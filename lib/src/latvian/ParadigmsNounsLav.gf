@@ -1,18 +1,10 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
-resource ParadigmsNounsLav = open
-  (Predef=Predef),
-  Prelude,
-  ResLav,
-  CatLav
-  in {
+resource ParadigmsNounsLav = open ResLav, CatLav, Prelude, Predef in {
 
-flags
-  coding = utf8 ;
+flags coding = utf8 ;
 
 oper
-  Noun  : Type = { s : Number => Case => Str ; g : Gender } ;
-  PNoun : Type = { s : Case => Str ; g : Gender ; n : Number } ;
 
   masculine : Gender = Masc ;
   feminine  : Gender = Fem ;
@@ -21,13 +13,12 @@ oper
   mkNoun : Str -> Noun = \lemma ->
     mkNounByPal lemma True ;
 
-  mkProperNoun : Str -> Number -> PNoun = \lemma,number ->
-    let noun = mkNoun lemma
-    in {
-      s = \\c => noun.s ! number ! c  ;
-      g = noun.g ;
-      n = number
-  } ;
+  mkProperNoun : Str -> Number -> ProperNoun = \lemma,num ->
+    let n = mkNoun lemma in {
+      s = \\c => n.s ! num ! c  ;
+      gend = n.gend ;
+      num = num
+    } ;
 
 {-
   mkCardinalNumeral : Str -> CardinalNumeral = \lemma ->
@@ -113,7 +104,7 @@ oper
   -- Expected endings: #vowel
   mkNoun_D0 : Str -> Gender -> Noun = \lemma,gend -> {
     s = \\_,_ => lemma ;
-    g = gend
+    gend = gend
   } ;
 
   -- Expected endings of a D1 lemma:
@@ -143,7 +134,7 @@ oper
           Voc => stem + "i"
         }
       } ;
-      g = Masc
+      gend = Masc
     } ;
 
   -- Expected endings of a D2 lemma:
@@ -174,7 +165,7 @@ oper
 		  Voc => palatalize stem pal + "i"
         }
       } ;
-      g = Masc
+      gend = Masc
     } ;
 
   -- Expected endings of a D3 lemma:
@@ -201,7 +192,7 @@ oper
           Voc => stem + "i"
         }
       } ;
-      g = Masc
+      gend = Masc
     } ;
 
   -- Expected endings of a D4 lemma:
@@ -228,7 +219,7 @@ oper
           Voc => stem + "as"
         }
       } ;
-      g = gend
+      gend = gend
     } ;
 
   -- Expected endings of a D5 lemma:
@@ -255,7 +246,7 @@ oper
           Voc => stem + "es"
         }
       } ;
-      g = gend
+      gend = gend
     } ;
 
   -- Expected endings of a D6 lemma:
@@ -285,7 +276,7 @@ oper
           Voc => stem + "is"
         }
       } ;
-      g = gend
+      gend = gend
     } ;
 
   -- Reflexive noun
@@ -311,7 +302,7 @@ oper
           Voc => stem + "šanās"
         }
       } ;
-      g = Fem
+      gend = Fem
     } ;
 
   -- Exceptions

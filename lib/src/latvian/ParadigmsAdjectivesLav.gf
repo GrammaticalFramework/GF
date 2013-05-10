@@ -1,18 +1,10 @@
 --# -path=.:../abstract:../common:../prelude
 
-resource ParadigmsAdjectivesLav = open
-  (Predef=Predef),
-  Prelude,
-  ResLav,
-  CatLav
-  in {
+resource ParadigmsAdjectivesLav = open ResLav, CatLav, Predef, Prelude in {
 
-flags
-  coding = utf8;
+flags coding = utf8 ;
 
 oper
-	--Adj      : Type = {s : Degree => Definite => Gender => Number => Case => Str} ;
-	Adj      : Type = {s : AForm => Str} ;
 
 -- ADJECTIVES
 
@@ -21,7 +13,7 @@ oper
   -- To keep the code and user interface (parameters) simple, Masc lemmas are expected.
 
   -- No parameters - default assumptions (type)
-  mkAdjective : Str -> Adj = \lemma ->
+  mkAdjective : Str -> Adjective = \lemma ->
     case lemma of {
       s + "ais"     => mkAdjective_Rel lemma ;
       s + ("s"|"š") => mkAdjective_Qual lemma ;
@@ -29,7 +21,7 @@ oper
     } ;
 
   -- Specified type - no defaults
-  mkAdjectiveByType : Str -> AType -> Adj = \lemma,type ->
+  mkAdjectiveByType : Str -> AType -> Adjective = \lemma,type ->
     case type of {
       AQual   => mkAdjective_Qual lemma ;
       ARel    => mkAdjective_Rel lemma ;
@@ -37,7 +29,7 @@ oper
     } ;
 
   -- Indeclinable adjective: theoretically, any #vowel ending
-  mkAdjective_Indecl : Str -> Adj = \lemma -> {
+  mkAdjective_Indecl : Str -> Adjective = \lemma -> {
     s = table{
       AAdj Superl Indef _ _ _ => NON_EXISTENT ;
       AAdj _ _ _ _ _ => lemma ;
@@ -46,7 +38,7 @@ oper
   } ;
 
   -- Qualitative adjective: -s, -š
-  mkAdjective_Qual : Str -> Adj = \lemma -> {
+  mkAdjective_Qual : Str -> Adjective = \lemma -> {
     s = table {
       AAdj Posit d g n c => mkAdjective_Pos lemma d ! g ! n ! c ;
       AAdj Compar d g n c => mkAdjective_Comp lemma d ! g ! n ! c ;
@@ -57,7 +49,7 @@ oper
   } ;
 
   -- Relative adjective: -ais (Def only); -s, -š (Indef and Def)
-  mkAdjective_Rel : Str -> Adj = \lemma -> {
+  mkAdjective_Rel : Str -> Adjective = \lemma -> {
     s = table {
       AAdj Posit Def g n c => mkAdjective_Pos lemma Def ! g ! n ! c ;
       AAdj Posit Indef g n c => case lemma of {
@@ -74,7 +66,7 @@ oper
   -- TODO: Jāpieliek parametrs Tense: present = ziedošs, izsalkstošs; past = ziedējis, izsalcis.
   --       Vai arī jāpadod Str "-is"/"-ošs" un pa tiešo jāizsauc mkParticiple, bet
   --       kā šis mkA(Str) atšķirsies no citiem mkA(Str)? 
-  mkAdjective_Participle : Verb -> Voice -> Adj = \v,p -> {
+  mkAdjective_Participle : Verb -> Voice -> Adjective = \v,p -> {
     s = table {
       AAdj Posit Indef g n c => v.s ! Pos ! (VPart p g n c) ;
       _ => NON_EXISTENT

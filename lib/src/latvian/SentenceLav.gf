@@ -16,27 +16,30 @@ lin
 
   PredSCVP sc vp = mkClauseSC sc vp ;
 
-  ImpVP vp = { s = \\pol,n => vp.v.s ! pol ! (VImp n) ++ vp.compl ! (AgP2 n Masc) } ;
+  ImpVP vp = { s = \\pol,num => vp.v.s ! pol ! (VImp num) ++ vp.compl ! (AgrP2 num Masc) } ;
 
-  SlashVP np vp = mkClause np vp ** { p = vp.p } ;
+  SlashVP np vp = mkClause np vp ** { prep = vp.focus } ;
 
   AdvSlash slash adv = {
     s  = \\m,p => slash.s ! m ! p ++ adv.s ;
-    p = slash.p
+    prep = slash.prep
   } ;
 
-  SlashPrep cl prep = cl ** { p = prep } ;
+  SlashPrep cl prep = cl ** { prep = prep } ;
 
-  SlashVS np vs sslash =
-    mkClause np (lin VP {
+  -- NP -> VS -> SSlash -> ClSlash
+  -- e.g. '(whom) she says that he loves'
+  SlashVS np vs sslash = mkClause
+    np
+    (lin VP {
       v = vs ;
-      compl = \\_ => "," ++ vs.subj.s ++ sslash.s ;
-      val = toVal_Reg vs.topic ;
-      objNeg = Pos ;
-      voice = Act
-    }) ** { p = sslash.p } ;
+      agr   = { subj = variants {} ; focus = Pos } ;
+      compl = \\_ => "," ++ vs.conj.s ++ sslash.s ;
+      voice = Act ;
+      topic = vs.topic      
+    }) ** { prep = sslash.prep } ;
 
-  ComplVS v s  = { v = v ; compl = \\_ => "," ++ v.subj.s ++ s.s } ;
+  -- ComplVS v s  = { v = v ; compl = \\_ => "," ++ v.subj.s ++ s.s } ;
 
   -- TODO: nočekot kāpēc te ir tieši 'ka'
   EmbedS s = { s = "ka" ++ s.s } ;
@@ -44,7 +47,7 @@ lin
   EmbedQS qs = { s = qs.s } ;
 
   -- FIXME: vai agr ir Pl?
-  EmbedVP vp = { s = build_VP vp Pos VInf (AgP3 Pl Masc Pos) } ;
+  EmbedVP vp = { s = buildVP vp Pos VInf (AgrP3 Pl Masc) } ;
 
   UseCl t p cl = { s = t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p } ;
   UseQCl t p cl = { s = t.s ++ p.s ++ cl.s ! (Ind t.a t.t) ! p.p } ;
@@ -54,7 +57,7 @@ lin
 	| { s = \\ag => t.s ++ p.s ++ cl.s ! (Rel t.a t.t) ! p.p ! ag }		--# notpresent
 	;
 
-  UseSlash t p slash = { s = t.s ++ p.s ++ slash.s ! (Ind t.a t.t) ! p.p ; p = slash.p } ;
+  UseSlash t p slash = { s = t.s ++ p.s ++ slash.s ! (Ind t.a t.t) ! p.p ; prep = slash.prep } ;
 
   -- FIXME: placeholder
   AdvS a s = { s = NON_EXISTENT } ;
@@ -62,28 +65,27 @@ lin
 oper
   -- TODO: PassV2 verbs jāsaskaņo ar objektu, nevis subjektu (by8means_Prep: AgP3 Sg Masc)
   mkClause : NP -> CatLav.VP -> Cl = \np,vp ->  
-    let subj : Case = case vp.voice of {
-      Act  => vp.val.subj ;
-      Pass => vp.val.obj
-    } in lin Cl {
+    let agr : Agreement = case <vp.voice, vp.topic> of {
+      <Act,  Nom> => np.agr ;
+      <Act,  _  > => vp.agr.subj ;
+      <Pass, Acc> => vp.agr.subj ;
+      <Pass, _  > => np.agr
+    }
+    in lin Cl {
       s = \\mood,pol =>
-        case mood of {  -- Subject
+        case mood of {                                      -- subject
           Deb _ _ => np.s ! Dat ;  --# notpresent
-          _       => np.s ! vp.val.subj
+          _       => np.s ! vp.topic
         } ++
-        case subj of {  -- Verb
-          -- TODO: vai np.a un np.a.pol argumentus nevar apvienot?
-          Nom => buildVerb vp.v mood pol np.a (fromAgr np.a).pol vp.objNeg ;
-          _   => buildVerb vp.v mood pol vp.val.agr (fromAgr np.a).pol vp.objNeg -- TESTME
-        } ++
-        vp.compl ! np.a  -- Object(s), complements, adverbial modifiers
+        buildVerb vp.v mood pol agr np.pol vp.agr.focus ++  -- verb
+        vp.compl ! np.agr                                   -- object(s), complements, adverbial modifiers
     } ;
 
   -- FIXME: quick&dirty - lai kompilētos pret RGL API
   -- Eng: PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp
   -- Ar SC nav iespējams neko saskaņot (sk. Cat.gf un Common.gf)
   mkClauseSC : SC -> CatLav.VP -> Cl = \sc,vp -> lin Cl {
-    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgP3 Sg Masc Pos) Pos vp.objNeg ++ vp.compl ! (AgP3 Sg Masc Pos)
+    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgrP3 Sg Masc) Pos vp.agr.focus ++ vp.compl ! (AgrP3 Sg Masc)
   } ;
 
 }

@@ -18,10 +18,10 @@ lin
   UseComparA a = { s = \\d,g,n,c => a.s ! (AAdj Compar d g n c) } ;
 
   ComplA2 a np = {
-    s = \\d,g,n,c => a.s ! (AAdj Posit d g n c) ++ a.p.s ++ np.s ! (a.p.c ! (fromAgr np.a).num)
+    s = \\d,g,n,c => a.s ! (AAdj Posit d g n c) ++ a.prep.s ++ np.s ! (a.prep.c ! (fromAgr np.agr).num)
   } ;
 
-  ReflA2 a = { s = \\d,g,n,c => a.s ! (AAdj Posit d g n c) ++ a.p.s ++ reflPron ! (a.p.c ! n) } ;
+  ReflA2 a = { s = \\d,g,n,c => a.s ! (AAdj Posit d g n c) ++ a.prep.s ++ reflPron ! (a.prep.c ! n) } ;
 
   AdAP ada ap = { s = \\d,g,n,c => ada.s ++ ap.s ! d ! g ! n ! c } ;
 
@@ -32,7 +32,7 @@ lin
   AdjOrd ord = { s = \\d,g,n,c => ord.s ! g ! c } ;
 
   --TODO: nominatīvs var ne vienmēr būt, pie CAdv jāliek parametrs par locījumu
-  CAdvAP cadv ap np = { s = \\d,g,n,c => cadv.s ++ ap.s ! d ! g ! n ! c ++ cadv.p ++ np.s ! Nom } ;
+  CAdvAP cadv ap np = { s = \\d,g,n,c => cadv.s ++ ap.s ! d ! g ! n ! c ++ cadv.prep ++ np.s ! Nom } ;
 
   UseA2 a = { s = \\d,g,n,c => a.s ! (AAdj Posit d g n c) } ;
 

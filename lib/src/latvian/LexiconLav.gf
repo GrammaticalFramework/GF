@@ -14,7 +14,7 @@ flags
 
 lin
   airplane_N = mkN "lidmašīna" ;
-  answer_V2S = mkV2S (mkV "atbildēt" third_conjugation) dat_Prep that_Subj ; -- toP = 'answer to [Person]' = 'atbildēt [kam?]'
+  answer_V2S = mkV2S (mkV "atbildēt" third_conjugation) that_Subj dat_Prep ; -- toP = 'answer to [Person]' = 'atbildēt [kam?]'
   apartment_N = mkN "dzīvoklis" ;
   apple_N = mkN "ābols" ;
   art_N = mkN "māksla" ;
@@ -115,7 +115,7 @@ lin
   learn_V2 = mkV2 (mkV "mācīties" third_conjugation) acc_Prep ;
   leather_N = mkN "āda" ;
   leave_V2 = mkV2 (mkV "atstāt" "atstāju" "atstāju") acc_Prep ;
-  like_V2 = mkV2 (mkV "patikt" "patīku" "patiku") nom_Prep Dat ;
+  like_V2 = mkV2 (mkV "patikt" "patīku" "patiku" Dat) nom_Prep ;
   listen_V2 = mkV2 (mkV "klausīties" third_conjugation) acc_Prep ;
   live_V = mkV "dzīvot" second_conjugation ;
   long_A = mkA "garš" ;

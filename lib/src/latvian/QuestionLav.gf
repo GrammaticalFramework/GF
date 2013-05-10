@@ -1,30 +1,31 @@
 --# -path=.:../abstract:../common:../prelude
 
 concrete QuestionLav of Question = CatLav ** open
-  ResLav,
   VerbLav,
-  Prelude,
-  ParadigmsVerbsLav
+  ParadigmsLav,
+  ResLav,
+  Prelude
 in {
 
 flags
+
   optimize = all_subs ;
   coding = utf8 ;
 
 lin
   QuestCl cl = { s = \\m,p => "vai" ++ cl.s ! m ! p } ;
 
-  QuestVP ip vp = { s = \\m,p => ip.s ! Nom ++ buildVerb vp.v m p (AgP3 ip.n Masc Pos) Pos vp.objNeg } ;
+  QuestVP ip vp = { s = \\m,p => ip.s ! Nom ++ buildVerb vp.v m p (AgrP3 ip.num Masc) Pos vp.agr.focus } ;
 
-  QuestSlash ip slash = { s = \\m,p => slash.p.s ++ ip.s ! (slash.p.c ! ip.n) ++ slash.s ! m ! p } ;
+  QuestSlash ip slash = { s = \\m,p => slash.prep.s ++ ip.s ! (slash.prep.c ! ip.num) ++ slash.s ! m ! p } ;
 
   QuestIAdv iadv cl = { s = \\m,p => iadv.s ++ cl.s ! m ! p } ;
 
-  QuestIComp icomp np = { s = \\m,p => icomp.s ++ buildVerb mkVerb_Irreg_Be m p np.a (fromAgr np.a).pol Pos  ++ np.s ! Nom } ;
+  QuestIComp icomp np = { s = \\m,p => icomp.s ++ buildVerb (mkV "būt") m p np.agr np.pol Pos ++ np.s ! Nom } ;
 
   IdetQuant idet num = {
-    s = \\g => idet.s ! g ! num.n ++ num.s ! g ! Nom ;
-    n = num.n
+    s = \\g => idet.s ! g ! num.num ++ num.s ! g ! Nom ;
+    num = num.num
   } ;
 
   -- FIXME: quick&dirty - lai kompilētos pret RGL API
@@ -34,19 +35,19 @@ lin
 
   AdvIP ip adv = {
     s = \\c => ip.s ! c ++ adv.s ;
-    n = ip.n
+    num = ip.num
   } ;
 
-  PrepIP p ip = { s = p.s ++ ip.s ! (p.c ! ip.n) } ;
+  PrepIP p ip = { s = p.s ++ ip.s ! (p.c ! ip.num) } ;
 
   IdetCN idet cn = {
-    s = \\c => idet.s ! cn.g ++ cn.s ! Def ! idet.n ! c ;
-    n = idet.n
+    s = \\c => idet.s ! cn.gend ++ cn.s ! Def ! idet.num ! c ;
+    num = idet.num
   } ;
 
   IdetIP idet = {
     s = \\c => (idet.s ! Masc) | (idet.s ! Fem) ;
-    n = idet.n
+    num = idet.num
   } ;
 
   CompIAdv a = a ;

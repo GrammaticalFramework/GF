@@ -1,14 +1,13 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
 -- TODO: module relations.
--- VerbLav is included in many places because of buildVerb (SentenceLav, QuestionLav, RelativeLav, IdiomLav),
--- and includes ParadigmsVerbsLav because of mkVerb_Irreg_Be.
--- They need to be reallocated somehow to ResLav.or something similar (e.g. 'be' => IrregLav).
+-- VerbLav is included in many modules because of buildVerb.
+-- It needs to be reallocated somehow to ResLav.or something similar.
 -- Not so simple since morphology itself needs ResLav & friends.
 
-concrete VerbLav of Verb = CatLav ** open 
-  StructuralLav, 
-  ParadigmsVerbsLav, 
+concrete VerbLav of Verb = CatLav ** open
+  StructuralLav,
+  ParadigmsLav,
   ResLav,
   ParamX,
   Prelude
@@ -21,74 +20,80 @@ flags
 
 lin
 
+  -- Complementization rules
+
   -- V -> VP
+  -- e.g. 'sleep'
   UseV v = {
-    v      = v ;
-    compl  = \\_ => [] ;
-    val    = toVal_Reg Nom ;
-    objNeg = Pos ;
-    voice  = Act
+    v     = v ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\_ => [] ;
+    voice = Act ;
+    topic = v.topic
   } ;
 
   -- VV -> VP -> VP
+  -- e.g. 'want to run'
   ComplVV vv vp = {
-    v      = vv ;
-    compl  = \\agr => build_VP vp Pos VInf agr ;
-    val    = toVal_Reg vv.topic ;
-    objNeg = Pos ;
-    voice  = Act
+    v     = vv ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\agr => buildVP vp Pos VInf agr ;
+    voice = Act ;
+    topic = vv.topic
   } ;
 
   -- VS -> S -> VP
+  -- e.g. 'say that she runs'
   ComplVS vs s = {
-    v      = vs ;
-    compl  = \\_ => "," ++ vs.subj.s ++ s.s ;
-    val    = toVal_Reg vs.topic ;
-    objNeg = Pos ;
-    voice  = Act
+    v     = vs ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\_ => "," ++ vs.conj.s ++ s.s ;
+    voice = Act ;
+    topic = vs.topic
   } ;
 
   -- VQ -> QS -> VP
+  -- e.g. 'wonder who runs'
   ComplVQ vq qs = {
-    v      = vq ;
-    compl  = \\_ => "," ++ qs.s ;
-    val    = toVal_Reg vq.topic ;
-    objNeg = Pos ;
-    voice  = Act
+    v     = vq ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\_ => "," ++ qs.s ;
+    voice = Act ;
+    topic = vq.topic
   } ;
 
   -- VA -> AP -> VP
+  -- e.g. '(they) become red'
   ComplVA va ap = {
-    v      = va ;
-    compl  = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom ;
-    val    = toVal_Reg Nom ;
-    objNeg = Pos ;
-    voice  = Act
+    v     = va ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom ;
+    voice = Act ;
+    topic = va.topic
   } ;
 
   -- V2 -> VPSlash
   -- e.g. 'love (it)'
   SlashV2a v2 = {
-    v      = v2 ;
-    compl  = \\_ => [] ;  -- overriden in ComplSlash
-    val    = toVal v2.topic (v2.p.c ! Sg) (AgP3 Sg Masc Pos) ;
-    objNeg = Pos ;  -- overriden in ComplSlash
-    voice  = Act ;
-    p      = v2.p ;
+    v     = v2 ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\_ => [] ;
+    voice = Act ;
+    topic = v2.topic ;
+    focus = v2.focus
   } ;
-  -- TODO: val other than P3 Sg Masc
 
   -- V3 -> NP -> VPSlash
   -- e.g. 'give it (to her)'
   Slash2V3 v3 np = insertObjC
-    (\\_ => v3.p1.s ++ np.s ! (v3.p1.c ! (fromAgr np.a).num))
+    (\\_ => v3.focus2.s ++ np.s ! (v3.focus2.c ! (fromAgr np.agr).num))
     {
-      v      = v3 ;
-      compl  = \\_ => [] ;
-      val    = toVal v3.topic (v3.p1.c ! Sg) np.a ;
-      objNeg = (fromAgr np.a).pol ;
-      voice  = Act ;
-      p      = v3.p2
+      v     = v3 ;
+      agr   = { subj = np.agr ; focus = np.pol } ;
+      compl = \\_ => [] ;
+      voice = Act ;
+      topic = v3.topic ;
+      focus = v3.focus1
     } ;
   -- FIXME: "vīrietis runā par ābolus ar sievieti" ("a man talks to a woman about apples")
   -- FIXME: the order of objects (?)
@@ -97,194 +102,213 @@ lin
   -- V3 -> NP -> VPSlash
   -- e.g. 'give (it) to her'
   Slash3V3 v3 np = insertObjC
-    (\\_ => v3.p2.s ++ np.s ! (v3.p2.c ! (fromAgr np.a).num))
+    (\\_ => v3.focus2.s ++ np.s ! (v3.focus2.c ! (fromAgr np.agr).num))
     {
-      v      = v3 ;
-      compl  = \\_ => [] ;
-      val    = toVal v3.topic (v3.p2.c ! Sg) (AgP3 Sg Masc Pos) ;
-      objNeg = (fromAgr np.a).pol ;
-      voice  = Act ;
-      p      = v3.p1
+      v     = v3 ;
+      agr   = { subj = np.agr ; focus = np.pol } ;
+      compl = \\_ => [] ;
+      voice = Act ;
+      topic = v3.topic ;
+      focus = v3.focus1
     } ;
   -- TODO: val other than P3 Sg Masc
   -- TODO: test objNeg
 
   -- V2V -> VP -> VPSlash
+  -- e.g. 'beg (her) to go'
   SlashV2V v2v vp = {
-    v      = v2v ;
-    compl  = \\agr => build_VP vp Pos VInf agr ;
-    val    = toVal_Reg Nom ;
-    objNeg = Pos ;
-    voice  = Act ;
-    p      = v2v.p
+    v     = v2v ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\agr => buildVP vp Pos VInf agr ;
+    voice = Act ;
+    topic = v2v.topic ;
+    focus = v2v.focus
   } ;
 
   -- V2S -> S -> VPSlash
+  -- e.g. 'answer (to him) that it is good'
   SlashV2S v2s s = {
-    v      = v2s ;
-    compl  = \\_ => "," ++ v2s.subj.s ++ s.s ;
-    val    = toVal_Reg Nom ;
-    objNeg = Pos ;
-    voice  = Act ;
-    p      = v2s.p
+    v     = v2s ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\_ => "," ++ v2s.conj.s ++ s.s ;
+    voice = Act ;
+    topic = v2s.topic ;
+    focus = v2s.focus
   } ;
 
   -- V2Q -> QS -> VPSlash
+  -- e.g. 'ask (him) who came'
   SlashV2Q v2q qs = {
-    v      = v2q ;
-    compl  = \\_ => "," ++ qs.s ;
-    val    = toVal_Reg Nom ;
-    objNeg = Pos ;
-    voice  = Act ;
-    p      = v2q.p
+    v     = v2q ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\_ => "," ++ qs.s ;
+    voice = Act ;
+    topic = v2q.topic ;
+    focus = v2q.focus
   } ;
 
   -- V2A -> AP -> VPSlash
+  -- e.g. 'paint (it) red'
   SlashV2A v2a ap = {
-    v      = v2a ;
-    compl  = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom ;
-    val    = toVal_Reg Nom ;
-    objNeg = Pos ;
-    voice  = Act ;
-    p      = v2a.p
+    v     = v2a ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom ;
+    voice = Act ;
+    topic = v2a.topic ;
+    focus = v2a.focus
   } ;
 
+  -- VPSlash -> NP -> VP
+  -- e.g. 'love it'
+  ComplSlash vpslash np =
+    let agr : Agreement = np.agr in {
+      v     = vpslash.v ;
+      agr   = { subj = agr ; focus = np.pol } ;
+      compl = \\agr => case vpslash.voice of {
+        Act  => vpslash.focus.s ++ np.s ! (vpslash.focus.c ! (fromAgr agr).num) ;
+        Pass => case vpslash.focus.c ! (fromAgr agr).num of {
+          Nom => np.s ! (vpslash.focus.c ! Sg) ;
+          _   => vpslash.focus.s ++ np.s ! (vpslash.focus.c ! (fromAgr agr).num)
+        }
+      } ++ vpslash.compl ! agr ;
+      voice = vpslash.voice ;
+      topic = vpslash.topic ;
+      focus = vpslash.focus
+    } ;
+
   -- VV -> VPSlash -> VPSlash
-  SlashVV vv vp = {
-    v      = vv ;
-    compl  = \\agr => build_VP vp Pos VInf agr ;
-    val    = toVal_Reg vv.topic ;
-    objNeg = Pos ;
-    voice  = Act ;
-    p      = vp.p
+  -- e.g. 'want to buy'
+  SlashVV vv vpslash = {
+    v     = vv ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\agr => buildVP vpslash Pos VInf agr ;
+    voice = Act ;
+    topic = vv.topic ;
+    focus = defaultPrep
   } ;
 
   -- V2V -> NP -> VPSlash -> VPSlash
-  SlashV2VNP v2v np vp = insertObjC
-    (\\_ => v2v.p.s ++ np.s ! (v2v.p.c ! (fromAgr np.a).num))
+  -- e.g. '-- beg me to buy'
+  SlashV2VNP v2v np vpslash = insertObjC
+    (\\_ => v2v.focus.s ++ np.s ! (v2v.focus.c ! (fromAgr np.agr).num))
     {
-      v      = v2v ;
-      compl  = \\agr => build_VP vp Pos VInf agr ;
-      val    = toVal_Reg Nom ;
-      objNeg = Pos ;
-      voice  = Act ;
-      p      = vp.p
+      v     = v2v ;
+      agr   = { subj = np.agr ; focus = np.pol } ;
+      compl = \\agr => buildVP vpslash Pos VInf agr ;
+      voice = Act ;
+      topic = v2v.topic ;
+      focus = v2v.focus
     } ;
 
-  -- VP -> Prep -> VPSlash
-  VPSlashPrep vp prep = vp ** {p = prep} ;
-  -- TODO: šajā brīdī ir jāignorē prep (by8agent_Prep); tas jāaizstāj ar v2.topic (?)
-  -- Tad varēs dzēst ārā komentāru pie StructuralLav.by8agent_Prep (?)
+  -- Other ways of forming verb phrases
 
-  -- VPSlash -> NP -> VP
-  ComplSlash vp np = let agr : Agr = np.a in {
-    v     = vp.v ;
-    compl = \\agr => case vp.voice of {
-      Act  => vp.p.s ++ np.s ! (vp.p.c ! (fromAgr agr).num) ;
-      Pass => case vp.p.c ! (fromAgr agr).num of {
-        Nom => np.s ! vp.val.obj ;
-        _   => vp.p.s ++ np.s ! (vp.p.c ! (fromAgr agr).num)
-      }
-    } ++ vp.compl ! agr ;
-    val    = vp.val ;
-    objNeg = (fromAgr np.a).pol ;
-    voice  = vp.voice
+  -- VPSlash -> VP
+  -- e.g. 'love himself'
+  ReflVP vpslash = insertObjPre
+    (\\agr => vpslash.focus.s ++ reflPron ! (vpslash.focus.c ! (fromAgr agr).num))
+    vpslash ;
+
+  -- Comp -> VP
+  -- e.g. 'be warm'
+  UseComp comp = {
+    v     = mkV "būt" ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\agr => comp.s ! agr ;
+    voice = Act ;
+    topic = Nom
   } ;
 
   -- V2 -> VP
+  -- e.g. 'be loved'
   PassV2 v2 = {
-    v      = v2 ;
-    compl  = \\_ => [] ;
-    val    = toVal (v2.p.c ! Sg) v2.topic (AgP3 Sg Masc Pos) ;
-    objNeg = Pos ;
-    voice  = Pass
+    v     = v2 ;
+    agr   = { subj = defaultAgr ; focus = Pos } ;
+    compl = \\_ => [] ;
+    voice = Pass ;
+    topic = v2.focus.c ! Sg ;
+    focus = mkPrep v2.topic
   } ;
   -- TODO: val - should not be overriden in ComplSlash etc.?
   -- TODO: val - P3 Sg Masc restriction - never used?
   -- TODO: notestēt objNeg (kur tas tiek pārrakstīts - ComplSlash, AdvVP u.c.?)
 
   -- VP -> Adv -> VP
+  -- e.g. 'sleep here'
   AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
 
   -- AdV -> VP -> VP
+  -- e.g. 'always sleep'
   AdVVP adv vp = insertObjPre (\\_ => adv.s) vp ;
 
-  -- VPSlash -> VP
-  ReflVP vp = insertObjPre (\\agr => vp.p.s ++ reflPron ! (vp.p.c ! (fromAgr agr).num)) vp ;
+  -- TODO: AdvVPSlash : VPSlash -> Adv -> VPSlash
+  -- e.g. 'use (it) here'
 
-  -- Comp -> VP
-  UseComp comp = {
-    v      = lin V mkVerb_Irreg_Be ;
-    compl  = \\agr => comp.s ! agr ;
-    val    = toVal_Reg Nom ;
-    objNeg = Pos ;
-    voice  = Act
-  } ;
+  -- TODO: AdVVPSlash : AdV -> VPSlash -> VPSlash
+  -- e.g. 'always use (it)'
+
+  -- VP -> Prep -> VPSlash
+  -- e.g. 'live in (it)'
+  VPSlashPrep vp prep = vp ** { focus = prep } ;
+  -- TODO: šajā brīdī ir jāignorē prep (by8agent_Prep); tas jāaizstāj ar v2.topic (?)
+  -- Tad varēs dzēst ārā komentāru pie StructuralLav.by8agent_Prep (?)
+
+  -- Complements to copula
 
   -- AP -> Comp
+  -- e.g. '(be) small'
   CompAP ap = { s = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom } ;
 
   -- NP -> Comp
+  -- e.g. '(be) the man'
   CompNP np = { s = \\_ => np.s ! Nom } ;
 
   -- Adv -> Comp
+  -- e.g. '(be) here'
   CompAdv a = { s = \\_ => a.s } ;
 
   -- CN -> Comp
+  -- e.g. '(be) a man/men'
   CompCN cn = { s = \\agr => cn.s ! Indef ! (fromAgr agr).num ! Nom } ;
 
+  -- TODO: UseCopula : VP
+  -- e.g. 'be'
+
 oper
-  build_VP : ResLav.VP -> Polarity -> VForm -> Agr -> Str = \vp,pol,vf,agr ->
-    vp.v.s ! pol ! vf ++ vp.compl ! agr ;
 
-  insertObjC : (Agr => Str) -> ResLav.VPSlash -> ResLav.VPSlash = \obj,vp ->
-    insertObj obj vp ** { p = vp.p } ;
-
-  insertObj : (Agr => Str) -> ResLav.VP -> ResLav.VP = \obj,vp -> {
-    v = vp.v ;
-    compl = \\agr => vp.compl ! agr ++ obj ! agr ;
-    val = vp.val ;
-    objNeg = vp.objNeg ;
-    voice = vp.voice
-  } ;
-
-  insertObjPre : (Agr => Str) -> ResLav.VP -> ResLav.VP = \obj,vp -> {
-    v = vp.v ;
-    compl = \\agr => obj ! agr ++ vp.compl ! agr ;
-    val = vp.val ;
-    objNeg = vp.objNeg ;
-    voice = vp.voice
-  } ;
+  defaultAgr : Agreement = AgrP3 Sg Masc ; -- variants {}
+  defaultPrep : Preposition = nom_Prep ;
 
   -- FIXME: the type of the participle form - depending on what?! (currently fixed)
-  buildVerb : Verb -> VMood -> Polarity -> Agr -> Polarity -> Polarity -> Str = 
-  \v,mood,pol,subjAgr,subjNeg,objNeg ->
+  buildVerb : Verb -> VMood -> Polarity -> Agreement -> Polarity -> Polarity -> Str = 
+  \v,mood,pol,agr,polTopic,polFocus ->
     let
-      pol_prim : Polarity = case <subjNeg, objNeg> of {
+      polFinal : Polarity = case <polTopic, polFocus> of {
+        -- double negation, if the topic/focus NP has a negated determiner
         <Neg, _> => Neg ;
         <_, Neg> => Neg ;
         _        => pol
       } ;
-      agr = fromAgr subjAgr
+      agr = fromAgr agr
       ;  --# notpresent
-      part = v.s ! ResLav.Pos ! (VPart Pass agr.gend agr.num Nom)  --# notpresent
+      part = v.s ! Pos ! (VPart Pass agr.gend agr.num Nom)  --# notpresent
     in case mood of {
-      Ind Simul tense => v.s ! pol_prim ! (VInd agr.pers agr.num tense)
+      Ind Simul tense => v.s ! polFinal ! (VInd agr.pers agr.num tense)
       ;  --# notpresent
-      Ind Anter tense => mkVerb_Irreg_Be.s ! pol_prim ! (VInd agr.pers agr.num tense) ++ part ;  --# notpresent
+      Ind Anter tense => (mkV "būt").s ! polFinal ! (VInd agr.pers agr.num tense) ++ part ;  --# notpresent
 
       -- FIXME(?): Rel _ Past => ...
-      Rel _     Past  => ResLav.NON_EXISTENT ;  --# notpresent
-      Rel Simul tense => v.s ! pol_prim ! (VRel tense) ;  --# notpresent
-      Rel Anter tense => mkVerb_Irreg_Be.s ! pol_prim ! (VRel tense) ++ part ;  --# notpresent
+      Rel _     Past  => NON_EXISTENT ;  --# notpresent
+      Rel Simul tense => v.s ! polFinal ! (VRel tense) ;  --# notpresent
+      Rel Anter tense => (mkV "būt").s ! polFinal ! (VRel tense) ++ part ;  --# notpresent
 
-      Deb Simul tense => mkVerb_Irreg_Be.s ! pol_prim ! (VInd P3 Sg tense) ++  --# notpresent
-      	v.s ! ResLav.Pos ! VDeb ;  --# notpresent
-      Deb Anter tense => mkVerb_Irreg_Be.s ! pol_prim ! (VInd P3 Sg tense) ++  --# notpresent
-        mkVerb_Irreg_Be.s ! ResLav.Pos ! (VPart Pass Masc Sg Nom) ++  --# notpresent
-        v.s ! ResLav.Pos ! VDeb ;  --# notpresent
+      Deb Simul tense => (mkV "būt").s ! polFinal ! (VInd P3 Sg tense) ++  --# notpresent
+        v.s ! Pos ! VDeb ;  --# notpresent
+      Deb Anter tense => (mkV "būt").s ! polFinal ! (VInd P3 Sg tense) ++  --# notpresent
+        (mkV "būt").s ! Pos ! (VPart Pass Masc Sg Nom) ++  --# notpresent
+        v.s ! Pos ! VDeb ;  --# notpresent
 
-      Condit Simul => v.s ! pol_prim ! (VInd agr.pers agr.num ParamX.Cond) ;  --# notpresent
-      Condit Anter => mkVerb_Irreg_Be.s ! pol_prim ! (VInd agr.pers agr.num ParamX.Cond) ++ part  --# notpresent
+      Condit Simul => v.s ! polFinal ! (VInd agr.pers agr.num ParamX.Cond) ;  --# notpresent
+      Condit Anter => (mkV "būt").s ! polFinal ! (VInd agr.pers agr.num ParamX.Cond) ++ part  --# notpresent
     } ;
+
 }

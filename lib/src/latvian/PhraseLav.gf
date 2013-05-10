@@ -1,14 +1,11 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
-concrete PhraseLav of Phrase = CatLav ** open
-  ResLav,
-  VerbLav
-  in {
+concrete PhraseLav of Phrase = CatLav ** open ResLav in {
 
-flags
-  coding = utf8 ;
+flags coding = utf8 ;
 
 lin
+
   PhrUtt pconj utt voc = { s = pconj.s ++ utt.s ++ voc.s } ;
 
   UttS s = { s = s.s } ;
@@ -22,8 +19,7 @@ lin
   UttAP ap = { s = ap.s ! Indef ! Masc ! Sg ! Nom } ;
   UttAdv adv = adv ;
 
-  -- FIXME: neesmu līdz galam drošs vai agreement ir tieši (AgPr Pl)
-  UttVP vp = { s = build_VP vp Pos VInf (AgP3 Pl Masc Pos) } ;
+  UttVP vp = { s = buildVP vp Pos VInf (AgrP3 Pl Masc) } ;
 
   UttIP ip = { s = ip.s ! Nom } ;
   UttIAdv iadv = iadv ;

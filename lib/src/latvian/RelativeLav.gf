@@ -17,35 +17,39 @@ lin
   RelVP rp vp = mkRelClause rp vp ;
 
 oper
-  -- TODO: PassV2 verbs jāsaskaņo ar objektu, nevis subjektu (by8means_Prep: AgP3 Sg Masc)
+
+  -- TODO: PassV2 verbs jāsaskaņo ar objektu, nevis subjektu (by8means_Prep: AgP3 Sg Masc) - done?
   mkRelClause : RP -> CatLav.VP -> RCl = \rp,vp ->  
-    let subj : Case = case vp.voice of {
-      Act  => vp.val.subj ;
-      Pass => vp.val.obj
-    } in lin RCl {
+    let subjInTopic : Bool = case <vp.voice, vp.topic> of {
+      <Act,  Nom> => True ;
+      <Act,  _  > => False ;
+      <Pass, Acc> => False ;
+      <Pass, _  > => True
+    }
+    in lin RCl {
       s = \\mood,pol,agr =>
-        case mood of {  -- Subject
+        case mood of {         -- subject
           Deb _ _ => rp.s ! Masc ! Dat ;  --# notpresent
-          _       => rp.s ! Masc ! vp.val.subj
+          _       => rp.s ! Masc ! vp.topic
         } ++
-        case subj of {  -- Verb
-          Nom => buildVerb vp.v mood pol (AgP3 (fromAgr agr).num (fromAgr agr).gend Pos) Pos vp.objNeg ; -- TODO: kāpēc P3 nevis agr, kāds tas ir?
-          _   => buildVerb vp.v mood pol vp.val.agr Pos vp.objNeg -- TODO: test me
+        case subjInTopic of {  -- verb
+          True  => buildVerb vp.v mood pol (AgrP3 (fromAgr agr).num (fromAgr agr).gend) Pos vp.agr.focus ;
+          False => buildVerb vp.v mood pol vp.agr.subj                                  Pos vp.agr.focus
         } ++
-        vp.compl ! agr  -- Object(s), complements, adverbial modifiers
+        vp.compl ! agr         -- object(s), complements, adverbial modifiers
     } ;
 
 lin
   -- FIXME: vārdu secība - nevis 'kas mīl viņu' bet 'kas viņu mīl' (?)
   -- FIXME: Masc varētu nebūt labi
   RelSlash rp slash = {
-    s = \\m,p,ag => slash.p.s ++ rp.s ! Masc ! (slash.p.c ! Sg) ++  slash.s ! m ! p
+    s = \\m,p,ag => slash.prep.s ++ rp.s ! Masc ! (slash.prep.c ! Sg) ++  slash.s ! m ! p
   } ;
 
   -- FIXME: placeholder
   -- TODO: jātestē, kautkas nav labi ar testpiemēru
   FunRP p np rp = {
-    s = \\g,c => p.s ++ rp.s ! g ! c ++ np.s ! (p.c ! (fromAgr np.a).num)
+    s = \\g,c => p.s ++ rp.s ! g ! c ++ np.s ! (p.c ! (fromAgr np.agr).num)
   } ;
 
   IdRP = {
