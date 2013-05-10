@@ -9,7 +9,7 @@ concrete VerbGre of Verb = CatGre ** open ResGre,CommonGre, Prelude in {
 
     ComplVV v vp = 
       insertComplement (\\a => case a of {
-        Ag _ n p  =>  "να" ++ vp.clit  ++ vp.clit2 ++ vp.v.s ! VPres Con n p Active Perf ++ vp.comp ! a}) (predV v) ;
+        Ag _ n p  => let vo= vp.voice ; as = vp.aspect  in  "να" ++ vp.clit  ++ vp.clit2 ++ vp.v.s ! VPres Con n p vo as ++ vp.comp ! a}) (predV v) ;
 
 
     ComplVS v s = 
@@ -30,9 +30,11 @@ concrete VerbGre of Verb = CatGre ** open ResGre,CommonGre, Prelude in {
 
     SlashV2V v vp = mkVPSlash v.c2 ( predV v) ** {
       n3 = \\a =>  
-          let agr = clitAgr a  
+          let agr = clitAgr a ;
+          vo = vp.voice ;
+          as = vp.aspect  
           in   
-            v.c3.s  ++ "να" ++ vp.clit ++ vp.clit2  ++ vp.v.s ! VPres Con agr.n agr.p Active Perf ++ vp.comp! a  ; 
+            v.c3.s  ++ "να" ++ vp.clit ++ vp.clit2  ++ vp.v.s ! VPres Con agr.n agr.p vo as ++ vp.comp! a  ; 
       c2 = v.c2
       } ;
     
@@ -50,7 +52,7 @@ concrete VerbGre of Verb = CatGre ** open ResGre,CommonGre, Prelude in {
 
 
    SlashV2A v ap =  mkVPSlash v.c2 (predV v )** {
-      n3 =\\a => let agr = complAgr a in  ap.s ! Posit !  agr.g ! agr.n ! Acc ;
+      n3 =\\a => let agr = complAgr a  in  ap.s ! Posit !  agr.g ! agr.n ! Acc ;
       c2 = v.c2
      } ;
 
@@ -61,16 +63,18 @@ concrete VerbGre of Verb = CatGre ** open ResGre,CommonGre, Prelude in {
   
     SlashVV v vp = 
       insertComplement (\\a => case a of {
-      Ag _ n p  => "να" ++ vp.clit  ++ vp.clit2 ++ vp.v.s ! VPres Con n p Active Perf++ vp.comp ! a})
+      Ag _ n p  => let vo=vp.voice ; as =vp.aspect in "να" ++ vp.clit  ++ vp.clit2 ++ vp.v.s ! VPres Con n p vo as++ vp.comp ! a})
       (predV v) ** {n3 = vp.n3 ; c2 = vp.c2} ;
 
 
     SlashV2VNP v np vp = 
       mkVPSlash vp.c2( insertObject v.c2 np (predV v)) ** {
       n3 = \\a => 
-          let agr = clitAgr a  
+          let agr = clitAgr a ;
+          vo=vp.voice ; 
+          as =vp.aspect  
           in   
-            v.c2.s  ++ "να" ++ vp.clit ++ vp.clit2  ++ vp.v.s ! VPres Con agr.n agr.p Active Perf ++ vp.comp! a  ; 
+            v.c2.s  ++ "να" ++ vp.clit ++ vp.clit2  ++ vp.v.s ! VPres Con agr.n agr.p vo as ++ vp.comp! a  ; 
       c2 = v.c2
       } ;
 
@@ -79,15 +83,16 @@ concrete VerbGre of Verb = CatGre ** open ResGre,CommonGre, Prelude in {
 
      UseComp comp = insertComplement comp.s (predV copula) ;
 
-     PassV2 v = {
+     PassV2 v = let vp = predV v in {
         v = v ; 
         clit = [] ;
         clit2 = [] ; 
         comp   = \\a => [] ;
         isNeg = False; 
         voice = Passive ;
-        aspect = Perf ;
+        aspect = vp.aspect;
         } ;
+
  
      AdvVP vp adv = insertAdv adv.s vp ;
 

@@ -41,9 +41,10 @@ concrete QuestionGre of Question = CatGre ** open ResGre, Prelude in {
 
      QuestSlash ip slash = { 
       s = \\t,a,p => 
-            let 
-              cls = slash.s  !  ip.a !  Inv !  t ! a ! p!  Ind;
-              who =   ip.s ! Masc ! slash.c2.c   ++slash.c2.s    
+            let
+            agr = Ag ip.a.g ip.n P3 ;
+              cls = slash.s  !  ip.a !  Inv !  t ! a ! p!  Ind ++ slash.n3 !agr;
+              who =  slash.c2.s ++ ip.s ! Masc ! slash.c2.c      
            in table {
               QDir   => who ++ cls  ;
               QIndir => who ++ cls 

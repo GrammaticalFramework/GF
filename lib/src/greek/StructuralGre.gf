@@ -24,7 +24,7 @@ concrete StructuralGre of Structural = CatGre **
   but_PConj = ss "αλλά" ;
   by8agent_Prep = mkPreposition  "από";
   by8means_Prep = mkPreposition  "από";
-  can8know_VV = mkVV (v_VerbNoPassive1 "ξέρω" "ξέρω" "ήξερα" "ήξερα" " ") ;
+  can8know_VV = mkVV (v_VerbNoPassive5 "μπορώ" "μπορέσω" "μπόρεσα" "μπορούσα" "μπόρεσε" " " ) ;
   can_VV = mkVV (v_VerbNoPassive5 "μπορώ" "μπορέσω" "μπόρεσα" "μπορούσα" "μπόρεσε" " " ) ; 
   during_Prep =   mkPreposition3 "κατα τη διάρκεια" ;
   either7or_DConj = mkConj "είτε" "ή" plural ; 
@@ -67,15 +67,15 @@ concrete StructuralGre of Structural = CatGre **
   here_Adv = ss "εδώ" ;
   here7to_Adv = ss "ως εδώ" ;
   here7from_Adv = ss "από εδώ " ;
-  how_IAdv = ss "πόσο" ;
+  how_IAdv = ss "πώς" ;
   how8much_IAdv = ss "πόσο" ;
-  how8many_IDet = mkDeterminer "πόσοι" "πόσων" "πόσους" "πόσες" "πόσων" "πόσες" "πόσα" "πόσων" "πόσα" "πόσοι" "πόσων" "πόσους" Pl ;
+  how8many_IDet = mkDeterminer "πόσοι" "πόσων" "πόσους" "πόσες" "πόσων" "πόσες" "πόσα" "πόσων" "πόσα" "πόσα" "πόσων" "πόσα" Pl ;
   i_Pron  = mkPron "εγώ" "μου" "με" "εμένα"  "εμού" Masc Sg P1 ;
   if_Subj = ss "αν" ** {m = Ind};
   in8front_Prep = mkPreposition "μπροστά από";
   in_Prep = complPrepSe;
   it_Pron  = mkPron "αυτό" "του" "το" "αυτό" "αυτού" Neut  Sg P3 ;
-  less_CAdv = {s="λιγότερο"; p= "από"  ; c= CPrep PNul ; lock_CAdv = <>}  ;
+  less_CAdv = {s,s2="λιγότερο"; p= "από"  ; c= CPrep PNul ; lock_CAdv = <>}  ;
 
   many_Det =  {s,sp = \\g,c => case <g,c> of { 
         <Masc,Nom |Vocative> => "πολλοί"; 
@@ -88,7 +88,7 @@ concrete StructuralGre of Structural = CatGre **
       isNeg = False
       } ;
 
-  more_CAdv = {s="πιό"; p="από"  ; c= CPrep PNul}  ;
+  more_CAdv = {s="πιό"; s2 = "πάνω" ; p="από"  ; c= CPrep PNul}  ;
   most_Predet = { s = \\n,g,c => artDef  g n c ++  (regAdj "περισσότερος").s ! Posit ! g ! n ! c };
 
   much_Det = {s,sp = \\g,c => case <g,c> of{ 
@@ -172,39 +172,28 @@ concrete StructuralGre of Structural = CatGre **
   when_IAdv = ss "πότε" ;
   when_Subj = ss "όταν" ** {m =Con} ;
   where_IAdv = ss "που" ;
-
-  which_IQuant = {s = table {
-      Sg => table {Masc | Change=> table { Nom  => "ποιός";
-                                   Gen       => "ποιού";
-                                   Acc | CPrep P_se |CPrep PNul => "ποιόν" ;
-                                   Voc => " "
-                                 };
-                   Fem  => table { Nom | Acc | CPrep P_se |CPrep PNul => "ποιά";
-                                   Gen       => "ποιάς";
-                                   Voc => " "
-                                 };
-                   Neut  => table { Nom | Acc | CPrep P_se |CPrep PNul  => "ποιό";
-                                   Gen       => "ποιού";
-                                   Voc => " "
-                                 } };
-      Pl => table {Masc => table { Nom  => "ποιoί";
-                                   Gen       => "ποιών";
-                                   Acc |CPrep P_se |CPrep PNul    => "ποιούς" ;
-                                   Voc => " "
-                                 };
-                   Fem  => table { Nom | Acc | CPrep P_se |CPrep PNul => "ποιές";
-                                   Gen       => "ποιών" ;
-                                   Voc => " "
-                                 };
-                   Neut | Change => table { Nom | Acc | CPrep P_se |CPrep PNul  => "ποιά";
-                                            Gen       => "ποιών";
-                                            Voc => " "
-                  }}}};
+  
+  which_IQuant = {s =  \\n,g,c =>  case <n,g,c> of {
+      <Sg,Masc | Change,Nom |Vocative> => "ποιός"; 
+      <Sg,Masc | Change,Gen|CPrep P_Dat> => "ποιού" ; 
+      <Sg, Masc | Change ,Acc |CPrep P_se | CPrep PNul> => prepCase c ++ "ποιόν"  ; 
+      <Sg,Fem,Nom |Vocative |Acc |CPrep P_se | CPrep PNul> => prepCase c ++ "ποιά"; 
+      <Sg,Fem,Gen|CPrep P_Dat > => "ποιάς" ; 
+      <Sg,Neut,Nom |Vocative |Acc |CPrep P_se | CPrep PNul> =>  prepCase c ++"ποιό"; 
+      <Sg,Neut,Gen|CPrep P_Dat > => "ποιού" ;
+      <Pl,Masc,Nom |Vocative> => "ποιoί"; 
+      <Pl,Masc,Gen|CPrep P_Dat> => "ποιών" ; 
+      <Pl, Masc| Change, Acc|CPrep P_se | CPrep PNul> => prepCase c ++ "ποιούς"  ; 
+      <Pl,Fem,Nom |Vocative |Acc |CPrep P_se | CPrep PNul> => prepCase c ++ "ποιές"; 
+      <Pl,Fem,Gen|CPrep P_Dat > => "ποιών" ; 
+      <Pl,Neut | Change,Nom |Vocative |Acc |CPrep P_se | CPrep PNul> =>  prepCase c ++"ποιά"; 
+      <Pl,Neut | Change,Gen|CPrep P_Dat > => "ποιών" } 
+     } ;
 
  whoSg_IP = {s = \\g,c => case <g,c> of { 
-                <Masc ,Nom> =>prepCase c ++ "ποιός"  ;
+                <Masc | Change ,Nom> =>prepCase c ++ "ποιός"  ;
                 <Fem ,Nom | Acc |CPrep P_se | CPrep PNul > =>prepCase c ++ "ποιά"  ;
-                <Neut| Change ,Nom | Acc | CPrep P_se | CPrep PNul > =>prepCase c ++ "ποιό"  ;
+                <Neut ,Nom | Acc | CPrep P_se | CPrep PNul > =>prepCase c ++ "ποιό"  ;
                 <Fem ,Gen> =>prepCase c ++"ποιάς"  ;
                 <Neut | Change | Masc,Gen> => prepCase c ++"ποιού"  ;
                 <Masc ,Acc |CPrep P_se | CPrep PNul > => prepCase c ++"ποιόν" ;
@@ -256,7 +245,7 @@ concrete StructuralGre of Structural = CatGre **
   nobody_NP = nppolNeg (mkDeterminer "κανένας" "κανενός" "κανέναν" "καμία" "καμιάς" "καμία" "κανένα" "κανενός" "κανένα" "κανένας" "κανενός" "κανέναν" Sg) ;
   nothing_NP = makeNP "τίποτα" Sg Neut True;
   except_Prep = mkPreposition "εκτός απο";
-  as_CAdv = {s="τόσο"; p="όσο"  ; c= Nom}  ;
+  as_CAdv = {s,s2="τόσο"; p="όσο"  ; c= Nom}  ;
   have_V2 = dirV2 (mkAux "έχω" "είχα" "έχε" "έχετε" "έχων" ** {lock_V = <>}) ;
   lin language_title_Utt = ss "Ελληνικά" ;
 

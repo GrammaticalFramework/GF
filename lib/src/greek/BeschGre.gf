@@ -1141,6 +1141,82 @@
        mkVerbContracIrreg2  lEw pW eIpa Elega lE  p eIp Eleg lEg leg eipWth eipwth part;
 
 
+mkVerbContracIrreg3 : (x1,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = \vlEpw, dW, eIda, Evlepa, vlEp, d, eId, Evlep, vlEp, vlep, eidWth, eidwth, part ->
+     {
+      s = table {
+            VPres Ind Sg P1 Active _ => vlEpw ;
+            VPres Ind Sg P2 Active _ => vlEp + "εις" ;
+            VPres Ind Sg P3 Active _=> vlEp + "ει" ;
+            VPres Ind Pl P1 Active _ => vlEp + "ουμε" ;
+            VPres Ind Pl P2 Active _ => vlEp + "ετε" ;
+            VPres Ind Pl P3 Active _ => vlEp + "ουν" ;
+
+            VPres Ind Sg P1 Passive  _ => vlEp  + "ομαι" ; 
+            VPres Ind Sg P2 Passive  _ => vlEp  +"εσαι" ;
+            VPres Ind Sg P3 Passive  _=> vlEp  +"εται" ;
+            VPres Ind Pl P1 Passive  _=> vlep  +"όμαστε" ;   
+            VPres Ind Pl P2 Passive  _ => vlEp  + "εστε" ;
+            VPres Ind Pl P3 Passive  _ => vlEp  +"ονται" ;
+            
+            VPres _ Sg P1 Active  _ => dW ;
+            VPres _ Sg P2 Active  _ => d + "είς" ;
+            VPres _ Sg P3 Active  _ => d + "εί" ;
+            VPres _ Pl P1 Active  _=> d + "ούμε" ;
+            VPres _ Pl P2 Active  _ => d + "είτε" ;
+            VPres _ Pl P3 Active  _ =>  d + "ούν" ;
+
+            VPres _ Sg P1 Passive  _ => eidwth + "ώ" ;
+            VPres _ Sg P2 Passive  _ => eidwth + "είς" ;
+            VPres _ Sg P3 Passive  _ => eidwth + "εί" ;
+            VPres _ Pl P1 Passive  _ => eidwth + "ούμε" ;
+            VPres _ Pl P2 Passive  _ => eidwth + "είτε" ;
+            VPres _ Pl P3 Passive  _ => eidwth + "ούν" ;
+            
+            VPast _ Sg P1 Active Perf => eIda ;
+            VPast _ Sg P2 Active Perf=> eId + "ες" ;
+            VPast _ Sg P3 Active Perf => eId + "ε" ;
+            VPast _ Pl P1 Active Perf => eId  +  "αμε" ;
+            VPast _ Pl P2 Active Perf => eId  + "ατε" ;
+            VPast _ Pl P3 Active Perf => eId + "αν" ;
+
+            VPast _ Sg P1 Passive Perf => eidWth  + "ηκα" ;
+            VPast _ Sg P2 Passive Perf => eidWth + "ηκες" ;
+            VPast _ Sg P3 Passive Perf => eidWth + "ηκε" ;
+            VPast _ Pl P1 Passive Perf => eidwth + "ήκαμε" ;
+            VPast _ Pl P2 Passive Perf=> eidwth + "ήκατε" ;
+            VPast _ Pl P3 Passive Perf => eidWth + "ηκαν" ;
+
+            VPast _ Sg P1 Active Imperf => Evlepa ;
+            VPast _ Sg P2 Active Imperf => Evlep + "ες" ;
+            VPast _ Sg P3 Active Imperf => Evlep + "ε" ;
+            VPast _ Pl P1 Active Imperf => vlEp+ "αμε" ;
+            VPast _ Pl P2 Active Imperf => vlEp + "ατε" ;
+            VPast _ Pl P3 Active Imperf => Evlep + "αν" ;
+
+            VPast _ Sg P1  Passive Imperf=> vlep  + "όμουν" ;
+            VPast _ Sg P2  Passive Imperf => vlep+ "όσουν" ;
+            VPast _ Sg P3  Passive Imperf => vlep +"όταν" ;
+            VPast _ Pl P1  Passive Imperf => vlep + "όμασταν" ;
+            VPast _ Pl P2  Passive Imperf=> vlep + "όσασταν" ;
+            VPast _ Pl P3  Passive Imperf => vlep + "όντουσαν" ;
+            
+            VNonFinite Active       => d + "εί" ;
+            VNonFinite Passive       => eidwth + "εί" ; 
+
+            VImperative Perf Sg Active=> d + "ές" ;
+            VImperative Perf Pl Active => d + "είτε" ;
+            VImperative Imperf Sg  Active =>vlEp + "ε" ;
+            VImperative Imperf Pl Active => vlEp + "ετε"  ;
+
+            VImperative _  Sg Passive =>  " " ;
+            VImperative _ Pl Passive => eidwth + "είτε" ;
+
+            Gerund =>vlEp + "οντας" ;
+
+            Participle d  g n c => (regAdj part).s !d! g !n !c
+              } 
+              } ;
+
        VerbContrIrreg3 : (x1,_,_,_ : Str) -> Verb = \vlEpw,dW,eIda,Evlepa-> 
      let
         vlEp = init  vlEpw;
@@ -1153,7 +1229,7 @@
         eidwth = mkVerbStem eidWth;
         part= mkPartStem  eidwth;
       in 
-       mkVerbContracIrreg2  vlEpw dW eIda Evlepa vlEp d eId  Evlep  vlEp vlep eidWth eidwth part;
+       mkVerbContracIrreg3  vlEpw dW eIda Evlepa vlEp d eId  Evlep  vlEp vlep eidWth eidwth part;
 
 
 
@@ -2074,7 +2150,7 @@
         zIs = init zIsw ;             
         Ezis = init Ezisa ;            
         zoYs = init zoYsa ;
-        Nonfinite = z + "εί" ; 
+        Nonfinite = zIs + "ει" ; 
         Imp1 = zIse ;
         Imp2 = z+ "είτε" ; 
         Imp3 = zIs + "ε";
@@ -2091,7 +2167,7 @@
         tharrEps = init tharrEpsw ;             
         thArreps = init thArrepsa ;            
         tharroYs = init tharroYsa ;
-        Nonfinite = tharr + "εί" ; 
+        Nonfinite = tharrEps + "ει" ; 
         Imp1 = thArrepse ;
         Imp2 = tharr + "είτε" ; 
         Imp3 = thArreps + "ε";

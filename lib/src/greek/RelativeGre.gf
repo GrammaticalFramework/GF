@@ -4,8 +4,10 @@ concrete RelativeGre of Relative = CatGre ** open Prelude, ResGre in {
 
   lin
 
-                        
+                         
+
  
+
     RelCl cl = {
       s = \\ag,t,a,p,_ =>"ώστε"   ++  cl.s ! Main ! t ! a ! p ! Ind ;
       c = Nom
@@ -29,10 +31,11 @@ concrete RelativeGre of Relative = CatGre ** open Prelude, ResGre in {
  
     RelSlash rp slash = {
       s = \\ag,t,a,p,m => 
-          let aag = complAgr ag
+          let aag = complAgr ag ;
+          agr = Ag rp.a.g rp.a.n P3 ;
           in
               slash.c2.s ++  rp.s ! False ! aag ! slash.c2.c ++ 
-              slash.s ! aag ! Main ! t ! a ! p ! m  ;    
+              slash.s ! aag ! Main ! t ! a ! p ! m ++ slash.n3 ! agr ;    
         c = Acc
       } ;
 

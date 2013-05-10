@@ -14,7 +14,7 @@ flags coding = utf8 ;
     AdA = {s : Str} ; 
     AdN = {s : Str} ; 
     IAdv = {s : Str} ; 
-    CAdv = {s : Str; p : Str} ** {c:Case};
+    CAdv = {s ,s2: Str; p : Str} ** {c:Case};
     PConj = {s : Str} ; 
     Interj = {s : Str} ;
     

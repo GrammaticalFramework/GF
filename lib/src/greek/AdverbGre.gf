@@ -12,7 +12,7 @@ flags coding = utf8 ;
 
 
     ComparAdvAdjS cadv a s = {
-      s = cadv.s ++ a.adv ! Posit ++ cadv.p ++ "ότι" ++ s.s ! Ind    
+      s = cadv.s ++ a.adv ! Posit ++ cadv.p ++ "οτι" ++ s.s ! Ind    
     } ;
 
    
@@ -30,6 +30,6 @@ flags coding = utf8 ;
       s = subj.s ++ s.s ! subj.m
     }  ;
 
-    AdnCAdv cadv = {s = cadv.s ++ cadv.p} ;
+    AdnCAdv cadv = {s = cadv.s2 ++ cadv.p} ;
 
 }
