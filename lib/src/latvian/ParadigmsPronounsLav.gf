@@ -1,31 +1,25 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
-resource ParadigmsPronounsLav = open
-  (Predef=Predef),
-  Prelude,
-  ResLav,
-  CatLav
-  in {
+resource ParadigmsPronounsLav = open ResLav, CatLav, Prelude, Predef in {
 
-flags
-  coding = utf8 ;
+flags coding = utf8 ;
 
 oper
+
   PronGend : Type = { s : Gender => Number => Case => Str } ;
-  Pron : Type = { s : Case => Str ; a : ResLav.Agr ; poss : Gender => Number => Case => Str } ;
 
--- PRONOUNS (incl. 'determiners')
+  -- Pronouns (incl. "determiners")
 
-  mkPronoun_I : Gender -> Pron = \g -> {
+  mkPronoun_I : Gender -> Pronoun = \gend -> {
     s = table {
       Nom => "es" ;
       Gen => "manis" ;
       Dat => "man" ;
       Acc => "mani" ;
       Loc => "manī" ;
-      ResLav.Voc => NON_EXISTENT
+      Voc => NON_EXISTENT
     } ;
-    a = AgP1 Sg g ;
+    agr = AgrP1 Sg gend ;
     poss = table {
       Masc => table {
         Sg => table {
@@ -34,7 +28,7 @@ oper
           Dat => "manam" ;
           Acc => "manu" ;
           Loc => "manā" ;
-          ResLav.Voc => "mans"
+          Voc => "mans"
         } ;
         Pl => table {
           Nom => "mani" ;
@@ -42,7 +36,7 @@ oper
           Dat => "maniem" ;
           Acc => "manus" ;
           Loc => "manos" ;
-          ResLav.Voc => "mani"
+          Voc => "mani"
         }
       } ;
       Fem => table {
@@ -52,7 +46,7 @@ oper
           Dat => "manai" ;
           Acc => "manu" ;
           Loc => "manā" ;
-          ResLav.Voc => "mana"
+          Voc => "mana"
         } ;
         Pl => table {
           Nom => "manas" ;
@@ -60,35 +54,37 @@ oper
           Dat => "manām" ;
           Acc => "manas" ;
           Loc => "manās" ;
-          ResLav.Voc => "manas"
+          Voc => "manas"
         }
       }
-    }
+    } ;
+    pol = Pos
   } ;
 
-  mkPronoun_We : Gender -> Pron = \g -> {
+  mkPronoun_We : Gender -> Pronoun = \gend -> {
     s = table {
       Nom => "mēs" ;
       Gen => "mūsu" ;
       Dat => "mums" ;
       Acc => "mūs" ;
       Loc => "mūsos" ;
-      ResLav.Voc => NON_EXISTENT
+      Voc => NON_EXISTENT
     } ;
-    a = AgP1 Pl g ;
-    poss = \\_,_,_ => "mūsu"
+    agr = AgrP1 Pl gend ;
+    poss = \\_,_,_ => "mūsu" ;
+    pol = Pos
   } ;
 
-  mkPronoun_You_Sg : Gender -> Pron = \g -> {
+  mkPronoun_You_Sg : Gender -> Pronoun = \gend -> {
     s = table {
       Nom => "tu" ;
       Gen => "tevis" ;
       Dat => "tev" ;
       Acc => "tevi" ;
       Loc => "tevī" ;
-      ResLav.Voc => "tu"
+      Voc => "tu"
     } ;
-    a = AgP2 Sg g ;
+    agr = AgrP2 Sg gend ;
     poss = table {
       Masc => table {
         Sg => table {
@@ -97,7 +93,7 @@ oper
           Dat => "tavam" ;
           Acc => "tavu" ;
           Loc => "tavā" ;
-          ResLav.Voc => "tavs"
+          Voc => "tavs"
         };
         Pl => table {
           Nom => "tavi" ;
@@ -105,7 +101,7 @@ oper
           Dat => "taviem" ;
           Acc => "tavus" ;
           Loc => "tavos" ;
-          ResLav.Voc => "tavi"
+          Voc => "tavi"
         }
       } ;
       Fem => table {
@@ -115,7 +111,7 @@ oper
           Dat => "tavai" ;
           Acc => "tavu" ;
           Loc => "tavā" ;
-          ResLav.Voc => "tava"
+          Voc => "tava"
         };
         Pl => table {
           Nom => "tavas" ;
@@ -123,48 +119,53 @@ oper
           Dat => "tavām" ;
           Acc => "tavas" ;
           Loc => "tavās" ;
-          ResLav.Voc => "tavas"
+          Voc => "tavas"
         }
       }
-    }
+    } ;
+    pol = Pos
   } ;
 
-  mkPronoun_You_Pol : Gender -> Pron = \g -> {
+  mkPronoun_You_Pol : Gender -> Pronoun = \gend -> {
     s = table {
       Nom => "Jūs" ;
       Gen => "Jūsu" ;
       Dat => "Jums" ;
       Acc => "Jūs" ;
       Loc => "Jūsos" ;
-      ResLav.Voc => "Jūs"
+      Voc => "Jūs"
     } ;
-    a = AgP2 Pl g ;  -- FIXME: in the case of a predicate nominal: copula=Pl, complement=Sg
-    poss = \\_,_,_ => "Jūsu"
+    agr = AgrP2 Pl gend ;  -- FIXME: in the case of a predicate nominal: copula=Pl, complement=Sg
+    poss = \\_,_,_ => "Jūsu" ;
+    pol = Pos
   } ;
 
-  mkPronoun_You_Pl : Gender -> Pron = \g -> {
+  mkPronoun_You_Pl : Gender -> Pronoun = \gend -> {
     s = table {
       Nom => "jūs" ;
       Gen => "jūsu" ;
       Dat => "jums" ;
       Acc => "jūs" ;
       Loc => "jūsos" ;
-      ResLav.Voc => "jūs"
+      Voc => "jūs"
     } ;
-    a = AgP2 Pl g ;
-    poss = \\_,_,_ => "jūsu"
+    agr = AgrP2 Pl gend ;
+    poss = \\_,_,_ => "jūsu" ;
+    pol = Pos
   } ;
 
-  mkPronoun_They : Gender -> Pron = \g -> {
-    s = \\c => (mkPronoun_Gend "viņš").s ! g ! Pl ! c ;
-    a = AgP3 Pl g Pos ;
-    poss = \\_,_,_ => "viņu"
+  mkPronoun_They : Gender -> Pronoun = \gend -> {
+    s = \\c => (mkPronoun_Gend "viņš").s ! gend ! Pl ! c ;
+    agr = AgrP3 Pl gend ;
+    poss = \\_,_,_ => "viņu" ;
+    pol = Pos
   } ;
 
-  mkPronoun_It_Sg : Gender -> Pron = \g -> {
-    s = \\c => (mkPronoun_ThisThat That).s ! g ! Sg ! c ;
-    a = AgP3 Sg g Pos ;
-    poss = \\_,_,_ => case g of { Masc => "tā" ; Fem => "tās" }
+  mkPronoun_It_Sg : Gender -> Pronoun = \gend -> {
+    s = \\c => (mkPronoun_ThisThat That).s ! gend ! Sg ! c ;
+    agr = AgrP3 Sg gend ;
+    poss = \\_,_,_ => case gend of { Masc => "tā" ; Fem => "tās" } ;
+    pol = Pos
   } ;
 
   -- Gender=>Number=>Case P3 pronouns
@@ -268,7 +269,7 @@ oper
     } ;
 
     -- Everything, something, nothing, i.e., all that end with "kas"
-    mkPronoun_Thing : Str -> Polarity -> Pron = \lemma,pol ->
+    mkPronoun_Thing : Str -> Polarity -> Pronoun = \lemma,pol ->
     let stem : Str = Predef.tk 3 lemma
     in {
       s = \\c => table {
@@ -279,15 +280,17 @@ oper
         Loc => case stem of { "kaut" => stem ++ "kur" ; _ => stem + "kur" } ;
         Voc => NON_EXISTENT
       } ! c ;
-      a = AgP3 Sg Masc pol ;
-      poss = \\_,_,_ => case stem of { "kaut" => stem ++ "kā" ; _ => stem + "kā" }
+      agr = AgrP3 Sg Masc ;
+      poss = \\_,_,_ => case stem of { "kaut" => stem ++ "kā" ; _ => stem + "kā" } ;
+      pol =  pol
     } ;
 
     -- Everybody, somebody, nobody
-    mkPronoun_Body : Str -> Polarity -> Pron = \lemma,pol -> {
+    mkPronoun_Body : Str -> Polarity -> Pronoun = \lemma,pol -> {
       s = \\c => (mkPronoun_Gend lemma).s ! Masc ! Sg ! c ;
-      a = AgP3 Sg Masc pol ;
+      agr = AgrP3 Sg Masc ;
       poss = \\_,_,_ => (mkPronoun_Gend lemma).s ! Masc ! Sg ! Gen ;
+      pol = pol
     } ;
 
 } ;

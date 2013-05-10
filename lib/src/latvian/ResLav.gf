@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
 resource ResLav = ParamX ** open Prelude in {
 
@@ -29,7 +29,7 @@ param
   Voice = Act | Pass ;
   Conjugation = C2 | C3 ;  -- C1 - "irregular" verbs
 
-  -- Verb mood:
+  -- Verb moods:
   --   Ind - indicative
   --   Rel - relative (http://www.isocat.org/rest/dc/3836)
   --   Deb - debitive (http://www.isocat.org/rest/dc/3835)
@@ -50,14 +50,11 @@ param
     | VDebRel  -- the relative subtype of debitive
     | VPart Voice Gender Number Case ;
 
-  -- Verb agreement:
-  --   Number depends on Subject.Person
-  --   Subject.Gender has to be agreed in predicative nominal clauses, and in participle forms
-  --   Polarity - double negation, if the subject/object NP has a negated determiner
-  Agr =
-      AgP1 Number Gender
-    | AgP2 Number Gender
-    | AgP3 Number Gender Polarity ;
+  -- Number and Gender has to be agreed in predicative nominal clauses
+  Agreement =
+      AgrP1 Number Gender
+    | AgrP2 Number Gender
+    | AgrP3 Number Gender ;
 
   -- Other
 
@@ -68,38 +65,70 @@ param
 
 oper
 
-  Verb : Type = { s : Polarity => VForm => Str } ;
+  Noun : Type = { s : Number => Case => Str ; gend : Gender } ;
 
-  Valence : Type = { subj : Case ; obj : Case ; agr : Agr } ;
-  -- TODO: jāpāriet uz vienotu TopicFocus parametru
-  -- TODO: ieraksta tips (c:CaseCase, p:Prep; kam ir agr?) vai algebr. param.?
+  ProperNoun : Type = { s : Case => Str ; gend : Gender ; num : Number } ;
+  
+  Pronoun : Type = { s : Case => Str ; agr : Agreement ; poss : Gender => Number => Case => Str ; pol : Polarity } ;
 
-  Prep : Type = { s : Str ; c : Number => Case } ;
+  Adjective : Type = { s : AForm => Str } ;
+
+  Preposition : Type = { s : Str ; c : Number => Case } ;
   -- For simple case-based valences, the preposition is empty ([])
-  -- TODO: position of prepositions (pre or post)
+  -- TODO: position of prepositions (pre or post) ?
 
-  VP = { v : Verb ; compl : Agr => Str ; val : Valence ; objNeg : Polarity ; voice : Voice } ;
-  -- compl: objects, complements, adverbial modifiers
-  -- TODO: lai varētu spēlēties ar vārdu secību, compl vēlāk būs jāskalda pa daļām
+  Verb : Type = { s : Polarity => VForm => Str ; topic : Case } ;
 
-  VPSlash = VP ** { p : Prep } ;
-  -- TODO: p pārklājas ar val.obj un val.agr / vai vp.p = v.p?
+  VP : Type = {
+    v : Verb ;
+    agr : {
+      subj : Agreement ;        -- the verb-subject agreement (the subject can be in the focus part of a clause)
+      focus : Polarity          -- the verb-focus agreement (for the double negation)  -- TODO: jāpārsauc par pol, lai nejūk citur
+    } ;
+    compl : Agreement => Str ;  -- the complement-subject agreement
+    voice : Voice ;
+    topic : Case                -- the valence of the topic NP (typically, the subject)
+  } ;
 
-  toAgr : Person -> Number -> Gender -> Polarity -> Agr = \pers,num,gend,pol ->
+  VPSlash : Type = VP ** { focus : Preposition } ;  -- the valence of the focus NP (typically, the object)
+
+  insertObj : (Agreement => Str) -> VP -> VP = \obj,vp -> {
+    v     = vp.v ;
+    agr   = vp.agr ;
+    compl = \\agr => vp.compl ! agr ++ obj ! agr ;
+    voice = vp.voice ;
+    topic = vp.topic
+  } ;
+
+  insertObjC : (Agreement => Str) -> VPSlash -> VPSlash = \obj,vp ->
+    insertObj obj vp ** { focus = vp.focus } ;
+
+  insertObjPre : (Agreement => Str) -> VP -> VP = \obj,vp -> {
+    v     = vp.v ;
+    agr   = vp.agr ;
+    compl = \\agr => obj ! agr ++ vp.compl ! agr ;
+    voice = vp.voice ;
+    topic = vp.topic
+  } ;
+
+  buildVP : VP -> Polarity -> VForm -> Agreement -> Str = \vp,pol,vf,agr ->
+    vp.v.s ! pol ! vf ++ vp.compl ! agr ;
+
+  toAgr : Person -> Number -> Gender -> Agreement = \pers,num,gend ->
     case pers of {
-      P1 => AgP1 num gend ;
-      P2 => AgP2 num gend ;
-      P3 => AgP3 num gend pol
+      P1 => AgrP1 num gend ;
+      P2 => AgrP2 num gend ;
+      P3 => AgrP3 num gend
     } ;
 
-  fromAgr : Agr -> { pers : Person ; num : Number ; gend : Gender ; pol : Polarity } = \agr ->
+  fromAgr : Agreement -> { pers : Person ; num : Number ; gend : Gender } = \agr ->
     case agr of {
-      AgP1 num gend     => { pers = P1 ; num = num ; gend = gend ; pol = Pos } ;
-      AgP2 num gend     => { pers = P2 ; num = num ; gend = gend ; pol = Pos } ;
-      AgP3 num gend pol => { pers = P3 ; num = num ; gend = gend ; pol = pol }
+      AgrP1 num gend => { pers = P1 ; num = num ; gend = gend } ;
+      AgrP2 num gend => { pers = P2 ; num = num ; gend = gend } ;
+      AgrP3 num gend => { pers = P3 ; num = num ; gend = gend }
     } ;
 
-  conjAgr : Agr -> Agr -> Agr = \agr1,agr2 ->
+  conjAgr : Agreement -> Agreement -> Agreement = \agr1,agr2 ->
     let
       a1 = fromAgr agr1 ;
       a2 = fromAgr agr2
@@ -107,28 +136,13 @@ oper
       toAgr
         (conjPerson a1.pers a2.pers) -- FIXME: personu apvienošana ir tricky un ir jāuztaisa korekti
         (conjNumber a1.num a2.num)
-        (conjGender a1.gend a2.gend)
-        (conjPolarity a1.pol a2.pol) ;
+        (conjGender a1.gend a2.gend) ;
 
   conjGender : Gender -> Gender -> Gender = \gend1,gend2 ->
     case gend1 of {
       Fem => gend2 ;
       _   => Masc
     } ;
-
-  conjPolarity : Polarity -> Polarity -> Polarity = \pol1,pol2 ->
-    case pol1 of {
-      Neg => Neg ;
-      _   => pol2
-    } ;
-
-  toVal : Case -> Case -> Agr -> Valence = \subj,obj,agr -> {
-    subj = subj ;
-    obj = obj ;
-    agr = agr
-  } ;
-
-  toVal_Reg : Case -> Valence = \subj -> toVal subj Nom (AgP3 Sg Masc Pos) ;
 
   vowel : pattern Str = #("a"|"ā"|"e"|"ē"|"i"|"ī"|"o"|"u"|"ū") ;
 

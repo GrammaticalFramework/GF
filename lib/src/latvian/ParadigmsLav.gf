@@ -1,19 +1,20 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
 resource ParadigmsLav = open
-  (Predef=Predef),
-  Prelude,
+  ResLav,
+  CatLav,
   ParadigmsNounsLav,
+  ParadigmsPronounsLav,
   ParadigmsAdjectivesLav,
   ParadigmsVerbsLav,
-  ParadigmsPronounsLav,
-  ResLav,
-  CatLav
+  Prelude,
+  Predef
 in {
 
 flags coding = utf8 ;
 
 oper
+
   masculine : Gender = Masc ;
   feminine  : Gender = Fem ;
 
@@ -53,12 +54,12 @@ oper
   } ;
 
   mkN2 = overload {
-    mkN2 : N -> ResLav.Prep -> N2 = \n,p -> lin N2 n ** { p = p ; isPre = True } ;
-    mkN2 : N -> ResLav.Prep -> Bool -> N2 = \n,p,isPre -> lin N2 n ** { p = p ; isPre = isPre } ;
+    mkN2 : N -> Preposition -> N2 = \n,p -> lin N2 n ** { prep = p ; isPre = True } ;
+    mkN2 : N -> Preposition -> Bool -> N2 = \n,p,pp -> lin N2 n ** { prep = p ; isPre = pp } ;
   } ;
 
-  mkN3 : N -> ResLav.Prep -> ResLav.Prep -> N3 = \n,p1,p2 ->
-    lin N3 n ** { p1 = p1 ; p2 = p2 ; isPre1 = False ; isPre2 = False } ;
+  mkN3 : N -> Preposition -> Preposition -> N3 = \n,p1,p2 ->
+    lin N3 n ** { prep1 = p1 ; prep2 = p2 ; isPre1 = False ; isPre2 = False } ;
 
   mkA = overload {
     mkA : (lemma : Str) -> A = \s -> lin A (mkAdjective s) ;
@@ -71,29 +72,35 @@ oper
     mkA : (v : Verb) -> Voice -> A = \v,p -> lin A (mkAdjective_Participle v p) ;
   } ;
 
-  mkA2  : A -> ResLav.Prep -> A2 = \a,p -> lin A2 (a ** { p = p }) ; -- precējies ar ...
-  mkAS  : A -> AS  =\a   -> lin A  a ;
-  mkA2S : A -> ResLav.Prep -> A2S =\a,p -> lin A2 (a ** { p = p }) ;
-  mkAV  : A -> AV  = \a   -> lin A  a ;
-  mkA2V : A -> ResLav.Prep -> A2V = \a,p -> lin A2 (a ** { p = p }) ;
+  AS, AV = A ;
+  mkAS  : A -> AS = \a -> lin A a ;
+  mkAV  : A -> AV = \a -> lin A a ;
+  
+  mkA2  : A -> Prep -> A2 = \a,p -> lin A2 (a ** { prep = p }) ;
+  
+  A2S, A2V = A2 ;
+  mkA2S : A -> Prep -> A2S =\a,p -> lin A2 (a ** { prep = p }) ;
+  mkA2V : A -> Prep -> A2V = \a,p -> lin A2 (a ** { prep = p }) ;
 
-  AS, AV   : Type = { s : AForm => Str } ;
-  A2S, A2V : Type = { s : AForm => Str ; p : ResLav.Prep };
+  -- Verbs
 
   mkV = overload {
-    mkV : (lemma : Str) -> V = \l -> lin V (mkVerb_Irreg l) ;
-    mkV : (lemma : Str) -> Conjugation -> V = \l,c -> lin V (mkVerb l c) ;
-    mkV : (lemma : Str) -> Str -> Str -> V = \l1,l2,l3 -> lin V (mkVerbC1 l1 l2 l3) ;
+    mkV : Str -> V = \s -> lin V (mkVerb_Irreg s Nom) ;
+    mkV : Str -> Case -> V = \s,c -> lin V (mkVerb_Irreg s c) ;
+    mkV : Str -> Conjugation -> V = \s,c -> lin V (mkVerb s c Nom) ;
+    mkV : Str -> Conjugation -> Case -> V = \s,conj,c -> lin V (mkVerb s conj c) ;
+    mkV : Str -> Str -> Str -> V = \s1,s2,s3 -> lin V (mkVerbC1 s1 s2 s3 Nom) ;
+    mkV : Str -> Str -> Str -> Case -> V = \s1,s2,s3,c -> lin V (mkVerbC1 s1 s2 s3 c) ;
   } ;
 
   mkV2 = overload {
-    mkV2 : V -> ResLav.Prep -> V2 = \v,p -> lin V2 v ** { p = p ; topic = Nom } ;
-    mkV2 : V -> ResLav.Prep -> Case -> V2 = \v,p,c -> lin V2 v ** { p = p ; topic = c } ;
+    mkV2 : V -> V2 = \v -> lin V2 v ** { focus = acc_Prep } ;
+    mkV2 : V -> Preposition -> V2 = \v,p -> lin V2 v ** { focus = p } ;
   } ;
-  
+
   mkVS = overload {
-    mkVS : V -> Subj -> VS = \v,s -> lin VS v ** { subj = s ; topic = Nom } ;
-    mkVS : V -> Subj -> Case -> VS = \v,s,c -> lin VS v ** { subj = s ; topic = c } ;
+    mkVS : V -> Subj -> VS = \v,c -> lin VS v ** { conj = c ; topic = Nom } ;
+    mkVS : V -> Subj -> Case -> VS = \v,c,s -> lin VS v ** { conj = c ; topic = s } ;
   } ;
   
   mkVQ = overload {
@@ -107,25 +114,25 @@ oper
   } ;
   
   mkV3 = overload {
-    mkV3 : V -> ResLav.Prep -> ResLav.Prep -> V3 = \v,p1,p2 ->
-      lin V3 v ** { p1 = p1 ; p2 = p2 ; topic = Nom } ;
-    mkV3 : V -> ResLav.Prep -> ResLav.Prep -> Case -> V3 = \v,p1,p2,c ->
-      lin V3 v ** { p1 = p1 ; p2 = p2 ; topic = c } ;
+    mkV3 : V -> Preposition -> Preposition -> V3 = \v,p1,p2 ->
+      lin V3 v ** { topic = Nom ; focus1 = p1 ; focus2 = p2 } ;
+    mkV3 : V -> Case -> Preposition -> Preposition -> V3 = \v,c,p1,p2 ->
+      lin V3 v ** { topic = c ; focus1 = p1 ; focus2 = p2 } ;
   } ;
   
   mkVA : V -> VA = \v -> lin VA v ;
   
-  mkV2S : V -> ResLav.Prep -> Subj -> V2S = \v,p,s -> lin V2S v ** { p = p ; subj = s } ;
-  mkV2A : V -> ResLav.Prep -> V2A = \v,p -> lin V2A v ** { p = p } ;
-  mkV2Q : V -> ResLav.Prep -> V2Q = \v,p -> lin V2Q v ** { p = p } ;
-  mkV2V : V -> ResLav.Prep -> V2V = \v,p -> lin V2V v ** { p = p } ;
+  mkV2S : V -> Subj -> Preposition -> V2S = \v,c,o -> lin V2S v ** { conj = c ; focus = o } ;
+  mkV2A : V -> Preposition -> V2A = \v,o -> lin V2A v ** { focus = o } ;
+  mkV2Q : V -> Preposition -> V2Q = \v,o -> lin V2Q v ** { focus = o } ;
+  mkV2V : V -> Preposition -> V2V = \v,o -> lin V2V v ** { focus = o } ;
 
-  mkCAdv : Str -> Str -> Degree -> CAdv  = \s,p,d -> { s = s ; p = p ; d = d ; lock_CAdv = <> } ;
+  mkCAdv : Str -> Str -> Degree -> CAdv  = \s,p,d -> lin CAdv { s = s ; prep = p ; deg = d } ;
 
   mkPrep = overload {
-    mkPrep : Str -> Case -> Case -> ResLav.Prep = \prep,sg,pl ->
+    mkPrep : Str -> Case -> Case -> Preposition = \prep,sg,pl ->
       lin Prep { s = prep ; c = table { Sg => sg ; Pl => pl } } ;
-    mkPrep : Case -> ResLav.Prep = \c -> lin Prep { s = [] ; c = table { _ => c } } ;
+    mkPrep : Case -> Preposition = \c -> lin Prep { s = [] ; c = table { _ => c } } ;
   } ;
 
   -- empty fake prepositions for valences
@@ -148,7 +155,7 @@ oper
     mkConj : Str -> Str -> Number -> Conj = mk2Conj ;
   } ;
 
-  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> lin Conj (sd2 x y ** { n = n }) ;
+  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> lin Conj (sd2 x y ** { num = n }) ;
 
   viens = mkNumSpec "viens" "pirmais" "vien" "" Sg ;
 

@@ -14,7 +14,7 @@ lin
   -- NP -> CN -> CN
   GenCN np cn = {
     s = \\d,n,c => np.s ! Gen ++ cn.s ! d ! n ! c ;
-    g = cn.g
+    gend = cn.gend
   } ;
 
   aiz_Prep = mkPrep "aiz" Gen Dat ;
@@ -38,7 +38,7 @@ lin
   they8fem_Pron = mkPronoun_They Fem ;
   it8fem_Pron = mkPronoun_It_Sg Fem ;
 
-  have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
+  have_V3 = mkV3 (mkV "būt" Dat) nom_Prep dat_Prep ;
 
   {-
   empty_Det num def pol = \num,def,pol -> {
@@ -54,8 +54,8 @@ lin
   -- NP -> Quant
   GenNP np = {
     s = \\_,_,_ => np.s ! Gen ;
-    d = Def ;
-    pol = (fromAgr np.a).pol
+    defin = Def ;
+    pol = np.pol
   } ;
 
   --ICompAP ap = { s = \\g,n => "cik" ++ ap.s ! Indef ! g ! n ! Nom } ;
@@ -65,25 +65,28 @@ lin
   -- VP conjunction:
 
   lincat
-    VPS = { s : Agr => Str } ;
-    [VPS] = { s1,s2 : Agr => Str } ;
+    VPS = { s : AgrAgr => Str } ;
+    [VPS] = { s1,s2 : AgrAgr => Str } ;
 
   lin
-    BaseVPS = twoTable Agr ;
-    ConsVPS = consrTable Agr comma ;
+    BaseVPS = twoTable AgrAgr ;
+    ConsVPS = consrTable AgrAgr comma ;
 
     -- NP -> VPS -> S
-    PredVPS np vps = { s = np.s ! Nom ++ vps.s ! np.a } ;
+    PredVPS np vps = { s = np.s ! Nom ++ vps.s ! { agr = np.agr ; pol = np.pol } } ;
 
     -- Temp -> Pol -> VP -> VPS
     MkVPS temp pol vp = {
-      s = \\subjAgr =>
+      s = \\agrAgr =>
         temp.s ++
         -- TODO: verb moods other than Ind
-        buildVerb vp.v (Ind temp.a temp.t) pol.p subjAgr (fromAgr subjAgr).pol vp.objNeg ++
-        vp.compl ! subjAgr
+        buildVerb vp.v (Ind temp.a temp.t) pol.p agrAgr.agr agrAgr.pol vp.agr.focus ++
+        vp.compl ! agrAgr.agr
       } ;
     
     -- Conj -> [VPS] -> VPS
-    ConjVPS = conjunctDistrTable Agr ;
+    ConjVPS = conjunctDistrTable AgrAgr ;
+
+  oper AgrAgr : Type = { agr : Agreement ; pol : Polarity } ;
+
 }

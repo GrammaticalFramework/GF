@@ -6,7 +6,6 @@
 
 resource MorphoLav = ResLav ** {
 
-flags
-  optimize = all ;
+flags optimize = all ;
 
 }

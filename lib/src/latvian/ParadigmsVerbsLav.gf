@@ -1,32 +1,29 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
-resource ParadigmsVerbsLav = open
-  (Predef=Predef),
-  Prelude,
-  ResLav,
-  CatLav
-  in {
+resource ParadigmsVerbsLav = open ResLav, CatLav, Prelude, Predef in {
 
-flags
-  coding = utf8 ;
+flags coding = utf8 ;
 
 oper
+
   Verb_TMP : Type = {s : VForm => Str} ;
 
   -- Second and third conjugations
-  mkVerb : Str -> Conjugation -> Verb = \lemma,conj -> {
+  mkVerb : Str -> Conjugation -> Case -> Verb = \lemma,conj,topic -> {
     s = table {
       Pos => (mkVerb_Pos lemma conj).s ;
       Neg => (filter_Neg (mkVerb_Pos ("ne"+lemma) conj)).s
-    }
+    } ;
+    topic = topic
   } ;
 
   -- First conjugation
-  mkVerbC1 : Str -> Str -> Str -> Verb = \lemma,lemma2,lemma3 -> {
+  mkVerbC1 : Str -> Str -> Str -> Case -> Verb = \lemma,lemma2,lemma3,topic -> {
     s = table {
       Pos => (mkVerbC1_Pos lemma lemma2 lemma3).s ;
       Neg => (filter_Neg (mkVerbC1_Pos ("ne"+lemma) ("ne"+lemma2) ("ne"+lemma3))).s
-    }
+    } ;
+    topic = topic
   } ;
 
   mkVerb_Pos : Str -> Conjugation -> Verb_TMP = \lemma,conj ->
@@ -347,18 +344,19 @@ oper
       }
     } ;
 
-  mkVerb_Irreg : Str -> Verb = \lemma ->
+  mkVerb_Irreg : Str -> Case -> Verb = \lemma,topic ->
     case lemma of {
-      "būt"   => mkVerb_Irreg_Be ;
-      "iet"   => mkVerb_Irreg_Go ;
-      #prefix + "iet"   => mkVerb_Irreg_Go_Prefix (Predef.tk 3 lemma) ;
-      "gulēt" => mkVerb_Irreg_Sleep  -- FIXME: Should be treated as a regular verb (C3: gulēt, sēdēt etc.)
+      "būt"   => mkVerb_Irreg_Be topic ;
+      "iet"   => mkVerb_Irreg_Go topic ;
+      #prefix + "iet"   => mkVerb_Irreg_Go_Prefix (Predef.tk 3 lemma) topic ;
+      "gulēt" => mkVerb_Irreg_Sleep topic
+      -- FIXME: "gulēt" should be treated as a regular verb (C3: gulēt, sēdēt etc.)
       -- TODO: add "dot"/Give (+prefix, +refl)
       -- TODO: multiple prefixes
       -- TODO: move to IrregLav?
     } ;
 
-  mkVerb_Irreg_Be : Verb = {
+  mkVerb_Irreg_Be : Case -> Verb = \topic -> {
     s = table {
       Pos => table {
         VInd P1 Sg Pres => "esmu" ;
@@ -374,18 +372,18 @@ oper
         VInd P2 Sg Pres => "neesi" ;
         VInd P3 _  Pres => "nav" ;
 
-        VDeb => NON_EXISTENT ;
-
+        VDeb    => NON_EXISTENT ;
         VDebRel => NON_EXISTENT ;
 
         x => (mkVerb_C1 "nebūt" "neesu" "nebiju").s ! x -- the incorrect 'neesu' will be overriden
       }
-    }
+    } ;
+    topic = topic
   } ;
 
-  mkVerb_Irreg_Go : Verb = mkVerb_Irreg_Go_Prefix "" ;
+  mkVerb_Irreg_Go : Case -> Verb = \topic -> mkVerb_Irreg_Go_Prefix "" topic ;
 
-  mkVerb_Irreg_Go_Prefix : Str -> Verb = \pref -> {
+  mkVerb_Irreg_Go_Prefix : Str -> Case -> Verb = \pref,topic -> {
     s = table {
       Pos => table {
         VInd P3 _ Pres => pref + "iet" ;
@@ -398,10 +396,11 @@ oper
         VDebRel => NON_EXISTENT ;
         x => (mkVerb_C1 ("ne" + pref + "iet") ("ne" + pref + "eju") ("ne" + pref + "gāju")).s ! x
       }
-    }
+    } ;
+    topic = topic
   } ;
 
-  mkVerb_Irreg_Sleep : Verb = {
+  mkVerb_Irreg_Sleep : Case -> Verb = \topic -> {
     s = table {
       Pos => table {
         VInd P2 Sg Pres => (mkVerb_C3 "gulēt").s ! VInd P2 Sg Pres ;
@@ -429,7 +428,8 @@ oper
 
         x => (mkVerb_C3 "negulēt").s ! x
       }
-    }
+    } ;
+    topic = topic
   } ;
 
   -- Auxiliaries: palatalization rules

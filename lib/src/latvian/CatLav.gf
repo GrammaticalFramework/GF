@@ -1,89 +1,127 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
-concrete CatLav of Cat = CommonX - [CAdv, Voc] ** open Prelude, ResLav in {
+concrete CatLav of Cat = CommonX - [CAdv, Voc] ** open ResLav, Prelude in {
 
 flags
+
   coding = utf8 ;
   optimize = all_subs ;
 
 lincat
 
-  -- Tensed / Untensed
+  -- Sentences and clauses
 
   S, QS = { s : Str } ;
-  RS = { s : Agr => Str } ;
-  SSlash = { s : Str ; p : ResLav.Prep } ;
 
-  -- Sentence
+  RS = { s : Agreement => Str } ;
 
   Cl = { s : VMood => Polarity => Str } ;
-  ClSlash = { s : VMood => Polarity => Str ; p : ResLav.Prep } ;
+
+  ClSlash = { s : VMood => Polarity => Str ; prep : Preposition } ;
+
+  SSlash = { s : Str ; prep : Preposition } ;
+
   Imp = { s : Polarity => Number => Str } ;
 
-  -- Question
+  -- Questions and interrogatives
 
   QCl = { s : VMood => Polarity => Str } ;
-  IP = { s : Case => Str ; n : Number } ;
-  IDet = { s : Gender => Str ; n : Number } ;
+
+  IP = { s : Case => Str ; num : Number } ;
+
+  -- TODO: IComp = { s : Str ; agr : Agreement } ;
+
+  IDet = { s : Gender => Str ; num : Number } ;
+
   IQuant = { s : Gender => Number => Str } ;
-  --IComp = { s : Str ; a : ResLav.Agr } ;
 
-  -- Relative clause
+  -- Relative clauses and pronouns
 
-  RCl = { s : VMood => Polarity => Agr => Str } ;
+  RCl = { s : VMood => Polarity => Agreement => Str } ;
+
   RP = { s : Gender => Case => Str } ;
 
-  -- Verb
+  -- Verb phrases
 
   VP = ResLav.VP ;
-  VPSlash = ResLav.VP ** { p : ResLav.Prep } ; -- the object agreement
-  Comp = { s : ResLav.Agr => Str } ;
 
-  -- Adjective
+  VPSlash = ResLav.VPSlash ;
+
+  Comp = { s : Agreement => Str } ;
+
+  -- Adjectival phrases
 
   AP = { s : Definiteness => Gender => Number => Case => Str } ;
 
-  -- Noun
+  -- Nouns and noun phrases
 
-  CN = { s : Definiteness => Number => Case => Str ; g : Gender } ;
-  NP = { s : Case => Str ; a : ResLav.Agr } ;
-  Pron = { s : Case => Str ; a : ResLav.Agr ; poss : Gender => Number => Case => Str } ;
-  Det = { s : Gender => Case => Str ; n : Number ; d : Definiteness ; pol : Polarity } ;
+  CN = { s : Definiteness => Number => Case => Str ; gend : Gender } ;
+
+  NP = { s : Case => Str ; agr : Agreement ; pol : Polarity } ;
+
+  Pron = Pronoun ;
+
+  Det = {
+    s : Gender => Case => Str ;
+    num : Number ;
+    defin : Definiteness ;
+    pol : Polarity
+  } ;
+
   Predet = { s : Gender => Str } ;
+
+  Quant = {
+    s : Gender => Number => Case => Str ;
+    defin : Definiteness ;
+    pol : Polarity
+  } ;
+
+  Num = { s : Gender => Case => Str ; num : Number ; hasCard : Bool } ;
+
+  Card = { s : Gender => Case => Str ; num : Number } ;
+
   Ord = { s : Gender => Case => Str } ;
-  Num = { s : Gender => Case => Str ; n : Number ; hasCard : Bool } ;
-  Card = { s : Gender => Case => Str ; n : Number } ;
-  Quant = { s : Gender => Number => Case => Str ; d : Definiteness ; pol : Polarity } ;
 
-  -- Numeral
+  -- Numerals
 
-  Numeral = { s : CardOrd => Gender => Case => Str ; n : Number } ;
-  Digits = { s : CardOrd => Str ; n : Number } ;
+  Numeral = { s : CardOrd => Gender => Case => Str ; num : Number } ;
 
-  -- Structural
+  Digits = { s : CardOrd => Str ; num : Number } ;
 
-  Conj = { s1, s2 : Str ; n : Number } ;
+  -- Structural words
+
+  Conj = { s1, s2 : Str ; num : Number } ;
+
   Subj = { s : Str } ;
-  Prep = ResLav.Prep ;
-  
-  -- Open lexical classes (lexicon)
 
-  N = { s : Number => Case => Str ; g : Gender } ;
-  N2 = { s : Number => Case => Str ; g : Gender } ** { p : ResLav.Prep ; isPre : Bool } ; -- If isPre then located before the noun
-  N3 = { s : Number => Case => Str ; g : Gender } ** { p1, p2 : ResLav.Prep ; isPre1, isPre2 : Bool } ;
-  PN = { s : Case => Str ; g : Gender ; n : Number } ;
+  Prep = Preposition ;
 
-  A = { s : ResLav.AForm => Str } ;
-  A2 = A ** { p : ResLav.Prep } ;
+  -- Words of open classes
 
-  V, VA = Verb ;
-  VV, VQ = Verb ** { topic : Case } ;
-  VS = Verb ** { subj : Subj ; topic : Case } ;
-  V2A, V2Q, V2V = Verb ** { p : ResLav.Prep } ;
-  V2S = Verb ** { p : ResLav.Prep ; subj : Subj } ;
-  
-  V2 = Verb ** { p : ResLav.Prep ; topic : Case } ;
-  V3 = Verb ** { p1, p2 : ResLav.Prep ; topic : Case } ;
+  V, VV, VQ, VA = Verb ;
 
-  CAdv = { s, p : Str ; d : Degree } ;
+  V2, V2V, V2Q, V2A = Verb ** { focus : Preposition } ;
+
+  V3 = Verb ** { focus1, focus2 : Preposition } ;
+
+  VS = Verb ** { conj : Subj } ;
+
+  V2S = Verb ** { conj : Subj ; focus : Preposition } ;
+
+  A = Adjective ;
+
+  A2 = Adjective ** { prep : Preposition } ;
+
+  N = Noun ;
+
+  N2 = Noun ** { prep : Preposition ; isPre : Bool } ;
+
+  N3 = Noun ** { prep1, prep2 : Preposition ; isPre1, isPre2 : Bool } ;
+
+  PN = ProperNoun ;
+
+  -- Overriden from CommonX
+
+  CAdv = { s, prep : Str ; deg : Degree } ;
+
 }

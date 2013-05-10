@@ -17,12 +17,13 @@ lin
   ConjAdv = conjunctDistrSS ;
 
   ConjNP conj ss = conjunctDistrTable Case conj ss ** {
-    a = toAgr (fromAgr ss.a).pers (conjNumber (fromAgr ss.a).num conj.n) (fromAgr ss.a).gend Pos
+    agr = toAgr (fromAgr ss.agr).pers (conjNumber (fromAgr ss.agr).num conj.num) (fromAgr ss.agr).gend;
+    pol = Pos
   } ;
 
   ConjAP conj ss = conjunctDistrTable4 Definiteness Gender Number Case conj ss ;
 
-  ConjRS conj ss = conjunctDistrTable Agr conj ss ;
+  ConjRS conj ss = conjunctDistrTable Agreement conj ss ;
 
   -- These fun's are generated from the list cat's:
   BaseS = twoSS ;
@@ -30,21 +31,21 @@ lin
   BaseAdv = twoSS ;
   ConsAdv = consrSS comma ;
 
-  BaseNP x y = twoTable Case x y ** { a = conjAgr x.a y.a } ;
-  ConsNP xs x = consrTable Case comma xs x ** { a = conjAgr xs.a x.a } ;
+  BaseNP x y = twoTable Case x y ** { agr = conjAgr x.agr y.agr } ;
+  ConsNP xs x = consrTable Case comma xs x ** { agr = conjAgr xs.agr x.agr } ;
 
   BaseAP x y = twoTable4 Definiteness Gender Number Case x y ;
   ConsAP xs x = consrTable4 Definiteness Gender Number Case comma xs x ;
 
-  BaseRS x y = twoTable Agr x y ;
-  ConsRS xs x = consrTable Agr comma xs x  ;
+  BaseRS x y = twoTable Agreement x y ;
+  ConsRS xs x = consrTable Agreement comma xs x  ;
 
 lincat
 
   [S] = { s1, s2 : Str } ;
   [Adv] = { s1, s2 : Str } ;
-  [NP] = { s1, s2 : Case => Str ; a : Agr } ;
+  [NP] = { s1, s2 : Case => Str ; agr : Agreement } ;
   [AP] = { s1, s2 : Definiteness => Gender => Number => Case => Str } ;
-  [RS] = { s1, s2 : Agr => Str } ;
+  [RS] = { s1, s2 : Agreement => Str } ;
 
 }

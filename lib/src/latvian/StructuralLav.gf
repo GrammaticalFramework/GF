@@ -1,80 +1,82 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
 concrete StructuralLav of Structural = CatLav ** open
-  Prelude,
   ResLav,
   ParadigmsLav,
   ParadigmsPronounsLav,
-  NounLav
-  in {
+  NounLav,
+  Prelude
+in {
 
 flags
+
   optimize = all ;
   coding = utf8 ;
 
 lin
+
   language_title_Utt = ss "latviešu valoda" ;
 
   yes_Utt = ss "jā" ;
   no_Utt = ss "nē" ;
 
   every_Det = {
-    s = (\\g,c => (mkPronoun_Gend "ikviens").s ! g ! Sg ! c) ;
-    n = Sg ;
-    d = Indef ;
+    s = (\\gend,c => (mkPronoun_Gend "ikviens").s ! gend ! Sg ! c) ;
+    num = Sg ;
+    defin = Indef ;
     pol = Pos
   } ;
 
   someSg_Det = {
-    s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Sg ! c) ;  --  TODO: lai atļautu arī tukšo, jāpieliek alternatīva: (\\_,_ => [])
-    n = Sg ;
-    d = Indef ;
+    s = (\\gend,c => (mkPronoun_Gend "kāds").s ! gend ! Sg ! c) ;  --  TODO: lai atļautu arī tukšo, jāpieliek alternatīva: (\\_,_ => [])
+    num = Sg ;
+    defin = Indef ;
     pol = Pos
   } ;
 
   somePl_Det = {
-    s = (\\g,c => (mkPronoun_Gend "kāds").s ! g ! Pl ! c) ;   --  TODO: lai atļautu arī tukšo, jāpieliek alternatīva: (\\_,_ => [])
-    n = Pl ;
-    d = Indef ;
+    s = (\\gend,c => (mkPronoun_Gend "kāds").s ! gend ! Pl ! c) ;   --  TODO: lai atļautu arī tukšo, jāpieliek alternatīva: (\\_,_ => [])
+    num = Pl ;
+    defin = Indef ;
     pol = Pos
   } ;
 
   few_Det = {
-    s = (\\g,c => (mkPronoun_Gend "dažs").s ! g ! Pl ! c) ;
-    n = Pl ;
-    d = Indef ;
+    s = (\\gend,c => (mkPronoun_Gend "dažs").s ! gend ! Pl ! c) ;
+    num = Pl ;
+    defin = Indef ;
     pol = Pos
   } ;
 
   many_Det = {
-    s = (\\g,c => (mkPronoun_Gend "daudzs").s ! g ! Pl ! c) ;  -- 'daudzs' izlocīsies korekti uz daudzskaitļa 'daudzi'; tomēr nesmuki...
-    n = Pl ;
-    d = Indef ;
+    s = (\\gend,c => (mkPronoun_Gend "daudzs").s ! gend ! Pl ! c) ;  -- 'daudzs' izlocīsies korekti uz daudzskaitļa 'daudzi'; tomēr nesmuki...
+    num = Pl ;
+    defin = Indef ;
     pol = Pos
   } ;
 
   much_Det = {
-    s = (\\g,c => "daudz") ;  -- FIXME: piesaista ģenitīvu
-    n = Sg ;
-    d = Indef ;
+    s = (\\gend,c => "daudz") ;  -- FIXME: piesaista ģenitīvu
+    num = Sg ;
+    defin = Indef ;
     pol = Pos
   } ;
 
   this_Quant = {
     s = (mkPronoun_ThisThat This).s ;
-    d = Def ;
+    defin = Def ;
     pol = Pos
   } ;
 
   that_Quant = {
     s = (mkPronoun_ThisThat That).s ;
-    d = Def ;
+    defin = Def ;
     pol = Pos
   } ;
 
   no_Quant = {
     s = (mkPronoun_Gend "neviens").s ;
-    d = Indef ;
+    defin = Indef ;
     pol = Neg
   } ;
 
@@ -96,14 +98,16 @@ lin
 
   he_Pron = {
     s = \\c => (mkPronoun_Gend "viņš").s ! Masc ! Sg ! c ;
-    a = AgP3 Sg Masc Pos ;
-    poss = \\_,_,_ => "viņa"
+    agr = AgrP3 Sg Masc ;
+    poss = \\_,_,_ => "viņa" ;
+    pol = Pos
   } ;
 
   she_Pron = {
     s = \\c => (mkPronoun_Gend "viņš").s ! Fem ! Sg ! c ;
-    a = AgP3 Sg Fem Pos ;
-    poss = \\_,_,_ => "viņas"
+    agr = AgrP3 Sg Fem ;
+    poss = \\_,_,_ => "viņas" ;
+    pol = Pos
   } ;
 
   they_Pron = mkPronoun_They Masc ;  -- See also: ExtraLav.they8fem_Pron
@@ -174,7 +178,7 @@ lin
       Loc => "kurā" ;
       ResLav.Voc => NON_EXISTENT
     } ;
-    n = Sg
+    num = Sg
   } ;
   
   whoPl_IP = { -- FIXME: Fem
@@ -186,7 +190,7 @@ lin
       Loc => "kuros" ;
       ResLav.Voc => NON_EXISTENT
     } ;
-    n = Pl
+    num = Pl
   } ;
   
   whatSg_IP = {
@@ -198,7 +202,7 @@ lin
       Loc => "kur" ;
       ResLav.Voc => NON_EXISTENT
     } ;
-    n = Sg
+    num = Sg
   } ;
   
   whatPl_IP = {
@@ -210,7 +214,7 @@ lin
       Loc => "kur" ;
       ResLav.Voc => NON_EXISTENT
     } ;
-    n = Pl
+    num = Pl
   } ;
 
   why_IAdv = ss "kāpēc" ;
@@ -228,7 +232,7 @@ lin
 
   how8many_IDet = {
     s = table { _ => "cik" } ;
-    n = Pl
+    num = Pl
   } ;
 
   when_Subj = ss "kad" ;
@@ -254,13 +258,13 @@ lin
   nobody_NP = UsePron (mkPronoun_Body "neviens" Neg) ;
   nothing_NP = UsePron (mkPronoun_Thing "nekas" Neg) ;
 
-  have_V2 = mkV2 (mkV "būt") nom_Prep Dat ;
-  --have_V3 = mkV3 (mkV "būt") nom_Prep dat_Prep Dat ;
+  have_V2 = mkV2 (mkV "būt" Dat) nom_Prep ;
+  --have_V3 = mkV3 (mkV "būt") Dat nom_Prep dat_Prep ;
 
   want_VV = mkVV (mkV "vēlēties" third_conjugation) ;
   can_VV = mkVV (mkV "varēt" third_conjugation) ;
   can8know_VV = mkVV (mkV "varēt" third_conjugation) ;
-  must_VV = mkVV (mkV "vajadzēt" third_conjugation) Dat ;
+  must_VV = mkVV (mkV "vajadzēt" third_conjugation Dat) ;
 
   please_Voc = ss "lūdzu" ;
 
@@ -281,13 +285,13 @@ oper
   {- Netiek izmantoti; to vietā sk. ExtraLav
   emptyPl_Det = {
     s : Gender => Case => Str = \\_,_ => [] ;
-    n = Pl ;
-    d = Indef
+    num = Pl ;
+    defin = Indef
   } ;
   emptySg_Det = { -- TODO: analoģiski kā emptyPl_Det
     s : Gender => Case => Str = \\_,_ => [] ;
-    n = Sg ;
-    d = Indef
+    num = Sg ;
+    defin = Indef
   } ;
   -}
 

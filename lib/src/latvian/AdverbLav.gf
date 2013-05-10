@@ -13,20 +13,20 @@ lin
 
   -- TODO: vajag arī 'ātrāks par Jāni' un 'ātrāks nekā Jānis' pie more_CAdv
   -- TODO: vai te tiešām veido 'ātrāk par Jāni'? kurš ir pareizais adverbs? nevis 'ātrāks par Jāni'?
-  ComparAdvAdj cadv a np = { s = cadv.s ++ a.s ! (AAdv cadv.d) ++ cadv.p ++ np.s ! Nom } ;
+  ComparAdvAdj cadv a np = { s = cadv.s ++ a.s ! (AAdv cadv.deg) ++ cadv.prep ++ np.s ! Nom } ;
 
-  ComparAdvAdjS cadv a s = { s = cadv.s ++ a.s ! (AAdv cadv.d) ++ cadv.p ++ s.s } ;
+  ComparAdvAdjS cadv a s = { s = cadv.s ++ a.s ! (AAdv cadv.deg) ++ cadv.prep ++ s.s } ;
 
   -- FIXME: postpozīcijas prievārdi
-  PrepNP prep np = { s = prep.s ++ np.s ! (prep.c ! (fromAgr np.a).num) } ;
+  PrepNP prep np = { s = prep.s ++ np.s ! (prep.c ! (fromAgr np.agr).num) } ;
 
   AdAdv = cc2 ;
 
   SubjS = cc2 ;
 
   AdnCAdv cadv = {
-    s = case cadv.d of {
-      Posit => cadv.s ++ cadv.p ;
+    s = case cadv.deg of {
+      Posit => cadv.s ++ cadv.prep ;
       _     => NON_EXISTENT
     }
   } ;

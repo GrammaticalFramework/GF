@@ -10,7 +10,7 @@ flags
 
 lin
   -- TODO: kāpēc citās valodās (piem., Eng, Bul) kategorijai Num (NumInt) ir lauks isNum (= True)?
-  NumInt n = { s = \\_,_ => n.s ; n = Pl ; hasCard = False } ;
+  NumInt n = { s = \\_,_ => n.s ; num = Pl ; hasCard = False } ;
   OrdInt n = { s = \\_,_ => n.s ++ "." } ;
 
 }

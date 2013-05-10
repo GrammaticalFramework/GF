@@ -1,170 +1,229 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:abstract:common:prelude
 
-concrete NounLav of Noun = CatLav ** open
-  MorphoLav,
-  ResLav,
-  Prelude
-in {
+concrete NounLav of Noun = CatLav ** open ResLav, Prelude in {
 
 flags
+
   coding = utf8 ;
   optimize = all_subs ;
 
 lin
 
-  UseN n = { s = \\_ => n.s ; g = n.g } ;
+  -- Noun phrases
 
-  UsePN pn = { s = pn.s ; a = AgP3 pn.n pn.g Pos } ;
-  
-  UsePron p = { s = p.s ; a = p.a } ;
-
-  PredetNP pred np = {
-    s = \\c => pred.s ! (fromAgr np.a).gend ++ np.s ! c ;
-    a = np.a 
+  -- Det -> CN -> NP
+  -- e.g. 'the man'
+  DetCN det cn = {
+    s   = \\c => det.s ! cn.gend ! c ++ cn.s ! det.defin ! det.num ! c ;
+    agr = AgrP3 det.num cn.gend ;
+    pol = det.pol
   } ;
 
-  UseN2 n = { s = \\_ => n.s ; g = n.g } ;
-  
-  --UseN3 n = n ;
+  -- PN -> NP
+  -- e.g. 'John'
+  UsePN pn = { s = pn.s ; agr = AgrP3 pn.num pn.gend ; pol = Pos } ;
 
-  ComplN2 f x = {
-    s = \\_,n,c => preOrPost f.isPre (f.p.s ++ x.s ! (f.p.c ! (fromAgr x.a).num)) (f.s ! n ! c) ;
-    g = f.g
+  -- Pron -> NP
+  -- e.g. 'he'
+  UsePron pron = { s = pron.s ; agr = pron.agr ; pol = pron.pol } ;
+
+  -- Predet -> NP -> NP
+  -- e.g. 'only the man'
+  PredetNP predet np = {
+    s   = \\c => predet.s ! (fromAgr np.agr).gend ++ np.s ! c ;
+    agr = np.agr ;
+    pol = np.pol
   } ;
 
-  ComplN3 f x = {
-    s = \\n,c => preOrPost f.isPre1 (f.p1.s ++ x.s ! (f.p1.c ! (fromAgr x.a).num)) (f.s ! n ! c) ;
-    g = f.g ;
-    p = f.p2 ;
-    isPre = f.isPre2
+  -- NP -> V2 -> NP
+  -- e.g. 'the man seen'
+  PPartNP np v2 = {
+    s   = \\c => v2.s ! Pos ! (VPart Pass (fromAgr np.agr).gend (fromAgr np.agr).num c) ++ np.s ! c ;
+    agr = np.agr ;
+    pol = np.pol
   } ;
 
-  Use2N3 n = { s = n.s ; g = n.g ; p = n.p1 ; isPre = n.isPre1 } ;
-  
-  Use3N3 n = { s = n.s ; g = n.g ; p = n.p2 ; isPre = n.isPre2 } ;
-
+  -- NP -> Adv -> NP
+  -- e.g. 'Paris today'
   AdvNP np adv = {
     s = \\c => np.s ! c ++ adv.s ;
-    a = np.a
+    agr = np.agr ;
+    pol = np.pol
   } ;
 
+  -- NP -> RS -> NP
+  -- e.g. 'Paris, which is here'
   RelNP np rs = {
-    s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
-    a = np.a
+    s = \\c => np.s ! c ++ "," ++ rs.s ! np.agr ;
+    agr = np.agr ;
+    pol = np.pol
   } ;
 
-  DetCN det cn = {
-    s = \\c => det.s ! cn.g ! c ++ cn.s ! det.d ! det.n ! c ;
-    a = AgP3 det.n cn.g det.pol
-  } ;
-
-  DetQuant quant num = {
-    s = \\g,c => quant.s ! g ! num.n ! c ++ num.s ! g ! c ;
-    n = num.n ;
-    d = quant.d	; -- FIXME: ja ir kārtas skaitļa vārds, tad tikai noteiktās formas drīkst būt
-    pol = quant.pol
-  } ;
-
-  DetQuantOrd quant num ord = {
-    s = \\g,c => quant.s ! g ! num.n ! c ++ num.s ! g ! c ++ ord.s ! g ! c ;
-    n = num.n ;
-    d = quant.d	; --FIXME: ja ir kārtas skaitļa vārds, tad tikai noteiktās formas drīkst būt
-    pol = quant.pol
-  } ;
-
+  -- Det -> NP
+  -- e.g. 'these five'
   DetNP det = {
     s = \\c => det.s ! Masc ! c ;
-    a = AgP3 det.n Masc det.pol
+    agr = AgrP3 det.num Masc ;
+    pol = det.pol
   } | {
     s = \\c => det.s ! Fem ! c ;
-    a = AgP3 det.n Fem det.pol
+    agr = AgrP3 det.num Fem ;
+    pol = det.pol
   } ;
 
-  AdjCN ap cn = {
-    s = \\d,n,c => ap.s ! d ! cn.g ! n ! c ++ cn.s ! d ! n ! c ;
-    g = cn.g
+  -- Determiners
+
+  -- Quant -> Num -> Det
+  -- e.g. 'these five'
+  DetQuant quant num = {
+    s     = \\gend,c => quant.s ! gend ! num.num ! c ++ num.s ! gend ! c ;
+    num   = num.num ;
+    defin = quant.defin ;  -- FIXME: ja ir kārtas skaitļa vārds, tad tikai noteiktās formas
+    pol   = quant.pol
   } ;
 
-  DefArt = {
-    s = \\_,_,_ => [] ;
-    d = Def ;
-    pol = Pos
+  -- Quant -> Num -> Ord -> Det
+  -- e.g. 'these five best'
+  DetQuantOrd quant num ord = {
+    s     = \\gend,c => quant.s ! gend ! num.num ! c ++ num.s ! gend ! c ++ ord.s ! gend ! c ;
+    num   = num.num ;
+    defin = quant.defin ; --FIXME: ja ir kārtas skaitļa vārds, tad tikai noteiktās formas
+    pol   = quant.pol
   } ;
 
-  IndefArt = {
-    s = \\_,_,_ => [] ;
-    d = Indef ;
-    pol = Pos
+  -- Num
+  NumSg = { s = \\_,_ => [] ; num = Sg ; hasCard = False } ;
+
+  -- Num
+  NumPl = { s = \\_,_ => [] ; num = Pl ; hasCard = False } ;
+
+  -- Card -> Num
+  NumCard card = card ** { hasCard = True } ;
+
+  -- Digits -> Card
+  -- e.g. '51'
+  NumDigits digits = { s = \\_,_ => digits.s ! NCard ; num = digits.num } ;
+
+  -- Numeral -> Card
+  -- e.g. 'fifty-one'
+  NumNumeral numeral = { s = numeral.s ! NCard ; num = numeral.num } ;
+
+  -- AdN -> Card -> Card
+  -- e.g. 'almost 51'
+  AdNum adn card = {
+    s   = \\gend,c => adn.s ++ card.s ! gend ! c ;
+    num = card.num
   } ;
 
-  PossPron p = {
-    s = p.poss ;
-    d = Def ;
-    pol = Pos
-  } ;
+  -- Digits -> Ord
+  -- e.g. '51st'
+  OrdDigits digits = { s = \\_,_ => digits.s ! NOrd } ;
 
-  MassNP cn = {
-    s = cn.s ! Indef ! Sg ;	-- FIXME: a 'šis alus'? der tak gan 'zaļš alus' gan 'zaļais alus'
-    a = AgP3 Sg cn.g Pos
-  } ;
-
-  NumSg = { s = \\_,_ => [] ; n = Sg ; hasCard = False } ;
-  
-  NumPl = { s = \\_,_ => [] ; n = Pl ; hasCard = False } ;
-
-  NumCard n = n ** { hasCard = True } ;
-
-  NumDigits n = { s = \\g,c => n.s ! NCard ; n = n.n } ;
-  
-  OrdDigits n = { s = \\g,c => n.s ! NOrd } ;
-
-  NumNumeral numeral = { s = numeral.s ! NCard ; n = numeral.n } ;
-  
+  -- Numeral -> Ord
+  -- e.g. 'fifty-first'
   OrdNumeral numeral = { s = numeral.s ! NOrd } ;
 
-  OrdSuperl a = { s = \\g,c => a.s ! (AAdj Superl Def g Sg c) } ;
+  -- A -> Ord
+  -- e.g. 'warmest'
+  OrdSuperl a = { s = \\gend,c => a.s ! (AAdj Superl Def gend Sg c) } ;
 
-  AdNum adn num = {
-    s = \\g,c => adn.s ++ num.s ! g ! c ;
-    n = num.n ;
-    hasCard = num.n
+  -- Quant
+  IndefArt = { s = \\_,_,_ => [] ; defin = Indef ; pol = Pos } ;
+
+  -- Quant
+  DefArt = { s = \\_,_,_ => [] ; defin = Def ; pol = Pos } ;
+
+  -- CN -> NP
+  MassNP cn = {
+    s   = cn.s ! Indef ! Sg ;  -- FIXME: bet 'šis alus'? un 'zaļš alus' vs. 'zaļais alus'?
+    agr = AgrP3 Sg cn.gend ;
+    pol = Pos
   } ;
 
-  AdvCN cn ad = {
-    s = \\d,n,c => cn.s ! d ! n ! c ++ ad.s ;
-    g = cn.g
+  -- Pron -> Quant
+  PossPron pron = { s = pron.poss ; defin = Def ; pol = Pos } ;
+
+  -- Common nouns
+
+  -- N -> CN
+  -- e.g. 'house'
+  UseN n = { s = \\_ => n.s ; gend = n.gend } ;
+
+  -- N2 -> NP -> CN
+  -- e.g. 'mother of the king'
+  ComplN2 n2 np = {
+    s    = \\_,num,c => preOrPost n2.isPre (n2.prep.s ++ np.s ! (n2.prep.c ! (fromAgr np.agr).num)) (n2.s ! num ! c) ;
+    gend = n2.gend
   } ;
 
-  -- 'Pielikums'
-  ApposCN cn np = {
-    s = \\d,n,c => case (fromAgr np.a).num of {
-      n => cn.s ! d ! n ! c ++ np.s ! c ;	-- FIXME: comparison not working
-      _ => NON_EXISTENT -- FIXME: pattern never reached
-    } ;
-    g = cn.g
+  -- N3 -> NP -> N2
+  -- e.g. 'distance from this city (to Paris)'
+  ComplN3 n3 np = {
+    s     = \\num,c => preOrPost n3.isPre1 (n3.prep1.s ++ np.s ! (n3.prep1.c ! (fromAgr np.agr).num)) (n3.s ! num ! c) ;
+    gend  = n3.gend ;
+    prep  = n3.prep2 ;
+    isPre = n3.isPre2
   } ;
 
+  -- N2 -> CN
+  -- e.g. 'mother'
+  UseN2 n2 = { s = \\_ => n2.s ; gend = n2.gend } ;
+
+  -- N3 -> N2
+  -- e.g. 'distance (from this city)'
+  Use2N3 n3 = { s = n3.s ; gend = n3.gend ; prep = n3.prep1 ; isPre = n3.isPre1 } ;
+
+  -- N3 -> N2
+  -- e.g. 'distance (to Paris)'
+  Use3N3 n3 = { s = n3.s ; gend = n3.gend ; prep = n3.prep2 ; isPre = n3.isPre2 } ;
+
+  -- AP -> CN -> CN
+  -- e.g. 'big house'
+  AdjCN ap cn = {
+    s    = \\defin,num,c => ap.s ! defin ! cn.gend ! num ! c ++ cn.s ! defin ! num ! c ;
+    gend = cn.gend
+  } ;
+
+  -- CN -> RS -> CN
+  -- e.g. 'house that John bought'
   RelCN cn rs = {
-    s = \\d,n,c => cn.s ! d ! n ! c ++ "," ++ rs.s ! AgP3 n cn.g Pos ;
-    g = cn.g
+    s    = \\defin,num,c => cn.s ! defin ! num ! c ++ "," ++ rs.s ! AgrP3 num cn.gend ;
+    gend = cn.gend
   } ;
 
+  -- CN -> Adv -> CN
+  -- e.g. 'house on the hill'
+  AdvCN cn adv = {
+    s    = \\defin,num,c => cn.s ! defin ! num ! c ++ adv.s ;
+    gend = cn.gend
+  } ;
+
+  -- CN -> SC -> CN
+  -- e.g. 'question where she sleeps'
   SentCN cn sc = {
-    s = \\d,n,c => cn.s ! d ! n ! c ++ "," ++ sc.s ;
-    g = cn.g
+    s    = \\defin,num,c => cn.s ! defin ! num ! c ++ "," ++ sc.s ;
+    gend = cn.gend
   } ;
 
-  -- FIXME: vajag šķirot noteikto/nenoteikto galotni..?
-  PPartNP np v2 = {
-    s = \\c => v2.s ! Pos ! (VPart Pass (fromAgr np.a).gend (fromAgr np.a).num c) ++ np.s ! c ;
-    a = np.a
-  } ;
+  -- Apposition
 
-  -- TODO: šim vajag -ts -ta divdabjus (+ noteiktās formas tiem)
-  --PPartNP np v2 = {
-  --  s = \\c => np.s ! c ++ v2.s ! VPPart ;
-  --  a = np.a
-  --} ;
-  --SentCN cn sc = { s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g } ;
+  -- CN -> NP -> CN
+  -- e.g. 'city Paris', 'numbers x and y'
+  ApposCN cn np = 
+    let num : Number = (fromAgr np.agr).num in {
+      s    = \\defin,num,c => cn.s ! defin ! num ! c ++ np.s ! c ;
+      gend = cn.gend
+    } ;
+
+  -- TODO: Possessive and partitive constructs
+
+  -- PossNP : CN -> NP -> CN
+  -- e.g. 'house of Paris', 'house of mine'
+
+  -- PartNP : CN -> NP -> CN
+  -- e.g. 'glass of wine'
+
+  -- CountNP : Det -> NP -> NP
+  -- e.g. 'three of them', 'some of the boys'
 
 }
