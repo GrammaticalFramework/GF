@@ -176,7 +176,7 @@ lin
    silver_N = regFN "plata" ;
    sister_N = regFN "germana" ;
    sleep_V = verbV (dormir_44 "dormir") ;
-   small_A = prefA (regADeg "petit") ;
+   small_A = prefA (mkA "petit" "petita" "petits" "petites" "petitament") ;
    snake_N = regFN "serp" ;     -- fem
    sock_N = regMN "mitjó" ;
    speak_V2 = dirV2 (regV "parlar") ;
