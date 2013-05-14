@@ -1,7 +1,7 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
 
 concrete LexiconFre of Lexicon = CatFre ** 
-  open (M = MorphoFre), ParadigmsFre, IrregFre in {
+  open (M = MorphoFre), PhonoFre, ParadigmsFre, IrregFre in {
 
 flags 
   optimize=values ; 
@@ -16,7 +16,8 @@ lin
   baby_N = regGenN "bébé" masculine ;
   bad_A = prefA (mkADeg (regA "mauvais") (regA "pire")) ;
   bank_N = regGenN "banque" feminine ;
-  beautiful_A = prefA (regA "joli") ; ---- beau
+  beautiful_A = 
+    prefA (compADeg (mkA (pre {voyelle => "bel" ; _ => "beau" }) "belle" "beaux" "bellement")) ;
   become_VA = mkVA devenir_V ;
   beer_N = regGenN "bière" feminine ;
   beg_V2V = mkV2V (regV "demander") accusative dative ;
@@ -126,11 +127,12 @@ lin
   mountain_N = regGenN "montagne" feminine ;
   music_N = regGenN "musique" feminine ;
   narrow_A = regA "étroit" ;
-  new_A = prefA (compADeg (mkA "nouveau" "nouvelle" "nouveaux" "nouvellement")) ;
+  new_A = 
+    prefA (compADeg (mkA (pre {voyelle => "nouvel" ; _ => "nouveau" }) "nouvelle" "nouveaux" "nouvellement")) ;
   newspaper_N = regGenN "journal" masculine ;
   oil_N = regGenN "huile" feminine ;
   old_A = 
-    prefA (compADeg (mkA "vieux" "vieille" "vieux" "vieillement")) ; ---- vieil
+    prefA (compADeg (mkA (pre {voyelle => "vieil" ; _ => "vieux" }) "vieille" "vieux" "vieillement")) ; 
   open_V2 = ouvrir_V2 ;
   paint_V2A = mkV2A (v2V peindre_V2) accusative (mkPrep "en") ;
   paper_N = regGenN "papier" masculine ;
