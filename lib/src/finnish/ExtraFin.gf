@@ -15,6 +15,11 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
 
+    GenRP num cn = {
+      s = \\n,c => let k = npform2case num.n c in relPron ! n ! Gen ++ cn.s ! NCase num.n k ; 
+      a = RNoAg ---RAg (agrP3 num.n)
+      } ;
+
     GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf ;
                    h = n2.h } ;
 
