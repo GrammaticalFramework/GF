@@ -27,7 +27,7 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Property = A ;
     Object = NP ;
     PrimObject = NP ;
-    Place = NPPlace ; -- {name : NP ; at : Adv ; to : Adv} ;
+    Place = NPPlace ; -- {name : NP ; at : Syntax.Adv ; to : Syntax.Adv} ;
     PlaceKind = CNPlace ; -- {name : CN ; at : Prep ; to : Prep} ;
     Currency = CN ;
     Price = NP ;
@@ -37,12 +37,12 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Language = NP ;
     Citizenship = A ;
     Country = NP ;
-    Day = NPDay ; -- {name : NP ; point : Adv ; habitual : Adv} ;
-    Date = Adv ;
+    Day = NPDay ; -- {name : NP ; point : Syntax.Adv ; habitual : Syntax.Adv} ;
+    Date = Syntax.Adv ;
     Name = NP ;
     Number = Card ;
-    ByTransport = Adv ;
-    Transport = {name : CN ; by : Adv} ;
+    ByTransport = Syntax.Adv ;
+    Transport = {name : CN ; by : Syntax.Adv} ;
     Superlative = Det ;
   lin
     MPhrase p = p ;
@@ -123,9 +123,9 @@ incomplete concrete SentencesI of Sentences = Numeral **
     Too property = mkAP too_AdA (mkAP property) ;
     PropQuality property = mkAP property ;
 
-    ThePlace kind = let dd = if_then_else Det kind.isPl thePl_Det theSg_Det 
+    ThePlace kind = let dd : Det = if_then_else Det kind.isPl thePl_Det theSg_Det 
                      in placeNP dd kind ;
-    APlace kind = let dd = if_then_else Det kind.isPl aPl_Det aSg_Det 
+    APlace kind = let dd : Det = if_then_else Det kind.isPl aPl_Det aSg_Det 
                      in placeNP dd kind ;
 
     IMale, IFemale = mkPerson i_Pron ;
@@ -182,15 +182,15 @@ oper
          prop = pro
         } ;
 
-  NPDay : Type = {name : NP ; point : Adv ; habitual : Adv} ;
+  NPDay : Type = {name : NP ; point : Syntax.Adv ; habitual : Syntax.Adv} ;
 
-  mkNPDay : NP -> Adv -> Adv -> NPDay = \d,p,h ->
+  mkNPDay : NP -> Syntax.Adv -> Syntax.Adv -> NPDay = \d,p,h ->
       {name = d ; 
        point = p ;
        habitual = h
       } ;
 
-  NPPlace : Type = {name : NP ; at : Adv ; to : Adv} ;
+  NPPlace : Type = {name : NP ; at : Syntax.Adv ; to : Syntax.Adv} ;
   CNPlace : Type = {name : CN ; at : Prep ; to : Prep; isPl : Bool} ;
 
   mkCNPlace : CN -> Prep -> Prep -> CNPlace = \p,i,t -> {
