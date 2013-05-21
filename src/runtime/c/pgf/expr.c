@@ -148,7 +148,7 @@ typedef enum {
 
 struct PgfExprParser {
 	GuExn* err;
-	GuReader* rdr;
+	GuIn* in;
 	GuPool* expr_pool;
 	GuPool* tmp_pool;
 	PGF_TOKEN_TAG token_tag;
@@ -159,7 +159,7 @@ struct PgfExprParser {
 static void
 pgf_expr_parser_getc(PgfExprParser* parser)
 {
-	parser->ch = gu_getc(parser->rdr, parser->err);
+	parser->ch = gu_in_u8(parser->in, parser->err);
 	if (!gu_ok(parser->err)) {
 		gu_exn_clear(parser->err);
 		parser->ch = EOF;
@@ -353,12 +353,12 @@ pgf_expr_parser_expr(PgfExprParser* parser)
 }
 
 PgfExpr
-pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err)
+pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err)
 {
 	GuPool* tmp_pool = gu_new_pool();
 	PgfExprParser* parser = gu_new(PgfExprParser, tmp_pool);
 	parser->err = err;
-	parser->rdr = rdr;
+	parser->in = in;
 	parser->expr_pool = pool;
 	parser->tmp_pool = NULL;
 	parser->ch = ' ';

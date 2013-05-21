@@ -1663,11 +1663,10 @@ pgf_readExpr(PyObject *self, PyObject *args) {
 
 	GuPool* tmp_pool = gu_local_pool();
 	GuIn* in = gu_data_in(buf, len, tmp_pool);
-	GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 
 	pyexpr->pool = gu_new_pool();
-	pyexpr->expr = pgf_read_expr(rdr, pyexpr->pool, err);
+	pyexpr->expr = pgf_read_expr(in, pyexpr->pool, err);
 	pyexpr->master = NULL;
 	
 	if (!gu_ok(err) || gu_variant_is_null(pyexpr->expr)) {

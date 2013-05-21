@@ -152,7 +152,7 @@ pgf_expr_unapply(PgfExpr expr, GuPool* pool);
 
 
 PgfExpr
-pgf_read_expr(GuReader* rdr, GuPool* pool, GuExn* err);
+pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);
 
 bool
 pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2);
