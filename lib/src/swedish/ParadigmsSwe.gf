@@ -347,6 +347,7 @@ oper
   regGenN : Str -> Gender -> N = \bil, g -> case g of {
     Utr => case bil of {
       _ + "are" => decl5Noun bil ;
+      _ + "ion" => decl3Noun bil ;
       _ + "a" => decl1Noun bil ;
       _   => decl2Noun bil
       } ;
@@ -393,7 +394,7 @@ oper
         br   + ("o" | "u" | "ö" | "å") => <bil + "ar",    bil  + "n"> ;
         pojk + "e"                     => <pojk + "ar",    bil  + "n"> ;
         hi + "mme" + l@("l" | "r")     => <hi + "m" + l + "ar",hi + "m" + l + "en"> ;
-        nyck + "e" + l@("l" | "r")     => <nyck + l + "ar",bil  + "n"> ;
+        nyck@(_ + ("a"|"e"|"i"|"o"|"u"|"y"|"å"|"ä"|"ö") + _) + "e" + l@("l" | "r")     => <nyck + l + "ar",bil  + "n"> ;
         sock + "e" + "n"               => <sock + "nar",   sock + "nen"> ;
         _                              => <bil + "ar",     bil  + "en">
         } ;
