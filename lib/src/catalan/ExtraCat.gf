@@ -1,5 +1,5 @@
 concrete ExtraCat of ExtraCatAbs = ExtraRomanceCat ** 
-open CommonRomance, ParadigmsCat, PhonoCat, MorphoCat, ParamX, ResCat, 
+open CommonRomance, ParadigmsCat, PhonoCat, MorphoCat, ParamX, ResCat, BeschCat,
  Prelude in {
 
 flags coding = utf8 ;
@@ -80,5 +80,8 @@ lin
         comp  = vps.comp ;
         ext   = vps.ext
         } ;
+
+    ExistsNP np = 
+      mkClause [] True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (mkV (complir_25 "existir")))) ;
 
 }

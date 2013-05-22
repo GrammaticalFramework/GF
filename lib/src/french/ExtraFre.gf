@@ -73,4 +73,7 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
 
     PNegNe = {s = [] ; p = RNeg True} ;
 
+    ExistsNP np = 
+      mkClause "il" True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (regV "exister"))) ;
+
 }

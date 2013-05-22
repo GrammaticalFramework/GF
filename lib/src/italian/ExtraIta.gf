@@ -45,4 +45,8 @@ concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta **
     AdvDatVP = insertClit3 datClit ;
     AdvGenVP = insertClit3 genClit ;
 
+    ExistsNP np = 
+      mkClause [] True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (regV "esistere"))) ;
+
+
 }
