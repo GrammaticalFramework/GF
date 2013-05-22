@@ -1,8 +1,8 @@
 abstract ExtraRomanceAbs = Cat, Extra[
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,
-  PassVPSlash,
-  Temp,Pol,S,NP,VPSlash,
+  PassVPSlash,ExistsNP,
+  Temp,Pol,S,NP,VPSlash,Cl,
   VV,VP,Conj,Pron,ProDrop,CompIQuant,IQuant,IComp,PrepCN,CN,Prep,Adv] ** {
 
   fun 

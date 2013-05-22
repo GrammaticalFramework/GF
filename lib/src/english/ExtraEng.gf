@@ -169,6 +169,11 @@ lin
      _  => insertObjPartLast (\\_ => vps.c2 ++ np.s ! NPAcc) vps  ---
      } ;
 
+   --- AR 22/5/2013
+   ExistsNP np = 
+      mkClause "there" (agrP3 (fromAgr np.a).n) 
+        (insertObj (\\_ => np.s ! NPAcc) (predV (regV "exist"))) ;
+
 ------------
 --- obsolete: use UncNeg : Pol
 

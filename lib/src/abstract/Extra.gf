@@ -78,4 +78,8 @@ abstract Extra = Cat ** {
 
     NominalizeVPSlashNP : VPSlash -> NP -> NP ;
 
+-- existential for mathematics
+
+    ExistsNP : NP -> Cl ;  -- there exists a number / there exist numbers
+
 }
