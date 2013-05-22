@@ -1,9 +1,9 @@
 --# -path=.:prelude
 
-concrete LexiconEng of Lexicon = CatEng ** 
+concrete LexiconEng of Lexicon = CatEng **
   open ParadigmsEng, IrregEng, Prelude in {
 
-flags 
+flags
   optimize=values ;
 
 lin
@@ -131,7 +131,7 @@ lin
   newspaper_N = regN "newspaper" ;
   oil_N = regN "oil" ;
   old_A = regADeg "old" ;
-  open_V2 = dirV2 (regV "open") ;
+  open_V2 = dirV2 (mkV "open" "opens" "opened" "opened" "opening") ;
   paint_V2A = mkV2A (regV "paint") noPrep ;
   paper_N = regN "paper" ;
   paris_PN = mkPN (mkN nonhuman (mkN "Paris")) ;
