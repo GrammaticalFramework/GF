@@ -170,9 +170,9 @@ oper
 
   compoundN = overload {
     compoundN : Str -> N -> N 
-      = \s,n -> {s = \\nform => s ++ n.s ! nform ; g=n.g ; anim=n.anim ; lock_N = <>} ;
+      = \s,n -> {s = \\nform => s ++ n.s ! nform ; rel = \\aform => s ++ n.rel ! aform; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> Str -> N 
-      = \n,s -> {s = \\nform => s ++ n.s ! nform ; g=n.g ; anim=n.anim ; lock_N = <>} ;
+      = \n,s -> {s = \\nform => s ++ n.s ! nform ; rel = \\aform => s ++ n.rel ! aform; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> N -> N 
       = \n1,n2 -> lin N
                 {s = table {
@@ -181,11 +181,25 @@ oper
                        NFPlCount   => n1.s ! NFPlCount     ++ n2.s ! (NF Pl Indef) ;
                        NFVocative  => n1.s ! NFVocative    ++ n2.s ! (NF Sg Indef)
                      } ;
+                 rel = \\aform => n1.rel ! aform; 
                  g = n1.g ;
                  g = n1.anim
                 } ;
   } ;
   
+  relativeN : N -> A -> N;
+  relativeN n a = lin N {
+    s   = n.s;
+    rel = a.s;
+    g   = n.g
+  } ;
+  
+  substantiveN : A -> AGender -> N;
+  substantiveN a g = lin N {
+    s   = \\nform => a.s ! nform2aform nform g;
+    rel = a.s;
+    g   = g
+  } ;
 
 --2 Prepositions
 --
