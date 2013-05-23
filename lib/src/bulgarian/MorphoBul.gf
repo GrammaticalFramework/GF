@@ -102,7 +102,7 @@ oper
 							        (v0+"ия")
 							        (v0+"ия")
 							        (v0+"е")
-							        ANeut).s ! nform;
+							        ANeut) ! nform;
           VGerund => case chete of {
                        rabot + "и" => rabot + "ейки";
                        _           => chete + "йки"
@@ -112,8 +112,8 @@ oper
 
 --2 Nouns
 
-  mkNoun : Str -> Str -> Str -> Str -> AGender -> N = \sg,pl,count,voc,g -> {
-    s = table {
+  mkNoun : Str -> Str -> Str -> Str -> AGender -> NForm => Str = \sg,pl,count,voc,g ->
+    table {
           NF Sg Indef => sg ;
           NF Sg Def   => case sg of {
                            _+"а"=>sg+"та" ;
@@ -165,9 +165,6 @@ oper
                          } ;
           NFPlCount   => count ;
           NFVocative  => voc
-        } ;
-    g = g ;
-    lock_N = <>
     } ;
 
 

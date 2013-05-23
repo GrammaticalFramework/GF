@@ -28,8 +28,18 @@ flags
   coding = utf8 ;
 
 lin
+  CompoundCN num noun cn = {
+    s = \\nf => (noun.rel ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
+    g = cn.g
+  } ;
+
   GerundN v = {
-    s = \\nform => v.s ! Imperf ! VNoun nform ;
+    s   = \\nform => v.s ! Imperf ! VNoun nform ;
+    rel = \\aform => v.s ! Imperf ! VPresPart aform ++
+                     case v.vtype of {
+                       VMedial c => reflClitics ! c;
+                       _         => []
+                     };
     g = ANeut
   } ;
   
