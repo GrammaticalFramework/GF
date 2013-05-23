@@ -44,7 +44,7 @@ lin
   buy_V2 = dirV2 (regV "kaufen") ;
   camera_N = reg2N "Kamera" "Kameras" feminine ;
   cap_N = mkN "Mütze" ;
-  car_N = mkN "Wagen" ;
+  car_N = mkN "Auto" "Autos" neuter ;
   carpet_N = mkN "Teppich" ;
   cat_N = mkN "Katze" ;
   ceiling_N = reg2N "Dach" "Dächer" neuter ;
