@@ -21,10 +21,10 @@ concrete IdiomMlt of Idiom = CatMlt ** open Prelude, ResMlt in {
         }
       where {
         kont : Str = case t of {
-          Pres => copula_kien.s ! VImpf (toVAgr np.a) ;
-          Past => copula_kien.s ! VPerf (toVAgr np.a) ;
-          Fut  => "ser" ++ copula_kien.s ! VImpf (toVAgr np.a) ;
-          Cond => "kieku" ++ copula_kien.s ! VPerf (toVAgr np.a)
+          Pres => copula_kien.s ! VImpf (toVAgr np.a) ! Pos ;
+          Past => copula_kien.s ! VPerf (toVAgr np.a) ! Pos ;
+          Fut  => "ser" ++ copula_kien.s ! VImpf (toVAgr np.a) ! Pos ;
+          Cond => "kieku" ++ copula_kien.s ! VPerf (toVAgr np.a) ! Pos
           } ;
         }
       } ;
@@ -55,8 +55,8 @@ concrete IdiomMlt of Idiom = CatMlt ** open Prelude, ResMlt in {
       } ;
 
     -- VP -> VP ;        -- be sleeping
-    ProgrVP vp = predV copula_kien ** {
-      s2 = \\agr => joinVParts (vp.s ! VPIndicat Pres agr ! Simul ! Pos)
+    ProgrVP vp = CopulaVP ** {
+      s2 = \\agr => joinVP vp (VPIndicat Pres agr) Simul Pos
       } ;
 
     -- VP -> Utt ;       -- let's go
