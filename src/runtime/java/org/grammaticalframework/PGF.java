@@ -1,25 +1,31 @@
 package org.grammaticalframework;
 
 public class PGF {
-	static native PGF readPGF(String path); 
-
-	private int pool;
-	private int gr;
+	public  static native PGF readPGF(String path); 
 	
-	private PGF(int pool, int gr) {
+	public void close() {
+		if (pool != 0) {
+			free(pool);
+			pool = 0;
+			gr = 0;
+		}
+	}
+
+	private static native void free(long pool);
+
+	private long pool;
+	private long gr;
+	
+	private PGF(long pool, long gr) {
 		this.pool = pool;
 		this.gr   = gr;
+	}
+	
+	protected void finalize () throws Throwable {
+		close();
 	}
 	
 	static { 
          System.loadLibrary("jpgf");
     }
-    
-    public void test() {
-		System.out.println("pool="+pool+", gr="+gr);
-	}
-	
-    public static void main(String[] args) {
-		readPGF("/home/krasimir/www.grammaticalframework.org/treebanks/PennTreebank/ParseEngAbs.pgf").test();
-	}
 }
