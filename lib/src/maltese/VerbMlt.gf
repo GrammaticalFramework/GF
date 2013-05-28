@@ -15,6 +15,7 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
     -- V2 -> VPSlash
     -- love (it)
     SlashV2a = predVc ;
+    -- SlashV2a v2 = (predV v2) ** { c2 = noCompl } ; -- gets rid of the V2's prep
 
     -- V3 -> NP -> VPSlash
     -- give it (to her)
@@ -61,17 +62,38 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
     -- VPSlash -> NP -> VP
     -- love it
     ComplSlash vp np =
-      case np.isPron of {
-        -- Join pron to verb
-        True => {
-            s = \\vpf,ant,pol =>
-              let bits = vp.s ! vpf ! ant ! pol in
-              mkVParts (glue bits.stem (np.s ! NPCPrep)) bits.pol ;
-            s2 = \\agr => [] ;
+      case <np.isPron, vp.c2.isPresent> of {
+
+        -- Get enclitic version of c2
+        <True,True> => {
+            s = vp.s ;
+            s2 = \\agr => vp.s2 ! agr ++ vp.c2.enclitic ! np.a ;
+            dir = NullVariants3 ;
+            ind = NullVariants3 ;
           } ;
 
+        -- Join pron to verb
+        <True,False> => {
+            s = vp.s ;
+            s2 = \\agr => [] ;
+            dir = mkMaybeVariants3 (np.s ! NPCPrep) ; --- we'll need to get all the variants direct from the NP
+            ind = NullVariants3 ;
+          } ;
+
+        -- <False,False> => {
+        --     s = vp.s ;
+        --     s2 = \\agr => vp.c2.enclitic ! agr ;
+        --     dir = NullVariants3 ;
+        --     ind = NullVariants3 ;
+        --   } ;
+
         -- Insert obj to VP
-        _ => insertObj (\\agr => np.s ! NPCPrep) vp
+        -- _ => insertObj (\\agr => vp.c2.s ! bool2definiteness np.isDefn ++ np.s ! NPNom) vp
+        _ => insertObj (\\agr => case <vp.c2.isPresent,np.isDefn> of {
+                          <True,True>  => vp.c2.s ! Definite ++ np.s ! NPCPrep ; -- mal-qattus
+                          <True,False> => vp.c2.s ! Indefinite ++ np.s ! NPNom ; -- ma' qattus
+                          _            => np.s ! NPNom                           -- il-qattus
+                          }) vp
       } ;
 
     -- VV -> VPSlash -> VPSlash
@@ -89,11 +111,14 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
 
     -- Comp -> VP
     -- be warm
-    UseComp comp = insertObj comp.s (predV copula_kien) ;
+    UseComp comp = insertObj comp.s CopulaVP ;
 
     -- VP -> Adv -> VP
     -- sleep here
-    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+    AdvVP vp adv = case adv.joinsVerb of {
+      True  => insertIndObj (indObjSuffix adv.a) vp ;
+      False => insertObj (\\_ => adv.s) vp
+      } ;
 
     -- AdV -> VP -> VP
     -- always sleep
@@ -101,7 +126,31 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
 
     -- VPSlash -> Adv -> VPSlash
     -- use (it) here
-    AdvVPSlash vp adv = insertObj (\\_ => adv.s) vp ** {c2 = vp.c2} ;
+    AdvVPSlash vp adv = case adv.joinsVerb of {
+      True  => insertIndObj (indObjSuffix adv.a) vp ;
+      False => insertObj (\\_ => adv.s) vp
+      }  ** {c2 = vp.c2} ;
+
+  oper
+
+    -- Only for_Prep causes these to be used, thus it doesn't make sense to store this
+    -- information in Prep.
+    indObjSuffix : Agr -> Str = \agr ->
+      case (toVAgr agr) of {
+        AgP1 Sg      => "li" ;
+        AgP2 Sg      => "lek" ;
+        AgP3Sg Masc  => "lu" ;
+        -- AgP3Sg Fem   => "ilha" ;
+        -- AgP1 Pl      => "ilna" ;
+        -- AgP2 Pl      => "ilkom" ;
+        -- AgP3Pl       => "ilhom"   --- need to introduce variants here too
+        AgP3Sg Fem   => "lha" ;
+        AgP1 Pl      => "lna" ;
+        AgP2 Pl      => "lkom" ;
+        AgP3Pl       => "lhom"
+      } ;
+
+  lin
 
     -- AdV -> VPSlash -> VPSlash
     -- always use (it)
@@ -113,24 +162,24 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
 
     -- V2 -> VP
     -- be loved
-    PassV2 v2 = insertObj (\\agr => v2.s ! VPassivePart (toGenNum agr) ++ v2.c2.s ! Definite) (predV copula_kien) ;
+    PassV2 v2 = insertObj (\\agr => stem1 (v2.s ! VPassivePart (toGenNum agr)) ++ v2.c2.s ! Definite) CopulaVP ;
 
     -- AP -> Comp
     -- (be) small
     CompAP ap = {
-      s = \\agr => ap.s ! toGenNum agr
+      s = \\agr => ap.s ! toGenNum agr ;
       } ;
 
     -- NP -> Comp
     -- (be) the man
     CompNP np = {
-      s = \\_ => np.s ! NPAcc
+      s = \\_ => np.s ! NPAcc ;
       } ;
 
     -- Adv -> Comp
     -- (be) here
     CompAdv adv = {
-      s = \\_ => adv.s
+      s = \\_ => adv.s ;
       } ;
 
     -- CN -> Comp
@@ -139,17 +188,24 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
       s = \\agr => case agr.n of {
         Sg => artIndef ++ cn.s ! Singulative ;
         Pl => cn.s ! Plural
-        }
+        } ;
     } ;
 
     -- VP
     -- be
-    UseCopula = predV copula_kien ;
+    UseCopula = CopulaVP ;
 
     -- VP -> Prep -> VPSlash
     -- live in (it)
     VPSlashPrep vp p = vp ** {
-      c2 = p
+      -- c2 = lin Compl (p ** {isPresent = True}) ;
+      c2 = {
+        s = p.s ;
+        enclitic = p.enclitic ;
+        takesDet = p.takesDet ;
+        joinsVerb = p.joinsVerb ;
+        isPresent = True ;
+        } ;
       } ;
 
 }

@@ -5,7 +5,7 @@
 -- Angelo Zammit 2012
 -- Licensed under LGPL
 
-concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
+concrete CatMlt of Cat = CommonX - [Adv] ** open ResMlt, Prelude in {
 
   flags
     optimize=all_subs ;
@@ -119,5 +119,13 @@ concrete CatMlt of Cat = CommonX ** open ResMlt, Prelude in {
     N2 = Noun ** {c2 : Compl} ;
     N3 = Noun ** {c2, c3 : Compl} ;
     PN = ProperNoun ;
+
+-- Overridden from CommonX
+
+    Adv = {
+      s : Str ;
+      joinsVerb : Bool ; -- Adv "for us" completely integrates into verb at VP level
+      a : Agr ; -- when joinsVerb, this is important
+      } ;
 
 }

@@ -17,10 +17,10 @@ concrete GrammarMlt of Grammar =
   RelativeMlt,
   ConjunctionMlt,
   PhraseMlt,
-  TextX,
+  TextX - [Adv],
   StructuralMlt,
   IdiomMlt,
-  TenseX
+  TenseX - [Adv]
   ** {
 
   flags coding=utf8 ;

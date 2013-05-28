@@ -43,7 +43,7 @@ concrete QuestionMlt of Question = CatMlt ** open ResMlt, ParamX, Prelude in {
     -- IComp -> NP -> QCl
     -- where is John
     QuestIComp icomp np =
-      mkQuestion icomp (mkClause (np.s ! npNom) np.a (predV copula_kien)) ;
+      mkQuestion icomp (mkClause (np.s ! npNom) np.a CopulaVP) ;
 
     -- Prep -> IP -> IAdv
     -- with whom

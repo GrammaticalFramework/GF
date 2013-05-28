@@ -150,24 +150,16 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- Predet -> NP -> NP
-    PredetNP pred np = np ** {
-      s = \\c => pred.s ++ np.s ! c ;
-      } ;
+    PredetNP pred np = overwriteNPs np (\\c => pred.s ++ np.s ! c) ;
 
     -- NP -> V2 -> NP
-    PPartNP np v2 = np ** {
-      s = \\c => np.s ! c ++ v2.s ! VImpf (toVAgr np.a) ; --- TODO: VPresPart
-      } ;
+    PPartNP np v2 = overwriteNPs np (\\c => np.s ! c ++ stem1 (v2.s ! VActivePart (toGenNum np.a))) ;
 
     -- NP -> RS -> NP
-    RelNP np rs = np ** {
-      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
-      } ;
+    RelNP np rs = overwriteNPs np (\\c => np.s ! c ++ "," ++ rs.s ! np.a ) ;
 
     -- NP -> Adv -> NP
-    AdvNP np adv = np ** {
-      s = \\c => np.s ! c ++ adv.s ;
-      } ;
+    AdvNP np adv = overwriteNPs np (\\c => np.s ! c ++ adv.s) ;
 
     -- Num
     NumSg = {s = \\c => []; n = NumX Sg ; hasCard = False} ;
@@ -241,35 +233,23 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- AP -> CN -> CN
-    AdjCN ap cn = cn ** {
-      s = \\num => preOrPost ap.isPre (ap.s ! mkGenNum num cn.g) (cn.s ! num) ;
-      } ;
+    AdjCN ap cn = overwriteCNs cn (\\num => preOrPost ap.isPre (ap.s ! mkGenNum num cn.g) (cn.s ! num)) ;
 
     -- CN -> RS -> CN
-    RelCN cn rs = cn ** {
-      s = \\num => cn.s ! num ++ rs.s ! mkGenNum num cn.g ;
-      } ;
+    RelCN cn rs = overwriteCNs cn (\\num => cn.s ! num ++ rs.s ! agrP3 (nounnum2num num) cn.g) ;
 
     -- CN -> Adv -> CN
-    AdvCN cn adv = cn ** {
-      s = \\num => cn.s ! num ++ adv.s
-      } ;
+    AdvCN cn adv = overwriteCNs cn (\\num => cn.s ! num ++ adv.s) ;
 
     -- CN -> SC -> CN
-    SentCN cn sc = cn ** {
-      s = \\num => cn.s ! num ++ sc.s
-      } ;
+    SentCN cn sc = overwriteCNs cn (\\num => cn.s ! num ++ sc.s) ;
 
     -- CN -> NP -> CN
-    ApposCN cn np = cn ** {
-      s = \\num => cn.s ! num ++ np.s ! NPNom
-      } ;
-    PossNP cn np = cn ** {
-      s = \\num => cn.s ! num ++ prepNP (mkPrep "ta'") np
-      } ;
-    PartNP cn np = cn ** {
-      s = \\num => cn.s ! num ++ prepNP (mkPrep "ta'") np
-      } ;
+    ApposCN cn np = overwriteCNs cn (\\num => cn.s ! num ++ np.s ! NPNom) ;
+
+    PossNP cn np = overwriteCNs cn (\\num => cn.s ! num ++ prepNP prep_ta np) ;
+
+    PartNP cn np = overwriteCNs cn (\\num => cn.s ! num ++ prepNP prep_ta np) ;
 
     -- Det -> NP -> NP
     CountNP det np = {
@@ -281,9 +261,46 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
 
   oper
     -- Copied from ParadigmsMlt (didn't want to change import structure)
-    mkPrep : Str -> Prep = \fuq -> lin Prep {
-      s = \\defn => fuq ;
-      takesDet = False
+    -- mkPrep : Str -> Prep = \fuq -> lin Prep {
+    --   s = \\defn => fuq ;
+    --   takesDet = False
+    --   } ;
+    prep_ta = lin Prep {
+      s = table {
+        Indefinite => "ta'" ;
+        Definite => makePreFull "tal-" "ta" "t'"
+      } ;
+      enclitic : Agr => Str = \\agr => case toVAgr agr of {
+        AgP1 Sg     => "tiegħi" ;
+        AgP2 Sg     => "tiegħek" ;
+        AgP3Sg Masc => "tiegħu" ;
+        AgP3Sg Fem  => "tagħha" ;
+        AgP1 Pl     => "tagħna" ;
+        AgP2 Pl     => "tagħkom" ;
+        AgP2Pl      => "tagħhom"
+        } ;
+      takesDet = True ;
+      joinsVerb = False ;
+      } ;
+
+  oper
+    -- Overwrite the s field in an NP
+    -- Use this instead of np ** { s = ... }
+    overwriteNPs : NounPhrase -> (NPCase => Str) -> NounPhrase = \np,tbl -> {
+      s = tbl ;
+      a = np.a ;
+      isPron = np.isPron ;
+      isDefn = np.isDefn ;
+      } ;
+
+    -- Overwrite the s field in a Noun
+    -- Use this instead of n ** { s = ... }
+    overwriteCNs : Noun -> (Noun_Number => Str) -> Noun = \n,tbl -> {
+      s = tbl ;
+      g = n.g ;
+      hasColl = n.hasColl ;
+      hasDual = n.hasDual ;
+      takesPron = n.takesPron ;
       } ;
 
 }

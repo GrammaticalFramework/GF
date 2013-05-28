@@ -8,40 +8,66 @@ concrete AdverbMlt of Adverb = CatMlt ** open ResMlt, Prelude in {
 
   lin
 
-    -- A -> Adv ;                 -- warmly
+    -- A -> Adv
+    -- warmly
     PositAdvAdj a = {
-      s = "b'mod" ++ a.s ! APosit (GSg Masc)
+      s = "b'mod" ++ a.s ! APosit (GSg Masc) ;
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
       } ;
 
-    -- CAdv -> A -> NP -> Adv ; -- more warmly than John
+    -- CAdv -> A -> NP -> Adv
+    -- more warmly than John
     ComparAdvAdj cadv a np = {
-      s = cadv.s ++ a.s ! APosit (GSg Masc) ++ cadv.p ++ np.s ! npNom
+      s = cadv.s ++ a.s ! APosit (GSg Masc) ++ cadv.p ++ np.s ! npNom ;
+      joinsVerb = False ;
+      a = np.a ; -- ignored when joinsVerb = False
       } ;
 
-    -- CAdv -> A -> S  -> Adv ; -- more warmly than he runs
+    -- CAdv -> A -> S  -> Adv
+    -- more warmly than he runs
     ComparAdvAdjS cadv a s = {
-      s = cadv.s ++ a.s ! APosit (GSg Masc) ++ cadv.p ++ s.s
+      s = cadv.s ++ a.s ! APosit (GSg Masc) ++ cadv.p ++ s.s ;
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
       } ;
 
-    -- Prep -> NP -> Adv ;        -- in the house
+    -- Prep -> NP -> Adv
+    -- in the house
     PrepNP prep np = {
-      s = prepNP prep np
+      s = prepNP prep np ;
+      joinsVerb = prep.joinsVerb ;
+      a = np.a ;
       };
 
-    -- AdA -> Adv -> Adv ;             -- very quickly
-    AdAdv = cc2 ;
-
-    -- A -> AdA ;                 -- extremely
-    PositAdAAdj a = {
-      s = a.s ! APosit (GSg Masc) ++ "ħafna" ;
+    -- AdA -> Adv -> Adv
+    -- very quickly
+    AdAdv a b = cc2 a b ** {
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
       } ;
 
-    -- Subj -> S -> Adv ;              -- when she sleeps
-    SubjS = cc2 ;
+    -- A -> AdA
+    -- extremely
+    PositAdAAdj a = {
+      s = a.s ! APosit (GSg Masc) ++ "ħafna" ;
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
+      } ;
 
-    -- CAdv -> AdN ;                  -- less (than five)
+    -- Subj -> S -> Adv
+    -- when she sleeps
+    SubjS s r = cc2 s r ** {
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
+      } ;
+
+    -- CAdv -> AdN
+    -- less (than five)
     AdnCAdv cadv = {
-      s = cadv.s ++ cadv.p
+      s = cadv.s ++ cadv.p ;
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
       } ;
 
 }

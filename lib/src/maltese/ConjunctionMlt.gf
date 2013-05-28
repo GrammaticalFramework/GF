@@ -12,7 +12,10 @@ concrete ConjunctionMlt of Conjunction =
     ConjS = conjunctDistrSS ;
 
     -- Conj -> [Adv] -> Adv   -- "here or there"
-    ConjAdv = conjunctDistrSS ;
+    ConjAdv c l = conjunctDistrSS c l ** {
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
+      } ;
 
     -- Conj -> [IAdv] -> IAdv -- "where and with whom"
     ConjIAdv = conjunctDistrSS ;

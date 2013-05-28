@@ -356,7 +356,7 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
       ;
     kamrad_KMRD_1_7014_V      = mkV "kamrad" (mkRoot "k-m-r-d") ;
     kanga_KNGJ_1_7015_V       = mkV "kanġa" (mkRoot "k-n-ġ-j") ;
-    kanta_KNTJ_1_7016_V       = mkV "kanta" (mkRoot "k-n-t-j") ;
+    kanta_KNTJ_1_7016_V       = mkV "kanta" "kanta" (mkRoot "k-n-t-j") ;
     tkanta_KNTJ_2_7017_V      = mkV_II "tkanta" (mkRoot "k-n-t-j") ;
     kopra_KPRJ_1_7018_V       = mkV "kopra" (mkRoot "k-p-r-j") ;
     tkopra_KPRJ_2_7019_V      = mkV_II "tkopra" (mkRoot "k-p-r-j") ;
@@ -428,13 +428,13 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     tmandar_MNDR_2_7086_V     = mkV_II "tmandar" (mkRoot "m-n-d-r") ;
     menghel_MNGHL_1_7087_V    = mkV "mengħel" (mkRoot "m-n-għ-l") ;
     mantna_MNTNJ_1_7088_V     = mkV quadWeak form1 (mkRoot "m-n-tn-j") (mkPattern "a" "a")
-      "mantnejt" "mantnejt" "mantna" "mantniet" "mantnejna" "mantnejtu" "mantnew" 
-      "nmantna" "tmantna" "jmantna" "tmantna" "nmantnu" "tmantnu" "jmantnu" 
+      "mantnejt" "mantnejt" "mantna" "mantniet" "mantnejna" "mantnejtu" "mantnew"
+      "nmantna" "tmantna" "jmantna" "tmantna" "nmantnu" "tmantnu" "jmantnu"
       "mantna" "mantnu"
       ;
     tmantna_MNTNJ_2_7089_V    = mkV quadWeak form2 (mkRoot "m-n-tn-j") (mkPattern "a" "a")
-      "tmantnejt" "tmantnejt" "tmantna" "tmantniet" "tmantnejna" "tmantnejtu" "tmantnew" 
-      "nitmantna" "titmantna" "jitmantna" "titmantna" "nitmantnu" "titmantnu" "jitmantnu" 
+      "tmantnejt" "tmantnejt" "tmantna" "tmantniet" "tmantnejna" "tmantnejtu" "tmantnew"
+      "nitmantna" "titmantna" "jitmantna" "titmantna" "nitmantnu" "titmantnu" "jitmantnu"
       "tmantna" "tmantnu"
       ;
     mantar_MNTR_1_7090_V      = mkV "mantar" (mkRoot "m-n-t-r") ;
@@ -1484,8 +1484,8 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     gezzez_GZZ_2_8121_V       = mkV_II "ġeżżeż" (mkRoot "ġ-ż-ż") ;
     ngezz_GZZ_7_8122_V        = mkV_VII "ġeżż" "nġeżż" (mkRoot "ġ-ż-ż") ;
     gie_GJ'_1_8123_V          = irregularV form1 (mkRoot "ġ-j-'") (mkPattern "ie" [])
-      "ġejt" "ġejt" "ġie" "ġiet" "ġejna" "ġejtu" "ġew" 
-      "niġi" "tiġi" "jiġi" "tiġi" "niġu" "tiġu" "jiġu" 
+      "ġejt" "ġejt" "ġie" "ġiet" "ġejna" "ġejtu" "ġew"
+      "niġi" "tiġi" "jiġi" "tiġi" "niġu" "tiġu" "jiġu"
       "ejja" "ejjew"
       ;
     gab_GJB_1_8124_V          = mkV "ġab" (mkRoot "ġ-j-b") ;
@@ -2035,8 +2035,8 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     kejjel_KJL_2_8670_V       = mkV_II "kejjel" (mkRoot "k-j-l") ;
     tkejjel_KJL_5_8671_V      = mkV_V "tkejjel" (mkRoot "k-j-l") ;
     kiel_KJL_1_8672_V         = irregularV form1 (mkRoot "k-j-l") (mkPattern "ie" [])
-      "kilt" "kilt" "kiel" "kielet" "kilna" "kiltu" "kielu" 
-      "niekol" "tiekol" "jiekol" "tiekol" "nieklu" "tieklu" "jieklu" 
+      "kilt" "kilt" "kiel" "kielet" "kilna" "kiltu" "kielu"
+      "niekol" "tiekol" "jiekol" "tiekol" "nieklu" "tieklu" "jieklu"
       ("kul"|"iekol") ("kulu"|"ieklu")
       ;
     wikkel_KJL_2_8673_V       = mkV_II "wikkel" (mkRoot "k-j-l") ;
@@ -2062,8 +2062,8 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     tkiewa_KWJ_6_8693_V       = mkV_VI "tkiewa" (mkRoot "k-w-j") ;
     nkewa_KWJ_7_8694_V        = mkV_VII "kewa" "nkewa" (mkRoot "k-w-j") ;
     kien_KWN_1_8695_V         = irregularV form1 (mkRoot "k-w-n") (mkPattern "ie" [])
-      "kont" "kont" "kien" "kienet" "konna" "kontu" "kienu" 
-      "nkun" "tkun" "jkun" "tkun" "nkunu" "tkunu" "jkunu" 
+      "kont" "kont" "kien" "kienet" "konna" "kontu" "kienu"
+      "nkun" "tkun" "jkun" "tkun" "nkunu" "tkunu" "jkunu"
       "kun" "kunu"
       ;
     kewwen_KWN_2_8696_V       = mkV_II "kewwen" (mkRoot "k-w-n") ;
@@ -2289,8 +2289,8 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     mewweg_MWG_2_8916_V       = mkV_II "mewweġ" (mkRoot "m-w-ġ") ;
     tmewweg_MWG_5_8917_V      = mkV_V "tmewweġ" (mkRoot "m-w-ġ") ;
     mar_MWR_1_8918_V          = irregularV form1 (mkRoot "m-w-r") (mkPattern "a" [])
-      "mort" "mort" "mar" "marret" "morna" "mortu" "marru" 
-      "mmur" "tmur" "jmur" "tmur" "mmorru" "tmorru" "jmorru" 
+      "mort" "mort" "mar" "marret" "morna" "mortu" "marru"
+      "mmur" "tmur" "jmur" "tmur" "mmorru" "tmorru" "jmorru"
       "mur" "morru"
       ;
     mawwar_MWR_2_8919_V       = mkV_II "mawwar" (mkRoot "m-w-r") ;
@@ -2730,8 +2730,8 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     qawwa_QWJ_2_9355_V        = mkV_II "qawwa" (mkRoot "q-w-j") ;
     tqawwa_QWJ_5_9356_V       = mkV_V "tqawwa" (mkRoot "q-w-j") ;
     qal_QWL_1_9357_V          = irregularV form1 (mkRoot "q-w-l") (mkPattern "a" [])
-      "għedt" "għedt" "qal" "qalet" "għedna" "għedtu" "qalu" 
-      "ngħid" "tgħid" "jgħid" "tgħid" "ngħidu" "tgħidu" "jgħidu" 
+      "għedt" "għedt" "qal" "qalet" "għedna" "għedtu" "qalu"
+      "ngħid" "tgħid" "jgħid" "tgħid" "ngħidu" "tgħidu" "jgħidu"
       "għid" "għidu"
       ; -- say/speak (note: GĦAD is also a separate verb)
     qawwel_QWL_2_9358_V       = mkV_II "qawwel" (mkRoot "q-w-l") ;
@@ -2890,8 +2890,8 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     razzan_RZN_2_9511_V       = mkV_II "rażżan" (mkRoot "r-ż-n") ;
     trazzan_RZN_5_9512_V      = mkV_V "trażżan" (mkRoot "r-ż-n") ;
     ra_R'J_1_9513_V           = irregularV form1 (mkRoot "r-'-j") (mkPattern "a" [])
-      "rajt" "rajt" "ra" "rat" "rajna" "rajtu" "raw" 
-      "nara" "tara" "jara" "tara" "naraw" "taraw" "jaraw" 
+      "rajt" "rajt" "ra" "rat" "rajna" "rajtu" "raw"
+      "nara" "tara" "jara" "tara" "naraw" "taraw" "jaraw"
       "ara" "araw"
       ;
     ntwera_R'J_7_9514_V       = irregularV form7 (mkRoot "r-'-j") (mkPattern "e" "e")
@@ -3458,15 +3458,15 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     twelled_WLD_5_10060_V     = mkV_V "twelled" (mkRoot "w-l-d") ;
     twieled_WLD_6_10061_V     = mkV_VI "twieled" (mkRoot "w-l-d") ;
     emmen_WMN_1_10062_V       = irregularV form1 (mkRoot "w-m-n") (mkPattern "e" "e")
-      "emmint" "emmint" "emmen" "emmnet" "emminna" "emmintu" "emmnu" 
-      "nemmen" "temmen" "jemmen" "temmen" "nemmnu" "temmnu" "jemmnu" 
+      "emmint" "emmint" "emmen" "emmnet" "emminna" "emmintu" "emmnu"
+      "nemmen" "temmen" "jemmen" "temmen" "nemmnu" "temmnu" "jemmnu"
       "emmen" "emmnu"
       ;
     wemmen_WMN_2_10063_V      = mkV_II "wemmen" (mkRoot "w-m-n") ;
     twemmen_WMN_5_10064_V     = mkV_V "twemmen" (mkRoot "w-m-n") ;
     wennes_WNS_2_10065_V      = mkV_II "wennes" (mkRoot "w-n-s") ;
     twennes_WNS_5_10066_V     = mkV_V "twennes" (mkRoot "w-n-s") ;
-    waqaf_WQF_1_10067_V       = mkV "waqaf" (mkRoot "w-q-f") ;
+    waqaf_WQF_1_10067_V       = mkV "waqaf" "ieqaf" (mkRoot "w-q-f") ;
     waqqaf_WQF_2_10068_V      = mkV_II "waqqaf" (mkRoot "w-q-f") ;
     twaqqaf_WQF_5_10069_V     = mkV_V "twaqqaf" (mkRoot "w-q-f") ;
     waqa'_WQGH_1_10070_V      = mkV "waqa'" (mkRoot "w-q-għ") ;
@@ -4167,14 +4167,14 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     hassel_HSL_2_10765_V      = mkV_II "ħassel" (mkRoot "ħ-s-l") ;
     thassel_HSL_5_10766_V     = mkV_V "tħassel" (mkRoot "ħ-s-l") ;
     ta_GHTJ_1_10767_V         = irregularV form1 (mkRoot "għ-t-j") (mkPattern "a" [])
-      "tajt" "tajt" "ta" "tat" "tajna" "tajtu" "taw" 
-      "nagħti" "tagħti" "jagħti" "tagħti" "nagħtu" "tagħtu" "jagħtu" 
+      "tajt" "tajt" "ta" "tat" "tajna" "tajtu" "taw"
+      "nagħti" "tagħti" "jagħti" "tagħti" "nagħtu" "tagħtu" "jagħtu"
       "agħti" "agħtu"
       ;
     nghata_GHTJ_7_10768_V     = mkV_VII "għata" "ngħata" (mkRoot "għ-t-j") ;
     idda_'DJ_8_10771_V        = irregularV form8 (mkRoot "'-d-j") (mkPattern "i" "e")
-      "iddejt" "iddejt" "idda" "iddiet" "iddejna" "iddejtu" "iddew" 
-      "niddi" "tiddi" "jiddi" "tiddi" "niddu" "tiddu" "jiddu" 
+      "iddejt" "iddejt" "idda" "iddiet" "iddejna" "iddejtu" "iddew"
+      "niddi" "tiddi" "jiddi" "tiddi" "niddu" "tiddu" "jiddu"
       "iddi" "iddu"
       ;
     idden_'DN_2_10772_V       = irregularV form2 (mkRoot "'-d-n") (mkPattern "i" "e")
@@ -4184,12 +4184,12 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
       ;
     stieden_'DN_10_10773_V    = irregularV form10 (mkRoot "'-d-n") (mkPattern "ie" "e")
       "stedint" "stedint" "stieden" "stiednet" "stedinna" "stedintu" "stiednu"
-      "nistieden" "tistieden" "jistieden" "tistieden" "nistiednu" "tistiednu" "jistiednu" 
+      "nistieden" "tistieden" "jistieden" "tistieden" "nistiednu" "tistiednu" "jistiednu"
       "stieden" "stiednu"
       ;
     af_''F_1_10774_V          = irregularV form1 (mkRoot "'-'-f") (mkPattern "a" [])
       "kont naf" "kont taf" "kien jaf" "kienet taf" "konna nafu" "kontu tafu" "kienu jafu" --- will fail for negative
-      "naf" "taf" "jaf" "taf" "nafu" "tafu" "jafu" 
+      "naf" "taf" "jaf" "taf" "nafu" "tafu" "jafu"
       "kun af" "kunu afu"
       ;
     ntaf_''F_7_10775_V        = irregularV form2 (mkRoot "'-'-f") (mkPattern "a" [])
@@ -4198,17 +4198,17 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
       "ntaf" "ntafu"
       ;
     ha_'HD_1_10776_V          = irregularV form1 (mkRoot "'-ħ-d") (mkPattern "a" [])
-      "ħadt" "ħadt" "ħa" "ħadet" "ħadna" "ħadtu" "ħadu" 
-      "nieħu" "tieħu" "jieħu" "tieħu" "nieħdu" "tieħdu" "jieħdu" 
+      "ħadt" "ħadt" "ħa" "ħadet" "ħadna" "ħadtu" "ħadu"
+      "nieħu" "tieħu" "jieħu" "tieħu" "nieħdu" "tieħdu" "jieħdu"
       "ħu" "ħudu"
       ;
     ttiehed_'HD_6_10777_V     = irregularV form6 (mkRoot "'-ħ-d") (mkPattern "ie" "e")
-      "ttieħedt" "ttieħedt" "ttieħed" "ttieħdet" "ttieħedna" "ttieħedtu" "ttieħdu" 
+      "ttieħedt" "ttieħedt" "ttieħed" "ttieħdet" "ttieħedna" "ttieħedtu" "ttieħdu"
       "nittieħed" "tittieħed" "jittieħed" "tittieħed" "nittieħdu" "tittieħdu" "jittieħdu"
       "ttieħed" "ttieħdu"
       ;
     staha_'HJ_10_10778_V      = irregularV form10 (mkRoot "'-ħ-j") (mkPattern "a" "a")
-      "stħajt" "stħajt" "staħa" "stħiet" "stħajna" "stħajtu" "stħew" 
+      "stħajt" "stħajt" "staħa" "stħiet" "stħajna" "stħajtu" "stħew"
       "nistħi" "tistħi" "jistħi" "tistħi" "nistħu" "tistħu" "jistħu"
       "istħi" "istħu"
       ;
@@ -4223,7 +4223,7 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
       "amba" "ambaw"
       ;
     stenna_'NJ_10_10781_V     = irregularV form10 (mkRoot "'-n-j") (mkPattern "e" "a")
-      "stennejt" "stennejt" "stenna" "stenniet" "stennejna" "stennejtu" "stennew" 
+      "stennejt" "stennejt" "stenna" "stenniet" "stennejna" "stennejtu" "stennew"
       "nistenna" "tistenna" "jistenna" "tistenna" "nistennew" "tistennew" "jistennew"
       "stenna" "stennew"
       ;
@@ -4273,8 +4273,8 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     penpen_PNPN_1_10813_V     = mkV "penpen" (mkRoot "p-n-p-n") ;
     hezzez_HZZ_2_10814_V      = mkV_II "heżżeż" (mkRoot "h-ż-ż") ;
     wera_R'J_1_10815_V        = irregularV form4 (mkRoot "r-'-j") (mkPattern "e" "a")
-      "urejt" "urejt" "wera" "uriet" "urejna" "urejtu" "urejna" 
-      "nuri" "turi" "juri" "turi" "nuru" "turu" "juru" 
+      "urejt" "urejt" "wera" "uriet" "urejna" "urejtu" "urejna"
+      "nuri" "turi" "juri" "turi" "nuru" "turu" "juru"
       "uri" "uru"
       ;
     ntara_R'J_7_10816_V       = irregularV form7 (mkRoot "r-'-j") (mkPattern "a" "a")

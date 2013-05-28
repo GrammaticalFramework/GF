@@ -223,10 +223,10 @@ resource ParadigmsMlt = open
     } ;
 
     prepN2 : N -> Prep -> N2 ;
-    prepN2 = \n,p -> lin N2 (n ** {c2 = p}) ;
+    prepN2 = \n,p -> lin N2 (n ** {c2 = hasCompl p}) ;
 
     mkN3 : Noun -> Prep -> Prep -> N3 ;
-    mkN3 = \n,p,q -> lin N3 (n ** {c2 = p ; c3 = q}) ;
+    mkN3 = \n,p,q -> lin N3 (n ** {c2 = hasCompl p ; c3 = hasCompl q}) ;
 
     -- Mark a noun as taking possessive enclitic pronouns
     possN : N -> N ;
@@ -245,7 +245,25 @@ resource ParadigmsMlt = open
       -- Same in all cases, e.g. FUQ
       mkPrep : Str -> Prep = \fuq -> lin Prep {
         s = \\defn => fuq ;
-        takesDet = False
+        enclitic = prepClitics fuq ;
+        takesDet = False ;
+        joinsVerb = False ;
+        } ;
+
+      -- Same in non-clitic cases, but given all clitic cases e.g. QABEL
+      mkPrep : (_,_,_,_,_,_,_,_ : Str) -> Prep = \qabel, qabli, qablek, qablu, qabilha, qabilna, qabilkom, qabilhom -> lin Prep {
+        s = \\defn => qabel ;
+        enclitic = \\agr => case toVAgr agr of {
+          AgP1 Sg     => qabli ;
+          AgP2 Sg     => qablek ;
+          AgP3Sg Masc => qablu ;
+          AgP3Sg Fem  => qabilha ;
+          AgP1 Pl     => qabilna ;
+          AgP2 Pl     => qabilkom ;
+          AgP2Pl      => qabilhom
+          } ;
+        takesDet = False ;
+        joinsVerb = False ;
         } ;
 
       -- Forms:
@@ -257,10 +275,12 @@ resource ParadigmsMlt = open
           Indefinite => ghal ;
           Definite   => makePreFull ghall (dropSfx 2 ghat) ghall
           } ;
-        takesDet = True
+        enclitic = prepClitics ghal ;
+        takesDet = True ;
+        joinsVerb = False ;
         } ;
 
-      -- All forms:
+      -- All forms, but assumed enclitic forms
       --   BI ktieb/triq
       --   B'ajruplan
       --   BIL-ktieb
@@ -271,12 +291,86 @@ resource ParadigmsMlt = open
           Indefinite => makePreVowel bi b' ;
           Definite   => makePreFull  bil (dropSfx 2 bit) bl
           } ;
-        takesDet = True
+        enclitic = prepClitics bi ;
+        takesDet = True ;
+        joinsVerb = False ;
         } ;
-      } ;
 
-    noPrep : Prep ;  -- no preposition
-    noPrep = mkPrep [] ;
+      -- All forms:
+      --   BI ktieb/triq
+      --   B'ajruplan
+      --   BIL-ktieb
+      --   BIT-triq
+      --   BL-ajruplan
+      --   BIJA
+      --   BIK
+      --   BIH
+      --   BIHA
+      --   BINA
+      --   BIKOM
+      --   BIHOM
+      mkPrep : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Bool -> Prep = \bi,b',bil,bit,bl,bija,bik,bih,biha,bina,bikom,bihom,joinsV -> lin Prep {
+        s = table {
+          Indefinite => makePreVowel bi b' ;
+          Definite   => makePreFull  bil (dropSfx 2 bit) bl
+          } ;
+        enclitic = \\agr => case toVAgr agr of {
+          AgP1 Sg     => bija ;
+          AgP2 Sg     => bik ;
+          AgP3Sg Masc => bih ;
+          AgP3Sg Fem  => biha ;
+          AgP1 Pl     => bina ;
+          AgP2 Pl     => bikom ;
+          AgP2Pl      => bihom
+          } ;
+        takesDet = True ;
+        joinsVerb = joinsV ;
+        } ;
+    } ;
+
+    prepClitics : Str -> (Agr => Str) = \taht -> \\agr =>
+      case taht of {
+
+        war+"a" => case toVAgr agr of {
+          AgP1 Sg     => war+"ajja" ;
+          AgP2 Sg     => war+"ajk" ;
+          AgP3Sg Masc => war+"ajh" ;
+          AgP3Sg Fem  => war+"ajha" ;
+          AgP1 Pl     => war+"ajna" ;
+          AgP2 Pl     => war+"ajkom" ;
+          AgP2Pl      => war+"ajhom"
+          } ;
+
+        f+"i" => case toVAgr agr of {
+          AgP1 Sg     => f+"ija" ;
+          AgP2 Sg     => f+"ik" ;
+          AgP3Sg Masc => f+"ih" ;
+          AgP3Sg Fem  => f+"iha" ;
+          AgP1 Pl     => f+"ina" ;
+          AgP2 Pl     => f+"ikom" ;
+          AgP2Pl      => f+"ihom"
+          } ;
+
+        t+"a'" => case toVAgr agr of {
+          AgP1 Sg     => t+"iegħi" ;
+          AgP2 Sg     => t+"iegħek" ;
+          AgP3Sg Masc => t+"iegħu" ;
+          AgP3Sg Fem  => t+"agħha" ;
+          AgP1 Pl     => t+"agħna" ;
+          AgP2 Pl     => t+"agħkom" ;
+          AgP2Pl      => t+"agħhom"
+          } ;
+
+        _ => case toVAgr agr of {
+          AgP1 Sg     => taht+"i" ;
+          AgP2 Sg     => taht+"ek" ;
+          AgP3Sg Masc => taht+"u" ;
+          AgP3Sg Fem  => taht + "ha" ;
+          AgP1 Pl     => case taht of {bej+"n" => bej+"na"; _ => taht+"na"} ;
+          AgP2 Pl     => taht + "kom" ;
+          AgP2Pl      => taht + "hom"
+          }
+      } ;
 
     {- Verb --------------------------------------------------------------- -}
 
@@ -402,7 +496,7 @@ resource ParadigmsMlt = open
             } ;
           info : VerbInfo = mkVerbInfo class form root patt impSg ;
         in lin V  {
-          s = tbl ;
+          s = stemVariantsTbl tbl ;
           i = info ;
         } ;
 
@@ -449,7 +543,7 @@ resource ParadigmsMlt = open
           } ;
         newinfo : VerbInfo = mkVerbInfo class FormII root patt imp ;
       in lin V {
-        s = conjFormII newinfo ;
+        s = stemVariantsTbl (conjFormII newinfo) ;
         i = newinfo ;
       } ;
 
@@ -462,7 +556,7 @@ resource ParadigmsMlt = open
           imp : Str = mammaII ; --- assumption: mamma II is also imperative
           newinfo : VerbInfo = mkVerbInfo class FormII root patt imp ;
         in lin V {
-          s = conjFormII_quad newinfo ;
+          s = stemVariantsTbl (conjFormII_quad newinfo) ;
           i = newinfo ;
         } ;
       derivedV_QuadII : Str -> Str -> Root -> V = \mammaII, imp, root ->
@@ -471,7 +565,7 @@ resource ParadigmsMlt = open
           patt : Pattern = extractPattern mammaII ;
           newinfo : VerbInfo = mkVerbInfo class FormII root patt imp ;
         in lin V {
-          s = conjFormII_quad newinfo ;
+          s = stemVariantsTbl (conjFormII_quad newinfo) ;
           i = newinfo ;
         } ;
       } ;
@@ -485,7 +579,7 @@ resource ParadigmsMlt = open
         class : VClass = classifyRoot root ;
         info : VerbInfo = mkVerbInfo class FormIII root vowels vowels2 mammaIII ; --- assumption: mamma III is also imperative
       in lin V {
-        s = conjFormIII info ;
+        s = stemVariantsTbl (conjFormIII info) ;
         i = info ;
       } ;
 
@@ -500,20 +594,22 @@ resource ParadigmsMlt = open
         mammaII : Str = dropPfx 1 mammaV ; -- WAQQAF
         vII : V = derivedV_II mammaII root ;
         info : VerbInfo = mkVerbInfo vII.i.class FormV vII.i.root vII.i.patt mammaV ;
-      in lin V {
-        s = table {
-          VPerf agr           => pfx_T (vII.s ! VPerf agr) ;
-          VImpf (AgP1 Sg)     => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Sg)))) ;
-          VImpf (AgP2 Sg)     => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Sg)))) ;
-          VImpf (AgP3Sg Masc) => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Sg Masc)))) ;
-          VImpf (AgP3Sg Fem)  => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Sg Fem)))) ;
-          VImpf (AgP1 Pl)     => pfx "ni" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP1 Pl)))) ;
-          VImpf (AgP2 Pl)     => pfx "ti" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP2 Pl)))) ;
-          VImpf (AgP3Pl)      => pfx "ji" (pfx_T (dropPfx 1 (vII.s ! VImpf (AgP3Pl)))) ;
-          VImp num            => pfx_T (vII.s ! VImp num) ;
+        get : VForm -> Str = \vf -> stem1 (vII.s ! vf) ;
+        tbl : VForm => Str = table {
+          VPerf agr           => pfx_T (get (VPerf agr)) ;
+          VImpf (AgP1 Sg)     => pfx "ni" (pfx_T (dropPfx 1 (get (VImpf (AgP1 Sg))))) ;
+          VImpf (AgP2 Sg)     => pfx "ti" (pfx_T (dropPfx 1 (get (VImpf (AgP2 Sg))))) ;
+          VImpf (AgP3Sg Masc) => pfx "ji" (pfx_T (dropPfx 1 (get (VImpf (AgP3Sg Masc))))) ;
+          VImpf (AgP3Sg Fem)  => pfx "ti" (pfx_T (dropPfx 1 (get (VImpf (AgP3Sg Fem))))) ;
+          VImpf (AgP1 Pl)     => pfx "ni" (pfx_T (dropPfx 1 (get (VImpf (AgP1 Pl))))) ;
+          VImpf (AgP2 Pl)     => pfx "ti" (pfx_T (dropPfx 1 (get (VImpf (AgP2 Pl))))) ;
+          VImpf (AgP3Pl)      => pfx "ji" (pfx_T (dropPfx 1 (get (VImpf (AgP3Pl))))) ;
+          VImp num            => pfx_T (get (VImp num)) ;
           VActivePart  _      => "" ; --- TODO
           VPassivePart _      => ""   --- TODO
           } ;
+      in lin V {
+        s = stemVariantsTbl (tbl) ;
         i = info ;
       } ;
 
@@ -525,20 +621,22 @@ resource ParadigmsMlt = open
         mammaIII : Str = dropPfx 1 mammaVI ; -- QIEGĦED
         vIII : V = derivedV_III mammaIII root ;
         info : VerbInfo = updateVerbInfo vIII.i FormVI mammaVI ;
-      in lin V {
-        s = table {
-          VPerf agr           => pfx_T (vIII.s ! VPerf agr) ;
-          VImpf (AgP1 Sg)     => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Sg)))) ;
-          VImpf (AgP2 Sg)     => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Sg)))) ;
-          VImpf (AgP3Sg Masc) => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Sg Masc)))) ;
-          VImpf (AgP3Sg Fem)  => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Sg Fem)))) ;
-          VImpf (AgP1 Pl)     => pfx "ni" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP1 Pl)))) ;
-          VImpf (AgP2 Pl)     => pfx "ti" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP2 Pl)))) ;
-          VImpf (AgP3Pl)      => pfx "ji" (pfx_T (dropPfx 1 (vIII.s ! VImpf (AgP3Pl)))) ;
-          VImp num            => pfx_T (vIII.s ! VImp num) ;
+        get : VForm -> Str = \vf -> stem1 (vIII.s ! vf) ;
+        tbl : VForm => Str = table {
+          VPerf agr           => pfx_T (get (VPerf agr)) ;
+          VImpf (AgP1 Sg)     => pfx "ni" (pfx_T (dropPfx 1 (get (VImpf (AgP1 Sg))))) ;
+          VImpf (AgP2 Sg)     => pfx "ti" (pfx_T (dropPfx 1 (get (VImpf (AgP2 Sg))))) ;
+          VImpf (AgP3Sg Masc) => pfx "ji" (pfx_T (dropPfx 1 (get (VImpf (AgP3Sg Masc))))) ;
+          VImpf (AgP3Sg Fem)  => pfx "ti" (pfx_T (dropPfx 1 (get (VImpf (AgP3Sg Fem))))) ;
+          VImpf (AgP1 Pl)     => pfx "ni" (pfx_T (dropPfx 1 (get (VImpf (AgP1 Pl))))) ;
+          VImpf (AgP2 Pl)     => pfx "ti" (pfx_T (dropPfx 1 (get (VImpf (AgP2 Pl))))) ;
+          VImpf (AgP3Pl)      => pfx "ji" (pfx_T (dropPfx 1 (get (VImpf (AgP3Pl))))) ;
+          VImp num            => pfx_T (get (VImp num)) ;
           VActivePart  _      => "" ; --- TODO
           VPassivePart _      => ""   --- TODO
           } ;
+      in lin V {
+        s = stemVariantsTbl (tbl) ;
         i = info ;
       } ;
 
@@ -558,7 +656,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo class FormVII root vowels mammaVII ;
       in lin V {
-        s = conjFormVII info c1 ;
+        s = stemVariantsTbl (conjFormVII info c1) ;
         i = info ;
       } ;
 
@@ -572,7 +670,7 @@ resource ParadigmsMlt = open
         info : VerbInfo = mkVerbInfo class FormVIII root vowels mammaVIII ;
         c1 : Str = root.C1+"t";
       in lin V {
-        s = conjFormVII info c1 ; -- note we use conjFormVII !
+        s = stemVariantsTbl (conjFormVII info c1) ; -- note we use conjFormVII !
         i = info ;
       } ;
 
@@ -587,7 +685,7 @@ resource ParadigmsMlt = open
             class : VClass = classifyRoot root ;
             info : VerbInfo = mkVerbInfo class FormIX root patt mammaIX ;
           in lin V {
-            s = conjFormIX info ;
+            s = stemVariantsTbl (conjFormIX info) ;
             i = info ;
           } ;
         _ => Predef.error("I don't know how to make a Form IX verb out of" ++ mammaIX)
@@ -602,7 +700,7 @@ resource ParadigmsMlt = open
         patt2 : Pattern = vowelChangesIE root patt ;
         info : VerbInfo = mkVerbInfo class FormX root patt patt2 mammaX ;
       in lin V {
-        s = conjFormX info ;
+        s = stemVariantsTbl (conjFormX info) ;
         i = info ;
       } ;
 
@@ -639,7 +737,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Strong Regular) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -681,7 +779,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Strong LiquidMedial) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -718,7 +816,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Strong Geminated) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -759,7 +857,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Weak Assimilative) (FormI) root patt patt2 (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -800,7 +898,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Weak Hollow) (FormI) root patt patt2 (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -841,7 +939,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Weak Lacking) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -878,7 +976,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Weak Defective) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -915,7 +1013,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Quad QStrong) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -955,7 +1053,7 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Quad QWeak) (FormI) root patt (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
@@ -980,29 +1078,35 @@ resource ParadigmsMlt = open
           } ;
         info : VerbInfo = mkVerbInfo (Loan) (FormI) (imp ! Sg) ;
       in lin V {
-        s = tbl ;
+        s = stemVariantsTbl tbl ;
         i = info ;
       } ;
 
     {- Verb --------------------------------------------------------------- -}
 
+    hasCompl : Prep -> Compl = \p -> p ** { isPresent = True } ;
+    noCompl : Compl = noPrep ** { isPresent = False } where { noPrep : Prep = mkPrep [] };
+
     mkVS : V -> VS ; -- sentence-compl
     mkVS v = lin VS v ;
 
     prepV2 : V -> Prep -> V2 ;
-    prepV2 v p = lin V2 ( v ** { c2 = p } ) ;
+    prepV2 v p = lin V2 ( v ** { c2 = hasCompl p } ) ;
 
     dirV2 : V -> V2 ;
-    dirV2 v = prepV2 v noPrep ;
+    -- dirV2 v = prepV2 v noPrep ;
+    dirV2 v = lin V2 ( v ** { c2 = noCompl } ) ;
 
     prepPrepV3 : V -> Prep -> Prep -> V3 ;
-    prepPrepV3 v p t = lin V3 (v ** { c2 = p ; c3 = t }) ;
+    prepPrepV3 v p t = lin V3 (v ** { c2 = hasCompl p ; c3 = hasCompl t }) ;
 
     dirV3 : V -> Prep -> V3 ;
-    dirV3 v p = prepPrepV3 v noPrep p ;
+    -- dirV3 v p = prepPrepV3 v noPrep p ;
+    dirV3      v   t = lin V3 (v ** { c2 = noCompl ; c3 = hasCompl t }) ;
 
     dirdirV3 : V -> V3 ;
-    dirdirV3 v = dirV3 v noPrep ;
+    -- dirdirV3 v = dirV3 v noPrep ;
+    dirdirV3   v     = lin V3 (v ** { c2 = noCompl ; c3 = noCompl }) ;
 
     mkV3 : overload {
       mkV3  : V -> V3 ;                   -- ditransitive, e.g. give,_,_
@@ -1022,7 +1126,7 @@ resource ParadigmsMlt = open
       } ;
 
     mkV2V : V -> Prep -> Prep -> V2V ;  -- e.g. want (noPrep NP) (to VP)
-    mkV2V v p t = lin V2V (v ** { c2 = p ; c3 = t }) ;
+    mkV2V v p t = lin V2V (v ** { c2 = hasCompl p ; c3 = hasCompl t }) ;
 
     {- Conjunction -------------------------------------------------------- -}
 
@@ -1126,10 +1230,11 @@ resource ParadigmsMlt = open
       } ;
 
     prepA2 : A -> Prep -> A2 ;
-    prepA2 a p = lin A2 (a ** {c2 = p}) ;
+    prepA2 a p = lin A2 (a ** {c2 = hasCompl p}) ;
 
     dirA2 : A -> A2 ;
-    dirA2 a = prepA2 a noPrep ;
+    -- dirA2 a = prepA2 a noPrep ;
+    dirA2 a = lin A2 (a ** {c2 = noCompl}) ;
 
     mkA2 : overload {
       mkA2 : A -> Prep -> A2 ;
@@ -1154,7 +1259,10 @@ resource ParadigmsMlt = open
     mkAdA : Str -> AdA ; -- adverb modifying adjective, e.g. PJUTTOST
     mkAdN : Str -> AdN ; -- adverb modifying numeral, e.g. MADWAR
 
-    mkAdv x = lin Adv (ss x) ;
+    mkAdv x = lin Adv (ss x) ** {
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
+      } ;
     mkAdV x = lin AdV (ss x) ;
     mkAdA x = lin AdA (ss x) ;
     mkAdN x = lin AdN (ss x) ;

@@ -17,7 +17,7 @@ concrete StructuralMlt of Structural = CatMlt **
 
     i_Pron      = mkPron "jien"  "i"   "ni" "li"  singular P1 masculine ; --- also JIENA
     youSg_Pron  = mkPron "int"   "ek"  "ek" "lek" singular P2 masculine ; --- also INTI
-    he_Pron     = mkPron "hu"    "u"   "u"  "lu"  singular P3 masculine ; --- also HUWA
+    he_Pron     = mkPron "hu"    "u"   "hu" "lu"  singular P3 masculine ; --- also HUWA
     she_Pron    = mkPron "hi"    "ha"             singular P3 feminine  ; --- also HIJA
     we_Pron     = mkPron "aħna"  "na"             plural   P1 masculine ;
     youPl_Pron  = mkPron "intom" "kom"            plural   P2 masculine ;
@@ -72,25 +72,30 @@ concrete StructuralMlt of Structural = CatMlt **
 
     above_Prep    = mkPrep "fuq" ;
     after_Prep    = mkPrep "wara" ;
-    before_Prep   = mkPrep "qabel" ;
-    behind_Prep   = mkPrep "wara" ;
+    before_Prep   = mkPrep "qabel"
+                           "qabli" "qablek" "qablu" "qabilha" "qabilna" "qabilkom" "qabilhom" ;
+    behind_Prep   = after_Prep ;
     between_Prep  = mkPrep "bejn" ;
     by8agent_Prep = mkPrep "minn" "mill-" "mit-" ;
     by8means_Prep = mkPrep "bi" "b'" "bil-" "bit-" "bl-" ;
     during_Prep   = mkPrep "waqt" ;
-    for_Prep      = mkPrep "għal" "għall-" "għat-" ;
-    from_Prep     = mkPrep "minn" "mill-" "mit-" ;
+    for_Prep      = mkPrep "għal" "għall-" "għall-" "għat-" "għall-"
+                           "għalija" "għalik" "għalih" "għaliha" "għalina" "għalikom" "għalihom"
+                           True ;
+    from_Prep     = mkPrep "mingħand" ;
     in8front_Prep = mkPrep "quddiem" ;
     in_Prep       = mkPrep "fi" "f'" "fil-" "fit-" "fl-" ;
     on_Prep       = mkPrep "fuq" ;
-    part_Prep     = mkPrep "ta'" "t'" "tal-" "tat-" "tal-" ;
+    part_Prep     = possess_Prep ;
     possess_Prep  = mkPrep "ta'" "t'" "tal-" "tat-" "tal-" ;
-    through_Prep  = mkPrep "ġo" "ġol-" "ġot-" ;
+    through_Prep  = mkPrep "minn ġo" "minn ġol-" "minn ġol-" "minn ġot-" "minn ġol-"
+                           "minn ġo fija" "minn ġo fik" "minn ġo fih" "minn ġo fiha" "minn ġo fina" "minn ġo fikom" "minn ġo fihom"
+                           False ;
     to_Prep       = mkPrep "lil" "lill-" "lit-" ;
     under_Prep    = mkPrep "taħt" ;
     without_Prep  = mkPrep "mingħajr" ;
     with_Prep     = mkPrep "ma'" "m'" "mal-" "mat-" "mal-" ;
-    except_Prep   = mkPrep "apparti" ;
+    except_Prep   = mkPrep "apparti" ; --- special case..
 
     {- Noun phrase ---------------------------------------------------------- -}
 
