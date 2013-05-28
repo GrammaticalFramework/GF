@@ -98,10 +98,6 @@ have_V2 = mkV2 "有" ;
 yes_Utt = ss "对" ;
 no_Utt = ss neg_s ;
 
-oper
-  mkConjForm : Str -> {s1,s2 : Str} = \s -> {s1 = [] ; s2 = word s} ;
-  mkConjForm2 : Str -> Str -> {s1,s2 : Str} = \s1,s2 -> {s1 = word s1 ; s2 = word s2} ; --obvious slip of a pen  chenpeng 11.19
- -- manually by AR, Jolene
 
 lin
   always_AdV = ssword "一直" ;

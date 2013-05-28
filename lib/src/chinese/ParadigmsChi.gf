@@ -62,29 +62,50 @@ oper
   mkVQ : V -> VQ =
     \v -> lin VQ v ;
 
+  mkVS = overload {
   mkVS : V -> VS =
     \v -> lin VS v ;
+  mkVS : Str -> VS =
+    \v -> lin VS (regVerb v) ;
+  } ;
 
+  mkVA = overload {
+  mkVA : Str -> VA =
+    \v -> lin VA (regVerb v) ;
   mkVA : V -> VA =
     \v -> lin VA v ;
+  } ;
 
   mkV2Q : V -> V2Q =
     \v -> lin V2Q (v ** {c2 = emptyPrep}) ; 
 ----  mkV2Q : V -> Str -> V2Q =
 ----    \v,p -> lin V2Q (v ** {c2 = mkPrep p}) ; 
 
-  mkV2V : V -> V2V =
+  mkV2V= overload {
+    mkV2V : Str -> V2V = 
+    \s -> lin V2V (regVerb s ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
+
+    mkV2V : V -> V2V =
     \v -> lin V2V (v ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
 ----  mkV2V : V -> Str -> Str -> V2V =
 ----    \v,p,q -> lin V2V (v ** {c2 = mkPrep p ; c3 = mkPrep q}) ; 
+    } ;
 
+  mkV2S = overload {
+  mkV2S : Str -> V2S =
+    \s -> lin V2S (regVerb s ** {c2 = emptyPrep}) ; 
   mkV2S : V -> V2S =
     \v -> lin V2S (v ** {c2 = emptyPrep}) ; 
 ----  mkV2S : V -> Str -> V2S =
 ----    \v,p -> lin V2S (v ** {c2 = mkPrep p}) ; 
+  } ;
 
-  mkV2A : V -> V2A
-    = \v -> lin V2A (v ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
+  mkV2A = overload {
+    mkV2A : Str -> V2A
+      = \s -> lin V2A (regVerb s ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
+    mkV2A : V -> V2A
+      = \v -> lin V2A (v ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
+    } ;
 ----  mkV2A : V -> Str -> Str -> V2A
 ----    = \v,p,q -> lin V2A (v ** {c2 = mkPrep p ; c3 = mkPrep q}) ; 
 
@@ -113,6 +134,40 @@ oper
 
   emptyPrep : Preposition = mkPrep [] ;
 
+  mkNP : Str -> CatChi.NP 
+    = \s -> lin NP {s = s} ;
+  mkAdV : Str -> AdV 
+    = \s -> lin AdV {s = s} ;
+  mkAdN : Str -> AdN 
+    = \s -> lin AdN {s = s} ;
+  mkSubj : Str -> Subj 
+    = \s -> lin Subj (ResChi.mkSubj s []) ;
+  mkConj : Str -> Conj 
+    = \s -> lin Conj {s = \\_ => mkConjForm s} ;
+  mkDet : Str -> Det 
+    = \s -> lin Det {s = s ; detType = DTFull Sg} ;
+  mkQuant : Str -> Quant 
+    = \s -> lin Quant {s,pl = s ; detType = DTFull Sg} ;
+  mkAdA : Str -> AdA 
+    = \s -> lin AdA {s = s} ;
+  mkNum : Str -> Num 
+    = \s -> lin Num {s = s ; numType = NTFull} ;
+  mkPredet : Str -> Predet 
+    = \s -> lin Predet {s = s} ;
+  mkIDet : Str -> IDet 
+    = \s -> lin IDet {s = s} ;
+  mkPConj : Str -> PConj 
+    = \s -> lin PConj {s = s} ;
+  mkRP : Str -> RP 
+    = \s -> lin RP {s = s} ;
+
+
+--. auxiliary
+
+oper
+  mkConjForm : Str -> {s1,s2 : Str} = \s -> {s1 = [] ; s2 = word s} ;
+  mkConjForm2 : Str -> Str -> {s1,s2 : Str} = \s1,s2 -> {s1 = word s1 ; s2 = word s2} ; --obvious slip of a pen  chenpeng 11.19
+ -- manually by AR, Jolene
 
 }
 
