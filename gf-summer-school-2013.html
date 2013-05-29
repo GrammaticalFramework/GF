@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<HTML>
-<HEAD>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
-<TITLE>Third GF Summer School &mdash; Bavaria, August 2013</TITLE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Third GF Summer School &mdash; Bavaria, August 2013</title>
 <style type="text/css">
 body {
   max-width: 700px;
@@ -17,6 +17,9 @@ h1, h2, h3, h4 {
 h1 {
   text-align: center;
 }
+h2.subtitle {
+  text-align: center;
+}
 img {
   display: block;
   margin: 0 auto;
@@ -24,24 +27,38 @@ img {
 sup {
   font-size: 0.6em;
 }
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 auto;
+}
+table td, table th {
+  border: 1px solid #ccc;
+  padding: 0.1em 0.5em;
+}
 </style>
-<link href='http://fonts.googleapis.com/css?family=Average' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:700' rel='stylesheet' type='text/css'>
-</HEAD>
-<BODY>
-<H1>3<sup>rd</sup> GF Summer School 2013<br/><em>Scaling up Grammatical Resources</em></H1>
+<link href='http://fonts.googleapis.com/css?family=Average' rel='stylesheet' type='text/css' />
+<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:700' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+<H1>3<sup>rd</sup> Third GF Summer School 2013<br/><em>Frontiers of Multilingual Technology</em></H1>
+
+<center>
+Special theme of 2013: <em>Scaling Up Grammatical Resources</em></H1>
+</center>
 
 <img height="480" width="480" alt="GF Summer School logo" src="https://sites.google.com/site/gfschool2011/_/rsrc/1286870375590/home/summerschool-logo.jpg?height=480&amp;width=480" />
 
-<H2 style="text-align:center">Frauenchiemsee island, Bavaria<br/>18<sup>th</sup>&ndash;30<sup>th</sup> August, 2013</H2>
+<h2 class="subtitle">Frauenchiemsee island, Bavaria<br/>18<sup>th</sup>&ndash;30<sup>th</sup> August, 2013</h2>
 
-<H2>About</H2>
-<P>
+<h2>About</h2>
+<p>
 Grammatical Framework (GF), <a href="http://www.grammaticalframework.org/">grammaticalframework.org</a>, is a multilingual grammar formalism
 based on the idea of a shared abstract syntax and mappings between the abstract syntax and
 concrete languages. GF has hundreds of users all over the world.
-</P>
-<P>
+</p>
+<p>
 The GF Resource Grammar Library (RGL) implements the morphology (inflection) and basic syntax
 (phrase structure) of some 26 languages:
 
@@ -73,24 +90,70 @@ Thai, and
 Urdu.
 
 These resources are freely available as open-source software. More languages are under construction,
-in both in-house and external projects.
-</P>
-<P>
-We are especially interested in EU languages not yet covered by the Resource Grammar Library,
-namely: Estonian, Lithuanian, Irish, Czech, Slovak, Hungarian, Slovene, Portuguese, Greek, and Maltese.
-Learn more at the <a href="http://www.grammaticalframework.org/lib/doc/status.html">RGL status page</a>.
-Embedded grammars are parsing and generation programs compiled from GF grammars and usable as parts of programs written in other languages: Haskell, Java, and JavaScript.
-</P>
+in both in-house and external projects (Greek and Maltese forthcoming by the summer school).
+</p>
+<p>
+We are constantly welcoming new languages, especially from new language families, as well as
+EU languages not yet covered by the Resource Grammar Library
+(Estonian, Lithuanian, Irish, Czech, Slovak, Hungarian, Slovene, and Portuguese).
+Learn more at the <a href="http://www.grammaticalframework.org/lib/doc/status.html">RGL status page</a>. The Summer School is an excellent place to get started with a new language.
+</p>
+<p>
+This year's special theme of “Scaling up Grammar Resources” means
+extending the existing resource grammars with the ultimate goal of
+dealing with any text in the supported languages. Lexicon extension is
+an obvious part of this work, but also new grammatical constructions
+are of interest.  Porting resources from other open-source approaches,
+such as WordNets and Apertium, is one method of doing this. And
+reciprocally, we want to make GF resources easily reusable in other
+approaches.
+</p>
+<!-- p>
+The Summer School also has tracks for those interesting in applications (e.g. web and 
+mobile applications, and embedded grammars in C, C++, Haskell, Java, JavaScript, Python), as
+well as a theory track (parsing, grammar compilation, statistical GF models).
+</p -->
 
-<H2>Venue</H2>
+<h2>Venue</h2>
 <img src="http://www.mpq.mpg.de/Theorygroup/CIRAC/wiki/images/f/f9/Kloster.jpg" alt="Frauenchiemsee island" />
-<P>
+<p>
 The summer school will take place at the <a href="http://www.frauenwoerth.de/english/">Frauenwörth Monastery</a>,
-on Frauenchiemsee island in Chiemsee lake, Bavaria, Germany
-(<a href="http://goo.gl/maps/uUnxN">map</a>).
+on Frauenchiemsee island in Chiemsee lake, Bavaria, Germany (<a href="http://goo.gl/maps/uUnxN">map</a>).
+</p>
 
 <h2>Preliminary schedule</h2>
+
+<h3>First week (18-23 August):<br/>Introduction to GF and multilingual grammar programming</h3>
 <ul>
+  <li>Tutorial on using the GF resource grammar library for small applications</li>
+  <li>Tutorial on the GF programming language</li>
+  <li>Tutorial on how to write a miniature resource grammar (morphology, paradigms, syntax)</li>
+  <li>Tutorial on complexity aspects, grammar compilation, portable grammar format</li>
+  <li>Tutorial on using new GF-tools like Eclipse IDE and GF Cloud</li>
+</ul>
+
+<p>
+Tutorials will be given in morning sessions; supervised exercises in the
+afternoon will make the attendants familiar with programming in GF.
+</p>
+
+<h3>Second week (25-30 August):<br/>Advanced work in specialized tracks</h3>
+<ul>
+  <li>Resource Grammar track: large-scale grammar implementation for a new language</li>
+  <li>Application track: web applications, ontologies</li>
+  <li>Theory track: type theory, parsing, compiler issues</li>
+  <li>Hybrid systems: connection with statistical methods</li>
+</ul>
+
+<p>
+In the mornings, each day is dedicated to a special track, with plenary
+talks attended by all participants.
+For the afternoons we want to organize group work on the various tracks,
+and have the participants choose which group they join. On the last day,
+results of these groups will be presented to all participants.
+</p>
+
+<!--ul>
   <li>Week 1: GF Introdcution</li>
   <ul>
     <li>GF tutorial</li>
@@ -101,51 +164,88 @@ on Frauenchiemsee island in Chiemsee lake, Bavaria, Germany
     <li>Automatic creation of large lexicons</li>
     <li>Statistical parsing</li>
     <li>Generation from ontologies</li>
-    <li>Common goals with Apertium - sharing of GF resources with other frameworks</li>
+    <li>Common goals with Apertium and WordNets - sharing of GF resources with other frameworks</li>
   </ul>
-</ul>
+</ul-->
 
-<h2>Teachers</h2>
+<h2>Teachers (to be confirmed and completed)</h2>
 <ul>
-  <li>Krasimir Angelov</li>
-  <li>Thomas Hallgren</li>
-  <li>Hans Leiß</li>
-  <li>Laurette Pretorius</li>
-  <li>Aarne Ranta</li>
-  <li>Mike Rosner</li>
-  <li>Christina Unger</li>
-  <li>others (to be confirmed)</li>
+  <li>Krasimir Angelov, U Gothenburg</li>
+  <li>Thomas Hallgren, U Gothenburg</li>
+  <li>Hans Leiß, LMU Munich</li>
+  <li>Laurette Pretorius, U South Africa</li>
+  <li>Aarne Ranta, U Gothenburg</li>
+  <li>Mike Rosner, U Malta</li>
+  <li>Christina Unger, U Bielefeld</li>
+  <li>others (to be announced)</li>
 </ul>
 
-<H2>Registration</H2>
-<P>
-We have now opened a prliminary registration for those of you who wish to express your interest.
-Precise details about costs payments will follow later (the preliminary booking is non-binding).
+<h2>Accomodation and travel costs</h2>
+<p>
+Accomodation will be in the Benedictine abbey of Frauenorth on Frauenchiemsee island.
+There are some rooms in categories A (€55/night), B (€45/night), and C (€30/night, no showers).
 
-If you are pretty sure you will attend, please fill out the <strong><a href="https://docs.google.com/forms/d/1DMTYSFhbD4xeirWv0DdOi4NfiwOrHMz_NDlHGHxuH-k/viewform">preliminary registration form</a></strong>.
+Approximate costs breakdown:
+</p>
 
-If you have any questions about the summer school you can contact us now below.
-</P>
+<table>
+<tbody>
+<tr>
+  <td>Accomodation (category B)</td>
+  <td>€45/night x 12</td>
+  <td>€ 540</td>
+</tr>
+<tr>
+  <td>Breakfast, lunch &amp; dinner</td>
+  <td>€35/day x 12</td>
+  <td>€ 420</td>
+</tr>
+<tr>
+  <td>Local travel costs (from Munich airport)</td>
+  <td>€36 x 2</td>
+  <td>€ 72</td>
+</tr>
+<tr>
+  <th colspan="2" style="text-align:right">Total:</th>
+  <th>€ 1032</th>
+</tr>
+</tbody>
+</table>
 
-<H2>Contact</H2>
-<P>
-Local organiser: <strong>Hans Leiß</strong>, leiss at cis dot uni-muenchen dot de
-</P>
-<P>
-Head organiser: <strong>Aarne Ranta</strong>, aarne at chalmers dot se
-</P>
-<P>
+<h2>Registration</h2>
+<p>
+We have now opened a preliminary registration for those of you who wish to express your interest in attending.
+Precise details about costs/payments will follow later (the preliminary booking is non-binding).
+
+So if you are pretty sure you will attend, please fill out the <strong><a href="https://docs.google.com/forms/d/1DMTYSFhbD4xeirWv0DdOi4NfiwOrHMz_NDlHGHxuH-k/viewform">preliminary registration form</a></strong>.
+
+If you have any questions about the summer school you can contact us below.
+</p>
+
+<h2>Contact</h2>
+<p>
+Head organiser: <strong>Hans Leiß</strong>, leiss at cis dot uni-muenchen dot de
+</p>
+<p>
+Co-organiser: <strong>Aarne Ranta</strong>, aarne at chalmers dot se
+</p>
+<p>
 Web/registration: <strong>John J. Camilleri</strong>, john dot j dot camilleri at chalmers dot se
-</P>
+</p>
 
-<H2>Previous summer schools</H2>
+<h2>Sponsor</h2>
+
+<a href="http://www.volkswagenstiftung.de/">VolkswagenStiftung</a>
+
+
+<h2>Previous summer schools</h2>
 <ul>
-<li><a href="http://school.grammaticalframework.org/2009">GF Resource Grammar Summer School</a> (2009) in Göteborg, Sweden</li>
-<li><a href="http://school.grammaticalframework.org/2011">Second GF Summer School</a> (2011) in Barcelona, Spain</li>
+  <li><a href="http://school.grammaticalframework.org/2009">GF Resource Grammar Summer School</a> (2009) in Gothenburg, Sweden</li>
+  <li><a href="http://school.grammaticalframework.org/2011">Second GF Summer School</a> (2011) in Barcelona, Spain</li>
 </ul>
 
-</BODY>
-</HTML>
+</body>
+</html>
 
 
 
