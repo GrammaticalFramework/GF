@@ -91,8 +91,11 @@ gu_exn_clear(GuExn* err) {
 GuType*
 gu_exn_caught(GuExn* err);
 
-const void*
-gu_exn_caught_data(GuExn* err);
+inline const void*
+gu_exn_caught_data(GuExn* err)
+{
+	return err->data.data;
+}
 
 /// Temporarily block a raised exception.
 void

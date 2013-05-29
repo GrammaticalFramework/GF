@@ -1640,7 +1640,12 @@ pgf_readPGF(PyObject *self, PyObject *args)
 	// Read the PGF grammar.
 	py_pgf->pgf = pgf_read(fpath, py_pgf->pool, err);
 	if (!gu_ok(err)) {
-		PyErr_SetString(PGFError, "The grammar cannot be loaded");
+		if (gu_exn_caught(err) == gu_type(GuErrno)) {
+			errno = *((GuErrno*) gu_exn_caught_data(err));
+			PyErr_SetFromErrnoWithFilename(PyExc_IOError, fpath);
+		} else {
+			PyErr_SetString(PGFError, "The grammar cannot be loaded");
+		}
 		Py_DECREF(py_pgf);
 		gu_pool_free(tmp_pool);
 		return NULL;
