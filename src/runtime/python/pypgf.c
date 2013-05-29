@@ -535,7 +535,7 @@ static PyMethodDef Iter_methods[] = {
     {NULL}  /* Sentinel */
 };
 
-static PyTypeObject pgf_ExprIterType = {
+static PyTypeObject pgf_IterType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "pgf.Iter",                /*tp_name*/
@@ -701,7 +701,7 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	}
 
 	IterObject* pyres = (IterObject*) 
-		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
+		pgf_IterType.tp_alloc(&pgf_IterType, 0);
 	if (pyres == NULL) {
 		Py_XDECREF(py_lexer);
 		return NULL;
@@ -794,7 +794,7 @@ Concr_getCompletions(ConcrObject* self, PyObject *args, PyObject *keywds)
 	}
 
 	IterObject* pyres = (IterObject*) 
-		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
+		pgf_IterType.tp_alloc(&pgf_IterType, 0);
 	if (pyres == NULL) {
 		Py_XDECREF(py_lexer);
 		return NULL;
@@ -1265,30 +1265,12 @@ static PyTypeObject pgf_ConcrType = {
     (newfunc)Concr_new,        /*tp_new */
 };
 
-static PGFObject*
-PGF_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
-    PGFObject* self = (PGFObject *)type->tp_alloc(type, 0);
-    if (self != NULL) {
-		self->pool = NULL;
-		self->pgf  = NULL;
-    }
-
-    return self;
-}
-
 static void
 PGF_dealloc(PGFObject* self)
 {
 	if (self->pool != NULL)
 		gu_pool_free(self->pool);
     self->ob_type->tp_free((PyObject*)self);
-}
-
-static int
-PGF_init(PGFObject *self, PyObject *args, PyObject *kwds)
-{
-    return -1;
 }
 
 static PyObject*
@@ -1513,7 +1495,7 @@ PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
         return NULL;
 
 	IterObject* pyres = (IterObject*)
-		pgf_ExprIterType.tp_alloc(&pgf_ExprIterType, 0);
+		pgf_IterType.tp_alloc(&pgf_IterType, 0);
 	if (pyres == NULL) {
 		return NULL;
 	}
@@ -1617,9 +1599,9 @@ static PyTypeObject pgf_PGFType = {
     0,                         /*tp_descr_get */
     0,                         /*tp_descr_set */
     0,                         /*tp_dictoffset */
-    (initproc)PGF_init,        /*tp_init */
+    0,                         /*tp_init */
     0,                         /*tp_alloc */
-    (newfunc)PGF_new,          /*tp_new */
+    0,                         /*tp_new */
 };
 
 static PGFObject*
@@ -1710,7 +1692,7 @@ initpgf(void)
     if (PyType_Ready(&pgf_ExprType) < 0)
         return;
 
-	if (PyType_Ready(&pgf_ExprIterType) < 0)
+	if (PyType_Ready(&pgf_IterType) < 0)
 		return;
 
     m = Py_InitModule("pgf", module_methods);
@@ -1732,6 +1714,6 @@ initpgf(void)
 
     Py_INCREF(&pgf_PGFType);
     Py_INCREF(&pgf_ConcrType);
-    Py_INCREF(&pgf_ExprIterType);
+    Py_INCREF(&pgf_IterType);
     Py_INCREF(&pgf_BracketType);
 }
