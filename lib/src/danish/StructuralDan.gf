@@ -37,7 +37,7 @@ concrete StructuralDan of Structural = CatDan **
   here7to_Adv = ss "hit" ;
   here7from_Adv = ss "herfra" ;
   how_IAdv = ss "hvor" ;
-  how8many_IDet = {s = \\_ => ["hur mange"] ; n = Pl ; det = DDef Indef} ;
+  how8many_IDet = {s = \\_ => ["hvor mange"] ; n = Pl ; det = DDef Indef} ;
   if_Subj = ss "hvis" ;
   in8front_Prep = ss "foran" ;
   i_Pron = 
