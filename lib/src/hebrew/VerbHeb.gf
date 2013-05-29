@@ -10,4 +10,6 @@ concrete VerbHeb of Verb = CatHeb ** open Prelude, ResHeb in {
 
    SlashV2a v = predVc v  ; --predV v ** {c2 = v.c2} ;
 
+   VPSlashPrep vp prep = vp ** {
+      c2 = {s = prep.s ; c = prep.c ; isDir = False} } ;
 }

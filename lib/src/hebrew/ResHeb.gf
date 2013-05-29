@@ -75,7 +75,19 @@ oper
       	   Vp3Sg g   => {n = Sg ; g = g} ;
       	   Vp3Pl g   => {n = Pl ; g = g} 
       } ;
-      
+     
+ 
+ -- Noun Phrase
+ mkNP : Str -> Number -> Person -> Gender -> NP = \s,n,p,g -> {
+   s = \\npcase =>  {obj = s } ;  
+   a = Ag g n p ; 
+   sp = Def ; 
+   isDef = False  
+ } ;
+
+ regNP : Str -> NP = \hakul -> 
+    mkNP hakul Sg Per3 Masc ; 
+
  pronNP : (s,a,d : Str) -> Gender -> Number -> Person ->  NP =
       \s,a,d,g,n,p ->  { 
       	s = 
@@ -88,6 +100,14 @@ oper
     	  sp = Indef ; 
     	  a = Ag g n p 
   } ;
+
+ -- check 
+--  prepNP : Prep -> NP -> Str ; 
+--  prepNP prep np =  case prep.isPre of {
+--   True =>  prep.s   ;
+--   False => prep.s ++ {obj = np.s} } ;  
+ 
+
 
   agrV : Verb -> TenseHeb ->  Agr -> Str = \v,t,a -> case a of {
     Ag g n p => v.s ! t ! (chooseForm g n p)  
@@ -110,6 +130,13 @@ oper
   Verb : Type = {s : TenseHeb => VPerNumGen  => Str } ;
   Verb2 : Type = Verb ** {c : Case} ; 
   
+ -- Interrogative pronoun
+ mkIP : Str -> Number -> {s : Str ; n : Number} = \who,n ->
+  {
+   s = who ;
+   n = n
+  } ;
+
   Pattern : Type = {C1, C1C2, C2C3, C3 : Str}; 
   Root    : Type = {C1,C2,C3 : Str};	   -- most verb roots consist of three consonants
   Root4   : Type = Root ** {C4 : Str};   -- for verb roots with four consonants
