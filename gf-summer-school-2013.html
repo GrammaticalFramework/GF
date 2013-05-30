@@ -25,12 +25,34 @@ h3.subtitle {
   text-align: center;
   margin: -0.5em 0 2em 0;
 }
+.nav {
+  text-align:center;
+}
+.nav a {
+  margin: 0 0.25em;
+}
+
 img {
   display: block;
   margin: 0 auto;
 }
 sup {
   font-size: 0.6em;
+}
+a.button {
+  display:inline-block;
+  background: #ddd;
+  color: midnightblue;
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+  text-decoration: none;
+  text-shadow: white 1px 1px 1px;
+  font-family: "Merriweather sans";
+}
+a.button:hover{
+  background: #333;
+  color: #eee;
+  text-shadow: black 1px 1px 1px;
 }
 table {
   border-collapse: collapse;
@@ -56,6 +78,15 @@ Special theme of 2013: <em>Scaling Up Grammatical Resources</em>
 <img height="480" width="480" alt="GF Summer School logo" src="https://sites.google.com/site/gfschool2011/_/rsrc/1286870375590/home/summerschool-logo.jpg?height=480&amp;width=480" />
 
 <h2 class="subtitle">Frauenchiemsee island, Bavaria<br/>18<sup>th</sup>&ndash;30<sup>th</sup> August, 2013</h2>
+
+<div class="nav">
+<a href="#schedule">Schedule</a>
+<a href="#venue">Venue</a>
+<a href="#accomodation">Accomodation</a>
+<a href="#registration">Registration</a>
+<a href="#contact">Contact</a>
+<a href="#previous">Previous schools</a>
+</div>
 
 <h2>About</h2>
 <p>
@@ -119,14 +150,7 @@ mobile applications, and embedded grammars in C, C++, Haskell, Java, JavaScript,
 well as a theory track (parsing, grammar compilation, statistical GF models).
 </p -->
 
-<h2>Venue</h2>
-<img src="http://www.mpq.mpg.de/Theorygroup/CIRAC/wiki/images/f/f9/Kloster.jpg" alt="Frauenchiemsee island" />
-<p>
-The summer school will take place at the <a href="http://www.frauenwoerth.de/english/">Frauenwörth Monastery</a>,
-on Frauenchiemsee island in Chiemsee lake, Bavaria, Germany (<a href="http://goo.gl/maps/uUnxN">map</a>).
-</p>
-
-<h2>Preliminary schedule</h2>
+<h2 id="schedule">Schedule</h2>
 
 <h3>First week (18-23 August):<br/>Introduction to GF and multilingual grammar programming</h3>
 <ul>
@@ -158,22 +182,8 @@ and have the participants choose which group they join. On the last day,
 results of these groups will be presented to all participants.
 </p>
 
-<!--ul>
-  <li>Week 1: GF Introdcution</li>
-  <ul>
-    <li>GF tutorial</li>
-    <li>Tools: Eclipse IDE, GF Cloud</li>
-  </ul>
-  <li>Week 2: Advanced topics</li>
-  <ul>
-    <li>Automatic creation of large lexicons</li>
-    <li>Statistical parsing</li>
-    <li>Generation from ontologies</li>
-    <li>Common goals with Apertium and WordNets - sharing of GF resources with other frameworks</li>
-  </ul>
-</ul-->
-
-<h2>Teachers (to be confirmed and completed)</h2>
+<h2>Teachers</h2>
+<p><em>The following list is still to be confirmed and completed.</em></p>
 <ul>
   <li>Krasimir Angelov, U Gothenburg</li>
   <li>Thomas Hallgren, U Gothenburg</li>
@@ -185,7 +195,40 @@ results of these groups will be presented to all participants.
   <li>others (to be announced)</li>
 </ul>
 
-<h2>Accomodation and travel costs</h2>
+<h2 id="venue">Venue</h2>
+<img src="http://www.mpq.mpg.de/Theorygroup/CIRAC/wiki/images/f/f9/Kloster.jpg" alt="Frauenchiemsee island" />
+<p>
+The summer school will take place at the <a href="http://www.frauenwoerth.de/english/">Frauenwörth Monastery</a>,
+on Frauenchiemsee island in Chiemsee lake, Bavaria, Germany (<a href="http://goo.gl/maps/uUnxN">map</a>).
+</p>
+
+<h3>Getting to Frauenwörth</h3>
+
+<h4>By plane</h4>
+
+<ol>
+<li>Fly to Munich Airport.</li>
+<li>Take S-Bahn line 8 to Munich East Station (Ostbahnhof), then the train to Prien at Lake Chiem. (<a href="http://www.cis.uni-muenchen.de/~leiss/GF-Summerschool-2013/Muenchen_flughafenPrien_a_chiemsee.pdf">S-Bahn/train timetable: Munich Airport - Prien</a>)</li>
+<li>From Prien train station to the lake harbour Prien-Stock you can walk (1.8 km, 20 min), or go by bus, taxi or Chiemsee-railway (8 min).</li>
+<li>At Prien-Stock, take the boat to the Fraueninsel (about 30 min. ride, roughly every 45 minutes). <strong>The last boat for the island leaves Prien-Stock at 19.30</strong> (<a href="http://www.chiemsee-schifffahrt.de/index.php?langSel=en&menuSel=2">boat timetable</a>).</li>
+<li>The nunnery is next to the landing pier, to the left.</li>
+</ol>
+
+Alternatively, fly to Salzburg, Austria, take bus or taxi to Salzburg Main Station and then the train to Prien and go on as above.
+
+<h4>By train</h4>
+
+Use the line Munich-Salzburg; the trains run every hour. Schedules can be found <a href="http://www.bahn.de/international/view/en/index.shtml">here</a>. Get off at Prien, then proceed as above.
+
+<h4>By car</h4>
+
+<ol>
+<li>Autobahn A8 from Munich into the direction of Salzburg; exit "Bernau", via Prien into the direction of Rimsting/Breitbrunn to Gstadt.</li>
+<li>Park your car (no cars allowed to the island), there is sufficient parking space.</li>
+<li>Take the ship to the Fraueninsel (about 10 min. ride).</li>
+</ol>
+
+<h2 id="accomodation">Accomodation and travel costs</h2>
 <p>
 Accomodation will be in the Benedictine abbey of Frauenorth on Frauenchiemsee island.
 There are some rooms in categories A (€55/night), B (€45/night), and C (€30/night, no showers).
@@ -217,33 +260,36 @@ Approximate costs breakdown:
 </tbody>
 </table>
 
-<h2>Registration</h2>
+<h2 id="registration">Registration</h2>
 <p>
-We have now opened a preliminary registration for those of you who wish to express your interest in attending.
-Precise details about costs/payments will follow later (the preliminary booking is non-binding).
-
-So if you are pretty sure you will attend, please fill out the <strong><a href="https://docs.google.com/forms/d/1DMTYSFhbD4xeirWv0DdOi4NfiwOrHMz_NDlHGHxuH-k/viewform">preliminary registration form</a></strong>.
-
-If you have any questions about the summer school you can contact us below.
+We have now opened a registration for those of you who wish to express your interest in attending.
+Precise details about costs/payments will follow soon.
 </p>
 
-<h2>Contact</h2>
-<p>
-Head organiser: <strong>Hans Leiß</strong>, leiss at cis dot uni-muenchen dot de
+<div style="text-align:center">
+<a class="button" href="https://docs.google.com/forms/d/1DMTYSFhbD4xeirWv0DdOi4NfiwOrHMz_NDlHGHxuH-k/viewform">Registration form »</a>
+</div>
+
 </p>
+
+<h2 id="contact">Contact</h2>
+
 <p>
-Co-organiser: <strong>Aarne Ranta</strong>, aarne at chalmers dot se
+If you have any questions about the summer school you can contact us below:
 </p>
-<p>
-Web/registration: <strong>John J. Camilleri</strong>, john dot j dot camilleri at chalmers dot se
-</p>
+
+<ul>
+<li>Head organiser: <strong>Hans Leiß</strong>, leiss at cis dot uni-muenchen dot de</li>
+<li>Co-organiser: <strong>Aarne Ranta</strong>, aarne at chalmers dot se</li>
+<li>Web/registration: <strong>John J. Camilleri</strong>, john dot j dot camilleri at chalmers dot se</li>
+</ul>
 
 <h2>Sponsor</h2>
 
 <a href="http://www.volkswagenstiftung.de/">VolkswagenStiftung</a>
 
 
-<h2>Previous summer schools</h2>
+<h2 id="previous">Previous summer schools</h2>
 <ul>
   <li><a href="http://school.grammaticalframework.org/2009">GF Resource Grammar Summer School</a> (2009) in Gothenburg, Sweden</li>
   <li><a href="http://school.grammaticalframework.org/2011">Second GF Summer School</a> (2011) in Barcelona, Spain</li>
