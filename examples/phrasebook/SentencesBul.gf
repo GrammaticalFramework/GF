@@ -29,8 +29,14 @@ lin YouFamMale = mkPerson youSg_Pron ;
 lin ACitizen p cit = 
       let noun : N
                = case p.name.a.gn of {
-                   R.GSg g => lin N {s = \\nf => cit.s1 ! g      ! nf; g = case g of {R.Masc=>R.AMasc R.Human; R.Fem=>R.AFem; R.Neut=>R.ANeut}} ;
-                   R.GPl   => lin N {s = \\nf => cit.s1 ! R.Masc ! nf; g = R.AMasc R.Human}
+                   R.GSg g => lin N {s   = \\nf => cit.s1 ! g      ! nf;
+                                     rel = cit.s2.s;
+                                     g   = case g of {R.Masc=>R.AMasc R.Human; R.Fem=>R.AFem; R.Neut=>R.ANeut}
+                                    } ;
+                   R.GPl   => lin N {s   = \\nf => cit.s1 ! R.Masc ! nf;
+                                     rel = cit.s2.s;
+                                     g   = R.AMasc R.Human
+                                    }
                  } ;
       in mkCl p.name noun ;
 
