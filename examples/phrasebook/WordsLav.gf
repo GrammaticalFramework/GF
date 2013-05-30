@@ -75,7 +75,7 @@ in {
 		University = mkPlace "universitāte" in_Prep ;
 		Zoo = mkPlace "zoodārzs" in_Prep ;
 		
-		CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restorāns")) in_Prep to8uz_Prep ;
+		CitRestaurant cit = mkCNPlace (mkCN cit (mkN "restorāns")) in_Prep to_Prep ;
 		
 		-- Currencies
 		
@@ -94,22 +94,22 @@ in {
 		
 		Belgian = mkA "beļģu" ;
 		Belgium = mkNP (mkPN "Beļģija") ;
-		Bulgarian = mkNat (mkA "bulgāru") (mkAdv "bulgāriski") (mkPN "Bulgārija") ;
-		Catalan = mkNat (mkA "kataloniešu") (mkAdv "kataloniski") (mkPN "Katalonija") ;
-		Danish = mkNat (mkA "dāņu") (mkAdv "dāniski") (mkPN "Dānija") ;
-		Dutch =  mkNat (mkA "holandiešu") (mkAdv "holandiski") (mkPN "Nīderlande") ;
-		English = mkNat (mkA "angļu") (mkAdv "angliski") (mkPN "Anglija") ;
-		Finnish = mkNat (mkA "somu") (mkAdv "somiski") (mkPN "Somija") ;
-		Flemish = mkLang (mkA "flāmu") (mkAdv "flāmiski") ;
-		French = mkNat (mkA "franču") (mkAdv "franciski") (mkPN "Francija") ;
-		German = mkNat (mkA "vācu") (mkAdv "vāciski") (mkPN "Vācija") ;
-		Italian = mkNat (mkA "itāļu") (mkAdv "itāliski") (mkPN "Itālija") ;
-		Norwegian = mkNat (mkA "norvēģu") (mkAdv "norvēģiski") (mkPN "Norvēģija") ;
-		Polish = mkNat (mkA "poļu") (mkAdv "poliski") (mkPN "Polija") ;
-		Romanian = mkNat (mkA "rumāņu") (mkAdv "rumāniski") (mkPN "Rumānija") ;
-		Russian = mkNat (mkA "krievu") (mkAdv "krieviski") (mkPN "Krievija") ;
-		Spanish = mkNat (mkA "spāņu") (mkAdv "spāniski") (mkPN "Spānija") ;
-		Swedish = mkNat (mkA "zviedru") (mkAdv "zviedriski") (mkPN "Zviedrija") ;
+		Bulgarian = mkNat (mkA "bulgāru") (P.mkAdv "bulgāriski") (mkPN "Bulgārija") ;
+		Catalan = mkNat (mkA "kataloniešu") (P.mkAdv "kataloniski") (mkPN "Katalonija") ;
+		Danish = mkNat (mkA "dāņu") (P.mkAdv "dāniski") (mkPN "Dānija") ;
+		Dutch =  mkNat (mkA "holandiešu") (P.mkAdv "holandiski") (mkPN "Nīderlande") ;
+		English = mkNat (mkA "angļu") (P.mkAdv "angliski") (mkPN "Anglija") ;
+		Finnish = mkNat (mkA "somu") (P.mkAdv "somiski") (mkPN "Somija") ;
+		Flemish = mkLang (mkA "flāmu") (P.mkAdv "flāmiski") ;
+		French = mkNat (mkA "franču") (P.mkAdv "franciski") (mkPN "Francija") ;
+		German = mkNat (mkA "vācu") (P.mkAdv "vāciski") (mkPN "Vācija") ;
+		Italian = mkNat (mkA "itāļu") (P.mkAdv "itāliski") (mkPN "Itālija") ;
+		Norwegian = mkNat (mkA "norvēģu") (P.mkAdv "norvēģiski") (mkPN "Norvēģija") ;
+		Polish = mkNat (mkA "poļu") (P.mkAdv "poliski") (mkPN "Polija") ;
+		Romanian = mkNat (mkA "rumāņu") (P.mkAdv "rumāniski") (mkPN "Rumānija") ;
+		Russian = mkNat (mkA "krievu") (P.mkAdv "krieviski") (mkPN "Krievija") ;
+		Spanish = mkNat (mkA "spāņu") (P.mkAdv "spāniski") (mkPN "Spānija") ;
+		Swedish = mkNat (mkA "zviedru") (P.mkAdv "zviedriski") (mkPN "Zviedrija") ;
 		
 		-- Means of transportation
 		
@@ -132,43 +132,43 @@ in {
 		AHasTable p num = mkCl p.name have_V3 (mkNP a_Det (mkN "galdiņš")) (mkNP num (mkN "persona")) ;
 		
 		AHasName p name = 
-			mkCl p.name (mkV2 (mkV "saukt" "saucu" "saucu") nom_Prep Acc) name |
+			mkCl p.name (mkV2 (mkV "saukt" "saucu" "saucu" Acc) nom_Prep) name |
 			mkCl (nameOf p) name ;
 		
-		AHungry p = mkCl p.name (mkA (mkV "izsalkt" "izsalkstu" "izsalku") IsUsi) ;
+		AHungry p = mkCl p.name (mkA (mkV "izsalkt" "izsalkstu" "izsalku") active_voice) ;
 		AIll p = mkCl p.name (mkA "slims") ;
 		AKnow p = mkCl p.name (mkV "zināt" third_conjugation) ;
-		ALike p item = mkCl p.name (mkV2 (mkV "garšot" second_conjugation) nom_Prep Dat) item ;
+		ALike p item = mkCl p.name (mkV2 (mkV "garšot" second_conjugation Dat) nom_Prep) item ;
 		ALive p co = mkCl p.name (mkVP (mkVP (mkV "dzīvot" second_conjugation)) (SyntaxLav.mkAdv in_Prep co)) ;
 		ALove p q = mkCl p.name L.love_V2 q.name ;
-		AMarried p = mkCl p.name (mkA (mkV "precēties" third_conjugation) IsUsi) ;
+		AMarried p = mkCl p.name (mkA (mkV "precēties" third_conjugation) active_voice) ;
 		AReady p = mkCl p.name (mkA "gatavs") ;
 		
 		AScared p = 
 			mkCl p.name (mkV "baidīties" third_conjugation) | 
-			mkCl p.name (mkA (mkV "nobīties" "nobīstos" "nobijos") IsUsi) ;
+			mkCl p.name (mkA (mkV "nobīties" "nobīstos" "nobijos") active_voice) ;
 		
 		ASpeak p lang = 
 			mkCl p.name (mkVP (mkVP (mkV "runāt" second_conjugation)) lang.modif) | 
 			mkCl p.name (mkV2 (mkV "runāt" second_conjugation) loc_Prep) lang.lang ;
 		
-		AThirsty p = mkCl p.name (mkA (mkV "izslāpt" "izslāpstu" "izslāpu") IsUsi) ;
-		ATired p = mkCl p.name (mkA (mkV "nogurt" "nogurstu" "noguru") IsUsi) ;
+		AThirsty p = mkCl p.name (mkA (mkV "izslāpt" "izslāpstu" "izslāpu") active_voice) ;
+		ATired p = mkCl p.name (mkA (mkV "nogurt" "nogurstu" "noguru") active_voice) ;
 		AUnderstand p = mkCl p.name (mkV "saprast" "saprotu" "sapratu") ;
-		AWant p obj = mkCl p.name (mkV2 (mkV "vēlēties" third_conjugation) acc_Prep) obj ;
+		AWant p obj = mkCl p.name (mkV2 (mkV "vēlēties" third_conjugation)) obj ;
 
 		-- TODO: IrregLav.doties_V
 		AWantGo p place = mkCl p.name (mkVV (mkV "vēlēties" third_conjugation)) (mkVP (mkVP (mkV "doties" "dodos" "devos")) place.to) ;
 		---- mkVV by AR 28/8/2012
 		
 		-- Quick & dirty, or ok?
-		QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (mkV2 (mkV "saukt" "saucu" "saucu") nom_Prep Acc) (mkNP (mkN [])))) ;
+		QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name (mkV2 (mkV "saukt" "saucu" "saucu" Acc) nom_Prep) (mkNP (mkN [])))) ;
 		
 		-- Quick & dirty
 		-- TODO: how8much_IAdv >>> how8many_IDet (but the word order!) or how8many_IAdv
 		--       mkNP a_Quant pluralNum L.year_N >>> mkNP pluralNum L.year_N
 		-- Cannot use have_V2 because of a different valence
-		QWhatAge p = mkQS (mkQCl how8much_IAdv (mkCl p.name (mkV2 (mkV "būt") gen_Prep Dat) (mkNP the_Quant pluralNum L.year_N))) ;
+		QWhatAge p = mkQS (mkQCl how8much_IAdv (mkCl p.name (mkV2 (mkV "būt" Dat) gen_Prep) (mkNP the_Quant pluralNum L.year_N))) ;
 
 		-- Quick & dirty
 		-- TODO: item is the subject >>> use NP -> V -> Cl (changing the default word order)
@@ -238,7 +238,7 @@ in {
 		
 		mkDay : Str -> NPDay = \d -> 
 			mkNPDay (mkNP (mkPN d))
-					(mkAdv (Predef.tk 1 d)) 
+					(P.mkAdv (Predef.tk 1 d)) 
 					(SyntaxLav.mkAdv in_Prep (mkNP the_Quant plNum (mkCN (mkN d)))) ;
 
 		--mkCompoundPlace : Str -> Str -> Prep -> {
@@ -249,7 +249,7 @@ in {
 		--} = \comp,p,i -> mkCNPlace (mkCN (P.mkN comp (mkN p))) i to_Prep ;
 
 		mkPlace : Str -> Prep -> {name : CN ; at : SyntaxLav.Prep ; to : SyntaxLav.Prep ; isPl : Bool} = \p,i -> 
-		 	mkCNPlace (mkCN (mkN p)) i to8uz_Prep ;  ---- SyntaxLav.Prep by AR 28/8/2012
+		 	mkCNPlace (mkCN (mkN p)) i to_Prep ;  ---- SyntaxLav.Prep by AR 28/8/2012
 
 		open_A = P.mkA "atvērts" ;
 		
