@@ -104,22 +104,26 @@ evalInfo opts sgr m c info = do
 
 -- | the main function for compiling linearizations
 partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term
-partEval opts gr (context, val) trm = errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $ do
+partEval opts = if flag optNewComp opts
+                then partEvalNew opts
+                else partEvalOld opts
+
+partEvalNew opts gr (context, val) trm =
+    errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $
+    checkPredefError gr trm
+
+partEvalOld opts gr (context, val) trm = errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $ do
   let vars  = map (\(bt,x,t) -> x) context
       args  = map Vr vars
       subst = [(v, Vr v) | v <- vars]
       trm1 = mkApp trm args
-  trm2 <- if new then return trm1 else computeTerm gr subst trm1
-  trm3 <- if new
-          then return trm2
-          else if rightType trm2
-               then computeTerm gr subst trm2 -- compute twice??
-               else recordExpand val trm2 >>= computeTerm gr subst
+  trm2 <- computeTerm gr subst trm1
+  trm3 <- if rightType trm2
+          then computeTerm gr subst trm2 -- compute twice??
+          else recordExpand val trm2 >>= computeTerm gr subst
   trm4 <- checkPredefError gr trm3
   return $ mkAbs [(Explicit,v) | v <- vars] trm4
   where
-    new = flag optNewComp opts -- computations moved to GF.Compile.GeneratePMCFG
-
     -- don't eta expand records of right length (correct by type checking)
     rightType (R rs) = case val of
                          RecType ts -> length rs == length ts

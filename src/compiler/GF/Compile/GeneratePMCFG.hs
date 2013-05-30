@@ -73,8 +73,7 @@ addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont
       pargs = [protoFCat gr (snd $ catSkeleton ty) lincat | ((_,_,ty),(_,_,lincat)) <- zip ctxt cont]
 
       pmcfgEnv0   = emptyPMCFGEnv
-
-  b             <- convert opts gr cenv (floc opath loc id) term val pargs
+  b             <- convert opts gr cenv (floc opath loc id) term (cont,val) pargs
   let (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
@@ -106,8 +105,8 @@ addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ linc
       parg = protoFCat gr (identW,cVar) typeStr
 
       pmcfgEnv0  = emptyPMCFGEnv
-
-  b             <- convert opts gr cenv (floc opath loc id) term lincat [parg]
+      lincont    = [(Explicit, varStr, typeStr)]
+  b             <- convert opts gr cenv (floc opath loc id) term (lincont,lincat) [parg]
   let (seqs1,b1) = addSequencesB seqs b
       pmcfgEnv1  = foldBM addRule
                           pmcfgEnv0
@@ -126,7 +125,7 @@ addPMCFG opts gr cenv opath am cm seqs id info = return (seqs, info)
 
 floc opath loc id = maybe (L loc id) (\path->L (External path loc) id) opath
 
-convert opts gr cenv loc term val pargs =
+convert opts gr cenv loc term ty@(_,val) pargs =
     case term' of
       Error s -> fail $ render $ ppL loc (text $ "Predef.error: "++s)
       _ -> return $ runCnvMonad gr (conv term') (pargs,[])
@@ -134,8 +133,15 @@ convert opts gr cenv loc term val pargs =
     conv t = convertTerm opts CNil val =<< unfactor t
 
     term' = if flag optNewComp opts
-            then normalForm cenv loc (recordExpand val term) -- new evaluator
+            then normalForm cenv loc (expand ty term) -- new evaluator
             else term -- old evaluator is invoked from GF.Compile.Optimize
+
+expand ty@(context,val) = recordExpand val . etaExpand ty
+
+etaExpand (context,val) = mkAbs pars . flip mkApp args
+  where pars = [(Explicit,v) | v <- vars]
+        args = map Vr vars
+        vars = map (\(bt,x,t) -> x) context
 
 recordExpand :: Type -> Term -> Term
 recordExpand typ trm =
