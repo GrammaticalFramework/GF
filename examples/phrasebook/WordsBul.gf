@@ -148,7 +148,7 @@ concrete WordsBul of Words = SentencesBul **
                                       })) ;
     AReady p = mkCl p.name (mkA076 "готов") ;
     AScared p = mkCl p.name (mkA076 "уплашен") ;
-    ASpeak p lang = mkCl p.name (dirV2 (stateV (mkV173 "говоря"))) (mkNP (adj2noun lang)) ;
+    ASpeak p lang = mkCl p.name (dirV2 (stateV (mkV173 "говоря"))) (mkNP (substantiveN lang (R.AMasc R.NonHuman))) ;
     AThirsty p = mkCl p.name (mkA079 "жаден") ;
     ATired p = mkCl p.name (mkA076 "уморен") ;
     AUnderstand p = mkCl p.name (actionV (mkV186 "разбирам") (mkV170 "разбера")) ;
@@ -290,10 +290,6 @@ concrete WordsBul of Words = SentencesBul **
 
     xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
       relativePerson n (mkCN x) (\a,b,c -> mkNP (mkNP the_Quant a c) (SyntaxBul.mkAdv (mkPrep "" R.Dat) b)) p ;
-
-    adj2noun : A -> N ;
-    adj2noun a = let g = R.AMasc R.NonHuman
-                 in lin N {s = \\nf => a.s ! R.nform2aform nf g; g = g} ;
 
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {
       name = mkCN n ; 
