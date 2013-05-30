@@ -176,9 +176,15 @@ pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences *sequences,
 		}
 	}
 	
-	gu_puts(") [", wtr, err);
-	gu_string_write(cncfun->absfun->name, wtr, err);
-	gu_puts("]\n", wtr, err);
+	gu_puts(")", wtr, err);
+	
+	if (cncfun->absfun != NULL) {
+		gu_puts(" [", wtr, err);
+		gu_string_write(cncfun->absfun->name, wtr, err);
+		gu_puts("]", wtr, err);
+	}
+	
+	gu_puts("\n", wtr, err);
 }
 
 static void
