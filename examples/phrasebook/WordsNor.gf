@@ -262,7 +262,7 @@ concrete WordsNor of Words = SentencesNor **
     \n,x,f,p -> 
       let num = if_then_else Num n plNum sgNum in {
       name = case p.isPron of {
-        True => PossNP (mkNP the_Quant num x) p.name ;
+        True => PossNPPron (mkNP the_Quant num x) p.name ;
         _    => f num p.name x
         } ;
       isPron = False ;
