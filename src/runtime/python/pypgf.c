@@ -1156,7 +1156,7 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
 		pgf_lzr_concretize(self->concr, pyexpr->expr, tmp_pool);
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (gu_variant_is_null(ctree)) {
-		PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+		PyErr_SetString(PGFError, "The abstract tree cannot be concretized");
 		gu_pool_free(tmp_pool);
 		return NULL;
 	}
