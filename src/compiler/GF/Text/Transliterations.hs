@@ -43,6 +43,7 @@ allTransliterations = Map.fromAscList [
   ("greek", transGreek),
   ("hebrew", transHebrew),
   ("persian", transPersian),
+  ("sanskrit", transSanskrit),
   ("sindhi", transSindhi),
   ("nepali", transNepali),
   ("telugu", transTelugu),
@@ -291,3 +292,15 @@ allTrans = words $
 	" p.  p-  p'  p(  p)  p  p?  p*" 	
 allCodes = [0x1200..0x1357]
  
+-- by Prasad 31/5/2013
+transSanskrit :: Transliteration
+transSanskrit = (mkTransliteration "Sanskrit" allTrans allCodes) {invisible_chars = ["a"]} where
+  allTrans = words $
+    "-  n~ m. h. - A A: I I: U U: R. L. - - E: " ++
+    "E+ - O O: O+ k k' g g' n- c c' j j' n* T " ++
+    "T' D D' N t t' d d' n - p p' b b' m y " ++
+    "r - l L - v s* S s h - - - v- a: i " ++
+    "i: u u: r. r.: - e e: e+ - o o: o+ a_ - - " ++
+    "o~  -  -  -  -  - - -  q x G  z  R  R'  f  -  " ++
+    "R.: L.: l. l.: p, p.  N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 "
+  allCodes = [0x0900 .. 0x097f]

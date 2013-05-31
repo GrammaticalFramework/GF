@@ -5,102 +5,89 @@ concrete MiniresourceSan of Miniresource = open Prelude in {
   flags coding = utf8;
 
   lincat
-    S   = {s : Str} ; 
+    S  = {s : Str} ; 
     Cl = {s : Bool => Str} ; 
     NP = NounPhrase ;  
-      -- {s : Str} ;     
     VP = VerbPhrase ;  
-      -- {verb : Verb ; compl : Str} ;  
-    AP = {s : Str; monoSyl: Bool} ;
-    CN = Noun ;        -- {s : Str; c : Str} ;
-    Det = {s : Str ; n : Number} ;
-    N = Noun ;         -- {s : Str; c : Str} ;
-    A = Adj ;          -- {s : Str; monoSyl: Bool} ; 
-    V = Verb;          -- {s : Str ; pp,ds,dp,ep : Str ; neg : Str}
-    V2 = Verb ;
+    AP = Adj ;
+    CN = Noun ;
+    Det = {s : Gender => Case => Str ; n : Number} ;
+    N = Noun ; 
+    A = Adj ;
+    V = Verb;
+    V2 = Verb ** {c : Case} ;
     AdA = {s : Str} ; 
     Pol = {s : Str ; b : Bool} ;
     Tense = {s : Str} ;
-    Conj = {s : SForm => Str} ;    
+    Conj = {s : Str} ;    
+
 
   lin
+
     UseCl t p cl = {s = t.s ++ p.s ++ cl.s ! p.b} ; 
 
     PredVP np vp = {
-       s  = \\p => np.s ++ neg p ++ vp.verb.s ++ vp.compl
+       s  = \\p => np.s ! Nom ++ neg p ++ vp.compl ! np.a ++ vp.verb.s ! VPres np.a.n np.a.p
        } ;
 
     ComplV2 v2 np = {
      verb  = v2 ;
-     compl = np.s
+     compl = \\_ => np.s ! v2.c
      } ; 
 
     UseV v = {
       verb = v ; 
-      compl = []
+      compl = \\_ => []
       } ; 
 
-    DetCN det cn = case det.n of {
-            Sg => {s = det.s ++ cn.c ++ cn.s ; n = Sg } ;
-            Pl => {s = det.s ++ "些" ++ cn.s ; n = Pl }             
+    DetCN det cn = {
+      s = \\c => det.s ! cn.g ! c ++ cn.s ! det.n ! c ; 
+      a = agr cn.g det.n P3
       } ;
       
-    ModCN ap cn = case ap.monoSyl of {
-            True => {s = ap.s ++ cn.s ; c = cn.c} ;
-            False => {s = ap.s ++ "的" ++ cn.s ; c = cn.c} 
-            } ;
+    ModCN ap cn = {s = \\n,c => ap.s ! cn.g ! n ! c ++ cn.s ! n ! c ; g = cn.g} ;
 
     CompAP ap = {
       verb = copula ;
-      compl = ap.s ++ "的"
+      compl = \\a => ap.s ! a.g ! a.n ! Nom 
       } ;
 
     AdAP ada ap = {
-      s = ada.s ++ ap.s ;
-      monoSyl = False
+      s = \\g,n,c => ada.s ++ ap.s ! g ! n ! c
       } ;
 
     ConjNP co x y = {
-      s = x.s ++ co.s ! Phr NPhrase ++ y.s
+      s = \\c => x.s ! c ++ co.s ++ y.s ! c ;
+      a = y.a ----
       } ;
 
-    ConjS  co x y = {s = x.s ++ co.s ! Sent ++ y.s} ;  
+    ConjS  co x y = {s = x.s ++ co.s ++ y.s} ;  
 
     UseN n = n ;
     UseA adj = adj ;
 
-    a_Det = mkDet "一" Sg ;
-    every_Det = mkDet "每" Sg ;        
-    the_Det = mkDet "那" Sg ;
+    a_Det = mkDet "" Sg ;
+    every_Det = mkDet "प्रति" Sg ;        
+    the_Det = mkDet "" Sg ;
 
-    this_Det = mkDet "这" Sg ;
-    these_Det = mkDet "这" Pl ;
-    that_Det = mkDet "那" Sg ;
-    those_Det = mkDet "那" Pl ;
+    this_Det = mkDet "एतद्" Sg ;
+--    these_Det = mkDet "这" Pl ;
+    that_Det = mkDet "तद्" Sg ;
+--    those_Det = mkDet "那" Pl ;
 
-    i_NP = pronNP "我" ;
-    youSg_NP = pronNP "你" ;
-    he_NP = pronNP "他" ;
-    she_NP = pronNP "她" ;
-    we_NP = pronNP "我们" ;
-    youPl_NP = pronNP "你们" ;
-    they_NP = pronNP "他们" ;
+    i_NP = pronNP "" Sg P1 ;
+    youSg_NP = pronNP "" Sg P2 ;
+    he_NP = pronNP "" Sg P3 ;
+    she_NP = pronNP "" Sg P3 ;
+    we_NP = pronNP "" Pl P1 ;
+    youPl_NP = pronNP "" Pl P2 ;
+    they_NP = pronNP "" Pl P3 ;
 
-    very_AdA = ss (word "非常") ;    
+    very_AdA = ss "अति" ;    
     
-    and_Conj = {s = table {
-                    Phr NPhrase => "和" ;
-                    Phr APhrase => "而" ;
-                    Phr VPhrase => "又" ;
-                    Sent =>  []
-                          }
-                } ;
+    and_Conj = {s = " च"} ;
 
-    or_Conj  = {s = table {
-                    Phr _ => "或" ;
-                    Sent => word "还是"
-                          }
-                } ;
+    or_Conj  = {s = "अथवा"} ;
 
     Pos  = {s = [] ; b = True} ;
     Neg  = {s = [] ; b = False} ;
@@ -110,17 +97,24 @@ concrete MiniresourceSan of Miniresource = open Prelude in {
 -- module TestChi
 
 lin
-  man_N = mkN "男人" ;  
-  woman_N = mkN "女人" ;
-  house_N = mkN "房子" ;
-  tree_N = mkN "树" "棵";
-  big_A = mkA "大" ;
-  small_A = mkA "小" ;
-  green_A = mkA "绿" ;
-  walk_V = mkV "走" ;
-  arrive_V = mkV "到" ;
-  love_V2 = mkV2 "爱" ;
-  please_V2 = mkV2 "麻烦" ;
+  man_N = mkN "नरः" ;  
+  woman_N = mkN "स्त्री" ;
+  house_N = mkN "गृहं" ;
+  tree_N = mkN "वृक्ष";
+  big_A = mkA "महाकाय" ;
+  small_A = mkA "अल्प" ;
+  green_A = mkA "हरित" ;
+  walk_V = mkV "गम्" ;
+  arrive_V = mkV "अभि-उपा-गम्" ;
+  love_V2 = mkV2 "कम्" ;
+  please_V2 = mkV2 "प्री" ;
+
+
+
+
+
+
+
 
 -- module ResSan
 
@@ -132,15 +126,19 @@ param
     Gender = Masc | Fem | Neutr ;
     Person = P3 | P2 | P1 ;
 
-    Agr = Ag Gender Number Person ;
 
     VForm = VPres Number Person ;
+
+oper
+    Agr = {g : Gender ; n : Number ; p : Person} ;
+
+    agr : Gender -> Number -> Person -> Agr = \g,n,p -> {g = g ; n = n ; p = p} ;
 
 -- parts of speech
 
 oper
 
-  VerbPhrase = {verb : Verb ; compl : Str} ;
+  VerbPhrase = {verb : Verb ; compl : Agr => Str} ;
   NounPhrase = {s : Case => Str ; a : Agr} ; 
 
 -- for morphology
@@ -150,7 +148,7 @@ oper
   Verb : Type = {s : VForm => Str} ;
 
   mkNoun : (s1,_,_,_,_,_,_,_, _,_,_, _,_,_,_,_,s17 : Str) -> Gender -> Noun = 
-    \snon,sacc,sins,sdat,sabl,sgen,sloc,svoc,
+    \snom,sacc,sins,sdat,sabl,sgen,sloc,svoc,
      dnomaccvoc,dinsdatabl,dgenloc,
      pnomvoc,pacc,pins,pdatabl,pgen,ploc, 
      gen -> {
@@ -159,7 +157,7 @@ oper
            Nom => snom ; Acc => sacc ; Ins => sins ; Dat => sdat ; Abl => sabl ; Gen => sgen ; Loc => sloc ; Voc => svoc
            } ;
         Dl => table {
-           Nom | Voc => dnomaccvoc ; Ins | Dat | Abl => dinsdatabl ; Gen | Loc => dgenloc 
+           Nom | Acc | Voc => dnomaccvoc ; Ins | Dat | Abl => dinsdatabl ; Gen | Loc => dgenloc 
            } ;
         Pl => table {
            Nom | Voc => pnomvoc ; Acc => pacc ; Ins => pins ; Dat | Abl => pdatabl ; Gen => pgen ; Loc => ploc
@@ -170,12 +168,12 @@ oper
 
   endingNoun : Str -> (s1,_,_,_,_,_,_,_, _,_,_, _,_,_,_,_,s17 : Str) -> Gender -> Noun = 
     \stem,
-     snon,sacc,sins,sdat,sabl,sgen,sloc,svoc,
+     snom,sacc,sins,sdat,sabl,sgen,sloc,svoc,
      dnomaccvoc,dinsdatabl,dgenloc,
      pnomvoc,pacc,pins,pdatabl,pgen,ploc, 
      gen -> 
        mkNoun
-         (stemm + snon) (stem + sacc) (stem + sins) (stem + sdat) (stem + sabl) (stem + sgen) (stem + sloc) (stem + svoc) 
+         (stem + snom) (stem + sacc) (stem + sins) (stem + sdat) (stem + sabl) (stem + sgen) (stem + sloc) (stem + svoc) 
          (stem + dnomaccvoc) (stem + dinsdatabl) (stem + dgenloc) 
          (stem + pnomvoc) (stem + pacc) (stem + pins) (stem + pdatabl) (stem + pgen) (stem + ploc) 
          gen ;
@@ -184,10 +182,13 @@ oper
   ramaNoun : Str -> Noun = \rama ->
     let ram = init rama in
     endingNoun ram
-      "aH" "amx" "eNe" "a:ya" "a:tx" "asxya" "e" "a"
-      "o+" "a:t'xya:mx" "ayo:" 
-      "a:H" "a:nx" "e+H" "e:t'yaH" "a:Na:ma" "e:Su" 
+      "ः" "म्" "ॆणॆ" "ाय" "ात्" "स्य" "ॆ" ""
+      "ौ" "ाथ्याम्" "यो" 
+      "ाः" "ान्" "ैः" "ेथयः" "ाणाम" "ेषु" 
       Masc ;
+
+  mkAdj : (m,f,n : Noun) -> Adj = \m,f,n -> {s = table {Masc => m.s ; Fem => f.s ; Neutr => n.s}} ; 
+
 
   mkVerb : (s1,_,_,_,_,_,_,_,s9 : Str) -> Verb = 
     \s3,s2,s1,d3,d2,d1,p3,p2,p1 -> {
@@ -211,58 +212,51 @@ oper
 
   patVerb : Str -> Verb = \pat ->
     endingVerb pat
-      "ita" "isa" "ima" "ataH" "at'aH" "avaH" "inxta" "at'a" "a:maH" ;
+      "ित" "िस" "िम" "तः" "थः" "ावः" "िनख़त" "थ" "ामः" ;
 
+  copula : Verb = {s = \\_ => []} ;
 
-{-
-  neg : Bool -> Str = \b -> case b of {True => [] ; False => "不"} ;
+  neg : Bool -> Str = \b -> case b of {True => [] ; False => "न"} ;
+
 
 -- for structural words
 
-  mkDet : Str -> Number -> {s : Str ; n : Number} = \s,n -> {
-    s = word s ;
+  mkDet : Str -> Number -> {s : Gender => Case => Str ; n : Number} = \s,n -> {
+    s = \\_,_ => s ;
     n = n
     } ;
 
-  pronNP : (s : Str) -> NounPhrase = \s -> {
-    s = word s
+  pronNP : (s : Str) -> Number -> Person -> NounPhrase = \s,n,p -> {
+    s = \\_ => s ;
+    a = agr Masc n p
     } ;
     
--- Write the characters that constitute a word separately. 
--- This enables straightforward tokenization.
 
-  bword : Str -> Str -> Str = \x,y -> x ++ y ; 
-  -- change to x + y to treat words as single tok ens
 
-  word : Str -> Str = \s -> case s of {
-      x@? + y@? + z@? + u@? => bword x (bword y (bword z u)) ;
-      x@? + y@? + z@? => bword x (bword y z) ;
-      x@? + y@? => bword x y ;
-      _ => s
-      } ;
-
--- module ParadigmsChi
+-- module ParadigmsSan
 
 oper
   mkN = overload {
     mkN : (man : Str) -> N 
-      = \n -> lin N (mkNoun n "个") ;  
-    mkN : (man : Str) -> Str -> N 
-      = \n,c -> lin N (mkNoun n c)
+      = \s -> lin N (ramaNoun s) ;
     } ;  
       
   mkA : (small : Str) -> A 
-      = \a -> lin A (mkAdj a) ;
+      = \s -> let n = ramaNoun s in lin A (mkAdj n n n) ;
       
   mkV : (walk : Str) -> V 
-      = \s -> lin V (mkVerb s) ; 
+      = \s -> lin V (patVerb s) ; 
 
   mkV2 = overload {
     mkV2 : (love : Str) -> V2 
-      = \love -> lin V2 (mkVerb love) ;
-    mkV2 : (love : V) -> V2 
-      = \love -> lin V2 love ;
+      = \love -> lin V2 (mkV love ** {c = Acc}) ;
+---    mkV2 : (love : V) -> V2 
+---      = \love -> lin V2 love ;
    } ;
--}
 
 }
+
+
+
+
+
