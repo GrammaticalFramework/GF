@@ -343,8 +343,9 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 			}
 		}
 		case PGF_EXPR_META: {
+			PyObject* res = Py_BuildValue("OO", Py_None, args);
 			Py_DECREF(args);
-			return Py_None;
+			return res;
 		}
 		case PGF_EXPR_FUN: {
 			PgfExprFun* efun = i.data;
