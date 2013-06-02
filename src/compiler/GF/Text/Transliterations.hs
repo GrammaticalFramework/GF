@@ -35,7 +35,7 @@ transliterateWithFile name src isFrom =
 transliteration :: String -> Maybe Transliteration
 transliteration s = Map.lookup s allTransliterations 
 
-allTransliterations = Map.fromAscList [
+allTransliterations = Map.fromList [
   ("amharic",transAmharic),
   ("ancientgreek", transAncientGreek),
   ("arabic", transArabic),
