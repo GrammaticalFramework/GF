@@ -54,6 +54,20 @@ concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
 
     CN = {s : Number => Case => Str ; g : Gender} ;
     NP = {s : NPCase => Str ; a : Agr} ;
+
+    -- Pronoun
+    -- In English, most of the personal pronouns have distinct
+    -- case forms (nominative and accusative) which is why NPCase is used here.
+    --
+    -- Structure of a pronoun:
+    --    gf             | form                | ex
+    --    ---------------+---------------------+-------
+    --    s (NCase Nom)  | Pers. pron. (subj.) | I
+    --    s (NCase Gen)  | Poss. determiner    | my
+    --    s NPAcc        | Pers. pron. (obj.)  | me
+    --    s NPNomPoss    | Poss. pron. (subj.) | mine
+    --    sp Nom         | Poss. pron. (subj.) | mine
+    --    sp Gen         | Poss. pron. (obj.)  | mine's
     Pron = {s : NPCase => Str ; sp : Case => Str ; a : Agr} ;
     Det = {s : Str ; sp : NPCase => Str ; n : Number ; hasNum : Bool} ;
     Predet = {s : Str} ;
