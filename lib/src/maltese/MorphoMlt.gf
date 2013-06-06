@@ -27,35 +27,22 @@ resource MorphoMlt = ResMlt ** open Prelude in {
   {- Pronoun -------------------------------------------------------------- -}
 
   oper
-    -- [AZ]
-    mkPron = overload {
-
-      -- jiena, inti, huwa
-      mkPron : (_,_,_,_ : Str) -> Number -> Person -> Gender -> Pronoun =
-        \jien, _i, _ni, _li, num, pers, gen -> {
-          s = table {
-            Personal     => jien ;         -- jien
-            Possessive   => "tiegħ" + _i ; -- tiegħi
-            Suffixed Acc => _ni ;          -- rajtni
-            Suffixed Dat => _li ;          -- rajtli
-            Suffixed Gen => _i             -- qalbi, idejja
-            } ;
-          a = mkAgr num pers gen ;
-        } ;
-
-      -- hija, aħna, intom, huma
-      mkPron : (_,_ : Str) -> Number -> Person -> Gender -> Pronoun =
-        \hi, _ha, num, pers, gen -> {
-          s = table {
-            Personal     => hi ;           -- hi
-            Possessive   => "tagħ" + _ha ; -- tagħha
-            Suffixed Acc => _ha ;          -- rajtha
-            Suffixed Dat => "l"+_ha ;      -- rajtilha
-            Suffixed Gen => _ha            -- qalbha
-            } ;
-          a = mkAgr num pers gen ;
-        } ;
-
+    mkPron : (_,_ : Str) -> Number -> Person -> Gender -> Pronoun =
+      \hi, _ha, num, pers, gen ->
+      let
+        tagh : Str = case <pers,num,gen> of {
+          <P1,Sg,_>    => "tiegħ" ;
+          <P2,Sg,_>    => "tiegħ" ;
+          <P3,Sg,Masc> => "tiegħ" ;
+          _            => "tagħ"
+          } ;
+      in {
+        s = table {
+          Personal   => hi ;         -- hi
+          Possessive => tagh + _ha ; -- tagħha
+          Suffixed   => _ha          -- qalbha
+          } ;
+        a = mkAgr num pers gen ;
       } ;
 
   {- Verb ----------------------------------------------------------------- -}

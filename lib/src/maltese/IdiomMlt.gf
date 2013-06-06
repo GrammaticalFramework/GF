@@ -6,6 +6,9 @@
 
 concrete IdiomMlt of Idiom = CatMlt ** open Prelude, ResMlt in {
 
+  flags
+    coding=utf8;
+
   lin
     -- VP -> Cl ;        -- it is hot
     ImpersCl vp = mkClause "" (agrP3 Sg Masc) vp ;

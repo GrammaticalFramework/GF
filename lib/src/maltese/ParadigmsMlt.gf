@@ -85,127 +85,122 @@ resource ParadigmsMlt = open
         _ => Masc
       } ;
 
-
-    -- Smart paradigm for building a noun
+    -- Noun paradigm 1(x): singular and plural(s)
     mkN : N = overload {
 
-      -- Take the singular and infer gender & plural.
-      -- Assume no special plural forms.
-      -- Params:
-        -- Singular, eg AJRUPLAN
+      -- 1: Take the singular and infer plural
       mkN : Str -> N = \sing ->
-        let
-          plural = inferNounPlural sing ;
-          gender = inferNounGender sing ;
-        in
-          mk5N sing [] [] plural [] gender ;
-
-      -- Take an explicit gender.
-      -- Assume no special plural forms.
-      -- Params:
-        -- Singular, eg AJRUPLAN
-        -- Gender
+        let plural = inferNounPlural sing ;
+            gender = inferNounGender sing ;
+        in  mk5N sing [] [] plural [] gender ;
       mkN : Str -> Gender -> N = \sing,gender ->
-        let
-          plural = inferNounPlural sing ;
-        in
-          mk5N sing [] [] plural [] gender ;
+        let plural = inferNounPlural sing ;
+        in  mk5N sing [] [] plural [] gender ;
 
-      -- Take the singular, plural. Infer gender.
-      -- Assume no special plural forms.
-      -- Params:
-        -- Singular, eg KTIEB
-        -- Plural, eg KOTBA
+      -- 1: Take the singular and plural
       mkN : Str -> Str -> N = \sing,plural ->
-        let
-          gender = inferNounGender sing ;
-        in
-          mk5N sing [] [] plural [] gender ;
-
-      -- Take the singular, plural and gender.
-      -- Assume no special plural forms.
-      -- Params:
-        -- Singular, eg KTIEB
-        -- Plural, eg KOTBA
-        -- Gender
+        let gender = inferNounGender sing ;
+        in  mk5N sing [] [] plural [] gender ;
       mkN : Str -> Str -> Gender -> N = \sing,plural,gender ->
-          mk5N sing [] [] plural [] gender ;
+        mk5N sing [] [] plural [] gender ;
 
-      -- Takes all 5 forms, inferring gender
-      -- Params:
-        -- Singulative, eg KOXXA
-        -- Collective, eg KOXXOX
-        -- Double, eg KOXXTEJN
-        -- Determinate Plural, eg KOXXIET
-        -- Indeterminate Plural
-      mkN : Str -> Str -> Str -> Str -> Str -> N = \sing,coll,dual,det,ind ->
-        let
-          gender = if_then_else (Gender) (isNil sing) (inferNounGender coll) (inferNounGender sing) ;
-        in
-          mk5N sing coll dual det ind gender ;
+      -- 1x: Take both plurals
+      mkN : Str -> Str -> Str -> N = \sing,det,ind ->
+        let gender = inferNounGender sing ;
+        in  mk5N sing [] [] det ind gender ;
+      mkN : Str -> Str -> Str -> Gender -> N = \sing,det,ind,gender ->
+        mk5N sing [] [] det ind gender ;
 
-    } ; --end of mkN overload
+    } ;
 
-    -- Take the singular and infer gender.
-    -- No other plural forms.
-    -- Params:
-      -- Singular, eg ARTI
+    -- Noun paradigm 2: with a collective form
+    mkNColl = overload {
+      -- Note: collective noun is always treated as Masculine
+
+      -- 2c
+      mkNColl : Str -> N = \coll ->
+        mk5N [] coll [] [] [] Masc ;
+
+      -- 2b
+      mkNColl : Str -> Str -> N = \coll,det ->
+        mk5N [] coll [] det [] Masc ;
+      -- 2bx
+      -- mkNColl : Str -> Str -> Str -> N = \coll,det,ind ->
+      --   mk5N [] coll [] det ind Masc ;
+
+      -- 2
+      mkNColl : Str -> Str -> Str -> N = \sing,coll,det ->
+        mk5N sing coll [] det [] Masc ;
+      -- 2x
+      mkNColl : Str -> Str -> Str -> Str -> N = \sing,coll,det,ind ->
+        mk5N sing coll [] det ind Masc ;
+
+      } ;
+
+    -- Noun paradigm 3: only singulative form
     mkNNoPlural : N = overload {
-
       mkNNoPlural : Str -> N = \sing ->
-        let  gender = inferNounGender sing ;
+        let gender = inferNounGender sing ;
         in  mk5N sing [] [] [] [] gender
       ;
-
       mkNNoPlural : Str -> Gender -> N = \sing,gender ->
         mk5N sing [] [] [] [] gender
       ;
+    } ;
 
-    } ; --end of mkNNoPlural overload
+    -- Noun paradigm 4: with dual form
+    mkNDual = overload {
 
-
-    -- Take the singular and infer dual, plural & gender
-    -- Params:
-      -- Singular, eg AJRUPLAN
-    mkNDual : Str -> N = \sing ->
-      let
-        dual : Str = case sing of {
-          _ + ("għ"|"'") => sing + "ajn" ;
-          _ + ("a") => init(sing) + "ejn" ;
-          _ => sing + "ejn"
-        } ;
-        plural = inferNounPlural sing ;
-        gender = inferNounGender sing ;
-      in
+      -- 4 smart
+      mkNDual : Str -> N = \sing ->
+        let
+          dual : Str = case sing of {
+            _ + ("għ"|"'") => sing + "ajn" ;
+            _ + ("a") => init(sing) + "ejn" ;
+            _ => sing + "ejn"
+            } ;
+          plural = inferNounPlural sing ;
+          gender = inferNounGender sing ;
+        in
         mk5N sing [] dual plural [] gender ;
 
+      -- 4
+      mkNDual : Str -> Str -> Str -> N = \sing,dual,det ->
+        let gender = inferNounGender sing ;
+        in  mk5N sing [] dual det [] gender ;
+      mkNDual : Str -> Str -> Str -> Gender -> N = \sing,dual,det,gender ->
+        mk5N sing [] dual det [] gender ;
 
-    -- Take the collective, and infer singulative, determinate plural, and gender.
-    -- Params:
-      -- Collective Plural, eg TUFFIEĦ
-    mkNColl : Str -> N = \coll ->
-      let
-        stem : Str = case coll of {
-          -- This can only apply when there are 2 syllables in the word
-          _ + #Vowel + #Consonant + #Vowel + K@#Consonant => dropSfx 2 coll + K ; -- eg GĦADAM -> GĦADM-
+      -- 4x
+      mkNDual : Str -> Str -> Str -> Str -> N = \sing,dual,det,ind ->
+        let gender = inferNounGender sing ;
+        in  mk5N sing [] dual det ind gender ;
+      mkNDual : Str -> Str -> Str -> Str -> Gender -> N = \sing,dual,det,ind,gender ->
+        mk5N sing [] dual det ind gender ;
 
-          _ => coll
-        } ;
-        sing : Str = case stem of {
-          _ => stem + "a"
-        } ;
-        det : Str = case stem of {
-          _ => stem + "iet"
-        } ;
-        -- gender = inferNounGender sing ;
-        gender = Masc ; -- Collective noun is always treated as Masculine
-      in
-      mk5N sing coll [] det [] gender ;
+      } ;
 
-    -- Build a noun using 5 forms, and a gender
+    -- Build a noun using 5 potentially non-present forms and a gender
+    -- You can pass empty strings to this oper; they won't be passed along
     mk5N : (_,_,_,_,_ : Str) -> Gender -> N ;
     mk5N = \sing,coll,dual,det,ind,gen -> lin N (
-      mkNoun sing coll dual det ind gen
+      case <isNil sing,isNil coll,isNil dual,isNil det,isNil ind> of {
+        <False,True, True, False,True > => mkNoun sing sing det det det gen False False ; -- 1
+        <False,True, True, False,False> => mkNoun sing sing det det ind gen False False ; -- 1x
+
+        <False,False,True, False,True > => mkNoun sing coll det det det gen True False ; -- 2
+        <False,False,True, False,False> => mkNoun sing coll det det ind gen True False ; -- 2x
+        <True, False,True, False,True > => mkNoun coll coll det det det gen True False ; -- 2b
+        <True, False,True, False,False> => mkNoun coll coll det det ind gen True False ; -- 2bx
+        <True, False,True, True, True > => mkNoun coll coll coll coll coll gen True False ; -- 2c
+
+        <False,True, True, True, True > => mkNoun sing sing sing sing sing gen False False ; -- 3
+
+        <False,True, False,False,True > => mkNoun sing sing dual det det gen False True ; -- 4
+        <False,True, False,False,False> => mkNoun sing sing dual det ind gen False True ; -- 4x
+
+        _ => error "Calling mk5N with some invalid combination"
+        }
       ) ;
 
     -- Proper noun
@@ -594,7 +589,7 @@ resource ParadigmsMlt = open
         mammaII : Str = dropPfx 1 mammaV ; -- WAQQAF
         vII : V = derivedV_II mammaII root ;
         info : VerbInfo = mkVerbInfo vII.i.class FormV vII.i.root vII.i.patt mammaV ;
-        get : VForm -> Str = \vf -> stem1 (vII.s ! vf) ;
+        get : VForm -> Str = \vf -> (vII.s ! vf).s1 ;
         tbl : VForm => Str = table {
           VPerf agr           => pfx_T (get (VPerf agr)) ;
           VImpf (AgP1 Sg)     => pfx "ni" (pfx_T (dropPfx 1 (get (VImpf (AgP1 Sg))))) ;
@@ -621,7 +616,7 @@ resource ParadigmsMlt = open
         mammaIII : Str = dropPfx 1 mammaVI ; -- QIEGĦED
         vIII : V = derivedV_III mammaIII root ;
         info : VerbInfo = updateVerbInfo vIII.i FormVI mammaVI ;
-        get : VForm -> Str = \vf -> stem1 (vIII.s ! vf) ;
+        get : VForm -> Str = \vf -> (vIII.s ! vf).s1 ;
         tbl : VForm => Str = table {
           VPerf agr           => pfx_T (get (VPerf agr)) ;
           VImpf (AgP1 Sg)     => pfx "ni" (pfx_T (dropPfx 1 (get (VImpf (AgP1 Sg))))) ;

@@ -88,7 +88,7 @@ concrete SentenceMlt of Sentence = CatMlt ** open
     -- VP -> SC
     -- to go
     EmbedVP vp = {
-      s = infVP vp Simul Pos (agrP3 Sg Masc) --- agr
+      s = infVP vp Simul Pos (agrP3 Sg Masc)
       } ;
 
     -- Temp -> Pol -> Cl -> S
