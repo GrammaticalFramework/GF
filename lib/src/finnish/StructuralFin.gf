@@ -82,12 +82,12 @@ concrete StructuralFin of Structural = CatFin **
     isPron = False ; isNeg = False
     } ;
   someSg_Det = heavyDet {
-    s1 = jokuPron ! Sg ;
+    s1 = jokinPron ! Sg ;
     s2 = \\_ => [] ;
     isNum,isPoss = False ; isDef = True ; isNeg = False ; n = Sg
     } ;
   somePl_Det = heavyDet {
-    s1 = jokuPron ! Pl ;
+    s1 = jokinPron ! Pl ;
     s2 = \\_ => [] ; isNum,isPoss = False ; isNeg = False ; isDef = True ; 
     n = Pl ; isNeg = False
     } ;
