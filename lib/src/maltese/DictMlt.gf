@@ -8,6 +8,7 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
 
   flags
     coding=utf8 ;
+    optimize=values ;
 
   -- Root-and-pattern verbs
   lin

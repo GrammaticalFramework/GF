@@ -15,13 +15,13 @@ concrete StructuralMlt of Structural = CatMlt **
 
     {- Pronoun -------------------------------------------------------------- -}
 
-    i_Pron      = mkPron "jien"  "i"   "ni" "li"  singular P1 masculine ; --- also JIENA
-    youSg_Pron  = mkPron "int"   "ek"  "ek" "lek" singular P2 masculine ; --- also INTI
-    he_Pron     = mkPron "hu"    "u"   "hu" "lu"  singular P3 masculine ; --- also HUWA
-    she_Pron    = mkPron "hi"    "ha"             singular P3 feminine  ; --- also HIJA
-    we_Pron     = mkPron "aħna"  "na"             plural   P1 masculine ;
-    youPl_Pron  = mkPron "intom" "kom"            plural   P2 masculine ;
-    they_Pron   = mkPron "huma"  "hom"            plural   P3 masculine ;
+    i_Pron      = mkPron "jien"  "i"   singular P1 masculine ; --- also JIENA
+    youSg_Pron  = mkPron "int"   "ek"  singular P2 masculine ; --- also INTI
+    he_Pron     = mkPron "hu"    "u"   singular P3 masculine ; --- also HUWA
+    she_Pron    = mkPron "hi"    "ha"  singular P3 feminine  ; --- also HIJA
+    we_Pron     = mkPron "aħna"  "na"  plural   P1 masculine ;
+    youPl_Pron  = mkPron "intom" "kom" plural   P2 masculine ;
+    they_Pron   = mkPron "huma"  "hom" plural   P3 masculine ;
     youPol_Pron = youSg_Pron ;
     it_Pron     = he_Pron ;
 

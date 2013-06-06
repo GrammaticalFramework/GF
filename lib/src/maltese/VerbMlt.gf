@@ -14,8 +14,8 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
 
     -- V2 -> VPSlash
     -- love (it)
-    SlashV2a = predVc ;
-    -- SlashV2a v2 = (predV v2) ** { c2 = noCompl } ; -- gets rid of the V2's prep
+    -- SlashV2a = predVc ;
+    SlashV2a v2 = (predV v2) ** { c2 = noCompl } ; -- gets rid of the V2's prep
 
     -- V3 -> NP -> VPSlash
     -- give it (to her)
@@ -68,17 +68,12 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
         <True,True> => {
             s = vp.s ;
             s2 = \\agr => vp.s2 ! agr ++ vp.c2.enclitic ! np.a ;
-            dir = NullVariants3 ;
-            ind = NullVariants3 ;
+            dir = NullAgr ;
+            ind = NullAgr ;
           } ;
 
-        -- Join pron to verb
-        <True,False> => {
-            s = vp.s ;
-            s2 = \\agr => [] ;
-            dir = mkMaybeVariants3 (np.s ! NPCPrep) ; --- we'll need to get all the variants direct from the NP
-            ind = NullVariants3 ;
-          } ;
+        -- Add dir pron to verb
+        <True,False> => insertDirObj np.a vp ;
 
         -- <False,False> => {
         --     s = vp.s ;
@@ -116,7 +111,7 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
     -- VP -> Adv -> VP
     -- sleep here
     AdvVP vp adv = case adv.joinsVerb of {
-      True  => insertIndObj (indObjSuffix adv.a) vp ;
+      True  => insertIndObj adv.a vp ;
       False => insertObj (\\_ => adv.s) vp
       } ;
 
@@ -127,30 +122,9 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
     -- VPSlash -> Adv -> VPSlash
     -- use (it) here
     AdvVPSlash vp adv = case adv.joinsVerb of {
-      True  => insertIndObj (indObjSuffix adv.a) vp ;
+      True  => insertIndObj adv.a vp ;
       False => insertObj (\\_ => adv.s) vp
       }  ** {c2 = vp.c2} ;
-
-  oper
-
-    -- Only for_Prep causes these to be used, thus it doesn't make sense to store this
-    -- information in Prep.
-    indObjSuffix : Agr -> Str = \agr ->
-      case (toVAgr agr) of {
-        AgP1 Sg      => "li" ;
-        AgP2 Sg      => "lek" ;
-        AgP3Sg Masc  => "lu" ;
-        -- AgP3Sg Fem   => "ilha" ;
-        -- AgP1 Pl      => "ilna" ;
-        -- AgP2 Pl      => "ilkom" ;
-        -- AgP3Pl       => "ilhom"   --- need to introduce variants here too
-        AgP3Sg Fem   => "lha" ;
-        AgP1 Pl      => "lna" ;
-        AgP2 Pl      => "lkom" ;
-        AgP3Pl       => "lhom"
-      } ;
-
-  lin
 
     -- AdV -> VPSlash -> VPSlash
     -- always use (it)
@@ -162,7 +136,7 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
 
     -- V2 -> VP
     -- be loved
-    PassV2 v2 = insertObj (\\agr => stem1 (v2.s ! VPassivePart (toGenNum agr)) ++ v2.c2.s ! Definite) CopulaVP ;
+    PassV2 v2 = insertObj (\\agr => (v2.s ! VPassivePart (toGenNum agr)).s1 ++ v2.c2.s ! Definite) CopulaVP ;
 
     -- AP -> Comp
     -- (be) small
