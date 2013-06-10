@@ -283,8 +283,8 @@ defaultFlags = Flags {
 #endif
     }
 
--- Option descriptions
-
+-- | Option descriptions
+{-# NOINLINE optDescr #-}
 optDescr :: [OptDescr (Err Options)]
 optDescr = 
     [
@@ -309,9 +309,9 @@ optDescr =
      Option [] ["gfo-dir"] (ReqArg gfoDir "DIR") "Directory to put .gfo files in (default = '.').",
      Option ['f'] ["output-format"] (ReqArg outFmt "FMT") 
         (unlines ["Output format. FMT can be one of:",
-                  "Multiple concrete: pgf (default), gar, js, prolog, ...",
-                  "Single concrete only: cf, bnf, lbnf, gsl, srgs_xml, srgs_abnf, ...",
-                  "Abstract only: haskell, prolog_abs, ..."]),
+                  "Multiple concrete: pgf (default), js, pgf_pretty, prolog, python, ...", -- gar,
+                  "Single concrete only: bnf, ebnf, fa, gsl, jsgf, regexp, slf, srgs_xml, srgs_abnf, vxml, ....", -- cf, lbnf,
+                  "Abstract only: haskell, ..."]), -- prolog_abs,
      Option [] ["sisr"] (ReqArg sisrFmt "FMT") 
         (unlines ["Include SISR tags in generated speech recognition grammars.",
                   "FMT can be one of: old, 1.0"]),
