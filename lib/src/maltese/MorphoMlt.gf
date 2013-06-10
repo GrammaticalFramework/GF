@@ -606,8 +606,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VActivePart  _ => "" ; --- TODO
-        VPassivePart _ => ""   --- TODO
+        VPresPart _ => NONEXIST ;
+        VPastPart _ => NONEXIST
       } ;
 
     conjFormII_quad : VerbInfo -> (VForm => Str) = \i ->
@@ -693,8 +693,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VActivePart  _ => "" ; --- TODO
-        VPassivePart _ => ""   --- TODO
+        VPresPart _ => NONEXIST ;
+        VPastPart _ => NONEXIST
       } ;
 
     {- ~~~ Form III verbs ~~~ -}
@@ -735,8 +735,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VActivePart  _ => "" ; --- TODO
-        VPassivePart _ => ""   --- TODO
+        VPresPart _ => NONEXIST ;
+        VPastPart _ => NONEXIST
       } ;
 
     {- ~~~ Form VII and VIII verbs ~~~ -}
@@ -806,8 +806,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VActivePart  _ => "" ; --- TODO
-        VPassivePart _ => ""   --- TODO
+        VPresPart _ => NONEXIST ;
+        VPastPart _ => NONEXIST
       } ;
 
     {- ~~~ Form IX verbs ~~~ -}
@@ -842,8 +842,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VActivePart  _ => "" ; --- TODO
-        VPassivePart _ => ""   --- TODO
+        VPresPart _ => NONEXIST ;
+        VPastPart _ => NONEXIST
       } ;
 
     {- ~~~ Form X verbs ~~~ -}
@@ -884,7 +884,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
           _ + "ie" + #Consonant =>
             let
               strieh : Str = mamma ;
-              strih : Str = ie2_ i.patt2.V1 strieh ;
+              strih : Str = ie2i strieh ;
               strihaj : Str = strih + "aj"
             in
             table {
@@ -936,8 +936,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VActivePart  _ => "" ; --- TODO
-        VPassivePart _ => ""   --- TODO
+        VPresPart _ => NONEXIST ;
+        VPastPart _ => NONEXIST
       } ;
 
 }

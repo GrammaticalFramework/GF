@@ -1,5 +1,5 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:alltenses
 
-resource SymbolicMlt = Symbolic with 
+resource SymbolicMlt = Symbolic with
   (Symbol = SymbolMlt),
   (Grammar = GrammarMlt) ;

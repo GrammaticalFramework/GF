@@ -23,7 +23,7 @@ concrete ConjunctionMlt of Conjunction =
     -- Conj -> [NP] -> NP     -- "either her or me"
     ConjNP conj ss = {
       s = \\npcase => conj.s1 ++ ss.np1.s ! npcase ++ conj.s2 ++ ss.np2.s ! npcase ;
-      a = ss.np2.a ;
+      a = { p = ss.np2.a.p ; g = ss.np2.a.g ; n = Pl } ; -- make plural
       isPron = andB ss.np1.isPron ss.np2.isPron ;
       isDefn = andB ss.np1.isDefn ss.np2.isDefn ;
       } ;
