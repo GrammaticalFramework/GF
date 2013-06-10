@@ -82,7 +82,7 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
           _ => adjectival
         } ;
         thousand = case num of {
-          Num1 => "wieħed" ;
+          Num1 => "elf" ; --- was: wieħed
           Num2 => "elfejn" ;
           _ => case adjectival of {
             _ + "'" => (init adjectival) + "t" ;  -- SEBA' -> SEBAT
@@ -94,11 +94,9 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
       s = table {
         Unit => table {
           NCard => table {
-            NumNom => unit ;    -- TNEJN
-            NumAdj => case num of {
-              Num1 => "" ; -- [] baqra
-              _ => adjectival -- ŻEWĠ baqar
-              }
+            NumNom => unit ;     -- TNEJN
+            -- NumAdj => case num of { Num1 => "" ; _ => adjectival } -- ŻEWĠ baqar
+            NumAdj => adjectival -- ŻEWĠ baqar
           } ;
           NOrd => \\numcase => ordunit -- TIENI
         } ;
@@ -139,13 +137,15 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
           }
         }
       } ;
---      thou = thousand ;
       thou = { s = thousand ; treatAs = Unit } ;
-      n = num ;
+      n = case num of {
+        Num1 => NumX Sg ;
+        _    => num
+        } ;
     } ;
 
   lin
-    --      Unit    Ord.Unit  Adjectival  Teen    Ten      Number
+    --         Unit    Ord.Unit  Adjectival  Teen    Ten      Number
     n2 = mkNum "tnejn"   "tieni"  "żewġ"  "tnax"    "għoxrin" Num2 ;
     n3 = mkNum "tlieta"  "tielet" "tlett" "tlettax" "tletin"  Num3_10 ; --- TODO tlett / tliet ?
     n4 = mkNum "erbgħa"  "raba'"  "erba'" "erbatax" "erbgħin" Num3_10 ;
@@ -209,14 +209,12 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
     num x = x ;
 
     -- Sub10 ; 1
-    --        Unit    Ord.Unit  Adjectival  Teen    Ten      Number
-    pot01 = mkNum  "wieħed"  "ewwel"    "wieħed"  []      []      Num1 ;
+    pot01 = mkNum "wieħed" "ewwel" "wieħed" "ħdax" "għaxra" Num1 ;
 
     -- Digit -> Sub10 ; d * 1
     pot0 d = d ** {n = case d.n of { Num2 => Num2 ; _ => Num3_10 }} ;
 
     -- Sub100 ; 10, 11
-    --          Cardinal  Ordinal    Adjectival  Thousand  Form
     pot110 = mkForm2  "għaxra"  "għaxar"  "għaxar"  "għaxart"  Unit Num3_10 ;
     pot111 = mkForm2  "ħdax"    "ħdax"    (glue "ħdax" "-il") (glue "ħdax" "-il") Teen Num11_19 ;
 
@@ -235,7 +233,7 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
     pot1 d =
       let
         numform : NumForm = case d.n of {
-          Num1 => Num3_10 ;
+          NumX Sg => Num3_10 ;
           _ => Num20_99
           }
       in mkForm2 (d.s ! Ten) Ten numform ;
@@ -245,7 +243,7 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
       let
         unit = (n.s ! Unit ! NCard ! NumNom) ;
         numform : NumForm = case d.n of {
-          Num1 => Num11_19 ;
+          NumX Sg => Num11_19 ;
           _ => Num20_99
           }
       in
@@ -280,17 +278,17 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
         hund : Str = m.s ! Hund ! NCard ! NumNom ;
       in {
         s = \\cardord,numcase => case n.n of {
-          Num1 => hund ++ "u" ;
+          NumX Sg => hund ++ "u" ;
           _ => hund ++ "u" ++ n.s ! NCard ! numcase
           } ;
         thou = {
           s = hund ++ "u" ++ n.thou.s ;
           treatAs = case n.n of {
-            Num1 => Ten ; -- specific case for mija u wiehed elf
+            NumX Sg => Ten ; -- specific case for mija u wiehed elf
             _ => n.f  -- So that "106,000" is treated as "6,000"
           } ;
         } ;
-        n = case n.n of { Num2 => Num3_10 ; _ => n.n } ;
+        n = case n.n of { NumX Sg => Num1 ; Num2 => Num3_10 ; _ => n.n } ;
         f = Hund ;
       } ;
 
@@ -301,7 +299,7 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
     pot3 m = {
       s =
       case <m.n, m.thou.treatAs> of  {
-        <Num1,_> => numTable "elf" ;        -- 1 * 1000
+        <NumX Sg,_> => numTable "elf" ;        -- 1 * 1000
         <Num2,_> => numTable "elfejn" ;      -- 2 * 1000
         <_,Unit> => numTable m.thou.s "elef" ;  -- 3-10 * 1000
         <_,_> => numTable m.thou.s "elf"    -- 11+ * 1000
@@ -324,7 +322,7 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
         }
       in
         case <m.n, m.thou.treatAs> of  {
-          <Num1,_>     => numTable "elf" ukemm ;
+          <NumX Sg,_>  => numTable "elf" ukemm ;
           <Num2,_>     => numTable "elfejn" ukemm ;
           <_,Unit>  => numTable (m.thou.s ++ "elef") ukemm ;
           <_,_>     => numTable (m.thou.s ++ "elf") ukemm
@@ -333,7 +331,7 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
         s = m.thou.s ;
         treatAs = m.f ;
       } ;
-      n = case n.n of { Num2 => Num3_10 ; _ => n.n } ;
+      n = case n.n of { NumX Sg => Num1 ; Num2 => Num3_10 ; _ => n.n } ;
       f = Hund ; -- NOT IMPORTANT
     } ;
 
@@ -377,7 +375,7 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
     -- Helper for making a Dig object.
     mkDig : Str -> NumForm -> Dig = \digit,num -> lin Dig {
       s = \\numcase => digit ;
-      n = num
+      n = case num of {Num1 => NumX Sg ; _ => num } ;
       } ;
 
     -- For correct comma placement in Digits
@@ -414,13 +412,13 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
       let
         digits = d.s ! NumNom ++ (commaIf i.tail) ++ i.s ! NumNom;
         numform = case <d.n,i.n> of {
-          <Num0,num> => num ; -- 0 x
-          <Num1,Num0> => Num3_10 ; -- 1 0
-          <Num1,_> => Num11_19 ; -- 1 1
-          <Num2,_> => Num20_99 ; -- 2 x
-          <Num3_10,_> => Num20_99 ; -- [3-9] x
-          <Num20_99,_> => Num20_99 ;
-          <_,_> => Num20_99 --- how to handle overwrap? see i:Int in lincat Dig above
+          <Num0,num>      => num ;      -- 0 x
+          <NumX Sg,Num0>  => Num3_10 ;  -- 1 0
+          <NumX Sg,_>     => Num11_19 ; -- 1 x
+          <Num2,_>        => Num20_99 ; -- 2 x
+          <Num3_10,_>     => Num20_99 ; -- [3-9] x
+          <Num20_99,_>    => Num20_99 ;
+          <_,_>           => Num20_99 --- how to handle overwrap? see i:Int in lincat Dig above
           } ;
       in {
         s = table {

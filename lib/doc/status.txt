@@ -4,14 +4,14 @@ Aarne Ranta
 
 
 
-The following table gives the languages currently available in the 
+The following table gives the languages currently available in the
 GF Resource Grammar Library.
 
-For another view, see the 
+For another view, see the
 [The Resource Grammar Library coverage map http://www.postcrashgames.com/gf_world/] .
 
 Corrections and additions are welcome! Notice that only those parts of implementations
-that are currently available via http://grammaticalframework.org 
+that are currently available via http://grammaticalframework.org
 are marked in the table
 
 
@@ -37,7 +37,7 @@ are marked in the table
 | Jpn   | Japanese     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *LZ
 | Lat   | Latin        | +     | -    | -     | -   | -    | -   | -    | -     | -    | *AR
 | Lav   | Latvian      | +     | -    | ++    | +   | +    | +   | -    | -     | -    | *NG,*PP
-| Mlt   | Maltese      | +     | -    | -     | -   | -    | -   | -    | -     | -    | *JC
+| Mlt   | Maltese      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *JC
 | Mon   | Mongolian    | -     | -    | -     | -   | -    | -   | -    | -     | -    | *NE
 | Nep   | Nepali       | +     | +    | ++    | +   | +    | -   | -    | -     | -    | *DS
 | Nor   | Norwegian(b) | +     | +    | ++    | +   | +    | +   | +    | +     | -    | *AR
@@ -55,7 +55,7 @@ are marked in the table
 | Tur   | Turkish      | +     | -    | ++    | +   | -    | -   | -    | -     | +    | *SC,KA
 | Urd   | Urdu         | +     | +    | ++    | +   | +    | +   | +    | -     | -    | *SV,MH
 
-ISO = 3-letter ISO language code, used in library file names 
+ISO = 3-letter ISO language code, used in library file names
 (mostly ISO 639-2 B (bibliographic))
 
 Darcs = available in the darcs repository of --http://code.haskell.org/gf-- http://www.grammaticalframework.org/
@@ -76,7 +76,7 @@ Irreg = the ``Irreg`` module with irregular verbs exists
 
 Dict = the ``Dict`` module, large-scale morphological lexicon, exists
 
-authors = main contributors, * means still active 
+authors = main contributors, * means still active
 (ready to fix bugs, answer to questions, etc)
 
 
@@ -139,6 +139,3 @@ active authors of it.
 
 Feel free to start a new language that is not yet in the table - but let us know and
 contribute some code as soon as you can!
-
-
-

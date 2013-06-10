@@ -251,16 +251,16 @@ langs = map fst langsCoding
 -- defaultLangs = langs `only` words "Eng Fre Ger Ita Spa Swe"
 
 -- languagues for which to compile Lang
-langsLang = langs -- `except` ["Amh","Ara","Lat","Tur","Mlt"]
+langsLang = langs -- `except` ["Amh","Ara","Lat","Tur"]
 --langsLang = langs `only` ["Fin"] --test
 
 -- languagues that have notpresent marked
 langsPresent = langsLang `except` ["Chi","Gre","Heb","Jpn","Mlt","Nep","Pes","Snd","Tha","Thb"]
 
 -- languages for which to compile Try
-langsAPI  = langsLang `except` langsIncomplete -- ["Ina","Mlt","Amh","Ara"]
+langsAPI  = langsLang `except` langsIncomplete -- ["Ina","Amh","Ara"]
 
-langsIncomplete = ["Amh","Ara","Heb","Ina","Lat","Mlt","Tur"]
+langsIncomplete = ["Amh","Ara","Heb","Ina","Lat","Tur"]
 
 -- languages for which to compile Symbolic
 langsSymbolic  = langsAPI `except` ["Jpn"]
