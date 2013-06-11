@@ -33,18 +33,18 @@ concrete StructuralMlt of Structural = CatMlt **
     {- Determiner ----------------------------------------------------------- -}
 
     all_Predet  = ss "kollha" ;
-    every_Det   = mkDeterminer singular "kull" ; --- KULĦADD
+    every_Det   = mkDeterminer singular "kull" ;
     few_Det     = mkDeterminer plural "ftit" ;
     many_Det    = mkDeterminer plural "ħafna" ;
-    most_Predet = ss "il-maġġoranza ta'" ; --- TAL-, TAN-
+    most_Predet = ss "il-maġġoranza ta'" ; --- tal-, tan-
     much_Det    = mkDeterminer singular "ħafna" ;
     only_Predet = ss "biss" ;
     someSg_Det  = mkDeterminer singular "xi" ;
-    somePl_Det  = mkDeterminer plural "xi" ;
+    somePl_Det  = mkDeterminer plural "xi uħud" ;
     not_Predet  = ss "mhux" ;
 
     how8many_IDet = {
-      s = "kemm" ; -- KEMM IL-...
+      s = "kemm" ; -- kemm il-...
       n = plural
       } ;
 
@@ -76,7 +76,7 @@ concrete StructuralMlt of Structural = CatMlt **
                            "qabli" "qablek" "qablu" "qabilha" "qabilna" "qabilkom" "qabilhom" ;
     behind_Prep   = after_Prep ;
     between_Prep  = mkPrep "bejn" ;
-    by8agent_Prep = mkPrep "minn" "mill-" "mit-" ;
+    by8agent_Prep = prep_minn ; -- mkPrep "minn" "mill-" "mit-" ;
     by8means_Prep = mkPrep "bi" "b'" "bil-" "bit-" "bl-" ;
     during_Prep   = mkPrep "waqt" ;
     for_Prep      = mkPrep "għal" "għall-" "għall-" "għat-" "għall-"
@@ -87,7 +87,7 @@ concrete StructuralMlt of Structural = CatMlt **
     in_Prep       = mkPrep "fi" "f'" "fil-" "fit-" "fl-" ;
     on_Prep       = mkPrep "fuq" ;
     part_Prep     = possess_Prep ;
-    possess_Prep  = mkPrep "ta'" "t'" "tal-" "tat-" "tal-" ;
+    possess_Prep  = prep_ta ; -- mkPrep "ta'" "t'" "tal-" "tat-" "tal-" ;
     through_Prep  = mkPrep "minn ġo" "minn ġo" "minn ġol-" "minn ġot-" "minn ġol-"
                            "minn ġo fija" "minn ġo fik" "minn ġo fih" "minn ġo fiha" "minn ġo fina" "minn ġo fikom" "minn ġo fihom"
                            False ;
@@ -125,8 +125,8 @@ concrete StructuralMlt of Structural = CatMlt **
     here_Adv       = mkAdv "hawn" ;
     here7to_Adv    = mkAdv ["s'hawnhekk"] ;
     here7from_Adv  = mkAdv ["minn hawnhekk"] ;
-    less_CAdv      = C.mkCAdv "inqas" "minn" ; --- INQAS MILL-IEĦOR
-    more_CAdv      = C.mkCAdv "iktar" "minn" ; --- IKTAR MIT-TNEJN
+    less_CAdv      = C.mkCAdv "inqas" "minn" ; --- inqas mill-ieħor
+    more_CAdv      = C.mkCAdv "iktar" "minn" ; --- iktar mit-tnejn
     quite_Adv      = mkAdv "pjuttost" ;
     so_AdA         = mkAdA "allura" ;
     somewhere_Adv  = mkAdv "x'imkien" ;
