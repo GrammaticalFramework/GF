@@ -36,6 +36,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
 
   lin
     -- Det -> CN -> NP
+    -- the man
     DetCN det cn =
       let
         -- To stop complaining about lock fields
@@ -63,6 +64,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- Quant -> Num -> Det
+    -- these five
     DetQuant quant num = {
       s = \\gen =>
         let gennum = case num.n of { NumX Sg => GSg gen ; _ => GPl }
@@ -80,6 +82,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     } ;
 
     -- Quant -> Num -> Ord -> Det
+    -- these five best
     --- Almost an exact copy of DetQuant, consider factoring together
     DetQuantOrd quant num ord = {
       s = \\gen =>
@@ -96,6 +99,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- Det -> NP
+    -- these five
     DetNP det = {
       s = \\c => det.s ! Masc ;
       a = agrP3 (numform2num det.n) Masc ;
@@ -120,6 +124,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     } ;
 
     -- PN -> NP
+    -- John
     UsePN pn = {
       s = \\c => pn.s ;
       a = pn.a ;
@@ -128,6 +133,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- Pron -> NP
+    -- he
     UsePron p = {
       s = table {
         NPNom   => p.s ! Personal ;
@@ -140,6 +146,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- Pron -> Quant
+    -- my (house)
     PossPron p = {
       s = \\_ => p.s ! Possessive ;
       clitic = p.s ! Suffixed ;
@@ -149,18 +156,22 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- Predet -> NP -> NP
+    -- only the man
     PredetNP pred np = overwriteNPs np (\\c => pred.s ++ np.s ! c) ;
 
     -- NP -> V2 -> NP
+    -- the man seen
     PPartNP np v2 = case v2.hasPastPart of {
       True  => overwriteNPs np (\\c => np.s ! c ++ (v2.s ! VPastPart (toGenNum np.a)).s1) ; -- raġel rieqed
       False => overwriteNPs np (\\c => np.s ! c ++ (v2.s ! VImpf (toVAgr np.a)).s1)         -- mara tisma'
       } ;
 
     -- NP -> RS -> NP
+    -- Paris, which is here
     RelNP np rs = overwriteNPs np (\\c => np.s ! c ++ "," ++ rs.s ! np.a ) ;
 
     -- NP -> Adv -> NP
+    -- Paris today
     AdvNP np adv = overwriteNPs np (\\c => np.s ! c ++ adv.s) ;
 
     -- Num
@@ -171,23 +182,29 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     NumCard n = n ** {hasCard = True} ;
 
     -- Digits -> Card
+    -- 51
     NumDigits d = {s = d.s ; n = d.n} ;
 
     -- Digits -> Ord
+    -- 51st
     OrdDigits d = {s = d.s} ;
 
     -- Numeral -> Card
+    -- fifty-one
     NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
 
     -- Numeral -> Ord
+    -- fifty-first
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
     -- AdN -> Card -> Card
+    -- almost 51
     AdNum adn card = card ** {
       s = \\c => adn.s ++ card.s ! c ;
       } ;
 
     -- A -> Ord
+    -- warmest
     OrdSuperl a = {
       s = \\c => case a.hasComp of {
         True => a.s ! ASuperl ;
@@ -196,6 +213,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- CN -> NP
+    -- (beer)
     MassNP cn = {
       s = \\c => cn.s ! Collective ;
       a = agrP3 Sg cn.g ;
@@ -204,18 +222,23 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- N -> CN
+    -- house
     UseN n = n ;
 
     -- N2 -> CN
+    -- mother
     UseN2 n2 = n2 ; -- just ignore the c2
 
     -- N3 -> N2
+    -- distance (from this city)
     Use2N3 n3 = n3 ** { c2 = n3.c2 } ;
 
     -- N3 -> N2
+    -- distance (to Paris)
     Use3N3 n3 = n3 ** { c2 = n3.c3 } ;
 
     -- N2 -> NP -> CN
+    -- mother of the king
     ComplN2 n2 np = {
         s = \\num => n2.s ! num ++ prepNP n2.c2 np ;
         g = n2.g ;
@@ -225,6 +248,7 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- N3 -> NP -> N2
+    -- distance from this city (to Paris)
     ComplN3 n3 np = {
         s = \\num => n3.s ! num ++ prepNP n3.c3 np ;
         g = n3.g ;
@@ -235,48 +259,49 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
       } ;
 
     -- AP -> CN -> CN
+    -- big house
     AdjCN ap cn = overwriteCNs cn (\\num => preOrPost ap.isPre (ap.s ! mkGenNum num cn.g) (cn.s ! num)) ;
 
     -- CN -> RS -> CN
+    -- house that John bought
     RelCN cn rs = overwriteCNs cn (\\num => cn.s ! num ++ rs.s ! agrP3 (nounnum2num num) cn.g) ;
 
     -- CN -> Adv -> CN
+    -- house on the hill
     AdvCN cn adv = overwriteCNs cn (\\num => cn.s ! num ++ adv.s) ;
 
     -- CN -> SC -> CN
+    -- question where she sleeps
     SentCN cn sc = overwriteCNs cn (\\num => cn.s ! num ++ sc.s) ;
 
     -- CN -> NP -> CN
+    -- Appossition: city Paris
     ApposCN cn np = overwriteCNs cn (\\num => cn.s ! num ++ np.s ! NPNom) ; -- known to be overgenerating
+
+    -- CN -> NP -> CN
+    -- Possessive: house of mine
     PossNP  cn np = overwriteCNs cn (\\num => cn.s ! num ++ prepNP prep_ta np) ;
+
+    -- CN -> NP -> CN
+    -- Partitive: glass of wine
     PartNP  cn np = overwriteCNs cn (\\num => cn.s ! num ++ prepNP prep_ta np) ;
 
     -- Det -> NP -> NP
-    --- LEAKS ?
-    -- CountNP det np = {
-    --   s = \\c => det.s ! np.a.g ++ np.s ! c ;
-    --   a = agrP3 (numform2num det.n) np.a.g ;
-    --   isPron = False ;
-    --   isDefn = np.isDefn ;
-    --   } ;
-
-  oper
-    prep_ta = lin Prep {
-      s = table {
-        Indefinite => "ta'" ;
-        Definite => makePreFull "tal-" "ta" "t'"
-      } ;
-      enclitic : Agr => Str = \\agr => case toVAgr agr of {
-        AgP1 Sg     => "tiegħi" ;
-        AgP2 Sg     => "tiegħek" ;
-        AgP3Sg Masc => "tiegħu" ;
-        AgP3Sg Fem  => "tagħha" ;
-        AgP1 Pl     => "tagħna" ;
-        AgP2 Pl     => "tagħkom" ;
-        AgP2Pl      => "tagħhom"
+    -- three of them, some of the boys
+    CountNP det np =
+      let
+        dets = case det.n of {
+          NumX Sg => wiehed ! np.a.g ;
+          _       => det.s ! np.a.g
         } ;
-      takesDet = True ;
-      joinsVerb = False ;
+      in {
+      s = \\c => case np.isPron of {
+        True  => dets ++ prep_minn.enclitic ! np.a;
+        False => dets ++ prep_minn.s ! (bool2definiteness np.isDefn) ++ np.s ! c
+        } ;
+      a = agrP3 (numform2num det.n) np.a.g ;
+      isPron = False ;
+      isDefn = np.isDefn ;
       } ;
 
   oper

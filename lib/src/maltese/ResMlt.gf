@@ -348,11 +348,49 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       isPresent = False ;
       } ;
 
+  {- Preposition ---------------------------------------------------------- -}
+
     Preposition = {
       s : Definiteness => Str ;
       enclitic : Agr => Str ; -- when suffixed by pronouns; magħ-ha
       takesDet : Bool ; -- True: fil- / False: fuq il-
       joinsVerb : Bool ; -- True for for_Prep (I.O. suffix)
+      } ;
+
+    prep_ta : Preposition = {
+      s = table {
+        Indefinite => "ta'" ;
+        Definite => makePreFull "tal-" "ta" "t'"
+      } ;
+      enclitic : Agr => Str = \\agr => case toVAgr agr of {
+        AgP1 Sg     => "tiegħi" ;
+        AgP2 Sg     => "tiegħek" ;
+        AgP3Sg Masc => "tiegħu" ;
+        AgP3Sg Fem  => "tagħha" ;
+        AgP1 Pl     => "tagħna" ;
+        AgP2 Pl     => "tagħkom" ;
+        AgP2Pl      => "tagħhom"
+        } ;
+      takesDet = True ;
+      joinsVerb = False ;
+      } ;
+
+    prep_minn : Preposition = {
+      s = table {
+        Indefinite => "minn" ;
+        Definite => makePreFull "mill-" "mi" "m"
+      } ;
+      enclitic : Agr => Str = \\agr => case toVAgr agr of {
+        AgP1 Sg     => "minni" ;
+        AgP2 Sg     => "minnek" ;
+        AgP3Sg Masc => "minnu" ;
+        AgP3Sg Fem  => "minnha" ;
+        AgP1 Pl     => "minna" ;
+        AgP2 Pl     => "minnkom" ;
+        AgP2Pl      => "minnhom"
+        } ;
+      takesDet = True ;
+      joinsVerb = False ;
       } ;
 
   {- Pronoun -------------------------------------------------------------- -}
@@ -1162,6 +1200,12 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
         #Consonant + #Consonant + ("ie" | #Vowel) + #Consonant => True ; -- ħliet
         #Consonant + #Consonant + ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- ħriġt
         _ => False
+      } ;
+
+    wiehed : Gender => Str =
+      table {
+        Masc => "wieħed" ;
+        Fem  => "waħda"
       } ;
 
     artIndef : Str = [] ; --- is this a source of leaks?
