@@ -11,7 +11,6 @@ function EditorMenu(editor,opts) {
         show_to_menu: true,
         show_random_button: true,
         show_import: true,
-        show_export: true,
     }
 
     // Apply supplied options
@@ -47,9 +46,7 @@ function EditorMenu(editor,opts) {
                 toggleHidden(t.ui.import.panel);
             })
         },
-        export_button: button("Export", function(){
-            alert(t.editor.ast.toString());
-        }),
+
         debug_toggle: button("⚙", function(){
             toggleHidden(element("debug"));
         })
@@ -57,7 +54,6 @@ function EditorMenu(editor,opts) {
     this.ui.to_toggle.title = "Select languages to linearise to (use Ctrl/Shift to select multiple)";
     this.ui.random_button.title = "Insert a randomly generated tree at the current node";
     this.ui.import.toggle.title = "Import an abstract syntax tree from a string (replaces current tree)";
-    this.ui.export_button.title = "Get the string representation of the abstract syntax tree";
     this.ui.debug_toggle.title = "Toggle the debug console";
 
     if (t.options.show_grammar_menu) {
@@ -95,11 +91,7 @@ function EditorMenu(editor,opts) {
             t.ui.import.button
         ]);
     }
-    if (t.options.show_export) {
-        appendChildren(t.container, [
-            t.ui.export_button,
-        ]);
-    }
+
     appendChildren(t.container, [t.ui.debug_toggle]);
 
     /* --- Client state initialisation -------------------------------------- */
@@ -187,7 +179,7 @@ EditorMenu.prototype.update_language_menu=function(menu,grammar) {
     // Replace the options in the menu with the languages in the grammar
     var langs=grammar.languages;
     menu.innerHTML="";
-	
+
     for(var i=0; i<langs.length; i++) {
 	var ln=langs[i].name;
 	if(!hasPrefix(ln,"Disamb")) {
@@ -200,4 +192,3 @@ EditorMenu.prototype.update_language_menu=function(menu,grammar) {
 	}
     }
 }
-

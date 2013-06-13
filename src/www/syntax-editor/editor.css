@@ -3,12 +3,12 @@ body.syntax-editor {
 }
 
 .hidden
-{ 
+{
   display:none;
 }
 
 .editor select#to_menu
-{ 
+{
   height: 10em;
   position: absolute;
   min-width: 5em;
@@ -35,7 +35,7 @@ body.syntax-editor {
   padding: 0.2em;
   }
 
-#tree
+#tree, #tree_str
 {
   white-space:pre;
   font-family: monospace;
@@ -57,16 +57,22 @@ body.syntax-editor {
   }
 
 #tree .node a
-{ 
+{
   cursor: pointer;
   }
 #tree .node a:hover
-{ 
+{
   text-decoration: underline;
   }
 #tree .node a.current
-{ 
+{
   font-weight: bold;
+  }
+
+#tree_str
+{
+  font-size:0.85em;
+  color:#666;
   }
 
 #refinements
@@ -99,7 +105,7 @@ body.syntax-editor {
   }
 
 .refinement
-{ 
+{
   margin: 0.1em;
   display: inline-block;
   cursor: pointer;
@@ -110,7 +116,7 @@ body.syntax-editor {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   }
 .refinement.disabled
-{ 
+{
   opacity: 0.5;
   }
 

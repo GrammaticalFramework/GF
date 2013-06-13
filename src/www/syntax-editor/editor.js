@@ -33,6 +33,8 @@ function Editor(gm,opts) {
 
         tree: div_id("tree"),
 
+        tree_str: div_id("tree_str"),
+
         actionbar: div_id("actions"),
         clear_button: button("Clear", function(){
             t.clear_node();
@@ -51,10 +53,11 @@ function Editor(gm,opts) {
     this.ui.clear_button.title = "Clear current node and all its children";
     this.ui.wrap_button.title = "Wrap the current node with a new function";
     this.ui.unwrap_button.title = "Replace parent of current node with current node (if possible)";
-    
+
     appendChildren(this.container, [
         t.ui.menubar,
         t.ui.tree,
+        t.ui.tree_str,
         t.ui.actionbar,
         t.ui.lin
     ]);
@@ -266,7 +269,7 @@ Editor.prototype.get_refinements=function(cat) {
 // Case 3: kids have diff types/number, prevent replacement (must clear first)
 Editor.prototype.select_refinement=function(fun) {
     var t = this;
-    
+
     // Check if current node is blank or childless (case 1)
     var blank = t.ast.is_writable();
 
@@ -427,7 +430,7 @@ Editor.prototype.unwrap = function() {
         alert("It is not possible to unwrap the top node");
         return;
     }
-    
+
     var child = t.ast.getCurrentNode();
     var parent = t.ast.getParent();
 
@@ -519,6 +522,7 @@ Editor.prototype.redraw_tree=function() {
     }
     with(this) {
         clear(ui.tree);
+        ui.tree_str.innerText = ast.toString();
         visit(ui.tree, new NodeID(), ast.root);
     }
 }
@@ -582,4 +586,3 @@ Editor.prototype.import_ast = function(abstr) {
     };
     t.server.pgf_call("abstrjson", args, cont, err);
 }
-
