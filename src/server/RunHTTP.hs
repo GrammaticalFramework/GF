@@ -4,9 +4,10 @@ import Network.CGI(ContentType(..))
 import Network.CGI.Protocol(CGIResult(..),CGIRequest(..),Input(..),
                             Headers,HeaderName(..))
 import Network.CGI.Monad(runCGIT)
-import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments)
+import Network.Shed.Httpd(initServer,Request(..),Response(..))
 import qualified Data.ByteString.Lazy.Char8 as BS(pack,unpack)
 import qualified Data.Map as M(fromList)
+import URLEncoding(decodeQuery)
 
 data Options = Options { documentRoot :: String, port :: Int } deriving Show
 
@@ -36,13 +37,15 @@ cgiReq root (Request method uri hdrs body) = CGIRequest vars inputs body'
            '?':s -> s
            s -> s
     al = maybe "" id $ lookup "Accept-Language" hdrs
-    inputs = map input $ queryToArguments $ fixplus qs  -- assumes method=="GET"
+--  inputs = map input $ queryToArguments $ fixplus qs  -- assumes method=="GET"
+    inputs = map input $ decodeQuery qs  -- assumes method=="GET"
     body' = BS.pack body
 
     input (name,val) = (name,Input (BS.pack val) Nothing plaintext)
     plaintext = ContentType "text" "plain" []
-
+{-
     fixplus = concatMap decode
       where
         decode '+' = "%20" -- httpd-shed bug workaround
         decode c   = [c]
+-}

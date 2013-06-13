@@ -24,8 +24,7 @@ import System.Posix.Files(getSymbolicLinkStatus,isSymbolicLink,removeLink,
 #endif
 import Control.Concurrent(newMVar,modifyMVar)
 import Network.URI(URI(..))
-import Network.Shed.Httpd(initServer,Request(..),Response(..),queryToArguments,
-                          noCache)
+import Network.Shed.Httpd(initServer,Request(..),Response(..),noCache)
 --import qualified Network.FastCGI as FCGI -- from hackage direct-fastcgi
 import Network.CGI(handleErrors,liftIO)
 import FastCGIUtils(handleCGIErrors)--,outputJSONP,stderrToFile
@@ -43,6 +42,7 @@ import Paths_gf(getDataDir,version)
 import GF.Infra.BuildInfo (buildInfo)
 import SimpleEditor.Convert(parseModule)
 import RunHTTP(cgiHandler)
+import URLEncoding(decodeQuery)
 
 --logFile :: FilePath
 --logFile = "pgf-error.log"
@@ -441,11 +441,17 @@ utf8inputs q = [(decodeString k,(decodeString v,v))|(k,v)<-inputs q]
 decoded = mapSnd fst
 raw = mapSnd snd
 
+inputs = decodeQuery
+{-
+-- Stay clear of queryToArgument, which uses unEscapeString, which had
+-- backward incompatible changes in network-2.4.1.1, see
+-- https://github.com/haskell/network/commit/f2168b1f8978b4ad9c504e545755f0795ac869ce
 inputs = queryToArguments . fixplus
   where
     fixplus = concatMap decode
     decode '+' = "%20" -- httpd-shed bug workaround
     decode c   = [c]
+-}
 
 mapFst f xys = [(f x,y)|(x,y)<-xys]
 mapSnd f xys = [(x,f y)|(x,y)<-xys]
