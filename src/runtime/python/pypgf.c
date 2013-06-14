@@ -457,7 +457,7 @@ Iter_fetch_expr(IterObject* self)
 	pyexpr->pool   = NULL;
 	pyexpr->expr   = ep->expr;
 	pyexpr->master = self->container;
-	Py_INCREF(self->container);
+	Py_XINCREF(self->container);
 
 	PyObject* res = Py_BuildValue("(f,O)", ep->prob, pyexpr);
 	Py_DECREF(pyexpr);
@@ -1508,6 +1508,7 @@ PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
 	pyres->max_count = max_count;
 	pyres->counter   = 0;
 	pyres->fetch     = Iter_fetch_expr;
+	pyres->container = (PyObject*) pyres;
 
 	GuPool *tmp_pool = gu_local_pool();
     GuString catname = gu_str_string(catname_s, tmp_pool);
