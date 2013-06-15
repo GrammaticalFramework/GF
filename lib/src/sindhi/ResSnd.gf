@@ -51,10 +51,10 @@ resource ResSnd = ParamX  ** open Prelude,Predef in {
 
   mkAdj1 : Str -> Adjective1 ;
   mkAdj1 nyrw = let end = last (nyrw) ;
-                   --nyr = if_then_else Str (eq end "ی") nyrw (tk 1 nyrw)
+                   --nyr = if_then_else Str (eq end "ي") nyrw (tk 1 nyrw)
 				   nyr = (tk 1 nyrw)
-                in adj1 (nyrw)    (nyr+"ی")  ( nyr+"ا") (nyr+"ا")  (nyrw)  (nyr+"ی")   (nyr+"ی")   (nyr+"ی")
-                        (nyr+"ا") (nyr+"ن") ( nyr+"ا")  (nyr+"ا") (nyr+"یون")  (nyr+"ین")   (nyr+"ین") (nyr+"یون")  ;
+                in adj1 (nyrw)    (nyr+"ي")  ( nyr+"ا") (nyr+"ا")  (nyrw)  (nyr+"ي")   (nyr+"ي")   (nyr+"ي")
+                        (nyr+"ا") (nyr+"ن") ( nyr+"ا")  (nyr+"ا") (nyr+"يون")  (nyr+"ين")   (nyr+"ين") (nyr+"يون")  ;
 						
 						
 
@@ -68,7 +68,7 @@ resource ResSnd = ParamX  ** open Prelude,Predef in {
    
  mkAdj2 : Str -> Adjective1 ;
  mkAdj2 young = adj1 (young)    (young)  (young ) (young)  (young)  (young)   (young)  (young) 
-                        (young) (young) (young )  (young) (young+"ین")  (young+"ین")   (young+"ین") (young+"ین") ;
+                        (young) (young) (young )  (young) (young+"ين")  (young+"ين")   (young+"ين") (young+"ين") ;
 						
 						
 
@@ -115,7 +115,7 @@ resource ResSnd = ParamX  ** open Prelude,Predef in {
        NPC c => ppf ! c;
        NPObj => ppf ! Obl ;
        NPErg => case (fromAgr a).p of {
-           (Pers3_Near|Pers3_Distant) => ppf ! Dir ++ "جی" ;
+           (Pers3_Near|Pers3_Distant) => ppf ! Dir ++ "جي" ;
 	   _			     => ppf ! Dir
 	   }
       } ;
@@ -192,86 +192,86 @@ resource ResSnd = ParamX  ** open Prelude,Predef in {
     copula : CTense -> Number -> PPerson -> Gender -> Str = \t,n,p,g -> 
 case <t,n,p,g> of {
 <CPresent,Sg,Pers1,Masc > => "ٿو";
-<CPresent,Sg,Pers1,Fem > => "ٿی" ;
+<CPresent,Sg,Pers1,Fem > => "ٿي" ;
 <CPresent,Sg,Pers2_Casual,Masc > => "ٿو" ;
-<CPresent,Sg,Pers2_Casual,Fem > => "ٿی" ;
+<CPresent,Sg,Pers2_Casual,Fem > => "ٿي" ;
 <CPresent,Sg,Pers2_Respect,Masc > => "ٿا" ;
-<CPresent,Sg,Pers2_Respect,Fem > => "ٿیون" ;
+<CPresent,Sg,Pers2_Respect,Fem > => "ٿيون" ;
 <CPresent,Sg,Pers3_Near,Masc > => "ٿو" ;
-<CPresent,Sg,Pers3_Near,Fem > => "ٿی" ;
+<CPresent,Sg,Pers3_Near,Fem > => "ٿي" ;
 <CPresent,Sg,Pers3_Distant,Masc > => "ٿو" ;
-<CPresent,Sg,Pers3_Distant,Fem > => "ٿی" ;
+<CPresent,Sg,Pers3_Distant,Fem > => "ٿي" ;
 <CPresent,Pl,Pers1,Masc > => "ٿا" ;
-<CPresent,Pl,Pers1,Fem > => "ٿیون" ;
+<CPresent,Pl,Pers1,Fem > => "ٿيون" ;
 <CPresent,Pl,Pers2_Casual,Masc > => "ٿا" ;
-<CPresent,Pl,Pers2_Casual,Fem > => "ٿی" ;
+<CPresent,Pl,Pers2_Casual,Fem > => "ٿي" ;
 <CPresent,Pl,Pers2_Respect,Masc > => "ٿا" ;
-<CPresent,Pl,Pers2_Respect,Fem > => "ٿیون" ;
+<CPresent,Pl,Pers2_Respect,Fem > => "ٿيون" ;
 <CPresent,Pl,Pers3_Near,Masc > => "ٿا" ;
-<CPresent,Pl,Pers3_Near,Fem > => "ٿیون" ;
+<CPresent,Pl,Pers3_Near,Fem > => "ٿيون" ;
 <CPresent,Pl,Pers3_Distant,Masc > => "ٿا" ;
-<CPresent,Pl,Pers3_Distant,Fem > => "ٿیون" ;
-<CPast,Sg,Pers1,Masc > => "ھیم" ;
-<CPast,Sg,Pers1,Fem > => "ھیم" ;
-<CPast,Sg,Pers2_Casual,Masc > => "ھ۶ین" ;
-<CPast,Sg,Pers2_Casual,Fem > => "ھ۶ین" ;
-<CPast,Sg,Pers2_Respect,Masc > => "ھ۶و" ;
-<CPast,Sg,Pers2_Respect,Fem > => "ھ۶یون" ;
-<CPast,Sg,Pers3_Near,_ > => "اھی" ;
---	<CPast,Sg,Pers3_Near,Fem > => "اھ۶" ;
-<CPast,Sg,Pers3_Distant,Masc > => "ھیو" ;
-<CPast,Sg,Pers3_Distant,Fem > => "ھ۶ی" ;
+<CPresent,Pl,Pers3_Distant,Fem > => "ٿيون" ;
+<CPast,Sg,Pers1,Masc > => "ھيم" ;
+<CPast,Sg,Pers1,Fem > => "ھيم" ;
+<CPast,Sg,Pers2_Casual,Masc > => "ھئين" ;
+<CPast,Sg,Pers2_Casual,Fem > => "ھئين" ;
+<CPast,Sg,Pers2_Respect,Masc > => "ھئو" ;
+<CPast,Sg,Pers2_Respect,Fem > => "ھئيون" ;
+<CPast,Sg,Pers3_Near,_ > => "اھي" ;
+--	<CPast,Sg,Pers3_Near,Fem > => "اھئ" ;
+<CPast,Sg,Pers3_Distant,Masc > => "ھيو" ;
+<CPast,Sg,Pers3_Distant,Fem > => "ھئي" ;
 
-<CPast,Pl,Pers1,Masc > => "ھ۶اسین" ;
-<CPast,Pl,Pers1,Fem > => "ھیوسین" ;
-<CPast,Pl,Pers2_Casual,_ > => "ھ۶ا" ;
-<CPast,Pl,Pers2_Respect,_ > => "ھیو" ;
-<CPast,Pl,Pers3_Near,Masc > => "ھ۶ا" ;
-<CPast,Pl,Pers3_Near,Fem > => "ھ۶یون" ;
-<CPast,Pl,Pers3_Distant,Masc > => "ھ۶ا" ;
-<CPast,Pl,Pers3_Distant,Fem > => "ھیون" ;
+<CPast,Pl,Pers1,Masc > => "ھئاسين" ;
+<CPast,Pl,Pers1,Fem > => "ھيوسين" ;
+<CPast,Pl,Pers2_Casual,_ > => "ھئا" ;
+<CPast,Pl,Pers2_Respect,_ > => "ھيو" ;
+<CPast,Pl,Pers3_Near,Masc > => "ھئا" ;
+<CPast,Pl,Pers3_Near,Fem > => "ھئيون" ;
+<CPast,Pl,Pers3_Distant,Masc > => "ھئا" ;
+<CPast,Pl,Pers3_Distant,Fem > => "ھيون" ;
 
 <CFuture,Sg,Pers1,Masc > => "ھوندس" ;
 <CFuture,Sg,Pers1,Fem > => "ھوندس" ;
-<CFuture,Sg,Pers2_Casual,Masc > => "ھوندین" ;
-<CFuture,Sg,Pers2_Casual,Fem > => "ھوندین" ;
-<CFuture,Sg,Pers2_Respect,Masc > => "ھوندو۶ " ;
-<CFuture,Sg,Pers2_Respect,Fem > => "ھوندو۶ " ;
-<CFuture,Sg,Pers3_Near,Masc > => "ھوندو " ;
-<CFuture,Sg,Pers3_Near,Fem > => "ھوندی" ;
-<CFuture,Sg,Pers3_Distant,Masc > => "ھوندو " ;
-<CFuture,Sg,Pers3_Distant,Fem > => "ھوندی" ;
-<CFuture,Pl,Pers1,Masc > => "ھونداسین" ;
-<CFuture,Pl,Pers1,Fem > => "ھوندیونسین" ;
-<CFuture,Pl,Pers2_Casual,Masc > => "ھوندو۶ " ;
-<CFuture,Pl,Pers2_Casual,Fem > => "ھوندیوین" ;
-<CFuture,Pl,Pers2_Respect,Masc > => "ھوندو۶ " ;
-<CFuture,Pl,Pers2_Respect,Fem > => "ھوندیوین" ;
+<CFuture,Sg,Pers2_Casual,Masc > => "ھوندين" ;
+<CFuture,Sg,Pers2_Casual,Fem > => "ھوندين" ;
+<CFuture,Sg,Pers2_Respect,Masc > => "ھوندؤ" ;
+<CFuture,Sg,Pers2_Respect,Fem > => "ھوندؤ" ;
+<CFuture,Sg,Pers3_Near,Masc > => "ھوندو" ;
+<CFuture,Sg,Pers3_Near,Fem > => "ھوندي" ;
+<CFuture,Sg,Pers3_Distant,Masc > => "ھوندو" ;
+<CFuture,Sg,Pers3_Distant,Fem > => "ھوندي" ;
+<CFuture,Pl,Pers1,Masc > => "ھونداسين" ;
+<CFuture,Pl,Pers1,Fem > => "ھونديونسين" ;
+<CFuture,Pl,Pers2_Casual,Masc > => "ھوندؤ" ;
+<CFuture,Pl,Pers2_Casual,Fem > => "ھونديوين" ;
+<CFuture,Pl,Pers2_Respect,Masc > => "ھوندؤ" ;
+<CFuture,Pl,Pers2_Respect,Fem > => "ھونديوين" ;
 <CFuture,Pl,Pers3_Near,Masc > => "ھوندا" ;
-<CFuture,Pl,Pers3_Near,Fem > => "ھوندیون" ;
+<CFuture,Pl,Pers3_Near,Fem > => "ھونديون" ;
 <CFuture,Pl,Pers3_Distant,Masc > => "ھوندا" ;
-<CFuture,Pl,Pers3_Distant,Fem > => "ھوندیون" ;
+<CFuture,Pl,Pers3_Distant,Fem > => "ھونديون" ;
 
-<CContinuous,Sg,Pers1,Masc > => "اھیان" ;
-<CContinuous,Sg,Pers1,Fem > => "اھیان" ;
-<CContinuous,Sg,Pers2_Casual,Masc > => "اھین" ;
-<CContinuous,Sg,Pers2_Casual,Fem > => "اھین" ;
-<CContinuous,Sg,Pers2_Respect,Masc > => "اھیو " ;
-<CContinuous,Sg,Pers2_Respect,Fem > => "اھیو " ;
-<CContinuous,Sg,Pers3_Near,Masc > => "اھی " ;
-<CContinuous,Sg,Pers3_Near,Fem > => "اھی" ;
-<CContinuous,Sg,Pers3_Distant,Masc > => "اھی " ;
-<CContinuous,Sg,Pers3_Distant,Fem > => "اھی" ;
-<CContinuous,Pl,Pers1,Masc > => "اھیون" ;
-<CContinuous,Pl,Pers1,Fem > => "اھیون" ;
-<CContinuous,Pl,Pers2_Casual,Masc > => "اھیو  " ;
-<CContinuous,Pl,Pers2_Casual,Fem > => "اھیو " ;
-<CContinuous,Pl,Pers2_Respect,Masc > => "اھیو  " ;
-<CContinuous,Pl,Pers2_Respect,Fem > => "اھیو " ;
-<CContinuous,Pl,Pers3_Near,Masc > => "اھن" ;
-<CContinuous,Pl,Pers3_Near,Fem > => "اھن" ;
-<CContinuous,Pl,Pers3_Distant,Masc > => "اھن" ;
-<CContinuous,Pl,Pers3_Distant,Fem > => "اھن" 
+<CContinuous,Sg,Pers1,Masc > => "آھيان" ;
+<CContinuous,Sg,Pers1,Fem > => "آھيان" ;
+<CContinuous,Sg,Pers2_Casual,Masc > => "آھين" ;
+<CContinuous,Sg,Pers2_Casual,Fem > => "آھين" ;
+<CContinuous,Sg,Pers2_Respect,Masc > => "آھيو " ;
+<CContinuous,Sg,Pers2_Respect,Fem > => "آھيو " ;
+<CContinuous,Sg,Pers3_Near,Masc > => "آھي " ;
+<CContinuous,Sg,Pers3_Near,Fem > => "آھي" ;
+<CContinuous,Sg,Pers3_Distant,Masc > => "آھي " ;
+<CContinuous,Sg,Pers3_Distant,Fem > => "آھي" ;
+<CContinuous,Pl,Pers1,Masc > => "آھيون" ;
+<CContinuous,Pl,Pers1,Fem > => "آھيون" ;
+<CContinuous,Pl,Pers2_Casual,Masc > => "آھيو  " ;
+<CContinuous,Pl,Pers2_Casual,Fem > => "آھيو " ;
+<CContinuous,Pl,Pers2_Respect,Masc > => "آھيو  " ;
+<CContinuous,Pl,Pers2_Respect,Fem > => "آھيو " ;
+<CContinuous,Pl,Pers3_Near,Masc > => "آھن" ;
+<CContinuous,Pl,Pers3_Near,Fem > => "آھن" ;
+<CContinuous,Pl,Pers3_Distant,Masc > => "آھن" ;
+<CContinuous,Pl,Pers3_Distant,Fem > => "آھن" 
 
 
 } ;
@@ -295,7 +295,7 @@ case <t,n,p,g> of {
 	 | VPPerfPresCont
 	 | VPPerfPastCont
 	 | VPPerfFutCont
-     | VPSubj     -- subj           na       "I مای گo"
+     | VPSubj     -- subj           na       "I ماي گo"
      ;
 
     VPHForm = 
@@ -363,20 +363,20 @@ case <t,n,p,g> of {
 ------------------------
 	 
     raha : Gender -> Number -> Str = \g,n -> 
-	   (mkAdj1 "ریا").s ! n ! g ! Dir ;
+	   (mkAdj1 "ريا").s ! n ! g ! Dir ;
     rahanDa : Gender -> Number -> Str = \g,n -> 
 	   (mkAdj1 "رھندا").s ! n ! g ! Dir ;	   
 	   
     pya : Gender -> Number -> Str = \g,n -> 
-	   (mkAdj1 "پیا").s ! n ! g ! Dir ;	   
+	   (mkAdj1 "پيا").s ! n ! g ! Dir ;	   
 
 	cka : Gender -> Number -> Str = \g,n -> 
-	  (mkAdj1 "گیا").s ! n ! g ! Dir ;
+	  (mkAdj1 "گيا").s ! n ! g ! Dir ;
 	  
 	hw : PPerson -> Number -> Str = \pp,n ->    
 	 case <pp,n> of {
 	 <Pers1,_> => "hwwاN";
-	 <Pers2_Casual,Sg>    => "hwwیN";
+	 <Pers2_Casual,Sg>    => "hwwيN";
 	 <Pers2_Casual,Pl>    => "hww";
 	 <Pers2_Respect,_>    => "hww";
 	 <Pers3_Distant,Sg>    => "hwwE";
@@ -483,8 +483,8 @@ case <t,n,p,g> of {
 					  {fin = copula CPast n p g ; inf = (vp.s ! VPTense VPFutr agr).inf ++ rahanDa g n} ;					
 					VPPerfFutCont => 
 					  {fin = copula CFuture n p g ; inf = (vp.s ! VPTense VPFutr agr).inf ++ rahanDa g n} ;					
-					VPSubj   => case vp.prog of { True => {fin = (vp.s !  VPTense VPFutr agr).inf ++ hw p n ; inf = "شاید" } ;
-					                                _    => {fin = (vp.s !  VPTense VPFutr agr).inf ; inf = "شاید" } } 
+					VPSubj   => case vp.prog of { True => {fin = (vp.s !  VPTense VPFutr agr).inf ++ hw p n ; inf = "شايد" } ;
+					                                _    => {fin = (vp.s !  VPTense VPFutr agr).inf ; inf = "شايد" } } 
                    
 					};
 					
@@ -537,7 +537,7 @@ case <t,n,p,g> of {
 					  {fin = copula CPast n p g ; inf = (vp.s ! VPStem).inf ++ pya g n } ; 
 					VPPerfFutCont => 
 					  {fin = copula CFuture n p g ; inf = (vp.s ! VPStem).inf ++ pya g n ++ hw p n } ;
-					VPSubj   => {fin = (vp.s ! VPTense VPPres agr).inf ; inf = "شاید"  }
+					VPSubj   => {fin = (vp.s ! VPTense VPPres agr).inf ; inf = "شايد"  }
                     
 					};
 
@@ -605,7 +605,7 @@ case <t,n,p,g> of {
     infVV : Bool -> VPH -> Str = \isAux,vp -> 
         case isAux of {False =>  (vp.comp ! (toAgr Sg Pers1 Masc)) ++ vp.inf  ; True => (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  }; -- need to be checked and should be covered in urdu as well
     infV2V : Bool -> VPH -> Str = \isAux,vp -> 
-      case isAux of {False =>  (vp.comp ! (toAgr Sg Pers1 Masc)) ++ vp.inf ++ "دی"  ; True => (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  ++ "دی"}; -- need to be checked and should be covered in urdu as well  
+      case isAux of {False =>  (vp.comp ! (toAgr Sg Pers1 Masc)) ++ vp.inf ++ "دي"  ; True => (vp.comp ! (toAgr Sg Pers1 Masc)) ++ (vp.s ! VPImp).fin  ++ "دي"}; -- need to be checked and should be covered in urdu as well  
 
     insertObject : NP -> VPHSlash -> VPH = \np,vps -> {
       s = vps.s ;

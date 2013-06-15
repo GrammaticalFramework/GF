@@ -7,14 +7,14 @@ concrete QuestionSnd of Question = CatSnd ** open ResSnd, Prelude in {
     QuestCl cl = {
       s = \\t,p,qf => case qf of { 
 	                  QDir => cl.s ! t ! p ! OQuest;
-                      QIndir => "جیڪڏھن" ++ cl.s ! t! p ! ODir
+                      QIndir => "جيڪڏھن" ++ cl.s ! t! p ! ODir
 					  }
 				};	  
 
     QuestVP qp vp = 
        let cl = mkSClause ("") (Ag qp.g qp.n Pers3_Near) vp;
            qp1 = qp.s ! Dir;
-           qp2 = qp.s ! Obl ++ "جی"
+           qp2 = qp.s ! Obl ++ "جي"
           in { s = \\t,p,o => case t of {
 		             VPImpPast => case vp.subj of {VIntrans => qp1 ++ cl.s ! t ! p ! ODir; _ => qp2 ++ cl.s ! t ! p ! ODir};
 					 _         => qp1 ++ cl.s ! t ! p ! ODir
@@ -22,7 +22,7 @@ concrete QuestionSnd of Question = CatSnd ** open ResSnd, Prelude in {
 					}; 
     QuestSlash ip slash = 
      let ip1 = ip.s ! Dir;
-         ip2 = ip.s ! Obl ++ "جی"
+         ip2 = ip.s ! Obl ++ "جي"
      in {
       s = \\t,p,o => case t of { 
             VPImpPast => ip2 ++ slash.s ! t ! p ! ODir;
