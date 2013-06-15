@@ -7,12 +7,12 @@ concrete RelativeSnd of Relative = CatSnd ** open ResSnd in {
 
     RelCl cl = {
       s = \\t,p,o,agr => case <t,giveNumber agr,giveGender agr> of {
-	                    <VPImpPast,Sg,_> => "جھنکی" ++ cl.s ! t ! p ! o ; 
+	                    <VPImpPast,Sg,_> => "جھنکي" ++ cl.s ! t ! p ! o ; 
 			    <VPImpPast,Pl,_> => "جھنجو" ++ cl.s ! t ! p ! o ;
-			    <_,Sg,Masc>          => "جیھڙو" ++ cl.s ! t ! p ! o ;
-			    <_,Sg,Fem>          => "جیھڙا" ++ cl.s ! t ! p ! o ;
-			    <_,Pl,Masc>          => "جیھڙا" ++ cl.s ! t ! p ! o ;
-			    <_,Pl,Fem>          => "جیھڙیون" ++ cl.s ! t ! p ! o 
+			    <_,Sg,Masc>          => "جيھڙو" ++ cl.s ! t ! p ! o ;
+			    <_,Sg,Fem>          => "جيھڙا" ++ cl.s ! t ! p ! o ;
+			    <_,Pl,Masc>          => "جيھڙا" ++ cl.s ! t ! p ! o ;
+			    <_,Pl,Fem>          => "جيھڙيون" ++ cl.s ! t ! p ! o 
 			};
       c = Dir
       } ;
@@ -58,29 +58,29 @@ concrete RelativeSnd of Relative = CatSnd ** open ResSnd in {
 		
     	    ResSnd.Dir  => "جھڙا" ; 
             ResSnd.Obl  => "جنھن" ;
-            ResSnd.Voc  => "جھڙی" ;
-	    ResSnd.Abl => "جھڙی"
+            ResSnd.Voc  => "جھڙي" ;
+	    ResSnd.Abl => "جھڙي"
 	    };
 	  Fem => table {
 		
-    	    ResSnd.Dir  => "جھڙی" ; 
+    	    ResSnd.Dir  => "جھڙي" ; 
             ResSnd.Obl  => "جنھن" ;
-            ResSnd.Voc  => "جھڙی" ;
-	    ResSnd.Abl => "جھڙی"
+            ResSnd.Voc  => "جھڙي" ;
+	    ResSnd.Abl => "جھڙي"
 	    }
 	    };
 	Pl => table {
 	    Masc => table {
-                    ResSnd.Dir  => "جھڙی" ;
-		    ResSnd.Obl  => "جھڙی" ;
-		    ResSnd.Voc  => "جھڙی" ;
-		    ResSnd.Abl => "جھڙی"
+                    ResSnd.Dir  => "جھڙي" ;
+		    ResSnd.Obl  => "جھڙي" ;
+		    ResSnd.Voc  => "جھڙي" ;
+		    ResSnd.Abl => "جھڙي"
 			};
 	    Fem => table {
-                    ResSnd.Dir  => "جھڙی" ;
-		    ResSnd.Obl  => "جھڙی" ;
-		    ResSnd.Voc  => "جھڙی" ;
-		    ResSnd.Abl => "جھڙی"
+                    ResSnd.Dir  => "جھڙي" ;
+		    ResSnd.Obl  => "جھڙي" ;
+		    ResSnd.Voc  => "جھڙي" ;
+		    ResSnd.Abl => "جھڙي"
 			}
 	  }
        }; 
