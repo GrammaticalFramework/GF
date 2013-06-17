@@ -7,6 +7,8 @@ AC_CONFIG_SRCDIR([gu/mem.c])
 AC_CONFIG_AUX_DIR([scripts])
 AC_CONFIG_MACRO_DIR([m4])
 
+AC_CANONICAL_TARGET
+
 AM_INIT_AUTOMAKE([1.7.9])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
@@ -37,6 +39,16 @@ AC_C_FAM_IN_MEM
 AC_C_STATEMENT_EXPRESSIONS
 AC_C_ASCII
 
+case "$target_cpu" in
+	i?86)	 cpu=i386; AC_DEFINE(LIGHTNING_I386, 1,
+		   [Define if lightning is targeting the x86 architecture]) ;;
+	sparc*)	 cpu=sparc; AC_DEFINE(LIGHTNING_SPARC, 1,
+		   [Define if lightning is targeting the x86 architecture]) ;;
+	powerpc) cpu=ppc; AC_DEFINE(LIGHTNING_PPC, 1,
+		   [Define if lightning is targeting the x86 architecture]) ;;
+	*)	 AC_MSG_ERROR([cpu $target_cpu not supported])	;;
+esac
+
 dnl Doxygen support
 DX_PS_FEATURE(OFF)	
 DX_PDF_FEATURE(OFF)	
@@ -52,6 +64,13 @@ DX_ARG_ABLE(dev, [include internal development documentation],
 	     [\$(guinclude_HEADERS) \$(pgfinclude_HEADERS)])])
 DX_INIT_DOXYGEN(libpgf)
 
+
+cpu_dir=pgf/lightning/$cpu
+AC_CONFIG_LINKS(pgf/lightning/asm.h:$cpu_dir/asm.h			dnl
+                pgf/lightning/fp.h:$cpu_dir/fp.h			dnl
+                pgf/lightning/core.h:$cpu_dir/core.h		dnl
+                pgf/lightning/funcs.h:$cpu_dir/funcs.h, [],
+  [cpu_dir=$cpu_dir])
 
 AC_CONFIG_FILES([Makefile
 	         libgu.pc
