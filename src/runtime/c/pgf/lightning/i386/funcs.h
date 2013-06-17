@@ -53,7 +53,7 @@ jit_flush_code(void *dest, void *end)
      jit_flush_code as an mprotect.  */
 #ifdef __linux__
   static unsigned long prev_page = 0, prev_length = 0;
-  int page, length;
+  unsigned long page, length;
 #ifdef PAGESIZE
   const int page_size = PAGESIZE;
 #else
@@ -62,7 +62,7 @@ jit_flush_code(void *dest, void *end)
     page_size = sysconf (_SC_PAGESIZE);
 #endif
 
-  page = (long) dest & ~(page_size - 1);
+  page = (unsigned long) dest & ~(page_size - 1);
   length = ((char *) end - (char *) page + page_size - 1) & ~(page_size - 1);
 
   /* Simple-minded attempt at optimizing the common case where a single
