@@ -666,6 +666,15 @@ pypgf_new_python_lexer(PyObject* pylexer, GuPool* pool)
 	return ((PgfLexer*) lexer);
 }
 
+#if (    (PY_VERSION_HEX <  0x02070000) \
+     || ((PY_VERSION_HEX >= 0x03000000) \
+      && (PY_VERSION_HEX <  0x03010000)) )
+
+#define PyPool_New(pool) \
+		PyCObject_FromVoidPtr(pool, gu_pool_free)
+
+#else
+
 #define PGF_CONTAINER_NAME "pgf.Container"
 
 void pypgf_container_descructor(PyObject *capsule)
@@ -673,6 +682,12 @@ void pypgf_container_descructor(PyObject *capsule)
 	GuPool* pool = PyCapsule_GetPointer(capsule, PGF_CONTAINER_NAME);
 	gu_pool_free(pool);
 }
+
+#define PyPool_New(pool) \
+		PyCapsule_New(pool, PGF_CONTAINER_NAME, \
+		              pypgf_container_descructor)
+
+#endif
 
 static IterObject*
 Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
@@ -712,10 +727,8 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	Py_XINCREF(pyres->grammar);
 
 	GuPool* out_pool = gu_new_pool();
-	
-	PyObject* py_pool =
-		PyCapsule_New(out_pool, PGF_CONTAINER_NAME, 
-		              pypgf_container_descructor);
+
+	PyObject* py_pool = PyPool_New(out_pool);
 	pyres->container = PyTuple_Pack(2, pyres->grammar, py_pool);
 	Py_DECREF(py_pool);
 
