@@ -679,7 +679,7 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
 	static char *kwlist[] = {"sentence", "tokens", "cat", "n", NULL};
 
-	size_t len;
+	int len;
 	const uint8_t *buf = NULL;
 	PyObject* py_lexer = NULL;
 	const char *catname_s = NULL;
@@ -770,7 +770,7 @@ Concr_getCompletions(ConcrObject* self, PyObject *args, PyObject *keywds)
 	static char *kwlist[] = {"sentence", "tokens", "cat", 
 	                         "prefix", "n", NULL};
 
-	size_t len;
+	int len;
 	const uint8_t *buf = NULL;
 	PyObject* py_lexer = NULL;
 	const char *catname_s = NULL;
