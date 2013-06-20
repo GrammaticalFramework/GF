@@ -43,6 +43,8 @@ AC_C_ASCII
 case "$target_cpu" in
 	i?86)	 cpu=i386; AC_DEFINE(LIGHTNING_I386, 1,
 		   [Define if lightning is targeting the x86 architecture]) ;;
+	x86_64)	 cpu=i386; AC_DEFINE(LIGHTNING_I386, 1,
+		   [Define if lightning is targeting the x86 architecture]) ;;
 	sparc*)	 cpu=sparc; AC_DEFINE(LIGHTNING_SPARC, 1,
 		   [Define if lightning is targeting the x86 architecture]) ;;
 	powerpc) cpu=ppc; AC_DEFINE(LIGHTNING_PPC, 1,

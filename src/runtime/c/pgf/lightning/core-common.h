@@ -45,12 +45,6 @@ typedef struct {
   struct jit_local_state jitl;
 } jit_state;
 
-#ifdef jit_init
-static jit_state 			_jit = jit_init ();
-#else
-static jit_state 			_jit;
-#endif
-
 #define JIT_NOREG			(-1)
 #define JIT_R0				JIT_R(0)
 #define JIT_R1				JIT_R(1)
