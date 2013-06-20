@@ -7,14 +7,14 @@
 
 /***********************************************************************
  *
- * Copyright 2000, 2001, 2002 Free Software Foundation, Inc.
+ * Copyright 2000, 2001, 2002, 2006 Free Software Foundation, Inc.
  * Written by Paolo Bonzini.
  *
  * This file is part of GNU lightning.
  *
  * GNU lightning is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation; either version 2.1, or (at your option)
+ * by the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  * 
  * GNU lightning is distributed in the hope that it will be useful, but 
@@ -24,8 +24,8 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with GNU lightning; see the file COPYING.LESSER; if not, write to the
- * Free Software Foundation, 59 Temple Place - Suite 330, Boston,
- * MA 02111-1307, USA.
+ * Free Software Foundation, 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
  *
  ***********************************************************************/
 
@@ -62,7 +62,7 @@ jit_flush_code(void *dest, void *end)
     page_size = sysconf (_SC_PAGESIZE);
 #endif
 
-  page = (unsigned long) dest & ~(page_size - 1);
+  page = (long) dest & ~(page_size - 1);
   length = ((char *) end - (char *) page + page_size - 1) & ~(page_size - 1);
 
   /* Simple-minded attempt at optimizing the common case where a single
@@ -79,7 +79,8 @@ jit_flush_code(void *dest, void *end)
 
   /* See if we can extend the previously mprotect'ed memory area towards
      lower addresses: the highest address remains the same as before.  */
-  else if (page < prev_page && page + length <= prev_page + prev_length)
+  else if (page < prev_page && page + length >= prev_page
+          && page + length <= prev_page + prev_length)
     prev_length += prev_page - page, prev_page = page;
 
   /* Nothing to do, replace the area.  */
