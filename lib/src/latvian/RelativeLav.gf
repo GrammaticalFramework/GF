@@ -20,7 +20,7 @@ oper
 
   -- TODO: PassV2 verbs jāsaskaņo ar objektu, nevis subjektu (by8means_Prep: AgP3 Sg Masc) - done?
   mkRelClause : RP -> CatLav.VP -> RCl = \rp,vp ->  
-    let subjInTopic : Bool = case <vp.voice, vp.topic> of {
+    let subjInTopic : Bool = case <vp.voice, vp.leftVal> of {
       <Act,  Nom> => True ;
       <Act,  _  > => False ;
       <Pass, Acc> => False ;
@@ -30,11 +30,11 @@ oper
       s = \\mood,pol,agr =>
         case mood of {         -- subject
           Deb _ _ => rp.s ! Masc ! Dat ;  --# notpresent
-          _       => rp.s ! Masc ! vp.topic
+          _       => rp.s ! Masc ! vp.leftVal
         } ++
         case subjInTopic of {  -- verb
-          True  => buildVerb vp.v mood pol (AgrP3 (fromAgr agr).num (fromAgr agr).gend) Pos vp.agr.focus ;
-          False => buildVerb vp.v mood pol vp.agr.subj                                  Pos vp.agr.focus
+          True  => buildVerb vp.v mood pol (AgrP3 (fromAgr agr).num (fromAgr agr).gend) Pos vp.rightPol ;
+          False => buildVerb vp.v mood pol vp.rightAgr                                  Pos vp.rightPol
         } ++
         vp.compl ! agr         -- object(s), complements, adverbial modifiers
     } ;

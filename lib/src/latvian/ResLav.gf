@@ -38,7 +38,7 @@ param
       Ind Anteriority Tense
     | Rel Anteriority Tense  --# notpresent
     | Deb Anteriority Tense  --# notpresent
-    | Condit Anteriority  --# notpresent
+    | Condit Anteriority     --# notpresent
     ;
 
   VForm =
@@ -50,7 +50,7 @@ param
     | VDebRel  -- the relative subtype of debitive
     | VPart Voice Gender Number Case ;
 
-  -- Number and Gender has to be agreed in predicative nominal clauses
+  -- Number and gender has to be agreed in predicative nominal clauses
   Agreement =
       AgrP1 Number Gender
     | AgrP2 Number Gender
@@ -74,45 +74,45 @@ oper
   Adjective : Type = { s : AForm => Str } ;
 
   Preposition : Type = { s : Str ; c : Number => Case } ;
-  -- For simple case-based valences, the preposition is empty ([])
-  -- TODO: position of prepositions (pre or post) ?
 
-  Verb : Type = { s : Polarity => VForm => Str ; topic : Case } ;
+  Verb : Type = { s : Polarity => VForm => Str ; leftVal : Case } ;
 
   VP : Type = {
-    v : Verb ;
-    agr : {
-      subj : Agreement ;        -- the verb-subject agreement (the subject can be in the focus part of a clause)
-      focus : Polarity          -- the verb-focus agreement (for the double negation)  -- TODO: jāpārsauc par pol, lai nejūk citur
-    } ;
-    compl : Agreement => Str ;  -- the complement-subject agreement
-    voice : Voice ;
-    topic : Case                -- the valence of the topic NP (typically, the subject)
+    v        : Verb ;
+    compl    : Agreement => Str ;  -- the subject-complement agreement
+    voice    : Voice ;
+    leftVal  : Case ;              -- the left valence (typically, the subject)
+    rightAgr : Agreement ;         -- for the potential subject-verb agreement (the subject can be on the right side)
+    rightPol : Polarity            -- for the potential double negation
   } ;
 
-  VPSlash : Type = VP ** { focus : Preposition } ;  -- the valence of the focus NP (typically, the object)
-
-  insertObj : (Agreement => Str) -> VP -> VP = \obj,vp -> {
-    v     = vp.v ;
-    agr   = vp.agr ;
-    compl = \\agr => vp.compl ! agr ++ obj ! agr ;
-    voice = vp.voice ;
-    topic = vp.topic
-  } ;
-
-  insertObjC : (Agreement => Str) -> VPSlash -> VPSlash = \obj,vp ->
-    insertObj obj vp ** { focus = vp.focus } ;
-
-  insertObjPre : (Agreement => Str) -> VP -> VP = \obj,vp -> {
-    v     = vp.v ;
-    agr   = vp.agr ;
-    compl = \\agr => obj ! agr ++ vp.compl ! agr ;
-    voice = vp.voice ;
-    topic = vp.topic
-  } ;
+  VPSlash : Type = VP ** { rightVal : Preposition } ;  -- the right valence (typically, the object)
 
   buildVP : VP -> Polarity -> VForm -> Agreement -> Str = \vp,pol,vf,agr ->
     vp.v.s ! pol ! vf ++ vp.compl ! agr ;
+
+  insertObj : (Agreement => Str) -> VP -> VP = \obj,vp -> {
+    v        = vp.v ;
+    compl    = \\agr => vp.compl ! agr ++ obj ! agr ;
+    voice    = vp.voice ;
+    leftVal  = vp.leftVal ;
+    rightAgr = vp.rightAgr ;
+    rightPol = vp.rightPol
+  } ;
+
+  insertObjPre : (Agreement => Str) -> VP -> VP = \obj,vp -> {
+    v        = vp.v ;
+    compl    = \\agr => obj ! agr ++ vp.compl ! agr ;
+    voice    = vp.voice ;
+    leftVal  = vp.leftVal ;
+    rightAgr = vp.rightAgr ;
+    rightPol = vp.rightPol
+  } ;
+
+  insertObjSlash : (Agreement => Str) -> VPSlash -> VPSlash = \obj,vp ->
+    insertObj obj vp ** { rightVal = vp.rightVal } ;
+
+  getInf : Verb -> Str = \v -> v.s ! Pos ! VInf ;
 
   toAgr : Person -> Number -> Gender -> Agreement = \pers,num,gend ->
     case pers of {
@@ -132,16 +132,15 @@ oper
     let
       a1 = fromAgr agr1 ;
       a2 = fromAgr agr2
-    in
-      toAgr
-        (conjPerson a1.pers a2.pers) -- FIXME: personu apvienošana ir tricky un ir jāuztaisa korekti
-        (conjNumber a1.num a2.num)
-        (conjGender a1.gend a2.gend) ;
+    in toAgr
+      (conjPerson a1.pers a2.pers)
+      (conjNumber a1.num a2.num)
+      (conjGender a1.gend a2.gend) ;
 
   conjGender : Gender -> Gender -> Gender = \gend1,gend2 ->
     case gend1 of {
-      Fem => gend2 ;
-      _   => Masc
+      Fem  => gend2 ;
+      Masc => Masc
     } ;
 
   vowel : pattern Str = #("a"|"ā"|"e"|"ē"|"i"|"ī"|"o"|"u"|"ū") ;

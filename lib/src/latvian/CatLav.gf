@@ -61,20 +61,11 @@ lincat
 
   Pron = Pronoun ;
 
-  Det = {
-    s : Gender => Case => Str ;
-    num : Number ;
-    defin : Definiteness ;
-    pol : Polarity
-  } ;
+  Det = { s : Gender => Case => Str ; num : Number ; defin : Definiteness ; pol : Polarity } ;
 
   Predet = { s : Gender => Str } ;
 
-  Quant = {
-    s : Gender => Number => Case => Str ;
-    defin : Definiteness ;
-    pol : Polarity
-  } ;
+  Quant = { s : Gender => Number => Case => Str ; defin : Definiteness ; pol : Polarity } ;
 
   Num = { s : Gender => Case => Str ; num : Number ; hasCard : Bool } ;
 
@@ -100,13 +91,13 @@ lincat
 
   V, VV, VQ, VA = Verb ;
 
-  V2, V2V, V2Q, V2A = Verb ** { focus : Preposition } ;
+  V2, V2V, V2Q, V2A = Verb ** { rightVal : Preposition } ;
 
-  V3 = Verb ** { focus1, focus2 : Preposition } ;
+  V3 = Verb ** { rightVal1, rightVal2 : Preposition } ;
 
   VS = Verb ** { conj : Subj } ;
 
-  V2S = Verb ** { conj : Subj ; focus : Preposition } ;
+  V2S = Verb ** { conj : Subj ; rightVal : Preposition } ;
 
   A = Adjective ;
 

@@ -9,35 +9,35 @@ oper
   Verb_TMP : Type = {s : VForm => Str} ;
 
   -- Second and third conjugations
-  mkVerb : Str -> Conjugation -> Case -> Verb = \lemma,conj,topic -> {
+  mkVerb : Str -> Conjugation -> Case -> Verb = \lemma,conj,leftVal -> {
     s = table {
       Pos => (mkVerb_Pos lemma conj).s ;
       Neg => (filter_Neg (mkVerb_Pos ("ne"+lemma) conj)).s
     } ;
-    topic = topic
+    leftVal = leftVal
   } ;
 
   -- First conjugation
-  mkVerbC1 : Str -> Str -> Str -> Case -> Verb = \lemma,lemma2,lemma3,topic -> {
+  mkVerbC1 : Str -> Str -> Str -> Case -> Verb = \lemma,lemma2,lemma3,leftVal -> {
     s = table {
       Pos => (mkVerbC1_Pos lemma lemma2 lemma3).s ;
       Neg => (filter_Neg (mkVerbC1_Pos ("ne"+lemma) ("ne"+lemma2) ("ne"+lemma3))).s
     } ;
-    topic = topic
+    leftVal = leftVal
   } ;
 
   mkVerb_Pos : Str -> Conjugation -> Verb_TMP = \lemma,conj ->
     case lemma of {
-      -- TODO: "ir" =>
-      s + ("t")    => mkRegVerb lemma conj ;
-      s + ("ties") => mkReflVerb lemma conj
+      -- TODO: "ir"
+      s + ("ties") => mkReflVerb lemma conj ;
+      _            => mkRegVerb lemma conj
     } ;
 
   mkVerbC1_Pos : Str -> Str -> Str -> Verb_TMP = \lemma,lemma2,lemma3 ->
     case lemma of {
-      -- TODO: "ir" =>
-      s + ("t") => mkVerb_C1 lemma lemma2 lemma3 ;
-      s + ("ties") => mkVerb_C1_Refl lemma lemma2 lemma3
+      -- TODO: "ir"
+      s + ("ties") => mkVerb_C1_Refl lemma lemma2 lemma3 ;
+      _            => mkVerb_C1 lemma lemma2 lemma3
     } ;
 
   mkRegVerb : Str -> Conjugation -> Verb_TMP = \lemma,conj ->
@@ -344,19 +344,19 @@ oper
       }
     } ;
 
-  mkVerb_Irreg : Str -> Case -> Verb = \lemma,topic ->
+  mkVerb_Irreg : Str -> Case -> Verb = \lemma,leftVal ->
     case lemma of {
-      "būt"   => mkVerb_Irreg_Be topic ;
-      "iet"   => mkVerb_Irreg_Go topic ;
-      #prefix + "iet"   => mkVerb_Irreg_Go_Prefix (Predef.tk 3 lemma) topic ;
-      "gulēt" => mkVerb_Irreg_Sleep topic
+      "būt"   => mkVerb_Irreg_Be leftVal ;
+      "iet"   => mkVerb_Irreg_Go leftVal ;
+      #prefix + "iet"   => mkVerb_Irreg_Go_Prefix (Predef.tk 3 lemma) leftVal ;
+      "gulēt" => mkVerb_Irreg_Sleep leftVal
       -- FIXME: "gulēt" should be treated as a regular verb (C3: gulēt, sēdēt etc.)
       -- TODO: add "dot"/Give (+prefix, +refl)
       -- TODO: multiple prefixes
       -- TODO: move to IrregLav?
     } ;
 
-  mkVerb_Irreg_Be : Case -> Verb = \topic -> {
+  mkVerb_Irreg_Be : Case -> Verb = \leftVal -> {
     s = table {
       Pos => table {
         VInd P1 Sg Pres => "esmu" ;
@@ -378,12 +378,12 @@ oper
         x => (mkVerb_C1 "nebūt" "neesu" "nebiju").s ! x -- the incorrect 'neesu' will be overriden
       }
     } ;
-    topic = topic
+    leftVal = leftVal
   } ;
 
-  mkVerb_Irreg_Go : Case -> Verb = \topic -> mkVerb_Irreg_Go_Prefix "" topic ;
+  mkVerb_Irreg_Go : Case -> Verb = \leftVal -> mkVerb_Irreg_Go_Prefix "" leftVal ;
 
-  mkVerb_Irreg_Go_Prefix : Str -> Case -> Verb = \pref,topic -> {
+  mkVerb_Irreg_Go_Prefix : Str -> Case -> Verb = \pref,leftVal -> {
     s = table {
       Pos => table {
         VInd P3 _ Pres => pref + "iet" ;
@@ -397,10 +397,10 @@ oper
         x => (mkVerb_C1 ("ne" + pref + "iet") ("ne" + pref + "eju") ("ne" + pref + "gāju")).s ! x
       }
     } ;
-    topic = topic
+    leftVal = leftVal
   } ;
 
-  mkVerb_Irreg_Sleep : Case -> Verb = \topic -> {
+  mkVerb_Irreg_Sleep : Case -> Verb = \leftVal -> {
     s = table {
       Pos => table {
         VInd P2 Sg Pres => (mkVerb_C3 "gulēt").s ! VInd P2 Sg Pres ;
@@ -429,7 +429,7 @@ oper
         x => (mkVerb_C3 "negulēt").s ! x
       }
     } ;
-    topic = topic
+    leftVal = leftVal
   } ;
 
   -- Auxiliaries: palatalization rules
