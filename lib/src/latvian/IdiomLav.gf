@@ -18,7 +18,7 @@ lin
     let agr = AgrP3 Sg Masc
     in {
       s = \\mood,pol =>
-        buildVerb vp.v mood pol agr Pos vp.agr.focus ++  -- Verb
+        buildVerb vp.v mood pol agr Pos vp.rightPol ++  -- Verb
         vp.compl ! agr  -- Object(s), complements, adverbial modifiers
     } ;
 
@@ -26,7 +26,7 @@ lin
     let agr = AgrP3 Sg Masc
     in {
       s = \\mood,pol =>
-        buildVerb vp.v mood pol agr Pos vp.agr.focus ++
+        buildVerb vp.v mood pol agr Pos vp.rightPol ++
         vp.compl ! agr
     } ;
 
@@ -53,7 +53,7 @@ lin
     ;
 
   ImpP3 np vp = {
-    s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.agr np.pol vp.agr.focus ++ vp.compl ! np.agr ;
+    s = "lai" ++ np.s ! Nom ++ buildVerb vp.v (Ind Simul Pres) Pos np.agr np.pol vp.rightPol ++ vp.compl ! np.agr ;
   } ;
 
   -- FIXME: placeholder

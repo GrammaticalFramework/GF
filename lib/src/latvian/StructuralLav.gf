@@ -241,7 +241,7 @@ lin
   if_Subj = ss "ja" ;
   that_Subj = ss "ka" ;
 
-  all_Predet = { s = table { Masc => "visi" ; Fem => "visas" } } ;
+  all_Predet = { s = table { Masc => "visi" ; Fem => "visas" } } ; -- FIXME: cases
   only_Predet = { s = table { _ => "tikai"} } ;
   most_Predet = { s = table { _ => "vairums"} } ;
 

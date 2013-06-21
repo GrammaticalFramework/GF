@@ -18,7 +18,7 @@ lin
 
   ImpVP vp = { s = \\pol,num => vp.v.s ! pol ! (VImp num) ++ vp.compl ! (AgrP2 num Masc) } ;
 
-  SlashVP np vp = mkClause np vp ** { prep = vp.focus } ;
+  SlashVP np vp = mkClause np vp ** { prep = vp.rightVal } ;
 
   AdvSlash slash adv = {
     s  = \\m,p => slash.s ! m ! p ++ adv.s ;
@@ -33,10 +33,11 @@ lin
     np
     (lin VP {
       v = vs ;
-      agr   = { subj = variants {} ; focus = Pos } ;
       compl = \\_ => "," ++ vs.conj.s ++ sslash.s ;
       voice = Act ;
-      topic = vs.topic      
+      leftVal = vs.leftVal ;
+      rightAgr = AgrP3 Sg Masc ;
+      rightPol = Pos ;
     }) ** { prep = sslash.prep } ;
 
   -- ComplVS v s  = { v = v ; compl = \\_ => "," ++ v.subj.s ++ s.s } ;
@@ -65,27 +66,27 @@ lin
 oper
   -- TODO: PassV2 verbs jāsaskaņo ar objektu, nevis subjektu (by8means_Prep: AgP3 Sg Masc)
   mkClause : NP -> CatLav.VP -> Cl = \np,vp ->  
-    let agr : Agreement = case <vp.voice, vp.topic> of {
+    let agr : Agreement = case <vp.voice, vp.leftVal> of {
       <Act,  Nom> => np.agr ;
-      <Act,  _  > => vp.agr.subj ;
-      <Pass, Acc> => vp.agr.subj ;
+      <Act,  _  > => vp.rightAgr ;
+      <Pass, Acc> => vp.rightAgr ;
       <Pass, _  > => np.agr
     }
     in lin Cl {
       s = \\mood,pol =>
-        case mood of {                                      -- subject
+        case mood of {                                     -- subject
           Deb _ _ => np.s ! Dat ;  --# notpresent
-          _       => np.s ! vp.topic
+          _       => np.s ! vp.leftVal
         } ++
-        buildVerb vp.v mood pol agr np.pol vp.agr.focus ++  -- verb
-        vp.compl ! np.agr                                   -- object(s), complements, adverbial modifiers
+        buildVerb vp.v mood pol agr np.pol vp.rightPol ++  -- verb
+        vp.compl ! np.agr                                  -- object(s), complements, adverbial modifiers
     } ;
 
   -- FIXME: quick&dirty - lai kompilētos pret RGL API
   -- Eng: PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp
   -- Ar SC nav iespējams neko saskaņot (sk. Cat.gf un Common.gf)
   mkClauseSC : SC -> CatLav.VP -> Cl = \sc,vp -> lin Cl {
-    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgrP3 Sg Masc) Pos vp.agr.focus ++ vp.compl ! (AgrP3 Sg Masc)
+    s = \\mood,pol => sc.s ++ buildVerb vp.v mood pol (AgrP3 Sg Masc) Pos vp.rightPol ++ vp.compl ! (AgrP3 Sg Masc)
   } ;
 
 }

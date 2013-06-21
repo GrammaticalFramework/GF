@@ -80,7 +80,7 @@ lin
       s = \\agrAgr =>
         temp.s ++
         -- TODO: verb moods other than Ind
-        buildVerb vp.v (Ind temp.a temp.t) pol.p agrAgr.agr agrAgr.pol vp.agr.focus ++
+        buildVerb vp.v (Ind temp.a temp.t) pol.p agrAgr.agr agrAgr.pol vp.rightPol ++
         vp.compl ! agrAgr.agr
       } ;
     

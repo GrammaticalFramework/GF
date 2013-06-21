@@ -15,7 +15,7 @@ flags
 lin
   QuestCl cl = { s = \\m,p => "vai" ++ cl.s ! m ! p } ;
 
-  QuestVP ip vp = { s = \\m,p => ip.s ! Nom ++ buildVerb vp.v m p (AgrP3 ip.num Masc) Pos vp.agr.focus } ;
+  QuestVP ip vp = { s = \\m,p => ip.s ! Nom ++ buildVerb vp.v m p (AgrP3 ip.num Masc) Pos vp.rightPol } ;
 
   QuestSlash ip slash = { s = \\m,p => slash.prep.s ++ ip.s ! (slash.prep.c ! ip.num) ++ slash.s ! m ! p } ;
 
