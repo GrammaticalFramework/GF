@@ -352,12 +352,16 @@ gu_string_is_prefix(GuString s1, GuString s2)
 		str2 = (char*) &p[1];
 	}
 
-	while (sz1 > 0 && sz2 > 0) {
+	
+	if (sz1 > sz2)
+		return false;
+
+	for (size_t sz = sz1; sz--; sz > 0) {
 		if (*str1 != *str2)
 			return false;
 			
-		str1++; sz1--;
-		str2++; sz2--;
+		str1++;
+		str2++;
 	}
 
 	return true;
