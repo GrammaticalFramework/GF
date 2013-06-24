@@ -378,7 +378,20 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 				gu_putc(']', wtr, err);
 				GuString s = gu_string_buf_freeze(sbuf, pool);
 
-				ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
+				if (ccat != NULL) {
+					ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
+				} else {
+					PgfCncTreeLit* clit = 
+						gu_new_variant(PGF_CNC_TREE_LIT,
+									   PgfCncTreeLit,
+									   &ret, pool);
+					clit->fid = lzn->fid++;
+					PgfLiteralStr* lit = 
+						gu_new_variant(PGF_LITERAL_STR,
+									   PgfLiteralStr,
+									   &clit->lit, pool);
+					lit->val = s;
+				}
 
 				gu_pool_free(tmp_pool);
 				goto done;
