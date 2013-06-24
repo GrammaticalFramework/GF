@@ -110,10 +110,10 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     vowelChangesStrong : Pattern -> (Number => Pattern) = \patt ->
       table {
         Sg => case <patt.V1,patt.V2> of {
-          <"a","a"> => mkPattern "o" "o" ; -- RABAT > ORBOT (but: ITLOB, ILGĦAB, AĦBAT)
+          <"a","a"> => mkPattern "o" "o" ; -- RABAT > ORBOT (but: ILGĦAB, AĦBAT)
           <"a","e"> => mkPattern "a" "e" ; -- GĦAMEL > AGĦMEL
           <"e","e"> => mkPattern "i" "e" ; -- FEHEM > IFHEM
-          <"e","a"> => mkPattern "i" "a" ; -- FETAĦ > IFTAĦ
+          <"e","a"> => mkPattern "i" "a" ; -- FETAĦ > IFTAĦ (but: ONFOĦ)
           <"i","e"> => mkPattern "i" "e" ; -- KITEB > IKTEB
           <"o","o"> => mkPattern "o" "o"   -- GĦOĠOB > OGĦĠOB
         };
@@ -168,7 +168,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     vowelChangesLiquidMedial : Pattern -> (Number => Pattern) = \patt ->
       table {
         Sg => case <patt.V1,patt.V2> of {
-          <"a","a"> => mkPattern "i" "o" ; -- TALAB > ITLOB
+          <"a","a"> => mkPattern "i" "o" ; -- TALAB > ITLOB but ĦARAQ > AĦRAQ
           <"a","e"> => mkPattern "o" "o" ; -- ĦAREĠ > OĦROĠ
           <"e","e"> => mkPattern "e" "e" ; -- ĦELES > EĦLES
           <"e","a"> => mkPattern "i" "o" ; -- ŻELAQ > IŻLOQ
@@ -233,13 +233,19 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     -- Params: Root, Pattern
     conjAssimilativePerf : Root -> Pattern -> (VAgr => Str) = \root,patt ->
       let
-        wasal = root.C1 + patt.V1 + root.C2 + patt.V2 + root.C3 ;
+        wasal = case root.C3 of {
+          "għ" => root.C1 + patt.V1 + root.C2 + patt.V2 + "j" ;
+          _    => root.C1 + patt.V1 + root.C2 + patt.V2 + root.C3
+          } ;
         wasl  = root.C1 + patt.V1 + root.C2 + root.C3 ;
       in
         table {
           AgP1 Sg    => wasal + "t" ;  -- Jiena WASALT
           AgP2 Sg    => wasal + "t" ;  -- Inti WASALT
-          AgP3Sg Masc=> wasal ;  -- Huwa WASAL
+          AgP3Sg Masc=> case root.C3 of {
+            "għ" => root.C1 + patt.V1 + root.C2 + patt.V2 + "'" ;  -- Huwa WAQA'
+            _    => wasal  -- Huwa WASAL
+            } ;
           AgP3Sg Fem => wasl + "et" ;  -- Hija WASLET
           AgP1 Pl    => wasal + "na" ;  -- Aħna WASALNA
           AgP2 Pl    => wasal + "tu" ;  -- Intom WASALTU
@@ -254,7 +260,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     -- Params: Root, Pattern
     conjAssimilativeImp : Root -> Pattern -> (Number => Str) = \root,patt ->
       table {
-        Sg => patt.V1 + root.C2 + patt.V2 + root.C3 ;  -- Inti: ASAL
+        Sg => patt.V1 + root.C2 + patt.V2 + case root.C3 of { "għ" => "'" ; _ => root.C3 } ;  -- Inti: ASAL
         Pl => patt.V1 + root.C2 + root.C3 + "u"  -- Intom: ASLU
       } ;
 
