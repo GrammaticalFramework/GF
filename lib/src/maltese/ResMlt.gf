@@ -489,10 +489,12 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
           ftahn + "a" => ftahn + "ie" ;
           fet + h@#Cns + "et" => fet + h + "it" ;
           fet + "aħ" => fet + "ħ" ;
+          qat + "a'" => qat + "a" ; -- waqa' -> ma waqax
           _ => s
           } ;
         ftahni  : Str = case s of {
           ftahn + "a" => ftahn + "i" ;
+          qat + "a'" => qat + "agħ" ;
           _ => ftahnie
           } ;
       in {
@@ -504,10 +506,15 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
         jiftah  : Str = s ;
         jifth : Str = case s of {
           jift + "aħ" => jift + "ħ" ;
+          jaq + "a'" => jaq + "a" ; -- jaqa' -> ma jaqax
           _ => s
           } ;
+        jaqagh : Str = case s of {
+          jaq + "a'" => jaq + "agħ" ;
+          _ => jifth
+          } ;
       in {
-        s1 = jiftah ; s2 = jifth ; s3 = jifth ;
+        s1 = jiftah ; s2 = jifth ; s3 = jaqagh ;
       } ;
 
     -- Convert old verb form table into one with stem variants
@@ -515,6 +522,7 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       \\vf => case vf of {
         VPerf _ => stemVariantsPerf (tbl ! vf) ;
         VImpf _ => stemVariantsImpf (tbl ! vf) ;
+        VImp  _ => stemVariantsImpf (tbl ! vf) ;
         _  => mkVerbStems (tbl ! vf)
       } ;
 
@@ -591,7 +599,7 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
 
   oper
 
-    --- TEMP FUNCTION
+    -- Pick the correct form of a verb, adding aux
     pickVerbForm : {s : VForm => VerbStems} -> Tense -> Anteriority -> Polarity -> Agr -> VerbParts = \verb,tense,ant,pol,agr ->
       let
         vagr : VAgr = toVAgr agr ;
@@ -920,9 +928,9 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       ind = NullAgr ;
       } ;
 
-    -- There is no infinitive in Maltese; use perfective
+    -- There is no infinitive in Maltese; use imperfective
     infVP : VerbPhrase -> Anteriority -> Polarity -> Agr -> Str = \vp,ant,pol,agr ->
-        joinVP vp Past ant pol agr ++ vp.s2 ! agr ;
+        joinVP vp Pres ant pol agr ++ vp.s2 ! agr ;
 
     Aux = {
       s : Tense => Polarity => Str ;
