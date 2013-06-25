@@ -104,6 +104,7 @@ libpgf_la_SOURCES = \
 	pgf/expr.h \
 	pgf/parser.c \
 	pgf/parser.h \
+	pgf/jit.c \
 	pgf/parseval.c \
 	pgf/lexer.c \
 	pgf/lexer.h \

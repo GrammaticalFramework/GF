@@ -1,39 +1,62 @@
 #include <pgf/pgf.h>
 #include <pgf/data.h>
+#include <pgf/reasoner.h>
 #include <gu/file.h>
-#include <math.h>
-#include <stdio.h>
 
 //#define PGF_REASONER_DEBUG
 
-typedef struct PgfExprState PgfExprState;
-
 typedef struct {
-	GuBuf* conts;
+	GuBuf* parents;
 	GuBuf* exprs;
 	prob_t outside_prob;
 } PgfAnswers;
 
-struct PgfExprState {
-	PgfAnswers* answers;
-	PgfExprProb ep;
-	PgfHypos hypos;
-	size_t arg_idx;
+#ifdef PGF_REASONER_DEBUG
+typedef void (*PgfStatePrinter)(PgfReasonerState* st,
+                                GuWriter* wtr, GuExn* err, 
+                                GuPool* tmp_pool);
+#endif
+
+struct PgfReasonerState {
+	// the jitter expects that continuation is the first field
+	PgfPredicate continuation;
+#ifdef PGF_REASONER_DEBUG
+	PgfStatePrinter print;
+#endif
+	prob_t prob;
 };
 
-typedef enum {
-	PGF_EXPR_QSTATE_PREDICT,
-	PGF_EXPR_QSTATE_COMBINE1,
-	PGF_EXPR_QSTATE_COMBINE2
-} PGF_EXPR_QSTATE_KIND;
+struct PgfExprState {
+	// base must be the first field in order to be able to cast
+	// from PgfExprState to PgfReasonerState
+	PgfReasonerState base;
+	PgfAnswers* answers;
+	PgfExpr expr;
+#ifdef PGF_REASONER_DEBUG
+	size_t n_args;
+	size_t arg_idx;
+#endif
+};
 
 typedef struct {
-	prob_t prob;
-	PGF_EXPR_QSTATE_KIND kind;
-	void*  single;
-	size_t choice_idx;
-	GuBuf* choices;
-} PgfExprQState;
+	// base must be the first field in order to be able to cast
+	// from PgfCombine2State to PgfReasonerState
+	PgfReasonerState base;
+	GuBuf* exprs;
+	PgfExprState* parent;
+	size_t n_choices;
+	size_t choice;
+} PgfCombine1State;
+
+typedef struct {
+	// base must be the first field in order to be able to cast
+	// from PgfCombine2State to PgfReasonerState
+	PgfReasonerState base;
+	GuBuf* parents;
+	PgfExprProb* ep;
+	size_t n_choices;
+	size_t choice;
+} PgfCombine2State;
 
 static GU_DEFINE_TYPE(PgfAnswers, abstract);
 
@@ -41,69 +64,68 @@ typedef GuStringMap PgfAbswersMap;
 static GU_DEFINE_TYPE(PgfAbswersMap, GuStringMap, gu_ptr_type(PgfAnswers),
                       &gu_null_struct);
 
-typedef struct {
+struct PgfReasoner {
+	GuPool* pool;
 	GuPool* tmp_pool;
 	PgfAbstr* abstract;
 	PgfAbswersMap* table;
 	GuBuf* pqueue;
+	GuBuf* exprs;
 	PgfExprEnum en;
-} PgfReasoner;
+};
 
 static int
-cmp_expr_qstate(GuOrder* self, const void* a, const void* b)
+cmp_expr_state(GuOrder* self, const void* a, const void* b)
 {
-	PgfExprQState *q1 = *((PgfExprQState **) a);
-	PgfExprQState *q2 = *((PgfExprQState **) b);
+	PgfReasonerState *st1 = *((PgfReasonerState **) a);
+	PgfReasonerState *st2 = *((PgfReasonerState **) b);
 	
-	if (q1->prob < q2->prob)
+	if (st1->prob < st2->prob)
 		return -1;
-	else if (q1->prob > q2->prob)
+	else if (st1->prob > st2->prob)
 		return 1;
 	else
 		return 0;
 }
 
 static GuOrder
-pgf_expr_qstate_order = { cmp_expr_qstate };
+pgf_expr_state_order = { cmp_expr_state };
 
 #ifdef PGF_REASONER_DEBUG
 static void
-pgf_print_expr_state(PgfExprState* st,
-                     GuWriter* wtr, GuExn* err, GuBuf* stack)
+pgf_print_parent_state(PgfExprState* st,
+                       GuWriter* wtr, GuExn* err, GuBuf* stack)
 {
-	gu_buf_push(stack, int, (gu_seq_length(st->hypos) - st->arg_idx - 1));
+	gu_buf_push(stack, int, (st->n_args - st->arg_idx - 1));
 
-	PgfExprState* cont = gu_buf_get(st->answers->conts, PgfExprState*, 0);
-	if (cont != NULL)
-		pgf_print_expr_state(cont, wtr, err, stack);
+	PgfExprState* parent = gu_buf_get(st->answers->parents, PgfExprState*, 0);
+	if (parent != NULL)
+		pgf_print_parent_state(parent, wtr, err, stack);
 
 	gu_puts(" (", wtr, err);
-	pgf_print_expr(st->ep.expr, 0, wtr, err);
+	pgf_print_expr(st->expr, 0, wtr, err);
 }
 
 static void
-pgf_print_expr_state0(PgfExprState* st,
-                      GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
+pgf_print_expr_state(PgfExprState* st,
+                     GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
 {	
-	prob_t prob = st->answers->outside_prob+st->ep.prob;
-	gu_printf(wtr, err, "[%f]", prob);
-
-	size_t n_args = gu_seq_length(st->hypos);
+	gu_printf(wtr, err, "[%f] ", st->base.prob);
 
 	GuBuf* stack = gu_new_buf(int, tmp_pool);
-	if (n_args > 0)
-		gu_buf_push(stack, int, n_args - st->arg_idx);
+	if (st->n_args > 0)
+		gu_buf_push(stack, int, st->n_args - st->arg_idx);
 
 	PgfExprState* cont =
-		gu_buf_get(st->answers->conts, PgfExprState*, 0);
+		gu_buf_get(st->answers->parents, PgfExprState*, 0);
 	if (cont != NULL)
-		pgf_print_expr_state(cont, wtr, err, stack);
+		pgf_print_parent_state(cont, wtr, err, stack);
 
-	if (n_args > 0)
+	if (st->n_args > 0)
 		gu_puts(" (", wtr, err);
 	else
 		gu_puts(" ", wtr, err);
-	pgf_print_expr(st->ep.expr, 0, wtr, err);
+	pgf_print_expr(st->expr, 0, wtr, err);
 
 	size_t n_counts = gu_buf_length(stack);
 	for (size_t i = 0; i < n_counts; i++) {
@@ -118,130 +140,208 @@ pgf_print_expr_state0(PgfExprState* st,
 #endif
 
 static PgfExprState*
-pgf_reasoner_combine(PgfReasoner* rs,
-                     PgfExprState* st, PgfExprProb* ep,
-                     GuPool* pool)
-{
-	PgfExprState* nst = 
-		gu_new(PgfExprState, rs->tmp_pool);
-	nst->answers = st->answers;
-	nst->ep.expr =
-		gu_new_variant_i(pool, PGF_EXPR_APP,
+pgf_combine1_to_expr(PgfCombine1State* st, GuPool* tmp_pool) {
+	PgfExprProb* ep =
+		gu_buf_get(st->exprs, PgfExprProb*, st->choice);
+
+	PgfExprState* nst = gu_new(PgfExprState, tmp_pool);
+	nst->base.continuation = st->parent->base.continuation;
+	nst->base.prob = st->base.prob;
+	nst->answers = st->parent->answers;
+	nst->expr =
+		gu_new_variant_i(tmp_pool, PGF_EXPR_APP,
 				PgfExprApp,
-				.fun = st->ep.expr,
+				.fun = st->parent->expr,
 				.arg = ep->expr);
-	nst->ep.prob = st->ep.prob+ep->prob;
-	nst->hypos = st->hypos;
-	nst->arg_idx = st->arg_idx+1;
+#ifdef PGF_REASONER_DEBUG
+	nst->base.print = (PgfStatePrinter) pgf_print_expr_state;
+	nst->n_args     = st->parent->n_args;
+	nst->arg_idx    = st->parent->arg_idx+1;
+#endif
+
 	return nst;
 }
 
-static void
-pgf_reasoner_predict(PgfReasoner* rs, PgfExprState* cont,
-                     prob_t outside_prob, PgfCId cat,
-                     GuPool* pool)
+static PgfExprState*
+pgf_combine2_to_expr(PgfCombine2State* st, GuPool* tmp_pool)
 {
+	PgfExprState* parent =
+		gu_buf_get(st->parents, PgfExprState*, st->choice);
+	if (parent == NULL)
+		return NULL;
+
+	PgfExprState* nst =
+		gu_new(PgfExprState, tmp_pool);
+	nst->base.continuation = parent->base.continuation;
+	nst->base.prob         = st->base.prob;
+	nst->answers = parent->answers;
+	nst->expr    =
+		gu_new_variant_i(tmp_pool, PGF_EXPR_APP,
+				PgfExprApp,
+				.fun = parent->expr,
+				.arg = st->ep->expr);
+#ifdef PGF_REASONER_DEBUG
+	nst->base.print = (PgfStatePrinter) pgf_print_expr_state;
+	nst->n_args  = parent->n_args;
+	nst->arg_idx = parent->arg_idx+1;
+#endif
+
+	return nst;
+}
+
+#ifdef PGF_REASONER_DEBUG
+static void
+pgf_print_combine1_state(PgfCombine1State* st,
+                         GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
+{
+	PgfExprState* nst = pgf_combine1_to_expr(st, tmp_pool);
+	pgf_print_expr_state(nst, wtr, err, tmp_pool);
+}
+
+static void
+pgf_print_combine2_state(PgfCombine2State* st,
+                         GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
+{
+	PgfExprState* nst = pgf_combine2_to_expr(st, tmp_pool);
+	if (nst != NULL)
+		pgf_print_expr_state(nst, wtr, err, tmp_pool);
+}
+#endif
+
+static void
+pgf_combine1(PgfReasoner* rs, PgfCombine1State* st)
+{
+	PgfExprState* nst = pgf_combine1_to_expr(st, rs->tmp_pool);
+	nst->base.continuation(rs, &nst->base);
+
+	st->choice++;
+
+	if (st->choice < st->n_choices) {
+		PgfExprProb* ep =
+			gu_buf_get(st->exprs, PgfExprProb*, st->choice);
+
+		st->base.prob = st->parent->base.prob + ep->prob;
+		gu_buf_heap_push(rs->pqueue, &pgf_expr_state_order, &st);
+	}
+}
+
+void
+pgf_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun)
+{
+	PgfCId cat = absfun->type->cid;
+
 	PgfAnswers* answers = gu_map_get(rs->table, &cat, PgfAnswers*);
 	if (answers == NULL) {
 		answers = gu_new(PgfAnswers, rs->tmp_pool);
-		answers->conts = gu_new_buf(PgfExprState*, rs->tmp_pool);
-		answers->exprs = gu_new_buf(PgfExprProb*, rs->tmp_pool);
-		answers->outside_prob = outside_prob;
+		answers->parents = gu_new_buf(PgfExprState*, rs->tmp_pool);
+		answers->exprs   = gu_new_buf(PgfExprProb*, rs->tmp_pool);
+		answers->outside_prob = parent->base.prob;
 
 		gu_map_put(rs->table, &cat, PgfAnswers*, answers);
 	}
 
-	gu_buf_push(answers->conts, PgfExprState*, cont);
+	gu_buf_push(answers->parents, PgfExprState*, parent);
 
-	if (gu_buf_length(answers->conts) == 1) {
-		PgfAbsCat* abscat = gu_map_get(rs->abstract->cats, &cat, PgfAbsCat*);
-		if (abscat == NULL) {
-			return;
-		}
-
-		if (gu_buf_length(abscat->functions) > 0) {
-			PgfExprQState *q = gu_new(PgfExprQState, rs->tmp_pool);
-			q->kind = PGF_EXPR_QSTATE_PREDICT;
-			q->single = answers;
-			q->choice_idx = 0;
-			q->choices = abscat->functions;
-
-			q->prob = answers->outside_prob + gu_buf_get(q->choices, PgfAbsFun*, 0)->ep.prob;
-			gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
-		}
+	if (gu_buf_length(answers->parents) == 1) {
+		PgfExprState* st = gu_new(PgfExprState, rs->tmp_pool);
+		st->base.continuation = (PgfPredicate) absfun->predicate;
+		st->base.prob = answers->outside_prob + absfun->ep.prob;
+		st->answers = answers;
+		st->expr = absfun->ep.expr;
+#ifdef PGF_REASONER_DEBUG
+		st->base.print = (PgfStatePrinter) pgf_print_expr_state;
+		st->n_args = gu_seq_length(absfun->type->hypos);
+		st->arg_idx = 0;
+#endif
+		gu_buf_heap_push(rs->pqueue, &pgf_expr_state_order, &st);
 	} else {
-		if (gu_buf_length(answers->exprs) > 0) {
-			PgfExprQState *q = gu_new(PgfExprQState, rs->tmp_pool);
-			q->prob = cont->ep.prob + gu_buf_get(answers->exprs, PgfExprProb*, 0)->prob;
-			q->kind = PGF_EXPR_QSTATE_COMBINE1;
-			q->single = cont;
-			q->choice_idx = 0;
-			q->choices = answers->exprs;
+		size_t n_exprs = gu_buf_length(answers->exprs);
+		if (n_exprs > 0) {
+			PgfExprProb* ep =
+				gu_buf_get(answers->exprs, PgfExprProb*, 0);
 
-			gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
+			PgfCombine1State* nst = gu_new(PgfCombine1State, rs->tmp_pool);
+			nst->base.continuation = (PgfPredicate) pgf_combine1;
+			nst->base.prob         = parent->base.prob + ep->prob;
+			nst->exprs             = answers->exprs;
+			nst->choice            = 0;
+			nst->n_choices         = gu_buf_length(answers->exprs);
+			nst->parent            = parent;
+#ifdef PGF_REASONER_DEBUG
+			nst->base.print = (PgfStatePrinter) pgf_print_combine1_state;
+#endif
+			gu_buf_heap_push(rs->pqueue, &pgf_expr_state_order, &nst);
 		}
 	}
 }
 
+void
+pgf_try_else(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun)
+{
+	PgfExprState *st = gu_new(PgfExprState, rs->tmp_pool);
+	st->base.continuation = (PgfPredicate) absfun->predicate;
+	st->base.prob = prev->answers->outside_prob + absfun->ep.prob;
+	st->answers   = prev->answers;
+	st->expr      = absfun->ep.expr;
+#ifdef PGF_REASONER_DEBUG
+	st->base.print = (PgfStatePrinter) pgf_print_expr_state;
+	st->n_args  = gu_seq_length(absfun->type->hypos);
+	st->arg_idx = 0;
+#endif
+	gu_buf_heap_push(rs->pqueue, &pgf_expr_state_order, &st);
+}
+
+static void
+pgf_combine2(PgfReasoner* rs, PgfCombine2State* st)
+{
+	PgfExprState* nst = pgf_combine2_to_expr(st, rs->tmp_pool);
+	if (nst != NULL) {
+		nst->base.continuation(rs, &nst->base);
+	}
+
+	st->choice++;
+
+	if (st->choice < st->n_choices) {
+		PgfExprState* parent =
+			gu_buf_get(st->parents, PgfExprState*, st->choice);
+
+		st->base.prob = parent->base.prob + st->ep->prob;
+		gu_buf_heap_push(rs->pqueue, &pgf_expr_state_order, &st);
+	}
+}
+
+void
+pgf_complete(PgfReasoner* rs, PgfExprState* st)
+{
+	PgfExprProb* ep = gu_new(PgfExprProb, rs->pool);
+	ep->prob = st->base.prob - st->answers->outside_prob;
+	ep->expr = st->expr;
+	gu_buf_push(st->answers->exprs, PgfExprProb*, ep);
+
+	PgfCombine2State* nst = gu_new(PgfCombine2State, rs->tmp_pool);
+	nst->base.continuation = (PgfPredicate) pgf_combine2;
+	nst->base.prob         = st->base.prob;
+	nst->parents           = st->answers->parents;
+	nst->choice            = 0;
+	nst->n_choices         = gu_buf_length(st->answers->parents);
+	nst->ep                = ep;
+#ifdef PGF_REASONER_DEBUG
+	nst->base.print = (PgfStatePrinter) pgf_print_combine2_state;
+#endif
+	nst->base.continuation(rs, &nst->base);
+}
+
 static PgfExprProb*
-pgf_reasoner_next(PgfReasoner* rs, GuPool* pool)
+pgf_reasoner_next(PgfReasoner* rs)
 {
 	if (rs->tmp_pool == NULL)
 		return NULL;
+		
+	size_t n_exprs = gu_buf_length(rs->exprs);
 
 	while (gu_buf_length(rs->pqueue) > 0) {
-		PgfExprQState* q;
-		gu_buf_heap_pop(rs->pqueue, &pgf_expr_qstate_order, &q);
-
-		PgfExprState* st = NULL;
-		switch (q->kind) {
-		case PGF_EXPR_QSTATE_PREDICT: {
-			PgfAbsFun* absfun =
-				gu_buf_get(q->choices, PgfAbsFun*, q->choice_idx);
-
-			st = gu_new(PgfExprState, pool);
-			st->answers = q->single;
-			st->ep      = absfun->ep;
-			st->hypos   = absfun->type->hypos;
-			st->arg_idx = 0;
-
-			q->choice_idx++;
-			if (q->choice_idx < gu_buf_length(q->choices)) {
-				q->prob = st->answers->outside_prob + gu_buf_get(q->choices, PgfAbsFun*, q->choice_idx)->ep.prob;
-				gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
-			}
-			break;
-		}
-		case PGF_EXPR_QSTATE_COMBINE1: {
-			PgfExprState* cont = q->single;
-			PgfExprProb* ep =
-				gu_buf_get(q->choices, PgfExprProb*, q->choice_idx);
-			st = pgf_reasoner_combine(rs, cont, ep, pool);
-			
-			q->choice_idx++;
-			if (q->choice_idx < gu_buf_length(q->choices)) {
-				q->prob = cont->ep.prob + gu_buf_get(q->choices, PgfExprProb*, q->choice_idx)->prob;
-				gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
-			}
-			break;
-		}
-		case PGF_EXPR_QSTATE_COMBINE2: {
-			PgfExprState* cont =
-				gu_buf_get(q->choices, PgfExprState*, q->choice_idx);
-			PgfExprProb* ep = q->single;
-			st = pgf_reasoner_combine(rs, cont, ep, pool);
-			
-			q->choice_idx++;
-			if (q->choice_idx < gu_buf_length(q->choices)) {
-				q->prob = ep->prob + gu_buf_get(q->choices, PgfExprState*, q->choice_idx)->ep.prob;
-				gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
-			}
-			break;
-		}
-		default:
-			gu_impossible();
-		}
-		
+		PgfReasonerState* st;
+		gu_buf_heap_pop(rs->pqueue, &pgf_expr_state_order, &st);
 
 #ifdef PGF_REASONER_DEBUG
 		{
@@ -249,45 +349,15 @@ pgf_reasoner_next(PgfReasoner* rs, GuPool* pool)
 			GuOut* out = gu_file_out(stderr, tmp_pool);
 			GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
 			GuExn* err = gu_exn(NULL, type, tmp_pool);
-			pgf_print_expr_state0(st, wtr, err, tmp_pool);
+			st->print(st, wtr, err, tmp_pool);
 			gu_pool_free(tmp_pool);
 		}
 #endif
 
-		if (st->arg_idx < gu_seq_length(st->hypos)) {
-			PgfHypo *hypo = gu_seq_index(st->hypos, PgfHypo, st->arg_idx);
-			prob_t outside_prob = 
-				st->ep.prob+st->answers->outside_prob;
-			pgf_reasoner_predict(rs, st, outside_prob,
-								 hypo->type->cid, pool);
-		} else {
-			gu_buf_push(st->answers->exprs, PgfExprProb*, &st->ep);
-
-			PgfExprProb* target = NULL;
-				
-			GuBuf* conts = st->answers->conts;
-			size_t choice_idx = 0;
-			PgfExprState* cont =
-				gu_buf_get(conts, PgfExprState*, 0);
-			if (cont == NULL) {
-				target = &st->ep;
-				cont   = gu_buf_get(conts, PgfExprState*, 1);
-				choice_idx++;
-			}
-
-			if (choice_idx < gu_buf_length(conts)) {
-				PgfExprQState *q = gu_new(PgfExprQState, rs->tmp_pool);
-				q->prob = st->ep.prob + cont->ep.prob;
-				q->kind = PGF_EXPR_QSTATE_COMBINE2;
-				q->single = &st->ep;
-				q->choice_idx = choice_idx;
-				q->choices = conts;
-
-				gu_buf_heap_push(rs->pqueue, &pgf_expr_qstate_order, &q);
-			}
-
-			if (target != NULL)
-				return target;
+		st->continuation(rs, st);
+		
+		if (n_exprs < gu_buf_length(rs->exprs)) {
+			return gu_buf_get(rs->exprs, PgfExprProb*, n_exprs);
 		}
 	}
 
@@ -301,20 +371,31 @@ static void
 pgf_reasoner_enum_next(GuEnum* self, void* to, GuPool* pool)
 {
 	PgfReasoner* pr = gu_container(self, PgfReasoner, en);
-	*(PgfExprProb**)to = pgf_reasoner_next(pr, pool);
+	*(PgfExprProb**)to = pgf_reasoner_next(pr);
 }
 
 PgfExprEnum*
 pgf_generate(PgfPGF* pgf, PgfCId cat, GuPool* pool)
 {
 	PgfReasoner* rs = gu_new(PgfReasoner, pool);
+	rs->pool = pool;
 	rs->tmp_pool = gu_new_pool(),
     rs->abstract = &pgf->abstract,
 	rs->table = gu_map_type_new(PgfAbswersMap, rs->tmp_pool),
-	rs->pqueue  = gu_new_buf(PgfExprQState*, rs->tmp_pool);
+	rs->pqueue = gu_new_buf(PgfReasonerState*, rs->tmp_pool);
+	rs->exprs = gu_new_buf(PgfExprProb*, rs->tmp_pool);
 	rs->en.next = pgf_reasoner_enum_next;
 
-	pgf_reasoner_predict(rs, NULL, 0, cat, pool);
+	PgfAnswers* answers = gu_new(PgfAnswers, rs->tmp_pool);
+	answers->parents = gu_new_buf(PgfExprState*, rs->tmp_pool);
+	answers->exprs   = rs->exprs;
+	answers->outside_prob = 0;
+	gu_map_put(rs->table, &cat, PgfAnswers*, answers);
+
+	PgfAbsCat* abscat = gu_map_get(rs->abstract->cats, &cat, PgfAbsCat*);
+	if (abscat != NULL) {
+		((PgfPredicate) abscat->predicate)(rs, NULL);
+	}
 
 	return &rs->en;
 }

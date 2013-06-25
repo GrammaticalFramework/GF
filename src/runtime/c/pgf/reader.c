@@ -2,6 +2,7 @@
 #include "expr.h"
 #include "literals.h"
 #include "reader.h"
+#include "jit.h"
 #include <gu/defs.h>
 #include <gu/map.h>
 #include <gu/seq.h>
@@ -23,6 +24,7 @@ struct PgfReader {
 	GuExn* err;
 	GuPool* opool;
 	GuSymTable* symtab;
+	PgfJitState* jit_state;
 };
 
 typedef struct PgfReadTagExn PgfReadTagExn;
@@ -495,7 +497,7 @@ pgf_read_absfuns(PgfReader* rdr)
 }
 
 static PgfAbsCat*
-pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr)
+pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 {
 	PgfAbsCat* abscat = gu_new(PgfAbsCat, rdr->opool);
 
@@ -531,6 +533,8 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr)
 			gu_map_get(abstr->funs, &name, PgfAbsFun*);
 		gu_buf_push(abscat->functions, PgfAbsFun*, absfun);
 	}
+	
+	pgf_jit_predicate(rdr->jit_state, abscats, abscat);
 
 	return abscat;
 }
@@ -548,7 +552,7 @@ pgf_read_abscats(PgfReader* rdr, PgfAbstr* abstr)
 	gu_return_on_exn(rdr->err, NULL);
 
 	for (size_t i = 0; i < len; i++) {
-		PgfAbsCat* abscat = pgf_read_abscat(rdr, abstr);
+		PgfAbsCat* abscat = pgf_read_abscat(rdr, abstr, abscats);
 		gu_return_on_exn(rdr->err, NULL);
 
 		gu_map_put(abscats, &abscat->name, PgfAbsCat*, abscat);
@@ -1187,5 +1191,12 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	rdr->symtab = gu_new_symtable(opool, tmp_pool);
 	rdr->err = err;
 	rdr->in = in;
+	rdr->jit_state = pgf_jit_init(tmp_pool, rdr->opool);
 	return rdr;
+}
+
+void
+pgf_reader_done(PgfReader* rdr, PgfPGF* pgf)
+{
+	pgf_jit_done(rdr->jit_state, &pgf->abstract);
 }

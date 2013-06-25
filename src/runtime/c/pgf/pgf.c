@@ -30,6 +30,7 @@ pgf_read(const char* fpath,
 
 	PgfReader* rdr = pgf_new_reader(in, pool, tmp_pool, err);
 	PgfPGF* pgf = pgf_read_pgf(rdr);
+	pgf_reader_done(rdr, pgf);
 
 	gu_pool_free(tmp_pool);
 	return pgf;

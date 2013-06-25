@@ -76,6 +76,7 @@ typedef struct {
 	int arity;
 	PgfEquations defns; // maybe null
 	PgfExprProb ep;
+	void* predicate;
 } PgfAbsFun;
 
 extern GU_DECLARE_TYPE(PgfAbsFun, abstract);
@@ -91,7 +92,8 @@ typedef struct {
 	prob_t meta_token_prob;
 	PgfMetaChildMap* meta_child_probs;
 
-	GuBuf* functions; // -->PgfFunDecl
+	GuBuf* functions; // -->PgfAbsFun
+	void* predicate;
 } PgfAbsCat;
 
 extern GU_DECLARE_TYPE(PgfAbsCat, abstract);
