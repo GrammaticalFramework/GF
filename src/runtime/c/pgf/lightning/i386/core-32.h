@@ -53,7 +53,7 @@ struct jit_local_state {
 /* Whether a register is used for the user-accessible registers.  */
 #define jit_save(reg)		1
 
-#define jit_base_prolog() (_jitl.framesize = 20, _jitl.alloca_offset = _jitl.alloca_slack = 0, \
+#define jit_base_prolog() (_jitl.framesize = 20, _jitl.alloca_offset = _jitl.alloca_slack = 0, _jitl.argssize = 0, \
   PUSHLr(_EBX), PUSHLr(_ESI), PUSHLr(_EDI), PUSHLr(_EBP), MOVLrr(_ESP, _EBP))
 #define jit_base_ret(ofs)						  \
   (((ofs) < 0 ? LEAVE_() : POPLr(_EBP)),				  \
