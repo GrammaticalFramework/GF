@@ -117,6 +117,11 @@ PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
           GuPool* pool, GuPool* out_pool);
 
+PgfExprEnum*
+pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
+                          double heuristics, 
+                          GuPool* pool, GuPool* out_pool);
+
 GuEnum*
 pgf_get_completions(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
                     GuString prefix, GuPool* pool);
@@ -127,11 +132,6 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
                     
 PgfExprEnum*
 pgf_generate(PgfPGF* pgf, PgfCId cat, GuPool* pool);
-
-// an experimental function. Please don't use it
-void
-pgf_print_chunks(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, GuPool* pool);
-
 
 /// @}
 

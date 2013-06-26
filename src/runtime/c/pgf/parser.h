@@ -34,6 +34,7 @@ typedef struct PgfParseState PgfParseState;
 /// Begin parsing
 PgfParseState*
 pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, 
+                      double heuristics,
                       GuPool* pool, GuPool* out_pool);
 /**<
  * @param parser The parser to use
@@ -68,9 +69,6 @@ pgf_parser_next_state(PgfParseState* prev, PgfToken tok);
 
 GuEnum*
 pgf_parser_completions(PgfParseState* prev, GuString prefix);
-
-void
-pgf_parser_set_beam_size(PgfParseState* state, double beam_size);
 
 void
 pgf_parser_add_literal(PgfConcr *concr, PgfCId cat,

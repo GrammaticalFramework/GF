@@ -157,7 +157,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 
 	PgfMetricsLznState state;
 	state.funcs = &pgf_metrics_lin_funcs1;
-	state.ps = pgf_parser_init_state(concr, cat, 0, pool, pool);
+	state.ps = pgf_parser_init_state(concr, cat, 0, -1, pool, pool);
 	state.marks = gu_new_buf(int, pool);
 	state.pos = 0;
 	state.phrases = gu_new_buf(PgfPhrase*, pool);
