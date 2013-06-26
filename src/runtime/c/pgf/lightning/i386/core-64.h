@@ -156,7 +156,7 @@ struct jit_local_state {
 #define jit_prolog(n) (_jitl.framesize = ((n) & 1) ? 56 : 48, _jitl.nextarg_getfp = _jitl.nextarg_geti = 0, _jitl.alloca_offset = 0, \
 		       PUSHQr(_EBX), PUSHQr(_R12), PUSHQr(_R13), PUSHQr(_R14), PUSHQr(_EBP), MOVQrr(_ESP, _EBP))
 
-#define jit_calli(sub)          (MOVQir((long) (sub), JIT_REXTMP), CALLsr(JIT_REXTMP))
+#define jit_calli(sub)      (MOVQir((long) (sub), JIT_REXTMP), _jitl.finish_ref = _jit.x.pc, CALLsr(JIT_REXTMP), _jitl.finish_ref)
 #define jit_callr(reg)		CALLsr((reg))
 
 #define jit_prepare_i(ni)	(_jitl.nextarg_puti = (ni), \
@@ -170,7 +170,7 @@ struct jit_local_state {
 				 : MOVBir(0, _AL), \
 				 ((_jitl.argssize & 1) \
 				   ? (PUSHQr(_EAX), ++_jitl.argssize) : 0), \
-				 _jitl.finish_ref = jit_calli(sub), \
+				 jit_calli(sub), \
 				 (_jitl.argssize \
 				  ? (ADDQir(sizeof(long) * _jitl.argssize, JIT_SP), _jitl.argssize = 0) \
 				  : 0), \
@@ -263,6 +263,7 @@ static int jit_arg_reg_order[] = { _EDI, _ESI, _EDX, _ECX, _R8D, _R9D };
 #define jit_patch_long_at(jump_pc,v)  (*_PSL((jump_pc) - sizeof(long)) = _jit_SL((jit_insn *)(v)))
 #define jit_patch_short_at(jump_pc,v)  (*_PSI((jump_pc) - sizeof(int)) = _jit_SI((jit_insn *)(v) - (jump_pc)))
 #define jit_patch_at(jump_pc,v) (_jitl.long_jumps ? jit_patch_long_at((jump_pc)-3, v) : jit_patch_short_at(jump_pc, v))
+#define jit_patch_calli(pa,pv) (*_PSL((pa) - sizeof(long)) = _jit_SL((pv)))
 #define jit_ret()			(LEAVE_(), POPQr(_R14), POPQr(_R13), POPQr(_R12), POPQr(_EBX), RET_())
 
 /* Memory */
