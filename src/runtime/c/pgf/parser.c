@@ -1638,7 +1638,8 @@ pgf_parsing_default_beam_size(PgfConcr* concr)
 }
 
 static PgfParsing*
-pgf_new_parsing(PgfConcr* concr, GuPool* pool, GuPool* out_pool)
+pgf_new_parsing(PgfConcr* concr, double heuristics,
+                GuPool* pool, GuPool* out_pool)
 {
 	PgfParsing* ps = gu_new(PgfParsing, pool);
 	ps->concr = concr;
@@ -1654,7 +1655,7 @@ pgf_new_parsing(PgfConcr* concr, GuPool* pool, GuPool* out_pool)
 	ps->prod_full_count = 0;
 #endif
 	ps->free_item = NULL;
-	ps->beam_size = pgf_parsing_default_beam_size(concr);
+	ps->beam_size = heuristics;
 
 	PgfExprMeta *expr_meta =
 		gu_new_variant(PGF_EXPR_META,
@@ -2214,6 +2215,7 @@ pgf_parse_print_chunks(PgfParseState* state)
 // TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 PgfParseState*
 pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx, 
+                      double heuristics,
                       GuPool* pool, GuPool* out_pool)
 {
 	PgfCncCat* cnccat =
@@ -2223,8 +2225,12 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx,
 
 	gu_assert(lin_idx < cnccat->n_lins);
 
+	if (heuristics < 0) {
+		heuristics = pgf_parsing_default_beam_size(concr);
+	}
+
 	PgfParsing* ps =
-		pgf_new_parsing(concr, pool, out_pool);
+		pgf_new_parsing(concr, heuristics, pool, out_pool);
 	PgfParseState* state =
 		pgf_new_parse_state(ps, NULL, NULL, pool);
 
@@ -2267,12 +2273,6 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx,
 		}
 	}
 	return state;
-}
-
-void
-pgf_parser_set_beam_size(PgfParseState* state, double beam_size)
-{
-	state->ps->beam_size = beam_size;
 }
 
 void

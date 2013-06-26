@@ -25,14 +25,19 @@ int main(int argc, char* argv[]) {
   // Create the pool that is used to allocate everything
   GuPool* pool = gu_new_pool();
   int status = EXIT_SUCCESS;
-  if (argc != 4) {
-    fprintf(stderr, "usage: %s pgf-file start-cat cnc-lang\n", argv[0]);
+  if (argc < 4 || argc > 5) {
+    fprintf(stderr, "usage: %s pgf-file start-cat cnc-lang [heuristics]\n(0.0 <= heuristics < 1.0, default: 0.95)\n", argv[0]);
     status = EXIT_FAILURE;
     goto fail;
   }
   char* filename = argv[1];
   GuString cat = gu_str_string(argv[2], pool);
   GuString lang = gu_str_string(argv[3], pool);
+
+  double heuristics = 0.95;
+  if (argc == 5) {
+      heuristics = atof(argv[4]);
+  }
 
   // Create an exception frame that catches all errors.
   GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
@@ -65,7 +70,7 @@ int main(int argc, char* argv[]) {
   clock_t end = clock();
   double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
-  fprintf(stderr, "(%.0f ms) Ready to parse!\n", 1000.0 * cpu_time_used);
+  fprintf(stderr, "(%.0f ms) Ready to parse [heuristics=%.2f]!\n", 1000.0 * cpu_time_used, heuristics);
 
   // Create an output stream for stdout
   GuOut* out = gu_file_out(stdout, pool);
@@ -113,18 +118,9 @@ int main(int argc, char* argv[]) {
 
     clock_t start = clock();
 
-    // Begin parsing a sentence of the specified category
-    PgfParseState* state =
-      pgf_parser_init_state(concr, cat, 0, ppool, ppool);
-    if (state == NULL) {
-      fprintf(stderr, "Couldn't begin parsing\n");
-      status = EXIT_FAILURE;
-      break;
-    }
-
     GuReader *rdr = gu_string_reader(gu_str_string(line, ppool), ppool);
     PgfLexer *lexer = pgf_new_simple_lexer(rdr, ppool);
-    GuEnum* result = pgf_parse(concr, cat, lexer, ppool, ppool);
+    GuEnum* result = pgf_parse_with_heuristics(concr, cat, lexer, heuristics, ppool, ppool);
 
     PgfExprProb* ep = NULL;
     if (result != NULL) 

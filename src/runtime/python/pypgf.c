@@ -692,15 +692,16 @@ void pypgf_container_descructor(PyObject *capsule)
 static IterObject*
 Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
-	static char *kwlist[] = {"sentence", "tokens", "cat", "n", NULL};
+	static char *kwlist[] = {"sentence", "tokens", "cat", "n", "heuristics", NULL};
 
 	int len;
 	const uint8_t *buf = NULL;
 	PyObject* py_lexer = NULL;
 	const char *catname_s = NULL;
 	int max_count = -1;
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "|s#Osi", kwlist,
-                                     &buf, &len, &py_lexer, &catname_s, &max_count))
+	double heuristics = -1;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "|s#Osid", kwlist,
+                                     &buf, &len, &py_lexer, &catname_s, &max_count, &heuristics))
         return NULL;
 
     if ((buf == NULL && py_lexer == NULL) || 
@@ -752,7 +753,8 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	}
 
 	pyres->res =
-		pgf_parse(self->concr, catname, lexer, pyres->pool, out_pool);
+		pgf_parse_with_heuristics(self->concr, catname, lexer, 
+		                          heuristics, pyres->pool, out_pool);
 
 	if (pyres->res == NULL) {
 		Py_DECREF(pyres);
@@ -1217,7 +1219,12 @@ static PyMethodDef Concr_methods[] = {
      "Returns the print name of a function or category"
     },
     {"parse", (PyCFunction)Concr_parse, METH_VARARGS | METH_KEYWORDS,
-     "Parses a string and returns an iterator over the abstract trees for this sentence"
+     "Parses a string and returns an iterator over the abstract trees for this sentence\n\n"
+     "Named arguments:\n"
+     "- sentence (string) or tokens (list of strings)\n"
+     "- cat (string); OPTIONAL, default: the startcat of the grammar\n"
+     "- n (int), max. trees; OPTIONAL, default: extract all trees\n"
+     "- heuristics (double >= 0.0); OPTIONAL, default: taken from the flags in the grammar"
     },
     {"getCompletions", (PyCFunction)Concr_getCompletions, METH_VARARGS | METH_KEYWORDS,
      "Parses a partial string and returns a list with the top n possible next tokens"
