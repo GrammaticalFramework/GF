@@ -92,7 +92,6 @@ typedef struct {
 	prob_t meta_token_prob;
 	PgfMetaChildMap* meta_child_probs;
 
-	GuBuf* functions; // -->PgfAbsFun
 	void* predicate;
 } PgfAbsCat;
 

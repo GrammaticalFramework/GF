@@ -10,7 +10,7 @@ void
 pgf_jit_done(PgfJitState* state, PgfAbstr* abstr);
 
 void
-pgf_jit_predicate(PgfJitState* state, 
-                  PgfCIdMap* abscats, PgfAbsCat* abscat);
+pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats, 
+                  PgfAbsCat* abscat, GuBuf* functions);
 
 #endif

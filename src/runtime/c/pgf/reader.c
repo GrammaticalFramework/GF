@@ -23,6 +23,7 @@ struct PgfReader {
 	GuIn* in;
 	GuExn* err;
 	GuPool* opool;
+	GuPool* tmp_pool;
 	GuSymTable* symtab;
 	PgfJitState* jit_state;
 };
@@ -517,7 +518,7 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 	abscat->meta_token_prob = INFINITY;
     abscat->meta_child_probs = NULL;
 
-    abscat->functions = gu_new_buf(PgfAbsFun*, rdr->opool);
+    GuBuf* functions = gu_new_buf(PgfAbsFun*, rdr->tmp_pool);
 
 	size_t n_functions = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
@@ -531,10 +532,10 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 		
 		PgfAbsFun* absfun =
 			gu_map_get(abstr->funs, &name, PgfAbsFun*);
-		gu_buf_push(abscat->functions, PgfAbsFun*, absfun);
+		gu_buf_push(functions, PgfAbsFun*, absfun);
 	}
-	
-	pgf_jit_predicate(rdr->jit_state, abscats, abscat);
+
+	pgf_jit_predicate(rdr->jit_state, abscats, abscat, functions);
 
 	return abscat;
 }
@@ -1188,6 +1189,7 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 {
 	PgfReader* rdr = gu_new(PgfReader, tmp_pool);
 	rdr->opool = opool;
+	rdr->tmp_pool = tmp_pool;
 	rdr->symtab = gu_new_symtable(opool, tmp_pool);
 	rdr->err = err;
 	rdr->in = in;
