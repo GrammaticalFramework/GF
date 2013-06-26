@@ -34,7 +34,7 @@
 #ifndef __lightning_funcs_h
 #define __lightning_funcs_h
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
 #include <unistd.h>
 #include <sys/mman.h>
 #endif
@@ -51,7 +51,7 @@ jit_flush_code(void *dest, void *end)
      execution of the data and stack segment are becoming more
      and more common (Fedora, for example), so we implement our
      jit_flush_code as an mprotect.  */
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
   static unsigned long prev_page = 0, prev_length = 0;
   unsigned long page, length;
 #ifdef PAGESIZE
@@ -59,7 +59,7 @@ jit_flush_code(void *dest, void *end)
 #else
   static int page_size = -1;
   if (page_size == -1)
-    page_size = sysconf (_SC_PAGESIZE);
+    page_size = getpagesize();
 #endif
 
   page = (long) dest & ~(page_size - 1);

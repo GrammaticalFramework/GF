@@ -48,15 +48,11 @@ pgf_jit_alloc_page(PgfJitState* state)
 {
 	void *page;
 
-	size_t page_size = sysconf(_SC_PAGESIZE);
+	size_t page_size = getpagesize();
 	total_size += page_size;
 
 	if (posix_memalign(&page, page_size, page_size) != 0) {
 		gu_fatal("Memory allocation failed");
-	}
-	if (mprotect(page, page_size,
-	             PROT_READ | PROT_WRITE | PROT_EXEC) != 0) {
-		gu_fatal("mprotect failed");
 	}
 
 	PgfPageFinalizer* fin = gu_new(PgfPageFinalizer, state->pool);
@@ -85,7 +81,7 @@ pgf_jit_init(GuPool* tmp_pool, GuPool* pool)
 static void
 pgf_jit_make_space(PgfJitState* state)
 {
-	size_t page_size = sysconf(_SC_PAGESIZE);
+	size_t page_size = getpagesize();
 	if (jit_get_ip().ptr + JIT_CODE_WINDOW > ((char*) state->buf) + page_size) {
 		jit_flush_code(state->buf, jit_get_ip().ptr);
 		pgf_jit_alloc_page(state);
