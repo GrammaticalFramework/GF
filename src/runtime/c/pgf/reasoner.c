@@ -40,7 +40,7 @@ struct PgfExprState {
 
 typedef struct {
 	// base must be the first field in order to be able to cast
-	// from PgfCombine2State to PgfReasonerState
+	// from PgfCombine1State to PgfReasonerState
 	PgfReasonerState base;
 	GuBuf* exprs;
 	PgfExprState* parent;
@@ -329,6 +329,13 @@ pgf_complete(PgfReasoner* rs, PgfExprState* st)
 	nst->base.print = (PgfStatePrinter) pgf_print_combine2_state;
 #endif
 	nst->base.continuation(rs, &nst->base);
+}
+
+void
+pgf_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun)
+{
+	pgf_try_else(rs, prev, absfun);
+	pgf_complete(rs, prev);
 }
 
 static PgfExprProb*
