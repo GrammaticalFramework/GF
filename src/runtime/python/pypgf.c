@@ -1546,6 +1546,17 @@ PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
 	return pyres;
 }
 
+static ExprObject*
+PGF_compute(PGFObject* self, PyObject *args)
+{
+	ExprObject* py_expr = NULL;
+    if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &py_expr))
+		return NULL;
+
+	Py_INCREF(py_expr);
+	return py_expr;
+}
+
 static PyGetSetDef PGF_getseters[] = {
     {"abstractName", 
      (getter)PGF_getAbstractName, NULL,
@@ -1580,6 +1591,9 @@ static PyMethodDef PGF_methods[] = {
     },
     {"generate", (PyCFunction)PGF_generate, METH_VARARGS | METH_KEYWORDS,
      "Generates abstract syntax trees of given category in decreasing probability order"
+    },
+    {"compute", (PyCFunction)PGF_compute, METH_VARARGS,
+     "Computes the normal form of an abstract syntax tree"
     },
     {NULL}  /* Sentinel */
 };
