@@ -151,35 +151,31 @@ pgf_iter_functions(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
 	gu_map_iter(pgf->abstract.funs, fn, err);
 }
 
+typedef struct {
+	GuMapItor fn;
+	PgfCId catname;
+	GuMapItor* client_fn;
+} PgfFunByCatIter;
+
+static void
+pgf_filter_by_cat(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	(void) (key && err);
+
+	PgfFunByCatIter* clo = (PgfFunByCatIter*) fn;
+	PgfAbsFun* absfun = *((PgfAbsFun**) value);
+	
+	if (gu_string_eq(absfun->type->cid, clo->catname)) {
+		clo->client_fn->fn(clo->client_fn, &absfun->name, NULL, err);
+	}
+}
+
 void
 pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname, 
                           GuMapItor* fn, GuExn* err) 
 {
-	PgfAbsCat* abscat =
-		gu_map_get(pgf->abstract.cats, &catname, PgfAbsCat*);
-	if (abscat == NULL) {
-		gu_raise(err, PgfExn);
-		return;
-	}
-	
-	size_t n_functions = gu_buf_length(abscat->functions);
-	for (size_t i = 0; i < n_functions; i++) {
-		PgfAbsFun* fun =
-			gu_buf_get(abscat->functions, PgfAbsFun*, i);
-		
-		GuVariantInfo i = gu_variant_open(fun->ep.expr);
-		switch (i.tag) {
-		case PGF_EXPR_FUN: {
-			PgfExprFun* efun = i.data;
-			fn->fn(fn, &efun->fun, NULL, err);
-			if (!gu_ok(err))
-				return;
-			break;
-		}
-		default:
-			gu_impossible();
-		}
-	}
+	PgfFunByCatIter clo = { { pgf_filter_by_cat }, catname, fn };
+	gu_map_iter(pgf->abstract.funs, &clo.fn, err);
 }
 
 GuString

@@ -86,8 +86,8 @@ pgf_jit_make_space(PgfJitState* state)
 }
 
 void
-pgf_jit_predicate(PgfJitState* state,
-                  PgfCIdMap* abscats, PgfAbsCat* abscat)
+pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats, 
+                  PgfAbsCat* abscat, GuBuf* functions)
 {
 #ifdef PGF_JIT_DEBUG
 	GuPool* tmp_pool = gu_new_pool();
@@ -101,7 +101,7 @@ pgf_jit_predicate(PgfJitState* state,
 	int label = 0;
 #endif
 
-	size_t n_funs = gu_buf_length(abscat->functions);
+	size_t n_funs = gu_buf_length(functions);
 	
 	pgf_jit_make_space(state);
 
@@ -111,7 +111,7 @@ pgf_jit_predicate(PgfJitState* state,
 
 	if (n_funs > 0) {
 		PgfAbsFun* absfun = 
-			gu_buf_get(abscat->functions, PgfAbsFun*, 0);
+			gu_buf_get(functions, PgfAbsFun*, 0);
 
 #ifdef PGF_JIT_DEBUG
 		gu_puts("    TRY_FIRST ", wtr, err);
@@ -142,7 +142,7 @@ pgf_jit_predicate(PgfJitState* state,
 #ifdef PGF_JIT_DEBUG
 	if (n_funs > 0) {
 		PgfAbsFun* absfun = 
-			gu_buf_get(abscat->functions, PgfAbsFun*, 0);
+			gu_buf_get(functions, PgfAbsFun*, 0);
 
 		gu_string_write(absfun->name, wtr, err);
 		gu_puts(":\n", wtr, err);
@@ -151,7 +151,7 @@ pgf_jit_predicate(PgfJitState* state,
 
 	for (size_t i = 0; i < n_funs; i++) {
 		PgfAbsFun* absfun = 
-			gu_buf_get(abscat->functions, PgfAbsFun*, i);
+			gu_buf_get(functions, PgfAbsFun*, i);
 
 		pgf_jit_make_space(state);
 
@@ -168,7 +168,7 @@ pgf_jit_predicate(PgfJitState* state,
 		if (n_hypos > 0) {
 			if (i+1 < n_funs) {
 				PgfAbsFun* absfun = 
-					gu_buf_get(abscat->functions, PgfAbsFun*, i+1);
+					gu_buf_get(functions, PgfAbsFun*, i+1);
 
 #ifdef PGF_JIT_DEBUG
 				gu_puts("    TRY_ELSE ", wtr, err);
@@ -246,7 +246,7 @@ pgf_jit_predicate(PgfJitState* state,
 		} else {
 			if (i+1 < n_funs) {
 				PgfAbsFun* absfun = 
-					gu_buf_get(abscat->functions, PgfAbsFun*, i+1);
+					gu_buf_get(functions, PgfAbsFun*, i+1);
 
 #ifdef PGF_JIT_DEBUG
 				gu_puts("    TRY_CONSTANT ", wtr, err);
@@ -284,7 +284,7 @@ pgf_jit_predicate(PgfJitState* state,
 #ifdef PGF_JIT_DEBUG
 		if (i+1 < n_funs) {
 			PgfAbsFun* absfun = 
-				gu_buf_get(abscat->functions, PgfAbsFun*, i+1);
+				gu_buf_get(functions, PgfAbsFun*, i+1);
 
 			gu_string_write(absfun->name, wtr, err);
 			gu_puts(":\n", wtr, err);
