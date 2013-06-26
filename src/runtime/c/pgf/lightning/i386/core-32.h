@@ -121,6 +121,7 @@ struct jit_local_state {
 #define jit_movi_p(d, is)       (MOVLir (((long)(is)), (d)), _jit.x.pc)
 #define jit_patch_long_at(jump_pc,v)  (*_PSL((jump_pc) - sizeof(long)) = _jit_SL((jit_insn *)(v) - (jump_pc)))
 #define jit_patch_at(jump_pc,v)  jit_patch_long_at(jump_pc, v)
+#define jit_patch_calli(jump_pc,v) jit_patch_long_at(jump_pc, v)
 
 /* Memory */
 #define jit_replace(s, rep, op)                         \

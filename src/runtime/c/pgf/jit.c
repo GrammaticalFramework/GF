@@ -283,7 +283,7 @@ pgf_jit_done(PgfJitState* state, PgfAbstr* abstr)
 			gu_map_get(abstr->cats, &patch->cid, PgfAbsCat*);
 		gu_assert(arg != NULL);
 
-		jit_patch_at(patch->ref,(jit_insn*) arg->predicate);
+		jit_patch_calli(patch->ref,(jit_insn*) arg->predicate);
 	}
 	
 	jit_flush_code(state->buf, jit_get_ip().ptr);
