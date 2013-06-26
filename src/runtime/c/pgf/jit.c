@@ -41,15 +41,12 @@ pgf_jit_finalize_page(GuFinalizer* self)
 	free(fin->page);
 }
 
-static size_t total_size = 0;
-
 static void
 pgf_jit_alloc_page(PgfJitState* state)
 {
 	void *page;
 
 	size_t page_size = getpagesize();
-	total_size += page_size;
 
 	if (posix_memalign(&page, page_size, page_size) != 0) {
 		gu_fatal("Memory allocation failed");
@@ -166,92 +163,124 @@ pgf_jit_predicate(PgfJitState* state,
 		jit_getarg_p(JIT_V1, rs_arg);
 		jit_getarg_p(JIT_V2, st_arg);
 
-		if (i+1 < n_funs) {
-			PgfAbsFun* absfun = 
-				gu_buf_get(abscat->functions, PgfAbsFun*, i+1);
-
-#ifdef PGF_JIT_DEBUG
-			gu_puts("    TRY_ELSE ", wtr, err);
-			gu_string_write(absfun->name, wtr, err);
-			gu_puts("\n", wtr, err);
-#endif
-
-			// compile TRY_ELSE
-			jit_prepare(3);
-			jit_movi_p(JIT_V0, absfun);
-			jit_pusharg_p(JIT_V0);
-			jit_pusharg_p(JIT_V2);
-			jit_pusharg_p(JIT_V1);
-			jit_finish(pgf_try_else);
-		}
-
 		size_t n_hypos = gu_seq_length(absfun->type->hypos);
-		for (size_t i = 0; i < n_hypos; i++) {
-			PgfHypo* hypo = gu_seq_index(absfun->type->hypos, PgfHypo, i);
 
-			jit_insn *ref;
-			
-			// call the predicate for the category in hypo->type->cid
-			PgfAbsCat* arg =
-				gu_map_get(abscats, &hypo->type->cid, PgfAbsCat*);
+		if (n_hypos > 0) {
+			if (i+1 < n_funs) {
+				PgfAbsFun* absfun = 
+					gu_buf_get(abscat->functions, PgfAbsFun*, i+1);
 
 #ifdef PGF_JIT_DEBUG
-			gu_puts("    CALL ", wtr, err);
-			gu_string_write(hypo->type->cid, wtr, err);
-			gu_printf(wtr, err, " L%d\n", label);
+				gu_puts("    TRY_ELSE ", wtr, err);
+				gu_string_write(absfun->name, wtr, err);
+				gu_puts("\n", wtr, err);
 #endif
 
-			// compile CALL
-			ref = jit_movi_p(JIT_V0, jit_forward());
-			jit_str_p(JIT_V2, JIT_V0);
-			jit_prepare(2);
-			jit_pusharg_p(JIT_V2);
-			jit_pusharg_p(JIT_V1);
-			if (arg != NULL) {
-				jit_finish(arg->predicate);
+				// compile TRY_ELSE
+				jit_prepare(3);
+				jit_movi_p(JIT_V0, absfun);
+				jit_pusharg_p(JIT_V0);
+				jit_pusharg_p(JIT_V2);
+				jit_pusharg_p(JIT_V1);
+				jit_finish(pgf_try_else);
+			}
+				
+			for (size_t i = 0; i < n_hypos; i++) {
+				PgfHypo* hypo = gu_seq_index(absfun->type->hypos, PgfHypo, i);
+
+				jit_insn *ref;
+				
+				// call the predicate for the category in hypo->type->cid
+				PgfAbsCat* arg =
+					gu_map_get(abscats, &hypo->type->cid, PgfAbsCat*);
+
+#ifdef PGF_JIT_DEBUG
+				gu_puts("    CALL ", wtr, err);
+				gu_string_write(hypo->type->cid, wtr, err);
+				if (i+1 < n_hypos) {
+					gu_printf(wtr, err, " L%d\n", label);
+				} else {
+					gu_printf(wtr, err, " COMPLETE\n");
+				}
+#endif
+
+				// compile CALL
+				ref = jit_movi_p(JIT_V0, jit_forward());
+				jit_str_p(JIT_V2, JIT_V0);
+				jit_prepare(2);
+				jit_pusharg_p(JIT_V2);
+				jit_pusharg_p(JIT_V1);
+				if (arg != NULL) {
+					jit_finish(arg->predicate);
+				} else {
+					PgfCallPatch patch;
+					patch.cid = hypo->type->cid;
+					patch.ref = jit_finish(jit_forward());
+					gu_buf_push(state->patches, PgfCallPatch, patch);
+				}
+
+#ifdef PGF_JIT_DEBUG
+				gu_puts("    RET\n", wtr, err);
+				if (i+1 < n_hypos) {
+					gu_printf(wtr, err, "L%d:\n", label++);
+				}
+#endif
+
+				// compile RET
+				jit_ret();
+
+				if (i+1 < n_hypos) {
+					pgf_jit_make_space(state);
+
+					jit_patch_movi(ref,jit_get_label());
+					
+					jit_prolog(2);
+					rs_arg = jit_arg_p();
+					st_arg = jit_arg_p();
+					jit_getarg_p(JIT_V1, rs_arg);
+					jit_getarg_p(JIT_V2, st_arg);
+				} else {
+					jit_patch_movi(ref,pgf_complete);
+				}
+			}
+		} else {
+			if (i+1 < n_funs) {
+				PgfAbsFun* absfun = 
+					gu_buf_get(abscat->functions, PgfAbsFun*, i+1);
+
+#ifdef PGF_JIT_DEBUG
+				gu_puts("    TRY_CONSTANT ", wtr, err);
+				gu_string_write(absfun->name, wtr, err);
+				gu_puts("\n", wtr, err);
+#endif
+
+				// compile TRY_CONSTANT
+				jit_prepare(3);
+				jit_movi_p(JIT_V0, absfun);
+				jit_pusharg_p(JIT_V0);
+				jit_pusharg_p(JIT_V2);
+				jit_pusharg_p(JIT_V1);
+				jit_finish(pgf_try_constant);
 			} else {
-				PgfCallPatch patch;
-				patch.cid = hypo->type->cid;
-				patch.ref = jit_finish(jit_forward());
-				gu_buf_push(state->patches, PgfCallPatch, patch);
+#ifdef PGF_JIT_DEBUG
+				gu_puts("    COMPLETE\n", wtr, err);
+#endif
+
+				// compile COMPLETE
+				jit_prepare(2);
+				jit_pusharg_p(JIT_V2);
+				jit_pusharg_p(JIT_V1);
+				jit_finish(pgf_complete);
 			}
 
 #ifdef PGF_JIT_DEBUG
 			gu_puts("    RET\n", wtr, err);
-			gu_printf(wtr, err, "L%d:\n", label++);
 #endif
 
 			// compile RET
 			jit_ret();
-
-			pgf_jit_make_space(state);
-
-			jit_patch_movi(ref,jit_get_label());
-			
-			jit_prolog(2);
-			rs_arg = jit_arg_p();
-			st_arg = jit_arg_p();
-			jit_getarg_p(JIT_V1, rs_arg);
-			jit_getarg_p(JIT_V2, st_arg);
 		}
-
-#ifdef PGF_JIT_DEBUG
-		gu_puts("    COMPLETE\n", wtr, err);
-#endif
-
-		// compile COMPLETE
-		jit_prepare(2);
-		jit_pusharg_p(JIT_V2);
-		jit_pusharg_p(JIT_V1);
-		jit_finish(pgf_complete);
-
-#ifdef PGF_JIT_DEBUG
-		gu_puts("    RET\n", wtr, err);
-#endif
-
-		// compile RET
-		jit_ret();
-
+		
 #ifdef PGF_JIT_DEBUG
 		if (i+1 < n_funs) {
 			PgfAbsFun* absfun = 
