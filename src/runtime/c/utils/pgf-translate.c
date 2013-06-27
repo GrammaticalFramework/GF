@@ -21,7 +21,7 @@ print_result(PgfExprProb* ep, PgfConcr* to_concr,
 {
 	// Write out the abstract syntax tree
 	gu_printf(wtr, err, " [%f] ", ep->prob);
-	pgf_print_expr(ep->expr, 0, wtr, err);
+	pgf_print_expr(ep->expr, NULL, 0, wtr, err);
 	gu_putc('\n', wtr, err);
 
 	// Enumerate the concrete syntax trees corresponding
