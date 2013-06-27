@@ -178,6 +178,17 @@ pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
 	gu_map_iter(pgf->abstract.funs, &clo.fn, err);
 }
 
+PgfType*
+pgf_function_type(PgfPGF* pgf, PgfCId funname) 
+{
+	PgfAbsFun* absfun =
+		gu_map_get(pgf->abstract.funs, &funname, PgfAbsFun*);
+	if (absfun == NULL)
+		return NULL;
+		
+	return absfun->type;
+}
+
 GuString
 pgf_print_name(PgfConcr* concr, PgfCId id)
 {

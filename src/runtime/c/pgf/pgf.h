@@ -107,6 +107,9 @@ void
 pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
                           GuMapItor* fn, GuExn* err);
 
+PgfType*
+pgf_function_type(PgfPGF* pgf, PgfCId funname);
+
 GuString
 pgf_print_name(PgfConcr*, PgfCId id);
 

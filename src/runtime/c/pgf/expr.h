@@ -53,7 +53,7 @@ typedef struct {
 
 
 struct PgfHypo {
-	PgfBindType bindtype;
+	PgfBindType bind_type;
 
 	PgfCId cid;
 	/**< Locally scoped name for the parameter if dependent types
@@ -87,7 +87,7 @@ typedef enum {
 
 typedef struct {
 	PgfBindType bind_type;
-	PgfCId id; // 
+	PgfCId id;
 	PgfExpr body;
 } PgfExprAbs;
 		
@@ -154,22 +154,38 @@ pgf_expr_unapply(PgfExpr expr, GuPool* pool);
 PgfExpr
 pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);
 
+PgfType*
+pgf_read_type(GuIn* in, GuPool* pool, GuExn* err);
+
 bool
 pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2);
 
 bool
 pgf_expr_eq(PgfExpr e1, PgfExpr e2);
 
+bool
+pgf_type_eq(PgfType* t1, PgfType* t2);
+
+typedef struct PgfPrintContext PgfPrintContext;
+
+struct PgfPrintContext {
+	PgfCId name;
+	PgfPrintContext* next;
+};
+
 void
 pgf_print_literal(PgfLiteral lit, GuWriter* wtr, GuExn* err);
 
 void
-pgf_print_expr(PgfExpr expr, int prec, GuWriter* wtr, GuExn* err);
+pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec, 
+               GuWriter* wtr, GuExn* err);
+
+PgfPrintContext*
+pgf_print_hypo(PgfHypo *hypo, PgfPrintContext* ctxt, int prec,
+               GuWriter *wtr, GuExn *err);
 
 void
-pgf_print_hypo(PgfHypo *hypo, int prec, GuWriter *wtr, GuExn *err);
-
-void
-pgf_print_type(PgfType *type, int prec, GuWriter *wtr, GuExn *err);
+pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
+               GuWriter *wtr, GuExn *err);
 
 #endif /* EXPR_H_ */

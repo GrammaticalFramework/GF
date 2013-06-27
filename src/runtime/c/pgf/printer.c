@@ -1,4 +1,5 @@
 #include <pgf/data.h>
+#include <stdlib.h>
 
 typedef struct {
 	GuMapItor fn;
@@ -33,11 +34,18 @@ pgf_print_cat(GuMapItor* fn, const void* key, void* value,
     gu_puts("  cat ", wtr, err);
     gu_string_write(name, wtr, err);
 
+	PgfPrintContext* ctxt = NULL;
     size_t n_hypos = gu_seq_length(cat->context);
     for (size_t i = 0; i < n_hypos; i++) {
-		PgfHypo* hypo = gu_seq_get(cat->context, PgfHypo*, i);
+		PgfHypo* hypo = gu_seq_index(cat->context, PgfHypo, i);
 		gu_putc(' ', wtr, err);
-		pgf_print_hypo(hypo, 4, wtr, err);
+		ctxt = pgf_print_hypo(hypo, ctxt, 4, wtr, err);
+	}
+
+	while (ctxt != NULL) {
+		PgfPrintContext* next = ctxt->next;
+		free(ctxt);
+		ctxt = next;
 	}
 
     gu_printf(wtr, err, " ;   -- %f\n",cat->meta_prob);
@@ -55,7 +63,7 @@ pgf_print_absfun(GuMapItor* fn, const void* key, void* value,
     gu_puts(gu_seq_is_null(fun->defns) ? "  data " : "  fun ", wtr, err);
     gu_string_write(name, wtr, err);
     gu_puts(" : ", wtr, err);
-    pgf_print_type(fun->type, 0, wtr, err);
+    pgf_print_type(fun->type, NULL, 0, wtr, err);
     gu_printf(wtr, err, " ;   -- %f\n", fun->ep.prob);
 }
 static void

@@ -126,7 +126,7 @@ Expr_repr(ExprObject *self)
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuWriter* wtr = gu_string_buf_writer(sbuf);
 
-	pgf_print_expr(self->expr, 0, wtr, err);
+	pgf_print_expr(self->expr, NULL, 0, wtr, err);
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
 	PyObject* pystr = gu2py_string(str);
@@ -140,11 +140,11 @@ Expr_richcompare(ExprObject *e1, ExprObject *e2, int op)
 {
 	bool cmp = pgf_expr_eq(e1->expr,e2->expr);
 	
-	if (op == Py_EQ)
-		return cmp ? Py_True : Py_False;
-	else if (op == Py_NE)
-		return cmp ? Py_False : Py_True;
-	else {
+	if (op == Py_EQ) {
+		if (cmp) Py_RETURN_TRUE;  else Py_RETURN_FALSE;
+	} else if (op == Py_NE) {
+		if (cmp) Py_RETURN_FALSE; else Py_RETURN_TRUE;
+	} else {
 		PyErr_SetString(PyExc_TypeError, "the operation is not supported");
 		return NULL;
 	}
@@ -154,6 +154,34 @@ static PyMethodDef Expr_methods[] = {
     {"unpack", (PyCFunction)Expr_unpack, METH_VARARGS,
      "Decomposes an expression into its components"
     },
+    {NULL}  /* Sentinel */
+};
+
+static PyGetSetDef Expr_getseters[] = {
+    {"fun", 
+     NULL, NULL,
+     "this the function in a function application",
+     NULL},
+    {"arg", 
+     NULL, NULL,
+     "this the argument in a function application",
+     NULL},
+    {"val", 
+     NULL, NULL,
+     "this is the value of a literal",
+     NULL},
+    {"id", 
+     NULL, NULL,
+     "this is the id of a meta variable",
+     NULL},
+    {"name", 
+     NULL, NULL,
+     "this is the name of a function",
+     NULL},
+    {"index", 
+     NULL, NULL,
+     "this is the de Bruijn index of a variable",
+     NULL},
     {NULL}  /* Sentinel */
 };
 
@@ -188,7 +216,7 @@ static PyTypeObject pgf_ExprType = {
     0,		                   /*tp_iternext */
     Expr_methods,              /*tp_methods */
     0,                         /*tp_members */
-    0,                         /*tp_getset */
+    Expr_getseters,            /*tp_getset */
     0,                         /*tp_base */
     0,                         /*tp_dict */
     0,                         /*tp_descr_get */
@@ -297,6 +325,28 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 	for (;;) {
 		GuVariantInfo i = gu_variant_open(expr);
 		switch (i.tag) {
+		case PGF_EXPR_ABS: {
+			PgfExprAbs* eabs = i.data;
+
+			ExprObject* py_body = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+			if (py_body == NULL)
+				return NULL;
+			py_body->pool   = NULL;
+			py_body->master = (self->master) ? self->master : (PyObject*) self;
+			py_body->expr   = eabs->body;
+			Py_INCREF(py_body->master);
+
+			PyObject* py_bindtype = 
+				(eabs->bind_type == PGF_BIND_TYPE_EXPLICIT) ? Py_True
+				                                            : Py_False;
+			PyObject* py_var = gu2py_string(eabs->id);
+			PyObject* res = 
+				Py_BuildValue("OOOO", py_bindtype, py_var, py_body, args);
+			Py_DECREF(py_var);
+			Py_DECREF(py_body);
+			Py_DECREF(args);
+			return res;
+		}
 		case PGF_EXPR_APP: {
 			PgfExprApp* eapp = i.data;
 			
@@ -355,6 +405,22 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 			Py_DECREF(args);
 			return res;
 		}
+		case PGF_EXPR_VAR: {
+			PgfExprVar* evar = i.data;
+			PyObject* res = Py_BuildValue("iO", evar->var, args);
+			Py_DECREF(args);
+			return res;
+		}
+		case PGF_EXPR_TYPED: {
+			PgfExprTyped* etyped = i.data;
+			expr = etyped->expr;
+			break;
+		}
+		case PGF_EXPR_IMPL_ARG: {
+			PgfExprImplArg* eimpl = i.data;
+			expr = eimpl->expr;
+			break;
+		}
 		default:
 			gu_impossible();
 			return NULL;
@@ -367,7 +433,10 @@ static PyObject*
 Expr_getattro(ExprObject *self, PyObject *attr_name) {
 	const char* name = PyString_AsString(attr_name);
 
-    GuVariantInfo i = gu_variant_open(self->expr);
+	PgfExpr expr = self->expr;
+	
+redo:;
+    GuVariantInfo i = gu_variant_open(expr);
     switch (i.tag) {
 	case PGF_EXPR_APP: {
 		PgfExprApp* eapp = i.data;
@@ -419,12 +488,29 @@ Expr_getattro(ExprObject *self, PyObject *attr_name) {
 			return PyInt_FromLong(emeta->id);
 		break;
 	}
-	case PGF_EXPR_FUN: {		
+	case PGF_EXPR_FUN: {
 		PgfExprFun* efun = i.data;
 		if (strcmp(name, "name") == 0) {
 			return gu2py_string(efun->fun);
 		}
 		break;
+	}
+	case PGF_EXPR_VAR: {
+		PgfExprVar* evar = i.data;
+		if (strcmp(name, "index") == 0) {
+			return PyInt_FromLong(evar->var);
+		}
+		break;
+	}
+	case PGF_EXPR_TYPED: {
+		PgfExprTyped* etyped = i.data;
+		expr = etyped->expr;
+		goto redo;
+	}
+	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* eimpl = i.data;
+		expr = eimpl->expr;
+		goto redo;
 	}
 	default:
 		gu_impossible();
@@ -432,6 +518,362 @@ Expr_getattro(ExprObject *self, PyObject *attr_name) {
 
 	return PyObject_GenericGetAttr((PyObject*)self, attr_name);
 }
+
+typedef struct {
+	PyObject_HEAD
+	PyObject* master;
+	GuPool* pool;
+    PgfType* type;
+} TypeObject;
+
+static PyTypeObject pgf_TypeType;
+
+static TypeObject*
+Type_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+    TypeObject* self = (TypeObject *)type->tp_alloc(type, 0);
+    if (self != NULL) {
+		self->master = NULL;
+		self->pool   = NULL;
+		self->type   = NULL;
+    }
+
+    return self;
+}
+
+static void
+Type_dealloc(TypeObject* self)
+{
+	if (self->master != NULL) {
+		Py_DECREF(self->master);
+	}
+	if (self->pool != NULL) {
+		gu_pool_free(self->pool);
+	}
+
+    self->ob_type->tp_free((PyObject*)self);
+}
+
+static int
+Type_init(TypeObject *self, PyObject *args, PyObject *kwds)
+{
+	PyObject* py_hypos;
+	const char* catname_s;
+	PyObject* py_exprs;
+	size_t n_exprs;
+	size_t n_hypos;
+
+	if (PyTuple_Size(args) == 1) {
+		py_hypos = NULL;
+		py_exprs = NULL;
+		n_exprs  = 0;
+		n_hypos  = 0;
+		if (!PyArg_ParseTuple(args, "s", &catname_s))
+			return -1;
+	} else {
+		if (!PyArg_ParseTuple(args, "O!sO!", 
+				&PyList_Type, &py_hypos, 
+				&catname_s, 
+				&PyList_Type, &py_exprs))
+			return -1;
+			
+		n_exprs = PyList_Size(py_exprs);
+		n_hypos = PyList_Size(py_hypos);
+	}
+
+	self->pool = gu_new_pool();
+	self->master =
+		(n_exprs+n_hypos > 0) ? PyTuple_New(n_exprs+n_hypos) : NULL;
+
+	self->type = gu_new_flex(self->pool, PgfType, exprs, n_exprs);
+
+	self->type->hypos =
+		gu_new_seq(PgfHypo, n_hypos, self->pool);
+
+	for (size_t i = 0; i < n_hypos; i++) {
+		PyObject* obj = PyList_GetItem(py_hypos, i);
+		PyObject* py_bindtype;
+		PgfCId cid;
+		PyObject* py_type;
+
+		if (obj->ob_type == &pgf_TypeType) {
+			py_bindtype = Py_True;
+			cid = gu_str_string("_", self->pool);
+			py_type = obj;
+		} else {
+			if (!PyTuple_Check(obj) ||
+				PyTuple_GET_SIZE(obj) != 3) {
+				PyErr_SetString(PyExc_TypeError, "the arguments in the first list must be triples of (boolean,string,pgf.Type)");
+				return -1;
+			}
+
+			py_bindtype = PyTuple_GetItem(obj, 0);
+			if (!PyBool_Check(py_bindtype)) {
+				PyErr_SetString(PyExc_TypeError, "the arguments in the first list must be triples of (boolean,string,pgf.Type)");
+				return -1;
+			}
+
+			PyObject* py_var = PyTuple_GetItem(obj, 1);
+			if (!PyString_Check(py_var)) {
+				PyErr_SetString(PyExc_TypeError, "the arguments in the first list must be triples of (boolean,string,pgf.Type)");
+				return -1;
+			}
+			cid = gu_str_string(PyString_AsString(py_var), self->pool);
+
+			py_type = PyTuple_GetItem(obj, 2);
+			if (py_type->ob_type != &pgf_TypeType) {
+				PyErr_SetString(PyExc_TypeError, "the arguments in the first list must be triples of (boolean,string,pgf.Type)");
+				return -1;
+			}
+		}
+
+		PgfHypo* hypo = gu_seq_index(self->type->hypos, PgfHypo, i);
+		hypo->bind_type = 
+			(py_bindtype == Py_True) ? PGF_BIND_TYPE_EXPLICIT
+			                         : PGF_BIND_TYPE_IMPLICIT;
+		hypo->cid = cid;
+		hypo->type = ((TypeObject*) py_type)->type;
+
+		PyTuple_SetItem(self->master, i, py_type);
+		Py_INCREF(py_type);
+	}
+
+	self->type->cid = gu_str_string(catname_s, self->pool);
+
+	self->type->n_exprs = n_exprs;
+	for (Py_ssize_t i = 0; i < n_exprs; i++) {
+		PyObject* obj = PyList_GetItem(py_exprs, i);
+		if (obj->ob_type != &pgf_ExprType) {
+			PyErr_SetString(PyExc_TypeError, "the arguments in the second list must be expressions");
+			return -1;
+		}
+
+		PyTuple_SetItem(self->master, n_hypos+i, obj);
+		Py_INCREF(obj);
+
+		self->type->exprs[i] = ((ExprObject*) obj)->expr;
+	}
+
+	return 0;
+}
+
+static PyObject *
+Type_repr(TypeObject *self)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+
+	pgf_print_type(self->type, NULL, 0, wtr, err);
+
+	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+	PyObject* pystr = gu2py_string(str);
+	
+	gu_pool_free(tmp_pool);
+	return pystr;
+}
+
+PyObject *
+Type_richcompare(TypeObject *t1, TypeObject *t2, int op)
+{
+	bool cmp = pgf_type_eq(t1->type,t2->type);
+
+	if (op == Py_EQ) {
+		if (cmp) Py_RETURN_TRUE;  else Py_RETURN_FALSE;
+	} else if (op == Py_NE) {
+		if (cmp) Py_RETURN_FALSE; else Py_RETURN_TRUE;
+	} else {
+		PyErr_SetString(PyExc_TypeError, "the operation is not supported");
+		return NULL;
+	}
+}
+
+static PyObject*
+Type_getHypos(TypeObject *self, void *closure)
+{
+	PgfType* type = self->type;
+
+	PyObject* py_hypos = PyList_New(0);
+	if (py_hypos == NULL)
+		return NULL;
+
+	size_t n_hypos = gu_seq_length(type->hypos);
+	for (size_t i = 0; i < n_hypos; i++) {
+		PgfHypo* hypo = gu_seq_index(type->hypos, PgfHypo, i);
+
+		PyObject* py_bindtype = 
+			(hypo->bind_type == PGF_BIND_TYPE_EXPLICIT) ? Py_True
+						  							    : Py_False;
+
+		PyObject* py_var = gu2py_string(hypo->cid);
+		if (py_var == NULL)
+			goto fail;
+
+		TypeObject* py_type = (TypeObject*) pgf_TypeType.tp_alloc(&pgf_TypeType, 0);
+		if (py_type == NULL) {
+			Py_DECREF(py_var);
+			goto fail;
+		}
+
+		py_type->pool   = NULL;
+		py_type->master = (PyObject*) self;
+		py_type->type   = hypo->type;
+		Py_INCREF(self);
+
+		PyObject* py_hypo = 
+			Py_BuildValue("OOO", py_bindtype, py_var, py_type);
+		Py_DECREF(py_var);
+		Py_DECREF(py_type);
+
+		if (py_hypo == NULL)
+			goto fail;
+
+		if (PyList_Append(py_hypos, (PyObject*) py_hypo) == -1)
+			goto fail;
+
+		Py_DECREF(py_hypo);
+	}
+
+	return py_hypos;
+	
+fail:
+	Py_DECREF(py_hypos);
+	return NULL;
+}
+
+static PyObject*
+Type_getCat(TypeObject *self, void *closure)
+{
+	return gu2py_string(self->type->cid);
+}
+
+static PyObject*
+Type_getExprs(TypeObject *self, void *closure)
+{
+	PgfType* type = self->type;
+
+	PyObject* py_exprs = PyList_New(0);
+	if (py_exprs == NULL)
+		return NULL;
+
+	for (size_t i = 0; i < type->n_exprs; i++) {
+		ExprObject* py_expr = 
+			(ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+		if (py_expr == NULL)
+			goto fail;
+		py_expr->pool   = NULL;
+		py_expr->master = (PyObject*) self;
+		py_expr->expr   = type->exprs[i];
+		Py_INCREF(py_expr->master);
+
+		if (PyList_Append(py_exprs, (PyObject*) py_expr) == -1)
+			goto fail;
+
+		Py_DECREF((PyObject*) py_expr);
+	}
+
+	return py_exprs;
+
+fail:
+	Py_DECREF(py_exprs);
+	return NULL;
+}
+
+static PyObject*
+Type_unpack(TypeObject* self, PyObject *fargs)
+{
+	PyObject* res = NULL;
+	PyObject* py_hypos = NULL;
+	PyObject* py_cat = NULL;
+	PyObject* py_exprs = NULL;
+
+	py_hypos = Type_getHypos(self, NULL);
+	if (py_hypos == NULL)
+		goto fail;
+
+	py_cat = Type_getCat(self, NULL);
+	if (py_cat == NULL)
+		goto fail;
+
+	py_exprs = Type_getExprs(self, NULL);
+	if (py_exprs == NULL)
+		goto fail;
+
+	res = Py_BuildValue("OOO", py_hypos, py_cat, py_exprs);
+
+fail:
+	Py_XDECREF(py_hypos);
+	Py_XDECREF(py_cat);
+	Py_XDECREF(py_exprs);
+	return res;
+}
+
+static PyMethodDef Type_methods[] = {
+    {"unpack", (PyCFunction)Type_unpack, METH_VARARGS,
+     "Decomposes a type into its components"
+    },
+    {NULL}  /* Sentinel */
+};
+
+static PyGetSetDef Type_getseters[] = {
+    {"hypos", 
+     (getter)Type_getHypos, NULL,
+     "this is the list of hypotheses in the type signature",
+     NULL},
+    {"cat", 
+     (getter)Type_getCat, NULL,
+     "this is the name of the category",
+     NULL},
+    {"exprs", 
+     (getter)Type_getExprs, NULL,
+     "this is the list of indices for the category",
+     NULL},
+    {NULL}  /* Sentinel */
+};
+
+static PyTypeObject pgf_TypeType = {
+    PyObject_HEAD_INIT(NULL)
+    0,                         /*ob_size*/
+    "pgf.Type",                /*tp_name*/
+    sizeof(TypeObject),        /*tp_basicsize*/
+    0,                         /*tp_itemsize*/
+    (destructor)Type_dealloc,  /*tp_dealloc*/
+    0,                         /*tp_print*/
+    0,                         /*tp_getattr*/
+    0,                         /*tp_setattr*/
+    0,                         /*tp_compare*/
+    0,                         /*tp_repr*/
+    0,                         /*tp_as_number*/
+    0,                         /*tp_as_sequence*/
+    0,                         /*tp_as_mapping*/
+    0,                         /*tp_hash */
+    0,                         /*tp_call*/
+    (reprfunc) Type_repr,      /*tp_str*/
+    0,                         /*tp_getattro*/
+    0,                         /*tp_setattro*/
+    0,                         /*tp_as_buffer*/
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, /*tp_flags*/
+    "abstract syntax type",    /*tp_doc*/
+    0,		                   /*tp_traverse */
+    0,		                   /*tp_clear */
+    (richcmpfunc) Type_richcompare, /*tp_richcompare */
+    0,		                   /*tp_weaklistoffset */
+    0,		                   /*tp_iter */
+    0,		                   /*tp_iternext */
+    Type_methods,              /*tp_methods */
+    0,                         /*tp_members */
+    Type_getseters,            /*tp_getset */
+    0,                         /*tp_base */
+    0,                         /*tp_dict */
+    0,                         /*tp_descr_get */
+    0,                         /*tp_descr_set */
+    0,                         /*tp_dictoffset */
+    (initproc)Type_init,       /*tp_init */
+    0,                         /*tp_alloc */
+    (newfunc) Type_new,        /*tp_new */
+};
 
 typedef struct IterObject {
     PyObject_HEAD
@@ -1504,6 +1946,37 @@ PGF_functionsByCat(PGFObject* self, PyObject *args)
     return functions;
 }
 
+static TypeObject*
+PGF_functionType(PGFObject* self, PyObject *args)
+{
+	const char *funname_s;
+    if (!PyArg_ParseTuple(args, "s", &funname_s))
+        return NULL;
+
+	GuPool *tmp_pool = gu_local_pool();
+    GuString funname = gu_str_string(funname_s, tmp_pool);
+    
+    PgfType* type =
+		pgf_function_type(self->pgf, funname);
+
+	gu_pool_free(tmp_pool);
+
+	if (type == NULL) {
+		PyErr_Format(PyExc_KeyError, "Function '%s' is not defined", funname_s);
+		return NULL;
+	}
+
+	TypeObject* pytype = (TypeObject*) pgf_TypeType.tp_alloc(&pgf_TypeType, 0);
+	if (pytype == NULL)
+		return NULL;
+	pytype->pool   = NULL;
+	pytype->type   = type;
+	pytype->master = (PyObject*) self;
+	Py_XINCREF(self);
+
+    return pytype;
+}
+
 static IterObject*
 PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
 {
@@ -1588,6 +2061,9 @@ static PyMemberDef PGF_members[] = {
 static PyMethodDef PGF_methods[] = {
     {"functionsByCat", (PyCFunction)PGF_functionsByCat, METH_VARARGS,
      "Returns the list of functions for a given category"
+    },
+    {"functionType", (PyCFunction)PGF_functionType, METH_VARARGS,
+     "Returns the type of a function"
     },
     {"generate", (PyCFunction)PGF_generate, METH_VARARGS | METH_KEYWORDS,
      "Generates abstract syntax trees of given category in decreasing probability order"
@@ -1703,11 +2179,43 @@ pgf_readExpr(PyObject *self, PyObject *args) {
     return pyexpr;
 }
 
+static TypeObject*
+pgf_readType(PyObject *self, PyObject *args) {
+	size_t len;
+    const uint8_t *buf;
+    if (!PyArg_ParseTuple(args, "s#", &buf, &len))
+        return NULL;
+
+	TypeObject* pytype = (TypeObject*) pgf_TypeType.tp_alloc(&pgf_TypeType, 0);
+	if (pytype == NULL)
+		return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuIn* in = gu_data_in(buf, len, tmp_pool);
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	pytype->pool = gu_new_pool();
+	pytype->type = pgf_read_type(in, pytype->pool, err);
+	pytype->master = NULL;
+
+	if (!gu_ok(err) || pytype->type == NULL) {
+		PyErr_SetString(PGFError, "The type cannot be parsed");
+		Py_DECREF(pytype);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+    return pytype;
+}
+
 static PyMethodDef module_methods[] = {
     {"readPGF",  (void*)pgf_readPGF,  METH_VARARGS,
      "Reads a PGF file in the memory"},
     {"readExpr", (void*)pgf_readExpr, METH_VARARGS,
      "Parses a string as an abstract tree"},
+    {"readType", (void*)pgf_readType, METH_VARARGS,
+     "Parses a string as an abstract type"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
@@ -1726,6 +2234,9 @@ initpgf(void)
         return;
 
     if (PyType_Ready(&pgf_ExprType) < 0)
+        return;
+
+    if (PyType_Ready(&pgf_TypeType) < 0)
         return;
 
 	if (PyType_Ready(&pgf_IterType) < 0)
@@ -1747,6 +2258,9 @@ initpgf(void)
 
     PyModule_AddObject(m, "Expr", (PyObject *) &pgf_ExprType);
     Py_INCREF(&pgf_ExprType);
+
+    PyModule_AddObject(m, "Type", (PyObject *) &pgf_TypeType);
+    Py_INCREF(&pgf_TypeType);
 
     Py_INCREF(&pgf_PGFType);
     Py_INCREF(&pgf_ConcrType);

@@ -188,7 +188,7 @@ pgf_read_flags(PgfReader* rdr)
 }
 
 static PgfType*
-pgf_read_type(PgfReader* rdr);
+pgf_read_type_(PgfReader* rdr);
 
 static PgfExpr
 pgf_read_expr_(PgfReader* rdr)
@@ -269,7 +269,7 @@ pgf_read_expr_(PgfReader* rdr)
 						   &expr, rdr->opool);
 		etyped->expr = pgf_read_expr_(rdr);
 		gu_return_on_exn(rdr->err, gu_null_variant);
-		etyped->type = pgf_read_type(rdr);
+		etyped->type = pgf_read_type_(rdr);
 		gu_return_on_exn(rdr->err, gu_null_variant);
 		break;
 	}
@@ -292,34 +292,38 @@ pgf_read_expr_(PgfReader* rdr)
 static void
 pgf_read_hypo(PgfReader* rdr, PgfHypo* hypo)
 {
-	hypo->bindtype = pgf_read_tag(rdr);
+	hypo->bind_type = pgf_read_tag(rdr);
 	gu_return_on_exn(rdr->err, );
 	
 	hypo->cid = pgf_read_cid(rdr);
 	gu_return_on_exn(rdr->err, );
 	
-	hypo->type = pgf_read_type(rdr);
+	hypo->type = pgf_read_type_(rdr);
 	gu_return_on_exn(rdr->err, );
 }
 
 static PgfType*
-pgf_read_type(PgfReader* rdr)
+pgf_read_type_(PgfReader* rdr)
 {
-	PgfType* type = gu_new(PgfType, rdr->opool);
-
 	size_t n_hypos = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
-	type->hypos = gu_new_seq(PgfHypo, n_hypos, rdr->opool);
+	GuSeq hypos = gu_new_seq(PgfHypo, n_hypos, rdr->opool);
 	for (size_t i = 0; i < n_hypos; i++) {
-		PgfHypo* hypo = gu_seq_index(type->hypos, PgfHypo, i);
+		PgfHypo* hypo = gu_seq_index(hypos, PgfHypo, i);
 		pgf_read_hypo(rdr, hypo);
 		gu_return_on_exn(rdr->err, NULL);
 	}
 
-	type->cid = pgf_read_cid(rdr);
+	PgfCId cid = pgf_read_cid(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
-	type->n_exprs = pgf_read_len(rdr);
+	size_t n_exprs = pgf_read_len(rdr);
+
+	PgfType* type = gu_new_flex(rdr->opool, PgfType, exprs, n_exprs);
+	type->hypos   = hypos;
+	type->cid     = cid;
+	type->n_exprs = n_exprs;
+
 	for (size_t i = 0; i < type->n_exprs; i++) {
 		type->exprs[i] = pgf_read_expr_(rdr);
 		gu_return_on_exn(rdr->err, NULL);
@@ -423,7 +427,7 @@ pgf_read_absfun(PgfReader* rdr)
 	absfun->name = pgf_read_cid(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
-	absfun->type = pgf_read_type(rdr);
+	absfun->type = pgf_read_type_(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
 	absfun->arity = pgf_read_int(rdr);

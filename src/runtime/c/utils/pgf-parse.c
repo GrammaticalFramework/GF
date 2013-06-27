@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
     gu_printf(wtr, err, "%d (%.0f ms): ", ctr, 1000.0 * cpu_time_used);
     if (ep != NULL) {
       gu_printf(wtr, err, "[%.4f] (", ep->prob);
-      pgf_print_expr(ep->expr, 0, wtr, err);
+      pgf_print_expr(ep->expr, NULL, 0, wtr, err);
       gu_printf(wtr, err, ")\n");
     } else {
       gu_printf(wtr, err, "---\n");
