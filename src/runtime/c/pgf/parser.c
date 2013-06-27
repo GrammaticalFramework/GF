@@ -313,7 +313,7 @@ pgf_print_production(int fid, PgfProduction prod,
     case PGF_PRODUCTION_APPLY: {
         PgfProductionApply* papp = i.data;
         gu_printf(wtr,err,"F%d(",papp->fun->funid);
-        pgf_print_expr(papp->fun->ep->expr, 0, wtr, err);
+        pgf_print_expr(papp->fun->ep->expr, NULL, 0, wtr, err);
         gu_printf(wtr,err,")[");
         pgf_print_production_args(papp->args,wtr,err);
         gu_printf(wtr,err,"]\n");
@@ -327,7 +327,7 @@ pgf_print_production(int fid, PgfProduction prod,
     case PGF_PRODUCTION_EXTERN: {
         PgfProductionExtern* pext = i.data;
         gu_printf(wtr,err,"<extern>(");
-        pgf_print_expr(pext->ep->expr, 0, wtr, err);
+        pgf_print_expr(pext->ep->expr, NULL, 0, wtr, err);
         gu_printf(wtr,err,")[]\n");
         break;
     }
@@ -383,7 +383,7 @@ pgf_print_item(PgfItem* item, PgfParseState* state, GuWriter* wtr, GuExn* err, G
 		PgfProductionApply* papp = i.data;
         PgfCncFun* fun = papp->fun;
         gu_printf(wtr, err, "F%d(", fun->funid);
-        pgf_print_expr(fun->ep->expr, 0, wtr, err);
+        pgf_print_expr(fun->ep->expr, NULL, 0, wtr, err);
         gu_printf(wtr, err, ")[");
         pgf_print_production_args(item->args, wtr, err);
         gu_printf(wtr, err, "]; ");
@@ -399,7 +399,7 @@ pgf_print_item(PgfItem* item, PgfParseState* state, GuWriter* wtr, GuExn* err, G
         gu_printf(wtr, err, "<extern>");
         if (pext->ep != NULL) {
 			gu_printf(wtr, err, "(");
-			pgf_print_expr(pext->ep->expr, 0, wtr, err);
+			pgf_print_expr(pext->ep->expr, NULL, 0, wtr, err);
 			gu_printf(wtr, err, ")");
 		}
 		gu_printf(wtr, err, "[");
@@ -438,7 +438,7 @@ pgf_print_expr_state(PgfExprState* st,
 	}
 
 	gu_puts(" (", wtr, err);
-	pgf_print_expr(st->ep.expr, 0, wtr, err);
+	pgf_print_expr(st->ep.expr, NULL, 0, wtr, err);
 }
 
 static void
@@ -467,7 +467,7 @@ pgf_print_expr_state0(PgfExprState* st,
 		gu_puts(" (", wtr, err);
 	else
 		gu_puts(" ", wtr, err);
-	pgf_print_expr(st->ep.expr, 0, wtr, err);
+	pgf_print_expr(st->ep.expr, NULL, 0, wtr, err);
 
 	size_t n_counts = gu_buf_length(stack);
 	for (size_t i = 0; i < n_counts; i++) {
