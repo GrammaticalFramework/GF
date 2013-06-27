@@ -103,7 +103,7 @@ pgf_print_parent_state(PgfExprState* st,
 		pgf_print_parent_state(parent, wtr, err, stack);
 
 	gu_puts(" (", wtr, err);
-	pgf_print_expr(st->expr, 0, wtr, err);
+	pgf_print_expr(st->expr, NULL, 0, wtr, err);
 }
 
 static void
@@ -125,7 +125,7 @@ pgf_print_expr_state(PgfExprState* st,
 		gu_puts(" (", wtr, err);
 	else
 		gu_puts(" ", wtr, err);
-	pgf_print_expr(st->expr, 0, wtr, err);
+	pgf_print_expr(st->expr, NULL, 0, wtr, err);
 
 	size_t n_counts = gu_buf_length(stack);
 	for (size_t i = 0; i < n_counts; i++) {
