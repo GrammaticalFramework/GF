@@ -160,11 +160,11 @@ static PyMethodDef Expr_methods[] = {
 static PyGetSetDef Expr_getseters[] = {
     {"fun", 
      NULL, NULL,
-     "this the function in a function application",
+     "this is the function in a function application",
      NULL},
     {"arg", 
      NULL, NULL,
-     "this the argument in a function application",
+     "this is the argument in a function application",
      NULL},
     {"val", 
      NULL, NULL,
@@ -2211,7 +2211,7 @@ pgf_readType(PyObject *self, PyObject *args) {
 
 static PyMethodDef module_methods[] = {
     {"readPGF",  (void*)pgf_readPGF,  METH_VARARGS,
-     "Reads a PGF file in the memory"},
+     "Reads a PGF file in memory"},
     {"readExpr", (void*)pgf_readExpr, METH_VARARGS,
      "Parses a string as an abstract tree"},
     {"readType", (void*)pgf_readType, METH_VARARGS,
