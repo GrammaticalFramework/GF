@@ -799,10 +799,11 @@ pgf_expr_eq(PgfExpr e1, PgfExpr e2)
 		return false;
 
 	switch (ei1.tag) {
-	case PGF_EXPR_FUN: {
-		PgfExprFun* fun1 = ei1.data;
-		PgfExprFun* fun2 = ei2.data;
-		return gu_string_eq(fun1->fun, fun2->fun);
+	case PGF_EXPR_ABS: {
+		PgfExprAbs* abs1 = ei1.data;
+		PgfExprAbs* abs2 = ei2.data;
+		return gu_string_eq(abs1->id, abs2->id) &&
+		       pgf_expr_eq(abs1->body, abs2->body);
 	}
 	case PGF_EXPR_APP: {
 		PgfExprApp* app1 = ei1.data;
@@ -815,14 +816,32 @@ pgf_expr_eq(PgfExpr e1, PgfExpr e2)
 		PgfExprLit* lit2 = ei2.data;
 		return (pgf_literal_eq(lit1->lit,lit2->lit));
 	}
-	case PGF_EXPR_META:
-		return true;
-	case PGF_EXPR_ABS:
-	case PGF_EXPR_VAR:
-	case PGF_EXPR_TYPED:
-	case PGF_EXPR_IMPL_ARG:
-		gu_impossible();
-		break;
+	case PGF_EXPR_META: {
+		PgfExprMeta* meta1 = ei1.data;
+		PgfExprMeta* meta2 = ei2.data;
+		return (meta1->id == meta2->id);
+	}
+	case PGF_EXPR_FUN: {
+		PgfExprFun* fun1 = ei1.data;
+		PgfExprFun* fun2 = ei2.data;
+		return gu_string_eq(fun1->fun, fun2->fun);
+	}
+	case PGF_EXPR_VAR: {
+		PgfExprVar* var1 = ei1.data;
+		PgfExprVar* var2 = ei2.data;
+		return (var1->var == var2->var);
+	}
+	case PGF_EXPR_TYPED: {
+		PgfExprTyped* typed1 = ei1.data;
+		PgfExprTyped* typed2 = ei2.data;
+		return pgf_expr_eq(typed1->expr, typed2->expr) &&
+		       pgf_type_eq(typed1->type, typed2->type);
+	}
+	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* impl1 = ei1.data;
+		PgfExprImplArg* impl2 = ei2.data;
+		return pgf_expr_eq(impl1->expr, impl2->expr);
+	}
 	default:
 		gu_impossible();
 	}
