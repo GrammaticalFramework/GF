@@ -367,15 +367,15 @@ gu_string_is_prefix(GuString s1, GuString s2)
 	return true;
 }
 
-GuWord
-gu_string_hash(GuString s)
+GuHash
+gu_string_hash(GuHash h, GuString s)
 {
 	if (s.w_ & 1) {
-		return s.w_;
+		return h*101 + s.w_;
 	}
 	size_t len = gu_string_length(s);
 	uint8_t* data = gu_string_long_data(s);
-	return gu_hash_bytes(0, data, len);
+	return gu_hash_bytes(h, data, len);
 }
 
 bool
@@ -403,7 +403,7 @@ gu_string_hasher_hash(GuHasher* self, const void* p)
 {
 	(void) self;
 	const GuString* sp = p;
-	return gu_string_hash(*sp);
+	return gu_string_hash(0, *sp);
 }
 
 static bool

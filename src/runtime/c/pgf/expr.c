@@ -830,6 +830,86 @@ pgf_expr_eq(PgfExpr e1, PgfExpr e2)
 	return false;
 }
 
+GuHash
+pgf_literal_hash(GuHash h, PgfLiteral lit)
+{
+	GuVariantInfo i = gu_variant_open(lit);
+
+	switch (i.tag) {
+	case PGF_LITERAL_STR: {
+		PgfLiteralStr* lit = i.data;
+        h = gu_string_hash(h, lit->val);
+        break;
+    }
+	case PGF_LITERAL_INT: {
+		PgfLiteralInt* lit = i.data;
+		h = gu_hash_byte(h, lit->val);
+		break;
+	}
+	case PGF_LITERAL_FLT: {
+		PgfLiteralFlt* lit = i.data;
+		h = gu_hash_byte(h, lit->val);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+
+	return h;
+}
+
+GuHash
+pgf_expr_hash(GuHash h, PgfExpr e)
+{
+	GuVariantInfo ei = gu_variant_open(e);
+	switch (ei.tag) {
+	case PGF_EXPR_ABS: {
+		PgfExprAbs* abs = ei.data;
+		h = gu_string_hash(h, abs->id);
+		h = pgf_expr_hash(h, abs->body);
+		break;
+	}
+	case PGF_EXPR_APP: {
+		PgfExprApp* app = ei.data;
+		h = pgf_expr_hash(h, app->fun);
+		h = pgf_expr_hash(h, app->arg);
+		break;
+	}
+	case PGF_EXPR_LIT: {
+		PgfExprLit* lit = ei.data;
+        h = pgf_literal_hash(h, lit->lit);
+		break;
+	}
+	case PGF_EXPR_META:
+		h = gu_hash_byte(h, '?');
+		break;
+	case PGF_EXPR_FUN: {
+		PgfExprFun* fun = ei.data;
+		h = gu_string_hash(h, fun->fun);
+		break;
+	}
+	case PGF_EXPR_VAR: {
+		PgfExprVar* evar = ei.data;
+		
+		h = gu_hash_byte(h, evar->var);
+		break;
+	}
+	case PGF_EXPR_TYPED: {
+		PgfExprTyped* typed = ei.data;
+		h = pgf_expr_hash(h, typed->expr);
+		break;
+	}
+	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* impl = ei.data;
+		h = pgf_expr_hash(h, impl->expr);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+	return h;
+}
+
 void
 pgf_print_literal(PgfLiteral lit,
 			  GuWriter* wtr, GuExn* err)

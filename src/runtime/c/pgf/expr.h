@@ -166,6 +166,12 @@ pgf_expr_eq(PgfExpr e1, PgfExpr e2);
 bool
 pgf_type_eq(PgfType* t1, PgfType* t2);
 
+GuHash
+pgf_literal_hash(GuHash h, PgfLiteral lit);
+
+GuHash
+pgf_expr_hash(GuHash h, PgfExpr e);
+
 typedef struct PgfPrintContext PgfPrintContext;
 
 struct PgfPrintContext {

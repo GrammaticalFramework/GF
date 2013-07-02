@@ -78,8 +78,8 @@ gu_string_is_prefix(GuString s1, GuString s2);
 #if defined(GU_HASH_H_) && !defined(GU_STRING_H_HASH_)
 #define GU_STRING_H_HASH_
 
-uintptr_t
-gu_string_hash(GuString s);
+GuHash
+gu_string_hash(GuHash h, GuString s);
 
 extern GuHasher gu_string_hasher[1];
 
