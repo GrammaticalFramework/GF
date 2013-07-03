@@ -2025,6 +2025,29 @@ pgf_result_predict(PgfParsing* ps,
 	}
 }
 
+static bool
+pgf_parse_result_is_new(PgfExprState* st)
+{
+	// we have found a complete abstract tree but we must check
+	// whether this is not a duplication. Since the trees are
+	// generated in probability order it is enough to check only
+	// trees with the same probability.
+
+	size_t i = gu_buf_length(st->answers->exprs);
+	while (i-- > 0) {
+		PgfExprProb* ep = 
+			gu_buf_get(st->answers->exprs, PgfExprProb*, i);
+
+		if (ep->prob < st->ep.prob)
+			break;
+
+		if (pgf_expr_eq(ep->expr, st->ep.expr))
+			return false;
+	}
+
+	return true;
+}
+
 static PgfExprProb*
 pgf_parse_result_next(PgfParseResult* pr)
 {
@@ -2063,7 +2086,7 @@ pgf_parse_result_next(PgfParseResult* pr)
 			} else {
 				pgf_result_predict(pr->state->ps, st, ccat);
 			}
-		} else {
+		} else if (pgf_parse_result_is_new(st)) {
 			gu_buf_push(st->answers->exprs, PgfExprProb*, &st->ep);
 
 			size_t n_conts = gu_buf_length(st->answers->conts);
