@@ -150,6 +150,12 @@ Expr_richcompare(ExprObject *e1, ExprObject *e2, int op)
 	}
 }
 
+static long
+Expr_hash(ExprObject *e)
+{
+	return (long) pgf_expr_hash(0, e->expr);
+}
+
 static PyMethodDef Expr_methods[] = {
     {"unpack", (PyCFunction)Expr_unpack, METH_VARARGS,
      "Decomposes an expression into its components"
@@ -200,7 +206,7 @@ static PyTypeObject pgf_ExprType = {
     0,                         /*tp_as_number*/
     0,                         /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
-    0,                         /*tp_hash */
+    (hashfunc) Expr_hash,      /*tp_hash */
     0,                         /*tp_call*/
     (reprfunc) Expr_repr,      /*tp_str*/
     (getattrofunc) Expr_getattro,/*tp_getattro*/
