@@ -62,7 +62,8 @@ executable pgf-service
 
   build-depends: base >=4.2 && <5,
                  mtl,
-                 old-time,
+                 time,
+                 time-compat,
                  directory,
                  filepath,
                  containers,
