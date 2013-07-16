@@ -45,6 +45,54 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         a = mkAgr num pers gen ;
       } ;
 
+    {- Noun --------------------------------------------------------------- -}
+
+    -- Helper function for inferring noun plural from singulative
+    -- Nouns with collective & determinate forms should not use this...
+    inferNounPlural : Str -> Str = \sing ->
+      case sing of {
+        _ + "na" => init sing + "iet" ; -- eg WIDNIET
+        _ + "i" => sing + "n" ; -- eg BAĦRIN, DĦULIN, RAĦLIN
+        _ + ("a"|"u") => init(sing) + "i" ; -- eg ROTI
+        _ + "q" => sing + "at" ; -- eg TRIQAT
+        _ => sing + "i"
+      } ;
+
+    -- Helper function for inferring noun gender from singulative
+    -- Refer {MDG pg190}
+    inferNounGender : Str -> Gender = \sing ->
+      case sing of {
+        _ + "aġni" => Fem ;
+        _ + "anti" => Fem ;
+        _ + "zzjoni" => Fem ;
+        _ + "ġenesi" => Fem ;
+        _ + "ite" => Fem ;
+        _ + "itù" => Fem ;
+        _ + "joni" => Fem ;
+        _ + "ojde" => Fem ;
+        _ + "udni" => Fem ;
+        _ + ("a"|"à") => Fem ;
+        _ => Masc
+      } ;
+
+  {- Adjective ------------------------------------------------------------ -}
+
+    -- Infer femininine form of adjective from masculine
+    inferAdjFem : Str -> Str ;
+    inferAdjFem masc = case masc of {
+      _ + "ef" => (dropSfx 2 masc) + "fa" ; -- NIEXEF
+      _ + "u" => (init masc) + "a" ; -- BRAVU
+      _ + "i" => masc + "ja" ; -- MIMLI
+      _ => masc + "a" -- VOJT
+      } ;
+
+    -- Infer plural form of adjective from feminine
+    inferAdjPlural : Str -> Str ;
+    inferAdjPlural fem = case fem of {
+      _ + ("f"|"j"|"ġ") + "a" => (init fem) + "in" ; -- NIEXFA, MIMLIJA, MAĦMUĠA
+      _ => (init fem) + "i" -- BRAVA
+      } ;
+
   {- Verb ----------------------------------------------------------------- -}
 
   oper
@@ -64,19 +112,19 @@ resource MorphoMlt = ResMlt ** open Prelude in {
 
     -- IE/I vowel changes
     -- so far only used in derived verbs
-    vowelChangesIE : Root -> Pattern -> Pattern = \root,vowels ->
+    vowelChangesIE : Root -> Vowels -> Vowels = \root,vowels ->
       case <root, vowels> of { -- see {GO pg93}
-        <{C2="għ"},{V1="ie";V2="e"}> => mkPattern "e" "i" ; -- QIEGĦED > QEGĦIDKOM
-        <_,{V1="ie";V2="e"}> => mkPattern "i" "i" ; -- WIEĠEB > WIĠIBKOM
-        <_,{V1="ie";V2=""}> => mkPattern "i" ; -- STRIEĦ > STRIĦAJT
+        <{C2="għ"},{V1="ie";V2="e"}> => mkVowels "e" "i" ; -- QIEGĦED > QEGĦIDKOM
+        <_,{V1="ie";V2="e"}> => mkVowels "i" "i" ; -- WIEĠEB > WIĠIBKOM
+        <_,{V1="ie";V2=""}> => mkVowels "i" ; -- STRIEĦ > STRIĦAJT
         _ => vowels
       } ;
 
     {- ~~~ Strong Verb ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
-    -- Params: Root, Pattern
-    conjStrongPerf : Root -> Pattern -> (VAgr => Str) = \root,p ->
+    -- Params: Root, Vowels
+    conjStrongPerf : Root -> Vowels -> (VAgr => Str) = \root,p ->
       let
         ktib = root.C1 + root.C2 + (case p.V2 of {"e" => "i" ; _ => p.V2 }) + root.C3 ;
         kitb = root.C1 + p.V1 + root.C2 + root.C3 ;
@@ -95,11 +143,11 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     -- Params: Imperative Singular (eg IKTEB), Imperative Plural (eg IKTBU)
     conjStrongImpf = conjGenericImpf ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
-    conjStrongImp : Root -> Pattern -> (Number => Str) = \root,patt ->
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
+    conjStrongImp : Root -> Vowels -> (Number => Str) = \root,vseq ->
       let
-        vwls = vowelChangesStrong patt ;
+        vwls = vowelChangesStrong vseq ;
       in
         table {
           Sg => (vwls!Sg).V1 + root.C1 + root.C2 + (vwls!Sg).V2 + root.C3 ;  -- Inti:  IKTEB
@@ -107,43 +155,43 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         } ;
 
     -- Vowel changes for imperative
-    vowelChangesStrong : Pattern -> (Number => Pattern) = \patt ->
+    vowelChangesStrong : Vowels -> (Number => Vowels) = \vseq ->
       table {
-        Sg => case <patt.V1,patt.V2> of {
-          <"a","a"> => mkPattern "o" "o" ; -- RABAT > ORBOT (but: ILGĦAB, AĦBAT)
-          <"a","e"> => mkPattern "a" "e" ; -- GĦAMEL > AGĦMEL
-          <"e","e"> => mkPattern "i" "e" ; -- FEHEM > IFHEM
-          <"e","a"> => mkPattern "i" "a" ; -- FETAĦ > IFTAĦ (but: ONFOĦ)
-          <"i","e"> => mkPattern "i" "e" ; -- KITEB > IKTEB
-          <"o","o"> => mkPattern "o" "o"   -- GĦOĠOB > OGĦĠOB
+        Sg => case <vseq.V1,vseq.V2> of {
+          <"a","a"> => mkVowels "o" "o" ; -- RABAT > ORBOT (but: ILGĦAB, AĦBAT)
+          <"a","e"> => mkVowels "a" "e" ; -- GĦAMEL > AGĦMEL
+          <"e","e"> => mkVowels "i" "e" ; -- FEHEM > IFHEM
+          <"e","a"> => mkVowels "i" "a" ; -- FETAĦ > IFTAĦ (but: ONFOĦ)
+          <"i","e"> => mkVowels "i" "e" ; -- KITEB > IKTEB
+          <"o","o"> => mkVowels "o" "o"   -- GĦOĠOB > OGĦĠOB
         };
-        Pl => case <patt.V1,patt.V2> of {
-          <"a","a"> => mkPattern "o" ; -- RABAT > ORBTU
-          <"a","e"> => mkPattern "a" ; -- GĦAMEL > AGĦMLU
-          <"e","e"> => mkPattern "i" ; -- FEHEM > IFHMU
-          <"e","a"> => mkPattern "i" ; -- FETAĦ > IFTĦU
-          <"i","e"> => mkPattern "i" ; -- KITEB > IKTBU
-          <"o","o"> => mkPattern "o"   -- GĦOĠOB > OGĦĠBU
+        Pl => case <vseq.V1,vseq.V2> of {
+          <"a","a"> => mkVowels "o" ; -- RABAT > ORBTU
+          <"a","e"> => mkVowels "a" ; -- GĦAMEL > AGĦMLU
+          <"e","e"> => mkVowels "i" ; -- FEHEM > IFHMU
+          <"e","a"> => mkVowels "i" ; -- FETAĦ > IFTĦU
+          <"i","e"> => mkVowels "i" ; -- KITEB > IKTBU
+          <"o","o"> => mkVowels "o"   -- GĦOĠOB > OGĦĠBU
         }
       } ;
 
     {- ~~~ Liquid-Medial Verb ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
-    -- Params: Root, Pattern
-    conjLiquidMedialPerf : Root -> Pattern -> (VAgr => Str) = \root,patt ->
+    -- Params: Root, Vowels
+    conjLiquidMedialPerf : Root -> Vowels -> (VAgr => Str) = \root,vseq ->
       let
         zlaq : Str = case root.C1 of {
-          "għ" => root.C1 + patt.V1 + root.C2 + (case patt.V2 of {"e" => "i" ; _ => patt.V2 }) + root.C3 ; -- GĦAMIL-
-          _ => root.C1 + root.C2 + (case patt.V2 of {"e" => "i" ; _ => patt.V2 }) + root.C3 -- ŻLAQ-
+          "għ" => root.C1 + vseq.V1 + root.C2 + (case vseq.V2 of {"e" => "i" ; _ => vseq.V2 }) + root.C3 ; -- GĦAMIL-
+          _ => root.C1 + root.C2 + (case vseq.V2 of {"e" => "i" ; _ => vseq.V2 }) + root.C3 -- ŻLAQ-
           } ;
-        zelq = root.C1 + patt.V1 + root.C2 + root.C3 ;
+        zelq = root.C1 + vseq.V1 + root.C2 + root.C3 ;
       in
         table {
           AgP1 Sg    => zlaq + "t" ;  -- Jiena ŻLAQT
           AgP2 Sg    => zlaq + "t" ;  -- Inti ŻLAQT
-          AgP3Sg Masc=> root.C1 + patt.V1 + root.C2 + patt.V2 + root.C3 ;  -- Huwa ŻELAQ
-          AgP3Sg Fem => zelq + (case patt.V2 of {"o" => "o" ; _ => "e"}) + "t" ;  -- Hija ŻELQET
+          AgP3Sg Masc=> root.C1 + vseq.V1 + root.C2 + vseq.V2 + root.C3 ;  -- Huwa ŻELAQ
+          AgP3Sg Fem => zelq + (case vseq.V2 of {"o" => "o" ; _ => "e"}) + "t" ;  -- Hija ŻELQET
           AgP1 Pl    => zlaq + "na" ;  -- Aħna ŻLAQNA
           AgP2 Pl    => zlaq + "tu" ;  -- Intom ŻLAQTU
           AgP3Pl     => zelq + "u"  -- Huma ŻELQU
@@ -153,11 +201,11 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     -- Params: Imperative Singular (eg IŻLOQ), Imperative Plural (eg IŻOLQU)
     conjLiquidMedialImpf = conjGenericImpf ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
-    conjLiquidMedialImp : Root -> Pattern -> (Number => Str) = \root,patt ->
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
+    conjLiquidMedialImp : Root -> Vowels -> (Number => Str) = \root,vseq ->
       let
-        vwls = vowelChangesLiquidMedial patt ;
+        vwls = vowelChangesLiquidMedial vseq ;
       in
         table {
           Sg => (vwls!Sg).V1 + root.C1 + root.C2 + (vwls!Sg).V2 + root.C3 ;  -- Inti: IŻLOQ
@@ -165,33 +213,33 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         } ;
 
     -- Vowel changes for imperative
-    vowelChangesLiquidMedial : Pattern -> (Number => Pattern) = \patt ->
+    vowelChangesLiquidMedial : Vowels -> (Number => Vowels) = \vseq ->
       table {
-        Sg => case <patt.V1,patt.V2> of {
-          <"a","a"> => mkPattern "i" "o" ; -- TALAB > ITLOB but ĦARAQ > AĦRAQ
-          <"a","e"> => mkPattern "o" "o" ; -- ĦAREĠ > OĦROĠ
-          <"e","e"> => mkPattern "e" "e" ; -- ĦELES > EĦLES
-          <"e","a"> => mkPattern "i" "o" ; -- ŻELAQ > IŻLOQ
-          <"i","e"> => mkPattern "i" "e" ; -- DILEK > IDLEK
-          <"o","o"> => mkPattern "i" "o"   -- XOROB > IXROB
+        Sg => case <vseq.V1,vseq.V2> of {
+          <"a","a"> => mkVowels "i" "o" ; -- TALAB > ITLOB but ĦARAQ > AĦRAQ
+          <"a","e"> => mkVowels "o" "o" ; -- ĦAREĠ > OĦROĠ
+          <"e","e"> => mkVowels "e" "e" ; -- ĦELES > EĦLES
+          <"e","a"> => mkVowels "i" "o" ; -- ŻELAQ > IŻLOQ
+          <"i","e"> => mkVowels "i" "e" ; -- DILEK > IDLEK
+          <"o","o"> => mkVowels "i" "o"   -- XOROB > IXROB
         };
-        Pl => case <patt.V1,patt.V2> of {
-          <"a","a"> => mkPattern "i" "o" ; -- TALAB > ITOLBU
-          <"a","e"> => mkPattern "o" "o" ; -- ĦAREĠ > OĦORĠU
-          <"e","e"> => mkPattern "e" "i" ; -- ĦELES > EĦILSU
-          <"e","a"> => mkPattern "i" "o" ; -- ŻELAQ > IŻOLQU
-          <"i","e"> => mkPattern "i" "i" ; -- DILEK > IDILKU
-          <"o","o"> => mkPattern "i" "o"   -- XOROB > IXORBU
+        Pl => case <vseq.V1,vseq.V2> of {
+          <"a","a"> => mkVowels "i" "o" ; -- TALAB > ITOLBU
+          <"a","e"> => mkVowels "o" "o" ; -- ĦAREĠ > OĦORĠU
+          <"e","e"> => mkVowels "e" "i" ; -- ĦELES > EĦILSU
+          <"e","a"> => mkVowels "i" "o" ; -- ŻELAQ > IŻOLQU
+          <"i","e"> => mkVowels "i" "i" ; -- DILEK > IDILKU
+          <"o","o"> => mkVowels "i" "o"   -- XOROB > IXORBU
         }
       } ;
 
     {- ~~~ Geminated Verb ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
-    -- Params: Root, Pattern
-    conjGeminatedPerf : Root -> Pattern -> (VAgr => Str) = \root,patt ->
+    -- Params: Root, Vowels
+    conjGeminatedPerf : Root -> Vowels -> (VAgr => Str) = \root,vseq ->
       let
-        habb = root.C1 + patt.V1 + root.C2 + root.C3 ;
+        habb = root.C1 + vseq.V1 + root.C2 + root.C3 ;
       in
         table {
           AgP1 Sg    => habb + "ejt" ;  -- Jiena ĦABBEJT
@@ -207,11 +255,11 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     -- Params: Imperative Singular (eg IKTEB), Imperative Plural (eg IKTBU)
     conjGeminatedImpf = conjGenericImpf ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
-    conjGeminatedImp : Root -> Pattern -> (Number => Str) = \root,patt ->
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
+    conjGeminatedImp : Root -> Vowels -> (Number => Str) = \root,vseq ->
       let
-        vwls = vowelChangesGeminated patt ;
+        vwls = vowelChangesGeminated vseq ;
         stem_sg = root.C1 + (vwls!Sg).V1 + root.C2 + root.C3 ;
       in
         table {
@@ -220,30 +268,30 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         } ;
 
     -- Vowel changes for imperative
-    vowelChangesGeminated : Pattern -> (Number => Pattern) = \patt ->
-      \\n => case patt.V1 of {
-        "e" => mkPattern "e" ; -- BEXX > BEXX (?)
-        _ => mkPattern "o" -- ĦABB > ĦOBB
+    vowelChangesGeminated : Vowels -> (Number => Vowels) = \vseq ->
+      \\n => case vseq.V1 of {
+        "e" => mkVowels "e" ; -- BEXX > BEXX (?)
+        _ => mkVowels "o" -- ĦABB > ĦOBB
       } ;
 
 
     {- ~~~ Assimilative Verb ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
-    -- Params: Root, Pattern
-    conjAssimilativePerf : Root -> Pattern -> (VAgr => Str) = \root,patt ->
+    -- Params: Root, Vowels
+    conjAssimilativePerf : Root -> Vowels -> (VAgr => Str) = \root,vseq ->
       let
         wasal = case root.C3 of {
-          "għ" => root.C1 + patt.V1 + root.C2 + patt.V2 + "j" ;
-          _    => root.C1 + patt.V1 + root.C2 + patt.V2 + root.C3
+          "għ" => root.C1 + vseq.V1 + root.C2 + vseq.V2 + "j" ;
+          _    => root.C1 + vseq.V1 + root.C2 + vseq.V2 + root.C3
           } ;
-        wasl  = root.C1 + patt.V1 + root.C2 + root.C3 ;
+        wasl  = root.C1 + vseq.V1 + root.C2 + root.C3 ;
       in
         table {
           AgP1 Sg    => wasal + "t" ;  -- Jiena WASALT
           AgP2 Sg    => wasal + "t" ;  -- Inti WASALT
           AgP3Sg Masc=> case root.C3 of {
-            "għ" => root.C1 + patt.V1 + root.C2 + patt.V2 + "'" ;  -- Huwa WAQA'
+            "għ" => root.C1 + vseq.V1 + root.C2 + vseq.V2 + "'" ;  -- Huwa WAQA'
             _    => wasal  -- Huwa WASAL
             } ;
           AgP3Sg Fem => wasl + "et" ;  -- Hija WASLET
@@ -256,23 +304,23 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     -- Params: Imperative Singular (eg ASAL), Imperative Plural (eg ASLU)
     conjAssimilativeImpf = conjGenericImpf ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
-    conjAssimilativeImp : Root -> Pattern -> (Number => Str) = \root,patt ->
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
+    conjAssimilativeImp : Root -> Vowels -> (Number => Str) = \root,vseq ->
       table {
-        Sg => patt.V1 + root.C2 + patt.V2 + case root.C3 of { "għ" => "'" ; _ => root.C3 } ;  -- Inti: ASAL
-        Pl => patt.V1 + root.C2 + root.C3 + "u"  -- Intom: ASLU
+        Sg => vseq.V1 + root.C2 + vseq.V2 + case root.C3 of { "għ" => "'" ; _ => root.C3 } ;  -- Inti: ASAL
+        Pl => vseq.V1 + root.C2 + root.C3 + "u"  -- Intom: ASLU
       } ;
 
     {- ~~~ Hollow Verb ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
-    -- Params: Root, Pattern
+    -- Params: Root, Vowels
     -- Refer: http://blog.johnjcamilleri.com/2012/07/vowel-patterns-maltese-hollow-verb/
-    conjHollowPerf : Root -> Pattern -> (VAgr => Str) = \root,patt ->
+    conjHollowPerf : Root -> Vowels -> (VAgr => Str) = \root,vseq ->
       let
-        sar = root.C1 + patt.V1 + root.C3 ;
-        sir = case <patt.V1,root.C2> of {
+        sar = root.C1 + vseq.V1 + root.C3 ;
+        sir = case <vseq.V1,root.C2> of {
           <"a","w"> => root.C1 + "o" + root.C3 ; -- DAM, FAR, SAQ (most common case)
           _ => root.C1 + "i" + root.C3
           }
@@ -300,18 +348,18 @@ resource MorphoMlt = ResMlt ** open Prelude in {
           AgP3Pl     => pfx_J imp_pl    -- Huma JDUMU / JMORRU
       } ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
     -- Refer: http://blog.johnjcamilleri.com/2012/07/vowel-patterns-maltese-hollow-verb/
-    conjHollowImp : Root -> Pattern -> (Number => Str) = \root,patt ->
+    conjHollowImp : Root -> Vowels -> (Number => Str) = \root,vseq ->
       let
-        sir = case <patt.V1,root.C2> of {
+        sir = case <vseq.V1,root.C2> of {
           <"a","w"> => root.C1 + "u" + root.C3 ; -- DAM, FAR, SAQ (most common case)
           <"a","j"> => root.C1 + "i" + root.C3 ; -- ĠAB, SAB, TAR
           <"ie","j"> => root.C1 + "i" + root.C3 ; -- FIEQ, RIED, ŻIED
           <"ie","w"> => root.C1 + "u" + root.C3 ; -- MIET
           <"e","j"> => root.C1 + "i" + root.C3 ; -- GĦEB
-          _ => Predef.error("Unhandled case in hollow verb:"++root.C1+patt.V1+root.C2+patt.V2+root.C3)
+          _ => Predef.error("Unhandled case in hollow verb:"++root.C1+vseq.V1+root.C2+vseq.V2+root.C3)
           }
       in
       table {
@@ -322,23 +370,23 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     {- ~~~ Lacking Verb ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
-    -- Params: Root, Pattern
-    conjLackingPerf : Root -> Pattern -> (VAgr => Str) = \root,patt ->
+    -- Params: Root, Vowels
+    conjLackingPerf : Root -> Vowels -> (VAgr => Str) = \root,vseq ->
       let
-        mxej = root.C1 + root.C2 + patt.V1 + root.C3
+        mxej = root.C1 + root.C2 + vseq.V1 + root.C3
       in
         table {
           --- i tal-leħen needs to be added here!
           AgP1 Sg    => mxej + "t" ;  -- Jiena IMXEJT
           AgP2 Sg    => mxej + "t" ;  -- Inti IMXEJT
-          AgP3Sg Masc=> root.C1 + patt.V1 + root.C2 + patt.V2 ;  -- Huwa MEXA
-          AgP3Sg Fem => case patt.V1 of {
+          AgP3Sg Masc=> root.C1 + vseq.V1 + root.C2 + vseq.V2 ;  -- Huwa MEXA
+          AgP3Sg Fem => case vseq.V1 of {
             "a" => root.C1 + root.C2 + "at" ;  -- Hija QRAT
             _ => root.C1 + root.C2 + "iet"  -- Hija MXIET
             } ;
           AgP1 Pl    => mxej + "na" ;  -- Aħna IMXEJNA
           AgP2 Pl    => mxej + "tu" ;  -- Intom IMXEJTU
-          AgP3Pl     => case patt.V1 of {
+          AgP3Pl     => case vseq.V1 of {
             "a" => root.C1 + root.C2 + "aw" ;  -- Huma QRAW
             _ => root.C1 + root.C2 + "ew"  -- Huma IMXEW
             }
@@ -348,9 +396,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     -- Params: Imperative Singular (eg IMXI), Imperative Plural (eg IMXU)
     conjLackingImpf = conjGenericImpf ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
-    conjLackingImp : Root -> Pattern -> (Number => Str) = \root,patt ->
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
+    conjLackingImp : Root -> Vowels -> (Number => Str) = \root,vseq ->
       table {
         Sg => "i" + root.C1 + root.C2 + "i" ;  -- Inti: IMXI
         Pl => "i" + root.C1 + root.C2 + "u"  -- Intom: IMXU
@@ -359,17 +407,17 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     {- ~~~ Defective Verb ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
-    -- Params: Root, Pattern
-    conjDefectivePerf : Root -> Pattern -> ( VAgr => Str ) = \root,patt ->
+    -- Params: Root, Vowels
+    conjDefectivePerf : Root -> Vowels -> ( VAgr => Str ) = \root,vseq ->
       let
-        qlaj = root.C1 + root.C2 + (case patt.V2 of {"e" => "i" ; _ => patt.V2 }) + "j" ;
-        qalgh = root.C1 + patt.V1 + root.C2 + root.C3 ;
+        qlaj = root.C1 + root.C2 + (case vseq.V2 of {"e" => "i" ; _ => vseq.V2 }) + "j" ;
+        qalgh = root.C1 + vseq.V1 + root.C2 + root.C3 ;
       in
         table {
           AgP1 Sg    => qlaj + "t" ;  -- Jiena QLAJT
           AgP2 Sg    => qlaj + "t" ;  -- Inti QLAJT
-          AgP3Sg Masc=> root.C1 + patt.V1 + root.C2 + patt.V2 + "'" ;  -- Huwa QALA'
-          AgP3Sg Fem => qalgh + (case patt.V2 of {"o" => "o" ; _ => "e"}) + "t" ;  -- Hija QALGĦET
+          AgP3Sg Masc=> root.C1 + vseq.V1 + root.C2 + vseq.V2 + "'" ;  -- Huwa QALA'
+          AgP3Sg Fem => qalgh + (case vseq.V2 of {"o" => "o" ; _ => "e"}) + "t" ;  -- Hija QALGĦET
           AgP1 Pl    => qlaj + "na" ;  -- Aħna QLAJNA
           AgP2 Pl    => qlaj + "tu" ;  -- Intom QLAJTU
           AgP3Pl     => qalgh + "u"  -- Huma QALGĦU
@@ -379,32 +427,32 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     -- Params: Imperative Singular (eg IKTEB), Imperative Plural (eg IKTBU)
     conjDefectiveImpf = conjGenericImpf ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
-    conjDefectiveImp : Root -> Pattern -> ( Number => Str ) = \root,patt ->
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
+    conjDefectiveImp : Root -> Vowels -> ( Number => Str ) = \root,vseq ->
       let
-        v1 = case patt.V1 of { "e" => "i" ; _ => patt.V1 } ;
+        v1 = case vseq.V1 of { "e" => "i" ; _ => vseq.V1 } ;
         v_pl : Str = case root.C2 of { #LiquidCons => "i" ; _ => "" } ; -- some verbs require "i" insertion in middle (eg AQILGĦU)
       in
         table {
-          Sg => v1 + root.C1 + root.C2 + patt.V2 + "'" ;  -- Inti:  AQLA' / IBŻA'
+          Sg => v1 + root.C1 + root.C2 + vseq.V2 + "'" ;  -- Inti:  AQLA' / IBŻA'
           Pl => v1 + root.C1 + v_pl + root.C2 + root.C3 + "u"  -- Intom: AQILGĦU / IBŻGĦU
         } ;
 
     {- ~~~ Quadriliteral Verb (Strong) ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
-    -- Params: Root, Pattern
-    conjQuadPerf : Root -> Pattern -> (VAgr => Str) = \root,patt ->
+    -- Params: Root, Vowels
+    conjQuadPerf : Root -> Vowels -> (VAgr => Str) = \root,vseq ->
       let
-        dendil = root.C1 + patt.V1 + root.C2 + root.C3 + (case patt.V2 of {"e" => "i" ; _ => patt.V2 }) + root.C4 ;
-        dendl = root.C1 + patt.V1 + root.C2 + root.C3 + root.C4 ;
+        dendil = root.C1 + vseq.V1 + root.C2 + root.C3 + (case vseq.V2 of {"e" => "i" ; _ => vseq.V2 }) + root.C4 ;
+        dendl = root.C1 + vseq.V1 + root.C2 + root.C3 + root.C4 ;
       in
       table {
         AgP1 Sg    => dendil + "t" ;  -- Jiena DENDILT
         AgP2 Sg    => dendil + "t" ;  -- Inti DENDILT
-        AgP3Sg Masc=> root.C1 + patt.V1 + root.C2 + root.C3 + patt.V2 + root.C4 ;  -- Huwa DENDIL
-        AgP3Sg Fem => dendl + (case patt.V2 of {"o" => "o" ; _ => "e"}) + "t" ;  -- Hija DENDLET
+        AgP3Sg Masc=> root.C1 + vseq.V1 + root.C2 + root.C3 + vseq.V2 + root.C4 ;  -- Huwa DENDIL
+        AgP3Sg Fem => dendl + (case vseq.V2 of {"o" => "o" ; _ => "e"}) + "t" ;  -- Hija DENDLET
         AgP1 Pl    => dendil + "na" ;  -- Aħna DENDILNA
         AgP2 Pl    => dendil + "tu" ;  -- Intom DENDILTU
         AgP3Pl     => dendl + "u"  -- Huma DENDLU
@@ -423,19 +471,19 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         AgP3Pl     => pfx_J imp_pl    -- Huma JDENDLU
       } ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
-    conjQuadImp : Root -> Pattern -> (Number => Str) = \root,patt ->
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
+    conjQuadImp : Root -> Vowels -> (Number => Str) = \root,vseq ->
       table {
-        Sg => root.C1 + patt.V1 + root.C2 + root.C3 + patt.V2 + root.C4 ;  -- Inti:  DENDEL
-        Pl => root.C1 + patt.V1 + root.C2 + root.C3 + root.C4 + "u"  -- Intom: DENDLU
+        Sg => root.C1 + vseq.V1 + root.C2 + root.C3 + vseq.V2 + root.C4 ;  -- Inti:  DENDEL
+        Pl => root.C1 + vseq.V1 + root.C2 + root.C3 + root.C4 + "u"  -- Intom: DENDLU
       } ;
 
     {- ~~~ Quadriliteral Verb (Weak Final) ~~~ -}
 
     -- Conjugate entire verb in PERFECT tense
     -- Params: Stem
-    conjQuadWeakPerf : Root -> Pattern -> Str -> (VAgr => Str) = \root,patt,imp_sg ->
+    conjQuadWeakPerf : Root -> Vowels -> Str -> (VAgr => Str) = \root,vseq,imp_sg ->
       case takeSfx 1 imp_sg of {
         "a" => -- KANTA
           let
@@ -452,13 +500,13 @@ resource MorphoMlt = ResMlt ** open Prelude in {
           } ;
         _ => -- SERVI
           let
-            serve = root.C1 + patt.V1 + root.C2 + root.C3 + "e" ;
+            serve = root.C1 + vseq.V1 + root.C2 + root.C3 + "e" ;
           in
           table {
             AgP1 Sg    => serve + "jt" ;  -- Jiena SERVEJT
             AgP2 Sg    => serve + "jt" ;  -- Inti SERVEJT
-            AgP3Sg Masc=> root.C1 + patt.V1 + root.C2 + root.C3 + patt.V2 ;  -- Huwa SERVA
-            AgP3Sg Fem => root.C1 + patt.V1 + root.C2 + root.C3 + "iet" ; -- Hija SERVIET
+            AgP3Sg Masc=> root.C1 + vseq.V1 + root.C2 + root.C3 + vseq.V2 ;  -- Huwa SERVA
+            AgP3Sg Fem => root.C1 + vseq.V1 + root.C2 + root.C3 + "iet" ; -- Hija SERVIET
             AgP1 Pl    => serve + "jna" ;  -- Aħna SERVEJNA
             AgP2 Pl    => serve + "jtu" ;  -- Intom SERVEJTU
             AgP3Pl     => serve + "w"  -- Huma SERVEW
@@ -478,13 +526,13 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         AgP3Pl     => pfx_J imp_pl    -- Huma JSERVU
       } ;
 
-    -- Conjugate entire verb in IMPERATIVE tense, infers vowel patterns
-    -- Params: Root, Pattern
-    conjQuadWeakImp : Root -> Pattern -> (Number => Str) = \root,patt ->
+    -- Conjugate entire verb in IMPERATIVE tense, infers vowel sequence
+    -- Params: Root, Vowels
+    conjQuadWeakImp : Root -> Vowels -> (Number => Str) = \root,vseq ->
       table {
         --- this is known to fail for KANTA, but that seems like a less common case
-        Sg => root.C1 + patt.V1 + root.C2 + root.C3 + "i" ;  -- Inti: SERVI
-        Pl => root.C1 + patt.V1 + root.C2 + root.C3 + "u"  -- Intom: SERVU
+        Sg => root.C1 + vseq.V1 + root.C2 + root.C3 + "i" ;  -- Inti: SERVI
+        Pl => root.C1 + vseq.V1 + root.C2 + root.C3 + "u"  -- Intom: SERVU
       } ;
 
 
@@ -542,7 +590,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       } ;
 
     -- Conjugate entire verb in IMPERATIVE tense
-    -- Params: Root, Pattern
+    -- Params: Root, Vowels
     conjLoanImp : Str -> (Number => Str) = \mamma ->
       table {
         Sg => case mamma of {
@@ -560,37 +608,37 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     conjFormII : VerbInfo -> (VForm => Str) = \i ->
       let
         mamma : Str = case i.class of {
-          Weak Defective => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 + i.patt.V2 + "'" ; -- QATTA'
-          Weak Lacking => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 + i.patt.V2 ; -- NEĦĦA
-          _ => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 + i.patt.V2 + i.root.C3 -- WAQQAF
+          Weak Defective => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2 + i.vseq.V2 + "'" ; -- QATTA'
+          Weak Lacking => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2 + i.vseq.V2 ; -- NEĦĦA
+          _ => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2 + i.vseq.V2 + i.root.C3 -- WAQQAF
           } ;
         nehhi : Str = case i.class of {
-          Weak Lacking => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 + "i" ; -- NEĦĦI
+          Weak Lacking => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2 + "i" ; -- NEĦĦI
           _ => mamma -- WAQQAF
           } ;
-        bexxix : Str = case <i.class,i.patt.V1,i.patt.V2> of {
-          <Weak Defective,_,_> => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 + i.patt.V2 + "j" ; -- QATTAJ
-          <_,"e","a"> => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 + "e" + i.root.C3 ; -- NEĦĦEJ
-          <_,_,"e"> => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 + "i" + i.root.C3 ;
+        bexxix : Str = case <i.class,i.vseq.V1,i.vseq.V2> of {
+          <Weak Defective,_,_> => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2 + i.vseq.V2 + "j" ; -- QATTAJ
+          <_,"e","a"> => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2 + "e" + i.root.C3 ; -- NEĦĦEJ
+          <_,_,"e"> => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2 + "i" + i.root.C3 ;
           _ => nehhi -- no change
           } ;
         waqqf : Str = case i.class of {
-          Weak Hollow => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3 ; -- QAJM
-          Weak Lacking => i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2 ; -- NEĦĦ
-          _ => sfx (i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C2) i.root.C3
+          Weak Hollow => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C3 ; -- QAJM
+          Weak Lacking => i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2 ; -- NEĦĦ
+          _ => sfx (i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C2) i.root.C3
           } ;
         waqqfu : Str = waqqf + "u" ;
         perf : VAgr => Str = table {
           AgP1 Sg => bexxix + "t" ;
           AgP2 Sg => bexxix + "t" ;
           AgP3Sg Masc => mamma ;
-          AgP3Sg Fem => case <i.patt.V1, i.patt.V2> of {
+          AgP3Sg Fem => case <i.vseq.V1, i.vseq.V2> of {
             <"e","a"> => waqqf + "iet" ; -- NEĦĦIET
             _ => waqqf + "et"
             } ;
           AgP1 Pl => bexxix + "na" ;
           AgP2 Pl => bexxix + "tu" ;
-          AgP3Pl => case <i.patt.V1, i.patt.V2> of {
+          AgP3Pl => case <i.vseq.V1, i.vseq.V2> of {
             <"e","a"> => waqqf + "ew" ; -- NEĦĦEW
             _ => waqqf + "u"
             }
@@ -618,23 +666,23 @@ resource MorphoMlt = ResMlt ** open Prelude in {
 
     conjFormII_quad : VerbInfo -> (VForm => Str) = \i ->
       let
-        vowels = extractPattern i.imp ;
+        vowels = extractVowels i.imp ;
         mamma : Str = case i.class of {
-          Quad QWeak => pfx_T i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3 + i.patt.V2 ; -- SSERVA
-          _ => pfx_T i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3 + i.patt.V2 + i.root.C4 -- T-ĦARBAT
+          Quad QWeak => pfx_T i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C3 + i.vseq.V2 ; -- SSERVA
+          _ => pfx_T i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C3 + i.vseq.V2 + i.root.C4 -- T-ĦARBAT
           } ;
         tharb : Str = case i.class of {
-          _ => pfx_T i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3
+          _ => pfx_T i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C3
           } ;
         tharbt : Str = case i.class of {
-          Quad QWeak => pfx_T i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3 ; -- SSERV
-          _ => pfx_T i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3 + i.root.C4
+          Quad QWeak => pfx_T i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C3 ; -- SSERV
+          _ => pfx_T i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C3 + i.root.C4
           } ;
         perf : VAgr => Str =
           let
             tharbat : Str = case <i.class,vowels.V2> of {
-              <Quad QWeak,"i"> => pfx_T i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3 + "e" + i.root.C4 ; -- SSERVEJ
-              <Quad QWeak,"a"> => pfx_T i.root.C1 + i.patt.V1 + i.root.C2 + i.root.C3 + "a" + i.root.C4 ; -- TKANTAJ
+              <Quad QWeak,"i"> => pfx_T i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C3 + "e" + i.root.C4 ; -- SSERVEJ
+              <Quad QWeak,"a"> => pfx_T i.root.C1 + i.vseq.V1 + i.root.C2 + i.root.C3 + "a" + i.root.C4 ; -- TKANTAJ
               _ => mamma
               } ;
             tharbtu : Str = case <i.class, vowels.V2> of {
@@ -707,13 +755,13 @@ resource MorphoMlt = ResMlt ** open Prelude in {
 
     conjFormIII : VerbInfo -> (VForm => Str) = \i ->
       let
-        wiegeb : Str = i.root.C1 + i.patt.V1 + i.root.C2 + i.patt.V2 + i.root.C3 ;
-        wegib : Str = case <i.patt.V1,i.patt.V2> of {
+        wiegeb : Str = i.root.C1 + i.vseq.V1 + i.root.C2 + i.vseq.V2 + i.root.C3 ;
+        wegib : Str = case <i.vseq.V1,i.vseq.V2> of {
           <"ie","e"> => i.root.C1 + "e" + i.root.C2 + "i" + i.root.C3 ;
           <v1,"e"> => i.root.C1 + v1 + i.root.C2 + "i" + i.root.C3 ;
           _ => wiegeb -- no change
           } ;
-        wiegb : Str = sfx (i.root.C1 + i.patt.V1 + i.root.C2) i.root.C3 ;
+        wiegb : Str = sfx (i.root.C1 + i.vseq.V1 + i.root.C2) i.root.C3 ;
         wiegbu : Str = wiegb + "u" ;
         perf : VAgr => Str = table {
           AgP1 Sg => wegib + "t" ;
@@ -751,13 +799,13 @@ resource MorphoMlt = ResMlt ** open Prelude in {
     conjFormVII : VerbInfo -> Str -> (VForm => Str) = \i,C1 ->
       let
         nhasel : Str = case i.class of {
-          Weak Hollow => C1 + i.patt.V1 + i.root.C3 ;
-          Weak Lacking => C1 + i.patt.V1 + i.root.C2 + i.patt.V2 ;
-          Weak Defective => C1 + i.patt.V1 + i.root.C2 + i.patt.V2 + "'" ;
-          _ => C1 + i.patt.V1 + i.root.C2 + i.patt.V2 + i.root.C3
+          Weak Hollow => C1 + i.vseq.V1 + i.root.C3 ;
+          Weak Lacking => C1 + i.vseq.V1 + i.root.C2 + i.vseq.V2 ;
+          Weak Defective => C1 + i.vseq.V1 + i.root.C2 + i.vseq.V2 + "'" ;
+          _ => C1 + i.vseq.V1 + i.root.C2 + i.vseq.V2 + i.root.C3
           } ;
-        v1 : Str = case i.patt.V1 of { "ie" => "e" ; v => v } ;
-        v2 : Str = case i.patt.V2 of { "e" => "i" ; v => v } ;
+        v1 : Str = case i.vseq.V1 of { "ie" => "e" ; v => v } ;
+        v2 : Str = case i.vseq.V2 of { "e" => "i" ; v => v } ;
         -- nhsil : Str = case <i.class,i.root.C1> of {
         --   <Strong Regular,_> => C1 + i.root.C2 + v2 + i.root.C3 ;
         --   <Strong LiquidMedial,_> => C1 + v1 + i.root.C2 + v2 + i.root.C3 ;
@@ -775,9 +823,9 @@ resource MorphoMlt = ResMlt ** open Prelude in {
           _ => C1 + v1 + i.root.C2 + v2 + i.root.C3
           } ;
         nhasl : Str = case i.class of {
-          Weak Hollow => C1 + i.patt.V1 + i.root.C3 ;
+          Weak Hollow => C1 + i.vseq.V1 + i.root.C3 ;
           Weak Lacking => C1 + i.root.C2 ;
-          _ => sfx (C1 + i.patt.V1 + i.root.C2) i.root.C3
+          _ => sfx (C1 + i.vseq.V1 + i.root.C2) i.root.C3
           } ;
         nhaslu : Str = case i.class of {
           Weak Lacking => nhasl + "ew" ;

@@ -537,7 +537,7 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       class : VClass ;
       form  : VDerivedForm ;
       root  : Root ; -- radicals
-      patt  : Pattern ; -- vowels extracted from mamma
+      vseq  : Vowels ; -- vowels extracted from mamma
       imp   : Str ; -- Imperative Sg. Gives so much information jaħasra!
       } ;
 
@@ -849,8 +849,8 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
         <VImpf (AgP1 Pl), Pos>     => "nkunu" ;
         <VImpf (AgP2 Pl), Pos>     => "tkunu" ;
         <VImpf (AgP3Pl), Pos>      => "jkunu" ;
-        <VImp (Pl), Pos>           => "kun" ;
-        <VImp (Sg), Pos>           => "kunu" ;
+        <VImp (Sg), Pos>           => "kun" ;
+        <VImp (Pl), Pos>           => "kunu" ;
         <VPerf (AgP1 Sg), Neg>     => "kontx" ;
         <VPerf (AgP2 Sg), Neg>     => "kontx" ;
         <VPerf (AgP3Sg Masc), Neg> => "kienx" ;
@@ -865,8 +865,8 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
         <VImpf (AgP1 Pl), Neg>     => "nkunux" ;
         <VImpf (AgP2 Pl), Neg>     => "tkunux" ;
         <VImpf (AgP3Pl), Neg>      => "jkunux" ;
-        <VImp (Pl), Neg>           => "kunx" ;
-        <VImp (Sg), Neg>           => "kunux" ;
+        <VImp (Sg), Neg>           => "kunx" ;
+        <VImp (Pl), Neg>           => "kunux" ;
         <VPresPart gn, _>          => NONEXIST ;
         <VPastPart gn, _>          => NONEXIST
         }
@@ -907,8 +907,8 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
           VImpf (AgP1 Pl)     => mkVerbStems [] "m'aħnie" ;
           VImpf (AgP2 Pl)     => mkVerbStems [] "m'intom" ;
           VImpf (AgP3Pl)      => mkVerbStems "huma" "m'humie" ;
-          VImp (Pl)           => mkVerbStems "kun" ;
-          VImp (Sg)           => mkVerbStems "kunu" ;
+          VImp (Sg)           => mkVerbStems "kun" ;
+          VImp (Pl)           => mkVerbStems "kunu" ;
           VPresPart gn        => mkVerbStems NONEXIST ;
           VPastPart gn        => mkVerbStems NONEXIST
           } ;
@@ -1043,9 +1043,9 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
     EorI : Str = "e" | "i" ;
     IorE : Str = "i" | "e" ;
 
-    {- ~~~ Roots & Patterns ~~~ -}
+    {- ~~~ Roots & Vowel sequences ~~~ -}
 
-    Pattern : Type = {V1, V2 : Str} ;
+    Vowels : Type = {V1, V2 : Str} ;
     Root : Type = {C1, C2, C3, C4 : Str} ;
 
     -- Make a root object. Accepts following overloads:
@@ -1068,40 +1068,40 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
         { C1=toLower c1 ; C2=toLower c2 ; C3=toLower c3 ; C4=toLower c4 } ;
       } ;
 
-    mkPattern : Pattern = overload {
-      mkPattern : Pattern =
+    mkVowels : Vowels = overload {
+      mkVowels : Vowels =
         { V1=[] ; V2=[] } ;
-      mkPattern : Str -> Pattern = \v1 ->
+      mkVowels : Str -> Vowels = \v1 ->
         { V1=toLower v1 ; V2=[] } ;
-      mkPattern : Str -> Str -> Pattern = \v1,v2 ->
+      mkVowels : Str -> Str -> Vowels = \v1,v2 ->
         { V1=toLower v1 ; V2=case v2 of {"" => [] ; _ => toLower v2}} ;
       } ;
 
     -- Extract first two vowels from a token (designed for semitic verb forms)
     --- potentially slow
-    extractPattern : Str -> Pattern = \s ->
+    extractVowels : Str -> Vowels = \s ->
       case s of {
-        v1@"ie" + _ + v2@#Vowel + _       => mkPattern v1 v2 ; -- IEQAF
-        v1@#Vowel + _ + v2@#Vowel + _     => mkPattern v1 v2 ; -- IKTEB
-        _ + v1@"ie" + _ + v2@#Vowel + _   => mkPattern v1 v2 ; -- RIEQED
-        _ + v1@"ie" + _                   => mkPattern v1 ;    -- ŻIED
-        _ + v1@#Vowel + _ + v2@#Vowel + _ => mkPattern v1 v2 ; -- ĦARBAT
-        _ + v1@#Vowel + _                 => mkPattern v1 ;    -- ĦOBB
-        _                                 => mkPattern
+        v1@"ie" + _ + v2@#Vowel + _       => mkVowels v1 v2 ; -- IEQAF
+        v1@#Vowel + _ + v2@#Vowel + _     => mkVowels v1 v2 ; -- IKTEB
+        _ + v1@"ie" + _ + v2@#Vowel + _   => mkVowels v1 v2 ; -- RIEQED
+        _ + v1@"ie" + _                   => mkVowels v1 ;    -- ŻIED
+        _ + v1@#Vowel + _ + v2@#Vowel + _ => mkVowels v1 v2 ; -- ĦARBAT
+        _ + v1@#Vowel + _                 => mkVowels v1 ;    -- ĦOBB
+        _                                 => mkVowels
       } ;
 
     -- Create a VerbInfo record, optionally omitting various fields
     mkVerbInfo : VerbInfo = overload {
       mkVerbInfo : VClass -> VDerivedForm -> VerbInfo = \c,f ->
-        { class=c ; form=f ; root=mkRoot ; patt=mkPattern ; imp=[] } ;
+        { class=c ; form=f ; root=mkRoot ; vseq=mkVowels ; imp=[] } ;
       mkVerbInfo : VClass -> VDerivedForm -> Str -> VerbInfo = \c,f,i ->
-        { class=c ; form=f ; root=mkRoot ; patt=mkPattern ; imp=i } ;
-      mkVerbInfo : VClass -> VDerivedForm -> Root -> Pattern -> VerbInfo = \c,f,r,p ->
-        { class=c ; form=f ; root=r ; patt=p ; imp=[] } ;
-      mkVerbInfo : VClass -> VDerivedForm -> Root -> Pattern -> Str -> VerbInfo = \c,f,r,p,i ->
-        { class=c ; form=f ; root=r ; patt=p ; imp=i } ;
-      -- mkVerbInfo : VClass -> VDerivedForm -> Root -> Pattern -> Pattern -> Str -> VerbInfo = \c,f,r,p,p2,i ->
-      --   { class=c ; form=f ; root=r ; patt=p ; patt2=p2 ; imp=i } ;
+        { class=c ; form=f ; root=mkRoot ; vseq=mkVowels ; imp=i } ;
+      mkVerbInfo : VClass -> VDerivedForm -> Root -> Vowels -> VerbInfo = \c,f,r,p ->
+        { class=c ; form=f ; root=r ; vseq=p ; imp=[] } ;
+      mkVerbInfo : VClass -> VDerivedForm -> Root -> Vowels -> Str -> VerbInfo = \c,f,r,p,i ->
+        { class=c ; form=f ; root=r ; vseq=p ; imp=i } ;
+      -- mkVerbInfo : VClass -> VDerivedForm -> Root -> Vowels -> Vowels -> Str -> VerbInfo = \c,f,r,p,p2,i ->
+      --   { class=c ; form=f ; root=r ; vseq=p ; vseq2=p2 ; imp=i } ;
       } ;
 
     -- Change certain fields of a VerbInfo record
@@ -1109,16 +1109,44 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
 
       -- Root
       updateVerbInfo : VerbInfo -> Root -> VerbInfo = \i,r ->
-        { class=i.class ; form=i.form ; root=r ; patt=i.patt ; imp=i.imp } ;
+        { class=i.class ; form=i.form ; root=r ; vseq=i.vseq ; imp=i.imp } ;
 
       -- DerivedForm
       updateVerbInfo : VerbInfo -> VDerivedForm -> VerbInfo = \i,f ->
-        { class=i.class ; form=f ; root=i.root ; patt=i.patt ; imp=i.imp } ;
+        { class=i.class ; form=f ; root=i.root ; vseq=i.vseq ; imp=i.imp } ;
 
       -- DerivedForm, Imperative
       updateVerbInfo : VerbInfo -> VDerivedForm -> Str -> VerbInfo = \i,f,imp ->
-        { class=i.class ; form=f ; root=i.root ; patt=i.patt ; imp=imp } ;
+        { class=i.class ; form=f ; root=i.root ; vseq=i.vseq ; imp=imp } ;
 
+      } ;
+
+    -- Return the class for a given root
+    classifyRoot : Root -> VClass = \r ->
+      case <r.C1,r.C2,r.C3,r.C4> of {
+        <#WeakCons, #StrongCons, #StrongCons, ""> => Weak Assimilative ;
+        <#StrongCons, #WeakCons, #StrongCons, ""> => Weak Hollow ;
+        <#StrongCons, #StrongCons, #WeakCons, ""> => Weak Lacking ;
+        <#StrongCons, #WeakCons, #WeakCons, ""> => Weak Lacking ;
+        <#Consonant, #Consonant, "għ", ""> => Weak Defective ;
+        <#Consonant, c2@#Consonant, c3@#Consonant, ""> =>
+          if_then_else VClass (pbool2bool (eqStr c2 c3))
+          (Strong Geminated)
+          (case c2 of {
+            #LiquidCons => Strong LiquidMedial ;
+            _ => Strong Regular
+          }) ;
+        <#Consonant, #Consonant, #Consonant, #WeakCons> => Quad QWeak ;
+        <#Consonant, #Consonant, #Consonant, #Consonant> => Quad QStrong ;
+
+        -- Irregular
+        <"'",_,_,_> => Irregular ;
+        <_,"'",_,_> => Irregular ;
+        <_,_,"'",_> => Irregular ;
+        <_,_,_,"'"> => Irregular ;
+
+        <_,_,_,""> => Predef.error("Cannot classify root:"++r.C1+"-"+r.C2+"-"+r.C3) ;
+        <_,_,_,_>  => Predef.error("Cannot classify root:"++r.C1+"-"+r.C2+"-"+r.C3+"-"+r.C4)
       } ;
 
     {- ~~~ Useful helper functions ~~~ -}
