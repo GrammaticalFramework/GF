@@ -21,69 +21,64 @@ resource ParadigmsMlt = open
 
   oper
 
-    {- Parameters --------------------------------------------------------- -}
-
-    -- Abstraction over gender names
-
-    masculine = Masc ;
-    feminine  = Fem ;
-    -- human     = Masc ;
-    -- nonhuman  = Neutr ;
-
-    singular = Sg ;
-    plural   = Pl ;
-
-    form1 = FormI ;
-    form2 = FormII ;
-    form3 = FormIII ;
-    form4 = FormIV ;
-    form5 = FormV ;
-    form6 = FormVI ;
-    form7 = FormVII ;
-    form8 = FormVIII ;
-    form9 = FormIX ;
-    form10 = FormX ;
-
-    strong       = Strong Regular ;
-    liquidMedial = Strong LiquidMedial ;
-    geminated    = Strong Geminated ;
-    assimilative = Weak Assimilative ;
-    hollow       = Weak Hollow ;
-    lacking      = Weak Lacking ;
-    quad         = Quad QStrong ;
-    quadWeak     = Quad QWeak ;
-    loan         = Loan ;
-    irregular    = Irregular ;
-
     {- Type declarations only (for synopsis) ------------------------------ -}
 
+    masculine : Gender ;
+    feminine  : Gender ;
+
+    singular : Number ;
+    plural   : Number ;
+
+    form1  : VDerivedForm ; -- Binyan I: daħal
+    form2  : VDerivedForm ; -- Binyan II: daħħal
+    form3  : VDerivedForm ; -- Binyan III: wieġeb
+    form4  : VDerivedForm ; -- Binyan IV: wera
+    form5  : VDerivedForm ; -- Binyan V: ddaħħal
+    form6  : VDerivedForm ; -- Binyan VI: twieġeb
+    form7  : VDerivedForm ; -- Binyan VII: ndaħal
+    form8  : VDerivedForm ; -- Binyan VIII: ftakar
+    form9  : VDerivedForm ; -- Binyan IX: sfar
+    form10 : VDerivedForm ; -- Binyan X: stieden
+
+    strong       : VClass ; -- Strong tri. verb: kiteb (k-t-b)
+    liquidMedial : VClass ; -- Strong liquid-medial tri. verb: ħareġ (ħ-r-ġ)
+    geminated    : VClass ; -- Strong geminated tri. verb: ħabb (ħ-b-b)
+    assimilative : VClass ; -- Weak-initial tri. verb: wieġeb (w-ġ-b)
+    hollow       : VClass ; -- Weak-medial tri. verb: ried (r-j-d)
+    lacking      : VClass ; -- Weak-final tri. verb: mexa (m-x-j)
+    defective    : VClass ; -- GĦ-final tri. verb: qata' (q-t-għ)
+    quad         : VClass ; -- Strong quad. verb: ħarbat (ħ-r-b-t)
+    quadWeak     : VClass ; -- Weak-final quad. verb: kanta (k-n-t-j)
+    irregular    : VClass ; -- Irregular verb: af ('-'-f)
+    loan         : VClass ; -- Loan verb: ipparkja (no root)
+
     mkN : overload {
-      mkN : Str -> N ; -- 1: Take the singular and infer plural
-      mkN : Str -> Gender -> N ; -- 1: Explicit gender
-      mkN : Str -> Str -> N ; -- 1: Take the singular and explicit plural
-      mkN : Str -> Str -> Gender -> N ; -- 1: Explicit gender
-      mkN : Str -> Str -> Str -> N ; -- 1x: Take singular and both plurals
-      mkN : Str -> Str -> Str -> Gender -> N ; -- 1x: Explicit gender
+      mkN : Str -> N ; -- Noun paradigm 1: Take the singular and infer plural
+      mkN : Str -> Gender -> N ; -- Noun paradigm 1: Explicit gender
+      mkN : Str -> Str -> N ; -- Noun paradigm 1: Take the singular and explicit plural
+      mkN : Str -> Str -> Gender -> N ; -- Noun paradigm 1: Explicit gender
+      mkN : Str -> Str -> Str -> N ; -- Noun paradigm 1x: Take singular and both plurals
+      mkN : Str -> Str -> Str -> Gender -> N ; -- Noun paradigm 1x: Explicit gender
     } ;
 
     mkNColl : overload {
-      mkNColl : Str -> N ; -- 2c: Collective form only
-      mkNColl : Str -> Str -> N ; -- 2b: Collective and plural
-      mkNColl : Str -> Str -> Str -> N ; -- 2: Singular, collective and plural
-      mkNColl : Str -> Str -> Str -> Str -> N ; -- 2x: Singular, collective and both plurals
+      mkNColl : Str -> N ; -- Noun paradigm 2c: Collective form only
+      mkNColl : Str -> Str -> N ; -- Noun paradigm 2b: Collective and plural
+      mkNColl : Str -> Str -> Str -> N ; -- Noun paradigm 2: Singular, collective and plural
+      mkNColl : Str -> Str -> Str -> Str -> N ; -- Noun paradigm 2x: Singular, collective and both plurals
       } ;
 
     mkNNoPlural : overload {
-      mkNNoPlural : Str -> N ; -- 3: No plural
-      mkNNoPlural : Str -> Gender -> N ; -- 3: Explicit gender
+      mkNNoPlural : Str -> N ; -- Noun paradigm 3: No plural
+      mkNNoPlural : Str -> Gender -> N ; -- Noun paradigm 3: Explicit gender
     } ;
 
     mkNDual : overload {
-      mkNDual : Str -> N ; -- 4: Infer dual, plural and gender from singular
-      mkNDual : Str -> Str -> Str -> N ; -- 4: Singular, dual, plural
-      mkNDual : Str -> Str -> Str -> Gender -> N ; -- 4: Explicit gender
-      mkNDual : Str -> Str -> Str -> Str -> N ; -- 4x: Singular, dual, both plurals
-      mkNDual : Str -> Str -> Str -> Str -> Gender -> N ; -- 4x: Explicit gender
+      mkNDual : Str -> N ; -- Noun paradigm 4: Infer dual, plural and gender from singular
+      mkNDual : Str -> Str -> Str -> N ; -- Noun paradigm 4: Singular, dual, plural
+      mkNDual : Str -> Str -> Str -> Gender -> N ; -- Noun paradigm 4: Explicit gender
+      mkNDual : Str -> Str -> Str -> Str -> N ; -- Noun paradigm 4x: Singular, dual, both plurals
+      mkNDual : Str -> Str -> Str -> Str -> Gender -> N ; -- Noun paradigm 4x: Explicit gender
       } ;
 
     mkPN : Str -> Gender -> Number -> ProperNoun ; -- Proper noun
@@ -176,8 +171,41 @@ resource ParadigmsMlt = open
     mkAdA : Str -> AdA ; -- adverb modifying adjective: pjuttost
     mkAdN : Str -> AdN ; -- adverb modifying numeral: madwar
 
+
 --.
 -- Everything below this is definitions (excluded from synopsis)
+
+
+    {- Parameters --------------------------------------------------------- -}
+
+    masculine : Gender = Masc ;
+    feminine  : Gender = Fem ;
+
+    singular : Number = Sg ;
+    plural   : Number = Pl ;
+
+    form1  = FormI ;
+    form2  = FormII ;
+    form3  = FormIII ;
+    form4  = FormIV ;
+    form5  = FormV ;
+    form6  = FormVI ;
+    form7  = FormVII ;
+    form8  = FormVIII ;
+    form9  = FormIX ;
+    form10 = FormX ;
+
+    strong       = Strong Regular ;
+    liquidMedial = Strong LiquidMedial ;
+    geminated    = Strong Geminated ;
+    assimilative = Weak Assimilative ;
+    hollow       = Weak Hollow ;
+    lacking      = Weak Lacking ;
+    defective    = Weak Defective ;
+    quad         = Quad QStrong ;
+    quadWeak     = Quad QWeak ;
+    irregular    = Irregular ;
+    loan         = Loan ;
 
     {- Noun --------------------------------------------------------------- -}
 
