@@ -152,14 +152,14 @@ concrete StructuralMlt of Structural = CatMlt **
     have_V2     = dirV2 (kellu_V) ;
 
   oper
-    af_V = irregularV form1 (ResMlt.mkRoot "'-'-f") (ResMlt.mkPattern "a" [])
+    af_V = irregularV form1 (ResMlt.mkRoot "'-'-f") (ResMlt.mkVowels "a" [])
       "kont naf" "kont taf" "kien jaf" "kienet taf" "konna nafu" "kontu tafu" "kienu jafu" --- will fail for negative
       "naf" "taf" "jaf" "taf" "nafu" "tafu" "jafu"
       "kun af" "kunu afu"
       ;
     sata'_V = mkV "sata'" (ResMlt.mkRoot "s-t-għ") ;
     ried_V = mkV "ried" (ResMlt.mkRoot "r-j-d") ;
-    kellu_V = irregularV form1 (ResMlt.mkRoot) (ResMlt.mkPattern)
+    kellu_V = irregularV form1 (ResMlt.mkRoot) (ResMlt.mkVowels)
       "kelli" "kellek" "kellu" "kellha" "kellna" "kellkom" "kellhom"
       "għandi" "għandek" "għandu" "għandha" "għandna" "għandkom" "għandhom"
       "kollok" "kollkom"

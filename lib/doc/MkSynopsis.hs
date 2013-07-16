@@ -17,8 +17,8 @@ synopsis = "synopsis.txt"
 revealedLang = "Eng"
 
 -- all languages shown
-apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words 
---   "Eng Chi" 
+apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words
+--   "Eng Chi"
   "Afr Bul Cat Chi Dan Dut Eng Fin Fre Ger Gre Hin Ita Jpn Lav Mlt Nep Nor Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd"
    ]
 
@@ -26,7 +26,7 @@ main = do
   xx <- getArgs
   let isLatex = case xx of
         "-tex":_ -> True
-        _ -> False 
+        _ -> False
   cs1 <- getCats commonAPI
   cs2 <- getCats catAPI
   let cs = sortCats (cs1 ++ cs2)
@@ -42,7 +42,7 @@ main = do
   append "%!postproc(html): '#UL'  '<ul>'"
   append "%!postproc(html): '#EUL'  '</ul>'"
   append "%!postproc(html): '#LI'  '<li>'"
-  append "%!postproc(html): '(SRC=\"categories.png\")'  '\\1 USEMAP=\"#categories\"'"  
+  append "%!postproc(html): '(SRC=\"categories.png\")'  '\\1 USEMAP=\"#categories\"'"
   append "%!postproc(html): '#LParadigms'  '<a name=\"RParadigms\"></a>'"
   append "%!postproc(tex): '#LParadigms' ''"
   delimit $ addToolTips cs
@@ -66,12 +66,12 @@ main = do
   space
   apiExx <- getApiExx apiExxFiles
   rs <- getRules apiExx syntaxAPI
----  putStrLn $ unlines ["p -cat=" ++ last (words t) ++ 
+---  putStrLn $ unlines ["p -cat=" ++ last (words t) ++
 ---               " \"" ++ e ++ "\"" | (_,t,e) <- rs, not (null e)] ----
   rs2 <- getRules apiExx structuralAPI
   let rss = rs ++ rs2
 ---  mapM_ putStrLn [f ++ " " ++ e | (f,_,e) <- rss]
-  delimit $ mkSplitTables True isLatex apiExx cs rss 
+  delimit $ mkSplitTables True isLatex apiExx cs rss
   space
 --  title "Structural Words"
 --  space
@@ -138,7 +138,7 @@ getRules aexx file = do
        _:":":_ -> getrs (rule s:rs) ss2
        _ -> getrs rs ss2
    rule s = (name, typ, ex)
-       where 
+       where
          ws = takeWhile (flip notElem ["--#", "--:", "="]) $ words s
          name = head ws
          (t,e) = span (/="--") (tail ws)
@@ -171,7 +171,7 @@ inChunks i f = concat . intersperse ["\n\n"] . map f . chunks i where
 mkSplitTables :: Bool -> Bool -> ApiExx -> Cats -> Rules -> [String]
 mkSplitTables hasEx isLatex aexx cs = concatMap t . addLexicalCats cs . sortRules
   where t (c, xs) = [subtitle c expl] ++ tableOrLink
-         where 
+         where
            expl = case [e | (n,e,_) <- cs, n == c] of
                         []  -> ""
                         e:_ -> e
@@ -185,25 +185,25 @@ mkTable :: Bool -> Bool -> ApiExx -> Cats -> Rules -> [String]
 mkTable hasEx isLatex aexx cs = inChunks chsize (\rs -> header : map (unwords . row) rs)
  where
   chsize = if isLatex then 40 else 1000
-  header = if hasEx then "|| Function  | Type  | Example  ||" 
+  header = if hasEx then "|| Function  | Type  | Example  ||"
                     else "|| Function  | Type  | Explanation ||"
   row (name,typ,ex) =
          let ntyp = mkIdent (name ++ " : " ++ typ) in
          if hasEx then ["|", name', "|", typ', "|", ex' ntyp, "|"]
                   else ["|", name', "|", typ', "|", expl ntyp, "|"]
-   where 
+   where
      name' = ttf name
      typ' = showTyp cs typ
-     ex' typ = let ex0 = if null ex then itf (takeWhile (/='_') name) else ex in 
+     ex' typ = let ex0 = if null ex then itf (takeWhile (/='_') name) else ex in
            case M.lookup typ aexx of
              Just es -> mkExample es ex0
              _ -> itf ex0
-     expl typ = if null ex then itf "-" else itf ex 
+     expl typ = if null ex then itf "-" else itf ex
 
 -- make an example with hover-popup translations
 mkExample es ex = unwords [
   "#divreveal",
-  itf (maybe ex id (M.lookup revealedLang es)), 
+  itf (maybe ex id (M.lookup revealedLang es)),
   "#divpopup",
   "#UL",
   unwords ["#LI" ++ e | e <- prApiEx es],
@@ -296,11 +296,11 @@ sortCats = sortBy compareCat
 sortRules :: Rules -> [Rules]
 sortRules = groupBy sameCat . sortBy compareRules
   where sameCat r1 r2 = resultCat r1 == resultCat r2
-        compareRules r1@(n1,_,_) r2@(n2,_,_) 
+        compareRules r1@(n1,_,_) r2@(n2,_,_)
             = compare (resultCat r1,n1) (resultCat r2,n2)
 
 addLexicalCats :: Cats -> [Rules] -> [(String,Rules)]
-addLexicalCats cs rss = 
+addLexicalCats cs rss =
     map head $ groupBy fstEq $ sortBy (\x y -> compare (fst x) (fst y)) $
            [ (resultCat r, rs) | rs@(r:_) <- rss] ++ [(n,[]) | (n,_,_) <- cs]
   where fstEq p1 p2 = fst p1 == fst p2
@@ -335,10 +335,11 @@ readFileC cod file = do
       system $ "iconv -f ISO-8859-1 -t UTF-8 " ++ file ++ " >" ++ tmp
       readFile tmp
 
+-- 'intelligently' determine the coding of a file
 coding file = case language file of
   "Pol" -> "utf8"
   "Rus" -> "utf8"
+  "Mlt" -> "utf8"
   _     -> "latin1"
 
 language = reverse . take 3 . drop 3 . reverse
-
