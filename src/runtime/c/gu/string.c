@@ -280,7 +280,7 @@ gu_string_to_double(GuString s, double *res)
 	
 	bool neg = false;
 	bool dec = false;
-	int  exp = 1;
+	double exp = 1;
 
 	if (src[i] == '-') {
 		neg = true;
