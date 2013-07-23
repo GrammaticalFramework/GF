@@ -10,6 +10,7 @@ basedir=${dir}/../../src
 tagsdir=${dir}/tags
 index=${dir}/index.json
 ignore="demo old-demo tmp"
+start=`date +%s`
 
 # Function for testing array membership
 in_ignore() {
@@ -34,8 +35,12 @@ do
         echo "  \"${dir}\": [" >> $index
         find -maxdepth 1 -name '*.gf' | while read -r file
         do
-            gf --batch --quiet --tags --output-dir=${tagsdir} $file 2>/dev/null
             echo "    \""`echo $file | sed 's|./||;s|.gf||'`"\"," >> $index
+            filemtime=`stat -c %Y "${tagsdir}/${file}-tags"` 2>/dev/null
+            if [ -z "$filemtime" ] || [ "$filemtime" -lt "$start" ]
+            then
+                gf --batch --quiet --tags --output-dir=${tagsdir} $file 2>/dev/null
+            fi
         done
         echo "    \"\"\n  ]," >> $index
     fi
