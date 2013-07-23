@@ -125,9 +125,6 @@ input#search {
   margin-top:1em;
   border-collapse: collapse;
 }
-#results tr:hover {
-  background:#f9f9f9;
-}
 /* this is set in code */
 #results tr.odd {
   background:ghostwhite;
