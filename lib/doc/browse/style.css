@@ -4,7 +4,7 @@
 */
 
 body {
-  background-color: white;
+  background: url('http://cloud.grammaticalframework.org/minibar/brushed-metal.png') #ddd;
   margin:0;
   font: 13px sans-serif;
 }
@@ -28,10 +28,16 @@ header h1 {
 }
 
 .ui-layout-north {
-  background:#ddd;
+  background:none;
   border:none;
 }
 .ui-layout-resizer-north {
+}
+.ui-layout-resizer {
+  background:none;
+}
+.ui-layout-toggler {
+  background:#999;
 }
 
 .ui-layout-center,
@@ -51,12 +57,17 @@ header h1 {
 }
 
 #tabbar {
-  border-bottom: 1px dotted #ccc;
-  padding-bottom: 5px;
+  display:inline-block;
+}
+#tabbar .module {
+  border-left: 1px dotted #333;
+  border-right: 1px dotted #333;
+  padding:0.5em 0.2em 0.5em 1em;
+  margin-right:0.7em;
 }
 #module_name {
   font-weight: bold;
-  margin-right: 2em;
+  margin-right:0.7em;
 }
 .tab {
   cursor:pointer;
@@ -75,11 +86,14 @@ header h1 {
 .tab:hover {
   background: #666;
 }
+.tab.active {
+  background: #222;
+}
 
 #loading {
   position: fixed;
   top: 10px;
-  left: 46%;
+  right: 10px;
   white-space: nowrap;
   padding: 0.5em 1em;
   border: 1px solid #F0C36D;
@@ -97,6 +111,11 @@ header h1 {
 }
 .help {
 }
+
+a.synopsis {
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=') center right no-repeat;
+  padding-right:14px;
+}
 input#search {
   font-family:monospace;
   width:25em;
@@ -105,9 +124,7 @@ input#search {
 }
 
 .panel {
-  padding:10px 5px;
 }
-
 .panel.code,
 .panel.api,
 .panel.help {
