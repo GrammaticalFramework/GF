@@ -8,12 +8,12 @@
     <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" href="icon.png" type="image/png">
     <link rel="stylesheet" href="google-code-prettify/prettify-gf.css">
-    <link rel="stylesheet" href="http://layout.jquery-dev.net/lib/css/layout-default-latest.css" />
+    <link rel="stylesheet" href="layout-default-latest.css" />
     <link rel="stylesheet" href="style.css">
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="http://layout.jquery-dev.net/lib/js/jquery.layout-latest.js"></script>
+    <script type="text/javascript" src="jquery.layout-latest.js"></script>
     <script type="text/javascript">
     $(document).ready(function () {
       $('body').layout({
@@ -38,12 +38,6 @@
     </div>
 
     <div class="ui-layout-center">
-
-      <div id="tabbar">
-        Module: <span id="module_name">...</span>
-        <a class="tab scope" href="#scope">scope</a>
-        <a class="tab code" href="#code">code</a>
-      </div>
 
       <div id="scope" class="panel scope">
         <div id="controls">
@@ -117,9 +111,19 @@
       <header>
       <img src="../../../doc/Logos/gf0.png" alt="" />
       <h1 title="...or ‘GFRGLSB’ as we like to call it">GF Resource Grammar Library Source Browser</h1>
-      <a class="tab api" href="#api">API</a>
-      <a class="tab help" href="#help">Help</a>
-      <a href="http://www.grammaticalframework.org/lib/doc/synopsis.html" target="_blank">Synopsis...</a>
+
+      <div id="tabbar">
+        <span class="module">
+          Module: <span id="module_name">...</span>
+          <a class="tab scope" href="#scope">scope</a>
+          <a class="tab code" href="#code">code</a>
+        </span>
+        <a class="tab api" href="#api">API</a>
+        <a class="tab help" href="#help">Help</a>
+        <a class="synopsis" href="http://www.grammaticalframework.org/lib/doc/synopsis.html" target="_blank">Synopsis</a>
+      </div>
+
+
       </header>
 
       <footer id="footer">
