@@ -4,8 +4,8 @@
 
 =Browsing the libraries with GF commands=
 
-**New**: Browsing by syntax editor 
-[directly on the web ../../../demos/resource-api/editor.html].
+**Note**: You can browse using the syntax editor
+[directly on the web http://cloud.grammaticalframework.org/syntax-editor/editor.html].
 
 All of the following assume that
 ``GF_LIB_PATH`` points to the directory ``GF/lib`` with compiled libraries.
@@ -20,4 +20,3 @@ To try out overloaded syntax, test lexicon, and inflection paradigms:
   > i -retain alltenses/TryGer.gfo
   > cc mkCl (mkNP this_Quant (mkN "Farbe")) (mkA "dunkel")
 ```
-
