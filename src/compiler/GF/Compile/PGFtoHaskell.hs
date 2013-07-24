@@ -105,7 +105,7 @@ gfinstances gId lexical (m,g) = (foldr (+++++) "") $ (filter (/="")) $ (map (gfI
 
 hDatatype  :: Prefix -> (OIdent -> Bool) -> (OIdent, [(OIdent, [OIdent])]) -> String
 hDatatype _ _ ("Cn",_) = "" ---
-hDatatype _ _ (cat,[]) = ""
+hDatatype gId _ (cat,[]) = "data" +++ gId cat
 hDatatype gId _ (cat,rules) | isListCat (cat,rules) = 
  "newtype" +++ gId cat +++ "=" +++ gId cat +++ "[" ++ gId (elemCat cat) ++ "]" 
   +++ "deriving Show"
@@ -201,7 +201,13 @@ gfInstance :: Prefix -> (OIdent -> Bool) -> String -> (OIdent, [(OIdent, [OIdent
 gfInstance gId lexical m crs = hInstance gId lexical m crs ++++ fInstance gId lexical m crs
 
 ----hInstance m ("Cn",_) = "" --- seems to belong to an old applic. AR 18/5/2004
-hInstance _ _ m (cat,[]) = "" 
+hInstance gId _ m (cat,[]) = unlines [
+  "instance Show" +++ gId cat,
+  "",
+  "instance Gf" +++ gId cat +++ "where",
+  "  gf _ = undefined",
+  "  fg _ = undefined"
+  ]
 hInstance gId lexical m (cat,rules) 
  | isListCat (cat,rules) =
   "instance Gf" +++ gId cat +++ "where" ++++
@@ -257,10 +263,13 @@ fInstance gId lexical m (cat,rules) =
 hSkeleton :: PGF -> (String,HSkeleton)
 hSkeleton gr = 
   (showCId (absname gr), 
-   [(showCId c, [(showCId f, map showCId cs) | (f, (cs,_)) <- fs]) | 
+   let fs = 
+         [(showCId c, [(showCId f, map showCId cs) | (f, (cs,_)) <- fs]) | 
                                         fs@((_, (_,c)):_) <- fns]
+   in fs ++ [(sc, []) | c <- cts, let sc = showCId c, notElem sc (["Int", "Float", "String"] ++ map fst fs)]
   )
  where
+   cts = Map.keys (cats (abstract gr)) 
    fns = groupBy valtypg (sortBy valtyps (map jty (Map.assocs (funs (abstract gr)))))
    valtyps (_, (_,x)) (_, (_,y)) = compare x y
    valtypg (_, (_,x)) (_, (_,y)) = x == y
