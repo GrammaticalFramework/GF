@@ -43,8 +43,8 @@
         Module: <span id="module_name">...</span>
         <a class="tab scope" href="#scope">scope</a>
         <a class="tab code" href="#code">code</a>
-        <a class="tab api" href="#api">API</a>
       </div>
+
       <div id="scope" class="panel scope">
         <div id="controls">
           <input type="text" id="search" />
@@ -55,10 +55,12 @@
           <input type="radio" name="show" id="show_local" /><label for="show_local">Local only</label>
         </div>
         <table id="results"></table>
-      </div>
+      </div><!-- panel scope -->
+
       <div id="code" class="panel code">
         <pre class="prettyprint lang-gf linenums"></pre>
-      </div>
+      </div><!-- panel code -->
+
       <div id="api" class="panel api">
         Search the API by constructor name <strong>or</strong> type signature:
         <div id="controls">
@@ -67,8 +69,8 @@
           <input type="reset" id="clear" value="Clear" />
         </div>
         <table id="results"></table>
+      </div><!-- panel api -->
 
-      </div>
       <div id="help" class="panel help">
 
         <h3>About</h3>
@@ -107,13 +109,15 @@
         <h4>Something is missing or out of date</h4>
         <p>All the scoping information shown is not read directly from the RGL on-demand. There is an in-between processing stage which must be run, so if something seems out of date just let me know and I can udpate things manually.</p>
 
-      </div>
-    </div>
+      </div><!-- panel help -->
+
+    </div><!-- ui-layout-center -->
 
     <div class="ui-layout-north">
       <header>
       <img src="../../../doc/Logos/gf0.png" alt="" />
       <h1 title="...or ‘GFRGLSB’ as we like to call it">GF Resource Grammar Library Source Browser</h1>
+      <a class="tab api" href="#api">API</a>
       <a class="tab help" href="#help">Help</a>
       <a href="http://www.grammaticalframework.org/lib/doc/synopsis.html" target="_blank">Synopsis...</a>
       </header>
@@ -121,12 +125,12 @@
       <footer id="footer">
         John J. Camilleri<br/><em>Updated 2013-07-23</em>
       </footer>
-    </div>
+    </div><!-- ui-layout-north -->
 
     <div class="ui-layout-west">
       <div id="languages"></div>
       <div id="modules"></div>
-    </div>
+    </div><!-- ui-layout-west -->
 
   </body>
 </html>

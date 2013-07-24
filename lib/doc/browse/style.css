@@ -154,7 +154,6 @@ input#search {
 #code pre {
   margin:0;
   color:#000;
-  overflow:auto;
   font: 12px monospace;
 }
 #code ol.linenums {
