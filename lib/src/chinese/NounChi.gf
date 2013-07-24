@@ -84,4 +84,6 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
 
     RelNP np rs = mkNP (rs.s ++ np.s) ;
 
+    PossNP cn np = {s = np.s ++ possessive_s ++ cn.s ; c = cn.c} ;
+
 }

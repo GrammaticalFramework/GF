@@ -61,7 +61,8 @@ lin
   themselves_NP = regNP "themselves" plural ;
 -}
 
-----  CompoundCN num noun cn = mkCN (ParadigmsChi.mkN (num.s ++ (noun.s ++ cn.s)) cn.c) ; ----
+CompoundCN num noun cn = {s = num.s ++ noun.s ++ cn.s ; c = cn.c} ; ----
+DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
 
 {-  
   DashCN noun1 noun2 = {
@@ -129,16 +130,14 @@ lin
     s = \\agr => vp.ad ++ vp.prp ++ vp.s2 ! agr ;
     c = npNom
   } ;
+-}
 
   ApposNP np1 np2 = {
-    s = \\c => np1.s ! c ++ "," ++ np2.s ! npNom ;
-    a = np1.a
+    s = np1.s ++ chcomma ++ np2.s
   } ;
   
   AdAdV = cc2 ;
   
   UttAdV adv = adv;
-
--}    
 
 }
