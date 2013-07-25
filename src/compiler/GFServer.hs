@@ -339,16 +339,16 @@ jsonp qs = json200' $ maybe id apply (lookup "jsonp" qs)
     apply f json = f++"("++json++")"
 
 -- * Standard HTTP responses
-ok200        = Response 200 [plainUTF8,noCache] . encodeString
-ok200' t     = Response 200 [t]
+ok200        = Response 200 [plainUTF8,noCache,xo] . encodeString
+ok200' t     = Response 200 [t,xo]
 json200 x    = json200' id x
 json200' f   = ok200' jsonUTF8 . encodeString . f . encode
 html200      = ok200' htmlUTF8 . encodeString
-resp204      = Response 204 [] "" -- no content
-resp400 msg  = Response 400 [plain] $ "Bad request: "++msg++"\n"
-resp404 path = Response 404 [plain] $ "Not found: "++path++"\n"
-resp500 msg  = Response 500 [plain] $ "Internal error: "++msg++"\n"
-resp501 msg  = Response 501 [plain] $ "Not implemented: "++msg++"\n"
+resp204      = Response 204 [xo] "" -- no content
+resp400 msg  = Response 400 [plain,xo] $ "Bad request: "++msg++"\n"
+resp404 path = Response 404 [plain,xo] $ "Not found: "++path++"\n"
+resp500 msg  = Response 500 [plain,xo] $ "Internal error: "++msg++"\n"
+resp501 msg  = Response 501 [plain,xo] $ "Not implemented: "++msg++"\n"
 
 instance Error Response where
   noMsg = resp500 "no message"
@@ -360,6 +360,8 @@ plainUTF8 = ct "text/plain; charset=UTF-8"
 jsonUTF8 = ct "text/javascript; charset=UTF-8"
 htmlUTF8 = ct "text/html; charset=UTF-8"
 ct t = ("Content-Type",t)
+xo = ("Access-Control-Allow-Origin","*") -- Allow cross origin requests
+     -- https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
 
 contentTypeFromExt ext =
   case ext of
@@ -441,7 +443,9 @@ utf8inputs q = [(decodeString k,(decodeString v,v))|(k,v)<-inputs q]
 decoded = mapSnd fst
 raw = mapSnd snd
 
-inputs = decodeQuery
+inputs ('?':q) = decodeQuery q
+inputs q = decodeQuery q
+
 {-
 -- Stay clear of queryToArgument, which uses unEscapeString, which had
 -- backward incompatible changes in network-2.4.1.1, see
