@@ -22,7 +22,8 @@ import System.Posix
 #endif
 
 --import Network.FastCGI
-import Network.CGI
+import Network.CGI(CGI,CGIResult,setHeader,output,outputFPS,outputError,
+                   getInput,catchCGI,throwCGI)
 
 import Text.JSON
 import qualified Codec.Binary.UTF8.String as UTF8 (encodeString)
@@ -153,9 +154,10 @@ throwCGIError :: Int -> String -> [String] -> CGI a
 throwCGIError c m t = throwCGI $ toException $ CGIError c m t
 
 handleCGIErrors :: CGI CGIResult -> CGI CGIResult
-handleCGIErrors x = x `catchCGI` \e -> case fromException e of
-                                         Nothing -> throw e
-                                         Just (CGIError c m t) -> outputError c m t
+handleCGIErrors x =
+    x `catchCGI` \e -> case fromException e of
+                         Nothing -> throw e
+                         Just (CGIError c m t) -> do setXO; outputError c m t
 
 -- * General CGI and JSON stuff
 
@@ -174,11 +176,13 @@ outputEncodedJSONP json =
 outputPNG :: BS.ByteString -> CGI CGIResult
 outputPNG x = do
        setHeader "Content-Type" "image/png"
+       setXO
        outputFPS x
 
 outputBinary :: BS.ByteString -> CGI CGIResult
 outputBinary x = do
        setHeader "Content-Type" "application/binary"
+       setXO
        outputFPS x
 
 outputHTML :: String -> CGI CGIResult
@@ -192,8 +196,11 @@ outputPlain x = do
        outputStrict $ UTF8.encodeString x
 
 outputStrict :: String -> CGI CGIResult
-outputStrict x | x == x = output x
+outputStrict x | x == x = do setXO ; output x
                | otherwise = fail "I am the pope."
+
+setXO = setHeader "Access-Control-Allow-Origin" "*"
+     -- https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
 
 -- * General utilities
 
