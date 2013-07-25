@@ -1,0 +1,462 @@
+GF Resource Grammar Library Documentation and Publications
+
+
+
+%!Encoding:utf8
+
+
+%!postproc(html): #BR <br>
+
+
+
+===Afrikaans===
+
+**Source**: http://www.grammaticalframework.org/lib/src/afrikaans
+
+%**Publications**
+
+
+
+===Amharic===
+
+**Source**: http://www.grammaticalframework.org/lib/src/amharic
+
+**Publications**
+
+Markos Kassa Gobena, MSc thesis, Chalmers, 2010.
+
+
+
+
+
+===Arabic===
+
+**Source**: http://www.grammaticalframework.org/lib/src/arabic
+
+**Publications**
+
+Ali El Dada, MSc Thesis, Chalmers, 2006.
+
+A. El Dada and A. Ranta.
+Implementing an Open Source Arabic Resource Grammar in GF.
+In M. Mughazy (ed),
+//Perspectives on Arabic Linguistics XX. Papers from the Twentieth Annual Symposium on Arabic Linguistics, Kalamazoo, March 26//
+John Benjamins Publishing Company.
+2007.
+#BR
+//An outline of the Arabic resource grammar project, focusing on linguistic aspects.//
+
+A. El Dada.
+Implementation of the Arabic Numerals and their Syntax in GF.
+Computational Approaches to Semitic Languages: Common Issues and Resources, 
+  ACL-2007 Workshop,
+June 28, 2007, Prague.
+2007.
+#BR
+//A case study with the resource grammar, focusing on the morphosyntax//
+//and agreement of constructions with numerals.//
+
+
+
+
+===Bulgarian===
+
+**Source**: http://www.grammaticalframework.org/lib/src/bulgarian
+
+**Publications**
+
+K. Angelov.
+Type-Theoretical Bulgarian Grammar.
+In B. Nordström and A. Ranta (eds), 
+//Advances in Natural Language Processing (GoTAL 2008)//, 
+LNCS/LNAI 5221, Springer,
+2008.
+#BR
+//Explains the implementation of a Bulgarian resource grammar in GF.//
+
+
+
+===Catalan===
+
+**Source**: http://www.grammaticalframework.org/lib/src/catalan http://www.grammaticalframework.org/lib/src/romance
+
+%**Publications**
+
+
+
+
+===Chinese===
+
+**Source**: http://www.grammaticalframework.org/lib/src/chinese
+
+**Publications**
+
+Chenpeng
+
+Aarne Ranta, Appendix to GF book
+
+
+
+===Danish===
+
+**Source**: http://www.grammaticalframework.org/lib/src/danish  http://www.grammaticalframework.org/lib/src/scandinavian
+
+%**Publications**
+
+
+
+===Dutch===
+
+**Source**: http://www.grammaticalframework.org/lib/src/dutch
+
+%**Publications**
+
+
+
+===English===
+
+**Source**: http://www.grammaticalframework.org/lib/src/english
+
+%**Publications**
+
+
+
+===Finnish===
+
+**Source**: http://www.grammaticalframework.org/lib/src/finnish
+
+**Publications**
+
+A. Ranta.
+Discourse particles.
+
+A. Ranta.
+How predictable is Finnish morphology? An experiment on lexicon construction.
+In J. Nivre, M. Dahllöf and B. Megyesi (eds),
+//Resourceful Language Technology: Festschrift in Honor of Anna Sågvall Hein//,
+University of Uppsala,
+2008.
+Available from [series homepage http://publications.uu.se/abstract.xsql?dbid=8933]
+#BR
+//Presents an experiment on smart paradigms in Finnish.//
+
+
+
+
+
+===French===
+
+**Source**: http://www.grammaticalframework.org/lib/src/french  http://www.grammaticalframework.org/lib/src/romance
+
+%**Publications**
+
+
+
+===German===
+
+**Source**: http://www.grammaticalframework.org/lib/src/german
+
+%**Publications**
+
+
+
+===Greek===
+
+**Source**: http://www.grammaticalframework.org/lib/src/greek
+
+**Publications**
+
+Ioanna Pa, Master's thesis
+
+Ioanna Pa, RANLP paper
+
+
+
+===Hebrew===
+
+**Source**: http://www.grammaticalframework.org/lib/src/hebrew
+
+**Publications**
+
+D. Dannélls and J. Camilleri. 
+Verb Morphology of Hebrew and Maltese - Towards an Open Source Type Theoretical Resource Grammar in GF.
+//Proceedings of the Language Resources (LRs) and Human Language Technologies (HLT) for Semitic Languages Status, Updates, and Prospects, LREC-2010 Workshop//,
+Malta, pp. 57-61.
+2010.
+[PDF http://spraakdata.gu.se/svedd/pub/lrec10.pdf]
+#BR
+//A study of Semitic non-concatenative morphology from the GF point of view.//
+
+
+
+
+===Hindi===
+
+**Source**: http://www.grammaticalframework.org/lib/src/hindi  http://www.grammaticalframework.org/lib/src/hindustani
+
+**Publications**
+
+Shafqat, PhD thesis
+
+Prasad and Shafqat
+
+
+
+===Interlingua===
+
+**Source**: http://www.grammaticalframework.org/lib/src/interlingua
+
+%**Publications**
+
+
+===Italian===
+
+**Source**: http://www.grammaticalframework.org/lib/src/italian  http://www.grammaticalframework.org/lib/src/romance
+
+%**Publications**
+
+
+
+
+===Japanese===
+
+**Source**: http://www.grammaticalframework.org/lib/src/japanese
+
+**Publications**
+
+Liza Zimina, Master's thesis
+
+Liza Zimina, JapTAL paper
+
+
+
+
+===Latin===
+
+**Source**: http://www.grammaticalframework.org/lib/src/latin
+
+%**Publications**
+
+
+
+===Latvian===
+
+**Source**: http://www.grammaticalframework.org/lib/src/latvian
+
+**Publications**
+
+Normunds Gruzitis
+
+
+===Maltese===
+
+**Source**: http://www.grammaticalframework.org/lib/src/<li>maltese
+
+**Publications**
+
+John Camilleri, MSc thesis
+
+John Camilleri, workshop paper
+
+D. Dannélls and J. Camilleri. 
+Verb Morphology of Hebrew and Maltese - Towards an Open Source Type Theoretical Resource Grammar in GF.
+//Proceedings of the Language Resources (LRs) and Human Language Technologies (HLT) for Semitic Languages Status, Updates, and Prospects, LREC-2010 Workshop//,
+Malta, pp. 57-61.
+2010.
+[PDF http://spraakdata.gu.se/svedd/pub/lrec10.pdf]
+#BR
+//A study of Semitic non-concatenative morphology from the GF point of view.//
+
+
+
+===Nepali===
+
+**Source**: http://www.grammaticalframework.org/lib/src/nepali
+
+**Publications**
+
+Dinesh Simk, MSc thesis
+
+
+===Norwegian===
+
+**Source**: http://www.grammaticalframework.org/lib/src/norwegian  http://www.grammaticalframework.org/lib/src/scandinavian
+
+%**Publications**
+
+
+===Persian===
+
+**Source**: http://www.grammaticalframework.org/lib/src/persian
+
+**Publications**
+
+Elnaz and Shafqat, LREC paper
+
+
+===Polish===
+
+**Source**: http://www.grammaticalframework.org/lib/src/polish
+
+**Publications**
+
+Adam Slaski, MSc thesis
+
+
+
+===Punjabi===
+
+**Source**: http://www.grammaticalframework.org/lib/src/punjabi
+
+**Publications**
+
+S. Virk, M. Humayoun, and A. Ranta.
+An Open-Source Punjabi Resource Grammar.
+Proceedings of RANLP-2011, Recent Advances in Natural Language Processing,
+Hissar, Bulgaria, 12-14 September, 2011.
+pp. 70-76.
+[PDF http://lml.bas.bg/~iva/ranlp2011/RANLR2011_Proceedings.PDF]
+#BR
+//Punjabi syntax, building on Humayoun and Ranta 2010.//
+
+M. Humayoun and A. Ranta. 
+Developing Punjabi Morphology, Corpus and Lexicon. 
+//The 24th Pacific Asia conference on Language, Information and Computation (PACLIC24)//,
+2010.
+#BR
+//Yet another South-East Asian language, spoken by 88 million people.//
+
+
+
+
+
+
+===Romanian===
+
+**Source**: http://www.grammaticalframework.org/lib/src/romanian
+
+**Publications**
+
+R. Enache, A. Ranta, and K. Angelov.
+An Open-Source Computational Grammar of Romanian.
+A. Gelbukh (ed.), //CiCLING-2010//,
+LNCS 6008,
+2010.
+#BR
+//A Romance language different enough not to follow the Romance functor.//
+
+
+
+
+
+===Russian===
+
+**Source**: http://www.grammaticalframework.org/lib/src/russian
+
+**Publications**
+
+J. Khegai. 
+GF parallel resource grammars and Russian.
+In proceedings of ACL2006 
+  (The joint conference of the International Committee on Computational 
+  Linguistics and the Association for Computational Linguistics) (pp. 475-482),
+  Sydney, Australia, July 2006.
+#BR
+//Gives an outline of the Russian resource grammar project.//
+
+J. Khegai and A. Ranta.
+Building and Using a Russian Resource Grammar in GF.
+In A. Gelbukh (ed), 
+//Intelligent Text Processing and Computational Linguistics (CICLing-2004)//, 
+Seoul, Korea, February 2003,
+Springer LNCS 945, 
+pp. 38-41,
+2004.
+[ps.gz http://www.cse.chalmers.se/~aarne/articles/mexico.ps.gz].
+#BR
+//An introduction to the GF resource grammar project, with Russian as prime example.//
+
+
+
+
+
+===Sindhi===
+
+**Source**: http://www.grammaticalframework.org/lib/src/sindhi
+
+**Publications**
+
+Jherna, MSc thesis
+
+
+
+===Spanish===
+
+**Source**: http://www.grammaticalframework.org/lib/src/spanish  http://www.grammaticalframework.org/lib/src/romance
+
+%**Publications**
+
+
+===Swahili===
+
+**Source**: http://www.grammaticalframework.org/lib/src/swahili
+
+
+**Publications**
+
+Wanjiku Ng'ng'a, paper
+
+
+
+===Swedish===
+
+**Source**: http://www.grammaticalframework.org/lib/src/swedish  http://www.grammaticalframework.org/lib/src/scandinavian
+
+**Publications**
+
+Malin Ahlberg, MSc thesis
+
+Ahlberg and Enache, paper
+
+
+
+
+===Thai===
+
+**Source**: http://www.grammaticalframework.org/lib/src/thai
+
+%**Publications**
+
+===Turkish===
+
+**Source**: http://www.grammaticalframework.org/lib/src/turkish
+
+%**Publications**
+
+
+===Urdu===
+
+**Source**: http://www.grammaticalframework.org/lib/src/urdu  http://www.grammaticalframework.org/lib/src/hindustani
+
+**Publications**
+
+Prasad and Shafqat, paper
+
+S. Virk, M. Humayoun, and A. Ranta. 
+An Open Source Urdu Resource Grammar. 
+//Proceedings of the 8th Workshop on Asian Language Resources (Coling 2010 workshop)//,
+2010.
+#BR
+//The national language of Pakistan, spoken by 60 million people; almost the same as Hindi.//
+
+M. Humayoun, H. Hammarström, and A. Ranta.
+Urdu Morphology, Orthography and Lexicon Extraction.
+//CAASL-2: The Second Workshop on Computational Approaches to Arabic Script-based Languages//,
+July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
+2007.
+#BR
+//Fairly complete open-source Urdu morphology and elemenraty syntax in GF.//
+
+M. Humayoun, MSc thesis
+
+
