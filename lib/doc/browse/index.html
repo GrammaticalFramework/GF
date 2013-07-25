@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="layout-default-latest.css" />
     <link rel="stylesheet" href="style.css">
 
+    <link rel="stylesheet" type="text/css" href="http://cloud.grammaticalframework.org/syntax-editor/editor.css" />
+
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
     <script type="text/javascript" src="jquery.layout-latest.js"></script>
@@ -64,6 +66,35 @@
         </div>
         <table id="results"></table>
       </div><!-- panel api -->
+
+      <!-- Syntax editor -->
+      <script type="text/javascript" src="http://cloud.grammaticalframework.org/js/grammar_manager.js"></script>
+      <script type="text/javascript" src="http://cloud.grammaticalframework.org/js/support.js"></script>
+      <script type="text/JavaScript" src="http://cloud.grammaticalframework.org/js/localstorage.js"></script>
+      <script type="text/javascript" src="http://cloud.grammaticalframework.org/js/pgf_online.js"></script>
+      <script type="text/javascript" src="http://cloud.grammaticalframework.org/syntax-editor/ast.js"></script>
+      <script type="text/javascript" src="http://cloud.grammaticalframework.org/syntax-editor/editor_menu.js"></script>
+      <script type="text/javascript" src="http://cloud.grammaticalframework.org/syntax-editor/editor.js"></script>
+      <script type="text/javascript">
+      $(document).ready(function(){
+        var server = pgf_online({
+          grammars_url: "http://www.grammaticalframework.org/grammars/"
+        });
+        var gm = new GrammarManager(server, {
+          initial: {
+            grammar: "http://www.grammaticalframework.org/grammars/LibraryBrowser.pgf",
+            startcat: "Utt"
+          }
+        });
+        var editor = new Editor(gm, {
+          target: "editor",
+          show_grammar_menu: false
+        });
+      });
+      </script>
+
+      <div id="editor" class="panel editor">
+      </div><!-- panel editor -->
 
       <div id="help" class="panel help">
 
@@ -119,10 +150,10 @@
           <a class="tab code" href="#code">code</a>
         </span>
         <a class="tab api" href="#api">API</a>
+        <a class="tab editor" href="#editor">Tree Builder</a>
         <a class="tab help" href="#help">Help</a>
         <a class="synopsis" href="http://www.grammaticalframework.org/lib/doc/synopsis.html" target="_blank">Synopsis</a>
       </div>
-
 
       </header>
 

@@ -11,6 +11,7 @@ function EditorMenu(editor,opts) {
         show_to_menu: true,
         show_random_button: true,
         show_import: true,
+        show_debug: false,
     }
 
     // Apply supplied options
@@ -92,7 +93,9 @@ function EditorMenu(editor,opts) {
         ]);
     }
 
-    appendChildren(t.container, [t.ui.debug_toggle]);
+    if (t.options.show_debug) {
+        appendChildren(t.container, [t.ui.debug_toggle]);
+    }
 
     /* --- Client state initialisation -------------------------------------- */
     this.editor = editor;
