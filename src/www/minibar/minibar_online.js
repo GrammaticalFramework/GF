@@ -24,7 +24,7 @@ if(/^\?\/tmp\//.test(location.search)) {
     if(args[0]) online_options.grammars_url=args[0];
     if(args[1]) minibar_options.initial_grammar=args[1];
 }
-else if(window.localStorage) {
+else if(supports_html5_storage()) {
     var s=window.localStorage["gf.editor.simple.grammardir"]
     if(s) var editor_dir=JSON.parse(s);
 }
