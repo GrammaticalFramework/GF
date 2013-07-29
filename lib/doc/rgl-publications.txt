@@ -43,7 +43,7 @@ http://publications.lib.chalmers.se/records/fulltext/146295.pdf
 
 - **Publications**
 
-Ali El Dada. 
+Ali El Dada.
 //Arabic Resource Grammar in GF//, MSc Thesis, Chalmers University, 2006.
 
 A. El Dada and A. Ranta.
@@ -57,7 +57,7 @@ John Benjamins Publishing Company.
 
 A. El Dada.
 Implementation of the Arabic Numerals and their Syntax in GF.
-Computational Approaches to Semitic Languages: Common Issues and Resources, 
+Computational Approaches to Semitic Languages: Common Issues and Resources,
   ACL-2007 Workshop,
 June 28, 2007, Prague.
 2007.
@@ -77,8 +77,8 @@ http://acl.ldc.upenn.edu/W/W07/W07-08.pdf
 
 K. Angelov.
 Type-Theoretical Bulgarian Grammar.
-In B. Nordström and A. Ranta (eds), 
-//Advances in Natural Language Processing (GoTAL 2008)//, 
+In B. Nordström and A. Ranta (eds),
+//Advances in Natural Language Processing (GoTAL 2008)//,
 LNCS/LNAI 5221, Springer,
 2008.
 http://link.springer.com/chapter/10.1007%2F978-3-540-85287-2_6
@@ -105,7 +105,7 @@ http://link.springer.com/chapter/10.1007%2F978-3-540-85287-2_6
 Chen Peng,
 Implementation of a Chinese Resource Grammar in Grammatical Framework.
 //International Journal of Knowledge and Language Processing//,
-4(1), 
+4(1),
 2013,
 pp. 26-34.
 http://www.ijklp.org/archives/vol4no1/Implementation%20of%20Chinese%20Resource%20Grammar%20in%20Grammatical%20Framework.pdf
@@ -142,7 +142,7 @@ http://www.grammaticalframework.org/gf-book/gf-chinese-appendix.pdf
 
 A. Ranta.
 The GF Resource Grammar Library.
-//Linguistic Issues in Language Technology//, 
+//Linguistic Issues in Language Technology//,
 2 (2),
 2009.
 [PDF http://elanguage.net/journals/index.php/lilt/article/viewFile/214/158]
@@ -220,7 +220,7 @@ RANLP 2013.
 
 - **Publications**
 
-D. Dannélls and J. Camilleri. 
+D. Dannélls and J. Camilleri.
 Verb Morphology of Hebrew and Maltese - Towards an Open Source Type Theoretical Resource Grammar in GF.
 //Proceedings of the Language Resources (LRs) and Human Language Technologies (HLT) for Semitic Languages Status, Updates, and Prospects, LREC-2010 Workshop//,
 Malta, pp. 57-61.
@@ -243,7 +243,7 @@ http://www.cse.chalmers.se/~virk/shafqat-phd-thesis.pdf
 
 K.V.S. Prasad and Shafqat Virk.
 Computational evidence that
-Hindi and Urdu share a grammar but not the lexicon. 
+Hindi and Urdu share a grammar but not the lexicon.
 In The 3rd Workshop
 on South and Southeast Asian NLP, COLING 2012. //Reprinted in Shafqat's thesis//
 
@@ -272,7 +272,7 @@ on South and Southeast Asian NLP, COLING 2012. //Reprinted in Shafqat's thesis//
 
 - **Publications**
 
-Elizaveta Zimina. 
+Elizaveta Zimina.
 GF Japanese Resource Grammar,
 MA Thesis, University of Gothenburg,
 2012.
@@ -280,7 +280,7 @@ http://www.ling.gu.se/~lager/MLT/zimina_thesis_draft.pdf
 
 Elizaveta Zimina.
 Fitting a Round Peg in a Square Hole: Japanese Resource Grammar in GF.
-//Advances in Natural Language Processing (JapTAL-2012)// 
+//Advances in Natural Language Processing (JapTAL-2012)//
 Lecture Notes in Computer Science Volume 7614, 2012, pp 156-167.
 http://link.springer.com/chapter/10.1007%2F978-3-642-33983-7_16
 
@@ -308,18 +308,18 @@ http://lrec.elra.info/proceedings/lrec2012/pdf/976_Paper.pdf
 
 ===Maltese===
 
-- **Source**: http://www.grammaticalframework.org/lib/src/<li>maltese (John Camilleri)
+- **Source**: http://www.grammaticalframework.org/lib/src/maltese (John J. Camilleri)
 
 - **Publications**
 
-John Camilleri, 
+John J. Camilleri,
 MSc thesis, Chalmers University of Technology, 2013.
 
-John Camilleri.
+John J. Camilleri.
 A computational grammar for Maltese: Talk at the 4th International Conference on Maltese Linguistics (GĦILM 2013). Lyon, France, 2013.
 http://academic.johnjcamilleri.com/presentations/2013-06%20G%C4%A6ILM%201.pdf
 
-D. Dannélls and J. Camilleri. 
+D. Dannélls and J. Camilleri.
 Verb Morphology of Hebrew and Maltese - Towards an Open Source Type Theoretical Resource Grammar in GF.
 //Proceedings of the Language Resources (LRs) and Human Language Technologies (HLT) for Semitic Languages Status, Updates, and Prospects, LREC-2010 Workshop//,
 Malta, pp. 57-61.
@@ -334,7 +334,7 @@ http://spraakdata.gu.se/svedd/pub/lrec10.pdf
 
 - **Publications**
 
-Dinesh Simk. 
+Dinesh Simk.
 Implementing the GF Resource Grammar for Nepali Language,
 MSc thesis, Chalmers University of Technology,
 2012.
@@ -388,8 +388,8 @@ Hissar, Bulgaria, 12-14 September, 2011.
 pp. 70-76.
 http://lml.bas.bg/~iva/ranlp2011/RANLR2011_Proceedings.PDF
 
-M. Humayoun and A. Ranta. 
-Developing Punjabi Morphology, Corpus and Lexicon. 
+M. Humayoun and A. Ranta.
+Developing Punjabi Morphology, Corpus and Lexicon.
 //The 24th Pacific Asia conference on Language, Information and Computation (PACLIC24)//,
 2010.
 
@@ -419,19 +419,19 @@ LNCS 6008,
 
 - **Publications**
 
-J. Khegai. 
+J. Khegai.
 GF parallel resource grammars and Russian.
-In proceedings of ACL2006 
-  (The joint conference of the International Committee on Computational 
+In proceedings of ACL2006
+  (The joint conference of the International Committee on Computational
   Linguistics and the Association for Computational Linguistics) (pp. 475-482),
   Sydney, Australia, July 2006.
 
 J. Khegai and A. Ranta.
 Building and Using a Russian Resource Grammar in GF.
-In A. Gelbukh (ed), 
-//Intelligent Text Processing and Computational Linguistics (CICLing-2004)//, 
+In A. Gelbukh (ed),
+//Intelligent Text Processing and Computational Linguistics (CICLing-2004)//,
 Seoul, Korea, February 2003,
-Springer LNCS 945, 
+Springer LNCS 945,
 pp. 38-41,
 2004.
 
@@ -454,7 +454,7 @@ http://publications.lib.chalmers.se/records/fulltext/163234.pdf
 
 ===Spanish===
 
-- **Source**: http://www.grammaticalframework.org/lib/src/spanish  http://www.grammaticalframework.org/lib/src/romance 
+- **Source**: http://www.grammaticalframework.org/lib/src/spanish  http://www.grammaticalframework.org/lib/src/romance
 (Aarne Ranta, Ingrid Andersson, Therese Söderberg, Inari Listenmaa)
 
 %- **Publications**
@@ -521,8 +521,8 @@ http://link.springer.com/content/pdf/10.1007%2F978-3-642-32790-2_22.pdf
 
 - **Publications**
 
-S. Virk, M. Humayoun, and A. Ranta. 
-An Open Source Urdu Resource Grammar. 
+S. Virk, M. Humayoun, and A. Ranta.
+An Open Source Urdu Resource Grammar.
 //Proceedings of the 8th Workshop on Asian Language Resources (Coling 2010 workshop)//,
 2010.
 
@@ -533,6 +533,3 @@ July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
 2007.
 
 See also **Hindi** above.
-
-
-
