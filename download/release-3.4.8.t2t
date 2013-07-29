@@ -1,0 +1,40 @@
+GF Version 3.4.8 Release Notes
+August 2013
+
+%!style:../css/style.css
+%!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+==Installation==
+
+See the [download page http://www.grammaticalframework.org/download/index.html].
+
+==What's new==
+
+===GF compiler and run-time library===
+
+- The Haskell source code for GF now compiles with GHC 7.6 and hence the
+  the latest [Haskell Platform http://www.haskell.org/platform/] (2013.2.0.0).
+  Compatibility with GHC 7.4 is also maintained.
+- A bug in the partial evaluator that caused problems with pattern macros has
+  been fixed.
+- [...]
+
+
+===Resource Grammar Library===
+
+- New languages in the Resource Grammar Library: Greek, Maltese
+  (see the [updated synopsis ../lib/doc/synopsis.html]).
+%- Improvements for other languages, e.g. [...]
+- Updated web-based RGL browser ([/lib/doc/browse/ ../lib/doc/browse/]).
+- [...]
+
+
+===GF Cloud services===
+
+- Support for [cross-site HTTP requests https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS]...
+- [...]
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
