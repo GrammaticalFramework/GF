@@ -324,7 +324,7 @@ serveStaticFile' path =
      if ext `elem` [".cgi",".fcgi",".sh",".php"]
        then return $ resp400 $ "Unsupported file type: "++ext
        else do b <- doesFileExist path
-               if b then fmap (ok200' (ct t)) $ rdFile path
+               if b then fmap (ok200' (ct t "")) $ rdFile path
                     else do cwd <- getCurrentDirectory
                             logPutStrLn $ "Not found: "++path++" cwd="++cwd
                             return (resp404 path)
@@ -334,15 +334,16 @@ logPutStrLn s = liftIO . hPutStrLn stderr $ s
 
 -- * JSONP output
 
-jsonp qs = json200' $ maybe id apply (lookup "jsonp" qs)
+jsonp qs =  maybe json200 apply (lookup "jsonp" qs)
   where
-    apply f json = f++"("++json++")"
+    apply f = jsonp200' $ \ json -> f++"("++json++")"
 
 -- * Standard HTTP responses
 ok200        = Response 200 [plainUTF8,noCache,xo] . encodeString
 ok200' t     = Response 200 [t,xo]
 json200 x    = json200' id x
 json200' f   = ok200' jsonUTF8 . encodeString . f . encode
+jsonp200' f  = ok200' jsonpUTF8 . encodeString . f . encode
 html200      = ok200' htmlUTF8 . encodeString
 resp204      = Response 204 [xo] "" -- no content
 resp400 msg  = Response 400 [plain,xo] $ "Bad request: "++msg++"\n"
@@ -355,11 +356,14 @@ instance Error Response where
   strMsg = resp500
 
 -- * Content types
-plain = ct "text/plain"
-plainUTF8 = ct "text/plain; charset=UTF-8"
-jsonUTF8 = ct "text/javascript; charset=UTF-8"
-htmlUTF8 = ct "text/html; charset=UTF-8"
-ct t = ("Content-Type",t)
+plain = ct "text/plain" ""
+plainUTF8 = ct "text/plain" csutf8
+jsonUTF8 = ct "application/json" csutf8 -- http://www.ietf.org/rfc/rfc4627.txt
+jsonpUTF8 = ct "application/javascript" csutf8
+htmlUTF8 = ct "text/html" csutf8
+
+ct t cs = ("Content-Type",t++cs)
+csutf8 = "; charset=UTF-8"
 xo = ("Access-Control-Allow-Origin","*") -- Allow cross origin requests
      -- https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
 
