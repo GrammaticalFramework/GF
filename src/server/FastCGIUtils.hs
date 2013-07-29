@@ -167,11 +167,11 @@ outputJSONP = outputEncodedJSONP . encode
 outputEncodedJSONP :: String -> CGI CGIResult
 outputEncodedJSONP json = 
     do mc <- getInput "jsonp"
-       let str = case mc of
-                   Nothing -> json
-                   Just c  -> c ++ "(" ++ json ++ ")"
-       setHeader "Content-Type" "text/javascript; charset=utf-8"
-       outputStrict $ UTF8.encodeString str
+       let (ty,str) = case mc of
+                        Nothing -> ("json",json)
+                        Just c  -> ("javascript",c ++ "(" ++ json ++ ")")
+           ct = "application/"++ty++"; charset=utf-8"
+       outputStrict ct $ UTF8.encodeString str
 
 outputPNG :: BS.ByteString -> CGI CGIResult
 outputPNG x = do
@@ -186,18 +186,16 @@ outputBinary x = do
        outputFPS x
 
 outputHTML :: String -> CGI CGIResult
-outputHTML x = do
-       setHeader "Content-Type" "text/html; charset=utf-8"
-       outputStrict $ UTF8.encodeString x
+outputHTML = outputStrict "text/html; charset=utf-8" . UTF8.encodeString
 
 outputPlain :: String -> CGI CGIResult
-outputPlain x = do
-       setHeader "Content-Type" "text/plain; charset=utf-8"
-       outputStrict $ UTF8.encodeString x
+outputPlain = outputStrict "text/plain; charset=utf-8" . UTF8.encodeString 
 
-outputStrict :: String -> CGI CGIResult
-outputStrict x | x == x = do setXO ; output x
-               | otherwise = fail "I am the pope."
+outputStrict :: String -> String -> CGI CGIResult
+outputStrict ct x | x == x = do setHeader "Content-Type" ct
+                                setXO
+                                output x
+                  | otherwise = fail "I am the pope."
 
 setXO = setHeader "Access-Control-Allow-Origin" "*"
      -- https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
