@@ -33,6 +33,8 @@ The new runtime provides the following new features:
      the exhaustive generator. The goal is to reach the state where
      GF will provide state of the art theorem prover.
 [/src/runtime/c/ ../src/runtime/c/]
+- There is a binding from Python to the C runtime in [/src/runtime/python/ ../src/runtime/python/].
+- A volunteer to complete the binding from Java is highly wanted [/src/runtime/java/ ../src/runtime/java/].
 
 ===Resource Grammar Library===
 
