@@ -18,8 +18,21 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
   Compatibility with GHC 7.4 is also maintained.
 - A bug in the partial evaluator that caused problems with pattern macros has
   been fixed.
-- [...]
-
+- The new runtime in C is now stable enough to be used although there
+are still features from the Haskell runtime which are not ported yet. 
+The new runtime provides the following new features:
+     - state of the art statistical parser for GF (PMCFG)
+     - the parser is usable in a robust mode, i.e. even if the
+     sentence is not in the scope of the grammar it is still possible
+     to get a list of parsable chunks
+     - the linearizer is also more robust than the one in Haskell since
+     it can linearize the partial trees returned from the robust parser
+     - the exhaustive generation for GF abstract trees generates the trees
+     in decreasing probability order (the order in Haskell is unspecified).
+     - we have started using just-in-time compilation to native code in
+     the exhaustive generator. The goal is to reach the state where
+     GF will provide state of the art theorem prover.
+[/src/runtime/c/ ../src/runtime/c/]
 
 ===Resource Grammar Library===
 
