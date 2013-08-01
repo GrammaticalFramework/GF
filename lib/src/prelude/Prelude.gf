@@ -138,5 +138,17 @@ oper
   eNext : ENumber -> ENumber = \e -> case e of {
     E0 => E1 ; E1 => E2 ; _ => Emore} ;
 
+-- convert initial to upper/lower
+
+  toUpperFirst : Str -> Str = \s -> case s of {
+    x@? + xs => Predef.toUpper x + xs ;
+    _ => s
+    } ;
+
+  toLowerFirst : Str -> Str = \s -> case s of {
+    x@? + xs => Predef.toLower x + xs ;
+    _ => s
+    } ;
+
 
 }
