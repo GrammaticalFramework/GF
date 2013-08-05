@@ -8,19 +8,19 @@ Grammatical Framework Download and Installation
 %!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-**GF 3.4.8** has not been released yet
+**GF 3.5** has not been released yet
 
-What's new? See the [Release notes release-3.4.8.html].
+What's new? See the [Release notes release-3.5.html].
 
 
 == Binary packages ==
 
 | **Platform** | **Download** | **How to install**
-| MacOS X | [gf-3.4.8-bin-intel-mac.tar.gz gf-3.4.8-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.4.8-bin-intel-mac.tar.gz``
+| MacOS X | [gf-3.5-bin-intel-mac.tar.gz gf-3.5-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.5-bin-intel-mac.tar.gz``
 %| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | ``sudo rpm -i ...``
-| Ubuntu (32-bit) | [gf_3.4.8-1_i386.deb gf_3.4.8-1_i386.deb] | ``sudo dpkg -i gf_3.4.8-1_i386.deb``
-| Ubuntu (64-bit) | [gf_3.4.8-1_amd64.deb gf_3.4.8-1_amd64.deb] | ``sudo dpkg -i gf_3.4.8-1_amd64.deb``
-| Windows | [gf-3.4.8-bin-windows.zip gf-3.4.8-bin-windows.zip] | 
+| Ubuntu (32-bit) | [gf_3.5-1_i386.deb gf_3.5-1_i386.deb] | ``sudo dpkg -i gf_3.5-1_i386.deb``
+| Ubuntu (64-bit) | [gf_3.5-1_amd64.deb gf_3.5-1_amd64.deb] | ``sudo dpkg -i gf_3.5-1_amd64.deb``
+| Windows | [gf-3.5-bin-windows.zip gf-3.5-bin-windows.zip] | 
 %| ... | ... | ...
 
 %More binary packages might be added later.
@@ -41,7 +41,7 @@ You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
 ```
-  export GF_LIB_PATH=/usr/local/share/gf-3.4.8/lib
+  export GF_LIB_PATH=/usr/local/share/gf-3.5/lib
 ```
 
 where ``/usr/local`` should be replaced with the path to the location where you
@@ -62,7 +62,7 @@ fairly simple:
 
 
 You can also download the full source package from here:
-[``gf-3.4.8.tar.gz`` gf-3.4.8.tar.gz].
+[``gf-3.5.tar.gz`` gf-3.5.tar.gz].
 
 === Notes ===
 
@@ -87,14 +87,14 @@ on Linux depends on some non-Haskell libraries that
 won't be installed automatically by cabal, and therefore need to be installed
 manually. Here is one way to do this:
 
-- On Ubuntu: ``sudo apt-get install libghc6-terminfo-dev``
-- On Fedora: ``sudo yum install ghc-terminfo-devel``
+- On Ubuntu: ``sudo apt-get install libghc-haskeline-dev``
+- On Fedora: ``sudo yum install ghc-haskeline-devel``
 
 
 **Note 2**.
 We recommend using GHC 7.6 (which is part of the Haskell Platform 2013.2.0.0)
 or GHC 7.4 (which is part of the Haskell Platform 2012.4.0.0).
-Older versions of GHC (6.12 and 7.0) still works for the most part.
+Older versions of GHC (6.12 and 7.0) still work for the most part.
 (For example, there is a issue with error reporting in ``gf -server``
 when compiled with GHC 7.0.)
 %GF does **not** compile with the most recent versions of Alex (>=3.0).
