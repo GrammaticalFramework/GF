@@ -446,6 +446,7 @@ sequences; see example.
  | ``-from_hebrew`` | from unicode to GF unvocalized Hebrew transliteration
  | ``-from_nepali`` | from unicode to GF Nepali transliteration
  | ``-from_persian`` | from unicode to GF Persian/Farsi transliteration
+ | ``-from_sanskrit`` | from unicode to GF Sanskrit transliteration
  | ``-from_sindhi`` | from unicode to GF Sindhi transliteration
  | ``-from_telugu`` | from unicode to GF Telugu transliteration
  | ``-from_thai`` | from unicode to GF Thai transliteration
@@ -464,6 +465,7 @@ sequences; see example.
  | ``-to_html`` | wrap in a html file with linebreaks
  | ``-to_nepali`` | from GF Nepali transliteration to unicode
  | ``-to_persian`` | from GF Persian/Farsi transliteration to unicode
+ | ``-to_sanskrit`` | from GF Sanskrit transliteration to unicode
  | ``-to_sindhi`` | from GF Sindhi transliteration to unicode
  | ``-to_telugu`` | from GF Telugu transliteration to unicode
  | ``-to_thai`` | from GF Thai transliteration to unicode
@@ -686,6 +688,7 @@ To see transliteration tables, use command ut.
  | ``-from_hebrew`` | from unicode to GF unvocalized Hebrew transliteration
  | ``-from_nepali`` | from unicode to GF Nepali transliteration
  | ``-from_persian`` | from unicode to GF Persian/Farsi transliteration
+ | ``-from_sanskrit`` | from unicode to GF Sanskrit transliteration
  | ``-from_sindhi`` | from unicode to GF Sindhi transliteration
  | ``-from_telugu`` | from unicode to GF Telugu transliteration
  | ``-from_thai`` | from unicode to GF Thai transliteration
@@ -704,6 +707,7 @@ To see transliteration tables, use command ut.
  | ``-to_html`` | wrap in a html file with linebreaks
  | ``-to_nepali`` | from GF Nepali transliteration to unicode
  | ``-to_persian`` | from GF Persian/Farsi transliteration to unicode
+ | ``-to_sanskrit`` | from GF Sanskrit transliteration to unicode
  | ``-to_sindhi`` | from GF Sindhi transliteration to unicode
  | ``-to_telugu`` | from GF Telugu transliteration to unicode
  | ``-to_thai`` | from GF Thai transliteration to unicode
@@ -758,6 +762,7 @@ are type checking and semantic computation.
  | ``-nub`` | remove duplicate trees
  | ``-smallest`` | sort trees from smallest to largest, in number of nodes
  | ``-subtrees`` | return all fully applied subtrees (stopping at abstractions), by default sorted from the largest
+ | ``-funs`` | return all fun functions appearing in the tree, with duplications
 
 - Flags:
 
@@ -1043,9 +1048,10 @@ This command must be a line of its own, and thus cannot be a part of a pipe.
  | ``-devanagari`` | Devanagari
  | ``-greek`` | modern Greek
  | ``-hebrew`` | unvocalized Hebrew
- | ``-persian`` | Persian/Farsi
- | ``-sindhi`` | Sindhi
  | ``-nepali`` | Nepali
+ | ``-persian`` | Persian/Farsi
+ | ``-sanskrit`` | Sanskrit
+ | ``-sindhi`` | Sindhi
  | ``-telugu`` | Telugu
  | ``-thai`` | Thai
  | ``-urdu`` | Urdu
@@ -1063,8 +1069,8 @@ This command must be a line of its own, and thus cannot be a part of a pipe.
 #TINY
 
 Prints a dependency tree in the .dot format (the graphviz format, default)
-or the MaltParser/CoNLL format (flag -output=malt for training, malt_input)
-for unanalysed input.
+or the CoNLL/MaltParser format (flag -output=conll for training, malt_input
+for unanalysed input).
 By default, the last argument is the head of every abstract syntax
 function; moreover, the head depends on the head of the function above.
 The graph can be saved in a file by the wf command as usual.
@@ -1084,6 +1090,7 @@ flag -format.
  | ``-format`` | format of the visualization file (default "png")
  | ``-output`` | output format of graph source (default "dot")
  | ``-view`` | program to open the resulting file (default "open")
+ | ``-lang`` | the language of analysis
 
 - Examples:
 
@@ -1120,7 +1127,6 @@ flag -format.
  | ``-nofun`` | don't show function names (default)
  | ``-showleaves`` | show the leaves of the tree (default)
  | ``-noleaves`` | don't show the leaves of the tree (i.e., only the abstract tree)
- | ``-old`` | use the old tree visualization algorithm
 
 - Flags:
 
