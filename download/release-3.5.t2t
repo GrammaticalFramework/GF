@@ -1,4 +1,4 @@
-GF Version 3.4.8 Release Notes
+GF 3.5 Release Notes
 August 2013
 
 %!style:../css/style.css
@@ -11,16 +11,25 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
+Over 400 changes have been pushed to the source repository since the release
+of GF 3.4.
+
+
 ===GF compiler and run-time library===
 
 - The Haskell source code for GF now compiles with GHC 7.6 and hence the
   the latest [Haskell Platform http://www.haskell.org/platform/] (2013.2.0.0).
   Compatibility with GHC 7.4 is also maintained.
-- A bug in the partial evaluator that caused problems with pattern macros has
-  been fixed.
-- The new runtime in C is now stable enough to be used although there
-are still features from the Haskell runtime which are not ported yet. 
-The new runtime provides the following new features:
+- ``gf -s/-q`` now silences ``no linearization of ...`` warnings.
+- Faster regular expression pattern matching in the grammar compiler.
+- Two bugs in the partial evaluator that caused problems with pattern macros
+  and variants have been fixed.
+- A portability problem with PGF files has been fixed. It could cause problems
+  when PGF files were produced on a 32-bit system and used on a 64-bit system.
+- The new runtime in C (in [/src/runtime/c/ ../src/runtime/c/])
+  is now stable enough to be used although there
+  are still features from the Haskell runtime which are not ported yet.
+  The new runtime provides the following new features:
      - state of the art statistical parser for GF (PMCFG)
      - the parser is usable in a robust mode, i.e. even if the
      sentence is not in the scope of the grammar it is still possible
@@ -32,22 +41,31 @@ The new runtime provides the following new features:
      - we have started using just-in-time compilation to native code in
      the exhaustive generator. The goal is to reach the state where
      GF will provide state of the art theorem prover.
-[/src/runtime/c/ ../src/runtime/c/]
 - There is a binding from Python to the C runtime in [/src/runtime/python/ ../src/runtime/python/].
-- A volunteer to complete the binding from Java is highly wanted [/src/runtime/java/ ../src/runtime/java/].
+- A volunteer to complete the binding from Java is highly wanted,
+  [/src/runtime/java/ ../src/runtime/java/].
+
 
 ===Resource Grammar Library===
 
 - New languages in the Resource Grammar Library: Greek, Maltese
   (see the [updated synopsis ../lib/doc/synopsis.html]).
-%- Improvements for other languages, e.g. [...]
+- Various improvements for several other languages, e.g. [...]
 - Updated web-based RGL browser ([/lib/doc/browse/ ../lib/doc/browse/]).
 - [...]
 
 
 ===GF Cloud services===
 
+- Word alignment diagrams can now be restricted to a subset
+  of the  languages supported by the grammar.
+- Minibar: you can now click on a linearization to obtain a table with all
+  variants and forms
 - Support for [cross-site HTTP requests https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS]...
+- A UTF-8 decoding problem in ``gf -server`` has been fixed.
+  It was caused by a backward incompatible change in
+  [``network-2.4.1.1`` https://github.com/haskell/network/commit/f2168b1f8978b4ad9c504e545755f0795ac869ce].
+- Various other small improvements and bug fixes.
 - [...]
 
 --------------------
