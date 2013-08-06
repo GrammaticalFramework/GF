@@ -1,5 +1,5 @@
 concrete StructuralFin of Structural = CatFin ** 
-  open MorphoFin, ParadigmsFin, (X = ConstructX), MakeStructuralFin, Prelude in {
+  open MorphoFin, ParadigmsFin, (X = ConstructX), StemFin, Prelude in {
 
   flags optimize=all ;
 
@@ -9,7 +9,7 @@ concrete StructuralFin of Structural = CatFin **
 
   all_Predet = {s = \\n,c => 
     let
-      kaiket = caseTable n (mkN "kaikki" "kaiken" "kaikkia")
+      kaiket = caseTable n (snoun2nounBind (mkN "kaikki" "kaiken" "kaikkena"))
     in
     case npform2case n c of {
       Nom => "kaikki" ;
@@ -32,12 +32,12 @@ concrete StructuralFin of Structural = CatFin **
   can_VV = mkVV (mkV "voida" "voi") ;
   during_Prep = postGenPrep "aikana" ;
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
-  everybody_NP = makeNP (mkN "jokainen") Sg ;
-  every_Det = mkDet Sg (mkN "jokainen") ;
-  everything_NP = makeNP (((mkN "kaikki" "kaiken" "kaikkena")) **
+  everybody_NP = makeNP (snoun2nounBind (mkN "jokainen")) Sg ;
+  every_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "jokainen")) ;
+  everything_NP = makeNP (((snoun2nounBind (mkN "kaikki" "kaiken" "kaikkena"))) **
     {lock_N = <>}) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
-  few_Det  = mkDet Sg (mkN "harva") ;
+  few_Det  = MorphoFin.mkDet Sg (snoun2nounBind (mkN "harva")) ;
 ---  first_Ord = {s = \\n,c => (mkN "ensimmäinen").s ! NCase n c} ;
   for_Prep = casePrep allative ;
   from_Prep = casePrep elative ;
@@ -48,7 +48,7 @@ concrete StructuralFin of Structural = CatFin **
   how_IAdv = ss "miten" ;
   how8much_IAdv = ss "kuinka paljon" ;
   how8many_IDet = 
-    {s = \\c => "kuinka" ++ (mkN "moni" "monia").s ! NCase Sg c ; n = Sg ; isNum = False} ;
+    {s = \\c => "kuinka" ++ (snoun2nounBind (mkN "moni" "monia")).s ! NCase Sg c ; n = Sg ; isNum = False} ;
   if_Subj = ss "jos" ;
   in8front_Prep = postGenPrep "edessä" ;
   i_Pron  = mkPronoun "minä" "minun" "minua" "minuna" "minuun" Sg P1 ;
@@ -56,17 +56,17 @@ concrete StructuralFin of Structural = CatFin **
   it_Pron = {
     s = \\c => pronSe.s ! npform2case Sg c ; 
     a = agrP3 Sg ; 
-    isPron = False
+    hasPoss = False
     } ;
   less_CAdv = X.mkCAdv "vähemmän" "kuin" ;
-  many_Det = mkDet Sg (mkN "moni" "monia") ;
+  many_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "moni" "monia")) ;
   more_CAdv = X.mkCAdv "enemmän" "kuin" ;
   most_Predet = {s = \\n,c => (nForms2N (dSuurin "useinta")).s ! NCase n (npform2case n c)} ;
-  much_Det = mkDet Sg {s = \\_ => "paljon" ; h = Back} ; --Harmony not relevant, it's just a CommonNoun
+  much_Det = MorphoFin.mkDet Sg {s = \\_ => "paljon" ; h = Back} ; --Harmony not relevant, it's just a CommonNoun
   must_VV = mkVV (caseV genitive (mkV "täytyä")) ;
   no_Utt = ss "ei" ;
   on_Prep = casePrep adessive ;
----  one_Quant = mkDet Sg  DEPREC
+---  one_Quant = MorphoFin.mkDet Sg  DEPREC
   only_Predet = {s = \\_,_ => "vain"} ;
   or_Conj = {s1 = [] ; s2 = "tai" ; n = Sg} ;
   otherwise_PConj = ss "muuten" ;
@@ -82,12 +82,12 @@ concrete StructuralFin of Structural = CatFin **
     isPron = False ; isNeg = False
     } ;
   someSg_Det = heavyDet {
-    s1 = jokinPron ! Sg ;
+    s1 = jokuPron ! Sg ;
     s2 = \\_ => [] ;
     isNum,isPoss = False ; isDef = True ; isNeg = False ; n = Sg
     } ;
   somePl_Det = heavyDet {
-    s1 = jokinPron ! Pl ;
+    s1 = jokuPron ! Pl ;
     s2 = \\_ => [] ; isNum,isPoss = False ; isNeg = False ; isDef = True ; 
     n = Pl ; isNeg = False
     } ;
@@ -162,12 +162,12 @@ concrete StructuralFin of Structural = CatFin **
   youPl_Pron = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 ;
   youPol_Pron = 
     let p = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 in
-    {s = p.s ; a = AgPol} ;
+    {s = p.s ; a = AgPol ; hasPoss = True} ;
 
 oper
   jokuPron : MorphoFin.Number => (MorphoFin.Case) => Str =
     let 
-      kui = mkN "kuu" 
+      kui = snoun2nounBind (mkN "kuu") 
     in
     table {
       Sg => table {
@@ -196,7 +196,7 @@ oper
 
   mikaInt : MorphoFin.Number => (MorphoFin.Case) => Str = 
     let {
-      mi  = mkN "mi"
+      mi  = snoun2nounBind (mkN "mi")
     } in
     table {
       Sg => table {
@@ -217,8 +217,8 @@ oper
 
   kukaInt : MorphoFin.Number => (MorphoFin.Case) => Str = 
     let 
-      kuka = mkN "kuka" "kenen" "ketä" "kenä" "keneen" 
-                 "keiden" "keitä" "keinä" "keissä" "keihin" ;
+      kuka = snoun2nounBind (mkN "kuka" "kenen" "ketä" "kenä" "keneen" 
+                 "keiden" "keitä" "keinä" "keissä" "keihin") ;
     in
     table {
       Sg => table {

@@ -1,23 +1,24 @@
-concrete AdjectiveFin of Adjective = CatFin ** open ResFin, Prelude in {
+concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in {
 
   flags optimize=all_subs ; -- gfc size from 2864336 to 6786 - i.e. factor 422
 
   lin
 
     PositA  a = {
-      s = \\_,nf => a.s ! Posit ! AN nf
+      s = \\_ => (snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s
       } ;
-    ComparA a np = {
+    ComparA a np = 
+      let acomp = (snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s in {
       s = \\isMod,af => case isMod of {
-        True => np.s ! NPCase Part ++ a.s ! Compar ! AN af ;        -- minua isompi
-        _    => a.s ! Compar ! AN af ++ "kuin" ++ np.s ! NPCase Nom -- isompi kuin minä
+        True => np.s ! NPCase Part ++ acomp ! af ;        -- minua isompi
+        _    => acomp ! af ++ "kuin" ++ np.s ! NPCase Nom -- isompi kuin minä
         } 
       } ;
     CAdvAP ad ap np = {
       s = \\m,af => ad.s ++ ap.s ! m ! af ++ ad.p ++ np.s ! NPCase Nom 
       } ;
     UseComparA a = {
-      s = \\_,nf => a.s ! Compar ! AN nf ;
+      s = \\_ => (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s
       } ;
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
@@ -26,15 +27,15 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, Prelude in {
       } ;
 
 
-    ComplA2 adj np = {
+    ComplA2 a np = {
       s = \\isMod,af => 
-          preOrPost isMod (appCompl True Pos adj.c2 np) (adj.s ! Posit ! AN af)
+          preOrPost isMod (appCompl True Pos a.c2 np)  ((snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s ! af)
       } ;
 
-    ReflA2 adj = {
+    ReflA2 a = {
       s = \\isMod,af => 
           preOrPost isMod 
-            (appCompl True Pos adj.c2 (reflPron (agrP3 Sg))) (adj.s ! Posit ! AN af)
+            (appCompl True Pos a.c2 (reflPron (agrP3 Sg))) ((snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s ! af)
       } ;
 
     SentAP ap sc = {
@@ -45,8 +46,12 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, Prelude in {
       s = \\b,af => ada.s ++ ap.s ! b ! af
       } ;
 
+    AdvAP ap adv = {
+      s = \\b,af => adv.s ++ ap.s ! b ! af -- luonnostaan vaalea
+      } ;
+
     UseA2 a = {
-      s = \\_,nf => a.s ! Posit ! AN nf
+      s = \\_ => (snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s
       } ;
 
 }

@@ -1,6 +1,4 @@
-concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
-
-  flags optimize=all_subs ;
+concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in {
 
   lin
 
@@ -58,7 +56,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       } ;
 
     UsePN pn = {
-      s = \\c => pn.s ! npform2case Sg c ; 
+      s = snoun2np Sg pn ; 
       a = agrP3 Sg ;
       isPron = False ; isNeg = False
       } ;
@@ -72,7 +70,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       } ;
 
     PPartNP np v2 = {
-      s = \\c => np.s ! c ++ v2.s ! PastPartPass (AN (NCase (complNumAgr np.a) Ess)) ;
+      s = \\c => np.s ! c ++ (sverb2verbSep v2).s ! PastPartPass (AN (NCase (complNumAgr np.a) Ess)) ;
       a = np.a ;
       isPron = np.isPron ;  -- minun täällä - ni
       isNeg = np.isNeg
@@ -87,7 +85,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
 
     DetQuantOrd quant num ord = {
       s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase num.n c ; 
-      sp = \\c => quant.sp ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase num.n c ; 
+      sp = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase num.n c ; 
       s2 = quant.s2 ;
       n = num.n ;
       isNum = num.isNum ;
@@ -111,10 +109,13 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
 
     PossPron p = {
       s1,sp = \\_,_ => p.s ! NPCase Gen ;
-      s2 = table {Front => BIND ++ possSuffixFront p.a ; 
-                  Back  => BIND ++ possSuffix p.a } ;
+      s2 = case p.hasPoss of {
+             True => table {Front => BIND ++ possSuffixFront p.a ; 
+                            Back  => BIND ++ possSuffix p.a } ;
+             False => \\_ => []
+             } ;
       isNum = False ;
-      isPoss = True ;
+      isPoss = p.hasPoss ;
       isDef = True ; --- "minun kolme autoani ovat" ; thus "...on" is missing
       isNeg = False
       } ;
@@ -128,20 +129,20 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       s = \\n,c => numeral.s ! NCard (NCase n c) ; 
       n = numeral.n 
       } ;
-    OrdDigits numeral = {s = \\nc => numeral.s ! NOrd nc} ;
+    OrdDigits numeral = {s = \\f => numeral.s ! NOrd f} ;
 
     NumNumeral numeral = {
       s = \\n,c => numeral.s ! NCard (NCase n c) ; 
       n = numeral.n
       } ;
-    OrdNumeral numeral = {s = \\nc => numeral.s ! NOrd nc} ;
+    OrdNumeral numeral = {s = \\f => numeral.s ! NOrd f} ;
 
     AdNum adn num = {
       s = \\n,c => adn.s ++ num.s ! n ! c ; 
       n = num.n
       } ;
 
-    OrdSuperl a = {s = \\nc => a.s ! Superl ! AN nc} ;
+    OrdSuperl a = snoun2nounSep {s = \\nc => a.s ! Superl ! sAN nc ; h = a.h} ; 
 
     DefArt = {
       s1 = \\_,_ => [] ; 
@@ -171,18 +172,18 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
         isPron = False ; isNeg = False
       } ;
 
-    UseN n = n ;
+    UseN n = snoun2nounSep n ;
 
-    UseN2 n = n ;
+    UseN2 n = snoun2nounSep n ;
 
     Use2N3 f = {
-      s = f.s ;
+      s = (snoun2nounSep f).s ;
       c2 = f.c2 ;
       h = f.h ;
       isPre = f.isPre
       } ;
     Use3N3 f = {
-      s = f.s ;
+      s = (snoun2nounSep f).s ;
       c2 = f.c3 ;
       h = f.h ;
       isPre = f.isPre2
@@ -192,7 +193,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
 --- If a possessive suffix is added here it goes after the complements...
 
     ComplN2 f x = {
-      s = \\nf => preOrPost f.isPre (f.s ! nf) (appCompl True Pos f.c2 x) ;
+      s = \\nf => preOrPost f.isPre ((snoun2nounSep f).s ! nf) (appCompl True Pos f.c2 x) ;
       h = f.h } ;
     ComplN3 f x = {
       s = \\nf => preOrPost f.isPre (f.s ! nf) (appCompl True Pos f.c2 x) ;

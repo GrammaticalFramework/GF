@@ -61,7 +61,7 @@ param
   AForm = AN NForm | AAdv ;
 
 oper
-  Adjective : Type = {s : Degree => AForm => Str; lock_A : {}} ;
+  Adjective : Type = {s : Degree => AForm => Str} ;
 
 --2 Noun phrases
 --
@@ -204,10 +204,10 @@ oper
     ext : Str ;
     sc  : NPForm ;
     isNeg : Bool ; -- True if some complement is negative
-    qp  : Bool -- True = back vowel
+    h   : Harmony
     } ;
     
-  predV : (Verb ** {sc : NPForm ; qp : Bool ; p : Str}) -> VP = \verb -> {
+  predV : (Verb ** {sc : NPForm ; h : Harmony ; p : Str}) -> VP = \verb -> {
     s = \\vi,ant,b,agr0 => 
       let
 
@@ -280,7 +280,7 @@ oper
     adv = \\_ => verb.p ; -- the particle of the verb
     ext = [] ;
     sc = verb.sc ;
-    qp = verb.qp ;
+    h = verb.h ;
     isNeg = False 
     } ;
 
@@ -290,17 +290,17 @@ oper
     adv = vp.adv ;
     ext = vp.ext ;
     sc = vp.sc ; 
-    qp = vp.qp ;
+    h = vp.h ;
     isNeg = vp.isNeg
     } ;
 
-  insertObjPre : Bool -> (Bool => Polarity => Agr => Str) -> VP -> VP = \isNeg, obj,vp -> {
+  insertObjPre : Bool -> (Bool -> Polarity -> Agr -> Str) -> VP -> VP = \isNeg, obj,vp -> {
     s = vp.s ;
-    s2 = \\fin,b,a => obj ! fin ! b ! a ++ vp.s2 ! fin ! b ! a ;
+    s2 = \\fin,b,a => obj fin b a ++ vp.s2 ! fin ! b ! a ;
     adv = vp.adv ;
     ext = vp.ext ;
     sc = vp.sc ; 
-    qp = vp.qp ;
+    h = vp.h ;
     isNeg = orB vp.isNeg isNeg
     } ;
 
@@ -310,7 +310,7 @@ oper
     ext = vp.ext ;
     adv = \\b => vp.adv ! b ++ adv ! b ;
     sc = vp.sc ; 
-    qp = vp.qp ;
+    h = vp.h ;
     isNeg = vp.isNeg --- missään
     } ;
 
@@ -320,7 +320,7 @@ oper
     ext = vp.ext ++ obj ;
     adv = vp.adv ;
     sc = vp.sc ; 
-    qp = vp.qp ;
+    h = vp.h ;
     isNeg = vp.isNeg
     } ;
 
@@ -331,7 +331,7 @@ oper
     } ;
 
   ClausePlus : Type = {
-    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,adv,ext : Str ; qp : Bool}
+    s : Tense => Anteriority => Polarity => {subj,fin,inf,compl,adv,ext : Str ; h : Harmony}
     } ;
 
   mkClausePol : Bool -> (Polarity -> Str) -> Agr -> VP -> Clause = 
@@ -346,7 +346,7 @@ oper
          in 
          table {
            SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.adv ++ c.ext ;
-           SQuest => c.fin ++ BIND ++ questPart c.qp ++ c.subj ++ c.inf ++ c.compl ++ c.adv ++ c.ext
+           SQuest => c.fin ++ BIND ++ questPart c.h ++ c.subj ++ c.inf ++ c.compl ++ c.adv ++ c.ext
            }
       } ;
   mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = 
@@ -354,7 +354,7 @@ oper
       s = \\t,a,b => let c = (mkClausePlus sub agr vp).s ! t ! a ! b in 
          table {
            SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.adv ++ c.ext ;
-           SQuest => c.fin ++ BIND ++ questPart c.qp ++ c.subj ++ c.inf ++ c.compl ++ c.adv ++ c.ext
+           SQuest => c.fin ++ BIND ++ questPart c.h ++ c.subj ++ c.inf ++ c.compl ++ c.adv ++ c.ext
            }
       } ;
 
@@ -373,7 +373,7 @@ oper
             compl = vp.s2 ! agrfin.p2 ! b ! agr ;
             adv  = vp.adv ! b ; 
             ext  = vp.ext ; 
-            qp   = selectPart vp a b
+            h    = selectPart vp a b
             }
      } ;
 
@@ -383,10 +383,10 @@ oper
          c = cl.s ! t ! a ! b   
       in
       case p of {
-         0 => {subj = c.subj ++ kin b True ; fin = c.fin ; inf = c.inf ;  -- Jussikin nukkuu
-               compl = c.compl ; adv = c.adv ; ext = c.ext ; qp = c.qp} ;
-         1 => {subj = c.subj ; fin = c.fin ++ kin b c.qp ; inf = c.inf ;  -- Jussi nukkuukin
-               compl = c.compl ; adv = c.adv ; ext = c.ext ; qp = c.qp}
+         0 => {subj = c.subj ++ kin b Back ; fin = c.fin ; inf = c.inf ;  -- Jussikin nukkuu
+               compl = c.compl ; adv = c.adv ; ext = c.ext ; h = c.h} ;
+         1 => {subj = c.subj ; fin = c.fin ++ kin b c.h ; inf = c.inf ;  -- Jussi nukkuukin
+               compl = c.compl ; adv = c.adv ; ext = c.ext ; h = c.h}
          }
     } ;
 
@@ -395,20 +395,20 @@ oper
     s = \\t,a,b =>
       let 
          c = cl.s ! t ! a ! b ;
-         co = obj ! b ++ if_then_Str ifKin (kin b True) [] ;
+         co = obj ! b ++ if_then_Str ifKin (kin b Back) [] ;
       in case p of {
          0 => {subj = c.subj ; fin = c.fin ; inf = c.inf ; 
-               compl = co ; adv = c.compl ++ c.adv ; ext = c.ext ; qp = c.qp} ; -- Jussi juo maitoakin
+               compl = co ; adv = c.compl ++ c.adv ; ext = c.ext ; h = c.h} ; -- Jussi juo maitoakin
          1 => {subj = c.subj ; fin = c.fin ; inf = c.inf ; 
-               compl = c.compl ; adv = co ; ext = c.adv ++ c.ext ; qp = c.qp}   -- Jussi nukkuu nytkin
+               compl = c.compl ; adv = co ; ext = c.adv ++ c.ext ; h = c.h}   -- Jussi nukkuu nytkin
          }
      } ;
 
-  kin : Polarity -> Bool -> Str  = 
+  kin : Polarity -> Harmony -> Str  = 
     \p,b -> case p of {Pos => (mkPart "kin" "kin").s ! b ; Neg => (mkPart "kaan" "kään").s ! b} ;
 
-  mkPart : Str -> Str -> {s : Bool => Str} = \ko,koe ->
-    {s = table {True => glueTok ko ; False => glueTok koe}} ;
+  mkPart : Str -> Str -> {s : Harmony => Str} = \ko,koe ->
+    {s = table {Back => glueTok ko ; Front => glueTok koe}} ;
 
   glueTok : Str -> Str = \s -> "&+" ++ s ;
 
@@ -418,14 +418,14 @@ oper
   subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
     appCompl False b {s = [] ; c = sc ; isPre = True} np ;
 
-  questPart : Bool -> Str = \b -> if_then_Str b "ko" "kö" ;
+  questPart : Harmony -> Str = \b -> case b of {Back => "ko" ; _ => "kö"} ;
 
-  selectPart : VP -> Anteriority -> Polarity -> Bool = \vp,a,p -> 
+  selectPart : VP -> Anteriority -> Polarity -> Harmony = \vp,a,p -> 
     case p of {
-      Neg => False ;  -- eikö tule
+      Neg => Front ;  -- eikö tule
       _ => case a of {
-        Anter => True ; -- onko mennyt --# notpresent
-        _ => vp.qp  -- tuleeko, meneekö
+        Anter => Back ; -- onko mennyt --# notpresent
+        _ => vp.h  -- tuleeko, meneekö
         }
       } ;
 
@@ -440,10 +440,10 @@ oper
             } ;
           verb = case ipol of {
             Pos => <vp.s ! VIInf vi ! Simul ! Pos ! agr, []> ; -- nähdä/näkemään
-            Neg => <(predV (verbOlla ** {sc = NPCase Nom ; qp = True ; p = []})).s ! VIInf vi ! Simul ! Pos ! agr,
+            Neg => <(predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []})).s ! VIInf vi ! Simul ! Pos ! agr,
                     (vp.s ! VIInf Inf3Abess ! Simul ! Pos ! agr).fin> -- olla/olemaan näkemättä
             } ;
-          vph = case vp.qp of {True => Back ; False => Front} ;
+          vph = vp.h ;
           poss = case vi of {
             InfPresPartAgr => possSuffixGen vph agr ; -- toivon nukkuva + ni
             _ => []

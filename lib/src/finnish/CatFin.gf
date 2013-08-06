@@ -1,4 +1,4 @@
-concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
+concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -48,7 +48,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 -- The $Bool$ tells if a possessive suffix is attached, which affects the case.
 
     CN   = {s : NForm => Str ; h : Harmony} ;
-    Pron = {s : NPForm => Str ; a : Agr} ;
+    Pron = {s : NPForm => Str ; a : Agr ; hasPoss : Bool} ;
     NP   = {s : NPForm => Str ; a : Agr ; isPron : Bool ; isNeg : Bool} ;
     Det  = {
       s1 : Case => Str ;       -- minun kolme
@@ -81,21 +81,19 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
 -- Open lexical classes, e.g. Lexicon
 
-    V, VS, VQ = Verb1 ; -- = {s : VForm => Str ; sc : Case} ;
-    V2, VA, V2Q, V2S = Verb1 ** {c2 : Compl} ;
-    V2A = Verb1 ** {c2, c3 : Compl} ;
-    VV = Verb1 ** {vi : InfForm} ; ---- infinitive form
-    V2V = Verb1 ** {c2 : Compl ; vi : InfForm} ; ---- infinitive form
-    V3 = Verb1 ** {c2, c3 : Compl} ;
+    V, VS, VQ = SVerb1 ; 
+    V2, VA, V2Q, V2S = SVerb1 ** {c2 : Compl} ;
+    V2A = SVerb1 ** {c2, c3 : Compl} ;
+    VV = SVerb1 ** {vi : InfForm} ; ---- infinitive form
+    V2V = SVerb1 ** {c2 : Compl ; vi : InfForm} ; ---- infinitive form
+    V3 = SVerb1 ** {c2, c3 : Compl} ;
 
-    A  = {s : Degree => AForm => Str} ;
-    A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
+    A  = {s : Degree => SAForm => Str ; h : Harmony} ;
+    A2 = {s : Degree => SAForm => Str ; h : Harmony ; c2 : Compl} ;
 
-    N  = {s : NForm => Str ; h : Harmony} ;
-    N2 = {s : NForm => Str ; h: Harmony} ** {c2 : Compl ; isPre : Bool} ;
-    N3 = {s : NForm => Str ; h: Harmony} ** {c2,c3 : Compl ; isPre,isPre2 : Bool} ;
-    PN = {s : Case  => Str} ;
-
-oper Verb1 = {s : VForm => Str ; sc : NPForm ; qp : Bool ; p : Str} ;
+    N  = SNoun ;
+    N2 = SNoun ** {c2 : Compl ; isPre : Bool} ;
+    N3 = SNoun ** {c2,c3 : Compl ; isPre,isPre2 : Bool} ;
+    PN = SPN ;
 
 }

@@ -66,7 +66,7 @@ oper
       s2 = vp.s2 ;
       adv = vp.adv ;
       ext = vp.ext ;
-      qp = vp.qp ;
+      h = vp.h ;
       isNeg = vp.isNeg ;
       sc = case vp.c2.c of {NPCase Nom => NPAcc ; c => c}
       } ; 

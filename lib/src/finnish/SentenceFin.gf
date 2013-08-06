@@ -1,4 +1,4 @@
-concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
+concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
 
   flags optimize=all_subs ;
 
@@ -38,7 +38,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
       s = \\t,a,p => 
         (mkClause (subjForm np vs.sc) np.a 
           (insertExtrapos ("että" ++ slash.s) 
-             (predV vs))
+             (predSV vs))
         ).s ! t ! a ! p ! SDecl ;
       c2 = slash.c2
       } ;
@@ -63,5 +63,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
     ExtAdvS a s = {s = a.s ++ "," ++ s.s} ;
 
     RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ; ---- mikä
+
+    SSubjS a subj b = {s = a.s ++ "," ++ subj.s ++ b.s} ;
 
 }

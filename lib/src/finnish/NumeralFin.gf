@@ -1,4 +1,4 @@
-concrete NumeralFin of Numeral = CatFin [Numeral,Digits] **  open Prelude, ParadigmsFin, MorphoFin in {
+concrete NumeralFin of Numeral = CatFin [Numeral,Digits] **  open Prelude, ParadigmsFin, MorphoFin, StemFin in {
 
 -- Notice: possessive forms are not used. They get wrong, since every
 -- part is made to agree in them.
@@ -12,14 +12,17 @@ lincat
 
 lin 
   num x = x ;
-  n2 = kaksi_toinenN ;
+  n2 = co
+    (nhn (mkSubst "a" "kaksi" "kahde" "kahte" "kahta" "kahteen" "kaksi" "kaksi"
+    "kaksien" "kaksia" "kaksiin")) 
+    (ordN "a" "kahdes") ; --- toinen
   n3 = co 
     (nhn (mkSubst "a" "kolme" "kolme" "kolme" "kolmea" "kolmeen" "kolmi" "kolmi"
     "kolmien" "kolmia" "kolmiin"))
     (ordN "a" "kolmas") ;
-  n4 = co (mkN "neljä") (ordN "ä" "neljäs") ;
-  n5 = co (mkN "viisi" "viiden" "viisiä") (ordN "ä" "viides") ;
-  n6 = co (mkN "kuusi" "kuuden" "kuusia") (ordN "a" "kuudes") ; 
+  n4 = co (snoun2nounBind (mkN "neljä")) (ordN "ä" "neljäs") ;
+  n5 = co (snoun2nounBind (mkN "viisi" "viiden" "viisiä")) (ordN "ä" "viides") ;
+  n6 = co (snoun2nounBind (mkN "kuusi" "kuuden" "kuusia")) (ordN "a" "kuudes") ; 
   n7 = co 
     (nhn (mkSubst "ä" "seitsemän" "seitsemä" "seitsemä" "seitsemää" 
     "seitsemään" "seitsemi" "seitsemi" "seitsemien" "seitsemiä"
@@ -80,7 +83,7 @@ oper
       }
     } ;
 
-  nBIND : Number -> Str = \n -> case n of {Sg => [] ; _ => BIND} ; -- no BIND after silent 1
+  nBIND : MorphoFin.Number -> Str = \n -> case n of {Sg => [] ; _ => BIND} ; -- no BIND after silent 1
 
 -- Too much trouble to infer vowel, cf. "kuudes" vs. "viides".
 
@@ -89,10 +92,10 @@ oper
     let
       sada = init sadas
     in
-    mkN 
+    snoun2nounBind (mkN 
       sadas (sada + "nnen") (sada + "tt" + a) (sada + "nten" + a) (sada + "nteen")
       (sada + "nsien") (sada + "nsi" + a) (sada + "nsin" + a)
-      (sada + "nsiss" + a) (sada + "nsiin") ;
+      (sada + "nsiss" + a) (sada + "nsiin")) ;
 
 param 
   NumPlace = NumIndep | NumAttr  ;
@@ -101,26 +104,22 @@ oper
   yksiN = co 
     (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
      "yksien" "yksiä" "yksiin")) 
-    (ordN "ä" "yhdes") ; ---- ensimmäinen
+    (ordN "ä" "yhdes") ; -- yhdestoista
   yksi_ensiN = co 
     (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
      "yksien" "yksiä" "yksiin")) 
-    (mkN "ensimmäinen") ; -- ensimmäinen ---- sadasensimmäinentuhannes
-  kaksi_toinenN = co 
-    (nhn (mkSubst "a" "kaksi" "kahde" "kahte" "kahta" "kahteen" "kaksi" "kaksi" 
-     "kaksien" "kaksia" "kaksiin"))
-    (mkN "toinen") ; 
+    (snoun2nounBind (mkN "ensimmäinen")) ; -- ensimmäinen ---- sadasensimmäinentuhannes
   kymmenenN = co 
     (nhn (mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
     "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä" "kymmeniin")) 
     (ordN "ä" "kymmenes") ;
   sataN = co 
-    (mkN "sata") 
+    (snoun2nounBind (mkN "sata")) 
     (ordN "a" "sadas") ;
 
   tuhatN = co
-    (mkN "tuhat" "tuhannen" "tuhatta" "ruhantena" "tuhanteen"
-    "tuhansien" "tuhansia" "tuhansina" "tuhansissa" "tuhansiin")
+    (snoun2nounBind (mkN "tuhat" "tuhannen" "tuhatta" "ruhantena" "tuhanteen"
+    "tuhansien" "tuhansia" "tuhansina" "tuhansissa" "tuhansiin"))
     (ordN "a" "tuhannes")  ;
 
   kymmentaN =

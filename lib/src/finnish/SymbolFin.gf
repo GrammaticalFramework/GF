@@ -1,12 +1,12 @@
 --# -path=.:../abstract:../common
 
-concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin, MorphoFin in {
+concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin, MorphoFin, StemFin in {
 
 lin
-  SymbPN i = {s = \\c => i.s ++ bindIf c ++ defaultCaseEnding c} ; --- c
-  IntPN i  = {s = \\c => i.s ++ bindColonIf c ++ defaultCaseEnding c} ; --- c
-  FloatPN i  = {s = \\c => i.s ++ bindColonIf c ++ defaultCaseEnding c} ; --- c
-  NumPN i  = {s = \\c => i.s!Sg!Nom } ; --- c
+  SymbPN i = addStemEnding i.s ; 
+  IntPN i = addStemEnding i.s ; 
+  FloatPN i = addStemEnding i.s ;  
+  NumPN i  = {s = \\c => i.s!Sg!Nom  ; h = Back} ; --- c
 
   CNIntNP cn i = {
     s = \\c => cn.s ! NCase Sg (npform2case Sg c) ++ i.s ;
