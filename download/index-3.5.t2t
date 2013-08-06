@@ -8,7 +8,7 @@ Grammatical Framework Download and Installation
 %!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-**GF 3.5** has not been released yet
+**GF 3.5** was released on 6 August 2013.
 
 What's new? See the [Release notes release-3.5.html].
 
@@ -20,15 +20,15 @@ What's new? See the [Release notes release-3.5.html].
 %| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | ``sudo rpm -i ...``
 | Ubuntu (32-bit) | [gf_3.5-1_i386.deb gf_3.5-1_i386.deb] | ``sudo dpkg -i gf_3.5-1_i386.deb``
 | Ubuntu (64-bit) | [gf_3.5-1_amd64.deb gf_3.5-1_amd64.deb] | ``sudo dpkg -i gf_3.5-1_amd64.deb``
-| Windows | [gf-3.5-bin-windows.zip gf-3.5-bin-windows.zip] | 
+| Windows | [gf-3.5-bin-windows.zip gf-3.5-bin-windows.zip] | ``unzip gf-3.5-bin-windows.zip``
 %| ... | ... | ...
 
 %More binary packages might be added later.
 
 ===Notes===
 
-%The Windows package is installed by just unpacking it anywhere. 
-%It finds the libraries relative to the ``.exe`` file.
+The Windows package is installed by just unpacking it anywhere.
+It finds the libraries relative to the ``.exe`` file.
 
 The ``.deb`` packages work on Ubuntu 12.04, 12.10 and 13.04.
 
@@ -94,7 +94,7 @@ manually. Here is one way to do this:
 **Note 2**.
 We recommend using GHC 7.6 (which is part of the Haskell Platform 2013.2.0.0)
 or GHC 7.4 (which is part of the Haskell Platform 2012.4.0.0).
-Older versions of GHC (6.12 and 7.0) still work for the most part.
+Older versions of GHC (6.12 and 7.0) probably still work for the most part.
 (For example, there is a issue with error reporting in ``gf -server``
 when compiled with GHC 7.0.)
 %GF does **not** compile with the most recent versions of Alex (>=3.0).

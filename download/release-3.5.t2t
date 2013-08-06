@@ -26,6 +26,8 @@ of GF 3.4.
   and variants have been fixed.
 - A portability problem with PGF files has been fixed. It could cause problems
   when PGF files were produced on a 32-bit system and used on a 64-bit system.
+
+
 - The new runtime in C (in [/src/runtime/c/ ../src/runtime/c/])
   is now stable enough to be used although there
   are still features from the Haskell runtime which are not ported yet.
@@ -50,7 +52,8 @@ of GF 3.4.
 
 - New languages in the Resource Grammar Library: Greek, Maltese
   (see the [updated synopsis ../lib/doc/synopsis.html]).
-- Various improvements for several other languages, e.g. [...]
+- Various improvements for several other languages.
+%, e.g. [...]
 - Updated web-based RGL browser ([/lib/doc/browse/ ../lib/doc/browse/]),
   with search-by-type and inbuilt syntax tree builder.
 
@@ -60,13 +63,13 @@ of GF 3.4.
 - Word alignment diagrams can now be restricted to a subset
   of the  languages supported by the grammar.
 - Minibar: you can now click on a linearization to obtain a table with all
-  variants and forms
-- Support for [cross-site HTTP requests https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS]...
+  variants and forms.
+- Support for [cross-site HTTP requests https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS].
 - A UTF-8 decoding problem in ``gf -server`` has been fixed.
   It was caused by a backward incompatible change in
   [``network-2.4.1.1`` https://github.com/haskell/network/commit/f2168b1f8978b4ad9c504e545755f0795ac869ce].
 - Various other small improvements and bug fixes.
-- [...]
+%- [...]
 
 --------------------
 
