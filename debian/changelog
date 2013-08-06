@@ -1,3 +1,9 @@
+gf (3.5-1) precise quantal; urgency=low
+
+  * GF 3.5
+
+ -- Thomas Hallgren <hallgren@chalmers.se>  Tue,  6 Aug 2013 17:30:00 +0200
+
 gf (3.4-1) precise quantal; urgency=low
 
   * GF 3.4
