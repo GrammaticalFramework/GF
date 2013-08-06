@@ -1,5 +1,5 @@
 name: gf
-version: 3.4-darcs
+version: 3.5
 
 cabal-version: >= 1.8
 build-type: Custom
