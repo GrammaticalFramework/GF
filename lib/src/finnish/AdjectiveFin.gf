@@ -8,7 +8,7 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in 
       s = \\_ => (snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s
       } ;
     ComparA a np = 
-      let acomp = (snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s in {
+      let acomp = (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s in {
       s = \\isMod,af => case isMod of {
         True => np.s ! NPCase Part ++ acomp ! af ;        -- minua isompi
         _    => acomp ! af ++ "kuin" ++ np.s ! NPCase Nom -- isompi kuin minä
