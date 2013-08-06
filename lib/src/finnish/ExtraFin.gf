@@ -1,7 +1,7 @@
 --# -path=.:abstract:common:prelude
 
 concrete ExtraFin of ExtraFinAbs = CatFin ** 
-  open ResFin, MorphoFin, Coordination, Prelude, NounFin, StructuralFin, (R = ParamX) in {
+  open ResFin, MorphoFin, Coordination, Prelude, NounFin, StructuralFin, StemFin, (R = ParamX) in {
 
   lin
     GenNP np = {
@@ -15,46 +15,46 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
 
+    GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf ;
+                   h = n2.h } ;
+
     GenRP num cn = {
       s = \\n,c => let k = npform2case num.n c in relPron ! n ! Gen ++ cn.s ! NCase num.n k ; 
       a = RNoAg 
 ---      a = RAg (agrP3 num.n)
       } ;
 
-    GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf ;
-                   h = n2.h } ;
-
   lincat
-    VPI   = {s : Str} ;
-    [VPI] = {s1,s2 : Str} ;
+    VPI   = {s : InfForm => Str} ;
+    [VPI] = {s1,s2 : InfForm => Str} ;
   lin
-    BaseVPI = twoSS ;
-    ConsVPI = consrSS comma ;
+    BaseVPI = twoTable InfForm ;
+    ConsVPI = consrTable InfForm comma ;
 
-    MkVPI vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp Inf1} ;
-    ConjVPI = conjunctDistrSS ;
+    MkVPI vp = {s = \\i => infVP (NPCase Nom) Pos (agrP3 Sg) vp i} ;
+    ConjVPI = conjunctDistrTable InfForm ;
     ComplVPIVV vv vpi = 
-      insertObj (\\_,_,_ => vpi.s) (predV vv) ;
+      insertObj (\\_,_,_ => vpi.s ! vv.vi) (predSV vv) ;
 
   lincat
     VPS = {
       s   : Agr  => Str ; 
       sc  : NPForm ;  --- can be different for diff parts
-      qp  : Bool -- True = back vowel --- can be different for diff parts
+      h   : Harmony   --- can be different for diff parts
       } ;
 
     [VPS] = {
       s1,s2 : Agr  => Str ; 
-      sc    : NPForm ;  --- take the first: minä osaan kutoa ja täytyy virkata
-      qp    : Bool      --- take the first: osaanko minä kutoa ja käyn koulua
+      sc    : NPForm ;   --- take the first: minä osaan kutoa ja täytyy virkata
+      h     : Harmony    --- take the first: osaanko minä kutoa ja käyn koulua
       } ;
 
   lin
-    BaseVPS x y = twoTable Agr x y ** {sc = x.sc ; qp = x.qp} ;
-    ConsVPS x y = consrTable Agr comma x y ** {sc = x.sc ; qp = x.qp} ;
+    BaseVPS x y = twoTable Agr x y ** {sc = x.sc ; h = x.h} ;
+    ConsVPS x y = consrTable Agr comma x y ** {sc = x.sc ; h = x.h} ;
 
     ConjVPS conj ss = conjunctDistrTable Agr conj ss ** {
-      sc = ss.sc ; qp = ss.qp
+      sc = ss.sc ; h = ss.h
       } ;
 
     MkVPS t p vp = { --  Temp -> Pol -> VP -> VPS ;
@@ -66,7 +66,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
                  vp.adv ! p.p ++
                  vp.ext ;
       sc = vp.sc ;
-      qp = vp.qp
+      h = vp.h
       } ;
 
     PredVPS np vps = { -- NP -> VPS -> S ;
@@ -75,7 +75,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     AdvExistNP adv np = 
       mkClause (\_ -> adv.s) np.a (insertObj 
-        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; qp = True ; p = []}))) ;
+        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []}))) ;
 
     RelExistNP prep rp np = {
       s = \\t,ant,bo,ag => 
@@ -86,7 +86,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
           np.a 
           (insertObj 
             (\\_,b,_ => np.s ! NPCase Nom) 
-            (predV (verbOlla ** {sc = NPCase Nom ; qp = True ; p = []}))) ;
+            (predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []}))) ;
       in 
       cl.s ! t ! ant ! bo ! SDecl ;
       c = NPCase Nom
@@ -94,18 +94,18 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     AdvPredNP  adv v np =
       mkClause (\_ -> adv.s) np.a (insertObj 
-        (\\_,b,_ => subjForm np v.sc b) (predV v)) ;
+        (\\_,b,_ => subjForm np v.sc b) (predSV v)) ;
 
     ICompExistNP adv np = 
       let cl = mkClause (\_ -> adv.s ! np.a) np.a (insertObj 
-        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; qp = True ; p = []}))) ;
+        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []}))) ;
       in  {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
       } ;
 
     IAdvPredNP iadv v np =
       let cl = mkClause (\_ -> iadv.s) np.a (insertObj 
-                 (\\_,b,_ => np.s ! v.sc) (predV v)) ;
+                 (\\_,b,_ => np.s ! v.sc) (predSV v)) ;
       in  {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
       } ;
@@ -124,7 +124,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
         acn = DetCN (DetQuant IndefArt NumSg) cn
       in {
         s = table {
-          NPCase Nom | NPAcc => acn.s ! NPCase Part ;
+          NPCase Nom | NPAcc => acn.s ! NPCase ResFin.Part ;
           c => acn.s ! c
           } ; 
         a = acn.a ;
@@ -134,7 +134,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     vai_Conj = {s1 = [] ; s2 = "vai" ; n = Sg} ;
 
     CompPartAP ap = {
-      s = \\agr => ap.s ! False ! NCase (complNumAgr agr) Part
+      s = \\agr => ap.s ! False ! NCase (complNumAgr agr) ResFin.Part
       } ;
 
 ---- copied from VerbFin.CompAP, should be shared
@@ -144,7 +144,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
             n = complNumAgr agr ;
             c = case n of {
               Sg => Nom ;  -- minä olen iso ; te olette iso
-              Pl => Part   -- me olemme isoja ; te olette isoja
+              Pl => ResFin.Part   -- me olemme isoja ; te olette isoja
               }            --- definiteness of NP ?
           in "kuinka" ++ ap.s ! False ! (NCase n c)
       } ;
@@ -154,7 +154,8 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     ProDrop p = {
       s = table {NPCase (Nom) => [] ; c => p.s ! c} ; 
           ---- drop Gen only works in adjectival position: "autoni", but not in "ø täytyy mennä"
-      a = p.a
+      a = p.a ;
+      hasPoss = p.hasPoss ;
       } ;
 
     ProDropPoss p = {
@@ -170,38 +171,38 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
   lincat 
     ClPlus, ClPlusObj, ClPlusAdv = ClausePlus ;
-    Part = {s : Bool => Str} ;
+    Part = {s : Harmony => Str} ;
 
   lin 
     S_SVO part t p clp = 
       let 
          cl = clp.s ! t.t ! t.a ! p.p ;
-         pa = part.s ! True ----
+         pa = part.s ! Back ----
       in
       {s = t.s ++ p.s ++ cl.subj ++ pa ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.adv ++ cl.ext} ; 
     S_OSV part t p clp = 
       let 
          cl = clp.s ! t.t ! t.a ! p.p ;
-         pa = part.s ! True ----
+         pa = part.s ! Back ----
       in
       {s = t.s ++ p.s ++ cl.compl ++ pa ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.adv ++ cl.ext} ; 
     S_VSO part t p clp = 
       let 
          cl = clp.s ! t.t ! t.a ! p.p ;
-         pa = part.s ! cl.qp
+         pa = part.s ! cl.h
       in
       {s = t.s ++ p.s ++ cl.fin ++ pa ++ cl.subj ++ cl.inf ++ cl.compl ++ cl.adv ++ cl.ext} ; 
     S_ASV part t p clp = 
       let 
          cl = clp.s ! t.t ! t.a ! p.p ;
-         pa = part.s ! cl.qp
+         pa = part.s ! cl.h
       in
       {s = t.s ++ p.s ++ cl.adv ++ pa ++ cl.subj ++ cl.fin ++ cl.inf ++ cl.compl ++ cl.ext} ; 
 
     S_OVS part t p clp = 
       let 
          cl = clp.s ! t.t ! t.a ! p.p ;
-         pa = part.s ! True ----
+         pa = part.s ! Back ----
       in
       {s = t.s ++ p.s ++ cl.compl ++ pa ++ cl.fin ++ cl.inf ++ cl.subj ++ cl.adv ++ cl.ext} ; 
 

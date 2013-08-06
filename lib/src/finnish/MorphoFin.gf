@@ -382,7 +382,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       10 => ukko_  -- the compound form, e.g. nais-
       } ;
 
-    Noun = {s : NForm => Str; h : Harmony; lock_N : {}} ;
+    Noun = {s : NForm => Str; h : Harmony} ;
 
     nForms2N : NForms -> Noun = \f -> 
       let

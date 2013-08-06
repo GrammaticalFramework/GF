@@ -105,6 +105,18 @@ oper
     harmonyV : Str -> Str -> Harmony -> Str = \u,y,h -> case h of 
        {Back => u ; Front => y} ;
 
+    SPN : Type = SNoun ;
+
+    snoun2spn : SNoun -> SPN = \n -> n ;
+
+    exceptNomSNoun : SNoun -> Str -> SNoun = \noun,nom -> {
+      s = table {
+        0 => nom ;
+        f => noun.s ! f
+	} ;
+      h = noun.h
+      } ;
+
 
 -- Adjectives --- could be made more compact by pressing comparison forms down to a few
 
@@ -127,6 +139,33 @@ oper
          } ;
         h = tuore.h
        } ;
+
+  sAN : SNForm -> SAForm = \n -> SAN n ;
+  sAAdv : SAForm = SAAdv ;
+
+  sANGen : (SAForm => Str) -> Str = \a -> glue (a ! SAN 1) "n" ;
+
+    mkAdj : (hyva,parempi,paras : SNoun) -> (hyvin,paremmin,parhaiten : Str) -> {s : Degree => SAForm => Str ; h : Harmony} = \h,p,ps,hn,pn,ph -> {
+      s = table {
+        Posit => table {
+           SAN nf => h.s ! nf ;
+           SAAdv  => hn
+           } ; 
+        Compar => table {
+           SAN nf => p.s ! nf ;
+           SAAdv  => pn
+           } ; 
+        Superl => table {
+           SAN nf => ps.s ! nf ;
+           SAAdv  => ph
+           }
+        } ;
+      h = h.h
+      } ;
+
+  snoun2compar : SNoun -> Str = \n -> (n.s ! 1 + "mpi")  ; ---- to check
+  snoun2superl : SNoun -> Str = \n -> (n.s ! 8 + "n") ; ----
+    
 
 
 -- verbs
@@ -283,8 +322,7 @@ oper
     } ;
 
   predSV : SVerb1 -> VP = \sv ->
-    predV (sverb2verbSep sv ** {p = sv.p ; sc = sv.sc ; qp = case sv.h of {Back => True ; Front => False}}) ;
---    (Verb ** {sc : NPForm ; qp : Bool ; p : Str}) -> VP = \verb -> {
+    predV (sverb2verbSep sv ** {p = sv.p ; sc = sv.sc ; h = sv.h}) ;
 
 
 -- word formation functions
@@ -343,7 +381,8 @@ oper
 
 -- for Symbol
 
-  defaultStemEnding : SNForm -> Str = \c -> case c of {
+  addStemEnding : Str -> SPN = \i -> {
+    s = \\c => i ++ bindColonIfS c ++ case c of {
       0 => "" ;
       1 => "i" ;
       2 => "ia" ;
@@ -355,7 +394,10 @@ oper
       8 => "i" ;
       9 => "ihi" ;
      10 => "" 
-      } ; 
+     } ;
+    h = Back ----
+    } ;
+ 
   bindIfS : SNForm -> Str = \c -> case c of {
     0 | 10 => [] ;
     _ => BIND

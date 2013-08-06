@@ -25,7 +25,7 @@ resource ParadigmsFin = open
   (Predef=Predef), 
   Prelude, 
   MorphoFin,
-  CatFin
+  CatFin, StemFin
   in {
 
   flags optimize=noexpand ;
@@ -57,8 +57,11 @@ oper
   allative    : Case ; -- e.g. "talolle"
 
   infFirst : InfForm ; -- e.g. "tehdä"
-  infElat : InfForm ;  -- e.g. "tekemästä"
+  infIness : InfForm ; -- e.g. "tekemässä"
+  infElat  : InfForm ; -- e.g. "tekemästä"
   infIllat : InfForm ; -- e.g. "tekemään"
+  infPresPart : InfForm ; -- e.g. "tekevän"
+  infPresPartAgr : InfForm ; -- e.g. "tekevänsä"
 
 -- The following type is used for defining *rection*, i.e. complements
 -- of many-place verbs and adjective. A complement can be defined by
@@ -68,6 +71,20 @@ oper
   postPrep    : Case -> Str -> Prep ;  -- postposition, e.g. genitive "takana"
   postGenPrep :         Str -> Prep ;  -- genitive postposition, e.g. "takana"
   casePrep    : Case ->        Prep ;  -- just case, e.g. adessive
+
+  mkPrep = overload {
+    mkPrep : Case -> Prep 
+     = casePrep ;
+    mkPrep : Str -> Prep
+     = postGenPrep ;
+    mkPrep : Case -> Str -> Prep
+     = postPrep ;
+    mkPrep : Str -> Case -> Prep
+     = \s,c -> prePrep c s ;
+    } ;
+
+  accusative : Prep
+    = {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
 
   NK : Type ;   -- Noun from DictFin (Kotus)
   AK : Type ;   -- Adjective from DictFin (Kotus)
@@ -103,11 +120,21 @@ oper
     mkN : (pika : Str) -> (juna  : N) -> N ; -- compound with invariable prefix
     mkN : (oma : N)    -> (tunto : N) -> N ; -- compound with inflecting prefix
     mkN : NK -> N ;  -- noun from DictFin (Kotus)
+    mkN : V -> N ;   -- verbal noun: "tekeminen"
   } ;
 
 -- Some nouns are regular except for the singular nominative (e.g. "mies").
 
     exceptNomN : N -> Str -> N ;
+
+-- Nouns where the parts are separate (should perhaps be treated as CN)
+
+   separateN = overload {
+     separateN : Str -> N -> N 
+      = \s,n -> mkN (s + "_") n ;
+     separateN : N -> N -> N 
+      = \oma, asunto -> lin N {s = \\c => oma.s ! c + "_" + asunto.s ! c ; h = asunto.h} ;
+      } ;
 
 -- Nouns used as functions need a case, of which the default is
 -- the genitive.
@@ -146,9 +173,14 @@ oper
 
 -- Two-place adjectives need a case for the second argument.
 
-  mkA2 : A -> Prep -> A2  -- e.g. "jaollinen" casePrep adessive
-    = \a,p -> a ** {c2 = p ; lock_A2 = <>};
-
+  mkA2 = overload {
+    mkA2 : Str -> A2  -- e.g. "vihainen" (jollekin)
+    = \s -> mkA s ** {c2 = mkPrep "allative" ; lock_A2 = <>} ;
+    mkA2 : Str -> Prep -> A2  -- e.g. "jaollinen" (mkPrep adessive)
+    = \a,p -> mkA a ** {c2 = p ; lock_A2 = <>} ;
+    mkA2 : A -> Prep -> A2  -- e.g. "jaollinen" (mkPrep adessive)
+    = \a,p -> a ** {c2 = p ; lock_A2 = <>} ;
+    } ;
 
 
 --2 Verbs
@@ -165,6 +197,7 @@ oper
     mkV : (huutaa,dan,taa,tavat,takaa,detaan,sin,si,sisi,tanut,dettu,tanee : Str) -> V ; -- worst-case verb
     mkV : VK -> V ;  -- verb from DictFin (Kotus)
     mkV : V -> Str -> V ; -- hakata päälle (particle verb)
+    mkV : Str -> V -> V ; -- laimin+lyödä (prefixed verb)
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
@@ -176,6 +209,8 @@ oper
 
   vOlla : V ; -- the verb "be"
 
+  olla_V : V
+   = vOlla ;
 
 --3 Two-place verbs
 --
@@ -186,6 +221,7 @@ oper
 
   mkV2 : overload {
     mkV2 : Str -> V2 ;  -- predictable direct transitive
+    mkV2 : Str -> Case -> V2 ;  -- predictable with another case
     mkV2 : V -> V2 ;    -- direct transitive
     mkV2 : V -> Case -> V2 ; -- complement just case
     mkV2 : V -> Prep -> V2 ; -- complement pre/postposition
@@ -198,7 +234,15 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;  -- e.g. puhua, allative, elative
+  mkV3 = overload {
+   mkV3 : Str -> V3
+     = \s -> dirdirV3 (mkV s) ; 
+   mkV3 : V -> V3
+     = \v -> dirdirV3 v ;
+   mkV3 : V -> Prep -> Prep -> V3  -- e.g. puhua, allative, elative
+     = \v,p,q -> v ** {c2 = p ; c3 = q ; lock_V3 = <>} ; 
+   } ;
+
   dirV3    : V -> Case -> V3 ;          -- siirtää, (accusative), illative
   dirdirV3 : V         -> V3 ;          -- antaa, (accusative), (allative)
 
@@ -208,12 +252,39 @@ oper
 -- Verbs and adjectives can take complements such as sentences,
 -- questions, verb phrases, and adjectives.
 
+mkVV = overload {
+  mkVV : Str -> VV   -- e.g. "yrittää" (puhua)
+   = \s -> mkVVf (mkV s) infFirst ; 
+  mkVV : V -> VV     -- e.g. "alkaa" (puhua)
+   = \v -> mkVVf v infFirst ; 
+  mkVV : Str -> InfForm -> VV  -- e.g. "ruveta" (puhumaan)
+   = \s,i -> mkVVf (mkV s) i ;
+  mkVV : V -> InfForm -> VV  -- e.g. "lakata" (puhumasta)
+   = \v,i -> mkVVf v i ;
+  } ;
+
+mkVS = overload {
+  mkVS : Str -> VS   -- e.g. "väittää"
+   = \s -> lin VS (mk1V s) ;
+  mkVS : V -> VS     -- e.g. "sanoa"
+   = \v -> lin VS v ;
+  } ;
+
+  mkV2V = overload {
+    mkV2V : Str -> V2V 
+     = \s -> mkV2Vf (mkV s) (casePrep partitive) infIllat ; ----
+    mkV2V : V -> V2V 
+     = \v -> mkV2Vf v (casePrep partitive) infIllat ; ----
+    mkV2V : V -> Prep -> V2V  -- e.g. "käskeä" genitive
+     = \v,p -> mkV2Vf v p infIllat ;
+    mkV2Vf  : V -> Prep -> InfForm -> V2V -- e.g. "kieltää" partitive infElatv 
+     = \v,p,f -> mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
+    } ;
+
   mkV0  : V -> V0 ; --%
-  mkVS  : V -> VS ;
+
   mkV2S : V -> Prep -> V2S ; -- e.g. "sanoa" allative
-  mkVV  : V -> VV ;  -- e.g. "alkaa"
   mkVVf : V -> InfForm -> VV ; -- e.g. "ruveta" infIllat
-  mkV2V : V -> Prep -> V2V ;  -- e.g. "käskeä" genitive
   mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "kieltää" partitive infElat  
   mkVA  : V -> Prep -> VA ; -- e.g. "maistua" ablative
   mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "maalata" accusative translative
@@ -221,9 +292,9 @@ oper
   mkV2Q : V -> Prep -> V2Q ; -- e.g. "kysyä" ablative 
 
   mkAS  : A -> AS ; --%
-  mkA2S : A -> Prep -> A2S ; --%
+---  mkA2S : A -> Prep -> A2S ; --%
   mkAV  : A -> AV ; --%
-  mkA2V : A -> Prep -> A2V ; --%
+---  mkA2V : A -> Prep -> A2V ; --%
 
 -- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
 -- and the second argument is given
@@ -233,8 +304,42 @@ oper
   V0 : Type ; --%
   AS, A2S, AV, A2V : Type ; --%
 
+--2 Structural categories
+
+  mkAdV : Str -> AdV
+   = \s -> lin AdV (ss s) ;
+  mkAdA : Str -> AdA
+   = \s -> lin AdA (ss s) ;
+  mkAdN : Str -> AdN
+   = \s -> lin AdN (ss s) ;
+  mkPConj : Str -> PConj
+   = \s -> lin PConj (ss s) ;
+  mkSubj : Str -> Subj
+   = \s -> lin Subj (ss s) ;
+
+  mkPredet : Str -> Predet  -- invariable Predet, such as "vain"
+   = \s -> lin Predet {s = \\_,_ => s} ;
+
+  mkConj = overload {
+   mkConj : Str -> Conj
+   = \y -> {s1 = [] ; s2 = y ; n = Pl ; lock_Conj = <>} ;
+   mkConj : Str -> Str -> Conj 
+   = \x,y -> {s1 = x ; s2 = y ; n = Pl ; lock_Conj = <>} ;
+   mkConj : Str -> Str -> Number -> Conj 
+   = \x,y,n -> {s1 = x ; s2 = y ; n = n ; lock_Conj = <>} ;
+   } ;
+
+  mkDet = overload {
+    mkDet : Number -> N -> Det 
+    = \nu,noun -> MorphoFin.mkDet nu (snoun2nounBind noun) ;
+    mkDet : (isNeg : Bool) -> Number -> N -> Det  -- use this with True to create a negative determiner 
+    = \isNeg,nu,noun -> MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun) ;
+    mkDet : (isNeg : Bool) -> Number -> N -> Case -> Det  -- paljon + False + partitive, ei yhtään + True + partitive
+    = \isNeg,nu,noun,_ -> MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun) ;
+    } ;
+
 --.
--- The definitions should not bother the user of the API. So they are
+-- THE definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
   Case = MorphoFin.Case ;
@@ -255,7 +360,7 @@ oper
   ablative = Ablat ;
   allative = Allat ;
 
-  infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ;
+  infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ; infIness = Inf3Iness ; infPresPart = InfPresPart ; infPresPartAgr = InfPresPartAgr ;
 
   prePrep  : Case -> Str -> Prep = 
     \c,p -> {c = NPCase c ; s = p ; isPre = True ; lock_Prep = <>} ;
@@ -275,42 +380,36 @@ oper
 
   mkN = overload {
     mkN : (talo : Str) -> N = mk1N ;
-    --  \s -> nForms2N (nForms1 s) ;
+    --  \s -> nforms2snoun (nForms1 s) ;
     mkN : (talo,talon : Str) -> N = mk2N ;
-    --  \s,t -> nForms2N (nForms2 s t) ;
+    --  \s,t -> nforms2snoun (nForms2 s t) ;
     mkN : (talo,talon,taloja : Str) -> N = mk3N ;
-    --  \s,t,u -> nForms2N (nForms3 s t u) ;
+    --  \s,t,u -> nforms2snoun (nForms3 s t u) ;
     mkN : (talo,talon,taloja,taloa : Str) -> N = mk4N ;
-    --  \s,t,u,v -> nForms2N (nForms4 s t u v) ;
+    --  \s,t,u,v -> nforms2snoun (nForms4 s t u v) ;
     mkN : 
       (talo,talon,taloa,talona,taloon,talojen,taloja,taloina,taloissa,taloihin
         : Str) -> N = mk10N ;
     mkN : (sora : Str) -> (tie : N) -> N = mkStrN ;
     mkN : (oma,tunto : N) -> N = mkNN ;
-    mkN : (sana : NK) -> N = \w -> nForms2N w.s ;
+    mkN : (sana : NK) -> N = \w -> nforms2snoun w.s ;
+    mkN : V -> N = \w -> sverb2snoun w ;
   } ;
 
-    exceptNomN : N -> Str -> N = \noun,nom -> lin N {
-      s = table {
-        NCase Sg Nom => nom ;
-        f => noun.s ! f
-	} ;
-      h = noun.h
-      } ;
+    exceptNomN : N -> Str -> N = \noun,nom -> lin N (exceptNomSNoun noun nom) ;
 
+----  mk1A : Str -> A = \jalo -> aForms2A (nforms2aforms (nForms1 jalo)) ;
+----  mkNA : N -> A = snoun2sadj ; 
 
-  mk1A : Str -> A = \jalo -> aForms2A (nforms2aforms (nForms1 jalo)) ;
-  mkNA : N -> A = \suuri -> aForms2A (nforms2aforms (n2nforms suuri)) ;
-
-  mk1N : (talo : Str) -> N = \s -> nForms2N (nForms1 s) ;
-  mk2N : (talo,talon : Str) -> N = \s,t -> nForms2N (nForms2 s t) ;
-  mk3N : (talo,talon,taloja : Str) -> N = \s,t,u -> nForms2N (nForms3 s t u) ;
+  mk1N : (talo : Str) -> N = \s -> lin N (nforms2snoun (nForms1 s)) ;
+  mk2N : (talo,talon : Str) -> N = \s,t -> nforms2snoun (nForms2 s t) ;
+  mk3N : (talo,talon,taloja : Str) -> N = \s,t,u -> nforms2snoun (nForms3 s t u) ;
   mk4N : (talo,talon,taloa,taloja : Str) -> N = \s,t,u,v -> 
-      nForms2N (nForms4 s t u v) ;
+      nforms2snoun (nForms4 s t u v) ;
   mk10N : 
       (talo,talon,taloa,talona,taloon,talojen,taloja,taloina,taloissa,taloihin
         : Str) -> N = \a,b,c,d,e,f,g,h,i,j -> 
-        nForms2N (nForms10 a b c d e f g h i j) ;
+        lin N (nforms2snoun (nForms10 a b c d e f g h i j)) ;
 
   mkStrN : Str -> N -> N = \sora,tie -> {
     s = \\c => sora + tie.s ! c ; 
@@ -470,59 +569,45 @@ oper
 
   mkPN = overload {
     mkPN : Str -> PN = mkPN_1 ;
-    mkPN : N -> PN = \s -> {s = \\c => s.s ! NCase Sg c ; lock_PN = <>} ;
+    mkPN : N -> PN = \s -> lin PN (snoun2spn s) ;
     } ;
 
-  mkPN_1 : Str -> PN = \s -> {s = \\c => (mk1N s).s ! NCase Sg c ; lock_PN = <>} ;
+  mkPN_1 : Str -> PN = \s -> lin PN (snoun2spn (mk1N s)) ;
 
 -- adjectives
 
   mkA = overload {
     mkA : Str -> A  = mkA_1 ;
     mkA : N -> A = \n -> noun2adjDeg n ** {lock_A = <>} ;
-    mkA : N -> (kivempaa,kivinta : Str) -> A = regAdjective ;
-    mkA : (sana : AK) -> A = \w -> noun2adjDeg (nForms2N w.s) ;
+    mkA : N -> (kivempaa,kivinta : Str) -> A = \n -> regAdjective n ;
+    mkA : (sana : AK) -> A = \w -> noun2adjDeg (nforms2snoun w.s) ;
 
-    mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A = \h,p,ps,hn,pn,ph -> lin A {
-      s = table {
-        Posit => table {
-           AN nf => h.s ! nf ;
-           AAdv  => hn
-           } ; 
-        Compar => table {
-           AN nf => p.s ! nf ;
-           AAdv  => pn
-           } ; 
-        Superl => table {
-           AN nf => ps.s ! nf ;
-           AAdv  => ph
-           }
-        } 
-      } ;
-     } ;
+    mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A 
+      = \h,p,ps,hn,pn,ph -> lin A (mkAdj h p ps hn pn ph) ;
+    } ;
 
-  mkA_1 : Str -> A = \x -> noun2adjDeg (mk1N x) ** {lock_A = <>} ;
+  mkA_1 : Str -> A = \x -> lin A (noun2adjDeg (mk1N x)) ;
 
 -- auxiliaries
-  mkAdjective : (_,_,_ : Adj) -> A = \hyva,parempi,paras -> 
+  mkAdjective : (_,_,_ : SAdj) -> A = \hyva,parempi,paras -> 
     {s = table {
       Posit  => hyva.s ;
       Compar => parempi.s ;
       Superl => paras.s
       } ;
+     h = hyva.h ;  ---- different for parempi, paras
      lock_A = <>
     } ;
-  regAdjective : Noun -> Str -> Str -> A = \kiva, kivempi, kivin ->
+  regAdjective : SNoun -> Str -> Str -> A = \kiva, kivempi, kivin ->
     mkAdjective 
-      (noun2adj kiva) 
-      (noun2adjComp False (nForms2N (dSuurempi kivempi))) 
-      (noun2adjComp False (nForms2N (dSuurin kivin))) ;
-  noun2adjDeg : Noun -> Adjective = \suuri -> 
+      (snoun2sadj kiva) 
+      (snoun2sadjComp False (nforms2snoun (dSuurempi kivempi))) 
+      (snoun2sadjComp False (nforms2snoun (dSuurin kivin))) ;
+  noun2adjDeg : SNoun -> A = \suuri -> 
     regAdjective 
       suuri 
-      (init (suuri.s ! NCase Sg Gen) + "mpi")  ---- to check
-      (suuri.s ! NInstruct) ; ----
-    
+      (snoun2compar suuri)
+      (snoun2superl suuri) ;   
 
 
 
@@ -535,21 +620,22 @@ oper
     mkV : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
-    mkV : (sana : VK) -> V = \w -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
-    mkV : V -> Str -> V = \w,p -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = p} ;
+    mkV : (sana : VK) -> V = \w -> vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+    mkV : V -> Str -> V = \w,p -> {s = w.s ; sc = w.sc ; lock_V = <> ; h = w.h ; p = p} ;
+    mkV : Str -> V -> V = \s,v -> {s = \\f => s + v.s ! f ; sc = v.sc ; lock_V = <> ; h = v.h ; p = v.p} ;
   } ;
 
   mk1V : Str -> V = \s -> 
-    let vfs = vforms2V (vForms1 s) in 
+    let vfs = vforms2sverb (vForms1 s) in 
       vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
   mk2V : (_,_ : Str) -> V = \x,y -> 
-    let vfs = vforms2V (vForms2 x y) in vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+    let vfs = vforms2sverb (vForms2 x y) in vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
   mk3V : (huutaa,huudan,huusi : Str) -> V = \x,_,y -> mk2V x y ; ----
   mk12V : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = 
      \a,b,c,d,e,f,g,h,i,j,k,l -> 
-        vforms2V (vForms12 a b c d e f g h i j k l) ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+        vforms2sverb (vForms12 a b c d e f g h i j k l) ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
 
   vForms1 : Str -> VForms = \ottaa ->
     let
@@ -612,9 +698,11 @@ oper
 
 
 
-  caseV c v = {s = v.s ; sc = NPCase c ; qp = v.qp ; lock_V = <> ; p = v.p} ;
+  caseV c v = {s = v.s ; sc = NPCase c ; h = v.h ; lock_V = <> ; p = v.p} ;
 
-  vOlla = verbOlla ** {sc = NPCase Nom ; qp = True ; lock_V = <> ; p = []} ; ---- lieneekö
+  vOlla = {
+    s = table SVForm ["olla";"ole";"on";"o";"olk";"olla";"oli";"oli";"olisi";"oll";"oltu";"ollu";"liene";"ole"] ;
+    sc = NPCase Nom ; h = Back ; lock_V = <> ; p = []} ; ---- lieneekö
 
   mk2V2 : V -> Prep -> V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 
@@ -627,22 +715,21 @@ oper
 
   mkV2 = overload {
     mkV2 : Str -> V2 = \s -> dirV2 (mk1V s) ;
+    mkV2 : Str -> Case -> V2 = \s -> caseV2 (mk1V s) ;
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : V -> Case -> V2 = caseV2 ;
     mkV2 : V -> Prep -> V2 = mk2V2 ;
-    mkV2 : VK -> V2 = \w -> dirV2 (vforms2V w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []}) ;
+    mkV2 : VK -> V2 = \w -> dirV2 (vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []}) ;
     } ;
 
   mk2V2 : V -> Prep -> V2 ;
   caseV2 : V -> Case -> V2 ;
   dirV2 : V -> V2 ;
 
-  mkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ; 
-  dirV3 v p = mkV3 v accPrep (casePrep p) ;
+  dirV3 v p = v ** {c2 = accPrep ; c3 = casePrep p ; lock_V3 = <>} ; 
   dirdirV3 v = dirV3 v allative ;
 
-  mkVS  v = v ** {lock_VS = <>} ;
-  mkVV  v = mkVVf v infFirst ;
+
   mkVVf  v f = v ** {vi = f ; lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
@@ -651,17 +738,23 @@ oper
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
+  mkV2Sbare : V -> V2S = \v -> mkV2S v (casePrep allative) ; ----
+
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
-  mkV2V v p = mkV2Vf v p infIllat ;
+  mkV2Vbare : V -> V2V = \v -> mkV2Vf v (casePrep partitive) infIllat ; ----
+--  mkV2V v p = mkV2Vf v p infIllat ;
   mkV2Vf v p f = mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
 
+  mkVAbare : V -> VA = \v -> mkVA v (casePrep partitive) ; ----
   mkVA  v p = v ** {c2 = p ; lock_VA = <>} ;
+  mkV2Abare : V -> V2A = \v -> mkV2A v (casePrep partitive) (casePrep translative) ;
   mkV2A v p q = v ** {c2 = p ; c3 = q ; lock_V2A = <>} ;
+  mkV2Qbare : V -> V2Q = \v -> mkV2Q v (casePrep ablative) ; ----
   mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
-  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+---  mkA2S v p = mkA2 <v : A> p ** {lock_A = <>} ;
   mkAV  v = v ** {lock_A = <>} ;
-  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
+---  mkA2V v p = mkA2 <v : A> p ** {lock_A2 = <>} ;
 
 } ;
