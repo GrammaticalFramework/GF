@@ -51,8 +51,8 @@ of GF 3.4.
 - New languages in the Resource Grammar Library: Greek, Maltese
   (see the [updated synopsis ../lib/doc/synopsis.html]).
 - Various improvements for several other languages, e.g. [...]
-- Updated web-based RGL browser ([/lib/doc/browse/ ../lib/doc/browse/]).
-- [...]
+- Updated web-based RGL browser ([/lib/doc/browse/ ../lib/doc/browse/]),
+  with search-by-type and inbuilt syntax tree builder.
 
 
 ===GF Cloud services===
