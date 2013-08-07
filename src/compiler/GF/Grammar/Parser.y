@@ -1,3 +1,4 @@
+-- -*- haskell -*-
 {
 {-# OPTIONS -fno-warn-overlapping-patterns #-}
 module GF.Grammar.Parser
@@ -240,8 +241,8 @@ FunDef
 
 DefDef :: { [(Ident,Info)] }
 DefDef
-  : Posn ListName '=' Exp         Posn { [(f, AbsFun Nothing (Just 0)           (Just [mkL $1 $5 ([],$4)]) Nothing) | f <- $2] }
-  | Posn Name ListPatt '=' Exp    Posn { [($2,AbsFun Nothing (Just (length $3)) (Just [mkL $1 $6 ($3,$5)]) Nothing)] }
+  : Posn LhsNames '=' Exp         Posn { [(f, AbsFun Nothing (Just 0)           (Just [mkL $1 $5 ([],$4)]) Nothing) | f <- $2] }
+  | Posn LhsName ListPatt '=' Exp    Posn { [($2,AbsFun Nothing (Just (length $3)) (Just [mkL $1 $6 ($3,$5)]) Nothing)] }
 
 DataDef :: { [(Ident,Info)] }
 DataDef
@@ -252,25 +253,25 @@ DataDef
 
 ParamDef :: { [(Ident,Info)] }
 ParamDef
-  : Posn Ident '=' ListParConstr Posn { ($2, ResParam (Just (mkL $1 $5 [param | L loc param <- $4])) Nothing) :
+  : Posn LhsIdent '=' ListParConstr Posn { ($2, ResParam (Just (mkL $1 $5 [param | L loc param <- $4])) Nothing) :
                                         [(f, ResValue (L loc (mkProdSimple co (Cn $2)))) | L loc (f,co) <- $4] }
-  | Posn Ident                   Posn { [($2, ResParam Nothing Nothing)] }
+  | Posn LhsIdent                   Posn { [($2, ResParam Nothing Nothing)] }
 
 OperDef :: { [(Ident,Info)] }
 OperDef
-  : Posn ListName ':' Exp         Posn { [(i, info) | i <- $2,   info <- mkOverload (Just (mkL $1 $5 $4)) Nothing  ] } 
-  | Posn ListName '=' Exp         Posn { [(i, info) | i <- $2,   info <- mkOverload Nothing   (Just (mkL $1 $5 $4))] }
-  | Posn Name ListArg '=' Exp     Posn { [(i, info) | i <- [$2], info <- mkOverload Nothing   (Just (mkL $1 $6 (mkAbs $3 $5)))] }
-  | Posn ListName ':' Exp '=' Exp Posn { [(i, info) | i <- $2,   info <- mkOverload (Just (mkL $1 $7 $4)) (Just (mkL $1 $7 $6))] }
+  : Posn LhsNames ':' Exp         Posn { [(i, info) | i <- $2,   info <- mkOverload (Just (mkL $1 $5 $4)) Nothing  ] }
+  | Posn LhsNames '=' Exp         Posn { [(i, info) | i <- $2,   info <- mkOverload Nothing   (Just (mkL $1 $5 $4))] }
+  | Posn LhsName ListArg '=' Exp     Posn { [(i, info) | i <- [$2], info <- mkOverload Nothing   (Just (mkL $1 $6 (mkAbs $3 $5)))] }
+  | Posn LhsNames ':' Exp '=' Exp Posn { [(i, info) | i <- $2,   info <- mkOverload (Just (mkL $1 $7 $4)) (Just (mkL $1 $7 $6))] }
 
 LinDef :: { [(Ident,Info)] }
 LinDef
-  : Posn ListName '=' Exp         Posn { [(f,  CncFun Nothing (Just (mkL $1 $5 $4)) Nothing Nothing) | f <- $2] }
-  | Posn Name ListArg '=' Exp     Posn { [($2, CncFun Nothing (Just (mkL $1 $6 (mkAbs $3 $5))) Nothing Nothing)] }
+  : Posn LhsNames '=' Exp         Posn { [(f,  CncFun Nothing (Just (mkL $1 $5 $4)) Nothing Nothing) | f <- $2] }
+  | Posn LhsName ListArg '=' Exp     Posn { [($2, CncFun Nothing (Just (mkL $1 $6 (mkAbs $3 $5))) Nothing Nothing)] }
 
 TermDef :: { [(Ident,L Term)] }
 TermDef
-  : Posn ListName '=' Exp Posn { [(i,mkL $1 $5 $4) | i <- $2] } 
+  : Posn LhsNames '=' Exp Posn { [(i,mkL $1 $5 $4) | i <- $2] }
 
 FlagDef :: { Options }
 FlagDef
@@ -350,15 +351,19 @@ ListIdent2
   : Ident               { [$1]    } 
   | Ident ListIdent2    { $1 : $2 }
 
-Name :: { Ident }
-Name
-  : Ident         { $1          } 
-  | '[' Ident ']' { mkListId $2 }
+LhsIdent :: { Ident }
+  : Ident     { $1 }
+  | Posn Sort {% failLoc $1 (showIdent $2++ " is a predefined constant, it can not be redefined") }
 
-ListName :: { [Ident] }
-ListName
-  : Name              { [$1]    }
-  | Name ',' ListName { $1 : $3 }
+LhsName :: { Ident }
+LhsName
+  : LhsIdent         { $1          }
+  | '[' LhsIdent ']' { mkListId $2 }
+
+LhsNames :: { [Ident] }
+LhsNames
+  : LhsName              { [$1]    }
+  | LhsName ',' LhsNames { $1 : $3 }
 
 LocDef :: { [(Ident, Maybe Type, Maybe Term)] }
 LocDef
