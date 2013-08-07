@@ -12,10 +12,7 @@ lincat
 
 lin 
   num x = x ;
-  n2 = co
-    (nhn (mkSubst "a" "kaksi" "kahde" "kahte" "kahta" "kahteen" "kaksi" "kaksi"
-    "kaksien" "kaksia" "kaksiin")) 
-    (ordN "a" "kahdes") ; --- toinen
+  n2 = kaksi_toinenN ;
   n3 = co 
     (nhn (mkSubst "a" "kolme" "kolme" "kolme" "kolmea" "kolmeen" "kolmi" "kolmi"
     "kolmien" "kolmia" "kolmiin"))
@@ -109,6 +106,10 @@ oper
     (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
      "yksien" "yksiä" "yksiin")) 
     (snoun2nounBind (mkN "ensimmäinen")) ; -- ensimmäinen ---- sadasensimmäinentuhannes
+  kaksi_toinenN = co 
+    (nhn (mkSubst "a" "kaksi" "kahde" "kahte" "kahta" "kahteen" "kaksi" "kaksi" 
+     "kaksien" "kaksia" "kaksiin"))
+    (snoun2nounBind (mkN "toinen")) ; 
   kymmenenN = co 
     (nhn (mkSubst "ä" "kymmenen" "kymmene" "kymmene" "kymmentä" 
     "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä" "kymmeniin")) 

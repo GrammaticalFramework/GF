@@ -67,13 +67,8 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
                 h = v.h ; p = v.p
                }
          ) ** {c2 = vp.c2} ; ---- correct ??
--- { ---- 153543936 (210912,312)
-    SlashV2VNP v np vp = 
-      insertObjPre np.isNeg
-        (\fin,b,a ->  appCompl fin b v.c2 np ++ ---- compilation to pgf takes too long 6/8/2013
-                      infVP v.sc b a vp v.vi) 
-          (predSV v) ** {c2 = vp.c2} ;
----- }
+
+    SlashV2VNP = StemFin.slashV2VNP ; ---- compilation to pgf takes too long 6/8/2013 hence a simplified version in stemmed/
 
     AdvVP vp adv = insertAdv (\\_ => adv.s) vp ;
 
