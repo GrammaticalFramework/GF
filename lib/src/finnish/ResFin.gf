@@ -454,7 +454,7 @@ oper
 
   infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str = infVPGen Pos ;
 
--- The definitions below were moved here from $MorphoFin$ so that we the
+-- The definitions below were moved here from $MorphoFin$ so that the
 -- auxiliary of predication can be defined.
 
   verbOlla : Verb = 

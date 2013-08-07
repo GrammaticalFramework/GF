@@ -279,7 +279,7 @@ concrete WordsFin of Words = SentencesFin **
       by = SyntaxFin.mkAdv (casePrep adessive) (mkNP n)
       } ;
 
-    mkSuperl : A -> Det = \a -> mkDet the_Quant (mkOrd a) ;
+    mkSuperl : A -> Det = \a -> SyntaxFin.mkDet the_Quant (mkOrd a) ;
 
     far_IAdv = E.IAdvAdv L.far_Adv ;
 
