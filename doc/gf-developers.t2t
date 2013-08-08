@@ -401,6 +401,49 @@ $ make clean
 %$ make sdist
 %```
 
+== Creating .deb packages for Ubuntu ==
+
+This has been tested on Ubuntu 12.04, and the resulting ``.deb`` packages
+appears to work on Ubuntu 12.04, 12.10 and 13.04.
+
+Under Ubuntu, Haskell executables are statically linked against other Haskell
+libraries, so the .deb packages are fairly self-contained.
+
+=== Preparations ===
+
+```
+sudo apt-get install dpkg-dev debhelper
+```
+
+=== Creating the package ===
+
+Make sure the ``debian/changelog`` starts with an entry that describes the
+version you are building. Then run
+
+```
+make deb
+```
+
+== Creating .rpm packages for Fedora ==
+
+This is possible, but the procedure has not been automated.
+It involves using the cabal-rpm tool,
+
+```
+sudo yum install cabal-rpm
+```
+
+and following the Fedora guide
+[How to create an RPM package http://fedoraproject.org/wiki/How_to_create_an_RPM_package].
+
+Under Fedora, Haskell executables are dynamically linked against other Haskell
+libraries, so ``.rpm`` packages for all Haskell libraries that GF depends on
+are required. Most of them are already available in the Fedora distribution,
+but a few of them might have to be built and distributed along with
+the GF ``.rpm`` package.
+When building ``.rpm`` packages for GF 3.4, we also had to build ``.rpm``s for
+``fst`` and ``httpd-shed``.
+
 == Running the testsuite ==
 
 **NOTE:** The test suite has not been maintained recently, so expect many
