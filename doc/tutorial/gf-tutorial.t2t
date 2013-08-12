@@ -1,6 +1,6 @@
 Grammatical Framework Tutorial
 Aarne Ranta
-December 2010 for GF 3.2 
+December 2010 for GF 3.2
 
 
 % NOTE: this is a txt2tags file.
@@ -94,7 +94,7 @@ December 2010 for GF 3.2
 %!postproc(tex): #Lchapfour "label{chapfour}"
 %!postproc(tex): #Rchapfour "chref{chapfour}"
 %!postproc(html): #Lchapfour <a name="chapfour"></a>
-%!postproc(html): #Rchapfour <a href="#chaptwo">Lesson 3</a>
+%!postproc(html): #Rchapfour <a href="#chapfour">Lesson 3</a>
 
 %!postproc(tex): #Lchapfive "label{chapfive}"
 %!postproc(tex): #Rchapfive "chref{chapfive}"
@@ -284,7 +284,7 @@ December 2010 for GF 3.2
 
 %!postproc(tex): "textbf" "keywrd"
 %!postproc(tex): #PRINTINDEX "printindex"
-%!preproc(html): #PRINTINDEX "" 
+%!preproc(html): #PRINTINDEX ""
 
 %!postproc(tex): #sugar "sugar"
 %!postproc(tex): #comput "computes"
@@ -588,7 +588,7 @@ Main ingredients of GF:
 
 Prerequisites:
 - some previous experience from some programming language
-- the basics of using computers, e.g. the use of 
+- the basics of using computers, e.g. the use of
   text editors and the management of files.
 - knowledge of Unix commands is useful but not necessary
 - knowledge of many natural languages may add fun to experience
@@ -608,7 +608,7 @@ Prerequisites:
 
 #Rchapfive: using the resource grammar library.
 
-#Rchapsix: semantics -  **dependent types**, **variable bindings**, 
+#Rchapsix: semantics -  **dependent types**, **variable bindings**,
 and **semantic definitions**.
 
 #Rchapseven: implementing formal languages.
@@ -661,23 +661,23 @@ We use the term GF for three different things:
 
 The GF system is an implementation
 of the GF programming language, which in turn is built on the ideas of the
-GF theory. 
+GF theory.
 
 The focus of this tutorial is on using the GF programming language.
 
-At the same time, we learn the way of thinking in the GF theory. 
+At the same time, we learn the way of thinking in the GF theory.
 
-We make the grammars run on a computer by 
-using the GF system. 
+We make the grammars run on a computer by
+using the GF system.
 
 
 #NEW
 
 ==GF grammars and language processing tasks==
 
-A GF program is called a **grammar**. 
+A GF program is called a **grammar**.
 
-A grammar defines a language. 
+A grammar defines a language.
 
 From this definition, language processing components can be derived:
 - **parsing**: to analyse the language
@@ -706,7 +706,7 @@ Open-source free software, downloaded via the GF Homepage:
 There you find
 - binaries for Linux, Mac OS X, and Windows
 - source code and documentation
-- grammar libraries and examples 
+- grammar libraries and examples
 
 
 Many examples in this tutorial are
@@ -746,7 +746,7 @@ follow them.
 ==A "Hello World" grammar==
 
 Like most programming language tutorials, we start with a
-program that prints "Hello World" on the terminal. 
+program that prints "Hello World" on the terminal.
 
 Extra features:
 - **Multilinguality**: the message is printed in many languages.
@@ -766,8 +766,8 @@ are
 
 The abstract syntax defines what **meanings**
 can be expressed in the grammar
-- //Greetings//, where we greet a //Recipient//, which can be 
-  //World// or //Mum// or //Friends// 
+- //Greetings//, where we greet a //Recipient//, which can be
+  //World// or //Mum// or //Friends//
 
 
 
@@ -782,13 +782,13 @@ GF code for the abstract syntax:
 
     cat Greeting ; Recipient ;
 
-    fun 
+    fun
       Hello : Recipient -> Greeting ;
       World, Mum, Friends : Recipient ;
   }
 ```
 The code has the following parts:
-- a **comment** (optional), saying what the module is doing 
+- a **comment** (optional), saying what the module is doing
 - a **module header** indicating that it is an abstract syntax
   module named ``Hello``
 - a **module body** in braces, consisting of
@@ -806,7 +806,7 @@ English concrete syntax (mapping from meanings to strings):
 
     lincat Greeting, Recipient = {s : Str} ;
 
-    lin 
+    lin
       Hello recip = {s = "hello" ++ recip.s} ;
       World = {s = "world"} ;
       Mum = {s = "mum"} ;
@@ -817,7 +817,7 @@ The major parts of this code are:
 - a module header indicating that it is a concrete syntax of the abstract syntax
   ``Hello``, itself named ``HelloEng``
 - a module body in curly brackets, consisting of
-  - **linearization type definitions** stating that 
+  - **linearization type definitions** stating that
     ``Greeting`` and ``Recipient`` are **records** with a **string** ``s``
   - **linearization definitions** telling what records are assigned to
     each of the meanings defined in the abstract syntax
@@ -832,7 +832,7 @@ Finnish and an Italian concrete syntaxes:
 ```
   concrete HelloFin of Hello = {
     lincat Greeting, Recipient = {s : Str} ;
-    lin 
+    lin
       Hello recip = {s = "terve" ++ recip.s} ;
       World = {s = "maailma"} ;
       Mum = {s = "äiti"} ;
@@ -841,7 +841,7 @@ Finnish and an Italian concrete syntaxes:
 
   concrete HelloIta of Hello = {
     lincat Greeting, Recipient = {s : Str} ;
-    lin 
+    lin
       Hello recip = {s = "ciao" ++ recip.s} ;
       World = {s = "mondo"} ;
       Mum = {s = "mamma"} ;
@@ -867,7 +867,7 @@ All commands also have short names; here:
 ```
   > i HelloEng.gf
 ```
-The GF system will **compile** your grammar 
+The GF system will **compile** your grammar
 into an internal representation and show the CPU time was consumed, followed
 by a new prompt:
 ```
@@ -892,7 +892,7 @@ The notation for trees is that of **function application**:
 ```
   function argument1 ... argumentn
 ```
-Parentheses are only needed for grouping. 
+Parentheses are only needed for grouping.
 
 Parsing something that is not in grammar will fail:
 ```
@@ -905,7 +905,7 @@ Parsing something that is not in grammar will fail:
 
 #NEW
 
-You can also use GF for **linearization** (``linearize = l``). 
+You can also use GF for **linearization** (``linearize = l``).
 It takes trees into strings:
 ```
   > linearize Hello World
@@ -944,16 +944,16 @@ form.
 + Add a concrete syntax for some other
 languages you might know.
 
-+ Add a pair of greetings that are expressed in one and 
++ Add a pair of greetings that are expressed in one and
 the same way in
-one language and in two different ways in another. 
+one language and in two different ways in another.
 For instance, //good morning//
-and //good afternoon// in English are both expressed 
+and //good afternoon// in English are both expressed
 as //buongiorno// in Italian.
 Test what happens when you translate //buongiorno// to English in GF.
 
 + Inject errors in the ``Hello`` grammars, for example, leave out
-some line, omit a variable in a ``lin`` rule, or change the name 
+some line, omit a variable in a ``lin`` rule, or change the name
 in one occurrence
 of a variable. Inspect the error messages generated by GF.
 
@@ -962,7 +962,7 @@ of a variable. Inspect the error messages generated by GF.
 
 ==Using grammars from outside GF==
 
-You can use the ``gf`` program in a Unix pipe. 
+You can use the ``gf`` program in a Unix pipe.
 - echo a GF command
 - pipe it into GF with grammar names as arguments
 
@@ -991,7 +991,7 @@ If we name this script ``hello.gfs``, we can do
   terve maailma
   hello world
 ```
-The option ``--run`` removes prompts, CPU time, and other messages. 
+The option ``--run`` removes prompts, CPU time, and other messages.
 
 See #Rchapeight, for stand-alone programs that don't need the GF system to run.
 
@@ -1053,11 +1053,11 @@ Goals:
 
 Phrases usable for speaking about food:
 - the start category is ``Phrase``
-- a ``Phrase`` can be built by assigning a ``Quality`` to an ``Item`` 
+- a ``Phrase`` can be built by assigning a ``Quality`` to an ``Item``
   (e.g. //this cheese is Italian//)
-- an``Item`` is build from a ``Kind`` by prefixing //this// or //that// 
+- an``Item`` is build from a ``Kind`` by prefixing //this// or //that//
   (e.g. //this wine//)
-- a ``Kind`` is either **atomic** (e.g. //cheese//), or formed 
+- a ``Kind`` is either **atomic** (e.g. //cheese//), or formed
   qualifying a given ``Kind`` with a ``Quality`` (e.g. //Italian cheese//)
 - a ``Quality`` is either atomic (e.g. //Italian//,
   or built by modifying a given ``Quality`` with the word //very// (e.g. //very warm//)
@@ -1113,7 +1113,7 @@ Example ``Phrase``
       Expensive = {s = "expensive"} ;
       Delicious = {s = "delicious"} ;
       Boring = {s = "boring"} ;
-  }  
+  }
 ```
 
 #NEW
@@ -1138,10 +1138,10 @@ Parse in other categories setting the ``cat`` flag:
 + Extend the ``Food`` grammar by ten new food kinds and
 qualities, and run the parser with new kinds of examples.
 
-+ Add a rule that enables question phrases of the form 
++ Add a rule that enables question phrases of the form
 //is this cheese Italian//.
 
-+ Enable the optional prefixing of 
++ Enable the optional prefixing of
 phrases with the words "excuse me but". Do this in such a way that
 the prefix can occur at most once.
 
@@ -1206,7 +1206,7 @@ What options a command has can be seen by the ``help = h`` command:
 trees in your grammar, it would never terminate. Why?
 
 + Measure how many trees the grammar gives with depths 4 and 5,
-respectively. **Hint**. You can 
+respectively. **Hint**. You can
 use the Unix **word count** command ``wc`` to count lines.
 
 
@@ -1222,13 +1222,13 @@ want to see:
 
   Is (This Cheese) Boring
   this cheese is boring
-  Is (This Cheese) Boring  
+  Is (This Cheese) Boring
 ```
 Useful for test purposes: the pipe above can show
 if a grammar is **ambiguous**, i.e.
 contains strings that can be parsed in more than one way.
 
-**Exercise**. Extend the ``Food`` grammar so that it produces ambiguous 
+**Exercise**. Extend the ``Food`` grammar so that it produces ambiguous
 strings, and try out the ambiguity test.
 
 
@@ -1244,7 +1244,7 @@ To read a file to GF, use the ``read_file = rf`` command,
 ```
   > read_file -file=exx.tmp -lines | parse
 ```
-The flag ``-lines`` tells GF to read each line of the file separately. 
+The flag ``-lines`` tells GF to read each line of the file separately.
 
 Files with examples can be used for **regression testing**
 of grammars - the most systematic way to do this is by
@@ -1256,16 +1256,16 @@ of grammars - the most systematic way to do this is by
 ===Visualizing trees===
 
 Parentheses give a linear representation of trees,
-useful for the computer. 
+useful for the computer.
 
 Human eye may prefer to see a visualization: ``visualize_tree = vt``:
-``` 
+```
   > parse "this delicious cheese is very Italian" | visualize_tree
 ```
 The tree is generated in postscript (``.ps``) file. The ``-view`` option is used for
 telling what command to use to view the file. Its default is ``"open"``, which works
 on Mac OS X. On Ubuntu Linux, one can write
-``` 
+```
   > parse "this delicious cheese is very Italian" | visualize_tree -view="eog"
 ```
 
@@ -1277,17 +1277,17 @@ on Mac OS X. On Ubuntu Linux, one can write
 This command uses the program [Graphviz http://www.graphviz.org/], which you
 might not have, but which are freely available on the web.
 
-You can save the temporary file ``_grph.dot``, 
-which the command ``vt`` produces. 
+You can save the temporary file ``_grph.dot``,
+which the command ``vt`` produces.
 
-Then you can process this file with the ``dot`` 
+Then you can process this file with the ``dot``
 program (from the Graphviz package).
 ```
   % dot -Tpng _grph.dot > mytree.png
 ```
 You can also visualize **parse trees**, which show categories and words instead of
 function symbols. The command is ``visualize_parse = vp``:
-``` 
+```
   > parse "this delicious cheese is very Italian" | visualize_parse
 ```
 
@@ -1360,17 +1360,17 @@ The order of a quality and the kind it modifies is changed in
 ```
     QKind quality kind = {s = kind.s ++ quality.s} ;
 ```
-Thus Italian says ``vino italiano`` for ``Italian wine``. 
+Thus Italian says ``vino italiano`` for ``Italian wine``.
 
 (Some Italian adjectives
-are put before the noun. This distinction can be controlled by parameters, 
+are put before the noun. This distinction can be controlled by parameters,
 which are introduced in #Rchapfour.)
 
 Multilingual grammars have yet another visualization option:
 **word alignment**, which shows what words correspond to each other.
 Technically, this means words that have the same smallest spanning subtrees
 in abstract syntax. The command is ``align_words = aw``:
-``` 
+```
   > parse "this delicious cheese is very Italian" | align_words
 ```
 
@@ -1382,7 +1382,7 @@ in abstract syntax. The command is ``align_words = aw``:
 ===Exercises on multilinguality===
 
 + Write a concrete syntax of ``Food`` for some other language.
-You will probably end up with grammatically incorrect 
+You will probably end up with grammatically incorrect
 linearizations - but don't
 worry about this yet.
 
@@ -1425,7 +1425,7 @@ This notation also allows the limiting case: an empty variant list,
 ```
   variants {}
 ```
-It can be used e.g. if a word lacks a certain inflection form. 
+It can be used e.g. if a word lacks a certain inflection form.
 
 Free variation works for all types in concrete syntax; all terms in
 a variant list must be of the same type.
@@ -1461,7 +1461,7 @@ linearizations in different languages:
 
 ``translation_quiz = tq``:
 generate random sentences, display them in one language, and check the user's
-answer given in another language. 
+answer given in another language.
 ```
   > translation_quiz -from=FoodEng -to=FoodIta
 
@@ -1509,8 +1509,8 @@ The grammar ``FoodEng`` can be written in a BNF format as follows:
   Very.      Quality ::= "very" Quality ;
   Warm.      Quality ::= "warm" ;
 ```
-GF can convert BNF grammars into GF. 
-BNF files are recognized by the file name suffix ``.cf`` (for **context-free**): 
+GF can convert BNF grammars into GF.
+BNF files are recognized by the file name suffix ``.cf`` (for **context-free**):
 ```
   > import food.cf
 ```
@@ -1559,7 +1559,7 @@ a new one, by looking at modification times.
 
 #NEW
 
-**Exercise**.  What happens when you import ``FoodEng.gf`` for 
+**Exercise**.  What happens when you import ``FoodEng.gf`` for
 a second time? Try this in different situations:
 - Right after importing it the first time (the modules are kept in
   the memory of GF and need no reloading).
@@ -1597,7 +1597,7 @@ The symbol ``===>`` will be used for computation.
 
 #NEW
 
-Notice the **lambda abstraction** form 
+Notice the **lambda abstraction** form
 - ``\``//x// ``->`` //t//
 
 
@@ -1623,7 +1623,7 @@ sugar for abstraction:
 ===The ``resource`` module type===
 
 The ``resource`` module type is used to package
-``oper`` definitions into reusable resources. 
+``oper`` definitions into reusable resources.
 ```
   resource StringOper = {
     oper
@@ -1682,11 +1682,11 @@ can be written more concisely
 ```
   lin This = prefix "this" ;
 ```
-Part of the art in functional programming: 
-decide the order of arguments in a function, 
-so that partial application can be used as much as possible. 
+Part of the art in functional programming:
+decide the order of arguments in a function,
+so that partial application can be used as much as possible.
 
-For instance, ``prefix`` is typically applied to 
+For instance, ``prefix`` is typically applied to
 linearization variables with constant strings. Hence we
 put the ``Str`` argument before the ``SS`` argument.
 
@@ -1702,7 +1702,7 @@ such that it allows you to write
 
 ===Testing resource modules===
 
-Import with the flag ``-retain``, 
+Import with the flag ``-retain``,
 ```
   > import -retain StringOper.gf
 ```
@@ -1728,7 +1728,7 @@ A new module can **extend** an old one:
       Question ;
     fun
       QIs : Item -> Quality -> Question ;
-      Pizza : Kind ;      
+      Pizza : Kind ;
   }
 ```
 Parallel to the abstract syntax, extensions can
@@ -1743,7 +1743,7 @@ be built for concrete syntaxes:
   }
 ```
 The effect of extension: all of the contents of the extended
-and extending modules are put together. 
+and extending modules are put together.
 
 In other words: the new module **inherits** the contents of the old module.
 
@@ -1759,7 +1759,7 @@ Simultaneous extension and opening:
       Pizza = ss "pizza" ;
   }
 ```
-Resource modules can extend other resource modules - thus it is 
+Resource modules can extend other resource modules - thus it is
 possible to build resource hierarchies.
 
 
@@ -1771,7 +1771,7 @@ possible to build resource hierarchies.
 Extend several grammars at the same time:
 ```
   abstract Foodmarket = Food, Fruit, Mushroom ** {
-    fun 
+    fun
       FruitKind    : Fruit    -> Kind ;
       MushroomKind : Mushroom -> Kind ;
     }
@@ -1811,7 +1811,7 @@ Goals:
 
 It is possible to skip this chapter and go directly
 to the next, since the use of the GF Resource Grammar library
-makes it unnecessary to use parameters: they 
+makes it unnecessary to use parameters: they
 could be left to library implementors.
 
 
@@ -1825,7 +1825,7 @@ Plural forms are needed in things like
 #ENQU
 This requires two things:
 - the **inflection** of nouns and verbs in singular and plural
-- the **agreement** of the verb to subject: 
+- the **agreement** of the verb to subject:
   the verb must have the same number as the subject
 
 
@@ -1851,18 +1851,18 @@ a new form of judgement:
   param Number = Sg | Pl ;
 ```
 This judgement defines the parameter type ``Number`` by listing
-its two **constructors**, ``Sg`` and ``Pl`` 
-(singular and plural). 
+its two **constructors**, ``Sg`` and ``Pl``
+(singular and plural).
 
 We give ``Kind`` a linearization type that has a **table** depending on number:
 ```
   lincat Kind = {s : Number => Str} ;
 ```
-The **table type** ``Number => Str`` is similar a function type 
-(``Number -> Str``). 
+The **table type** ``Number => Str`` is similar a function type
+(``Number -> Str``).
 
 Difference: the argument must be a parameter type. Then
-the argument-value pairs can be listed in a finite table. 
+the argument-value pairs can be listed in a finite table.
 
 #NEW
 
@@ -1878,13 +1878,13 @@ Here is a table:
 The table has **branches**, with a **pattern** on the
 left of the arrow ``=>`` and a **value** on the right.
 
-The application of a table is done by the **selection** operator ``!``. 
+The application of a table is done by the **selection** operator ``!``.
 
 It which is computed by **pattern matching**: return
 the value from the first branch whose pattern matches the
 argument. For instance,
 ```
-   table {Sg => "cheese" ; Pl => "cheeses"} ! Pl 
+   table {Sg => "cheese" ; Pl => "cheeses"} ! Pl
    ===> "cheeses"
 ```
 
@@ -1900,13 +1900,13 @@ when writing GF programs.
 
 #NEW
 
-Constructors can take arguments from other parameter types. 
+Constructors can take arguments from other parameter types.
 
 Example: forms of English verbs (except //be//):
 ```
   param VerbForm = VPresent Number | VPast | VPastPart | VPresPart ;
 ```
-Fact expressed: only present tense has number variation. 
+Fact expressed: only present tense has number variation.
 
 Example table: the forms of the verb //drink//:
 ```
@@ -1917,12 +1917,12 @@ Example table: the forms of the verb //drink//:
     VPastPart   => "drunk" ;
     VPresPart   => "drinking"
     }
-``` 
+```
 
 
-**Exercise**. In an earlier exercise (previous section), 
-you made a list of the possible 
-forms that nouns, adjectives, and verbs can have in some languages that 
+**Exercise**. In an earlier exercise (previous section),
+you made a list of the possible
+forms that nouns, adjectives, and verbs can have in some languages that
 you know. Now take some of the results and implement them by
 using parameter type definitions and tables. Write them into a ``resource``
 module, which you can test by using the command ``compute_concrete``.
@@ -1933,12 +1933,12 @@ module, which you can test by using the command ``compute_concrete``.
 
 ==Inflection tables and paradigms==
 
-A morphological **paradigm** is a formula telling how a class of 
+A morphological **paradigm** is a formula telling how a class of
 words is inflected.
 
-From the GF point of view, a paradigm is a function that takes 
-a **lemma** (also known as a **dictionary form**, or a **citation form**) and 
-returns an inflection table. 
+From the GF point of view, a paradigm is a function that takes
+a **lemma** (also known as a **dictionary form**, or a **citation form**) and
+returns an inflection table.
 
 The following operation defines the regular noun paradigm of English:
 ```
@@ -1969,7 +1969,7 @@ A more complex example: regular verbs,
     } ;
 ```
 The catch-all case for the past tense and the past participle
-uses a **wild card** pattern ``_``. 
+uses a **wild card** pattern ``_``.
 
 
 #NEW
@@ -1990,7 +1990,7 @@ considered in earlier exercises.
 
 Purpose: a more radical
 variation between languages
-than just the use of different words and word orders. 
+than just the use of different words and word orders.
 
 We add to the grammar ``Food`` two rules for forming plural items:
 ```
@@ -2000,7 +2000,7 @@ We also add a noun which in Italian has the feminine case:
 ```
   fun Pizza : Kind ;
 ```
-This will force us to deal with gender- 
+This will force us to deal with gender-
 
 
 #NEW
@@ -2020,7 +2020,7 @@ the verb of a sentence must be inflected in the number of the subject,
 ```
 It is the **copula** (the verb //be//) that is affected:
 ```
-  oper copula : Number -> Str = \n -> 
+  oper copula : Number -> Str = \n ->
     case n of {
       Sg => "is" ;
       Pl => "are"
@@ -2047,7 +2047,7 @@ How does an ``Item`` subject receive its number? The rules
 ```
 add **determiners**, either //this// or //these//, which
 require different //this pizza// vs.
-//these pizzas//. 
+//these pizzas//.
 
 Thus ``Kind`` must have both singular and plural forms:
 ```
@@ -2056,14 +2056,14 @@ Thus ``Kind`` must have both singular and plural forms:
 We can write
 ```
   lin This kind = {
-    s = "this" ++ kind.s ! Sg ; 
+    s = "this" ++ kind.s ! Sg ;
     n = Sg
-  } ; 
+  } ;
 
   lin These kind = {
-    s = "these" ++ kind.s ! Pl ; 
+    s = "these" ++ kind.s ! Pl ;
     n = Pl
-  } ; 
+  } ;
 ```
 
 
@@ -2071,12 +2071,12 @@ We can write
 
 To avoid copy-and-paste, we can factor out the pattern of determination,
 ```
-  oper det : 
-    Str -> Number -> {s : Number => Str} -> {s : Str ; n : Number} = 
+  oper det :
+    Str -> Number -> {s : Number => Str} -> {s : Str ; n : Number} =
       \det,n,kind -> {
-      s = det ++ kind.s ! n ; 
+      s = det ++ kind.s ! n ;
       n = n
-    } ; 
+    } ;
 ```
 Now we can write
 ```
@@ -2088,9 +2088,9 @@ In a more **lexicalized** grammar, determiners would be a category:
   lincat Det = {s : Str ; n : Number} ;
   fun Det : Det -> Kind -> Item ;
   lin Det det kind = {
-      s = det.s ++ kind.s ! det.n ; 
+      s = det.s ++ kind.s ! det.n ;
       n = det.n
-    } ; 
+    } ;
 ```
 
 
@@ -2134,13 +2134,13 @@ For words, inherent features are usually given as lexical information.
 For combinations, they are //inherited// from some part of the construction
 (typically the one called the **head**). Italian modification:
 ```
-  lin QKind qual kind = 
+  lin QKind qual kind =
     let gen = kind.g in {
       s = table {n => kind.s ! n ++ qual.s ! gen ! n} ;
       g = gen
       } ;
 ```
-Notice 
+Notice
 - **local definition** (``let`` expression)
 - **variable pattern** ``n``
 
@@ -2150,14 +2150,14 @@ Notice
 
 ==An English concrete syntax for Foods with parameters==
 
-We use some string operations from the library ``Prelude`` are used. 
+We use some string operations from the library ``Prelude`` are used.
 ```
    concrete FoodsEng of Foods = open Prelude in {
 
   lincat
-    S, Quality = SS ; 
-    Kind = {s : Number => Str} ; 
-    Item = {s : Str ; n : Number} ; 
+    S, Quality = SS ;
+    Kind = {s : Number => Str} ;
+    Item = {s : Str ; n : Number} ;
 
   lin
     Is item quality = ss (item.s ++ copula item.n ++ quality.s) ;
@@ -2186,25 +2186,25 @@ We use some string operations from the library ``Prelude`` are used.
     Number = Sg | Pl ;
 
   oper
-    det : Number -> Str -> {s : Number => Str} -> {s : Str ; n : Number} = 
+    det : Number -> Str -> {s : Number => Str} -> {s : Str ; n : Number} =
       \n,d,cn -> {
         s = d ++ cn.s ! n ;
         n = n
       } ;
-    noun : Str -> Str -> {s : Number => Str} = 
+    noun : Str -> Str -> {s : Number => Str} =
       \man,men -> {s = table {
         Sg => man ;
-        Pl => men 
+        Pl => men
         }
       } ;
-    regNoun : Str -> {s : Number => Str} = 
+    regNoun : Str -> {s : Number => Str} =
       \car -> noun car (car + "s") ;
-    copula : Number -> Str = 
+    copula : Number -> Str =
       \n -> case n of {
         Sg => "is" ;
         Pl => "are"
         } ;
-  }    
+  }
 ```
 
 #NEW
@@ -2216,7 +2216,7 @@ We use some string operations from the library ``Prelude`` are used.
 Let us extend the English noun paradigms so that we can
 deal with all nouns, not just the regular ones. The goal is to
 provide a morphology module that makes it easy to
-add words to a lexicon. 
+add words to a lexicon.
 
 
 #NEW
@@ -2282,7 +2282,7 @@ But up from this level, we can retain the old definitions
 #NEW
 
 In the last definition of ``mkNoun``, we used a case expression
-on the last character of the plural, as well as the ``Prelude`` 
+on the last character of the plural, as well as the ``Prelude``
 operation
 ```
   last : Str -> Str ;
@@ -2309,12 +2309,12 @@ predictable variations:
 
 We could provide alternative paradigms:
 ```
-  noun_y : Str -> Noun = \fly -> mkNoun fly (init fly + "ies") ;  
+  noun_y : Str -> Noun = \fly -> mkNoun fly (init fly + "ies") ;
   noun_s : Str -> Noun = \bus -> mkNoun bus (bus + "es") ;
 ```
 (The Prelude function ``init`` drops the last character of a token.)
 
-Drawbacks: 
+Drawbacks:
 - it can be difficult to select the correct paradigm
 - it can be difficult to remember the names of the different paradigms
 
@@ -2323,17 +2323,17 @@ Drawbacks:
 
 Better solution: a **smart paradigm**:
 ```
-  regNoun : Str -> Noun = \w -> 
-    let 
+  regNoun : Str -> Noun = \w ->
+    let
       ws : Str = case w of {
         _ + ("a" | "e" | "i" | "o") + "o" => w + "s" ;  -- bamboo
         _ + ("s" | "x" | "sh" | "o")      => w + "es" ; -- bus, hero
-        _ + "z"                           => w + "zes" ;-- quiz 
+        _ + "z"                           => w + "zes" ;-- quiz
         _ + ("a" | "e" | "o" | "u") + "y" => w + "s" ;  -- boy
         x + "y"                           => x + "ies" ;-- fly
         _                                 => w + "s"    -- car
-        } 
-    in 
+        }
+    in
     mkNoun w ws
 ```
 GF has **regular expression patterns**:
@@ -2341,7 +2341,7 @@ GF has **regular expression patterns**:
 - **concatenation patterns** //P// ``+`` //Q//
 
 
-The patterns are ordered in such a way that, for instance, 
+The patterns are ordered in such a way that, for instance,
 the suffix ``"oo"`` prevents //bamboo// from matching the suffix
 ``"o"``.
 
@@ -2351,7 +2351,7 @@ the suffix ``"oo"`` prevents //bamboo// from matching the suffix
 ===Exercises on regular patterns===
 
 + The same rules that form plural nouns in English also
-apply in the formation of third-person singular verbs. 
+apply in the formation of third-person singular verbs.
 Write a regular verb paradigm that uses this idea, but first
 rewrite ``regNoun`` so that the analysis needed to build //s//-forms
 is factored out as a separate ``oper``, which is shared with
@@ -2416,7 +2416,7 @@ looking like the expected forms:
 ===Separating operation types and definitions===
 
 In librarues, it is useful to group type signatures separately from
-definitions. It is possible to divide an ``oper`` judgement, 
+definitions. It is possible to divide an ``oper`` judgement,
 ```
   oper regNoun : Str -> Noun ;
   oper regNoun s = mkNoun s (s + "s") ;
@@ -2436,7 +2436,7 @@ With the ``interface`` and ``instance`` module types
 The compiler performs **overload resolution**, which works as long as the
 functions have different types.
 
-In GF, the functions must be grouped together in ``overload`` groups. 
+In GF, the functions must be grouped together in ``overload`` groups.
 
 Example: different ways to define nouns in English:
 ```
@@ -2447,7 +2447,7 @@ Example: different ways to define nouns in English:
 ```
 Cf. dictionaries: if the
 word is regular, just one form is needed. If it is irregular,
-more forms are given. 
+more forms are given.
 
 The definition can be given separately, or at the same time, as the types:
 ```
@@ -2470,7 +2470,7 @@ can be used to read a text and return for each word its analyses
 ```
   > read_file bible.txt | morpho_analyse
 ```
-The command ``morpho_quiz = mq`` generates inflection exercises. 
+The command ``morpho_quiz = mq`` generates inflection exercises.
 ```
   % gf -path=alltenses:prelude $GF_LIB_PATH/alltenses/IrregFre.gfo
 
@@ -2512,10 +2512,10 @@ have a parametric number and an inherent gender.
 Items have an inherent number and gender.
 ```
   lincat
-    Phr = SS ; 
-    Quality = {s : Gender => Number => Str} ; 
-    Kind = {s : Number => Str ; g : Gender} ; 
-    Item = {s : Str ; g : Gender ; n : Number} ; 
+    Phr = SS ;
+    Quality = {s : Gender => Number => Str} ;
+    Kind = {s : Number => Str ; g : Gender} ;
+    Item = {s : Str ; g : Gender ; n : Number} ;
 ```
 
 #NEW
@@ -2523,13 +2523,13 @@ Items have an inherent number and gender.
 A Quality is an adjective, with one form for each gender-number combination.
 ```
   oper
-    adjective : (_,_,_,_ : Str) -> {s : Gender => Number => Str} = 
+    adjective : (_,_,_,_ : Str) -> {s : Gender => Number => Str} =
       \nero,nera,neri,nere -> {
         s = table {
           Masc => table {
             Sg => nero ;
             Pl => neri
-            } ; 
+            } ;
           Fem => table {
             Sg => nera ;
             Pl => nere
@@ -2540,16 +2540,16 @@ A Quality is an adjective, with one form for each gender-number combination.
 Regular adjectives work by adding endings to the stem.
 ```
     regAdj : Str -> {s : Gender => Number => Str} = \nero ->
-      let ner = init nero 
+      let ner = init nero
       in adjective nero (ner + "a") (ner + "i") (ner + "e") ;
 ```
 
 #NEW
 
-For noun inflection, we are happy to give the two forms and the gender 
+For noun inflection, we are happy to give the two forms and the gender
 explicitly:
 ```
-    noun : Str -> Str -> Gender -> {s : Number => Str ; g : Gender} = 
+    noun : Str -> Str -> Gender -> {s : Number => Str ; g : Gender} =
       \vino,vini,g -> {
         s = table {
           Sg => vino ;
@@ -2560,7 +2560,7 @@ explicitly:
 ```
 We need only number variation for the copula.
 ```
-    copula : Number -> Str = 
+    copula : Number -> Str =
       \n -> case n of {
         Sg => "è" ;
         Pl => "sono"
@@ -2571,8 +2571,8 @@ We need only number variation for the copula.
 
 Determination is more complex than in English, because of gender:
 ```
-    det : Number -> Str -> Str -> {s : Number => Str ; g : Gender} -> 
-        {s : Str ; g : Gender ; n : Number} = 
+    det : Number -> Str -> Str -> {s : Number => Str ; g : Gender} ->
+        {s : Str ; g : Gender ; n : Number} =
       \n,m,f,cn -> {
         s = case cn.g of {Masc => m ; Fem => f} ++ cn.s ! n ;
         g = cn.g ;
@@ -2586,7 +2586,7 @@ Determination is more complex than in English, because of gender:
 The complete set of linearization rules:
 ```
   lin
-    Is item quality = 
+    Is item quality =
       ss (item.s ++ copula item.n ++ quality.s ! item.g ! item.n) ;
     This  = det Sg "questo" "questa" ;
     That  = det Sg "quel"   "quella" ;
@@ -2618,7 +2618,7 @@ The complete set of linearization rules:
 + Experiment with multilingual generation and translation in the
 ``Foods`` grammars.
 
-+ Add items, qualities, and determiners to the grammar, 
++ Add items, qualities, and determiners to the grammar,
 and try to get their inflection and inherent features right.
 
 + Write a concrete syntax of ``Food`` for a language of your choice,
@@ -2652,7 +2652,7 @@ We can define transitive verbs and their combinations as follows:
 
   fun AppTV : Item -> TV -> Item -> Phrase ;
 
-  lin AppTV subj tv obj = 
+  lin AppTV subj tv obj =
     {s = subj.s ++ tv.s ! subj.n ++ obj.s ++ tv.part} ;
 ```
 
@@ -2685,9 +2685,9 @@ Hence it is not legal to write
 ```
 because ``n`` is a run-time variable. Also
 ```
-  lin Plural n = {s = (regNoun n).s ! Pl} ; 
+  lin Plural n = {s = (regNoun n).s ! Pl} ;
 ```
-is incorrect with ``regNoun`` as defined #Rsecinflection, because the run-time 
+is incorrect with ``regNoun`` as defined #Rsecinflection, because the run-time
 variable is eventually sent to string pattern matching and gluing.
 
 
@@ -2697,13 +2697,13 @@ How to write tokens together without a space?
 ```
   lin Question p = {s = p + "?"} ;
 ```
-is incorrect. 
+is incorrect.
 
 The way to go is to use an **unlexer** that creates correct spacing
-after linearization. 
+after linearization.
 
 Correspondingly, a **lexer** that e.g. analyses ``"warm?"`` into
-to tokens is needed before parsing. 
+to tokens is needed before parsing.
 This topic will be covered in #Rseclexing.
 
 
@@ -2721,12 +2721,12 @@ The symbol ``**`` is used for both record types and record objects.
 ```
   lincat TV = Verb ** {c : Case} ;
 
-  lin Follow = regVerb "folgen" ** {c = Dative} ; 
+  lin Follow = regVerb "folgen" ** {c = Dative} ;
 ```
 ``TV`` becomes a **subtype** of ``Verb``.
 
 If //T// is a subtype of //R//, an object of //T// can be used whenever
-an object of //R// is required. 
+an object of //R// is required.
 
 **Covariance**: a function returning a record //T// as value can
 also be used to return a value of a supertype //R//.
@@ -2753,7 +2753,7 @@ Thus the labels ``p1, p2,...`` are hard-coded.
 
 English indefinite article:
 ```
-  oper artIndef : Str = 
+  oper artIndef : Str =
     pre {"a" ; "an" / strs {"a" ; "e" ; "i" ; "o"}} ;
 ```
 Thus
@@ -2797,7 +2797,7 @@ The current 16 resource languages (GF version 3.2, December 2010) are
 - ``Ita``lian
 - ``Nor``wegian
 - ``Pol``ish
-- ``Ron``, Romanian 
+- ``Ron``, Romanian
 - ``Rus``sian
 - ``Spa``nish
 - ``Swe``dish
@@ -2819,8 +2819,8 @@ a grammar defines a system of meanings (abstract syntax) and
 tells how they are expressed(concrete syntax).
 
 Resource grammars (as usual in linguistic tradition):
-a grammar specifies the **grammatically correct combinations of words**, 
-whatever their meanings are. 
+a grammar specifies the **grammatically correct combinations of words**,
+whatever their meanings are.
 
 With resource grammars, we can achieve a
 wider coverage than with semantic grammars.
@@ -2849,7 +2849,7 @@ But it is a good discipline to follow.
 ===Lexical categories===
 
 Two kinds of lexical categories:
-- **closed**: 
+- **closed**:
   - a finite number of words
   - seldom extended in the history of language
   - structural words / function words, e.g.
@@ -2874,11 +2874,11 @@ Two kinds of lexical categories:
 
 Closed classes: module ``Syntax``. In the ``Foods`` grammar, we need
 ```
-  this_Det, that_Det, these_Det, those_Det : Det ; 
+  this_Det, that_Det, these_Det, those_Det : Det ;
   very_AdA  : AdA ;
 ```
 Naming convention: word followed by the category (so we can
-distinguish the quantifier //that// from the conjunction //that//). 
+distinguish the quantifier //that// from the conjunction //that//).
 
 Open classes have no objects in ``Syntax``. Words are
 built as they are needed in applications: if we have
@@ -2938,9 +2938,9 @@ Common nouns are made into noun phrases by adding determiners.
 We need the following combinations:
 ```
   mkCl : NP -> AP -> Cl ;      -- e.g. "this pizza is very warm"
-  mkNP : Det -> CN -> NP ;     -- e.g. "this pizza" 
+  mkNP : Det -> CN -> NP ;     -- e.g. "this pizza"
   mkCN : AP -> CN -> CN ;      -- e.g. "warm pizza"
-  mkAP : AdA -> AP -> AP ;     -- e.g. "very warm" 
+  mkAP : AdA -> AP -> AP ;     -- e.g. "very warm"
 ```
 We also need **lexical insertion**, to form phrases from single words:
 ```
@@ -2963,10 +2963,10 @@ The sentence
 #ENQU
 can be built as follows:
 ```
-  mkCl 
-    (mkNP these_Det 
+  mkCl
+    (mkNP these_Det
        (mkCN (mkAP very_AdA (mkAP warm_A)) (mkCN pizza_CN)))
-    (mkAP italian_AP) 
+    (mkAP italian_AP)
 ```
 The task now: to define the concrete syntax of ``Foods`` so that
 this syntactic tree gives the value of linearizing the semantic tree
@@ -2981,9 +2981,9 @@ this syntactic tree gives the value of linearizing the semantic tree
 ==The resource API==
 
 Language-specific and language-independent parts - roughly,
-- the syntax API ``Syntax``//L// has the same types and 
+- the syntax API ``Syntax``//L// has the same types and
   functions for all languages //L//
-- the morphology API ``Paradigms``//L// has partly 
+- the morphology API ``Paradigms``//L// has partly
   different types and functions
   for different languages //L//
 
@@ -3039,15 +3039,15 @@ Full API documentation on-line: the **resource synopsis**,
 From ``ParadigmsEng``:
 
 || Function  | Type  ||
-| ``mkN`` | ``(dog : Str) -> N`` | 
-| ``mkN`` | ``(man,men : Str) -> N`` | 
-| ``mkA`` | ``(cold : Str) -> A`` | 
+| ``mkN`` | ``(dog : Str) -> N`` |
+| ``mkN`` | ``(man,men : Str) -> N`` |
+| ``mkA`` | ``(cold : Str) -> A`` |
 
 From ``ParadigmsIta``:
 
 || Function  | Type  ||
-| ``mkN`` | ``(vino : Str) -> N`` | 
-| ``mkA`` | ``(caro : Str) -> A`` | 
+| ``mkN`` | ``(vino : Str) -> N`` |
+| ``mkA`` | ``(caro : Str) -> A`` |
 
 
 #NEW
@@ -3057,11 +3057,11 @@ From ``ParadigmsIta``:
 From ``ParadigmsGer``:
 
 || Function  | Type  ||
-| ``Gender`` | ``Type`` | 
+| ``Gender`` | ``Type`` |
 | ``masculine`` | ``Gender`` |
 | ``feminine`` | ``Gender`` |
-| ``neuter`` | ``Gender`` | 
-| ``mkN`` | ``(Stufe : Str) -> N`` | 
+| ``neuter`` | ``Gender`` |
+| ``mkN`` | ``(Stufe : Str) -> N`` |
 | ``mkN`` | ``(Bild,Bilder : Str) -> Gender -> N`` |
 | ``mkA`` | ``(klein : Str) -> A`` |
 | ``mkA`` | ``(gut,besser,beste : Str) -> A`` |
@@ -3069,8 +3069,8 @@ From ``ParadigmsGer``:
 From ``ParadigmsFin``:
 
 || Function  | Type  ||
-| ``mkN`` | ``(talo : Str) -> N`` | 
-| ``mkA`` | ``(hieno : Str) -> A`` | 
+| ``mkN`` | ``(talo : Str) -> N`` |
+| ``mkA`` | ``(hieno : Str) -> A`` |
 
 
 
@@ -3078,7 +3078,7 @@ From ``ParadigmsFin``:
 
 ===Exercises===
 
-1. Try out the morphological paradigms in different languages. Do 
+1. Try out the morphological paradigms in different languages. Do
 as follows:
 ```
   > i -path=alltenses -retain alltenses/ParadigmsGer.gfo
@@ -3099,9 +3099,9 @@ We don't need to think about inflection and agreement, but just pick
 functions from the resource grammar library.
 
 We need a path with
-- the current directory ``.`` 
+- the current directory ``.``
 - the directory ``../foods``, in which ``Foods.gf`` resides.
-- the library directory ``present``, which is relative to the 
+- the library directory ``present``, which is relative to the
   environment variable ``GF_LIB_PATH``
 
 
@@ -3121,7 +3121,7 @@ As linearization types, we use clauses for ``Phrase``, noun phrases
 for ``Item``, common nouns for ``Kind``, and adjectival phrases for ``Quality``.
 ```
   lincat
-    Phrase = Cl ; 
+    Phrase = Cl ;
     Item = NP ;
     Kind = CN ;
     Quality = AP ;
@@ -3166,11 +3166,11 @@ The two-place noun paradigm is needed only once, for
 
 ===English example: exercises===
 
-1. Compile the grammar ``FoodsEng`` and generate 
+1. Compile the grammar ``FoodsEng`` and generate
 and parse some sentences.
 
-2. Write a concrete syntax of ``Foods`` for Italian 
-or some other language included in the resource library. You can 
+2. Write a concrete syntax of ``Foods`` for Italian
+or some other language included in the resource library. You can
 compare the results with the hand-written
 grammars presented earlier in this tutorial.
 
@@ -3186,10 +3186,10 @@ grammars presented earlier in this tutorial.
 
 If you write  a concrete syntax of ``Foods`` for some other
 language, much of the code will look exactly the same
-as for English. This is because 
+as for English. This is because
 - the ``Syntax`` API is the same for all languages (because
-  all languages in the resource package do implement the same 
-  syntactic structures) 
+  all languages in the resource package do implement the same
+  syntactic structures)
 - languages tend to use the syntactic structures in similar ways
 
 
@@ -3208,13 +3208,13 @@ Can we avoid this programming by copy-and-paste?
 
 ===Functors: functions on the module level===
 
-**Functors** familiar from the functional programming languages ML and OCaml, 
+**Functors** familiar from the functional programming languages ML and OCaml,
 also known as **parametrized modules**.
 
 In GF, a functor is a module that ``open``s one or more **interfaces**.
 
 An ``interface`` is a module similar to a ``resource``, but it only
-contains the //types// of ``oper``s, not (necessarily) their definitions. 
+contains the //types// of ``oper``s, not (necessarily) their definitions.
 
 Syntax for functors: add the keyword ``incomplete``. We will use the header
 ```
@@ -3232,7 +3232,7 @@ When we moreover have
 ```
 we can write a **functor instantiation**,
 ```
-  concrete FoodsGer of Foods = FoodsI with 
+  concrete FoodsGer of Foods = FoodsI with
     (Syntax = SyntaxGer),
     (LexFoods = LexFoodsGer) ;
 ```
@@ -3246,7 +3246,7 @@ we can write a **functor instantiation**,
 
   incomplete concrete FoodsI of Foods = open Syntax, LexFoods in {
   lincat
-    Phrase = Cl ; 
+    Phrase = Cl ;
     Item = NP ;
     Kind = CN ;
     Quality = AP ;
@@ -3323,7 +3323,7 @@ we can write a **functor instantiation**,
 ```
   --# -path=.:../foods:present
 
-  concrete FoodsGer of Foods = FoodsI with 
+  concrete FoodsGer of Foods = FoodsI with
     (Syntax = SyntaxGer),
     (LexFoods = LexFoodsGer) ;
 ```
@@ -3342,7 +3342,7 @@ Just two modules are needed:
 The functor instantiation is completely mechanical to write.
 
 The domain lexicon instance requires some knowledge of the words of the
-language: 
+language:
 - what words are used for which concepts
 - how the words are
 - features such as genders
@@ -3372,7 +3372,7 @@ Functor instantiation
 ```
   --# -path=.:../foods:present
 
-  concrete FoodsFin of Foods = FoodsI with 
+  concrete FoodsFin of Foods = FoodsI with
     (Syntax = SyntaxFin),
     (LexFoods = LexFoodsFin) ;
 ```
@@ -3387,9 +3387,9 @@ This can be seen as a //design pattern// for multilingual grammars:
                       concrete DomainL*
 
     instance LexDomainL                 instance SyntaxL*
-   
+
                  incomplete concrete DomainI
-                 /           |              \               
+                 /           |              \
    interface LexDomain   abstract Domain    interface Syntax*
 ```
 Modules marked with ``*`` are either given in the library, or trivial.
@@ -3435,19 +3435,19 @@ The implementation goes in the following phases:
 
 ===A problem with functors===
 
-Problem: a functor only works when all languages use the resource ``Syntax`` 
+Problem: a functor only works when all languages use the resource ``Syntax``
 in the same way.
 
 Example (contrived): assume that English has
 no word for ``Pizza``, but has to use the paraphrase //Italian pie//.
 This is no longer a noun ``N``, but a complex phrase
-in the category ``CN``. 
+in the category ``CN``.
 
 Possible solution: change interface the ``LexFoods`` with
 ```
   oper pizza_CN : CN ;
 ```
-Problem with this solution: 
+Problem with this solution:
 - we may end up changing the interface and the function with each new language
 - we must every time also change the instances for the old languages to maintain
   type correctness
@@ -3473,29 +3473,29 @@ A concrete syntax of ``Foodmarket`` must make the analogous restrictions.
 
 ===The functor problem solved===
 
-The English instantiation inherits the functor 
+The English instantiation inherits the functor
 implementation except for the constant ``Pizza``. This constant
 is defined in the body instead:
 ```
   --# -path=.:../foods:present
 
-  concrete FoodsEng of Foods = FoodsI - [Pizza] with 
+  concrete FoodsEng of Foods = FoodsI - [Pizza] with
     (Syntax = SyntaxEng),
-    (LexFoods = LexFoodsEng) ** 
+    (LexFoods = LexFoodsEng) **
       open SyntaxEng, ParadigmsEng in {
 
     lin Pizza = mkCN (mkA "Italian") (mkN "pie") ;
   }
 ```
- 
+
 
 #NEW
 
 ==Grammar reuse==
 
-Abstract syntax modules can be used as interfaces, 
+Abstract syntax modules can be used as interfaces,
 and concrete syntaxes as their instances.
- 
+
 The following correspondencies are then applied:
 ```
   cat C         <--->  oper C : Type
@@ -3547,7 +3547,7 @@ By just changing the path, we get all tenses:
 ```
   --# -path=.:../foods:alltenses
 ```
-Now we can see all the tenses of phrases, by using the ``-all`` flag 
+Now we can see all the tenses of phrases, by using the ``-all`` flag
 in linearization:
 ```
   > gr | l -all
@@ -3600,7 +3600,7 @@ in linearization:
   This wine would not have been delicious
   Would this wine not have been delicious
 ```
-We also see 
+We also see
 - polarity (positive vs. negative)
 - word order (direct vs. inverted)
 - variation between contracted and full negation
@@ -3619,9 +3619,9 @@ tenses and moods, e.g. the Romance languages.
 
 Goals:
 - include semantic conditions in grammars, by using
-  - **dependent types** 
-  - **higher order abstract syntax** 
-  - proof objects  
+  - **dependent types**
+  - **higher order abstract syntax**
+  - proof objects
   - semantic definitions
 
 These concepts are inherited from **type theory** (more precisely:
@@ -3647,18 +3647,18 @@ Thus we want to restrict particular actions to
 particular devices - we can //dim a light//, but we cannot
 //dim a fan//.
 
-The following example is borrowed from the 
+The following example is borrowed from the
 Regulus Book (Rayner & al. 2006).
 
 A simple example is a "smart house" system, which
-defines voice commands for household appliances.   
+defines voice commands for household appliances.
 
 
 #NEW
 
 ===A dependent type system===
 
-Ontology: 
+Ontology:
 - there are commands and device kinds
 - for each kind of device, there are devices and actions
 - a command concerns an action of some kind on a device of the same kind
@@ -3668,10 +3668,10 @@ Abstract syntax formalizing this:
 ```
   cat
     Command ;
-    Kind ; 
-    Device Kind ; -- argument type Kind 
-    Action Kind ; 
-  fun 
+    Kind ;
+    Device Kind ; -- argument type Kind
+    Action Kind ;
+  fun
     CAction : (k : Kind) -> Action k -> Device k -> Command ;
 ```
 ``Device`` and ``Action`` are both dependent types.
@@ -3706,10 +3706,10 @@ but we cannot form the trees
 
 ===Linearization and parsing with dependent types===
 
-Concrete syntax does not know if a category is a dependent type. 
+Concrete syntax does not know if a category is a dependent type.
 ```
   lincat Action = {s : Str} ;
-  lin CAction _ act dev = {s = act.s ++ dev.s} ; 
+  lin CAction _ act dev = {s = act.s ++ dev.s} ;
 ```
 Notice that the ``Kind`` argument is suppressed in linearization.
 
@@ -3762,14 +3762,14 @@ is shown and no tree is returned:
 
 #Lsecpolymorphic
 
-Sometimes an action can be performed on all kinds of devices. 
+Sometimes an action can be performed on all kinds of devices.
 
-This is represented as a function that takes a ``Kind`` as an argument 
+This is represented as a function that takes a ``Kind`` as an argument
 and produce an ``Action`` for that ``Kind``:
 ```
   fun switchOn, switchOff : (k : Kind) -> Action k ;
 ```
-Functions of this kind are called **polymorphic**. 
+Functions of this kind are called **polymorphic**.
 
 We can use this kind of polymorphism in concrete syntax as well,
 to express Haskell-type library functions:
@@ -3807,7 +3807,7 @@ a proposition is a type of proofs (= proof objects).
 
 Example: define the //less than// proposition for natural numbers,
 ```
-  cat Nat ; 
+  cat Nat ;
   fun Zero : Nat ;
   fun Succ : Nat -> Nat ;
 ```
@@ -3821,7 +3821,7 @@ Expressing these axioms in type theory
 with a dependent type ``Less`` //x y// and two functions constructing
 its objects:
 ```
-  cat Less Nat Nat ; 
+  cat Less Nat Nat ;
   fun lessZ : (y : Nat) -> Less Zero (Succ y) ;
   fun lessS : (x,y : Nat) -> Less x y -> Less (Succ x) (Succ y) ;
 ```
@@ -3838,15 +3838,15 @@ Example: the fact that 2 is less that 4 has the proof object
 
 ===Proof-carrying documents===
 
-Idea: to be semantically well-formed, the abstract syntax of a document 
-must contain a proof of some property, 
+Idea: to be semantically well-formed, the abstract syntax of a document
+must contain a proof of some property,
 although the proof is not shown in the concrete document.
 
 Example: documents describing flight connections:
 
 //To fly from Gothenburg to Prague, first take LH3043 to Frankfurt, then OK0537 to Prague.//
 
-The well-formedness of this text is partly expressible by dependent typing: 
+The well-formedness of this text is partly expressible by dependent typing:
 ```
   cat
     City ;
@@ -3863,8 +3863,8 @@ of proofs that a change is possible:
 ```
 A legal connection is formed by the function
 ```
-  fun Connect : (x,y,z : City) -> 
-    (u : Flight x y) -> (v : Flight y z) -> 
+  fun Connect : (x,y,z : City) ->
+    (u : Flight x y) -> (v : Flight y z) ->
       IsPossible x y z u v -> Flight x z ;
 ```
 
@@ -3878,7 +3878,7 @@ Above, all Actions were either of
 - **polymorphic**: defined for all Kinds
 
 
-To make this scale up for new Kinds, we can refine this to 
+To make this scale up for new Kinds, we can refine this to
 **restricted polymorphism**: defined for Kinds of a certain **class**
 
 
@@ -3904,7 +3904,7 @@ fun
   switchOn : (k : Kind) -> Switchable k -> Action k ;
   dim      : (k : Kind) -> Dimmable k -> Action k ;
 ```
-Classes for new actions can be added incrementally. 
+Classes for new actions can be added incrementally.
 
 
 
@@ -3915,7 +3915,7 @@ Classes for new actions can be added incrementally.
 #Lsecbinding
 
 Mathematical notation and programming languages have
-expressions that **bind** variables. 
+expressions that **bind** variables.
 
 Example: universal quantifier formula
 ```
@@ -3946,7 +3946,7 @@ Abstract syntax can use functions as arguments:
   fun All : (Ind -> Prop) -> Prop
 ```
 where ``Ind`` is the type of individuals and ``Prop``,
-the type of propositions. 
+the type of propositions.
 
 Let us add an equality predicate
 ```
@@ -3969,7 +3969,7 @@ expressed using higher-order syntactic constructors.
 ===Higher-order abstract syntax: linearization===
 
 HOAS has proved to be useful in the semantics and computer implementation of
-variable-binding expressions. 
+variable-binding expressions.
 
 How do we relate HOAS to the concrete syntax?
 
@@ -3981,7 +3981,7 @@ In GF, we write
 General rule: if an argument type of a ``fun`` function is
 a function type ``A -> C``, the linearization type of
 this argument is the linearization type of ``C``
-together with a new field ``$0 : Str``. 
+together with a new field ``$0 : Str``.
 
 The argument ``B`` thus has the linearization type
 ```
@@ -4009,7 +4009,7 @@ Given the linearization rule
 ```
   lin Eq a b = {s = "(" ++ a.s ++ "=" ++ b.s ++ ")"}
 ```
-the linearization of the tree 
+the linearization of the tree
 ```
   \x -> Eq x x
 ```
@@ -4021,7 +4021,7 @@ Then we can compute the linearization of the formula,
 ```
   All (\x -> Eq x x)  --> {s = "[( All x ) ( x = x )]"}.
 ```
-The linearization of the variable ``x`` is, 
+The linearization of the variable ``x`` is,
 "automagically", the string ``"x"``.
 
 
@@ -4087,7 +4087,7 @@ The key word is ``def``:
   def twice x = plus x x ;
 
   fun plus : Nat -> Nat -> Nat ;
-  def 
+  def
     plus x Zero = x ;
     plus x (Succ y) = Succ (Sum x y) ;
 ```
@@ -4140,12 +4140,12 @@ so that an object of one also is an object of the other.
 
 ===Judgement forms for constructors===
 
-The judgement form ``data`` tells that a category has 
+The judgement form ``data`` tells that a category has
 certain functions as constructors:
 ```
   data Nat = Succ | Zero ;
 ```
-The type signatures of constructors are given separately, 
+The type signatures of constructors are given separately,
 ```
   fun Zero : Nat ;
   fun Succ : Nat -> Nat ;
@@ -4168,7 +4168,7 @@ language with natural numbers, lists, pairs, lambdas, etc. Use higher-order
 abstract syntax with semantic definitions. As concrete syntax, use
 your favourite programming language.
 
-2. There is no termination checking for ``def`` definitions. 
+2. There is no termination checking for ``def`` definitions.
 Construct an examples that makes type checking loop.
 Type checking can be invoked with ``put_term -transform=solve``.
 
@@ -4192,7 +4192,7 @@ Goals:
 ===Arithmetic expressions===
 
 We construct a calculator with addition, subtraction, multiplication, and
-division of integers. 
+division of integers.
 ```
   abstract Calculator = {
 
@@ -4219,11 +4219,11 @@ grammars are not allowed to declare functions with ``Int`` as value type.
 
 We begin with a
 concrete syntax that always uses parentheses around binary
-operator applications: 
+operator applications:
 ```
   concrete CalculatorP of Calculator = {
 
-  lincat 
+  lincat
     Exp = SS ;
   lin
     EPlus  = infix "+" ;
@@ -4233,7 +4233,7 @@ operator applications:
     EInt i = i ;
 
   oper
-    infix : Str -> SS -> SS -> SS = \f,x,y -> 
+    infix : Str -> SS -> SS -> SS = \f,x,y ->
       ss ("(" ++ x.s ++ f ++ y.s ++ ")") ;
   }
 ```
@@ -4242,8 +4242,8 @@ Now we have
   > linearize EPlus (EInt 2) (ETimes (EInt 3) (EInt 4))
   ( 2 + ( 3 * 4 ) )
 ```
-First problems: 
-- to get rid of superfluous spaces and 
+First problems:
+- to get rid of superfluous spaces and
 - to recognize integer literals in the parser
 
 
@@ -4296,7 +4296,7 @@ In linearization, we use a corresponding **unlexer**:
   | ``lexcode``  | ``unlexcode``  | program code conventions (uses Haskell's lex)
   | ``lexmixed`` | ``unlexmixed`` | like text, but between $ signs like code
   | ``lextext``  | ``unlextext``  | with conventions on punctuation and capitals
-  | ``words``    | ``unwords``    | (default) tokens separated by space characters 
+  | ``words``    | ``unwords``    | (default) tokens separated by space characters
 
 %TODO: also on alphabet encodings - although somewhere else
 
@@ -4342,13 +4342,13 @@ Precedence can be made into an inherent feature of expressions:
 
     mkPrec : Prec -> Str -> TermPrec = \p,s -> {s = s ; p = p} ;
 
-  lincat 
+  lincat
     Exp = TermPrec ;
 ```
 Notice ``Ints 2``: a parameter type, whose values are the integers
-``0,1,2``. 
+``0,1,2``.
 
-Using precedence levels: compare the inherent precedence of an 
+Using precedence levels: compare the inherent precedence of an
 expression with the expected precedence.
 - if the inherent precedence is lower than the expected precedence,
   use parentheses
@@ -4435,7 +4435,7 @@ Just give linearization rules for JVM:
     EDiv   = postfix "idiv" ;
     EInt i = ss ("iconst" ++ i.s) ;
   oper
-    postfix : Str -> SS -> SS -> SS = \op,x,y -> 
+    postfix : Str -> SS -> SS -> SS = \op,x,y ->
       ss (x.s ++ ";" ++ y.s ++ ";" ++ op) ;
 ```
 
@@ -4447,8 +4447,8 @@ Just give linearization rules for JVM:
 A **straight code** programming language, with
 **initializations** and **assignments**:
 ```
-  int x = 2 + 3 ;  
-  int y = x + 1 ; 
+  int x = 2 + 3 ;
+  int y = x + 1 ;
   x = x + 9 * y ;
 ```
 We define programs by the following constructors:
@@ -4458,17 +4458,17 @@ We define programs by the following constructors:
     PInit  : Exp -> (Var -> Prog) -> Prog ;
     PAss   : Var -> Exp  -> Prog  -> Prog ;
 ```
-``PInit`` uses higher-order abstract syntax for making the 
-initialized variable available in the **continuation** of the program. 
+``PInit`` uses higher-order abstract syntax for making the
+initialized variable available in the **continuation** of the program.
 
 The abstract syntax tree for the above code is
 ```
-  PInit (EPlus (EInt 2) (EInt 3)) (\x -> 
-    PInit (EPlus (EVar x) (EInt 1)) (\y -> 
-      PAss x (EPlus (EVar x) (ETimes (EInt 9) (EVar y))) 
+  PInit (EPlus (EInt 2) (EInt 3)) (\x ->
+    PInit (EPlus (EVar x) (EInt 1)) (\y ->
+      PAss x (EPlus (EVar x) (ETimes (EInt 9) (EVar y)))
         PEmpty))
 ```
-No uninitialized variables are allowed - there are no constructors for ``Var``! 
+No uninitialized variables are allowed - there are no constructors for ``Var``!
 But we do have the rule
 ```
   fun EVar : Var -> Exp ;
@@ -4526,7 +4526,7 @@ Goals:
 - generate language models for speech recognition from GF grammars
 
 
- 
+
 #NEW
 
 ==Functionalities of an embedded grammar format==
@@ -4548,19 +4548,19 @@ This facility is based on several components:
 
 The portable format is called PGF, "Portable Grammar Format".
 
-This format is produced by using GF as batch compiler, with the option ``-make``, 
+This format is produced by using GF as batch compiler, with the option ``-make``,
 from the operative system shell:
 ```
   % gf -make SOURCE.gf
 ```
-PGF is the recommended format in 
+PGF is the recommended format in
 which final grammar products are distributed, because they
 are stripped from superfluous information and can be started and applied
 faster than sets of separate modules.
 
-Application programmers have never any need to read or modify PGF files. 
+Application programmers have never any need to read or modify PGF files.
 
-PGF thus plays the same role as machine code in 
+PGF thus plays the same role as machine code in
 general-purpose programming (or bytecode in Java).
 
 
@@ -4603,7 +4603,7 @@ module Main where
 import PGF
 import System (getArgs)
 
-main :: IO () 
+main :: IO ()
 main = do
   file:_ <- getArgs
   gr     <- readPGF file
@@ -4616,7 +4616,7 @@ translate gr s = case parseAllLang gr (startCat gr) s of
 ```
 To run the translator, first compile it by
 ```
-  % ghc -make -o trans Translator.hs 
+  % ghc -make -o trans Translator.hs
 ```
 For this, you need the Haskell compiler [GHC http://www.haskell.org/ghc].
 
@@ -4625,7 +4625,7 @@ For this, you need the Haskell compiler [GHC http://www.haskell.org/ghc].
 
 ===Producing PGF for the translator===
 
-Then produce a PGF file. For instance, the ``Food`` grammar set can be 
+Then produce a PGF file. For instance, the ``Food`` grammar set can be
 compiled as follows:
 ```
   % gf -make FoodEng.gf FoodIta.gf
@@ -4654,9 +4654,9 @@ change ``interact`` in the main function to ``loop``, defined as
 follows:
 ```
 loop :: (String -> String) -> IO ()
-loop trans = do 
+loop trans = do
   s <- getLine
-  if s == "quit" then putStrLn "bye" else do  
+  if s == "quit" then putStrLn "bye" else do
     putStrLn $ trans s
     loop trans
 ```
@@ -4710,10 +4710,10 @@ abstract Query = {
 
   flags startcat=Question ;
 
-  cat 
+  cat
     Answer ; Question ; Object ;
 
-  fun 
+  fun
     Even   : Object -> Question ;
     Odd    : Object -> Question ;
     Prime  : Object -> Question ;
@@ -4738,8 +4738,8 @@ It is also possible to produce the Haskell file together with PGF, by
 ```
   % gf -make --output-format=haskell QueryEng.gf
 ```
-The result is a file named ``Query.hs``, containing a 
-module named ``Query``. 
+The result is a file named ``Query.hs``, containing a
+module named ``Query``.
 
 
 #NEW
@@ -4750,15 +4750,15 @@ module Query where
 import PGF
 
 data GAnswer =
-   GYes 
- | GNo 
+   GYes
+ | GNo
 
-data GObject = GNumber GInt 
+data GObject = GNumber GInt
 
 data GQuestion =
-   GPrime GObject 
- | GOdd GObject 
- | GEven GObject 
+   GPrime GObject
+ | GOdd GObject
+ | GEven GObject
 
 newtype GInt = GInt Integer
 ```
@@ -4772,7 +4772,7 @@ The Haskell module name is the same as the abstract syntax name.
 ===The question-answer function===
 
 Haskell's type checker guarantees that the functions are well-typed also with
-respect to GF. 
+respect to GF.
 ```
 answer :: GQuestion -> GAnswer
 answer p = case p of
@@ -4795,7 +4795,7 @@ test f x = if f (value x) then GYes else GNo
 
 The generated Haskell module also contains
 ```
-class Gf a where 
+class Gf a where
   gf :: a -> Tree
   fg :: Tree -> a
 
@@ -4862,15 +4862,15 @@ module Main where
 import PGF
 import TransferDef (transfer)
 
-main :: IO () 
+main :: IO ()
 main = do
   gr <- readPGF "Query.pgf"
   loop (translate transfer gr)
 
 loop :: (String -> String) -> IO ()
-loop trans = do 
+loop trans = do
   s <- getLine
-  if s == "quit" then putStrLn "bye" else do  
+  if s == "quit" then putStrLn "bye" else do
     putStrLn $ trans s
     loop trans
 
@@ -4894,7 +4894,7 @@ all:
         strip math
 ```
 (The empty segments starting the command lines in a Makefile must be tabs.)
-Now we can compile the whole system by just typing 
+Now we can compile the whole system by just typing
 ```
   make
 ```
@@ -4916,8 +4916,8 @@ Just to summarize, the source of the application consists of the following files
 ==Web server applications==
 
 PGF files can be used in web servers, for which there is a Haskell library included
-in ``src/server/``. How to build a server for tasks like translators is explained 
-in the [``README`` ../src/server/README] file in that directory. 
+in ``src/server/``. How to build a server for tasks like translators is explained
+in the [``README`` ../src/server/README] file in that directory.
 
 One of the servers that can be readily built with the library (without any
 programming required) is **fridge poetry magnets**. It is an application that
@@ -4958,18 +4958,18 @@ syntax name. This file contains the multilingual grammar as a JavaScript object.
 
 To perform parsing and linearization, the run-time library
 ``gflib.js`` is used. It is included in ``GF/lib/javascript/``, together with
-some other JavaScript and HTML files; these files can be used 
+some other JavaScript and HTML files; these files can be used
 as templates for building applications.
 
-An example of usage is 
-[``translator.html`` http://grammaticalframework.org:41296], 
+An example of usage is
+[``translator.html`` http://grammaticalframework.org:41296],
 which is in fact initialized with
 a pointer to the Food grammar, so that it provides translation between the English
 and Italian grammars:
 
 [food-js.png]
 
-The grammar must have the name ``grammar.js``. The abstract syntax and start 
+The grammar must have the name ``grammar.js``. The abstract syntax and start
 category names in ``translator.html`` must match the ones in the grammar.
 With these changes, the translator works for any multilingual grammar.
 
@@ -4982,13 +4982,13 @@ With these changes, the translator works for any multilingual grammar.
 ==Language models for speech recognition==
 
 The standard way of using GF in speech recognition is by building
-**grammar-based language models**. 
+**grammar-based language models**.
 
 GF supports several formats, including
 GSL, the formatused in the [Nuance speech recognizer www.nuance.com].
 
 GSL is produced from GF by running ``gf`` with the flag
-``--output-format=gsl``. 
+``--output-format=gsl``.
 
 Example: GSL  generated from ``FoodsEng.gf``.
 ```
@@ -5012,7 +5012,7 @@ Example: GSL  generated from ``FoodsEng.gf``.
   Phrase_1 [(Item_1 "is" Quality_1)
             (Item_2 "are" Quality_1)]
   Phrase_cat Phrase_1
-  
+
   Quality_1 ["boring" "delicious" "expensive"
              "fresh" "italian" ("very" Quality_1) "warm"]
   Quality_cat Quality_1
@@ -5036,5 +5036,3 @@ Other formats available via the ``--output-format`` flag include:
     | ``slf_sub``        | finite automaton with sub-automata in HTK SLF
 
 All currently available formats can be seen with ``gf --help``.
-
-
