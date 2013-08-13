@@ -7,7 +7,7 @@ flags optimize=values ;
   lin
   awake_V = irregV "awake" "awoke" "awoken" ;
   bear_V = irregV "bear" "bore" "born" ;
-  beat_V = irregV "beat" "beat" "beat" ;
+  beat_V = irregV "beat" "beat" "beaten" ;
   become_V = irregV "become" "became" "become" ;
   begin_V = irregV "begin" "began" "begun" ;
   bend_V = irregV "bend" "bent" "bent" ;
