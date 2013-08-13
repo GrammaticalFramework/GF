@@ -37,7 +37,7 @@ body.syntax-editor {
 
 #tree, #tree_str
 {
-  white-space:pre;
+  white-space:pre-wrap;
   font-family: monospace;
   background: rgba(238, 238, 238, 0.6);
   padding:0.5em;
@@ -125,7 +125,7 @@ body.syntax-editor {
 div#debug
 {
   font: 10px monospace;
-  white-space: pre;
+  white-space: pre-wrap;
   color: #333;
   margin: 1em 0;
   border: 1px dashed #999;
