@@ -1,5 +1,6 @@
 #include "data.h"
 #include "graphviz.h"
+#include "linearizer.h"
 
 static int
 pgf_graphviz_abstract_tree_(PgfExpr expr, int *pid,
@@ -83,11 +84,215 @@ pgf_graphviz_abstract_tree_(PgfExpr expr, int *pid,
 }
 
 void
-pgf_graphviz_abstract_tree(PgfExpr expr, GuWriter* wtr, GuExn* err)
+pgf_graphviz_abstract_tree(PgfPGF* pgf, PgfExpr expr, GuWriter* wtr, GuExn* err)
 {
 	int id = 0;
 
 	gu_puts("graph {\n", wtr, err);
 	pgf_graphviz_abstract_tree_(expr, &id, wtr, err);
 	gu_puts("}", wtr, err);
+}
+
+typedef struct PgfParseNode PgfParseNode;
+	
+struct PgfParseNode {
+	int id;
+	PgfParseNode* parent;
+	GuString label;
+};
+
+typedef struct {
+	PgfLinFuncs* funcs;
+
+	GuPool* pool;
+	GuWriter* wtr;
+	GuExn* err;
+	
+	PgfParseNode* parent;
+	size_t level;
+	GuBuf* internals;
+	GuBuf* leaves;
+	GuString wildcard;
+} PgfBracketLznState;
+
+static void
+pgf_bracket_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens toks)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+
+	size_t len = gu_seq_length(toks);
+	for (size_t i = 0; i < len; i++) {
+		PgfParseNode* node = gu_new(PgfParseNode, state->pool);
+		node->id     = 100000 + gu_buf_length(state->leaves);
+		node->parent = state->parent;
+		node->label  = gu_seq_get(toks, PgfToken, i);
+		gu_buf_push(state->leaves, PgfParseNode*, node);
+	}
+}
+
+static void
+pgf_bracket_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+
+	GuString label;
+
+	GuVariantInfo i = gu_variant_open(lit);
+    switch (i.tag) {
+    case PGF_LITERAL_STR: {
+        PgfLiteralStr* lstr = i.data;
+        label = lstr->val;
+		break;
+	}
+    case PGF_LITERAL_INT: {
+        PgfLiteralInt* lint = i.data;
+        label = gu_format_string(state->pool, "%d", lint->val);
+		break;
+	}
+    case PGF_LITERAL_FLT: {
+        PgfLiteralFlt* lflt = i.data;
+        label = gu_format_string(state->pool, "%f", lflt->val);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+	
+	PgfParseNode* node = gu_new(PgfParseNode, state->pool);
+	node->id     = 100000 + gu_buf_length(state->leaves);
+	node->parent = state->parent;
+	node->label  = label;
+	gu_buf_push(state->leaves, PgfParseNode*, node);
+}
+
+static void
+pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+
+	if (gu_string_eq(cat, state->wildcard))
+		return;
+	
+	state->level++;
+
+	GuBuf* level;
+	if (state->level < gu_buf_length(state->internals))
+		level = gu_buf_get(state->internals, GuBuf*, state->level);
+	else {
+		level = gu_new_buf(PgfParseNode*, state->pool);
+		gu_buf_push(state->internals, GuBuf*, level);
+	}
+
+	size_t len = gu_buf_length(level);
+	for (size_t i = 0; i < len; i++) {
+		PgfParseNode* node = gu_buf_get(level, PgfParseNode*, i);
+		if (node->id == fid) {
+			state->parent = node;
+			return;
+		}
+	}
+	
+	PgfParseNode* node = gu_new(PgfParseNode, state->pool);
+	node->id     = fid;
+	node->parent = state->parent;
+	node->label  = cat;
+	gu_buf_push(level, PgfParseNode*, node);
+
+	state->parent = node;
+}
+
+static void
+pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+
+	if (gu_string_eq(cat, state->wildcard))
+		return;
+
+	state->level--;
+	state->parent = state->parent->parent;
+}
+
+static PgfLinFuncs pgf_bracket_lin_funcs = {
+	.symbol_tokens = pgf_bracket_lzn_symbol_tokens,
+	.expr_literal  = pgf_bracket_lzn_expr_literal,
+	.begin_phrase  = pgf_bracket_lzn_begin_phrase,
+	.end_phrase    = pgf_bracket_lzn_end_phrase
+};
+
+void
+pgf_graphviz_parse_level(GuBuf* level, GuWriter* wtr, GuExn* err)
+{
+	gu_puts("\n  subgraph {rank=same;\n", wtr, err);
+
+	size_t len = gu_buf_length(level);
+	
+	if (len > 1)
+		gu_puts("    edge[style=invis]\n", wtr, err);
+
+	for (size_t i = 0; i < len; i++) {
+		PgfParseNode* node = gu_buf_get(level, PgfParseNode*, i);
+		gu_printf(wtr, err, "    n%d[label=\"", node->id);
+		gu_string_write(node->label, wtr, err);
+		gu_puts("\"]\n", wtr, err);		
+	}
+	
+	if (len > 1) {
+		for (size_t i = 0; i < len; i++) {
+			PgfParseNode* node = gu_buf_get(level, PgfParseNode*, i);		
+		
+			gu_puts((i == 0) ? "    " : " -- ", wtr, err);
+			gu_printf(wtr, err, "n%d", node->id);
+		}
+		gu_puts("\n", wtr, err);
+	}
+	
+	gu_puts("  }\n", wtr, err);
+
+	for (size_t i = 0; i < len; i++) {
+		PgfParseNode* node = gu_buf_get(level, PgfParseNode*, i);		
+		if (node->parent != NULL)
+			gu_printf(wtr, err, "  n%d -- n%d\n", node->parent->id, node->id);
+	}
+}
+
+void
+pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err)
+{
+	GuPool* tmp_pool = gu_local_pool();
+	
+	GuEnum* cts = 
+		pgf_lzr_concretize(concr, expr, tmp_pool);
+	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
+	if (gu_variant_is_null(ctree)) {
+		gu_pool_free(tmp_pool);
+		return;
+	}
+
+	gu_puts("graph {\n", wtr, err);
+	gu_puts("  node[shape=plaintext]\n", wtr, err);
+
+	PgfBracketLznState state;
+	state.funcs = &pgf_bracket_lin_funcs;
+	state.pool = tmp_pool;
+	state.wtr = wtr;
+	state.err = err;
+
+	state.parent    = NULL;
+	state.level     = -1;
+	state.internals = gu_new_buf(GuBuf*, tmp_pool);
+	state.leaves    = gu_new_buf(PgfParseNode*, tmp_pool);
+	state.wildcard  = gu_str_string("_", tmp_pool);
+	pgf_lzr_linearize(concr, ctree, 0, &state.funcs);
+
+	size_t len = gu_buf_length(state.internals);
+	for (size_t i = 0; i < len; i++) {
+		GuBuf* level = gu_buf_get(state.internals, GuBuf*, i);
+		pgf_graphviz_parse_level(level, wtr, err);
+	}
+	pgf_graphviz_parse_level(state.leaves, wtr, err);
+
+	gu_puts("}", wtr, err);
+
+	gu_pool_free(tmp_pool);
 }

@@ -56,7 +56,7 @@ url_escape(char *str)
 }
 
 static int
-render(PgfExpr expr, GuPool* pool)
+render(PgfPGF* pgf, PgfExpr expr, GuPool* pool)
 {
 	int pid;
 	int pc[2]; /* Parent to child pipe */
@@ -94,7 +94,7 @@ render(PgfExpr expr, GuPool* pool)
 		GuWriter* wtr = gu_new_utf8_writer(out, pool);
 		GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
 
-		pgf_graphviz_abstract_tree(expr, wtr, err);
+		pgf_graphviz_abstract_tree(pgf, expr, wtr, err);
 		fclose(fstream);
 
 		close(cp[1]);
@@ -275,7 +275,7 @@ int main ()
 			FCGI_printf("Status: 200 OK\r\n");
 			if (to_concr == NULL) {
 				FCGI_printf("Content-type: image/svg+xml\r\n\r\n");
-				render(ep->expr, ppool);
+				render(pgf, ep->expr, ppool);
 			} else {
 				FCGI_printf("Content-type: text/plain; charset=utf-8\r\n\r\n");
 				linearize(to_concr, ep->expr, ppool);
