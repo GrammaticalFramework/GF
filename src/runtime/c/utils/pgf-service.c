@@ -56,87 +56,6 @@ url_escape(char *str)
 }
 
 static int
-generate_graphviz_expr(PgfExpr expr, int *pid,
-                       GuWriter* wtr, GuExn* err, GuPool* pool)
-{
-	int id = -1;
-	
-	GuVariantInfo ei = gu_variant_open(expr);
-	switch (ei.tag) {
-	case PGF_EXPR_FUN: {
-		PgfExprFun* fun = ei.data;
-		id = (*pid)++;
-		gu_printf(wtr, err, "n%d[label = \"", id);
-		gu_string_write(fun->fun, wtr, err);
-		gu_puts("\", style = \"solid\", shape = \"plaintext\"]\n", wtr, err);
-		break;
-	}
-	case PGF_EXPR_APP: {
-		PgfExprApp* app = ei.data;
-		id = generate_graphviz_expr(app->fun, pid, wtr, err, pool);
-		int arg_id = generate_graphviz_expr(app->arg, pid, wtr, err, pool);
-		gu_printf(wtr, err, "n%d -- n%d [style = \"solid\"]\n", id, arg_id);
-		break;
-	}
-	case PGF_EXPR_ABS:
-	case PGF_EXPR_LIT: {
-		PgfExprLit* lit = ei.data;
-		id = (*pid)++;
-		gu_printf(wtr, err, "n%d[label = \"", id);
-		
-		GuVariantInfo ei = gu_variant_open(lit->lit);
-		switch (ei.tag) {
-		case PGF_LITERAL_STR: {
-			PgfLiteralStr* lit = ei.data;
-			gu_puts("\\\"", wtr, err);
-			gu_string_write(lit->val, wtr, err);
-			gu_puts("\\\"", wtr, err);
-			break;
-		}
-		case PGF_LITERAL_INT: {
-			PgfLiteralInt* lit = ei.data;
-			gu_printf(wtr, err, "%d", lit->val);
-			break;
-		}
-		case PGF_LITERAL_FLT: {
-			PgfLiteralFlt* lit = ei.data;
-			gu_printf(wtr, err, "%lf", lit->val);
-			break;
-		}
-		default:
-			gu_impossible();
-		}
-
-		gu_puts("\", style = \"solid\", shape = \"plaintext\"]\n", wtr, err);
-		break;
-	}
-	case PGF_EXPR_META:
-		id = (*pid)++;
-		gu_printf(wtr, err, "n%d[label = \"?\", style = \"solid\", shape = \"plaintext\"]\n", id);
-		break;
-	case PGF_EXPR_VAR:
-	case PGF_EXPR_TYPED:
-	case PGF_EXPR_IMPL_ARG:
-		gu_impossible();
-		break;
-	default:
-		gu_impossible();
-	}
-	
-	return id;
-}
-
-static void
-generate_graphviz(PgfExpr expr, GuWriter* wtr, GuExn* err, GuPool* pool)
-{
-	int id = 0;
-
-	gu_puts("graph {\n", wtr, err);
-	generate_graphviz_expr(expr, &id, wtr, err, pool);
-	gu_puts("}", wtr, err);
-}
-
-static int
 render(PgfExpr expr, GuPool* pool)
 {
 	int pid;
@@ -175,7 +94,7 @@ render(PgfExpr expr, GuPool* pool)
 		GuWriter* wtr = gu_new_utf8_writer(out, pool);
 		GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
 
-		generate_graphviz(expr, wtr, err, pool);
+		pgf_graphviz_abstract_tree(expr, wtr, err);
 		fclose(fstream);
 
 		close(cp[1]);

@@ -47,6 +47,7 @@ pgfinclude_HEADERS = \
 	pgf/parser.h \
 	pgf/lexer.h \
 	pgf/literals.h \
+	pgf/graphviz.h \
 	pgf/pgf.h
 
 libgu_la_SOURCES = \
@@ -115,6 +116,7 @@ libpgf_la_SOURCES = \
 	pgf/linearizer.c \
 	pgf/reasoner.c \
 	pgf/printer.c \
+	pgf/graphviz.c \
 	pgf/pgf.c \
 	pgf/pgf.h
 

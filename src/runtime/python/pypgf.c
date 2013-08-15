@@ -2215,6 +2215,30 @@ pgf_readType(PyObject *self, PyObject *args) {
     return pytype;
 }
 
+static PyObject*
+pgf_graphvizAbstractTree(PyObject *self, PyObject *args) {
+	ExprObject* pyexpr;
+	if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &pyexpr))
+        return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	
+	pgf_graphviz_abstract_tree(pyexpr->expr, wtr, err);
+	if (!gu_ok(err)) {
+		PyErr_SetString(PGFError, "The abstract tree cannot be visualized");
+		return NULL;
+	}
+
+	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+	PyObject* pystr = gu2py_string(str);
+
+	gu_pool_free(tmp_pool);
+	return pystr;
+}
+
 static PyMethodDef module_methods[] = {
     {"readPGF",  (void*)pgf_readPGF,  METH_VARARGS,
      "Reads a PGF file in memory"},
@@ -2222,6 +2246,8 @@ static PyMethodDef module_methods[] = {
      "Parses a string as an abstract tree"},
     {"readType", (void*)pgf_readType, METH_VARARGS,
      "Parses a string as an abstract type"},
+    {"graphvizAbstractTree", (void*)pgf_graphvizAbstractTree, METH_VARARGS,
+     "Renders an abstract syntax tree in a Graphviz format"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
