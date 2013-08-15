@@ -1654,6 +1654,30 @@ Concr_getName(ConcrObject *self, void *closure)
     return gu2py_string(pgf_concrete_name(self->concr));
 }
 
+static PyObject*
+Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
+	ExprObject* pyexpr;
+	if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &pyexpr))
+        return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	
+	pgf_graphviz_parse_tree(self->concr, pyexpr->expr, wtr, err);
+	if (!gu_ok(err)) {
+		PyErr_SetString(PGFError, "The parse tree cannot be visualized");
+		return NULL;
+	}
+
+	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+	PyObject* pystr = gu2py_string(str);
+
+	gu_pool_free(tmp_pool);
+	return pystr;
+}
+
 static PyGetSetDef Concr_getseters[] = {
     {"name", 
      (getter)Concr_getName, NULL,
@@ -1688,6 +1712,9 @@ static PyMethodDef Concr_methods[] = {
     },
     {"bracketedLinearize", (PyCFunction)Concr_bracketedLinearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a bracketed string"
+    },
+    {"graphvizParseTree", (PyCFunction)Concr_graphvizParseTree, METH_VARARGS,
+     "Renders an abstract syntax tree as a parse tree in Graphviz format"
     },
     {NULL}  /* Sentinel */
 };
@@ -2036,6 +2063,30 @@ PGF_compute(PGFObject* self, PyObject *args)
 	return py_expr;
 }
 
+static PyObject*
+PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
+	ExprObject* pyexpr;
+	if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &pyexpr))
+        return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	
+	pgf_graphviz_abstract_tree(self->pgf, pyexpr->expr, wtr, err);
+	if (!gu_ok(err)) {
+		PyErr_SetString(PGFError, "The abstract tree cannot be visualized");
+		return NULL;
+	}
+
+	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+	PyObject* pystr = gu2py_string(str);
+
+	gu_pool_free(tmp_pool);
+	return pystr;
+}
+
 static PyGetSetDef PGF_getseters[] = {
     {"abstractName", 
      (getter)PGF_getAbstractName, NULL,
@@ -2076,6 +2127,9 @@ static PyMethodDef PGF_methods[] = {
     },
     {"compute", (PyCFunction)PGF_compute, METH_VARARGS,
      "Computes the normal form of an abstract syntax tree"
+    },
+    {"graphvizAbstractTree", (PyCFunction)PGF_graphvizAbstractTree, METH_VARARGS,
+     "Renders an abstract syntax tree in a Graphviz format"
     },
     {NULL}  /* Sentinel */
 };
@@ -2215,30 +2269,6 @@ pgf_readType(PyObject *self, PyObject *args) {
     return pytype;
 }
 
-static PyObject*
-pgf_graphvizAbstractTree(PyObject *self, PyObject *args) {
-	ExprObject* pyexpr;
-	if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &pyexpr))
-        return NULL;
-
-	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
-	
-	pgf_graphviz_abstract_tree(pyexpr->expr, wtr, err);
-	if (!gu_ok(err)) {
-		PyErr_SetString(PGFError, "The abstract tree cannot be visualized");
-		return NULL;
-	}
-
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = gu2py_string(str);
-
-	gu_pool_free(tmp_pool);
-	return pystr;
-}
-
 static PyMethodDef module_methods[] = {
     {"readPGF",  (void*)pgf_readPGF,  METH_VARARGS,
      "Reads a PGF file in memory"},
@@ -2246,8 +2276,6 @@ static PyMethodDef module_methods[] = {
      "Parses a string as an abstract tree"},
     {"readType", (void*)pgf_readType, METH_VARARGS,
      "Parses a string as an abstract type"},
-    {"graphvizAbstractTree", (void*)pgf_graphvizAbstractTree, METH_VARARGS,
-     "Renders an abstract syntax tree in a Graphviz format"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
