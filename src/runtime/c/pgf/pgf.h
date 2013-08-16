@@ -95,6 +95,9 @@ pgf_get_language(PgfPGF*, PgfCId lang);
 GuString
 pgf_concrete_name(PgfConcr*);
 
+GuString
+pgf_language_code(PgfConcr* concr);
+
 void
 pgf_iter_categories(PgfPGF* pgf, GuMapItor* fn, GuExn* err);
 

@@ -1655,6 +1655,12 @@ Concr_getName(ConcrObject *self, void *closure)
 }
 
 static PyObject*
+Concr_getLanguageCode(ConcrObject *self, void *closure)
+{
+    return gu2py_string(pgf_language_code(self->concr));
+}
+
+static PyObject*
 Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
 	ExprObject* pyexpr;
 	if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &pyexpr))
@@ -1682,6 +1688,10 @@ static PyGetSetDef Concr_getseters[] = {
     {"name", 
      (getter)Concr_getName, NULL,
      "the name of the concrete syntax",
+    },
+    {"languageCode", 
+     (getter)Concr_getLanguageCode, NULL,
+     "the language code for this concrete syntax",
     },
     {NULL}  /* Sentinel */
 };

@@ -145,6 +145,29 @@ pgf_start_cat(PgfPGF* pgf, GuPool* pool)
 	return gu_str_string("S", pool);
 }
 
+GuString
+pgf_language_code(PgfConcr* concr)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuString s = gu_str_string("language", tmp_pool);
+	PgfLiteral lit =
+		gu_map_get(concr->cflags, &s, PgfLiteral);
+
+	if (gu_variant_is_null(lit))
+		return gu_empty_string;
+
+	GuVariantInfo i = gu_variant_open(lit);
+	switch (i.tag) {
+	case PGF_LITERAL_STR: {
+		PgfLiteralStr *lstr = (PgfLiteralStr *) i.data;
+		return lstr->val;
+	}
+	}
+
+	return gu_empty_string;
+}
+
 void
 pgf_iter_functions(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
 {
