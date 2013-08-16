@@ -124,6 +124,17 @@ PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
           GuPool* pool, GuPool* out_pool);
 
+typedef struct PgfMorphoCallback PgfMorphoCallback;
+struct PgfMorphoCallback {
+	void (*callback)(PgfMorphoCallback* self, PgfTokens tokens, 
+	                 PgfCId lemma, GuString analysis, prob_t prob,
+	                 GuExn* err);
+};
+
+void
+pgf_lookup_morpho(PgfConcr *concr, PgfLexer *lexer,
+                  PgfMorphoCallback* callback, GuExn* err);
+
 PgfExprEnum*
 pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
                           double heuristics, 
