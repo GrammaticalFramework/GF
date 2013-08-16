@@ -220,7 +220,7 @@ static PgfLinFuncs pgf_bracket_lin_funcs = {
 	.end_phrase    = pgf_bracket_lzn_end_phrase
 };
 
-void
+static void
 pgf_graphviz_parse_level(GuBuf* level, GuWriter* wtr, GuExn* err)
 {
 	gu_puts("\n  subgraph {rank=same;\n", wtr, err);

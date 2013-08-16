@@ -8,15 +8,15 @@ typedef struct PgfExprState PgfExprState;
 typedef void (*PgfPredicate)(PgfReasoner* rs, PgfReasonerState* st);
 
 void
-pgf_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun);
+pgf_reasoner_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun);
 
 void
-pgf_try_else(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
+pgf_reasoner_try_else(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
 
 void
-pgf_complete(PgfReasoner* rs, PgfExprState* st);
+pgf_reasoner_complete(PgfReasoner* rs, PgfExprState* st);
 
 void
-pgf_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
+pgf_reasoner_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
 
 #endif

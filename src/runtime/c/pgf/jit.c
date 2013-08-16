@@ -130,7 +130,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 		jit_pusharg_p(JIT_V0);
 		jit_pusharg_p(JIT_V2);
 		jit_pusharg_p(JIT_V1);
-		jit_finish(pgf_try_first);
+		jit_finish(pgf_reasoner_try_first);
 	}
 
 #ifdef PGF_JIT_DEBUG
@@ -182,7 +182,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 				jit_pusharg_p(JIT_V0);
 				jit_pusharg_p(JIT_V2);
 				jit_pusharg_p(JIT_V1);
-				jit_finish(pgf_try_else);
+				jit_finish(pgf_reasoner_try_else);
 			}
 				
 			for (size_t i = 0; i < n_hypos; i++) {
@@ -240,7 +240,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 					jit_getarg_p(JIT_V1, rs_arg);
 					jit_getarg_p(JIT_V2, st_arg);
 				} else {
-					jit_patch_movi(ref,pgf_complete);
+					jit_patch_movi(ref,pgf_reasoner_complete);
 				}
 			}
 		} else {
@@ -260,7 +260,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 				jit_pusharg_p(JIT_V0);
 				jit_pusharg_p(JIT_V2);
 				jit_pusharg_p(JIT_V1);
-				jit_finish(pgf_try_constant);
+				jit_finish(pgf_reasoner_try_constant);
 			} else {
 #ifdef PGF_JIT_DEBUG
 				gu_puts("    COMPLETE\n", wtr, err);
@@ -270,7 +270,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 				jit_prepare(2);
 				jit_pusharg_p(JIT_V2);
 				jit_pusharg_p(JIT_V1);
-				jit_finish(pgf_complete);
+				jit_finish(pgf_reasoner_complete);
 			}
 
 #ifdef PGF_JIT_DEBUG

@@ -226,7 +226,7 @@ pgf_combine1(PgfReasoner* rs, PgfCombine1State* st)
 }
 
 void
-pgf_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun)
+pgf_reasoner_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun)
 {
 	PgfCId cat = absfun->type->cid;
 
@@ -276,7 +276,7 @@ pgf_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun)
 }
 
 void
-pgf_try_else(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun)
+pgf_reasoner_try_else(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun)
 {
 	PgfExprState *st = gu_new(PgfExprState, rs->tmp_pool);
 	st->base.continuation = (PgfPredicate) absfun->predicate;
@@ -311,7 +311,7 @@ pgf_combine2(PgfReasoner* rs, PgfCombine2State* st)
 }
 
 void
-pgf_complete(PgfReasoner* rs, PgfExprState* st)
+pgf_reasoner_complete(PgfReasoner* rs, PgfExprState* st)
 {
 	PgfExprProb* ep = gu_new(PgfExprProb, rs->pool);
 	ep->prob = st->base.prob - st->answers->outside_prob;
@@ -332,10 +332,10 @@ pgf_complete(PgfReasoner* rs, PgfExprState* st)
 }
 
 void
-pgf_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun)
+pgf_reasoner_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun)
 {
-	pgf_try_else(rs, prev, absfun);
-	pgf_complete(rs, prev);
+	pgf_reasoner_try_else(rs, prev, absfun);
+	pgf_reasoner_complete(rs, prev);
 }
 
 static PgfExprProb*
@@ -382,7 +382,7 @@ pgf_reasoner_enum_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 PgfExprEnum*
-pgf_generate(PgfPGF* pgf, PgfCId cat, GuPool* pool)
+pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool)
 {
 	PgfReasoner* rs = gu_new(PgfReasoner, pool);
 	rs->pool = pool;
