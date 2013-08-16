@@ -2311,6 +2311,109 @@ pgf_parser_add_literal(PgfConcr *concr, PgfCId cat,
 	           PgfLiteralCallback*, callback);
 }
 
+typedef struct {
+	GuMapItor fn;
+	PgfTokens tokens;
+	PgfMorphoCallback* callback;
+} PgfMorphoFn;
+
+static void
+pgf_morpho_iter(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	PgfMorphoFn* clo = (PgfMorphoFn*) fn;
+	PgfCFCat cfc = *((PgfCFCat*) key);
+	PgfProductionSeq prods = *((PgfProductionSeq*) value);
+
+	if (gu_seq_is_null(prods))
+		return;
+
+	GuString analysis = cfc.ccat->cnccat->labels[cfc.lin_idx];
+
+	size_t n_prods = gu_seq_length(prods);
+	for (size_t i = 0; i < n_prods; i++) {
+		PgfProduction prod =
+			gu_seq_get(prods, PgfProduction, i);
+
+		GuVariantInfo i = gu_variant_open(prod);
+		switch (i.tag) {
+		case PGF_PRODUCTION_APPLY: {
+			PgfProductionApply* papp = i.data;
+
+			// match the tokens with the production
+			size_t pos = 0;
+			PgfSequence seq = papp->fun->lins[cfc.lin_idx];
+			size_t len = gu_seq_length(seq);
+			for (size_t i = 0; i < len; i++) {
+				PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
+
+				GuVariantInfo i = gu_variant_open(sym);
+				switch (i.tag) {
+				case PGF_SYMBOL_KS: {
+					PgfSymbolKS* symks = i.data;
+					size_t len = gu_seq_length(symks->tokens);
+					for (size_t i = 0; i < len; i++) {
+						if (pos >= gu_seq_length(clo->tokens))
+							goto cont;
+
+						PgfToken tok1 = gu_seq_get(symks->tokens, PgfToken, i);
+						PgfToken tok2 = gu_seq_get(clo->tokens, PgfToken, pos++);
+						
+						if (!gu_string_eq(tok1, tok2))
+							goto cont;
+					}
+				}
+				default:
+					continue;
+				}
+			}
+			
+			if (pos != gu_seq_length(clo->tokens))
+				goto cont;
+
+			PgfCId lemma = papp->fun->absfun->name;
+			prob_t prob = papp->fun->absfun->ep.prob;
+			clo->callback->callback(clo->callback, clo->tokens,
+			                        lemma, analysis, prob, err);
+		}
+		}
+	cont:;
+	}
+}
+
+void
+pgf_lookup_morpho(PgfConcr *concr, PgfLexer *lexer,
+                  PgfMorphoCallback* callback, GuExn* err)
+{
+	GuPool* tmp_pool = gu_local_pool();
+	
+	GuBuf* tokens = gu_new_buf(PgfToken, tmp_pool);
+	GuExn* lex_err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	PgfToken tok = pgf_lexer_read_token(lexer, lex_err);
+	if (gu_exn_is_raised(lex_err)) {
+		gu_raise(err, PgfExn);
+		gu_pool_free(tmp_pool);
+		return;
+	}
+
+	PgfProductionIdx* lexicon_idx =
+		gu_map_get(concr->leftcorner_tok_idx, &tok, PgfProductionIdx*);
+	if (lexicon_idx == NULL) {
+		gu_pool_free(tmp_pool);
+		return;
+	}
+
+	do {
+		gu_buf_push(tokens, PgfToken, tok);
+		tok = pgf_lexer_read_token(lexer, lex_err);
+	} while (!gu_exn_is_raised(lex_err));
+
+	PgfMorphoFn clo = { { pgf_morpho_iter }, gu_buf_seq(tokens), callback };
+	gu_map_iter(lexicon_idx, &clo.fn, err);
+	
+	gu_pool_free(tmp_pool);
+}
+
 static void
 pgf_parser_leftcorner_add_token(PgfConcr* concr,
                                 PgfTokens tokens, PgfItem* item, 

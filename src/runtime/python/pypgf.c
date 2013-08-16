@@ -1684,6 +1684,87 @@ Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
 	return pystr;
 }
 
+typedef struct {
+	PgfMorphoCallback fn;
+	PyObject* analyses;
+} PyMorphoCallback;
+
+static void
+pypgf_collect_morpho(PgfMorphoCallback* self, PgfTokens tokens,
+	                 PgfCId lemma, GuString analysis, prob_t prob,
+	                 GuExn* err)
+{
+	PyMorphoCallback* callback = (PyMorphoCallback*) self;
+
+	PyObject* py_lemma = gu2py_string(lemma);
+	PyObject* py_analysis = gu2py_string(analysis);
+	PyObject* res = 
+		Py_BuildValue("OOf", py_lemma, py_analysis, prob);
+
+    if (PyList_Append(callback->analyses, res) != 0) {
+		gu_raise(err, PgfExn);
+	}
+	
+	Py_DECREF(py_lemma);
+	Py_DECREF(py_analysis);
+	Py_DECREF(res);
+}
+
+static PyObject*
+Concr_lookupMorpho(ConcrObject* self, PyObject *args, PyObject *keywds) {
+	static char *kwlist[] = {"sentence", "tokens", NULL};
+
+	int len;
+	const uint8_t *buf = NULL;
+	PyObject* py_lexer = NULL;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "|s#O", kwlist,
+                                     &buf, &len, &py_lexer))
+        return NULL;
+
+    if ((buf == NULL && py_lexer == NULL) || 
+        (buf != NULL && py_lexer != NULL)) {
+		PyErr_SetString(PyExc_TypeError, "either the sentence or the tokens argument must be provided");
+		return NULL;
+	}
+
+    GuPool* tmp_pool = gu_local_pool();
+
+	PgfLexer *lexer = NULL;
+	if (buf != NULL) {
+		GuIn* in = gu_data_in(buf, len, tmp_pool);
+		GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
+		lexer = pgf_new_simple_lexer(rdr, tmp_pool);
+	} 
+	if (py_lexer != NULL) {
+		// get an iterator out of the iterable object
+		py_lexer = PyObject_GetIter(py_lexer);
+		if (py_lexer == NULL) {
+			gu_pool_free(tmp_pool);
+			return NULL;
+		}
+
+		lexer = pypgf_new_python_lexer(py_lexer, tmp_pool);
+	}
+
+    GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	PyObject* analyses = PyList_New(0);
+
+	PyMorphoCallback callback = { { pypgf_collect_morpho }, analyses };
+	pgf_lookup_morpho(self->concr, lexer, &callback.fn, err);
+
+	Py_XDECREF(py_lexer);
+
+	gu_pool_free(tmp_pool);
+
+	if (!gu_ok(err)) {
+		Py_DECREF(analyses);
+		return NULL;
+	}
+
+    return analyses;
+}
+
 static PyGetSetDef Concr_getseters[] = {
     {"name", 
      (getter)Concr_getName, NULL,
@@ -1725,6 +1806,9 @@ static PyMethodDef Concr_methods[] = {
     },
     {"graphvizParseTree", (PyCFunction)Concr_graphvizParseTree, METH_VARARGS,
      "Renders an abstract syntax tree as a parse tree in Graphviz format"
+    },
+    {"lookupMorpho", (PyCFunction)Concr_lookupMorpho, METH_VARARGS | METH_KEYWORDS,
+     "Looks up a word in the lexicon of the grammar"
     },
     {NULL}  /* Sentinel */
 };
