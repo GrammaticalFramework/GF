@@ -254,8 +254,8 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, PgfLexer *lexer,
 }
 
 GuEnum*
-pgf_get_completions(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
-                    GuString prefix, GuPool* pool)
+pgf_complete(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
+             GuString prefix, GuPool* pool)
 {
 	// Begin parsing a sentence of the specified category
 	PgfParseState* state =

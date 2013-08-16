@@ -51,6 +51,7 @@ typedef struct PgfConcr PgfConcr;
 
 #include <pgf/expr.h>
 #include <pgf/lexer.h>
+#include <pgf/graphviz.h>
 
 /// An enumeration of #PgfExpr elements.
 typedef GuEnum PgfExprEnum;
@@ -126,15 +127,15 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, PgfLexer *lexer,
                           GuPool* pool, GuPool* out_pool);
 
 GuEnum*
-pgf_get_completions(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
-                    GuString prefix, GuPool* pool);
+pgf_complete(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
+             GuString prefix, GuPool* pool);
 
 bool
 pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
              double *precision, double *recall, double *exact);
                     
 PgfExprEnum*
-pgf_generate(PgfPGF* pgf, PgfCId cat, GuPool* pool);
+pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool);
 
 /// @}
 

@@ -1228,7 +1228,7 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 }
 
 static IterObject*
-Concr_getCompletions(ConcrObject* self, PyObject *args, PyObject *keywds)
+Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
 	static char *kwlist[] = {"sentence", "tokens", "cat", 
 	                         "prefix", "n", NULL};
@@ -1295,7 +1295,7 @@ Concr_getCompletions(ConcrObject* self, PyObject *args, PyObject *keywds)
 	}
 
 	pyres->res =
-		pgf_get_completions(self->concr, catname, lexer, prefix, pyres->pool);
+		pgf_complete(self->concr, catname, lexer, prefix, pyres->pool);
 
 	if (pyres->res == NULL) {
 		Py_DECREF(pyres);
@@ -1698,7 +1698,7 @@ static PyMethodDef Concr_methods[] = {
      "- n (int), max. trees; OPTIONAL, default: extract all trees\n"
      "- heuristics (double >= 0.0); OPTIONAL, default: taken from the flags in the grammar"
     },
-    {"getCompletions", (PyCFunction)Concr_getCompletions, METH_VARARGS | METH_KEYWORDS,
+    {"complete", (PyCFunction)Concr_complete, METH_VARARGS | METH_KEYWORDS,
      "Parses a partial string and returns a list with the top n possible next tokens"
     },
     {"parseval", (PyCFunction)Concr_parseval, METH_VARARGS,
@@ -2011,7 +2011,7 @@ PGF_functionType(PGFObject* self, PyObject *args)
 }
 
 static IterObject*
-PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
+PGF_generateAll(PGFObject* self, PyObject *args, PyObject *keywds)
 {
 	static char *kwlist[] = {"cat", "n", NULL};
 
@@ -2040,7 +2040,7 @@ PGF_generate(PGFObject* self, PyObject *args, PyObject *keywds)
     GuString catname = gu_str_string(catname_s, tmp_pool);
 
 	pyres->res =
-		pgf_generate(self->pgf, catname, pyres->pool);
+		pgf_generate_all(self->pgf, catname, pyres->pool);
 	if (pyres->res == NULL) {
 		Py_DECREF(pyres);
 		gu_pool_free(tmp_pool);
@@ -2122,7 +2122,7 @@ static PyMethodDef PGF_methods[] = {
     {"functionType", (PyCFunction)PGF_functionType, METH_VARARGS,
      "Returns the type of a function"
     },
-    {"generate", (PyCFunction)PGF_generate, METH_VARARGS | METH_KEYWORDS,
+    {"generateAll", (PyCFunction)PGF_generateAll, METH_VARARGS | METH_KEYWORDS,
      "Generates abstract syntax trees of given category in decreasing probability order"
     },
     {"compute", (PyCFunction)PGF_compute, METH_VARARGS,
