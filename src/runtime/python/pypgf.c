@@ -920,9 +920,10 @@ Iter_fetch_token(IterObject* self)
 	if (tp == NULL)
 		return NULL;
 
-	PyObject* ty_tok = gu2py_string(tp->tok);
-	PyObject* res = Py_BuildValue("(f,O)", tp->prob, ty_tok);
-	Py_DECREF(ty_tok);
+	PyObject* py_tok = gu2py_string(tp->tok);
+	PyObject* py_cat = gu2py_string(tp->cat);
+	PyObject* res = Py_BuildValue("(f,O,O)", tp->prob, py_tok, py_cat);
+	Py_DECREF(py_tok);
 
 	return res;
 }
