@@ -1690,7 +1690,7 @@ typedef struct {
 } PyMorphoCallback;
 
 static void
-pypgf_collect_morpho(PgfMorphoCallback* self, PgfTokens tokens,
+pypgf_collect_morpho(PgfMorphoCallback* self,
 	                 PgfCId lemma, GuString analysis, prob_t prob,
 	                 GuExn* err)
 {
@@ -1765,6 +1765,73 @@ Concr_lookupMorpho(ConcrObject* self, PyObject *args, PyObject *keywds) {
     return analyses;
 }
 
+PyObject*
+Iter_fetch_fullform(IterObject* self)
+{
+	PgfFullFormEntry* entry = 
+		gu_next(self->res, PgfFullFormEntry*, self->pool);
+	if (entry == NULL)
+		return NULL;
+
+	PyObject* res = NULL;
+	PyObject* py_tokens = NULL;
+	PyObject* py_analyses = NULL;
+
+	GuString tokens =
+		pgf_fullform_get_string(entry);
+		
+	py_tokens = gu2py_string(tokens);
+	if (py_tokens == NULL)
+		goto done;
+
+	py_analyses = PyList_New(0);
+	if (py_analyses == NULL)
+		goto done;
+
+	GuPool* tmp_pool = gu_local_pool();
+    GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	PyMorphoCallback callback = { { pypgf_collect_morpho }, py_analyses };
+	pgf_fullform_get_analyses(entry, &callback.fn, err);
+	
+	if (!gu_ok(err))
+		goto done;
+
+	res = Py_BuildValue("OO", py_tokens, py_analyses);
+
+done:
+	Py_XDECREF(py_tokens);
+	Py_XDECREF(py_analyses);
+
+	return res;
+}
+
+static PyObject*
+Concr_fullFormLexicon(ConcrObject* self, PyObject *args)
+{
+	IterObject* pyres = (IterObject*) 
+		pgf_IterType.tp_alloc(&pgf_IterType, 0);
+	if (pyres == NULL)
+		return NULL;
+
+	pyres->grammar = self->grammar;
+	Py_XINCREF(pyres->grammar);
+
+	pyres->container = NULL;
+	pyres->pool      = gu_new_pool();
+	pyres->max_count = -1;
+	pyres->counter   = 0;
+	pyres->fetch     = Iter_fetch_fullform;
+
+	pyres->res = pgf_fullform_lexicon(self->concr, pyres->pool);
+	if (pyres->res == NULL) {
+		Py_DECREF(pyres);
+		return NULL;
+	}
+
+	return (PyObject*) pyres;
+}
+
 static PyGetSetDef Concr_getseters[] = {
     {"name", 
      (getter)Concr_getName, NULL,
@@ -1809,6 +1876,9 @@ static PyMethodDef Concr_methods[] = {
     },
     {"lookupMorpho", (PyCFunction)Concr_lookupMorpho, METH_VARARGS | METH_KEYWORDS,
      "Looks up a word in the lexicon of the grammar"
+    },
+    {"fullFormLexicon", (PyCFunction)Concr_fullFormLexicon, METH_VARARGS,
+     "Enumerates all words in the lexicon (useful for extracting full form lexicons)"
     },
     {NULL}  /* Sentinel */
 };
