@@ -303,6 +303,47 @@ gu_map_iter(GuMap* map, GuMapItor* itor, GuExn* err)
 	}
 }
 
+typedef struct {
+	GuEnum en;
+	GuMap* ht;
+	size_t i;
+	GuMapKeyValue x;
+} GuMapEnum;
+
+static void
+gu_map_enum_next(GuEnum* self, void* to, GuPool* pool)
+{
+	*((GuMapKeyValue**) to) = NULL;
+
+	size_t i;
+	GuMapEnum* en = (GuMapEnum*) self;
+	for (i = en->i; i < en->ht->data.n_entries; i++) {
+		if (gu_map_entry_is_free(en->ht, &en->ht->data, i)) {
+			continue;
+		}
+		en->x.key   = &en->ht->data.keys[i * en->ht->key_size];
+		en->x.value = &en->ht->data.values[i * en->ht->value_size];
+		if (en->ht->kind == GU_MAP_ADDR) {
+			en->x.key = *(const void* const*) en->x.key;
+		}
+		
+		*((GuMapKeyValue**) to) = &en->x;
+		break;
+	}
+	
+	en->i = i+1;
+}
+
+GuEnum*
+gu_map_enum(GuMap* ht, GuPool* pool)
+{
+	GuMapEnum* en = gu_new(GuMapEnum, pool);
+	en->en.next = gu_map_enum_next;
+	en->ht = ht;
+	en->i  = 0;
+	return &en->en;
+}
+
 size_t
 gu_map_count(GuMap* map)
 {
