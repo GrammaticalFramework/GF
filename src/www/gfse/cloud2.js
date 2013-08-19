@@ -71,7 +71,8 @@ function upload_grammars(gs,cont) {
 	else alert(res.errorcode+"\n"+res.command+"\n\n"+res.output);
     }
 
-    with_dir(upload2)
+    if(navigator.onLine) with_dir(upload2)
+    else cont({errorcode:"Offline",command:"",output:""})
 }
 
 function assign_unique_name(g,unique_id) {
