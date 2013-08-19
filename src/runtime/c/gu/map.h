@@ -4,8 +4,9 @@
 #include <gu/hash.h>
 #include <gu/mem.h>
 #include <gu/exn.h>
+#include <gu/enum.h>
 
-typedef const struct GuMapItor GuMapItor;
+typedef struct GuMapItor GuMapItor;
 
 struct GuMapItor {
 	void (*fn)(GuMapItor* self, const void* key, void* value,
@@ -67,6 +68,13 @@ gu_map_insert(GuMap* ht, const void* key);
 void
 gu_map_iter(GuMap* ht, GuMapItor* itor, GuExn* err);
 
+typedef struct {
+	const void* key;
+	void* value;
+} GuMapKeyValue;
+
+GuEnum*
+gu_map_enum(GuMap* ht, GuPool* pool);
 
 typedef GuMap GuIntMap;
 
