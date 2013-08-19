@@ -1811,16 +1811,18 @@ function string_editor(el,init,ok,async) {
 	e.it.focus();
     }
     var m=empty_class("span","error_message");
-    if(init.indexOf("\n")>=0) {
+    /*if(init.indexOf("\n")>=0)*/ {
 	var rows=init.split("\n").length+1
 	var i=node("textarea",{"class":"string_edit",name:"it",
-			       rows:rows,cols:"80"},
+			       rows:rows,cols:"60"},
 		   [text(init)]);
     }
+    /*
     else {
 	var i=node("input",{"class":"string_edit",name:"it",value:init},[]);
 	if(init.length>10) i.size=init.length+5;
     }
+    */
     var e=node("form",{},
 	       [i,
 		text(" "),

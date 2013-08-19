@@ -40,3 +40,5 @@
 
 + Bug! The startcat menu shows the first category by default, but the startcat
   flag is actually not set until a selection is made from the menu.
+
++ Always open a resizable text box when editing concrete syntax.
