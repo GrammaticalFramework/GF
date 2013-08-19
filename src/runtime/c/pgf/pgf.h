@@ -126,7 +126,7 @@ pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer,
 
 typedef struct PgfMorphoCallback PgfMorphoCallback;
 struct PgfMorphoCallback {
-	void (*callback)(PgfMorphoCallback* self, PgfTokens tokens, 
+	void (*callback)(PgfMorphoCallback* self,
 	                 PgfCId lemma, GuString analysis, prob_t prob,
 	                 GuExn* err);
 };
@@ -134,6 +134,18 @@ struct PgfMorphoCallback {
 void
 pgf_lookup_morpho(PgfConcr *concr, PgfLexer *lexer,
                   PgfMorphoCallback* callback, GuExn* err);
+
+typedef GuMapKeyValue PgfFullFormEntry;
+
+GuEnum*
+pgf_fullform_lexicon(PgfConcr *concr, GuPool* pool);
+
+GuString
+pgf_fullform_get_string(PgfFullFormEntry* entry);
+
+void
+pgf_fullform_get_analyses(PgfFullFormEntry* entry,
+                          PgfMorphoCallback* callback, GuExn* err);
 
 PgfExprEnum*
 pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
