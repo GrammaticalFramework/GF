@@ -1814,6 +1814,49 @@ typedef struct {
 	PgfParseState* state;
 } PgfPrefixTokenState;
 
+static GuString
+pgf_get_tokens(PgfSequence seq,
+               uint16_t seq_idx, uint8_t tok_idx,
+               GuPool* pool)
+{
+	GuPool* tmp_pool = gu_new_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+
+	// collect the tokens in the production
+	size_t len = gu_seq_length(seq);
+	for (size_t i = seq_idx; i < len; i++) {
+		PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
+
+		GuVariantInfo i = gu_variant_open(sym);
+		switch (i.tag) {
+		case PGF_SYMBOL_KS: {
+			PgfSymbolKS* symks = i.data;
+			size_t len = gu_seq_length(symks->tokens);
+			for (size_t i = tok_idx; i < len; i++) {
+				if (i > 0) {
+					gu_putc(' ', wtr, err);
+				}
+
+				PgfToken tok = gu_seq_get(symks->tokens, PgfToken, i);
+				gu_string_write(tok, wtr, err);						
+			}
+			
+			tok_idx = 0;
+		}
+		default:
+			continue;
+		}
+	}
+	
+	GuString tokens = gu_string_buf_freeze(sbuf, pool);
+	
+	gu_pool_free(tmp_pool);
+	
+	return tokens;
+}
+
 static bool
 pgf_prefix_match_token(PgfTokenState* ts0, PgfToken tok, PgfItem* item)
 {
@@ -1821,8 +1864,23 @@ pgf_prefix_match_token(PgfTokenState* ts0, PgfToken tok, PgfItem* item)
 		gu_container(ts0, PgfPrefixTokenState, ts);
 
 	if (gu_string_is_prefix(ts->prefix, tok)) {
+		size_t lin_idx;
+		PgfSequence seq;
+		pgf_item_sequence(item, &lin_idx, &seq, ts->pool);
+
+		uint16_t seq_idx = item->seq_idx;
+		uint8_t  tok_idx = item->tok_idx;
+
+		// go one token back
+		if (tok_idx > 0)
+			tok_idx--;
+		else
+			seq_idx--;
+
 		ts->tp = gu_new(PgfTokenProb, ts->pool);
-		ts->tp->tok  = tok;
+		ts->tp->tok  =
+			pgf_get_tokens(seq, seq_idx, tok_idx, ts->pool);
+		ts->tp->cat  = item->conts->ccat->cnccat->abscat->name;
 		ts->tp->prob = item->inside_prob+item->conts->outside_prob;
 	}
 
@@ -2446,37 +2504,9 @@ pgf_fullform_iter(GuMapItor* fn, const void* key, void* value, GuExn* err)
 		switch (i.tag) {
 		case PGF_PRODUCTION_APPLY: {
 			PgfProductionApply* papp = i.data;
-			
-			GuPool* tmp_pool = gu_new_pool();
-			GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
-			GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-			GuWriter* wtr = gu_string_buf_writer(sbuf);
 
-			// collect the tokens in the production
 			PgfSequence seq = papp->fun->lins[cfc.lin_idx];
-			size_t len = gu_seq_length(seq);
-			for (size_t i = 0; i < len; i++) {
-				PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
-
-				GuVariantInfo i = gu_variant_open(sym);
-				switch (i.tag) {
-				case PGF_SYMBOL_KS: {
-					PgfSymbolKS* symks = i.data;
-					size_t len = gu_seq_length(symks->tokens);
-					for (size_t i = 0; i < len; i++) {
-						if (i > 0) {
-							gu_putc(' ', wtr, err);
-						}
-
-						PgfToken tok = gu_seq_get(symks->tokens, PgfToken, i);
-						gu_string_write(tok, wtr, err);						
-					}
-				}
-				default:
-					continue;
-				}
-			}
-			GuString tokens = gu_string_buf_freeze(sbuf, st->pool);
+			GuString tokens = pgf_get_tokens(seq, 0, 0, st->pool);
 
 			// create a new production index with keys that 
 			// are multiword units

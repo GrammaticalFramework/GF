@@ -10,6 +10,7 @@ typedef GuSeq PgfTokens;  // -> PgfToken
 
 typedef struct {
 	prob_t prob;
+	PgfCId cat;
 	PgfToken tok;
 } PgfTokenProb;
 
