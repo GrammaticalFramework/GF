@@ -28,7 +28,10 @@ What's new? See the [Release notes release-3.5.html].
 ===Notes===
 
 The Windows package is installed by just unpacking it anywhere.
-It finds the libraries relative to the ``.exe`` file.
+%It finds the libraries relative to the ``.exe`` file.
+You will probably need to set the ``PATH`` and ``GF_LIB_PATH`` environment
+variables, see Inari's notes on
+[Installing GF on Windows http://www.grammaticalframework.org/~inari/gf-windows.html#toc3].
 
 The ``.deb`` packages work on Ubuntu 12.04, 12.10 and 13.04.
 
