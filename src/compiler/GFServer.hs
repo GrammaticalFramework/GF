@@ -314,9 +314,13 @@ jsonresult cwd dir cmd (ecode,stdout,stderr) files =
 -- * Static content
 
 serveStaticFile path =
-  do b <- doesDirectoryExist path
-     let path' = if b then path </> "index.html" else path
-     serveStaticFile' path'
+  do --logPutStrLn $ "Serving static file "++path
+     b <- doesDirectoryExist path
+     if b
+       then if path `elem` ["","."] || last path=='/'
+            then serveStaticFile' (path </> "index.html")
+            else return (resp301 (path++"/"))
+       else serveStaticFile' path
 
 serveStaticFile' path =
   do let ext = takeExtension path
@@ -346,6 +350,8 @@ json200' f   = ok200' jsonUTF8 . encodeString . f . encode
 jsonp200' f  = ok200' jsonpUTF8 . encodeString . f . encode
 html200      = ok200' htmlUTF8 . encodeString
 resp204      = Response 204 [xo] "" -- no content
+resp301 url  = Response 301 [plain,xo,location url] $
+               "Moved permanently to "++url
 resp400 msg  = Response 400 [plain,xo] $ "Bad request: "++msg++"\n"
 resp404 path = Response 404 [plain,xo] $ "Not found: "++path++"\n"
 resp500 msg  = Response 500 [plain,xo] $ "Internal error: "++msg++"\n"
@@ -366,6 +372,7 @@ ct t cs = ("Content-Type",t++cs)
 csutf8 = "; charset=UTF-8"
 xo = ("Access-Control-Allow-Origin","*") -- Allow cross origin requests
      -- https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
+location url = ("Location",url)
 
 contentTypeFromExt ext =
   case ext of
@@ -426,7 +433,7 @@ removeDir dir =
      removeDirectory dir
 
 setDir path =
-  do logPutStrLn $ "cd "++show path
+  do --logPutStrLn $ "cd "++show path
      setCurrentDirectory path
 
 {-
