@@ -51848,7 +51848,6 @@ fun stair_carpet_N : N;
 fun stair_rod_N : N;
 fun staircase_N : N;
 fun stairhead_N : N;
-fun stairs_N : N;
 fun stairway_N : N;
 fun stairwell_N : N;
 fun stake_N : N;
