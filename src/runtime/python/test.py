@@ -2,6 +2,7 @@ import pgf
 import sys
 import sets
 import readline
+import locale
 
 sys.stdout.write("loading...")
 sys.stdout.flush();
@@ -42,6 +43,7 @@ class Completer():
 completer = Completer(source_lang)
 readline.set_completer(completer.complete)
 readline.parse_and_bind("tab: complete")
+locale.setlocale(locale.LC_CTYPE, "")
 
 while True:
 	try:
