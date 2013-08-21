@@ -1206,9 +1206,6 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 		                          heuristics, pyres->pool, out_pool);
 
 	if (pyres->res == NULL) {
-		Py_DECREF(pyres);
-		pyres = NULL;
-
 		PgfToken tok =
 			pgf_lexer_current_token(lexer);
 
@@ -1221,6 +1218,9 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 										PyString_AsString(py_tok));
 			Py_DECREF(py_tok);
 		}
+		
+		Py_DECREF(pyres);
+		pyres = NULL;
 	}
 
 	Py_XDECREF(py_lexer);
