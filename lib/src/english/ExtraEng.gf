@@ -174,6 +174,8 @@ lin
       mkClause "there" (agrP3 (fromAgr np.a).n) 
         (insertObj (\\_ => np.s ! NPAcc) (predV (regV "exist"))) ;
 
+   PurposeVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
+
 ------------
 --- obsolete: use UncNeg : Pol
 
