@@ -1367,7 +1367,7 @@ function add_oper(g,ci,el) {
 	}
 	check_oper(s,ok,cont)
     }
-    string_editor(el,"",check,true);
+    text_editor(el,"",check,true);
 }
 
 function edit_oper(ci,i) {
@@ -1381,7 +1381,7 @@ function edit_oper(ci,i) {
 	    }
 	    check_oper(s,ok,cont)
 	}
-	string_editor(el,show_oper(g.concretes[ci].opers[i]),check,true);
+	text_editor(el,show_oper(g.concretes[ci].opers[i]),check,true);
     }
 }
 
@@ -1458,7 +1458,7 @@ function draw_elin(g,igs,ci,f,dc,df) {
 	    }
 	    check_exp(s,check2);
 	}
-	string_editor(el,f.lin,check,true)
+	text_editor(el,f.lin,check,true)
     }
     function dl(cls) {
 	var fn=ident(f.fun)
@@ -1790,7 +1790,11 @@ function sort_list(list,olditems,key) {
     }
 }
 
-function string_editor(el,init,ok,async) {
+function text_editor(el,init,ok,async) {
+    string_editor(el,init,ok,async,true)
+}
+
+function string_editor(el,init,ok,async,multiline) {
     var p=el.parentNode;
     function restore() {
 	e.parentNode.removeChild(e);
@@ -1811,18 +1815,16 @@ function string_editor(el,init,ok,async) {
 	e.it.focus();
     }
     var m=empty_class("span","error_message");
-    /*if(init.indexOf("\n")>=0)*/ {
+    if(multiline || init.indexOf("\n")>=0) {
 	var rows=init.split("\n").length+1
 	var i=node("textarea",{"class":"string_edit",name:"it",
 			       rows:rows,cols:"60"},
 		   [text(init)]);
     }
-    /*
     else {
 	var i=node("input",{"class":"string_edit",name:"it",value:init},[]);
 	if(init.length>10) i.size=init.length+5;
     }
-    */
     var e=node("form",{},
 	       [i,
 		text(" "),
