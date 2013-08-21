@@ -1846,10 +1846,11 @@ pgf_get_tokens(PgfSequence seq,
 			tok_idx = 0;
 		}
 		default:
-			continue;
+			goto end;
 		}
 	}
 	
+end:;
 	GuString tokens = gu_string_buf_freeze(sbuf, pool);
 	
 	gu_pool_free(tmp_pool);
