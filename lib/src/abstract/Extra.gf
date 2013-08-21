@@ -82,4 +82,8 @@ abstract Extra = Cat ** {
 
     ExistsNP : NP -> Cl ;  -- there exists a number / there exist numbers
 
+-- infinitive for purpose AR 21/8/2013
+
+    PurposeVP : VP -> Adv ;  -- to become happy
+
 }
