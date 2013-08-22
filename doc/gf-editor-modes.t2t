@@ -17,7 +17,7 @@ welcome!
 automatic indentation and lets you run the GF Shell in an emacs buffer.
 See installation instructions inside.
 
-== Eclipse ==
+==Eclipse==
 
 [GF Eclipse Plugin http://www.grammaticalframework.org/eclipse/index.html]
 
@@ -70,6 +70,6 @@ GF=*.gf
 ```
 
 
-== Vim ==
+==Vim==
 
 [vim-gf https://github.com/gdetrez/vim-gf]
