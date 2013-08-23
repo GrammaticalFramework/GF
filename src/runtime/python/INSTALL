@@ -1,0 +1,5 @@
+You will need the python-devel package or similar.
+You must have installed the PGF C runtime (see ../c/INSTALL)
+
+$ python setup.py build
+$ sudo python setup.py install
