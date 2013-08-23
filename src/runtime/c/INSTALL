@@ -1,3 +1,5 @@
+You will need the package: libtool
+
 The compilation steps are:
 
 $ autoreconf -i
@@ -26,4 +28,3 @@ $ autoreconf -i
 $ ./configure
 $ make
 $ make install
-
