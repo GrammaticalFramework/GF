@@ -152,6 +152,7 @@ instance Binary Symbol where
   put (SymVar n l)       = putWord8 2 >> put (n,l)
   put (SymKS ts)         = putWord8 3 >> put ts
   put (SymKP d vs)       = putWord8 4 >> put (d,vs)
+  put SymNE              = putWord8 5
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 SymCat get get
@@ -159,6 +160,7 @@ instance Binary Symbol where
              2 -> liftM2 SymVar get get
              3 -> liftM  SymKS  get
              4 -> liftM2 (\d vs -> SymKP d vs) get get
+             5 -> return SymNE
              _ -> decodingError
 
 instance Binary PArg where

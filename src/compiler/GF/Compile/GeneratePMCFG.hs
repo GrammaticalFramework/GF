@@ -391,6 +391,10 @@ convertTerm opts sel ctype (Alts s alts)
                                    4
                                    (ppPatt Unqualified 0 p)
 
+convertTerm opts sel ctype (Q (m,f))
+  | m == cPredef &&
+    f == cNonExist                      = return (CStr [SymNE])
+
 convertTerm opts sel@(CProj l _) ctype (ExtR t1 t2@(R rs2))
                     | l `elem` map fst rs2 = convertTerm opts sel ctype t2
                     | otherwise            = convertTerm opts sel ctype t1

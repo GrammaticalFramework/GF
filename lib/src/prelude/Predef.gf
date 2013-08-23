@@ -36,6 +36,6 @@ resource Predef = {
   oper toStr  : (L : Type) -> L -> Str = variants {} ; -- find the "first" string
   oper mapStr : (L : Type) -> (Str -> Str) -> L -> L = variants {} ; 
                -- map all strings in a data structure; experimental ---
+  oper nonExist : Str = variants {} ;  -- a placeholder for non-existant morphological forms
 
 } ;
-

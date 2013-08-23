@@ -60,6 +60,7 @@ data Symbol
   | SymVar {-# UNPACK #-} !Int {-# UNPACK #-} !Int
   | SymKS [Token]
   | SymKP [Token] [Alternative]
+  | SymNE                           -- non exist
   deriving (Eq,Ord,Show)
 data Production
   = PApply  {-# UNPACK #-} !FunId [PArg]

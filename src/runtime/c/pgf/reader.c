@@ -717,6 +717,13 @@ pgf_read_symbol(PgfReader* rdr)
 		}
 		break;
 	}
+	case PGF_SYMBOL_NE: {
+		gu_new_variant(PGF_SYMBOL_NE,
+		               PgfSymbolNE,
+		               &sym, rdr->opool);
+		gu_return_on_exn(rdr->err, gu_null_variant);
+		break;
+	}
 	default:
 		pgf_read_tag_error(rdr);
 	}

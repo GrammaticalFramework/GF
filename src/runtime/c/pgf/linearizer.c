@@ -532,6 +532,10 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 				}
 				break;
 			}
+			case PGF_SYMBOL_NE: {
+				// Nothing to be done here
+				break;
+			}
 			default:
 				gu_impossible(); 
 			}

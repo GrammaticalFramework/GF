@@ -83,6 +83,8 @@ primitives = Map.fromList
                                          [(Explicit,varL,typeType),(Explicit,identW,Vr varL)] typeStr []))) Nothing)
   , (cMapStr   , ResOper (Just (noLoc (mkProd -- (L : Type)  -> (Str -> Str) -> L -> L
                                          [(Explicit,varL,typeType),(Explicit,identW,mkFunType [typeStr] typeStr),(Explicit,identW,Vr varL)] (Vr varL) []))) Nothing)
+  , (cNonExist , ResOper (Just (noLoc (mkProd -- Str
+                                         [] typeStr []))) Nothing)
   ]
   where
     fun from to = oper (mkFunType from to)
