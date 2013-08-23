@@ -10,7 +10,7 @@ import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
 import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
 import GF.Grammar.PatternMatch(matchPattern,measurePatt)
 import GF.Grammar.Lockfield(unlockRecord,lockLabel,isLockLabel,lockRecType)
-import GF.Compile.Compute.Value hiding (Predefined(..))
+import GF.Compile.Compute.Value hiding (Error)
 import GF.Compile.Compute.Predef(predef,predefName,delta)
 import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
 import GF.Data.Operations(Err,err,errIn,maybeErr,combinations,mapPairsM)
@@ -169,6 +169,8 @@ vconcat vv@(v1,v2) =
     case vv of
       (VString "",_) -> v2
       (_,VString "") -> v1
+      (VApp NonExist _,_) -> v1
+      (_,VApp NonExist _) -> v2
       _ -> VC v1 v2
 
 proj l v | isLockLabel l = return (VRec [])
@@ -243,6 +245,8 @@ glue env (v1,v2) = glu v1 v2
           (v1,VC va vb) -> VC (glu v1 va) vb
           (VS (VV ty pvs vs) vb,v2) -> VS (VV ty pvs [glu v v2|v<-vs]) vb
           (v1,VS (VV ty pvs vs) vb) -> VS (VV ty pvs [glu v1 v|v<-vs]) vb
+          (v1@(VApp NonExist _),_) -> v1
+          (_,v2@(VApp NonExist _)) -> v2
 --        (v1,v2) -> ok2 VGlue v1 v2
           (v1,v2) -> error . render $
                      ppL loc (hang (text "unsupported token gluing:") 4

@@ -180,7 +180,8 @@ typedef enum {
 	PGF_SYMBOL_LIT,
 	PGF_SYMBOL_VAR,
 	PGF_SYMBOL_KS,
-	PGF_SYMBOL_KP
+	PGF_SYMBOL_KP,
+	PGF_SYMBOL_NE
 } PgfSymbolTag;
 
 typedef struct {
@@ -208,6 +209,8 @@ typedef struct PgfSymbolKP
 	 * symbol. */
 } PgfSymbolKP;
 
+typedef struct {
+} PgfSymbolNE;
 
 typedef GuSeq PgfSequence; // -> PgfSymbol
 typedef GuList(PgfSequence) PgfSequences;

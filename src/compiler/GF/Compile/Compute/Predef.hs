@@ -39,6 +39,13 @@ instance Predef String where
 instance Predef Value where
   toValue = id
   fromValue = return
+
+instance Predef Predefined where
+  toValue p = VApp p []
+  fromValue v = case v of
+                  VApp p _ -> return p
+                  _        -> fail $ "Expected a predefined constant, got something else"
+
 {-
 instance (Predef a,Predef b) => Predef (a->b) where
   toValue f = VAbs Explicit (varX 0) $ Bind $ err bug (toValue . f) . fromValue
@@ -70,22 +77,23 @@ predefList =
      -- cShow, cRead, cMapStr, cEqVal
      (cError,Error),
      -- Canonical values:
-     (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInt,Int),(cInts,Ints)]
+     (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInt,Int),
+     (cInts,Ints),(cNonExist,NonExist)]
     --- add more functions!!!
 
 delta f vs =
     case f of
-      Drop    -> ap2 (drop::Int->String->String)
-      Take    -> ap2 (take::Int->String->String)
-      Tk      -> ap2 tk
-      Dp      -> ap2 dp
-      EqStr   -> ap2 ((==)::String->String->Bool)
-      Occur   -> ap2 occur
-      Occurs  -> ap2 occurs
-      ToUpper -> ap1 (map toUpper)
-      ToLower -> ap1 (map toLower)
-      IsUpper -> ap1 (all isUpper)
-      Length  -> ap1 (length::String->Int)
+      Drop    -> fromNonExist vs NonExist (ap2 (drop::Int->String->String))
+      Take    -> fromNonExist vs NonExist (ap2 (take::Int->String->String))
+      Tk      -> fromNonExist vs NonExist (ap2 tk)
+      Dp      -> fromNonExist vs NonExist (ap2 dp)
+      EqStr   -> fromNonExist vs PFalse   (ap2 ((==)::String->String->Bool))
+      Occur   -> fromNonExist vs PFalse   (ap2 occur)
+      Occurs  -> fromNonExist vs PFalse   (ap2 occurs)
+      ToUpper -> fromNonExist vs NonExist (ap1 (map toUpper))
+      ToLower -> fromNonExist vs NonExist (ap1 (map toLower))
+      IsUpper -> fromNonExist vs PFalse   (ap1 (all isUpper))
+      Length  -> fromNonExist vs (0::Int) (ap1 (length::String->Int))
       Plus    -> ap2 ((+)::Int->Int->Int)
       EqInt   -> ap2 ((==)::Int->Int->Bool)
       LessInt -> ap2 ((<)::Int->Int->Bool)
@@ -97,6 +105,7 @@ delta f vs =
       Ints    -> canonical
       PFalse  -> canonical
       PTrue   -> canonical
+      NonExist-> canonical
   where
     canonical = delay
     delay = return (VApp f vs) -- wrong number of arguments
@@ -108,6 +117,10 @@ delta f vs =
     ap2 f = case vs of
              [v1,v2] -> toValue `fmap` (f `fmap` fromValue v1 `ap` fromValue v2)
              _ -> delay
+
+    fromNonExist vs a b
+      | null [v | v@(VApp NonExist _) <- vs] = b
+      | otherwise                            = return (toValue a)
 
 --  unimpl id = bug $ "unimplemented predefined function: "++showIdent id
 --  problem id vs = bug $ "unexpected arguments: Predef."++showIdent id++" "++show vs

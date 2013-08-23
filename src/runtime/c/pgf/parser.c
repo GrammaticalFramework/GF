@@ -163,6 +163,8 @@ pgf_prev_extern_sym(PgfSymbol sym)
 		return *((PgfSymbol*) (((PgfSymbolLit*) i.data)+1));
 	case PGF_SYMBOL_VAR:
 		return *((PgfSymbol*) (((PgfSymbolVar*) i.data)+1));
+	case PGF_SYMBOL_NE:
+		return *((PgfSymbol*) (((PgfSymbolNE*) i.data)+1));
 	default:
 		gu_impossible();
 		return gu_null_variant;
@@ -1410,6 +1412,10 @@ pgf_parsing_symbol(PgfParseState* before, PgfParseState* after,
 	case PGF_SYMBOL_VAR:
 		// XXX TODO proper support
 		break;
+	case PGF_SYMBOL_NE: {
+		// Nothing to be done here
+		break;
+	}
 	default:
 		gu_impossible();
 	}
@@ -2743,6 +2749,7 @@ pgf_parser_leftcorner_item(PgfLeftcornerFn* clo, PgfItem* item)
 				break;
 			}
 			case PGF_SYMBOL_LIT:
+			case PGF_SYMBOL_NE:
 				// Nothing to be done here
 				break;
 			case PGF_SYMBOL_VAR:

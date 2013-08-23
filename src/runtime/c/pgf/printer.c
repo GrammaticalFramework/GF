@@ -258,6 +258,10 @@ pgf_print_symbol(PgfSymbol sym, GuWriter *wtr, GuExn *err)
 		gu_printf(wtr, err, "<%d,$%d>", svar->d, svar->r);
 		break;
 	}
+	case PGF_SYMBOL_NE: {
+		gu_puts("nonExist", wtr, err);
+		break;
+	}
 	default:
 		gu_impossible();
 	}

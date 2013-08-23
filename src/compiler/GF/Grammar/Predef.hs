@@ -21,6 +21,7 @@ module GF.Grammar.Predef
           , cString
           , cVar
           , cInts
+          , cNonExist
           , cPBool
           , cErrorType
           , cOverload
@@ -93,6 +94,9 @@ cOverload = identC (BS.pack "overload")
 
 cUndefinedType :: Ident
 cUndefinedType = identC (BS.pack "UndefinedType")
+
+cNonExist :: Ident
+cNonExist = identC (BS.pack "nonExist")
 
 isPredefCat :: Ident -> Bool
 isPredefCat c = elem c [cInt,cString,cFloat]

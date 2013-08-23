@@ -35,7 +35,7 @@ oper
 
 -- Missing form.
 
-  nonExist : Str = variants {} ;
+  nonExist : Str = Predef.nonExist;
 
 -- Optional string with preference on the string vs. empty.
  
