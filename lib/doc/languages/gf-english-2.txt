@@ -1,4 +1,4 @@
 
 
-+Syntax: English-specific section+
++Syntax: English-specific rules+
 

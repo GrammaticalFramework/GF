@@ -7,7 +7,13 @@ Aarne Ranta
 %!postproc(html) : "#BECE" "<center>"
 %!postproc(tex)  : "#ENCE" "end{center}"
 %!postproc(html) : "#ENCE" "</center>"
+%!postproc(tex)  : "#HR" "hline"
+%!postproc(html) : "#HR" "<hr>"
 
+
+Also available for [Chinese gf-chinese.html] [Finnish gf-finnish.html] [French gf-french.html] [German gf-german.html] [Swedish gf-swedish.html]
+
+#HR
 
 **Digital grammars** are grammars usable by computers, so that they can mechanically perform 
 tasks like interpreting, producing, and translating languages. The **GF Resource Grammar Library**
@@ -47,7 +53,7 @@ in question.
 
 
 
-+Words: general section+
++Words: general rules+
 
 Categories of words are called **lexical categories**.
 The language-specific variation in lexical categories is due to **morphology**, that is, the different forms that
@@ -131,7 +137,7 @@ The following table summarizes the most important semantic types that will be us
 
 || name  | text name              | example             | definition ||
 | ``e``  | entity                 | //Paris//           | (primitive)
-| ``t``  | proposition            | //Paris is large//  | (primitive)
+| ``t``  | proposition ("truth value")  | //Paris is large//  | (primitive)
 | ``q``  | question               | //is Paris large//  | (primitive)
 | ``p``  | top-level phrase       | //Paris is large.// | (primitive)
 | ``n``  | substantive ("noun")   | //man//             | ``e -> t`` 
