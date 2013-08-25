@@ -1,4 +1,3 @@
-English: A Digital Grammar
 Aarne Ranta
 %%date
 
@@ -365,26 +364,4 @@ a feature of the other words it combines with, rather than as a word of its own.
 the determiner //the// in Swedish just selects an inflectional form of the noun that it is applied to:
 "the" + //bil// = //bilen// ("the car").
 
-
-
-//BEGIN English//
-
-+Words: English-specific section+
-
-
-
-//END English//
-
-
-
-+Syntax: general section+
-
-
-//BEGIN English//
-
-+Syntax: English-specific section+
-
-
-
-//END English//
 
