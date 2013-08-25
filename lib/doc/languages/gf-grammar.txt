@@ -1,0 +1,390 @@
+English: A Digital Grammar
+Aarne Ranta
+%%date
+
+
+%!Encoding:utf8
+%!postproc(tex)  : "#BECE" "begin{center}"
+%!postproc(html) : "#BECE" "<center>"
+%!postproc(tex)  : "#ENCE" "end{center}"
+%!postproc(html) : "#ENCE" "</center>"
+
+
+**Digital grammars** are grammars usable by computers, so that they can mechanically perform 
+tasks like interpreting, producing, and translating languages. The **GF Resource Grammar Library**
+(RGL) is a set of digital grammars which, at the time of writing, covers 28 languages. These grammars
+are written in GF, **Grammatical Framework**, which is a programming language designed for
+writing digital grammars. 
+
+The grammars in the RGL have been written by linguists, computer scientists, and
+programmers who know the languages thoroughly, both in practice and in theory. Almost 50 persons from
+around the world have contributed to this work, and ongoing projects are expected to give us many new
+languages soon. 
+
+The leading idea of the RGL is that different languages share large parts of their grammars, despite
+their observed differences. One important thing that is shared are the **categories**, that is, the
+types of words and expressions. For instance, every language in RGL has a category of **nouns**, but 
+what exactly a noun is varies from language to language. Thus English nouns have four forms
+(singular and plural, nominative and genitive, as in //house, houses, house's, houses'//) 
+whereas French nouns have just two forms (singular and plural //maison, maisons//, "house"), but they also
+have a piece of information that English nouns don't have, namely gender (masculine and feminine).
+Chinese nouns have just one form (房子 //fangzi// "house"), which is used for both singular and plural, but in
+addition, a little bit like the French gender, they have a **classifier** (间 //jian// for the word 
+"house"). German nouns have 8 forms and a gender, Finnish nouns have 26 forms, and so on.
+
+This document provides a tour of the digital grammars in the RGL. It is intended to serve at least three kinds of readers.
+In the decreasing order of the number of potential readers,
+- those who are intested to learn the grammar of a particular language,
+- those who want to use the RGL for a programming task,
+- those who want to write an RGL grammar for a new language.
+
+
+The document has two main parts: **Words** and **Syntax**. Both parts have a **general section**,
+explaining the RGL structure from a multilingual perspective, followed by a **specific section**,
+going into the details of the grammar in a particular language. The general sections are the same
+in all languages. The specific sections differ in length and detail, depending on the complexity of
+the language and on what aspects are particularly interesting or problematic for the language 
+in question. 
+
+
+
++Words: general section+
+
+Categories of words are called **lexical categories**.
+The language-specific variation in lexical categories is due to **morphology**, that is, the different forms that
+one and the same word can have in different contexts. If we look at the 28 languages in the RGL, we can
+see that the classification of words is common to all the languages, and the
+differences are in morphology. In this chapter, we will explain all lexical categories and give an overview
+of their morphological aspects. Details of morphology for each language is given in the language-specific documents.
+
+
+++Main parts of speech: content words++
+
+The most important categories of words are given in the following table. More precisely, we will give the
+categories of **content words**, which, so so say, describe things and events in the real world. 
+Content words are distinguished from **structural words**, whose purpose is to combine words into syntactic
+structures. Each category of content words may have thousands of words, and new words can be introduced
+continuously; therefore, these categories are also called **open categories**. In contrast, structural
+words are very few (maybe some dozens), and new ones are very seldom added.
+
+Each category has a GF name, that is, a short symbolic name, which is the name actually used in the GF program code.
+In the text we usually use the text names, but will sometimes find the GF names handy to use as well, since they
+give us a short and precise way to state grammatical rules.
+
+
+===Table: categories of content words===
+
+|| GF name  | text name        | example    | inflectional features               | inherent features  | semantics ||
+| ``N``     | noun             | //house//  | number, case                        | gender, classifier | ``n`` = ``e -> t``
+| ``PN``    | proper name      | //Paris//  | case                                | gender             | ``e``
+| ``A``     | adjective        | //blue//   | gender, number, case, degree        | position           | ``a`` = ``e -> t``
+| ``V``     | verb             | //sleep//  | number, person, tense, aspect, mood | subject case       | ``v`` = ``e -> t``
+| ``Adv``   | adverb           | //here//   | (none)                              | adverb type (place, time, manner) | ``adv`` = ``v -> v``
+| ``AdA``   | adadjective      | //very//   | (none)                              | (none) | ``a -> a``
+
+
+In addition to the names and examples, the table lists the **inflectional features** and **inherent features**
+typical of each category. Inflectional features are those that create different forms of words. For instance,
+French nouns have forms for number (singular and plural) - or, as one often says, 
+French nouns are //inflected for number//. In contrast to number, the gender does not give rise to different forms
+of French nouns: //maison// ("house") //is// feminine, inherently, and there is no masculine form of //maison//.
+(Of course, there are some nouns that do have masculine and feminine forms, such as //étudiant, étudiante// 
+"male/female student", but this only applies to a minority of French nouns and shouldn't be taken as an
+indication of an inflectional gender.)
+
+
+++Semantics of the categories++
+
+//Notice: this section, and all "semantics" columns can be safely skipped, because//
+//the semantics types do not belong to the RGL proper, and don't appear anywhere in the code.//
+//Their understanding can however be useful, in particular for programmers who want to use the RGL to//
+//express logical relations, ontologies, etc//
+
+The last column in the category table shows the **semantic type** corresponding to each category. This type gives an indication
+of the kind of meaning that the word of each type has. Starting from the simplest meanings, ``e`` is the type of **entities** that serve as meanings of proper names. Nouns, adjectives, and verbs have the type ``e -> t``, which means 
+**functions from entities to propositions** (where the symbol ``t`` for propositions comes from **truth values**). Such a function can be **applied** to an entity to yield a proposition. 
+The type ``t`` itself is reserved for sentences, which are formed in syntax by putting words together.
+For example, the sentence //Paris is large//
+involves an application of the adjective //large// to //Paris//, and yields the value true if //large// applies to //Paris//.
+//Paris is a capital// works in the similar way with the noun //capital//, and //Paris grows// with the verb //grow//.
+
+The semantic types will be useful in syntax to explain the ways in which expressions are combined. They are also useful in
+explaining some differences between categories. For example, the categories ``PN`` and ``N`` are different, because a ``PN``
+refers to an entity but an ``N`` expresses a property of an entity. Of course, the semantic types alone do not explain
+all distinctions of categories: nouns, verbs, and adjectives have the same semantic type, but different syntactic properties.
+We will occasionally use the **type synonyms** ``n``, ``a``, and ``v`` instead of ``e -> t``, to give a clearer structure to some semantic types. But from the semantic point of view, all these types are one and the same.
+
+We should notice that the semantic types given here are quite rough and do not give a full picture of the nuances. For instance, many adjectives work in a different way than straightforwardly yielding truth values from entities. An example is 
+the adjective //large//. Being a //large mouse// is different (in terms of absolute size) from being //a large elephant//, 
+and a logical type for expressing this is ``n -> e -> t``, with an argument ``n`` indicating the domain of comparison (such as
+mice or elephants).
+
+Another problem is that defining
+verbs as ``e -> t`` suggests that all verbs apply to all kinds of entities. But there are combinations of entities and
+verbs that make no sense semantically. For example, the verb //sleep// is only meaningful for animate entities, and
+a sentence like //this book sleeps//, if not senseless, requires some kind of a metaphorical interpretation 
+of //sleep//.
+
+The following table summarizes the most important semantic types that will be used. We use more primitive types than most traditional approaches, which reduce everything to ``e`` and ``t``. For instance, we can't see any way to reduce the top-level category ``p`` of phrases to these types. From a type-theoretical perspective, ``p`` is the category of **judgements**, whereas
+``e`` and ``t`` operate on the lower level of propositions. Some more types are defined in the category tables.
+
+===Table: semantic types===
+
+|| name  | text name              | example             | definition ||
+| ``e``  | entity                 | //Paris//           | (primitive)
+| ``t``  | proposition            | //Paris is large//  | (primitive)
+| ``q``  | question               | //is Paris large//  | (primitive)
+| ``p``  | top-level phrase       | //Paris is large.// | (primitive)
+| ``n``  | substantive ("noun")   | //man//             | ``e -> t`` 
+| ``a``  | quality ("adjective")  | //large//           | ``e -> t`` 
+| ``v``  | action ("verb")        | //sleep//           | ``e -> t`` 
+| ``np`` | quantifier ("noun phase") | //every man//    | ``(e -> t) -> t`` 
+
+
+
+
+++Syntactic implications++
+
+The features given in the table are rough indications for what one can expect in different languages. Thus, 
+for instance, some languages have no gender at all, and hence their nouns and adjectives won't have
+genders either. But the table is a rather good generalization from the 28 language of the RGL: we can
+safely say that, if a language //does// have gender, then nouns have an inherent gender and adjectives have
+a variable gender. This is not a coincidence but has to do with **syntax**, that is, the combination of words 
+into complex expressions. Thus, for instance, nouns are combined with adjectives that modify them, so that
+#BECE
+//blue// + //house// = //blue house//
+#ENCE
+Now, adjectives have to be combinable with all nouns, independently of the gender of the noun: there are no
+separate classes of masculine and feminine adjectives (again, with some apparent exceptions, such as //pregnant//,
+but even these adjectives have at least grammatically correct metaphoric uses with nouns of other genders).
+This means that we must be able to pick the gender of the adjective in agreement with the gender of the noun
+that it modifies, which means that the gender of adjectives must be inflectional. Thus in French the adjective
+for "blue" is //bleu//, with the feminine form //bleue//, and works as follows:
+#BECE
+//bleu// + //maison// = //maison bleue// ("blue house", feminine)
+
+//bleu// + //livre// = //livre bleu// ("blue book", masculine)
+#ENCE
+French also provides examples of adjectives with different **positions**: //bleu// is put after the noun
+it modifies, whereas //vieux// ("old") is put before the noun: //vieux livre// ("old book").
+
+We will return to syntax later. At this point, it is sufficient to say that the morphological features of
+words are not there just for nothing, but they play an important role in how words are combined in syntax.
+In particular, they determine to a great extent how **agreement** works, that is, how the features of
+words depend on each other in combinations.
+
+
+++Subcategorization++
+
+In addition to the features needed for inflection and agreement, the lexicon must give information about //what//
+combinations are possible with each word. For most nouns and adjective, this is simple: a noun can be modified
+by an adjective, for instance, and there is a uniform syntax rule for this. However, there are some nouns and adjectives
+that are trickier, because they don't correspond to simple things but to **relations**. For instance, //brother// is
+a **relational noun**, since its primary usage is not alone bur in phrases like //brother of this man//. 
+In the same way, //similar// 
+is a **relational adjective**, since its primary use is in phrases like //similar to this//. The additional
+term attached to these words is called its **complement**; thus //this// is the complement in //similar to this//.
+The categories of words that take complements are called **subcategories**. They are morphologically similar to
+the main categories, but need extra information for the usage of complements.
+
+The RGL has categories
+for relational nouns and adjectives, and nouns also have a variant with two complements
+(e.g. //distance from Paris to Munich//).
+From the semantic point of you, complements are called **places**, and appear as supplementary
+argument places in semantic types. Thus the number of places
+is one plus the number of complements, so that the first place is reserved for the subject of a sentence
+and the rest of the places for the complements.
+
+The following table shows the categories of relational nouns and adjectives in the RGL. The inflectional and 
+inherent features are the same as for one-place nouns and adjectives, but for each complement, the lexicon
+must tell what preposition, if any, is needed to attach that complement. For instance, the preposition for
+//similar// is //to//, whereas the preposition for //different// is //from//. In languages with richer case
+systems (such as German, Latin, and Finnish), the complement information also determines the case (genitive, 
+dative, ablative, and so on).
+
+
+===Table: subcategories of nouns and adjectives===
+
+|| GF name  | text name                 | example                             | inherent complement features  | semantics ||
+| ``N2``    | two-place noun            | //brother// (//of someone//         | case or preposition | ``e -> n``
+| ``N3``    | three-place noun          | //distance// (//from some place to some place//    | case or preposition  | ``e -> e -> n``
+| ``A2``    | two-place adjective       | //similar// (//to something//         | case or preposition | ``e -> e -> t``
+
+
+Verbs show a particularly rich variation in subcategorization. The most familiar distinction is the one between
+**intransitive** and **transitive** verbs: intransitive verbs need only a **subject** (like //she// in //she sleeps//),
+whereas transitive verbs also need an **object** (like //him// in //she loves him//). Our category ``V`` obviously includes 
+intransitive verbs. But there is no category for transitive verbs in the RGL. Instead, we have a more general category of
+**two-place verbs**, which includes transitive verbs but also verbs that need a preposition (such as //at// in 
+//she looks at him//). Just like for relational nouns and adjectives, the complement of a two-place verb has variations
+in cases and prepositions.
+
+The following table shows the subcategories of verbs in the RGL. The list is long but it may still be incomplete. For
+example, there are no four-place verbs (//she paid him one million pounds for the house//). Such constructions can
+be built, as we will see later, by using for instance a ``V3`` verb with an additional adverb. But we can envisage 
+future additions of more subcategories for verbs.
+
+
+===Table: subcategories of verbs===
+
+|| GF name  | text name                 | example                             | inherent complement features | semantics ||
+| ``V2``    | two-place verb            | //love// (//someone//               | case or preposition | ``e -> e -> t``
+| ``V3``    | three-place verb          | //give// (//something to someone//) | two cases or prepositions | ``e -> e -> e -> t``
+| ``VV``    | verb-complement verb      | //try// (//to do something//)       | infinitive form | ``e -> v -> t``
+| ``VS``    | sentence-complement verb  | //know// (//that something happens//)      | sentence mood | ``e -> t -> t``
+| ``VQ``    | question-complement verb  | //ask// (//what happens//)            | question mood | ``e -> q -> t``
+| ``VA``    | adjective-complement verb | //become// (//something, e.g. old//)                | adjective case | ``e -> a -> t``
+| ``V2V``   | two-place verb-complement verb  | //force// (//someone to do something//)  | infinitive form, control type | ``e -> e -> v -> t``
+| ``V2S``   | two-place sentence-complement verb  | //tell// (//someone that something happens//)  | object case, sentence mood | ``e -> e -> t -> t``
+| ``V2Q``   | two-place question-complement verb  | //ask// (//someone what happens//)  | object case, question mood | ``e -> e -> q -> t``
+| ``V2A``   | two-place adjective-complement verb  | //paint// (//something in some colour, e.g. blue//)  | object and adjective case | ``e -> e -> a -> t``
+
+
+Of particular interest here is the infinitive form in ``VV`` and ``V2V``. For instance, English has three such forms: bare infinitive (//I must sleep//), (infinitive with //to// (//I try to sleep//), and the //ing// form (//I start sleeping//).
+
+The traditional English grammar makes a distinction between **auxiliary verbs** (such as //must//) and other verb-complement
+verbs (such as //try// and //start//), but this distinction is very specific to English (and some other Germanic languages)
+and hard to maintain in a multilingual setting like the RGL. Thus we make the distinction on the level of complement features
+and not on the level of categories.
+
+The **mood** of complement sentences and questions is relevant in languages like French and Ancient Greek, where some verbs may require sentences in the indicative, some in another mood such as subjunctive, conjunctive, or optative. English has only a few remnants of conjunctives, such as with the verb //suggest// as used in //I suggest that this part be struck out//.
+
+The type of **control** in ``V2V`` is interesting but subtle. It decides whether the verb complement of the verb agrees to the
+subject or the object. An example of a **subject-control verb** is //promise//: //I promised her to wash myself//.
+**Object-control verbs** seem to be more common: //I forced her to wash herself//, //I made her wash herself//, etc.
+Semantically, the type ``e -> e -> v -> t`` works for both of them. However, if you consider the proposition formed by applying
+them, then the two kinds of verbs apply their argument verb to different arguments:
+- ``promise subj obj verb`` is about the proposition ``verb subj``
+- ``force subj obj verb`` is about the proposition ``verb obj``
+ 
+
+Hence it would make sense to distinguish between subject-control and object-control ``V2V``'s on the category level rather 
+than with a complement feature. The agreement behaviour would them become simpler to describe, and, what is more important,
+the semantic behaviour would be predictable from the category alone.
+
+As a final thing about subcategorizations, notice that one and the same verb can have different categories. In the above
+table, //ask// appears in both ``VQ`` and ``V2Q``. Now, these uses are related, in the sense that to //ask something// means
+the same as to //ask someone something//. But in some other cases, the meaning can be completely different. For instance,
+//walk// in ``V2`` (as in //I walk the dog//) is different from //walk// in ``V`` (as in //the dog walks//). The ``V2`` is in
+this case **causative** with respect to the ``V``: I cause the walking of the dog. From the multilingual perspective, it is
+just a coincidence that English uses the same verb for the intransitive and the causative meanings. In many other languages, 
+different words would be used. And so would English do for many other verbs: one cannot say //I eat the dog// to express that I make the dog eat; the verb //feed// is used instead.
+
+
+
+++Structural words++
+
+We have defined the categories of content along three criteria:
+- **morphological**: words belonging to the same category must have the same types of inflectional and inherent features
+- **syntactic**: words belonging to the same category must have the same syntactic combination possibilities
+- **semantic**: words belonging to the same category must have the same semantic type
+
+
+Thus morphological criteria are, in most languages, enough to tell apart ``N``, ``A``, ``V``, and ``Adv``. 
+Syntactic criteria are appealed to when distinguishing the subcategories of nouns, adjectives, and verbs. 
+Semantic criteria are often obeyed as well, although we have noticed that finer distinctions could be useful
+for subject vs. object control verbs and for different kinds of adjectives.
+
+For structural words, following the same criteria leads to a high number of categories, higher than in many traditional
+grammars. Thus, for instance the category of **pronouns** is divided to at least, 
+personal pronouns (//he//), determiners (//this//),
+interrogative pronouns (//who//), and relative pronouns (//that//). There is no way to see all these classes as subcategories
+of a uniform class of pronouns, as we did with the verb subcategories: for verbs, there was a uniform
+set of features, to which only complement feature information had to be added, but the same does not concern the things
+traditionally called "pronouns".
+
+The following tables give a summary of the structural word categories of the RGL, equipped with morphological and
+semantic information as we did for content words. The full details will be best explained in the sections on syntax,
+i.e. on how the structural words are actually used for building structures.
+
+
+===Table: categories of structural words===
+
+**Building noun phrases**
+
+|| GF name  | text name         | example    | inflectional features   | inherent features      | semantics ||
+| ``Det``   | determiner        | //every//  | gender, case            | number, definiteness   | ``det`` = ``n -> (e -> t) -> t``
+| ``Quant`` | quantifier        | //this//   | gender, number, case    | definiteness           | ``num -> det`` 
+| ``Predet`` | predeterminer    | //only//   | gender, number, case    | (none)                 | ``np -> np``
+| ``Pron``  | personal pronoun  | //he//     | case, possessives       | gender, number, person | ``e``
+
+The most important thing to notice is the distinction between ``Det`` and ``Quant``. The latter covers determiners that have
+"two forms", for both numbers, such as //this-these// and //that-those//. The former covers determiners with a fixed number,
+such as //every// (singular). 
+
+
+
+**Building number expressions**
+
+|| GF name  | text name         | example    | inflectional features   | inherent features      | semantics ||
+| ``Num``   | number expression | //five//   | gender, case            | number                 | ``num`` = ``det`` 
+| ``Card``  | cardinal number  | //five//      | gender, case          | number                 | ``num`` = ``det`` 
+| ``Ord``   | ordinal number   | //fifth//     | gender, number, case  | (none)                 | ``e -> t``
+| ``Numeral`` | verbal numeral        | //five//      | gender, case, card/ord | number         | ``num``
+| ``Digits`` | numeral in digits      | //511//       | card/ord       | number                 | ``num``
+| ``AdN``   | numeral-modifying adverb | //almost// | (none)           | (none)                 | ``num -> num``
+
+//Notice: under// ``Numeral``, //there is a category structure of its own, which is however of a technical//
+//nature and needs usually no attention by the library users.//
+
+
+**Building interrogatives and relatives**
+
+|| GF name  | text name         | example    | inflectional features   | inherent features      | semantics ||
+| ``IP``    | interrogative pronoun | //who// | case                   | gender, number         | ``(e -> t) -> q``   
+| ``IDet``  | interrogative determiner | //how many// | gender, case   | number                 | ``n -> (e -> t) -> q``
+| ``IQuant`` | interrogative quantifier | //which// | gender, number, case   | (none)           | ``num -> n -> (e -> t) -> q``
+| ``IAdv``  | interrogative adverb | //why//   | (none)                | (none)                 | ``t -> q``
+| ``RP``    | relative pronoun | //that// | gender, number, case       | gender, number         | ``(e -> t) -> rel``
+
+The interrogative pronoun structure replicates a part of the determiner structure. For instance, ``IQuant`` such as
+//which// is usable for both singular and plural, whereas //IDet// has a fixed number: //how many// is plural.
+
+
+**Combining sentences**
+
+|| GF name  | text name         | example    | inflectional features   | inherent features      | semantics ||
+| ``Conj``  | conjunction      | //and//       | (none)                | number; continuity     | ``t -> t -> t``
+| ``PConj`` | phrasal conjunction  | //therefore// | (none)            | (none)                 | ``p -> p``
+| ``Subj``  | subjunction      | //if//        | (none)                | mood                   | ``t -> adv``
+
+
+**Adverbial expressions**
+
+|| GF name  | text name         | example    | inflectional features   | inherent features      | semantics ||
+| ``AdV``   | sentential adverb | //always//   | (none)                | (none)                 | ``v -> v``
+| ``CAdv``  | comparative adverb | //as//      | (none)                | (none)                 | ``a -> e -> a``
+| ``Prep``  | preposition      | //through//   | (none)                | case, position         | ``np -> adv``
+
+
+One more thing to be taken into account is that many of the "structural word categories" also admit of complex
+expressions and not only words. That is, the RGL has not only words in these categories but also syntactic
+rules for building more expressions. Thus for instance //these five// is a ``Det`` built from the ``Quant`` //this// 
+and the ``Num`` //five//. It is also common that a "structural word" in a particular language is realized as 
+a feature of the other words it combines with, rather than as a word of its own. For instance,
+the determiner //the// in Swedish just selects an inflectional form of the noun that it is applied to:
+"the" + //bil// = //bilen// ("the car").
+
+
+
+//BEGIN English//
+
++Words: English-specific section+
+
+
+
+//END English//
+
+
+
++Syntax: general section+
+
+
+//BEGIN English//
+
++Syntax: English-specific section+
+
+
+
+//END English//
+
