@@ -3,6 +3,7 @@ Aarne Ranta
 %%date
 
 
+%!Encoding:utf8
 %!postproc(tex)  : "#BECE" "begin{center}"
 %!postproc(html) : "#BECE" "<center>"
 %!postproc(tex)  : "#ENCE" "end{center}"
@@ -59,12 +60,12 @@ give us a short and precise way to state grammatical rules.
 
 ===Table: categories of content words===
 
-|| GF name  | text name        | example    | inflectional features               | inherent features  ||
-| ``N``     | noun             | //house//  | number, case                        | gender, classifier
-| ``PN``    | proper name      | //Paris//  | case                                | gender
-| ``A``     | adjective        | //blue//   | gender, number, case, degree        | position
-| ``V``     | verb             | //sleep//  | number, person, tense, aspect, mood | subject case
-| ``Adv``   | adverb           | //here//   | (none)                              | adverb type (place, time, manner)
+|| GF name  | text name        | example    | inflectional features               | inherent features  | semantics ||
+| ``N``     | noun             | //house//  | number, case                        | gender, classifier | ``n`` = ``e -> t``     
+| ``PN``    | proper name      | //Paris//  | case                                | gender             | ``e``
+| ``A``     | adjective        | //blue//   | gender, number, case, degree        | position           | ``a`` = ``e -> t``
+| ``V``     | verb             | //sleep//  | number, person, tense, aspect, mood | subject case       | ``v`` = ``e -> t``
+| ``Adv``   | adverb           | //here//   | (none)                              | adverb type (place, time, manner) | ``adv`` = ``(e -> t) -> e -> t``
 
 
 In addition to the names and examples, the table lists the **inflectional features** and **inherent features**
@@ -147,10 +148,10 @@ dative, ablative, and so on).
 
 ===Table: subcategories of nouns and adjectives===
 
-|| GF name  | text name                 | example                             | inherent complement features  ||
-| ``N2``    | two-place noun            | //brother// (//of someone//         | case or preposition
-| ``N3``    | three-place noun          | //distance// (//from some place to some place//    | case or preposition
-| ``A2``    | two-place adjective       | //similar// (//to something//         | case or preposition
+|| GF name  | text name                 | example                             | inherent complement features  | semantics ||
+| ``N2``    | two-place noun            | //brother// (//of someone//         | case or preposition | ``e -> n``
+| ``N3``    | three-place noun          | //distance// (//from some place to some place//    | case or preposition  | ``e -> e -> n``
+| ``A2``    | two-place adjective       | //similar// (//to something//         | case or preposition | ``e -> e -> t``
 
 
 Verbs show a particularly rich variation in subcategorization. The most familiar distinction is the one between
@@ -169,15 +170,15 @@ future additions of more subcategories for verbs.
 
 ===Table: subcategories of verbs===
 
-|| GF name  | text name                 | example                             | inherent complement features  ||
-| ``V2``    | two-place verb            | //love// (//someone//               | case or preposition
-| ``V3``    | three-place verb          | //give// (//something to someone//) | two cases or prepositions
-| ``VV``    | verb-complement verb      | //try// (//to do something//)       | infinitive form
-| ``VS``    | sentence-complement verb  | //know// (//that something happens//)      | sentence mood
-| ``VQ``    | question-complement verb  | //ask// (//what happens//)            | question mood
-| ``VA``    | adjective-complement verb | //become// (//something, e.g. old//)                | adjective case
-| ``V2V``   | two-place verb-complement verb  | //force// (//someone to do something//)  | infinitive form, control type
-| ``V2S``   | two-place sentence-complement verb  | //tell// (//someone that something happens//)  | object case, sentence mood
-| ``V2Q``   | two-place question-complement verb  | //ask// (//someone what happens//)  | object case, question mood
-| ``V2A``   | two-place adjective-complement verb  | //paint// (//something in some colour, e.g. blue//)  | object and adjective case
+|| GF name  | text name                 | example                             | inherent complement features | semantics ||
+| ``V2``    | two-place verb            | //love// (//someone//               | case or preposition | ``e -> e -> t``
+| ``V3``    | three-place verb          | //give// (//something to someone//) | two cases or prepositions | ``e -> e -> e -> t``
+| ``VV``    | verb-complement verb      | //try// (//to do something//)       | infinitive form | ``e -> v -> t``
+| ``VS``    | sentence-complement verb  | //know// (//that something happens//)      | sentence mood | ``e -> t -> t``
+| ``VQ``    | question-complement verb  | //ask// (//what happens//)            | question mood | ``e -> q -> t``
+| ``VA``    | adjective-complement verb | //become// (//something, e.g. old//)                | adjective case | ``e -> a -> t``
+| ``V2V``   | two-place verb-complement verb  | //force// (//someone to do something//)  | infinitive form, control type | ``e -> e -> v -> t``
+| ``V2S``   | two-place sentence-complement verb  | //tell// (//someone that something happens//)  | object case, sentence mood | ``e -> e -> t -> t``
+| ``V2Q``   | two-place question-complement verb  | //ask// (//someone what happens//)  | object case, question mood | ``e -> e -> q -> t``
+| ``V2A``   | two-place adjective-complement verb  | //paint// (//something in some colour, e.g. blue//)  | object and adjective case | ``e -> e -> a -> t``
 
