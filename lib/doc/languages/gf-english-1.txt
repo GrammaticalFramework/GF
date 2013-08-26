@@ -1,4 +1,58 @@
 
 +Words: English-specific rules+
 
+++Morphological features++
+
+The first task when defining the language-specific rules for linguistic structures in the RGL is to give the
+actual ranges of the features attached to the categories. We have to tell whether the language has the grammatical
+number (as e.g. Chinese has not), and which values it takes (as many languages have two numbers but e.g. Arabic has three).
+We have to do likewise for case, gender, person, tense - in other words, to specify the **parameter types** of
+the language. Then we have to proceed to specifying which features belong to which lexical categories and how (i.e.
+as inflectional or inherent features). In this process, we may also note that we need some special features that
+are complex combinations of the "standard" features (as happens with English verbs: their forms are depend on tense,
+number, and person, but not as a straightforward combination of them). We may also notice that a "words" in some 
+category may in fact consist of several words, which may even appear separated from each other. English verbs such as
+//switch off//, called **particle verbs**, are a case in point. The particle contributes essentially to the meaning
+of the verb, but it may be separated from it by an object: //Please switch it off!//
+
+
+===Table: parameter types needed for content words in English===
+
+|| GF name   | text name | values             ||
+| ``Number`` | number    | singular, plural
+| ``Person`` | person    | first, second, third
+| ``Case``   | case      | nominative, genitive
+| ``Degree`` | degree    | positive, comparative, superlative
+| ``VForm``  | verb form | infinitive, present, past, past participle, present participle
+
+
+The assignment of parameter types and the identification of the separate parts of categories defines a
+the **data structures** in which the words are stored in a lexicon.
+This data structure is in GF called the **linearization type** of the category. From the computational
+point of view, it is important that the data structures are well defined for all words, even if this may
+sound unnecessary. For instance, since some verbs need a particle part, all verbs must uniformly have a
+storage for this particle, even if it is empty most of the time. This property is guaranteed by
+an operation called **type checking**. It is performed by GF as a part of **grammar compilation**, which
+is the process in which the human-readable description of the grammar is converted to bits executable
+by the computer.
+
+
+===Table: linearization types of English content words===
+
+|| GF name  | text name        | example    | inflectional features       | inherent features  ||
+| ``N``     | noun             | //house//  | number, case                | (none)         
+| ``PN``    | proper name      | //Paris//  | case                        | (none)
+| ``A``     | adjective        | //blue//   | degree                      | (none)
+| ``V``     | verb             | //sleep//  | verb form                   | particle
+| ``Adv``   | adverb           | //here//   | (none)                      | (none)
+| ``V2``    | two-place verb   | //love//   | verb form                   | particle, preposition
+| ``VV``    | verb-complement verb   | //try//   | verb form              | particle, infinitive form
+| ``VS``    | sentence-complement verb   | //know//   | verb form              | particle
+| ``VQ``    | question-complement verb   | //ask//    | verb form              | particle
+| ``VA``    | adjective-complement verb  | //become// | verb form              | particle
+
+Notice that we have placed the particle of verbs in the inherent feature column. It is not a parameter
+but a string. 
+We have done the same with the preposition strings that define the complement features of verb 
+and other subcategories.
 
