@@ -298,6 +298,12 @@ of a uniform class of pronouns, as we did with the verb subcategories: for verbs
 set of features, to which only complement feature information had to be added, but the same does not concern the things
 traditionally called "pronouns".
 
+Structural words moreover contain many categories that have no morphological variation or morphologically relevant features.
+For instance, interrogative adverbs (such as //why//) and sentential adverbs (such as //always//) are, in all languages we
+have encountered, equivalent from the morphological point of view. Yet of course they are syntactically different, as
+one cannot convert //why are you always late// into //always are you why late//. And semantically, sentential adverbs
+modify actions whereas interrogative adverbs form questions from sentences.
+
 The following tables give a summary of the structural word categories of the RGL, equipped with morphological and
 semantic information as we did for content words. The full details will be best explained in the sections on syntax,
 i.e. on how the structural words are actually used for building structures.
