@@ -7331,7 +7331,6 @@ fun briefcase_N : N;
 fun briefing_N : N;
 fun briefless_A : A;
 fun briefness_N : N;
-fun briefs_N : N;
 fun brier_N : N;
 fun brig_N : N;
 fun brig_PN : PN;
