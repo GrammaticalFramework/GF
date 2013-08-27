@@ -85,6 +85,9 @@ extern GuHasher gu_string_hasher[1];
 
 bool
 gu_string_eq(GuString s1, GuString s2);
+
+int
+gu_string_cmp(GuString s1, GuString s2);
 #endif
 
 #ifdef GU_TYPE_H_
