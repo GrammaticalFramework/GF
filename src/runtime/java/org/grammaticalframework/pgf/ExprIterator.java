@@ -22,7 +22,7 @@ class ExprIterator implements Iterator<ExprProb> {
 
 	private void fetch() {
 		if (!fetched) {
-			ep = fetchExprProb(enumRef, out_pool);
+			ep = fetchExprProb(ref, out_pool);
 			fetched = true;
 		}
 	}
