@@ -120,6 +120,15 @@ Java_org_grammaticalframework_pgf_PGF_getAbstractName(JNIEnv* env, jobject self)
 	return gu2j_string(env, pgf_abstract_name(get_ref(env, self)));
 }
 
+JNIEXPORT jstring JNICALL
+Java_org_grammaticalframework_pgf_PGF_getStartCat(JNIEnv* env, jobject self)
+{
+	GuPool* tmp_pool = gu_local_pool();
+	jstring jname = gu2j_string(env, pgf_start_cat(get_ref(env, self), tmp_pool));
+	gu_pool_free(tmp_pool);
+	return jname;
+}
+
 JNIEXPORT void JNICALL 
 Java_org_grammaticalframework_pgf_PGF_free(JNIEnv* env, jclass cls, jlong pool)
 {
