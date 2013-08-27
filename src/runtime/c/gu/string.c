@@ -397,6 +397,62 @@ gu_string_eq(GuString s1, GuString s2)
 
 }
 
+int
+gu_string_cmp(GuString s1, GuString s2)
+{
+	uint8_t buf1[sizeof(GuWord)];
+	char* src1;
+	size_t sz1;
+	if (s1.w_ & 1) {
+		sz1 = (s1.w_ & 0xff) >> 1;
+		gu_assert(sz1 <= sizeof(GuWord));
+		size_t i = sz1;
+		while (i > 0) {
+			s1.w_ >>= 8;
+			buf1[--i] = s1.w_ & 0xff;
+		}
+		src1 = (char*) buf1;
+	} else {
+		uint8_t* p = (void*) s1.w_;
+		sz1 = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
+		src1 = (char*) &p[1];
+	}
+
+	uint8_t buf2[sizeof(GuWord)];
+	char* src2;
+	size_t sz2;
+	if (s2.w_ & 1) {
+		sz2 = (s2.w_ & 0xff) >> 1;
+		gu_assert(sz2 <= sizeof(GuWord));
+		size_t i = sz2;
+		while (i > 0) {
+			s2.w_ >>= 8;
+			buf2[--i] = s2.w_ & 0xff;
+		}
+		src2 = (char*) buf2;
+	} else {
+		uint8_t* p = (void*) s2.w_;
+		sz2 = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
+		src2 = (char*) &p[1];
+	}
+
+	for (size_t i = 0; ; i++) {
+		if (sz1 == i && i == sz2)
+			break;
+		
+		if (sz1 < i)
+			return -1;
+		if (i > sz2)
+			return 1;
+
+		if (src1[i] > src2[i])
+			return 1;
+		else if (src1[i] < src2[i])
+			return -1;
+	}
+
+	return 0;
+}
 
 static GuHash
 gu_string_hasher_hash(GuHasher* self, const void* p)
