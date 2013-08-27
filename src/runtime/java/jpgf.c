@@ -51,16 +51,10 @@ j2gu_string(JNIEnv *env, jstring s, GuPool* pool) {
 	return gu_str_string(str, pool);
 }
 
-static PgfPGF*
-get_pgf(JNIEnv *env, jobject self) {
-	jfieldID grId = (*env)->GetFieldID(env, (*env)->GetObjectClass(env, self), "gr", "J");
-	return (PgfPGF*) (*env)->GetLongField(env, self, grId);
-}
-
-static PgfPGF*
-get_concr(JNIEnv *env, jobject self) {
-	jfieldID concrId = (*env)->GetFieldID(env, (*env)->GetObjectClass(env, self), "concr", "J");
-	return (PgfPGF*) (*env)->GetLongField(env, self, concrId);
+static void*
+get_ref(JNIEnv *env, jobject self) {
+	jfieldID refId = (*env)->GetFieldID(env, (*env)->GetObjectClass(env, self), "ref", "J");
+	return (void*) (*env)->GetLongField(env, self, refId);
 }
 
 static void
@@ -123,7 +117,7 @@ Java_org_grammaticalframework_pgf_PGF_readPGF(JNIEnv *env, jclass cls, jstring s
 JNIEXPORT jstring JNICALL 
 Java_org_grammaticalframework_pgf_PGF_getAbstractName(JNIEnv* env, jobject self)
 {
-	return gu2j_string(env, pgf_abstract_name(get_pgf(env, self)));
+	return gu2j_string(env, pgf_abstract_name(get_ref(env, self)));
 }
 
 JNIEXPORT void JNICALL 
@@ -171,7 +165,7 @@ Java_org_grammaticalframework_pgf_PGF_getLanguages(JNIEnv* env, jobject self)
 	if (!languages)
 		return NULL;
 
-	PgfPGF* pgf = get_pgf(env, self);
+	PgfPGF* pgf = get_ref(env, self);
 
 	GuPool* tmp_pool = gu_local_pool();
 
@@ -193,7 +187,7 @@ Java_org_grammaticalframework_pgf_PGF_getLanguages(JNIEnv* env, jobject self)
 JNIEXPORT jstring JNICALL 
 Java_org_grammaticalframework_pgf_Concr_getName(JNIEnv* env, jobject self)
 {
-	return gu2j_string(env, pgf_concrete_name(get_concr(env, self)));
+	return gu2j_string(env, pgf_concrete_name(get_ref(env, self)));
 }
 
 JNIEXPORT jobject JNICALL 
@@ -210,7 +204,7 @@ Java_org_grammaticalframework_pgf_Parser_parse
 	PgfLexer *lexer = pgf_new_simple_lexer(rdr, pool);
 
 	GuEnum* res =
-		pgf_parse(get_concr(env, concr), startCat, lexer, pool, out_pool);
+		pgf_parse(get_ref(env, concr), startCat, lexer, pool, out_pool);
 
 	if (res == NULL) {
 		PgfToken tok =
@@ -256,7 +250,7 @@ Java_org_grammaticalframework_pgf_Pool_free(JNIEnv* env, jobject self, jlong ref
 	gu_pool_free((GuPool*) ref);
 }
 
-JNIEXPORT jstring JNICALL 
+JNIEXPORT jstring JNICALL
 Java_org_grammaticalframework_pgf_Expr_showExpr(JNIEnv* env, jclass clazz, jlong ref)
 {
 	GuPool* tmp_pool = gu_local_pool();

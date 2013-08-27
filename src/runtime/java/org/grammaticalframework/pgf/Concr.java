@@ -14,10 +14,10 @@ public class Concr {
 	// private stuff
 	
 	private PGF gr;
-	public long concr;
+	public long ref;
 
-	private Concr(PGF gr, long concr) {
-		this.gr    = gr;
-		this.concr = concr;
+	private Concr(PGF gr, long ref) {
+		this.gr  = gr;
+		this.ref = ref;
 	}
 }
