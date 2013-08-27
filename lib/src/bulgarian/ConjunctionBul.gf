@@ -14,6 +14,10 @@ concrete ConjunctionBul of Conjunction =
       s = (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
       } ;
 
+    ConjAdV conj ss = {
+      s = (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
+      } ;
+
     ConjIAdv conj ss = {
       s = \\qform => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!qform;
       } ;
@@ -44,6 +48,9 @@ concrete ConjunctionBul of Conjunction =
 
     BaseAdv x y  = {s  = \\d,t=>x.s++linCoord!t++ y.s} ; 
     ConsAdv x xs = {s  = \\d,t=>x.s++(linCoordSep comma)!d!t++xs.s!d!t} ;
+
+    BaseAdV x y  = {s  = \\d,t=>x.s++linCoord!t++ y.s} ; 
+    ConsAdV x xs = {s  = \\d,t=>x.s++(linCoordSep comma)!d!t++xs.s!d!t} ;
 
     BaseIAdv x y  = {s  = \\d,t,qform=>x.s!qform++linCoord!t++ y.s!qform} ; 
     ConsIAdv x xs = {s  = \\d,t,qform=>x.s!qform++(linCoordSep comma)!d!t++xs.s!d!t!qform} ;
@@ -79,6 +86,7 @@ concrete ConjunctionBul of Conjunction =
   lincat
     [S] = {s : Bool => Ints 2 => Str} ;
     [Adv] = {s : Bool => Ints 2 => Str} ;
+    [AdV] = {s : Bool => Ints 2 => Str} ;
     [IAdv] = {s : Bool => Ints 2 => QForm => Str} ;
     [NP] = {s : Bool => Ints 2 => Role  => Str; a : Agr} ;
     [AP] = {s : Bool => Ints 2 => AForm => Str; adv : Bool => Ints 2 => Str; isPre : Bool} ;
