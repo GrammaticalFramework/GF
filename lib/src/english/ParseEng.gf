@@ -128,7 +128,7 @@ lin
     } ;
 
   PresPartRS ant pol vp = {
-    s = \\agr => vp.ad ++ vp.prp ++ vp.s2 ! agr ;
+    s = \\agr => vp.ad ++ vp.prp ++ vp.p ++ vp.s2 ! agr;
     c = npNom
   } ;
 
