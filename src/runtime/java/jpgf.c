@@ -244,6 +244,28 @@ Java_org_grammaticalframework_pgf_ExprIterator_fetchExprProb
 	return jexpprob;
 }
 
+JNIEXPORT jstring JNICALL
+Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, jobject jexpr)
+{
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	
+	pgf_linearize(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), wtr, err);
+	if (!gu_ok(err)) {
+		//
+		return NULL;
+	}
+
+	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+	jstring jstr = gu2j_string(env, str);
+
+	gu_pool_free(tmp_pool);
+	
+	return jstr;
+}
+
 JNIEXPORT void JNICALL 
 Java_org_grammaticalframework_pgf_Pool_free(JNIEnv* env, jobject self, jlong ref)
 {

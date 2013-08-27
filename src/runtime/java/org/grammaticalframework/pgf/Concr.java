@@ -9,6 +9,8 @@ public class Concr {
 	public Iterable<ExprProb> parse(String startCat, String s) {
 		return new Parser(this, startCat, s);
 	}
+	
+	public native String linearize(Expr expr);
 
 	//////////////////////////////////////////////////////////////////
 	// private stuff
