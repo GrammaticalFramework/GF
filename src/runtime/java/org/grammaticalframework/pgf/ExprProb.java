@@ -9,6 +9,10 @@ public class ExprProb {
 		this.prob = prob;
 	}
 	
+	private static ExprProb mkExprProb(Pool pool, long expr, double prob) {
+		return new ExprProb(new Expr(pool, expr), prob);
+	}
+	
 	public Expr getExpr() {
 		return expr;
 	}
