@@ -175,6 +175,84 @@ gu_buf_freeze(GuBuf* buf, GuPool* pool)
 }
 
 static void
+gu_quick_sort(GuBuf *buf, GuOrder *order, int left, int right)
+{
+	int l_hold = left;
+	int r_hold = right;
+
+	void* pivot = alloca(buf->elem_size);
+	memcpy(pivot,
+	       &buf->data[buf->elem_size * left],
+	       buf->elem_size);
+	while (left < right) {
+
+		while ((order->compare(order, &buf->data[buf->elem_size * right], pivot) >= 0) && (left < right))
+			right--;
+
+		if (left != right) {
+			memcpy(&buf->data[buf->elem_size * left],
+			       &buf->data[buf->elem_size * right],
+			       buf->elem_size);
+			left++;
+		}
+
+		while ((order->compare(order, &buf->data[buf->elem_size * left], pivot) <= 0) && (left < right))
+			left++;
+
+		if (left != right) {
+			memcpy(&buf->data[buf->elem_size * right],
+			       &buf->data[buf->elem_size * left],
+			       buf->elem_size);
+			right--;
+		}
+	}
+	
+	memcpy(&buf->data[buf->elem_size * left],
+	       pivot,
+           buf->elem_size);
+	int index = left;
+	left  = l_hold;
+	right = r_hold;
+
+	if (left < index)
+		gu_quick_sort(buf, order, left, index-1);
+
+	if (right > index)
+		gu_quick_sort(buf, order, index+1, right);
+}
+
+void
+gu_buf_sort(GuBuf *buf, GuOrder *order)
+{
+	gu_quick_sort(buf, order, 0, gu_buf_length(buf) - 1);
+}
+
+bool
+gu_buf_binsearch(GuBuf *buf, GuOrder *order, void *value)
+{
+	size_t i = 0;
+	size_t j = gu_buf_length(buf)-1;
+	
+	while (i <= j) {
+		size_t k = (i+j) / 2;
+		int cmp = order->compare(order, value, &buf->data[buf->elem_size * k]);
+	
+		if (cmp < 0) {
+			j = k-1;
+		} else if (cmp > 0) {
+			i = k+1;
+		} else {
+			memcpy(value,
+			       &buf->data[buf->elem_size * k],
+			       buf->elem_size);
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+static void
 gu_heap_siftdown(GuBuf *buf, GuOrder *order, 
                  const void *value, int startpos, int pos)
 {
