@@ -130,6 +130,11 @@ gu_buf_flush(GuBuf* buf);
 void
 gu_seq_resize_tail(GuSeq seq, ptrdiff_t change);
 
+void
+gu_buf_sort(GuBuf *buf, GuOrder *order);
+
+bool
+gu_buf_binsearch(GuBuf *buf, GuOrder *order, void *value);
 
 // Using a buffer as a heap
 void
