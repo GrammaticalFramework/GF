@@ -22,6 +22,7 @@ abstract Conjunction = Cat ** {
     ConjAP   : Conj -> [AP] -> AP ;     -- "cold and warm"
     ConjNP   : Conj -> [NP] -> NP ;     -- "she or we"
     ConjAdv  : Conj -> [Adv] -> Adv ;   -- "here or there"
+    ConjAdV  : Conj -> [AdV] -> AdV ;
     ConjIAdv : Conj -> [IAdv] -> IAdv ; -- "where and with whom"
     ConjCN   : Conj -> [CN] -> CN ;     -- "man and woman"
 
@@ -32,7 +33,8 @@ abstract Conjunction = Cat ** {
   cat
     [S]{2} ; 
     [RS]{2} ; 
-    [Adv]{2} ; 
+    [Adv]{2} ;
+    [AdV]{2} ;
     [NP]{2} ; 
     [AP]{2} ;
     [IAdv]{2} ;
