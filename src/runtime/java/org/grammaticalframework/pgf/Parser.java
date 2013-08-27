@@ -21,5 +21,5 @@ class Parser implements Iterable<ExprProb> {
 		return iter;
 	}
 
-	public static native ExprIterator parse(Concr concr, String startCat, String s);
+	static native ExprIterator parse(Concr concr, String startCat, String s);
 }

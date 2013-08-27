@@ -220,8 +220,8 @@ Java_org_grammaticalframework_pgf_Parser_parse
 	}
 
 	jclass expiter_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ExprIterator");
-	jmethodID constrId = (*env)->GetMethodID(env, expiter_class, "<init>", "(JJJ)V");
-	jobject jexpiter = (*env)->NewObject(env, expiter_class, constrId, (jlong) pool, (jlong) out_pool, (jlong) res);
+	jmethodID constrId = (*env)->GetMethodID(env, expiter_class, "<init>", "(Lorg/grammaticalframework/pgf/Concr;JJJ)V");
+	jobject jexpiter = (*env)->NewObject(env, expiter_class, constrId, concr, (jlong) pool, (jlong) out_pool, (jlong) res);
 
 	return jexpiter;
 }
