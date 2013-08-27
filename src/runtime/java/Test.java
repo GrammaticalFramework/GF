@@ -19,5 +19,9 @@ public class Test {
 		for (Map.Entry<String,Concr> entry : gr.getLanguages().entrySet()) {
 			System.out.println(entry.getKey()+" "+entry.getValue()+" "+entry.getValue().getName());
 		}
+		
+		for (ExprProb ep : gr.getLanguages().get("ParseEng").parse("Phr", "test")) {
+			System.out.println("["+ep.getProb()+"] "+ep.getExpr());
+		}
 	}
 }
