@@ -20,8 +20,10 @@ public class Test {
 			System.out.println(entry.getKey()+" "+entry.getValue()+" "+entry.getValue().getName());
 		}
 		
-		for (ExprProb ep : gr.getLanguages().get("ParseEng").parse("Phr", "test")) {
+		Concr eng = gr.getLanguages().get("ParseEng");
+		for (ExprProb ep : eng.parse("Phr", "where are you")) {
 			System.out.println("["+ep.getProb()+"] "+ep.getExpr());
+			System.out.println(eng.linearize(ep.getExpr()));
 		}
 	}
 }
