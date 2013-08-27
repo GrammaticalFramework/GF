@@ -30307,6 +30307,7 @@ lin laudatory_A = compoundA (mkA "laudatory");
 lin laugh_N = mkN "laugh" "laughs";
 lin laugh_V = mkV "laugh" "laughs" "laughed" "laughed" "laughing";
 lin laugh_V2 = mkV2 (mkV "laugh" "laughs" "laughed" "laughed" "laughing");
+lin laugh_at_V2 = mkV2 (mkV "laugh" "laughs" "laughed" "laughed" "laughing") (mkPrep "at");
 lin laugh_VS = mkVS (mkV "laugh" "laughs" "laughed" "laughed" "laughing");
 lin laughable_A = compoundA (mkA "laughable");
 lin laugher_N = mkN "laugher" ;

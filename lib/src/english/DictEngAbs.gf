@@ -30278,6 +30278,7 @@ fun laudatory_A : A;
 fun laugh_N : N;
 fun laugh_V : V;
 fun laugh_V2 : V2;
+fun laugh_at_V2 : V2;
 fun laugh_VS : VS;
 fun laughable_A : A;
 fun laugher_N : N;
