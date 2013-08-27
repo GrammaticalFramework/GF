@@ -161,7 +161,7 @@ lin
     ptp = be.ptp ;
     inf = be.inf ;
     ad = vps.ad ;
-    s2 = \\a => ppt ++ vps.p ++ vps.s2 ! a ---- order
+    s2 = \\a => ppt ++ vps.p ++ vps.s2 ! a ++ vps.c2 ---- order
     } ;
 
    --- AR 7/3/2013
