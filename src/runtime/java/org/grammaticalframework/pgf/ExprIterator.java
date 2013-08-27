@@ -3,20 +3,22 @@ package org.grammaticalframework.pgf;
 import java.util.*;
 
 class ExprIterator implements Iterator<ExprProb> {
+	private Concr concr;
 	private Pool pool, out_pool;
-	private long enumRef;
+	private long ref;
 	private ExprProb ep;
 	private boolean fetched;
 
-	public ExprIterator(long pool, long out_pool, long enumRef) {
-		this.pool = new Pool(pool);
+	public ExprIterator(Concr concr, long pool, long out_pool, long ref) {
+		this.concr    = concr;
+		this.pool     = new Pool(pool);
 		this.out_pool = new Pool(out_pool);
-		this.enumRef = enumRef;
-		this.ep = null;
-		this.fetched = false;
+		this.ref      = ref;
+		this.ep       = null;
+		this.fetched  = false;
 	}
 
-	private native ExprProb fetchExprProb(long enumRef, Pool out_pool);
+	private native ExprProb fetchExprProb(long ref, Pool out_pool);
 
 	private void fetch() {
 		if (!fetched) {
