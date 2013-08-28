@@ -10,7 +10,7 @@ public class Concr {
 		return new Parser(this, startCat, s);
 	}
 
-	public Expr parseBest(String startCat, String s) {
+	public Expr parseBest(String startCat, String s) throws ParseError {
 		Iterator<ExprProb> iter = Parser.parse(this, startCat, s);
 		if (iter.hasNext()) {
 			return iter.next().getExpr();
