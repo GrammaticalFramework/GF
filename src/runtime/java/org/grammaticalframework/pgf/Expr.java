@@ -4,7 +4,7 @@ public class Expr {
 		private Pool pool;
 		private long ref;
 
-		private Expr(Pool pool, long ref) {
+		Expr(Pool pool, long ref) {
 			this.pool = pool;
 			this.ref  = ref;
 		}

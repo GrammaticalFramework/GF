@@ -226,6 +226,7 @@ Java_org_grammaticalframework_pgf_Parser_parse
 
 		gu_pool_free(pool);
 		gu_pool_free(out_pool);
+		return NULL;
 	}
 
 	jclass expiter_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ExprIterator");
