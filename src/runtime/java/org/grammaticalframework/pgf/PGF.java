@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class PGF {
-	public static native PGF readPGF(String path) throws FileNotFoundException; 
+	public static native PGF readPGF(String path) throws FileNotFoundException;
 
 	public native String getAbstractName();
 
