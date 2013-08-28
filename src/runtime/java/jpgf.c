@@ -62,13 +62,13 @@ throw_jstring_exception(JNIEnv *env, const char* class_name, jstring msg)
 {
 	jclass exception_class = (*env)->FindClass(env, class_name);
 	if (!exception_class)
-		return NULL;
+		return;
 	jmethodID constrId = (*env)->GetMethodID(env, exception_class, "<init>", "(Ljava/lang/String;)V");
 	if (!constrId)
-		return NULL;
+		return;
 	jobject exception = (*env)->NewObject(env, exception_class, constrId, msg);
 	if (!exception)
-		return NULL;
+		return;
 	(*env)->Throw(env, exception);
 }
 
@@ -77,7 +77,7 @@ throw_string_exception(JNIEnv *env, const char* class_name, const char* msg)
 {
 	jstring jmsg = (*env)->NewStringUTF(env, msg);
 	if (!jmsg)
-		return NULL;
+		return;
 	throw_jstring_exception(env, class_name, jmsg);
 }
 
@@ -101,7 +101,7 @@ Java_org_grammaticalframework_pgf_PGF_readPGF(JNIEnv *env, jclass cls, jstring s
 		if (gu_exn_caught(err) == gu_type(GuErrno)) {
 			throw_jstring_exception(env, "java/io/FileNotFoundException", s);
 		} else {
-			throw_string_exception(env, "org/grammaticalframework/PGFError", "The grammar cannot be loaded");
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The grammar cannot be loaded");
 		}
 		gu_pool_free(pool);
 		gu_pool_free(tmp_pool);
@@ -220,9 +220,9 @@ Java_org_grammaticalframework_pgf_Parser_parse
 			pgf_lexer_current_token(lexer);
 
 		if (gu_string_eq(tok, gu_empty_string))
-			throw_string_exception(env, "org/grammaticalframework/PGFError", "The sentence cannot be parsed");
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The sentence cannot be parsed");
 		else
-			throw_jstring_exception(env, "org/grammaticalframework/ParseError", gu2j_string(env, tok));
+			throw_jstring_exception(env, "org/grammaticalframework/pgf/ParseError", gu2j_string(env, tok));
 
 		gu_pool_free(pool);
 		gu_pool_free(out_pool);
@@ -290,7 +290,7 @@ Java_org_grammaticalframework_pgf_Expr_showExpr(JNIEnv* env, jclass clazz, jlong
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuWriter* wtr = gu_string_buf_writer(sbuf);
 
-	pgf_print_expr(gu_variant_from_ptr(ref), NULL, 0, wtr, err);
+	pgf_print_expr(gu_variant_from_ptr((void*)ref), NULL, 0, wtr, err);
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
 	jstring jstr = gu2j_string(env, str);
