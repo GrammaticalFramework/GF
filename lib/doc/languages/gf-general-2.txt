@@ -2,4 +2,172 @@
 
 +Syntax: general rules+
 
+The rules of syntax specify how words are combined to **phrases**, and how phrases are combined to even longer phrases.
+Phrases, just like words, belong to different categories, which are equipped with inflectional and inherent features and
+with semantic types. Moreover, each syntactic rule has a corresponding **semantic rule**, which specifies how the meaning
+of the new phrases is constructed from the meanings of its parts.
 
+The RGL has around 30 categories of phrases, on top of the lexical categories. The widest category is ``Text``, which cover
+entire texts consisting of sentences, questions, interjections, etc, with punctuation. The following picture shows all RGL
+categories as a dependency tree, where ``Text`` is in the root (so it is an upside-down tree), and the lexical categories
+in the leaves. Being above another category in the tree means that phrases of higher categories can have phrases of lower
+categories as parts. But these dependencies can work in both directions: for instance, the noun phrase (``NP``)
+//every man who owns a donkey// has as its part the relative clause (``RCl``), which in turn has its part the noun phrase
+//a donkey//.
+
+===Figure: the principal dependences of phrasal and lexical categories===
+
+[../categories.png]
+
+Lexical categories appear in boxes rather than ellipses, with several categories gathered in some of the boxes.
+
+
+++The structure of a clause++
+
+It is convenient to start from the middle of the RGL: from the structure of a **clause** (``Cl``). A clause is an application
+of a verb to its arguments. For instance, //John paints the house yellow// is an application of the ``V2V`` verb //paint//
+to the arguments //John//, //the house//, and //yellow//. Recalling the table of lexical categories from Chapter 1,
+we can summarize the semantic types of these parts as follows:
+```
+  paint     : e -> e -> (e -> t) -> t
+  John      : e
+  the house : e
+  yellow    : e -> t
+```
+Hence the verb //paint// is a **predicate**, a function that can be applied to arguments to return a proposition.
+In this case, we can build the application
+```
+  paint John (the house) yellow : t
+```
+which is thus an object of type ``t``.
+
+Applying verbs to arguments is how clauses work on the semantic level. However, the syntactic fine-structure is
+a bit more complex. The predication process is hence divided to several steps, which involve intermediate categories.
+Following these steps, a clause is built by adding one argument at a time. Doing in this way, rather than adding
+all arguments at once, has two advantages:
+- the grammar doesn't need to specify the same things again and again for different verb categories
+- at each step of construction, some other rule could apply than adding an argument - for instance, adding an adverb
+
+
+Here are the steps in which //John paints the house yellow// is constructed from its arguments in the RGL:
+- //paints// and //yellow// are combined to a **verb phrase missing a noun phrase** (``VPSlash``)
+- //paints - yellow// and //the house// are combined to a **verb phrase** (``VP``)
+- //John// and //paints the house yellow// are combined to a **clause** (``Cl``)
+
+
+
+The structure is shown by the following tree:
+
+#BECE
+[paint-abstract.png]
+#ENCE
+This tree is called the **abstract syntax tree** of the sentence. It shows the structural components from which the
+sentence has been constructed. Its nodes show the GF names associated with syntax rules and internally used for building
+structures. Thus for instance ``PredVP`` encodes the rule that combines a noun phrase and a verb phrase into a clause,
+``UsePN`` converts a proper name to a noun phrase, and so on. Mathematically, these names 
+denote **functions** that build abstract syntax trees from other tree. Every tree belongs to some category.
+The GF notation for the ``PredVP`` rule is
+```
+  PredVP : NP -> VP -> Cl
+```
+in words, ``PredVP`` //is a function that takes a noun phrase and a verb phrase and returns a clause//.
+
+The tree is thus in fact built by function applications. A computer-friendly notation for trees uses
+parentheses rather than graphical trees:
+```
+  PredVP 
+    (UsePN john_PN) 
+    (ComplSlash 
+      (SlashV2A paint_V2A (PositA yellow_A)) 
+      (DetCN (DetQuant DefArt NumSg) (UseN house_N)))
+```
+Before going to the details of phrasal categories and rules, let us compare the abstract syntax tree with 
+another tree, known as **parse tree** or **concrete syntax tree**:
+
+
+#BECE
+[paint-concrete.png]
+#ENCE
+This tree shows, on its leaves, the clause that results from the combination of categories. Each node
+is labelled with the category to which the part of the clause under it belongs to. As shown by the label
+``VPSlash``, this part can consist of many separate groups of words, where words from constructions from
+higher up are inserted. 
+
+As parse trees display the actual words of a particular language, in a language-specific
+order, they are less interesting from the multilingual point of view than the abstract syntax trees.
+A GF grammar is thus primarily specified by its abstract syntax functions, which are language-neutral,
+and secondarily by the **linearization rules** that convert them to different languages.
+
+Let us specify the phrasal categories that are used for making up predications. The lexical category ``V2A`` of 
+two-place adjective-complement verbs was explained in Chapter 1. 
+
+===Table: phrasal categories involved in predication===
+
+|| GF name  | text name     | example             | inflection features            | inherent features | parts | semantics ||
+| ``Cl``    | clause        | //he paints it blue// | temporal, polarity             | (none)            | one   | ``t``
+| ``VP``    | verb phrase   | //paints it blue//    | temporal, polarity, agreement  | subject case      | verb, complement | ``e -> t`` 
+| ``VPSlash`` | slash verb phrase   | //paints - blue//      | temporal, polarity, agreement  | subject and complement case  | verb, complement | ``e -> e -> t`` 
+| ``NP``    | noun phrase   | //the house//       | case                           | agreement         | one   | ``(e -> t) -> t`` 
+| ``AP``    | adjectival phrase  | //very blue//       | gender, numeber, case     | position         | one   | ``a`` = ``e -> t`` 
+
+TODO explain **agreement** and **temporal**.
+
+TODO explain the semantic type of ``NP``.
+
+The functions that build up the clause in our example tree are given in the following table, together with functions that
+build the semantics of the constructed trees. The latter functions operate on variables belonging to the semantic types of 
+the arguments of the function.
+
+===Table: abstract syntax functions involved in predication===
+
+|| GF name       | type                     | example                            | semantics  ||
+| ``PredVP``     | ``NP -> VP -> S``        | //he// + //paints the house blue// | ``np vp``
+| ``ComplSlash`` | ``VPSlash -> NP -> VP``  | //paints - blue// + //the house//  | ``\x -> np (\y -> vpslash x y)``
+| ``SlashV2A``   | ``V2A -> AP -> VPSlash`` | //paints// + //blue//              | ``\x,y -> v2a x y ap``
+
+TODO explain lambda abstraction.
+
+The semantics of the clause //John paints the house yellow// can now be computed from the assumed meanings 
+```
+  John*      : e
+  paint*     : e -> e -> (e -> t) -> t
+  the_house* : e
+  yellow*    : e -> t
+```
+as follows:
+```
+    (PredVP John (ComplSlash (SlashV2A paint yellow) the-house))*
+  = (ComplSlash (SlashV2A paint yellow) the_house)* John*
+  = (SlashV2A paint yellow)* John* the_house*
+  = paint* John* the_house* yellow*
+```
+for the moment ignoring the internal structure of noun phrases, which will be explained later.
+
+The linearization rules work very much in the same way as the semantic rules. They obey the definitions of
+inflectional and inherent features and discontinuous parts, which together define linearization types of
+the phrasal categories. These types are at this point schematic, because we don't assume any particular
+language. But what we can read out from the category table above is as follows:
+
+===Table: schematic linearization types===
+
+|| GF name  | text name     | linearization type ||
+| ``Cl``    | clause        | ``{s : Temp => Pol => Str}``
+| ``VP``    | verb phrase   | ``{s : Temp => Pol => Agr => {verb,compl : Str} ; sc : Case}``
+| ``VPSlash`` | slash verb phrase  | ``{s : Temp => Pol => Agr => {verb,compl : Str} ; sc, cc : Case}``
+| ``NP``    | noun phrase   | ``{s : Case => Str ; a : Agr}`` 
+| ``AP``    | adjectival phrase  | ``{s : Gender => Number => Case => Str ; isPre : Bool}`` 
+
+
+These types suggest the following linearization rules:
+```
+  PredVP np vp = {s = \\t,p => np.s ! vp.sc ++ vps.verb ++ vps.compl where vps = vp.s ! t ! p ! np.a}
+```
+TODO linearization of the example
+
+
+Similar rules as to ``V2A`` apply to all subcategories of verbs. The ``V2`` verbs are first made into ``VPSlash`` 
+by giving the non-NP complement. ``V3`` verbs can take their two NP complements in either order, which
+means that there are two ``VPSlash``-producing rules. This
+makes it possible to form both the questions //what did she give him// and //whom did she give it//.
+The other ``V`` categories are turned into ``VP`` without going through ``VPSlash``, since they have
+no noun phrase complements. 

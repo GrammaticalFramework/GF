@@ -23,14 +23,16 @@ of the verb, but it may be separated from it by an object: //Please switch it of
 | ``Person`` | person    | first, second, third
 | ``Case``   | case      | nominative, genitive
 | ``Degree`` | degree    | positive, comparative, superlative
+| ``AForm``  | adjective form | degrees, adverbial
 | ``VForm``  | verb form | infinitive, present, past, past participle, present participle
+| ``VVType`` | infinitive form (for a VV) | bare infinitive, //to// infinitive, //ing// form 
 
 
-The assignment of parameter types and the identification of the separate parts of categories defines a
+The assignment of parameter types and the identification of the separate parts of categories defines
 the **data structures** in which the words are stored in a lexicon.
-This data structure is in GF called the **linearization type** of the category. From the computational
+This data structure is in GF called the **linearization type** of the category. From the computer's
 point of view, it is important that the data structures are well defined for all words, even if this may
-sound unnecessary. For instance, since some verbs need a particle part, all verbs must uniformly have a
+sound unnecessary for the human. For instance, since some verbs need a particle part, all verbs must uniformly have a
 storage for this particle, even if it is empty most of the time. This property is guaranteed by
 an operation called **type checking**. It is performed by GF as a part of **grammar compilation**, which
 is the process in which the human-readable description of the grammar is converted to bits executable
@@ -42,7 +44,7 @@ by the computer.
 || GF name  | text name        | example    | inflectional features       | inherent features  ||
 | ``N``     | noun             | //house//  | number, case                | (none)         
 | ``PN``    | proper name      | //Paris//  | case                        | (none)
-| ``A``     | adjective        | //blue//   | degree                      | (none)
+| ``A``     | adjective        | //blue//   | adjective form              | (none)
 | ``V``     | verb             | //sleep//  | verb form                   | particle
 | ``Adv``   | adverb           | //here//   | (none)                      | (none)
 | ``V2``    | two-place verb   | //love//   | verb form                   | particle, preposition
@@ -55,4 +57,150 @@ Notice that we have placed the particle of verbs in the inherent feature column.
 but a string. 
 We have done the same with the preposition strings that define the complement features of verb 
 and other subcategories.
+
+The "digital grammar" representations of these types are **records**, where for instance the ``VV``
+record type is formally written
+```
+  {s : VForm => Str ; p : Str ; i : InfForm}
+```
+The record has **fields** for different types of data. In the record above, there are three fields:
+- the field labelled ``s``, storing an **inflection table** that produces a **string** (``Str``) depending on verb form,
+- the field labelled ``p``, storing a string representing the particle,
+- the field labelled ``i``, storing an inherent feature for the infinitive form required
+
+
+Thus for instance the record for verb-complement verb //try// (//to do something//) in the lexicon looks as follows:
+```
+  {s = table {
+     VInf => "try" ;
+     VPres => "tries" ;
+     VPast => "tried" ;
+     VPastPart => "tried" ;
+     VPresPart => "trying"
+     } ;
+   p = "" ;
+   i = VVInf 
+   }
+```
+We have not introduce the GF names of the features, as we will not make essential use of them: we will prefer
+informal explanations for all rules. So these records are a little hint for those who want to understand the
+whole chain, from the rules as we state them in natural language, down to machine-readable digital grammars,
+which ultimately have the same structure as our statements.
+
+
+++Inflection paradigms++
+
+In many languages, the description of inflectional forms occupies a large part of grammar books. Words, in particular
+verbs, can have dozens of forms, and there can be dozens of different ways of building those forms. Each type of
+inflection is described in a **paradigm**, which is a table including all forms of an example verb. For other
+verbs, it is enough to indicate the number of the paradigm, to say that this verb is inflected "in the same way"
+as the model verb.
+
+
+===Nouns===
+
+Computationally, inflection paradigms are **functions** that take as their arguments **stems**, to which suffixes
+(and sometime prefixes) are added. Here is, for instance, the English **regular noun** paradigm:
+
+|| form      | singular  | plural  ||
+| nominative | //dog//   | //dogs//
+| genitive   | //dog's// | //dogs'//
+
+As a function, it is interpreted as follows: the word //dog// is the stem to which endings are added. Replacing it
+with //cat//, //donkey//, //rabbit//, etc, will yield the forms of these words.
+
+In addition to nouns that are inflected with exactly the same suffixes as //dog//, English has 
+inflection types such as //fly-flies//, //kiss-kisses//, //bush-bushes//, //echo-echoes//. Each of these inflection types
+could be described by a paradigm of its own. However, it is more attractive to see these as variations of the regular
+paradigm, which are predictable by studying the singular nominative. This leads to a generalization of paradigms which
+in the RGL are called **smart paradigms**.
+
+Here is the smart paradigm of English nouns. It tells how the plural nominative is formed from the singular; the
+genitive forms are always formed by just adding //'s// in the singular and //'// in the plural.
+- for nouns ending with //s//, //z//, //x//, //sh//, //ch//, the forms are like //kiss - kisses//
+- for nouns ending with a vowel (one of //a//,//e//,//i//,//o//,//u//) followed by //y//, the forms are like //boy - boys//
+- for all other nouns ending with //y//, the forms are like //baby - babies//
+- for nouns ending with a vowel or //y// and followed by //o//, the forms are like //embryo - embryos//
+- for all other nouns ending with //o//, the forms are like //echo - echoes//
+- for all other nouns, the forms are like //dog - dogs//
+
+
+The same rules are in GF expressed by **regular expression pattern matching** which, although formal and machine-readable,
+might in fact be a nice notation for humans to read as well:
+```
+  "s" | "z" | "x" | "sh" | "ch" => <word, word + "es">
+  #vowel + "y"                  => <word, word + "s">
+  "y"                           => <word, init word + "ies">
+  (#vowel | "y") + "o"          => <word, word + "s">
+  "o"                           => <word, word + "es">
+  _                             => <word, word + "s">
+```
+In this notation, ``|`` means "or" and ``+`` means "followed by". The pattern that is matched is followed by 
+an arrow ``=>``, after which the two forms appear within angel brackets. The patterns are matched in the given
+order, and ``_`` means "anything that was not matched before". Finally, the function ``init`` returns the
+initial segment of a word (e.g. //happ// for //happy//), and the pattern ``#vowel`` is defined as
+``"a" | "e" | "i" | "o" | "u".
+
+In addition to regular and predictable nouns, English has **irregular nouns**, such as //man - men//, 
+//formula - formulae//, //ox - oxen//. These nouns have their plural genitive formed by //'s//: //men's//.
+
+
+
+===Adjectives===
+
+English adjectives inflect for degree, with three values, and also have an adverbial form in their linearization type.
+Here are some regular variations:
+- for adjectives ending with consonant + vowel + consonant: //dim, dimmer, dimmest, dimly//
+- for adjectives ending with //y// not preceded by a vowel: //happy, happier, happier, happily//
+- for other adjectives: //quick, quicker, quickest, quickly//
+
+
+The comparison forms only work for adjectives with at most two syllables. For longer ones,
+they are formed syntactically: //expensive, more expensive, most expensive//. There are also
+some irregular adjectives, the most extreme one being perhaps //good, better, best, well//.
+
+
+
+===Verbs===
+
+English verbs have five different forms, except for the verb //be//, which has some more forms, e.g.
+//sing, sings, sang, sung, singing//.
+But //be// is also special syntactically and semantically, and is in the RGL introduced
+in the syntax rather than in the lexicon.
+
+Two forms, the past (indicative) and the past participle are the same for the so-called **regular verbs**
+(e.g. //play, plays, played, played, playing//). The regular verb paradigm thus looks as follows:
+
+|| feature   | form ||
+| infinitive | //play//
+| present    | //plays//
+| past       | //played//
+| past participle    | //played//
+| present participle | //plays//
+
+The predictable variables are related to the ones we have seen in nouns and adjectives: 
+the present tense of verbs varies in the same way as the plural of nouns,
+and the past varies in the same way as the comparative of adjectives. The most important variations are
+- for verbs ending with //s//, //z//, //x//, //sh//, //ch//: //kiss, kisses, kissed, kissing//
+- for verbs ending with consonant + vowel + consonant: //dim, dims, dimmed, dimming//
+- for verbs ending with //y// not preceded by a vowel: //cry, cries, cried, crying//
+- for verbs ending with //ee//: //free, frees, freed, freeing// 
+- for verbs ending with //ie//: //die, dies, died, dying// 
+- for other verbs ending with //e//: //use, uses, used, using// 
+- for other verbs: //walk, walks, walked, walking//
+
+
+
+English also has a couple of hundred **irregular verbs**, whose infinitive, past, and past participle forms have to stored
+separately. These free forms determine the other forms in the same way as regular verbs. Thus
+- from //cut, cut, cut//, you also get //cuts, cutting//
+- from //fly, flew, flown//, you also get //flies, flying//
+- from //write, wrote, written//, you also get //writes, writing//
+
+
+
+===Structural words=== 
+
+
+
 
