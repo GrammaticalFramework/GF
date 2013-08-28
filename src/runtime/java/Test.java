@@ -6,7 +6,7 @@ public class Test {
 	public static void main(String[] args) {
 		PGF gr = null;
 		try {
-			gr = PGF.readPGF("/home/krasimir/www.grammaticalframework.org/treebanks/PennTreebank/ParseEngAbs.pgf");
+			gr = PGF.readPGF("Phrasebook.pgf");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return;
@@ -14,16 +14,22 @@ public class Test {
 			e.printStackTrace();
 			return;
 		}
-		
+
 		System.out.println(gr.getAbstractName());
 		for (Map.Entry<String,Concr> entry : gr.getLanguages().entrySet()) {
 			System.out.println(entry.getKey()+" "+entry.getValue()+" "+entry.getValue().getName());
 		}
-		
-		Concr eng = gr.getLanguages().get("ParseEng");
-		for (ExprProb ep : eng.parse("Phr", "where are you")) {
-			System.out.println("["+ep.getProb()+"] "+ep.getExpr());
-			System.out.println(eng.linearize(ep.getExpr()));
+
+		Concr eng = gr.getLanguages().get("PhrasebookEng");
+		Concr ger = gr.getLanguages().get("PhrasebookGer");
+
+		try {
+			for (ExprProb ep : eng.parse(gr.getStartCat(), "where is the conference")) {
+				System.out.println("["+ep.getProb()+"] "+ep.getExpr());
+				System.out.println(ger.linearize(ep.getExpr()));
+			}
+		} catch (ParseError e) {
+			System.out.println("Parsing failed at token \""+e.getToken()+"\"");
 		}
 	}
 }
