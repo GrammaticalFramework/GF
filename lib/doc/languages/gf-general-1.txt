@@ -3,6 +3,8 @@ Aarne Ranta
 
 
 %!Encoding:utf8
+%!style(html): ../revealpopup.css
+
 %!postproc(tex)  : "#BECE" "begin{center}"
 %!postproc(html) : "#BECE" "<center>"
 %!postproc(tex)  : "#ENCE" "end{center}"
@@ -233,7 +235,7 @@ future additions of more subcategories for verbs.
 ===Table: subcategories of verbs===
 
 || GF name  | text name                 | example                             | inherent complement features | semantics ||
-| ``V2``    | two-place verb            | //love// (//someone//               | case or preposition | ``e -> e -> t``
+| ``V2``    | two-place verb            | //love// (//someone//)              | case or preposition | ``e -> e -> t``
 | ``V3``    | three-place verb          | //give// (//something to someone//) | two cases or prepositions | ``e -> e -> e -> t``
 | ``VV``    | verb-complement verb      | //try// (//to do something//)       | infinitive form | ``e -> v -> t``
 | ``VS``    | sentence-complement verb  | //know// (//that something happens//)      | sentence mood | ``e -> t -> t``
