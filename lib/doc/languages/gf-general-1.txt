@@ -41,7 +41,7 @@ addition, a little bit like the French gender, they have a **classifier** (间 /
 
 This document provides a tour of the digital grammars in the RGL. It is intended to serve at least three kinds of readers.
 In the decreasing order of the number of potential readers,
-- those who are intested to learn the grammar of a particular language,
+- those who want to learn the grammar of some language in a precise way,
 - those who want to use the RGL for a programming task,
 - those who want to write an RGL grammar for a new language.
 
@@ -100,6 +100,38 @@ of French nouns: //maison// ("house") //is// feminine, inherently, and there is 
 indication of an inflectional gender.)
 
 
+
+++Syntactic implications++
+
+The features given in the table are rough indications for what one can expect in different languages. Thus, 
+for instance, some languages have no gender at all, and hence their nouns and adjectives won't have
+genders either. But the table is a rather good generalization from the 28 language of the RGL: we can
+safely say that, if a language //does// have gender, then nouns have an inherent gender and adjectives have
+a variable gender. This is not a coincidence but has to do with **syntax**, that is, the combination of words 
+into complex expressions. Thus, for instance, nouns are combined with adjectives that modify them, so that
+#BECE
+//blue// + //house// = //blue house//
+#ENCE
+Now, adjectives have to be combinable with all nouns, independently of the gender of the noun: there are no
+separate classes of masculine and feminine adjectives (again, with some apparent exceptions, such as //pregnant//,
+but even these adjectives have at least grammatically correct metaphoric uses with nouns of other genders).
+This means that we must be able to pick the gender of the adjective in agreement with the gender of the noun
+that it modifies, which means that the gender of adjectives must be inflectional. Thus in French the adjective
+for "blue" is //bleu//, with the feminine form //bleue//, and works as follows:
+#BECE
+//bleu// + //maison// = //maison bleue// ("blue house", feminine)
+
+//bleu// + //livre// = //livre bleu// ("blue book", masculine)
+#ENCE
+French also provides examples of adjectives with different **positions**: //bleu// is put after the noun
+it modifies, whereas //vieux// ("old") is put before the noun: //vieux livre// ("old book").
+
+We will return to syntax later. At this point, it is sufficient to say that the morphological features of
+words are not there just for nothing, but they play an important role in how words are combined in syntax.
+In particular, they determine to a great extent how **agreement** works, that is, how the features of
+words depend on each other in combinations.
+
+
 ++Semantics of the categories++
 
 //Notice: this section, and all "semantics" columns can be safely skipped, because//
@@ -149,38 +181,6 @@ The following table summarizes the most important semantic types that will be us
 
 
 
-
-++Syntactic implications++
-
-The features given in the table are rough indications for what one can expect in different languages. Thus, 
-for instance, some languages have no gender at all, and hence their nouns and adjectives won't have
-genders either. But the table is a rather good generalization from the 28 language of the RGL: we can
-safely say that, if a language //does// have gender, then nouns have an inherent gender and adjectives have
-a variable gender. This is not a coincidence but has to do with **syntax**, that is, the combination of words 
-into complex expressions. Thus, for instance, nouns are combined with adjectives that modify them, so that
-#BECE
-//blue// + //house// = //blue house//
-#ENCE
-Now, adjectives have to be combinable with all nouns, independently of the gender of the noun: there are no
-separate classes of masculine and feminine adjectives (again, with some apparent exceptions, such as //pregnant//,
-but even these adjectives have at least grammatically correct metaphoric uses with nouns of other genders).
-This means that we must be able to pick the gender of the adjective in agreement with the gender of the noun
-that it modifies, which means that the gender of adjectives must be inflectional. Thus in French the adjective
-for "blue" is //bleu//, with the feminine form //bleue//, and works as follows:
-#BECE
-//bleu// + //maison// = //maison bleue// ("blue house", feminine)
-
-//bleu// + //livre// = //livre bleu// ("blue book", masculine)
-#ENCE
-French also provides examples of adjectives with different **positions**: //bleu// is put after the noun
-it modifies, whereas //vieux// ("old") is put before the noun: //vieux livre// ("old book").
-
-We will return to syntax later. At this point, it is sufficient to say that the morphological features of
-words are not there just for nothing, but they play an important role in how words are combined in syntax.
-In particular, they determine to a great extent how **agreement** works, that is, how the features of
-words depend on each other in combinations.
-
-
 ++Subcategorization++
 
 In addition to the features needed for inflection and agreement, the lexicon must give information about //what//
@@ -213,9 +213,9 @@ dative, ablative, and so on).
 ===Table: subcategories of nouns and adjectives===
 
 || GF name  | text name                 | example                             | inherent complement features  | semantics ||
-| ``N2``    | two-place noun            | //brother// (//of someone//         | case or preposition | ``e -> n``
-| ``N3``    | three-place noun          | //distance// (//from some place to some place//    | case or preposition  | ``e -> e -> n``
-| ``A2``    | two-place adjective       | //similar// (//to something//         | case or preposition | ``e -> e -> t``
+| ``N2``    | two-place noun            | //brother// (//of someone//)         | case or preposition | ``e -> n``
+| ``N3``    | three-place noun          | //distance// (//from some place to some place//)    | case or preposition  | ``e -> e -> n``
+| ``A2``    | two-place adjective       | //similar// (//to something//)         | case or preposition | ``e -> e -> t``
 
 
 Verbs show a particularly rich variation in subcategorization. The most familiar distinction is the one between

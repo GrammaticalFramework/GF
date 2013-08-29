@@ -1,0 +1,1636 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.org">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf8">
+<LINK REL="stylesheet" TYPE="text/css" HREF="../revealpopup.css">
+<TITLE>English: A Digital Grammar</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<CENTER>
+<H1>English: A Digital Grammar</H1>
+<FONT SIZE="4"><I>Aarne Ranta</I></FONT><BR>
+<FONT SIZE="4">20130829</FONT>
+</CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+
+  <UL>
+  <LI><A HREF="#toc1">1. Words: general rules</A>
+    <UL>
+    <LI><A HREF="#toc2">1.1. Main parts of speech: content words</A>
+      <UL>
+      <LI><A HREF="#toc3">Table: categories of content words</A>
+      </UL>
+    <LI><A HREF="#toc4">1.2. Syntactic implications</A>
+    <LI><A HREF="#toc5">1.3. Semantics of the categories</A>
+      <UL>
+      <LI><A HREF="#toc6">Table: semantic types</A>
+      </UL>
+    <LI><A HREF="#toc7">1.4. Subcategorization</A>
+      <UL>
+      <LI><A HREF="#toc8">Table: subcategories of nouns and adjectives</A>
+      <LI><A HREF="#toc9">Table: subcategories of verbs</A>
+      </UL>
+    <LI><A HREF="#toc10">1.5. Structural words</A>
+      <UL>
+      <LI><A HREF="#toc11">Table: categories of structural words</A>
+      </UL>
+    </UL>
+  <LI><A HREF="#toc12">2. Words: English-specific rules</A>
+    <UL>
+    <LI><A HREF="#toc13">2.1. Morphological features</A>
+      <UL>
+      <LI><A HREF="#toc14">Table: parameter types needed for content words in English</A>
+      <LI><A HREF="#toc15">Table: linearization types of English content words</A>
+      </UL>
+    <LI><A HREF="#toc16">2.2. Inflection paradigms</A>
+      <UL>
+      <LI><A HREF="#toc17">Nouns</A>
+      <LI><A HREF="#toc18">Adjectives</A>
+      <LI><A HREF="#toc19">Verbs</A>
+      <LI><A HREF="#toc20">Structural words</A>
+      </UL>
+    </UL>
+  <LI><A HREF="#toc21">3. Syntax: general rules</A>
+      <UL>
+      <LI><A HREF="#toc22">Figure: the principal dependences of phrasal and lexical categories</A>
+      </UL>
+  <LI><A HREF="#toc23">3.1. The structure of a clause</A>
+      <UL>
+      <LI><A HREF="#toc24">Table: phrasal categories involved in predication</A>
+      <LI><A HREF="#toc25">Table: abstract syntax functions involved in predication</A>
+      <LI><A HREF="#toc26">Table: schematic linearization types</A>
+      </UL>
+  <LI><A HREF="#toc27">4. Syntax: English-specific rules</A>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+Also available for <A HREF="gf-chinese.html">Chinese</A> <A HREF="gf-finnish.html">Finnish</A> <A HREF="gf-french.html">French</A> <A HREF="gf-german.html">German</A> <A HREF="gf-swedish.html">Swedish</A>
+</P>
+<P>
+<hr>
+</P>
+<P>
+<B>Digital grammars</B> are grammars usable by computers, so that they can mechanically perform 
+tasks like interpreting, producing, and translating languages. The <B>GF Resource Grammar Library</B>
+(RGL) is a set of digital grammars which, at the time of writing, covers 28 languages. These grammars
+are written in GF, <B>Grammatical Framework</B>, which is a programming language designed for
+writing digital grammars. 
+</P>
+<P>
+The grammars in the RGL have been written by linguists, computer scientists, and
+programmers who know the languages thoroughly, both in practice and in theory. Almost 50 persons from
+around the world have contributed to this work, and ongoing projects are expected to give us many new
+languages soon. 
+</P>
+<P>
+The leading idea of the RGL is that different languages share large parts of their grammars, despite
+their observed differences. One important thing that is shared are the <B>categories</B>, that is, the
+types of words and expressions. For instance, every language in RGL has a category of <B>nouns</B>, but 
+what exactly a noun is varies from language to language. Thus English nouns have four forms
+(singular and plural, nominative and genitive, as in <I>house, houses, house's, houses'</I>) 
+whereas French nouns have just two forms (singular and plural <I>maison, maisons</I>, "house"), but they also
+have a piece of information that English nouns don't have, namely gender (masculine and feminine).
+Chinese nouns have just one form (房子 <I>fangzi</I> "house"), which is used for both singular and plural, but in
+addition, a little bit like the French gender, they have a <B>classifier</B> (间 <I>jian</I> for the word 
+"house"). German nouns have 8 forms and a gender, Finnish nouns have 26 forms, and so on.
+</P>
+<P>
+This document provides a tour of the digital grammars in the RGL. It is intended to serve at least three kinds of readers.
+In the decreasing order of the number of potential readers,
+</P>
+
+<UL>
+<LI>those who want to learn the grammar of some language in a precise way,
+<LI>those who want to use the RGL for a programming task,
+<LI>those who want to write an RGL grammar for a new language.
+</UL>
+
+<P>
+The document has two main parts: <B>Words</B> and <B>Syntax</B>. Both parts have a <B>general section</B>,
+explaining the RGL structure from a multilingual perspective, followed by a <B>specific section</B>,
+going into the details of the grammar in a particular language. The general sections are the same
+in all languages. The specific sections differ in length and detail, depending on the complexity of
+the language and on what aspects are particularly interesting or problematic for the language 
+in question. 
+</P>
+
+<A NAME="toc1"></A>
+<H1>1. Words: general rules</H1>
+
+<P>
+Categories of words are called <B>lexical categories</B>.
+The language-specific variation in lexical categories is due to <B>morphology</B>, that is, the different forms that
+one and the same word can have in different contexts. If we look at the 28 languages in the RGL, we can
+see that the classification of words is common to all the languages, and the
+differences are in morphology. In this chapter, we will explain all lexical categories and give an overview
+of their morphological aspects. Details of morphology for each language is given in the language-specific documents.
+</P>
+
+<A NAME="toc2"></A>
+<H2>1.1. Main parts of speech: content words</H2>
+
+<P>
+The most important categories of words are given in the following table. More precisely, we will give the
+categories of <B>content words</B>, which, so so say, describe things and events in the real world. 
+Content words are distinguished from <B>structural words</B>, whose purpose is to combine words into syntactic
+structures. Each category of content words may have thousands of words, and new words can be introduced
+continuously; therefore, these categories are also called <B>open categories</B>. In contrast, structural
+words are very few (maybe some dozens), and new ones are very seldom added.
+</P>
+<P>
+Each category has a GF name, that is, a short symbolic name, which is the name actually used in the GF program code.
+In the text we usually use the text names, but will sometimes find the GF names handy to use as well, since they
+give us a short and precise way to state grammatical rules.
+</P>
+
+<A NAME="toc3"></A>
+<H3>Table: categories of content words</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inflectional features</TH>
+<TH>inherent features</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>N</CODE></TD>
+<TD>noun</TD>
+<TD><I>house</I></TD>
+<TD>number, case</TD>
+<TD>gender, classifier</TD>
+<TD><CODE>n</CODE> = <CODE>e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>PN</CODE></TD>
+<TD>proper name</TD>
+<TD><I>Paris</I></TD>
+<TD>case</TD>
+<TD>gender</TD>
+<TD><CODE>e</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>A</CODE></TD>
+<TD>adjective</TD>
+<TD><I>blue</I></TD>
+<TD>gender, number, case, degree</TD>
+<TD>position</TD>
+<TD><CODE>a</CODE> = <CODE>e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>V</CODE></TD>
+<TD>verb</TD>
+<TD><I>sleep</I></TD>
+<TD>number, person, tense, aspect, mood</TD>
+<TD>subject case</TD>
+<TD><CODE>v</CODE> = <CODE>e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Adv</CODE></TD>
+<TD>adverb</TD>
+<TD><I>here</I></TD>
+<TD>(none)</TD>
+<TD>adverb type (place, time, manner)</TD>
+<TD><CODE>adv</CODE> = <CODE>v -&gt; v</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>AdA</CODE></TD>
+<TD>adadjective</TD>
+<TD><I>very</I></TD>
+<TD>(none)</TD>
+<TD>(none)</TD>
+<TD><CODE>a -&gt; a</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+In addition to the names and examples, the table lists the <B>inflectional features</B> and <B>inherent features</B>
+typical of each category. Inflectional features are those that create different forms of words. For instance,
+French nouns have forms for number (singular and plural) - or, as one often says, 
+French nouns are <I>inflected for number</I>. In contrast to number, the gender does not give rise to different forms
+of French nouns: <I>maison</I> ("house") <I>is</I> feminine, inherently, and there is no masculine form of <I>maison</I>.
+(Of course, there are some nouns that do have masculine and feminine forms, such as <I>étudiant, étudiante</I> 
+"male/female student", but this only applies to a minority of French nouns and shouldn't be taken as an
+indication of an inflectional gender.)
+</P>
+
+<A NAME="toc4"></A>
+<H2>1.2. Syntactic implications</H2>
+
+<P>
+The features given in the table are rough indications for what one can expect in different languages. Thus, 
+for instance, some languages have no gender at all, and hence their nouns and adjectives won't have
+genders either. But the table is a rather good generalization from the 28 language of the RGL: we can
+safely say that, if a language <I>does</I> have gender, then nouns have an inherent gender and adjectives have
+a variable gender. This is not a coincidence but has to do with <B>syntax</B>, that is, the combination of words 
+into complex expressions. Thus, for instance, nouns are combined with adjectives that modify them, so that
+<center>
+<I>blue</I> + <I>house</I> = <I>blue house</I>
+</center>
+Now, adjectives have to be combinable with all nouns, independently of the gender of the noun: there are no
+separate classes of masculine and feminine adjectives (again, with some apparent exceptions, such as <I>pregnant</I>,
+but even these adjectives have at least grammatically correct metaphoric uses with nouns of other genders).
+This means that we must be able to pick the gender of the adjective in agreement with the gender of the noun
+that it modifies, which means that the gender of adjectives must be inflectional. Thus in French the adjective
+for "blue" is <I>bleu</I>, with the feminine form <I>bleue</I>, and works as follows:
+<center>
+<I>bleu</I> + <I>maison</I> = <I>maison bleue</I> ("blue house", feminine)
+</P>
+<P>
+<I>bleu</I> + <I>livre</I> = <I>livre bleu</I> ("blue book", masculine)
+</center>
+French also provides examples of adjectives with different <B>positions</B>: <I>bleu</I> is put after the noun
+it modifies, whereas <I>vieux</I> ("old") is put before the noun: <I>vieux livre</I> ("old book").
+</P>
+<P>
+We will return to syntax later. At this point, it is sufficient to say that the morphological features of
+words are not there just for nothing, but they play an important role in how words are combined in syntax.
+In particular, they determine to a great extent how <B>agreement</B> works, that is, how the features of
+words depend on each other in combinations.
+</P>
+
+<A NAME="toc5"></A>
+<H2>1.3. Semantics of the categories</H2>
+
+<P>
+<I>Notice: this section, and all "semantics" columns can be safely skipped, because</I>
+<I>the semantics types do not belong to the RGL proper, and don't appear anywhere in the code.</I>
+<I>Their understanding can however be useful, in particular for programmers who want to use the RGL to</I>
+<I>express logical relations, ontologies, etc</I>
+</P>
+<P>
+The last column in the category table shows the <B>semantic type</B> corresponding to each category. This type gives an indication
+of the kind of meaning that the word of each type has. Starting from the simplest meanings, <CODE>e</CODE> is the type of <B>entities</B> that serve as meanings of proper names. Nouns, adjectives, and verbs have the type <CODE>e -&gt; t</CODE>, which means 
+<B>functions from entities to propositions</B> (where the symbol <CODE>t</CODE> for propositions comes from <B>truth values</B>). Such a function can be <B>applied</B> to an entity to yield a proposition. 
+The type <CODE>t</CODE> itself is reserved for sentences, which are formed in syntax by putting words together.
+For example, the sentence <I>Paris is large</I>
+involves an application of the adjective <I>large</I> to <I>Paris</I>, and yields the value true if <I>large</I> applies to <I>Paris</I>.
+<I>Paris is a capital</I> works in the similar way with the noun <I>capital</I>, and <I>Paris grows</I> with the verb <I>grow</I>.
+</P>
+<P>
+The semantic types will be useful in syntax to explain the ways in which expressions are combined. They are also useful in
+explaining some differences between categories. For example, the categories <CODE>PN</CODE> and <CODE>N</CODE> are different, because a <CODE>PN</CODE>
+refers to an entity but an <CODE>N</CODE> expresses a property of an entity. Of course, the semantic types alone do not explain
+all distinctions of categories: nouns, verbs, and adjectives have the same semantic type, but different syntactic properties.
+We will occasionally use the <B>type synonyms</B> <CODE>n</CODE>, <CODE>a</CODE>, and <CODE>v</CODE> instead of <CODE>e -&gt; t</CODE>, to give a clearer structure to some semantic types. But from the semantic point of view, all these types are one and the same.
+</P>
+<P>
+We should notice that the semantic types given here are quite rough and do not give a full picture of the nuances. For instance, many adjectives work in a different way than straightforwardly yielding truth values from entities. An example is 
+the adjective <I>large</I>. Being a <I>large mouse</I> is different (in terms of absolute size) from being <I>a large elephant</I>, 
+and a logical type for expressing this is <CODE>n -&gt; e -&gt; t</CODE>, with an argument <CODE>n</CODE> indicating the domain of comparison (such as
+mice or elephants).
+</P>
+<P>
+Another problem is that defining
+verbs as <CODE>e -&gt; t</CODE> suggests that all verbs apply to all kinds of entities. But there are combinations of entities and
+verbs that make no sense semantically. For example, the verb <I>sleep</I> is only meaningful for animate entities, and
+a sentence like <I>this book sleeps</I>, if not senseless, requires some kind of a metaphorical interpretation 
+of <I>sleep</I>.
+</P>
+<P>
+The following table summarizes the most important semantic types that will be used. We use more primitive types than most traditional approaches, which reduce everything to <CODE>e</CODE> and <CODE>t</CODE>. For instance, we can't see any way to reduce the top-level category <CODE>p</CODE> of phrases to these types. From a type-theoretical perspective, <CODE>p</CODE> is the category of <B>judgements</B>, whereas
+<CODE>e</CODE> and <CODE>t</CODE> operate on the lower level of propositions. Some more types are defined in the category tables.
+</P>
+
+<A NAME="toc6"></A>
+<H3>Table: semantic types</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH COLSPAN="2">definition</TH>
+</TR>
+<TR>
+<TD><CODE>e</CODE></TD>
+<TD>entity</TD>
+<TD><I>Paris</I></TD>
+<TD>(primitive)</TD>
+</TR>
+<TR>
+<TD><CODE>t</CODE></TD>
+<TD>proposition ("truth value")</TD>
+<TD><I>Paris is large</I></TD>
+<TD>(primitive)</TD>
+</TR>
+<TR>
+<TD><CODE>q</CODE></TD>
+<TD>question</TD>
+<TD><I>is Paris large</I></TD>
+<TD>(primitive)</TD>
+</TR>
+<TR>
+<TD><CODE>p</CODE></TD>
+<TD>top-level phrase</TD>
+<TD><I>Paris is large.</I></TD>
+<TD>(primitive)</TD>
+</TR>
+<TR>
+<TD><CODE>n</CODE></TD>
+<TD>substantive ("noun")</TD>
+<TD><I>man</I></TD>
+<TD><CODE>e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>a</CODE></TD>
+<TD>quality ("adjective")</TD>
+<TD><I>large</I></TD>
+<TD><CODE>e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>v</CODE></TD>
+<TD>action ("verb")</TD>
+<TD><I>sleep</I></TD>
+<TD><CODE>e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>np</CODE></TD>
+<TD>quantifier ("noun phase")</TD>
+<TD><I>every man</I></TD>
+<TD><CODE>(e -&gt; t) -&gt; t</CODE></TD>
+</TR>
+</TABLE>
+
+<A NAME="toc7"></A>
+<H2>1.4. Subcategorization</H2>
+
+<P>
+In addition to the features needed for inflection and agreement, the lexicon must give information about <I>what</I>
+combinations are possible with each word. For most nouns and adjective, this is simple: a noun can be modified
+by an adjective, for instance, and there is a uniform syntax rule for this. However, there are some nouns and adjectives
+that are trickier, because they don't correspond to simple things but to <B>relations</B>. For instance, <I>brother</I> is
+a <B>relational noun</B>, since its primary usage is not alone bur in phrases like <I>brother of this man</I>. 
+In the same way, <I>similar</I> 
+is a <B>relational adjective</B>, since its primary use is in phrases like <I>similar to this</I>. The additional
+term attached to these words is called its <B>complement</B>; thus <I>this</I> is the complement in <I>similar to this</I>.
+The categories of words that take complements are called <B>subcategories</B>. They are morphologically similar to
+the main categories, but need extra information for the usage of complements.
+</P>
+<P>
+The RGL has categories
+for relational nouns and adjectives, and nouns also have a variant with two complements
+(e.g. <I>distance from Paris to Munich</I>).
+From the semantic point of you, complements are called <B>places</B>, and appear as supplementary
+argument places in semantic types. Thus the number of places
+is one plus the number of complements, so that the first place is reserved for the subject of a sentence
+and the rest of the places for the complements.
+</P>
+<P>
+The following table shows the categories of relational nouns and adjectives in the RGL. The inflectional and 
+inherent features are the same as for one-place nouns and adjectives, but for each complement, the lexicon
+must tell what preposition, if any, is needed to attach that complement. For instance, the preposition for
+<I>similar</I> is <I>to</I>, whereas the preposition for <I>different</I> is <I>from</I>. In languages with richer case
+systems (such as German, Latin, and Finnish), the complement information also determines the case (genitive, 
+dative, ablative, and so on).
+</P>
+
+<A NAME="toc8"></A>
+<H3>Table: subcategories of nouns and adjectives</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inherent complement features</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>N2</CODE></TD>
+<TD>two-place noun</TD>
+<TD><I>brother</I> (<I>of someone</I>)</TD>
+<TD>case or preposition</TD>
+<TD><CODE>e -&gt; n</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>N3</CODE></TD>
+<TD>three-place noun</TD>
+<TD><I>distance</I> (<I>from some place to some place</I>)</TD>
+<TD>case or preposition</TD>
+<TD><CODE>e -&gt; e -&gt; n</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>A2</CODE></TD>
+<TD>two-place adjective</TD>
+<TD><I>similar</I> (<I>to something</I>)</TD>
+<TD>case or preposition</TD>
+<TD><CODE>e -&gt; e -&gt; t</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+Verbs show a particularly rich variation in subcategorization. The most familiar distinction is the one between
+<B>intransitive</B> and <B>transitive</B> verbs: intransitive verbs need only a <B>subject</B> (like <I>she</I> in <I>she sleeps</I>),
+whereas transitive verbs also need an <B>object</B> (like <I>him</I> in <I>she loves him</I>). Our category <CODE>V</CODE> obviously includes 
+intransitive verbs. But there is no category for transitive verbs in the RGL. Instead, we have a more general category of
+<B>two-place verbs</B>, which includes transitive verbs but also verbs that need a preposition (such as <I>at</I> in 
+<I>she looks at him</I>). Just like for relational nouns and adjectives, the complement of a two-place verb has variations
+in cases and prepositions.
+</P>
+<P>
+The following table shows the subcategories of verbs in the RGL. The list is long but it may still be incomplete. For
+example, there are no four-place verbs (<I>she paid him one million pounds for the house</I>). Such constructions can
+be built, as we will see later, by using for instance a <CODE>V3</CODE> verb with an additional adverb. But we can envisage 
+future additions of more subcategories for verbs.
+</P>
+
+<A NAME="toc9"></A>
+<H3>Table: subcategories of verbs</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inherent complement features</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>V2</CODE></TD>
+<TD>two-place verb</TD>
+<TD><I>love</I> (<I>someone</I>)</TD>
+<TD>case or preposition</TD>
+<TD><CODE>e -&gt; e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>V3</CODE></TD>
+<TD>three-place verb</TD>
+<TD><I>give</I> (<I>something to someone</I>)</TD>
+<TD>two cases or prepositions</TD>
+<TD><CODE>e -&gt; e -&gt; e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>VV</CODE></TD>
+<TD>verb-complement verb</TD>
+<TD><I>try</I> (<I>to do something</I>)</TD>
+<TD>infinitive form</TD>
+<TD><CODE>e -&gt; v -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>VS</CODE></TD>
+<TD>sentence-complement verb</TD>
+<TD><I>know</I> (<I>that something happens</I>)</TD>
+<TD>sentence mood</TD>
+<TD><CODE>e -&gt; t -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>VQ</CODE></TD>
+<TD>question-complement verb</TD>
+<TD><I>ask</I> (<I>what happens</I>)</TD>
+<TD>question mood</TD>
+<TD><CODE>e -&gt; q -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>VA</CODE></TD>
+<TD>adjective-complement verb</TD>
+<TD><I>become</I> (<I>something, e.g. old</I>)</TD>
+<TD>adjective case</TD>
+<TD><CODE>e -&gt; a -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>V2V</CODE></TD>
+<TD>two-place verb-complement verb</TD>
+<TD><I>force</I> (<I>someone to do something</I>)</TD>
+<TD>infinitive form, control type</TD>
+<TD><CODE>e -&gt; e -&gt; v -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>V2S</CODE></TD>
+<TD>two-place sentence-complement verb</TD>
+<TD><I>tell</I> (<I>someone that something happens</I>)</TD>
+<TD>object case, sentence mood</TD>
+<TD><CODE>e -&gt; e -&gt; t -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>V2Q</CODE></TD>
+<TD>two-place question-complement verb</TD>
+<TD><I>ask</I> (<I>someone what happens</I>)</TD>
+<TD>object case, question mood</TD>
+<TD><CODE>e -&gt; e -&gt; q -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>V2A</CODE></TD>
+<TD>two-place adjective-complement verb</TD>
+<TD><I>paint</I> (<I>something in some colour, e.g. blue</I>)</TD>
+<TD>object and adjective case</TD>
+<TD><CODE>e -&gt; e -&gt; a -&gt; t</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+Of particular interest here is the infinitive form in <CODE>VV</CODE> and <CODE>V2V</CODE>. For instance, English has three such forms: bare infinitive (<I>I must sleep</I>), (infinitive with <I>to</I> (<I>I try to sleep</I>), and the <I>ing</I> form (<I>I start sleeping</I>).
+</P>
+<P>
+The traditional English grammar makes a distinction between <B>auxiliary verbs</B> (such as <I>must</I>) and other verb-complement
+verbs (such as <I>try</I> and <I>start</I>), but this distinction is very specific to English (and some other Germanic languages)
+and hard to maintain in a multilingual setting like the RGL. Thus we make the distinction on the level of complement features
+and not on the level of categories.
+</P>
+<P>
+The <B>mood</B> of complement sentences and questions is relevant in languages like French and Ancient Greek, where some verbs may require sentences in the indicative, some in another mood such as subjunctive, conjunctive, or optative. English has only a few remnants of conjunctives, such as with the verb <I>suggest</I> as used in <I>I suggest that this part be struck out</I>.
+</P>
+<P>
+The type of <B>control</B> in <CODE>V2V</CODE> is interesting but subtle. It decides whether the verb complement of the verb agrees to the
+subject or the object. An example of a <B>subject-control verb</B> is <I>promise</I>: <I>I promised her to wash myself</I>.
+<B>Object-control verbs</B> seem to be more common: <I>I forced her to wash herself</I>, <I>I made her wash herself</I>, etc.
+Semantically, the type <CODE>e -&gt; e -&gt; v -&gt; t</CODE> works for both of them. However, if you consider the proposition formed by applying
+them, then the two kinds of verbs apply their argument verb to different arguments:
+</P>
+
+<UL>
+<LI><CODE>promise subj obj verb</CODE> is about the proposition <CODE>verb subj</CODE>
+<LI><CODE>force subj obj verb</CODE> is about the proposition <CODE>verb obj</CODE>
+</UL>
+
+<P>
+Hence it would make sense to distinguish between subject-control and object-control <CODE>V2V</CODE>'s on the category level rather 
+than with a complement feature. The agreement behaviour would them become simpler to describe, and, what is more important,
+the semantic behaviour would be predictable from the category alone.
+</P>
+<P>
+As a final thing about subcategorizations, notice that one and the same verb can have different categories. In the above
+table, <I>ask</I> appears in both <CODE>VQ</CODE> and <CODE>V2Q</CODE>. Now, these uses are related, in the sense that to <I>ask something</I> means
+the same as to <I>ask someone something</I>. But in some other cases, the meaning can be completely different. For instance,
+<I>walk</I> in <CODE>V2</CODE> (as in <I>I walk the dog</I>) is different from <I>walk</I> in <CODE>V</CODE> (as in <I>the dog walks</I>). The <CODE>V2</CODE> is in
+this case <B>causative</B> with respect to the <CODE>V</CODE>: I cause the walking of the dog. From the multilingual perspective, it is
+just a coincidence that English uses the same verb for the intransitive and the causative meanings. In many other languages, 
+different words would be used. And so would English do for many other verbs: one cannot say <I>I eat the dog</I> to express that I make the dog eat; the verb <I>feed</I> is used instead.
+</P>
+
+<A NAME="toc10"></A>
+<H2>1.5. Structural words</H2>
+
+<P>
+We have defined the categories of content along three criteria:
+</P>
+
+<UL>
+<LI><B>morphological</B>: words belonging to the same category must have the same types of inflectional and inherent features
+<LI><B>syntactic</B>: words belonging to the same category must have the same syntactic combination possibilities
+<LI><B>semantic</B>: words belonging to the same category must have the same semantic type
+</UL>
+
+<P>
+Thus morphological criteria are, in most languages, enough to tell apart <CODE>N</CODE>, <CODE>A</CODE>, <CODE>V</CODE>, and <CODE>Adv</CODE>. 
+Syntactic criteria are appealed to when distinguishing the subcategories of nouns, adjectives, and verbs. 
+Semantic criteria are often obeyed as well, although we have noticed that finer distinctions could be useful
+for subject vs. object control verbs and for different kinds of adjectives.
+</P>
+<P>
+For structural words, following the same criteria leads to a high number of categories, higher than in many traditional
+grammars. Thus, for instance the category of <B>pronouns</B> is divided to at least, 
+personal pronouns (<I>he</I>), determiners (<I>this</I>),
+interrogative pronouns (<I>who</I>), and relative pronouns (<I>that</I>). There is no way to see all these classes as subcategories
+of a uniform class of pronouns, as we did with the verb subcategories: for verbs, there was a uniform
+set of features, to which only complement feature information had to be added, but the same does not concern the things
+traditionally called "pronouns".
+</P>
+<P>
+Structural words moreover contain many categories that have no morphological variation or morphologically relevant features.
+For instance, interrogative adverbs (such as <I>why</I>) and sentential adverbs (such as <I>always</I>) are, in all languages we
+have encountered, equivalent from the morphological point of view. Yet of course they are syntactically different, as
+one cannot convert <I>why are you always late</I> into <I>always are you why late</I>. And semantically, sentential adverbs
+modify actions whereas interrogative adverbs form questions from sentences.
+</P>
+<P>
+The following tables give a summary of the structural word categories of the RGL, equipped with morphological and
+semantic information as we did for content words. The full details will be best explained in the sections on syntax,
+i.e. on how the structural words are actually used for building structures.
+</P>
+
+<A NAME="toc11"></A>
+<H3>Table: categories of structural words</H3>
+
+<P>
+<B>Building noun phrases</B>
+</P>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inflectional features</TH>
+<TH>inherent features</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>Det</CODE></TD>
+<TD>determiner</TD>
+<TD><I>every</I></TD>
+<TD>gender, case</TD>
+<TD>number, definiteness</TD>
+<TD><CODE>det</CODE> = <CODE>n -&gt; (e -&gt; t) -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Quant</CODE></TD>
+<TD>quantifier</TD>
+<TD><I>this</I></TD>
+<TD>gender, number, case</TD>
+<TD>definiteness</TD>
+<TD><CODE>num -&gt; det</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Predet</CODE></TD>
+<TD>predeterminer</TD>
+<TD><I>only</I></TD>
+<TD>gender, number, case</TD>
+<TD>(none)</TD>
+<TD><CODE>np -&gt; np</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Pron</CODE></TD>
+<TD>personal pronoun</TD>
+<TD><I>he</I></TD>
+<TD>case, possessives</TD>
+<TD>gender, number, person</TD>
+<TD><CODE>e</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+The most important thing to notice is the distinction between <CODE>Det</CODE> and <CODE>Quant</CODE>. The latter covers determiners that have
+"two forms", for both numbers, such as <I>this-these</I> and <I>that-those</I>. The former covers determiners with a fixed number,
+such as <I>every</I> (singular). 
+</P>
+<P>
+<B>Building number expressions</B>
+</P>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inflectional features</TH>
+<TH>inherent features</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>Num</CODE></TD>
+<TD>number expression</TD>
+<TD><I>five</I></TD>
+<TD>gender, case</TD>
+<TD>number</TD>
+<TD><CODE>num</CODE> = <CODE>det</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Card</CODE></TD>
+<TD>cardinal number</TD>
+<TD><I>five</I></TD>
+<TD>gender, case</TD>
+<TD>number</TD>
+<TD><CODE>num</CODE> = <CODE>det</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Ord</CODE></TD>
+<TD>ordinal number</TD>
+<TD><I>fifth</I></TD>
+<TD>gender, number, case</TD>
+<TD>(none)</TD>
+<TD><CODE>e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Numeral</CODE></TD>
+<TD>verbal numeral</TD>
+<TD><I>five</I></TD>
+<TD>gender, case, card/ord</TD>
+<TD>number</TD>
+<TD><CODE>num</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Digits</CODE></TD>
+<TD>numeral in digits</TD>
+<TD><I>511</I></TD>
+<TD>card/ord</TD>
+<TD>number</TD>
+<TD><CODE>num</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>AdN</CODE></TD>
+<TD>numeral-modifying adverb</TD>
+<TD><I>almost</I></TD>
+<TD>(none)</TD>
+<TD>(none)</TD>
+<TD><CODE>num -&gt; num</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+<I>Notice: under</I> <CODE>Numeral</CODE>, <I>there is a category structure of its own, which is however of a technical</I>
+<I>nature and needs usually no attention by the library users.</I>
+</P>
+<P>
+<B>Building interrogatives and relatives</B>
+</P>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inflectional features</TH>
+<TH>inherent features</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>IP</CODE></TD>
+<TD>interrogative pronoun</TD>
+<TD><I>who</I></TD>
+<TD>case</TD>
+<TD>gender, number</TD>
+<TD><CODE>(e -&gt; t) -&gt; q</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>IDet</CODE></TD>
+<TD>interrogative determiner</TD>
+<TD><I>how many</I></TD>
+<TD>gender, case</TD>
+<TD>number</TD>
+<TD><CODE>n -&gt; (e -&gt; t) -&gt; q</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>IQuant</CODE></TD>
+<TD>interrogative quantifier</TD>
+<TD><I>which</I></TD>
+<TD>gender, number, case</TD>
+<TD>(none)</TD>
+<TD><CODE>num -&gt; n -&gt; (e -&gt; t) -&gt; q</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>IAdv</CODE></TD>
+<TD>interrogative adverb</TD>
+<TD><I>why</I></TD>
+<TD>(none)</TD>
+<TD>(none)</TD>
+<TD><CODE>t -&gt; q</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>RP</CODE></TD>
+<TD>relative pronoun</TD>
+<TD><I>that</I></TD>
+<TD>gender, number, case</TD>
+<TD>gender, number</TD>
+<TD><CODE>(e -&gt; t) -&gt; rel</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+The interrogative pronoun structure replicates a part of the determiner structure. For instance, <CODE>IQuant</CODE> such as
+<I>which</I> is usable for both singular and plural, whereas <I>IDet</I> has a fixed number: <I>how many</I> is plural.
+</P>
+<P>
+<B>Combining sentences</B>
+</P>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inflectional features</TH>
+<TH>inherent features</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>Conj</CODE></TD>
+<TD>conjunction</TD>
+<TD><I>and</I></TD>
+<TD>(none)</TD>
+<TD>number; continuity</TD>
+<TD><CODE>t -&gt; t -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>PConj</CODE></TD>
+<TD>phrasal conjunction</TD>
+<TD><I>therefore</I></TD>
+<TD>(none)</TD>
+<TD>(none)</TD>
+<TD><CODE>p -&gt; p</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Subj</CODE></TD>
+<TD>subjunction</TD>
+<TD><I>if</I></TD>
+<TD>(none)</TD>
+<TD>mood</TD>
+<TD><CODE>t -&gt; adv</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+<B>Adverbial expressions</B>
+</P>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inflectional features</TH>
+<TH>inherent features</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>AdV</CODE></TD>
+<TD>sentential adverb</TD>
+<TD><I>always</I></TD>
+<TD>(none)</TD>
+<TD>(none)</TD>
+<TD><CODE>v -&gt; v</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>CAdv</CODE></TD>
+<TD>comparative adverb</TD>
+<TD><I>as</I></TD>
+<TD>(none)</TD>
+<TD>(none)</TD>
+<TD><CODE>a -&gt; e -&gt; a</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Prep</CODE></TD>
+<TD>preposition</TD>
+<TD><I>through</I></TD>
+<TD>(none)</TD>
+<TD>case, position</TD>
+<TD><CODE>np -&gt; adv</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+One more thing to be taken into account is that many of the "structural word categories" also admit of complex
+expressions and not only words. That is, the RGL has not only words in these categories but also syntactic
+rules for building more expressions. Thus for instance <I>these five</I> is a <CODE>Det</CODE> built from the <CODE>Quant</CODE> <I>this</I> 
+and the <CODE>Num</CODE> <I>five</I>. It is also common that a "structural word" in a particular language is realized as 
+a feature of the other words it combines with, rather than as a word of its own. For instance,
+the determiner <I>the</I> in Swedish just selects an inflectional form of the noun that it is applied to:
+"the" + <I>bil</I> = <I>bilen</I> ("the car").
+</P>
+
+<A NAME="toc12"></A>
+<H1>2. Words: English-specific rules</H1>
+
+<A NAME="toc13"></A>
+<H2>2.1. Morphological features</H2>
+
+<P>
+The first task when defining the language-specific rules for linguistic structures in the RGL is to give the
+actual ranges of the features attached to the categories. We have to tell whether the language has the grammatical
+number (as e.g. Chinese has not), and which values it takes (as many languages have two numbers but e.g. Arabic has three).
+We have to do likewise for case, gender, person, tense - in other words, to specify the <B>parameter types</B> of
+the language. Then we have to proceed to specifying which features belong to which lexical categories and how (i.e.
+as inflectional or inherent features). In this process, we may also note that we need some special features that
+are complex combinations of the "standard" features (as happens with English verbs: their forms are depend on tense,
+number, and person, but not as a straightforward combination of them). We may also notice that a "words" in some 
+category may in fact consist of several words, which may even appear separated from each other. English verbs such as
+<I>switch off</I>, called <B>particle verbs</B>, are a case in point. The particle contributes essentially to the meaning
+of the verb, but it may be separated from it by an object: <I>Please switch it off!</I>
+</P>
+
+<A NAME="toc14"></A>
+<H3>Table: parameter types needed for content words in English</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH COLSPAN="2">values</TH>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD>number</TD>
+<TD>singular, plural</TD>
+</TR>
+<TR>
+<TD><CODE>Person</CODE></TD>
+<TD>person</TD>
+<TD>first, second, third</TD>
+</TR>
+<TR>
+<TD><CODE>Case</CODE></TD>
+<TD>case</TD>
+<TD>nominative, genitive</TD>
+</TR>
+<TR>
+<TD><CODE>Degree</CODE></TD>
+<TD>degree</TD>
+<TD>positive, comparative, superlative</TD>
+</TR>
+<TR>
+<TD><CODE>AForm</CODE></TD>
+<TD>adjective form</TD>
+<TD>degrees, adverbial</TD>
+</TR>
+<TR>
+<TD><CODE>VForm</CODE></TD>
+<TD>verb form</TD>
+<TD>infinitive, present, past, past participle, present participle</TD>
+</TR>
+<TR>
+<TD><CODE>VVType</CODE></TD>
+<TD>infinitive form (for a VV)</TD>
+<TD>bare infinitive, <I>to</I> infinitive, <I>ing</I> form</TD>
+</TR>
+</TABLE>
+
+<P>
+The assignment of parameter types and the identification of the separate parts of categories defines
+the <B>data structures</B> in which the words are stored in a lexicon.
+This data structure is in GF called the <B>linearization type</B> of the category. From the computer's
+point of view, it is important that the data structures are well defined for all words, even if this may
+sound unnecessary for the human. For instance, since some verbs need a particle part, all verbs must uniformly have a
+storage for this particle, even if it is empty most of the time. This property is guaranteed by
+an operation called <B>type checking</B>. It is performed by GF as a part of <B>grammar compilation</B>, which
+is the process in which the human-readable description of the grammar is converted to bits executable
+by the computer.
+</P>
+
+<A NAME="toc15"></A>
+<H3>Table: linearization types of English content words</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inflectional features</TH>
+<TH COLSPAN="2">inherent features</TH>
+</TR>
+<TR>
+<TD><CODE>N</CODE></TD>
+<TD>noun</TD>
+<TD><I>house</I></TD>
+<TD>number, case</TD>
+<TD>(none)</TD>
+</TR>
+<TR>
+<TD><CODE>PN</CODE></TD>
+<TD>proper name</TD>
+<TD><I>Paris</I></TD>
+<TD>case</TD>
+<TD>(none)</TD>
+</TR>
+<TR>
+<TD><CODE>A</CODE></TD>
+<TD>adjective</TD>
+<TD><I>blue</I></TD>
+<TD>adjective form</TD>
+<TD>(none)</TD>
+</TR>
+<TR>
+<TD><CODE>V</CODE></TD>
+<TD>verb</TD>
+<TD><I>sleep</I></TD>
+<TD>verb form</TD>
+<TD>particle</TD>
+</TR>
+<TR>
+<TD><CODE>Adv</CODE></TD>
+<TD>adverb</TD>
+<TD><I>here</I></TD>
+<TD>(none)</TD>
+<TD>(none)</TD>
+</TR>
+<TR>
+<TD><CODE>V2</CODE></TD>
+<TD>two-place verb</TD>
+<TD><I>love</I></TD>
+<TD>verb form</TD>
+<TD>particle, preposition</TD>
+</TR>
+<TR>
+<TD><CODE>VV</CODE></TD>
+<TD>verb-complement verb</TD>
+<TD><I>try</I></TD>
+<TD>verb form</TD>
+<TD>particle, infinitive form</TD>
+</TR>
+<TR>
+<TD><CODE>VS</CODE></TD>
+<TD>sentence-complement verb</TD>
+<TD><I>know</I></TD>
+<TD>verb form</TD>
+<TD>particle</TD>
+</TR>
+<TR>
+<TD><CODE>VQ</CODE></TD>
+<TD>question-complement verb</TD>
+<TD><I>ask</I></TD>
+<TD>verb form</TD>
+<TD>particle</TD>
+</TR>
+<TR>
+<TD><CODE>VA</CODE></TD>
+<TD>adjective-complement verb</TD>
+<TD><I>become</I></TD>
+<TD>verb form</TD>
+<TD>particle</TD>
+</TR>
+</TABLE>
+
+<P>
+Notice that we have placed the particle of verbs in the inherent feature column. It is not a parameter
+but a string. 
+We have done the same with the preposition strings that define the complement features of verb 
+and other subcategories.
+</P>
+<P>
+The "digital grammar" representations of these types are <B>records</B>, where for instance the <CODE>VV</CODE>
+record type is formally written
+</P>
+
+<PRE>
+    {s : VForm =&gt; Str ; p : Str ; i : InfForm}
+</PRE>
+
+<P>
+The record has <B>fields</B> for different types of data. In the record above, there are three fields:
+</P>
+
+<UL>
+<LI>the field labelled <CODE>s</CODE>, storing an <B>inflection table</B> that produces a <B>string</B> (<CODE>Str</CODE>) depending on verb form,
+<LI>the field labelled <CODE>p</CODE>, storing a string representing the particle,
+<LI>the field labelled <CODE>i</CODE>, storing an inherent feature for the infinitive form required
+</UL>
+
+<P>
+Thus for instance the record for verb-complement verb <I>try</I> (<I>to do something</I>) in the lexicon looks as follows:
+</P>
+
+<PRE>
+    {s = table {
+       VInf =&gt; "try" ;
+       VPres =&gt; "tries" ;
+       VPast =&gt; "tried" ;
+       VPastPart =&gt; "tried" ;
+       VPresPart =&gt; "trying"
+       } ;
+     p = "" ;
+     i = VVInf 
+     }
+</PRE>
+
+<P>
+We have not introduce the GF names of the features, as we will not make essential use of them: we will prefer
+informal explanations for all rules. So these records are a little hint for those who want to understand the
+whole chain, from the rules as we state them in natural language, down to machine-readable digital grammars,
+which ultimately have the same structure as our statements.
+</P>
+
+<A NAME="toc16"></A>
+<H2>2.2. Inflection paradigms</H2>
+
+<P>
+In many languages, the description of inflectional forms occupies a large part of grammar books. Words, in particular
+verbs, can have dozens of forms, and there can be dozens of different ways of building those forms. Each type of
+inflection is described in a <B>paradigm</B>, which is a table including all forms of an example verb. For other
+verbs, it is enough to indicate the number of the paradigm, to say that this verb is inflected "in the same way"
+as the model verb.
+</P>
+
+<A NAME="toc17"></A>
+<H3>Nouns</H3>
+
+<P>
+Computationally, inflection paradigms are <B>functions</B> that take as their arguments <B>stems</B>, to which suffixes
+(and sometime prefixes) are added. Here is, for instance, the English <B>regular noun</B> paradigm:
+</P>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>form</TH>
+<TH>singular</TH>
+<TH COLSPAN="2">plural</TH>
+</TR>
+<TR>
+<TD>nominative</TD>
+<TD><I>dog</I></TD>
+<TD><I>dogs</I></TD>
+</TR>
+<TR>
+<TD>genitive</TD>
+<TD><I>dog's</I></TD>
+<TD><I>dogs'</I></TD>
+</TR>
+</TABLE>
+
+<P>
+As a function, it is interpreted as follows: the word <I>dog</I> is the stem to which endings are added. Replacing it
+with <I>cat</I>, <I>donkey</I>, <I>rabbit</I>, etc, will yield the forms of these words.
+</P>
+<P>
+In addition to nouns that are inflected with exactly the same suffixes as <I>dog</I>, English has 
+inflection types such as <I>fly-flies</I>, <I>kiss-kisses</I>, <I>bush-bushes</I>, <I>echo-echoes</I>. Each of these inflection types
+could be described by a paradigm of its own. However, it is more attractive to see these as variations of the regular
+paradigm, which are predictable by studying the singular nominative. This leads to a generalization of paradigms which
+in the RGL are called <B>smart paradigms</B>.
+</P>
+<P>
+Here is the smart paradigm of English nouns. It tells how the plural nominative is formed from the singular; the
+genitive forms are always formed by just adding <I>'s</I> in the singular and <I>'</I> in the plural.
+</P>
+
+<UL>
+<LI>for nouns ending with <I>s</I>, <I>z</I>, <I>x</I>, <I>sh</I>, <I>ch</I>, the forms are like <I>kiss - kisses</I>
+<LI>for nouns ending with a vowel (one of <I>a</I>,<I>e</I>,<I>i</I>,<I>o</I>,<I>u</I>) followed by <I>y</I>, the forms are like <I>boy - boys</I>
+<LI>for all other nouns ending with <I>y</I>, the forms are like <I>baby - babies</I>
+<LI>for nouns ending with a vowel or <I>y</I> and followed by <I>o</I>, the forms are like <I>embryo - embryos</I>
+<LI>for all other nouns ending with <I>o</I>, the forms are like <I>echo - echoes</I>
+<LI>for all other nouns, the forms are like <I>dog - dogs</I>
+</UL>
+
+<P>
+The same rules are in GF expressed by <B>regular expression pattern matching</B> which, although formal and machine-readable,
+might in fact be a nice notation for humans to read as well:
+</P>
+
+<PRE>
+    "s" | "z" | "x" | "sh" | "ch" =&gt; &lt;word, word + "es"&gt;
+    #vowel + "y"                  =&gt; &lt;word, word + "s"&gt;
+    "y"                           =&gt; &lt;word, init word + "ies"&gt;
+    (#vowel | "y") + "o"          =&gt; &lt;word, word + "s"&gt;
+    "o"                           =&gt; &lt;word, word + "es"&gt;
+    _                             =&gt; &lt;word, word + "s"&gt;
+</PRE>
+
+<P>
+In this notation, <CODE>|</CODE> means "or" and <CODE>+</CODE> means "followed by". The pattern that is matched is followed by 
+an arrow <CODE>=&gt;</CODE>, after which the two forms appear within angel brackets. The patterns are matched in the given
+order, and <CODE>_</CODE> means "anything that was not matched before". Finally, the function <CODE>init</CODE> returns the
+initial segment of a word (e.g. <I>happ</I> for <I>happy</I>), and the pattern <CODE>#vowel</CODE> is defined as
+``"a" | "e" | "i" | "o" | "u".
+</P>
+<P>
+In addition to regular and predictable nouns, English has <B>irregular nouns</B>, such as <I>man - men</I>, 
+<I>formula - formulae</I>, <I>ox - oxen</I>. These nouns have their plural genitive formed by <I>'s</I>: <I>men's</I>.
+</P>
+
+<A NAME="toc18"></A>
+<H3>Adjectives</H3>
+
+<P>
+English adjectives inflect for degree, with three values, and also have an adverbial form in their linearization type.
+Here are some regular variations:
+</P>
+
+<UL>
+<LI>for adjectives ending with consonant + vowel + consonant: <I>dim, dimmer, dimmest, dimly</I>
+<LI>for adjectives ending with <I>y</I> not preceded by a vowel: <I>happy, happier, happier, happily</I>
+<LI>for other adjectives: <I>quick, quicker, quickest, quickly</I>
+</UL>
+
+<P>
+The comparison forms only work for adjectives with at most two syllables. For longer ones,
+they are formed syntactically: <I>expensive, more expensive, most expensive</I>. There are also
+some irregular adjectives, the most extreme one being perhaps <I>good, better, best, well</I>.
+</P>
+
+<A NAME="toc19"></A>
+<H3>Verbs</H3>
+
+<P>
+English verbs have five different forms, except for the verb <I>be</I>, which has some more forms, e.g.
+<I>sing, sings, sang, sung, singing</I>.
+But <I>be</I> is also special syntactically and semantically, and is in the RGL introduced
+in the syntax rather than in the lexicon.
+</P>
+<P>
+Two forms, the past (indicative) and the past participle are the same for the so-called <B>regular verbs</B>
+(e.g. <I>play, plays, played, played, playing</I>). The regular verb paradigm thus looks as follows:
+</P>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>feature</TH>
+<TH COLSPAN="2">form</TH>
+</TR>
+<TR>
+<TD>infinitive</TD>
+<TD><I>play</I></TD>
+</TR>
+<TR>
+<TD>present</TD>
+<TD><I>plays</I></TD>
+</TR>
+<TR>
+<TD>past</TD>
+<TD><I>played</I></TD>
+</TR>
+<TR>
+<TD>past participle</TD>
+<TD><I>played</I></TD>
+</TR>
+<TR>
+<TD>present participle</TD>
+<TD><I>plays</I></TD>
+</TR>
+</TABLE>
+
+<P>
+The predictable variables are related to the ones we have seen in nouns and adjectives: 
+the present tense of verbs varies in the same way as the plural of nouns,
+and the past varies in the same way as the comparative of adjectives. The most important variations are
+</P>
+
+<UL>
+<LI>for verbs ending with <I>s</I>, <I>z</I>, <I>x</I>, <I>sh</I>, <I>ch</I>: <I>kiss, kisses, kissed, kissing</I>
+<LI>for verbs ending with consonant + vowel + consonant: <I>dim, dims, dimmed, dimming</I>
+<LI>for verbs ending with <I>y</I> not preceded by a vowel: <I>cry, cries, cried, crying</I>
+<LI>for verbs ending with <I>ee</I>: <I>free, frees, freed, freeing</I> 
+<LI>for verbs ending with <I>ie</I>: <I>die, dies, died, dying</I> 
+<LI>for other verbs ending with <I>e</I>: <I>use, uses, used, using</I> 
+<LI>for other verbs: <I>walk, walks, walked, walking</I>
+</UL>
+
+<P>
+English also has a couple of hundred <B>irregular verbs</B>, whose infinitive, past, and past participle forms have to stored
+separately. These free forms determine the other forms in the same way as regular verbs. Thus
+</P>
+
+<UL>
+<LI>from <I>cut, cut, cut</I>, you also get <I>cuts, cutting</I>
+<LI>from <I>fly, flew, flown</I>, you also get <I>flies, flying</I>
+<LI>from <I>write, wrote, written</I>, you also get <I>writes, writing</I>
+</UL>
+
+<A NAME="toc20"></A>
+<H3>Structural words</H3>
+
+<A NAME="toc21"></A>
+<H1>3. Syntax: general rules</H1>
+
+<P>
+The rules of syntax specify how words are combined to <B>phrases</B>, and how phrases are combined to even longer phrases.
+Phrases, just like words, belong to different categories, which are equipped with inflectional and inherent features and
+with semantic types. Moreover, each syntactic rule has a corresponding <B>semantic rule</B>, which specifies how the meaning
+of the new phrases is constructed from the meanings of its parts.
+</P>
+<P>
+The RGL has around 30 categories of phrases, on top of the lexical categories. The widest category is <CODE>Text</CODE>, which cover
+entire texts consisting of sentences, questions, interjections, etc, with punctuation. The following picture shows all RGL
+categories as a dependency tree, where <CODE>Text</CODE> is in the root (so it is an upside-down tree), and the lexical categories
+in the leaves. Being above another category in the tree means that phrases of higher categories can have phrases of lower
+categories as parts. But these dependencies can work in both directions: for instance, the noun phrase (<CODE>NP</CODE>)
+<I>every man who owns a donkey</I> has as its part the relative clause (<CODE>RCl</CODE>), which in turn has its part the noun phrase
+<I>a donkey</I>.
+</P>
+
+<A NAME="toc22"></A>
+<H3>Figure: the principal dependences of phrasal and lexical categories</H3>
+
+<P>
+<IMG ALIGN="middle" SRC="../categories.png" BORDER="0" ALT="">
+</P>
+<P>
+Lexical categories appear in boxes rather than ellipses, with several categories gathered in some of the boxes.
+</P>
+
+<A NAME="toc23"></A>
+<H2>3.1. The structure of a clause</H2>
+
+<P>
+It is convenient to start from the middle of the RGL: from the structure of a <B>clause</B> (<CODE>Cl</CODE>). A clause is an application
+of a verb to its arguments. For instance, <I>John paints the house yellow</I> is an application of the <CODE>V2V</CODE> verb <I>paint</I>
+to the arguments <I>John</I>, <I>the house</I>, and <I>yellow</I>. Recalling the table of lexical categories from Chapter 1,
+we can summarize the semantic types of these parts as follows:
+</P>
+
+<PRE>
+    paint     : e -&gt; e -&gt; (e -&gt; t) -&gt; t
+    John      : e
+    the house : e
+    yellow    : e -&gt; t
+</PRE>
+
+<P>
+Hence the verb <I>paint</I> is a <B>predicate</B>, a function that can be applied to arguments to return a proposition.
+In this case, we can build the application
+</P>
+
+<PRE>
+    paint John (the house) yellow : t
+</PRE>
+
+<P>
+which is thus an object of type <CODE>t</CODE>.
+</P>
+<P>
+Applying verbs to arguments is how clauses work on the semantic level. However, the syntactic fine-structure is
+a bit more complex. The predication process is hence divided to several steps, which involve intermediate categories.
+Following these steps, a clause is built by adding one argument at a time. Doing in this way, rather than adding
+all arguments at once, has two advantages:
+</P>
+
+<UL>
+<LI>the grammar doesn't need to specify the same things again and again for different verb categories
+<LI>at each step of construction, some other rule could apply than adding an argument - for instance, adding an adverb
+</UL>
+
+<P>
+Here are the steps in which <I>John paints the house yellow</I> is constructed from its arguments in the RGL:
+</P>
+
+<UL>
+<LI><I>paints</I> and <I>yellow</I> are combined to a <B>verb phrase missing a noun phrase</B> (<CODE>VPSlash</CODE>)
+<LI><I>paints - yellow</I> and <I>the house</I> are combined to a <B>verb phrase</B> (<CODE>VP</CODE>)
+<LI><I>John</I> and <I>paints the house yellow</I> are combined to a <B>clause</B> (<CODE>Cl</CODE>)
+</UL>
+
+<P>
+The structure is shown by the following tree:
+</P>
+<P>
+<center>
+<IMG ALIGN="middle" SRC="paint-abstract.png" BORDER="0" ALT="">
+</center>
+This tree is called the <B>abstract syntax tree</B> of the sentence. It shows the structural components from which the
+sentence has been constructed. Its nodes show the GF names associated with syntax rules and internally used for building
+structures. Thus for instance <CODE>PredVP</CODE> encodes the rule that combines a noun phrase and a verb phrase into a clause,
+<CODE>UsePN</CODE> converts a proper name to a noun phrase, and so on. Mathematically, these names 
+denote <B>functions</B> that build abstract syntax trees from other tree. Every tree belongs to some category.
+The GF notation for the <CODE>PredVP</CODE> rule is
+</P>
+
+<PRE>
+    PredVP : NP -&gt; VP -&gt; Cl
+</PRE>
+
+<P>
+in words, <CODE>PredVP</CODE> <I>is a function that takes a noun phrase and a verb phrase and returns a clause</I>.
+</P>
+<P>
+The tree is thus in fact built by function applications. A computer-friendly notation for trees uses
+parentheses rather than graphical trees:
+</P>
+
+<PRE>
+    PredVP 
+      (UsePN john_PN) 
+      (ComplSlash 
+        (SlashV2A paint_V2A (PositA yellow_A)) 
+        (DetCN (DetQuant DefArt NumSg) (UseN house_N)))
+</PRE>
+
+<P>
+Before going to the details of phrasal categories and rules, let us compare the abstract syntax tree with 
+another tree, known as <B>parse tree</B> or <B>concrete syntax tree</B>:
+</P>
+<P>
+<center>
+<IMG ALIGN="middle" SRC="paint-concrete.png" BORDER="0" ALT="">
+</center>
+This tree shows, on its leaves, the clause that results from the combination of categories. Each node
+is labelled with the category to which the part of the clause under it belongs to. As shown by the label
+<CODE>VPSlash</CODE>, this part can consist of many separate groups of words, where words from constructions from
+higher up are inserted. 
+</P>
+<P>
+As parse trees display the actual words of a particular language, in a language-specific
+order, they are less interesting from the multilingual point of view than the abstract syntax trees.
+A GF grammar is thus primarily specified by its abstract syntax functions, which are language-neutral,
+and secondarily by the <B>linearization rules</B> that convert them to different languages.
+</P>
+<P>
+Let us specify the phrasal categories that are used for making up predications. The lexical category <CODE>V2A</CODE> of 
+two-place adjective-complement verbs was explained in Chapter 1. 
+</P>
+
+<A NAME="toc24"></A>
+<H3>Table: phrasal categories involved in predication</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH>example</TH>
+<TH>inflection features</TH>
+<TH>inherent features</TH>
+<TH>parts</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>Cl</CODE></TD>
+<TD>clause</TD>
+<TD><I>he paints it blue</I></TD>
+<TD>temporal, polarity</TD>
+<TD>(none)</TD>
+<TD>one</TD>
+<TD><CODE>t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>VP</CODE></TD>
+<TD>verb phrase</TD>
+<TD><I>paints it blue</I></TD>
+<TD>temporal, polarity, agreement</TD>
+<TD>subject case</TD>
+<TD>verb, complements</TD>
+<TD><CODE>e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>VPSlash</CODE></TD>
+<TD>slash verb phrase</TD>
+<TD><I>paints - blue</I></TD>
+<TD>temporal, polarity, agreement</TD>
+<TD>subject and complement case</TD>
+<TD>verb, complements</TD>
+<TD><CODE>e -&gt; e -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>NP</CODE></TD>
+<TD>noun phrase</TD>
+<TD><I>the house</I></TD>
+<TD>case</TD>
+<TD>agreement</TD>
+<TD>one</TD>
+<TD><CODE>(e -&gt; t) -&gt; t</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>AP</CODE></TD>
+<TD>adjectival phrase</TD>
+<TD><I>very blue</I></TD>
+<TD>gender, numeber, case</TD>
+<TD>position</TD>
+<TD>one</TD>
+<TD><CODE>a</CODE> = <CODE>e -&gt; t</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+TODO explain <B>agreement</B> and <B>temporal</B>.
+</P>
+<P>
+TODO explain the semantic type of <CODE>NP</CODE>.
+</P>
+<P>
+The functions that build up the clause in our example tree are given in the following table, together with functions that
+build the semantics of the constructed trees. The latter functions operate on variables belonging to the semantic types of 
+the arguments of the function.
+</P>
+
+<A NAME="toc25"></A>
+<H3>Table: abstract syntax functions involved in predication</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>type</TH>
+<TH>example</TH>
+<TH COLSPAN="2">semantics</TH>
+</TR>
+<TR>
+<TD><CODE>PredVP</CODE></TD>
+<TD><CODE>NP -&gt; VP -&gt; S</CODE></TD>
+<TD><I>he</I> + <I>paints the house blue</I></TD>
+<TD><CODE>np vp</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>ComplSlash</CODE></TD>
+<TD><CODE>VPSlash -&gt; NP -&gt; VP</CODE></TD>
+<TD><I>paints - blue</I> + <I>the house</I></TD>
+<TD><CODE>\x -&gt; np (\y -&gt; vpslash x y)</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>SlashV2A</CODE></TD>
+<TD><CODE>V2A -&gt; AP -&gt; VPSlash</CODE></TD>
+<TD><I>paints</I> + <I>blue</I></TD>
+<TD><CODE>\x,y -&gt; v2a x y ap</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+TODO explain lambda abstraction.
+</P>
+<P>
+The semantics of the clause <I>John paints the house yellow</I> can now be computed from the assumed meanings 
+</P>
+
+<PRE>
+    John*      : e
+    paint*     : e -&gt; e -&gt; (e -&gt; t) -&gt; t
+    the_house* : e
+    yellow*    : e -&gt; t
+</PRE>
+
+<P>
+as follows:
+</P>
+
+<PRE>
+      (PredVP John (ComplSlash (SlashV2A paint yellow) the-house))*
+    = (ComplSlash (SlashV2A paint yellow) the_house)* John*
+    = (SlashV2A paint yellow)* John* the_house*
+    = paint* John* the_house* yellow*
+</PRE>
+
+<P>
+for the moment ignoring the internal structure of noun phrases, which will be explained later.
+</P>
+<P>
+The linearization rules work very much in the same way as the semantic rules. They obey the definitions of
+inflectional and inherent features and discontinuous parts, which together define linearization types of
+the phrasal categories. These types are at this point schematic, because we don't assume any particular
+language. But what we can read out from the category table above is as follows:
+</P>
+
+<A NAME="toc26"></A>
+<H3>Table: schematic linearization types</H3>
+
+<TABLE BORDER="1" CELLPADDING="4">
+<TR>
+<TH>GF name</TH>
+<TH>text name</TH>
+<TH COLSPAN="2">linearization type</TH>
+</TR>
+<TR>
+<TD><CODE>Cl</CODE></TD>
+<TD>clause</TD>
+<TD><CODE>{s : Temp =&gt; Pol =&gt; Str}</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>VP</CODE></TD>
+<TD>verb phrase</TD>
+<TD><CODE>{v : V ; c : Agr =&gt; Str ; sc : Case}</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>VPSlash</CODE></TD>
+<TD>slash verb phrase</TD>
+<TD><CODE>{v : V ; c : Agr =&gt; Str ;  ; sc, cc : Case}</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>NP</CODE></TD>
+<TD>noun phrase</TD>
+<TD><CODE>{s : Case =&gt; Str ; a : Agr}</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>AP</CODE></TD>
+<TD>adjectival phrase</TD>
+<TD><CODE>{s : Gender =&gt; Number =&gt; Case =&gt; Str ; isPre : Bool}</CODE></TD>
+</TR>
+</TABLE>
+
+<P>
+TODO explain these types, in particular the use of <CODE>V</CODE>
+</P>
+<P>
+These types suggest the following linearization rules:
+</P>
+
+<PRE>
+    PredVP np vp = {s = \\t,p =&gt; np.s ! vp.sc ++ vp.v ! t ! p ! np.a ++ vp.c ! np.a}
+    ComplSlash vpslash np = {v = vpslash.v ; c = \\a =&gt; np.s ! vpslash.cc ++ vpslash.c ! a}
+    SlashV2A v2a ap = {v = v2a ; c = ap.s ! v2a.ac ; cc = v2a.ap}
+</PRE>
+
+<P>
+TODO explain these rules
+</P>
+<P>
+The linearization of the example goes in a way analogous to the computation of semantics.
+It is in both cases <B>compositional</B>, which means that the semantics/linearization only
+depends on the semantics/linearization of the immediate arguments, not on the tree structure
+of those arguments. Assuming the following linearizations of the words,
+</P>
+
+<PRE>
+    John*      : mkPN "John"
+    paint*     : mkV "paint" ** {cc = Acc ; ca = Nom}
+    the_house* : mkPN "the house"
+    yellow*    : mkA "yellow"
+</PRE>
+
+<P>
+we get the linearization of the clause as follows:
+</P>
+
+<PRE>
+      (PredVP John (ComplSlash (SlashV2A paint yellow) the-house))*
+    = "John" ++ vp.v ! SgP3 ++ vp.c ! SgP3 
+        where vp = (ComplSlash (SlashV2A paint yellow) the_house)*
+                 = {v = mkV "paint" ; c = \\_ =&gt; "the house yellow"} 
+    = "John paints the house yellow"
+</PRE>
+
+<P>
+Similar rules as to <CODE>V2A</CODE> apply to all subcategories of verbs. The <CODE>V2</CODE> verbs are first made into <CODE>VPSlash</CODE> 
+by giving the non-NP complement. <CODE>V3</CODE> verbs can take their two NP complements in either order, which
+means that there are two <CODE>VPSlash</CODE>-producing rules. This
+makes it possible to form both the questions <I>what did she give him</I> and <I>whom did she give it</I>.
+The other <CODE>V</CODE> categories are turned into <CODE>VP</CODE> without going through <CODE>VPSlash</CODE>, since they have
+no noun phrase complements. 
+</P>
+
+<A NAME="toc27"></A>
+<H1>4. Syntax: English-specific rules</H1>
+
+<!-- html code generated by txt2tags 2.6 (http://txt2tags.org) -->
+<!-- cmdline: txt2tags -thtml -\-toc gf-english.txt -->
+</BODY></HTML>

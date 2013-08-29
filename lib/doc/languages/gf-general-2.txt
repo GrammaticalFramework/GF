@@ -105,8 +105,8 @@ two-place adjective-complement verbs was explained in Chapter 1.
 
 || GF name  | text name     | example             | inflection features            | inherent features | parts | semantics ||
 | ``Cl``    | clause        | //he paints it blue// | temporal, polarity             | (none)            | one   | ``t``
-| ``VP``    | verb phrase   | //paints it blue//    | temporal, polarity, agreement  | subject case      | verb, complement | ``e -> t`` 
-| ``VPSlash`` | slash verb phrase   | //paints - blue//      | temporal, polarity, agreement  | subject and complement case  | verb, complement | ``e -> e -> t`` 
+| ``VP``    | verb phrase   | //paints it blue//    | temporal, polarity, agreement  | subject case      | verb, complements | ``e -> t`` 
+| ``VPSlash`` | slash verb phrase   | //paints - blue//      | temporal, polarity, agreement  | subject and complement case  | verb, complements | ``e -> e -> t`` 
 | ``NP``    | noun phrase   | //the house//       | case                           | agreement         | one   | ``(e -> t) -> t`` 
 | ``AP``    | adjectival phrase  | //very blue//       | gender, numeber, case     | position         | one   | ``a`` = ``e -> t`` 
 
@@ -152,18 +152,40 @@ language. But what we can read out from the category table above is as follows:
 
 || GF name  | text name     | linearization type ||
 | ``Cl``    | clause        | ``{s : Temp => Pol => Str}``
-| ``VP``    | verb phrase   | ``{s : Temp => Pol => Agr => {verb,compl : Str} ; sc : Case}``
-| ``VPSlash`` | slash verb phrase  | ``{s : Temp => Pol => Agr => {verb,compl : Str} ; sc, cc : Case}``
+| ``VP``    | verb phrase   | ``{v : V ; c : Agr => Str ; sc : Case}``
+| ``VPSlash`` | slash verb phrase  | ``{v : V ; c : Agr => Str ;  ; sc, cc : Case}``
 | ``NP``    | noun phrase   | ``{s : Case => Str ; a : Agr}`` 
 | ``AP``    | adjectival phrase  | ``{s : Gender => Number => Case => Str ; isPre : Bool}`` 
 
 
+TODO explain these types, in particular the use of ``V``
+
 These types suggest the following linearization rules:
 ```
-  PredVP np vp = {s = \\t,p => np.s ! vp.sc ++ vps.verb ++ vps.compl where vps = vp.s ! t ! p ! np.a}
+  PredVP np vp = {s = \\t,p => np.s ! vp.sc ++ vp.v ! t ! p ! np.a ++ vp.c ! np.a}
+  ComplSlash vpslash np = {v = vpslash.v ; c = \\a => np.s ! vpslash.cc ++ vpslash.c ! a}
+  SlashV2A v2a ap = {v = v2a ; c = ap.s ! v2a.ac ; cc = v2a.ap}
 ```
-TODO linearization of the example
+TODO explain these rules
 
+The linearization of the example goes in a way analogous to the computation of semantics.
+It is in both cases **compositional**, which means that the semantics/linearization only
+depends on the semantics/linearization of the immediate arguments, not on the tree structure
+of those arguments. Assuming the following linearizations of the words,
+```
+  John*      : mkPN "John"
+  paint*     : mkV "paint" ** {cc = Acc ; ca = Nom}
+  the_house* : mkPN "the house"
+  yellow*    : mkA "yellow"
+```
+we get the linearization of the clause as follows:
+```
+    (PredVP John (ComplSlash (SlashV2A paint yellow) the-house))*
+  = "John" ++ vp.v ! SgP3 ++ vp.c ! SgP3 
+      where vp = (ComplSlash (SlashV2A paint yellow) the_house)*
+               = {v = mkV "paint" ; c = \\_ => "the house yellow"} 
+  = "John paints the house yellow"
+```
 
 Similar rules as to ``V2A`` apply to all subcategories of verbs. The ``V2`` verbs are first made into ``VPSlash`` 
 by giving the non-NP complement. ``V3`` verbs can take their two NP complements in either order, which
