@@ -222,10 +222,10 @@ function getTree(tree, level) {
 	htmlTree.push("<li>");
 	if (tree.hasChildren()) {	
 		htmlTree.push("<img class='tree-menu'");
-		if (tree.collapsed) {
+		if (tree.collapsed)
 			htmlTree.push(" src='plus.png'");
-		}
-		else { htmlTree.push(" src='minus.png'"); }
+		else
+			htmlTree.push(" src='minus.png'");
 		htmlTree.push(" onclick='signClick(\"", tree.name, "\", \"", tree.caption, "\")' />");
 	}
 	else {
@@ -359,7 +359,7 @@ function editFrameKeyDown(me,lang,event) {
                          else
                            parseTrees = [new Fun(string)];
                          break;
-          default:       parseTrees = grammar.concretes[lang].parser.parseString(string, node.cat); break;
+          default:       parseTrees = grammar.concretes[lang].parseString(string, node.cat); break;
         }
         if (parseTrees.length == 1) {
           pushUndoClearRedo();
@@ -607,13 +607,8 @@ function showActions(caption) {
 		actions.push(createAction("Wrap", "action", "SingleWordCommand Wrap", "W"));
 	}
     
-    for (var i in grammar.concretes) {
-	  if (grammar.concretes[i].parser) {
-		actions.push(createAction("Parse", "action", "Command Parse IndefSgDet String_N", "P"));
-	  } else { actions.push(createAction("Parse", "unavailable", "Command Parse IndefSgDet String_N", "P")); }
-	  break;
-	}
-
+    actions.push(createAction("Parse", "action", "Command Parse IndefSgDet String_N", "P"));
+	
 	if (node && !abstractNode.isComplete()) {	
 		actions.push(createAction("RandomNode", "action", "RandomlyCommand Refine DefSgDet Node", "N"));
 	}
