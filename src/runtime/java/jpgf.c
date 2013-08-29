@@ -129,12 +129,6 @@ Java_org_grammaticalframework_pgf_PGF_getStartCat(JNIEnv* env, jobject self)
 	return jname;
 }
 
-JNIEXPORT void JNICALL 
-Java_org_grammaticalframework_pgf_PGF_free(JNIEnv* env, jclass cls, jlong pool)
-{
-	gu_pool_free((GuPool*) pool);
-}
-
 typedef struct {
 	GuMapItor fn;
 	JNIEnv *env;

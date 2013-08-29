@@ -26,23 +26,12 @@ public class PGF {
 
 	//////////////////////////////////////////////////////////////////
 	// private stuff
-	
-	private static native void free(long pool);
-
-	private long pool;
+	private Pool pool;
 	private long ref;
 
 	private PGF(long pool, long ref) {
-		this.pool = pool;
+		this.pool = new Pool(pool);
 		this.ref  = ref;
-	}
-
-	protected void finalize () throws Throwable {
-		if (pool != 0) {
-			free(pool);
-			pool = 0;
-			ref = 0;
-		}
 	}
 	
 	static { 
