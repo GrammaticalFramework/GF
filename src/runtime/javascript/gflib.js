@@ -20,20 +20,18 @@ GFGrammar.prototype.translate = function (input, fromLang, toLang) {
 	  toConcs[toLang] = this.concretes[toLang];
 	}
 	for (var c1 in fromConcs) {
-		var p = this.concretes[c1].parser;
-		if (p) {
-			var trees = p.parseString(input, this.abstract.startcat);
-			if (trees.length > 0) {
-				outputs[c1] = new Array();
-				for (var i in trees) {
-				        outputs[c1][i] = new Object();
-				        for (var c2 in toConcs) {
-						outputs[c1][i][c2] = this.concretes[c2].linearize(trees[i]);
-					}
+		var concrete = this.concretes[c1];
+		var trees = concrete.parseString(input, this.abstract.startcat);
+		if (trees.length > 0) {
+			outputs[c1] = new Array();
+			for (var i in trees) {
+				outputs[c1][i] = new Object();
+				for (var c2 in toConcs) {
+					outputs[c1][i][c2] = this.concretes[c2].linearize(trees[i]);
 				}
 			}
 		}
-  	}
+	}
 	return outputs;
 }
 
@@ -50,7 +48,10 @@ String.prototype.setTag = function (tag) { this.tag = tag; };
 /* Abstract syntax trees */
 function Fun(name) {
 	this.name = name;
-	this.args = copy_arguments(arguments, 1);
+	this.args = new Array();
+	for (var i = 1; i < arguments.length; i++) {
+		this.args[i-1] = arguments[i];
+	}
 }
 Fun.prototype.print = function () { return this.show(0); } ;
 Fun.prototype.show = function (prec) {
@@ -98,7 +99,18 @@ Fun.prototype.isComplete = function() {
 	}
 } ;
 Fun.prototype.isLiteral = function() {
-  return (/^[\"\d]/).test(this.name);
+  return (/^[\"\-\d]/).test(this.name);
+} ;
+Fun.prototype.isString = function() {
+  return (/^\".*\"$/).test(this.name);
+} ;
+Fun.prototype.isInt = function() {
+  return (/^\-?\d+$/).test(this.name);
+} ;
+Fun.prototype.isFloat = function() {
+  return (/^\-?\d*(\.\d*)?$/).test(this.name) &&
+         this.name != "." &&
+         this.name != "-.";
 } ;
 Fun.prototype.isEqual = function(obj) {
   if (this.name != obj.name)
@@ -111,93 +123,6 @@ Fun.prototype.isEqual = function(obj) {
   
   return true;
 }
-
-/* Concrete syntax terms */
-
-function Arr() { this.arr = copy_arguments(arguments, 0); }
-Arr.prototype.tokens = function() { return this.arr[0].tokens(); };
-Arr.prototype.sel = function(i) { return this.arr[i.toIndex()]; };
-Arr.prototype.setTag = function(tag) {
-	for (var i = 0, j = this.arr.length; i < j; i++) {
-		this.arr[i].setTag(tag);
-	}
-};
-
-function Seq() { this.seq = copy_arguments(arguments, 0); }
-Seq.prototype.tokens = function() { 
-	var xs = new Array();
-	for (var i in this.seq) {
-		var ys = this.seq[i].tokens();
-		for (var j in ys) {
-			xs.push(ys[j]);
-		}		
-	}
-	return xs; 
-};
-Seq.prototype.setTag = function(tag) {
-	for (var i = 0, j = this.seq.length; i < j; i++) {
-		this.seq[i].setTag(tag);
-	}
-};
-
-function Variants() { this.variants = copy_arguments(arguments, 0); }
-Variants.prototype.tokens = function() { return this.variants[0].tokens(); };
-Variants.prototype.sel = function(i) { return this.variants[0].sel(i); };
-Variants.prototype.toIndex = function() { return this.variants[0].toIndex(); };
-Variants.prototype.setTag = function(tag) {
-	for (var i = 0, j = this.variants.length; i < j; i++) {
-		this.variants[i].setTag(tag);
-	}
-};
-
-function Rp(index,value) { this.index = index; this.value = value; }
-Rp.prototype.tokens = function() { return new Array(this.index.tokens()); };
-Rp.prototype.sel = function(i) { return this.value.arr[i.toIndex()]; };
-Rp.prototype.toIndex = function() { return this.index.toIndex(); };
-Rp.prototype.setTag = function(tag) { this.index.setTag(tag) };
-
-function Suffix(prefix,suffix) {
-	this.prefix = new String(prefix);
-	if (prefix.tag) { this.prefix.tag = prefix.tag; }
-	this.suffix = suffix;
-};
-Suffix.prototype.tokens = function() {
-	var xs = this.suffix.tokens();
-	for (var i in xs) {
-		xs[i] = new String(this.prefix + xs[i]);
-		xs[i].setTag(this.prefix.tag);
-	}
-	return xs;
-};
-Suffix.prototype.sel = function(i) { return new Suffix(this.prefix, this.suffix.sel(i)); };
-Suffix.prototype.setTag = function(tag) { if (!this.prefix.tag) { this.prefix.setTag(tag); } };
-
-function Meta() { }
-Meta.prototype.tokens = function() { 
-	var newString = new String("?");
-	newString.setTag(this.tag);
-	return new Array(newString);
-};
-Meta.prototype.toIndex = function() { return 0; };
-Meta.prototype.sel = function(i) { return this; };
-Meta.prototype.setTag = function(tag) { if (!this.tag) { this.tag = tag; } };
-
-function Str(value) { this.value = value; }
-Str.prototype.tokens = function() {
-	var newString = new String(this.value);	
-	newString.setTag(this.tag);
-	return new Array(newString);
-};
-Str.prototype.setTag = function(tag) { if (!this.tag) { this.tag = tag; } };
-
-function Int(value) { this.value = value; }
-Int.prototype.tokens = function() {
-	var newString = new String(this.value.toString());
-	newString.setTag(this.tag);
-	return new Array(newString);
-};
-Int.prototype.toIndex = function() { return this.value; };
-Int.prototype.setTag = function(tag) { if (!this.tag) { this.tag = tag; } };
 
 /* Type annotation */
 
@@ -284,47 +209,166 @@ function Type(args, cat) {
 
 /* Linearization */
 
-function GFConcrete(flags, rules, parser) {
-	this.flags = flags;
-	this.rules = rules;
-	if (parser) {
-		this.parser = parser;
-	} else {
-		this.parser = undefined;
-	}
+function GFConcrete(flags, productions, functions, sequences, startCats, totalFIds) {
+	this.flags       = flags;
+	this.productions = productions;
+	this.functions   = functions;
+	this.sequences   = sequences;
+	this.startCats   = startCats;
+	this.totalFIds   = totalFIds;
+
+	this.pproductions = productions;
+	this.lproductions = new Object();
+
+    for (var fid in productions) {
+      for (var i in productions[fid]) {
+        var rule = productions[fid][i];
+        
+        if (rule.id == "Apply") {
+          var fun          = this.functions[rule.fun];
+          var lproductions = this.lproductions;
+          
+          rule.fun = fun;
+
+          var register = function (args, key, i) {
+			    if (i < args.length) {
+				  var c   = 0;
+				  var arg = args[i].fid;
+				  
+				  for (var k in productions[arg]) {
+                    var rule = productions[arg][k];
+                    if (rule.id == "Coerce") {
+                      register(args,key + "_" + rule.arg,i+1);
+                      c++;
+                    }
+                  }
+                  
+                  if (c == 0)
+                    register(args,key + "_" + arg,i+1);
+		        } else {
+			      var set = lproductions[key];
+                  if (set == null) {
+                    set = new Array();
+                    lproductions[key] = set;
+                  }
+		          set.push({fun: fun, fid: fid});
+				}
+		  }
+
+          register(rule.args,rule.fun.name,0);
+		}
+      }
+    }
+    
+    for (var i in functions) {
+      var fun = functions[i];
+      for (var j in fun.lins) {
+        fun.lins[j] = sequences[fun.lins[j]];
+      }
+    }
 }
-GFConcrete.prototype.rule = function (name, cs) { 
-  var r = this.rules[name];
-  if (r) {
-    return this.rules[name](cs); 
+GFConcrete.prototype.linearizeSyms = function (tree, tag) { 
+  var res = new Array();
+  
+  if (tree.isString()) {
+	var sym = new SymKS(tree.name);
+	sym.tag = tag;
+	res.push({fid: -1, table: [[sym]]});
+  } else if (tree.isInt()) {
+	var sym = new SymKS(tree.name);
+	sym.tag = tag;
+	res.push({fid: -2, table: [[sym]]});
+  } else if (tree.isFloat()) {
+	var sym = new SymKS(tree.name);
+	sym.tag = tag;
+	res.push({fid: -3, table: [[sym]]});
+  } else if (tree.isMeta()) {
+	  // TODO: Use lindef here
+      var cat = this.startCats[tree.type];
+      
+      var sym = new SymKS(tree.name);
+	  sym.tag = tag;
+	  
+	  for (var fid = cat.s; fid <= cat.e; fid++) {
+	    res.push({fid: fid, table: [[sym]]});
+      }
   } else {
-    window.alert("Missing rule " + name);
+    var cs = new Array();
+    for (var i in tree.args) {
+      // TODO: we should handle the case for nondeterministic linearization
+      cs.push(this.linearizeSyms(tree.args[i],tag + "-" + i)[0]);
+    }
+    var key = tree.name;
+    for (var i in cs) {
+      key = key + "_" + cs[i].fid
+    }
+
+    for (var i in this.lproductions[key]) {
+      var rule = this.lproductions[key][i];
+      var row  = {fid: rule.fid, table: new Array()};
+      for (var j in rule.fun.lins) {
+        var lin  = rule.fun.lins[j];
+        var toks = new Array();
+        row.table[j] = toks;
+		
+        for (var k in lin) {
+          var sym = lin[k];
+          switch (sym.id) {
+            case "Arg":
+            case "Lit":
+              var ts = cs[sym.i].table[sym.label];
+              for (var l in ts) {
+                toks.push(ts[l]);
+              }
+              break;
+            case "KS":
+            case "KP":
+              toks.push(this.tagIt(sym,tag));
+              break;
+          }
+        }
+      }
+      res.push(row);
+    }
   }
+  
+  return res;
 };
-GFConcrete.prototype.addRule = function (name, f) { this.rules[name] = f; };
-GFConcrete.prototype.lindef = function (cat, v) {	return this.rules[cat]([new Str(v)]); } ;
-GFConcrete.prototype.linearize = function (tree) { 
-	return this.unlex(this.linearizeToTerm(tree).tokens());
+GFConcrete.prototype.syms2toks = function (syms) {
+  var ts   = new Array();
+  for (var i in syms) {
+    var sym = syms[i];
+    switch (sym.id) {
+      case "KS":
+        for (var j in sym.tokens) {
+          ts.push(this.tagIt(sym.tokens[j],sym.tag));
+        }
+        break;
+      case "KP":
+        for (var j in sym.tokens) {
+          ts.push(this.tagIt(sym.tokens[j],sym.tag));
+  	    }
+        break;
+    }
+  }
+  return ts;
 };
-GFConcrete.prototype.linearizeToTerm = function (tree) {
-	if (tree.isMeta()) {
-		if (isUndefined(tree.type)) {
-			return new Meta();
-		} else {
-			return this.lindef(tree.type, tree.name);
-		}
-	} else {
-	    var cs = new Array();
-		for (var i in tree.args) {
-		  cs.push(this.linearizeToTerm(tree.args[i]));
-		}
-                if (tree.isLiteral()) {
-		  return new Arr(new Str(tree.name));
-		} else {
-		  return this.rule(tree.name, cs);
-		}
-	}
+GFConcrete.prototype.linearizeAll = function (tree) {
+  var res  = this.linearizeSyms(tree,"0");
+  for (var l in res) {
+    res[l] = this.unlex(this.syms2toks(res[l].table[0]));
+  }
+
+  return res;
 };
+GFConcrete.prototype.linearize = function (tree) {
+  var res  = this.linearizeSyms(tree,"0");
+  return this.unlex(this.syms2toks(res[0].table[0]));
+}
+GFConcrete.prototype.tagAndLinearize = function (tree) { 
+  var res  = this.linearizeSyms(tree,"0");
+  return this.syms2toks(res[0].table[0]);
+}
 GFConcrete.prototype.unlex = function (ts) {
 	if (ts.length == 0) {
 		return "";
@@ -345,29 +389,20 @@ GFConcrete.prototype.unlex = function (ts) {
 	}
 	return s;
 };
-GFConcrete.prototype.tagAndLinearize = function (tree) {
-	return this.tagAndLinearizeToTerm(tree, "0").tokens();
-};
-GFConcrete.prototype.tagAndLinearizeToTerm = function (tree, route) {
-	if (tree.isMeta()) {
-		if (isUndefined(tree.type)) {
-			var newMeta = new Meta();
-			newMeta.setTag(route);
-			return newMeta;
-		} else {
-			var newTerm = this.lindef(tree.type, tree.name);
-			newTerm.setTag(route);
-			return newTerm;
-		}
-	} else {
-	    var cs = new Array();
-		for (var i in tree.args) {
-		  cs.push(this.tagAndLinearizeToTerm(tree.args[i], route + "-" + i));
-		}
-		var newTerm = this.rule(tree.name, cs);
-		newTerm.setTag(route);
-		return newTerm;
-	}
+GFConcrete.prototype.tagIt = function (obj, tag) {
+  if (isString(obj)) {
+	var o = new String(obj);
+	o.setTag(tag);
+	return o;
+  } else {
+	var me = arguments.callee;
+    if (arguments.length == 2) {
+      me.prototype = obj;
+      var o = new me();
+      o.tag = tag;
+      return o;
+    }
+  }
 };
 
 /* Utilities */
@@ -405,42 +440,12 @@ function dumpObject (obj) {
 	}
 }
 
-
-function copy_arguments(args, start) {
-	var arr = new Array();
-	for (var i = 0; i < args.length - start; i++) {
-		arr[i] = args[i + start];
-	}
-	return arr;
-}
-
 /* ------------------------------------------------------------------------- */
 /* -------------------------------- PARSING -------------------------------- */
 /* ------------------------------------------------------------------------- */
 
 
-function Parser(productions, functions, sequences, startCats, totalCats) {
-	this.productions = productions;
-    this.functions = functions;
-    this.sequences = sequences;
-	this.startCats = startCats;
-    this.totalCats = totalCats;
-    
-    for (var fid in productions) {
-      for (var i in productions[fid]) {
-        var rule = productions[fid][i];
-        rule.fun = functions[rule.fun];
-      }
-    }
-    
-    for (var i in functions) {
-      var fun = functions[i];
-      for (var j in fun.lins) {
-        fun.lins[j] = sequences[fun.lins[j]];
-      }
-    }
-}
-Parser.prototype.showRules = function () {
+GFConcrete.prototype.showRules = function () {
     var ruleStr = new Array();
 	ruleStr.push("");
 	for (var i = 0, j = this.rules.length; i < j; i++) {
@@ -448,7 +453,7 @@ Parser.prototype.showRules = function () {
 	}
 	return ruleStr.join("");
 };
-Parser.prototype.tokenize = function (string) {
+GFConcrete.prototype.tokenize = function (string) {
     var inToken = false;
     var start, end;
     var tokens = new Array();
@@ -484,7 +489,7 @@ Parser.prototype.tokenize = function (string) {
     }
     return tokens;
 };
-Parser.prototype.parseString = function (string, cat) {
+GFConcrete.prototype.parseString = function (string, cat) {
 	var tokens = this.tokenize(string);
     
 	var ps = new ParseState(this, cat);
@@ -497,7 +502,7 @@ Parser.prototype.parseString = function (string, cat) {
 /**
  * Generate list of suggestions given an input string
  */
-Parser.prototype.complete = function (input, cat) {
+GFConcrete.prototype.complete = function (input, cat) {
 
 	// Parameter defaults
 	if (input == null) input = "";
@@ -558,19 +563,19 @@ Parser.prototype.complete = function (input, cat) {
 	return { 'consumed' : tokens, 'suggestions' : suggs };
 }
 
-// Rule Object Definition
+// Apply Object Definition
 
-function Rule(fun, args) {
-    this.id = "Rule";
+function Apply(fun, args) {
+    this.id   = "Apply";
 	this.fun  = fun;
 	this.args = args;
 }
-Rule.prototype.show = function (cat) {
+Apply.prototype.show = function (cat) {
 	var recStr = new Array();
 	recStr.push(cat, " -> ", fun.name, " [", this.args, "]");
 	return recStr.join("");
 };
-Rule.prototype.isEqual = function (obj) {
+Apply.prototype.isEqual = function (obj) {
 	if (this.id != obj.id || this.fun != obj.fun || this.args.length != obj.args.length)
       return false;
       
@@ -581,6 +586,12 @@ Rule.prototype.isEqual = function (obj) {
 
     return true;
 };
+
+function PArg() {
+	this.fid = arguments[arguments.length-1];
+	if (arguments.length > 1)
+		this.hypos = arguments.slice(0,arguments.length-1);
+}
 
 // Coerce Object Definition
 
@@ -618,7 +629,7 @@ Const.prototype.isEqual = function (obj) {
     return true;
 };
 
-function FFun(name,lins) {
+function CncFun(name,lins) {
     this.name = name;
     this.lins = lins;
 }
@@ -626,39 +637,39 @@ function FFun(name,lins) {
 // Definition of symbols present in linearization records
 
 // Object to represent argument projections in grammar rules
-function Arg(i, label) {
+function SymCat(i, label) {
 	this.id = "Arg";
 	this.i = i;
 	this.label = label;
 }
-Arg.prototype.getId = function () { return this.id; };
-Arg.prototype.getArgNum = function () { return this.i };
-Arg.prototype.show = function () {
+SymCat.prototype.getId = function () { return this.id; };
+SymCat.prototype.getArgNum = function () { return this.i };
+SymCat.prototype.show = function () {
 	var argStr = new Array();
 	argStr.push(this.i, this.label);
 	return argStr.join(".");
 };
 
 // Object to represent terminals in grammar rules
-function KS() {
+function SymKS() {
 	this.id = "KS";
 	this.tokens = arguments;
 }
-KS.prototype.getId = function () { return this.id; };
-KS.prototype.show = function () {
+SymKS.prototype.getId = function () { return this.id; };
+SymKS.prototype.show = function () {
 	var terminalStr = new Array();
 	terminalStr.push('"', this.tokens, '"');
 	return terminalStr.join("");
 };
 
 // Object to represent pre in grammar rules
-function KP(tokens,alts) {
+function SymKP(tokens,alts) {
 	this.id = "KP";
 	this.tokens = tokens;
     this.alts   = alts;
 }
-KP.prototype.getId = function () { return this.id; };
-KP.prototype.show = function () {
+SymKP.prototype.getId = function () { return this.id; };
+SymKP.prototype.show = function () {
 	var terminalStr = new Array();
 	terminalStr.push('"', this.tokens, '"');
 	return terminalStr.join("");
@@ -670,13 +681,13 @@ function Alt(tokens, prefixes) {
 }
 
 // Object to represent pre in grammar rules
-function Lit(i,label) {
+function SymLit(i,label) {
 	this.id = "Lit";
 	this.i = i;
 	this.label = label;
 }
-Lit.prototype.getId = function () { return this.id; };
-Lit.prototype.show = function () {
+SymLit.prototype.getId = function () { return this.id; };
+SymLit.prototype.show = function () {
 	var argStr = new Array();
 	argStr.push(this.i, this.label);
 	return argStr.join(".");
@@ -729,15 +740,15 @@ Trie.prototype.isEmpty = function() {
   return true;
 }
 
-function ParseState(parser, startCat) {
-  this.parser = parser;
+function ParseState(concrete, startCat) {
+  this.concrete = concrete;
   this.startCat = startCat;
   this.items = new Trie();
-  this.chart = new Chart(parser);
+  this.chart = new Chart(concrete);
 
   var items = new Array();
   
-  var fids = parser.startCats[startCat];
+  var fids = concrete.startCats[startCat];
   if (fids != null) {
     var fid;
     for (fid = fids.s; fid <= fids.e; fid++) {
@@ -841,11 +852,11 @@ ParseState.prototype.extractTrees = function() {
               );
   
   
-  var totalCats = this.parser.totalCats;
+  var totalFIds = this.concrete.totalFIds;
   var forest    = this.chart.forest;
       
   function go(fid) {
-    if (fid < totalCats) {
+    if (fid < totalFIds) {
       return [new Fun("?")];
     } else {
       var trees = new Array();
@@ -861,7 +872,7 @@ ParseState.prototype.extractTrees = function() {
           var arg_ts = new Array();
           for (var k in rule.args) {
             arg_ix[k] = 0;
-            arg_ts[k] = go(rule.args[k]);
+            arg_ts[k] = go(rule.args[k].fid);
           }
             
           while (true) {
@@ -893,7 +904,7 @@ ParseState.prototype.extractTrees = function() {
 
   
   var trees = new Array();
-  var fids = this.parser.startCats[this.startCat];
+  var fids = this.concrete.startCats[this.startCat];
   if (fids != null) {
     var fid0;
     for (fid0 = fids.s; fid0 <= fids.e; fid0++) {
@@ -936,7 +947,7 @@ ParseState.prototype.process = function (agenda,literalCallback,tokenCallback) {
       if (item.dot < lin.length) {
         var sym = lin[item.dot];
         switch (sym.id) {
-          case "Arg": var fid   = item.args[sym.i];
+          case "Arg": var fid   = item.args[sym.i].fid;
                       var label = sym.label;
 
                       var items = this.chart.lookupAC(fid,label);
@@ -975,7 +986,7 @@ ParseState.prototype.process = function (agenda,literalCallback,tokenCallback) {
                         tokenCallback(alt.tokens, pitem);
                       }
                       break;
-          case "Lit": var fid = item.args[sym.i];
+          case "Lit": var fid = item.args[sym.i].fid;
                       var rules = this.chart.forest[fid];
                       if (rules != null) {
                         tokenCallback(rules[0].toks, item.shiftOverTokn());
@@ -1004,7 +1015,7 @@ ParseState.prototype.process = function (agenda,literalCallback,tokenCallback) {
             }
             
             this.chart.insertPC(item.fid,item.lbl,item.offset,fid);
-            this.chart.forest[fid] = [new Rule(item.fun,item.args)];
+            this.chart.forest[fid] = [new Apply(item.fun,item.args)];
           } else {
             var labels = this.chart.labelsAC(fid);
             if (labels != null) {
@@ -1014,7 +1025,7 @@ ParseState.prototype.process = function (agenda,literalCallback,tokenCallback) {
             }
             
             var rules = this.chart.forest[fid];
-            var rule  = new Rule(item.fun,item.args);
+            var rule  = new Apply(item.fun,item.args);
               
             var isMember = false;
             for (var j in rules) {
@@ -1030,16 +1041,16 @@ ParseState.prototype.process = function (agenda,literalCallback,tokenCallback) {
   }
 }
 
-function Chart(parser) {
+function Chart(concrete) {
   this.active      = new Object();
   this.actives     = new Array();
   this.passive     = new Object();
   this.forest      = new Object();
-  this.nextId      = parser.totalCats;
+  this.nextId      = concrete.totalFIds;
   this.offset      = 0;
   
-  for (var fid in parser.productions) {
-    this.forest[fid] = parser.productions[fid];
+  for (var fid in concrete.pproductions) {
+    this.forest[fid] = concrete.pproductions[fid];
   }
 }
 Chart.prototype.lookupAC = function (fid,label) {
@@ -1096,7 +1107,7 @@ Chart.prototype.expandForest = function (fid) {
              for (var i in rules0) {
                var rule = rules0[i];
                switch (rule.id) {
-                 case "Rule":   rules.push(rule); break;
+                 case "Apply":  rules.push(rule); break;
                  case "Coerce": go(forest[rule.arg]); break;
                }
              }
@@ -1129,7 +1140,7 @@ ActiveItem.prototype.shiftOverArg = function (i,fid) {
     for (var k in this.args) {
       nargs[k] = this.args[k];
     }
-    nargs[i] = fid;
+    nargs[i] = new PArg(fid);
     return new ActiveItem(this.offset,this.dot+1,this.fun,this.seq,nargs,this.fid,this.lbl);
 }
 ActiveItem.prototype.shiftOverTokn = function () {
