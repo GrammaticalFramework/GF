@@ -201,7 +201,7 @@ Java_org_grammaticalframework_pgf_Concr_getName(JNIEnv* env, jobject self)
 
 JNIEXPORT jobject JNICALL 
 Java_org_grammaticalframework_pgf_Parser_parse
-  (JNIEnv* env, jclass self, jobject concr, jstring jstartCat, jstring js)
+  (JNIEnv* env, jclass clazz, jobject concr, jstring jstartCat, jstring js)
 {
 	GuPool* pool = gu_new_pool();
 	GuPool* out_pool = gu_new_pool();
@@ -229,16 +229,19 @@ Java_org_grammaticalframework_pgf_Parser_parse
 		return NULL;
 	}
 
+	jfieldID refId = (*env)->GetFieldID(env, (*env)->GetObjectClass(env, concr), "gr", "Lorg/grammaticalframework/pgf/PGF;");
+	jobject jpgf = (*env)->GetObjectField(env, concr, refId);
+
 	jclass expiter_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ExprIterator");
-	jmethodID constrId = (*env)->GetMethodID(env, expiter_class, "<init>", "(Lorg/grammaticalframework/pgf/Concr;JJJ)V");
-	jobject jexpiter = (*env)->NewObject(env, expiter_class, constrId, concr, (jlong) pool, (jlong) out_pool, (jlong) res);
+	jmethodID constrId = (*env)->GetMethodID(env, expiter_class, "<init>", "(Lorg/grammaticalframework/pgf/PGF;JJJ)V");
+	jobject jexpiter = (*env)->NewObject(env, expiter_class, constrId, jpgf, (jlong) pool, (jlong) out_pool, (jlong) res);
 
 	return jexpiter;
 }
 
 JNIEXPORT jobject JNICALL 
 Java_org_grammaticalframework_pgf_ExprIterator_fetchExprProb
-  (JNIEnv* env, jobject self, jlong enumRef, jobject out_pool)
+  (JNIEnv* env, jobject self, jlong enumRef, jobject pool, jobject gr)
 {
 	GuEnum* res = (GuEnum*) enumRef;
 
@@ -247,9 +250,10 @@ Java_org_grammaticalframework_pgf_ExprIterator_fetchExprProb
 		return NULL;
 
 	jclass expprob_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ExprProb");
-	jmethodID methodId = (*env)->GetStaticMethodID(env, expprob_class, "mkExprProb", "(Lorg/grammaticalframework/pgf/Pool;JD)Lorg/grammaticalframework/pgf/ExprProb;");
+	jmethodID methodId = (*env)->GetStaticMethodID(env, expprob_class, "mkExprProb", 
+	           "(Lorg/grammaticalframework/pgf/Pool;Lorg/grammaticalframework/pgf/PGF;JD)Lorg/grammaticalframework/pgf/ExprProb;");
 	jobject jexpprob = (*env)->CallStaticObjectMethod(env, expprob_class, methodId, 
-	                                  out_pool, (jlong) gu_variant_to_ptr(ep->expr), (double) ep->prob);
+	           pool, gr, (jlong) gu_variant_to_ptr(ep->expr), (double) ep->prob);
 
 	return jexpprob;
 }

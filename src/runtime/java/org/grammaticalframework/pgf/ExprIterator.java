@@ -3,14 +3,14 @@ package org.grammaticalframework.pgf;
 import java.util.*;
 
 class ExprIterator implements Iterator<ExprProb> {
-	private Concr concr;
+	private PGF gr;
 	private Pool pool, out_pool;
 	private long ref;
 	private ExprProb ep;
 	private boolean fetched;
 
-	public ExprIterator(Concr concr, long pool, long out_pool, long ref) {
-		this.concr    = concr;
+	public ExprIterator(PGF gr, long pool, long out_pool, long ref) {
+		this.gr       = gr;
 		this.pool     = new Pool(pool);
 		this.out_pool = new Pool(out_pool);
 		this.ref      = ref;
@@ -18,20 +18,20 @@ class ExprIterator implements Iterator<ExprProb> {
 		this.fetched  = false;
 	}
 
-	private native ExprProb fetchExprProb(long ref, Pool out_pool);
+	private native ExprProb fetchExprProb(long ref, Pool pool, PGF gr);
 
 	private void fetch() {
 		if (!fetched) {
-			ep = fetchExprProb(ref, out_pool);
+			ep = fetchExprProb(ref, out_pool, gr);
 			fetched = true;
 		}
 	}
-	
+
 	public boolean hasNext() {
 		fetch();
 		return (ep != null);
 	}
-	
+
 	public ExprProb next() {
 		fetch();
 		fetched = false;
