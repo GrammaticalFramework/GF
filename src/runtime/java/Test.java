@@ -24,7 +24,7 @@ public class Test {
 		Concr ger = gr.getLanguages().get("PhrasebookGer");
 
 		try {
-			for (ExprProb ep : eng.parse(gr.getStartCat(), "where is the conference")) {
+			for (ExprProb ep : eng.parse(gr.getStartCat(), "where is the hotel")) {
 				System.out.println("["+ep.getProb()+"] "+ep.getExpr());
 				System.out.println(ger.linearize(ep.getExpr()));
 			}
