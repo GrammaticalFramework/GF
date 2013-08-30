@@ -17,6 +17,12 @@ concrete ConjunctionMlt of Conjunction =
       a = agrP3 Sg Masc ; -- ignored when joinsVerb = False
       } ;
 
+    -- Conj -> [AdV] -> AdV
+    ConjAdV c l = conjunctDistrSS c l ** {
+      joinsVerb = False ;
+      a = agrP3 Sg Masc ;
+      } ;
+
     -- Conj -> [IAdv] -> IAdv -- "where and with whom"
     ConjIAdv = conjunctDistrSS ;
 
@@ -55,6 +61,9 @@ concrete ConjunctionMlt of Conjunction =
     BaseAdv = twoSS ;
     ConsAdv = consrSS comma ;
 
+    BaseAdV = twoSS ;
+    ConsAdV = consrSS comma ;
+
     BaseIAdv = twoSS ;
     ConsIAdv = consrSS comma ;
 
@@ -91,6 +100,7 @@ concrete ConjunctionMlt of Conjunction =
     -- These basically match the lincat's in CommonX/CatMlt
     [S]    = {s1,s2 : Str} ;
     [Adv]  = {s1,s2 : Str} ;
+    [AdV]  = {s1,s2 : Str} ;
     [IAdv] = {s1,s2 : Str} ;
     [NP]   = {np1,np2 : NounPhrase} ;
     [AP]   = {s1,s2 : GenNum => Str ; isPre : Bool} ;
