@@ -8,6 +8,7 @@
 
 concrete AllMlt of AllMltAbs =
   LangMlt,
+  DictMlt,
   IrregMlt,
   ExtraMlt
   ** {

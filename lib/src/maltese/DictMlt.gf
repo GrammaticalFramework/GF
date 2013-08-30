@@ -648,7 +648,6 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     tentex_TNTX_1_7299_V      = mkV "tentex" (mkRoot "t-n-t-x") ;
     ttentex_TNTX_2_7300_V     = mkV_II "ttentex" (mkRoot "t-n-t-x") ;
     taptap_TPTP_1_7301_V      = mkV "taptap" (mkRoot "t-p-t-p") ;
-    staqsa_TPTP_1_7302_V      = mkV "staqsa" (mkRoot "t-p-t-p") ;
     volga_VLGJ_1_7303_V       = mkV "volġa" (mkRoot "v-l-ġ-j") ;
     vilja_VLJJ_1_7304_V       = mkV "vilja" (mkRoot "v-l-j-j") ;
     vilja_VLJJ_1_7305_V       = mkV "vilja" (mkRoot "v-l-j-j") ;

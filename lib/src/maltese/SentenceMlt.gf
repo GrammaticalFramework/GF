@@ -19,10 +19,11 @@ concrete SentenceMlt of Sentence = CatMlt ** open
     -- John walks
     PredVP np vp =
       let
-        subj : Str = case np.isPron of {
-          True => [] ; -- omit subject pronouns
-          False => np.s ! NPNom
-          } ;
+        -- subj : Str = case np.isPron of {
+        --   True => [] ; -- omit subject pronouns
+        --   False => np.s ! NPNom
+        --   } ;
+        subj : Str = np.s ! NPNom ;
       in
       mkClause subj np.a vp ;
 
