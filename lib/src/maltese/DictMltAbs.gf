@@ -624,7 +624,6 @@ abstract DictMltAbs = Cat ** {
     tentex_TNTX_1_7299_V : V ;
     ttentex_TNTX_2_7300_V : V ;
     taptap_TPTP_1_7301_V : V ;
-    staqsa_TPTP_1_7302_V : V ;
     volga_VLGJ_1_7303_V : V ;
     vilja_VLJJ_1_7304_V : V ;
     vilja_VLJJ_1_7305_V : V ;

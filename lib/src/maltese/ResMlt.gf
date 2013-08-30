@@ -1152,6 +1152,7 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
     {- ~~~ Useful helper functions ~~~ -}
 
     NONEXIST : Str = "#NONEXIST#" ;
+    -- NONEXIST : Str = Prelude.nonExist ; -- Still doesn't work in Haskell runtime 2013-08-26
 
     -- New names for the drop/take operations
     takePfx = Predef.take ;
@@ -1223,20 +1224,20 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
 
     -- Is a word mono-syllabic?
     --- potentially slow
-    isMonoSyl : Str -> Bool = \s ->
-      case s of {
-        #Consonant + ("ie" | #Vowel) => True ; -- ra
-        #Consonant + #Consonant + ("ie" | #Vowel) => True ; -- bla
+    -- isMonoSyl : Str -> Bool = \s ->
+    --   case s of {
+    --     #Consonant + ("ie" | #Vowel) => True ; -- ra
+    --     #Consonant + #Consonant + ("ie" | #Vowel) => True ; -- bla
 
-        ("ie" | #Vowel) + #Consonant => True ; -- af
-        ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- elf
+    --     ("ie" | #Vowel) + #Consonant => True ; -- af
+    --     ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- elf
 
-        #Consonant + ("ie" | #Vowel) + #Consonant => True ; -- miet
-        #Consonant + ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- mort
-        #Consonant + #Consonant + ("ie" | #Vowel) + #Consonant => True ; -- ħliet
-        #Consonant + #Consonant + ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- ħriġt
-        _ => False
-      } ;
+    --     #Consonant + ("ie" | #Vowel) + #Consonant => True ; -- miet
+    --     #Consonant + ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- mort
+    --     #Consonant + #Consonant + ("ie" | #Vowel) + #Consonant => True ; -- ħliet
+    --     #Consonant + #Consonant + ("ie" | #Vowel) + #Consonant + #Consonant => True ; -- ħriġt
+    --     _ => False
+    --   } ;
 
     wiehed : Gender => Str =
       table {
