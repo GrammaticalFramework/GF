@@ -36,18 +36,16 @@ oper
 
   mkV2 : overload {
     -- make V2, use default case and preposition which are accusative case and no preposition
-    mkV2 : (sormak : Verb) -> Verb ** {c : Case; p : Prep} ;
+    mkV2 : (sormak : Verb) -> Verb ** {c : Compl} ;
     -- make V2, set case explicitly
-    mkV2 : (korkmak : Verb) -> (dat : Case) -> Verb ** {c : Case; p : Prep} ;
-    -- make V2, set case and preposition explicitly
-    mkV2 : (dovusmek : Verb) -> (dat : Case) -> (against : Prep) -> Verb ** {c : Case; p : Prep} ;
+    mkV2 : (korkmak : Verb) -> Compl -> Verb ** {c : Compl} ;
   } ;
 
   mkV3 : overload {
     -- make V3, use default cases and prepositions which are accusative and dative cases and no preposition.
-    mkV3 : (satmak : Verb) -> Verb ** {c1 : Case; p1 : Prep; c2 : Case; p2 : Prep} ;
+    mkV3 : (satmak : Verb) -> Verb ** {c1,c2 : Compl} ;
     -- make V3, set cases and prepositions explicitly.
-    mkV3 : (konusmak : Verb) -> Case -> Prep -> Case -> Prep -> Verb ** {c1 : Case; p1 : Prep; c2 : Case; p2 : Prep} ;
+    mkV3 : (konusmak : Verb) -> Compl -> Compl -> Verb ** {c1,c2 : Compl} ;
   } ;
 
 
@@ -71,20 +69,18 @@ oper
 
   mkV2 = overload {
     -- sormak
-    mkV2 : Verb -> Verb ** {c : Case; p : Prep} = \verb -> verb ** {c = Acc; p = no_Prep} ;
+    mkV2 : Verb -> Verb ** {c : Compl} = \verb -> verb ** {c = no_Prep} ;
     -- (bir şeyden) korkmak
-    mkV2 : Verb -> Case -> Verb ** {c : Case; p : Prep} = \verb,ca -> verb ** {c = ca; p = no_Prep} ;
-    -- (bir şeye karşı) dövüşmek
-    mkV2 : Verb -> Case -> Prep -> Verb ** {c : Case; p : Prep} = \verb,ca,prep -> verb ** {c = ca; p = prep} ;
+    mkV2 : Verb -> Compl -> Verb ** {c : Compl} = \verb,c -> verb ** {c = c} ;
   } ;
 
   
   mkV3 = overload {
     -- (birine bir şeyi) satmak
-    mkV3 : Verb -> Verb ** {c1 : Case; p1 : Prep; c2 : Case; p2 : Prep} = \verb -> verb ** {c1 = Acc; p1 = no_Prep; c2 = Dat; p2 = no_Prep} ;
+    mkV3 : Verb -> Verb ** {c1,c2 : Compl} = \verb -> verb ** {c1 = no_Prep; c2 = no_Prep} ;
     -- (biri ile bir şeyi) konuşmak
-    mkV3 : Verb -> Case -> Prep -> Case -> Prep -> Verb ** {c1 : Case; p1 : Prep; c2 : Case; p2 : Prep} = 
-      \verb,c1,p1,c2,p2 -> verb ** {c1 = c1; p1 = p1; c2 = c2; p2 = p2} ;
+    mkV3 : Verb -> Compl -> Compl -> Verb ** {c1 : Compl; c2 : Compl} = 
+      \verb,c1,c2 -> verb ** {c1 = c1; c2 = c2} ;
   } ;
 
 -- Paradigms for noun
@@ -106,9 +102,9 @@ oper
     mkN : (zeytin, yag : Noun) -> Noun ;
   } ;
   
-  mkN2 : Str -> Noun ** {c : Case} ;
+  mkN2 : Str -> Noun ** {c : Compl} ;
 
-  mkN3 : Str -> Noun ** {c1 : Case; c2 : Case} ;
+  mkN3 : Str -> Noun ** {c1,c2 : Compl} ;
 
   -- worst case function
   -- parameters: all singular cases of base, base of genitive table, plural form of base and harmony of base
@@ -142,12 +138,10 @@ oper
 
   mkA2 : overload {
     -- (biri) ile evli
-    mkA2 : Adjective -> Case -> Prep -> Adjective ** {c : Case; p : Prep} ;
-    -- makes default case accusative
-    mkA2 : Adjective -> Prep -> Adjective ** {c : Case; p : Prep} ;
+    mkA2 : Adjective -> Compl -> Adjective ** {c : Compl};
   } ;
 
-  mkAdj2 : Adjective -> Case -> Prep -> Adjective ** {c : Case; p : Prep} ;
+  mkAdj2 : Adjective -> Compl -> Adjective ** {c : Compl} ;
 
 -- Paradigms for numerals
   mkNum : overload {
@@ -156,7 +150,7 @@ oper
     -- an irregular numeral of which two form is needed. e.g. "kırk" "kırkıncı" "kırk" "kırkıncı" (does not soften)
     mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} ;
   } ;
-  
+
   regNum : Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} ;
   makeNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} ;
 
@@ -393,13 +387,10 @@ oper
     mkN : (zeytin, yag : Noun) -> Noun = \n1,n2 -> linkNoun n1 n2 Indef Con ;
   } ;
 
-  
-  mkN2 base = let noun = mkN base in noun ** {c = Gen} ;
+  mkN2 base = mkN base ** {c = {s=[]; c=Gen}} ;
 
-  
-  mkN3 base = let noun = mkN base in noun ** {c1 = Gen; c2 = Dat} ;
+  mkN3 base = mkN base ** {c1,c2 = {s=[]; c=Gen}} ;
 
-  
 -- Implementation of adjactive paradigms
   mkA = overload {
     -- güzel
@@ -414,12 +405,11 @@ oper
 
 
   mkA2 = overload {
-    mkA2 : Adjective -> Case -> Prep -> Adjective ** {c : Case; p : Prep} = mkAdj2 ;
-    mkA2 : Adjective -> Prep -> Adjective ** {c : Case; p : Prep} = \n,p -> mkAdj2 n Acc p ;
+    mkA2 : Adjective -> Compl -> Adjective ** {c : Compl} = mkAdj2 ;
   } ;
 
-  mkAdj2 base c prep = base ** {c = c; p = prep} ;
-  
+  mkAdj2 base c = base ** {c = c} ;
+
 -- Implementation of numeral paradigms
   mkNum = overload {
     mkNum : Str -> Str -> {s : DForm => CardOrd => Number => Case => Str} = regNum ;
@@ -515,6 +505,10 @@ oper
         Sg => base ;
         Pl => addSuffix base (mkHar harVow SVow) plSuffix
       } ;
+
+  ablat_Case = mkPrep [] Ablat;
+  dat_Case   = mkPrep [] Dat;
+  acc_Case   = mkPrep [] Dat;
 
 param
   AoristType = PlSyl         -- more than one syllable, takes -ir
