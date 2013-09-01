@@ -27,5 +27,5 @@ concrete IrregTur of IrregTurAbs = CatTur ** open ParadigmsTur, ResTur in {
     ol_Aux        : Verb = mkV "olmak" SgSylConIrreg ;
     koy_Aux       : Verb = mkV "koymak" ;
     gec_Aux       : Verb = mkV "geçmek" ;
-    against_Prep  : Prep = mkPrep "karşı" ;
+    against_Prep  : Prep = mkPrep "karşı" Dat;
 }
