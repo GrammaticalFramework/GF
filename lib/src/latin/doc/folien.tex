@@ -1,0 +1,227 @@
+%\documentclass[handout]{beamer}
+\documentclass{beamer}
+%\usetheme{Singapore} % anderes Layout
+%\usetheme{Antibes} % anderes Layout
+%\usecolortheme{lily}
+\usetheme{Antibes}
+\usecolortheme{beaver}
+\setbeamertemplate{footline}[frame number]
+\usepackage{color}
+\usepackage{german}
+\usepackage{latexsym,amssymb}
+\usepackage{amsmath} % für begin{cases} ... \end{cases}
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+%\usepackage{algorithm}
+%\usepackage{algorithmicx}
+%\usepackage{algpseudocode}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{fontspec}
+
+\setbeamertemplate{footline}[frame number]
+\parindent0pt
+\parskip1.2ex
+
+\def\nat{{\mathbb N}}
+\def\bool{{\mathbb B}}
+\def\real{{\mathbb R}}
+
+\title[Implementierung einer Lateingrammatik]{Implementierung einer Lateingrammatik im Grammatical Framework \\ \quad \\ \large Kolloquium Computerlinguistisches Arbeiten SS 2013 }
+\author{Herbert Lange}
+
+\date{\today} 
+
+\begin{document}
+\frame{\titlepage}
+
+\section*{Überblick}
+\subsection*{Inhalt}
+\begin{frame}{Inhalt}
+%\begin{multicols}{2}
+\tableofcontents
+%\end{multicols}
+\end{frame}
+\section{Einführung}
+\subsection{Das Grammatical Framework}
+\begin{frame}[fragile]{Das Grammatical Framework}
+\begin{itemize}
+\item Mächtigkeit äquivalent zu PMCFG (Parallel Multiple Context-Free Grammars)
+$\rightarrow$ zwischen mild und voll kontextsensitiv
+\item Trennung von abstrakter und konkreter Syntax
+\item Verschiedene API-Ebenen und Einbindungsmöglichkeiten (u.a. Java, JavaScript)
+\end{itemize}
+\end{frame}
+\subsection{Die Ressource Grammar Library}
+\begin{frame}{Die Ressource Grammar Library}
+\begin{itemize}
+  \item Minimaler Satz gemeinsamer Bestandteile verschiedener Sprachen (Beispielvokabular, Wort-/Satzarten, Syntaxregeln)
+  \item ca. 38 Sprachen voll oder teilweise umgesetzt
+  \item ca. 43 geschlossene Kategorien (Determiner, ...) und Phrasentypen
+  \item ca. 22 offene Kategorien (Nomen, Verben, Adjektive, ...)
+\end{itemize}
+\end{frame}
+\begin{frame}
+
+\begin{block}{}
+{\scriptsize\ttfamily
+%> i alltenses/LangGer.gfo \\
+% linking ... OK \\
+% Languages: LangGer \\
+% 47884 msec \\
+Lang> p ''der Mann sieht die Frau'' \\
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumSg) (UseN man\_N)) (ComplSlash (SlashV2a see\_V2) (DetCN (DetQuant DefArt NumSg) (UseN woman\_N)))))) NoVoc
+}
+\end{block}
+{\tiny
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+\hline
+Funktion & Typ & Argumente & Übersetzung\\
+\hline
+PhrUtt & Phr & (PConj) Utt (Voc) & der Mann sieht die Frau \\
+NoPConj & PConj &  & (Keine Konjunktion) \\
+UttS & Utt & S & der Mann sieht die Frau \\
+UseCl & S & (Temp) (Pol) Cl & der Mann sieht die Frau \\
+TTAnt & Temp & Tense Ant & (Tempus und Aspekt) \\
+TPres & Tense & & (Präsens) \\
+ASimul & Ant & & (Gleichzeitigkeit) \\
+PPos & Pol & & (Positive Aussage) \\
+PredVP & Cl & NP VP & der Mann sehen die Frau \\
+DetCN & NP & Det CN & der Mann \\
+DetQuant & Det & Quant Num & der \\
+DefArt & Quant & & der \\
+NumSg & Num & & (Singular) \\
+UseN & CN & N & Mann \\
+man\_N & N & & Mann \\
+ComplSlash & VP & VPSlash NP & sehen die Frau \\
+%SlashV2a & VPSlash & V2 & sehen \\
+%see\_V2 & V2 & & sehen \\
+\multicolumn{4}{|c|}{...} \\
+NoVoc & Voc & & (Keine Anrede) \\
+\hline
+\end{tabular}
+\end{center}
+}
+\end{frame}
+\subsection{Die Lateinische Sprache}
+\begin{frame}[fragile]{Die Lateinische Sprache}
+Teil der indogermanischen Sprachfamilie $\rightarrow$ Ähnlichkeiten zu germanischen Sprachen so wie dem Griechischen \\
+\begin{center}
+\begin{tabular}{|l|l|l|}
+  \hline
+  lateinisch & griechisch & deutsch \\
+  \hline
+  pater & patér & Vater \\
+  ager & agrós & Acker \\
+  trēs & treĩs & drei \\
+  decem & déka & zehn \\
+  est & estí & ist \\
+  \hline
+\end{tabular}
+\end{center}
+Ursprünglich Sprache der Bewohner der mittelitalienischen Region Latium
+\end{frame}
+\begin{frame}{Sprachliche Besonderheiten}
+\begin{itemize}
+  \item Sehr freie Satzstellung $\rightarrow$ aber meist Verwendung von Subjekt-Objekt-Verb
+  \item Flektierende Sprache mit synthetischer Syntax (Abl. abs. und AcI)
+    \begin{itemize}
+      \item Augusto regente pax erat in toto imperio romano $\rightarrow$ Als/weil Augustus regierte, herrschte im ganzen römischen Reich Frieden.
+      \item Imperatorem venire audit $\rightarrow$ Er hört, dass der Imperator kommt.
+    \end{itemize}
+  \item Ablativ und Vokativ als eigene Fälle
+  \item Fehlen von Artikel
+\end{itemize}
+\end{frame}
+\section{Umsetzung}
+\begin{frame}{Umsetzung}
+\begin{itemize}
+  \item Lexikon der RGL
+  \item Morphologie der RGL
+  \item Syntax der RGL
+  \item Optional: rein sprachspezifische Konstrukte
+\end{itemize}
+\end{frame}
+\subsection{Lexikon}
+\begin{frame}{Lexikon}
+\begin{itemize}
+  \item Ca. 400 vorgegebene englische Wörter aus allen möglichen Wortarten und verschiedenen Bereichen
+  \item Keine Klärung von Ambiguitäten (z.B. bank) $\rightarrow$ willkürliche Wahl der Übersetzung
+  \item Viele moderne Begriffe (Auto, Eisenbahn, Computer, Fernseher) $\rightarrow$ Übersetzung mit Hilfe der Wikipedia
+  \item Begriffe ohne auffindbare Übersetzung (ein-/ausschalten) $\rightarrow$ Wahl eines nahe liegenden Wortes (accendere/exstinguere)
+  \item Manche Differenzierungen nicht in jeder Sprache möglich
+\end{itemize}
+\end{frame}
+\begin{frame}{}
+\begin{block}{Beispiel}
+{\scriptsize\ttfamily
+  blue\_A = mkA ( variants { ''caeruleus'' ; ''caerulus'' } ) ; -- 3 L... \\
+  boat\_N = mkN ''navicula'' ; -- -ae f. L... \\
+  book\_N = mkN ''liber'' ''libri'' masculine ; -- Ranta; -bri m. L... \\
+  boot\_N = mkN ''calceus'' ; -- -i m. L... \\
+  boss\_N = mkN ''dux'' ''ducis'' ( variants { feminine ; masculine } ) ; -- ducis m./f. L... \\
+  boy\_N = mkN ''puer'' ''pueri'' masculine ; -- -eri m. L... \\
+  bread\_N = ( variants { (mkN ''panis'' ''panis'' masculine ) ; mkN ''pane'' } ) ; -- -is m./n. L...  \\
+  break\_V2 = mkV2 (mkV ''rumpo'' ''rupi'' ''ruptum'' ''rumpere'') ; -- Ranta; 3 L...
+}
+\end{block}
+\end{frame}
+\subsection{Morphologie}
+\begin{frame}{Morphologie}
+\begin{itemize}
+\item Einteilung in vier Gruppen: Nomina (Substantive, Adjektive, Pronomina, Numeralia), Verben, Partikel (Adverbien, Präpositionen, Konjunktionen), Interjektionen. Es gibt keine Artikel
+\item Nomina und Verben werden flektiert, Partikel und Interjektionen werden nicht flektiert
+\item Fünf Nomendeklinationen, drei Adjektivdeklinationen, Adjektivkomparation, Adverbbildung, vier Verbkonjugationen, Deponentia
+\end{itemize}
+\end{frame}
+\begin{frame}{Smart Paradigms}
+Pattern Matching um für ein Wort aus möglichst wenig Formen das Paradigma zu bestimmen
+\begin{block}{Beispiel}
+{\scriptsize\ttfamily
+  noun : Str -> Noun = \textbackslash verbum ->  \\
+    case verbum of \{ \\
+      \_ + ''a''  => noun1 verbum ; \\
+      \_ + ''us'' => noun2us verbum ; \\
+      \_ + ''um'' => noun2um verbum ; \\
+      \_ + ''er'' => noun2er verbum ;  \\
+      \_ + ''u''  => noun4u verbum ;  \\
+      \_ + ''es'' => noun5 verbum ;  \\
+      \_  => noun3 verbum \\
+      \} ; 
+}
+\end{block}
+\end{frame}
+\subsection{Syntax}
+\begin{frame}{Syntax}
+\begin{itemize}
+\item Problem: Freie Wortstellung im Satz $\rightarrow$ Variationen erhöhen die Komplexität exponentiell
+\item Zunächst: Beschränkung auf SOV-Wortstellung (Subjekt-Objekt-Verb)
+\item Später: Suche nach performanten Implementierungsmöglichkeiten für beschränkte oder volle Variation
+\end{itemize}
+\end{frame}
+\subsection{Ausblick}
+\begin{frame}{Ausblick}
+\begin{itemize}
+\item Anbinden eines größeres Lexikons
+\item Integration in eine Weboberfläche oder eine Android-App
+\item Anwendung in der Lehre (Translation Quiz)
+\end{itemize}
+\end{frame}
+\section{Abschluss}
+\begin{frame}{Zusammenfassung}
+\begin{itemize}
+  \item Lexikon mit ca. 400 teils modernen Wörtern
+  \item Morphologie mit Smart Paradigms
+  \item Syntax mit möglichst freier Wortstellung
+\end{itemize}
+\end{frame}
+\begin{frame}{Literatur}
+\begin{itemize}
+  \item Bayer, Karl u. Lindauer, Josef: Lateinische Grammatik, C.C. Buchners Verlag, Bamberg 1994
+  \item Leuman, M./Hofmann, J.B./ Szantyr, A.: Lateinische Grammatik. Auf der Grundlage des Werkes von Friedrich Stolz und Joseph Hermann Schmalz; Band 2: Lateinische Syntax und Stilistik, C.H. Beck'sche Verlagsbuchhandlung, München 1972
+  \item Ranta, Aarne: Grammatical Framework. Programming with Multilingual Grammars, CSLI Publications, Stanford 2011 
+  \item Ranta, Aarne: Grammatical Framework Tutorial, http://www.grammaticalframework.org/doc/tutorial/gf-tutorial.html 2010
+\end{itemize}
+\end{frame}
+\end{document}

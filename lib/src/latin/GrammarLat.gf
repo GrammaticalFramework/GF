@@ -10,10 +10,9 @@ concrete GrammarLat of Grammar =
 --  QuestionLat,
 --  RelativeLat,
 --  ConjunctionLat,
---  PhraseLat,
+  PhraseLat,
   TextX,
-  StructuralLat,
+  StructuralLat
 --  IdiomLat
-  TenseX
   ** {
 } ;

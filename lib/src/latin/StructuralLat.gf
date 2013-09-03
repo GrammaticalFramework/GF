@@ -1,128 +1,130 @@
 concrete StructuralLat of Structural = CatLat ** 
-  open ResLat, (P = ParadigmsLat), Prelude in 
+  open ResLat, ParadigmsLat, Prelude, IrregLat, ConstructX in 
   {
-
+    
   flags optimize=all ;
-
+	
   lin
-  above_Prep = mkPrep "super" Acc ;
-  after_Prep = mkPrep "post" Acc ;
---  all_Predet = ss "all" ;
-  almost_AdA, almost_AdN = ss "quasi" ;
---  although_Subj = ss "although" ;
-  always_AdV = ss "semper" ;
---  and_Conj = sd2 [] "and" ** {n = Pl} ;
+  above_Prep = mkPrep "super" Abl ; -- abl. L...
+  after_Prep = mkPrep "post" Acc ; -- acc. L...
+  all_Predet = ss "cuncti" ; -- L...
+  almost_AdA, almost_AdN = ss "quasi" ; -- L...
+  although_Subj = ss "quamquam" ; -- L...
+  always_AdV = ss "semper" ; -- L...
+  and_Conj = sd2 [] "et" ** {n = Pl} ; -- L...
 -----b  and_Conj = ss "and" ** {n = Pl} ;
---  because_Subj = ss "because" ;
-  before_Prep = mkPrep "ante" Acc ;
---  behind_Prep = ss "behind" ;
-  between_Prep = mkPrep "inter" Acc ;
---  both7and_DConj = sd2 "both" "and" ** {n = Pl} ;
-  but_PConj = ss "sed" ;
-  by8agent_Prep = mkPrep "a" Abl ;
-  by8means_Prep = mkPrep "per" Acc ;
---  can8know_VV, can_VV = {
---    s = table { 
---      VVF VInf => ["be able to"] ;
---      VVF VPres => "can" ;
---      VVF VPPart => ["been able to"] ;
---      VVF VPresPart => ["being able to"] ;
---      VVF VPast => "could" ;      --# notpresent
---      VVPastNeg => "couldn't" ;   --# notpresent
---      VVPresNeg => "can't"
---      } ;
---    isAux = True
---    } ;
---  during_Prep = ss "during" ;
---  either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
---  everybody_NP = regNP "everybody" Sg ;
---  every_Det = mkDeterminer Sg "every" ;
---  everything_NP = regNP "everything" Sg ;
---  everywhere_Adv = ss "everywhere" ;
---  few_Det = mkDeterminer Pl "few" ;
+  because_Subj = ss "cum" ; -- L...
+  before_Prep = mkPrep "ante" Acc ; -- acc. L...
+  behind_Prep = mkPrep "a tergo" Acc ; -- acc. L...
+  between_Prep = mkPrep "inter" Acc ; -- acc. L...
+  both7and_DConj = sd2 "et" "et" ** {n = Pl} ; --L...
+  but_PConj = ss "sed" ; -- L...
+  by8agent_Prep = mkPrep "per" Abl ; -- L...
+  by8means_Prep = Abl_Prep ; -- L...
+  can8know_VV, can_VV = IrregLat.can_VV ; --L...
+  during_Prep = mkPrep "inter" Acc ; -- L...
+  either7or_DConj = sd2 "aut" "aut" ** {n = Sg} ; -- L...
+  everybody_NP = regNP  "quisque" "quemque" "cuiusque" "cuique" "quoque" "quisque" ( Masc | Fem ) Sg ;-- regNP "quisquae" Sg ; -- L...
+  every_Det = mkDeterminer ( mkA "omnis" ) Pl ; -- Pons
+  everything_NP = regNP "omnia" "omnia" "omnium" "omnis" "omnis" "omnia" Neutr Pl ; --regNP "omnia" Pl ; -- L...
+  everywhere_Adv = ss "ubique" ; -- L...
+  few_Det = mkDeterminer ( mkA "paulus" ) Pl ; -- L...
 -----  first_Ord = ss "first" ; DEPRECATED
-  for_Prep = mkPrep "pro" Abl ;
-  from_Prep = mkPrep "de" Abl ;
-  he_Pron = personalPronoun Masc Sg P3 ;
-  here_Adv = ss "hic" ;
---  here7to_Adv = ss ["to here"] ;
---  here7from_Adv = ss ["from here"] ;
---  how_IAdv = ss "how" ;
---  how8many_IDet = mkDeterminer Pl ["how many"] ;
---  if_Subj = ss "if" ;
-  in8front_Prep = mkPrep "coram" Abl ;
-  i_Pron = personalPronoun Masc Sg P1 ;
-  in_Prep = mkPrep "in" Abl ;
-  it_Pron = personalPronoun Neutr Sg P3 ;
---  less_CAdv = ss "less" ;
---  many_Det = mkDeterminer Pl "many" ;
---  more_CAdv = ss "more" ;
---  most_Predet = ss "most" ;
---  much_Det = mkDeterminer Sg "much" ;
---  must_VV = {
---    s = table {
---      VVF VInf => ["have to"] ;
---      VVF VPres => "must" ;
---      VVF VPPart => ["had to"] ;
---      VVF VPresPart => ["having to"] ;
---      VVF VPast => ["had to"] ;      --# notpresent
---      VVPastNeg => ["hadn't to"] ;      --# notpresent
---      VVPresNeg => "mustn't"
---      } ;
---    isAux = True
---    } ;
------b  no_Phr = ss "no" ;
-  no_Utt = ss "non" ;
---  on_Prep = ss "on" ;
+  for_Prep = mkPrep "pro" Abl ; -- abl. L...
+  from_Prep = mkPrep "de" Abl ; -- abl. L...
+  he_Pron = mkPronoun Masc Sg P3 ;
+  here_Adv = ss "hic" ; -- L...
+  here7to_Adv = ss "huc" ; -- L...
+  here7from_Adv = ss "hinc" ; -- L...
+  how_IAdv = ss "qui" ; -- L...
+  how8many_IDet = mkDeterminer (mkA "quantus" ) Pl ; -- Pons
+  how8much_IAdv = ss "quantum" ; -- L...
+  if_Subj = ss "si" ; -- L...
+  in8front_Prep = mkPrep "ante" Acc ; -- acc. L...
+  i_Pron = mkPronoun Masc Sg P1 ;
+  in_Prep = mkPrep "in" ( variants { Abl ; Acc } ) ; -- L...
+  it_Pron = mkPronoun Neutr Sg P3 ; 
+  less_CAdv = mkCAdv "minus" "quam" ; -- L...
+  many_Det = mkDeterminer ( mkA "multus" ) Pl ; -- L...
+  more_CAdv = mkCAdv "magis" "quam" ; -- L...
+  most_Predet = ss "plurimi" ; -- L...
+  much_Det = mkDeterminer ( mkA "multus" ) Sg ; -- L...
+  must_VV = mkVV ( mkV "debere" ) True ; -- L...
+-----b  no_Phr = ss "immo" ;
+  no_Utt = ss "non est" ; -- should be expressed by a short negated sentence L...
+  on_Prep = mkPrep "in" ( Acc | Abl ) ; -- L...
 ------  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
-  only_Predet = ss "tantum" ;
---  or_Conj = sd2 [] "or" ** {n = Sg} ;
---  otherwise_PConj = ss "otherwise" ;
-  part_Prep = mkPrep [] Gen ;
---  please_Voc = ss "please" ;
-  possess_Prep = mkPrep [] Gen ;
---  quite_Adv = ss "quite" ;
-  she_Pron = personalPronoun Fem Sg P3 ;
-  so_AdA = ss "sic" ;
---  somebody_NP = regNP "somebody" Sg ;
---  someSg_Det = mkDeterminer Sg "some" ;
---  somePl_Det = mkDeterminer Pl "some" ;
---  something_NP = regNP "something" Sg ;
---  somewhere_Adv = ss "somewhere" ;
+  only_Predet = ss "solum" ; -- L...
+  or_Conj = sd2 [] "aut" ** {n = Sg} ; -- L...
+  otherwise_PConj = ss "praeterea" ; -- Pons
+  part_Prep = mkPrep [] Gen ; -- Bayer-Lindauer 127
+  please_Voc = ss "queso" ; -- L...
+  possess_Prep = mkPrep [] Gen ; -- Bayer-Lindauer 125.2
+  quite_Adv = ss "admodum" ; -- or by comparation L...
+  she_Pron = mkPronoun Fem Sg P3 ;
+  so_AdA = ss "sic" ; -- L...
+  somebody_NP = regNP "aliquis" "aliquem" "alicuius" "clicui" "aliquo" "aliquis" ( Masc | Fem ) Sg ; -- Bayer-Lindauer 60.1
+  someSg_Det = mkDeterminer ( mkA "aliquis" ) Sg ; -- L...
+  somePl_Det = mkDeterminer ( mkA "nonnullus" ) Pl ; --L ...
+  something_NP = regNP "aliquid" "aliquid" "alicuius rei" "alicui rei" "aliqua re" "aliquid" Masc Sg ; -- Bayer-Lindauer 60.1
+  somewhere_Adv = ss "usquam" ; -- L...
   that_Quant = ille_Quantifier ;
---  there_Adv = ss "there" ;
---  there7to_Adv = ss "there" ;
---  there7from_Adv = ss ["from there"] ;
---  therefore_PConj = ss "therefore" ;
-  they_Pron = personalPronoun Masc Pl P3 ;
+  that_Subj = ss "ut" ; -- L...
+  there_Adv = ss "ibi" ; -- loc. L...
+  there7to_Adv = ss "eo" ; -- Pons
+  there7from_Adv = ss "inde" ; -- Pons
+  therefore_PConj = ss "ergo" ; -- L...
+  they_Pron = mkPronoun Masc Pl P3 ;
   this_Quant = hic_Quantifier ;
---  through_Prep = ss "through" ;
---  too_AdA = ss "too" ;
---  to_Prep = ss "to" ;
-  under_Prep = mkPrep "sub" Acc ;
-  very_AdA = ss "valde" ;
---  want_VV = P.mkVV (P.regV "want") ;
-  we_Pron = personalPronoun Masc Pl P1 ;
---  whatPl_IP = mkIP "what" "what" "what's" Pl ;
---  whatSg_IP = mkIP "what" "what" "what's" Sg ;
---  when_IAdv = ss "when" ;
---  when_Subj = ss "when" ;
---  where_IAdv = ss "where" ;
---  which_IQuant = {s = \\_ => "which"} ;
+  through_Prep = mkPrep "per" Acc ; -- L...
+  too_AdA = ss "quoque" ; -- L...
+  to_Prep = mkPrep "ad" Acc; -- L...
+  under_Prep = mkPrep "sub" Acc ; -- L...
+  very_AdA = ss "valde" ; -- L...
+  want_VV = mkVV IrregLat.want_V True ; -- L...
+  we_Pron = mkPronoun Masc Pl P1 ;
+  whatSg_IP = { s =pronForms "quid" "quid" "cuius" "cui" "quo" ; n = Sg } ; -- only feminine or masculine Bayer-Lindauer 59.1
+  whatPl_IP = { s = \\_ => "" ; n = Pl } ; -- no plural forms Bayer-Lindauer 59.1
+  when_IAdv = ss "quando" ; -- L...
+  when_Subj = ss "si" ; -- L...
+  where_IAdv = ss "ubi" ; -- L...
+  which_IQuant = -- Bayer-Lindauer 59.1.2 and 58.1
+    { s = table { 
+	Ag Masc  Sg c => ( pronForms "qui" "quem" "cuius" "cui" "quo" ) ! c ;
+	Ag Masc  Pl c => ( pronForms "qui" "quos" "quorum" "quibus" "quibus" ) ! c ;
+	Ag Fem   Sg c => ( pronForms "quae" "quam" "cuius" "cui" "qua" ) ! c ;
+	Ag Fem   Pl c => ( pronForms "quae" "quas" "quarum" "quibus" "quibus" ) ! c ;
+	Ag Neutr Sg c => ( pronForms "quod" "quod" "cuius" "cui" "quo" ) ! c ;
+	Ag Neutr Pl c => ( pronForms "quae" "quae" "quorum" "quibus" "quibus" ) ! c
+	}
+    } ;
 -----b  whichPl_IDet = mkDeterminer Pl ["which"] ;
 -----b  whichSg_IDet = mkDeterminer Sg ["which"] ;
---  whoPl_IP = mkIP "who" "whom" "whose" Pl ;
---  whoSg_IP = mkIP "who" "whom" "whose" Sg ;
---  why_IAdv = ss "why" ;
-  without_Prep = mkPrep "sine" Abl ;
-  with_Prep = mkPrep "cum" Abl ;
-  yes_Utt = ss "sic" ;
-  youSg_Pron = personalPronoun Masc Sg P2 ;
-  youPl_Pron = personalPronoun Masc Pl P2 ;
-  youPol_Pron = personalPronoun Masc Sg P2 ;
+  whoSg_IP = { s =pronForms "quis" "quem" "cuius" "cui" "quo" ; n = Sg } ; -- only feminine or masculine Bayer-Lindauer 59.1
+  whoPl_IP = { s = \\_ => "" ; n = Pl } ; -- no plural forms Bayer-Lindauer 59.1
 
-  lin language_title_Utt = ss "latina" ;
+  why_IAdv = ss "cur" ; -- L...
+  without_Prep = mkPrep "sine" Abl ; -- abl. L..
+  with_Prep = mkPrep "cum" Abl ; -- abl. L..
+  yes_Utt = ss "sane" ; -- L...
+  youSg_Pron = mkPronoun Masc Sg P2 ;
+  youPl_Pron = mkPronoun Masc Pl P2 ;
+  youPol_Pron = youSg_Pron | youPl_Pron ;
 
+  no_Quant = { s , sp = ( mkA "nullus" ).s ! Posit } ; -- nullus L... 
+  not_Predet = ss "non" ; -- L...
+  if_then_Conj = {s1 = "si" ; s2 = "######" ; n = Sg } ; -- no word in s2 field L... 
+  at_least_AdN = ss "saltem" ; -- L...
+  at_most_AdN = ss "summum" ; -- Pons
+  nobody_NP = regNP "nemo" "neminem" "neminis" "nemini" "nemine" "nemo" ( Masc | Fem ) Sg ; -- Bayer Lindauer 60.4
+  nothing_NP = regNP "nihil" "nihil" "nullius rei" "nulli rei" "nulla re" "nihil" Neutr Sg ; -- Bayer-Lindauer 60.4
+  except_Prep = mkPrep "praeter" Acc ; -- L...
+
+  as_CAdv = mkCAdv "ita" "ut" ; -- L ...
+
+  have_V2 = mkV2 (mkV "habere") ; -- habeo, -ui, -itum 2 (Langenscheidts)
+
+  lin language_title_Utt = ss "lingua latina" ;
 
 }
 

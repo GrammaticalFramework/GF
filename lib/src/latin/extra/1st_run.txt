@@ -1,0 +1,614 @@
+                              
+         *  *  *              
+      *           *           
+    *               *         
+   *                          
+   *                          
+   *        * * * * * *       
+   *        *         *       
+    *       * * * *  *        
+      *     *      *          
+         *  *  *              
+                              
+This is GF version 3.4. 
+No detailed version info available
+Built on linux/x86_64 with ghc-7.0, flags: interrupt
+License: see help -license.   
+Bug reports: http://code.google.com/p/grammatical-framework/issues/list
+
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Common.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Common.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Cat.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Cat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Noun.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Noun.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Verb.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Verb.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Adjective.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Adjective.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Adverb.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Adverb.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Numeral.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Numeral.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Sentence.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Sentence.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Question.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Question.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Relative.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Relative.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Conjunction.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Conjunction.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Phrase.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Phrase.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Text.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Text.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Structural.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Structural.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Idiom.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Idiom.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Tense.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Tense.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/NumeralTransfer.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/NumeralTransfer.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Transfer.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Transfer.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Grammar.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Grammar.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Lexicon.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Lexicon.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/abstract/Lang.gf...   write file /home/herb/src/GF-daherb/lib/src/abstract/Lang.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/prelude/Predef.gf...   write file /home/herb/src/GF-daherb/lib/src/prelude/Predef.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/prelude/Prelude.gf...   write file /home/herb/src/GF-daherb/lib/src/prelude/Prelude.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/common/ParamX.gf...   write file /home/herb/src/GF-daherb/lib/src/common/ParamX.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/common/CommonX.gf...   write file /home/herb/src/GF-daherb/lib/src/common/CommonX.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/ResLat.gf...   write file /home/herb/src/GF-daherb/lib/src/latin/ResLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/CatLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/CatLat.gf:
+   Warning: no linearization type for A2, inserting default {s : Str}
+   Warning: no linearization type for Card, inserting default {s : Str}
+   Warning: no linearization type for ClSlash, inserting default {s : Str}
+   Warning: no linearization type for IComp, inserting default {s : Str}
+   Warning: no linearization type for IDet, inserting default {s : Str}
+   Warning: no linearization type for IP, inserting default {s : Str}
+   Warning: no linearization type for IQuant, inserting default {s : Str}
+   Warning: no linearization type for Imp, inserting default {s : Str}
+   Warning: no linearization type for N2, inserting default {s : Str}
+   Warning: no linearization type for N3, inserting default {s : Str}
+   Warning: no linearization type for Numeral, inserting default {s : Str}
+   Warning: no linearization type for Ord, inserting default {s : Str}
+   Warning: no linearization type for Predet, inserting default {s : Str}
+   Warning: no linearization type for QCl, inserting default {s : Str}
+   Warning: no linearization type for QS, inserting default {s : Str}
+   Warning: no linearization type for RCl, inserting default {s : Str}
+   Warning: no linearization type for RP, inserting default {s : Str}
+   Warning: no linearization type for RS, inserting default {s : Str}
+   Warning: no linearization type for S, inserting default {s : Str}
+   Warning: no linearization type for SSlash, inserting default {s : Str}
+   Warning: no linearization type for Subj, inserting default {s : Str}
+   Warning: no linearization type for V2A, inserting default {s : Str}
+   Warning: no linearization type for V2Q, inserting default {s : Str}
+   Warning: no linearization type for V2S, inserting default {s : Str}
+   Warning: no linearization type for V2V, inserting default {s : Str}
+   Warning: no linearization type for V3, inserting default {s : Str}
+   Warning: no linearization type for VA, inserting default {s : Str}
+   Warning: no linearization type for VQ, inserting default {s : Str}
+   Warning: no linearization type for VS, inserting default {s : Str}
+   Warning: no linearization type for VV, inserting default {s : Str}
+  write file /home/herb/src/GF-daherb/lib/src/latin/CatLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/NounLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/NounLat.gf:
+   Warning: no linearization of AdNum
+   Warning: no linearization of AdvNP
+   Warning: no linearization of ApposCN
+   Warning: no linearization of ComplN2
+   Warning: no linearization of ComplN3
+   Warning: no linearization of CountNP
+   Warning: no linearization of DetQuantOrd
+   Warning: no linearization of IndefArt
+   Warning: no linearization of MassNP
+   Warning: no linearization of NumCard
+   Warning: no linearization of NumDigits
+   Warning: no linearization of NumNumeral
+   Warning: no linearization of OrdDigits
+   Warning: no linearization of OrdNumeral
+   Warning: no linearization of OrdSuperl
+   Warning: no linearization of PPartNP
+   Warning: no linearization of PartNP
+   Warning: no linearization of PossNP
+   Warning: no linearization of PossPron
+   Warning: no linearization of PredetNP
+   Warning: no linearization of RelCN
+   Warning: no linearization of RelNP
+   Warning: no linearization of SentCN
+   Warning: no linearization of Use2N3
+   Warning: no linearization of Use3N3
+   Warning: no linearization of UseN2
+   Warning: no linearization of UsePN
+  write file /home/herb/src/GF-daherb/lib/src/latin/NounLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/VerbLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/VerbLat.gf:
+   Warning: no linearization of AdVVPSlash
+   Warning: no linearization of AdvVPSlash
+   Warning: no linearization of CompAdv
+   Warning: no linearization of CompCN
+   Warning: no linearization of CompNP
+   Warning: no linearization of ComplVA
+   Warning: no linearization of ComplVQ
+   Warning: no linearization of ComplVS
+   Warning: no linearization of ComplVV
+   Warning: no linearization of PassV2
+   Warning: no linearization of ReflVP
+   Warning: no linearization of Slash2V3
+   Warning: no linearization of Slash3V3
+   Warning: no linearization of SlashV2A
+   Warning: no linearization of SlashV2Q
+   Warning: no linearization of SlashV2S
+   Warning: no linearization of SlashV2V
+   Warning: no linearization of SlashV2VNP
+   Warning: no linearization of SlashVV
+   Warning: no linearization of UseCopula
+   Warning: no linearization of VPSlashPrep
+  write file /home/herb/src/GF-daherb/lib/src/latin/VerbLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/AdjectiveLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/AdjectiveLat.gf:
+   Warning: no linearization of AdjOrd
+   Warning: no linearization of AdvAP
+   Warning: no linearization of CAdvAP
+   Warning: no linearization of ComparA
+   Warning: no linearization of ComplA2
+   Warning: no linearization of ReflA2
+   Warning: no linearization of SentAP
+   Warning: no linearization of UseA2
+   Warning: no linearization of UseComparA
+  write file /home/herb/src/GF-daherb/lib/src/latin/AdjectiveLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/AdverbLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/AdverbLat.gf:
+   Warning: no linearization of AdAdv
+   Warning: no linearization of AdnCAdv
+   Warning: no linearization of ComparAdvAdj
+   Warning: no linearization of ComparAdvAdjS
+   Warning: no linearization of PositAdAAdj
+   Warning: no linearization of PositAdvAdj
+   Warning: no linearization of SubjS
+  write file /home/herb/src/GF-daherb/lib/src/latin/AdverbLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/NumeralLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/NumeralLat.gf:
+   Warning: no linearization type for Digit, inserting default {s : Str}
+   Warning: no linearization type for Sub10, inserting default {s : Str}
+   Warning: no linearization type for Sub100, inserting default {s : Str}
+   Warning: no linearization type for Sub1000, inserting default {s : Str}
+   Warning: no linearization type for Sub1000000, inserting default {s : Str}
+   Warning: no linearization of n2
+   Warning: no linearization of n3
+   Warning: no linearization of n4
+   Warning: no linearization of n5
+   Warning: no linearization of n6
+   Warning: no linearization of n7
+   Warning: no linearization of n8
+   Warning: no linearization of n9
+   Warning: no linearization of num
+   Warning: no linearization of pot0
+   Warning: no linearization of pot01
+   Warning: no linearization of pot0as1
+   Warning: no linearization of pot1
+   Warning: no linearization of pot110
+   Warning: no linearization of pot111
+   Warning: no linearization of pot1as2
+   Warning: no linearization of pot1plus
+   Warning: no linearization of pot1to19
+   Warning: no linearization of pot2
+   Warning: no linearization of pot2as3
+   Warning: no linearization of pot2plus
+   Warning: no linearization of pot3
+   Warning: no linearization of pot3plus
+  write file /home/herb/src/GF-daherb/lib/src/latin/NumeralLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/SentenceLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/SentenceLat.gf:
+   Warning: no linearization of AdvS
+   Warning: no linearization of AdvSlash
+   Warning: no linearization of EmbedQS
+   Warning: no linearization of EmbedS
+   Warning: no linearization of EmbedVP
+   Warning: no linearization of ExtAdvS
+   Warning: no linearization of ImpVP
+   Warning: no linearization of PredSCVP
+   Warning: no linearization of RelS
+   Warning: no linearization of SSubjS
+   Warning: no linearization of SlashPrep
+   Warning: no linearization of SlashVP
+   Warning: no linearization of SlashVS
+   Warning: no linearization of UseCl
+   Warning: no linearization of UseQCl
+   Warning: no linearization of UseRCl
+   Warning: no linearization of UseSlash
+  write file /home/herb/src/GF-daherb/lib/src/latin/SentenceLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/common/TextX.gf...   write file /home/herb/src/GF-daherb/lib/src/common/TextX.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/ParadigmsLat.gf...   write file /home/herb/src/GF-daherb/lib/src/latin/ParadigmsLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/StructuralLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/StructuralLat.gf:
+   Warning: no linearization of all_Predet
+   Warning: no linearization of although_Subj
+   Warning: no linearization of and_Conj
+   Warning: no linearization of as_CAdv
+   Warning: no linearization of at_least_AdN
+   Warning: no linearization of at_most_AdN
+   Warning: no linearization of because_Subj
+   Warning: no linearization of behind_Prep
+   Warning: no linearization of both7and_DConj
+   Warning: no linearization of can8know_VV
+   Warning: no linearization of can_VV
+   Warning: no linearization of during_Prep
+   Warning: no linearization of either7or_DConj
+   Warning: no linearization of every_Det
+   Warning: no linearization of everybody_NP
+   Warning: no linearization of everything_NP
+   Warning: no linearization of everywhere_Adv
+   Warning: no linearization of except_Prep
+   Warning: no linearization of few_Det
+   Warning: no linearization of have_V2
+   Warning: no linearization of here7from_Adv
+   Warning: no linearization of here7to_Adv
+   Warning: no linearization of how8many_IDet
+   Warning: no linearization of how8much_IAdv
+   Warning: no linearization of how_IAdv
+   Warning: no linearization of if_Subj
+   Warning: no linearization of if_then_Conj
+   Warning: no linearization of less_CAdv
+   Warning: no linearization of many_Det
+   Warning: no linearization of more_CAdv
+   Warning: no linearization of most_Predet
+   Warning: no linearization of much_Det
+   Warning: no linearization of must_VV
+   Warning: no linearization of no_Quant
+   Warning: no linearization of nobody_NP
+   Warning: no linearization of not_Predet
+   Warning: no linearization of nothing_NP
+   Warning: no linearization of on_Prep
+   Warning: no linearization of or_Conj
+   Warning: no linearization of otherwise_PConj
+   Warning: no linearization of please_Voc
+   Warning: no linearization of quite_Adv
+   Warning: no linearization of somePl_Det
+   Warning: no linearization of someSg_Det
+   Warning: no linearization of somebody_NP
+   Warning: no linearization of something_NP
+   Warning: no linearization of somewhere_Adv
+   Warning: no linearization of that_Subj
+   Warning: no linearization of there7from_Adv
+   Warning: no linearization of there7to_Adv
+   Warning: no linearization of there_Adv
+   Warning: no linearization of therefore_PConj
+   Warning: no linearization of through_Prep
+   Warning: no linearization of to_Prep
+   Warning: no linearization of too_AdA
+   Warning: no linearization of want_VV
+   Warning: no linearization of whatPl_IP
+   Warning: no linearization of whatSg_IP
+   Warning: no linearization of when_IAdv
+   Warning: no linearization of when_Subj
+   Warning: no linearization of where_IAdv
+   Warning: no linearization of which_IQuant
+   Warning: no linearization of whoPl_IP
+   Warning: no linearization of whoSg_IP
+   Warning: no linearization of why_IAdv
+  write file /home/herb/src/GF-daherb/lib/src/latin/StructuralLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/common/TenseX.gf...   write file /home/herb/src/GF-daherb/lib/src/common/TenseX.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/GrammarLat.gf...   write file /home/herb/src/GF-daherb/lib/src/latin/GrammarLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/LexiconLat.gf... 
+/home/herb/src/GF-daherb/lib/src/latin/LexiconLat.gf:
+   Warning: no linearization of add_V3
+   Warning: no linearization of airplane_N
+   Warning: no linearization of alas_Interj
+   Warning: no linearization of already_Adv
+   Warning: no linearization of animal_N
+   Warning: no linearization of answer_V2S
+   Warning: no linearization of apartment_N
+   Warning: no linearization of apple_N
+   Warning: no linearization of ashes_N
+   Warning: no linearization of ask_V2Q
+   Warning: no linearization of back_N
+   Warning: no linearization of bank_N
+   Warning: no linearization of bark_N
+   Warning: no linearization of become_VA
+   Warning: no linearization of beg_V2V
+   Warning: no linearization of belly_N
+   Warning: no linearization of bike_N
+   Warning: no linearization of bite_V2
+   Warning: no linearization of blood_N
+   Warning: no linearization of blow_V
+   Warning: no linearization of blue_A
+   Warning: no linearization of boat_N
+   Warning: no linearization of bone_N
+   Warning: no linearization of boot_N
+   Warning: no linearization of boss_N
+   Warning: no linearization of breast_N
+   Warning: no linearization of breathe_V
+   Warning: no linearization of broad_A
+   Warning: no linearization of brother_N2
+   Warning: no linearization of brown_A
+   Warning: no linearization of burn_V
+   Warning: no linearization of butter_N
+   Warning: no linearization of buy_V2
+   Warning: no linearization of camera_N
+   Warning: no linearization of cap_N
+   Warning: no linearization of car_N
+   Warning: no linearization of carpet_N
+   Warning: no linearization of ceiling_N
+   Warning: no linearization of chair_N
+   Warning: no linearization of cheese_N
+   Warning: no linearization of child_N
+   Warning: no linearization of church_N
+   Warning: no linearization of clean_A
+   Warning: no linearization of clever_A
+   Warning: no linearization of close_V2
+   Warning: no linearization of cloud_N
+   Warning: no linearization of coat_N
+   Warning: no linearization of cold_A
+   Warning: no linearization of come_V
+   Warning: no linearization of computer_N
+   Warning: no linearization of correct_A
+   Warning: no linearization of count_V2
+   Warning: no linearization of country_N
+   Warning: no linearization of cousin_N
+   Warning: no linearization of cow_N
+   Warning: no linearization of cut_V2
+   Warning: no linearization of day_N
+   Warning: no linearization of die_V
+   Warning: no linearization of dig_V
+   Warning: no linearization of dirty_A
+   Warning: no linearization of distance_N3
+   Warning: no linearization of do_V2
+   Warning: no linearization of doctor_N
+   Warning: no linearization of dog_N
+   Warning: no linearization of door_N
+   Warning: no linearization of drink_V2
+   Warning: no linearization of dry_A
+   Warning: no linearization of dull_A
+   Warning: no linearization of dust_N
+   Warning: no linearization of ear_N
+   Warning: no linearization of earth_N
+   Warning: no linearization of easy_A2V
+   Warning: no linearization of eat_V2
+   Warning: no linearization of egg_N
+   Warning: no linearization of empty_A
+   Warning: no linearization of enemy_N
+   Warning: no linearization of eye_N
+   Warning: no linearization of factory_N
+   Warning: no linearization of fall_V
+   Warning: no linearization of far_Adv
+   Warning: no linearization of fat_N
+   Warning: no linearization of father_N2
+   Warning: no linearization of fear_V2
+   Warning: no linearization of fear_VS
+   Warning: no linearization of feather_N
+   Warning: no linearization of fight_V2
+   Warning: no linearization of find_V2
+   Warning: no linearization of fingernail_N
+   Warning: no linearization of fire_N
+   Warning: no linearization of fish_N
+   Warning: no linearization of float_V
+   Warning: no linearization of floor_N
+   Warning: no linearization of flow_V
+   Warning: no linearization of flower_N
+   Warning: no linearization of fly_V
+   Warning: no linearization of fog_N
+   Warning: no linearization of foot_N
+   Warning: no linearization of forest_N
+   Warning: no linearization of forget_V2
+   Warning: no linearization of freeze_V
+   Warning: no linearization of fridge_N
+   Warning: no linearization of friend_N
+   Warning: no linearization of fruit_N
+   Warning: no linearization of full_A
+   Warning: no linearization of fun_AV
+   Warning: no linearization of garden_N
+   Warning: no linearization of girl_N
+   Warning: no linearization of give_V3
+   Warning: no linearization of glove_N
+   Warning: no linearization of go_V
+   Warning: no linearization of grammar_N
+   Warning: no linearization of grass_N
+   Warning: no linearization of green_A
+   Warning: no linearization of guts_N
+   Warning: no linearization of hair_N
+   Warning: no linearization of hand_N
+   Warning: no linearization of harbour_N
+   Warning: no linearization of hat_N
+   Warning: no linearization of hate_V2
+   Warning: no linearization of head_N
+   Warning: no linearization of hear_V2
+   Warning: no linearization of heart_N
+   Warning: no linearization of heavy_A
+   Warning: no linearization of hill_N
+   Warning: no linearization of hit_V2
+   Warning: no linearization of hold_V2
+   Warning: no linearization of hope_VS
+   Warning: no linearization of horn_N
+   Warning: no linearization of horse_N
+   Warning: no linearization of hot_A
+   Warning: no linearization of house_N
+   Warning: no linearization of hunt_V2
+   Warning: no linearization of husband_N
+   Warning: no linearization of ice_N
+   Warning: no linearization of important_A
+   Warning: no linearization of industry_N
+   Warning: no linearization of iron_N
+   Warning: no linearization of john_PN
+   Warning: no linearization of jump_V
+   Warning: no linearization of kill_V2
+   Warning: no linearization of king_N
+   Warning: no linearization of knee_N
+   Warning: no linearization of know_V2
+   Warning: no linearization of know_VQ
+   Warning: no linearization of know_VS
+   Warning: no linearization of lake_N
+   Warning: no linearization of lamp_N
+   Warning: no linearization of language_N
+   Warning: no linearization of laugh_V
+   Warning: no linearization of leaf_N
+   Warning: no linearization of learn_V2
+   Warning: no linearization of leather_N
+   Warning: no linearization of leave_V2
+   Warning: no linearization of left_Ord
+   Warning: no linearization of leg_N
+   Warning: no linearization of lie_V
+   Warning: no linearization of like_V2
+   Warning: no linearization of listen_V2
+   Warning: no linearization of live_V
+   Warning: no linearization of liver_N
+   Warning: no linearization of long_A
+   Warning: no linearization of lose_V2
+   Warning: no linearization of louse_N
+   Warning: no linearization of man_N
+   Warning: no linearization of married_A2
+   Warning: no linearization of meat_N
+   Warning: no linearization of milk_N
+   Warning: no linearization of moon_N
+   Warning: no linearization of mother_N2
+   Warning: no linearization of mountain_N
+   Warning: no linearization of mouth_N
+   Warning: no linearization of music_N
+   Warning: no linearization of name_N
+   Warning: no linearization of narrow_A
+   Warning: no linearization of near_A
+   Warning: no linearization of neck_N
+   Warning: no linearization of new_A
+   Warning: no linearization of newspaper_N
+   Warning: no linearization of night_N
+   Warning: no linearization of nose_N
+   Warning: no linearization of now_Adv
+   Warning: no linearization of number_N
+   Warning: no linearization of oil_N
+   Warning: no linearization of old_A
+   Warning: no linearization of open_V2
+   Warning: no linearization of paint_V2A
+   Warning: no linearization of paper_N
+   Warning: no linearization of paris_PN
+   Warning: no linearization of peace_N
+   Warning: no linearization of pen_N
+   Warning: no linearization of person_N
+   Warning: no linearization of planet_N
+   Warning: no linearization of plastic_N
+   Warning: no linearization of play_V
+   Warning: no linearization of play_V2
+   Warning: no linearization of policeman_N
+   Warning: no linearization of priest_N
+   Warning: no linearization of probable_AS
+   Warning: no linearization of pull_V2
+   Warning: no linearization of push_V2
+   Warning: no linearization of put_V2
+   Warning: no linearization of queen_N
+   Warning: no linearization of question_N
+   Warning: no linearization of radio_N
+   Warning: no linearization of rain_N
+   Warning: no linearization of rain_V0
+   Warning: no linearization of read_V2
+   Warning: no linearization of ready_A
+   Warning: no linearization of reason_N
+   Warning: no linearization of red_A
+   Warning: no linearization of religion_N
+   Warning: no linearization of restaurant_N
+   Warning: no linearization of right_Ord
+   Warning: no linearization of river_N
+   Warning: no linearization of road_N
+   Warning: no linearization of rock_N
+   Warning: no linearization of roof_N
+   Warning: no linearization of root_N
+   Warning: no linearization of rope_N
+   Warning: no linearization of rotten_A
+   Warning: no linearization of round_A
+   Warning: no linearization of rub_V2
+   Warning: no linearization of rubber_N
+   Warning: no linearization of rule_N
+   Warning: no linearization of run_V
+   Warning: no linearization of salt_N
+   Warning: no linearization of sand_N
+   Warning: no linearization of say_VS
+   Warning: no linearization of school_N
+   Warning: no linearization of science_N
+   Warning: no linearization of scratch_V2
+   Warning: no linearization of sea_N
+   Warning: no linearization of see_V2
+   Warning: no linearization of seed_N
+   Warning: no linearization of seek_V2
+   Warning: no linearization of sell_V3
+   Warning: no linearization of send_V3
+   Warning: no linearization of sew_V
+   Warning: no linearization of sharp_A
+   Warning: no linearization of sheep_N
+   Warning: no linearization of ship_N
+   Warning: no linearization of shirt_N
+   Warning: no linearization of shoe_N
+   Warning: no linearization of shop_N
+   Warning: no linearization of short_A
+   Warning: no linearization of silver_N
+   Warning: no linearization of sing_V
+   Warning: no linearization of sister_N
+   Warning: no linearization of sit_V
+   Warning: no linearization of skin_N
+   Warning: no linearization of sky_N
+   Warning: no linearization of small_A
+   Warning: no linearization of smell_V
+   Warning: no linearization of smoke_N
+   Warning: no linearization of smooth_A
+   Warning: no linearization of snake_N
+   Warning: no linearization of snow_N
+   Warning: no linearization of sock_N
+   Warning: no linearization of song_N
+   Warning: no linearization of speak_V2
+   Warning: no linearization of spit_V
+   Warning: no linearization of split_V2
+   Warning: no linearization of squeeze_V2
+   Warning: no linearization of stab_V2
+   Warning: no linearization of stand_V
+   Warning: no linearization of star_N
+   Warning: no linearization of steel_N
+   Warning: no linearization of stick_N
+   Warning: no linearization of stone_N
+   Warning: no linearization of stop_V
+   Warning: no linearization of stove_N
+   Warning: no linearization of straight_A
+   Warning: no linearization of student_N
+   Warning: no linearization of stupid_A
+   Warning: no linearization of suck_V2
+   Warning: no linearization of sun_N
+   Warning: no linearization of swell_V
+   Warning: no linearization of swim_V
+   Warning: no linearization of switch8off_V2
+   Warning: no linearization of switch8on_V2
+   Warning: no linearization of table_N
+   Warning: no linearization of tail_N
+   Warning: no linearization of talk_V3
+   Warning: no linearization of teach_V2
+   Warning: no linearization of teacher_N
+   Warning: no linearization of television_N
+   Warning: no linearization of thick_A
+   Warning: no linearization of thin_A
+   Warning: no linearization of think_V
+   Warning: no linearization of throw_V2
+   Warning: no linearization of tie_V2
+   Warning: no linearization of today_Adv
+   Warning: no linearization of tongue_N
+   Warning: no linearization of tooth_N
+   Warning: no linearization of train_N
+   Warning: no linearization of travel_V
+   Warning: no linearization of tree_N
+   Warning: no linearization of turn_V
+   Warning: no linearization of ugly_A
+   Warning: no linearization of uncertain_A
+   Warning: no linearization of understand_V2
+   Warning: no linearization of university_N
+   Warning: no linearization of village_N
+   Warning: no linearization of vomit_V
+   Warning: no linearization of wait_V2
+   Warning: no linearization of walk_V
+   Warning: no linearization of war_N
+   Warning: no linearization of warm_A
+   Warning: no linearization of wash_V2
+   Warning: no linearization of watch_V2
+   Warning: no linearization of water_N
+   Warning: no linearization of wet_A
+   Warning: no linearization of white_A
+   Warning: no linearization of wide_A
+   Warning: no linearization of wife_N
+   Warning: no linearization of win_V2
+   Warning: no linearization of wind_N
+   Warning: no linearization of window_N
+   Warning: no linearization of wine_N
+   Warning: no linearization of wing_N
+   Warning: no linearization of wipe_V2
+   Warning: no linearization of woman_N
+   Warning: no linearization of wonder_VQ
+   Warning: no linearization of wood_N
+   Warning: no linearization of worm_N
+   Warning: no linearization of write_V2
+   Warning: no linearization of year_N
+   Warning: no linearization of yellow_A
+   Warning: no linearization of young_A
+  write file /home/herb/src/GF-daherb/lib/src/latin/LexiconLat.gfo
+- compiling /home/herb/src/GF-daherb/lib/src/latin/LangLat.gf...   write file /home/herb/src/GF-daherb/lib/src/latin/LangLat.gfo
+linking ... OK
+
+Languages: LangLat
+See you.
+0 msec
