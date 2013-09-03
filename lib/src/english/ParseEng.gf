@@ -133,7 +133,7 @@ lin
   } ;
 
   ApposNP np1 np2 = {
-    s = \\c => np1.s ! c ++ "," ++ np2.s ! npNom ;
+    s = \\c => np1.s ! c ++ "," ++ np2.s ! npNom ++ finalComma ;
     a = np1.a
   } ;
   
