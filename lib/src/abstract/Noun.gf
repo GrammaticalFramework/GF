@@ -27,6 +27,7 @@ abstract Noun = Cat ** {
 
     PPartNP : NP -> V2  -> NP ;    -- the man seen
     AdvNP   : NP -> Adv -> NP ;    -- Paris today
+    ExtAdvNP: NP -> Adv -> NP ;    -- boys, such as ..
     RelNP   : NP -> RS  -> NP ;    -- Paris, which is here
 
 -- Determiners can form noun phrases directly.

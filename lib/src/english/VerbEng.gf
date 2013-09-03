@@ -37,6 +37,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
     UseComp comp = insertObj comp.s (predAux auxBe) ;
 
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+    ExtAdvVP vp adv = insertObj (\\_ => "," ++ adv.s ++ finalComma) vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
 
     AdvVPSlash vp adv = insertObj (\\_ => adv.s) vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
