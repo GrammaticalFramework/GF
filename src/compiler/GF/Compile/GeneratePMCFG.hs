@@ -379,7 +379,7 @@ convertTerm opts sel ctype (Alts s alts)
              strings (C u v)   = strings u ++ strings v
              strings (Strs ss) = concatMap strings ss
              strings (EPatt p) = getPatts p
-             strings Empty = [] -- ??
+             strings Empty     = [""]
              strings t = bug $ "strings "++show t
 
              getPatts p =

@@ -23,7 +23,7 @@ import qualified Data.Set as Set
 
 -- | Linearizes given expression as string in the language
 linearize :: PGF -> Language -> Tree -> String
-linearize pgf lang = concat . take 1 . map (unwords . concatMap flattenBracketedString . snd . untokn "" . firstLin) . linTree pgf lang
+linearize pgf lang = concat . take 1 . map (unwords . concatMap flattenBracketedString . snd . untokn Nothing . firstLin) . linTree pgf lang
 
 -- | The same as 'linearizeAllLang' but does not return
 -- the language.
@@ -37,7 +37,7 @@ linearizeAllLang pgf t = [(lang,linearize pgf lang t) | lang <- Map.keys (concre
 
 -- | Linearizes given expression as a bracketed string in the language
 bracketedLinearize :: PGF -> Language -> Tree -> BracketedString
-bracketedLinearize pgf lang = head . concat . map (snd . untokn "" . firstLin) . linTree pgf lang
+bracketedLinearize pgf lang = head . concat . map (snd . untokn Nothing . firstLin) . linTree pgf lang
   where
 --  head []       = error "cannot linearize"
     head []       = Leaf ""
@@ -53,7 +53,7 @@ firstLin (_,arr)
 tabularLinearizes :: PGF -> Language -> Expr -> [[(String,String)]]
 tabularLinearizes pgf lang e = map cnv (linTree pgf lang e)
   where
-    cnv ((cat,_),lin) = zip (lbls cat) $ map (unwords . concatMap flattenBracketedString . snd . untokn "") (elems lin)
+    cnv ((cat,_),lin) = zip (lbls cat) $ map (unwords . concatMap flattenBracketedString . snd . untokn Nothing) (elems lin)
 
     lbls cat = case Map.lookup cat (cnccats (lookConcr pgf lang)) of
                  Just (CncCat _ _ lbls) -> elems lbls

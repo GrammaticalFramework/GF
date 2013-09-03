@@ -47,7 +47,7 @@ data Forest
 --------------------------------------------------------------------
 
 linearizeWithBrackets :: Maybe Int -> Forest -> BracketedString
-linearizeWithBrackets dp = head . snd . untokn "" . bracketedTokn dp
+linearizeWithBrackets dp = head . snd . untokn Nothing . bracketedTokn dp
 
 ---------------------------------------------------------------
 -- Internally we have to do everything with Tokn first because
