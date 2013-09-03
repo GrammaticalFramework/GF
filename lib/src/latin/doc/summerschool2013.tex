@@ -1,0 +1,68 @@
+%\documentclass[handout]{beamer}
+\documentclass{beamer}
+%\usetheme{Singapore} % anderes Layout
+%\usetheme{Antibes} % anderes Layout
+%\usecolortheme{lily}
+\usetheme{Antibes}
+\usecolortheme{beaver}
+\setbeamertemplate{footline}[frame number]
+\usepackage{color}
+\usepackage{german}
+\usepackage{latexsym,amssymb}
+\usepackage{amsmath} % für begin{cases} ... \end{cases}
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+%\usepackage{algorithm}
+%\usepackage{algorithmicx}
+%\usepackage{algpseudocode}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{fontspec}
+\usepackage{url}
+
+\setbeamertemplate{footline}[frame number]
+\parindent0pt
+\parskip1.2ex
+
+\def\nat{{\mathbb N}}
+\def\bool{{\mathbb B}}
+\def\real{{\mathbb R}}
+
+\title[Implementation of the Latin Language for the RGL]{Implementation of the Latin Language for the RGL\\\quad \\ \small{ GF Summer School, Frauenchiemsee 2013 }}
+\author{Herbert Lange\\Centrum für Informations- und Sprachverarbeitung\\München}
+
+\date{\today} 
+
+\begin{document}
+\frame{\titlepage}
+
+\section{The Latin RG}
+\subsection{Current Status}
+\begin{frame}[fragile]{Current Status}
+\begin{itemize}
+  \item Translated nearly all strings in LexiconLat and StructuralLat
+  \item Morphology for all common word types (with smart paradigms)
+  \item Basic syntax rules to create simple Clauses
+  \item Basic handling of pronoun drop (ExtraLat)
+  \item On Github \url{https://www.github.com/daherb/GF}
+\end{itemize}
+\end{frame}
+\subsection{Project for the Summer School}
+\begin{frame}{Project for the Summer School}
+\begin{itemize}
+  \item Handling of modifiers for NPs (Adjectives, APs, ...)
+  \item Rules to create S and Utt from Cl
+  \item Evaluation of the Lexicon
+  \item Further testing of the morphology
+\end{itemize}
+\end{frame}
+\subsection{The more Distant Future}
+\begin{frame}{The more Distant Future}
+\begin{itemize}
+  \item Subordinate Clauses, relative clauses
+  \item Different word orders
+  \item Change handling incomplete paradigms
+  \item Much more
+\end{itemize}
+\end{frame}
+\end{document}

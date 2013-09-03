@@ -1,0 +1,33 @@
+Herbert Lange, Matr. 8063320
+Thema: Implementierung einer Grammatik des Lateinischen im "Grammatical Framework"
+
+Anmeldung zur Magisterprüfung: 12.3.-13.3. bzw. 19.3.-21.3.2013
+
+Abgabetermin: ?? September 2013 (6 Monate)
+
+Fr. 10.5.2013, 15.15 - 17.10
+----------------------------
+Morphologie und Lexicon: vorhanden 3-4 Woerter von Ranta
+
+Lateinlexikon: aus lateinischem Wikipedia  la.wikipedia.org  (Ebbe
+Viborg, svensk-latinska ordbook, 2009)
+
+Plan: Archiv anlegen (Lange): git clone https://github.com/daherb/GF.git 
+
+Problem: 
+Nomen, die im Latein NPs sind: camera_N = machina photographica
+
+grob: 
+lin camera_N = let n = machina_N 
+                   a = photographica_A (: ResLat.NP)
+                in mkN {s : \\form => n.form ++ a.form } ;
+
+lin antiquus_A = let anitiq_simpl = ...
+                  in { s : AF gen Sg Nom => antiq_simpl.<Sg Nom> ; ..}
+
+
+Bisher sind die Lexikoneintraege laut Lexika geschrieben, aber die 
+darunteliegenden Paradigmenfunktionen fehlen noch! Auch die Kasus und
+Präpositionen der Objekte sind bei den V2,V3-Einträgen noch Defaults.
+
+Tip: erst Nomen-, dann Adjektivdeklinationen machen; regelmäßige Fälle

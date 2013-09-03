@@ -1,181 +1,456 @@
-----# -path=.:prelude:../abstract:../common
---
---concrete IrregLat of IrregLatAbs = CatLat ** open ParadigmsLat in {
+--# -path=.:prelude:../abstract:../common
+
+concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat in {
 --
 --flags optimize=values ;
 --
---  lin
---  awake_V = irregV "awake" "awoke" "awoken" ;
---  bear_V = irregV "bear" "bore" "born" ;
---  beat_V = irregV "beat" "beat" "beat" ;
---  become_V = irregV "become" "became" "become" ;
---  begin_V = irregV "begin" "began" "begun" ;
---  bend_V = irregV "bend" "bent" "bent" ;
---  beset_V = irregV "beset" "beset" "beset" ;
---  bet_V = irregDuplV "bet" "bet" "bet" ;
---  bid_V = irregDuplV "bid" (variants {"bid" ; "bade"}) (variants {"bid" ; "bidden"}) ;
---  bind_V = irregV "bind" "bound" "bound" ;
---  bite_V = irregV "bite" "bit" "bitten" ;
---  bleed_V = irregV "bleed" "bled" "bled" ;
---  blow_V = irregV "blow" "blew" "blown" ;
---  break_V = irregV "break" "broke" "broken" ;
---  breed_V = irregV "breed" "bred" "bred" ;
---  bring_V = irregV "bring" "brought" "brought" ;
---  broadcast_V = irregV "broadcast" "broadcast" "broadcast" ;
---  build_V = irregV "build" "built" "built" ;
---  burn_V = irregV "burn" (variants {"burned" ; "burnt"}) (variants {"burned" ; "burnt"}) ;
---  burst_V = irregV "burst" "burst" "burst" ;
---  buy_V = irregV "buy" "bought" "bought" ;
---  cast_V = irregV "cast" "cast" "cast" ;
---  catch_V = irregV "catch" "caught" "caught" ;
---  choose_V = irregV "choose" "chose" "chosen" ;
---  cling_V = irregV "cling" "clung" "clung" ;
---  come_V = irregV "come" "came" "come" ;
---  cost_V = irregV "cost" "cost" "cost" ;
---  creep_V = irregV "creep" "crept" "crept" ;
---  cut_V = irregDuplV "cut" "cut" "cut" ;
---  deal_V = irregV "deal" "dealt" "dealt" ;
---  dig_V = irregDuplV "dig" "dug" "dug" ;
---  dive_V = irregV "dive" (variants {"dived" ; "dove"}) "dived" ;
---  do_V = mk5V "do" "does" "did" "done" "doing" ;
---  draw_V = irregV "draw" "drew" "drawn" ;
---  dream_V = irregV "dream" (variants {"dreamed" ; "dreamt"}) (variants {"dreamed" ; "dreamt"}) ;
---  drive_V = irregV "drive" "drove" "driven" ;
---  drink_V = irregV "drink" "drank" "drunk" ;
---  eat_V = irregV "eat" "ate" "eaten" ;
---  fall_V = irregV "fall" "fell" "fallen" ;
---  feed_V = irregV "feed" "fed" "fed" ;
---  feel_V = irregV "feel" "felt" "felt" ;
---  fight_V = irregV "fight" "fought" "fought" ;
---  find_V = irregV "find" "found" "found" ;
---  fit_V = irregDuplV "fit" "fit" "fit" ;
---  flee_V = irregV "flee" "fled" "fled" ;
---  fling_V = irregV "fling" "flung" "flung" ;
---  fly_V = irregV "fly" "flew" "flown" ;
---  forbid_V = irregDuplV "forbid" "forbade" "forbidden" ;
---  forget_V = irregDuplV "forget" "forgot" "forgotten" ;
---  forgive_V = irregV "forgive" "forgave" "forgiven" ;
---  forsake_V = irregV "forsake" "forsook" "forsaken" ;
---  freeze_V = irregV "freeze" "froze" "frozen" ;
---  get_V = irregDuplV "get" "got" "gotten" ;
---  give_V = irregV "give" "gave" "given" ;
---  go_V = mk5V "go" "goes" "went" "gone" "going" ;
---  grind_V = irregV "grind" "ground" "ground" ;
---  grow_V = irregV "grow" "grew" "grown" ;
---  hang_V = irregV "hang" "hung" "hung" ;
---  have_V = mk5V "have" "has" "had" "had" "having" ;
---  hear_V = irregV "hear" "heard" "heard" ;
---  hide_V = irregV "hide" "hid" "hidden" ;
---  hit_V = irregDuplV "hit" "hit" "hit" ;
---  hold_V = irregV "hold" "held" "held" ;
---  hurt_V = irregV "hurt" "hurt" "hurt" ;
---  keep_V = irregV "keep" "kept" "kept" ;
---  kneel_V = irregV "kneel" "knelt" "knelt" ;
---  knit_V = irregDuplV "knit" "knit" "knit" ;
---  know_V = irregV "know" "knew" "know" ;
---  lay_V = irregV "lay" "laid" "laid" ;
---  lead_V = irregV "lead" "led" "led" ;
---  leap_V = irregV "leap" (variants {"leaped" ; "lept"}) (variants {"leaped" ; "lept"}) ;
---  learn_V = irregV "learn" (variants {"learned" ; "learnt"}) (variants {"learned" ; "learnt"}) ;
---  leave_V = irregV "leave" "left" "left" ;
---  lend_V = irregV "lend" "lent" "lent" ;
---  let_V = irregDuplV "let" "let" "let" ;
---  lie_V = irregV "lie" "lay" "lain" ;
---  light_V = irregV "light" (variants {"lighted" ; "lit"}) "lighted" ;
---  lose_V = irregV "lose" "lost" "lost" ;
---  make_V = irregV "make" "made" "made" ;
---  mean_V = irregV "mean" "meant" "meant" ;
---  meet_V = irregV "meet" "met" "met" ;
---  misspell_V = irregV "misspell" (variants {"misspelled" ; "misspelt"}) (variants {"misspelled" ; "misspelt"}) ;
---  mistake_V = irregV "mistake" "mistook" "mistaken" ;
---  mow_V = irregV "mow" "mowed" (variants {"mowed" ; "mown"}) ;
---  overcome_V = irregV "overcome" "overcame" "overcome" ;
---  overdo_V = mk5V "overdo" "overdoes" "overdid" "overdone" "overdoing" ;
---  overtake_V = irregV "overtake" "overtook" "overtaken" ;
---  overthrow_V = irregV "overthrow" "overthrew" "overthrown" ;
---  pay_V = irregV "pay" "paid" "paid" ;
---  plead_V = irregV "plead" "pled" "pled" ;
---  prove_V = irregV "prove" "proved" (variants {"proved" ; "proven"}) ;
---  put_V = irregDuplV "put" "put" "put" ;
---  quit_V = irregDuplV "quit" "quit" "quit" ;
---  read_V = irregV "read" "read" "read" ;
---  rid_V = irregDuplV "rid" "rid" "rid" ;
---  ride_V = irregV "ride" "rode" "ridden" ;
---  ring_V = irregV "ring" "rang" "rung" ;
---  rise_V = irregV "rise" "rose" "risen" ;
---  run_V = irregDuplV "run" "ran" "run" ;
---  saw_V = irregV "saw" "sawed" (variants {"sawed" ; "sawn"}) ;
---  say_V = irregV "say" "said" "said" ;
---  see_V = irregV "see" "saw" "seen" ;
---  seek_V = irregV "seek" "sought" "sought" ;
---  sell_V = irregV "sell" "sold" "sold" ;
---  send_V = irregV "send" "sent" "sent" ;
---  set_V = irregDuplV "set" "set" "set" ;
---  sew_V = irregV "sew" "sewed" (variants {"sewed" ; "sewn"}) ;
---  shake_V = irregV "shake" "shook" "shaken" ;
---  shave_V = irregV "shave" "shaved" (variants {"shaved" ; "shaven"}) ;
---  shear_V = irregV "shear" "shore" "shorn" ;
---  shed_V = irregDuplV "shed" "shed" "shed" ;
---  shine_V = irregV "shine" "shone" "shone" ;
---  shoe_V = irregV "shoe" "shoed" (variants {"shoed" ; "shod"}) ;
---  shoot_V = irregV "shoot" "shot" "shot" ;
---  show_V = irregV "show" "showed" (variants {"showed" ; "shown"}) ;
---  shrink_V = irregV "shrink" "shrank" "shrunk" ;
---  shut_V = irregDuplV "shut" "shut" "shut" ;
---  sing_V = irregV "sing" "sang" "sung" ;
---  sink_V = irregV "sink" "sank" "sunk" ;
---  sit_V = irregDuplV "sit" "sat" "sat" ;
---  sleep_V = irregV "sleep" "slept" "slept" ;
---  slay_V = irregV "slay" "slew" "slain" ;
---  slide_V = irregV "slide" "slid" "slid" ;
---  sling_V = irregV "sling" "slung" "slung" ;
---  slit_V = irregDuplV "slit" "slit" "slit" ;
---  smite_V = irregV "smite" "smote" "smitten" ;
---  sow_V = irregV "sow" "sowed" (variants {"sowed" ; "sown"}) ;
---  speak_V = irregV "speak" "spoke" "spoken" ;
---  speed_V = irregV "speed" "sped" "sped" ;
---  spend_V = irregV "spend" "spent" "spent" ;
---  spill_V = irregV "spill" (variants {"spilled" ; "spilt"}) (variants {"spilled" ; "spilt"}) ;
---  spin_V = irregDuplV "spin" "spun" "spun" ;
---  spit_V = irregDuplV "spit" (variants {"spit" ; "spat"}) "spit" ;
---  split_V = irregDuplV "split" "split" "split" ;
---  spread_V = irregV "spread" "spread" "spread" ;
---  spring_V = irregV "spring" (variants {"sprang" ; "sprung"}) "sprung" ;
---  stand_V = irregV "stand" "stood" "stood" ;
---  steal_V = irregV "steal" "stole" "stolen" ;
---  stick_V = irregV "stick" "stuck" "stuck" ;
---  sting_V = irregV "sting" "stung" "stung" ;
---  stink_V = irregV "stink" "stank" "stunk" ;
---  stride_V = irregV "stride" "strod" "stridden" ;
---  strike_V = irregV "strike" "struck" "struck" ;
---  string_V = irregV "string" "strung" "strung" ;
---  strive_V = irregV "strive" "strove" "striven" ;
---  swear_V = irregV "swear" "swore" "sworn" ;
---  sweep_V = irregV "sweep" "swept" "swept" ;
---  swell_V = irregV "swell" "swelled" (variants {"swelled" ; "swollen"}) ;
---  swim_V = irregDuplV "swim" "swam" "swum" ;
---  swing_V = irregV "swing" "swung" "swung" ;
---  take_V = irregV "take" "took" "taken" ;
---  teach_V = irregV "teach" "taught" "taught" ;
---  tear_V = irregV "tear" "tore" "torn" ;
---  tell_V = irregV "tell" "told" "told" ;
---  think_V = irregV "think" "thought" "thought" ;
---  thrive_V = irregV "thrive" (variants {"thrived" ; "throve"}) "thrived" ;
---  throw_V = irregV "throw" "threw" "thrown" ;
---  thrust_V = irregV "thrust" "thrust" "thrust" ;
---  tread_V = irregV "tread" "trod" "trodden" ;
---  understand_V = irregV "understand" "understood" "understood" ;
---  uphold_V = irregV "uphold" "upheld" "upheld" ;
---  upset_V = irregDuplV "upset" "upset" "upset" ;
---  wake_V = irregV "wake" "woke" "woken" ;
---  wear_V = irregV "wear" "wore" "worn" ;
---  weave_V = irregV "weave" (variants {"weaved" ; "wove"}) (variants {"weaved" ; "woven"}) ;
---  wed_V = irregDuplV "wed" "wed" "wed" ;
---  weep_V = irregV "weep" "wept" "wept" ;
---  wind_V = irregV "wind" "wound" "wound" ;
---  win_V = irregDuplV "win" "won" "won" ;
---  withhold_V = irregV "withhold" "withheld" "withheld" ;
---  withstand_V = irregV "withstand" "withstood" "withstood" ;
---  wring_V = irregV "wring" "wrung" "wrung" ;
---  write_V = irregV "write" "wrote" "written" ;
---}
+
+  lin
+    -- Bayer-Lindauer 93 1
+    be_V =
+      let
+	pres_stem = "s" ;
+	pres_ind_base = "su" ;
+	pres_conj_base = "si" ;
+	impf_ind_base = "era" ;
+	impf_conj_base = "esse" ;
+	fut_I_base = "eri" ;
+	imp_base = "es" ;
+	perf_stem = "fu" ;
+	perf_ind_base = "fu" ;
+	perf_conj_base = "fueri" ;
+	pqperf_ind_base = "fuera" ;
+	pqperf_conj_base = "fuisse" ;
+	fut_II_base = "fueri" ;
+	part_stem = "fut" ;
+	verb = mkVerb "esse" pres_stem pres_ind_base pres_conj_base impf_ind_base impf_conj_base fut_I_base
+    	  imp_base perf_stem perf_ind_base perf_conj_base pqperf_ind_base pqperf_conj_base fut_II_base part_stem ;
+      in
+      {
+	act = 
+	  table {
+    	    VAct VSim (VPres VInd)  n  p  => 
+	      table Number [ table Person [ "sum" ; "es" ; "est" ] ;
+    			     table Person [ "sumus" ; "estis" ; "sunt" ]
+    	      ] ! n ! p ;
+    	    a => verb.act ! a
+	  };
+	pass =
+	  \\_ => "######" ; -- no passive forms 
+	inf =
+	  verb.inf ;
+	imp =
+	  table {
+	    VImp1 Sg => "es" ;
+	    VImp1 Pl => "este" ;
+	    VImp2 Pl P2 => "estote" ;
+	    a => verb.imp ! a
+	  } ;
+	sup =
+	  \\_ => "######" ; -- no supin forms
+	ger =
+	  \\_ => "######" ; -- no gerund forms
+	geriv = 
+	  \\_ => "######" ; -- no gerundive forms
+	part = table {
+	  VActFut =>
+	    verb.part ! VActFut ;
+	  VActPres => 
+	    \\_ => "######" ; -- no such participle
+	  VPassPerf =>
+	    \\_ => "######" -- no such participle
+	  }
+      } ;
+
+    -- Bayer-Lindauer 93 2.2
+    can_VV = 
+      let
+    	pres_stem = "pos" ;
+    	pres_ind_base = "pos" ;
+    	pres_conj_base = "possi" ;
+    	impf_ind_base = "potera" ;
+    	impf_conj_base = "posse" ;
+    	fut_I_base = "poteri" ;
+    	imp_base = "" ;
+    	perf_stem = "potu" ;
+    	perf_ind_base = "potu" ;
+    	perf_conj_base = "potueri" ;
+    	pqperf_ind_base = "potuera" ;
+    	pqperf_conj_base = "potuisse" ;
+    	fut_II_base = "potueri" ;
+    	part_stem = "" ;
+    	verb = mkVerb "posse" pres_stem pres_ind_base pres_conj_base impf_ind_base impf_conj_base fut_I_base
+    	  imp_base perf_stem perf_ind_base perf_conj_base pqperf_ind_base pqperf_conj_base fut_II_base part_stem ;
+      in
+      {
+    	act =
+    	  table {
+    	    VAct VSim (VPres VInd)  n  p  => 
+	      table Number [ table Person [ "possum" ; "potes" ; "potest" ] ;
+    			     table Person [ "possumus" ; "potestis" ; "possunt" ]
+    	      ] ! n ! p ;
+    	    a => verb.act ! a
+    	  } ;
+    	pass = 
+    	  \\_ => "######" ; -- no passive forms
+    	inf = 
+	  table {
+	    VInfActFut _ => "######" ;
+	    a => verb.inf ! a
+	  } ;
+    	imp = 
+	  \\_ => "######" ;
+    	sup = 
+	  \\_ => "######" ;
+    	ger =
+	  \\_ => "######" ;
+    	geriv =
+	  \\_ => "######" ;
+    	part = table {
+	  VActFut =>
+    	    \\_ => "######" ; -- no such participle
+    	  VActPres => 
+	    \\_ => "######" ; -- no such participle
+    	  VPassPerf =>
+    	    \\_ => "######" -- no such participle
+	  } ;
+    	isAux = False
+      };
+
+    -- Bayer-Lindauer 94
+    bring_V = 
+      let
+    	pres_stem = "fer" ;
+    	pres_ind_base = "fer" ;
+    	pres_conj_base = "fera" ;
+    	impf_ind_base = "fereba" ;
+    	impf_conj_base = "ferre" ;
+    	fut_I_base = "fere" ;
+    	imp_base = "fer" ;
+    	perf_stem = "tul" ;
+    	perf_ind_base = "tul" ;
+    	perf_conj_base = "tuleri" ;
+    	pqperf_ind_base = "tulera" ;
+    	pqperf_conj_base = "tulisse" ;
+    	fut_II_base = "tuleri" ;
+    	part_stem = "lat" ;
+    	verb = mkVerb "ferre" pres_stem pres_ind_base pres_conj_base impf_ind_base impf_conj_base fut_I_base
+    	  imp_base perf_stem perf_ind_base perf_conj_base pqperf_ind_base pqperf_conj_base fut_II_base part_stem ;
+      in
+      {
+    	act =
+	  table {
+	    VAct VSim (VPres VInd) n p => 
+	      table Number [ table Person [ "fero" ; "fers" ; "fert" ] ;
+			     table Person [ "ferimus" ; "fertis" ; "ferunt" ] 
+	      ] ! n ! p ;
+	    a => verb.act ! a
+	  } ;
+    	pass = 
+	  table {
+	    VPass (VPres VInd) n p => 
+	      table Number [ table Person [ "feror" ; "ferris" ; "fertur" ] ;
+			     table Person [ "ferimur" ; "ferimini" ; "feruntur" ]
+	      ] ! n ! p ;
+	    a => verb.pass ! a
+	  } ;
+    	inf = 
+	  verb.inf ;	  
+    	imp =
+	  table {
+	    VImp1 n => table Number [ "fer" ; "ferte" ] ! n ;
+	    VImp2 Sg ( P2 | P3 ) => "ferto" ;
+	    VImp2 Pl P2 => "fertote" ;
+	    a => verb.imp ! a 
+	  } ; 
+    	sup = 
+	  verb.sup ;
+    	ger =
+	  verb.ger ;
+    	geriv =
+	  verb.geriv ;
+    	part = verb.part ;
+      };
+
+    -- Bayer-Lindauer 95
+    want_V = 
+      let
+	pres_stem = "vel" ;
+	pres_ind_base = "vol" ;
+	pres_conj_base = "veli" ;
+	impf_ind_base = "voleba" ;
+	impf_conj_base = "volle" ;
+	fut_I_base = "vole" ;
+	imp_base = "" ;
+	perf_stem = "volu" ;
+	perf_ind_base = "volu" ;
+	perf_conj_base = "volueri" ;
+	pqperf_ind_base = "voluera" ;
+	pqperf_conj_base = "voluisse" ;
+	fut_II_base = "volueri" ;
+	part_stem = "volet" ;
+	verb = mkVerb "velle" pres_stem pres_ind_base pres_conj_base impf_ind_base impf_conj_base fut_I_base
+    	  imp_base perf_stem perf_ind_base perf_conj_base pqperf_ind_base pqperf_conj_base fut_II_base part_stem ;
+      in
+      {
+	act =
+	  table {
+	    VAct VSim (VPres VInd)  n  p  => 
+	      table Number [ table Person [ "volo" ; "vis" ; "vult" ] ;
+    			     table Person [ "volumus" ; "vultis" ; "volunt" ]
+    	      ] ! n ! p ;
+    	    a => verb.act ! a
+	  } ;
+	  pass =
+	    \\_ => "######" ;
+	  ger = 
+	    verb.ger ;
+	  geriv =
+	    verb.geriv ;
+	  imp = 
+	    \\_ => "######" ;
+	  inf = 
+	    verb.inf ;
+	  part = table {
+	    VActFut =>
+	      \\_ => "######" ;
+	    VActPres =>
+	      verb.part ! VActPres ;
+	    VPassPerf =>
+	      \\_ => "######"
+	    } ; 
+	  sup =
+	    verb.sup ;
+      } ;
+
+    -- Bayer-Lindauer 96 1
+    go_V = 
+      let
+	pres_stem = "i" ;
+	pres_ind_base = "i" ;
+	pres_conj_base = "ea" ;
+	impf_ind_base = "iba" ;
+	impf_conj_base = "ire" ;
+	fut_I_base = "ibi" ;
+	imp_base = "i" ;
+	perf_stem = "i" ;
+	perf_ind_base = "i" ;
+	perf_conj_base = "ieri" ;
+	pqperf_ind_base = "iera" ;
+	pqperf_conj_base = "isse" ;
+	fut_II_base = "ieri" ;
+	part_stem = "it" ;
+	verb = mkVerb "ire" pres_stem pres_ind_base pres_conj_base impf_ind_base impf_conj_base fut_I_base
+    	  imp_base perf_stem perf_ind_base perf_conj_base pqperf_ind_base pqperf_conj_base fut_II_base part_stem ;
+      in
+      {
+	act =
+	  table {
+	    VAct VSim (VPres VInd)  n  p  => 
+	      table Number [ table Person [ "eo" ; "is" ; "it" ] ;
+    			     table Person [ "imus" ; "itis" ; "eunt" ]
+    	      ] ! n ! p ;
+	    VAct VAnt (VPres VInd)  Sg P2 => "isti" ;
+	    VAct VAnt (VPres VInd)  Pl P2 => "istis" ;
+    	    a => verb.act ! a
+	  } ;
+	pass = 
+	  \\_ => "######"; -- no passive forms
+	ger = 
+	  table VGerund [ "eundum" ; "eundi" ; "eundo" ; "eundo" ] ;
+	geriv =
+	  verb.geriv ;
+	imp =
+	  table {
+	    VImp2 Pl P3 => "eunto" ;
+	    a => verb.imp ! a
+	  } ;
+	inf =
+	  table {
+	    VInfActPerf _ => "isse" ;
+	    a =>verb.inf ! a
+	  };
+	part = table {
+	  VActFut => 
+	    verb.part ! VActFut ;
+	  VActPres => 
+	    table {
+	      Ag ( Fem | Masc ) n c =>
+		( mkNoun ( "iens" ) ( "euntem" ) ( "euntis" ) 
+		    ( "eunti" ) ( "eunte" ) ( "iens" ) 
+		    ( "euntes" ) ( "euntes" ) ( "euntium" ) 
+		    ( "euntibus" ) 
+ 		    Masc ).s ! n ! c ;
+	      Ag Neutr n c =>
+		( mkNoun ( "iens" ) ( "iens" ) ( "euntis" ) 
+		    ( "eunti" ) ( "eunte" ) ( "iens" ) 
+		    ( "euntia" ) ( "euntia" ) ( "euntium" ) 
+		    ( "euntibus" ) 
+ 		    Masc ).s ! n ! c
+	    } ;
+	  VPassPerf => 
+	    \\_ => "######" -- no such participle
+	  } ;
+	sup = 
+	  \\_ => "######" -- really no such form?
+      } ;
+
+    -- Bayer-Lindauer 97
+    become_V = 
+      let
+	pres_stem = "fi" ;
+	pres_ind_base = "fi" ;
+	pres_conj_base = "fia" ;
+	impf_ind_base = "fieba" ;
+	impf_conj_base = "fiere" ;
+	fut_I_base = "fie" ;
+	imp_base = "fi" ;
+	perf_stem = "" ;
+	perf_ind_base = "" ;
+	perf_conj_base = "" ;
+	pqperf_ind_base = "" ;
+	pqperf_conj_base = "" ;
+	fut_II_base = "" ;
+	part_stem = "fact" ;
+
+	verb = 
+	  mkVerb "fieri" pres_stem pres_ind_base pres_conj_base impf_ind_base impf_conj_base fut_I_base imp_base
+	  perf_stem perf_ind_base perf_conj_base pqperf_ind_base pqperf_conj_base fut_II_base part_stem ;
+      in
+      {
+	act = 
+	  table {
+	    VAct VSim (VPres VInd) Sg P1 => "fio" ;
+	    VAct VAnt _            _  _  => "######" ; -- perfect expressed by participle
+	    a => verb.act ! a 
+	  } ;
+	pass =
+	  \\_ => "######" ; -- no passive forms
+	ger =
+	  \\_ => "######" ; -- no gerund form
+	geriv = 
+	  \\_ => "######" ; -- no gerundive form
+	imp = 
+	  verb.imp ;
+	inf = 
+	  table {
+	    VInfActPerf _ => "factus" ;
+	    VInfActFut Masc => "futurum" ;
+	    VInfActFut Fem => "futura" ;
+	    VInfActFut Neutr => "futurum" ;
+	    a => verb.inf ! a
+	  } ;
+	part = table {
+	  VActFut =>
+	    \\_ => "######" ; -- no such participle
+	  VActPres => 
+	    \\_ => "######" ; -- no such participle
+	  VPassPerf =>
+	    verb.part ! VPassPerf
+	  } ;
+	sup = 
+	  \\_ => "######" -- no supin
+      } ;
+
+    -- Source ?
+    rain_V =
+      {
+	act = 
+	  table {
+	    VAct VSim (VPres VInd) Sg P3 => "pluit" ;
+	    VAct VSim (VPres VInd) Pl P3 => "pluunt" ;
+	    VAct VSim (VImpf VInd) Sg P3 => "pluebat" ;
+	    VAct VSim (VImpf VInd) Pl P3 => "pluebant" ;
+	    VAct VSim VFut Sg P3 => "pluet" ;
+	    VAct VSim VFut Pl P3 => "pluent" ;
+	    VAct VAnt (VPres VInd) Sg P3 => "pluvit" ;
+	    VAct VAnt (VPres VInd) Pl P3 => "pluverunt" ;
+	    VAct VAnt (VImpf VInd) Sg P3 => "pluverat" ;
+	    VAct VAnt (VImpf VInd) Pl P3 => "pluverat" ;
+	    VAct VAnt VFut Sg P3 => "pluverit" ;
+	    VAct VAnt VFut Pl P3 => "pluverint" ;
+	    VAct VSim (VPres VConj) Sg P3 => "pluat" ;
+	    VAct VSim (VPres VConj) Pl P3 => "pluant" ;
+	    VAct VSim (VImpf VConj) Sg P3 => "plueret" ; 
+	    VAct VSim (VImpf VConj) Pl P3 => "pluerent" ;
+	    VAct VAnt (VPres VConj) Sg P3 => "pluverit" ;
+	    VAct VAnt (VPres VConj) Pl P3 => "pluverint" ;
+	    VAct VAnt (VImpf VConj) Sg P3 => "pluvisset" ;
+	    VAct VAnt (VImpf VConj) Pl P3 => "pluvissent" ;
+	    _ => "######" -- no such forms
+	  } ;
+	pass = 
+	  \\_ => "######" ; -- no passive forms
+	inf = table {
+	  VInfActPres => "pluere" ;
+	  VInfActPerf _ => "pluvisse" ;
+	  _ => "######"
+	  } ;
+	imp =
+	  table {
+	    VImp2 Sg ( P2 | P3 ) => "pluito" ;
+	    VImp2 Pl P2 => "pluitote" ;
+	    VImp2 Pl P3 => "pluunto" ;
+	    _ => "######" 
+	  } ;
+	ger = 
+	  \\_ => "######" ; -- no gerund forms
+	geriv = 
+	  \\_ => "######" ; -- no gerundive forms
+	sup = 
+	  \\_ => "######" ; -- no supin forms
+	part = table { 
+	  VActPres =>
+	    \\_ => "pluens" ;
+	  VActFut =>
+	    \\_ => "######" ; -- no such participle
+	  VPassPerf =>
+	    \\_ => "######" -- no such participle
+	  }
+      } ;
+
+    -- Bayer-Lindauer 98
+    hate_V = 
+      let  
+	pres_stem = "" ;
+	pres_ind_base = "" ;
+	pres_conj_base = "" ;
+	impf_ind_base = "" ;
+	impf_conj_base = "" ;
+	fut_I_base = "" ;
+	imp_base = "" ;
+	perf_stem = "od" ;
+	perf_ind_base = "od" ;
+	perf_conj_base = "oderi" ;
+	pqperf_ind_base = "odera" ;
+	pqperf_conj_base = "odissem" ;
+	fut_II_base = "oderi" ;
+	part_stem = "os" ;
+	verb = 
+	  mkVerb "odisse" pres_stem pres_ind_base pres_conj_base impf_ind_base impf_conj_base fut_I_base imp_base
+	  perf_stem perf_ind_base perf_conj_base pqperf_ind_base pqperf_conj_base fut_II_base part_stem ;
+      in {
+	act = table {
+	  VAct VSim t n p => verb.act ! VAct VAnt t n p ;
+	  _ => "######" -- no such verb forms
+	  } ;
+	pass = \\_ => "######" ; -- no passive forms 
+	ger = \\_ => "######" ; -- no gerund forms
+	geriv = \\_ => "######" ; -- no gerundive forms
+	imp = \\_ => "######" ; -- no imperative form
+	inf = table {
+	  VInfActPres => verb.inf ! VInfActPres ;
+	  VInfActFut g => verb.inf ! VInfActFut g ; -- really ?
+	  _ => "######"
+	  } ;
+	part = table {
+	  VActFut => 
+	    verb.part ! VActFut ;
+	  VActPres => 
+	    \\_ => "######" ; -- no such participle form
+	  VPassPerf => 
+	    \\_ => "######" -- no such participle form
+	  } ;
+	sup = \\_ => "######" ; -- no such supine form
+      } ;
+}

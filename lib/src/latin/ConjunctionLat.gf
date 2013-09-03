@@ -1,21 +1,19 @@
---concrete ConjunctionLat of Conjunction = 
---  CatLat ** open ResLat, Coordination, Prelude in {
+concrete ConjunctionLat of Conjunction = 
+  CatLat ** open ResLat, StructuralLat, Coordination, Prelude in {
 --
 --  flags optimize=all_subs ;
 --
---  lin
+  lin
 --
---    ConjS = conjunctDistrSS ;
+    ConjS = conjunctDistrSS ;
 --
---    ConjAdv = conjunctDistrSS ;
+    ConjAdv = conjunctDistrSS ;
 --
 --    ConjNP conj ss = conjunctDistrTable Case conj ss ** {
 --      a = conjAgr (agrP3 conj.n) ss.a
 --      } ;
 --
---    ConjAP conj ss = conjunctDistrTable Agr conj ss ** {
---      isPre = ss.isPre
---      } ;
+    ConjAP conj ss = conjunctDistrTable Agr conj ss ;
 --
 --{---b
 --
@@ -32,9 +30,8 @@
 --      a = conjAgr (agrP3 conj.n) ss.a
 --      } ;
 --
---    ConjAP conj ss = conjunctTable Agr conj ss ** {
---      isPre = ss.isPre
---      } ;
+--    ConjAP conj ss = conjunctTable Agr conj ss ;
+--
 --    DConjAP conj ss = conjunctDistrTable Agr conj ss ** {
 --      isPre = ss.isPre
 --      } ;
@@ -44,17 +41,17 @@
 --
 --    BaseS = twoSS ;
 --    ConsS = consrSS comma ;
---    BaseAdv = twoSS ;
---    ConsAdv = consrSS comma ;
+    BaseAdv = twoSS ;
+    ConsAdv = consrSS "et" ;
 --    BaseNP x y = twoTable Case x y ** {a = conjAgr x.a y.a} ;
 --    ConsNP xs x = consrTable Case comma xs x ** {a = conjAgr xs.a x.a} ;
---    BaseAP x y = twoTable Agr x y ** {isPre = andB x.isPre y.isPre} ;
---    ConsAP xs x = consrTable Agr comma xs x ** {isPre = andB xs.isPre x.isPre} ;
+    BaseAP x y = lin A ( twoTable Agr x y ) ;
+    ConsAP xs x = lin A ( consrTable Agr and_Conj.s2 xs x );
 --
---  lincat
---    [S] = {s1,s2 : Str} ;
---    [Adv] = {s1,s2 : Str} ;
+  lincat
+    [S] = {s1,s2 : Str} ;
+    [Adv] = {s1,s2 : Str} ;
 --    [NP] = {s1,s2 : Case => Str ; a : Agr} ;
---    [AP] = {s1,s2 : Agr => Str ; isPre : Bool} ;
+    [AP] = {s1,s2 : Agr => Str } ;
 --
---}
+}

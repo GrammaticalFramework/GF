@@ -1,4 +1,4 @@
-concrete VerbLat of Verb = CatLat ** open ResLat in {
+concrete VerbLat of Verb = CatLat ** open ResLat,IrregLat in {
 
   flags optimize=all_subs ;
 
@@ -21,7 +21,8 @@ concrete VerbLat of Verb = CatLat ** open ResLat in {
 --    SlashV2Q v q  = insertObjc (\\_ => q.s ! QIndir) (predVc v) ;
 --    SlashV2A v ap = insertObjc (\\a => ap.s ! a) (predVc v) ; ----
 --
-    ComplSlash vp np = insertObj (appPrep vp.c2 np.s) vp ;
+    ComplSlash vp np = -- VPSlash -> NP -> VP
+      insertObj (appPrep vp.c2 np.s) vp ;
 --
 --    SlashVV vv vp = 
 --      insertObj (\\a => infVP vv.isAux vp a) (predVV vv) **
@@ -31,11 +32,12 @@ concrete VerbLat of Verb = CatLat ** open ResLat in {
 --        (insertObjc (\\a => infVP vv.isAux vp a) (predVc vv)) **
 --          {c2 = vp.c2} ;
 --
-    UseComp comp = insertAdj comp.s (predV esse_V) ;
+    UseComp comp = -- Comp -> VP
+      insertAdj comp.s (predV be_V) ;
 
-    AdvVP vp adv = insertObj adv.s vp ;
+--    AdvVP vp adv = insertObj adv.s vp ;
 
-    AdVVP adv vp = insertObj adv.s vp ;
+--    AdVVP adv vp = insertObj adv.s vp ;
 
 --    ReflVP v = insertObjPre (\\a => v.c2 ++ reflPron ! a) v ;
 --

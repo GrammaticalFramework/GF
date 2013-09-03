@@ -1,0 +1,7 @@
+i -src LexiconLat.gf
+gt -cat=N | l -table | wf -file=paradigms_N.txt
+gt -cat=A | l -table | wf -file=paradigms_A.txt
+gt -cat=V | l -table | wf -file=paradigms_V.txt
+gt -cat=V2 | l -table | wf -append -file=paradigms_V.txt
+gt -cat=Adv | l -table | wf -file=paradigms_Adv.txt
+gt -cat=Prep | l -table | wf -file=paradigms_Prep.txt

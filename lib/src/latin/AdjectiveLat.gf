@@ -3,7 +3,10 @@ concrete AdjectiveLat of Adjective = CatLat ** open ResLat, Prelude in {
 
   lin
 
-    PositA  a = a ;
+    PositA  a = -- A -> AP
+      { 
+	s = table { Ag g n c  => a.s ! Posit ! Ag g n c } ;
+      };
 
 {-
     ComparA a np = {
@@ -29,11 +32,14 @@ concrete AdjectiveLat of Adjective = CatLat ** open ResLat, Prelude in {
       } ;
 -}
 
-    AdAP ada ap = {
-      s = \\g,n,c => ada.s ++ ap.s ! g ! n ! c ;
-      isPre = ap.isPre
-      } ;
+    -- AdAP ada ap = {
+    --   s = \\g,n,c => ada.s ++ ap.s ! g ! n ! c ;
+    --   isPre = ap.isPre
+    --   } ;
 
---    UseA2 a = a ;
+    UseA2 a = -- A2 -> AP
+      { 
+	s = table { Ag g n c  => a.s ! Posit ! Ag g n c } ;
+      } ;
 
 }

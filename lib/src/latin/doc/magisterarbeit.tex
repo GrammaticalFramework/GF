@@ -1,0 +1,152 @@
+\documentclass[draft,11pt]{scrartcl}
+
+%\usepackage[utf8]{inputenc}
+\usepackage[onehalfspacing]{setspace}
+\usepackage[ngerman]{babel}
+\usepackage{fontspec}
+\usepackage[a4paper, left=3cm, right=3cm, top=3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{qtree}
+\usepackage{listings}
+\usepackage{floatrow}
+\usepackage{capt-of}
+
+\floatstyle{plain}
+\newfloat{program}{thp}{lop}
+\floatname{program}{Beispiel}
+
+\lstdefinelanguage{gf}
+{
+  morekeywords={abstract, flags, cat, fun, concrete, of, lincat, lin},
+  sensitive=false,
+  morecomment=[l]{--},
+  morestring=[b]"
+}
+\lstset{language=gf}
+
+\begin{document}
+\setcounter{tocdepth}{3}
+\date{30.9.2013}
+\makeatletter
+
+\begin{titlepage}
+\begin{center}
+\vspace{4cm}
+\begin{huge}
+Hausarbeit \\
+zur Erlangung des Magistergrades \\
+an der Ludwig-Maximilians-Universität München
+\end{huge} \\[3cm]
+{\Huge Erstellen einer Lateingrammatik im Grammatical Framework} \\[6cm]
+{\LARGE vorgelegt von Herbert Lange} \\[5cm]
+\end{center}
+\parindent0mm
+\begin{huge} 
+Fach: Computerlinguistik  \\[0.3cm]
+Referent: Prof. Dr. Klaus U. Schulz \\[0.3cm]
+München, den \@date 
+\end{huge}
+\end{titlepage}
+\makeatother
+\tableofcontents
+\pagebreak
+\section{Einleitung}
+\subsection{Motivation}
+So mancher, der den Titel dieser Arbeit liest, wird sich wundern, warum man in der heutigen Zeit eine computergestützte Grammatik gerade für eine tote Sprache wie Latein entwickeln will. Doch die konkrete Sprache, die umgesetzt werden sollte, war bei der Wahl des Themas zunächst zweitrangig. Die Intention hinter dieser Arbeit war es eher, einmal in einem konkreten Falle die im Studium behandelten Theorien der Morphologie und der Syntax, aber auch die Prinzipien der Lexikonerstellung, in einem einheitlichen Projekt zusammenzuführen. \\
+Das fuer dieses Unterfangen am ehesten geeignete Softwaresystem schien schon sehr bald das Grammatical Framework\footnote{http://www.grammaticalframework.org/} zu sein. Es stellt alle benötigten Hilfsmittel zur Verfügung, die jeweils für die einzelnen Komponenten benötigt werden, sorgt aber auch durch einen einheitlichen Beschreibungsformalismus für die nötige Konsistenz zwischen allen Bestandteilen. Weitere Vorteile des Grammatical Frameworks sind der mächtige Beschreibungsformalismus für Grammatiken, Unterstützung für Multilingualität und aktive Entwicklung als Open Source-Software. \\
+Nachdem sich das Grammatical Framework als geeignet heraus gestellt hatte, fiel die Wahl der zu bearbeitenden Sprache auf Latein, da diese Sprache, die trotz ihres Alters in der Linguistik weiterhin nicht unbedeutend ist, in der Ressource Grammar Library\footnote{http://www.grammaticalframework.org/lib/doc/synopsis.html} bisher nur sehr rudimentär umgesetzt war. \\
+\subsection{Inhalt}
+Im Folgenden sollen zunächst die Grundlagen der Arbeit genauer geschildert werden, es folgt also eine genauere Betrachtung des Grammatical Framework so wie der lateinischen Sprache. Anschließend wird das Vorgehen bei der Implementierung der Grammatik als zukünftiger Bestandteil der Ressource Grammar Library geschildert werden. Und zum Schluss soll noch eine Betrachtung der Erweiterungs- und Anwendungsmöglichkeiten folgen.
+\subsection{Das Grammatical Framework}
+Das Grammatical Framework ist ein Softwaresystem mit einer spezialisierten Programmiersprache um Grammatiken zu entwickeln. Es bietet die nötigen Möglichkeiten um natürliche Sprachen zu verarbeiten. Dabei benutzt es Formalismen, wie sie auch in modernen funktionalen Programmiersprachen wie Haskell zu finden sind.\footnote{RANTA S. vii} \\ 
+Die große Stärke dabei ist die Multilingualität. Grundkonzept dabei ist die Trennung in eine konkrete und eine abstrakte Repräsentation der Grammatik. Dabei ist die konkrete repräsentation jeder Sprache eigen während die abstrakte Repräsentation von mehreren Sprachen geteilt werden kann. Über diesen Schritt der abstrakten Repräsentation kann man eine Übersetzung zwischen allen Sprachen umsetzen, die diese abstrakte Syntax teilen.\footnote{RANTA S. 10ff.} Im folgenden soll darauf noch genauer eingegangen werden.
+\subsubsection{Der Grammatikformalismus}
+Meist werden im Bereich der Computerlinguistik und Informatik kontextfreie Grammatiken, also Grammatiken von Typ 2 der Chomsky-Hierarchie verwendet.\footnote{quelle} Dies hat meist den Grund, dass die Ausdrucksmächtigkeit größtenteils ausreicht, jedoch der Verarbeitungsaufwand vergleichsweise gering ist.\footnote{quelle}
+\begin{program}[h]
+\begin{flushleft}
+$S\ \longrightarrow\ NP\ \ VP$ \\
+$NP\ \longrightarrow\ Det\ N$ \\
+$N\ \longrightarrow\ \text{Mann}$ \\
+$Det\ \longrightarrow\ \text{der}$ \\
+$VP\ \longrightarrow\ V$ \\
+$V\ \longrightarrow\ \text{schläft} $ \\
+\end{flushleft}
+\caption{Kontextfreie Grammatikfragment}
+\label{CFG-Beispiel}
+\end{program}
+Die in Beispiel \ref{CFG-Beispiel} gegebene Grammatik ist ein sehr minimalistisches Beispiel für eine kontextfreie Grammatik. Mit ihrer Hilfe kann nur der eine deutsche Satz \textit{Der Mann schläft} hergeleitet werden. Dabei hat die Ableitung die in Beispiel \ref{CFG-Ableitung} gezeigte Form.
+\begin{figure}
+\begin{floatrow}[2]
+\ffigbox{
+\begin{flushleft}
+S \\ $\Rightarrow$ NP VP \\ $\Rightarrow$ Det N VP \\ $\Rightarrow$ ``der'' N VP \\ $\Rightarrow$ ``der Mann'' VP \\ $\Rightarrow$ ``der Mann'' V \\ $\Rightarrow$ ``der Mann schläft''
+\end{flushleft}
+}{\caption{Ableitung eines Satzes}\label{CFG-Ableitung}}
+\ffigbox{\Tree [.S [.NP [.Det ``der'' ] [.N ``Mann'' ] ] [.VP [.V ``schläft'' ] ] ]}{\caption{Entsprechender Syntaxbaum}\label{CFG-Syntaxbaum}}
+\end{floatrow}
+\end{figure}
+Im Formalismus des Grammatical Framework wird die oben gegebene Grammatik in die abstrakte und die konkrete Syntax zerlegt.
+Dabei entspricht die abstrakte Syntax dem Syntaxbaum ohne die terminalen Blätter.
+\begin{minipage}{0.5\textwidth}
+\begin{verbatim}
+abstract Satz = {
+  flags startcat = S ;
+  cat S ; NP ; VP ; Det ; N ; V ;
+  lin
+    mkNP : Det -> N -> NP ;
+    mkVP : V -> VP ;
+    mkS : NP -> VP -> S ;
+    der_Det : Det ;
+    Mann_N : N ;
+    schlafen_V : V ;
+}
+\end{verbatim}
+\captionof{program}{Abstrakte Syntax}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+\begin{verbatim}
+concrete Satz of SatzAbs = {
+  lincat S,NP,VP,Det,N,V = Str;
+  lin
+    mkNP det n = det ++ n ;
+    mkVP v = v ;           
+    mkS np vp = np ++ vp ;
+    der_Det = "der" ;     
+    Mann_N = "Mann" ;
+    schlafen_V = "schlaeft" ;
+}
+\end{verbatim}
+\captionof{program}{Konkrete Syntax}
+\end{minipage}
+\subsubsection{Die Ressource Grammar Library}
+Was für allgemeine Programmiersprachen eine Standardbibliothek ist, ist im Grammatical Framework für die Multilingualität die Ressource Grammar Library. Sie ist definiert als gemeinsame abstrakte Syntax, die für verschiedenen Sprachen implementiert ist. Auf diese Möglichkeit ist eine grundlegende Übersetzung zwischen den unterstützten Sprachen direkt nach der Installation möglich. Meist muss jedoch mindestens das nötige Vokabular angegeben werden, da das Lexikon auf eine kleine Anzahl von Wörtern beschränkt ist, die benötigt wird um die grammatischen Konstrukte zu testen. \\
+\subsection{Die Lateinische Sprache}
+\subsubsection{Sprachwissenschaftliche Einordnung}
+Die lateinische Sprache gehört zur indogermanische Sprachfamilie und dort zur Unterfamilie der italischen Sprachen. Entstanden ist es als ein in der Stadt Rom üblicher Dialekt parallel zu weiteren ländlichen Dialekten im Latium, im laufe der Zeit verdrängte es jedoch die weiteren italischen Sprachen im Zuge der Ausdehnung des römischen Reichs.\footnote{METZLER2004 S. 5359} Die Sprachgeschichte kann in mehrere Epochen unterteilt werden, nämlich das Altlatein, das klassische Latei, das Mittellatein (ca. 650 n. Chr. bis ca. 1400 n. Chr.) und das Neulatein (ca. 1400 n. Chr. bis heute).\footnote{MÜLLER-LANCE2006 S. 27ff.} Auch heute noch am bedeutendsten ist wohl das klassische Latein, das weiterhin in Schulen unterrichtet wird und vor allem mit seinem großen überlieferten Textkorpus hervorsticht. \\
+Latein gehört zu den stark flektierenden Sprachen. Es gibt fünf zum teil genusbasierte Flektionsklassen für Nomen, sechs Verschiedene Kasus (Nominativ, Genitiv, Dativ, Akkusativ, Ablativ und Vokativ), drei Genera (Maskulin, Feminin, Neutrum), ein voll flektierendes Pronomensystem und vier relativ stark synthetische Deklinationsklassen für Verben.\footnote{METZLER2004 S. 5359} Zu den Kasus sei anzumerken, dass der Ablativ ein eigenständiger Kasus ist, jedoch der Vokativ oft mit dem Nominativ zusammenfällt.\footnote{???} \\
+Die Wortstellung des Lateinischen wird oft als sehr frei beschrieben, allerdings gibt es eine klare Präferenz der SOV-Wortstellung im Satz, also dass das Objekt des Satzes direkt auf das Subjekt folgt, und das Verb den Satz abschließt. Die position des Adjektivs im Bezug auf das Nomen ist allerdings wirklich recht frei.\footnote{METZLER2004 s. 5359}
+\subsubsection{Bedeutung in der heutigen Zeit}
+Man kann sich natürlich über die Notwendigkeit streiten, sich in der heutigen Zeit noch mit der lateinischen Sprache zu beschäftigen. Es gibt aber auch ziemlich gute Gründe dafür Latein nicht einfach nur als tote Sprache abzustempeln und nicht weiter zu betrachten. \\
+So gibt es verschiedenste Personengruppen, für die Lateinkenntnis von Vorteil ist.
+\section{Grammatikerstellung}
+\subsection{Lexikon}
+Den Beginn dieser Grammatikimplementierung bildete die Erstellung des minimal nötigen Lexikons. Durch die abstrakte Syntax der RGL\footnote{vgl. lib/src/abstract/Lexicon.gf} eine Liste von ca. 400 englischen Bezeichnern für Worte vorgegeben, die in jeder Sprache umgesetzt werden sollten. \\
+Um für das vorgegebene Vokabular die passenden lateinischen Entsprechungen zu finden, wurde verschiedene Vorgehensweisen angewandt. \\
+Für die meisten englischen Begriffe war es zunächst problemlos möglich, deutsche Entsprechungen zu finden. Bei problematischeren Begriffen wurde ein verbreitetes Onlinewörterbuch\footnote{http://dict.leo.org} zu Rate gezogen. Somit war es für fast alle vorgegebenen Begriffe möglich, eine adequate deutsche Übersetzung zu finden. Die einzige Art von Wörtern, die weiterhin zu Problemen führten, waren Wörter mit ambiger Bedeutung, wie das häufig gezeigte Wort \textit{bank}, das in vielen Sprachen mehrer verschiedene Bedeutungen haben kann, z.B. im Deutschen als Sitzgelegenheit und als Geldinstitut oder im Englischen ebenfalls als Geldinstitut oder als Flussufer.\footnote{} Für diesen und ähnliche Begriffe wurde willkürlich eine plausible Bedeutung gewählt, da keine Hinweise zur gewünschten Bedeutung in der Grammar Library gefunden werden konnte. Die Entscheidung eine einzige Bedeutung zu wählen, und nicht verschiedene Bedeutungen als Varianten des Wortes zu implementieren, wurde getroffen um die Anzahl der möglichen Übersetzungen möglichst gering zu halten. \\
+Nachdem für alle Bezeichner im abstrakten Lexikon eine zwischenzeitliche deutsche Entsprechung, nach dem obigen Schema, gefunden wurde, wurde versucht, diese deutschen Begriffe in die lateinische Sprache zu übersetzen. Dies geschah zum größten Teil mit Hilfe des deutsch-lateinischen Teils des Standardwörterbuchs\footnote{Langenscheidt}, soweit ein entsprechender Eintrag im diesem Wörterbuch zu finden war. Zusätzlich zu den recht kurzen Einträgen in diesem Teil des Wörterbuch, wurden auch alle weiteren vefügbaren Informationen zu den gefundenen lateinischen Begriffen berücksichtigt. \\
+Bei vielen, meist moderneren Begriffen, konnte nicht immer ein entsprechender Wörterbucheintrag gefunden werden. Wenn auch in anderen verfügbaren Wörterbüchern\footnote{PONS} kein Eintrag zu finden war, gab es noch die Möglichkeit, auf Internetquellen zurückzugreifen, die meist auf dem Prinzip der freiwilligen Kollaboration basieren. Eine der interessantes Quelle für moderne Begriffe aus dem Breich der Substantive ist wohl die lateinische Wikipedia\footnote{http://la.wikipedia.org/wiki/Pagina\_prima}. Obwohl Latein als tote Sprache gilt, existieren dort über 90000 lateinische Artikel\footnote{http://la.wikipedia.org/wiki/Specialis:Census; Stand: 30.7.2013}. Natürlich muss man immer bedenken, dass es keine Garantie für die Qualität von kollaborativen Onlinequellen gibt.
+\subsubsection{Geschlossene Kategorien}
+\subsubsection{Offene Kategorien}
+\subsubsection{Ausnahmen} 
+\subsection{Morphologie}
+\subsubsection{Nomenflektion}
+\subsubsection{Verbdeklination}
+\subsubsection{Pronomen}
+\subsubsection{Ausnahmen}
+\subsection{Syntax}
+\subsubsection{Nominalphrasen}
+\subsubsection{Verbalphrasen}
+\subsubsection{Einfache Sätze}
+\subsection{Anwendungen und Ausblick}
+\section{Ausblick}
+\end{document}

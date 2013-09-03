@@ -1,0 +1,28 @@
+1./a-Declension (f.)  2./o-Declension (m.)  (n.)  (m.)	         3./Consonant Declension (m.)  (f.)	  (n.)	  
+s Sg Nom : -a	       s Sg Nom : -us         -um    -er	 s Sg Nom : -or	      	  	-as	  -ur
+s Sg Acc : -am	       s Sg Acc : -um         -um    -r-um	 s Sg Acc : -or-em    		-at-em	  -ur
+s Sg Gen : -ae	       s Sg Gen : -i          -i     -r-i	 s Sg Gen : -or-is    		-at-is	  -or-is
+s Sg Dat : -ae	       s Sg Dat : -o          -o     -o	 	 s Sg Dat : -or-i     		-at-i	  -or-i
+s Sg Abl : in -a       s Sg Abl : in -o       -o     in/a -o	 s Sg Abl : -or-e     		-at-e	  -or-e
+s Sg Voc : -a 	       s Sg Voc : -e          -um    -er  	 s Sg Voc : -or	      		-as	  -ur
+s Pl Nom : -ae	       s Pl Nom : -i          -a     -r-i	 s Pl Nom : -or-es    		-at-es	  -or-a
+s Pl Acc : -as	       s Pl Acc : -os         -a     -r-os	 s Pl Acc : -or-es    		-at-es	  -or-a
+s Pl Gen : -arum       s Pl Gen : -orum       -orum  -r-orum	 s Pl Gen : -or-um    		-at-um	  -or-um
+s Pl Dat : -is	       s Pl Dat : -is         -is    -r-is	 s Pl Dat : -or-ibus  		-at-ibus  -or-ibus
+s Pl Abl : in -is      s Pl Abl : in -is      -is    in/a -r-is	 s Pl Abl : -or-ibus  		-at-ibus  -or-ibus
+s Pl Voc : -ae	       s Pl Voc : -i          -a     -r-i 	 s Pl Voc : -or-es    		-at-es	  -or-a
+
+
+3./i-Declension (f.)	 (f.)  	   (f.)   (n.)   4./u-Declension (m.)   (n.)   5./e-Declension (f.)
+s Sg Nom : -is	 	 -rs	   -is	  -e	 s Sg Nom : -us	  	-u     s Sg Nom : -es
+s Sg Acc : -em	 	 -rt-em	   -im	  -e	 s Sg Acc : -um	 	-u     s Sg Acc : -em
+s Sg Gen : -is	 	 -rt-is	   -is	  -is	 s Sg Gen : -us	 	-us    s Sg Gen : -ei
+s Sg Dat : -i	 	 -rt-i	   -i	  -i	 s Sg Dat : -ui	 	-u     s Sg Dat : -ei
+s Sg Abl : -e	 	 -rt-e	   -i	  -i	 s Sg Abl : -u	 	-u     s Sg Abl : -e
+s Sg Voc : -is	 	 -rs	   -is	  -e	 s Sg Voc : -us	 	-u     s Sg Voc : -es
+s Pl Nom : -es	 	 -rt-es	   -es	  -ia	 s Pl Nom : -us	 	-ua    s Pl Nom : -es
+s Pl Acc : -es	 	 -rt-es	   -is	  -ia	 s Pl Acc : -us	 	-ua    s Pl Acc : -es
+s Pl Gen : -ium  	 -rt-ium   -ium	  -ium	 s Pl Gen : -uum	-uum   s Pl Gen : -erum
+s Pl Dat : -ibus 	 -rt-ibus  -ibus  -ibus  s Pl Dat : -ibus	-ibus  s Pl Dat : -ebus
+s Pl Abl : -ibus 	 -rt-ibus  -ibus  -ibus  s Pl Abl : -ibus	-ibus  s Pl Abl : -ebus
+s Pl Voc : -es	 	 -rt-es	   -es	  -ia	 s Pl Voc : -us		-ua    s Pl Voc : -es
