@@ -61,6 +61,11 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       a = np.a
       } ;
 
+    ExtAdvNP np adv = {
+      s = \\c => np.s ! c ++ "," ++ adv.s ;
+      a = np.a
+      } ;
+
     DetQuant quant num = {
       s  = \\sp,g,c => let sp' = case num.nonEmpty of { True  => True ;
                                                         False => sp   }

@@ -31,6 +31,11 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       a = np.a
       } ;
 
+    ExtAdvNP np adv = {
+      s = \\c => np.s ! c ++ "," ++ adv.s ++ finalComma;
+      a = np.a
+      } ;
+
     DetQuant quant num = {
       s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom;
       sp = \\c => case num.hasCard of {

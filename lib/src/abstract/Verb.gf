@@ -56,6 +56,7 @@ abstract Verb = Cat ** {
 -- vs. next to (or before) the verb.
 
     AdvVP    : VP -> Adv -> VP ;        -- sleep here
+    ExtAdvVP : VP -> Adv -> VP ;        -- sleep , even though ...
     AdVVP    : AdV -> VP -> VP ;        -- always sleep
 
     AdvVPSlash : VPSlash -> Adv -> VPSlash ;  -- use (it) here
