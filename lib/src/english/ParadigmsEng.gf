@@ -306,6 +306,7 @@ oper
   mkVS  : V -> VS ; -- sentence-compl e.g. say (that S)
   mkV2S : V -> Prep -> V2S ; -- e.g. tell (NP) (that S)
   mkVV  : V -> VV ; -- e.g. want (to VP)
+  infVV : V -> VV ; -- e.g. want (to VP)
   ingVV : V -> VV ; -- e.g. start (VPing)
   mkV2V : V -> Prep -> Prep -> V2V ;  -- e.g. want (noPrep NP) (to VP)
   ingV2V : V -> Prep -> Prep -> V2V ; -- e.g. prevent (noPrep NP) (from VP-ing)
@@ -547,6 +548,11 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
     s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
     p = v.p ; 
     typ = VVInf
+    } ;
+  infVV  v = lin VV {
+    s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
+    p = v.p ; 
+    typ = VVAux
     } ;
   ingVV  v = lin VV {
     s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
