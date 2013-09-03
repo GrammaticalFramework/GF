@@ -523,5 +523,6 @@ resource ResEng = ParamX ** open Prelude in {
               }
       } ;
 
+  finalComma : Str = pre {"," | "." => []; "" => ","; _ => []} ;
 
 }
