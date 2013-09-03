@@ -178,9 +178,9 @@ lengthBracketedString (Leaf _)              = 1
 lengthBracketedString (Bracket _ _ _ _ _ bss) = sum (map lengthBracketedString bss)
 
 untokn :: Maybe String -> BracketedTokn -> (Maybe String,[BracketedString])
-untokn nw (LeafKS ts)   = (has_tok nw (head ts),map Leaf ts)
-untokn nw (LeafKP d vs) = let ts = sel d vs nw
-                          in (has_tok nw (head ts),map Leaf ts)
+untokn nw (LeafKS ts)   = (has_tok nw ts,map Leaf ts)
+untokn nw (LeafKP d vs) = let ts = filter (not . null) (sel d vs nw)
+                          in (has_tok nw ts,map Leaf ts)
                           where
                             sel d vs Nothing  = d
                             sel d vs (Just w) =
@@ -191,9 +191,8 @@ untokn nw (Bracket_ cat fid index fun es bss) =
   let (nw',bss') = mapAccumR untokn nw bss
   in (nw',[Bracket cat fid index fun es (concat bss')])
 
-has_tok nw t
-  | null t    = nw
-  | otherwise = Just t
+has_tok nw []     = nw
+has_tok nw (t:ts) = Just t
 
 type CncType = (CId, FId)    -- concrete type is the abstract type (the category) + the forest id
 
