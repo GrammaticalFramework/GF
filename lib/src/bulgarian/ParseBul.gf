@@ -17,6 +17,7 @@ concrete ParseBul of ParseEngAbs =
   ExtraBul [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
+            ComplSlashPartLast,
             ClSlash, RCl, EmptyRelSlash],
 
   DictEngBul ** 
