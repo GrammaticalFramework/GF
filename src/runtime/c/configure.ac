@@ -34,10 +34,6 @@ AM_PROG_CC_C_O
  -Wno-unused-value"
 fi]
 
-
-AC_C_ALIGNOF
-AC_C_FAM_IN_MEM
-
 case "$target_cpu" in
 	i?86)	 cpu=i386; AC_DEFINE(LIGHTNING_I386, 1,
 		   [Define if lightning is targeting the x86 architecture]) ;;

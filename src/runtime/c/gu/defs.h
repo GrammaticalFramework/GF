@@ -56,13 +56,9 @@
 
 #ifdef GU_ALIGNOF
 # define gu_alignof GU_ALIGNOF
-# define GU_ALIGNOF_WORKS_ON_FAM_STRUCTS
 #else
 # define gu_alignof(t_) \
 	((size_t)(offsetof(struct { char c_; t_ e_; }, e_)))
-# ifdef GU_CAN_HAVE_FAM_IN_MEMBER
-#  define GU_ALIGNOF_WORKS_ON_FAM_STRUCTS
-# endif
 #endif
 
 #define GU_PLIT(type, expr) \
@@ -116,7 +112,7 @@ gu_min(int a, int b) {
 	return GU_MIN(a, b);
 }
 
-#ifdef GU_ALIGNOF_WORKS_ON_FAM_STRUCTS
+#ifdef GU_ALIGNOF
 #define gu_flex_alignof gu_alignof
 #else
 #define gu_flex_alignof(t) 0
