@@ -2,7 +2,11 @@
 #include "expr.h"
 #include "literals.h"
 #include "reader.h"
+
+#ifndef ANDROID
 #include "jit.h"
+#endif
+
 #include <gu/defs.h>
 #include <gu/map.h>
 #include <gu/seq.h>
@@ -25,7 +29,9 @@ struct PgfReader {
 	GuPool* opool;
 	GuPool* tmp_pool;
 	GuSymTable* symtab;
+#ifndef ANDROID
 	PgfJitState* jit_state;
+#endif
 };
 
 typedef struct PgfReadTagExn PgfReadTagExn;
@@ -545,7 +551,9 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 		gu_buf_push(functions, PgfAbsFun*, absfun);
 	}
 
+#ifndef ANDROID
 	pgf_jit_predicate(rdr->jit_state, abscats, abscat, functions);
+#endif
 
 	return abscat;
 }
@@ -1210,12 +1218,16 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	rdr->symtab = gu_new_symtable(opool, tmp_pool);
 	rdr->err = err;
 	rdr->in = in;
+#ifndef ANDROID
 	rdr->jit_state = pgf_jit_init(tmp_pool, rdr->opool);
+#endif
 	return rdr;
 }
 
 void
 pgf_reader_done(PgfReader* rdr, PgfPGF* pgf)
 {
+#ifndef ANDROID
 	pgf_jit_done(rdr->jit_state, &pgf->abstract);
+#endif
 }
