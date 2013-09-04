@@ -5,7 +5,6 @@
 #include <gu/string.h>
 #include <gu/utf8.h>
 #include <gu/assert.h>
-#include "config.h"
 
 const GuString gu_empty_string = { 1 };
 
@@ -195,18 +194,7 @@ gu_format_string(GuPool* pool, const char* fmt, ...)
 GuString
 gu_str_string(const char* str, GuPool* pool)
 {
-#ifdef CHAR_ASCII
 	return gu_utf8_string((const uint8_t*) str, strlen(str), pool);
-#else
-	GuPool* tmp_pool = gu_local_pool();
-	GuStringBuf* sb = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sb);
-	gu_puts(str, wtr, NULL);
-	gu_writer_flush(wtr, NULL);
-	GuString s = gu_string_buf_freeze(sb, pool);
-	gu_pool_free(tmp_pool);
-	return s;
-#endif
 }
 
 bool

@@ -1,6 +1,5 @@
 #include <gu/assert.h>
 #include <gu/utf8.h>
-#include "config.h"
 
 GuUCS
 gu_utf8_decode(const uint8_t** src_inout)
@@ -107,13 +106,11 @@ gu_in_utf8_char_(GuIn* in, GuExn* err)
 char
 gu_in_utf8_char(GuIn* in, GuExn* err)
 {
-#ifdef CHAR_ASCII
 	int i = gu_in_peek_u8(in);
 	if (i >= 0 && i < 0x80) {
 		gu_in_consume(in, 1);
 		return (char) i;
 	}
-#endif
 	return gu_in_utf8_char_(in, err);
 }
 
@@ -192,47 +189,11 @@ gu_utf32_out_utf8(const GuUCS* src, size_t len, GuOut* out, GuExn* err)
 
 }
 
-#ifndef CHAR_ASCII
-
-void gu_str_out_utf8_(const char* str, GuOut* out, GuExn* err)
-{
-	size_t len = strlen(str);
-	size_t sz = 0;
-	uint8_t* buf = gu_out_begin_span(out, len, &sz, err);
-	if (!gu_ok(err)) {
-		return;
-	}
-	if (buf != NULL && sz < len) {
-		gu_out_end_span(out, 0);
-		buf = NULL;
-	}
-	GuPool* tmp_pool = buf ? NULL : gu_local_pool();
-	buf = buf ? buf : gu_new_n(uint8_t, len, tmp_pool);
-	for (size_t i = 0; i < len; i++) {
-		GuUCS ucs = gu_char_ucs(str[i]);
-		buf[i] = (uint8_t) ucs;
-	}
-	if (tmp_pool) {
-		gu_out_bytes(out, buf, len, err);
-		gu_pool_free(tmp_pool);
-	} else {
-		gu_out_end_span(out, len);
-	}
-}
-
-#endif
-
 extern inline GuUCS
 gu_in_utf8(GuIn* in, GuExn* err);
 
 void 
 gu_str_out_utf8(const char* str, GuOut* out, GuExn* err)
 {
-#ifdef CHAR_ASCII
 	gu_out_bytes(out, (const uint8_t*) str, strlen(str), err);
-#else
-	extern void 
-		gu_str_out_utf8_(const char* str, GuOut* out, GuExn* err);
-	gu_str_out_utf8_(str, out, err);
-#endif
 }

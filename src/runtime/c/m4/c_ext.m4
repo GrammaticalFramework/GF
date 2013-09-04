@@ -40,34 +40,3 @@ AC_DEFUN([AC_C_FAM_IN_MEM],
      the last member of another struct.])
   fi
 ])
-
-## AC_C_ASCII
-AC_DEFUN([AC_C_ASCII],
-[
-  AC_CACHE_CHECK([whether the execution character set uses ASCII],
-    ac_cv_c_ascii,
-    [AC_RUN_IFELSE(
-      [AC_LANG_PROGRAM([], [[
-
-int i;
-static const char ascii[128] =
-	"\0\0\0\0\0\0\0\a\b\t\n\v\f\r\0\0"
-	"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
-	" !\"#\0%&'()*+,-./0123456789:;<=>?"
-	"\0ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_"
-	"\0abcdefghijklmnopqrstuvwxyz{|}~\0";
-
-for (i = 0; i < 128; i++) {
-  if (ascii[i] && ascii[i] != (char) i) {
-    return 1;
-  }
-}
-
-]])],
-      [ac_cv_c_ascii=yes],
-      [ac_cv_c_ascii=no])])
-  if test $ac_cv_c_ascii = yes; then
-    AC_DEFINE([CHAR_ASCII], 1,
-    [Define to 1 if the encoding of the basic character set is ASCII.])
-  fi
-])

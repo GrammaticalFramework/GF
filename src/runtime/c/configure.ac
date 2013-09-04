@@ -37,7 +37,6 @@ fi]
 
 AC_C_ALIGNOF
 AC_C_FAM_IN_MEM
-AC_C_ASCII
 
 case "$target_cpu" in
 	i?86)	 cpu=i386; AC_DEFINE(LIGHTNING_I386, 1,
