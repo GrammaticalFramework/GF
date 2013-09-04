@@ -35,16 +35,7 @@ gu_decode_double(uint64_t u)
 	double ret;
 
 	if (rawexp == 0x7ff) {
-		if (mantissa == 0) {
-			ret = INFINITY;
-		} else {
-			// At least glibc supports specifying the
-			// mantissa like this.
-			int len = snprintf(NULL, 0, "0x%" PRIx64, mantissa);
-			char buf[len + 1];
-			snprintf(buf, len + 1, "0x%" PRIx64, mantissa);
-			ret = nan(buf);
-		}
+		ret = (mantissa == 0) ? INFINITY : NAN;
 	} else {
 		uint64_t m = rawexp ? 1ULL << 52 | mantissa : mantissa << 1;
 		ret = ldexp((double) m, rawexp - 1075);
