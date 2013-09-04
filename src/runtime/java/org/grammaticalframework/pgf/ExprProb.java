@@ -9,6 +9,7 @@ public class ExprProb {
 		this.prob = prob;
 	}
 	
+	@SuppressWarnings("unused")
 	private static ExprProb mkExprProb(Pool pool, PGF gr, long expr, double prob) {
 		return new ExprProb(new Expr(pool, gr, expr), prob);
 	}
