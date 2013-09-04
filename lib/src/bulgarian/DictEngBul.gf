@@ -21292,6 +21292,7 @@ lin for_Prep = mkPrep "за" Acc;
 lin for_example_Adv = mkAdv "например";
 lin for_instance_Adv = mkAdv "например";
 lin for_starters_Adv = mkAdv "за начало";
+lin for_sure_Adv = mkAdv "със сигурност";
 lin forage_N = variants {};
 lin forage_V = variants {};
 lin forager_N = variants {};

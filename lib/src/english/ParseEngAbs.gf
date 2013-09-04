@@ -32,9 +32,8 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     himself_NP : NP ;
     herself_NP : NP ;
     itself_NP : NP ;
-    ourself_NP : NP ;
+    ourselves_NP : NP ;
     yourselfPl_NP : NP ;
-    themself_NP : NP ;
     themselves_NP : NP ;
     OrdCompar : A -> Ord ;
 

@@ -21256,6 +21256,7 @@ lin for_Prep = mkPrep "for";
 lin for_example_Adv = mkAdv "for example";
 lin for_instance_Adv = mkAdv "for instance";
 lin for_starters_Adv = mkAdv "for starters";
+lin for_sure_Adv = mkAdv "for sure";
 lin forage_N = mkN "forage" ;
 lin forage_V = mkV "forage" "forages" "foraged" "foraged" "foraging";
 lin forager_N = mkN "forager" ;

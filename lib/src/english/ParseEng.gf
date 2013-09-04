@@ -33,9 +33,8 @@ lin
   himself_NP = regNP "himself" singular ;
   herself_NP = regNP "herself" singular ;
   itself_NP = regNP "itself" singular ;
-  ourself_NP = regNP "ourself" plural ;
+  ourselves_NP = regNP "ourselves" plural ;
   yourselfPl_NP = regNP "yourself" plural ;
-  themself_NP = regNP "themself" plural ;
   themselves_NP = regNP "themselves" plural ;
 
   CompoundCN num noun cn = {
