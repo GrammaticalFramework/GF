@@ -20,9 +20,10 @@ gu_string_buf(GuPool* pool)
 	GuBuf* buf = gu_new_buf(uint8_t, pool);
 	GuOut* out = gu_buf_out(buf, pool);
 	GuWriter* wtr = gu_new_utf8_writer(out, pool);
-	return gu_new_s(pool, GuStringBuf,
-			.bbuf = buf,
-			.wtr = wtr);
+	GuStringBuf* sbuf = gu_new(GuStringBuf, pool);
+	sbuf->bbuf = buf;
+	sbuf->wtr = wtr;
+	return sbuf;
 }
 
 GuWriter*

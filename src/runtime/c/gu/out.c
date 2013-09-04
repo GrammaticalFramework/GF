@@ -236,12 +236,13 @@ gu_proxy_out_flush(GuOutStream* self, GuExn* err)
 GuOutStream*
 gu_out_proxy_stream(GuOut* out, GuPool* pool)
 {
-	return &gu_new_s(pool, GuProxyOutStream,
-			 .stream.begin_buf = gu_proxy_out_buf_begin,
-			 .stream.end_buf = gu_proxy_out_buf_end,
-			 .stream.output = gu_proxy_out_output,
-			 .stream.flush = gu_proxy_out_flush,
-			 .real_out = out)->stream;
+	GuProxyOutStream* pos = gu_new(GuProxyOutStream, pool);
+	pos->stream.begin_buf = gu_proxy_out_buf_begin;
+	pos->stream.end_buf = gu_proxy_out_buf_end;
+	pos->stream.output = gu_proxy_out_output;
+	pos->stream.flush = gu_proxy_out_flush;
+	pos->real_out = out;
+	return &pos->stream;
 }
 
 

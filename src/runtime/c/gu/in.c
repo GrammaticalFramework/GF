@@ -307,12 +307,12 @@ gu_proxy_in_input(GuInStream* self, uint8_t* dst, size_t sz, GuExn* err)
 GuInStream*
 gu_in_proxy_stream(GuIn* in, GuPool* pool)
 {
-	return &gu_new_s(
-		pool, GuProxyInStream,
-		.stream.begin_buffer = gu_proxy_in_begin_buffer,
-		.stream.end_buffer = gu_proxy_in_end_buffer,
-		.stream.input = gu_proxy_in_input,
-		.real_in = in)->stream;
+	GuProxyInStream* ins = gu_new(GuProxyInStream, pool);
+	ins->stream.begin_buffer = gu_proxy_in_begin_buffer;
+	ins->stream.end_buffer = gu_proxy_in_end_buffer;
+	ins->stream.input = gu_proxy_in_input;
+	ins->real_in = in;
+	return &ins->stream;
 }
 
 enum {
@@ -401,10 +401,12 @@ gu_data_in_begin_buffer(GuInStream* self, size_t* sz_out, GuExn* err)
 GuIn*
 gu_data_in(const uint8_t* data, size_t sz, GuPool* pool)
 {
-	GuDataIn* di = gu_new_s(pool, GuDataIn,
-				.stream.begin_buffer = gu_data_in_begin_buffer,
-				.data = data,
-				.sz = sz);
+	GuDataIn* di = gu_new(GuDataIn, pool);
+	di->stream.begin_buffer = gu_data_in_begin_buffer;
+	di->stream.end_buffer = NULL;
+	di->stream.input = NULL;
+	di->data = data;
+	di->sz = sz;
 	return gu_new_in(&di->stream, pool);
 }
 

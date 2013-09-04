@@ -23,10 +23,10 @@ struct GuMapData {
 };
 
 struct GuMap {
-	GuMapKind const kind;
-	GuHasher* const hasher;
-	size_t const key_size;
-	size_t const value_size;
+	GuMapKind kind;
+	GuHasher* hasher;
+	size_t key_size;
+	size_t value_size;
 	const void* default_value;
 	GuMapData data;
 	
@@ -380,16 +380,14 @@ gu_make_map(size_t key_size, GuHasher* hasher,
 		.values = value_size ? NULL : (uint8_t*) gu_map_no_values,
 		.zero_idx = SIZE_MAX
 	};
-	GuMap* map = gu_new_i(
-		pool, GuMap,
-		.default_value = default_value,
-		.hasher = hasher,
-		.data = data,
-		.key_size = key_size,
-		.value_size = value_size,
-		.fin.fn = gu_map_finalize,
-		.kind = kind
-		);
+	GuMap* map = gu_new(GuMap, pool);
+	map->default_value = default_value;
+	map->hasher = hasher;
+	map->data = data;
+	map->key_size = key_size;
+	map->value_size = value_size;
+	map->fin.fn = gu_map_finalize;
+	map->kind = kind;
 	gu_pool_finally(pool, &map->fin);
 	gu_map_resize(map);
 	return map;

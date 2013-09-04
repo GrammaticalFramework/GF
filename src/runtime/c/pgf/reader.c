@@ -76,8 +76,14 @@ pgf_read_len(PgfReader* rdr)
 	// immediately.
 	gu_return_on_exn(rdr->err, 0);
 	if (len < 0) {
-		gu_raise_i(rdr->err, PgfReadTagExn,
-			   .type = gu_type(GuLength), .tag = len);
+		GuExnData* err_data = gu_raise(rdr->err, PgfReadTagExn);
+		if (err_data) {
+			PgfReadTagExn* rtag = gu_new(PgfReadTagExn, err_data->pool);
+			rtag->type = gu_type(GuLength);
+			rtag->tag  = len;
+			err_data->data = rtag;
+		}
+
 		return 0;
 	}
 	return (GuLength) len;

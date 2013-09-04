@@ -112,24 +112,6 @@ gu_malloc(GuPool* pool, size_t size) {
 
 #include <string.h>
 
-//@private
-static inline void*
-gu_malloc_init_aligned(GuPool* pool, size_t size, size_t alignment, 
-		       const void* init)
-{
-	void* p = gu_malloc_aligned(pool, size, alignment);
-	memcpy(p, init, size);
-	return p;
-}
-
-//@private
-static inline void*
-gu_malloc_init(GuPool* pool, size_t size, const void* init)
-{
-	return gu_malloc_init_aligned(pool, size, 0, init);
-}
-
-
 /** Allocate memory to store an array of objects of a given type. */
 
 #define gu_new_n(type, n, pool)						\
@@ -166,38 +148,6 @@ gu_malloc_init(GuPool* pool, size_t size, const void* init)
 	((type*)(gu_malloc_prefixed((pool),				\
 				    gu_alignof(pre_type), sizeof(pre_type), \
 				    gu_alignof(type), sizeof(type))))
-
-
-	
-
-
-#ifdef HAVE_STATEMENT_EXPRESSIONS
-#define gu_new_i(pool, type, ...)					\
-	({								\
-		type *gu_new_p_ = gu_new(type, pool);			\
-		memcpy((void*) gu_new_p_, &(type){ __VA_ARGS__ },	\
-		       sizeof(type));					\
-		gu_new_p_;						\
-	})
-#else // HAVE_STATEMENT_EXPRESSIONS
-#define gu_new_i(pool, type, ...)					\
-	((type*)gu_malloc_init_aligned((pool), sizeof(type),		\
-				       gu_alignof(type),		\
-				       &(type){ __VA_ARGS__ }))
-#endif // HAVE_STATEMENT_EXPRESSIONS
-
-/** @def gu_new_i(pool, type, ...)
- *
- * Allocate and initialize an object.
- *
- * @param pool The pool to allocate from.
- *
- * @param type The C type of the object to allocate.
- *
- * @param ... An initializer list for the object to allocate.
- */
-
-#define gu_new_s gu_new_i
 
 // Alas, there's no portable way to get the alignment of flex structs.
 #define gu_new_flex(pool_, type_, flex_member_, n_elems_)		\

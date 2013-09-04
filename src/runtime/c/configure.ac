@@ -37,7 +37,6 @@ fi]
 
 AC_C_ALIGNOF
 AC_C_FAM_IN_MEM
-AC_C_STATEMENT_EXPRESSIONS
 AC_C_ASCII
 
 case "$target_cpu" in

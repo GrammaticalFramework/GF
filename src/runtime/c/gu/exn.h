@@ -38,10 +38,10 @@ struct GuExnData
 {
 	
 	/// The pool that the exception value should be allocated from.
-	GuPool* const pool;
+	GuPool* pool;
 
 	/// The exception value.
-	const void* data;
+	void* data;
 };
 
 struct GuExn {
@@ -146,10 +146,6 @@ gu_exn_raise_debug_(GuExn* err, GuType* type,
 	}								\
 	GU_END
 
-#define gu_raise_i(error_, t_, ...) \
-	gu_raise_new(error_, t_, gu_raise_pool_, gu_new_i(gu_raise_pool_, t_, __VA_ARGS__))
-
-
 /// Check the status of the current exception frame
 static inline bool
 gu_ok(GuExn* exn) {
@@ -177,21 +173,8 @@ typedef int GuErrno;
 
 extern GU_DECLARE_TYPE(GuErrno, signed);
 
-
-
-#define gu_raise_errno(error_) \
-	gu_raise_i(error_, GuErrno, errno)
-
-#if 0
-
-typedef void (*GuExnPrintFn)(GuFn* clo, void* err, FILE* out);
-
-extern GuTypeTable gu_exn_default_printer;
-
 void
-gu_exn_print(GuExn* err, FILE* out, GuTypeMap printer_map);
-
-#endif
+gu_raise_errno(GuExn* err);
 
 /** @} */
 
