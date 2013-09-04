@@ -2,7 +2,7 @@
 #include <gu/mem.h>
 #include <gu/exn.h>
 #include <alloca.h>
-#include "org_grammaticalframework_pgf_PGF.h"
+#include <jni.h>
 
 static jstring
 gu2j_string(JNIEnv *env, GuString s) {
