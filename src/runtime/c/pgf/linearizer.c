@@ -181,23 +181,24 @@ pgf_lzn_resolve_app(PgfLzn* lzn, GuBuf* buf, GuBuf* args, GuPool* pool)
 	GuChoiceMark mark = gu_choice_mark(lzn->ch);
 	int save_fid = lzn->fid;
 
+	size_t n_args = gu_buf_length(args);
+
+	PgfCncTree ret = gu_null_variant;
+	PgfCncTreeApp* capp =
+		gu_new_flex_variant(PGF_CNC_TREE_APP,
+							PgfCncTreeApp,
+							args, n_args, &ret, pool);
+
 redo:;
 	int index = gu_choice_next(lzn->ch, gu_buf_length(buf));
 	if (index < 0) {
 		return gu_null_variant;
 	}
 
-	size_t n_args = gu_buf_length(args);
-
 	PgfProductionApply* papply =
 		gu_buf_get(buf, PgfProductionApply*, index);
 	gu_assert(n_args == gu_seq_length(papply->args));
 
-	PgfCncTree ret = gu_null_variant;
-	PgfCncTreeApp* capp = 
-		gu_new_flex_variant(PGF_CNC_TREE_APP,
-							PgfCncTreeApp,
-							args, n_args, &ret, pool);
 	capp->fun = papply->fun;
 	capp->fid = 0;
 	capp->n_args = n_args;
