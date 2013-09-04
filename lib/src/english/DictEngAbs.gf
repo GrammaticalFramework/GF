@@ -21234,6 +21234,7 @@ fun for_Prep : Prep;
 fun for_example_Adv : Adv;
 fun for_instance_Adv : Adv;
 fun for_starters_Adv : Adv;
+fun for_sure_Adv : Adv;
 fun forage_N : N;
 fun forage_V : V;
 fun forager_N : N;
