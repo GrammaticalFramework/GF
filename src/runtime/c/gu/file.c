@@ -34,10 +34,12 @@ gu_file_flush(GuOutStream* stream, GuExn* err)
 GuOut*
 gu_file_out(FILE* file, GuPool* pool)
 {
-	GuFileOutStream* fos = gu_new_i(pool, GuFileOutStream,
-					.stream.output = gu_file_output,
-					.stream.flush = gu_file_flush,
-					.file = file);
+	GuFileOutStream* fos = gu_new(GuFileOutStream, pool);
+	fos->stream.begin_buf = NULL;
+	fos->stream.end_buf = NULL;
+	fos->stream.output = gu_file_output;
+	fos->stream.flush = gu_file_flush;
+	fos->file = file;
 	return gu_new_out(&fos->stream, pool);
 }
 
@@ -66,8 +68,10 @@ gu_file_input(GuInStream* stream, uint8_t* buf, size_t sz, GuExn* err)
 GuIn*
 gu_file_in(FILE* file, GuPool* pool)
 {
-	GuFileInStream* fis = gu_new_s(pool, GuFileInStream,
-				       .stream.input = gu_file_input,
-				       .file = file);
+	GuFileInStream* fis = gu_new(GuFileInStream, pool);
+	fis->stream.begin_buffer = NULL;
+	fis->stream.end_buffer = NULL;
+	fis->stream.input = gu_file_input;
+	fis->file = file;
 	return gu_new_in(&fis->stream, pool);
 }

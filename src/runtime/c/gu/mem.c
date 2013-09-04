@@ -339,8 +339,3 @@ gu_pool_free(GuPool* pool)
 
 
 extern inline void* gu_malloc(GuPool* pool, size_t size);
-
-extern inline void* 
-gu_malloc_init_aligned(GuPool* pool, size_t size, size_t alignment, 
-		       const void* init);
-

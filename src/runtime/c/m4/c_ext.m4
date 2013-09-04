@@ -41,22 +41,6 @@ AC_DEFUN([AC_C_FAM_IN_MEM],
   fi
 ])
 
-
-## AC_C_STATEMENT_EXPRESSIONS
-AC_DEFUN([AC_C_STATEMENT_EXPRESSIONS],
-[
-  AC_CACHE_CHECK([for statement expressions],
-    ac_cv_c_statement_expressions,
-    [AC_COMPILE_IFELSE(
-      [AC_LANG_PROGRAM([], [int x = ({ int a = 42; a = a + 1; a; })])],
-      [ac_cv_c_statement_expressions=yes],
-      [ac_cv_c_statement_expressions=no])])
-  if test $ac_cv_c_statement_expressions = yes; then
-    AC_DEFINE([HAVE_STATEMENT_EXPRESSIONS], 1,
-    [Define to 1 if statement expressions are supported.])
-  fi
-])
-
 ## AC_C_ASCII
 AC_DEFUN([AC_C_ASCII],
 [

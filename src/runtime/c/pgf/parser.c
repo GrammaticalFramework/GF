@@ -2195,12 +2195,10 @@ pgf_parse_result(PgfParseState* state)
 	pgf_parsing_print_counts(state->ps);
 #endif
 
-	PgfExprEnum* en =
-           &gu_new_i(state->ps->pool, PgfParseResult,
-                     .state = state,
-			         .en.next = pgf_parse_result_enum_next)->en;
-
-	return en;
+	PgfParseResult* res = gu_new(PgfParseResult, state->ps->pool);
+	res->state   = state;
+	res->en.next = pgf_parse_result_enum_next;
+	return &res->en;
 }
 
 void

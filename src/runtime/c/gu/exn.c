@@ -5,13 +5,14 @@
 GuExn*
 gu_new_exn(GuExn* parent, GuKind* catch, GuPool* pool)
 {
-	return gu_new_s(pool, GuExn,
-			.state = GU_EXN_OK,
-			.parent = parent,
-			.catch = catch,
-			.caught = NULL,
-			.data.pool = pool,
-			.data.data = NULL);
+	GuExn* exn = gu_new(GuExn, pool);
+	exn->state = GU_EXN_OK;
+	exn->parent = parent;
+	exn->catch = catch;
+	exn->caught = NULL;
+	exn->data.pool = pool;
+	exn->data.data = NULL;
+	return exn;
 }
 
 void
@@ -72,6 +73,17 @@ GuType*
 gu_exn_caught(GuExn* err)
 {
 	return err->caught;
+}
+
+void
+gu_raise_errno(GuExn* err)
+{
+	GuExnData* err_data = gu_raise(err, GuErrno);
+	if (err_data) {
+		GuErrno* gu_errno = gu_new(GuErrno, err_data->pool);
+		*gu_errno = errno;
+		err_data->data = gu_errno;
+	}
 }
 
 GU_DEFINE_TYPE(GuErrno, signed, _);
