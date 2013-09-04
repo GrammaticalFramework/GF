@@ -9,6 +9,9 @@ doc:
 Test.class: Test.java
 	javac Test.java
 
+libjpgf.jar: org/grammaticalframework/pgf/PGF.class
+	jar -cf libjpgf.jar org/grammaticalframework/pgf/*.class
+
 org/grammaticalframework/pgf/PGF.class: org/grammaticalframework/pgf/PGF.java
 	javac Test.java
 
