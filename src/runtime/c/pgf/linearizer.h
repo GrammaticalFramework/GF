@@ -18,7 +18,6 @@
  */
 
 #include <gu/type.h>
-#include <gu/dump.h>
 #include <gu/enum.h>
 
 /// Linearization of abstract syntax trees.
