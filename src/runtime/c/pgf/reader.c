@@ -11,7 +11,6 @@
 #include <gu/map.h>
 #include <gu/seq.h>
 #include <gu/assert.h>
-#include <gu/intern.h>
 #include <gu/in.h>
 #include <gu/bits.h>
 #include <gu/exn.h>
@@ -28,7 +27,6 @@ struct PgfReader {
 	GuExn* err;
 	GuPool* opool;
 	GuPool* tmp_pool;
-	GuSymTable* symtab;
 #ifndef ANDROID
 	PgfJitState* jit_state;
 #endif
@@ -108,11 +106,9 @@ pgf_read_cid(PgfReader* rdr)
 		GuUCS ucs = gu_in_u8(rdr->in, rdr->err);
 		gu_out_utf8(ucs, out, rdr->err);
 	}
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	
-	GuSymbol sym = gu_symtable_intern(rdr->symtab, str);
+	GuString str = gu_string_buf_freeze(sbuf, rdr->opool);
 	gu_pool_free(tmp_pool);
-	return sym;
+	return str;
 }
 
 static GuString
@@ -128,11 +124,10 @@ pgf_read_string(PgfReader* rdr)
 		GuUCS ucs = gu_in_utf8(rdr->in, rdr->err);
 		gu_out_utf8(ucs, out, rdr->err);
 	}
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	GuSymbol sym = gu_symtable_intern(rdr->symtab, str);
+	GuString str = gu_string_buf_freeze(sbuf, rdr->opool);
 	gu_pool_free(tmp_pool);
 
-	return sym;
+	return str;
 }
 
 static void
@@ -1215,7 +1210,6 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	PgfReader* rdr = gu_new(PgfReader, tmp_pool);
 	rdr->opool = opool;
 	rdr->tmp_pool = tmp_pool;
-	rdr->symtab = gu_new_symtable(opool, tmp_pool);
 	rdr->err = err;
 	rdr->in = in;
 #ifndef ANDROID
