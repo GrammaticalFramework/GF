@@ -20,7 +20,6 @@ guinclude_HEADERS = \
 	gu/fun.h \
 	gu/hash.h \
 	gu/in.h \
-	gu/intern.h \
 	gu/list.h \
 	gu/log.h \
 	gu/map.h \
@@ -59,7 +58,6 @@ libgu_la_SOURCES = \
 	gu/fun.c \
 	gu/hash.c \
 	gu/in.c \
-	gu/intern.c \
 	gu/list.c \
 	gu/log.c \
 	gu/map.c \
