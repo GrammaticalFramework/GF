@@ -371,8 +371,9 @@ gu_buffered_in(GuIn* in, size_t buf_sz, GuPool* pool)
 		.end_buffer = gu_buffered_in_end_buffer,
 		.input = gu_buffered_in_input
 	};
-	bis->have = bis->curr = 0;
 	bis->alloc = buf_sz;
+	bis->have = bis->curr = 0;
+	bis->in = in;
 	return gu_new_in(&bis->stream, pool);
 }
 
