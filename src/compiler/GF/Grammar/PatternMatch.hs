@@ -77,6 +77,7 @@ tryMatch (p,t) = do
   isInConstantFormt = True -- tested already in matchPattern
   trym p t' =
     case (p,t') of
+--    (_,(x,Typed e ty,y)) -> trym p (x,e,y) -- Add this? /TH 2013-09-05
       (_,(x,Empty,y)) -> trym p (x,K [],y)   -- because "" = [""] = []
       (PW, _) | isInConstantFormt -> return [] -- optimization with wildcard
       (PV x,  _) | isInConstantFormt -> return [(x,t)]
@@ -187,6 +188,9 @@ isInConstantForm trm = case trm of
     K _      -> True
     Empty    -> True
     EInt _   -> True
+    V ty ts  -> isInConstantForm ty && all isInConstantForm ts -- TH 2013-09-05
+--  Typed e t-> isInConstantForm e && isInConstantForm t -- Add this? TH 2013-09-05
+
     _       -> False ---- isInArgVarForm trm
 {- -- unused and suspicuous, see contP in GF.Compile.Compute.Concrete instead
 varsOfPatt :: Patt -> [Ident]
