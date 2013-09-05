@@ -1,4 +1,5 @@
 #include <pgf/pgf.h>
+#include <pgf/reader.h>
 #include <gu/mem.h>
 #include <gu/exn.h>
 #include <gu/utf8.h>
@@ -86,7 +87,7 @@ throw_string_exception(JNIEnv *env, const char* class_name, const char* msg)
 }
 
 JNIEXPORT jobject JNICALL 
-Java_org_grammaticalframework_pgf_PGF_readPGF(JNIEnv *env, jclass cls, jstring s)
+Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_lang_String_2(JNIEnv *env, jclass cls, jstring s)
 { 
 	GuPool* pool = gu_new_pool();
 	GuPool* tmp_pool = gu_local_pool();
@@ -107,6 +108,99 @@ Java_org_grammaticalframework_pgf_PGF_readPGF(JNIEnv *env, jclass cls, jstring s
 		} else {
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The grammar cannot be loaded");
 		}
+		gu_pool_free(pool);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	jmethodID constrId = (*env)->GetMethodID(env, cls, "<init>", "(JJ)V");
+	return (*env)->NewObject(env, cls, constrId, p2l(pool), p2l(pgf));
+}
+
+typedef struct {
+	GuInStream stream;
+	jobject java_stream;
+	JNIEnv *env;
+	jmethodID read_method;
+	jbyteArray buf_array;
+	jbyte *buf;
+} JInStream;
+
+static const uint8_t*
+jpgf_jstream_begin_buffer(GuInStream* self, size_t* sz_out, GuExn* err)
+{
+	*sz_out = 0;
+
+	JInStream* jstream = (JInStream*) self;
+	int sz = (*jstream->env)->CallIntMethod(jstream->env, jstream->java_stream, jstream->read_method, jstream->buf_array);
+	if ((*jstream->env)->ExceptionOccurred(jstream->env)) {
+		gu_raise(err, PgfExn);
+		return NULL;
+	}
+
+	jboolean isCopy;
+	jstream->buf = (*jstream->env)->GetByteArrayElements(jstream->env, jstream->buf_array, &isCopy);
+	if ((*jstream->env)->ExceptionOccurred(jstream->env)) {
+		gu_raise(err, PgfExn);
+		return NULL;
+	}
+
+	*sz_out = (size_t) sz;
+	return ((uint8_t*) jstream->buf);
+}
+
+static void
+jpgf_jstream_end_buffer(GuInStream* self, size_t consumed, GuExn* err)
+{
+	JInStream* jstream = (JInStream*) self;
+	(*jstream->env)->ReleaseByteArrayElements(jstream->env, jstream->buf_array, jstream->buf, JNI_ABORT);
+}
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_io_InputStream_2(JNIEnv *env, jclass cls, jobject java_stream)
+{
+	GuPool* pool = gu_new_pool();
+	GuPool* tmp_pool = gu_local_pool();
+
+	jclass java_stream_class = (*env)->GetObjectClass(env, java_stream);
+
+	JInStream* jstream = gu_new(JInStream, tmp_pool);
+	jstream->stream.begin_buffer = jpgf_jstream_begin_buffer;
+	jstream->stream.end_buffer = jpgf_jstream_end_buffer;
+	jstream->stream.input = NULL;;
+	jstream->java_stream = java_stream;
+	jstream->env = env;
+
+	jstream->read_method = (*env)->GetMethodID(env, java_stream_class, "read", "([B)I");
+	if (!jstream->read_method) {
+		gu_pool_free(pool);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	jstream->buf_array = (*env)->NewByteArray(env, 1024);
+	if (!jstream->buf_array) {
+		gu_pool_free(pool);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	jstream->buf = NULL;
+
+	GuIn* in = gu_new_in(&jstream->stream, tmp_pool);
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	// Read the PGF grammar.
+	PgfReader* rdr = pgf_new_reader(in, pool, tmp_pool, err);
+	PgfPGF* pgf = pgf_read_pgf(rdr);
+	pgf_reader_done(rdr, pgf);
+
+	if (!gu_ok(err)) {
+		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The grammar cannot be loaded");
 		gu_pool_free(pool);
 		gu_pool_free(tmp_pool);
 		return NULL;
