@@ -124,9 +124,9 @@ Expr_repr(ExprObject *self)
 
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 
-	pgf_print_expr(self->expr, NULL, 0, wtr, err);
+	pgf_print_expr(self->expr, NULL, 0, out, err);
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
 	PyObject* pystr = gu2py_string(str);
@@ -670,9 +670,9 @@ Type_repr(TypeObject *self)
 
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 
-	pgf_print_type(self->type, NULL, 0, wtr, err);
+	pgf_print_type(self->type, NULL, 0, out, err);
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
 	PyObject* pystr = gu2py_string(str);
@@ -1194,8 +1194,7 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	PgfLexer *lexer = NULL;
 	if (buf != NULL) {
 		GuIn* in = gu_data_in(buf, len, pyres->pool);
-		GuReader* rdr = gu_new_utf8_reader(in, pyres->pool);
-		lexer = pgf_new_simple_lexer(rdr, pyres->pool);
+		lexer = pgf_new_simple_lexer(in, pyres->pool);
 	} 
 	if (py_lexer != NULL) {
 		lexer = pypgf_new_python_lexer(py_lexer, pyres->pool);
@@ -1288,8 +1287,7 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 	PgfLexer *lexer = NULL;
 	if (buf != NULL) {
 		GuIn* in = gu_data_in(buf, len, tmp_pool);
-		GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
-		lexer = pgf_new_simple_lexer(rdr, tmp_pool);
+		lexer = pgf_new_simple_lexer(in, tmp_pool);
 	} 
 	if (py_lexer != NULL) {
 		lexer = pypgf_new_python_lexer(py_lexer, tmp_pool);
@@ -1376,9 +1374,9 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 	
-	pgf_linearize(self->concr, pyexpr->expr, wtr, err);
+	pgf_linearize(self->concr, pyexpr->expr, out, err);
 	if (!gu_ok(err)) {
 		PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
 		return NULL;
@@ -1670,9 +1668,9 @@ Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 	
-	pgf_graphviz_parse_tree(self->concr, pyexpr->expr, wtr, err);
+	pgf_graphviz_parse_tree(self->concr, pyexpr->expr, out, err);
 	if (!gu_ok(err)) {
 		PyErr_SetString(PGFError, "The parse tree cannot be visualized");
 		return NULL;
@@ -1733,8 +1731,7 @@ Concr_lookupMorpho(ConcrObject* self, PyObject *args, PyObject *keywds) {
 	PgfLexer *lexer = NULL;
 	if (buf != NULL) {
 		GuIn* in = gu_data_in(buf, len, tmp_pool);
-		GuReader* rdr = gu_new_utf8_reader(in, tmp_pool);
-		lexer = pgf_new_simple_lexer(rdr, tmp_pool);
+		lexer = pgf_new_simple_lexer(in, tmp_pool);
 	} 
 	if (py_lexer != NULL) {
 		// get an iterator out of the iterable object
@@ -2237,9 +2234,9 @@ PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 	
-	pgf_graphviz_abstract_tree(self->pgf, pyexpr->expr, wtr, err);
+	pgf_graphviz_abstract_tree(self->pgf, pyexpr->expr, out, err);
 	if (!gu_ok(err)) {
 		PyErr_SetString(PGFError, "The abstract tree cannot be visualized");
 		return NULL;

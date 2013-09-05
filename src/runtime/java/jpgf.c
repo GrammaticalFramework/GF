@@ -1,6 +1,7 @@
 #include <pgf/pgf.h>
 #include <gu/mem.h>
 #include <gu/exn.h>
+#include <gu/utf8.h>
 #include <alloca.h>
 #include <jni.h>
 
@@ -206,8 +207,8 @@ Java_org_grammaticalframework_pgf_Parser_parse
     GuString startCat = j2gu_string(env, jstartCat, pool);
     GuString s = j2gu_string(env, js, pool);
 
-	GuReader* rdr = gu_string_reader(s, pool);
-	PgfLexer *lexer = pgf_new_simple_lexer(rdr, pool);
+	GuIn* in = gu_string_in(s, pool);
+	PgfLexer *lexer = pgf_new_simple_lexer(in, pool);
 
 	GuEnum* res =
 		pgf_parse(get_ref(env, concr), startCat, lexer, pool, out_pool);
@@ -261,9 +262,9 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 	
-	pgf_linearize(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), wtr, err);
+	pgf_linearize(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), out, err);
 	if (!gu_ok(err)) {
 		//
 		return NULL;
@@ -290,9 +291,9 @@ Java_org_grammaticalframework_pgf_Expr_showExpr(JNIEnv* env, jclass clazz, jlong
 
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 
-	pgf_print_expr(gu_variant_from_ptr(l2p(ref)), NULL, 0, wtr, err);
+	pgf_print_expr(gu_variant_from_ptr(l2p(ref)), NULL, 0, out, err);
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
 	jstring jstr = gu2j_string(env, str);

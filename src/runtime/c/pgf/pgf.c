@@ -223,7 +223,7 @@ pgf_print_name(PgfConcr* concr, PgfCId id)
 }
 
 void
-pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err)
+pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 {
 	GuPool* tmp_pool = gu_local_pool();
 	
@@ -231,7 +231,7 @@ pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err)
 		pgf_lzr_concretize(concr, expr, tmp_pool);
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (!gu_variant_is_null(ctree)) {
-		pgf_lzr_linearize_simple(concr, ctree, 0, wtr, err);
+		pgf_lzr_linearize_simple(concr, ctree, 0, out, err);
 	}
 
 	gu_pool_free(tmp_pool);

@@ -27,7 +27,6 @@ guinclude_HEADERS = \
 	gu/mem.h \
 	gu/out.h \
 	gu/prime.h \
-	gu/read.h \
 	gu/seq.h \
 	gu/str.h \
 	gu/string.h \
@@ -35,12 +34,12 @@ guinclude_HEADERS = \
 	gu/type.h \
 	gu/ucs.h \
 	gu/utf8.h \
-	gu/variant.h \
-	gu/write.h
+	gu/variant.h
 
 pgfincludedir=$(includedir)/pgf
 pgfinclude_HEADERS = \
 	pgf/expr.h \
+	pgf/reader.h \
 	pgf/linearizer.h \
 	pgf/parser.h \
 	pgf/lexer.h \
@@ -67,12 +66,10 @@ libgu_la_SOURCES = \
 	gu/mem.c \
 	gu/out.c \
 	gu/prime.c \
-	gu/read.c \
 	gu/str.c \
 	gu/string.c \
 	gu/type.c \
 	gu/utf8.c \
-	gu/write.c \
 	gu/ucs.c \
 	gu/variant.c
 

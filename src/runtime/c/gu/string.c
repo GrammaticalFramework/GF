@@ -10,7 +10,7 @@ const GuString gu_empty_string = { 1 };
 
 struct GuStringBuf {
 	GuByteBuf* bbuf;
-	GuWriter* wtr;
+	GuOut* out;
 };
 
 GuStringBuf*
@@ -18,17 +18,16 @@ gu_string_buf(GuPool* pool)
 {
 	GuBuf* buf = gu_new_buf(uint8_t, pool);
 	GuOut* out = gu_buf_out(buf, pool);
-	GuWriter* wtr = gu_new_utf8_writer(out, pool);
 	GuStringBuf* sbuf = gu_new(GuStringBuf, pool);
 	sbuf->bbuf = buf;
-	sbuf->wtr = wtr;
+	sbuf->out = out;
 	return sbuf;
 }
 
-GuWriter*
-gu_string_buf_writer(GuStringBuf* sb)
+GuOut*
+gu_string_buf_out(GuStringBuf* sb)
 {
-	return sb->wtr;
+	return sb->out;
 }
 
 static GuString
@@ -61,14 +60,14 @@ gu_utf8_string(const uint8_t* buf, size_t sz, GuPool* pool)
 GuString
 gu_string_buf_freeze(GuStringBuf* sb, GuPool* pool)
 {
-	gu_writer_flush(sb->wtr, NULL);
+	gu_out_flush(sb->out, NULL);
 	uint8_t* data = gu_buf_data(sb->bbuf);
 	size_t len = gu_buf_length(sb->bbuf);
 	return gu_utf8_string(data, len, pool);
 }
 
-GuReader*
-gu_string_reader(GuString s, GuPool* pool)
+GuIn*
+gu_string_in(GuString s, GuPool* pool)
 {
 	GuWord w = s.w_;
 	uint8_t* buf = NULL;
@@ -85,9 +84,7 @@ gu_string_reader(GuString s, GuPool* pool)
 		len = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
 		buf = &p[1];
 	}
-	GuIn* in = gu_data_in(buf, len, pool);
-	GuReader* rdr = gu_new_utf8_reader(in, pool);
-	return rdr;
+	return gu_data_in(buf, len, pool);
 }
 
 static bool
@@ -145,7 +142,7 @@ gu_string_copy(GuString string, GuPool* pool)
 
 
 void
-gu_string_write(GuString s, GuWriter* wtr, GuExn* err)
+gu_string_write(GuString s, GuOut* out, GuExn* err)
 {
 	GuWord w = s.w_;
 	uint8_t buf[sizeof(GuWord)];
@@ -165,7 +162,7 @@ gu_string_write(GuString s, GuWriter* wtr, GuExn* err)
 		sz = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
 		src = &p[1];
 	}
-	gu_utf8_write(src, sz, wtr, err);
+	gu_out_bytes(out, src, sz, err);
 }
 
 GuString
@@ -173,9 +170,9 @@ gu_format_string_v(const char* fmt, va_list args, GuPool* pool)
 {
 	GuPool* tmp_pool = gu_local_pool();
 	GuStringBuf* sb = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sb);
-	gu_vprintf(fmt, args, wtr, NULL);
-	gu_writer_flush(wtr, NULL);
+	GuOut* out = gu_string_buf_out(sb);
+	gu_vprintf(fmt, args, out, NULL);
+	gu_out_flush(out, NULL);
 	GuString s = gu_string_buf_freeze(sb, pool);
 	gu_pool_free(tmp_pool);
 	return s;

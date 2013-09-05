@@ -25,15 +25,8 @@ struct GuIn {
 	GuFinalizer fini;
 };
 
-
-GuIn
-gu_init_in(GuInStream* stream);
-
 GuIn*
 gu_new_in(GuInStream* stream, GuPool* pool);
-
-GuInStream*
-gu_in_proxy_stream(GuIn* in, GuPool* pool);
 
 const uint8_t*
 gu_in_begin_span(GuIn* in, size_t *sz_out, GuExn* err);

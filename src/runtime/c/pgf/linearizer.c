@@ -367,11 +367,11 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 				GuPool* tmp_pool = gu_local_pool();
 				GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 				GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-				GuWriter* wtr = gu_string_buf_writer(sbuf);
+				GuOut* out = gu_string_buf_out(sbuf);
 
-				gu_putc('[', wtr, err);
-				gu_string_write(efun->fun, wtr, err);
-				gu_putc(']', wtr, err);
+				gu_putc('[', out, err);
+				gu_string_write(efun->fun, out, err);
+				gu_putc(']', out, err);
 				GuString s = gu_string_buf_freeze(sbuf, pool);
 
 				if (ccat != NULL) {
@@ -594,7 +594,7 @@ typedef struct PgfSimpleLin PgfSimpleLin;
 struct PgfSimpleLin {
 	PgfLinFuncs* funcs;
 	int n_tokens;
-	GuWriter* wtr;
+	GuOut* out;
 	GuExn* err;
 };
 
@@ -608,10 +608,10 @@ pgf_file_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens toks)
 	size_t len = gu_seq_length(toks);
 	for (size_t i = 0; i < len; i++) {
 		if (flin->n_tokens > 0)
-			gu_putc(' ', flin->wtr, flin->err);
+			gu_putc(' ', flin->out, flin->err);
 
 		PgfToken tok = gu_seq_get(toks, PgfToken, i);
-		gu_string_write(tok, flin->wtr, flin->err);
+		gu_string_write(tok, flin->out, flin->err);
 		
 		flin->n_tokens++;
 	}
@@ -626,23 +626,23 @@ pgf_file_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
 	}
 
 	if (flin->n_tokens > 0)
-		gu_putc(' ', flin->wtr, flin->err);
+		gu_putc(' ', flin->out, flin->err);
 
 	GuVariantInfo i = gu_variant_open(lit);
     switch (i.tag) {
     case PGF_LITERAL_STR: {
         PgfLiteralStr* lstr = i.data;
-		gu_string_write(lstr->val, flin->wtr, flin->err);
+		gu_string_write(lstr->val, flin->out, flin->err);
 		break;
 	}
     case PGF_LITERAL_INT: {
         PgfLiteralInt* lint = i.data;
-		gu_printf(flin->wtr, flin->err, "%d", lint->val);
+		gu_printf(flin->out, flin->err, "%d", lint->val);
 		break;
 	}
     case PGF_LITERAL_FLT: {
         PgfLiteralFlt* lflt = i.data;
-		gu_printf(flin->wtr, flin->err, "%lf", lflt->val);
+		gu_printf(flin->out, flin->err, "%lf", lflt->val);
 		break;
 	}
 	default:
@@ -661,12 +661,12 @@ static PgfLinFuncs pgf_file_lin_funcs = {
 
 void
 pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
-			 size_t lin_idx, GuWriter* wtr, GuExn* err)
+			 size_t lin_idx, GuOut* out, GuExn* err)
 {
 	PgfSimpleLin flin = {
 		.funcs = &pgf_file_lin_funcs,
 		.n_tokens = 0,
-		.wtr = wtr,
+		.out = out,
 		.err = err
 	};
 	pgf_lzr_linearize(concr, ctree, lin_idx, &flin.funcs);

@@ -75,4 +75,4 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
 /// Linearize a concrete syntax tree as space-separated tokens.
 void
 pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
-			 size_t lin_idx, GuWriter* wtr, GuExn* err);
+			 size_t lin_idx, GuOut* out, GuExn* err);

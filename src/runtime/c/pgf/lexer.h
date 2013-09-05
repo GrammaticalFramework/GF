@@ -1,7 +1,7 @@
 #ifndef PGF_LEXER_H_
 #define PGF_LEXER_H_
 
-#include <gu/read.h>
+#include <gu/in.h>
 #include <pgf/expr.h>
 
 /// A single lexical token			      
@@ -20,7 +20,7 @@ typedef struct {
 } PgfLexer;
 
 PgfLexer*
-pgf_new_simple_lexer(GuReader *rdr, GuPool *pool);
+pgf_new_simple_lexer(GuIn *in, GuPool *pool);
 
 PgfToken
 pgf_lexer_read_token(PgfLexer *lexer, GuExn* err);

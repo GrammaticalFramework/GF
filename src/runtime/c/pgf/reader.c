@@ -100,13 +100,13 @@ pgf_read_cid(PgfReader* rdr)
 {
 	GuPool* tmp_pool = gu_new_pool();
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 
 	size_t len = pgf_read_len(rdr);
 	for (size_t i = 0; i < len; i++) {
 		// CIds are in latin-1
 		GuUCS ucs = gu_in_u8(rdr->in, rdr->err);
-		gu_ucs_write(ucs, wtr, rdr->err);
+		gu_out_utf8(ucs, out, rdr->err);
 	}
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
 	
@@ -120,13 +120,13 @@ pgf_read_string(PgfReader* rdr)
 {	
 	GuPool* tmp_pool = gu_new_pool();
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 
 	GuLength len = pgf_read_len(rdr);
 
 	for (size_t i = 0; i < len; i++) {
 		GuUCS ucs = gu_in_utf8(rdr->in, rdr->err);
-		gu_ucs_write(ucs, wtr, rdr->err);
+		gu_out_utf8(ucs, out, rdr->err);
 	}
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
 	GuSymbol sym = gu_symtable_intern(rdr->symtab, str);

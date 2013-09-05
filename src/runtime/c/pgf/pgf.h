@@ -118,7 +118,7 @@ GuString
 pgf_print_name(PgfConcr*, PgfCId id);
 
 void
-pgf_linearize(PgfConcr* concr, PgfExpr expr, GuWriter* wtr, GuExn* err);
+pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err);
 
 PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
@@ -166,6 +166,6 @@ pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool);
 /// @}
 
 void
-pgf_print(PgfPGF* pgf, GuWriter* wtr, GuExn* err); 
+pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err); 
 
 #endif // PGF_H_

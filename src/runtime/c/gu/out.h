@@ -4,6 +4,7 @@
 #include <gu/defs.h>
 #include <gu/assert.h>
 #include <gu/exn.h>
+#include <gu/ucs.h>
 
 typedef struct GuOut GuOut;
 
@@ -27,10 +28,6 @@ struct GuOut {
 	GuFinalizer fini;
 };
 
-
-GuOut
-gu_init_out(GuOutStream* stream);
-
 GuOut*
 gu_new_out(GuOutStream* stream, GuPool* pool);
 
@@ -39,9 +36,6 @@ gu_out_is_buffered(GuOut* out)
 {
 	return !!out->stream->begin_buf;
 }
-
-GuOutStream*
-gu_out_proxy_stream(GuOut* out, GuPool* pool);
 
 GuOut*
 gu_new_buffered_out(GuOut* out, size_t buf_sz, GuPool* pool);
@@ -162,5 +156,21 @@ gu_out_f64le(GuOut* out, double d, GuExn* err);
 
 void
 gu_out_f64be(GuOut* out, double d, GuExn* err);
+
+inline void
+gu_putc(char c, GuOut* out, GuExn* err)
+{
+	GuUCS ucs = gu_char_ucs(c);
+	gu_out_u8(out, (uint8_t) ucs, err);
+}
+
+void
+gu_puts(const char* str, GuOut* out, GuExn* err);
+
+void
+gu_vprintf(const char* fmt, va_list args, GuOut* out, GuExn* err);
+
+void
+gu_printf(GuOut* out, GuExn* err, const char* fmt, ...);
 
 #endif // GU_OUT_H_

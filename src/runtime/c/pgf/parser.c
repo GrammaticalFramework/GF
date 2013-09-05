@@ -1828,7 +1828,7 @@ pgf_get_tokens(PgfSequence seq,
 	GuPool* tmp_pool = gu_new_pool();
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 
 	// collect the tokens in the production
 	size_t len = gu_seq_length(seq);
@@ -1842,11 +1842,11 @@ pgf_get_tokens(PgfSequence seq,
 			size_t len = gu_seq_length(symks->tokens);
 			for (size_t i = tok_idx; i < len; i++) {
 				if (i > 0) {
-					gu_putc(' ', wtr, err);
+					gu_putc(' ', out, err);
 				}
 
 				PgfToken tok = gu_seq_get(symks->tokens, PgfToken, i);
-				gu_string_write(tok, wtr, err);						
+				gu_string_write(tok, out, err);						
 			}
 			
 			tok_idx = 0;

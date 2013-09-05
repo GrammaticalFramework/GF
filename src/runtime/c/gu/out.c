@@ -1,20 +1,6 @@
 #include <gu/seq.h>
 #include <gu/out.h>
-
-
-
-GuOut
-gu_init_out(GuOutStream* stream)
-{
-	gu_require(stream != NULL);
-	GuOut out = {
-		.buf_end = NULL,
-		.buf_curr = 0,
-		.stream = stream,
-		.fini.fn = NULL
-	};
-	return out;
-}
+#include <gu/utf8.h>
 
 static bool
 gu_out_is_buffering(GuOut* out)
@@ -81,8 +67,12 @@ gu_out_fini(GuFinalizer* self)
 GuOut*
 gu_new_out(GuOutStream* stream, GuPool* pool)
 {
+	gu_require(stream != NULL);
+
 	GuOut* out = gu_new(GuOut, pool);
-	*out = gu_init_out(stream);
+	out->buf_end = NULL,
+	out->buf_curr = 0,
+	out->stream = stream,
 	out->fini.fn = gu_out_fini;
 	gu_pool_finally(pool, &out->fini);
 	return out;
@@ -185,72 +175,11 @@ gu_out_try_u8_(GuOut* restrict out, uint8_t u);
 
 
 
-
-
-
-
-
-typedef struct GuProxyOutStream GuProxyOutStream;
-
-struct GuProxyOutStream {
-	GuOutStream stream;
-	GuOut* real_out;
-};
-
-
-static uint8_t*
-gu_proxy_out_buf_begin(GuOutStream* self, size_t req, size_t* sz_out,
-		       GuExn* err)
-{
-	GuProxyOutStream* pos =
-		gu_container(self, GuProxyOutStream, stream);
-	return gu_out_begin_span(pos->real_out, req, sz_out, err);
-}
-
-static void
-gu_proxy_out_buf_end(GuOutStream* self, size_t sz, GuExn* err)
-{
-	GuProxyOutStream* pos =
-		gu_container(self, GuProxyOutStream, stream);
-	gu_out_end_span(pos->real_out, sz);
-}
-
-static size_t
-gu_proxy_out_output(GuOutStream* self, const uint8_t* src, size_t sz,
-		    GuExn* err)
-{
-	GuProxyOutStream* pos =
-		gu_container(self, GuProxyOutStream, stream);
-	return gu_out_bytes(pos->real_out, src, sz, err);
-}
-
-static void
-gu_proxy_out_flush(GuOutStream* self, GuExn* err)
-{
-	GuProxyOutStream* pos =
-		gu_container(self, GuProxyOutStream, stream);
-	gu_out_flush(pos->real_out, err);
-}
-
-
-GuOutStream*
-gu_out_proxy_stream(GuOut* out, GuPool* pool)
-{
-	GuProxyOutStream* pos = gu_new(GuProxyOutStream, pool);
-	pos->stream.begin_buf = gu_proxy_out_buf_begin;
-	pos->stream.end_buf = gu_proxy_out_buf_end;
-	pos->stream.output = gu_proxy_out_output;
-	pos->stream.flush = gu_proxy_out_flush;
-	pos->real_out = out;
-	return &pos->stream;
-}
-
-
-
 typedef struct GuBufferedOutStream GuBufferedOutStream;
 
 struct GuBufferedOutStream {
-	GuProxyOutStream pstream;
+	GuOutStream stream;
+	GuOut* real_out;
 	size_t sz;
 	uint8_t buf[];
 };
@@ -261,7 +190,7 @@ gu_buffered_out_buf_begin(GuOutStream* self, size_t req, size_t* sz_out,
 {
 	(void) (req && err);
 	GuBufferedOutStream* b =
-		gu_container(self, GuBufferedOutStream, pstream.stream);
+		gu_container(self, GuBufferedOutStream, stream);
 	*sz_out = b->sz;
 	return b->buf;
 }
@@ -270,9 +199,26 @@ static void
 gu_buffered_out_buf_end(GuOutStream* self, size_t sz, GuExn* err)
 {
 	GuBufferedOutStream* b =
-		gu_container(self, GuBufferedOutStream, pstream.stream);
+		gu_container(self, GuBufferedOutStream, stream);
 	gu_require(sz <= b->sz);
-	gu_out_bytes(b->pstream.real_out, b->buf, sz, err);
+	gu_out_bytes(b->real_out, b->buf, sz, err);
+}
+
+static size_t
+gu_buffered_out_output(GuOutStream* self, const uint8_t* src, size_t sz,
+		    GuExn* err)
+{
+	GuBufferedOutStream* bos =
+		gu_container(self, GuBufferedOutStream, stream);
+	return gu_out_bytes(bos->real_out, src, sz, err);
+}
+
+static void
+gu_buffered_out_flush(GuOutStream* self, GuExn* err)
+{
+	GuBufferedOutStream* bos =
+		gu_container(self, GuBufferedOutStream, stream);
+	gu_out_flush(bos->real_out, err);
 }
 
 GuOut*
@@ -280,15 +226,15 @@ gu_new_buffered_out(GuOut* out, size_t sz, GuPool* pool)
 {
 	GuBufferedOutStream* b =
 		gu_new_flex(pool, GuBufferedOutStream, buf, sz);
-	b->pstream.stream = (GuOutStream) {
+	b->stream = (GuOutStream) {
 		.begin_buf = gu_buffered_out_buf_begin,
 		.end_buf = gu_buffered_out_buf_end,
-		.output = gu_proxy_out_output,
-		.flush = gu_proxy_out_flush
+		.output = gu_buffered_out_output,
+		.flush = gu_buffered_out_flush
 	};
-	b->pstream.real_out = out;
+	b->real_out = out;
 	b->sz = sz;
-	return gu_new_out(&b->pstream.stream, pool);
+	return gu_new_out(&b->stream, pool);
 }
 
 GuOut*
@@ -301,3 +247,29 @@ gu_out_buffered(GuOut* out, GuPool* pool)
 }
 
 
+extern inline void
+gu_putc(char c, GuOut* out, GuExn* err);
+
+void
+gu_puts(const char* str, GuOut* out, GuExn* err)
+{
+	gu_str_out_utf8(str, out, err);
+}
+
+void
+gu_vprintf(const char* fmt, va_list args, GuOut* out, GuExn* err)
+{
+	GuPool* tmp_pool = gu_local_pool();
+	char* str = gu_vasprintf(fmt, args, tmp_pool);
+	gu_str_out_utf8(str, out, err);
+	gu_pool_free(tmp_pool);
+}
+
+void
+gu_printf(GuOut* out, GuExn* err, const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	gu_vprintf(fmt, args, out, err);
+	va_end(args);
+}
