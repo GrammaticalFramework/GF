@@ -87,11 +87,20 @@ gu_in_some(GuIn* in, uint8_t* dst, size_t sz, GuExn* err)
 void
 gu_in_bytes_(GuIn* in, uint8_t* dst, size_t sz, GuExn* err)
 {
-	size_t avail_sz = GU_MIN(sz, (size_t)(-in->buf_curr));
-	memcpy(dst, &in->buf_end[in->buf_curr], avail_sz);
-	in->buf_curr += avail_sz;
-	if (avail_sz < sz) {
-		gu_in_input(in, &dst[avail_sz], sz - avail_sz, err);
+	for (;;) {
+		size_t avail_sz = GU_MIN(sz, (size_t)(-in->buf_curr));
+		memcpy(dst, &in->buf_end[in->buf_curr], avail_sz);
+		in->buf_curr += avail_sz;
+		dst += avail_sz;
+		sz -= avail_sz;
+
+		if (sz == 0)
+			break;
+
+		if (!gu_in_begin_buffering(in, err)) {
+			gu_in_input(in, dst, sz, err);
+			return;
+		}
 	}
 }
 
@@ -268,13 +277,6 @@ gu_new_in(GuInStream* stream, GuPool* pool)
 	in->fini.fn = gu_in_fini;
 	return in;
 }
-
-
-typedef struct GuProxyInStream GuProxyInStream;
-
-enum {
-	GU_BUFFERED_IN_BUF_SIZE = 4096
-};
 
 typedef struct GuBufferedInStream GuBufferedInStream;
 
