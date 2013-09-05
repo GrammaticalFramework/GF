@@ -5,6 +5,8 @@ import java.util.*;
 
 public class PGF {
 	public static native PGF readPGF(String path) throws FileNotFoundException;
+	
+	public static native PGF readPGF(InputStream stream);
 
 	public native String getAbstractName();
 
