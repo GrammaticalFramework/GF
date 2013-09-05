@@ -1,4 +1,5 @@
-#include <gu/read.h>
+#include <gu/in.h>
+#include <gu/utf8.h>
 #include <pgf/parser.h>
 #include <pgf/literals.h>
 #include <wctype.h>
@@ -192,25 +193,25 @@ pgf_match_name_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 	if (gu_string_eq(tok, hyp)) {
 		iscap = true;
 	} else if (!gu_string_eq(tok, gu_empty_string)) {
-		GuReader* rdr = gu_string_reader(tok, tmp_pool);
-		iscap = iswupper(gu_read_ucs(rdr, err));
+		GuIn* in = gu_string_in(tok, tmp_pool);
+		iscap = iswupper(gu_in_utf8(in, err));
 	}
 
 	size_t n_syms = gu_seq_length(seq);
 	if (!iscap && n_syms > 0) {
 		GuStringBuf *sbuf = gu_string_buf(tmp_pool);
-		GuWriter* wtr = gu_string_buf_writer(sbuf);
+		GuOut* out = gu_string_buf_out(sbuf);
 
 		for (size_t i = 0; i < n_syms; i++) {
 			if (i > 0)
-			  gu_putc(' ', wtr, err);
+			  gu_putc(' ', out, err);
 
 			PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
 			gu_assert(gu_variant_tag(sym) == PGF_SYMBOL_KS);
 			PgfSymbolKS* sks = gu_variant_data(sym);
 			PgfToken tok = gu_seq_get(sks->tokens, PgfToken, 0);
 
-			gu_string_write(tok, wtr, err);
+			gu_string_write(tok, out, err);
 		}
 
 		PgfExprProb* ep = gu_new(PgfExprProb, pool);

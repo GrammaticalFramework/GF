@@ -1,6 +1,5 @@
 #include <gu/variant.h>
 #include <gu/map.h>
-#include <gu/dump.h>
 #include <gu/log.h>
 #include <gu/enum.h>
 #include <gu/file.h>
@@ -17,12 +16,12 @@
 
 static void
 print_result(PgfExprProb* ep, PgfConcr* to_concr, 
-             GuWriter* wtr, GuExn* err, GuPool* ppool)
+             GuOut* out, GuExn* err, GuPool* ppool)
 {
 	// Write out the abstract syntax tree
-	gu_printf(wtr, err, " [%f] ", ep->prob);
-	pgf_print_expr(ep->expr, NULL, 0, wtr, err);
-	gu_putc('\n', wtr, err);
+	gu_printf(out, err, " [%f] ", ep->prob);
+	pgf_print_expr(ep->expr, NULL, 0, out, err);
+	gu_putc('\n', out, err);
 
 	// Enumerate the concrete syntax trees corresponding
 	// to the abstract tree.
@@ -33,12 +32,12 @@ print_result(PgfExprProb* ep, PgfConcr* to_concr,
 		if (gu_variant_is_null(ctree)) {
 			break;
 		}
-		gu_putc(' ', wtr, err);
+		gu_putc(' ', out, err);
 		// Linearize the concrete tree as a simple
 		// sequence of strings.
-		pgf_lzr_linearize_simple(to_concr	, ctree, 0, wtr, err);
-		gu_putc('\n', wtr, err);
-		gu_writer_flush(wtr, err);
+		pgf_lzr_linearize_simple(to_concr	, ctree, 0, out, err);
+		gu_putc('\n', out, err);
+		gu_out_flush(out, err);
 	}
 }
 
@@ -100,11 +99,6 @@ int main(int argc, char* argv[]) {
 	// Create an output stream for stdout
 	GuOut* out = gu_file_out(stdout, pool);
 
-	// Locale-encoding writers are currently unsupported
-	// GuWriter* wtr = gu_locale_writer(out, pool);
-	// Use a writer with hard-coded utf-8 encoding for now.
-	GuWriter* wtr = gu_new_utf8_writer(out, pool);
-
 	// We will keep the latest results in the 'ppool' and
 	// we will iterate over them by using 'result'.
 	GuPool* ppool = NULL;
@@ -145,7 +139,7 @@ int main(int argc, char* argv[]) {
 					goto fail_parse;
 				}
 				
-				print_result(ep, to_concr, wtr, err, ppool);
+				print_result(ep, to_concr, out, err, ppool);
 			}
 			continue;
 		}
@@ -161,10 +155,10 @@ int main(int argc, char* argv[]) {
 		// sentence, so our memory usage doesn't increase over time.
 		ppool = gu_new_pool();
 
-		GuReader *rdr =
-			gu_string_reader(gu_str_string(line, ppool), ppool);
+		GuIn *in =
+			gu_string_in(gu_str_string(line, ppool), ppool);
 		PgfLexer *lexer =
-			pgf_new_simple_lexer(rdr, ppool);
+			pgf_new_simple_lexer(in, ppool);
 
 		clock_t start = clock();
 
@@ -175,11 +169,11 @@ int main(int argc, char* argv[]) {
 				pgf_lexer_current_token(lexer);
 
 			if (gu_string_eq(tok, gu_empty_string))
-				gu_puts("Couldn't begin parsing", wtr, err);
+				gu_puts("Couldn't begin parsing", out, err);
 			else {
-				gu_puts("Unexpected token: \"", wtr, err);
-				gu_string_write(tok, wtr, err);
-				gu_puts("\"\n", wtr, err);
+				gu_puts("Unexpected token: \"", out, err);
+				gu_string_write(tok, out, err);
+				gu_puts("\"\n", out, err);
 			}
 
 			goto fail_parse;
@@ -196,7 +190,7 @@ int main(int argc, char* argv[]) {
 			goto fail_parse;
 		}
 		
-		print_result(ep, to_concr, wtr, err, ppool);
+		print_result(ep, to_concr, out, err, ppool);
 
 		continue;
 	fail_parse:

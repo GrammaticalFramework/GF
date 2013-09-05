@@ -21,8 +21,8 @@
 #define GU_STRING_H_
 
 #include <gu/bits.h>
-#include <gu/read.h>
-#include <gu/write.h>
+#include <gu/in.h>
+#include <gu/out.h>
 
 typedef GuOpaque() GuString;
 
@@ -32,10 +32,10 @@ GuString
 gu_string_copy(GuString string, GuPool* pool);
 
 void
-gu_string_write(GuString string, GuWriter* wtr, GuExn* err);
+gu_string_write(GuString string, GuOut* out, GuExn* err);
 
-GuReader*
-gu_string_reader(GuString string, GuPool* pool);
+GuIn*
+gu_string_in(GuString string, GuPool* pool);
 
 bool
 gu_string_is_stable(GuString string);
@@ -48,8 +48,8 @@ typedef struct GuStringBuf GuStringBuf;
 GuStringBuf*
 gu_string_buf(GuPool* pool);
 
-GuWriter*
-gu_string_buf_writer(GuStringBuf* sb);
+GuOut*
+gu_string_buf_out(GuStringBuf* sb);
 
 GuString
 gu_string_buf_freeze(GuStringBuf* sb, GuPool* pool);

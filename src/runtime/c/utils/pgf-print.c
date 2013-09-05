@@ -1,7 +1,6 @@
 #include <pgf/pgf.h>
 #include <pgf/data.h>
 
-#include <gu/dump.h>
 #include <gu/file.h>
 #include <gu/utf8.h>
 
@@ -30,9 +29,8 @@ int main(int argc, char* argv[]) {
 		goto fail_read;
 	}
 	GuOut* out = gu_file_out(stdout, pool);
-	GuWriter* wtr = gu_new_utf8_writer(out, pool);
-    pgf_print(pgf, wtr, err);
-	gu_writer_flush(wtr, err);
+    pgf_print(pgf, out, err);
+	gu_out_flush(out, err);
 fail_read:
 	gu_pool_free(pool);
 	return status;

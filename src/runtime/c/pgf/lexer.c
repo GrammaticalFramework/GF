@@ -1,11 +1,12 @@
 #include <gu/list.h>
+#include <gu/utf8.h>
 #include <pgf/pgf.h>
 #include <pgf/data.h>
 #include <wctype.h>
 
 typedef struct {
 	PgfLexer base;
-	GuReader* rdr;
+	GuIn* in;
 	GuPool* pool;
 	GuUCS ucs;
 } PgfSimpleLexer;
@@ -13,7 +14,7 @@ typedef struct {
 static void
 pgf_lexer_read_ucs(PgfSimpleLexer *lexer, GuExn* err)
 {
-	lexer->ucs = gu_read_ucs(lexer->rdr, err);
+	lexer->ucs = gu_in_utf8(lexer->in, err);
 	if (gu_exn_is_raised(err)) {
 		gu_exn_clear(err);
 		lexer->ucs = ' ';
@@ -27,10 +28,10 @@ pgf_simple_lexer_read_token(PgfLexer *base, GuExn* err)
 	GuPool* tmp_pool = gu_new_pool();
 
 	GuStringBuf* buf = gu_string_buf(tmp_pool);
-	GuWriter* wtr = gu_string_buf_writer(buf);
+	GuOut* out = gu_string_buf_out(buf);
 
 	while (iswspace(lexer->ucs)) {
-		lexer->ucs = gu_read_ucs(lexer->rdr, err);
+		lexer->ucs = gu_in_utf8(lexer->in, err);
 		if (gu_exn_is_raised(err))
 			goto stop;
 	}
@@ -40,7 +41,7 @@ pgf_simple_lexer_read_token(PgfLexer *base, GuExn* err)
 	    lexer->ucs == '_') {
 		int counter = 0;
 		do {
-			gu_ucs_write(lexer->ucs, wtr, err);
+			gu_out_utf8(lexer->ucs, out, err);
 			if (gu_exn_is_raised(err))
 				goto stop;
 			counter++;
@@ -48,7 +49,7 @@ pgf_simple_lexer_read_token(PgfLexer *base, GuExn* err)
 
 			if (lexer->ucs == '.' && counter < 4) {
 				// perhaps an abreviation
-				gu_ucs_write(lexer->ucs, wtr, err);
+				gu_out_utf8(lexer->ucs, out, err);
 				if (gu_exn_is_raised(err))
 					goto stop;
 				counter = 0;
@@ -59,7 +60,7 @@ pgf_simple_lexer_read_token(PgfLexer *base, GuExn* err)
 		         lexer->ucs == '_');
 	} else if (iswdigit(lexer->ucs) || lexer->ucs == '-') {
 		if (lexer->ucs == '-') {
-			gu_ucs_write(lexer->ucs, wtr, err);
+			gu_out_utf8(lexer->ucs, out, err);
 			if (gu_exn_is_raised(err))
 				goto stop;
 				
@@ -69,7 +70,7 @@ pgf_simple_lexer_read_token(PgfLexer *base, GuExn* err)
 		}
 
 		do {
-			gu_ucs_write(lexer->ucs, wtr, err);
+			gu_out_utf8(lexer->ucs, out, err);
 			if (gu_exn_is_raised(err))
 				goto stop;
 
@@ -77,20 +78,20 @@ pgf_simple_lexer_read_token(PgfLexer *base, GuExn* err)
 		} while (iswdigit(lexer->ucs));
 		
 		if (lexer->ucs == '.') {
-			gu_ucs_write(lexer->ucs, wtr, err);
+			gu_out_utf8(lexer->ucs, out, err);
 			if (gu_exn_is_raised(err))
 				goto stop;
 
 			pgf_lexer_read_ucs(lexer, err);
 			while (iswdigit(lexer->ucs)) {
-				gu_ucs_write(lexer->ucs, wtr, err);
+				gu_out_utf8(lexer->ucs, out, err);
 				if (gu_exn_is_raised(err))
 					goto stop;
 				pgf_lexer_read_ucs(lexer, err);
 			}
 		}
 	} else {
-		gu_ucs_write(lexer->ucs, wtr, err);
+		gu_out_utf8(lexer->ucs, out, err);
 		if (gu_exn_is_raised(err))
 			goto stop;
 		pgf_lexer_read_ucs(lexer, err);
@@ -104,12 +105,12 @@ stop:
 }
 
 PgfLexer*
-pgf_new_simple_lexer(GuReader *rdr, GuPool *pool)
+pgf_new_simple_lexer(GuIn *in, GuPool *pool)
 {
 	PgfSimpleLexer* lexer = gu_new(PgfSimpleLexer, pool);
 	lexer->base.read_token = pgf_simple_lexer_read_token;
 	lexer->base.tok = gu_empty_string;
-	lexer->rdr = rdr;
+	lexer->in = in;
 	lexer->pool = pool;
 	lexer->ucs = ' ';	
 	return ((PgfLexer*) lexer);

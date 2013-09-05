@@ -91,10 +91,9 @@ render(PgfPGF* pgf, PgfExpr expr, GuPool* pool)
 		/* Parent. */
 		FILE* fstream = fdopen(pc[1], "w");
 		GuOut* out = gu_file_out(fstream, pool);
-		GuWriter* wtr = gu_new_utf8_writer(out, pool);
 		GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
 
-		pgf_graphviz_abstract_tree(pgf, expr, wtr, err);
+		pgf_graphviz_abstract_tree(pgf, expr, out, err);
 		fclose(fstream);
 
 		close(cp[1]);
@@ -138,11 +137,11 @@ static void
 linearize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
 {
 	GuStringBuf* sbuf = gu_string_buf(pool);
-	GuWriter* wtr = gu_string_buf_writer(sbuf);
+	GuOut* out = gu_string_buf_out(sbuf);
 
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
 	
-	pgf_linearize(concr, expr, wtr, err);
+	pgf_linearize(concr, expr, out, err);
 	
 	GuString s = gu_string_buf_freeze(sbuf, pool);
 	put_gu_string(s);
