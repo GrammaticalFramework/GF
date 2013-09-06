@@ -22,7 +22,9 @@ public class PGF {
 	
 	public native Type getFunctionType(String fun);
 
-	public native Iterator<ExprProb> generate(Type type);
+	public Iterable<ExprProb> generateAll(String startCat) {
+		return new Generator(this, startCat);
+	}
 
 	public native Expr compute(Expr expr);
 

@@ -19,6 +19,14 @@ public class Test {
 		for (Map.Entry<String,Concr> entry : gr.getLanguages().entrySet()) {
 			System.out.println(entry.getKey()+" "+entry.getValue()+" "+entry.getValue().getName());
 		}
+		
+		int count = 10;
+		for (ExprProb ep : gr.generateAll("Phrase")) {
+			System.out.println(ep.getExpr());
+			
+			if (count-- <= 0)
+				break;
+		}
 
 		Concr eng = gr.getLanguages().get("PhrasebookEng");
 		Concr ger = gr.getLanguages().get("PhrasebookGer");

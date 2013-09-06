@@ -395,3 +395,25 @@ Java_org_grammaticalframework_pgf_Expr_showExpr(JNIEnv* env, jclass clazz, jlong
 	gu_pool_free(tmp_pool);
 	return jstr;
 }
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_Generator_generateAll(JNIEnv* env, jclass clazz, jobject jpgf, jstring jstartCat)
+{
+	GuPool* pool = gu_new_pool();
+
+    GuString startCat = j2gu_string(env, jstartCat, pool);
+
+	GuEnum* res =
+		pgf_generate_all(get_ref(env, jpgf), startCat, pool);
+	if (res == NULL) {
+		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The generation failed");
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	jclass expiter_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ExprIterator");
+	jmethodID constrId = (*env)->GetMethodID(env, expiter_class, "<init>", "(Lorg/grammaticalframework/pgf/PGF;JJJ)V");
+	jobject jexpiter = (*env)->NewObject(env, expiter_class, constrId, jpgf, p2l(pool), p2l(pool), p2l(res));
+
+	return jexpiter;
+}
