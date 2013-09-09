@@ -15,8 +15,8 @@ import GF.Compile.Compute.Predef(predef,predefName,delta)
 import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
 import GF.Data.Operations(Err,err,errIn,maybeErr,combinations,mapPairsM)
 import GF.Data.Utilities(mapFst,mapSnd,mapBoth,apBoth,apSnd)
-import Control.Monad(ap,liftM,liftM2,mplus)
-import Data.List (findIndex,intersect,isInfixOf,nub,elemIndex)
+import Control.Monad(ap,liftM,liftM2,mplus,unless)
+import Data.List (findIndex,intersect,isInfixOf,nub,elemIndex,(\\))
 import Data.Char (isUpper,toUpper,toLower)
 import Text.PrettyPrint
 import qualified Data.ByteString.Char8 as BS
@@ -325,7 +325,11 @@ valueTable env i cs =
               _ -> False
 
     valueCase (p,t) = do p' <- measurePatt # inlinePattMacro p
-                         let pvs = pattVars p'
+                         let allpvs = allPattVars p'
+                             pvs = nub allpvs
+                             dups = allpvs \\ pvs
+                         unless (null dups) $
+                           fail $ "Pattern is not linear: "++show p'
                          vt <- value (extend pvs env) t
                          return (p', \ vs -> Bind $ \ bs -> vt (push' p' bs pvs vs))
 --{-
