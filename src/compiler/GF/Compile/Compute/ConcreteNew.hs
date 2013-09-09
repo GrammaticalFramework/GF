@@ -329,7 +329,8 @@ valueTable env i cs =
                              pvs = nub allpvs
                              dups = allpvs \\ pvs
                          unless (null dups) $
-                           fail $ "Pattern is not linear: "++show p'
+                           fail.render $ hang (text "Pattern is not linear:") 4
+                                              (ppPatt Unqualified 0 p')
                          vt <- value (extend pvs env) t
                          return (p', \ vs -> Bind $ \ bs -> vt (push' p' bs pvs vs))
 --{-
