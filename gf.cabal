@@ -184,7 +184,7 @@ executable gf
     GF.Grammar.Binary
     GF.Compile.Update
     GF.Compile.CheckGrammar
-    GF.Compile.Refresh
+--  GF.Compile.Refresh
     GF.Compile.Rename
     GF.Compile.ReadFiles
     GF.Compile.GrammarToPGF

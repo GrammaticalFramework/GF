@@ -12,10 +12,10 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Compile.Refresh (refreshTerm, refreshTermN,
-		refreshModule
+module GF.Compile.Refresh ({-refreshTermN, refreshTerm,
+		refreshModule-}
 	       ) where
-
+{-
 import GF.Data.Operations
 import GF.Grammar.Grammar
 import GF.Infra.Ident
@@ -143,3 +143,4 @@ inBlockSTM mo = do
   return v
 
 
+-}
