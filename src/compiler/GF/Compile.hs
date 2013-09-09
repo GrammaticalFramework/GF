@@ -12,7 +12,7 @@ import GF.Compile.GeneratePMCFG
 import GF.Compile.GrammarToPGF
 import GF.Compile.ReadFiles
 import GF.Compile.Update
-import GF.Compile.Refresh
+--import GF.Compile.Refresh
 import GF.Compile.Coding
 import GF.Compile.Tags
 
@@ -196,8 +196,10 @@ compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
       if tagsFlag then generateTags k mo3 else compileCompleteModule k mo3
   where
     compileCompleteModule k mo3 = do
-      (k',mo3r:_) <- runPass2 (head.snd) Refresh "refreshing" $
-                     refreshModule (k,gr) mo3
+--    (k',mo3r:_) <- runPass2 (head.snd) Refresh "refreshing" $
+--                   refreshModule (k,gr) mo3
+      let k' = k
+          mo3r = mo3
       mo4 <- runPass2 id Optimize "optimizing" $ optimizeModule opts gr mo3r
       mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
              then runPass2' "generating PMCFG" $ generatePMCFG opts gr mb_gfFile mo4

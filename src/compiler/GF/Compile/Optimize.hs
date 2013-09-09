@@ -21,7 +21,7 @@ import GF.Grammar.Printer
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
-import GF.Compile.Refresh
+--import GF.Compile.Refresh
 import GF.Compile.Compute.Concrete
 import GF.Compile.CheckGrammar
 import GF.Compile.Update

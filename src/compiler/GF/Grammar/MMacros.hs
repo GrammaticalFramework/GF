@@ -20,7 +20,7 @@ import GF.Data.Operations
 import GF.Grammar.Grammar
 import GF.Grammar.Printer
 import GF.Infra.Ident
-import GF.Compile.Refresh
+--import GF.Compile.Refresh
 import GF.Grammar.Values
 ----import GrammarST
 import GF.Grammar.Macros
@@ -160,12 +160,12 @@ substitute v s = return . substTerm v s
 alphaConv :: [Var] -> (Var,Var) -> Exp -> Err Exp ---
 alphaConv oldvars (x,x') = substitute (x:x':oldvars) [(x,Vr x')]
 
-alphaFresh :: [Var] -> Exp -> Err Exp
-alphaFresh vs = refreshTermN $ maxVarIndex vs
+--alphaFresh :: [Var] -> Exp -> Err Exp
+--alphaFresh vs = refreshTermN $ maxVarIndex vs
 
 -- | done in a state monad
-alphaFreshAll :: [Var] -> [Exp] -> Err [Exp]
-alphaFreshAll vs = mapM $ alphaFresh vs 
+--alphaFreshAll :: [Var] -> [Exp] -> Err [Exp]
+--alphaFreshAll vs = mapM $ alphaFresh vs
 
 -- | for display
 val2exp :: Val -> Err Exp

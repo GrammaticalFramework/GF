@@ -25,7 +25,7 @@ import GF.Infra.CheckM
 import GF.Grammar
 import GF.Grammar.Lookup
 import GF.Grammar.Unify
-import GF.Compile.Refresh
+--import GF.Compile.Refresh
 import GF.Compile.Compute.Abstract
 import GF.Compile.TypeCheck.TC
 
