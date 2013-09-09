@@ -42,14 +42,15 @@ oper
 
   mkNending : Str -> Str -> Gender ->  N = \x,n,g ->
         case <x,n> of {
-          <c + "ος", c + "ων"> => mkNoun_anthropos x  n g ;
-          <c + "η", c + "εις"> => mkNoun_kivernisi x  n g ;
-          <c + "ης", c + "ηδες"> => mkNoun_fournaris x  n g ;
-          <c + "ας", c + "ων"> => mkNoun_filakas x  n g ;
-          <c + "ο", c + "ων"> => mkNoun_prosopo x  n g ;
-          <c + ("ώς" | "ός" | "ως" ) , c + ("ος"|"ός" ) > => mkNoun_fws x  n g ;
-          <c + ("μα" | "ιμο" ), c + "ατα"> => mkNoun_provlima x  n g ;
-          <c + "ος", c + "η"> => mkNoun_megethos x  n g 
+          -- all of these were nonlinear
+          <c + "ος", c2 + "ων"> => mkNoun_anthropos x  n g ;
+          <c + "η", c2 + "εις"> => mkNoun_kivernisi x  n g ;
+          <c + "ης", c2 + "ηδες"> => mkNoun_fournaris x  n g ;
+          <c + "ας", c2 + "ων"> => mkNoun_filakas x  n g ;
+          <c + "ο", c2 + "ων"> => mkNoun_prosopo x  n g ;
+          <c + ("ώς" | "ός" | "ως" ) , c2 + ("ος"|"ός" ) > => mkNoun_fws x  n g ;
+          <c + ("μα" | "ιμο" ), c2 + "ατα"> => mkNoun_provlima x  n g ;
+          <c + "ος", c2 + "η"> => mkNoun_megethos x  n g 
         }  ** {lock_N = <>} ;
    
 
@@ -128,9 +129,9 @@ oper
 
       mkA1 : Str -> Str ->  A = \x,n ->
           case <x,n> of {
-            <c + "ης", c + "ες"> => mkAdjective4 x n ; 
-            <c + "ων", c + "όντων"> => mkAdjective3 x n ;
-            <c + "ύς", c + "έως"> => mkAdjectiveIr x n  
+            <c + "ης", c2 + "ες"> => mkAdjective4 x n ;  -- was nonlinear
+            <c + "ων", c2 + "όντων"> => mkAdjective3 x n ;  -- was nonlinear
+            <c + "ύς", c2 + "έως"> => mkAdjectiveIr x n    -- was nonlinear
             }  ** {lock_A = <>} ;
 
 

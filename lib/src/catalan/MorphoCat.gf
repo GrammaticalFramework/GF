@@ -236,7 +236,7 @@ oper
   mkAdj2Reg : Str -> Str -> Adj = \petit,petita ->
     case <petit,petita> of {
         <_, _ + ("b"|"c"|"d"|"e"|"f"|"g"|"h"|"i"|"j"|"k"|"l"|"m"|"n"|"o"|"p"|"q"|"r"|"s"|"t"|"u"|"v"|"x"|"y"|"z")> => adjFidel petit ; --feminine doesn't end in "a"
-        <p@(_ + ("t"|"l"|"ç")), p+"a"> => adjPrim petit ; --1) petit~petita 2) ridícul~ridícula, dolç~dolça
+        <p@(_ + ("t"|"l"|"ç")), p2+"a"> => adjPrim petit ; --1) petit~petita 2) ridícul~ridícula, dolç~dolça -- was nonlinear
         <_ + "ig", _> => adjIg petit petita ; --lleig~letja
         <_, _+ "na">  => adjVn petit ; --pla~plana
         <_, _ + ("à"|"é"|"è"|"í"|"ó"|"ò"|"ú") + _> => adjBlau petit petita ; --diari~diària
