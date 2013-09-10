@@ -20,6 +20,7 @@ import GF.Infra.Option
 import GF.Grammar hiding (Env, mkRecord, mkTable)
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
+import GF.Grammar.Lockfield (isLockLabel)
 import GF.Data.BacktrackM
 import GF.Data.Operations
 import GF.Infra.UseIO (IOE)
@@ -438,7 +439,8 @@ convertArg opts ty nr path              = do
   return (CPar value)
 
 convertRec opts CNil (RecType rs) record =
-  mkRecord (map (\(lbl,ctype) -> (lbl,convertTerm opts CNil ctype (projectRec lbl record))) rs)
+    mkRecord [(lbl,convertTerm opts CNil ctype (proj lbl))|(lbl,ctype)<-rs]
+  where proj lbl = if isLockLabel lbl then R [] else projectRec lbl record
 convertRec opts (CProj lbl path) ctype record =
   convertTerm opts path ctype (projectRec lbl record)
 convertRec opts _ ctype _ = bug ("convertRec: "++show ctype)
