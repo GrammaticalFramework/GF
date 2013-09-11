@@ -102,7 +102,6 @@ typedef enum {
 /* match vfpv3 result */
 #define NAN_TO_INT_IS_ZERO		1
 
-#define jit_thumb_p()			jit_cpu.thumb
 #define jit_armv6_p()			(jit_cpu.version >= 6)
 typedef union _jit_thumb_t {
     int		i;
@@ -110,13 +109,13 @@ typedef union _jit_thumb_t {
 } jit_thumb_t;
 
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-#  define _jit_WW(i, j)			do { _jit_W(j); _jit_W(i); } while (0)
-#  define code2thumb(t0, t1, c0, c1)	do { t1 = c0; t0 = c1; } while (0)
-#  define thumb2code(t0, t1, c0, c1)	do { c0 = t1; c1 = t0; } while (0)
+#  define _jit_WW(i, j)			(_jit_W(j), _jit_W(i))
+#  define code2thumb(t0, t1, c0, c1)	(t1 = c0, t0 = c1)
+#  define thumb2code(t0, t1, c0, c1)	(c0 = t1, c1 = t0)
 #else
-#  define _jit_WW(i, j)			do { _jit_W(i); _jit_W(j); } while (0)
-#  define code2thumb(t0, t1, c0, c1)	do { t0 = c0; t1 = c1; } while (0)
-#  define thumb2code(t0, t1, c0, c1)	do { c0 = t0; c1 = t1; } while (0)
+#  define _jit_WW(i, j)			(_jit_W(i), _jit_W(j))
+#  define code2thumb(t0, t1, c0, c1)	(t0 = c0, t1 = c1)
+#  define thumb2code(t0, t1, c0, c1)	(c0 = t0, c1 = t1)
 #endif
 
 #define ARM_CC_EQ	0x00000000	/* Z=1 */
@@ -625,318 +624,111 @@ success:
     }
     imm = ((imm & 0x80) << 17) | ((imm & 0x70) << 12) | (imm & 0x0f);
     code |= mode | imm;
-    if (jit_thumb_p()) {
+#ifdef USE_THUMB_CODE
 	if (code & 0x1000000)
 	    code |= 0xff000000;
 	else
 	    code |= 0xef000000;
-    }
-    else
+#else
 	code |= ARM_CC_NV;
+#endif
     return (code);
 }
 
-#define arm_vodi(oi,r0)		_arm_vodi(_jit,oi,r0)
-__jit_inline void
-_arm_vodi(jit_state_t _jit, int oi, int r0)
-{
-    jit_thumb_t	thumb;
-    assert(!(oi  & 0x0000f000));
-    assert(!(r0 & 1));	r0 >>= 1;
-    thumb.i = oi|(_u4(r0)<<12);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#ifdef USE_THUMB_CODE
+#define _jit_TI(I) (_jitl.thumb.i = (I), _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
+#else
+#define _jit_TI(I) _jit_I(I)
+#endif
 
-#define arm_voqi(oi,r0)		_arm_voqi(_jit,oi,r0)
-__jit_inline void
-_arm_voqi(jit_state_t _jit, int oi, int r0)
-{
-    jit_thumb_t	thumb;
-    assert(!(oi  & 0x0000f000));
-    assert(!(r0 & 3));	r0 >>= 1;
-    thumb.i = oi|(_u4(r0)<<12);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vodi(oi,r0) \
+    (assert(!((oi) & 0x0000f000) && !((r0) & 1)), \
+     _jit_TI((oi)|(_u4((r0) >> 1)<<12)))
 
-#define arm_vo_ss(o,r0,r1)	 _arm_cc_vo_ss(_jit,ARM_CC_NV,o,r0,r1)
-#define arm_cc_vo_ss(cc,o,r0,r1) _arm_cc_vo_ss(_jit,cc,o,r0,r1)
-__jit_inline void
-_arm_cc_vo_ss(jit_state_t _jit, int cc, int o, int r0, int r1)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    if (r0 & 1)	o |= ARM_V_D;	r0 >>= 1;
-    if (r1 & 1)	o |= ARM_V_M;	r1 >>= 1;
-    thumb.i = cc|o|(_u4(r0)<<12)|_u4(r1);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_voqi(oi,r0) \
+    (assert(!((oi) & 0x0000f000) && !((r0) & 3)), \
+     _jit_TI((oi)|(_u4((r0) >> 1)<<12)))
 
-#define arm_vo_dd(o,r0,r1)	 _arm_cc_vo_dd(_jit,ARM_CC_NV,o,r0,r1)
-#define arm_cc_vo_dd(cc,o,r0,r1) _arm_cc_vo_dd(_jit,cc,o,r0,r1)
-__jit_inline void
-_arm_cc_vo_dd(jit_state_t _jit, int cc, int o, int r0, int r1)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    assert(!(r0 & 1) && !(r1 & 1));
-    r0 >>= 1;	r1 >>= 1;
-    thumb.i = cc|o|(_u4(r0)<<12)|_u4(r1);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vo_ss(o,r0,r1)	 _arm_cc_vo_ss(ARM_CC_NV,o,r0,r1)
+#define arm_cc_vo_ss(cc,o,r0,r1) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf000f00f)), \
+     _jit_TI((cc)|(o) | (((r0) & 1) ? ARM_V_D : 0) | (((r1) & 1) ? ARM_V_M : 0)|(_u4((r0) >> 1)<<12)|_u4((r1) >> 1)))
 
-#define arm_vo_qd(o,r0,r1)	 _arm_cc_vo_qd(_jit,ARM_CC_NV,o,r0,r1)
-#define arm_cc_vo_qd(cc,o,r0,r1) _arm_cc_vo_qd(_jit,cc,o,r0,r1)
-__jit_inline void
-_arm_cc_vo_qd(jit_state_t _jit, int cc, int o, int r0, int r1)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    assert(!(r0 & 3) && !(r1 & 1));
-    r0 >>= 1;	r1 >>= 1;
-    thumb.i = cc|o|(_u4(r0)<<12)|_u4(r1);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vo_dd(o,r0,r1)	 _arm_cc_vo_dd(ARM_CC_NV,o,r0,r1)
+#define arm_cc_vo_dd(cc,o,r0,r1) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf000f00f) && !((r0) & 1) && !((r1) & 1)), \
+     _jit_TI((cc)|(o)|(_u4((r0) >> 1)<<12)|_u4((r1) >> 1)))
 
-#define arm_vo_qq(o,r0,r1)	 _arm_cc_vo_qq(_jit,ARM_CC_NV,o,r0,r1)
-#define arm_cc_vo_qq(cc,o,r0,r1) _arm_cc_vo_qq(_jit,cc,o,r0,r1)
-__jit_inline void
-_arm_cc_vo_qq(jit_state_t _jit, int cc, int o, int r0, int r1)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    assert(!(r0 & 3) && !(r1 & 3));
-    r0 >>= 1;	r1 >>= 1;
-    thumb.i = cc|o|(_u4(r0)<<12)|_u4(r1);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vo_qd(o,r0,r1)	 arm_cc_vo_qd(ARM_CC_NV,o,r0,r1)
+#define arm_cc_vo_qd(cc,o,r0,r1) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf000f00f) && !((r0) & 3) && !((r1) & 1)), \
+     _jit_TI((cc)|(o)|(_u4((r0) >> 1)<<12)|_u4((r1) >> 1)))
 
-#define arm_vorr_(o,r0,r1)	 _arm_cc_vorr_(_jit,ARM_CC_NV,o,r0,r1)
-#define arm_cc_vorr_(cc,o,r0,r1) _arm_cc_vorr_(_jit,cc,o,r0,r1)
-__jit_inline void
-_arm_cc_vorr_(jit_state_t _jit, int cc, int o, int r0, int r1)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vo_qq(o,r0,r1)	 arm_cc_vo_qq(ARM_CC_NV,o,r0,r1)
+#define arm_cc_vo_qq(cc,o,r0,r1) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf000f00f) && !((r0) & 3) && !((r1) & 3)), \
+     _jit_TI((cc)|(o)|(_u4((r0) >> 1)<<12)|_u4((r1) >> 1)))
 
-#define arm_vors_(o,r0,r1)	 _arm_cc_vors_(_jit,ARM_CC_NV,o,r0,r1)
-#define arm_cc_vors_(cc,o,r0,r1) _arm_cc_vors_(_jit,cc,o,r0,r1)
-__jit_inline void
-_arm_cc_vors_(jit_state_t _jit, int cc, int o, int r0, int r1)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    if (r1 & 1)	o |= ARM_V_N;	r1 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vorr_(o,r0,r1)	 arm_cc_vorr_(ARM_CC_NV,o,r0,r1)
+#define arm_cc_vorr_(cc,o,r0,r1) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf000f00f)), \
+     _jit_TI((cc)|(o)|(_u4(r1)<<16)|(_u4(r0)<<12)))
 
-#define arm_vorv_(o,r0,r1)	 _arm_cc_vorv_(_jit,ARM_CC_NV,o,r0,r1)
-#define arm_cc_vorv_(cc,o,r0,r1) _arm_cc_vorv_(_jit,cc,o,r0,r1)
-__jit_inline void
-_arm_cc_vorv_(jit_state_t _jit, int cc, int o, int r0, int r1)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    if (r1 & 1)	cc |= ARM_V_M;	r1 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vors_(o,r0,r1)	 arm_cc_vors_(ARM_CC_NV,o,r0,r1)
+#define arm_cc_vors_(cc,o,r0,r1) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf000f00f)), \
+     _jit_TI((cc)|(o)|(((r1) & 1) ? ARM_V_N : 0)|(_u4(r1 >> 1)<<16)|(_u4(r0)<<12)))
 
-#define arm_vori_(o,r0,r1)	 _arm_cc_vori_(_jit,ARM_CC_NV,o,r0,r1)
-#define arm_cc_vori_(cc,o,r0,r1) _arm_cc_vori_(_jit,cc,o,r0,r1)
-__jit_inline void
-_arm_cc_vori_(jit_state_t _jit, int cc, int o, int r0, int r1)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    /* use same bit pattern, to set opc1... */
-    if (r1 & 1)	o |= ARM_V_I32;	r1 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vorv_(o,r0,r1)	 arm_cc_vorv_(ARM_CC_NV,o,r0,r1)
+#define arm_cc_vorv_(cc,o,r0,r1) \
+    (assert(!((cc) & 0x0fffffff) && ((o) & 0xf000f00f)), \
+     _jit_TI((cc)|(o)|(((r1) & 1) ? ARM_V_M : 0)|(_u4((r1) >> 1)<<16)|(_u4(r0)<<12)))
 
-#define arm_vorrd(o,r0,r1,r2)	    _arm_cc_vorrd(_jit,ARM_CC_NV,o,r0,r1,r2)
-#define arm_cc_vorrd(cc,o,r0,r1,r2) _arm_cc_vorrd(_jit,cc,o,r0,r1,r2)
-__jit_inline void
-_arm_cc_vorrd(jit_state_t _jit, int cc, int o, int r0, int r1, int r2)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff00f));
-    assert(!(r2 & 1));
-    r2 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12)|_u4(r2);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vori_(o,r0,r1)	 arm_cc_vori_(ARM_CC_NV,o,r0,r1)
+#define arm_cc_vori_(cc,o,r0,r1) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf000f00f)), \
+     /* use same bit pattern, to set opc1... */ \
+     _jit_TI((cc)|(o)|((r1 & 1) ? ARM_V_I32 : 0)|(_u4((r1) >> 1)<<16)|(_u4(r0)<<12)))
 
-#define arm_vosss(o,r0,r1,r2)	    _arm_cc_vosss(_jit,ARM_CC_NV,o,r0,r1,r2)
-#define arm_cc_vosss(cc,o,r0,r1,r2) _arm_cc_vosss(_jit,cc,o,r0,r1,r2)
-__jit_inline void
-_arm_cc_vosss(jit_state_t _jit, int cc, int o, int r0, int r1, int r2)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff00f));
-    if (r0 & 1)	o |= ARM_V_D;	r0 >>= 1;
-    if (r1 & 1)	o |= ARM_V_N;	r1 >>= 1;
-    if (r2 & 1)	o |= ARM_V_M;	r2 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12)|_u4(r2);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vorrd(o,r0,r1,r2)	    arm_cc_vorrd(ARM_CC_NV,o,r0,r1,r2)
+#define arm_cc_vorrd(cc,o,r0,r1,r2) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00ff00f) && !((r2) & 1)), \
+     _jit_TI((cc)|(o)|(_u4(r1)<<16)|(_u4(r0)<<12)|_u4((r2) >> 1)))
 
-#define arm_voddd(o,r0,r1,r2)	    _arm_cc_voddd(_jit,ARM_CC_NV,o,r0,r1,r2)
-#define arm_cc_voddd(cc,o,r0,r1,r2) _arm_cc_voddd(_jit,cc,o,r0,r1,r2)
-__jit_inline void
-_arm_cc_voddd(jit_state_t _jit, int cc, int o, int r0, int r1, int r2)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff00f));
-    assert(!(r0 & 1) && !(r1 & 1) && !(r2 & 1));
-    r0 >>= 1;	r1 >>= 1;	r2 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12)|_u4(r2);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_vosss(o,r0,r1,r2)	    arm_cc_vosss(ARM_CC_NV,o,r0,r1,r2)
+#define arm_cc_vosss(cc,o,r0,r1,r2) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00ff00f)), \
+     _jit_TI((cc)|(o)|(((r0) & 1) ? ARM_V_D : 0)|(((r1) & 1) ? ARM_V_N : 0)|(((r2) & 1) ? ARM_V_M : 0)|(_u4((r1) >> 1)<<16)|(_u4((r0) >> 1)<<12)|_u4((r2) >> 1)))
 
-#define arm_voqdd(o,r0,r1,r2)	    _arm_cc_voqdd(_jit,ARM_CC_NV,o,r0,r1,r2)
-#define arm_cc_voqdd(cc,o,r0,r1,r2) _arm_cc_voqdd(_jit,cc,o,r0,r1,r2)
-__jit_inline void
-_arm_cc_voqdd(jit_state_t _jit, int cc, int o, int r0, int r1, int r2)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff00f));
-    assert(!(r0 & 3) && !(r1 & 1) && !(r2 & 1));
-    r0 >>= 1;	r1 >>= 1;	r2 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12)|_u4(r2);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_voddd(o,r0,r1,r2)	    arm_cc_voddd(ARM_CC_NV,o,r0,r1,r2)
+#define arm_cc_voddd(cc,o,r0,r1,r2) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00ff00f) && !((r0) & 1) && !((r1) & 1) && !((r2) & 1)), \
+     _jit_TI((cc)|(o)|(_u4((r1) >> 1)<<16)|(_u4((r0) >> 1)<<12)|_u4((r2) >> 1)))
 
-#define arm_voqqd(o,r0,r1,r2)	    _arm_cc_voqqd(_jit,ARM_CC_NV,o,r0,r1,r2)
-#define arm_cc_voqqd(cc,o,r0,r1,r2) _arm_cc_voqqd(_jit,cc,o,r0,r1,r2)
-__jit_inline void
-_arm_cc_voqqd(jit_state_t _jit, int cc, int o, int r0, int r1, int r2)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff00f));
-    assert(!(r0 & 3) && !(r1 & 3) && !(r2 & 1));
-    r0 >>= 1;	r1 >>= 1;	r2 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12)|_u4(r2);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_voqdd(o,r0,r1,r2)	    arm_cc_voqdd(ARM_CC_NV,o,r0,r1,r2)
+#define arm_cc_voqdd(cc,o,r0,r1,r2) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00ff00f) && !((r0) & 3) && !((r1) & 1) && !((r2) & 1)), \
+     _jit_TI((cc)|(o)|(_u4((r1) >> 1)<<16)|(_u4((r0) >> 1)<<12)|_u4((r2) >> 1)))
 
-#define arm_voqqq(o,r0,r1,r2)	    _arm_cc_voqqq(_jit,ARM_CC_NV,o,r0,r1,r2)
-#define arm_cc_voqqq(cc,o,r0,r1,r2) _arm_cc_voqqq(_jit,cc,o,r0,r1,r2)
-__jit_inline void
-_arm_cc_voqqq(jit_state_t _jit, int cc, int o, int r0, int r1, int r2)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff00f));
-    assert(!(r0 & 3) && !(r1 & 3) && !(r2 & 3));
-    r0 >>= 1;	r1 >>= 1;	r2 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12)|_u4(r2);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_voqqd(o,r0,r1,r2)	    arm_cc_voqqd(ARM_CC_NV,o,r0,r1,r2)
+#define arm_cc_voqqd(cc,o,r0,r1,r2) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00ff00f) && !((r0) & 3) && !((r1) & 3) && !((r2) & 1)), \
+     _jit_TI((cc)|(o)|(_u4((r1) >> 1)<<16)|(_u4((r0) >> 1)<<12)|_u4((r2) >> 1)))
 
-#define arm_cc_vldst(cc,o,r0,r1,i0) _arm_cc_vldst(_jit,cc,o,r0,r1,i0)
-__jit_inline void
-_arm_cc_vldst(jit_state_t _jit, int cc, int o, int r0, int r1, int i0)
-{
-    jit_thumb_t	thumb;
-    /* i0 << 2 is byte offset */
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff0ff));
-    if (r0 & 1) {
-	assert(!(o & ARM_V_F64));
-	o |= ARM_V_D;
-    }
-    r0 >>= 1;
-    thumb.i = cc|o|(_u4(r1)<<16)|(_u4(r0)<<12)|_u8(i0);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_voqqq(o,r0,r1,r2)	    arm_cc_voqqq(ARM_CC_NV,o,r0,r1,r2)
+#define arm_cc_voqqq(cc,o,r0,r1,r2) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00ff00f) && !((r0) & 3) && !((r1) & 3) && !((r2) & 3)), \
+     _jit_TI((cc)|(o)|(_u4((r1) >> 1)<<16)|(_u4((r0) >> 1)<<12)|_u4((r2) >> 1)))
 
-#define arm_cc_vorsl(cc,o,r0,r1,i0) _arm_cc_vorsl(_jit,cc,o,r0,r1,i0)
-__jit_inline void
-_arm_cc_vorsl(jit_state_t _jit, int cc, int o, int r0, int r1, int i0)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff0ff));
-    /* save i0 double precision registers */
-    if (o & ARM_V_F64)		i0 <<= 1;
-    assert(i0 && !(i0 & 1) && r1 + i0 <= 32);
-    /* if (r1 & 1) cc & ARM_V_F64 must be false */
-    if (r1 & 1)	o |= ARM_V_D;	r1 >>= 1;
-    thumb.i = cc|o|(_u4(r0)<<16)|(_u4(r1)<<12)|_u8(i0);
-    if (jit_thumb_p())
-	_jit_WW(thumb.s[0], thumb.s[1]);
-    else
-	_jit_I(thumb.i);
-}
+#define arm_cc_vldst(cc,o,r0,r1,i0) \
+    /* i0 << 2 is byte offset */ \
+    (assert(!((cc) & 0x0fffffff) && !((o)  & 0xf00ff0ff) && (!((r0) & 1) | !((o) & ARM_V_F64))), \
+     _jit_TI((cc)|(o)|(((r0) & 1) ? ARM_V_D : 0)|(_u4(r1)<<16)|(_u4((r0) >> 1)<<12)|_u8(i0)))
+
+#define arm_cc_vorsl(cc,o,r0,r1,i0) \
+    (assert(!((cc) & 0x0fffffff) && !((o)  & 0xf00ff0ff)), \
+     /* save i0 double precision registers */ \
+     _jit_TI((cc)|((o) | ((r1) & 1) ? ARM_V_D : 0)|(_u4(r0)<<16)|(_u4((r1) >> 1)<<12)|_u8(((o) & ARM_V_F64) ? ((i0) << 1) : (i0))))
 
 /***********************************************************************
  * VFPv2 and VFPv3 (encoding T2/A2) instructions
@@ -1247,117 +1039,53 @@ encode_arm_immediate(unsigned int v)
     return (-1);
 }
 
-#define corrr(cc,o,rn,rd,rm)		_corrr(_jit,cc,o,rn,rd,rm)
-__jit_inline void
-_corrr(jit_state_t _jit, int cc, int o, int rn, int rd, int rm)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o & 0xf00fff0f));
-    _jit_I(cc|o|(_u4(rn)<<16)|(_u4(rd)<<12)|_u4(rm));
-}
+#define corrr(cc,o,rn,rd,rm) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00fff0f)), \
+     _jit_I((cc)|(o)|(_u4(rn)<<16)|(_u4(rd)<<12)|_u4(rm)))
 
-#define corri(cc,o,rn,rd,im)		_corri(_jit,cc,o,rn,rd,im)
-__jit_inline void
-_corri(jit_state_t _jit, int cc, int o, int rn, int rd, int im)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00fffff));
-    assert(!(im & 0xfffff000));
-    _jit_I(cc|o|(_u4(rn)<<16)|(_u4(rd)<<12)|_u12(im));
-}
+#define corri(cc,o,rn,rd,im) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00fffff) && !((im) & 0xfffff000)), \
+     _jit_I((cc)|(o)|(_u4(rn)<<16)|(_u4(rd)<<12)|_u12(im)))
 
-#define coriw(cc,o,rd,im)			_coriw(_jit,cc,o,rd,im)
-__jit_inline void
-_coriw(jit_state_t _jit, int cc, int o, int rd, int im)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00fffff));
-    assert(!(im & 0xffff0000));
-    _jit_I(cc|o|((im&0xf000)<<4)|(_u4(rd)<<12)|(im&0xfff));
-}
+#define coriw(cc,o,rd,im) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00fffff) && !(im & 0xffff0000)), \
+     _jit_I((cc)|(o)|((im&0xf000)<<4)|(_u4(rd)<<12)|(im&0xfff)))
 
-#define corri8(cc,o,rn,rt,im)	_corri8(_jit,cc,o,rn,rt,im)
-__jit_inline void
-_corri8(jit_state_t _jit, int cc, int o, int rn, int rt, int im)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00fff0f));
-    assert(!(im & 0xffffff00));
-    _jit_I(cc|o|(_u4(rn)<<16)|(_u4(rt)<<12)|((im&0xf0)<<4)|(im&0x0f));
-}
+#define corri8(cc,o,rn,rt,im) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00fff0f) && !(im & 0xffffff00)), \
+     _jit_I((cc)|(o)|(_u4(rn)<<16)|(_u4(rt)<<12)|((im&0xf0)<<4)|(im&0x0f)))
 
-#define corrrr(cc,o,rh,rl,rm,rn) _corrrr(_jit,cc,o,rh,rl,rm,rn)
-__jit_inline void
-_corrrr(jit_state_t _jit, int cc, int o, int rh, int rl, int rm, int rn)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00fff0f));
-    _jit_I(cc|o|(_u4(rh)<<16)|(_u4(rl)<<12)|(_u4(rm)<<8)|_u4(rn));
-}
+#define corrrr(cc,o,rh,rl,rm,rn) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00fff0f)), \
+     _jit_I((cc)|(o)|(_u4(rh)<<16)|(_u4(rl)<<12)|(_u4(rm)<<8)|_u4(rn)))
 
-#define corrrs(cc,o,rn,rd,rm,im)	_corrrs(_jit,cc,o,rn,rd,rm,im)
-__jit_inline void
-_corrrs(jit_state_t _jit, int cc, int o, int rn, int rd, int rm, int im)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000ff8f));
-    _jit_I(cc|o|(_u4(rd)<<12)|(_u4(rn)<<16)|(im<<7)|_u4(rm));
-}
+#define corrrs(cc,o,rn,rd,rm,im) \
+    (assert(!((cc) & 0x0fffffff) && !((o)  & 0xf000ff8f)), \
+     _jit_I((cc)|(o)|(_u4(rd)<<12)|(_u4(rn)<<16)|(im<<7)|_u4(rm)))
 
-#define cshift(cc,o,rd,rm,rn,im)	_cshift(_jit,cc,o,rd,rm,rn,im)
-__jit_inline void
-_cshift(jit_state_t _jit, int cc, int o, int rd, int rm, int rn, int im)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xffe0ff8f));
-    assert(((_u4(rm)<<8)&(im<<7)) == 0);
-    _jit_I(cc|ARM_SHIFT|o|(_u4(rd)<<12)|(_u4(rm)<<8)|(im<<7)|_u4(rn));
-}
+#define cshift(cc,o,rd,rm,rn,im) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xffe0ff8f) && ((_u4(rm)<<8)&(im<<7)) == 0), \
+     _jit_I((cc)|ARM_SHIFT|(o)|(_u4(rd)<<12)|(_u4(rm)<<8)|(im<<7)|_u4(rn)))
 
-#define cb(cc,o,im)			_cb(_jit,cc,o,im)
-__jit_inline void
-_cb(jit_state_t _jit, int cc, int o, int im)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf0ffffff));
-    _jit_I(cc|o|_u24(im));
-}
+#define cb(cc,o,im) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf0ffffff)), \
+     _jit_I((cc)|(o)|_u24(im)))
 
-#define cbx(cc,o,rm)			_cbx(_jit,cc,o,rm)
-__jit_inline void
-_cbx(jit_state_t _jit, int cc, int o, int rm)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000000f));
-    _jit_I(cc|o|_u4(rm));
-}
+#define cbx(cc,o,rm) \
+    (assert(!((cc) & 0x0fffffff) && !((o)  & 0xf000000f)), \
+     _jit_I((cc)|(o)|_u4(rm)))
 
-#define corl(cc,o,r0,i0)		_corl(_jit,cc,o,r0,i0)
-__jit_inline void
-_corl(jit_state_t _jit, int cc, int o, int r0, int i0)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00fffff));
-    _jit_I(cc|o|(_u4(r0)<<16)|_u16(i0));
-}
+#define corl(cc,o,r0,i0) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00fffff)), \
+     _jit_I((cc)|(o)|(_u4(r0)<<16)|_u16(i0)))
 
-#define c6orr(cc,o,rd,rm)		_c6orr(_jit,cc,o,rd,rm)
-__jit_inline void
-_c6orr(jit_state_t _jit, int cc, int o, int rd, int rm)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf000f00f));
-    _jit_I(cc|o|(_u4(rd)<<12)|_u4(rm));
-}
+#define c6orr(cc,o,rd,rm) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf000f00f)), \
+     _jit_I((cc)|(o)|(_u4(rd)<<12)|_u4(rm)))
 
-#define arm_cc_pkh(cc,o,rn,rd,rm,im)	_arm_cc_pkh(_jit,cc,o,rn,rd,rm,im)
-__jit_inline void
-_arm_cc_pkh(jit_state_t _jit, int cc, int o, int rn, int rd, int rm, int im)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(!(o  & 0xf00ff00f));
-    _jit_I(cc|o|(_u4(rn)<<16)|(_u4(rd)<<12)|(_u5(im)<<7)|_u4(rm));
-}
+#define arm_cc_pkh(cc,o,rn,rd,rm,im) \
+    (assert(!((cc) & 0x0fffffff) && !((o) & 0xf00ff00f)), \
+     _jit_I((cc)|(o)|(_u4(rn)<<16)|(_u4(rd)<<12)|(_u5(im)<<7)|_u4(rm)))
 
 
 #define _CC_MOV(cc,rd,rm)	corrr(cc,ARM_MOV,0,rd,rm)
@@ -1887,223 +1615,106 @@ encode_thumb_shift(int v, int type)
 }
 #endif
 
-#define thumb2_orri(o,rn,rd,im)		_torri(_jit,o,rn,rd,im)
-#define torri(o,rn,rt,im)		_torri(_jit,o,rn,rt,im)
-__jit_inline void
-_torri(jit_state_t _jit, int o, int rn, int rd, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o  & 0x0c0f7fff));
-    assert(!(im & 0xfbff8f00));
-    thumb.i = o|(_u4(rn)<<16)|(_u4(rd)<<8)|im;
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define thumb2_orri(o,rn,rd,im) torri(o,rn,rd,im)
+#define torri(o,rn,rd,im) \
+    (assert(!((o) & 0x0c0f7fff) && !((im) & 0xfbff8f00)), \
+     _jitl.thumb.i = ((o)|(_u4(rn)<<16)|(_u4(rd)<<8)|(im)), \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define torri8(o,rn,rt,im)		_torri8(_jit,o,rn,rt,im)
-__jit_inline void
-_torri8(jit_state_t _jit, int o, int rn, int rt, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o  & 0x000ff0ff));
-    assert(!(im & 0xffffff00));
-    thumb.i = o|(_u4(rn)<<16)|(_u4(rt)<<12)|im;
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define torri8(o,rn,rt,im) \
+    (assert(!((o) & 0x000ff0ff) && !((im) & 0xffffff00)), \
+     _jitl.thumb.i = ((o)|(_u4(rn)<<16)|(_u4(rt)<<12)|im), \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define torri12(o,rn,rt,im)		_torri12(_jit,o,rn,rt,im)
-__jit_inline void
-_torri12(jit_state_t _jit, int o, int rn, int rt, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o  & 0x000fffff));
-    assert(!(im & 0xfffff000));
-    thumb.i = o|(_u4(rn)<<16)|(_u4(rt)<<12)|im;
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define torri12(o,rn,rt,im) \
+    (assert(!((o) & 0x000fffff) && !((im) & 0xfffff000)), \
+     _jitl.thumb.i = ((o)|(_u4(rn)<<16)|(_u4(rt)<<12)|(im)), \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define toriw(o,rd,im)			_toriw(_jit,o,rd,im)
-__jit_inline void
-_toriw(jit_state_t _jit, int o, int rd, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o  & 0x40f7fff));
-    assert(!(im & 0xffff0000));
-    thumb.i = o|((im&0xf000)<<4)|((im&0x800)<<15)|((im&0x700)<<4)|(_u4(rd)<<8)|(im&0xff);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define toriw(o,rd,im) \
+    (assert(!((o) & 0x40f7fff) && !((im) & 0xffff0000)), \
+     _jitl.thumb.i = ((o)|(((im)&0xf000)<<4)|(((im)&0x800)<<15)|(((im)&0x700)<<4)|(_u4(rd)<<8)|((im)&0xff)), \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define torrr(o,rn,rd,rm)		_torrr(_jit,o,rn,rd,rm)
-__jit_inline void
-_torrr(jit_state_t _jit, int o, int rn, int rd, int rm)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0xf0f0f));
-    thumb.i = o|(_u4(rn)<<16)|(_u4(rd)<<8)|_u4(rm);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define torrr(o,rn,rd,rm) \
+    (assert(!((o) & 0xf0f0f)), \
+     _jit.jitl.thumb.i = ((o)|(_u4(rn)<<16)|(_u4(rd)<<8)|_u4(rm)), \
+     _jit_WW(_jit.jitl.thumb.s[0], _jit.jitl.thumb.s[1]))
 
-#define torrrs(o,rn,rd,rm,im)		_torrrs(_jit,o,rn,rd,rm,im)
-__jit_inline void
-_torrrs(jit_state_t _jit, int o, int rn, int rd, int rm, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o  & 0x000f0f0f));
-    assert(!(im & 0xffff8f0f));
-    thumb.i = o|(_u4(rn)<<16)|(_u4(rd)<<8)|im|_u4(rm);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define torrrs(o,rn,rd,rm,im) \
+    (assert(!((o) & 0x000f0f0f) && !((im) & 0xffff8f0f)), \
+     _jitl.thumb.i = ((o)|(_u4(rn)<<16)|(_u4(rd)<<8)|(im)|_u4(rm)), \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define torxr(o,rn,rt,rm)		_torxr(_jit,o,rn,rt,rm)
-__jit_inline void
-_torxr(jit_state_t _jit, int o, int rn, int rt, int rm)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0xf0f0f));
-    thumb.i = o|(_u4(rn)<<16)|(_u4(rt)<<12)|_u4(rm);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define torxr(o,rn,rt,rm) \
+    (assert(!((o) & 0xf0f0f)), \
+     _jitl.thumb.i = ((o)|(_u4(rn)<<16)|(_u4(rt)<<12)|_u4(rm)) \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define torrrr(o,rn,rl,rh,rm)		_torrrr(_jit,o,rn,rl,rh,rm)
-__jit_inline void
-_torrrr(jit_state_t _jit, int o, int rn, int rl, int rh, int rm)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0x000fff0f));
-    thumb.i = o|(_u4(rn)<<16)|(_u4(rl)<<12)|(_u4(rh)<<8)|_u4(rm);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define torrrr(o,rn,rl,rh,rm) \
+    (assert(!((o) & 0x000fff0f)), \
+     _jitl.thumb.i = ((o)|(_u4(rn)<<16)|(_u4(rl)<<12)|(_u4(rh)<<8)|_u4(rm)), \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define torrri8(o,rn,rt,rt2,im)		_torrri8(_jit,o,rn,rt,rt2,im)
-__jit_inline void
-_torrri8(jit_state_t _jit, int o, int rn, int rt, int rt2, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o  & 0x000fffff));
-    assert(!(im & 0xffffff00));
-    thumb.i = o|(_u4(rn)<<16)|(_u4(rt)<<12)|(_u4(rt2)<<8)|im;
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define torrri8(o,rn,rt,rt2,im) \
+    (assert(!((o) & 0x000fffff) && !((im) & 0xffffff00)), \
+     _jitl.thumb.i = ((o)|(_u4(rn)<<16)|(_u4(rt)<<12)|(_u4(rt2)<<8)|(im)), \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define tc8(cc,im)			_tc8(_jit,cc,im)
-__jit_inline void
-_tc8(jit_state_t _jit, int cc, int im)
-{
-    assert(!(cc & 0x0fffffff));
-    assert(cc != ARM_CC_AL && cc != ARM_CC_NV);
-    assert(_s8P(im));
-    _jit_W(THUMB_CC_B|(cc>>20)|(im&0xff));
-}
+#define tc8(cc,im) \
+    (assert(!((cc) & 0x0fffffff) && ((cc) != ARM_CC_AL) && ((cc) != ARM_CC_NV) && _s8P(im)), \
+     _jit_W(THUMB_CC_B|((cc)>>20)|((im)&0xff)))
 
-#define t11(im)				_t11(_jit,im)
-__jit_inline void
-_t11(jit_state_t _jit, int im)
-{
-    assert(!(im & 0xfffff800));
-    _jit_W(THUMB_B|im);
-}
+#define t11(im) \
+    (assert(!((im) & 0xfffff800)), \
+     _jit_W(THUMB_B|(im)))
 
-#define tcb(cc,im)			_tcb(_jit,cc,im)
-__jit_inline void
-_tcb(jit_state_t _jit, int cc, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(cc & 0xfffffff));
-    assert(cc != ARM_CC_AL && cc != ARM_CC_NV);
-    cc = ((unsigned)cc) >> 6;
-    assert(!(im & (THUMB2_CC_B|cc)));
-    thumb.i = THUMB2_CC_B|cc|im;
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define tcb(cc,im) \
+    (assert(!((cc) & 0xfffffff) && ((cc) != ARM_CC_AL) && ((cc) != ARM_CC_NV) && !((im) & (THUMB2_CC_B|(((unsigned)cc) >> 6)))), \
+     _jitl.thumb.i = THUMB2_CC_B|(((unsigned)(cc)) >> 6)|(im), \
+     _jit_WW(_jitl.thumb.s[0], _jitl.thumb.s[1]))
 
-#define blxi(im)				_blxi(_jit,im)
-__jit_inline void
-_blxi(jit_state_t _jit, int im)
-{
-    assert(!(im & 0xfe000000));
-    _jit_I(ARM_BLXI|im);
-}
+#define blxi(im) \
+    (assert(!((im) & 0xfe000000)), \
+     _jit_I(ARM_BLXI|(im)))
 
-#define tb(o,im)				_tb(_jit,o,im)
-__jit_inline void
-_tb(jit_state_t _jit, int o, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0x07ff2fff));
-    assert(!(o & im));
-    thumb.i = o|im;
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define tb(o,im) \
+    (assert(!((o) & 0x07ff2fff) && !((o) & (im))), \
+     jitl.thumb.i = (o)|(im), \
+     _jit_WW(thumb.s[0], thumb.s[1]))
 
-#define tshift(o,rd,rm,im)		_tshift(_jit,o,rd,rm,im)
-__jit_inline void
-_tshift(jit_state_t _jit, int o, int rd, int rm, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0x7fcf));
-    assert(im >= 0 && im < 32);
-    thumb.i = o|((im&0x1c)<<10)|(_u4(rd)<<8)|((im&3)<<6)|_u4(rm);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define tshift(o,rd,rm,im) \
+    (assert(!((o) & 0x7fcf) && ((im) >= 0) && ((im) < 32)), \
+     thumb.i = (o|(((im)&0x1c)<<10)|(_u4(rd)<<8)|(((im)&3)<<6)|_u4(rm)), \
+     _jit_WW(thumb.s[0], thumb.s[1]))
 
-#define thumb2_orrr(o,rn,rd,rm)		_thumb2_orrr(_jit,o,rn,rd,rm)
-__jit_inline void
-_thumb2_orrr(jit_state_t _jit, int o, int rn, int rd, int rm)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0x000f0f0f));
-    thumb.i = o | (_u4(rn)<<16) | (_u4(rd)<<8) | _u4(rm);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define thumb2_orrr(o,rn,rd,rm) \
+    (assert(!((o) & 0x000f0f0f)), \
+     thumb.i = (o) | (_u4(rn)<<16) | (_u4(rd)<<8) | _u4(rm), \
+     _jit_WW(thumb.s[0], thumb.s[1]))
 
-#define thumb2_bfx(o,rn,rd,lsb,width)	_thumb2_bfx(_jit,o,rn,rd,lsb,width)
-__jit_inline void
-_thumb2_bfx(jit_state_t _jit, int o, int rn, int rd, int lsb, int width)
-{
-    int		msb;
-    jit_thumb_t	thumb;
-    assert(!(o & 0x7fdf));
-    assert(lsb >= 0 && lsb < 32 && width >= 0 && width <= 32);
-    msb = lsb + width;
-    if (msb > 31)
-	msb = 31;
-    thumb.i = o | (_u4(rn) << 16) | (_u4(rd) << 8) |
-	      ((msb & 7) << 10) | ((msb & 3) << 5) | msb;
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define thumb2_bfx(o,rn,rd,lsb,width) \
+    (assert(!((o) & 0x7fdf) && ((lsb) >= 0) && ((lsb) < 32) && ((width) >= 0) && ((width) <= 32)), \
+     thumb.i = (o) | (_u4(rn) << 16) | (_u4(rd) << 8) | \
+	       (((((lsb) + (width) > 31) ? 31 : (lsb) + (width)) & 7) << 10) | \
+	       (((((lsb) + (width) > 31) ? 31 : (lsb) + (width)) & 3) << 5) | \
+	       (((lsb) + (width) > 31) ? 31 : (lsb) + (width)), \
+     _jit_WW(thumb.s[0], thumb.s[1]))
 
-#define thumb2_cbxz(o,rn,im)		_thumb2_cbxz(_jit,o,rn,im)
-__jit_inline void
-_thumb2_cbxz(jit_state_t _jit, int o, int rn, int im)
-{
-    assert(!(o & 0x2ff));
-    /* branch forward only */
-    assert(im >= 0 && im < 128 && !(im & 1));
-    im >>= 1;
-    _jit_W(o|((im&0x80)<<5)|((im&0x1f)<<3)|_u3(rn));
-}
+#define thumb2_cbxz(o,rn,im) \
+    (assert(!((o) & 0x2ff) && (im) >= 0 && (im) < 128 && !((im) & 1)), \
+     _jit_W((o)|((((im) >> 1)&0x80)<<5)|((((im) >> 1)&0x1f)<<3)|_u3(rn)))
 
-#define thumb2_dbg(h,l,im)		_thumb2_dbg(_jit,h,l,im)
-__jit_inline void
-_thumb2_dbg(jit_state_t _jit, int h, int l, int im)
-{
-    assert(!(h & ~0xffff));
-    assert(!(l & 0xffff000f));
-    _jit_WW(h, l | _u4(im));
-}
+#define thumb2_dbg(h,l,im) \
+    (assert(!((h) & ~0xffff) && !((l) & 0xffff000f)), \
+     _jit_WW((h), (l) | _u4(im)))
 
-#define tpp(o,im)			_tpp(_jit,o,im)
-__jit_inline void
-_tpp(jit_state_t _jit, int o, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o  & 0x0000ffff));
-    assert(!(im & 0xffff2000));
-    if (o == THUMB2_PUSH)
-	assert(!(im & 0x8000));
-    assert(__builtin_popcount(im & 0x1fff) > 1);
-    thumb.i = o|im;
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define tpp(o,im) \
+    (assert(!((o)  & 0x0000ffff) && !((im) & 0xffff2000) && \
+	       (!((o) == THUMB2_PUSH) || !((im) & 0x8000)) && \
+           (__builtin_popcount((im) & 0x1fff) > 1)), \
+     _jit.jitl.thumb.i = (o)|(im), \
+     _jit_WW(_jit.jitl.thumb.s[0], _jit.jitl.thumb.s[1]))
 
 #define THUMB2_IT			0
 #define THUMB2_ITT			1
@@ -2120,35 +1731,26 @@ _tpp(jit_state_t _jit, int o, int im)
 #define THUMB2_ITETE			12
 #define THUMB2_ITTEE			13
 #define THUMB2_ITEEE			14
-#define tcit(tc,it)			_tcit(_jit,tc,it)
-__jit_inline void
-_tcit(jit_state_t _jit, unsigned int tc, int it)
-{
-    int		c;
-    int		m;
-    c = (tc >> 28) & 1;
-    assert(!(tc & 0xfffffff) && tc != ARM_CC_NV);
-    switch (it) {
-	case THUMB2_IT:		m =   1<<3; 			break;
-	case THUMB2_ITT:	m =  (c<<3)| (1<<2);		break;
-	case THUMB2_ITE:	m = (!c<<3)| (1<<2);		break;
-	case THUMB2_ITTT:	m =  (c<<3)| (c<<2)| (1<<1);	break;
-	case THUMB2_ITET:	m = (!c<<3)| (c<<2)| (1<<1);	break;
-	case THUMB2_ITTE:	m =  (c<<3)|(!c<<2)| (1<<1);	break;
-	case THUMB2_ITEE:	m = (!c<<3)|(!c<<2)| (1<<1);	break;
-	case THUMB2_ITTTT:	m =  (c<<3)| (c<<2)| (c<<1)|1;	break;
-	case THUMB2_ITETT:	m = (!c<<3)| (c<<2)| (c<<1)|1;	break;
-	case THUMB2_ITTET:	m =  (c<<3)|(!c<<2)| (c<<1)|1;	break;
-	case THUMB2_ITEET:	m = (!c<<3)|(!c<<2)| (c<<1)|1;	break;
-	case THUMB2_ITTTE:	m =  (c<<3)| (c<<2)|(!c<<1)|1;	break;
-	case THUMB2_ITETE:	m = (!c<<3)| (c<<2)|(!c<<1)|1;	break;
-	case THUMB2_ITTEE:	m =  (c<<3)|(!c<<2)|(!c<<1)|1;	break;
-	case THUMB2_ITEEE:	m = (!c<<3)|(!c<<2)|(!c<<1)|1;	break;
-	default:		assert(!"valid it code!");
-    }
-    assert(m && (tc != ARM_CC_AL || !(m & (m - 1))));
-    _jit_W(0xbf00 | (tc >> 24) | m);
-}
+#define tcit(tc,it) \
+    (assert(!(tc & 0xfffffff) && tc != ARM_CC_NV), \
+     _jit_W(0xbf00 | (tc >> 24) | \
+            ((it == THUMB2_IT) ? 1<<3 : \
+	         (it == THUMB2_ITT) ? ((((tc) >> 28) & 1)<<3)| (1<<2) : \
+	         (it == THUMB2_ITE) ? (!(((tc) >> 28) & 1)<<3)| (1<<2) : \
+ 	         (it == THUMB2_ITTT) ? ((((tc) >> 28) & 1)<<3)| ((((tc) >> 28) & 1)<<2)| (1<<1) : \
+	         (it == THUMB2_ITET) ? (!(((tc) >> 28) & 1)<<3)| ((((tc) >> 28) & 1)<<2)| (1<<1) : \
+	         (it == THUMB2_ITTE) ? ((((tc) >> 28) & 1)<<3)|(!(((tc) >> 28) & 1)<<2)| (1<<1) : \
+	         (it == THUMB2_ITEE) ? (!(((tc) >> 28) & 1)<<3)|(!(((tc) >> 28) & 1)<<2)| (1<<1) : \
+	         (it == THUMB2_ITTTT) ? ((((tc) >> 28) & 1)<<3)| ((((tc) >> 28) & 1)<<2)| ((((tc) >> 28) & 1)<<1)|1 : \
+	         (it == THUMB2_ITETT) ? (!(((tc) >> 28) & 1)<<3)| ((((tc) >> 28) & 1)<<2)| ((((tc) >> 28) & 1)<<1)|1 : \
+	         (it == THUMB2_ITTET) ? ((((tc) >> 28) & 1)<<3)|(!(((tc) >> 28) & 1)<<2)| ((((tc) >> 28) & 1)<<1)|1 : \
+	         (it == THUMB2_ITEET) ? (!(((tc) >> 28) & 1)<<3)|(!(((tc) >> 28) & 1)<<2)| ((((tc) >> 28) & 1)<<1)|1 : \
+	         (it == THUMB2_ITTTE) ? ((((tc) >> 28) & 1)<<3)| ((((tc) >> 28) & 1)<<2)|(!(((tc) >> 28) & 1)<<1)|1 : \
+	         (it == THUMB2_ITETE) ? (!(((tc) >> 28) & 1)<<3)| ((((tc) >> 28) & 1)<<2)|(!(((tc) >> 28) & 1)<<1)|1 : \
+	         (it == THUMB2_ITTEE) ? ((((tc) >> 28) & 1)<<3)|(!(((tc) >> 28) & 1)<<2)|(!(((tc) >> 28) & 1)<<1)|1 : \
+	         (it == THUMB2_ITEEE) ? (!(((tc) >> 28) & 1)<<3)|(!(((tc) >> 28) & 1)<<2)|(!(((tc) >> 28) & 1)<<1)|1 : \
+	         assert(!"valid it code"))))
+
 #define _IT(cc)				tcit(cc,THUMB2_IT)
 #define _ITT(cc)			tcit(cc,THUMB2_ITT)
 #define _ITE(cc)			tcit(cc,THUMB2_ITE)
@@ -2165,38 +1767,23 @@ _tcit(jit_state_t _jit, unsigned int tc, int it)
 #define _ITTEE(cc)			tcit(cc,THUMB2_ITTEE)
 #define _ITEEE(cc)			tcit(cc,THUMB2_ITEEE)
 
-#define torl(o,rn,im)			_torl(_jit,o,rn,im)
-__jit_inline void
-_torl(jit_state_t _jit, int o, int rn, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0xf1fff));
-    assert(rn != _R15 || !im || ((o & 0xc000) == 0xc000));
-    assert(!(o & THUMB2_LDM_W) || !(im & (1 << rn)));
-    thumb.i = o | (_u4(rn)<<16) | _u13(im);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define torl(o,rn,im) \
+    (assert(!((o) & 0xf1fff) && \
+            ((rn) != _R15 || !(im) || (((o) & 0xc000) == 0xc000)) && \
+            !((o) & THUMB2_LDM_W) || !((im) & (1 << (rn)))), \
+     thumb.i = ((o) | (_u4(rn)<<16) | _u13(im)), \
+     _jit_WW(thumb.s[0], thumb.s[1]))
 
-#define thumb2_mrrc(o,t2,t,cc,o1,m)	_thumb2_mrrc(_jit,o,t2,t,cc,o1,m)
-__jit_inline void
-_thumb2_mrrc(jit_state_t _jit, int o, int t2, int t, int cc, int o1, int m)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0x03afffff));
-    thumb.i = o|(_u4(t2)<<16)|(_u4(t)<<12)|(_u4(cc)<<8)|(_u4(o1)<<4)|_u4(m);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define thumb2_mrrc(o,t2,t,cc,o1,m)	\
+    (assert(!((o) & 0x03afffff)), \
+     thumb.i = ((o)|(_u4(t2)<<16)|(_u4(t)<<12)|(_u4(cc)<<8)|(_u4(o1)<<4)|_u4(m)), \
+     _jit_WW(thumb.s[0], thumb.s[1]))
 
-#define thumb2_pkh(o,rn,rd,rm,im)	_thumb2_pkh(_jit,o,rn,rd,rm,im)
-__jit_inline void
-_thumb2_pkh(jit_state_t _jit, int o, int rn, int rd, int rm, int im)
-{
-    jit_thumb_t	thumb;
-    assert(!(o & 0x7ffcf));
-    thumb.i = o|(_u4(rn)<<16)|((_u5(im)&0x1c)<<10)|
-	      (_u4(rd)<<12)|((im&3)<<6)|_u4(rm);
-    _jit_WW(thumb.s[0], thumb.s[1]);
-}
+#define thumb2_pkh(o,rn,rd,rm,im) \
+    (assert(!((o) & 0x7ffcf)), \
+     thumb.i = ((o)|(_u4(rn)<<16)|((_u5(im)&0x1c)<<10)| \
+	      (_u4(rd)<<12)|(((im)&3)<<6)|_u4(rm)), \
+     _jit_WW(thumb.s[0], thumb.s[1]))
 
 /* v6T2, v7 */
 #define THUMB2_BFX			0xf3600000

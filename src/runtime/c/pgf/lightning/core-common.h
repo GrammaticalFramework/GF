@@ -198,13 +198,19 @@ typedef union jit_code {
 #endif
 
 /* Common 'shortcut' implementations */
+#ifndef jit_subi_i
 #define jit_subi_i(d, rs, is)		jit_addi_i((d), (rs), -(is))
+#endif
 #define jit_subi_l(d, rs, is)		jit_addi_l((d), (rs), -(is))
+#ifndef jit_subci_i
 #define jit_subci_i(d, rs, is)		jit_addci_i((d), (rs), -(is))
+#endif
 #define jit_subci_l(d, rs, is)		jit_addci_l((d), (rs), -(is))
 #define jit_rsbr_f(d, s1, s2)		jit_subr_f((d), (s2), (s1))
 #define jit_rsbr_d(d, s1, s2)		jit_subr_d((d), (s2), (s1))
+#ifndef jit_rsbr_i
 #define jit_rsbr_i(d, s1, s2)		jit_subr_i((d), (s2), (s1))
+#endif
 #define jit_rsbr_l(d, s1, s2)		jit_subr_l((d), (s2), (s1))
 #define jit_rsbr_p(d, s1, s2)		jit_subr_p((d), (s2), (s1))
 
@@ -213,7 +219,9 @@ typedef union jit_code {
 #define jit_notr_uc(d, rs)		jit_xori_c((d), (rs), 255)
 #define jit_notr_s(d, rs)		jit_xori_s((d), (rs), 65535)
 #define jit_notr_us(d, rs)		jit_xori_s((d), (rs), 65535)
+#ifndef jit_notr_i
 #define jit_notr_i(d, rs)		jit_xori_i((d), (rs), ~0)
+#endif
 #define jit_notr_ui(d, rs)		jit_xori_i((d), (rs), ~0)
 #define jit_notr_l(d, rs)		jit_xori_l((d), (rs), ~0L)
 #define jit_notr_ul(d, rs)		jit_xori_l((d), (rs), ~0L)

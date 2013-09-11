@@ -45,9 +45,10 @@ jit_hard_order[6] = {
 #define JIT_FPR(n)							\
     (jit_hardfp_p() ? jit_hard_order[n] : jit_soft_order[n])
 
-#include "fp-swf.h"
-#include "fp-vfp.h"
+#include "arm/fp-swf.h"
+#include "arm/fp-vfp.h"
 
+#if 0
 #define jit_movr_f(r0, r1)		arm_movr_f(_jit, r0, r1)
 __jit_inline void
 arm_movr_f(jit_state_t _jit, jit_fpr_t r0, jit_fpr_t r1)
@@ -1103,5 +1104,5 @@ arm_retval_d(jit_state_t _jit, jit_fpr_t r0)
     }
     /* else assume chaining call to jit_retval_d as done in tests/funcfp.c */
 }
-
+#endif
 #endif /* __lightning_fp_arm_h */
