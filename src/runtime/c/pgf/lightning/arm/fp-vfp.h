@@ -34,6 +34,8 @@
 #ifndef __lightning_fp_vfp_h
 #define __lightning_fp_vfp_h
 
+#if 0 
+
 __jit_inline void
 vfp_movr_f(jit_state_t _jit, jit_fpr_t r0, jit_fpr_t r1)
 {
@@ -1084,5 +1086,6 @@ vfp_retval_d(jit_state_t _jit, jit_fpr_t r0)
 
 #undef vfp_unget_tmp
 #undef vfp_get_tmp
+#endif
 
 #endif /* __lightning_fp_vfp_h */

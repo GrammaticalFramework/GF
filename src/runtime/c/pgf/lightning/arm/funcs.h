@@ -51,8 +51,7 @@ jit_flush_code(void *start, void *end)
     __clear_cache(start, end);
 }
 
-#define jit_get_cpu			jit_get_cpu
-__jit_constructor static void
+__attribute__((constructor)) static void
 jit_get_cpu(void)
 {
 #if defined(__linux__)
@@ -105,5 +104,280 @@ jit_get_cpu(void)
     if (!jit_cpu.vfp && jit_cpu.thumb)
 	jit_cpu.thumb = 0;
 }
+
+static void
+arm_patch_arguments(struct jit_local_state* jitl)
+{
+    int		 reg;
+    int		 ioff;
+    int		 foff;
+    int		 size;
+    int		 index;
+    jit_thumb_t	 thumb;
+    int		 offset;
+    union {
+	_ui	*i;
+	_us	*s;
+    } u;
+
+    ioff = foff = 0;
+    for (index = jitl->nextarg_put - 1, offset = 0; index >= 0; index--) {
+	if (jitl->types[index >> 5] & (1 << (index & 31)))
+	    size = sizeof(double);
+	else
+	    size = sizeof(int);
+	u.i = jitl->arguments[index];
+	if (jit_thumb_p()) {
+	    code2thumb(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+	    switch (thumb.i & 0xfff00f00) {
+		case ARM_CC_AL|ARM_VSTR|ARM_P:
+		    if (jit_hardfp_p()) {
+			if (foff < 16) {
+			    reg = (thumb.i >> 12) & 0xf;
+			    thumb.i = (ARM_CC_AL|ARM_VMOV_F |
+				       ((foff >> 1) << 12) | reg);
+			    if (foff & 1)
+				thumb.i |= ARM_V_D;
+			    thumb2code(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+			    ++foff;
+			    continue;
+			}
+		    }
+		    else {
+			if (ioff < 4) {
+			    thumb.i = ((thumb.i & 0xfff0ff00) |
+				       (JIT_FP << 16) | ioff);
+			    thumb2code(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+			    ++ioff;
+			    continue;
+			}
+		    }
+		    thumb.i = (thumb.i & 0xffffff00) | (offset >> 2);
+		    thumb2code(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+		    break;
+		case ARM_CC_AL|ARM_VSTR|ARM_V_F64|ARM_P:
+		    if (jit_hardfp_p()) {
+			if (foff & 1)
+			    ++foff;
+			if (foff < 16) {
+			    reg = (thumb.i >> 12) & 0xf;
+			    thumb.i = (ARM_CC_AL|ARM_VMOV_F|ARM_V_F64 |
+				       ((foff >> 1) << 12) | reg);
+			    thumb2code(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+			    foff += 2;
+			    continue;
+			}
+		    }
+		    else {
+			if (ioff & 1)
+			    ++ioff;
+			if (ioff < 4) {
+			    thumb.i = ((thumb.i & 0xfff0ff00) |
+				       (JIT_FP << 16) | ioff);
+			    thumb2code(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+			    ioff += 2;
+			    continue;
+			}
+		    }
+		    if (offset & 7)
+			offset += sizeof(int);
+		    thumb.i = (thumb.i & 0xffffff00) | (offset >> 2);
+		    thumb2code(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+		    break;
+		case THUMB2_STRWI:
+		thumb_stri:
+		    if (size == 8 && (ioff & 1))
+			++ioff;
+		    if (ioff < 4) {
+			thumb.i = ((thumb.i & 0xfff0f000) |
+				   (JIT_FP << 16) | (ioff << 2));
+			thumb2code(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+			++ioff;
+			if (size == 8) {
+			    code2thumb(thumb.s[0], thumb.s[1], u.s[2], u.s[3]);
+			    thumb.i = ((thumb.i & 0xfff0f000) |
+				       (JIT_FP << 16) | (ioff << 2));
+			    thumb2code(thumb.s[0], thumb.s[1], u.s[2], u.s[3]);
+			    ++ioff;
+			}
+			continue;
+		    }
+		    if (size == 8 && (offset & 7))
+			offset += sizeof(int);
+		    thumb.i = (thumb.i & 0xfffff000) | offset;
+		    thumb2code(thumb.s[0], thumb.s[1], u.s[0], u.s[1]);
+		    if (size == 8) {
+			code2thumb(thumb.s[0], thumb.s[1], u.s[2], u.s[3]);
+			thumb.i = (thumb.i & 0xfffff000) | (offset + 4);
+			thumb2code(thumb.s[0], thumb.s[1], u.s[2], u.s[3]);
+		    }
+		    break;
+		default:
+		    /* offset too large */
+		    if ((thumb.i & 0xfff00000) == THUMB2_STRWI)
+			goto thumb_stri;
+		    abort();
+	    }
+	}
+	else {
+	    switch (u.i[0] & 0xfff00f00) {
+		case ARM_CC_AL|ARM_VSTR|ARM_P:
+		    if (jit_hardfp_p()) {
+			if (foff < 16) {
+			    reg = (u.i[0] >> 12) & 0xf;
+			    u.i[0] = (ARM_CC_AL|ARM_VMOV_F |
+				      ((foff >> 1) << 12) | reg);
+			    if (foff & 1)
+				u.i[0] |= ARM_V_D;
+			    ++foff;
+			    continue;
+			}
+		    }
+		    else {
+			if (ioff < 4) {
+			    u.i[0] = ((u.i[0] & 0xfff0ff00) |
+				      (JIT_FP << 16) | ioff);
+			    ++ioff;
+			    continue;
+			}
+		    }
+		    u.i[0] = (u.i[0] & 0xffffff00) | (offset >> 2);
+		    break;
+		case ARM_CC_AL|ARM_VSTR|ARM_V_F64|ARM_P:
+		    if (jit_hardfp_p()) {
+			if (foff & 1)
+			    ++foff;
+			if (foff < 16) {
+			    reg = (u.i[0] >> 12) & 0xf;
+			    u.i[0] = (ARM_CC_AL|ARM_VMOV_F|ARM_V_F64 |
+				      ((foff >> 1) << 12) | reg);
+			    foff += 2;
+			    continue;
+			}
+		    }
+		    else {
+			if (ioff & 1)
+			    ++ioff;
+			if (ioff < 4) {
+			    u.i[0] = ((u.i[0] & 0xfff0ff00) |
+				      (JIT_FP << 16) | ioff);
+			    ioff += 2;
+			    continue;
+			}
+		    }
+		    if (offset & 7)
+			offset += sizeof(int);
+		    u.i[0] = (u.i[0] & 0xffffff00) | (offset >> 2);
+		    break;
+		case ARM_CC_AL|ARM_STRI|ARM_P:
+		arm_stri:
+		    if (size == 8 && (ioff & 1))
+			++ioff;
+		    if (ioff < 4) {
+			u.i[0] = ((u.i[0] & 0xfff0f000) |
+				  (JIT_FP << 16) | (ioff << 2));
+			++ioff;
+			if (size == 8) {
+			    u.i[1] = ((u.i[1] & 0xfff0f000) |
+				      (JIT_FP << 16) | (ioff << 2));
+			    ++ioff;
+			}
+			continue;
+		    }
+		    if (size == 8 && (offset & 7))
+			offset += sizeof(int);
+		    u.i[0] = (u.i[0] & 0xfffff000) | offset;
+		    if (size == 8)
+			u.i[1] = (u.i[1] & 0xfffff000) | (offset + 4);
+		    break;
+		default:
+		    /* offset too large */
+		    if ((u.i[0] & 0xfff00000) == (ARM_CC_AL|ARM_STRI|ARM_P))
+			goto arm_stri;
+		    abort();
+	    }
+	}
+		offset += size;
+    }
+    jitl->reglist = ((1 << ioff) - 1) & 0xf;
+    if (jitl->stack_length < offset) {
+		jitl->stack_length = offset;
+		jit_patch_movi(jitl->stack, (void *)
+		               ((jitl->alloca_offset + jitl->stack_length + 7) & -8));
+    }
+}
+
+extern int	__aeabi_idivmod(int, int);
+extern unsigned	__aeabi_uidivmod(unsigned, unsigned);
+
+#pragma push_macro("_jit")
+#ifdef _jit
+#undef _jit
+#endif
+#define _jit (*jit)
+static void
+arm_divmod(jit_state* jit, int div, int sign,
+           jit_gpr_t r0, jit_gpr_t r1, jit_gpr_t r2)
+{
+    int d;
+    int l;
+    void *p;
+    l = 0xf;
+    if ((int)r0 < 4)
+		/* bogus extra push to align at 8 bytes */
+		l = (l & ~(1 << r0)) | 0x10;
+#ifdef USE_THUMB_CODE
+	T1_PUSH(l);
+#else
+	_PUSH(l);
+#endif
+    if (r1 == _R1 && r2 == _R0) {
+		jit_movr_i(JIT_FTMP, _R0);
+		jit_movr_i(_R0, _R1);
+		jit_movr_i(_R1, JIT_FTMP);
+    } else if (r2 == _R0) {
+		jit_movr_i(_R1, r2);
+		jit_movr_i(_R0, r1);
+    } else {
+		jit_movr_i(_R0, r1);
+		jit_movr_i(_R1, r2);
+    }
+	p = (sign) ? (void*) __aeabi_idivmod : (void*) __aeabi_uidivmod;
+    if (!jit_exchange_p()) {
+#ifdef USE_THUMB_CODE
+	    d = (((int)p - (int)_jit.x.pc) >> 1) - 2;
+#else
+	    d = (((int)p - (int)_jit.x.pc) >> 2) - 2;
+#endif
+		if (_s24P(d)) {
+#ifdef USE_THUMB_CODE
+			T2_BLI(encode_thumb_jump(d));
+#else
+			_BLI(d & 0x00ffffff);
+#endif
+		}
+		else
+			goto fallback;
+    } else {
+fallback:
+		jit_movi_i(JIT_FTMP, (int)p);
+#ifdef USE_THUMB_CODE
+		T1_BLX(JIT_FTMP);
+#else
+		_BLX(JIT_FTMP);
+#endif
+    }
+    if (div) {
+		jit_movr_i(r0, _R0);
+    } else {
+		jit_movr_i(r0, _R1);
+	}
+#ifdef USE_THUMB_CODE
+	T1_POP(l);
+#else
+	_POP(l);
+#endif
+}
+#pragma pop_macro("_jit")
 
 #endif /* __lightning_funcs_h */

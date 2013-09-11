@@ -34,6 +34,7 @@
 #ifndef __lightning_fp_swf_h
 #define __lightning_fp_swf_h
 
+#if 0
 #include <math.h>
 
 #define swf_off(rn)				((rn) << 2)
@@ -1249,5 +1250,5 @@ swf_retval_d(jit_state_t _jit, jit_fpr_t r0)
 	swf_strin(_R1, JIT_FP, swf_off(r0) + 4);
     }
 }
-
+#endif
 #endif /* __lightning_fp_swf_h */
