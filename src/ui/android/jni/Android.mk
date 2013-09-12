@@ -11,7 +11,7 @@ LOCAL_MODULE    := jpgf
 LOCAL_SRC_FILES := $(addprefix ../../../runtime/java/, $(jni_c_files)) \
                    $(addprefix ../../../runtime/c/pgf/, $(pgf_c_files)) \
                    $(addprefix ../../../runtime/c/gu/, $(gu_c_files))
-LOCAL_C_INCLUDES := . ../../../runtime/c
+LOCAL_C_INCLUDES := ../../../runtime/c
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -19,11 +19,7 @@ $(realpath ../obj/local/armeabi/objs/jpgf/__/__/__/runtime/c/pgf/jit.o): lightni
 $(realpath ../obj/local/armeabi/objs-debug/jpgf/__/__/__/runtime/c/pgf/jit.o): lightning
 
 lightning:
-	mkdir lightning
-	mkdir lightning/arm
-	ln -s ../../../../runtime/c/pgf/lightning/arm/asm.h lightning/asm.h
-	ln -s ../../../../runtime/c/pgf/lightning/arm/core.h lightning/core.h
-	ln -s ../../../../runtime/c/pgf/lightning/arm/fp.h lightning/fp.h
-	ln -s ../../../../../runtime/c/pgf/lightning/arm/fp-swf.h lightning/arm/fp-swf.h
-	ln -s ../../../../../runtime/c/pgf/lightning/arm/fp-vfp.h lightning/arm/fp-vfp.h
-	ln -s ../../../../runtime/c/pgf/lightning/arm/funcs.h lightning/funcs.h
+	ln -s -f arm/asm.h ../../../runtime/c/pgf/lightning/asm.h
+	ln -s -f arm/core.h ../../../runtime/c/pgf/lightning/core.h
+	ln -s -f arm/fp.h ../../../runtime/c/pgf/lightning/fp.h
+	ln -s -f arm/funcs.h ../../../runtime/c/pgf/lightning/funcs.h
