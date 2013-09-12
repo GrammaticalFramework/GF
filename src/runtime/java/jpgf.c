@@ -169,7 +169,7 @@ Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_io_InputStream_2(JNIEnv *en
 	JInStream* jstream = gu_new(JInStream, tmp_pool);
 	jstream->stream.begin_buffer = jpgf_jstream_begin_buffer;
 	jstream->stream.end_buffer = jpgf_jstream_end_buffer;
-	jstream->stream.input = NULL;;
+	jstream->stream.input = NULL;
 	jstream->java_stream = java_stream;
 	jstream->env = env;
 
