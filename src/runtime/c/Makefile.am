@@ -21,7 +21,6 @@ guinclude_HEADERS = \
 	gu/hash.h \
 	gu/in.h \
 	gu/list.h \
-	gu/log.h \
 	gu/map.h \
 	gu/mem.h \
 	gu/out.h \
@@ -59,7 +58,6 @@ libgu_la_SOURCES = \
 	gu/hash.c \
 	gu/in.c \
 	gu/list.c \
-	gu/log.c \
 	gu/map.c \
 	gu/mem.c \
 	gu/out.c \

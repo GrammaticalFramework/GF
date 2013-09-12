@@ -21,7 +21,6 @@
 #include <gu/fun.h>
 #include <gu/bits.h>
 #include <gu/assert.h>
-#include <gu/log.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -60,7 +59,6 @@ gu_mem_realloc(void* p, size_t size)
 	if (size != 0 && buf == NULL) {
 		gu_fatal("Memory allocation failed");
 	}
-	gu_debug("%p %zu -> %p", p, size, buf); // strictly illegal
 	return buf;
 }
 
@@ -71,14 +69,12 @@ gu_mem_alloc(size_t size)
 	if (buf == NULL) {
 		gu_fatal("Memory allocation failed");
 	}
-	gu_debug("%zu -> %p", size, buf);
 	return buf;
 }
 
 static void
 gu_mem_free(void* p)
 {
-	gu_debug("%p", p);
 	free(p);
 }
 
@@ -180,7 +176,6 @@ gu_local_pool_(uint8_t* buf, size_t sz)
 {
 	GuPool* pool = gu_init_pool(buf, sz);
 	pool->flags |= GU_POOL_LOCAL;
-	gu_debug("%p", pool);
 	return pool;
 }
 
@@ -190,7 +185,6 @@ gu_new_pool(void)
 	size_t sz = GU_FLEX_SIZE(GuPool, init_buf, gu_mem_pool_initial_size);
 	uint8_t* buf = gu_mem_buf_alloc(sz, &sz);
 	GuPool* pool = gu_init_pool(buf, sz);
-	gu_debug("%p", pool);
 	return pool;
 }
 
@@ -264,8 +258,6 @@ void*
 gu_malloc_prefixed(GuPool* pool, size_t pre_align, size_t pre_size,
 		   size_t align, size_t size)
 {
-	gu_enter("-> %p %zu %zu %zu %zu",
-		 pool, pre_align, pre_size, align, size);
 	void* ret = NULL;
 	if (pre_align == 0) {
 		pre_align = gu_alignof(GuMaxAlign);
@@ -291,7 +283,6 @@ gu_malloc_prefixed(GuPool* pool, size_t pre_align, size_t pre_size,
 		ret = gu_pool_malloc_aligned(pool, pre_align, pre_size,
 					     align, size);
 	}
-	gu_exit("<- %p", ret);
 	return ret;
 }
 
@@ -318,7 +309,6 @@ gu_pool_finally(GuPool* pool, GuFinalizer* finalizer)
 void
 gu_pool_free(GuPool* pool)
 {
-	gu_debug("%p", pool);
 	GuFinalizerNode* node = pool->finalizers;
 	while (node) {
 		GuFinalizerNode* next = node->next;

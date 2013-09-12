@@ -2,7 +2,6 @@
 #include <gu/seq.h>
 #include <gu/assert.h>
 
-#include <gu/log.h>
 #include <gu/file.h>
 #include <math.h>
 #include <stdlib.h>
