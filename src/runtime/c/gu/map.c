@@ -4,7 +4,6 @@
 #include <gu/map.h>
 #include <gu/assert.h>
 #include <gu/prime.h>
-#include <gu/log.h>
 
 typedef enum {
 	GU_MAP_GENERIC,
@@ -185,7 +184,6 @@ gu_map_resize(GuMap* map)
 	}
 
 	gu_assert(data->n_entries > data->n_occupied);
-	gu_debug("Resized to %d entries", data->n_entries);
 	
 	data->n_occupied = 0;
 	data->zero_idx = SIZE_MAX;

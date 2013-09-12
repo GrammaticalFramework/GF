@@ -1,6 +1,5 @@
 #include <gu/variant.h>
 #include <gu/map.h>
-#include <gu/log.h>
 #include <gu/enum.h>
 #include <gu/file.h>
 #include <pgf/pgf.h>

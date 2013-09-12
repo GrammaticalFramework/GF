@@ -2,7 +2,6 @@
 #include "linearizer.h"
 #include <gu/map.h>
 #include <gu/fun.h>
-#include <gu/log.h>
 #include <gu/choice.h>
 #include <gu/seq.h>
 #include <gu/file.h>
