@@ -48,7 +48,11 @@ pgf_jit_alloc_page(PgfJitState* state)
 
 	size_t page_size = getpagesize();
 
+#ifndef ANDROID
 	if (posix_memalign(&page, page_size, page_size) != 0) {
+#else
+	if ((page = memalign(page_size, page_size)) == NULL) {
+#endif
 		gu_fatal("Memory allocation failed");
 	}
 
