@@ -156,7 +156,7 @@ gu_in_utf8_buf(uint8_t** buf, GuIn* in, GuExn* err)
 	if (!gu_ok(err)) {
 		return;
 	}
-	*buf = p;
+	*buf = p+len;
 	return;
 
 fail:
