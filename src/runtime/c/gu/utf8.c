@@ -146,7 +146,6 @@ gu_in_utf8_buf(uint8_t** buf, GuIn* in, GuExn* err)
 		*buf = p;
 		return;
 	}
-	static const uint8_t mask[4] = { 0x7f, 0x1f, 0x0f, 0x07 };
 	// If reading the extra bytes causes EOF, it is an encoding
 	// error, not a legitimate end of character stream.
 	GuExn* tmp_err = gu_exn(err, GuEOF, NULL);
