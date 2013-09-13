@@ -253,7 +253,7 @@ gu_putc(char c, GuOut* out, GuExn* err);
 void
 gu_puts(const char* str, GuOut* out, GuExn* err)
 {
-	gu_str_out_utf8(str, out, err);
+	gu_out_bytes(out, (const uint8_t*) str, strlen(str), err);
 }
 
 void
@@ -261,7 +261,7 @@ gu_vprintf(const char* fmt, va_list args, GuOut* out, GuExn* err)
 {
 	GuPool* tmp_pool = gu_local_pool();
 	char* str = gu_vasprintf(fmt, args, tmp_pool);
-	gu_str_out_utf8(str, out, err);
+	gu_out_bytes(out, (const uint8_t*) str, strlen(str), err);
 	gu_pool_free(tmp_pool);
 }
 
