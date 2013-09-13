@@ -157,9 +157,6 @@ extern GU_DECLARE_TYPE(PgfCncOverloadMap, GuMap);
 typedef GuMap PgfProductionIdx;
 extern GU_DECLARE_TYPE(PgfProductionIdx, GuMap);
 
-typedef GuMap PgfLeftcornerCatIdx;
-extern GU_DECLARE_TYPE(PgfLeftcornerCatIdx, GuMap);
-
 typedef GuMap PgfLeftcornerTokIdx;
 extern GU_DECLARE_TYPE(PgfLeftcornerTokIdx, GuMap);
 
@@ -233,7 +230,6 @@ struct PgfConcr {
 	PgfCncFunOverloadMap* fun_indices;
 	PgfCncOverloadMap* coerce_idx;
 	PgfProductionIdx* epsilon_idx;
-	PgfLeftcornerCatIdx* leftcorner_cat_idx;
 	PgfLeftcornerTokIdx* leftcorner_tok_idx;
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
