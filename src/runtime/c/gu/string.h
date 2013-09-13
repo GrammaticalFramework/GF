@@ -34,6 +34,12 @@ gu_string_copy(GuString string, GuPool* pool);
 void
 gu_string_write(GuString string, GuOut* out, GuExn* err);
 
+GuString
+gu_string_read(size_t len, GuPool* pool, GuIn* in, GuExn* err);
+
+GuString
+gu_string_read_latin1(size_t len, GuPool* pool, GuIn* in, GuExn* err);
+
 GuIn*
 gu_string_in(GuString string, GuPool* pool);
 

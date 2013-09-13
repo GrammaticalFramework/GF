@@ -253,7 +253,6 @@ gu_in_f64be(GuIn* in, GuExn* err)
 	return gu_decode_double(gu_in_u64le(in, err));
 }
 
-
 static void
 gu_in_fini(GuFinalizer* fin)
 {
