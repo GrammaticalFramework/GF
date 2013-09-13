@@ -1,4 +1,4 @@
---# -path=.:english:alltenses
+--# -path=.:../english:alltenses
 concrete ParseChi of ParseEngAbs = 
   TenseChi,
 ---  CatChi,
