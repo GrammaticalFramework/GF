@@ -5,6 +5,7 @@
 #include <gu/string.h>
 #include <gu/utf8.h>
 #include <gu/assert.h>
+#include <stdlib.h>
 
 const GuString gu_empty_string = { 1 };
 
@@ -163,6 +164,43 @@ gu_string_write(GuString s, GuOut* out, GuExn* err)
 		src = &p[1];
 	}
 	gu_out_bytes(out, src, sz, err);
+}
+
+GuString
+gu_string_read(size_t len, GuPool* pool, GuIn* in, GuExn* err)
+{
+	uint8_t* buf = alloca(len*4);
+	uint8_t* p   = buf;
+	for (size_t i = 0; i < len; i++) {
+		gu_in_utf8_buf(&p, in, err);
+	}
+	return gu_utf8_string(buf, p-buf, pool);
+}
+
+GuString
+gu_string_read_latin1(size_t len, GuPool* pool, GuIn* in, GuExn* err)
+{
+	if (len < GU_MIN(sizeof(GuWord), 128)) {
+		GuWord w = 0;
+		for (size_t n = 0; n < len; n++) {
+			w = w << 8 | gu_in_u8(in, err);
+		}
+		w = w << 8 | (len << 1) | 1;
+		return (GuString) { w };
+	}
+	uint8_t* p = NULL;
+	if (len < 256) {
+		p = gu_malloc_aligned(pool, 1 + len, 2);
+		p[0] = (uint8_t) len;
+	} else {
+		p =	gu_malloc_prefixed(pool, gu_alignof(size_t),
+		                       sizeof(size_t), 1, 1 + len);
+		((size_t*) p)[-1] = len;
+		p[0] = 0;
+	}
+
+	gu_in_bytes(in, &p[1], len, err);
+	return (GuString) { (GuWord) (void*) p };
 }
 
 GuString

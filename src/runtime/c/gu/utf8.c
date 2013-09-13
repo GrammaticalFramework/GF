@@ -72,8 +72,8 @@ fail:
 	return 0;
 }
 
-extern inline void
-gu_out_utf8(GuUCS ucs, GuOut* out, GuExn* err);
+extern inline GuUCS
+gu_in_utf8(GuIn* in, GuExn* err);
 
 static size_t
 gu_advance_utf8(GuUCS ucs, uint8_t* buf)
@@ -121,5 +121,46 @@ gu_out_utf8_(GuUCS ucs, GuOut* out, GuExn* err)
 	}
 }
 
-extern inline GuUCS
-gu_in_utf8(GuIn* in, GuExn* err);
+extern inline void
+gu_out_utf8(GuUCS ucs, GuOut* out, GuExn* err);
+
+void
+gu_in_utf8_buf(uint8_t** buf, GuIn* in, GuExn* err)
+{
+	uint8_t* p = *buf;
+
+	uint8_t c = gu_in_u8(in, err);
+	if (!gu_ok(err)) {
+		return;
+	}
+	*(p++) = c;
+	int len = (c < 0x80 ? 0 : 
+		   c < 0xc2 ? -1 :
+		   c < 0xe0 ? 1 :
+		   c < 0xf0 ? 2 :
+		   c < 0xf5 ? 3 :
+		   -1);
+	if (len < 0) {
+	 	goto fail;
+	} else if (len == 0) {
+		*buf = p;
+		return;
+	}
+	static const uint8_t mask[4] = { 0x7f, 0x1f, 0x0f, 0x07 };
+	// If reading the extra bytes causes EOF, it is an encoding
+	// error, not a legitimate end of character stream.
+	GuExn* tmp_err = gu_exn(err, GuEOF, NULL);
+	gu_in_bytes(in, p, len, tmp_err);
+	if (tmp_err->caught) {
+		goto fail;
+	}
+	if (!gu_ok(err)) {
+		return;
+	}
+	*buf = p;
+	return;
+
+fail:
+	gu_raise(err, GuUCSExn);
+	return;
+}
