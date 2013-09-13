@@ -1128,7 +1128,6 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr)
 	concr->fun_indices = gu_map_type_new(PgfCncFunOverloadMap, rdr->opool);
 	concr->coerce_idx  = gu_map_type_new(PgfCncOverloadMap, rdr->opool);
 	concr->epsilon_idx = gu_map_type_new(PgfProductionIdx, rdr->opool);
-	concr->leftcorner_cat_idx = gu_map_type_new(PgfLeftcornerCatIdx,rdr->opool);
 	concr->leftcorner_tok_idx = gu_map_type_new(PgfLeftcornerTokIdx,rdr->opool);
 	pgf_read_lindefs(rdr, concr);
 	pgf_read_ccats(rdr, concr);

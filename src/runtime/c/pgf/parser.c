@@ -138,10 +138,6 @@ struct PgfItem {
 	prob_t inside_prob;
 };
 
-GU_DEFINE_TYPE(PgfLeftcornerCatIdx, GuMap,
-		       gu_type(PgfCFCat), &pgf_cfcat_hasher,
-		       gu_ptr_type(PgfProductionIdx), &gu_null_struct);
-
 GU_DEFINE_TYPE(PgfLeftcornerTokIdx, GuStringMap,
 		       gu_ptr_type(PgfProductionIdx), &gu_null_struct);
 
