@@ -35,60 +35,34 @@ pgf_lzr_add_overl_entry(PgfCncOverloadMap* overl_table,
 	gu_buf_push(entries, void*, entry);
 }
 
-typedef struct {
-	GuMapItor fn;
-	PgfConcr* concr;
-	GuPool* pool;
-} PgfLzrIndexFn;
-
-static void
-pgf_lzr_index_itor(GuMapItor* fn, const void* key, void* value, GuExn* err)
-{
-	(void) (key && err);
-
-	PgfLzrIndexFn* clo = (PgfLzrIndexFn*) fn;
-    PgfCCat* ccat = *((PgfCCat**) value);
-    PgfConcr *concr = clo->concr;
-    GuPool *pool = clo->pool;
-
-	if (gu_seq_is_null(ccat->prods))
-		return;
-
-	size_t n_prods = gu_seq_length(ccat->prods);
-	for (size_t i = 0; i < n_prods; i++) {
-		PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
-
-		void* data = gu_variant_data(prod);
-		switch (gu_variant_tag(prod)) {
-		case PGF_PRODUCTION_APPLY: {
-			PgfProductionApply* papply = data;
-			PgfCncOverloadMap* overl_table =
-				gu_map_get(concr->fun_indices, &papply->fun->absfun->name,
-					PgfCncOverloadMap*);
-			if (!overl_table) {
-				overl_table = gu_map_type_new(PgfCncOverloadMap, pool);
-				gu_map_put(concr->fun_indices,
-					&papply->fun->absfun->name, PgfCncOverloadMap*, overl_table);
-			}
-			pgf_lzr_add_overl_entry(overl_table, ccat, papply, pool);
-			break;
-		}
-		case PGF_PRODUCTION_COERCE: {
-			PgfProductionCoerce* pcoerce = data;
-			pgf_lzr_add_overl_entry(concr->coerce_idx, ccat, pcoerce, pool);
-			break;
-		}
-		default:
-			gu_impossible();
-		}
-	}
-}
-
 void
-pgf_lzr_index(PgfConcr* concr, GuPool *pool)
+pgf_lzr_index(PgfConcr* concr, 
+              PgfCCat* ccat, PgfProduction prod,
+              GuPool *pool)
 {
-	PgfLzrIndexFn clo = { { pgf_lzr_index_itor }, concr, pool };
-	gu_map_iter(concr->ccats, &clo.fn, NULL);
+	void* data = gu_variant_data(prod);
+	switch (gu_variant_tag(prod)) {
+	case PGF_PRODUCTION_APPLY: {
+		PgfProductionApply* papply = data;
+		PgfCncOverloadMap* overl_table =
+			gu_map_get(concr->fun_indices, &papply->fun->absfun->name,
+				PgfCncOverloadMap*);
+		if (!overl_table) {
+			overl_table = gu_map_type_new(PgfCncOverloadMap, pool);
+			gu_map_put(concr->fun_indices,
+				&papply->fun->absfun->name, PgfCncOverloadMap*, overl_table);
+		}
+		pgf_lzr_add_overl_entry(overl_table, ccat, papply, pool);
+		break;
+	}
+	case PGF_PRODUCTION_COERCE: {
+		PgfProductionCoerce* pcoerce = data;
+		pgf_lzr_add_overl_entry(concr->coerce_idx, ccat, pcoerce, pool);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
 }
 
 typedef struct PgfLzn PgfLzn;
