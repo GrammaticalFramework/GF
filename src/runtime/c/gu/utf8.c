@@ -97,25 +97,8 @@ gu_advance_utf8(GuUCS ucs, uint8_t* buf)
 	}
 }
 
-char
-gu_in_utf8_char_(GuIn* in, GuExn* err)
-{
-	return gu_ucs_char(gu_in_utf8(in, err), err);
-}
-
-char
-gu_in_utf8_char(GuIn* in, GuExn* err)
-{
-	int i = gu_in_peek_u8(in);
-	if (i >= 0 && i < 0x80) {
-		gu_in_consume(in, 1);
-		return (char) i;
-	}
-	return gu_in_utf8_char_(in, err);
-}
-
 void
-gu_out_utf8_long_(GuUCS ucs, GuOut* out, GuExn* err)
+gu_out_utf8_(GuUCS ucs, GuOut* out, GuExn* err)
 {
 	uint8_t buf[4];
 	size_t sz = gu_advance_utf8(ucs, buf);
@@ -173,27 +156,5 @@ gu_utf32_out_utf8_buffered_(const GuUCS* src, size_t len, GuOut* out,
 	return src_i;
 }
 
-size_t
-gu_utf32_out_utf8(const GuUCS* src, size_t len, GuOut* out, GuExn* err)
-{
-	if (gu_out_is_buffered(out)) {
-		return gu_utf32_out_utf8_buffered_(src, len, out, err);
-	} 
-	for (size_t i = 0; i < len; i++) {
-		gu_out_utf8(src[i], out, err);
-		if (!gu_ok(err)) {
-			return i;
-		}
-	}
-	return len;
-
-}
-
 extern inline GuUCS
 gu_in_utf8(GuIn* in, GuExn* err);
-
-void 
-gu_str_out_utf8(const char* str, GuOut* out, GuExn* err)
-{
-	gu_out_bytes(out, (const uint8_t*) str, strlen(str), err);
-}
