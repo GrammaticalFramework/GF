@@ -72,7 +72,10 @@ fail:
 	return 0;
 }
 
-size_t
+extern inline void
+gu_out_utf8(GuUCS ucs, GuOut* out, GuExn* err);
+
+static size_t
 gu_advance_utf8(GuUCS ucs, uint8_t* buf)
 {
 	gu_require(gu_ucs_valid(ucs));
@@ -97,6 +100,7 @@ gu_advance_utf8(GuUCS ucs, uint8_t* buf)
 	}
 }
 
+
 void
 gu_out_utf8_(GuUCS ucs, GuOut* out, GuExn* err)
 {
@@ -115,45 +119,6 @@ gu_out_utf8_(GuUCS ucs, GuOut* out, GuExn* err)
 	default:
 		gu_impossible();
 	}
-}
-
-extern inline void
-gu_out_utf8(GuUCS ucs, GuOut* out, GuExn* err);
-
-static size_t 
-gu_utf32_out_utf8_buffered_(const GuUCS* src, size_t len, GuOut* out, 
-			    GuExn* err)
-{
-	size_t src_i = 0;
-	while (src_i < len) {
-		size_t dst_sz;
-		uint8_t* dst = gu_out_begin_span(out, len - src_i, &dst_sz, err);
-		if (!gu_ok(err)) {
-			return src_i;
-		}
-		if (!dst) {
-			gu_out_utf8(src[src_i], out, err);
-			if (!gu_ok(err)) {
-				return src_i;
-			}
-			src_i++;
-			break;
-		} 
-		size_t dst_i = 0;
-		while (true) {
-			size_t safe = (dst_sz - dst_i) / 4;
-			size_t end = GU_MIN(len, src_i + safe);
-			if (end == src_i) {
-				break;
-			}
-			do {
-				GuUCS ucs = src[src_i++];
-				dst_i += gu_advance_utf8(ucs, &dst[dst_i]);
-			} while (src_i < end);
-		} 
-		gu_out_end_span(out, dst_i);
-	}
-	return src_i;
 }
 
 extern inline GuUCS
