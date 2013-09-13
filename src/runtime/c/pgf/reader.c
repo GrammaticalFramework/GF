@@ -74,7 +74,7 @@ pgf_read_len(PgfReader* rdr)
 	// caller can proceed without checking for error
 	// immediately.
 	gu_return_on_exn(rdr->err, 0);
-	if (len < 0) {
+	if (GU_UNLIKELY(len < 0)) {
 		GuExnData* err_data = gu_raise(rdr->err, PgfReadTagExn);
 		if (err_data) {
 			PgfReadTagExn* rtag = gu_new(PgfReadTagExn, err_data->pool);
