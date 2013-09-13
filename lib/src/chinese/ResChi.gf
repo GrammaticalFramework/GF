@@ -229,7 +229,7 @@ oper
 
 -- added by AR
 
-  mkNP : Str -> NP = ss ;
+  mkNP     : Str -> NP = ss ;  -- not to be used in lexicon building
 
   appPrep : Preposition -> Str -> Str = \prep,s -> 
     prep.prepPre ++ s ++ prep.prepMain ;
