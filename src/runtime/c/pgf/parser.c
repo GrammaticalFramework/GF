@@ -2561,94 +2561,69 @@ pgf_parser_index_epsilon(PgfConcr* concr,
 	gu_buf_push(gu_seq_buf(prods), PgfProduction, prod);
 }
 
-typedef struct {
-	GuMapItor fn;
-	PgfConcr* concr;
-	GuPool* pool;
-} PgfLeftcornerFn;
-
-static void
-pgf_parser_index_cats(GuMapItor* fn, const void* key, void* value, GuExn* err)
+void
+pgf_parser_index(PgfConcr* concr, 
+                 PgfCCat* ccat, PgfProduction prod,
+                 GuPool *pool)
 {
-	(void) (key && err);
-
-	PgfLeftcornerFn* clo = (PgfLeftcornerFn*) fn;
-    PgfCCat* ccat = *((PgfCCat**) value);
-
-	if (gu_seq_is_null(ccat->prods))
-		return;
-
 	for (size_t lin_idx = 0; lin_idx < ccat->cnccat->n_lins; lin_idx++) {
-		size_t n_prods = gu_seq_length(ccat->prods);
-		for (size_t i = 0; i < n_prods; i++) {
-			PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
+		GuVariantInfo i = gu_variant_open(prod);
+		switch (i.tag) {
+		case PGF_PRODUCTION_APPLY: {
+			PgfProductionApply* papp = i.data;
 
-			GuVariantInfo i = gu_variant_open(prod);
-			switch (i.tag) {
-			case PGF_PRODUCTION_APPLY: {
-				PgfProductionApply* papp = i.data;
-
-				if (gu_seq_length(papp->args) > 0)
-					break;
-
-				PgfSequence seq = papp->fun->lins[lin_idx];
-				if (gu_seq_length(seq) > 0) {
-					GuVariantInfo i = gu_variant_open(gu_seq_get(seq, PgfSymbol, 0));
-					switch (i.tag) {
-					case PGF_SYMBOL_KS: {
-						PgfSymbolKS* sks = i.data;
-						pgf_parser_index_token(clo->concr, 
-						                       sks->tokens,
-						                       ccat, lin_idx, prod,
-						                       clo->pool);
-						break;
-					}
-					case PGF_SYMBOL_KP: {
-						PgfSymbolKP* skp = i.data;
-						pgf_parser_index_token(clo->concr, 
-						                       skp->default_form,
-						                       ccat, lin_idx, prod,
-						                       clo->pool);
-						for (size_t i = 0; i < skp->n_forms; i++) {
-							pgf_parser_index_token(clo->concr, 
-							                       skp->forms[i].form,
-							                       ccat, lin_idx, prod,
-							                       clo->pool);
-						}
-						break;
-					}
-					case PGF_SYMBOL_CAT:
-					case PGF_SYMBOL_LIT:
-					case PGF_SYMBOL_NE:
-					case PGF_SYMBOL_VAR:
-						// Nothing to be done here
-						break;
-					default:
-						gu_impossible();
-					}
-				} else {
-					pgf_parser_index_epsilon(clo->concr,
-					                         ccat, lin_idx, prod,
-					                         clo->pool);
-				}
-			}
-			break;
-			case PGF_PRODUCTION_COERCE:
-				// Nothing to be done here
+			if (gu_seq_length(papp->args) > 0)
 				break;
-			default:
-				gu_impossible();
+
+			PgfSequence seq = papp->fun->lins[lin_idx];
+			if (gu_seq_length(seq) > 0) {
+				GuVariantInfo i = gu_variant_open(gu_seq_get(seq, PgfSymbol, 0));
+				switch (i.tag) {
+				case PGF_SYMBOL_KS: {
+					PgfSymbolKS* sks = i.data;
+					pgf_parser_index_token(concr, 
+										   sks->tokens,
+										   ccat, lin_idx, prod,
+										   pool);
+					break;
+				}
+				case PGF_SYMBOL_KP: {
+					PgfSymbolKP* skp = i.data;
+					pgf_parser_index_token(concr, 
+										   skp->default_form,
+										   ccat, lin_idx, prod,
+										   pool);
+					for (size_t i = 0; i < skp->n_forms; i++) {
+						pgf_parser_index_token(concr, 
+											   skp->forms[i].form,
+											   ccat, lin_idx, prod,
+											   pool);
+					}
+					break;
+				}
+				case PGF_SYMBOL_CAT:
+				case PGF_SYMBOL_LIT:
+				case PGF_SYMBOL_NE:
+				case PGF_SYMBOL_VAR:
+					// Nothing to be done here
+					break;
+				default:
+					gu_impossible();
+				}
+			} else {
+				pgf_parser_index_epsilon(concr,
+										 ccat, lin_idx, prod,
+										 pool);
 			}
 		}
+		break;
+		case PGF_PRODUCTION_COERCE:
+			// Nothing to be done here
+			break;
+		default:
+			gu_impossible();
+		}
 	}
-}
-
-void
-pgf_parser_index(PgfConcr* concr, GuPool *pool)
-{
-	PgfLeftcornerFn clo1 = { { pgf_parser_index_cats }, 
-	                         concr, pool };
-	gu_map_iter(concr->ccats, &clo1.fn, NULL);
 }
 
 prob_t

@@ -1024,64 +1024,79 @@ pgf_read_cnccats(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr)
 	return cnccats;
 }
 
-typedef struct {
-	GuMapItor fn;
-	PgfReader* rdr;
-} PgfIndexFn;
-
-static PgfCncCat*
-pgf_ccat_set_cnccat(PgfCCat* ccat)
+static void
+pgf_ccat_set_cnccat(PgfCCat* ccat, PgfProduction prod)
 {
-	if (!ccat->cnccat) {
-		size_t n_prods = gu_seq_length(ccat->prods);
-		for (size_t i = 0; i < n_prods; i++) {
-			PgfProduction prod = 
-				gu_seq_get(ccat->prods, PgfProduction, i);
-			GuVariantInfo i = gu_variant_open(prod);
-			switch (i.tag) {
-			case PGF_PRODUCTION_COERCE: {
-				PgfProductionCoerce* pcoerce = i.data;
-				PgfCncCat* cnccat = 
-					pgf_ccat_set_cnccat(pcoerce->coerce);
-				if (!ccat->cnccat) {
-					ccat->cnccat = cnccat;
-				} else if (ccat->cnccat != cnccat) {
-					// XXX: real error
-					gu_impossible();
-				}
- 				break;
-			}
-			case PGF_PRODUCTION_APPLY:
-				// Shouldn't happen with current PGF.
-				// XXX: real error
-				gu_impossible();
-				break;
-			default:
-				gu_impossible();
-			}
+	GuVariantInfo i = gu_variant_open(prod);
+	switch (i.tag) {
+	case PGF_PRODUCTION_COERCE: {
+		PgfProductionCoerce* pcoerce = i.data;
+		PgfCncCat* cnccat = pcoerce->coerce->cnccat;
+		if (!ccat->cnccat) {
+			ccat->cnccat = cnccat;
+		} else if (ccat->cnccat != cnccat) {
+			// XXX: real error
+			gu_impossible();
 		}
+		break;
 	}
-	return ccat->cnccat;
+	case PGF_PRODUCTION_APPLY:
+		// Shouldn't happen with current PGF.
+		// XXX: real error
+		gu_impossible();
+		break;
+	default:
+		gu_impossible();
+	}
 }
 
-extern float
+extern prob_t
 pgf_ccat_set_viterbi_prob(PgfCCat* ccat);
+
+typedef struct {
+	GuMapItor fn;
+	PgfConcr* concr;
+	GuPool* pool;
+} PgfIndexFn;
+
+extern void
+pgf_parser_index(PgfConcr* concr, 
+                 PgfCCat* ccat, PgfProduction prod,
+                 GuPool *pool);
+
+void
+pgf_lzr_index(PgfConcr* concr, 
+              PgfCCat* ccat, PgfProduction prod,
+              GuPool *pool);
 
 static void
 pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
 	(void) (key && err);
-	PgfCCat* ccat = *((PgfCCat**) value);
+	
+	PgfIndexFn* clo = (PgfIndexFn*) fn;
+    PgfCCat* ccat = *((PgfCCat**) value);
+    PgfConcr *concr = clo->concr;
+    GuPool *pool = clo->pool;
 
-	pgf_ccat_set_cnccat(ccat);
+	if (gu_seq_is_null(ccat->prods))
+		return;
+
+	size_t n_prods = gu_seq_length(ccat->prods);
+	for (size_t i = 0; i < n_prods; i++) {
+		PgfProduction prod = 
+			gu_seq_get(ccat->prods, PgfProduction, i);
+			
+		if (!ccat->cnccat) {
+			pgf_ccat_set_cnccat(ccat, prod);
+		}
+
+		pgf_parser_index(concr, ccat, prod, pool);
+		pgf_lzr_index(concr, ccat, prod, pool);
+	}
+
 //	pgf_ccat_set_viterbi_prob(ccat);
 }
-
-void
-pgf_parser_index(PgfConcr* concr, GuPool *pool);
-
-void
-pgf_lzr_index(PgfConcr* concr, GuPool *pool);
 
 static PgfConcr*
 pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr)
@@ -1121,11 +1136,8 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr)
 	concr->callbacks = pgf_new_callbacks_map(concr, rdr->opool); 
 	concr->total_cats = pgf_read_int(rdr);
 
-	PgfIndexFn clo1 = { { pgf_read_ccat_cb }, rdr };
+	PgfIndexFn clo1 = { { pgf_read_ccat_cb }, concr, rdr->opool };
 	gu_map_iter(concr->ccats, &clo1.fn, NULL);
-
-	pgf_parser_index(concr, rdr->opool);
-	pgf_lzr_index(concr, rdr->opool);
 
 	return concr;
 }
