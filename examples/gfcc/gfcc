@@ -1,2 +1,0 @@
-echo "rf -file=$1 | ps -lexcode | p | pt -number=1 | l -lang=ImperJVM | wf -file=tmp.gfcc" | gf Imper.pgf
-runghc CleanJVM tmp.gfcc $1

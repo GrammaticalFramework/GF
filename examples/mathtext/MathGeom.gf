@@ -1,1 +1,0 @@
-abstract MathGeom = Geometry, MathText ;

@@ -16,13 +16,20 @@ import Distribution.Simple.LocalBuildInfo(datadir,buildDir,absoluteInstallDirs)
 -}
 
 example_grammars =  -- :: [(pgf, tmp, src)]
-   [("Foods.pgf","foods",foodsSrc),
-    ("Letter.pgf","letter",letterSrc)]
+   [("Foods.pgf","foods",foodsSrc)
+   ,("Phrasebook.pgf","phrasebook",phrasebookSrc)
+   ,("Letter.pgf","letter",letterSrc)
+   ]
   where
-    foodsDir ="contrib"</>"summerschool"</>"foods"
+    foodsDir ="examples"</>"foods"
   --foodsSrc = foodsDir</>"Foods???.gf" -- doesn't work on Win32
     foodsSrc = unwords [foodsDir</>"Foods"++lang++".gf"|lang<-foodsLangs]
     foodsLangs = words "Afr Amh Bul Cat Cze Dut Eng Epo Fin Fre Ger Gle Heb Hin Ice Ita Jpn Lav Mlt Mon Nep Pes Por Ron Spa Swe Tha Tsn Tur Urd"
+
+    phrasebookDir ="examples"</>"phrasebook"
+  --phrasebookSrc = phrasebookDir</>"Phrasebook???.gf" -- doesn't work on Win32
+    phrasebookSrc = unwords [phrasebookDir</>"Phrasebook"++lang++".gf"|lang<-phrasebookLangs]
+    phrasebookLangs = words "Bul Cat Dan Dut Eng Hin Lav Nor Spa Swe Tha" -- only fastish languages
 
     letterDir = "examples"</>"letter"
   --letterSrc = letterDir</>"Letter???.gf"
