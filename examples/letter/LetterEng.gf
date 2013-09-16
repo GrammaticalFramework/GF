@@ -151,4 +151,8 @@ ego :
     pl => table {nom => "we" ; acc => "us"}
         } ;
 
+  -- added by John 2013-01-11 for testing syntax editor
+  printname cat Recipient = "Someone who receives a letter";
+  printname fun HelloRec = "Saying hello to a recipient";
+
 }
