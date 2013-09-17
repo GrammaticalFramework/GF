@@ -504,5 +504,4 @@ GuHasher gu_string_hasher[1] = {
 
 
 GU_DEFINE_TYPE(GuString, GuOpaque, _);
-GU_DEFINE_TYPE(GuStrings, GuSeq, gu_type(GuString));
 GU_DEFINE_KIND(GuStringMap, GuMap);

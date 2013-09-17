@@ -237,7 +237,7 @@ pgf_lzn_resolve_def(PgfLzn* lzn, PgfCncFuns* lindefs, GuString s, GuPool* pool)
 		return lit;
 
 	int index =
-		gu_choice_next(lzn->ch, gu_list_length(lindefs));
+		gu_choice_next(lzn->ch, gu_seq_length(lindefs));
 	if (index < 0) {
 		return ret;
 	}
@@ -245,7 +245,7 @@ pgf_lzn_resolve_def(PgfLzn* lzn, PgfCncFuns* lindefs, GuString s, GuPool* pool)
 		gu_new_flex_variant(PGF_CNC_TREE_APP,
 							PgfCncTreeApp,
 							args, 1, &ret, pool);
-	capp->fun = gu_list_index(lindefs, index);
+	capp->fun = gu_seq_get(lindefs, PgfCncFun*, index);
 	capp->fid = lzn->fid++;
 	capp->n_args = 1;
 	capp->args[0] = lit;
@@ -472,7 +472,7 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		}
 
 		gu_require(lin_idx < fun->n_lins);
-		PgfSequence seq = fun->lins[lin_idx];
+		PgfSequence* seq = fun->lins[lin_idx];
 		size_t nsyms = gu_seq_length(seq);
 		PgfSymbol* syms = gu_seq_data(seq);
 		for (size_t i = 0; i < nsyms; i++) {
@@ -572,7 +572,7 @@ struct PgfSimpleLin {
 };
 
 static void
-pgf_file_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens toks)
+pgf_file_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens* toks)
 {
 	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
 	if (!gu_ok(flin->err)) {

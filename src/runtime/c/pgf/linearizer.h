@@ -51,7 +51,7 @@ typedef struct PgfLinFuncs PgfLinFuncs;
 struct PgfLinFuncs
 {
 	/// Output tokens
-	void (*symbol_tokens)(PgfLinFuncs** self, PgfTokens toks);
+	void (*symbol_tokens)(PgfLinFuncs** self, PgfTokens* toks);
 
 	/// Output literal
 	void (*expr_literal)(PgfLinFuncs** self, PgfLiteral lit);

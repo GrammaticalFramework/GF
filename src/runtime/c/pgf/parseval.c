@@ -19,7 +19,7 @@ typedef struct {
 } PgfMetricsLznState;
 
 static void
-pgf_metrics_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens toks)
+pgf_metrics_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens* toks)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
 	

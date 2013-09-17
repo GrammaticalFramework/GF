@@ -2,54 +2,40 @@
 #define GU_SEQ_H_
 
 #include <gu/mem.h>
-#include <gu/bits.h>
-
 
 typedef struct GuBuf GuBuf;
 
-typedef GuOpaque() GuSeq;
+typedef struct GuSeq GuSeq;
 
-GuSeq
+GuSeq*
 gu_empty_seq();
 
-GuSeq
+GuSeq*
 gu_make_seq(size_t elem_size, size_t len, GuPool* pool);
 
 #define gu_new_seq(T, N, POOL)			\
 	gu_make_seq(sizeof(T), (N), (POOL))
 
-static inline size_t
-gu_seq_length(GuSeq seq)
-{
-	GuWord w = seq.w_;
-	size_t tag = gu_tagged_tag(w);
-	if (tag == 0) {
-		GuWord* p = gu_tagged_ptr(w);
-		return (size_t) (p[-1] >> 1);
-	}
-	return tag;
-}
+GuSeq*
+gu_alloc_seq_(size_t elem_size, size_t length);
 
-static inline void*
-gu_seq_data(GuSeq seq)
-{
-	GuWord w = seq.w_;
-	int tag = gu_tagged_tag(w);
-	void* ptr = gu_tagged_ptr(w);
-	if (tag == 0) {
-		GuWord* p = ptr;
-		if (p[-1] & 0x1) {
-		 	return *(uint8_t**) ptr;
-		}
-	}
-	return ptr;
-}
+#define gu_alloc_seq(T, N)			\
+	gu_alloc_seq_(sizeof(T), (N))
 
-static inline bool
-gu_seq_is_null(GuSeq seq)
-{
-	return (gu_tagged_ptr(seq.w_)) == NULL;
-}
+GuSeq*
+gu_realloc_seq_(GuSeq* seq, size_t elem_size, size_t length);
+
+#define gu_realloc_seq(S, T, N)			\
+	gu_realloc_seq_(S, sizeof(T), (N))
+
+void
+gu_seq_free(GuSeq* seq);
+
+size_t
+gu_seq_length(GuSeq* seq);
+
+void*
+gu_seq_data(GuSeq* seq);
 
 
 #define gu_seq_index(SEQ, T, I)			\
@@ -63,14 +49,6 @@ gu_seq_is_null(GuSeq seq)
 	(*gu_seq_index(SEQ, T, I) = (V));	\
 	GU_END
 
-
-
-
-GuBuf*
-gu_seq_buf(GuSeq seq);
-
-GuSeq
-gu_buf_seq(GuBuf* buf);
 
 GuBuf*
 gu_make_buf(size_t elem_size, GuPool* pool);
@@ -86,6 +64,9 @@ gu_buf_avail(GuBuf* buf);
 
 void*
 gu_buf_data(GuBuf* buf);
+
+GuSeq*
+gu_buf_data_seq(GuBuf* buf);
 
 #define gu_buf_index(BUF, T, I)			\
 	(&((T*)gu_buf_data(BUF))[I])
@@ -149,31 +130,14 @@ gu_buf_heap_replace(GuBuf *buf, GuOrder *order, void *value, void *data_out);
 void
 gu_buf_heapify(GuBuf *buf, GuOrder *order);
 
-#if 0
-void
-gu_buf_resize_head(GuBuf* buf, ptrdiff_t change);
-
-void
-gu_buf_unshift(GuBuf* buf, const void* data, size_t size);
-
-void
-gu_buf_shift(GuBuf* buf, size_t size, void* data_out);
-#endif
-
-GuSeq
+GuSeq*
 gu_buf_freeze(GuBuf* buf, GuPool* pool);
 
-extern const GuSeq gu_null_seq;
-
-#define GU_NULL_SEQ { .w_ = (GuWord)(void*)NULL }
-
-typedef GuSeq GuChars;
-typedef GuSeq GuBytes;
 typedef GuBuf GuCharBuf;
 typedef GuBuf GuByteBuf;
 
 char*
-gu_chars_str(GuChars chars, GuPool* pool);
+gu_char_buf_str(GuCharBuf* chars, GuPool* pool);
 
 #endif // GU_SEQ_H_
 
@@ -215,9 +179,6 @@ struct GuBufType {
 	.abstract_base = GU_TYPE_INIT_abstract(KIND, BUF_T, _), \
 	.elem_type = ELEM_T \
 }
-
-extern GU_DECLARE_TYPE(GuChars, GuSeq);
-extern GU_DECLARE_TYPE(GuBytes, GuSeq);
 
 #endif 
 

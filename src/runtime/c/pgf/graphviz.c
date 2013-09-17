@@ -116,7 +116,7 @@ typedef struct {
 } PgfBracketLznState;
 
 static void
-pgf_bracket_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens toks)
+pgf_bracket_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens* toks)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 

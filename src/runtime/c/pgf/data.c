@@ -5,7 +5,7 @@
 #include <math.h>
 
 bool 
-pgf_tokens_equal(PgfTokens t1, PgfTokens t2)
+pgf_tokens_equal(PgfTokens* t1, PgfTokens* t2)
 {
 	size_t len1 = gu_seq_length(t1);
 	size_t len2 = gu_seq_length(t2);
@@ -36,7 +36,8 @@ GU_DEFINE_TYPE(PgfDummyVariant, GuVariant);
 
 GU_DEFINE_TYPE(PgfFlags, GuStringMap, gu_type(PgfDummyVariant), &gu_null_variant);
 
-GU_DEFINE_TYPE(PgfProductionSeq, GuSeq, gu_type(PgfDummyVariant));
+GU_DEFINE_TYPE(PgfProductionSeq, abstract);
+GU_DEFINE_TYPE(PgfProductionBuf, abstract);
 
 GU_DEFINE_TYPE(PgfAbsFun, abstract);
 
