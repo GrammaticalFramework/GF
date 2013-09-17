@@ -114,8 +114,11 @@ gu_seq_resize_tail(GuSeq seq, ptrdiff_t change);
 void
 gu_buf_sort(GuBuf *buf, GuOrder *order);
 
-bool
-gu_buf_binsearch(GuBuf *buf, GuOrder *order, void *value);
+#define gu_seq_binsearch(S, O, T, N, V) \
+	((T*) gu_seq_binsearch_(S, O, sizeof(T), offsetof(T,N), V))
+
+void*
+gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, size_t field_offset, void *key);
 
 // Using a buffer as a heap
 void
