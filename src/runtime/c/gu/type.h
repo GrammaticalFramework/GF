@@ -201,7 +201,7 @@ typedef GuType_alias GuType_referenced;
 
 
 
-#include <gu/list.h>
+#include <gu/mem.h>
 
 //
 // struct
@@ -221,7 +221,10 @@ struct GuMember {
 struct GuStructRepr {
 	GuType_repr repr_base;
 	const char* name;
-	GuSList(GuMember) members;
+	struct {
+		int len;
+		GuMember* elems;
+	} members;
 };
 
 extern GU_DECLARE_KIND(struct);
@@ -259,7 +262,10 @@ extern GU_DECLARE_KIND(struct);
 #define GU_TYPE_INIT_struct(k_, t_, ...)	{		\
 	.repr_base = GU_TYPE_INIT_repr(k_, t_, _),		\
 	.name = #t_, \
-	.members = GU_SLIST(GuMember, __VA_ARGS__)	\
+	.members = {								\
+		.len = GU_ARRAY_LEN(GuMember,GU_ID({__VA_ARGS__})),		\
+		.elems = ((GuMember[]){__VA_ARGS__})			\
+	} \
 }
 
 bool
@@ -367,7 +373,10 @@ typedef const struct GuEnumType GuEnumType, GuType_enum;
 
 struct GuEnumType {
 	GuType_repr repr_base;
-	GuSList(GuEnumConstant) constants;
+	struct {
+		int len;
+		GuEnumConstant* elems;
+	} constants;
 };
 
 #define GU_ENUM_C(t_, x) {		\
@@ -378,7 +387,10 @@ struct GuEnumType {
 
 #define GU_TYPE_INIT_enum(k_, t_, ...) { \
 	.repr_base = GU_TYPE_INIT_repr(k_, t_, _),	\
-	.constants = GU_SLIST(GuEnumConstant, __VA_ARGS__) \
+	.constants = {								\
+		.len = GU_ARRAY_LEN(GuEnumConstant,GU_ID({__VA_ARGS__})),		\
+		.elems = ((GuEnumConstant[]){__VA_ARGS__})			\
+	} \
 }
 
 GuEnumConstant*
@@ -402,14 +414,22 @@ struct GuTypeTableEntry {
 typedef const struct GuTypeTable GuTypeTable;
 
 struct GuTypeTable {
-	GuSList(const GuTypeTable*) parents;
-	GuSList(GuTypeTableEntry) entries;
+	struct {
+		int len;
+		GuTypeTable** elems;
+	} parents;
+	struct {
+		int len;
+		GuTypeTableEntry* elems;
+	} entries;
 };
 
 #define GU_TYPETABLE(parents_, ...) { \
 	.parents = parents_, \
-	.entries = GU_SLIST(GuTypeTableEntry, \
-			    __VA_ARGS__) \
+	.entries = {								\
+		.len = GU_ARRAY_LEN(GuTypeTableEntry,GU_ID({__VA_ARGS__})),		\
+		.elems = ((GuTypeTableEntry[]){__VA_ARGS__})			\
+	} \
  }
 
 typedef struct GuTypeMap GuTypeMap;

@@ -148,7 +148,10 @@ struct GuConstructor {
 
 
 
-typedef GuSList(GuConstructor) GuConstructors;
+typedef struct {
+	int len;
+	GuConstructor* elems;
+} GuConstructors;
 
 typedef const struct GuVariantType GuVariantType, GuType_GuVariant;
 
@@ -159,7 +162,10 @@ struct GuVariantType {
 
 #define GU_TYPE_INIT_GuVariant(k_, t_, ...) {			\
 	.repr_base = GU_TYPE_INIT_repr(k_, GuVariant, _),	\
-	.ctors = GU_SLIST(GuConstructor, __VA_ARGS__) \
+	.ctors = {								\
+		.len = GU_ARRAY_LEN(GuConstructor,GU_ID({__VA_ARGS__})),		\
+		.elems = ((GuConstructor[]){__VA_ARGS__})			\
+	} \
 }
 
 extern GU_DECLARE_KIND(GuVariant);

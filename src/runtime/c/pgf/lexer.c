@@ -1,4 +1,3 @@
-#include <gu/list.h>
 #include <gu/utf8.h>
 #include <pgf/pgf.h>
 #include <pgf/data.h>

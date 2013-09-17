@@ -1,35 +1,27 @@
 #include <gu/out.h>
 #include <gu/seq.h>
 #include <gu/fun.h>
+#include <gu/str.h>
 #include <gu/assert.h>
 #include <string.h>
 #include <stdlib.h>
 
+struct GuSeq {
+	size_t len;
+	uint8_t data[0];
+};
 
 struct GuBuf {
-	uint8_t* data;
+	GuSeq* seq;
 	size_t elem_size;
 	size_t avail_len;
 	GuFinalizer fin;
 };
 
-GuBuf*
-gu_seq_buf(GuSeq seq)
-{
-	gu_require(gu_tagged_tag(seq.w_) == 0);
-	return gu_word_ptr(seq.w_);
-}
-
-GuSeq
-gu_buf_seq(GuBuf* buf)
-{
-	return (GuSeq) { .w_ = gu_ptr_word(buf) };
-}
-
 size_t
-gu_buf_length(GuBuf* dyn)
+gu_buf_length(GuBuf* buf)
 {
-	return (size_t)(((GuWord*)(void*)dyn)[-1] >> 1);
+	return buf->seq->len;
 }
 
 size_t
@@ -38,58 +30,82 @@ gu_buf_avail(GuBuf* buf)
 	return buf->avail_len;
 }
 
-
-static void
-gu_buf_set_length(GuBuf* dyn, size_t new_len)
-{
-	((GuWord*)(void*)dyn)[-1] = ((GuWord) new_len) << 1 | 0x1;
-}
-
 static void
 gu_buf_fini(GuFinalizer* fin)
 {
 	GuBuf* buf = gu_container(fin, GuBuf, fin);
-	gu_mem_buf_free(buf->data);
+	if (buf->avail_len > 0)
+		gu_mem_buf_free(buf->seq);
 }
 
 GuBuf*
 gu_make_buf(size_t elem_size, GuPool* pool)
 {
-	GuBuf* buf = gu_new_prefixed(unsigned, GuBuf, pool);
-	gu_buf_set_length(buf, 0);
+	GuBuf* buf = gu_new(GuBuf, pool);
+	buf->seq = gu_empty_seq();
 	buf->elem_size = elem_size;
-	buf->data = NULL;
 	buf->avail_len = 0;
 	buf->fin.fn = gu_buf_fini;
 	gu_pool_finally(pool, &buf->fin);
-	gu_buf_set_length(buf, 0);
 	return buf;
 }
 
-static const GuWord gu_empty_seq_[2] = {0, 0};
-
-GuSeq
-gu_empty_seq() {
-	return (GuSeq) { gu_tagged((void*)&gu_empty_seq_[1], 0) };
+size_t
+gu_seq_length(GuSeq* seq)
+{
+	return seq->len;
 }
 
-GuSeq
+void*
+gu_seq_data(GuSeq* seq)
+{
+	return seq->data;
+}
+
+static GuSeq gu_empty_seq_ = {0};
+
+GuSeq*
+gu_empty_seq() {
+	return &gu_empty_seq_;
+}
+
+GuSeq*
 gu_make_seq(size_t elem_size, size_t length, GuPool* pool)
 {
-	size_t size = elem_size * length;
-	if (0 < length && length <= GU_TAG_MAX) {
-		void* buf = gu_malloc(pool, size);
-		return (GuSeq) { gu_tagged(buf, length) };
-	} else if (size == 0) {
+	GuSeq* seq = gu_malloc(pool, sizeof(GuSeq) + elem_size * length);
+	seq->len = length;
+	return seq;
+}
+
+GuSeq*
+gu_alloc_seq_(size_t elem_size, size_t length)
+{
+	if (length == 0)
 		return gu_empty_seq();
-	} else {
-		void* buf = gu_malloc_prefixed(pool,
-					       gu_alignof(GuWord), 
-					       sizeof(GuWord),
-					       0, size);
-		((GuWord*) buf)[-1] = ((GuWord) length) << 1;
-		return (GuSeq) { gu_tagged(buf, 0) };
-	}
+
+	size_t real_size;
+	GuSeq* seq = gu_mem_buf_alloc(sizeof(GuSeq) + elem_size * length, &real_size);
+	seq->len = (real_size - sizeof(GuSeq)) / elem_size;
+	return seq;
+}
+
+GuSeq*
+gu_realloc_seq_(GuSeq* seq, size_t elem_size, size_t length)
+{
+	size_t real_size;
+	GuSeq* new_seq = (seq == NULL || seq == gu_empty_seq()) ?
+	   gu_mem_buf_alloc(sizeof(GuSeq) + elem_size * length, &real_size) :
+	   gu_mem_buf_realloc(seq, sizeof(GuSeq) + elem_size * length, &real_size);
+	new_seq->len = (real_size - sizeof(GuSeq)) / elem_size;
+	return new_seq;
+}
+
+void
+gu_seq_free(GuSeq* seq)
+{
+	if (seq == NULL || seq == gu_empty_seq())
+		return;
+	gu_mem_buf_free(seq);
 }
 
 static void
@@ -98,17 +114,30 @@ gu_buf_require(GuBuf* buf, size_t req_len)
 	if (req_len <= buf->avail_len) {
 		return;
 	}
-	size_t req_size = buf->elem_size * req_len;
+
+	size_t req_size = sizeof(GuSeq) + buf->elem_size * req_len;
 	size_t real_size;
-	buf->data = gu_mem_buf_realloc(buf->data, req_size,
-				       &real_size);
-	buf->avail_len = real_size / buf->elem_size;
+	
+	if (buf->seq == NULL || buf->seq == gu_empty_seq())  {
+		buf->seq = gu_mem_buf_alloc(req_size, &real_size);
+		buf->seq->len = 0;
+	} else {
+		buf->seq = gu_mem_buf_realloc(buf->seq, req_size, &real_size);
+	}
+
+	buf->avail_len = (real_size - sizeof(GuSeq)) / buf->elem_size;
 }
 
 void*
 gu_buf_data(GuBuf* buf)
 {
-	return buf->data;
+	return &buf->seq->data;
+}
+
+GuSeq*
+gu_buf_data_seq(GuBuf* buf)
+{
+	return buf->seq;
 }
 
 void*
@@ -117,8 +146,8 @@ gu_buf_extend_n(GuBuf* buf, size_t n_elems)
 	size_t len = gu_buf_length(buf);
 	size_t new_len = len + n_elems;
 	gu_buf_require(buf, new_len);
-	gu_buf_set_length(buf, new_len);
-	return &buf->data[buf->elem_size * len];
+	buf->seq->len = new_len;
+	return &buf->seq->data[buf->elem_size * len];
 }
 
 void*
@@ -130,7 +159,6 @@ gu_buf_extend(GuBuf* buf)
 void
 gu_buf_push_n(GuBuf* buf, const void* data, size_t n_elems)
 {
-	
 	void* p = gu_buf_extend_n(buf, n_elems);
 	memcpy(p, data, buf->elem_size * n_elems);
 }
@@ -140,8 +168,8 @@ gu_buf_trim_n(GuBuf* buf, size_t n_elems)
 {
 	gu_require(n_elems <= gu_buf_length(buf));
 	size_t new_len = gu_buf_length(buf) - n_elems;
-	gu_buf_set_length(buf, new_len);
-	return &buf->data[buf->elem_size * new_len];
+	buf->seq->len = new_len;
+	return &buf->seq->data[buf->elem_size * new_len];
 }
 
 const void*
@@ -153,7 +181,7 @@ gu_buf_trim(GuBuf* buf)
 void
 gu_buf_flush(GuBuf* buf)
 {
-	gu_buf_set_length(buf, 0);
+	buf->seq->len = 0;
 }
 
 void
@@ -163,11 +191,11 @@ gu_buf_pop_n(GuBuf* buf, size_t n_elems, void* data_out)
 	memcpy(data_out, p, buf->elem_size * n_elems);
 }
 
-GuSeq
+GuSeq*
 gu_buf_freeze(GuBuf* buf, GuPool* pool)
 {
 	size_t len = gu_buf_length(buf);
-	GuSeq seq = gu_make_seq(buf->elem_size, len, pool);
+	GuSeq* seq = gu_make_seq(buf->elem_size, len, pool);
 	void* bufdata = gu_buf_data(buf);
 	void* seqdata = gu_seq_data(seq);
 	memcpy(seqdata, bufdata, buf->elem_size * len);
@@ -182,32 +210,32 @@ gu_quick_sort(GuBuf *buf, GuOrder *order, int left, int right)
 
 	void* pivot = alloca(buf->elem_size);
 	memcpy(pivot,
-	       &buf->data[buf->elem_size * left],
+	       &buf->seq->data[buf->elem_size * left],
 	       buf->elem_size);
 	while (left < right) {
 
-		while ((order->compare(order, &buf->data[buf->elem_size * right], pivot) >= 0) && (left < right))
+		while ((order->compare(order, &buf->seq->data[buf->elem_size * right], pivot) >= 0) && (left < right))
 			right--;
 
 		if (left != right) {
-			memcpy(&buf->data[buf->elem_size * left],
-			       &buf->data[buf->elem_size * right],
+			memcpy(&buf->seq->data[buf->elem_size * left],
+			       &buf->seq->data[buf->elem_size * right],
 			       buf->elem_size);
 			left++;
 		}
 
-		while ((order->compare(order, &buf->data[buf->elem_size * left], pivot) <= 0) && (left < right))
+		while ((order->compare(order, &buf->seq->data[buf->elem_size * left], pivot) <= 0) && (left < right))
 			left++;
 
 		if (left != right) {
-			memcpy(&buf->data[buf->elem_size * right],
-			       &buf->data[buf->elem_size * left],
+			memcpy(&buf->seq->data[buf->elem_size * right],
+			       &buf->seq->data[buf->elem_size * left],
 			       buf->elem_size);
 			right--;
 		}
 	}
 	
-	memcpy(&buf->data[buf->elem_size * left],
+	memcpy(&buf->seq->data[buf->elem_size * left],
 	       pivot,
            buf->elem_size);
 	int index = left;
@@ -235,7 +263,7 @@ gu_buf_binsearch(GuBuf *buf, GuOrder *order, void *value)
 	
 	while (i <= j) {
 		size_t k = (i+j) / 2;
-		int cmp = order->compare(order, value, &buf->data[buf->elem_size * k]);
+		int cmp = order->compare(order, value, &buf->seq->data[buf->elem_size * k]);
 	
 		if (cmp < 0) {
 			j = k-1;
@@ -243,7 +271,7 @@ gu_buf_binsearch(GuBuf *buf, GuOrder *order, void *value)
 			i = k+1;
 		} else {
 			memcpy(value,
-			       &buf->data[buf->elem_size * k],
+			       &buf->seq->data[buf->elem_size * k],
 			       buf->elem_size);
 			return true;
 		}
@@ -258,16 +286,16 @@ gu_heap_siftdown(GuBuf *buf, GuOrder *order,
 {
 	while (pos > startpos) {
 		int parentpos = (pos - 1) >> 1;
-        void *parent = &buf->data[buf->elem_size * parentpos];
+        void *parent = &buf->seq->data[buf->elem_size * parentpos];
         
 		if (order->compare(order, value, parent) >= 0)
 			break;
 
-		memcpy(&buf->data[buf->elem_size * pos], parent, buf->elem_size);
+		memcpy(&buf->seq->data[buf->elem_size * pos], parent, buf->elem_size);
 		pos = parentpos;
 	}
 
-	memcpy(&buf->data[buf->elem_size * pos], value, buf->elem_size);
+	memcpy(&buf->seq->data[buf->elem_size * pos], value, buf->elem_size);
 }
 
 static void
@@ -282,13 +310,13 @@ gu_heap_siftup(GuBuf *buf, GuOrder *order,
 		int rightpos = childpos + 1;
 		if (rightpos < endpos &&
 		    order->compare(order, 
-			               &buf->data[buf->elem_size * childpos],
-			               &buf->data[buf->elem_size * rightpos]) >= 0) {
+			               &buf->seq->data[buf->elem_size * childpos],
+			               &buf->seq->data[buf->elem_size * rightpos]) >= 0) {
 			childpos = rightpos;
 		}
 
-		memcpy(&buf->data[buf->elem_size * pos], 
-		       &buf->data[buf->elem_size * childpos], buf->elem_size);
+		memcpy(&buf->seq->data[buf->elem_size * pos], 
+		       &buf->seq->data[buf->elem_size * childpos], buf->elem_size);
 		pos = childpos;
 		childpos = 2*pos + 1;
    }
@@ -309,7 +337,7 @@ gu_buf_heap_pop(GuBuf *buf, GuOrder *order, void* data_out)
 	const void* last = gu_buf_trim(buf); // raises an error if empty
 
 	if (gu_buf_length(buf) > 0) {
-		memcpy(data_out, buf->data, buf->elem_size);
+		memcpy(data_out, buf->seq->data, buf->elem_size);
 		gu_heap_siftup(buf, order, last, 0);
 	} else {
 		memcpy(data_out, last, buf->elem_size);
@@ -321,7 +349,7 @@ gu_buf_heap_replace(GuBuf *buf, GuOrder *order, void *value, void *data_out)
 {
 	gu_require(gu_buf_length(buf) > 0);
 
-	memcpy(data_out, buf->data, buf->elem_size);
+	memcpy(data_out, buf->seq->data, buf->elem_size);
 	gu_heap_siftup(buf, order, value, 0);
 }
 
@@ -332,7 +360,7 @@ gu_buf_heapify(GuBuf *buf, GuOrder *order)
 	void *value = alloca(buf->elem_size);
 	
 	for (size_t i = 0; i < middle; i++) {
-		memcpy(value, &buf->data[buf->elem_size * i], buf->elem_size);
+		memcpy(value, &buf->seq->data[buf->elem_size * i], buf->elem_size);
 		gu_heap_siftup(buf, order, value, i);
 	}
 }
@@ -370,7 +398,7 @@ gu_buf_outbuf_begin(GuOutStream* stream, size_t req, size_t* sz_out, GuExn* err)
 	size_t avail = buf->avail_len;
 	gu_assert(len < avail);
 	*sz_out = esz * (avail - len);
-	return &buf->data[len * esz];
+	return &buf->seq->data[len * esz];
 }
 
 static void
@@ -383,7 +411,7 @@ gu_buf_outbuf_end(GuOutStream* stream, size_t sz, GuExn* err)
 	size_t elem_size = buf->elem_size;
 	gu_require(sz % elem_size == 0);
 	gu_require(sz < elem_size * (len - buf->avail_len));
-	gu_buf_set_length(buf, len + (sz / elem_size));
+	buf->seq->len = len + (sz / elem_size);
 }
 
 GuOut*
@@ -398,23 +426,16 @@ gu_buf_out(GuBuf* buf, GuPool* pool)
 	return gu_new_out(&bout->stream, pool);
 }
 
-const GuSeq
-gu_null_seq = GU_NULL_SEQ;
-
-
 #include <gu/type.h>
 
 GU_DEFINE_KIND(GuSeq, GuOpaque);
 GU_DEFINE_KIND(GuBuf, abstract);
 
-GU_DEFINE_TYPE(GuChars, GuSeq, gu_type(char));
-GU_DEFINE_TYPE(GuBytes, GuSeq, gu_type(uint8_t));
-
 char*
-gu_chars_str(GuChars chars, GuPool* pool)
+gu_char_buf_str(GuCharBuf* chars, GuPool* pool)
 {
-	size_t len = gu_seq_length(chars);
-	char* data = gu_seq_data(chars);
+	size_t len = gu_buf_length(chars);
+	char* data = gu_buf_data(chars);
 	char* str = gu_new_str(len, pool);
 	memcpy(str, data, len);
 	return str;

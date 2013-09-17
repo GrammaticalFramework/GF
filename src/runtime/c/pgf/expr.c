@@ -91,20 +91,12 @@ GU_DEFINE_TYPE(PgfHypo, struct,
 	       GU_MEMBER(PgfHypo, cid, PgfCId),
 	       GU_MEMBER_P(PgfHypo, type, PgfType));
 
-GU_DEFINE_TYPE(PgfHypos, GuSeq, gu_type(PgfHypo));
-
-GU_DEFINE_TYPE(PgfType, struct,
-	       GU_MEMBER(PgfType, hypos, PgfHypos),
-	       GU_MEMBER(PgfType, cid, PgfCId),
-	       GU_MEMBER(PgfType, n_exprs, GuLength),
-	       GU_FLEX_MEMBER(PgfType, exprs, PgfExpr));
-
 GU_DEFINE_TYPE(
 	PgfExpr, GuVariant,
 	GU_CONSTRUCTOR_S(
 		PGF_EXPR_ABS, PgfExprAbs,
 		GU_MEMBER(PgfExprAbs, bind_type, PgfBindType),
-		GU_MEMBER(PgfExprAbs, id, GuStr),
+		GU_MEMBER(PgfExprAbs, id, GuString),
 		GU_MEMBER(PgfExprAbs, body, PgfExpr)),
 	GU_CONSTRUCTOR_S(
 		PGF_EXPR_APP, PgfExprApp,
@@ -160,7 +152,7 @@ struct PgfExprParser {
 	GuPool* expr_pool;
 	GuPool* tmp_pool;
 	PGF_TOKEN_TAG token_tag;
-	GuChars token_value;
+	GuCharBuf* token_value;
 	int ch;
 };
 
@@ -182,7 +174,7 @@ pgf_expr_parser_token(PgfExprParser* parser)
 	}
 
 	parser->token_tag   = PGF_TOKEN_UNKNOWN;
-	parser->token_value = gu_null_seq;
+	parser->token_value = NULL;
 
 	switch (parser->ch) {
 	case EOF:
@@ -250,7 +242,7 @@ pgf_expr_parser_token(PgfExprParser* parser)
 				pgf_expr_parser_getc(parser);
 			}
 			parser->token_tag   = PGF_TOKEN_IDENT;
-			parser->token_value = gu_buf_seq(chars);
+			parser->token_value = chars;
 		} else if (isdigit(parser->ch)) {
 			while (isdigit(parser->ch)) {
 				gu_buf_push(chars, char, parser->ch);
@@ -266,10 +258,10 @@ pgf_expr_parser_token(PgfExprParser* parser)
 					pgf_expr_parser_getc(parser);
 				}
 				parser->token_tag   = PGF_TOKEN_FLT;
-				parser->token_value = gu_buf_seq(chars);
+				parser->token_value = chars;
 			} else {
 				parser->token_tag   = PGF_TOKEN_INT;
-				parser->token_value = gu_buf_seq(chars);
+				parser->token_value = chars;
 			}
 		} else if (parser->ch == '"') {
 			pgf_expr_parser_getc(parser);
@@ -282,7 +274,7 @@ pgf_expr_parser_token(PgfExprParser* parser)
 			if (parser->ch == '"') {
 				pgf_expr_parser_getc(parser);
 				parser->token_tag   = PGF_TOKEN_STR;
-				parser->token_value = gu_buf_seq(chars);
+				parser->token_value = chars;
 			}
 		}
 		break;
@@ -350,7 +342,7 @@ pgf_expr_parser_term(PgfExprParser* parser)
 	}
 	case PGF_TOKEN_IDENT: {
 		char* str = 
-			gu_chars_str(parser->token_value, parser->tmp_pool);
+			gu_char_buf_str(parser->token_value, parser->tmp_pool);
 		PgfCId id = gu_str_string(str, parser->expr_pool);
 		pgf_expr_parser_token(parser);
 		return gu_new_variant_i(parser->expr_pool,
@@ -360,7 +352,7 @@ pgf_expr_parser_term(PgfExprParser* parser)
 	}
 	case PGF_TOKEN_INT: {
 		char* str = 
-			gu_chars_str(parser->token_value, parser->tmp_pool);
+			gu_char_buf_str(parser->token_value, parser->tmp_pool);
 		int n = atoi(str);
 		pgf_expr_parser_token(parser);
 		PgfLiteral lit = 
@@ -375,7 +367,7 @@ pgf_expr_parser_term(PgfExprParser* parser)
 	}
 	case PGF_TOKEN_STR: {
 		char* str =
-			gu_chars_str(parser->token_value, parser->tmp_pool);
+			gu_char_buf_str(parser->token_value, parser->tmp_pool);
 		GuString s = gu_str_string(str, parser->expr_pool);
 		pgf_expr_parser_token(parser);
 		PgfLiteral lit = 
@@ -390,7 +382,7 @@ pgf_expr_parser_term(PgfExprParser* parser)
 	}
 	case PGF_TOKEN_FLT: {
 		char* str = 
-			gu_chars_str(parser->token_value, parser->tmp_pool);
+			gu_char_buf_str(parser->token_value, parser->tmp_pool);
 		double d = atof(str);
 		pgf_expr_parser_token(parser);
 		PgfLiteral lit = 
@@ -451,7 +443,7 @@ pgf_expr_parser_bind(PgfExprParser* parser, GuBuf* binds)
 	for (;;) {
 		if (parser->token_tag == PGF_TOKEN_IDENT) {
 			char* str = 
-				gu_chars_str(parser->token_value, parser->tmp_pool);
+				gu_char_buf_str(parser->token_value, parser->tmp_pool);
 			var = gu_str_string(str, parser->expr_pool);
 			pgf_expr_parser_token(parser);
 		} else if (parser->token_tag == PGF_TOKEN_WILD) {
@@ -571,7 +563,7 @@ pgf_expr_parser_hypos(PgfExprParser* parser, GuBuf* hypos)
 
 		if (parser->token_tag == PGF_TOKEN_IDENT) {
 			char* str = 
-				gu_chars_str(parser->token_value, parser->tmp_pool);
+				gu_char_buf_str(parser->token_value, parser->tmp_pool);
 			var = gu_str_string(str, parser->expr_pool);
 			pgf_expr_parser_token(parser);
 		} else if (parser->token_tag == PGF_TOKEN_WILD) {
@@ -612,7 +604,7 @@ pgf_expr_parser_atom(PgfExprParser* parser)
 		return NULL;
 
 	char* str =
-		gu_chars_str(parser->token_value, parser->tmp_pool);
+		gu_char_buf_str(parser->token_value, parser->tmp_pool);
 	PgfCId cid = gu_str_string(str, parser->expr_pool);
 	pgf_expr_parser_token(parser);
 
@@ -712,7 +704,7 @@ pgf_expr_parser_type(PgfExprParser* parser)
 		}
 	}
 
-	type->hypos = gu_buf_seq(hypos);
+	type->hypos = gu_buf_data_seq(hypos);
 
 	return type;
 }

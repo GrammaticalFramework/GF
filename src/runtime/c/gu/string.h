@@ -103,11 +103,6 @@ gu_string_cmp(GuString s1, GuString s2);
 extern GU_DECLARE_TYPE(GuString, GuOpaque);
 # endif
 
-# if defined(GU_SEQ_H_) && !defined(GU_STRING_H_SEQ_TYPE_)
-#  define GU_STRING_H_SEQ_TYPE_
-extern GU_DECLARE_TYPE(GuStrings, GuSeq);
-# endif
-
 # if defined(GU_MAP_H_TYPE_) && !defined(GU_STRING_H_MAP_TYPE_)
 #  define GU_STRING_H_MAP_TYPE_
 

@@ -60,7 +60,7 @@ pgf_print_absfun(GuMapItor* fn, const void* key, void* value,
     PgfAbsFun *fun = *((PgfAbsFun **) value);
     GuOut *out = clo->out;
     
-    gu_puts(gu_seq_is_null(fun->defns) ? "  data " : "  fun ", out, err);
+    gu_puts((fun->defns == NULL) ? "  data " : "  fun ", out, err);
     gu_string_write(name, out, err);
     gu_puts(" : ", out, err);
     pgf_print_type(fun->type, NULL, 0, out, err);
@@ -94,7 +94,7 @@ pgf_print_productions(GuMapItor* fn, const void* key, void* value,
     PgfCCat* ccat = *((PgfCCat**) value);
     GuOut *out = clo->out;
 
-	if (!gu_seq_is_null(ccat->prods)) {
+	if (ccat->prods != NULL) {
 		size_t n_prods = gu_seq_length(ccat->prods);
 		for (size_t i = 0; i < n_prods; i++) {
 			PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
@@ -114,11 +114,11 @@ pgf_print_productions(GuMapItor* fn, const void* key, void* value,
 					PgfPArg arg = gu_seq_get(papp->args, PgfPArg, j);
 
 					if (arg.hypos != NULL) {
-						size_t n_hypos = gu_list_length(arg.hypos);
+						size_t n_hypos = gu_seq_length(arg.hypos);
 						for (size_t k = 0; k < n_hypos; k++) {
 							if (k > 0)
 								gu_putc(' ',out,err);
-							PgfCCat *hypo = gu_list_index(arg.hypos, k);
+							PgfCCat *hypo = gu_seq_get(arg.hypos, PgfCCat*, k);
 							gu_printf(out,err,"C%d",hypo->fid);
 						}
 					}
@@ -152,11 +152,11 @@ pgf_print_lindefs(GuMapItor* fn, const void* key, void* value,
     if (ccat->lindefs != NULL) {
 		gu_printf(out,err,"    C%d -> ",fid);
 		
-		size_t n_lindefs = gu_list_length(ccat->lindefs);
+		size_t n_lindefs = gu_seq_length(ccat->lindefs);
 		for (size_t i = 0; i < n_lindefs; i++) {
 			if (i > 0) gu_putc(' ', out, err);
 			
-			PgfCncFun* fun = gu_list_index(ccat->lindefs, i);
+			PgfCncFun* fun = gu_seq_get(ccat->lindefs, PgfCncFun*, i);
 			gu_printf(out,err,"F%d",fun->funid);
 		}
 		
@@ -165,19 +165,19 @@ pgf_print_lindefs(GuMapItor* fn, const void* key, void* value,
 }
 
 static void
-pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences *sequences, 
+pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences* sequences, 
 					GuOut *out, GuExn *err)
 {
 	gu_printf(out,err,"    F%d := (", cncfun->funid);
 	
-	size_t n_seqs = gu_list_length(sequences);
+	size_t n_seqs = gu_seq_length(sequences);
 	
 	for (size_t i = 0; i < cncfun->n_lins; i++) {
 		if (i > 0) gu_putc(',', out, err);
-		PgfSequence seq = cncfun->lins[i];
+		PgfSequence* seq = cncfun->lins[i];
 
 		for (size_t seqid = 0; seqid < n_seqs; seqid++) {
-			if (gu_seq_data(gu_list_index(sequences, seqid)) == gu_seq_data(seq)) {
+			if (gu_seq_data(gu_seq_get(sequences, PgfSequence*, seqid)) == gu_seq_data(seq)) {
 				gu_printf(out,err,"S%d", seqid);
 				break;
 			}
@@ -196,7 +196,7 @@ pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences *sequences,
 }
 
 static void
-pgf_print_tokens(PgfTokens tokens, GuOut *out, GuExn *err)
+pgf_print_tokens(PgfTokens* tokens, GuOut *out, GuExn *err)
 {
 	gu_putc('"', out, err);
 	size_t n_toks = gu_seq_length(tokens);
@@ -234,11 +234,11 @@ pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
             pgf_print_tokens(skp->forms[i].form, out, err);
             gu_puts(" / ", out, err);
             
-            size_t n_prefixes = gu_list_length(skp->forms[i].prefixes);
+            size_t n_prefixes = gu_seq_length(skp->forms[i].prefixes);
             for (size_t j = 0; j < n_prefixes; j++) {
 				if (j > 0) gu_putc(' ', out, err);
 				
-				GuString prefix = gu_list_index(skp->forms[i].prefixes, j);
+				GuString prefix = gu_seq_get(skp->forms[i].prefixes, GuString, j);
 				gu_putc('"', out, err);
 				gu_string_write(prefix, out, err);
 				gu_putc('"', out, err);
@@ -268,7 +268,7 @@ pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
 }
 
 static void
-pgf_print_sequence(size_t seqid, PgfSequence seq, GuOut *out, GuExn *err)
+pgf_print_sequence(size_t seqid, PgfSequence* seq, GuOut *out, GuExn *err)
 {
 	gu_printf(out,err,"    S%d := ", seqid);
 
@@ -296,8 +296,8 @@ pgf_print_cnccat(GuMapItor* fn, const void* key, void* value,
     gu_string_write(name, out, err);
     gu_puts(" :=\n", out, err);
     
-    PgfCCat *start = gu_list_index(cnccat->cats, 0);
-    PgfCCat *end   = gu_list_index(cnccat->cats, gu_list_length(cnccat->cats)-1);
+    PgfCCat *start = gu_seq_get(cnccat->cats, PgfCCat*, 0);
+    PgfCCat *end   = gu_seq_get(cnccat->cats, PgfCCat*, gu_seq_length(cnccat->cats)-1);
     
     gu_printf(out, err, "       range  [C%d..C%d]\n", start->fid, end->fid);
     
@@ -332,16 +332,16 @@ pgf_print_concrete(PgfCId cncname, PgfConcr* concr,
 	gu_map_iter(concr->ccats, &clo3.fn, err);
 
 	gu_puts("  lin\n", out, err);
-	size_t n_funs = gu_list_length(concr->cncfuns);
+	size_t n_funs = gu_seq_length(concr->cncfuns);
 	for (size_t i = 0; i < n_funs; i++) {
-		PgfCncFun* cncfun = gu_list_index(concr->cncfuns, i);
+		PgfCncFun* cncfun = gu_seq_get(concr->cncfuns, PgfCncFun*, i);
 		pgf_print_cncfun(cncfun, concr->sequences, out, err);
 	}
 
 	gu_puts("  sequences\n", out, err);
-	size_t n_seqs = gu_list_length(concr->sequences);
+	size_t n_seqs = gu_seq_length(concr->sequences);
 	for (size_t i = 0; i < n_seqs; i++) {
-		PgfSequence seq = gu_list_index(concr->sequences, i);
+		PgfSequence* seq = gu_seq_get(concr->sequences, PgfSequence*, i);
 		pgf_print_sequence(i, seq, out, err);
 	}
 	

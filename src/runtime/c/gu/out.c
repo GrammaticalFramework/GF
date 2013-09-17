@@ -1,6 +1,7 @@
 #include <gu/seq.h>
 #include <gu/out.h>
 #include <gu/utf8.h>
+#include <gu/str.h>
 
 static bool
 gu_out_is_buffering(GuOut* out)
