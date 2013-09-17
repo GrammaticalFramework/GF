@@ -475,9 +475,9 @@ gu_string_cmp(GuString s1, GuString s2)
 		if (sz1 == i && i == sz2)
 			break;
 		
-		if (sz1 < i)
+		if (sz1 <= i)
 			return -1;
-		if (i > sz2)
+		if (i >= sz2)
 			return 1;
 
 		if (src1[i] > src2[i])
