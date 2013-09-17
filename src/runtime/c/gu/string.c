@@ -421,6 +421,17 @@ gu_string_eq(GuString s1, GuString s2)
 
 }
 
+static bool
+gu_string_eq_fn(GuEquality* self, const void* p1, const void* p2)
+{
+	(void) self;
+	const GuString* sp1 = p1;
+	const GuString* sp2 = p2;
+	return gu_string_eq(*sp1, *sp2);
+}
+
+GuEquality gu_string_equality[1] = { { gu_string_eq_fn } };
+
 int
 gu_string_cmp(GuString s1, GuString s2)
 {
@@ -478,21 +489,23 @@ gu_string_cmp(GuString s1, GuString s2)
 	return 0;
 }
 
+static int
+gu_string_cmp_fn(GuOrder* self, const void* p1, const void* p2)
+{
+	(void) self;
+	const GuString* sp1 = p1;
+	const GuString* sp2 = p2;
+	return gu_string_cmp(*sp1, *sp2);
+}
+
+GuOrder gu_string_order[1] = { { gu_string_cmp_fn } };
+
 static GuHash
 gu_string_hasher_hash(GuHasher* self, const void* p)
 {
 	(void) self;
 	const GuString* sp = p;
 	return gu_string_hash(0, *sp);
-}
-
-static bool
-gu_string_eq_fn(GuEquality* self, const void* p1, const void* p2)
-{
-	(void) self;
-	const GuString* sp1 = p1;
-	const GuString* sp2 = p2;
-	return gu_string_eq(*sp1, *sp2);
 }
 
 GuHasher gu_string_hasher[1] = {
