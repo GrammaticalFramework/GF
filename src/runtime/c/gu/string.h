@@ -81,6 +81,19 @@ gu_string_is_prefix(GuString s1, GuString s2);
 
 #endif // GU_STRING_H_
 
+#if defined(GU_FUN_H_) && !defined(GU_STRING_H_FUN_)
+#define GU_STRING_H_FUN_
+bool
+gu_string_eq(GuString s1, GuString s2);
+
+extern GuEquality gu_string_equality[1];
+
+int
+gu_string_cmp(GuString s1, GuString s2);
+
+extern GuOrder gu_string_order[1];
+#endif
+
 #if defined(GU_HASH_H_) && !defined(GU_STRING_H_HASH_)
 #define GU_STRING_H_HASH_
 
@@ -88,12 +101,6 @@ GuHash
 gu_string_hash(GuHash h, GuString s);
 
 extern GuHasher gu_string_hasher[1];
-
-bool
-gu_string_eq(GuString s1, GuString s2);
-
-int
-gu_string_cmp(GuString s1, GuString s2);
 #endif
 
 #ifdef GU_TYPE_H_
