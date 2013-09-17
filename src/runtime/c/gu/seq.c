@@ -3,7 +3,6 @@
 #include <gu/fun.h>
 #include <gu/str.h>
 #include <gu/assert.h>
-#include <string.h>
 #include <stdlib.h>
 
 struct GuSeq {
@@ -255,29 +254,27 @@ gu_buf_sort(GuBuf *buf, GuOrder *order)
 	gu_quick_sort(buf, order, 0, gu_buf_length(buf) - 1);
 }
 
-bool
-gu_buf_binsearch(GuBuf *buf, GuOrder *order, void *value)
+void*
+gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, size_t field_offset, void *key)
 {
 	size_t i = 0;
-	size_t j = gu_buf_length(buf)-1;
+	size_t j = seq->len-1;
 	
 	while (i <= j) {
 		size_t k = (i+j) / 2;
-		int cmp = order->compare(order, value, &buf->seq->data[buf->elem_size * k]);
+		uint8_t* elem_p = &seq->data[elem_size * k];
+		int cmp = order->compare(order, key, elem_p + field_offset);
 	
 		if (cmp < 0) {
 			j = k-1;
 		} else if (cmp > 0) {
 			i = k+1;
 		} else {
-			memcpy(value,
-			       &buf->seq->data[buf->elem_size * k],
-			       buf->elem_size);
-			return true;
+			return elem_p;
 		}
 	}
 	
-	return false;
+	return NULL;
 }
 
 static void
