@@ -79,6 +79,9 @@ gu_string_to_double(GuString s, double *res);
 bool
 gu_string_is_prefix(GuString s1, GuString s2);
 
+size_t
+gu_string_length(GuString s);
+
 #endif // GU_STRING_H_
 
 #if defined(GU_FUN_H_) && !defined(GU_STRING_H_FUN_)
