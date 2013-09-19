@@ -32,8 +32,7 @@ import GF.Data.Operations
 import Control.Monad
 import Data.Map (Map)
 import qualified Data.Map as Map
-import qualified Data.ByteString.Char8 as BS
-import Data.List
+
 
 subexpModule :: SourceModule -> SourceModule
 subexpModule (n,mo) = errVal (n,mo) $ do
@@ -133,9 +132,9 @@ collectSubterms mo t = case t of
      return t --- only because of composOp
 
 operIdent :: Int -> Ident
-operIdent i = identC (operPrefix `BS.append` (BS.pack (show i))) ---
+operIdent i = identC (operPrefix `prefixRawIdent` (rawIdentS (show i))) ---
 
 isOperIdent :: Ident -> Bool
-isOperIdent id = BS.isPrefixOf operPrefix (ident2bs id)
+isOperIdent id = isPrefixOf operPrefix (ident2raw id)
 
-operPrefix = BS.pack ("A''")
+operPrefix = rawIdentS ("A''")

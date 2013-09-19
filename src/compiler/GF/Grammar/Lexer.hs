@@ -278,12 +278,12 @@ getPosn :: P Posn
 getPosn = P $ \inp@(AI pos _ _) -> POk pos
 
 
-alex_action_3 =  tok (eitherResIdent (T_Ident . identC))      
+alex_action_3 =  tok (eitherResIdent (T_Ident . identC . rawIdentC))
 alex_action_4 =  tok (eitherResIdent (T_LString . BS.unpack)) 
-alex_action_5 =  tok (eitherResIdent (T_Ident . identC))      
-alex_action_6 =  tok (T_String . unescapeInitTail . BS.unpack) 
-alex_action_7 =  tok (T_Integer . read . BS.unpack) 
-alex_action_8 =  tok (T_Double  . read . BS.unpack) 
+alex_action_5 =  tok (eitherResIdent (T_Ident . identC . rawIdentC))
+alex_action_6 =  tok (T_String . unescapeInitTail . BS.unpack)
+alex_action_7 =  tok (T_Integer . read . BS.unpack)
+alex_action_8 =  tok (T_Double  . read . BS.unpack)
 {-# LINE 1 "templates/GenericTemplate.hs" #-}
 {-# LINE 1 "templates/GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}

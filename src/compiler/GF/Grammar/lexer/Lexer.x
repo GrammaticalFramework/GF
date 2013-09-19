@@ -30,9 +30,9 @@ $u = [\0-\255]          -- universal: any character
 "{-" ([$u # \-] | \- [$u # \}])* ("-")+ "}" ; 
 
 $white+ ;
-@rsyms                          { tok (eitherResIdent (T_Ident . identC))      }
+@rsyms                          { tok (eitherResIdent (T_Ident . identC . rawIdentC)) }
 \' ($u # \')* \'                { tok (eitherResIdent (T_LString . BS.unpack)) }
-(\_ | $l)($l | $d | \_ | \')*   { tok (eitherResIdent (T_Ident . identC))      }
+(\_ | $l)($l | $d | \_ | \')*   { tok (eitherResIdent (T_Ident . identC . rawIdentC)) }
 
 \" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \" { tok (T_String . unescapeInitTail . BS.unpack) }
 

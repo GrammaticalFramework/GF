@@ -5,7 +5,7 @@ import PGF.Data
 
 import GF.Compile
 import GF.Compile.Multi (readMulti)
-import GF.Grammar (identC, SourceGrammar) -- for cc command
+import GF.Grammar (identS, SourceGrammar) -- for cc command
 import GF.Grammar.CF
 import GF.Grammar.EBNF
 import GF.Infra.UseIO
@@ -13,7 +13,6 @@ import GF.Infra.Option
 import GF.Data.ErrM
 
 import Data.List (nubBy)
-import qualified Data.ByteString.Char8 as BS
 import System.FilePath
 
 -- import a grammar in an environment where it extends an existing grammar
@@ -59,7 +58,7 @@ importCF opts files get = do
                Ok gf -> return gf
                Bad s -> error s ---- 
        Ok gr <- appIOE $ compileSourceGrammar opts gf
-       epgf <- appIOE $ link opts (identC (BS.pack (justModuleName (last files) ++ "Abs"))) gr
+       epgf <- appIOE $ link opts (identS (justModuleName (last files) ++ "Abs")) gr
        case epgf of
          Ok pgf -> return pgf
          Bad s  -> error s ----

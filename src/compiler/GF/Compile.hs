@@ -35,7 +35,6 @@ import qualified Data.Map as Map
 --import qualified Data.Set as Set
 import Data.List(nub)
 import Data.Maybe (isNothing)
-import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
 
 import PGF.CId
@@ -50,7 +49,7 @@ compileToPGF :: Options -> [FilePath] -> IOE PGF
 compileToPGF opts fs =
     do gr <- batchCompile opts fs
        let name = justModuleName (last fs)
-       link opts (identC (BS.pack name)) gr
+       link opts (identS name) gr
 
 link :: Options -> Ident -> SourceGrammar -> IOE PGF
 link opts cnc gr = do

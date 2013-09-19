@@ -74,7 +74,6 @@ import Data.Array.Unboxed
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntMap as IntMap
-import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
 import System.FilePath
 import Control.Monad.Identity
@@ -472,7 +471,7 @@ data TInfo =
 
 -- | record label
 data Label = 
-    LIdent BS.ByteString
+    LIdent RawIdent
   | LVar Int
    deriving (Show, Eq, Ord)
 
@@ -497,16 +496,15 @@ varLabel :: Int -> Label
 varLabel = LVar
 
 tupleLabel, linLabel :: Int -> Label
-tupleLabel i = LIdent $! BS.pack ('p':show i)
-linLabel   i = LIdent $! BS.pack ('s':show i)
+tupleLabel i = LIdent $! rawIdentS ('p':show i)
+linLabel   i = LIdent $! rawIdentS ('s':show i)
 
 theLinLabel :: Label
-theLinLabel = LIdent (BS.singleton 's')
+theLinLabel = LIdent (rawIdentS "s")
 
 ident2label :: Ident -> Label
-ident2label c = LIdent (ident2bs c)
+ident2label c = LIdent (ident2raw c)
 
 label2ident :: Label -> Ident
 label2ident (LIdent s) = identC s
-label2ident (LVar i)   = identC (BS.pack ('$':show i))
-
+label2ident (LVar i)   = identS ('$':show i)

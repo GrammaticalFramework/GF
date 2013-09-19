@@ -10,7 +10,7 @@ import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
 import GF.Data.ErrM
 import GF.Data.Operations (chunks,err)
-import GF.Grammar hiding (Ident)
+import GF.Grammar hiding (Ident,isPrefixOf)
 import GF.Grammar.Analyse
 import GF.Grammar.Parser (runP, pExp)
 import GF.Grammar.Printer (ppGrammar, ppModule)

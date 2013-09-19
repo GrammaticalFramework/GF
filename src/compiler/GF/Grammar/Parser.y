@@ -507,11 +507,11 @@ Patt3
 
 PattAss :: { [(Label,Patt)] }
 PattAss
-  : ListIdent '=' Patt { [(LIdent (ident2bs i),$3) | i <- $1] } 
+  : ListIdent '=' Patt { [(LIdent (ident2raw i),$3) | i <- $1] } 
 
 Label :: { Label }
 Label
-  : Ident       { LIdent (ident2bs $1)   } 
+  : Ident       { LIdent (ident2raw $1)   } 
   | '$' Integer { LVar (fromIntegral $2) }
 
 Sort :: { Ident }

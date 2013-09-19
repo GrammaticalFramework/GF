@@ -26,7 +26,6 @@ import GF.Grammar.Values
 import GF.Grammar.Macros
 
 import Control.Monad
-import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
 
 {-
@@ -238,11 +237,11 @@ qualifTerm m  = qualif [] where
     Cn c  -> Q (m,c)
     Con c -> QC (m,c)
     _ -> composSafeOp (qualif xs) t
-  chV x = string2var $ ident2bs x
+  chV x = string2var $ ident2raw x
     
-string2var :: BS.ByteString -> Ident
-string2var s = case BS.unpack s of
-  c:'_':i -> identV (BS.singleton c) (readIntArg i) ---
+string2var :: RawIdent -> Ident
+string2var s = case showRawIdent s of
+  c:'_':i -> identV (rawIdentS [c]) (readIntArg i) ---
   _       -> identC s
 
 -- | reindex variables so that they tell nesting depth level
@@ -254,7 +253,7 @@ reindexTerm = qualif (0,[]) where
     Vr x       -> Vr $ look x g
     _ -> composSafeOp (qualif dg) t
   look x  = maybe x id . lookup x --- if x is not in scope it is unchanged
-  ind x d = identC $ ident2bs x `BS.append` BS.singleton '_' `BS.append` BS.pack (show d)
+  ind x d = identC $ ident2raw x `prefixRawIdent` rawIdentS "_" `prefixRawIdent` rawIdentS (show d)
 
 {-
 -- this method works for context-free abstract syntax
