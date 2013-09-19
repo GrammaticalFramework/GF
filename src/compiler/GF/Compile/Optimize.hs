@@ -35,7 +35,6 @@ import Data.List
 import qualified Data.Set as Set
 import Text.PrettyPrint
 import Debug.Trace
-import qualified Data.ByteString.Char8 as BS
 
 
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
@@ -194,7 +193,7 @@ factor param c i t =
            else V ty (map snd pvs0)
 
     --- we hope this will be fresh and don't check... in GFC would be safe
-    qvar = identC (BS.pack ("q_" ++ showIdent c ++ "__" ++ show i))
+    qvar = identS ("q_" ++ showIdent c ++ "__" ++ show i)
 
     mkFun (patt, val) = replace (patt2term patt) (Vr qvar) val
     mkCases t = [(PV qvar, t)]

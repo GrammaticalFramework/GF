@@ -13,7 +13,6 @@ import GF.Data.Operations
 import Text.PrettyPrint
 import Data.List (nub, (\\), tails)
 import qualified Data.IntMap as IntMap
-import qualified Data.ByteString.Char8 as BS
 
 import GF.Grammar.Parser
 import System.IO
@@ -438,8 +437,8 @@ quantify gr scope t tvs ty0 = do
     bndrs _                = []
 
 allBinders :: [Ident]    -- a,b,..z, a1, b1,... z1, a2, b2,... 
-allBinders = [ identC (BS.pack [x])          | x <- ['a'..'z'] ] ++
-             [ identC (BS.pack (x : show i)) | i <- [1 :: Integer ..], x <- ['a'..'z']]
+allBinders = [ identS [x]          | x <- ['a'..'z'] ] ++
+             [ identS (x : show i) | i <- [1 :: Integer ..], x <- ['a'..'z']]
 
 
 -----------------------------------------------------------------------
@@ -502,7 +501,7 @@ setMeta i mv = TcM (\ms msgs -> TcOk () (IntMap.insert i mv ms) msgs)
 
 newVar :: Scope -> Ident
 newVar scope = head [x | i <- [1..], 
-                         let x = identC (BS.pack ('v':show i)), 
+                         let x = identS ('v':show i),
                          isFree scope x]
   where
     isFree []            x = True

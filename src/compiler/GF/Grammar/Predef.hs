@@ -8,195 +8,65 @@
 -- Predefined identifiers and labels which the compiler knows
 ----------------------------------------------------------------------
 
+module GF.Grammar.Predef where
 
-module GF.Grammar.Predef
-          ( cType
-          , cPType
-          , cTok
-          , cStr
-          , cStrs
-          , cPredefAbs, cPredefCnc, cPredef
-          , cInt
-          , cFloat
-          , cString
-          , cVar
-          , cInts
-          , cNonExist
-          , cPBool
-          , cErrorType
-          , cOverload
-          , cUndefinedType
-          , isPredefCat
+import GF.Infra.Ident(Ident,identS)
 
-          , cPTrue, cPFalse
-
-          , cLength, cDrop, cTake, cTk, cDp, cEqStr, cOccur
-          , cOccurs, cEqInt, cLessInt, cPlus, cShow, cRead
-          , cToStr, cMapStr, cError
-          , cToUpper, cToLower, cIsUpper
-          , cEqVal
-
-          -- hacks
-          , cMeta, cAs, cChar, cChars, cSeq, cAlt, cRep
-          , cNeg, cCNC, cConflict
-          ) where
-
-import GF.Infra.Ident
-import qualified Data.ByteString.Char8 as BS
-
-cType :: Ident
-cType = identC (BS.pack "Type")
-
-cPType :: Ident
-cPType = identC (BS.pack "PType")
-
-cTok :: Ident
-cTok = identC (BS.pack "Tok")
-
-cStr :: Ident
-cStr = identC (BS.pack "Str")
-
-cStrs :: Ident
-cStrs = identC (BS.pack "Strs")
-
-cPredefAbs :: Ident
-cPredefAbs = identC (BS.pack "PredefAbs")
-
-cPredefCnc :: Ident
-cPredefCnc = identC (BS.pack "PredefCnc")
-
-cPredef :: Ident
-cPredef = identC (BS.pack "Predef")
-
-cInt :: Ident
-cInt = identC (BS.pack "Int")
-
-cFloat :: Ident
-cFloat = identC (BS.pack "Float")
-
-cString :: Ident
-cString = identC (BS.pack "String")
-
-cVar :: Ident
-cVar = identC (BS.pack "__gfVar")
-
-cInts :: Ident
-cInts = identC (BS.pack "Ints")
-
-cPBool :: Ident
-cPBool = identC (BS.pack "PBool")
-
-cErrorType :: Ident
-cErrorType = identC (BS.pack "Error")
-
-cOverload :: Ident
-cOverload = identC (BS.pack "overload")
-
-cUndefinedType :: Ident
-cUndefinedType = identC (BS.pack "UndefinedType")
-
-cNonExist :: Ident
-cNonExist = identC (BS.pack "nonExist")
+cType = identS "Type"
+cPType = identS "PType"
+cTok = identS "Tok"
+cStr = identS "Str"
+cStrs = identS "Strs"
+cPredefAbs = identS "PredefAbs"
+cPredefCnc = identS "PredefCnc"
+cPredef = identS "Predef"
+cInt = identS "Int"
+cFloat = identS "Float"
+cString = identS "String"
+cVar = identS "__gfVar"
+cInts = identS "Ints"
+cPBool = identS "PBool"
+cErrorType = identS "Error"
+cOverload = identS "overload"
+cUndefinedType = identS "UndefinedType"
+cNonExist = identS "nonExist"
 
 isPredefCat :: Ident -> Bool
 isPredefCat c = elem c [cInt,cString,cFloat]
 
-cPTrue :: Ident
-cPTrue  = identC (BS.pack "PTrue")
+cPTrue  = identS "PTrue"
+cPFalse = identS "PFalse"
+cLength = identS "length"
+cDrop = identS "drop"
+cTake = identS "take"
+cTk = identS "tk"
+cDp = identS "dp"
+cToUpper = identS "toUpper"
+cToLower = identS "toLower"
+cIsUpper = identS "isUpper"
+cEqStr = identS "eqStr"
+cEqVal = identS "eqVal"
+cOccur = identS "occur"
+cOccurs = identS "occurs"
+cEqInt = identS "eqInt"
+cLessInt = identS "lessInt"
+cPlus = identS "plus"
+cShow = identS "show"
+cRead = identS "read"
+cToStr = identS "toStr"
+cMapStr = identS "mapStr"
+cError = identS "error"
 
-cPFalse :: Ident
-cPFalse = identC (BS.pack "PFalse")
+-- * Hacks: dummy identifiers used in various places.
+-- Not very nice!
 
-cLength :: Ident
-cLength = identC (BS.pack "length")
-
-cDrop :: Ident
-cDrop = identC (BS.pack "drop")
-
-cTake :: Ident
-cTake = identC (BS.pack "take")
-
-cTk :: Ident
-cTk = identC (BS.pack "tk")
-
-cDp :: Ident
-cDp = identC (BS.pack "dp")
-
-cToUpper :: Ident
-cToUpper = identC (BS.pack "toUpper")
-
-cToLower :: Ident
-cToLower = identC (BS.pack "toLower")
-
-cIsUpper :: Ident
-cIsUpper = identC (BS.pack "isUpper")
-
-cEqStr :: Ident
-cEqStr = identC (BS.pack "eqStr")
-
-cEqVal :: Ident
-cEqVal = identC (BS.pack "eqVal")
-
-cOccur :: Ident
-cOccur = identC (BS.pack "occur")
-
-cOccurs :: Ident
-cOccurs = identC (BS.pack "occurs")
-
-cEqInt :: Ident
-cEqInt = identC (BS.pack "eqInt")
-
-cLessInt :: Ident
-cLessInt = identC (BS.pack "lessInt")
-
-cPlus :: Ident
-cPlus = identC (BS.pack "plus")
-
-cShow :: Ident
-cShow = identC (BS.pack "show")
-
-cRead :: Ident
-cRead = identC (BS.pack "read")
-
-cToStr :: Ident
-cToStr = identC (BS.pack "toStr")
-
-cMapStr :: Ident
-cMapStr = identC (BS.pack "mapStr")
-
-cError :: Ident
-cError = identC (BS.pack "error")
-
-
---- hacks: dummy identifiers used in various places
---- Not very nice!
-
-cMeta :: Ident
-cMeta = identC (BS.singleton '?')
-
-cAs :: Ident
-cAs = identC (BS.singleton '@')
-
-cChar :: Ident
-cChar = identC (BS.singleton '?')
-
-cChars :: Ident
-cChars = identC (BS.pack "[]")
-
-cSeq :: Ident
-cSeq = identC (BS.pack "+")
-
-cAlt :: Ident
-cAlt = identC (BS.pack "|")
-
-cRep :: Ident
-cRep = identC (BS.pack "*")
-
-cNeg :: Ident
-cNeg = identC (BS.pack "-")
-
-cCNC :: Ident
-cCNC = identC (BS.pack "CNC")
-
-cConflict :: Ident
-cConflict = IC (BS.pack "#conflict")
+cMeta = identS "?"
+cAs = identS "@"
+cChar = identS "?"
+cChars = identS "[]"
+cSeq = identS "+"
+cAlt = identS "|"
+cRep = identS "*"
+cNeg = identS "-"
+cCNC = identS "CNC"
+cConflict = identS "#conflict"

@@ -57,7 +57,7 @@ lookupConst :: Theory -> QIdent -> Err Val
 lookupConst th f = th f
 
 lookupVar :: Env -> Ident -> Err Val
-lookupVar g x = maybe (Bad (render (text "unknown variable" <+> ppIdent x))) return $ lookup x ((IW,uVal):g)
+lookupVar g x = maybe (Bad (render (text "unknown variable" <+> ppIdent x))) return $ lookup x ((identW,uVal):g)
 -- wild card IW: no error produced, ?0 instead.
 
 type TCEnv = (Int,Env,Env)

@@ -508,8 +508,7 @@ computeTermOpt gr = comput True where
 -- | argument variables cannot be glued
 checkNoArgVars :: Term -> Comp Term
 checkNoArgVars t = case t of
-  Vr (IA _ _)    -> fail $ glueErrorMsg $ ppTerm Unqualified 0 t 
-  Vr (IAV _ _ _) -> fail $ glueErrorMsg $ ppTerm Unqualified 0 t 
+  Vr x | isArgIdent x -> fail $ glueErrorMsg $ ppTerm Unqualified 0 t
   _ -> composOp checkNoArgVars t
 
 glueErrorMsg s = 

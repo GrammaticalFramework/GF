@@ -13,9 +13,10 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.Ident (-- * Identifiers
-	      Ident(..), ident2bs, showIdent, ppIdent,
-	      identC, identV, identA, identAV, identW,
-	      argIdent, varStr, varX, isWildIdent, varIndex,
+	      Ident, ident2bs, showIdent, ppIdent, prefixIdent,
+	      identS, identC, identV, identA, identAV, identW,
+	      argIdent, isArgIdent, getArgIndex,
+              varStr, varX, isWildIdent, varIndex,
 	      -- * refreshing identifiers
 	      IdState, initIdStateN, initIdState,
 	      lookVar, refVar, refVarPlus
@@ -23,6 +24,7 @@ module GF.Infra.Ident (-- * Identifiers
 
 import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
+import Data.Char(isDigit)
 import Text.PrettyPrint
 
 
@@ -54,6 +56,9 @@ showIdent i = BS.unpack $! ident2bs i
 ppIdent :: Ident -> Doc
 ppIdent = text . showIdent
 
+identS :: String -> Ident
+identS = identC . BS.pack
+
 identC :: BS.ByteString -> Ident
 identV :: BS.ByteString -> Int -> Ident
 identA :: BS.ByteString -> Int -> Ident
@@ -62,6 +67,10 @@ identW :: Ident
 (identC, identV, identA, identAV, identW) = 
     (IC,     IV,     IA,     IAV,     IW)
 
+
+prefixIdent :: String -> Ident -> Ident
+prefixIdent pref = identC . BS.append (BS.pack pref) . ident2bs
+
 -- normal identifier
 -- ident s = IC s
 
@@ -69,6 +78,16 @@ identW :: Ident
 argIdent :: Int -> Ident -> Int -> Ident
 argIdent 0 (IC c) i = identA  c i
 argIdent b (IC c) i = identAV c b i
+
+isArgIdent IA{}  = True
+isArgIdent IAV{} = True
+isArgIdent _     = False
+
+getArgIndex (IA _ i)    = Just i
+getArgIndex (IAV _ _ i) = Just i
+getArgIndex (IC s)
+  | isDigit (BS.last s) = (Just . read . BS.unpack . snd . BS.spanEnd isDigit) s
+getArgIndex x = Nothing
 
 -- | used in lin defaults
 varStr :: Ident

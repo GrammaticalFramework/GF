@@ -333,7 +333,7 @@ checkComputeTerm' new sgr t = do
                  ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
                                             inferLType sgr [] t
                  t1 <- if new
-                       then return (CN.normalForm (CN.resourceValues sgr) (L NoLoc IW) t)
+                       then return (CN.normalForm (CN.resourceValues sgr) (L NoLoc identW) t)
                        else computeConcrete sgr t
                  checkPredefError sgr t1
 
