@@ -17,6 +17,9 @@ module GF.Infra.Ident (-- * Identifiers
 	      identS, identC, identV, identA, identAV, identW,
 	      argIdent, isArgIdent, getArgIndex,
               varStr, varX, isWildIdent, varIndex,
+              -- * Raw Identifiers
+              RawIdent, rawIdentS, rawIdentC, ident2raw, prefixRawIdent,
+              isPrefixOf, showRawIdent, rawId2bs,
 	      -- * refreshing identifiers
 	      IdState, initIdStateN, initIdState,
 	      lookVar, refVar, refVarPlus
@@ -31,24 +34,36 @@ import Text.PrettyPrint
 -- | the constructors labelled /INTERNAL/ are
 -- internal representation never returned by the parser
 data Ident = 
-   IC  {-# UNPACK #-} !BS.ByteString                                           -- ^ raw identifier after parsing, resolved in Rename
- | IW                                                                          -- ^ wildcard
+   IC  {-# UNPACK #-} !RawIdent                                           -- ^ raw identifier after parsing, resolved in Rename
+ | IW                                                                     -- ^ wildcard
 --
 -- below this constructor: internal representation never returned by the parser
- | IV  {-# UNPACK #-} !BS.ByteString {-# UNPACK #-} !Int                       -- ^ /INTERNAL/ variable
- | IA  {-# UNPACK #-} !BS.ByteString {-# UNPACK #-} !Int                       -- ^ /INTERNAL/ argument of cat at position
- | IAV {-# UNPACK #-} !BS.ByteString {-# UNPACK #-} !Int {-# UNPACK #-} !Int   -- ^ /INTERNAL/ argument of cat with bindings at position
+ | IV  {-# UNPACK #-} !RawIdent {-# UNPACK #-} !Int                       -- ^ /INTERNAL/ variable
+ | IA  {-# UNPACK #-} !RawIdent {-# UNPACK #-} !Int                       -- ^ /INTERNAL/ argument of cat at position
+ | IAV {-# UNPACK #-} !RawIdent {-# UNPACK #-} !Int {-# UNPACK #-} !Int   -- ^ /INTERNAL/ argument of cat with bindings at position
 -- 
 
   deriving (Eq, Ord, Show, Read)
 
+newtype RawIdent = Id { rawId2bs :: BS.ByteString }
+  deriving (Eq, Ord, Show, Read)
+
+rawIdentS = Id . BS.pack
+rawIdentC = Id
+showRawIdent = BS.unpack . rawId2bs
+
+prefixRawIdent (Id x) (Id y) = Id (BS.append x y) 
+isPrefixOf (Id x) (Id y) = BS.isPrefixOf x y
+
 ident2bs :: Ident -> BS.ByteString
 ident2bs i = case i of
-  IC s -> s
-  IV s n -> BS.append s (BS.pack ('_':show n))
-  IA s j -> BS.append s (BS.pack ('_':show j))
-  IAV s b j -> BS.append s (BS.pack ('_':show b ++ '_':show j))
+  IC (Id s) -> s
+  IV (Id s) n -> BS.append s (BS.pack ('_':show n))
+  IA (Id s) j -> BS.append s (BS.pack ('_':show j))
+  IAV (Id s) b j -> BS.append s (BS.pack ('_':show b ++ '_':show j))
   IW -> BS.pack "_"
+
+ident2raw = Id . ident2bs
 
 showIdent :: Ident -> String
 showIdent i = BS.unpack $! ident2bs i
@@ -57,19 +72,19 @@ ppIdent :: Ident -> Doc
 ppIdent = text . showIdent
 
 identS :: String -> Ident
-identS = identC . BS.pack
+identS = identC . rawIdentS
 
-identC :: BS.ByteString -> Ident
-identV :: BS.ByteString -> Int -> Ident
-identA :: BS.ByteString -> Int -> Ident
-identAV:: BS.ByteString -> Int -> Int -> Ident
+identC :: RawIdent -> Ident
+identV :: RawIdent -> Int -> Ident
+identA :: RawIdent -> Int -> Ident
+identAV:: RawIdent -> Int -> Int -> Ident
 identW :: Ident
 (identC, identV, identA, identAV, identW) = 
     (IC,     IV,     IA,     IAV,     IW)
 
 
 prefixIdent :: String -> Ident -> Ident
-prefixIdent pref = identC . BS.append (BS.pack pref) . ident2bs
+prefixIdent pref = identC . Id . BS.append (BS.pack pref) . ident2bs
 
 -- normal identifier
 -- ident s = IC s
@@ -85,23 +100,25 @@ isArgIdent _     = False
 
 getArgIndex (IA _ i)    = Just i
 getArgIndex (IAV _ _ i) = Just i
-getArgIndex (IC s)
+getArgIndex (IC (Id s))
   | isDigit (BS.last s) = (Just . read . BS.unpack . snd . BS.spanEnd isDigit) s
 getArgIndex x = Nothing
 
 -- | used in lin defaults
 varStr :: Ident
-varStr = identA (BS.pack "str") 0
+varStr = identA (rawIdentS "str") 0
 
 -- | refreshing variables
 varX :: Int -> Ident
-varX = identV (BS.pack "x")
+varX = identV (rawIdentS "x")
 
 isWildIdent :: Ident -> Bool
 isWildIdent x = case x of
   IW -> True
-  IC s | s == BS.pack "_" -> True
+  IC s | s == wild -> True
   _ -> False
+
+wild = Id (BS.pack "_")
 
 varIndex :: Ident -> Int
 varIndex (IV _ n) = n
@@ -129,7 +146,7 @@ refVar :: Ident -> STM IdState Ident
 ----refVar IW = return IW --- no update of wildcard
 refVar x = do
   (_,m) <- readSTM
-  let x' = IV (ident2bs x) m
+  let x' = IV (ident2raw x) m
   updateSTM (\(sys,mx) -> ((x, x'):sys, mx + 1))
   return x'
 

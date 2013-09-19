@@ -30,7 +30,6 @@ import Data.Char (isDigit,isSpace)
 import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
-import qualified Data.ByteString.Char8 as BS
 import Data.Array.IArray
 import Text.PrettyPrint
 import Control.Monad.Identity
@@ -250,8 +249,7 @@ genCncFuns gr am cm seqs0 cdefs fid_cnt cnccats =
             ctxt = mapM (mkCtxt lindefs) hargs_C
             fids = map (mkFId arg_C) fid0s
 
-    mkLinDefId id = 
-      identC (BS.append (BS.pack "lindef ") (ident2bs id))
+    mkLinDefId id = prefixIdent "lindef " id
 
     toLinDef res offs lindefs (Production fid0 funid0 _) =
       IntMap.insertWith (++) fid [offs+funid0] lindefs

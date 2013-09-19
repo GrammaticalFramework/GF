@@ -34,7 +34,7 @@ instance Binary Ident where
   get    = do bs <- get
               if bs == BS.pack "_"
                 then return identW
-                else return (identC bs)
+                else return (identC (rawIdentC bs))
 
 instance Binary SourceGrammar where
   put = put . modules
@@ -289,6 +289,9 @@ instance Binary Label where
              1 -> fmap LVar   get
              _ -> decodingError
 
+instance Binary RawIdent where
+  put = put . rawId2bs
+  get = fmap rawIdentC get
 
 putGFOVersion = mapM_ (putWord8 . fromIntegral . ord) gfoVersion
 getGFOVersion = replicateM (length gfoVersion) (fmap (chr . fromIntegral) getWord8)

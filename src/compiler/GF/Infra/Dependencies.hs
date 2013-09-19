@@ -3,7 +3,7 @@ module GF.Infra.Dependencies (
   ) where
 
 import GF.Grammar.Grammar
-import GF.Infra.Ident
+import GF.Infra.Ident(Ident,showIdent)
 
 import Data.List (nub,isPrefixOf)
 
