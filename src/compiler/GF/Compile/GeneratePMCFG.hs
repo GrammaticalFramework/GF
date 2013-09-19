@@ -32,7 +32,6 @@ import qualified Data.Set as Set
 import qualified Data.List as List
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
-import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint hiding (Str)
 import Data.Array.IArray
 import Data.Array.Unboxed
@@ -553,10 +552,8 @@ evalTerm path (EInt n)     = return (EInt n)
 evalTerm path t            = ppbug (text "evalTerm" <+> parens (ppU 0 t))
 --evalTerm path t            = ppbug (text "evalTerm" <+> sep [parens (text (show path)),parens (text (show t))])
 
-getVarIndex (IA _ i) = i
-getVarIndex (IAV _ _ i) = i
-getVarIndex (IC s) | isDigit (BS.last s) = (read . BS.unpack . snd . BS.spanEnd isDigit) s
-getVarIndex x = bug ("getVarIndex "++show x)
+getVarIndex x = maybe err id $ getArgIndex x
+  where err = bug ("getVarIndex "++show x)
 
 ----------------------------------------------------------------------
 -- GrammarEnv

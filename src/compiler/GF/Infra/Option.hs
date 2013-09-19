@@ -42,8 +42,6 @@ import GF.Data.ErrM
 
 import Data.Set (Set)
 import qualified Data.Set as Set
-import qualified Data.ByteString.Char8 as BS
-
 
 
 usageHeader :: String
@@ -398,7 +396,7 @@ optDescr =
                          Just p  -> set $ \o -> o { optHaskellOptions = Set.insert p (optHaskellOptions o) }
                          Nothing -> fail $ "Unknown Haskell option: " ++ x
                                             ++ " Known: " ++ show (map fst haskellOptionNames)
-       literalCat  x = set $ \o -> o { optLiteralCats = foldr Set.insert (optLiteralCats o) ((map (identC . BS.pack) . splitBy (==',')) x) }
+       literalCat  x = set $ \o -> o { optLiteralCats = foldr Set.insert (optLiteralCats o) ((map identS . splitBy (==',')) x) }
        lexicalCat  x = set $ \o -> o { optLexicalCats = foldr Set.insert (optLexicalCats o) (splitBy (==',') x) }
        outDir      x = set $ \o -> o { optOutputDir = Just x }
        gfLibPath   x = set $ \o -> o { optGFLibPath = Just x }

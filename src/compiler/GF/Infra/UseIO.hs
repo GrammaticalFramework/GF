@@ -34,7 +34,6 @@ import Text.Printf
 import Control.Monad
 import Control.Monad.Trans(MonadIO(..))
 import Control.Exception(evaluate)
-import qualified Data.ByteString.Char8 as BS
 
 putShow' :: Show a => (c -> a) -> c -> IO ()
 putShow' f = putStrLn . show . length . show . f

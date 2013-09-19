@@ -9,7 +9,6 @@ import GF.Grammar.Predef
 import GF.Data.Operations
 import Data.List (intersect)
 import Text.PrettyPrint
-import qualified Data.ByteString.Char8 as BS
 
 normalForm :: SourceGrammar -> Term -> Term
 normalForm gr t = value2term gr [] (eval gr [] t)
@@ -44,7 +43,7 @@ eval gr env (Vr x)   = case lookup x env of
                          Nothing -> error ("Unknown variable "++showIdent x)
 eval gr env (Q x)
   | x == (cPredef,cErrorType)                            -- to be removed
-                     = let varP = identC (BS.pack "P")   
+                     = let varP = identS "P"
                        in eval gr [] (mkProd [(Implicit,varP,typeType)] (Vr varP) [])
   | fst x == cPredef = VApp x []
   | otherwise        = case lookupResDef gr x of

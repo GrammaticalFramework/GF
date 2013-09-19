@@ -16,14 +16,13 @@ module GF.Compile.Compute.AppPredefined (
           isInPredefined, typPredefined, arrityPredefined, predefModInfo, appPredefined
 		  ) where
 
-import GF.Infra.Ident
+import GF.Infra.Ident(identS)
 import GF.Infra.Option
 import GF.Data.Operations
 import GF.Grammar
 import GF.Grammar.Predef
 
 import qualified Data.Map as Map
-import qualified Data.ByteString.Char8 as BS
 import Text.PrettyPrint
 import Data.Char (isUpper,toUpper,toLower)
 
@@ -90,11 +89,8 @@ primitives = Map.fromList
     fun from to = oper (mkFunType from to)
     oper ty     = ResOper (Just (noLoc ty)) Nothing
 
-    varL :: Ident
-    varL = identC (BS.pack "L")
-
-    varP :: Ident
-    varP = identC (BS.pack "P")
+    varL = identS "L"
+    varP = identS "P"
 
 appPredefined :: Term -> Err (Term,Bool)
 appPredefined t = case t of
@@ -127,7 +123,7 @@ appPredefined t = case t of
       (EInt i, EInt j) | f == cLessInt -> retb $ if i<j  then predefTrue else predefFalse
       (EInt i, EInt j) | f == cPlus    -> retb $ EInt $ i+j
       (_,      t)      | f == cShow  && notVar t  -> retb $ foldrC $ map K $ words $ render (ppTerm Unqualified 0 t)
-      (_,      K s)    | f == cRead    -> retb $ Cn (identC (BS.pack s)) --- because of K, only works for atomic tags
+      (_,      K s)    | f == cRead    -> retb $ Cn (identS s) --- because of K, only works for atomic tags
       (_,      t)      | f == cToStr   -> trm2str t >>= retb
       _ -> retb t ---- prtBad "cannot compute predefined" t
 

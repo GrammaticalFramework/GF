@@ -16,7 +16,7 @@ module GF.Grammar.CF (getCF,CFItem,CFCat,CFFun,cf2gf,CFRule) where
 
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
-import GF.Infra.Ident
+import GF.Infra.Ident(Ident,identS)
 import GF.Infra.Option
 import GF.Infra.UseIO
 
@@ -25,7 +25,6 @@ import GF.Data.Utilities (nub')
 
 import Data.Char
 import Data.List
-import qualified Data.ByteString.Char8 as BS
 import System.FilePath
 
 getCF :: FilePath -> String -> Err SourceGrammar
@@ -126,6 +125,3 @@ cf2rule (L loc (fun, (cat, items))) = (def,ldef) where
   mkIt (_, Right a) = K a
   foldconcat [] = K ""
   foldconcat tt = foldr1 C tt
-
-identS = identC . BS.pack
-

@@ -215,7 +215,7 @@ freeVarsExp e = case e of
   _ -> [] --- thus applies to abstract syntax only
 
 int2var :: Int -> Ident
-int2var = identC . BS.pack . ('$':) . show
+int2var = identS . ('$':) . show
 
 meta0 :: MetaId
 meta0 = 0
