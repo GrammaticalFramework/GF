@@ -19,16 +19,15 @@ module GF.Infra.Ident (-- * Identifiers
               varStr, varX, isWildIdent, varIndex,
               -- * Raw Identifiers
               RawIdent, rawIdentS, rawIdentC, ident2raw, prefixRawIdent,
-              isPrefixOf, showRawIdent, rawId2bs,
-	      -- * refreshing identifiers
+              isPrefixOf, showRawIdent, rawId2bs{-,
+	      -- * Refreshing identifiers
 	      IdState, initIdStateN, initIdState,
-	      lookVar, refVar, refVarPlus
+	      lookVar, refVar, refVarPlus-}
 	     ) where
 
-import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
 import Data.Char(isDigit)
-import Text.PrettyPrint
+import Text.PrettyPrint(Doc,text)
 
 
 -- | the constructors labelled /INTERNAL/ are
@@ -124,7 +123,8 @@ varIndex :: Ident -> Int
 varIndex (IV _ n) = n
 varIndex _ = -1 --- other than IV should not count
 
--- refreshing identifiers
+{-
+-- * Refreshing identifiers
 
 type IdState = ([(Ident,Ident)],Int) 
 
@@ -153,7 +153,7 @@ refVar x = do
 refVarPlus :: Ident -> STM IdState Ident
 ----refVarPlus IW = refVar (identC "h")
 refVarPlus x = refVar x
-
+-}
 
 {-
 ------------------------------
