@@ -155,6 +155,13 @@ resource ResBul = ParamX ** open Prelude, Predef in {
         GPl    => APl spec
       } ;
 
+    indefAForm : AForm -> AForm
+      = \af -> case af of {
+                 ASg g spec    => ASg g Indef ;
+                 ASgMascDefNom => ASg Masc Indef ;
+                 APl spec      => APl Indef
+               } ;
+
     dgenderSpecies : AGender -> Species -> Role -> CardForm =
       \g,spec,role -> case <g,spec> of {
                         <AMasc a,Indef> => CFMasc Indef a ;

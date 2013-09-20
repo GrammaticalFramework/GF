@@ -181,10 +181,15 @@ oper
                        NFPlCount   => n1.s ! NFPlCount     ++ n2.s ! (NF Pl Indef) ;
                        NFVocative  => n1.s ! NFVocative    ++ n2.s ! (NF Sg Indef)
                      } ;
-                 rel = \\aform => n1.rel ! aform; 
-                 g = n1.g ;
-                 g = n1.anim
+                 rel = \\aform => n1.rel ! aform;
+                 g = n1.g
                 } ;
+    compoundN : A -> N -> N 
+      = \a,n -> lin N
+              {s   = \\nf => (a.s ! nform2aform nf n.g) ++ (n.s ! (indefNForm nf)) ;
+               rel = \\aform => a.s ! aform ++ n.rel ! indefAForm aform ;
+               g   = n.g
+              } ;
   } ;
   
   relativeN : N -> A -> N;
