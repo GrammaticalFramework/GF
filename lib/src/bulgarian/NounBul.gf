@@ -173,6 +173,21 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
     ApposCN cn np = {s = \\nf => cn.s ! nf ++ np.s ! RSubj; g=cn.g} ;
 
+    PossNP cn np = {s = \\nf => cn.s ! nf ++ "на" ++ np.s ! (RObj Acc); g = cn.g} ;
+    
+    PartNP cn np = {s = \\nf => cn.s ! nf ++ "от" ++ np.s ! (RObj Acc); g = cn.g} ;
+
+    CountNP det np = {
+      s = \\role => let g = case np.a.gn of { -- this is lossy
+                              GSg Masc => AMasc NonHuman ; 
+                              GSg Neut => ANeut ;
+                              GSg Fem  => AFem ;
+                              GPl      => ANeut
+                            }
+                    in det.s ! False ! g ! role ++ np.s ! (RObj Acc) ;
+      a = {gn = gennum ANeut (numnnum det.nn); p = P3}
+      } ;
+
     RelNP np rs = {
       s = \\r => np.s ! r ++ rs.s ! np.a ;
       a = np.a
