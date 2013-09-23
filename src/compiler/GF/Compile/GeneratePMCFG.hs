@@ -578,7 +578,7 @@ getPMCFG :: PMCFGEnv -> PMCFG
 getPMCFG (PMCFGEnv prodSet funSet) =
   PMCFG (optimize prodSet) (mkSetArray funSet)
   where
-    optimize ps = Map.foldWithKey ff [] (Map.fromListWith (++) [((fid,funid),[args]) | (Production fid funid args) <- Set.toList ps])
+    optimize ps = Map.foldrWithKey ff [] (Map.fromListWith (++) [((fid,funid),[args]) | (Production fid funid args) <- Set.toList ps])
       where
         ff :: (FId,FunId) -> [[[FId]]] -> [Production] -> [Production]
         ff (fid,funid) xs prods
