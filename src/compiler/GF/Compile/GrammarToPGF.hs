@@ -45,8 +45,7 @@ mkCanon2pgf opts gr am = do
 
     mkAbstr am = return (i2i am, D.Abstr flags funs cats bcode)
       where
-        aflags = 
-          concatOptions (reverse [mflags mo | (_,mo) <- modules gr, isModAbs mo])
+        aflags = err (const noOptions) mflags (lookupModule gr am)
 
         (adefs,bcode) =
           generateByteCode $
@@ -65,7 +64,7 @@ mkCanon2pgf opts gr am = do
               [(0,i2i f) | ((m,f),AbsFun (Just (L _ ty)) _ _ (Just True),_) <- adefs, snd (GM.valCat ty) == cat]
 
     mkConcr cm = do
-      let cflags  = concatOptions [mflags mo | (i,mo) <- modules gr, isModCnc mo]
+      let cflags  = err (const noOptions) mflags (lookupModule gr cm)
 
       (seqs,cdefs) <- addMissingPMCFGs
                            Map.empty 
