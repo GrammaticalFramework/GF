@@ -40,6 +40,7 @@ import GF.Grammar.Predef
 import GF.Grammar.Lockfield
 
 import Data.List (sortBy)
+import Data.Maybe (maybe)
 import Control.Monad
 import Text.PrettyPrint
 import qualified Data.Map as Map
@@ -193,30 +194,24 @@ lookupCatContext gr m c = do
 
 allOpers :: SourceGrammar -> [((Ident,Ident),Type,Location)]
 allOpers gr = 
-  [((mo,op),typ,loc) | 
-      (mo,minc)  <- reachable,
-      Ok minfo   <- [lookupModule gr mo],
-      (op,info)  <- Map.toList $ jments minfo,
-      isInherited minc op, 
+  [((m,op),typ,loc) |
+      (m,mi)  <- maybe [] (allExtends gr) (greatestResource gr),
+      (op,info)  <- Map.toList (jments mi),
       L loc typ  <- typesIn info
-  ] 
- where
-  typesIn info = case info of
-    AbsFun  (Just ltyp) _ _ _ -> [ltyp]
-    ResOper (Just ltyp) _     -> [ltyp]
-    ResValue ltyp             -> [ltyp]
-    ResOverload _ tytrs       -> [ltyp | (ltyp,_) <- tytrs]
-    CncFun  (Just (i,ctx,typ)) _ _ _ ->
-                                 [L NoLoc (mkProdSimple ctx (lock' i typ))]
-    _                         -> []
+  ]
+  where
+    typesIn info = case info of
+      AbsFun  (Just ltyp) _ _ _ -> [ltyp]
+      ResOper (Just ltyp) _     -> [ltyp]
+      ResValue ltyp             -> [ltyp]
+      ResOverload _ tytrs       -> [ltyp | (ltyp,_) <- tytrs]
+      CncFun  (Just (i,ctx,typ)) _ _ _ ->
+                                   [L NoLoc (mkProdSimple ctx (lock' i typ))]
+      _                         -> []
 
-  lock' i typ = case lock i typ of
-                  Ok t -> t
-                  _ -> typ
-
-  reachable = case greatestResource gr of
-    Just r -> allExtendSpecs gr r
-    _ -> []
+    lock' i typ = case lock i typ of
+                    Ok t -> t
+                    _ -> typ
 
 --- not for dependent types
 allOpersTo :: SourceGrammar -> Type -> [((Ident,Ident),Type,Location)]

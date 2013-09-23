@@ -65,8 +65,7 @@ mkCanon2pgf opts gr am = do
               [(0,i2i f) | ((m,f),AbsFun (Just (L _ ty)) _ _ (Just True),_) <- adefs, snd (GM.valCat ty) == cat]
 
     mkConcr cm = do
-      let cflags  = concatOptions [mflags mo | (i,mo) <- modules gr, isModCnc mo, 
-                                                  Just r <- [lookup i (allExtendSpecs gr cm)]]
+      let cflags  = concatOptions [mflags mo | (i,mo) <- modules gr, isModCnc mo]
 
       (seqs,cdefs) <- addMissingPMCFGs
                            Map.empty 
