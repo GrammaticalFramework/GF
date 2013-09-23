@@ -125,10 +125,10 @@ tree2status o = case o of
 
 buildStatus :: SourceGrammar -> SourceModule -> Check Status
 buildStatus gr mo@(m,mi) = checkIn (ppLocation (msrc mi) NoLoc <> colon) $ do
-  let gr1 = prependModule gr mo
-      ops = [OSimple e | e <- allExtends gr1 m] ++ mopens mi
-  mods <- checkErr $ mapM (lookupModule gr1 . openedModule) ops
-  let sts = map modInfo2status $ zip ops mods    
+  let gr1  = prependModule gr mo
+      exts = [(OSimple m,mi) | (m,mi) <- allExtends gr1 m]
+  ops <- checkErr $ mapM (\o -> lookupModule gr1 (openedModule o) >>= \mi -> return (o,mi)) (mopens mi)
+  let sts = map modInfo2status (exts++ops)
   return (if isModCnc mi
             then (emptyBinTree,    reverse sts)  -- the module itself does not define any names
             else (self2status m mi,reverse sts)) -- so the empty ident is not needed

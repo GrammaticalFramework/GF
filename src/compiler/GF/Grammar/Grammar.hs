@@ -21,7 +21,7 @@ module GF.Grammar.Grammar (
         MInclude (..), OpenSpec(..),
         extends, isInherited, inheritAll,
         openedModule, depPathModule, allDepsModule, partOfGrammar,
-        allExtends, allExtendSpecs, allExtendsPlus, allExtensions, 
+        allExtends, allExtendsPlus,
         searchPathModule,
         
         lookupModule,
@@ -82,7 +82,7 @@ import Control.Monad.Identity
 
 data SourceGrammar = MGrammar { 
     moduleMap :: Map.Map Ident SourceModInfo,
-    modules :: [(Ident,SourceModInfo)]
+    modules :: [SourceModule]
   }
 
 data SourceModInfo = ModInfo {
@@ -165,25 +165,14 @@ partOfGrammar gr (i,m) = mGrammar [mo | mo@(j,_) <- mods, elem j modsFor]
     mods = modules gr
     modsFor = (i:) $ map openedModule $ allDepsModule gr m
 
--- | all modules that a module extends, directly or indirectly, without restricts
-allExtends :: SourceGrammar -> Ident -> [Ident]
-allExtends gr i =
-  case lookupModule gr i of
-    Ok m -> case extends m of 
-              [] -> [i]
-              is -> i : concatMap (allExtends gr) is
-    _    -> []
-
 -- | all modules that a module extends, directly or indirectly, with restricts
-allExtendSpecs :: SourceGrammar -> Ident -> [(Ident,MInclude)]
-allExtendSpecs gr i =
-  case lookupModule gr i of
-    Ok m -> case mextend m of 
-              [] -> [(i,MIAll)]
-              is ->  (i,MIAll) : concatMap (allExtendSpecs gr . fst) is
-    _    -> []
+allExtends :: SourceGrammar -> Ident -> [SourceModule]
+allExtends gr m =
+  case lookupModule gr m of
+    Ok mi -> (m,mi) : concatMap (allExtends gr . fst) (mextend mi)
+    _     -> []
 
--- | this plus that an instance extends its interface
+-- | the same as 'allExtends' plus that an instance extends its interface
 allExtendsPlus :: SourceGrammar -> Ident -> [Ident]
 allExtendsPlus gr i =
   case lookupModule gr i of
@@ -191,19 +180,6 @@ allExtendsPlus gr i =
     _    -> []
   where
     exts m = extends m ++ [j | MTInstance (j,_) <- [mtype m]]
-
--- | conversely: all modules that extend a given module, incl. instances of interface
-allExtensions :: SourceGrammar -> Ident -> [Ident]
-allExtensions gr i =
-  case lookupModule gr i of
-    Ok m -> let es = exts i in es ++ concatMap (allExtensions gr) es
-    _    -> []
- where
-   exts i = [j | (j,m) <- mods, elem i (extends m) || isInstanceOf i m]
-   mods = modules gr
-   isInstanceOf i m = case mtype m of
-     MTInstance (j,_) -> j == i
-     _ -> False
 
 -- | initial search path: the nonqualified dependencies
 searchPathModule :: SourceModInfo -> [Ident]
