@@ -34,7 +34,6 @@ import Data.Array.IArray
 import Text.PrettyPrint
 import Control.Monad.Identity
 
-
 mkCanon2pgf :: Options -> SourceGrammar -> Ident -> IOE D.PGF
 mkCanon2pgf opts gr am = do
   (an,abs) <- mkAbstr am
@@ -66,23 +65,28 @@ mkCanon2pgf opts gr am = do
     mkConcr cm = do
       let cflags  = err (const noOptions) mflags (lookupModule gr cm)
 
-      (seqs,cdefs) <- addMissingPMCFGs
-                           Map.empty 
-                           ([((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]] ++
-                            Look.allOrigInfos gr cm)
+      (ex_seqs,cdefs) <- addMissingPMCFGs
+                            Map.empty 
+                            ([((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]] ++
+                             Look.allOrigInfos gr cm)
 
       let flags = Map.fromList [(mkCId f,if f == "beam_size" then C.LFlt (read x) else C.LStr x) | (f,x) <- optionsPGF cflags]
 
+          seqs = (mkSetArray . Set.fromList . concat) $
+                     (Map.keys ex_seqs : [maybe [] elems (mseqs mi) | (m,mi) <- allExtends gr cm])
+
+          ex_seqs_arr = mkMapArray ex_seqs :: Array SeqId Sequence
+
           !(!fid_cnt1,!cnccats) = genCncCats gr am cm cdefs
-          !(!fid_cnt2,!productions,!lindefs,!sequences,!cncfuns)
-                                = genCncFuns gr am cm seqs cdefs fid_cnt1 cnccats
+          !(!fid_cnt2,!productions,!lindefs,!cncfuns)
+                                = genCncFuns gr am cm ex_seqs_arr seqs cdefs fid_cnt1 cnccats
         
           printnames = genPrintNames cdefs
       return (i2i cm, D.Concr flags 
                               printnames
                               cncfuns
                               lindefs
-                              sequences
+                              seqs
                               productions
                               IntMap.empty
                               Map.empty
@@ -194,25 +198,25 @@ genCncCats gr am cm cdefs =
     mkCncCats index (_                      :cdefs) = mkCncCats index cdefs
 
 
-genCncFuns gr am cm seqs0 cdefs fid_cnt cnccats =
-  let (fid_cnt1,funs_cnt1,seqs1,funs1,lindefs) = mkCncCats cdefs fid_cnt  0 seqs0 [] IntMap.empty
-      (fid_cnt2,funs_cnt2,seqs2,funs2,prods)   = mkCncFuns cdefs fid_cnt1 funs_cnt1 seqs1 funs1 lindefs Map.empty IntMap.empty
-  in (fid_cnt2,prods,lindefs,mkSetArray seqs2,array (0,funs_cnt2-1) funs2)
+genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats =
+  let (fid_cnt1,funs_cnt1,funs1,lindefs) = mkCncCats cdefs fid_cnt  0 [] IntMap.empty
+      (fid_cnt2,funs_cnt2,funs2,prods)   = mkCncFuns cdefs fid_cnt1 funs_cnt1 funs1 lindefs Map.empty IntMap.empty
+  in (fid_cnt2,prods,lindefs,array (0,funs_cnt2-1) funs2)
   where
-    mkCncCats []                                                        fid_cnt funs_cnt seqs funs lindefs =
-      (fid_cnt,funs_cnt,seqs,funs,lindefs)
-    mkCncCats (((m,id),CncCat _ _ _ (Just (PMCFG prods0 funs0))):cdefs) fid_cnt funs_cnt seqs funs lindefs =
-      let !funs_cnt'     = let (s_funid, e_funid) = bounds funs0
-                           in funs_cnt+(e_funid-s_funid+1)
-          lindefs'       = foldl' (toLinDef (am,id) funs_cnt) lindefs prods0
-          !(seqs',funs') = foldl' (toCncFun funs_cnt (m,mkLinDefId id)) (seqs,funs) (assocs funs0)
-      in mkCncCats cdefs fid_cnt funs_cnt' seqs' funs' lindefs'
-    mkCncCats (_                                                :cdefs) fid_cnt funs_cnt seqs funs lindefs = 
-      mkCncCats cdefs fid_cnt funs_cnt seqs funs lindefs
+    mkCncCats []                                                        fid_cnt funs_cnt funs lindefs =
+      (fid_cnt,funs_cnt,funs,lindefs)
+    mkCncCats (((m,id),CncCat _ _ _ (Just (PMCFG prods0 funs0))):cdefs) fid_cnt funs_cnt funs lindefs =
+      let !funs_cnt' = let (s_funid, e_funid) = bounds funs0
+                       in funs_cnt+(e_funid-s_funid+1)
+          lindefs'   = foldl' (toLinDef (am,id) funs_cnt) lindefs prods0
+          funs'      = foldl' (toCncFun funs_cnt (m,mkLinDefId id)) funs (assocs funs0)
+      in mkCncCats cdefs fid_cnt funs_cnt' funs' lindefs'
+    mkCncCats (_                                                :cdefs) fid_cnt funs_cnt funs lindefs = 
+      mkCncCats cdefs fid_cnt funs_cnt funs lindefs
 
-    mkCncFuns []                                                        fid_cnt funs_cnt seqs funs lindefs crc prods =
-      (fid_cnt,funs_cnt,seqs,funs,prods)
-    mkCncFuns (((m,id),CncFun _ _ _ (Just (PMCFG prods0 funs0))):cdefs) fid_cnt funs_cnt seqs funs lindefs crc prods =
+    mkCncFuns []                                                        fid_cnt funs_cnt funs lindefs crc prods =
+      (fid_cnt,funs_cnt,funs,prods)
+    mkCncFuns (((m,id),CncFun _ _ _ (Just (PMCFG prods0 funs0))):cdefs) fid_cnt funs_cnt funs lindefs crc prods =
       let ---Ok ty_C        = fmap GM.typeForm (Look.lookupFunType gr am id)
           ty_C           = err error (\x -> x) $ fmap GM.typeForm (Look.lookupFunType gr am id)
           !funs_cnt'     = let (s_funid, e_funid) = bounds funs0
@@ -220,10 +224,10 @@ genCncFuns gr am cm seqs0 cdefs fid_cnt cnccats =
           !(fid_cnt',crc',prods') 
                          = foldl' (toProd lindefs ty_C funs_cnt)
                                   (fid_cnt,crc,prods) prods0
-          !(seqs',funs') = foldl' (toCncFun funs_cnt (m,id)) (seqs,funs) (assocs funs0)
-      in mkCncFuns cdefs fid_cnt' funs_cnt' seqs' funs' lindefs crc' prods'
-    mkCncFuns (_                                                :cdefs) fid_cnt funs_cnt seqs funs lindefs crc prods = 
-      mkCncFuns cdefs fid_cnt funs_cnt seqs funs lindefs crc prods
+          funs'          = foldl' (toCncFun funs_cnt (m,id)) funs (assocs funs0)
+      in mkCncFuns cdefs fid_cnt' funs_cnt' funs' lindefs crc' prods'
+    mkCncFuns (_                                                :cdefs) fid_cnt funs_cnt funs lindefs crc prods = 
+      mkCncFuns cdefs fid_cnt funs_cnt funs lindefs crc prods
 
     toProd lindefs (ctxt_C,res_C,_) offs st (Production fid0 funid0 args0) =
       let !((fid_cnt,crc,prods),args) = mapAccumL mkArg st (zip ctxt_C args0) 
@@ -264,21 +268,22 @@ genCncFuns gr am cm seqs0 cdefs fid_cnt cnccats =
         Just (C.CncCat s e _) -> [(C.fidVar,fid) | fid <- [s..e], Just _ <- [IntMap.lookup fid lindefs]]
         Nothing               -> error "GrammarToPGF.mkCtxt failed"
 
-    toCncFun offs (m,id) (seqs,funs) (funid0,lins0) =
-      case lookupModule gr m of
-        Ok (ModInfo{mseqs=Just mseqs}) -> let !(!seqs',lins) = mapAccumL (mkLin mseqs) seqs (elems lins0)
-                                          in (seqs',(offs+funid0,C.CncFun (i2i id) (mkArray lins)):funs)
-        _                              -> -- this function should have been compiled during the linking phase
-                                          -- so its sequences must be in seqs already
-                                          (seqs,(offs+funid0,C.CncFun (i2i id) lins0):funs)
+    toCncFun offs (m,id) funs (funid0,lins0) =
+      let mseqs = case lookupModule gr m of
+                    Ok (ModInfo{mseqs=Just mseqs}) -> mseqs
+                    _                              -> ex_seqs
+      in (offs+funid0,C.CncFun (i2i id) (amap (newIndex mseqs) lins0)):funs                                          
       where
-        mkLin mseqs seqs seqid =
-          let seq = mseqs ! seqid
-          in case Map.lookup seq seqs of
-               Just seqid -> (seqs,seqid)
-               Nothing    -> let !seqid = Map.size seqs
-                                 !seqs' = Map.insert seq seqid seqs
-                             in (seqs',seqid)
+        newIndex mseqs i = binSearch (mseqs ! i) seqs (bounds seqs)
+           
+        binSearch v arr (i,j)
+          | i <= j    = case compare v (arr ! k) of
+                          LT -> binSearch v arr (i,k-1)
+                          EQ -> k
+                          GT -> binSearch v arr (k+1,j)
+          | otherwise = error "binSearch"
+          where
+            k = (i+j) `div` 2
 
 genPrintNames cdefs =
   Map.fromAscList [(i2i id, name) | ((m,id),info) <- cdefs, name <- prn info]
@@ -292,4 +297,5 @@ genPrintNames cdefs =
     flatten (C x y)    = flatten x +++ flatten y
 
 mkArray    lst = listArray (0,length lst-1) lst
-mkSetArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
+mkMapArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
+mkSetArray set = listArray (0,Set.size set-1) [v | v <- Set.toList set]
