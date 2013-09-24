@@ -86,4 +86,6 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
 
     PossNP cn np = {s = np.s ++ possessive_s ++ cn.s ; c = cn.c} ;
 
+    CountNP det np = {s = det.s ++ possessive_s ++ np.s} ; ---- classifier?
+
 }

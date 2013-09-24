@@ -62,5 +62,13 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
 
     VPSlashPrep vp prep = vp ** {c2 = prep ; isPre = True} ;
 
+    AdvVPSlash vp adv = case adv.advType of {
+      ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;                -- he sleeps well
+      _ => insertAdv (ss (zai_V.s ++ adv.s)) vp     -- he sleeps in the house / today
+      } ** {c2 = vp.c2 ; isPre = vp.isPre} ;
+
+    AdVVPSlash adv vp = insertAdv adv vp  ** {c2 = vp.c2 ; isPre = vp.isPre} ;
+
+
 }
 

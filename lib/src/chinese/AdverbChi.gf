@@ -16,4 +16,6 @@ concrete AdverbChi of Adverb = CatChi **
 
     AdnCAdv cadv = ss (cadv.s ++ conjThat) ** {advType = ATManner} ; -----
 
+    PositAdAAdj a = {s = a.s} ; ----
+
 }

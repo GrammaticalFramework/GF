@@ -23,5 +23,7 @@ concrete AdjectiveChi of Adjective = CatChi ** open ResChi, Prelude in {
     AdAP ada ap = complexAP (ada.s ++ ap.s) ;
 
     UseA2 a = a ;
+   
+    AdvAP ap adv = complexAP (adv.s ++ ap.s) ; ----
 
 }

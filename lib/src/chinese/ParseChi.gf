@@ -1,4 +1,4 @@
---# -path=.:../english:alltenses
+--# -path=alltenses:.:../english
 concrete ParseChi of ParseEngAbs = 
   TenseChi,
 ---  CatChi,
@@ -14,7 +14,7 @@ concrete ParseChi of ParseEngAbs =
   QuestionChi,
   RelativeChi,
   IdiomChi [NP, VP, Tense, Cl, ProgrVP, ExistNP],
-  ExtraChi [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
+  ExtraChi [NP, Quant, VPSlash, VP, Tense, Aspect, GenNP, PassVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash],
@@ -34,7 +34,7 @@ lin
   GenNP np = 
     ParadigmsChi.mkQuant (np.s ++ possessive_s) ;
 
-  EmptyRelSlash slash = mkRCl which_RP (lin ClSlash slash) ;
+  EmptyRelSlash slash = mkRCl <which_RP : RP> <lin ClSlash slash : ClSlash> ; 
 
   that_RP = which_RP ;
 
@@ -69,17 +69,23 @@ DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
     s = \\n,c => noun1.s ! Sg ! Nom ++ "-" ++ noun2.s ! n ! c ;
     g = noun2.g
   } ;
+-}
 
   GerundN v = {
-    s = \\n,c => v.s ! VPresPart ;
-    g = Neutr
+    s = v.s ;
+    c = ge_s ---- ge
   } ;
   
   GerundAP v = {
-    s = \\agr => v.s ! VPresPart ;
-    isPre = True
+    s = v.s ++ de_s ; ----
+    monoSyl = False 
   } ;
--}
+
+  PastPartAP v = {
+    s = v.s ++ de_s ;
+    monoSyl = False 
+  } ;
+
 
 ----  PastPartAP v = v ; ----
 
@@ -89,48 +95,52 @@ DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
 
   PositAdVAdj a = {s = a.s} ;
 
+
+  UseQuantPN q pn = {s = q.s ++ ge_s ++ pn.s} ; ---- ge
+
+  SlashV2V v a p vp = 
+    insertObj (ResChi.mkNP (a.s ++ p.s ++ useVerb vp.verb ! p.p ! APlain ++ vp.compl))   
+              (predV v) ** {c2 = v.c2 ; isPre = True} ; ---- aspect
+
 {-
-  UseQuantPN q pn = {s = \\c => q.s ! False ! Sg ++ pn.s ! npcase2case c ; a = agrgP3 Sg pn.g} ;
-
-  SlashV2V v ant p vp = insertObjc (\\a => v.c3 ++ ant.s ++ p.s ++
-                                           infVP v.typ vp ant.a p.p a)
-                                   (predVc v) ;
-
   SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++ 
                                            v.c3 ++ 
                                            vpi.s ! VVAux ! a)
                                    (predVc v) ;
-  ComplVV v a p vp = insertObj (\\agr => a.s ++ p.s ++ 
-                                         infVP v.typ vp a.a p.p agr)
-                               (predVV v) ;
 -}
 
 ---- TODO: find proper expressions for OSV and OVS in Chi
-----  PredVPosv np vp = mkCl (lin NP np) (lin VP vp) ;
-----  PredVPovs np vp = mkCl (lin NP np) (lin VP vp) ;
+  PredVPosv np vp = PredVP np vp ; ---- (lin NP np) (lin VP vp) ; ----
+  PredVPovs np vp = PredVP np vp ; ----  (lin NP np) (lin VP vp) ; ----
 
 
-----  CompS s = s ;  -----
+  CompS s = insertObj s (predV copula) ; ----
+
+
+  CompQS qs = insertObj qs (predV copula) ; ----
+  CompVP ant p vp = insertObj (ss (infVP vp)) (predV copula) ; ----
 
 {-
-  CompQS qs = {s = \\_ => qs.s ! QIndir} ;
-  CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
-                                infVP VVInf vp ant.a p.p a} ;
-
   VPSlashVS vs vp = 
     insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) **
     {c2 = ""; gapInMiddle = False} ;
 
-  PastPartRS ant pol vps = {
-    s = \\agr => vps.ad ++ vps.ptp ++ vps.s2 ! agr ;
-    c = npNom
-    } ;
-
-  PresPartRS ant pol vp = {
-    s = \\agr => vp.ad ++ vp.prp ++ vp.s2 ! agr ;
-    c = npNom
-  } ;
 -}
+
+  PastPartRS ant pol vp = { ---- copied from PresPartRS
+       s = ant.s ++ pol.s ++ vp.prePart ++ useVerb vp.verb ! pol.p ! APlain ++ vp.compl ++ which_RP.s  ---- aspect
+       } ; ---- ??
+
+
+  PresPartRS ant pol vp = { ---- copied from RelVP
+       s = ant.s ++ pol.s ++ vp.prePart ++ useVerb vp.verb ! pol.p ! APlain ++ vp.compl ++ which_RP.s  ---- aspect
+       } ; ---- ??
+
+    ComplVV v a p vp = {
+      verb = v ;
+      compl = a.s ++ p.s ++ useVerb vp.verb ! p.p ! APlain ++ vp.compl ; ---- aspect
+      prePart = vp.prePart
+      } ;
 
   ApposNP np1 np2 = {
     s = np1.s ++ chcomma ++ np2.s
