@@ -2,7 +2,7 @@ module Main where
 
 import Numeric
 import qualified Data.Map as Map
-import System
+import System.Environment
 
 -- AR 3/10/2012
 -- Chinese unicode - character - pinyin conversions

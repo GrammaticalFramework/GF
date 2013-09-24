@@ -1,4 +1,4 @@
-abstract ExtraChiAbs = Cat ** {
+abstract ExtraChiAbs = Cat, Extra [VPSlash, PassVPSlash] ** {
   cat
     Aspect ;
   } ;
