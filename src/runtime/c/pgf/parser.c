@@ -273,7 +273,7 @@ pgf_item_sequence(PgfItem* item,
 
 #ifdef PGF_PARSER_DEBUG
 static void
-pgf_print_production_args(PgfPArgs args,
+pgf_print_production_args(PgfPArgs* args,
                           GuOut* out, GuExn* err)
 {
 	size_t n_args = gu_seq_length(args);
