@@ -1,7 +1,7 @@
 concrete PhraseChi of Phrase = CatChi ** open Prelude, ResChi in {
 
   lin
-    PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
+    PhrUtt pconj utt voc = {s = pconj.s ++ voc.s ++ utt.s} ;
 
     UttS s = s ;
     UttQS qs = qs ;
