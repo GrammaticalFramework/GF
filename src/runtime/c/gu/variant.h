@@ -82,6 +82,7 @@ struct GuVariantInfo {
 };
 
 GuVariantInfo gu_variant_open(GuVariant variant);
+GuVariant gu_variant_close(GuVariantInfo info);
 
 /** @privatesection */
 struct GuVariant {
