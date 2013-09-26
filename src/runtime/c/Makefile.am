@@ -87,7 +87,6 @@ libteyjus_la_SOURCES = \
 libpgf_la_SOURCES = \
 	pgf/data.c \
 	pgf/data.h \
-	pgf/edsl.h \
 	pgf/expr.c \
 	pgf/expr.h \
 	pgf/parser.c \
