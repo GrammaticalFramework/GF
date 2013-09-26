@@ -83,6 +83,20 @@ GuVariantInfo gu_variant_open(GuVariant variant)
 	return info;
 }
 
+GuVariant gu_variant_close(GuVariantInfo info)
+{
+	GuVariant variant;
+
+	if (((size_t)info.tag) > GU_VARIANT_ALIGNMENT - 2) {
+		variant.p = (uintptr_t)info.data;
+		assert(gu_variant_tag(variant) == info.tag);
+	} else {
+		variant.p = ((uintptr_t)info.data) | (info.tag + 1);
+	}
+
+	return variant;
+}
+
 int 
 gu_variant_intval(GuVariant variant)
 {
