@@ -132,34 +132,37 @@ oper
      = \s,t -> lin Prep (ResChi.mkPreposition s t) ;
     } ;
 
+  mkInterj : Str -> Interj 
+    = \s -> lin Interj {s = word s} ;
+
   emptyPrep : Preposition = mkPrep [] ;
 
-  mkNP : Str -> CatChi.NP 
-    = \s -> lin NP {s = s} ;
+  mkpNP : Str -> CatChi.NP 
+    = \s -> lin NP {s = word s} ;
   mkAdV : Str -> AdV 
-    = \s -> lin AdV {s = s} ;
+    = \s -> lin AdV {s = word s} ;
   mkAdN : Str -> AdN 
-    = \s -> lin AdN {s = s} ;
+    = \s -> lin AdN {s = word s} ;
   mkSubj : Str -> Subj 
     = \s -> lin Subj (ResChi.mkSubj s []) ;
   mkConj : Str -> Conj 
     = \s -> lin Conj {s = \\_ => mkConjForm s} ;
-  mkDet : Str -> Det 
-    = \s -> lin Det {s = s ; detType = DTFull Sg} ;
+  mkpDet : Str -> Det 
+    = \s -> lin Det {s = word s ; detType = DTFull Sg} ;
   mkQuant : Str -> Quant 
     = \s -> lin Quant {s,pl = s ; detType = DTFull Sg} ;
   mkAdA : Str -> AdA 
-    = \s -> lin AdA {s = s} ;
+    = \s -> lin AdA {s = word s} ;
   mkNum : Str -> Num 
-    = \s -> lin Num {s = s ; numType = NTFull} ;
+    = \s -> lin Num {s = word s ; numType = NTFull} ;
   mkPredet : Str -> Predet 
-    = \s -> lin Predet {s = s} ;
+    = \s -> lin Predet {s = word s} ;
   mkIDet : Str -> IDet 
-    = \s -> lin IDet {s = s} ;
+    = \s -> lin IDet {s = word s} ;
   mkPConj : Str -> PConj 
-    = \s -> lin PConj {s = s} ;
+    = \s -> lin PConj {s = word s} ;
   mkRP : Str -> RP 
-    = \s -> lin RP {s = s} ;
+    = \s -> lin RP {s = word s} ;
 
 
 --. auxiliary
