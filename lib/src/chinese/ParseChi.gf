@@ -1,4 +1,4 @@
---# -path=alltenses:.:../english
+--# -path=alltenses:.:sysu:../english
 concrete ParseChi of ParseEngAbs = 
   TenseChi,
 ---  CatChi,
@@ -19,7 +19,29 @@ concrete ParseChi of ParseEngAbs =
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash, ListCN, ConjCN, BaseCN, ConsCN],
 
-  DictEngChi ** 
+  DictEngChi,
+Assign_1,
+Assign_10,
+Assign_11,
+Assign_12,
+Assign_13,
+Assign_14,
+Assign_15,
+Assign_16,
+Assign_17,
+Assign_18,
+Assign_19,
+Assign_2,
+Assign_20,
+Assign_3,
+--* Assign_32, -- characters not in utf8
+Assign_4,
+Assign_5,
+Assign_6,
+Assign_7,
+Assign_9
+
+   ** 
 open ResChi, ParadigmsChi, SyntaxChi, Prelude in {
 
 flags
