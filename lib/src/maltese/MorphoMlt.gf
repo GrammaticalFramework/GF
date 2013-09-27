@@ -660,8 +660,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VPresPart _ => NONEXIST ;
-        VPastPart _ => NONEXIST
+        VPresPart _ => nonExist ;
+        VPastPart _ => nonExist
       } ;
 
     conjFormII_quad : VerbInfo -> (VForm => Str) = \i ->
@@ -747,8 +747,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VPresPart _ => NONEXIST ;
-        VPastPart _ => NONEXIST
+        VPresPart _ => nonExist ;
+        VPastPart _ => nonExist
       } ;
 
     {- ~~~ Form III verbs ~~~ -}
@@ -789,8 +789,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VPresPart _ => NONEXIST ;
-        VPastPart _ => NONEXIST
+        VPresPart _ => nonExist ;
+        VPastPart _ => nonExist
       } ;
 
     {- ~~~ Form VII and VIII verbs ~~~ -}
@@ -860,8 +860,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VPresPart _ => NONEXIST ;
-        VPastPart _ => NONEXIST
+        VPresPart _ => nonExist ;
+        VPastPart _ => nonExist
       } ;
 
     {- ~~~ Form IX verbs ~~~ -}
@@ -896,8 +896,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VPresPart _ => NONEXIST ;
-        VPastPart _ => NONEXIST
+        VPresPart _ => nonExist ;
+        VPastPart _ => nonExist
       } ;
 
     {- ~~~ Form X verbs ~~~ -}
@@ -990,8 +990,8 @@ resource MorphoMlt = ResMlt ** open Prelude in {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
         VImp num  => imp ! num ;
-        VPresPart _ => NONEXIST ;
-        VPastPart _ => NONEXIST
+        VPresPart _ => nonExist ;
+        VPastPart _ => nonExist
       } ;
 
 }
