@@ -80,7 +80,7 @@ bracketedTokn dp f@(Forest abs cnc forest root) =
                                                  ltable = mkLinTable cnc isTrusted [] funid largs
                                              in ((cat,fid),wildCId,either (const []) id $ getAbsTrees f arg Nothing dp,ltable)
         descend forest (PCoerce fid)       = render forest (PArg [] fid)
-        descend forest (PConst cat e ts)   = ((cat,fid),wildCId,[e],([],listArray (0,0) [[LeafKS ts]]))
+        descend forest (PConst cat e ts)   = ((cat,fid),wildCId,[e],([],listArray (0,0) [map LeafKS ts]))
 
     getVar (fid,_)
       | fid == fidVar = wildCId

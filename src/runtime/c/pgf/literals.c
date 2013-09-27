@@ -42,7 +42,7 @@ pgf_match_string_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 			gu_new_variant(PGF_LITERAL_STR,
 						   PgfLiteralStr,
 						   &expr_lit->lit, pool);
-		lit_str->val = gu_seq_get(sks->tokens, PgfToken, 0);
+		lit_str->val = sks->token;
 
 		*out_ep = ep;
 		accepted = false;
@@ -80,10 +80,9 @@ pgf_match_int_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 	} else if (n_syms == 1) {
 		PgfSymbolKS* sks =
 			gu_variant_data(gu_seq_get(seq, PgfSymbol, 0));
-		PgfToken tok = gu_seq_get(sks->tokens, PgfToken, 0);
 
 		int val;
-		if (!gu_string_to_int(tok, &val)) {
+		if (!gu_string_to_int(sks->token, &val)) {
 			*out_ep = NULL;
 		} else {
 			PgfExprProb* ep = gu_new(PgfExprProb, pool);
@@ -137,10 +136,9 @@ pgf_match_float_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 	} else if (n_syms == 1) {
 		PgfSymbolKS* sks =
 			gu_variant_data(gu_seq_get(seq, PgfSymbol, 0));
-		PgfToken tok = gu_seq_get(sks->tokens, PgfToken, 0);
 
 		double val;
-		if (!gu_string_to_double(tok, &val)) {
+		if (!gu_string_to_double(sks->token, &val)) {
 			*out_ep = NULL;
 		} else {
 			PgfExprProb* ep = gu_new(PgfExprProb, pool);
@@ -209,9 +207,8 @@ pgf_match_name_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 			PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
 			gu_assert(gu_variant_tag(sym) == PGF_SYMBOL_KS);
 			PgfSymbolKS* sks = gu_variant_data(sym);
-			PgfToken tok = gu_seq_get(sks->tokens, PgfToken, 0);
 
-			gu_string_write(tok, out, err);
+			gu_string_write(sks->token, out, err);
 		}
 
 		PgfExprProb* ep = gu_new(PgfExprProb, pool);

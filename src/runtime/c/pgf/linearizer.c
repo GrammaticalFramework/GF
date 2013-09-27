@@ -454,6 +454,50 @@ pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
 }
 
 void
+pgf_lzr_linearize_sequence(PgfConcr* concr, 
+                           PgfCncTreeApp* fapp, PgfSequence* seq, 
+                           PgfLinFuncs** fnsp)
+{
+	size_t nsyms = gu_seq_length(seq);
+	PgfSymbol* syms = gu_seq_data(seq);
+	for (size_t i = 0; i < nsyms; i++) {
+		PgfSymbol sym = syms[i];
+		GuVariantInfo sym_i = gu_variant_open(sym);
+		switch (sym_i.tag) {
+		case PGF_SYMBOL_CAT:
+		case PGF_SYMBOL_VAR:
+		case PGF_SYMBOL_LIT: {
+			PgfSymbolIdx* sidx = sym_i.data;
+			gu_assert((unsigned) sidx->d < fapp->n_args);
+
+			PgfCncTree argf = fapp->args[sidx->d];
+			pgf_lzr_linearize(concr, argf, sidx->r, fnsp);
+			break;
+		}
+		case PGF_SYMBOL_KS: {
+			PgfSymbolKS* ks = sym_i.data;
+			if ((*fnsp)->symbol_token) {
+				(*fnsp)->symbol_token(fnsp, ks->token);
+			}
+			break;
+		}
+		case PGF_SYMBOL_KP: {
+			// TODO: correct prefix-dependencies
+			PgfSymbolKP* kp = sym_i.data;
+			pgf_lzr_linearize_sequence(concr, fapp, kp->default_form, fnsp);
+			break;
+		}
+		case PGF_SYMBOL_NE: {
+			// Nothing to be done here
+			break;
+		}
+		default:
+			gu_impossible(); 
+		}
+	}
+}
+
+void
 pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs** fnsp)
 {
 	PgfLinFuncs* fns = *fnsp;
@@ -472,47 +516,9 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		}
 
 		gu_require(lin_idx < fun->n_lins);
-		PgfSequence* seq = fun->lins[lin_idx];
-		size_t nsyms = gu_seq_length(seq);
-		PgfSymbol* syms = gu_seq_data(seq);
-		for (size_t i = 0; i < nsyms; i++) {
-			PgfSymbol sym = syms[i];
-			GuVariantInfo sym_i = gu_variant_open(sym);
-			switch (sym_i.tag) {
-			case PGF_SYMBOL_CAT:
-			case PGF_SYMBOL_VAR:
-			case PGF_SYMBOL_LIT: {
-				PgfSymbolIdx* sidx = sym_i.data;
-				gu_assert((unsigned) sidx->d < fapp->n_args);
 
-				PgfCncTree argf = fapp->args[sidx->d];
-				pgf_lzr_linearize(concr, argf, sidx->r, fnsp);
-				break;
-			}
-			case PGF_SYMBOL_KS: {
-				PgfSymbolKS* ks = sym_i.data;
-				if (fns->symbol_tokens) {
-					fns->symbol_tokens(fnsp, ks->tokens);
-				}
-				break;
-			}
-			case PGF_SYMBOL_KP: {
-				// TODO: correct prefix-dependencies
-				PgfSymbolKP* kp = sym_i.data;
-				if (fns->symbol_tokens) {
-					fns->symbol_tokens(fnsp,
-							   kp->default_form);
-				}
-				break;
-			}
-			case PGF_SYMBOL_NE: {
-				// Nothing to be done here
-				break;
-			}
-			default:
-				gu_impossible(); 
-			}
-		}
+		PgfSequence* seq = fun->lins[lin_idx];
+		pgf_lzr_linearize_sequence(concr, fapp, seq, fnsp);
 		
 		if (fns->end_phrase) {
 			fns->end_phrase(fnsp,
@@ -572,22 +578,18 @@ struct PgfSimpleLin {
 };
 
 static void
-pgf_file_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens* toks)
+pgf_file_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 {
 	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
 	if (!gu_ok(flin->err)) {
 		return;
 	}
-	size_t len = gu_seq_length(toks);
-	for (size_t i = 0; i < len; i++) {
-		if (flin->n_tokens > 0)
-			gu_putc(' ', flin->out, flin->err);
+	if (flin->n_tokens > 0)
+		gu_putc(' ', flin->out, flin->err);
 
-		PgfToken tok = gu_seq_get(toks, PgfToken, i);
-		gu_string_write(tok, flin->out, flin->err);
-		
-		flin->n_tokens++;
-	}
+	gu_string_write(tok, flin->out, flin->err);
+	
+	flin->n_tokens++;
 }
 
 static void
@@ -626,10 +628,10 @@ pgf_file_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
 }
 
 static PgfLinFuncs pgf_file_lin_funcs = {
-	.symbol_tokens = pgf_file_lzn_symbol_tokens,
-	.expr_literal  = pgf_file_lzn_expr_literal,
-	.begin_phrase  = NULL,
-	.end_phrase    = NULL,
+	.symbol_token = pgf_file_lzn_symbol_token,
+	.expr_literal = pgf_file_lzn_expr_literal,
+	.begin_phrase = NULL,
+	.end_phrase   = NULL,
 };
 
 void

@@ -196,18 +196,15 @@ pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences* sequences,
 }
 
 static void
-pgf_print_tokens(PgfTokens* tokens, GuOut *out, GuExn *err)
+pgf_print_token(PgfToken tok, GuOut *out, GuExn *err)
 {
 	gu_putc('"', out, err);
-	size_t n_toks = gu_seq_length(tokens);
-	for (size_t i = 0; i < n_toks; i++) {
-		if (i > 0) gu_putc(' ', out, err);
-			
-		PgfToken tok = gu_seq_get(tokens, PgfToken, i);
-		gu_string_write(tok, out, err);
-	}
+	gu_string_write(tok, out, err);
 	gu_putc('"', out, err);
 }
+
+static void
+pgf_print_sequence(PgfSequence* seq, GuOut *out, GuExn *err);
 
 void
 pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
@@ -220,18 +217,18 @@ pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
 	}
 	case PGF_SYMBOL_KS: {
 		PgfSymbolKS* sks = gu_variant_data(sym);
-		pgf_print_tokens(sks->tokens, out, err);
+		pgf_print_token(sks->token, out, err);
 		break;
 	}
 	case PGF_SYMBOL_KP: {
 		PgfSymbolKP* skp = gu_variant_data(sym);
 
 		gu_puts("pre {", out, err);
-		pgf_print_tokens(skp->default_form, out, err);
+		pgf_print_sequence(skp->default_form, out, err);
 		
 		for (size_t i = 0; i < skp->n_forms; i++) {
 			gu_puts("; ", out, err);
-            pgf_print_tokens(skp->forms[i].form, out, err);
+            pgf_print_sequence(skp->forms[i].form, out, err);
             gu_puts(" / ", out, err);
             
             size_t n_prefixes = gu_seq_length(skp->forms[i].prefixes);
@@ -262,16 +259,18 @@ pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
 		gu_puts("nonExist", out, err);
 		break;
 	}
+	case PGF_SYMBOL_BIND: {
+		gu_puts("BIND", out, err);
+		break;
+	}
 	default:
 		gu_impossible();
 	}
 }
 
 static void
-pgf_print_sequence(size_t seqid, PgfSequence* seq, GuOut *out, GuExn *err)
+pgf_print_sequence(PgfSequence* seq, GuOut *out, GuExn *err)
 {
-	gu_printf(out,err,"    S%d := ", seqid);
-
 	int n_syms = gu_seq_length(seq);
 	for (int i = 0; i < n_syms; i++) {
 		if (i > 0) gu_putc(' ', out, err);
@@ -279,8 +278,6 @@ pgf_print_sequence(size_t seqid, PgfSequence* seq, GuOut *out, GuExn *err)
 		PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
 		pgf_print_symbol(sym, out, err);
 	}
-
-	gu_putc('\n', out, err);
 }
 
 static void
@@ -342,7 +339,10 @@ pgf_print_concrete(PgfCId cncname, PgfConcr* concr,
 	size_t n_seqs = gu_seq_length(concr->sequences);
 	for (size_t i = 0; i < n_seqs; i++) {
 		PgfSequence* seq = gu_seq_get(concr->sequences, PgfSequence*, i);
-		pgf_print_sequence(i, seq, out, err);
+			
+		gu_printf(out,err,"    S%d := ", i);
+		pgf_print_sequence(seq, out, err);
+		gu_putc('\n', out, err);
 	}
 	
 	gu_puts("  categories\n", out, err);

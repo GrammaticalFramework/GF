@@ -58,9 +58,10 @@ data Symbol
   = SymCat {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
   | SymLit {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
   | SymVar {-# UNPACK #-} !Int {-# UNPACK #-} !Int
-  | SymKS [Token]
-  | SymKP [Token] [Alternative]
+  | SymKS Token
   | SymNE                           -- non exist
+  | SymBIND                         -- the special BIND token
+  | SymKP [Symbol] [([Symbol],[String])]
   deriving (Eq,Ord,Show)
 data Production
   = PApply  {-# UNPACK #-} !FunId [PArg]
@@ -74,10 +75,6 @@ type Sequence = Array DotPos Symbol
 type FunId = Int
 type SeqId = Int
 type BCAddr = Int
-
-data Alternative =
-   Alt [Token] [String]
-  deriving (Eq,Ord,Show)
 
 
 -- merge two PGFs; fails is differens absnames; priority to second arg

@@ -76,10 +76,6 @@ instance Binary Concr where
                         , cnccats=cnccats, totalCats=totalCats
                         })
 
-instance Binary Alternative where
-  put (Alt v x) = put (v,x)
-  get = liftM2 Alt get get
-
 instance Binary Expr where
   put (EAbs b x exp)  = putWord8 0 >> put (b,x,exp)
   put (EApp e1 e2)    = putWord8 1 >> put (e1,e2)
@@ -153,6 +149,7 @@ instance Binary Symbol where
   put (SymKS ts)         = putWord8 3 >> put ts
   put (SymKP d vs)       = putWord8 4 >> put (d,vs)
   put SymNE              = putWord8 5
+  put SymBIND            = putWord8 6
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 SymCat get get
@@ -161,6 +158,7 @@ instance Binary Symbol where
              3 -> liftM  SymKS  get
              4 -> liftM2 (\d vs -> SymKP d vs) get get
              5 -> return SymNE
+             6 -> return SymBIND
              _ -> decodingError
 
 instance Binary PArg where

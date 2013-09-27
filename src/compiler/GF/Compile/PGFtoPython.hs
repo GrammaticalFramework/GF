@@ -75,9 +75,9 @@ pySymbol :: Symbol -> String
 pySymbol (SymCat n l)    = pyTuple 0 show [n, l]
 pySymbol (SymLit n l)    = pyDict 0 pyStr id [("lit", pyTuple 0 show [n, l])]
 pySymbol (SymVar n l)    = pyDict 0 pyStr id [("var", pyTuple 0 show [n, l])]
-pySymbol (SymKS ts)      = prTList "," (map pyStr ts)
-pySymbol (SymKP ts alts) = pyDict 0 pyStr id [("pre", pyList 0 pyStr ts), ("alts", pyList 0 alt2py alts)]
-    where alt2py (Alt ps ts) = pyTuple 0 (pyList 0 pyStr) [ps, ts]
+pySymbol (SymKS t)       = pyStr t
+pySymbol (SymKP ts alts) = pyDict 0 pyStr id [("pre", pyList 0 pySymbol ts), ("alts", pyList 0 alt2py alts)]
+    where alt2py (ps,ts) = pyTuple 0 (pyList 0 pyStr) [map pySymbol ps, ts]
 
 ----------------------------------------------------------------------
 -- python helpers 

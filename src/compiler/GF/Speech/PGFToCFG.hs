@@ -91,8 +91,8 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
         symbolToCFSymbol :: Symbol -> [CFSymbol]
         symbolToCFSymbol (SymCat n l)    = [let PArg _ fid = args!!n in NonTerminal (fcatToCat fid l)]
-        symbolToCFSymbol (SymKS ts)      = map Terminal ts
-        symbolToCFSymbol (SymKP ts as)   = map Terminal $ ts 
+        symbolToCFSymbol (SymKS t)       = [Terminal t]
+        symbolToCFSymbol (SymKP syms as) = concatMap symbolToCFSymbol syms
                                            ---- ++ [t | Alt ss _ <- as, t <- ss]
                                            ---- should be alternatives in [[CFSymbol]]
                                            ---- AR 3/6/2010

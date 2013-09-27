@@ -116,18 +116,15 @@ typedef struct {
 } PgfBracketLznState;
 
 static void
-pgf_bracket_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens* toks)
+pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 
-	size_t len = gu_seq_length(toks);
-	for (size_t i = 0; i < len; i++) {
-		PgfParseNode* node = gu_new(PgfParseNode, state->pool);
-		node->id     = 100000 + gu_buf_length(state->leaves);
-		node->parent = state->parent;
-		node->label  = gu_seq_get(toks, PgfToken, i);
-		gu_buf_push(state->leaves, PgfParseNode*, node);
-	}
+	PgfParseNode* node = gu_new(PgfParseNode, state->pool);
+	node->id     = 100000 + gu_buf_length(state->leaves);
+	node->parent = state->parent;
+	node->label  = tok;
+	gu_buf_push(state->leaves, PgfParseNode*, node);
 }
 
 static void
@@ -214,7 +211,7 @@ pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex,
 }
 
 static PgfLinFuncs pgf_bracket_lin_funcs = {
-	.symbol_tokens = pgf_bracket_lzn_symbol_tokens,
+	.symbol_token  = pgf_bracket_lzn_symbol_token,
 	.expr_literal  = pgf_bracket_lzn_expr_literal,
 	.begin_phrase  = pgf_bracket_lzn_begin_phrase,
 	.end_phrase    = pgf_bracket_lzn_end_phrase

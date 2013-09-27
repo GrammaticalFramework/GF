@@ -85,10 +85,12 @@ sym2js :: Symbol -> JS.Expr
 sym2js (SymCat n l)    = new "SymCat" [JS.EInt n, JS.EInt l]
 sym2js (SymLit n l)    = new "SymLit" [JS.EInt n, JS.EInt l]
 sym2js (SymVar n l)    = new "SymVar" [JS.EInt n, JS.EInt l]
-sym2js (SymKS ts)      = new "SymKS"  (map JS.EStr ts)
-sym2js (SymKP ts alts) = new "SymKP"  [JS.EArray (map JS.EStr ts), JS.EArray (map alt2js alts)]
+sym2js (SymKS t)       = new "SymKS"  [JS.EStr t]
+sym2js (SymKP ts alts) = new "SymKP"  [JS.EArray (map sym2js ts), JS.EArray (map alt2js alts)]
+sym2js SymNE           = new "SymNE"  []
+sym2js SymBIND         = new "SymKS"  [JS.EStr "&+"]
 
-alt2js (Alt ps ts) = new "Alt" [JS.EArray (map JS.EStr ps), JS.EArray (map JS.EStr ts)]
+alt2js (ps,ts) = new "Alt" [JS.EArray (map sym2js ps), JS.EArray (map JS.EStr ts)]
 
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
