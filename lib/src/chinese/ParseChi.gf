@@ -35,7 +35,7 @@ Assign_2,
 Assign_20,
 Assign_21,
 Assign_3,
--- Assign_31, -- characters not in utf8
+Assign_31,
 Assign_32, 
 Assign_4,
 Assign_5,
