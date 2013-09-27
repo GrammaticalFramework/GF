@@ -65,14 +65,14 @@ oper
 lin
 
 
-above_Prep = mkPrep "上边" ;
-after_Prep = mkPrep "以后" ;
-under_Prep = mkPrep "下" ;
+above_Prep = mkPrep [] "上边" ;
+after_Prep = mkPrep [] "以后" ;
+under_Prep = mkPrep [] "下" ;
 why_IAdv = mkIAdvL "为什么" ;
 too_AdA = mkAdA "太" ;
 
-before_Prep = mkPrep "从前" ;
-between_Prep = mkPrep "之间" ;
+before_Prep = mkPrep [] "之前" ;
+between_Prep = mkPrep [] "之间" ;
 but_PConj = mkPConjL "但是" ;
 
 
@@ -173,7 +173,7 @@ therefore_PConj = ssword "因此" ;
 through_Prep = mkPrep "通过" ;
 which_IQuant = mkIQuant "哪" ;
 --which_IQuant = ssword [] ; -- [mark] in sent, it depends on the context
-without_Prep = mkPrep [] "没有" ;
+without_Prep = mkPrep "没有" ;
 youPol_Pron = ssword "您" ; -- polite you
 
 }

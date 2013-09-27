@@ -36,7 +36,10 @@ oper
 
   mkV = overload {      
     mkV : (walk : Str) -> V 
-      = \walk -> lin V (regVerb walk) ;
+      = \walk -> case walk of {
+          v + "+" + p => lin V (regVerb (v + p)) ;
+          _ => lin V (regVerb walk)
+          } ;
     mkV : (arrive : Str) -> Str -> Str -> Str -> Str -> V
       = \arrive,pp,ds,dp,ep -> lin V (mkVerb arrive pp ds dp ep neg_s) ;
     mkV : (arrive : Str) -> Str -> Str -> Str -> Str -> Str -> V
