@@ -100,7 +100,7 @@ DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
 
   SlashV2V v a p vp = 
     insertObj (ResChi.mkNP (a.s ++ p.s ++ useVerb vp.verb ! p.p ! APlain ++ vp.compl))   
-              (predV v) ** {c2 = v.c2 ; isPre = True} ; ---- aspect
+              (predV v v.part) ** {c2 = v.c2 ; isPre = v.hasPrep} ; ---- aspect
 
 {-
   SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++ 
@@ -114,15 +114,15 @@ DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
   PredVPovs np vp = PredVP np vp ; ----  (lin NP np) (lin VP vp) ; ----
 
 
-  CompS s = insertObj s (predV copula) ; ----
+  CompS s = insertObj s (predV copula []) ; ----
 
 
-  CompQS qs = insertObj qs (predV copula) ; ----
-  CompVP ant p vp = insertObj (ss (infVP vp)) (predV copula) ; ----
+  CompQS qs = insertObj qs (predV copula []) ; ----
+  CompVP ant p vp = insertObj (ss (infVP vp)) (predV copula []) ; ----
 
 {-
   VPSlashVS vs vp = 
-    insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) **
+    insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs []) **
     {c2 = ""; gapInMiddle = False} ;
 
 -}

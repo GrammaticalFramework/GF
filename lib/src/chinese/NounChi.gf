@@ -14,7 +14,7 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
 
     PredetNP pred np = mkNP (pred.s ++ possessive_s ++ np.s) ;
 
-    PPartNP np v2 = mkNP ((predV v2).verb.s ++ possessive_s ++ np.s) ; ---- ??
+    PPartNP np v2 = mkNP ((predV v2 v2.part).verb.s ++ possessive_s ++ np.s) ; ---- ??
 
     AdvNP np adv = mkNP (adv.s ++ possessive_s ++ np.s) ;
 

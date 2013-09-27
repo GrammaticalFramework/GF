@@ -12,7 +12,7 @@ concrete QuestionChi of Question = CatChi **
       } ;
  
     QuestSlash ip cls =  {
-      s =\\p,a => cls.c2.prepPre ++ cls.np ++ cls.c2.prepMain ++ cls.vp ! p ! a ++ 
+      s =\\p,a => appPrep cls.c2 cls.np ++ cls.vp ! p ! a ++ 
                   possessive_s ++ di_s ++ ip.s
       } ;       
       

@@ -18,7 +18,7 @@ oper
 ----      = \n,p -> lin N2 (n ** {c2 = mkPrep p}) ;
     } ;
 
-  mkN3 : N -> Preposition -> Preposition -> N3
+  mkN3 : N -> Prep -> Prep -> N3
       = \n,p,q -> lin N3 (n ** {c2 = p ; c3 = q}) ;
 
       
@@ -43,17 +43,26 @@ oper
       = \arrive,pp,ds,dp,ep,neg -> lin V (mkVerb arrive pp ds dp ep neg) ;
       } ;      
 
-
-  mkV2 : Str -> V2 
-      = \s -> lin V2 (regVerb s ** {c2 = emptyPrep}) ;
+  mkV2 = overload {
+    mkV2 : Str -> V2 
+      = \s -> case s of {
+         v + "+" + p => lin V2 (regVerb v ** {c2 = emptyPrep ; hasPrep = False ; part = p}) ;
+         v + "*" + p => lin V2 (regVerb v ** {c2 = ResChi.mkPreposition p [] ; hasPrep = True ; part = []}) ;
+         _ => lin V2 (regVerb s ** {c2 = emptyPrep ; hasPrep = False ; part = []})
+         } ;
+    mkV2 : V -> V2 
+      = \v -> lin V2 (v ** {c2 = emptyPrep ; hasPrep = False ; part = []}) ;
+    mkV2 : V -> Prep -> V2 
+      = \v,p -> lin V2 (v ** {c2 = p ; hasPrep = True ; part = []}) ;
+    } ;
 
   mkV3 = overload {
     mkV3 : Str -> V3
-      = \s -> lin V3 (regVerb s ** {c2,c3 = emptyPrep}) ;
+      = \s -> lin V3 (regVerb s ** {c2,c3 = emptyPrep ; hasPrep = False ; part = []}) ;
     mkV3 : V -> V3
-      = \s -> lin V3 (s ** {c2,c3 = emptyPrep}) ;
-----    mkV3 : V -> Str -> Str -> V3
-----      = \v,p,q -> lin V3 (v ** {c2 = mkPrep p ; c3 = mkPrep q}) ;
+      = \s -> lin V3 (s ** {c2,c3 = emptyPrep ; hasPrep = False ; part = []}) ;
+    mkV3 : V -> Prep -> Prep -> V3
+      = \v,p,q -> lin V3 (v ** {c2 = p ; c3 = q ; hasPrep = True ; part = []}) ;
     } ;
 
   mkVV : Str -> VV = ----
@@ -77,34 +86,34 @@ oper
   } ;
 
   mkV2Q : V -> V2Q =
-    \v -> lin V2Q (v ** {c2 = emptyPrep}) ; 
+    \v -> lin V2Q (v ** {c2 = emptyPrep ; hasPrep = False ; part = []}) ; 
 ----  mkV2Q : V -> Str -> V2Q =
 ----    \v,p -> lin V2Q (v ** {c2 = mkPrep p}) ; 
 
   mkV2V= overload {
     mkV2V : Str -> V2V = 
-    \s -> lin V2V (regVerb s ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
+    \s -> lin V2V (regVerb s ** {c2 = emptyPrep ; c3 = emptyPrep ; hasPrep = False ; part = []}) ; 
 
     mkV2V : V -> V2V =
-    \v -> lin V2V (v ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
+    \v -> lin V2V (v ** {c2 = emptyPrep ; c3 = emptyPrep ; hasPrep = False ; part = []}) ; 
 ----  mkV2V : V -> Str -> Str -> V2V =
 ----    \v,p,q -> lin V2V (v ** {c2 = mkPrep p ; c3 = mkPrep q}) ; 
     } ;
 
   mkV2S = overload {
   mkV2S : Str -> V2S =
-    \s -> lin V2S (regVerb s ** {c2 = emptyPrep}) ; 
+    \s -> lin V2S (regVerb s ** {c2 = emptyPrep ; hasPrep = False ; part = []}) ; 
   mkV2S : V -> V2S =
-    \v -> lin V2S (v ** {c2 = emptyPrep}) ; 
+    \v -> lin V2S (v ** {c2 = emptyPrep ; hasPrep = False ; part = []}) ; 
 ----  mkV2S : V -> Str -> V2S =
 ----    \v,p -> lin V2S (v ** {c2 = mkPrep p}) ; 
   } ;
 
   mkV2A = overload {
     mkV2A : Str -> V2A
-      = \s -> lin V2A (regVerb s ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
+      = \s -> lin V2A (regVerb s ** {c2 = emptyPrep ; c3 = emptyPrep ; hasPrep = False ; part = []}) ; 
     mkV2A : V -> V2A
-      = \v -> lin V2A (v ** {c2 = emptyPrep ; c3 = emptyPrep}) ; 
+      = \v -> lin V2A (v ** {c2 = emptyPrep ; c3 = emptyPrep ; hasPrep = False ; part = []}) ; 
     } ;
 ----  mkV2A : V -> Str -> Str -> V2A
 ----    = \v,p,q -> lin V2A (v ** {c2 = mkPrep p ; c3 = mkPrep q}) ; 
@@ -125,9 +134,9 @@ oper
   mannerAdvType : AdvType
    = ATManner ;
     
-  mkPrep = overload { ---- is this the right order of the fields?
+  mkPrep = overload { -- first pre part, then optional post part
     mkPrep : Str -> Prep 
-     = \s -> lin Prep (ResChi.mkPreposition [] s) ;
+     = \s -> lin Prep (ResChi.mkPreposition s []) ;
     mkPrep : Str -> Str -> Prep 
      = \s,t -> lin Prep (ResChi.mkPreposition s t) ;
     } ;
