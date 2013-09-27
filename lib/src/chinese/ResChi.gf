@@ -65,6 +65,8 @@ resource ResChi = ParamX ** open Prelude in {
   bword : Str -> Str -> Str = \x,y -> x ++ y ; -- change to x + y to treat words as single tokens
 
   word : Str -> Str = \s -> case s of {
+      x@? + y@? + z@? + u@? + v@? + w@? => bword x (bword y (bword z (bword u (bword v w)))) ;
+      x@? + y@? + z@? + u@? + v@? => bword x (bword y (bword z (bword u v))) ;
       x@? + y@? + z@? + u@? => bword x (bword y (bword z u)) ;
       x@? + y@? + z@? => bword x (bword y z) ;
       x@? + y@? => bword x y ;
