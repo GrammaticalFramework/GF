@@ -137,9 +137,9 @@ oper
 
   infVP : VP -> Str = \vp -> vp.prePart ++ vp.verb.s ++ vp.compl ; 
 
-  predV : Verb -> VP = \v -> {
+  predV : Verb -> Str -> VP = \v,part -> {
       verb = v ; 
-      compl = [] ;
+      compl = part ;
       prePart = [] ;
       } ; 
 
@@ -158,7 +158,13 @@ oper
    insertAdv : SS -> VP -> VP = \adv,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ;
-     prePart = adv.s
+     prePart = adv.s ++ vp.prePart
+     } ; 
+
+   insertPP : SS -> VP -> VP = \pp,vp -> {
+     verb  = vp.verb ;
+     compl = vp.compl ;
+     prePart = vp.prePart ++ pp.s
      } ; 
 
    insertExtra : SS -> VP -> VP = \ext,vp ->
@@ -215,9 +221,9 @@ oper
     s = word s
     } ;
     
-  mkPreposition : Str -> Str -> Preposition = \s,b -> {
-    prepMain = word s ;
-    prepPre = word b
+  mkPreposition : Str -> Str -> Preposition = \s1,s2 -> {
+    prepPre  = word s1 ;
+    prepPost = word s2 
     } ;
     
   mkSubj : Str -> Str -> {prePart : Str ; sufPart : Str} = \p,s -> {
@@ -225,13 +231,13 @@ oper
     sufPart = word s
     } ;
 
-  Preposition = {prepMain : Str ; prepPre : Str} ;  
+  Preposition = {prepPre : Str ; prepPost : Str} ;  
 
 -- added by AR
 
   mkNP     : Str -> NP = ss ;  -- not to be used in lexicon building
 
   appPrep : Preposition -> Str -> Str = \prep,s -> 
-    prep.prepPre ++ s ++ prep.prepMain ;
+    prep.prepPre ++ s ++ prep.prepPost ;
 
 }

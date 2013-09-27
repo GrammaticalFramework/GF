@@ -65,8 +65,8 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Adv] ** open ResChi, Prelude in
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ; 
-    V2, V2Q, V2S = Verb ** {c2 : Preposition} ;
-    V3, V2A, V2V = Verb ** {c2, c3 : Preposition} ;
+    V2, V2Q, V2S = Verb ** {c2 : Preposition ; hasPrep : Bool ; part : Str} ;
+    V3, V2A, V2V = Verb ** {c2, c3 : Preposition ; hasPrep : Bool ; part : Str} ;
     VV = Verb ;
 
     A = ResChi.Adj ;

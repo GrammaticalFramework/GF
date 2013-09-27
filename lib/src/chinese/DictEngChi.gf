@@ -466,7 +466,7 @@ lin
 
 --- TODO
 
-of_Prep = mkPrep "的" ;
+of_Prep = mkPrep [] "的" ;
 by_Prep = mkPrep "由" ;
 at_Prep = mkPrep "在" ;
 as_Prep = mkPrep "如" ;
@@ -1213,7 +1213,7 @@ evidence_N = mkN "证据" ;
 appear_VV = mkVV "出现" ;
 sure_A = mkA "肯定" ;
 size_N = mkN "大小" ;
-out_Prep = mkPrep "到。。。外面" ;
+out_Prep = mkPrep "到" "外面" ;
 face_N = mkN "面对" ;
 anything_NP = mkNPword "无论何事" ;
 version_N = mkN "版本" ;
@@ -1630,7 +1630,7 @@ delay_N = mkN "延迟" ;
 decline_V2 = mkV2 "下降" ;
 crisis_N = mkN "危机" ;
 audience_N = mkN "听众" ;
-amid_Prep = mkPrep "在。。。之中" ;
+amid_Prep = mkPrep "在" "之中" ;
 yield_V = mkV "产量" ;
 street_N = mkN "街头" ;
 soar_V = mkV "翱翔" ;
