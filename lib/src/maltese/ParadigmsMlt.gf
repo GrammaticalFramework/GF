@@ -580,8 +580,8 @@ resource ParadigmsMlt = open
             VImpf (AgP3Pl)      => impfP3Pl ;
             VImp (Pl)           => impSg ;
             VImp (Sg)           => impPl ;
-            VPresPart _         => NONEXIST ;
-            VPastPart _         => NONEXIST
+            VPresPart _         => nonExist ;
+            VPastPart _         => nonExist
             } ;
           info : VerbInfo = mkVerbInfo class form root vseq impSg ;
         in lin V  {
@@ -703,8 +703,8 @@ resource ParadigmsMlt = open
           VImpf (AgP2 Pl)     => pfx "ti" (pfx_T (dropPfx 1 (get (VImpf (AgP2 Pl))))) ;
           VImpf (AgP3Pl)      => pfx "ji" (pfx_T (dropPfx 1 (get (VImpf (AgP3Pl))))) ;
           VImp num            => pfx_T (get (VImp num)) ;
-          VPresPart _         => NONEXIST ;
-          VPastPart _         => NONEXIST
+          VPresPart _         => nonExist ;
+          VPastPart _         => nonExist
           } ;
       in lin V {
         s = stemVariantsTbl (tbl) ;
@@ -732,8 +732,8 @@ resource ParadigmsMlt = open
           VImpf (AgP2 Pl)     => pfx "ti" (pfx_T (dropPfx 1 (get (VImpf (AgP2 Pl))))) ;
           VImpf (AgP3Pl)      => pfx "ji" (pfx_T (dropPfx 1 (get (VImpf (AgP3Pl))))) ;
           VImp num            => pfx_T (get (VImp num)) ;
-          VPresPart _         => NONEXIST ;
-          VPastPart _         => NONEXIST
+          VPresPart _         => nonExist ;
+          VPastPart _         => nonExist
           } ;
       in lin V {
         s = stemVariantsTbl (tbl) ;
@@ -841,8 +841,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjStrongPerf root vseq ) ! agr ;
           VImpf agr => ( conjStrongImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Strong Regular) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -885,8 +885,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjLiquidMedialPerf root vseq ) ! agr ;
           VImpf agr => ( conjLiquidMedialImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Strong LiquidMedial) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -924,8 +924,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjGeminatedPerf root vseq ) ! agr ;
           VImpf agr => ( conjGeminatedImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Strong Geminated) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -963,8 +963,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjAssimilativePerf root vseq ) ! agr ;
           VImpf agr => ( conjAssimilativeImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Weak Assimilative) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -1002,8 +1002,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjHollowPerf root vseq ) ! agr ;
           VImpf agr => ( conjHollowImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Weak Hollow) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -1045,8 +1045,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjLackingPerf root vseq ) ! agr ;
           VImpf agr => ( conjLackingImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Weak Lacking) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -1084,8 +1084,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjDefectivePerf root vseq ) ! agr ;
           VImpf agr => ( conjDefectiveImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Weak Defective) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -1123,8 +1123,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjQuadPerf root vseq ) ! agr ;
           VImpf agr => ( conjQuadImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Quad QStrong) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -1165,8 +1165,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjQuadWeakPerf root vseq (imp ! Sg) ) ! agr ;
           VImpf agr => ( conjQuadWeakImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Quad QWeak) (FormI) root vseq (imp ! Sg) ;
       in lin V {
@@ -1192,8 +1192,8 @@ resource ParadigmsMlt = open
           VPerf agr => ( conjLoanPerf mamma ) ! agr ;
           VImpf agr => ( conjLoanImpf (imp ! Sg) (imp ! Pl) ) ! agr ;
           VImp n    => imp ! n ;
-          VPresPart _ => NONEXIST ;
-          VPastPart _ => NONEXIST
+          VPresPart _ => nonExist ;
+          VPastPart _ => nonExist
           } ;
         info : VerbInfo = mkVerbInfo (Loan) (FormI) (imp ! Sg) ;
       in lin V {

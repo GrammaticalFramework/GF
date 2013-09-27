@@ -867,8 +867,8 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
         <VImpf (AgP3Pl), Neg>      => "jkunux" ;
         <VImp (Sg), Neg>           => "kunx" ;
         <VImp (Pl), Neg>           => "kunux" ;
-        <VPresPart gn, _>          => NONEXIST ;
-        <VPastPart gn, _>          => NONEXIST
+        <VPresPart gn, _>          => nonExist ;
+        <VPastPart gn, _>          => nonExist
         }
       } ;
 
@@ -909,8 +909,8 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
           VImpf (AgP3Pl)      => mkVerbStems "huma" "m'humie" ;
           VImp (Sg)           => mkVerbStems "kun" ;
           VImp (Pl)           => mkVerbStems "kunu" ;
-          VPresPart gn        => mkVerbStems NONEXIST ;
-          VPastPart gn        => mkVerbStems NONEXIST
+          VPresPart gn        => mkVerbStems nonExist ;
+          VPastPart gn        => mkVerbStems nonExist
           } ;
         i = mkVerbInfo Irregular FormI ;
         hasPresPart = False ;
@@ -1150,9 +1150,6 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       } ;
 
     {- ~~~ Useful helper functions ~~~ -}
-
-    NONEXIST : Str = "#NONEXIST#" ;
-    -- NONEXIST : Str = Prelude.nonExist ; -- Still doesn't work in Haskell runtime 2013-08-26
 
     -- New names for the drop/take operations
     takePfx = Predef.take ;
