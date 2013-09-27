@@ -46,7 +46,7 @@ oper
   mkV2 = overload {
     mkV2 : Str -> V2 
       = \s -> case s of {
-         v + "+" + p => lin V2 (regVerb v ** {c2 = emptyPrep ; hasPrep = False ; part = p}) ;
+         v + "+" + p => lin V2 (regVerb v ** {c2 = emptyPrep ; hasPrep = False ; part = word p}) ;
          v + "*" + p => lin V2 (regVerb v ** {c2 = ResChi.mkPreposition p [] ; hasPrep = True ; part = []}) ;
          _ => lin V2 (regVerb s ** {c2 = emptyPrep ; hasPrep = False ; part = []})
          } ;
