@@ -1199,10 +1199,10 @@ oper
   mkN075 : Str -> N ;
   mkN075 base = let v0 = base
                 in { s = table {
-                           NF Sg _     => variants {} ;
+                           NF Sg _     => nonExist ;
                            NF Pl Indef => v0 ;
                            NF Pl Def   => v0+"те" ;
-                           NFSgDefNom  => variants {} ;
+                           NFSgDefNom  => nonExist ;
                            NFPlCount   => v0 ;
                            NFVocative  => v0
                          } ;
