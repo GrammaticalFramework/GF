@@ -34,7 +34,7 @@ Assign_19,
 Assign_2,
 Assign_20,
 Assign_3,
---* Assign_32, -- characters not in utf8
+Assign_32, -- characters not in utf8
 Assign_4,
 Assign_5,
 Assign_6,
