@@ -18,8 +18,8 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
 
     ComplVV v vp = {
       verb = v ;
-      compl = vp.verb.s ++ vp.compl ;
-      prePart = vp.prePart
+      compl = vp.prePart ++ vp.verb.s ++ vp.compl ;
+      prePart = []
       } ;
 
     ComplVS v s  = insertObj s  (predV v []) ; 
