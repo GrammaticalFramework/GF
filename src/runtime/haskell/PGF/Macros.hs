@@ -156,9 +156,11 @@ data BracketedString
                                                                                -- that represents the same constituent.
 
 data BracketedTokn
-  = LeafKS [Token]
-  | LeafKP [Token] [Alternative]
-  | Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [Expr] [BracketedTokn]    -- Invariant: the list is not empty
+  = Bracket_ CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [Expr] [BracketedTokn]    -- Invariant: the list is not empty
+  | LeafKS Token
+  | LeafNE
+  | LeafBIND
+  | LeafKP [BracketedTokn] [([BracketedTokn],[String])]
   deriving Eq
 
 type LinTable = ([CId],Array.Array LIndex [BracketedTokn])
@@ -178,21 +180,30 @@ lengthBracketedString (Leaf _)              = 1
 lengthBracketedString (Bracket _ _ _ _ _ bss) = sum (map lengthBracketedString bss)
 
 untokn :: Maybe String -> BracketedTokn -> (Maybe String,[BracketedString])
-untokn nw (LeafKS ts)   = (has_tok nw ts,map Leaf ts)
-untokn nw (LeafKP d vs) = let ts = filter (not . null) (sel d vs nw)
-                          in (has_tok nw ts,map Leaf ts)
-                          where
-                            sel d vs Nothing  = d
-                            sel d vs (Just w) =
-                              case [v | Alt v cs <- vs, any (\c -> isPrefixOf c w) cs] of
-                                v:_ -> v
-                                _   -> d
-untokn nw (Bracket_ cat fid index fun es bss) =
-  let (nw',bss') = mapAccumR untokn nw bss
-  in (nw',[Bracket cat fid index fun es (concat bss')])
-
-has_tok nw []     = nw
-has_tok nw (t:ts) = Just t
+untokn nw bs = 
+  case untokn nw bs of
+    (nw,Nothing ) -> (nw,[] )
+    (nw,Just bss) -> (nw,bss)
+  where
+    untokn nw (Bracket_ cat fid index fun es bss) =
+      let (nw',bss') = mapAccumR untokn nw bss
+      in case sequence bss' of
+           Just bss -> (nw',Just [Bracket cat fid index fun es (concat bss)])
+           Nothing  -> (Nothing, Nothing)
+    untokn nw (LeafKS t)
+      | null t              = (nw,Just [])
+      | otherwise           = (Just t,Just [Leaf t])
+    untokn nw LeafNE        = (Nothing, Nothing)
+    untokn nw (LeafKP d vs) = let (nw',bss') = mapAccumR untokn nw (sel d vs nw)
+                              in case sequence bss' of
+                                   Just bss -> (nw',Just (concat bss))
+                                   Nothing  -> (Nothing, Nothing)
+                              where
+                                sel d vs Nothing  = d
+                                sel d vs (Just w) =
+                                  case [v | (v,cs) <- vs, any (\c -> isPrefixOf c w) cs] of
+                                    v:_ -> v
+                                    _   -> d
 
 type CncType = (CId, FId)    -- concrete type is the abstract type (the category) + the forest id
 
@@ -204,11 +215,13 @@ mkLinTable cnc filter xs funid args = (xs,listArray (bounds lins) [computeSeq fi
 computeSeq :: (CncType -> Bool) -> [Symbol] -> [(CncType,CId,[Expr],LinTable)] -> [BracketedTokn]
 computeSeq filter seq args = concatMap compute seq
   where
-    compute (SymCat d r)    = getArg d r
-    compute (SymLit d r)    = getArg d r
-    compute (SymVar d r)    = getVar d r
-    compute (SymKS ts)      = [LeafKS ts]
-    compute (SymKP ts alts) = [LeafKP ts alts]
+    compute (SymCat d r)      = getArg d r
+    compute (SymLit d r)      = getArg d r
+    compute (SymVar d r)      = getVar d r
+    compute (SymKS t)         = [LeafKS t]
+    compute SymNE             = [LeafNE]
+    compute SymBIND           = [LeafKS "&+"]
+    compute (SymKP syms alts) = [LeafKP (concatMap compute syms) [(concatMap compute syms,cs) | (syms,cs) <- alts]]
 
     getArg d r
       | not (null arg_lin) &&
@@ -218,7 +231,7 @@ computeSeq filter seq args = concatMap compute seq
         arg_lin                    = lin ! r
         (ct@(cat,fid),fun,es,(xs,lin)) = args !! d
 
-    getVar d r = [LeafKS [showCId (xs !! r)]]
+    getVar d r = [LeafKS (showCId (xs !! r))]
       where
         (ct,fun,es,(xs,lin)) = args !! d
 

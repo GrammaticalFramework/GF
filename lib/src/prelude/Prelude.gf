@@ -114,7 +114,7 @@ oper
 
 -- These should be hidden, and never changed since they are hardcoded in (un)lexers
 
-    BIND : Str = "&+" ;
+    BIND : Str = Predef.BIND;
     PARA : Str = "&-" ;
     CAPIT : Str = "&|" ;
 

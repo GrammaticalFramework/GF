@@ -136,9 +136,9 @@ instance PLPrint Symbol where
     plp (SymCat n l)    = plOper ":" (show n) (show l)
     plp (SymLit n l)    = plTerm "lit" [show n, show l]
     plp (SymVar n l)    = plTerm "var" [show n, show l]
-    plp (SymKS ts)      = prTList "," (map plAtom ts)
-    plp (SymKP ts alts) = plTerm "pre" [plList (map plAtom ts), plList (map plAlt alts)]
-        where plAlt (Alt ps ts) = plOper "/" (plList (map plAtom ps)) (plList (map plAtom ts))
+    plp (SymKS t)       = plAtom t
+    plp (SymKP ts alts) = plTerm "pre" [plList (map plp ts), plList (map plAlt alts)]
+        where plAlt (ps,ts) = plOper "/" (plList (map plp ps)) (plList (map plAtom ts))
 
 class PLPrint a where
     plp :: a -> String

@@ -586,27 +586,13 @@ pgf_read_printnames(PgfReader* rdr)
 	return printnames;
 }
 
-static PgfTokens*
-pgf_read_tokens(PgfReader* rdr)
-{
-	size_t len = pgf_read_len(rdr);
-	gu_return_on_exn(rdr->err, NULL);
-
-	PgfTokens* tokens = gu_new_seq(PgfToken, len, rdr->opool);
-	for (size_t i = 0; i < len; i++) {
-		PgfToken token = pgf_read_string(rdr);
-		gu_return_on_exn(rdr->err, NULL);
-
-		gu_seq_set(tokens, PgfToken, i, token);
-	}
-
-	return tokens;
-}
+static PgfSequence*
+pgf_read_sequence(PgfReader* rdr);
 
 static void
 pgf_read_alternative(PgfReader* rdr, PgfAlternative* alt)
 {
-	alt->form = pgf_read_tokens(rdr);
+	alt->form = pgf_read_sequence(rdr);
 	gu_return_on_exn(rdr->err,);
 
 	size_t n_prefixes = pgf_read_len(rdr);
@@ -672,12 +658,12 @@ pgf_read_symbol(PgfReader* rdr)
 			gu_new_variant(PGF_SYMBOL_KS,
 						   PgfSymbolKS,
 						   &sym, rdr->opool);
-		sym_ks->tokens = pgf_read_tokens(rdr);
+		sym_ks->token = pgf_read_string(rdr);
 		gu_return_on_exn(rdr->err, gu_null_variant);
 		break;
 	}
 	case PGF_SYMBOL_KP: {
-		PgfTokens* default_form = pgf_read_tokens(rdr);
+		PgfSequence* default_form = pgf_read_sequence(rdr);
 		gu_return_on_exn(rdr->err, gu_null_variant);
 		
 		size_t n_forms = pgf_read_len(rdr);
@@ -699,6 +685,13 @@ pgf_read_symbol(PgfReader* rdr)
 	case PGF_SYMBOL_NE: {
 		gu_new_variant(PGF_SYMBOL_NE,
 		               PgfSymbolNE,
+		               &sym, rdr->opool);
+		gu_return_on_exn(rdr->err, gu_null_variant);
+		break;
+	}
+	case PGF_SYMBOL_BIND: {
+		gu_new_variant(PGF_SYMBOL_BIND,
+		               PgfSymbolBIND,
 		               &sym, rdr->opool);
 		gu_return_on_exn(rdr->err, gu_null_variant);
 		break;

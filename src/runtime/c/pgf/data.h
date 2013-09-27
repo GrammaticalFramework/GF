@@ -131,8 +131,11 @@ extern GU_DECLARE_TYPE(PgfCncCat, abstract);
 bool
 pgf_tokens_equal(PgfTokens* t1, PgfTokens* t2);
 
+typedef GuSeq PgfSequence; // -> PgfSymbol
+typedef GuSeq PgfSequences;
+
 typedef struct {
-	PgfTokens* form;
+	PgfSequence* form;
 	/**< The form of this variant as a list of tokens. */
 
 	GuStrings* prefixes;
@@ -175,7 +178,8 @@ typedef enum {
 	PGF_SYMBOL_VAR,
 	PGF_SYMBOL_KS,
 	PGF_SYMBOL_KP,
-	PGF_SYMBOL_NE
+	PGF_SYMBOL_NE,
+	PGF_SYMBOL_BIND
 } PgfSymbolTag;
 
 typedef struct {
@@ -186,14 +190,14 @@ typedef struct {
 typedef PgfSymbolIdx PgfSymbolCat, PgfSymbolLit, PgfSymbolVar;
 
 typedef struct {
-	PgfTokens* tokens;
+	PgfToken token;
 } PgfSymbolKS;
 
 typedef struct PgfSymbolKP
 /** A prefix-dependent symbol. The form that this symbol takes
  * depends on the form of a prefix of the following symbol. */
 {
-	PgfTokens* default_form; 
+	PgfSequence* default_form; 
 	/**< Default form that this symbol takes if none of of the
 	 * variant forms is triggered. */
 
@@ -206,8 +210,8 @@ typedef struct PgfSymbolKP
 typedef struct {
 } PgfSymbolNE;
 
-typedef GuSeq PgfSequence; // -> PgfSymbol
-typedef GuSeq PgfSequences;
+typedef struct {
+} PgfSymbolBIND;
 
 typedef struct {
 	PgfAbsFun* absfun;

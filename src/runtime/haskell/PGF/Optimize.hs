@@ -221,9 +221,13 @@ splitLexicalRules cnc p_prods =
         
         wf ts = (ts,IntSet.singleton funid)
         
-        seq2prefix []                   = TrieMap.fromList [wf []]
-        seq2prefix (SymKS ts     :syms) = TrieMap.fromList [wf ts]
-        seq2prefix (SymKP ts alts:syms) = TrieMap.fromList (wf ts : [wf ts | Alt ts ps <- alts])
+        seq2prefix []                      = TrieMap.fromList [wf []]
+        seq2prefix (SymKS t         :syms) = TrieMap.fromList [wf [t]]
+        seq2prefix (SymKP syms0 alts:syms) = TrieMap.unionsWith IntSet.union
+                                                (seq2prefix (syms0++syms) : 
+                                                  [seq2prefix (syms1 ++ syms) | (syms1,ps) <- alts])
+        seq2prefix (SymNE           :syms) = TrieMap.empty
+        seq2prefix (SymBIND         :syms) = TrieMap.fromList [wf ["&+"]]
 
 updateConcrete abs cnc = 
   let p_prods0      = filterProductions IntMap.empty IntSet.empty (productions cnc)

@@ -51,5 +51,5 @@ data Predefined = Drop | Take | Tk | Dp | EqStr | Occur | Occurs | ToUpper
              {- | Show | Read | ToStr | MapStr | EqVal -}
                 | Error
                 -- Canonical values below:
-                | PBool | PFalse | PTrue | Int | Ints | NonExist
+                | PBool | PFalse | PTrue | Int | Ints | NonExist | BIND
                 deriving (Show,Eq,Ord,Ix,Bounded,Enum)

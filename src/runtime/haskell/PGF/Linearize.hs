@@ -82,7 +82,7 @@ linTree pgf lang e =
                                                    LInt n -> return (n_fid+1,((cidInt,   n_fid),wildCId,[e0],([],ss (show n))))
                                                    LFlt f -> return (n_fid+1,((cidFloat, n_fid),wildCId,[e0],([],ss (show f))))
 
-    ss s = listArray (0,0) [[LeafKS [s]]]
+    ss s = listArray (0,0) [[LeafKS s]]
 
     apply :: Maybe CncType -> FId -> Expr -> [CId] -> [CId] -> CId -> [Expr] -> [(FId,(CncType, CId, [Expr], LinTable))]
     apply mb_cty n_fid e0 ys xs f es =
@@ -115,7 +115,7 @@ linTree pgf lang e =
                                   let args = [((wildCId, n_fid),wildCId,[e0],([],ss s))]
                                   return (n_fid+2,((cat,n_fid+1),wildCId,[e0],mkLinTable cnc (const True) xs funid args))
         Nothing
-          | isPredefFId fid -> return (n_fid+2,((cat,n_fid+1),wildCId,[e0],(xs,listArray (0,0) [[LeafKS [s]]])))
+          | isPredefFId fid -> return (n_fid+2,((cat,n_fid+1),wildCId,[e0],(xs,listArray (0,0) [[LeafKS s]])))
           | otherwise       -> do PCoerce fid <- maybe [] Set.toList (IntMap.lookup fid (pproductions cnc))
                                   def (Just (cat,fid)) n_fid e0 ys xs s
     def Nothing          n_fid e0 ys xs s = []

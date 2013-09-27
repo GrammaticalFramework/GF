@@ -244,14 +244,12 @@ getParseOutput (PState abs cnc chart cnt) ty@(DTyp _ start _) dp =
     flit _    = Nothing
     ftok toks = TrieMap.unionWith Set.union (TrieMap.compose Nothing toks)
 
-    cutAt ppos toks seqid  = 
+    cutAt ppos toks seqid =
       let seq  = unsafeAt (sequences cnc) seqid
           init = take (ppos-1) (elems seq)
           tail = case unsafeAt seq (ppos-1) of
-                   SymKS ts   -> let ts' = reverse (drop (length toks) (reverse ts))
-                                 in if null ts' then [] else [SymKS ts']
-		   SymKP ts _ -> let ts' = reverse (drop (length toks) (reverse ts))
-                                 in if null ts' then [] else [SymKS ts']
+                   SymKS t    -> drop (length toks) [SymKS t]
+                   SymKP ts _ -> reverse (drop (length toks) (reverse ts))
                    sym        -> []
       in init ++ tail
 
@@ -307,11 +305,18 @@ process flit ftok cnc (item@(Active j ppos funid seqid args key0):items) acc cha
                            Nothing                             -> process flit ftok cnc items4 acc' chart{active=insertAC key (Set.singleton item,new_sc) (active chart)}
                            Just (set,sc) | Set.member item set -> process flit ftok cnc items  acc  chart
                                          | otherwise           -> process flit ftok cnc items2 acc  chart{active=insertAC key (Set.insert item set,IntMap.unionWith Set.union new_sc sc) (active chart)}
-      	SymKS toks -> let !acc' = ftok_ toks (Active j (ppos+1) funid seqid args key0) acc
+      	SymKS tok  -> let !acc' = ftok_ [tok] (Active j (ppos+1) funid seqid args key0) acc
       	              in process flit ftok cnc items acc' chart
-      	SymKP strs vars
-      	           -> let !acc' = foldl (\acc toks -> ftok_ toks (Active j (ppos+1) funid seqid args key0) acc) acc
-                                        (strs:[strs' | Alt strs' _ <- vars])
+      	SymNE      -> process flit ftok cnc items acc chart
+      	SymBIND    -> let !acc' = ftok_ ["&+"] (Active j (ppos+1) funid seqid args key0) acc
+      	              in process flit ftok cnc items acc' chart
+      	SymKP syms vars
+      	           -> let to_tok (SymKS t) = [t]
+      	                  to_tok SymBIND   = ["&+"]
+      	                  to_tok _         = []
+
+      	                  !acc' = foldl (\acc syms -> ftok_ (concatMap to_tok syms) (Active j (ppos+1) funid seqid args key0) acc) acc
+                                        (syms:[syms' | (syms',_) <- vars])
                       in process flit ftok cnc items acc' chart
         SymLit d r -> let PArg hypos fid = args !! d
                           key   = AK fid r

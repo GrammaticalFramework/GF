@@ -30,6 +30,7 @@ cErrorType = identS "Error"
 cOverload = identS "overload"
 cUndefinedType = identS "UndefinedType"
 cNonExist = identS "nonExist"
+cBIND = identS "BIND"
 
 isPredefCat :: Ident -> Bool
 isPredefCat c = elem c [cInt,cString,cFloat]

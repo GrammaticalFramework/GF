@@ -19,19 +19,14 @@ typedef struct {
 } PgfMetricsLznState;
 
 static void
-pgf_metrics_lzn_symbol_tokens(PgfLinFuncs** funcs, PgfTokens* toks)
+pgf_metrics_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
-	
-	size_t len = gu_seq_length(toks);
-	for (size_t i = 0; i < len; i++) {
-		PgfToken tok = gu_seq_get(toks, PgfToken, i);
-		
-		if (state->ps != NULL)
-			state->ps = pgf_parser_next_state(state->ps, tok);
+			
+	if (state->ps != NULL)
+		state->ps = pgf_parser_next_state(state->ps, tok);
 
-		state->pos++;
-	}
+	state->pos++;
 }
 
 static void
@@ -128,17 +123,17 @@ pgf_metrics_lzn_end_phrase2(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_id
 }
 
 static PgfLinFuncs pgf_metrics_lin_funcs1 = {
-	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
-	.expr_literal  = pgf_metrics_lzn_expr_literal,
-	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
-	.end_phrase    = pgf_metrics_lzn_end_phrase1
+	.symbol_token = pgf_metrics_lzn_symbol_token,
+	.expr_literal = pgf_metrics_lzn_expr_literal,
+	.begin_phrase = pgf_metrics_lzn_begin_phrase,
+	.end_phrase   = pgf_metrics_lzn_end_phrase1
 };
 
 static PgfLinFuncs pgf_metrics_lin_funcs2 = {
-	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
-	.expr_literal  = pgf_metrics_lzn_expr_literal,
-	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
-	.end_phrase    = pgf_metrics_lzn_end_phrase2
+	.symbol_token = pgf_metrics_lzn_symbol_token,
+	.expr_literal = pgf_metrics_lzn_expr_literal,
+	.begin_phrase = pgf_metrics_lzn_begin_phrase,
+	.end_phrase   = pgf_metrics_lzn_end_phrase2
 };
 
 bool

@@ -36,8 +36,8 @@ collectWords pinfo = Map.fromListWith (++)
                          , sym <- elems (sequences pinfo ! seqid)
                          , t <- sym2tokns sym]
   where
-    sym2tokns (SymKS ts)      = ts
-    sym2tokns (SymKP ts alts) = ts ++ [t | Alt ts ps <- alts, t <- ts]
+    sym2tokns (SymKS t)       = [t]
+    sym2tokns (SymKP ts alts) = concat (map sym2tokns ts ++ [sym2tokns sym | (syms,ps) <- alts, sym <- syms])
     sym2tokns _               = []
 
 lookupMorpho :: Morpho -> String -> [(Lemma,Analysis)]

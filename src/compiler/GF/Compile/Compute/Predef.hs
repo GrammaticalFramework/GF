@@ -78,7 +78,7 @@ predefList =
      (cError,Error),
      -- Canonical values:
      (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInt,Int),
-     (cInts,Ints),(cNonExist,NonExist)]
+     (cInts,Ints),(cNonExist,NonExist),(cBIND,BIND)]
     --- add more functions!!!
 
 delta f vs =
@@ -106,6 +106,7 @@ delta f vs =
       PFalse  -> canonical
       PTrue   -> canonical
       NonExist-> canonical
+      BIND    -> canonical
   where
     canonical = delay
     delay = return (VApp f vs) -- wrong number of arguments

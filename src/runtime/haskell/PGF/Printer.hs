@@ -89,10 +89,12 @@ ppPrintName (id,name) =
 ppSymbol (SymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (SymLit d r) = char '{' <> int d <> comma <> int r <> char '}'
 ppSymbol (SymVar d r) = char '<' <> int d <> comma <> char '$' <> int r <> char '>'
-ppSymbol (SymKS ts)   = ppStrs ts
-ppSymbol (SymKP ts alts) = text "pre" <+> braces (hsep (punctuate semi (ppStrs ts : map ppAlt alts)))
+ppSymbol (SymKS t)    = doubleQuotes (text t)
+ppSymbol SymNE        = text "nonExist"
+ppSymbol SymBIND      = text "BIND"
+ppSymbol (SymKP syms alts) = text "pre" <+> braces (hsep (punctuate semi (hsep (map ppSymbol syms) : map ppAlt alts)))
 
-ppAlt (Alt ts ps) = ppStrs ts <+> char '/' <+> hsep (map (doubleQuotes . text) ps)
+ppAlt (syms,ps) = hsep (map ppSymbol syms) <+> char '/' <+> hsep (map (doubleQuotes . text) ps)
 
 ppStrs ss = doubleQuotes (hsep (map text ss))
 
