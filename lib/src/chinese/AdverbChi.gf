@@ -4,7 +4,7 @@ concrete AdverbChi of Adverb = CatChi **
   lin
     PositAdvAdj a = {s = a.s ; advType = ATManner} ;
 
-    PrepNP prep np = ss (appPrep prep np.s) ** {advType = ATPlace} ; --- should depend on prep, np ? or treat in ExtraChi ?
+    PrepNP prep np = ss (appPrep prep np.s) ** {advType = prep.advType} ; --- should depend on np too ? 
 
     ComparAdvAdj cadv a np = ss (a.s ++ cadv.s ++ cadv.p ++ np.s) ** {advType = ATManner} ;
 

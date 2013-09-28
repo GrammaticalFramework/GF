@@ -19,7 +19,7 @@ lin
 
     very_AdA = ssword "非常" ;
 
-    by8means_Prep = mkPrep [] "旁边"  ;
+    by8means_Prep = mkPrep [] "旁边" mannerAdvType ;
 --    in_Prep = mkPrep "里" [];  --- in Paris
     in_Prep = mkPrep "在" "中"  ;  --- in the house, the car, etc
     possess_Prep = mkPrep [] "的" ;
@@ -66,12 +66,12 @@ lin
 
 
 above_Prep = mkPrep [] "上边" ;
-after_Prep = mkPrep [] "以后" ;
+after_Prep = mkPrep [] "以后" timeAdvType ;
 under_Prep = mkPrep [] "下" ;
 why_IAdv = mkIAdvL "为什么" ;
 too_AdA = mkAdA "太" ;
 
-before_Prep = mkPrep [] "之前" ;
+before_Prep = mkPrep [] "之前" timeAdvType ;
 between_Prep = mkPrep [] "之间" ;
 but_PConj = mkPConjL "但是" ;
 
@@ -83,7 +83,7 @@ but_PConj = mkPConjL "但是" ;
 can8know_VV = mkV "会" [] [] [] [] "不" ; ----
 
 
-except_Prep = mkPrep "以外" "除了"  ;
+except_Prep = mkPrep "以外" "除了" mannerAdvType ;
 for_Prep = mkPrep "为了" ;
 from_Prep = mkPrep "从" ;
 in8front_Prep = mkPrep zai_s "前边"  ;
@@ -125,9 +125,9 @@ both7and_DConj = {s = table { -- modified by chenpeng 11.19
                     }
                 } ;
 
-by8agent_Prep = mkPrep "被" ; -- by for agent in passive
+by8agent_Prep = mkPrep "被" [] mannerAdvType; -- by for agent in passive
                                   -- [mark] 被
-during_Prep = mkPrep "在" "期间"  ; -- [mark] often equivalent to nothing
+during_Prep = mkPrep "在" "期间" timeAdvType ; -- [mark] often equivalent to nothing
                                    -- translation for "he swam during this summer. " and "he swam this summer." are often the same
 
 either7or_DConj = {s = table { -- modified by chenpeng 11.19
@@ -173,7 +173,7 @@ therefore_PConj = ssword "因此" ;
 through_Prep = mkPrep "通过" ;
 which_IQuant = mkIQuant "哪" ;
 --which_IQuant = ssword [] ; -- [mark] in sent, it depends on the context
-without_Prep = mkPrep "没有" ;
+without_Prep = mkPrep "没有" [] mannerAdvType ;
 youPol_Pron = ssword "您" ; -- polite you
 
 }
