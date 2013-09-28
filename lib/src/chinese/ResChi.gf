@@ -62,7 +62,7 @@ resource ResChi = ParamX ** open Prelude in {
 
 -- Write the characters that constitute a word separately. This enables straightforward tokenization.
 
-  bword : Str -> Str -> Str = \x,y -> x ++ y ; -- change to x + y to treat words as single tokens
+  bword : Str -> Str -> Str = \x,y -> x + y ; -- change to x + y to treat words as single tokens
 
   word : Str -> Str = \s -> case s of {
       x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? => bword x (bword y (bword z (bword u (bword v (bword w (bword a b)))))) ;
@@ -87,7 +87,7 @@ param
     CPosType = CAPhrase | CNPhrase | CVPhrase ;
     DeForm = DeNoun | NdNoun ;    -- parameter created for noun with/out partical "de"
 
-    AdvType = ATPlace | ATTime | ATManner ;
+    AdvType = ATPlace Bool | ATTime | ATManner ; -- ATPlace True = has zai_s already
 
 -- parts of speech
 
@@ -117,6 +117,8 @@ oper
 
   regVerb : (walk : Str) -> Verb = \v -> 
     mkVerb v "了" "着" "在" "过" "没" ;
+
+  noVerb : Verb = regVerb [] ; ---?? -- used as copula for verbal adverbs
 
   mkVerb : (v : Str) -> (pp,ds,dp,ep,neg : Str) -> Verb = \v,pp,ds,dp,ep,neg -> 
     {s = word v ; pp = pp ; ds = ds ; dp = dp ; ep = ep ; neg = neg} ;
@@ -224,18 +226,25 @@ oper
   pronNP : (s : Str) -> NP = \s -> {
     s = word s
     } ;
+
+  Preposition = {prepPre : Str ; prepPost : Str ; advType : AdvType} ;  
     
-  mkPreposition : Str -> Str -> Preposition = \s1,s2 -> {
+  mkPreposition : Str -> Str -> AdvType -> Preposition = \s1,s2,at -> {
     prepPre  = word s1 ;
-    prepPost = word s2 
+    prepPost = word s2 ;
+    advType = at
     } ;
     
+  getAdvType : Str -> AdvType = \s -> case s of {
+    "在" + _ => ATPlace True ; -- certain that True
+    _ => ATPlace False         -- uncertain whether ATPlace
+    } ;
+
   mkSubj : Str -> Str -> {prePart : Str ; sufPart : Str} = \p,s -> {
     prePart = word p ;
     sufPart = word s
     } ;
 
-  Preposition = {prepPre : Str ; prepPost : Str} ;  
 
 -- added by AR
 

@@ -50,7 +50,8 @@ oper
     mkV2 : Str -> V2 
       = \s -> case s of {
          v + "+" + p => lin V2 (regVerb v ** {c2 = emptyPrep ; hasPrep = False ; part = word p}) ;
-         v + "*" + p => lin V2 (regVerb v ** {c2 = ResChi.mkPreposition p [] ; hasPrep = True ; part = []}) ;
+         v + "*" + p => lin V2 (regVerb v ** 
+                                {c2 = ResChi.mkPreposition p [] (getAdvType p) ; hasPrep = True ; part = []}) ;
          _ => lin V2 (regVerb s ** {c2 = emptyPrep ; hasPrep = False ; part = []})
          } ;
     mkV2 : V -> V2 
@@ -123,15 +124,17 @@ oper
 
   mkAdv = overload {
     mkAdv : Str -> Adv 
-      = \s -> lin Adv {s = word s ; advType = ATPlace} ;
+      = \s -> lin Adv {s = word s ; advType = getAdvType s} ;
     mkAdv : Str -> AdvType -> Adv 
       = \s,at -> lin Adv {s = word s ; advType = at} ;
     } ;
 
   AdvType : Type
    = ResChi.AdvType ;
-  placeAdvType : AdvType
-   = ATPlace ;
+  placeAdvType : AdvType      -- without "在" included
+   = ATPlace False ;
+  zai_placeAdvType : AdvType  -- with "在" included
+   = ATPlace True ;
   timeAdvType : AdvType
    = ATTime ;
   mannerAdvType : AdvType
@@ -139,9 +142,11 @@ oper
     
   mkPrep = overload { -- first pre part, then optional post part
     mkPrep : Str -> Prep 
-     = \s -> lin Prep (ResChi.mkPreposition s []) ;
+     = \s -> lin Prep (ResChi.mkPreposition s [] (getAdvType s)) ;
     mkPrep : Str -> Str -> Prep 
-     = \s,t -> lin Prep (ResChi.mkPreposition s t) ;
+     = \s,t -> lin Prep (ResChi.mkPreposition s t (getAdvType s)) ;
+    mkPrep : Str -> Str -> AdvType -> Prep 
+     = \s,t,a -> lin Prep (ResChi.mkPreposition s t a) ;
     } ;
 
   mkInterj : Str -> Interj 

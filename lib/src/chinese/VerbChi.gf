@@ -43,7 +43,8 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
         (insertObj (mkNP (infVP vp)) (predV v v.part)) ** {c2 = vp.c2 ; isPre = vp.isPre} ;
 
     AdvVP vp adv = case adv.advType of {
-      ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;                -- he sleeps well
+      ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;     -- he sleeps well
+      ATPlace True => insertAdv adv vp ;                       -- he sleeps on the table (zai - shang)
       _ => insertAdv (ss (zai_V.s ++ adv.s)) vp     -- he sleeps in the house / today
       } ;
 
@@ -59,12 +60,16 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
 
     CompCN cn = insertObj cn (predV copula []) ; ----
 
-    CompAdv adv = insertObj adv (predV zai_V []) ;
+    CompAdv adv = case adv.advType of {
+      ATPlace True => insertObj adv (predV noVerb []) ;
+      _ => insertObj adv (predV zai_V [])
+      } ;
 
     VPSlashPrep vp prep = vp ** {c2 = prep ; isPre = True} ;
 
     AdvVPSlash vp adv = case adv.advType of {
-      ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;                -- he sleeps well
+      ATManner     => insertObj (ss (deVAdv_s ++ adv.s)) vp ;                -- he sleeps well
+      ATPlace True => insertAdv adv vp ;            -- he sleeps on the table
       _ => insertAdv (ss (zai_V.s ++ adv.s)) vp     -- he sleeps in the house / today
       } ** {c2 = vp.c2 ; isPre = vp.isPre} ;
 
