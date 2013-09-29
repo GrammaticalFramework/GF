@@ -32,8 +32,15 @@ th { background: #9df; }
 
 h1 img { float: right; border: 0; }
 h1 img.nofloat { float: none; }
+img.right { float: right; }
+
+ol.languages {
+    column-width: 12em;
+    -moz-column-width: 12em;
+}
 
 .grow {
+  max-width: 75%;
   animation-name: grow;
   animation-duration: 2s;
   animation-timing-function: ease-in-out;
