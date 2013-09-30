@@ -454,19 +454,22 @@ pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
 }
 
 void
-pgf_lzr_linearize_sequence(PgfConcr* concr, 
-                           PgfCncTreeApp* fapp, PgfSequence* seq, 
+pgf_lzr_linearize_sequence(PgfConcr* concr, PgfCncTreeApp* fapp, 
+                           PgfSequence* seq, uint16_t seq_idx,
                            PgfLinFuncs** fnsp)
 {
 	size_t nsyms = gu_seq_length(seq);
 	PgfSymbol* syms = gu_seq_data(seq);
-	for (size_t i = 0; i < nsyms; i++) {
+	for (size_t i = seq_idx; i < nsyms; i++) {
 		PgfSymbol sym = syms[i];
 		GuVariantInfo sym_i = gu_variant_open(sym);
 		switch (sym_i.tag) {
 		case PGF_SYMBOL_CAT:
 		case PGF_SYMBOL_VAR:
 		case PGF_SYMBOL_LIT: {
+			if (fapp == NULL)
+				return;
+
 			PgfSymbolIdx* sidx = sym_i.data;
 			gu_assert((unsigned) sidx->d < fapp->n_args);
 
@@ -484,11 +487,19 @@ pgf_lzr_linearize_sequence(PgfConcr* concr,
 		case PGF_SYMBOL_KP: {
 			// TODO: correct prefix-dependencies
 			PgfSymbolKP* kp = sym_i.data;
-			pgf_lzr_linearize_sequence(concr, fapp, kp->default_form, fnsp);
+			pgf_lzr_linearize_sequence(concr, fapp, kp->default_form, 0, fnsp);
 			break;
 		}
 		case PGF_SYMBOL_NE: {
-			// Nothing to be done here
+			if ((*fnsp)->symbol_ne) {
+				(*fnsp)->symbol_ne(fnsp);
+			}
+			break;
+		}
+		case PGF_SYMBOL_BIND: {
+			if ((*fnsp)->symbol_bind) {
+				(*fnsp)->symbol_bind(fnsp);
+			}
 			break;
 		}
 		default:
@@ -518,7 +529,7 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		gu_require(lin_idx < fun->n_lins);
 
 		PgfSequence* seq = fun->lins[lin_idx];
-		pgf_lzr_linearize_sequence(concr, fapp, seq, fnsp);
+		pgf_lzr_linearize_sequence(concr, fapp, seq, 0, fnsp);
 		
 		if (fns->end_phrase) {
 			fns->end_phrase(fnsp,
@@ -572,10 +583,21 @@ typedef struct PgfSimpleLin PgfSimpleLin;
 
 struct PgfSimpleLin {
 	PgfLinFuncs* funcs;
-	int n_tokens;
+	bool bind;
 	GuOut* out;
 	GuExn* err;
 };
+
+GU_DEFINE_TYPE(PgfLinNonExist, abstract, _);
+
+static void
+pgf_file_lzn_put_space(PgfSimpleLin* flin)
+{
+	if (flin->bind)
+		flin->bind = false;
+	else
+		gu_putc(' ', flin->out, flin->err);
+}
 
 static void
 pgf_file_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
@@ -584,12 +606,9 @@ pgf_file_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 	if (!gu_ok(flin->err)) {
 		return;
 	}
-	if (flin->n_tokens > 0)
-		gu_putc(' ', flin->out, flin->err);
 
+	pgf_file_lzn_put_space(flin);
 	gu_string_write(tok, flin->out, flin->err);
-	
-	flin->n_tokens++;
 }
 
 static void
@@ -600,8 +619,7 @@ pgf_file_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
 		return;
 	}
 
-	if (flin->n_tokens > 0)
-		gu_putc(' ', flin->out, flin->err);
+	pgf_file_lzn_put_space(flin);
 
 	GuVariantInfo i = gu_variant_open(lit);
     switch (i.tag) {
@@ -623,8 +641,20 @@ pgf_file_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
 	default:
 		gu_impossible();
 	}
+}
 
-	flin->n_tokens++;
+static void
+pgf_file_lzn_symbol_ne(PgfLinFuncs** funcs)
+{
+	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
+	gu_raise(flin->err, PgfLinNonExist);
+}
+
+static void
+pgf_file_lzn_symbol_bind(PgfLinFuncs** funcs)
+{
+	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
+	flin->bind = true;
 }
 
 static PgfLinFuncs pgf_file_lin_funcs = {
@@ -632,6 +662,8 @@ static PgfLinFuncs pgf_file_lin_funcs = {
 	.expr_literal = pgf_file_lzn_expr_literal,
 	.begin_phrase = NULL,
 	.end_phrase   = NULL,
+	.symbol_ne    = pgf_file_lzn_symbol_ne,
+	.symbol_bind  = pgf_file_lzn_symbol_bind
 };
 
 void
@@ -640,9 +672,34 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 {
 	PgfSimpleLin flin = {
 		.funcs = &pgf_file_lin_funcs,
-		.n_tokens = 0,
+		.bind = true,
 		.out = out,
 		.err = err
 	};
 	pgf_lzr_linearize(concr, ctree, lin_idx, &flin.funcs);
+}
+
+GuString
+pgf_get_tokens(PgfSequence* seq, uint16_t seq_idx, GuPool* pool)
+{
+	GuPool* tmp_pool = gu_new_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuOut* out = gu_string_buf_out(sbuf);
+
+	PgfSimpleLin flin = {
+		.funcs = &pgf_file_lin_funcs,
+		.bind = true,
+		.out = out,
+		.err = err
+	};
+
+	pgf_lzr_linearize_sequence(NULL, NULL, seq, seq_idx, &flin.funcs);
+
+	GuString tokens = gu_ok(err) ? gu_string_buf_freeze(sbuf, pool)
+	                             : gu_empty_string;
+
+	gu_pool_free(tmp_pool);
+
+	return tokens;
 }
