@@ -1,4 +1,5 @@
 #include <pgf/parser.h>
+#include <pgf/linearizer.h>
 #include <gu/seq.h>
 #include <gu/assert.h>
 
@@ -1733,38 +1734,6 @@ typedef struct {
 	GuPool* pool;
 	PgfParseState* state;
 } PgfPrefixTokenState;
-
-static GuString
-pgf_get_tokens(PgfSequence* seq, uint16_t seq_idx, GuPool* pool)
-{
-	GuPool* tmp_pool = gu_new_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-	GuOut* out = gu_string_buf_out(sbuf);
-
-	// collect the tokens in the production
-	size_t len = gu_seq_length(seq);
-	for (size_t i = seq_idx; i < len; i++) {
-		PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
-
-		GuVariantInfo i = gu_variant_open(sym);
-		switch (i.tag) {
-		case PGF_SYMBOL_KS: {
-			PgfSymbolKS* symks = i.data;
-			gu_string_write(symks->token, out, err);						
-		}
-		default:
-			goto end;
-		}
-	}
-	
-end:;
-	GuString tokens = gu_string_buf_freeze(sbuf, pool);
-	
-	gu_pool_free(tmp_pool);
-	
-	return tokens;
-}
 
 static bool
 pgf_prefix_match_token(PgfTokenState* ts0, PgfToken tok, PgfItem* item)

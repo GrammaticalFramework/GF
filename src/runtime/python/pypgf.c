@@ -1378,8 +1378,12 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 	
 	pgf_linearize(self->concr, pyexpr->expr, out, err);
 	if (!gu_ok(err)) {
-		PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
-		return NULL;
+		if (gu_exn_caught(err) == gu_type(PgfLinNonExist))
+			Py_RETURN_NONE;
+		else {
+			PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+			return NULL;
+		}
 	}
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);

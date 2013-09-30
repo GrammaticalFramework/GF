@@ -1,21 +1,5 @@
-/* 
- * Copyright 2010-2011 University of Helsinki.
- *   
- * This file is part of libpgf.
- * 
- * Libpgf is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Libpgf is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with libpgf. If not, see <http://www.gnu.org/licenses/>.
- */
+#ifndef PGF_LINEARIZER_H_
+#define PGF_LINEARIZER_H_
 
 #include <gu/type.h>
 #include <gu/enum.h>
@@ -46,6 +30,11 @@ typedef GuEnum PgfCncTreeEnum;
 PgfCncTreeEnum*
 pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool);
 
+typedef struct {
+} PgfLinNonExist;
+
+extern GU_DECLARE_TYPE(PgfLinNonExist, abstract);
+
 typedef struct PgfLinFuncs PgfLinFuncs;
 
 struct PgfLinFuncs
@@ -61,6 +50,12 @@ struct PgfLinFuncs
 
 	/// End phrase
 	void (*end_phrase)(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCId fun);
+
+	/// handling nonExist
+	void (*symbol_ne)(PgfLinFuncs** self);
+
+	/// token binding
+	void (*symbol_bind)(PgfLinFuncs** self);
 };
 
 
@@ -76,3 +71,10 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
 void
 pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 			 size_t lin_idx, GuOut* out, GuExn* err);
+#endif
+
+#ifdef PGF_PARSER_H_
+// Used internally in the parser
+GuString
+pgf_get_tokens(PgfSequence* seq, uint16_t seq_idx, GuPool* pool);
+#endif
