@@ -20,8 +20,9 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
 
     DetQuant quant num = {
       s = case num.numType of {
-        NTFull => quant.pl ++ num.s ;  -- to avoid yi in indef
-        _ => quant.s ++ num.s
+        NTFull    => quant.pl ++ num.s ;  -- to avoid yi in indef
+        NTVoid Pl => quant.pl ++ num.s ;
+        _         => quant.s ++ num.s
         } ; 
       detType = case num.numType of {
         NTFull => DTNum ;                     -- five
