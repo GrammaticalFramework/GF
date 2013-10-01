@@ -7,7 +7,6 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
     [VPS] = {s1,s2 : Str} ;
     VPI   = {s : Str} ;  --- ???
     [VPI] = {s1,s2 : Str} ; --- ???
-    [CN] = {s : Str ; c : Str} ;
 
   lin
     PassVPSlash vps = insertAdv (mkNP passive_s) vps ;
@@ -17,14 +16,13 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
     BaseVPS = twoSS ;
     ConsVPS = consrSS duncomma ;
 
+    PredVPS np vps = {s = np.s ++ vps.s} ;
+
     MkVPI vp = {s = (mkClause [] vp).s ! Pos ! APlain} ; --- ?? almost just a copy of VPS
     ConjVPI c = conjunctDistrSS (c.s ! CSent) ;
     BaseVPI = twoSS ;
     ConsVPI = consrSS duncomma ;
 
-    ConjCN c = conjunctDistrSS (c.s ! CPhr CNPhrase) ** {c = ge_s} ; --- classifier always ge
-    BaseCN = twoSS ;
-    ConsCN = consrSS duncomma ;
 
     GenRP nu cn = {s = cn.s ++ relative_s} ; ---- ??
 

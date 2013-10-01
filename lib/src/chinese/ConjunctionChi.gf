@@ -7,6 +7,7 @@ concrete ConjunctionChi of Conjunction = CatChi ** open ResChi, Prelude, Coordin
     ConjNP c = conjunctDistrSS (c.s ! CPhr CNPhrase) ;
     ConjAP c as = conjunctDistrSS (c.s ! CPhr CAPhrase) as ** {monoSyl = False} ;
     ConjRS c = conjunctDistrSS (c.s ! CSent) ;
+    ConjCN c ns = conjunctDistrSS (c.s ! CPhr CNPhrase) ns ** {c = ns.c} ; 
 
 -- These fun's are generated from the list cat's.
 
@@ -20,6 +21,8 @@ concrete ConjunctionChi of Conjunction = CatChi ** open ResChi, Prelude, Coordin
     ConsAP = consrSS duncomma ;
     BaseRS = twoSS ;
     ConsRS = consrSS duncomma ;
+    BaseCN x y = twoSS x y ** {c = x.c} ;  --- classified comes from first part ; should it rather be ge?
+    ConsCN x xs = consrSS duncomma x xs ** {c = x.c} ;
 
   lincat
     [S] = {s1,s2 : Str} ;
@@ -27,5 +30,7 @@ concrete ConjunctionChi of Conjunction = CatChi ** open ResChi, Prelude, Coordin
     [NP] = {s1,s2 : Str} ;
     [AP] = {s1,s2 : Str} ;
     [RS] = {s1,s2 : Str} ;
+    [CN] = {s1,s2 : Str ; c : Str} ;
+
 
 }
