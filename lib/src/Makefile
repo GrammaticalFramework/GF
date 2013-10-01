@@ -156,7 +156,7 @@ ParseEngSwe:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngSwe ParseEng.pgf ParseSwe.pgf
 
 ParseChi:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseChi chinese/ParseChi.gf
+	gf -make -s -literal=Symb -probs=$(PROBSFILE) -name=ParseChi chinese/ParseChi.gf
 
 ParseEngChi:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngChi ParseEng.pgf ParseChi.pgf

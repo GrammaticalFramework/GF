@@ -62,7 +62,7 @@ resource ResChi = ParamX ** open Prelude in {
 
 -- Write the characters that constitute a word separately. This enables straightforward tokenization.
 
-  bword : Str -> Str -> Str = \x,y -> x + y ; -- change to x + y to treat words as single tokens
+  bword : Str -> Str -> Str = \x,y -> x ++ y ; -- change to x + y to treat words as single tokens
 
   word : Str -> Str = \s -> case s of {
       x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? => bword x (bword y (bword z (bword u (bword v (bword w (bword a b)))))) ;

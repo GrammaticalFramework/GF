@@ -72,8 +72,12 @@ oper
   mkVV : Str -> VV = ----
     \v -> lin VV (regVerb v) ;
 
-  mkVQ : V -> VQ =
-    \v -> lin VQ v ;
+  mkVQ = overload {
+    mkVQ : Str -> VQ =
+      \v -> lin VQ (regVerb v) ;
+    mkVQ : V -> VQ =
+      \v -> lin VQ v ;
+    } ;
 
   mkVS = overload {
   mkVS : V -> VS =
@@ -89,10 +93,12 @@ oper
     \v -> lin VA v ;
   } ;
 
-  mkV2Q : V -> V2Q =
-    \v -> lin V2Q (v ** {c2 = emptyPrep ; hasPrep = False ; part = []}) ; 
-----  mkV2Q : V -> Str -> V2Q =
-----    \v,p -> lin V2Q (v ** {c2 = mkPrep p}) ; 
+  mkV2Q = overload {
+    mkV2Q : V -> V2Q =
+     \v -> lin V2Q (v ** {c2 = emptyPrep ; hasPrep = False ; part = []}) ; 
+    mkV2Q : Str -> V2Q =
+      \v -> lin V2Q (regVerb v ** {c2 = emptyPrep ; hasPrep = False ; part = []}) ; 
+    } ;
 
   mkV2V= overload {
     mkV2V : Str -> V2V = 
