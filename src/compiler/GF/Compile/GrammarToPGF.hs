@@ -197,7 +197,18 @@ genCncCats gr am cm cdefs =
             in (index', (i2i id,cc) : cats)
     mkCncCats index (_                      :cdefs) = mkCncCats index cdefs
 
-
+genCncFuns :: SourceGrammar
+           -> Ident
+           -> Ident
+           -> Array SeqId Sequence
+           -> Array SeqId Sequence
+           -> [(QIdent, Info)]
+           -> FId
+           -> Map.Map CId D.CncCat
+           -> (FId,
+               IntMap.IntMap (Set.Set D.Production),
+               IntMap.IntMap [FunId],
+               Array FunId D.CncFun)
 genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats =
   let (fid_cnt1,funs_cnt1,funs1,lindefs) = mkCncCats cdefs fid_cnt  0 [] IntMap.empty
       (fid_cnt2,funs_cnt2,funs2,prods)   = mkCncFuns cdefs fid_cnt1 funs_cnt1 funs1 lindefs Map.empty IntMap.empty
