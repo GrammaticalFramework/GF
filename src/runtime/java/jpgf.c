@@ -53,7 +53,9 @@ gu2j_string(JNIEnv *env, GuString s) {
 static GuString
 j2gu_string(JNIEnv *env, jstring s, GuPool* pool) {
 	const char *str = (*env)->GetStringUTFChars(env, s, 0);
-	return gu_str_string(str, pool);
+	GuString s = gu_str_string(str, pool);
+	(*env)->ReleaseStringUTFChars(env, s, str);
+	return s;
 }
 
 static void*
