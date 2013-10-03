@@ -28,6 +28,11 @@ lin
       } ;
 
  lin
+  --TODO: fix this; just wrote something that it compiles and doesn't give [PassVPSlash] when parsing text
+  PassVPSlash vps = 
+       insertObj (\\a => vps.c2.s ++ vps.n3 ! a) vps ;
+
+
   RelVS s rvs = {s = \\o => s.s ! o ++ "," ++ rvs.s ! agrP3 Neutr Sg ! RPrep True} ; 
   RelSlashVS t p vs np = let vpform = VPFinite t.t t.a ;
                           cl     = PredVP np (predV vs) ; 
