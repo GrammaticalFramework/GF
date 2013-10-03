@@ -59,9 +59,9 @@ data Symbol
   | SymLit {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
   | SymVar {-# UNPACK #-} !Int {-# UNPACK #-} !Int
   | SymKS Token
-  | SymNE                           -- non exist
-  | SymBIND                         -- the special BIND token
   | SymKP [Symbol] [([Symbol],[String])]
+  | SymBIND                         -- the special BIND token
+  | SymNE                           -- non exist (this should be last constructor to simplify the binary search in the runtime)
   deriving (Eq,Ord,Show)
 data Production
   = PApply  {-# UNPACK #-} !FunId [PArg]

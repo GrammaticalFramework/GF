@@ -178,8 +178,8 @@ typedef enum {
 	PGF_SYMBOL_VAR,
 	PGF_SYMBOL_KS,
 	PGF_SYMBOL_KP,
-	PGF_SYMBOL_NE,
-	PGF_SYMBOL_BIND
+	PGF_SYMBOL_BIND,
+	PGF_SYMBOL_NE
 } PgfSymbolTag;
 
 typedef struct {
