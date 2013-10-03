@@ -37,7 +37,7 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Adv] ** open ResChi, Prelude in
 
 -- Adjective
 
-    AP = ResChi.Adj ;
+    AP = ResChi.Adj ** {hasAdA : Bool} ;
 
 -- Noun
 

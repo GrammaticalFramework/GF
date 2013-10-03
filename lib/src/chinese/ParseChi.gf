@@ -103,12 +103,14 @@ DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
   
   GerundAP v = {
     s = v.s ++ de_s ; ----
-    monoSyl = False 
+    monoSyl = False ;
+    hasAdA = True ; --- 
   } ;
 
   PastPartAP v = {
     s = v.s ++ de_s ;
-    monoSyl = False 
+    monoSyl = False ;
+    hasAdA = True ; --- 
   } ;
 
 
