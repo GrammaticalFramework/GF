@@ -2,7 +2,7 @@ concrete AdjectiveChi of Adjective = CatChi ** open ResChi, Prelude in {
 
   lin
 
-    PositA  a = a ;
+    PositA  a = a ** {hasAdA = False} ;
 
     --ComparA a np = complexAP (a.s ++ than_s ++ np.s) ;
     ComparA a np = complexAP (than_s ++ np.s ++ a.s) ;
@@ -20,9 +20,9 @@ concrete AdjectiveChi of Adjective = CatChi ** open ResChi, Prelude in {
 
     SentAP ap sc = complexAP (ap.s ++ sc.s) ;
 
-    AdAP ada ap = complexAP (ada.s ++ ap.s) ;
+    AdAP ada ap = {s = ada.s ++ ap.s ; monoSyl = False ; hasAdA = True} ;
 
-    UseA2 a = a ;
+    UseA2 a = a ** {hasAdA = False} ;
    
     AdvAP ap adv = complexAP (adv.s ++ ap.s) ; ----
 

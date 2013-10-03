@@ -40,6 +40,7 @@ resource ResChi = ParamX ** open Prelude in {
   xie_s = "些" ;
   the_s = "那" ;
   geng_s = "更" ; -- more, in comparison
+  hen_s = "很" ; -- very, or predicating a monosyllabic adjective
 
   zai_V = mkVerb "在" [] [] [] [] "不" ;
   fullstop_s = "。" ;
@@ -98,15 +99,16 @@ oper
 
 -- for morphology
 
-  Noun : Type = {s : Str; c : Str} ;
-  Adj  : Type = {s : Str; monoSyl: Bool} ;
-  Verb : Type = {s : Str ; pp,ds,dp,ep : Str ; neg : Str} ;
+  Noun : Type = {s : Str ; c : Str} ;
+  Adj  : Type = {s : Str ; monoSyl: Bool} ;
+  Verb : Type = {s,sn : Str ; pp,ds,dp,ep : Str ; neg : Str} ; --- sn=[] needed for "hen" as copula
 
   regNoun : Str -> Str -> Noun = \s,c -> {s = word s ; c = word c};
 
   mkAdj : Str -> Bool -> Adj = \s,b -> {s = word s ; monoSyl = b};
 
-  complexAP : Str -> Adj = \s -> {s = s ; monoSyl = False} ;
+  complexAP : Str -> Adj ** {hasAdA : Bool} = 
+    \s -> {s = s ; monoSyl = False ; hasAdA = False} ; --- not used for adding AdA
 
   simpleAdj : Str -> Adj = \s -> case s of {
     ? => mkAdj s True ; -- monosyllabic
@@ -114,6 +116,9 @@ oper
     } ;
 
   copula : Verb = mkVerb "是" [] [] [] [] "不" ;
+  hen_copula : Verb = 
+    {s = hen_s ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "不"} ; --- 
+  nocopula : Verb = mkVerb [] [] [] [] [] "不" ;
 
   regVerb : (walk : Str) -> Verb = \v -> 
     mkVerb v "了" "着" "在" "过" "没" ;
@@ -121,7 +126,7 @@ oper
   noVerb : Verb = regVerb [] ; ---?? -- used as copula for verbal adverbs
 
   mkVerb : (v : Str) -> (pp,ds,dp,ep,neg : Str) -> Verb = \v,pp,ds,dp,ep,neg -> 
-    {s = word v ; pp = pp ; ds = ds ; dp = dp ; ep = ep ; neg = neg} ;
+    {s,sn = word v ; pp = pp ; ds = ds ; dp = dp ; ep = ep ; neg = neg} ;
 
   useVerb : Verb -> Polarity => Aspect => Str = \v -> 
     table {
@@ -133,11 +138,11 @@ oper
             AExper   => v.s ++ v.ep
             } ;
           Neg => table {
-            APlain   => v.neg ++ v.s ; --- neg?
-            APerf    => "不" ++ v.s ++ v.pp ;
-            ADurStat => "不" ++ v.s ;
-            ADurProg => v.neg ++ v.dp ++ v.s ;  -- mei or bu
-            AExper   => v.neg ++ v.s ++ v.ep
+            APlain   => v.neg ++ v.sn ; --- neg?
+            APerf    => "不" ++ v.sn ++ v.pp ;
+            ADurStat => "不" ++ v.sn ;
+            ADurProg => v.neg ++ v.dp ++ v.sn ;  -- mei or bu
+            AExper   => v.neg ++ v.sn ++ v.ep
             }
      } ;
 

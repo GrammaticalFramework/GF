@@ -5,7 +5,7 @@ concrete ConjunctionChi of Conjunction = CatChi ** open ResChi, Prelude, Coordin
     ConjS c = conjunctDistrSS (c.s ! CSent) ;
     ConjAdv c as = conjunctDistrSS (c.s ! CSent) as ** {advType = as.advType} ; ---- ??
     ConjNP c = conjunctDistrSS (c.s ! CPhr CNPhrase) ;
-    ConjAP c as = conjunctDistrSS (c.s ! CPhr CAPhrase) as ** {monoSyl = False} ;
+    ConjAP c as = conjunctDistrSS (c.s ! CPhr CAPhrase) as ** {monoSyl = False ; hasAdA = True} ; ---- ??
     ConjRS c = conjunctDistrSS (c.s ! CSent) ;
     ConjCN c ns = conjunctDistrSS (c.s ! CPhr CNPhrase) ns ** {c = ns.c} ; 
 
