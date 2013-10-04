@@ -15,7 +15,7 @@ pgf_tokens_equal(PgfTokens* t1, PgfTokens* t2)
 	for (size_t i = 0; i < len1; i++) {
 		GuString s1 = gu_seq_get(t1, PgfToken, i);
 		GuString s2 = gu_seq_get(t2, PgfToken, i);
-		if (!gu_string_eq(s1, s2)) {
+		if (strcmp(s1, s2) != 0) {
 			return false;
 		}
 	}
@@ -51,7 +51,9 @@ GU_DEFINE_TYPE(PgfMetaChildMap, GuMap,
 
 GU_DEFINE_TYPE(PgfAbsCat, abstract);
 
+static GuString empty_string = "";
+
 GU_DEFINE_TYPE(
-	PgfPrintNames, PgfCIdMap, gu_type(GuString), &gu_empty_string);
+	PgfPrintNames, PgfCIdMap, gu_type(GuString), &empty_string);
 
 GU_DEFINE_TYPE(PgfConcr, abstract);

@@ -39,10 +39,11 @@ pgf_match_string_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 						   PgfExprLit,
 						   &ep->expr, pool);
 		PgfLiteralStr *lit_str =
-			gu_new_variant(PGF_LITERAL_STR,
-						   PgfLiteralStr,
-						   &expr_lit->lit, pool);
-		lit_str->val = sks->token;
+			gu_new_flex_variant(PGF_LITERAL_STR,
+						        PgfLiteralStr,
+						        val, strlen(sks->token)+1,
+						        &expr_lit->lit, pool);
+		strcpy(lit_str->val, sks->token);
 
 		*out_ep = ep;
 		accepted = false;
@@ -185,12 +186,10 @@ pgf_match_name_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	
-	GuString hyp = gu_str_string("-", tmp_pool);
-	
 	bool iscap = false;
-	if (gu_string_eq(tok, hyp)) {
+	if (strcmp(tok, "-") == 0) {
 		iscap = true;
-	} else if (!gu_string_eq(tok, gu_empty_string)) {
+	} else if (*tok) {
 		GuIn* in = gu_string_in(tok, tmp_pool);
 		iscap = iswupper(gu_in_utf8(in, err));
 	}
@@ -218,21 +217,24 @@ pgf_match_name_lit(PgfConcr* concr, PgfItem* item, PgfToken tok,
 			gu_new_variant(PGF_EXPR_APP,
 			               PgfExprApp,
 			               &ep->expr, pool);
+		GuString con = "MkSymb";
 		PgfExprFun *expr_fun =
-			gu_new_variant(PGF_EXPR_FUN,
-			               PgfExprFun,
-			               &expr_app->fun, pool);
-		expr_fun->fun = gu_str_string("MkSymb", pool);
+			gu_new_flex_variant(PGF_EXPR_FUN,
+			                    PgfExprFun,
+			                    fun, strlen(con)+1,
+			                    &expr_app->fun, pool);
+		strcpy(expr_fun->fun, con);
 		PgfExprLit *expr_lit =
 			gu_new_variant(PGF_EXPR_LIT,
 			               PgfExprLit,
 			               &expr_app->arg, pool);
+		GuString val = gu_string_buf_freeze(sbuf, tmp_pool);
 		PgfLiteralStr *lit_str =
-			gu_new_variant(PGF_LITERAL_STR,
-			               PgfLiteralStr,
-			               &expr_lit->lit, pool);
-		lit_str->val = gu_string_buf_freeze(sbuf, pool);
-
+			gu_new_flex_variant(PGF_LITERAL_STR,
+			                    PgfLiteralStr,
+			                    val, strlen(val)+1,
+			                    &expr_lit->lit, pool);
+        strcpy(lit_str->val, val);
 		*out_ep = ep;
 	} else {
 		*out_ep = NULL;

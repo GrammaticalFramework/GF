@@ -135,13 +135,6 @@ gu_buf_heapify(GuBuf *buf, GuOrder *order);
 
 GuSeq*
 gu_buf_freeze(GuBuf* buf, GuPool* pool);
-
-typedef GuBuf GuCharBuf;
-typedef GuBuf GuByteBuf;
-
-char*
-gu_char_buf_str(GuCharBuf* chars, GuPool* pool);
-
 #endif // GU_SEQ_H_
 
 #if defined(GU_OUT_H_) && !defined(GU_SEQ_H_OUT_)

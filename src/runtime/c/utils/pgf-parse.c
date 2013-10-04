@@ -28,8 +28,8 @@ int main(int argc, char* argv[]) {
     goto fail;
   }
   char* filename = argv[1];
-  GuString cat = gu_str_string(argv[2], pool);
-  GuString lang = gu_str_string(argv[3], pool);
+  GuString cat = argv[2];
+  GuString lang = argv[3];
 
   double heuristics = 0.95;
   if (argc == 5) {
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
   }
 
   /* // Register a callback for the literal category Symbol */
-  /* pgf_parser_add_literal(from_concr, gu_str_string("Symb", pool), */
+  /* pgf_parser_add_literal(from_concr, "Symb", */
   /*                        &pgf_nerc_literal_callback); */
 
   clock_t end = clock();
@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
 
     clock_t start = clock();
 
-    GuIn *in = gu_string_in(gu_str_string(line, ppool), ppool);
+    GuIn *in = gu_string_in(line, ppool);
     PgfLexer *lexer = pgf_new_simple_lexer(in, ppool);
     GuEnum* result = pgf_parse_with_heuristics(concr, cat, lexer, heuristics, ppool, ppool);
 

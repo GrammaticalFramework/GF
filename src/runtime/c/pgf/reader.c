@@ -13,7 +13,7 @@
 #include <gu/exn.h>
 #include <gu/utf8.h>
 #include <math.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 //
 // PgfReader
@@ -116,11 +116,21 @@ pgf_read_literal(PgfReader* rdr)
 	uint8_t tag = pgf_read_tag(rdr);
 	switch (tag) {
 	case PGF_LITERAL_STR: {
+		GuLength len = pgf_read_len(rdr);
+		uint8_t* buf = alloca(len*6+1);
+		uint8_t* p   = buf;
+		for (size_t i = 0; i < len; i++) {
+			gu_in_utf8_buf(&p, rdr->in, rdr->err);
+			gu_return_on_exn(rdr->err, gu_null_variant);
+		}
+		*p++ = 0;
+
 		PgfLiteralStr *lit_str =
-			gu_new_variant(PGF_LITERAL_STR,
-						   PgfLiteralStr,
-						   &lit, rdr->opool);
-		lit_str->val = pgf_read_string(rdr);
+			gu_new_flex_variant(PGF_LITERAL_STR,
+						        PgfLiteralStr,
+						        val, p-buf,
+						        &lit, rdr->opool);
+		strcpy((char*) lit_str->val, (char*) buf);
 		break;
 	}
 	case PGF_LITERAL_INT: {
@@ -160,7 +170,7 @@ pgf_read_flags(PgfReader* rdr)
 		PgfLiteral value = pgf_read_literal(rdr);
 		gu_return_on_exn(rdr->err, NULL);
 		
-		gu_map_put(flags, &name, PgfLiteral, value);
+		gu_map_put(flags, name, PgfLiteral, value);
 	}
 
 	return flags;
@@ -224,11 +234,16 @@ pgf_read_expr_(PgfReader* rdr)
 		break;
 	}
 	case PGF_EXPR_FUN: {
+		size_t len = pgf_read_len(rdr);
+
 		PgfExprFun *efun =
-			gu_new_variant(PGF_EXPR_FUN,
-						   PgfExprFun,
-						   &expr, rdr->opool);
-		efun->fun = pgf_read_cid(rdr, rdr->opool);
+			gu_new_flex_variant(PGF_EXPR_FUN,
+						        PgfExprFun,
+						        fun, len+1,
+						        &expr, rdr->opool);
+		gu_in_bytes(rdr->in, (uint8_t*)efun->fun, len, rdr->err);
+		efun->fun[len] = 0;
+		
 		gu_return_on_exn(rdr->err, gu_null_variant);
 		break;
 	}
@@ -403,7 +418,17 @@ pgf_read_absfun(PgfReader* rdr)
 {
 	PgfAbsFun* absfun = gu_new(PgfAbsFun, rdr->opool);
 
-	absfun->name = pgf_read_cid(rdr, rdr->opool);
+	size_t len = pgf_read_len(rdr);
+
+	PgfExprFun *efun =
+		gu_new_flex_variant(PGF_EXPR_FUN,
+							PgfExprFun,
+							fun, len+1,
+							&absfun->ep.expr, rdr->opool);
+	gu_in_bytes(rdr->in, (uint8_t*)efun->fun, len, rdr->err);
+	efun->fun[len] = 0;
+	absfun->name = efun->fun;
+
 	gu_return_on_exn(rdr->err, NULL);
 
 	absfun->type = pgf_read_type_(rdr);
@@ -449,12 +474,6 @@ pgf_read_absfun(PgfReader* rdr)
 
 	absfun->ep.prob = - log(gu_in_f64be(rdr->in, rdr->err));
 
-	PgfExprFun* expr_fun =
-		gu_new_variant(PGF_EXPR_FUN,
-					   PgfExprFun,
-					   &absfun->ep.expr, rdr->opool);
-	expr_fun->fun = absfun->name;
-
 	return absfun;
 }
 					    
@@ -474,7 +493,7 @@ pgf_read_absfuns(PgfReader* rdr)
 		PgfAbsFun* absfun = pgf_read_absfun(rdr);
 		gu_return_on_exn(rdr->err, NULL);
 		
-		gu_map_put(absfuns, &absfun->name, PgfAbsFun*, absfun);
+		gu_map_put(absfuns, absfun->name, PgfAbsFun*, absfun);
 	}
 
 	return absfuns;
@@ -514,7 +533,8 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 		gu_return_on_exn(rdr->err, NULL);
 		
 		PgfAbsFun* absfun =
-			gu_map_get(abstr->funs, &name, PgfAbsFun*);
+			gu_map_get(abstr->funs, name, PgfAbsFun*);
+		assert(absfun != NULL);
 		gu_buf_push(functions, PgfAbsFun*, absfun);
 	}
 
@@ -539,7 +559,7 @@ pgf_read_abscats(PgfReader* rdr, PgfAbstr* abstr)
 		PgfAbsCat* abscat = pgf_read_abscat(rdr, abstr, abscats);
 		gu_return_on_exn(rdr->err, NULL);
 
-		gu_map_put(abscats, &abscat->name, PgfAbsCat*, abscat);
+		gu_map_put(abscats, abscat->name, PgfAbsCat*, abscat);
 	}
 
 	return abscats;
@@ -567,7 +587,7 @@ pgf_read_printnames(PgfReader* rdr)
 	GuMapType* map_type = (GuMapType*)
 		GU_TYPE_LIT(GuStringMap, _,
 			 		gu_type(GuString),
-					&gu_empty_string);
+					&"");
 	PgfCIdMap* printnames = gu_map_type_make(map_type, rdr->opool);
 
 	size_t len = pgf_read_len(rdr);
@@ -580,7 +600,7 @@ pgf_read_printnames(PgfReader* rdr)
 		GuString printname = pgf_read_string(rdr);
 		gu_return_on_exn(rdr->err, NULL);
 
-		gu_map_put(printnames, &name, GuString, printname);
+		gu_map_put(printnames, name, GuString, printname);
 	}
 
 	return printnames;
@@ -654,12 +674,21 @@ pgf_read_symbol(PgfReader* rdr)
 		break;
 	}
 	case PGF_SYMBOL_KS: {
+		GuLength len = pgf_read_len(rdr);
+		uint8_t* buf = alloca(len*6+1);
+		uint8_t* p   = buf;
+		for (size_t i = 0; i < len; i++) {
+			gu_in_utf8_buf(&p, rdr->in, rdr->err);
+			gu_return_on_exn(rdr->err, gu_null_variant);
+		}
+		*p++ = 0;
+
 		PgfSymbolKS *sym_ks =
-			gu_new_variant(PGF_SYMBOL_KS,
-						   PgfSymbolKS,
-						   &sym, rdr->opool);
-		sym_ks->token = pgf_read_string(rdr);
-		gu_return_on_exn(rdr->err, gu_null_variant);
+			gu_new_flex_variant(PGF_SYMBOL_KS,
+						        PgfSymbolKS,
+						        token, p-buf,
+						        &sym, rdr->opool);
+		strcpy((char*) sym_ks->token, (char*) buf);
 		break;
 	}
 	case PGF_SYMBOL_KP: {
@@ -747,7 +776,7 @@ pgf_read_cncfun(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, int funid)
 	gu_return_on_exn(rdr->err, NULL);
 
 	PgfAbsFun* absfun =
-		gu_map_get(abstr->funs, &name, PgfAbsFun*);
+		gu_map_get(abstr->funs, name, PgfAbsFun*);
 
 	PgfCncFun* cncfun = gu_new_flex(rdr->opool, PgfCncFun, lins, len);
 	cncfun->absfun = absfun;
@@ -956,7 +985,7 @@ pgf_read_cnccat(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, PgfCId name)
 		gu_malloc(rdr->opool, sizeof(PgfCncCat)+n_lins*sizeof(GuString));
 
 	cnccat->abscat = 
-		gu_map_get(abstr->cats, &name, PgfAbsCat*);
+		gu_map_get(abstr->cats, name, PgfAbsCat*);
 	gu_assert(cnccat->abscat != NULL);
 
 	int len = last + 1 - first;
@@ -1011,7 +1040,7 @@ pgf_read_cnccats(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr)
 			pgf_read_cnccat(rdr, abstr, concr, name);
 		gu_return_on_exn(rdr->err, NULL);
 		
-		gu_map_put(cnccats, &name, PgfCncCat*, cnccat);
+		gu_map_put(cnccats, name, PgfCncCat*, cnccat);
 	}
 
 	return cnccats;
@@ -1100,7 +1129,7 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr)
 		pgf_read_cid(rdr, rdr->opool);
 	gu_return_on_exn(rdr->err, NULL);
 
-	concr->cflags = 
+	concr->cflags =
 		pgf_read_flags(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 	
@@ -1150,7 +1179,7 @@ pgf_read_concretes(PgfReader* rdr, PgfAbstr* abstr)
 		PgfConcr* concr = pgf_read_concrete(rdr, abstr);
 		gu_return_on_exn(rdr->err, NULL);
 		
-		gu_map_put(concretes, &concr->name, PgfConcr*, concr);
+		gu_map_put(concretes, concr->name, PgfConcr*, concr);
 	}
 
 	return concretes;

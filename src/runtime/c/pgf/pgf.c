@@ -49,30 +49,28 @@ pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath,
 	GuPool* tmp_pool = gu_new_pool();
 	
 	for (;;) {
-		char cat1_s[21];
-		char cat2_s[21];
+		char cat1[21];
+		char cat2[21];
 		prob_t prob;
 
-		if (fscanf(fp, "%20s\t%20s\t%f", cat1_s, cat2_s, &prob) < 3)
+		if (fscanf(fp, "%20s\t%20s\t%f", cat1, cat2, &prob) < 3)
 			break;
 
 		prob = - log(prob);
 
-		GuString cat1 = gu_str_string(cat1_s, tmp_pool);
 		PgfAbsCat* abscat1 =
-			gu_map_get(pgf->abstract.cats, &cat1, PgfAbsCat*);
+			gu_map_get(pgf->abstract.cats, cat1, PgfAbsCat*);
 		if (abscat1 == NULL) {
 			gu_raise(err, PgfExn);
 			goto close;
 		}
 
-		if (strcmp(cat2_s, "*") == 0) {
+		if (strcmp(cat2, "*") == 0) {
 			abscat1->meta_prob = prob;
-		} else if (strcmp(cat2_s, "_") == 0) {
+		} else if (strcmp(cat2, "_") == 0) {
 			abscat1->meta_token_prob = prob;
 		} else {
-			GuString cat2 = gu_str_string(cat2_s, tmp_pool);
-			PgfAbsCat* abscat2 = gu_map_get(pgf->abstract.cats, &cat2, PgfAbsCat*);
+			PgfAbsCat* abscat2 = gu_map_get(pgf->abstract.cats, cat2, PgfAbsCat*);
 			if (abscat2 == NULL) {
 				gu_raise(err, PgfExn);
 				goto close;
@@ -107,7 +105,7 @@ pgf_iter_languages(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
 PgfConcr*
 pgf_get_language(PgfPGF* pgf, PgfCId lang)
 {
-	return gu_map_get(pgf->concretes, &lang, PgfConcr*);
+	return gu_map_get(pgf->concretes, lang, PgfConcr*);
 }
 
 GuString
@@ -123,16 +121,13 @@ pgf_iter_categories(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
 }
 
 PgfCId
-pgf_start_cat(PgfPGF* pgf, GuPool* pool)
+pgf_start_cat(PgfPGF* pgf)
 {
-	GuPool* tmp_pool = gu_local_pool();
-
-	GuString s = gu_str_string("startcat", tmp_pool);
 	PgfLiteral lit =
-		gu_map_get(pgf->abstract.aflags, &s, PgfLiteral);
+		gu_map_get(pgf->abstract.aflags, "startcat", PgfLiteral);
 
 	if (gu_variant_is_null(lit))
-		return gu_str_string("S", pool);
+		return "S";
 
 	GuVariantInfo i = gu_variant_open(lit);
 	switch (i.tag) {
@@ -142,20 +137,17 @@ pgf_start_cat(PgfPGF* pgf, GuPool* pool)
 	}
 	}
 
-	return gu_str_string("S", pool);
+	return "S";
 }
 
 GuString
 pgf_language_code(PgfConcr* concr)
 {
-	GuPool* tmp_pool = gu_local_pool();
-
-	GuString s = gu_str_string("language", tmp_pool);
 	PgfLiteral lit =
-		gu_map_get(concr->cflags, &s, PgfLiteral);
+		gu_map_get(concr->cflags, "language", PgfLiteral);
 
 	if (gu_variant_is_null(lit))
-		return gu_empty_string;
+		return "";
 
 	GuVariantInfo i = gu_variant_open(lit);
 	switch (i.tag) {
@@ -165,7 +157,7 @@ pgf_language_code(PgfConcr* concr)
 	}
 	}
 
-	return gu_empty_string;
+	return "";
 }
 
 void
@@ -188,8 +180,8 @@ pgf_filter_by_cat(GuMapItor* fn, const void* key, void* value, GuExn* err)
 	PgfFunByCatIter* clo = (PgfFunByCatIter*) fn;
 	PgfAbsFun* absfun = *((PgfAbsFun**) value);
 	
-	if (gu_string_eq(absfun->type->cid, clo->catname)) {
-		clo->client_fn->fn(clo->client_fn, &absfun->name, NULL, err);
+	if (strcmp(absfun->type->cid, clo->catname) == 0) {
+		clo->client_fn->fn(clo->client_fn, absfun->name, NULL, err);
 	}
 }
 
@@ -205,10 +197,10 @@ PgfType*
 pgf_function_type(PgfPGF* pgf, PgfCId funname) 
 {
 	PgfAbsFun* absfun =
-		gu_map_get(pgf->abstract.funs, &funname, PgfAbsFun*);
+		gu_map_get(pgf->abstract.funs, funname, PgfAbsFun*);
 	if (absfun == NULL)
 		return NULL;
-		
+
 	return absfun->type;
 }
 
@@ -216,8 +208,8 @@ GuString
 pgf_print_name(PgfConcr* concr, PgfCId id)
 {
 	PgfCId name =
-		gu_map_get(concr->printnames, &id, PgfCId);
-	if (gu_string_eq(name, gu_empty_string))
+		gu_map_get(concr->printnames, id, PgfCId);
+	if (*name == 0)
 		name = id;
 	return name;
 }
@@ -226,7 +218,7 @@ void
 pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 {
 	GuPool* tmp_pool = gu_local_pool();
-	
+
 	GuEnum* cts = 
 		pgf_lzr_concretize(concr, expr, tmp_pool);
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);

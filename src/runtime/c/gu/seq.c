@@ -427,13 +427,3 @@ gu_buf_out(GuBuf* buf, GuPool* pool)
 
 GU_DEFINE_KIND(GuSeq, GuOpaque);
 GU_DEFINE_KIND(GuBuf, abstract);
-
-char*
-gu_char_buf_str(GuCharBuf* chars, GuPool* pool)
-{
-	size_t len = gu_buf_length(chars);
-	char* data = gu_buf_data(chars);
-	char* str = gu_new_str(len, pool);
-	memcpy(str, data, len);
-	return str;
-}

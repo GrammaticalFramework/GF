@@ -12,31 +12,6 @@ static PyObject* PGFError;
 
 static PyObject* ParseError;
 
-static PyObject*
-gu2py_string(GuString s) {
-	GuWord w = s.w_;
-	uint8_t buf[sizeof(GuWord)];
-
-	char* src;
-	size_t len;
-	if (w & 1) {
-		len = (w & 0xff) >> 1;
-		gu_assert(len <= sizeof(GuWord));
-		size_t i = len;
-		while (i > 0) {
-			w >>= 8;
-			buf[--i] = w & 0xff;
-		}
-		src = (char*) buf;
-	} else {
-		uint8_t* p = (void*) w;
-		len = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
-		src = (char*) &p[1];
-	}
-
-	return PyString_FromStringAndSize(src, len);
-}
-
 typedef struct {
     PyObject_HEAD
     GuPool* pool;
@@ -129,7 +104,7 @@ Expr_repr(ExprObject *self)
 	pgf_print_expr(self->expr, NULL, 0, out, err);
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = gu2py_string(str);
+	PyObject* pystr = PyString_FromString(str);
 	
 	gu_pool_free(tmp_pool);
 	return pystr;
@@ -258,11 +233,13 @@ Expr_initLiteral(ExprObject *self, PyObject *lit)
 	e->lit = gu_null_variant;
 
 	if (PyString_Check(lit)) {
+		GuString s = PyString_AsString(lit);
 		PgfLiteralStr* slit =
-			gu_new_variant(PGF_LITERAL_STR,
-			               PgfLiteralStr,
-			               &e->lit, self->pool);
-		slit->val = gu_str_string(PyString_AsString(lit), self->pool);
+			gu_new_flex_variant(PGF_LITERAL_STR,
+			                    PgfLiteralStr,
+			                    val, strlen(s)+1,
+			                    &e->lit, self->pool);
+		strcpy(slit->val, s);
 	} else if (PyInt_Check(lit)) {
 		PgfLiteralInt* ilit =
 			gu_new_variant(PGF_LITERAL_INT,
@@ -293,10 +270,11 @@ Expr_initApp(ExprObject *self, const char* fname, PyObject *args)
 
 	self->pool = gu_new_pool();
 	PgfExprFun* e =
-		gu_new_variant(PGF_EXPR_FUN,
-					   PgfExprFun,
-					   &self->expr, self->pool);
-	e->fun = gu_str_string(fname, self->pool);
+		gu_new_flex_variant(PGF_EXPR_FUN,
+					        PgfExprFun,
+					        fun, strlen(fname)+1,
+					        &self->expr, self->pool);
+	strcpy(e->fun, fname);
 
 	for (Py_ssize_t i = 0; i < n_args; i++) {
 		PyObject* obj = PyList_GetItem(args, i);
@@ -345,7 +323,7 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 			PyObject* py_bindtype = 
 				(eabs->bind_type == PGF_BIND_TYPE_EXPLICIT) ? Py_True
 				                                            : Py_False;
-			PyObject* py_var = gu2py_string(eabs->id);
+			PyObject* py_var = PyString_FromString(eabs->id);
 			PyObject* res = 
 				Py_BuildValue("OOOO", py_bindtype, py_var, py_body, args);
 			Py_DECREF(py_var);
@@ -383,7 +361,7 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 			switch (i.tag) {
 			case PGF_LITERAL_STR: {
 				PgfLiteralStr* lstr = i.data;
-				return gu2py_string(lstr->val);
+				return PyString_FromString(lstr->val);
 			}
 			case PGF_LITERAL_INT: {
 				PgfLiteralInt* lint = i.data;
@@ -405,7 +383,7 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 		}
 		case PGF_EXPR_FUN: {
 			PgfExprFun* efun = i.data;
-			PyObject* fun = gu2py_string(efun->fun);
+			PyObject* fun = PyString_FromString(efun->fun);
 			PyObject* res = Py_BuildValue("OO", fun, args);
 			Py_DECREF(fun);
 			Py_DECREF(args);
@@ -482,7 +460,7 @@ redo:;
 			}
 			case PGF_LITERAL_STR: {
 				PgfLiteralStr* lstr = i.data;
-				return gu2py_string(lstr->val);
+				return PyString_FromString(lstr->val);
 			}
 			}
 		}
@@ -497,7 +475,7 @@ redo:;
 	case PGF_EXPR_FUN: {
 		PgfExprFun* efun = i.data;
 		if (strcmp(name, "name") == 0) {
-			return gu2py_string(efun->fun);
+			return PyString_FromString(efun->fun);
 		}
 		break;
 	}
@@ -604,7 +582,7 @@ Type_init(TypeObject *self, PyObject *args, PyObject *kwds)
 
 		if (obj->ob_type == &pgf_TypeType) {
 			py_bindtype = Py_True;
-			cid = gu_str_string("_", self->pool);
+			cid = "_";
 			py_type = obj;
 		} else {
 			if (!PyTuple_Check(obj) ||
@@ -624,7 +602,7 @@ Type_init(TypeObject *self, PyObject *args, PyObject *kwds)
 				PyErr_SetString(PyExc_TypeError, "the arguments in the first list must be triples of (boolean,string,pgf.Type)");
 				return -1;
 			}
-			cid = gu_str_string(PyString_AsString(py_var), self->pool);
+			cid = gu_string_copy(PyString_AsString(py_var), self->pool);
 
 			py_type = PyTuple_GetItem(obj, 2);
 			if (py_type->ob_type != &pgf_TypeType) {
@@ -644,7 +622,7 @@ Type_init(TypeObject *self, PyObject *args, PyObject *kwds)
 		Py_INCREF(py_type);
 	}
 
-	self->type->cid = gu_str_string(catname_s, self->pool);
+	self->type->cid = gu_string_copy(catname_s, self->pool);
 
 	self->type->n_exprs = n_exprs;
 	for (Py_ssize_t i = 0; i < n_exprs; i++) {
@@ -675,7 +653,7 @@ Type_repr(TypeObject *self)
 	pgf_print_type(self->type, NULL, 0, out, err);
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = gu2py_string(str);
+	PyObject* pystr = PyString_FromString(str);
 	
 	gu_pool_free(tmp_pool);
 	return pystr;
@@ -713,7 +691,7 @@ Type_getHypos(TypeObject *self, void *closure)
 			(hypo->bind_type == PGF_BIND_TYPE_EXPLICIT) ? Py_True
 						  							    : Py_False;
 
-		PyObject* py_var = gu2py_string(hypo->cid);
+		PyObject* py_var = PyString_FromString(hypo->cid);
 		if (py_var == NULL)
 			goto fail;
 
@@ -752,7 +730,7 @@ fail:
 static PyObject*
 Type_getCat(TypeObject *self, void *closure)
 {
-	return gu2py_string(self->type->cid);
+	return PyString_FromString(self->type->cid);
 }
 
 static PyObject*
@@ -920,8 +898,8 @@ Iter_fetch_token(IterObject* self)
 	if (tp == NULL)
 		return NULL;
 
-	PyObject* py_tok = gu2py_string(tp->tok);
-	PyObject* py_cat = gu2py_string(tp->cat);
+	PyObject* py_tok = PyString_FromString(tp->tok);
+	PyObject* py_cat = PyString_FromString(tp->cat);
 	PyObject* res = Py_BuildValue("(f,O,O)", tp->prob, py_tok, py_cat);
 	Py_DECREF(py_tok);
 
@@ -1061,16 +1039,11 @@ Concr_init(ConcrObject *self, PyObject *args, PyObject *kwds)
 static PyObject*
 Concr_printName(ConcrObject* self, PyObject *args)
 {
-	const char *name_s;
-    if (!PyArg_ParseTuple(args, "s", &name_s))
+	GuString name;
+    if (!PyArg_ParseTuple(args, "s", &name))
         return NULL;
 
-	GuPool *tmp_pool = gu_local_pool();
-    GuString name = gu_str_string(name_s, tmp_pool);
-    PyObject* pyname = gu2py_string(pgf_print_name(self->concr, name));
-	gu_pool_free(tmp_pool);
-
-	return pyname;
+	return PyString_FromString(pgf_print_name(self->concr, name));
 }
 
 typedef struct {
@@ -1085,7 +1058,7 @@ static PgfToken
 pypgf_python_lexer_read_token(PgfLexer *base, GuExn* err)
 {
 	PgfPythonLexer* lexer = (PgfPythonLexer*) base;
-	lexer->base.tok = gu_empty_string;
+	lexer->base.tok = "";
 
 	PyObject* item = PyIter_Next(lexer->pylexer);
 	if (item == NULL)
@@ -1098,7 +1071,7 @@ pypgf_python_lexer_read_token(PgfLexer *base, GuExn* err)
 		if (str == NULL)
 			gu_raise(err, PyPgfLexerExn);
 		else
-			lexer->base.tok = gu_str_string(str, lexer->pool);
+			lexer->base.tok = gu_string_copy(str, lexer->pool);
 	}
 
 	return lexer->base.tok;
@@ -1109,7 +1082,7 @@ pypgf_new_python_lexer(PyObject* pylexer, GuPool* pool)
 {
 	PgfPythonLexer* lexer = gu_new(PgfPythonLexer, pool);
 	lexer->base.read_token = pypgf_python_lexer_read_token;
-	lexer->base.tok = gu_empty_string;
+	lexer->base.tok = "";
 	lexer->pylexer = pylexer;
 	lexer->pool = pool;
 	return ((PgfLexer*) lexer);
@@ -1146,11 +1119,11 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	int len;
 	const uint8_t *buf = NULL;
 	PyObject* py_lexer = NULL;
-	const char *catname_s = NULL;
+	PgfCId catname = pgf_start_cat(self->grammar->pgf);
 	int max_count = -1;
 	double heuristics = -1;
     if (!PyArg_ParseTupleAndKeywords(args, keywds, "|s#Osid", kwlist,
-                                     &buf, &len, &py_lexer, &catname_s, &max_count, &heuristics))
+                                     &buf, &len, &py_lexer, &catname, &max_count, &heuristics))
         return NULL;
 
     if ((buf == NULL && py_lexer == NULL) || 
@@ -1187,10 +1160,6 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	pyres->counter   = 0;
 	pyres->fetch     = Iter_fetch_expr;
 
-    GuString catname =
-		(catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, pyres->pool)
-		                    : gu_str_string(catname_s, pyres->pool);
-
 	PgfLexer *lexer = NULL;
 	if (buf != NULL) {
 		GuIn* in = gu_data_in(buf, len, pyres->pool);
@@ -1208,10 +1177,10 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 		PgfToken tok =
 			pgf_lexer_current_token(lexer);
 
-		if (gu_string_eq(tok, gu_empty_string))
+		if (*tok == 0)
 			PyErr_SetString(PGFError, "The sentence cannot be parsed");
 		else {
-			PyObject* py_tok = gu2py_string(tok);
+			PyObject* py_tok = PyString_FromString(tok);
 			PyObject_SetAttrString(ParseError, "token", py_tok);
 			PyErr_Format(ParseError, "Unexpected token: \"%s\"", 
 										PyString_AsString(py_tok));
@@ -1236,12 +1205,12 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 	int len;
 	const uint8_t *buf = NULL;
 	PyObject* py_lexer = NULL;
-	const char *catname_s = NULL;
-	const char *prefix_s = NULL;
+	GuString catname = pgf_start_cat(self->grammar->pgf);
+	GuString prefix = "";
 	int max_count = -1;
     if (!PyArg_ParseTupleAndKeywords(args, keywds, "|s#Ossi", kwlist,
-                                     &buf, &len, &py_lexer, &catname_s,
-                                     &prefix_s, &max_count))
+                                     &buf, &len, &py_lexer, &catname,
+                                     &prefix, &max_count))
         return NULL;
 
     if ((buf == NULL && py_lexer == NULL) || 
@@ -1276,14 +1245,6 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 
 	GuPool *tmp_pool = gu_local_pool();
 
-    GuString catname =
-		(catname_s == NULL) ? pgf_start_cat(self->grammar->pgf, tmp_pool)
-		                    : gu_str_string(catname_s, tmp_pool);
-
-    GuString prefix =
-		(prefix_s == NULL) ? gu_empty_string
-		                   : gu_str_string(prefix_s, pyres->pool);
-
 	PgfLexer *lexer = NULL;
 	if (buf != NULL) {
 		GuIn* in = gu_data_in(buf, len, tmp_pool);
@@ -1303,10 +1264,10 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 		PgfToken tok =
 			pgf_lexer_current_token(lexer);
 
-		if (gu_string_eq(tok, gu_empty_string))
+		if (*tok == 0)
 			PyErr_SetString(PGFError, "The sentence cannot be parsed");
 		else {
-			PyObject* py_tok = gu2py_string(tok);
+			PyObject* py_tok = PyString_FromString(tok);
 			PyObject_SetAttrString(ParseError, "token", py_tok);
 			PyErr_Format(ParseError, "Unexpected token: \"%s\"", 
 										PyString_AsString(py_tok));
@@ -1323,13 +1284,11 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 static PyObject*
 Concr_parseval(ConcrObject* self, PyObject *args) {
 	ExprObject* pyexpr = NULL;
-	const char* s_cat = NULL;
-	if (!PyArg_ParseTuple(args, "O!s", &pgf_ExprType, &pyexpr, &s_cat))
+	PgfCId cat = "";
+	if (!PyArg_ParseTuple(args, "O!s", &pgf_ExprType, &pyexpr, &cat))
         return NULL;
         
     GuPool* tmp_pool = gu_local_pool();
-
-    PgfCId cat = gu_str_string(s_cat, tmp_pool);
 
 	double precision = 0;
 	double recall = 0;
@@ -1387,7 +1346,7 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 	}
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = gu2py_string(str);
+	PyObject* pystr = PyString_FromString(str);
 	
 	gu_pool_free(tmp_pool);
 	return pystr;
@@ -1526,7 +1485,7 @@ pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 
-	PyObject* str = gu2py_string(tok);
+	PyObject* str = PyString_FromString(tok);
 	PyList_Append(state->list, str);
 	Py_DECREF(str);
 }
@@ -1540,7 +1499,7 @@ pgf_bracket_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
     switch (i.tag) {
     case PGF_LITERAL_STR: {
         PgfLiteralStr* lstr = i.data;
-        PyObject* str = gu2py_string(lstr->val);
+        PyObject* str = PyString_FromString(lstr->val);
 		PyList_Append(state->list, str);
 		Py_DECREF(str);
 		break;
@@ -1584,10 +1543,10 @@ pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex,
 		BracketObject* bracket = (BracketObject *)
 			pgf_BracketType.tp_alloc(&pgf_BracketType, 0);
 		if (bracket != NULL) {
-			bracket->cat = gu2py_string(cat);
+			bracket->cat = PyString_FromString(cat);
 			bracket->fid = fid;
 			bracket->lindex = lindex;
-			bracket->fun = gu2py_string(fun);
+			bracket->fun = PyString_FromString(fun);
 			bracket->children = state->list;
 			PyList_Append(parent, (PyObject*) bracket);
 			Py_DECREF(bracket);
@@ -1652,13 +1611,13 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
 static PyObject*
 Concr_getName(ConcrObject *self, void *closure)
 {
-    return gu2py_string(pgf_concrete_name(self->concr));
+    return PyString_FromString(pgf_concrete_name(self->concr));
 }
 
 static PyObject*
 Concr_getLanguageCode(ConcrObject *self, void *closure)
 {
-    return gu2py_string(pgf_language_code(self->concr));
+    return PyString_FromString(pgf_language_code(self->concr));
 }
 
 static PyObject*
@@ -1679,7 +1638,7 @@ Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
 	}
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = gu2py_string(str);
+	PyObject* pystr = PyString_FromString(str);
 
 	gu_pool_free(tmp_pool);
 	return pystr;
@@ -1697,8 +1656,8 @@ pypgf_collect_morpho(PgfMorphoCallback* self,
 {
 	PyMorphoCallback* callback = (PyMorphoCallback*) self;
 
-	PyObject* py_lemma = gu2py_string(lemma);
-	PyObject* py_analysis = gu2py_string(analysis);
+	PyObject* py_lemma = PyString_FromString(lemma);
+	PyObject* py_analysis = PyString_FromString(analysis);
 	PyObject* res = 
 		Py_BuildValue("OOf", py_lemma, py_analysis, prob);
 
@@ -1780,7 +1739,7 @@ Iter_fetch_fullform(IterObject* self)
 	GuString tokens =
 		pgf_fullform_get_string(entry);
 		
-	py_tokens = gu2py_string(tokens);
+	py_tokens = PyString_FromString(tokens);
 	if (py_tokens == NULL)
 		goto done;
 
@@ -1936,7 +1895,7 @@ PGF_dealloc(PGFObject* self)
 static PyObject*
 PGF_getAbstractName(PGFObject *self, void *closure)
 {
-    return gu2py_string(pgf_abstract_name(self->pgf));
+    return PyString_FromString(pgf_abstract_name(self->pgf));
 }
 
 typedef struct {
@@ -1948,14 +1907,14 @@ typedef struct {
 static void
 pgf_collect_langs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
-	PgfCId name = *((PgfCId*) key);
+	PgfCId name = (PgfCId) key;
     PgfConcr* concr = *((PgfConcr**) value);
     PyPGFClosure* clo = (PyPGFClosure*) fn;
     
     PyObject* py_name = NULL;
     PyObject* py_lang = NULL;
     
-	py_name = gu2py_string(name);
+	py_name = PyString_FromString(name);
 	if (py_name == NULL) {
 		gu_raise(err, PgfExn);
 		goto end;
@@ -2012,12 +1971,12 @@ PGF_getLanguages(PGFObject *self, void *closure)
 static void
 pgf_collect_cats(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
-	PgfCId name = *((PgfCId*) key);
+	PgfCId name = (PgfCId) key;
     PyPGFClosure* clo = (PyPGFClosure*) fn;
     
     PyObject* py_name = NULL;
     
-	py_name = gu2py_string(name);
+	py_name = PyString_FromString(name);
 	if (py_name == NULL) {
 		gu_raise(err, PgfExn);
 		goto end;
@@ -2059,21 +2018,18 @@ PGF_getCategories(PGFObject *self, void *closure)
 static PyObject*
 PGF_getStartCat(PGFObject *self, void *closure)
 {
-	GuPool* tmp_pool = gu_local_pool();
-	PyObject* pyname = gu2py_string(pgf_start_cat(self->pgf, tmp_pool));
-	gu_pool_free(tmp_pool);
-    return pyname;
+    return PyString_FromString(pgf_start_cat(self->pgf));
 }
 
 static void
 pgf_collect_funs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
-	PgfCId name = *((PgfCId*) key);
+	PgfCId name = (PgfCId) key;
     PyPGFClosure* clo = (PyPGFClosure*) fn;
     
     PyObject* py_name = NULL;
     
-	py_name = gu2py_string(name);
+	py_name = PyString_FromString(name);
 	if (py_name == NULL) {
 		gu_raise(err, PgfExn);
 		goto end;
@@ -2115,18 +2071,16 @@ PGF_getFunctions(PGFObject *self, void *closure)
 static PyObject*
 PGF_functionsByCat(PGFObject* self, PyObject *args)
 {
-	const char *catname_s;
-    if (!PyArg_ParseTuple(args, "s", &catname_s))
+	PgfCId catname;
+    if (!PyArg_ParseTuple(args, "s", &catname))
         return NULL;
-
-	GuPool *tmp_pool = gu_local_pool();
-    GuString catname = gu_str_string(catname_s, tmp_pool);
 
 	PyObject* functions = PyList_New(0);
 	if (functions == NULL) {
-		gu_pool_free(tmp_pool);
 		return NULL;
 	}
+
+	GuPool *tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
@@ -2146,20 +2100,14 @@ PGF_functionsByCat(PGFObject* self, PyObject *args)
 static TypeObject*
 PGF_functionType(PGFObject* self, PyObject *args)
 {
-	const char *funname_s;
-    if (!PyArg_ParseTuple(args, "s", &funname_s))
+	PgfCId funname;
+    if (!PyArg_ParseTuple(args, "s", &funname))
         return NULL;
 
-	GuPool *tmp_pool = gu_local_pool();
-    GuString funname = gu_str_string(funname_s, tmp_pool);
-    
     PgfType* type =
 		pgf_function_type(self->pgf, funname);
-
-	gu_pool_free(tmp_pool);
-
 	if (type == NULL) {
-		PyErr_Format(PyExc_KeyError, "Function '%s' is not defined", funname_s);
+		PyErr_Format(PyExc_KeyError, "Function '%s' is not defined", funname);
 		return NULL;
 	}
 
@@ -2179,10 +2127,10 @@ PGF_generateAll(PGFObject* self, PyObject *args, PyObject *keywds)
 {
 	static char *kwlist[] = {"cat", "n", NULL};
 
-	const char *catname_s;
+	PgfCId catname;
 	int max_count = -1;
     if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|i", kwlist,
-                                     &catname_s, &max_count))
+                                     &catname, &max_count))
         return NULL;
 
 	IterObject* pyres = (IterObject*)
@@ -2201,7 +2149,6 @@ PGF_generateAll(PGFObject* self, PyObject *args, PyObject *keywds)
 	pyres->container = (PyObject*) pyres;
 
 	GuPool *tmp_pool = gu_local_pool();
-    GuString catname = gu_str_string(catname_s, tmp_pool);
 
 	pyres->res =
 		pgf_generate_all(self->pgf, catname, pyres->pool);
@@ -2245,7 +2192,7 @@ PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
 	}
 
 	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = gu2py_string(str);
+	PyObject* pystr = PyString_FromString(str);
 
 	gu_pool_free(tmp_pool);
 	return pystr;

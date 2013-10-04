@@ -45,12 +45,12 @@ pgf_lzr_index(PgfConcr* concr,
 	case PGF_PRODUCTION_APPLY: {
 		PgfProductionApply* papply = data;
 		PgfCncOverloadMap* overl_table =
-			gu_map_get(concr->fun_indices, &papply->fun->absfun->name,
+			gu_map_get(concr->fun_indices, papply->fun->absfun->name,
 				PgfCncOverloadMap*);
 		if (!overl_table) {
 			overl_table = gu_map_type_new(PgfCncOverloadMap, pool);
 			gu_map_put(concr->fun_indices,
-				&papply->fun->absfun->name, PgfCncOverloadMap*, overl_table);
+				papply->fun->absfun->name, PgfCncOverloadMap*, overl_table);
 		}
 		pgf_lzr_add_overl_entry(overl_table, ccat, papply, pool);
 		break;
@@ -227,11 +227,12 @@ pgf_lzn_resolve_def(PgfLzn* lzn, PgfCncFuns* lindefs, GuString s, GuPool* pool)
 					   PgfCncTreeLit,
 					   &lit, pool);
 	clit->fid = lzn->fid++;
-	clit->lit =
-		gu_new_variant_i(pool,
-					 PGF_LITERAL_STR,
-					 PgfLiteralStr,
-					 s);
+	PgfLiteralStr* lit_str =
+		gu_new_flex_variant(PGF_LITERAL_STR,
+					        PgfLiteralStr,
+					        val, strlen(s),
+					        &clit->lit, pool);
+	strcpy((char*) lit_str->val, (char*) s);
 
 	if (lindefs == NULL)
 		return lit;
@@ -322,8 +323,7 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 					goto done;
 				}
 
-				GuString s = gu_str_string("?", pool);
-				ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
+				ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, "?", pool);
 				goto done;
 			}
 		}
@@ -331,7 +331,7 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 			PgfExprFun* efun = i.data;
 
 			PgfCncOverloadMap* overl_table =
-				gu_map_get(lzn->concr->fun_indices, &efun->fun, PgfCncOverloadMap*);
+				gu_map_get(lzn->concr->fun_indices, efun->fun, PgfCncOverloadMap*);
 			if (overl_table == NULL) {
 				if (ccat != NULL && ccat->lindefs == NULL) {
 					goto done;
@@ -345,7 +345,7 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 				gu_putc('[', out, err);
 				gu_string_write(efun->fun, out, err);
 				gu_putc(']', out, err);
-				GuString s = gu_string_buf_freeze(sbuf, pool);
+				GuString s = gu_string_buf_freeze(sbuf, tmp_pool);
 
 				if (ccat != NULL) {
 					ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
@@ -356,10 +356,11 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 									   &ret, pool);
 					clit->fid = lzn->fid++;
 					PgfLiteralStr* lit = 
-						gu_new_variant(PGF_LITERAL_STR,
-									   PgfLiteralStr,
-									   &clit->lit, pool);
-					lit->val = s;
+						gu_new_flex_variant(PGF_LITERAL_STR,
+									        PgfLiteralStr,
+									        val, strlen(s)+1,
+									        &clit->lit, pool);
+					strcpy(lit->val, s);
 				}
 
 				gu_pool_free(tmp_pool);
@@ -557,7 +558,7 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		if (fns->begin_phrase) {
 			fns->begin_phrase(fnsp,
 							  cat, flit->fid, 0,
-							  gu_empty_string);
+							  "");
 		}
 
 		if (fns->expr_literal) {
@@ -567,7 +568,7 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		if (fns->end_phrase) {
 			fns->end_phrase(fnsp,
 							cat, flit->fid, 0,
-							gu_empty_string);
+							"");
 		}
 
 		break;
@@ -697,7 +698,7 @@ pgf_get_tokens(PgfSequence* seq, uint16_t seq_idx, GuPool* pool)
 	pgf_lzr_linearize_sequence(NULL, NULL, seq, seq_idx, &flin.funcs);
 
 	GuString tokens = gu_ok(err) ? gu_string_buf_freeze(sbuf, pool)
-	                             : gu_empty_string;
+	                             : "";
 
 	gu_pool_free(tmp_pool);
 

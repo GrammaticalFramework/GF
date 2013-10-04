@@ -230,14 +230,14 @@ pgf_reasoner_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun)
 {
 	PgfCId cat = absfun->type->cid;
 
-	PgfAnswers* answers = gu_map_get(rs->table, &cat, PgfAnswers*);
+	PgfAnswers* answers = gu_map_get(rs->table, cat, PgfAnswers*);
 	if (answers == NULL) {
 		answers = gu_new(PgfAnswers, rs->tmp_pool);
 		answers->parents = gu_new_buf(PgfExprState*, rs->tmp_pool);
 		answers->exprs   = gu_new_buf(PgfExprProb*, rs->tmp_pool);
 		answers->outside_prob = parent->base.prob;
 
-		gu_map_put(rs->table, &cat, PgfAnswers*, answers);
+		gu_map_put(rs->table, cat, PgfAnswers*, answers);
 	}
 
 	gu_buf_push(answers->parents, PgfExprState*, parent);
@@ -397,9 +397,9 @@ pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool)
 	answers->parents = gu_new_buf(PgfExprState*, rs->tmp_pool);
 	answers->exprs   = rs->exprs;
 	answers->outside_prob = 0;
-	gu_map_put(rs->table, &cat, PgfAnswers*, answers);
+	gu_map_put(rs->table, cat, PgfAnswers*, answers);
 
-	PgfAbsCat* abscat = gu_map_get(rs->abstract->cats, &cat, PgfAbsCat*);
+	PgfAbsCat* abscat = gu_map_get(rs->abstract->cats, cat, PgfAbsCat*);
 	if (abscat != NULL) {
 		((PgfPredicate) abscat->predicate)(rs, NULL);
 	}

@@ -112,7 +112,6 @@ typedef struct {
 	size_t level;
 	GuBuf* internals;
 	GuBuf* leaves;
-	GuString wildcard;
 } PgfBracketLznState;
 
 static void
@@ -167,7 +166,7 @@ pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int linde
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 
-	if (gu_string_eq(cat, state->wildcard))
+	if (strcmp(cat, "_") == 0)
 		return;
 	
 	state->level++;
@@ -203,7 +202,7 @@ pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex,
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 
-	if (gu_string_eq(cat, state->wildcard))
+	if (strcmp(cat, "_") == 0)
 		return;
 
 	state->level--;
@@ -281,7 +280,6 @@ pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 	state.level     = -1;
 	state.internals = gu_new_buf(GuBuf*, tmp_pool);
 	state.leaves    = gu_new_buf(PgfParseNode*, tmp_pool);
-	state.wildcard  = gu_str_string("_", tmp_pool);
 	pgf_lzr_linearize(concr, ctree, 0, &state.funcs);
 
 	size_t len = gu_buf_length(state.internals);

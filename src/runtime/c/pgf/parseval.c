@@ -111,7 +111,7 @@ pgf_metrics_lzn_end_phrase2(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_id
 			
 			if (phrase->start == start &&
 				phrase->end   == end &&
-				gu_string_eq(phrase->cat, cat) &&
+				strcmp(phrase->cat, cat) == 0 &&
 				phrase->lin_idx == lin_idx) {
 				state->matches++;
 				break;

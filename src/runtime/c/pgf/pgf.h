@@ -102,7 +102,7 @@ void
 pgf_iter_categories(PgfPGF* pgf, GuMapItor* fn, GuExn* err);
 
 PgfCId
-pgf_start_cat(PgfPGF* pgf, GuPool* pool);
+pgf_start_cat(PgfPGF* pgf);
 
 void
 pgf_iter_functions(PgfPGF* pgf, GuMapItor* fn, GuExn* err);
