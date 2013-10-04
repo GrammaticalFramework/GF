@@ -1,5 +1,6 @@
 #include <pgf/pgf.h>
 #include <pgf/reader.h>
+#include <pgf/lexer.h>
 #include <gu/mem.h>
 #include <gu/exn.h>
 #include <gu/utf8.h>
@@ -34,9 +35,9 @@ gu2j_string(JNIEnv *env, GuString s) {
 static GuString
 j2gu_string(JNIEnv *env, jstring s, GuPool* pool) {
 	GuString str = (*env)->GetStringUTFChars(env, s, 0);
-	str = gu_string_copy(str, pool);
+	GuString copy = gu_string_copy(str, pool);
 	(*env)->ReleaseStringUTFChars(env, s, str);
-	return str;
+	return copy;
 }
 
 static void*
@@ -217,7 +218,7 @@ typedef struct {
 static void
 pgf_collect_langs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
-	PgfCId name = *((PgfCId*) key);
+	PgfCId name = (PgfCId) key;
     PgfConcr* concr = *((PgfConcr**) value);
     JPGFClosure* clo = (JPGFClosure*) fn;
 
