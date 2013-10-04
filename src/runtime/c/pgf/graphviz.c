@@ -131,7 +131,7 @@ pgf_bracket_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 
-	GuString label;
+	GuString label = NULL;
 
 	GuVariantInfo i = gu_variant_open(lit);
     switch (i.tag) {
