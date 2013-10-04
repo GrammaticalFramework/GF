@@ -190,7 +190,7 @@ typedef struct {
 typedef PgfSymbolIdx PgfSymbolCat, PgfSymbolLit, PgfSymbolVar;
 
 typedef struct {
-	PgfToken token;
+	char token[0];   // a flexible array that contains the token
 } PgfSymbolKS;
 
 typedef struct PgfSymbolKP

@@ -1,22 +1,3 @@
-/* 
- * Copyright 2011 University of Helsinki.
- *   
- * This file is part of libgu.
- * 
- * Libgu is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Libgu is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with libgu. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #ifndef GU_STRING_H_
 #define GU_STRING_H_
 
@@ -24,9 +5,7 @@
 #include <gu/in.h>
 #include <gu/out.h>
 
-typedef GuOpaque() GuString;
-
-extern const GuString gu_empty_string;
+typedef const char* GuString;
 
 GuString
 gu_string_copy(GuString string, GuPool* pool);
@@ -42,12 +21,6 @@ gu_string_read_latin1(size_t len, GuPool* pool, GuIn* in, GuExn* err);
 
 GuIn*
 gu_string_in(GuString string, GuPool* pool);
-
-bool
-gu_string_is_stable(GuString string);
-
-GuString
-gu_ucs_string(const GuUCS* ubuf, size_t len, GuPool* pool);
 
 typedef struct GuStringBuf GuStringBuf;
 
@@ -66,33 +39,20 @@ gu_format_string_v(const char* fmt, va_list args, GuPool* pool);
 GuString
 gu_format_string(GuPool* pool, const char* fmt, ...);
 
-GuString
-gu_str_string(const char* str, GuPool* pool);
-
 bool
 gu_string_to_int(GuString s, int *res);
 
 bool
 gu_string_to_double(GuString s, double *res);
 
-
 bool
 gu_string_is_prefix(GuString s1, GuString s2);
-
-size_t
-gu_string_length(GuString s);
 
 #endif // GU_STRING_H_
 
 #if defined(GU_FUN_H_) && !defined(GU_STRING_H_FUN_)
 #define GU_STRING_H_FUN_
-bool
-gu_string_eq(GuString s1, GuString s2);
-
 extern GuEquality gu_string_equality[1];
-
-int
-gu_string_cmp(GuString s1, GuString s2);
 
 extern GuOrder gu_string_order[1];
 #endif
@@ -110,7 +70,7 @@ extern GuHasher gu_string_hasher[1];
 # ifndef GU_STRING_H_TYPE_
 #  define GU_STRING_H_TYPE_
 
-extern GU_DECLARE_TYPE(GuString, GuOpaque);
+extern GU_DECLARE_KIND(GuString);
 # endif
 
 # if defined(GU_MAP_H_TYPE_) && !defined(GU_STRING_H_MAP_TYPE_)
@@ -132,8 +92,6 @@ typedef GuType_GuMap GuType_GuStringMap;
 #define GU_STRING_H_SEQ_
 
 typedef GuSeq GuStrings;
-// typedef GuBuf GuStringBuf;
-
 #endif
 
 

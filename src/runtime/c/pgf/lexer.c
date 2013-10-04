@@ -108,7 +108,7 @@ pgf_new_simple_lexer(GuIn *in, GuPool *pool)
 {
 	PgfSimpleLexer* lexer = gu_new(PgfSimpleLexer, pool);
 	lexer->base.read_token = pgf_simple_lexer_read_token;
-	lexer->base.tok = gu_empty_string;
+	lexer->base.tok = "";
 	lexer->in = in;
 	lexer->pool = pool;
 	lexer->ucs = ' ';	

@@ -53,10 +53,10 @@ int main(int argc, char* argv[]) {
 	}
 	char* filename = argv[1];
 
-	GuString cat = gu_str_string(argv[2], pool);
+	GuString cat = argv[2];
 
-	GuString from_lang = gu_str_string(argv[3], pool);
-	GuString to_lang = gu_str_string(argv[4], pool);
+	GuString from_lang = argv[3];
+	GuString to_lang = argv[4];
 	
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
 	}
 	
 	// Register a callback for the literal category Symbol
-	pgf_parser_add_literal(from_concr, gu_str_string("Symb", pool),
+	pgf_parser_add_literal(from_concr, "Symb",
 	                       &pgf_nerc_literal_callback);
 
 	// Create an output stream for stdout
@@ -154,7 +154,7 @@ int main(int argc, char* argv[]) {
 		ppool = gu_new_pool();
 
 		GuIn *in =
-			gu_string_in(gu_str_string(line, ppool), ppool);
+			gu_string_in(line, ppool);
 		PgfLexer *lexer =
 			pgf_new_simple_lexer(in, ppool);
 
@@ -166,7 +166,7 @@ int main(int argc, char* argv[]) {
 			PgfToken tok =
 				pgf_lexer_current_token(lexer);
 
-			if (gu_string_eq(tok, gu_empty_string))
+			if (*tok == 0)
 				gu_puts("Couldn't begin parsing", out, err);
 			else {
 				gu_puts("Unexpected token: \"", out, err);

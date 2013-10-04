@@ -145,24 +145,7 @@ GU_DEFINE_TYPE(PgfLeftcornerTokIdx, GuStringMap,
 static PgfSymbol
 pgf_prev_extern_sym(PgfSymbol sym)
 {
-	GuVariantInfo i = gu_variant_open(sym);
-	switch (i.tag) {
-	case PGF_SYMBOL_CAT:
-		return *((PgfSymbol*) (((PgfSymbolCat*) i.data)+1));
-	case PGF_SYMBOL_KP:
-		return *((PgfSymbol*) (((PgfSymbolKP*) i.data)+1));
-	case PGF_SYMBOL_KS:
-		return *((PgfSymbol*) (((PgfSymbolKS*) i.data)+1));
-	case PGF_SYMBOL_LIT:
-		return *((PgfSymbol*) (((PgfSymbolLit*) i.data)+1));
-	case PGF_SYMBOL_VAR:
-		return *((PgfSymbol*) (((PgfSymbolVar*) i.data)+1));
-	case PGF_SYMBOL_NE:
-		return *((PgfSymbol*) (((PgfSymbolNE*) i.data)+1));
-	default:
-		gu_impossible();
-		return gu_null_variant;
-	}
+	return *(((PgfSymbol*) gu_variant_data(sym))-1);
 }
 
 size_t
@@ -1126,19 +1109,19 @@ pgf_parsing_meta_scan(PgfParseState* before, PgfParseState* after,
 	                  PgfItem* meta_item, prob_t meta_prob)
 {
 	PgfToken tok = after->ts->fn->get_token(after->ts);
-	
-	if (!gu_string_eq(tok, gu_empty_string)) {	
+
+	if (*tok == 0) {	
 		PgfItem* item = pgf_item_copy(meta_item, before->ps->pool, before->ps);
 		item->inside_prob += meta_prob;
 
 		PgfSymbol prev = item->curr_sym;
 		PgfSymbolKS* sks = (PgfSymbolKS*)
 			gu_alloc_variant(PGF_SYMBOL_KS,
-							 sizeof(PgfSymbolKS)+sizeof(PgfSymbol),
+							 sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+strlen(tok)+1,
 							 gu_alignof(PgfSymbolKS),
 							 &item->curr_sym, after->ps->pool);
-		*((PgfSymbol*)(sks+1)) = prev;
-		sks->token = tok;
+		*(((PgfSymbol*) sks)-1) = prev;
+		strcpy((char*) sks->token, (char*) tok);
 
 		gu_buf_heap_push(before->agenda, &pgf_item_prob_order, &item);
 	}
@@ -1162,7 +1145,7 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
     PgfItem* meta_item  = clo->meta_item;
 
     PgfCncCat* cnccat =
-		gu_map_get(state->ps->concr->cnccats, &abscat->name, PgfCncCat*);
+		gu_map_get(state->ps->concr->cnccats, abscat->name, PgfCncCat*);
 	if (cnccat == NULL)
 		return;
 
@@ -1193,7 +1176,7 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 								 sizeof(PgfSymbolCat)+sizeof(PgfSymbol),
 								 gu_alignof(PgfSymbolCat),
 								 &item->curr_sym, state->ps->pool);
-			*((PgfSymbol*)(scat+1)) = prev;
+			*(((PgfSymbol*)scat)-1) = prev;
 			scat->d = nargs;
 			scat->r = lin_idx;
 		
@@ -1342,6 +1325,10 @@ pgf_parsing_symbol(PgfParseState* before, PgfParseState* after,
 		pgf_item_free(before, after, item);
 		break;
 	}
+	case PGF_SYMBOL_BIND: {
+		pgf_item_free(before, after, item);
+		break;
+	}
 	default:
 		gu_impossible();
 	}
@@ -1412,7 +1399,7 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 		} else {
 			PgfToken tok = (after != NULL)
 			    ? after->ts->fn->get_token(after->ts)
-			    : gu_empty_string;
+			    : "";
 
 			PgfExprProb *ep = NULL;
 			bool accepted = 
@@ -1428,11 +1415,11 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 					PgfSymbol prev = item->curr_sym;
 					PgfSymbolKS* sks = (PgfSymbolKS*)
 						gu_alloc_variant(PGF_SYMBOL_KS,
-										 sizeof(PgfSymbolKS)+sizeof(PgfSymbol),
+										 sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+strlen(tok)+1,
 										 gu_alignof(PgfSymbolKS),
 										 &item->curr_sym, after->ps->pool);
-					*((PgfSymbol*)(sks+1)) = prev;
-					sks->token = tok;
+					*(((PgfSymbol*) sks)-1) = prev;
+					strcpy((char*) sks->token, (char*) tok);
 
 					item->seq_idx++;
 					pgf_parsing_add_transition(before, after, tok, item);
@@ -1546,9 +1533,7 @@ pgf_parsing_proceed(PgfParseState* state)
 static prob_t
 pgf_parsing_default_beam_size(PgfConcr* concr)
 {
-	GuPool* tmp_pool = gu_new_pool();
-	PgfCId flag_name = gu_str_string("beam_size", tmp_pool);
-	PgfLiteral lit = gu_map_get(concr->cflags, &flag_name, PgfLiteral);
+	PgfLiteral lit = gu_map_get(concr->cflags, "beam_size", PgfLiteral);
 	
 	if (gu_variant_is_null(lit))
 		return 0;
@@ -1677,7 +1662,7 @@ typedef struct {
 static bool
 pgf_real_match_token(PgfTokenState* ts, PgfToken tok, PgfItem* item)
 {
-	return gu_string_eq(gu_container(ts, PgfRealTokenState, ts)->tok, tok);
+	return strcmp(gu_container(ts, PgfRealTokenState, ts)->tok, tok) == 0;
 }
 
 static PgfToken
@@ -1707,7 +1692,7 @@ pgf_parser_next_state(PgfParseState* prev, PgfToken tok)
 		pgf_new_token_state(PgfRealTokenState, prev->ps->pool);
 	ts->tok = tok;
     ts->lexicon_idx = gu_map_get(prev->ps->concr->leftcorner_tok_idx,
-                                 &tok, PgfProductionIdx*);	
+                                 tok, PgfProductionIdx*);	
 	if (ts->lexicon_idx != NULL) {
 		PgfLexiconFn clo = { { pgf_parser_compute_lexicon_prob }, &ts->ts };
 		gu_map_iter(ts->lexicon_idx, &clo.fn, NULL);
@@ -1758,7 +1743,7 @@ pgf_prefix_match_token(PgfTokenState* ts0, PgfToken tok, PgfItem* item)
 
 static PgfToken
 pgf_prefix_get_token(PgfTokenState* ts) {
-	return gu_empty_string;
+	return "";
 }
 
 static PgfProductionIdx*
@@ -2165,7 +2150,7 @@ pgf_parser_init_state(PgfConcr* concr, PgfCId cat, size_t lin_idx,
                       GuPool* pool, GuPool* out_pool)
 {
 	PgfCncCat* cnccat =
-		gu_map_get(concr->cnccats, &cat, PgfCncCat*);
+		gu_map_get(concr->cnccats, cat, PgfCncCat*);
 	if (!cnccat)
 		return NULL;
 
@@ -2226,7 +2211,7 @@ pgf_parser_add_literal(PgfConcr *concr, PgfCId cat,
                        PgfLiteralCallback* callback)
 {
 	PgfCncCat* cnccat =
-		gu_map_get(concr->cnccats, &cat, PgfCncCat*);
+		gu_map_get(concr->cnccats, cat, PgfCncCat*);
 	if (cnccat == NULL)
 		return;
 
@@ -2281,7 +2266,7 @@ pgf_morpho_iter(GuMapItor* fn, const void* key, void* value, GuExn* err)
 						PgfToken tok1 = symks->token;
 						PgfToken tok2 = gu_seq_get(clo->tokens, PgfToken, pos++);
 
-						if (!gu_string_eq(tok1, tok2))
+						if (strcmp(tok1, tok2) != 0)
 							goto cont;
 					}
 					default:
@@ -2320,7 +2305,7 @@ pgf_lookup_morpho(PgfConcr *concr, PgfLexer *lexer,
 	}
 
 	PgfProductionIdx* lexicon_idx =
-		gu_map_get(concr->leftcorner_tok_idx, &tok, PgfProductionIdx*);
+		gu_map_get(concr->leftcorner_tok_idx, tok, PgfProductionIdx*);
 	if (lexicon_idx == NULL) {
 		gu_pool_free(tmp_pool);
 		return;
@@ -2374,10 +2359,10 @@ pgf_fullform_iter(GuMapItor* fn, const void* key, void* value, GuExn* err)
 			// create a new production index with keys that 
 			// are multiword units
 			PgfProductionIdx* lexicon_idx =
-				gu_map_get(st->new_idx, &tokens, PgfProductionIdx*);
+				gu_map_get(st->new_idx, tokens, PgfProductionIdx*);
 			if (lexicon_idx == NULL) {
 				lexicon_idx = gu_map_type_new(PgfProductionIdx, st->pool);
-				gu_map_put(st->new_idx, &tokens, PgfProductionIdx*, lexicon_idx);
+				gu_map_put(st->new_idx, tokens, PgfProductionIdx*, lexicon_idx);
 			}
 
 			PgfProductionBuf* prods =
@@ -2443,7 +2428,7 @@ pgf_fullform_lexicon(PgfConcr *concr, GuPool* pool)
 GuString
 pgf_fullform_get_string(PgfFullFormEntry* entry)
 {
-	return *((GuString*) entry->key);
+	return (GuString) entry->key;
 }
 
 void
@@ -2462,10 +2447,10 @@ pgf_parser_index_token(PgfConcr* concr,
                        GuPool *pool)
 {
 	PgfProductionIdx* set =
-		gu_map_get(concr->leftcorner_tok_idx, &tok, PgfProductionIdx*);
+		gu_map_get(concr->leftcorner_tok_idx, tok, PgfProductionIdx*);
 	if (set == NULL) {
 		set = gu_map_type_new(PgfProductionIdx, pool);
-		gu_map_put(concr->leftcorner_tok_idx, &tok, PgfProductionIdx*, set);
+		gu_map_put(concr->leftcorner_tok_idx, tok, PgfProductionIdx*, set);
 	}
 
 	PgfCFCat cfc = {ccat, lin_idx};
@@ -2527,6 +2512,7 @@ pgf_parser_index_symbol(PgfConcr* concr, PgfSymbol sym,
 	case PGF_SYMBOL_CAT:
 	case PGF_SYMBOL_LIT:
 	case PGF_SYMBOL_NE:
+	case PGF_SYMBOL_BIND:
 	case PGF_SYMBOL_VAR:
 		// Nothing to be done here
 		break;

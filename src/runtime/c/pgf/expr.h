@@ -37,7 +37,7 @@ typedef enum {
 } PgfLiteralTag;
 
 typedef struct {
-	GuString val;
+	char val[0];  // a flexible array that contains the value
 } PgfLiteralStr;
 
 typedef struct {
@@ -102,7 +102,7 @@ typedef struct {
 } PgfExprMeta;
 
 typedef struct {
-	PgfCId fun;
+	char fun[0];
 } PgfExprFun;
 
 typedef struct {

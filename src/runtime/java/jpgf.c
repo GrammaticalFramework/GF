@@ -11,32 +11,13 @@
 
 static jstring
 gu2j_string(JNIEnv *env, GuString s) {
-	GuWord w = s.w_;
-	uint8_t buf[sizeof(GuWord)];
-
-	uint8_t* utf8;
-	size_t len;
-	if (w & 1) {
-		len = (w & 0xff) >> 1;
-		gu_assert(len <= sizeof(GuWord));
-		size_t i = len;
-		while (i > 0) {
-			w >>= 8;
-			buf[--i] = w & 0xff;
-		}
-		utf8 = buf;
-	} else {
-		uint8_t* p = (void*) w;
-		len = (p[0] == 0) ? ((size_t*) p)[-1] : p[0];
-		utf8 = &p[1];
-	}
-
-	const uint8_t* src = utf8;
+	const char* utf8 = s;
+	size_t len = strlen(s);
 
 	jchar* utf16 = alloca(len*sizeof(jchar));
 	jchar* dst   = utf16;
-	while (src-utf8 < len) {
-		GuUCS ucs = gu_utf8_decode(&src);
+	while (s-utf8 < len) {
+		GuUCS ucs = gu_utf8_decode((const uint8_t**) &s);
 		
 		if (ucs <= 0xFFFF) {
 			*dst++ = ucs;
@@ -52,10 +33,10 @@ gu2j_string(JNIEnv *env, GuString s) {
 
 static GuString
 j2gu_string(JNIEnv *env, jstring s, GuPool* pool) {
-	const char *str = (*env)->GetStringUTFChars(env, s, 0);
-	GuString s = gu_str_string(str, pool);
+	GuString str = (*env)->GetStringUTFChars(env, s, 0);
+	str = gu_string_copy(str, pool);
 	(*env)->ReleaseStringUTFChars(env, s, str);
-	return s;
+	return str;
 }
 
 static void*
@@ -223,10 +204,7 @@ Java_org_grammaticalframework_pgf_PGF_getAbstractName(JNIEnv* env, jobject self)
 JNIEXPORT jstring JNICALL
 Java_org_grammaticalframework_pgf_PGF_getStartCat(JNIEnv* env, jobject self)
 {
-	GuPool* tmp_pool = gu_local_pool();
-	jstring jname = gu2j_string(env, pgf_start_cat(get_ref(env, self), tmp_pool));
-	gu_pool_free(tmp_pool);
-	return jname;
+	return gu2j_string(env, pgf_start_cat(get_ref(env, self)));
 }
 
 typedef struct {
@@ -313,7 +291,7 @@ Java_org_grammaticalframework_pgf_Parser_parse
 		PgfToken tok =
 			pgf_lexer_current_token(lexer);
 
-		if (gu_string_eq(tok, gu_empty_string))
+		if (*tok == 0)
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The sentence cannot be parsed");
 		else
 			throw_jstring_exception(env, "org/grammaticalframework/pgf/ParseError", gu2j_string(env, tok));

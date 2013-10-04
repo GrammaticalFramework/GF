@@ -200,8 +200,8 @@ int main ()
 		goto fail;
 	}
 
-	GuString cat = gu_str_string("Phr", pool);
-	GuString from_lang = gu_str_string("ParseEng", pool);
+	GuString cat = "Phr";
+	GuString from_lang = "ParseEng";
 	PgfConcr* from_concr =
 		pgf_get_language(pgf, from_lang);
 	if (!from_concr) {
@@ -210,7 +210,7 @@ int main ()
 	}
 
 	// Register a callback for the literal category Symbol
-	pgf_parser_add_literal(from_concr, gu_str_string("Symb", pool),
+	pgf_parser_add_literal(from_concr, "Symb",
 	                       &pgf_nerc_literal_callback);
 
     while (FCGI_Accept() >= 0) {
@@ -233,7 +233,7 @@ int main ()
 
 			PgfConcr* to_concr = NULL;
 			if (strlen(to_lang_buf) > 0) {
-				GuString to_lang = gu_str_string(to_lang_buf, ppool);
+				GuString to_lang = to_lang_buf;
 				to_concr =
 					pgf_get_language(pgf, to_lang);
 				if (!to_concr) {
@@ -248,7 +248,7 @@ int main ()
 			sentence[len+1] = '\0';
 		
 			GuReader *rdr =
-				gu_string_reader(gu_str_string(sentence, ppool), ppool);
+				gu_string_reader(sentence, ppool);
 			PgfLexer *lexer =
 				pgf_new_simple_lexer(rdr, ppool);
 

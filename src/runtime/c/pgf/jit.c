@@ -201,7 +201,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 				
 				// call the predicate for the category in hypo->type->cid
 				PgfAbsCat* arg =
-					gu_map_get(abscats, &hypo->type->cid, PgfAbsCat*);
+					gu_map_get(abscats, hypo->type->cid, PgfAbsCat*);
 
 #ifdef PGF_JIT_DEBUG
 				gu_puts("    CALL ", wtr, err);
@@ -314,7 +314,7 @@ pgf_jit_done(PgfJitState* state, PgfAbstr* abstr)
 		PgfCallPatch* patch =
 			gu_buf_index(state->patches, PgfCallPatch, i);
 		PgfAbsCat* arg =
-			gu_map_get(abstr->cats, &patch->cid, PgfAbsCat*);
+			gu_map_get(abstr->cats, patch->cid, PgfAbsCat*);
 		gu_assert(arg != NULL);
 
 		jit_patch_calli(patch->ref,(jit_insn*) arg->predicate);
