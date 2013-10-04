@@ -1,0 +1,66 @@
+= Overview =
+
+This directory contains a sample Android app tht uses
+the Android speech recognition and TTS APIs along with
+JNI bindings to the C PGF runtime to implement a simple
+speech translation app.
+
+
+= Requirements =
+
+1. Android SDK: http://developer.android.com/sdk/
+   installed in $ANDROID_SDK_LOCATION
+
+2. Android NDK: http://developer.android.com/tools/sdk/ndk/
+   installed in	$ANDROID_NDK_LOCATION
+
+= Building =
+
+Set up Android project:
+
+# Creates local.properties, not to be checked in
+$ $ANDROID_SDK_LOCATION/tools/android update project -p .
+
+Build libs/libjpgf.jar:
+
+$ (cd ../../runtime/java && javac org/grammaticalframework/pgf/*.java && jar -cf libjpgf.jar org/grammaticalframework/pgf/*.class)
+$ cp ../../runtime/java/libjpgf.jar libs
+
+Build JNI code:
+
+$ cd jni
+$ $ANDROID_NDK_LOCATION/ndk-build
+
+
+Build APK:
+
+$ ant debug
+
+
+Install on your device:
+
+$ ant debug install
+
+or:
+
+$ adb install -r bin/MainActivity-debug.apk
+
+
+= Changing the grammar =
+
+1. Replace assets/ResourceDemo.pgf
+
+2. Edit Translator.java to point to the new file and include its metadata
+
+
+= Developing in Eclipse =
+
+1. Install Android ADT
+
+2. Eclipse > File > Import > Existing Projects into Workspace > Next
+
+3. Select root directory...
+
+4. Select GF/src/ui/android
+
+5. Finish
