@@ -8,11 +8,9 @@ import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
 import org.grammaticalframework.pgf.ParseError;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -89,38 +87,24 @@ public class Translator {
     private synchronized void ensureLoaded(String grammarName) {
         if (mPgf != null) return;
 
+        InputStream in = null;
+
         try {
             // TODO: use PGF API to read this directly from assets
-            Log.d(TAG, "Copying grammar...");
-            File file = copyAsset(grammarName);
-            Log.d(TAG, "Trying to open " + file);
-            mPgf = PGF.readPGF(file.getPath());
+        	in = getContext().getAssets().open(grammarName);
+            Log.d(TAG, "Trying to open " + grammarName);
+            mPgf = PGF.readPGF(in);
         } catch (FileNotFoundException e) {
             Log.e(TAG, "File not found", e);
         } catch (IOException e) {
             Log.e(TAG, "Error loading grammar", e);
-        }
-    }
-
-    private File copyAsset(String asset) throws IOException {
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = getContext().getAssets().open(asset);
-            out = getContext().openFileOutput(asset, Context.MODE_PRIVATE);
-            byte[] buf = new byte[4096];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            return getContext().getFileStreamPath(asset);
         } finally {
-            if (in != null) {
-                in.close();
-            }
-            if (out != null) {
-                out.close();
-            }
+        	if (in != null) {
+        		try {
+        			in.close();
+        		} catch (IOException e) {
+        		}
+        	}
         }
     }
 
