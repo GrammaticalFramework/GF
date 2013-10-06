@@ -118,7 +118,10 @@ oper
   copula : Verb = mkVerb "是" [] [] [] [] "不" ;
   hen_copula : Verb = 
     {s = hen_s ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "不"} ; --- 
-  nocopula : Verb = mkVerb [] [] [] [] [] "不" ;
+  nocopula : Verb = 
+    {s = [] ; sn = "是" ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "不"} ; --- 
+  adjcopula : Verb = 
+    {s = "是" ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "不"} ; --- 
 
   regVerb : (walk : Str) -> Verb = \v -> 
     mkVerb v "了" "着" "在" "过" "没" ;
