@@ -54,11 +54,10 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
 
     PassV2 v = insertAdv (mkNP passive_s) (predV v v.part) ; ----
 
-    CompAP ap = insertObj (mkNP ap.s) (
-      case ap.hasAdA of {
-         True => predV nocopula [] ; 
-         False => predV hen_copula []}
-         ) ; 
+    CompAP ap = case ap.hasAdA of {
+      True  => insertObj (mkNP ap.s) (predV nocopula []) ; 
+      False => insertObj (mkNP (ap.s ++ de_s)) (predV copula [])
+      } ; 
 
     CompNP np = insertObj np (predV copula []) ; ----
 

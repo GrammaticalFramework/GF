@@ -1,4 +1,4 @@
-concrete TextChi of Text = CommonX - [Temp,Tense,Adv] ** open ResChi in {
+concrete TextChi of Text = CommonX - [Temp,Tense,Ant,Adv] ** open ResChi in {
 
 -- No punctuation - but make sure to leave spaces between sentences!
 
