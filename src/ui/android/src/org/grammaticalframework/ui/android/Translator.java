@@ -29,20 +29,17 @@ public class Translator {
             new Language("fr-FR", "French", "ResourceDemoFre"),
     };
 
-    private final Context mContext;
-
     private Language mSourceLanguage;
 
     private Language mTargetLanguage;
 
-    private PGF mPgf;
+	private PGF mPGF;
+	private Thread mGrammarLoader;
+
 
     public Translator(Context context) {
-        mContext = context;
-    }
-
-    public Context getContext() {
-        return mContext;
+		mGrammarLoader = new GrammarLoader(context);
+		mGrammarLoader.start();
     }
 
     public List<Language> getAvailableSourceLanguages() {
@@ -72,43 +69,7 @@ public class Translator {
     /**
      * Takes a lot of time. Must not be called on the main thread.
      */
-    public void init() {
-        ensureLoaded(mGrammar);
-    }
-
-    /**
-     * Takes a lot of time. Must not be called on the main thread.
-     */
     public String translate(String input) {
-        ensureLoaded(mGrammar);
-        return translateInternal(input);
-    }
-
-    private synchronized void ensureLoaded(String grammarName) {
-        if (mPgf != null) return;
-
-        InputStream in = null;
-
-        try {
-            // TODO: use PGF API to read this directly from assets
-        	in = getContext().getAssets().open(grammarName);
-            Log.d(TAG, "Trying to open " + grammarName);
-            mPgf = PGF.readPGF(in);
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found", e);
-        } catch (IOException e) {
-            Log.e(TAG, "Error loading grammar", e);
-        } finally {
-        	if (in != null) {
-        		try {
-        			in.close();
-        		} catch (IOException e) {
-        		}
-        	}
-        }
-    }
-
-    protected String translateInternal(String input) {
         try {
             Concr sourceGrammar = getConcr(getSourceLanguage().getConcrete());
             Expr expr = sourceGrammar.parseBest("S", input);
@@ -122,7 +83,48 @@ public class Translator {
     }
 
     private Concr getConcr(String name) {
-        return mPgf.getLanguages().get(name);
+        return getGrammar().getLanguages().get(name);
     }
 
+	private PGF getGrammar() {
+		try {
+			mGrammarLoader.join();
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Loading interrupted", e);
+		}
+		return mPGF;
+	}
+
+	private class GrammarLoader extends Thread {
+	    private final Context mContext;
+	    
+	    public GrammarLoader(Context context) {
+	    	mContext = context;
+	    }
+
+		public void run() {
+			InputStream in = null;
+			
+		    try {
+		    	in = mContext.getAssets().open(mGrammar);
+		        Log.d(TAG, "Trying to open " + mGrammar);
+		        long t1 = System.currentTimeMillis();
+		        mPGF = PGF.readPGF(in);
+		        long t2 = System.currentTimeMillis();
+		        Log.d(TAG, "Grammar loaded ("+(t2-t1)+" ms)");
+		    } catch (FileNotFoundException e) {
+		        Log.e(TAG, "File not found", e);
+		    } catch (IOException e) {
+		        Log.e(TAG, "Error loading grammar", e);
+		    } finally {
+		    	if (in != null) {
+		    		try {
+		    			in.close();
+		    		} catch (IOException e) {
+		    			Log.e(TAG, "Error closing the stream", e);
+		    		}
+		    	}
+		    }
+		}
+	}
 }
