@@ -71,10 +71,10 @@ public class Translator {
      */
     public String translate(String input) {
         try {
-            Concr sourceGrammar = getConcr(getSourceLanguage().getConcrete());
-            Expr expr = sourceGrammar.parseBest("S", input);
-            Concr targetGrammar = getConcr(getTargetLanguage().getConcrete());
-            String output = targetGrammar.linearize(expr);
+            Concr sourceLang = getConcr(getSourceLanguage().getConcrete());
+            Expr expr = sourceLang.parseBest(getGrammar().getStartCat(), input);
+            Concr targetLang = getConcr(getTargetLanguage().getConcrete());
+            String output = targetLang.linearize(expr);
             return output;
         } catch (ParseError e) {
             Log.e(TAG, "Parse error: " + e);

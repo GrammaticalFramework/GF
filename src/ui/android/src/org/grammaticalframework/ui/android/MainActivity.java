@@ -34,7 +34,9 @@ public class MainActivity extends Activity {
 
     private TTS mTts;
 
-    private Translator mTranslator;
+    // mTranslator is static to ensure that the grammar
+    // is loaded only once even if the activity has been recreated.
+    private static Translator mTranslator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +67,9 @@ public class MainActivity extends Activity {
 
         mTts = new TTS(this);
 
-        mTranslator = new Translator(this);
-        new AsyncTask<Void,Void,Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                mTranslator.init();
-                return null;
-            }
-        }.execute();
+        if (mTranslator == null) {
+        	mTranslator = new Translator(this);
+        }
 
         mSourceLanguageView.setLanguages(mTranslator.getAvailableSourceLanguages());
         mSourceLanguageView.setSelectedLanguage(mTranslator.getSourceLanguage());
