@@ -25,7 +25,6 @@
                 android:layout_alignParentRight="true"
                 android:padding="8dp"
                 android:src="@drawable/ic_mic"
-                android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/microphone"
                 />
 
@@ -38,7 +37,6 @@
                 android:layout_toLeftOf="@id/start_stop"
                 android:padding="8dp"
                 android:src="@drawable/ic_action_switch"
-                android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/switch_languages"
                 />
 
