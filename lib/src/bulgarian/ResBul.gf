@@ -530,18 +530,19 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       \dva, dvama, dve, vtori ->
                table {
                  NCard dg   => digitGenderSpecies dva dvama dve ! dg ;
-                 NOrd aform => let vtora = init vtori + "а" ;
-                                   vtoro = init vtori + "о"
+                 NOrd aform => let vtora : Str = case vtori of {_+"в" => vtori; _ => init vtori} + "а" ;
+                                   vtoro : Str = case vtori of {_+"в" => vtori; _ => init vtori} + "о";
+                                   i     : Str = case vtori of {_+"в" => "и"; _ => ""}
                                in case aform of {
                                     ASg Masc Indef => vtori ;
-                                    ASg Masc Def   => vtori+"я" ;
-                                    ASgMascDefNom  => vtori+"ят" ;
+                                    ASg Masc Def   => vtori+i+"я" ;
+                                    ASgMascDefNom  => vtori+i+"ят" ;
                                     ASg Fem  Indef => vtora ;
                                     ASg Fem  Def   => vtora+"та" ;
                                     ASg Neut Indef => vtoro ;
                                     ASg Neut Def   => vtoro+"то" ;
-                                    APl Indef      => vtori ;
-                                    APl Def        => vtori+"те"
+                                    APl Indef      => vtori+i ;
+                                    APl Def        => vtori+i+"те"
                                   }
                } ;
 
@@ -565,23 +566,26 @@ resource ResBul = ParamX ** open Prelude, Predef in {
 
     digitGenderSpecies : Str -> Str -> Str -> CardForm => Str =
       \dva, dvama, dve
-            -> let addDef : Str -> Str =
-                     \s -> case s of {
+            -> let addDef : Str -> Gender -> Str =
+                     \s,g -> case s of {
 		             dves+"та" => dves+"тате" ;
 		             dv+"а"    => dv+"ата" ;
+		             "0"       => s+"та" ;
+		             "1"       => s+case g of {Masc => "ят"; Fem => "та"; Neut => "то"} ;
+		             "2"       => s+case g of {Masc => "та"; _ => "те"} ;
 		             x         => x+"те"
-                           }
+                     }
                in table {
                     CFMasc Indef  NonHuman => dva ;
-                    CFMasc Def    NonHuman => addDef dva ;
-                    CFMascDefNom  NonHuman => addDef dva ;
+                    CFMasc Def    NonHuman => addDef dva Masc ;
+                    CFMascDefNom  NonHuman => addDef dva Masc ;
                     CFMasc Indef  Human    => dvama ;
-                    CFMasc Def    Human    => addDef dvama ;
-                    CFMascDefNom  Human    => addDef dvama ;
+                    CFMasc Def    Human    => addDef dvama Masc ;
+                    CFMascDefNom  Human    => addDef dvama Masc ;
                     CFFem  Indef           => dve ;
-                    CFFem  Def             => addDef dve ;
+                    CFFem  Def             => addDef dve Fem ;
                     CFNeut Indef           => dve ;
-                    CFNeut Def             => addDef dve
+                    CFNeut Def             => addDef dve Neut
                   } ;
 
     mkIP : Str -> Str -> GenNum -> {s : Role => QForm => Str ; gn : GenNum} =

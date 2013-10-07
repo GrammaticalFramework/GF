@@ -100,16 +100,16 @@ lin pot3plus n m = {
       tail = inc i.tail
     } ;
 
-    D_0 = mk2Dig "0" "0в" ;
-    D_1 = mk3Dig "1" "1ви" Sg ;
+    D_0 = mk3Dig "0" "0" "0ев" Pl ;
+    D_1 = mk3Dig "1" "1" "1ви" Sg ;
     D_2 = mk2Dig "2" "2ри" ;
     D_3 = mkDig "3" ;
     D_4 = mkDig "4" ;
     D_5 = mkDig "5" ;
     D_6 = mkDig "6" ;
-    D_7 = mk2Dig "7" "7ми" ;
-    D_8 = mk2Dig "8" "8ми" ;
-    D_9 = mkDig "9" ;
+    D_7 = mk3Dig "7" "7на" "7ми" Pl ;
+    D_8 = mk3Dig "8" "8на" "8ми" Pl ;
+    D_9 = mk3Dig "9" "9има" "9ти" Pl ;
 
   oper
     commaIf : DTail -> Str = \t -> case t of {
@@ -123,11 +123,11 @@ lin pot3plus n m = {
       T3 => T1
       } ;
 
-    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
+    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c (c+"ма") o Pl ;
     mkDig : Str -> TDigit = \c -> mk2Dig c (c + "ти") ;
 
-    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
-      s = table {NCard _ => c ; NOrd aform => regAdjective o ! aform} ;
+    mk3Dig : Str -> Str -> Str -> Number -> TDigit = \c1,c2,o,n -> {
+      s = mkCardOrd c1 c2 c1 o ;
       n = n
       } ;
 
