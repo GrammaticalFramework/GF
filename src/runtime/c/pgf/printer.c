@@ -11,7 +11,7 @@ pgf_print_flag(GuMapItor* fn, const void* key, void* value,
 			GuExn* err)
 {
 	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId flag = *((PgfCId *) key);
+    PgfCId flag = (PgfCId) key;
     PgfLiteral lit = *((PgfLiteral *) value);
     GuOut *out = clo->out;
     
@@ -27,7 +27,7 @@ pgf_print_cat(GuMapItor* fn, const void* key, void* value,
 			GuExn* err)
 {
 	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId name = *((PgfCId *) key);
+    PgfCId name = (PgfCId) key;
     PgfAbsCat *cat  = *((PgfAbsCat **) value);
     GuOut *out = clo->out;
 
@@ -56,7 +56,7 @@ pgf_print_absfun(GuMapItor* fn, const void* key, void* value,
 			GuExn* err)
 {
 	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId name = *((PgfCId *) key);
+    PgfCId name = (PgfCId) key;
     PgfAbsFun *fun = *((PgfAbsFun **) value);
     GuOut *out = clo->out;
     
@@ -285,7 +285,7 @@ pgf_print_cnccat(GuMapItor* fn, const void* key, void* value,
 			GuExn* err)
 {
 	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId name = *((PgfCId *) key);
+    PgfCId name = (PgfCId) key;
     PgfCncCat* cnccat = *((PgfCncCat**) value);
     GuOut *out = clo->out;
     
@@ -357,7 +357,7 @@ pgf_print_concr_cb(GuMapItor* fn, const void* key, void* value,
 			GuExn* err)
 {
 	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId cncname = *((PgfCId *) key);
+    PgfCId cncname = (PgfCId) key;
     PgfConcr *concr = *((PgfConcr **) value);
 
 	pgf_print_concrete(cncname, concr, clo->out, err);
