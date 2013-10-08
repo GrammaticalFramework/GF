@@ -1,8 +1,9 @@
 concrete ExtraChi of ExtraChiAbs = CatChi ** 
   open ResChi, Coordination, Prelude in {
 
+  flags coding = utf8 ;
+
   lincat 
-    Aspect = {s : Str ; a : ResChi.Aspect} ;
     VPS   = {s : Str} ;
     [VPS] = {s1,s2 : Str} ;
     VPI   = {s : Str} ;  --- ???
@@ -27,4 +28,28 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
     GenRP nu cn = {s = cn.s ++ relative_s} ; ---- ??
 
 
+-----------------------
+-- Chinese-only extras
+
+  lincat
+    Aspect = {s : Str ; a : ResChi.Aspect} ;
+  lin
+    PredBareAP np ap = case ap.hasAdA of {
+      True  => mkClause np.s (insertObj (mkNP ap.s) (predV nocopula [])) ; 
+      False => mkClause np.s (insertObj (mkNP ap.s) (predV hen_copula []))
+      } ; 
+    QuestRepV cl = {
+      s = \\p,a => 
+          let
+          v = cl.vp.verb ; 
+          verb = case a of {
+            APlain   => v.s  ++ v.neg ++ v.sn ; 
+            APerf    => v.s  ++ "不"  ++ v.sn ++ v.pp ;
+            ADurStat => v.s  ++ "不"  ++ v.sn ;
+            ADurProg => v.dp ++ v.neg ++ v.dp ++ v.sn ;  -- mei or bu
+            AExper   => v.s  ++ v.neg ++ v.sn ++ v.ep
+            }
+          in
+          cl.np ++ cl.vp.prePart ++ verb ++ cl.vp.compl
+      } ;
 } 

@@ -119,12 +119,12 @@ oper
   hen_copula : Verb = 
     {s = hen_s ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "不"} ; --- 
   nocopula : Verb = 
-    {s = [] ; sn = "是" ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "不"} ; --- 
+    {s = [] ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "不"} ; --- 
   adjcopula : Verb = 
     {s = "是" ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "不"} ; --- 
 
   regVerb : (walk : Str) -> Verb = \v -> 
-    mkVerb v "了" "着" "在" "过" "没" ;
+    mkVerb v "了" "着" "在" "过" "不" ; -- 没" ;
 
   noVerb : Verb = regVerb [] ; ---?? -- used as copula for verbal adverbs
 
@@ -189,23 +189,25 @@ oper
    Clause : Type = {
      s  : Polarity => Aspect => Str ; 
      np : Str; 
-     vp : Polarity => Aspect => Str
+     vp : VP 
      } ; 
 
 
    mkClause = overload {
-     mkClause : Str -> Verb -> Clause = \np,v -> mkClauseCompl np (useVerb v) [] ;
-     mkClause : Str -> (Polarity => Aspect => Str) -> Str -> Clause = mkClauseCompl ;
+     mkClause : Str -> Verb -> Clause = \np,v -> 
+       mkClauseCompl np (predV v []) [] ;
      mkClause : Str -> Verb -> Str -> Clause = \subj,verb,obj ->
-       mkClauseCompl subj (useVerb verb) obj ;
+       mkClauseCompl subj (predV verb []) obj ;
      mkClause : Str -> VP -> Clause = \np,vp -> 
-       mkClauseCompl np (\\p,a => vp.prePart ++ useVerb vp.verb ! p ! a) vp.compl ;
+       mkClauseCompl np vp [] ;
+     mkClause : Str -> VP -> Str -> Clause = 
+       mkClauseCompl ;
      } ;
  
-   mkClauseCompl : Str -> (Polarity => Aspect => Str) -> Str -> Clause = \np,vp,compl -> {
-     s = \\p,a => np ++ vp ! p ! a ++ compl ;
+   mkClauseCompl : Str -> VP -> Str -> Clause = \np,vp,compl -> {
+     s = \\p,a => np ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl ++ compl ;
      np = np ;
-     vp = \\p,a => vp ! p ! a ++ compl
+     vp = vp ;
      } ;
    
 
