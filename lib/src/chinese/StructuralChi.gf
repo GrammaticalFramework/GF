@@ -94,7 +94,7 @@ not_Predet = ssword "不" ;
 otherwise_PConj = mkPConjL "还是" ;
 to_Prep = mkPrep "往" ;
 
-have_V2 = mkV2 "有" ;
+have_V2 = mkV2 (mkV "有" "了" "着" "在" "过" "没") ;
 
 yes_Utt = ss "对" ;
 no_Utt = ss neg_s ;

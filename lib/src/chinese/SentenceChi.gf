@@ -17,7 +17,7 @@ concrete SentenceChi of Sentence = CatChi **
       } ;
 
     SlashVP np vp = 
-      mkClauseCompl np.s (\\p,a => vp.prePart ++ useVerb vp.verb ! p ! a) vp.compl 
+      mkClauseCompl np.s vp []
       ** {c2 = vp.c2} ;
 
     SlashVS np vs sslash = <mkClause np.s vs sslash.s : Clause> ** {c2 = sslash.c2} ;
@@ -25,7 +25,7 @@ concrete SentenceChi of Sentence = CatChi **
 
     -- yet another reason for discontinuity of clauses
     AdvSlash slash adv = 
-      mkClause slash.np (<\\p,a => adv.s ++ slash.vp ! p ! a : Polarity => Aspect => Str>) [] 
+      mkClauseCompl slash.np <insertAdv adv slash.vp : VP> []
          ** {c2 = slash.c2} ;
   
     SlashPrep cl prep = cl ** {c2 = prep} ;

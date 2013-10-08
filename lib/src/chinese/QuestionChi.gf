@@ -11,12 +11,9 @@ concrete QuestionChi of Question = CatChi **
       s = \\p,a => ip.s ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl
       } ;
  
-    QuestSlash ip cls =  {
-      s =\\p,a => appPrep cls.c2 cls.np ++ cls.vp ! p ! a ++ 
-                  possessive_s ++ di_s ++ ip.s
-      } ;       
+    QuestSlash ip cls = mkClauseCompl cls.np (insertObj (ss (appPrep cls.c2 ip.s)) cls.vp) [] ; 
       
-    QuestIAdv iadv cl = {s = \\p,a => cl.np ++ iadv.s ++ cl.vp ! p ! a} ;
+    QuestIAdv iadv cl = mkClauseCompl cl.np (insertAdv iadv cl.vp) [] ;
 
     QuestIComp icomp np = {s = \\p,a => np.s ++ icomp.s} ; ---- order
 
