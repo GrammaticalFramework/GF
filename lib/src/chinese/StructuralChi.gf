@@ -145,7 +145,7 @@ here7from_Adv = mkAdv "从这里" ; -- from here
 here7to_Adv = mkAdv "到这里" ; -- to here
 -- [mark] "从这里" 从(from) 这里(here)
 -- "到这里" 到( to ) 这里(here)
-how8many_IDet = ssword "多少" ;
+how8many_IDet = mkIDet "多少" ;
 how8much_IAdv = ssword "多少" ;
 if_Subj = mkSubj "如果" [] ; --"就" ; -- [mark] "就" often comes between NP and VP
 less_CAdv = {s = than_s ; p = word "没更"} ; -- modified by chenpeng 11.24

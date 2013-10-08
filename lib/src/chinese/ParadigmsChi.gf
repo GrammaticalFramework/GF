@@ -181,7 +181,7 @@ oper
   mkPredet : Str -> Predet 
     = \s -> lin Predet {s = word s} ;
   mkIDet : Str -> IDet 
-    = \s -> lin IDet {s = word s} ;
+    = \s -> lin IDet {s = word s ; detType = DTNum} ; ----
   mkPConj : Str -> PConj 
     = \s -> lin PConj {s = word s} ;
   mkRP : Str -> RP 

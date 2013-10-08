@@ -21,11 +21,24 @@ concrete QuestionChi of Question = CatChi **
 
     AdvIP ip adv = ss (adv.s ++ possessive_s ++ ip.s) ; ---- adding de
 
-    IdetCN det cn = {s = det.s ++ cn.c ++ cn.s} ; ---- number?
+    IdetCN det cn = case det.detType of {
+            DTFull Sg => {s = det.s ++ cn.c  ++ cn.s} ;  -- which house
+            DTFull Pl => {s = det.s ++ xie_s ++ cn.s} ;  -- which houses
+            DTNum     => {s = det.s ++ cn.c  ++ cn.s} ;  -- (which) five houses
+            DTPoss    => {s = det.s          ++ cn.s}    -- whose (five) houses
+      } ;
+
 
     IdetIP idet = idet ;
 
-    IdetQuant iquant num = ss (iquant.s ++ num.s) ; ---- 
+    IdetQuant iquant num = {
+      s = iquant.s ++ num.s ; 
+      detType = case num.numType of {
+        NTFull   => DTNum ;                     -- which five
+        NTVoid n => DTFull n   ---- TODO: whose
+        }
+      } ;
+ 
 
     AdvIAdv i a = ss (a.s ++ i.s) ;
 

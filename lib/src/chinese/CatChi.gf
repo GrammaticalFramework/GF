@@ -22,7 +22,8 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Ant, Adv] ** open ResChi, Prelu
     QCl = {s : Polarity => Aspect => Str} ; 
     IP = {s : Str} ;
     IComp = {s : Str} ;    
-    IDet, IQuant = {s : Str} ;
+    IDet = {s : Str ; detType : DetType} ;
+    IQuant = {s : Str} ;
 
 -- Relative
 
