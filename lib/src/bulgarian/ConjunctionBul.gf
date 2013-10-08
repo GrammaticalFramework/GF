@@ -7,38 +7,38 @@ concrete ConjunctionBul of Conjunction =
 
   lin
     ConjS conj ss = {
-      s = (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
+      s = conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
       } ;
 
     ConjAdv conj ss = {
-      s = (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
+      s = conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
       } ;
 
     ConjAdV conj ss = {
-      s = (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
+      s = conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
       } ;
 
     ConjIAdv conj ss = {
-      s = \\qform => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!qform;
+      s = \\qform => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!qform;
       } ;
 
     ConjNP conj ss = {
-      s = \\role => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role;
+      s = \\role => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role;
       a = {gn = conjGenNum (gennum (AMasc NonHuman) conj.n) ss.a.gn; p = ss.a.p}
       } ;
 
     ConjAP conj ss = {
-      s     = \\aform => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!aform;
-      adv   =            (linCoordSep [])!conj.distr!conj.conj++ss.adv!conj.distr!conj.conj;
+      s     = \\aform => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!aform;
+      adv   =            conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.adv!conj.distr!conj.conj;
       isPre = ss.isPre
       } ;
 
     ConjRS conj ss = {
-      s = \\role => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role
+      s = \\role => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role
       } ;
 
     ConjCN conj ss = {
-      s = \\nform => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!nform;
+      s = \\nform => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!nform;
       g = ss.g
       } ;
 
