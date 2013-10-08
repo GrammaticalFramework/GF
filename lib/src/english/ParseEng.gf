@@ -25,7 +25,7 @@ open MorphoEng, ResEng, ParadigmsEng, Prelude in {
 
 flags
   literal=Symb ;
-  beam_size=0.80 ;
+  beam_size=0.60 ;
 
 lin
   myself_NP = regNP "myself" singular ;
