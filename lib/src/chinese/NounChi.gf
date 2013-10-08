@@ -60,7 +60,7 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
 
     OrdSuperl a = {s = superlative_s ++ a.s} ;
 
-    DefArt = mkQuant [] [] DTPoss ;             -- use that_Quant if you want the_s
+    DefArt = mkQuant [] [] DTPoss ;          -- use that_Quant if you want the_s
     IndefArt = mkQuant yi_s [] (DTFull Sg) ;    -- empty in the plural
 
     MassNP cn = cn ;

@@ -41,6 +41,7 @@ resource ResChi = ParamX ** open Prelude in {
   the_s = "那" ;
   geng_s = "更" ; -- more, in comparison
   hen_s = "很" ; -- very, or predicating a monosyllabic adjective
+  taN_s = "它" ;
 
   zai_V = mkVerb "在" [] [] [] [] "不" ;
   fullstop_s = "。" ;

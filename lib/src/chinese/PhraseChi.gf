@@ -17,6 +17,7 @@ concrete PhraseChi of Phrase = CatChi ** open Prelude, ResChi in {
     UttCard x = x ;
     UttVP vp = ss (infVP vp) ;
     UttAdv adv = adv ;
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = ss (conj.s ! CSent).s2 ;
