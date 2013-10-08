@@ -66,10 +66,24 @@ public class Translator {
         return mTargetLanguage != null ? mTargetLanguage : mLanguages[1];
     }
 
+    private static String explode(String in) {
+    	String out = "";
+    	for (int i = 0; i < in.length(); i++) {
+    		if (i > 0)
+    			out += ' ';
+    		out += in.charAt(i);
+    	}
+    	return out;
+    }
     /**
      * Takes a lot of time. Must not be called on the main thread.
      */
     public String translate(String input) {
+        if (getSourceLanguage().getLangCode().equals("cmn-Hans-CN")) {
+        	// for Chinese we need to put space after every character
+        	input = explode(input);
+        }
+
         try {
             Concr sourceLang = getConcr(getSourceLanguage().getConcrete());
             Expr expr = sourceLang.parseBest(getGrammar().getStartCat(), input);
