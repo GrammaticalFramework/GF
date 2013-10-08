@@ -145,7 +145,28 @@ GU_DEFINE_TYPE(PgfLeftcornerTokIdx, GuStringMap,
 static PgfSymbol
 pgf_prev_extern_sym(PgfSymbol sym)
 {
-	return *(((PgfSymbol*) gu_variant_data(sym))-1);
+	GuVariantInfo i = gu_variant_open(sym);
+	switch (i.tag) {
+	case PGF_SYMBOL_CAT:
+		return *((PgfSymbol*) (((PgfSymbolCat*) i.data)+1));
+	case PGF_SYMBOL_KP:
+		return *((PgfSymbol*) (((PgfSymbolKP*) i.data)+1));
+	case PGF_SYMBOL_KS:
+		PgfSymbolKS* sks = (PgfSymbolKS*) i.data;
+		size_t tok_len = strlen(sks->token);
+		return *((PgfSymbol*) (((uint8_t*) sks)+sizeof(PgfSymbolKS)+tok_len+1));
+	case PGF_SYMBOL_LIT:
+		return *((PgfSymbol*) (((PgfSymbolLit*) i.data)+1));
+	case PGF_SYMBOL_VAR:
+		return *((PgfSymbol*) (((PgfSymbolVar*) i.data)+1));
+	case PGF_SYMBOL_BIND:
+		return *((PgfSymbol*) (((PgfSymbolBIND*) i.data)+1));
+	case PGF_SYMBOL_NE:
+		return *((PgfSymbol*) (((PgfSymbolNE*) i.data)+1));
+	default:
+		gu_impossible();
+		return gu_null_variant;
+	}
 }
 
 size_t
@@ -1115,13 +1136,14 @@ pgf_parsing_meta_scan(PgfParseState* before, PgfParseState* after,
 		item->inside_prob += meta_prob;
 
 		PgfSymbol prev = item->curr_sym;
+		size_t tok_len = strlen(tok);
 		PgfSymbolKS* sks = (PgfSymbolKS*)
 			gu_alloc_variant(PGF_SYMBOL_KS,
-							 sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+strlen(tok)+1,
+							 sizeof(PgfSymbolKS)+tok_len+1+sizeof(PgfSymbol),
 							 gu_alignof(PgfSymbolKS),
 							 &item->curr_sym, after->ps->pool);
-		*(((PgfSymbol*) sks)-1) = prev;
 		strcpy((char*) sks->token, (char*) tok);
+		*((PgfSymbol*) (((uint8_t*) sks)+sizeof(PgfSymbolKS)+tok_len+1)) = prev;
 
 		gu_buf_heap_push(before->agenda, &pgf_item_prob_order, &item);
 	}
@@ -1176,10 +1198,10 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 								 sizeof(PgfSymbolCat)+sizeof(PgfSymbol),
 								 gu_alignof(PgfSymbolCat),
 								 &item->curr_sym, state->ps->pool);
-			*(((PgfSymbol*)scat)-1) = prev;
+			*((PgfSymbol*) (scat+1)) = prev;
 			scat->d = nargs;
 			scat->r = lin_idx;
-		
+
 			gu_buf_heap_push(state->agenda, &pgf_item_prob_order, &item);
 		}
 	}
@@ -1413,13 +1435,14 @@ pgf_parsing_item(PgfParseState* before, PgfParseState* after, PgfItem* item)
 			if (accepted) {
 				if (after != NULL) {
 					PgfSymbol prev = item->curr_sym;
+					size_t tok_len = strlen(tok);
 					PgfSymbolKS* sks = (PgfSymbolKS*)
 						gu_alloc_variant(PGF_SYMBOL_KS,
-										 sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+strlen(tok)+1,
+										 sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+tok_len+1,
 										 gu_alignof(PgfSymbolKS),
 										 &item->curr_sym, after->ps->pool);
-					*(((PgfSymbol*) sks)-1) = prev;
 					strcpy((char*) sks->token, (char*) tok);
+					*((PgfSymbol*) (((uint8_t*) sks)+sizeof(PgfSymbolKS)+tok_len+1)) = prev;
 
 					item->seq_idx++;
 					pgf_parsing_add_transition(before, after, tok, item);
