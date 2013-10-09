@@ -350,6 +350,53 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 	return jstr;
 }
 
+typedef struct {
+	PgfMorphoCallback fn;
+	jobject analyses;
+	JNIEnv* env;
+	jmethodID addId;
+	jclass an_class;
+	jmethodID an_constrId;
+} JMorphoCallback;
+
+static void
+jpgf_collect_morpho(PgfMorphoCallback* self,
+                    PgfCId lemma, GuString analysis, prob_t prob,
+	                GuExn* err)
+{
+	JMorphoCallback* callback = (JMorphoCallback*) self;
+	JNIEnv* env = callback->env;
+	
+	jobject jan = (*env)->NewObject(env, 
+	                                callback->an_class,
+	                                callback->an_constrId, 
+	                                gu2j_string(env,lemma),
+	                                gu2j_string(env,analysis),
+	                                (double) prob);
+	(*env)->CallObjectMethod(env, callback->analyses, callback->addId, jan);
+	(*env)->DeleteLocalRef(env, jan);
+}
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_Concr_lookupMorpho(JNIEnv* env, jobject self, jstring sentence)
+{
+	jclass list_class = (*env)->FindClass(env, "java/util/ArrayList");
+	jmethodID list_constrId = (*env)->GetMethodID(env, list_class, "<init>", "()V");
+	jobject analyses = (*env)->NewObject(env, list_class, list_constrId);
+	
+	jmethodID addId = (*env)->GetMethodID(env, list_class, "add", "(Ljava/lang/Object;)Z");
+
+	jclass an_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/MorphoAnalysis");
+	jmethodID an_constrId = (*env)->GetMethodID(env, an_class, "<init>", "(Ljava/lang/String;Ljava/lang/String;D)V");
+
+	GuPool* tmp_pool = gu_new_pool();
+	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, env, addId, an_class, an_constrId };
+	pgf_lookup_morpho(get_ref(env, self), j2gu_string(env, sentence, tmp_pool),
+	                  &callback.fn, NULL);
+
+	return analyses;
+}
+
 JNIEXPORT void JNICALL 
 Java_org_grammaticalframework_pgf_Pool_free(JNIEnv* env, jobject self, jlong ref)
 {
