@@ -208,7 +208,7 @@ oper
    mkClauseCompl : Str -> VP -> Str -> Clause = \np,vp,compl -> {
      s = \\p,a => np ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl ++ compl ;
      np = np ;
-     vp = vp ;
+     vp = insertObj (ss compl) vp ;
      } ;
    
 

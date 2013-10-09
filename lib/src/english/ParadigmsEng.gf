@@ -329,6 +329,8 @@ oper
 --2 Other categories
 
 mkSubj : Str -> Subj = \s -> lin Subj {s = s} ; --%
+mkInterj : Str -> Interj
+  = \s -> lin Interj (ss s) ;
 
 --.
 --2 Definitions of paradigms

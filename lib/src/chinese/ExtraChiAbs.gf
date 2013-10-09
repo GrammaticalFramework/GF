@@ -14,4 +14,5 @@ abstract ExtraChiAbs = Cat,
 
     QuestRepV : Cl -> QCl ;        -- V neg V question
 
+    TopicAdvCl : Adv -> Cl -> Cl ; -- topicalized adverb
   } ;
