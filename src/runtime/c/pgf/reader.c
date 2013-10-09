@@ -606,13 +606,13 @@ pgf_read_printnames(PgfReader* rdr)
 	return printnames;
 }
 
-static PgfSequence*
-pgf_read_sequence(PgfReader* rdr);
+static PgfSymbols*
+pgf_read_symbols(PgfReader* rdr);
 
 static void
 pgf_read_alternative(PgfReader* rdr, PgfAlternative* alt)
 {
-	alt->form = pgf_read_sequence(rdr);
+	alt->form = pgf_read_symbols(rdr);
 	gu_return_on_exn(rdr->err,);
 
 	size_t n_prefixes = pgf_read_len(rdr);
@@ -692,7 +692,7 @@ pgf_read_symbol(PgfReader* rdr)
 		break;
 	}
 	case PGF_SYMBOL_KP: {
-		PgfSequence* default_form = pgf_read_sequence(rdr);
+		PgfSymbols* default_form = pgf_read_symbols(rdr);
 		gu_return_on_exn(rdr->err, gu_null_variant);
 		
 		size_t n_forms = pgf_read_len(rdr);
@@ -732,21 +732,21 @@ pgf_read_symbol(PgfReader* rdr)
 	return sym;
 }
 
-static PgfSequence*
-pgf_read_sequence(PgfReader* rdr)
+static PgfSymbols*
+pgf_read_symbols(PgfReader* rdr)
 {
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
-	PgfSequence* seq = gu_new_seq(PgfSymbol, len, rdr->opool);
+	PgfSymbols* syms = gu_new_seq(PgfSymbol, len, rdr->opool);
 
 	for (size_t i = 0; i < len; i++) {
 		PgfSymbol sym = pgf_read_symbol(rdr);
 		gu_return_on_exn(rdr->err, NULL);
-		gu_seq_set(seq, PgfSymbol, i, sym);
+		gu_seq_set(syms, PgfSymbol, i, sym);
 	}
 
-	return seq;
+	return syms;
 }
 
 static PgfSequences*
@@ -755,12 +755,14 @@ pgf_read_sequences(PgfReader* rdr)
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 	
-	PgfSequences* seqs = gu_new_seq(PgfSequence*, len, rdr->opool);
+	PgfSequences* seqs = gu_new_seq(PgfSequence, len, rdr->opool);
 
 	for (size_t i = 0; i < len; i++) {
-		PgfSequence* seq = pgf_read_sequence(rdr);
+		PgfSymbols* syms = pgf_read_symbols(rdr);
 		gu_return_on_exn(rdr->err, NULL);
-		gu_seq_set(seqs, PgfSequence*, i, seq);
+
+		gu_seq_index(seqs, PgfSequence, i)->syms = syms;
+		gu_seq_index(seqs, PgfSequence, i)->idx  = NULL;
 	}
 
 	return seqs;
@@ -793,7 +795,7 @@ pgf_read_cncfun(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, int funid)
 			return NULL;
 		}
 		
-		cncfun->lins[i] = gu_seq_get(concr->sequences, PgfSequence*, seqid);
+		cncfun->lins[i] = gu_seq_index(concr->sequences, PgfSequence, seqid);
 	}
 
 	return cncfun;
@@ -1149,8 +1151,6 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr)
 		gu_new_int_map(PgfCCat*, &gu_null_struct, rdr->opool);
 	concr->fun_indices = gu_map_type_new(PgfCncFunOverloadMap, rdr->opool);
 	concr->coerce_idx  = gu_map_type_new(PgfCncOverloadMap, rdr->opool);
-	concr->epsilon_idx = gu_map_type_new(PgfProductionIdx, rdr->opool);
-	concr->leftcorner_tok_idx = gu_map_type_new(PgfLeftcornerTokIdx,rdr->opool);
 	pgf_read_lindefs(rdr, concr);
 	pgf_read_ccats(rdr, concr);
 	concr->cnccats = pgf_read_cnccats(rdr, abstr, concr);
@@ -1200,7 +1200,7 @@ pgf_read_pgf(PgfReader* rdr) {
 		
 	pgf_read_abstract(rdr, &pgf->abstract);
 	gu_return_on_exn(rdr->err, NULL);
-	
+
 	pgf->concretes = pgf_read_concretes(rdr, &pgf->abstract);
 	gu_return_on_exn(rdr->err, NULL);
 

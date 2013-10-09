@@ -37,7 +37,7 @@ gu_utf8_decode(const uint8_t** utf8);
 void
 gu_in_utf8_buf(uint8_t** buf, GuIn* in, GuExn* err);
 
-bool
+static inline bool
 gu_is_space(uint8_t c) {
 	return (c == '\t' || c == '\n' || c == '\v' ||
 	        c == '\f' || c == '\r' || c == ' ');

@@ -169,21 +169,14 @@ pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences* sequences,
 					GuOut *out, GuExn *err)
 {
 	gu_printf(out,err,"    F%d := (", cncfun->funid);
-	
-	size_t n_seqs = gu_seq_length(sequences);
-	
+
 	for (size_t i = 0; i < cncfun->n_lins; i++) {
 		if (i > 0) gu_putc(',', out, err);
-		PgfSequence* seq = cncfun->lins[i];
 
-		for (size_t seqid = 0; seqid < n_seqs; seqid++) {
-			if (gu_seq_data(gu_seq_get(sequences, PgfSequence*, seqid)) == gu_seq_data(seq)) {
-				gu_printf(out,err,"S%d", seqid);
-				break;
-			}
-		}
+		PgfSequence* seq = cncfun->lins[i];
+		gu_printf(out,err,"S%d", (seq - ((PgfSequence*) gu_seq_data(sequences))));
 	}
-	
+
 	gu_puts(")", out, err);
 	
 	if (cncfun->absfun != NULL) {
@@ -204,7 +197,7 @@ pgf_print_token(PgfToken tok, GuOut *out, GuExn *err)
 }
 
 static void
-pgf_print_sequence(PgfSequence* seq, GuOut *out, GuExn *err);
+pgf_print_symbols(PgfSymbols* syms, GuOut *out, GuExn *err);
 
 void
 pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
@@ -224,11 +217,11 @@ pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
 		PgfSymbolKP* skp = gu_variant_data(sym);
 
 		gu_puts("pre {", out, err);
-		pgf_print_sequence(skp->default_form, out, err);
+		pgf_print_symbols(skp->default_form, out, err);
 		
 		for (size_t i = 0; i < skp->n_forms; i++) {
 			gu_puts("; ", out, err);
-            pgf_print_sequence(skp->forms[i].form, out, err);
+            pgf_print_symbols(skp->forms[i].form, out, err);
             gu_puts(" / ", out, err);
             
             size_t n_prefixes = gu_seq_length(skp->forms[i].prefixes);
@@ -269,13 +262,13 @@ pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
 }
 
 static void
-pgf_print_sequence(PgfSequence* seq, GuOut *out, GuExn *err)
+pgf_print_symbols(PgfSymbols* syms, GuOut *out, GuExn *err)
 {
-	int n_syms = gu_seq_length(seq);
+	int n_syms = gu_seq_length(syms);
 	for (int i = 0; i < n_syms; i++) {
 		if (i > 0) gu_putc(' ', out, err);
 			
-		PgfSymbol sym = gu_seq_get(seq, PgfSymbol, i);
+		PgfSymbol sym = gu_seq_get(syms, PgfSymbol, i);
 		pgf_print_symbol(sym, out, err);
 	}
 }
@@ -338,10 +331,9 @@ pgf_print_concrete(PgfCId cncname, PgfConcr* concr,
 	gu_puts("  sequences\n", out, err);
 	size_t n_seqs = gu_seq_length(concr->sequences);
 	for (size_t i = 0; i < n_seqs; i++) {
-		PgfSequence* seq = gu_seq_get(concr->sequences, PgfSequence*, i);
-			
 		gu_printf(out,err,"    S%d := ", i);
-		pgf_print_sequence(seq, out, err);
+		PgfSymbols* syms = gu_seq_index(concr->sequences, PgfSequence, i)->syms;
+		pgf_print_symbols(syms, out, err);
 		gu_putc('\n', out, err);
 	}
 	

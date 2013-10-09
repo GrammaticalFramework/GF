@@ -128,14 +128,16 @@ typedef struct {
 
 extern GU_DECLARE_TYPE(PgfCncCat, abstract);
 
+typedef GuString PgfToken;
+typedef GuSeq PgfTokens;
+
 bool
 pgf_tokens_equal(PgfTokens* t1, PgfTokens* t2);
 
-typedef GuSeq PgfSequence; // -> PgfSymbol
-typedef GuSeq PgfSequences;
+typedef GuSeq PgfSymbols;
 
 typedef struct {
-	PgfSequence* form;
+	PgfSymbols* form;
 	/**< The form of this variant as a list of tokens. */
 
 	GuStrings* prefixes;
@@ -154,18 +156,7 @@ extern GU_DECLARE_TYPE(PgfCncFunOverloadMap, GuStringMap);
 typedef GuMap PgfCncOverloadMap;
 extern GU_DECLARE_TYPE(PgfCncOverloadMap, GuMap);
 
-typedef GuMap PgfProductionIdx;
-extern GU_DECLARE_TYPE(PgfProductionIdx, GuMap);
-
-typedef GuMap PgfLeftcornerTokIdx;
-extern GU_DECLARE_TYPE(PgfLeftcornerTokIdx, GuMap);
-
 typedef struct PgfItem PgfItem;
-
-typedef struct {
-	bool (*match)(PgfConcr* concr, PgfItem* item, PgfToken tok,
-	              PgfExprProb** out_ep, GuPool *pool);
-} PgfLiteralCallback;
 
 typedef GuMap PgfCallbacksMap;
 extern GU_DECLARE_TYPE(PgfCallbacksMap, GuMap);
@@ -197,7 +188,7 @@ typedef struct PgfSymbolKP
 /** A prefix-dependent symbol. The form that this symbol takes
  * depends on the form of a prefix of the following symbol. */
 {
-	PgfSequence* default_form; 
+	PgfSymbols* default_form;
 	/**< Default form that this symbol takes if none of of the
 	 * variant forms is triggered. */
 
@@ -212,6 +203,21 @@ typedef struct {
 
 typedef struct {
 } PgfSymbolBIND;
+
+typedef struct {
+	PgfExprProb* (*match)(PgfConcr* concr, PgfSymbol* psym, size_t lin_idx,
+	                      GuString sentence, size_t* poffset,
+	                      GuPool *pool, GuPool *out_pool);
+} PgfLiteralCallback;
+
+typedef GuBuf PgfProductionIdx;
+
+typedef struct {
+	PgfSymbols* syms; // -> PgfSymbol
+	PgfProductionIdx* idx;
+} PgfSequence;
+
+typedef GuSeq PgfSequences;
 
 typedef struct {
 	PgfAbsFun* absfun;
@@ -230,8 +236,6 @@ struct PgfConcr {
     GuMap* ccats;
 	PgfCncFunOverloadMap* fun_indices;
 	PgfCncOverloadMap* coerce_idx;
-	PgfProductionIdx* epsilon_idx;
-	PgfLeftcornerTokIdx* leftcorner_tok_idx;
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
 	PgfCIdMap* cnccats;
@@ -274,7 +278,6 @@ typedef struct PgfProductionCoerce
 } PgfProductionCoerce;
 
 typedef struct {
-	PgfLiteralCallback *callback;
 	PgfExprProb *ep;
     GuSeq* lins;
 } PgfProductionExtern;
@@ -287,8 +290,11 @@ typedef struct {
 typedef GuSeq PgfProductionSeq;
 extern GU_DECLARE_TYPE(PgfProductionSeq, abstract);
 
-typedef GuBuf PgfProductionBuf;
-extern GU_DECLARE_TYPE(PgfProductionBuf, abstract);
+typedef struct {
+	PgfCCat* ccat;
+	size_t lin_idx;
+	PgfProductionApply* papp;
+} PgfProductionIdxEntry;
 
 struct PgfCCat {
 	PgfCncCat* cnccat;

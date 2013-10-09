@@ -91,7 +91,7 @@ gu_exn_clear(GuExn* err) {
 GuType*
 gu_exn_caught(GuExn* err);
 
-inline const void*
+static inline const void*
 gu_exn_caught_data(GuExn* err)
 {
 	return err->data.data;

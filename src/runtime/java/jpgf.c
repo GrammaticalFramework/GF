@@ -1,6 +1,5 @@
 #include <pgf/pgf.h>
 #include <pgf/reader.h>
-#include <pgf/lexer.h>
 #include <gu/mem.h>
 #include <gu/exn.h>
 #include <gu/utf8.h>
@@ -19,7 +18,7 @@ gu2j_string(JNIEnv *env, GuString s) {
 	jchar* dst   = utf16;
 	while (s-utf8 < len) {
 		GuUCS ucs = gu_utf8_decode((const uint8_t**) &s);
-		
+
 		if (ucs <= 0xFFFF) {
 			*dst++ = ucs;
 		} else {
@@ -281,21 +280,21 @@ Java_org_grammaticalframework_pgf_Parser_parse
 
     GuString startCat = j2gu_string(env, jstartCat, pool);
     GuString s = j2gu_string(env, js, pool);
-
-	GuIn* in = gu_string_in(s, pool);
-	PgfLexer *lexer = pgf_new_simple_lexer(in, pool);
+    GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), pool);
 
 	GuEnum* res =
-		pgf_parse(get_ref(env, concr), startCat, lexer, pool, out_pool);
+		pgf_parse(get_ref(env, concr), startCat, s, parse_err, pool, out_pool);
 
-	if (res == NULL) {
-		PgfToken tok =
-			pgf_lexer_current_token(lexer);
-
-		if (*tok == 0)
-			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The sentence cannot be parsed");
-		else
-			throw_jstring_exception(env, "org/grammaticalframework/pgf/ParseError", gu2j_string(env, tok));
+	if (!gu_ok(parse_err)) {
+		if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(parse_err);
+			jstring jmsg = gu2j_string(env, msg);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", jmsg);
+		} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
+			GuString tok = (GuString) gu_exn_caught_data(parse_err);
+			jstring jtok = gu2j_string(env, tok);
+			throw_jstring_exception(env, "org/grammaticalframework/pgf/ParseError", jtok);
+		}
 
 		gu_pool_free(pool);
 		gu_pool_free(out_pool);

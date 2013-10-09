@@ -37,6 +37,7 @@ extern GU_DECLARE_TYPE(PgfCId, typedef);
 
 
 extern GU_DECLARE_TYPE(PgfExn, abstract);
+extern GU_DECLARE_TYPE(PgfParseError, abstract);
 
 /// @name PGF Grammar objects
 /// @{
@@ -50,7 +51,6 @@ typedef struct PgfConcr PgfConcr;
  */
 
 #include <pgf/expr.h>
-#include <pgf/lexer.h>
 #include <pgf/graphviz.h>
 
 /// An enumeration of #PgfExpr elements.
@@ -120,8 +120,16 @@ pgf_print_name(PgfConcr*, PgfCId id);
 void
 pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err);
 
+bool
+pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
+             double *precision, double *recall, double *exact);
+                    
 PgfExprEnum*
-pgf_parse(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
+pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool);
+
+PgfExprEnum*
+pgf_parse(PgfConcr* concr, PgfCId cat, GuString sentence,
+          GuExn* err,
           GuPool* pool, GuPool* out_pool);
 
 typedef struct PgfMorphoCallback PgfMorphoCallback;
@@ -132,10 +140,10 @@ struct PgfMorphoCallback {
 };
 
 void
-pgf_lookup_morpho(PgfConcr *concr, PgfLexer *lexer,
+pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
                   PgfMorphoCallback* callback, GuExn* err);
 
-typedef GuMapKeyValue PgfFullFormEntry;
+typedef struct PgfFullFormEntry PgfFullFormEntry;
 
 GuEnum*
 pgf_fullform_lexicon(PgfConcr *concr, GuPool* pool);
@@ -148,20 +156,14 @@ pgf_fullform_get_analyses(PgfFullFormEntry* entry,
                           PgfMorphoCallback* callback, GuExn* err);
 
 PgfExprEnum*
-pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
-                          double heuristics, 
+pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, 
+                          GuString sentence, double heuristics,
+                          GuExn* err,
                           GuPool* pool, GuPool* out_pool);
 
 GuEnum*
-pgf_complete(PgfConcr* concr, PgfCId cat, PgfLexer *lexer, 
-             GuString prefix, GuPool* pool);
-
-bool
-pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
-             double *precision, double *recall, double *exact);
-                    
-PgfExprEnum*
-pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool);
+pgf_complete(PgfConcr* concr, PgfCId cat, GuString string, 
+             GuString prefix, GuExn* err, GuPool* pool);
 
 /// @}
 
