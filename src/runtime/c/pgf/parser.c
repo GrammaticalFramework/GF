@@ -241,6 +241,7 @@ pgf_extern_syms_get(PgfItem* item, GuPool* pool)
 	return syms;
 }
 
+#ifdef PGF_PARSER_DEBUG
 static void
 pgf_item_symbols(PgfItem* item,
                  size_t* lin_idx, PgfSymbols** syms,
@@ -281,7 +282,6 @@ pgf_item_symbols(PgfItem* item,
     }
 }
 
-#ifdef PGF_PARSER_DEBUG
 static void
 pgf_print_production_args(PgfPArgs* args,
                           GuOut* out, GuExn* err)
