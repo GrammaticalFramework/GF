@@ -464,6 +464,42 @@ lin
   yellow_A = L.yellow_A ; --CHECKED
   young_A = L.young_A ; --CHECKED
 
+-- according to http://www.linguanaut.com/english_chinese.htm and Google translate AR 8/10/2013
+
+  alas_Interj = mkInterj "唉" ;
+  amen_Interj = mkInterj "阿门" ;
+  bye_Interj = mkInterj "再见" ;
+  bye_bye_Interj = mkInterj "再见" ;
+  cheers_Interj = mkInterj "干杯" ;
+  damn_Interj = mkInterj "该死的" ;
+  egad_Interj = mkInterj "哦天呐" ;
+  er_Interj = mkInterj "呃" ;
+  excuse_me_Interj = mkInterj "原谅我" ;
+  good_afternoon_Interj = mkInterj "下午好" ;
+  good_evening_Interj = mkInterj "下午好" ;
+  good_luck_Interj = mkInterj "祝你好运" ;
+  good_morning_Interj = mkInterj "早上好" ;
+  good_night_Interj = mkInterj "晚安" ;
+  goodbye_Interj = mkInterj "再见" ;
+  hell_Interj = mkInterj "见鬼去吧" ;
+--  hello_Interj = mkInterj "你好" ;
+  hey_Interj = mkInterj "嗨" ;
+  nope_Interj = mkInterj "没了";
+--  oh_Interj = mkInterj "哦" ;
+  ok_Interj = mkInterj "行";
+  okay_Interj = mkInterj "行";
+  quack_Interj = mkInterj "嘎嘎" ;
+  thanks_Interj = mkInterj "谢谢" ;
+  uh_Interj = mkInterj "呵" ;
+  uh_uh_Interj = mkInterj "嗯，嗯" ;
+  uh_huh_Interj = mkInterj "嗯" ;
+  well_Interj = mkInterj "好了";
+  whoopee_Interj = mkInterj "放屁" ;
+  wow_Interj = mkInterj "哇" ;
+  yeah_Interj = mkInterj "耶" ;
+  yes_Interj = mkInterj "是";
+
+
 --- TODO
 
 of_Prep = mkPrep [] "的" ;
