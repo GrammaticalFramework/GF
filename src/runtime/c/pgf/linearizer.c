@@ -455,14 +455,13 @@ pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
 }
 
 void
-pgf_lzr_linearize_sequence(PgfConcr* concr, PgfCncTreeApp* fapp, 
-                           PgfSequence* seq, uint16_t seq_idx,
-                           PgfLinFuncs** fnsp)
+pgf_lzr_linearize_symbols(PgfConcr* concr, PgfCncTreeApp* fapp,
+                          PgfSymbols* syms, uint16_t sym_idx,
+                          PgfLinFuncs** fnsp)
 {
-	size_t nsyms = gu_seq_length(seq);
-	PgfSymbol* syms = gu_seq_data(seq);
-	for (size_t i = seq_idx; i < nsyms; i++) {
-		PgfSymbol sym = syms[i];
+	size_t nsyms = gu_seq_length(syms);
+	for (size_t i = sym_idx; i < nsyms; i++) {
+		PgfSymbol sym = gu_seq_get(syms, PgfSymbol, i);
 		GuVariantInfo sym_i = gu_variant_open(sym);
 		switch (sym_i.tag) {
 		case PGF_SYMBOL_CAT:
@@ -488,7 +487,7 @@ pgf_lzr_linearize_sequence(PgfConcr* concr, PgfCncTreeApp* fapp,
 		case PGF_SYMBOL_KP: {
 			// TODO: correct prefix-dependencies
 			PgfSymbolKP* kp = sym_i.data;
-			pgf_lzr_linearize_sequence(concr, fapp, kp->default_form, 0, fnsp);
+			pgf_lzr_linearize_symbols(concr, fapp, kp->default_form, 0, fnsp);
 			break;
 		}
 		case PGF_SYMBOL_NE: {
@@ -528,9 +527,7 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		}
 
 		gu_require(lin_idx < fun->n_lins);
-
-		PgfSequence* seq = fun->lins[lin_idx];
-		pgf_lzr_linearize_sequence(concr, fapp, seq, 0, fnsp);
+		pgf_lzr_linearize_symbols(concr, fapp, fun->lins[lin_idx]->syms, 0, fnsp);
 		
 		if (fns->end_phrase) {
 			fns->end_phrase(fnsp,
@@ -681,7 +678,7 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 }
 
 GuString
-pgf_get_tokens(PgfSequence* seq, uint16_t seq_idx, GuPool* pool)
+pgf_get_tokens(PgfSymbols* syms, uint16_t sym_idx, GuPool* pool)
 {
 	GuPool* tmp_pool = gu_new_pool();
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
@@ -695,7 +692,7 @@ pgf_get_tokens(PgfSequence* seq, uint16_t seq_idx, GuPool* pool)
 		.err = err
 	};
 
-	pgf_lzr_linearize_sequence(NULL, NULL, seq, seq_idx, &flin.funcs);
+	pgf_lzr_linearize_symbols(NULL, NULL, syms, sym_idx, &flin.funcs);
 
 	GuString tokens = gu_ok(err) ? gu_string_buf_freeze(sbuf, pool)
 	                             : "";

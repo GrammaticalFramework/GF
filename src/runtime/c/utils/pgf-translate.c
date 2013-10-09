@@ -2,6 +2,7 @@
 #include <gu/map.h>
 #include <gu/enum.h>
 #include <gu/file.h>
+#include <gu/exn.h>
 #include <pgf/pgf.h>
 #include <pgf/parser.h>
 #include <pgf/literals.h>
@@ -153,23 +154,19 @@ int main(int argc, char* argv[]) {
 		// sentence, so our memory usage doesn't increase over time.
 		ppool = gu_new_pool();
 
-		GuIn *in =
-			gu_string_in(line, ppool);
-		PgfLexer *lexer =
-			pgf_new_simple_lexer(in, ppool);
-
 		clock_t start = clock();
 
+		GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), ppool);
 		result =
-			pgf_parse(from_concr, cat, lexer, ppool, ppool);
-		if (result == NULL) {
-			PgfToken tok =
-				pgf_lexer_current_token(lexer);
-
-			if (*tok == 0)
-				gu_puts("Couldn't begin parsing", out, err);
-			else {
+			pgf_parse(from_concr, cat, line, parse_err, ppool, ppool);
+		if (!gu_ok(parse_err)) {
+			if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
+				GuString msg = gu_exn_caught_data(parse_err);
+				gu_string_write(msg, out, err);
+				gu_putc('\n', out, err);
+			} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
 				gu_puts("Unexpected token: \"", out, err);
+				GuString tok = gu_exn_caught_data(parse_err);
 				gu_string_write(tok, out, err);
 				gu_puts("\"\n", out, err);
 			}

@@ -1,8 +1,9 @@
 #include <pgf/pgf.h>
+#include <pgf/data.h>
 #include <pgf/linearizer.h>
 #include <pgf/parser.h>
 
-typedef struct {
+/*typedef struct {
 	int start, end;
 	PgfCId cat;
 	int lin_idx;
@@ -123,24 +124,50 @@ pgf_metrics_lzn_end_phrase2(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_id
 }
 
 static PgfLinFuncs pgf_metrics_lin_funcs1 = {
+v v v v v v v
+	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
+	.expr_literal  = pgf_metrics_lzn_expr_literal,
+	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
+	.end_phrase    = pgf_metrics_lzn_end_phrase1
+=============
 	.symbol_token = pgf_metrics_lzn_symbol_token,
 	.expr_literal = pgf_metrics_lzn_expr_literal,
 	.begin_phrase = pgf_metrics_lzn_begin_phrase,
 	.end_phrase   = pgf_metrics_lzn_end_phrase1
+*************
+	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
+	.expr_literal  = pgf_metrics_lzn_expr_literal,
+	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
+	.end_phrase    = pgf_metrics_lzn_end_phrase1,
+	.symbol_glue   = NULL
+^ ^ ^ ^ ^ ^ ^
 };
 
 static PgfLinFuncs pgf_metrics_lin_funcs2 = {
+v v v v v v v
+	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
+	.expr_literal  = pgf_metrics_lzn_expr_literal,
+	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
+	.end_phrase    = pgf_metrics_lzn_end_phrase2
+=============
 	.symbol_token = pgf_metrics_lzn_symbol_token,
 	.expr_literal = pgf_metrics_lzn_expr_literal,
 	.begin_phrase = pgf_metrics_lzn_begin_phrase,
 	.end_phrase   = pgf_metrics_lzn_end_phrase2
+*************
+	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
+	.expr_literal  = pgf_metrics_lzn_expr_literal,
+	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
+	.end_phrase    = pgf_metrics_lzn_end_phrase2,
+	.symbol_glue   = NULL
+^ ^ ^ ^ ^ ^ ^
 };
-
+*/
 bool
 pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
              double *precision, double *recall, double *exact)
 {
-	GuPool* pool = gu_new_pool();
+/*	GuPool* pool = gu_new_pool();
 	
 	GuEnum* en_lins1 =
 		pgf_lzr_concretize(concr, expr, pool);
@@ -190,6 +217,6 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 	*precision = ((double) state.matches)/((double) state.found);
 	*recall = ((double) state.matches)/((double) gu_buf_length(state.phrases));
 	*exact = pgf_expr_eq(expr, ep->expr) ? 1 : 0;
-
+*/
 	return true;
 }

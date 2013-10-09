@@ -110,12 +110,11 @@ int main(int argc, char* argv[]) {
 
     clock_t start = clock();
 
-    GuIn *in = gu_string_in(line, ppool);
-    PgfLexer *lexer = pgf_new_simple_lexer(in, ppool);
-    GuEnum* result = pgf_parse_with_heuristics(concr, cat, lexer, heuristics, ppool, ppool);
+    GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), ppool);
+    GuEnum* result = pgf_parse_with_heuristics(concr, cat, line, heuristics, parse_err, ppool, ppool);
 
     PgfExprProb* ep = NULL;
-    if (result != NULL) 
+    if (gu_ok(parse_err))
       ep = gu_next(result, PgfExprProb*, ppool);
 
     clock_t end = clock();

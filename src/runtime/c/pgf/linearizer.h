@@ -76,5 +76,5 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 #ifdef PGF_PARSER_H_
 // Used internally in the parser
 GuString
-pgf_get_tokens(PgfSequence* seq, uint16_t seq_idx, GuPool* pool);
+pgf_get_tokens(PgfSymbols* sym, uint16_t sym_idx, GuPool* pool);
 #endif
