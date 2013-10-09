@@ -288,12 +288,10 @@ Java_org_grammaticalframework_pgf_Parser_parse
 	if (!gu_ok(parse_err)) {
 		if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
-			jstring jmsg = gu2j_string(env, msg);
-			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", jmsg);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
 			GuString tok = (GuString) gu_exn_caught_data(parse_err);
-			jstring jtok = gu2j_string(env, tok);
-			throw_jstring_exception(env, "org/grammaticalframework/pgf/ParseError", jtok);
+			throw_string_exception(env, "org/grammaticalframework/pgf/ParseError", tok);
 		}
 
 		gu_pool_free(pool);
