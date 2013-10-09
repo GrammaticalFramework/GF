@@ -25254,6 +25254,7 @@ lin hey_Interj = ss "hey";
 lin heyday_N = mkN "heyday" "IRREG";
 lin heysham_PN = mkPN "Heysham";
 lin heywood_PN = mkPN "Heywood";
+lin hi_Interj = ss "hi" ;
 lin hi_fi_A = compoundA (mkA "hi - fi");
 lin hi_fi_N = mkN "hi - fi" "hi - fis";
 lin hiatus_N = mkN "hiatus" "hiatuses";

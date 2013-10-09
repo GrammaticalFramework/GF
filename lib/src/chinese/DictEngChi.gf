@@ -484,6 +484,7 @@ lin
   hell_Interj = mkInterj "见鬼去吧" ;
 --  hello_Interj = mkInterj "你好" ;
   hey_Interj = mkInterj "嗨" ;
+  hi_Interj = mkInterj "你好" ;
   nope_Interj = mkInterj "没了";
 --  oh_Interj = mkInterj "哦" ;
   ok_Interj = mkInterj "行";

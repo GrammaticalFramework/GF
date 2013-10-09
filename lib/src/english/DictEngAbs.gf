@@ -25227,6 +25227,7 @@ fun hey_Interj : Interj;
 fun heyday_N : N;
 fun heysham_PN : PN;
 fun heywood_PN : PN;
+fun hi_Interj : Interj ;
 fun hi_fi_A : A;
 fun hi_fi_N : N;
 fun hiatus_N : N;
