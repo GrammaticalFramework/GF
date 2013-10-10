@@ -276,13 +276,24 @@ oper
 
   mkV0  : V -> V0 ;  --%
   mkVS  : V -> VS ;
-  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
   deVV  : V -> VV ;  -- "j'essaie de parler"
   aVV   : V -> VV ;  -- "j'arrive à parler"
-  mkV2V : V -> Prep -> Prep -> V2V ;
+  mkV2S  : overload {
+    mkV2S : V -> V2S ;
+    mkV2S : V -> Prep -> V2S ;
+    } ;
+  mkV2V  : overload {
+    mkV2V : V -> V2V ;
+    mkV2V : V -> Prep -> Prep -> V2V ;
+    } ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Prep -> Prep -> V2A ;
+
+  mkV2A : overload {
+    mkV2A : V -> V2A ;
+    mkV2A : V -> Prep -> Prep -> V2A ;
+    } ;
+
   mkVQ  : V -> VQ ;
   mkV2Q : V -> Prep -> V2Q ;
 
@@ -403,13 +414,28 @@ oper
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  ---- more moods
-  mkV2S v p = mmkV2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
+
+  mkV2S = overload {
+    mkV2S : V -> V2S = \v -> mmkV2 v dative ** {mn,mp = Indic ; lock_V2S = <>} ;
+    mkV2S : V -> Prep -> V2S = \v,p -> mmkV2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
+    } ;
+
   mkVV  v = v ** {c2 = complAcc ; lock_VV = <>} ;
   deVV  v = v ** {c2 = complGen ; lock_VV = <>} ;
   aVV  v = v ** {c2 = complDat ; lock_VV = <>} ;
-  mkV2V v p q = mmkV3 v p q ** {lock_V2V = <>} ;
+
+  mkV2V = overload {
+    mkV2V : V -> V2V                 = \v -> mmkV3 v accusative dative ** {lock_V2V = <>} ;
+    mkV2V : V -> Prep -> Prep -> V2V = \v,p,q -> mmkV3 v p q ** {lock_V2V = <>} ;
+    } ;
+
+  mkV2A = overload {
+    mkV2A : V -> V2A                 = \v -> mmkV3 v accusative dative ** {lock_V2A = <>} ;
+    mkV2A : V -> Prep -> Prep -> V2A = \v,p,q -> mmkV3 v p q ** {lock_V2A = <>} ;
+    } ;
+
   mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p q = mmkV3 v p q ** {lock_V2A = <>} ;
+
   mkVQ  v = v ** {lock_VQ = <>} ;
   mkV2Q v p = mmkV2 v p ** {lock_V2Q = <>} ;
 
@@ -455,6 +481,8 @@ oper
     = \tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu -> 
       let v = vvf (mkVerb12 tenir tiens tient tenons tenez tiennent tienne tenions tiensI tint tiendra tenu) in
       {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
+   mkV : V -> V
+    = \v -> v ;
   } ;
 
   regV : Str -> V ;
