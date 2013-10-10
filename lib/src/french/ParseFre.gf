@@ -10,7 +10,7 @@ concrete ParseFre of ParseEngAbs =
   VerbFre - [SlashV2V, PassV2, UseCopula, ComplVV  , SlashV2VNP],
   AdverbFre,
   PhraseFre,
-  SentenceFre - [  SlashVP],
+  SentenceFre - [  SlashVP, SlashVS],
   QuestionFre,
   RelativeFre,
   IdiomFre [NP, VP, Tense, Cl, ProgrVP, ExistNP],

@@ -44,8 +44,8 @@ public class LexicalEntryActivity extends ListActivity {
 
 		List<String> data = new ArrayList<String>();
 	    for (MorphoAnalysis a : list) {
-	    	Expr e = Expr.readExpr(a.getLemma());
-	    	String phrase = mTranslator.linearize(e);
+		//	    	Expr e = Expr.readExpr(a.getLemma());
+	    	String phrase = "FOO" ; //mTranslator.linearize(e);
 	    	
 	    	if (!data.contains(phrase)) {
 		    	data.add(phrase);

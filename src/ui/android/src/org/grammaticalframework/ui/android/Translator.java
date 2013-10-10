@@ -20,13 +20,16 @@ public class Translator {
     private static final String TAG = "Translator";
 
     // TODO: allow changing
-    private String mGrammar = "ParseEngAbs.pgf";
+    private String mGrammar = "ParseEngChi.pgf";
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
             new Language("en-US", "English", "ParseEng"),
-            new Language("bg-BG", "Bulgarian", "ParseBul"),
-            new Language("cmn-Hans-CN", "Chinese", "ParseChi")
+            new Language("cmn-Hans-CN", "Chinese", "ParseChi"), 
+	    //            new Language("de-DE", "German",  "ParseGer"),
+	    //           new Language("es-ES", "Spanish", "ResourceDemoSpa"),
+            //new Language("fr-FR", "French", "ResourceDemoFre"),
+            //            new Language("bg-BG", "Bulgarian", "ParseBul"),
     };
 
     private Language mSourceLanguage;
@@ -92,7 +95,7 @@ public class Translator {
             return output;
         } catch (ParseError e) {
             Log.e(TAG, "Parse error: " + e);
-            return "parse error: " + e.getMessage(); // TODO: no no no
+            return "parse error: " + input + " " + e.getMessage(); // TODO: no no no
         }
     }
 
