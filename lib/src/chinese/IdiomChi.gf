@@ -18,7 +18,12 @@ concrete IdiomChi of Idiom = CatChi ** open Prelude, ResChi in {
 
     ExistIP ip = {s = (mkClause [] (regVerb you_s) ip.s).s} ; ---- infl of you
 
-    ProgrVP vp = vp ; ----
+    ProgrVP vp = {
+      verb = regVerb zai_s ;
+      compl = vp.prePart ++ vp.verb.s ++ vp.compl ;
+      prePart = []
+      } ;
+
 
     ImpPl1 vp = ss (zan_s ++ men_s ++ infVP vp ++ ba0_s) ;
 
