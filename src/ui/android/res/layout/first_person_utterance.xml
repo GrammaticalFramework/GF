@@ -1,11 +1,27 @@
-<TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="32dp"
-        android:layout_gravity="left"
-        android:padding="8dp"
-        android:textSize="20sp"
-        android:background="@drawable/first_person_utterance_bg"
-        />
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/first_person_utterance_bg" >
+
+	<TextView
+	    android:id="@+id/text"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_marginBottom="16dp"
+		android:layout_gravity="left"
+		android:padding="8dp"
+		android:textSize="20sp"
+		/>
+
+   	<ImageView
+		android:id="@+id/show_word"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/text"
+		android:padding="8dp"
+		android:src="@drawable/ic_dictionary"
+		android:visibility="gone"
+		/>
+
+</RelativeLayout>

@@ -30,6 +30,10 @@ public class LanguageSelector extends Spinner {
         setSelection(((LanguagesAdapter) getAdapter()).getPosition(selected));
     }
 
+    public Language getSelectedLanguage() {
+    	return (Language) getSelectedItem();
+    }
+
     public void setOnLanguageSelectedListener(final OnLanguageSelectedListener listener) {
         setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override

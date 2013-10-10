@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
+import org.grammaticalframework.pgf.MorphoAnalysis;
 import org.grammaticalframework.pgf.PGF;
 import org.grammaticalframework.pgf.ParseError;
 
@@ -19,14 +20,13 @@ public class Translator {
     private static final String TAG = "Translator";
 
     // TODO: allow changing
-    private String mGrammar = "ResourceDemo.pgf";
+    private String mGrammar = "ParseEngAbs.pgf";
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
-            new Language("en-US", "English", "ResourceDemoEng"),
-            new Language("de-DE", "German", "ResourceDemoGer"),
-            new Language("es-ES", "Spanish", "ResourceDemoSpa"),
-            new Language("fr-FR", "French", "ResourceDemoFre"),
+            new Language("en-US", "English", "ParseEng"),
+            new Language("bg-BG", "Bulgarian", "ParseBul"),
+            new Language("cmn-Hans-CN", "Chinese", "ParseChi")
     };
 
     private Language mSourceLanguage;
@@ -94,6 +94,15 @@ public class Translator {
             Log.e(TAG, "Parse error: " + e);
             return "parse error: " + e.getMessage(); // TODO: no no no
         }
+    }
+
+    public String linearize(Expr e) {
+        Concr targetLang = getConcr(getTargetLanguage().getConcrete());
+        return targetLang.linearize(e);
+    }
+
+    public List<MorphoAnalysis> lookupMorpho(String sentence) {
+    	return getConcr(getSourceLanguage().getConcrete()).lookupMorpho(sentence);
     }
 
     private Concr getConcr(String name) {
