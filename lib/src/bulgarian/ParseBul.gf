@@ -30,7 +30,7 @@ flags
 
 lin
   CompoundCN num noun cn = {
-    s = \\nf => (noun.rel ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
+    s = \\nf => num.s ! CFNeut Indef ++ (noun.rel ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
     g = cn.g
   } ;
 
