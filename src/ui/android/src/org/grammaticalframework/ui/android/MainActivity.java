@@ -1,7 +1,11 @@
 
 package org.grammaticalframework.ui.android;
 
+import java.io.Serializable;
+import java.util.List;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
@@ -12,6 +16,8 @@ import android.widget.ImageView;
 
 import org.grammaticalframework.ui.android.ASR.State;
 import org.grammaticalframework.ui.android.LanguageSelector.OnLanguageSelectedListener;
+import org.grammaticalframework.ui.android.ConversationView.OnWordSelectedListener;
+import org.grammaticalframework.pgf.MorphoAnalysis;
 
 public class MainActivity extends Activity {
 
@@ -34,9 +40,7 @@ public class MainActivity extends Activity {
 
     private TTS mTts;
 
-    // mTranslator is static to ensure that the grammar
-    // is loaded only once even if the activity has been recreated.
-    private static Translator mTranslator;
+    private Translator mTranslator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,7 @@ public class MainActivity extends Activity {
         mSourceLanguageView = (LanguageSelector) findViewById(R.id.source_language);
         mTargetLanguageView = (LanguageSelector) findViewById(R.id.target_language);
         mSwitchLanguagesButton = (ImageView) findViewById(R.id.switch_languages);
-
+        
         mStartStopButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,15 +65,22 @@ public class MainActivity extends Activity {
         });
 
         mStartStopButton.setEnabled(SpeechRecognizer.isRecognitionAvailable(this));
+        
+        mConversationView.setOnWordSelectedListener(new OnWordSelectedListener() {
+            @Override
+            public void onWordSelected(Object lexicon) {
+            	Intent myIntent = new Intent(MainActivity.this, LexicalEntryActivity.class);
+            	myIntent.putExtra("analyses", (Serializable) lexicon);
+            	MainActivity.this.startActivity(myIntent);
+            }
+        });
 
         mAsr = new ASR(this);
         mAsr.setListener(new SpeechInputListener());
 
         mTts = new TTS(this);
 
-        if (mTranslator == null) {
-        	mTranslator = new Translator(this);
-        }
+        mTranslator = ((GFTranslator) getApplicationContext()).getTranslator();
 
         mSourceLanguageView.setLanguages(mTranslator.getAvailableSourceLanguages());
         mSourceLanguageView.setSelectedLanguage(mTranslator.getSourceLanguage());
@@ -148,11 +159,15 @@ public class MainActivity extends Activity {
     }
 
     private void handlePartialSpeechInput(String input) {
-        mConversationView.updateLastUtterance(input);
+        mConversationView.updateLastUtterance(input, null);
     }
 
     private void handleSpeechInput(final String input) {
-        mConversationView.updateLastUtterance(input);
+    	List<MorphoAnalysis> list = mTranslator.lookupMorpho(input);
+    	if (list.size() == 0)
+    		list = null;
+
+        mConversationView.updateLastUtterance(input, list);
         new AsyncTask<Void,Void,String>() {
             @Override
             protected String doInBackground(Void... params) {

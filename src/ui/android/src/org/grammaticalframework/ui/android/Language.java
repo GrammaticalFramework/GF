@@ -1,7 +1,11 @@
 package org.grammaticalframework.ui.android;
 
-public class Language {
-    private final String mLangCode;
+import java.io.Serializable;
+
+public class Language implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	private final String mLangCode;
     private final String mLangName;
     private final String mConcrete;
 
@@ -27,5 +31,10 @@ public class Language {
     public String toString() {
         return getLangName();
     }
-
+    
+    @Override
+    public boolean equals(Object o) {
+        Language other = (Language) o;
+        return mLangCode.equals(other.mLangCode); 
+    }
 }
