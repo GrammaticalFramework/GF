@@ -76,7 +76,10 @@ public class ConversationView extends ScrollView {
     	        showWordButton.setOnClickListener(new OnClickListener() {
     	        	@Override
     	        	public void onClick(View v) {
-    	        		mListener.onWordSelected(lexicon2);
+    	        		TextView textview = (TextView)
+    	        				((View) v.getParent()).findViewById(R.id.text);
+    	        		CharSequence text = textview.getText();
+    	        		mListener.onWordSelected(text, lexicon2);
     	        	}
     	        });    	        
             }
@@ -88,6 +91,6 @@ public class ConversationView extends ScrollView {
     }
     
     public interface OnWordSelectedListener {
-    	public void onWordSelected(Object lexicon);
+    	public void onWordSelected(CharSequence word, Object lexicon);
     }
 }
