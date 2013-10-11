@@ -106,6 +106,14 @@ public class MainActivity extends Activity {
         });
     }
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		mSourceLanguageView.setSelectedLanguage(mTranslator.getSourceLanguage());
+		mTargetLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
+	}
+
     @Override
     protected void onDestroy() {
         if (mAsr != null) {
