@@ -1,4 +1,4 @@
---# -path=.:alltenses:../phrasebook:../../lib/src/bulgarian
+--# -path=.:alltenses:../phrasebook:../../lib/src/english:../../lib/src/bulgarian
 
 concrete TranslateBul of Translate = ParseBul, PhrasebookBul ** open SyntaxBul, (E = ExtraBul), Prelude in {
 
