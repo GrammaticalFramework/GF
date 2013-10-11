@@ -1,6 +1,10 @@
 package org.grammaticalframework.pgf;
 
-public class MorphoAnalysis {
+import java.io.Serializable;
+
+public class MorphoAnalysis implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private String lemma;
 	private String field;
 	private double prob;
