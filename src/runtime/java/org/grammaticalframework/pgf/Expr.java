@@ -15,5 +15,7 @@ public class Expr {
 			return showExpr(ref);
 		}
 
+		public static native Expr readExpr(String s) throws PGFError;
+
 		private static native String showExpr(long ref);
 }

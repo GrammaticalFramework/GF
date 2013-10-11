@@ -421,6 +421,34 @@ Java_org_grammaticalframework_pgf_Expr_showExpr(JNIEnv* env, jclass clazz, jlong
 	return jstr;
 }
 
+JNIEXPORT jobject JNICALL 
+Java_org_grammaticalframework_pgf_Expr_readExpr(JNIEnv* env, jclass clazz, jstring s)
+{
+	GuPool* pool = gu_new_pool();
+	
+	GuPool* tmp_pool = gu_local_pool();
+	GuString buf = j2gu_string(env, s, tmp_pool);
+	GuIn* in = gu_data_in((uint8_t*) buf, strlen(buf), tmp_pool);
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	PgfExpr e = pgf_read_expr(in, pool, err);
+	if (!gu_ok(err) || gu_variant_is_null(e)) {
+		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be parsed");
+		gu_pool_free(tmp_pool);
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	jclass pool_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Pool");
+	jmethodID pool_constrId = (*env)->GetMethodID(env, pool_class, "<init>", "(J)V");
+	jobject jpool = (*env)->NewObject(env, pool_class, pool_constrId, p2l(pool));
+
+	jmethodID constrId = (*env)->GetMethodID(env, clazz, "<init>", "(Lorg/grammaticalframework/pgf/Pool;Lorg/grammaticalframework/pgf/PGF;J)V");
+	return (*env)->NewObject(env, clazz, constrId, jpool, NULL, p2l(gu_variant_to_ptr(e)));
+}
+
 JNIEXPORT jobject JNICALL
 Java_org_grammaticalframework_pgf_Generator_generateAll(JNIEnv* env, jclass clazz, jobject jpgf, jstring jstartCat)
 {
