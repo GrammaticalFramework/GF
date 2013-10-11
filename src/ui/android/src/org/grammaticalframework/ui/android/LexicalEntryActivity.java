@@ -43,7 +43,14 @@ public class LexicalEntryActivity extends ListActivity {
 
 	    updateTranslations();
       }
-	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		mShowLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
+	}
+
 	private void updateTranslations() {
 	    @SuppressWarnings("unchecked")
 		List<MorphoAnalysis> list = (List<MorphoAnalysis>)
