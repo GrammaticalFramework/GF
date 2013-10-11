@@ -68,8 +68,9 @@ public class MainActivity extends Activity {
         
         mConversationView.setOnWordSelectedListener(new OnWordSelectedListener() {
             @Override
-            public void onWordSelected(Object lexicon) {
+            public void onWordSelected(CharSequence word, Object lexicon) {
             	Intent myIntent = new Intent(MainActivity.this, LexicalEntryActivity.class);
+            	myIntent.putExtra("source", word);
             	myIntent.putExtra("analyses", (Serializable) lexicon);
             	MainActivity.this.startActivity(myIntent);
             }
@@ -83,7 +84,6 @@ public class MainActivity extends Activity {
         mTranslator = ((GFTranslator) getApplicationContext()).getTranslator();
 
         mSourceLanguageView.setLanguages(mTranslator.getAvailableSourceLanguages());
-        mSourceLanguageView.setSelectedLanguage(mTranslator.getSourceLanguage());
         mSourceLanguageView.setOnLanguageSelectedListener(new OnLanguageSelectedListener() {
             @Override
             public void onLanguageSelected(Language language) {
@@ -91,7 +91,6 @@ public class MainActivity extends Activity {
             }
         });
         mTargetLanguageView.setLanguages(mTranslator.getAvailableTargetLanguages());
-        mTargetLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
         mTargetLanguageView.setOnLanguageSelectedListener(new OnLanguageSelectedListener() {
             @Override
             public void onLanguageSelected(Language language) {

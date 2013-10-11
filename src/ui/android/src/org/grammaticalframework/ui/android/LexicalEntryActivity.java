@@ -3,9 +3,14 @@ package org.grammaticalframework.ui.android;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import org.grammaticalframework.pgf.*;
 import org.grammaticalframework.ui.android.LanguageSelector.OnLanguageSelectedListener;
@@ -25,7 +30,6 @@ public class LexicalEntryActivity extends ListActivity {
 
 	    mShowLanguageView = (LanguageSelector) findViewById(R.id.show_language);
 	    mShowLanguageView.setLanguages(mTranslator.getAvailableSourceLanguages());
-	    mShowLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
 	    mShowLanguageView.setOnLanguageSelectedListener(new OnLanguageSelectedListener() {
             @Override
             public void onLanguageSelected(Language language) {
@@ -33,6 +37,9 @@ public class LexicalEntryActivity extends ListActivity {
                 updateTranslations();
             }
         });
+	    
+	    TextView descrView = (TextView) findViewById(R.id.lexical_desc);
+	    descrView.setText(getIntent().getExtras().getString("source"));
 
 	    updateTranslations();
       }
@@ -44,17 +51,34 @@ public class LexicalEntryActivity extends ListActivity {
 
 		List<String> data = new ArrayList<String>();
 	    for (MorphoAnalysis a : list) {
-		//	    	Expr e = Expr.readExpr(a.getLemma());
-	    	String phrase = "FOO" ; //mTranslator.linearize(e);
+	    	Expr e = Expr.readExpr(a.getLemma());
+	    	String phrase = mTranslator.linearize(e);
 	    	
 	    	if (!data.contains(phrase)) {
 		    	data.add(phrase);
 	    	}
 	    }
 
-	    ArrayAdapter adapter = new ArrayAdapter(this, 
+	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, 
 	    	android.R.layout.simple_list_item_1, 
-	    	data);
+	    	data) {
+	    		public View getView(int position, View convertView, ViewGroup parent) {
+	    			String item = getItem(position);
+	    			
+	    			LayoutInflater inflater = (LayoutInflater) getContext()
+	    	                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+	    	        if (convertView == null) {
+	    	            convertView = inflater.inflate(R.layout.lexical_item, null);
+	    	        } 
+
+	    	        TextView descView =
+	    	        		(TextView) convertView.findViewById(R.id.lexical_desc);
+	    	        descView.setText(item);
+
+	    			return convertView;
+	    	    }
+	    };
+	    
         setListAdapter(adapter);	
 	}
 }

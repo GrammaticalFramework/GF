@@ -20,7 +20,7 @@ public class Translator {
     private static final String TAG = "Translator";
 
     // TODO: allow changing
-    private String mGrammar = "ParseEngChi.pgf";
+    private String mGrammar = "ParseEngAbs.pgf";
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
