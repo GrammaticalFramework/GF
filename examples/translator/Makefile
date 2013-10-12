@@ -8,11 +8,23 @@ TranslateEng:
 TranslateBul:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateBul TranslateBul.gf
 
-TranslateEngBul:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngBul TranslateEng.pgf TranslateBul.pgf
+TranslateChi:
+	gf -make -s -literal=Symb -probs=$(PROBSFILE) -name=TranslateChi TranslateChi.gf
+
+TranslateFin:
+	gf -make -s -literal=Symb -probs=$(PROBSFILE) -name=TranslateFin TranslateFin.gf
 
 TranslateFre:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateFre TranslateFre.gf
+
+TranslateEngBul:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngBul TranslateEng.pgf TranslateBul.pgf
+
+TranslateEngChi:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChi TranslateEng.pgf TranslateChi.pgf
+
+TranslateEngChiFin:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChiFin TranslateEng.pgf TranslateChi.pgf TranslateFin.pgf
 
 TranslateEngFre:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngFre TranslateEng.pgf TranslateFre.pgf
