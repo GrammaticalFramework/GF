@@ -6,4 +6,6 @@
     <string name="microphone">Microphone</string>
     <string name="switch_languages">Switch languages</string>
 	<string name="open_image">Opening</string>
+	<string name="mic_input">Speech Input</string>
+	<string name="keyboard_input">Keyboard Input</string>
 </resources>

@@ -5,13 +5,18 @@ import java.io.Serializable;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import org.grammaticalframework.ui.android.ASR.State;
@@ -41,6 +46,10 @@ public class MainActivity extends Activity {
     private TTS mTts;
 
     private Translator mTranslator;
+    
+    private boolean input_mode;
+
+    private SpeechInputListener mSpeechListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +73,13 @@ public class MainActivity extends Activity {
             }
         });
 
-        mStartStopButton.setEnabled(SpeechRecognizer.isRecognitionAvailable(this));
+        input_mode = true;
+        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+        	input_mode = false;
+        	mStartStopButton.setImageResource(R.drawable.ic_keyboard);
+        }
+
+        mSpeechListener = new SpeechInputListener();
         
         mConversationView.setOnWordSelectedListener(new OnWordSelectedListener() {
             @Override
@@ -75,9 +90,10 @@ public class MainActivity extends Activity {
             	MainActivity.this.startActivity(myIntent);
             }
         });
+        mConversationView.setSpeechInputListener(mSpeechListener);
 
         mAsr = new ASR(this);
-        mAsr.setListener(new SpeechInputListener());
+        mAsr.setListener(mSpeechListener);
 
         mTts = new TTS(this);
 
@@ -112,6 +128,37 @@ public class MainActivity extends Activity {
 
 		mSourceLanguageView.setSelectedLanguage(mTranslator.getSourceLanguage());
 		mTargetLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    
+	    if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+	    	menu.getItem(0).setEnabled(false);
+	    }
+	    return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	        case R.id.input_mode:
+	        	if (input_mode) {
+	        		item.setTitle(R.string.mic_input);
+	        		mStartStopButton.setImageResource(R.drawable.ic_keyboard);
+	        		input_mode = false;
+	        	} else {
+	        		item.setTitle(R.string.keyboard_input);
+	        		mStartStopButton.setImageResource(R.drawable.ic_mic);
+	        		input_mode = true;
+	        	}
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 
     @Override
@@ -151,14 +198,18 @@ public class MainActivity extends Activity {
     }
 
     private void startRecognition() {
-        mConversationView.addFirstPersonUtterance("...");
-
-        if (FAKE_SPEECH) {
+    	if (FAKE_SPEECH) {
             handleSpeechInput("where is the hotel");
-        } else {
+            return;
+    	}
+
+    	if (input_mode) {
+    		mConversationView.addFirstPersonUtterance("...");
             mAsr.setLanguage(getSourceLanguageCode());
             mAsr.startRecognition();
-        }
+    	} else {
+    		mConversationView.addInputBox();
+    	}
     }
 
     private void stopRecognition() {

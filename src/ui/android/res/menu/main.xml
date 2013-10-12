@@ -1,0 +1,4 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item android:id="@+id/input_mode"
+          android:title="@string/keyboard_input"/>
+</menu>
