@@ -53,8 +53,8 @@ oper
   phrasalV : V -> Case -> V ;
   phrasalV v c = {s = v.s; vtype = VPhrasal c; lock_V=<>} ;
   
-  actionV : VTable -> VTable -> V ;
-  actionV imperf perf = { 
+  dualV : VTable -> VTable -> V ;
+  dualV imperf perf = { 
     s = table {Imperf=>imperf; Perf=>perf};
     n = let v0 = init (imperf ! (VImperfect Sg P1)) + "í"
         in (mkNoun (v0+"å")
@@ -66,8 +66,10 @@ oper
     lock_V=<>
     } ;
 
-  stateV : VTable -> V ;
-  stateV vtable = { 
+  actionV : VTable -> VTable -> V = dualV ;
+
+  singleV : VTable -> V ;
+  singleV vtable = { 
     s = \\_=>vtable;
     n = let v0 = init (vtable ! (VImperfect Sg P1)) + "í"
         in (mkNoun (v0+"å")
@@ -78,6 +80,8 @@ oper
     vtype = VNormal;
     lock_V=<>
     } ;
+
+  stateV : VTable -> V = singleV ;
 
 --3 Zero-place verbs
 --
@@ -192,13 +196,15 @@ oper
               } ;
   } ;
   
-  relativeN : N -> A -> N;
-  relativeN n a = lin N {
+  dualN : N -> A -> N;
+  dualN n a = lin N {
     s   = n.s;
     rel = a.s;
     g   = n.g
   } ;
-  
+
+  relativeN : N -> A -> N = dualN ; -- deprecated
+
   substantiveN : A -> AGender -> N;
   substantiveN a g = lin N {
     s   = \\nform => a.s ! nform2aform nform g;
