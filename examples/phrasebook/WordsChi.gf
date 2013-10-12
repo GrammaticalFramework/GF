@@ -23,7 +23,7 @@ concrete WordsChi of Words = SentencesChi **
     Fish = mkCN L.fish_N ;
     Meat = mkCN L.meat_N ;
     Milk = mkCN L.milk_N ;
---    Pizza = mkCN D.pizza_N ;
+    Pizza = mkCN (mkN "比萨饼") ;
     Salt = mkCN L.salt_N ;
     Tea = mkCN D.tea_N ;
     Water = mkCN L.water_N ;
@@ -32,10 +32,10 @@ concrete WordsChi of Words = SentencesChi **
 -- Properties; many of them are in the resource lexicon, others can be built by $mkA$.
 
     Bad = L.bad_A ;
---    Boring = D.boring_A ;
+    Boring = mkA "难吃" ;
     Cheap = D.cheap_A ;
     Cold = L.cold_A ;
---    Delicious = D.delicious_A ;
+    Delicious = mkA "美味" ;
     Expensive = D.expensive_A ;
     Fresh = D.fresh_A ;
     Good = D.good_A ;
@@ -47,33 +47,33 @@ concrete WordsChi of Words = SentencesChi **
 -- defined by $mkPlace$.
 
     Airport = mkPlace ((D.airport_N)) ;
---    AmusementPark = mkPlace (placeN (D.amusement_park_N)) ;
+---    AmusementPark = mkPlace (placeN (D.amusement_park_N)) ;
     Bank = mkPlace ((D.bank_N)) ;
     Bar = mkPlace ((D.bar_N)) ;
     Cafeteria = mkPlace ((D.bank_N)) ;
 ---    Center = mkPlace D.center_N ;
---    Cinema = mkPlace (placeN (R.thword "โรง" "หนัง")) ;
---    Church = mkPlace (placeN (R.thword "โบส" "ถ์")) ;
---    Disco = mkPlace (placeN (R.thword "ดิส" "โก้")) ;
+---    Cinema = mkPlace D.cinema_N ;
+    Church = mkPlace D.church_N ;
+---    Disco = mkPlace D.disco_N ;
     Hospital = mkPlace D.hospital_N ;
     Hotel = mkPlace D.hotel_N ;
     Museum = mkPlace D.museum_N ;
---    Park = mkPlace (placeN (R.thword "สวน")) ;
---    Parking = mkPlace (placeN (R.thword "ที่" "จอด" "รถ")) ; 
---    Pharmacy = mkPlace (placeN (R.thword "ร้าน" "ขาย" "ยา")) ;
---    PostOffice = mkPlace (placeN (R.thword "ไปร" "ษณี" "ย์")) ;
---    Pub = mkPlace (placeN (R.thword "ร้าน" "เหล้า")) ;
+    Park = mkPlace D.park_N ;
+    Parking = mkPlace (mkN "地方停车") ;
+    Pharmacy = mkPlace (mkN "药店") ;
+    PostOffice = mkPlace (mkN "邮局") ;
+    Pub = mkPlace (mkN "酒吧") ;
     Restaurant = mkPlace L.restaurant_N ;
     School = mkPlace L.school_N ;
     Shop = mkPlace L.shop_N ;
---    Station = mkPlace (placeN (R.thword "สถา" "นี")) ;
---    Supermarket = mkPlace (placeN (R.thword "ซุป" "เปอ" "ร์" "มา" "เก็ต")) ; 
---    Theatre = mkPlace (placeN (R.thword "โรง" "ละ" "คร")) ;
---    Toilet = mkPlace (placeN (R.thword "ห้อง" "น้ำ")) ;
+    Station = mkPlace D.station_N ;
+    Supermarket = mkPlace D.supermarket_N ;
+    Theatre = mkPlace (mkN "剧院") ;
+    Toilet = mkPlace D.toilet_N ;
     University = mkPlace L.university_N ;
---    Zoo = mkPlace (placeN (R.thword "สวน" "สัต" "ว์")) ;
+    Zoo = mkPlace (mkN "动物园") ;
    
---    CitRestaurant cit = mkCNPlace (mkCN cit L.restaurant_N) at_Prep noPrep ;
+    CitRestaurant cit = mkCNPlace (mkCN cit L.restaurant_N) at_Prep noPrep ;
 
 
 -- Currencies; $crown$ is ambiguous between Danish and Swedish crowns.
@@ -115,62 +115,60 @@ concrete WordsChi of Words = SentencesChi **
    Bike = mkTransport L.bike_N ;
    Bus = mkTransport D.bus_N ;
    Car = mkTransport L.car_N ;
---   Ferry = mkTransport (mkN (R.thword "เรือ" "เฟอ" "รี่")) ;
+   Ferry = mkTransport (mkN "渡船") ; 
    Plane = mkTransport L.airplane_N ;
---   Subway = mkTransport (mkN (R.thword "รถ" "ไฟ" "ใต้" "ดิน")) ;
---   Taxi = mkTransport (mkN (R.thword "รถ" "แท็ก" "ซี่")) ;
+   Subway = mkTransport (mkN "地铁") ;
+   Taxi = mkTransport (mkN "出租车") ;
    Train = mkTransport L.train_N ;
---   Tram = mkTransport (mkN (R.thword "รถ" "ราง")) ;
+   Tram = mkTransport (mkN "电车") ;
 
 --   ByFoot = P.mkAdv (R.thword "ด้วย" "การ" "เดิน") ;
 
 -- Actions: the predication patterns are very often language-dependent.
 
---    AHasAge p num = mkCl p.name (mkNP (mkNP num L.year_N) (ParadigmsChi.mkAdv (R.thword "อา" "ยุ"))) ;
+    AHasAge p nu =  mkCl (lin NP {s = p.name.s ++ nu.s}) (mkV "岁") ; ----
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
---    AHasRoom p num = mkCl p.name have_V2 
---      (mkNP (mkNP a_Det (mkN "ห้อง")) (SyntaxChi.mkAdv for_Prep (mkNP num (mkN "หมาย" "เลข")))) ;
---    AHasTable p num = mkCl p.name have_V2 
---      (mkNP (mkNP a_Det (mkN "โต๊ะ")) (SyntaxChi.mkAdv for_Prep (mkNP num (mkN "ตัว" "ที่")))) ;
---    AHasName p name = mkCl p.name (mkV2 "ชื่อ") name ; ---
---    AHungry p = mkCl p.name (mkA (R.thword "หิว" "ข้าว")) ;
---    AIll p = mkCl p.name (mkA (R.thword "เจ็บ" "ปวย")) ;
+    AHasRoom p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det D.room_N) (SyntaxChi.mkAdv for_Prep (mkNP num D.person_N))) ;
+    AHasTable p num = mkCl p.name have_V2 
+      (mkNP (mkNP a_Det D.table_N) (SyntaxChi.mkAdv for_Prep (mkNP num D.person_N))) ;
+    AHasName p name = mkCl p.name (mkV2 "叫") name ; 
+    AHungry p = mkCl p.name (mkA "饿") ;
+    AIll p = mkCl p.name D.ill_A ;
     AKnow p = mkCl p.name <lin V L.know_V2 : V> ;
     ALike p item = mkCl p.name D.like_V2 item ;
----    ALive p co = mkCl p.name D.live_V2 co ;
+    ALive p co = mkCl p.name (mkV2 (mkV "住")) co ;
     ALove p q = mkCl p.name L.love_V2 q.name ;
     AMarried p = mkCl p.name (mkAP L.married_A2) ;
     AReady p = mkCl p.name L.ready_A ;
---    AScared p = mkCl p.name (mkA "กลัว") ;
+    AScared p = mkCl p.name (mkA "惊慌") ;
     ASpeak p lang = mkCl p.name L.speak_V2 lang ;
---    AThirsty p = mkCl p.name (mkA (R.thword "กระ" "หาย" "น้ำ")) ;
---    ATired p = mkCl p.name (mkA "เหนื่อย") ;
---    AUnderstand p = mkCl p.name (mkV (R.thword "เข้า" "ใจ")) ;
---    AWant p obj = mkCl p.name (mkV2 (mkV (R.thword "ต้อง" "การ"))) obj ;
---    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
+    AThirsty p = mkCl p.name (mkA "渴") ;
+    ATired p = mkCl p.name (mkA "累") ;
+    AUnderstand p = mkCl p.name (lin V D.understand_V) ;
+    AWant p obj = mkCl p.name (mkV2 "要") obj ;
+    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
 
 -- miscellaneous
 
---    QWhatName p = mkQS (mkQCl whatSg_IP p.name (mkV2 "ชื่อ")) ; ---
---    QWhatAge p = mkQS (mkQCl (mkIComp how8much_IAdv) (mkNP p.name (ParadigmsChi.mkAdv (R.thword "อา" "ยุ")))) ; --- Adv
---    HowMuchCost item = mkQS (mkQCl (mkIComp how8much_IAdv) item) ;
---    ItCost item price = mkCl item (mkV2 (R.thword "เป็น" "รา" "คา")) price ;
+    QWhatName p = lin QS {s = p.name.s ++ R.word "贵姓"} ; ---
+    QWhatAge p = lin QS {s = p.name.s ++ (R.word "几岁" | R.word "多大")} ; ---
+    HowMuchCost item = lin QS {s = item.s ++ R.word "是多少呢"} ;
+    ItCost item price = mkCl item (mkV2 "成本") price ;
 
---    PropOpen p = mkCl p.name open_A ;
---    PropClosed p = mkCl p.name closed_A ;
---    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_A) d) ; 
---    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
---    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
---    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
+    PropOpen p = mkCl p.name D.open_A ;
+    PropClosed p = mkCl p.name closed_A ;
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP D.open_A) d) ; 
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; 
+    PropOpenDay p d = mkCl p.name (mkVP (mkVP D.open_A) d.habitual) ; 
+    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
---    PSeeYouDate d = mkText (lin Text (ss (    R.thword "เจอ" "กัน"))) (mkPhrase (mkUtt d)) ;
---    PSeeYouPlace p = mkText (lin Text (ss (R.thword "เจอ" "กัน" "ที่"))) (mkPhrase (mkUtt p.at)) ;
---    PSeeYouPlaceDate p d = 
---      mkText (lin Text (ss (R.thword "เจอ" "กัน" "ที่"))) 
---        (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
+    PSeeYouDate d = lin Text (ss (d.s ++ "见")) ;
+    PSeeYouPlace p = lin Text (ss (p.at.s ++ "见")) ; ---
+    PSeeYouPlaceDate p d = lin Text (ss (d.s ++ p.at.s ++ "见")) ; ----
 
 -- Relations are expressed as "มย วิฝเ" or "มย สoณส วิฝเ", as defined by $xOf$
 -- below. Languages without productive genitives must use an equivalent of
@@ -193,7 +191,7 @@ concrete WordsChi of Words = SentencesChi **
   Saturday = mkDay "星期六" ;
   Sunday = mkDay "星期日" ;
  
-  Tomorrow = mkAdv "明天" ;
+  Tomorrow = ParadigmsChi.mkAdv "明天" ;
 
 -- modifiers of places
 
@@ -209,7 +207,7 @@ concrete WordsChi of Words = SentencesChi **
 
 -- transports
 
---    HowFar place = mkQS (mkQCl howFar.howfar place.name) ; ---- (mkNP place.name howFar.far)) ;
+    HowFar place = lin QS {s = place.name.s ++ R.word "有多远"} ; 
 
 --    HowFarFrom x y = 
 --      mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) (lin AP (R.thbind from_Prep x.name)))) ; --- no yuu
@@ -236,7 +234,7 @@ concrete WordsChi of Words = SentencesChi **
     mkNat : Str -> NPNationality = \nat -> 
       mkNPNationality (mkNP (mkCN (mkA nat) L.language_N)) (mkNP (mkCN (mkA nat) L.country_N)) (mkA nat) ;
 
-    mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
+    mkDay : Str -> {name : NP ; point : SyntaxChi.Adv ; habitual : SyntaxChi.Adv} = \d ->
       let day = mkNP (mkPN d) in 
       mkNPDay day (SyntaxChi.mkAdv noPrep day) 
         (SyntaxChi.mkAdv noPrep (mkNP a_Quant plNum (mkCN (mkN d)))) ;
@@ -247,7 +245,7 @@ concrete WordsChi of Words = SentencesChi **
     placeN : Str -> N = \s -> mkN s "间" ;
 
 --    open_A = P.mkA "เปิด" ;
---    closed_A = P.mkA "ปิด" ;
+    closed_A = P.mkA "关闭" ;
 
     xOf : N -> NPPerson -> NPPerson = \f,p -> 
       {name = mkNP the_Det (mkCN f (SyntaxChi.mkAdv possess_Prep p.name)) ; 

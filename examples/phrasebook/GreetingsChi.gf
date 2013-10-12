@@ -1,6 +1,6 @@
 concrete GreetingsChi of Greetings = 
   SentencesChi [Greeting,mkGreeting] ** 
-  open (D = DictEngChi), ResChi, Prelude in {
+  open (D = DictEngChi), ParadigmsChi, ResChi, Prelude in {
 
 flags coding = utf8 ;
 
@@ -15,18 +15,17 @@ lin
   GGoodNight = D.good_night_Interj ;
   GGoodbye = D.goodbye_Interj ;
   GHello = D.hi_Interj ;
---  GHelp = mkGreeting (thword "ช่วย" "ด้วย") ;
---  GHowAreYou = mkGreeting (thword "สบาย" "ดี" "ไหม") ;
---  GLookOut = mkGreeting (thword "ระ" "วัง") ;  google
---  GNiceToMeetYou, GNiceToMeetYouPol = mkGreeting (thword "ยิน" "ดี" "ที่" "ได้" "รู้" "จัก") ;
---  GPleaseGive, GPleaseGivePol = mkGreeting "นะ" ;
---  GSeeYouSoon = mkGreeting (thword "เจอ" "กัน" "นะ") ;
---  GSorry, GSorryPol = mkGreeting (thword "ขอ" "โทษ") ;
+  GHelp = mkInterj "帮助" ;
+  GHowAreYou = mkInterj "你好" ;
+  GLookOut = mkInterj "留意" ;
+  GNiceToMeetYou, GNiceToMeetYouPol = mkInterj "很高兴见到你" ;
+  GPleaseGive, GPleaseGivePol = mkInterj "请" ;
+  GSeeYouSoon = mkInterj "很快再见" ;
+  GSorry, GSorryPol = mkInterj "对不起" ;
   GThanks = D.thanks_Interj ;
---  GTheCheck = mkGreeting (thword "เช็ค" "บิล") ;
---  GCongratulations = mkGreeting (thword "ยิน" "ดี" "ด้วย") ;
---  GHappyBirthday = mkGreeting (thword "สุข" "สันต์" "วัน" "เกิด") ;
+  GTheCheck = mkInterj "检查" ;
+  GCongratulations = mkInterj "祝贺您" ;
+  GHappyBirthday = mkInterj "祝你生日快乐" ;
   GGoodLuck = D.good_luck_Interj ;
-
 
 }
