@@ -54,10 +54,6 @@ flags
 
 
 lin
--- missing from ExtraChi; should not really be there either
-
-  GenNP np = 
-    ParadigmsChi.mkQuant (np.s ++ possessive_s) ;
 
   EmptyRelSlash slash = mkRCl <which_RP : RP> <lin ClSlash slash : ClSlash> ; 
 
