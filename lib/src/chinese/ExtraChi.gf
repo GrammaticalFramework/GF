@@ -24,6 +24,7 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
     BaseVPI = twoSS ;
     ConsVPI = consrSS duncomma ;
 
+    GenNP np =  {s,pl = np.s ++ possessive_s ; detType = DTPoss} ;
 
     GenRP nu cn = {s = cn.s ++ relative_s} ; ---- ??
 
