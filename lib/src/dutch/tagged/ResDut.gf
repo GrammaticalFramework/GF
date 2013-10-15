@@ -23,10 +23,10 @@ resource ResDut = ParamX ** open Prelude in {
 
     mkNoun : (_,_ : Str) -> Gender -> Noun = \sg,pl,g -> {
       s = table {
-        NF Sg Nom => sg ;
-        NF Sg Gen => add_s sg ; 
-        NF Pl Nom => pl ;
-        NF Pl Gen => add_s pl
+        NF Sg Nom => sg + ".N.Sg.Nom" ;
+        NF Sg Gen => sg + ".N.Sg.Gen" ;
+        NF Pl Nom => sg + ".N.Pl.Nom" ;
+        NF Pl Gen => sg + ".N.Pl.Gen"
         } ;
      g = g
      } ;
@@ -74,9 +74,9 @@ resource ResDut = ParamX ** open Prelude in {
 
     mkAdjective : (_,_,_,_,_ : Str) -> Adjective = \ap,aa,ag,ac,as -> {
       s = table {
-        Posit  => table {APred => ap ; AAttr => aa ; AGen => ag} ; 
-        Compar => table {APred => ac ; AAttr => ac + "e" ; AGen => ac + "es"} ; ----
-        Superl => table {APred => as ; AAttr => as + "e" ; AGen => as + "es"}   ----
+        Posit  => table {APred => ap + ".A.Pos.Pred" ; AAttr => ap + ".A.Pos.Attr" ; AGen => ap} ; 
+        Compar => table {APred => ap + ".A.Comp.Pred" ; AAttr => ap + ".A.Comp.Attr" ; AGen => ap} ; ----
+        Superl => table {APred => ap + ".A.Sup.Pred" ; AAttr => ap + ".A.Sup.Attr" ; AGen => ap}   ----
         }
       } ;
     regAdjective : Str -> Adjective = \s ->  ----
@@ -123,12 +123,17 @@ resource ResDut = ParamX ** open Prelude in {
   mkVerb : (_,_,_,_,_,_,_ : Str) -> 
     	Verb = \aai, aait, aaien, aaide, _, aaiden, geaaid -> {
     	s = table {
-    		VInf | VImpPl | VPresPl   => aaien; -- hij/zij/het/wij aaien
-    		VPresSg1 | VImp2 => aai; -- ik aai
-    		VPresSg2 | VPresSg3 | VImp3 => aait; -- jij aait
-    		VPastSg => aaide; -- ik aaide  --# notpresent
-    		VPastPl => aaiden; -- hij/zij/het/wij aaiden --# notpresent
-    		VPerf   => geaaid -- ik heb geaaid 
+    		VInf     => aaien + ".V.Inf" ; 
+    		VImpPl   => aaien + ".V.Imp.Pl" ; 
+    		VPresPl  => aaien + ".V.Pres.Pl" ; 
+    		VPresSg1 => aaien + ".V.Pres.Sg.1" ; 
+    		VImp2    => aaien + ".V.Imp.2" ; 
+    		VPresSg2 => aaien + ".V.Pres.Sg.2" ; 
+    		VPresSg3 => aaien + ".V.Pres.Sg.3" ; 
+    		VImp3    => aaien + ".V.Imp.3" ; 
+    		VPastSg  => aaien + ".V.Past.Sg" ; 
+    		VPastPl  => aaien + ".V.Past.Pl" ; 
+    		VPerf    => aaien + ".V.Perf" 
     	}
     };
     
@@ -137,12 +142,12 @@ resource ResDut = ParamX ** open Prelude in {
   irregVerb : (breken,brak,gebroken : Str) -> Verb = \breken,brak,gebroken ->
     let brek = (regVerb breken).s 
     in
-    mkVerb (brek ! VPresSg1) (brek ! VPresSg3) (brek ! VInf) brak brak (brak + "en") gebroken ; 
+    mkVerb (brek ! VPresSg1) (brek ! VPresSg3) breken brak brak (brak + "en") gebroken ; 
 
   irregVerb2 : (breken,brak,braken,gebroken : Str) -> Verb = \breken,brak,braken,gebroken ->
     let brek = (regVerb breken).s 
     in
-    mkVerb (brek ! VPresSg1) (brek ! VPresSg3) (brek ! VInf) brak brak (braken) gebroken ; 
+    mkVerb (brek ! VPresSg1) (brek ! VPresSg3) breken brak brak (braken) gebroken ; 
 
 -- To add a prefix (like "ein") to an already existing verb.
 
@@ -274,7 +279,13 @@ resource ResDut = ParamX ** open Prelude in {
 	mkVerb hoef (hoef +"t") hoeven (hoef+"de") (hoef+"de") (hoef+"den")
 		("ge"+hoef+"d");  
 
-  zijn_V : VVerb = {
+  zijn_V : VVerb = regVerb "zijn" ** {
+    aux = VZijn ;
+    prefix = [] ;
+    vtype = VAct ;
+    } ;
+
+  zzc = {
     s = table {
        VInf      => "zijn" ;
        VPresSg1  => "ben" ; 
@@ -361,9 +372,9 @@ resource ResDut = ParamX ** open Prelude in {
 
     mkPronoun : (x1,_,_,_,_,x6,x7 : Str) -> Gender -> Number -> Person -> Pronoun = 
       \ik,me,mn,Ik,mij,mijn,mijne,g,n,p -> {
-         unstressed = {nom = ik ; acc = me  ; poss = mn} ;
-         stressed   = {nom = Ik ; acc = mij ; poss = mijn} ;
-         substposs  = mijne ;
+         unstressed = {nom = ik+".Pron.Nom" ; acc = ik+".Pron.Acc"  ; poss = ik+".Pron.Poss"} ;
+         stressed   = {nom = ik+".Pron.Nom.Str" ; acc = ik+".Pron.Acc.Str"  ; poss = ik+".Pron.Poss.Str"} ;
+         substposs  = ik+".Pron.Poss.Subst" ;
          a = {g = g ; n = n ; p = p}
          } ;
 
@@ -631,10 +642,13 @@ param
  
   infPart : Bool -> Str = \b -> if_then_Str b [] "te" ;
 
+  tagNumber : Number -> Str = \n -> case n of {Sg => ".Sg" ; Pl => ".Pl"} ;
+  tagGender : Gender -> Str = \n -> case n of {Utr => ".Utr" ; Neutr => ".Neutr"} ;
+
   mkDet : Str -> Str -> Number -> {s,sp : Gender => Str ; n : Number ; a : Adjf} =
     \deze,dit,n -> {
-      s  = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
-      sp = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+      s  = \\g => case <n,g> of {<Sg,Neutr> => dit+".Det.Neutr" ; _ => deze+".Det.Common"}+tagNumber n ;
+      sp = \\g => case <n,g> of {<Sg,Neutr> => dit+".Det.Neutr.Subst" ; _ => deze+".Det.Common.Subst"}+tagNumber n ;
       n = n ;
       a = Weak
       } ;
@@ -645,19 +659,19 @@ param
     a  : Adjf
     } = 
     \deze,dit -> {
-      s  = \\_ ,n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
-      sp = \\   n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+      s  = \\_ ,n,g => case <n,g> of {<Sg,Neutr> => dit+".Quant.Sg.Neutr" ; _ => deze+".Quant.Common"} ;
+      sp = \\   n,g => case <n,g> of {<Sg,Neutr> => dit+".Quant.Sg.Neutr.Subst" ; _ => deze+".Quant.Common.Subst"} ;
       a = Weak
       } ;
 
   mkPredet : Str -> Str -> {s : Number => Gender => Str} = 
     \deze,dit -> {
-      s  = \\n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze}
+      s  = \\n,g => case <n,g> of {<Sg,Neutr> => deze+".Predet.Sg.Neutr" ; _ => deze+".Predet.Common"}
       } ;
 
   mkNP : Str -> Gender -> Number -> {s : NPCase => Str ; a : Agr ; isPron : Bool} = 
     \s,g,n -> heavyNP {
-      s = \\_ => s ;
+      s = \\_ => s+".NP"+tagGender g + tagNumber n ;
       a = agrgP3 g n ;
       } ;
 

@@ -1,0 +1,9 @@
+cd GF/lib/src/dutch
+gf
+> i -src tagged/LangDutTagged.gf
+> i -src LangDut.gf
+
+Lang> gr -cat=Cl | l
+
+altijd zijn te willen smeekt zich niets niemand gekrast te sturen
+altijd zijn.V.Inf te willen.V.Inf smeken.V.Pres.Sg.3 zich niets.NP.Neutr.Sg niemand.NP.Utr.Sg krassen.V.Perf te sturen.V.Inf
