@@ -143,8 +143,8 @@ oper
             } ;
           Neg => table {
             APlain   => v.neg ++ v.sn ; --- neg?
-            APerf    => "不" ++ v.sn ++ v.pp ;
-            ADurStat => "不" ++ v.sn ;
+            APerf    => "bu4" ++ v.sn ++ v.pp ;
+            ADurStat => "bu4" ++ v.sn ;
             ADurProg => v.neg ++ v.dp ++ v.sn ;  -- mei or bu
             AExper   => v.neg ++ v.sn ++ v.ep
             }
