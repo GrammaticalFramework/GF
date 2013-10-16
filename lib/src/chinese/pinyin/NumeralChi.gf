@@ -1,4 +1,4 @@
-concrete NumeralCmn of Numeral = CatCmn ** open ResCmn, Prelude in {
+concrete NumeralChi of Numeral = CatChi ** open ResChi, Prelude in {
 
 flags coding = utf8 ;
 
@@ -58,8 +58,8 @@ lin pot111  =
    s,p = table {
     shi => mkD "shi2yi1" "shi2yi1" ; 
     shi0 => mkD "yi1shi2yi1" "yi1shi2yi1" ; 
-    wan => mkD "shi2yi1wan4" "shi2yi1wan4" ; 
-    wan0 => mkD "shi2yi1wan4" "shi2yi1wan4"}} ;
+    wan => mkD "yi1wan4yi1qian1" "yi1wan4yi1qian1" ;  -- 11.16 by chenpeng wan => mkD "shi2yi1wan4" "shi2yi1wan4" ;
+    wan0 => mkD "yi1wan4yi1qian1" "yi1wan4yi1qian1"}} ; -- 11.16 by chenpeng wan0 => mkD "shi2yi1wan4" "shi2yi1wan4"}} ;
 lin pot1to19 d =
   {inh = nozero ; 
    s,p = table {
@@ -81,7 +81,7 @@ lin pot0as1 n =
     wan0 => n.s ++ mkD "qian1" "qian1"}
   } ;
 lin pot1 d =
-  {inh = zero ; 
+  {inh = nozero ;  -- inh = zero
    s,p = table {
     shi => d.s ++ mkD "shi2" "shi2" ; 
     shi0 => d.s ++ mkD "shi2" "shi2" ; 
@@ -116,10 +116,10 @@ lin pot2 d =
 lin pot2plus d e =
   {inh = nozero ; 
    s,p = table {
-    bai => d.s ++ mkD "" "bai3" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; 
-    bai0 => d.s ++ mkD "" "bai3" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; 
-    shiwan => d.s ++ mkD "" "shi2" ++ (Wan ! (e.inh)) ++ e.s ! wan ; 
-    shiwan0 => d.s ++ mkD "" "shi2" ++ (Wan ! (e.inh)) ++ e.s ! wan0}} ;
+    bai => d.s ++ mkD "bai3" "bai3" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; --why omit "bai3"? i add it /chenpeng
+    bai0 => d.s ++ mkD "bai3" "bai3" ++ (ling ! <e.inh,e.inh>) ++ e.s ! shi0 ; --why omit "bai3"? i add it /chenpeng
+    shiwan => d.s ++ mkD "shi2" "shi2" ++ (Wan ! (e.inh)) ++ e.s ! wan ; --why omit "shi2"? i add it /chenpeng
+    shiwan0 => d.s ++ mkD "shi2" "shi2" ++ (Wan ! (e.inh)) ++ e.s ! wan0}} ;--why omit "shi2"? i add it /chenpeng
 lin pot2as3 n =
   {s = n.s ! bai ; p = n.p ! bai} ;
 lin pot3 n =

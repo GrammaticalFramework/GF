@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common
 
-concrete SymbolCmn of Symbol = CatCmn ** open Prelude, ResCmn in {
+concrete SymbolChi of Symbol = CatChi ** open Prelude, ResChi in {
 
   flags coding = utf8;
 
