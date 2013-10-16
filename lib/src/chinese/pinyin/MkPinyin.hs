@@ -4,14 +4,19 @@ import Numeric
 main = do
   s <- readFile pinyinFile
   let m = c2pMap (mkList (words s))
-  mapM_ (mkPinyin m) ["Lexicon", "Numeral", "Res", "Structural"]
+  mapM_ (mkPinyin m) resModules
+--  mapM_ (mkPinyin m) ["HSKGrammar"]
   return ()
 
 pinyinFile = "pinyin.txt"
 
+resModules = [mo | mo <- 
+                ["DictEng","Extra","Lexicon", "Numeral", "Paradigms","Res", "Structural","Symbol"]
+             ]
+
 mkPinyin ma mo = do
-  s <- readFile ("../" ++ runghc MkPinyin.hsmo ++ "Chi.gf")
-  writeFile (mo ++ "Cmn.gf") (useMapGF ma s)
+  s <- readFile ("../" ++ mo ++ "Chi.gf")
+  writeFile (mo ++ "Chi.gf") (useMapGF ma s)
 
 
 --import Pinyin (c2pMap, useMapGF, mkList)
@@ -32,8 +37,8 @@ chop = words . map unslash
   unslash c = c
 
 useMapGF m s = case s of
-  'C':'h':'i':'n':cs -> "Chin" ++ useMapGF m cs  -- don't change Chinese, China
-  'C':'h':'i'    :cs -> "Cmn"  ++ useMapGF m cs  -- to change language code Chi to Cmn
+---  'C':'h':'i':'n':cs -> "Chin" ++ useMapGF m cs  -- don't change Chinese, China
+---  'C':'h':'i'    :cs -> "Cmn"  ++ useMapGF m cs  -- to change language code Chi to Cmn
   '"':cs -> '"':convert cs
   c  :cs -> c  :useMapGF m cs
   _ -> s

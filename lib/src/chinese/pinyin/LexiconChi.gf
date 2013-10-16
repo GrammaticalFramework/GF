@@ -1,5 +1,5 @@
-concrete LexiconCmn of Lexicon = CatCmn ** 
-  open ParadigmsCmn, ResCmn, Prelude in {
+concrete LexiconChi of Lexicon = CatChi ** 
+  open ParadigmsChi, ResChi, Prelude in {
 
 flags 
   coding = utf8 ;
