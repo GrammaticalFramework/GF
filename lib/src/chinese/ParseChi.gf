@@ -21,7 +21,7 @@ concrete ParseChi of ParseEngAbs =
 
   DictEngChi,
 Assign_1,
-Assign_10,
+Assign_10 - [weep_V],
 Assign_11,
 Assign_12,
 Assign_13,
