@@ -18,7 +18,7 @@ concrete ParseEng of ParseEngAbs =
             Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ComplSlashPartLast,
-            ClSlash, RCl, EmptyRelSlash],
+            ClSlash, RCl, EmptyRelSlash, VS, V2S, ComplBareVS, SlashBareV2S],
 
   DictEng ** 
 open MorphoEng, ResEng, ParadigmsEng, Prelude in {

@@ -176,6 +176,14 @@ lin
 
    PurposeVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
 
+
+   ComplBareVS  v s = insertObj (\\_ => s.s) (predV v) ;
+   SlashBareV2S v s = insertObjc (\\_ => s.s) (predVc v) ;
+
+
+
+
+
 ------------
 --- obsolete: use UncNeg : Pol
 
