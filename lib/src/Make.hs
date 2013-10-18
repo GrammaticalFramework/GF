@@ -37,6 +37,7 @@ langsCoding = [
   (("danish",   "Dan"),"Scand"),
   (("dutch",    "Dut"),""),
   (("english",  "Eng"),""),
+  (("estonian", "Est"),""),
   (("finnish",  "Fin"),""),
   (("french",   "Fre"),"Romance"),
   (("german",   "Ger"),""),
@@ -76,7 +77,7 @@ langsLangAll = langs
 langsLang = langs `except` langsIncomplete
 
 -- languagues that have notpresent marked
-langsPresent = langsLang `except` ["Chi","Gre","Heb","Jpn","Mlt","Nep","Pes","Snd","Tha","Thb"]
+langsPresent = langsLang `except` ["Chi","Est","Gre","Heb","Jpn","Mlt","Nep","Pes","Snd","Tha","Thb"]
 
 -- languages for which Lang can be compiled but which are incomplete
 langsIncomplete = ["Amh","Ara","Heb","Lat","Tur","Thb"]
