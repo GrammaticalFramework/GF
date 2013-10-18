@@ -1,4 +1,4 @@
-module MkExxTable (getApiExx, ApiExx, prApiEx) where
+module MkExxTable (getApiExx, ApiExx, prApiEx, mkEx) where
 
 import System.Cmd
 import System.Environment
@@ -13,7 +13,7 @@ main = do
 getApiExx :: [FilePath] -> IO ApiExx
 getApiExx xx = do
   s  <- readFile (head xx)
-  let aet = getApiExxTrees $ filter validOutput $ lines s 
+  let aet = getApiExxTrees $ filter validOutput $ mergeOutput $ lines s 
   aeos <- mapM readApiExxOne xx
   let aexx = mkApiExx $ ("API",aet) : aeos
 --  putStrLn $ prApiExx aexx
@@ -22,7 +22,7 @@ getApiExx xx = do
 readApiExxOne file = do
   s <- readFile file
   let lang = reverse (take 3 (drop 4 (reverse file))) -- api-exx-*Eng*.txt
-  let api = getApiExxOne $ filter validOutput $ lines s
+  let api = getApiExxOne $ filter validOutput $ mergeOutput $ lines s
   putStrLn $ unlines $ prApiEx api ---
   return (lang,api)
 
@@ -51,6 +51,13 @@ getApiExxTrees = M.fromList . pairs . map cleanUp
 -- remove leading prompts and spaces
 cleanUp = dropWhile (flip elem " >")
 
+--- this makes txt2tags loop...
+mergeOutput ls = ls
+mergeOutputt ls = case ls of
+  l@('>':_):ll -> let (ll1,ll2) = span ((/=">") . take 1) ll in unwords (l : map (unwords . words) ll1) : mergeOutput ll2 
+  _:ll -> mergeOutput ll
+  _ -> []
+
 -- only accept lines starting with prompts (to eliminate multi-line gf uncomputed output)
 validOutput = (==">") . take 1
 
@@ -76,12 +83,19 @@ mkEx l = unws . bind . mkE . words where
   mkE e = case e of
     "atomic":"term":_ -> ["*"]
     "[]":_ -> ["''"]
-    "pre":p@('{':_):es -> init (init (drop 2 p)) : [] ---- mkE es -- occurs only on last position
+    "(table":es -> ["..."]
+    "table":es -> ["..."]
+    ('{':_):es -> ["..."]
+    "pre":p@('{':_):es -> init (init (drop 2 p)) : ["..."]
+---    "pre":p@('{':_):es -> init (init (drop 2 p)) : reverse (takeWhile ((/='}') . head) (reverse es))
     e0:es -> e0:mkE es
     _ -> e
 
 bind ws = case ws of
          w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
+         w : "Predef.BIND" : u : ws2 -> bind ((w ++ u) : ws2)
          "&+":ws2           -> bind ws2
+         "Predef.BIND":ws2           -> bind ws2
          w : ws2            -> w : bind ws2
+         w : "++" : ws2     -> w : bind ws2
          _ -> ws

@@ -203,7 +203,7 @@ mkTable hasEx isLatex aexx cs = inChunks chsize (\rs -> header : map (unwords . 
 -- make an example with hover-popup translations
 mkExample es ex = unwords [
   "#divreveal",
-  itf (maybe ex id (M.lookup revealedLang es)),
+  itf (maybe ex (mkEx revealedLang) (M.lookup revealedLang es)),
   "#divpopup",
   "#UL",
   unwords ["#LI" ++ e | e <- prApiEx es],
