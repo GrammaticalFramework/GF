@@ -16,7 +16,7 @@ abstract ParseEngAbs =
   ExtraEngAbs [NP, Quant, VPSlash, VP, GenNP, PassVPSlash,
                Temp, Tense, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
                VPI, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV, ComplSlashPartLast,
-               ClSlash, RCl, EmptyRelSlash],
+               ClSlash, RCl, EmptyRelSlash, VS, V2S, ComplBareVS, SlashBareV2S],
   DictEngAbs ** {
 
 flags

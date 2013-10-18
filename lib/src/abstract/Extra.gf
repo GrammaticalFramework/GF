@@ -86,4 +86,9 @@ abstract Extra = Cat ** {
 
     PurposeVP : VP -> Adv ;  -- to become happy
 
+-- object S without "that"
+
+    ComplBareVS  : VS  -> S  -> VP ;       -- say she runs
+    SlashBareV2S : V2S -> S  -> VPSlash ;  -- answer (to him) it is good
+
 }
