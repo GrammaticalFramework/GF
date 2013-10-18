@@ -21,11 +21,11 @@ are marked in the table
 | Ara   | Arabic       | +     | +    | +     | +   | -    | -   | -    | -     | -    | -      | +      | AD
 | Bul   | Bulgarian    | +     | +    | +     | +   | +    | +   | +    | +     | +    | ++     | +      | *KA
 | Cat   | Catalan      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | ++     | -      | *JS, IL
-| Chi   | Chinese      | +     | -    | ++    | +   | +    | +   | -    | -     | -    | -      | +      | *ZL,*AR,*CP
+| Chi   | Chinese      | +     | -    | ++    | +   | +    | +   | -    | -     | +    | -      | +      | ZL,*AR,*CP,QH
 | Dan   | Danish       | +     | +    | ++    | +   | +    | +   | +    | +     | -    | +      | -      | *AR
 | Dut   | Dutch        | +     | +    | ++    | +   | +    | +   | +    | +     | -    | +      | -      | *AR,FJ
 | Eng   | English      | +     | +    | ++    | +   | +    | +   | +    | +     | +    | ++     | +      | *AR,BB,KA
-| Est   | Estonian     | -     | -    | -     | -   | -    | -   | -    | -     | -    | -      | -      | *KK,IL
+| Est   | Estonian     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | +      | -      | *KK,IL
 | Fin   | Finnish      | +     | +    | ++    | +   | +    | +   | +    | -     | +    | ++     | +      | *AR,IL
 | Fre   | French       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | ++     | -      | *AR,RE
 | Ger   | German       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | ++     | -      | *AR,HH,EG
@@ -123,6 +123,7 @@ MH Muhammad Humayoun,
 NE Nyamsuren Erdenebadrakh,
 NF Nick Frolov,
 NG Normunds Gruzitis,
+QH Qiao Haiyan,
 RE Ramona Enache,
 PP Peteris Paikens,
 SC Server Cimen,
