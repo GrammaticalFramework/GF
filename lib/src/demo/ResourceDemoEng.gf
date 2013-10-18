@@ -118,7 +118,8 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     by_Prep, in_Prep, of_Prep, with_Prep, -- Prep,
     can_VV, must_VV, want_VV, -- VV,
     although_Subj, because_Subj, when_Subj, if_Subj, -- Subj,
-    when_IAdv, where_IAdv, why_IAdv-- IAdv,
+    when_IAdv, where_IAdv, why_IAdv, -- IAdv,
+    have_V2
 
 ] ** open SyntaxEng, (S = SyntaxEng) in {
 
