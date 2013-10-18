@@ -243,9 +243,9 @@ mkUtt (mkNP (mkDet the_Quant (mkNum (mkNumeral n5_Unit))) (mkCN old_A man_N))
       mkNP : Det -> N -> NP       -- the first man   
 mkUtt (mkNP (mkDet the_Quant (mkNum (mkNumeral n5_Unit))) man_N)
       mkNP : Numeral -> CN -> NP      -- fifty old men
-mkUtt (mkNP (mkNumeral (tenfoldSub100 n5_Unit)) (mkCN old_A man_N))
+mkUtt (mkNP (mkNumeral (n5_Unit)) (mkCN old_A man_N))
       mkNP : Numeral -> N -> NP       -- fifty men  
-mkUtt (mkNP (mkNumeral (tenfoldSub100 n5_Unit)) man_N)
+mkUtt (mkNP (mkNumeral (n5_Unit)) man_N)
       mkNP : Digits -> CN -> NP      -- 51 old men 
 mkUtt (mkNP (mkDigits n5_Dig (mkDigits n1_Dig)) (mkCN old_A man_N))
       mkNP : Digits -> N -> NP       -- 51 men 

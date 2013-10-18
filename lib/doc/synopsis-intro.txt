@@ -8,7 +8,36 @@
 =Introduction=
 
 The GF Resource Grammar Library is the standard library for Grammatical Framework.
-It covers the morphology and basic syntax of currently 27 languages.
+It covers the morphology and basic syntax of currently 29 languages:
+Afrikaans,
+Bulgarian,
+Catalan,
+Chinese,
+Danish,
+Dutch,
+English,
+Estonian,
+Finnish,
+French,
+German,
+Greek,
+Hindi,
+Japanese,
+Italian,
+Latvian,
+Maltese,
+Nepali,
+Norwegian bokmål,
+Persian,
+Polish,
+<li>Punjabi,
+Romanian,
+Russian,
+Sindhi,
+Spanish,
+Swedish,
+Thai,
+Urdu.
 
 This document contains the most important parts of the GF Resource Grammar API,
 as needed by a GF application programmer.
