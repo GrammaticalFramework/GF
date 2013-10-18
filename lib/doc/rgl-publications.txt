@@ -98,7 +98,7 @@ http://link.springer.com/chapter/10.1007%2F978-3-540-85287-2_6
 
 ===Chinese===
 
-- **Source**: http://www.grammaticalframework.org/lib/src/chinese (Aarne Ranta, Zhuo Lin Qiqige, Chen Peng)
+- **Source**: http://www.grammaticalframework.org/lib/src/chinese (Aarne Ranta, Zhuo Lin Qiqige, Chen Peng, Qiao Haiyan)
 
 - **Publications**
 
@@ -149,6 +149,14 @@ The GF Resource Grammar Library.
 #BR
 //A systematic presentation of the library from the linguistic point of view.//
 //Not only about English, but English examples abound.//
+
+
+===Estonian===
+
+- **Source**: http://www.grammaticalframework.org/lib/src/estonian (Kaarel Kaljurand, Inari Listenmaa)
+
+%- **Publications**
+
 
 
 ===Finnish===
