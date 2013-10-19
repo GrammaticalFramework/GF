@@ -1,11 +1,12 @@
 import qualified Data.Map as Map
 import Numeric
+import System.Environment
 
 main = do
+  xx <- getArgs
   s <- readFile pinyinFile
   let m = c2pMap (mkList (words s))
-  mapM_ (mkPinyin m) resModules
---  mapM_ (mkPinyin m) ["HSKGrammar"]
+  mapM_ (mkPinyin m) xx
   return ()
 
 pinyinFile = "pinyin.txt"
@@ -15,8 +16,8 @@ resModules = [mo | mo <-
              ]
 
 mkPinyin ma mo = do
-  s <- readFile ("../" ++ mo ++ "Chi.gf")
-  writeFile (mo ++ "Chi.gf") (useMapGF ma s)
+  s <- readFile mo
+  writeFile (mo ++ "-cmn") (useMapGF ma s)
 
 
 --import Pinyin (c2pMap, useMapGF, mkList)
