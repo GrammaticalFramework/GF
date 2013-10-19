@@ -43,9 +43,10 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
         (insertObj (mkNP (infVP vp)) (predV v v.part)) ** {c2 = vp.c2 ; isPre = vp.isPre} ;
 
     AdvVP vp adv = case adv.advType of {
-      ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;     -- he sleeps well
-      ATPlace True => insertAdv adv vp ;                       -- he sleeps on the table (zai - shang)
-      _ => insertAdv (ss (zai_V.s ++ adv.s)) vp     -- he sleeps in the house / today
+      ATManner => insertObj (ss (deVAdv_s ++ adv.s)) vp ;           -- he sleeps *well*
+      ATPlace True => insertAdvPost adv vp ;                        -- he today *in the house* sleeps
+      ATPlace False => insertAdvPost (ss (zai_V.s ++ adv.s)) vp ;   -- he today *here* sleeps
+      _ => insertAdv adv vp                                         -- he *today* here sleeps
       } ;
 
     AdVVP adv vp = insertAdv adv vp ; 
