@@ -40,7 +40,10 @@ resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
        NCase Gen => my
        } ;
      a = toAgr n p g ;
-     sp = regGenitiveS mine
+     sp = table {
+       Nom => mine ;
+       _ => genitiveS mine
+       }
    } ;
 
 } ;

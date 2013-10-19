@@ -61,7 +61,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
 
     PossPron p = {
       s = \\_,_ => p.s ! NCase Gen ;
-      sp = \\_,_,c => p.sp ! Gen
+      sp = \\_,_,c => p.sp ! npcase2case c
       } ;
 
     NumSg = {s = \\c => []; n = Sg ; hasCard = False} ;
