@@ -252,7 +252,7 @@ oper
     } ;
     
   getAdvType : Str -> AdvType = \s -> case s of {
-    "在" + _ => ATPlace True ; -- certain that True
+    "zai4" + _ => ATPlace True ; -- certain that True
     _ => ATPlace False         -- uncertain whether ATPlace
     } ;
 
