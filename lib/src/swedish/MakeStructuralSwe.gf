@@ -13,6 +13,9 @@ oper
            [table (P.Gender) [vilken;vilket] ; table (P.Gender) [vilka;vilka]] ; 
      det = d ; lock_IQuant = <>} ;
 
+  mkDet : Str -> P.Number -> Det = \s,n ->
+    lin Det {s,sp = \\_,_ => s ; n = n ; det = DDef Indef} ;
+
   dDefIndef : DetSpecies = DDef Indef ;
   ---- other DetSpecies
 

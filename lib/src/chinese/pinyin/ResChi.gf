@@ -175,6 +175,11 @@ oper
      compl = vp.compl ;
      prePart = adv.s ++ vp.prePart
      } ; 
+   insertAdvPost : SS -> VP -> VP = \adv,vp -> {
+     verb  = vp.verb ;
+     compl = vp.compl ;
+     prePart = vp.prePart ++ adv.s
+     } ; 
 
    insertPP : SS -> VP -> VP = \pp,vp -> {
      verb  = vp.verb ;
