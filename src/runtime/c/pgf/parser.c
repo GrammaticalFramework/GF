@@ -1503,7 +1503,7 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 					PgfSymbol curr_sym = gu_null_variant;
 					PgfExprProb *ep =
 						callback->match(ps->concr, &curr_sym,
-						                item->conts->lin_idx,
+						                slit->r,
 				                        ps->sentence, &offset,
 				                        ps->pool, ps->out_pool);
 
