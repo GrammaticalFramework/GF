@@ -23,8 +23,6 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 
   oper
 
-	NFS = {s : NForm => Str} ;
-
 	foreign : pattern Str = #("z" | "ž" | "š") ;
 	-- Foreign vowel endings
 	foreign_v : pattern Str = #("ko" | "po" | "to" | "fo" | "ka" | "pa" | "ta" | "fa" | "ku" | "pu" | "tu" | "fu") ;
@@ -50,13 +48,14 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 	hjk_type_VI_meeskond,
 	hjk_type_VI_seminar,
 	hjk_type_VII_touge : Str -> NForms ;
---	hjk_type_VII_touge : Str -> NFS ;
 
 	-- IVa additionally needs the stem vowel.
 	hjk_type_IVb_audit,
-	hjk_type_IVb_audit1 : Str -> Str -> NForms ; --NFS
+	hjk_type_IVb_audit1 : Str -> Str -> NForms ;
 	
-	hjk_type_VI_tukk : Str -> Str -> NForms ;
+	hjk_type_VI_link2 : Str -> Str -> NForms ;
+
+	hjk_type2 : Str -> Str -> NForms ;
 
 
 	-- Definition of the mapping rules.
@@ -147,24 +146,19 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 		in
 		nForms6 x (x_n+"i") (x+"i") (x+"i") (x+"ide") (x+"e") ;
 
-
-        --like link but 
-	-- gen form given (takes care of vowel and consonant gradation) 
-	-- -sid for pl.part (todo: generate short forms depending on vowel?)
-	hjk_type_VI_tukk x x_gen =
+	-- same as hjk_type_VI_link but additionally takes the genitive ending
+	hjk_type_VI_link2 x i =
 		let
-			v_g : Str = last x_gen ;
-			
- 		     {-   pl_part : Str = 
- 		            case v_g of { 
- 		                "i" => "e" ; 
- 		                 _  => v_g + "sid" } ;
- 		      -}
-
+			x_n : Str = weaker_noun x ;
+			-- TODO: think about it
+			e : Str = case i of {
+				"a" => "asid" ; -- pikk/pika -> pikkasid
+				_ => "e"
+			}
 		in
-		nForms6 x x_gen (x+v_g) (x+v_g) (x+v_g+"de") (x+v_g+"sid") ;
+		nForms6 x (x_n+i) (x+i) (x+i) (x+i+"de") (x+e) ;
 
-		
+
 	hjk_type_VI_imelik x =
 		let
 			x_t : Str = stronger_noun x
@@ -312,103 +306,105 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 	--  - comparative and superlative adjective forms (workaround: use mkA instead)
 	--  - type VII (t6uge -> t6uke), as one needs to detect derivation from verb
 	--  - last syllable superlong (rostbiif)
-	hjk_type x =
-		case <(syl_type x), x> of {
-			<S3, _ + "ke">
+	hjk_type x = hjk_type2 x "i" ;
+
+	hjk_type2 x i =
+		case <(syl_type x), x, i> of {
+			<S3, _ + "ke", _>
 				=> hjk_type_Vb_oluline x ;
 
-			<_, _ + "kond">
+			<_, _ + "kond", _>
 				=> hjk_type_VI_meeskond x ;
 
 			-- Some S2 -ik words (voolik), we only cover words with double vowel
-			<_, _ + #vv + ("lik"|"nik"|"stik")>
+			<_, _ + #vv + ("lik"|"nik"|"stik"), _>
 				=> hjk_type_IVb_audit x "u" ;
 
 			-- Other -ik words as in HJKEKS,
 			-- but added 'ndik' which fixes fractions ('kaheksandik')
 			-- and is wrong only for 'kandik'.
-			<_, _ + ("lik"|"nik"|"stik"|"ndik")>
+			<_, _ + ("lik"|"nik"|"stik"|"ndik"), _>
 				=> hjk_type_VI_imelik x ;
 
 			-- Remaining -k words (but need to be S2)
 			-- but not 'konjak'
-			<S2, _ + ("a"|"e"|"i") + ("ng"|"k")>
+			<S2, _ + ("a"|"e"|"i") + ("ng"|"k"), _>
 				=> hjk_type_IVb_audit x "u" ;
 
 			-- Other -ik words (not in HJKEKS)
 			-- including also: alevik, asemik, lobudik, hämarik, sarapik, põletik
-			<_, _ + ("vik"|"mik"|"dik"|"rik"|"pik"|"tik")>
+			<_, _ + ("vik"|"mik"|"dik"|"rik"|"pik"|"tik"), _>
 				=> hjk_type_VI_imelik x ;
 
 			-- kikas
-			<_, ? + #v + #c + #v + "s">
+			<_, ? + #v + #c + #v + "s", _>
 				=> hjk_type_Va_otsene x ;
 
-			<_, _ + ("ngas"|"kas"|"jas"|"nud"|"tud")>
+			<_, _ + ("ngas"|"kas"|"jas"|"nud"|"tud"), _>
 				=> hjk_type_IVb_maakas x ;
 
-			<S1, _ + #v + #v>
+			<S1, _ + #v + #v, _>
 				=> hjk_type_I_koi x ;
 
 			-- 'statiiv' (not like 'karjuv')
-			<S1, _ + #vv + #c>
-				=> hjk_type_VI_link x ;
+			<S1, _ + #vv + #c, i>
+				=> hjk_type_VI_link2 x i ;
 
-			<S3, _ + #c + #v + #lmnr>
+			<S3, _ + #c + #v + #lmnr, _>
 				=> hjk_type_VI_seminar x ;
 
-			<S1, _ + #v + #v + #c>
-				=> hjk_type_VI_link x ;
+			<S1, _ + #v + #v + #c, i>
+				=> hjk_type_VI_link2 x i ;
 
-			<_, _ + ("us"|"is")>
+			<_, _ + ("us"|"is"), _>
 				=> hjk_type_Vb_oluline x ;
 
-			<S3, _ + #v + #v + #c>
-				=> hjk_type_VI_link x ;
+			<S3, _ + #v + #v + #c, i>
+				=> hjk_type_VI_link2 x i ;
 
-			<(S1|S3), _ + #v + #c + #c>
-				=> hjk_type_VI_link x ;
+			<(S1|S3), _ + #v + #c + #c, i>
+				=> hjk_type_VI_link2 x i ;
 
-			<(S1|S3), _ + #v + #c + #c + #c>
-				=> hjk_type_VI_link x ;
+			<(S1|S3), _ + #v + #c + #c + #c, i>
+				=> hjk_type_VI_link2 x i ;
 
-			<_, _ + "nna">
+			<_, _ + "nna", _>
 				=> hjk_type_III_ratsu x ;
 
-			<-(S21|S22), _ + ("nu"|"tu")>
+			<-(S21|S22), _ + ("nu"|"tu"), _>
 				=> hjk_type_IVa_aasta x ;
 
 			-- TODO: improve foreign detection
-			<S2, _ + #foreign + _ + "in">
-				=> hjk_type_IVb_audit x "i" ;
+			<S2, _ + #foreign + _ + "in", i>
+				=> hjk_type_IVb_audit x i ;
 
 			-- TODO: this is not in HJKEKS
 			-- 'absurd' vs 'ebard'
-			<S2, _ + #v + #lmnr + "d">
-				=> hjk_type_IVb_audit x "i" ;
+			<S2, _ + #v + #lmnr + "d", i>
+				=> hjk_type_IVb_audit x i ;
 
 			-- sometimes 'a' (laurits) TODO: this is not in HJKEKS
-			<S2, _ + #v + #kpt + "s">
-				=> hjk_type_IVb_audit x "i" ;
+			<S2, _ + #v + #kpt + "s", i>
+				=> hjk_type_IVb_audit x i ;
 
 			-- TODO: next 3 rules: last syllable must be long
 			-- portfell, TODO: not 'karask'
-			<S2, _ + #v + #c + #c>
-				=> hjk_type_VI_link x ;
+			<S2, _ + #v + #c + #c, i>
+				=> hjk_type_VI_link2 x i ;
 
 			-- rostbiif, not viiul
-			<S2, _ + #c + #v + #v + #c>
-				=> hjk_type_VI_link x ;
+			<S2, _ + #c + #v + #v + #c, i>
+				=> hjk_type_VI_link2 x i ;
 
 			-- impulss
-			<S2, _ + #v + #c + #c + #c>
-				=> hjk_type_VI_link x ;
+			<S2, _ + #v + #c + #c + #c, i>
+				=> hjk_type_VI_link2 x i ;
 
 			-- TODO: sometimes masked by 'maakas'
-			<_, _ + #v + "s">
+			<_, _ + #v + "s", _>
 				=> hjk_type_Va_otsene x ;
 
-			<_, _ + ("v"|"tav")>
+			<_, _ + ("v"|"tav"), _>
 				=> hjk_type_IVb_audit x "a" ;
 
 			-- The choice between Va (pl part: -seid) and Vb (pl part: -si)
@@ -416,38 +412,38 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			-- We just check the ending of the word and require at least 2 letters
 			-- to precede the ending.
 			-- We added also -tine and -ldane (which occur with adjectives).
-			<_, _ + ? + ? + ("line"|"lane"|"mine"|"kene"|"tine"|"ldane")>
+			<_, _ + ? + ? + ("line"|"lane"|"mine"|"kene"|"tine"|"ldane"), _>
 				=> hjk_type_Vb_oluline x ;
 
 			-- k6ne
-			<S21, _ + "e">
+			<S21, _ + "e", _>
 				=> hjk_type_III_ratsu x ;
 
 			-- Many adjectives end with "ne" (40% in WordNet)
 			-- We require them to be at least 5 letters long (excluding 'öine'),
 			-- to give a chance to VII_touge (next rule).
-			<_, _ + ? + ? + ? + "ne">
+			<_, _ + ? + ? + ? + "ne", _>
 				=> hjk_type_Va_otsene x ;
 
 			-- Note: this rule does not actually check the derivation from verb.
 			-- verb + e, TODO: masked by S21/e
-			<(S2|S22), _ + "e">
+			<(S2|S22), _ + "e", _>
 				=> hjk_type_VII_touge x ;
 
 			-- ufo, pita, lito
-			<S21, _ + #foreign_v>
+			<S21, _ + #foreign_v, _>
 				=> hjk_type_III_ratsu x ;
 
-			<S21, _ + #v>
+			<S21, _ + #v, _>
 				=> hjk_type_II_ema x ;
 
-			<S22, _ + #v>
+			<S22, _ + #v, _>
 				=> hjk_type_III_ratsu x ;
 
-			<S23, _ + #v>
+			<S23, _ + #v, _>
 				=> hjk_type_IVa_aasta x ;
 
-			<S2, _ + "in">
+			<S2, _ + "in", _>
 				=> hjk_type_IVb_audit x "a" ;
 
 			-- 'e' deletion
@@ -456,54 +452,54 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			-- spikker -> spikri (TODO: not: pokker -> pokkeri)
 			-- Note: pintsel -> pintsli, but not pitser -> pitsri
 			-- Note: 'redel' and 'paber' do not lose the 'e'.
-			<S2, y + kk@("kk"|"pp"|"tt"|"hh") + "e" + l@("l"|"r")>
+			<S2, y + kk@("kk"|"pp"|"tt"|"hh") + "e" + l@("l"|"r"), _>
 				=> hjk_type_IVb_audit1 x (y + (init kk) + l) ;
 
 			-- aaker -> aakri, teater -> teatri
-			<S2, y + vvkpt@(#v + #v + #kpt) + "e" + l@("l"|"r")>
+			<S2, y + vvkpt@(#v + #v + #kpt) + "e" + l@("l"|"r"), _>
 				=> hjk_type_IVb_audit1 x (y+vvkpt+l) ;
 
-			<S2, y + vv@(#vv) + gbd@(#gbd) + "e" + l@("l"|"r")>
+			<S2, y + vv@(#vv) + gbd@(#gbd) + "e" + l@("l"|"r"), _>
 				=> hjk_type_IVb_audit1 x (y+vv+gbd+l) ;
 
 			-- Disabled, 50-50 correctness
-			--<S2, y + vv@(#vv) + lmnr@(#lmnr) + "e" + l@("l"|"r")>
+			--<S2, y + vv@(#vv) + lmnr@(#lmnr) + "e" + l@("l"|"r"), _>
 			--	=> hjk_type_IVb_audit1 x (y+vv+lmnr+l) ; -- 50-50
 
-			<S2, y + vv@(#vv) + s@("s"|"v") + "e" + l@("l"|"r")>
+			<S2, y + vv@(#vv) + s@("s"|"v") + "e" + l@("l"|"r"), _>
 				=> hjk_type_IVb_audit1 x (y+vv+s+l) ;
 
-			<S2, y + n@("ht"|"hk"|"hv"|"nts"|"ld"|"lv"|"lb"|"ng"|"nd"|"mb"|"mp"|"nt"|"ps"|"ks"|"sk"|"st") + "e" + l@("l"|"r")>
+			<S2, y + n@("ht"|"hk"|"hv"|"nts"|"ld"|"lv"|"lb"|"ng"|"nd"|"mb"|"mp"|"nt"|"ps"|"ks"|"sk"|"st") + "e" + l@("l"|"r"), _>
 				=> hjk_type_IVb_audit1 x (y+n+l) ;
 
-			<S2, y + "e" + l@("l"|"r")>
-				=> hjk_type_IVb_audit x "i" ;
+			<S2, y + "e" + l@("l"|"r"), i>
+				=> hjk_type_IVb_audit x i ;
 
 			-- TODO: sometimes masked by 'link'
-			<S2, _ + #c>
-				=> hjk_type_IVb_audit x "i" ;
+			<S2, _ + #c, i>
+				=> hjk_type_IVb_audit x i ;
 
-			<S3, _ + #v>
+			<S3, _ + #v, _>
 				=> hjk_type_IVa_aasta x ;
 
 			-- verb + 'e'
-			<_, _ + "e">
+			<_, _ + "e", _>
 				=> hjk_type_VII_touge x ;
 
 			-- catch all that end with consonant
-			<_, _ + #c>
-				=> hjk_type_IVb_audit x "i" ;
+			<_, _ + #c, i>
+				=> hjk_type_IVb_audit x i ;
 
 			-- TODO: not in HJKEKS
-			<_, _ + ("ia"|"ja")> --kündja, not gerilja
+			<_, _ + ("ia"|"ja"), _> --kündja, not gerilja
 				=> hjk_type_IVa_aasta x ;
 
 			--added by Inari 07.10.
-			<S23, _ + #c + ("la")> --haigla, not gorilla
+			<S23, _ + #c + ("la"), _> --haigla, not gorilla
 				=> hjk_type_IVa_aasta x ;
 
 			-- catch all
-			<_, _>
+			<_, _, _>
 				=> hjk_type_III_ratsu x
 		} ;
 
