@@ -16,8 +16,12 @@
 --
 -- The structure of functions for each word class $C$ is the following:
 -- there is a polymorphic constructor $mkC$, which takes one or
--- a few arguments. In Estonian, one argument is enough in ??? % of
+-- a few arguments. In Estonian, one argument is enough in 90% of
 -- cases in average.
+--
+-- @author Inari Listenmaa
+-- @author Kaarel Kaljurand
+-- @version 2013-10-21
 
 resource ParadigmsEst = open 
   (Predef=Predef), 
@@ -59,7 +63,7 @@ oper
   comitative  : Case ; -- e.g. "karbiga"
 
   infDa : InfForm ; -- e.g. "lugeda"
-  infDes : InfForm ;
+  infDes : InfForm ; -- e.g. "lugedes"
   infMa : InfForm ; -- e.g. "lugema"
   infMas : InfForm ; -- e.g. "lugemas"
   infMaks : InfForm ; -- e.g. "lugemaks"
@@ -70,49 +74,30 @@ oper
 -- of many-place verbs and adjective. A complement can be defined by
 -- just a case, or a pre/postposition and a case.
 
-  prePrep     : Case -> Str -> Prep ;  -- preposition, e.g. comitative "koos"
+  prePrep     : Case -> Str -> Prep ;  -- preposition, e.g. abessive "ilma"
   postPrep    : Case -> Str -> Prep ;  -- postposition, e.g. genitive "taga"
   postGenPrep :         Str -> Prep ;  -- genitive postposition, e.g. "taga"
   casePrep    : Case ->        Prep ;  -- just case, e.g. adessive
 
-  -- TODO build the dict 
-  NW : Type ;   -- Noun from DictEst (WordNet)
-  AW : Type ;   -- Adjective from DictEst (WordNet)
-  VW : Type ;   -- Verb from DictEst (WordNet)
-  AdvW : Type ; -- Adverb from DictEst (WordNet)
 
 --2 Nouns
-
--- The worst case gives six forms.
--- In practice just a couple of forms are needed to define the different
--- stems, vowel alternation, and vowel harmony.
 
 oper
 
 -- The regular noun heuristic takes just one form (singular
 -- nominative) and analyses it to pick the correct paradigm.
--- It does automatic grade alternation, and is hence not usable
--- for words like "auto" (whose genitive would become "audon").
---
--- If the one-argument paradigm does not give the correct result, one can try and give 
--- two or three forms. Most notably, the two-argument variant is used
--- for nouns like "kivi - kiviä", which would otherwise become like
--- "rivi - rivejä". Three arguments are used e.g. for 
--- "auto - auton - autoja", which would otherwise become
--- "auto - audon".
+-- If the 1-argument paradigm does not give the correct result,
+-- one can try and give 2, 3, 4, or 6 forms.
 
   mkN : overload {
-    mkN : (kukko : Str) -> N ;  -- predictable nouns, covers 82%
-    mkN : (savi,savia : Str) -> N ; -- different pl.part
-    mkN : (vesi,veden,vesia : Str) -> N ; -- also different sg.gen
+    mkN : (ema : Str) -> N ;  -- predictable nouns, covers 90%
+    mkN : (tukk,tuku : Str) -> N ; -- sg nom,gen: unpredictable stem vowel
+    mkN : (tukk,tuku,tukku : Str) -> N ; -- sg nom,gen,part
     mkN : (pank,panga,panka,panku : Str) -> N ; -- sg nom,gen,part, pl.part
 
---    mkN : (olo,n,a,na,oon,jen,ja,ina,issa,ihin : Str) -> N ; -- worst case, 10 forms
     mkN : (oun,ouna,ouna,ounasse,ounte,ounu : Str) -> N ; -- worst case, 6 forms
-    mkN : (oun,ouna,ouna,ounasse,ounte,ounu,ountesse : Str) -> N ; -- worst case, 7 forms
-    mkN : (pika : Str) -> (juna  : N) -> N ; -- compound with invariable prefix
-    mkN : (oma : N)    -> (tunto : N) -> N ; -- compound with inflecting prefix
-    mkN : NW -> N ;  -- noun from DictEst (WordNet)
+--    mkN : (pika : Str) -> (juna  : N) -> N ; -- compound with invariable prefix
+--    mkN : (oma : N)    -> (tunto : N) -> N ; -- compound with inflecting prefix
   } ;
 
 -- Nouns used as functions need a case, of which the default is
@@ -141,22 +126,20 @@ oper
 -- The comparative and the superlative
 -- are always inflected in the same way, so the nominative of them is actually
 -- enough (TODO: confirm).
--- TODO: update these types to include the new boolean non-inflection marker
 
   mkA : overload {
     mkA : Str -> A ;  -- regular noun made into adjective
     mkA : N -> A ;    -- any noun made into adjective
-    mkA : N -> (infl : Bool) -> A ; -- noun made into adjective, agreement type specified
+    mkA : N -> (infl : Infl) -> A ; -- noun made into adjective, agreement type specified
     mkA : N -> (parem, parim : Str) -> A ; -- deviating comparison forms
-    mkA : AW -> A ;  -- adjective from DictEst (WordNet)
   } ;
 
 -- Two-place adjectives need a case for the second argument.
 
-  mkA2 : A -> Prep -> A2  -- e.g. "jaollinen" casePrep adessive
+  mkA2 : A -> Prep -> A2  -- e.g. "vihane" (postGenPrep "peale")
     = \a,p -> a ** {c2 = p ; lock_A2 = <>};
 
-  genAttrA : Str -> A ; -- genitive attributes ; no agreement to head, no comparison forms. 
+  invA : Str -> A ; -- invariable adjectives, such as genitive attributes ; no agreement to head, no comparison forms. 
 
 --2 Verbs
 --
@@ -166,19 +149,18 @@ oper
 -- The worst case needs eight forms, as shown in the following.
 
   mkV : overload {
-    mkV : (lugema : Str) -> V ;     -- predictable verbs, covers n %
-    mkV : (lugema,lugeda : Str) -> V ; -- deviating past 3sg
-    mkV : (lugema,loeb,lugeda : Str) -> V ; -- also deviating pres. 1sg
-    mkV : (lugema,lugeda,loeb,loetakse : Str) -> V ;
-    mkV : (tegema,teha,teeb,tehakse,tehke,tegi,teinud,tehtud : Str) -> V ; -- worst-case verb
-    mkV : (saama : V) -> (aru : Str) -> V ; -- püsiühendid TODO
-    mkV : VW -> V ;  -- verb from DictEst (WordNet)
+    mkV : (lugema : Str) -> V ;     -- predictable verbs, covers 90 %
+    mkV : (lugema,lugeda : Str) -> V ; -- ma infinitive, da infinitive
+    mkV : (lugema,lugeda,loeb : Str) -> V ; -- ma, da, present sg 3
+    mkV : (lugema,lugeda,loeb,loetakse : Str) -> V ; --ma, da, pres sg 3, pres passive
+    mkV : (tegema,teha,teeb,tehakse,tehke,tegi,teinud,tehtud : Str) -> V ; -- worst-case verb, 8 forms
+    mkV : (saama : V) -> (aru : Str) -> V ; -- multi-word verbs
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
 -- If another case is wanted, use the following.
 
-  caseV : Case -> V -> V ;  -- deviating subj. case, e.g. genitive "täytyä"
+  caseV : Case -> V -> V ;  -- deviating subj. case, e.g. allative "meeldima"
 
 -- The verbs "be" and "go" are special.
 
@@ -206,9 +188,9 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;  -- e.g. puhua, allative, elative
-  dirV3    : V -> Case -> V3 ;          -- siirtää, (accusative), illative
-  dirdirV3 : V         -> V3 ;          -- antaa, (accusative), (allative)
+  mkV3     : V -> Prep -> Prep -> V3 ;  -- e.g. rääkima, allative, elative
+  dirV3    : V -> Case -> V3 ;          -- liigutama, (accusative), illative
+  dirdirV3 : V         -> V3 ;          -- andma, (accusative), (allative)
 
 
 --3 Other complement patterns
@@ -218,15 +200,15 @@ oper
 
   mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
-  mkV2S : V -> Prep -> V2S ; -- e.g. "sanoa" allative
-  mkVV  : V -> VV ;  -- e.g. "alkaa"
+  mkV2S : V -> Prep -> V2S ; -- e.g. "ütlema" allative
+  mkVV  : V -> VV ;  -- e.g. "hakkama"
   mkVVf : V -> InfForm -> VV ; -- e.g. "hakkama" infMa
-  mkV2V : V -> Prep -> V2V ;  -- e.g. "käskeä" genitive
-  mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "kieltää" partitive infMast  
-  mkVA  : V -> Prep -> VA ; -- e.g. "maistua" ablative
-  mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "maalata" accusative translative
+  mkV2V : V -> Prep -> V2V ;  -- e.g. "käskima" adessive
+  mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "keelama" partitive infMast  
+  mkVA  : V -> Prep -> VA ; -- e.g. "muutuma" translative
+  mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "värvima" genitive translative
   mkVQ  : V -> VQ ; 
-  mkV2Q : V -> Prep -> V2Q ; -- e.g. "kysyä" ablative 
+  mkV2Q : V -> Prep -> V2Q ; -- e.g. "küsima" ablative 
 
   mkAS  : A -> AS ; --%
   mkA2S : A -> Prep -> A2S ; --%
@@ -279,22 +261,16 @@ oper
     \c -> {c = NPCase c ; s = [] ; isPre = True ; lock_Prep = <>} ;
   accPrep =  {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
 
-  NW = {s : NForms ; lock_NW : {}} ;
-  AW = {s : NForms ; lock_AW : {}} ;
-  VW = {s : VForms ; lock_VW : {}} ;
-  AdvW = {s : Str ; lock_AdvW : {}} ;
-
 
   mkN = overload {
     mkN : (nisu : Str) -> N = mk1N ;
     mkN : (link,lingi : Str) -> N = mk2N ;
     mkN : (tukk,tuku,tukku : Str) -> N = mk3N ;
-    mkN : (paat,paadi,paati,paatide : Str) -> N = mk4N ;
+    mkN : (paat,paadi,paati,paate : Str) -> N = mk4N ;
     mkN : (oun,ouna,ouna,ounasse,ounte,ounu : Str) -> N = mk6N ;
 
     mkN : (sora : Str) -> (tie : N) -> N = mkStrN ;
     mkN : (oma,tunto : N) -> N = mkNN ;
-    mkN : (sana : NW) -> N = \w -> nForms2N w.s ;
   } ;
 
   -- Adjective forms (incl. comp and sup) are derived from noun forms
@@ -309,6 +285,8 @@ oper
 
   mk1N : (link : Str) -> N = \s -> nForms2N (hjk_type s) ** {lock_N = <> } ;
 
+  -- mk2N, mk3N, mk4N make sure that the user specified forms end up in the paradigm,
+  -- even though the rest is wrong
   mk2N : (link,lingi : Str) -> N = \link,lingi -> 
     let nfs : NForms = (nForms2 link lingi) ; 
         nfs_fixed : NForms = table {
@@ -334,24 +312,16 @@ oper
         } ;
     in nForms2N nfs_fixed ** {lock_N = <> } ;
 
-{-  mk1N : (link : Str) -> N = \s -> nForms2N (hjk_type s) ** {lock_N = <> } ;
-  mk2N : (link,lingi : Str) -> N = \s,t -> nForms2N (nForms2 s t)  ** {lock_N = <>} ;
-  mk3N : (tukk,tuku,tukku : Str) -> N = \s,t,u -> nForms2N (nForms3 s t u) ** {lock_N = <>} ;  
-  --regular mk4N
-  mk4N : (paat,paadi,paati,paate : Str) -> N = \s,t,u,v -> nForms2N (nForms4 s t u v) ** {lock_N = <>} ;
--}
 
-  --experimental: make sure that the user specified forms end up in the paradigm, even though the rest is wrong
-  --this is using pl part
-  mk4N : (paat,paadi,paati,paatide : Str) -> N = \paat,paadi,paati,paate ->  
-    let nfs : NForms = (nForms4 paat paadi paati paate) ; 
+  mk4N : (paat,paadi,paati,paate : Str) -> N = \paat,paadi,paati,paate ->
+    let nfs : NForms = (nForms4 paat paadi paati paate) ;
         nfs_fixed : NForms = table {
                 0 => paat ;
                 1 => paadi ;
                 2 => paati ;
                 3 => nfs ! 3 ;
                 4 => nfs ! 4 ; 
-                5 => paate 
+                5 => paate
         } ;
     in nForms2N nfs_fixed ** {lock_N = <> } ;
 
@@ -403,7 +373,7 @@ oper
         --heuristics to catch palk:palga but not maakas:maaka (for longer words, same with more ?s)
         --didn't work, don't try this
         --<? + ? + #c, ? + ? + #c + #v> => hjk_type_IVb_audit link i ; 
-        _ => hjk_type link 
+        _ => hjk_type2 link i
       } ;
 
   nForms3 : (_,_,_ : Str) -> NForms = \tukk,tuku,tukku ->
@@ -422,13 +392,12 @@ oper
 
       <_ + "ik", _ + "iku", _ + "ikku"> => hjk_type_VI_imelik tukk ; --imelik:_:imelikku caught here
 
-      <_ + #c, _ + #v, _ + #v> => hjk_type_VI_tukk tukk tuku ;
       <_ + "ud", _ + "u", _ + "ut"> => nForms2 tukk tuku ;  -- -nud/-tud participles are not like 'voolik'
       <_ + #c, _ + #v, _ + #v + "t"> => hjk_type_IVb_audit tukk u ;  --voolik:_:voolikut caught here
       _ => nForms2 tukk tuku 
     } ;
 
-  nForms4 : (_,_,_,_ : Str) -> NForms = \paat,paadi,paati,paate -> 
+  nForms4 : (_,_,_,_ : Str) -> NForms = \paat,paadi,paati,paate ->
     case <paat,paadi,paati,paate> of {
      -- distinguish between joonis and segadus
       <_ +("ne"|"s"),  _+"se", _+"st", _+"seid"> => hjk_type_Va_otsene paat ;
@@ -442,6 +411,7 @@ oper
 
       _  => nForms3 paat paadi paati 
       } ;
+
 {-
   --Version that uses pl gen instead of pl part
   nForms4 : (_,_,_,_ : Str) -> NForms = \paat,paadi,paati,paatide -> 
@@ -468,7 +438,7 @@ oper
 
   mmkN2 : N -> Prep -> N2 = \n,c -> n ** {c2 = c ; isPre = mkIsPre c ; lock_N2 = <>} ;
   mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; 
-    isPre = mkIsPre c  ; -- matka Lontoosta Pariisiin
+    isPre = mkIsPre c  ; -- matka Londonist Pariisi
     isPre2 = mkIsPre e ;          -- Suomen voitto Ruotsista
     lock_N3 = <>
     } ;
@@ -495,10 +465,9 @@ oper
     -- TODO: temporary usage of regAdjective1
     mkA : N -> (valmim,valmeim : Str) -> (infl : Infl) -> A =
 		\n,c,s,infl -> (regAdjective1 n c s) ** {infl = infl ; lock_A = <>} ;
-    mkA : (sana : AW) -> A = \w -> noun2adjDeg (nForms2N w.s) ** {infl = Regular} ;
   } ;
 
-  genAttrA balti = {s = \\_,_ => balti ; infl = Invariable ; lock_A = <>} ;
+  invA balti = {s = \\_,_ => balti ; infl = Invariable ; lock_A = <>} ;
 
   mkA_1 : Str -> A = \x -> noun2adjDeg (mk1N x) ** {infl = Regular  ; lock_A = <>} ;
 
@@ -550,7 +519,6 @@ oper
     mkV : (lugema,lugeda,loeb,loetakse : Str) -> V = mk4V ;
     mkV : (tegema,teha,teeb,tehakse,tehke,tegi,teinud,tehtud : Str) -> V = mk8V ;
     mkV : (aru : Str) -> (saama : V) -> V = mkPV ; -- particle verbs
-    mkV : (sana : VW) -> V = \w -> vforms2V w.s ** {sc = NPCase Nom ; lock_V = <>} ;
   } ;
 
   mk1V : Str -> V = \s -> 
@@ -742,7 +710,6 @@ oper
 
   mkAdv = overload { 
     mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
-    mkAdv : AdvW -> Adv = \s -> {s = s.s ; lock_Adv = <>} ;
     } ;
 
   mkV2 = overload {
