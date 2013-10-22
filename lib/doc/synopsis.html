@@ -6236,7 +6236,7 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TR>
 <TD><CODE>infDes</CODE></TD>
 <TD><A HREF="#InfForm">InfForm</A></TD>
-<TD><I>-</I></TD>
+<TD><I>e.g. "lugedes"</I></TD>
 </TR>
 <TR>
 <TD><CODE>infMa</CODE></TD>
@@ -6266,7 +6266,7 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TR>
 <TD><CODE>prePrep</CODE></TD>
 <TD><A HREF="#Case">Case</A> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-<TD><I>preposition, e.g. comitative "koos"</I></TD>
+<TD><I>preposition, e.g. abessive "ilma"</I></TD>
 </TR>
 <TR>
 <TD><CODE>postPrep</CODE></TD>
@@ -6284,39 +6284,19 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TD><I>just case, e.g. adessive</I></TD>
 </TR>
 <TR>
-<TD><CODE>NW</CODE></TD>
-<TD><A HREF="#Type">Type</A></TD>
-<TD><I>Noun from DictEst (WordNet)</I></TD>
-</TR>
-<TR>
-<TD><CODE>AW</CODE></TD>
-<TD><A HREF="#Type">Type</A></TD>
-<TD><I>Adjective from DictEst (WordNet)</I></TD>
-</TR>
-<TR>
-<TD><CODE>VW</CODE></TD>
-<TD><A HREF="#Type">Type</A></TD>
-<TD><I>Verb from DictEst (WordNet)</I></TD>
-</TR>
-<TR>
-<TD><CODE>AdvW</CODE></TD>
-<TD><A HREF="#Type">Type</A></TD>
-<TD><I>Adverb from DictEst (WordNet)</I></TD>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(ema</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><I>predictable nouns, covers 90%</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
-<TD><CODE>(kukko</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-<TD><I>predictable nouns, covers 82%</I></TD>
+<TD><CODE>(tukk,tuku</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><I>sg nom,gen: unpredictable stem vowel</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
-<TD><CODE>(savi,savia</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-<TD><I>different pl.part</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkN</CODE></TD>
-<TD><CODE>(vesi,veden,vesia</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-<TD><I>also different sg.gen</I></TD>
+<TD><CODE>(tukk,tuku,tukku</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><I>sg nom,gen,part</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
@@ -6327,26 +6307,6 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(oun,ouna,ouna,ounasse,ounte,ounu</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
 <TD><I>worst case, 6 forms</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkN</CODE></TD>
-<TD><CODE>(oun,ouna,ouna,ounasse,ounte,ounu,ountesse</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-<TD><I>worst case, 7 forms</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkN</CODE></TD>
-<TD><CODE>(pika</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <CODE>(juna</CODE> <CODE>:</CODE> <CODE>N)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-<TD><I>compound with invariable prefix</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkN</CODE></TD>
-<TD><CODE>(oma</CODE> <CODE>:</CODE> <CODE>N)</CODE> <CODE>-&gt;</CODE> <CODE>(tunto</CODE> <CODE>:</CODE> <CODE>N)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-<TD><I>compound with inflecting prefix</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkN</CODE></TD>
-<TD><A HREF="#NW">NW</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-<TD><I>noun from DictEst (WordNet)</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
@@ -6385,7 +6345,7 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
-<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <CODE>(infl</CODE> <CODE>:</CODE> <CODE>Bool)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <CODE>(infl</CODE> <CODE>:</CODE> <CODE>Infl)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
 <TD><I>noun made into adjective, agreement type specified</I></TD>
 </TR>
 <TR>
@@ -6394,59 +6354,49 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TD><I>deviating comparison forms</I></TD>
 </TR>
 <TR>
-<TD><CODE>mkA</CODE></TD>
-<TD><A HREF="#AW">AW</A> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
-<TD><I>adjective from DictEst (WordNet)</I></TD>
-</TR>
-<TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><A HREF="#A" TITLE="A - one-place adjective">A</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#A2" TITLE="A2 - two-place adjective">A2</A></TD>
-<TD><I>e.g. "jaollinen" casePrep adessive</I></TD>
+<TD><I>e.g. "vihane" (postGenPrep "peale")</I></TD>
 </TR>
 <TR>
-<TD><CODE>genAttrA</CODE></TD>
+<TD><CODE>invA</CODE></TD>
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
-<TD><I>genitive attributes ; no agreement to head, no comparison forms.</I></TD>
+<TD><I>invariable adjectives, such as genitive attributes ; no agreement to head, no comparison forms.</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(lugema</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
-<TD><I>predictable verbs, covers n %</I></TD>
+<TD><I>predictable verbs, covers 90 %</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(lugema,lugeda</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
-<TD><I>deviating past 3sg</I></TD>
+<TD><I>ma infinitive, da infinitive</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>(lugema,loeb,lugeda</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
-<TD><I>also deviating pres. 1sg</I></TD>
+<TD><CODE>(lugema,lugeda,loeb</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+<TD><I>ma, da, present sg 3</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>(lugema,lugeda,loeb,loetakse</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
+<TD><CODE>(lugema,lugeda,loeb,loetakse</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>--ma,</CODE> <CODE>da,</CODE> <CODE>pres</CODE> <CODE>sg</CODE> <CODE>3,</CODE> <CODE>pres</CODE> <CODE>passive</CODE></TD>
 <TD><I>-</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(tegema,teha,teeb,tehakse,tehke,tegi,teinud,tehtud</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
-<TD><I>worst-case verb</I></TD>
+<TD><I>worst-case verb, 8 forms</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(saama</CODE> <CODE>:</CODE> <CODE>V)</CODE> <CODE>-&gt;</CODE> <CODE>(aru</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
-<TD><I>pÃ¼siÃ¼hendid TODO</I></TD>
-</TR>
-<TR>
-<TD><CODE>mkV</CODE></TD>
-<TD><A HREF="#VW">VW</A> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
-<TD><I>verb from DictEst (WordNet)</I></TD>
+<TD><I>multi-word verbs</I></TD>
 </TR>
 <TR>
 <TD><CODE>caseV</CODE></TD>
 <TD><A HREF="#Case">Case</A> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V" TITLE="V - one-place verb">V</A></TD>
-<TD><I>deviating subj. case, e.g. genitive "tÃ¤ytyÃ¤"</I></TD>
+<TD><I>deviating subj. case, e.g. allative "meeldima"</I></TD>
 </TR>
 <TR>
 <TD><CODE>vOlema</CODE></TD>
@@ -6481,17 +6431,17 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A></TD>
-<TD><I>e.g. puhua, allative, elative</I></TD>
+<TD><I>e.g. rÃ¤Ã¤kima, allative, elative</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirV3</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Case">Case</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A></TD>
-<TD><I>siirtÃ¤Ã¤, (accusative), illative</I></TD>
+<TD><I>liigutama, (accusative), illative</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirdirV3</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#V3" TITLE="V3 - three-place verb">V3</A></TD>
-<TD><I>antaa, (accusative), (allative)</I></TD>
+<TD><I>andma, (accusative), (allative)</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
@@ -6501,12 +6451,12 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2S" TITLE="V2S - verb with NP and S complement">V2S</A></TD>
-<TD><I>e.g. "sanoa" allative</I></TD>
+<TD><I>e.g. "Ã¼tlema" allative</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
-<TD><I>e.g. "alkaa"</I></TD>
+<TD><I>e.g. "hakkama"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVVf</CODE></TD>
@@ -6516,22 +6466,22 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A></TD>
-<TD><I>e.g. "kÃ¤skeÃ¤" genitive</I></TD>
+<TD><I>e.g. "kÃ¤skima" adessive</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Vf</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#InfForm">InfForm</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A></TD>
-<TD><I>e.g. "kieltÃ¤Ã¤" partitive infMast</I></TD>
+<TD><I>e.g. "keelama" partitive infMast</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#VA" TITLE="VA - adjective-complement verb">VA</A></TD>
-<TD><I>e.g. "maistua" ablative</I></TD>
+<TD><I>e.g. "muutuma" translative</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2A" TITLE="V2A - verb with NP and AP complement">V2A</A></TD>
-<TD><I>e.g. "maalata" accusative translative</I></TD>
+<TD><I>e.g. "vÃ¤rvima" genitive translative</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
@@ -6541,7 +6491,7 @@ source <A HREF="http://www.grammaticalframework.org/lib/src/estonian/ParadigmsEs
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2Q" TITLE="V2Q - verb with NP and Q complement">V2Q</A></TD>
-<TD><I>e.g. "kysyÃ¤" ablative</I></TD>
+<TD><I>e.g. "kÃ¼sima" ablative</I></TD>
 </TR>
 </TABLE>
 
