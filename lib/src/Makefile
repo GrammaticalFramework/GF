@@ -29,7 +29,7 @@ lang:
 api:
 	$(RUNMAKE) alltenses api
 
-dict: DictBul DictEng DictFin DictFre DictRus DictGer DictSwe
+dict: DictBul DictEng DictEst DictFin DictFre DictRus DictGer DictSwe
 
 DictBul:
 	gf -batch bulgarian/DictBul.gf +RTS -K100M
@@ -38,6 +38,10 @@ DictBul:
 DictEng:
 	gf -batch english/DictEng.gf +RTS -K100M
 	cp -p english/DictEng*.gfo ../alltenses
+
+DictEst:
+	gf -batch estonian/DictEst.gf +RTS -K100M
+	cp -p estonian/DictEst*.gfo ../alltenses
 
 DictFin:
 	gf -batch finnish/DictFin.gf +RTS -K100M
