@@ -1,0 +1,67 @@
+<inflection_temlate>
+	<noun>
+		<h1>Noun</h1>
+
+		<table class="forms-table" rules="all">
+			<tr>
+				<th>s</th>
+				<td><form>s</form></td>
+			</tr>
+			<tr>
+				<th>c</th>
+				<td><form>c</form></td>
+			</tr>
+		</table>
+	</noun>
+	<adjective>
+		<h1>Adjective</h1>
+
+		<table class="forms-table" rules="all">
+			<tr>
+				<th>s</th>
+				<td><form>s</form></td>
+			</tr>
+		</table>
+	</adjective>
+	<adverb>
+		<h1>Adverb</h1>
+		<p><form>s</form></p>
+	</adverb>
+	<prep>
+		<h1>Preposition</h1>
+		<p><form>prepPre</form> - <form>prepPost</form></p>
+	</prep>
+	<verb>
+		<h1>Verb</h1>
+		<table class="forms-table" rules="all">
+			<tr>
+				<th>s</th>
+				<td><form>s</form></td>
+			</tr>
+			<tr>
+				<th>dp</th>
+				<td><form>dp</form></td>
+			</tr>
+			<tr>
+				<th>ds</th>
+				<td><form>ds</form></td>
+			</tr>
+			<tr>
+				<th>ep</th>
+				<td><form>ep</form></td>
+			</tr>
+			<tr>
+				<th>neg</th>
+				<td><form>neg</form></td>
+			</tr>
+			<tr>
+				<th>pp</th>
+				<td><form>pp</form></td>
+			</tr>
+			<tr>
+				<th>sn</th>
+				<td><form>sn</form></td>
+			</tr>
+		</table>
+	</verb>
+</inflection_temlate>
