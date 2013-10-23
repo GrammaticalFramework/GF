@@ -8,11 +8,13 @@ public class Language implements Serializable {
 	private final String mLangCode;
     private final String mLangName;
     private final String mConcrete;
+    private final int    mInflResource;
 
-    public Language(String langCode, String langName, String concrete) {
+    public Language(String langCode, String langName, String concrete, int inflResource) {
         mLangCode = langCode;
         mLangName = langName;
         mConcrete = concrete;
+        mInflResource = inflResource;
     }
 
     public String getLangCode() {
@@ -21,6 +23,10 @@ public class Language implements Serializable {
 
     public String getLangName() {
         return mLangName;
+    }
+    
+    public int getInflectionResource() {
+    	return mInflResource;
     }
 
     String getConcrete() {

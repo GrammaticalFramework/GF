@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Translator {
 
@@ -24,12 +25,10 @@ public class Translator {
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
-            new Language("en-US", "English", "ParseEng"),
-            new Language("cmn-Hans-CN", "Chinese", "ParseChi"), 
-	    //            new Language("de-DE", "German",  "ParseGer"),
-	    //           new Language("es-ES", "Spanish", "ResourceDemoSpa"),
-            //new Language("fr-FR", "French", "ResourceDemoFre"),
-            //            new Language("bg-BG", "Bulgarian", "ParseBul"),
+            new Language("en-US", "English", "ParseEng", R.xml.inflection_en),
+            new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.inflection_bg),
+            //new Language("fr-FR", "French", "ParseFre", 0)
+            //new Language("cmn-Hans-CN", "Chinese", "ParseChi", 0)
     };
 
     private Language mSourceLanguage;
@@ -102,6 +101,11 @@ public class Translator {
     public String linearize(Expr e) {
         Concr targetLang = getConcr(getTargetLanguage().getConcrete());
         return targetLang.linearize(e);
+    }
+
+    public Map<String,String> tabularLinearize(Expr e) {
+        Concr targetLang = getConcr(getTargetLanguage().getConcrete());
+        return targetLang.tabularLinearize(e);
     }
 
     public List<MorphoAnalysis> lookupMorpho(String sentence) {

@@ -1,0 +1,84 @@
+<inflection_temlate>
+	<noun>
+		<h1>Noun</h1>
+
+		<table class="forms-table" rules="all">
+			<tr>
+				<th></th>
+				<th>nom</th>
+				<th>gen</th>
+			</tr>
+			<tr>
+				<th>sg</th>
+				<td><form>s Sg Nom</form></td>
+				<td><form>s Sg Gen</form></td>
+			</tr>
+			<tr>
+				<th>pl</th>
+				<td><form>s Pl Nom</form></td>
+				<td><form>s Pl Gen</form></td>
+			</tr>
+		</table>
+	</noun>
+	<adjective>
+		<h1>Adjective</h1>
+
+		<table class="forms-table" rules="all">
+			<tr>
+				<th></th>
+				<th>nom</th>
+				<th>gen</th>
+			</tr>
+			<tr>
+				<th>posit</th>
+				<td><form>s (AAdj Posit Nom)</form></td>
+				<td><form>s (AAdj Posit Gen)</form></td>
+			</tr>
+			<tr>
+				<th>compar</th>
+				<td><form>s (AAdj Compar Nom)</form></td>
+				<td><form>s (AAdj Compar Gen)</form></td>
+			</tr>
+			<tr>
+				<th>compar</th>
+				<td><form>s (AAdj Superl Nom)</form></td>
+				<td><form>s (AAdj Superl Gen)</form></td>
+			</tr>
+		</table>
+		<h1>Adverb</h1>
+		<p><form>s AAdv</form></p>
+	</adjective>
+	<adverb>
+		<h1>Adverb</h1>
+		<p><form>s</form></p>
+	</adverb>
+	<prep>
+		<h1>Preposition</h1>
+		<p><form>s</form></p>
+	</prep>
+	<verb>
+		<h1>Verb</h1>
+		<table class="forms-table" rules="all">
+			<tr>
+				<th>infitive</th>
+				<td><form>s VInf</form></td>
+			</tr>
+			<tr>
+				<th>present</th>
+				<td><form>s VPres</form></td>
+			</tr>
+			<tr>
+				<th>past</th>
+				<td><form>s VPast</form></td>
+			</tr>
+			<tr>
+				<th>past part.</th>
+				<td><form>s VPPart</form></td>
+			</tr>
+			<tr>
+				<th>present part.</th>
+				<td><form>s VPresPart</form></td>
+			</tr>
+		</table>
+	</verb>
+</inflection_temlate>

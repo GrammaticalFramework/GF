@@ -1,19 +1,35 @@
 package org.grammaticalframework.ui.android;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.grammaticalframework.pgf.*;
 import org.grammaticalframework.ui.android.LanguageSelector.OnLanguageSelectedListener;
+import org.xmlpull.v1.XmlPullParserException;
 
 public class LexicalEntryActivity extends ListActivity {
 
@@ -51,6 +67,8 @@ public class LexicalEntryActivity extends ListActivity {
 		mShowLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
 	}
 
+	private View expandedView;
+
 	private void updateTranslations() {
 	    @SuppressWarnings("unchecked")
 		List<MorphoAnalysis> list = (List<MorphoAnalysis>)
@@ -59,33 +77,167 @@ public class LexicalEntryActivity extends ListActivity {
 		List<String> data = new ArrayList<String>();
 	    for (MorphoAnalysis a : list) {
 	    	Expr e = Expr.readExpr(a.getLemma());
-	    	String phrase = mTranslator.linearize(e);
 	    	
-	    	if (!data.contains(phrase)) {
-		    	data.add(phrase);
+	    	if (!data.contains(a.getLemma())) {
+		    	data.add(a.getLemma());
 	    	}
 	    }
 
-	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, 
-	    	android.R.layout.simple_list_item_1, 
-	    	data) {
-	    		public View getView(int position, View convertView, ViewGroup parent) {
-	    			String item = getItem(position);
-	    			
-	    			LayoutInflater inflater = (LayoutInflater) getContext()
-	    	                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-	    	        if (convertView == null) {
-	    	            convertView = inflater.inflate(R.layout.lexical_item, null);
-	    	        } 
-
-	    	        TextView descView =
-	    	        		(TextView) convertView.findViewById(R.id.lexical_desc);
-	    	        descView.setText(item);
-
-	    			return convertView;
-	    	    }
-	    };
-	    
-        setListAdapter(adapter);	
+        setListAdapter(new LexicalAdapter(this, data));
+        expandedView = null;
 	}
+	
+	private void collapse() {
+		if (expandedView == null)
+			return;
+		
+		ImageView arrow = (ImageView) expandedView.findViewById(R.id.arrow);
+		arrow.setImageResource(R.drawable.open_arrow);
+
+		WebView inflectionView = (WebView) expandedView.findViewById(R.id.lexical_inflection);
+		((RelativeLayout) expandedView).removeView(inflectionView);
+
+		expandedView = null;
+	}
+
+	private void expand(View view, String lemma) {
+		String tag = null;
+		if (lemma.endsWith("_N") || lemma.endsWith("_N2"))
+			tag = "noun";
+		else if (lemma.endsWith("_V")  || lemma.endsWith("_V2")  || 
+				 lemma.endsWith("_V3") || lemma.endsWith("_V2V") ||
+				 lemma.endsWith("_VV") || lemma.endsWith("_VS"))
+			tag = "verb";
+		else if (lemma.endsWith("_A") || lemma.endsWith("_A2")) 
+			tag = "adjective";
+		else if (lemma.endsWith("_Prep")) 
+			tag = "prep";
+		else if (lemma.endsWith("_Adv")) 
+			tag = "adverb";
+
+		if (tag == null)
+			return;
+		
+		int res = mTranslator.getTargetLanguage().getInflectionResource();
+		if (res == 0)
+			return;
+
+		ImageView arrow = (ImageView) view.findViewById(R.id.arrow);
+		arrow.setImageResource(R.drawable.close_arrow);
+		
+		WebView inflectionView = (WebView) view.findViewById(R.id.lexical_inflection);
+		if (inflectionView == null) {
+			inflectionView = new WebView(this);
+			inflectionView.setId(R.id.lexical_inflection);
+			RelativeLayout.LayoutParams params = 
+					new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.addRule(RelativeLayout.BELOW, R.id.lexical_desc);
+			((RelativeLayout) view).addView(inflectionView, params);
+		}
+
+		Expr expr = Expr.readExpr(lemma);
+		Map<String,String> lins = mTranslator.tabularLinearize(expr);
+		XmlResourceParser parser = getResources().getXml(res);
+		StringBuilder builder = new StringBuilder();
+		builder.append("<html><head><meta charset=\"UTF-8\"/></head><body>");
+		
+		try {
+			boolean emit = false;
+			boolean form = false;
+			int event = parser.next();
+			while (event != XmlResourceParser.END_DOCUMENT) {
+				switch (event) {
+				case XmlResourceParser.START_TAG:
+					if (tag.equals(parser.getName())) {
+						emit = true;
+					} if ("form".equals(parser.getName())) {
+						form = true;
+					} else if (emit) {
+						builder.append("<"+parser.getName());
+						int n_attrs = parser.getAttributeCount();
+						for (int i = 0; i < n_attrs; i++) {
+							builder.append(' ');
+							builder.append(parser.getAttributeName(i));
+							builder.append("=\"");
+							builder.append(parser.getAttributeValue(i));
+							builder.append("\"");
+						}
+						builder.append(">");
+					}
+					break;
+				case XmlResourceParser.END_TAG:
+					if (tag.equals(parser.getName())) {
+						emit = false;
+					} else if ("form".equals(parser.getName())) {
+						form = false;
+					} else if (emit) {
+						builder.append("</"+parser.getName()+">");
+					}
+					break;
+				case XmlResourceParser.TEXT:
+					if (emit) {
+						if (form) {
+							String s = lins.get(parser.getText());
+							if (s != null)
+								builder.append(s);
+						} else {
+							builder.append(parser.getText());
+						}
+					}
+					break;
+				}
+				event = parser.next();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+		} finally {
+			parser.close();
+		}
+		
+		builder.append("</body>");
+		inflectionView.loadData(builder.toString(), "text/html", null);
+
+		expandedView = view;
+	}
+
+    private class LexicalAdapter extends ArrayAdapter<String> {
+    	public LexicalAdapter(Context context, List<String> data) {
+    		super(context, android.R.layout.simple_list_item_1, data);
+    	}
+
+    	public View getView(int position, View convertView, ViewGroup parent) {
+			final String lemma = getItem(position);
+			
+			LayoutInflater inflater = (LayoutInflater) getContext()
+	                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+	        if (convertView == null) {
+	            convertView = inflater.inflate(R.layout.lexical_item, null);
+	        }
+
+	        TextView descView =
+	        		(TextView) convertView.findViewById(R.id.lexical_desc);
+
+	    	Expr e = Expr.readExpr(lemma);
+	    	String phrase = mTranslator.linearize(e);		    	
+	        descView.setText(phrase);
+
+	        convertView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					if (expandedView == view)
+						collapse();
+					else if (expandedView == null)
+						expand(view, lemma);
+					else {
+						collapse();
+						expand(view, lemma);
+					}					
+				}
+			});
+
+			return convertView;
+	    }
+    }
 }
