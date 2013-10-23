@@ -677,6 +677,35 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 	pgf_lzr_linearize(concr, ctree, lin_idx, &flin.funcs);
 }
 
+void
+pgf_lzr_linearize_table(PgfConcr* concr, PgfCncTree ctree, 
+                        size_t* n_lins, GuString** labels)
+{
+	static GuString s_label = "s";
+
+	GuVariantInfo cti = gu_variant_open(ctree);
+
+	switch (cti.tag) {
+	case PGF_CNC_TREE_APP: {
+		PgfCncTreeApp* fapp = cti.data;
+		PgfCncCat* cnccat =
+			gu_map_get(concr->cnccats, fapp->fun->absfun->type->cid, PgfCncCat*);
+		*n_lins = cnccat->n_lins;
+		*labels = cnccat->labels;
+		break;
+	}
+	case PGF_CNC_TREE_LIT:
+	case PGF_CNC_TREE_CHUNKS: {
+		*n_lins = 1;
+		*labels = &s_label;
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+
+}
+
 GuString
 pgf_get_tokens(PgfSymbols* syms, uint16_t sym_idx, GuPool* pool)
 {

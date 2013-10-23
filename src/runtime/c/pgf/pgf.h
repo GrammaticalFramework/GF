@@ -35,6 +35,7 @@
 typedef GuString PgfCId;
 extern GU_DECLARE_TYPE(PgfCId, typedef);
 
+typedef GuString PgfToken;
 
 extern GU_DECLARE_TYPE(PgfExn, abstract);
 extern GU_DECLARE_TYPE(PgfParseError, abstract);
