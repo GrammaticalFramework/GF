@@ -128,7 +128,6 @@ typedef struct {
 
 extern GU_DECLARE_TYPE(PgfCncCat, abstract);
 
-typedef GuString PgfToken;
 typedef GuSeq PgfTokens;
 
 bool

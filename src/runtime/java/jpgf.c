@@ -1,5 +1,6 @@
 #include <pgf/pgf.h>
 #include <pgf/reader.h>
+#include <pgf/linearizer.h>
 #include <gu/mem.h>
 #include <gu/exn.h>
 #include <gu/utf8.h>
@@ -348,6 +349,71 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 	gu_pool_free(tmp_pool);
 	
 	return jstr;
+}
+
+JNIEXPORT jobject JNICALL 
+Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject self, jobject jexpr)
+{
+	jclass map_class = (*env)->FindClass(env, "java/util/HashMap");
+	if (!map_class)
+		return NULL;
+	jmethodID constrId = (*env)->GetMethodID(env, map_class, "<init>", "()V");
+	if (!constrId)
+		return NULL;
+	jobject table = (*env)->NewObject(env, map_class, constrId);
+	if (!table)
+		return NULL;
+
+	jmethodID put_method = (*env)->GetMethodID(env, map_class, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+	if (!put_method)
+		return NULL;
+		
+	PgfConcr* concr = get_ref(env, self);
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	GuEnum* cts = 
+		pgf_lzr_concretize(concr,
+		                   gu_variant_from_ptr((void*) get_ref(env, jexpr)),
+		                   tmp_pool);
+	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
+	if (gu_variant_is_null(ctree)) {
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	size_t n_lins;
+	GuString* labels;
+	pgf_lzr_linearize_table(concr, ctree, &n_lins, &labels);
+
+	for (size_t lin_idx = 0; lin_idx < n_lins; lin_idx++) {
+		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+
+		pgf_lzr_linearize_simple(concr, ctree, lin_idx, out, err);
+
+		jstring jstr = NULL;
+		if (gu_ok(err)) {
+			GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+			jstr = gu2j_string(env, str);
+		} else {
+			gu_exn_clear(err);
+		}
+		
+		jstring jname = gu2j_string(env, labels[lin_idx]);
+
+		(*env)->CallObjectMethod(env, table, put_method, jname, jstr);
+
+		(*env)->DeleteLocalRef(env, jname);
+		
+		if (jstr != NULL)
+			(*env)->DeleteLocalRef(env, jstr);
+	}
+	
+	gu_pool_free(tmp_pool);
+
+	return table;
 }
 
 typedef struct {
