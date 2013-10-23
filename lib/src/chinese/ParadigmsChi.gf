@@ -184,7 +184,7 @@ oper
   mkpDet : Str -> Det 
     = \s -> lin Det {s = word s ; detType = DTFull Sg} ;
   mkQuant : Str -> Quant 
-    = \s -> lin Quant {s,pl = s ; detType = DTFull Sg} ;
+    = \s -> lin Quant {s,pl = word s ; detType = DTFull Sg} ;
   mkAdA : Str -> AdA 
     = \s -> lin AdA {s = word s} ;
   mkNum : Str -> Num 
