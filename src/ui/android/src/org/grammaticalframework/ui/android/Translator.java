@@ -28,7 +28,7 @@ public class Translator {
             new Language("en-US", "English", "ParseEng", R.xml.inflection_en),
             new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.inflection_bg),
             //new Language("fr-FR", "French", "ParseFre", 0)
-            //new Language("cmn-Hans-CN", "Chinese", "ParseChi", 0)
+            //new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.inflection_cmn)
     };
 
     private Language mSourceLanguage;
