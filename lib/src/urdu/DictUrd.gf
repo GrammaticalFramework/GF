@@ -15136,7 +15136,7 @@ lin
   part_Prep = mkPrep "" "" ;
   please_Voc = ss "مہربانی" ;
   possess_Prep = mkPrep "كا" "كی" ;
-  quite_Adv = ss "خاموش" ;
+  quite_Adv = mkAdv "خاموش" ;
   she_Pron = personalPN "وہ" "اس" "وہ" ["اس كی"] ["اس كی"] ["اس كے"] ["اس كی"] Sg Fem Pers3_Distant ;
   so_AdA = ss "اس لیے" ;
   somebody_NP = MassNP (UseN (ParadigmsUrd.mkN "كوی" "كوی" "كوی" "كوی" "كوی" "كوی" Masc ));
