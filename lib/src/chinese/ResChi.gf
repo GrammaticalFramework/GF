@@ -67,6 +67,11 @@ resource ResChi = ParamX ** open Prelude in {
   bword : Str -> Str -> Str = \x,y -> x ++ y ; -- change to x + y to treat words as single tokens
 
   word : Str -> Str = \s -> case s of {
+      x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? + c@? + d@? + e@? => 
+        bword x (bword y (bword z (bword u (bword v (bword w (bword a (bword b (bword c (bword d e))))))))) ;
+      x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? + c@? + d@? => 
+        bword x (bword y (bword z (bword u (bword v (bword w (bword a (bword b (bword c d)))))))) ;
+      x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? + c@? => bword x (bword y (bword z (bword u (bword v (bword w (bword a (bword b c))))))) ;
       x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? => bword x (bword y (bword z (bword u (bword v (bword w (bword a b)))))) ;
       x@? + y@? + z@? + u@? + v@? + w@? + a@? => bword x (bword y (bword z (bword u (bword v (bword w a))))) ;
       x@? + y@? + z@? + u@? + v@? + w@? => bword x (bword y (bword z (bword u (bword v w)))) ;
@@ -228,15 +233,15 @@ oper
   Quantifier = Determiner ** {pl : Str} ;
 
   mkDet = overload {
-    mkDet : Str ->            Determiner = \s   -> {s = s ; detType = DTFull Sg} ;
-    mkDet : Str -> Number  -> Determiner = \s,n -> {s = s ; detType = DTFull n} ;
-    mkDet : Str -> DetType -> Determiner = \s,d -> {s = s ; detType = d} ;
+    mkDet : Str ->            Determiner = \s   -> {s = word s ; detType = DTFull Sg} ;
+    mkDet : Str -> Number  -> Determiner = \s,n -> {s = word s ; detType = DTFull n} ;
+    mkDet : Str -> DetType -> Determiner = \s,d -> {s = word s ; detType = d} ;
     } ;
 
   mkQuant = overload {
-    mkQuant : Str ->                   Quantifier = \s     -> {s,pl = s ; detType = DTFull Sg} ;
-    mkQuant : Str ->        DetType -> Quantifier = \s,d   -> {s,pl = s ; detType = d} ;
-    mkQuant : Str -> Str -> DetType -> Quantifier = \s,p,d -> {s    = s ; detType = d ; pl = p} ;
+    mkQuant : Str ->                   Quantifier = \s     -> {s,pl = word s ; detType = DTFull Sg} ;
+    mkQuant : Str ->        DetType -> Quantifier = \s,d   -> {s,pl = word s ; detType = d} ;
+    mkQuant : Str -> Str -> DetType -> Quantifier = \s,p,d -> {s    = word s ; detType = d ; pl = p} ;
     } ;
 
   pronNP : (s : Str) -> NP = \s -> {
