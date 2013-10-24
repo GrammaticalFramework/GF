@@ -59,14 +59,14 @@ cgiMain' cache path =
 pgfMain :: String -> PGF -> CGI CGIResult
 pgfMain command pgf =
     case command of
-      "parse"          -> out =<< doParse pgf # text % cat % from % limit
+      "parse"          -> out =<< doParse pgf # text % cat % from % limit % trie
       "complete"       -> out =<< doComplete pgf # text % cat % from % limit
       "linearize"      -> out =<< doLinearize pgf # tree % to
       "linearizeAll"   -> out =<< doLinearizes pgf # tree % to
       "linearizeTable" -> out =<< doLinearizeTabular pgf # tree % to
       "random"         -> cat >>= \c -> depth >>= \dp -> limit >>= \l -> to >>= \to -> liftIO (doRandom pgf c dp l to) >>= out
       "generate"       -> out =<< doGenerate pgf # cat % depth % limit % to
-      "translate"      -> out =<< doTranslate pgf # text % cat % from % to % limit
+      "translate"      -> out =<< doTranslate pgf # text % cat % from % to % limit % trie
       "translategroup" -> out =<< doTranslateGroup pgf # text % cat % from % to % limit
       "grammar"        -> out =<< doGrammar pgf # requestAcceptLanguage
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
@@ -129,6 +129,9 @@ pgfMain command pgf =
     to :: CGI [PGF.Language]
     to = getLangs "to"
 
+    trie :: CGI Bool
+    trie = maybe False toBool # getInput "trie"
+
     getLangs :: String -> CGI [PGF.Language]
     getLangs i = mapM readLang . maybe [] words =<< getInput i
 
@@ -162,7 +165,8 @@ pgfMain command pgf =
       where
         string name = maybe "" id # getInput name
         bool name = maybe False toBool # getInput name
-        toBool s = s `elem` ["","yes","true","True"]
+
+    toBool s = s `elem` ["","yes","true","True"]
 
 errorMissingId = throwCGIError 400 "Missing identifier" []
 
@@ -188,8 +192,8 @@ doExternal (Just cmd) input =
          liftIO $ removeFile tmpfile2
          return r
 
-doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [PGF.Language] -> Maybe Int -> JSValue
-doTranslate pgf input mcat mfrom tos mlimit =
+doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [PGF.Language] -> Maybe Int -> Bool -> JSValue
+doTranslate pgf input mcat mfrom tos mlimit trie =
   showJSON
      [makeObj ("from".=from : "brackets".=bs : jsonTranslateOutput po)
           | (from,po,bs) <- parse' pgf input mcat mfrom]
@@ -197,6 +201,7 @@ doTranslate pgf input mcat mfrom tos mlimit =
     jsonTranslateOutput output =
       case output of
         PGF.ParseOk trees ->
+            addTrie trie trees++
             ["translations".=
               [makeObj ["tree".=tree,
                         "linearizations".=
@@ -264,17 +269,21 @@ doTranslateGroup pgf input mcat mfrom tos mlimit =
 
    notDisamb = (/="Disamb") . take 6 . PGF.showLanguage
 
-doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe Int -> JSValue
-doParse pgf input mcat mfrom mlimit = showJSON $ map makeObj
+doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe Int -> Bool -> JSValue
+doParse pgf input mcat mfrom mlimit trie = showJSON $ map makeObj
      ["from".=from : "brackets".=bs : jsonParseOutput po
         | (from,po,bs) <- parse' pgf input mcat mfrom]
   where
     jsonParseOutput output =
       case output of
         PGF.ParseOk trees   -> ["trees".=maybe id take mlimit trees]
+                               ++addTrie trie trees
         PGF.TypeError errs  -> jsonTypeErrors errs
         PGF.ParseIncomplete -> ["incomlete".=True]
         PGF.ParseFailed n   -> ["parseFailed".=n]
+
+addTrie trie trees =
+    ["trie".=map head (PGF.toTrie (map PGF.toATree trees))|trie]
 
 doComplete :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe Int -> JSValue
 doComplete pgf input mcat mfrom mlimit = showJSON
@@ -505,23 +514,30 @@ doBrowse pgf (Just id) cssClass href _ pn = -- default to "html" format
     annotatePrintNames = "<DL>"++(unwords pns)++"</DL>"
       where pns = ["<DT>"++(show lang)++"</DT><DD>"++(PGF.showPrintName pgf lang id)++"</DD>" | lang <- PGF.languages pgf ]
 
-instance JSON PGF.CId where
-    readJSON x = readJSON x >>= maybe (fail "Bad language.") return . PGF.readLanguage
-    showJSON = showJSON . PGF.showLanguage
-
-jsonExpr e = evalState (expr e) 0
+-- | Render trees as JSON with numbered functions
+jsonExpr e = evalState (expr (PGF.toATree e)) 0
   where
-    expr e = maybe other app (PGF.unApp e)
-      where
-        other = return (makeObj ["other".=e])
-
-    app (f,es) = do js <- mapM expr es
-                    let children=["children".=js | not (null js)]
-                    i<-inc
-                    return $ makeObj (["fun".=f,"fid".=i]++children)
+    expr e =
+      case e of
+        PGF.Other e -> return (makeObj ["other".=e])
+        PGF.App f es ->
+                do js <- mapM expr es
+                   let children=["children".=js | not (null js)]
+                   i<-inc
+                   return $ makeObj (["fun".=f,"fid".=i]++children)
 
     inc :: State Int Int
     inc = do i <- get; put (i+1); return i
+
+instance JSON PGF.Trie where
+    showJSON (PGF.Oth e) = makeObj ["other".=e]
+    showJSON (PGF.Ap f [[]]) = makeObj ["fun".=f] -- leaf
+--  showJSON (PGF.Ap f [es]) = makeObj ["fun".=f,"children".=es] -- one alternative
+    showJSON (PGF.Ap f alts) = makeObj ["fun".=f,"alts".=alts]
+
+instance JSON PGF.CId where
+    readJSON x = readJSON x >>= maybe (fail "Bad language.") return . PGF.readLanguage
+    showJSON = showJSON . PGF.showLanguage
 
 instance JSON PGF.Expr where
     readJSON x = readJSON x >>= maybe (fail "Bad expression.") return . PGF.readExpr
