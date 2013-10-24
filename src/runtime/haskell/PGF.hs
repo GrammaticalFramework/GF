@@ -136,7 +136,9 @@ module PGF(
 --         forExample,
 
            -- * Browsing
-           browse
+           browse,
+           -- * Tries
+           ATree(..),Trie(..),toATree,toTrie
           ) where
 
 import PGF.CId
@@ -328,3 +330,34 @@ browse pgf id = fmap (\def -> (def,producers,consumers)) definition
     expIds (EFun id)    ids = id : ids
     expIds (ETyped e _) ids = expIds e ids
     expIds _            ids = ids
+
+-- | A type for plain applicative trees
+data ATree = Other Tree | App CId  [ATree]  deriving Show
+data Trie  = Oth   Tree | Ap  CId [[Trie ]] deriving Show
+-- ^ A type for tries of plain applicative trees
+
+-- | Convert a 'Tree' to an 'ATree'
+toATree :: Tree -> ATree
+toATree e = maybe (Other e) app (unApp e)
+  where
+    app (f,es) = App f (map toATree es)
+
+-- | Combine a list of trees into a trie
+toTrie = combines . map ((:[]) . singleton)
+  where
+    singleton t = case t of
+                    Other e -> Oth e
+                    App f ts -> Ap f [map singleton ts]
+
+    combines [] = []
+    combines (ts:tss) = ts1:combines tss2
+      where
+        (ts1,tss2) = combines2 [] tss ts
+        combines2 ots []        ts1 = (ts1,reverse ots)
+        combines2 ots (ts2:tss) ts1 =
+          maybe (combines2 (ts2:ots) tss ts1) (combines2 ots tss) (combine ts1 ts2)
+
+        combine ts us = mapM combine2 (zip ts us)
+          where
+            combine2 (Ap f ts,Ap g us) | f==g = Just (Ap f (combines (ts++us)))
+            combine2 _ = Nothing

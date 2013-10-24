@@ -687,6 +687,12 @@ allCommands = Map.fromList [
        ("to",  "forward-apply transliteration defined in this file")
        ]
      }),
+  ("tt", emptyCommandInfo {
+     longname = "to_trie",
+     syntax = "to_trie",
+     synopsis = "combine a list of trees into a trie",
+     exec = \ _ _ -> return . fromString . trie
+    }),
   ("pt", emptyCommandInfo {
      longname = "put_tree",
      syntax = "pt OPT? TREE",
@@ -1407,3 +1413,18 @@ execToktok (pgf, _) opts exprs = do
         getLang [] = Nothing
         getLang (OFlag "lang" (VId l):_) = readLanguage l
         getLang (_:os) = getLang os
+
+
+
+trie = render . pptss . toTrie . map toATree
+  where
+    pptss [ts] = text "*"<+>nest 2 (ppts ts)
+    pptss tss  = vcat [int i<+>nest 2 (ppts ts)|(i,ts)<-zip [1..] tss]
+
+    ppts = vcat . map ppt
+
+    ppt t =
+      case t of
+        Oth e     -> text (showExpr [] e)
+        Ap f [[]] -> text (showCId f)
+        Ap f tss  -> text (showCId f) $$ nest 2 (pptss tss)
