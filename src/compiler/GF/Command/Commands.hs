@@ -689,7 +689,7 @@ allCommands = Map.fromList [
      }),
   ("pt", emptyCommandInfo {
      longname = "put_tree",
-     syntax = "ps OPT? TREE",
+     syntax = "pt OPT? TREE",
      synopsis = "return a tree, possibly processed with a function",
      explanation = unlines [
        "Returns a tree obtained from its argument tree by applying",
