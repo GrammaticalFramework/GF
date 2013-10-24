@@ -46921,7 +46921,6 @@ fun sadism_N : N;
 fun sadist_N : N;
 fun sadistic_A : A;
 fun sadness_N : N;
-fun sado_masochist_N : N;
 fun sadomasochism_N : N;
 fun sadomasochist_N : N;
 fun sadomasochistic_A : A;
