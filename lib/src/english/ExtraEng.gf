@@ -13,8 +13,6 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       a = RAg (agrP3 nu.n)
       } ;
 
-    ComplBareVS v s  = insertObj (\\_ => s.s) (predV v) ;
-
     StrandRelSlash rp slash = {
       s = \\t,a,p,ag => 
         rp.s ! RC (fromAgr ag).g NPAcc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
@@ -161,7 +159,8 @@ lin
     ptp = be.ptp ;
     inf = be.inf ;
     ad = [] ;
-    s2 = \\a => vps.ad ++ ppt ++ vps.p ++ vps.s2 ! a ++ vps.c2 ---- order
+    s2 = \\a => vps.ad ++ ppt ++ vps.p ++ vps.s2 ! a ++ vps.c2 ; ---- order
+    ext = vps.ext
     } ;
 
    --- AR 7/3/2013
@@ -177,8 +176,8 @@ lin
    PurposeVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
 
 
-   ComplBareVS  v s = insertObj (\\_ => s.s) (predV v) ;
-   SlashBareV2S v s = insertObjc (\\_ => s.s) (predVc v) ;
+   ComplBareVS  v s = insertExtra s.s (predV v) ;
+   SlashBareV2S v s = insertExtrac s.s (predVc v) ;
 
 
 
