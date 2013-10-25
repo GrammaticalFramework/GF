@@ -11,16 +11,16 @@ concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
     Slash3V3 v np = 
       insertObjc (\\_ => v.c3 ++ np.s ! NPAcc) (predVc v) ; ----
 
-    ComplVV v vp = insertObj (\\a => infVP v.typ vp Simul CPos a) (predVV v) ;
-    ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
+    ComplVV v vp = insertObj (\\a => infVP v.typ vp Simul CPos a) (predVV v) ;  ---- insertExtra?
+    ComplVS v s  = insertExtra (conjThat ++ s.s) (predV v) ; 
 ---    ComplVS v s  = insertObj (variants {\\_ => conjThat ++ s.s; \\_ => s.s}) (predV v) ;
-    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
+    ComplVQ v q  = insertExtra (q.s ! QIndir) (predV v) ;
     ComplVA v ap = insertObj (ap.s) (predV v) ;
 
     SlashV2V v vp = insertObjc (\\a => v.c3 ++ infVP v.typ vp Simul CPos a) (predVc v) ;
-    SlashV2S v s  = insertObjc (\\_ => conjThat ++ s.s) (predVc v) ;
+    SlashV2S v s  = insertExtrac (conjThat ++ s.s) (predVc v) ;   ---- insertExtra?
 ---    SlashV2S v s  = insertObjc (variants {\\_ => conjThat ++ s.s; \\_ => s.s}) (predVc v) ;
-    SlashV2Q v q  = insertObjc (\\_ => q.s ! QIndir) (predVc v) ;
+    SlashV2Q v q  = insertExtrac (q.s ! QIndir) (predVc v) ;
     SlashV2A v ap = insertObjc (\\a => ap.s ! a) (predVc v) ; ----
 
     ComplSlash vp np = case vp.gapInMiddle of {

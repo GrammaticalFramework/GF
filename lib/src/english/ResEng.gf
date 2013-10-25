@@ -230,7 +230,8 @@ resource ResEng = ParamX ** open Prelude in {
     ptp : Str ;   -- past participle
     inf : Str ;   -- the infinitive form ; VerbForms would be the logical place
     ad  : Str ;   -- sentence adverb
-    s2  : Agr => Str -- complement
+    s2  : Agr => Str ; -- complement
+    ext : Str          -- extreposed field such as S, QS, VP
     } ;
 
 
@@ -271,6 +272,7 @@ resource ResEng = ParamX ** open Prelude in {
     ptp  = verb.s ! VPPart ;
     inf  = verb.s ! VInf ;
     ad   = [] ;
+    ext  = [] ;
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
 
@@ -309,6 +311,7 @@ resource ResEng = ParamX ** open Prelude in {
     ptp = verb.ppart ;
     inf = verb.inf ;
     ad = [] ;
+    ext = [] ;
     s2 = \\_ => []
     } ;
         
@@ -331,7 +334,8 @@ resource ResEng = ParamX ** open Prelude in {
     ptp = vp.ptp ;
     inf = vp.inf ;
     ad = vp.ad ;
-    s2 = \\a => vp.s2 ! a ++ obj ! a
+    s2 = \\a => vp.s2 ! a ++ obj ! a ;
+    ext = vp.ext
     } ;
 
   insertObjPre : (Agr => Str) -> VP -> VP = \obj,vp -> {
@@ -341,11 +345,14 @@ resource ResEng = ParamX ** open Prelude in {
     ptp = vp.ptp ;
     inf = vp.inf ;
     ad = vp.ad ;
-    s2 = \\a => obj ! a ++ vp.s2 ! a 
+    s2 = \\a => obj ! a ++ vp.s2 ! a ;
+    ext = vp.ext 
     } ;
 
   insertObjc : (Agr => Str) -> SlashVP -> SlashVP = \obj,vp -> 
     insertObj obj vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
+  insertExtrac : Str -> SlashVP -> SlashVP = \obj,vp -> 
+    insertExtra obj vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
 
 --- AR 7/3/2013 move the particle after the object
   insertObjPartLast : (Agr => Str) -> VP -> VP = \obj,vp -> {
@@ -355,7 +362,8 @@ resource ResEng = ParamX ** open Prelude in {
     ptp = vp.ptp ;
     inf = vp.inf ;
     ad = vp.ad ;
-    s2 = \\a => obj ! a ++ vp.s2 ! a ++ vp.p  -- and put it here ; corresponds to insertObjPre
+    s2 = \\a => obj ! a ++ vp.s2 ! a ++ vp.p ; -- and put it here ; corresponds to insertObjPre
+    ext = vp.ext    
     } ;
 
 --- The adverb should be before the finite verb.
@@ -367,7 +375,19 @@ resource ResEng = ParamX ** open Prelude in {
     ptp = vp.ptp ;
     inf = vp.inf ;
     ad  = vp.ad ++ ad ;
-    s2 = \\a => vp.s2 ! a
+    s2 = \\a => vp.s2 ! a  ;
+    ext = vp.ext
+    } ;
+
+  insertExtra : Str -> VP -> VP = \e,vp -> {
+    s = vp.s ;
+    p = vp.p ;
+    prp = vp.prp ;
+    ptp = vp.ptp ;
+    inf = vp.inf ;
+    ad  = vp.ad ;
+    s2 =  vp.s2  ;
+    ext = vp.ext ++ e  --- there should be at most one, one might think; but: I would say that it will be raining if I saw clouds
     } ;
 
 -- 
@@ -410,7 +430,7 @@ resource ResEng = ParamX ** open Prelude in {
                  _     => "having" ++ vp.ad ++ vp.ptp                 --# notpresent
                }                                                       --# notpresent
     } ++ vp.p ++
-    vp.s2 ! a ;
+    vp.s2 ! a ++ vp.ext ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
     case agr of {
@@ -473,7 +493,7 @@ resource ResEng = ParamX ** open Prelude in {
       s = \\t,a,b,o => 
         let 
           verb  = vp.s ! t ! a ! b ! o ! agr ;
-          compl = vp.s2 ! agr
+          compl = vp.s2 ! agr ++ vp.ext
         in
         case o of {
           ODir => subj ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ vp.p ++ compl ;
