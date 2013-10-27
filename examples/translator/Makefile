@@ -26,8 +26,8 @@ TranslateEngBul:
 TranslateEngChi:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChi TranslateEng.pgf TranslateChi.pgf
 
-TranslateEngChiFin:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChiFin TranslateEng.pgf TranslateChi.pgf TranslateFin.pgf
+TranslateEngChiFinSwe:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChiFinSwe TranslateEng.pgf TranslateChi.pgf TranslateFin.pgf TranslateSwe.pgf
 
 TranslateEngFre:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngFre TranslateEng.pgf TranslateFre.pgf
