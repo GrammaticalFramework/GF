@@ -2,7 +2,7 @@
 
 concrete TranslateFre of Translate = 
     ParseFre - [open_A], 
-    PhrasebookFre ** 
+    PhrasebookFre - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] ** 
   open SyntaxFre, ParadigmsFre, (E = ExtraFre), Prelude in {
 
 lin
@@ -13,4 +13,11 @@ lin
   NP_Place np0 = let np = lin NP np0 in 
                  {name = np ; at = SyntaxFre.mkAdv dative np ; to = SyntaxFre.mkAdv dative np} ;
   
+--- to remove Phrasebook punctuation, which makes the output in Translate heterogeneous
+
+    PSentence s = lin Text (mkUtt s) ; 
+    PQuestion s = lin Text (mkUtt s) ; 
+    PGreetingMale, PGreetingFemale = \g -> lin Text g ;
+    GObjectPlease o = lin Text (mkUtt o) ;
+
 }

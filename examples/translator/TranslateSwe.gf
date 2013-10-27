@@ -2,8 +2,8 @@
 
 concrete TranslateSwe of Translate = 
     ParseSwe - [open_A], 
-    PhrasebookSwe ** 
-  open SyntaxSwe, ParadigmsSwe, (E = ExtraSwe), Prelude in {
+    PhrasebookSwe - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] 
+  ** open SyntaxSwe, ParadigmsSwe, (E = ExtraSwe), Prelude in {
 
 lin
   PPhr p = lin Text p ;
@@ -13,4 +13,11 @@ lin
   NP_Place np0 = let np = lin NP np0 in 
                  {name = np ; at = SyntaxSwe.mkAdv in_Prep np ; to = SyntaxSwe.mkAdv to_Prep np} ;
   
+--- to remove Phrasebook punctuation, which makes the output in Translate heterogeneous
+
+    PSentence s = lin Text (mkUtt s) ; 
+    PQuestion s = lin Text (mkUtt s) ; 
+    PGreetingMale, PGreetingFemale = \g -> lin Text g ;
+    GObjectPlease o = lin Text (mkUtt o) ;
+
 }
