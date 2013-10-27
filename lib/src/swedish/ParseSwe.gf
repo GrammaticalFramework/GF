@@ -19,7 +19,7 @@ concrete ParseSwe of ParseEngAbs =
             ClSlash, RCl, EmptyRelSlash],
 
   DictEngSwe ** 
-open MorphoSwe, ResSwe, ParadigmsSwe, Prelude in {
+open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, Prelude in {
 
 flags
   literal=Symb ;
@@ -80,10 +80,12 @@ lin
                                            v.c3 ++ 
                                            vpi.s ! VVAux ! a)
                                    (predVc v) ;
-  ComplVV v a p vp = insertObj (\\agr => a.s ++ p.s ++ 
-                                         infVP v.typ vp a.a p.p agr)
-                               (predVV v) ;
+-}
 
+  ComplVV v a p vp = mkVP v vp ; ----
+
+
+{-
   PredVPosv np vp = {
       s = \\t,a,b,o => 
         let 
@@ -107,12 +109,11 @@ lin
           OQuest => verb.aux ++ compl ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom
           }
     } ;
+-}
 
-  that_RP = {
-    s = \\_ => "that" ;
-    a = RNoAg
-    } ;
+  that_RP = which_RP ; -- som
 
+{-
   CompS s = {s = \\_ => "that" ++ s.s} ;
   CompQS qs = {s = \\_ => qs.s ! QIndir} ;
   CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
@@ -132,6 +133,7 @@ lin
     c = npNom
   } ;
 -}
+
   ApposNP np1 np2 = {
     s = \\c => np1.s ! c ++ "," ++ np2.s ! NPNom ;
     a = np1.a
