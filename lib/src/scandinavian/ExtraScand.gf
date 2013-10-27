@@ -2,8 +2,7 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
    open CommonScand,Coordination,ResScand, ParamX in {
   lin
     GenNP np = {
-      s = \\n,_,_,g  => np.s ! NPPoss (gennum (ngen2gen g) n) Nom ; 
-      sp = \\_,_,_,_ => NONEXIST ;
+      s,sp = \\n,_,_,g  => np.s ! NPPoss (gennum (ngen2gen g) n) Nom ; 
       det = DDef Indef
       } ;
 
