@@ -1,4 +1,4 @@
---# -path=.:alltenses:../abstract:../english:../hindustani
+--# -path=.:../abstract:../english:../hindustani
 concrete ParseHin of ParseEngAbs = 
   TenseX - [AdN,Adv,SC,PPos,PNeg],
 --  TextX - [AdN,Adv,SC],
@@ -20,7 +20,7 @@ concrete ParseHin of ParseEngAbs =
   RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,VPI, VPIForm, VPIInf, VPIPresPart, ListVPI,
   VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,ClSlash, RCl, EmptyRelSlash],
 --  DictHinMath **
-  DictHin ** 
+  DictEngHin ** 
 open MorphoHin, ResHin, ParadigmsHin,CommonX, CommonHindustani, Prelude in {
 
 flags
