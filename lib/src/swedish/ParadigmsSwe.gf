@@ -280,7 +280,11 @@ oper
   mkVS  : V -> VS ; 
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
-  mkV2V : V -> Prep -> Prep -> V2V ;
+  auxVV : V -> VV ;
+  mkV2V : overload {
+    mkV2V : V -> V2V ;
+    mkV2V : V -> Prep -> Prep -> V2V ;
+    } ;
   mkVA  : V -> VA ;
   mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
@@ -634,6 +638,7 @@ oper
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
   mkVV  v = v ** {c2 = mkComplement "att" ; lock_VV = <>} ;
+  auxVV v = v ** {c2 = mkComplement [] ; lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
   mkVA  v = v ** {lock_VA = <>} ;
@@ -645,7 +650,15 @@ oper
   A2V : Type = A2 ;
 
   mkV2S v p = mmkV2 v p ** {lock_V2S = <>} ;
-  mkV2V v p t = mmkV2 v p ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
+
+
+  mkV2V = overload {
+    mkV2V : V -> V2V =
+     \v -> mmkV2 v (mkPrep []) ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
+    mkV2V : V -> Prep -> Prep -> V2V =
+     \v, p, t -> mmkV2 v p ** {c3 = mkComplement p.s ; lock_V2V = <>} ;
+    } ;
+
   mkV2Q v p = mmkV2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;

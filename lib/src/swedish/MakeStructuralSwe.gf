@@ -13,6 +13,14 @@ oper
            [table (P.Gender) [vilken;vilket] ; table (P.Gender) [vilka;vilka]] ; 
      det = d ; lock_IQuant = <>} ;
 
+  mkQuant : Str -> Str -> Str -> Quant = \naagon,naagot,naagra ->
+    lin Quant {s,sp = table {
+       Sg => \\_,_ => table {Utr => naagon ; Neutr => naagot} ; 
+       Pl => \\_,_,_ => naagra
+       } ;
+     det = DIndef
+    } ; 
+
   mkDet : Str -> P.Number -> Det = \s,n ->
     lin Det {s,sp = \\_,_ => s ; n = n ; det = DDef Indef} ;
 
@@ -33,4 +41,7 @@ oper
         a = PAg n ;
         }      
       } ;
+
+    mkNum : Str -> Num = \s -> lin Num {s = table {_ => s} ; isDet = True ; n = Pl} ;
+
 }
