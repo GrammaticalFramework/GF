@@ -17,6 +17,9 @@ TranslateFin:
 TranslateFre:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateFre TranslateFre.gf
 
+TranslateSwe:
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateSwe TranslateSwe.gf
+
 TranslateEngBul:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngBul TranslateEng.pgf TranslateBul.pgf
 

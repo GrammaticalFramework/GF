@@ -1,4 +1,4 @@
---# -path=.:alltenses:../phrasebook:../../lib/src/english
+--# -path=.:../phrasebook:../../lib/src/english:../../lib/src/abstract
 
 concrete TranslateEng of Translate = ParseEng, PhrasebookEng ** open SyntaxEng, (E = ExtraEng), Prelude in {
 
