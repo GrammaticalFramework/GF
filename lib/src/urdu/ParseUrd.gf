@@ -1,4 +1,4 @@
---# -path=.:alltenses:../abstract:../english:../hindustani
+--# -path=.:../abstract:../english:../hindustani
 concrete ParseUrd of ParseEngAbs = 
   TenseX - [AdN,Adv,SC,PPos,PNeg],
 --  TextX - [AdN,Adv,SC],
@@ -19,7 +19,7 @@ concrete ParseUrd of ParseEngAbs =
   ExtraUrd [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,Temp,Pol,Conj,VPS,ListVPS,S,Num, CN,
   RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,VPI, VPIForm, VPIInf, VPIPresPart, ListVPI,
   VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,ClSlash, RCl, EmptyRelSlash],
-  DictUrd2 **
+  DictEngUrd **
 --  UNDictUrd ** 
 open MorphoUrd, ResUrd, ParadigmsUrd,CommonX, CommonHindustani, Prelude in {
 
