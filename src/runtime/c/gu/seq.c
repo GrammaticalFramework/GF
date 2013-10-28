@@ -255,7 +255,7 @@ gu_buf_sort(GuBuf *buf, GuOrder *order)
 }
 
 void*
-gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, size_t field_offset, void *key)
+gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, void *key)
 {
 	size_t i = 0;
 	size_t j = seq->len-1;
@@ -263,8 +263,8 @@ gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, size_t field_off
 	while (i <= j) {
 		size_t k = (i+j) / 2;
 		uint8_t* elem_p = &seq->data[elem_size * k];
-		int cmp = order->compare(order, key, elem_p + field_offset);
-	
+		int cmp = order->compare(order, key, elem_p);
+
 		if (cmp < 0) {
 			j = k-1;
 		} else if (cmp > 0) {
@@ -273,8 +273,34 @@ gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, size_t field_off
 			return elem_p;
 		}
 	}
-	
+
 	return NULL;
+}
+
+bool
+gu_seq_binsearch_index_(GuSeq *seq, GuOrder *order, size_t elem_size,
+                        void *key, size_t *pindex)
+{
+	size_t i = 0;
+	size_t j = seq->len-1;
+	
+	while (i <= j) {
+		size_t k = (i+j) / 2;
+		uint8_t* elem_p = &seq->data[elem_size * k];
+		int cmp = order->compare(order, key, elem_p);
+	
+		if (cmp < 0) {
+			j = k-1;
+		} else if (cmp > 0) {
+			i = k+1;
+		} else {
+			*pindex = k;
+			return true;
+		}
+	}
+
+	*pindex = j;
+	return false;
 }
 
 static void
