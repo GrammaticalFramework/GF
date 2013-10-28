@@ -59812,7 +59812,6 @@ lin vertigo_N = variants {};
 lin verve_N = variants {};
 lin vervet_N = variants {};
 lin very_AdA = ss "много";
-lin very_Adv = variants {};
 lin vesical_A = variants {};
 lin vesicant_N = variants {};
 lin vesicatory_A = variants {};

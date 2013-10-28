@@ -13426,7 +13426,6 @@ upwards_Adv = mkAdv "向上" ;
 variant_N = mkN "变种" "个" ;
 vegetation_N = mkN "植被" "棵" ;
 verb_N = mkN "动词" "个";
-very_Adv = mkAdv "非常" ;
 villa_N = mkN "别墅" "个";
 vitamin_N = mkN "维他命" ;
 vocabulary_N = mkN "词汇" "个";
