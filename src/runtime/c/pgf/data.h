@@ -237,6 +237,7 @@ struct PgfConcr {
 	PgfCncOverloadMap* coerce_idx;
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
+    GuBuf* pre_sequences;
 	PgfCIdMap* cnccats;
 	PgfCallbacksMap* callbacks;
 	int total_cats;

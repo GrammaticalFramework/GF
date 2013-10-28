@@ -2,7 +2,7 @@
 #include <pgf/linearizer.h>
 #include <gu/seq.h>
 #include <gu/assert.h>
-
+#include <gu/choice.h>
 #include <gu/file.h>
 #include <gu/utf8.h>
 #include <math.h>
@@ -1176,7 +1176,21 @@ pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state)
 			}
 		}
 
-next:
+next:;
+		size_t n_pres = gu_buf_length(ps->concr->pre_sequences);
+		for (size_t pi = 0; pi < n_pres; pi++) {
+			PgfSequence* seq = gu_buf_index(ps->concr->pre_sequences, PgfSequence, pi);
+
+			GuString current = ps->sentence + state->end_offset;
+			BIND_TYPE bind_type = state->needs_bind ? BIND_NONE : BIND_HARD;
+			if (pgf_symbols_cmp(&current, n, &bind_type, seq->syms) == 0) {
+				PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
+				entry->idx       = seq->idx;
+				entry->bind_type = bind_type;
+				entry->offset    = (current - ps->sentence);
+			}
+		}
+
 		j = s;
 		n++;
 	}
@@ -2426,8 +2440,8 @@ pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
                   PgfMorphoCallback* callback, GuExn* err)
 {
 	PgfSequence* seq = (PgfSequence*)
-		gu_seq_binsearch_(concr->sequences, pgf_sequence_order,
-		                  sizeof(PgfSequence), 0, (void*) sentence);
+		gu_seq_binsearch(concr->sequences, pgf_sequence_order,
+		                 PgfSequence, (void*) sentence);
 
 	if (seq != NULL && seq->idx != NULL)
 		pgf_morpho_iter(seq->idx, callback, err);
@@ -2493,11 +2507,76 @@ pgf_fullform_get_analyses(PgfFullFormEntry* entry,
 	pgf_morpho_iter(entry->idx, callback, err);
 }
 
+// The 'pre' construction needs a special handling since
+// it cannot be sorted alphabetically (a single pre contains 
+// many alternative tokens).
+static GuBuf*
+pgf_parser_index_pre_(GuBuf* buf, PgfSymbols* syms,
+                      GuChoice* ch, GuPool *pool)
+{
+	size_t n_syms = gu_seq_length(syms);
+	for (size_t i = 0; i < n_syms; i++) {
+		PgfSymbol sym = gu_seq_get(syms, PgfSymbol, i);
+		GuVariantInfo inf = gu_variant_open(sym);
+		if (inf.tag == PGF_SYMBOL_KP) {
+			PgfSymbolKP* skp = inf.data;
+
+			if (buf == NULL) {
+				// Since most of the sequences doesn't contain 'pre'
+				// we create the buffer on demand. This minimizes
+				// the overhead.
+				buf = gu_new_buf(PgfSymbol, pool);
+				gu_buf_extend_n(buf, i);
+				for (size_t j = 0; j < i; j++) {
+					PgfSymbol sym = gu_seq_get(syms, PgfSymbol, j);
+					gu_buf_set(buf, PgfSymbol, j, sym);
+				}
+			}
+
+			int idx = gu_choice_next(ch, skp->n_forms+1);
+			if (idx == 0) {
+				buf = pgf_parser_index_pre_(buf, skp->default_form, ch, pool);
+			} else {
+				buf = pgf_parser_index_pre_(buf, skp->forms[idx-1].form, ch, pool);
+			}
+		} else {
+			if (buf != NULL) {
+				gu_buf_push(buf, PgfSymbol, sym);
+			}
+		}
+	}
+
+	return buf;
+}
+
+static void 
+pgf_parser_index_pre(PgfConcr* concr, PgfSequence* seq, 
+                     GuChoice* ch, GuPool *pool)
+{
+	do {
+		GuChoiceMark mark = gu_choice_mark(ch);
+
+		GuBuf* buf =
+			pgf_parser_index_pre_(NULL, seq->syms, ch, pool);
+
+		if (buf != NULL) {
+			PgfSequence* pre_seq = gu_buf_extend(concr->pre_sequences);
+			pre_seq->syms = gu_buf_data_seq(buf);
+			pre_seq->idx  = seq->idx;
+		}
+
+		gu_choice_reset(ch, mark);
+	} while (gu_choice_advance(ch));	
+}
+
 void
 pgf_parser_index(PgfConcr* concr, 
                  PgfCCat* ccat, PgfProduction prod,
                  GuPool *pool)
 {
+	GuPool* tmp_pool = gu_local_pool();
+	GuChoice* choice = gu_new_choice(tmp_pool); // we need this for the pres
+
 	for (size_t lin_idx = 0; lin_idx < ccat->cnccat->n_lins; lin_idx++) {
 		GuVariantInfo i = gu_variant_open(prod);
 		switch (i.tag) {
@@ -2510,6 +2589,7 @@ pgf_parser_index(PgfConcr* concr,
 			PgfSequence* seq = papp->fun->lins[lin_idx];
 			if (seq->idx == NULL) {
 				seq->idx = gu_new_buf(PgfProductionIdxEntry, pool);
+				pgf_parser_index_pre(concr, seq, choice, pool);
 			}
 
 			PgfProductionIdxEntry* entry = gu_buf_extend(seq->idx);
@@ -2525,6 +2605,8 @@ pgf_parser_index(PgfConcr* concr,
 			gu_impossible();
 		}
 	}
+	
+	gu_pool_free(tmp_pool);
 }
 
 prob_t

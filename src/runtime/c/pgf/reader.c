@@ -1142,7 +1142,9 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr)
 	concr->sequences = 
 		pgf_read_sequences(rdr);
 	gu_return_on_exn(rdr->err, NULL);
-	
+
+	concr->pre_sequences = gu_new_buf(PgfSequence, rdr->opool);
+
 	concr->cncfuns =
 		pgf_read_cncfuns(rdr, abstr, concr);
 	gu_return_on_exn(rdr->err, NULL);
