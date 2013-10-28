@@ -74,7 +74,7 @@ gu_buf_data_seq(GuBuf* buf);
 #define gu_buf_get(BUF, T, I)			\
 	(*gu_buf_index(BUF, T, I))
 
-#define gu_buf_set(BUF, T, I)			\
+#define gu_buf_set(BUF, T, I, V)		\
 	GU_BEGIN				\
 	(*gu_buf_index(BUF, T, I) = (V));	\
 	GU_END
