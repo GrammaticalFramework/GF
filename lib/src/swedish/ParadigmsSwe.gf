@@ -278,7 +278,12 @@ oper
 
   mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ; 
-  mkV2S : V -> Prep -> V2S ;
+
+  mkV2S : overload {
+    mkV2S : V ->         V2S ;
+    mkV2S : V -> Prep -> V2S ;
+    } ;
+
   mkVV  : V -> VV ;
   auxVV : V -> VV ;
   mkV2V : overload {
@@ -286,9 +291,19 @@ oper
     mkV2V : V -> Prep -> Prep -> V2V ;
     } ;
   mkVA  : V -> VA ;
-  mkV2A : V -> Prep -> V2A ;
+
+  mkV2A : overload {
+    mkV2A : V ->         V2A ;
+    mkV2A : V -> Prep -> V2A ;
+    } ;
+
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Prep -> V2Q ;
+
+  mkV2Q : overload {
+    mkV2Q : V ->         V2Q ;
+    mkV2Q : V -> Prep -> V2Q ;
+    } ;
+
 
   mkAS  : A -> AS ; --%
   mkA2S : A -> Prep -> A2S ; --%
@@ -300,6 +315,9 @@ oper
 
   V0 : Type ; --%
   AS, A2S, AV, A2V : Type ; --%
+
+  mkInterj : Str -> Interj
+  = \s -> lin Interj {s = s} ;
 
 --.
 --2 Definitions of the paradigms
@@ -604,7 +622,11 @@ oper
     mk6V sälja (säljer.s ! VF (VPres Act)) (säljer.s ! (VF (VImper Act))) sålde sålt såld
      ** {s1 = [] ; lock_V = <>} ;
 
-  partV v p = {s = v.s ; part = p ; vtype = v.vtype ; lock_V = <>} ;
+  partV v p = case p of {
+    "sig" => {s = v.s ; part = [] ; vtype = VRefl ; lock_V = <>} ;
+    _     => {s = v.s ; part = p ; vtype = v.vtype ; lock_V = <>}
+    } ;
+
   depV v = {s = v.s ; part = v.part ; vtype = VPass ; lock_V = <>} ;
   reflV v = {s = v.s ; part = v.part ; vtype = VRefl ; lock_V = <>} ;
 
@@ -642,14 +664,20 @@ oper
   mkVQ  v = v ** {lock_VQ = <>} ;
 
   mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p = mmkV2 v p ** {lock_V2A = <>} ;
+
+  mkV2A = overload {
+    mkV2A : V ->         V2A = \v    -> lin V2A (mmkV2 v (mkPrep [])) ; 
+    mkV2A : V -> Prep -> V2A = \v, p -> lin V2A (mmkV2 v p) ; 
+    } ;
 
   V0 : Type = V ;
---  V2S, V2V, V2Q : Type = V2 ;
   AS, A2S, AV : Type = A ;
   A2V : Type = A2 ;
 
-  mkV2S v p = mmkV2 v p ** {lock_V2S = <>} ;
+  mkV2S = overload {
+    mkV2S : V ->         V2S = \v    -> lin V2S (mmkV2 v (mkPrep [])) ; 
+    mkV2S : V -> Prep -> V2S = \v, p -> lin V2S (mmkV2 v p) ; 
+    } ;
 
 
   mkV2V = overload {
@@ -659,7 +687,10 @@ oper
      \v, p, t -> mmkV2 v p ** {c3 = mkComplement p.s ; lock_V2V = <>} ;
     } ;
 
-  mkV2Q v p = mmkV2 v p ** {lock_V2Q = <>} ;
+  mkV2Q = overload {
+    mkV2Q : V ->         V2Q = \v    -> lin V2Q (mmkV2 v (mkPrep [])) ; 
+    mkV2Q : V -> Prep -> V2Q = \v, p -> lin V2Q (mmkV2 v p) ; 
+    } ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
