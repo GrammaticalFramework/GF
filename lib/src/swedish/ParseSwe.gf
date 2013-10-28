@@ -18,7 +18,7 @@ concrete ParseSwe of ParseEngAbs =
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash],
 
-  DictEngSwe ** 
+  WDictEngSwe ** 
 open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, Prelude in {
 
 flags
