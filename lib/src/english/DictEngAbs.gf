@@ -59631,7 +59631,6 @@ fun vertigo_N : N;
 fun verve_N : N;
 fun vervet_N : N;
 fun very_AdA : AdA;
-fun very_Adv : Adv;
 fun vesical_A : A;
 fun vesicant_N : N;
 fun vesicatory_A : A;

@@ -50248,7 +50248,6 @@ vertiginous_A = mkWA (k10 "huimaava") ;
 vertigo_N = mkWN (k39 "pyörrytys") ;
 verve_N = mkWN (k39 "innostus") ;
 vervet_N = mkWN (compoundN "tantalus" (k5A "marakatti")) ;
-very_Adv = mkWAdv (k99 "oikein") ;
 vesical_A = mkWA "rakkula-" ;
 vesicant_N = mkWN (k48 "aine") "rakoille" "vetävä" ;
 vesicatory_A = mkWA (k10 "vetävä") "rakoille" ;

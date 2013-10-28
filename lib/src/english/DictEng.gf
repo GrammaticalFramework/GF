@@ -59716,7 +59716,6 @@ lin vertigo_N = mkN "vertigo" ;
 lin verve_N = mkN "verve" ;
 lin vervet_N = mkN "vervet" ;
 lin very_AdA = mkAdA "very" ;
-lin very_Adv = mkAdv "very" ;
 lin vesical_A = mkA "vesical" ;
 lin vesicant_N = mkN "vesicant" ;
 lin vesicatory_A = mkA "vesicatory" ;

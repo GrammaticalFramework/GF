@@ -18848,7 +18848,6 @@ vertex_N = mkN "sommet"  | mkN "sommet" masculine | mkN "sommet"  | mkN "sommet"
 vertical_A = mkA "vertical"  ;
 vertiginous_A = mkA "vertigineux"  ;
 vertigo_N = mkN "vertige" masculine ;
-very_Adv = mkAdv "même"  | mkAdv "très"  ;
 vessel_N = mkN "récipient" masculine | mkN "vaisseau" masculine | mkN "vaisseau" masculine ;
 vest_N = mkN "gilet" masculine ;
 vestibule_N = mkN "vestibule" masculine ;
