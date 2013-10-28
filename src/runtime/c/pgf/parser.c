@@ -1420,6 +1420,22 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 }
 
 static void
+pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym);
+
+static void
+pgf_parsing_pre(PgfParsing* ps, PgfItem* item, PgfSymbols* syms)
+{
+	if (item->alt_idx < gu_seq_length(syms)) {
+		PgfSymbol sym = gu_seq_get(syms, PgfSymbol, item->alt_idx);
+		pgf_parsing_symbol(ps, item, sym);
+	} else {
+		item->alt = 0;
+		pgf_item_advance(item, ps->pool);
+		gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
+	}
+}
+
+static void
 pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 {
 	switch (gu_variant_tag(sym)) {
@@ -1453,8 +1469,7 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 				new_item = pgf_item_copy(item, ps);
 				new_item->alt = 1;
 				new_item->alt_idx = 0;
-				sym = gu_seq_get(skp->default_form, PgfSymbol, new_item->alt_idx);
-				pgf_parsing_symbol(ps, new_item, sym);
+				pgf_parsing_pre(ps, new_item, skp->default_form);
 
 				for (size_t i = 0; i < skp->n_forms; i++) {
 					PgfSymbols* syms = skp->forms[i].form;
@@ -1468,23 +1483,14 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 						new_item = pgf_item_copy(item, ps);
 						new_item->alt = i+2;
 						new_item->alt_idx = 0;
-						sym = gu_seq_get(syms, PgfSymbol, new_item->alt_idx);
-						pgf_parsing_symbol(ps, new_item, sym);
+						pgf_parsing_pre(ps, new_item, syms);
 					}
 				}
 			} else {
 				PgfSymbols* syms =
 				   (item->alt == 1) ? skp->default_form : 
 				                      skp->forms[item->alt-2].form;
-
-				if (item->alt_idx < gu_seq_length(syms)) {
-					sym = gu_seq_get(syms, PgfSymbol, item->alt_idx);
-					pgf_parsing_symbol(ps, item, sym);
-				} else {
-					item->alt = 0;
-					pgf_item_advance(item, ps->pool);
-					gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
-				}
+				pgf_parsing_pre(ps, item, syms);
 			}
 		}
 		break;
