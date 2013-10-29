@@ -219,6 +219,7 @@ langsCoding = [
   (("danish",   "Dan"),""),
   (("dutch",    "Dut"),""),
   (("english",  "Eng"),""),
+  (("estonian", "Est"),""),
   (("finnish",  "Fin"),""),
   (("french",   "Fre"),""),
   (("greek",    "Gre"),""),
@@ -255,7 +256,7 @@ langsLang = langs -- `except` ["Amh","Ara","Lat","Tur"]
 --langsLang = langs `only` ["Fin"] --test
 
 -- languagues that have notpresent marked
-langsPresent = langsLang `except` ["Chi","Gre","Heb","Jpn","Mlt","Nep","Pes","Snd","Tha","Thb"]
+langsPresent = langsLang `except` ["Chi","Gre","Heb","Jpn","Mlt","Nep","Pes","Snd","Tha","Thb","Est"]
 
 -- languages for which to compile Try
 langsAPI  = langsLang `except` langsIncomplete -- ["Ina","Amh","Ara"]
