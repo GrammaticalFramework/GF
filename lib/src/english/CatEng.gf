@@ -105,4 +105,23 @@ concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
     N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Str} ;
     PN = {s : Case => Str ; g : Gender} ;
 
+  lindef
+    VP = \s -> predV {s = \\_ => s; p = ""; isRefl = True} ;
+
+    V, VS, VQ, VA = \s -> {s = \\_ => s; p = ""; isRefl = True} ;
+    V2, V2A, V2Q, V2S = \s -> {s = \\_ => s; p = ""; isRefl = True; c2=""} ;
+    V3 = \s -> {s = \\_ => s; p = ""; isRefl = True; c2,c3=""} ;
+    VV = \s -> {s = \\_ => s; p = ""; isRefl = True; typ = VVInf} ;
+    V2V = \s -> {s = \\_ => s; p = ""; isRefl = True; c2,c3="" ; typ = VVInf} ;
+
+    A = \s -> {s = \\_ => s} ;
+    A2 = \s -> {s = \\_ => s; c2 = ""} ;
+
+    N = \s -> {s = \\_,_ => s; g = Neutr} ;
+    N2 = \s -> {s = \\_,_ => s; c2 = ""; g = Neutr} ;
+    N3 = \s -> {s = \\_,_ => s; c2,c3 = ""; g = Neutr} ;
+
+  linref
+    VP = \vp -> infVP VVAux vp Simul CPos (agrP3 Sg) ;    
+
 }
