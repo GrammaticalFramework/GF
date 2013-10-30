@@ -1,0 +1,46 @@
+GF x.y Release Notes
+Not released yet
+
+%!style:../css/style.css
+%!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+==Installation==
+
+See the [download page http://www.grammaticalframework.org/download/index.html].
+
+==What's new==
+
+Over [...] changes have been pushed to the source repository since the release
+of GF 3.5.
+
+
+===GF compiler and run-time library===
+
+- Nonlinear patterns (i.e., patterns where the same variable appears more than
+  once) in concrete syntax are now detected and reported as errors.
+  (Section C.4.13 in the GF book explicitly states that patterns must be
+  linear.)
+- A pattern matching bug which prevented variables in patterns to be bound to
+  table values has been fixed.
+- A bug with local variable name shadowing has been fixed.
+- The refresh pass
+% (and thus the command line option --dump-refresh)
+  had become obsolete and has been removed.
+- ``nonExist`` now exists. [...]
+- [...]
+
+
+===Resource Grammar Library===
+
+- New languages in the Resource Grammar Library: Estonian
+  (see the [updated synopsis ../lib/doc/synopsis.html]).
+- [...]
+
+===GF Cloud services===
+
+- [...]
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
