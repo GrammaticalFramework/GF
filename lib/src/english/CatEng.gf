@@ -109,14 +109,14 @@ concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
     SSlash = \s -> {s = s; c2 = ""} ;
     ClSlash = \s -> {s = \\t,a,p,o => s; c2 = ""} ;
 
-    VP = \s -> predV {s = \\_ => s; p = ""; isRefl = True} ;
-    VPSlash = \s -> predV {s = \\_ => s; p = ""; isRefl = True} ** {c2 = ""; gapInMiddle = False} ;
+    VP = \s -> predV {s = \\_ => s; p = ""; isRefl = False} ;
+    VPSlash = \s -> predV {s = \\_ => s; p = ""; isRefl = False} ** {c2 = ""; gapInMiddle = False} ;
 
-    V, VS, VQ, VA = \s -> {s = \\_ => s; p = ""; isRefl = True} ;
-    V2, V2A, V2Q, V2S = \s -> {s = \\_ => s; p = ""; isRefl = True; c2=""} ;
-    V3 = \s -> {s = \\_ => s; p = ""; isRefl = True; c2,c3=""} ;
-    VV = \s -> {s = \\_ => s; p = ""; isRefl = True; typ = VVInf} ;
-    V2V = \s -> {s = \\_ => s; p = ""; isRefl = True; c2,c3="" ; typ = VVInf} ;
+    V, VS, VQ, VA = \s -> {s = \\_ => s; p = ""; isRefl = False} ;
+    V2, V2A, V2Q, V2S = \s -> {s = \\_ => s; p = ""; isRefl = False; c2=""} ;
+    V3 = \s -> {s = \\_ => s; p = ""; isRefl = False; c2,c3=""} ;
+    VV = \s -> {s = \\_ => s; p = ""; isRefl = False; typ = VVInf} ;
+    V2V = \s -> {s = \\_ => s; p = ""; isRefl = False; c2,c3="" ; typ = VVInf} ;
 
     A = \s -> {s = \\_ => s} ;
     A2 = \s -> {s = \\_ => s; c2 = ""} ;
