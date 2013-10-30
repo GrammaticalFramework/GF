@@ -105,39 +105,39 @@ typedef struct {
 
 #ifdef PGF_LINEARIZER_DEBUG
 void
-pgf_print_cnc_tree(PgfCncTree ctree, GuWriter* wtr, GuExn* err)
+pgf_print_cnc_tree(PgfCncTree ctree, GuOut* out, GuExn* err)
 {
 	GuVariantInfo ti = gu_variant_open(ctree);
 	switch (ti.tag) {
 	case PGF_CNC_TREE_APP: {
 		PgfCncTreeApp* capp = ti.data;
-		if (capp->n_args > 0) gu_putc('(', wtr, err);
-		gu_printf(wtr, err, "F%d", capp->fun->funid);
+		if (capp->n_args > 0) gu_putc('(', out, err);
+		gu_printf(out, err, "F%d", capp->fun->funid);
 		for (size_t i = 0; i < capp->n_args; i++) {
-			gu_putc(' ', wtr, err);
-			pgf_print_cnc_tree(capp->args[i], wtr, err);
+			gu_putc(' ', out, err);
+			pgf_print_cnc_tree(capp->args[i], out, err);
 		}
-		if (capp->n_args > 0) gu_putc(')', wtr, err);
+		if (capp->n_args > 0) gu_putc(')', out, err);
 		break;
 	}
 	case PGF_CNC_TREE_CHUNKS: {
 		PgfCncTreeChunks* chunks = ti.data;
-		if (chunks->n_args > 0) gu_putc('(', wtr, err);
-		gu_putc('?', wtr, err);
+		if (chunks->n_args > 0) gu_putc('(', out, err);
+		gu_putc('?', out, err);
 		for (size_t i = 0; i < chunks->n_args; i++) {
-			gu_putc(' ', wtr, err);
-			pgf_print_cnc_tree(chunks->args[i], wtr, err);
+			gu_putc(' ', out, err);
+			pgf_print_cnc_tree(chunks->args[i], out, err);
 		}
-		if (chunks->n_args > 0) gu_putc(')', wtr, err);
+		if (chunks->n_args > 0) gu_putc(')', out, err);
 		break;
 	}
 	case PGF_CNC_TREE_LIT: {
 		PgfCncTreeLit* clit = ti.data;
-		pgf_print_literal(clit->lit, wtr, err);
+		pgf_print_literal(clit->lit, out, err);
 		break;
 	}
 	case GU_VARIANT_NULL:
-		gu_puts("null", wtr, err);
+		gu_puts("null", out, err);
 		break;
 	default:
 		gu_impossible();
@@ -426,13 +426,12 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 #ifdef PGF_LINEARIZER_DEBUG
     GuPool* tmp_pool = gu_new_pool();
     GuOut* out = gu_file_out(stderr, tmp_pool);
-    GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
     GuExn* err = gu_exn(NULL, type, tmp_pool);
     if (gu_variant_is_null(*toc))
-		gu_puts("*nil*\n", wtr, err);
+		gu_puts("*nil*\n", out, err);
 	else {
-		pgf_print_cnc_tree(*toc, wtr, err);
-		gu_puts("\n", wtr, err);
+		pgf_print_cnc_tree(*toc, out, err);
+		gu_puts("\n", out, err);
 	}
     gu_pool_free(tmp_pool);
 #endif
