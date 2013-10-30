@@ -1680,7 +1680,7 @@ pgf_parsing_item(PgfParsing* ps, PgfItem* item)
 				break;
 			ps->before->meta_item = item;
 			
-			if (ps->after == NULL) {
+			if (ps->before->end_offset == strlen(ps->sentence)) {
 				PgfExprProb *ep = gu_new(PgfExprProb, ps->pool);
 				ep->expr = ps->meta_var;
 				ep->prob = item->inside_prob;

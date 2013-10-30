@@ -87,6 +87,7 @@ typedef enum {
 } PgfCncTreeTag;
 
 typedef struct {
+	PgfCCat* ccat;
 	PgfCncFun* fun;
 	int fid;
 	GuLength n_args;
@@ -149,7 +150,7 @@ static PgfCncTree
 pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool);
 
 static PgfCncTree
-pgf_lzn_resolve_app(PgfLzn* lzn, GuBuf* buf, GuBuf* args, GuPool* pool)
+pgf_lzn_resolve_app(PgfLzn* lzn, PgfCCat* ccat, GuBuf* buf, GuBuf* args, GuPool* pool)
 {
 	GuChoiceMark mark = gu_choice_mark(lzn->ch);
 	int save_fid = lzn->fid;
@@ -172,6 +173,7 @@ redo:;
 		gu_buf_get(buf, PgfProductionApply*, index);
 	gu_assert(n_args == gu_seq_length(papply->args));
 
+	capp->ccat= ccat;
 	capp->fun = papply->fun;
 	capp->fid = 0;
 	capp->n_args = n_args;
@@ -217,7 +219,7 @@ redo:;
 }
 
 static PgfCncTree
-pgf_lzn_resolve_def(PgfLzn* lzn, PgfCncFuns* lindefs, GuString s, GuPool* pool)
+pgf_lzn_resolve_def(PgfLzn* lzn, PgfCCat* ccat, GuString s, GuPool* pool)
 {
 	PgfCncTree lit = gu_null_variant;
 	PgfCncTree ret = gu_null_variant;
@@ -234,11 +236,11 @@ pgf_lzn_resolve_def(PgfLzn* lzn, PgfCncFuns* lindefs, GuString s, GuPool* pool)
 					        &clit->lit, pool);
 	strcpy((char*) lit_str->val, (char*) s);
 
-	if (lindefs == NULL)
+	if (ccat->lindefs == NULL)
 		return lit;
 
 	int index =
-		gu_choice_next(lzn->ch, gu_seq_length(lindefs));
+		gu_choice_next(lzn->ch, gu_seq_length(ccat->lindefs));
 	if (index < 0) {
 		return ret;
 	}
@@ -246,16 +248,19 @@ pgf_lzn_resolve_def(PgfLzn* lzn, PgfCncFuns* lindefs, GuString s, GuPool* pool)
 		gu_new_flex_variant(PGF_CNC_TREE_APP,
 							PgfCncTreeApp,
 							args, 1, &ret, pool);
-	capp->fun = gu_seq_get(lindefs, PgfCncFun*, index);
+	capp->ccat = ccat;
+	capp->fun = gu_seq_get(ccat->lindefs, PgfCncFun*, index);
 	capp->fid = lzn->fid++;
 	capp->n_args = 1;
 	capp->args[0] = lit;
-	
+
 	return ret;
 }
 
 typedef struct {
 	GuMapItor fn;
+	int index;
+	PgfCCat* ccat;
 	GuBuf* buf;
 } PgfLznItor;
 
@@ -263,13 +268,45 @@ static void
 pgf_lzn_cat_resolve_itor(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
 	PgfLznItor* clo = (PgfLznItor*) fn;
+	PgfCCat* ccat = (PgfCCat*) key;
 	GuBuf* buf = *((GuBuf**) value);
-	
-	for (size_t i = 0; i < gu_buf_length(buf); i++) {
-		PgfProductionApply* apply = 
-			gu_buf_get(buf, PgfProductionApply*, i);
-		gu_buf_push(clo->buf, PgfProductionApply*, apply);
+
+	if (clo->index == 0) {
+		clo->ccat = ccat;
+		clo->buf = buf;
+	} else {
+		clo->index--;
 	}
+}
+
+PgfCncTree
+pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool)
+{
+	GuVariantInfo cti = gu_variant_open(ctree);
+	switch (cti.tag) {
+	case PGF_CNC_TREE_APP: {
+		PgfCncTreeApp* capp = cti.data;
+
+		assert(gu_seq_length(capp->ccat->linrefs) > 0);
+	
+		// here we must apply the linref function
+		PgfCncTree new_ctree;
+		PgfCncTreeApp* new_capp =
+			gu_new_flex_variant(PGF_CNC_TREE_APP,
+						PgfCncTreeApp,
+						args, 1, &new_ctree, pool);
+		new_capp->ccat    = NULL;
+		new_capp->fun     = gu_seq_get(capp->ccat->linrefs, PgfCncFun*, 0);
+		new_capp->fid     = -1;
+		new_capp->n_args  = 1;
+		new_capp->args[0] = ctree;
+
+		ctree = new_ctree;
+		break;
+	}
+	}
+	
+	return ctree;
 }
 
 static PgfCncTree
@@ -299,33 +336,50 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 			goto done;
 		}
 		case PGF_EXPR_META: {
+			size_t n_args = gu_buf_length(args);
+
+			PgfCncTree chunks_tree;
+			PgfCncTreeChunks* chunks = 
+				gu_new_flex_variant(PGF_CNC_TREE_CHUNKS,
+				                    PgfCncTreeChunks,
+				                    args, n_args, &chunks_tree, pool);
+			chunks->n_args = n_args;
+
+			for (size_t i = 0; i < n_args; i++) {
+				PgfExpr earg = gu_buf_get(args, PgfExpr, n_args-i-1);
+				chunks->args[i] = pgf_lzn_resolve(lzn, earg, NULL, pool);
+				if (gu_variant_is_null(chunks->args[i])) {
+					ret = gu_null_variant;
+					break;
+				}
+				chunks->args[i] = 
+					pgf_lzr_wrap_linref(chunks->args[i], pool);
+			}
+
 			if (ccat == NULL) {
-				size_t n_args = gu_buf_length(args);
-
-				PgfCncTreeChunks* chunks = 
-					gu_new_flex_variant(PGF_CNC_TREE_CHUNKS,
-								PgfCncTreeChunks,
-								args, n_args, &ret, pool);
-				chunks->n_args = n_args;
-
-				for (size_t i = 0; i < n_args; i++) {
-					PgfExpr earg = gu_buf_get(args, PgfExpr, n_args-i-1);
-					chunks->args[i] = pgf_lzn_resolve(lzn, earg, NULL, pool);
-					if (gu_variant_is_null(chunks->args[i])) {
-						ret = gu_null_variant;
-						break;
-					}
-				}
-
-				goto done;
-			} else {
-				if (ccat->lindefs == NULL) {
-					goto done;
-				}
-
-				ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, "?", pool);
+				ret = chunks_tree;
 				goto done;
 			}
+			if (ccat->lindefs == NULL) {
+				goto done;
+			}
+
+			int index =
+				gu_choice_next(lzn->ch, gu_seq_length(ccat->lindefs));
+			if (index < 0) {
+				return ret;
+			}
+			PgfCncTreeApp* capp =
+				gu_new_flex_variant(PGF_CNC_TREE_APP,
+									PgfCncTreeApp,
+									args, 1, &ret, pool);
+			capp->ccat = ccat;
+			capp->fun = gu_seq_get(ccat->lindefs, PgfCncFun*, index);
+			capp->fid = lzn->fid++;
+			capp->n_args = 1;
+			capp->args[0] = chunks_tree;
+
+			goto done;
 		}
 		case PGF_EXPR_FUN: {
 			PgfExprFun* efun = i.data;
@@ -348,7 +402,7 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 				GuString s = gu_string_buf_freeze(sbuf, tmp_pool);
 
 				if (ccat != NULL) {
-					ret = pgf_lzn_resolve_def(lzn, ccat->lindefs, s, pool);
+					ret = pgf_lzn_resolve_def(lzn, ccat, s, pool);
 				} else {
 					PgfCncTreeLit* clit = 
 						gu_new_variant(PGF_CNC_TREE_LIT,
@@ -368,21 +422,33 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 			}
 
 			if (ccat == NULL) {
-				GuPool* tmp_pool = gu_local_pool();
-				GuBuf* buf =
-					gu_new_buf(PgfProductionApply*, tmp_pool);
-				PgfLznItor clo = { { pgf_lzn_cat_resolve_itor }, buf };
+				size_t n_count = gu_map_count(overl_table);
+				GuChoiceMark mark = gu_choice_mark(lzn->ch);
+
+redo:;
+				int index = gu_choice_next(lzn->ch, n_count);
+				if (index < 0) {
+					goto done;
+				}
+
+				PgfLznItor clo = { { pgf_lzn_cat_resolve_itor }, index, NULL, NULL };
 				gu_map_iter(overl_table, &clo.fn, NULL);
-				ret = pgf_lzn_resolve_app(lzn, buf, args, pool);
-				gu_pool_free(tmp_pool);
+				assert(clo.ccat != NULL && clo.buf != NULL);
+
+				ret = pgf_lzn_resolve_app(lzn, clo.ccat, clo.buf, args, pool);
+				if (gu_variant_is_null(ret)) {
+					gu_choice_reset(lzn->ch, mark);
+					if (gu_choice_advance(lzn->ch))
+						goto redo;
+				}
 			} else {
 				GuBuf* buf =
 					gu_map_get(overl_table, ccat, GuBuf*);
 				if (buf == NULL) {
 					goto done;
 				}
-				
-				ret = pgf_lzn_resolve_app(lzn, buf, args, pool);
+
+				ret = pgf_lzn_resolve_app(lzn, ccat, buf, args, pool);
 			}
 			goto done;
 		}
@@ -518,7 +584,7 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		PgfCncTreeApp* fapp = cti.data;
 		PgfCncFun* fun = fapp->fun;
 
-		if (fns->begin_phrase) {
+		if (fns->begin_phrase && fapp->ccat != NULL) {
 			fns->begin_phrase(fnsp,
 							  fun->absfun->type->cid,
 							  fapp->fid, lin_idx,
@@ -528,7 +594,7 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		gu_require(lin_idx < fun->n_lins);
 		pgf_lzr_linearize_symbols(concr, fapp, fun->lins[lin_idx]->syms, 0, fnsp);
 		
-		if (fns->end_phrase) {
+		if (fns->end_phrase && fapp->ccat != NULL) {
 			fns->end_phrase(fnsp,
 							fun->absfun->type->cid,
 							fapp->fid, lin_idx,
@@ -539,8 +605,15 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 	case PGF_CNC_TREE_CHUNKS: {
 		gu_require(lin_idx == 0);
 		PgfCncTreeChunks* fchunks = cti.data;
-		for (size_t i = 0; i < fchunks->n_args; i++) {
-			pgf_lzr_linearize(concr, fchunks->args[i], 0, fnsp);
+
+		if (fchunks->n_args == 0) {
+			if ((*fnsp)->symbol_token) {
+				(*fnsp)->symbol_token(fnsp, "?");
+			}
+		} else {
+			for (size_t i = 0; i < fchunks->n_args; i++) {
+				pgf_lzr_linearize(concr, fchunks->args[i], 0, fnsp);
+			}
 		}
 		break;
 	}
@@ -687,8 +760,8 @@ pgf_lzr_linearize_table(PgfConcr* concr, PgfCncTree ctree,
 	switch (cti.tag) {
 	case PGF_CNC_TREE_APP: {
 		PgfCncTreeApp* fapp = cti.data;
-		PgfCncCat* cnccat =
-			gu_map_get(concr->cnccats, fapp->fun->absfun->type->cid, PgfCncCat*);
+		
+		PgfCncCat* cnccat = fapp->ccat->cnccat;
 		*n_lins = cnccat->n_lins;
 		*labels = cnccat->labels;
 		break;
@@ -703,6 +776,22 @@ pgf_lzr_linearize_table(PgfConcr* concr, PgfCncTree ctree,
 		gu_impossible();
 	}
 
+}
+
+void
+pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuEnum* cts =
+		pgf_lzr_concretize(concr, expr, tmp_pool);
+	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
+	if (!gu_variant_is_null(ctree)) {
+		ctree = pgf_lzr_wrap_linref(ctree, tmp_pool);
+		pgf_lzr_linearize_simple(concr, ctree, 0, out, err);
+	}
+
+	gu_pool_free(tmp_pool);
 }
 
 GuString
