@@ -1166,7 +1166,7 @@ allCommands = Map.fromList [
                                    map (map (unl . snd)) . tabularLinearizes pgf lang
        _ | isOpt "table"   opts -> unlines . concat . intersperse [[]] .
                     map (map (\(p,v) -> p+++":"+++unl v)) . tabularLinearizes pgf lang
-       _ | isOpt "bracket" opts -> showBracketedString . bracketedLinearize pgf lang
+       _ | isOpt "bracket" opts -> unwords . map showBracketedString . bracketedLinearize pgf lang
        _                        -> unl . linearize pgf lang
 
    -- replace each non-atomic constructor with mkC, where C is the val cat

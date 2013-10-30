@@ -601,9 +601,9 @@ linearizeTabular pgf tos tree =
         vs = concat (PGF.tabularLinearizes pgf to t)
 
 linearizeAndBind pgf mto tree =
-    [(to,s,bs) | to<-langs,
-                 let bs = PGF.bracketedLinearize pgf to (transfer to tree)
-                     s = unwords . bind $ PGF.flattenBracketedString bs]
+    [(to,s,bss) | to<-langs,
+                 let bss = PGF.bracketedLinearize pgf to (transfer to tree)
+                     s   = unwords . bind $ concatMap PGF.flattenBracketedString bss]
   where
     langs = if null mto then PGF.languages pgf else mto
 
