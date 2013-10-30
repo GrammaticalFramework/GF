@@ -1,5 +1,6 @@
 abstract AllFreAbs = 
   Lang,
   IrregFreAbs,
-  ExtraFreAbs
+  ExtraFreAbs,
+  DictFreAbs
   ** {} ;
