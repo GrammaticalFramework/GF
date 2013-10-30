@@ -116,7 +116,7 @@ instance Binary Info where
   put (ResValue x)     = putWord8 3 >> put x
   put (ResOper x y)    = putWord8 4 >> put (x,y)
   put (ResOverload x y)= putWord8 5 >> put (x,y)
-  put (CncCat w x y z) = putWord8 6 >> put (w,x,y,z)
+  put (CncCat v w x y z)=putWord8 6 >> put (v,w,x,y,z)
   put (CncFun w x y z) = putWord8 7 >> put (w,x,y,z)
   put (AnyInd x y)     = putWord8 8 >> put (x,y)
   get = do tag <- getWord8
@@ -127,7 +127,7 @@ instance Binary Info where
              3 -> get >>= \x         -> return (ResValue x)
              4 -> get >>= \(x,y)     -> return (ResOper x y)
              5 -> get >>= \(x,y)     -> return (ResOverload x y)
-             6 -> get >>= \(w,x,y,z) -> return (CncCat w x y z)
+             6 -> get >>= \(v,w,x,y,z)->return (CncCat v w x y z)
              7 -> get >>= \(w,x,y,z) -> return (CncFun w x y z)
              8 -> get >>= \(x,y)     -> return (AnyInd x y)
              _ -> decodingError

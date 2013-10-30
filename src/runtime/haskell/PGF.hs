@@ -32,7 +32,7 @@ module PGF(
            showType, readType,
            mkType, mkHypo, mkDepHypo, mkImplHypo,
            unType,
-           categories, startCat,
+           categories, categoryContext, startCat,
 
            -- * Functions
            functions, functionsByCat, functionType, missingLins,
@@ -221,6 +221,8 @@ abstractName :: PGF -> Language
 -- with the \'cat\' keyword.
 categories :: PGF -> [CId]
 
+categoryContext :: PGF -> CId -> Maybe [Hypo]
+
 -- | The start category is defined in the grammar with
 -- the \'startcat\' flag. This is usually the sentence category
 -- but it is not necessary. Despite that there is a start category
@@ -278,6 +280,11 @@ languageCode pgf lang =
       _             -> Nothing
 
 categories pgf = [c | (c,hs) <- Map.toList (cats (abstract pgf))]
+
+categoryContext pgf cat =
+  case Map.lookup cat (cats (abstract pgf)) of
+    Just (hypos,_,_) -> Just hypos
+    Nothing          -> Nothing
 
 startCat pgf = DTyp [] (lookStartCat pgf) []
 

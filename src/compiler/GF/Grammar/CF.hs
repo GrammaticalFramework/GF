@@ -102,7 +102,7 @@ cf2grammar rules = (buildTree abs, buildTree conc, cat) where
             _ -> error "empty CF" 
   cats  = [(cat, AbsCat (Just (L NoLoc []))) | 
              cat <- nub' (concat (map cf2cat rules))] ----notPredef cat
-  lincats = [(cat, CncCat (Just (L loc defLinType)) Nothing Nothing Nothing) | (cat,AbsCat (Just (L loc _))) <- cats]
+  lincats = [(cat, CncCat (Just (L loc defLinType)) Nothing Nothing Nothing Nothing) | (cat,AbsCat (Just (L loc _))) <- cats]
   (funs,lins) = unzip (map cf2rule rules)
 
 cf2cat :: CFRule -> [Ident]

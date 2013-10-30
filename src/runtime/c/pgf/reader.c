@@ -830,6 +830,7 @@ pgf_read_fid(PgfReader* rdr, PgfConcr* concr)
         ccat = gu_new(PgfCCat, rdr->opool);
         ccat->cnccat = NULL;
         ccat->lindefs = NULL;
+        ccat->linrefs = NULL;
         ccat->n_synprods = 0;
         ccat->prods = NULL;
         ccat->viterbi_prob = 0;
@@ -858,7 +859,7 @@ pgf_read_funid(PgfReader* rdr, PgfConcr* concr)
 }
 
 static void
-pgf_read_lindefs(PgfReader* rdr, PgfConcr* concr)
+pgf_read_lindefs(PgfReader* rdr, PgfAbsFun* abs_lin_fun, PgfConcr* concr)
 {
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, );
@@ -872,7 +873,29 @@ pgf_read_lindefs(PgfReader* rdr, PgfConcr* concr)
 		ccat->lindefs = gu_new_seq(PgfCncFun*, n_funs, rdr->opool);
 		for (size_t j = 0; j < n_funs; j++) {
 			PgfCncFun* fun = pgf_read_funid(rdr, concr);
+			fun->absfun = abs_lin_fun;
 			gu_seq_set(ccat->lindefs, PgfCncFun*, j, fun);
+		}
+	}
+}
+
+static void
+pgf_read_linrefs(PgfReader* rdr, PgfAbsFun* abs_lin_fun, PgfConcr* concr)
+{
+	size_t len = pgf_read_len(rdr);
+	gu_return_on_exn(rdr->err, );
+
+	for (size_t i = 0; i < len; i++) {
+		PgfCCat* ccat = pgf_read_fid(rdr, concr);
+		
+		size_t n_funs = pgf_read_len(rdr);
+		gu_return_on_exn(rdr->err, );
+
+		ccat->linrefs = gu_new_seq(PgfCncFun*, n_funs, rdr->opool);
+		for (size_t j = 0; j < n_funs; j++) {
+			PgfCncFun* fun = pgf_read_funid(rdr, concr);
+			fun->absfun = abs_lin_fun;
+			gu_seq_set(ccat->linrefs, PgfCncFun*, j, fun);
 		}
 	}
 }
@@ -1000,6 +1023,7 @@ pgf_read_cnccat(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, PgfCId name)
             ccat = gu_new(PgfCCat, rdr->opool);
             ccat->cnccat = NULL;
             ccat->lindefs = NULL;
+            ccat->linrefs = NULL;
             ccat->n_synprods = 0;
             ccat->prods = NULL;
             ccat->viterbi_prob = 0;
@@ -1123,7 +1147,7 @@ pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 }
 
 static PgfConcr*
-pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr)
+pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, PgfAbsFun* abs_lin_fun)
 {
 	PgfConcr* concr = gu_new(PgfConcr, rdr->opool);
 
@@ -1153,7 +1177,8 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr)
 		gu_new_int_map(PgfCCat*, &gu_null_struct, rdr->opool);
 	concr->fun_indices = gu_map_type_new(PgfCncFunOverloadMap, rdr->opool);
 	concr->coerce_idx  = gu_map_type_new(PgfCncOverloadMap, rdr->opool);
-	pgf_read_lindefs(rdr, concr);
+	pgf_read_lindefs(rdr, abs_lin_fun, concr);
+	pgf_read_linrefs(rdr, abs_lin_fun, concr);
 	pgf_read_ccats(rdr, concr);
 	concr->cnccats = pgf_read_cnccats(rdr, abstr, concr);
 	concr->callbacks = pgf_new_callbacks_map(concr, rdr->opool); 
@@ -1177,10 +1202,21 @@ pgf_read_concretes(PgfReader* rdr, PgfAbstr* abstr)
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
+	PgfAbsFun* abs_lin_fun = gu_new(PgfAbsFun, rdr->opool);
+	abs_lin_fun->name = "_";
+	abs_lin_fun->type = gu_new(PgfType, rdr->opool);
+	abs_lin_fun->type->hypos = NULL;
+	abs_lin_fun->type->cid = "_";
+	abs_lin_fun->type->n_exprs = 0;
+	abs_lin_fun->arity = 0;
+	abs_lin_fun->defns = NULL;
+	abs_lin_fun->ep.prob = INFINITY;
+	abs_lin_fun->ep.expr = gu_null_variant;
+
 	for (size_t i = 0; i < len; i++) {
-		PgfConcr* concr = pgf_read_concrete(rdr, abstr);
+		PgfConcr* concr = pgf_read_concrete(rdr, abstr, abs_lin_fun);
 		gu_return_on_exn(rdr->err, NULL);
-		
+
 		gu_map_put(concretes, concr->name, PgfConcr*, concr);
 	}
 

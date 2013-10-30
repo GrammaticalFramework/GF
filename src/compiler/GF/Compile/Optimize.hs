@@ -60,7 +60,7 @@ evalInfo opts sgr m c info = do
 
  errIn ("optimizing " ++ showIdent c) $ case info of
 
-  CncCat ptyp pde ppr mpmcfg -> do
+  CncCat ptyp pde pre ppr mpmcfg -> do
     pde' <- case (ptyp,pde) of
       (Just (L _ typ), Just (L loc de)) -> do
         de <- partEval opts gr ([(Explicit, varStr, typeStr)], typ) de
@@ -71,9 +71,19 @@ evalInfo opts sgr m c info = do
         return (Just (L loc (factor param c 0 de)))
       _ -> return pde   -- indirection
 
+    pre' <- case (ptyp,pre) of
+      (Just (L _ typ), Just (L loc re)) -> do
+        re <- partEval opts gr ([(Explicit, varStr, typ)], typeStr) re
+        return (Just (L loc (factor param c 0 re)))
+      (Just (L loc typ), Nothing) -> do
+        re <- mkLinReference gr typ
+        re <- partEval opts gr ([(Explicit, varStr, typ)], typeStr) re
+        return (Just (L loc (factor param c 0 re)))
+      _ -> return pre   -- indirection
+
     ppr' <- evalPrintname gr ppr
 
-    return (CncCat ptyp pde' ppr' mpmcfg)
+    return (CncCat ptyp pde' pre' ppr' mpmcfg)
 
   CncFun (mt@(Just (_,cont,val))) pde ppr mpmcfg -> --trace (prt c) $
        eIn (text "linearization in type" <+> ppTerm Unqualified 0 (mkProd cont val []) $$ text "of function") $ do
@@ -165,6 +175,26 @@ mkLinDefault gr typ = liftM (Abs Explicit varStr) $ mkDefField typ
        return $ R (zipWith assign ls ts)
      _ | Just _ <- isTypeInts typ -> return $ EInt 0 -- exists in all as first val
      _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
+
+mkLinReference :: SourceGrammar -> Type -> Err Term
+mkLinReference gr typ = 
+ liftM (Abs Explicit varStr) $ 
+   case mkDefField typ (Vr varStr) of
+     Bad "no string" -> return Empty
+     x               -> x
+ where
+   mkDefField ty trm = 
+     case ty of
+       Table pty ty -> do ps <- allParamValues gr pty
+                          case ps of
+                            []     -> Bad "no string"
+                            (p:ps) -> mkDefField ty (S trm p)
+       Sort s | s == cStr -> return trm
+       QC p -> Bad "no string"
+       RecType rs  -> do
+         msum (map (\(l,ty) -> mkDefField ty (P trm l)) (sortRec rs))
+       _ | Just _ <- isTypeInts typ -> Bad "no string"
+       _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
 
 evalPrintname :: SourceGrammar -> Maybe (L Term) -> Err (Maybe (L Term))
 evalPrintname gr mpr =

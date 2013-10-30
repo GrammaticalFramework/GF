@@ -178,7 +178,7 @@ globalizeLoc fpath i =
     ResValue t            -> ResValue (gl t)
     ResOper mt m          -> ResOper (fmap gl mt) (fmap gl m)
     ResOverload ms os     -> ResOverload ms (map (\(x,y) -> (gl x,gl y)) os)
-    CncCat mc mf mp mpmcfg-> CncCat (fmap gl mc)  (fmap gl mf) (fmap gl mp) mpmcfg
+    CncCat mc md mr mp mpmcfg-> CncCat (fmap gl mc) (fmap gl md) (fmap gl mr) (fmap gl mp) mpmcfg
     CncFun m  mt md mpmcfg-> CncFun m (fmap gl mt) (fmap gl md) mpmcfg
     AnyInd b m            -> AnyInd b m
   where
@@ -205,8 +205,8 @@ unifyAnyInfo m i j = case (i,j) of
   (ResOper mt1 m1, ResOper mt2 m2) -> 
     liftM2 ResOper (unifMaybeL mt1 mt2) (unifMaybeL m1 m2)
 
-  (CncCat mc1 mf1 mp1 mpmcfg1, CncCat mc2 mf2 mp2 mpmcfg2) -> 
-    liftM4 CncCat (unifMaybeL mc1 mc2) (unifMaybeL mf1 mf2) (unifMaybeL mp1 mp2)  (unifMaybe mpmcfg1 mpmcfg2)
+  (CncCat mc1 md1 mr1 mp1 mpmcfg1, CncCat mc2 md2 mr2 mp2 mpmcfg2) -> 
+    liftM5 CncCat (unifMaybeL mc1 mc2) (unifMaybeL md1 md2) (unifMaybeL mr1 mr2) (unifMaybeL mp1 mp2)  (unifMaybe mpmcfg1 mpmcfg2)
   (CncFun m mt1 md1 mpmcfg1, CncFun _ mt2 md2 mpmcfg2) -> 
     liftM3 (CncFun m) (unifMaybeL mt1 mt2) (unifMaybeL md1 md2) (unifMaybe mpmcfg1 mpmcfg2)
 

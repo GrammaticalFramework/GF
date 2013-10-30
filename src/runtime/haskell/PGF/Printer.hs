@@ -47,7 +47,9 @@ ppCnc name cnc =
           text "productions" $$
           nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions cnc), prod <- Set.toList set]) $$
           text "lindefs" $$
-          nest 2 (vcat (map ppLinDef (IntMap.toList (lindefs cnc)))) $$
+          nest 2 (vcat (map ppFunList (IntMap.toList (lindefs cnc)))) $$
+          text "linrefs" $$
+          nest 2 (vcat (map ppFunList (IntMap.toList (linrefs cnc)))) $$
           text "lin" $$
           nest 2 (vcat (map ppCncFun (assocs (cncfuns cnc)))) $$
           text "sequences" $$
@@ -73,7 +75,7 @@ ppProduction (fid,PConst _ _ ss) =
 ppCncFun (funid,CncFun fun arr) =
   ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (ppCId fun)
 
-ppLinDef (fid,funids) = 
+ppFunList (fid,funids) = 
   ppFId fid <+> text "->" <+> hcat (punctuate comma (map ppFunId funids))
 
 ppSeq (seqid,seq) = 

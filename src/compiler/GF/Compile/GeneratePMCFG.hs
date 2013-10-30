@@ -100,26 +100,46 @@ addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont
           newArgs  = map getFIds newArgs'
       in addFunction env0 newCat fun newArgs
 
-addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) mdef@(Just (L loc term)) mprn Nothing) = do
-  let pres = protoFCat gr (am,id) lincat
-      parg = protoFCat gr (identW,cVar) typeStr
+addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ lincat)) 
+                                                             mdef@(Just (L loc1 def))
+                                                             mref@(Just (L loc2 ref))
+                                                             mprn
+                                                             Nothing) = do
+  let pcat = protoFCat gr (am,id) lincat
+      pvar = protoFCat gr (identW,cVar) typeStr
 
       pmcfgEnv0  = emptyPMCFGEnv
-      lincont    = [(Explicit, varStr, typeStr)]
-  b             <- convert opts gr cenv (floc opath loc id) term (lincont,lincat) [parg]
+
+  let lincont    = [(Explicit, varStr, typeStr)]
+  b             <- convert opts gr cenv (floc opath loc1 id) def (lincont,lincat) [pvar]
   let (seqs1,b1) = addSequencesB seqs b
-      pmcfgEnv1  = foldBM addRule
+      pmcfgEnv1  = foldBM addLindef
                           pmcfgEnv0
                           (goB b1 CNil [])
-                          (pres,[parg])
-      pmcfg     = getPMCFG pmcfgEnv1
-  when (verbAtLeast opts Verbose) $ liftIO $ hPutStr stderr ("\n+ "++showIdent id++" "++show (catFactor pres))
-  seqs1 `seq` pmcfg `seq` return (seqs1,GF.Grammar.CncCat mty mdef mprn (Just pmcfg))
+                          (pcat,[pvar])
+
+  let lincont    = [(Explicit, varStr, lincat)]
+  b             <- convert opts gr cenv (floc opath loc2 id) ref (lincont,typeStr) [pcat]
+  let (seqs2,b2) = addSequencesB seqs1 b
+      pmcfgEnv2  = foldBM addLinref
+                          pmcfgEnv1
+                          (goB b2 CNil [])
+                          (pvar,[pcat])
+
+  let pmcfg     = getPMCFG pmcfgEnv2
+
+  when (verbAtLeast opts Verbose) $ liftIO $ hPutStr stderr ("\n+ "++showIdent id++" "++show (catFactor pcat))
+  seqs2 `seq` pmcfg `seq` return (seqs2,GF.Grammar.CncCat mty mdef mref mprn (Just pmcfg))
   where
-    addRule lins (newCat', newArgs') env0 =
+    addLindef lins (newCat', newArgs') env0 =
       let [newCat] = getFIds newCat'
           !fun     = mkArray lins
       in addFunction env0 newCat fun [[fidVar]]
+
+    addLinref lins (newCat', [newArg']) env0 =
+      let newArg   = getFIds newArg'
+          !fun     = mkArray lins
+      in addFunction env0 fidVar fun [newArg]
 
 addPMCFG opts gr cenv opath am cm seqs id info = return (seqs, info)
 

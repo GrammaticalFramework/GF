@@ -124,9 +124,16 @@ refreshModule (k,sgr) mi@(i,mo)
       (k',tyts') <- liftM (\ (t,(_,i)) -> (i,t)) $ 
                     appSTM (mapPairsM (\(L loc t) -> liftM (L loc) (refresh t)) tyts) (initIdStateN k)
       return $ (k', (c, ResOverload os tyts'):cs)
-    CncCat mt (Just (L loc trm)) mn mpmcfg-> do   ---- refresh mt, pn
-      (k',trm') <- refreshTermKN k trm
-      return $ (k', (c, CncCat mt (Just (L loc trm')) mn mpmcfg):cs)
+    CncCat mt md mr mn mpmcfg-> do
+      (k,md) <- case md of
+                  Just (L loc trm) -> do (k,trm) <- refreshTermKN k trm
+                                         return (k,Just (L loc trm))
+                  Nothing          -> return (k,Nothing)
+      (k,mr) <- case mr of
+                  Just (L loc trm) -> do (k,trm) <- refreshTermKN k trm
+                                         return (k,Just (L loc trm))
+                  Nothing          -> return (k,Nothing)
+      return (k, (c, CncCat mt md mr mn mpmcfg):cs)
     CncFun mt (Just (L loc trm)) mn mpmcfg -> do   ---- refresh pn
       (k',trm') <- refreshTermKN k trm
       return $ (k', (c, CncFun mt (Just (L loc trm')) mn mpmcfg):cs)

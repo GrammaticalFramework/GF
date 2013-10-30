@@ -41,6 +41,7 @@ data Concr = Concr {
   printnames   :: Map.Map CId String,                                -- printname of a cat or a fun
   cncfuns      :: Array FunId CncFun,
   lindefs      :: IntMap.IntMap [FunId],
+  linrefs      :: IntMap.IntMap [FunId],
   sequences    :: Array SeqId Sequence,
   productions  :: IntMap.IntMap (Set.Set Production),                -- the original productions loaded from the PGF file
   pproductions :: IntMap.IntMap (Set.Set Production),                -- productions needed for parsing

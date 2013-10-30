@@ -611,6 +611,8 @@ pgf_parsing_create_completed(PgfParsing* ps, PgfParseState* state,
 {
 	PgfCCat* cat = gu_new_flex(ps->pool, PgfCCat, fin, 1);
 	cat->cnccat = conts->ccat->cnccat;
+	cat->lindefs = conts->ccat->lindefs;
+	cat->linrefs = conts->ccat->linrefs;
 	cat->viterbi_prob = viterbi_prob;
 	cat->fid = ps->max_fid++;
 	cat->conts = conts;

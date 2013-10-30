@@ -36,8 +36,9 @@ getLocalTags x (m,mi) =
                                                   maybe (loc "oper-def")     mb_def
     getLocations (ResOverload _ defs)           = list (\(x,y) -> ltype "overload-type" x ++ 
                                                                   loc   "overload-def"  y) defs
-    getLocations (CncCat mty mdef mprn _)       = maybe (loc "lincat")       mty ++ 
-                                                  maybe (loc "lindef")       mdef  ++ 
+    getLocations (CncCat mty md mr mprn _)      = maybe (loc "lincat")       mty ++ 
+                                                  maybe (loc "lindef")       md  ++
+                                                  maybe (loc "linref")       mr  ++
                                                   maybe (loc "printname")    mprn
     getLocations (CncFun _ mlin mprn _)         = maybe (loc "lin")          mlin ++
                                                   maybe (loc "printname")    mprn

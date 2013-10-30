@@ -14,7 +14,7 @@ import qualified Data.Set as Set
 import Control.Monad
 
 pgfMajorVersion, pgfMinorVersion :: Word16
-(pgfMajorVersion, pgfMinorVersion) = (1,0)
+(pgfMajorVersion, pgfMinorVersion) = (2,0)
 
 instance Binary PGF where
   put pgf = do putWord16be pgfMajorVersion
@@ -56,6 +56,7 @@ instance Binary Concr where
                putArray2 (sequences cnc)
                putArray (cncfuns cnc)
                put (lindefs cnc)
+               put (linrefs cnc)
                put (productions cnc)
                put (cnccats cnc)
                put (totalCats cnc)
@@ -64,11 +65,13 @@ instance Binary Concr where
            sequences   <- getArray2
            cncfuns     <- getArray
            lindefs     <- get
+           linrefs     <- get
            productions <- get
            cnccats     <- get
            totalCats   <- get
            return (Concr{ cflags=cflags, printnames=printnames
-                        , sequences=sequences, cncfuns=cncfuns, lindefs=lindefs
+                        , sequences=sequences, cncfuns=cncfuns
+                        , lindefs=lindefs, linrefs=linrefs
                         , productions=productions
                         , pproductions = IntMap.empty
                         , lproductions = Map.empty
