@@ -137,11 +137,11 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
 
     nil = -1
 
-    bs = bracketedLinearize pgf lang t
+    bss = bracketedLinearize pgf lang t
 
     root = (wildCId,nil,wildCId)
 
-    leaves = (root,0,root_lbl) : (groupAndIndexIt 1 . getLeaves root) bs
+    leaves = (root,0,root_lbl) : (groupAndIndexIt 1 . concatMap (getLeaves root)) bss
     deps   = let (_,(h,deps)) = getDeps 0 [] t []
              in (h,(dep_lbl,nil)):deps
 
@@ -213,8 +213,8 @@ graphvizParseTree :: PGF -> Language -> GraphvizOptions -> Tree -> String
 graphvizParseTree pgf lang opts = graphvizBracketedString opts . bracketedLinearize pgf lang
 
 
-graphvizBracketedString :: GraphvizOptions -> BracketedString -> String
-graphvizBracketedString opts bs = render graphviz_code
+graphvizBracketedString :: GraphvizOptions -> [BracketedString] -> String
+graphvizBracketedString opts bss = render graphviz_code
     where
       graphviz_code
           = text "graph {" $$
@@ -250,10 +250,10 @@ graphvizBracketedString opts bs = render graphviz_code
 
       nil = -1
       internal_nodes = [mkLevel internals |
-                        internals <- getInternals [(nil, bs)],
+                        internals <- getInternals (map ((,) nil) bss),
                         not (null internals)]
       leaf_nodes = mkLevel [(parent, id, word) |
-                            (id, (parent, word)) <- zip [100000..] (getLeaves nil bs)]
+                            (id, (parent, word)) <- zip [100000..] (concatMap (getLeaves nil) bss)]
 
       getInternals []    = []
       getInternals nodes
@@ -300,12 +300,12 @@ genPreAlignment pgf langs = lin2align . linsBracketed
  where
       linsBracketed t = [bracketedLinearize pgf lang t | lang <- langs]
 
-      lin2align :: [BracketedString] -> PreAlign
-      lin2align bss =  PreAlign langSeqs langRels
+      lin2align :: [[BracketedString]] -> PreAlign
+      lin2align bsss =  PreAlign langSeqs langRels
           where
            (langSeqs,langRels) = mkLayers leaves
            nil = -1
-           leaves = map (groupAndIndexIt 0 . getLeaves nil) bss
+           leaves = map (groupAndIndexIt 0 . concatMap (getLeaves nil)) bsss
 
            groupAndIndexIt id []          = []
            groupAndIndexIt id ((p,w):pws) = let (ws,pws1) = collect pws

@@ -47,7 +47,7 @@ data Forest
 --------------------------------------------------------------------
 
 linearizeWithBrackets :: Maybe Int -> Forest -> BracketedString
-linearizeWithBrackets dp = head . snd . untokn Nothing . bracketedTokn dp
+linearizeWithBrackets dp = head . snd . untokn Nothing . (:[]) .bracketedTokn dp
 
 ---------------------------------------------------------------
 -- Internally we have to do everything with Tokn first because
@@ -67,8 +67,8 @@ bracketedTokn dp f@(Forest abs cnc forest root) =
 
     render forest arg@(PArg hypos fid) =
       case IntMap.lookup fid forest >>= Set.maxView of
-        Just (p,set) -> let (ct,fun,es,(_,lin)) = descend (if Set.null set then forest else IntMap.insert fid set forest) p
-                        in (ct,fun,es,(map getVar hypos,lin))
+        Just (p,set) -> let (ct,fid',fun,es,(_,lin)) = descend (if Set.null set then forest else IntMap.insert fid set forest) p
+                        in (ct,fid',fun,es,(map getVar hypos,lin))
         Nothing      -> error ("wrong forest id " ++ show fid)
       where
         descend forest (PApply funid args) = let (CncFun fun lins) = cncfuns cnc ! funid
@@ -78,9 +78,9 @@ bracketedTokn dp f@(Forest abs cnc forest root) =
                                                                        Just (DTyp _ cat _,_,_,_,_) -> cat
                                                  largs  = map (render forest) args
                                                  ltable = mkLinTable cnc isTrusted [] funid largs
-                                             in ((cat,fid),wildCId,either (const []) id $ getAbsTrees f arg Nothing dp,ltable)
+                                             in ((cat,fid),0,wildCId,either (const []) id $ getAbsTrees f arg Nothing dp,ltable)
         descend forest (PCoerce fid)       = render forest (PArg [] fid)
-        descend forest (PConst cat e ts)   = ((cat,fid),wildCId,[e],([],listArray (0,0) [map LeafKS ts]))
+        descend forest (PConst cat e ts)   = ((cat,fid),0,wildCId,[e],([],listArray (0,0) [map LeafKS ts]))
 
     getVar (fid,_)
       | fid == fidVar = wildCId
