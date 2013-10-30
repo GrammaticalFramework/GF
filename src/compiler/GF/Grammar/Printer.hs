@@ -124,12 +124,15 @@ ppJudgement q (id, ResOverload ids defs) =
   (text "overload" <+> lbrace $$
    nest 2 (vcat [ppIdent id <+> (colon <+> ppTerm q 0 ty $$ equals <+> ppTerm q 0 e <+> semi) | (L _ ty,L _ e) <- defs]) $$
    rbrace) <+> semi
-ppJudgement q (id, CncCat  ptype pexp pprn mpmcfg) =
-  (case ptype of
+ppJudgement q (id, CncCat pcat pdef pref pprn mpmcfg) =
+  (case pcat of
      Just (L _ typ) -> text "lincat" <+> ppIdent id <+> equals <+> ppTerm q 0 typ <+> semi
      Nothing        -> empty) $$
-  (case pexp of
+  (case pdef of
      Just (L _ exp) -> text "lindef" <+> ppIdent id <+> equals <+> ppTerm q 0 exp <+> semi
+     Nothing        -> empty) $$
+  (case pref of
+     Just (L _ exp) -> text "linref" <+> ppIdent id <+> equals <+> ppTerm q 0 exp <+> semi
      Nothing        -> empty) $$
   (case pprn of
      Just (L _ prn) -> text "printname" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi

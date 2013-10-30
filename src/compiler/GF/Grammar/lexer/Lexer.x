@@ -97,6 +97,7 @@ data Token
  | T_lin
  | T_lincat
  | T_lindef
+ | T_linref
  | T_of
  | T_open
  | T_oper
@@ -181,6 +182,7 @@ resWords = Map.fromList
  , b "lin"        T_lin
  , b "lincat"     T_lincat
  , b "lindef"     T_lindef
+ , b "linref"     T_linref
  , b "of"         T_of
  , b "open"       T_open
  , b "oper"       T_oper

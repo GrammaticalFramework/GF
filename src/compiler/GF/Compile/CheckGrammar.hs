@@ -106,8 +106,8 @@ checkCompleteGrammar opts gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) 
                                                     return info
                                  _            -> return info
                        case info of
-                         CncCat (Just (L loc (RecType []))) _ _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
-                         _                                        -> Bad "no def lin"
+                         CncCat (Just (L loc (RecType []))) _ _ _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
+                         _                                          -> Bad "no def lin"
 
                  case lookupIdent c js of
                    Ok (AnyInd _ _) -> return js
@@ -129,13 +129,13 @@ checkCompleteGrammar opts gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) 
                            checkWarn (text "no linearization of" <+> ppIdent c)
        AbsCat (Just _) -> case lookupIdent c js of
          Ok (AnyInd _ _) -> return js
-         Ok (CncCat (Just _) _ _ _) -> return js
-         Ok (CncCat Nothing mt mp mpmcfg) -> do
+         Ok (CncCat (Just _) _ _ _ _) -> return js
+         Ok (CncCat Nothing md mr mp mpmcfg) -> do
            checkWarn (text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}")
-           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) mt mp mpmcfg) js
+           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) md mr mp mpmcfg) js
          _ -> do
            checkWarn (text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}")
-           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) Nothing Nothing Nothing) js
+           return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) Nothing Nothing Nothing Nothing) js
        _ -> return js
      
    checkCnc js i@(c,info) =
@@ -147,7 +147,7 @@ checkCompleteGrammar opts gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) 
                                            return $ updateTree (c,CncFun (Just linty) d mn mf) js
                              _       -> do checkWarn (text "function" <+> ppIdent c <+> text "is not in abstract")
                                            return js
-       CncCat _ _ _ _   -> case lookupOrigInfo gr (am,c) of
+       CncCat _ _ _ _ _ -> case lookupOrigInfo gr (am,c) of
                              Ok _ -> return $ updateTree i js
                              _    -> do checkWarn (text "category" <+> ppIdent c <+> text "is not in abstract")
                                         return js
@@ -175,7 +175,7 @@ checkInfo opts sgr (m,mo) c info = do
         Nothing  -> return ()
       return (AbsFun (Just (L loc typ)) ma md moper)
 
-    CncCat mty mdef mpr mpmcfg -> do
+    CncCat mty mdef mref mpr mpmcfg -> do
       mty  <- case mty of
                 Just (L loc typ) -> chIn loc "linearization type of" $ 
                                      (if False --flag optNewComp opts
@@ -192,13 +192,19 @@ checkInfo opts sgr (m,mo) c info = do
                        (def,_) <- checkLType gr [] def (mkFunType [typeStr] typ)
                        return (Just (L loc def))
                 _ -> return Nothing
+      mref <- case (mty,mref) of
+                (Just (L _ typ),Just (L loc ref)) -> 
+                    chIn loc "reference linearization of" $ do
+                       (ref,_) <- checkLType gr [] ref (mkFunType [typ] typeStr)
+                       return (Just (L loc ref))
+                _ -> return Nothing
       mpr  <- case mpr of
                 (Just (L loc t)) -> 
                     chIn loc "print name of" $ do
                        (t,_) <- checkLType gr [] t typeStr
                        return (Just (L loc t))
                 _ -> return Nothing
-      return (CncCat mty mdef mpr mpmcfg)
+      return (CncCat mty mdef mref mpr mpmcfg)
 
     CncFun mty mt mpr mpmcfg -> do
       mt <- case (mty,mt) of

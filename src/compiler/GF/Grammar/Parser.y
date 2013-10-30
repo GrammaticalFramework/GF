@@ -85,6 +85,7 @@ import Data.Char(toLower)
  'lin'        { T_lin       }
  'lincat'     { T_lincat    }
  'lindef'     { T_lindef    }
+ 'linref'     { T_linref    }
  'of'         { T_of        }
  'open'       { T_open      }
  'oper'       { T_oper      }
@@ -221,10 +222,11 @@ TopDef
   | 'data'            ListDataDef     { Left  $2 }
   | 'param'           ListParamDef    { Left  $2 }
   | 'oper'            ListOperDef     { Left  $2 }
-  | 'lincat'          ListTermDef     { Left  [(f, CncCat (Just e) Nothing    Nothing Nothing) | (f,e) <- $2] }
-  | 'lindef'          ListTermDef     { Left  [(f, CncCat Nothing    (Just e) Nothing Nothing) | (f,e) <- $2] }
+  | 'lincat'          ListTermDef     { Left  [(f, CncCat (Just e) Nothing  Nothing  Nothing Nothing) | (f,e) <- $2] }
+  | 'lindef'          ListTermDef     { Left  [(f, CncCat Nothing  (Just e) Nothing  Nothing Nothing) | (f,e) <- $2] }
+  | 'linref'          ListTermDef     { Left  [(f, CncCat Nothing  Nothing  (Just e) Nothing Nothing) | (f,e) <- $2] }
   | 'lin'             ListLinDef      { Left  $2 }
-  | 'printname' 'cat' ListTermDef     { Left  [(f, CncCat Nothing    Nothing (Just e) Nothing) | (f,e) <- $3] }
+  | 'printname' 'cat' ListTermDef     { Left  [(f, CncCat Nothing Nothing Nothing (Just e) Nothing) | (f,e) <- $3] }
   | 'printname' 'fun' ListTermDef     { Left  [(f, CncFun Nothing Nothing (Just e) Nothing) | (f,e) <- $3] }
   | 'flags'           ListFlagDef     { Right $2 }
 
@@ -688,7 +690,7 @@ checkInfoType mt jment@(id,info) =
   case info of
     AbsCat pcont         -> ifAbstract mt (locPerh pcont)
     AbsFun pty _ pde _   -> ifAbstract mt (locPerh pty ++ maybe [] locAll pde)
-    CncCat pty pd ppn _  -> ifConcrete mt (locPerh pty ++ locPerh pd ++ locPerh ppn)
+    CncCat pty pd pr ppn _->ifConcrete mt (locPerh pty ++ locPerh pd ++ locPerh pr ++ locPerh ppn)
     CncFun _   pd ppn _  -> ifConcrete mt (locPerh pd ++ locPerh ppn)
     ResParam pparam _    -> ifResource mt (locPerh pparam)
     ResValue ty          -> ifResource mt (locL ty)

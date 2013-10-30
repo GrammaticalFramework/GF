@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP,MagicHash #-}
+{-# LANGUAGE CPP,MagicHash,BangPatterns #-}
 {-# LINE 3 "lexer/Lexer.x" #-}
 
 module GF.Grammar.Lexer
@@ -103,6 +103,7 @@ data Token
  | T_lin
  | T_lincat
  | T_lindef
+ | T_linref
  | T_of
  | T_open
  | T_oper
@@ -187,6 +188,7 @@ resWords = Map.fromList
  , b "lin"        T_lin
  , b "lincat"     T_lincat
  , b "lindef"     T_lindef
+ , b "linref"     T_linref
  , b "of"         T_of
  , b "open"       T_open
  , b "oper"       T_oper
@@ -314,10 +316,10 @@ alexIndexInt16OffAddr (AlexA# arr) off =
 #ifdef WORDS_BIGENDIAN
   narrow16Int# i
   where
-        i    = word2Int# ((high `uncheckedShiftL#` 8#) `or#` low)
-        high = int2Word# (ord# (indexCharOffAddr# arr (off' +# 1#)))
-        low  = int2Word# (ord# (indexCharOffAddr# arr off'))
-        off' = off *# 2#
+        !i    = word2Int# ((high `uncheckedShiftL#` 8#) `or#` low)
+        !high = int2Word# (ord# (indexCharOffAddr# arr (off' +# 1#)))
+        !low  = int2Word# (ord# (indexCharOffAddr# arr off'))
+        !off' = off *# 2#
 #else
   indexInt16OffAddr# arr off
 #endif
@@ -331,14 +333,14 @@ alexIndexInt32OffAddr (AlexA# arr) off =
 #ifdef WORDS_BIGENDIAN
   narrow32Int# i
   where
-   i    = word2Int# ((b3 `uncheckedShiftL#` 24#) `or#`
+   !i    = word2Int# ((b3 `uncheckedShiftL#` 24#) `or#`
 		     (b2 `uncheckedShiftL#` 16#) `or#`
 		     (b1 `uncheckedShiftL#` 8#) `or#` b0)
-   b3   = int2Word# (ord# (indexCharOffAddr# arr (off' +# 3#)))
-   b2   = int2Word# (ord# (indexCharOffAddr# arr (off' +# 2#)))
-   b1   = int2Word# (ord# (indexCharOffAddr# arr (off' +# 1#)))
-   b0   = int2Word# (ord# (indexCharOffAddr# arr off'))
-   off' = off *# 4#
+   !b3   = int2Word# (ord# (indexCharOffAddr# arr (off' +# 3#)))
+   !b2   = int2Word# (ord# (indexCharOffAddr# arr (off' +# 2#)))
+   !b1   = int2Word# (ord# (indexCharOffAddr# arr (off' +# 1#)))
+   !b0   = int2Word# (ord# (indexCharOffAddr# arr off'))
+   !off' = off *# 4#
 #else
   indexInt32OffAddr# arr off
 #endif
@@ -414,12 +416,12 @@ alex_scan_tkn user orig_input len input s last_acc =
 
 
 	let
-		(base) = alexIndexInt32OffAddr alex_base s
-		((I# (ord_c))) = ord c
-		(offset) = (base +# ord_c)
-		(check)  = alexIndexInt16OffAddr alex_check offset
+		(!(base)) = alexIndexInt32OffAddr alex_base s
+		(!((I# (ord_c)))) = ord c
+		(!(offset)) = (base +# ord_c)
+		(!(check))  = alexIndexInt16OffAddr alex_check offset
 		
-		(new_s) = if (offset >=# 0#) && (check ==# ord_c)
+		(!(new_s)) = if (offset >=# 0#) && (check ==# ord_c)
 			  then alexIndexInt16OffAddr alex_table offset
 			  else alexIndexInt16OffAddr alex_deflt s
 	in

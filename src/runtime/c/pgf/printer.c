@@ -165,8 +165,32 @@ pgf_print_lindefs(GuMapItor* fn, const void* key, void* value,
 }
 
 static void
+pgf_print_linrefs(GuMapItor* fn, const void* key, void* value,
+			GuExn* err)
+{
+	PgfPrintFn* clo = (PgfPrintFn*) fn;
+    int fid = *((int *) key);
+    PgfCCat* ccat = *((PgfCCat**) value);
+    GuOut *out = clo->out;
+    
+    if (ccat->linrefs != NULL) {
+		gu_puts("    ",out,err);
+
+		size_t n_linrefs = gu_seq_length(ccat->linrefs);
+		for (size_t i = 0; i < n_linrefs; i++) {
+			if (i > 0) gu_putc(' ', out, err);
+
+			PgfCncFun* fun = gu_seq_get(ccat->linrefs, PgfCncFun*, i);
+			gu_printf(out,err,"F%d",fun->funid);
+		}
+
+		gu_printf(out,err," -> C%d\n",fid);
+	}
+}
+
+static void
 pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences* sequences, 
-					GuOut *out, GuExn *err)
+                 GuOut *out, GuExn *err)
 {
 	gu_printf(out,err,"    F%d := (", cncfun->funid);
 
@@ -321,6 +345,10 @@ pgf_print_concrete(PgfCId cncname, PgfConcr* concr,
 	PgfPrintFn clo3 = { { pgf_print_lindefs }, out };
 	gu_map_iter(concr->ccats, &clo3.fn, err);
 
+	gu_puts("  linrefs\n", out, err);
+	PgfPrintFn clo4 = { { pgf_print_linrefs }, out };
+	gu_map_iter(concr->ccats, &clo4.fn, err);
+
 	gu_puts("  lin\n", out, err);
 	size_t n_funs = gu_seq_length(concr->cncfuns);
 	for (size_t i = 0; i < n_funs; i++) {
@@ -338,8 +366,8 @@ pgf_print_concrete(PgfCId cncname, PgfConcr* concr,
 	}
 	
 	gu_puts("  categories\n", out, err);
-	PgfPrintFn clo4 = { { pgf_print_cnccat }, out };
-	gu_map_iter(concr->cnccats, &clo4.fn, err);
+	PgfPrintFn clo5 = { { pgf_print_cnccat }, out };
+	gu_map_iter(concr->cnccats, &clo5.fn, err);
 	
 	gu_puts("}\n", out, err);
 }

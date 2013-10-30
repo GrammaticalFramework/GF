@@ -74,8 +74,8 @@ lookupResDefLoc gr (m,c)
       case info of
         ResOper _ (Just lt) -> return lt
         ResOper _ Nothing  -> return (noLoc (Q (m,c)))
-        CncCat (Just (L l ty)) _ _ _ -> fmap (L l) (lock c ty)
-        CncCat _ _ _ _         -> fmap noLoc (lock c defLinType)
+        CncCat (Just (L l ty)) _ _ _ _ -> fmap (L l) (lock c ty)
+        CncCat _ _ _ _ _         -> fmap noLoc (lock c defLinType)
       
         CncFun (Just (cat,_,_)) (Just (L l tr)) _ _ -> fmap (L l) (unlock cat tr)
         CncFun _                (Just ltr) _ _ -> return ltr
@@ -92,7 +92,7 @@ lookupResType gr (m,c) = do
     ResOper (Just (L _ t)) _ -> return t
 
     -- used in reused concrete
-    CncCat _ _ _ _ -> return typeType
+    CncCat _ _ _ _ _ -> return typeType
     CncFun (Just (cat,cont,val)) _ _ _ -> do
           val' <- lock cat val 
           return $ mkProd cont val' []
@@ -166,9 +166,9 @@ lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
 lookupLincat gr m c = do
   info <- lookupQIdentInfo gr (m,c)
   case info of
-    CncCat (Just (L _ t)) _ _ _ -> return t
-    AnyInd _ n                  -> lookupLincat gr n c
-    _                           -> Bad (render (ppIdent c <+> text "has no linearization type in" <+> ppIdent m))
+    CncCat (Just (L _ t)) _ _ _ _ -> return t
+    AnyInd _ n                    -> lookupLincat gr n c
+    _                             -> Bad (render (ppIdent c <+> text "has no linearization type in" <+> ppIdent m))
 
 -- | this is needed at compile time
 lookupFunType :: SourceGrammar -> Ident -> Ident -> Err Type

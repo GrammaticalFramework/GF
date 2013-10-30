@@ -121,7 +121,7 @@ convCncJment (name,jment) =
     ResParam ops _ ->
       return $ Pa $ Param i (maybe "" (render . ppParams q . unLoc) ops)
     ResValue _ -> return Ignored
-    CncCat (Just (L _ typ)) Nothing pprn _ -> -- ignores printname !!
+    CncCat (Just (L _ typ)) Nothing Nothing pprn _ -> -- ignores printname !!
       return $ LC $ Lincat i (render $ ppTerm q 0 typ)
     ResOper oltyp (Just lterm) -> return $ Op $ Oper lhs rhs
       where
@@ -153,7 +153,7 @@ jmentLocation jment =
     AbsCat ctxt      -> fmap loc ctxt
     AbsFun ty _ _ _  -> fmap loc ty
     ResParam ops _   -> fmap loc ops
-    CncCat ty _ _ _  -> fmap loc ty
+    CncCat ty _ _ _ _ ->fmap loc ty
     ResOper ty rhs   -> fmap loc rhs `mplus` fmap loc ty
     CncFun _ rhs _ _ -> fmap loc rhs
     _ -> Nothing

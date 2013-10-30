@@ -299,6 +299,7 @@ typedef struct {
 struct PgfCCat {
 	PgfCncCat* cnccat;
 	PgfCncFuns* lindefs;
+	PgfCncFuns* linrefs;
 	size_t n_synprods;
 	PgfProductionSeq* prods;
 	float viterbi_prob;
