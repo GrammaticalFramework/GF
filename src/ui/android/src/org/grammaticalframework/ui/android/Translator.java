@@ -1,6 +1,7 @@
 package org.grammaticalframework.ui.android;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.grammaticalframework.pgf.Concr;
@@ -38,10 +39,38 @@ public class Translator {
 	private PGF mPGF;
 	private Thread mGrammarLoader;
 
+	private static final String SOURCE_LANG_KEY = "source_lang";
+	private static final String TARGET_LANG_KEY = "target_lang";
+	
+	private SharedPreferences mSharedPref;
+	
+	private Language getPrefLang(String key, int def) {
+		int index = mSharedPref.getInt(key, def);
+		if (index < 0 || index >= mLanguages.length)
+			index = def;
+		return mLanguages[index];
+	}
+
+	private void setPrefLang(String key, Language def) {
+		for (int index = 0; index < mLanguages.length; index++) {
+			if (def == mLanguages[index]) {
+				SharedPreferences.Editor editor = mSharedPref.edit();
+				editor.putInt(key, index);
+				editor.commit();
+				break;
+			}
+		}
+	}
 
     public Translator(Context context) {
 		mGrammarLoader = new GrammarLoader(context);
 		mGrammarLoader.start();
+		
+		mSharedPref = context.getSharedPreferences(
+				context.getString(R.string.global_preferences_key), Context.MODE_PRIVATE);
+		
+		mSourceLanguage = getPrefLang(SOURCE_LANG_KEY, 0);
+		mTargetLanguage = getPrefLang(TARGET_LANG_KEY, 1);
     }
 
     public List<Language> getAvailableSourceLanguages() {
@@ -54,18 +83,20 @@ public class Translator {
 
     public void setSourceLanguage(Language language) {
         mSourceLanguage = language;
+        setPrefLang(SOURCE_LANG_KEY, language);
     }
 
     public void setTargetLanguage(Language language) {
         mTargetLanguage = language;
+        setPrefLang(TARGET_LANG_KEY, language);
     }
 
     public Language getSourceLanguage() {
-        return mSourceLanguage != null ? mSourceLanguage : mLanguages[0];
+        return mSourceLanguage;
     }
 
     public Language getTargetLanguage() {
-        return mTargetLanguage != null ? mTargetLanguage : mLanguages[1];
+        return mTargetLanguage;
     }
 
     private static String explode(String in) {
