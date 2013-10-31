@@ -1,5 +1,4 @@
 abstract AllFinAbs = 
   Lang,
-  ExtraFinAbs,
-  DictFinAbs
+  ExtraFinAbs
   ** {} ;
