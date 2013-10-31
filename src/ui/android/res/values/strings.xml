@@ -8,4 +8,5 @@
 	<string name="open_image">Opening</string>
 	<string name="mic_input">Speech Input</string>
 	<string name="keyboard_input">Keyboard Input</string>
+	<string name="global_preferences_key">org.grammaticalframework.ui.android.GLOBAL_PREFERENCES</string>
 </resources>
