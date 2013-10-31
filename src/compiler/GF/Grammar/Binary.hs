@@ -7,7 +7,7 @@
 --
 -----------------------------------------------------------------------------
 
-module GF.Grammar.Binary where
+module GF.Grammar.Binary(decodeModule,decodeModuleHeader,encodeModule) where
 
 import Prelude hiding (catch)
 import Control.Exception(catch,ErrorCall(..),throwIO)
@@ -27,7 +27,6 @@ import PGF.Binary
 
 -- Please change this every time when the GFO format is changed
 gfoVersion = "GF02"
-
 
 instance Binary Ident where
   put id = put (ident2bs id)
@@ -295,13 +294,32 @@ instance Binary RawIdent where
   put = put . rawId2bs
   get = fmap rawIdentC get
 
-putGFOVersion = mapM_ (putWord8 . fromIntegral . ord) gfoVersion
-getGFOVersion = replicateM (length gfoVersion) (fmap (chr . fromIntegral) getWord8)
+--putGFOVersion = mapM_ (putWord8 . fromIntegral . ord) gfoVersion
+--getGFOVersion = replicateM (length gfoVersion) (fmap (chr . fromIntegral) getWord8)
+--putGFOVersion = put gfoVersion
+--getGFOVersion = get :: Get VersionMagic
+
+
+data VersionTagged a = Tagged {unV::a} | WrongVersion
+
+instance Binary a => Binary (VersionTagged a) where
+  put (Tagged a) = put (gfoBinVersion,a)
+  get = do ver <- get
+           if ver==gfoBinVersion
+             then fmap Tagged get
+             else return WrongVersion
+
+gfoBinVersion = (b1,b2,b3,b4)
+  where [b1,b2,b3,b4] = map (toEnum.fromEnum) gfoVersion :: [Word8]
+
 
 decodeModule :: FilePath -> IO SourceModule
-decodeModule fpath = decodeFile' fpath (getGFOVersion >> get)
-
-decodeModuleHeader fpath = decodeFile' fpath getVersionedMod
+decodeModule fpath = check =<< decodeFile' fpath
+  where
+    check (Tagged m) = return m
+    check _ = fail ".gfo file version mismatch"
+{-
+decodeModuleHeader fpath = decodeFile_ fpath getVersionedMod
   where
     getVersionedMod = do
       ver <- getGFOVersion
@@ -309,13 +327,19 @@ decodeModuleHeader fpath = decodeFile' fpath getVersionedMod
         then do (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc) <- get
                 return (Just (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty))
         else return Nothing
-
+--}
+--{-
+decodeModuleHeader fpath = fmap check $ decodeFile' fpath
+  where
+    check (Tagged (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc)) =
+        (Just (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty))
+    check _ = Nothing
+--}
 encodeModule :: FilePath -> SourceModule -> IO ()
-encodeModule fpath mo =
-  encodeFile_ fpath (putGFOVersion >> put mo)
+encodeModule fpath mo = encodeFile fpath (Tagged mo)
 
--- | like decodeFile_ but adds file name to error message if there was an error
-decodeFile' fpath get = addFPath fpath (decodeFile_ fpath get)
+-- | like 'decodeFile' but adds file name to error message if there was an error
+decodeFile' fpath = addFPath fpath (decodeFile fpath)
 
 -- | Adds file name to error message if there was an error,
 -- | but laziness can cause errors to slip through
