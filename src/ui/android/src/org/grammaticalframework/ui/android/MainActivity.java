@@ -27,7 +27,7 @@ import org.grammaticalframework.pgf.MorphoAnalysis;
 public class MainActivity extends Activity {
 
     private static final boolean DBG = true;
-    private static final String TAG = "DemoActivity";
+    private static final String TAG = "MainActivity";
 
     private static final boolean FAKE_SPEECH = false;
 
