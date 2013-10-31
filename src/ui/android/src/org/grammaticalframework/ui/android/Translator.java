@@ -94,7 +94,7 @@ public class Translator {
             return output;
         } catch (ParseError e) {
             Log.e(TAG, "Parse error: " + e);
-            return "parse error: " + input + " " + e.getMessage(); // TODO: no no no
+            return "parse error: " + e.getMessage(); // TODO: no no no
         }
     }
 
