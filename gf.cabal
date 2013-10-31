@@ -10,7 +10,7 @@ synopsis: Grammatical Framework
 description: GF, Grammatical Framework, is a programming language for multilingual grammar applications
 homepage: http://www.grammaticalframework.org/
 bug-reports: http://code.google.com/p/grammatical-framework/issues/list
-tested-with: GHC==7.4.2, GHC==7.6.2
+tested-with: GHC==7.4.2, GHC==7.6.3
 
 data-dir: src
 data-files: www/*.html
@@ -53,6 +53,10 @@ flag new-comp
   Description: Make -new-comp the default
   Default:     True
 
+flag custom-binary
+  Description: Use a customised version of the binary package
+  Default:     True
+
 library
   build-depends: base >= 4.2 && <5,
                  array,
@@ -63,6 +67,19 @@ library
                  pretty,
                  mtl
   hs-source-dirs: src/compiler src/runtime/haskell
+
+  if flag(custom-binary)
+    hs-source-dirs: src/binary
+    other-modules:
+      -- not really part of GF but I have changed the original binary library
+      -- and we have to keep the copy for now.
+      Data.Binary
+      Data.Binary.Put
+      Data.Binary.Get
+      Data.Binary.Builder
+  else
+    build-depends: binary
+
   extensions: 
   exposed-modules: 
     PGF
@@ -94,13 +111,6 @@ library
     GF.Data.ErrM
     GF.Data.Relation
     GF.Data.Operations
--- not really part of GF but I have changed the original binary library
--- and we have to keep the copy for now.
-    Data.Binary
-    Data.Binary.Put
-    Data.Binary.Get
-    Data.Binary.Builder
-    Data.Binary.IEEE754
 
 executable gf
   build-depends: base >= 4.2 && <5,
@@ -143,6 +153,13 @@ executable gf
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
   hs-source-dirs: src/compiler src/runtime/haskell
+
+  if flag(custom-binary)
+    hs-source-dirs: src/binary
+    other-modules: Data.Binary.IEEE754
+  else
+    build-depends: binary, data-binary-ieee754
+
   extensions:
   main-is: GF.hs
   other-modules:
@@ -221,7 +238,6 @@ executable gf
     PGF.Binary
     PGF.Paraphrase
     PGF.TypeCheck
-    PGF.Binary
     PGF.Printer
     PGF.Optimize
     GFC
