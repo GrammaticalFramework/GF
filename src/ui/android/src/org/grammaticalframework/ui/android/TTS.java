@@ -1,6 +1,7 @@
 package org.grammaticalframework.ui.android;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
@@ -12,9 +13,11 @@ public class TTS {
     private static final String TAG = "TTS";
 
     private TextToSpeech mTts;
+    private AudioManager mAudioManager;
 
     public TTS(Context context) {
         mTts = new TextToSpeech(context, new InitListener());
+        mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     public void setLanguage(String language) {
@@ -33,13 +36,16 @@ public class TTS {
 
     // TODO: handle speak() calls before service connects
     public void speak(String text) {
-        HashMap<String,String> params = new HashMap<String,String>();
-        // TODO: how can I get network / embedded fallback?
-        // Using both crashes the TTS engine if the offline data is not installed
-        // Using only one doesn't allow the other
-//        params.put(TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS, "true");
-//        params.put(TextToSpeech.Engine.KEY_FEATURE_EMBEDDED_SYNTHESIS, "true");
-        mTts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
+    	int mode = mAudioManager.getRingerMode();
+    	if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+	        HashMap<String,String> params = new HashMap<String,String>();
+	        // TODO: how can I get network / embedded fallback?
+	        // Using both crashes the TTS engine if the offline data is not installed
+	        // Using only one doesn't allow the other
+	//        params.put(TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS, "true");
+	//        params.put(TextToSpeech.Engine.KEY_FEATURE_EMBEDDED_SYNTHESIS, "true");
+	        mTts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
+    	}
     }
 
     public void destroy() {
