@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
@@ -73,11 +74,12 @@ public class MainActivity extends Activity {
             }
         });
 
-        input_mode = true;
+        SharedPreferences pref = getPreferences(MODE_PRIVATE);
+        input_mode = pref.getBoolean("input_mode", true);
         if (!SpeechRecognizer.isRecognitionAvailable(this)) {
         	input_mode = false;
-        	mStartStopButton.setImageResource(R.drawable.ic_keyboard);
         }
+        mStartStopButton.setImageResource(input_mode ? R.drawable.ic_mic : R.drawable.ic_keyboard);
 
         mSpeechListener = new SpeechInputListener();
         
@@ -131,10 +133,19 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		outState.putBoolean("input_mode", input_mode);
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.main, menu);
-	    
+
+	    menu.getItem(0).setTitle(input_mode ? R.string.keyboard_input : R.string.mic_input);
+
 	    if (!SpeechRecognizer.isRecognitionAvailable(this)) {
 	    	menu.getItem(0).setEnabled(false);
 	    }
@@ -155,6 +166,11 @@ public class MainActivity extends Activity {
 	        		mStartStopButton.setImageResource(R.drawable.ic_mic);
 	        		input_mode = true;
 	        	}
+
+	        	SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+	        	editor.putBoolean("input_mode", input_mode);
+	        	editor.commit();
+
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
