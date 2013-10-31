@@ -1,4 +1,4 @@
---# -path=.:folketslexikon:alltenses
+--# -path=.:../english/:../scandinavian:alltenses
 concrete ParseSwe of ParseEngAbs = 
   TenseSwe,
   NounSwe - [PPartNP],
@@ -19,7 +19,7 @@ concrete ParseSwe of ParseEngAbs =
             ClSlash, RCl, EmptyRelSlash],
 
   DictEngSwe ** 
-open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, Prelude in {
+open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, Prelude in {
 
 flags
   literal=Symb ;
@@ -82,7 +82,7 @@ lin
                                    (predVc v) ;
 -}
 
-  ComplVV v a p vp = mkVP v vp ; ----
+  ComplVV v ant pol vp = insertObj (\\a => v.c2.s ++ ant.s ++ pol.s ++ infVPPlus vp a ant.a pol.p) (predV v) ;
 
 
 {-

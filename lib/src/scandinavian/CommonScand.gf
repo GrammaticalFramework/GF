@@ -319,8 +319,10 @@ oper
     eext = vp.eext
     } ;
 
-  infVP : VP -> Agr -> Str = \vp,a -> 
-    vp.a1 ! Pos ++ (vp.s ! VPInfinit Simul).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
+  infVP : VP -> Agr -> Str = \vp,a -> infVPPlus vp a Simul Pos ;
+ 
+  infVPPlus : VP -> Agr -> Anteriority -> Polarity -> Str = \vp,a,ant,pol -> 
+    vp.a1 ! pol ++ (vp.s ! VPInfinit ant).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
 
 
 -- For $Sentence$.

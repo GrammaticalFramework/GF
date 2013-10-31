@@ -97,7 +97,8 @@ lin
   when_IAdv = S.when_IAdv ; --CHECKED
   when_Subj = S.when_Subj ; --CHECKED
   where_IAdv = S.where_IAdv ; --CHECKED
-  which_IQuant = S.which_IQuant ; --CHECKED
+  whichPl_IDet = S.whichPl_IDet  ; --CHECKED
+  whichSg_IDet = S.whichSg_IDet  ; --CHECKED
   whoPl_IP = S.whoPl_IP ; --CHECKED
   whoSg_IP = S.whoSg_IP ; --CHECKED
   why_IAdv = S.why_IAdv ; --CHECKED

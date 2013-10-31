@@ -23973,7 +23973,8 @@ lin whet_V2 = mkV2 (slipa_vb_1_V) | mkV2 (mkV "skärpa") | mkV2 (fila_vb_1_V) ; 
 lin whether_Prep = mkPrep "huruvida"  ; -- 
 lin whetstone_N = bryne_nn_1_N ; -- comment=2
 lin whey_N = vassle_nn_1_N | vassla_nn_1_N ; -- status=guess status=guess
-lin which_IQuant = S.which_IQuant  ; -- comment=CHECKED
+lin whichPl_IDet = S.whichPl_IDet  ; -- comment=CHECKED
+lin whichSg_IDet = S.whichSg_IDet  ; -- comment=CHECKED
 lin while_N = stund_nn_1_N ; -- comment=2
 lin whim_N = ryck_nn_2_N ; -- comment=4
 lin whimper_N = gny_nn_1_N ; -- comment=1
