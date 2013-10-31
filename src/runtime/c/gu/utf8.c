@@ -11,9 +11,12 @@ gu_utf8_decode(const uint8_t** src_inout)
 		return (GuUCS) c;
 	}
 	size_t len = (c < 0xe0 ? 1 :
-		      c < 0xf0 ? 2 :
-		      3);
-	uint32_t mask = 0x07071f7f;
+	              c < 0xf0 ? 2 :
+	              c < 0xf8 ? 3 :
+	              c < 0xfc ? 4 :
+	                         5
+	             );
+	uint64_t mask = 0x0103070F1f7f;
 	uint32_t u = c & (mask >> (len * 8));
 	for (size_t i = 1; i <= len; i++) {
 		c = src[i];
