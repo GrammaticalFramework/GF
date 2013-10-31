@@ -82,7 +82,7 @@ public class ConversationView extends ScrollView {
                         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
                     }
                     if (mSpeechListener != null)
-                    	mSpeechListener.onSpeechInput(text.toString());
+                    	mSpeechListener.onSpeechInput(text.toString().trim());
                     return true;
                 }
                 return false;
