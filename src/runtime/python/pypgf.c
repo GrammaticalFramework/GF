@@ -1492,6 +1492,8 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
 	
 	PyObject* list = PyList_New(0);
 
+	ctree = pgf_lzr_wrap_linref(ctree, tmp_pool);
+
 	PgfBracketLznState state;
 	state.funcs = &pgf_bracket_lin_funcs;
 	state.stack = gu_new_buf(PyObject*, tmp_pool);
@@ -1499,18 +1501,8 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
 	pgf_lzr_linearize(self->concr, ctree, 0, &state.funcs);
 
 	gu_pool_free(tmp_pool);
-	
-	PyObject* bracket = NULL;
-	if (PyList_Size(list) == 1) {
-		bracket = PyList_GetItem(list, 0);
-		Py_INCREF(bracket);
-	} else {
-		PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
-	}
 
-	Py_DECREF(list);
-
-	return bracket;
+	return list;
 }
 
 static PyObject*

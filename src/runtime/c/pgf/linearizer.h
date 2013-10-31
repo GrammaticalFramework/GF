@@ -59,7 +59,8 @@ struct PgfLinFuncs
 };
 
 
-
+PgfCncTree
+pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool);
 
 /// Linearize a concrete syntax tree.
 void
