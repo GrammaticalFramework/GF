@@ -15,6 +15,11 @@ gu_new_exn(GuExn* parent, GuKind* catch, GuPool* pool)
 	return exn;
 }
 
+bool
+gu_exn_is_raised(GuExn* err) {
+	return err && (err->state == GU_EXN_RAISED);
+}
+
 void
 gu_exn_block(GuExn* err)
 {
