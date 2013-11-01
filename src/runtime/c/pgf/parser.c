@@ -1359,16 +1359,23 @@ static void
 pgf_parsing_meta_scan(PgfParsing* ps,
 	                  PgfItem* meta_item, prob_t meta_prob)
 {
-/*	PgfToken tok = after->ts->fn->get_token(after->ts);
+	PgfItem* item = pgf_item_copy(meta_item, ps);
+	item->inside_prob += meta_prob;
 
-	if (*tok == 0) {	
-		PgfItem* item = pgf_item_copy(meta_item, before->ps);
-		item->inside_prob += meta_prob;
+	size_t offset = ps->before->end_offset;
+	while (ps->sentence[offset] != 0 &&
+	       !gu_is_space(ps->sentence[offset])) {
+		offset++;
+	}
+	
+	size_t len = offset - ps->before->end_offset;
+	char* tok = gu_malloc(ps->pool, len+1);
+	memcpy(tok, ps->sentence+ps->before->end_offset, len);
+	tok[len] = 0;
 
-		pgf_add_extern_tok(item, tok, ps->pool);
+	pgf_add_extern_tok(&item->curr_sym, tok, ps->pool);
 
-		gu_buf_heap_push(before->agenda, pgf_item_prob_order, &item);
-	}*/
+	gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
 }
 
 typedef struct {
@@ -1679,7 +1686,7 @@ pgf_parsing_item(PgfParsing* ps, PgfItem* item)
 			if (ps->before->meta_item != NULL)
 				break;
 			ps->before->meta_item = item;
-			
+
 			if (ps->before->end_offset == strlen(ps->sentence)) {
 				PgfExprProb *ep = gu_new(PgfExprProb, ps->pool);
 				ep->expr = ps->meta_var;
