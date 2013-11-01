@@ -97,8 +97,7 @@ lin
   when_IAdv = S.when_IAdv ; --CHECKED
   when_Subj = S.when_Subj ; --CHECKED
   where_IAdv = S.where_IAdv ; --CHECKED
-  whichPl_IDet = S.whichPl_IDet  ; --CHECKED
-  whichSg_IDet = S.whichSg_IDet  ; --CHECKED
+  which_IQuant = S.which_IQuant  ; --CHECKED
   whoPl_IP = S.whoPl_IP ; --CHECKED
   whoSg_IP = S.whoSg_IP ; --CHECKED
   why_IAdv = S.why_IAdv ; --CHECKED
@@ -5712,7 +5711,6 @@ antagonize_V2 = mkV2 "对抗" ; -- 3
 affirm_V2 = mkV2 "肯定" ; -- 3
 accede_V = mkV "加入" ; -- 3
 working_class_A = mkA "工人阶级" ; -- 2
-whichSg_IDet = mkIDet "哪一个" ; -- 2
 wash_V = mkV "洗" ; -- 2
 violet_N = mkN "紫色" [] ; -- 2
 vantage_N = mkN "优势" ; -- 2

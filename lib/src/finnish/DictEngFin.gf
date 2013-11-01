@@ -52198,8 +52198,7 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   when_IAdv = S.when_IAdv ; --CHECKED
   when_Subj = S.when_Subj ; --CHECKED
   where_IAdv = S.where_IAdv ; --CHECKED
-  whichPl_IDet = S.whichPl_IDet  ; --CHECKED
-  whichSg_IDet = S.whichSg_IDet  ; --CHECKED
+  which_IQuant = S.which_IQuant  ; -- comment=CHECKED
   whoPl_IP = S.whoPl_IP ; --CHECKED
   whoSg_IP = S.whoSg_IP ; --CHECKED
   why_IAdv = S.why_IAdv ; --CHECKED
@@ -54282,7 +54281,6 @@ beside_Prep = mkPrep "vieressä" ; --CHECKED
 aesthetic_A = mkA "esteettinen" ; --CHECKED
 
 see_V2V = mkV2V nahda_V (mkPrep genitive) infPresPart ; --CHECKED
-whichSg_IDet = {s = S.mikaInt ! Sg ; n = Sg ; isNum = False} ; --CHECKED ---- why needed?
 
 -- whole Penn: down to 100 occurrences checked
 
