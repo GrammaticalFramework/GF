@@ -494,6 +494,18 @@ resource ResBul = ParamX ** open Prelude, Predef in {
          } ++
          vp.compl ! agr ;
 
+  linrefVP : VP -> Str =
+    \vp ->
+      let agr = {gn = GSg Neut; p = P1};
+          clitic = case vp.vtype of {
+                     VNormal    => {s=[]; agr=agr} ;
+                     VMedial c  => {s=reflClitics ! c; agr=agr} ;
+                     VPhrasal c => {s=personalClitics ! c ! agr.gn ! agr.p; agr={gn=GSg Neut; p=P3}}
+                   } ;
+      in vp.ad.s ++
+         vp.s ! Imperf ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ++ clitic.s ++
+         vp.compl ! agr ;
+
   gerund : VP -> Aspect => Agr => Str =
     \vp -> \\asp,agr =>
       let clitic = case vp.vtype of {
