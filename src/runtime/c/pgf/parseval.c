@@ -3,7 +3,7 @@
 #include <pgf/linearizer.h>
 #include <pgf/parser.h>
 
-/*typedef struct {
+typedef struct {
 	int start, end;
 	PgfCId cat;
 	int lin_idx;
@@ -11,7 +11,9 @@
 
 typedef struct {
 	PgfLinFuncs* funcs;
-	PgfParseState* ps;
+	bool bind;
+	GuOut* out;
+	GuExn* err;
 	int pos;
 	GuBuf* marks;
 	GuBuf* phrases;
@@ -20,14 +22,27 @@ typedef struct {
 } PgfMetricsLznState;
 
 static void
+pgf_metrics_put_space(PgfMetricsLznState* state)
+{
+	if (state->bind)
+		state->bind = false;
+	else {
+		if (state->out != NULL)
+			gu_putc(' ', state->out, state->err);
+		state->pos++;
+	}
+}
+
+static void
 pgf_metrics_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
-			
-	if (state->ps != NULL)
-		state->ps = pgf_parser_next_state(state->ps, tok);
 
-	state->pos++;
+	pgf_metrics_put_space(state);
+	if (state->out != NULL)
+		gu_string_write(tok, state->out, state->err);
+
+	state->pos += strlen(tok);
 }
 
 static void
@@ -39,32 +54,27 @@ pgf_metrics_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
     switch (i.tag) {
     case PGF_LITERAL_STR: {
         PgfLiteralStr* lstr = i.data;
-        if (state->ps != NULL) {
-			state->ps = pgf_parser_next_state(state->ps, lstr->val);
-		}
-		state->pos++;
+        if (state->out != NULL)
+			gu_string_write(lstr->val, state->out, state->err);
+		state->pos += strlen(lstr->val);
 		break;
 	}
     case PGF_LITERAL_INT: {
         PgfLiteralInt* lint = i.data;
-        if (state->ps != NULL) {
-			GuString tok =
-				gu_format_string(state->pool, "%d", lint->val);
-
-			state->ps = pgf_parser_next_state(state->ps, tok);
-		}
-		state->pos++;
+		GuString tok =
+			gu_format_string(state->pool, "%d", lint->val);
+		if (state->out != NULL)
+			gu_string_write(tok, state->out, state->err);
+		state->pos += strlen(tok);
 		break;
 	}
     case PGF_LITERAL_FLT: {
         PgfLiteralFlt* lflt = i.data;
-        if (state->ps != NULL) {
-			GuString tok =
-				gu_format_string(state->pool, "%f", lflt->val);
-
-			state->ps = pgf_parser_next_state(state->ps, tok);
-		}
-		state->pos++;
+		GuString tok =
+			gu_format_string(state->pool, "%f", lflt->val);
+		if (state->out != NULL)
+			gu_string_write(tok, state->out, state->err);
+		state->pos += strlen(tok);
 		break;
 	}
 	default:
@@ -83,7 +93,7 @@ static void
 pgf_metrics_lzn_end_phrase1(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_idx, PgfCId fun)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
-	
+
 	int start = gu_buf_pop(state->marks, int);
 	int end   = state->pos;
 	
@@ -98,14 +108,28 @@ pgf_metrics_lzn_end_phrase1(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_id
 }
 
 static void
+pgf_metrics_symbol_ne(PgfLinFuncs** funcs)
+{
+	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
+	gu_raise(state->err, PgfLinNonExist);
+}
+
+static void
+pgf_metrics_symbol_bind(PgfLinFuncs** funcs)
+{
+	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
+	state->bind = true;
+}
+
+static void
 pgf_metrics_lzn_end_phrase2(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_idx, PgfCId fun)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
-	
+
 	int start = gu_buf_pop(state->marks, int);
 	int end   = state->pos;
 	
-	if (start != end) {
+	if (start != end) {		
 		size_t n_phrases = gu_buf_length(state->phrases);
 		for (size_t i = 0; i < n_phrases; i++) {
 			PgfPhrase* phrase = gu_buf_get(state->phrases, PgfPhrase*, i);
@@ -124,51 +148,29 @@ pgf_metrics_lzn_end_phrase2(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_id
 }
 
 static PgfLinFuncs pgf_metrics_lin_funcs1 = {
-v v v v v v v
-	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
-	.expr_literal  = pgf_metrics_lzn_expr_literal,
-	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
-	.end_phrase    = pgf_metrics_lzn_end_phrase1
-=============
 	.symbol_token = pgf_metrics_lzn_symbol_token,
 	.expr_literal = pgf_metrics_lzn_expr_literal,
 	.begin_phrase = pgf_metrics_lzn_begin_phrase,
-	.end_phrase   = pgf_metrics_lzn_end_phrase1
-*************
-	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
-	.expr_literal  = pgf_metrics_lzn_expr_literal,
-	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
-	.end_phrase    = pgf_metrics_lzn_end_phrase1,
-	.symbol_glue   = NULL
-^ ^ ^ ^ ^ ^ ^
+	.end_phrase   = pgf_metrics_lzn_end_phrase1,
+	.symbol_ne    = pgf_metrics_symbol_ne,
+	.symbol_bind  = pgf_metrics_symbol_bind
 };
 
 static PgfLinFuncs pgf_metrics_lin_funcs2 = {
-v v v v v v v
-	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
-	.expr_literal  = pgf_metrics_lzn_expr_literal,
-	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
-	.end_phrase    = pgf_metrics_lzn_end_phrase2
-=============
 	.symbol_token = pgf_metrics_lzn_symbol_token,
 	.expr_literal = pgf_metrics_lzn_expr_literal,
 	.begin_phrase = pgf_metrics_lzn_begin_phrase,
-	.end_phrase   = pgf_metrics_lzn_end_phrase2
-*************
-	.symbol_tokens = pgf_metrics_lzn_symbol_tokens,
-	.expr_literal  = pgf_metrics_lzn_expr_literal,
-	.begin_phrase  = pgf_metrics_lzn_begin_phrase,
-	.end_phrase    = pgf_metrics_lzn_end_phrase2,
-	.symbol_glue   = NULL
-^ ^ ^ ^ ^ ^ ^
+	.end_phrase   = pgf_metrics_lzn_end_phrase2,
+	.symbol_ne    = pgf_metrics_symbol_ne,
+	.symbol_bind  = pgf_metrics_symbol_bind
 };
-*/
+
 bool
 pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
              double *precision, double *recall, double *exact)
 {
-/*	GuPool* pool = gu_new_pool();
-	
+	GuPool* pool = gu_new_pool();
+
 	GuEnum* en_lins1 =
 		pgf_lzr_concretize(concr, expr, pool);
 	PgfCncTree ctree1 = gu_next(en_lins1, PgfCncTree, pool);
@@ -177,24 +179,33 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 		return false;
 	}
 
+	GuStringBuf* sbuf =
+		gu_string_buf(pool);
+
 	PgfMetricsLznState state;
+	state.bind = true;
+	state.out  = gu_string_buf_out(sbuf);
+	state.err  = gu_new_exn(NULL, gu_kind(type), pool);
 	state.funcs = &pgf_metrics_lin_funcs1;
-	state.ps = pgf_parser_init_state(concr, cat, 0, -1, pool, pool);
-	state.marks = gu_new_buf(int, pool);
 	state.pos = 0;
+	state.marks = gu_new_buf(int, pool);
 	state.phrases = gu_new_buf(PgfPhrase*, pool);
 	state.matches = 0;
 	state.found = 0;
 	state.pool = pool;
 
 	pgf_lzr_linearize(concr, ctree1, 0, &state.funcs);
-	
-	if (state.ps == NULL) {
+	if (!gu_ok(state.err)) {
 		gu_pool_free(pool);
 		return false;
 	}
 
-	GuEnum* en_trees = pgf_parse_result(state.ps);
+	GuString sentence =
+		gu_string_buf_freeze(sbuf, pool);
+
+	GuEnum* en_trees =
+		pgf_parse(concr, cat, sentence,
+		          state.err, pool, pool);
 	PgfExprProb* ep = gu_next(en_trees, PgfExprProb*, pool);
 	if (ep == NULL) {
 		gu_pool_free(pool);
@@ -210,13 +221,14 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 	}
 
 	state.funcs = &pgf_metrics_lin_funcs2;
-	state.ps = NULL;
-	state.pos = 0;
+	state.bind = true;
+	state.out  = NULL;
+	state.pos  = 0;
 	pgf_lzr_linearize(concr, ctree2, 0, &state.funcs);
-	
+
 	*precision = ((double) state.matches)/((double) state.found);
 	*recall = ((double) state.matches)/((double) gu_buf_length(state.phrases));
 	*exact = pgf_expr_eq(expr, ep->expr) ? 1 : 0;
-*/
+
 	return true;
 }
