@@ -22,14 +22,18 @@ public class Translator {
     private static final String TAG = "Translator";
 
     // TODO: allow changing
-    private String mGrammar = "ParseEngAbs.pgf";
+       private String mGrammar = "ParseEngAbs.pgf";
+    ///private String mGrammar = "TranslateEngChiFinSwe.pgf";  // AR
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
-            new Language("en-US", "English", "ParseEng", R.xml.inflection_en),
-            new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.inflection_bg),
-            //new Language("fr-FR", "French", "ParseFre", 0)
-            //new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.inflection_cmn)
+        ///new Language("en-US", "English", "TranslateEng", R.xml.inflection_en),  // AR
+        ///new Language("cmn-Hans-CN", "Chinese", "TranslateChi", 0), 
+	///        new Language("fi-FI", "Finnish", "TranslateFin", 0), 
+	///        new Language("sv-SE", "Swedish", "TranslateSwe", 0), 
+
+	            new Language("en-US", "English", "ParseEng", R.xml.inflection_en),
+	            new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.inflection_bg),
     };
 
     private Language mSourceLanguage;
