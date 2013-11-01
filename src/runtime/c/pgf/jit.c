@@ -3,7 +3,6 @@
 #include <pgf/data.h>
 #include <pgf/jit.h>
 #include <pgf/reasoner.h>
-#include "sys/mman.h"
 #include "lightning.h"
 
 //#define PGF_JIT_DEBUG
