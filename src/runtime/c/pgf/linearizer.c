@@ -274,9 +274,9 @@ pgf_lzn_cat_resolve_itor(GuMapItor* fn, const void* key, void* value, GuExn* err
 	if (clo->index == 0) {
 		clo->ccat = ccat;
 		clo->buf = buf;
-	} else {
-		clo->index--;
 	}
+
+	clo->index--;
 }
 
 PgfCncTree
