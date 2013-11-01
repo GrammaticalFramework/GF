@@ -79,7 +79,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
             let 
               verb = vp.s ! t.t ! t.a ! p.p ! ODir ! a ;
               verbf = verb.aux ++ verb.adv ++ verb.fin ++ verb.inf ;
-            in t.s ++ p.s ++ vp.ad ++ verbf ++ vp.p ++ vp.s2 ! a
+            in t.s ++ p.s ++ vp.ad ++ verbf ++ vp.p ++ vp.s2 ! a ++ vp.ext
       } ;
 
     ConjVPS = conjunctDistrTable Agr ;
