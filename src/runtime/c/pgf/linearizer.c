@@ -350,7 +350,7 @@ pgf_lzn_resolve(PgfLzn* lzn, PgfExpr expr, PgfCCat* ccat, GuPool* pool)
 				chunks->args[i] = pgf_lzn_resolve(lzn, earg, NULL, pool);
 				if (gu_variant_is_null(chunks->args[i])) {
 					ret = gu_null_variant;
-					break;
+					goto done;
 				}
 				chunks->args[i] = 
 					pgf_lzr_wrap_linref(chunks->args[i], pool);
