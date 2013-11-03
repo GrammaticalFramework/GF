@@ -176,7 +176,9 @@ oper
 
   compoundA : A -> A ; -- force comparison by mera - mest
 
-
+-- Adjective with all positive forms the same.
+ 
+  invarA : Str -> A ;  -- e.g. äkta
 
 
 --3 Two-place adjectives
@@ -526,6 +528,8 @@ oper
     } ;
 
   compoundA adj = {s = adj.s ; isComp = True ; lock_A = <>} ;
+
+  invarA s = mk3cA s s s True ;
 
   mkA2 a p = a ** {c2 = mkComplement p.s ; lock_A2 = <>} ;
 

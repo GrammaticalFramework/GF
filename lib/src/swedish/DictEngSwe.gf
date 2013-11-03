@@ -24452,4 +24452,17 @@ lin zoom_in_V = zooma_vb_1_V ; -- comment=1
 lin zoom_off_V = zooma_vb_1_V ; -- comment=1
 lin zoom_out_V = zooma_vb_1_V ; -- comment=1
 lin zooplankton_N = djurplankton_nn_1_N ; -- status=guess
+
+--- studying Penn output 3/11/2013 AR
+
+lin conclude_VS = mkVS (mkV "konkludera") ;
+lin attribute_V2 = mkV2 (mkV "tilldela" ) ;
+lin for_starters_Adv = mkAdv "för att börja med" ;
+lin start_ing_VV = auxVV (mkV "börja") ;
+lin lower_V2 = mkV2 (mkV "sänka") ;
+lin dislike_V2 = mkV2 (mkV (mkV "tycker") "illa") (mkPrep "om") ;
+lin idea_of_N2 = mkN2 (mkN "idé" "idéer") (mkPrep "om") ;
+lin middle_aged_A = invarA "medelålders" ;
+
+
 }
