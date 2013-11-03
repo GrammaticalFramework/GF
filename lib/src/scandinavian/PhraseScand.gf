@@ -18,6 +18,7 @@ incomplete concrete PhraseScand of Phrase =
     UttCN n = {s = n.s ! Sg ! DIndef ! Nom} ;
     UttAP n = {s = n.s ! Strong (GSg Utr)} ;
     UttCard n = {s = n.s ! neutrum} ;
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ;

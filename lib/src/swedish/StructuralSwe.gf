@@ -104,7 +104,7 @@ concrete StructuralSwe of Structural = CatSwe **
     {c2 = mkComplement [] ; lock_VV = <>} ;
   we_Pron = MorphoSwe.mkNP "vi"  "oss"  "vår" "vårt" "våra"  Utr Pl P1 ;
   whatSg_IP = {s = \\_ => "vad" ; g = Neutr ; n = Sg} ; ---- infl, g
-  whatPl_IP = {s = \\_ => "vad" ; g = Neutr ; n = Pl} ; ---- infl, g
+  whatPl_IP = {s = \\_ => "vilka" ; g = Neutr ; n = Pl} ; ---- infl, g
   when_IAdv = ss "när" ;
   when_Subj = ss "när" ;
   that_Subj = ss "att" ;
