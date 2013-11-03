@@ -94,6 +94,11 @@ oper
          "a" => mkCase c spist ;
          _   => mkCase c (spist + "e")
          } ;
+       VI (VPtPres c)  => case last spise of {
+         "e" => mkCase c (spise + "nde") ;
+         "i" => mkCase c (spise + "vende") ; --- gi, bli
+         _   => mkCase c (spise + "ende")
+         } ;
        VF (VImper v)     => mkVoice v spis
        }
      } ;

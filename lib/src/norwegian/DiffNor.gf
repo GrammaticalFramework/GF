@@ -44,13 +44,13 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
     detIndefPl = "noen" ;
 
     verbHave = 
-      mkVerb "ha" "har" "ha" "hadde" "hatt" "haven" "havet" "havne"
+      mkVerb9 "ha" "har" "ha" "hadde" "hatt" "haven" "havet" "havne" "havende"
       **       {part = [] ; isVaere = False} ;
     verbBe = 
-      mkVerb "være" "er" "var" "var" "vært" "væren" "været" "værne" 
+      mkVerb9 "være" "er" "var" "var" "vært" "væren" "været" "værne" "værende"
       **       {part = [] ; isVaere = False} ;
     verbBecome = 
-      mkVerb "bli" "blir" "bli" "ble" "blitt" "bliven" "blivet" "blivne" 
+      mkVerb9 "bli" "blir" "bli" "ble" "blitt" "bliven" "blivet" "blivne" "blivende" 
       **       {part = [] ; isVaere = True} ;
 
     -- auxiliary
