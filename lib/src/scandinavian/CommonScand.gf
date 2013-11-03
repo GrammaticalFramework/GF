@@ -53,10 +53,10 @@ param
    ;
 
   VInf = 
-     VInfin Voice
-   | VSupin Voice  --# notpresent
+     VInfin  Voice
+   | VSupin  Voice  --# notpresent
    | VPtPret AFormPos Case
-   | VPtPres Case
+   | VPtPres Number Species Case
    ;
 
   VPForm = 
@@ -192,7 +192,12 @@ oper
     VI (VInfin v)   => mkVoice v finna ;
     VI (VSupin v)   => mkVoice v funnit ;  --# notpresent
     VI (VPtPret a c)=> mkCase c (mkAdjPos a funnen funnet funna funna) ;
-    VI (VPtPres c)  => mkCase c finnande
+    VI (VPtPres n d c)  => case <n,d> of {
+      <Sg,Indef> => mkCase c finnande ;
+      <Sg,Def>   => mkCase c (finnande + "t") ;
+      <Pl,Indef> => mkCase c (finnande + "n") ;
+      <Pl,Def>   => mkCase c (finnande + "na")   ---- TODO "ne" in Dan, Nor
+      }
     } ;
    vtype = VAct
    } ;
