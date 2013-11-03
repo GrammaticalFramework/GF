@@ -3,6 +3,7 @@
 concrete DictEngSwe of DictEngAbs = CatSwe
 ** open ParadigmsSwe, (L = LexiconSwe), (M = MakeStructuralSwe), DictSwe, (S = SyntaxSwe) in {
 
+flags coding = utf8 ;
 
 lin aardvark_N = jordsvin_nn_1_N ; -- status=guess
 lin aback_Adv = mkAdv "bakåt" | mkAdv "back: baxna" | mkAdv "häpna" ; -- status=guess status=guess status=guess
@@ -12444,8 +12445,8 @@ lin leap_out_at_V2 = hoppa_oever_vbm_1_1_V2 ; -- comment=2
 lin leap_upon_V2 = hoppa_oever_vbm_1_1_V2 ; -- comment=2
 lin learn_V = erfara_vb_1_V ; -- comment=2
 lin learn_V2 = L.learn_V2  ; -- comment=CHECKED
-lin learn_VS = mkVS (mkV (mkV "lära") "sig") ; -- status=guess, src=wikt
-lin learn_VV = mkVV (mkV (mkV "lära") "sig") ; -- status=guess, src=wikt
+lin learn_VS = mkVS (lin V L.learn_V2) ; -- comment=CHECKED
+lin learn_VV = mkVV (lin V L.learn_V2) ; -- comment=CHECKED
 lin learning_N = laerdom_nn_1_1_N ; -- comment=2
 lin lease_N = hyra_nn_1_N ; -- comment=6
 lin leasehold_N = arrende_nn_1_N ; -- comment=1
