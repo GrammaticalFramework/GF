@@ -107,4 +107,29 @@ incomplete concrete CatScand of Cat =
   lincat
     Temp  = {s : Str ; t : STense ; a : Anteriority} ;
     Tense = {s : Str ; t : STense} ;
+
+  oper
+    agrUSgP3 : Agr = {g = Utr ; n = Sg ; p = P3} ;
+
+  linref
+    SSlash = \ss -> ss.s ! Main ++ ss.c2.s ++ ss.n3 ! agrUSgP3 ;
+    ClSlash = \cls -> cls.s ! SPres ! Simul ! Pos ! Main ++ cls.c2.s ++ cls.n3 ! agrUSgP3 ;
+
+    VP = \vp -> infVP vp agrUSgP3 ;
+    VPSlash = \vps -> infVP vps agrUSgP3 ++ vps.c2.s ++ vps.n3 ! agrUSgP3 ;
+
+    V, VS, VQ, VA = \v -> infVP (predV v) agrUSgP3 ;
+    V2, V2A, V2Q, V2S = \v -> infVP (predV v) agrUSgP3 ++ v.c2.s ;
+    V3 = \v -> infVP (predV v) agrUSgP3 ++ v.c2.s ++ v.c3.s ;
+    VV = \v -> infVP (predV v) agrUSgP3 ;
+    V2V = \v -> infVP (predV v) agrUSgP3 ++ v.c2.s ;
+{-
+    A = \a -> a.s ! AAdj Posit Nom ;
+    A2 = \a -> a.s ! AAdj Posit Nom ++ a.c2 ;
+
+    N = \n -> n.s ! Sg ! Nom ;
+    N2 = \n -> n.s ! Sg ! Nom ++ n.c2 ;
+    N3 = \n -> n.s ! Sg ! Nom ++ n.c2 ++ n.c3 ;
+-}
+
 }
