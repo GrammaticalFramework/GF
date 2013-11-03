@@ -80,7 +80,7 @@ oper
        VI (VSupin v)     => mkVoice v spist ;    --# notpresent
        VI (VPtPret (Strong (GSg _)) c) => mkCase c spist ;
        VI (VPtPret _ c)  => mkCase c (spist + "e") ;
-       VI (VPtPres c)  => case last spise of {
+       VI (VPtPres _ _ c)  => case last spise of {
          "e" => mkCase c (spise + "nde") ;
          "i" => mkCase c (spise + "vende") ; --- gi, bli
          _   => mkCase c (spise + "ende")

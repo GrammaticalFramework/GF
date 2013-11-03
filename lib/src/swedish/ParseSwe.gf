@@ -50,22 +50,22 @@ lin
     isMod = False ;
   } ;
 
-{-
   GerundN v = {
-    s = \\n,c => v.s ! VPresPart ;
+    s = \\n,d,c => v.s ! VI (VPtPres n d c) ;
     g = Neutr
   } ;
   
   GerundAP v = {
-    s = \\agr => v.s ! VPresPart ;
+    s = \\_ => v.s ! VI (VPtPres Sg Indef Nom) ;
     isPre = True
   } ;
 
   PastPartAP v = {
-    s = \\agr => v.s ! VPPart ;
+    s = \\afpos => v.s ! VI (VPtPret afpos Nom) ;
     isPre = True
   } ;
 
+{-
   OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;
 
   PositAdVAdj a = {s = a.s ! AAdv} ;
