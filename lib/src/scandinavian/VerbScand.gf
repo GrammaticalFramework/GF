@@ -15,10 +15,10 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand, 
       c2 = v.c2
       } ;
 
-    ComplVV v vp = insertObj (\\a => v.c2.s ++ infVP vp a) (predV v) ;
-    ComplVS v s  = insertObj (\\_ => conjThat ++ s.s ! Sub) (predV v) ;
-    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
-    ComplVA  v ap = insertObj (\\a => ap.s ! agrAdjNP a DIndef) (predV v) ;
+    ComplVV v vp = insertObjPost (\\a => v.c2.s ++ infVP vp a) (predV v) ;
+    ComplVS v s  = insertObjPost (\\_ => conjThat ++ s.s ! Sub) (predV v) ;
+    ComplVQ v q  = insertObjPost (\\_ => q.s ! QIndir) (predV v) ;
+    ComplVA v ap = insertObjPost (\\a => ap.s ! agrAdjNP a DIndef) (predV v) ;
 
     SlashV2V v vp = predV v ** {
       n3 = \\a => v.c3.s ++ infVP vp a ; 

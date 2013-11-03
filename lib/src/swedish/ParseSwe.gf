@@ -82,7 +82,7 @@ lin
                                    (predVc v) ;
 -}
 
-  ComplVV v ant pol vp = insertObj (\\a => v.c2.s ++ ant.s ++ pol.s ++ infVPPlus vp a ant.a pol.p) (predV v) ;
+  ComplVV v ant pol vp = insertObjPost (\\a => v.c2.s ++ ant.s ++ pol.s ++ infVPPlus vp a ant.a pol.p) (predV v) ;
 
 
 {-

@@ -12,7 +12,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
       s = \\pol,agr => 
         let 
           verb  = vp.s ! VIImper ! Simul ! pol ! agr ;
-          compl = vp.s2 ! False ! pol ! agr ++ vp.ext  --- False = like inf (osta auto)
+          compl = vp.s2 ! False ! pol ! agr ++ vp.adv ! pol ++ vp.ext  --- False = like inf (osta auto)
         in
         verb.fin ++ verb.inf ++ compl ;
     } ;
