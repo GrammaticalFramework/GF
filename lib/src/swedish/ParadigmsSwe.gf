@@ -538,16 +538,25 @@ oper
     mkV : (slita, slet : Str) -> V = reg2V ;
     mkV : (dricka,drack,druckit : Str) -> V = irregV ;
     mkV : (supa,super,sup,söp,supit,supen : Str) -> V = mk6V ;
+    mkV : (supa,super,sup,söp,supit,supen,supande : Str) -> V = mk7V ;
     mkV : V -> Str -> V = partV
     } ;
 
   mk6V = \finna,finner,finn,fann,funnit,funnen ->
+    let finnande : Str = case finna of {
+       _ + "a" => finna + "nde" ;
+       _       => finna + "ende"   -- gående; but bli - blivande must be given separately
+       }
+    in
+    mk7V finna finner finn fann funnit funnen finnande ;
+
+  mk7V = \finna,finner,finn,fann,funnit,funnen,finnande ->
     let 
       funn = ptPretForms funnen ;
       funnet = funn ! Strong (GSg Neutr) ! Nom ;
       funna  = funn ! Strong GPl ! Nom 
     in
-    mkVerb finna finner finn fann funnit funnen funnet funna **
+    mkVerb9 finna finner finn fann funnit funnen funnet funna finnande **
     {part = [] ; vtype=VAct ; lock_V = <>} ;
 
   regV leker = case leker of {
@@ -720,6 +729,7 @@ oper
   mk3cA : (galen,galet,galna : Str) -> Bool -> A = 
     \x,y,z,b -> lin A {s = (mk3A x y z).s ; isComp = b} ;
 
+  mk7V : (supa,super,sup,söp,supit,supen,supande : Str) -> V ;
   mk6V : (supa,super,sup,söp,supit,supen : Str) -> V ;
   regV : (talar : Str) -> V ;
   mk2V : (leka,lekte : Str) -> V ;

@@ -37,12 +37,12 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
     detIndefPl = "några" ;
 
     verbHave = 
-      mkVerb "ha" "har" "ha" "hade" "haft" "havd" "havt" "havda" ** noPart ;
+      mkVerb9 "ha" "har" "ha" "hade" "haft" "havd" "havt" "havda" "havande" ** noPart ;
     verbBe = 
-      mkVerb "vara" "är" "var" "var" "varit" "varen" "varet" "varna" 
+      mkVerb9 "vara" "är" "var" "var" "varit" "varen" "varet" "varna" "varande"
       ** noPart ;
     verbBecome = 
-      mkVerb "bli" "blir" "bli" "blev" "blivit" "bliven" "blivet" "blivna"
+      mkVerb9 "bli" "blir" "bli" "blev" "blivit" "bliven" "blivet" "blivna" "blivande"
       ** noPart ;
 
     -- auxiliary

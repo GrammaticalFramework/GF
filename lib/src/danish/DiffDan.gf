@@ -36,14 +36,14 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
     detIndefPl = "nogle" ;
 
     verbHave = 
-      mkVerb "have" "har" "hav" "havde" "haft" "haven" "havet" "havne" **
+      mkVerb9 "have" "har" "hav" "havde" "haft" "haven" "havet" "havne" "havende" **
       {part = [] ; isVaere = False} ;
     verbBe = 
-      mkVerb "være" "er" "var" "var" "været" "væren" "været" "værne" **
+      mkVerb9 "være" "er" "var" "var" "været" "væren" "været" "værne" "værende" **
       {part = [] ; isVaere = False} ;
     verbBecome = 
-      mkVerb "blive" "bliver" "bliv" "blev" "blevet" 
-        "bliven" "blivet" "blivne"  **
+      mkVerb9 "blive" "bliver" "bliv" "blev" "blevet" 
+        "bliven" "blivet" "blivne" "blivende" **
       {part = [] ; isVaere = True} ;
 
     auxFut = "vil" ;      -- "skal" in ExtDan

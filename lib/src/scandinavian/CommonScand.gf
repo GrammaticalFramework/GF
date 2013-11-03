@@ -56,6 +56,7 @@ param
      VInfin Voice
    | VSupin Voice  --# notpresent
    | VPtPret AFormPos Case
+   | VPtPres Case
    ;
 
   VPForm = 
@@ -181,8 +182,8 @@ oper
       } 
     } ;
 
-  mkVerb : (x1,_,_,_,_,_,_,x8 : Str) -> {s : VForm => Str ; vtype : VType} = 
-   \finna,finner,finn,fann,funnit,funnen,funnet,funna -> {
+  mkVerb9 : (x1,_,_,_,_,_,_,_,x9 : Str) -> {s : VForm => Str ; vtype : VType} = 
+   \finna,finner,finn,fann,funnit,funnen,funnet,funna, finnande -> {
    s = table {
     VF (VPres Act)  => finner ;
     VF (VPres Pass) => mkVoice Pass finn ;
@@ -190,7 +191,8 @@ oper
     VF (VImper v)   => mkVoice v finn ;
     VI (VInfin v)   => mkVoice v finna ;
     VI (VSupin v)   => mkVoice v funnit ;  --# notpresent
-    VI (VPtPret a c)=> mkCase c (mkAdjPos a funnen funnet funna funna)
+    VI (VPtPret a c)=> mkCase c (mkAdjPos a funnen funnet funna funna) ;
+    VI (VPtPres c)  => mkCase c finnande
     } ;
    vtype = VAct
    } ;
