@@ -19,7 +19,7 @@ concrete ParseSwe of ParseEngAbs =
             ClSlash, RCl, EmptyRelSlash],
 
   DictEngSwe ** 
-open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, Prelude in {
+open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Prelude in {
 
 flags
   literal=Symb ;
@@ -65,74 +65,52 @@ lin
     isPre = True
   } ;
 
-{-
-  OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;
 
-  PositAdVAdj a = {s = a.s ! AAdv} ;
+  OrdCompar a = {
+      s = case a.isComp of {
+        True => "mera" ++ a.s ! AF (APosit (Weak Sg)) Nom ;
+        _    => a.s ! AF ACompar Nom
+        }  ; 
+      isDet = True
+      } ;
 
-  UseQuantPN q pn = {s = \\c => q.s ! False ! Sg ++ pn.s ! npcase2case c ; a = agrgP3 Sg pn.g} ;
+  PositAdVAdj a = {s = a.s ! adverbForm} ;
 
-  SlashV2V v ant p vp = insertObjc (\\a => v.c3 ++ ant.s ++ p.s ++
-                                           infVP v.typ vp ant.a p.p a)
-                                   (predVc v) ;
+  UseQuantPN q pn = {
+      s = \\c => q.s ! Sg ! True ! False ! pn.g ++ pn.s ! caseNP c ; 
+      a = agrP3 pn.g Sg
+      } ;
 
-  SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++ 
-                                           v.c3 ++ 
-                                           vpi.s ! VVAux ! a)
-                                   (predVc v) ;
--}
+  SlashV2V v ant p vp = predV v ** {
+      n3 = \\a => v.c3.s ++ ant.s ++ p.s ++ infVPPlus vp a ant.a p.p ; 
+      c2 = v.c2
+      } ;
+
+  SlashVPIV2V v p vpi = predV v ** {
+      n3 = \\a => v.c3.s ++ p.s ++ negation ! p.p ++ vpi.s ! VPIInf ! a ; 
+      c2 = v.c2
+      } ;
 
   ComplVV v ant pol vp = insertObjPost (\\a => v.c2.s ++ ant.s ++ pol.s ++ infVPPlus vp a ant.a pol.p) (predV v) ;
 
 
-{-
-  PredVPosv np vp = {
-      s = \\t,a,b,o => 
-        let 
-          verb  = vp.s ! t ! a ! b ! o ! np.a ;
-          compl = vp.s2 ! np.a
-        in
-        case o of {
-          ODir => compl ++ "," ++ np.s ! npNom ++ verb.aux ++ vp.ad ++ verb.fin ++ verb.adv ++ verb.inf ;
-          OQuest => verb.aux ++ compl ++ "," ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
-          }
-    } ;
-    
-  PredVPovs np vp = {
-      s = \\t,a,b,o => 
-        let 
-          verb  = vp.s ! t ! a ! b ! o ! np.a ;
-          compl = vp.s2 ! np.a
-        in
-        case o of {
-          ODir => compl ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
-          OQuest => verb.aux ++ compl ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom
-          }
-    } ;
--}
+  PredVPosv np vp = mkCl np vp ; ---- TODO restructure all this using Extra.Foc
+  PredVPovs np vp = mkCl np vp ; ---- 
 
   that_RP = which_RP ; -- som
 
-{-
-  CompS s = {s = \\_ => "that" ++ s.s} ;
+  CompS s = {s = \\_ => "att" ++ s.s ! Sub} ;
   CompQS qs = {s = \\_ => qs.s ! QIndir} ;
-  CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
-                                infVP VVInf vp ant.a p.p a} ;
+  CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ infVPPlus vp a ant.a p.p} ;
 
-  VPSlashVS vs vp = 
-    insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) **
-    {c2 = ""; gapInMiddle = False} ;
+  -- VPSlashVS : VS -> VP -> VPSlash
+  ---VPSlashVS vs vp = 
+  ---   insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) **
+  ---  {c2 = ""; gapInMiddle = False} ;
 
-  PastPartRS ant pol vps = {
-    s = \\agr => vps.ad ++ vps.ptp ++ vps.s2 ! agr ;
-    c = npNom
-    } ;
+  PastPartRS ant pol vps = mkRS ant pol (mkRCl which_RP <lin VP vps : VP> ) ; ---- maybe as participle construction?
 
-  PresPartRS ant pol vp = {
-    s = \\agr => vp.ad ++ vp.prp ++ vp.s2 ! agr ;
-    c = npNom
-  } ;
--}
+  PresPartRS ant pol vp = mkRS ant pol (mkRCl which_RP vp) ; --- probably not as participle construction
 
   ApposNP np1 np2 = {
     s = \\c => np1.s ! c ++ "," ++ np2.s ! NPNom ;
