@@ -100,11 +100,10 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 #ifdef PGF_JIT_DEBUG
 	GuPool* tmp_pool = gu_new_pool();
     GuOut* out = gu_file_out(stderr, tmp_pool);
-    GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
     GuExn* err = gu_exn(NULL, type, tmp_pool);
     
-	gu_string_write(abscat->name, wtr, err);
-	gu_puts(":\n", wtr, err);
+	gu_string_write(abscat->name, out, err);
+	gu_puts(":\n", out, err);
 	
 	int label = 0;
 #endif
@@ -122,9 +121,9 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 			gu_buf_get(functions, PgfAbsFun*, 0);
 
 #ifdef PGF_JIT_DEBUG
-		gu_puts("    TRY_FIRST ", wtr, err);
-		gu_string_write(absfun->name, wtr, err);
-		gu_puts("\n", wtr, err);
+		gu_puts("    TRY_FIRST ", out, err);
+		gu_string_write(absfun->name, out, err);
+		gu_puts("\n", out, err);
 #endif
 
 		int rs_arg = jit_arg_p();
@@ -142,7 +141,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 	}
 
 #ifdef PGF_JIT_DEBUG
-	gu_puts("    RET\n", wtr, err);
+	gu_puts("    RET\n", out, err);
 #endif
 	// compile RET
 	jit_ret();
@@ -152,8 +151,8 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 		PgfAbsFun* absfun = 
 			gu_buf_get(functions, PgfAbsFun*, 0);
 
-		gu_string_write(absfun->name, wtr, err);
-		gu_puts(":\n", wtr, err);
+		gu_string_write(absfun->name, out, err);
+		gu_puts(":\n", out, err);
 	}
 #endif
 
@@ -179,9 +178,9 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 					gu_buf_get(functions, PgfAbsFun*, i+1);
 
 #ifdef PGF_JIT_DEBUG
-				gu_puts("    TRY_ELSE ", wtr, err);
-				gu_string_write(absfun->name, wtr, err);
-				gu_puts("\n", wtr, err);
+				gu_puts("    TRY_ELSE ", out, err);
+				gu_string_write(absfun->name, out, err);
+				gu_puts("\n", out, err);
 #endif
 
 				// compile TRY_ELSE
@@ -203,12 +202,12 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 					gu_map_get(abscats, hypo->type->cid, PgfAbsCat*);
 
 #ifdef PGF_JIT_DEBUG
-				gu_puts("    CALL ", wtr, err);
-				gu_string_write(hypo->type->cid, wtr, err);
+				gu_puts("    CALL ", out, err);
+				gu_string_write(hypo->type->cid, out, err);
 				if (i+1 < n_hypos) {
-					gu_printf(wtr, err, " L%d\n", label);
+					gu_printf(out, err, " L%d\n", label);
 				} else {
-					gu_printf(wtr, err, " COMPLETE\n");
+					gu_printf(out, err, " COMPLETE\n");
 				}
 #endif
 
@@ -228,9 +227,9 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 				}
 
 #ifdef PGF_JIT_DEBUG
-				gu_puts("    RET\n", wtr, err);
+				gu_puts("    RET\n", out, err);
 				if (i+1 < n_hypos) {
-					gu_printf(wtr, err, "L%d:\n", label++);
+					gu_printf(out, err, "L%d:\n", label++);
 				}
 #endif
 
@@ -257,9 +256,9 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 					gu_buf_get(functions, PgfAbsFun*, i+1);
 
 #ifdef PGF_JIT_DEBUG
-				gu_puts("    TRY_CONSTANT ", wtr, err);
-				gu_string_write(absfun->name, wtr, err);
-				gu_puts("\n", wtr, err);
+				gu_puts("    TRY_CONSTANT ", out, err);
+				gu_string_write(absfun->name, out, err);
+				gu_puts("\n", out, err);
 #endif
 
 				// compile TRY_CONSTANT
@@ -271,7 +270,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 				jit_finish(pgf_reasoner_try_constant);
 			} else {
 #ifdef PGF_JIT_DEBUG
-				gu_puts("    COMPLETE\n", wtr, err);
+				gu_puts("    COMPLETE\n", out, err);
 #endif
 
 				// compile COMPLETE
@@ -282,7 +281,7 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 			}
 
 #ifdef PGF_JIT_DEBUG
-			gu_puts("    RET\n", wtr, err);
+			gu_puts("    RET\n", out, err);
 #endif
 
 			// compile RET
@@ -294,8 +293,8 @@ pgf_jit_predicate(PgfJitState* state, PgfCIdMap* abscats,
 			PgfAbsFun* absfun = 
 				gu_buf_get(functions, PgfAbsFun*, i+1);
 
-			gu_string_write(absfun->name, wtr, err);
-			gu_puts(":\n", wtr, err);
+			gu_string_write(absfun->name, out, err);
+			gu_puts(":\n", out, err);
 		}
 #endif
 	}
