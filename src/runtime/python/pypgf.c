@@ -12,6 +12,8 @@ static PyObject* PGFError;
 
 static PyObject* ParseError;
 
+static PyObject* TypeError;
+
 typedef struct {
     PyObject_HEAD
     GuPool* pool;
@@ -2036,6 +2038,143 @@ PGF_compute(PGFObject* self, PyObject *args)
 	return py_expr;
 }
 
+static ExprObject*
+PGF_checkExpr(PGFObject* self, PyObject *args)
+{
+	ExprObject* py_expr = NULL;
+	TypeObject* py_type = NULL;
+    if (!PyArg_ParseTuple(args, "O!O!", &pgf_ExprType, &py_expr, &pgf_TypeType, &py_type))
+		return NULL;
+
+	ExprObject* new_pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+	if (new_pyexpr == NULL)
+		return NULL;
+
+	new_pyexpr->pool = gu_new_pool();
+	new_pyexpr->expr = py_expr->expr;
+	new_pyexpr->master = NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* exn = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	pgf_check_expr(self->pgf, &new_pyexpr->expr, py_type->type,
+	               exn, new_pyexpr->pool);
+	if (!gu_ok(exn)) {
+		if (gu_exn_caught(exn) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(exn);
+			PyErr_SetString(PGFError, msg);
+		} else if (gu_exn_caught(exn) == gu_type(PgfTypeError)) {
+			GuString msg = (GuString) gu_exn_caught_data(exn);
+			PyErr_SetString(TypeError, msg);
+		}
+
+		Py_DECREF(new_pyexpr);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return new_pyexpr;
+}
+
+static PyObject*
+PGF_inferExpr(PGFObject* self, PyObject *args)
+{
+	ExprObject* py_expr = NULL;
+    if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &py_expr))
+		return NULL;
+
+	ExprObject* new_pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+	if (new_pyexpr == NULL)
+		return NULL;
+
+	new_pyexpr->pool = gu_new_pool();
+	new_pyexpr->expr = py_expr->expr;
+	new_pyexpr->master = NULL;
+
+	TypeObject* new_pytype = (TypeObject*) pgf_TypeType.tp_alloc(&pgf_TypeType, 0);
+	if (new_pytype == NULL) {
+		Py_DECREF(new_pyexpr);
+		return NULL;
+	}
+
+	new_pytype->pool = NULL;
+	new_pytype->type = NULL;
+	new_pytype->master = (PyObject*) new_pyexpr;
+	Py_INCREF(new_pyexpr);
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* exn = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	new_pytype->type =
+		pgf_infer_expr(self->pgf, &new_pyexpr->expr,
+		               exn, new_pyexpr->pool);
+	if (!gu_ok(exn)) {
+		if (gu_exn_caught(exn) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(exn);
+			PyErr_SetString(PGFError, msg);
+		} else if (gu_exn_caught(exn) == gu_type(PgfTypeError)) {
+			GuString msg = (GuString) gu_exn_caught_data(exn);
+			PyErr_SetString(TypeError, msg);
+		}
+
+		Py_DECREF(new_pyexpr);
+		Py_DECREF(new_pytype);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	PyObject* res =
+		Py_BuildValue("OO", new_pyexpr, new_pytype);
+
+	Py_DECREF(new_pyexpr);
+	Py_DECREF(new_pytype);
+
+	return res;
+}
+
+static TypeObject*
+PGF_checkType(PGFObject* self, PyObject *args)
+{
+	TypeObject* py_type = NULL;
+    if (!PyArg_ParseTuple(args, "O!", &pgf_TypeType, &py_type))
+		return NULL;
+
+	TypeObject* new_pytype = (TypeObject*) pgf_TypeType.tp_alloc(&pgf_TypeType, 0);
+	if (new_pytype == NULL) {
+		return NULL;
+	}
+
+	new_pytype->pool   = gu_new_pool();
+	new_pytype->type   = py_type->type;
+	new_pytype->master = NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* exn = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	pgf_check_type(self->pgf, &new_pytype->type,
+	               exn, new_pytype->pool);
+	if (!gu_ok(exn)) {
+		if (gu_exn_caught(exn) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(exn);
+			PyErr_SetString(PGFError, msg);
+		} else if (gu_exn_caught(exn) == gu_type(PgfTypeError)) {
+			GuString msg = (GuString) gu_exn_caught_data(exn);
+			PyErr_SetString(TypeError, msg);
+		}
+
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return new_pytype;
+}
+
 static PyObject*
 PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
 	ExprObject* pyexpr;
@@ -2100,6 +2239,15 @@ static PyMethodDef PGF_methods[] = {
     },
     {"compute", (PyCFunction)PGF_compute, METH_VARARGS,
      "Computes the normal form of an abstract syntax tree"
+    },
+    {"checkExpr", (PyCFunction)PGF_checkExpr, METH_VARARGS,
+     "Type checks an abstract syntax expression and returns the updated expression"
+    },
+    {"inferExpr", (PyCFunction)PGF_inferExpr, METH_VARARGS,
+     "Type checks an abstract syntax expression and returns the updated expression"
+    },
+    {"checkType", (PyCFunction)PGF_checkType, METH_VARARGS,
+     "Type checks an abstract syntax type and returns the updated type"
     },
     {"graphvizAbstractTree", (PyCFunction)PGF_graphvizAbstractTree, METH_VARARGS,
      "Renders an abstract syntax tree in a Graphviz format"
@@ -2288,6 +2436,10 @@ initpgf(void)
     ParseError = PyErr_NewException("pgf.ParseError", NULL, dict);
     PyModule_AddObject(m, "ParseError", ParseError);
     Py_INCREF(ParseError);
+
+    TypeError = PyErr_NewException("pgf.TypeError", NULL, NULL);
+    PyModule_AddObject(m, "TypeError", TypeError);
+    Py_INCREF(TypeError);
 
     PyModule_AddObject(m, "Expr", (PyObject *) &pgf_ExprType);
     Py_INCREF(&pgf_ExprType);

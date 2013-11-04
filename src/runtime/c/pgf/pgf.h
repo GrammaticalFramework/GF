@@ -39,6 +39,7 @@ typedef GuString PgfToken;
 
 extern GU_DECLARE_TYPE(PgfExn, abstract);
 extern GU_DECLARE_TYPE(PgfParseError, abstract);
+extern GU_DECLARE_TYPE(PgfTypeError, abstract);
 
 /// @name PGF Grammar objects
 /// @{
@@ -170,5 +171,17 @@ pgf_complete(PgfConcr* concr, PgfCId cat, GuString string,
 
 void
 pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err); 
+
+void
+pgf_check_expr(PgfPGF* gr, PgfExpr* pe, PgfType* ty,
+               GuExn* exn, GuPool* pool);
+
+PgfType*
+pgf_infer_expr(PgfPGF* gr, PgfExpr* pe, 
+               GuExn* exn, GuPool* pool);
+
+void
+pgf_check_type(PgfPGF* gr, PgfType** ty,
+               GuExn* exn, GuPool* pool);
 
 #endif // PGF_H_
