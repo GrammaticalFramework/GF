@@ -278,7 +278,7 @@ pgf_lzn_resolve_def(PgfLzn* lzn,
 	PgfLiteralStr* lit_str =
 		gu_new_flex_variant(PGF_LITERAL_STR,
 					        PgfLiteralStr,
-					        val, strlen(s),
+					        val, strlen(s)+1,
 					        &clit->lit, pool);
 	strcpy((char*) lit_str->val, (char*) s);
 
