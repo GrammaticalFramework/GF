@@ -16,7 +16,7 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand, 
       } ;
 
     ComplVV v vp = insertObjPost (\\a => v.c2.s ++ infVP vp a) (predV v) ;
-    ComplVS v s  = insertObjPost (\\_ => conjThat ++ s.s ! Sub) (predV v) ;
+    ComplVS v s  = insertObjPost (\\_ => conjThat ++ s.s ! Sub) (predV v) ;  --- insertExt ?
     ComplVQ v q  = insertObjPost (\\_ => q.s ! QIndir) (predV v) ;
     ComplVA v ap = insertObjPost (\\a => ap.s ! agrAdjNP a DIndef) (predV v) ;
 
@@ -75,5 +75,9 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand, 
     } ;
 
     UseCopula = predV verbBe ;
+
+    AdvVPSlash vps adv = insertAdv adv.s vps ** {c2 = vps.c2 ; n3 = vps.n3} ;
+    AdVVPSlash adv vps = insertAdV adv.s vps ** {c2 = vps.c2 ; n3 = vps.n3} ;
+    ExtAdvVP vp adv = insertExt ("," ++ adv.s) vp ;
 
 }

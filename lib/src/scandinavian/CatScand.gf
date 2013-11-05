@@ -123,6 +123,8 @@ incomplete concrete CatScand of Cat =
     V3 = \v -> infVP (predV v) agrUSgP3 ++ v.c2.s ++ v.c3.s ;
     VV = \v -> infVP (predV v) agrUSgP3 ;
     V2V = \v -> infVP (predV v) agrUSgP3 ++ v.c2.s ;
+
+    Conj = \c -> c.s1 ++ c.s2 ;
 {-
     A = \a -> a.s ! AAdj Posit Nom ;
     A2 = \a -> a.s ! AAdj Posit Nom ++ a.c2 ;

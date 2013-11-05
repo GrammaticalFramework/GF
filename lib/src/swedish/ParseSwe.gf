@@ -98,6 +98,7 @@ lin
   PredVPovs np vp = mkCl np vp ; ---- 
 
   that_RP = which_RP ; -- som
+  who_RP = who_RP ;
 
   CompS s = {s = \\_ => "att" ++ s.s ! Sub} ;
   CompQS qs = {s = \\_ => qs.s ! QIndir} ;
