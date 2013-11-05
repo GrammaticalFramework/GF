@@ -35,8 +35,8 @@ import GF.Grammar.Grammar
 import GF.Grammar.Binary
 
 import Control.Monad
-import Data.Char
-import Data.List
+--import Data.Char
+--import Data.List
 import Data.Maybe(isJust)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map

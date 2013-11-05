@@ -12,20 +12,20 @@
 
 module GF.Speech.JSGF (jsgfPrinter) where
 
-import GF.Data.Utilities
+--import GF.Data.Utilities
 import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.RegExp
 import GF.Speech.SISR
 import GF.Speech.SRG
-import PGF.CId
+--import PGF.CId
 import PGF.Data
 
 import Data.Char
 import Data.List
-import Data.Maybe
+--import Data.Maybe
 import Text.PrettyPrint.HughesPJ
-import Debug.Trace
+--import Debug.Trace
 
 width :: Int
 width = 75

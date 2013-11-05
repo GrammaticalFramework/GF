@@ -1,18 +1,18 @@
 module GF.Compile.PGFtoJS (pgf2js) where
 
-import PGF.CId
+import PGF(showCId)
 import PGF.Data hiding (mkStr)
 import qualified PGF.Macros as M
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 
-import GF.Data.ErrM
-import GF.Infra.Option
+--import GF.Data.ErrM
+--import GF.Infra.Option
 
-import Control.Monad (mplus)
-import Data.Array.Unboxed (UArray)
+--import Control.Monad (mplus)
+--import Data.Array.Unboxed (UArray)
 import qualified Data.Array.IArray as Array
-import Data.Maybe (fromMaybe)
+--import Data.Maybe (fromMaybe)
 import Data.Map (Map)
 import qualified Data.Set as Set
 import qualified Data.Map as Map

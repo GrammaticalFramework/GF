@@ -9,13 +9,13 @@ module GF.Index (addIndex) where
 
 import PGF
 import PGF.Data
-import PGF.Binary
+--import PGF.Binary
 import Data.Binary
-import Data.ByteString.Lazy (readFile,length)
+import Data.ByteString.Lazy (length) -- readFile
 import qualified Data.Map as Map
 import Data.Map (toAscList)
 import Data.List (intercalate)
-import qualified Data.ByteString.Lazy as BS
+--import qualified Data.ByteString.Lazy as BS
 
 addIndex  :: PGF -> PGF
 addIndex pgf = pgf {gflags = flags}  

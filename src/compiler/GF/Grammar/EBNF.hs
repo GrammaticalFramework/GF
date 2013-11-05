@@ -24,7 +24,7 @@ import GF.Grammar.Grammar
 
 import Data.Char
 import Data.List
-import System.FilePath
+--import System.FilePath
 
 
 

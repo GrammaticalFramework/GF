@@ -7,16 +7,16 @@ import GF.Grammar.Lockfield
 import GF.Compile.Compute.ConcreteNew1
 import GF.Compile.Compute.AppPredefined
 import GF.Infra.CheckM
-import GF.Infra.UseIO
+--import GF.Infra.UseIO
 import GF.Data.Operations
 
 import Text.PrettyPrint
 import Data.List (nub, (\\), tails)
 import qualified Data.IntMap as IntMap
 
-import GF.Grammar.Parser
-import System.IO
-import Debug.Trace
+--import GF.Grammar.Parser
+--import System.IO
+--import Debug.Trace
 
 checkLType :: SourceGrammar -> Term -> Type -> Check (Term, Type)
 checkLType gr t ty = runTcM $ do

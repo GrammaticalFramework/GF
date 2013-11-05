@@ -21,6 +21,8 @@ module PGF(
            -- * Identifiers
            CId, mkCId, wildCId,
            showCId, readCId,
+           -- extra
+           ppCId, pIdent, bsCId,
 
            -- * Languages
            Language, 
@@ -50,6 +52,8 @@ module PGF(
            mkInt,    unInt,
            mkDouble, unDouble,
            mkMeta,   unMeta,
+           -- extra
+           pExpr,
 
            -- * Operations
            -- ** Linearization
@@ -111,6 +115,8 @@ module PGF(
            Lemma, Analysis, Morpho,
            lookupMorpho, buildMorpho, fullFormLexicon,
            morphoMissing,
+           -- extra:
+           morphoKnown, isInMorpho,
 
            -- ** Tokenizing
            mkTokenizer,
@@ -124,6 +130,8 @@ module PGF(
            gizaAlignment,
            GraphvizOptions(..),
            graphvizDefaults,
+           -- extra:
+           getDepLabels,
  
            -- * Probabilities
            Probabilities,
@@ -131,6 +139,8 @@ module PGF(
            defaultProbabilities,
            showProbabilities,
            readProbabilitiesFromFile,
+           -- extra:
+           probTree, setProbabilities, rankTreesByProbs,
            
            -- -- ** SortTop
 --         forExample,
@@ -153,21 +163,20 @@ import PGF.Macros
 import PGF.Expr (Tree)
 import PGF.Morphology
 import PGF.Data
-import PGF.Binary
+import PGF.Binary()
 import PGF.Tokenizer
 import qualified PGF.Forest as Forest
 import qualified PGF.Parse as Parse
+import PGF.Utilities(replace)
 
-import GF.Data.Utilities (replace)
-
-import Data.Char
+--import Data.Char
 import qualified Data.Map as Map
-import qualified Data.IntMap as IntMap
-import Data.Maybe
+--import qualified Data.IntMap as IntMap
+--import Data.Maybe
 import Data.Binary
 import Data.List(mapAccumL)
-import System.Random (newStdGen)
-import Control.Monad
+--import System.Random (newStdGen)
+--import Control.Monad
 import Text.PrettyPrint
 
 ---------------------------------------------------

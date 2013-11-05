@@ -24,10 +24,10 @@ import GF.Infra.Ident
 import GF.Grammar.Macros
 import GF.Grammar.Printer
 
-import Data.List
+--import Data.List
 import Control.Monad
 import Text.PrettyPrint
-import Debug.Trace
+--import Debug.Trace
 
 matchPattern :: [(Patt,rhs)] -> Term -> Err (rhs, Substitution)
 matchPattern pts term = 

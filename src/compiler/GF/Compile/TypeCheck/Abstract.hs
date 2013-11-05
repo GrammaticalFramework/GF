@@ -26,11 +26,11 @@ import GF.Grammar
 import GF.Grammar.Lookup
 import GF.Grammar.Unify
 --import GF.Compile.Refresh
-import GF.Compile.Compute.Abstract
+--import GF.Compile.Compute.Abstract
 import GF.Compile.TypeCheck.TC
 
 import Text.PrettyPrint
-import Control.Monad (foldM, liftM, liftM2)
+--import Control.Monad (foldM, liftM, liftM2)
 
 -- | invariant way of creating TCEnv from context
 initTCEnv gamma = 

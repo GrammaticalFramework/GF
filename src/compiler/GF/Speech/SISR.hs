@@ -10,12 +10,12 @@ module GF.Speech.SISR (SISRFormat(..), SISRTag, prSISR,
 
 import Data.List
 
-import GF.Data.Utilities
-import GF.Infra.Ident
+--import GF.Data.Utilities
+--import GF.Infra.Ident
 import GF.Infra.Option (SISRFormat(..))
 import GF.Speech.CFG
 import GF.Speech.SRG (SRGNT)
-import PGF.CId
+import PGF(showCId)
 
 import qualified GF.JavaScript.AbsJS   as JS
 import qualified GF.JavaScript.PrintJS as JS

@@ -15,17 +15,17 @@ module GF.Speech.SLF (slfPrinter,slfGraphvizPrinter,
 import GF.Data.Utilities
 import GF.Speech.CFG
 import GF.Speech.FiniteState
-import GF.Speech.CFG
+--import GF.Speech.CFG
 import GF.Speech.CFGToFA
 import GF.Speech.PGFToCFG
 import qualified GF.Data.Graphviz as Dot
 import PGF
-import PGF.CId
+--import PGF.CId
 
 import Control.Monad
 import qualified Control.Monad.State as STM
 import Data.Char (toUpper)
-import Data.List
+--import Data.List
 import Data.Maybe
 
 data SLFs = SLFs [(String,SLF)] SLF

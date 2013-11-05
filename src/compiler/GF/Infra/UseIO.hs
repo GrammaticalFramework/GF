@@ -29,7 +29,7 @@ import System.IO.Error(isUserError,ioeGetErrorString)
 import System.Environment
 import System.Exit
 import System.CPUTime
-import System.Cmd
+--import System.Cmd
 import Text.Printf
 import Control.Monad
 import Control.Monad.Trans(MonadIO(..))

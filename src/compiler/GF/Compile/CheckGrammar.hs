@@ -33,8 +33,8 @@ import qualified GF.Compile.Compute.ConcreteNew as CN
 import GF.Grammar
 import GF.Grammar.Lexer
 import GF.Grammar.Lookup
-import GF.Grammar.Predef
-import GF.Grammar.PatternMatch
+--import GF.Grammar.Predef
+--import GF.Grammar.PatternMatch
 
 import GF.Data.Operations
 import GF.Infra.CheckM

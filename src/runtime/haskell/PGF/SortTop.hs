@@ -4,7 +4,6 @@ module PGF.SortTop
 
 import PGF.CId
 import PGF.Data
-import PGF.Expr
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.Maybe

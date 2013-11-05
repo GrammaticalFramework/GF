@@ -25,7 +25,7 @@ import GF.Data.Utilities (nub')
 
 import Data.Char
 import Data.List
-import System.FilePath
+--import System.FilePath
 
 getCF :: FilePath -> String -> Err SourceGrammar
 getCF fpath = fmap (cf2gf fpath) . pCF

@@ -3,7 +3,7 @@ module PGF.CId (CId(..),
                 readCId, showCId,
                 
                 -- utils
-                pCId, pIdent, ppCId) where
+                bsCId, pCId, pIdent, ppCId) where
 
 import Control.Monad
 import qualified Data.ByteString.Char8 as BS
@@ -22,6 +22,8 @@ wildCId = CId (BS.singleton '_')
 -- | Creates a new identifier from 'String'
 mkCId :: String -> CId
 mkCId s = CId (BS.pack s)
+
+bsCId = CId
 
 -- | Reads an identifier from 'String'. The function returns 'Nothing' if the string is not valid identifier.
 readCId :: String -> Maybe CId

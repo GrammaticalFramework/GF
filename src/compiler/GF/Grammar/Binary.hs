@@ -12,9 +12,9 @@ module GF.Grammar.Binary(decodeModule,decodeModuleHeader,encodeModule) where
 import Prelude hiding (catch)
 import Control.Exception(catch,ErrorCall(..),throwIO)
 
-import Data.Char
+--import Data.Char
 import Data.Binary
-import Control.Monad
+--import Control.Monad
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 
@@ -23,7 +23,7 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Grammar.Grammar
 
-import PGF.Binary
+import PGF() -- Binary instances
 
 -- Please change this every time when the GFO format is changed
 gfoVersion = "GF02"
@@ -346,3 +346,5 @@ decodeFile' fpath = addFPath fpath (decodeFile fpath)
 addFPath fpath m = m `catch` handle
   where
     handle (ErrorCall msg) = throwIO (ErrorCall (fpath++": "++msg))
+
+decodingError = fail "This file was compiled with different version of GF"

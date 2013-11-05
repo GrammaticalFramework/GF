@@ -19,11 +19,11 @@ module GF.Quiz (
   ) where
 
 import PGF
-import PGF.Linearize
+--import PGF.Linearize
 import GF.Data.Operations
-import GF.Infra.UseIO
-import GF.Infra.Option
-import PGF.Probabilistic
+--import GF.Infra.UseIO
+--import GF.Infra.Option
+--import PGF.Probabilistic
 
 import System.Random
 import Data.List (nub)

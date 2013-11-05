@@ -13,7 +13,7 @@ module GF.Compile.GeneratePMCFG
     (generatePMCFG, pgfCncCat, addPMCFG, resourceValues
     ) where
 
-import PGF.CId
+--import PGF.CId
 import PGF.Data(CncCat(..),Symbol(..),fidVar)
 
 import GF.Infra.Option
@@ -24,23 +24,23 @@ import GF.Grammar.Lockfield (isLockLabel)
 import GF.Data.BacktrackM
 import GF.Data.Operations
 import GF.Infra.UseIO (IOE)
-import GF.Data.Utilities (updateNthM, updateNth)
+import GF.Data.Utilities (updateNthM) --updateNth
 import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues,ppL)
 import System.IO(hPutStr,hPutStrLn,stderr)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.List as List
-import qualified Data.IntMap as IntMap
+--import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import Text.PrettyPrint hiding (Str)
 import Data.Array.IArray
 import Data.Array.Unboxed
-import Data.Maybe
-import Data.Char (isDigit)
+--import Data.Maybe
+--import Data.Char (isDigit)
 import Control.Monad
 import Control.Monad.Identity
 import Control.Monad.Trans (liftIO)
-import Control.Exception
+--import Control.Exception
 
 ----------------------------------------------------------------------
 -- main conversion function

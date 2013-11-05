@@ -20,7 +20,7 @@ module GF.Infra.SIO(
   ) where
 import Prelude hiding (putStrLn,print)
 import Control.Monad(liftM)
-import System.IO(Handle,hPutStrLn,hFlush,stdout)
+import System.IO(hPutStrLn,hFlush,stdout)
 import GF.System.Catch(try)
 import System.Cmd(system)
 import System.Environment(getEnv)

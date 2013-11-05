@@ -15,13 +15,13 @@ module PGF.Paraphrase (
 
 import PGF.Data
 import PGF.Tree
-import PGF.Macros (lookDef,isData)
-import PGF.CId
+--import PGF.Macros (lookDef,isData)
+--import PGF.CId
 
 import Data.List (nub,sort,group)
 import qualified Data.Map as Map
 
-import Debug.Trace ----
+--import Debug.Trace ----
 
 paraphrase :: PGF -> Expr -> [Expr]
 paraphrase pgf t = nub (paraphraseN 2 pgf t)

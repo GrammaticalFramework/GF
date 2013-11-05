@@ -9,7 +9,7 @@ module PGF.Tokenizer
        ( mkTokenizer
        ) where
 
-import Data.List (intercalate)
+--import Data.List (intercalate)
 --import Test.QuickCheck
 import FST.TransducerInterface
 import PGF.Morphology (fullFormLexicon, buildMorpho)

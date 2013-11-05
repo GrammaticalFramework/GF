@@ -24,7 +24,7 @@ module GF.Grammar.Values (-- * values used in TC type checking
 --Z tree2exp, loc2treeFocus
 	      ) where
 
-import GF.Data.Operations
+--import GF.Data.Operations
 ---Z import GF.Data.Zipper
 
 import GF.Infra.Ident

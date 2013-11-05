@@ -30,7 +30,7 @@ module PGF.TypeCheck ( checkType, checkExpr, inferExpr
 import PGF.Data
 import PGF.Expr hiding (eval, apply, applyValue, value2expr)
 import qualified PGF.Expr as Expr
-import PGF.Macros (typeOfHypo, cidInt, cidFloat, cidString)
+import PGF.Macros (cidInt, cidFloat, cidString) -- typeOfHypo
 import PGF.CId
 
 import Data.Map as Map
@@ -38,7 +38,7 @@ import Data.IntMap as IntMap
 import Data.Maybe as Maybe
 import Data.List as List
 import Control.Monad
-import Control.Monad.Identity
+--import Control.Monad.Identity
 import Control.Monad.State
 import Control.Monad.Error
 import Text.PrettyPrint

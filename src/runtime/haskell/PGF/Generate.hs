@@ -8,14 +8,13 @@ module PGF.Generate
 
 import PGF.CId
 import PGF.Data
-import PGF.Expr
-import PGF.Macros
+--import PGF.Macros
 import PGF.TypeCheck
-import PGF.Probabilistic
+--import PGF.Probabilistic
 
-import Data.Maybe (fromMaybe)
-import qualified Data.Map as Map
-import qualified Data.IntMap as IntMap
+--import Data.Maybe (fromMaybe)
+--import qualified Data.Map as Map
+--import qualified Data.IntMap as IntMap
 import Control.Monad
 import Control.Monad.Identity
 import System.Random

@@ -14,17 +14,17 @@ import qualified Data.Map as Map
 import Data.Set (Set)
 import qualified Data.Set as Set
 
-import PGF.CId
+--import PGF.CId
 import PGF.Data
 import GF.Data.Utilities
 import GF.Speech.CFG
-import GF.Speech.PGFToCFG
-import GF.Infra.Ident (Ident)
+--import GF.Speech.PGFToCFG
+--import GF.Infra.Ident (Ident)
 
 import GF.Data.Graph
-import GF.Data.Relation
+--import GF.Data.Relation
 import GF.Speech.FiniteState
-import GF.Speech.CFG
+--import GF.Speech.CFG
 
 data Recursivity = RightR | LeftR | NotR
 

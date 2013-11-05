@@ -2,16 +2,14 @@ module PGF.Printer (ppPGF,ppCat,ppFId,ppFunId,ppSeqId,ppSeq,ppFun) where
 
 import PGF.CId
 import PGF.Data
-import PGF.Macros
-
-import GF.Data.Operations
+--import PGF.Macros
 
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntMap as IntMap
 import Data.List
 import Data.Array.IArray
-import Data.Array.Unboxed
+--import Data.Array.Unboxed
 import Text.PrettyPrint
 
 

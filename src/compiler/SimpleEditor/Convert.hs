@@ -5,7 +5,7 @@ import Control.Monad(unless,foldM,ap,mplus)
 import Data.List(sortBy)
 import Data.Function(on)
 import qualified Data.Map as Map
-import Text.JSON(encode,makeObj)
+import Text.JSON(makeObj) --encode
 import Text.PrettyPrint(render,text,(<+>))
 
 -- 4 extra imports just to deal with the ByteString mess...

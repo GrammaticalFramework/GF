@@ -15,15 +15,14 @@ module PGF.Parse
 import Data.Array.IArray
 import Data.Array.Base (unsafeAt)
 import Data.List (isPrefixOf, foldl')
-import Data.Maybe (fromMaybe, maybe, maybeToList)
+import Data.Maybe (fromMaybe, maybeToList)
 import qualified Data.Map as Map
-import qualified GF.Data.TrieMap as TrieMap
+import qualified PGF.TrieMap as TrieMap
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import qualified Data.Set as Set
 import Control.Monad
 
-import GF.Data.SortedList
 import PGF.CId
 import PGF.Data
 import PGF.Expr(Tree)

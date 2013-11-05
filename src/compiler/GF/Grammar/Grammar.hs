@@ -68,15 +68,15 @@ import GF.Data.Operations
 
 import PGF.Data (FId, FunId, SeqId, LIndex, Sequence, BindType(..))
 
-import Data.List
+--import Data.List
 import Data.Array.IArray
 import Data.Array.Unboxed
 import qualified Data.Map as Map
-import qualified Data.Set as Set
-import qualified Data.IntMap as IntMap
+--import qualified Data.Set as Set
+--import qualified Data.IntMap as IntMap
 import Text.PrettyPrint
-import System.FilePath
-import Control.Monad.Identity
+--import System.FilePath
+--import Control.Monad.Identity
 
 
 

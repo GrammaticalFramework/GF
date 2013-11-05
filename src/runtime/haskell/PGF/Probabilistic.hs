@@ -15,12 +15,10 @@ module PGF.Probabilistic
 import PGF.CId
 import PGF.Data
 import PGF.Macros
-import PGF.Type
-import PGF.Expr
 
 import qualified Data.Map as Map
 import Data.List (sortBy,partition,nub,mapAccumL)
-import Data.Maybe (fromMaybe, fromJust)
+import Data.Maybe (fromMaybe) --, fromJust
 
 -- | An abstract data structure which represents
 -- the probabilities for the different functions in a grammar.

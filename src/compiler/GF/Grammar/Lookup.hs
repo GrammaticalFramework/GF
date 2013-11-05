@@ -40,8 +40,8 @@ import GF.Grammar.Predef
 import GF.Grammar.Lockfield
 
 import Data.List (sortBy)
-import Data.Maybe (maybe)
-import Control.Monad
+--import Data.Maybe (maybe)
+--import Control.Monad
 import Text.PrettyPrint
 import qualified Data.Map as Map
 

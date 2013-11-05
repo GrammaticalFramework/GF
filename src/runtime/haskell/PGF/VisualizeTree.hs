@@ -21,24 +21,24 @@ module PGF.VisualizeTree
              , getDepLabels
              ) where
 
-import PGF.CId (CId,wildCId,showCId,ppCId,pCId,mkCId)
+import PGF.CId (wildCId,showCId,ppCId,mkCId) --CId,pCId,
 import PGF.Data
-import PGF.Expr (showExpr, Tree)
+import PGF.Expr (Tree) -- showExpr
 import PGF.Linearize
-import PGF.Macros (lookValCat, lookMap,
-                   BracketedString(..), BracketedTokn(..), flattenBracketedString)
+import PGF.Macros (lookValCat, BracketedString(..))
+                   --lookMap, BracketedTokn(..), flattenBracketedString
 
 import qualified Data.Map as Map
-import qualified Data.IntMap as IntMap
+--import qualified Data.IntMap as IntMap
 import Data.List (intersperse,nub,mapAccumL,find)
-import Data.Char (isDigit)
+--import Data.Char (isDigit)
 import Data.Maybe (fromMaybe)
 import Text.PrettyPrint
 
-import Data.Array.IArray
-import Control.Monad
-import qualified Data.Set as Set
-import qualified Text.ParserCombinators.ReadP as RP
+--import Data.Array.IArray
+--import Control.Monad
+--import qualified Data.Set as Set
+--import qualified Text.ParserCombinators.ReadP as RP
 
 
 data GraphvizOptions = GraphvizOptions {noLeaves :: Bool,

@@ -24,7 +24,7 @@ module GF.Data.Graph ( Graph(..), Node, Edge, NodeInfo
                         , reverseGraph, mergeGraphs, renameNodes
                        ) where
 
-import GF.Data.Utilities
+--import GF.Data.Utilities
 
 import Data.List
 import Data.Maybe

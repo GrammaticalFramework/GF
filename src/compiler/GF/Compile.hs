@@ -17,7 +17,6 @@ import GF.Compile.Coding
 import GF.Compile.Tags
 
 import GF.Grammar.Grammar
-import GF.Grammar.Lookup
 import GF.Grammar.Printer
 import GF.Grammar.Binary
 
@@ -34,15 +33,10 @@ import System.FilePath
 import qualified Data.Map as Map
 --import qualified Data.Set as Set
 import Data.List(nub)
-import Data.Maybe (isNothing)
 import Text.PrettyPrint
 
-import PGF.CId
-import PGF.Data
-import PGF.Macros
 import PGF.Optimize
-import PGF.Probabilistic
-
+import PGF
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.
 compileToPGF :: Options -> [FilePath] -> IOE PGF

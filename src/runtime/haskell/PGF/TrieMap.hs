@@ -1,4 +1,4 @@
-module GF.Data.TrieMap
+module PGF.TrieMap
          ( TrieMap
 
          , empty

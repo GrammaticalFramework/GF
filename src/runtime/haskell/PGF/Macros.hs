@@ -4,11 +4,11 @@ import PGF.CId
 import PGF.Data
 import Control.Monad
 import qualified Data.Map    as Map
-import qualified Data.Set    as Set
-import qualified Data.IntMap as IntMap
-import qualified Data.IntSet as IntSet
+--import qualified Data.Set    as Set
+--import qualified Data.IntMap as IntMap
+--import qualified Data.IntSet as IntSet
 import qualified Data.Array  as Array
-import Data.Maybe
+--import Data.Maybe
 import Data.List
 import Data.Array.IArray
 import Text.PrettyPrint

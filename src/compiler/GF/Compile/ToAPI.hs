@@ -2,14 +2,14 @@ module GF.Compile.ToAPI
  (stringToAPI,exprToAPI)
   where
 
-import PGF.Expr
-import PGF.CId
+import PGF.Data
+import PGF(showCId)
 import Data.Maybe
-import System.IO
-import Control.Monad
-import Data.Set as Set (fromList,toList)
+--import System.IO
+--import Control.Monad
+--import Data.Set as Set (fromList,toList)
 import Data.List
-import Data.Map(Map)
+--import Data.Map(Map)
 import qualified Data.Map as Map
 import PGF.Signature
 

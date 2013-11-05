@@ -7,11 +7,11 @@ module PGF.Tree
 import PGF.CId
 import PGF.Expr hiding (Tree)
 
-import Data.Char
+--import Data.Char
 import Data.List as List
-import Control.Monad
-import qualified Text.PrettyPrint as PP
-import qualified Text.ParserCombinators.ReadP as RP
+--import Control.Monad
+--import qualified Text.PrettyPrint as PP
+--import qualified Text.ParserCombinators.ReadP as RP
 
 -- | The tree is an evaluated expression in the abstract syntax
 -- of the grammar. The type is especially restricted to not

@@ -4,9 +4,9 @@ module GF.Compile.ExampleBased (
   ) where
 
 import PGF
-import PGF.Probabilistic
-import PGF.Morphology
-import GF.Compile.ToAPI
+--import PGF.Probabilistic
+--import PGF.Morphology
+--import GF.Compile.ToAPI
 
 import Data.List
 

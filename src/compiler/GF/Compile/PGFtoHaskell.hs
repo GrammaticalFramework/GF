@@ -16,7 +16,7 @@
 
 module GF.Compile.PGFtoHaskell (grammar2haskell) where
 
-import PGF.CId
+import PGF(showCId)
 import PGF.Data
 import PGF.Macros
 

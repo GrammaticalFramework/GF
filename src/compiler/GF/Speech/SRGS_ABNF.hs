@@ -19,7 +19,7 @@
 
 module GF.Speech.SRGS_ABNF (srgsAbnfPrinter, srgsAbnfNonRecursivePrinter) where
 
-import GF.Data.Utilities
+--import GF.Data.Utilities
 import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.SISR as SISR
@@ -27,11 +27,11 @@ import GF.Speech.SRG
 import GF.Speech.RegExp
 import PGF (PGF, CId)
 
-import Data.Char
+--import Data.Char
 import Data.List
 import Data.Maybe
 import Text.PrettyPrint.HughesPJ
-import Debug.Trace
+--import Debug.Trace
 
 width :: Int
 width = 75

@@ -17,21 +17,21 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , lookupFM_
                      ) where
 
-import GF.Data.Operations
+--import GF.Data.Operations
 import GF.Data.Utilities
-import GF.Infra.Ident
+--import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
-import GF.Data.Relation
-import GF.Speech.FiniteState
+--import GF.Data.Relation
+--import GF.Speech.FiniteState
 import GF.Speech.RegExp
 import GF.Speech.CFGToFA
-import GF.Infra.Option
+--import GF.Infra.Option
 import PGF
 
 import Data.List
-import Data.Maybe (fromMaybe, maybeToList)
+--import Data.Maybe (fromMaybe, maybeToList)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Set (Set)

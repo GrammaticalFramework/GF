@@ -36,7 +36,7 @@ import GF.Infra.GetOpt
 import GF.Grammar.Predef
 --import System.Console.GetOpt
 import System.FilePath
-import System.IO
+--import System.IO
 
 import GF.Data.ErrM
 

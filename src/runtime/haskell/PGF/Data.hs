@@ -8,11 +8,11 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
-import qualified GF.Data.TrieMap as TMap
+import qualified PGF.TrieMap as TMap
 import qualified Data.ByteString as BS
 import Data.Array.IArray
 import Data.Array.Unboxed
-import Data.List
+--import Data.List
 
 
 -- internal datatypes for PGF

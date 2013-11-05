@@ -41,7 +41,7 @@ import qualified Data.Map as Map
 import Data.Set (Set)
 import qualified Data.Set as Set
 
-import GF.Data.Utilities
+--import GF.Data.Utilities
 import GF.Data.Graph
 import qualified GF.Data.Graphviz as Dot
 

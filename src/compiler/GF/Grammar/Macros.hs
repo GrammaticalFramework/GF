@@ -22,14 +22,14 @@ import GF.Data.Operations
 import GF.Data.Str
 import GF.Infra.Ident
 import GF.Grammar.Grammar
-import GF.Grammar.Values
+--import GF.Grammar.Values
 import GF.Grammar.Predef
 import GF.Grammar.Printer
 
 import Control.Monad.Identity(Identity(..))
 import qualified Data.Traversable as T(mapM)
 import Control.Monad (liftM, liftM2, liftM3)
-import Data.Char (isDigit)
+--import Data.Char (isDigit)
 import Data.List (sortBy,nub)
 import Text.PrettyPrint
 

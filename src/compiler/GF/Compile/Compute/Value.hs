@@ -1,8 +1,8 @@
 module GF.Compile.Compute.Value where
-import GF.Grammar.Grammar(Label,Type,TInfo,MetaId,Patt,QIdent)
+import GF.Grammar.Grammar(Label,Type,MetaId,Patt,QIdent)
 import PGF.Data(BindType)
 import GF.Infra.Ident(Ident)
-import Text.Show.Functions
+import Text.Show.Functions()
 import Data.Ix(Ix)
 
 -- | Self-contained (not quite) representation of values

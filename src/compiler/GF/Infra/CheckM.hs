@@ -20,9 +20,9 @@ module GF.Infra.CheckM
 	  ) where
 
 import GF.Data.Operations
-import GF.Infra.Ident
+--import GF.Infra.Ident
 --import GF.Grammar.Grammar(Context)
-import GF.Grammar.Printer
+--import GF.Grammar.Printer
 
 import qualified Data.Map as Map
 import Text.PrettyPrint

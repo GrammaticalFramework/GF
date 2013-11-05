@@ -12,12 +12,12 @@
 -----------------------------------------------------------------------------
 
 
-module GF.Data.Utilities where
+module GF.Data.Utilities(module GF.Data.Utilities, module PGF.Utilities) where
 
 import Data.Maybe
 import Data.List
 import Control.Monad (MonadPlus(..),liftM)
-import qualified Data.Set as Set
+import PGF.Utilities
 
 -- * functions on lists
 
@@ -68,17 +68,6 @@ safeInit :: [a] -> [a]
 safeInit [] = []
 safeInit xs = init xs
 
--- | Like 'nub', but O(n log n) instead of O(n^2), since it uses a set to lookup previous things.
---   The result list is stable (the elements are returned in the order they occur), and lazy.
---   Requires that the list elements can be compared by Ord.
---   Code ruthlessly taken from http://hpaste.org/54411
-nub' :: Ord a => [a] -> [a]
-nub' = loop Set.empty
-    where loop _    []            = []
-          loop seen (x : xs)
-              | Set.member x seen = loop seen xs
-              | otherwise         = x : loop (Set.insert x seen) xs
-
 -- | Sorts and then groups elements given an ordering of the 
 --   elements.
 sortGroupBy :: (a -> a -> Ordering) -> [a] -> [[a]]
@@ -107,10 +96,6 @@ tableSet x y (p@(x',_):xs) | x' == x = (x,y):xs
 buildMultiMap :: Ord a => [(a,b)] -> [(a,[b])]
 buildMultiMap = map (\g -> (fst (head g), map snd g) )
                  . sortGroupBy (compareBy fst)
-
--- | Replace all occurences of an element by another element.
-replace :: Eq a => a -> a -> [a] -> [a]
-replace x y = map (\z -> if z == x then y else z)
 
 -- * equality functions
 

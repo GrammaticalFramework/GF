@@ -23,7 +23,7 @@ import PGF.CId
 import PGF.Type
 
 import Data.Char
-import Data.Maybe
+--import Data.Maybe
 import Data.List as List
 import qualified Data.Map as Map hiding (showTree)
 import Control.Monad

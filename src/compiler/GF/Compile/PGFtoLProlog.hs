@@ -1,13 +1,13 @@
 module GF.Compile.PGFtoLProlog(grammar2lambdaprolog_mod, grammar2lambdaprolog_sig) where
 
-import PGF.CId
+import PGF(mkCId,ppCId,showCId,wildCId)
 import PGF.Data hiding (ppExpr, ppType, ppHypo)
-import PGF.Macros
+--import PGF.Macros
 import Data.List
 import Data.Maybe
 import Text.PrettyPrint
 import qualified Data.Map as Map
-import Debug.Trace
+--import Debug.Trace
 
 grammar2lambdaprolog_mod pgf = render $
   text "module" <+> ppCId (absname pgf) <> char '.' $$

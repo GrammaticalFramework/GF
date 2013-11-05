@@ -8,7 +8,7 @@
 
 module GF.Compile.PGFtoPython (pgf2python) where
 
-import PGF.CId
+import PGF(showCId)
 import PGF.Data
 import qualified PGF.Macros as M
 
@@ -18,7 +18,7 @@ import qualified Data.Array.IArray as Array
 import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
-import Data.List (intersperse)
+--import Data.List (intersperse)
 
 pgf2python :: PGF -> String
 pgf2python pgf = ("# -*- coding: utf-8 -*-" ++++

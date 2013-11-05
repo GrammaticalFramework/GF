@@ -1,4 +1,4 @@
-module PGF.Type ( Type(..), Hypo,
+module PGF.Type ( Type(..), Hypo, CId,
                   readType, showType,
                   mkType, mkHypo, mkDepHypo, mkImplHypo,
                   unType,
@@ -10,7 +10,7 @@ import Data.Char
 import Data.List
 import qualified Text.PrettyPrint as PP
 import qualified Text.ParserCombinators.ReadP as RP
-import Control.Monad
+--import Control.Monad
 
 -- | To read a type from a 'String', use 'readType'.
 data Type =
