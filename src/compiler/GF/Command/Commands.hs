@@ -516,9 +516,9 @@ allCommands = Map.fromList [
        ],
      exec = \env@(pgf, mos) opts -> return . fromStrings . optLins pgf opts,
      options = [
-       ("all","show all forms and variants, one by line (cf. l -list)"),
+       ("all",    "show all forms and variants, one by line (cf. l -list)"),
        ("bracket","show tree structure with brackets and paths to nodes"),
-       ("groups","all languages, grouped by lang, remove duplicate strings"),
+       ("groups", "all languages, grouped by lang, remove duplicate strings"),
        ("list","show all forms and variants, comma-separated on one line (cf. l -all)"),
        ("multi","linearize to all languages (default)"),
        ("table","show all forms labelled by parameters"),
@@ -528,6 +528,24 @@ allCommands = Map.fromList [
        ("lang","the languages of linearization (comma-separated, no spaces)"),
        ("unlexer","set unlexers separately to each language (space-separated)")
        ]
+     }),
+  ("lc", emptyCommandInfo {
+     longname = "linearize_chunks",
+     synopsis = "linearize a tree that has metavariables in maximal chunks without them",
+     explanation = unlines [
+       "A hopefully temporary command, intended to work around the type checker that fails",
+       "trees where a function node is a metavariable."
+       ],
+     examples = [
+       mkEx "l -lang=LangSwe,LangNor -chunks ? a b (? c d)"
+       ],
+     exec = \env@(pgf, mos) opts -> return . fromStrings . optLins pgf (opts ++ [OOpt "chunks"]),
+     options = [
+       ] ++ stringOpOptions,
+     flags = [
+       ("lang","the languages of linearization (comma-separated, no spaces)")
+       ],
+     needsTypeCheck = False
      }),
   ("ma", emptyCommandInfo {
      longname = "morpho_analyse",
@@ -1155,6 +1173,8 @@ allCommands = Map.fromList [
        _ | isOpt "treebank" opts ->
          (showCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
          [showCId lang ++ ": " ++ linear pgf opts lang t | lang <- optLangs pgf opts]
+       _ | isOpt "chunks" opts ->
+            [unwords (intersperse "<+>" (map (linear pgf opts lang) (treeChunks t))) | lang <- optLangs pgf opts]
        _  -> [linear pgf opts lang t | lang <- optLangs pgf opts]
 
    linear :: PGF -> [Option] -> CId -> Expr -> String
