@@ -51,6 +51,7 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     PredVPosv,PredVPovs : NP -> VP -> Cl ;
     
     that_RP : RP ;
+    who_RP : RP ;
 
     CompS : S -> Comp ;
     CompQS : QS -> Comp ;

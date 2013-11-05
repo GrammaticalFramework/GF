@@ -113,6 +113,11 @@ lin
     a = RNoAg
     } ;
 
+  who_RP = {
+    s = \\_ => "who" ;
+    a = RNoAg
+    } ;
+
   CompS s = {s = \\_ => "that" ++ s.s} ;
   CompQS qs = {s = \\_ => qs.s ! QIndir} ;
   CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
