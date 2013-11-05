@@ -77,6 +77,7 @@ library
       Data.Binary.Put
       Data.Binary.Get
       Data.Binary.Builder
+      Data.Binary.IEEE754
   else
     build-depends: binary
 
