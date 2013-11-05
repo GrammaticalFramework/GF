@@ -2,7 +2,7 @@ module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..
                 readExpr, showExpr, pExpr, pBinds, ppExpr, ppPatt, pattScope,
 
                 mkAbs,    unAbs,
-                mkApp,    unApp,
+                mkApp,    unApp, unAppForm,
                 mkStr,    unStr,
                 mkInt,    unInt,
                 mkDouble, unDouble,
@@ -112,13 +112,19 @@ mkApp f es = foldl EApp (EFun f) es
 
 -- | Decomposes an expression into application of function
 unApp :: Expr -> Maybe (CId,[Expr])
-unApp = extract []
+unApp e = case unAppForm e of
+  (EFun f,es) -> Just (f,es)
+  _           -> Nothing
+
+-- | Decomposes an expression into an application of a constructor such as a constant or a metavariable
+unAppForm :: Expr -> (Expr,[Expr])
+unAppForm = extract []
   where
-    extract es (EFun f)     = Just (f,es)
+    extract es f@(EFun _)   = (f,es)
     extract es (EApp e1 e2) = extract (e2:es) e1
     extract es (ETyped e ty)= extract es e
     extract es (EImplArg e) = extract es e
-    extract es _            = Nothing
+    extract es h            = (h,es)
 
 -- | Constructs an expression from string literal
 mkStr :: String -> Expr
