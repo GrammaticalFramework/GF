@@ -29,15 +29,15 @@ import GF.Infra.Option
 import GF.Grammar.Values
 import GF.Grammar.Grammar
 
-import PGF.Expr (ppMeta)
+import PGF.Data (ppMeta)
 import PGF.Printer (ppFId, ppFunId, ppSeqId, ppSeq)
 
 import Text.PrettyPrint
-import Data.Maybe (maybe, isNothing)
+import Data.Maybe (isNothing)
 import Data.List  (intersperse)
 import qualified Data.Map as Map
-import qualified Data.IntMap as IntMap
-import qualified Data.Set as Set
+--import qualified Data.IntMap as IntMap
+--import qualified Data.Set as Set
 import qualified Data.Array.IArray as Array
 
 data TermPrintQual 

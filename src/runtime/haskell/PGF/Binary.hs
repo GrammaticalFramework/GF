@@ -10,7 +10,7 @@ import Data.Array.IArray
 import qualified Data.ByteString as BS
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
-import qualified Data.Set as Set
+--import qualified Data.Set as Set
 import Control.Monad
 
 pgfMajorVersion, pgfMinorVersion :: Word16

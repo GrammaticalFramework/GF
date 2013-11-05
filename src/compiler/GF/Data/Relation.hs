@@ -26,7 +26,7 @@ module GF.Data.Relation (Rel, mkRel, mkRel'
                            , topologicalSort, findCycles) where
 
 import Data.Foldable (toList)
-import Data.List
+--import Data.List
 import Data.Maybe
 import Data.Map (Map)
 import qualified Data.Map as Map

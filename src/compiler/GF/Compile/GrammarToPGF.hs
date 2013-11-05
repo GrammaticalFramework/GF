@@ -1,24 +1,23 @@
 {-# LANGUAGE BangPatterns #-}
 module GF.Compile.GrammarToPGF (mkCanon2pgf) where
 
-import GF.Compile.Export
+--import GF.Compile.Export
 import GF.Compile.GeneratePMCFG
 import GF.Compile.GenerateBC
 
-import PGF.CId
+import PGF(CId,mkCId,bsCId)
 import PGF.Data(fidInt,fidFloat,fidString,fidVar)
 import PGF.Optimize(updateProductionIndices)
-import qualified PGF.Macros as CM
+--import qualified PGF.Macros as CM
 import qualified PGF.Data as C
 import qualified PGF.Data as D
 import GF.Grammar.Predef
-import GF.Grammar.Printer
+--import GF.Grammar.Printer
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar as A
 import qualified GF.Grammar.Macros as GM
-import qualified GF.Infra.Option as O
-import GF.Compile.GeneratePMCFG
+--import GF.Compile.GeneratePMCFG
 
 import GF.Infra.Ident
 import GF.Infra.Option
@@ -26,13 +25,13 @@ import GF.Infra.UseIO (IOE)
 import GF.Data.Operations
 
 import Data.List
-import Data.Char (isDigit,isSpace)
+--import Data.Char (isDigit,isSpace)
 import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
-import Text.PrettyPrint
-import Control.Monad.Identity
+--import Text.PrettyPrint
+--import Control.Monad.Identity
 
 mkCanon2pgf :: Options -> SourceGrammar -> Ident -> IOE D.PGF
 mkCanon2pgf opts gr am = do
@@ -104,7 +103,7 @@ mkCanon2pgf opts gr am = do
           return (seqs, ((m,id), info) : is)
 
 i2i :: Ident -> CId
-i2i = CId . ident2bs
+i2i = bsCId . ident2bs
 
 mkType :: [Ident] -> A.Type -> C.Type
 mkType scope t =

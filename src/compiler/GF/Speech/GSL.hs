@@ -8,12 +8,12 @@
 
 module GF.Speech.GSL (gslPrinter) where
 
-import GF.Data.Utilities
+--import GF.Data.Utilities
 import GF.Speech.CFG
 import GF.Speech.SRG
 import GF.Speech.RegExp
 import GF.Infra.Option
-import GF.Infra.Ident
+--import GF.Infra.Ident
 import PGF
 
 import Data.Char (toUpper,toLower)

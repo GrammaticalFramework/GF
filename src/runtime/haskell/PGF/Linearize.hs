@@ -12,7 +12,7 @@ import PGF.Macros
 import PGF.Expr
 import Data.Array.IArray
 import Data.List
-import Control.Monad
+--import Control.Monad
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set

@@ -6,7 +6,7 @@
 ----------------------------------------------------------------------
 module GF.Speech.SRGS_XML (srgsXmlPrinter, srgsXmlNonRecursivePrinter) where
 
-import GF.Data.Utilities
+--import GF.Data.Utilities
 import GF.Data.XML
 import GF.Infra.Option
 import GF.Speech.CFG
@@ -15,11 +15,11 @@ import GF.Speech.SISR as SISR
 import GF.Speech.SRG
 import PGF (PGF, CId, Token)
 
-import Control.Monad
-import Data.Char (toUpper,toLower)
+--import Control.Monad
+--import Data.Char (toUpper,toLower)
 import Data.List
 import Data.Maybe
-import qualified Data.Map as Map
+--import qualified Data.Map as Map
 
 srgsXmlPrinter :: Options
                -> PGF -> CId -> String

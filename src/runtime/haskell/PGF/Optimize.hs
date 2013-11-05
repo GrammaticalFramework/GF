@@ -7,7 +7,7 @@ module PGF.Optimize
 import PGF.CId
 import PGF.Data
 import PGF.Macros
-import Data.Maybe
+--import Data.Maybe
 import Data.List (mapAccumL)
 import Data.Array.IArray
 import Data.Array.MArray
@@ -17,7 +17,7 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntSet as IntSet
 import qualified Data.IntMap as IntMap
-import qualified GF.Data.TrieMap as TrieMap
+import qualified PGF.TrieMap as TrieMap
 import qualified Data.List as List
 import Control.Monad.ST
 

@@ -3,10 +3,10 @@ module GF.Compile.Coding where
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
 import GF.Text.Coding
-import GF.Infra.Option
+--import GF.Infra.Option
 import GF.Data.Operations
 
-import Data.Char
+--import Data.Char
 import System.IO
 import qualified Data.ByteString.Char8 as BS
 

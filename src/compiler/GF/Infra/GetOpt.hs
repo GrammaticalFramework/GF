@@ -69,7 +69,7 @@ module GF.Infra.GetOpt (
 
 import Prelude -- necessary to get dependencies right
 
-import Data.List ( isPrefixOf, find )
+--import Data.List ( isPrefixOf, find )
 
 -- |What to do with options following non-options
 data ArgOrder a

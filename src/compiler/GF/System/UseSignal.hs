@@ -18,7 +18,7 @@ module GF.System.UseSignal where
 import Control.Concurrent (myThreadId, killThread)
 import Control.Exception (SomeException,catch)
 import Prelude hiding (catch)
-import System.IO
+--import System.IO
 
 #ifdef mingw32_HOST_OS
 import GHC.ConsoleHandler

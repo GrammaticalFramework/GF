@@ -13,10 +13,8 @@ import GF.Command.Abstract
 import GF.Command.Parse
 import PGF
 import PGF.Data
-import PGF.Morphology
-import GF.System.Signal
+--import PGF.Morphology
 import GF.Infra.SIO
-import GF.Infra.Option
 
 import Text.PrettyPrint
 import Control.Monad(when)

@@ -1,5 +1,5 @@
 {-# LANGUAGE CPP,MagicHash,BangPatterns #-}
-{-# LINE 3 "lexer/Lexer.x" #-}
+-- {-# LINE 3 "lexer/Lexer.x" #-}
 
 module GF.Grammar.Lexer
          ( Token(..), Posn(..)
@@ -8,7 +8,7 @@ module GF.Grammar.Lexer
          ) where
 
 import GF.Infra.Ident
-import GF.Data.Operations
+--import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map
 

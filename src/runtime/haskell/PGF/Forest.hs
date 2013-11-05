@@ -32,7 +32,7 @@ import qualified Data.IntSet as IntSet
 import qualified Data.IntMap as IntMap
 import Control.Monad
 import Control.Monad.State
-import GF.Data.Utilities (nub')
+import PGF.Utilities (nub')
 
 data Forest
   = Forest

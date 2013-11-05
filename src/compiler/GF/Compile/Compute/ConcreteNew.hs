@@ -9,15 +9,15 @@ import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
 import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
 import GF.Grammar.PatternMatch(matchPattern,measurePatt)
-import GF.Grammar.Lockfield(unlockRecord,lockLabel,isLockLabel,lockRecType)
+import GF.Grammar.Lockfield(lockLabel,isLockLabel,lockRecType) --unlockRecord
 import GF.Compile.Compute.Value hiding (Error)
 import GF.Compile.Compute.Predef(predef,predefName,delta)
 import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
 import GF.Data.Operations(Err,err,errIn,maybeErr,combinations,mapPairsM)
-import GF.Data.Utilities(mapFst,mapSnd,mapBoth,apBoth,apSnd)
+import GF.Data.Utilities(mapFst,mapSnd,mapBoth)
 import Control.Monad(ap,liftM,liftM2,mplus,unless)
-import Data.List (findIndex,intersect,isInfixOf,nub,elemIndex,(\\))
-import Data.Char (isUpper,toUpper,toLower)
+import Data.List (findIndex,intersect,nub,elemIndex,(\\)) --,isInfixOf
+--import Data.Char (isUpper,toUpper,toLower)
 import Text.PrettyPrint
 import qualified Data.Map as Map
 --import Debug.Trace(trace)

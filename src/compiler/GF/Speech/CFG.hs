@@ -8,16 +8,16 @@ module GF.Speech.CFG where
 
 import GF.Data.Utilities
 import PGF
-import GF.Infra.Option
+--import GF.Infra.Option
 import GF.Data.Relation
 
-import Control.Monad
-import Control.Monad.State (State, get, put, evalState)
+--import Control.Monad
+--import Control.Monad.State (State, get, put, evalState)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.List
-import Data.Maybe (fromMaybe)
-import Data.Monoid (mconcat)
+--import Data.Maybe (fromMaybe)
+--import Data.Monoid (mconcat)
 import Data.Set (Set)
 import qualified Data.Set as Set
 

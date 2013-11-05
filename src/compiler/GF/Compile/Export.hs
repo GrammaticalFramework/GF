@@ -1,14 +1,14 @@
 module GF.Compile.Export where
 
 import PGF
-import PGF.Printer
+import PGF.Printer(ppPGF)
 import GF.Compile.PGFtoHaskell
 import GF.Compile.PGFtoProlog
 import GF.Compile.PGFtoLProlog
 import GF.Compile.PGFtoJS
 import GF.Compile.PGFtoPython
 import GF.Infra.Option
-import GF.Speech.CFG
+--import GF.Speech.CFG
 import GF.Speech.PGFToCFG
 import GF.Speech.SRGS_ABNF
 import GF.Speech.SRGS_XML

@@ -14,13 +14,12 @@ import Prelude hiding (putStrLn)
 
 import PGF
 
-import PGF.VisualizeTree(getDepLabels)
 import PGF.Macros(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
 import PGF.Data(abstract,funs,cats,Literal(LStr),Expr(EFun,ELit)) ----
-import PGF.Morphology(isInMorpho,morphoKnown)
+--import PGF.Morphology(isInMorpho,morphoKnown)
 import PGF.Printer(ppFun,ppCat)
-import PGF.Probabilistic(rankTreesByProbs,probTree,setProbabilities)
-import PGF.Generate (generateRandomFrom) ----
+--import PGF.Probabilistic(rankTreesByProbs,probTree,setProbabilities)
+--import PGF.Generate (generateRandomFrom) ----
 import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
 import PGF.Optimize(optimizePGF)
 
@@ -30,7 +29,7 @@ import GF.Compile.ExampleBased
 import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
 import GF.Infra.UseIO(writeUTF8File)
 import GF.Infra.SIO
-import GF.Data.ErrM ----
+--import GF.Data.ErrM ----
 import GF.Command.Abstract
 import GF.Command.Messages
 import GF.Text.Lexing
@@ -43,13 +42,13 @@ import GF.Command.TreeOperations ---- temporary place for typecheck and compute
 import GF.Data.Operations
 
 import Data.Binary (encodeFile)
-import Data.List
+import Data.List(intersperse,nub)
 import Data.Maybe
 import qualified Data.Map as Map
 --import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
 import Text.PrettyPrint
 import Data.List (sort)
-import Debug.Trace
+--import Debug.Trace
 --import System.Random (newStdGen) ----
 
 
@@ -940,7 +939,7 @@ allCommands = Map.fromList [
          let outp = valStrOpts "output" "dot" opts
          mlab <- case file of
            "" -> return Nothing
-           _  -> restricted (readFile file) >>= return . Just . getDepLabels . lines
+           _  -> (Just . getDepLabels . lines) `fmap` restricted (readFile file)
          let lang = optLang pgf opts
          let grphs = unlines $ map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
          if isFlag "view" opts || isFlag "format" opts then do

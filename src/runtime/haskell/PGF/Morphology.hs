@@ -11,7 +11,7 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
-import Data.List (intersperse)
+--import Data.List (intersperse)
 import Data.Char (isDigit) ----
 
 -- these 4 definitions depend on the datastructure used

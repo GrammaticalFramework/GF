@@ -13,7 +13,6 @@ import GF.Data.Operations (chunks,err)
 import GF.Grammar hiding (Ident,isPrefixOf)
 import GF.Grammar.Analyse
 import GF.Grammar.Parser (runP, pExp)
-import GF.Grammar.Printer (ppGrammar, ppModule)
 import GF.Grammar.ShowTerm
 import GF.Grammar.Lookup (allOpers,allOpersTo)
 import GF.Compile.Rename(renameSourceTerm)
@@ -25,7 +24,6 @@ import GF.Infra.CheckM
 import GF.Infra.UseIO(ioErrorText)
 import GF.Infra.SIO
 import GF.Infra.Option
-import GF.Infra.Ident (showIdent)
 import qualified System.Console.Haskeline as Haskeline
 import GF.Text.Coding(decodeUnicode,encodeUnicode)
 
@@ -36,7 +34,6 @@ import PGF.Data
 import PGF.Macros
 
 import Data.Char
-import Data.Maybe
 import Data.List(nub,isPrefixOf,isInfixOf,partition)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS

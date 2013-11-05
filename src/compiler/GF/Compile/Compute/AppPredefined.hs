@@ -16,7 +16,7 @@ module GF.Compile.Compute.AppPredefined (
           isInPredefined, typPredefined, arrityPredefined, predefModInfo, appPredefined
 		  ) where
 
-import GF.Infra.Ident(identS)
+--import GF.Infra.Ident(identS)
 import GF.Infra.Option
 import GF.Data.Operations
 import GF.Grammar

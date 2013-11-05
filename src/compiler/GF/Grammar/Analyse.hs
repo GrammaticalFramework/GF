@@ -10,7 +10,7 @@ module GF.Grammar.Analyse (
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
-import GF.Infra.Option ---
+--import GF.Infra.Option ---
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
 
@@ -18,7 +18,7 @@ import GF.Data.Operations
 
 import qualified Data.Map as Map
 import Data.List (nub)
-import Debug.Trace
+--import Debug.Trace
 
 stripSourceGrammar :: SourceGrammar -> SourceGrammar
 stripSourceGrammar sgr = mGrammar [(i, m{jments = Map.map stripInfo (jments m)}) | (i,m) <- modules sgr]

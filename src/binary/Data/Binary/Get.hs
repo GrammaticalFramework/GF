@@ -68,7 +68,7 @@ module Data.Binary.Get (
 
   ) where
 
-import Control.Monad (when,liftM,ap)
+import Control.Monad (when,liftM) -- ap
 import Control.Monad.Fix
 import Data.Maybe (isNothing)
 
@@ -95,7 +95,7 @@ import Data.STRef
 #if defined(__GLASGOW_HASKELL__) && !defined(__HADDOCK__)
 import GHC.Base
 import GHC.Word
-import GHC.Int
+--import GHC.Int
 #endif
 
 -- | The parse state

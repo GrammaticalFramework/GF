@@ -8,9 +8,9 @@
 
 module GF.Compile.PGFtoProlog (grammar2prolog) where
 
-import PGF.CId
+import PGF(mkCId,wildCId,showCId)
 import PGF.Data
-import PGF.Macros
+--import PGF.Macros
 
 import GF.Data.Operations
 

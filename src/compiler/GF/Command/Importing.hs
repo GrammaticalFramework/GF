@@ -12,7 +12,7 @@ import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
 
-import Data.List (nubBy)
+--import Data.List (nubBy)
 import System.FilePath
 
 -- import a grammar in an environment where it extends an existing grammar

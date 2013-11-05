@@ -2,7 +2,7 @@ module GFC (mainGFC, writePGF) where
 -- module Main where
 
 import PGF
-import PGF.CId
+--import PGF.CId
 import PGF.Data
 import PGF.Optimize
 import GF.Index

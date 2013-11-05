@@ -26,7 +26,7 @@ import GF.Grammar
 import GF.Grammar.Predef
 
 import Control.Monad
-import Data.List (sortBy)
+--import Data.List (sortBy)
 import Data.Maybe
 import Text.PrettyPrint
 

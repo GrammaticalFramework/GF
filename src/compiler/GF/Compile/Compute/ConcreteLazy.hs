@@ -17,9 +17,9 @@ module GF.Compile.Compute.ConcreteLazy (computeConcrete, computeTerm,checkPredef
 import GF.Data.Operations
 import GF.Grammar.Grammar
 import GF.Infra.Ident
-import GF.Infra.Option
+--import GF.Infra.Option
 import GF.Data.Str
-import GF.Grammar.ShowTerm
+--import GF.Grammar.ShowTerm
 import GF.Grammar.Printer
 import GF.Grammar.Predef
 import GF.Grammar.Macros
@@ -30,8 +30,8 @@ import GF.Grammar.Lockfield (isLockLabel,unlockRecord) ----
 
 import GF.Compile.Compute.AppPredefined
 
-import Data.List (nub,intersperse)
-import Control.Monad (liftM2, liftM)
+import Data.List (nub) --intersperse
+--import Control.Monad (liftM2, liftM)
 import Control.Monad.Identity
 import Text.PrettyPrint
 

@@ -9,13 +9,13 @@ import Data.List (isInfixOf)
 import Data.Char (isUpper,toLower,toUpper)
 import Control.Monad(ap)
 
-import GF.Data.Utilities (mapSnd,apBoth)
+import GF.Data.Utilities (apBoth) --mapSnd
 
 import GF.Compile.Compute.Value
-import GF.Infra.Ident (Ident,varX,showIdent)
-import GF.Data.Operations(Err,err)
+import GF.Infra.Ident (Ident,showIdent) --,varX
+import GF.Data.Operations(Err) -- ,err
 import GF.Grammar.Predef
-import PGF.Data(BindType(..))
+--import PGF.Data(BindType(..))
 
 --------------------------------------------------------------------------------
 class Predef a where

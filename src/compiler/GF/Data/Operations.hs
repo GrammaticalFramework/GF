@@ -60,10 +60,10 @@ module GF.Data.Operations (-- * misc functions
 		  ) where
 
 import Data.Char (isSpace, toUpper, isSpace, isDigit)
-import Data.List (nub, sortBy, sort, deleteBy, nubBy, partition, (\\))
+import Data.List (nub, partition, (\\))
 import qualified Data.Map as Map
 import Data.Map (Map)
-import Control.Monad (liftM,liftM2, MonadPlus, mzero, mplus)
+import Control.Monad (liftM,liftM2)
 
 import GF.Data.ErrM
 import GF.Data.Relation

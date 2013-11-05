@@ -8,10 +8,10 @@ import GF.Infra.UseIO
 import GF.Data.Operations
 import GF.Grammar
 
-import Data.List
+--import Data.List
 import qualified Data.Map as Map
 import qualified Data.Set as Set
-import Control.Monad
+--import Control.Monad
 import Text.PrettyPrint
 import System.FilePath
 
