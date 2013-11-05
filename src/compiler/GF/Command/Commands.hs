@@ -541,6 +541,7 @@ allCommands = Map.fromList [
        ],
      exec = \env@(pgf, mos) opts -> return . fromStrings . optLins pgf (opts ++ [OOpt "chunks"]),
      options = [
+       ("treebank","show the tree and tag linearizations with language names")
        ] ++ stringOpOptions,
      flags = [
        ("lang","the languages of linearization (comma-separated, no spaces)")
@@ -1170,12 +1171,16 @@ allCommands = Map.fromList [
      _ -> map (optLin pgf opts) ts
    optLin pgf opts t = unlines $
      case opts of
+       _ | isOpt "treebank" opts && isOpt "chunks" opts ->
+         (showCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
+         [showCId lang ++ ": " ++ li | (lang,li) <- linChunks pgf opts t] --linear pgf opts lang t | lang <- optLangs pgf opts]
        _ | isOpt "treebank" opts ->
          (showCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
          [showCId lang ++ ": " ++ linear pgf opts lang t | lang <- optLangs pgf opts]
-       _ | isOpt "chunks" opts ->
-            [unwords (intersperse "<+>" (map (linear pgf opts lang) (treeChunks t))) | lang <- optLangs pgf opts]
-       _  -> [linear pgf opts lang t | lang <- optLangs pgf opts]
+       _ | isOpt "chunks" opts -> map snd $ linChunks pgf opts t   
+       _ -> [linear pgf opts lang t | lang <- optLangs pgf opts]
+   linChunks pgf opts t = 
+     [(lang, unwords (intersperse "<+>" (map (linear pgf opts lang) (treeChunks t)))) | lang <- optLangs pgf opts]
 
    linear :: PGF -> [Option] -> CId -> Expr -> String
    linear pgf opts lang = let unl = unlex opts lang in case opts of
