@@ -1473,39 +1473,37 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 		break;
 	}
 	case PGF_SYMBOL_KP: {
-		if (ps->after != NULL) {
-			PgfSymbolKP* skp = gu_variant_data(sym);
-			
-			PgfSymbol sym;
-			if (item->alt == 0) {
-				PgfItem* new_item;
+		PgfSymbolKP* skp = gu_variant_data(sym);
 
-				new_item = pgf_item_copy(item, ps);
-				new_item->alt = 1;
-				new_item->alt_idx = 0;
-				pgf_parsing_pre(ps, new_item, skp->default_form);
+		PgfSymbol sym;
+		if (item->alt == 0) {
+			PgfItem* new_item;
 
-				for (size_t i = 0; i < skp->n_forms; i++) {
-					PgfSymbols* syms = skp->forms[i].form;
-					PgfSymbols* syms2 = skp->default_form;
-					bool skip = false; /*pgf_tokens_equal(toks, toks2);
-					for (size_t j = 0; j < i; j++) {
-						PgfTokens* toks2 = skp->forms[j].form;
-						skip |= pgf_tokens_equal(toks, toks2);
-					}*/
-					if (!skip) {
-						new_item = pgf_item_copy(item, ps);
-						new_item->alt = i+2;
-						new_item->alt_idx = 0;
-						pgf_parsing_pre(ps, new_item, syms);
-					}
+			new_item = pgf_item_copy(item, ps);
+			new_item->alt = 1;
+			new_item->alt_idx = 0;
+			pgf_parsing_pre(ps, new_item, skp->default_form);
+
+			for (size_t i = 0; i < skp->n_forms; i++) {
+				PgfSymbols* syms = skp->forms[i].form;
+				PgfSymbols* syms2 = skp->default_form;
+				bool skip = false; /*pgf_tokens_equal(toks, toks2);
+				for (size_t j = 0; j < i; j++) {
+					PgfTokens* toks2 = skp->forms[j].form;
+					skip |= pgf_tokens_equal(toks, toks2);
+				}*/
+				if (!skip) {
+					new_item = pgf_item_copy(item, ps);
+					new_item->alt = i+2;
+					new_item->alt_idx = 0;
+					pgf_parsing_pre(ps, new_item, syms);
 				}
-			} else {
-				PgfSymbols* syms =
-				   (item->alt == 1) ? skp->default_form : 
-				                      skp->forms[item->alt-2].form;
-				pgf_parsing_pre(ps, item, syms);
 			}
+		} else {
+			PgfSymbols* syms =
+			   (item->alt == 1) ? skp->default_form : 
+								  skp->forms[item->alt-2].form;
+			pgf_parsing_pre(ps, item, syms);
 		}
 		break;
 	}
