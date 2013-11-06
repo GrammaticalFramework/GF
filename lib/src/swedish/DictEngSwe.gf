@@ -7064,7 +7064,7 @@ lin dysprosium_N = dysprosium_nn_1_N ; -- status=guess
 lin dystopia_N = dystopi_nn_1_N ; -- status=guess
 lin dystrophy_N = dystrofi_nn_1_N ; -- status=guess
 lin each_Adv = var_ab_1_Adv ; -- comment=1
-lin each_Det = M.mkDet "varjd" singular  ; -- comment=var och en
+lin each_Det = M.mkDet "varje" singular  ; -- comment=var och en
 lin eager_A = angelaegen_av_1_1_A ; -- comment=4
 lin eagerness_N = iver_nn_1_N ; -- comment=1
 lin eagle_N = oern_nn_1_1_N ; -- comment=1
