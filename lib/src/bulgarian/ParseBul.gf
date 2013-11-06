@@ -25,7 +25,6 @@ open ResBul, Prelude in {
 
 flags
   literal=Symb ;
-  beam_size=0.95 ;
   coding = utf8 ;
 
 lin

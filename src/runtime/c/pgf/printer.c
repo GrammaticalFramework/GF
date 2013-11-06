@@ -48,7 +48,7 @@ pgf_print_cat(GuMapItor* fn, const void* key, void* value,
 		ctxt = next;
 	}
 
-    gu_printf(out, err, " ;   -- %f\n",cat->meta_prob);
+    gu_printf(out, err, " ;   -- %f\n", cat->prob);
 }
 
 void

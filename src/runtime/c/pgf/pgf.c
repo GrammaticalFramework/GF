@@ -35,63 +35,6 @@ pgf_read(const char* fpath,
 	return pgf;
 }
 
-void
-pgf_load_meta_child_probs(PgfPGF* pgf, const char* fpath,
-                          GuPool* pool, GuExn* err)
-{
-	FILE *fp = fopen(fpath, "r");
-	if (!fp) {
-		gu_raise_errno(err);
-		return;
-	}
-
-	GuPool* tmp_pool = gu_new_pool();
-	
-	for (;;) {
-		char cat1[21];
-		char cat2[21];
-		prob_t prob;
-
-		if (fscanf(fp, "%20s\t%20s\t%f", cat1, cat2, &prob) < 3)
-			break;
-
-		prob = - log(prob);
-
-		PgfAbsCat* abscat1 =
-			gu_map_get(pgf->abstract.cats, cat1, PgfAbsCat*);
-		if (abscat1 == NULL) {
-			GuExnData* exn = gu_raise(err, PgfExn);
-			exn->data = "Unknown category name";
-			goto close;
-		}
-
-		if (strcmp(cat2, "*") == 0) {
-			abscat1->meta_prob = prob;
-		} else if (strcmp(cat2, "_") == 0) {
-			abscat1->meta_token_prob = prob;
-		} else {
-			PgfAbsCat* abscat2 = gu_map_get(pgf->abstract.cats, cat2, PgfAbsCat*);
-			if (abscat2 == NULL) {
-				gu_raise(err, PgfExn);
-				GuExnData* exn = gu_raise(err, PgfExn);
-				exn->data = "Unknown category name";
-				goto close;
-			}
-
-			if (abscat1->meta_child_probs == NULL) {
-				abscat1->meta_child_probs = 
-					gu_map_type_new(PgfMetaChildMap, pool);
-			}
-
-			gu_map_put(abscat1->meta_child_probs, abscat2, prob_t, prob);
-		}
-	}
-	
-close:
-	gu_pool_free(tmp_pool);
-	fclose(fp);
-}
-
 GuString
 pgf_abstract_name(PgfPGF* pgf)
 {

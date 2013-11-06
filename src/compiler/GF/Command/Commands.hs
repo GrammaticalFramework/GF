@@ -1134,15 +1134,19 @@ allCommands = Map.fromList [
        case arg of
          [EFun id] -> case Map.lookup id (funs (abstract pgf)) of
                         Just fd -> do putStrLn $ render (ppFun id fd)
-                                      putStrLn ("Probability: "++show (probTree pgf (EFun id)))
+                                      let (_,_,_,prob,_) = fd
+                                      putStrLn ("Probability: "++show prob)
                                       return void
                         Nothing -> case Map.lookup id (cats (abstract pgf)) of
-                                     Just hyps -> do putStrLn $
-                                                        render (ppCat id hyps $$
+                                     Just cd   -> do putStrLn $
+                                                        render (ppCat id cd $$
                                                                 if null (functionsToCat pgf id)
                                                                   then empty
                                                                   else space $$
-                                                                       vcat [ppFun fid (ty,0,Just [],0,0) | (fid,ty) <- functionsToCat pgf id])
+                                                                       vcat [ppFun fid (ty,0,Just [],0,0) | (fid,ty) <- functionsToCat pgf id] $$
+                                                                       space)
+                                                     let (_,_,prob,_) = cd
+                                                     putStrLn ("Probability: "++show prob)
                                                      return void
                                      Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
                                                      return void

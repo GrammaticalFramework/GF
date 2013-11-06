@@ -516,10 +516,6 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 		gu_return_on_exn(rdr->err, NULL);
 	}
 
-	abscat->meta_prob = INFINITY;
-	abscat->meta_token_prob = INFINITY;
-    abscat->meta_child_probs = NULL;
-
     GuBuf* functions = gu_new_buf(PgfAbsFun*, rdr->tmp_pool);
 
 	size_t n_functions = pgf_read_len(rdr);
@@ -537,6 +533,8 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 		assert(absfun != NULL);
 		gu_buf_push(functions, PgfAbsFun*, absfun);
 	}
+
+	abscat->prob = - log(gu_in_f64be(rdr->in, rdr->err));
 
 	pgf_jit_predicate(rdr->jit_state, abscats, abscat, functions);
 
@@ -1154,6 +1152,8 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, PgfAbsFun* abs_lin_fun)
 	concr->name = 
 		pgf_read_cid(rdr, rdr->opool);
 	gu_return_on_exn(rdr->err, NULL);
+
+	concr->abstr = abstr;
 
 	concr->cflags =
 		pgf_read_flags(rdr);

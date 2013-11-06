@@ -67,7 +67,7 @@ functionsToCat :: PGF -> CId -> [(CId,Type)]
 functionsToCat pgf cat =
   [(f,ty) | (_,f) <- fs, Just (ty,_,_,_,_) <- [Map.lookup f $ funs $ abstract pgf]]
  where 
-   (_,fs,_) = lookMap ([],[],0) cat $ cats $ abstract pgf
+   (_,fs,_,_) = lookMap ([],[],0,0) cat $ cats $ abstract pgf
 
 -- | List of functions that lack linearizations in the given language.
 missingLins :: PGF -> Language -> [CId]
@@ -82,7 +82,7 @@ restrictPGF :: (CId -> Bool) -> PGF -> PGF
 restrictPGF cond pgf = pgf {
   abstract = abstr {
     funs = Map.filterWithKey (\c _ -> cond c) (funs abstr),
-    cats = Map.map (\(hyps,fs,addr) -> (hyps,filter (cond . snd) fs,addr)) (cats abstr)
+    cats = Map.map (\(hyps,fs,p,addr) -> (hyps,filter (cond . snd) fs,p,addr)) (cats abstr)
     }
   }  ---- restrict concrs also, might be needed
  where

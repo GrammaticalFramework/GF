@@ -104,7 +104,7 @@ writeByteCode opts pgf
   where
     addrs = 
       [(id,addr) | (id,(_,_,_,_,addr)) <- Map.toList (funs (abstract pgf))] ++
-      [(id,addr) | (id,(_,_,addr))     <- Map.toList (cats (abstract pgf))]
+      [(id,addr) | (id,(_,_,_,addr))     <- Map.toList (cats (abstract pgf))]
 
 writePGF :: Options -> PGF -> IOE ()
 writePGF opts pgf = do

@@ -40,13 +40,13 @@ instance Binary CId where
 instance Binary Abstr where
   put abs = put (aflags abs, 
                  fmap (\(w,x,y,z,_) -> (w,x,y,z)) (funs abs),
-                 fmap (\(x,y,_) -> (x,y)) (cats abs))
+                 fmap (\(x,y,z,_) -> (x,y,z)) (cats abs))
   get = do aflags <- get
            funs <- get
            cats <- get
            return (Abstr{ aflags=aflags
                         , funs=fmap (\(w,x,y,z) -> (w,x,y,z,0)) funs
-                        , cats=fmap (\(x,y) -> (x,y,0)) cats
+                        , cats=fmap (\(x,y,z) -> (x,y,z,0)) cats
                         , code=BS.empty                        
                         })
   

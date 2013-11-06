@@ -29,10 +29,10 @@ data PGF = PGF {
 data Abstr = Abstr {
   aflags  :: Map.Map CId Literal,                            -- ^ value of a flag
   funs    :: Map.Map CId (Type,Int,Maybe [Equation],Double,BCAddr), -- ^ type, arrity and definition of function + probability
-  cats    :: Map.Map CId ([Hypo],[(Double, CId)],BCAddr),    -- ^ 1. context of a category
-                                                             -- ^ 2. functions of a category. The order in the list is important,
-                                                             -- this is the order in which the type singatures are given in the source.
-                                                             -- The termination of the exhaustive generation might depend on this.
+  cats    :: Map.Map CId ([Hypo],[(Double, CId)],Double,BCAddr),    -- ^ 1. context of a category
+                                                                    --   2. functions of a category. The functions are stored
+                                                                    --      in decreasing probability order.
+                                                                    --   3. probability
   code    :: BS.ByteString
   }
 

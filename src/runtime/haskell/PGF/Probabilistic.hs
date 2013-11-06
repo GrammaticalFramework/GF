@@ -24,13 +24,14 @@ import Data.Maybe (fromMaybe) --, fromJust
 -- the probabilities for the different functions in a grammar.
 data Probabilities = Probs {
   funProbs :: Map.Map CId Double,
-  catProbs :: Map.Map CId [(Double, CId)]
+  catProbs :: Map.Map CId (Double, [(Double, CId)])
   }
 
 -- | Renders the probability structure as string
 showProbabilities :: Probabilities -> String
-showProbabilities = unlines . map pr . Map.toList . funProbs where
-  pr (f,d) = showCId f ++ "\t" ++ show d
+showProbabilities = unlines . concatMap prProb . Map.toList . catProbs where
+  prProb (c,(p,fns)) = pr (p,c) : map pr fns
+  pr (p,f) = showCId f ++ "\t" ++ show p
 
 -- | Reads the probabilities from a file.
 -- This should be a text file where on every line
@@ -50,8 +51,12 @@ readProbabilitiesFromFile file pgf = do
 -- for the result category.
 mkProbabilities :: PGF -> Map.Map CId Double -> Probabilities
 mkProbabilities pgf probs =
-  let funs1 = Map.fromList [(f,p) | (_,cf) <- Map.toList cats1, (p,f) <- cf]
-      cats1 = Map.map (\(_,fs,_) -> sortBy cmpProb (fill fs)) (cats (abstract pgf))
+  let funs1 = Map.fromList [(f,p) | (_,(_,fns)) <- Map.toList cats1, (p,f) <- fns]
+      cats1 = Map.mapWithKey (\c (_,fns,_,_) -> 
+                                 let p'   = fromMaybe 0 (Map.lookup c probs)
+                                     fns' = sortBy cmpProb (fill fns)
+                                 in (p', fns'))
+                             (cats (abstract pgf))
   in Probs funs1 cats1
   where
     cmpProb (p1,_) (p2,_) = compare p2 p1
@@ -71,15 +76,15 @@ defaultProbabilities pgf = mkProbabilities pgf Map.empty
 
 getProbabilities :: PGF -> Probabilities
 getProbabilities pgf = Probs {
-  funProbs = Map.map (\(_,_,_,p,_) -> p) (funs (abstract pgf)),
-  catProbs = Map.map (\(_,fns,_) -> fns) (cats (abstract pgf))
+  funProbs = Map.map (\(_,_,_,p,_) -> p      ) (funs (abstract pgf)),
+  catProbs = Map.map (\(_,fns,p,_) -> (p,fns)) (cats (abstract pgf))
   }
 
 setProbabilities :: Probabilities -> PGF -> PGF
 setProbabilities probs pgf = pgf {
   abstract = (abstract pgf) {
-    funs = mapUnionWith (\(ty,a,df,_,addr) p -> (ty,a,df,p,addr)) (funs (abstract pgf)) (funProbs probs),
-    cats = mapUnionWith (\(hypos,_,addr) fns -> (hypos,fns,addr)) (cats (abstract pgf)) (catProbs probs)
+    funs = mapUnionWith (\(ty,a,df,_,addr) p       -> (ty,a,df,  p,addr)) (funs (abstract pgf)) (funProbs probs),
+    cats = mapUnionWith (\(hypos,_,_,addr) (p,fns) -> (hypos,fns,p,addr)) (cats (abstract pgf)) (catProbs probs)
   }}
   where
     mapUnionWith f map1 map2 = 
@@ -102,7 +107,7 @@ rankTreesByProbs pgf ts = sortBy (\ (_,p) (_,q) -> compare q p)
 
 mkProbDefs :: PGF -> ([[CId]],[(CId,Type,[Equation])])
 mkProbDefs pgf =
-  let cs = [(c,hyps,fns) | (c,(hyps0,fs,_)) <- Map.toList (cats (abstract pgf)),
+  let cs = [(c,hyps,fns) | (c,(hyps0,fs,_,_)) <- Map.toList (cats (abstract pgf)),
                            not (elem c [cidString,cidInt,cidFloat]),
 	                       let hyps = zipWith (\(bt,_,ty) n -> (bt,mkCId ('v':show n),ty))
 	                                          hyps0

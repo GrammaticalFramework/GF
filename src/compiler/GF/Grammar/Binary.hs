@@ -17,6 +17,7 @@ import Data.Binary
 --import Control.Monad
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
+import Text.PrettyPrint (render)
 
 import GF.Data.Operations
 import GF.Infra.Ident
@@ -24,9 +25,10 @@ import GF.Infra.Option
 import GF.Grammar.Grammar
 
 import PGF() -- Binary instances
+import PGF.Data(ppLit)
 
 -- Please change this every time when the GFO format is changed
-gfoVersion = "GF02"
+gfoVersion = "GF03"
 
 instance Binary Ident where
   put id = put (ident2bs id)
@@ -91,7 +93,7 @@ instance Binary ModuleStatus where
 instance Binary Options where
   put = put . optionsGFO
   get = do opts <- get
-           case parseModuleOptions ["--" ++ flag ++ "=" ++ value | (flag,value) <- opts] of
+           case parseModuleOptions ["--" ++ flag ++ "=" ++ render (ppLit value) | (flag,value) <- opts] of
              Ok  x   -> return x
              Bad msg -> fail msg
 
