@@ -10417,7 +10417,7 @@ lin herd_V2 = mkV2 (valla_vb_1_V) ; -- status=guess, src=wikt
 lin herdsman_N = herde_nn_1_N ; -- status=guess
 lin here7from_Adv = S.here7from_Adv  ; -- comment=CHECKED
 lin here7to_Adv = S.here7to_Adv  ; -- comment=CHECKED
-lin here_Adv = daa_ab_2_1_Adv ; -- comment=7
+lin here_Adv = mkAdv "här";
 lin here_N = nu_nn_1_N ; -- comment=3
 lin hereabout_Adv = mkAdv "häromkring" ; -- status=guess
 lin hereby_Adv = haermed_ab_1_1_Adv ; -- comment=1
@@ -21915,7 +21915,7 @@ lin theosophy_N = teosofi_nn_1_N ; -- status=guess
 lin therapeutic_A = terapeutisk_av_1_A ; -- comment=1
 lin therapeutics_N = terapi_nn_1_N ; -- comment=1
 lin therapist_N = terapeut_nn_1_N ; -- comment=1
-lin therapy_N = terapi_nn_1_N ; -- comment=2
+lin therapy_N = terapi_nn_1_N ;
 lin there7from_Adv = S.there7from_Adv  ; -- comment=CHECKED
 lin there7to_Adv = S.there7to_Adv  ; -- comment=CHECKED
 lin there_Adv = S.there_Adv  ; -- comment=CHECKED
