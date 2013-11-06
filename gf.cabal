@@ -89,7 +89,6 @@ Library
     PGF.Macros
     PGF.Optimize
     PGF.Printer
-    PGF.Signature
     PGF.Tree
     PGF.Utilities
   other-modules:
