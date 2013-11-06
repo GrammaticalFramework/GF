@@ -8133,8 +8133,7 @@ lin fatal_A = oedesdiger_av_1_1_A ; -- comment=8
 lin fatalistic_A = fatalistisk_av_1_A ; -- comment=1
 lin fate_N = oede_nn_1_1_N ; -- comment=5
 lin fateful_A = oedesmaettad_av_1_1_A ; -- comment=3
-lin father_N = upphovsman_nn_1_N ; -- comment=5
-lin father_N2 = L.father_N2  ; -- comment=CHECKED
+lin father_N = far_nn_1_N ; -- comment=5
 lin fatherland_N = fosterland_nn_1_N | mkN "fädernesland" ; -- status=guess status=guess
 lin fathom_N = famn_nn_1_N ; -- comment=1
 lin fathom_V2 = mkV2 (omfamna_vb_1_V) | mkV2 (mkV (mkV "famna") "om") ; -- status=guess, src=wikt status=guess, src=wikt
