@@ -1647,7 +1647,7 @@ lin ban_N = foerbud_nn_1_1_N ; -- comment=4
 lin ban_V2 = mkV2 (banna_vb_1_V) ; -- status=guess, src=wikt
 lin banal_A = banal_av_1_A ; -- comment=1
 lin banality_N = banalitet_nn_1_N ; -- comment=1
-lin banana_N = banan_nn_1_N ; -- comment=2
+lin banana_N = banan_nn_1_N ;
 lin band_N = skaerp_nn_1_1_N ; -- comment=20
 lin band_V = skaerpa_vb_1_1_V ; -- comment=4
 lin band_V2 = mkV2 (mkV (mkV "förena") "sig") | mkV2 (mkV (mkV "gadda") "ihop sig") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -11946,7 +11946,7 @@ lin jug_N = kanna_nn_1_N ; -- comment=8
 lin juggle_V = jonglera_vb_1_V ; -- comment=1
 lin juggle_V2 = mkV2 (jonglera_vb_1_V) ; -- status=guess, src=wikt
 lin juggler_N = jongloer_nn_1_1_N ; -- comment=1
-lin juice_N = soppa_nn_2_N ; -- comment=11
+lin juice_N = saft_nn_1_N ;
 lin juicy_A = saftig_av_1_A ; -- comment=7
 lin jukebox_N = jukebox_nn_1_N ; -- comment=1
 lin july_N = juli_nn_1_N ; -- comment=1
@@ -23671,7 +23671,7 @@ lin wake_V2 = mkV2 (mkV "väcka") ; -- status=guess, src=wikt
 lin wake_up_V = vakna_vb_1_V ; -- comment=2
 lin wakefulness_N = vakenhet_nn_1_N ; -- status=guess
 lin waken_V = vakna_vb_1_V ; -- comment=1
-lin walk_N = omraade_nn_1_1_N ; -- comment=11
+lin walk_N = promenad_nn_1_N ;
 lin walk_V = L.walk_V  ; -- comment=CHECKED
 lin walk_V2 = gaa_ut_vbm_1_1_V2 ; -- comment=17
 lin walk_away_from_V2 = gaa_ut_vbm_1_1_V2 ; -- comment=17
