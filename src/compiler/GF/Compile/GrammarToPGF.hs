@@ -50,12 +50,12 @@ mkCanon2pgf opts gr am = do
             [((cPredefAbs,c), AbsCat (Just (L NoLoc []))) | c <- [cFloat,cInt,cString]] ++ 
             Look.allOrigInfos gr am
 
-        flags = Map.fromList [(mkCId f,if f == "beam_size" then C.LFlt (read x) else C.LStr x) | (f,x) <- optionsPGF aflags]
+        flags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF aflags]
 
         funs = Map.fromList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty, 0, addr)) | 
                                    ((m,f),AbsFun (Just (L _ ty)) ma pty _,addr) <- adefs]
                                    
-        cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c, addr)) |
+        cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c, 0, addr)) |
                                    ((m,c),AbsCat (Just (L _ cont)),addr) <- adefs]
 
         catfuns cat =
@@ -69,7 +69,7 @@ mkCanon2pgf opts gr am = do
                             ([((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]] ++
                              Look.allOrigInfos gr cm)
 
-      let flags = Map.fromList [(mkCId f,if f == "beam_size" then C.LFlt (read x) else C.LStr x) | (f,x) <- optionsPGF cflags]
+      let flags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF cflags]
 
           seqs = (mkSetArray . Set.fromList . concat) $
                      (Map.keys ex_seqs : [maybe [] elems (mseqs mi) | (m,mi) <- allExtends gr cm])

@@ -292,8 +292,8 @@ categories pgf = [c | (c,hs) <- Map.toList (cats (abstract pgf))]
 
 categoryContext pgf cat =
   case Map.lookup cat (cats (abstract pgf)) of
-    Just (hypos,_,_) -> Just hypos
-    Nothing          -> Nothing
+    Just (hypos,_,_,_) -> Just hypos
+    Nothing            -> Nothing
 
 startCat pgf = DTyp [] (lookStartCat pgf) []
 
@@ -301,8 +301,8 @@ functions pgf = Map.keys (funs (abstract pgf))
 
 functionsByCat pgf cat =
   case Map.lookup cat (cats (abstract pgf)) of
-    Just (_,fns,_) -> map snd fns
-    Nothing        -> []
+    Just (_,fns,_,_) -> map snd fns
+    Nothing          -> []
 
 functionType pgf fun =
   case Map.lookup fun (funs (abstract pgf)) of
@@ -325,8 +325,8 @@ browse pgf id = fmap (\def -> (def,producers,consumers)) definition
                                                                                           in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
                    Just (ty,_,Nothing, _,_) -> Just $ render (text "data" <+> ppCId id <+> colon <+> ppType 0 [] ty)
                    Nothing   -> case Map.lookup id (cats (abstract pgf)) of
-                                  Just (hyps,_,_) -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)))
-                                  Nothing         -> Nothing
+                                  Just (hyps,_,_,_) -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)))
+                                  Nothing           -> Nothing
 
     (producers,consumers) = Map.foldWithKey accum ([],[]) (funs (abstract pgf))
       where

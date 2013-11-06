@@ -29,7 +29,7 @@ import GF.Infra.Option
 import GF.Grammar.Values
 import GF.Grammar.Grammar
 
-import PGF.Data (ppMeta)
+import PGF.Data (ppMeta, ppLit)
 import PGF.Printer (ppFId, ppFunId, ppSeqId, ppSeq)
 
 import Text.PrettyPrint
@@ -87,7 +87,7 @@ ppModule q (mn, ModInfo mtype mstat opts exts with opens _ _ mseqs jments) =
 
 ppOptions opts = 
   text "flags" $$
-  nest 2 (vcat [text option <+> equals <+> str value <+> semi | (option,value) <- optionsGFO opts])
+  nest 2 (vcat [text option <+> equals <+> ppLit value <+> semi | (option,value) <- optionsGFO opts])
 
 ppJudgement q (id, AbsCat pcont ) =
   text "cat" <+> ppIdent id <+>

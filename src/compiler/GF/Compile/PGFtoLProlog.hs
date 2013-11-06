@@ -12,7 +12,7 @@ import qualified Data.Map as Map
 grammar2lambdaprolog_mod pgf = render $
   text "module" <+> ppCId (absname pgf) <> char '.' $$
   space $$
-  vcat [ppClauses cat fns | (cat,(_,fs,_)) <- Map.toList (cats (abstract pgf)),
+  vcat [ppClauses cat fns | (cat,(_,fs,_,_)) <- Map.toList (cats (abstract pgf)),
                             let fns = [(f,fromJust (Map.lookup f (funs (abstract pgf)))) | (_,f) <- fs]]
   where
     ppClauses cat fns =
@@ -25,11 +25,11 @@ grammar2lambdaprolog_mod pgf = render $
 grammar2lambdaprolog_sig pgf = render $
   text "sig" <+> ppCId (absname pgf) <> char '.' $$
   space $$
-  vcat [ppCat c hyps <> dot | (c,(hyps,_,_)) <- Map.toList (cats (abstract pgf))] $$
+  vcat [ppCat c hyps <> dot | (c,(hyps,_,_,_)) <- Map.toList (cats (abstract pgf))] $$
   space $$
   vcat [ppFun f ty <> dot | (f,(ty,_,Nothing,_,_)) <- Map.toList (funs (abstract pgf))] $$
   space $$
-  vcat [ppExport c hyps <> dot | (c,(hyps,_,_)) <- Map.toList (cats (abstract pgf))] $$
+  vcat [ppExport c hyps <> dot | (c,(hyps,_,_,_)) <- Map.toList (cats (abstract pgf))] $$
   vcat [ppFunPred f (hyps ++ [(Explicit,wildCId,DTyp [] c es)]) <> dot | (f,(DTyp hyps c es,_,Just _,_,_)) <- Map.toList (funs (abstract pgf))]
 
 ppCat :: CId -> [Hypo] -> Doc

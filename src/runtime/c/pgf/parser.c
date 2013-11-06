@@ -63,7 +63,10 @@ typedef struct {
     int prod_full_count;
 #endif
     PgfItem* free_item;
-    prob_t beam_size;
+
+    prob_t heuristic_factor;
+    prob_t meta_prob;
+	prob_t meta_token_prob;
 } PgfParsing;
 
 typedef enum { BIND_NONE, BIND_HARD, BIND_SOFT } BIND_TYPE;
@@ -1389,11 +1392,13 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 {
 	(void) (err);
 	
-	PgfAbsCat* abscat = (PgfAbsCat*) key;
-    prob_t meta_prob = *((prob_t*) value);
+	PgfAbsCat* abscat = *((PgfAbsCat**) value);
     PgfMetaPredictFn* clo = (PgfMetaPredictFn*) fn;
     PgfParsing* ps = clo->ps;
     PgfItem* meta_item  = clo->meta_item;
+
+	if (abscat->prob == INFINITY)
+		return;
 
     PgfCncCat* cnccat =
 		gu_map_get(ps->concr->cnccats, abscat->name, PgfCncCat*);
@@ -1412,7 +1417,7 @@ pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err
 			PgfItem* item = 
 				pgf_item_copy(meta_item, ps);
 			item->inside_prob +=
-				ccat->viterbi_prob+meta_prob;
+				ccat->viterbi_prob+abscat->prob;
 
 			size_t nargs = gu_seq_length(meta_item->args);
 			item->args = gu_new_seq(PgfPArg, nargs+1, ps->pool);
@@ -1698,18 +1703,14 @@ pgf_parsing_item(PgfParsing* ps, PgfItem* item)
 				}
 				pgf_parsing_complete(ps, item, ep);
 			} else {
-				prob_t meta_token_prob = 
-					item->conts->ccat->cnccat->abscat->meta_token_prob;
+				prob_t meta_token_prob =
+					ps->meta_token_prob;
 				if (meta_token_prob != INFINITY) {
 					pgf_parsing_meta_scan(ps, item, meta_token_prob);
 				}
 
-				PgfCIdMap* meta_child_probs =
-					item->conts->ccat->cnccat->abscat->meta_child_probs;
-				if (meta_child_probs != NULL) {
-					PgfMetaPredictFn clo = { { pgf_parsing_meta_predict }, ps, item };
-					gu_map_iter(meta_child_probs, &clo.fn, NULL);
-				}
+				PgfMetaPredictFn clo = { { pgf_parsing_meta_predict }, ps, item };
+				gu_map_iter(ps->concr->abstr->cats, &clo.fn, NULL);
 			}
 		} else {
 			pgf_parsing_symbol(ps, item, item->curr_sym);
@@ -1721,22 +1722,38 @@ pgf_parsing_item(PgfParsing* ps, PgfItem* item)
 	}
 }
 
-static prob_t
-pgf_parsing_default_beam_size(PgfConcr* concr)
+static void
+pgf_parsing_set_default_factors(PgfParsing* ps, PgfAbstr* abstr)
 {
-	PgfLiteral lit = gu_map_get(concr->cflags, "beam_size", PgfLiteral);
+	PgfLiteral lit;
 	
-	if (gu_variant_is_null(lit))
-		return 0;
+	lit =
+		gu_map_get(abstr->aflags, "heuristic_search_factor", PgfLiteral);
+	if (!gu_variant_is_null(lit)) {
+		GuVariantInfo pi = gu_variant_open(lit);
+		gu_assert (pi.tag == PGF_LITERAL_FLT);
+		ps->heuristic_factor = ((PgfLiteralFlt*) pi.data)->val;
+	}
 
-	GuVariantInfo pi = gu_variant_open(lit);
-	gu_assert (pi.tag == PGF_LITERAL_FLT);	
-	return ((PgfLiteralFlt*) pi.data)->val;
+	lit =
+		gu_map_get(abstr->aflags, "meta_prob", PgfLiteral);
+	if (!gu_variant_is_null(lit)) {
+		GuVariantInfo pi = gu_variant_open(lit);
+		gu_assert (pi.tag == PGF_LITERAL_FLT);
+		ps->meta_prob = - log(((PgfLiteralFlt*) pi.data)->val);
+	}
+
+	lit =
+		gu_map_get(abstr->aflags, "meta_token_prob", PgfLiteral);
+	if (!gu_variant_is_null(lit)) {
+		GuVariantInfo pi = gu_variant_open(lit);
+		gu_assert (pi.tag == PGF_LITERAL_FLT);
+		ps->meta_token_prob = - log(((PgfLiteralFlt*) pi.data)->val);
+	}
 }
 
 static PgfParsing*
-pgf_new_parsing(PgfConcr* concr,
-                GuString sentence, double heuristics,
+pgf_new_parsing(PgfConcr* concr, GuString sentence,
                 GuPool* pool, GuPool* out_pool)
 {
 	PgfParsing* ps = gu_new(PgfParsing, pool);
@@ -1756,7 +1773,11 @@ pgf_new_parsing(PgfConcr* concr,
 	ps->prod_full_count = 0;
 #endif
 	ps->free_item = NULL;
-	ps->beam_size = heuristics;
+	ps->heuristic_factor = 0;
+	ps->meta_prob = INFINITY;
+	ps->meta_token_prob = INFINITY;
+
+	pgf_parsing_set_default_factors(ps, concr->abstr);
 
 	PgfExprMeta *expr_meta =
 		gu_new_variant(PGF_EXPR_META,
@@ -2107,7 +2128,7 @@ pgf_parse_result_is_new(PgfExprState* st)
 // TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 static PgfParsing*
 pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx, 
-                 GuString sentence, double heuristics,
+                 GuString sentence, double heuristic_factor,
                  GuExn* err,
                  GuPool* pool, GuPool* out_pool)
 {
@@ -2121,12 +2142,13 @@ pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx,
 
 	gu_assert(lin_idx < cnccat->n_lins);
 
-	if (heuristics < 0) {
-		heuristics = pgf_parsing_default_beam_size(concr);
+	PgfParsing* ps =
+		pgf_new_parsing(concr, sentence, pool, out_pool);
+
+	if (heuristic_factor >= 0) {
+		ps->heuristic_factor = heuristic_factor;
 	}
 
-	PgfParsing* ps =
-		pgf_new_parsing(concr, sentence, heuristics, pool, out_pool);
 	PgfParseState* state =
 		pgf_new_parse_state(ps, 0, BIND_SOFT);
 
@@ -2156,11 +2178,13 @@ pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx,
                 gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
             }
 
-         	PgfItem *item =
-				pgf_new_item(ps, conts, ps->meta_prod);
-			item->inside_prob =
-				ccat->cnccat->abscat->meta_prob;
-			gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
+			if (ps->meta_prob != INFINITY) {
+				PgfItem *item =
+					pgf_new_item(ps, conts, ps->meta_prod);
+				item->inside_prob =
+					ps->meta_prob;
+				gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
+			}
 		}
 	}
 
@@ -2200,7 +2224,7 @@ pgf_parsing_proceed(PgfParsing* ps)
 		
 		prob_t state_delta =
 			(st->viterbi_prob-(st->next ? st->next->viterbi_prob : 0))*
-			ps->beam_size;
+			ps->heuristic_factor;
 		delta_prob += state_delta;
 		st = st->next;
 	}

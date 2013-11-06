@@ -80,11 +80,6 @@ pgf_read(const char* fpath,
  *
  */
 
-
-void
-pgf_load_meta_child_probs(PgfPGF*, const char* fpath, 
-                          GuPool* pool, GuExn* err);
-
 GuString
 pgf_abstract_name(PgfPGF*);
 

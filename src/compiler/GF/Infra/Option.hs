@@ -43,6 +43,7 @@ import GF.Data.ErrM
 import Data.Set (Set)
 import qualified Data.Set as Set
 
+import PGF.Data(Literal(..))
 
 usageHeader :: String
 usageHeader = unlines 
@@ -170,7 +171,9 @@ data Flags = Flags {
       optWarnings        :: [Warning],
       optDump            :: [Dump],
       optTagsOnly        :: Bool,
-      optBeamSize        :: Maybe Double,
+      optHeuristicFactor :: Maybe Double,
+      optMetaProb        :: Maybe Double,
+      optMetaToknProb    :: Maybe Double,
       optNewComp         :: Bool
     }
   deriving (Show)
@@ -206,16 +209,18 @@ fixRelativeLibPaths curr_dir lib_dir (Options o) = Options (fixPathFlags . o)
 -- Showing options
 
 -- | Pretty-print the options that are preserved in .gfo files.
-optionsGFO :: Options -> [(String,String)]
+optionsGFO :: Options -> [(String,Literal)]
 optionsGFO opts = optionsPGF opts
-      ++ [("coding", flag optEncoding opts)]
+      ++ [("coding", LStr (flag optEncoding opts))]
 
 -- | Pretty-print the options that are preserved in .pgf files.
-optionsPGF :: Options -> [(String,String)]
+optionsPGF :: Options -> [(String,Literal)]
 optionsPGF opts = 
-         maybe [] (\x -> [("language",x)]) (flag optSpeechLanguage opts)
-      ++ maybe [] (\x -> [("startcat",x)]) (flag optStartCat opts)
-      ++ maybe [] (\x -> [("beam_size",show x)]) (flag optBeamSize opts)
+         maybe [] (\x -> [("language",LStr x)]) (flag optSpeechLanguage opts)
+      ++ maybe [] (\x -> [("startcat",LStr x)]) (flag optStartCat opts)
+      ++ maybe [] (\x -> [("heuristic_search_factor",LFlt x)]) (flag optHeuristicFactor opts)
+      ++ maybe [] (\x -> [("meta_prob",LFlt x)]) (flag optMetaProb opts)
+      ++ maybe [] (\x -> [("meta_token_prob",LFlt x)]) (flag optMetaToknProb opts)
 
 -- Option manipulation
 
@@ -272,7 +277,9 @@ defaultFlags = Flags {
       optWarnings        = [],
       optDump            = [],
       optTagsOnly        = False,
-      optBeamSize        = Nothing,
+      optHeuristicFactor = Nothing,
+      optMetaProb        = Nothing,
+      optMetaToknProb    = Nothing,
       optNewComp         =
 #ifdef NEW_COMP
                            True
@@ -358,7 +365,9 @@ optDescr =
      Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
-     Option [] ["beam_size"] (ReqArg readDouble "SIZE") "Set the beam size for statistical parsing",
+     Option [] ["heuristic_search_factor"] (ReqArg (readDouble (\d o -> o { optHeuristicFactor = Just d })) "FACTOR") "Set the heuristic search factor for statistical parsing",
+     Option [] ["meta_prob"] (ReqArg (readDouble (\d o -> o { optMetaProb = Just d })) "PROB") "Set the probability of introducting a meta variable in the parser",
+     Option [] ["meta_token_prob"] (ReqArg (readDouble (\d o -> o { optMetaToknProb = Just d })) "PROB") "Set the probability for skipping a token in the parser",
      Option [] ["new-comp"] (NoArg (set $ \o -> o{optNewComp = True})) "Use the new experimental compiler.",
      Option [] ["old-comp"] (NoArg (set $ \o -> o{optNewComp = False})) "Use old trusty compiler.",
      dumpOption "source" Source,
@@ -433,9 +442,9 @@ optDescr =
                               Nothing -> fail $ "Unknown CFG transformation: " ++ x'
                                                 ++ " Known: " ++ show (map fst cfgTransformNames)
 
-       readDouble x = case reads x of
-                        [(d,"")] -> set $ \o -> o { optBeamSize = Just d }
-                        _        -> fail "A floating point number is expected"
+       readDouble f x = case reads x of
+                          [(d,"")] -> set $ f d
+                          _        -> fail "A floating point number is expected"
 
        dumpOption s d = Option [] ["dump-"++s] (NoArg (set $ \o -> o { optDump = Dump d:optDump o})) ("Dump output of the " ++ s ++ " phase.")
 

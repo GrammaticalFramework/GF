@@ -87,9 +87,7 @@ typedef struct {
 	PgfCId name;
 	PgfHypos* context;
 
-	prob_t meta_prob;
-	prob_t meta_token_prob;
-	PgfMetaChildMap* meta_child_probs;
+	prob_t prob;
 
 	void* predicate;
 } PgfAbsCat;
@@ -230,6 +228,7 @@ typedef GuSeq PgfCncFuns;
 
 struct PgfConcr {
 	PgfCId name;
+	PgfAbstr* abstr;
 	PgfFlags* cflags;
 	PgfPrintNames* printnames;
     GuMap* ccats;
