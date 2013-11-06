@@ -23,7 +23,6 @@ open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Pr
 
 flags
   literal=Symb ;
-  beam_size=0.95 ;
 
 lin
 {-
