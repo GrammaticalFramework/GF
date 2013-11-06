@@ -5,6 +5,9 @@ concrete TranslateFre of Translate =
     PhrasebookFre - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] ** 
   open SyntaxFre, ParadigmsFre, (E = ExtraFre), Prelude in {
 
+flags
+  literal = Symb ;
+
 lin
   PPhr p = lin Text p ;
   NP_Person np = {name = lin NP np ; isPron = False ; poss = mkQuant he_Pron} ;

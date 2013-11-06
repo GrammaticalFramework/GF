@@ -5,6 +5,9 @@ concrete TranslateBul of Translate =
   PhrasebookBul - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease]
    ** open SyntaxBul, (E = ExtraBul), Prelude in {
 
+flags
+  literal = Symb ;
+
 lin
   PPhr p = lin Text p ;
   NP_Person np = {name = lin NP np ; isPron = False ; poss = mkQuant he_Pron} ;

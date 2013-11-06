@@ -1,6 +1,10 @@
 abstract Translate = ParseEngAbs, Phrasebook ** {
 
-flags startcat = Phrase ;
+flags 
+  startcat = Phrase ;
+  heuristic_search_factor=0.60;
+  meta_prob=1.0e-5;
+  meta_token_prob=1.1965149246222233e-9;
 
 fun
   PPhr : Phr -> Phrase ;

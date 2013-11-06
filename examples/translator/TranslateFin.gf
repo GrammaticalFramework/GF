@@ -6,6 +6,9 @@ concrete TranslateFin of Translate =
   PhrasebookFin - [at_Prep, PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] 
   ** open SyntaxFin, (E = ExtraFin), Prelude in {
 
+flags
+  literal = Symb ;
+
 lin
   PPhr p = lin Text p ;
   NP_Person np = {name = lin NP np ; isPron = False ; poss = E.GenNP np} ;

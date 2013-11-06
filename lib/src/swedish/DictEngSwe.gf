@@ -1084,7 +1084,6 @@ lin ardor_N = kaerlek_nn_1_1_N ; -- comment=4
 lin ardour_N = kaerlek_nn_1_1_N ; -- comment=4
 lin arduous_A = brant_av_1_A | mkA "besvärlig" ; -- status=guess status=guess
 lin are_N = ar_nn_1_N ; -- status=guess
-lin area_1_N = yta_nn_1_N ; -- comment=11
 lin area_2_N = yta_nn_1_N ; -- comment=11
 lin area_3_N = yta_nn_1_N ; -- comment=11
 lin area_4_N = yta_nn_1_N ; -- comment=11
@@ -5859,7 +5858,6 @@ lin degenerate_V = urarta_vb_1_V ; -- comment=3
 lin degeneration_N = foersaemring_nn_1_1_N ; -- comment=1
 lin degradation_N = foernedring_nn_1_1_N ; -- comment=7
 lin degrade_V2 = mkV2 (degradera_vb_1_V) | mkV2 (mkV "nedvärdera") ; -- status=guess, src=wikt status=guess, src=wikt
-lin degree_N = slaekt_nn_1_1_N ; -- comment=9
 lin dehydrate_V2 = torka_ut_vbm_1_V2 ; -- comment=3
 lin dehydration_N = uttorkning_nn_1_N ; -- comment=1
 lin deism_N = deism_nn_1_N ; -- status=guess
@@ -7035,7 +7033,6 @@ lin dutch_N = hollaendska_nn_2_1_N ; -- comment=5
 lin dutchman_N = nederlaendare_nn_1_1_N ; -- comment=1
 lin duteous_A = mkA "underdånig" | plikttrogen_av_1_A ; -- status=guess status=guess
 lin dutiful_A = plikttrogen_av_1_A ; -- comment=2
-lin duty_N = tull_nn_1_N ; -- comment=14
 lin duvet_N = mkN "täcke" ; -- status=guess
 lin dwarf_N = dvaerg_nn_1_1_N ; -- comment=1
 lin dwarf_V2 = mkV2 (krympa_vb_1_V) ; -- status=guess, src=wikt
@@ -18777,7 +18774,6 @@ lin scoop_V = skopa_vb_1_V ; -- comment=1
 lin scoop_V2 = mkV2 (supa_vb_1_V) ; -- status=guess, src=wikt
 lin scoop_up_V = skopa_vb_1_V ; -- comment=1
 lin scooter_N = moppe_nn_1_N ; -- comment=1
-lin scope_N = teleskop_nn_1_N ; -- comment=10
 lin scorch_N = braennskada_nn_1_1_N ; -- comment=2
 lin scorch_V = braennskada_vb_1_1_V ; -- comment=3
 lin score_N = tjog_nn_1_N ; -- comment=12
@@ -20994,9 +20990,8 @@ lin studbook_N = stambok_nn_1_N ; -- comment=1
 lin student_N = L.student_N  ; -- comment=CHECKED
 lin studentship_N = mkN "studentskap" ; -- status=guess
 lin studio_N = atelj_e_nn_1_1_N ; -- comment=3
-lin study_N = utbildningsprogram_nn_1_N ; -- comment=4
 lin study_V = studera_vb_1_V ; -- comment=4
-lin study_V2 = laesa_ut_vbm_1_1_V2 ; -- comment=5
+lin study_V2 = mkV2 "studera" ; -- CHECKED
 lin stuff_N = material_nn_1_N ; -- comment=5
 lin stuff_V2 = stoppa_till_vbm_1_V2 ; -- comment=3
 lin stuff_up_V2 = stoppa_till_vbm_1_V2 ; -- comment=3
@@ -24222,8 +24217,7 @@ lin woolly_A = ullig_av_1_A ; -- comment=4
 lin word_N = bud_nn_1_N ; -- comment=11
 lin wording_N = lydelse_nn_1_N ; -- comment=1
 lin words_N = ord_nn_1_N ; -- comment=1
-lin work_N = greja_nn_1_N ; -- comment=20
-lin work_V = bearbeta_vb_1_V ; -- comment=59
+lin work_V = arbeta_vb_1_V ; -- comment=59
 lin work_V2 = ordna_om_vbm_1_V2 ; -- comment=29
 lin work_VV = mkVV (fungera_vb_1_V) ; -- status=guess, src=wikt
 lin work_off_V2 = ordna_om_vbm_1_V2 ; -- comment=29
@@ -24453,7 +24447,7 @@ lin zoom_off_V = zooma_vb_1_V ; -- comment=1
 lin zoom_out_V = zooma_vb_1_V ; -- comment=1
 lin zooplankton_N = djurplankton_nn_1_N ; -- status=guess
 
---- studying Penn output 3/11/2013 AR
+-- studying Penn output 3/11/2013 AR
 
 lin conclude_VS = mkVS (mkV "konkludera") ;
 lin attribute_V2 = mkV2 (mkV "tilldela" ) ;
@@ -24463,6 +24457,64 @@ lin lower_V2 = mkV2 (mkV "sänka") ;
 lin dislike_V2 = mkV2 (mkV (mkV "tycker") "illa") (mkPrep "om") ;
 lin idea_of_N2 = mkN2 (mkN "idé" "idéer") (mkPrep "om") ;
 lin middle_aged_A = invarA "medelålders" ;
+
+
+-- studying PhD regulations 6/11/2013 AR
+
+  degree_N = mkN "examen" "examen" "examina" "examina" ;
+  scope_N = mkN "räckvidd" ;
+  duty_N = mkN "plikt" "plikter" ;
+  work_N = mkN "arbete" "arbeten" ;
+  study_N = mkN "studie" "studiet" "studier" "studierna" ;
+  area_1_N = mkN "område" "områden" ;
+
+  withdraw_V2 = mkV2 (mkV (mkV "ställer") "in") ;
+  doctoral_A = mkA "doktoral" ; ---
+  specify_V2 = mkV2 "specificera" ;
+  onto_Prep = mkPrep "på" ;
+  in_addition_to_Prep = mkPrep "jämte" ;
+  prior_to_Prep = mkPrep "före" ;
+  in_order_to_Prep = mkPrep "i syftet av" ;
+  require_VV = mkVV (mkV "kräva") ;
+  licentiate_N = mkN "licentiat" "licentiater" ;
+  designate_V2 = mkV2 (mkV "utse" "utsåg" "utsett") ;
+  phd_N = mkN "doktorsexamen" "doktorsexamen" "doktorsexamina" "doktorsexamina" ;
+  no_longer_AdV = mkAdV "inte längre" ;
+
+  less_than_AdN = lin AdN {s = "mindre än"} ;
+  less_than_AdN = lin AdN {s = "mindre än"} ;
+  award_V2 = mkV2 (mkV "bevilja") ;
+  with_regard_to_Prep = mkPrep "med hänsyn till" ;
+  assure_V2 = mkV2 (mkV "försäkra") ;
+  relate_V2 = mkV2 "relatera" ;
+  so_Subj = lin Subj {s = "så att"} ;
+  fulfill_V2 = mkV2 "fullfölja" ;
+  revise_V2 = mkV2 "revidera" ;
+
+  intermediate_A = mkA "intermediär" ;
+  per_Prep = mkPrep "per" ;
+  require_V2 = mkV2 "kräver" ;
+  presuppose_V2 = mkV2 (mkV "förutsätta" "förutsatte" "förutsatt") ;
+  advertise_V2 = mkV2 (mkV (mkV "göra" "gjorde" "gjort") "reklam") (mkPrep "för") ;
+  date_1_N = mkN "datum" "datum" ;
+  grant_V2 = mkV2 "bevilja" ;
+  parental_A = mkA "förälderlig" ; --- should be föräldra-
+  due_to_Prep = mkPrep "på grund av" ;
+  extend_V2 = mkV2 "utvidga" ;
+  beyond_Prep = mkPrep "bortom" ;
+  no_more_than_AdN = lin AdN {s = "inte mer än"} ;
+  inter_alia_Adv = mkAdv "bland annat" ;
+  revise_V = mkV "revidera" ;
+  entitle_V2 = mkV2 "berättiga" ;
+  appoint_V2 = mkV2 (mkV "utse" "utsåg" "utsett") ;
+  follow_up_V2 = mkV2 (mkV (mkV "följer") "upp") ;
+  once_Prep = mkPrep "en gång" ; --- ??
+  evaluate_V2 = mkV2 "utvärdera" ;
+  moreSg_Det = M.mkDet "mera" ;
+  docent_N = mkN "docent" "docenter" ;
+  defend_V2 = mkV2 "försvara" ;
+  quorum_N = mkN "kvorum" "kvorum" ;
+
 
 
 }

@@ -5,6 +5,9 @@ concrete TranslateSwe of Translate =
     PhrasebookSwe - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] 
   ** open SyntaxSwe, ParadigmsSwe, (E = ExtraSwe), Prelude in {
 
+flags
+  literal = Symb ;
+
 lin
   PPhr p = lin Text p ;
   NP_Person np = {name = lin NP np ; isPron = False ; poss = mkQuant he_Pron} ;
