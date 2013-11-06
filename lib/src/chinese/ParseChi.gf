@@ -26,7 +26,6 @@ open ResChi, ParadigmsChi, SyntaxChi, Prelude in {
 
 flags
   literal=Symb ;
-  beam_size=0.95 ;
   coding = utf8 ;
 
 
