@@ -295,5 +295,5 @@ function draw_brackets(b) {
 function draw_bracketss(bs) {
     return Array.isArray(bs)
 	? bs.map(draw_brackets)  //with gf>3.5, in some cases
-	: draw_brackets(b) // with gf<=3.5
+	: draw_brackets(bs) // with gf<=3.5
 }
