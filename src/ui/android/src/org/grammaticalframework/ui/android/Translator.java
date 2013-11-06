@@ -29,7 +29,7 @@ public class Translator {
     private Language[] mLanguages = {
 	/*
         new Language("en-US", "English", "TranslateEng", R.xml.inflection_en),  // AR
-        new Language("cmn-Hans-CN", "Chinese", "TranslateChi", 0), 
+        new Language("cmn-Hans-CN", "Chinese", "TranslateChi", R.xml.inflection_cmn), 
 	        new Language("fi-FI", "Finnish", "TranslateFin", 0), 
 	        new Language("sv-SE", "Swedish", "TranslateSwe", 0), 
 	*/
