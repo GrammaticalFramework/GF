@@ -370,23 +370,36 @@ Input.prototype.end_structural_editing=function() {
     }
 }
 
-Input.prototype.enable_structural_editing=function(brackets,tree) {
+Input.prototype.enable_structural_editing=function(bracketss,tree) {
     var t=this;
     with(t) {
 	var typed=surface.typed;
-	function add_bs(b,parent) {
-	    if(b.token) {
-		var fun=parent.fun,cat=parent.cat;
-		function showrepl() { t.show_replacements(brackets,parent,tree)}
-		var w= span_class("word editable",text(b.token));
-		if(fun && cat) w.onclick=showrepl
-		w.title=(fun||"_")+":"+(cat||"_")+" "+parent.fid+":"+parent.index
-		surface.insertBefore(w,typed);
+	function add_bracket(brackets) {
+	    function add_bs(b,parent) {
+		if(b.token) {
+		    var fun=parent.fun,cat=parent.cat;
+		    function showrepl() {
+			t.show_replacements(brackets,parent,tree)
+		    }
+		    if(fun && cat) {
+			var w= span_class("word editable",text(b.token));
+			w.onclick=showrepl
+		    }
+		    else
+			var w= span_class("word",text(b.token));
+		    w.title=(fun||"_")+":"+(cat||"_")+" "+parent.fid+":"+parent.index
+		    surface.insertBefore(w,typed);
+		}
+		else b.children.map(function(c){add_bs(c,b)})
 	    }
-	    else b.children.map(function(c){add_bs(c,b)})
+	    add_bs(brackets,null)
 	}
 	remove_surface_words()
-	add_bs(brackets);
+	//add_bs(brackets);
+	if(Array.isArray(bracketss))
+	    bracketss.map(add_bracket) // gf>3.5
+	else
+	    add_bracket(bracketss) // gf<=3.5
 	t.surface.structural_editing_enabled=true;
     }
 }

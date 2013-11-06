@@ -207,7 +207,7 @@ Translations.prototype.show_translations=function(translationResults) {
 			trans.appendChild(wrap("pre",text(errs[i].msg)))
 	    }
 	    if(options.show_brackets)
-		trans.appendChild(div_class("brackets",draw_brackets(bra)));
+		trans.appendChild(div_class("brackets",draw_bracketss(bra)));
 
 	}
     }
@@ -290,4 +290,10 @@ function draw_brackets(b) {
 	: node("span",{"class":"brackets",
 		       title:(b.fun||"_")+":"+b.cat+" "+b.fid+":"+b.index},
 	       b.children.map(draw_brackets))
+}
+
+function draw_bracketss(bs) {
+    return Array.isArray(bs)
+	? bs.map(draw_brackets)  //with gf>3.5, in some cases
+	: draw_brackets(b) // with gf<=3.5
 }
