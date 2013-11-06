@@ -89,7 +89,6 @@ Library
     PGF.Macros
     PGF.Optimize
     PGF.Printer
-    PGF.Tree
     PGF.Utilities
   other-modules:
     PGF.CId
@@ -102,6 +101,7 @@ Library
     PGF.Parse
     PGF.Probabilistic
     PGF.SortTop
+    PGF.Tree
     PGF.Type
     PGF.Tokenizer
     PGF.TypeCheck

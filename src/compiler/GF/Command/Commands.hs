@@ -20,7 +20,7 @@ import PGF.Data(abstract,funs,cats,Literal(LStr),Expr(EFun,ELit)) ----
 import PGF.Printer(ppFun,ppCat)
 --import PGF.Probabilistic(rankTreesByProbs,probTree,setProbabilities)
 --import PGF.Generate (generateRandomFrom) ----
-import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
+--import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
 import PGF.Optimize(optimizePGF)
 
 import GF.Compile.Export
@@ -1198,10 +1198,9 @@ allCommands = Map.fromList [
        _                        -> unl . linearize pgf lang
 
    -- replace each non-atomic constructor with mkC, where C is the val cat
-   tree2mk pgf = showExpr [] . tree2expr . t2m . expr2tree where
-     t2m t = case t of
-       Fun cid [] -> t
-       Fun cid ts -> Fun (mk cid) (map t2m ts)
+   tree2mk pgf = showExpr [] . t2m where
+     t2m t = case unApp t of
+       Just (cid,ts@(_:_)) -> mkApp (mk cid) (map t2m ts)
        _ -> t
      mk = mkCId . ("mk" ++) . showCId . lookValCat (abstract pgf)
 
