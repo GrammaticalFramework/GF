@@ -5,6 +5,9 @@ concrete TranslateChi of Translate =
   PhrasebookChi - [at_Prep, PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] 
   ** open SyntaxChi, (E = ExtraChi), Prelude in {
 
+flags
+  literal = Symb ;
+
 lin
   PPhr p = lin Text p ;
   NP_Person np = {name = lin NP np ; isPron = False ; poss = E.GenNP np} ;

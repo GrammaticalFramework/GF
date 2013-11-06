@@ -5,6 +5,8 @@ concrete TranslateEng of Translate =
   PhrasebookEng  - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] 
   ** open SyntaxEng, (E = ExtraEng), Prelude in {
 
+flags
+  literal = Symb ;
 lin
   PPhr p = lin Text p ;
   NP_Person np = {name = lin NP np ; isPron = False ; poss = E.GenNP np} ;
