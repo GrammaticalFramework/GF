@@ -439,7 +439,7 @@ jpgf_collect_morpho(PgfMorphoCallback* self,
 	                                gu2j_string(env,lemma),
 	                                gu2j_string(env,analysis),
 	                                (double) prob);
-	(*env)->CallObjectMethod(env, callback->analyses, callback->addId, jan);
+	(*env)->CallBooleanMethod(env, callback->analyses, callback->addId, jan);
 	(*env)->DeleteLocalRef(env, jan);
 }
 
