@@ -1,0 +1,218 @@
+<inflection_temlate>
+	<noun>
+		<h1>Substantiv</h1>
+
+		<table class="forms-table" rules="all">
+			<tr>
+				<th></th>
+				<th colspan="2">singular</th>
+				<th colspan="2">plural</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>obestämd</th>
+				<th>bestämd</th>
+				<th>obestämd</th>
+				<th>bestämd</th>
+			</tr>
+			<tr>
+				<th>nominativ</th>
+				<td><form>s Sg Indef Nom</form></td>
+				<td><form>s Sg Def Nom</form></td>
+				<td><form>s Pl Indef Nom</form></td>
+				<td><form>s Pl Def Nom</form></td>
+			</tr>
+			<tr>
+				<th>genitiv</th>
+				<td><form>s Sg Indef Gen</form></td>
+				<td><form>s Sg Def Gen</form></td>
+				<td><form>s Pl Indef Gen</form></td>
+				<td><form>s Pl Def Gen</form></td>
+			</tr>
+		</table>
+	</noun>
+	<adjective>
+		<h1>Adjektiv</h1>
+
+		<table class="forms-table" rules="all">
+			<tr>
+				<th colspan="5">nominativ</th>
+			</tr>
+			<tr>
+				<th colspan="2"></th>
+				<th>positiv</th>
+				<th>komparativ</th>
+				<th>superlativ</th>
+			</tr>
+			<tr>
+				<th rowspan="3">obestämd</th>
+				<th>utrum</th>
+				<td><form>s (AF (APosit (Strong (GSg Utr))) Nom)</form></td>
+				<td rowspan="5"><form>s (AF ACompar Nom)</form></td>
+				<td rowspan="3"><form>s (AF (ASuperl SupStrong) Nom)</form></td>
+			</tr>
+			<tr>
+				<th>neutrum</th>
+				<td><form>s (AF (APosit (Strong (GSg Neutr))) Nom)</form></td>
+			</tr>
+			<tr>
+				<th>plural</th>
+				<td><form>s (AF (APosit (Strong GPl)) Nom)</form></td>
+			</tr>
+			<tr>
+				<th rowspan="2">bestämd</th>
+				<th>singular</th>
+				<td><form>s (AF (APosit (Weak Sg)) Nom)</form></td>
+				<td rowspan="2"><form>s (AF (ASuperl SupWeak) Nom)</form></td>
+			</tr>
+			<tr>
+				<th>plural</th>
+				<td><form>s (AF (APosit (Weak Pl)) Nom)</form></td>
+			</tr>
+			<tr>
+				<th colspan="5">genitiv</th>
+			</tr>
+			<tr>
+				<th colspan="2"></th>
+				<th>positiv</th>
+				<th>komparativ</th>
+				<th>superlativ</th>
+			</tr>
+			<tr>
+				<th rowspan="3">obestämd</th>
+				<th>utrum</th>
+				<td><form>s (AF (APosit (Strong (GSg Utr))) Gen)</form></td>
+				<td rowspan="5"><form>s (AF ACompar Gen)</form></td>
+				<td rowspan="3"><form>s (AF (ASuperl SupStrong) Gen)</form></td>
+			</tr>
+			<tr>
+				<th>neutrum</th>
+				<td><form>s (AF (APosit (Strong (GSg Neutr))) Gen)</form></td>
+			</tr>
+			<tr>
+				<th>plural</th>
+				<td><form>s (AF (APosit (Strong GPl)) Gen)</form></td>
+			</tr>
+			<tr>
+				<th rowspan="2">bestämd</th>
+				<th>singular</th>
+				<td><form>s (AF (APosit (Weak Sg)) Gen)</form></td>
+				<td rowspan="2"><form>s (AF (ASuperl SupWeak) Gen)</form></td>
+			</tr>
+			<tr>
+				<th>plural</th>
+				<td><form>s (AF (APosit (Weak Pl)) Gen)</form></td>
+			</tr>
+		</table>
+	</adjective>
+	<adverb>
+		<h1>Adverb</h1>
+		<p><form>s</form></p>
+	</adverb>
+	<prep>
+		<h1>Preposition</h1>
+		<p><form>s</form></p>
+	</prep>
+	<verb>
+		<h1>Verb</h1>
+		<table class="forms-table" rules="all">
+			<tr>
+				<th></th>
+				<th>active</th>
+				<th>passive</th>
+			</tr>
+			<tr>
+				<th>infitiv</th>
+				<td><form>s (VI (VInfin Act))</form></td>
+				<td><form>s (VI (VInfin Pass))</form></td>
+			</tr>
+			<tr>
+				<th>presens</th>
+				<td><form>s (VF (VPres Act))</form></td>
+				<td><form>s (VF (VPres Pass))</form></td>
+			</tr>
+			<tr>
+				<th>preteritum</th>
+				<td><form>s (VF (VPret Act))</form></td>
+				<td><form>s (VF (VPret Pass))</form></td>
+			</tr>
+			<tr>
+				<th>supinum</th>
+				<td><form>s (VI (VSupin Act))</form></td>
+				<td><form>s (VI (VSupin Pass))</form></td>
+			</tr>
+			<tr>
+				<th>imperativ</th>
+				<td><form>s (VF (VImper Act))</form></td>
+				<td><form>s (VF (VImper Pass))</form></td>
+			</tr>
+		</table>
+
+		<h2>Presens Particip</h2>
+
+		<table class="forms-table" rules="all">
+			<tr>
+				<th colspan="2"></th>
+				<th>nominativ</th>
+				<th>genitiv</th>
+			</tr>
+			<tr>
+				<th rowspan="3">obestämd</th>
+				<th>utrum</th>
+				<td><form>s (VI (VPtPret (Strong (GSg Utr)) Nom))</form></td>
+				<td><form>s (VI (VPtPret (Strong (GSg Utr)) Gen))</form></td>
+			</tr>
+			<tr>
+				<th>neutrum</th>
+				<td><form>s (VI (VPtPret (Strong (GSg Neutr)) Nom))</form></td>
+				<td><form>s (VI (VPtPret (Strong (GSg Neutr)) Gen))</form></td>
+			</tr>
+			<tr>
+				<th>plural</th>
+				<td><form>s (VI (VPtPret (Strong GPl) Nom))</form></td>
+				<td><form>s (VI (VPtPret (Strong GPl) Gen))</form></td>
+			</tr>
+			<tr>
+				<th rowspan="2">bestämd</th>
+				<th>singular</th>
+				<td><form>s (VI (VPtPret (Weak Sg) Nom))</form></td>
+				<td><form>s (VI (VPtPret (Weak Sg) Gen))</form></td>
+			</tr>
+			<tr>
+				<th>plural</th>
+				<td><form>s (VI (VPtPret (Weak Pl) Nom))</form></td>
+				<td><form>s (VI (VPtPret (Weak Pl) Gen))</form></td>
+			</tr>
+		</table>
+
+		<h2>Perfekt Particip</h2>
+		<table class="forms-table" rules="all">
+			<tr>
+				<th></th>
+				<th colspan="2">singular</th>
+				<th colspan="2">plural</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>obestämd</th>
+				<th>bestämd</th>
+				<th>obestämd</th>
+				<th>bestämd</th>
+			</tr>
+			<tr>
+				<th>nominativ</th>
+				<td><form>s (VI (VPtPres Sg Indef Nom))</form></td>
+				<td><form>s (VI (VPtPres Sg Def Nom))</form></td>
+				<td><form>s (VI (VPtPres Pl Indef Nom))</form></td>
+				<td><form>s (VI (VPtPres Pl Def Nom))</form></td>
+			</tr>
+			<tr>
+				<th>genitiv</th>
+				<td><form>s (VI (VPtPres Sg Indef Gen))</form></td>
+				<td><form>s (VI (VPtPres Sg Def Gen))</form></td>
+				<td><form>s (VI (VPtPres Pl Indef Gen))</form></td>
+				<td><form>s (VI (VPtPres Pl Def Gen))</form></td>
+			</tr>
+		</table>
+	</verb>
+</inflection_temlate>

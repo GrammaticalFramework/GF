@@ -31,7 +31,7 @@ public class Translator {
         new Language("en-US", "English", "TranslateEng", R.xml.inflection_en),  // AR
         new Language("cmn-Hans-CN", "Chinese", "TranslateChi", R.xml.inflection_cmn), 
 	        new Language("fi-FI", "Finnish", "TranslateFin", 0), 
-	        new Language("sv-SE", "Swedish", "TranslateSwe", 0), 
+	        new Language("sv-SE", "Swedish", "TranslateSwe", R.xml.inflection_sv), 
 	*/
     	new Language("en-US", "English", "ParseEng", R.xml.inflection_en),
         new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.inflection_bg),
