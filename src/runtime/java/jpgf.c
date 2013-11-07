@@ -4,8 +4,12 @@
 #include <gu/mem.h>
 #include <gu/exn.h>
 #include <gu/utf8.h>
-#include <alloca.h>
 #include <jni.h>
+#ifndef __MINGW32__
+#include <alloca.h>
+#else
+#include <malloc.h>
+#endif
 
 #define l2p(x) ((void*) (intptr_t) (x))
 #define p2l(x) ((jlong) (intptr_t) (x))
