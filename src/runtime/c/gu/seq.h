@@ -109,9 +109,6 @@ gu_buf_flush(GuBuf* buf);
 	(*(T*)gu_buf_trim(BUF))
 
 void
-gu_seq_resize_tail(GuSeq seq, ptrdiff_t change);
-
-void
 gu_buf_sort(GuBuf *buf, GuOrder *order);
 
 #define gu_seq_binsearch(S, O, T, V) \
