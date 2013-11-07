@@ -48,10 +48,12 @@ pgf_jit_alloc_page(PgfJitState* state)
 
 	size_t page_size = getpagesize();
 
-#ifndef ANDROID
-	if (posix_memalign(&page, page_size, page_size) != 0) {
+#if defined(ANDROID)
+	if ((page = memalign(page_size, page_size)) == NULL) {	
+#elif defined(__MINGW32__)
+	if ((page = malloc(page_size)) == NULL) {
 #else
-	if ((page = memalign(page_size, page_size)) == NULL) {
+	if (posix_memalign(&page, page_size, page_size) != 0) {
 #endif
 		gu_fatal("Memory allocation failed");
 	}
