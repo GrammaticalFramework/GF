@@ -269,7 +269,7 @@ oper
 -- For $Verb$.
 
   VP = {
-      s : VPForm => {
+      s : Voice => VPForm => {
         fin : Str ;          -- V1 har  ---s1
         inf : Str            -- V2 sagt ---s4
         } ;
@@ -337,10 +337,21 @@ oper
     eext = vp.eext
     } ;
 
+  passiveVP : VP -> VP = \vp -> {
+    s = \\_ => vp.s ! Pass ; -- forms the s-passive
+    a1 = vp.a1 ;
+    n2 = vp.n2 ;
+    a2 = vp.a2 ;
+    ext = vp.ext ;
+    en2 = vp.en2 ;
+    ea2 = vp.ea2 ;
+    eext = vp.eext
+    } ;
+
   infVP : VP -> Agr -> Str = \vp,a -> infVPPlus vp a Simul Pos ;
  
   infVPPlus : VP -> Agr -> Anteriority -> Polarity -> Str = \vp,a,ant,pol -> 
-    vp.a1 ! pol ++ (vp.s ! VPInfinit ant).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
+    vp.a1 ! pol ++ (vp.s ! Act ! VPInfinit ant).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
 
 
 -- For $Sentence$.
@@ -352,7 +363,7 @@ oper
   mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {
       s = \\t,a,b,o => 
         let 
-          verb  = vp.s  ! VPFinite t a ;
+          verb  = vp.s  ! Act ! VPFinite t a ;
           neg   = vp.a1 ! b ;
           compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext
         in

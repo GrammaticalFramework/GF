@@ -1935,6 +1935,7 @@ lin befall_V = drabba_vb_1_V ; -- comment=2
 lin befit_V2 = passa_paa_vbm_1_1_V2 ; -- comment=1
 lin before_Adv = innan_ab_1_Adv ; -- comment=9
 lin before_Prep = S.before_Prep  ; -- comment=CHECKED
+lin before_Subj = lin Subj {s = "innan"} ;
 lin beforehand_Adv = dessfoerinnan_ab_1_1_Adv ; -- comment=1
 lin beg_V = tigga_vb_1_V ; -- comment=3
 lin beg_V2 = mkV2 (tigga_vb_1_V) ; -- status=guess, src=wikt
@@ -5749,9 +5750,10 @@ lin decentralization_N = decentralisering_nn_1_N ; -- comment=1
 lin deceptive_A = vilseledande_av_1_A ; -- comment=4
 lin decibel_N = decibel_nn_1_N ; -- comment=1
 lin decide_V = vaelja_vb_1_1_V ; -- comment=7
-lin decide_V2 = doema_ut_vbm_1_1_V2 ; -- comment=1
-lin decide_on_V2 = doema_ut_vbm_1_1_V2 ; -- comment=1
-lin decide_upon_V2 = doema_ut_vbm_1_1_V2 ; -- comment=1
+lin decide_V2 = mkV2 (mkV "bestämmer") (mkPrep "om") ; 
+lin decide_VS = mkVS (mkV "bestämmer") ; 
+lin decide_on_V2 = mkV2 (mkV "bestämmer") (mkPrep "om") ; 
+lin decide_upon_V2 = mkV2 (mkV "bestämmer") (mkPrep "om") ; 
 lin decided_A = bestaemd_av_1_1_A ; -- comment=5
 lin deciliter_N = deciliter_nn_1_N ; -- comment=1
 lin decimal_A = mkA "decimal" ; -- status=guess
@@ -6155,6 +6157,7 @@ lin devilry_N = djaevulskap_nn_1_1_N ; -- comment=3
 lin devious_A = oaerlig_av_1_1_A ; -- comment=1
 lin devolution_N = delegering_nn_1_N ; -- comment=2
 lin devolve_V = oeverlaata_vb_1_1_V ; -- comment=1
+lin devote_V2 = mkV2 (mkV "devote") ;
 lin devotee_N = fantast_nn_1_N ; -- comment=2
 lin devotion_N = tillgivenhet_nn_1_N ; -- comment=8
 lin devotional_A = mkA "andäktig" | andaktsfull_av_1_A | mkA "compounds with andakt" ; -- status=guess status=guess status=guess
@@ -11635,6 +11638,7 @@ lin intrinsic_A = inneboende_av_1_A ; -- comment=1
 lin intrinsically_Adv = egentligen_ab_1_Adv ; -- comment=1
 lin introduce_V2 = mkV2 (mkV "införa" "införde" "infört")  ; -- 
 lin introduction_N = introducering_nn_1_N ; -- comment=3
+lin introductory_A = mkA "inledande" ;
 lin introspection_N = sjaelviakttagelse_nn_1_1_N ; -- comment=2
 lin introversion_N = inaatvaendhet_nn_1_1_N ; -- comment=2
 lin introvert_N = slut_nn_1_N ; -- comment=1
@@ -23957,6 +23961,7 @@ lin when_Subj = S.when_Subj  ; -- comment=CHECKED
 lin whence_Adv = mkAdv "varifrån" | mkAdv "var i från" | vadan_ab_1_Adv ; -- status=guess status=guess status=guess
 lin whenever_Adv = mkAdv "närsom" | mkAdv "när som helst" | mkAdv "närhelst" ; -- status=guess status=guess status=guess
 lin where_IAdv = S.where_IAdv  ; -- comment=CHECKED
+lin where_Subj = lin Subj {s = "där"} ;
 lin whereabouts_N = vistelseort_nn_1_N ; -- status=guess
 lin whereby_Adv = varmed_ab_1_Adv ; -- status=guess
 lin whereon_Adv = mkAdv "varpå" ; -- status=guess
@@ -24154,7 +24159,7 @@ lin withdrawal_N = uttraede_nn_1_1_N ; -- comment=6
 lin wither_V = vissna_vb_1_V ; -- comment=3
 lin withers_N = manke_nn_1_N ; -- status=guess
 lin withholding_N = mkN "källskatt" | mkN "preliminärskatt" ; -- status=guess status=guess
-lin within_Prep = mkPrep "inuti"  ; -- 
+lin within_Prep = mkPrep "inom"  ; -- 
 lin without_Prep = S.without_Prep  ; -- comment=CHECKED
 lin witness_N = vittne_nn_1_N ; -- comment=1
 lin witness_V = bevittna_vb_1_V ; -- comment=2

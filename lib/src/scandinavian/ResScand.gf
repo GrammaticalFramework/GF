@@ -25,13 +25,13 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
  oper
   predV : Verb -> VP = \verb -> 
     let
-      diath = case verb.vtype of {
+      diath : Voice -> Voice = \d -> case verb.vtype of {
         VPass => Pass ;
-        _ => Act
+        _ => d
         } ;
-      vfin : STense -> Str = \t -> verb.s ! vFin t diath ;
-      vsup = verb.s ! VI (VSupin diath) ; --# notpresent  
-      vinf = verb.s ! VI (VInfin diath) ;
+      vfin : Voice -> STense -> Str = \d,t -> verb.s ! vFin t (diath d) ;
+      vsup : Voice -> Str = \d -> verb.s ! VI (VSupin (diath d)) ; --# notpresent  
+      vinf : Voice -> Str = \d -> verb.s ! VI (VInfin (diath d)) ;
 
       auxv = case hasAuxBe verb of {
         True => verbBe.s ;
@@ -47,24 +47,24 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
         } ;
 
     in {
-    s = table {
+    s = \\d => table {
       VPFinite t Simul => case t of {
---        SPres | SPast => vf (vfin t) [] ; -- the general rule
-        SPast => vf (vfin t) [] ;    --# notpresent
-        SFut  => vf auxFut vinf ;    --# notpresent
-        SFutKommer => vf auxFutKommer (auxFutPart ++ infMark ++ vinf) ;   --# notpresent
-        SCond => vf auxCond vinf ;   --# notpresent
-        SPres => vf (vfin t) []
+--        SPres | SPast => vf (vfin d t) [] ; -- the general rule
+        SPast => vf (vfin d t) [] ;    --# notpresent
+        SFut  => vf auxFut (vinf d) ;    --# notpresent
+        SFutKommer => vf auxFutKommer (auxFutPart ++ infMark ++ vinf d) ;   --# notpresent
+        SCond => vf auxCond (vinf d) ;   --# notpresent
+        SPres => vf (vfin d t) []
         } ;
       VPFinite t Anter => case t of {    --# notpresent
-        SPres | SPast => vf (har t) vsup ; --# notpresent
-        SFut  => vf auxFut (ha ++ vsup) ; --# notpresent
-        SFutKommer => vf auxFutKommer (auxFutPart ++ infMark ++ ha ++ vsup) ; --# notpresent
-        SCond => vf auxCond (ha ++ vsup)  --# notpresent
+        SPres | SPast => vf (har t) (vsup d) ; --# notpresent
+        SFut  => vf auxFut (ha ++ vsup d) ; --# notpresent
+        SFutKommer => vf auxFutKommer (auxFutPart ++ infMark ++ ha ++ vsup d) ; --# notpresent
+        SCond => vf auxCond (ha ++ vsup d)  --# notpresent
         } ;                              --# notpresent
-      VPImperat => vf (verb.s ! VF (VImper diath)) [] ;
-      VPInfinit Anter => vf [] (ha ++ vsup) ;  --# notpresent
-      VPInfinit Simul => vf [] vinf
+      VPImperat => vf (verb.s ! VF (VImper (diath d))) [] ;
+      VPInfinit Anter => vf [] (ha ++ vsup d) ;  --# notpresent
+      VPInfinit Simul => vf [] (vinf d)
       } ;
     a1  : Polarity => Str = negation ;
     n2  : Agr => Str = \\a => case verb.vtype of {

@@ -12,7 +12,7 @@ incomplete concrete SentenceScand of Sentence =
       s = \\pol,n => 
         let 
           agr   = {g = Utr ; n = n ; p = P2} ;
-          verb  = vp.s ! VPImperat ;
+          verb  = vp.s ! Act ! VPImperat ;
         in
         verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
     } ;
