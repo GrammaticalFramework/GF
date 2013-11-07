@@ -556,6 +556,27 @@ cmp_item_prob(GuOrder* self, const void* a, const void* b)
 static GuOrder
 pgf_item_prob_order[1] = { { cmp_item_prob } };
 
+static int
+cmp_item_production_idx_entry(GuOrder* self, const void* a, const void* b)
+{
+	PgfProductionIdxEntry *entry1 = (PgfProductionIdxEntry *) a;
+	PgfProductionIdxEntry *entry2 = (PgfProductionIdxEntry *) b;
+
+	if (entry1->ccat->fid < entry2->ccat->fid)
+		return -1;
+	else if (entry1->ccat->fid > entry2->ccat->fid)
+		return 1;
+	else if (entry1->lin_idx < entry2->lin_idx)
+		return -1;
+	else if (entry1->lin_idx > entry2->lin_idx)
+		return 1;
+	else
+		return 0;
+}
+
+static GuOrder
+pgf_production_idx_entry_order[1] = { { cmp_item_production_idx_entry } };
+
 static PgfItemContss*
 pgf_parsing_get_contss(PgfParseState* state, PgfCCat* cat, GuPool *pool)
 {
@@ -1321,18 +1342,21 @@ pgf_parsing_td_predict(PgfParsing* ps,
 				pgf_new_parse_state(ps, lentry->offset, lentry->bind_type);
 
 			if (state != NULL) {
-				size_t n_entries = gu_buf_length(lentry->idx);
-				for (size_t j = 0; j < n_entries; j++) {
-					PgfProductionIdxEntry* pentry =
-						gu_buf_index(lentry->idx, PgfProductionIdxEntry, j);
+				PgfProductionIdxEntry key;
+				key.ccat    = ccat;
+				key.lin_idx = lin_idx;
+				key.papp    = NULL;
+				PgfProductionIdxEntry* value =
+					gu_seq_binsearch(gu_buf_data_seq(lentry->idx),
+									 pgf_production_idx_entry_order,
+									 PgfProductionIdxEntry, &key);
 
-					if (pentry->ccat == ccat && pentry->lin_idx == lin_idx) {
-						GuVariantInfo i = { PGF_PRODUCTION_APPLY, pentry->papp };
-						PgfProduction prod = gu_variant_close(i);
-						pgf_parsing_add_production(ps, state, state->next, 
-												   conts, prod, 
-												   pentry->papp->fun->absfun->ep.prob);
-					}
+				if (value != NULL) {
+					GuVariantInfo i = { PGF_PRODUCTION_APPLY, value->papp };
+					PgfProduction prod = gu_variant_close(i);
+					pgf_parsing_add_production(ps, state, state->next, 
+											   conts, prod, 
+											   value->papp->fun->absfun->ep.prob);
 				}
 			}
 		}
@@ -2611,18 +2635,18 @@ pgf_parser_index(PgfConcr* concr,
                  PgfCCat* ccat, PgfProduction prod,
                  GuPool *pool)
 {
-	GuPool* tmp_pool = gu_local_pool();
-	GuChoice* choice = gu_new_choice(tmp_pool); // we need this for the pres
+	GuVariantInfo i = gu_variant_open(prod);
+	switch (i.tag) {
+	case PGF_PRODUCTION_APPLY: {
+		PgfProductionApply* papp = i.data;
 
-	for (size_t lin_idx = 0; lin_idx < ccat->cnccat->n_lins; lin_idx++) {
-		GuVariantInfo i = gu_variant_open(prod);
-		switch (i.tag) {
-		case PGF_PRODUCTION_APPLY: {
-			PgfProductionApply* papp = i.data;
+		if (gu_seq_length(papp->args) > 0)
+			break;
 
-			if (gu_seq_length(papp->args) > 0)
-				break;
+		GuPool* tmp_pool = gu_local_pool();
+		GuChoice* choice = gu_new_choice(tmp_pool); // we need this for the pres
 
+		for (size_t lin_idx = 0; lin_idx < papp->fun->n_lins; lin_idx++) {
 			PgfSequence* seq = papp->fun->lins[lin_idx];
 			if (seq->idx == NULL) {
 				seq->idx = gu_new_buf(PgfProductionIdxEntry, pool);
@@ -2634,16 +2658,16 @@ pgf_parser_index(PgfConcr* concr,
 			entry->lin_idx = lin_idx;
 			entry->papp    = papp;
 		}
+		
+		gu_pool_free(tmp_pool);
 		break;
-		case PGF_PRODUCTION_COERCE:
-			// Nothing to be done here
-			break;
-		default:
-			gu_impossible();
-		}
 	}
-	
-	gu_pool_free(tmp_pool);
+	case PGF_PRODUCTION_COERCE:
+		// Nothing to be done here
+		break;
+	default:
+		gu_impossible();
+	}
 }
 
 prob_t
