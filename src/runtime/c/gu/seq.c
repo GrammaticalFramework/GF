@@ -257,11 +257,11 @@ gu_buf_sort(GuBuf *buf, GuOrder *order)
 void*
 gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, void *key)
 {
-	size_t i = 0;
-	size_t j = seq->len-1;
+	int i = 0;
+	int j = seq->len-1;
 	
 	while (i <= j) {
-		size_t k = (i+j) / 2;
+		int k = (i+j) / 2;
 		uint8_t* elem_p = &seq->data[elem_size * k];
 		int cmp = order->compare(order, key, elem_p);
 
