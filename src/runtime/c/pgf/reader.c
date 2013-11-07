@@ -929,6 +929,16 @@ pgf_read_pargs(PgfReader* rdr, PgfConcr* concr)
 	return pargs;
 }
 
+extern void
+pgf_parser_index(PgfConcr* concr, 
+                 PgfCCat* ccat, PgfProduction prod,
+                 GuPool *pool);
+
+extern void
+pgf_lzr_index(PgfConcr* concr, 
+              PgfCCat* ccat, PgfProduction prod,
+              GuPool *pool);
+
 static void
 pgf_read_production(PgfReader* rdr, PgfConcr* concr, 
                     PgfCCat* ccat, size_t* top, size_t* bot)
@@ -970,6 +980,9 @@ pgf_read_production(PgfReader* rdr, PgfConcr* concr,
 	default:
 		pgf_read_tag_error(rdr);
 	}
+
+	pgf_parser_index(concr, ccat, prod, rdr->opool);
+	pgf_lzr_index(concr, ccat, prod, rdr->opool);
 }
 
 static void
@@ -1105,25 +1118,11 @@ typedef struct {
 	GuPool* pool;
 } PgfIndexFn;
 
-extern void
-pgf_parser_index(PgfConcr* concr, 
-                 PgfCCat* ccat, PgfProduction prod,
-                 GuPool *pool);
-
-void
-pgf_lzr_index(PgfConcr* concr, 
-              PgfCCat* ccat, PgfProduction prod,
-              GuPool *pool);
-
 static void
 pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
-	(void) (key && err);
-	
-	PgfIndexFn* clo = (PgfIndexFn*) fn;
+	(void) (fn && key && err);
     PgfCCat* ccat = *((PgfCCat**) value);
-    PgfConcr *concr = clo->concr;
-    GuPool *pool = clo->pool;
 
 	if (ccat->prods == NULL)
 		return;
@@ -1136,9 +1135,6 @@ pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 		if (!ccat->cnccat) {
 			pgf_ccat_set_cnccat(ccat, prod);
 		}
-
-		pgf_parser_index(concr, ccat, prod, pool);
-		pgf_lzr_index(concr, ccat, prod, pool);
 	}
 
 //	pgf_ccat_set_viterbi_prob(ccat);
@@ -1184,8 +1180,8 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, PgfAbsFun* abs_lin_fun)
 	concr->callbacks = pgf_new_callbacks_map(concr, rdr->opool); 
 	concr->total_cats = pgf_read_int(rdr);
 
-	PgfIndexFn clo1 = { { pgf_read_ccat_cb }, concr, rdr->opool };
-	gu_map_iter(concr->ccats, &clo1.fn, NULL);
+	GuMapItor clo1 = { pgf_read_ccat_cb };
+	gu_map_iter(concr->ccats, &clo1, NULL);
 
 	return concr;
 }
