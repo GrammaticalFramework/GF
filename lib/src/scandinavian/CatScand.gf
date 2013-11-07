@@ -38,7 +38,7 @@ incomplete concrete CatScand of Cat =
 -- Verb
 
     VP = {
-      s : VPForm => {
+      s : Voice => VPForm => {
         fin : Str ;          -- V1 har  ---s1
         inf : Str            -- V2 sagt ---s4
         } ;
