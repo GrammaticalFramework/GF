@@ -12239,7 +12239,7 @@ lin lad_N = pojke_nn_1_N ; -- comment=3
 lin ladder_N = stege_nn_1_N ; -- comment=4
 lin ladle_N = skopa_nn_1_N ; -- comment=2
 lin ladle_V2 = mkV2 (mkV "slev") ; -- status=guess, src=wikt
-lin lady_N = fru_nn_1_N ; -- comment=4
+lin lady_N = mkN "dam" "damer" ;
 lin ladybird_N = nyckelpiga_nn_1_N ; -- comment=1
 lin ladybug_N = nyckelpiga_nn_1_N ; -- comment=1
 lin lag_N = tidsfoerskjutning_nn_1_1_N ; -- comment=3
@@ -12853,7 +12853,7 @@ lin logion_N = mkN "logion" ; -- status=guess
 lin logistics_N = logistik_nn_1_N ; -- comment=1
 lin logo_N = logotyp_nn_1_N ; -- comment=1
 lin loin_N = fransyska_nn_1_N ; -- comment=1
-lin loins_N = land_nn_1_N ; -- comment=2
+lin loins_N = mkN "njurtrakt" "njurtrakter" ;
 lin loiter_V = soela_vb_1_1_V ; -- comment=1
 lin lollipop_N = klubba_nn_1_N ; -- comment=2
 lin london_PN = mkPN "London" neutrum  ; -- 
@@ -13073,8 +13073,8 @@ lin magnitude_N = omfattning_nn_1_N ; -- comment=3
 lin magnolia_N = magnolia_nn_1_N ; -- comment=1
 lin magpie_N = skata_nn_1_N ; -- comment=1
 lin maid_N = ungmoe_nn_1_1_N ; -- comment=6
-lin maiden_A = mkA "jungfru-" ; -- status=guess
-lin maiden_N = jungfru_nn_1_N ; -- comment=1
+lin maiden_A = mkA "jungfrulig" ; 
+lin maiden_N = jungfru_nn_1_N ; 
 lin mail_N = postverk_nn_1_N ; -- comment=9
 lin mail_V2 = mkV2 (posta_vb_1_V) ; -- status=guess, src=wikt
 lin mailbox_N = brevlaada_nn_1_1_N ; -- comment=2
