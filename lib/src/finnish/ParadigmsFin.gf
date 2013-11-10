@@ -338,6 +338,9 @@ mkVS = overload {
     = \isNeg,nu,noun,_ -> MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun) ;
     } ;
 
+  mkInterj : Str -> Interj
+    = \s -> lin Interj {s = s} ;
+
 --.
 -- THE definitions should not bother the user of the API. So they are
 -- hidden from the document.
