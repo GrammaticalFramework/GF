@@ -76,5 +76,6 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
     en2,ea2,eext : Bool = False   -- indicate if the field exists
     } ;
 
+  comma : Str = SOFT_BIND ++ "," ;
 
 }

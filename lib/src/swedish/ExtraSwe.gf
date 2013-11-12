@@ -33,7 +33,7 @@ lin
        insertObj (\\a => vps.c2.s ++ vps.n3 ! a) (passiveVP vps) ;
 
 
-  RelVS s rvs = {s = \\o => s.s ! o ++ "," ++ rvs.s ! agrP3 Neutr Sg ! RPrep True} ; 
+  RelVS s rvs = {s = \\o => s.s ! o ++ comma ++ rvs.s ! agrP3 Neutr Sg ! RPrep True} ; 
   RelSlashVS t p vs np = let vpform = VPFinite t.t t.a ;
                           cl     = PredVP np (predV vs) ; 
                           vilket = IdRP.s ! Neutr ! Sg ! (RPrep True) in

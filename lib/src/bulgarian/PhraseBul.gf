@@ -25,5 +25,5 @@ concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
     PConjConj conj = {s = conj.s ++ linCoord!conj.conj} ;
 
     NoVoc = {s = []} ;
-    VocNP np = {s = "," ++ np.s ! RVoc} ;
+    VocNP np = {s = comma ++ np.s ! RVoc} ;
 }

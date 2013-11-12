@@ -62,7 +62,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     ExtAdvNP np adv = {
-      s = \\c => np.s ! c ++ "," ++ adv.s ;
+      s = \\c => np.s ! c ++ comma ++ adv.s ;
       a = np.a
       } ;
 

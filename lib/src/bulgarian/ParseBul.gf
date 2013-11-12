@@ -146,7 +146,7 @@ lin
        } ;
 
   ApposNP np1 np2 = {
-    s = \\role => np1.s ! role ++ "," ++ np2.s ! RSubj ;
+    s = \\role => np1.s ! role ++ comma ++ np2.s ! RSubj ;
     a = np1.a
   } ;
   

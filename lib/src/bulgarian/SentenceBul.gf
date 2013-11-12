@@ -47,7 +47,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       c2 = slash.c2
     } ;
 
-    EmbedS  s  = {s = "," ++ "че" ++ s.s} ;
+    EmbedS  s  = {s = comma ++ "че" ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = daComplex Simul Pos vp ! Perf ! {gn=GSg Masc; p=P1}} ;
 
@@ -66,10 +66,10 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       c2 = cl.c2
     } ;
 
-    ExtAdvS a s = {s = a.s ++ "," ++ s.s} ;
+    ExtAdvS a s = {s = a.s ++ comma ++ s.s} ;
     AdvS a s = {s = a.s ++ s.s} ;
 
-    SSubjS a s b = {s = a.s ++ "," ++ s.s ++ b.s} ;
+    SSubjS a s b = {s = a.s ++ comma ++ s.s ++ b.s} ;
 
-    RelS s r = {s = s.s ++ "," ++ r.s ! {gn=gennum ANeut Sg; p=P3}} ;
+    RelS s r = {s = s.s ++ comma ++ r.s ! {gn=gennum ANeut Sg; p=P3}} ;
 }

@@ -113,7 +113,7 @@ lin
   PresPartRS ant pol vp = mkRS ant pol (mkRCl which_RP vp) ; --- probably not as participle construction
 
   ApposNP np1 np2 = {
-    s = \\c => np1.s ! c ++ "," ++ np2.s ! NPNom ;
+    s = \\c => np1.s ! c ++ comma ++ np2.s ! NPNom ;
     a = np1.a
   } ;
   
