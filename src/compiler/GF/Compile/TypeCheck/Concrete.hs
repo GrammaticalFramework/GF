@@ -160,7 +160,8 @@ inferLType gr g trm = case trm of
          checkLType gr g trm (Table arg val)
    V arg pts -> do
      (_,val) <- checks $ map (inferLType gr g) pts
-     return (trm, Table arg val)
+--   return (trm, Table arg val) -- old, caused issue 68
+     checkLType gr g trm (Table arg val)
 
    K s  -> do
      if elem ' ' s
@@ -431,6 +432,12 @@ checkLType gr g trm typ0 = do
         cs' <- mapM (checkCase arg val) cs
         return (T (TTyped arg) cs', typ)
       _ -> checkError $ text "table type expected for table instead of" $$ nest 2 (ppType typ)
+    V arg0 vs ->
+      case typ of
+        Table arg1 val ->
+           do arg' <- checkEqLType gr g arg0 arg1 trm
+              vs' <- map fst `fmap` sequence [checkLType gr g v val|v<-vs]
+              return (V arg' vs',typ)
 
     R r -> case typ of --- why needed? because inference may be too difficult
        RecType rr -> do
