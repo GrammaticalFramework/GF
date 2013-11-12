@@ -1210,6 +1210,18 @@ oper
                      g = ANeut ;
                      lock_N = <>
                    } ;
+  mkN076 : Str -> N ;
+  mkN076 base = let v0 = tk 1 base;
+                    g  = ANeut
+                in {s = mkNoun (v0+"о")
+                               (v0+"ета")
+                               (v0+"ета")
+                               (v0+"о")
+                               g ;
+                    rel = \\_ => base ;
+                    g   = g ;
+                    lock_N = <>
+                   };
   mkA076 : Str -> A ;
   mkA076 base = let v0 = base
                 in mkAdjective (v0)
