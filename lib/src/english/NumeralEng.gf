@@ -69,7 +69,7 @@ lin pot3plus n m = {
 
   oper
     commaIf : DTail -> Str = \t -> case t of {
-      T3 => "," ;
+      T3 => frontComma ;
       _ => []
       } ;
 

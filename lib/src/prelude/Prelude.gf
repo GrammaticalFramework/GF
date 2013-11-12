@@ -2,7 +2,7 @@
 
 -- This file defines some prelude facilities usable in all grammars.
 
-resource Prelude = open (Predef=Predef) in {
+resource Prelude = Predef[nonExist, BIND, SOFT_BIND] ** open (Predef=Predef) in {
 
 oper
 
@@ -32,10 +32,6 @@ oper
 
 
 --2 Optional elements
-
--- Missing form.
-
-  nonExist : Str = Predef.nonExist;
 
 -- Optional string with preference on the string vs. empty.
  
@@ -114,7 +110,6 @@ oper
 
 -- These should be hidden, and never changed since they are hardcoded in (un)lexers
 
-    BIND : Str = Predef.BIND;
     PARA : Str = "&-" ;
     CAPIT : Str = "&|" ;
 

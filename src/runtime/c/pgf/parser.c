@@ -145,6 +145,7 @@ pgf_prev_extern_sym(PgfSymbol sym)
 	case PGF_SYMBOL_VAR:
 		return *((PgfSymbol*) (((PgfSymbolVar*) i.data)+1));
 	case PGF_SYMBOL_BIND:
+	case PGF_SYMBOL_SOFT_BIND:
 		return *((PgfSymbol*) (((PgfSymbolBIND*) i.data)+1));
 	case PGF_SYMBOL_NE:
 		return *((PgfSymbol*) (((PgfSymbolNE*) i.data)+1));
@@ -1137,6 +1138,10 @@ pgf_symbols_cmp(GuString* psent, size_t sent_len, BIND_TYPE* pbind, PgfSymbols* 
 			*pbind = BIND_HARD;
 			break;
 		}
+		case PGF_SYMBOL_SOFT_BIND: {
+			*pbind = BIND_SOFT;
+			break;
+		}
 		case PGF_SYMBOL_NE: {
 			return -2;
 		}
@@ -1632,6 +1637,31 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 			}
 		} else {
 			pgf_item_free(ps, item);
+		}
+		break;
+	}
+	case PGF_SYMBOL_SOFT_BIND: {
+		if (ps->before->start_offset == ps->before->end_offset) {
+			if (ps->before->needs_bind) {
+				PgfParseState* state =
+					pgf_new_parse_state(ps, ps->before->end_offset, BIND_HARD);
+				if (state != NULL) {
+					if (state->next == NULL) {
+						state->viterbi_prob = 
+							item->inside_prob+item->conts->outside_prob;
+					}
+
+					pgf_item_advance(item, ps->pool);
+					gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
+				} else {
+					pgf_item_free(ps, item);
+				}
+			} else {
+				pgf_item_free(ps, item);
+			}
+		} else {
+			pgf_item_advance(item, ps->pool);
+			gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
 		}
 		break;
 	}

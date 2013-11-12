@@ -38,5 +38,6 @@ resource Predef = {
                -- map all strings in a data structure; experimental ---
   oper nonExist : Str = variants {} ;  -- a placeholder for non-existant morphological forms
   oper BIND : Str = variants {} ;  -- a token for gluing
+  oper SOFT_BIND : Str = variants {} ;  -- a token for soft gluing
 
 } ;
