@@ -9,13 +9,13 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
       } ;
 
     ComparA a np = {
-      s = \\aform => "по" ++ "-" ++ a.s ! aform ++ "от" ++ np.s ! RObj Acc ; 
-      adv = "по" ++ "-" ++ a.adv ++ "от" ++ np.s ! RObj Acc ;
+      s = \\aform => "по" ++ hyphen ++ a.s ! aform ++ "от" ++ np.s ! RObj Acc ; 
+      adv = "по" ++ hyphen ++ a.adv ++ "от" ++ np.s ! RObj Acc ;
       isPre = True
       } ;
     UseComparA a = {
-      s = \\aform => "по" ++ "-" ++ a.s ! aform ; 
-      adv = "по" ++ "-" ++ a.adv ;
+      s = \\aform => "по" ++ hyphen ++ a.s ! aform ; 
+      adv = "по" ++ hyphen ++ a.adv ;
       isPre = True
       } ;
 

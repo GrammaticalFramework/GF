@@ -102,7 +102,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     
     AdNum adn num = {s = \\gspec => adn.s ++ num.s ! gspec; n = num.n; nonEmpty = num.nonEmpty} ;
 
-    OrdSuperl a = {s = \\aform => "най" ++ "-" ++ a.s ! aform} ;
+    OrdSuperl a = {s = \\aform => "най" ++ hyphen ++ a.s ! aform} ;
 
     DefArt = {
       s  = table {
