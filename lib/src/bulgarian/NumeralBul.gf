@@ -95,7 +95,7 @@ lin pot3plus n m = {
     IDig d = d ** {tail = T1} ;
 
     IIDig d i = {
-      s = \\o => d.s ! NCard (CFMasc Indef NonHuman) ++ commaIf i.tail ++ i.s ! o ;
+      s = \\o => d.s ! NCard (CFMasc Indef NonHuman) ++ spaceIf i.tail ++ i.s ! o ;
       n = Pl ;
       tail = inc i.tail
     } ;
@@ -112,9 +112,9 @@ lin pot3plus n m = {
     D_9 = mk3Dig "9" "9има" "9ти" Pl ;
 
   oper
-    commaIf : DTail -> Str = \t -> case t of {
-      T3 => comma ;
-      _ => []
+    spaceIf : DTail -> Str = \t -> case t of {
+      T3 => SOFT_BIND ;
+      _  => BIND
       } ;
 
     inc : DTail -> DTail = \t -> case t of {

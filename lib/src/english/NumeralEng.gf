@@ -1,4 +1,4 @@
-concrete NumeralEng of Numeral = CatEng [Numeral,Digits] ** open ResEng in {
+concrete NumeralEng of Numeral = CatEng [Numeral,Digits] ** open Prelude, ResEng in {
 
 lincat 
   Digit = {s : DForm => CardOrd => Case => Str} ;
@@ -69,8 +69,8 @@ lin pot3plus n m = {
 
   oper
     commaIf : DTail -> Str = \t -> case t of {
-      T3 => frontComma ;
-      _ => []
+      T3 => BIND ++ "," ++ BIND ;
+      _  => BIND
       } ;
 
     inc : DTail -> DTail = \t -> case t of {
