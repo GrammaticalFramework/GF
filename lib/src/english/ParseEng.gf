@@ -90,8 +90,8 @@ lin
           compl = vp.s2 ! np.a
         in
         case o of {
-          ODir => compl ++ "," ++ np.s ! npNom ++ verb.aux ++ vp.ad ++ verb.fin ++ verb.adv ++ verb.inf ;
-          OQuest => verb.aux ++ compl ++ "," ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
+          ODir => compl ++ frontComma ++ np.s ! npNom ++ verb.aux ++ vp.ad ++ verb.fin ++ verb.adv ++ verb.inf ;
+          OQuest => verb.aux ++ compl ++ frontComma ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
           }
     } ;
     
@@ -102,7 +102,7 @@ lin
           compl = vp.s2 ! np.a
         in
         case o of {
-          ODir => compl ++ "," ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
+          ODir => compl ++ frontComma ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
           OQuest => verb.aux ++ compl ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom
           }
     } ;
@@ -137,7 +137,7 @@ lin
   } ;
 
   ApposNP np1 np2 = {
-    s = \\c => np1.s ! c ++ "," ++ np2.s ! npNom ++ finalComma ;
+    s = \\c => np1.s ! c ++ frontComma ++ np2.s ! npNom ++ finalComma ;
     a = np1.a
   } ;
   

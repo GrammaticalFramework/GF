@@ -160,6 +160,7 @@ data BracketedTokn
   | LeafKS Token
   | LeafNE
   | LeafBIND
+  | LeafSOFT_BIND
   | LeafKP [BracketedTokn] [([BracketedTokn],[String])]
   deriving Eq
 
@@ -222,6 +223,7 @@ computeSeq filter seq args = concatMap compute seq
     compute (SymKS t)         = [LeafKS t]
     compute SymNE             = [LeafNE]
     compute SymBIND           = [LeafKS "&+"]
+    compute SymSOFT_BIND      = []
     compute (SymKP syms alts) = [LeafKP (concatMap compute syms) [(concatMap compute syms,cs) | (syms,cs) <- alts]]
 
     getArg d r

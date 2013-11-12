@@ -62,6 +62,7 @@ data Symbol
   | SymKS Token
   | SymKP [Symbol] [([Symbol],[String])]
   | SymBIND                         -- the special BIND token
+  | SymSOFT_BIND                    -- the special SOFT_BIND token
   | SymNE                           -- non exist (this should be last constructor to simplify the binary search in the runtime)
   deriving (Eq,Ord,Show)
 data Production

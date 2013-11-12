@@ -22,7 +22,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       } ;
 
     RelNP np rs = {
-      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ++ finalComma ;
+      s = \\c => np.s ! c ++ frontComma ++ rs.s ! np.a ++ finalComma ;
       a = np.a
       } ;
 
@@ -32,7 +32,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       } ;
 
     ExtAdvNP np adv = {
-      s = \\c => np.s ! c ++ "," ++ adv.s ++ finalComma;
+      s = \\c => np.s ! c ++ frontComma ++ adv.s ++ finalComma;
       a = np.a
       } ;
 

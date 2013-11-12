@@ -543,6 +543,7 @@ resource ResEng = ParamX ** open Prelude in {
               }
       } ;
 
-  finalComma : Str = pre {"," | "." => []; "" => ","; _ => []} ;
+  finalComma : Str = pre {"," | "." => []; "" => SOFT_BIND ++ ","; _ => []} ;
+  frontComma : Str = SOFT_BIND ++ "," ;
 
 }

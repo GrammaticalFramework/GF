@@ -280,6 +280,10 @@ pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
 		gu_puts("BIND", out, err);
 		break;
 	}
+	case PGF_SYMBOL_SOFT_BIND: {
+		gu_puts("SOFT_BIND", out, err);
+		break;
+	}
 	default:
 		gu_impossible();
 	}

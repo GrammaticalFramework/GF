@@ -33,7 +33,7 @@ lin
   MkSymb s = s ;
 
   BaseSymb = infixSS "and" ;
-  ConsSymb = infixSS "," ;
+  ConsSymb = infixSS frontComma ;
 
 oper
     -- Note: this results in a space before 's, but there's

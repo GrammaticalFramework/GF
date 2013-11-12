@@ -23,6 +23,6 @@ concrete PhraseEng of Phrase = CatEng ** open Prelude, ResEng in {
     PConjConj conj = {s = conj.s2} ; ---
 
     NoVoc = {s = []} ;
-    VocNP np = {s = "," ++ np.s ! npNom} ;
+    VocNP np = {s = frontComma ++ np.s ! npNom} ;
 
 }

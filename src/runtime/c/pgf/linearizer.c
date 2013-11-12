@@ -723,7 +723,8 @@ pgf_lzr_linearize_symbols(PgfConcr* concr, PgfCncTreeApp* fapp,
 			}
 			break;
 		}
-		case PGF_SYMBOL_BIND: {
+		case PGF_SYMBOL_BIND:
+		case PGF_SYMBOL_SOFT_BIND: {
 			if ((*fnsp)->symbol_bind) {
 				(*fnsp)->symbol_bind(fnsp);
 			}
