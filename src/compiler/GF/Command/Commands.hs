@@ -869,10 +869,9 @@ allCommands = Map.fromList [
        let tmpi = "_tmpi" ---
        let tmpo = "_tmpo"
        restricted $ writeFile tmpi $ toString arg
-       let syst = optComm opts ++ " " ++ tmpi
+       let syst = optComm opts  -- ++ " " ++ tmpi
        restrictedSystem $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo
-       s <- restricted $ readFile tmpo
-       return $ fromString s,
+       fmap fromString $ restricted $ readFile tmpo,
      flags = [
        ("command","the system command applied to the argument")
        ],
