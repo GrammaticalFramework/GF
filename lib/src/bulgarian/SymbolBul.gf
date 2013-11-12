@@ -49,6 +49,6 @@ lin
   MkSymb s = s ;
 
   BaseSymb = infixSS "è" ;
-  ConsSymb = infixSS "," ;
+  ConsSymb = infixSS comma ;
 
 }

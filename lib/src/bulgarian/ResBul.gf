@@ -693,4 +693,6 @@ resource ResBul = ParamX ** open Prelude, Predef in {
     
     linCoordSep : Str -> Bool => Ints 2 => Str ;
     linCoordSep s = table {True => linCoord; False=> \\_ => s} ;
+    
+    comma : Str = SOFT_BIND ++ "," ;
 }
