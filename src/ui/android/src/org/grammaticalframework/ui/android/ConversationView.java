@@ -1,6 +1,7 @@
 package org.grammaticalframework.ui.android;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +89,9 @@ public class ConversationView extends ScrollView {
                 return false;
             }
         });
+        Bundle extras = edittext.getInputExtras(true);
+        extras.putBoolean("show_language_toggle", false);
+
         mContent.addView(view);
         post(new Runnable() {
             public void run() {

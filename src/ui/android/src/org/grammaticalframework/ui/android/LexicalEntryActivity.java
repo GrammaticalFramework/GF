@@ -45,7 +45,7 @@ public class LexicalEntryActivity extends ListActivity {
         mTranslator = ((GFTranslator) getApplicationContext()).getTranslator();
 
 	    mShowLanguageView = (LanguageSelector) findViewById(R.id.show_language);
-	    mShowLanguageView.setLanguages(mTranslator.getAvailableSourceLanguages());
+	    mShowLanguageView.setLanguages(mTranslator.getAvailableLanguages());
 	    mShowLanguageView.setOnLanguageSelectedListener(new OnLanguageSelectedListener() {
             @Override
             public void onLanguageSelected(Language language) {
