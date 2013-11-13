@@ -5860,6 +5860,9 @@ lin degenerate_V = urarta_vb_1_V ; -- comment=3
 lin degeneration_N = foersaemring_nn_1_1_N ; -- comment=1
 lin degradation_N = foernedring_nn_1_1_N ; -- comment=7
 lin degrade_V2 = mkV2 (degradera_vb_1_V) | mkV2 (mkV "nedvärdera") ; -- status=guess, src=wikt status=guess, src=wikt
+lin degree_1_N = maan_nn_1_1_N;
+lin degree_2_N = mkN "examen" "examen" "examina" "examina";
+lin degree_3_N = grad_nn_1_N;
 lin dehydrate_V2 = torka_ut_vbm_1_V2 ; -- comment=3
 lin dehydration_N = uttorkning_nn_1_N ; -- comment=1
 lin deism_N = deism_nn_1_N ; -- status=guess
@@ -24466,7 +24469,6 @@ lin middle_aged_A = invarA "medelålders" ;
 
 -- studying PhD regulations 6/11/2013 AR
 
-  degree_N = mkN "examen" "examen" "examina" "examina" ;
   scope_N = mkN "räckvidd" ;
   duty_N = mkN "plikt" "plikter" ;
   work_N = mkN "arbete" "arbeten" ;
