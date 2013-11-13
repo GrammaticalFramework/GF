@@ -1247,9 +1247,9 @@ pgf_new_parse_state(PgfParsing* ps, size_t start_offset, BIND_TYPE bind_type)
 		pstate = &ps->after;
 		while (*pstate != NULL) {
 			if (bind_type != BIND_NONE) {
-				if (ps->before->start_offset == start_offset &&
-				    ps->before->end_offset   == start_offset &&
-				    !ps->before->needs_bind)
+				if ((*pstate)->start_offset == start_offset &&
+				    (*pstate)->end_offset   == start_offset &&
+				    !(*pstate)->needs_bind)
 					return ps->before;
 			} else {
 				if ((*pstate)->start_offset == start_offset)
