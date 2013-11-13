@@ -131,9 +131,10 @@ public class Translator {
         }
     }
 
-    public String linearize(Expr e) {
+    public String generateTranslationEntry(Expr e) {
+        Concr sourceLang = getConcr(getSourceLanguage().getConcrete());
         Concr targetLang = getConcr(getTargetLanguage().getConcrete());
-        return targetLang.linearize(e);
+        return sourceLang.linearize(e) + " - " + targetLang.linearize(e);
     }
 
     public Map<String,String> tabularLinearize(Expr e) {

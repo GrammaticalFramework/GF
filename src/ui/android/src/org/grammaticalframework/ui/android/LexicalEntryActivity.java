@@ -1,17 +1,13 @@
 package org.grammaticalframework.ui.android;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,8 +18,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -76,8 +70,6 @@ public class LexicalEntryActivity extends ListActivity {
 
 		List<String> data = new ArrayList<String>();
 	    for (MorphoAnalysis a : list) {
-	    	Expr e = Expr.readExpr(a.getLemma());
-	    	
 	    	if (!data.contains(a.getLemma())) {
 		    	data.add(a.getLemma());
 	    	}
@@ -220,7 +212,7 @@ public class LexicalEntryActivity extends ListActivity {
 	        		(TextView) convertView.findViewById(R.id.lexical_desc);
 
 	    	Expr e = Expr.readExpr(lemma);
-	    	String phrase = mTranslator.linearize(e);		    	
+	    	String phrase = mTranslator.generateTranslationEntry(e);
 	        descView.setText(phrase);
 
 	        convertView.setOnClickListener(new OnClickListener() {

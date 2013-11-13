@@ -1,7 +1,5 @@
 package org.grammaticalframework.ui.android;
 
-import java.util.Locale;
-
 import org.grammaticalframework.ui.android.TranslatorKeyboard;
 
 import android.content.Context;
