@@ -67,6 +67,7 @@ public class TranslatorInputMethodService extends InputMethodService
     }
 
     private int mModeId;
+    private EditorInfo mAttribute;
     private static TranslatorInputMethodService mInstance;
 
     static TranslatorInputMethodService getInstance() {
@@ -98,6 +99,7 @@ public class TranslatorInputMethodService extends InputMethodService
             !attribute.extras.getBoolean("show_language_toggle", true)) {
        		mModeId = R.string.internalKeyboardMode;
        	}
+       	mAttribute = attribute;
        	mLanguageKeyboard = new TranslatorKeyboard(this, res, mModeId);
        	mSymbolsKeyboard = new TranslatorKeyboard(this, R.xml.symbols, mModeId);
         mSymbolsShiftedKeyboard = new TranslatorKeyboard(this, R.xml.symbols_shift, mModeId);
@@ -169,7 +171,7 @@ public class TranslatorInputMethodService extends InputMethodService
         
         mActionId = attribute.imeOptions & EditorInfo.IME_MASK_ACTION;
         mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
-        
+
         mInstance = this;
     }
 
@@ -191,8 +193,9 @@ public class TranslatorInputMethodService extends InputMethodService
         if (mInputView != null) {
             mInputView.closing();
         }
-        
+
         mInstance = null;
+        mAttribute = null;
     }
     
     @Override
@@ -504,11 +507,10 @@ public class TranslatorInputMethodService extends InputMethodService
     }
 
     void handleChangeSourceLanguage(Language newSource) {
-       	mLanguageKeyboard =
-       		new TranslatorKeyboard(this, newSource.getKeyboardResource(), mModeId);
+       	updateLanguageKeyboard(newSource);
        	mSymbolsKeyboard.updateLanguageKeyLabels();
         mSymbolsShiftedKeyboard.updateLanguageKeyLabels();
-        mInputView.setKeyboard(mLanguageKeyboard);
+        mInputView.setKeyboard(mCurKeyboard);
     }
 
     void handleChangeTargetLanguage(Language newTarget) {
@@ -520,10 +522,21 @@ public class TranslatorInputMethodService extends InputMethodService
 
     void handleSwitchLanguages() {
     	Language newSource = mTranslator.getSourceLanguage();
-    	mLanguageKeyboard =
-       		new TranslatorKeyboard(this, newSource.getKeyboardResource(), mModeId);
-        mInputView.setKeyboard(mLanguageKeyboard);
+    	updateLanguageKeyboard(newSource);
+       	mSymbolsKeyboard.updateLanguageKeyLabels();
+        mSymbolsShiftedKeyboard.updateLanguageKeyLabels();
+        mInputView.setKeyboard(mCurKeyboard);
     }
+
+	private void updateLanguageKeyboard(Language language) {
+		TranslatorKeyboard keyboard =
+       		new TranslatorKeyboard(this, language.getKeyboardResource(), mModeId);
+		keyboard.setImeOptions(getResources(), mAttribute.imeOptions);
+		if (mCurKeyboard == mLanguageKeyboard) {
+			mCurKeyboard = keyboard;
+		}
+		mLanguageKeyboard = keyboard;
+	}
 
     private void checkToggleCapsLock() {
         long now = System.currentTimeMillis();
