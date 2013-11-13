@@ -202,6 +202,7 @@ oper
 -- build $PP$s in the resource API, just requires a string.
 
   mkPrep : Str -> Prep ; -- e.g. "in front of"
+  mkPost : Str -> Prep ; -- e.g. "ago"
   noPrep : Prep ;  -- no preposition
 
 -- (These two functions are synonyms.)
@@ -486,7 +487,8 @@ mkInterj : Str -> Interj
   mkAdA x = lin AdA (ss x) ;
   mkAdN x = lin AdN (ss x) ;
 
-  mkPrep p = lin Prep (ss p) ;
+  mkPrep p = lin Prep {s=p; isPre=True} ;
+  mkPost p = lin Prep {s=p; isPre=False} ;
   noPrep = mkPrep [] ;
 
   mk5V a b c d e = lin V (mkVerb a b c d e ** {s1 = []}) ;

@@ -1247,7 +1247,6 @@ fun agnosia_N : N;
 fun agnostic_A : A;
 fun agnostic_N : N;
 fun agnosticism_N : N;
-fun ago_A : A;
 fun ago_Adv : Adv;
 fun ago_Prep : Prep ;
 fun agog_A : A;
