@@ -9,7 +9,7 @@ concrete AdverbEng of Adverb = CatEng ** open ResEng, Prelude in {
       s = cadv.s ++ a.s ! AAdv ++ cadv.p ++ s.s
       } ;
 
-    PrepNP prep np = {s = prep.s ++ np.s ! NPAcc} ;
+    PrepNP prep np = {s = preOrPost prep.isPre prep.s (np.s ! NPAcc)} ;
 
     AdAdv = cc2 ;
     PositAdAAdj a = {s = a.s ! AAdv} ;

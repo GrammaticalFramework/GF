@@ -87,7 +87,7 @@ concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
 ---b    Conj = {s : Str ; n : Number} ;
 ---b    DConj = {s1,s2 : Str ; n : Number} ;
     Subj = {s : Str} ;
-    Prep = {s : Str} ;
+    Prep = {s : Str; isPre : Bool} ;
 
 -- Open lexical classes, e.g. Lexicon
 
