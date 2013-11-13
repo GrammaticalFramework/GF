@@ -20400,7 +20400,7 @@ lin spread_V = sprida_vb_1_V ; -- comment=6
 lin spread_V2 = sprida_ut_vbm_1_V2 ; -- comment=4
 lin spread_V2V = mkV2V (mkV (mkV "sprida") "sig som en präriebrand") ; -- status=guess, src=wikt
 lin spread_VS = mkVS (mkV (mkV "sprida") "sig som en präriebrand") ; -- status=guess, src=wikt
-lin spread_out_V = sprida_vb_1_V ; -- comment=6
+lin spread_out_V2 = mkV2 sprida_vb_1_V ; -- comment=6
 lin spreader_N = spridare_nn_1_N ; -- comment=1
 lin spreadsheet_N = kalkylark_nn_1_N | mkN "tabelldokument" ; -- status=guess status=guess
 lin spree_N = sudd_nn_3_N ; -- comment=3
