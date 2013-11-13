@@ -220,7 +220,8 @@ lin
   fight_V2 = L.fight_V2 ; --CHECKED
   find_V2 = L.find_V2 ; --CHECKED
   fingernail_N = L.fingernail_N ; --CHECKED
-  fire_N = L.fire_N ; --CHECKED
+  fire_1_N = L.fire_N ; --CHECKED
+  fire_2_N = L.fire_N ;
   fish_N = L.fish_N ; --CHECKED
   float_V = L.float_V ; --CHECKED
   floor_N = L.floor_N ; --CHECKED

@@ -8385,7 +8385,8 @@ lin finite_A = mkA "ändlig" | mkA "begränsad" ; -- status=guess status=guess
 lin finnish_A = finsk_av_1_A ; -- comment=2
 lin finnish_N = finska_nn_2_N ; -- comment=2
 lin fir_N = gran_nn_2_N ; -- comment=2
-lin fire_N = L.fire_N  ; -- comment=CHECKED
+lin fire_1_N = L.fire_N ; -- comment=CHECKED
+lin fire_2_N = brand_nn_1_N ;
 lin fire_V = steka_vb_1_V ; -- comment=22
 lin fire_V2 = torka_ut_vbm_1_V2 ; -- comment=6
 lin fire_away_V = steka_vb_1_V ; -- comment=22
