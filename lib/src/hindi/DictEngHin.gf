@@ -16065,7 +16065,6 @@ lin marvel_N = mkN "आश्चर्यजनक व्यक्ति" ;     
 lin marvel_V = compoundV "आश्चर्य में पड़" (mkV "जाना") ;       -- old       -- old
 lin marvel_VS = mkVS (compoundV "आश्चर्य में पड़" (mkV "जाना")) ;
 lin marvellous_A = mkA "चमत्कारी" ;       -- old       -- old
-lin marvelous_A = mkA "शानदार" ;       -- old       -- old
 lin marxism_N = mkN "मार्क्सवाद" ;       -- old       -- old
 lin marxist_N = mkN "मार्क्सवादी" ;       -- old       -- old
 lin mary_PN = mkPN "मेरी" ;       -- old       -- old
