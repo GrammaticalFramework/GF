@@ -47985,7 +47985,8 @@ lin rind_N = mkN "svål"; -- comment=3
 lin rinderpest_N = variants {};
 lin ring_N = mkN "slå"; -- comment=16
 lin ring_V = mkV "slå" "slog" "slagit"; -- comment=9
-lin ring_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut"); -- comment=14
+lin ring_4_V2 = dirV2 (partV (mkV "slå" "slog" "slagit") "ut"); -- comment=14
+lin ring_6_V2 = variants {};
 lin ring_armour_N = variants {};
 lin ring_back_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut"); -- comment=14
 lin ring_finger_N = variants {};
