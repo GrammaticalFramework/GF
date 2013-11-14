@@ -1104,8 +1104,8 @@ function draw_concrete(g,i) {
 		   indent([kw_lincat,draw_lincats(g,i)]),
 		   indent([kw_lin,draw_lins(g,i)]),
 		   indent([extensible([kw_param,draw_params(g,i)])]),
-		   indent([extensible([kw_oper,draw_opers(g,i)])])/*,
-		   exb_extra(g,i)*/
+		   indent([extensible([kw_oper,draw_opers(g,i)])]),
+		   exb_extra(g,i)
 		  ])
     if(navigator.onLine) {
 	var mode_button=text_mode(g,file,i+1);
