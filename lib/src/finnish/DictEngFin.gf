@@ -27451,7 +27451,6 @@ marvel_N = mkWN (k48 "ihme") ;
 marvel_V = mkWV (k67 "äimistellä") ;
 marvel_VS = mkWVS (k67 "äimistellä") ;
 marvellous_A = mkWA (k38 "ihmeellinen") ;
-marvelous_A = mkWA (k38 "ihmeellinen") ;
 marxism_N = mkWN (k5 "marxismi") ;
 marxist_N = mkWN (k5A "punikki") ;
 marzipan_N = mkWN (k5 "marsipaani") ;
