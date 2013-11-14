@@ -14220,6 +14220,7 @@ lin data_N = mkN075 "данни";
 lin database_N = mkN041 "база";
 lin datable_A = variants {};
 lin date_1_N = mkN041 "дата";
+lin date_3_N = mkN041 "среща";
 lin date_7_N = mkN041 "фурма";
 lin date_V = variants {};
 lin date_V2 = variants {};

@@ -14733,7 +14733,8 @@ lin data_N = mkN "data"; -- comment=5
 lin database_N = mkN "databas" "databaser";
 lin datable_A = variants {};
 lin date_1_N = mkN "datum" "datum";
-lin date_7_N = variants {};
+lin date_3_N = mkN "träff";
+lin date_7_N = mkN "dadel";
 lin date_V = mkV "daterar"; -- comment=3
 lin date_V2 = mkV2 (mkV "åldras"); -- status=guess, src=wikt
 lin dateless_A = variants {};
