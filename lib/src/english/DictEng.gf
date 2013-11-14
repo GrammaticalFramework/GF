@@ -14192,6 +14192,7 @@ lin data_N = mkN "data" "data";
 lin database_N = mkN "database";
 lin datable_A = compoundA (mkA "datable");
 lin date_1_N = mkN "date" "dates";
+lin date_3_N = mkN "date" "dates";
 lin date_7_N = mkN "date" "dates";
 lin date_V = mkV "date" "dates" "dated" "dated" "dating";
 lin date_V2 = mkV2 (mkV "date" "dates" "dated" "dated" "dating");

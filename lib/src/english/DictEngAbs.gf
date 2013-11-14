@@ -14172,8 +14172,9 @@ fun dasyure_N : N;
 fun data_N : N;
 fun database_N : N;
 fun datable_A : A;
-fun date_1_N : N;
-fun date_7_N : N;
+fun date_1_N : N;  -- | the specified day of the month
+fun date_3_N : N;  -- | a meeting arranged in advance
+fun date_7_N : N;  -- | sweet edible fruit of the date palm with a single long woody seed
 fun date_V : V;
 fun date_V2 : V2;
 fun dateless_A : A;
@@ -14685,9 +14686,9 @@ fun degeneration_N : N;
 fun degenerative_A : A;
 fun degradation_N : N;
 fun degrade_V2 : V2;
-fun degree_1_N : N;
-fun degree_2_N : N;
-fun degree_3_N : N;
+fun degree_1_N : N;  -- | a position on a scale of intensity or amount or quality
+fun degree_2_N : N;  -- | an award conferred by a college or university signifying that the recipient has satisfactorily completed a course of study
+fun degree_3_N : N;  -- | a unit of temperature on a specified scale
 fun degressive_A : A;
 fun dehiscence_N : N;
 fun dehiscent_A : A;
@@ -37608,8 +37609,8 @@ fun orang_outan_N : N;
 fun orang_outang_N : N;
 fun orang_utan_N : N;
 fun orange_A : A;
-fun orange_1_N : N;
-fun orange_2_N : N;
+fun orange_1_N : N;  -- | round yellow to orange fruit of any of several citrus trees
+fun orange_2_N : N;  -- | orange color or pigment; any of a range of colors between red and yellow
 fun orangeade_N : N;
 fun orangeman_N : N;
 fun orangery_N : N;
@@ -52703,8 +52704,8 @@ fun stridor_N : N;
 fun stridulate_V : V;
 fun stridulation_N : N;
 fun strife_N : N;
-fun strike_1_N : N;
-fun strike_2_N : N;
+fun strike_1_N : N;  -- | a group's refusal to work in protest against low pay or bad work conditions
+fun strike_2_N : N;  -- | an attack that is intended to seize or inflict damage on or destroy an objective
 fun strike_V : V;
 fun strike_V2 : V2;
 fun strike_leader_N : N;
