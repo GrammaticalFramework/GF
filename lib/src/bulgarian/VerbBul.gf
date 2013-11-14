@@ -83,6 +83,14 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       compl = vp.compl ;
       vtype = vp.vtype
       } ;
+    AdVVPSlash adv vp = {
+      s   = vp.s ;
+      ad  = {isEmpty=False; s=vp.ad.s ++ adv.s} ;
+      compl1 = vp.compl1 ;
+      compl2 = vp.compl2 ;
+      vtype = vp.vtype ;
+      c2 = vp.c2
+      } ;
 
     ReflVP slash = {
       s = slash.s ;
