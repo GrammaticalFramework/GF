@@ -59,7 +59,7 @@ function ask_possibilities(g,ci) {
 }
 
 var parser = { Eng: "ParseEngAbs.pgf",
-	       Swe: "AllSweAbs.pgf"
+	       Swe: "ParseSwe.pgf"
 	     }
 
 function exb_extra(g,ci) {
