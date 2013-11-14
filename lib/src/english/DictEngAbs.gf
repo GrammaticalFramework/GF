@@ -46114,8 +46114,9 @@ fun rimu_N : N;
 fun rind_N : N;
 fun rinderpest_N : N;
 fun ring_N : N;
-fun ring_V : V;
-fun ring_V2 : V2;
+fun ring_V : V;        -- | sound loudly and sonorously
+fun ring_4_V2 : V2;    -- | get or try to get into communication (with someone) by telephone
+fun ring_6_V2 : V2;    -- | attach a ring to the foot of, in order to identify
 fun ring_armour_N : N;
 fun ring_finger_N : N;
 fun ring_mail_N : N;
