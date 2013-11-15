@@ -16,7 +16,7 @@ PgfPGF*
 pgf_read(const char* fpath,
          GuPool* pool, GuExn* err)
 {
-	FILE* infile = fopen(fpath, "r");
+	FILE* infile = fopen(fpath, "rb");
 	if (infile == NULL) {
 		gu_raise_errno(err);
 		return NULL;
