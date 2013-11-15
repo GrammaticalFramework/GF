@@ -1,6 +1,6 @@
 --# -path=.:abstract:common:prelude
 
-concrete NumeralLav of Numeral = CatLav ** open ResLav, ParadigmsLav in {
+concrete NumeralLav of Numeral = CatLav [Numeral,Digits] ** open ResLav, ParadigmsLav in {
 
 flags coding = utf8 ;
 
