@@ -1263,5 +1263,8 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 void
 pgf_reader_done(PgfReader* rdr, PgfPGF* pgf)
 {
+	if (pgf == NULL)
+		return;
+
 	pgf_jit_done(rdr->jit_state, &pgf->abstract);
 }
