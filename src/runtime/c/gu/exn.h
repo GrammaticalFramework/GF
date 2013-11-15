@@ -64,8 +64,7 @@ struct GuExn {
 	.parent = parent_,	\
 	.catch = gu_kind(catch_),	\
 	.caught = NULL,	\
-	.data.pool = pool_,		\
-	.data.data = NULL \
+	.data = {.pool = pool_, .data = NULL} \
 }
 
 

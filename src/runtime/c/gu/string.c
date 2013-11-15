@@ -179,7 +179,7 @@ gu_string_is_prefix(GuString s1, GuString s2)
 	if (len1 > len2)
 		return false;
 
-	for (size_t len = len1; len--; len > 0) {
+	for (size_t len = len1; len > 0; len--) {
 		if (*s1 != *s2)
 			return false;
 

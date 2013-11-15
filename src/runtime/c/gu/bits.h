@@ -111,36 +111,36 @@ extern GU_DECLARE_TYPE(GuIntDecodeExn, abstract);
 	(((u_) <= (posmax_))					\
 	 ? (t_) (u_)						\
 	 : (tmin_) + ((t_) ((umax_) - (u_))) < 0		\
-	 ? -1 - ((t_) ((umax_) - (u_)))				\
-	 : (gu_raise(err_, GuIntDecodeExn), -1))
+	 ? (t_) (-1 - ((t_) ((umax_) - (u_))))				\
+	 : (t_) (gu_raise(err_, GuIntDecodeExn), -1))
 
 
 static inline int8_t
 gu_decode_2c8(uint8_t u, GuExn* err)
 {
 	return GU_DECODE_2C_(u, int8_t, UINT8_C(0xff), 
-			     INT8_C(0x7f), INT8_MIN, err);
+			     UINT8_C(0x7f), INT8_MIN, err);
 }
 
 static inline int16_t
 gu_decode_2c16(uint16_t u, GuExn* err)
 {
 	return GU_DECODE_2C_(u, int16_t, UINT16_C(0xffff), 
-			     INT16_C(0x7fff), INT16_MIN, err);
+			     UINT16_C(0x7fff), INT16_MIN, err);
 }
 
 static inline int32_t
 gu_decode_2c32(uint32_t u, GuExn* err)
 {
 	return GU_DECODE_2C_(u, int32_t, UINT32_C(0xffffffff), 
-			     INT32_C(0x7fffffff), INT32_MIN, err);
+			     UINT32_C(0x7fffffff), INT32_MIN, err);
 }
 
 static inline int64_t
 gu_decode_2c64(uint64_t u, GuExn* err)
 {
 	return GU_DECODE_2C_(u, int64_t, UINT64_C(0xffffffffffffffff), 
-			     INT64_C(0x7fffffffffffffff), INT64_MIN, err);
+			     UINT64_C(0x7fffffffffffffff), INT64_MIN, err);
 }
 
 double

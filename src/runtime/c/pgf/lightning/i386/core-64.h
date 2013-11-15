@@ -193,7 +193,7 @@ struct jit_local_state {
 #define jit_retval_l(rd)	((void)jit_movr_l ((rd), _EAX))
 #define jit_arg_i()		(_jitl.nextarg_geti < JIT_ARG_MAX \
 				 ? _jitl.nextarg_geti++ \
-				 : ((_jitl.framesize += sizeof(long)) - sizeof(long)))
+				 : (int) ((_jitl.framesize += sizeof(long)) - sizeof(long)))
 #define jit_arg_c()		jit_arg_i()
 #define jit_arg_uc()		jit_arg_i()
 #define jit_arg_s()		jit_arg_i()
