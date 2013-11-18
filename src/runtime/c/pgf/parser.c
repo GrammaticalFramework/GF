@@ -997,15 +997,18 @@ pgf_parsing_new_production(PgfItem* item, PgfExprProb *ep, GuPool *pool)
 }
 
 static void
-pgf_parsing_add_production(PgfParsing* ps,
-                           PgfParseState* before, PgfParseState* after,
-                           PgfItemConts* conts, PgfProduction prod,
-                           prob_t inside_prob)
+pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
 {
-	PgfCCat* tmp_ccat = pgf_parsing_get_completed(before, conts);
+	PgfProduction prod =
+		pgf_parsing_new_production(item, ep, ps->pool);
+#ifdef PGF_COUNTS_DEBUG
+	ps->prod_full_count++;
+#endif
+
+	PgfCCat* tmp_ccat = pgf_parsing_get_completed(ps->before, item->conts);
     PgfCCat* ccat = tmp_ccat;
     if (ccat == NULL) {
-        ccat = pgf_parsing_create_completed(ps, before, conts, inside_prob);
+        ccat = pgf_parsing_create_completed(ps, ps->before, item->conts, item->inside_prob);
     }
 
 	if (ccat->prods == NULL || ccat->n_synprods >= gu_seq_length(ccat->prods)) {
@@ -1031,7 +1034,7 @@ pgf_parsing_add_production(PgfParsing* ps,
 
 	if (tmp_ccat != NULL) {
 		PgfItemContss* contss =
-			pgf_parsing_get_contss(before, ccat, ps->pool);
+			pgf_parsing_get_contss(ps->before, ccat, ps->pool);
 		size_t n_contss = gu_seq_length(contss);
 		for (size_t i = 0; i < n_contss; i++) {
 			PgfItemConts* conts2 = gu_seq_get(contss, PgfItemConts*, i);
@@ -1041,13 +1044,13 @@ pgf_parsing_add_production(PgfParsing* ps,
 			 * production immediately to the agenda,
 			 * i.e. process it. */
 			if (conts2) {
-				pgf_parsing_production(ps, before, conts2, prod);
+				pgf_parsing_production(ps, ps->before, conts2, prod);
 			}
 		}
 
 		// The category has already been created. If it has also been
 		// predicted already, then process a new item for this production.
-		PgfParseState* state = after;
+		PgfParseState* state = ps->after;
 		while (state != NULL) {
 			PgfItemContss* contss =
 				pgf_parsing_get_contss(state, ccat, ps->pool);
@@ -1071,24 +1074,12 @@ pgf_parsing_add_production(PgfParsing* ps,
 			pgf_result_production(ps, ccat->answers, prod);
 		}
 	} else {
-		size_t n_conts = gu_buf_length(conts->items);
+		size_t n_conts = gu_buf_length(item->conts->items);
 		for (size_t i = 0; i < n_conts; i++) {
-			PgfItem* cont = gu_buf_get(conts->items, PgfItem*, i);
-			pgf_parsing_combine(ps, before, after, cont, ccat, conts->lin_idx);
+			PgfItem* cont = gu_buf_get(item->conts->items, PgfItem*, i);
+			pgf_parsing_combine(ps, ps->before, ps->after, cont, ccat, item->conts->lin_idx);
 		}
     }
-}
-
-static void
-pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
-{
-	PgfProduction prod =
-		pgf_parsing_new_production(item, ep, ps->pool);
-#ifdef PGF_COUNTS_DEBUG
-	before->ps->prod_full_count++;
-#endif
-
-	pgf_parsing_add_production(ps, ps->before, ps->after, item->conts, prod, item->inside_prob);
 }
 
 static int
@@ -1196,7 +1187,7 @@ pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state)
 					PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
 					entry->idx       = seq->idx;
 					entry->bind_type = bind_type;
-					entry->offset    = (current - ps->sentence);
+					entry->offset    = (current - ps->sentence);					
 				}
 				i = k+1;
 				goto next;
@@ -1316,6 +1307,20 @@ pgf_parsing_add_transition(PgfParsing* ps, PgfToken tok, PgfItem* item)
 }
 
 static void
+pgf_parsing_predict_lexeme(PgfParsing* ps,
+                           PgfParseState* state, PgfItemConts* conts,
+                           PgfProductionIdxEntry* entry)
+{
+	GuVariantInfo i = { PGF_PRODUCTION_APPLY, entry->papp };
+	PgfProduction prod = gu_variant_close(i);
+	PgfItem* item =
+        pgf_new_item(ps, conts, prod);
+    PgfSymbols* syms = entry->papp->fun->lins[conts->lin_idx]->syms;
+    item->sym_idx = gu_seq_length(syms);
+    gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
+}
+
+static void
 pgf_parsing_td_predict(PgfParsing* ps,
                        PgfItem* item, PgfCCat* ccat, size_t lin_idx)
 {
@@ -1357,11 +1362,28 @@ pgf_parsing_td_predict(PgfParsing* ps,
 									 PgfProductionIdxEntry, &key);
 
 				if (value != NULL) {
-					GuVariantInfo i = { PGF_PRODUCTION_APPLY, value->papp };
-					PgfProduction prod = gu_variant_close(i);
-					pgf_parsing_add_production(ps, state, state->next, 
-											   conts, prod, 
-											   value->papp->fun->absfun->ep.prob);
+                    pgf_parsing_predict_lexeme(ps, state, conts, value);
+                    
+                    PgfProductionIdxEntry* start =
+						gu_buf_data(lentry->idx);
+					PgfProductionIdxEntry* end =
+						start + gu_buf_length(lentry->idx)-1;
+
+                    PgfProductionIdxEntry* left = value-1;
+                    while (left >= start &&
+                           value->ccat->fid == left->ccat->fid &&
+                           value->lin_idx   == left->lin_idx) {
+						pgf_parsing_predict_lexeme(ps, state, conts, left);
+						left--;
+					}
+
+					PgfProductionIdxEntry* right = value+1;
+                    while (right <= end &&
+                           value->ccat->fid == right->ccat->fid &&
+                           value->lin_idx   == right->lin_idx) {
+						pgf_parsing_predict_lexeme(ps, state, conts, right);
+						right--;
+					}
 				}
 			}
 		}
@@ -2683,7 +2705,20 @@ pgf_parser_index(PgfConcr* concr,
 				pgf_parser_index_pre(concr, seq, choice, pool);
 			}
 
-			PgfProductionIdxEntry* entry = gu_buf_extend(seq->idx);
+			size_t i = gu_buf_length(seq->idx);
+			while (i > 0) {
+				PgfProductionIdxEntry* entry =
+					gu_buf_index(seq->idx, PgfProductionIdxEntry, i-1);
+
+				if (entry->ccat->fid < ccat->fid)
+					break;
+				if (entry->lin_idx <= lin_idx)
+					break;
+
+				i--;
+			}
+
+			PgfProductionIdxEntry* entry = gu_buf_insert(seq->idx, i);
 			entry->ccat    = ccat;
 			entry->lin_idx = lin_idx;
 			entry->papp    = papp;
