@@ -201,6 +201,20 @@ gu_buf_freeze(GuBuf* buf, GuPool* pool)
 	return seq;
 }
 
+void*
+gu_buf_insert(GuBuf* buf, size_t index)
+{
+	size_t len = buf->seq->len;
+	gu_buf_require(buf, len + 1);
+
+	uint8_t* target =
+		buf->seq->data + buf->elem_size * index;
+	memmove(target+buf->elem_size, target, (len-index)*buf->elem_size);
+
+	buf->seq->len++;
+	return target;
+}
+
 static void
 gu_quick_sort(GuBuf *buf, GuOrder *order, int left, int right)
 {

@@ -102,6 +102,9 @@ gu_buf_trim_n(GuBuf* buf, size_t n_elems);
 const void*
 gu_buf_trim(GuBuf* buf);
 
+void*
+gu_buf_insert(GuBuf* buf, size_t n_index);
+
 void
 gu_buf_flush(GuBuf* buf);
 
