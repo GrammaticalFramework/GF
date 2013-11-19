@@ -46,6 +46,7 @@ import Data.List(intersperse,nub)
 import Data.Maybe
 import qualified Data.Map as Map
 --import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
+import GF.System.Process
 import Text.PrettyPrint
 import Data.List (sort)
 --import Debug.Trace
@@ -866,12 +867,15 @@ allCommands = Map.fromList [
      synopsis = "send argument to a system command",
      syntax   = "sp -command=\"SYSTEMCOMMAND\", alt. ? SYSTEMCOMMAND",
      exec = \_ opts arg -> do
+       let syst = optComm opts  -- ++ " " ++ tmpi
+       {-
        let tmpi = "_tmpi" ---
        let tmpo = "_tmpo"
        restricted $ writeFile tmpi $ toString arg
-       let syst = optComm opts  -- ++ " " ++ tmpi
        restrictedSystem $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo
        fmap fromString $ restricted $ readFile tmpo,
+       -}
+       fmap fromString . restricted . readShellProcess syst $ toString arg,
      flags = [
        ("command","the system command applied to the argument")
        ],
