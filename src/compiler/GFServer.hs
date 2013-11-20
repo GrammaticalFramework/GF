@@ -7,7 +7,7 @@ import Control.Monad(when)
 import Control.Monad.State(StateT(..),get,gets,put)
 import Control.Monad.Error(ErrorT(..),Error(..))
 import System.Random(randomRIO)
-import System.IO(stderr,hPutStrLn)
+--import System.IO(stderr,hPutStrLn)
 import GF.System.Catch(try)
 import System.IO.Error(isAlreadyExistsError)
 import GF.System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
@@ -33,7 +33,7 @@ import Text.JSON(encode,showJSON,makeObj)
 import System.Process(readProcessWithExitCode)
 import System.Exit(ExitCode(..))
 import Codec.Binary.UTF8.String(decodeString,encodeString)
-import GF.Infra.UseIO(readBinaryFile,writeBinaryFile)
+import GF.Infra.UseIO(readBinaryFile,writeBinaryFile,ePutStrLn)
 import GF.Infra.SIO(captureSIO)
 import qualified PGFService as PS
 import qualified ExampleService as ES
@@ -334,7 +334,7 @@ serveStaticFile' path =
                             return (resp404 path)
 
 -- * Logging
-logPutStrLn s = liftIO . hPutStrLn stderr $ s
+logPutStrLn s = ePutStrLn s
 
 -- * JSONP output
 

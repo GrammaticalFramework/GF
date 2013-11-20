@@ -13,7 +13,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Infra.UseIO where
+module GF.Infra.UseIO(module GF.Infra.UseIO,MonadIO(..),liftErr) where
 
 import Prelude hiding (catch)
 
@@ -35,8 +35,8 @@ import Control.Monad
 import Control.Monad.Trans(MonadIO(..))
 import Control.Exception(evaluate)
 
-putShow' :: Show a => (c -> a) -> c -> IO ()
-putShow' f = putStrLn . show . length . show . f
+--putShow' :: Show a => (c -> a) -> c -> IO ()
+--putShow' f = putStrLn . show . length . show . f
 
 putIfVerb :: Options -> String -> IO ()
 putIfVerb opts msg =
@@ -118,12 +118,6 @@ splitInModuleSearchPath s = case break isPathSep s of
 
 --
 
-putStrFlush :: String -> IO ()
-putStrFlush s = putStr s >> hFlush stdout
-
-putStrLnFlush :: String -> IO ()
-putStrLnFlush s = putStrLn s >> hFlush stdout
-
 -- * IO monad with error; adapted from state monad
 
 newtype IOE a = IOE { appIOE :: IO (Err a) }
@@ -131,14 +125,11 @@ newtype IOE a = IOE { appIOE :: IO (Err a) }
 ioe :: IO (Err a) -> IOE a
 ioe = IOE
 
-ioeIO :: IO a -> IOE a
-ioeIO io = ioe (io >>= return . return)
+instance MonadIO IOE where liftIO io = ioe (io >>= return . return)
 
-ioeErr :: Err a -> IOE a
-ioeErr = ioe . return 
-
-ioeErrIn :: String -> IOE a -> IOE a
-ioeErrIn msg (IOE ioe) = IOE (fmap (errIn msg) ioe)
+instance ErrorMonad IOE where
+  raise = ioe . return . Bad
+  handle m h = ioe $ err (appIOE . h) (return . Ok) =<< appIOE m
 
 instance Functor IOE where fmap = liftM
 
@@ -146,22 +137,17 @@ instance  Monad IOE where
   return a    = ioe (return (return a))
   IOE c >>= f = IOE $ do 
                   x <- c          -- Err a
-                  appIOE $ err ioeBad f x         -- f :: a -> IOE a
-  fail = ioeBad
-
-instance MonadIO IOE where liftIO = ioeIO
-
-ioeBad :: String -> IOE a
-ioeBad = ioe . return . Bad
+                  appIOE $ err raise f x         -- f :: a -> IOE a
+  fail = raise
 
 useIOE :: a -> IOE a -> IO a
 useIOE a ioe = appIOE ioe >>= err (\s -> putStrLn s >> return a) return 
 
-foldIOE :: (a -> b -> IOE a) -> a -> [b] -> IOE (a, Maybe String)
+--foldIOE :: (a -> b -> IOE a) -> a -> [b] -> IOE (a, Maybe String)
 foldIOE f s xs = case xs of
   [] -> return (s,Nothing)
   x:xx -> do
-    ev <- ioeIO $ appIOE (f s x) 
+    ev <- liftIO $ appIOE (f s x) 
     case ev of 
       Ok v  -> foldIOE f v xx
       Bad m -> return $ (s, Just m)
@@ -170,19 +156,19 @@ die :: String -> IO a
 die s = do hPutStrLn stderr s
            exitFailure
 
-putStrLnE :: String -> IOE ()
-putStrLnE = ioeIO . putStrLnFlush 
+ePutStr, ePutStrLn, putStrE, putStrLnE :: MonadIO m => String -> m ()
+ePutStr s = liftIO $ hPutStr stderr s
+ePutStrLn s = liftIO $ hPutStrLn stderr s
+putStrLnE s = liftIO $ putStrLn s >> hFlush stdout
+putStrE s = liftIO $ putStr s >> hFlush stdout
 
-putStrE :: String -> IOE ()
-putStrE = ioeIO . putStrFlush 
-
-putPointE :: Verbosity -> Options -> String -> IOE a -> IOE a
+putPointE :: MonadIO m => Verbosity -> Options -> String -> m a -> m a
 putPointE v opts msg act = do
-  when (verbAtLeast opts v) $ ioeIO $ putStrFlush msg
+  when (verbAtLeast opts v) $ putStrE msg
 
-  t1 <- ioeIO $ getCPUTime
-  a <- act >>= ioeIO . evaluate
-  t2 <- ioeIO $ getCPUTime
+  t1 <- liftIO $ getCPUTime
+  a <- act >>= liftIO . evaluate
+  t2 <- liftIO $ getCPUTime
 
   if flag optShowCPUTime opts
       then do let msec = (t2 - t1) `div` 1000000000

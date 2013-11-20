@@ -262,22 +262,22 @@ mkWildCases = mkCases identW
 mkFunType :: [Type] -> Type -> Type
 mkFunType tt t = mkProd [(Explicit,identW, ty) | ty <- tt] t [] -- nondep prod
 
-plusRecType :: Type -> Type -> Err Type
+--plusRecType :: Type -> Type -> Err Type
 plusRecType t1 t2 = case (t1, t2) of
   (RecType r1, RecType r2) -> case
     filter (`elem` (map fst r1)) (map fst r2) of
       [] -> return (RecType (r1 ++ r2))
-      ls -> fail $ render (text "clashing labels" <+> hsep (map ppLabel ls))
-  _ -> fail $ render (text "cannot add record types" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2) 
+      ls -> raise $ render (text "clashing labels" <+> hsep (map ppLabel ls))
+  _ -> raise $ render (text "cannot add record types" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2) 
 
-plusRecord :: Term -> Term -> Err Term
+--plusRecord :: Term -> Term -> Err Term
 plusRecord t1 t2 =
  case (t1,t2) of
    (R r1, R r2 ) -> return (R ([(l,v) | -- overshadowing of old fields
                               (l,v) <- r1, not (elem l (map fst r2)) ] ++ r2))
    (_,    FV rs) -> mapM (plusRecord t1) rs >>= return . FV
    (FV rs,_    ) -> mapM (`plusRecord` t2) rs >>= return . FV
-   _ -> fail $ render (text "cannot add records" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2)
+   _ -> raise $ render (text "cannot add records" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2)
 
 -- | default linearization type
 defLinType :: Type
@@ -444,7 +444,7 @@ strsFromTerm t = case t of
            ]
   FV ts -> mapM strsFromTerm ts >>= return . concat
   Strs ts -> mapM strsFromTerm ts >>= return . concat  
-  _ -> fail (render (text "cannot get Str from term" <+> ppTerm Unqualified 0 t))
+  _ -> raise (render (text "cannot get Str from term" <+> ppTerm Unqualified 0 t))
 
 -- | to print an Str-denoting term as a string; if the term is of wrong type, the error msg
 stringFromTerm :: Term -> String
@@ -599,20 +599,20 @@ allDependencies ism b =
       AbsCat (Just (L loc co)) -> [Just (L loc ty) | (_,_,ty) <- co]
       _              -> []
 
-topoSortJments :: SourceModule -> Err [(Ident,Info)]
+topoSortJments :: ErrorMonad m => SourceModule -> m [(Ident,Info)]
 topoSortJments (m,mi) = do
   is <- either
           return
-          (\cyc -> Bad (render (text "circular definitions:" <+> fsep (map ppIdent (head cyc)))))
+          (\cyc -> raise (render (text "circular definitions:" <+> fsep (map ppIdent (head cyc)))))
           (topoTest (allDependencies (==m) (jments mi)))
   return (reverse [(i,info) | i <- is, Ok info <- [lookupTree showIdent i (jments mi)]])
 
-topoSortJments2 :: SourceModule -> Err [[(Ident,Info)]]
+topoSortJments2 :: ErrorMonad m => SourceModule -> m [[(Ident,Info)]]
 topoSortJments2 (m,mi) = do
   iss <- either
            return
-           (\cyc -> fail (render (text "circular definitions:"
-                                  <+> fsep (map ppIdent (head cyc)))))
+           (\cyc -> raise (render (text "circular definitions:"
+                                   <+> fsep (map ppIdent (head cyc)))))
            (topoTest2 (allDependencies (==m) (jments mi)))
   return
     [[(i,info) | i<-is,Ok info<-[lookupTree showIdent i (jments mi)]] | is<-iss]

@@ -29,10 +29,10 @@ import Control.Monad
 import Text.PrettyPrint
 --import Debug.Trace
 
-matchPattern :: [(Patt,rhs)] -> Term -> Err (rhs, Substitution)
+matchPattern :: ErrorMonad m => [(Patt,rhs)] -> Term -> m (rhs, Substitution)
 matchPattern pts term = 
   if not (isInConstantForm term)
-    then Bad (render (text "variables occur in" <+> ppTerm Unqualified 0 term))
+    then raise (render (text "variables occur in" <+> ppTerm Unqualified 0 term))
   else do
     term' <- mkK term
     errIn (render (text "trying patterns" <+> hsep (punctuate comma (map (ppPatt Unqualified 0 . fst) pts)))) $
@@ -49,20 +49,20 @@ matchPattern pts term =
     K w -> return [w]
     C v w -> liftM2 (++) (getS v) (getS w)
     Empty -> return []
-    _ -> Bad (render (text "cannot get string from" <+> ppTerm Unqualified 0 s))
+    _ -> raise (render (text "cannot get string from" <+> ppTerm Unqualified 0 s))
 
-testOvershadow :: [Patt] -> [Term] -> Err [Patt]
+testOvershadow :: ErrorMonad m => [Patt] -> [Term] -> m [Patt]
 testOvershadow pts vs = do
   let numpts = zip pts [0..]
   let cases  = [(p,EInt i) | (p,i) <- numpts]
   ts <- mapM (liftM fst . matchPattern cases) vs
   return [p | (p,i) <- numpts, notElem i [i | EInt i <- ts] ]
 
-findMatch :: [([Patt],rhs)] -> [Term] -> Err (rhs, Substitution)
+findMatch :: ErrorMonad m => [([Patt],rhs)] -> [Term] -> m (rhs, Substitution)
 findMatch cases terms = case cases of
-   [] -> Bad (render (text "no applicable case for" <+> hsep (punctuate comma (map (ppTerm Unqualified 0) terms))))
+   [] -> raise (render (text "no applicable case for" <+> hsep (punctuate comma (map (ppTerm Unqualified 0) terms))))
    (patts,_):_ | length patts /= length terms -> 
-       Bad (render (text "wrong number of args for patterns :" <+> hsep (map (ppPatt Unqualified 0) patts) <+> 
+       raise (render (text "wrong number of args for patterns :" <+> hsep (map (ppPatt Unqualified 0) patts) <+> 
                     text "cannot take" <+> hsep (map (ppTerm Unqualified 0) terms)))
    (patts,val):cc -> case mapM tryMatch (zip patts terms) of
        Ok substs -> return (val, concat substs)
@@ -116,7 +116,7 @@ tryMatch (p,t) = do
 
       (PNeg p',_) -> case tryMatch (p',t) of
         Bad _ -> return []
-        _ -> Bad (render (text "no match with negative pattern" <+> ppPatt Unqualified 0 p))
+        _ -> raise (render (text "no match with negative pattern" <+> ppPatt Unqualified 0 p))
 
       (PSeq p1 p2, ([],K s, [])) -> matchPSeq p1 p2 s
       (PMSeq mp1 mp2, ([],K s, [])) -> matchPMSeq mp1 mp2 s
@@ -130,7 +130,7 @@ tryMatch (p,t) = do
       (PChar,  ([],K [_], [])) -> return []
       (PChars cs, ([],K [c], [])) | elem c cs -> return []
 
-      _ -> Bad (render (text "no match in case expr for" <+> ppTerm Unqualified 0 t))
+      _ -> raise (render (text "no match in case expr for" <+> ppTerm Unqualified 0 t))
 
 matchPMSeq (m1,p1) (m2,p2) s = matchPSeq' m1 p1 m2 p2 s
 --matchPSeq p1 p2 s = matchPSeq' (0,maxBound::Int) p1 (0,maxBound::Int) p2 s

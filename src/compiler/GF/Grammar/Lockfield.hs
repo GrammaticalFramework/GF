@@ -20,9 +20,9 @@ import GF.Infra.Ident
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
 
-import GF.Data.Operations
+import GF.Data.Operations(ErrorMonad,Err(..))
 
-lockRecType :: Ident -> Type -> Err Type
+lockRecType :: ErrorMonad m => Ident -> Type -> m Type
 lockRecType c t@(RecType rs) = 
   let lab = lockLabel c in
   return $ if elem lab (map fst rs) || elem (showIdent c) ["String","Int"]

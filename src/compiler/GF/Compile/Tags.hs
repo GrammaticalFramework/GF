@@ -19,7 +19,7 @@ writeTags opts gr file mo = do
   let imports = getImports opts gr mo
       locals  = getLocalTags [] mo
       txt     = unlines ((Set.toList . Set.fromList) (imports++locals))
-  putPointE Normal opts ("  write file" +++ file) $ ioeIO $ writeFile file txt
+  putPointE Normal opts ("  write file" +++ file) $ liftIO $ writeFile file txt
 
 getLocalTags x (m,mi) = 
   [showIdent i ++ "\t" ++ k ++ "\t" ++ l ++ "\t" ++ t 

@@ -12,7 +12,6 @@ import Data.Version
 import System.Directory
 import System.Environment (getArgs)
 import System.Exit
-import System.IO
 import GF.System.Console (setConsoleEncoding)
 
 main :: IO ()
@@ -23,8 +22,8 @@ main = do
     Ok (opts,files) -> do curr_dir <- getCurrentDirectory
                           lib_dir  <- getLibraryDirectory opts
                           mainOpts (fixRelativeLibPaths curr_dir lib_dir opts) files
-    Bad err         -> do hPutStrLn stderr err
-                          hPutStrLn stderr "You may want to try --help."
+    Bad err         -> do ePutStrLn err
+                          ePutStrLn "You may want to try --help."
                           exitFailure
 
 mainOpts :: Options -> [FilePath] -> IO ()

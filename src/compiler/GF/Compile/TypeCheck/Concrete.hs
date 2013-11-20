@@ -23,7 +23,7 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
       | isPredefConstant ty     -> return ty ---- shouldn't be needed
 
     Q (m,ident) -> checkIn (text "module" <+> ppIdent m) $ do
-      ty' <- checkErr (lookupResDef gr (m,ident)) 
+      ty' <- lookupResDef gr (m,ident)
       if ty' == ty then return ty else comp g ty' --- is this necessary to test?
 
     Vr ident  -> checkLookup ident g -- never needed to compute!
@@ -50,7 +50,7 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
       r' <- comp g r
       s' <- comp g s
       case (r',s') of
-        (RecType rs, RecType ss) -> checkErr (plusRecType r' s') >>= comp g
+        (RecType rs, RecType ss) -> plusRecType r' s' >>= comp g
         _ -> return $ ExtR r' s'
 
     RecType fs -> do
@@ -59,7 +59,7 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
 
     ELincat c t -> do
       t' <- comp g t
-      checkErr $ lockRecType c t' ---- locking to be removed AR 20/6/2009
+      lockRecType c t' ---- locking to be removed AR 20/6/2009
 
     _ | ty == typeTok -> return typeStr
     _ | isPredefConstant ty -> return ty
@@ -76,9 +76,9 @@ inferLType gr g trm = case trm of
                                                 Nothing -> checkError (text "unknown in Predef:" <+> ppIdent ident)
 
    Q ident -> checks [
-     termWith trm $ checkErr (lookupResType gr ident) >>= computeLType gr g
+     termWith trm $ lookupResType gr ident >>= computeLType gr g
      ,
-     checkErr (lookupResDef gr ident) >>= inferLType gr g
+     lookupResDef gr ident >>= inferLType gr g
      ,
      checkError (text "cannot infer type of constant" <+> ppTerm Unqualified 0 trm)
      ]
@@ -88,9 +88,9 @@ inferLType gr g trm = case trm of
                                                  Nothing -> checkError (text "unknown in Predef:" <+> ppIdent ident)
 
    QC ident -> checks [
-       termWith trm $ checkErr (lookupResType gr ident) >>= computeLType gr g
+       termWith trm $ lookupResType gr ident >>= computeLType gr g
        ,
-       checkErr (lookupResDef gr ident) >>= inferLType gr g
+       lookupResDef gr ident >>= inferLType gr g
        ,
        checkError (text "cannot infer type of canonical constant" <+> ppTerm Unqualified 0 trm)
        ]
@@ -214,10 +214,10 @@ inferLType gr g trm = case trm of
      sT'     <- computeLType gr g sT
 
      let trm' = ExtR r' s'
-     ---- trm'    <- checkErr $ plusRecord r' s'
+     ---- trm'    <- plusRecord r' s'
      case (rT', sT') of
        (RecType rs, RecType ss) -> do
-         rt <- checkErr $ plusRecType rT' sT'
+         rt <- plusRecType rT' sT'
          checkLType gr g trm' rt ---- return (trm', rt)
        _ | rT' == typeType && sT' == typeType -> return (trm', typeType)
        _ -> checkError (text "records or record types expected in" <+> ppTerm Unqualified 0 trm)
@@ -249,7 +249,7 @@ inferLType gr g trm = case trm of
 
    ELin c trm -> do
      (trm',ty) <- inferLType gr g trm
-     ty' <- checkErr $ lockRecType c ty ---- lookup c; remove lock AR 20/6/2009
+     ty' <- lockRecType c ty ---- lookup c; remove lock AR 20/6/2009
      return $ (ELin c trm', ty') 
 
    _ -> checkError (text "cannot infer lintype of" <+> ppTerm Unqualified 0 trm)
@@ -289,7 +289,7 @@ inferLType gr g trm = case trm of
      _ -> False
 
    inferPatt p = case p of
-     PP (q,c) ps | q /= cPredef -> checkErr $ liftM valTypeCnc (lookupResType gr (q,c))
+     PP (q,c) ps | q /= cPredef -> liftM valTypeCnc (lookupResType gr (q,c))
      PAs _ p  -> inferPatt p
      PNeg p   -> inferPatt p
      PAlt p q -> checks [inferPatt p, inferPatt q]
@@ -423,7 +423,7 @@ checkLType gr g trm typ0 = do
         case allParamValues gr arg of
           Ok vs -> do
             let ps0 = map fst cs
-            ps <- checkErr $ testOvershadow ps0 vs
+            ps <- testOvershadow ps0 vs
             if null ps 
               then return () 
               else checkWarn (text "patterns never reached:" $$
@@ -511,7 +511,7 @@ checkLType gr g trm typ0 = do
         checkLType gr g (Let (x,(Just ty,def')) body) typ
 
     ELin c tr -> do
-      tr1 <- checkErr $ unlockRecord c tr
+      tr1 <- unlockRecord c tr
       checkLType gr g tr1 typ
 
     _ -> do
@@ -547,7 +547,7 @@ pattContext :: SourceGrammar -> Context -> Type -> Patt -> Check Context
 pattContext env g typ p = case p of
   PV x -> return [(Explicit,x,typ)]
   PP (q,c) ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
-    t <- checkErr $ lookupResType env (q,c)
+    t <- lookupResType env (q,c)
     let (cont,v) = typeFormCnc t
     checkCond (text "wrong number of arguments for constructor in" <+> ppPatt Unqualified 0 p) 
               (length cont == length ps)

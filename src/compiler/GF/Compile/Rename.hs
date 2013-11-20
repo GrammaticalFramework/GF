@@ -45,7 +45,7 @@ import Text.PrettyPrint
 -- | this gives top-level access to renaming term input in the cc command
 renameSourceTerm :: SourceGrammar -> Ident -> Term -> Check Term
 renameSourceTerm g m t = do
-  mi     <- checkErr $ lookupModule g m
+  mi     <- lookupModule g m
   status <- buildStatus g (m,mi)
   renameTerm status [] t
 
@@ -72,12 +72,12 @@ renameIdentTerm' env@(act,imps) t0 =
     Cn c -> ident (\_ s -> checkError s) c
     Q (m',c) | m' == cPredef {- && isInPredefined c -} -> return t0
     Q (m',c) -> do
-      m <- checkErr (lookupErr m' qualifs)
+      m <- lookupErr m' qualifs
       f <- lookupTree showIdent c m
       return $ f c
     QC (m',c) | m' == cPredef {- && isInPredefined c -} -> return t0
     QC (m',c) -> do
-      m <- checkErr (lookupErr m' qualifs)
+      m <- lookupErr m' qualifs
       f <- lookupTree showIdent c m
       return $ f c
     _ -> return t0
@@ -127,7 +127,7 @@ buildStatus :: SourceGrammar -> SourceModule -> Check Status
 buildStatus gr mo@(m,mi) = checkIn (ppLocation (msrc mi) NoLoc <> colon) $ do
   let gr1  = prependModule gr mo
       exts = [(OSimple m,mi) | (m,mi) <- allExtends gr1 m]
-  ops <- checkErr $ mapM (\o -> lookupModule gr1 (openedModule o) >>= \mi -> return (o,mi)) (mopens mi)
+  ops <- mapM (\o -> lookupModule gr1 (openedModule o) >>= \mi -> return (o,mi)) (mopens mi)
   let sts = map modInfo2status (exts++ops)
   return (if isModCnc mi
             then (emptyBinTree,    reverse sts)  -- the module itself does not define any names
