@@ -65,11 +65,27 @@ incomplete concrete VerbRomance of Verb =
       mkVPSlash vp.c2
         (insertComplement (\\a => prepCase v.c2.c ++ infVP vp a) (predV v)) ;
 
+    SlashV2VNP v np vps = let obj = np.s ! v.c2.c in { 
+      s     = v ;
+      agr   = partAgr v.vtyp ;
+      clit1 = obj.c1 ; 
+      clit2 = obj.c2 ; 
+      clit3 = {s,imp = [] ; hasClit = False} ; ---- shortcut from insertObject, to check AR 20/11/2013 
+      isNeg = False ;  
+      neg   = negation ;
+      comp  = \\a => v.c2.s ++ obj.comp ++ prepCase v.c3.c ++ infVP vps a ;
+      ext   = \\p => [] ;
+      c2    = vps.c2
+      } ;
+
+{-  ---- this takes ages to compile, hence inlined as above AR 20/11/2013 
     SlashV2VNP v np vp = 
       mkVPSlash vp.c2
        (insertComplement 
          (\\a => prepCase v.c3.c ++ infVP vp a) 
          (insertObject v.c2 np (predV v))) ; 
+-}
+
 
     UseComp comp = insertComplement comp.s (predV copula) ;
 
