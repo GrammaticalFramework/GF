@@ -191,24 +191,24 @@ globalizeLoc fpath i =
 unifyAnyInfo :: Ident -> Info -> Info -> Err Info
 unifyAnyInfo m i j = case (i,j) of
   (AbsCat mc1, AbsCat mc2) -> 
-    liftM AbsCat (unifMaybeL mc1 mc2)
+    liftM AbsCat (unifyMaybeL mc1 mc2)
   (AbsFun mt1 ma1 md1 moper1, AbsFun mt2 ma2 md2 moper2) -> 
-    liftM4 AbsFun (unifMaybeL mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) (unifMaybe moper1 moper2) -- adding defs
+    liftM4 AbsFun (unifyMaybeL mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) (unifyMaybe moper1 moper2) -- adding defs
 
   (ResParam mt1 mv1, ResParam mt2 mv2) ->
-    liftM2 ResParam (unifMaybeL mt1 mt2) (unifMaybe mv1 mv2)
+    liftM2 ResParam (unifyMaybeL mt1 mt2) (unifyMaybe mv1 mv2)
   (ResValue (L l1 t1), ResValue (L l2 t2)) 
       | t1==t2    -> return (ResValue (L l1 t1))
       | otherwise -> fail ""
   (_, ResOverload ms t) | elem m ms ->
     return $ ResOverload ms t
   (ResOper mt1 m1, ResOper mt2 m2) -> 
-    liftM2 ResOper (unifMaybeL mt1 mt2) (unifMaybeL m1 m2)
+    liftM2 ResOper (unifyMaybeL mt1 mt2) (unifyMaybeL m1 m2)
 
   (CncCat mc1 md1 mr1 mp1 mpmcfg1, CncCat mc2 md2 mr2 mp2 mpmcfg2) -> 
-    liftM5 CncCat (unifMaybeL mc1 mc2) (unifMaybeL md1 md2) (unifMaybeL mr1 mr2) (unifMaybeL mp1 mp2)  (unifMaybe mpmcfg1 mpmcfg2)
+    liftM5 CncCat (unifyMaybeL mc1 mc2) (unifyMaybeL md1 md2) (unifyMaybeL mr1 mr2) (unifyMaybeL mp1 mp2)  (unifyMaybe mpmcfg1 mpmcfg2)
   (CncFun m mt1 md1 mpmcfg1, CncFun _ mt2 md2 mpmcfg2) -> 
-    liftM3 (CncFun m) (unifMaybeL mt1 mt2) (unifMaybeL md1 md2) (unifMaybe mpmcfg1 mpmcfg2)
+    liftM3 (CncFun m) (unifyMaybeL mt1 mt2) (unifyMaybeL md1 md2) (unifyMaybe mpmcfg1 mpmcfg2)
 
   (AnyInd b1 m1, AnyInd b2 m2) -> do
     testErr (b1 == b2) $ "indirection status"
@@ -218,33 +218,13 @@ unifyAnyInfo m i j = case (i,j) of
   _ -> fail "informations"
 
 -- | this is what happens when matching two values in the same module
-unifMaybe :: Eq a => Maybe a -> Maybe a -> Err (Maybe a)
-unifMaybe Nothing   Nothing   = return Nothing
-unifMaybe (Just p1) Nothing   = return (Just p1)
-unifMaybe Nothing   (Just p2) = return (Just p2)
-unifMaybe (Just p1) (Just p2)
-  | p1==p2                    = return (Just p1)
-  | otherwise                 = fail ""
-
--- | this is what happens when matching two values in the same module
-unifMaybeL :: Eq a => Maybe (L a) -> Maybe (L a) -> Err (Maybe (L a))
-unifMaybeL Nothing          Nothing          = return Nothing
-unifMaybeL (Just p1)        Nothing          = return (Just p1)
-unifMaybeL Nothing          (Just p2)        = return (Just p2)
-unifMaybeL (Just (L l1 p1)) (Just (L l2 p2))
-  | p1==p2                                   = return (Just (L l1 p1))
-  | otherwise                                = fail ""
+unifyMaybeL :: Eq a => Maybe (L a) -> Maybe (L a) -> Err (Maybe (L a))
+unifyMaybeL = unifyMaybeBy unLoc
 
 unifAbsArrity :: Maybe Int -> Maybe Int -> Err (Maybe Int)
-unifAbsArrity Nothing   Nothing   = return Nothing
-unifAbsArrity (Just a ) Nothing   = return (Just a )
-unifAbsArrity Nothing   (Just a ) = return (Just a )
-unifAbsArrity (Just a1) (Just a2)
-  | a1==a2                        = return (Just a1)
-  | otherwise                     = fail ""
+unifAbsArrity = unifyMaybe
 
 unifAbsDefs :: Maybe [L Equation] -> Maybe [L Equation] -> Err (Maybe [L Equation])
-unifAbsDefs Nothing   Nothing   = return Nothing
-unifAbsDefs (Just _ ) Nothing   = fail ""
-unifAbsDefs Nothing   (Just _ ) = fail ""
 unifAbsDefs (Just xs) (Just ys) = return (Just (xs ++ ys))
+unifAbsDefs Nothing   Nothing   = return Nothing
+unifAbsDefs _         _         = fail ""
