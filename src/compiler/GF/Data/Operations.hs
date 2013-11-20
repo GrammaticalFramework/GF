@@ -24,11 +24,12 @@ module GF.Data.Operations (-- * misc functions
 		   singleton, --mapsErr, mapsErrTree,
 		   
 		   -- ** checking
-		   checkUnique,
+		   checkUnique, unifyMaybeBy, unifyMaybe,
 
 		   -- * binary search trees; now with FiniteMap
 		   BinTree, emptyBinTree, isInBinTree, justLookupTree,
-		   lookupTree, lookupTreeMany, lookupTreeManyAll, updateTree,
+		   lookupTree, --lookupTreeMany,
+                   lookupTreeManyAll, updateTree,
 		   buildTree, filterBinTree,
 		   sorted2tree, mapTree, mapMTree, tree2list,
  
@@ -120,6 +121,17 @@ checkUnique ss = ["overloaded" +++ show s | s <- nub overloads] where
   overloads = filter overloaded ss
   overloaded s = length (filter (==s) ss) > 1
 
+-- | this is what happens when matching two values in the same module
+unifyMaybe :: (Eq a, Monad m) => Maybe a -> Maybe a -> m (Maybe a)
+unifyMaybe = unifyMaybeBy id
+
+unifyMaybeBy :: (Eq b, Monad m) => (a->b) -> Maybe a -> Maybe a -> m (Maybe a)
+unifyMaybeBy f (Just p1) (Just p2)
+  | f p1==f p2                     = return (Just p1)
+  | otherwise                      = fail ""
+unifyMaybeBy _ Nothing   mp2       = return mp2
+unifyMaybeBy _ mp1       _         = return mp1
+
 -- binary search trees
 
 type BinTree a b = Map a b
@@ -137,13 +149,13 @@ lookupTree :: (Monad m,Ord a) => (a -> String) -> a -> BinTree a b -> m b
 lookupTree pr x tree = case Map.lookup x tree of
   Just y -> return y
   _ -> fail ("no occurrence of element" +++ pr x)
-
+{-
 lookupTreeMany :: Ord a => (a -> String) -> [BinTree a b] -> a -> Err b
 lookupTreeMany pr (t:ts) x = case lookupTree pr x t of
   Ok v -> return v
   _ -> lookupTreeMany pr ts x
 lookupTreeMany pr [] x = Bad $ "failed to find" +++ pr x
-
+-}
 lookupTreeManyAll :: Ord a => (a -> String) -> [BinTree a b] -> a -> [b]
 lookupTreeManyAll pr (t:ts) x = case lookupTree pr x t of
   Ok v -> v : lookupTreeManyAll pr ts x
