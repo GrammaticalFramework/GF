@@ -5,7 +5,6 @@
 #include <gu/map.h>
 #include <gu/file.h>
 #include <pgf/pgf.h>
-#include <pgf/lexer.h>
 #include <pgf/linearizer.h>
 
 static PyObject* PGFError;

@@ -158,6 +158,12 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat,
                           GuExn* err,
                           GuPool* pool, GuPool* out_pool);
 
+typedef struct {
+	PgfToken tok;
+	PgfCId cat;
+	prob_t prob;
+} PgfTokenProb;
+
 GuEnum*
 pgf_complete(PgfConcr* concr, PgfCId cat, GuString string, 
              GuString prefix, GuExn* err, GuPool* pool);
