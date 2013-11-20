@@ -15,7 +15,7 @@
 module GF.Infra.CheckM
           (Check, CheckResult, Message, runCheck,
 	   checkError, checkCond, checkWarn, checkWarnings, checkAccumError,
-	   checkErr, checkIn, checkMap, checkMapRecover,
+	   {-checkErr,-} checkIn, checkMap, checkMapRecover,
            parallelCheck, accumulateError, commitCheck,
 	  ) where
 
@@ -92,14 +92,14 @@ commitCheck c =
     list = vcat . reverse
 
 -- | Run an error check, report errors and warnings
-runCheck :: Check a -> Err (a,String)
+runCheck :: ErrorMonad m => Check a -> m (a,String)
 runCheck c =
     case unCheck c {-[]-} ([],[]) of
-      (([],ws),Success v) -> Ok (v,render (list ws))
+      (([],ws),Success v) -> return (v,render (list ws))
       (msgs   ,Success v) -> bad msgs
       ((es,ws),Fail    e) -> bad ((e:es),ws)
   where
-    bad (es,ws) = Bad (render $ list ws $$ list es)
+    bad (es,ws) = raise (render $ list ws $$ list es)
     list = vcat . reverse
 
 parallelCheck :: [Check a] -> Check [a]
@@ -134,10 +134,6 @@ checkMapRecover f mp = do
       if not (all null ss) then checkWarn (text (unlines ss)) else return ()
       return (Map.fromAscList kx)
 -}
-
-checkErr :: Err a -> Check a
-checkErr (Ok x)    = return x
-checkErr (Bad err) = checkError (text err)
 
 checkIn :: Doc -> Check a -> Check a
 checkIn msg c = Check $ \{-ctxt-} msgs0 ->

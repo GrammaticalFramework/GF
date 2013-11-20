@@ -23,10 +23,9 @@ import GF.Grammar.Predef
 import GF.Grammar.Lockfield (isLockLabel)
 import GF.Data.BacktrackM
 import GF.Data.Operations
-import GF.Infra.UseIO (IOE)
+import GF.Infra.UseIO (IOE,ePutStr,ePutStrLn)
 import GF.Data.Utilities (updateNthM) --updateNth
 import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues,ppL)
-import System.IO(hPutStr,hPutStrLn,stderr)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.List as List
@@ -39,7 +38,6 @@ import Data.Array.Unboxed
 --import Data.Char (isDigit)
 import Control.Monad
 import Control.Monad.Identity
-import Control.Monad.Trans (liftIO)
 --import Control.Exception
 
 ----------------------------------------------------------------------
@@ -48,7 +46,7 @@ import Control.Monad.Trans (liftIO)
 generatePMCFG :: Options -> SourceGrammar -> Maybe FilePath -> SourceModule -> IOE SourceModule
 generatePMCFG opts sgr opath cmo@(cm,cmi) = do
   (seqs,js) <- mapAccumWithKeyM (addPMCFG opts gr cenv opath am cm) Map.empty (jments cmi)
-  when (verbAtLeast opts Verbose) $ liftIO $ hPutStrLn stderr ""
+  when (verbAtLeast opts Verbose) $ ePutStrLn ""
   return (cm,cmi{mseqs = Just (mkSetArray seqs), jments = js})
   where
     cenv = resourceValues gr
@@ -87,9 +85,9 @@ addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont
                        !funs_cnt        = e-s+1
                    in (prods_cnt,funs_cnt)
 
-  when (verbAtLeast opts Verbose) $ liftIO $ hPutStr stderr ("\n+ "++showIdent id ++ " " ++ show (product (map catFactor pargs)))
+  when (verbAtLeast opts Verbose) $ ePutStr ("\n+ "++showIdent id ++ " " ++ show (product (map catFactor pargs)))
   seqs1 `seq` stats `seq` return ()
-  when (verbAtLeast opts Verbose) $ liftIO $ hPutStr stderr (" "++show stats)
+  when (verbAtLeast opts Verbose) $ ePutStr (" "++show stats)
   return (seqs1,GF.Grammar.CncFun mty mlin mprn (Just pmcfg))
   where
     (ctxt,res,_) = err bug typeForm (lookupFunType gr am id)
@@ -128,7 +126,7 @@ addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ linc
 
   let pmcfg     = getPMCFG pmcfgEnv2
 
-  when (verbAtLeast opts Verbose) $ liftIO $ hPutStr stderr ("\n+ "++showIdent id++" "++show (catFactor pcat))
+  when (verbAtLeast opts Verbose) $ ePutStr ("\n+ "++showIdent id++" "++show (catFactor pcat))
   seqs2 `seq` pmcfg `seq` return (seqs2,GF.Grammar.CncCat mty mdef mref mprn (Just pmcfg))
   where
     addLindef lins (newCat', newArgs') env0 =

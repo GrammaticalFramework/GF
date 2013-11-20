@@ -35,8 +35,6 @@ import GF.Grammar.Grammar
 import GF.Grammar.Binary
 
 import Control.Monad
---import Data.Char
---import Data.List
 import Data.Maybe(isJust)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map
@@ -52,11 +50,11 @@ type ModEnv  = Map.Map ModName (UTCTime,[ModName])
 
 -- | Returns a list of all files to be compiled in topological order i.e.
 -- the low level (leaf) modules are first.
-getAllFiles :: Options -> [InitPath] -> ModEnv -> FileName -> IOE [FullPath]
+getAllFiles :: (MonadIO m,ErrorMonad m) => Options -> [InitPath] -> ModEnv -> FileName -> m [FullPath]
 getAllFiles opts ps env file = do
   -- read module headers from all files recursively
   ds <- liftM reverse $ get [] [] (justModuleName file)
-  ioeIO $ putIfVerb opts $ "all modules:" +++ show [name | (name,_,_,_,_,_) <- ds]
+  liftIO $ putIfVerb opts $ "all modules:" +++ show [name | (name,_,_,_,_,_) <- ds]
   return $ paths ds
   where
     -- construct list of paths to read
@@ -71,12 +69,12 @@ getAllFiles opts ps env file = do
 
     -- | traverses the dependency graph and returns a topologicaly sorted
     -- list of ModuleInfo. An error is raised if there is circular dependency
-    get :: [ModName]          -- ^ keeps the current path in the dependency graph to avoid cycles
+ {- get :: [ModName]          -- ^ keeps the current path in the dependency graph to avoid cycles
         -> [ModuleInfo]       -- ^ a list of already traversed modules
         -> ModName            -- ^ the current module
-        -> IOE [ModuleInfo]   -- ^ the final 
+        -> IOE [ModuleInfo]   -- ^ the final -}
     get trc ds name
-      | name `elem` trc = ioeErr $ Bad $ "circular modules" +++ unwords trc
+      | name `elem` trc = raise $ "circular modules" +++ unwords trc
       | (not . null) [n | (n,_,_,_,_,_) <- ds, name == n]     --- file already read
                         = return ds
       | otherwise       = do
@@ -91,20 +89,20 @@ getAllFiles opts ps env file = do
 
     -- searches for module in the search path and if it is found
     -- returns 'ModuleInfo'. It fails if there is no such module
-    findModule :: ModName -> IOE ModuleInfo
+  --findModule :: ModName -> IOE ModuleInfo
     findModule name = do
       (file,gfTime,gfoTime) <- do
-          mb_gfFile <- ioeIO $ getFilePath ps (gfFile name)
+          mb_gfFile <- getFilePath ps (gfFile name)
           case mb_gfFile of
-            Just gfFile -> do gfTime  <- ioeIO $ toUTCTime `fmap` getModificationTime gfFile
-                              mb_gfoTime <- ioeIO $ catch (liftM Just $ toUTCTime `fmap` getModificationTime (gf2gfo opts gfFile))
+            Just gfFile -> do gfTime  <- liftIO $ toUTCTime `fmap` getModificationTime gfFile
+                              mb_gfoTime <- liftIO $ catch (liftM Just $ toUTCTime `fmap` getModificationTime (gf2gfo opts gfFile))
                                                           (\_->return Nothing)
                               return (gfFile, Just gfTime, mb_gfoTime)
-            Nothing     -> do mb_gfoFile <- ioeIO $ getFilePath (maybe id (:) (flag optGFODir opts) ps) (gfoFile name)
+            Nothing     -> do mb_gfoFile <- getFilePath (maybe id (:) (flag optGFODir opts) ps) (gfoFile name)
                               case mb_gfoFile of
-                                Just gfoFile -> do gfoTime <- ioeIO $ toUTCTime `fmap` getModificationTime gfoFile
+                                Just gfoFile -> do gfoTime <- liftIO $ toUTCTime `fmap` getModificationTime gfoFile
                                                    return (gfoFile, Nothing, Just gfoTime)
-                                Nothing      -> ioeErr $ Bad (render (text "File" <+> text (gfFile name) <+> text "does not exist." $$
+                                Nothing      -> raise (render (text "File" <+> text (gfFile name) <+> text "does not exist." $$
                                                                       text "searched in:" <+> vcat (map text ps)))
 
 
@@ -114,21 +112,21 @@ getAllFiles opts ps env file = do
       (st,(mname,imps)) <-
                       case st of
                         CSEnv  -> return (st, (name, maybe [] snd mb_envmod))
-                        CSRead -> do mb_mo <- ioeIO $ decodeModuleHeader ((if isGFO file then id else gf2gfo opts) file)
+                        CSRead -> do mb_mo <- liftIO $ decodeModuleHeader ((if isGFO file then id else gf2gfo opts) file)
                                      case mb_mo of
                                        Just mo -> return (st,importsOfModule mo)
                                        Nothing
-                                         | isGFO file -> ioeErr $ Bad (file ++ " is compiled with different GF version and I can't find the source file")
-                                         | otherwise  -> do s <- ioeIO $ BS.readFile file
+                                         | isGFO file -> raise (file ++ " is compiled with different GF version and I can't find the source file")
+                                         | otherwise  -> do s <- liftIO $ BS.readFile file
                                                             case runP pModHeader s of
-                                                              Left (Pn l c,msg) -> ioeBad (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
+                                                              Left (Pn l c,msg) -> raise (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
                                                               Right mo          -> return (CSComp,importsOfModule mo)
-                        CSComp -> do s <- ioeIO $ BS.readFile file
+                        CSComp -> do s <- liftIO $ BS.readFile file
                                      case runP pModHeader s of
-                                       Left (Pn l c,msg) -> ioeBad (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
+                                       Left (Pn l c,msg) -> raise (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
                                        Right mo          -> return (st,importsOfModule mo)
-      ioeErr $ testErr (mname == name)
-                       ("module name" +++ mname +++ "differs from file name" +++ name)
+      testErr (mname == name)
+              ("module name" +++ mname +++ "differs from file name" +++ name)
       return (name,st,t,isJust gfTime,imps,dropFileName file)
 
 isGFO :: FilePath -> Bool
@@ -212,16 +210,16 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
     modName = showIdent
 
 -- | options can be passed to the compiler by comments in @--#@, in the main file
-getOptionsFromFile :: FilePath -> IOE Options
+getOptionsFromFile :: (MonadIO m,ErrorMonad m) => FilePath -> m Options
 getOptionsFromFile file = do
-  s <- ioe $ catch (fmap Ok $ BS.readFile file)
-                   (\_ -> return (Bad $ "File " ++ file ++ " does not exist"))
+  s <- handle (liftIO $ BS.readFile file)
+              (\_ -> raise $ "File " ++ file ++ " does not exist")
   let ls = filter (BS.isPrefixOf (BS.pack "--#")) $ BS.lines s
       fs = map (BS.unpack . BS.unwords . BS.words . BS.drop 3) ls
-  ioeErr $ parseModuleOptions fs
+  liftErr $ parseModuleOptions fs
 
-getFilePath :: [FilePath] -> String -> IO (Maybe FilePath)
-getFilePath paths file = get paths
+getFilePath :: MonadIO m => [FilePath] -> String -> m (Maybe FilePath)
+getFilePath paths file = liftIO $ get paths
   where
     get []     = return Nothing
     get (p:ps) = do

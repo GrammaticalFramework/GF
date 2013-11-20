@@ -28,14 +28,14 @@ import Data.Char
 import Data.List
 --import System.FilePath
 
-getCF :: FilePath -> String -> Err SourceGrammar
+getCF :: ErrorMonad m => FilePath -> String -> m SourceGrammar
 getCF fpath = fmap (cf2gf fpath . uniqueFuns) . pCF
 
 ---------------------
 -- the parser -------
 ---------------------
 
-pCF :: String -> Err CF
+pCF :: ErrorMonad m => String -> m CF
 pCF s = do
   rules <- mapM getCFRule $ filter isRule $ lines s
   return $ concat rules
@@ -48,14 +48,14 @@ pCF s = do
 -- fun. C -> item1 item2 ... where unquoted items are treated as cats
 -- Actually would be nice to add profiles to this.
 
-getCFRule :: String -> Err [CFRule]
+getCFRule :: ErrorMonad m => String -> m [CFRule]
 getCFRule s = getcf (wrds s) where
   getcf ws = case ws of
     fun : cat : a : its | isArrow a -> 
-      Ok [L NoLoc (init fun, (cat, map mkIt its))]
+      return [L NoLoc (init fun, (cat, map mkIt its))]
     cat : a : its | isArrow a -> 
-      Ok [L NoLoc (mkFun cat it, (cat, map mkIt it)) | it <- chunk its]
-    _ -> Bad (" invalid rule:" +++ s)
+      return [L NoLoc (mkFun cat it, (cat, map mkIt it)) | it <- chunk its]
+    _ -> raise (" invalid rule:" +++ s)
   isArrow a = elem a ["->", "::="] 
   mkIt w = case w of
     ('"':w@(_:_)) -> Right (init w)

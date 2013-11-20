@@ -195,17 +195,17 @@ mGrammar ms = MGrammar (Map.fromList ms) ms
 
 -- | we store the module type with the identifier
 
-abstractOfConcrete :: SourceGrammar -> Ident -> Err Ident
+abstractOfConcrete :: ErrorMonad m => SourceGrammar -> Ident -> m Ident
 abstractOfConcrete gr c = do
   n <- lookupModule gr c
   case mtype n of
     MTConcrete a -> return a
-    _ -> Bad $ render (text "expected concrete" <+> ppIdent c)
+    _ -> raise $ render (text "expected concrete" <+> ppIdent c)
 
-lookupModule :: SourceGrammar -> Ident -> Err SourceModInfo
+lookupModule :: ErrorMonad m => SourceGrammar -> Ident -> m SourceModInfo
 lookupModule gr m = case Map.lookup m (moduleMap gr) of
   Just i  -> return i
-  Nothing -> Bad $ render (text "unknown module" <+> ppIdent m <+> text "among" <+> hsep (map (ppIdent . fst) (modules gr)))
+  Nothing -> raise $ render (text "unknown module" <+> ppIdent m <+> text "among" <+> hsep (map (ppIdent . fst) (modules gr)))
 
 isModAbs :: SourceModInfo -> Bool
 isModAbs m =

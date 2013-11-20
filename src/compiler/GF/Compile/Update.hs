@@ -55,7 +55,7 @@ extendModule gr (name,m)
                                                  return (name,m')
  where
    extOne mo (n,cond) = do
-     m0 <- checkErr $ lookupModule gr n
+     m0 <- lookupModule gr n
 
      -- test that the module types match, and find out if the old is complete
      unless (sameMType (mtype m) (mtype mo)) 
@@ -93,7 +93,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js_)) 
                           text "has open interfaces and must therefore be declared incomplete"))
       case mt of
         MTInstance (i0,mincl) -> do
-          m1 <- checkErr $ lookupModule gr i0
+          m1 <- lookupModule gr i0
           unless (isModRes m1)
                  (checkError (text "interface expected instead of" <+> ppIdent i0))
           js' <- extendMod gr False ((i0,m1), isInherited mincl) i (jments mi)
@@ -101,7 +101,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js_)) 
           case extends mi of
             []  -> return mi{jments=js'}
             j0s -> do
-                m0s <- checkErr $ mapM (lookupModule gr) j0s
+                m0s <- mapM (lookupModule gr) j0s
                 let notInM0 c _  = all (not . isInBinTree c . jments) m0s
                 let js2 = filterBinTree notInM0 js'
                 return mi{jments=js2}
@@ -114,7 +114,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js_)) 
                     [i | i <- is, notElem i infs]
       unless (stat' == MSComplete || stat == MSIncomplete) 
              (checkError (text "module" <+> ppIdent i <+> text "remains incomplete"))
-      ModInfo mt0 _ fs me' _ ops0 _ fpath _ js <- checkErr $ lookupModule gr ext
+      ModInfo mt0 _ fs me' _ ops0 _ fpath _ js <- lookupModule gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already
                    [OQualif i j | (i,j) <- ops] ++
@@ -145,10 +145,10 @@ extendMod gr isCompl ((name,mi),cond) base new = foldM try new $ Map.toList (jme
                          Just j -> case unifyAnyInfo name i j of
 		                     Ok k  -> return $ updateTree (c,k) new
 		                     Bad _ -> do (base,j) <- case j of 
-		                                               AnyInd _ m -> checkErr $ lookupOrigInfo gr (m,c)
+		                                               AnyInd _ m -> lookupOrigInfo gr (m,c)
 		                                               _          -> return (base,j)
 		                                 (name,i) <- case i of 
-                                                               AnyInd _ m -> checkErr $ lookupOrigInfo gr (m,c)
+                                                               AnyInd _ m -> lookupOrigInfo gr (m,c)
                                                                _          -> return (name,i)
 		                                 checkError (text "cannot unify the information" $$ 
 		                                             nest 4 (ppJudgement Qualified (c,i)) $$

@@ -8,8 +8,7 @@ import GF.Command.Interpreter(CommandEnv(..),commands,mkCommandEnv,emptyCommandE
 import GF.Command.Commands(flags,options)
 import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
-import GF.Data.ErrM
-import GF.Data.Operations (chunks,err)
+import GF.Data.Operations (Err(..),chunks,err,raise)
 import GF.Grammar hiding (Ident,isPrefixOf)
 import GF.Grammar.Analyse
 import GF.Grammar.Parser (runP, pExp)
@@ -326,7 +325,7 @@ printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
 
 checkComputeTerm = checkComputeTerm' False
 checkComputeTerm' new sgr t = do
-                 mo <- maybe (Bad "no source grammar in scope") return $ greatestResource sgr
+                 mo <- maybe (raise "no source grammar in scope") return $ greatestResource sgr
                  ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
                                             inferLType sgr [] t
                  t1 <- if new

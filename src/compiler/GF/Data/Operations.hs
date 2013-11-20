@@ -21,7 +21,7 @@ module GF.Data.Operations (-- * misc functions
 		   Err(..), err, maybeErr, testErr, errVal, errIn, 
 		   lookupErr,
 		   mapPairListM, mapPairsM, pairM,
-		   singleton, mapsErr, mapsErrTree,
+		   singleton, --mapsErr, mapsErrTree,
 		   
 		   -- ** checking
 		   checkUnique,
@@ -55,7 +55,8 @@ module GF.Data.Operations (-- * misc functions
 		   STM(..), appSTM, stm, stmr, readSTM, updateSTM, writeSTM, done,
 
 		   -- * error monad class
-		   ErrorMonad(..), checkAgain, checks, allChecks, doUntil
+		   ErrorMonad(..), checkAgain, checks, allChecks, doUntil,
+                   liftErr
                 
 		  ) where
 
@@ -85,19 +86,19 @@ err d f e = case e of
   Bad s -> d s
 
 -- | add msg s to @Maybe@ failures
-maybeErr :: String -> Maybe a -> Err a
-maybeErr s = maybe (Bad s) Ok
+maybeErr :: ErrorMonad m => String -> Maybe a -> m a
+maybeErr s = maybe (raise s) return
 
-testErr :: Bool -> String -> Err ()
-testErr cond msg = if cond then return () else Bad msg
+testErr :: ErrorMonad m => Bool -> String -> m ()
+testErr cond msg = if cond then return () else raise msg
 
 errVal :: a -> Err a -> a
 errVal a = err (const a) id
 
-errIn :: String -> Err a -> Err a
-errIn msg = err (\s -> Bad (s ++++ "OCCURRED IN" ++++ msg)) return
+errIn :: ErrorMonad m => String -> m a -> m a
+errIn msg m = handle m (\s -> raise (s ++++ "OCCURRED IN" ++++ msg))
 
-lookupErr :: (Eq a,Show a) => a -> [(a,b)] -> Err b
+lookupErr :: (ErrorMonad m,Eq a,Show a) => a -> [(a,b)] -> m b
 lookupErr a abs = maybeErr ("Unknown" +++ show a) (lookup a abs)
 
 mapPairListM :: Monad m => ((a,b) -> m c) -> [(a,b)] -> m [(a,c)]
@@ -313,6 +314,8 @@ stm = STM
 stmr :: (s -> (a,s)) -> STM s a
 stmr f = stm (\s -> return (f s))
 
+instance Functor (STM s) where fmap = liftM
+
 instance  Monad (STM s) where
   return a    = STM (\s -> return (a,s))
   STM c >>= f = STM (\s -> do 
@@ -332,7 +335,7 @@ writeSTM s = stmr (const ((),s))
 done :: Monad m => m ()
 done = return ()
 
-class Monad m => ErrorMonad m where
+class (Functor m,Monad m) => ErrorMonad m where
   raise   :: String -> m a
   handle  :: m a -> (String -> m a) -> m a
   handle_ :: m a -> m a -> m a
@@ -343,12 +346,14 @@ instance ErrorMonad Err where
   handle a@(Ok _) _ = a
   handle (Bad i) f  = f i
 
+liftErr e = err raise return e
+
 instance ErrorMonad (STM s) where
   raise msg = STM (\s -> raise msg)
   handle (STM f) g = STM (\s -> (f s) 
                                 `handle` (\e -> let STM g' = (g e) in
                                                     g' s))
-
+{-
 -- error recovery with multiple reporting AR 30/5/2008
 mapsErr :: (a -> Err b) -> [a] -> Err [b]
 
@@ -364,7 +369,7 @@ mapsErr f = seqs . map f where
 
 mapsErrTree :: (Ord a) => ((a,b) -> Err (a,c)) -> BinTree a b -> Err (BinTree a c)
 mapsErrTree f t =  mapsErr f (tree2list t) >>= return . sorted2tree
-
+-}
 
 -- | if the first check fails try another one
 checkAgain :: ErrorMonad m => m a -> m a -> m a
