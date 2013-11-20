@@ -1,37 +1,42 @@
 PROBSFILE=../../treebanks/PennTreebank/ParseEngAbs.probs
 
+GF=gf +RTS -K200M -RTS -make 
+
 all: TranslateEng TranslateBul TranslateFre TranslateBulEngFre
 
 TranslateEng:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEng TranslateEng.gf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateEng TranslateEng.gf
 
 TranslateBul:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateBul TranslateBul.gf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateBul TranslateBul.gf
 
 TranslateChi:
-	gf -make -s -literal=Symb -probs=$(PROBSFILE) -name=TranslateChi TranslateChi.gf
+	$(GF) -s -literal=Symb -probs=$(PROBSFILE) -name=TranslateChi TranslateChi.gf
 
 TranslateFin:
-	gf -make -s -literal=Symb -probs=$(PROBSFILE) -name=TranslateFin TranslateFin.gf
+	$(GF) -s -literal=Symb -probs=$(PROBSFILE) -name=TranslateFin TranslateFin.gf
 
 TranslateFre:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateFre TranslateFre.gf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateFre TranslateFre.gf
 
 TranslateSwe:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateSwe TranslateSwe.gf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateSwe TranslateSwe.gf
 
 TranslateEngBul:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngBul TranslateEng.pgf TranslateBul.pgf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngBul TranslateEng.pgf TranslateBul.pgf
 
 TranslateEngChi:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChi TranslateEng.pgf TranslateChi.pgf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChi TranslateEng.pgf TranslateChi.pgf
 
 TranslateEngChiFinSwe:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChiFinSwe TranslateEng.pgf TranslateChi.pgf TranslateFin.pgf TranslateSwe.pgf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngChiFinSwe TranslateEng.pgf TranslateChi.pgf TranslateFin.pgf TranslateSwe.pgf
 
 TranslateEngFre:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngFre TranslateEng.pgf TranslateFre.pgf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngFre TranslateEng.pgf TranslateFre.pgf
+
+TranslateEngSwe:
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateEngSwe TranslateEng.pgf TranslateSwe.pgf
 
 TranslateBulEngFre:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=TranslateBulEngFre TranslateBul.pgf TranslateEng.pgf TranslateFre.pgf
+	$(GF) -literal=Symb -probs=$(PROBSFILE) -name=TranslateBulEngFre TranslateBul.pgf TranslateEng.pgf TranslateFre.pgf
 
