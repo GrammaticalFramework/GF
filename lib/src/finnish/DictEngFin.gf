@@ -7,6 +7,10 @@ concrete DictEngFin of DictEngAbs = CatFin ** open ParadigmsFin,
 
 flags coding=utf8 ;
 
+oper 
+  tehda_V = mkV (lin VK {s = c71 "tehdä"}) ; --CHECKED
+  nahda_V = mkV (lin VK {s = c71 "nähdä"}) ; --CHECKED
+
 
 lin
 a_fortiori_Adv = mkWAdv "suuremmalla" "syyllä" ;
@@ -53037,10 +53041,6 @@ zymotic_A = mkWA "tsymoosiin" "liittyvä" ;
   win_V = mkV "voittaa" ; --CHECKED
   worry_VS = mkVS (caseV partitive (mkV "huolettaa")) ; --CHECKED --- minua huolettaa että
   zip_code_N = mkN "postinumero" ; --CHECKED
-
-oper 
-  tehda_V = mkV (lin VK {s = c71 "tehdä"}) ; --CHECKED
-  nahda_V = mkV (lin VK {s = c71 "nähdä"}) ; --CHECKED
 
 -- another batch of additions, 29/3/2013
 
