@@ -437,14 +437,18 @@ jpgf_collect_morpho(PgfMorphoCallback* self,
 	JMorphoCallback* callback = (JMorphoCallback*) self;
 	JNIEnv* env = callback->env;
 	
+	jstring jlemma = gu2j_string(env,lemma);
+	jstring janalysis = gu2j_string(env,analysis);
 	jobject jan = (*env)->NewObject(env, 
 	                                callback->an_class,
 	                                callback->an_constrId, 
-	                                gu2j_string(env,lemma),
-	                                gu2j_string(env,analysis),
+	                                jlemma,
+	                                janalysis,
 	                                (double) prob);
 	(*env)->CallBooleanMethod(env, callback->analyses, callback->addId, jan);
 	(*env)->DeleteLocalRef(env, jan);
+	(*env)->DeleteLocalRef(env, janalysis);
+	(*env)->DeleteLocalRef(env, jlemma);
 }
 
 JNIEXPORT jobject JNICALL
