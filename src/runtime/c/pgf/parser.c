@@ -1382,7 +1382,7 @@ pgf_parsing_td_predict(PgfParsing* ps,
                            value->ccat->fid == right->ccat->fid &&
                            value->lin_idx   == right->lin_idx) {
 						pgf_parsing_predict_lexeme(ps, state, conts, right);
-						right--;
+						right++;
 					}
 				}
 			}
