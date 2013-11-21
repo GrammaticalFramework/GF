@@ -216,6 +216,7 @@ oper
             <True,_,RPos,_>    => polNegDirSubj ;
             _ => b
             } ;
+
           neg = vp.neg ! pol ;
 
           gen = agr.g ;
@@ -226,20 +227,22 @@ oper
             True => vp.comp ! {g = gen ; n = Sg ; p = per} ;
             _ => vp.comp ! agr
             } ;
-          ext = vp.ext ! pol ;
+          ext = vp.ext ! b ;
 
           vtyp  = vp.s.vtyp ;
           refl  = case isVRefl vtyp of {
             True => reflPron num per Acc ; ---- case ?
             _ => [] 
             } ;
-          clit  = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s ; ---- refl first?
+          clit = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s ; ---- refl first?
 
           verb = vp.s.s ;
           vaux = auxVerb vp.s.vtyp ;
 
-          vagr = appVPAgr vp.agr (aagr gen num) ; --- subtype bug
-          part = verb ! VPart vagr.g vagr.n ;
+          part = case vp.agr of {
+            VPAgrSubj     => verb ! VPart agr.g agr.n ;
+            VPAgrClit g n => verb ! VPart g n  
+            } ;
 
           vps : Str * Str = case <te,a> of {
             <RPast,Simul> => <verb ! VFin (VImperf m) num per, []> ; --# notpresent
@@ -261,9 +264,7 @@ oper
           DDir => 
             subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ ext ;
           DInv => 
-----            neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ subj ++ ext
             invertedClause vp.s.vtyp <te, a, num, per> hasClit neg clit fin inf compl subj ext
-----            neg.p1 ++ clit ++ fin ++ preOrPost hasClit subj (neg.p2 ++ inf) ++ compl ++ ext ----
           }
     } ;
 
