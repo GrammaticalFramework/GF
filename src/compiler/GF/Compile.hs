@@ -13,7 +13,6 @@ import GF.Compile.GrammarToPGF
 import GF.Compile.ReadFiles
 import GF.Compile.Update
 --import GF.Compile.Refresh
-import GF.Compile.Coding
 import GF.Compile.Tags
 
 import GF.Grammar.Grammar
@@ -27,7 +26,6 @@ import GF.Infra.CheckM
 import GF.Data.Operations
 
 import Control.Monad
-import System.IO
 import GF.System.Directory
 import System.FilePath
 import qualified Data.Map as Map
@@ -164,11 +162,8 @@ compileOne opts env@(_,srcgr,_) file = do
         then compileOne opts env $ (gf2gfo opts file)
         else do
 
-       sm00 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
-                                           getSourceModule opts file
-       enc <- liftIO $ mkTextEncoding (renameEncoding (flag optEncoding (mflags (snd sm00))))
-       let sm = decodeStringsInModule enc sm00
-
+       sm <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ")
+             $ getSourceModule opts file
        intermOut opts (Dump Source) (ppModule Internal sm)
 
        compileSourceModule opts env (Just file) sm
