@@ -98,17 +98,17 @@ compileModule :: Options -- ^ Options from program command line and shell comman
 compileModule opts1 env file = do
   file <- getRealFile file
   opts0 <- getOptionsFromFile file
-  curr_dir <- return $ dropFileName file
+  let curr_dir = dropFileName file
   lib_dir  <- liftIO $ getLibraryDirectory (addOptions opts0 opts1)
   let opts = addOptions (fixRelativeLibPaths curr_dir lib_dir opts0) opts1
-  ps0 <- liftIO $ extendPathEnv opts
+  ps0 <- extendPathEnv opts
   let ps = nub (curr_dir : ps0)
-  liftIO $ putIfVerb opts $ "module search path:" +++ show ps ----
+  putIfVerb opts $ "module search path:" +++ show ps ----
   let (_,sgr,rfs) = env
   files <- getAllFiles opts ps rfs file
-  liftIO $ putIfVerb opts $ "files to read:" +++ show files ----
+  putIfVerb opts $ "files to read:" +++ show files ----
   let names = map justModuleName files
-  liftIO $ putIfVerb opts $ "modules to include:" +++ show names ----
+  putIfVerb opts $ "modules to include:" +++ show names ----
   foldM (compileOne opts) (0,sgr,rfs) files
   where
     getRealFile file = do
