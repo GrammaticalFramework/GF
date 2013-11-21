@@ -20,30 +20,38 @@ import GF.Data.Operations
 
 import GF.System.Catch
 import GF.Infra.UseIO
-import GF.Infra.Option(Options,optPreprocessors,addOptions,flag)
+import GF.Infra.Option(Options,optPreprocessors,addOptions,optEncoding,flag,renameEncoding)
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar
+import GF.Compile.Coding
 
---import GF.Compile.ReadFiles
-
---import Data.Char (toUpper)
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad (foldM)
 import System.Cmd (system)
+import System.IO(mkTextEncoding)
 import System.Directory(removeFile)
 
 getSourceModule :: Options -> FilePath -> IOE SourceModule
 getSourceModule opts file0 = ioe $
-    do tmp <- foldM runPreprocessor (Source file0) (flag optPreprocessors opts)
-       content <- keepTemp tmp
-       case runP pModDef content of
-         Left (Pn l c,msg) -> do file <- writeTemp tmp
-                                 let location = file++":"++show l++":"++show c
-                                 return (Bad (location++":\n   "++msg))
-         Right (i,mi)      -> do removeTemp tmp
-                                 return (Ok (i,mi{mflags=mflags mi `addOptions` opts, msrc=file0}))
+  do tmp <- foldM runPreprocessor (Source file0) (flag optPreprocessors opts)
+     content <- keepTemp tmp
+     case runP pModDef content of
+       Left (Pn l c,msg) -> do file <- writeTemp tmp
+                               let location = file++":"++show l++":"++show c
+                               return (Bad (location++":\n   "++msg))
+       Right (i,mi00) ->
+         do removeTemp tmp
+            let mi0 =mi00 {mflags=mflags mi00 `addOptions` opts, msrc=file0}
+            mi <- transcodeModule (i,mi0)
+            return (Ok mi)
   `catch` (return . Bad . show)
+
+transcodeModule sm00 =
+  do enc <- mkTextEncoding (renameEncoding (flag optEncoding (mflags (snd sm00))))
+     let sm = decodeStringsInModule enc sm00
+     return sm
+
 
 runPreprocessor :: Temporary -> String -> IO Temporary
 runPreprocessor tmp0 p =
