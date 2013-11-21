@@ -1,0 +1,5 @@
+i -retain lib/src/french/BeschFre.gf
+cc -table (v_besch16 "payer")
+-- note that there is a discrepency between the bescherelle table
+-- numbers and the book, from 7 in the book, the gf numbers are one behind
+-- (i.e. 7 in the book is 6 in gf, etc)
