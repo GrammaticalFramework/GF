@@ -38,7 +38,7 @@ import GF.Grammar.Predef
 import System.FilePath
 --import System.IO
 
-import GF.Data.ErrM
+import GF.Data.Operations(Err,ErrorMonad(..),liftErr)
 
 import Data.Set (Set)
 import qualified Data.Set as Set
@@ -68,8 +68,8 @@ helpMessage = usageInfo usageHeader optDescr
 
 
 -- FIXME: do we really want multi-line errors?
-errors :: [String] -> Err a
-errors = fail . unlines
+errors :: ErrorMonad err => [String] -> err a
+errors = raise . unlines
 
 -- Types
 
@@ -185,17 +185,19 @@ instance Show Options where
 
 -- Option parsing
 
-parseOptions :: [String]                   -- ^ list of string arguments
-             -> Err (Options, [FilePath])
+parseOptions :: ErrorMonad err =>
+                [String]                   -- ^ list of string arguments
+             -> err (Options, [FilePath])
 parseOptions args 
   | not (null errs) = errors errs
-  | otherwise       = do opts <- liftM concatOptions $ sequence optss
+  | otherwise       = do opts <- concatOptions `fmap` liftErr (sequence optss)
                          return (opts, files)
   where
     (optss, files, errs) = getOpt RequireOrder optDescr args
 
-parseModuleOptions :: [String]                   -- ^ list of string arguments
-                   -> Err Options
+parseModuleOptions :: ErrorMonad err =>
+                      [String]                   -- ^ list of string arguments
+                   -> err Options
 parseModuleOptions args = do
   (opts,nonopts) <- parseOptions args
   if null nonopts 

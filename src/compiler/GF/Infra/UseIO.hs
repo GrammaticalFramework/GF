@@ -38,21 +38,21 @@ import Control.Exception(evaluate)
 --putShow' :: Show a => (c -> a) -> c -> IO ()
 --putShow' f = putStrLn . show . length . show . f
 
-putIfVerb :: Options -> String -> IO ()
+putIfVerb :: MonadIO io => Options -> String -> io ()
 putIfVerb opts msg =
-      when (verbAtLeast opts Verbose) $ putStrLn msg
+      when (verbAtLeast opts Verbose) $ liftIO $ putStrLn msg
 
-putIfVerbW :: Options -> String -> IO ()
+putIfVerbW :: MonadIO io => Options -> String -> io ()
 putIfVerbW opts msg =
-      when (verbAtLeast opts Verbose) $ putStr (' ' : msg)
-
+      when (verbAtLeast opts Verbose) $ liftIO $ putStr (' ' : msg)
+{-
 errOptIO :: Options -> a -> Err a -> IO a
 errOptIO os e m = case m of
   Ok x  -> return x
   Bad k -> do  
     putIfVerb os k
     return e
-
+-}
 type FileName = String
 type InitPath = String
 type FullPath = String
@@ -60,13 +60,12 @@ type FullPath = String
 gfLibraryPath    = "GF_LIB_PATH"
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
 
-getLibraryDirectory :: Options -> IO FilePath
+getLibraryDirectory :: MonadIO io => Options -> io FilePath
 getLibraryDirectory opts =
   case flag optGFLibPath opts of
     Just path -> return path
-    Nothing   -> catch
-                   (getEnv gfLibraryPath)
-                   (\ex -> getDataDir >>= \path -> return (path </> "lib"))
+    Nothing   -> liftIO $ catch (getEnv gfLibraryPath)
+                                (\ex -> fmap (</> "lib") getDataDir)
 
 getGrammarPath :: FilePath -> IO [FilePath]
 getGrammarPath lib_dir = do
@@ -76,9 +75,9 @@ getGrammarPath lib_dir = do
 -- | extends the search path with the
 -- 'gfLibraryPath' and 'gfGrammarPathVar'
 -- environment variables. Returns only existing paths.
-extendPathEnv :: Options -> IO [FilePath]
-extendPathEnv opts = do
-  opt_path <- return $ flag optLibraryPath opts         -- e.g. paths given as options
+extendPathEnv :: MonadIO io => Options -> io [FilePath]
+extendPathEnv opts = liftIO $ do
+  let opt_path = flag optLibraryPath opts         -- e.g. paths given as options
   lib_dir  <- getLibraryDirectory opts                  -- e.g. GF_LIB_PATH
   grm_path <- getGrammarPath lib_dir                   -- e.g. GF_GRAMMAR_PATH
   let paths = opt_path ++ [lib_dir] ++ grm_path

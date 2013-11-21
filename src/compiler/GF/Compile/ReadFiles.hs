@@ -212,11 +212,11 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
 -- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile :: (MonadIO m,ErrorMonad m) => FilePath -> m Options
 getOptionsFromFile file = do
-  s <- handle (liftIO $ BS.readFile file)
-              (\_ -> raise $ "File " ++ file ++ " does not exist")
+  s <- either (\_ -> raise $ "File " ++ file ++ " does not exist") return =<<
+       liftIO (try $ BS.readFile file)
   let ls = filter (BS.isPrefixOf (BS.pack "--#")) $ BS.lines s
       fs = map (BS.unpack . BS.unwords . BS.words . BS.drop 3) ls
-  liftErr $ parseModuleOptions fs
+  parseModuleOptions fs
 
 getFilePath :: MonadIO m => [FilePath] -> String -> m (Maybe FilePath)
 getFilePath paths file = liftIO $ get paths
