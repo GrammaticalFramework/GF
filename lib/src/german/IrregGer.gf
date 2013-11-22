@@ -1,4 +1,5 @@
 --# -path=.:prelude:../abstract:../common
+--# -coding=latin1
 
 -- adapted from verb list in
 -- http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html

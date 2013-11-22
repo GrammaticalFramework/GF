@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NumeralSwe of Numeral = CatSwe [Numeral,Digits] ** open ResSwe, MorphoSwe, Prelude in {
 
 lincat 

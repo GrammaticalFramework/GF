@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete StructuralNor of Structural = CatNor ** 
   open MorphoNor, ParadigmsNor, (X = ConstructX), IrregNor, Prelude in {
 

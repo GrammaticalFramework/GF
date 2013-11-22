@@ -1,4 +1,5 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
+--# -coding=latin1
 
 -- see: http://frodo.bruderhof.com/norskklassen/commonverbs.htm
 

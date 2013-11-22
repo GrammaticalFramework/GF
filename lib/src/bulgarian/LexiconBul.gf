@@ -1,4 +1,5 @@
 --# -path=.:prelude
+--# -coding=cp1251
 
 concrete LexiconBul of Lexicon = CatBul ** 
   open ParadigmsBul, ResBul, Prelude in {

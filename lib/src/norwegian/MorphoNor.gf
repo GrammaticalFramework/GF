@@ -1,3 +1,4 @@
+--# -coding=latin1
 --1 A Simple Norwegian Resource Morphology
 --
 -- Aarne Ranta 2002

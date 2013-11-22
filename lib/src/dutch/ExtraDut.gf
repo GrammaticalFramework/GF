@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete ExtraDut of ExtraDutAbs = CatDut ** 
   open ResDut, MorphoDut, Coordination, Prelude, IrregDut in 
 {

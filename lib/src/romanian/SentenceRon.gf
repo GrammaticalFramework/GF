@@ -1,3 +1,4 @@
+--# -coding=latin1
  concrete SentenceRon of Sentence = 
   CatRon ** open Prelude, ResRon in {
 

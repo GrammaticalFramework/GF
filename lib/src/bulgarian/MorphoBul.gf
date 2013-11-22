@@ -1,4 +1,5 @@
 --# -path=.:../../prelude
+--# -coding=cp1251
 
 --1 A Simple English Resource Morphology
 --

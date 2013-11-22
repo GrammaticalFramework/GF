@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in {
 
   lin

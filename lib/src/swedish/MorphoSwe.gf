@@ -1,4 +1,5 @@
 --# -path=.:../scandinavian:../common:../../prelude
+--# -coding=latin1
 
 --1 A Simple Swedish Resource Morphology
 --

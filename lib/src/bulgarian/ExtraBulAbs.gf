@@ -1,3 +1,4 @@
+--# -coding=cp1251
 abstract ExtraBulAbs = Extra ** {
   flags coding=cp1251 ;
 

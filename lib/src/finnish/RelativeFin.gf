@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in {
 
   flags optimize=all_subs ;

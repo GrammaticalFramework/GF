@@ -1,4 +1,5 @@
 --# -path=.:../romance:../abstract:../common:prelude
+--# -coding=latin1
 
 instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelude in {
 

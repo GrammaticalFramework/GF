@@ -1,4 +1,5 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
+--# -coding=latin1
 
 --1 Italian Lexical Paradigms
 --

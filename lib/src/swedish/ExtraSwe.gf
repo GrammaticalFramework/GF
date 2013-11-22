@@ -1,4 +1,5 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
+--# -coding=latin1
 concrete ExtraSwe of ExtraSweAbs = ExtraScandSwe - [FocAdv] ,
                                    ParadigmsSwe - [nominative] **
  open CommonScand, ResSwe, ParamX, VerbSwe, Prelude, DiffSwe, StructuralSwe, MorphoSwe,

@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre ** 
   open CommonRomance, PhonoFre, MorphoFre, ParadigmsFre, ParamX, ResFre, Prelude in {
 

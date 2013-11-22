@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete IdiomSwe of Idiom = CatSwe ** 
   open MorphoSwe, ParadigmsSwe, IrregSwe, Prelude in {
 

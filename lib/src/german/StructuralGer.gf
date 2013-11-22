@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete StructuralGer of Structural = CatGer ** 
 
   open MorphoGer, MakeStructuralGer, (X = ConstructX), 

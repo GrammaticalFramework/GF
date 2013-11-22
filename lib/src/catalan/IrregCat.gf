@@ -1,4 +1,5 @@
 --# -path=.:../romance:../abstract:../common:prelude
+--# -coding=latin1
 -- machine-generated GF file from Andersson & Söderberg's MSc work
 concrete IrregCat of IrregCatAbs = CatCat **
 open CommonRomance, ParadigmsCat, BeschCat in {

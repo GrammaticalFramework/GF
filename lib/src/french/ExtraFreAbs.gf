@@ -1,3 +1,4 @@
+--# -coding=latin1
 -- Structures special for French. These are not implemented in other
 -- Romance languages.
 

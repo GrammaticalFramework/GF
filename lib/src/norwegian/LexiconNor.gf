@@ -1,4 +1,5 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
+--# -coding=latin1
 
 concrete LexiconNor of Lexicon = CatNor ** 
   open Prelude, ParadigmsNor, IrregNor in {

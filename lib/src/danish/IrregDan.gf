@@ -1,4 +1,5 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
+--# -coding=latin1
 
 -- http://users.cybercity.dk/~nmb3879/danishgram3.html
 

@@ -1,3 +1,4 @@
+--# -coding=latin1
 instance DiffSwe of DiffScand = open CommonScand, Prelude in {
 
 -- Parameters.

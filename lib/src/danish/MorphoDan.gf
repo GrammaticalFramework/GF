@@ -1,3 +1,4 @@
+--# -coding=latin1
 --1 A Simple Danish Resource Morphology
 --
 -- Aarne Ranta 2002

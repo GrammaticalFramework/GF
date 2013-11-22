@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete StructuralSwe of Structural = CatSwe ** 
   open MorphoSwe, ParadigmsSwe, MakeStructuralSwe,
   (X = ConstructX), Prelude in {

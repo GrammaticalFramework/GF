@@ -1,3 +1,4 @@
+--# -coding=latin1
 --1 Differences between Romance languages
 
 interface DiffRomance = open CommonRomance, Prelude in {

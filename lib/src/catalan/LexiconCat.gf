@@ -1,4 +1,5 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
+--# -coding=latin1
 
 concrete LexiconCat of Lexicon = CatCat ** open 
   (M=MorphoCat), ParadigmsCat, BeschCat in {

@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete TextBul of Text = CatBul ** {
   flags coding=cp1251 ;
 

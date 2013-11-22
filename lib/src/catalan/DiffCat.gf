@@ -1,5 +1,5 @@
 --# -path=.:../romance:../abstract:../common:prelude
-
+--# -coding=latin1
 instance DiffCat of DiffRomance = open CommonRomance, PhonoCat, BeschCat, Prelude in {
 
   flags optimize=noexpand ;

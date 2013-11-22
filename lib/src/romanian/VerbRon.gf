@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete VerbRon of Verb = 
   CatRon ** open Prelude, ResRon in {
 

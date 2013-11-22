@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa ** 
   open CommonRomance, PhonoSpa, MorphoSpa, ParadigmsSpa, ParamX, ResSpa, BeschSpa,
   Prelude in {

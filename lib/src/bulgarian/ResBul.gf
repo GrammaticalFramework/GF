@@ -1,4 +1,5 @@
 --# -path=.:../abstract:../common:../../prelude
+--# -coding=cp1251
 
 --1 Bulgarian auxiliary operations.
 

@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete IdiomRon of Idiom = 
 -- CatRon **   open (P = ParamX), MorphoRon, ParadigmsRon,Prelude 
 CatRon ** open Prelude, ResRon,BeschRon

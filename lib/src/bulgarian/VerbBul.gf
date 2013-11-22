@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
   flags coding=cp1251 ;
 

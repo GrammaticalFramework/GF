@@ -1,3 +1,4 @@
+--# -coding=latin1
 abstract IrregSpaAbs = Cat ** {
   fun abarse_V  : V ; 
   fun abastecer_V  : V ; 

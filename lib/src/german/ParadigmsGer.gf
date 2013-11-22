@@ -1,4 +1,5 @@
 --# -path=.:../common:../abstract:../../prelude
+--# -coding=latin1
 
 --1 German Lexical Paradigms
 --

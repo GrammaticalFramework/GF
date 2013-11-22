@@ -1,4 +1,5 @@
 --# -path=.:prelude
+--# -coding=latin1
 
 concrete LexiconFin of Lexicon = CatFin ** open MorphoFin, StemFin, ParadigmsFin in {
 

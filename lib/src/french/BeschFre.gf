@@ -1,3 +1,4 @@
+--# -coding=latin1
 resource BeschFre = open Prelude, MorphoFre in {
 
 flags optimize=noexpand ; -- faster and smaller than =all

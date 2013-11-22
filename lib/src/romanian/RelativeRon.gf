@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete RelativeRon of Relative = 
   CatRon ** open Prelude, ResRon in {
 

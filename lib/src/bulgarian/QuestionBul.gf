@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
   flags coding=cp1251 ;
 

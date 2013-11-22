@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete ExtraBul of ExtraBulAbs = CatBul ** 
   open ResBul, MorphoFunsBul, Coordination, Prelude, Predef in {
   flags coding=cp1251 ;

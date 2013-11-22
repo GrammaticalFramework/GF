@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NumeralNor of Numeral = CatNor ** open MorphoNor in {
 
 lincat 

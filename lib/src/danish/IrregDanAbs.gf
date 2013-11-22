@@ -1,3 +1,4 @@
+--# -coding=latin1
 abstract IrregDanAbs = Cat ** {
 
   fun

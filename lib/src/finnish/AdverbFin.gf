@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete AdverbFin of Adverb = CatFin ** open ResFin, Prelude, StemFin in {
 
   lin

@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NumeralDut of Numeral = CatDut [Numeral,Digits] ** open ResDut, Prelude in {
 
 flags optimize = all_subs ;

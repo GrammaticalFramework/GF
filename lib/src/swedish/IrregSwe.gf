@@ -1,4 +1,5 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
+--# -coding=latin1
 
 concrete IrregSwe of IrregSweAbs = CatSwe ** open ParadigmsSwe in {
 

@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete ConjunctionBul of Conjunction = 
   CatBul ** open ResBul, Coordination, Prelude, Predef in {
   flags coding=cp1251 ;
