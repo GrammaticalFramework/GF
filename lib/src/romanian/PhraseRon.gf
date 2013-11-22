@@ -1,3 +1,4 @@
+--# -coding=latin1
  concrete PhraseRon of Phrase = 
   CatRon ** open ResRon, Prelude in {
 

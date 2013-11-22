@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in {
 
   flags optimize=all_subs ; -- gfc size from 2864336 to 6786 - i.e. factor 422

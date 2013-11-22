@@ -1,4 +1,5 @@
 --# -path=.:../abstract:../common:prelude
+--# -coding=latin1
 
 --1 German auxiliary operations.
 --

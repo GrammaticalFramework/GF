@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
 
   flags optimize=all_subs ;

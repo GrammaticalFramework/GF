@@ -1,3 +1,4 @@
+--# -coding=cp1251
 --# -path=.:../abstract:../../prelude:../common
 
 resource MorphoFunsBul = open

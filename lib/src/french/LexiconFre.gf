@@ -1,4 +1,5 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
+--# -coding=latin1
 
 concrete LexiconFre of Lexicon = CatFre ** 
   open (M = MorphoFre), PhonoFre, ParadigmsFre, IrregFre in {

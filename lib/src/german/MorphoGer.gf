@@ -1,4 +1,5 @@
 --# -path=.:../common:../../prelude
+--# -coding=latin1
 --
 ----1 A Simple German Resource Morphology
 ----

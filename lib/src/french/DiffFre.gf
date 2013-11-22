@@ -1,4 +1,5 @@
 --# -path=.:../romance:../abstract:../common:prelude
+--# -coding=latin1
 
 instance DiffFre of DiffRomance - [
   imperClit,

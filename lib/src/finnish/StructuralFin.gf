@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete StructuralFin of Structural = CatFin ** 
   open MorphoFin, ParadigmsFin, (X = ConstructX), StemFin, Prelude in {
 

@@ -1,3 +1,4 @@
+--# -coding=latin1
 incomplete concrete SentenceRomance of Sentence = 
   CatRomance ** open Prelude, CommonRomance, ResRomance in {
 

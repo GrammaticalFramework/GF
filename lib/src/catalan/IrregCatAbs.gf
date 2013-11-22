@@ -1,4 +1,6 @@
+--# -coding=latin1
 abstract IrregCatAbs = Cat ** {
+
 --  fun abarse_V  : V ; 
 --  fun abastecer_V  : V ; 
 --  fun abeldar_V  : V ; 

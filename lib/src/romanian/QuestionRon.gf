@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete QuestionRon of Question = 
   CatRon ** open ResRon, Prelude in {
 

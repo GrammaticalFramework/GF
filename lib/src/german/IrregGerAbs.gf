@@ -1,3 +1,4 @@
+--# -coding=latin1
 abstract IrregGerAbs = Cat ** {
 
   fun backen_V : V ;

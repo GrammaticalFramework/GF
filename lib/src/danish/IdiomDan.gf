@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete IdiomDan of Idiom = CatDan ** 
   open MorphoDan, ParadigmsDan, IrregDan, Prelude in {
 

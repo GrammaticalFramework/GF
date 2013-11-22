@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete IdiomNor of Idiom = CatNor ** 
   open MorphoNor, ParadigmsNor, IrregNor, Prelude in {
 

@@ -1,4 +1,5 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
+--# -coding=latin1
 
 --1 Swedish Lexical Paradigms
 --

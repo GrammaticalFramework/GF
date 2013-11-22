@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NumeralDan of Numeral = CatDan ** open MorphoDan in {
 
 

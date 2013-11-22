@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, (R = ParamX) in {
 
   flags 

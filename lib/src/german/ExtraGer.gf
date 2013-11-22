@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete ExtraGer of ExtraGerAbs = CatGer ** 
   open ResGer, Coordination, Prelude, IrregGer in {
 

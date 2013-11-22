@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NumeralGer of Numeral = CatGer [Numeral,Digits] ** open MorphoGer, Prelude in {
 
 flags optimize = all_subs ;

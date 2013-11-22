@@ -1,4 +1,5 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
+--# -coding=latin1
 
 concrete LexiconSwe of Lexicon = CatSwe ** 
   open Prelude, ParadigmsSwe, IrregSwe in {

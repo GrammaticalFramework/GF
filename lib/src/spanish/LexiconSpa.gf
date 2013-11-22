@@ -1,4 +1,5 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
+--# -coding=latin1
 
 concrete LexiconSpa of Lexicon = CatSpa ** open 
   (M=MorphoSpa), ParadigmsSpa, BeschSpa in {

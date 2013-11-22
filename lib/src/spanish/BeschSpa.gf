@@ -1,4 +1,5 @@
 --# -path=.:../romance:../common:../abstract:../prelude
+--# -coding=latin1
 
 resource BeschSpa = open Prelude, CommonRomance in {
 

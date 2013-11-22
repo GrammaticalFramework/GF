@@ -1,10 +1,10 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
+--# -coding=latin1
 --
 -- Verbs trets de "Xurriguera".
 --
 
 resource BeschCat = open Prelude, CommonRomance in {
-
 
 --flags optimize=noexpand ; -- faster than values
 --

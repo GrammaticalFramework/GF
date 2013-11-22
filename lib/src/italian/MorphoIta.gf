@@ -1,4 +1,5 @@
 --# -path=.:../romance:../common:../../prelude
+--# -coding=latin1
 
 --1 A Simple Italian Resource Morphology
 --

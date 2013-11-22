@@ -1,4 +1,5 @@
 --# -path=.:../abstract:../common
+--# -coding=latin1
 
 --1 Dutch auxiliary operations.
 --

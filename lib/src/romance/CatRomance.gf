@@ -1,3 +1,4 @@
+--# -coding=latin1
 incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
   ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
 

@@ -1,4 +1,5 @@
 --# -path=.:../Romance:../common:../abstract:../common:prelude
+--# -coding=latin1
 
 concrete CatRon of Cat =
   CommonX - [CAdv,Temp,Tense] 

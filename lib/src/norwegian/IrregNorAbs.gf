@@ -1,3 +1,4 @@
+--# -coding=latin1
 abstract IrregNorAbs = Cat ** {
   fun be_V : V ;
   fun bite_V : V ;

@@ -1,4 +1,5 @@
 --# -path=.:../romance:../abstract:../../prelude
+--# -coding=latin1
 
 -- Irregular verbs from Nancy, based on a list from Sylvain Pogodalla, 25/11/2004
 -- Translated to GF by Aarne Ranta

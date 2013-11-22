@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
   flags coding=cp1251 ;
 

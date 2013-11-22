@@ -1,3 +1,4 @@
+--# -coding=latin1
 abstract IrregSweAbs = Cat ** {
   fun
   anfalla_V : V ;

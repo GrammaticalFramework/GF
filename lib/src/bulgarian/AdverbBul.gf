@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
   flags coding=cp1251 ;
 

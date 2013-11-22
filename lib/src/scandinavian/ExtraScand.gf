@@ -1,3 +1,4 @@
+--# -coding=latin1
 incomplete concrete ExtraScand of ExtraScandAbs = CatScand ** 
    open CommonScand,Coordination,ResScand, ParamX in {
   lin

@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
   flags coding=cp1251 ;
 

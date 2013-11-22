@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete StructuralDan of Structural = CatDan ** 
   open MorphoDan, ParadigmsDan, (X = ConstructX), IrregDan, Prelude in {
 

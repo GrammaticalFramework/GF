@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NumeralFin of Numeral = CatFin [Numeral,Digits] **  open Prelude, ParadigmsFin, MorphoFin, StemFin in {
 
 -- Notice: possessive forms are not used. They get wrong, since every

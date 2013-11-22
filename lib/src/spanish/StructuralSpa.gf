@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete StructuralSpa of Structural = CatSpa ** 
   open PhonoSpa, MorphoSpa, ParadigmsSpa, BeschSpa, 
        MakeStructuralSpa, (X = ConstructX), Prelude in {

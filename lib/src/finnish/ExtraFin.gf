@@ -1,4 +1,5 @@
 --# -path=.:abstract:common:prelude
+--# -coding=latin1
 
 concrete ExtraFin of ExtraFinAbs = CatFin ** 
   open ResFin, MorphoFin, Coordination, Prelude, NounFin, StructuralFin, StemFin, (R = ParamX) in {

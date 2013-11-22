@@ -1,3 +1,4 @@
+--# -coding=cp1251
 concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
   flags coding=cp1251 ;
 
