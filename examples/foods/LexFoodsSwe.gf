@@ -1,4 +1,5 @@
 -- (c) 2009 Aarne Ranta under LGPL
+--# -coding=latin1
 
 instance LexFoodsSwe of LexFoods = 
     open SyntaxSwe, ParadigmsSwe in {

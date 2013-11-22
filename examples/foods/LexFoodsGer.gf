@@ -1,4 +1,5 @@
 -- (c) 2009 Aarne Ranta under LGPL
+--# -coding=latin1
 
 instance LexFoodsGer of LexFoods = 
     open SyntaxGer, ParadigmsGer in {

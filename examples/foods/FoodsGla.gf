@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete FoodsGla of Foods = open MutationsGla, CharactersGla, Prelude in {
 	param Gender = Masc|Fem ;
 	param Number = Sg|Pl ;

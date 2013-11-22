@@ -1,4 +1,5 @@
 -- (c) 2009 Rami Shashati under LGPL
+--# -coding=latin1
 
 concrete FoodsPor of Foods = open Prelude in {
 	lincat
