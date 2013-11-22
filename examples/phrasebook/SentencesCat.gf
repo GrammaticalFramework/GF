@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete SentencesCat of Sentences = NumeralCat ** SentencesI - [
   IsMass,
   IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,

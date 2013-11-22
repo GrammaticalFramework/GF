@@ -1,4 +1,5 @@
 -- (c) 2010 Aarne Ranta under LGPL
+--# -coding=latin1
 
 concrete WordsSwe of Words = SentencesSwe ** 
     open SyntaxSwe, ParadigmsSwe, IrregSwe, (L = LexiconSwe), ExtraSwe, Prelude in {

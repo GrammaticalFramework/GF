@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete GreetingsSwe of Greetings = SentencesSwe [Greeting,mkGreeting] ** open Prelude in {
 
 lin 

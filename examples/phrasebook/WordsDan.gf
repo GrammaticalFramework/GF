@@ -1,4 +1,5 @@
 -- (c) 2009 Aarne Ranta under LGPL
+--# -coding=latin1
 
 concrete WordsDan of Words = SentencesDan ** 
     open SyntaxDan, ParadigmsDan, IrregDan, (L = LexiconDan), ExtraDan, StructuralDan, Prelude in {

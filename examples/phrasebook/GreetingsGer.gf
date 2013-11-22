@@ -1,4 +1,5 @@
 --# -path=.:abstract:prelude:german:api:common
+--# -coding=latin1
 concrete GreetingsGer of Greetings = SentencesGer [Greeting,mkGreeting] ** open Prelude in {
 
 lin 

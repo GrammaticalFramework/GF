@@ -1,4 +1,5 @@
 -- (c) 2010 Aarne Ranta under LGPL
+--# -coding=latin1
 
 concrete WordsFin of Words = SentencesFin ** 
   open 

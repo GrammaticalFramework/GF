@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete GreetingsDan of Greetings = SentencesDan [Greeting,mkGreeting] ** open Prelude in {
 
 lin 
