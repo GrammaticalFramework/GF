@@ -1022,10 +1022,10 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
     GuExn* err = gu_exn(NULL, type, tmp_pool);
     if (tmp_ccat == NULL) {
 	    gu_printf(out, err, "[");
-		pgf_print_range(conts->state, before, out, err);
+		pgf_print_range(item->conts->state, ps->before, out, err);
 		gu_printf(out, err, "; C%d; %d; C%d]\n",
-                            conts->ccat->fid, 
-                            conts->lin_idx, 
+                            item->conts->ccat->fid, 
+                            item->conts->lin_idx, 
                             ccat->fid);
 	}
     pgf_print_production(ccat->fid, prod, out, err, tmp_pool);
