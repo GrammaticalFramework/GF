@@ -1,4 +1,5 @@
 --# -path=.:prelude
+--# -coding=latin1
 
 -- (c) 2009 Martha Dis Brandt under LGPL
 

@@ -1,3 +1,4 @@
+--# -coding=latin1
 resource CharactersGla = {
 	
 	--Character classes

@@ -1,4 +1,5 @@
 -- (c) 2009 Laurette Pretorius Sr & Jr and Ansu Berg under LGPL
+--# -coding=latin1
 
 concrete FoodsAfr of Foods = open Prelude, Predef in{
 	lincat
