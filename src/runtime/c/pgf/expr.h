@@ -177,6 +177,9 @@ struct PgfPrintContext {
 };
 
 void
+pgf_print_cid(PgfCId id, GuOut* out, GuExn* err);
+
+void
 pgf_print_literal(PgfLiteral lit, GuOut* out, GuExn* err);
 
 void

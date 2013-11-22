@@ -1,5 +1,6 @@
 #include "pgf.h"
 #include <gu/assert.h>
+#include <gu/utf8.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -166,6 +167,45 @@ pgf_expr_parser_getc(PgfExprParser* parser)
 	}
 }
 
+static bool
+pgf_is_ident_first(GuUCS ucs)
+{
+	return (ucs == '_') ||
+           (ucs >= 'a' && ucs <= 'z') ||
+           (ucs >= 'A' && ucs <= 'Z') ||
+           (ucs >= 192 && ucs <= 255 && ucs != 247 && ucs != 215);
+}
+
+static bool
+pgf_is_ident_rest(GuUCS ucs)
+{
+	return (ucs == '_') ||
+           (ucs == '\'') ||
+           (ucs >= '0' && ucs <= '9') ||
+           (ucs >= 'a' && ucs <= 'z') ||
+           (ucs >= 'A' && ucs <= 'Z') ||
+           (ucs >= 192 && ucs <= 255 && ucs != 247 && ucs != 215);
+}
+
+static bool
+pgf_is_normal_ident(PgfCId id)
+{
+	const uint8_t* p = (const uint8_t*) id;
+	GuUCS ucs = gu_utf8_decode(&p);
+	if (!pgf_is_ident_first(ucs))
+		return false;
+
+	for (;;) {
+		ucs = gu_utf8_decode(&p);
+		if (ucs == 0)
+			break;
+		if (!pgf_is_ident_rest(ucs))
+			return false;
+	}
+
+	return true;
+}
+
 static void
 pgf_expr_parser_token(PgfExprParser* parser)
 {
@@ -227,20 +267,32 @@ pgf_expr_parser_token(PgfExprParser* parser)
 		pgf_expr_parser_getc(parser);
 		parser->token_tag = PGF_TOKEN_COLON;
 		break;
-	case '_':
+	case '\'':
 		pgf_expr_parser_getc(parser);
-		parser->token_tag = PGF_TOKEN_WILD;
+
+		GuBuf* chars = gu_new_buf(char, parser->tmp_pool);
+		while (parser->ch != '\'' && parser->ch != EOF) {
+			if (parser->ch == '\\') {
+				pgf_expr_parser_getc(parser);
+			}
+			gu_buf_push(chars, char, parser->ch);
+			pgf_expr_parser_getc(parser);
+		}
+		if (parser->ch == '\'') {
+			pgf_expr_parser_getc(parser);
+			gu_buf_push(chars, char, 0);
+			parser->token_tag   = PGF_TOKEN_IDENT;
+			parser->token_value = chars;
+		}
 		break;
 	default: {
 		GuBuf* chars = gu_new_buf(char, parser->tmp_pool);
 
-		if (isalpha(parser->ch)) {
-			while (isalnum(parser->ch) || 
-			       parser->ch == '_' || 
-			       parser->ch == '\'') {
+		if (pgf_is_ident_first(parser->ch)) {
+			do {
 				gu_buf_push(chars, char, parser->ch);
 				pgf_expr_parser_getc(parser);
-			}
+			} while (pgf_is_ident_rest(parser->ch));
 			gu_buf_push(chars, char, 0);
 			parser->token_tag   = PGF_TOKEN_IDENT;
 			parser->token_value = chars;
@@ -268,7 +320,7 @@ pgf_expr_parser_token(PgfExprParser* parser)
 			}
 		} else if (parser->ch == '"') {
 			pgf_expr_parser_getc(parser);
-			
+
 			while (parser->ch != '"' && parser->ch != EOF) {
 				gu_buf_push(chars, char, parser->ch);
 				pgf_expr_parser_getc(parser);
@@ -925,6 +977,30 @@ pgf_expr_hash(GuHash h, PgfExpr e)
 }
 
 void
+pgf_print_cid(PgfCId id,
+			  GuOut* out, GuExn* err)
+{
+	if (pgf_is_normal_ident(id))
+		gu_string_write(id, out, err);
+	else {
+		gu_putc('\'', out, err);
+		const uint8_t* p = (const uint8_t*) id;
+		for (;;) {
+			GuUCS ucs = gu_utf8_decode(&p);
+			if (ucs == 0)
+				break;
+			if (ucs == '\'')
+				gu_puts("\\\'", out, err);
+			else if (ucs == '\\')
+				gu_puts("\\\\", out, err);
+			else
+				gu_out_utf8(ucs, out, err);
+		}
+		gu_putc('\'', out, err);
+	}
+}
+
+void
 pgf_print_literal(PgfLiteral lit,
 			      GuOut* out, GuExn* err)
 {
@@ -973,7 +1049,7 @@ pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec,
 			if (abs->bind_type == PGF_BIND_TYPE_IMPLICIT) {
 				gu_putc('{', out, err);
 			}
-			gu_string_write(abs->id, out, err);
+			pgf_print_cid(abs->id, out, err);
 			if (abs->bind_type == PGF_BIND_TYPE_IMPLICIT) {
 				gu_putc('}', out, err);
 			}
@@ -1028,7 +1104,7 @@ pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec,
 		break;
 	case PGF_EXPR_FUN: {
 		PgfExprFun* fun = ei.data;
-		gu_string_write(fun->fun, out, err);
+		pgf_print_cid(fun->fun, out, err);
 		break;
 	}
 	case PGF_EXPR_VAR: {
@@ -1043,7 +1119,7 @@ pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec,
 		if (c == NULL) {
 			gu_printf(out, err, "#%d", evar->var);
 		} else {
-			gu_string_write(c->name, out, err);
+			pgf_print_cid(c->name, out, err);
 		}
 		break;
 	}
@@ -1074,7 +1150,7 @@ pgf_print_hypo(PgfHypo *hypo, PgfPrintContext* ctxt, int prec,
 {
     if (hypo->bind_type == PGF_BIND_TYPE_IMPLICIT) {
         gu_puts("({", out, err);
-        gu_string_write(hypo->cid, out, err);
+        pgf_print_cid(hypo->cid, out, err);
         gu_puts("} : ", out, err);
         pgf_print_type(hypo->type, ctxt, 0, out, err);
         gu_puts(")", out, err);
@@ -1083,7 +1159,7 @@ pgf_print_hypo(PgfHypo *hypo, PgfPrintContext* ctxt, int prec,
 
         if (strcmp(hypo->cid, "_") != 0) {
             gu_puts("(", out, err);
-            gu_string_write(hypo->cid, out, err);
+            pgf_print_cid(hypo->cid, out, err);
             gu_puts(" : ", out, err);
             pgf_print_type(hypo->type, ctxt, 0, out, err);
             gu_puts(")", out, err);
@@ -1117,7 +1193,7 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
 			gu_puts(" -> ", out, err);
 		}
 
-		gu_string_write(type->cid, out, err);
+		pgf_print_cid(type->cid, out, err);
     
 		for (size_t i = 0; i < type->n_exprs; i++) {
 			gu_puts(" ", out, err);
@@ -1143,7 +1219,7 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
 		
 		if (prec > 3) gu_putc(')', out, err);
 	} else {
-		gu_string_write(type->cid, out, err);
+		pgf_print_cid(type->cid, out, err);
 	}
 }
 

@@ -63,6 +63,7 @@ Library
                  fst,
                  containers,
                  bytestring,
+                 utf8-string,
                  random,
                  pretty,
                  mtl

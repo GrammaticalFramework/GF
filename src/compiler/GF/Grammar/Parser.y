@@ -103,7 +103,6 @@ import Data.Char(toLower)
 Integer       { (T_Integer $$) }
 Double        { (T_Double  $$) }
 String        { (T_String  $$) }
-LString       { (T_LString $$) }
 Ident         { (T_Ident   $$) }
 
 
@@ -457,7 +456,6 @@ Exp6
   | '{' ListLocDef '}'    {% mkR $2 }
   | '<' ListTupleComp '>' { R (tuple2record $2) }
   | '<' Exp ':' Exp '>'   { Typed $2 $4      }
-  | LString               { K $1 }
   | '(' Exp ')'           { $2 }
 
 ListExp :: { [Term] }
