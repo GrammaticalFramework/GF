@@ -96,6 +96,10 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
                                            ---- ++ [t | Alt ss _ <- as, t <- ss]
                                            ---- should be alternatives in [[CFSymbol]]
                                            ---- AR 3/6/2010
+        symbolToCFSymbol SymBIND         = [Terminal "&+"]
+        symbolToCFSymbol SymSOFT_BIND    = []
+        symbolToCFSymbol SymNE           = []
+
         fixProfile :: Array DotPos Symbol -> Int -> Profile
         fixProfile row i = [k | (k,j) <- nts, j == i]
             where
