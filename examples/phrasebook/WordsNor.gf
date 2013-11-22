@@ -1,4 +1,5 @@
 -- (c) 2009 Aarne Ranta under LGPL
+--# -coding=latin1
 
 concrete WordsNor of Words = SentencesNor ** 
     open SyntaxNor, ParadigmsNor, IrregNor, (L = LexiconNor), ExtraNor, StructuralNor, Prelude in {

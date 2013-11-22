@@ -1,4 +1,5 @@
 -- (c) 2009 Ramona Enache and Aarne Ranta under LGPL
+--# -coding=latin1
 
 concrete WordsFre of Words = SentencesFre ** open
   SyntaxFre,

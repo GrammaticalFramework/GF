@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete GreetingsCat of Greetings = SentencesCat [Greeting,mkGreeting] ** open Prelude in {
 
 lin 

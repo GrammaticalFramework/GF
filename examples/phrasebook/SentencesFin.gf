@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete SentencesFin of Sentences = NumeralFin ** SentencesI - 
   [Is, IsMass, NameNN, ObjMass,
    IFemale, YouFamFemale, YouPolFemale, IMale, YouFamMale, YouPolMale,

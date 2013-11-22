@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete GreetingsNor of Greetings = SentencesNor [Greeting,mkGreeting] ** open Prelude in {
 
 lin 

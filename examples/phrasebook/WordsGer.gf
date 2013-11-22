@@ -1,4 +1,5 @@
 -- (c) 2009 Aarne Ranta under LGPL
+--# -coding=latin1
 
 concrete WordsGer of Words = SentencesGer ** 
     open SyntaxGer, ParadigmsGer, IrregGer, (L = LexiconGer), ExtraGer, Prelude in {

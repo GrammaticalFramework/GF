@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete GreetingsFin of Greetings = SentencesFin [Greeting,mkGreeting] ** open Prelude in {
 
 lin 

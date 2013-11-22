@@ -1,4 +1,5 @@
 -- (c) 2010 Aarne Ranta and Olga Caprotti under LGPL
+--# -coding=latin1
 
 concrete WordsIta of Words = SentencesIta ** open
   SyntaxIta,
