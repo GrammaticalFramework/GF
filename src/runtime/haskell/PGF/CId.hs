@@ -7,6 +7,7 @@ module PGF.CId (CId(..),
 
 import Control.Monad
 import qualified Data.ByteString.Char8 as BS
+import qualified Data.ByteString.UTF8 as UTF8
 import Data.Char
 import qualified Text.ParserCombinators.ReadP as RP
 import qualified Text.PrettyPrint as PP
@@ -21,7 +22,7 @@ wildCId = CId (BS.singleton '_')
 
 -- | Creates a new identifier from 'String'
 mkCId :: String -> CId
-mkCId s = CId (BS.pack s)
+mkCId s = CId (UTF8.fromString s)
 
 bsCId = CId
 
@@ -33,7 +34,18 @@ readCId s = case [x | (x,cs) <- RP.readP_to_S pCId s, all isSpace cs] of
 
 -- | Renders the identifier as 'String'
 showCId :: CId -> String
-showCId (CId x) = BS.unpack x
+showCId (CId x) = 
+  let raw = UTF8.toString x
+  in if isIdent raw
+       then raw
+       else "'" ++ concatMap escape raw ++ "'"
+  where
+    isIdent []     = False
+    isIdent (c:cs) = isIdentFirst c && all isIdentRest cs
+
+    escape '\'' = "\\\'"
+    escape '\\' = "\\\\"
+    escape c    = [c]
 
 instance Show CId where
     showsPrec _ = showString . showCId
@@ -48,10 +60,35 @@ pCId = do s <- pIdent
             else return (mkCId s)
 
 pIdent :: RP.ReadP String
-pIdent = liftM2 (:) (RP.satisfy isIdentFirst) (RP.munch isIdentRest)
-  where
-    isIdentFirst c = c == '_' || isLetter c
-    isIdentRest c = c == '_' || c == '\'' || isAlphaNum c
+pIdent = 
+  liftM2 (:) (RP.satisfy isIdentFirst) (RP.munch isIdentRest)
+  `mplus`
+  do RP.char '\''
+     cs <- RP.many1 insideChar
+     RP.char '\''
+     return cs
+--  where
+insideChar = RP.readS_to_P $ \s ->
+  case s of
+	[]             -> []
+	('\\':'\\':cs) -> [('\\',cs)]
+	('\\':'\'':cs) -> [('\'',cs)]
+	('\\':cs)      -> []
+	('\'':cs)      -> []
+	(c:cs)         -> [(c,cs)]
+
+isIdentFirst c =
+  (c == '_') ||
+  (c >= 'a' && c <= 'z') ||
+  (c >= 'A' && c <= 'Z') ||
+  (c >= '\192' && c <= '\255' && c /= '\247' && c /= '\215')
+isIdentRest c = 
+  (c == '_') ||
+  (c == '\'') ||
+  (c >= '0' && c <= '9') ||
+  (c >= 'a' && c <= 'z') ||
+  (c >= 'A' && c <= 'Z') ||
+  (c >= '\192' && c <= '\255' && c /= '\247' && c /= '\215')
 
 ppCId :: CId -> PP.Doc
 ppCId = PP.text . showCId

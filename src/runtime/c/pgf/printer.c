@@ -16,7 +16,7 @@ pgf_print_flag(GuMapItor* fn, const void* key, void* value,
     GuOut *out = clo->out;
     
     gu_puts("  flag ", out, err);
-    gu_string_write(flag, out, err);
+    pgf_print_cid(flag, out, err);
     gu_puts(" = ", out, err);
     pgf_print_literal(lit, out, err);
     gu_puts(";\n", out, err);
@@ -32,7 +32,7 @@ pgf_print_cat(GuMapItor* fn, const void* key, void* value,
     GuOut *out = clo->out;
 
     gu_puts("  cat ", out, err);
-    gu_string_write(name, out, err);
+    pgf_print_cid(name, out, err);
 
 	PgfPrintContext* ctxt = NULL;
     size_t n_hypos = gu_seq_length(cat->context);
@@ -61,7 +61,7 @@ pgf_print_absfun(GuMapItor* fn, const void* key, void* value,
     GuOut *out = clo->out;
     
     gu_puts((fun->defns == NULL) ? "  data " : "  fun ", out, err);
-    gu_string_write(name, out, err);
+    pgf_print_cid(name, out, err);
     gu_puts(" : ", out, err);
     pgf_print_type(fun->type, NULL, 0, out, err);
     gu_printf(out, err, " ;   -- %f\n", fun->ep.prob);
@@ -70,7 +70,7 @@ static void
 pgf_print_abstract(PgfAbstr* abstr, GuOut* out, GuExn* err)
 {
 	gu_puts("abstract ", out, err);
-	gu_string_write(abstr->name, out, err);
+	pgf_print_cid(abstr->name, out, err);
 	gu_puts(" {\n", out, err);
 	
 	PgfPrintFn clo1 = { { pgf_print_flag }, out };
@@ -205,7 +205,7 @@ pgf_print_cncfun(PgfCncFun *cncfun, PgfSequences* sequences,
 	
 	if (cncfun->absfun != NULL) {
 		gu_puts(" [", out, err);
-		gu_string_write(cncfun->absfun->name, out, err);
+		pgf_print_cid(cncfun->absfun->name, out, err);
 		gu_puts("]", out, err);
 	}
 	
@@ -311,7 +311,7 @@ pgf_print_cnccat(GuMapItor* fn, const void* key, void* value,
     GuOut *out = clo->out;
     
     gu_puts("    ", out, err);
-    gu_string_write(name, out, err);
+    pgf_print_cid(name, out, err);
     gu_puts(" :=\n", out, err);
     
     PgfCCat *start = gu_seq_get(cnccat->cats, PgfCCat*, 0);
@@ -335,7 +335,7 @@ pgf_print_concrete(PgfCId cncname, PgfConcr* concr,
                    GuOut* out, GuExn* err)
 {
 	gu_puts("concrete ", out, err);
-	gu_string_write(cncname, out, err);
+	pgf_print_cid(cncname, out, err);
 	gu_puts(" {\n", out, err);
 
 	PgfPrintFn clo1 = { { pgf_print_flag }, out };
