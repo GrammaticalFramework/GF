@@ -3,7 +3,7 @@
 -- Scandinavian languages.
 
 abstract ExtraSweAbs = ExtraScandAbs -[FocAP] ** {
-
+flags coding=utf8;
 cat ReflNP ; 
     PronAD ; -- relational pronouns which can act like adjectives and
              -- determiners. 'fler'

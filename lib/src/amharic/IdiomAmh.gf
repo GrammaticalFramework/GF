@@ -1,4 +1,5 @@
 concrete IdiomAmh of Idiom = CatAmh ** open Prelude, ResAmh in {
+  flags coding=utf8;
 ----
 ----  flags optimize=all_subs ;
 ----

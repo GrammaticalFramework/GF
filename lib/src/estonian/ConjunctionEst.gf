@@ -1,7 +1,7 @@
 concrete ConjunctionEst of Conjunction = 
   CatEst ** open ResEst, Coordination, Prelude in {
 
-  flags optimize=all_subs ;
+  flags optimize=all_subs ; coding=utf8;
 
   lin
 

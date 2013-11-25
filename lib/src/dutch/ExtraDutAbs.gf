@@ -5,7 +5,7 @@ abstract ExtraDutAbs = Extra [
   VV,VP,Conj,IComp,ICompAP,IAdvAdv,Adv,AP,IAdv,
   VPSlash, NominalizeVPSlashNP] ** 
 {
-
+  flags coding=utf8;
 --{
 --
 --  fun

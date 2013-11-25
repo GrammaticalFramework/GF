@@ -1,3 +1,4 @@
+--# -coding=latin1
 abstract ExtraFinAbs = Extra [
   GenNP,GenIP,GenRP,
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,

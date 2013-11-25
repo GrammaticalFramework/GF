@@ -3,7 +3,7 @@ abstract ExtraGerAbs = Extra [
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,EmptyRelSlash,
   VPSlash,PassVPSlash,CompIQuant,
   Temp,Tense,Pol,S,NP,VV,VP,Conj,IAdv,IQuant,IComp,ICompAP,IAdvAdv,Adv,AP] ** {
-
+  flags coding=utf8;
   fun
     PPzuAdv   : CN -> Adv ;  -- zum Lied, zur Flasche
     TImpfSubj : Tense ;      -- ich möchte...   --# notpresent

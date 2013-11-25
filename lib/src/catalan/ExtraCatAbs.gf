@@ -2,6 +2,7 @@
 -- Romance languages.
 
 abstract ExtraCatAbs = ExtraRomanceAbs ** {
+  flags coding=utf8;
 
 fun
 

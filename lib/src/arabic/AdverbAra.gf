@@ -1,4 +1,5 @@
 concrete AdverbAra of Adverb = CatAra ** open ResAra, Prelude in {
+  flags coding=utf8;
 
   lin
     PositAdvAdj a = {s = a.s ! APosit Masc Sg Indef Acc} ;

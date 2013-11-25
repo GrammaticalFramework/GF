@@ -1,4 +1,5 @@
 concrete IdiomAra of Idiom = CatAra ** open Prelude, ResAra in {
+  flags coding=utf8;
 --
 --  flags optimize=all_subs ;
 --

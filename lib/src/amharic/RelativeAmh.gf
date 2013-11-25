@@ -1,4 +1,5 @@
 concrete RelativeAmh of Relative = CatAmh ** open ResAmh in {
+  flags coding=utf8;
 ----
 ----  flags optimize=all_subs ;
 ----

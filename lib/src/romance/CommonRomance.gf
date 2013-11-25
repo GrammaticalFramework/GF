@@ -6,6 +6,7 @@
 -- which depends on [DiffRomance DiffRomance.html].
 --
 
+--# -coding=latin1
 resource CommonRomance = ParamX ** open Prelude in {
 
   flags optimize=all ;

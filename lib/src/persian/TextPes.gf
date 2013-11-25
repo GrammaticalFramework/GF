@@ -1,5 +1,5 @@
 concrete TextPes of Text = CommonX - [Temp,TTAnt,Tense,TPres,TPast,TFut,TCond] ** {
-
+  flags coding=utf8;
 -- This works for the special punctuation marks of Persian.
 
   lin

@@ -3,6 +3,7 @@
 -- (c) 2009 Server Çimen under LGPL
 
 abstract IrregTurAbs = Cat ** {
+  flags coding=utf8;
   fun
     eat_V : V ;
     fear_V : V ;

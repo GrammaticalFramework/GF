@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
 
   flags optimize=all_subs ;

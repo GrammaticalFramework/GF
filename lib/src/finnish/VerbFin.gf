@@ -1,5 +1,6 @@
 --1 Verb Phrases in Finnish
 
+--# -coding=latin1
 concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 
   flags optimize=all_subs ;

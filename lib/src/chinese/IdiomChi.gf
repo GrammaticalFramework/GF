@@ -1,5 +1,5 @@
 concrete IdiomChi of Idiom = CatChi ** open Prelude, ResChi in {
-
+  flags coding=utf8;
   lin
     ---- formal subject, e.g. it is hot ?? now empty subject
     ImpersCl vp =  mkClause [] vp ;

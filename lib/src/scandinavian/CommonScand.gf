@@ -3,6 +3,7 @@
 -- This module contains operations that are shared by the Scandinavian
 -- languages, without dependence on parameters.
 
+--# -coding=latin1
 resource CommonScand = ParamX ** open Prelude in {
 
   flags optimize=all ;

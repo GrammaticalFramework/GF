@@ -1,4 +1,5 @@
 concrete RelativeAra of Relative = CatAra ** open ResAra in {
+  flags coding=utf8;
 --
 --  flags optimize=all_subs ;
 --

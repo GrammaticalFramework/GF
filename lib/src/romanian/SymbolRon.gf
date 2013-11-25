@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../common:../prelude
 concrete SymbolRon of Symbol = 
   CatRon ** open Prelude, ResRon in {
-
+flags coding=utf8;
 lin
   SymbPN i = mkSymb i.s ;
   IntPN i  = mkSymb i.s ;
