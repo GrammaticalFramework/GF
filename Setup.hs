@@ -120,9 +120,9 @@ checkRGLArgs args = do
   let args' = filter (\arg -> not (arg `elem` all_modes ||
                                    rgl_prefix `isPrefixOf` arg ||
                                    langs_prefix `isPrefixOf` arg)) args
-  if null args'
-    then return emptyHookedBuildInfo
-    else die $ "Unrecognised flags: " ++ intercalate ", " args'
+  unless (null args') $
+    putStrLn $ "Unrecognised flags: " ++ intercalate ", " args'
+  return emptyHookedBuildInfo
 
 buildRGL args flags pkg lbi = do
   let cmds = getRGLCommands args
