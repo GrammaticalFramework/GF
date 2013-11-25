@@ -1,5 +1,5 @@
 name: gf
-version: 3.5-darcs
+version: 3.5.11-darcs
 
 cabal-version: >= 1.8
 build-type: Custom
@@ -140,8 +140,8 @@ Executable gf
   if flag(new-comp)
     cpp-options: -DNEW_COMP
 
-  build-tools: happy
-           --, alex>=2 && <3 -- tricky to install in Ubuntu 12.04
+  build-tools: happy, alex>=3
+
   if os(windows)
     build-depends: Win32
   else

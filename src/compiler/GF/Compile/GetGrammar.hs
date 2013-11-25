@@ -18,40 +18,61 @@ import Prelude hiding (catch)
 
 import GF.Data.Operations
 
-import GF.System.Catch
+--import GF.System.Catch
 import GF.Infra.UseIO
-import GF.Infra.Option(Options,optPreprocessors,addOptions,optEncoding,flag,renameEncoding)
+import GF.Infra.Option(Options,optPreprocessors,addOptions,renameEncoding,optEncoding,flag,defaultEncoding)
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar
-import GF.Compile.Coding
+--import GF.Compile.Coding
+import GF.Compile.ReadFiles(parseSource,lift)
+--import GF.Text.Coding(decodeUnicodeIO)
 
 import qualified Data.ByteString.Char8 as BS
-import Control.Monad (foldM)
+import Data.Char(isAscii)
+import Control.Monad (foldM,when,unless)
 import System.Cmd (system)
-import System.IO(mkTextEncoding)
+--import System.IO(mkTextEncoding) --,utf8
 import System.Directory(removeFile)
 
 getSourceModule :: Options -> FilePath -> IOE SourceModule
-getSourceModule opts file0 = ioe $
-  do tmp <- foldM runPreprocessor (Source file0) (flag optPreprocessors opts)
-     content <- keepTemp tmp
-     case runP pModDef content of
-       Left (Pn l c,msg) -> do file <- writeTemp tmp
+getSourceModule opts file0 = 
+  errIn file0 $
+  do tmp <- lift $ foldM runPreprocessor (Source file0) (flag optPreprocessors opts)
+     raw <- lift $ keepTemp tmp
+   --ePutStrLn $ "1 "++file0
+     (optCoding,parsed) <- parseSource opts pModDef raw
+     case parsed of
+       Left (Pn l c,msg) -> do file <- lift $ writeTemp tmp
                                let location = file++":"++show l++":"++show c
-                               return (Bad (location++":\n   "++msg))
-       Right (i,mi00) ->
-         do removeTemp tmp
-            let mi0 =mi00 {mflags=mflags mi00 `addOptions` opts, msrc=file0}
-            mi <- transcodeModule (i,mi0)
-            return (Ok mi)
-  `catch` (return . Bad . show)
+                               raise (location++":\n   "++msg)
+       Right (i,mi0) ->
+         do lift $ removeTemp tmp
+            let mi =mi0 {mflags=mflags mi0 `addOptions` opts, msrc=file0}
+                optCoding' = renameEncoding `fmap` flag optEncoding (mflags mi0)
+            case (optCoding,optCoding') of
+              (Nothing,Nothing) ->
+                  unless (BS.all isAscii raw) $
+                    ePutStrLn $ file0++":\n    Warning: default encoding has changed from Latin-1 to UTF-8"
+              (_,Just coding') -> 
+                  when (coding/=coding') $
+                  raise $ "Encoding mismatch: "++coding++" /= "++coding'
+                where coding = maybe defaultEncoding renameEncoding optCoding
+              _ -> return ()
+          --lift $ transcodeModule' (i,mi) -- old lexer
+            return (i,mi) -- new lexer
 
+{-
 transcodeModule sm00 =
-  do enc <- mkTextEncoding (renameEncoding (flag optEncoding (mflags (snd sm00))))
+  do enc <- mkTextEncoding (getEncoding (mflags (snd sm00)))
      let sm = decodeStringsInModule enc sm00
      return sm
 
+transcodeModule' sm00 =
+  do let enc = utf8
+     let sm = decodeStringsInModule enc sm00
+     return sm
+-}
 
 runPreprocessor :: Temporary -> String -> IO Temporary
 runPreprocessor tmp0 p =

@@ -31,7 +31,7 @@ encodeUnicode enc s =
                        (cbuf,bbuf) <- cod cbuf bbuf
 #endif
                        if isEmptyBuffer bbuf
-                         then ioe_invalidCharacter
+                         then ioe_invalidCharacter1
                          else do let bs = PS (bufRaw bbuf) (bufL bbuf) (bufR bbuf-bufL bbuf)
                                  bss <- translate cod cbuf
                                  return (bs:bss)
@@ -41,8 +41,9 @@ encodeUnicode enc s =
         w = bufR cbuf
 
 decodeUnicode :: TextEncoding -> ByteString -> String
-decodeUnicode enc (PS fptr l len) =
-  unsafePerformIO $ do
+decodeUnicode enc bs = unsafePerformIO $ decodeUnicodeIO enc bs
+
+decodeUnicodeIO enc (PS fptr l len) = do
     let bbuf = Buffer{bufRaw=fptr, bufState=ReadBuffer, bufSize=len, bufL=l, bufR=l+len}
     cbuf <- newCharBuffer 128 WriteBuffer
     case enc of
@@ -59,7 +60,7 @@ decodeUnicode enc (PS fptr l len) =
                        (bbuf,cbuf) <- cod bbuf cbuf
 #endif
                        if isEmptyBuffer cbuf
-                         then ioe_invalidCharacter
+                         then ioe_invalidCharacter2
                          else unpack cod bbuf cbuf
       | otherwise = return []
       where
@@ -75,6 +76,10 @@ decodeUnicode enc (PS fptr l len) =
         i = bufL cbuf
         w = bufR cbuf
 
-ioe_invalidCharacter = ioException
+ioe_invalidCharacter1 = ioException
    (IOError Nothing InvalidArgument ""
         ("invalid byte sequence for this encoding") Nothing Nothing)
+
+ioe_invalidCharacter2 = ioException
+   (IOError Nothing InvalidArgument ""
+        ("invalid byte sequence for this decoding") Nothing Nothing)
