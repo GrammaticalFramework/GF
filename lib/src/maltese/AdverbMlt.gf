@@ -5,7 +5,7 @@
 -- Licensed under LGPL
 
 concrete AdverbMlt of Adverb = CatMlt ** open ResMlt, Prelude in {
-
+  flags coding=utf8;
   lin
 
     -- A -> Adv

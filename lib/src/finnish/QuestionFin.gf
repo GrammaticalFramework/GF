@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
 
   flags optimize=all_subs ;

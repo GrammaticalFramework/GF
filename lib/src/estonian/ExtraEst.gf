@@ -1,6 +1,6 @@
 concrete ExtraEst of ExtraEstAbs = CatEst ** 
   open ResEst, MorphoEst, Coordination, Prelude, NounEst, StructuralEst, (R = ParamX) in {
-
+  flags coding=utf8;
   lin
     GenNP np = {
       s,sp = \\_,_ => np.s ! NPCase Gen ;

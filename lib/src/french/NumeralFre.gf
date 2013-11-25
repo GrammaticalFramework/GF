@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NumeralFre of Numeral = CatFre [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoFre, Prelude in {
 

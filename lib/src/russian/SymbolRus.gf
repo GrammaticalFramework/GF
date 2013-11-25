@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../common
 
 concrete SymbolRus of Symbol = CatRus ** open Prelude, ResRus in {
-
+flags coding=utf8;
 {- TODO! -}
 lin
   SymbPN i = {s = table  {_ => i.s} ; g = Neut; anim = Inanimate } ;

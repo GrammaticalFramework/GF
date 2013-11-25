@@ -7,7 +7,7 @@
 --# -path=.:prelude:../abstract:../common
 
 concrete IrregMlt of IrregMltAbs = CatMlt ** open ParadigmsMlt in {
-
+  flags coding=utf8;
 {-
   Known irregular verbs in Maltese:
     - ĦA

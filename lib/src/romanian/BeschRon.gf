@@ -1,3 +1,4 @@
+--# -coding=latin1
 resource BeschRon = open Prelude, MorphoRon,CatRon in {
 
 flags optimize=noexpand ; 

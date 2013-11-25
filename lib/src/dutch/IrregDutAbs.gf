@@ -1,3 +1,4 @@
+--# -coding=latin1
 abstract IrregDutAbs = Cat ** {
 
 fun bakken_V : V ; -- to fry

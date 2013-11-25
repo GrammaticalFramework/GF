@@ -1,6 +1,6 @@
 incomplete concrete AdjectiveRomance of Adjective = 
   CatRomance ** open CommonRomance, ResRomance, Prelude in {
-
+  flags coding=utf8;
   lin
 
     PositA  a = {

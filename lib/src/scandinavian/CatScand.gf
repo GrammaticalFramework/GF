@@ -1,3 +1,4 @@
+--# -coding=latin1
 incomplete concrete CatScand of Cat = 
   CommonX -[Tense,Temp] ** open (RS = ResScand), Prelude, CommonScand, (R = ParamX) in {
 

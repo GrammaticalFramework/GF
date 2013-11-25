@@ -1,6 +1,7 @@
 --1 Romance auxiliary operations.
 --
 
+--# -coding=latin1
 interface ResRomance = DiffRomance ** open CommonRomance, Prelude in {
 
 flags optimize=all ;

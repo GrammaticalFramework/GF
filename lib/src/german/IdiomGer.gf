@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete IdiomGer of Idiom = CatGer ** 
   open MorphoGer, ParadigmsGer, Prelude in {
 

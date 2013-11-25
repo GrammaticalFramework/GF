@@ -2,6 +2,7 @@ concrete PhraseAra of Phrase = CatAra ** open
   ParamX, 
   Prelude, 
   ResAra in {
+  flags coding=utf8;
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ! Masc ++ voc.s} ;--FIXME

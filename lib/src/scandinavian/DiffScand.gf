@@ -1,3 +1,4 @@
+--# -coding=latin1
 interface DiffScand = open CommonScand, Prelude in {
 
 --1 Differences between Scandinavian languages

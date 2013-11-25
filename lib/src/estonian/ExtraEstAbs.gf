@@ -1,3 +1,4 @@
+--# -coding=latin1
 abstract ExtraEstAbs = Extra [
   GenNP,
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,

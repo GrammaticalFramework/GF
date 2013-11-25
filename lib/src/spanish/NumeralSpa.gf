@@ -1,3 +1,4 @@
+--# -coding=latin1
 concrete NumeralSpa of Numeral = CatSpa [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoSpa, Prelude in {
 

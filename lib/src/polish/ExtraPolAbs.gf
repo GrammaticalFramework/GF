@@ -1,5 +1,6 @@
 abstract ExtraPolAbs = Cat, Extra [AP,CN,Pron,ProDrop] ** 
 {
+flags coding=utf8;
 	-- in Polish there exists a distinction between 
     -- attributes describing a quality of some object (e.g. cold water)
     -- and qualifying that object (e.g. sparkling water).
