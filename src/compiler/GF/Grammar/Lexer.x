@@ -1,3 +1,4 @@
+-- -*- haskell -*-
 {
 module GF.Grammar.Lexer
          ( Token(..), Posn(..)
@@ -6,9 +7,14 @@ module GF.Grammar.Lexer
          ) where
 
 import GF.Infra.Ident
+--import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
+import qualified Data.ByteString as WBS
+import qualified Data.ByteString.Internal as BS(w2c)
+import qualified Data.ByteString.UTF8 as UTF8
 import qualified Data.Map as Map
-
+import Data.Word(Word8)
+--import Debug.Trace(trace)
 }
 
 
@@ -17,7 +23,7 @@ $c = [A-Z\192-\221] # [\215]
 $s = [a-z\222-\255] # [\247]
 $d = [0-9]                -- digit
 $i = [$l $d _ ']          -- identifier character
-$u = [\0-\255]            -- universal: any character
+$u = [.\n]                -- universal: any character
 
 @rsyms =    -- symbols and non-identifier-like reserved words
    \; | \= | \{ | \} | \( | \) | \~ | \* \* | \: | \- \> | \, | \[ | \] | \- | \. | \| | \% | \? | \< | \> | \@ | \# | \! | \* | \+ | \+ \+ | \\ | \\\\ | \= \> | \_ | \$ | \/
@@ -27,17 +33,20 @@ $u = [\0-\255]            -- universal: any character
 "{-" ([$u # \-] | \- [$u # \}])* ("-")+ "}" ; 
 
 $white+ ;
-@rsyms                          { tok (eitherResIdent (T_Ident . identC . rawIdentC)) }
-\' ([. # [\' \\ \n]] | (\\ (\' | \\)))+ \' { tok (eitherResIdent (T_Ident . identC . rawIdentS . unescapeInitTail . BS.unpack)) }
-(\_ | $l)($l | $d | \_ | \')*   { tok (eitherResIdent (T_Ident . identC . rawIdentC)) }
+@rsyms                          { tok (res (T_Ident . identS)) }
+\' ([. # [\' \\ \n]] | (\\ (\' | \\)))+ \' { tok (eitherResIdent (T_Ident . identC . rawIdentS . unescapeInitTail . unpack)) }
+(\_ | $l)($l | $d | \_ | \')*   { tok (res (T_Ident . identS)) }
 
-\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \" { tok (T_String . unescapeInitTail . BS.unpack) }
+\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \" { tok (T_String . unescapeInitTail . unpack) }
 
-(\-)? $d+                       { tok (T_Integer . read . BS.unpack) }
-(\-)? $d+ \. $d+ (e (\-)? $d+)? { tok (T_Double  . read . BS.unpack) }
+(\-)? $d+                       { tok (T_Integer . read . unpack) }
+(\-)? $d+ \. $d+ (e (\-)? $d+)? { tok (T_Double  . read . unpack) }
 
 {
+--unpack = BS.unpack
+unpack = id
 
+tok :: (String->Token) -> Posn -> String -> Token
 tok f p s = f s
 
 data Token
@@ -114,15 +123,17 @@ data Token
  | T_Double  Double          -- double precision float literals
  | T_Ident   Ident
  | T_EOF
+-- deriving Show -- debug
 
-eitherResIdent :: (BS.ByteString -> Token) -> BS.ByteString -> Token
+res = eitherResIdent
+eitherResIdent :: (String -> Token) -> String -> Token
 eitherResIdent tv s = 
   case Map.lookup s resWords of
     Just t  -> t
     Nothing -> tv s
 
 isReservedWord :: BS.ByteString -> Bool
-isReservedWord s = Map.member s resWords
+isReservedWord s = Map.member (BS.unpack s) resWords
 
 resWords = Map.fromList
  [ b "!"  T_exclmark
@@ -194,7 +205,7 @@ resWords = Map.fromList
  , b "where"      T_where
  , b "with"       T_with
  ]
- where b s t = (BS.pack s, t)
+ where b s t = (s, t)
 
 unescapeInitTail :: String -> String
 unescapeInitTail = unesc . tail where
@@ -202,7 +213,7 @@ unescapeInitTail = unesc . tail where
     '\\':c:cs | elem c ['\"', '\\', '\''] -> c : unesc cs
     '\\':'n':cs  -> '\n' : unesc cs
     '\\':'t':cs  -> '\t' : unesc cs
-    '"':[]    -> []
+    '\"':[]    -> []
     '\'':[]    -> []
     c:cs      -> c : unesc cs
     _         -> []
@@ -219,13 +230,14 @@ alexMove :: Posn -> Char -> Posn
 alexMove (Pn l c) '\n' = Pn (l+1) 1
 alexMove (Pn l c) _    = Pn l     (c+1)
 
-alexGetChar :: AlexInput -> Maybe (Char,AlexInput)
-alexGetChar (AI p _ s) =
-  case BS.uncons s of
+alexGetByte :: AlexInput -> Maybe (Word8,AlexInput)
+alexGetByte (AI p _ s) =
+  case WBS.uncons s of
     Nothing  -> Nothing
-    Just (c,s) ->
+    Just (w,s) ->
              let p' = alexMove p c
-              in p' `seq` Just (c, (AI p' c s))
+                 c = BS.w2c w
+              in p' `seq` Just (w, (AI p' c s))
 
 alexInputPrevChar :: AlexInput -> Char
 alexInputPrevChar (AI p c s) = c
@@ -260,12 +272,13 @@ failLoc pos msg = P $ \_ -> PFailed pos msg
 lexer :: (Token -> P a) -> P a
 lexer cont = P go
   where
+  --cont' t = trace (show t) (cont t)
     go inp@(AI pos _ str) =
       case alexScan inp 0 of
         AlexEOF                -> unP (cont T_EOF) inp
         AlexError (AI pos _ _) -> PFailed pos "lexical error"
-        AlexSkip  inp' len     -> go inp'
-        AlexToken inp' len act -> unP (cont (act pos (BS.take len str))) inp'
+        AlexSkip  inp' len     -> {-trace (show len) $-} go inp'
+        AlexToken inp' len act -> unP (cont (act pos (UTF8.toString (UTF8.take len str)))) inp'
 
 getPosn :: P Posn
 getPosn = P $ \inp@(AI pos _ _) -> POk pos

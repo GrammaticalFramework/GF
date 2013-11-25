@@ -21,7 +21,8 @@
 module GF.Compile.ReadFiles 
            ( getAllFiles,ModName,ModEnv,importsOfModule,
              gfoFile,gfFile,isGFO,gf2gfo,
-             getOptionsFromFile) where
+             parseSource,lift,
+             getOptionsFromFile,getPragmas) where
 
 import Prelude hiding (catch)
 import GF.System.Catch
@@ -33,6 +34,10 @@ import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar
 import GF.Grammar.Binary
+
+import System.IO(mkTextEncoding)
+import qualified Data.ByteString.UTF8 as UTF8
+import GF.Text.Coding(decodeUnicodeIO)
 
 import Control.Monad
 import Data.Maybe(isJust)
@@ -50,7 +55,7 @@ type ModEnv  = Map.Map ModName (UTCTime,[ModName])
 
 -- | Returns a list of all files to be compiled in topological order i.e.
 -- the low level (leaf) modules are first.
-getAllFiles :: (MonadIO m,ErrorMonad m) => Options -> [InitPath] -> ModEnv -> FileName -> m [FullPath]
+--getAllFiles :: (MonadIO m,ErrorMonad m) => Options -> [InitPath] -> ModEnv -> FileName -> m [FullPath]
 getAllFiles opts ps env file = do
   -- read module headers from all files recursively
   ds <- liftM reverse $ get [] [] (justModuleName file)
@@ -117,14 +122,10 @@ getAllFiles opts ps env file = do
                                        Just mo -> return (st,importsOfModule mo)
                                        Nothing
                                          | isGFO file -> raise (file ++ " is compiled with different GF version and I can't find the source file")
-                                         | otherwise  -> do s <- liftIO $ BS.readFile file
-                                                            case runP pModHeader s of
-                                                              Left (Pn l c,msg) -> raise (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
-                                                              Right mo          -> return (CSComp,importsOfModule mo)
-                        CSComp -> do s <- liftIO $ BS.readFile file
-                                     case runP pModHeader s of
-                                       Left (Pn l c,msg) -> raise (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
-                                       Right mo          -> return (st,importsOfModule mo)
+                                         | otherwise  -> do mo <- parseModHeader opts file
+                                                            return (CSComp,importsOfModule mo)
+                        CSComp -> do mo <- parseModHeader opts file
+                                     return (st,importsOfModule mo)
       testErr (mname == name)
               ("module name" +++ mname +++ "differs from file name" +++ name)
       return (name,st,t,isJust gfTime,imps,dropFileName file)
@@ -209,17 +210,55 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
 
     modName = showIdent
 
+
+parseModHeader opts file =
+  do --ePutStrLn file
+     (_,parsed) <- parseSource opts pModHeader =<< lift (BS.readFile file)
+     case parsed of
+       Right mo          -> return mo
+       Left (Pn l c,msg) ->
+                  raise (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
+
+parseSource opts p raw =
+  do (coding,utf8) <- toUTF8 opts raw
+     return (coding,runP p utf8)
+
+toUTF8 opts0 raw =
+  do opts <- getPragmas raw
+     let given = flag optEncoding opts -- explicitly given encoding
+         coding = getEncoding $ opts0 `addOptions` opts
+     utf8 <- if coding=="UTF-8"
+             then return raw
+             else lift $ do --ePutStrLn $ "toUTF8 from "++coding
+                            enc <- mkTextEncoding coding
+                            -- decodeUnicodeIO uses a lot of stack space,
+                            -- so we need to split the file into smaller pieces
+                            ls <- mapM (decodeUnicodeIO enc) (BS.lines raw)
+                            return $ UTF8.fromString (unlines ls)
+     return (given,utf8)
+
+--lift io = ioe (fmap Ok io `catch` (return . Bad . show))
+lift io = liftIO io
+
 -- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile :: (MonadIO m,ErrorMonad m) => FilePath -> m Options
 getOptionsFromFile file = do
   s <- either (\_ -> raise $ "File " ++ file ++ " does not exist") return =<<
        liftIO (try $ BS.readFile file)
-  let ls = filter (BS.isPrefixOf (BS.pack "--#")) $ BS.lines s
-      fs = map (BS.unpack . BS.unwords . BS.words . BS.drop 3) ls
-  parseModuleOptions fs
+  opts <- getPragmas s
+  -- The coding flag should not be inherited by other files
+  return (addOptions opts (modifyFlags $ \ f -> f{optEncoding=Nothing}))
 
-getFilePath :: MonadIO m => [FilePath] -> String -> m (Maybe FilePath)
-getFilePath paths file = liftIO $ get paths
+
+getPragmas :: (ErrorMonad m) => BS.ByteString -> m Options
+getPragmas = parseModuleOptions . 
+             map (BS.unpack . BS.unwords . BS.words . BS.drop 3) .
+             filter (BS.isPrefixOf (BS.pack "--#")) . BS.lines
+
+--getFilePath :: MonadIO m => [FilePath] -> String -> m (Maybe FilePath)
+getFilePath paths file =
+   liftIO $ do --ePutStrLn $ "getFilePath "++show paths++" "++show file
+               get paths
   where
     get []     = return Nothing
     get (p:ps) = do

@@ -20,7 +20,7 @@ module GF.Infra.Option
      helpMessage,
      -- * Checking specific options
      flag, cfgTransform, haskellOption, readOutputFormat,
-     isLexicalCat, isLiteralCat, renameEncoding,
+     isLexicalCat, isLiteralCat, renameEncoding, getEncoding, defaultEncoding,
      -- * Setting specific options
      setOptimization, setCFGTransform,
      -- * Convenience methods for checking options    
@@ -157,7 +157,7 @@ data Flags = Flags {
       optRetainResource  :: Bool,
       optName            :: Maybe String,
       optPreprocessors   :: [String],
-      optEncoding        :: String,
+      optEncoding        :: Maybe String,
       optPMCFG           :: Bool,
       optOptimizations   :: Set Optimization,
       optOptimizePGF     :: Bool,
@@ -213,7 +213,7 @@ fixRelativeLibPaths curr_dir lib_dir (Options o) = Options (fixPathFlags . o)
 -- | Pretty-print the options that are preserved in .gfo files.
 optionsGFO :: Options -> [(String,Literal)]
 optionsGFO opts = optionsPGF opts
-      ++ [("coding", LStr (flag optEncoding opts))]
+      ++ [("coding", LStr (getEncoding opts))]
 
 -- | Pretty-print the options that are preserved in .pgf files.
 optionsPGF :: Options -> [(String,Literal)]
@@ -241,6 +241,10 @@ concatOptions = foldr addOptions noOptions
 modifyFlags :: (Flags -> Flags) -> Options
 modifyFlags = Options
 
+getEncoding :: Options -> String
+getEncoding = renameEncoding . maybe defaultEncoding id . flag optEncoding
+defaultEncoding = "UTF-8"
+
 -- Default options
 
 defaultFlags :: Flags
@@ -264,7 +268,7 @@ defaultFlags = Flags {
 
       optName            = Nothing,
       optPreprocessors   = [],
-      optEncoding        = "latin1",
+      optEncoding        = Nothing,
       optPMCFG           = True,
       optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize],
       optOptimizePGF     = False,
@@ -419,7 +423,7 @@ optDescr =
        addLibDir   x = set $ \o -> o { optLibraryPath = x:optLibraryPath o }
        setLibPath  x = set $ \o -> o { optLibraryPath = splitInModuleSearchPath x }
        preproc     x = set $ \o -> o { optPreprocessors = optPreprocessors o ++ [x] }
-       coding      x = set $ \o -> o { optEncoding = x }
+       coding      x = set $ \o -> o { optEncoding = Just x }
        startcat    x = set $ \o -> o { optStartCat = Just x }
        language    x = set $ \o -> o { optSpeechLanguage = Just x }
        lexer       x = set $ \o -> o { optLexer = Just x }

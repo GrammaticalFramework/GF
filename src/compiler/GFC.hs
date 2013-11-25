@@ -24,7 +24,7 @@ import qualified Data.ByteString.Lazy as BSL
 import System.FilePath
 import System.IO
 import Control.Exception
-
+import Control.Monad(unless)
 
 mainGFC :: Options -> [FilePath] -> IO ()
 mainGFC opts fs = do
@@ -46,9 +46,8 @@ compileSourceFiles :: Options -> [FilePath] -> IOE ()
 compileSourceFiles opts fs = 
     do gr <- batchCompile opts fs
        let cnc = justModuleName (last fs)
-       if flag optStopAfterPhase opts == Compile 
-         then return ()
-         else do pgf <- link opts (identS cnc) gr
+       unless (flag optStopAfterPhase opts == Compile) $
+              do pgf <- link opts (identS cnc) gr
                  writePGF opts pgf
                  writeByteCode opts pgf
                  writeOutputs opts pgf
@@ -57,11 +56,9 @@ compileCFFiles :: Options -> [FilePath] -> IOE ()
 compileCFFiles opts fs = 
     do s  <- liftIO $ fmap unlines $ mapM readFile fs
        let cnc = justModuleName (last fs)
-       gf <- getCF cnc s
-       gr <- compileSourceGrammar opts gf
-       if flag optStopAfterPhase opts == Compile 
-         then return ()
-         else do pgf <- link opts (identS cnc) gr
+       gr <- compileSourceGrammar opts =<< getCF cnc s
+       unless (flag optStopAfterPhase opts == Compile) $
+              do pgf <- link opts (identS cnc) gr
                  writePGF opts pgf
                  writeOutputs opts pgf
 

@@ -17,8 +17,8 @@ import GF.Grammar.Grammar
 import GF.Grammar.Macros
 import GF.Grammar.Lexer
 import GF.Compile.Update (buildAnyTree)
-import Codec.Binary.UTF8.String(decodeString)
-import Data.Char(toLower)
+--import Codec.Binary.UTF8.String(decodeString)
+--import Data.Char(toLower)
 }
 
 %name pModDef ModDef
@@ -616,9 +616,9 @@ happyError = fail "syntax error"
 
 -- Quick fix to render error messages from UTF-8-encoded source files correctly.
 optDecode opts =
-    if map toLower (flag optEncoding opts) `elem` ["utf8","utf-8"]
+    {-if map toLower (getEncoding opts) `elem` ["utf8","utf-8"]
     then decodeString
-    else id
+    else-} id
 
 mkListId,mkConsId,mkBaseId  :: Ident -> Ident
 mkListId = prefixIdent "List"
