@@ -1,0 +1,88 @@
+GF character encoding changes
+Thomas Hallgren
+%%mtime(%F)
+
+%!style:../css/style.css
+%!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+==Planned changes to character encodings in GF grammar files ==
+
+We plan to make two changes:
+
++ Currently the default character encoding in GF grammar files is Latin-1
+(also known as iso-8859-1, cp1252). We plan to change the default to UTF-8.
+
++ It is currently possible to use another character encoding by specifying it
+with a ``flags coding = ...`` declaration in the source file. We plan to change
+this to use a pragma ``--# -coding=...`` at the top of the file instead.
+
+
+== Advantages ==
+
+UTF-8 is the default encoding for text files on many systems these days, so
+it makes sense to use it as the default for GF grammar files too.
+
+Changing how alternate encodings are specified allows conversion to Unicode
+to be done before parsing, which means that
+
+- we can allow Unicode characters in identifiers, not just in string literals,
+- it makes accurate column positions in error messages possible,
+- and (an implementation detail) we can use Alex to generate the lexer again.
+
+
+== How are my grammar files affected? ==
+
+If your files still compile without errors after the change, you don't need
+to do anything. (But see Known problems below!)
+If you get one of the following errors,
+
+- ``lexical error``,
+- ``encoding mismatch``,
+- ``Warning: default encoding has changed from Latin-1 to UTF-8``
+
+
+ you need to add a
+``--# -coding=...`` pragma to your file (or convert it to UTF-8).
+
+- For files containing only ASCII characters, no change is needed.
+- For files encoded in UTF-8 (and thus using a ``flags coding=utf8``
+  declaration), no change is needed.
+- For files containing Latin-1 characters (e.g. characters like
+  å ä ö ü é), add a ``#-- -coding=latin1`` pragma at the top of the file.
+- For files using other encodings, copy the encoding specified in the
+  ``flags coding=``//enc// to a corresponding ``--# -coding=``//enc//.
+
+
+Grammars will still compile with GF-3.5 after these changes.
+
+
+Note that GF only understands one option per pragma line. If you already
+have a ``--path=...`` pragma, you can not put the ``-coding=...`` option on
+the same line. Add it on a separate line:
+
+```
+	--# -path=...
+	--# -coding=...
+```
+
+The recommendation for the future is to use UTF-8 for all source files.
+
+
+== Known problems ==
+
+The intention is that if a grammar file is affected by the changed default
+encoding, then you will see one of the messages listed in the previous
+section when you compile the grammar. But there are a couple if issues to be
+aware of:
+
+- Alex 3.0 seems to be confused about the length of matched strings sometimes.
+  This can cause it to skip more than one line when it encounters a one-line
+  comment in a grammar file with character encoding problems. So instead of a
+  lexical error in the comment, you can get an odd syntax error
+  on a subsequent line.
+
+- If you explicitly specify -coding=utf8 for a file that is not in UTF-8, you
+  will not get an error, because the UTF-8 decoding function we currently use is
+  forgiving, substituting the Unicode replacement character �, instead of
+  reporting an error. Hopefully, we will be able to change this.

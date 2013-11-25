@@ -14,9 +14,15 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 Over [...] changes have been pushed to the source repository since the release
 of GF 3.5.
 
+Closed issues: 30, 41, 57, 60, 61, 68.
 
 ===GF compiler and run-time library===
 
+- The default character encoding in grammar files has been changed from
+  Latin-1 to UTF-8. Also, alternate character encodings should now be specified
+  as ``--# -coding=``//enc//, instead of ``flags coding=``//enc//.
+  See the separate document
+  [GF character encoding changes encoding-change.html] for more details.
 - Nonlinear patterns (i.e., patterns where the same variable appears more than
   once) in concrete syntax are now detected and reported as errors.
   (Section C.4.13 in the GF book explicitly states that patterns must be
@@ -36,6 +42,7 @@ of GF 3.5.
 - New languages in the Resource Grammar Library: Estonian
   (see the [updated synopsis ../lib/doc/synopsis.html]).
 - [...]
+
 
 ===GF Cloud services===
 
