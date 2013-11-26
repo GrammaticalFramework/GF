@@ -6,7 +6,7 @@ concrete LetterFre of Letter = {
 -- whose abstract syntax is $letter.Abs.gf$. 
 
 
-flags lexer=textlit ; unlexer=textlit ;
+flags lexer=textlit ; unlexer=textlit ; coding=utf8;
 
 param Gen = masc | fem ;
 param Num = sg | pl ;
@@ -24,7 +24,7 @@ oper SSSrcGen = {s : Str ; n : Num ; g : Gen} ; -- gives Num and Gen
 oper 
   ss : Str -> SS = \s -> {s = s} ;
   cher : Num => Gen => Tok = 
-    table {n => table {masc => regNom "cher" ! n ; fem => regNom "chère" ! n}};
+    table {n => table {masc => regNom "cher" ! n ; fem => regNom "chÃ¨re" ! n}};
   regAdj : Str -> Gen => Num => Str = \s -> 
     table {masc => regNom s ; fem => regNom (s + "e")} ;
   regNom : Str -> Num => Str = \s -> table {sg => s ; pl => s + "s"} ;
@@ -33,7 +33,7 @@ oper
   egohabeo : Num => Str = 
     table {sg => "j'ai" ; pl => "nous" ++ "avons"} ;
   fuisti : Num => Str = 
-    table {sg => "tu" ++ "as" ++ "été"; pl => "vous" ++ "avez" ++ "été"} ;
+    table {sg => "tu" ++ "as" ++ "Ã©tÃ©"; pl => "vous" ++ "avez" ++ "Ã©tÃ©"} ;
   quePrep = "que" ; ----
   tuinformare : Num => Str = 
     table {sg => "t'informer"; pl => "vous" ++ "informer"} ;
@@ -102,18 +102,18 @@ FormalEnding auth =
   {s = 
      table {n => table {g => 
         "avec" ++ mes ! dep2num auth.n n ++ 
-        ["salutations distinguées"] ++ RET ++ auth.s ! n ! g}} ; 
+        ["salutations distinguÃ©es"] ++ RET ++ auth.s ! n ! g}} ; 
    n = auth.n ; g = auth.g} ;
 InformalEnding auth = 
   {s = table {n => table {g => ["Amicalement"] ++ RET ++ auth.s ! n ! g}} ; 
    n = auth.n ; g = auth.g} ;
 
-ColleaguesHe  = {s = regNom "collègue" ! pl  ; n = pl ; g = masc} ;
-ColleaguesShe = {s = regNom "collègue" ! pl  ; n = pl ; g = fem} ;
-ColleagueHe  = {s = regNom "collègue" ! sg ; n = sg ; g = masc} ;
-ColleagueShe = {s = regNom "collègue" ! sg ; n = sg ; g = fem} ;
-DarlingHe    = {s = "chéri"   ; n = sg ; g = masc} ;
-DarlingShe   = {s = "chérie"  ; n = sg ; g = fem} ;
+ColleaguesHe  = {s = regNom "collÃ¨gue" ! pl  ; n = pl ; g = masc} ;
+ColleaguesShe = {s = regNom "collÃ¨gue" ! pl  ; n = pl ; g = fem} ;
+ColleagueHe  = {s = regNom "collÃ¨gue" ! sg ; n = sg ; g = masc} ;
+ColleagueShe = {s = regNom "collÃ¨gue" ! sg ; n = sg ; g = fem} ;
+DarlingHe    = {s = "chÃ©ri"   ; n = sg ; g = masc} ;
+DarlingShe   = {s = "chÃ©rie"  ; n = sg ; g = fem} ;
 NameHe s   = {s = s.s  ; n = sg ; g = masc} ;
 NameShe s  = {s = s.s  ; n = sg ; g = fem} ;
 
@@ -126,12 +126,12 @@ Honour = {s =
 Regret = {s = 
     table {na => table {ga => table {nr => table {gr =>
       let {dga = dep2gen ga gr ; dna = dep2num na nr} in 
-      egosum ! dna ++ regAdj "désolé" ! dga ! dna ++ 
+      egosum ! dna ++ regAdj "dÃ©solÃ©" ! dga ! dna ++ 
       ["d'informer"] ++ quePrep}}}}
   } ;
 
 
-President = constNG ["le président"] sg masc ;
+President = constNG ["le prÃ©sident"] sg masc ;
 Mother    = constNG ["maman"] sg fem ;
 Spouse    = {s = table {
                    sg => table {fem => ["ton mari"] ; masc => ["ta femme"]} ; 
@@ -155,7 +155,7 @@ ILoveYou = {s =
   } ;
     
 Company      = {s = ["notre entreprise"]          ; n = sg ; g = fem} ;
-Competitor   = {s = ["notre pire compétiteur"]    ; n = sg ; g = masc} ;
+Competitor   = {s = ["notre pire compÃ©titeur"]    ; n = sg ; g = masc} ;
 OurCustomers = {s = ["nos clients"] ; n = pl ; g = masc} ;
 
 Senior = {s = table {sg => table {g => ["responsable scientifique"]} ;

@@ -6,7 +6,7 @@ concrete LetterSwe of Letter = {
 -- whose abstract syntax is $letter.Abs.gf$. 
 
 
-flags lexer=textlit ; unlexer=textlit ;
+flags lexer=textlit ; unlexer=textlit ; coding=utf8;
 
 printname cat Letter = "Brev" ;
 printname fun MkLetter = "brevmall" ;
@@ -70,30 +70,30 @@ PlainSent sent = sent ;
 
 FormalEnding auth = 
   {s = table {n => table {x => 
-     ["Med vänlig hälsning"] ++ RET ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
+     ["Med vÃ¤nlig hÃ¤lsning"] ++ RET ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
 
 InformalEnding auth = 
   {s = table {n => table {x => 
-     ["Med hälsningar"] ++ RET ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
+     ["Med hÃ¤lsningar"] ++ RET ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
 
 ColleaguesHe  = {s = kollega ! pl ; n = pl ; x = masc} ;
 ColleaguesShe = {s = kollega ! pl ; n = pl ; x = fem} ;
 ColleagueHe  = {s = kollega ! sg ; n = sg ; x = masc} ;
 ColleagueShe = {s = kollega ! sg ; n = sg ; x = fem} ;
-DarlingHe    = {s = "älskling"  ; n = sg ; x = masc} ;
-DarlingShe   = {s = "älskling"  ; n = sg ; x = fem} ;
+DarlingHe    = {s = "Ã¤lskling"  ; n = sg ; x = masc} ;
+DarlingShe   = {s = "Ã¤lskling"  ; n = sg ; x = fem} ;
 NameHe s   = {s = s.s  ; n = sg ; x = masc} ;
 NameShe s  = {s = s.s  ; n = sg ; x = fem} ;
 
 Honour = {s = 
     table {na => table {xa => table {nr => table {xr => 
-      jag ! dep2num na nr ! nom ++ ["har äran att meddela"] ++ 
+      jag ! dep2num na nr ! nom ++ ["har Ã¤ran att meddela"] ++ 
       du ! nr ! acc ++ "att"}}}}
   } ;
 
 Regret = {s = 
     table {na => table {xa => table {nr => table {xr => 
-      jag ! dep2num na nr ! nom ++ ["måste tyvärr meddela"] ++ 
+      jag ! dep2num na nr ! nom ++ ["mÃ¥ste tyvÃ¤rr meddela"] ++ 
       du ! nr ! acc ++ "att"}}}}
   } ;
 
@@ -102,7 +102,7 @@ President = constNX ["Presidenten"] sg masc ;
 Mother    = constNX ["Mamma"] sg fem ;
 Spouse    = {s = table {
                    sg => table {fem => ["din man"] ; masc => ["din hustru"]} ; 
-                   pl => table {fem => ["era män"] ; masc => ["era hustrur"]}
+                   pl => table {fem => ["era mÃ¤n"] ; masc => ["era hustrur"]}
                  } ; n = depnum ; x = masc} ; -- sex does not matter here
 Dean      = constNX ["Dekanus"] sg masc ;
 Name s    = constNX s.s sg masc ; ---
@@ -114,18 +114,18 @@ BePromoted pos = {s =
   } ;
 GoBankrupt np = {s = 
     table {na => table {xa => table {nr => table {xr => 
-      np.s ++ ["har gått i konkurs"]}}}}
+      np.s ++ ["har gÃ¥tt i konkurs"]}}}}
   } ;
 ILoveYou = {s = 
     table {na => table {xa => table {nr => table {xr => 
-      jag ! dep2num na nr ! nom ++ ["älskar"] ++ du ! nr ! acc}}}}
+      jag ! dep2num na nr ! nom ++ ["Ã¤lskar"] ++ du ! nr ! acc}}}}
   } ;
     
-Company      = {s = ["vårt företag"]          ; n = sg ; g = ett} ;
-Competitor   = {s = ["vår värsta konkurrent"] ; n = sg ; g = en} ;
-OurCustomers = {s = ["våra kunder"] ; n = pl ; g = en} ;
+Company      = {s = ["vÃ¥rt fÃ¶retag"]          ; n = sg ; g = ett} ;
+Competitor   = {s = ["vÃ¥r vÃ¤rsta konkurrent"] ; n = sg ; g = en} ;
+OurCustomers = {s = ["vÃ¥ra kunder"] ; n = pl ; g = en} ;
 
-Senior = {s = table {n => table {x => ["äldre forskare"]}}} ;
+Senior = {s = table {n => table {x => ["Ã¤ldre forskare"]}}} ;
 ProjectManager = {s = 
   table {
     sg => table {_ => "projektchef"} ;
@@ -137,8 +137,8 @@ oper
 kaer : 
   Num => Sex => Str =
   table {
-    sg => table {masc => "Käre" ; fem => "Kära"} ;
-    pl => table {_ => "Kära"}
+    sg => table {masc => "KÃ¤re" ; fem => "KÃ¤ra"} ;
+    pl => table {_ => "KÃ¤ra"}
         } ;
 
 kollega : 
