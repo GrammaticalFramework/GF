@@ -5,7 +5,7 @@ concrete LetterFin of Letter = {
 -- This file defines the Finnish syntax of the grammar set 
 -- whose abstract syntax is $letter.Abs.gf$. 
 
-flags lexer=textlit ; unlexer=textlit ;
+flags lexer=textlit ; unlexer=textlit ; coding=utf8;
 
 -- modified from French in 20 min, 15/6/2002
 
@@ -33,10 +33,10 @@ oper
   egosum : Num => Str = 
     table {sg => "olen" ; pl => "olemme"} ;
   egohabeo : Num => Str = 
-    table {sg => "minulla" ++ "on" ; pl => "meill‰" ++ "on"} ;
+    table {sg => "minulla" ++ "on" ; pl => "meill√§" ++ "on"} ;
   fuisti : Num => Str = 
-    table {sg => "sinut" ++ "on"; pl => "teid‰t" ++ "on"} ;
-  quePrep = "ett‰" ; ----
+    table {sg => "sinut" ++ "on"; pl => "teid√§t" ++ "on"} ;
+  quePrep = "ett√§" ; ----
   tuinformare : Num => Str = 
     table {sg => "ilmoittaa" ++ "sinulle" ; pl => "ilmoittaa" ++ "teille"} ;
   
@@ -45,13 +45,13 @@ oper
   avoir : Num => Str = 
     table {sg => "on"; pl => "ovat"} ;
  
-  mes : Num => Str = table {sg => "minun" ; pl => "meid‰n"} ;
+  mes : Num => Str = table {sg => "minun" ; pl => "meid√§n"} ;
 
   teamo : Num => Num => Str = table {
     sg => table {sg => "rakastan" ++ "sinua" ; 
-                 pl => "rakastan" ++ "teit‰"} ;
+                 pl => "rakastan" ++ "teit√§"} ;
     pl => table {sg => "rakastamme" ++ "sinua" ; 
-                 pl => "rakastamme" ++ "teit‰"}
+                 pl => "rakastamme" ++ "teit√§"}
    } ;
 
   constNG : Str -> Num -> Gen -> SSSrc2 = \str,num,gen -> 
@@ -132,7 +132,7 @@ Regret = {s =
 
 
 President = constNG ["presidentti"] sg masc ;
-Mother    = constNG ["‰iti"] sg fem ;
+Mother    = constNG ["√§iti"] sg fem ;
 Spouse    = {s = table {
                    sg => table {fem => ["miehesi"] ; masc => ["vaimosi"]} ; 
                    pl => table {fem => ["miehenne"] ; masc => ["vaimonne"]}
@@ -174,8 +174,8 @@ Senior = {s = table {sg => table {g => ["vanhemmaksi tutkijaksi"]} ;
 
 ProjectManager = {s = 
   table {
-    sg => table {_ => ["projektip‰‰llikˆksi"]} ;
-    pl => table {_ => ["projektip‰‰llikˆiksi"]}
+    sg => table {_ => ["projektip√§√§llik√∂ksi"]} ;
+    pl => table {_ => ["projektip√§√§llik√∂iksi"]}
         }} ;
 
 }
