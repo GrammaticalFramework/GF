@@ -13,20 +13,24 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.Ident (-- * Identifiers
-	      Ident, ident2bs, showIdent, ppIdent, prefixIdent,
+	      Ident, ident2utf8, showIdent, ppIdent, prefixIdent,
 	      identS, identC, identV, identA, identAV, identW,
 	      argIdent, isArgIdent, getArgIndex,
               varStr, varX, isWildIdent, varIndex,
               -- * Raw Identifiers
               RawIdent, rawIdentS, rawIdentC, ident2raw, prefixRawIdent,
-              isPrefixOf, showRawIdent, rawId2bs{-,
+              isPrefixOf, showRawIdent{-,
 	      -- * Refreshing identifiers
 	      IdState, initIdStateN, initIdState,
 	      lookVar, refVar, refVarPlus-}
 	     ) where
 
-import qualified Data.ByteString.Char8 as BS
+import qualified Data.ByteString.UTF8 as UTF8
+import qualified Data.ByteString.Char8 as BS(append,isPrefixOf)
+                 -- Limit use of BS functions to the ones that work correctly on
+                 -- UTF-8-encoded bytestrings!
 import Data.Char(isDigit)
+import Data.Binary(Binary(..))
 import Text.PrettyPrint(Doc,text)
 
 
@@ -41,31 +45,41 @@ data Ident =
  | IA  {-# UNPACK #-} !RawIdent {-# UNPACK #-} !Int                       -- ^ /INTERNAL/ argument of cat at position
  | IAV {-# UNPACK #-} !RawIdent {-# UNPACK #-} !Int {-# UNPACK #-} !Int   -- ^ /INTERNAL/ argument of cat with bindings at position
 -- 
-
   deriving (Eq, Ord, Show, Read)
 
-newtype RawIdent = Id { rawId2bs :: BS.ByteString }
+-- | Identifiers are stored as UTF-8-encoded bytestrings.
+newtype RawIdent = Id { rawId2utf8 :: UTF8.ByteString }
   deriving (Eq, Ord, Show, Read)
 
-rawIdentS = Id . BS.pack
+pack = UTF8.fromString
+unpack = UTF8.toString
+
+rawIdentS = Id . pack
 rawIdentC = Id
-showRawIdent = BS.unpack . rawId2bs
+showRawIdent = unpack . rawId2utf8
 
 prefixRawIdent (Id x) (Id y) = Id (BS.append x y) 
 isPrefixOf (Id x) (Id y) = BS.isPrefixOf x y
 
-ident2bs :: Ident -> BS.ByteString
-ident2bs i = case i of
-  IC (Id s) -> s
-  IV (Id s) n -> BS.append s (BS.pack ('_':show n))
-  IA (Id s) j -> BS.append s (BS.pack ('_':show j))
-  IAV (Id s) b j -> BS.append s (BS.pack ('_':show b ++ '_':show j))
-  IW -> BS.pack "_"
+instance Binary RawIdent where
+  put = put . rawId2utf8
+  get = fmap rawIdentC get
 
-ident2raw = Id . ident2bs
+
+-- | This function should be used with care, since the returned ByteString is
+-- UTF-8-encoded.
+ident2utf8 :: Ident -> UTF8.ByteString
+ident2utf8 i = case i of
+  IC (Id s) -> s
+  IV (Id s) n -> BS.append s (pack ('_':show n))
+  IA (Id s) j -> BS.append s (pack ('_':show j))
+  IAV (Id s) b j -> BS.append s (pack ('_':show b ++ '_':show j))
+  IW -> pack "_"
+
+ident2raw = Id . ident2utf8
 
 showIdent :: Ident -> String
-showIdent i = BS.unpack $! ident2bs i
+showIdent i = unpack $! ident2utf8 i
 
 ppIdent :: Ident -> Doc
 ppIdent = text . showIdent
@@ -83,7 +97,7 @@ identW :: Ident
 
 
 prefixIdent :: String -> Ident -> Ident
-prefixIdent pref = identC . Id . BS.append (BS.pack pref) . ident2bs
+prefixIdent pref = identC . Id . BS.append (pack pref) . ident2utf8
 
 -- normal identifier
 -- ident s = IC s
@@ -99,8 +113,11 @@ isArgIdent _     = False
 
 getArgIndex (IA _ i)    = Just i
 getArgIndex (IAV _ _ i) = Just i
-getArgIndex (IC (Id s))
-  | isDigit (BS.last s) = (Just . read . BS.unpack . snd . BS.spanEnd isDigit) s
+getArgIndex (IC (Id bs))
+  | isDigit c =
+   -- (Just . read . unpack . snd . BS.spanEnd isDigit) bs -- not ok with UTF-8
+      (Just . read . reverse . takeWhile isDigit) s
+  where s@(c:_) = reverse (unpack bs)
 getArgIndex x = Nothing
 
 -- | used in lin defaults
@@ -117,7 +134,7 @@ isWildIdent x = case x of
   IC s | s == wild -> True
   _ -> False
 
-wild = Id (BS.pack "_")
+wild = Id (pack "_")
 
 varIndex :: Ident -> Int
 varIndex (IV _ n) = n

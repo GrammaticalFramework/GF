@@ -3,7 +3,7 @@ module PGF.CId (CId(..),
                 readCId, showCId,
                 
                 -- utils
-                bsCId, pCId, pIdent, ppCId) where
+                utf8CId, pCId, pIdent, ppCId) where
 
 import Control.Monad
 import qualified Data.ByteString.Char8 as BS
@@ -24,7 +24,8 @@ wildCId = CId (BS.singleton '_')
 mkCId :: String -> CId
 mkCId s = CId (UTF8.fromString s)
 
-bsCId = CId
+-- | Creates an identifier from a UTF-8-encoded 'ByteString'
+utf8CId = CId
 
 -- | Reads an identifier from 'String'. The function returns 'Nothing' if the string is not valid identifier.
 readCId :: String -> Maybe CId

@@ -30,7 +30,7 @@ import PGF.Data(Literal(..))
 gfoVersion = "GF03"
 
 instance Binary Ident where
-  put id = put (ident2bs id)
+  put id = put (ident2utf8 id)
   get    = do bs <- get
               if bs == BS.pack "_"
                 then return identW
@@ -294,10 +294,6 @@ instance Binary Label where
              0 -> fmap LIdent get
              1 -> fmap LVar   get
              _ -> decodingError
-
-instance Binary RawIdent where
-  put = put . rawId2bs
-  get = fmap rawIdentC get
 
 --putGFOVersion = mapM_ (putWord8 . fromIntegral . ord) gfoVersion
 --getGFOVersion = replicateM (length gfoVersion) (fmap (chr . fromIntegral) getWord8)

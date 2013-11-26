@@ -5,7 +5,7 @@ module GF.Compile.GrammarToPGF (mkCanon2pgf) where
 import GF.Compile.GeneratePMCFG
 import GF.Compile.GenerateBC
 
-import PGF(CId,mkCId,bsCId)
+import PGF(CId,mkCId,utf8CId)
 import PGF.Data(fidInt,fidFloat,fidString,fidVar)
 import PGF.Optimize(updateProductionIndices)
 --import qualified PGF.Macros as CM
@@ -103,7 +103,7 @@ mkCanon2pgf opts gr am = do
           return (seqs, ((m,id), info) : is)
 
 i2i :: Ident -> CId
-i2i = bsCId . ident2bs
+i2i = utf8CId . ident2utf8
 
 mkType :: [Ident] -> A.Type -> C.Type
 mkType scope t =
