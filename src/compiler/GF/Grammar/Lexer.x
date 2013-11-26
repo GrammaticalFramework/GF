@@ -33,9 +33,9 @@ $u = [.\n]                -- universal: any character
 "{-" ([$u # \-] | \- [$u # \}])* ("-")+ "}" ; 
 
 $white+ ;
-@rsyms                          { tok (res (T_Ident . identS)) }
-\' ([. # [\' \\ \n]] | (\\ (\' | \\)))+ \' { tok (eitherResIdent (T_Ident . identC . rawIdentS . unescapeInitTail . unpack)) }
-(\_ | $l)($l | $d | \_ | \')*   { tok (res (T_Ident . identS)) }
+@rsyms                          { tok ident }
+\' ([. # [\' \\ \n]] | (\\ (\' | \\)))+ \' { tok (res T_Ident . identS . unescapeInitTail . unpack) }
+(\_ | $l)($l | $d | \_ | \')*   { tok ident }
 
 \" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \" { tok (T_String . unescapeInitTail . unpack) }
 
@@ -43,10 +43,12 @@ $white+ ;
 (\-)? $d+ \. $d+ (e (\-)? $d+)? { tok (T_Double  . read . unpack) }
 
 {
---unpack = BS.unpack
-unpack = id
+unpack = UTF8.toString
+--unpack = id
 
-tok :: (String->Token) -> Posn -> String -> Token
+ident = res T_Ident . identC . rawIdentC
+
+--tok :: (String->Token) -> Posn -> String -> Token
 tok f p s = f s
 
 data Token
@@ -126,14 +128,14 @@ data Token
 -- deriving Show -- debug
 
 res = eitherResIdent
-eitherResIdent :: (String -> Token) -> String -> Token
+eitherResIdent :: (Ident -> Token) -> Ident -> Token
 eitherResIdent tv s = 
   case Map.lookup s resWords of
     Just t  -> t
     Nothing -> tv s
 
-isReservedWord :: BS.ByteString -> Bool
-isReservedWord s = Map.member (BS.unpack s) resWords
+isReservedWord :: Ident -> Bool
+isReservedWord ident = Map.member ident resWords
 
 resWords = Map.fromList
  [ b "!"  T_exclmark
@@ -205,7 +207,7 @@ resWords = Map.fromList
  , b "where"      T_where
  , b "with"       T_with
  ]
- where b s t = (s, t)
+ where b s t = (identS s, t)
 
 unescapeInitTail :: String -> String
 unescapeInitTail = unesc . tail where
@@ -278,7 +280,7 @@ lexer cont = P go
         AlexEOF                -> unP (cont T_EOF) inp
         AlexError (AI pos _ _) -> PFailed pos "lexical error"
         AlexSkip  inp' len     -> {-trace (show len) $-} go inp'
-        AlexToken inp' len act -> unP (cont (act pos (UTF8.toString (UTF8.take len str)))) inp'
+        AlexToken inp' len act -> unP (cont (act pos ({-UTF8.toString-} (UTF8.take len str)))) inp'
 
 getPosn :: P Posn
 getPosn = P $ \inp@(AI pos _ _) -> POk pos

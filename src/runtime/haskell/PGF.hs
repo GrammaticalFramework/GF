@@ -22,7 +22,7 @@ module PGF(
            CId, mkCId, wildCId,
            showCId, readCId,
            -- extra
-           ppCId, pIdent, bsCId,
+           ppCId, pIdent, utf8CId,
 
            -- * Languages
            Language, 

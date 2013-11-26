@@ -298,9 +298,9 @@ checkInfo opts sgr (m,mo) c info = do
 
 -- | for grammars obtained otherwise than by parsing ---- update!!
 checkReservedId :: Ident -> Check ()
-checkReservedId x
-  | isReservedWord (ident2bs x) = checkWarn (text "reserved word used as identifier:" <+> ppIdent x)
-  | otherwise                   = return ()
+checkReservedId x =
+  when (isReservedWord x) $
+       checkWarn (text "reserved word used as identifier:" <+> ppIdent x)
 
 -- auxiliaries
 
