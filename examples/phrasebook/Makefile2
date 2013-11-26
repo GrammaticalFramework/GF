@@ -1,0 +1,73 @@
+
+# Use e.g. 'make -j4' to compile with 4 parallel processes
+
+all: Phrasebook.pgf
+
+Phrasebook.pgf: PhrasebookFre.pgf PhrasebookGer.pgf PhrasebookFin.pgf PhrasebookEng.pgf PhrasebookBul.pgf PhrasebookCat.pgf PhrasebookDan.pgf PhrasebookDut.pgf PhrasebookHin.pgf PhrasebookIta.pgf PhrasebookLav.pgf PhrasebookNor.pgf PhrasebookPes.pgf PhrasebookPol.pgf PhrasebookRon.pgf PhrasebookRus.pgf PhrasebookSpa.pgf PhrasebookSwe.pgf PhrasebookTha.pgf PhrasebookUrd.pgf DisambPhrasebookEng.pgf
+	gf -make $^
+
+PhrasebookEng.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookEng PhrasebookEng.gf
+
+PhrasebookEng.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookEng PhrasebookEng.gf
+
+PhrasebookBul.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookBul PhrasebookBul.gf
+
+PhrasebookCat.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookCat PhrasebookCat.gf
+
+PhrasebookDan.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookDan PhrasebookDan.gf
+
+PhrasebookDut.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookDut PhrasebookDut.gf
+
+PhrasebookFin.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookFin PhrasebookFin.gf
+
+PhrasebookFre.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookFre PhrasebookFre.gf
+
+PhrasebookGer.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookGer PhrasebookGer.gf
+
+PhrasebookHin.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookHin PhrasebookHin.gf
+
+PhrasebookIta.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookIta PhrasebookIta.gf
+
+PhrasebookLav.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookLav PhrasebookLav.gf
+
+PhrasebookNor.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookNor PhrasebookNor.gf
+
+PhrasebookPes.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookPes PhrasebookPes.gf
+
+PhrasebookPol.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookPol PhrasebookPol.gf
+
+PhrasebookRon.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookRon PhrasebookRon.gf
+
+PhrasebookRus.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookRus PhrasebookRus.gf
+
+PhrasebookSpa.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookSpa PhrasebookSpa.gf
+
+PhrasebookSwe.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookSwe PhrasebookSwe.gf
+
+PhrasebookTha.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookTha PhrasebookTha.gf
+
+PhrasebookUrd.pgf::
+	gf -make -s -optimize-pgf -name=PhrasebookUrd PhrasebookUrd.gf
+
+DisambPhrasebookEng.pgf::
+	gf -make -s -optimize-pgf -name=DisambPhrasebookEng DisambPhrasebookEng.gf
