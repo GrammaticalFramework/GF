@@ -149,5 +149,9 @@ lin
   PPos = {s = [] ; p = CPos} ;
   PNeg = {s = [] ; p = CNeg True} ; -- contracted: don't
   UncNeg = {s = [] ; p = CNeg False} ;
+
+lincat
+    Feat = Str;
+lin FeatN, FeatN2 = \_ -> "";
     
 }

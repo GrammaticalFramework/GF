@@ -154,4 +154,14 @@ lin
 
   UttAdV adv = adv;
 
+lincat
+    Feat = Str;
+lin FeatN2, FeatN = \n ->
+      case n.g of {
+        AMasc Human    => "(м.р.л.)" ;
+        AMasc NonHuman => "(м.р.)" ;
+        AFem           => "(ж.р.)" ;
+        ANeut          => "(ср.р.)"
+      } ;
+
 }

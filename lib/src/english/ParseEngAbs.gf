@@ -72,4 +72,9 @@ fun CompoundCN : Num -> N -> CN -> CN ;
 	AdAdV : AdA -> AdV -> AdV ;
 
 	UttAdV : AdV -> Utt;
+	
+cat Feat;
+fun FeatN  : N  -> Feat;
+    FeatN2 : N2 -> Feat;
+
 }

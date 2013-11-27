@@ -1,615 +1,642 @@
-<inflection_temlate>
-	<noun>
-		<h1>Съществително</h1>
+<inflection_template>
+	<inflection>
+	    <cat>N</cat>
+	    <cat>N2</cat>
+	    <tag>същ</tag>
+	    <template>
+			<h1>Съществително <lin>Feat<cat/>(<lemma/>)</lin></h1>
 
-		<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="3">ед.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s (NF Sg Indef)</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s (NF Sg Def)</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>s NFSgDefNom</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s (NF Pl Indef)</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s (NF Pl Def)</form></td>
-			</tr>
-			<tr>
-				<th colspan="2">звателна форма</th>
-				<td><form>s NFVocative</form></td>
-			</tr>
-			<tr>
-				<th colspan="2">бройна форма</th>
-				<td><form>s NFPlCount</form></td>
-			</tr>
-		</table>
-		
-		<h1>Прилагателно</h1>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="7">ед.ч.</th>
-				<th rowspan="3">м.р.</th>
-				<th>нечленувано</th>
-				<td><form>rel (ASg Masc Indef)</form></td>
-			</tr>
-			<tr>
-				<th>непълен член</th>
-				<td><form>rel (ASg Masc Def)</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>rel ASgMascDefNom</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ж.р.</th>
-				<th>нечленувано</th>
-				<td><form>rel (ASg Fem Indef)</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>rel (ASg Fem Def)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ср.р.</th>
-				<th>нечленувано</th>
-				<td><form>rel (ASg Neut Indef)</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>rel (ASg Neut Def)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2" colspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>rel (APl Indef)</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>rel (APl Def)</form></td>
-			</tr>
-		</table>
-	</noun>
-	<adjective>
-		<h1>Прилагателно</h1>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="7">ед.ч.</th>
-				<th rowspan="3">м.р.</th>
-				<th>нечленувано</th>
-				<td><form>s (ASg Masc Indef)</form></td>
-			</tr>
-			<tr>
-				<th>непълен член</th>
-				<td><form>s (ASg Masc Def)</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>s ASgMascDefNom</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ж.р.</th>
-				<th>нечленувано</th>
-				<td><form>s (ASg Fem Indef)</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s (ASg Fem Def)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ср.р.</th>
-				<th>нечленувано</th>
-				<td><form>s (ASg Neut Indef)</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s (ASg Neut Def)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2" colspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s (APl Indef)</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s (APl Def)</form></td>
-			</tr>
-		</table>
-		
-		<h1>Наречие</h1>
-		<p><form>adv</form></p>
-	</adjective>
-	<adverb>
-		<h1>Наречие</h1>
-		<p><form>s</form></p>
-	</adverb>
-	<prep>
-		<h1>Предлог</h1>
-		<p><form>s</form></p>
-	</prep>
-	<verb>
-		<h1>Глагол от несвършен вид</h1>
-
-		<h2>Изявително наклонение</h2>
-
-		<h3>Сегашно време</h3>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th></th>
-				<th>ед.ч.</th>
-				<th>мн.ч.</th>
-			</tr>
-			<tr>
-				<th>1 л.</th>
-				<td><form>s Imperf (VPres Sg P1)</form></td>
-				<td><form>s Imperf (VPres Pl P1)</form></td>
-			</tr>
-			<tr>
-				<th>2 л.</th>
-				<td><form>s Imperf (VPres Sg P2)</form></td>
-				<td><form>s Imperf (VPres Pl P2)</form></td>
-			</tr>
-			<tr>
-				<th>3 л.</th>
-				<td><form>s Imperf (VPres Sg P3)</form></td>
-				<td><form>s Imperf (VPres Pl P3)</form></td>
-			</tr>
-		</table>
-
-		<h3>Минало свършено време (аорист)</h3>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th></th>
-				<th>ед.ч.</th>
-				<th>мн.ч.</th>
-			</tr>
-			<tr>
-				<th>1 л.</th>
-				<td><form>s Imperf (VAorist Sg P1)</form></td>
-				<td><form>s Imperf (VAorist Pl P1)</form></td>
-			</tr>
-			<tr>
-				<th>2 л.</th>
-				<td><form>s Imperf (VAorist Sg P2)</form></td>
-				<td><form>s Imperf (VAorist Pl P2)</form></td>
-			</tr>
-			<tr>
-				<th>3 л.</th>
-				<td><form>s Imperf (VAorist Sg P3)</form></td>
-				<td><form>s Imperf (VAorist Pl P3)</form></td>
-			</tr>
-		</table>
-
-		<h3>Минало несвършено време (имперфект)</h3>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th></th>
-				<th>ед.ч.</th>
-				<th>мн.ч.</th>
-			</tr>
-			<tr>
-				<th>1 л.</th>
-				<td><form>s Imperf (VImperfect Sg P1)</form></td>
-				<td><form>s Imperf (VImperfect Pl P1)</form></td>
-			</tr>
-			<tr>
-				<th>2 л.</th>
-				<td><form>s Imperf (VImperfect Sg P2)</form></td>
-				<td><form>s Imperf (VImperfect Pl P2)</form></td>
-			</tr>
-			<tr>
-				<th>3 л.</th>
-				<td><form>s Imperf (VImperfect Sg P3)</form></td>
-				<td><form>s Imperf (VImperfect Pl P3)</form></td>
-			</tr>
-		</table>
-
-		<h2>Повелително наклонение</h2>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th>ед.ч.</th>
-				<th>мн.ч.</th>
-			</tr>
-			<tr>
-				<td><form>s Imperf (VImperative Sg)</form></td>
-				<td><form>s Imperf (VImperative Pl)</form></td>
-			</tr>
-		</table>
-		
-		<h2>Причастия (отглаголни прилагателни)</h2>
-
-		<h3>Минало страдателно причастие</h3>
 			<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="7">ед.ч.</th>
-				<th rowspan="3">м.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPassive (ASg Masc Indef))</form></td>
-			</tr>
-			<tr>
-				<th>непълен член</th>
-				<td><form>s Imperf (VPassive (ASg Masc Def))</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>s Imperf (VPassive ASgMascDefNom)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ж.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPassive (ASg Fem Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPassive (ASg Fem Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ср.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPassive (ASg Neut Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPassive (ASg Neut Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2" colspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPassive (APl Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPassive (APl Def))</form></td>
-			</tr>
-		</table>
+				<tr>
+					<th rowspan="3">ед.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s (NF Sg Indef)</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s (NF Sg Def)</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>s NFSgDefNom</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s (NF Pl Indef)</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s (NF Pl Def)</form></td>
+				</tr>
+				<tr>
+					<th colspan="2">звателна форма</th>
+					<td><form>s NFVocative</form></td>
+				</tr>
+				<tr>
+					<th colspan="2">бройна форма</th>
+					<td><form>s NFPlCount</form></td>
+				</tr>
+			</table>
 
-		<h3>Минало свършено деятелно причастие</h3>
+			<h1>Прилагателно</h1>
 			<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="7">ед.ч.</th>
-				<th rowspan="3">м.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPerfect (ASg Masc Indef))</form></td>
-			</tr>
-			<tr>
-				<th>непълен член</th>
-				<td><form>s Imperf (VPerfect (ASg Masc Def))</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>s Imperf (VPerfect ASgMascDefNom)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ж.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPerfect (ASg Fem Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPerfect (ASg Fem Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ср.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPerfect (ASg Neut Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPerfect (ASg Neut Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2" colspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPerfect (APl Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPerfect (APl Def))</form></td>
-			</tr>
-		</table>
-
-		<h3>Минало несвършено деятелно причастие</h3>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="7">ед.ч.</th>
-				<th rowspan="3">м.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPluPerfect (ASg Masc Indef))</form></td>
-			</tr>
-			<tr>
-				<th>непълен член</th>
-				<td><form>s Imperf (VPluPerfect (ASg Masc Def))</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>s Imperf (VPluPerfect ASgMascDefNom)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ж.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPluPerfect (ASg Fem Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPluPerfect (ASg Fem Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ср.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPluPerfect (ASg Neut Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPluPerfect (ASg Neut Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2" colspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPluPerfect (APl Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPluPerfect (APl Def))</form></td>
-			</tr>
-		</table>
-
-		<h3>Сегашно деятелно причастие</h3>
+				<tr>
+					<th rowspan="7">ед.ч.</th>
+					<th rowspan="3">м.р.</th>
+					<th>нечленувано</th>
+					<td><form>rel (ASg Masc Indef)</form></td>
+				</tr>
+				<tr>
+					<th>непълен член</th>
+					<td><form>rel (ASg Masc Def)</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>rel ASgMascDefNom</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ж.р.</th>
+					<th>нечленувано</th>
+					<td><form>rel (ASg Fem Indef)</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>rel (ASg Fem Def)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ср.р.</th>
+					<th>нечленувано</th>
+					<td><form>rel (ASg Neut Indef)</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>rel (ASg Neut Def)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2" colspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>rel (APl Indef)</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>rel (APl Def)</form></td>
+				</tr>
+			</table>
+		</template>
+	</inflection>
+	<inflection>
+	    <cat>A</cat>
+	    <cat>A2</cat>
+	    <tag>пр</tag>
+	    <template>
+			<h1>Прилагателно</h1>
 			<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="7">ед.ч.</th>
-				<th rowspan="3">м.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPresPart (ASg Masc Indef))</form></td>
-			</tr>
-			<tr>
-				<th>непълен член</th>
-				<td><form>s Imperf (VPresPart (ASg Masc Def))</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>s Imperf (VPresPart ASgMascDefNom)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ж.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPresPart (ASg Fem Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPresPart (ASg Fem Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ср.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPresPart (ASg Neut Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPresPart (ASg Neut Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2" colspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VPresPart (APl Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VPresPart (APl Def))</form></td>
-			</tr>
-		</table>
-
-		<h2>Деепричастие (отглаголно наречие)</h2>
-		<p><form>s Imperf VGerund</form></p>
-
-		<h1>Глагол от свършен вид</h1>
-		<h2>Изявително наклонение</h2>
-
-		<h3>Сегашно време</h3>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th></th>
-				<th>ед.ч.</th>
-				<th>мн.ч.</th>
-			</tr>
-			<tr>
-				<th>1 л.</th>
-				<td><form>s Perf (VPres Sg P1)</form></td>
-				<td><form>s Perf (VPres Pl P1)</form></td>
-			</tr>
-			<tr>
-				<th>2 л.</th>
-				<td><form>s Perf (VPres Sg P2)</form></td>
-				<td><form>s Perf (VPres Pl P2)</form></td>
-			</tr>
-			<tr>
-				<th>3 л.</th>
-				<td><form>s Perf (VPres Sg P3)</form></td>
-				<td><form>s Perf (VPres Pl P3)</form></td>
-			</tr>
-		</table>
-
-		<h3>Минало свършено време (аорист)</h3>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th></th>
-				<th>ед.ч.</th>
-				<th>мн.ч.</th>
-			</tr>
-			<tr>
-				<th>1 л.</th>
-				<td><form>s Perf (VAorist Sg P1)</form></td>
-				<td><form>s Perf (VAorist Pl P1)</form></td>
-			</tr>
-			<tr>
-				<th>2 л.</th>
-				<td><form>s Perf (VAorist Sg P2)</form></td>
-				<td><form>s Perf (VAorist Pl P2)</form></td>
-			</tr>
-			<tr>
-				<th>3 л.</th>
-				<td><form>s Perf (VAorist Sg P3)</form></td>
-				<td><form>s Perf (VAorist Pl P3)</form></td>
-			</tr>
-		</table>
-
-		<h3>Минало несвършено време (имперфект)</h3>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th></th>
-				<th>ед.ч.</th>
-				<th>мн.ч.</th>
-			</tr>
-			<tr>
-				<th>1 л.</th>
-				<td><form>s Perf (VImperfect Sg P1)</form></td>
-				<td><form>s Perf (VImperfect Pl P1)</form></td>
-			</tr>
-			<tr>
-				<th>2 л.</th>
-				<td><form>s Perf (VImperfect Sg P2)</form></td>
-				<td><form>s Perf (VImperfect Pl P2)</form></td>
-			</tr>
-			<tr>
-				<th>3 л.</th>
-				<td><form>s Perf (VImperfect Sg P3)</form></td>
-				<td><form>s Perf (VImperfect Pl P3)</form></td>
-			</tr>
-		</table>
-
-		<h2>Повелително наклонение</h2>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th>ед.ч.</th>
-				<th>мн.ч.</th>
-			</tr>
-			<tr>
-				<td><form>s Perf (VImperative Sg)</form></td>
-				<td><form>s Perf (VImperative Pl)</form></td>
-			</tr>
-		</table>
-		
-		<h2>Причастия (отглаголни прилагателни)</h2>
-
-		<h3>Минало свършено деятелно причастие</h3>
+				<tr>
+					<th rowspan="7">ед.ч.</th>
+					<th rowspan="3">м.р.</th>
+					<th>нечленувано</th>
+					<td><form>s (ASg Masc Indef)</form></td>
+				</tr>
+				<tr>
+					<th>непълен член</th>
+					<td><form>s (ASg Masc Def)</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>s ASgMascDefNom</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ж.р.</th>
+					<th>нечленувано</th>
+					<td><form>s (ASg Fem Indef)</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s (ASg Fem Def)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ср.р.</th>
+					<th>нечленувано</th>
+					<td><form>s (ASg Neut Indef)</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s (ASg Neut Def)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2" colspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s (APl Indef)</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s (APl Def)</form></td>
+				</tr>
+			</table>
+			
+			<h1>Наречие</h1>
+			<p><form>adv</form></p>
+		</template>
+	</inflection>
+	<inflection>
+	    <cat>Adv</cat>
+	    <tag>нар</tag>
+	    <template>
+			<h1>Наречие</h1>
+			<p><form>s</form></p>
+		</template>
+	</inflection>
+	<inflection>
+	    <cat>Prep</cat>
+	    <tag>пр</tag>
+	    <template>
+			<h1>Предлог</h1>
+			<p><form>s</form></p>
+		</template>
+	</inflection>
+	<inflection>
+	    <cat>V</cat>
+	    <cat>V2</cat> 
+		<cat>V3</cat>
+		<cat>V2V</cat>
+		<cat>VV</cat>
+		<cat>VS</cat>
+		<tag>гл</tag>
+		<template>
+			<h1>Глагол от несвършен вид</h1>
+	
+			<h2>Изявително наклонение</h2>
+	
+			<h3>Сегашно време</h3>
 			<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="7">ед.ч.</th>
-				<th rowspan="3">м.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Perf (VPerfect (ASg Masc Indef))</form></td>
-			</tr>
-			<tr>
-				<th>непълен член</th>
-				<td><form>s Perf (VPerfect (ASg Masc Def))</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>s Perf (VPerfect ASgMascDefNom)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ж.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Perf (VPerfect (ASg Fem Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Perf (VPerfect (ASg Fem Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ср.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Perf (VPerfect (ASg Neut Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Perf (VPerfect (ASg Neut Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2" colspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s Perf (VPerfect (APl Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Perf (VPerfect (APl Def))</form></td>
-			</tr>
-		</table>
-
-		<h3>Минало несвършено деятелно причастие</h3>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="7">ед.ч.</th>
-				<th rowspan="3">м.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Perf (VPluPerfect (ASg Masc Indef))</form></td>
-			</tr>
-			<tr>
-				<th>непълен член</th>
-				<td><form>s Perf (VPluPerfect (ASg Masc Def))</form></td>
-			</tr>
-			<tr>
-				<th>пълен член</th>
-				<td><form>s Perf (VPluPerfect ASgMascDefNom)</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ж.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Perf (VPluPerfect (ASg Fem Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Perf (VPluPerfect (ASg Fem Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">ср.р.</th>
-				<th>нечленувано</th>
-				<td><form>s Perf (VPluPerfect (ASg Neut Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Perf (VPluPerfect (ASg Neut Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2" colspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s Perf (VPluPerfect (APl Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Perf (VPluPerfect (APl Def))</form></td>
-			</tr>
-		</table>
-
-		<h1>Отглаголно съществително</h1>
-		<table class="forms-table" rules="all">
-			<tr>
-				<th rowspan="2">ед.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VNoun (NF Sg Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VNoun (NF Sg Def))</form></td>
-			</tr>
-			<tr>
-				<th rowspan="2">мн.ч.</th>
-				<th>нечленувано</th>
-				<td><form>s Imperf (VNoun (NF Pl Indef))</form></td>
-			</tr>
-			<tr>
-				<th>членувано</th>
-				<td><form>s Imperf (VNoun (NF Pl Def))</form></td>
-			</tr>
-		</table>
-	</verb>
-</inflection_temlate>
+				<tr>
+					<th></th>
+					<th>ед.ч.</th>
+					<th>мн.ч.</th>
+				</tr>
+				<tr>
+					<th>1 л.</th>
+					<td><form>s Imperf (VPres Sg P1)</form></td>
+					<td><form>s Imperf (VPres Pl P1)</form></td>
+				</tr>
+				<tr>
+					<th>2 л.</th>
+					<td><form>s Imperf (VPres Sg P2)</form></td>
+					<td><form>s Imperf (VPres Pl P2)</form></td>
+				</tr>
+				<tr>
+					<th>3 л.</th>
+					<td><form>s Imperf (VPres Sg P3)</form></td>
+					<td><form>s Imperf (VPres Pl P3)</form></td>
+				</tr>
+			</table>
+	
+			<h3>Минало свършено време (аорист)</h3>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th></th>
+					<th>ед.ч.</th>
+					<th>мн.ч.</th>
+				</tr>
+				<tr>
+					<th>1 л.</th>
+					<td><form>s Imperf (VAorist Sg P1)</form></td>
+					<td><form>s Imperf (VAorist Pl P1)</form></td>
+				</tr>
+				<tr>
+					<th>2 л.</th>
+					<td><form>s Imperf (VAorist Sg P2)</form></td>
+					<td><form>s Imperf (VAorist Pl P2)</form></td>
+				</tr>
+				<tr>
+					<th>3 л.</th>
+					<td><form>s Imperf (VAorist Sg P3)</form></td>
+					<td><form>s Imperf (VAorist Pl P3)</form></td>
+				</tr>
+			</table>
+	
+			<h3>Минало несвършено време (имперфект)</h3>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th></th>
+					<th>ед.ч.</th>
+					<th>мн.ч.</th>
+				</tr>
+				<tr>
+					<th>1 л.</th>
+					<td><form>s Imperf (VImperfect Sg P1)</form></td>
+					<td><form>s Imperf (VImperfect Pl P1)</form></td>
+				</tr>
+				<tr>
+					<th>2 л.</th>
+					<td><form>s Imperf (VImperfect Sg P2)</form></td>
+					<td><form>s Imperf (VImperfect Pl P2)</form></td>
+				</tr>
+				<tr>
+					<th>3 л.</th>
+					<td><form>s Imperf (VImperfect Sg P3)</form></td>
+					<td><form>s Imperf (VImperfect Pl P3)</form></td>
+				</tr>
+			</table>
+	
+			<h2>Повелително наклонение</h2>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th>ед.ч.</th>
+					<th>мн.ч.</th>
+				</tr>
+				<tr>
+					<td><form>s Imperf (VImperative Sg)</form></td>
+					<td><form>s Imperf (VImperative Pl)</form></td>
+				</tr>
+			</table>
+			
+			<h2>Причастия (отглаголни прилагателни)</h2>
+	
+			<h3>Минало страдателно причастие</h3>
+				<table class="forms-table" rules="all">
+				<tr>
+					<th rowspan="7">ед.ч.</th>
+					<th rowspan="3">м.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPassive (ASg Masc Indef))</form></td>
+				</tr>
+				<tr>
+					<th>непълен член</th>
+					<td><form>s Imperf (VPassive (ASg Masc Def))</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>s Imperf (VPassive ASgMascDefNom)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ж.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPassive (ASg Fem Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPassive (ASg Fem Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ср.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPassive (ASg Neut Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPassive (ASg Neut Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2" colspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPassive (APl Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPassive (APl Def))</form></td>
+				</tr>
+			</table>
+	
+			<h3>Минало свършено деятелно причастие</h3>
+				<table class="forms-table" rules="all">
+				<tr>
+					<th rowspan="7">ед.ч.</th>
+					<th rowspan="3">м.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPerfect (ASg Masc Indef))</form></td>
+				</tr>
+				<tr>
+					<th>непълен член</th>
+					<td><form>s Imperf (VPerfect (ASg Masc Def))</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>s Imperf (VPerfect ASgMascDefNom)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ж.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPerfect (ASg Fem Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPerfect (ASg Fem Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ср.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPerfect (ASg Neut Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPerfect (ASg Neut Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2" colspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPerfect (APl Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPerfect (APl Def))</form></td>
+				</tr>
+			</table>
+	
+			<h3>Минало несвършено деятелно причастие</h3>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th rowspan="7">ед.ч.</th>
+					<th rowspan="3">м.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPluPerfect (ASg Masc Indef))</form></td>
+				</tr>
+				<tr>
+					<th>непълен член</th>
+					<td><form>s Imperf (VPluPerfect (ASg Masc Def))</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>s Imperf (VPluPerfect ASgMascDefNom)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ж.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPluPerfect (ASg Fem Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPluPerfect (ASg Fem Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ср.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPluPerfect (ASg Neut Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPluPerfect (ASg Neut Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2" colspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPluPerfect (APl Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPluPerfect (APl Def))</form></td>
+				</tr>
+			</table>
+	
+			<h3>Сегашно деятелно причастие</h3>
+				<table class="forms-table" rules="all">
+				<tr>
+					<th rowspan="7">ед.ч.</th>
+					<th rowspan="3">м.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPresPart (ASg Masc Indef))</form></td>
+				</tr>
+				<tr>
+					<th>непълен член</th>
+					<td><form>s Imperf (VPresPart (ASg Masc Def))</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>s Imperf (VPresPart ASgMascDefNom)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ж.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPresPart (ASg Fem Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPresPart (ASg Fem Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ср.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPresPart (ASg Neut Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPresPart (ASg Neut Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2" colspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VPresPart (APl Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VPresPart (APl Def))</form></td>
+				</tr>
+			</table>
+	
+			<h2>Деепричастие (отглаголно наречие)</h2>
+			<p><form>s Imperf VGerund</form></p>
+	
+			<h1>Глагол от свършен вид</h1>
+			<h2>Изявително наклонение</h2>
+	
+			<h3>Сегашно време</h3>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th></th>
+					<th>ед.ч.</th>
+					<th>мн.ч.</th>
+				</tr>
+				<tr>
+					<th>1 л.</th>
+					<td><form>s Perf (VPres Sg P1)</form></td>
+					<td><form>s Perf (VPres Pl P1)</form></td>
+				</tr>
+				<tr>
+					<th>2 л.</th>
+					<td><form>s Perf (VPres Sg P2)</form></td>
+					<td><form>s Perf (VPres Pl P2)</form></td>
+				</tr>
+				<tr>
+					<th>3 л.</th>
+					<td><form>s Perf (VPres Sg P3)</form></td>
+					<td><form>s Perf (VPres Pl P3)</form></td>
+				</tr>
+			</table>
+	
+			<h3>Минало свършено време (аорист)</h3>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th></th>
+					<th>ед.ч.</th>
+					<th>мн.ч.</th>
+				</tr>
+				<tr>
+					<th>1 л.</th>
+					<td><form>s Perf (VAorist Sg P1)</form></td>
+					<td><form>s Perf (VAorist Pl P1)</form></td>
+				</tr>
+				<tr>
+					<th>2 л.</th>
+					<td><form>s Perf (VAorist Sg P2)</form></td>
+					<td><form>s Perf (VAorist Pl P2)</form></td>
+				</tr>
+				<tr>
+					<th>3 л.</th>
+					<td><form>s Perf (VAorist Sg P3)</form></td>
+					<td><form>s Perf (VAorist Pl P3)</form></td>
+				</tr>
+			</table>
+	
+			<h3>Минало несвършено време (имперфект)</h3>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th></th>
+					<th>ед.ч.</th>
+					<th>мн.ч.</th>
+				</tr>
+				<tr>
+					<th>1 л.</th>
+					<td><form>s Perf (VImperfect Sg P1)</form></td>
+					<td><form>s Perf (VImperfect Pl P1)</form></td>
+				</tr>
+				<tr>
+					<th>2 л.</th>
+					<td><form>s Perf (VImperfect Sg P2)</form></td>
+					<td><form>s Perf (VImperfect Pl P2)</form></td>
+				</tr>
+				<tr>
+					<th>3 л.</th>
+					<td><form>s Perf (VImperfect Sg P3)</form></td>
+					<td><form>s Perf (VImperfect Pl P3)</form></td>
+				</tr>
+			</table>
+	
+			<h2>Повелително наклонение</h2>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th>ед.ч.</th>
+					<th>мн.ч.</th>
+				</tr>
+				<tr>
+					<td><form>s Perf (VImperative Sg)</form></td>
+					<td><form>s Perf (VImperative Pl)</form></td>
+				</tr>
+			</table>
+			
+			<h2>Причастия (отглаголни прилагателни)</h2>
+	
+			<h3>Минало свършено деятелно причастие</h3>
+				<table class="forms-table" rules="all">
+				<tr>
+					<th rowspan="7">ед.ч.</th>
+					<th rowspan="3">м.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Perf (VPerfect (ASg Masc Indef))</form></td>
+				</tr>
+				<tr>
+					<th>непълен член</th>
+					<td><form>s Perf (VPerfect (ASg Masc Def))</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>s Perf (VPerfect ASgMascDefNom)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ж.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Perf (VPerfect (ASg Fem Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Perf (VPerfect (ASg Fem Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ср.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Perf (VPerfect (ASg Neut Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Perf (VPerfect (ASg Neut Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2" colspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s Perf (VPerfect (APl Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Perf (VPerfect (APl Def))</form></td>
+				</tr>
+			</table>
+	
+			<h3>Минало несвършено деятелно причастие</h3>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th rowspan="7">ед.ч.</th>
+					<th rowspan="3">м.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Perf (VPluPerfect (ASg Masc Indef))</form></td>
+				</tr>
+				<tr>
+					<th>непълен член</th>
+					<td><form>s Perf (VPluPerfect (ASg Masc Def))</form></td>
+				</tr>
+				<tr>
+					<th>пълен член</th>
+					<td><form>s Perf (VPluPerfect ASgMascDefNom)</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ж.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Perf (VPluPerfect (ASg Fem Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Perf (VPluPerfect (ASg Fem Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">ср.р.</th>
+					<th>нечленувано</th>
+					<td><form>s Perf (VPluPerfect (ASg Neut Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Perf (VPluPerfect (ASg Neut Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2" colspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s Perf (VPluPerfect (APl Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Perf (VPluPerfect (APl Def))</form></td>
+				</tr>
+			</table>
+	
+			<h1>Отглаголно съществително</h1>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th rowspan="2">ед.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VNoun (NF Sg Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VNoun (NF Sg Def))</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">мн.ч.</th>
+					<th>нечленувано</th>
+					<td><form>s Imperf (VNoun (NF Pl Indef))</form></td>
+				</tr>
+				<tr>
+					<th>членувано</th>
+					<td><form>s Imperf (VNoun (NF Pl Def))</form></td>
+				</tr>
+			</table>
+		</template>
+	</inflection>
+</inflection_template>
