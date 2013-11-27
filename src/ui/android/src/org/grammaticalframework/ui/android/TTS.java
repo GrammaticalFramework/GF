@@ -36,7 +36,6 @@ public class TTS {
 
     // TODO: handle speak() calls before service connects
     public void speak(String text) {
-    	int mode = mAudioManager.getRingerMode();
     	if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
 	        HashMap<String,String> params = new HashMap<String,String>();
 	        // TODO: how can I get network / embedded fallback?
