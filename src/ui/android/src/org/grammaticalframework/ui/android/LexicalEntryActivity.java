@@ -189,7 +189,7 @@ public class LexicalEntryActivity extends ListActivity {
 		}
 		
 		builder.append("</body>");
-		inflectionView.loadData(builder.toString(), "text/html", null);
+		inflectionView.loadData(builder.toString(), "text/html; charset=UTF-8", null);
 
 		expandedView = view;
 	}
