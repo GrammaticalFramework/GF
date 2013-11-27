@@ -8,6 +8,7 @@ h1,h2,h3,h4 { font-family: sans-serif; color: #303030;
 h1 { text-align: center; }
 h2 { border-bottom: 2px solid #303030; clear: right; }
 
+div.mainlinks { font-size: 140%; }
 div.center { text-align: center; }
 div.news { font-size: small; }
 
