@@ -18564,7 +18564,6 @@ lin elegy_N = mkN "elegi" "elegier"; -- status=guess
 lin element_N = mkN "element" neutrum; -- comment=8
 lin elemental_A = mkA "primitiv"; -- comment=4
 lin elementary_A = mkA "enkel"; -- comment=3
-lin elements_N = mkN "elementa" "elementan" "elementa" "elementana"; -- comment=3
 lin elemi_N = variants {};
 lin elephant_N = mkN "elefant" "elefanter";
 lin elephantiasis_N = variants {};
@@ -19257,7 +19256,6 @@ lin epicardia_N = variants {};
 lin epicardium_N = variants {};
 lin epicarp_N = variants {};
 lin epicarpal_A = variants {};
-lin epicenter_N = mkN "epicentrum" neutrum;
 lin epicentre_N = mkN "epicentrum" neutrum;
 lin epicondyle_N = variants {};
 lin epicondylitis_N = variants {};
@@ -19671,7 +19669,6 @@ lin eucalyptus_N = (mkN "eukalyptus") | mkN "gummiträd"; -- status=guess status
 lin eucharist_N = variants {};
 lin euchre_N = variants {};
 lin euclidean_A = variants {};
-lin euclidian_A = variants {};
 lin eudemon_N = variants {};
 lin eudemonic_A = variants {};
 lin eudemonism_N = variants {};
@@ -20027,7 +20024,6 @@ lin exonuclease_N = variants {};
 lin exophthalmos_N = mkN "exoftalmus"; -- status=guess
 lin exorbitance_N = variants {};
 lin exorbitant_A = mkA "omåttlig"; -- comment=4
-lin exorcise_V2 = variants {};
 lin exorcism_N = mkN "exorcism" "exorcismer"; -- status=guess
 lin exorcist_N = variants {};
 lin exorcize_V2 = variants {};
@@ -26770,10 +26766,10 @@ lin holyhead_PN = variants {};
 lin holystone_N = variants {};
 lin holystone_V2 = variants {};
 lin homage_N = mkN "vördnad" "vördnader";
-lin home_A = mkA "inhemsk"; -- comment=3
-lin home_Adv = mkAdv "hem"; -- comment=3
-lin home_N = mkN "anstalt" "anstalter"; -- comment=11
-lin home_baked_A = variants {};
+lin home_A = mkA "inhemsk";
+lin home_Adv = mkAdv "hem";
+lin home_N = mkN "hem" "hemmet" "hem" "hemmen";
+lin home_baked_A = mkA "hembakat";
 lin home_brewed_A = variants {};
 lin home_cured_A = variants {};
 lin home_farm_N = variants {};
@@ -26847,19 +26843,19 @@ lin homogenization_N = variants {};
 lin homogenize_V2 = variants {};
 lin homogeny_N = variants {};
 lin homograft_N = variants {};
-lin homograph_N = mkN "homograf" "homografer"; -- status=guess
+lin homograph_N = mkN "homograf" "homografer";
 lin homoiothermic_A = variants {};
 lin homologic_A = variants {};
 lin homologous_A = variants {};
 lin homology_N = variants {};
 lin homomorphism_N = mkN "homomorfi" | mkN "homomorfism"; -- status=guess status=guess
-lin homonym_N = mkN "homonym" "homonymer"; -- status=guess
+lin homonym_N = mkN "homonym" "homonymer";
 lin homonymic_A = variants {};
-lin homonymy_N = mkN "homonymi" "homonymier"; -- status=guess
+lin homonymy_N = mkN "homonymi" "homonymier";
 lin homophobe_N = variants {};
-lin homophobia_N = mkN "homofobi"; -- status=guess
+lin homophobia_N = mkN "homofobi";
 lin homophobic_A = variants {};
-lin homophone_N = mkN "homofon" "homofoner"; -- status=guess
+lin homophone_N = mkN "homofon" "homofoner";
 lin homophonic_A = variants {};
 lin homophonous_A = variants {};
 lin homophony_N = variants {};
@@ -27706,7 +27702,7 @@ lin ice_N = L.ice_N;
 lin ice_V = mkV "isar"; -- comment=2
 lin ice_V2 = mkV2 (mkV "glaserar"); -- status=guess, src=wikt
 lin ice_axe_N = variants {};
-lin ice_cream_N = variants {};
+lin ice_cream_N = mkN "glass";
 lin ice_lolly_N = variants {};
 lin ice_show_N = variants {};
 lin ice_skate_N = variants {};
@@ -48297,7 +48293,7 @@ lin rook_N = mkN "torn"; -- comment=3
 lin rook_V2 = variants {};
 lin rookery_N = variants {};
 lin rookie_N = mkN "nybörjare" utrum;
-lin room_N = mkN "utrymme"; -- comment=6
+lin room_N = mkN "utrymme";
 lin room_V = variants {};
 lin room_in_V2 = variants {};
 lin room_mate_N = variants {};
@@ -51794,7 +51790,7 @@ lin sinewy_A = mkA "stark"; -- comment=3
 lin sinful_A = mkA "syndig";
 lin sinfulness_N = variants {};
 lin sing_V = L.sing_V;
-lin sing_V2 = mkV2 (mkV "sjunga" "sjöng" "sjungit"); -- status=guess, src=wikt
+lin sing_V2 = mkV2 (mkV "sjunga" "sjöng" "sjungit");
 lin sing_along_V = mkV "tjallar"; -- comment=11
 lin sing_out_V = mkV "tjallar"; -- comment=11
 lin sing_up_V = mkV "tjallar"; -- comment=11

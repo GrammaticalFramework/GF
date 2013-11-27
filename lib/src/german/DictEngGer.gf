@@ -12699,7 +12699,6 @@ lin exonerate_V2 = variants {};
 lin exoneration_N = variants {};
 lin exorbitance_N = variants {};
 lin exorbitant_A = mk3A "exorbitant" "exorbitanter" "exorbitanteste";
-lin exorcise_V2 = variants {};
 lin exorcize_V2 = variants {};
 lin exotic_A = variants {};
 lin expand_V = irregV "expandieren" "expandiert" "expandierte" "expandierte" "expandiert";
