@@ -158,3 +158,11 @@ pgf_print_name(PgfConcr* concr, PgfCId id)
 		name = id;
 	return name;
 }
+
+bool
+pgf_has_linearization(PgfConcr* concr, PgfCId id)
+{
+	PgfCncOverloadMap* overl_table =
+		gu_map_get(concr->fun_indices, id, PgfCncOverloadMap*);
+	return (overl_table != NULL);
+}

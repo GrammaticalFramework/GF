@@ -472,6 +472,17 @@ Java_org_grammaticalframework_pgf_Concr_lookupMorpho(JNIEnv* env, jobject self, 
 	return analyses;
 }
 
+JNIEXPORT jboolean JNICALL
+Java_org_grammaticalframework_pgf_Concr_hasLinearization(JNIEnv* env, jobject self, jstring jid)
+{
+	PgfConcr* concr = get_ref(env, self);
+	GuPool* tmp_pool = gu_new_pool();
+	PgfCId id = j2gu_string(env, jid, tmp_pool);
+	bool res = pgf_has_linearization(concr, id);
+	gu_pool_free(tmp_pool);
+	return res;
+}
+
 JNIEXPORT void JNICALL 
 Java_org_grammaticalframework_pgf_Pool_free(JNIEnv* env, jobject self, jlong ref)
 {
