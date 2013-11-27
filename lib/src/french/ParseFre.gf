@@ -7,7 +7,7 @@ concrete ParseFre of ParseEngAbs =
   NumeralFre,
   SymbolFre [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
   ConjunctionFre,
-  VerbFre - [SlashV2V, PassV2, UseCopula, ComplVV  , SlashV2VNP],
+  VerbFre - [SlashV2V, PassV2, UseCopula, ComplVV],
   AdverbFre,
   PhraseFre,
   SentenceFre - [  SlashVP, SlashVS],

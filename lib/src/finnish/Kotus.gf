@@ -1,4 +1,4 @@
---# -path=.:alltenses
+--# -coding=latin1
 
 resource Kotus = open MorphoFin, Prelude in {
 
