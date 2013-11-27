@@ -1,27 +1,3 @@
-/* 
- * Copyright 2010 University of Gothenburg.
- *   
- * This file is part of libpgf.
- * 
- * Libpgf is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Libpgf is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with libpgf. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/** @file
- *
- * The public libpgf API.
- */
-
 #ifndef PGF_H_
 #define PGF_H_
 
@@ -113,6 +89,9 @@ pgf_function_type(PgfPGF* pgf, PgfCId funname);
 
 GuString
 pgf_print_name(PgfConcr*, PgfCId id);
+
+bool
+pgf_has_linearization(PgfConcr* concr, PgfCId id);
 
 void
 pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err);

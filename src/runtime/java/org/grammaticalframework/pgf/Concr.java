@@ -25,6 +25,8 @@ public class Concr {
 
 	public native List<MorphoAnalysis> lookupMorpho(String sentence);
 
+	public native boolean hasLinearization(String id);
+
 	//////////////////////////////////////////////////////////////////
 	// private stuff
 	

@@ -211,8 +211,7 @@ public class LexicalEntryActivity extends ListActivity {
 	        TextView descView =
 	        		(TextView) convertView.findViewById(R.id.lexical_desc);
 
-	    	Expr e = Expr.readExpr(lemma);
-	    	String phrase = mTranslator.generateTranslationEntry(e);
+	    	String phrase = mTranslator.generateTranslationEntry(lemma);
 	        descView.setText(phrase);
 
 	        convertView.setOnClickListener(new OnClickListener() {
