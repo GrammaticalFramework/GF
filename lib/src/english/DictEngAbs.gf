@@ -20539,8 +20539,8 @@ fun fiord_N : N;
 fun fipple_N : N;
 fun fir_N : N;
 fun fir_cone_N : N;
-fun fire_1_N : N;
-fun fire_2_N : N;
+fun fire_1_N : N; --- ??
+fun fire_2_N : N; --- ??
 fun fire_V : V;
 fun fire_V2 : V2;
 fun fire_alarm_N : N;

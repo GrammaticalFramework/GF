@@ -1,4 +1,5 @@
 --# -path=.:..:../../abstract:../../common:../../english:../kotus
+--# -coding=latin1
 
 resource WNKotus = open Kotus, MorphoFin, ParadigmsFin, CatFin, StemFin, Prelude in {
 

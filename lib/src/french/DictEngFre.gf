@@ -1,4 +1,4 @@
---# -path=.:alltenses
+--# -coding=latin1
 
 concrete DictEngFre of DictEngAbs = CatFre ** open ParadigmsFre,
   (S = StructuralFre),

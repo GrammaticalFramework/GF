@@ -33,19 +33,23 @@ incomplete concrete SentenceRomance of Sentence =
 ---- one shortcut left: polarity change from negative elements ("rien" etc) ignored
 ---- thus we get "la fille que personne ne voit pas"
 
-    SlashVP np vps = {
-
-      c2 = vps.c2 ;
-
-      s = \\agr0,d,te,a,b,m => 
-        let
+    SlashVP np vps = 
+      let
           isNeg = np.isNeg ;
           subj = (np.s ! Nom).comp ;
           hasClit = np.hasClit ;
           isPol = np.isPol ;
           agr = np.a ;
+
+      in {
+
+      c2 = vps.c2 ;
+
+      s = \\agr0,d,te,a,b,m => 
+        let
+
           vp : VP = case <vps.c2.c, vps.c2.isDir> of {
-              <Acc,True> => insertAgr agr0 vps ;                         -- la fille qu'il a trouvée is decided here
+              <Acc,True> => insertAgr agr0 vps ;    -- la fille qu'il a trouvée is decided here
               _ => vps
               } ;
 
@@ -80,14 +84,9 @@ incomplete concrete SentenceRomance of Sentence =
           num = agr.n ;
           per = agr.p ;
 
-          compl = case isPol of {
-            True => vp.comp ! {g = gen ; n = Sg ; p = per} ;
-            _ => vp.comp ! agr
-            } ;
-
-          ext = vp.ext ! b ;
-
           vtyp  = vp.s.vtyp ;
+          verb = vp.s.s ;
+          vaux = auxVerb vp.s.vtyp ;
 
           refl  = case isVRefl vtyp of {
             True => reflPron num per Acc ; ---- case ?
@@ -96,8 +95,13 @@ incomplete concrete SentenceRomance of Sentence =
 
           clit = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s ; ---- refl first?
 
-          verb = vp.s.s ;
-          vaux = auxVerb vp.s.vtyp ;
+
+          compl = case isPol of {
+            True => vp.comp ! {g = gen ; n = Sg ; p = per} ;
+            _ => vp.comp ! agr
+            } ;
+
+          ext = vp.ext ! b ;
 
           part = case vp.agr of {
             VPAgrSubj     => verb ! VPart agr.g agr.n ;
@@ -105,6 +109,7 @@ incomplete concrete SentenceRomance of Sentence =
             } ;
 
           vps : Str * Str = case <te,a> of {
+
             <RPast,Simul> => <verb ! VFin (VImperf m) num per, []> ; --# notpresent
             <RPast,Anter> => <vaux ! VFin (VImperf m) num per, part> ; --# notpresent
             <RFut,Simul>  => <verb ! VFin (VFut) num per, []> ; --# notpresent
@@ -116,7 +121,6 @@ incomplete concrete SentenceRomance of Sentence =
             <RPres,Anter> => <vaux ! VFin (VPres m) num per, part> ; --# notpresent
             <RPres,Simul> => <verb ! VFin (VPres m) num per, []> 
             } ;
-
           fin = vps.p1 ;
           inf = vps.p2 ;
         in
