@@ -467,6 +467,7 @@ Java_org_grammaticalframework_pgf_Concr_lookupMorpho(JNIEnv* env, jobject self, 
 	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, env, addId, an_class, an_constrId };
 	pgf_lookup_morpho(get_ref(env, self), j2gu_string(env, sentence, tmp_pool),
 	                  &callback.fn, NULL);
+	gu_pool_free(tmp_pool);
 
 	return analyses;
 }
