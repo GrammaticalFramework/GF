@@ -123,5 +123,13 @@ lin
 
 lin
   UncNeg = {s = [] ; p = Neg} ;
-    
+
+lincat
+    Feat = Str;
+lin FeatN2, FeatN = \n ->
+      case n.g of {
+        Utr   => "(utr)" ;
+        Neutr => "(neutr)"
+      } ;
+
 }
