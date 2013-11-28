@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title></title>
+</head>
+
+<body>
+
+
+
+			<h1>Substantiivi</h1>
+			<table class="forms-table" rules="all" border="yes">
+				<tr>
+					<th></th>
+					<th>yksikkö</th>
+					<th>monikko</th>
+				</tr>
+				<tr>
+					<th>nominatiivi</th>
+					<td><form>s NCase Sg Nom</form></td>
+					<td><form>s NCase Pl Nom</form></td>
+				</tr>
+				<tr>
+					<th>genetiivi</th>
+					<td><form>s NCase Sg Gen</form></td>
+					<td><form>s NCase Pl Gen</form></td>
+				</tr>
+				<tr>
+					<th>partitiivi</th>
+					<td><form>s NCase Sg Part</form></td>
+					<td><form>s NCase Pl Part</form></td>
+				</tr>
+				<tr>
+					<th>translatiivi</th>
+					<td><form>s NCase Sg Transl</form></td>
+					<td><form>s NCase Pl Transl</form></td>
+				</tr>
+				<tr>
+					<th>essiivi</th>
+					<td><form>s NCase Sg Ess</form></td>
+					<td><form>s NCase Pl Ess</form></td>
+				</tr>
+				<tr>
+					<th>inessiivi</th>
+					<td><form>s NCase Sg Iness</form></td>
+					<td><form>s NCase Pl Iness</form></td>
+				</tr>
+				<tr>
+					<th>elatiivi</th>
+					<td><form>s NCase Sg Elat</form></td>
+					<td><form>s NCase Pl Elat</form></td>
+				</tr>
+				<tr>
+					<th>illatiivi</th>
+					<td><form>s NCase Sg Illat</form></td>
+					<td><form>s NCase Pl Illat</form></td>
+				</tr>
+				<tr>
+					<th>adessiivi</th>
+					<td><form>s NCase Sg Adess</form></td>
+					<td><form>s NCase Pl Adess</form></td>
+				</tr>
+				<tr>
+					<th>ablatiivi</th>
+					<td><form>s NCase Sg Ablat</form></td>
+					<td><form>s NCase Pl Ablat</form></td>
+				</tr>
+				<tr>
+					<th>allatiivi</th>
+					<td><form>s NCase Sg Allat</form></td>
+					<td><form>s NCase Pl Allat</form></td>
+				</tr>
+				<tr>
+					<th>abessiivi</th>
+					<td><form>s NCase Sg Abess</form></td>
+					<td><form>s NCase Pl Abess</form></td>
+				</tr>
+				<tr>
+					<th>komitatiivi</th>
+					<td colspan="2"><form>s NComit</form></td>
+				</tr>
+				<tr>
+					<th>instruktiivi</th>
+					<td colspan="2"><form>s NInstruct</form></td>
+				</tr>
+			</table>
+
+
+
+			<h1>Verbi</h1>
+			<table class="forms-table" rules="all" border="yes">
+				<tr>
+				        <th colspan="2">aktiivi</th>
+					<th>preesens</th>
+					<th>imperfekti</th>
+					<th>konditionaali</th>
+					<th>potentiaali</th>
+					<th>imperatiivi</th>
+				</tr>
+				<tr>
+				        <th rowspan="3">yksikkö</th>
+					<th>1. persoona</th>
+					<td><form>s Presn Sg P1</form></td>
+					<td><form>s Impf Sg P1</form></td>
+					<td><form>s Condit Sg P1</form></td>
+					<td><form>s Potent Sg P1</form></td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<th>2. persoona</th>
+					<td><form>s Presn Sg P2</form></td>
+					<td><form>s Impf Sg P2</form></td>
+					<td><form>s Condit Sg P2</form></td>
+					<td><form>s Potent Sg P2</form></td>
+					<td><form>s Imper Sg</form></td>
+				</tr>
+				<tr>
+					<th>3. persoona</th>
+					<td><form>s Presn Sg P3</form></td>
+					<td><form>s Impf Sg P3</form></td>
+					<td><form>s Condit Sg P3</form></td>
+				        <td><form>s Potent Sg P3</form></td>
+					<td><form>s ImperP3 Sg </form></td>
+				</tr>
+				<tr>
+				        <th rowspan="4">monikko</th>
+					<th>1. persoona</th>
+					<td><form>s Presn Pl P1</form></td>
+					<td><form>s Impf Pl P1</form></td>
+					<td><form>s Condit Pl P1</form></td>
+					<td><form>s Potent Pl P1</form></td>
+					<td><form>s ImperP1Pl</form></td>
+				</tr>
+				<tr>
+					<th>2. persoona</th>
+					<td><form>s Presn Pl P2</form></td>
+					<td><form>s Impf Pl P2</form></td>
+					<td><form>s Condit Pl P2</form></td>
+					<td><form>s Potent Pl P2</form></td>
+					<td><form>s Imper Pl</form></td>
+				</tr>
+				<tr>
+					<th>3. persoona</th>
+					<td><form>s Presn Pl P3</form></td>
+					<td><form>s Impf Pl P3</form></td>
+					<td><form>s Condit Pl P3</form></td>
+					<td><form>s Potent Pl P3</form></td>
+					<td><form>s ImperP3 Pl</form></td>
+				</tr>
+				<tr>
+					<th>kielteinen</th>
+					<td><form>s Imper Sg</form></td>
+					<td><form>s PastPartAct (AN (NCase Pl Nom))</form></td>
+					<td><form>s Condit Sg P3</form></td>
+					<td><form>s PotentNeg</form></td>
+					<td><form>s ImperNegPl</form></td>
+				</tr>
+				<tr>
+				        <th rowspan="2">passiivi</th>
+				        <th>myönteinen</th>
+					<td><form>s PassPresn True</form></td>
+					<td><form>s PassImpf True</form></td>
+					<td><form>s PassCondit True</form></td>
+					<td><form>s PassPotent True</form></td>
+					<td><form>s PassImper True</form></td>
+				</tr>
+				<tr>
+				        <th>kielteinen</th>
+					<td><form>s PassPresn False</form></td>
+					<td><form>s PassImpf False</form></td>
+					<td><form>s PassCondit False</form></td>
+					<td><form>s PassPotent False</form></td>
+					<td><form>s PassImper False</form></td>
+				</tr>
+
+			      </table>
+
+
+			<table class="forms-table" rules="all" border="yes">
+				<tr>
+				        <th rowspan="14">infinitiivi</th>
+					<th rowspan="2">1.</th>
+                                        <th>lyhyt</th>
+					<td><form>s Inf Inf1</form></td>
+				</tr>
+				<tr>
+                                        <th>pitkä</th>
+					<td><form>s Inf Inf1Long</form>ni</td>
+				</tr>
+				<tr>
+					<th rowspan="2">2. aktiivi</th>
+					<th>inessiivi</th>
+					<td><form>s Inf Inf2Iness</form></td>
+				</tr>
+				<tr>
+					<th>instruktiivi</th>
+					<td><form>s Inf Inf2Instr</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">2. passiivi</th>
+					<th>inessiivi</th>
+					<td><form>s Inf Inf2InessPass</form></td>
+				</tr>
+				<tr>
+					<th>instruktiivi</th>
+					<td><form>s Inf Inf2InstrPass</form></td>
+				</tr>
+				<tr>
+					<th rowspan="5">3.</th>
+					<th>inessiivi</th>
+					<td><form>s Inf Inf3Iness</form></td>
+				</tr>
+				<tr>
+					<th>elatiivi</th>
+					<td><form>s Inf Inf3Elat</form></td>
+				</tr>
+				<tr>
+					<th>illatiivi</th>
+					<td><form>s Inf Inf3Illat</form></td>
+				</tr>
+				<tr>
+					<th>adessiivi</th>
+					<td><form>s Inf Inf3Adess</form></td>
+				</tr>
+				<tr>
+					<th>abessiivi</th>
+					<td><form>s Inf Inf3Abess</form></td>
+				</tr>
+				<tr>
+					<th rowspan="2">4.</th>
+					<th>nominatiivi</th>
+					<td><form>s Inf Inf4Nom</form></td>
+				</tr>
+				<tr>
+					<th>partitiivi</th>
+					<td><form>s Inf Inf4Part</form></td>
+				</tr>
+				<tr>
+					<th colspan="2">5.</th>
+					<td><form>s Inf Inf5</form>ni</td>
+				</tr>
+
+				
+				<tr>
+				        <th rowspan="6">partisiippi</th>
+				        <th rowspan="2">preesens</th>
+					<th>aktiivi</th>
+					<td><form>s PastPartAct (AN (NCase Sg Nom))</form></td>
+				</tr>
+				<tr>
+					<th>passiivi</th>
+					<td><form>s PastPartPass (AN (NCase Sg Nom))</form></td>
+				</tr>
+				<tr>
+				        <th rowspan="2">perfekti</th>
+					<th>aktiivi</th>
+					<td><form>s PastPartAct (AN (NCase Sg Nom))</form></td>
+				</tr>
+				<tr>
+					<th>passiivi</th>
+					<td><form>s PastPartPass (AN (NCase Sg Nom))</form></td>
+				</tr>
+			      </table>
+
+			      
+			
+<hr>
+<address></address>
+<!-- hhmts start -->Last modified: Thu Nov 28 22:24:06 CET 2013 <!-- hhmts end -->
+</body> </html>
