@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -223,9 +224,10 @@ public class Translator {
 		if (res == 0)
 			return "";
 
+		Map<String,Map<String,String>> cache = new HashMap<String,Map<String,String>>();
+
 		String cat = getGrammar().getFunctionType(lemma).getCategory();
-		Expr expr = Expr.readExpr(lemma);
-		Map<String,String> lins = targetLang.tabularLinearize(expr);
+
 		XmlResourceParser parser = mContext.getResources().getXml(res);
 		StringBuilder builder = new StringBuilder();
 		builder.append("<html><head><meta charset=\"UTF-8\"/></head><body>");
@@ -282,11 +284,18 @@ public class Translator {
 					} else if (state == 4 && "form".equals(parser.getName())) {
 						form = false;
 					} else if (state == 4 && lin && "lin".equals(parser.getName())) {
-						Expr expr2 = Expr.readExpr(abstrBuilder.toString());
-						if (formName == null)
-							builder.append(TextUtils.htmlEncode(targetLang.linearize(expr2)));
-						else {
-							String elin = targetLang.tabularLinearize(expr2).get(formName);
+						String s = abstrBuilder.toString();
+						if (formName == null) {
+							Expr expr = Expr.readExpr(s);
+							builder.append(TextUtils.htmlEncode(targetLang.linearize(expr)));
+						} else {
+							Map<String,String> elins = cache.get(s);
+							if (elins == null) {
+								Expr expr = Expr.readExpr(s);
+								elins = targetLang.tabularLinearize(expr);
+								cache.put(s, elins);
+							}
+							String elin = elins.get(formName);
 							builder.append(TextUtils.htmlEncode(elin));
 						}
 
@@ -302,7 +311,13 @@ public class Translator {
 							emit = true;
 					} else if (state == 4 && emit) {
 						if (form) {
-							String s = lins.get(parser.getText());
+							Map<String,String> elins = cache.get(lemma);
+							if (elins == null) {
+								Expr expr = Expr.readExpr(lemma);
+								elins = targetLang.tabularLinearize(expr);
+								cache.put(lemma, elins);
+							}
+							String s = elins.get(parser.getText());
 							if (s != null)
 								builder.append(TextUtils.htmlEncode(s));
 						} else {
