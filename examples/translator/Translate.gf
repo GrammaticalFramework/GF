@@ -12,5 +12,5 @@ fun
   NP_Object : NP -> Object ;
   NP_Item   : NP -> Item ;
   NP_Place  : NP -> Place ;
-
+  NP_Name   : NP -> Name ;
 }
