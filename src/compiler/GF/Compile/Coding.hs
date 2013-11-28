@@ -1,5 +1,5 @@
 module GF.Compile.Coding where
-
+{-
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
 import GF.Text.Coding
@@ -61,3 +61,4 @@ codeStringLiterals co ('"':cs) = '"' : inStringLiteral cs
         inStringLiteral ('\\':d:ds) = '\\' : co [d] ++ inStringLiteral ds
         inStringLiteral (d:ds) = co [d] ++ inStringLiteral ds
 codeStringLiterals co (c:cs) = c : codeStringLiterals co cs
+-}
