@@ -8,16 +8,10 @@ import qualified Data.Map as Map
 import Text.JSON(makeObj) --encode
 import Text.PrettyPrint(render,text,(<+>))
 
--- 4 extra imports just to deal with the ByteString mess...
-import qualified Data.ByteString.Char8 as BS(pack)
-import Codec.Binary.UTF8.String(encodeString)
-import GF.Compile.Coding(decodeStringsInModule)
-import System.IO(utf8)
+import qualified Data.ByteString.UTF8 as UTF8(fromString)
 
---import GF.Compile.GetGrammar (getSourceModule)
 import GF.Infra.Option(optionsGFO)
 import GF.Infra.Ident(showIdent)
---import GF.Infra.UseIO(appIOE)
 import GF.Grammar.Grammar
 import GF.Grammar.Printer(ppParams,ppTerm,getAbs,TermPrintQual(..))
 import GF.Grammar.Parser(runP,pModDef)
@@ -31,10 +25,10 @@ import SimpleEditor.JSON
 
 parseModule (path,source) =
    (path.=) $
-   case runP pModDef (BS.pack (encodeString source)) of
+   case runP pModDef (UTF8.fromString source) of
      Left (Pn l c,msg) ->
          makeObj ["error".=msg, "location".= show l++":"++show c]
-     Right mod -> case convModule (decodeStringsInModule utf8 mod) of
+     Right mod -> case convModule mod of
                     Ok g -> makeObj ["converted".=g]
                     Bad msg -> makeObj ["parsed".=msg]
 
