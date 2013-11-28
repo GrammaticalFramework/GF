@@ -103,7 +103,8 @@ param
    | Presn Number Person
    | Impf Number Person  --# notpresent
    | Condit Number Person  --# notpresent
-----   | Potent Number Person
+   | Potent Number Person  --# notpresent
+   | PotentNeg  --# notpresent
    | Imper Number
    | ImperP3 Number
    | ImperP1Pl
@@ -111,21 +112,30 @@ param
    | PassPresn  Bool 
    | PassImpf   Bool --# notpresent
    | PassCondit Bool --# notpresent
-----   | PassPotent Bool 
+   | PassPotent Bool --# notpresent 
+   | PassImper  Bool 
    | PastPartAct  AForm
    | PastPartPass AForm
-----   | PresPartAct  AForm
-----   | PresPartPass AForm
+   | PresPartAct  AForm
+   | PresPartPass AForm
    ;
 
   InfForm =
-     Inf1         -- puhua
-   | Inf3Iness    -- puhumassa
-   | Inf3Elat     -- puhumasta
-   | Inf3Illat    -- puhumaan
-   | Inf3Adess    -- puhumalla
-   | Inf3Abess    -- puhumatta
-   | InfPresPart  -- puhuvan
+     Inf1          -- puhua
+   | Inf1Long      -- puhuakseni
+   | Inf2Iness     -- puhuessa
+   | Inf2Instr     -- puhuen
+   | Inf2InessPass -- puhuettaessa
+   | Inf2InstrPass -- puhuttaen
+   | Inf3Iness     -- puhumassa
+   | Inf3Elat      -- puhumasta
+   | Inf3Illat     -- puhumaan
+   | Inf3Adess     -- puhumalla
+   | Inf3Abess     -- puhumatta
+   | Inf4Nom       -- puhuminen
+   | Inf4Part      -- puhumista
+   | Inf5          -- puhumaisillani
+   | InfPresPart   -- puhuvan
    | InfPresPartAgr -- puhuva(mme)
    ;
 
@@ -459,21 +469,77 @@ oper
 -- auxiliary of predication can be defined.
 
   verbOlla : Verb = 
-    let olla = mkVerb 
-      "olla" "on" "olen" "ovat" "olkaa" "ollaan" 
-      "oli" "olin" "olisi" "ollut" "oltu" "ollun" ;
-    in {s = table {
+    let
+      ollut = (noun2adj (nhn (sRae "ollut" "olleena"))).s ;
+      oltu = (noun2adj (nhn (sKukko "oltu" "ollun" "oltuja"))).s  ;
+      oleva = (noun2adj (nhn (sKukko "oleva" "olevan" "olevia"))).s  ;
+      oltava = (noun2adj (nhn (sKukko "oltava" "oltavan" "oltavia"))).s  ;
+    in
+    {s = table {
+      Inf Inf1 => "olla" ;
+      Inf Inf1Long => "ollakse" ;
+      Inf Inf2Iness => "ollessa" ;
+      Inf Inf2Instr => "ollen" ;
+      Inf Inf2InessPass => "oltaessa" ;
+      Inf Inf2InstrPass => "oltaen" ;
       Inf Inf3Iness => "olemassa" ;
       Inf Inf3Elat  => "olemasta" ;
       Inf Inf3Illat => "olemaan" ;
       Inf Inf3Adess => "olemalla" ;
       Inf Inf3Abess => "olematta" ;
+      Inf Inf4Nom => "oleminen" ;
+      Inf Inf4Part => "olemista" ;
+      Inf Inf5 => "olemaisilla" ;
       Inf InfPresPart => "olevan" ;
       Inf InfPresPartAgr => "oleva" ;
-      v => olla.s ! v
+      Presn Sg P1 => "olen" ;
+      Presn Sg P2 => "olet" ;
+      Presn Sg P3 => "on" ;
+      Presn Pl P1 => "olemme" ;
+      Presn Pl P2 => "olette" ;
+      Presn Pl P3 => "ovat" ;
+      Impf Sg P1 => "olin" ;   --# notpresent
+      Impf Sg P2 => "olit" ;  --# notpresent
+      Impf Sg P3 => "oli" ;  --# notpresent
+      Impf Pl P1 => "olimme" ;  --# notpresent
+      Impf Pl P2 => "olitte" ;  --# notpresent
+      Impf Pl P3 => "olivat" ;  --# notpresent
+      Condit Sg P1 => "olisin" ;  --# notpresent
+      Condit Sg P2 => "olisit" ;  --# notpresent
+      Condit Sg P3 => "olisi" ;  --# notpresent
+      Condit Pl P1 => "olisimme" ;  --# notpresent
+      Condit Pl P2 => "olisitte" ;  --# notpresent
+      Condit Pl P3 => "olisivat" ;  --# notpresent
+      Potent Sg P1 => "lienen" ;  --# notpresent
+      Potent Sg P2 => "lienet" ;  --# notpresent
+      Potent Sg P3 => "lienee" ;  --# notpresent
+      Potent Pl P1 => "lienemme" ;  --# notpresent
+      Potent Pl P2 => "lienette" ;  --# notpresent
+      Potent Pl P3 => "lienevät" ;  --# notpresent
+      PotentNeg    => "liene" ;  --# notpresent
+      Imper Sg   => "ole" ;
+      Imper Pl   => "olkaa" ;
+      ImperP3 Sg => "olkoon" ;
+      ImperP3 Pl => "olkoot" ;
+      ImperP1Pl  => "olkaamme" ;
+      ImpNegPl   => "olko" ;
+      PassPresn True  => "ollaan" ;
+      PassPresn False => "olla" ;
+      PassImpf  True  => "oltiin" ;  --# notpresent
+      PassImpf  False => "oltu" ;  --# notpresent
+      PassCondit  True  => "oltaisiin" ;  --# notpresent
+      PassCondit  False => "oltaisi" ;  --# notpresent
+      PassPotent  True  => "lienetään" ;  --# notpresent
+      PassPotent  False => "lienetä" ;  --# notpresent
+      PassImper True  => "oltakoon" ;
+      PassImper False => "oltako" ;
+      PastPartAct n => ollut ! n ;
+      PastPartPass n => oltu ! n ;
+      PresPartAct n => oleva ! n ;
+      PresPartPass n => oltava ! n 
       }
     } ;
- 
+
 
 --3 Verbs
 --
@@ -484,107 +550,6 @@ oper
 --- A problem remains with the verb "seistä", where the infinitive
 --- stem has vowel harmony "ä" but the others "a", thus "seisoivat" but "seiskää".
 
-
-  mkVerb : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
-    \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
-    v2v (mkVerbH 
-     tulla tulee tulen tulevat tulkaa tullaan tuli tulin tulisi tullut tultu tullun
-      ) ;
-
-  v2v : VerbH -> Verb = \vh -> 
-    let
-      tulla = vh.tulla ; 
-      tulee = vh.tulee ; 
-      tulen = vh.tulen ; 
-      tulevat = vh.tulevat ;
-      tulkaa = vh.tulkaa ; 
-      tullaan = vh.tullaan ; 
-      tuli = vh.tuli ; 
-      tulin = vh.tulin ;
-      tulisi = vh.tulisi ;
-      tullut = vh.tullut ;
-      tultu = vh.tultu ;
-      tultu = vh.tultu ;
-      tult = init tultu ;
-      tullun = vh.tullun ;
-      tuje = init tulen ;
-      tuji = init tulin ;
-      a = Predef.dp 1 tulkaa ;
-      tulko = Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
-      o = last tulko ;
-      tulleena = Predef.tk 2 tullut + ("een" + a) ;
-      tulleen = (noun2adj (nhn (sRae tullut tulleena))).s ;
-      tullun = (noun2adj (nhn (sKukko tultu tullun (tultu + ("j"+a))))).s  ;
-      tule_ = Predef.tk 3 tulevat ;
-      tulema = tule_ + "m" + a ;
-      tuleva = tule_ + "v" + a ;
-----      tulema = tuje + "m" + a ;
-      vat = "v" + a + "t"
-    in
-    {s = table {
-      Inf Inf1 => tulla ;
-      Presn Sg P1 => tuje + "n" ;
-      Presn Sg P2 => tuje + "t" ;
-      Presn Sg P3 => tulee ;
-      Presn Pl P1 => tuje + "mme" ;
-      Presn Pl P2 => tuje + "tte" ;
-      Presn Pl P3 => tulevat ;
-      Impf Sg P1 => tuji + "n" ;   --# notpresent
-      Impf Sg P2 => tuji + "t" ;  --# notpresent
-      Impf Sg P3 => tuli ;  --# notpresent
-      Impf Pl P1 => tuji + "mme" ;  --# notpresent
-      Impf Pl P2 => tuji + "tte" ;  --# notpresent
-      Impf Pl P3 => tuli + vat ;  --# notpresent
-      Condit Sg P1 => tulisi + "n" ;  --# notpresent
-      Condit Sg P2 => tulisi + "t" ;  --# notpresent
-      Condit Sg P3 => tulisi ;  --# notpresent
-      Condit Pl P1 => tulisi + "mme" ;  --# notpresent
-      Condit Pl P2 => tulisi + "tte" ;  --# notpresent
-      Condit Pl P3 => tulisi + vat ;  --# notpresent
-      Imper Sg   => tuje ;
-      Imper Pl   => tulkaa ;
-      ImperP3 Sg => tulko + o + "n" ;
-      ImperP3 Pl => tulko + o + "t" ;
-      ImperP1Pl  => tulkaa + "mme" ;
-      ImpNegPl   => tulko ;
-      PassPresn True  => tullaan ;
-      PassPresn False => Predef.tk 2 tullaan ;
-      PassImpf  True  => tult + "iin" ;  --# notpresent
-      PassImpf  False => tultu ;  --# notpresent
-      PassCondit  True  => tult + a + "isiin" ;  --# notpresent
-      PassCondit  False => tult + a + "isi" ;  --# notpresent
-      PastPartAct n => tulleen ! n ;
-      PastPartPass n => tullun ! n ;
-      Inf Inf3Iness => tulema + "ss" + a ;
-      Inf Inf3Elat  => tulema + "st" + a ;
-      Inf Inf3Illat => tulema +  a   + "n" ;
-      Inf Inf3Adess => tulema + "ll" + a ;
-      Inf Inf3Abess => tulema + "tt" + a ;
-      Inf InfPresPart => tuleva + "n" ;
-      Inf InfPresPartAgr => tuleva
-      }
-    } ;
-
-  VerbH : Type = {
-    tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun
-      : Str
-    } ;
-
-  mkVerbH : (_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> VerbH = 
-    \tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun -> 
-    {tulla = tulla ; 
-     tulee = tulee ; 
-     tulen = tulen ; 
-     tulevat = tulevat ;
-     tulkaa = tulkaa ; 
-     tullaan = tullaan ; 
-     tuli = tuli ; 
-     tulin = tulin ;
-     tulisi = tulisi ;
-     tullut = tullut ;
-     tultu = tultu ;
-     tullun = tullun
-     } ; 
 
   noun2adj : CommonNoun -> Adj = noun2adjComp True ;
 
