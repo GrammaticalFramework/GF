@@ -236,6 +236,7 @@ public class Translator {
 			boolean emit = false;
 			boolean form = false;
 			boolean lin  = false;
+			String formName = null;
 			StringBuilder abstrBuilder = null;
 			while (event != XmlResourceParser.END_DOCUMENT) {
 				switch (event) {
@@ -252,6 +253,7 @@ public class Translator {
 						lin = true;
 						emit = false;
 						abstrBuilder = new StringBuilder();
+						formName = parser.getAttributeValue(null, "form");
 					} else if (state == 4 && lin && "cat".equals(parser.getName())) {
 						abstrBuilder.append(cat);
 					} else if (state == 4 && lin && "lemma".equals(parser.getName())) {
@@ -281,7 +283,13 @@ public class Translator {
 						form = false;
 					} else if (state == 4 && lin && "lin".equals(parser.getName())) {
 						Expr expr2 = Expr.readExpr(abstrBuilder.toString());
-						builder.append(TextUtils.htmlEncode(targetLang.linearize(expr2)));
+						if (formName == null)
+							builder.append(TextUtils.htmlEncode(targetLang.linearize(expr2)));
+						else {
+							String elin = targetLang.tabularLinearize(expr2).get(formName);
+							builder.append(TextUtils.htmlEncode(elin));
+						}
+
 						lin  = false;
 						emit = true;
 					} else if (state == 4 && emit) {
