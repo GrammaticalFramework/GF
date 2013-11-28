@@ -28,8 +28,6 @@ public class MainActivity extends Activity {
     private static final boolean DBG = true;
     private static final String TAG = "MainActivity";
 
-    private static final boolean FAKE_SPEECH = false;
-
     private ImageView mStartStopButton;
 
     private ConversationView mConversationView;
@@ -222,11 +220,6 @@ public class MainActivity extends Activity {
     }
 
     private void startRecognition() {
-    	if (FAKE_SPEECH) {
-            handleSpeechInput("where is the hotel");
-            return;
-    	}
-
     	if (input_mode) {
     		mConversationView.addFirstPersonUtterance("...");
             mAsr.setLanguage(getSourceLanguageCode());
@@ -266,10 +259,7 @@ public class MainActivity extends Activity {
     private void outputText(String text) {
         if (DBG) Log.d(TAG, "Speaking: " + text);
         mConversationView.addSecondPersonUtterance(text);
-        if (!FAKE_SPEECH) {
-            mTts.setLanguage(getTargetLanguageCode());
-            mTts.speak(text);
-        }
+        mTts.speak(getTargetLanguageCode(), text);
     }
 
     private class SpeechInputListener implements ASR.Listener {
