@@ -3,6 +3,7 @@ package org.grammaticalframework.ui.android;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.grammaticalframework.pgf.Concr;
@@ -213,14 +214,17 @@ public class Translator {
     }
 
 	public String getInflectionTable(String lemma) {
-		String cat = getGrammar().getFunctionType(lemma).getCategory();
+		Concr targetLang = getConcr(getTargetLanguage().getConcrete());
+		
+		if (!targetLang.hasLinearization(lemma))
+			return null;
 
 		int res = getTargetLanguage().getInflectionResource();
 		if (res == 0)
 			return "";
 
+		String cat = getGrammar().getFunctionType(lemma).getCategory();
 		Expr expr = Expr.readExpr(lemma);
-        Concr targetLang = getConcr(getTargetLanguage().getConcrete());
 		Map<String,String> lins = targetLang.tabularLinearize(expr);
 		XmlResourceParser parser = mContext.getResources().getXml(res);
 		StringBuilder builder = new StringBuilder();
@@ -277,7 +281,8 @@ public class Translator {
 						form = false;
 					} else if (state == 4 && lin && "lin".equals(parser.getName())) {
 						Expr expr2 = Expr.readExpr(abstrBuilder.toString());
-						builder.append(targetLang.linearize(expr2));
+						builder.append(TextUtils.htmlEncode(targetLang.linearize(expr2)));
+						lin  = false;
 						emit = true;
 					} else if (state == 4 && emit) {
 						builder.append("</"+parser.getName()+">");
@@ -291,7 +296,7 @@ public class Translator {
 						if (form) {
 							String s = lins.get(parser.getText());
 							if (s != null)
-								builder.append(s);
+								builder.append(TextUtils.htmlEncode(s));
 						} else {
 							builder.append(parser.getText());
 						}

@@ -132,11 +132,17 @@
 	    <cat>V2</cat> 
 		<cat>V3</cat>
 		<cat>V2V</cat>
+		<cat>V2S</cat>
+		<cat>V2Q</cat>
+		<cat>V2A</cat>
 		<cat>VV</cat>
 		<cat>VS</cat>
+		<cat>VQ</cat>
+		<cat>VA</cat>
 		<tag>v</tag>
 		<template>
 			<h1>Verb</h1>
+			<p><lin>Feat<cat/> (<lemma/>)</lin></p>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th></th>

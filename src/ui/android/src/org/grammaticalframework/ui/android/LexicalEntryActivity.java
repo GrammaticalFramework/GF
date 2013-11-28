@@ -89,6 +89,10 @@ public class LexicalEntryActivity extends ListActivity {
 	}
 
 	private void expand(View view, String lemma) {
+		String html = mTranslator.getInflectionTable(lemma);
+		if (html == null)
+			return;
+
 		ImageView arrow = (ImageView) view.findViewById(R.id.arrow);
 		arrow.setImageResource(R.drawable.close_arrow);
 		
@@ -102,7 +106,6 @@ public class LexicalEntryActivity extends ListActivity {
 			((RelativeLayout) view).addView(inflectionView, params);
 		}
 
-		String html = mTranslator.getInflectionTable(lemma);
 		inflectionView.loadData(html, "text/html; charset=UTF-8", null);
 
 		expandedView = view;
