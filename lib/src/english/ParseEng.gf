@@ -153,5 +153,60 @@ lin
 lincat
     Feat = Str;
 lin FeatN, FeatN2 = \_ -> "";
-    
+    FeatV = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ;
+    FeatV2 = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++ v.c2 ++
+      "<object>";
+    FeatV3 = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++
+      v.c2 ++ "<arg1>" ++
+      v.c3 ++ "<arg2>";
+    FeatV2V = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++
+      v.c2 ++ "<object>" ++
+      v.c3 ++ case v.typ of {
+                VVAux => "<verb>" ;
+                VVInf => "to" ++ "<verb>" ;
+                VVPresPart => "<verb+ing>"
+              };
+    FeatV2S = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++
+      v.c2 ++ "<object>" ++
+      "that" ++ "<sentence>";
+    FeatV2Q = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++
+      v.c2 ++ "<object>" ++
+      "that" ++ "<question>";
+    FeatV2A = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++
+      v.c2 ++ "<object>" ++
+      "<adjective>";
+    FeatVV = \v ->
+      "<subject>" ++
+      v.s ! VVF VInf ++ v.p ++
+      case v.typ of {
+        VVAux => "<verb>" ;
+        VVInf => "to" ++ "<verb>" ;
+        VVPresPart => "<verb+ing>"
+      };
+    FeatVS = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++
+      "that" ++ "<sentence>";
+    FeatVQ = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++
+      "<question>";
+    FeatVA = \v ->
+      "<subject>" ++
+      v.s ! VInf ++ v.p ++
+      "<adjective>";
 }

@@ -124,7 +124,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
 
     V, VS, VQ, VA = \v -> linrefVP (predV v);
     V2, V2A = \v -> linrefVP (predV v) ++ v.c2.s;
-    V2V, V2S, V2Q = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
+    V2V = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s ++ "да";
+    V2S, V2Q = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
     V3 = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
     VV = \v -> linrefVP (predV v);
 

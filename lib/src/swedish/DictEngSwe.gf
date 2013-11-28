@@ -8673,12 +8673,12 @@ lin campus_N = variants {};
 lin campylotropous_A = variants {};
 lin camshaft_N = variants {};
 lin camwood_N = variants {};
-lin can_N = mkN "soptunna"; -- comment=11
-lin can_V2 = dirV2 (partV (mkV "orkar")"med"); -- comment=4
+lin can_N = mkN "dunk";
+lin can_V2 = dirV2 (mkV "konserverar");
 lin can_VV = S.can_VV;
 lin canada_PN = variants {};
 lin canadian_A = mkA "kanadensisk";
-lin canadian_N = mkN "kanadensiska"; -- comment=2
+lin canadian_N = mkN "kanadensiska";
 lin canal_N = mkN "kanal" "kanaler";
 lin canalicular_A = variants {};
 lin canaliculate_A = variants {};
@@ -18974,7 +18974,7 @@ lin energid_N = variants {};
 lin energizer_N = variants {};
 lin energizing_A = variants {};
 lin energizing_N = variants {};
-lin energy_N = mkN "kraft" "krafter"; -- comment=4
+lin energy_N = mkN "energi" "energier";
 lin enervate_V2 = mkV2 (mkV "försvaga"); -- status=guess, src=wikt
 lin enervation_N = variants {};
 lin enfant_terrible_N = variants {};
