@@ -20,30 +20,20 @@ public class TTS {
         mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
     }
 
-    public void setLanguage(String language) {
-        Locale locale = LocaleUtils.parseJavaLocale(language.replace('-', '_'),
-                Locale.getDefault());
-
-        int result = mTts.setLanguage(locale);
-        if (result == TextToSpeech.LANG_MISSING_DATA ||
-            result == TextToSpeech.LANG_NOT_SUPPORTED) {
-            Log.e(TAG, "Language is not available");
-        } else {
-            // TODO: the language may be available for the locale,
-            // but not for the specified country and variant.
-        }
-    }
-
     // TODO: handle speak() calls before service connects
-    public void speak(String text) {
+    public void speak(String language, String text) {
     	if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
-	        HashMap<String,String> params = new HashMap<String,String>();
-	        // TODO: how can I get network / embedded fallback?
-	        // Using both crashes the TTS engine if the offline data is not installed
-	        // Using only one doesn't allow the other
-	//        params.put(TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS, "true");
-	//        params.put(TextToSpeech.Engine.KEY_FEATURE_EMBEDDED_SYNTHESIS, "true");
-	        mTts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
+	        Locale locale = LocaleUtils.parseJavaLocale(language.replace('-', '_'),
+	                                                    Locale.getDefault());
+
+	        int result = mTts.setLanguage(locale);
+	        if (result == TextToSpeech.LANG_MISSING_DATA ||
+	            result == TextToSpeech.LANG_NOT_SUPPORTED) {
+	            Log.e(TAG, "Language is not available");
+	        } else {
+		        HashMap<String,String> params = new HashMap<String,String>();
+		        mTts.speak(text, TextToSpeech.QUEUE_FLUSH, params);
+	        }
     	}
     }
 
