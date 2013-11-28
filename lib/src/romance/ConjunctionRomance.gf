@@ -52,6 +52,7 @@ incomplete concrete ConjunctionRomance of Conjunction =
   lincat
     [S] = {s1,s2 : Mood => Str} ;
     [Adv] = {s1,s2 : Str} ;
+    [AdV] = {s1,s2 : Str} ;
     [IAdv] = {s1,s2 : Str} ;
     [NP] = {s1,s2 : Case => Str ; a : Agr ; isNeg : Bool} ;
     [AP] = {s1,s2 : AForm  => Str ; isPre : Bool} ;
