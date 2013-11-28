@@ -92,4 +92,18 @@ incomplete concrete CatHindustani of Cat =
     N3 = {s : Number => Case => Str ; g : Gender} ** {c2 : Str ; c3 : Str ; c4 : Str} ;
     PN = {s : Case => Str ; g : Gender} ;
 
+
+--infVV False
+  linref
+    VP = \vp -> infVV False vp ;
+    VPSlash = \vps -> infVV False vps ++ vps.c2.s ;
+
+    V, VS, VQ, VA = \v -> infVV False (predV v) ;
+    V2, V2A, V2Q, V2S = \v -> infVV False (predV v) ++ v.c2.s ;
+    V3 = \v -> infVV False (predV v) ++ v.c2 ++ v.c3 ;
+    VV = \v -> infVV False (predV v) ;
+    V2V = \v -> infVV False (predV v) ++ v.c2 ;
+
+    Conj = \c -> c.s1 ++ c.s2 ;
+
 }

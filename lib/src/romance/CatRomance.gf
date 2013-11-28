@@ -117,4 +117,26 @@ incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
     Temp  = {s : Str ; t : RTense ; a : Anteriority} ;
     Tense = {s : Str ; t : RTense} ;
 
+  linref
+    SSlash = \ss -> ss.s ! aagr Masc Sg ! Indic ++ ss.c2.s ;
+    ClSlash = \cls -> cls.s ! aagr Masc Sg ! DDir ! RPres ! Simul ! RPos ! Indic ++ cls.c2.s ;
+
+    VP = \vp -> infVP vp (agrP3 Masc Sg) ;
+    VPSlash = \vps -> infVP vps (agrP3 Masc Sg) ++ vps.c2.s ;
+
+    V, VS, VQ, VA = \v -> infVP (predV v) (agrP3 Masc Sg);
+    V2, V2A, V2Q, V2S = \v -> infVP (predV v) (agrP3 Masc Sg) ++ v.c2.s ;
+    V3 = \v -> infVP (predV v) (agrP3 Masc Sg) ++ v.c2.s ++ v.c3.s ;
+    VV = \v -> infVP (predV v) (agrP3 Masc Sg) ;
+    V2V = \v -> infVP (predV v) (agrP3 Masc Sg) ;
+
+    NP = \np -> (np.s ! Nom).comp ;
+    Conj = \c -> c.s2 ;
+
+    A = \a -> a.s ! Posit ! AF Masc Sg ;
+    A2 = \a -> a.s ! Posit ! AF Masc Sg ++ a.c2.s ;
+
+    N = \n -> n.s ! Sg ;
+    N2 = \n -> n.s ! Sg ++ n.c2.s ;
+    N3 = \n -> n.s ! Sg ++ n.c2.s ++ n.c3.s ;
 }

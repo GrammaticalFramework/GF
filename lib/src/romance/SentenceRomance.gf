@@ -48,7 +48,7 @@ incomplete concrete SentenceRomance of Sentence =
       s = \\agr0,d,te,a,b,m => 
         let
 
-          vp : VP = case <vps.c2.c, vps.c2.isDir> of {
+          vp : ResRomance.VP = case <vps.c2.c, vps.c2.isDir> of {
               <Acc,True> => insertAgr agr0 vps ;    -- la fille qu'il a trouvée is decided here
               _ => vps
               } ;
