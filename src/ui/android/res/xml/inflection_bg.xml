@@ -160,15 +160,23 @@
 	    <cat>V2</cat> 
 		<cat>V3</cat>
 		<cat>V2V</cat>
+		<cat>V2S</cat>
+		<cat>V2Q</cat>
+		<cat>V2A</cat>
 		<cat>VV</cat>
 		<cat>VS</cat>
+		<cat>VQ</cat>
+		<cat>VA</cat>
 		<tag>гл</tag>
 		<template>
-			<h1>Глагол от несвършен вид</h1>
+		    <h1>Глагол</h1>
+		    <lin>Feat<cat/> (<lemma/>)</lin>
+
+			<h2>Несвършен вид</h2>
+
+			<h3>Изявително наклонение</h3>
 	
-			<h2>Изявително наклонение</h2>
-	
-			<h3>Сегашно време</h3>
+			<h4>Сегашно време</h4>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th></th>
@@ -192,7 +200,7 @@
 				</tr>
 			</table>
 	
-			<h3>Минало свършено време (аорист)</h3>
+			<h4>Минало свършено време (аорист)</h4>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th></th>
@@ -216,7 +224,7 @@
 				</tr>
 			</table>
 	
-			<h3>Минало несвършено време (имперфект)</h3>
+			<h4>Минало несвършено време (имперфект)</h4>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th></th>
@@ -240,7 +248,7 @@
 				</tr>
 			</table>
 	
-			<h2>Повелително наклонение</h2>
+			<h3>Повелително наклонение</h3>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th>ед.ч.</th>
@@ -251,10 +259,10 @@
 					<td><form>s Imperf (VImperative Pl)</form></td>
 				</tr>
 			</table>
-			
-			<h2>Причастия (отглаголни прилагателни)</h2>
-	
-			<h3>Минало страдателно причастие</h3>
+
+			<h3>Причастия (отглаголни прилагателни)</h3>
+
+			<h4>Минало страдателно причастие</h4>
 				<table class="forms-table" rules="all">
 				<tr>
 					<th rowspan="7">ед.ч.</th>
@@ -299,7 +307,7 @@
 				</tr>
 			</table>
 	
-			<h3>Минало свършено деятелно причастие</h3>
+			<h4>Минало свършено деятелно причастие</h4>
 				<table class="forms-table" rules="all">
 				<tr>
 					<th rowspan="7">ед.ч.</th>
@@ -344,7 +352,7 @@
 				</tr>
 			</table>
 	
-			<h3>Минало несвършено деятелно причастие</h3>
+			<h4>Минало несвършено деятелно причастие</h4>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th rowspan="7">ед.ч.</th>
@@ -388,8 +396,8 @@
 					<td><form>s Imperf (VPluPerfect (APl Def))</form></td>
 				</tr>
 			</table>
-	
-			<h3>Сегашно деятелно причастие</h3>
+
+			<h4>Сегашно деятелно причастие</h4>
 				<table class="forms-table" rules="all">
 				<tr>
 					<th rowspan="7">ед.ч.</th>
@@ -433,14 +441,11 @@
 					<td><form>s Imperf (VPresPart (APl Def))</form></td>
 				</tr>
 			</table>
-	
-			<h2>Деепричастие (отглаголно наречие)</h2>
-			<p><form>s Imperf VGerund</form></p>
-	
-			<h1>Глагол от свършен вид</h1>
-			<h2>Изявително наклонение</h2>
-	
-			<h3>Сегашно време</h3>
+
+			<h2>Свършен вид</h2>
+			<h3>Изявително наклонение</h3>
+
+			<h4>Сегашно време</h4>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th></th>
@@ -463,8 +468,8 @@
 					<td><form>s Perf (VPres Pl P3)</form></td>
 				</tr>
 			</table>
-	
-			<h3>Минало свършено време (аорист)</h3>
+
+			<h4>Минало свършено време (аорист)</h4>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th></th>
@@ -487,8 +492,8 @@
 					<td><form>s Perf (VAorist Pl P3)</form></td>
 				</tr>
 			</table>
-	
-			<h3>Минало несвършено време (имперфект)</h3>
+
+			<h4>Минало несвършено време (имперфект)</h4>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th></th>
@@ -512,7 +517,7 @@
 				</tr>
 			</table>
 	
-			<h2>Повелително наклонение</h2>
+			<h3>Повелително наклонение</h3>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th>ед.ч.</th>
@@ -524,9 +529,9 @@
 				</tr>
 			</table>
 			
-			<h2>Причастия (отглаголни прилагателни)</h2>
-	
-			<h3>Минало свършено деятелно причастие</h3>
+			<h3>Причастия (отглаголни прилагателни)</h3>
+
+			<h4>Минало свършено деятелно причастие</h4>
 				<table class="forms-table" rules="all">
 				<tr>
 					<th rowspan="7">ед.ч.</th>
@@ -571,7 +576,7 @@
 				</tr>
 			</table>
 	
-			<h3>Минало несвършено деятелно причастие</h3>
+			<h4>Минало несвършено деятелно причастие</h4>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th rowspan="7">ед.ч.</th>
@@ -615,7 +620,7 @@
 					<td><form>s Perf (VPluPerfect (APl Def))</form></td>
 				</tr>
 			</table>
-	
+
 			<h1>Отглаголно съществително</h1>
 			<table class="forms-table" rules="all">
 				<tr>
@@ -637,6 +642,9 @@
 					<td><form>s Imperf (VNoun (NF Pl Def))</form></td>
 				</tr>
 			</table>
+			
+			<h1>Деепричастие (отглаголно наречие)</h1>
+			<p><form>s Imperf VGerund</form></p>
 		</template>
 	</inflection>
 </inflection_template>

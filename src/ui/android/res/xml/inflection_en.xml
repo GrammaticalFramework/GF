@@ -79,11 +79,16 @@
 	    <cat>V2</cat> 
 		<cat>V3</cat>
 		<cat>V2V</cat>
-		<cat>VV</cat>
+		<cat>V2S</cat>
+		<cat>V2Q</cat>
+		<cat>V2A</cat>
 		<cat>VS</cat>
+		<cat>VQ</cat>
+		<cat>VA</cat>
 		<tag>v</tag>
 		<template>
 			<h1>Verb</h1>
+			<p><lin>Feat<cat/> (<lemma/>)</lin></p>
 			<table class="forms-table" rules="all">
 				<tr>
 					<th>infitive</th>
@@ -104,6 +109,36 @@
 				<tr>
 					<th>present part.</th>
 					<td><form>s VPresPart</form></td>
+				</tr>
+			</table>
+		</template>
+	</inflection>
+	<inflection>
+		<cat>VV</cat>
+		<tag>v</tag>
+		<template>
+			<h1>Verb</h1>
+			<p><lin>Feat<cat/> (<lemma/>)</lin></p>
+			<table class="forms-table" rules="all">
+				<tr>
+					<th>infitive</th>
+					<td><form>s (VVF VInf)</form></td>
+				</tr>
+				<tr>
+					<th>present</th>
+					<td><form>s (VVF VPres)</form>&#160;<form>s VVPresNeg</form></td>
+				</tr>
+				<tr>
+					<th>past</th>
+					<td><form>s (VVF VPast)</form>&#160;<form>s VVPastNeg</form></td>
+				</tr>
+				<tr>
+					<th>past part.</th>
+					<td><form>s (VVF VPPart)</form></td>
+				</tr>
+				<tr>
+					<th>present part.</th>
+					<td><form>s (VVF VPresPart)</form></td>
 				</tr>
 			</table>
 		</template>
