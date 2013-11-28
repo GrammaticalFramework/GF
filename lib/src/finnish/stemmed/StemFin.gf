@@ -317,7 +317,8 @@ oper
       Inf Inf3Adess => plus tulema ("ll" + a) ;
       Inf Inf3Abess => plus tulema ("tt" + a) ;
       Inf InfPresPart => plus tuleva "n" ;
-      Inf InfPresPartAgr => tuleva
+      Inf InfPresPartAgr => tuleva ;
+      _ => plus "TODO" tulla ----
       } ;
     sc = NPCase Nom ;
     lock_V = <>
