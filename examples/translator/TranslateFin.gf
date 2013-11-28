@@ -17,6 +17,7 @@ lin
   NP_Place np0 = let np = lin NP np0 in 
                  {name = np ; at = SyntaxFin.mkAdv in_Prep np ; 
                   to = SyntaxFin.mkAdv to_Prep np ; from = SyntaxFin.mkAdv from_Prep np} ;
+  NP_Name np = lin NP np ;
 
 --- to remove Phrasebook punctuation, which makes the output in Translate heterogeneous
 

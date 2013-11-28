@@ -1,9 +1,9 @@
---# -path=.:alltenses:../phrasebook:../../lib/src/english:../../lib/src/swedish:../../lib/src/scandinavian
+--# -path=.:alltenses:../phrasebook:../../lib/src/english:../../lib/src/german
 
-concrete TranslateSwe of Translate = 
-    ParseSwe - [open_A], 
-    PhrasebookSwe - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] 
-  ** open SyntaxSwe, ParadigmsSwe, (E = ExtraSwe), Prelude in {
+concrete TranslateGer of Translate = 
+    ParseGer - [open_A], 
+    PhrasebookGer - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease] 
+  ** open SyntaxGer, ParadigmsGer, (E = ExtraGer), Prelude in {
 
 flags
   literal = Symb ;
@@ -14,7 +14,7 @@ lin
   NP_Object np = lin NP np ;
   NP_Item np = lin NP np ;
   NP_Place np0 = let np = lin NP np0 in 
-                 {name = np ; at = SyntaxSwe.mkAdv in_Prep np ; to = SyntaxSwe.mkAdv to_Prep np} ;
+                 {name = np ; at = SyntaxGer.mkAdv in_Prep np ; to = SyntaxGer.mkAdv to_Prep np} ;
   NP_Name np = lin NP np ;
   
 --- to remove Phrasebook punctuation, which makes the output in Translate heterogeneous
