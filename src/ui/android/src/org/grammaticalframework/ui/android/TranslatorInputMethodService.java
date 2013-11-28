@@ -529,7 +529,8 @@ public class TranslatorInputMethodService extends InputMethodService
     	updateLanguageKeyboard(newSource);
        	mSymbolsKeyboard.updateLanguageKeyLabels();
         mSymbolsShiftedKeyboard.updateLanguageKeyLabels();
-        mInputView.setKeyboard(mCurKeyboard);
+        if (mInputView != null)
+        	mInputView.setKeyboard(mCurKeyboard);
     }
 
 	private void updateLanguageKeyboard(Language language) {
