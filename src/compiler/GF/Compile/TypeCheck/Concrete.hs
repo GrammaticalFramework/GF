@@ -9,7 +9,7 @@ import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Grammar.PatternMatch
 import GF.Grammar.Lockfield (isLockLabel, lockRecType, unlockRecord)
-import GF.Compile.Compute.AppPredefined
+import GF.Compile.TypeCheck.Primitives
 
 import Data.List
 import Control.Monad
