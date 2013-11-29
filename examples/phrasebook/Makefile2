@@ -52,7 +52,7 @@ PhrasebookPol.pgf::
 	gf -make -s -optimize-pgf -name=PhrasebookPol PhrasebookPol.gf
 
 PhrasebookRon.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookRon PhrasebookRon.gf
+	gf -make -s -optimize-pgf -name=PhrasebookRon PhrasebookRon.gf +RTS -K32M
 
 PhrasebookRus.pgf::
 	gf -make -s -optimize-pgf -name=PhrasebookRus PhrasebookRus.gf
