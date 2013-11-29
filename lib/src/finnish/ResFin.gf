@@ -118,6 +118,7 @@ param
    | PastPartPass AForm
    | PresPartAct  AForm
    | PresPartPass AForm
+   | AgentPart    AForm
    ;
 
   InfForm =
@@ -125,13 +126,14 @@ param
    | Inf1Long      -- puhuakseni
    | Inf2Iness     -- puhuessa
    | Inf2Instr     -- puhuen
-   | Inf2InessPass -- puhuettaessa
-   | Inf2InstrPass -- puhuttaen
+   | Inf2InessPass -- puhuttaessa
    | Inf3Iness     -- puhumassa
    | Inf3Elat      -- puhumasta
    | Inf3Illat     -- puhumaan
    | Inf3Adess     -- puhumalla
    | Inf3Abess     -- puhumatta
+   | Inf3Instr     -- puhuman
+   | Inf3InstrPass -- puhuttaman
    | Inf4Nom       -- puhuminen
    | Inf4Part      -- puhumista
    | Inf5          -- puhumaisillani
@@ -474,6 +476,7 @@ oper
       oltu = (noun2adj (nhn (sKukko "oltu" "ollun" "oltuja"))).s  ;
       oleva = (noun2adj (nhn (sKukko "oleva" "olevan" "olevia"))).s  ;
       oltava = (noun2adj (nhn (sKukko "oltava" "oltavan" "oltavia"))).s  ;
+      olema = (noun2adj (nhn (sKukko "olema" "oleman" "olemia"))).s  ;
     in
     {s = table {
       Inf Inf1 => "olla" ;
@@ -481,12 +484,13 @@ oper
       Inf Inf2Iness => "ollessa" ;
       Inf Inf2Instr => "ollen" ;
       Inf Inf2InessPass => "oltaessa" ;
-      Inf Inf2InstrPass => "oltaen" ;
       Inf Inf3Iness => "olemassa" ;
       Inf Inf3Elat  => "olemasta" ;
       Inf Inf3Illat => "olemaan" ;
       Inf Inf3Adess => "olemalla" ;
       Inf Inf3Abess => "olematta" ;
+      Inf Inf3Instr => "oleman" ;
+      Inf Inf3InstrPass => "oltaman" ;
       Inf Inf4Nom => "oleminen" ;
       Inf Inf4Part => "olemista" ;
       Inf Inf5 => "olemaisilla" ;
@@ -529,14 +533,15 @@ oper
       PassImpf  False => "oltu" ;  --# notpresent
       PassCondit  True  => "oltaisiin" ;  --# notpresent
       PassCondit  False => "oltaisi" ;  --# notpresent
-      PassPotent  True  => "lienetään" ;  --# notpresent
-      PassPotent  False => "lienetä" ;  --# notpresent
+      PassPotent  True  => "oltaneen" ;  --# notpresent
+      PassPotent  False => "oltane" ;  --# notpresent
       PassImper True  => "oltakoon" ;
       PassImper False => "oltako" ;
       PastPartAct n => ollut ! n ;
       PastPartPass n => oltu ! n ;
       PresPartAct n => oleva ! n ;
-      PresPartPass n => oltava ! n 
+      PresPartPass n => oltava ! n ;
+      AgentPart n => olema ! n
       }
     } ;
 

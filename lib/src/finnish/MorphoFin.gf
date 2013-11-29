@@ -750,6 +750,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       tulta = tult + a ;
       tulevaP = (noun2adj (nhn (sKukko tuleva (tuleva + "n") (init tuleva + "ia")))).s  ;
       tultavaP = (noun2adj (nhn (sKukko (tulta + "v" + a) (tulta + "v" + a + "n") (tulta + "vi" + a)))).s  ;
+      tulemaP = (noun2adj (nhn (sKukko tulema (tulema + "n") (init tulema + "ia")))).s  ;
 
     in
     {s = table {
@@ -757,13 +758,14 @@ resource MorphoFin = ResFin ** open Prelude in {
       Inf Inf1Long => tulla + "kse" ;
       Inf Inf2Iness => tull + "ess" + a ;
       Inf Inf2Instr => tull + "en" ;
-      Inf Inf2InessPass => tult + a + "ess" + "a" ;
-      Inf Inf2InstrPass => tult + a + "en" ;
+      Inf Inf2InessPass => tult + a + "ess" + a ;
       Inf Inf3Iness => tulema + "ss" + a ;
       Inf Inf3Elat  => tulema + "st" + a ;
       Inf Inf3Illat => tulema +  a   + "n" ;
       Inf Inf3Adess => tulema + "ll" + a ;
       Inf Inf3Abess => tulema + "tt" + a ;
+      Inf Inf3Instr => tulema + "n" ;
+      Inf Inf3InstrPass => tult + a + "m" + a + "n" ;
       Inf Inf4Nom   => tule__ + "minen" ;
       Inf Inf4Part  => tule__ + "mist" + a ; 
       Inf Inf5      => tulema + "isill" + a ;
@@ -806,8 +808,8 @@ resource MorphoFin = ResFin ** open Prelude in {
       PassImpf  False => tultu ;  --# notpresent
       PassCondit  True  => tult + a + "isiin" ;  --# notpresent
       PassCondit  False => tult + a + "isi" ;  --# notpresent
-      PassPotent True  => liene + "t" + a + a + "n" ; --# notpresent
-      PassPotent False => liene + "t" + a ; --# notpresent
+      PassPotent True  => tult + a + "neen" ; --# notpresent
+      PassPotent False => tult + a + "ne" ; --# notpresent
       PassImper True   => tult + a + "k" + o + o + "n" ;
       PassImper False  => tult + a + "k" + o ;
 
@@ -816,7 +818,8 @@ resource MorphoFin = ResFin ** open Prelude in {
       PastPartAct (AN n)  => tulleen ! n ;
       PastPartAct AAdv    => tullee + "sti" ;
       PastPartPass (AN n) => tullun ! n ;
-      PastPartPass AAdv   => tullu + "sti" 
+      PastPartPass AAdv   => tullu + "sti" ;
+      AgentPart a => tulemaP ! a
       } ;
     sc = NPCase Nom ;
     qp = pbool2bool (Predef.eqStr (last tulko) "o") ;
