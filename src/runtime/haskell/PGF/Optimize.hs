@@ -35,16 +35,20 @@ topDownFilter startCat cnc =
       (env1,defs)  = IntMap.mapAccumWithKey (\env fid funids -> mapAccumL (optimizeFun fid [PArg [] fidVar]) env funids) 
                                             env0
                                             (lindefs cnc)
-      (env2,prods) = IntMap.mapAccumWithKey (\env fid set  -> mapAccumLSet (optimizeProd fid) env set)
+      (env2,refs)  = IntMap.mapAccumWithKey (\env fid funids -> mapAccumL (optimizeFun fidVar [PArg [] fid]) env funids)
                                             env1
+                                            (linrefs cnc)
+      (env3,prods) = IntMap.mapAccumWithKey (\env fid set  -> mapAccumLSet (optimizeProd fid) env set)
+                                            env2
                                             (productions cnc)
       cats = Map.mapWithKey filterCatLabels (cnccats cnc)
-      (seqs,funs) = env2
+      (seqs,funs) = env3
   in cnc{ sequences   = mkSetArray seqs
         , cncfuns     = mkSetArray funs
         , productions = prods
         , cnccats     = cats
         , lindefs     = defs
+        , linrefs     = refs
         }
   where
     fid2cat fid =
@@ -143,10 +147,12 @@ topDownFilter startCat cnc =
       where
         CncFun fun lin = cncfuns cnc ! funid
 
-        indicesOf fid =
-          case Map.lookup (fid2cat fid) closure of
-            Just indices -> indices
-            Nothing      -> error "unknown category"
+        indicesOf fid
+          | fid < 0   = listArray (0,0) [0]
+          | otherwise =
+              case Map.lookup (fid2cat fid) closure of
+                Just indices -> indices
+                Nothing      -> error "unknown category"
 
         addUnique seqs seq =
           case Map.lookup seq seqs of
