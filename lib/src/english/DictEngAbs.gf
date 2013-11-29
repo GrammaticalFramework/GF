@@ -47365,6 +47365,7 @@ fun satisfactory_A : A;
 fun satisfier_N : N;
 fun satisfy_V : V;
 fun satisfy_V2 : V2;
+fun satisfied_A : A;
 fun satori_N : N;
 fun satrap_N : N;
 fun satsuma_N : N;

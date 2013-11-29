@@ -22745,8 +22745,8 @@ lin frustrating_A = variants {};
 lin frustration_N = mkN "frustration" "frustrationer";
 lin frustum_N = variants {};
 lin fry_N = mkN "yngel" neutrum; -- comment=3
-lin fry_V = mkV "steker"; -- comment=7
-lin fry_V2 = dirV2 (partV (mkV "dö" "dog" "dött")"ut");
+lin fry_V = mkV "fritera";
+lin fry_V2 = dirV2 (mkV "fritera");
 lin fry_pan_N = variants {};
 lin fryer_N = mkN "stekpanna";
 lin frying_N = mkN "stekning";
@@ -31286,7 +31286,7 @@ lin lam_V = variants {};
 lin lam_V2 = variants {};
 lin lama_N = mkN "lama"; -- comment=3
 lin lamasery_N = variants {};
-lin lamb_N = mkN "lammkött" neutrum; -- comment=4
+lin lamb_N = mkN "lamm" neutrum;
 lin lamb_V = variants {};
 lin lambaste_V2 = mkV2 (mkV (mkV "klå") "upp"); -- status=guess, src=wikt
 lin lambda_N = variants {};
@@ -49324,6 +49324,7 @@ lin satisfactory_A = variants {};
 lin satisfier_N = variants {};
 lin satisfy_V = mkV "uppfyller"; -- comment=6
 lin satisfy_V2 = mkV2 (mkV "tillfredsställa"); -- status=guess, src=wikt
+lin satisfied_A = mkA "nöjd" "nöjt";
 lin satori_N = variants {};
 lin satrap_N = variants {};
 lin satsuma_N = variants {};

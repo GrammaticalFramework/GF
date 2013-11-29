@@ -47431,6 +47431,7 @@ lin satisfactory_A = compoundA (mkA "satisfactory");
 lin satisfier_N = mkN "satisfier" ;
 lin satisfy_V = mkV "satisfy" "satisfies" "satisfied" "satisfied" "satisfying";
 lin satisfy_V2 = mkV2 (mkV "satisfy" "satisfies" "satisfied" "satisfied" "satisfying");
+lin satisfied_A = compoundA (mkA "satisfied");
 lin satori_N = mkN "satori" ;
 lin satrap_N = mkN "satrap" "satraps";
 lin satsuma_N = mkN "satsuma" "satsumas";
