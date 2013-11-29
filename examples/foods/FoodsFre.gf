@@ -1,4 +1,3 @@
---# -path=.:../foods:present
 
 concrete FoodsFre of Foods = open SyntaxFre, ParadigmsFre in {
 

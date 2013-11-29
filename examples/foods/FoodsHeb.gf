@@ -1,4 +1,3 @@
---# -path=alltenses
 
 --(c) 2009 Dana Dannells
 -- Licensed under LGPL

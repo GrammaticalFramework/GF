@@ -1,4 +1,3 @@
---# -path=.:present
 
 concrete FoodsSpa of Foods = open SyntaxSpa, StructuralSpa, ParadigmsSpa in {
 

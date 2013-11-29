@@ -1,4 +1,3 @@
---# -path=alltenses
 
 -- (c) 2009 Laurette Pretorius Sr & Jr and Ansu Berg under LGPL
 

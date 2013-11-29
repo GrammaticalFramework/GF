@@ -1,4 +1,3 @@
---# -path=.:prelude
 
 -- (c) 2009 Inese Bernsone under LGPL
 

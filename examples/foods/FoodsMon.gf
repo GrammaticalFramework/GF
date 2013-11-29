@@ -1,4 +1,3 @@
---# -path=.:/GF/lib/src/prelude
 
 -- (c) 2009 Nyamsuren Erdenebadrakh under LGPL
 

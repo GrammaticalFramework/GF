@@ -1,4 +1,3 @@
---# -path=.:../lib/src/prelude
 
 -- (c) 2009 Zofia Stankiewicz under LGPL
 
