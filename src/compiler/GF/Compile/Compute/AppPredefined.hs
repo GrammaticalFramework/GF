@@ -12,10 +12,10 @@
 -- Predefined function type signatures and definitions.
 -----------------------------------------------------------------------------
 
-module GF.Compile.Compute.AppPredefined (
-          isInPredefined, typPredefined, arrityPredefined, predefModInfo, appPredefined
+module GF.Compile.Compute.AppPredefined ({-
+          isInPredefined, typPredefined, arrityPredefined, predefModInfo, appPredefined-}
 		  ) where
-
+{-
 import GF.Compile.TypeCheck.Primitives
 import GF.Infra.Option
 import GF.Data.Operations
@@ -140,3 +140,4 @@ mapStr ty f t = case (ty,t) of
    mapField (mty,te) = case mty of
      Just ty -> (mty,mapStr ty f te)
      _ -> (mty,te)
+-}

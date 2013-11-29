@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP #-}
+-- LANGUAGE CPP
 module GF.Infra.Option
     (
      -- * Option types
@@ -173,8 +173,8 @@ data Flags = Flags {
       optTagsOnly        :: Bool,
       optHeuristicFactor :: Maybe Double,
       optMetaProb        :: Maybe Double,
-      optMetaToknProb    :: Maybe Double,
-      optNewComp         :: Bool
+      optMetaToknProb    :: Maybe Double{-,
+      optNewComp         :: Bool-}
     }
   deriving (Show)
 
@@ -285,13 +285,14 @@ defaultFlags = Flags {
       optTagsOnly        = False,
       optHeuristicFactor = Nothing,
       optMetaProb        = Nothing,
-      optMetaToknProb    = Nothing,
+      optMetaToknProb    = Nothing{-,
       optNewComp         =
 #ifdef NEW_COMP
                            True
 #else
                            False
 #endif
+-}
     }
 
 -- | Option descriptions
@@ -374,8 +375,8 @@ optDescr =
      Option [] ["heuristic_search_factor"] (ReqArg (readDouble (\d o -> o { optHeuristicFactor = Just d })) "FACTOR") "Set the heuristic search factor for statistical parsing",
      Option [] ["meta_prob"] (ReqArg (readDouble (\d o -> o { optMetaProb = Just d })) "PROB") "Set the probability of introducting a meta variable in the parser",
      Option [] ["meta_token_prob"] (ReqArg (readDouble (\d o -> o { optMetaToknProb = Just d })) "PROB") "Set the probability for skipping a token in the parser",
-     Option [] ["new-comp"] (NoArg (set $ \o -> o{optNewComp = True})) "Use the new experimental compiler.",
-     Option [] ["old-comp"] (NoArg (set $ \o -> o{optNewComp = False})) "Use old trusty compiler.",
+--     Option [] ["new-comp"] (NoArg (set $ \o -> o{optNewComp = True})) "Use the new experimental compiler.",
+--     Option [] ["old-comp"] (NoArg (set $ \o -> o{optNewComp = False})) "Use old trusty compiler.",
      dumpOption "source" Source,
      dumpOption "rebuild" Rebuild,
      dumpOption "extend" Extend,

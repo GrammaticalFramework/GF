@@ -15,7 +15,7 @@ import GF.Grammar.Parser (runP, pExp)
 import GF.Grammar.ShowTerm
 import GF.Grammar.Lookup (allOpers,allOpersTo)
 import GF.Compile.Rename(renameSourceTerm)
-import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
+--import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
 import qualified GF.Compile.Compute.ConcreteNew as CN(normalForm,resourceValues)
 import GF.Compile.TypeCheck.Concrete (inferLType,ppType)
 import GF.Infra.Dependencies(depGraph)
@@ -178,16 +178,17 @@ execute1 opts gfenv0 s0 =
         pOpts style q ("-qual"   :ws) = pOpts style            Qualified   ws
         pOpts style q             ws  = (style,q,unwords ws)
 
-        (style,q,s) = pOpts TermPrintDefault Qualified ws'
+        (style,q,s) = pOpts TermPrintDefault Qualified ws
+        {-
         (new,ws') = case ws of
                       "-new":ws' -> (True,ws')
                       "-old":ws' -> (False,ws')
                       _ -> (flag optNewComp opts,ws)
-
+        -}
       case runP pExp (UTF8.fromString s) of
         Left (_,msg) -> putStrLn msg
         Right t      -> putStrLn . err id (showTerm sgr style q)
-                                 . checkComputeTerm' new sgr
+                                 . checkComputeTerm sgr
                                  $ {-codeTerm (decodeUnicode utf8 . BS.pack)-} t
       continue gfenv
 
@@ -324,14 +325,13 @@ execute1 opts gfenv0 s0 =
 
 printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
 
-checkComputeTerm = checkComputeTerm' False
-checkComputeTerm' new sgr t = do
+checkComputeTerm sgr t = do
                  mo <- maybe (raise "no source grammar in scope") return $ greatestResource sgr
                  ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
                                             inferLType sgr [] t
-                 t1 <- if new
-                       then return (CN.normalForm (CN.resourceValues sgr) (L NoLoc identW) t)
-                       else computeConcrete sgr t
+                 t1 <- {-if new
+                       then-} return (CN.normalForm (CN.resourceValues sgr) (L NoLoc identW) t)
+                       {-else computeConcrete sgr t-}
                  checkPredefError t1
 
 fetchCommand :: GFEnv -> IO String

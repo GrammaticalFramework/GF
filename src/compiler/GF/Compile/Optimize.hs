@@ -22,7 +22,8 @@ import GF.Grammar.Macros
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
 --import GF.Compile.Refresh
-import GF.Compile.Compute.Concrete
+--import GF.Compile.Compute.Concrete
+import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues)
 --import GF.Compile.CheckGrammar
 --import GF.Compile.Update
 
@@ -49,12 +50,14 @@ optimizeModule opts sgr m@(name,mi)
  where
    oopts = opts `addOptions` mflags mi
 
+   resenv = resourceValues sgr
+
    updateEvalInfo mi (i,info) = do
-     info <- evalInfo oopts sgr (name,mi) i info
+     info <- evalInfo oopts resenv sgr (name,mi) i info
      return (mi{jments=updateTree (i,info) (jments mi)})
 
-evalInfo :: Options -> SourceGrammar -> SourceModule -> Ident -> Info -> Err Info
-evalInfo opts sgr m c info = do
+evalInfo :: Options -> GlobalEnv -> SourceGrammar -> SourceModule -> Ident -> Info -> Err Info
+evalInfo opts resenv sgr m c info = do
 
  (if verbAtLeast opts Verbose then trace (" " ++ showIdent c) else id) return ()
 
@@ -81,7 +84,7 @@ evalInfo opts sgr m c info = do
         return (Just (L loc (factor param c 0 re)))
       _ -> return pre   -- indirection
 
-    ppr' <- evalPrintname gr ppr
+    let ppr' = fmap (evalPrintname resenv c) ppr
 
     return (CncCat ptyp pde' pre' ppr' mpmcfg)
 
@@ -91,9 +94,9 @@ evalInfo opts sgr m c info = do
       Just (L loc de) -> do de <- partEval opts gr (cont,val) de
                             return (Just (L loc (factor param c 0 de)))
       Nothing -> return pde
-    ppr' <-  evalPrintname gr ppr
+    let ppr' = fmap (evalPrintname resenv c) ppr
     return $ CncFun mt pde' ppr' mpmcfg -- only cat in type actually needed
-
+{-
   ResOper pty pde 
     | not new && OptExpand `Set.member` optim -> do
          pde' <- case pde of
@@ -101,10 +104,10 @@ evalInfo opts sgr m c info = do
                                          return (Just (L loc (factor param c 0 de)))
                    Nothing -> return Nothing
          return $ ResOper pty pde'
-
+-}
   _ ->  return info
  where
-   new = flag optNewComp opts -- computations moved to GF.Compile.GeneratePMCFG
+-- new = flag optNewComp opts -- computations moved to GF.Compile.GeneratePMCFG
 
    gr = prependModule sgr m
    optim = flag optOptimizations opts
@@ -113,14 +116,14 @@ evalInfo opts sgr m c info = do
 
 -- | the main function for compiling linearizations
 partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term
-partEval opts = if flag optNewComp opts
-                then partEvalNew opts
-                else partEvalOld opts
+partEval opts = {-if flag optNewComp opts
+                then-} partEvalNew opts
+                {-else partEvalOld opts-}
 
 partEvalNew opts gr (context, val) trm =
     errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $
     checkPredefError trm
-
+{-
 partEvalOld opts gr (context, val) trm = errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $ do
   let vars  = map (\(bt,x,t) -> x) context
       args  = map Vr vars
@@ -140,8 +143,6 @@ partEvalOld opts gr (context, val) trm = errIn (render (text "partial evaluation
     rightType _      = False
 
 
-
-
 -- here we must be careful not to reduce
 --   variants {{s = "Auto" ; g = N} ; {s = "Wagen" ; g = M}}
 --   {s  = variants {"Auto" ; "Wagen"} ; g  = variants {N ; M}} ;
@@ -153,7 +154,7 @@ recordExpand typ trm = case typ of
     _ -> return $ R [assign lab (P trm lab) | (lab,_) <- tys]
   _ -> return trm
 
-
+-}
 -- | auxiliaries for compiling the resource
 
 mkLinDefault :: SourceGrammar -> Type -> Err Term
@@ -196,12 +197,8 @@ mkLinReference gr typ =
        _ | Just _ <- isTypeInts typ -> Bad "no string"
        _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
 
-evalPrintname :: SourceGrammar -> Maybe (L Term) -> Err (Maybe (L Term))
-evalPrintname gr mpr =
-  case mpr of
-    Just (L loc pr) -> do pr <- computeConcrete gr pr
-                          return (Just (L loc pr))
-    Nothing         -> return Nothing
+evalPrintname :: GlobalEnv -> Ident -> L Term -> L Term
+evalPrintname resenv c (L loc pr) = L loc (normalForm resenv (L loc c) pr)
 
 -- do even more: factor parametric branches
 
@@ -238,4 +235,3 @@ replace old new trm =
     R _      | trm == old -> new
     App x y               -> App (replace old new x) (replace old new y)
     _                     -> composSafeOp (replace old new) trm
-

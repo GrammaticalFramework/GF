@@ -150,9 +150,9 @@ convert opts gr cenv loc term ty@(_,val) pargs =
   where
     conv t = convertTerm opts CNil val =<< unfactor t
 
-    term' = if flag optNewComp opts
-            then normalForm cenv loc (expand ty term) -- new evaluator
-            else term -- old evaluator is invoked from GF.Compile.Optimize
+    term' = {-if flag optNewComp opts
+            then-} normalForm cenv loc (expand ty term) -- new evaluator
+            --else term -- old evaluator is invoked from GF.Compile.Optimize
 
 expand ty@(context,val) = recordExpand val . etaExpand ty
 
