@@ -1,4 +1,3 @@
---# -path=.:present
 
 -- (c) 2009 Jordi Saludes under LGPL
 

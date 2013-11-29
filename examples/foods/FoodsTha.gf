@@ -1,4 +1,3 @@
---# -path=.:alltenses
 
 concrete FoodsTha of Foods = open SyntaxTha, LexiconTha,
   ParadigmsTha, (R=ResTha) in {
