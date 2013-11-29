@@ -366,8 +366,8 @@ setup: Distribution/Simple/PackageIndex.hs:124:8-13: Assertion failed
 ```
 
 The exact cause of this problem is unclear, but it seems to happen
-during the configure phase if GF is already installed, so a workaround
-is to remove the existing installation with
+during the configure phase if the same version of GF is already installed,
+so a workaround is to remove the existing installation with
 
 ```
 ghc-pkg unregister gf
