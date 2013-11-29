@@ -116,7 +116,7 @@ There seems to be a bug in some versions of Cabal that can cause
   Distribution/Simple/PackageIndex.hs:124:8-13: Assertion failed
 ```
 
- if GF is
+if the same version of GF is
 already installed. If you encounter this, you can use ``ghc-pkg unregister gf``
 to remove the installed version of GF and ``ghc-pkg list gf`` to verify that
 it is gone.

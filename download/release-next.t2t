@@ -14,7 +14,7 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 Over [...] changes have been pushed to the source repository since the release
 of GF 3.5.
 
-Closed issues: 30, 41, 57, 60, 61, 68.
+Closed issues: 25, 30, 41, 57, 60, 61, 68, 80.
 
 ===GF compiler and run-time library===
 
@@ -34,7 +34,7 @@ Closed issues: 30, 41, 57, 60, 61, 68.
 % (and thus the command line option --dump-refresh)
   had become obsolete and has been removed.
 - ``nonExist`` now exists. [...]
-- [...]
+- Unicode characters in identifiers [...]
 
 
 ===Resource Grammar Library===
