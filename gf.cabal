@@ -49,9 +49,9 @@ flag server
   Description: Include --server mode
   Default:     True
 
-flag new-comp
-  Description: Make -new-comp the default
-  Default:     True
+--flag new-comp
+--  Description: Make -new-comp the default
+--  Default:     True
 
 flag custom-binary
   Description: Use a customised version of the binary package
@@ -137,8 +137,8 @@ Executable gf
     other-modules: GFServer
     hs-source-dirs: src/server src/server/transfer src/example-based
 
-  if flag(new-comp)
-    cpp-options: -DNEW_COMP
+--if flag(new-comp)
+--  cpp-options: -DNEW_COMP
 
   build-tools: happy, alex>=3
 
@@ -206,7 +206,7 @@ Executable gf
     GF.Compile.TypeCheck.ConcreteNew
     GF.Compile.TypeCheck.TC
     GF.Compile.Compute.Abstract
-    GF.Compile.Compute.Concrete
+--  GF.Compile.Compute.Concrete
     GF.Compile.Compute.ConcreteNew1
     GF.Compile.Compute.ConcreteNew
     GF.Compile.Compute.AppPredefined

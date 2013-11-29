@@ -12,10 +12,10 @@
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module GF.Compile.Compute.ConcreteLazy (computeConcrete, computeTerm,checkPredefError) where
-
-import GF.Data.Operations
+module GF.Compile.Compute.ConcreteLazy ({-computeConcrete, computeTerm,checkPredefError-}) where
+{-
 import GF.Grammar.Grammar
+import GF.Data.Operations
 import GF.Infra.Ident
 --import GF.Infra.Option
 import GF.Data.Str
@@ -527,4 +527,5 @@ checkPredefError sgr t = case t of
   _ -> composOp (checkPredefError sgr) t
   
 predef_error s = App (Q (cPredef,cError)) (K s)
+-}
 -}
