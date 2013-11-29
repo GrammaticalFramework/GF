@@ -332,7 +332,7 @@ checkComputeTerm' new sgr t = do
                  t1 <- if new
                        then return (CN.normalForm (CN.resourceValues sgr) (L NoLoc identW) t)
                        else computeConcrete sgr t
-                 checkPredefError sgr t1
+                 checkPredefError t1
 
 fetchCommand :: GFEnv -> IO String
 fetchCommand gfenv = do
