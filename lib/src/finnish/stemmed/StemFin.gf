@@ -184,7 +184,7 @@ oper
 
   vforms2sverb : VForms -> SVerb = \vf -> {
     s = table {
-      0  =>             (vf ! 0) ;  -- tulla
+      0  => Predef.tk 1 (vf ! 0) ;  -- tull(a)
       1  => Predef.tk 1 (vf ! 1) ;  -- tule(n)
       2  =>             (vf ! 2) ;  -- tulee
       3  => Predef.tk 3 (vf ! 3) ;  -- tule(vat)
@@ -207,7 +207,7 @@ oper
       plus = plusIf b ;
       vh   = sverb.s ;
 
-      tulla   = vh ! 0 ; 
+      tull    = vh ! 0 ;    -- tull(a) 
       tule_   = vh ! 1 ;    -- tule(n) 
       tulee   = vh ! 2 ; 
       tule__  = vh ! 3 ;    -- tule(vat)
@@ -226,6 +226,7 @@ oper
       o = harmonyV "o" "ö" sverb.h ;
       u = harmonyV "u" "y" sverb.h ;
 
+      tulla   = plus tull a ;
       tulko   = plus tulk_ o ;
       tulkoo  = plus tulko o ;
       tullee  = plus tull_ "ee" ;
@@ -235,7 +236,12 @@ oper
       tullun  = plus tullu_ "n" ; 
       tultu   = plus tult_ u ;
 
-      tuleva  = plus tule___ ("v" + a) ;
+      tulev    = plus tule___ "v" ;
+      tuleva   = plus tule___ ("v" + a) ;
+      tulem    = plus tule___ "m" ;
+      tulema   = plus tule___ ("m" + a) ;
+      tultav   = plus tult_ (a + "v") ;
+      tultava  = plus tult_ (a + "v" + a) ;
 
       tullutN : Noun = snoun2noun b {
         s = table SNForm [
@@ -271,12 +277,79 @@ oper
         h = sverb.h
         } ;
 
+      tulevaN : Noun = snoun2noun b {
+        s = table SNForm [
+          tuleva ;
+          tuleva ;
+          plus tuleva a ;
+          plus tuleva ("n" + a) ;
+          plus tuleva a ;
+          plus tulev "ie" ;
+          plus tulev ("i" + a) ;
+          plus tulev "i" ;
+          plus tulev "i" ;
+          plus tulev "ii" ;
+          tuleva
+        ] ;
+        h = sverb.h
+        } ;
 
-      tulema  = plus tule___ ("m" + a) ;
+      tultavaN : Noun = snoun2noun b {
+        s = table SNForm [
+          tultava ;
+          tultava ;
+          plus tultava a ;
+          plus tultava ("n" + a) ;
+          plus tultava a ;
+          plus tultav "ie" ;
+          plus tultav ("i" + a) ;
+          plus tultav "i" ;
+          plus tultav "i" ;
+          plus tultav "ii" ;
+          tuleva
+        ] ;
+        h = sverb.h
+        } ;
+
+      tulemaN : Noun = snoun2noun b {
+        s = table SNForm [
+          tulema ;
+          tulema ;
+          plus tulema a ;
+          plus tulema ("n" + a) ;
+          plus tulema a ;
+          plus tulem "ie" ;
+          plus tulem ("i" + a) ;
+          plus tulem "i" ;
+          plus tulem "i" ;
+          plus tulem "ii" ;
+          tulema
+        ] ;
+        h = sverb.h
+        } ;
+
+
       vat     = "v" + a + "t"
     in
     {s = table {
       Inf Inf1 => tulla ;
+      Inf Inf1Long  => plus tulla "kse" ;
+      Inf Inf2Iness => plus tull ("ess" + a) ;
+      Inf Inf2Instr => plus tull "en" ;
+      Inf Inf2InessPass => plus tult_ (a + "ess" + a) ;
+      Inf Inf3Iness => plus tulema ("ss" + a) ;
+      Inf Inf3Elat  => plus tulema ("st" + a) ;
+      Inf Inf3Illat => plus tulema (a + "n") ;
+      Inf Inf3Adess => plus tulema ("ll" + a) ;
+      Inf Inf3Abess => plus tulema ("tt" + a) ;
+      Inf Inf3Instr => plus tulema "n" ;
+      Inf Inf3InstrPass => plus tult_ (a + "m" + a + "n") ;
+      Inf Inf4Nom   => plus tule__ "minen" ;
+      Inf Inf4Part  => plus tule__ ("mist" + a) ; 
+      Inf Inf5      => plus tulema ("isill" + a) ;
+      Inf InfPresPart => plus tuleva "n" ;
+      Inf InfPresPartAgr => tuleva ;
+
       Presn Sg P1  => plus tule_ "n" ;
       Presn Sg P2  => plus tule_ "t" ;
       Presn Sg P3  => tulee ;
@@ -295,6 +368,13 @@ oper
       Condit Pl P1 => plus tulisi "mme" ; --# notpresent
       Condit Pl P2 => plus tulisi "tte" ; --# notpresent
       Condit Pl P3 => plus tulisi vat ;   --# notpresent
+      Potent Sg P1 => plus tulle_ "n" ;   --# notpresent
+      Potent Sg P2 => plus tulle_ "t" ;   --# notpresent
+      Potent Sg P3 => plus tulle_ "e" ;   --# notpresent
+      Potent Pl P1 => plus tulle_ "mme" ; --# notpresent
+      Potent Pl P2 => plus tulle_ "tte" ; --# notpresent
+      Potent Pl P3 => plus tulle_ vat ;   --# notpresent
+      PotentNeg    => tulle_ ;   --# notpresent
       Imper Sg     => tule_ ;
       Imper Pl     => plus tulk_ (a + a) ;
       ImperP3 Sg   => plus tulkoo "n" ;
@@ -307,18 +387,24 @@ oper
       PassImpf False    => tultu ;                    --# notpresent
       PassCondit True   => plus tult_ (a + "isiin") ; --# notpresent
       PassCondit False  => plus tult_ (a + "isi") ;   --# notpresent
+      PassPotent True   => plus tult_ (a + "neen") ; --# notpresent
+      PassPotent False  => plus tult_ (a + "ne") ; --# notpresent
+      PassImper True    => plus tult_ (a + "k" + o + o + "n") ;
+      PassImper False   => plus tult_ (a + "k" + o) ;
+
+      PresPartAct (AN n)  => tulevaN.s ! n ;
+      PresPartAct AAdv    => plus tuleva "sti" ;
+      PresPartPass (AN n)  => tultavaN.s ! n ;
+      PresPartPass AAdv    => plus tultava "sti" ;
+
       PastPartAct (AN n)  => tullutN.s ! n ;
       PastPartAct AAdv    => plus tullee "sti" ;
       PastPartPass (AN n) => tultuN.s ! n ;
       PastPartPass AAdv   => plus tullu__ "sti" ;
-      Inf Inf3Iness => plus tulema ("ss" + a) ;
-      Inf Inf3Elat  => plus tulema ("st" + a) ;
-      Inf Inf3Illat => plus tulema (a + "n") ;
-      Inf Inf3Adess => plus tulema ("ll" + a) ;
-      Inf Inf3Abess => plus tulema ("tt" + a) ;
-      Inf InfPresPart => plus tuleva "n" ;
-      Inf InfPresPartAgr => tuleva ;
-      _ => plus "TODO" tulla ----
+
+      AgentPart (AN n)  => tulemaN.s ! n ;
+      AgentPart AAdv    => plus tulema "sti" 
+
       } ;
     sc = NPCase Nom ;
     lock_V = <>
