@@ -5,7 +5,7 @@ import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Grammar.Lockfield
 import GF.Compile.Compute.ConcreteNew1
-import GF.Compile.Compute.AppPredefined
+import GF.Compile.TypeCheck.Primitives
 import GF.Infra.CheckM
 --import GF.Infra.UseIO
 import GF.Data.Operations
