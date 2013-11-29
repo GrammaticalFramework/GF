@@ -119,7 +119,7 @@ partEval opts = if flag optNewComp opts
 
 partEvalNew opts gr (context, val) trm =
     errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $
-    checkPredefError gr trm
+    checkPredefError trm
 
 partEvalOld opts gr (context, val) trm = errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $ do
   let vars  = map (\(bt,x,t) -> x) context
@@ -130,7 +130,7 @@ partEvalOld opts gr (context, val) trm = errIn (render (text "partial evaluation
   trm3 <- if rightType trm2
           then computeTerm gr subst trm2 -- compute twice??
           else recordExpand val trm2 >>= computeTerm gr subst
-  trm4 <- checkPredefError gr trm3
+  trm4 <- checkPredefError trm3
   return $ mkAbs [(Explicit,v) | v <- vars] trm4
   where
     -- don't eta expand records of right length (correct by type checking)
