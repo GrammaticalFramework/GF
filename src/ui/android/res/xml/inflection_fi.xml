@@ -4,7 +4,7 @@
 </head>
 
 <body>
-
+<h1></h1>
 
 
 			<h1>Substantiivi</h1>
@@ -87,6 +87,7 @@
 
 
 			<h1>Verbi</h1>
+			<h2>Finiittimuodot</h2>
 			<table class="forms-table" rules="all" border="yes">
 				<tr>
 				        <th colspan="2">aktiivi</th>
@@ -174,10 +175,11 @@
 
 			      </table>
 
+			<h2>Nominaalimuodot</h2>
 
 			<table class="forms-table" rules="all" border="yes">
 				<tr>
-				        <th rowspan="14">infinitiivi</th>
+				        <th rowspan="15">infinitiivi</th>
 					<th rowspan="2">1.</th>
                                         <th>lyhyt</th>
 					<td><form>s Inf Inf1</form></td>
@@ -196,16 +198,12 @@
 					<td><form>s Inf Inf2Instr</form></td>
 				</tr>
 				<tr>
-					<th rowspan="2">2. passiivi</th>
+					<th rowspan="1">2. passiivi</th>
 					<th>inessiivi</th>
 					<td><form>s Inf Inf2InessPass</form></td>
 				</tr>
 				<tr>
-					<th>instruktiivi</th>
-					<td><form>s Inf Inf2InstrPass</form></td>
-				</tr>
-				<tr>
-					<th rowspan="5">3.</th>
+					<th rowspan="6">3. aktiivi</th>
 					<th>inessiivi</th>
 					<td><form>s Inf Inf3Iness</form></td>
 				</tr>
@@ -226,6 +224,16 @@
 					<td><form>s Inf Inf3Abess</form></td>
 				</tr>
 				<tr>
+					<th>instruktiivi</th>
+					<td><form>s Inf Inf3Instr</form></td>
+				</tr>
+				<tr>
+					<th rowspan="1">3. passiivi</th>
+					<th>instruktiivi</th>
+					<td><form>s Inf Inf3InstrPass</form></td>
+				</tr>
+
+				<tr>
 					<th rowspan="2">4.</th>
 					<th>nominatiivi</th>
 					<td><form>s Inf Inf4Nom</form></td>
@@ -241,7 +249,7 @@
 
 				
 				<tr>
-				        <th rowspan="6">partisiippi</th>
+				        <th rowspan="7">partisiippi</th>
 				        <th rowspan="2">preesens</th>
 					<th>aktiivi</th>
 					<td><form>s PastPartAct (AN (NCase Sg Nom))</form></td>
@@ -259,11 +267,13 @@
 					<th>passiivi</th>
 					<td><form>s PastPartPass (AN (NCase Sg Nom))</form></td>
 				</tr>
+				<tr>
+				        <th colspan="2">agentti</th>
+					<td><form>s AgentPart (AN (NCase Sg Nom))</form></td>
+				</tr>
 			      </table>
 
-			      
-			
 <hr>
 <address></address>
-<!-- hhmts start -->Last modified: Thu Nov 28 22:24:06 CET 2013 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Fri Nov 29 09:19:29 CET 2013 <!-- hhmts end -->
 </body> </html>
