@@ -33696,4 +33696,44 @@ lin another_Quant= demoPN "एक और" "एक और" "एक और" "ए�
 lin unit_3_N= mkN "इकांक";
 
 
-};
+-- from Phrasebook AR 2/12/2013
+
+--ah_Interj = mkInterj "" ;
+--alas_Interj = mkInterj "" ;
+amen_Interj = mkInterj "aamen" ;
+bye_Interj = mkInterj "hei sitten" ;
+bye_bye_Interj = mkInterj "heippa" ;
+cheers_Interj = mkInterj "चियर्ज़" ;
+damn_Interj = mkInterj "ाफ़" ;
+--egad_Interj = mkInterj "" ;
+--er_Interj = mkInterj "öh" ;
+excuse_me_Interj = mkInterj "क्षमा कीजिये" ;
+good_afternoon_Interj = mkInterj "नमस्कार" ;
+good_evening_Interj = mkInterj "नमस्कार" ;
+good_luck_Interj = mkInterj "onnea matkaan" ;
+good_morning_Interj = mkInterj "नमस्कार"  ;
+good_night_Interj = mkInterj "नमस्कार" ;
+goodbye_Interj = mkInterj "हम आपसे विदा लेते हैं" ;
+--hell_Interj = mkInterj "helvetti" ;
+hello_Interj = mkInterj "नमस्कार" ;
+hey_Interj = mkInterj "नमस्कार" ;
+hi_Interj = mkInterj "नमस्कार" ;
+no_Interj = mkInterj "नहीं" ;
+nope_Interj = mkInterj "नहीं" ;
+--oh_Interj = mkInterj "oi" ;
+--ok_Interj = mkInterj "okei" ;
+--okay_Interj = mkInterj "okei" ;
+--quack_Interj = mkInterj "kvaak" ;
+sorry_Interj = mkInterj "क्षमा कीजिये" ;
+thanks_Interj = mkInterj "धन्यवाद" ;
+--uh_Interj = mkInterj "uh" ;
+--uh_uh_Interj = mkInterj "uhhuh" ;
+--uh_huh_Interj = mkInterj "uhhuh" ;
+--well_Interj = mkInterj "no" ;
+--whoopee_Interj = mkInterj "jippii" ;
+--wow_Interj = mkInterj "vau" ;
+--yeah_Interj = mkInterj "yess" ;
+yes_Interj = mkInterj  "हाँ" ;
+
+
+}
