@@ -19,6 +19,7 @@ incomplete concrete PhraseHindustani of Phrase =
 	UttCN cn = {s = cn.s ! Sg ! Dir};
     UttCard n = n ;
     UttAP ap = {s = ap.s ! Sg ! Masc ! Dir ! Posit} ;
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ; ---

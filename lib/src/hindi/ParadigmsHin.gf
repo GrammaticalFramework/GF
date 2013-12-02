@@ -193,6 +193,9 @@ oper
 --  AS, A2S, AV, A2V : Type ;
 --
 --
+  mkInterj : Str -> Interj
+    = \s -> lin Interj {s = s} ;
+
 ----.
 ----2 Definitions of paradigms
 ----

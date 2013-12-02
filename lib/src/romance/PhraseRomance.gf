@@ -20,6 +20,7 @@ incomplete concrete PhraseRomance of Phrase =
     UttCN n = {s = n.s ! Sg} ;
     UttAP ap = {s = ap.s ! AF Masc Sg} ;
     UttCard n = {s = n.s ! Masc} ;
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ;

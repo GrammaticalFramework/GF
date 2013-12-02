@@ -1319,7 +1319,7 @@ lin agua_N = variants {};
 lin ague_N = variants {};
 lin agueweed_N = variants {};
 lin aguish_A = variants {};
-lin ah_Interj = variants {};
+lin ah_Interj = mkInterj "ah" ;
 lin ahead_Adv = mkAdv "före"; -- comment=3
 lin ahead_of_Prep = variants {};
 lin ahimsa_N = variants {};
@@ -1445,7 +1445,7 @@ lin alarm_clock_N = variants {};
 lin alarming_A = mkA "alarmerande";
 lin alarmism_N = variants {};
 lin alarmist_N = variants {};
-lin alas_Interj = mkInterj "ack"; -- status=guess
+lin alas_Interj = mkInterj "ack"; 
 lin alaska_PN = variants {};
 lin alastrim_N = variants {};
 lin alate_A = variants {};
@@ -1942,7 +1942,7 @@ lin ameliorate_V2 = mkV2 (mkV "förbättra"); -- status=guess, src=wikt
 lin amelioration_N = mkN "förbättring"; -- status=guess
 lin ameloblast_N = variants {};
 lin amelogenesis_N = variants {};
-lin amen_Interj = variants {};
+lin amen_Interj = mkInterj "amen" ;
 lin amenability_N = variants {};
 lin amenable_A = variants {};
 lin amend_V = mkV "ändrar"; -- comment=2
@@ -8299,8 +8299,8 @@ lin by_Prep = mkPrep "genom"; --
 lin by_election_N = variants {};
 lin by_means_of_Prep = variants {};
 lin by_virtue_of_Prep = variants {};
-lin bye_Interj = mkInterj "hej då" | mkInterj "adjö" | mkInterj "farväl"; -- status=guess status=guess status=guess
-lin bye_bye_Interj = variants {};
+lin bye_Interj = mkInterj "hej då" | mkInterj "adjö" | mkInterj "farväl"; 
+lin bye_bye_Interj = mkInterj "hej då" ;
 lin bye_law_N = variants {};
 lin bygone_A = variants {};
 lin bygone_N = variants {};
@@ -10098,7 +10098,7 @@ lin cheering_N = mkN "glädjande"; -- comment=3
 lin cheerleader_N = mkN "hejaklacksledare"; -- status=guess
 lin cheerless_A = mkA "dyster"; -- comment=2
 lin cheerlessness_N = variants {};
-lin cheers_Interj = mkInterj "hej" | mkInterj "mors" | mkInterj "morsning" | mkInterj "tja"; -- status=guess status=guess status=guess status=guess
+lin cheers_Interj = mkInterj "skål" ;
 lin cheery_A = mkA "klämkäck";
 lin cheese_N = L.cheese_N;
 lin cheeseboard_N = variants {};
@@ -14603,7 +14603,7 @@ lin damask_N = mkN "damast" "damaster";
 lin dame_N = variants {};
 lin dammar_N = variants {};
 lin damn_A = compoundA (regA "förbannad"); -- comment=3
-lin damn_Interj = variants {};
+lin damn_Interj = mkInterj "fan" ;
 lin damn_N = mkN "jäkel"; -- comment=5
 lin damn_V2 = dirV2 (partV (mkV "dömer")"ut");
 lin damnable_A = variants {};
@@ -18377,7 +18377,7 @@ lin effusiveness_N = variants {};
 lin eft_N = variants {};
 lin efta_N = variants {};
 lin eg_PN = variants {};
-lin egad_Interj = variants {};
+lin egad_Interj = mkInterj "milda makter" ;
 lin egalitarian_A = mkA "egalitär"; -- status=guess
 lin egalitarian_N = variants {};
 lin egalitarianism_N = mkN "egalitarism"; -- status=guess
@@ -19398,7 +19398,7 @@ lin equivalent_A = mkA "motsvarande"; -- comment=3
 lin equivalent_N = mkN "motsvarighet" "motsvarigheter"; -- comment=2
 lin equivocal_A = mkA "tvivelaktig"; -- comment=3
 lin equivocation_N = mkN "tvetydighet" "tvetydigheter"; -- status=guess
-lin er_Interj = variants {};
+lin er_Interj = mkInterj "öh" ;
 lin era_N = mkN "tideräkning"; -- comment=4
 lin eradicable_A = variants {};
 lin eradicate_V2 = mkV2 (mkV "utrotar") | mkV2 (mkV "tillintetgöra"); -- status=guess, src=wikt status=guess, src=wikt
@@ -19926,7 +19926,7 @@ lin excursionist_N = variants {};
 lin excusable_A = mkA "förlåtlig";
 lin excuse_N = mkN "ursäkt" "ursäkter"; -- comment=8
 lin excuse_V2 = mkV2 (mkV "ursäkta") | mkV2 (mkV "urskuldra"); -- status=guess, src=wikt status=guess, src=wikt
-lin excuse_me_Interj = variants {};
+lin excuse_me_Interj = mkInterj "ursäkta" ;
 lin execrable_A = variants {};
 lin execrate_V2 = variants {};
 lin execration_N = variants {};
@@ -24277,8 +24277,8 @@ lin gonorrhoea_N = mkN "gonorré" "gonorréer";
 lin goo_N = mkN "sentimentalitet" "sentimentaliteter"; -- comment=4
 lin good_A = mkA "bra"; -- comment=31
 lin good_N = mkN "tilltalande"; -- comment=9
-lin good_afternoon_Interj = variants {};
-lin good_evening_Interj = variants {};
+lin good_afternoon_Interj = mkInterj "god eftermiddag" ;
+lin good_evening_Interj = mkInterj "god afron" ;
 lin good_fellowship_N = variants {};
 lin good_for_naught_A = variants {};
 lin good_for_naught_N = variants {};
@@ -24286,14 +24286,14 @@ lin good_for_nothing_A = variants {};
 lin good_for_nothing_N = variants {};
 lin good_humoured_A = variants {};
 lin good_looking_A = variants {};
-lin good_luck_Interj = variants {};
-lin good_morning_Interj = variants {};
+lin good_luck_Interj = mkInterj "lycka till" ;
+lin good_morning_Interj = mkInterj "god morgon" ;
 lin good_natured_A = variants {};
 lin good_neighbourliness_N = variants {};
-lin good_night_Interj = variants {};
+lin good_night_Interj = mkInterj "god natt" ;
 lin good_tempered_A = variants {};
 lin good_time_A = variants {};
-lin goodbye_Interj = mkInterj "adjö" | mkInterj "hej då" | mkInterj "hej" | mkInterj "farväl"; -- status=guess status=guess status=guess status=guess
+lin goodbye_Interj = mkInterj "adjö" | mkInterj "hej då" | mkInterj "farväl"; 
 lin goodish_A = variants {};
 lin goodly_A = mkA "behaglig"; -- comment=2
 lin goodness_N = mkN "vänlighet"; -- comment=6
@@ -26067,7 +26067,7 @@ lin heliozoan_N = variants {};
 lin heliport_N = variants {};
 lin helium_N = mkN "helium" neutrum;
 lin helix_N = mkN "trädgårdssnäcka"; -- comment=3
-lin hell_Interj = variants {};
+lin hell_Interj = mkInterj "helvete" ;
 lin hell_N = mkN "helvete";
 lin hellbender_N = variants {};
 lin hellcat_N = variants {};
@@ -26080,7 +26080,7 @@ lin hellgrammiate_N = variants {};
 lin hellhound_N = variants {};
 lin hellion_N = mkN "buse" utrum; -- comment=2
 lin hellish_A = variants {};
-lin hello_Interj = mkInterj "men hallå"; -- status=guess
+lin hello_Interj = mkInterj "hej" | mkInterj "hallå"; 
 lin helm_N = mkN "roder" neutrum; -- comment=2
 lin helmet_N = mkN "hjälm";
 lin helmeted_A = variants {};
@@ -26364,11 +26364,11 @@ lin hexed_A = variants {};
 lin hexestrol_N = variants {};
 lin hexham_PN = variants {};
 lin hexose_N = variants {};
-lin hey_Interj = mkInterj "hallå"; -- status=guess
+lin hey_Interj = mkInterj "hej" | mkInterj "hallå"; 
 lin heyday_N = mkN "storhetstid" "storhetstider";
 lin heysham_PN = variants {};
 lin heywood_PN = variants {};
-lin hi_Interj = mkInterj "hallå" | mkInterj "hej!" | mkInterj "hejsan"; -- status=guess status=guess status=guess
+lin hi_Interj = mkInterj "hallå" | mkInterj "hej" | mkInterj "hejsan"; -- status=guess status=guess status=guess
 lin hi_fi_A = variants {};
 lin hi_fi_N = variants {};
 lin hiatus_N = mkN "uppehåll" neutrum; -- comment=5
@@ -37739,7 +37739,7 @@ lin nitwit_N = variants {};
 lin nitwitted_A = variants {};
 lin nix_N = mkN "nej" neutrum;
 lin nix_V2 = variants {};
-lin no_Interj = mkInterj "inga problem"; -- status=guess
+lin no_Interj = mkInterj "nej"; 
 lin no_Quant = S.no_Quant;
 lin no_ball_N = variants {};
 lin no_fewer_than_AdN = variants {};
@@ -38097,7 +38097,7 @@ lin noontide_N = variants {};
 lin noose_N = mkN "snara"; -- comment=3
 lin noose_V2 = variants {};
 lin nopal_N = variants {};
-lin nope_Interj = variants {};
+lin nope_Interj = mkInterj "nej" ;
 lin nor'_east_Adv = variants {};
 lin nor'_east_N = variants {};
 lin nor'_nor'_east_Adv = variants {};
@@ -38823,12 +38823,12 @@ lin oilskin_N = variants {};
 lin oilstone_N = variants {};
 lin oily_A = mkA "oljig"; -- comment=4
 lin ointment_N = mkN "salva"; -- comment=2
-lin ok_Interj = variants {};
+lin ok_Interj = mkInterj "okej" ;
 lin oka_N = variants {};
 lin okapi_N = variants {};
 lin okay_A = mkA "okej"; -- comment=4
 lin okay_Adv = mkAdv "bra";
-lin okay_Interj = variants {};
+lin okay_Interj = mkInterj "okej" ;
 lin okay_V2 = variants {};
 lin oklahoma_PN = variants {};
 lin oklahoma_city_PN = variants {};
@@ -53106,7 +53106,7 @@ lin sorrow_N = mkN "sorg" "sorger"; -- comment=2
 lin sorrow_V = variants {};
 lin sorrowful_A = mkA "sorgsen" "sorgset"; -- comment=2
 lin sorry_A = mkA "ledsen" "ledset"; -- comment=4
-lin sorry_Interj = mkInterj "förlåt"; -- status=guess
+lin sorry_Interj = mkInterj "förlåt"; 
 lin sort_N = mkN "sort" "sorter"; -- comment=4
 lin sort_V = mkV "sorterar"; -- comment=2
 lin sort_V2 = dirV2 (partV (mkV "ordnar")"om");
@@ -57482,8 +57482,8 @@ lin thank_offering_N = variants {};
 lin thankful_A = mkA "tacksam" "tacksamt" "tacksamma" "tacksamma" "tacksammare" "tacksammast" "tacksammaste";
 lin thankfulness_N = variants {};
 lin thankless_A = mkA "otacksam" "otacksamt" "otacksamma" "otacksamma" "otacksammare" "otacksammast" "otacksammaste";
-lin thanks_Interj = mkInterj "tack" | mkInterj "tackar"; -- status=guess status=guess
-lin thanks_to_Prep = variants {};
+lin thanks_Interj = mkInterj "tack" | mkInterj "tackar"; 
+lin thanks_to_Prep = mkInterj "tack vare" ;
 lin thanksgiving_N = mkN "tacksägelse" "tacksägelser";
 lin that_Quant = S.that_Quant;
 lin that_Subj = S.that_Subj;
@@ -63363,7 +63363,7 @@ lin welfare_N = mkN "välfärd"; -- comment=6
 lin welfarist_A = variants {};
 lin welkin_N = variants {};
 lin well_A = mkA "bra"; -- comment=6
-lin well_Interj = mkInterj "har man sett"; -- status=guess
+lin well_Interj = mkInterj "nåväl"; -- status=guess
 lin well_N = mkN "väl"; -- comment=8
 lin well_V = mkV "når"; -- comment=2
 lin well_adjusted_A = variants {};

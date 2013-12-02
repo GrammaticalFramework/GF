@@ -19,6 +19,7 @@ concrete PhraseGer of Phrase = CatGer ** open Prelude, ResGer in {
     UttCN n = {s = n.s ! Strong ! Sg ! Nom} ;
     UttCard n = {s = n.s ! Neutr ! Nom} ;
     UttAP ap = {s = ap.s ! APred} ;
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = ss (conj.s2) ;

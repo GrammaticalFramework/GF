@@ -120,6 +120,13 @@ clean:
 	$(RUNMAKE) clean
 
 
+
+
+Parse: ParseEng ParseBul ParseChi ParseGer ParseSwe ParseHin ParseFin ParseFre 
+	gf -make -literal=Symb -probs=$(PROBSFILE) -name=Parse8 ParseEng.pgf ParseBul.pgf ParseChi.pgf ParseGer.pgf ParseSwe.pgf ParseHin.pgf ParseFin.pgf ParseFre.pgf 
+
+
+
 ParseEng:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEng english/ParseEng.gf
 
