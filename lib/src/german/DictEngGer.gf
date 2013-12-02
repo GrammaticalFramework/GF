@@ -43294,4 +43294,43 @@ lin zurich_PN = variants {};
  lin zolpidem_N = mkN "Zolpidem" ; -- 1.0000000 ---M
 
 
+-- from Phrasebook etc
+
+ah_Interj = mkInterj "ach" ;
+--alas_Interj = mkInterj "voi voi" ;
+amen_Interj = mkInterj "amen" ;
+bye_Interj = mkInterj "auf Wiedersehen" ;
+bye_bye_Interj = mkInterj "tschüss" ;
+cheers_Interj = mkInterj "zum Wohl" ;
+damn_Interj = mkInterj "Donnerwetter" ;
+--egad_Interj = mkInterj "voi veljet" ;
+--er_Interj = mkInterj "öh" ;
+excuse_me_Interj = mkInterj "Entschuldigung" ;
+good_afternoon_Interj = mkInterj "guten Tag" ;
+good_evening_Interj = mkInterj "guten Abend" ;
+good_luck_Interj = mkInterj "viel Glück" ;
+good_morning_Interj = mkInterj "guten Morgen" ;
+good_night_Interj = mkInterj "gute Nacht" ;
+goodbye_Interj = mkInterj "auf Wiedersehen" ;
+hell_Interj = mkInterj "Teufel" ;
+hello_Interj = mkInterj "hallo" ;
+hey_Interj = mkInterj "hallo" ;
+hi_Interj = mkInterj "hallo" ;
+no_Interj = mkInterj "nein" ;
+nope_Interj = mkInterj "nein" ;
+--oh_Interj = mkInterj "oi" ;
+--ok_Interj = mkInterj "OK" ;
+okay_Interj = mkInterj "alles klar" ;
+--quack_Interj = mkInterj "kvaak" ;
+sorry_Interj = mkInterj "Entschuldigung" ;
+thanks_Interj = mkInterj "Danke" ;
+--uh_Interj = mkInterj "uh" ;
+--uh_uh_Interj = mkInterj "uhhuh" ;
+--uh_huh_Interj = mkInterj "uhhuh" ;
+well_Interj = mkInterj "na" ;
+--whoopee_Interj = mkInterj "jippii" ;
+--wow_Interj = mkInterj "vau" ;
+yeah_Interj = mkInterj "jawohl" ;
+yes_Interj = mkInterj "ja" ;
+
 }
