@@ -26,20 +26,20 @@ public class Translator {
     private static final String TAG = "Translator";
 
     // TODO: allow changing
-    private String mGrammar = "ParseEngAbs.pgf";
-    /// private String mGrammar = "TranslateEngChiFinSwe.pgf";  // AR
+    private String mGrammar = "Parse8.pgf";
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
-	/*
-        new Language("en-US", "English", "TranslateEng", R.xml.inflection_en),  // AR
-        new Language("cmn-Hans-CN", "Chinese", "TranslateChi", R.xml.inflection_cmn), 
-	        new Language("fi-FI", "Finnish", "TranslateFin", R.xml.inflection_fi, R.xml.qwerty), 
-	        new Language("sv-SE", "Swedish", "TranslateSwe", R.xml.inflection_sv), 
-	*/
-    	new Language("en-US", "English", "ParseEng", R.xml.inflection_en, R.xml.qwerty),
+
+	new Language("en-US", "English", "ParseEng", R.xml.inflection_en, R.xml.qwerty),
         new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.inflection_bg, R.xml.cyrillic),
+        new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.inflection_cmn, R.xml.qwerty),   
+        new Language("fi-FI", "Finnish", "ParseFin", R.xml.inflection_fi2, R.xml.qwerty),
+	new Language("fr-FR", "French", "ParseFre", 0, R.xml.qwerty),  
+	new Language("de-DE", "German", "ParseGer", 0, R.xml.qwerty), 
+	new Language("hi-IN", "Hindi", "ParseHin", 0, R.xml.qwerty), /// 
         new Language("sv-SE", "Swedish", "ParseSwe", R.xml.inflection_sv, R.xml.qwerty), 
+
     };
 
     private Context mContext;
@@ -129,7 +129,7 @@ public class Translator {
 
         try {
             Concr sourceLang = getConcr(getSourceLanguage().getConcrete());
-            Expr expr = sourceLang.parseBest(getGrammar().getStartCat(), input);
+	    Expr expr = sourceLang.parseBest(getGrammar().getStartCat(), input);
             Concr targetLang = getConcr(getTargetLanguage().getConcrete());
             String output = targetLang.linearize(expr);
             return output;
