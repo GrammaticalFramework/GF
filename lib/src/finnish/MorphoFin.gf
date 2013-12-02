@@ -750,7 +750,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       tulta = tult + a ;
       tulevaP = (noun2adj (nhn (sKukko tuleva (tuleva + "n") (init tuleva + "ia")))).s  ;
       tultavaP = (noun2adj (nhn (sKukko (tulta + "v" + a) (tulta + "v" + a + "n") (tulta + "vi" + a)))).s  ;
-      tulemaP = (noun2adj (nhn (sKukko tulema (tulema + "n") (init tulema + "ia")))).s  ;
+      tulemaP = (noun2adj (nhn (sKukko tulema (tulema + "n") (init tulema + "i" + a)))).s  ;
 
     in
     {s = table {

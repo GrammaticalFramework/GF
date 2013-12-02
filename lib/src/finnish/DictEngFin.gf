@@ -56887,4 +56887,43 @@ teach_V = mkWV (k53A "opettaa") ; -- 29
 swap_N = mkN "vaihdos" ;
 stop_N = mkWN (k39 "pysähdys") ; -- 29
 
+-- from Phrasebook
+
+ah_Interj = mkInterj "aah" ;
+alas_Interj = mkInterj "voi voi" ;
+amen_Interj = mkInterj "aamen" ;
+bye_Interj = mkInterj "hei sitten" ;
+bye_bye_Interj = mkInterj "heippa" ;
+cheers_Interj = mkInterj "kippis" ;
+damn_Interj = mkInterj "pahus" ;
+egad_Interj = mkInterj "voi veljet" ;
+er_Interj = mkInterj "öh" ;
+excuse_me_Interj = mkInterj "anteeksi" ;
+good_afternoon_Interj = mkInterj "hyvää iltapäivää" ;
+good_evening_Interj = mkInterj "hyvää iltaa" ;
+good_luck_Interj = mkInterj "onnea matkaan" ;
+good_morning_Interj = mkInterj "hyvää huomenta" ;
+good_night_Interj = mkInterj "hyvää yötä" ;
+goodbye_Interj = mkInterj "näkemiin" ;
+hell_Interj = mkInterj "helvetti" ;
+hello_Interj = mkInterj "terve" ;
+hey_Interj = mkInterj "hei" ;
+hi_Interj = mkInterj "moi" ;
+no_Interj = mkInterj "ei" ;
+nope_Interj = mkInterj "ei" ;
+oh_Interj = mkInterj "oi" ;
+ok_Interj = mkInterj "okei" ;
+okay_Interj = mkInterj "okei" ;
+quack_Interj = mkInterj "kvaak" ;
+sorry_Interj = mkInterj "anteeksi" ;
+thanks_Interj = mkInterj "kiitos" ;
+uh_Interj = mkInterj "uh" ;
+uh_uh_Interj = mkInterj "uhhuh" ;
+uh_huh_Interj = mkInterj "uhhuh" ;
+well_Interj = mkInterj "no" ;
+whoopee_Interj = mkInterj "jippii" ;
+wow_Interj = mkInterj "vau" ;
+yeah_Interj = mkInterj "yess" ;
+yes_Interj = mkInterj "kyllä" ;
+
 }

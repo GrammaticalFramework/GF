@@ -1,4 +1,4 @@
-compile = runghc Compile 
+compile = runghc +RTS -K200M -RTS Compile 
 
 all: src compdemo linkdemo
 
