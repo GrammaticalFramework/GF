@@ -59,7 +59,7 @@ oper
 
 --2 Booleans
 
- param Bool = True | False ;
+ param Bool = False | True ;
 
 oper
   if_then_else : (A : Type) -> Bool -> A -> A -> A = \_,c,d,e -> 
