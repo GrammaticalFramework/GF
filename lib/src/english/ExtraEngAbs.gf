@@ -28,7 +28,11 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
    --- AR 7/3/2013
    ComplSlashPartLast : VPSlash -> NP -> VP ;
 
----------------------
+   --- AR 3/12/2013 ---- TODO: the same for QCl, RCl
+   ContractedUseCl : Temp -> Pol -> Cl  -> S ;   -- he's here, I'll be back
+
+
+-----------------------------------------------------
 --- these are obsolete: use UncNeg : Pol instead
 
   fun
@@ -38,7 +42,7 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
 
     UncNegImpSg : Pol -> Imp -> Utt;           -- do not help yourself
     UncNegImpPl : Pol -> Imp -> Utt;           -- do not help yourselves
-
+-----------------------------------------------------
 
 
 }
