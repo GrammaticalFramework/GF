@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => broyer
 s . CommonRomance.VInfin Prelude.False => broyer
+s . CommonRomance.VInfin Prelude.True => broyer
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => broie
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => broies
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => broie

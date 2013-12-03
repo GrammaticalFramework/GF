@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => cevoir
 s . CommonRomance.VInfin Prelude.False => cevoir
+s . CommonRomance.VInfin Prelude.True => cevoir
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => çois
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => çois
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => çoit

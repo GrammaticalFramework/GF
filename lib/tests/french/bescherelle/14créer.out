@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => créer
 s . CommonRomance.VInfin Prelude.False => créer
+s . CommonRomance.VInfin Prelude.True => créer
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => crée
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => crées
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => crée

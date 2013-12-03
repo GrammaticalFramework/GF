@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => paître
 s . CommonRomance.VInfin Prelude.False => paître
+s . CommonRomance.VInfin Prelude.True => paître
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => pais
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => pais
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => paît

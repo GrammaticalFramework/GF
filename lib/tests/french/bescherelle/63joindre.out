@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => joindre
 s . CommonRomance.VInfin Prelude.False => joindre
+s . CommonRomance.VInfin Prelude.True => joindre
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => joins
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => joins
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => joint

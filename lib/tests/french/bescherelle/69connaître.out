@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => connaître
 s . CommonRomance.VInfin Prelude.False => connaître
+s . CommonRomance.VInfin Prelude.True => connaître
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => connais
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => connais
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => connaît

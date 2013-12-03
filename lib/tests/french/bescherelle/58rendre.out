@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => rendre
 s . CommonRomance.VInfin Prelude.False => rendre
+s . CommonRomance.VInfin Prelude.True => rendre
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => rends
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => rends
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => rend

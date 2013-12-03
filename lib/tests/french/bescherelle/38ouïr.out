@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => ouïr
 s . CommonRomance.VInfin Prelude.False => ouïr
+s . CommonRomance.VInfin Prelude.True => ouïr
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => ois
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => ois
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => oit

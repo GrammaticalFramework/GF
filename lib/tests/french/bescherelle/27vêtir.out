@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => vêtir
 s . CommonRomance.VInfin Prelude.False => vêtir
+s . CommonRomance.VInfin Prelude.True => vêtir
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => vêts
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => vêts
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => vêt

@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => aimer
 s . CommonRomance.VInfin Prelude.False => aimer
+s . CommonRomance.VInfin Prelude.True => aimer
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => aime
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => aimes
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => aime

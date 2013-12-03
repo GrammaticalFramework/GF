@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => coudre
 s . CommonRomance.VInfin Prelude.False => coudre
+s . CommonRomance.VInfin Prelude.True => coudre
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => couds
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => couds
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => coud
