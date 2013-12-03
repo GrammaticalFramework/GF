@@ -90,7 +90,7 @@ lin
           verb = mkClause subj agr (predV do_V) ;                        
           comp = vp.n2 ! agr ++ vp.a2 ++ vp.ext     
         in
-        vf ++ comp ++ (verb.s ! t ! a ! p ! Inv) ++ vp.a1 ! Pos 
+        vf ++ comp ++ (verb.s ! t ! a ! p ! Inv) ++ vp.a1 ! Pos ! agr 
       } ;
 
   oper do_V : V = mkV "göra" "gör" "gör" "gjorde" "gjort" "gjord" ;
@@ -110,7 +110,7 @@ lin
     let vps = vp.s ! Act ! VPInfinit Simul ;
         vvp = UseV vv ;
         vvs = vvp.s ! Act ! VPFinite t a ; 
-        always = vp.a1 ! Pos ++ vvp.a1 ! Pos ;
+        always = vp.a1 ! Pos ! np.a ++ vvp.a1 ! Pos ! np.a ;
         already = vp.a2 ++ vvp.a2 in
    vps.inf ++ vp.n2 ! np.a ++ vvs.fin ++ np.s ! NPNom 
    ++ vv.c2.s ++ always ++ negation ! p ++ already ++ vvs.inf
@@ -150,7 +150,7 @@ lin
 
   SupCl np vp pol = let sub = np.s ! nominative ;                     --# notpresent
                         verb = (vp.s ! Act ! VPFinite SPres Anter).inf ;    --# notpresent
-                        neg  = vp.a1 ! pol.p ++ pol.s ;               --# notpresent
+                        neg  = vp.a1 ! pol.p ! np.a ++ pol.s ;               --# notpresent
                         compl = vp.n2 ! np.a ++ vp.a2 ++ vp.ext in    --# notpresent
     {s = \\_ => sub ++ neg ++ verb ++ compl };                        --# notpresent
     

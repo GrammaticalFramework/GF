@@ -55,6 +55,20 @@ concrete IdiomSwe of Idiom = CatSwe **
 
     ImpPl1 vp = {s = ["låt oss"] ++ infVP vp {g = Utr ; n = Pl ; p = P1}} ;
 
+    SelfAdvVP vp = insertObj (\\a => sjalv a.g a.n) vp ;
+    SelfAdVVP vp = insertAdVAgr (\\a => sjalv a.g a.n) vp ;
+    SelfNP np = {
+      s = \\c => np.s ! c ++ sjalv np.a.g np.a.n ;
+      a = np.a
+      } ;
+
+  oper
+    sjalv : Gender -> Number -> Str = \g,n -> case <g,n> of {
+      <Utr,Sg> => "själv" ;
+      <Neutr,Sg> => "självt" ;
+      _ => "själva"
+      } ;
+
 
 }
 

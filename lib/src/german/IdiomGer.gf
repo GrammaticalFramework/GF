@@ -63,6 +63,14 @@ concrete IdiomGer of Idiom = CatGer **
                            MConjunct ! Pres ! Simul ! Pos ! Inv 
       } ;
 
+  SelfAdvVP vp = insertAdv "selbst" vp ;
+  SelfAdVVP vp = insertAdv "selbst" vp ;
+  SelfNP np = {
+      s = \\c => np.s ! c ++ "selbst" ;
+      a = np.a ;
+      isPron = False
+      } ;
+
   oper
     geben = dirV2 (mk6V "geben" "gibt" "gib" "gab" "gäbe" "gegeben") ;
 }

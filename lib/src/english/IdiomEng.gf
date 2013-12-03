@@ -30,11 +30,18 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
       mkQuestion (ss (ip.s ! npNom)) 
         (mkClause "there" (agrP3 ip.n) (insertObj (\\_ => adv.s) (predAux auxBe))) ;
 
-    ProgrVP vp = insertObj (\\a => vp.ad ++ vp.prp ++ vp.p ++ vp.s2 ! a) (predAux auxBe) ;
+    ProgrVP vp = insertObj (\\a => vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a) (predAux auxBe) ;
 
     ImpPl1 vp = {s = "let's" ++ infVP VVAux vp Simul CPos (AgP1 Pl)} ;
 
     ImpP3 np vp = {s = "let" ++ np.s ! NPAcc ++ infVP VVAux vp Simul CPos np.a} ;
+
+    SelfAdvVP vp = insertObj reflPron vp ;
+    SelfAdVVP vp = insertAdVAgr reflPron vp ;
+    SelfNP np = {
+      s = \\c => np.s ! c ++ reflPron ! np.a ; 
+      a = np.a
+      } ;
 
 }
 

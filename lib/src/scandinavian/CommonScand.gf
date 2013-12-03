@@ -274,7 +274,7 @@ oper
         fin : Str ;          -- V1 har  ---s1
         inf : Str            -- V2 sagt ---s4
         } ;
-      a1 : Polarity => Str ; -- A1 inte ---s3
+      a1 : Polarity => Agr => Str ; -- A1 inte ---s3 själv/själva/självt
       n2 : Agr => Str ;      -- N2 dig  ---s5  
       a2 : Str ;             -- A2 idag ---s6
       ext : Str ;            -- S-Ext att hon går   ---s7
@@ -327,9 +327,11 @@ oper
     eext = True ;
     } ;
 
-  insertAdV : Str -> VP -> VP = \adv,vp -> {
+  insertAdV : Str -> VP -> VP = \adv -> insertAdVAgr (\\_ => adv) ;
+
+  insertAdVAgr : (Agr => Str) -> VP -> VP = \adv,vp -> {
     s = vp.s ;
-    a1 = \\b => vp.a1 ! b ++ adv ;
+    a1 = \\b,a => vp.a1 ! b ! a ++ adv ! a ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     ext = vp.ext ;
@@ -352,7 +354,7 @@ oper
   infVP : VP -> Agr -> Str = \vp,a -> infVPPlus vp a Simul Pos ;
  
   infVPPlus : VP -> Agr -> Anteriority -> Polarity -> Str = \vp,a,ant,pol -> 
-    vp.a1 ! pol ++ (vp.s ! Act ! VPInfinit ant).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
+    vp.a1 ! pol ! a ++ (vp.s ! Act ! VPInfinit ant).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
 
 
 -- For $Sentence$.
@@ -365,7 +367,7 @@ oper
       s = \\t,a,b,o => 
         let 
           verb  = vp.s  ! Act ! VPFinite t a ;
-          neg   = vp.a1 ! b ;
+          neg   = vp.a1 ! b ! agr ;
           compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext
         in
         case o of {

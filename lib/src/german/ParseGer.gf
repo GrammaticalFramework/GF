@@ -12,7 +12,7 @@ concrete ParseGer of ParseEngAbs =
   SentenceGer,
   QuestionGer,
   RelativeGer,
-  IdiomGer [NP, VP, Tense, Cl, ProgrVP, ExistNP],
+  IdiomGer [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ExtraGer [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,

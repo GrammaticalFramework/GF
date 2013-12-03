@@ -76,7 +76,7 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     MkVPS t p vp = {
       s = \\o,a => 
             let 
-              neg = vp.a1 ! p.p ;
+              neg = vp.a1 ! p.p ! a ;
               verb = vp.s ! Act ! VPFinite t.t t.a ;
               compl = verb.inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ;
             in t.s ++ p.s ++ case o of {

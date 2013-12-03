@@ -713,7 +713,8 @@ oper
       nsa  = possSuffixFront agr
     in {
       s = table {
-        NPCase (Nom | Gen) | NPAcc => itse ! NPossNom Sg + nsa ;
+        NPCase Nom         => itse ! NPossNom Sg ;
+        NPCase Gen | NPAcc => itse ! NPossNom Sg + nsa ;
         NPCase Transl      => itse ! NPossTransl Sg + nsa ;
         NPCase Illat       => itse ! NPossIllat Sg + nsa ;
         NPCase c           => itse ! NCase Sg c + nsa

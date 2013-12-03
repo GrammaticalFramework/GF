@@ -13,7 +13,7 @@ concrete ParseEng of ParseEngAbs =
   SentenceEng - [UseCl], -- replaced by UseCl | ContractedUseCl
   QuestionEng,
   RelativeEng,
-  IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP],
+  IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
@@ -94,8 +94,8 @@ lin
           compl = vp.s2 ! np.a
         in
         case o of {
-          ODir _ => compl ++ frontComma ++ np.s ! npNom ++ verb.aux ++ vp.ad ++ verb.fin ++ verb.adv ++ verb.inf ;
-          OQuest => verb.aux ++ compl ++ frontComma ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
+          ODir _ => compl ++ frontComma ++ np.s ! npNom ++ verb.aux ++ vp.ad ! np.a ++ verb.fin ++ verb.adv ++ verb.inf ;
+          OQuest => verb.aux ++ compl ++ frontComma ++ np.s ! npNom ++ verb.adv ++ vp.ad ! np.a ++ verb.fin ++ verb.inf 
           }
     } ;
     
@@ -106,8 +106,8 @@ lin
           compl = vp.s2 ! np.a
         in
         case o of {
-          ODir _ => compl ++ frontComma ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
-          OQuest => verb.aux ++ compl ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom
+          ODir _ => compl ++ frontComma ++ verb.aux ++ verb.adv ++ vp.ad ! np.a ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
+          OQuest => verb.aux ++ compl ++ verb.adv ++ vp.ad ! np.a ++ verb.fin ++ verb.inf ++ np.s ! npNom
           }
     } ;
 
@@ -131,12 +131,12 @@ lin
     {c2 = ""; gapInMiddle = False} ;
 
   PastPartRS ant pol vps = {
-    s = \\agr => vps.ad ++ vps.ptp ++ vps.s2 ! agr ;
+    s = \\agr => vps.ad ! agr ++ vps.ptp ++ vps.s2 ! agr ;
     c = npNom
     } ;
 
   PresPartRS ant pol vp = {
-    s = \\agr => vp.ad ++ vp.prp ++ vp.p ++ vp.s2 ! agr;
+    s = \\agr => vp.ad ! agr ++ vp.prp ++ vp.p ++ vp.s2 ! agr;
     c = npNom
   } ;
 

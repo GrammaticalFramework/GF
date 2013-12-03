@@ -66,7 +66,7 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
       VPInfinit Anter => vf [] (ha ++ vsup d) ;  --# notpresent
       VPInfinit Simul => vf [] (vinf d)
       } ;
-    a1  : Polarity => Str = negation ;
+    a1  : Polarity => Agr => Str = \\p,a => negation ! p ;
     n2  : Agr => Str = \\a => case verb.vtype of {
       VRefl => reflPron a ;
       _ => []

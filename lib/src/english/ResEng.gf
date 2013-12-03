@@ -235,7 +235,7 @@ param
     prp : Str ;   -- present participle 
     ptp : Str ;   -- past participle
     inf : Str ;   -- the infinitive form ; VerbForms would be the logical place
-    ad  : Str ;   -- sentence adverb
+    ad  : Agr => Str ; -- sentence adverb (can be Xself, hence Agr)
     s2  : Agr => Str ; -- complement
     ext : Str          -- extreposed field such as S, QS, VP
     } ;
@@ -291,7 +291,7 @@ param
     prp  = verb.s ! VPresPart ;
     ptp  = verb.s ! VPPart ;
     inf  = verb.s ! VInf ;
-    ad   = [] ;
+    ad   = \\_ => [] ;
     ext  = [] ;
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
@@ -349,7 +349,7 @@ param
     prp = verb.prpart ;
     ptp = verb.ppart ;
     inf = verb.inf ;
-    ad = [] ;
+    ad = \\_ => [] ;
     ext = [] ;
     s2 = \\_ => []
     } ;
@@ -407,13 +407,15 @@ param
 
 --- The adverb should be before the finite verb.
 
-  insertAdV : Str -> VP -> VP = \ad,vp -> {
+  insertAdV : Str -> VP -> VP = \ad -> insertAdVAgr (\\_ => ad) ;
+
+  insertAdVAgr : (Agr => Str) -> VP -> VP = \ad,vp -> {
     s = vp.s ;
     p = vp.p ;
     prp = vp.prp ;
     ptp = vp.ptp ;
     inf = vp.inf ;
-    ad  = vp.ad ++ ad ;
+    ad  = \\a => vp.ad ! a ++ ad ! a ;
     s2 = \\a => vp.s2 ! a  ;
     ext = vp.ext
     } ;
@@ -459,14 +461,14 @@ param
     case cb of {CPos => ""; _ => "not"} ++
     case ant of {
       Simul => case typ of {
-                 VVAux => vp.ad ++ vp.inf ; 
-                 VVInf => "to" ++ vp.ad ++ vp.inf ;
-                 _ => vp.ad ++ vp.prp
+                 VVAux => vp.ad ! a ++ vp.inf ; 
+                 VVInf => "to" ++ vp.ad ! a ++ vp.inf ; ---- this is the "split infinitive"
+                 _ => vp.ad ! a ++ vp.prp
                }
       ; Anter => case typ of {                                    --# notpresent
-                 VVAux => "have" ++ vp.ad ++ vp.ptp ;                --# notpresent
-                 VVInf => "to" ++ "have" ++ vp.ad ++ vp.ptp ;        --# notpresent
-                 _     => "having" ++ vp.ad ++ vp.ptp                 --# notpresent
+                 VVAux => "have" ++ vp.ad ! a ++ vp.ptp ;                --# notpresent
+                 VVInf => "to" ++ "have" ++ vp.ad ! a ++ vp.ptp ;        --# notpresent
+                 _     => "having" ++ vp.ad ! a ++ vp.ptp                 --# notpresent
                }                                                       --# notpresent
     } ++ vp.p ++
     vp.s2 ! a ++ vp.ext ;
@@ -544,8 +546,8 @@ param
           compl = vp.s2 ! agr ++ vp.ext
         in
         case o of {
-          ODir _ => subj ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ vp.p ++ compl ;
-          OQuest => verb.aux ++ subj ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ vp.p ++ compl
+          ODir _ => subj ++ verb.aux ++ verb.adv ++ vp.ad ! agr ++ verb.fin ++ verb.inf ++ vp.p ++ compl ;
+          OQuest => verb.aux ++ subj ++ verb.adv ++ vp.ad ! agr ++ verb.fin ++ verb.inf ++ vp.p ++ compl
           }
     } ;
 
