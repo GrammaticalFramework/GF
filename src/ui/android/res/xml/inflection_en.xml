@@ -4,7 +4,7 @@
 	    <cat>N2</cat>
 	    <tag>n</tag>
 	    <template>
-			<h1>Noun</h1>
+			<h1>Noun <lin>Feat<cat/>(<lemma/>)</lin></h1>
 
 			<table class="forms-table" rules="all">
 				<tr>
