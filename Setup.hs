@@ -8,7 +8,7 @@ import Distribution.PackageDescription hiding (Flag)
 import Control.Monad
 import Data.List(isPrefixOf,intersect)
 import Data.Maybe(listToMaybe)
-import System.IO
+--import System.IO
 import qualified Control.Exception as E
 import System.Cmd
 import System.FilePath
@@ -31,7 +31,7 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild =gfPreBuild
                                            , preCopy  =const . checkRGLArgs
                                            , postCopy =gfPostCopy
                                            , sDistHook=sdistRGL
-                                           , runTests =testRGL
+--                                         , runTests =testRGL
                                            }
   where
     gfPreBuild args  = gfPre args . buildDistPref
@@ -165,43 +165,6 @@ sdistRGL pkg mb_lbi hooks flags = do
                then return (path : paths)
                else return paths
         else getRGLFiles path paths
-
-testRGL args _ pkg lbi = do
-  let paths = case args of
-                []    -> ["testsuite"]
-                paths -> paths
-  mapM_ walk paths
-  where
-    walk path = mapM_ (walkFile . (path </>)) =<< ls path
-
-    walkFile fpath = do
-      exists <- doesFileExist fpath
-      if exists
-        then if takeExtension fpath == ".gfs"
-               then do let in_file   = fpath
-                           gold_file = addExtension fpath ".gold"
-                           out_file  = addExtension fpath ".out"
-                       putStr (in_file++" ... ")
-                       hFlush stdout
-                       res <- runTest in_file out_file gold_file
-                       putStrLn res
-               else return ()
-        else walk fpath
-
-    runTest in_file out_file gold_file = do
-      writeFile out_file =<< readProcess (default_gf pkg lbi) ["-run"] =<< readFile in_file
-      exists <- doesFileExist gold_file
-      if exists
-        then do out <- compatReadFile out_file
-                gold <- compatReadFile gold_file
-                return $! if out == gold then "OK" else "FAIL"
-        else return "MISSING GOLD"
-
-    -- Avoid failures caused by Win32/Unix text file incompatibility
-    compatReadFile path =
-      do h <- openFile path ReadMode
-         hSetNewlineMode h universalNewlineMode
-         hGetContents h
 
 rgl_src_dir     = "lib" </> "src"
 rgl_dst_dir lbi = buildDir lbi </> "rgl"
