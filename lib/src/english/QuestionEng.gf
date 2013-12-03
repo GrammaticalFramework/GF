@@ -9,13 +9,13 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
             let cls = cl.s ! t ! a ! p 
             in table {
               QDir   => cls ! OQuest ;
-              QIndir => "if" ++ cls ! ODir
+              QIndir => "if" ++ cls ! oDir ----
               } ---- "whether" in ExtEng
       } ;
 
     QuestVP qp vp = 
       let cl = mkClause (qp.s ! npNom) (agrP3 qp.n) vp
-      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
+      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! oDir} ; ----
 
     QuestSlash ip slash = 
       mkQuestion (ss (slash.c2 ++ ip.s ! NPAcc)) slash ;
@@ -63,7 +63,7 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
 
     QuestQVP qp vp = 
       let cl = mkClause (qp.s ! npNom) (agrP3 qp.n) vp
-      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
+      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! oDir} ; ----
 
 
 }
