@@ -179,7 +179,9 @@ lin
    ComplBareVS  v s = insertExtra s.s (predV v) ;
    SlashBareV2S v s = insertExtrac s.s (predVc v) ;
 
-
+   ContractedUseCl  t p cl = {
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! ODir True
+      } ;
 
 
 

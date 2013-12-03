@@ -10,7 +10,7 @@ concrete ParseEng of ParseEngAbs =
   VerbEng - [SlashV2V, PassV2, UseCopula, ComplVV],
   AdverbEng,
   PhraseEng,
-  SentenceEng,
+  SentenceEng - [UseCl], -- replaced by UseCl | ContractedUseCl
   QuestionEng,
   RelativeEng,
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP],
@@ -21,10 +21,14 @@ concrete ParseEng of ParseEngAbs =
             ClSlash, RCl, EmptyRelSlash, VS, V2S, ComplBareVS, SlashBareV2S],
 
   DictEng ** 
-open MorphoEng, ResEng, ParadigmsEng, Prelude in {
+open MorphoEng, ResEng, ParadigmsEng, (S = SentenceEng), (E = ExtraEng), Prelude in {
 
 flags
   literal=Symb ;
+
+-- exceptional linearizations
+lin
+  UseCl t p cl = S.UseCl t p cl | E.ContractedUseCl t p cl ;
 
 lin
   myself_NP = regNP "myself" singular ;
@@ -147,8 +151,7 @@ lin
 
 lin
   PPos = {s = [] ; p = CPos} ;
-  PNeg = {s = [] ; p = CNeg True} ; -- contracted: don't
-  UncNeg = {s = [] ; p = CNeg False} ;
+  PNeg = {s = [] ; p = CNeg True} | {s = [] ; p = CNeg False} ;
 
 lincat
     Feat = Str;
