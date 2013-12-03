@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => craindre
 s . CommonRomance.VInfin Prelude.False => craindre
+s . CommonRomance.VInfin Prelude.True => craindre
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => crains
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => crains
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => craint

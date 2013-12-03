@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => dire
 s . CommonRomance.VInfin Prelude.False => dire
+s . CommonRomance.VInfin Prelude.True => dire
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => dis
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => dis
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => dit

@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => vouloir
 s . CommonRomance.VInfin Prelude.False => vouloir
+s . CommonRomance.VInfin Prelude.True => vouloir
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => veux
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => veux
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => veut

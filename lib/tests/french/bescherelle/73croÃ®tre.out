@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => croître
 s . CommonRomance.VInfin Prelude.False => croître
+s . CommonRomance.VInfin Prelude.True => croître
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => croîs
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => croîs
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => croît

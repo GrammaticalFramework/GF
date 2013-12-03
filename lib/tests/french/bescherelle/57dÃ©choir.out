@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => déchoir
 s . CommonRomance.VInfin Prelude.False => déchoir
+s . CommonRomance.VInfin Prelude.True => déchoir
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => déchois
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => déchois
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => déchoit

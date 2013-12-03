@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => moudre
 s . CommonRomance.VInfin Prelude.False => moudre
+s . CommonRomance.VInfin Prelude.True => moudre
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => mouds
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => mouds
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => moud

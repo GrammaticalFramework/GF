@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => assiéger
 s . CommonRomance.VInfin Prelude.False => assiéger
+s . CommonRomance.VInfin Prelude.True => assiéger
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => assiège
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => assièges
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => assiège

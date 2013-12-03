@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => aller
 s . CommonRomance.VInfin Prelude.False => aller
+s . CommonRomance.VInfin Prelude.True => aller
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => vais
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => vas
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => va

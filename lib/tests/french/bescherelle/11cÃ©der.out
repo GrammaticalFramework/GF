@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => céder
 s . CommonRomance.VInfin Prelude.False => céder
+s . CommonRomance.VInfin Prelude.True => céder
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => cède
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => cèdes
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => cède

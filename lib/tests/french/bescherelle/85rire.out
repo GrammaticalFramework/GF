@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => rire
 s . CommonRomance.VInfin Prelude.False => rire
+s . CommonRomance.VInfin Prelude.True => rire
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => ris
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => ris
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => rit

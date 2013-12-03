@@ -1,5 +1,5 @@
-s . CommonRomance.VInfin Prelude.True => assaillir
 s . CommonRomance.VInfin Prelude.False => assaillir
+s . CommonRomance.VInfin Prelude.True => assaillir
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P1 => assaille
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P2 => assailles
 s . CommonRomance.VFin (CommonRomance.VPres CommonRomance.Indic) ParamX.Sg ParamX.P3 => assaille
