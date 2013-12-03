@@ -15,11 +15,11 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
 
     StrandRelSlash rp slash = {
       s = \\t,a,p,ag => 
-        rp.s ! RC (fromAgr ag).g NPAcc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
+        rp.s ! RC (fromAgr ag).g NPAcc ++ slash.s ! t ! a ! p ! oDir ++ slash.c2 ;
       c = NPAcc
       } ;
     EmptyRelSlash slash = {
-      s = \\t,a,p,_ => slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
+      s = \\t,a,p,_ => slash.s ! t ! a ! p ! oDir ++ slash.c2 ;
       c = NPAcc
       } ;
 
@@ -77,7 +77,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     MkVPS t p vp = {
       s = \\a => 
             let 
-              verb = vp.s ! t.t ! t.a ! p.p ! ODir ! a ;
+              verb = vp.s ! t.t ! t.a ! p.p ! oDir ! a ;
               verbf = verb.aux ++ verb.adv ++ verb.fin ++ verb.inf ;
             in t.s ++ p.s ++ vp.ad ++ verbf ++ vp.p ++ vp.s2 ! a ++ vp.ext
       } ;
@@ -187,7 +187,7 @@ lin
 --- obsolete: use UncNeg : Pol
 
     UncNegCl t p cl = {
-      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! ODir
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! oDir
     } ;
     UncNegQCl t p cl = {
       s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! q

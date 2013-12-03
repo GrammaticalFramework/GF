@@ -127,7 +127,7 @@ concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
 
   linref
     SSlash = \ss -> ss.s ++ ss.c2 ;
-    ClSlash = \cls -> cls.s ! Pres ! Simul ! CPos ! ODir ++ cls.c2 ;
+    ClSlash = \cls -> cls.s ! Pres ! Simul ! CPos ! oDir ++ cls.c2 ;
 
     VP = \vp -> infVP VVAux vp Simul CPos (agrP3 Sg) ;
     VPSlash = \vps -> infVP VVAux vps Simul CPos (agrP3 Sg) ++ vps.c2;

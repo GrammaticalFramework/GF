@@ -29,7 +29,7 @@ concrete StructuralEng of Structural = CatEng **
       VVF VPresPart => ["being able to"] ;
       VVF VPast => "could" ;      --# notpresent
       VVPastNeg => "couldn't" ;   --# notpresent
-      VVPresNeg => "can't"
+      VVPresNeg => "can't" | "cannot"     ---- shouldn't be a variant, but replace "can not"
       } ;
     p = [] ;
     typ = VVAux

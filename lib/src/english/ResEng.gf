@@ -64,12 +64,18 @@ resource ResEng = ParamX ** open Prelude in {
      | VVPastNeg  --# notpresent
      ;
 
--- The order of sentence is needed already in $VP$.
+-- The order of sentence is needed already in $VP$ because the need of "do" depends on it. 
+-- $ODir True$ means contracted forms ("'s", "'d", "'ve". "'re").
+-- Notice that inverted forms ($OQuest$) don't allow verb contractions: *"'s he arrived".
 
-    Order = ODir | OQuest ;
+    Order = ODir Bool | OQuest ;
+
+oper
+    oDir = ODir False ;
 
 -- The type of complement of a VV
 
+param
     VVType = VVAux | VVInf | VVPresPart ; -- can do / try to do / start doing
 
 --2 For $Adjective$
@@ -240,6 +246,8 @@ resource ResEng = ParamX ** open Prelude in {
   predVc : (Verb ** {c2 : Str}) -> SlashVP = \verb -> 
     predV verb ** {c2 = verb.c2 ; gapInMiddle = True} ;
 
+  cBind : Str -> Str = \s -> Predef.BIND ++ ("'" + s) ;
+
   predV : Verb -> VP = \verb -> {
     s = \\t,ant,b,ord,agr => 
       let
@@ -248,24 +256,36 @@ resource ResEng = ParamX ** open Prelude in {
         part = verb.s ! VPPart ;
       in
       case <t,ant,b,ord> of {
-        <Pres,Simul,CPos,ODir>   => vff            fin [] ;
-        <Pres,Simul,CPos,OQuest> => vf (does agr)   inf ;
-        <Pres,Anter,CPos,_>      => vf (have agr)   part ; --# notpresent
-        <Pres,Anter,CNeg c,_>    => vfn c (have agr) (havent agr) part ; --# notpresent
-        <Past,Simul,CPos,ODir>   => vff (verb.s ! VPast) [] ; --# notpresent
-        <Past,Simul,CPos,OQuest> => vf "did"        inf ; --# notpresent
-        <Past,Simul,CNeg c,_>    => vfn c "did" "didn't"     inf ; --# notpresent
-        <Past,Anter,CPos,_>      => vf "had"        part ; --# notpresent
-        <Past,Anter,CNeg c,_>    => vfn c "had" "hadn't"     part ; --# notpresent
-        <Fut, Simul,CPos,_>      => vf "will"       inf ; --# notpresent
-        <Fut, Simul,CNeg c,_>    => vfn c "will" "won't"      inf ; --# notpresent
-        <Fut, Anter,CPos,_>      => vf "will"       ("have" ++ part) ; --# notpresent
-        <Fut, Anter,CNeg c,_>    => vfn c "will" "won't"("have" ++ part) ; --# notpresent
-        <Cond,Simul,CPos,_>      => vf "would"      inf ; --# notpresent
-        <Cond,Simul,CNeg c,_>    => vfn c "would" "wouldn't"   inf ; --# notpresent
-        <Cond,Anter,CPos,_>      => vf "would"      ("have" ++ part) ; --# notpresent
-        <Cond,Anter,CNeg c,_> => vfn c "would" "wouldn't" ("have" ++ part) ; --# notpresent
-        <Pres,Simul,CNeg c,_>    => vfn c (does agr) (doesnt agr) inf
+        <Pres,Simul,CPos,ODir _>      => vff            fin [] ;
+        <Pres,Simul,CPos,OQuest>      => vf (does agr)   inf ;
+        <Pres,Anter,CPos,ODir True>   => vf (haveContr agr)   part ; --# notpresent
+        <Pres,Anter,CPos,_>           => vf (have      agr)   part ; --# notpresent
+        <Pres,Anter,CNeg c,ODir True> => vfn c (haveContr agr) (haventContr agr) part ; --# notpresent
+        <Pres,Anter,CNeg c,_>         => vfn c (have agr) (havent agr) part ; --# notpresent
+        <Past,Simul,CPos,ODir _>      => vff (verb.s ! VPast) [] ; --# notpresent
+        <Past,Simul,CPos,OQuest>      => vf "did"        inf ; --# notpresent
+        <Past,Simul,CNeg c,_>         => vfn c "did" "didn't"     inf ; --# notpresent
+        <Past,Anter,CPos,ODir True>   => vf (cBind "d")         part ; --# notpresent
+        <Past,Anter,CPos,_>           => vf "had"        part ; --# notpresent
+        <Past,Anter,CNeg c,ODir True> => vfn c (cBind "d") (cBind "d not")     part ; --# notpresent
+        <Past,Anter,CNeg c,_>         => vfn c "had" "hadn't"     part ; --# notpresent
+        <Fut, Simul,CPos,ODir True>   => vf (cBind "ll")       inf ; --# notpresent
+        <Fut, Simul,CPos,_>           => vf "will"       inf ; --# notpresent
+        <Fut, Simul,CNeg c,ODir True> => vfn c (cBind "ll") (cBind "ll not")      inf ; --# notpresent
+        <Fut, Simul,CNeg c,_>         => vfn c "will" "won't"      inf ; --# notpresent
+        <Fut, Anter,CPos,ODir True>   => vf (cBind "ll")       ("have" ++ part) ; --# notpresent
+        <Fut, Anter,CPos,_>           => vf "will"       ("have" ++ part) ; --# notpresent
+        <Fut, Anter,CNeg c,ODir True> => vfn c (cBind "ll") (cBind "ll not") ("have" ++ part) ; --# notpresent
+        <Fut, Anter,CNeg c,_>         => vfn c "will" "won't" ("have" ++ part) ; --# notpresent
+        <Cond,Simul,CPos,ODir True>   => vf (cBind "d")      inf ; --# notpresent
+        <Cond,Simul,CPos,_>           => vf "would"      inf ; --# notpresent
+        <Cond,Simul,CNeg c,ODir True> => vfn c (cBind "d") (cBind "d not")   inf ; --# notpresent
+        <Cond,Simul,CNeg c,_>         => vfn c "would" "wouldn't"   inf ; --# notpresent
+        <Cond,Anter,CPos,ODir True>   => vf (cBind "d")      ("have" ++ part) ; --# notpresent
+        <Cond,Anter,CPos,_>           => vf "would"      ("have" ++ part) ; --# notpresent
+        <Cond,Anter,CNeg c,ODir True> => vfn c (cBind "d") (cBind "d not") ("have" ++ part) ; --# notpresent
+        <Cond,Anter,CNeg c,_>         => vfn c "would" "wouldn't" ("have" ++ part) ; --# notpresent
+        <Pres,Simul,CNeg c,_>         => vfn c (does agr) (doesnt agr) inf
         } ;
     p    = verb.p ;
     prp  = verb.s ! VPresPart ;
@@ -286,25 +306,44 @@ resource ResEng = ParamX ** open Prelude in {
         inf  = verb.inf ;
         fin  = verb.pres ! b ! agr ;
         finp = verb.pres ! Pos ! agr ;
+        cfin  = verb.contr ! b ! agr ;
+        cfinp = verb.contr ! Pos ! agr ;
         part = verb.ppart ;
       in
       case <t,ant,cb,ord> of {
-        <Pres,Anter,CPos,_>      => vf (have agr)   part ;  --# notpresent
-        <Pres,Anter,CNeg c,_>    => vfn c (have agr) (havent agr) part ; --# notpresent
+        <Pres,Anter,CPos,ODir True>   => vf (haveContr agr)   part ; --# notpresent
+        <Pres,Anter,CPos,_>           => vf (have      agr)   part ; --# notpresent
+        <Pres,Anter,CNeg c,ODir True> => vfn c (haveContr agr) (haventContr agr) part ; --# notpresent
+        <Pres,Anter,CNeg c,_>         => vfn c (have agr) (havent agr) part ; --# notpresent
+ 
+        <Past,Anter,CPos,ODir True>   => vf (cBind "d")         part ; --# notpresent
+        <Past,Anter,CPos,_>           => vf "had"        part ; --# notpresent
+        <Past,Anter,CNeg c,ODir True> => vfn c (cBind "d") (cBind "d not")     part ; --# notpresent
+        <Past,Anter,CNeg c,_>         => vfn c "had" "hadn't"     part ; --# notpresent
+        <Fut, Simul,CPos,ODir True>   => vf (cBind "ll")       inf ; --# notpresent
+        <Fut, Simul,CPos,_>           => vf "will"       inf ; --# notpresent
+        <Fut, Simul,CNeg c,ODir True> => vfn c (cBind "ll") (cBind "ll not")      inf ; --# notpresent
+        <Fut, Simul,CNeg c,_>         => vfn c "will" "won't"      inf ; --# notpresent
+        <Fut, Anter,CPos,ODir True>   => vf (cBind "ll")       ("have" ++ part) ; --# notpresent
+        <Fut, Anter,CPos,_>           => vf "will"       ("have" ++ part) ; --# notpresent
+        <Fut, Anter,CNeg c,ODir True> => vfn c (cBind "ll") (cBind "ll not") ("have" ++ part) ; --# notpresent
+        <Fut, Anter,CNeg c,_>         => vfn c "will" "won't"("have" ++ part) ; --# notpresent
+        <Cond,Simul,CPos,ODir True>   => vf (cBind "d")      inf ; --# notpresent
+        <Cond,Simul,CPos,_>           => vf "would"      inf ; --# notpresent
+        <Cond,Simul,CNeg c,ODir True> => vfn c (cBind "d") (cBind "d not")   inf ; --# notpresent
+        <Cond,Simul,CNeg c,_>         => vfn c "would" "wouldn't"   inf ; --# notpresent
+        <Cond,Anter,CPos,ODir True>   => vf (cBind "d")      ("have" ++ part) ; --# notpresent
+        <Cond,Anter,CPos,_>           => vf "would"      ("have" ++ part) ; --# notpresent
+        <Cond,Anter,CNeg c,ODir True> => vfn c (cBind "d") (cBind "d not") ("have" ++ part) ; --# notpresent
+        <Cond,Anter,CNeg c,_>         => vfn c "would" "wouldn't" ("have" ++ part) ; --# notpresent
+
         <Past,Simul,CPos,  _>    => vf (verb.past ! b ! agr) [] ; --# notpresent
         <Past,Simul,CNeg c,  _> => vfn c (verb.past!Pos!agr)(verb.past!Neg!agr) [] ; --# notpresent
-        <Past,Anter,CPos,_>      => vf "had"        part ; --# notpresent
-        <Past,Anter,CNeg c,_>    => vfn c "had" "hadn't"     part ; --# notpresent
-        <Fut, Simul,CPos,_>      => vf "will"       inf ; --# notpresent
-        <Fut, Simul,CNeg c,_>    => vfn c "will" "won't"      inf ; --# notpresent
-        <Fut, Anter,CPos,_>      => vf "will"       ("have" ++ part) ; --# notpresent
-        <Fut, Anter,CNeg c,_>    => vfn c "will" "won't"("have" ++ part) ; --# notpresent
-        <Cond,Simul,CPos,_>      => vf "would"      inf ; --# notpresent
-        <Cond,Simul,CNeg c,_>    => vfn c "would" "wouldn't"   inf ; --# notpresent
-        <Cond,Anter,CPos,_>      => vf "would"      ("have" ++ part) ; --# notpresent
-        <Cond,Anter,CNeg c,_> => vfn c "would" "wouldn't" ("have" ++ part) ; --# notpresent
-        <Pres,Simul,CPos,  _>    => vf fin          [] ;
-        <Pres,Simul,CNeg c,  _>  => vfn c finp fin          [] 
+        <Pres,Simul,CPos, ODir True>  => vf cfin          [] ;
+        <Pres,Simul,CPos,  _>         => vf fin           [] ;
+        <Pres,Simul,CNeg c,ODir True> => vfn c cfinp fin  [] ;
+        <Pres,Simul,CNeg c,  _>       => vfn c finp fin   []
+ 
         } ;
     p = [] ;
     prp = verb.prpart ;
@@ -397,7 +436,7 @@ resource ResEng = ParamX ** open Prelude in {
     in
     case verb.typ of {
       VVAux => predAux {
-        pres = table {
+        pres,contr = table {
           Pos => \\_ => verbs ! VVF VPres ;
           Neg => \\_ => verbs ! VVPresNeg
           } ;
@@ -443,9 +482,13 @@ resource ResEng = ParamX ** open Prelude in {
   does   = agrVerb "does"    "do" ;
   doesnt = agrVerb "doesn't" "don't" ;
 
+  haveContr   = agrVerb (cBind "s")     (cBind "ve") ;
+  haventContr = agrVerb (cBind "s not")  (cBind "ve not") ;
+
   Aux = {
-    pres : Polarity => Agr => Str ; 
-    past : Polarity => Agr => Str ;  --# notpresent
+    pres  : Polarity => Agr => Str ; 
+    contr : Polarity => Agr => Str ;  -- contracted forms 
+    past  : Polarity => Agr => Str ;  --# notpresent
     inf,ppart,prpart : Str
     } ;
 
@@ -454,6 +497,11 @@ resource ResEng = ParamX ** open Prelude in {
       <Pos,AgP1 Sg> => "am" ; 
       <Neg,AgP1 Sg> => ["am not"] ; --- am not I
       _ => agrVerb (posneg b "is")  (posneg b "are") a
+      } ;
+    contr = \\b,a => case <b,a> of {
+      <Pos,AgP1 Sg> => cBind "m" ; 
+      <Neg,AgP1 Sg> => cBind "m not" ; --- am not I
+      _ => agrVerb (posneg b (cBind "s"))  (posneg b (cBind "re")) a
       } ;
     past = \\b,a => case a of {          --# notpresent
       AgP1 Sg | AgP3Sg _ => posneg b "was" ; --# notpresent
@@ -496,7 +544,7 @@ resource ResEng = ParamX ** open Prelude in {
           compl = vp.s2 ! agr ++ vp.ext
         in
         case o of {
-          ODir => subj ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ vp.p ++ compl ;
+          ODir _ => subj ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ vp.p ++ compl ;
           OQuest => verb.aux ++ subj ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ vp.p ++ compl
           }
     } ;
@@ -539,7 +587,7 @@ resource ResEng = ParamX ** open Prelude in {
               why = wh.s
             in table {
               QDir   => why ++ cls ! OQuest ;
-              QIndir => why ++ cls ! ODir
+              QIndir => why ++ cls ! oDir    ---- enable "why he's here"
               }
       } ;
 

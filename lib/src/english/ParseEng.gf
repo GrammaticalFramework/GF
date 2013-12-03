@@ -90,7 +90,7 @@ lin
           compl = vp.s2 ! np.a
         in
         case o of {
-          ODir => compl ++ frontComma ++ np.s ! npNom ++ verb.aux ++ vp.ad ++ verb.fin ++ verb.adv ++ verb.inf ;
+          ODir _ => compl ++ frontComma ++ np.s ! npNom ++ verb.aux ++ vp.ad ++ verb.fin ++ verb.adv ++ verb.inf ;
           OQuest => verb.aux ++ compl ++ frontComma ++ np.s ! npNom ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf 
           }
     } ;
@@ -102,7 +102,7 @@ lin
           compl = vp.s2 ! np.a
         in
         case o of {
-          ODir => compl ++ frontComma ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
+          ODir _ => compl ++ frontComma ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
           OQuest => verb.aux ++ compl ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ np.s ! npNom
           }
     } ;

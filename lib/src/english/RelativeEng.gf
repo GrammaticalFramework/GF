@@ -5,7 +5,7 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
   lin
 
     RelCl cl = {
-      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! ODir ; 
+      s = \\t,a,p,_ => "such" ++ "that" ++ cl.s ! t ! a ! p ! oDir ; 
       c = npNom
       } ;
 
@@ -18,7 +18,7 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
             } ;
           cl = mkClause (rp.s ! RC (fromAgr agr).g npNom) agr vp
         in
-        cl.s ! t ! ant ! b ! ODir ;
+        cl.s ! t ! ant ! b ! oDir ;
       c = npNom
       } ;
 
@@ -28,7 +28,7 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
 
     RelSlash rp slash = {
       s = \\t,a,p,agr => 
-          slash.c2 ++ rp.s ! RPrep (fromAgr agr).g ++ slash.s ! t ! a ! p ! ODir ;
+          slash.c2 ++ rp.s ! RPrep (fromAgr agr).g ++ slash.s ! t ! a ! p ! oDir ;
       c = NPAcc
       } ;
 

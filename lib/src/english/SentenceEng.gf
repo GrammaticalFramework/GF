@@ -42,7 +42,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
     EmbedVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
 
     UseCl  t p cl = {
-      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! ODir
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! oDir
     } ;
     UseQCl t p cl = {
       s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! q
@@ -52,7 +52,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
       c = cl.c
     } ;
     UseSlash t p cl = {
-      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p  ! ODir ;
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p  ! oDir ;
       c2 = cl.c2
     } ;
 
