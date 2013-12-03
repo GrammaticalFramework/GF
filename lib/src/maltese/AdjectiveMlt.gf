@@ -13,7 +13,7 @@ concrete AdjectiveMlt of Adjective = CatMlt ** open ResMlt, Prelude in {
     -- warm
     PositA  a = {
       s = \\gn => a.s ! (APosit gn) ;
-      isPre = True
+      isPre = False
       } ;
 
     -- A -> NP -> AP

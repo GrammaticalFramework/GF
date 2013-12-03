@@ -16,7 +16,8 @@ concrete IdiomMlt of Idiom = CatMlt ** open Prelude, ResMlt in {
 
     -- VP -> Cl
     -- one sleeps
-    GenericCl vp = mkClause "wieħed" (agrP3 Sg Masc) vp ;
+    -- GenericCl vp = mkClause "wieħed" (agrP3 Sg Masc) vp ;
+    GenericCl vp = mkClause "dak li jkun" (agrP3 Sg Masc) vp ;
 
     -- NP -> RS -> Cl
     -- it is I who did it
