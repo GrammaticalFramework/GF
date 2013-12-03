@@ -1,5 +1,5 @@
 -- here we test that the abstract operations are not used for proof search
 
-i testsuite\compiler\check\abstract-operations\Nat.gf
+i testsuite/compiler/check/abstract-operations/Nat.gf
 gt -cat=Nat -number=10 -depth=10
 pt -compute (twice (succ zero))
