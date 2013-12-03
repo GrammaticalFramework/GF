@@ -45,7 +45,8 @@ appLexer :: (String -> [String]) -> String -> String
 appLexer f = unwords . filter (not . null) . f
 
 appUnlexer :: ([String] -> String) -> String -> String
-appUnlexer f = unlines . map (f . words) . lines
+----appUnlexer f = unlines . map (f . words) . lines
+appUnlexer f = f . words
 
 wrapHTML :: String -> String
 wrapHTML = unlines . tag . intersperse "<br>" . lines where
