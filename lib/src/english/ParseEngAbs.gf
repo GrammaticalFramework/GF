@@ -12,7 +12,7 @@ abstract ParseEngAbs =
   Sentence,
   Question,
   Relative,
-  Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP],
+  Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ExtraEngAbs [NP, Quant, VPSlash, VP, GenNP, PassVPSlash,
                Temp, Tense, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
                VPI, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV, ComplSlashPartLast,
@@ -61,8 +61,6 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     CompVP : Ant -> Pol -> VP -> Comp ;
 
 	VPSlashVS : VS -> VP -> VPSlash ;
-
-	UncNeg : Pol ;
 
 	PastPartRS : Ant -> Pol -> VPSlash -> RS ;
     PresPartRS : Ant -> Pol -> VP -> RS ;

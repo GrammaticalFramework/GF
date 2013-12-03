@@ -25,4 +25,11 @@ abstract Idiom = Cat ** {
     ImpPl1    : VP -> Utt ;       -- let's go
 
     ImpP3     : NP -> VP -> Utt ; -- let John walk
+
+-- 3/12/2013 non-reflexive uses of "self"
+
+    SelfAdvVP : VP -> VP ;        -- is at home himself
+    SelfAdVVP : VP -> VP ;        -- is himself at home
+    SelfNP    : NP -> NP ;        -- the president himself (is at home)
+
 }

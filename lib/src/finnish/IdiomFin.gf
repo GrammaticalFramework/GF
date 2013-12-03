@@ -73,6 +73,15 @@ concrete IdiomFin of Idiom = CatFin **
          vp.s2 ! True ! Pos ! Ag Pl P1 ++ vp.ext
     } ;
 
+  SelfAdvVP vp = insertAdv (\\_ => "itse") vp ;
+  SelfAdVVP vp = insertAdv (\\_ => "itse") vp ;
+  SelfNP np = {
+      s = \\c => np.s ! c ++ (reflPron np.a).s ! c ;
+      a = np.a ;
+      isPron = False ;  -- minun toloni --> minun itseni talo
+      isNeg = np.isNeg
+      } ;
+
   oper
     olla = verbOlla ** {sc = NPCase Nom ; h = Back ; p = []} ;
 
