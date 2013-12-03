@@ -152,7 +152,12 @@ lin
 
 lincat
     Feat = Str;
-lin FeatN, FeatN2 = \_ -> "";
+lin FeatN, FeatN2 = \n -> 
+      case n.g of {
+        Neutr => "";
+        Masc  => "(masc)";
+        Fem   => "(fem)"
+      };
     FeatV = \v ->
       "<subject>" ++
       v.s ! VInf ++ v.p ;
