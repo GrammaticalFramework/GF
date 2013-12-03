@@ -174,6 +174,10 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     -- Paris today
     AdvNP np adv = overwriteNPs np (\\c => np.s ! c ++ adv.s) ;
 
+    -- NP -> Adv -> NP
+    -- boys, such as ..
+    ExtAdvNP np adv = overwriteNPs np (\\c => np.s ! c ++ "," ++ adv.s ++ ",") ;
+
     -- Num
     NumSg = {s = \\c => []; n = NumX Sg ; hasCard = False} ;
     NumPl = {s = \\c => []; n = NumX Pl ; hasCard = False} ;
@@ -275,8 +279,8 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
     SentCN cn sc = overwriteCNs cn (\\num => cn.s ! num ++ sc.s) ;
 
     -- CN -> NP -> CN
-    -- Appossition: city Paris
-    ApposCN cn np = overwriteCNs cn (\\num => cn.s ! num ++ np.s ! NPNom) ; -- known to be overgenerating
+    -- Apposition: city Paris
+    ApposCN cn np = overwriteCNs cn (\\num => cn.s ! num ++ prepNP prep_ta np) ;
 
     -- CN -> NP -> CN
     -- Possessive: house of mine

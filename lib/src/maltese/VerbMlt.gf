@@ -115,6 +115,10 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
       False => insertObj (\\_ => adv.s) vp
       } ;
 
+    -- VP -> Adv -> VP
+    -- sleep , even though ...
+    ExtAdvVP vp adv = insertObj (\\_ => "," ++ adv.s ++ ",") vp ;
+
     -- AdV -> VP -> VP
     -- always sleep
     AdVVP adv vp = insertAdV adv.s vp ;
