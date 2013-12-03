@@ -30784,6 +30784,7 @@ fun lethargically_Adv : Adv;
 fun lethargy_N : N;
 fun lethe_PN : PN;
 fun letter_1_N : N;
+fun letter_2_N : N;
 fun letter_box_N : N;
 fun letter_card_N : N;
 fun letter_case_N : N;
