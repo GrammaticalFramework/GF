@@ -57061,7 +57061,8 @@ lin teach_V2 = L.teach_V2;
 lin teach_V2V = mkV2V (mkV "lära") | mkV2V (mkV (mkV "lära") "ut"); -- status=guess, src=wikt status=guess, src=wikt
 lin teach_in_N = variants {};
 lin teachable_A = variants {};
-lin teacher_N = L.teacher_N;
+lin teacherMasc_N = L.teacher_N;
+lin teacherFem_N = L.teacher_N;
 lin teachership_N = variants {};
 lin teaching_N = mkN "undervisning";
 lin teacup_N = mkN "tekopp";

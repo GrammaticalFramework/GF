@@ -414,7 +414,8 @@ lin
   table_N = L.table_N; --CHECKED
   tail_N = L.tail_N; --CHECKED
   talk_V3 = L.talk_V3; --CHECKED
-  teacher_N = L.teacher_N; --CHECKED
+  teacherMasc_N = L.teacher_N; --CHECKED
+  teacherFem_N =  regGenN "professeure" feminine; --CHECKED
   teach_V2 = L.teach_V2; --CHECKED
   television_N = L.television_N; --CHECKED
   thick_A = L.thick_A; --CHECKED
