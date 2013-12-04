@@ -78,7 +78,7 @@ incomplete concrete NounScand of Noun =
         g = neutrum ; ----
         m = True ;  ---- is this needed for other than Art?
       in {
-        s = \\c => det.sp ! m ! g ;
+        s = \\c => det.sp ! m ! g ;    ---- case of det!
         a = agrP3 (ngen2gen g) det.n
       } ;
 
