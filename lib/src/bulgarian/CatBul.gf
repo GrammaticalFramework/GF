@@ -1,8 +1,5 @@
---# -coding=cp1251
+--# -coding=utf8
 concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, (R = ParamX) in {
-
-  flags 
-    coding=cp1251; optimize=all_subs;
 
   lincat
 -- Tensed/Untensed
