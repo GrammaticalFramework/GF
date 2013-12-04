@@ -14,7 +14,7 @@ concrete RelativeBul of Relative = CatBul ** open ResBul in {
     RelVP rp vp = {
       s = \\t,a,p,agr => 
         let 
-          cl = mkClause (rp.s ! agr.gn) agr vp
+          cl = mkClause (rp.s ! agr.gn) agr Pos vp
         in
         cl.s ! t ! a ! p ! Main ;
       role = RSubj

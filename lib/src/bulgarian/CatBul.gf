@@ -36,7 +36,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
     VP = ResBul.VP ;
     VPSlash = ResBul.VPSlash ;
 
-    Comp = {s : Agr => Str} ; 
+    Comp = {s : Agr => Str; p : Polarity} ;
 
 -- Adjective
 
@@ -50,14 +50,14 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
 -- Noun
 
     CN = {s : NForm => Str; g : AGender} ;
-    NP = {s : Role => Str; a : Agr} ;
+    NP = {s : Role => Str; a : Agr; p : Polarity} ;
     Pron = {s : Role => Str; gen : AForm => Str; a : Agr} ;
-    Det = {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species} ;
+    Det = {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} ;
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str} ;
     Num = {s : CardForm => Str; nn : NNumber; nonEmpty : Bool} ;
     Card = {s : CardForm => Str; n : Number} ;
-    Quant = {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species} ;
+    Quant = {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species; p : Polarity} ;
 
 -- Numeral
 
@@ -115,7 +115,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
                              = {s  = vps.s ;
                                 ad = vps.ad ;
                                 compl = \\a => vps.compl1 ! a ++ vps.c2.s ++ vps.compl2 ! a ;
-                                vtype = vps.vtype
+                                vtype = vps.vtype ;
+                                p     = Pos
                                }
                       in linrefVP vp;
 

@@ -69,7 +69,8 @@ lin
                             RObj Dat => "на" ++ pn.s; 
                             _        => pn.s
                           } ;
-                      a = {gn = GSg pn.g; p = P3}
+                      a = {gn = GSg pn.g; p = P3};
+                      p = q.p
                     } ;
 
   PastPartRS ant pol vp = {
@@ -102,7 +103,8 @@ lin
 
   SlashV2V vv ant p vp =
       insertSlashObj2 (\\agr => ant.s ++ p.s ++ vv.c3.s ++
-                                daComplex ant.a p.p vp ! Perf ! agr)
+                                daComplex ant.a (orPol p.p vp.p) vp ! Perf ! agr)
+                      Pos
                       (slashV vv vv.c2) ;
 
   ComplVV vv ant p vp =
@@ -110,7 +112,7 @@ lin
                           case vv.typ of {
                             VVInf    => daComplex ant.a p.p vp ! Perf ! agr;
                             VVGerund => gerund vp ! Imperf ! agr
-                          })
+                          }) vp.p
                 (predV vv) ;
 
   PredVPosv np vp = {
@@ -130,24 +132,32 @@ lin
            }
     } ;
 
-  CompS s = {s = \\_ => "че" ++ s.s} ;
-  CompQS qs = {s = \\_ => qs.s ! QIndir} ;
-  CompVP ant p vp = {s = \\agr => ant.s ++ p.s ++
-                                  daComplex ant.a p.p vp ! Perf ! agr} ;
+  CompS s = {s = \\_ => "че" ++ s.s; p = Pos} ;
+  CompQS qs = {s = \\_ => qs.s ! QIndir; p = Pos} ;
+  CompVP ant p vp = {s = let p' = case vp.p of {
+                                    Neg => Neg;
+                                    Pos => p.p
+                                  }
+                         in \\agr => ant.s ++ p.s ++
+                                     daComplex ant.a p' vp ! Perf ! agr;
+                     p = Pos
+                    } ;
 
   VPSlashVS vs vp = 
-    let vp = insertObj (daComplex Simul Pos vp ! Perf) (predV vs)
+    let vp = insertObj (daComplex Simul Pos vp ! Perf) vp.p (predV vs)
     in { s  = vp.s;
          ad = vp.ad;
          compl1 = \\_ => "";
          compl2 = vp.compl;
          vtype  = vp.vtype;
+         p      = vp.p;
          c2     = {s=""; c=Acc}
        } ;
 
   ApposNP np1 np2 = {
     s = \\role => np1.s ! role ++ comma ++ np2.s ! RSubj ;
-    a = np1.a
+    a = np1.a ;
+    p = np1.p
   } ;
   
   UncNeg = {s = ""; p = Neg} ;

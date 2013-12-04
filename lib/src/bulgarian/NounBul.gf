@@ -28,6 +28,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                            _        => s
                          } ;
         a = {gn = gennum cn.g (numnnum det.nn); p = P3} ;
+        p = det.p
       } ;
 
     DetNP det =
@@ -37,34 +38,40 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                            _        => s
                          } ;
         a = {gn = gennum ANeut (numnnum det.nn); p = P3} ;
+        p = Pos
       } ;
     
     UsePN pn = { s = table {
                        RObj Dat => "на" ++ pn.s; 
                        _        => pn.s
                      } ;
-                 a = {gn = GSg pn.g; p = P3}
+                 a = {gn = GSg pn.g; p = P3} ;
+                 p = Pos
                } ;
-    UsePron p = {s = p.s; a=p.a} ;
+    UsePron p = {s = p.s; a=p.a; p=Pos} ;
 
     PredetNP pred np = {
       s = \\c => pred.s ! np.a.gn ++ np.s ! c ;
-      a = np.a
+      a = np.a ;
+      p = np.p
       } ;
 
     PPartNP np v2 = {
       s = \\c => np.s ! c ++ v2.s ! Perf ! VPassive (aform np.a.gn Indef c) ;
-      a = np.a
+      a = np.a ;
+      p = np.p
       } ;
 
     AdvNP np adv = {
       s = \\c => np.s ! c ++ adv.s ;
-      a = np.a
+      a = np.a ;
+      p = np.p
       } ;
 
     ExtAdvNP np adv = {
       s = \\c => np.s ! c ++ comma ++ adv.s ;
-      a = np.a
+      a = np.a ;
+      p = np.p
       } ;
 
     DetQuant quant num = {
@@ -73,7 +80,8 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                        in quant.s ! sp' ! aform (gennum g (numnnum num.nn)) (case c of {RVoc=>Indef; _=>Def}) c ++
                           num.s ! dgenderSpecies g quant.spec c ;
       nn = num.nn ;
-      spec = case num.nonEmpty of {True=>Indef; _=>quant.spec}
+      spec = case num.nonEmpty of {True=>Indef; _=>quant.spec} ;
+      p  = quant.p
       } ;
 
     DetQuantOrd = \quant, num, ord -> {
@@ -81,13 +89,15 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                       num.s ! dgenderSpecies g quant.spec c ++
                       ord.s ! aform (gennum g (numnnum num.nn)) (case num.nonEmpty of {True=>Indef; _=>quant.spec}) c ; 
       nn = num.nn ;
-      spec=Indef
+      spec=Indef ;
+      p  = quant.p
       } ;
 
     PossPron p = {
       s    = \\_ => p.gen ;
       nonEmpty = True ;
-      spec = ResBul.Indef
+      spec = ResBul.Indef ;
+      p = Pos
       } ;
 
     NumSg = {s = \\_ => []; nn = NNum Sg; nonEmpty = False} ;
@@ -117,7 +127,8 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                       }
            } ;
       nonEmpty = False ;
-      spec = ResBul.Def
+      spec = ResBul.Def ;
+      p = Pos
       } ;
 
     IndefArt = {
@@ -132,7 +143,8 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                       }
            } ;
       nonEmpty = False ;
-      spec = ResBul.Indef
+      spec = ResBul.Indef ;
+      p = Pos
       } ;
 
     MassNP cn = {
@@ -142,6 +154,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
             _        => cn.s ! (NF Sg Indef)
           } ;
       a = {gn = gennum cn.g Sg; p = P3} ;
+      p = Pos
       } ;
 
     UseN noun = noun ;
@@ -186,11 +199,13 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                               GPl      => ANeut
                             }
                     in det.s ! False ! g ! role ++ np.s ! (RObj Acc) ;
-      a = {gn = gennum ANeut (numnnum det.nn); p = P3}
+      a = {gn = gennum ANeut (numnnum det.nn); p = P3} ;
+      p = Pos
       } ;
 
     RelNP np rs = {
       s = \\r => np.s ! r ++ rs.s ! np.a ;
-      a = np.a
+      a = np.a ;
+      p = np.p
       } ;
 }

@@ -147,6 +147,12 @@ resource ResBul = ParamX ** open Prelude, Predef in {
         NCountable => Pl
       } ;
 
+    orPol : Polarity -> Polarity -> Polarity = \p1,p2 ->
+      case p1 of {
+        Neg => Neg;
+        Pos => p2
+      } ;
+
     aform : GenNum -> Species -> Role -> AForm = \gn,spec,role -> 
       case gn of {
         GSg g  => case <g,spec,role> of {
@@ -213,7 +219,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       s     : Aspect => VTable ;
       ad    : {isEmpty : Bool; s : Str} ;          -- sentential adverb
       compl : Agr => Str ;
-      vtype : VType
+      vtype : VType ;
+      p     : Polarity
     } ;
     
     VPSlash = {
@@ -222,6 +229,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       compl1 : Agr => Str ;
       compl2 : Agr => Str ;
       vtype  : VType ;
+      p      : Polarity ;
       c2     : Preposition
     } ;
 
@@ -230,6 +238,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       ad    = {isEmpty=True; s=[]} ;
       compl = \\_ => [] ;
       vtype = verb.vtype ;
+      p     = Pos
     } ;
 
     slashV : Verb -> Preposition -> VPSlash = \verb,prep -> {
@@ -238,31 +247,44 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       compl1 = \\_ => [] ;
       compl2 = \\_ => [] ;
       vtype  = verb.vtype ;
+      p      = Pos ;
       c2     = prep ;
     } ;
 
-    insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
+    insertObj : (Agr => Str) -> Polarity -> VP -> VP = \obj,p,vp -> {
       s     = vp.s ;
       ad    = vp.ad ;
       compl = \\a => vp.compl ! a ++ obj ! a ;
-      vtype = vp.vtype
+      vtype = vp.vtype ;
+      p     = case p of {
+                Neg => Neg;
+                _   => vp.p
+              }
       } ;
 
-    insertSlashObj1 : (Agr => Str) -> VPSlash -> VPSlash = \obj,slash -> {
+    insertSlashObj1 : (Agr => Str) -> Polarity -> VPSlash -> VPSlash = \obj,p,slash -> {
       s      = slash.s ;
       ad     = slash.ad ;
       compl1 = \\a => slash.compl1 ! a ++ obj ! a ;
       compl2 = slash.compl2 ;
       vtype  = slash.vtype ;
+      p      = case p of {
+                 Neg => Neg ;
+                 Pos => slash.p
+               } ;
       c2     = slash.c2
       } ;
 
-    insertSlashObj2 : (Agr => Str) -> VPSlash -> VPSlash = \obj,slash -> {
+    insertSlashObj2 : (Agr => Str) -> Polarity -> VPSlash -> VPSlash = \obj,p,slash -> {
       s      = slash.s ;
       ad     = slash.ad ;
       compl1 = slash.compl1 ;
       compl2 = \\a => slash.compl2 ! a ++ obj ! a ;
       vtype  = slash.vtype ;
+      p      = case p of {
+                 Neg => Neg ;
+                 Pos => slash.p
+               } ;
       c2     = slash.c2
       } ;
 
@@ -395,10 +417,17 @@ resource ResBul = ParamX ** open Prelude, Predef in {
     s : Tense => Anteriority => Polarity => Order => Str
   } ;
 
-  mkClause : Str -> Agr -> VP -> Clause =
-    \subj,agr,vp -> {
-      s = \\t,a,p,o => 
+  mkClause : Str -> Agr -> Polarity -> VP -> Clause =
+    \subj,agr,p1,vp -> {
+      s = \\t,a,p2,o => 
         let
+          p : Polarity
+            = case <p1,p2,vp.p> of {
+                <Neg,_,_> => Neg ;
+                <_,Neg,_> => Neg ;
+                <_,_,Neg> => Neg ;
+                _         => Pos
+              } ;
           verb  : Bool => Str
                 = \\q => vpTenses vp ! t ! a ! p ! agr ! q ! Perf ;
           compl = vp.compl ! agr
@@ -637,8 +666,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
           }
       } ;
 
-    mkNP : Str -> GenNum -> Person -> {s : Role => Str; a : Agr} =
-      \s,gn,p -> {
+    mkNP : Str -> GenNum -> Person -> Polarity -> {s : Role => Str; a : Agr; p : Polarity} =
+      \s,gn,p,pol -> {
       s = table {
             RSubj    => s ;
             RObj Acc => s ;
@@ -648,9 +677,10 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       a = {
            gn = gn ;
            p = p
-          }
+          } ;
+      p = pol
       } ;
-      
+
     Preposition : Type = {s : Str; c : Case};
 
     mkQuestion : 
