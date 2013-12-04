@@ -159,8 +159,6 @@ lin
     a = np1.a ;
     p = np1.p
   } ;
-  
-  UncNeg = {s = ""; p = Neg} ;
 
   UttAdV adv = adv;
 
