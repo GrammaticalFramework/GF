@@ -8,19 +8,22 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     PossIndefPron p = {
       s = \\_,aform => p.gen ! (indefAForm aform) ;
       nonEmpty = True;
-      spec = Indef
+      spec = Indef;
+      p = Pos
       } ;
       
     ReflQuant = {
       s = \\_,aform => reflPron ! aform ;
       nonEmpty = True;
-      spec = Indef
+      spec = Indef;
+      p = Pos
     } ;
 
     ReflIndefQuant = {
       s = \\_,aform => reflPron ! (indefAForm aform) ;
       nonEmpty = True;
-      spec = Indef
+      spec = Indef;
+      p = Pos
     } ;
 
     EmptyRelSlash slash = {
@@ -80,7 +83,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
       s = \\a => conj.s++(linCoordSep [])!conj.distr!conj.conj++vpi.s!conj.distr!conj.conj!a;
       } ;
     ComplVPIVV vv vpi = 
-      insertObj (\\a => vpi.s ! a) (predV vv) ;
+      insertObj (\\a => vpi.s ! a) Pos (predV vv) ;
 
   lincat
     VPS   = {s : Agr => Str} ;
@@ -104,6 +107,6 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
       } ;
 
     PassVPSlash vp = insertObj (\\a => vp.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc)) ++
-                                       vp.compl1 ! a ++ vp.compl2 ! a) (predV verbBe) ;
+                                       vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe) ;
 
 } 

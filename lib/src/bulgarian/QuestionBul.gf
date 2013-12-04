@@ -18,7 +18,7 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       
     QuestVP ip vp = {
       s = \\t,a,b,qform =>
-             (mkClause (ip.s ! RSubj ! qform) {gn = ip.gn ; p = P3} vp).s ! t ! a ! b ! Main
+             (mkClause (ip.s ! RSubj ! qform) {gn = ip.gn ; p = P3} Pos vp).s ! t ! a ! b ! Main
       } ;
 
     QuestSlash ip slash = 
@@ -28,7 +28,7 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
     QuestIAdv iadv cl = mkQuestion iadv cl ;
 
     QuestIComp icomp np = 
-      mkQuestion icomp (mkClause (np.s ! RSubj) np.a (predV verbBe)) ;
+      mkQuestion icomp (mkClause (np.s ! RSubj) np.a np.p (predV verbBe)) ;
 
     PrepIP p ip = {s = \\qform => p.s ++ case p.c of {Dat=>"на";_=>[]} ++ ip.s ! RSubj ! qform} ;
 

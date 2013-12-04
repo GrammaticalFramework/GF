@@ -5,13 +5,13 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
   flags optimize=all_subs ;
 
   lin
-    ImpersCl vp = mkClause [] (agrP3 (GSg Neut)) vp ;
-    GenericCl vp = mkClause "някой" (agrP3 (GSg Neut)) vp ;
+    ImpersCl vp = mkClause [] (agrP3 (GSg Neut)) Pos vp ;
+    GenericCl vp = mkClause "някой" (agrP3 (GSg Neut)) Pos vp ;
 
     CleftNP np rs = 
       mkClause (np.s ! RSubj)
-               {gn=GSg Neut; p=np.a.p}
-               (insertObj (\\_ => thisRP ! np.a.gn ++ rs.s ! np.a) (predV verbBe)) ;        
+               {gn=GSg Neut; p=np.a.p} Pos
+               (insertObj (\\_ => thisRP ! np.a.gn ++ rs.s ! np.a) np.p (predV verbBe)) ;        
         
     CleftAdv ad s = {s = \\t,a,p,o => case p of {Pos=>[]; Neg=>"не"} ++ ad.s ++ s.s } ;
 
@@ -53,13 +53,14 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
 
     ExistIP ip = 
       mkQuestion {s = ip.s ! RSubj}
-                 (mkClause "тук" (agrP3 ip.gn) (predV verbBe)) ;
+                 (mkClause "тук" (agrP3 ip.gn) Pos (predV verbBe)) ;
 
     ProgrVP vp = {
       s   = \\_ => vp.s ! Imperf ;
       ad = vp.ad ;
       compl = vp.compl ;
-      vtype = vp.vtype
+      vtype = vp.vtype ;
+      p = vp.p
       } ;
 
     ImpPl1 vp = {s = "нека" ++ daComplex Simul Pos vp ! Perf ! {gn = GPl ; p = P1}} ;

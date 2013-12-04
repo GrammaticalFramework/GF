@@ -13,15 +13,18 @@ lin
   NumPN i = {s = i.s ! CFNeut Indef ; g = Neut} ;
   CNIntNP cn i = {
     s = \\c => cn.s ! NF Sg Indef ++ i.s ;
-    a = agrP3 (gennum cn.g Sg)
+    a = agrP3 (gennum cn.g Sg) ;
+    p = Pos
     } ;
   CNSymbNP det cn xs = {
     s = \\c => det.s ! False ! cn.g ! RSubj ++ cn.s ! NF (numnnum det.nn) Indef ++ xs.s ; 
-    a = agrP3 (gennum cn.g (numnnum det.nn))
+    a = agrP3 (gennum cn.g (numnnum det.nn)) ;
+    p = Pos
     } ;
   CNNumNP cn i = {
     s = \\c => (cn.s ! NF Sg Indef ++ i.s ! CFNeut Indef) ;
-    a = agrP3 (gennum cn.g Sg)
+    a = agrP3 (gennum cn.g Sg) ;
+    p = Pos
     } ;
 
   SymbS sy = sy ; 
