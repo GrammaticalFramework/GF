@@ -69,7 +69,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     ComplSlash slash np = {
       s   = slash.s ;
       ad  = slash.ad ;
-      compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl2 ! a ;
+      compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl2 ! np.a ;
       vtype = slash.vtype ;
       p   = orPol np.p slash.p
       } ;
