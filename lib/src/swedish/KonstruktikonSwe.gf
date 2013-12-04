@@ -40,6 +40,70 @@ lin
       det = DDef Def
       } ;
 
+  i_adjaste_lagetComp a = {
+      s = \\_ => "i" ++ a.s ! AF (ASuperl SupWeak) Nom ++ "laget"
+      } ;
+
+  progpart_saettVP v w = insertAdv (w.s ! VI (VPtPres Sg Indef Nom)) (predV v) ;
+  progpart_addVP v w   = insertAdv (w.s ! VI (VPtPres Sg Indef Nom)) (predV v) ;
+
+  reaktiv_dubbel_auxUtt vv np pol = 
+    let 
+       verb = vv.s ! VF (VPres Act) ;
+       subj = np.s ! NPNom ;
+       inte = negation ! pol.p
+    in 
+    {s = verb ++ verb ++ subj ++ "väl" ++ inte} ;  
+  reaktiv_x_och_xUtt u = {
+    s = u.s ++ "och" ++ u.s
+    } ;
+
+  juxt_redupl_adj2AP a = {
+      s = \\ap => let adj = a.s ! AF (APosit ap) Nom in adj ++ adj ;
+      isPre = True
+      } ;
+
+  juxt_redupl_adj3AP a = {
+      s = \\ap => let adj = a.s ! AF (APosit ap) Nom in adj ++ adj ++ adj ;
+      isPre = True
+      } ;
+
+  koord_redupl_adv2Adv ad =
+    let adv = lin Adv ad in
+    mkAdv and_Conj adv adv ;
+
+  koord_redupl_adv3Adv ad =
+    let adv = lin Adv ad in
+    mkAdv and_Conj adv (mkAdv and_Conj adv adv) ;
+
+  juxt_redupl_intj i =
+    {s = i.s ++ i.s} ;
+
+
+  redupl_VP2cVP v = predV verb where {
+    verb = {
+      s = table VForm {f => v.s ! f ++ "och" ++ v.s ! f} ;
+      part = v.part ;
+      vtype = v.vtype
+      }
+    } ;
+  redupl_VP3cVP v = predV verb where {
+    verb = {
+      s = table VForm {f => v.s ! f ++ "och" ++ v.s ! f ++ "och" ++ v.s ! f} ;
+      part = v.part ;
+      vtype = v.vtype
+      }
+    } ;
+  redupl_VP3VP v = predV verb where {
+    verb = {
+      s = table VForm {f => v.s ! f ++ v.s ! f ++ v.s ! f} ;
+      part = v.part ;
+      vtype = v.vtype
+      }
+    } ;
+
+  pred_somAdv t ap np =
+    P.mkAdv (ap.s ! agrAdjNP np.a DIndef ++ (mkRS (lin Temp t) positivePol (mkRCl which_RP (lin NP np) (P.mkV2 verbBe))).s ! np.a ! RNom) ;
 
 
 lincat
@@ -54,5 +118,21 @@ lin
         s = \\c => npg.s ++ det.sp ! True ! npg.g ;   ---- case of det!
         a = agrP3 npg.g det.n
       } ;
+
+  man_NP = {
+    s = table {NPNom => "man" ; NPAcc => "en" ; NPPoss _ _ => "ens"} ;
+    a = agrP3 Utr Sg
+    } ;
+  
+  menUtt u v = 
+    {s = u.s ++ "men" ++ v.s} ;
+
+  UttBareVP vp = 
+    {s = infVP vp (agrP3 Utr Sg)} ;
+
+  tack_Interj = P.mkInterj "tack" ;
+  goddag_Interj = P.mkInterj "goddag" ;
+
+
 
 }
