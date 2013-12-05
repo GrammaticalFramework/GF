@@ -105,6 +105,38 @@ lin
   pred_somAdv t ap np =
     P.mkAdv (ap.s ! agrAdjNP np.a DIndef ++ (mkRS (lin Temp t) positivePol (mkRCl which_RP (lin NP np) (P.mkV2 verbBe))).s ! np.a ! RNom) ;
 
+  hur_AP_som_helstAP a = {
+      s = \\ap => "hur" ++ a.s ! AF (APosit ap) Nom ++ "som helst" ;
+      isPre = False ---- en näsa hur stor som helst ?
+      } ;
+  hur_AP_som_helstAdv a = {
+      s = "hur" ++ a.s ! adverbForm ++ "som helst" 
+      } ;
+  hur_AP_som_helstCN a cn = 
+    mkCN (mkCN (mkAP (P.mkAdA "hur") (lin A a)) (lin CN cn)) (P.mkAdv "som helst") ;
+
+  vokativ_m_possessivVoc pron cn =
+    mkVoc (SyntaxSwe.mkNP (mkQuant pron) cn) ;
+
+  haalla_naket_NVP n =
+    mkVP (P.mkV2 (P.mkV "hålla" "höll" "hållit")) (SyntaxSwe.mkNP n) ;
+
+
+  multiplicering_dimensionCard x y = {
+    s = \\g => x.s ! g ++ "gånger" ++ y.s ! g ;
+    n = Pl  ---- en gånger en ?
+    } ;
+
+  multiplicering_maengdNP x y =
+    let ggr_Conj = lin Conj {s1 = [] ; s2 = "gånger" ; n = Pl} in
+    SyntaxSwe.mkNP ggr_Conj (lin NP x) (lin NP y) ;
+    
+  maatt_plus_adjAP c cn a = 
+    mkAP (lin AdA (mkUtt (SyntaxSwe.mkNP c cn))) a ;
+
+  maatt_plus_PPComp c cn adv = 
+    mkComp (SyntaxSwe.mkNP (SyntaxSwe.mkNP c cn) adv) ;
+
 
 lincat
   NPAgr = {s : Str ; g : Gender ; n : Number} ;
