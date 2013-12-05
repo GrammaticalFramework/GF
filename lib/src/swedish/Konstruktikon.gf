@@ -74,7 +74,19 @@ fun
 
   pred_somAdv   : Temp -> AP -> NP -> Adv ; -- dum som jag var        --- not Adv in K, but "avm"
 
+  hur_AP_som_helstAP  : A  -> AP ;   -- hur stor som helst    ---- does this work as modifier? and with arbitrary AP?
+  hur_AP_som_helstAdv : A  -> Adv ;  -- hur mycket som helst  
+  hur_AP_som_helstCN  : A  -> CN -> CN ;  -- hur stor näsa som helst  -- discontinuous
 
+  vokativ_m_possessivVoc : Pron -> CN -> Voc ;  -- ditt jävla äckel
+
+  haalla_naket_NVP : N -> VP ;  -- hålla tal
+
+  multiplicering_dimensionCard : Card -> Card -> Card ; -- fem gånger fyra (gånger sex) --- can be iterated to more dimensions :-)
+  multiplicering_maengdNP      : NP -> NP -> NP ; -- fyrtio kronor gånger 52 fredagsmys
+
+  maatt_plus_adjAP  : Card -> CN -> A   -> AP ;     -- fem meter hög    ---- flera meter hög?
+  maatt_plus_PPComp : Card -> CN -> Adv -> Comp ;   -- fem meter i höjd ---- flera meter i höjd? --- på bredden ; vertikalt (therefore Adv)
 
 
 

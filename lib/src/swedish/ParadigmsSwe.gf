@@ -181,6 +181,10 @@ oper
  
   invarA : Str -> A ;  -- e.g. äkta
 
+---- Adjective with deviant adverb.
+
+----  deviantAdvA : Str -> A -> A ; -- e.g. bra, god
+
 
 --3 Two-place adjectives
 --
@@ -490,7 +494,8 @@ oper
     mkA : (liten,litet,lilla,sma,mindre,minst,minsta : Str) -> A = mk7A
     } ;
 
-
+----  deviantAdvA s a = 
+    
   regA : Str -> A ;
   mk2A :  (bred,brett : Str) -> A ;
   irregA : (tung,tyngre,tyngst : Str) -> A ;
