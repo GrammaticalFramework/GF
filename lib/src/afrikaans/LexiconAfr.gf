@@ -1,3 +1,4 @@
+--# -coding=latin1
 --# -path=.:../common:../abstract:../../prelude
 
 -- work by Aarne Ranta

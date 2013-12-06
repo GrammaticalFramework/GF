@@ -1,3 +1,4 @@
+--# -coding=latin1
 --# -path=.:../abstract:../common
 
 --1 Afrch auxiliary operations.
