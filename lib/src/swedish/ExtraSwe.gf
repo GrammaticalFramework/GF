@@ -3,7 +3,7 @@
 concrete ExtraSwe of ExtraSweAbs = ExtraScandSwe - [FocAdv] ,
                                    ParadigmsSwe - [nominative] **
  open CommonScand, ResSwe, ParamX, VerbSwe, Prelude, DiffSwe, StructuralSwe, MorphoSwe,
-      NounSwe, Coordination, AdjectiveSwe, SentenceSwe, RelativeSwe in {
+      NounSwe, Coordination, AdjectiveSwe, SentenceSwe, AdverbSwe, RelativeSwe in {
 
 lincat
  ReflNP  = NP ;
@@ -30,8 +30,11 @@ lin
 
  lin
   --TODO: fix this; just wrote something that it compiles and doesn't give [PassVPSlash] when parsing text
+  --looks OK now AR 5/12/2013
   PassVPSlash vps = 
        insertObj (\\a => vps.c2.s ++ vps.n3 ! a) (passiveVP vps) ;
+  PassAgentVPSlash vps np = 
+       insertObjPost (\\a => vps.c2.s ++ vps.n3 ! a) (insertObj (\\_ => (PrepNP by8agent_Prep np).s) (passiveVP vps)) ;
 
 
   RelVS s rvs = {s = \\o => s.s ! o ++ comma ++ rvs.s ! agrP3 Neutr Sg ! RPrep True} ; 
