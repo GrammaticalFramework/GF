@@ -13,8 +13,8 @@ concrete ParseChi of ParseEngAbs =
   SentenceChi,
   QuestionChi,
   RelativeChi,
-  IdiomChi [NP, VP, Tense, Cl, ProgrVP, ExistNP],
-  ExtraChi [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
+  IdiomChi [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
+  ExtraChi [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, PassAgentVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash, ListCN, ConjCN, BaseCN, ConsCN],
@@ -34,8 +34,6 @@ lin
   EmptyRelSlash slash = mkRCl <which_RP : RP> <lin ClSlash slash : ClSlash> ; 
 
   that_RP = which_RP ;
-
-  UncNeg = negativePol ;
 
 -- lexical entries
 
