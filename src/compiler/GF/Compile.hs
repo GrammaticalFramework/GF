@@ -62,7 +62,8 @@ batchCompile opts files = do
 -- to compile a set of modules, e.g. an old GF or a .cf file
 compileSourceGrammar :: Options -> SourceGrammar -> IOE SourceGrammar
 compileSourceGrammar opts gr = do
-  (_,gr',_) <- foldM (\env -> compileSourceModule opts env Nothing)
+  cwd <- liftIO getCurrentDirectory
+  (_,gr',_) <- foldM (\env -> compileSourceModule opts cwd env Nothing)
                      (0,emptySourceGrammar,Map.empty)
                      (modules gr)
   return gr'
@@ -132,6 +133,7 @@ compileOne opts env@(_,srcgr,_) file = do
 
   let path = dropFileName file
   let name = dropExtension file
+  cwd <- liftIO getCurrentDirectory
 
   case takeExtensions file of
 
@@ -145,7 +147,7 @@ compileOne opts env@(_,srcgr,_) file = do
 
        let sm1 = unsubexpModule sm0
        (sm,warnings) <- {- putPointE Normal opts "creating indirections" $ -}
-                        runCheck $ extendModule srcgr sm1
+                        runCheck $ extendModule cwd srcgr sm1
        warnOut opts warnings
 
        if flag optTagsOnly opts
@@ -166,22 +168,22 @@ compileOne opts env@(_,srcgr,_) file = do
              $ getSourceModule opts file
        intermOut opts (Dump Source) (ppModule Internal sm)
 
-       compileSourceModule opts env (Just file) sm
+       compileSourceModule opts cwd env (Just file) sm
   where
    isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete
 
-compileSourceModule :: Options -> CompileEnv -> Maybe FilePath -> SourceModule -> IOE CompileEnv
-compileSourceModule opts env@(k,gr,_) mb_gfFile mo@(i,mi) = do
+compileSourceModule :: Options -> FilePath -> CompileEnv -> Maybe FilePath -> SourceModule -> IOE CompileEnv
+compileSourceModule opts cwd env@(k,gr,_) mb_gfFile mo@(i,mi) = do
 
-  mo1  <- runPass Rebuild "" (rebuildModule gr mo)
-  mo1b <- runPass Extend "" (extendModule gr mo1)
+  mo1  <- runPass Rebuild "" (rebuildModule cwd gr mo)
+  mo1b <- runPass Extend "" (extendModule cwd gr mo1)
 
   case mo1b of
     (_,n) | not (isCompleteModule n) ->
       if tagsFlag then generateTags k mo1b else generateGFO k mo1b
     _ -> do
-      mo2 <- runPass Rename "renaming" $ renameModule gr mo1b
-      mo3 <- runPass TypeCheck "type checking" $ checkModule opts gr mo2
+      mo2 <- runPass Rename "renaming" $ renameModule cwd gr mo1b
+      mo3 <- runPass TypeCheck "type checking" $ checkModule opts cwd gr mo2
       if tagsFlag then generateTags k mo3 else compileCompleteModule k mo3
   where
     compileCompleteModule k mo3 = do

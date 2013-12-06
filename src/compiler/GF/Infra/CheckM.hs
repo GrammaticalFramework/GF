@@ -15,17 +15,18 @@
 module GF.Infra.CheckM
           (Check, CheckResult, Message, runCheck,
 	   checkError, checkCond, checkWarn, checkWarnings, checkAccumError,
-	   {-checkErr,-} checkIn, checkMap, checkMapRecover,
+	   checkIn, checkInModule, checkMap, checkMapRecover,
            parallelCheck, accumulateError, commitCheck,
 	  ) where
 
 import GF.Data.Operations
 --import GF.Infra.Ident
---import GF.Grammar.Grammar(Context)
---import GF.Grammar.Printer
+import GF.Grammar.Grammar(msrc) -- ,Context
+import GF.Grammar.Printer(ppLocation)
 
 import qualified Data.Map as Map
 import Text.PrettyPrint
+import System.FilePath(makeRelative)
 import Control.Parallel.Strategies(parList,rseq,using)
 import Control.Monad(liftM)
 
@@ -146,3 +147,10 @@ checkIn msg c = Check $ \{-ctxt-} msgs0 ->
     augment' msgs0 msgs' = (msg $$ nest 3 (vcat (reverse msgs'))):msgs0
 
     augment1 msg' = msg $$ nest 3 msg'
+
+-- | Augment error messages with a relative path to the source module and
+-- an contextual hint (which can be left 'empty')
+checkInModule cwd mi loc context =
+    checkIn (ppLocation relpath loc <> colon $$ nest 2 context)
+  where
+    relpath = makeRelative cwd (msrc mi)

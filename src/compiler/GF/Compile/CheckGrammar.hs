@@ -45,26 +45,25 @@ import Control.Monad
 import Text.PrettyPrint
 
 -- | checking is performed in the dependency order of modules
-checkModule :: Options -> SourceGrammar -> SourceModule -> Check SourceModule
-checkModule opts sgr mo@(m,mi) = do
-  checkRestrictedInheritance sgr mo
+checkModule :: Options -> FilePath -> SourceGrammar -> SourceModule -> Check SourceModule
+checkModule opts cwd sgr mo@(m,mi) = do
+  checkRestrictedInheritance cwd sgr mo
   mo <- case mtype mi of
           MTConcrete a -> do let gr = prependModule sgr mo
                              abs <- lookupModule gr a
-                             checkCompleteGrammar opts gr (a,abs) mo
+                             checkCompleteGrammar opts cwd gr (a,abs) mo
           _            -> return mo
-  infoss <- checkIn (ppLocation (msrc mi) NoLoc <> colon) $
-            topoSortJments2 mo
+  infoss <- checkInModule cwd mi NoLoc empty $ topoSortJments2 mo
   foldM updateCheckInfos mo infoss
   where
     updateCheckInfos mo = fmap (foldl update mo) . parallelCheck . map check
-      where check (i,info) = fmap ((,) i) (checkInfo opts sgr mo i info)
+      where check (i,info) = fmap ((,) i) (checkInfo opts cwd sgr mo i info)
     update mo@(m,mi) (i,info) = (m,mi{jments=updateTree (i,info) (jments mi)})
 
 -- check if restricted inheritance modules are still coherent
 -- i.e. that the defs of remaining names don't depend on omitted names
-checkRestrictedInheritance :: SourceGrammar -> SourceModule -> Check ()
-checkRestrictedInheritance sgr (name,mo) = checkIn (ppLocation (msrc mo) NoLoc <> colon) $ do
+checkRestrictedInheritance :: FilePath -> SourceGrammar -> SourceModule -> Check ()
+checkRestrictedInheritance cwd sgr (name,mo) = checkInModule cwd mo NoLoc empty $ do
   let irs = [ii | ii@(_,mi) <- mextend mo, mi /= MIAll]  -- names with restr. inh.
   let mrs = [((i,m),mi) | (i,m) <- mos, Just mi <- [lookup i irs]]
                              -- the restr. modules themself, with restr. infos
@@ -83,8 +82,8 @@ checkRestrictedInheritance sgr (name,mo) = checkIn (ppLocation (msrc mo) NoLoc <
                          nest 2 (vcat [ppIdent f <+> text "on" <+> fsep (map ppIdent is) | (f,is) <- cs]))
    allDeps = concatMap (allDependencies (const True) . jments . snd) mos
 
-checkCompleteGrammar :: Options -> SourceGrammar -> SourceModule -> SourceModule -> Check SourceModule
-checkCompleteGrammar opts gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) NoLoc <> colon) $ do
+checkCompleteGrammar :: Options -> FilePath -> SourceGrammar -> SourceModule -> SourceModule -> Check SourceModule
+checkCompleteGrammar opts cwd gr (am,abs) (cm,cnc) = checkInModule cwd cnc NoLoc empty $ do
   let jsa = jments abs
   let jsc = jments cnc
 
@@ -157,9 +156,9 @@ checkCompleteGrammar opts gr (am,abs) (cm,cnc) = checkIn (ppLocation (msrc cnc) 
 
 -- | General Principle: only Just-values are checked. 
 -- A May-value has always been checked in its origin module.
-checkInfo :: Options -> SourceGrammar -> SourceModule -> Ident -> Info -> Check Info
-checkInfo opts sgr (m,mo) c info = do
-  checkIn (ppLocation (msrc mo) NoLoc <> colon) $
+checkInfo :: Options -> FilePath -> SourceGrammar -> SourceModule -> Ident -> Info -> Check Info
+checkInfo opts cwd sgr (m,mo) c info = do
+  checkInModule cwd mo NoLoc empty $
     checkReservedId c
   case info of
     AbsCat (Just (L loc cont)) -> 
@@ -264,8 +263,8 @@ checkInfo opts sgr (m,mo) c info = do
     _ ->  return info
  where
    gr = prependModule sgr (m,mo)
-   chIn loc cat = checkIn (ppLocation (msrc mo) loc <> colon $$ 
-                           nest 2 (text "Happened in" <+> text cat <+> ppIdent c))
+   chIn loc cat = checkInModule cwd mo loc
+                             (text "Happened in" <+> text cat <+> ppIdent c)
 
    mkPar (f,co) = do
        vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
@@ -280,9 +279,7 @@ checkInfo opts sgr (m,mo) c info = do
 
    mkCheck loc cat ss = case ss of
      [] -> return info
-     _  -> checkError (ppLocation (msrc mo) loc <> colon $$ 
-                       nest 2 (text "Happened in" <+> text cat <+> ppIdent c $$ 
-                               nest 2 (vcat ss)))
+     _ -> chIn loc cat $ checkError (vcat ss)
 
    compAbsTyp g t = case t of
      Vr x -> maybe (checkError (text "no value given to variable" <+> ppIdent x)) return $ lookup x g

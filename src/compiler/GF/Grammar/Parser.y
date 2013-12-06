@@ -116,9 +116,7 @@ ModDef
                                           (extends,with,content) = $4
                                           (opens,jments,opts) = case content of { Just c -> c; Nothing -> ([],[],noOptions) }
                                       jments <- mapM (checkInfoType mtype) jments
-                                      defs <- case buildAnyTree id jments of
-                                                Ok x    -> return x
-                                                Bad msg -> fail (optDecode opts msg)
+                                      defs <- buildAnyTree id jments
                                       return (id, ModInfo mtype mstat opts extends with opens [] "" Nothing defs)  }
 
 ModHeader :: { SourceModule }
@@ -613,12 +611,6 @@ Posn
 
 happyError :: P a
 happyError = fail "syntax error"
-
--- Quick fix to render error messages from UTF-8-encoded source files correctly.
-optDecode opts =
-    {-if map toLower (getEncoding opts) `elem` ["utf8","utf-8"]
-    then decodeString
-    else-} id
 
 mkListId,mkConsId,mkBaseId  :: Ident -> Ident
 mkListId = prefixIdent "List"
