@@ -1,5 +1,5 @@
 concrete ExtraChi of ExtraChiAbs = CatChi ** 
-  open ResChi, Coordination, Prelude in {
+  open ResChi, Coordination, (S = StructuralChi), Prelude in {
 
   flags coding = utf8 ;
 
@@ -11,6 +11,7 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
 
   lin
     PassVPSlash vps = insertAdv (mkNP passive_s) vps ;
+    PassAgentVPSlash vps np = insertAdv (ss (appPrep S.by8agent_Prep np.s)) (insertAdv (mkNP passive_s) vps) ;
 
     MkVPS t p vp = {s = t.s ++ p.s ++ (mkClause [] vp).s ! p.p ! t.t} ;
     ConjVPS c = conjunctDistrSS (c.s ! CSent) ;

@@ -27,6 +27,10 @@ concrete IdiomChi of Idiom = CatChi ** open Prelude, ResChi in {
 
     ImpPl1 vp = ss (zan_s ++ men_s ++ infVP vp ++ ba0_s) ;
 
+    SelfAdvVP vp = insertAdv (ss reflPron) vp ;
+    SelfAdVVP vp = insertAdv (ss reflPron) vp ;
+    SelfNP np = {s = np.s ++ reflPron} ;
+
 }
 
 
