@@ -1,3 +1,4 @@
+--# -coding=latin1
 --# -path=.:../common:../../prelude
 --
 ----1 A Simple Afrman Resource Morphology

@@ -1,3 +1,5 @@
+--# -coding=latin1
+
 concrete NumeralAfr of Numeral = CatAfr ** open ResAfr, Prelude in {
 
 flags optimize = all_subs ;
