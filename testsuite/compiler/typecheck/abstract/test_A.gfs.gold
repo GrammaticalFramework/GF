@@ -1,5 +1,5 @@
 
 
-checking module A
+testsuite/compiler/typecheck/abstract/A.gf:4:
+  Happened in the category B
    Prod expected for function A instead of Type
-   in category B in A.gf, line 4

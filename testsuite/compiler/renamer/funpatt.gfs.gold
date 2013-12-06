@@ -1,5 +1,5 @@
 
 
-renaming module funpatt
-   renaming of d in funpatt.gf, line 11
-      data constructor expected but funpatt.D1 is found instead
+testsuite/compiler/renamer/funpatt.gf:11:
+  Happened in the renaming of d
+   data constructor expected but funpatt.D1 is found instead

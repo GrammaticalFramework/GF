@@ -9,7 +9,7 @@ import System.Exit(exitSuccess,exitFailure)
 main = 
    do res <- walk "testsuite"
       let cnt = length res
-          (good,bad) = partition ((=="OK").fst) res
+          (good,bad) = partition ((=="OK").fst.snd) res
           ok = length good
           fail = ok<cnt
       putStrLn $ show ok++"/"++show cnt++ " passed/tests"
@@ -24,15 +24,15 @@ main =
         "<!DOCTYPE html>\n"
         ++ "<meta charset=\"UTF-8\">\n"
         ++ "<style>\n"
-        ++ "pre { max-width: 500px; overflow: scroll; }\n"
+        ++ "pre { max-width: 600px; overflow: scroll; }\n"
         ++ "th,td { vertical-align: top; text-align: left; }\n"
         ++ "</style>\n"
         ++ "<table border=1>\n<tr><th>Result<th>Input<th>Gold<th>Output\n"
         ++ unlines (map testToHTML res)
         ++ "</table>\n"
 
-    testToHTML (res,(input,gold,output)) =
-      "<tr>"++concatMap (td.pre) [res,input,gold,output]
+    testToHTML (in_file,(res,(input,gold,output))) =
+      "<tr>"++concatMap td [pre res,in_file++":\n"++pre input,pre gold,pre output]
     pre s = "<pre>"++s++"</pre>"
     td s = "<td>"++s
 
@@ -45,9 +45,10 @@ main =
                then do let in_file   = fpath
                            gold_file = fpath <.> ".gold"
                            out_file  = fpath <.> ".out"
+                       putStr $ in_file++": "; hFlush stdout
                        res <- runTest in_file out_file gold_file
-                       putStrLn $ fst res++": "++in_file
-                       return [res]
+                       putStrLn $ fst res
+                       return [(in_file,res)]
                else return []
         else walk fpath
 

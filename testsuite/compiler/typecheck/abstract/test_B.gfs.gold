@@ -1,5 +1,5 @@
 
 
-checking module B
+testsuite/compiler/typecheck/abstract/B.gf:5:
+  Happened in the type of function f
    Prod expected for function S instead of Type
-   in type of function f in B.gf, line 5
