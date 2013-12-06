@@ -1,7 +1,7 @@
 --# -path=alltenses:.:../abstract
 
 concrete ConstructionFre of Construction = CatFre ** 
-  open SyntaxFre, ParadigmsFre, (L = LexiconFre), (E = ExtraFre), Prelude in {
+  open SyntaxFre, ParadigmsFre, (L = LexiconFre), (E = ExtraFre), (I = IrregFre), Prelude in {
 
 
 lin
@@ -17,7 +17,7 @@ lin
   how_far_QCl x = mkQCl (mkIAdv dative (mkIP which_IDet (mkN "distance"))) x ;
 
 -- some more things
-  weather_adjCl ap = mkCl (mkVP (lin AP ap)) ;
+  weather_adjCl ap = mkCl (mkVP (mkVA (mkV I.faire_V2)) (lin AP ap)) ;
    
   is_right_VP = mkVP have_V2 (mkNP (mkN "raison")) ;
   is_wrong_VP = mkVP have_V2 (mkNP (mkN "tort")) ;

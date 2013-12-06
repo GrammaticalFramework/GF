@@ -1,4 +1,4 @@
---# -path=alltenses:.:sysu:../english
+--# -path=.:../english
 concrete ParseChi of ParseEngAbs = 
   TenseChi,
 ---  CatChi,
