@@ -15,6 +15,7 @@ data ParseTree
  = Phrase Tag Mods Fn Index [ParseTree]
  | Word   Id Tag Word Lemma
  | App CId [ParseTree]
+ deriving Eq
 
 data ParseTreePos
  = Root
