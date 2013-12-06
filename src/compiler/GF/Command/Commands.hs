@@ -415,8 +415,8 @@ allCommands = Map.fromList [
      longname = "generate_trees",
      synopsis = "generates a list of trees, by default exhaustive",
      explanation = unlines [
-       "Generates all trees of a given category, with increasing depth.",
-       "By default, the depth is 4, but this can be changed by a flag.",
+       "Generates all trees of a given category. By default, ",
+       "the depth is limited to 4, but this can be changed by a flag.",
        "If a Tree argument is given, the command completes the Tree with values",
        "to all metavariables in the tree."
        ],
