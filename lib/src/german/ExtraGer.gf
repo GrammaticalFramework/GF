@@ -1,6 +1,6 @@
 --# -coding=latin1
 concrete ExtraGer of ExtraGerAbs = CatGer ** 
-  open ResGer, Coordination, Prelude, IrregGer in {
+  open ResGer, Coordination, Prelude, IrregGer, (P = ParadigmsGer) in {
 
   lincat
     VPI   = {s : Bool => Str} ;
@@ -58,7 +58,9 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
       } ;
 
     PassVPSlash vps = 
-      insertInf (vps.s.s ! VPastPart APred) (predV werdenPass);
+      insertInf (vps.s.s ! VPastPart APred) (predV werdenPass) ;
+    PassAgentVPSlash vps np = ---- "von" here, "durch" in StructuralGer
+      insertAdv (appPrep P.von_Prep np.s) (insertInf (vps.s.s ! VPastPart APred) (predV werdenPass)) ;
 
   lincat
     VPS   = {s : Order => Agr => Str} ;
