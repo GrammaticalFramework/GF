@@ -15,7 +15,7 @@ concrete ParseFin of ParseEngAbs =
   QuestionFin,
   RelativeFin,
   IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP]
-  , ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, Voc, RP, GenRP, 
+  , ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, Voc, RP, GenRP, PassVPSlash, PassAgentVPSlash,
       Temp, Tense, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
       VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV]
  , DictEngFin 
@@ -55,21 +55,6 @@ lin
     h = cn.h
     } ;
 
-  PassVPSlash = passVPSlash ;
-
-oper  
-  passVPSlash : VPSlash -> ResFin.VP = \vp -> lin VP {
-      s = \\vif,ant,pol,agr => case vif of {
-        VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
-        _ => vp.s ! vif ! ant ! pol ! agr 
-        } ;
-      s2 = vp.s2 ;
-      adv = vp.adv ;
-      ext = vp.ext ;
-      h = vp.h ;
-      isNeg = vp.isNeg ;
-      sc = case vp.c2.c of {NPCase Nom => NPAcc ; c => c}
-      } ; 
 
 lin
   DashCN noun1 noun2 = {

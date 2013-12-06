@@ -1,6 +1,7 @@
 --# -coding=latin1
 abstract ExtraFinAbs = Extra [
   GenNP,GenIP,GenRP,
+  PassVPSlash, PassAgentVPSlash,
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,ConjVPS,Tense,Temp,Pol,S,
   VV,VP,Conj,NP,Quant,IAdv,IComp,ICompAP,IAdvAdv,Adv,AP, Pron, RP, ProDrop] ** {

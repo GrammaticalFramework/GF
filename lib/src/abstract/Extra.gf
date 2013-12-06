@@ -74,6 +74,11 @@ abstract Extra = Cat ** {
 
     PassVPSlash : VPSlash -> VP ; -- be forced to sleep
 
+-- the form with an agent may result in a different linearization 
+-- from an adverbial modification by an agent phrase.
+
+    PassAgentVPSlash : VPSlash -> NP -> VP ;  -- be begged by her to go
+
 -- publishing of the document
 
     NominalizeVPSlashNP : VPSlash -> NP -> NP ;

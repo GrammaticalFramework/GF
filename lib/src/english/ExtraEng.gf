@@ -149,7 +149,8 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
 lin
   UncNeg = {s = [] ; p = CNeg False} ; 
 
-  PassVPSlash vps = 
+  oper passVPSlash : VPSlash -> Str -> ResEng.VP = 
+   \vps,ag -> 
     let 
       be = predAux auxBe ;
       ppt = vps.ptp
@@ -160,9 +161,13 @@ lin
     ptp = be.ptp ;
     inf = be.inf ;
     ad = \\_ => [] ;
-    s2 = \\a => vps.ad ! a ++ ppt ++ vps.p ++ vps.s2 ! a ++ vps.c2 ; ---- order
+    s2 = \\a => vps.ad ! a ++ ppt ++ vps.p ++ ag ++ vps.s2 ! a ++ vps.c2 ; ---- place of agent
     ext = vps.ext
     } ;
+
+  lin 
+    PassVPSlash vps = passVPSlash vps [] ;
+    PassAgentVPSlash vps np = passVPSlash vps ("by" ++ np.s ! NPAcc) ;
 
    --- AR 7/3/2013
    ComplSlashPartLast vps np = case vps.gapInMiddle of {

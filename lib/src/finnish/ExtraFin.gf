@@ -2,7 +2,7 @@
 --# -coding=latin1
 
 concrete ExtraFin of ExtraFinAbs = CatFin ** 
-  open ResFin, MorphoFin, Coordination, Prelude, NounFin, StructuralFin, StemFin, (R = ParamX) in {
+  open ResFin, MorphoFin, Coordination, Prelude, NounFin, VerbFin, StructuralFin, StemFin, (R = ParamX) in {
 
   lin
     GenNP np = {
@@ -230,5 +230,33 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
   kos_Part   = mkPart "kos" "kös" ;
   kohan_Part = mkPart "kohan" "köhän" ;
   pahan_Part = mkPart "pahan" "pähän" ;
+
+  PassVPSlash vp = {
+      s = \\vif,ant,pol,agr => case vif of {
+        VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
+        _ => vp.s ! vif ! ant ! pol ! agr 
+        } ;
+      s2 = vp.s2 ;
+      adv = vp.adv ;
+      ext = vp.ext ;
+      h = vp.h ;
+      isNeg = vp.isNeg ;
+      sc = case vp.c2.c of {NPCase Nom => NPAcc ; c => c}
+      } ; 
+
+---- uses inversion of active: Guernican maalasi Picasso. TODO: use the agent participle
+---- TODO maybe squeeze s2 between the fin and inf (but this is subtle)
+----   sinua olen rakastanut minä -> sinua olen minä rakastanus
+
+  PassAgentVPSlash vp np = {
+      s = \\vif,ant,pol,agr => vp.s ! vif ! ant ! pol ! np.a ;  -- only agr changes
+      s2 = \\b,p,a => np.s ! NPCase Nom ++ vp.s2 ! b ! p ! a ;
+      adv = vp.adv ;
+      ext = vp.ext ;
+      h = vp.h ;
+      isNeg = vp.isNeg ;
+      sc = vp.c2.c  -- advantage: works for all V2 verbs, need not be transitive
+      } ; 
+
 
 } 
