@@ -26,11 +26,11 @@ concrete StructuralBul of Structural = CatBul **
   can8know_VV, can_VV = mkVV (stateV (mkV166 "мога")) ;
   during_Prep = mkPrep ["по време на"] Acc ;
   either7or_DConj = {s=[]; conj=1; distr=True; n = Sg} ;
-  everybody_NP = mkNP "всеки" (GSg Masc) P3 ;
+  everybody_NP = mkNP "всеки" (GSg Masc) P3 Pos;
   every_Det = mkDeterminerSg "всеки" "всяка" "всяко";
-  everything_NP = mkNP "всичко" (GSg Neut) P3 ;
+  everything_NP = mkNP "всичко" (GSg Neut) P3 Pos;
   everywhere_Adv = ss "навсякъде" ;
-  few_Det = {s = \\_,_,_ => "няколко"; nn = NCountable; spec = Indef} ;
+  few_Det = {s = \\_,_,_ => "няколко"; nn = NCountable; spec = Indef; p = Pos} ;
 ---  first_Ord = ss "first" ; DEPRECATED
   for_Prep = mkPrep "за" Acc ;
   from_Prep = mkPrep "от" Acc ;
@@ -83,10 +83,10 @@ concrete StructuralBul of Structural = CatBul **
   quite_Adv = ss "доста" ;
   she_Pron = mkPron "тя" "нея" "и" "неин" "нейния" "нейният" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
   so_AdA = ss "толкова" ;
-  somebody_NP = mkNP "някой" (GSg Masc) P3 ;
+  somebody_NP = mkNP "някой" (GSg Masc) P3 Pos;
   someSg_Det = mkDeterminerSg "някой" "някоя" "някое" ;
   somePl_Det = mkDeterminerPl "някои" ;
-  something_NP = mkNP "нещо" (GSg Neut) P3 ;
+  something_NP = mkNP "нещо" (GSg Neut) P3 Pos;
   somewhere_Adv = ss "някъде" ;
   that_Quant = mkQuant "онзи" "онази" "онова" "онези" ;
   that_Subj = ss "че" ;
