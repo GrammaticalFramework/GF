@@ -5,9 +5,9 @@ concrete ConstructionFin of Construction = CatFin **
 
 
 lin
-  hungry_VP = mkVP have_V2 (mkNP (ParadigmsFin.mkN "nälkä")) ;
-  thirsty_VP = mkVP have_V2 (mkNP (ParadigmsFin.mkN "jano")) ;
-  has_age_VP card = mkVP (mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> L.year_N))) L.old_A) ;
+  hungry_VP = mkVP have_V2 (lin NP (mkNP (ParadigmsFin.mkN "nälkä"))) ;
+  thirsty_VP = mkVP have_V2 (lin NP (mkNP (ParadigmsFin.mkN "jano"))) ;
+  has_age_VP card = mkVP (mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> L.year_N)))) L.old_A) ;
 
   have_name_Cl x y = mkCl (mkNP (E.GenNP x) L.name_N) (lin NP y) ;
   married_Cl x y = mkCl (mkNP and_Conj (lin NP x) (lin NP y)) (ParadigmsFin.mkAdv "naimisissa") ;
@@ -22,6 +22,6 @@ lin
   is_right_VP = mkVP (ParadigmsFin.mkAdv "oikeassa") ;
   is_wrong_VP = mkVP (ParadigmsFin.mkAdv "väärässä") ;
 
-  n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
+  n_units_AP card cn a = mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> (lin CN cn))))) (lin A a) ;
   
 }

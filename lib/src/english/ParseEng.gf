@@ -1,4 +1,3 @@
---# -path=alltenses
 concrete ParseEng of ParseEngAbs = 
   TenseX - [Pol, PNeg, PPos],
   CatEng,
@@ -14,7 +13,8 @@ concrete ParseEng of ParseEngAbs =
   QuestionEng,
   RelativeEng,
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
-  ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,
+  ConstructionEng,
+  ExtraEng [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, PassAgentVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ComplSlashPartLast,
