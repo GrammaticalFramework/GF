@@ -42,8 +42,28 @@ concrete IdiomFre of Idiom = CatFre **
              ! DInv ! RPres ! Simul ! RPos ! Conjunct
       } ;
 
+
+    SelfAdvVP vp = insertComplement memePron vp ;
+    SelfAdVVP vp = insertComplement memePron vp ; ---- should be AdV
+    SelfNP np = heavyNP {
+      s = \\c => (np.s ! c).ton ++ memePron ! np.a ; ---- moi moi-même ? 
+      a = np.a
+      } ;
+
   oper
     elisCe = elision "c" ;
+
+    memePron : Agr => Str = table {
+      {n = Sg ; p = P1} => "moi-même" ;
+      {n = Sg ; p = P2} => "toi-même" ;
+      {g = Masc ; n = Sg ; p = P3} => "lui-même" ;
+      {g = Fem  ; n = Sg ; p = P3} => "elle-même" ;
+      {n = Pl ; p = P1} => "nous-mêmes" ;
+      {n = Pl ; p = P2} => "vous-mêmes" ;
+      {g = Masc ; n = Pl ; p = P3} => "eux-mêmes" ;
+      {g = Fem  ; n = Pl ; p = P3} => "elles-mêmes"
+      } ;
+
 
 }
 
