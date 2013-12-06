@@ -53,7 +53,8 @@ checkModule opts sgr mo@(m,mi) = do
                              abs <- lookupModule gr a
                              checkCompleteGrammar opts gr (a,abs) mo
           _            -> return mo
-  infoss <- topoSortJments2 mo
+  infoss <- checkIn (ppLocation (msrc mi) NoLoc <> colon) $
+            topoSortJments2 mo
   foldM updateCheckInfos mo infoss
   where
     updateCheckInfos mo = fmap (foldl update mo) . parallelCheck . map check
