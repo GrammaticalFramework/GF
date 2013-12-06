@@ -1,8 +1,8 @@
 
 
-checking module TestOpers
+testsuite/compiler/check/cyclic/opers/TestOpers.gf:
    circular definitions: A B
 
 
-checking module TestOperTypes
+testsuite/compiler/check/cyclic/opers/TestOperTypes.gf:
    circular definitions: A T

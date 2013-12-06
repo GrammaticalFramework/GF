@@ -1,4 +1,4 @@
 
 
-checking module Test2Abs
+testsuite/compiler/check/cyclic/abs-types/Test2Abs.gf:
    circular definitions: f g

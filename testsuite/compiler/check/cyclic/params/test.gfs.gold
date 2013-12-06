@@ -1,4 +1,4 @@
 
 
-checking module TestParams
+testsuite/compiler/check/cyclic/params/TestParams.gf:
    circular definitions: A B
