@@ -33,18 +33,20 @@ import Data.Char(isAscii)
 import Control.Monad (foldM,when,unless)
 import System.Cmd (system)
 --import System.IO(mkTextEncoding) --,utf8
-import System.Directory(removeFile)
+import System.Directory(removeFile,getCurrentDirectory)
+import System.FilePath(makeRelative)
 
 getSourceModule :: Options -> FilePath -> IOE SourceModule
 getSourceModule opts file0 = 
-  errIn file0 $
+--errIn file0 $
   do tmp <- lift $ foldM runPreprocessor (Source file0) (flag optPreprocessors opts)
      raw <- lift $ keepTemp tmp
    --ePutStrLn $ "1 "++file0
      (optCoding,parsed) <- parseSource opts pModDef raw
      case parsed of
        Left (Pn l c,msg) -> do file <- lift $ writeTemp tmp
-                               let location = file++":"++show l++":"++show c
+                               cwd <- lift $ getCurrentDirectory
+                               let location = makeRelative cwd file++":"++show l++":"++show c
                                raise (location++":\n   "++msg)
        Right (i,mi0) ->
          do lift $ removeTemp tmp

@@ -46,13 +46,13 @@ import Text.PrettyPrint
 renameSourceTerm :: SourceGrammar -> Ident -> Term -> Check Term
 renameSourceTerm g m t = do
   mi     <- lookupModule g m
-  status <- buildStatus g (m,mi)
+  status <- buildStatus "" g (m,mi)
   renameTerm status [] t
 
-renameModule :: SourceGrammar -> SourceModule -> Check SourceModule
-renameModule gr mo@(m,mi) = do
-  status <- buildStatus gr mo
-  js     <- checkMapRecover (renameInfo status mo) (jments mi)
+renameModule :: FilePath -> SourceGrammar -> SourceModule -> Check SourceModule
+renameModule cwd gr mo@(m,mi) = do
+  status <- buildStatus cwd gr mo
+  js     <- checkMapRecover (renameInfo cwd status mo) (jments mi)
   return (m, mi{jments = js})
 
 type Status = (StatusTree, [(OpenSpec, StatusTree)])
@@ -123,8 +123,8 @@ tree2status o = case o of
   OSimple i   -> mapTree (info2status (Just i))
   OQualif i j -> mapTree (info2status (Just j))
 
-buildStatus :: SourceGrammar -> SourceModule -> Check Status
-buildStatus gr mo@(m,mi) = checkIn (ppLocation (msrc mi) NoLoc <> colon) $ do
+buildStatus :: FilePath -> SourceGrammar -> SourceModule -> Check Status
+buildStatus cwd gr mo@(m,mi) = checkInModule cwd mi NoLoc empty $ do
   let gr1  = prependModule gr mo
       exts = [(OSimple m,mi) | (m,mi) <- allExtends gr1 m]
   ops <- mapM (\o -> lookupModule gr1 (openedModule o) >>= \mi -> return (o,mi)) (mopens mi)
@@ -140,8 +140,8 @@ self2status :: Ident -> SourceModInfo -> StatusTree
 self2status c m = mapTree (info2status (Just c)) (jments m)
 
   
-renameInfo :: Status -> SourceModule -> Ident -> Info -> Check Info
-renameInfo status (m,mi) i info = 
+renameInfo :: FilePath -> Status -> SourceModule -> Ident -> Info -> Check Info
+renameInfo cwd status (m,mi) i info =
   case info of
     AbsCat pco -> liftM AbsCat (renPerh (renameContext status) pco)
     AbsFun  pty pa ptr poper -> liftM4 AbsFun (renTerm pty) (return pa) (renMaybe (mapM (renLoc (renEquation status))) ptr) (return poper)
@@ -165,7 +165,7 @@ renameInfo status (m,mi) i info =
     renMaybe ren Nothing  = return Nothing
 
     renLoc ren (L loc x) =
-      checkIn (ppLocation (msrc mi) loc <> colon $$ text "Happened in the renaming of" <+> ppIdent i) $ do
+      checkInModule cwd mi loc (text "Happened in the renaming of" <+> ppIdent i) $ do
         x <- ren x
         return (L loc x)
 

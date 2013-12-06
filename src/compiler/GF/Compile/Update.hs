@@ -29,7 +29,7 @@ import Control.Monad
 import Text.PrettyPrint
 
 -- | combine a list of definitions into a balanced binary search tree
-buildAnyTree :: Ident -> [(Ident,Info)] -> Err (BinTree Ident Info)
+buildAnyTree :: Monad m => Ident -> [(Ident,Info)] -> m (BinTree Ident Info)
 buildAnyTree m = go Map.empty
   where
     go map []         = return map
@@ -37,20 +37,19 @@ buildAnyTree m = go Map.empty
       case Map.lookup c map of
         Just i  -> case unifyAnyInfo m i j of
 		     Ok k  -> go (Map.insert c k map) is
-		     Bad _ -> fail $ render (text "cannot unify the informations" $$ 
+		     Bad _ -> fail $ render (text "conflicting information in module"<+>ppIdent m $$
 		                             nest 4 (ppJudgement Qualified (c,i)) $$
 		                             text "and" $+$
-		                             nest 4 (ppJudgement Qualified (c,j)) $$
-		                             text "in module" <+> ppIdent m)
+		                             nest 4 (ppJudgement Qualified (c,j)))
         Nothing -> go (Map.insert c j map) is
 
-extendModule :: SourceGrammar -> SourceModule -> Check SourceModule
-extendModule gr (name,m)
+extendModule :: FilePath -> SourceGrammar -> SourceModule -> Check SourceModule
+extendModule cwd gr (name,m)
   ---- Just to allow inheritance in incomplete concrete (which are not
   ---- compiled anyway), extensions are not built for them.
   ---- Should be replaced by real control. AR 4/2/2005
   | mstatus m == MSIncomplete && isModCnc m = return (name,m)
-  | otherwise                               = checkIn (ppLocation (msrc m) NoLoc <> colon) $ do
+  | otherwise                               = checkInModule cwd m NoLoc empty $ do
                                                  m' <- foldM extOne m (mextend m) 
                                                  return (name,m')
  where
@@ -77,9 +76,9 @@ extendModule gr (name,m)
 
 -- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
-rebuildModule :: SourceGrammar -> SourceModule -> Check SourceModule
-rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js_)) = 
-  checkIn (ppLocation msrc_ NoLoc <> colon) $ do
+rebuildModule :: FilePath -> SourceGrammar -> SourceModule -> Check SourceModule
+rebuildModule cwd gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js_)) =
+  checkInModule cwd mi NoLoc empty $ do
 
 ----  deps <- moduleDeps ms
 ----  is   <- openInterfaces deps i
