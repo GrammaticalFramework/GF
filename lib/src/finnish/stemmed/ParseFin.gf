@@ -30,7 +30,7 @@ lin
       insertObj 
         (\\_,b,a => infVPGen pol.p v.sc b a vp v.vi) 
         (predSV {s = v.s ; 
-                sc = case vp.sc of {
+                sc = case vp.s.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
@@ -96,7 +96,7 @@ lin
       insertObj (\\_,b,a => infVPGen p.p v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
 
   CompS s = {s = \\_ => "että" ++ s.s} ;  -- S -> Comp            ---- what are these expected to do ? 29/3/2013
-  CompVP ant pol vp = {s = \\a => infVPGen pol.p vp.sc Pos a vp Inf1} ; -- VP -> Comp
+  CompVP ant pol vp = {s = \\a => infVPGen pol.p vp.s.sc Pos a vp Inf1} ; -- VP -> Comp
 
 
   that_RP = which_RP ;

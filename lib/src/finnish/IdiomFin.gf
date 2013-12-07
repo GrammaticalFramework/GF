@@ -37,11 +37,16 @@ concrete IdiomFin of Idiom = CatFin **
 
     ImpersCl vp = mkClause noSubj (agrP3 Sg) vp ;
 
+---- TODO properlu
     GenericCl vp = mkClause noSubj (agrP3 Sg) {
+{- ----
       s = \\vif,ant,pol,agr => case vif of {
         VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
         _ => vp.s ! vif ! ant ! pol ! agr 
         } ;
+-}
+      s = vp.s ; ----
+
       s2 = vp.s2 ;
       adv = vp.adv ;
       ext = vp.ext ;
@@ -52,7 +57,7 @@ concrete IdiomFin of Idiom = CatFin **
 
     ProgrVP vp = 
       let 
-        inf = (vp.s ! VIInf Inf3Iness ! Simul ! Pos ! agrP3 Sg).fin ;
+        inf = vp.s.s ! Inf Inf3Iness ;
         on  = predV olla
       in {
         s = on.s ;
@@ -63,13 +68,10 @@ concrete IdiomFin of Idiom = CatFin **
         h = vp.h ; isNeg = vp.isNeg
         } ;
 
--- This gives "otetaan oluet" instead of "ottakaamme oluet".
--- The imperative is not available in a $VP$.
-
   ImpPl1 vp = 
-    let vps = vp.s ! VIPass Pres ! Simul ! Pos ! Ag Pl P1
+    let vps = vp.s.s ! ImperP1Pl
     in
-    {s = vps.fin ++ vps.inf ++ 
+    {s = vps ++
          vp.s2 ! True ! Pos ! Ag Pl P1 ++ vp.ext
     } ;
 

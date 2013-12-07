@@ -5,11 +5,11 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
 
   lin
 
-    PredVP np vp = mkClausePol (orB np.isNeg vp.isNeg) (subjForm np vp.sc) np.a vp ;
+    PredVP np vp = mkClausePol (orB np.isNeg vp.isNeg) (subjForm np vp.s.sc) np.a vp ;
 
     PredSCVP sc vp = mkClause (\_ -> sc.s) (agrP3 Sg) vp ;
 
-    ImpVP vp = {
+    ImpVP vp0 = let vp = vp2old_vp vp0 in {
       s = \\pol,agr => 
         let 
           verb  = vp.s ! VIImper ! Simul ! pol ! agr ;
@@ -21,7 +21,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
 -- The object case is formed at the use site of $c2$, in $Relative$ and $Question$.
 
     SlashVP np vp = { 
-      s = \\t,a,p => (mkClause (subjForm np vp.sc) np.a vp).s ! t ! a ! p ! SDecl ;
+      s = \\t,a,p => (mkClause (subjForm np vp.s.sc) np.a vp).s ! t ! a ! p ! SDecl ;
       c2 = vp.c2
       } ;
 

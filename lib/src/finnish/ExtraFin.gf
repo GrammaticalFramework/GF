@@ -58,7 +58,9 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       sc = ss.sc ; h = ss.h
       } ;
 
-    MkVPS t p vp = { --  Temp -> Pol -> VP -> VPS ;
+    MkVPS t p vp0 = let vp = vp2old_vp vp0 in
+
+    { --  Temp -> Pol -> VP -> VPS ;
       s = \\a => let vps = vp.s ! VIFin t.t ! t.a ! p.p ! a
                  in
                  t.s ++ p.s ++
@@ -207,17 +209,17 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       in
       {s = t.s ++ p.s ++ cl.compl ++ pa ++ cl.fin ++ cl.inf ++ cl.subj ++ cl.adv ++ cl.ext} ; 
 
-    PredClPlus np vp = mkClausePlus (subjForm np vp.sc) np.a vp ;
-    PredClPlusFocSubj np vp = insertKinClausePlus 0 (mkClausePlus (subjForm np vp.sc) np.a vp) ;
-    PredClPlusFocVerb np vp = insertKinClausePlus 1 (mkClausePlus (subjForm np vp.sc) np.a vp) ;
+    PredClPlus np vp = mkClausePlus (subjForm np vp.s.sc) np.a vp ;
+    PredClPlusFocSubj np vp = insertKinClausePlus 0 (mkClausePlus (subjForm np vp.s.sc) np.a vp) ;
+    PredClPlusFocVerb np vp = insertKinClausePlus 1 (mkClausePlus (subjForm np vp.s.sc) np.a vp) ;
     PredClPlusObj  np vps obj = 
-      insertObjClausePlus 0 False (\\b => appCompl True b vps.c2 obj) (mkClausePlus (subjForm np vps.sc) np.a vps) ;
+      insertObjClausePlus 0 False (\\b => appCompl True b vps.c2 obj) (mkClausePlus (subjForm np vps.s.sc) np.a vps) ;
     PredClPlusFocObj  np vps obj = 
-      insertObjClausePlus 0 True (\\b => appCompl True b vps.c2 obj) (mkClausePlus (subjForm np vps.sc) np.a vps) ;
+      insertObjClausePlus 0 True (\\b => appCompl True b vps.c2 obj) (mkClausePlus (subjForm np vps.s.sc) np.a vps) ;
     PredClPlusAdv  np vp  adv = 
-      insertObjClausePlus 1 False (\\_ => adv.s) (mkClausePlus (subjForm np vp.sc) np.a vp) ;
+      insertObjClausePlus 1 False (\\_ => adv.s) (mkClausePlus (subjForm np vp.s.sc) np.a vp) ;
     PredClPlusFocAdv  np vp  adv = 
-      insertObjClausePlus 1 True (\\_ => adv.s) (mkClausePlus (subjForm np vp.sc) np.a vp) ;
+      insertObjClausePlus 1 True (\\_ => adv.s) (mkClausePlus (subjForm np vp.s.sc) np.a vp) ;
 
     ClPlusWithObj c = c ;
     ClPlusWithAdv c = c ;
@@ -232,10 +234,13 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
   pahan_Part = mkPart "pahan" "pähän" ;
 
   PassVPSlash vp = {
+      s = vp.s ; ---- TODO
+{- -----
       s = \\vif,ant,pol,agr => case vif of {
         VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
         _ => vp.s ! vif ! ant ! pol ! agr 
         } ;
+-}
       s2 = vp.s2 ;
       adv = vp.adv ;
       ext = vp.ext ;
@@ -249,7 +254,8 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 ----   sinua olen rakastanut minä -> sinua olen minä rakastanus
 
   PassAgentVPSlash vp np = {
-      s = \\vif,ant,pol,agr => vp.s ! vif ! ant ! pol ! np.a ;  -- only agr changes
+      s = vp.s ; ---- TODO
+----      s = \\vif,ant,pol,agr => vp.s ! vif ! ant ! pol ! np.a ;  -- only agr changes
       s2 = \\b,p,a => np.s ! NPCase Nom ++ vp.s2 ! b ! p ! a ;
       adv = vp.adv ;
       ext = vp.ext ;

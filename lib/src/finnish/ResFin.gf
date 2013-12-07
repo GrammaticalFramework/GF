@@ -210,7 +210,27 @@ param
    ;  
 
 oper
+  
+
   VP = {
+    s   : HVerb ;
+    s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
+    adv : Polarity => Str ; -- ainakin/ainakaan
+    ext : Str ;
+    isNeg : Bool ; -- True if some complement is negative
+    } ;
+    
+  HVerb : Type = Verb ** {sc : NPForm ; h : Harmony ; p : Str} ;
+ 
+  predV : HVerb -> VP = \verb -> {
+    s = verb ;
+    s2 = \\_,_,_ => [] ;
+    adv = \\_ => verb.p ; -- the particle of the verb
+    ext = [] ;
+    isNeg = False 
+    } ;
+
+  old_VP = {
     s   : VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ; 
     s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
     adv : Polarity => Str ; -- ainakin/ainakaan
@@ -219,8 +239,8 @@ oper
     isNeg : Bool ; -- True if some complement is negative
     h   : Harmony
     } ;
-    
-  predV : (Verb ** {sc : NPForm ; h : Harmony ; p : Str}) -> VP = \verb -> {
+
+  vp2old_vp : VP -> old_VP = \vp -> let verb = vp.s in {
     s = \\vi,ant,b,agr0 => 
       let
 
@@ -289,12 +309,12 @@ oper
         VIInf i    => mkvf (Inf i)
         } ;
 
-    s2 = \\_,_,_ => [] ;
-    adv = \\_ => verb.p ; -- the particle of the verb
-    ext = [] ;
+    s2 = vp.s2 ;
+    adv = vp.adv ; -- the particle of the verb
+    ext = vp.ext ;
     sc = verb.sc ;
     h = verb.h ;
-    isNeg = False 
+    isNeg = vp.isNeg 
     } ;
 
   insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
@@ -372,7 +392,7 @@ oper
       } ;
 
   mkClausePlus : (Polarity -> Str) -> Agr -> VP -> ClausePlus =
-    \sub,agr,vp -> {
+    \sub,agr,vp0 -> let vp = vp2old_vp vp0 in {
       s = \\t,a,b => 
         let 
           agrfin = case vp.sc of {
@@ -386,7 +406,7 @@ oper
             compl = vp.s2 ! agrfin.p2 ! b ! agr ;
             adv  = vp.adv ! b ; 
             ext  = vp.ext ; 
-            h    = selectPart vp a b
+            h    = selectPart vp0 a b
             }
      } ;
 
@@ -438,22 +458,23 @@ oper
       Neg => Front ;  -- eikö tule
       _ => case a of {
         Anter => Back ; -- onko mennyt --# notpresent
-        _ => vp.h  -- tuleeko, meneekö
+        _ => vp.s.h  -- tuleeko, meneekö
         }
       } ;
 
 -- the first Polarity is VP-internal, the second comes form the main verb:
 -- ([main] tahdon | en tahdo) ([internal] nukkua | olla nukkumatta)
   infVPGen : Polarity -> NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
-    \ipol,sc,pol,agr,vp,vi ->
+    \ipol,sc,pol,agr,vp0,vi ->
         let 
+          vp = vp2old_vp vp0 ;
           fin = case sc of {     -- subject case
             NPCase Nom => True ; -- minä tahdon nähdä auton
             _ => False           -- minun täytyy nähdä auto
             } ;
           verb = case ipol of {
             Pos => <vp.s ! VIInf vi ! Simul ! Pos ! agr, []> ; -- nähdä/näkemään
-            Neg => <(predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []})).s ! VIInf vi ! Simul ! Pos ! agr,
+            Neg => <(vp2old_vp (predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []}))).s ! VIInf vi ! Simul ! Pos ! agr,
                     (vp.s ! VIInf Inf3Abess ! Simul ! Pos ! agr).fin> -- olla/olemaan näkemättä
             } ;
           vph = vp.h ;

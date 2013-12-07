@@ -21,7 +21,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
       insertObj 
         (\\_,b,a => infVP v.sc b a vp v.vi) 
         (predSV {s = v.s ; 
-                sc = case vp.sc of {
+                sc = case vp.s.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
@@ -61,7 +61,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
       insertObj 
         (\\_,b,a => infVP v.sc b a vp v.vi) 
         (predSV {s = v.s ; 
-                sc = case vp.sc of {
+                sc = case vp.s.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
@@ -82,10 +82,14 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
     ReflVP v = insertObjPre False (\fin,b,agr -> appCompl fin b v.c2 (reflPron agr)) v ;
 
     PassV2 v = let vp = predSV v in {
+---- TODO
+{- ----
       s = \\vif,ant,pol,agr => case vif of {
         VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
         _ => vp.s ! vif ! ant ! pol ! agr 
         } ;
+-}
+      s = vp.s ;
       s2 = \\_,_,_ => [] ;
       adv = \\_ => [] ;
       ext = [] ;
@@ -93,8 +97,6 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
       isNeg = False ;
       sc = v.c2.c ; -- minut valitaan ; minua rakastetaan ; minulle kuiskataan 
       } ;           ---- talon valitaan: should be marked like inf.
-
-----b    UseVS, UseVQ = \v -> v ** {c2 = {s = [] ; c = NPAcc ; isPre = True}} ;
 
     CompAP ap = {
       s = \\agr => 

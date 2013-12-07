@@ -20,7 +20,7 @@ concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in 
             } ;
           cl = mkClause 
              (subjForm {s = rp.s ! (complNumAgr agr) ; 
-                        a = agr ; isPron = False} vp.sc) agr vp
+                        a = agr ; isPron = False} vp.s.sc) agr vp
         in
         cl.s ! t ! ant ! b ! SDecl ;
       c = NPCase Nom
