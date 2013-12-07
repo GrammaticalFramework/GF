@@ -1,4 +1,4 @@
-concrete PhraseFin of Phrase = CatFin ** open ResFin, (P = Prelude) in {
+concrete PhraseFin of Phrase = CatFin ** open ResFin, StemFin, (P = Prelude) in {
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;

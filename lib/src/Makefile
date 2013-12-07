@@ -131,7 +131,7 @@ ParseEng:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEng english/ParseEng.gf
 
 ParseFin:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseFin finnish/stemmed/ParseFin.gf
+	gf -make -literal=Symb -src -probs=$(PROBSFILE) -name=ParseFin finnish/stemmed/ParseFin.gf
 
 ParseEngFin:
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngFin ParseEng.pgf ParseFin.pgf

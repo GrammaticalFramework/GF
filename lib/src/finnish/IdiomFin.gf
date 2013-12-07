@@ -1,5 +1,5 @@
 concrete IdiomFin of Idiom = CatFin ** 
-  open MorphoFin, ParadigmsFin, Prelude in {
+  open MorphoFin, StemFin, ParadigmsFin, Prelude in {
 
   flags optimize=all_subs ; coding=utf8;
 
@@ -57,7 +57,7 @@ concrete IdiomFin of Idiom = CatFin **
 
     ProgrVP vp = 
       let 
-        inf = vp.s.s ! Inf Inf3Iness ;
+        inf = (sverb2verbSep vp.s).s ! Inf Inf3Iness ;
         on  = predV olla
       in {
         s = on.s ;
@@ -69,7 +69,7 @@ concrete IdiomFin of Idiom = CatFin **
         } ;
 
   ImpPl1 vp = 
-    let vps = vp.s.s ! ImperP1Pl
+    let vps = (sverb2verbSep vp.s).s ! ImperP1Pl
     in
     {s = vps ++
          vp.s2 ! True ! Pos ! Ag Pl P1 ++ vp.ext
@@ -85,7 +85,7 @@ concrete IdiomFin of Idiom = CatFin **
       } ;
 
   oper
-    olla = verbOlla ** {sc = NPCase Nom ; h = Back ; p = []} ;
+    olla = vpVerbOlla ;
 
     noSubj : Polarity -> Str = \_ -> [] ;
 }
