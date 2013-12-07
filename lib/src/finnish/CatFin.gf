@@ -33,8 +33,8 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
 
 -- Verb
 
-    VP   = ResFin.VP ;
-    VPSlash = ResFin.VP ** {c2 : Compl} ; 
+    VP   = StemFin.VP ;
+    VPSlash = StemFin.VP ** {c2 : Compl} ; 
     Comp = {s : Agr => Str} ; 
 
 -- Adjective

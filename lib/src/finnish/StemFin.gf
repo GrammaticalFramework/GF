@@ -170,4 +170,231 @@ oper
           (predSV v) ** {c2 = vp.c2} ;
 
 
+---- VP now stemming-dependent. AR 7/12/2013
+
+  VP = {
+    s   : SVerb1 ;
+    s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
+    adv : Polarity => Str ; -- ainakin/ainakaan
+    ext : Str ;
+    isNeg : Bool ; -- True if some complement is negative
+    } ;
+    
+  HVerb : Type = Verb ** {sc : NPForm ; h : Harmony ; p : Str} ;
+ 
+  predV : HVerb -> VP = \verb -> {
+    s = verb ;
+    s2 = \\_,_,_ => [] ;
+    adv = \\_ => verb.p ; -- the particle of the verb
+    ext = [] ;
+    isNeg = False 
+    } ;
+
+  old_VP = {
+    s   : VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ; 
+    s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
+    adv : Polarity => Str ; -- ainakin/ainakaan
+    ext : Str ;
+    sc  : NPForm ;
+    isNeg : Bool ; -- True if some complement is negative
+    h   : Harmony
+    } ;
+
+  vp2old_vp : VP -> old_VP = \vp -> let verb = vp.s in {
+    s = \\vi,ant,b,agr0 => 
+      let
+
+        agr = verbAgr agr0 ;
+        verbs = verb.s ;
+        part  : Str = case vi of {
+          VIPass _ => verbs ! PastPartPass (AN (NCase agr.n Nom)) ; 
+          _        => verbs ! PastPartAct (AN (NCase agr.n Nom))
+          } ; 
+
+        eiv : Str = case agr of {
+          {n = Sg ; p = P1} => "en" ;
+          {n = Sg ; p = P2} => "et" ;
+          {n = Sg ; p = P3} => "ei" ;
+          {n = Pl ; p = P1} => "emme" ;
+          {n = Pl ; p = P2} => "ette" ;
+          {n = Pl ; p = P3} => "eivät"
+          } ;
+
+        einegole : Str * Str * Str = case <vi,agr.n> of {
+          <VIFin Pres,        _>  => <eiv, verbs ! Imper Sg,     "ole"> ;
+          <VIFin Fut,         _>  => <eiv, verbs ! Imper Sg,     "ole"> ;   --# notpresent
+          <VIFin Cond,        _>  => <eiv, verbs ! Condit Sg P3, "olisi"> ;  --# notpresent
+          <VIFin Past,        Sg> => <eiv, part,                 "ollut"> ;  --# notpresent
+          <VIFin Past,        Pl> => <eiv, part,                 "olleet"> ;  --# notpresent
+          <VIImper,           Sg> => <"älä", verbs ! Imper Sg,   "ole"> ;
+          <VIImper,           Pl> => <"älkää", verbs ! ImpNegPl, "olko"> ;
+          <VIPass Pres,       _>  => <"ei", verbs ! PassPresn False,  "ole"> ;
+          <VIPass Fut,        _>  => <"ei", verbs ! PassPresn False,  "ole"> ; --# notpresent
+          <VIPass Cond,       _>  => <"ei", verbs ! PassCondit False,  "olisi"> ; --# notpresent
+          <VIPass Past,       _>  => <"ei", verbs ! PassImpf False,  "ollut"> ; --# notpresent
+          <VIInf i,           _>  => <"ei", verbs ! Inf i, "olla"> ----
+          } ;
+
+        ei  : Str = einegole.p1 ;
+        neg : Str = einegole.p2 ;
+        ole : Str = einegole.p3 ;
+
+        olla : VForm => Str = table {
+           PassPresn  True => verbOlla.s ! Presn Sg P3 ;
+           PassImpf   True => verbOlla.s ! Impf Sg P3 ;   --# notpresent
+           PassCondit True => verbOlla.s ! Condit Sg P3 ; --# notpresent
+           vf => verbOlla.s ! vf
+           } ;
+
+        vf : Str -> Str -> {fin, inf : Str} = \x,y -> 
+          {fin = x ; inf = y} ;
+        mkvf : VForm -> {fin, inf : Str} = \p -> case <ant,b> of {
+          <Simul,Pos> => vf (verbs ! p) [] ;
+          <Anter,Pos> => vf (olla ! p)  part ;    --# notpresent
+          <Anter,Neg> => vf ei          (ole ++ part) ;   --# notpresent
+          <Simul,Neg> => vf ei          neg
+          } ;
+        passPol = case b of {Pos => True ; Neg => False} ;
+      in
+      case vi of {
+        VIFin Past => mkvf (Impf agr.n agr.p) ;     --# notpresent
+        VIFin Cond => mkvf (Condit agr.n agr.p) ;  --# notpresent
+        VIFin Fut  => mkvf (Presn agr.n agr.p) ;  --# notpresent
+        VIFin Pres => mkvf (Presn agr.n agr.p) ;
+        VIImper    => mkvf (Imper agr.n) ;
+        VIPass Past    => mkvf (PassImpf passPol) ;  --# notpresent
+        VIPass Cond    => mkvf (PassCondit passPol) ; --# notpresent
+        VIPass Fut     => mkvf (PassPresn passPol) ;  --# notpresent
+        VIPass Pres    => mkvf (PassPresn passPol) ;  
+        VIInf i    => mkvf (Inf i)
+        } ;
+
+    s2 = vp.s2 ;
+    adv = vp.adv ; -- the particle of the verb
+    ext = vp.ext ;
+    sc = verb.sc ;
+    h = verb.h ;
+    isNeg = vp.isNeg 
+    } ;
+
+  insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
+    s = vp.s ;
+    s2 = \\fin,b,a => vp.s2 ! fin ! b ! a  ++ obj ! fin ! b ! a ;
+    adv = vp.adv ;
+    ext = vp.ext ;
+    sc = vp.sc ; 
+    h = vp.h ;
+    isNeg = vp.isNeg
+    } ;
+
+  insertObjPre : Bool -> (Bool -> Polarity -> Agr -> Str) -> VP -> VP = \isNeg, obj,vp -> {
+    s = vp.s ;
+    s2 = \\fin,b,a => obj fin b a ++ vp.s2 ! fin ! b ! a ;
+    adv = vp.adv ;
+    ext = vp.ext ;
+    sc = vp.sc ; 
+    h = vp.h ;
+    isNeg = orB vp.isNeg isNeg
+    } ;
+
+  insertAdv : (Polarity => Str) -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    s2 = vp.s2 ;
+    ext = vp.ext ;
+    adv = \\b => vp.adv ! b ++ adv ! b ;
+    sc = vp.sc ; 
+    h = vp.h ;
+    isNeg = vp.isNeg --- missään
+    } ;
+
+  insertExtrapos : Str -> VP -> VP = \obj,vp -> {
+    s = vp.s ;
+    s2 = vp.s2 ;
+    ext = vp.ext ++ obj ;
+    adv = vp.adv ;
+    sc = vp.sc ; 
+    h = vp.h ;
+    isNeg = vp.isNeg
+    } ;
+
+  mkClausePol : Bool -> (Polarity -> Str) -> Agr -> VP -> Clause = 
+    \isNeg,sub,agr,vp -> {
+      s = \\t,a,b => 
+         let
+           pol = case isNeg of {
+            True => Neg ; 
+            _ => b
+            } ; 
+           c = (mkClausePlus sub agr vp).s ! t ! a ! pol 
+         in 
+         table {
+           SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.adv ++ c.ext ;
+           SQuest => c.fin ++ BIND ++ questPart c.h ++ c.subj ++ c.inf ++ c.compl ++ c.adv ++ c.ext
+           }
+      } ;
+  mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = 
+    \sub,agr,vp -> {
+      s = \\t,a,b => let c = (mkClausePlus sub agr vp).s ! t ! a ! b in 
+         table {
+           SDecl  => c.subj ++ c.fin ++ c.inf ++ c.compl ++ c.adv ++ c.ext ;
+           SQuest => c.fin ++ BIND ++ questPart c.h ++ c.subj ++ c.inf ++ c.compl ++ c.adv ++ c.ext
+           }
+      } ;
+
+  mkClausePlus : (Polarity -> Str) -> Agr -> VP -> ClausePlus =
+    \sub,agr,vp0 -> let vp = vp2old_vp vp0 in {
+      s = \\t,a,b => 
+        let 
+          agrfin = case vp.sc of {
+                    NPCase Nom => <agr,True> ;
+                    _ => <agrP3 Sg,False>      -- minun täytyy, minulla on
+                    } ;
+          verb  = vp.s ! VIFin t ! a ! b ! agrfin.p1 ;
+        in {subj = sub b ; 
+            fin  = verb.fin ; 
+            inf  = verb.inf ; 
+            compl = vp.s2 ! agrfin.p2 ! b ! agr ;
+            adv  = vp.adv ! b ; 
+            ext  = vp.ext ; 
+            h    = selectPart vp0 a b
+            }
+     } ;
+
+  selectPart : VP -> Anteriority -> Polarity -> Harmony = \vp,a,p -> 
+    case p of {
+      Neg => Front ;  -- eikö tule
+      _ => case a of {
+        Anter => Back ; -- onko mennyt --# notpresent
+        _ => vp.s.h  -- tuleeko, meneekö
+        }
+      } ;
+
+-- the first Polarity is VP-internal, the second comes form the main verb:
+-- ([main] tahdon | en tahdo) ([internal] nukkua | olla nukkumatta)
+  infVPGen : Polarity -> NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
+    \ipol,sc,pol,agr,vp0,vi ->
+        let 
+          vp = vp2old_vp vp0 ;
+          fin = case sc of {     -- subject case
+            NPCase Nom => True ; -- minä tahdon nähdä auton
+            _ => False           -- minun täytyy nähdä auto
+            } ;
+          verb = case ipol of {
+            Pos => <vp.s ! VIInf vi ! Simul ! Pos ! agr, []> ; -- nähdä/näkemään
+            Neg => <(vp2old_vp (predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []}))).s ! VIInf vi ! Simul ! Pos ! agr,
+                    (vp.s ! VIInf Inf3Abess ! Simul ! Pos ! agr).fin> -- olla/olemaan näkemättä
+            } ;
+          vph = vp.h ;
+          poss = case vi of {
+            InfPresPartAgr => possSuffixGen vph agr ; -- toivon nukkuva + ni
+            _ => []
+            } ;
+          compl = vp.s2 ! fin ! pol ! agr ++ vp.adv ! pol ++ vp.ext     -- compl. case propagated
+        in
+        verb.p1.fin ++ verb.p1.inf ++ poss ++ verb.p2 ++ compl ;
+
+  infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str = infVPGen Pos ;
+
+  vpVerbOlla : HVerb = verbOlla ** {sc = NPCase Nom ; h = Back ; p = []} ;
+
 }

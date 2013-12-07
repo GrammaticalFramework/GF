@@ -1,5 +1,5 @@
 --# -coding=latin1
-concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin in {
+concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin, StemFin in {
 
   flags optimize=all_subs ;
 

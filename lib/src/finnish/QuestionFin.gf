@@ -1,5 +1,5 @@
 --# -coding=latin1
-concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
+concrete QuestionFin of Question = CatFin ** open ResFin, StemFin, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -32,7 +32,7 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
     QuestIComp icomp np = {
       s = \\t,a,p => 
         let 
-          vp = predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []}) ;
+          vp = predV vpVerbOlla ;
           cl = mkClause (subjForm np vp.s.sc) np.a vp ;
         in
         icomp.s ! np.a ++ cl.s ! t ! a ! p ! SDecl
