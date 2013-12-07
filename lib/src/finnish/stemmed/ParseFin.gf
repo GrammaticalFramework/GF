@@ -1,4 +1,4 @@
---# -path=.:..:../../abstract:../../common:../../english:../kotus
+--# -path=.:..:../../abstract:../../common:../../api:../../english:../kotus
 
 concrete ParseFin of ParseEngAbs = 
   TenseX, ---- - [Pol, PNeg, PPos],
@@ -21,7 +21,7 @@ concrete ParseFin of ParseEngAbs =
       VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV]
  , DictEngFin 
 ** 
-open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, StemFin, Prelude in {
+open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, StemFin, (E = ExtraFin), Prelude in {
 
 flags literal=Symb ; coding = utf8 ;
 
@@ -68,7 +68,7 @@ lin
   PredVPosv np vp = mkCl np vp ; ----
 
   -- Ant -> Pol -> VPSlash -> RS ; --- here replaced by a relative clause 
-  PastPartRS ant pol vps = mkRS ant pol (mkRCl which_RP (passVPSlash (lin VPSlash vps))) ;
+  PastPartRS ant pol vps = mkRS ant pol (mkRCl which_RP (E.PassVPSlash (lin VPSlash vps))) ;
 
   ApposNP np1 np2 = {
       s = \\c => np1.s ! c ++ "," ++ np2.s ! c ;
