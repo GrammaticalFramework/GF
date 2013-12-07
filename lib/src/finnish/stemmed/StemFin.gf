@@ -503,7 +503,7 @@ oper
 
   slashV2VNP : (SVerb1 ** {c2 : Compl ; vi : InfForm}) -> (NP ** {isNeg : Bool}) -> 
     (VP ** {c2 : Compl}) -> (VP ** {c2 : Compl}) 
-    = \v, np, vp -> 
+    = \v, np, vp0 -> let vp = vp2old_vp vp0 ** {c2 = vp0.c2} in 
       insertObjPre False                               ---- ignoring np.isNeg
         (\fin,b,a ->  np.s ! v.c2.c ++ vp.c2.s ++   
                         ---- appCompl fin b v.c2 np ++ -- ignoring Acc variation and pre/postposition
