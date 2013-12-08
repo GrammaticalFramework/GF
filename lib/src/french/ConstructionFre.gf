@@ -5,8 +5,8 @@ concrete ConstructionFre of Construction = CatFre **
 
 
 lin
-  hungry_VP = mkVP have_V2 (mkNP (ParadigmsFre.mkN "faim" feminine)) ;
-  thirsty_VP = mkVP have_V2 (mkNP (ParadigmsFre.mkN "soif" feminine)) ;
+  hungry_VP = E.ComplCN have_V2 (mkCN (mkN "faim")) ;
+  thirsty_VP = E.ComplCN have_V2 (mkCN (mkN "soif")) ;
   has_age_VP card = mkVP have_V2 (mkNP <lin Card card : Card> L.year_N) ;
 
   have_name_Cl x y = mkCl x (mkV2 (reflV (mkV "appeler"))) y ;
@@ -19,8 +19,8 @@ lin
 -- some more things
   weather_adjCl ap = mkCl (mkVP (mkVA (mkV I.faire_V2)) (lin AP ap)) ;
    
-  is_right_VP = mkVP have_V2 (mkNP (mkN "raison")) ;
-  is_wrong_VP = mkVP have_V2 (mkNP (mkN "tort")) ;
+  is_right_VP = E.ComplCN have_V2 (mkCN (mkN "raison")) ;
+  is_wrong_VP = E.ComplCN have_V2 (mkCN (mkN "tort")) ;
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
   

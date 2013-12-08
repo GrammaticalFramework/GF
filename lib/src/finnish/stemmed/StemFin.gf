@@ -507,17 +507,17 @@ oper
 ---- and in a simplified way for ParseFin (here)
 
   slashV2VNP : (SVerb1 ** {c2 : Compl ; vi : InfForm}) -> (NP ** {isNeg : Bool}) -> 
-    (VP ** {c2 : Compl}) -> (VP ** {c2 : Compl}) 
-    = \v, np, vp0 -> let vp = vp2old_vp vp0 ** {c2 = vp0.c2} in 
-      insertObjPre False                               ---- ignoring np.isNeg
-        (\fin,b,a ->  np.s ! v.c2.c ++ vp.c2.s ++   
-                        ---- appCompl fin b v.c2 np ++ -- ignoring Acc variation and pre/postposition
-                      (let verb = vp.s ! VIInf v.vi ! Simul ! Pos ! a 
-                       in verb.fin ++ verb.inf ++ vp.s2 ! fin ! b ! a ++ vp.adv ! b ++ vp.ext)    
-                        ---- infVP v.sc b a vp v.vi    -- ignoring neg vp's and possessive suffix of inf
-                      ) 
-          (predSV v) ** {c2 = vp.c2} ;
-
+    (VP ** {c2 : Compl}) -> (VP ** {c2 : Compl}) = 
+    \v, np, vp -> {
+      s  = v ;
+      s2 = \\fin,b,a =>  np.s ! v.c2.c ++ vp.c2.s ++ v.s ! SVInf ;
+                         ---- infVP v.sc b a vp v.vi ;
+                         -- ignoring Acc variation and pre/postposition and proper inf form
+      ext = [] ;
+      adv = \\_ => v.p ;
+      vptyp = vp.vptyp ; -- ignoring np.isNeg
+      c2 = vp.c2
+      } ;
 
 --------------------------------
 
