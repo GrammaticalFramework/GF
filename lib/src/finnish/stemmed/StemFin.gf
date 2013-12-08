@@ -418,8 +418,6 @@ oper
 
   predSV : SVerb1 -> VP = predV ; 
 
-----    \sv -> predV (sverb2verbSep sv ** {p = sv.p ; sc = sv.sc ; h = sv.h}) ;
-
 
 -- word formation functions
 
@@ -530,17 +528,17 @@ oper
     s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
     adv : Polarity => Str ; -- ainakin/ainakaan
     ext : Str ;
-    isNeg : Bool ; -- True if some complement is negative
+    vptyp : {isNeg : Bool ; isPass : Bool} ;-- True if some complement is negative, and if the verb is rendered in the passive
     } ;
-    
---  HVerb : Type = Verb ** {sc : NPForm ; h : Harmony ; p : Str} ;
+
+  defaultVPTyp = {isNeg = False ; isPass = False} ;
  
   predV : SVerb1 -> VP = \verb -> {
     s = verb ;
     s2 = \\_,_,_ => [] ;
     adv = \\_ => verb.p ; -- the particle of the verb
     ext = [] ;
-    isNeg = False 
+    vptyp = defaultVPTyp ;
     } ;
 
   old_VP = {
@@ -553,10 +551,11 @@ oper
     h   : Harmony
     } ;
 
-  vp2old_vp : VP -> old_VP = \vp -> let verb = sverb2verbSep vp.s in {
-    s = \\vi,ant,b,agr0 => 
+  vp2old_vp : VP -> old_VP = \vp -> 
+    let 
+     verb = sverb2verbSep vp.s ;
+     sverb :  VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} = \\vi,ant,b,agr0 => 
       let
-
         agr = verbAgr agr0 ;
         verbs = verb.s ;
         part  : Str = case vi of {
@@ -620,15 +619,23 @@ oper
         VIPass Fut     => mkvf (PassPresn passPol) ;  --# notpresent
         VIPass Pres    => mkvf (PassPresn passPol) ;  
         VIInf i    => mkvf (Inf i)
-        } ;
-
+        }
+    in {
+    s = case vp.vptyp.isPass of {
+          True => \\vif,ant,pol,agr => case vif of {
+            VIFin t  => sverb ! VIPass t ! ant ! pol ! agr ;
+           _ => sverb ! vif ! ant ! pol ! agr 
+           } ;
+          _ => sverb
+          } ;
     s2 = vp.s2 ;
     adv = vp.adv ; -- the particle of the verb
     ext = vp.ext ;
     sc = vp.s.sc ;
     h = vp.s.h ;
-    isNeg = vp.isNeg 
+    isNeg = vp.vptyp.isNeg 
     } ;
+
 
   insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
@@ -637,7 +644,7 @@ oper
     ext = vp.ext ;
     sc = vp.sc ; 
     h = vp.h ;
-    isNeg = vp.isNeg
+    vptyp = vp.vptyp
     } ;
 
   insertObjPre : Bool -> (Bool -> Polarity -> Agr -> Str) -> VP -> VP = \isNeg, obj,vp -> {
@@ -645,9 +652,7 @@ oper
     s2 = \\fin,b,a => obj fin b a ++ vp.s2 ! fin ! b ! a ;
     adv = vp.adv ;
     ext = vp.ext ;
-    sc = vp.sc ; 
-    h = vp.h ;
-    isNeg = orB vp.isNeg isNeg
+    vptyp = {isNeg = orB vp.vptyp.isNeg isNeg ; isPass = vp.vptyp.isPass} ;
     } ;
 
   insertAdv : (Polarity => Str) -> VP -> VP = \adv,vp -> {
@@ -657,7 +662,15 @@ oper
     adv = \\b => vp.adv ! b ++ adv ! b ;
     sc = vp.sc ; 
     h = vp.h ;
-    isNeg = vp.isNeg --- missään
+    vptyp = vp.vptyp --- missään
+    } ;
+
+  passVP : VP -> NPForm -> VP = \vp,sc -> {
+    s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = sc} ; -- minusta pidetään ---- TODO minun päälleni katsotaan
+    s2 = vp.s2 ;
+    ext = vp.ext ;
+    adv = vp.adv ;
+    vptyp = {isNeg = vp.vptyp.isNeg ; isPass = True} ; 
     } ;
 
   insertExtrapos : Str -> VP -> VP = \obj,vp -> {
@@ -667,7 +680,7 @@ oper
     adv = vp.adv ;
     sc = vp.sc ; 
     h = vp.h ;
-    isNeg = vp.isNeg
+    vptyp = vp.vptyp
     } ;
 
   mkClausePol : Bool -> (Polarity -> Str) -> Agr -> VP -> Clause = 

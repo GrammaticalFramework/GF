@@ -37,23 +37,7 @@ concrete IdiomFin of Idiom = CatFin **
 
     ImpersCl vp = mkClause noSubj (agrP3 Sg) vp ;
 
----- TODO properlu
-    GenericCl vp = mkClause noSubj (agrP3 Sg) {
-{- ----
-      s = \\vif,ant,pol,agr => case vif of {
-        VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
-        _ => vp.s ! vif ! ant ! pol ! agr 
-        } ;
--}
-      s = vp.s ; ----
-
-      s2 = vp.s2 ;
-      adv = vp.adv ;
-      ext = vp.ext ;
-      sc = vp.sc ; 
-      h = vp.h ;
-      isNeg = vp.isNeg
-      } ;
+    GenericCl vp = mkClause noSubj (agrP3 Sg) (passVP vp (NPCase Nom)) ;
 
     ProgrVP vp = 
       let 
@@ -64,8 +48,7 @@ concrete IdiomFin of Idiom = CatFin **
         s2 = \\b,p,a => inf ++ vp.s2 ! b ! p ! a ;
         adv = vp.adv ;
         ext = vp.ext ;
-        sc = vp.sc ; 
-        h = vp.h ; isNeg = vp.isNeg
+        vptyp = vp.vptyp ;
         } ;
 
   ImpPl1 vp = 
