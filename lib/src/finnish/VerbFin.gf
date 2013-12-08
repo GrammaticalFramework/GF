@@ -57,7 +57,16 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 
     UseCopula = predV vpVerbOlla ;
 
-    SlashVV v vp = 
+    SlashVV v vp = {
+      s  = v ; 
+      s2 = \\_,b,a => infVP v.sc b a vp v.vi ;
+      adv = \\_ => v.p ;
+      vptyp = vp.vptyp ;
+      ext = [] ;
+      c2 = vp.c2
+      } ;
+
+{- 
       insertObj 
         (\\_,b,a => infVP v.sc b a vp v.vi) 
         (predSV {s = v.s ; 
@@ -68,6 +77,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
                 h = v.h ; p = v.p
                }
          ) ** {c2 = vp.c2} ; ---- correct ??
+-}
 
     SlashV2VNP = StemFin.slashV2VNP ; ---- compilation to pgf takes too long 6/8/2013 hence a simplified version in stemmed/
 
