@@ -81,22 +81,16 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 
     ReflVP v = insertObjPre False (\fin,b,agr -> appCompl fin b v.c2 (reflPron agr)) v ;
 
-    PassV2 v = let vp = predSV v in {
----- TODO
+    PassV2 v = passVP (predSV v) v.c2.c ;
+
 {- ----
       s = \\vif,ant,pol,agr => case vif of {
         VIFin t  => vp.s ! VIPass t ! ant ! pol ! agr ;
         _ => vp.s ! vif ! ant ! pol ! agr 
         } ;
--}
-      s = vp.s ;
-      s2 = \\_,_,_ => [] ;
-      adv = \\_ => [] ;
-      ext = [] ;
-      h = vp.h ;
-      isNeg = False ;
       sc = v.c2.c ; -- minut valitaan ; minua rakastetaan ; minulle kuiskataan 
       } ;           ---- talon valitaan: should be marked like inf.
+-}
 
     CompAP ap = {
       s = \\agr => 

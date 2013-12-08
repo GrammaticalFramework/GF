@@ -97,4 +97,22 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
     N3 = SNoun ** {c2,c3 : Compl ; isPre,isPre2 : Bool} ;
     PN = SPN ;
 
+  linref
+    SSlash = \ss -> ss.s ++ ss.c2.s  ;
+    ClSlash = \cls -> cls.s ! Pres ! Simul ! Pos ++ cls.c2.s ;
+
+    VP = vpRef ;
+    VPSlash = \vps -> vpRef vps ++ vps.c2.s ;
+
+    V, VS, VQ, VA = \v -> vpRef (predV v) ;
+    V2, V2A, V2Q, V2S = \v -> vpRef (predV v) ++ v.c2.s ;
+    V3 = \v -> vpRef (predV v) ++ v.c2.s ++ v.c3.s ;
+    VV = \v -> vpRef (predV v) ;
+    V2V = \v -> vpRef (predV v) ++ v.c2.s ;
+
+    Conj = \c -> c.s1 ++ c.s2 ;
+
+  oper
+   vpRef : StemFin.VP -> Str = \vp -> infVP (NPCase Nom) Pos (agrP3 Sg) vp Inf1 ;
+
 }
