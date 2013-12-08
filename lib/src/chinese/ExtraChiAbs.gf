@@ -10,7 +10,7 @@ abstract ExtraChiAbs = Cat,
     Aspect ;
 
   fun
-    PredBareAP : NP -> AP -> Cl ;  -- adjectival predication without copula
+    CompBareAP : AP -> Comp ;  -- adjectival predication without copula
 
     QuestRepV : Cl -> QCl ;        -- V neg V question
 

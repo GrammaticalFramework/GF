@@ -21,7 +21,7 @@ concrete IdiomChi of Idiom = CatChi ** open Prelude, ResChi in {
     ProgrVP vp = {
       verb = regVerb zai_s ;
       compl = vp.prePart ++ vp.verb.s ++ vp.compl ;
-      prePart = []
+      prePart, topic = []
       } ;
 
 

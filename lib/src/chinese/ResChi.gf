@@ -100,7 +100,13 @@ param
 
 oper
 
-  VP = {verb : Verb ; compl : Str ; prePart : Str} ;
+  VP = {
+    topic : Str ;   -- topicalized item, before subject
+    prePart : Str ; -- between subject and verb
+    verb : Verb ; 
+    compl : Str     -- after verb
+    } ;
+
   NP = {s : Str} ; 
 
 -- for morphology
@@ -155,41 +161,53 @@ oper
             }
      } ;
 
-  infVP : VP -> Str = \vp -> vp.prePart ++ vp.verb.s ++ vp.compl ; 
+  infVP : VP -> Str = \vp -> vp.topic ++ vp.prePart ++ vp.verb.s ++ vp.compl ; 
 
   predV : Verb -> Str -> VP = \v,part -> {
       verb = v ; 
       compl = part ;
-      prePart = [] ;
+      prePart, topic = [] ;
       } ; 
 
   insertObj : NP -> VP -> VP = \np,vp -> {
      verb  = vp.verb ;
      compl = np.s ++ vp.compl ;
-     prePart = vp.prePart
+     prePart = vp.prePart ;
+     topic = vp.topic
      } ; 
 
   insertObjPost : NP -> VP -> VP = \np,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ++ np.s ;
-     prePart = vp.prePart
+     prePart = vp.prePart ;
+     topic = vp.topic
      } ; 
 
    insertAdv : SS -> VP -> VP = \adv,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ;
-     prePart = adv.s ++ vp.prePart
+     prePart = adv.s ++ vp.prePart ;
+     topic = vp.topic
+     } ; 
+
+   insertTopic : SS -> VP -> VP = \adv,vp -> {
+     verb  = vp.verb ;
+     compl = vp.compl ;
+     prePart = vp.prePart ;
+     topic = adv.s ++ vp.topic
      } ; 
    insertAdvPost : SS -> VP -> VP = \adv,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ;
-     prePart = vp.prePart ++ adv.s
+     prePart = vp.prePart ++ adv.s ;
+     topic = vp.topic
      } ; 
 
    insertPP : SS -> VP -> VP = \pp,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ;
-     prePart = vp.prePart ++ pp.s
+     prePart = vp.prePart ++ pp.s ;
+     topic = vp.topic
      } ; 
 
    insertExtra : SS -> VP -> VP = \ext,vp ->
@@ -216,8 +234,8 @@ oper
      } ;
  
    mkClauseCompl : Str -> VP -> Str -> Clause = \np,vp,compl -> {
-     s = \\p,a => np ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl ++ compl ;
-     np = np ;
+     s = \\p,a => vp.topic ++ np ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl ++ compl ;
+     np = vp.topic ++ np ;
      vp = insertObj (ss compl) vp ;
      } ;
    

@@ -36,9 +36,9 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
   lincat
     Aspect = {s : Str ; a : ResChi.Aspect} ;
   lin
-    PredBareAP np ap = case ap.hasAdA of {
-      True  => mkClause np.s (insertObj (mkNP ap.s) (predV nocopula [])) ; 
-      False => mkClause np.s (insertObj (mkNP ap.s) (predV hen_copula []))
+    CompBareAP ap = case ap.hasAdA of {
+      True  => insertObj (mkNP ap.s) (predV nocopula []) ; 
+      False => insertObj (mkNP ap.s) (predV hen_copula [])
       } ; 
     QuestRepV cl = {
       s = \\p,a => 
