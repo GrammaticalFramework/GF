@@ -7,13 +7,14 @@ concrete ParseChi of ParseEngAbs =
   NumeralChi,
   SymbolChi [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
   ConjunctionChi,
-  VerbChi - [SlashV2V, PassV2, UseCopula, ComplVV],
+  VerbChi - [SlashV2V, PassV2, UseCopula, ComplVV, CompAP],
   AdverbChi,
   PhraseChi,
   SentenceChi,
   QuestionChi,
   RelativeChi,
   IdiomChi [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
+  ConstructionChi,
   ExtraChi [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, PassAgentVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
@@ -22,12 +23,17 @@ concrete ParseChi of ParseEngAbs =
   DictEngChi
 
    ** 
-open ResChi, ParadigmsChi, SyntaxChi, Prelude in {
+open ResChi, ParadigmsChi, SyntaxChi, Prelude, (G = GrammarChi), (E = ExtraChi) in {
 
 flags
   literal=Symb ;
   coding = utf8 ;
 
+
+-- Chinese-specific overrides
+
+lin
+  CompAP = G.CompAP | E.CompBareAP ;
 
 lin
 
@@ -135,8 +141,8 @@ DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
 
     ComplVV v a p vp = {
       verb = v ;
-      compl = a.s ++ p.s ++ useVerb vp.verb ! p.p ! APlain ++ vp.compl ; ---- aspect
-      prePart = vp.prePart
+      compl = a.s ++ p.s ++ vp.topic ++ vp.prePart ++ useVerb vp.verb ! p.p ! APlain ++ vp.compl ; ---- aspect
+      prePart, topic = []
       } ;
 
   ApposNP np1 np2 = {
