@@ -128,5 +128,23 @@ lin
 --      insertObj (\\_,b,a => infVPGen pol.p v.sc b a vps v.vi) (predSV v) ** {c2 = v.c2} ; --- or vps.c2 ??
 
 --in Verb,   SlashV2VNP : V2V -> NP -> VPSlash -> VPSlash
+
+lincat 
+  NDisplay = {s : NForm => Str} ;
+  ADisplay = {s : Degree => NForm => Str} ; 
+  VDisplay = {s : VForm => Str} ; 
+
+lin
+  DisplayN n = snoun2nounSep n ;
+  DisplayA a = {
+    s = table {
+       Posit  => (snoun2nounSep {s = \\f => a.s ! Posit  ! sAN f ; h = a.h}).s ; 
+       Compar => (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s ; 
+       Superl => (snoun2nounSep {s = \\f => a.s ! Superl ! sAN f ; h = a.h}).s 
+      }
+    } ;
+ 
+  DisplayV v = sverb2verbSep v ;
+
 }
 
