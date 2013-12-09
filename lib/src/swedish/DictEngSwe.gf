@@ -3901,6 +3901,7 @@ lin asystole_N = variants {};
 lin at_N = mkN "för"; -- comment=6
 lin at_Prep = mkPrep "vid"; --
 lin at_all_Adv = variants {};
+lin at_home_Adv = mkAdv "hemma" ;
 lin at_home_N = variants {};
 lin at_least_AdN = S.at_least_AdN;
 lin at_the_behest_of_Prep = variants {};
@@ -22721,6 +22722,7 @@ lin frolic_N = variants {};
 lin frolic_V = variants {};
 lin frolicsome_A = variants {};
 lin from_Prep = S.from_Prep;
+lin from_home_Adv = mkAdv "hemifrån" ;
 lin frome_PN = variants {};
 lin frond_N = mkN "palmblad" neutrum;
 lin front_N = mkN "front" "fronter"; -- comment=4
@@ -54956,7 +54958,7 @@ lin storeyed_A = variants {};
 lin storied_A = variants {};
 lin stork_N = mkN "stork"; -- status=guess
 lin storksbill_N = variants {};
-lin storm_N = mkN "oväder" neutrum; -- comment=3
+lin storm_N = mkN "storm" ; 
 lin storm_V = mkV "stormar";
 lin storm_V2 = variants {};
 lin storm_beaten_A = variants {};
