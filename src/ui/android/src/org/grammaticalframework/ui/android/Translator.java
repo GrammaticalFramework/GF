@@ -34,7 +34,7 @@ public class Translator {
 	new Language("en-US", "English", "ParseEng", R.xml.inflection_en, R.xml.qwerty),
         new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.inflection_bg, R.xml.cyrillic),
         new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.inflection_cmn, R.xml.qwerty),   
-        new Language("fi-FI", "Finnish", "ParseFin", R.xml.inflection_fi2, R.xml.qwerty),
+        new Language("fi-FI", "Finnish", "ParseFin", R.xml.inflection_fi, R.xml.qwerty),
 	new Language("fr-FR", "French", "ParseFre", 0, R.xml.qwerty),  
 	new Language("de-DE", "German", "ParseGer", 0, R.xml.qwerty), 
 	new Language("hi-IN", "Hindi", "ParseHin", 0, R.xml.qwerty), /// 
