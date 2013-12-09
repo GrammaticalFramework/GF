@@ -21425,7 +21425,6 @@ holystone_N = mkWN (compoundN "hohka" (k7 "kivi")) ; --UNCHK
 holystone_V2 = mkWV2 (k53 "puhdistaa") "hohkakivellä" ; --UNCHK
 homage_N = mkWN (compoundN "kunnian" (k39 "osoitus")) ; --UNCHK
 home_A = mkWA "koti-" ; --UNCHK
-home_Adv = mkWAdv (k99 "kotona") ; --UNCHK
 homebound_A = mkWA (k10 "pysyvä") "kotona" ; --UNCHK
 homebound_N = mkWN (compoundN "koti" (k10A "rotta")) ; --UNCHK
 homeboy_N = mkWN (k5 "kundi") "kotikylän" ; --UNCHK
