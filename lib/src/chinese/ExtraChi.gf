@@ -55,6 +55,6 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
           cl.np ++ cl.vp.prePart ++ verb ++ cl.vp.compl
       } ;
 
-  TopicAdvCl adv cl = mkClause (adv.s ++ cl.np) cl.vp ;
+  TopicAdvVP vp adv = insertTopic adv vp ;
 
 } 
