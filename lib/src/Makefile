@@ -122,7 +122,9 @@ clean:
 
 
 
-Parse: ParseEng ParseBul ParseChi ParseGer ParseSwe ParseHin ParseFin ParseFre 
+Parse: ParseEng ParseBul ParseChi ParseGer ParseSwe ParseHin ParseFin ParseFre Parse8
+
+Parse8: 
 	gf -make -literal=Symb -probs=$(PROBSFILE) -name=Parse8 ParseEng.pgf ParseBul.pgf ParseChi.pgf ParseGer.pgf ParseSwe.pgf ParseHin.pgf ParseFin.pgf ParseFre.pgf 
 
 

@@ -233,7 +233,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
   kohan_Part = mkPart "kohan" "köhän" ;
   pahan_Part = mkPart "pahan" "pähän" ;
 
-  PassVPSlash vp = passVP vp vp.c2.c ;
+  PassVPSlash vp = passVP vp vp.c2 ;
 
 {- -----
       s = \\vif,ant,pol,agr => case vif of {

@@ -91,7 +91,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 
     ReflVP v = insertObjPre False (\fin,b,agr -> appCompl fin b v.c2 (reflPron agr)) v ;
 
-    PassV2 v = passVP (predSV v) v.c2.c ;
+    PassV2 v = passVP (predSV v) v.c2 ;
 
 {- ----
       s = \\vif,ant,pol,agr => case vif of {
