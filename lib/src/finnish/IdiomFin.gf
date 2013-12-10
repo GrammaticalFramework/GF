@@ -37,7 +37,7 @@ concrete IdiomFin of Idiom = CatFin **
 
     ImpersCl vp = mkClause noSubj (agrP3 Sg) vp ;
 
-    GenericCl vp = mkClause noSubj (agrP3 Sg) (passVP vp (NPCase Nom)) ;
+    GenericCl vp = mkClause noSubj (agrP3 Sg) (passVP vp (casePrep nominative)) ;
 
     ProgrVP vp = 
       let 

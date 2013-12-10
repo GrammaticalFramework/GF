@@ -315,9 +315,9 @@ oper
     vptyp = vp.vptyp --- missään
     } ;
 
-  passVP : VP -> NPForm -> VP = \vp,sc -> {
-    s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = sc} ; -- minusta pidetään ---- TODO minun päälleni katsotaan
-    s2 = vp.s2 ;
+  passVP : VP -> Compl -> VP = \vp,pr -> {
+    s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = pr.c} ; -- minusta pidetään ---- TODO minun katsotaan päälle
+    s2 = \\b,p,a => pr.s ++ vp.s2 ! b ! p ! a ;  ---- prep after verb
     ext = vp.ext ;
     adv = vp.adv ;
     vptyp = {isNeg = vp.vptyp.isNeg ; isPass = True} ; 
