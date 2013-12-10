@@ -20,9 +20,10 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     Tense, -- tense
     Pol,   -- polarity
     Conj,  -- conjunction
-
     Pron,  -- pronoun
     Numeral,
+    Interj,
+    Phr,
 
 --  fun
     UseCl  , -- Tense -> Pol -> Cl -> S,
@@ -75,6 +76,7 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     PN,      -- proper name                      e.g. "John"
     Subj,    -- subjunction                      e.g. "because"
     IAdv,    -- interrogative adverb             e.g. "why"
+    IComp,
 
     ListAP,
     ListNP,
@@ -89,6 +91,14 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
 
     UttS , -- S -> Utt,
     UttQS, -- QS -> Utt,
+    UttNP,
+    UttCN,
+    UttAdv,
+    UttVP,
+    UttImp,
+    UttIP,
+    UttIAdv,
+    UttInterj,
 
     UseQCl, -- Tense -> Pol -> QCl -> QS,
     
@@ -96,6 +106,8 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     QuestVP   , -- IP -> VP -> QCl,       -- who walks
     QuestSlash, -- IP -> ClSlash -> QCl,  -- who does she walk with
     QuestIAdv , -- IAdv -> Cl -> QCl,     -- why does she walk
+    QuestIComp,
+    CompIAdv,
 
     SubjCl, -- Cl -> Subj -> S -> Cl,     -- she walks because we run
 
@@ -126,6 +138,8 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
 -- functions with different type
 
 lin
+   PhrUtt u = mkPhr (lin Utt u) ;
+
    TextS s = mkText (lin S s) ;
    TextQS qs = mkText (lin QS qs) ;
    TextImp vp = mkText (mkImp (lin VP vp)) ;
@@ -133,6 +147,9 @@ lin
    ComplV2 v np = mkVP v np ;
    ModCN ap cn = lin CN (mkCN <lin AP ap : AP> <lin CN cn : CN>) ;
    CompAP ap = mkVP <(lin AP ap) : AP> ;
+   CompCN ap = mkVP <(lin CN ap) : CN> ;
+   CompNP ap = mkVP <(lin NP ap) : NP> ;
+   CompAdv ap = mkVP <(lin Adv ap) : Adv> ;
    ConjS co x y = mkS (lin Conj co) (lin S x) (lin S y) ;
    ConjAP co x y = mkAP co x y ;
    ConjNP co x y = mkNP co x y ;
@@ -147,7 +164,6 @@ lin
    possDet p = S.mkDet <p : Pron> ;
    numeralDet n = S.mkDet <n : Numeral> ;
    SubjS subj a b = mkS (S.mkAdv <subj : Subj> <a : S>) b ;
-   CompAdv p pp = mkVP (S.mkAdv <p : Prep> <pp : NP>) ;
    SlashV2 np v2 = mkClSlash np v2 ;
    SlashPrep cl p = mkClSlash (lin Cl cl) <p : Prep> ;
    AdvCN cn p pp = mkCN <lin CN cn : CN> (mkAdv <p : Prep> <pp : NP>) ;
