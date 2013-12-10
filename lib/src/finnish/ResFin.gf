@@ -166,7 +166,12 @@ param
 
 ---
 
-  Compl : Type = {s : Str ; c : NPForm ; isPre : Bool} ;
+  Compl : Type = {
+    s : Bool => Str ; -- perää(n) 
+    c : NPForm ;      -- NP Gen
+    isPre : Bool ;    -- False           postposition
+    h : Harmony       -- hänen peräänsä
+    } ;
 
   appCompl : Bool -> Polarity -> Compl -> NP -> Str = \isFin,b,co,np ->
     let
@@ -183,17 +188,19 @@ param
           } ;
         _        => co.c
         } ;
-{-
-      c = case <isFin, b, co.c, np.isPron> of {
-        <_,    Neg, NPAcc,_>      => NPCase Part ; -- en näe taloa/sinua
-        <_,    Pos, NPAcc,True>   => NPAcc ;       -- näen/täytyy sinut
-        <False,Pos, NPAcc,False>  => NPCase Nom ;  -- täytyy nähdä talo
-        <_,_,coc,_>               => coc
-        } ;
--}
-      nps = np.s ! c
+      nps = np.s ! c ;
+      cos = case c of {
+           NPCase Gen => case np.isPron of {
+               True  => co.s ! True ++ BIND ++ case co.h of {
+                  Back  => possSuffix np.a ; 
+                  Front => possSuffixFront np.a
+                  } ; 
+               False => co.s ! False
+              } ;
+           _ => co.s ! False
+           } ;
     in
-    preOrPost co.isPre co.s nps ;
+    preOrPost co.isPre cos nps ;
 
 -- For $Verb$.
 
@@ -261,7 +268,7 @@ oper
 -- This is used for subjects of passives: therefore isFin in False.
 
   subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
-    appCompl False b {s = [] ; c = sc ; isPre = True} np ;
+    appCompl False b {s = \\_ => [] ; c = sc ; isPre = True ; h = Back} np ;
 
   questPart : Harmony -> Str = \b -> case b of {Back => "ko" ; _ => "kö"} ;
 

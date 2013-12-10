@@ -510,7 +510,7 @@ oper
     (VP ** {c2 : Compl}) -> (VP ** {c2 : Compl}) = 
     \v, np, vp -> {
       s  = v ;
-      s2 = \\fin,b,a =>  np.s ! v.c2.c ++ vp.c2.s ++ v.s ! SVInf ;
+      s2 = \\fin,b,a =>  np.s ! v.c2.c ++ vp.c2.s ! False ++ v.s ! SVInf ;
                          ---- infVP v.sc b a vp v.vi ;
                          -- ignoring Acc variation and pre/postposition and proper inf form
       ext = [] ;
@@ -666,8 +666,8 @@ oper
     } ;
 
   passVP : VP -> Compl -> VP = \vp,pr -> {
-    s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = pr.c} ; -- minusta pidetään ---- TODO minun katsotaan päälle
-    s2 = \\b,p,a => pr.s ++ vp.s2 ! b ! p ! a ;  ---- prep after verb
+    s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = pr.c} ; -- minusta pidetään 
+    s2 = \\b,p,a => pr.s ! False ++ vp.s2 ! b ! p ! a ;  ---- prep after verb ---- TODO minun päälleni katsotaan
     ext = vp.ext ;
     adv = vp.adv ;
     vptyp = {isNeg = vp.vptyp.isNeg ; isPass = True} ; 

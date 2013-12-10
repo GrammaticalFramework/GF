@@ -317,7 +317,7 @@ oper
 
   passVP : VP -> Compl -> VP = \vp,pr -> {
     s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = pr.c} ; -- minusta pidetään ---- TODO minun katsotaan päälle
-    s2 = \\b,p,a => pr.s ++ vp.s2 ! b ! p ! a ;  ---- prep after verb
+    s2 = \\b,p,a => pr.s ! False ++ vp.s2 ! b ! p ! a ;  ---- prep after verb
     ext = vp.ext ;
     adv = vp.adv ;
     vptyp = {isNeg = vp.vptyp.isNeg ; isPass = True} ; 

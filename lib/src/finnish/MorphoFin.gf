@@ -888,6 +888,11 @@ resource MorphoFin = ResFin ** open Prelude in {
       ase => ase
       } ;
 
+  guessHarmony : Str -> Harmony = \s -> case s of {
+    _ + ("a" | "o" | "u" | "A" | "O" | "U") + _ => Back ;
+    _ => Front
+    } ;
+
   vowHarmony : Str -> Str = \s -> case s of {
     _ + ("a" | "o" | "u" | "A" | "O" | "U") + _ => "a" ;
     _ => "ä"
