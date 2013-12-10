@@ -1,0 +1,242 @@
+<inflection_template>
+	<inflection>
+	    <cat>N</cat>
+	    <cat>N2</cat>
+	    <tag>n</tag>
+	    <template>
+
+
+<h1>Nom</h1>
+
+<i><lin form="s Nom ton">DetCN (DetQuant IndefArt NumSg) (UseN (<lemma/>))</lin></i>
+
+<p>
+			<table class="forms-table" rules="all" border="yes">
+<tr>
+<th>singulier</th>
+<td><form>s Sg</form></td>
+</tr>
+<tr>
+<th>pluriel</th>
+<td><form>s Pl</form></td>
+</tr>
+</table> 
+</p>
+		</template>
+	</inflection>
+
+
+
+
+	<inflection>
+	    <cat>A</cat>
+	    <cat>A2</cat>
+	    <tag>a</tag>
+	    <template>
+
+<h1>Adjectif</h1>
+			<table class="forms-table" rules="all" border="yes">
+<tr>
+<th></th>
+<th>singulier</th>
+<th>pluriel</th>
+</tr>
+<tr>
+<th>masculin</th>
+<td><form>s Posit (AF Masc Sg)</form></td><td><form>s Posit (AF Masc Pl)</form></td>
+</tr>
+<tr>
+<th>féminin</th>
+<td><form>s Posit (AF Fem Sg)</form></td><td><form>s Posit (AF Fem Pl)</form></td>
+</tr>
+</table>
+		</template>
+	</inflection>
+
+	<inflection>
+	    <cat>Adv</cat>
+	    <tag>adv</tag>
+	    <template>
+			<h1>Adverb</h1>
+			<p><form>s</form></p>
+		</template>
+	</inflection>
+	<inflection>
+	    <cat>Prep</cat>
+	    <tag>prep</tag>
+		<template>
+			<h1>Preposition</h1>
+			<p><form>s</form></p>
+		</template>
+	</inflection>
+	<inflection>
+	    <cat>V</cat>
+	    <cat>V2</cat> 
+		<cat>V3</cat>
+		<cat>V2V</cat>
+		<cat>V2S</cat>
+		<cat>V2Q</cat>
+		<cat>V2A</cat>
+		<cat>VV</cat>
+		<cat>VS</cat>
+		<cat>VQ</cat>
+		<cat>VA</cat>
+		<tag>v</tag>
+		<template>
+
+
+<h1>Verbe</h1>
+
+<i><form>s (VInfin False)</form></i>
+
+<p>
+
+
+			<table class="forms-table" rules="all" border="yes">
+<tr>
+<th colspan="2">présent</th>
+<th>indicatif</th>
+<th>subjonctif</th>
+</tr>
+<tr>
+<th rowspan="3">singulier</th>
+<th>1.p</th>
+<td><form>s (VFin (VPres Indic) Sg P1)</form></td><td><form>s (VFin (VPres Conjunct) Sg P1)</form></td>
+</tr>
+<tr>
+<th>2.p</th>  
+<td><form>s (VFin (VPres Indic) Sg P2)</form></td><td><form>s (VFin (VPres Conjunct) Sg P2)</form></td>
+</tr>
+<tr>
+<th>3.p</th>
+<td><form>s (VFin (VPres Indic) Sg P3)</form></td><td><form>s (VFin (VPres Conjunct) Sg P3)</form></td>
+</tr>
+<tr>
+<th rowspan="3">pluriel</th>
+<th>1.p</th>
+<td><form>s (VFin (VPres Indic) Pl P1)</form></td><td><form>s (VFin (VPres Conjunct) Pl P1)</form></td>
+</tr>
+<tr>
+<th>2.p</th>
+<td><form>s (VFin (VPres Indic) Pl P2)</form></td><td><form>s (VFin (VPres Conjunct) Pl P2)</form></td>
+</tr>
+<tr>
+<th>3.p</th>
+<td><form>s (VFin (VPres Indic) Pl P3)</form></td><td><form>s (VFin (VPres Conjunct) Pl P3)</form></td>
+</tr>
+</table>
+
+
+</p>
+<p>
+
+			<table class="forms-table" rules="all" border="yes">
+<tr>
+<th colspan="2">imparfait</th>
+<th>indicatif</th>
+<th>subjonctif</th>
+</tr>
+<tr>
+<th rowspan="3">singulier</th>
+<th>1.p</th>
+<td><form>s (VFin (VImperf Indic) Sg P1)</form></td><td><form>s (VFin (VImperf Conjunct) Sg P1)</form></td>
+</tr>
+<tr>
+<th>2.p</th>  
+<td><form>s (VFin (VImperf Indic) Sg P2)</form></td><td><form>s (VFin (VImperf Conjunct) Sg P2)</form></td>
+</tr>
+<tr>
+<th>3.p</th>
+<td><form>s (VFin (VImperf Indic) Sg P3)</form></td><td><form>s (VFin (VImperf Conjunct) Sg P3)</form></td>
+</tr>
+<tr>
+<th rowspan="3">pluriel</th>
+<th>1.p</th>
+<td><form>s (VFin (VImperf Indic) Pl P1)</form></td><td><form>s (VFin (VImperf Conjunct) Pl P1)</form></td>
+</tr>
+<tr>
+<th>2.p</th>
+<td><form>s (VFin (VImperf Indic) Pl P2)</form></td><td><form>s (VFin (VImperf Conjunct) Pl P2)</form></td>
+</tr>
+<tr>
+<th>3.p</th>
+<td><form>s (VFin (VImperf Indic) Pl P3)</form></td><td><form>s (VFin (VImperf Conjunct) Pl P3)</form></td>
+</tr>
+</table>
+
+</p>
+<p>
+
+
+			<table class="forms-table" rules="all" border="yes">
+<tr>
+<th colspan="2"></th>
+<th>passé simple</th>
+<th>futur</th>
+<th>conditionnel</th>
+</tr>
+<tr>
+<th rowspan="3">singulier</th>
+<th>1.p</th>
+<td><form>s (VFin VPasse Sg P1)</form></td><td><form>s (VFin VFut Sg P1)</form></td><td><form>s (VFin VFut Sg P1)</form></td>
+</tr>
+<tr>
+<th>2.p</th>  
+<td><form>s (VFin VPasse Sg P2)</form></td><td><form>s (VFin VFut Sg P2)</form></td><td><form>s (VFin VCondit Sg P2)</form></td>
+</tr>
+<tr>
+<th>3.p</th>
+<td><form>s (VFin VPasse Sg P3)</form></td><td><form>s (VFin VFut Sg P3)</form></td><td><form>s (VFin VCondit Sg P3)</form></td>
+</tr>
+<tr>
+<th rowspan="3">pluriel</th>
+<th>1.p</th>
+<td><form>s (VFin VPasse Pl P1)</form></td><td><form>s (VFin VFut Pl P1)</form></td><td><form>s (VFin VCondit Pl P1)</form></td>
+</tr>
+<tr>
+<th>2.p</th>
+<td><form>s (VFin VPasse Pl P2)</form></td><td><form>s (VFin VFut Pl P2)</form></td><td><form>s (VFin VCondit Pl P2)</form></td>
+</tr>
+<tr>
+<th>3.p</th>
+<td><form>s (VFin VPasse Pl P3)</form></td><td><form>s (VFin VFut Pl P3)</form></td><td><form>s (VFin VCondit Pl P3)</form></td>
+</tr>
+</table>
+
+
+
+
+
+</p>
+<p>
+
+			<table class="forms-table" rules="all" border="yes">
+<tr>
+<th>infinitif</th>
+<td><form>s (VInfin False)</form></td>
+</tr>
+<tr>
+<th>impératif sing.2.p</th>
+<td><form>s (VImper SgP2)</form></td>
+</tr>
+<tr>
+<th>impératif plur.1.p</th>
+<td><form>s (VImper PlP1)</form></td>
+</tr>
+<tr>
+<th>impératif plur.2.p</th>
+<td><form>s (VImper PlP2)</form></td>
+</tr>
+<tr>
+<th>participe passé</th>
+<td><form>s (VPart Masc Sg)</form></td>
+</tr>
+<tr>
+<th>participe présent</th>
+<td><form>s VGer</form></td>
+</tr>
+</table>
+</p>
+		</template>
+	</inflection>
+</inflection_template>
