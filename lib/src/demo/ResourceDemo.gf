@@ -20,6 +20,8 @@ abstract ResourceDemo = Lexicon, Numeral, Grammar [
     Conj,  -- conjunction
     Pron, 
     Numeral,
+    Interj,
+    Phr,
 
 --  fun
     UseCl  , -- Tense -> Pol -> Cl -> S,
@@ -70,6 +72,7 @@ abstract ResourceDemo = Lexicon, Numeral, Grammar [
     PN,      -- proper name                      e.g. "John"
     Subj,    -- subjunction                      e.g. "because"
     IAdv,    -- interrogative adverb             e.g. "why"
+    IComp,
 
     ListAP,
     ListNP,
@@ -82,6 +85,14 @@ abstract ResourceDemo = Lexicon, Numeral, Grammar [
 --  fun
     UttS , -- S -> Utt,
     UttQS, -- QS -> Utt,
+    UttNP,
+    UttCN,
+    UttAdv,
+    UttVP,
+    UttImp,
+    UttIP,
+    UttIAdv,
+    UttInterj,
 
     UseQCl, -- Tense -> Pol -> QCl -> QS,
     
@@ -89,6 +100,8 @@ abstract ResourceDemo = Lexicon, Numeral, Grammar [
     QuestVP   , -- IP -> VP -> QCl,       -- who walks
     QuestSlash, -- IP -> ClSlash -> QCl,  -- who does she walk with
     QuestIAdv , -- IAdv -> Cl -> QCl,     -- why does she walk
+    QuestIComp,
+    CompIAdv,
 
     SubjCl, -- Cl -> Subj -> S -> Cl,     -- she walks because we run
 
@@ -116,12 +129,14 @@ abstract ResourceDemo = Lexicon, Numeral, Grammar [
 
 ] ** {
 
-flags startcat = Text ;
+flags startcat = Phr ;
 
 
 -- functions with different type
 
 fun
+   PhrUtt  : Utt -> Phr ;
+
    TextS   : S  -> Text ; -- with .
    TextQS  : QS -> Text ; -- with ?
    TextImp : VP -> Text ; -- with !
@@ -129,6 +144,9 @@ fun
    ComplV2 : V2 -> NP -> VP ;
    ModCN   : AP -> CN -> CN ;
    CompAP  : AP -> VP ;
+   CompCN  : CN -> VP ;
+   CompNP  : NP -> VP ;
+   CompAdv : Adv -> VP ;
    ConjS   : Conj -> S  -> S  -> S ;
    ConjAP  : Conj -> AP -> AP -> AP ;
    ConjNP  : Conj -> NP -> NP -> NP ;
@@ -139,7 +157,6 @@ fun
    numeralDet : Numeral -> Det ;
    i_Pron, youSg_Pron, he_Pron, she_Pron, we_Pron, youPl_Pron, they_Pron : Pron ;
    SubjS   : Subj -> S -> S -> S ;     -- if she walks we run
-   CompAdv : Prep -> NP -> VP ;        -- be in the house
    SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
    SlashPrep : Cl -> Prep -> ClSlash ; -- she walks with
    AdvCN : CN -> Prep -> NP -> CN ; -- man in the city
