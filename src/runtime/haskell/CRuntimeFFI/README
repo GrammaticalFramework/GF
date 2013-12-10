@@ -1,0 +1,32 @@
+This is a work in progress, but usable as it is now.
+Some memory leaks and segfaults to be expected. 
+
+
+The files are 
+
+CRuntimeFFI.hsc  -- user-friendly functions, almost the same as in the real Haskell PGF library.
+Gu.hsc           -- mindlessly copypasted functions from various files in gu/
+PgfLow.hs        -- mindlessly copypasted functions from various files in pgf/
+
+The first two files (.hsc) use some special constructions for accessing C objects from Haskell.
+See the syntax here: http://www.haskell.org/ghc/docs/7.2.1/html/users_guide/hsc2hs.html
+
+HOW TO COMPILE:
+
+hsc2hs Gu.hsc CRuntimeFFI.hsc -v --cflag="-std=c99" && ghc -lpgf -lgu --make CRuntimeFFI 
+
+HOW TO USE:
+
+- Symlink or copy the files in this directory to the directory you're working with; these files are not included in any makefiles
+- Import CRuntimeFFI to a Haskell program you're writing
+
+  module Main where
+  import CRuntimeFFI
+
+- Use the functions in your program
+
+  main = do
+    pgf <- readPGF "Foo.pgf"
+    let english = getConcr pgf (mkCId ("FooEng"))
+
+I haven't managed to make it work in ghci, get errors about unknown symbols (low level C functions).
