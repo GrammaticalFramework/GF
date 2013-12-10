@@ -54,7 +54,7 @@ putSplitAbs :: PGF -> Put
 putSplitAbs pgf = do
   putWord16be pgfMajorVersion
   putWord16be pgfMinorVersion
-  put (Map.insert (mkCId "index") (LStr "true") (gflags pgf))
+  put (Map.insert (mkCId "split") (LStr "true") (gflags pgf))
   put (absname pgf, abstract pgf)
   put [(name,cflags cnc) | (name,cnc) <- Map.toList (concretes pgf)]
 
