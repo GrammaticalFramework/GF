@@ -161,7 +161,7 @@ data Flags = Flags {
       optPMCFG           :: Bool,
       optOptimizations   :: Set Optimization,
       optOptimizePGF     :: Bool,
-      optMkIndexPGF      :: Bool,
+      optSplitPGF        :: Bool,
       optCFGTransforms   :: Set CFGTransform,
       optLibraryPath     :: [FilePath],
       optStartCat        :: Maybe String,
@@ -272,7 +272,7 @@ defaultFlags = Flags {
       optPMCFG           = True,
       optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize],
       optOptimizePGF     = False,
-      optMkIndexPGF     = False,
+      optSplitPGF        = False,
       optCFGTransforms   = Set.fromList [CFGRemoveCycles, CFGBottomUpFilter, 
                                          CFGTopDownFilter, CFGMergeIdentical],
       optLibraryPath     = [],
@@ -367,8 +367,8 @@ optDescr =
                 "Select an optimization package. OPT = all | values | parametrize | none",
      Option [] ["optimize-pgf"] (NoArg (optimize_pgf True))
                 "Enable or disable global grammar optimization. This could significantly reduce the size of the final PGF file",
-     Option [] ["mk-index"] (NoArg (mkIndex True))
-                "Add an index to the pgf file",
+     Option [] ["split-pgf"] (NoArg (splitPGF True))
+                "Split the PGF into one file per language. This allows the runtime to load only individual languages",
      Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
@@ -437,7 +437,7 @@ optDescr =
                          Nothing -> fail $ "Unknown optimization package: " ++ x
                          
        optimize_pgf x = set $ \o -> o { optOptimizePGF = x }
-       mkIndex x = set $ \o -> o { optMkIndexPGF = x }
+       splitPGF x = set $ \o -> o { optSplitPGF = x }
 
        toggleOptimize x b = set $ setOptimization' x b
 
