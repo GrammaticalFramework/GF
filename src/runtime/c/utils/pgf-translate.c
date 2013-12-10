@@ -24,7 +24,7 @@ print_result(PgfExprProb* ep, PgfConcr* to_concr,
 
 	// Enumerate the concrete syntax trees corresponding
 	// to the abstract tree.
-	GuEnum* cts = pgf_lzr_concretize(to_concr, ep->expr, ppool);
+	GuEnum* cts = pgf_lzr_concretize(to_concr, ep->expr, err, ppool);
 	while (true) {
 		PgfCncTree ctree =
 			gu_next(cts, PgfCncTree, ppool);

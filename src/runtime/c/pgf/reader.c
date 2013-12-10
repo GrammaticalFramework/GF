@@ -577,6 +577,17 @@ pgf_read_abstract(PgfReader* rdr, PgfAbstr* abstract)
 	
 	abstract->cats = pgf_read_abscats(rdr, abstract);
 	gu_return_on_exn(rdr->err, );
+
+	abstract->abs_lin_fun = gu_new(PgfAbsFun, rdr->opool);
+	abstract->abs_lin_fun->name = "_";
+	abstract->abs_lin_fun->type = gu_new(PgfType, rdr->opool);
+	abstract->abs_lin_fun->type->hypos = NULL;
+	abstract->abs_lin_fun->type->cid = "_";
+	abstract->abs_lin_fun->type->n_exprs = 0;
+	abstract->abs_lin_fun->arity = 0;
+	abstract->abs_lin_fun->defns = NULL;
+	abstract->abs_lin_fun->ep.prob = INFINITY;
+	abstract->abs_lin_fun->ep.expr = gu_null_variant;
 }
 
 static PgfCIdMap*
@@ -864,7 +875,7 @@ pgf_read_funid(PgfReader* rdr, PgfConcr* concr)
 }
 
 static void
-pgf_read_lindefs(PgfReader* rdr, PgfAbsFun* abs_lin_fun, PgfConcr* concr)
+pgf_read_lindefs(PgfReader* rdr, PgfConcr* concr)
 {
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, );
@@ -878,14 +889,14 @@ pgf_read_lindefs(PgfReader* rdr, PgfAbsFun* abs_lin_fun, PgfConcr* concr)
 		ccat->lindefs = gu_new_seq(PgfCncFun*, n_funs, rdr->opool);
 		for (size_t j = 0; j < n_funs; j++) {
 			PgfCncFun* fun = pgf_read_funid(rdr, concr);
-			fun->absfun = abs_lin_fun;
+			fun->absfun = concr->abstr->abs_lin_fun;
 			gu_seq_set(ccat->lindefs, PgfCncFun*, j, fun);
 		}
 	}
 }
 
 static void
-pgf_read_linrefs(PgfReader* rdr, PgfAbsFun* abs_lin_fun, PgfConcr* concr)
+pgf_read_linrefs(PgfReader* rdr, PgfConcr* concr)
 {
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, );
@@ -899,7 +910,7 @@ pgf_read_linrefs(PgfReader* rdr, PgfAbsFun* abs_lin_fun, PgfConcr* concr)
 		ccat->linrefs = gu_new_seq(PgfCncFun*, n_funs, rdr->opool);
 		for (size_t j = 0; j < n_funs; j++) {
 			PgfCncFun* fun = pgf_read_funid(rdr, concr);
-			fun->absfun = abs_lin_fun;
+			fun->absfun = concr->abstr->abs_lin_fun;
 			gu_seq_set(ccat->linrefs, PgfCncFun*, j, fun);
 		}
 	}
@@ -1147,8 +1158,67 @@ pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 //	pgf_ccat_set_viterbi_prob(ccat);
 }
 
+void
+pgf_read_concrete_content(PgfReader* rdr, PgfConcr* concr)
+{
+	concr->printnames =
+		pgf_read_printnames(rdr);
+	gu_return_on_exn(rdr->err,);
+
+	concr->sequences =
+		pgf_read_sequences(rdr);
+	gu_return_on_exn(rdr->err,);
+
+	concr->pre_sequences = gu_new_buf(PgfSequence, rdr->opool);
+
+	concr->cncfuns =
+		pgf_read_cncfuns(rdr, concr->abstr, concr);
+	gu_return_on_exn(rdr->err,);
+
+	concr->ccats =
+		gu_new_int_map(PgfCCat*, &gu_null_struct, rdr->opool);
+	concr->fun_indices = gu_map_type_new(PgfCncFunOverloadMap, rdr->opool);
+	concr->coerce_idx  = gu_map_type_new(PgfCncOverloadMap, rdr->opool);
+	pgf_read_lindefs(rdr, concr);
+	pgf_read_linrefs(rdr, concr);
+	pgf_read_ccats(rdr, concr);
+	concr->cnccats = pgf_read_cnccats(rdr, concr->abstr, concr);
+	concr->callbacks = pgf_new_callbacks_map(concr, rdr->opool); 
+	concr->total_cats = pgf_read_int(rdr);
+
+	GuMapItor clo1 = { pgf_read_ccat_cb };
+	gu_map_iter(concr->ccats, &clo1, NULL);
+}
+
+static void
+pgf_read_concrete_init_header(PgfConcr* concr)
+{
+	concr->printnames = NULL;
+	concr->sequences  = NULL;
+	concr->pre_sequences = NULL;
+	concr->cncfuns = NULL;
+	concr->ccats = NULL;
+	concr->fun_indices = NULL;
+	concr->coerce_idx = NULL;
+	concr->cnccats = NULL;
+	concr->callbacks = NULL;
+	concr->total_cats = 0;
+}
+
+static void
+gu_concr_fini(GuFinalizer* fin)
+{
+	PgfConcr* concr = gu_container(fin, PgfConcr, fin);
+	
+	if (concr->pool != NULL) {
+		pgf_read_concrete_init_header(concr);
+		gu_pool_free(concr->pool);
+		concr->pool = NULL;
+	}
+}
+
 static PgfConcr*
-pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, PgfAbsFun* abs_lin_fun)
+pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
 {
 	PgfConcr* concr = gu_new(PgfConcr, rdr->opool);
 
@@ -1161,40 +1231,66 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, PgfAbsFun* abs_lin_fun)
 	concr->cflags =
 		pgf_read_flags(rdr);
 	gu_return_on_exn(rdr->err, NULL);
-	
-	concr->printnames = 
-		pgf_read_printnames(rdr);
+
+	concr->pool = NULL;
+
+	if (with_content)
+		pgf_read_concrete_content(rdr, concr);
+	else {
+		pgf_read_concrete_init_header(concr);
+
+		concr->fin.fn = gu_concr_fini;
+		gu_pool_finally(rdr->opool, &concr->fin);
+	}
 	gu_return_on_exn(rdr->err, NULL);
-	
-	concr->sequences = 
-		pgf_read_sequences(rdr);
-	gu_return_on_exn(rdr->err, NULL);
-
-	concr->pre_sequences = gu_new_buf(PgfSequence, rdr->opool);
-
-	concr->cncfuns =
-		pgf_read_cncfuns(rdr, abstr, concr);
-	gu_return_on_exn(rdr->err, NULL);
-
-	concr->ccats =
-		gu_new_int_map(PgfCCat*, &gu_null_struct, rdr->opool);
-	concr->fun_indices = gu_map_type_new(PgfCncFunOverloadMap, rdr->opool);
-	concr->coerce_idx  = gu_map_type_new(PgfCncOverloadMap, rdr->opool);
-	pgf_read_lindefs(rdr, abs_lin_fun, concr);
-	pgf_read_linrefs(rdr, abs_lin_fun, concr);
-	pgf_read_ccats(rdr, concr);
-	concr->cnccats = pgf_read_cnccats(rdr, abstr, concr);
-	concr->callbacks = pgf_new_callbacks_map(concr, rdr->opool); 
-	concr->total_cats = pgf_read_int(rdr);
-
-	GuMapItor clo1 = { pgf_read_ccat_cb };
-	gu_map_iter(concr->ccats, &clo1, NULL);
 
 	return concr;
 }
 
+void
+pgf_concrete_load(PgfConcr* concr, GuIn* in, GuExn* err)
+{
+	if (concr->pool != NULL)
+		return;    // already loaded
+
+	GuPool* pool = gu_new_pool();
+	GuPool* tmp_pool = gu_local_pool();
+
+	PgfReader* rdr = pgf_new_reader(in, pool, tmp_pool, err);
+
+	PgfCId name =
+		pgf_read_cid(rdr, rdr->tmp_pool);
+	gu_return_on_exn(rdr->err, );
+
+	if (strcmp(name, concr->name) != 0) {
+		GuExnData* err_data = gu_raise(rdr->err, PgfExn);
+		if (err_data) {
+			err_data->data = "This file contains different concrete syntax";
+			gu_pool_free(tmp_pool);
+			gu_pool_free(pool);
+			return;
+		}
+	}
+
+	concr->pool = pool;
+
+	pgf_read_flags(rdr);
+	gu_return_on_exn(rdr->err, );
+
+	pgf_read_concrete_content(rdr, concr);
+	gu_return_on_exn(rdr->err, );
+	
+	gu_pool_free(tmp_pool);
+}
+
+void
+pgf_concrete_unload(PgfConcr* concr)
+{
+	gu_concr_fini(&concr->fin);
+}
+
 static PgfCIdMap*
-pgf_read_concretes(PgfReader* rdr, PgfAbstr* abstr)
+pgf_read_concretes(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
 {
 	GuMapType* map_type = (GuMapType*)
 		GU_TYPE_LIT(GuStringMap, _,
@@ -1205,19 +1301,8 @@ pgf_read_concretes(PgfReader* rdr, PgfAbstr* abstr)
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
-	PgfAbsFun* abs_lin_fun = gu_new(PgfAbsFun, rdr->opool);
-	abs_lin_fun->name = "_";
-	abs_lin_fun->type = gu_new(PgfType, rdr->opool);
-	abs_lin_fun->type->hypos = NULL;
-	abs_lin_fun->type->cid = "_";
-	abs_lin_fun->type->n_exprs = 0;
-	abs_lin_fun->arity = 0;
-	abs_lin_fun->defns = NULL;
-	abs_lin_fun->ep.prob = INFINITY;
-	abs_lin_fun->ep.expr = gu_null_variant;
-
 	for (size_t i = 0; i < len; i++) {
-		PgfConcr* concr = pgf_read_concrete(rdr, abstr, abs_lin_fun);
+		PgfConcr* concr = pgf_read_concrete(rdr, abstr, with_content);
 		gu_return_on_exn(rdr->err, NULL);
 
 		gu_map_put(concretes, concr->name, PgfConcr*, concr);
@@ -1242,7 +1327,9 @@ pgf_read_pgf(PgfReader* rdr) {
 	pgf_read_abstract(rdr, &pgf->abstract);
 	gu_return_on_exn(rdr->err, NULL);
 
-	pgf->concretes = pgf_read_concretes(rdr, &pgf->abstract);
+	bool with_content =
+		gu_variant_is_null(gu_map_get(pgf->gflags, "split", PgfLiteral));
+	pgf->concretes = pgf_read_concretes(rdr, &pgf->abstract, with_content);
 	gu_return_on_exn(rdr->err, NULL);
 
 	return pgf;

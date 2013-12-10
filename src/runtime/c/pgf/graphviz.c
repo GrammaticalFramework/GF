@@ -260,7 +260,10 @@ pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 	GuPool* tmp_pool = gu_local_pool();
 	
 	GuEnum* cts = 
-		pgf_lzr_concretize(concr, expr, tmp_pool);
+		pgf_lzr_concretize(concr, expr, err, tmp_pool);
+	if (!gu_ok(err))
+		return;
+
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (gu_variant_is_null(ctree)) {
 		gu_pool_free(tmp_pool);

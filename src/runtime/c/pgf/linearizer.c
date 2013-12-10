@@ -618,8 +618,17 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 PgfCncTreeEnum*
-pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool)
+pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuExn* err, GuPool* pool)
 {
+	if (concr->fun_indices == NULL ||
+	    concr->coerce_idx == NULL) {
+		GuExnData* err_data = gu_raise(err, PgfExn);
+		if (err_data) {
+			err_data->data = "The concrete syntax is not loaded";
+			return NULL;
+		}
+	}
+
 	PgfLzn* lzn = gu_new(PgfLzn, pool);
 	lzn->concr = concr;
 	lzn->expr = expr;
@@ -947,7 +956,10 @@ pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 	GuPool* tmp_pool = gu_local_pool();
 
 	GuEnum* cts =
-		pgf_lzr_concretize(concr, expr, tmp_pool);
+		pgf_lzr_concretize(concr, expr, err, tmp_pool);
+	if (!gu_ok(err))
+		return;
+
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (!gu_variant_is_null(ctree)) {
 		ctree = pgf_lzr_wrap_linref(ctree, tmp_pool);

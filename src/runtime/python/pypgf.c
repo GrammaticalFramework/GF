@@ -6,6 +6,7 @@
 #include <gu/file.h>
 #include <pgf/pgf.h>
 #include <pgf/linearizer.h>
+#include <pgf/reader.h>
 
 static PyObject* PGFError;
 
@@ -1245,7 +1246,11 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 	if (!gu_ok(err)) {
 		if (gu_exn_caught(err) == gu_type(PgfLinNonExist))
 			Py_RETURN_NONE;
-		else {
+		else if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+			return NULL;
+		} else {
 			PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
 			return NULL;
 		}
@@ -1481,9 +1486,20 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
         return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 	
 	GuEnum* cts = 
-		pgf_lzr_concretize(self->concr, pyexpr->expr, tmp_pool);
+		pgf_lzr_concretize(self->concr, pyexpr->expr, err, tmp_pool);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+			return NULL;
+		} else {
+			PyErr_SetString(PGFError, "The abstract tree cannot be concretized");
+		}
+	}
+
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (gu_variant_is_null(ctree)) {
 		PyErr_SetString(PGFError, "The abstract tree cannot be concretized");
@@ -1531,7 +1547,12 @@ Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
 	
 	pgf_graphviz_parse_tree(self->concr, pyexpr->expr, out, err);
 	if (!gu_ok(err)) {
-		PyErr_SetString(PGFError, "The parse tree cannot be visualized");
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+		} else {
+			PyErr_SetString(PGFError, "The parse tree cannot be visualized");
+		}
 		return NULL;
 	}
 
@@ -1581,6 +1602,16 @@ Concr_lookupMorpho(ConcrObject* self, PyObject *args) {
 
 	PyMorphoCallback callback = { { pypgf_collect_morpho }, analyses };
 	pgf_lookup_morpho(self->concr, sent, &callback.fn, err);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+		} else {
+			PyErr_SetString(PGFError, "The lookup failed");
+		}
+		Py_DECREF(analyses);
+		analyses = NULL;
+	}
 
 	gu_pool_free(tmp_pool);
 
@@ -1654,6 +1685,59 @@ Concr_fullFormLexicon(ConcrObject* self, PyObject *args)
 	return (PyObject*) pyres;
 }
 
+static PyObject*
+Concr_load(ConcrObject* self, PyObject *args)
+{
+    const char *fpath;
+    if (!PyArg_ParseTuple(args, "s", &fpath))
+        return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	FILE* infile = fopen(fpath, "rb");
+	if (infile == NULL) {
+		PyErr_SetFromErrnoWithFilename(PyExc_IOError, fpath);
+		return NULL;
+	}
+
+	// Create an input stream from the input file
+	GuIn* in = gu_file_in(infile, tmp_pool);
+
+	// Read the PGF grammar.
+	pgf_concrete_load(self->concr, in, err);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(GuErrno)) {
+			errno = *((GuErrno*) gu_exn_caught_data(err));
+			PyErr_SetFromErrnoWithFilename(PyExc_IOError, fpath);
+		} else if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+			return NULL;
+		} else {
+			PyErr_SetString(PGFError, "The language cannot be loaded");
+		}
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	Py_RETURN_NONE;
+}
+
+static PyObject*
+Concr_unload(ConcrObject* self, PyObject *args)
+{
+	if (!PyArg_ParseTuple(args, ""))
+        return NULL;
+
+	pgf_concrete_unload(self->concr);
+
+	Py_RETURN_NONE;
+}
+
 static PyGetSetDef Concr_getseters[] = {
     {"name", 
      (getter)Concr_getName, NULL,
@@ -1701,6 +1785,12 @@ static PyMethodDef Concr_methods[] = {
     },
     {"fullFormLexicon", (PyCFunction)Concr_fullFormLexicon, METH_VARARGS,
      "Enumerates all words in the lexicon (useful for extracting full form lexicons)"
+    },
+    {"load", (PyCFunction)Concr_load, METH_VARARGS,
+     "Loads the concrete syntax from a .pgf_c file"
+    },
+    {"unload", (PyCFunction)Concr_unload, METH_VARARGS,
+     "Unloads the concrete syntax"
     },
     {NULL}  /* Sentinel */
 };

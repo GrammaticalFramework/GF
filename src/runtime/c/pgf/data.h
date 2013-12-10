@@ -99,6 +99,7 @@ typedef struct {
 	PgfFlags* aflags;
 	PgfCIdMap* funs; // |-> PgfAbsFun*
 	PgfCIdMap* cats; // |-> PgfAbsCat*
+	PgfAbsFun* abs_lin_fun;
 } PgfAbstr;
 
 struct PgfPGF {
@@ -241,6 +242,9 @@ struct PgfConcr {
 	PgfCIdMap* cnccats;
 	PgfCallbacksMap* callbacks;
 	int total_cats;
+	
+	GuPool* pool;     // if the language is loaded separately then this is the pool
+	GuFinalizer fin;  // and this is the finalizer in the pool of the whole grammar
 };
 
 extern GU_DECLARE_TYPE(PgfConcr, abstract);
