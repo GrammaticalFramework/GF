@@ -171,8 +171,15 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 {
 	GuPool* pool = gu_new_pool();
 
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
+
 	GuEnum* en_lins1 =
-		pgf_lzr_concretize(concr, expr, pool);
+		pgf_lzr_concretize(concr, expr, err, pool);
+	if (!gu_ok(err)) {
+		gu_pool_free(pool);
+		return false;
+	}
+
 	PgfCncTree ctree1 = gu_next(en_lins1, PgfCncTree, pool);
 	if (gu_variant_is_null(ctree1)) {
 		gu_pool_free(pool);
@@ -213,7 +220,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 	}
 
 	GuEnum* en_lins2 =
-		pgf_lzr_concretize(concr, ep->expr, pool);
+		pgf_lzr_concretize(concr, ep->expr, err, pool);
 	PgfCncTree ctree2 = gu_next(en_lins2, PgfCncTree, pool);
 	if (gu_variant_is_null(ctree2)) {
 		gu_pool_free(pool);

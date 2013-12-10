@@ -28,7 +28,7 @@ typedef GuEnum PgfCncTreeEnum;
 
 /// Begin enumerating concrete syntax variants.
 PgfCncTreeEnum*
-pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuPool* pool);
+pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuExn* err, GuPool* pool);
 
 typedef struct {
 } PgfLinNonExist;

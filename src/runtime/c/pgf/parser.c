@@ -2438,6 +2438,16 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, GuString sentence,
                           GuExn* err,
                           GuPool* pool, GuPool* out_pool)
 {
+	if (concr->sequences == NULL ||
+	    concr->pre_sequences == NULL ||
+	    concr->cnccats == NULL) {
+		GuExnData* err_data = gu_raise(err, PgfExn);
+		if (err_data) {
+			err_data->data = "The concrete syntax is not loaded";
+			return NULL;
+		}
+	}
+
 	// Begin parsing a sentence with the specified category
 	PgfParsing* ps =
 		pgf_parsing_init(concr, cat, 0, sentence, heuristics, err, pool, out_pool);
@@ -2552,6 +2562,14 @@ void
 pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
                   PgfMorphoCallback* callback, GuExn* err)
 {
+	if (concr->sequences == NULL) {
+		GuExnData* err_data = gu_raise(err, PgfExn);
+		if (err_data) {
+			err_data->data = "The concrete syntax is not loaded";
+			return;
+		}
+	}
+
 	PgfSequence* seq = (PgfSequence*)
 		gu_seq_binsearch(concr->sequences, pgf_sequence_order,
 		                 PgfSequence, (void*) sentence);
@@ -2577,21 +2595,23 @@ gu_fullform_enum_next(GuEnum* self, void* to, GuPool* pool)
 	PgfFullFormState* st = gu_container(self, PgfFullFormState, en);
 	PgfFullFormEntry* entry = NULL;
 
-	size_t n_seqs = gu_seq_length(st->sequences);
-	while (st->seq_idx < n_seqs) {
-		PgfSymbols* syms = gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->syms;
-		GuString tokens = pgf_get_tokens(syms, 0, pool);
-		if (strlen(tokens) > 0 &&
-		    gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->idx != NULL) {
-			entry = gu_new(PgfFullFormEntry, pool);
-			entry->tokens = tokens;
-			entry->idx    = gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->idx;
+	if (st->sequences != NULL) {
+		size_t n_seqs = gu_seq_length(st->sequences);
+		while (st->seq_idx < n_seqs) {
+			PgfSymbols* syms = gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->syms;
+			GuString tokens = pgf_get_tokens(syms, 0, pool);
+			if (strlen(tokens) > 0 &&
+				gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->idx != NULL) {
+				entry = gu_new(PgfFullFormEntry, pool);
+				entry->tokens = tokens;
+				entry->idx    = gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->idx;
 
+				st->seq_idx++;
+				break;
+			}
+			
 			st->seq_idx++;
-			break;
 		}
-		
-		st->seq_idx++;
 	}
 
 	*((PgfFullFormEntry**) to) = entry;
