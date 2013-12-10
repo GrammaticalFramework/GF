@@ -123,7 +123,8 @@ lin
       insertObj (\\_,b,a => vpi.s ! v.vi) (predSV v) ** {c2 = v.c2} ;
 
    VPSlashVS v vp = -- : VS -> VP -> VPSlash ; -- hän sanoo (minun) menevän (!) ---- menneen ?
-      insertObj (\\_,b,a => infVP v.sc b a vp InfPresPart) (predSV v) ** {c2 = {c = NPCase Gen ; s = [] ; isPre = True}} ;
+      insertObj (\\_,b,a => infVP v.sc b a vp InfPresPart) (predSV v) ** 
+                   {c2 = {c = NPCase Gen ; s = \\_ => [] ; h = Back ; isPre = True}} ;
      
 --   SlashSlashV2V v ant pol vps = -- : V2V -> Ant -> Pol -> VPSlash -> VPSlash ; --- not implemented in Eng so far
 --      insertObj (\\_,b,a => infVPGen pol.p v.sc b a vps v.vi) (predSV v) ** {c2 = v.c2} ; --- or vps.c2 ??

@@ -98,17 +98,17 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
     PN = SPN ;
 
   linref
-    SSlash = \ss -> ss.s ++ ss.c2.s  ;
-    ClSlash = \cls -> cls.s ! Pres ! Simul ! Pos ++ cls.c2.s ;
+    SSlash = \ss -> ss.s ++ ss.c2.s ! False  ;
+    ClSlash = \cls -> cls.s ! Pres ! Simul ! Pos ++ cls.c2.s ! False ;
 
     VP = vpRef ;
-    VPSlash = \vps -> vpRef vps ++ vps.c2.s ;
+    VPSlash = \vps -> vpRef vps ++ vps.c2.s ! False ;
 
     V, VS, VQ, VA = \v -> vpRef (predV v) ;
-    V2, V2A, V2Q, V2S = \v -> vpRef (predV v) ++ v.c2.s ;
-    V3 = \v -> vpRef (predV v) ++ v.c2.s ++ v.c3.s ;
+    V2, V2A, V2Q, V2S = \v -> vpRef (predV v) ++ v.c2.s ! False ;
+    V3 = \v -> vpRef (predV v) ++ v.c2.s ! False ++ v.c3.s ! False ;
     VV = \v -> vpRef (predV v) ;
-    V2V = \v -> vpRef (predV v) ++ v.c2.s ;
+    V2V = \v -> vpRef (predV v) ++ v.c2.s ! False ;
 
     Conj = \c -> c.s1 ++ c.s2 ;
 

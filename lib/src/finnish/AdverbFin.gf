@@ -10,7 +10,7 @@ concrete AdverbFin of Adverb = CatFin ** open ResFin, Prelude, StemFin in {
       s = cadv.s ++ a.s ! Posit ! sAAdv ++ cadv.p ++ s.s
       } ;
 
-    PrepNP prep np = {s = preOrPost prep.isPre prep.s (np.s ! prep.c)} ;
+    PrepNP prep np = {s = appCompl True Pos prep np} ;
 
     AdAdv = cc2 ;
 

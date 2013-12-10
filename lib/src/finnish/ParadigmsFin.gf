@@ -85,7 +85,7 @@ oper
     } ;
 
   accusative : Prep
-    = {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
+    = {c = NPAcc ; s : Bool => Str = \\_ => [] ; isPre = True ; h = Back ; lock_Prep = <>} ;
 
   NK : Type ;   -- Noun from DictFin (Kotus)
   AK : Type ;   -- Adjective from DictFin (Kotus)
@@ -367,14 +367,21 @@ mkVS = overload {
   infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ; infIness = Inf3Iness ; infPresPart = InfPresPart ; infPresPartAgr = InfPresPartAgr ;
 
   prePrep  : Case -> Str -> Prep = 
-    \c,p -> {c = NPCase c ; s = p ; isPre = True ; lock_Prep = <>} ;
+    \c,p -> lin Prep {c = NPCase c ; s = \\_ => p ; isPre = True ; h = Back} ; --- no possessive suffix
+
   postPrep : Case -> Str -> Prep =
-    \c,p -> {c = NPCase c ; s = p ; isPre = False ; lock_Prep = <>} ;
-  postGenPrep p = {
-    c = NPCase genitive ; s = p ; isPre = False ; lock_Prep = <>} ;
+    \c,p -> let h = guessHarmony p in case p of {
+       mukaa + "n" => lin Prep {c = NPCase c ; s = table {False => p ; True => mukaa} ; isPre = False ; h = h} ;
+       _           => lin Prep {c = NPCase c ; s : Bool => Str = \\_ => p ; isPre = False ; h = h}
+      } ;
+
+  postGenPrep = postPrep genitive ;
+
   casePrep : Case -> Prep =
-    \c -> {c = NPCase c ; s = [] ; isPre = True ; lock_Prep = <>} ;
-  accPrep =  {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
+    \c -> lin Prep {c = NPCase c ; s : Bool => Str = \\_ => [] ; isPre = True ; h = Back} ;
+
+  accPrep =  
+    lin Prep {c = NPAcc ; s : Bool => Str = \\_ => [] ; isPre = True ; h = Back} ;
 
   NK = {s : NForms ; lock_NK : {}} ;
   AK = {s : NForms ; lock_AK : {}} ;
