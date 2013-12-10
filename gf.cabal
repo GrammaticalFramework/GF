@@ -88,12 +88,12 @@ Library
     PGF
     PGF.Data
     PGF.Macros
+    PGF.Binary
     PGF.Optimize
     PGF.Printer
     PGF.Utilities
   other-modules:
     PGF.CId
-    PGF.Binary
     PGF.Expr
     PGF.Generate
     PGF.Linearize
@@ -219,7 +219,6 @@ Executable gf
     GF.Compile.PGFtoProlog
     GF.Compile.PGFtoJS
     GF.Compile
-    GF.Index
     GF.Quiz
     GFC
     GFI

@@ -49,7 +49,15 @@ instance Binary Abstr where
                         , cats=fmap (\(x,y,z) -> (x,y,z,0)) cats
                         , code=BS.empty                        
                         })
-  
+
+putSplitAbs :: PGF -> Put
+putSplitAbs pgf = do
+  putWord16be pgfMajorVersion
+  putWord16be pgfMinorVersion
+  put (Map.insert (mkCId "index") (LStr "true") (gflags pgf))
+  put (absname pgf, abstract pgf)
+  put [(name,cflags cnc) | (name,cnc) <- Map.toList (concretes pgf)]
+
 instance Binary Concr where
   put cnc = do put (cflags cnc)
                put (printnames cnc)

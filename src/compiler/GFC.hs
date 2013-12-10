@@ -5,7 +5,7 @@ import PGF
 --import PGF.CId
 import PGF.Data
 import PGF.Optimize
-import GF.Index
+import PGF.Binary(putSplitAbs)
 import GF.Compile
 import GF.Compile.Export
 
@@ -24,7 +24,7 @@ import qualified Data.ByteString.Lazy as BSL
 import System.FilePath
 import System.IO
 import Control.Exception
-import Control.Monad(unless)
+import Control.Monad(unless,forM_)
 
 mainGFC :: Options -> [FilePath] -> IO ()
 mainGFC opts fs = do
@@ -66,10 +66,9 @@ unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs = 
     do pgfs <- mapM readPGFVerbose fs
        let pgf0 = foldl1 unionPGF pgfs
-           pgf1 = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
-           pgf = if flag optMkIndexPGF opts then addIndex pgf1 else pgf1
+           pgf  = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
            pgfFile = grammarName opts pgf <.> "pgf"
-       if pgfFile `elem` fs 
+       if pgfFile `elem` fs
          then putStrLnE $ "Refusing to overwrite " ++ pgfFile
          else writePGF opts pgf
        writeOutputs opts pgf
@@ -104,9 +103,16 @@ writeByteCode opts pgf
       [(id,addr) | (id,(_,_,_,addr))     <- Map.toList (cats (abstract pgf))]
 
 writePGF :: Options -> PGF -> IOE ()
-writePGF opts pgf = do
-  let outfile = grammarName opts pgf <.> "pgf"
-  putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ encodeFile outfile pgf
+writePGF opts pgf
+  | flag optSplitPGF opts = do let outfile = grammarName opts pgf <.> "pgf"
+                               putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ do
+                                 encodeFile_ outfile (putSplitAbs pgf)
+                               forM_ (Map.toList (concretes pgf)) $ \cnc -> do
+                                 let outfile = showCId (fst cnc) <.> "pgf_c"
+                                 putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ encodeFile outfile cnc
+                               return ()
+  | otherwise             = do let outfile = grammarName opts pgf <.> "pgf"
+                               putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ encodeFile outfile pgf
 
 grammarName :: Options -> PGF -> String
 grammarName opts pgf = fromMaybe (showCId (absname pgf)) (flag optName opts)
