@@ -146,15 +146,12 @@ jpgf_jstream_end_buffer(GuInStream* self, size_t consumed, GuExn* err)
 	(*jstream->env)->ReleaseByteArrayElements(jstream->env, jstream->buf_array, jstream->buf, JNI_ABORT);
 }
 
-JNIEXPORT jobject JNICALL
-Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_io_InputStream_2(JNIEnv *env, jclass cls, jobject java_stream)
+static GuInStream*
+jpgf_new_java_stream(JNIEnv* env, jobject java_stream, GuPool* pool)
 {
-	GuPool* pool = gu_new_pool();
-	GuPool* tmp_pool = gu_local_pool();
-
 	jclass java_stream_class = (*env)->GetObjectClass(env, java_stream);
 
-	JInStream* jstream = gu_new(JInStream, tmp_pool);
+	JInStream* jstream = gu_new(JInStream, pool);
 	jstream->stream.begin_buffer = jpgf_jstream_begin_buffer;
 	jstream->stream.end_buffer = jpgf_jstream_end_buffer;
 	jstream->stream.input = NULL;
@@ -163,21 +160,34 @@ Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_io_InputStream_2(JNIEnv *en
 
 	jstream->read_method = (*env)->GetMethodID(env, java_stream_class, "read", "([B)I");
 	if (!jstream->read_method) {
-		gu_pool_free(pool);
-		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
 	jstream->buf_array = (*env)->NewByteArray(env, 1024);
 	if (!jstream->buf_array) {
-		gu_pool_free(pool);
-		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
 	jstream->buf = NULL;
 
-	GuIn* in = gu_new_in(&jstream->stream, tmp_pool);
+	return &jstream->stream;
+}
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_io_InputStream_2(JNIEnv *env, jclass cls, jobject java_stream)
+{
+	GuPool* pool = gu_new_pool();
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuInStream* jstream =
+		jpgf_new_java_stream(env, java_stream, tmp_pool);
+	if (!jstream) {
+		gu_pool_free(pool);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	GuIn* in = gu_new_in(jstream, tmp_pool);
 
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
@@ -295,6 +305,42 @@ Java_org_grammaticalframework_pgf_Concr_getName(JNIEnv* env, jobject self)
 	return gu2j_string(env, pgf_concrete_name(get_ref(env, self)));
 }
 
+JNIEXPORT void JNICALL
+Java_org_grammaticalframework_pgf_Concr_load__Ljava_io_InputStream_2(JNIEnv* env, jobject self, jobject java_stream)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuInStream* jstream =
+		jpgf_new_java_stream(env, java_stream, tmp_pool);
+	if (!jstream) {
+		gu_pool_free(tmp_pool);
+		return;
+	}
+
+	GuIn* in = gu_new_in(jstream, tmp_pool);
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	pgf_concrete_load(get_ref(env, self), in, err);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+		} else {
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The language cannot be loaded");
+		}
+	}
+
+	gu_pool_free(tmp_pool);
+}
+
+JNIEXPORT void JNICALL
+Java_org_grammaticalframework_pgf_Concr_unload(JNIEnv* env, jobject self)
+{
+	pgf_concrete_unload(get_ref(env, self));
+}
+
 JNIEXPORT jobject JNICALL 
 Java_org_grammaticalframework_pgf_Parser_parse
   (JNIEnv* env, jclass clazz, jobject concr, jstring jstartCat, jstring js)
@@ -362,7 +408,12 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 	
 	pgf_linearize(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), out, err);
 	if (!gu_ok(err)) {
-		//
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+		} else {
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be linearized");
+		}
 		return NULL;
 	}
 
@@ -399,7 +450,18 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 	GuEnum* cts = 
 		pgf_lzr_concretize(concr,
 		                   gu_variant_from_ptr((void*) get_ref(env, jexpr)),
+		                   err,
 		                   tmp_pool);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+		} else {
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be concretized");
+		}
+		return NULL;
+	}
+
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (gu_variant_is_null(ctree)) {
 		gu_pool_free(tmp_pool);
@@ -483,9 +545,22 @@ Java_org_grammaticalframework_pgf_Concr_lookupMorpho(JNIEnv* env, jobject self, 
 	jmethodID an_constrId = (*env)->GetMethodID(env, an_class, "<init>", "(Ljava/lang/String;Ljava/lang/String;D)V");
 
 	GuPool* tmp_pool = gu_new_pool();
+	
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
 	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, env, addId, an_class, an_constrId };
 	pgf_lookup_morpho(get_ref(env, self), j2gu_string(env, sentence, tmp_pool),
-	                  &callback.fn, NULL);
+	                  &callback.fn, err);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+		} else {
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The lookup failed");
+		}
+		analyses = NULL;
+	}
+
 	gu_pool_free(tmp_pool);
 
 	return analyses;
