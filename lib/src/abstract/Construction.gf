@@ -13,6 +13,10 @@ abstract Construction = Cat ** {
 
 -- The first examples are from the MOLTO Phrasebook
 
+cat 
+  Weekday ;
+  Month ;
+
 fun
   hungry_VP     : VP ;                 -- x is hungry / x a faim (Fre)
   thirsty_VP    : VP ;                 -- x is thirsty / x a soif (Fre)
@@ -33,5 +37,14 @@ fun
   is_wrong_VP   : VP ;                 -- he is wrong / han har fel (Swe)
 
   n_units_AP    : Card -> CN -> A -> AP ;  -- x inches long
+
+--  weekdayN   : Weekday -> N ; --weekdays are already as nouns in Dict
+--  monthN     : Month -> N     --months are already as nouns in Dict
+  weekdayAdv : Weekday -> Adv ;
+  monthAdv   : Month -> Adv ;
+
+  monday,tuesday,wednesday,thursday,friday,sunday : Weekday ;
+  january,february,march,april,may,june,july : Month ;
+  august,september,october,november,december : Month ;
 
 }
