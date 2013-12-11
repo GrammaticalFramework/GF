@@ -61,7 +61,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
       a = agrP3 Sg ;
       isPron = False ; isNeg = False
       } ;
-    UsePron p = p ** {isPron = True ; isNeg = False} ;
+    UsePron p = p ** {isPron = p.hasPoss ; isNeg = False} ;  -- to block "se"; possessive suffix is the only use of isPron
 
     PredetNP pred np = {
       s = \\c => pred.s ! complNumAgr np.a ! c ++ np.s ! c ;
@@ -78,6 +78,13 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
       } ;
 
     AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a ;
+      isPron = np.isPron ;  -- minun t‰‰ll‰ - ni
+      isNeg = np.isNeg
+      } ;
+
+    ExtAdvNP np adv = {
       s = \\c => np.s ! c ++ adv.s ;
       a = np.a ;
       isPron = np.isPron ;  -- minun t‰‰ll‰ - ni

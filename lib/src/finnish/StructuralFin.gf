@@ -33,7 +33,7 @@ concrete StructuralFin of Structural = CatFin **
   can_VV = mkVV (mkV "voida" "voi") ;
   during_Prep = postGenPrep "aikana" ;
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
-  everybody_NP = makeNP (snoun2nounBind (mkN "jokainen")) Sg ;
+  everybody_NP = lin NP (makeNP (lin N (snoun2nounBind (mkN "jokainen"))) Sg) ;
   every_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "jokainen")) ;
   everything_NP = makeNP (((snoun2nounBind (mkN "kaikki" "kaiken" "kaikkena"))) **
     {lock_N = <>}) Sg ;

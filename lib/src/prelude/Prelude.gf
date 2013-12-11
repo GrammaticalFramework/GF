@@ -113,6 +113,11 @@ oper
     PARA : Str = "&-" ;
     CAPIT : Str = "&|" ;
 
+-- Embed between commas, where the latter one disappears in front of other punctuation
+
+    embedInCommas : Str -> Str = \s -> SOFT_BIND ++ "," ++ s ++ endComma ;
+    endComma : Str = pre {"," | "." => []; "" => SOFT_BIND ++ ","; _ => []} ;
+
 --2 Miscellaneous
 
 -- Identity function
