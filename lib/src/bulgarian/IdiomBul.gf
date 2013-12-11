@@ -17,22 +17,22 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
 
     ExistNP np = 
       { s = \\t,a,p,o => 
-	          let verb = case p of {
+	          let verb = case orPol p np.p of {
 	                       Pos => mkV186 "имам" ;
 	                       Neg => mkV186 "нямам" 
 	                     } ;
                                  
-                      agr=agrP3 (GSg Neut);
+                  agr=agrP3 (GSg Neut);
                                  
-                      present = verb ! (VPres   (numGenNum agr.gn) agr.p) ;
-                      aorist  = verb ! (VAorist (numGenNum agr.gn) agr.p) ;
-                      perfect = verb ! (VPerfect (aform agr.gn Indef (RObj Acc))) ;
+                  present = verb ! (VPres   (numGenNum agr.gn) agr.p) ;
+                  aorist  = verb ! (VAorist (numGenNum agr.gn) agr.p) ;
+                  perfect = verb ! (VPerfect (aform agr.gn Indef (RObj Acc))) ;
                                  
-                      auxPres    = auxBe ! VPres (numGenNum agr.gn) agr.p ;
-                      auxAorist  = auxBe ! VAorist (numGenNum agr.gn) agr.p ;
-                      auxCondS   = auxWould ! VAorist (numGenNum agr.gn) agr.p ;
+                  auxPres    = auxBe ! VPres (numGenNum agr.gn) agr.p ;
+                  auxAorist  = auxBe ! VAorist (numGenNum agr.gn) agr.p ;
+                  auxCondS   = auxWould ! VAorist (numGenNum agr.gn) agr.p ;
 
-                      v : {aux1:Str; aux2:Str; main:Str}
+                  v : {aux1:Str; aux2:Str; main:Str}
                         = case <t,a> of {
                             <Pres,Simul> => {aux1=[]; aux2=[]; main=present} 
                ;  --# notpresent
