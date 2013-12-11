@@ -12605,6 +12605,7 @@ fun correlational_A : A;
 fun correlative_A : A;
 fun correlative_N : N;
 fun correspond_V : V;
+fun correspond_V2 : V2 ; -- x corresponds to y
 fun correspondence_N : N;
 fun correspondent_N : N;
 fun correspondingly_Adv : Adv;
@@ -30781,7 +30782,7 @@ fun lethargic_A : A;
 fun lethargically_Adv : Adv;
 fun lethargy_N : N;
 fun lethe_PN : PN;
-fun letter_1_N : N;
+fun letter_1_N : N; ---- which is which??
 fun letter_2_N : N;
 fun letter_box_N : N;
 fun letter_card_N : N;

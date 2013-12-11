@@ -13097,6 +13097,7 @@ lin correlational_A = variants {};
 lin correlative_A = mkA "motsvarande";
 lin correlative_N = mkN "motsvarande";
 lin correspond_V = mkV "brevväxlar"; -- comment=2
+lin correspond_V2 = mkV2 (mkV "motsvarar") ;
 lin correspondence_N = mkN "överensstämmelse" "överensstämmelser"; -- comment=4
 lin correspondent_N = mkN "kund" "kunder"; -- comment=5
 lin correspondingly_Adv = variants {};
