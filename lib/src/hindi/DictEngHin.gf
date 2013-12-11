@@ -16618,7 +16618,6 @@ lin miller_N = mkN "चक्की पर काम करने वाला" 
 lin millet_N = mkN "बाजरा" ;       -- old       -- old
 lin milligram_N = mkN "मिलीग्राम" ;       -- old       -- old
 lin milliliter_N = mkN "मिलीलीटर" ;       -- old
-lin millimeter_N = mkN "मिलीमीटर" ;       -- old
 lin millimetre_N = mkN "मिलिमीटर" ;       -- old       -- old
 lin milliner_N = mkN "नारी टोपी विक्रेता" ;       -- old       -- old
 lin millinery_N = mkN "नारी टोपी" ;       -- old       -- old

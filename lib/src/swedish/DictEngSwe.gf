@@ -9670,7 +9670,6 @@ lin centesis_N = variants {};
 lin centigrade_A = variants {};
 lin centiliter_N = mkN "centiliter" "centilitern" "centiliter" "centiliterna";
 lin centime_N = variants {};
-lin centimeter_N = mkN "centimeter";
 lin centimetre_N = mkN "centimeter";
 lin centimo_N = variants {};
 lin centipede_N = mkN "tusenfoting";
@@ -29295,7 +29294,8 @@ lin intellect_N = mkN "intellekt" neutrum;
 lin intellectual_A = mkA "intellektuell"; -- comment=3
 lin intellectual_N = mkN "djup" neutrum;
 lin intellectualization_N = variants {};
-lin intelligence_N = mkN "underrättelse" "underrättelser"; -- comment=3
+lin intelligence_1_N = mkN "förstånd" neutrum;
+lin intelligence_2_N = mkN "underrättelse" "underrättelser";
 lin intelligent_A = mkA "intelligent" "intelligent";
 lin intelligentsia_N = mkN "intelligentia"; -- status=guess
 lin intelligibility_N = variants {};
@@ -30873,9 +30873,7 @@ lin kilobyte_N = mkN "kilobyte" "kilobyten" "kilobyte" "kilobytena";
 lin kilocycle_N = variants {};
 lin kilogram_N = mkN "kilogram" "kilogrammet" "kilogram" "kilogrammen";
 lin kilohertz_N = variants {};
-lin kiloliter_N = variants {};
 lin kilolitre_N = variants {};
-lin kilometer_N = mkN "kilometer";
 lin kilometre_N = mkN "kilometer";
 lin kiloton_N = variants {};
 lin kilovolt_N = variants {};
@@ -32651,7 +32649,6 @@ lin litany_N = variants {};
 lin litas_N = variants {};
 lin litchee_N = variants {};
 lin litchi_N = variants {};
-lin liter_N = variants {};
 lin literacy_N = mkN "skrivkunnighet";
 lin literal_A = mkA "fantasilös"; -- comment=8
 lin literal_N = variants {};
@@ -32691,7 +32688,7 @@ lin litigiousness_N = variants {};
 lin litmus_N = mkN "lackmus"; -- status=guess
 lin litmus_paper_N = variants {};
 lin litotes_N = variants {};
-lin litre_N = mkN "liter"; -- comment=2
+lin litre_N = mkN "liter";
 lin litter_N = mkN "strö" neutrum; -- comment=10
 lin litter_V = mkV "strör"; -- comment=5
 lin litter_V2 = mkV2 (mkV (mkV "skräpa") "ner"); -- status=guess, src=wikt
@@ -35445,7 +35442,6 @@ lin milligram_N = mkN "milligram" "milligrammet" "milligram" "milligrammen"; -- 
 lin millihenry_N = variants {};
 lin milliliter_N = variants {};
 lin millime_N = variants {};
-lin millimeter_N = variants {};
 lin millimetre_N = mkN "millimeter";
 lin milline_N = variants {};
 lin milliner_N = variants {};

@@ -122,9 +122,6 @@ lin
   
   UttAdV adv = adv;
 
-lin
-  UncNeg = {s = [] ; p = Neg} ;
-
 lincat
     Feat = Str;
 lin FeatN2, FeatN = \n ->
