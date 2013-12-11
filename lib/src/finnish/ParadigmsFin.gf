@@ -332,11 +332,11 @@ mkVS = overload {
 
   mkDet = overload {
     mkDet : Number -> N -> Det 
-    = \nu,noun -> MorphoFin.mkDet nu (snoun2nounBind noun) ;
+    = \nu,noun -> lin Det (MorphoFin.mkDet nu (snoun2nounBind noun)) ;
     mkDet : (isNeg : Bool) -> Number -> N -> Det  -- use this with True to create a negative determiner 
-    = \isNeg,nu,noun -> MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun) ;
+    = \isNeg,nu,noun -> lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ;
     mkDet : (isNeg : Bool) -> Number -> N -> Case -> Det  -- paljon + False + partitive, ei yhtään + True + partitive
-    = \isNeg,nu,noun,_ -> MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun) ;
+    = \isNeg,nu,noun,_ -> lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ;
     } ;
 
   mkInterj : Str -> Interj
@@ -403,8 +403,8 @@ mkVS = overload {
         : Str) -> N = mk10N ;
     mkN : (sora : Str) -> (tie : N) -> N = mkStrN ;
     mkN : (oma,tunto : N) -> N = mkNN ;
-    mkN : (sana : NK) -> N = \w -> nforms2snoun w.s ;
-    mkN : V -> N = \w -> sverb2snoun w ;
+    mkN : (sana : NK) -> N = \w -> lin N (nforms2snoun w.s) ;
+    mkN : V -> N = \w -> lin N (sverb2snoun w) ;
   } ;
 
     exceptNomN : N -> Str -> N = \noun,nom -> lin N (exceptNomSNoun noun nom) ;
@@ -413,10 +413,10 @@ mkVS = overload {
 ----  mkNA : N -> A = snoun2sadj ; 
 
   mk1N : (talo : Str) -> N = \s -> lin N (nforms2snoun (nForms1 s)) ;
-  mk2N : (talo,talon : Str) -> N = \s,t -> nforms2snoun (nForms2 s t) ;
-  mk3N : (talo,talon,taloja : Str) -> N = \s,t,u -> nforms2snoun (nForms3 s t u) ;
+  mk2N : (talo,talon : Str) -> N = \s,t -> lin N (nforms2snoun (nForms2 s t)) ;
+  mk3N : (talo,talon,taloja : Str) -> N = \s,t,u -> lin N (nforms2snoun (nForms3 s t u)) ;
   mk4N : (talo,talon,taloa,taloja : Str) -> N = \s,t,u,v -> 
-      nforms2snoun (nForms4 s t u v) ;
+      lin N (nforms2snoun (nForms4 s t u v)) ;
   mk10N : 
       (talo,talon,taloa,talona,taloon,talojen,taloja,taloina,taloissa,taloihin
         : Str) -> N = \a,b,c,d,e,f,g,h,i,j -> 

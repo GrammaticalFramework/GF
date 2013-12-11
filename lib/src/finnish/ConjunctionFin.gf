@@ -7,7 +7,7 @@ concrete ConjunctionFin of Conjunction =
 
     ConjS = conjunctDistrSS ;
 
-    ConjAdv = conjunctDistrSS ;
+    ConjAdv, ConjAdV = conjunctDistrSS ;
 
     ConjIAdv = conjunctDistrSS ;
 
@@ -30,8 +30,8 @@ concrete ConjunctionFin of Conjunction =
 
     BaseS = twoSS ;
     ConsS = consrSS comma ;
-    BaseAdv = twoSS ;
-    ConsAdv = consrSS comma ;
+    BaseAdv, BaseAdV = twoSS ;
+    ConsAdv, ConsAdV = consrSS comma ;
     BaseIAdv = twoSS ;
     ConsIAdv = consrSS comma ;
     BaseNP x y = twoTable NPForm x y ** {a = conjAgr x.a y.a ; isNeg = orB x.isNeg y.isNeg} ;
@@ -45,7 +45,7 @@ concrete ConjunctionFin of Conjunction =
 
   lincat
     [S] = {s1,s2 : Str} ;
-    [Adv] = {s1,s2 : Str} ;
+    [Adv],[AdV] = {s1,s2 : Str} ;
     [IAdv] = {s1,s2 : Str} ;
     [NP] = {s1,s2 : NPForm => Str ; a : Agr ; isNeg : Bool} ;
     [AP] = {s1,s2 : Bool => NForm => Str} ;

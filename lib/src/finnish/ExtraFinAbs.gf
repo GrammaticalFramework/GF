@@ -1,5 +1,6 @@
 --# -coding=latin1
 abstract ExtraFinAbs = Extra [
+  IP, IQuant,Num,CN,VPSlash,
   GenNP,GenIP,GenRP,
   PassVPSlash, PassAgentVPSlash,
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,
@@ -9,7 +10,7 @@ abstract ExtraFinAbs = Extra [
   fun
     GenCN : NP -> CN -> CN ;              -- auton merkki
 
-    AdvExistNP : Adv -> NP -> Cl ;        -- kuvassa olemme me
+    AdvExistNP : Adv -> NP -> Cl ;        -- kuvassa olemme me --- now obsolete because of Idiom.ExistNPAdv
     AdvPredNP  : Adv -> V  -> NP -> Cl ;  -- kuvassa hymyilee Veikko
 
     ICompExistNP : IComp -> NP -> QCl ;     -- missä/kuka on Veikko

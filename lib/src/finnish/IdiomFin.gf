@@ -55,7 +55,14 @@ concrete IdiomFin of Idiom = CatFin **
     let vps = (sverb2verbSep vp.s).s ! ImperP1Pl
     in
     {s = vps ++
-         vp.s2 ! True ! Pos ! Ag Pl P1 ++ vp.ext
+         vp.s2 ! True ! Pos ! Ag Pl P1 ++ vp.adv ! Pos ++ vp.ext
+    } ;
+
+  ImpP3 np vp = 
+    let vps = (sverb2verbSep vp.s).s ! ImperP3 (verbAgr np.a).n
+    in
+    {s = np.s ! vp.s.sc ++ vps ++
+         vp.s2 ! True ! Pos ! np.a ++ vp.adv ! Pos ++ vp.ext
     } ;
 
   SelfAdvVP vp = insertAdv (\\_ => "itse") vp ;
@@ -66,6 +73,19 @@ concrete IdiomFin of Idiom = CatFin **
       isPron = False ;  -- minun toloni --> minun itseni talo
       isNeg = np.isNeg
       } ;
+
+  ExistNPAdv np adv =
+      mkClause (\_ -> adv.s) np.a (insertObj 
+        (\\_,b,_ => np.s ! NPCase Nom) (predV vpVerbOlla)) ;
+
+  ExistIPAdv ip adv =
+      let 
+        c  = case ip.n of {Sg => Nom ; Pl => Part} ;
+        cl = mkClause (\_ -> ip.s ! NPCase c ++ adv.s) (agrP3 Sg)  -- kuka täällä on ; keitä täällä on
+                      (predV vpVerbOlla) ;
+      in {
+        s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
+        } ;
 
   oper
     olla = vpVerbOlla ;
