@@ -32303,7 +32303,6 @@ lin washroom_N = mkN "सार्वजनिक शौचघर" ;       -- ol
 lin washstand_N = mkN "वाश स्टैण्ड" ;       -- old       -- old
 lin washtub_N = mkN "कपड़े धोने का टब" ;       -- old       -- old
 lin washup_N = mkN "बर्तन आदि धोना" ;       -- old
-lin washwoman_N = mkN "धोबिन" ;       -- old
 lin washy_A = mkA "पनियल" ;       -- old       -- old
 lin waspish_A = mkA "चिड़चिड़ा" ;       -- old       -- old
 lin wassailer_N = mkN "सलामती का जाम उठाने वाला" ;       -- old

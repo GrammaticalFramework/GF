@@ -8211,7 +8211,6 @@ lin bushy_A = mkA "buskig"; -- comment=2
 lin business_N = mkN "uppgift" "uppgifter"; -- comment=20
 lin businesslike_A = mkA "affärsmässig"; -- comment=5
 lin businessman_N = mkN "affärsman" "affärsmannen" "affärsmän" "affärsmännen"; -- comment=2
-lin businessmen_N = variants {};
 lin businessperson_N = variants {};
 lin businesswoman_N = variants {};
 lin busker_N = variants {};
@@ -32512,7 +32511,6 @@ lin linebacker_N = variants {};
 lin linecut_N = variants {};
 lin linelike_A = variants {};
 lin lineman_N = variants {};
-lin linemen_N = variants {};
 lin linen_N = mkN "linne"; -- comment=2
 lin linen_draper_N = variants {};
 lin linendraper_N = mkN "lärftskrämare" | mkN "lärftskramhandlare" | mkN "manufakturhandlare"; -- status=guess status=guess status=guess
@@ -63156,7 +63154,6 @@ lin washroom_N = mkN "toalett" "toaletter";
 lin washstand_N = variants {};
 lin washtub_N = variants {};
 lin washup_N = variants {};
-lin washwoman_N = variants {};
 lin washy_A = variants {};
 lin wasp_N = mkN "geting";
 lin wasp_waisted_A = variants {};
