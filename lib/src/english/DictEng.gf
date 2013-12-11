@@ -12624,6 +12624,7 @@ lin correlational_A = mkA "correlational" ;
 lin correlative_A = compoundA (mkA "correlative");
 lin correlative_N = mkN "correlative" "correlatives";
 lin correspond_V = mkV "correspond" "corresponds" "corresponded" "corresponded" "corresponding";
+lin correspond_V2 = mkV2 (mkV "correspond") to_Prep ;
 lin correspondence_N = mkN "correspondence" "correspondences";
 lin correspondent_N = mkN "correspondent" "correspondents";
 lin correspondingly_Adv = mkAdv "correspondingly" ;

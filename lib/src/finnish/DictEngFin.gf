@@ -55056,6 +55056,7 @@ dam_N = mkN "pato" ;
 daily_N = mkWN (compoundN "päivä" (k7A "lehti")) ; 
 correspondent_N = mkN "kirjeenvaihtaja" ;  --mkWN (k10 "kirjoittaja") "kirjeiden" ; 
 correspond_V = mkV vOlla "kirjeenvaihdossa" ; 
+correspond_V2 = mkV2 (mkV "vastata") partitive ;
 cool_V2 = mkV2 "viilentää" partitive ; 
 continual_A = mkWA (kH1 "lakkaamaton") ; 
 companion_N = mkWN (k38 "seuralainen") ; 
