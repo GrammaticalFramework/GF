@@ -40,11 +40,13 @@ fun
 
 --  weekdayN   : Weekday -> N ; --weekdays are already as nouns in Dict
 --  monthN     : Month -> N     --months are already as nouns in Dict
-  weekdayAdv : Weekday -> Adv ;
+  weekdayPunctualAdv : Weekday -> Adv ;
+  weekdayHabitualAdv : Weekday -> Adv ;
   monthAdv   : Month -> Adv ;
 
-  monday,tuesday,wednesday,thursday,friday,sunday : Weekday ;
-  january,february,march,april,may,june,july : Month ;
-  august,september,october,november,december : Month ;
+  monday_Weekday, tuesday_Weekday, wednesday_Weekday, thursday_Weekday, friday_Weekday, sunday_Weekday : Weekday ;
+
+  january_Month, february_Month, march_Month, april_Month, may_Month, june_Month, july_Month : Month ;
+  august_Month, september_Month, october_Month, november_Month, december_Month : Month ;
 
 }

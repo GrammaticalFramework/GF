@@ -1,10 +1,7 @@
 --# -path=alltenses:.:../abstract
 
 concrete ConstructionFin of Construction = CatFin ** 
-  open SyntaxFin, ParadigmsFin, (L = LexiconFin), (E = ExtraFin), (D = DictEngFin), Prelude in {
-
-lincat
-  Weekday = {name : NP ; point : SyntaxFin.Adv ; habitual : SyntaxFin.Adv} ;
+  open SyntaxFin, ParadigmsFin, (L = LexiconFin), (E = ExtraFin)  in {
 
 lin
   hungry_VP = mkVP have_V2 (lin NP (mkNP (ParadigmsFin.mkN "nälkä"))) ;
@@ -26,22 +23,32 @@ lin
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> (lin CN cn))))) (lin A a) ;
 
-  monday = mkDay D.monday_PN "maanantaisin" ;
-  tuesday = mkDay D.tuesday_PN "tiistaisin" ;
-  wednesday = mkDay D.wednesday_PN "keskiviikkoisin" ;
-  thursday = mkDay D.thursday_PN "torstaisin" ;
-  friday = mkDay D.friday_PN "perjantaisin" ;
-  saturday = mkDay D.saturday_PN "lauantaisin" ;
-  sunday = mkDay D.sunday_PN "sunnuntaisin" ;
+lincat
+  Weekday = {name : NP ; noun : CN ; point : SyntaxFin.Adv ; habitual : SyntaxFin.Adv} ;
+lin
+  monday_Weekday = mkWeekday "maanantai" ;
+  tuesday_Weekday = mkWeekday "tiistaisi" ;
+  wednesday_Weekday = mkWeekday "keskiviikko" ;
+  thursday_Weekday = mkWeekday "torstai" ;
+  friday_Weekday = mkWeekday "perjantai" ;
+  saturday_Weekday = mkWeekday"lauantai" ;
+  sunday_Weekday = mkWeekday "sunnuntai" ;
 
-  weekdayAdv w = w.point | w.habitual ;
+  weekdayPunctualAdv w = w.point ;
+  weekdayHabitualAdv w = w.habitual ;
 
 oper
 
-  mkDay : PN -> Str -> Weekday = \d,s -> 
-      let day = mkNP d in
-      lin Weekday {name = day ; 
-       point = SyntaxFin.mkAdv (casePrep essive) day ; 
-       habitual = ParadigmsFin.mkAdv s
+  mkWeekday : Str -> Weekday = \d -> 
+      let day = mkN d 
+      in
+      lin Weekday {
+       name = mkNP day ; 
+       noun = mkCN day ; 
+       point = SyntaxFin.mkAdv (casePrep essive) (mkNP day) ; 
+       habitual = case d of {
+         _ + "i" => ParadigmsFin.mkAdv (d + "sin") ; -- tiistaisin
+         _ => ParadigmsFin.mkAdv (d + "isin")  -- keskiviikkoisin
+         }
       } ; 
 }
