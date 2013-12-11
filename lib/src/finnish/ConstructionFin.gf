@@ -36,6 +36,8 @@ lin
 
   weekdayPunctualAdv w = w.point ;
   weekdayHabitualAdv w = w.habitual ;
+  weekdayLastAdv w = ParadigmsFin.mkAdv ("viime" ++ w.point.s) ;
+  weekdayNextAdv w = ParadigmsFin.mkAdv ("ensi" ++ w.point.s) ;
 
 oper
 

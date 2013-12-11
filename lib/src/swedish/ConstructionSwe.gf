@@ -23,5 +23,22 @@ lin
   is_wrong_VP = mkVP have_V2 (mkNP (ParadigmsSwe.mkN "fel")) ;
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
+
+lincat
+  Weekday = N ;
+lin
+  monday_Weekday = mkN "måndag" ;
+  tuesday_Weekday = mkN "tisdag" ;
+  wednesday_Weekday = mkN "onsdag" ;
+  thursday_Weekday = mkN "torsdag" ;
+  friday_Weekday = mkN "fredag" ;
+  saturday_Weekday = mkN "lördag" ;
+  sunday_Weekday = mkN "söndag" ;
+
+  weekdayPunctualAdv w = SyntaxSwe.mkAdv on_Prep (mkNP w) ;         -- på söndag
+  weekdayHabitualAdv w = SyntaxSwe.mkAdv on_Prep (mkNP aPl_Det w) ; -- på söndagar
+  weekdayLastAdv w = SyntaxSwe.mkAdv in_Prep (mkNP (E.GenNP (mkNP w))) ; -- i söndags
+  weekdayNextAdv w = SyntaxSwe.mkAdv (mkPrep "nästa") (mkNP w) ; -- nästa söndag --- can mean a week later than English "next Sunday"
+
   
 }

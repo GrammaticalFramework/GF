@@ -42,6 +42,9 @@ fun
 --  monthN     : Month -> N     --months are already as nouns in Dict
   weekdayPunctualAdv : Weekday -> Adv ;
   weekdayHabitualAdv : Weekday -> Adv ;
+  weekdayLastAdv : Weekday -> Adv ;
+  weekdayNextAdv : Weekday -> Adv ;
+
   monthAdv   : Month -> Adv ;
 
   monday_Weekday, tuesday_Weekday, wednesday_Weekday, thursday_Weekday, friday_Weekday, sunday_Weekday : Weekday ;
