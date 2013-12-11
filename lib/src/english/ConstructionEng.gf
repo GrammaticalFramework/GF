@@ -23,5 +23,20 @@ lin
   is_wrong_VP = mkVP (ParadigmsEng.mkA "wrong") ;
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
+
+lincat
+  Weekday = N ;
+lin
+  monday_Weekday = mkN "Monday" ;
+  tuesday_Weekday = mkN "Tuesday" ;
+  wednesday_Weekday = mkN "Wednesday" ;
+  thursday_Weekday = mkN "Thursday" ;
+  friday_Weekday = mkN "Friday" ;
+  saturday_Weekday = mkN "Saturday" ;
+  sunday_Weekday = mkN "Sunday" ;
+
+  weekdayPunctualAdv w = SyntaxEng.mkAdv on_Prep (mkNP w) ;         -- on Sunday
+  weekdayHabitualAdv w = SyntaxEng.mkAdv on_Prep (mkNP aPl_Det w) ; -- on Sundays
+
   
 }
