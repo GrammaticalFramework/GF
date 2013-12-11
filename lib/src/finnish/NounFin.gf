@@ -85,7 +85,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
       } ;
 
     ExtAdvNP np adv = {
-      s = \\c => np.s ! c ++ adv.s ;
+      s = \\c => np.s ! c ++ embedInCommas adv.s ;
       a = np.a ;
       isPron = np.isPron ;  -- minun t‰‰ll‰ - ni
       isNeg = np.isNeg
