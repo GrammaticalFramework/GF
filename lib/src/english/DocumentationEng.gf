@@ -20,14 +20,14 @@ lincat
 
 lin
   noun_Category = mkN "noun" ;
-  adjective_Category = mkN "adjektive" ;
+  adjective_Category = mkN "adjective" ;
   verb_Category = mkN "verb" ;
   adverb_Category = mkN "adverb" ;
 
   singular_Parameter = mkN "singular" ;
   plural_Parameter = mkN "plural" ;
 
-  masculine_Parameter = mkN "maskuline" ;
+  masculine_Parameter = mkN "masculine" ;
   feminine_Parameter = mkN "feminine" ;
   neuter_Parameter = mkN "neuter" ;
 

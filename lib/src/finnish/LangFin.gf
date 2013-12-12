@@ -1,9 +1,10 @@
 --# -path=.:../abstract:../common:../prelude
 
 concrete LangFin of Lang = 
---  GrammarFin - [SlashV2VNP,SlashVV], ---- to speed up compilation
   GrammarFin, 
-  LexiconFin
+  LexiconFin,
+  ConstructionFin,
+  DocumentationFin
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = finnish ;
