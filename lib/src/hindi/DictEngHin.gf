@@ -33752,7 +33752,8 @@ lin fairness_N= mkN "निष्पक्षता";
 lin mississippi_PN= mkPN "mississippi";
 lin as_Prep= mkPrep "के जैसा" "के जैसा";
 lin outpatient_N= mkN "बहिरंग रोगी";
-lin may_VV= mkV "लेना" ** { isAux = True} ;
+lin may_1_VV= mkV "लेना" ** { isAux = True} ; ---- check these AR
+lin may_2_VV= mkV "लेना" ** { isAux = True} ;
 lin further_AdV= ss "इसके अतिरिक्त";
 lin throughout_Prep= mkPrep "पूरे" "में";
 lin such_Predet= ss "ऐसी";

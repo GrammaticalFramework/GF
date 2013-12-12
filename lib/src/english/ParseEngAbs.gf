@@ -14,6 +14,7 @@ abstract ParseEngAbs =
   Relative,
   Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   Construction,
+  Documentation,
   ExtraEngAbs [NP, Quant, VPSlash, VP, GenNP, PassVPSlash, PassAgentVPSlash,
                Temp, Tense, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
                VPI, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV, ComplSlashPartLast,
