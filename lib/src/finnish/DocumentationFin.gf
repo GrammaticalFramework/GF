@@ -5,6 +5,7 @@ concrete DocumentationFin of Documentation = CatFin ** open
   StemFin,
   ParadigmsFin,
   (G = GrammarFin),
+  (S = SyntaxFin),
   Prelude,
   HTML
 in {
@@ -14,6 +15,7 @@ lincat
   Category = G.N ;
   ParameterType = G.N ;
   Parameter = G.N ;
+  Modifier = G.A ;
   
   Heading = {s : Str} ;
   Inflection = {s : Str} ; 
@@ -70,6 +72,8 @@ lin
   superlative_Parameter = mkN "superlatiivi" ;
   predicative_Parameter = mkN "predikatiivi" ;
 
+  finite_Modifier = mkA "finiittinen" ;
+
   nounHeading n = ss ((snoun2nounSep n).s ! NCase Sg Nom) ;
 
 oper
@@ -103,7 +107,6 @@ lin
 
   InflectionA adj = {
     s = heading1 (heading adjective_Category) ++ 
-        heading2 (heading positive_Parameter) ++ 
         inflectionN (\nf -> (snoun2nounSep {s = \\f => adj.s ! Posit  ! sAN f ; h = adj.h}).s ! nf) ++ 
         heading2 (heading comparative_Parameter) ++ 
         inflectionN (\nf -> (snoun2nounSep {s = \\f => adj.s ! Compar ! sAN f ; h = adj.h}).s ! nf) ++ 
@@ -125,27 +128,28 @@ lin
      in {
      s =
       heading1 (heading verb_Category) ++  
+      heading2 "finiittimuodot" ++  --- 
        frameTable (
-       tr (th "" ++ th (heading present_Parameter)   ++  th (heading past_Parameter) ++  
-                    th (heading conditional_Parameter) ++ th (heading potential_Parameter))  ++  
+       tr (intagAttr "th" "rowspan=2" "" ++ 
+                    intagAttr "th" "colspan=2" (heading indicative_Parameter) ++ 
+                    th (heading conditional_Parameter) ++ th (heading potential_Parameter)  ++  
                     th (heading imperative_Parameter))  ++  
+       tr (         th (heading present_Parameter) ++ th (heading past_Parameter) ++  
+                    th (heading present_Parameter) ++ th (heading present_Parameter)  ++  
+                    th (heading present_Parameter))  ++  
        tr (th "yks.1"  ++ gforms Sg P1 ++ tdf "") ++
        tr (th "yks.2"  ++ gforms Sg P2 ++ tdf (vfin (Imper Sg))) ++
        tr (th "yks.3"  ++ gforms Sg P3 ++ tdf (vfin (ImperP3 Sg))) ++
        tr (th "mon.1"  ++ gforms Pl P1 ++ tdf (vfin (ImperP1Pl))) ++
        tr (th "mon.2"  ++ gforms Pl P2 ++ tdf (vfin (Imper Pl))) ++
        tr (th "mon.3"  ++ gforms Pl P3 ++ tdf (vfin (ImperP3 Pl))) 
-        
+       ) 
+ -- ++
+    --  heading2 "nominaalimuodot" ++ ---
+      -- frameTable () -----
+
      } ;
-{-
-       frameTable (
-       tr (th (heading imperative_Parameter ++ "Sg.2")  ++ tdf (vfin (VImper Sg))) ++
-       tr (th (heading imperative_Parameter ++ "Pl.2")  ++ tdf (vfin (VImper Pl))) ++
-       tr (th (heading infinitive_Parameter)            ++ tdf (verb.s ! (VInf False))) ++
-       tr (th (heading present_Parameter ++ heading participle_Parameter) ++ tdf (verb.s ! (VPresPart APred))) ++
-       tr (th (heading perfect_Parameter ++ heading participle_Parameter) ++ tdf (verb.s ! (VPastPart APred))) ++
-       tr (th (heading aux_verb_Parameter)       ++ td (intag "i" (case verb.aux of {VHaben => "haben" ; VSein => "sein"})))
-       ))
--}
+
+  formGF_N = mkN "muoto" ;
 
 }
