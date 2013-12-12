@@ -18,19 +18,22 @@ lin
   CNIntNP cn i = {
     s = \\_ => cn.s ! Indef ! Sg ! Nom ++ i.s ;
     agr = AgrP3 Sg cn.gend ;
-    pol = Pos
+    pol = Pos ;
+    isRel = False
   } ;
 
   CNSymbNP det cn xs = {
     s = \\_ => det.s ! cn.gend ! Nom ++ cn.s ! det.defin ! det.num ! Nom ++ xs.s ;
     agr = AgrP3 det.num cn.gend ;
-    pol = Pos
+    pol = Pos ;
+    isRel = False
   } ;
 
   CNNumNP cn i = {
     s = \\_ => cn.s ! Indef ! Sg ! Nom ++ i.s ! Masc ! Nom ;
     agr = AgrP3 Sg cn.gend ;
-    pol = Pos
+    pol = Pos ;
+    isRel = False
   } ;
 
   SymbS sy = sy ;

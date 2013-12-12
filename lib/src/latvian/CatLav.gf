@@ -55,9 +55,9 @@ lincat
 
   -- Nouns and noun phrases
 
-  CN = { s : Definiteness => Number => Case => Str ; gend : Gender } ;
+  CN = { s : Definiteness => Number => Case => Str ; gend : Gender ; isRel : Bool } ;
 
-  NP = { s : Case => Str ; agr : Agreement ; pol : Polarity } ;
+  NP = { s : Case => Str ; agr : Agreement ; pol : Polarity ; isRel : Bool } ;
 
   Pron = Pronoun ;
 

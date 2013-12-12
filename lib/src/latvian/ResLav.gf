@@ -143,6 +143,12 @@ oper
       Masc => Masc
     } ;
 
+  closeRelCl : Bool -> Str = \isRel -> 
+    case isRel of {
+      True => "," ;
+      False => []
+    } ;
+
   vowel : pattern Str = #("a"|"ā"|"e"|"ē"|"i"|"ī"|"o"|"u"|"ū") ;
 
   simpleCons : pattern Str = #("c"|"d"|"l"|"n"|"s"|"t"|"z") ;

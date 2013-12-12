@@ -78,6 +78,7 @@ oper
           Deb _ _ => np.s ! Dat ;  --# notpresent
           _       => np.s ! vp.leftVal
         } ++
+        closeRelCl np.isRel ++        
         buildVerb vp.v mood pol agr np.pol vp.rightPol ++  -- verb
         vp.compl ! np.agr                                  -- object(s), complements, adverbial modifiers
     } ;
