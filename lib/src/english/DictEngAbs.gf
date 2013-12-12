@@ -33060,7 +33060,8 @@ fun maxine_PN : PN;
 fun maxwell_N : N;
 fun may_N : N;
 fun may_PN : PN;
-fun may_VV : VV;
+fun may_1_VV : VV;  -- be possible
+fun may_2_VV : VV;  -- be allowed
 fun may_beetle_N : N;
 fun may_bug_N : N;
 fun mayapple_N : N;
