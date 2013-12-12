@@ -10,13 +10,14 @@ cat
 
   Heading ;        -- grammatical term used as heading e.g. "Noun" ---- TODO capitalization
   Inflection ;     -- inflection table
+  Modifier ;       -- e.g. finite, transitive
 
 fun
   noun_Category      : Category ;
   adjective_Category : Category ;
   verb_Category      : Category ;
   adverb_Category    : Category ;
-  
+
   number_ParameterType : ParameterType ;
   gender_ParameterType : ParameterType ;
   case_ParameterType   : ParameterType ;
@@ -73,11 +74,18 @@ fun
   person2_Parameter : Parameter ;
   person3_Parameter : Parameter ;
 
+  finite_Modifier : Modifier ;
+  transitive_Modifier : Modifier ;
+
   nounHeading : N -> Heading ;
 
   InflectionN  : N -> Inflection ;
   InflectionA  : A -> Inflection ;
   InflectionV  : V -> Inflection ;
   InflectionV2 : V2 -> Inflection ;
+
+-- generic lexicon
+
+  formGr_N : N ;  -- inflectional form
 
 }
