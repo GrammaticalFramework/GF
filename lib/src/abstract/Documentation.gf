@@ -15,6 +15,7 @@ fun
   noun_Category      : Category ;
   adjective_Category : Category ;
   verb_Category      : Category ;
+  adverb_Category    : Category ;
   
   number_ParameterType : ParameterType ;
   gender_ParameterType : ParameterType ;
@@ -44,13 +45,15 @@ fun
   past_Parameter : Parameter ;
   future_Parameter : Parameter ;
   conditional_Parameter : Parameter ;
+  perfect_Parameter : Parameter ;
 
   participle_Parameter : Parameter ;
-  participle_Parameter : Parameter ;
+  aux_verb_Parameter : Parameter ;
 
   positive_Parameter : Parameter ;
   comparative_Parameter : Parameter ;
   superlative_Parameter : Parameter ;
+  predicative_Parameter : Parameter ;
 
   person1_Parameter : Parameter ;
   person2_Parameter : Parameter ;
