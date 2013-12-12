@@ -33094,7 +33094,20 @@ lin maxine_PN = mkPN "Maxine";
 lin maxwell_N = mkN "maxwell" ;
 lin may_N = mkN "May" "Mays";
 lin may_PN = mkPN "May";
-lin may_VV = {
+lin may_1_VV = {
+    s = table { 
+      VVF VInf => ["be possible to"] ;
+      VVF VPres => "may" ;
+      VVF VPPart => ["been possible to"] ;
+      VVF VPresPart => ["being possible to"] ;
+      VVF VPast => "might" ;
+      VVPastNeg => "mightn't" ;
+      VVPresNeg => "may not"
+      } ;
+    p = [] ;
+    typ = VVAux
+    } ;
+lin may_2_VV = {
     s = table { 
       VVF VInf => ["be allowed to"] ;
       VVF VPres => "may" ;

@@ -1,4 +1,5 @@
 --# -coding=utf8
+--# -path=.:../english
 
 concrete DictEngFre of DictEngAbs = CatFre ** open ParadigmsFre,
   (S = StructuralFre),
@@ -11005,6 +11006,8 @@ maximal_A = mkA "maximal";
 maximum_A = mkA "maximum";
 maximum_N = mkN "maximum" masculine;
 may_N = mkN "aubépine" feminine;
+may_1_VV = S.can_VV ;
+may_2_VV = S.can_VV ;
 maybe_Adv = mkAdv "peut-être";
 mayday_N = mkN "mayday";
 mayhem_N = mkN "grabuge" masculine | mkN "mutilation" feminine;

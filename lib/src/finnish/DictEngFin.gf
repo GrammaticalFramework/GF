@@ -52549,7 +52549,8 @@ prosecutorFem_N = mkN "syyttäjä" ; -- 1832
   make_VS = mkVS tehda_V ;  
   malaysia_PN = mkPN "Malesia" ; 
   manage_VV = mkVVf (mkV "onnistua") infIllat ; 
-  may_VV = mkVV (mkV "saattaa") ; 
+  may_1_VV = mkVV (mkV "saattaa") ; 
+  may_2_VV = mkVV (mkV "saada") ; 
 ---moreSg_Det
   mother_N = mkN "äiti" ; 
 ----name_V3 = mkV3 "nimetä" accusative allative ;  ---

@@ -34520,7 +34520,8 @@ lin maxine_PN = variants {};
 lin maxwell_N = variants {};
 lin may_N = mkN "maj"; -- comment=2
 lin may_PN = variants {};
-lin may_VV = auxVV (mkV "få" "fick" "fått"); --
+lin may_1_VV = S.can_VV ;
+lin may_2_VV = auxVV (mkV "få" "fick" "fått"); --
 lin may_beetle_N = variants {};
 lin may_bug_N = variants {};
 lin mayapple_N = variants {};
