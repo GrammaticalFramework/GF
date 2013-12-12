@@ -18,7 +18,8 @@ lin
 
   ConjNP conj ss = conjunctDistrTable Case conj ss ** {
     agr = toAgr (fromAgr ss.agr).pers (conjNumber (fromAgr ss.agr).num conj.num) (fromAgr ss.agr).gend;
-    pol = Pos
+    pol = Pos ;
+    isRel = False
   } ;
 
   ConjAP conj ss = conjunctDistrTable4 Definiteness Gender Number Case conj ss ;

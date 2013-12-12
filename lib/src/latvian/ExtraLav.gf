@@ -11,10 +11,12 @@ in {
 flags coding = utf8 ;
 
 lin
+
   -- NP -> CN -> CN
   GenCN np cn = {
-    s = \\d,n,c => np.s ! Gen ++ cn.s ! d ! n ! c ;
-    gend = cn.gend
+    s     = \\d,n,c => np.s ! Gen ++ closeRelCl np.isRel ++ cn.s ! d ! n ! c ;
+    gend  = cn.gend ;
+    isRel = cn.isRel
   } ;
 
   aiz_Prep = mkPrep "aiz" Gen Dat ;
