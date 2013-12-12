@@ -2,7 +2,9 @@
 
 concrete LangEng of Lang = 
   GrammarEng,
-  LexiconEng
+  LexiconEng,
+  ConstructionEng,
+  DocumentationEng
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
