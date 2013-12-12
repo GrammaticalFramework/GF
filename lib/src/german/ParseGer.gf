@@ -14,13 +14,14 @@ concrete ParseGer of ParseEngAbs =
   RelativeGer,
   IdiomGer [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ConstructionGer,
+  DocumentationGer,
   ExtraGer [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, PassAgentVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash],
             
   DictEngGer ** 
-open MorphoGer, ResGer, ParadigmsGer, SyntaxGer, Prelude in {
+open MorphoGer, ResGer, ParadigmsGer, SyntaxGer, Prelude, HTML in {
 
 flags literal=Symb ; coding = utf8 ;
 
@@ -122,5 +123,6 @@ lin
   that_RP = which_RP ;
 
   UttAdV adv = adv;
+
 
 }
