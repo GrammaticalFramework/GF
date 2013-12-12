@@ -180,7 +180,7 @@ param
 oper
   SVerb : Type = {s : SVForm => Str ; h : Harmony} ;
 
-  ollaSVerbForms : SVForm => Str = table SVForm ["olla";"ole";"on";"o";"olk";"olla";"oli";"oli";"olisi";"oll";"oltu";"ollu";"liene";"ole"] ;
+  ollaSVerbForms : SVForm => Str = table SVForm ["oll";"ole";"on";"o";"olk";"olla";"oli";"oli";"olisi";"oll";"olt";"ollu";"liene";"ole"] ;
 
   -- used in Cat
   SVerb1 = {s : SVForm => Str ; sc : NPForm ; h : Harmony ; p : Str} ;
