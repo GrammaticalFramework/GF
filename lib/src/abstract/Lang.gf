@@ -7,7 +7,9 @@
 
 abstract Lang = 
   Grammar, 
-  Lexicon
+  Lexicon,
+  Construction,
+  Documentation
   ** {
   flags startcat=Phr ;
   } ;
