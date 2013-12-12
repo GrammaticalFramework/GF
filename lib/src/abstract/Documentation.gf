@@ -36,6 +36,19 @@ fun
   genitive_Parameter : Parameter ;
   dative_Parameter : Parameter ;
 
+  partitive_Parameter : Parameter ; -- Fin N
+  translative_Parameter : Parameter ;
+  essive_Parameter : Parameter ;
+  inessive_Parameter : Parameter ;
+  elative_Parameter : Parameter ;
+  illative_Parameter : Parameter ;
+  adessive_Parameter : Parameter ;
+  ablative_Parameter : Parameter ;
+  allative_Parameter : Parameter ;
+  abessive_Parameter : Parameter ;
+  comitative_Parameter : Parameter ;
+  instructive_Parameter : Parameter ;
+
   imperative_Parameter : Parameter ;
   indicative_Parameter : Parameter ;
   conjunctive_Parameter : Parameter ;
@@ -46,6 +59,7 @@ fun
   future_Parameter : Parameter ;
   conditional_Parameter : Parameter ;
   perfect_Parameter : Parameter ;
+  potential_Parameter : Parameter ; -- Fin V
 
   participle_Parameter : Parameter ;
   aux_verb_Parameter : Parameter ;
