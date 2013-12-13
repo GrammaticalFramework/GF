@@ -55,6 +55,9 @@ fun
   conjunctive_Parameter : Parameter ;
   infinitive_Parameter : Parameter ;
 
+  active_Parameter : Parameter ;
+  passive_Parameter : Parameter ;
+
   present_Parameter : Parameter ;
   past_Parameter : Parameter ;
   future_Parameter : Parameter ;
@@ -64,6 +67,7 @@ fun
 
   participle_Parameter : Parameter ;
   aux_verb_Parameter : Parameter ;
+  agent_Parameter : Parameter ;
 
   positive_Parameter : Parameter ;
   comparative_Parameter : Parameter ;
@@ -84,8 +88,11 @@ fun
   InflectionV  : V -> Inflection ;
   InflectionV2 : V2 -> Inflection ;
 
--- generic lexicon
 
-  formGr_N : N ;  -- inflectional form
+-- generic grammar terms
+
+  formGr_N : N ;   -- inflectional form
+  shortGr_A : A ;  -- short form of e.g. a Fin infinitive, or short vowel (may have to be split)
+  longGr_A : A ;   -- long form of e.g. a Fin infinitive, or long vowel (may have to be split)
 
 }

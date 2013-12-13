@@ -17,6 +17,7 @@ concrete ParseFin of ParseEngAbs =
   RelativeFin,
   IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ConstructionFin,
+  DocumentationFin,
   ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, Voc, RP, GenRP, PassVPSlash, PassAgentVPSlash,
       Temp, Tense, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
       VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV]
@@ -132,6 +133,7 @@ lin
 
 --in Verb,   SlashV2VNP : V2V -> NP -> VPSlash -> VPSlash
 
+---- these will be obsolete
 lincat 
   NDisplay = {s : NForm => Str} ;
   ADisplay = {s : Degree => NForm => Str} ; 
