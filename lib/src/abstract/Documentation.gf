@@ -29,9 +29,13 @@ fun
   singular_Parameter : Parameter ;
   plural_Parameter : Parameter ;
 
+  definite_Parameter : Parameter ;
+  indefinite_Parameter : Parameter ;
+
   masculine_Parameter : Parameter ;
   feminine_Parameter : Parameter ;
   neuter_Parameter : Parameter ;
+  uter_Parameter : Parameter ;  -- the Swedish/Dutch non-neuter gender
 
   nominative_Parameter : Parameter ;
   accusative_Parameter : Parameter ;

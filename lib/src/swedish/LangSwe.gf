@@ -2,7 +2,9 @@
 
 concrete LangSwe of Lang = 
   GrammarSwe,
-  LexiconSwe
+  LexiconSwe,
+  ConstructionSwe,
+  DocumentationSwe
   ** {
 
 flags startcat = Phr ;  unlexer = text ; lexer = text ;
