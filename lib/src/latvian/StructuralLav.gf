@@ -166,8 +166,8 @@ lin
   otherwise_PConj = ss "citādi" ;
   therefore_PConj = ss "tāpēc" ;
 
-  both7and_DConj = mkConj "gan" ("," ++ "gan"); -- FIXME: komati nav tā kā vajag
-  either7or_DConj = mkConj ("vai" ++ "nu") ("," ++ "vai") Sg ; -- FIXME: komati nav tā kā vajag
+  both7and_DConj = mkConj "gan" "gan" ;
+  either7or_DConj = mkConj ("vai" ++ "nu") "vai" Sg ;
 
   whoSg_IP = { -- FIXME: Fem
     s = table {
