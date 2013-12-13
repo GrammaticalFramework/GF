@@ -6,6 +6,7 @@ concrete DocumentationFin of Documentation = CatFin ** open
   ParadigmsFin,
   (G = GrammarFin),
   (S = SyntaxFin),
+  (L = LexiconFin),
   Prelude,
   HTML
 in {
@@ -26,6 +27,7 @@ lin
   adjective_Category = mkN "adjektiivi" ;
   verb_Category = mkN "verbi" ;
   adverb_Category = mkN "adverbi" ;
+  preposition_Category = mkN "prepositio" ;
 
   singular_Parameter = mkN "yksikkö" ;
   plural_Parameter = mkN "monikko" ;
@@ -119,7 +121,18 @@ lin
         inflectionN (\nf -> (snoun2nounSep {s = \\f => adj.s ! Superl ! sAN f ; h = adj.h}).s ! nf)
     } ;
 
-  InflectionV, InflectionV2 = \verb0 -> 
+
+  InflectionV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V v))) v ;
+  InflectionV2 v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2 v) S.something_NP)) (lin V v) ;
+  InflectionVV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))) (lin V v) ;
+  InflectionV2V v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2V v) S.we_NP (S.mkVP (L.sleep_V)))) (lin V v) ;
+
+  ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
+
+oper 
+  verbExample : Cl -> Str = \cl -> (S.mkUtt cl).s ;
+
+  inflectionVerb : Str -> V -> {s : Str} = \ex,verb0 -> 
      let 
        verb = sverb2verbSep verb0 ;
        vfin : VForm -> Str = \f ->
@@ -133,6 +146,7 @@ lin
      in {
      s =
       heading1 (heading verb_Category) ++  
+      paragraph (intag "b" (heading exampleGr_N ++ ":") ++ intag "i" ex) ++
       heading2 "finiittimuodot" ++  --- 
        frameTable (
        tr (intagAttr "th" "rowspan=2" "" ++ 
@@ -213,6 +227,15 @@ lin
 
      } ;
 
+lin
+  InflectionPrep p = {
+    s = heading1 (heading preposition_Category) ++
+        paragraph (intag "b" (heading exampleGr_N ++ ":") ++ 
+           intag "i" ((S.mkAdv (lin Prep p) S.it_NP).s ++ ";" ++ (S.mkAdv (lin Prep p) S.we_NP).s))
+    } ;
+
+
   formGF_N = mkN "muoto" ;
+  exampleGr_N = mkN "esimerkki" ;
 
 }

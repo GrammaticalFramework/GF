@@ -4,6 +4,8 @@ concrete DocumentationGer of Documentation = CatGer ** open
   ResGer,
   ParadigmsGer,
   (G = GrammarGer),
+  (S = SyntaxGer),
+  (L = LexiconGer),
   Prelude,
   HTML
 in {
@@ -22,6 +24,9 @@ lin
   noun_Category = mkN "Substantiv" ;
   adjective_Category = mkN "Adjektiv" ;
   verb_Category = mkN "Verb" ;
+  preposition_Category = mkN "Präposition" ;
+
+  gender_ParameterType = mkN "Geschlecht" ;
 
   singular_Parameter = mkN "Singular" ;
   plural_Parameter = mkN "Plural" ;
@@ -59,9 +64,18 @@ lin
 oper
    tdf : Str -> Str = \s -> td (intag "i" s) ;
    heading : N -> Str = \n -> (nounHeading n).s ;
+
+   nounGender : N -> Parameter = \n -> case n.g of {
+     Masc   => masculine_Parameter ; 
+     Fem    => feminine_Parameter ;
+     Neutr  => neuter_Parameter
+     } ;
+
 lin
   InflectionN noun = {
-    s = heading1 (heading noun_Category) ++ frameTable ( 
+    s = heading1 (heading noun_Category) ++ 
+        paragraph (intag "b" (heading (gender_ParameterType)) ++ ":" ++ heading (nounGender noun)) ++
+        frameTable ( 
           tr (th ""          ++ th (heading singular_Parameter)            ++ th (heading plural_Parameter)   ) ++
           tr (th (heading nominative_Parameter) ++ tdf (noun.s ! Sg ! Nom) ++ tdf (noun.s ! Pl ! Nom)) ++
           tr (th (heading genitive_Parameter)   ++ tdf (noun.s ! Sg ! Gen) ++ tdf (noun.s ! Pl ! Gen)) ++
@@ -92,7 +106,25 @@ lin
              dtable positive_Parameter Posit ++ dtable comparative_Parameter Compar ++ dtable superlative_Parameter Superl ;
         } ;
 
-  InflectionV, InflectionV2 = \verb -> 
+  InflectionV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V v))) v ;
+  InflectionV2 v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2 v) S.something_NP)) (lin V v) ;
+  InflectionVV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))) (lin V v) ;
+  InflectionV2V v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2V v) S.we_NP (S.mkVP (L.sleep_V)))) (lin V v) ;
+
+  InflectionPrep p = {
+    s = heading1 (heading preposition_Category) ++
+        paragraph (intag "b" (heading exampleGr_N ++ ":") ++ intag "i" (S.mkAdv (lin Prep p) (S.mkNP S.a_Det L.computer_N)).s)
+    } ;
+
+  ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
+
+oper 
+  verbExample : Cl -> Str = \cl ->
+     (S.mkUtt cl).s 
+     ++ ";" ++ (S.mkUtt (S.mkS S.anteriorAnt cl)).s  --# notpresent
+     ;
+
+  inflectionVerb : Str -> V -> {s : Str} = \ex,verb -> 
      let 
        vfin : VForm -> Str = \f ->
          verb.s ! f ++ verb.prefix ; 
@@ -105,6 +137,7 @@ lin
      in {
      s =
       heading1 (heading verb_Category) ++  
+       paragraph (intag "b" (heading exampleGr_N ++ ":") ++ intag "i" ex) ++
        paragraph (frameTable (
        tr (th "" ++ intagAttr "th" "colspan=2" (heading present_Parameter) ++  intagAttr "th" "colspan=2" (heading past_Parameter)) ++  
        tr (th "" ++ th (heading indicative_Parameter) ++ th (heading conjunctive_Parameter ++ "I")  ++  
@@ -127,5 +160,7 @@ lin
        ))
      } ;
 
+  lin
+    exampleGr_N = mkN "Beispiel" "Beispiele" neuter ;
 
 }
