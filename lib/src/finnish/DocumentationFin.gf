@@ -148,14 +148,16 @@ lin
        tr (th "mon.1"  ++ gforms Pl P1 ++ tdf (vfin (ImperP1Pl))) ++
        tr (th "mon.2"  ++ gforms Pl P2 ++ tdf (vfin (Imper Pl))) ++
        tr (th "mon.3"  ++ gforms Pl P3 ++ tdf (vfin (ImperP3 Pl))) ++
-       tr (th "pass."  ++ tdf (vfin (PassPresn True))  ++ tdf (vfin (PassImpf True)) ++ 
-                          tdf (vfin (PassCondit True)) ++ tdf (vfin (PassPotent True)) ++ tdf (vfin (PassImper True))) ++ 
-       tr (th "kielt.yks."  ++ tdf2 (vfin (Imper Sg))   ++ tdf (vfin (PastPartAct (AN (NCase Sg Nom)))) ++ 
-                               tdf2 (vfin (Condit Sg P3)) ++ tdf2 (vfin (PotentNeg)) ++ tdf (vfin (Imper Sg))) ++ 
+       tr (th "pass."  ++ tdf (vfin (PassPresn True))  ++ tdf (vfin (PassImpf True)) ++ --# notpresent
+                          tdf (vfin (PassCondit True)) ++ tdf (vfin (PassPotent True)) ++ tdf (vfin (PassImper True))) ++ --# notpresent 
+       tr (th "kielt.yks."  ++ tdf2 (vfin (Imper Sg))   ++ tdf (vfin (PastPartAct (AN (NCase Sg Nom))))  
+                            ++ tdf2 (vfin (Condit Sg P3)) ++ tdf2 (vfin (PotentNeg)) ++ tdf (vfin (Imper Sg)) --# notpresent 
+                               ) ++
        tr (th "kielt.mon."  ++                                tdf (vfin (PastPartAct (AN (NCase Pl Nom)))) ++ 
                                                               tdf (vfin (ImpNegPl))) ++ 
-       tr (th "kielt.pass." ++ tdf (vfin (PassPresn False))  ++ tdf (vfin (PassImpf False)) ++ 
-                          tdf (vfin (PassCondit False)) ++ tdf (vfin (PassPotent False)) ++ tdf (vfin (PassImper False))) 
+       tr (th "kielt.pass." ++ tdf (vfin (PassPresn False))  
+                          ++ tdf (vfin (PassImpf False)) ++ tdf (vfin (PassCondit False)) ++ tdf (vfin (PassPotent False))--# notpresent 
+                          ++ tdf (vfin (PassImper False))) 
        ) 
   ++
       heading2 "nominaalimuodot" ++ ---
