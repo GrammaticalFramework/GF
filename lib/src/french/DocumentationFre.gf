@@ -37,7 +37,7 @@ lin
   accusative_Parameter = mkN "accusativ" ;
   
   imperative_Parameter = mkN "impératif" ;
-  indicative_Parameter = mkN "indikatif" ;
+  indicative_Parameter = mkN "indicatif" ;
   conjunctive_Parameter = mkN "subjonctif" ;
   infinitive_Parameter = mkN "infinitif" ;
 
@@ -78,32 +78,57 @@ lin
          )
      } ;
              
-{-
-
   InflectionV, InflectionV2 = \verb -> 
      let 
-       vfin : VForm -> Str = \f ->
-         verb.s ! f ++ verb.prefix ; 
+       vfin : VF -> Str = \f ->
+         verb.s ! f ; 
+
        gforms : Number -> Person -> Str = \n,p -> 
-         tdf (vfin (VFin False (VPresInd  n p))) ++
-         tdf (vfin (VFin False (VPresSubj n p)))
-         ++ tdf (vfin (VFin False (VImpfInd  n p))) --# notpresent
-         ++ tdf (vfin (VFin False (VImpfSubj n p)))  --# notpresent
+         tdf (vfin (VFin (VPres Indic) n p)) ++
+         tdf (vfin (VFin (VPres Conjunct) n p)) 
+         ++ tdf (vfin (VFin (VImperf Indic) n p))     --# notpresent
+         ++ tdf (vfin (VFin (VImperf Conjunct) n p))  --# notpresent
          ;
+
+       gforms2 : Number -> Person -> Str = \n,p -> --# notpresent
+         tdf (vfin (VFin VPasse n p)) ++  --# notpresent
+         tdf (vfin (VFin VFut n p)) ++  --# notpresent
+         tdf (vfin (VFin VCondit n p))   --# notpresent
+         ;  --# notpresent
+
+       ttable : (Number -> Person -> Str) -> Str -> Str = \forms, theadings ->
+         paragraph (frameTable (
+           theadings ++ 
+           tr (intagAttr "th" "rowspan=3" (heading singular_Parameter) ++
+               th "1.p" ++ forms Sg P1) ++  
+           tr (th "2.p" ++ forms Sg P2) ++  
+           tr (th "3.p" ++ forms Sg P3) ++  
+           tr (intagAttr "th" "rowspan=3" (heading plural_Parameter) ++
+               th "1.p" ++ forms Pl P1) ++  
+           tr (th "2.p" ++ forms Pl P2) ++  
+           tr (th "3.p" ++ forms Pl P3)
+           )) ;
+
      in {
      s =
-      heading1 (heading verb_Category) ++  
-       paragraph (frameTable (
-       tr (th "" ++ intagAttr "th" "colspan=2" (heading present_Parameter) ++  intagAttr "th" "colspan=2" (heading past_Parameter)) ++  
-       tr (th "" ++ th (heading indicative_Parameter) ++ th (heading conjunctive_Parameter ++ "I")  ++  
-                    th (heading indicative_Parameter) ++ th (heading conjunctive_Parameter ++ "II"))  ++  
-       tr (th "Sg.1"  ++ gforms Sg P1) ++
-       tr (th "Sg.2"  ++ gforms Sg P2) ++
-       tr (th "Sg.3"  ++ gforms Sg P3) ++
-       tr (th "Pl.1"  ++ gforms Pl P1) ++
-       tr (th "Pl.2"  ++ gforms Pl P2) ++
-       tr (th "Pl.3"  ++ gforms Pl P3)
-       )) ++
+        heading1 (heading verb_Category)
+          ++ ttable gforms
+               (tr (intagAttr "th" "colspan=2 rowspan=2" "" 
+                    ++ intagAttr "th" "colspan=2" (heading present_Parameter)
+                    ++ intagAttr "th" "colspan=2" (heading imperfect_Parameter)
+                   ) ++
+                tr (   th (heading indicative_Parameter) ++ th (heading conjunctive_Parameter)
+                    ++ th (heading indicative_Parameter) ++ th (heading conjunctive_Parameter)
+                   )
+               ) 
+          ++ ttable gforms2  --# notpresent
+               (tr (intagAttr "th" "colspan=2" "" ++ th "passé simple" ++  --# notpresent 
+                    th (heading future_Parameter) ++ th (heading conditional_Parameter)))  --# notpresent
+        ;
+     } ; 
+
+
+{-
        paragraph (
        frameTable (
        tr (th (heading imperative_Parameter ++ "Sg.2")  ++ tdf (vfin (VImper Sg))) ++
