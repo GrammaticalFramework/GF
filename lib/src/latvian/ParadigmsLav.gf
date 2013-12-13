@@ -160,7 +160,7 @@ oper
     mkConj : Str -> Str -> Number -> Conj = mk2Conj ;
   } ;
 
-  mk2Conj : Str -> Str -> Number -> Conj = \c1,c2,n -> lin Conj (sd2 c1 c2 ** {num = n}) ;
+  mk2Conj : Str -> Str -> Number -> Conj = \c1,c2,n -> lin Conj (sd2 c1 ("," ++ c2) ** {num = n}) ;
 
   -- Numerals: need review (TODO)
 
