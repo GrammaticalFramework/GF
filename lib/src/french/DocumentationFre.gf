@@ -5,6 +5,8 @@ concrete DocumentationFre of Documentation = CatFre ** open
   CommonRomance,
   ParadigmsFre,
   (G = GrammarFre),
+  (S = SyntaxFre),
+  (L = LexiconFre),
   Prelude,
   HTML
 in {
@@ -61,9 +63,17 @@ lin
 oper
    tdf : Str -> Str = \s -> td (intag "i" s) ;
    heading : N -> Str = \n -> (nounHeading n).s ;
+   
+   nounGender : N -> Parameter = \n -> case n.g of {
+     Masc => masculine_Parameter ; 
+     Fem  => feminine_Parameter
+     } ;
+
 lin
   InflectionN noun = {
-    s = heading1 (heading noun_Category) ++ frameTable ( 
+    s = heading1 (heading noun_Category) ++
+        heading (nounGender noun) ++
+        frameTable ( 
           tr (th (heading singular_Parameter)  ++ th  (heading plural_Parameter)   ) ++
           tr (tdf (noun.s ! Sg)                ++ tdf (noun.s ! Pl))
           )
@@ -78,7 +88,12 @@ lin
          )
      } ;
              
-  InflectionV, InflectionV2 = \verb -> 
+  InflectionV v = inflectionVerb (S.mkUtt (S.mkCl S.she_NP (lin V v))).s v ;
+  InflectionV2 v = inflectionVerb (S.mkUtt (S.mkCl S.she_NP (lin V2 v) S.something_NP)).s (lin V v) ;
+  InflectionVV v = inflectionVerb (S.mkUtt (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))).s (lin V v) ;
+
+oper 
+  inflectionVerb : Str -> V -> {s : Str} = \ex,verb -> 
      let 
        vfin : VF -> Str = \f ->
          verb.s ! f ; 
@@ -112,6 +127,7 @@ lin
      in {
      s =
         heading1 (heading verb_Category)
+          ++ paragraph (intag "b" "exemple :" ++ intag "i" ex)
           ++ ttable gforms
                (tr (intagAttr "th" "colspan=2 rowspan=2" "" 
                     ++ intagAttr "th" "colspan=2" (heading present_Parameter)
@@ -124,21 +140,17 @@ lin
           ++ ttable gforms2  --# notpresent
                (tr (intagAttr "th" "colspan=2" "" ++ th "passé simple" ++  --# notpresent 
                     th (heading future_Parameter) ++ th (heading conditional_Parameter)))  --# notpresent
-        ;
+
+          ++ paragraph (frameTable (
+               tr (intagAttr "th" "colspan=2" (heading infinitive_Parameter) ++                (tdf (vfin (VInfin False)))) ++
+               tr (intagAttr "th" "rowspan=3" (heading imperative_Parameter) ++ th "sg.2.p" ++ (tdf (vfin (VImper SgP2)))) ++ 
+               tr (                                                             th "pl.1.p" ++ (tdf (vfin (VImper PlP1)))) ++ 
+               tr (                                                             th "pl.2.p" ++ (tdf (vfin (VImper PlP2)))) ++ 
+               tr (intagAttr "th" "rowspan=2" (heading participle_Parameter) ++ 
+                                                             th (heading past_Parameter) ++    (tdf (vfin (VPart Masc Sg)))) ++ 
+               tr (                                          th (heading present_Parameter) ++ (tdf (vfin VGer)))
+               )
+             )
      } ; 
-
-
-{-
-       paragraph (
-       frameTable (
-       tr (th (heading imperative_Parameter ++ "Sg.2")  ++ tdf (vfin (VImper Sg))) ++
-       tr (th (heading imperative_Parameter ++ "Pl.2")  ++ tdf (vfin (VImper Pl))) ++
-       tr (th (heading infinitive_Parameter)            ++ tdf (verb.s ! (VInf False))) ++
-       tr (th (heading present_Parameter ++ heading participle_Parameter) ++ tdf (verb.s ! (VPresPart APred))) ++
-       tr (th (heading perfect_Parameter ++ heading participle_Parameter) ++ tdf (verb.s ! (VPastPart APred))) ++
-       tr (th (heading aux_verb_Parameter)       ++ td (intag "i" (case verb.aux of {VHaben => "haben" ; VSein => "sein"})))
-       ))
-     } ;
--}
 
 }

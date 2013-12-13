@@ -75,6 +75,9 @@ fun
   superlative_Parameter : Parameter ;
   predicative_Parameter : Parameter ;
 
+  subject_Parameter : Parameter ;
+  object_Parameter : Parameter ;
+
   person1_Parameter : Parameter ;
   person2_Parameter : Parameter ;
   person3_Parameter : Parameter ;
@@ -88,12 +91,14 @@ fun
   InflectionA  : A -> Inflection ;
   InflectionV  : V -> Inflection ;
   InflectionV2 : V2 -> Inflection ;
+  InflectionVV : VV -> Inflection ;
 
 
 -- generic grammar terms
 
-  formGr_N : N ;   -- inflectional form
-  shortGr_A : A ;  -- short form of e.g. a Fin infinitive, or short vowel (may have to be split)
-  longGr_A : A ;   -- long form of e.g. a Fin infinitive, or long vowel (may have to be split)
+  exampleGr_N : N ; -- example of a rule, category, etc
+  formGr_N : N ;    -- inflectional form
+  shortGr_A : A ;   -- short form of e.g. a Fin infinitive, or short vowel (may have to be split)
+  longGr_A : A ;    -- long form of e.g. a Fin infinitive, or long vowel (may have to be split)
 
 }
