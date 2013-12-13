@@ -51,6 +51,9 @@ lin
   abessive_Parameter = mkN "abessiivi" ;
   comitative_Parameter = mkN "komitatiivi" ;
   instructive_Parameter = mkN "instruktiivi" ;
+
+  active_Parameter = mkN "aktiivi" ;
+  passive_Parameter = mkN "passiivi" ;
   
   imperative_Parameter = mkN "imperatiivi" ;
   indicative_Parameter = mkN "indikatiivi" ;
@@ -66,6 +69,7 @@ lin
 
   participle_Parameter = mkN "partisiippi" ;
   aux_verb_Parameter = mkN "apu" (mkN "verbi") ;
+  agent_Parameter = mkN "agentti" ;
 
   positive_Parameter = mkN "positiivi" ;
   comparative_Parameter = mkN "komparatiivi" ;
@@ -77,7 +81,8 @@ lin
   nounHeading n = ss ((snoun2nounSep n).s ! NCase Sg Nom) ;
 
 oper
-  tdf : Str -> Str = \s -> td (intag "i" s) ;
+  tdf  : Str -> Str = \s -> td (intag "i" s) ;
+  tdf2 : Str -> Str = \s -> intagAttr "td" "rowspan=2" (intag "i" s) ;
   heading : N -> Str = \n -> (nounHeading n).s ;
 
   inflectionN : (NForm -> Str) -> Str = \nouns -> 
@@ -142,11 +147,67 @@ lin
        tr (th "yks.3"  ++ gforms Sg P3 ++ tdf (vfin (ImperP3 Sg))) ++
        tr (th "mon.1"  ++ gforms Pl P1 ++ tdf (vfin (ImperP1Pl))) ++
        tr (th "mon.2"  ++ gforms Pl P2 ++ tdf (vfin (Imper Pl))) ++
-       tr (th "mon.3"  ++ gforms Pl P3 ++ tdf (vfin (ImperP3 Pl))) 
+       tr (th "mon.3"  ++ gforms Pl P3 ++ tdf (vfin (ImperP3 Pl))) ++
+       tr (th "pass."  ++ tdf (vfin (PassPresn True))  ++ tdf (vfin (PassImpf True)) ++ 
+                          tdf (vfin (PassCondit True)) ++ tdf (vfin (PassPotent True)) ++ tdf (vfin (PassImper True))) ++ 
+       tr (th "kielt.yks."  ++ tdf2 (vfin (Imper Sg))   ++ tdf (vfin (PastPartAct (AN (NCase Sg Nom)))) ++ 
+                               tdf2 (vfin (Condit Sg P3)) ++ tdf2 (vfin (PotentNeg)) ++ tdf (vfin (Imper Sg))) ++ 
+       tr (th "kielt.mon."  ++                                tdf (vfin (PastPartAct (AN (NCase Pl Nom)))) ++ 
+                                                              tdf (vfin (ImpNegPl))) ++ 
+       tr (th "kielt.pass." ++ tdf (vfin (PassPresn False))  ++ tdf (vfin (PassImpf False)) ++ 
+                          tdf (vfin (PassCondit False)) ++ tdf (vfin (PassPotent False)) ++ tdf (vfin (PassImper False))) 
        ) 
- -- ++
-    --  heading2 "nominaalimuodot" ++ ---
-      -- frameTable () -----
+  ++
+      heading2 "nominaalimuodot" ++ ---
+        frameTable (
+          tr (intagAttr "th" "rowspan=15" (heading infinitive_Parameter) ++         
+              intagAttr "th" "rowspan=2" "1" ++         
+              th "lyhyt" ++ ---
+              tdf (vfin (Inf Inf1))) ++
+          tr (th "pitkä" ++ ---
+              tdf (vfin (Inf Inf1Long) ++ BIND ++ "(ni)")) ++
+          tr (intagAttr "th" "rowspan=2" ("2." ++ heading active_Parameter) ++         
+              th (heading inessive_Parameter) ++ 
+              tdf (vfin (Inf Inf2Iness))) ++
+          tr (th (heading instructive_Parameter) ++ 
+              tdf (vfin (Inf Inf2Instr))) ++
+          tr (th ("2." ++ heading passive_Parameter) ++         
+              th (heading inessive_Parameter) ++ 
+              tdf (vfin (Inf Inf2InessPass))) ++
+
+          tr (intagAttr "th" "rowspan=7" "3." ++         
+              th (heading inessive_Parameter) ++ tdf (vfin (Inf Inf3Iness))) ++
+          tr (th (heading elative_Parameter)  ++ tdf (vfin (Inf Inf3Elat))) ++
+          tr (th (heading illative_Parameter) ++ tdf (vfin (Inf Inf3Illat))) ++
+          tr (th (heading adessive_Parameter) ++ tdf (vfin (Inf Inf3Adess))) ++
+          tr (th (heading abessive_Parameter) ++ tdf (vfin (Inf Inf3Abess))) ++
+          tr (th (heading instructive_Parameter) ++ tdf (vfin (Inf Inf3Instr))) ++
+          tr (th (heading instructive_Parameter ++ "pass.") ++ tdf (vfin (Inf Inf3InstrPass))) ++
+
+          tr (intagAttr "th" "rowspan=2" "4." ++         
+              th (heading nominative_Parameter) ++ tdf (vfin (Inf Inf4Nom))) ++
+          tr (th (heading partitive_Parameter) ++ tdf (vfin (Inf Inf4Part))) ++
+
+          tr (intagAttr "th" "colspan=2" "5." ++ tdf (vfin (Inf Inf5) ++ BIND ++ "(ni)")) ++
+
+          tr (intagAttr "th" "rowspan=5" (heading participle_Parameter) ++         
+              intagAttr "th" "rowspan=2" (heading present_Parameter) ++         
+              th (heading active_Parameter) ++ 
+              tdf (vfin (PresPartAct (AN (NCase Sg Nom))))) ++
+          tr (th (heading passive_Parameter) ++ 
+              tdf (vfin (PresPartPass (AN (NCase Sg Nom))))) ++
+
+          tr (intagAttr "th" "rowspan=2" (heading perfect_Parameter) ++         
+              th (heading active_Parameter) ++ 
+              tdf (vfin (PastPartAct (AN (NCase Sg Nom))))) ++
+
+          tr (th (heading passive_Parameter) ++ 
+              tdf (vfin (PastPartPass (AN (NCase Sg Nom))))) ++
+
+          tr (intagAttr "th" "colspan=2" (heading agent_Parameter) ++         
+             tdf (vfin (AgentPart (AN (NCase Sg Nom)))))
+
+         )
 
      } ;
 

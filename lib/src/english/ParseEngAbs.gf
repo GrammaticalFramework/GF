@@ -89,7 +89,7 @@ fun FeatN  : N  -> Feat;
     FeatVA : VA -> Feat;
 
 
--- for displaying inflection tables
+-- for displaying inflection tables ---- TODO soon obsolete
 
 cat 
   NDisplay ; ADisplay ; VDisplay ;
