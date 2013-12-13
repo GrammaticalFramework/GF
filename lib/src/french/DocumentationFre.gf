@@ -26,6 +26,8 @@ lin
   adjective_Category = mkN "adjectif" ;
   verb_Category = mkN "verbe" masculine ;
 
+  gender_ParameterType = mkN "genre" masculine ;
+
   singular_Parameter = mkN "singulier" ;
   plural_Parameter = mkN "pluriel" ;
 
@@ -72,11 +74,11 @@ oper
 lin
   InflectionN noun = {
     s = heading1 (heading noun_Category) ++
-        heading (nounGender noun) ++
-        frameTable ( 
+        paragraph (intag "b" (heading (gender_ParameterType)) ++ ":" ++ heading (nounGender noun)) ++
+        paragraph (frameTable ( 
           tr (th (heading singular_Parameter)  ++ th  (heading plural_Parameter)   ) ++
           tr (tdf (noun.s ! Sg)                ++ tdf (noun.s ! Pl))
-          )
+          ))
      } ;
 
   InflectionA adj = {
@@ -88,11 +90,19 @@ lin
          )
      } ;
              
-  InflectionV v = inflectionVerb (S.mkUtt (S.mkCl S.she_NP (lin V v))).s v ;
-  InflectionV2 v = inflectionVerb (S.mkUtt (S.mkCl S.she_NP (lin V2 v) S.something_NP)).s (lin V v) ;
-  InflectionVV v = inflectionVerb (S.mkUtt (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))).s (lin V v) ;
+  InflectionV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V v))) v ;
+  InflectionV2 v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2 v) S.something_NP)) (lin V v) ;
+  InflectionVV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))) (lin V v) ;
+  InflectionV2V v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2V v) S.we_NP (S.mkVP (L.sleep_V)))) (lin V v) ;
+
+  ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
 
 oper 
+  verbExample : Cl -> Str = \cl ->
+     (S.mkUtt cl).s 
+     ++ ";" ++ (S.mkUtt (S.mkS S.anteriorAnt cl)).s  --# notpresent
+     ;
+
   inflectionVerb : Str -> V -> {s : Str} = \ex,verb -> 
      let 
        vfin : VF -> Str = \f ->
@@ -127,7 +137,7 @@ oper
      in {
      s =
         heading1 (heading verb_Category)
-          ++ paragraph (intag "b" "exemple :" ++ intag "i" ex)
+          ++ paragraph (intag "b" (heading exampleGr_N ++ ":") ++ intag "i" ex)
           ++ ttable gforms
                (tr (intagAttr "th" "colspan=2 rowspan=2" "" 
                     ++ intagAttr "th" "colspan=2" (heading present_Parameter)
@@ -152,5 +162,9 @@ oper
                )
              )
      } ; 
+
+  lin
+    exampleGr_N = mkN "exemple" masculine ;
+
 
 }

@@ -4,6 +4,8 @@ concrete DocumentationEng of Documentation = CatEng ** open
   ResEng,
   ParadigmsEng,
   (G = GrammarEng),
+  (S = SyntaxEng),
+  (L = LexiconEng),
   Prelude,
   HTML
 in {
@@ -79,10 +81,19 @@ lin
         )
     } ;
 
+  InflectionV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V v))) v ;
+  InflectionV2 v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2 v) S.something_NP)) (lin V v) ;
+---  InflectionVV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))) (lin V v) ;
+  InflectionV2V v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2V v) S.we_NP (S.mkVP (L.sleep_V)))) (lin V v) ;
 
+  ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
 
-  InflectionV, InflectionV2 = \verb -> {
+oper 
+  verbExample : Cl -> Str = \cl -> (S.mkUtt cl).s ;
+
+  inflectionVerb : Str -> V -> {s : Str} = \ex,verb -> {
     s = heading1 (heading verb_Category) ++ 
+      paragraph (intag "b" (heading exampleGr_N ++ ":") ++ intag "i" ex) ++
         frameTable (
           tr (th (heading infinitive_Parameter)    ++ tdf (verb.s ! VInf)) ++
           tr (th (heading present_Parameter)       ++ tdf (verb.s ! VPres)) ++
@@ -91,6 +102,10 @@ lin
           tr (th (heading present_Parameter ++ heading participle_Parameter) ++ tdf (verb.s ! VPresPart)) 
         )
     } ;
+
+lin
+  exampleGr_N = mkN "example" ;
+  formGr_N = mkN "form" ;
 
 
 }
