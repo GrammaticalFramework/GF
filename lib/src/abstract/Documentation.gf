@@ -63,6 +63,7 @@ fun
   future_Parameter : Parameter ;
   conditional_Parameter : Parameter ;
   perfect_Parameter : Parameter ;
+  imperfect_Parameter : Parameter ;
   potential_Parameter : Parameter ; -- Fin V
 
   participle_Parameter : Parameter ;

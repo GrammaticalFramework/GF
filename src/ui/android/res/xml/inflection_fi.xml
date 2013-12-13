@@ -515,11 +515,11 @@
 				        <th rowspan="5">partisiippi</th>
 				        <th rowspan="2">preesens</th>
 					<th>aktiivi</th>
-					<td><lin form="s (PastPartAct (AN (NCase Sg Nom)))">DisplayV(<lemma/>)</lin></td>
+					<td><lin form="s (PresPartAct (AN (NCase Sg Nom)))">DisplayV(<lemma/>)</lin></td>
 				</tr>
 				<tr>
 					<th>passiivi</th>
-					<td><lin form="s (PastPartPass (AN (NCase Sg Nom)))">DisplayV(<lemma/>)</lin></td>
+					<td><lin form="s (PresPartPass (AN (NCase Sg Nom)))">DisplayV(<lemma/>)</lin></td>
 				</tr>
 				<tr>
 				        <th rowspan="2">perfekti</th>
