@@ -24,6 +24,8 @@ fun
   person_ParameterType : ParameterType ;
   tense_ParameterType  : ParameterType ;
   degree_ParameterType : ParameterType ;
+  finite_form_ParameterType : ParameterType ;  -- needed in Fin V
+  nominal_form_ParameterType : ParameterType ;
 
   singular_Parameter : Parameter ;
   plural_Parameter : Parameter ;
@@ -70,15 +72,18 @@ fun
   imperfect_Parameter : Parameter ;
   potential_Parameter : Parameter ; -- Fin V
   supine_Parameter : Parameter ; -- Swe V
+  simple_past_Parameter : Parameter ; -- Fre V
 
   participle_Parameter : Parameter ;
   aux_verb_Parameter : Parameter ;
   agent_Parameter : Parameter ;
 
-  positive_Parameter : Parameter ;
+  positive_Parameter : Parameter ;  -- as degree of verbs
   comparative_Parameter : Parameter ;
   superlative_Parameter : Parameter ;
   predicative_Parameter : Parameter ;
+  negative_Parameter : Parameter ;
+  positivePol_Parameter : Parameter ; -- as opposed to negative, e.g. for verbs
 
   subject_Parameter : Parameter ;
   object_Parameter : Parameter ;
@@ -87,17 +92,21 @@ fun
   person2_Parameter : Parameter ;
   person3_Parameter : Parameter ;
 
+  short_Parameter : Parameter ;   -- short form of e.g. a Fin infinitive
+  long_Parameter : Parameter ;    
+
   finite_Modifier : Modifier ;
   transitive_Modifier : Modifier ;
+  nominal_Modifier : Modifier ;
 
-  nounHeading : N -> Heading ;
+  nounHeading : N -> Heading ;            -- e.g. verb
+  nounPluralHeading : N -> Heading ;      -- e.g. verbs
+  modNounHeading : A -> N -> Heading ;    -- e.g. transitive verb
 
 
 -- generic grammar terms
 
   exampleGr_N : N ; -- example of a rule, category, etc
   formGr_N : N ;    -- inflectional form
-  shortGr_A : A ;   -- short form of e.g. a Fin infinitive, or short vowel (may have to be split)
-  longGr_A : A ;    -- long form of e.g. a Fin infinitive, or long vowel (may have to be split)
 
 }

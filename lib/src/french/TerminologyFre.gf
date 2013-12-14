@@ -45,11 +45,12 @@ lin
   infinitive_Parameter = mkN "infinitif" ;
 
   present_Parameter = mkN "présent" ;
-  past_Parameter = mkN "passé simple" ; ----
+  past_Parameter = mkN "passé" ;
   future_Parameter = mkN "futur" ;
   conditional_Parameter = mkN "conditionnel" ;
   perfect_Parameter = mkN "passé composé" ; ----
   imperfect_Parameter = mkN "imparfait" ;
+  simple_past_Parameter = mkN "passé simple" ; ----
 
   participle_Parameter = mkN "participe" ;
   aux_verb_Parameter = mkN "auxiliaire" ;
