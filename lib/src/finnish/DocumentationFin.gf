@@ -1,6 +1,7 @@
 --# -path=.:../abstract:../common
 
 concrete DocumentationFin of Documentation = CatFin ** open 
+  TerminologyFin,
   ResFin,
   StemFin,
   ParadigmsFin,
@@ -13,79 +14,12 @@ in {
 
 
 lincat
-  Category = G.N ;
-  ParameterType = G.N ;
-  Parameter = G.N ;
-  Modifier = G.A ;
-  
-  Heading = {s : Str} ;
   Inflection = {s : Str} ; 
   
-
-lin
-  noun_Category = mkN "substantiivi" ;
-  adjective_Category = mkN "adjektiivi" ;
-  verb_Category = mkN "verbi" ;
-  adverb_Category = mkN "adverbi" ;
-  preposition_Category = mkN "prepositio" ;
-
-  singular_Parameter = mkN "yksikkö" ;
-  plural_Parameter = mkN "monikko" ;
-
-  masculine_Parameter = mkN "maskuliini" ;
-  feminine_Parameter = mkN "feminiini" ;
-  neuter_Parameter = mkN "neutri" ;
-
-  nominative_Parameter = mkN "nominatiivi" ;
-  genitive_Parameter = mkN "genetiivi" ;
-  dative_Parameter = mkN "datiivi" ;
-  accusative_Parameter = mkN "akkusatiivi" ;
-
-  partitive_Parameter = mkN "partitiivi" ;
-  translative_Parameter = mkN "translatiivi" ;
-  essive_Parameter = mkN "essiivi" ;
-  inessive_Parameter = mkN "inessiivi" ;
-  elative_Parameter = mkN "elatiivi" ;
-  illative_Parameter = mkN "illatiivi" ;
-  adessive_Parameter = mkN "adessiivi" ;
-  ablative_Parameter = mkN "ablatiivi" ;
-  allative_Parameter = mkN "allatiivi" ;
-  abessive_Parameter = mkN "abessiivi" ;
-  comitative_Parameter = mkN "komitatiivi" ;
-  instructive_Parameter = mkN "instruktiivi" ;
-
-  active_Parameter = mkN "aktiivi" ;
-  passive_Parameter = mkN "passiivi" ;
-  
-  imperative_Parameter = mkN "imperatiivi" ;
-  indicative_Parameter = mkN "indikatiivi" ;
-  conjunctive_Parameter = mkN "konjunktiivi" ;
-  infinitive_Parameter = mkN "infinitiivi" ;
-
-  present_Parameter = mkN "preesens" ;
-  past_Parameter = mkN "imperfekti" ;
-  future_Parameter = mkN "futuuri" ;
-  conditional_Parameter = mkN "konditionaali" ;
-  perfect_Parameter = mkN "perfekti" ;
-  potential_Parameter = mkN "potentiaali" ;
-
-  participle_Parameter = mkN "partisiippi" ;
-  aux_verb_Parameter = mkN "apu" (mkN "verbi") ;
-  agent_Parameter = mkN "agentti" ;
-
-  positive_Parameter = mkN "positiivi" ;
-  comparative_Parameter = mkN "komparatiivi" ;
-  superlative_Parameter = mkN "superlatiivi" ;
-  predicative_Parameter = mkN "predikatiivi" ;
-
-  finite_Modifier = mkA "finiittinen" ;
-
-  nounHeading n = ss ((snoun2nounSep n).s ! NCase Sg Nom) ;
-
 oper
   tdf  : Str -> Str = \s -> td (intag "i" s) ;
   tdf2 : Str -> Str = \s -> intagAttr "td" "rowspan=2" (intag "i" s) ;
-  heading : N -> Str = \n -> (nounHeading n).s ;
+  heading : CatFin.N -> Str = \n -> (nounHeading n).s ;
 
   inflectionN : (NForm -> Str) -> Str = \nouns -> 
     frameTable ( 
@@ -130,12 +64,12 @@ lin
   ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
 
 oper 
-  verbExample : Cl -> Str = \cl -> (S.mkUtt cl).s ;
+  verbExample : CatFin.Cl -> Str = \cl -> (S.mkUtt cl).s ;
 
-  inflectionVerb : Str -> V -> {s : Str} = \ex,verb0 -> 
+  inflectionVerb : Str -> CatFin.V -> {s : Str} = \ex,verb0 -> 
      let 
        verb = sverb2verbSep verb0 ;
-       vfin : VForm -> Str = \f ->
+       vfin : ResFin.VForm -> Str = \f ->
          verb.s ! f ; 
        gforms : Number -> Person -> Str = \n,p -> 
          tdf (vfin (Presn n p)) 
@@ -233,9 +167,4 @@ lin
         paragraph (intag "b" (heading exampleGr_N ++ ":") ++ 
            intag "i" ((S.mkAdv (lin Prep p) S.it_NP).s ++ ";" ++ (S.mkAdv (lin Prep p) S.we_NP).s))
     } ;
-
-
-  formGF_N = mkN "muoto" ;
-  exampleGr_N = mkN "esimerkki" ;
-
 }

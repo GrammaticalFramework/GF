@@ -1,6 +1,7 @@
 --# -path=.:../abstract:../common
 
 concrete DocumentationGer of Documentation = CatGer ** open 
+  TerminologyGer,
   ResGer,
   ParadigmsGer,
   (G = GrammarGer),
@@ -12,60 +13,14 @@ in {
 
 
 lincat
-  Category = G.N ;
-  ParameterType = G.N ;
-  Parameter = G.N ;
-  
-  Heading = {s : Str} ;
   Inflection = {s : Str} ; 
   
-
-lin
-  noun_Category = mkN "Substantiv" ;
-  adjective_Category = mkN "Adjektiv" ;
-  verb_Category = mkN "Verb" ;
-  preposition_Category = mkN "Präposition" ;
-
-  gender_ParameterType = mkN "Geschlecht" ;
-
-  singular_Parameter = mkN "Singular" ;
-  plural_Parameter = mkN "Plural" ;
-
-  masculine_Parameter = mkN "Maskulinum" ;
-  feminine_Parameter = mkN "Femininum" ;
-  neuter_Parameter = mkN "Neutrum" ;
-
-  nominative_Parameter = mkN "Nominativ" ;
-  genitive_Parameter = mkN "Genitiv" ;
-  dative_Parameter = mkN "Dativ" ;
-  accusative_Parameter = mkN "Akkusativ" ;
-  
-  imperative_Parameter = mkN "Imperativ" ;
-  indicative_Parameter = mkN "Indikativ" ;
-  conjunctive_Parameter = mkN "Konjunktiv" ;
-  infinitive_Parameter = mkN "Infinitiv" ;
-
-  present_Parameter = mkN "Präsens" ;
-  past_Parameter = mkN "Präteritum" ;
-  future_Parameter = mkN "Futur" ;
-  conditional_Parameter = mkN "Konditional" ;
-  perfect_Parameter = mkN "Perfekt" ;
-
-  participle_Parameter = mkN "Partizip" ;
-  aux_verb_Parameter = mkN "Hilfsverb" ;
-
-  positive_Parameter = mkN "Positiv" ;
-  comparative_Parameter = mkN "Komparativ" ;
-  superlative_Parameter = mkN "Superlativ" ;
-  predicative_Parameter = mkN "Prädikativ" ;
-
-  nounHeading n = ss (n.s ! Sg ! Nom) ;
 
 oper
    tdf : Str -> Str = \s -> td (intag "i" s) ;
    heading : N -> Str = \n -> (nounHeading n).s ;
 
-   nounGender : N -> Parameter = \n -> case n.g of {
+   nounGender : CatGer.N -> Parameter = \n -> case n.g of {
      Masc   => masculine_Parameter ; 
      Fem    => feminine_Parameter ;
      Neutr  => neuter_Parameter
@@ -119,12 +74,12 @@ lin
   ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
 
 oper 
-  verbExample : Cl -> Str = \cl ->
+  verbExample : CatGer.Cl -> Str = \cl ->
      (S.mkUtt cl).s 
      ++ ";" ++ (S.mkUtt (S.mkS S.anteriorAnt cl)).s  --# notpresent
      ;
 
-  inflectionVerb : Str -> V -> {s : Str} = \ex,verb -> 
+  inflectionVerb : Str -> CatGer.V -> {s : Str} = \ex,verb -> 
      let 
        vfin : VForm -> Str = \f ->
          verb.s ! f ++ verb.prefix ; 
@@ -159,8 +114,5 @@ oper
        tr (th (heading aux_verb_Parameter)       ++ td (intag "i" (case verb.aux of {VHaben => "haben" ; VSein => "sein"})))
        ))
      } ;
-
-  lin
-    exampleGr_N = mkN "Beispiel" "Beispiele" neuter ;
 
 }
