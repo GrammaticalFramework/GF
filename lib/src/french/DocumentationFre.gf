@@ -1,6 +1,7 @@
 --# -path=.:../abstract:../common
 
 concrete DocumentationFre of Documentation = CatFre ** open 
+  TerminologyFre,
   ResFre,
   CommonRomance,
   ParadigmsFre,
@@ -13,60 +14,13 @@ in {
 
 
 lincat
-  Category = G.N ;
-  ParameterType = G.N ;
-  Parameter = G.N ;
-  
-  Heading = {s : Str} ;
   Inflection = {s : Str} ; 
   
-
-lin
-  noun_Category = mkN "nom" ;
-  adjective_Category = mkN "adjectif" ;
-  verb_Category = mkN "verbe" masculine ;
-
-  gender_ParameterType = mkN "genre" masculine ;
-
-  singular_Parameter = mkN "singulier" ;
-  plural_Parameter = mkN "pluriel" ;
-
-  masculine_Parameter = mkN "masculin" ;
-  feminine_Parameter = mkN "féminin" ;
-  neuter_Parameter = mkN "neutre" ;
-
-  nominative_Parameter = mkN "nominatif" ;
-  genitive_Parameter = mkN "génitif" ;
-  dative_Parameter = mkN "datif" ;
-  accusative_Parameter = mkN "accusativ" ;
-  
-  imperative_Parameter = mkN "impératif" ;
-  indicative_Parameter = mkN "indicatif" ;
-  conjunctive_Parameter = mkN "subjonctif" ;
-  infinitive_Parameter = mkN "infinitif" ;
-
-  present_Parameter = mkN "présent" ;
-  past_Parameter = mkN "passé simple" ; ----
-  future_Parameter = mkN "futur" ;
-  conditional_Parameter = mkN "conditionnel" ;
-  perfect_Parameter = mkN "passé composé" ; ----
-  imperfect_Parameter = mkN "imparfait" ;
-
-  participle_Parameter = mkN "participe" ;
-  aux_verb_Parameter = mkN "auxiliaire" ;
-
-  positive_Parameter = mkN "positif" ;
-  comparative_Parameter = mkN "comparatif" ;
-  superlative_Parameter = mkN "superlatif" ;
-  predicative_Parameter = mkN "prédicatif" ;
-
-  nounHeading n = ss (n.s ! Sg) ;
-
 oper
    tdf : Str -> Str = \s -> td (intag "i" s) ;
-   heading : N -> Str = \n -> (nounHeading n).s ;
+   heading : CatFre.N -> Str = \n -> (nounHeading n).s ;
    
-   nounGender : N -> Parameter = \n -> case n.g of {
+   nounGender : CatFre.N -> Parameter = \n -> case n.g of {
      Masc => masculine_Parameter ; 
      Fem  => feminine_Parameter
      } ;
@@ -98,14 +52,14 @@ lin
   ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
 
 oper 
-  verbExample : Cl -> Str = \cl ->
+  verbExample : CatFre.Cl -> Str = \cl ->
      (S.mkUtt cl).s 
      ++ ";" ++ (S.mkUtt (S.mkS S.anteriorAnt cl)).s  --# notpresent
      ;
 
-  inflectionVerb : Str -> V -> {s : Str} = \ex,verb -> 
+  inflectionVerb : Str -> CatFre.V -> {s : Str} = \ex,verb -> 
      let 
-       vfin : VF -> Str = \f ->
+       vfin : CommonRomance.VF -> Str = \f ->
          verb.s ! f ; 
 
        gforms : Number -> Person -> Str = \n,p -> 
@@ -162,9 +116,5 @@ oper
                )
              )
      } ; 
-
-  lin
-    exampleGr_N = mkN "exemple" masculine ;
-
 
 }
