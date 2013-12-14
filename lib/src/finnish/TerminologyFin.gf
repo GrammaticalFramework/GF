@@ -28,6 +28,9 @@ lin
   adverb_Category = mkN "adverbi" ;
   preposition_Category = mkN "prepositio" ;
 
+  finite_form_ParameterType = mkN "finiittimuoto" ;
+  nominal_form_ParameterType = mkN "nominaalimuoto" ;
+
   singular_Parameter = mkN "yksikkö" ;
   plural_Parameter = mkN "monikko" ;
 
@@ -76,10 +79,16 @@ lin
   comparative_Parameter = mkN "komparatiivi" ;
   superlative_Parameter = mkN "superlatiivi" ;
   predicative_Parameter = mkN "predikatiivi" ;
+  negative_Parameter = mkN "kielteinen" ;
+  positivePol_Parameter = mkN "myönteinen" ;
+
+  long_Parameter = mkN "pitkä" ;
+  short_Parameter = mkN "lyhyt" ;
 
   finite_Modifier = mkA "finiittinen" ;
 
   nounHeading n = ss ((snoun2nounSep n).s ! NCase Sg Nom) ;
+  nounPluralHeading n = ss ((snoun2nounSep n).s ! NCase Pl Nom) ;
 
   formGF_N = mkN "muoto" ;
   exampleGr_N = mkN "esimerkki" ;
