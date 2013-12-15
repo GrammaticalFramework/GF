@@ -95,12 +95,17 @@ oper
 
 -- and perhaps a gender.
 
-    mkN : (museum,museet,museer,museerna : Str) -> Gender -> N -- even worse case for nouns
-  } ;
+    mkN : (museum,museet,museer,museerna : Str) -> Gender -> N ; -- even worse case for nouns
 
 -- All the functions above work quite as well to form *compound nouns*,
--- such as "fotboll". 
+-- such as "fotboll", just given as one argument. But compound nouns can be formed from their parts as well,
 
+    mkN : (regering, makt : N) -> N ;   -- regeringsmakt, using the co form of regering
+    } ;
+
+-- The default compound form can be changed:
+
+    changeCompoundN : Str -> N -> N ;   -- kyrko + kyrka_N
 
 
 --3 Relational nouns 
@@ -350,21 +355,48 @@ oper
     mkN : Str -> Gender -> N = regGenN ; 
     mkN : (nyckel, nycklar : Str) -> N = mk2N ; 
     mkN : (museum,museet,museer,museerna : Str) -> N = mk4N ;
-    mkN : (museum,museet,museer,museerna : Str) -> Gender -> N = mk5N
-  } ;
+    mkN : (museum,museet,museer,museerna : Str) -> Gender -> N = mk5N ;
+    mkN : (regering, makt : N) -> N = \a,b -> lin N {
+      s = \\n,d,c => a.co + b.s ! n ! d ! c ;
+      g = b.g ;
+      co = case b.co  of {
+        _ + "s" => a.co + b.co ;
+        co => a.co + co + "s"
+        }
+      } ;
+    } ;
 
-  mk4N : (museum,museet,museer,museerna : Str) -> N = \apa,apan,apor,aporna ->  {
-    s = nounForms apa apan apor aporna ;
-    g = case last apan of {
-      "n" => Utr ;
-      _ => Neutr
+-- The default compound form can be changed:
+
+    changeCompoundN : Str -> N -> N = \co,n -> lin N {
+      s = n.s ;
+      g = n.g ;
+      co = co 
+      } ;
+
+
+  mk4N : (museum,museet,museer,museerna : Str) -> N = \apa,apan,apor,aporna ->  
+    mk5N apa apan apor aporna g 
+     where {
+       g = case last apan of {
+         "n" => Utr ;
+        _ => Neutr
       }
-    } ** {lock_N = <>} ;
+    } ;
 
-  mk5N : (museum,museet,museer,museerna : Str) -> Gender -> N = \apa,apan,apor,aporna,g ->  {
+  mk5N : (museum,museet,museer,museerna : Str) -> Gender -> N = \apa,apan,apor,aporna,g ->  lin N {
     s = nounForms apa apan apor aporna ;
-    g = g
-    } ** {lock_N = <>} ;
+    g = g ;
+    co = case apa of {  
+      ap + "e" => case g of {
+        Neutr => apa + "s" ;              -- rikes
+        _     => ap                       -- pojk
+        } ;
+      ap + "a" => ap ;                    -- flick
+      ? + ? + ? + _ + ("ing" | "ion" | "het") => apa + "s" ;  -- regerings, stations, frihets
+      _ => apa
+      }
+    } ;
 
   regN : Str -> N = \bil -> regGenN bil g where {
     g = case <bil : Str> of {

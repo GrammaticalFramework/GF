@@ -14,7 +14,7 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
       p = P3
       } ;
 
-    Noun = {s : Number => Species => Case => Str ; g : NGender} ;
+    Noun = {s : Number => Species => Case => Str ; g : NGender ; co : Str} ; -- co = compounding form
 
 -- needed for VP conjunction
   param

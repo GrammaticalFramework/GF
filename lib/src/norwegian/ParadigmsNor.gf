@@ -284,7 +284,7 @@ oper
   nominative = Nom ;
   genitive = Gen ;
 
-  mk4N x y z u = mkSubstantive x y z u ** {g = extNGen y ; lock_N = <>} ;
+  mk4N x y z u = mkSubstantive x y z u ** {g = extNGen y ; lock_N = <> ; co = x} ; ---- TODO co
 
   regN x = regGenN x g where {
     g = case <x : Str> of {

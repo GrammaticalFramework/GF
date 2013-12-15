@@ -2,9 +2,9 @@
 
 concrete LangFre of Lang = 
   GrammarFre,
-  LexiconFre,
-  DocumentationFre,
-  ConstructionFre
+  LexiconFre
+--  ,DocumentationFre
+--  ,ConstructionFre
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

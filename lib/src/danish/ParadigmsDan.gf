@@ -305,7 +305,7 @@ oper
   mkPrep p = {s = p ; lock_Prep = <>} ;
   noPrep = mkPrep [] ;
 
-  mk4N x y z u = mkSubstantive x y z u ** {g = extNGen y ; lock_N = <>} ;
+  mk4N x y z u = mkSubstantive x y z u ** {g = extNGen y ; lock_N = <> ; co = x} ; ---- TODO co
 
   regN x = regGenN x Utr ;
 
