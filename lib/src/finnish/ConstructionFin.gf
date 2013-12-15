@@ -44,10 +44,10 @@ lin
 
   monthAdv m = SyntaxFin.mkAdv in_Prep (mkNP m) ;
   yearAdv y = SyntaxFin.mkAdv (prePrep nominative "vuonna") y ;
-  dayMonthAdv d m = ParadigmsFin.mkAdv (d.s ! R.NPCase R.Nom ++ BIND ++ "." ++ m.s ! R.NCase R.Sg R.Part) ;  
-  monthYearAdv m y = SyntaxFin.mkAdv in_Prep (mkNP (mkNP m) (SyntaxFin.mkAdv (casePrep nominative) y)) ;
-  dayMonthYearAdv d m y = 
-    ParadigmsFin.mkAdv (d.s ! R.NPCase R.Nom ++ BIND ++ "." ++ m.s ! R.NCase R.Sg R.Part ++ y.s ! R.NPCase R.Nom) ;  
+----  dayMonthAdv d m = ParadigmsFin.mkAdv (d.s ! R.NPCase R.Nom ++ BIND ++ "." ++ m.s ! R.NCase R.Sg R.Part) ;  
+----  monthYearAdv m y = SyntaxFin.mkAdv in_Prep (mkNP (mkNP m) (SyntaxFin.mkAdv (casePrep nominative) y)) ;
+----  dayMonthYearAdv d m y = 
+----    lin Adv {s = d.s ! R.NPCase R.Nom ++ BIND ++ "." ++ m.s ! R.NCase R.Sg R.Part ++ y.s ! R.NPCase R.Nom} ;  
 
   intYear = symb ;
   intMonthday = symb ;

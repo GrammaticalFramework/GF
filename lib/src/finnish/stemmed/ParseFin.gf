@@ -12,12 +12,12 @@ concrete ParseFin of ParseEngAbs =
              VPSlashPrep],  -- with empty prepositions, a cyclic rule that leads to overgeneration
   AdverbFin,
   PhraseFin,
-  SentenceFin,
+  SentenceFin - [SlashV2VNP],  -- excluded for memory space reasons 15/12/2013
   QuestionFin,
   RelativeFin,
   IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ConstructionFin,
-  DocumentationFin,
+----  DocumentationFin, ---- this blows up the pgf size enormously: from 26 to 81 M! 15/12/2013
   ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, Voc, RP, GenRP, PassVPSlash, PassAgentVPSlash,
       Temp, Tense, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
       VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV]
