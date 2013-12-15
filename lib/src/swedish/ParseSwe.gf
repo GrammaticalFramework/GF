@@ -1,4 +1,4 @@
---# -path=.:../english/:../scandinavian:alltenses
+--# -path=.:../english/:../scandinavian:alltenses:../abstract
 concrete ParseSwe of ParseEngAbs = 
   TenseSwe,
   NounSwe - [PPartNP],
@@ -40,20 +40,21 @@ lin
 -}
 
   CompoundCN num noun cn = {
-      s = \\n,d,c => noun.s ! num.n ! Indef ! Nom ++ BIND ++ cn.s ! n ! d ! c ; 
+      s = \\n,d,c => num.s ! cn.g ++ noun.co ++ BIND ++ cn.s ! n ! d ! c ; 
       g = cn.g ;
       isMod = False
       } ;
 
   DashCN noun1 noun2 = {
-    s = \\n,d,c => noun1.s ! Sg ! Indef ! Nom ++ BIND ++ noun2.s ! n ! d ! c ;
-    g = noun2.g ;
-    isMod = False ;
-  } ;
+      s = \\n,d,c => noun1.co ++ BIND ++ noun2.s ! n ! d ! c ; 
+      g = noun2.g ;
+      co = noun1.co ++ BIND ++ noun2.co ---- add s if not already there
+      } ;
 
   GerundN v = {
     s = \\n,d,c => v.s ! VI (VPtPres n d c) ;
-    g = Neutr
+    g = Neutr ;
+    co = v.s ! VI (VPtPres Sg Indef Nom) ;
   } ;
   
   GerundAP v = {

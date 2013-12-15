@@ -1,4 +1,5 @@
---# -path=.:../english
+--# -path=.:../english:../abstract
+
 concrete ParseChi of ParseEngAbs = 
   TenseChi,
 ---  CatChi,

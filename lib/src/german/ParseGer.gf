@@ -1,4 +1,4 @@
---# -path=alltenses:.:../english
+--# -path=alltenses:.:../english:../abstract
 concrete ParseGer of ParseEngAbs = 
   TenseGer,
   NounGer - [PPartNP],
