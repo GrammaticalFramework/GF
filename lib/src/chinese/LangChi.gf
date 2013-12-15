@@ -3,7 +3,8 @@
 
 concrete LangChi of Lang = 
   GrammarChi,
-  LexiconChi
+  LexiconChi,
+  ConstructionChi
   ** {
 
 flags startcat = Phr ; unlexer = concat ; lexer = text ;
