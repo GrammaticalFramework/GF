@@ -1,7 +1,7 @@
 --# -path=alltenses:.:../abstract
 
 concrete ConstructionFin of Construction = CatFin ** 
-  open SyntaxFin, ParadigmsFin, (L = LexiconFin), (E = ExtraFin)  in {
+  open SyntaxFin, SymbolicFin, ParadigmsFin, (L = LexiconFin), (E = ExtraFin), (R = ResFin), Prelude  in {
 
 lin
   hungry_VP = mkVP have_V2 (lin NP (mkNP (ParadigmsFin.mkN "nälkä"))) ;
@@ -24,7 +24,10 @@ lin
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> (lin CN cn))))) (lin A a) ;
 
 lincat
-  Weekday = {name : NP ; noun : CN ; point : SyntaxFin.Adv ; habitual : SyntaxFin.Adv} ;
+  Weekday = {noun : N ; habitual : SyntaxFin.Adv} ;
+  Monthday = NP ;
+  Month = N ;
+  Year = NP ;
 lin
   monday_Weekday = mkWeekday "maanantai" ;
   tuesday_Weekday = mkWeekday "tiistaisi" ;
@@ -34,23 +37,45 @@ lin
   saturday_Weekday = mkWeekday"lauantai" ;
   sunday_Weekday = mkWeekday "sunnuntai" ;
 
-  weekdayPunctualAdv w = w.point ;
+  weekdayPunctualAdv w = lin Adv {s = pointWeekday w} ;
   weekdayHabitualAdv w = w.habitual ;
-  weekdayLastAdv w = ParadigmsFin.mkAdv ("viime" ++ w.point.s) ;
-  weekdayNextAdv w = ParadigmsFin.mkAdv ("ensi" ++ w.point.s) ;
+  weekdayLastAdv w = ParadigmsFin.mkAdv ("viime" ++ pointWeekday w) ;
+  weekdayNextAdv w = ParadigmsFin.mkAdv ("ensi" ++ pointWeekday w) ;
+
+  monthAdv m = SyntaxFin.mkAdv in_Prep (mkNP m) ;
+  yearAdv y = SyntaxFin.mkAdv (prePrep nominative "vuonna") y ;
+  dayMonthAdv d m = ParadigmsFin.mkAdv (d.s ! R.NPCase R.Nom ++ BIND ++ "." ++ m.s ! R.NCase R.Sg R.Part) ;  
+  monthYearAdv m y = SyntaxFin.mkAdv in_Prep (mkNP (mkNP m) (SyntaxFin.mkAdv (casePrep nominative) y)) ;
+  dayMonthYearAdv d m y = 
+    ParadigmsFin.mkAdv (d.s ! R.NPCase R.Nom ++ BIND ++ "." ++ m.s ! R.NCase R.Sg R.Part ++ y.s ! R.NPCase R.Nom) ;  
+
+  intYear = symb ;
+  intMonthday = symb ;
+  
+  january_Month = mkN "tammikuu" ; 
+  february_Month = mkN "helmikuu" ; 
+  march_Month = mkN "maaliskuu" ; 
+  april_Month = mkN "huhtikuu" ;
+  may_Month = mkN "toukokuu" ;
+  june_Month = mkN "kesäkuu" ;
+  july_Month = mkN "heinäkuu" ;
+  august_Month = mkN "elokuu" ;
+  september_Month = mkN "syyskuu" ;
+  october_Month = mkN "lokakuu" ;
+  november_Month = mkN "marraskuu" ;
+  december_Month = mkN "joulukuu" ;
 
 oper
 
   mkWeekday : Str -> Weekday = \d -> 
-      let day = mkN d 
-      in
       lin Weekday {
-       name = mkNP day ; 
-       noun = mkCN day ; 
-       point = SyntaxFin.mkAdv (casePrep essive) (mkNP day) ; 
+       noun = mkN d ; 
        habitual = case d of {
          _ + "i" => ParadigmsFin.mkAdv (d + "sin") ; -- tiistaisin
          _ => ParadigmsFin.mkAdv (d + "isin")  -- keskiviikkoisin
          }
       } ; 
+
+  pointWeekday : Weekday -> Str = \w -> (SyntaxFin.mkAdv (casePrep essive) (mkNP w.noun)).s ; 
+
 }

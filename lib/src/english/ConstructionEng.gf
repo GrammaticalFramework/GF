@@ -1,7 +1,7 @@
 --# -path=.:../abstract
 
 concrete ConstructionEng of Construction = CatEng ** 
-  open SyntaxEng, ParadigmsEng, (L = LexiconEng), (E = ExtraEng), (G = GrammarEng), Prelude in {
+  open SyntaxEng, SymbolicEng, ParadigmsEng, (L = LexiconEng), (E = ExtraEng), (G = GrammarEng), (R = ResEng), Prelude in {
 
 
 lin
@@ -26,7 +26,24 @@ lin
 
 lincat
   Weekday = N ;
+  Monthday = NP ;
+  Month = N ;
+  Year = NP ;
 lin
+  weekdayPunctualAdv w = SyntaxEng.mkAdv on_Prep (mkNP w) ;         -- on Sunday
+  weekdayHabitualAdv w = SyntaxEng.mkAdv on_Prep (mkNP aPl_Det w) ; -- on Sundays
+  weekdayNextAdv w = SyntaxEng.mkAdv (mkPrep "next") (mkNP w) ;     -- next Sunday
+  weekdayLastAdv w = SyntaxEng.mkAdv (mkPrep "last") (mkNP w) ;     -- last Sunday
+
+  monthAdv m = SyntaxEng.mkAdv in_Prep (mkNP m) ;
+  yearAdv y = SyntaxEng.mkAdv in_Prep y ;
+  dayMonthAdv d m = ParadigmsEng.mkAdv ("on" ++ d.s ! R.NPAcc ++ m.s ! R.Sg ! R.Nom) ; -- on 17 May
+  monthYearAdv m y = SyntaxEng.mkAdv in_Prep (mkNP (mkCN m y)) ; -- in May 2012
+  dayMonthYearAdv d m y = ParadigmsEng.mkAdv ("on" ++ d.s ! R.NPAcc ++ m.s ! R.Sg ! R.Nom ++ y.s ! R.NPAcc) ; -- on 17 May 2013
+
+  intYear = symb ;
+  intMonthday = symb ;
+
   monday_Weekday = mkN "Monday" ;
   tuesday_Weekday = mkN "Tuesday" ;
   wednesday_Weekday = mkN "Wednesday" ;
@@ -35,10 +52,17 @@ lin
   saturday_Weekday = mkN "Saturday" ;
   sunday_Weekday = mkN "Sunday" ;
 
-  weekdayPunctualAdv w = SyntaxEng.mkAdv on_Prep (mkNP w) ;         -- on Sunday
-  weekdayHabitualAdv w = SyntaxEng.mkAdv on_Prep (mkNP aPl_Det w) ; -- on Sundays
-  weekdayNextAdv w = SyntaxEng.mkAdv (mkPrep "next") (mkNP w) ;     -- next Sunday
-  weekdayLastAdv w = SyntaxEng.mkAdv (mkPrep "last") (mkNP w) ;     -- last Sunday
+  january_Month = mkN "January" ; 
+  february_Month = mkN "February" ; 
+  march_Month = mkN "March" ; 
+  april_Month = mkN "April" ;
+  may_Month = mkN "May" ;
+  june_Month = mkN "June" ;
+  july_Month = mkN "July" ;
+  august_Month = mkN "August" ;
+  september_Month = mkN "September" ;
+  october_Month = mkN "October" ;
+  november_Month = mkN "November" ;
+  december_Month = mkN "December" ;
 
-  
 }
