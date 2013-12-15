@@ -1,7 +1,9 @@
 --# -path=alltenses:.:../abstract
 
 concrete ConstructionFre of Construction = CatFre ** 
-  open SyntaxFre, ParadigmsFre, (L = LexiconFre), (E = ExtraFre), (I = IrregFre), Prelude in {
+  open SyntaxFre, SymbolicFre, ParadigmsFre, 
+       (L = LexiconFre), (E = ExtraFre), (I = IrregFre), (R = ResFre), (C = CommonRomance),
+       Prelude in {
 
 
 lin
@@ -24,4 +26,48 @@ lin
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
   
+lincat
+  Weekday = N ;
+  Monthday = NP ;
+  Month = N ;
+  Year = NP ;
+oper
+  noPrep : Prep = mkPrep [] ;
+
+lin
+  monday_Weekday = mkN "lundi" ;
+  tuesday_Weekday = mkN "mardi" ;
+  wednesday_Weekday = mkN "mercredi" ;
+  thursday_Weekday = mkN "jeudi" ;
+  friday_Weekday = mkN "vendredi" ;
+  saturday_Weekday = mkN "samedi" ;
+  sunday_Weekday = mkN "dimanche" masculine ;
+
+  weekdayPunctualAdv w = lin Adv {s = w.s ! C.Sg} ;         -- lundi
+  weekdayHabitualAdv w = SyntaxFre.mkAdv noPrep (mkNP the_Det w) ; -- le lundi
+  weekdayLastAdv w = SyntaxFre.mkAdv noPrep (mkNP the_Det (mkCN (mkA "dernier") w)) ; -- le lundi dernier
+  weekdayNextAdv w = SyntaxFre.mkAdv noPrep (mkNP the_Det (mkCN (mkA "prochain") w)) ; -- le lundi prochain
+
+  monthAdv m = lin Adv {s = "en" ++ m.s ! C.Sg} ;         -- en mai
+  yearAdv y = SyntaxFre.mkAdv (mkPrep "en") y ;
+  dayMonthAdv d m = ParadigmsFre.mkAdv ("le" ++ (d.s ! R.Nom).comp ++ m.s ! C.Sg) ; -- le 17 mai ---- le 1 mai should be le 1er mai
+  monthYearAdv m y = lin Adv {s = "en" ++ m.s ! C.Sg ++ (y.s ! R.Nom).comp} ;         -- en mai 2012
+  dayMonthYearAdv d m y = ParadigmsFre.mkAdv ("le" ++ (d.s ! R.Nom).comp ++ m.s ! C.Sg ++ (y.s ! R.Nom).comp) ; -- le 17 mai 2013
+
+  intYear = symb ;
+  intMonthday = symb ;
+  
+  january_Month = mkN "janvier" ; 
+  february_Month = mkN "février" ; 
+  march_Month = mkN "mars" ; 
+  april_Month = mkN "avril" ;
+  may_Month = mkN "mai" ;
+  june_Month = mkN "juin" ;
+  july_Month = mkN "juillet" ;
+  august_Month = mkN "août" ;
+  september_Month = mkN "septembre" ;
+  october_Month = mkN "octobre" ;
+  november_Month = mkN "novembre" ;
+  december_Month = mkN "décembre" ;
+
 }
