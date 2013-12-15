@@ -1,4 +1,4 @@
---# -path=.:../english/:../romance:alltenses
+--# -path=.:../english/:../abstract:../romance:alltenses
 concrete ParseFre of ParseEngAbs = 
   TenseFre,
 --  CatFre,

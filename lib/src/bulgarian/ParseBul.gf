@@ -1,4 +1,4 @@
---# -path=alltenses:../english
+--# -path=alltenses:../english:../abstract
 concrete ParseBul of ParseEngAbs = 
   TenseX - [IAdv, CAdv],
   CatBul,

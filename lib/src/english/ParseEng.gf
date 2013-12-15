@@ -1,3 +1,5 @@
+--# -path=.:../abstract
+
 concrete ParseEng of ParseEngAbs = 
   TenseX - [Pol, PNeg, PPos],
   CatEng,
