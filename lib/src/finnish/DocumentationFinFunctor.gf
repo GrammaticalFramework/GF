@@ -56,10 +56,10 @@ lin
     } ;
 
 
-  InflectionV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V v))) v ;
-  InflectionV2 v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2 v) S.something_NP)) (lin V v) ;
-  InflectionVV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))) (lin V v) ;
-  InflectionV2V v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2V v) S.we_NP (S.mkVP (L.sleep_V)))) (lin V v) ;
+  InflectionV v = inflectionVerb [] v ;----(verbExample (S.mkCl S.she_NP (lin V v))) v ;
+  InflectionV2 v = inflectionVerb [] v ;----(verbExample (S.mkCl S.she_NP (lin V2 v) S.something_NP)) (lin V v) ;
+  InflectionVV v = inflectionVerb [] v ;----(verbExample (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))) (lin V v) ;
+  InflectionV2V v = inflectionVerb [] v ;----(verbExample (S.mkCl S.she_NP (lin V2V v) S.we_NP (S.mkVP (L.sleep_V)))) (lin V v) ;
 
   ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
 
