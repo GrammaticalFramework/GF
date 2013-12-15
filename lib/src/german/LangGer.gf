@@ -2,9 +2,9 @@
 
 concrete LangGer of Lang = 
   GrammarGer,
-  LexiconGer,
-  ConstructionGer,
-  DocumentationGer
+  LexiconGer
+--  ,ConstructionGer
+--  ,DocumentationGer
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

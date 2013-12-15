@@ -142,6 +142,7 @@ incomplete concrete NounScand of Noun =
       s = f.s ;
       g = f.g ;
       c2 = f.c2 ;
+      co = f.co ;
       isMod = False
       } ;
 
@@ -149,6 +150,7 @@ incomplete concrete NounScand of Noun =
       s = f.s ;
       g = f.g ;
       c2 = f.c3 ;
+      co = f.co ;
       isMod = False
       } ;
 
@@ -163,6 +165,7 @@ incomplete concrete NounScand of Noun =
       s = \\n,d,c => f.s ! n ! d ! Nom ++ f.c2.s ++ x.s ! accusative ; 
       g = f.g ;
       c2 = f.c3 ;
+      co = f.co ;
       isMod = False
       } ;
 

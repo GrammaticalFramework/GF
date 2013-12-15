@@ -125,17 +125,20 @@ lin
  
   CompoundNomN a b = {
     s = \\n,d,c => a.s ! Sg ! Indef ! Nom ++ BIND ++ b.s ! n ! d ! c ;
-    g = b.g
+    g = b.g ;
+    co = b.co
     } ;
 
   CompoundGenN a b = {
     s = \\n,d,c => a.s ! Sg ! Indef ! Gen ++ BIND ++ b.s ! n ! d ! c ;
-    g = b.g
+    g = b.g ;
+    co = b.co
     } ;
 
   CompoundAdjN a b = {
     s = \\n,d,c => a.s ! AF (APosit (Strong (GSg Utr))) Nom ++ BIND ++ b.s ! n ! d ! c ;
-    g = b.g
+    g = b.g ;
+    co = b.co
     } ;
 
 
