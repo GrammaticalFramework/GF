@@ -14,86 +14,96 @@ lin
   -- Det -> CN -> NP
   -- e.g. 'the man'
   DetCN det cn = {
-    s     = \\c => det.s ! cn.gend ! c ++ cn.s ! det.defin ! det.num ! c ;
-    agr   = AgrP3 det.num cn.gend ;
-    pol   = det.pol ;
-    isRel = cn.isRel
+    s      = \\c => det.s ! cn.gend ! c ++ cn.s ! det.defin ! det.num ! c ;
+    agr    = AgrP3 det.num cn.gend ;
+    pol    = det.pol ;
+    isRel  = cn.isRel ;
+    isPron = False
   } ;
 
   -- PN -> NP
   -- e.g. 'John'
   UsePN pn = {
-    s     = pn.s ;
-    agr   = AgrP3 pn.num pn.gend ;
-    pol   = Pos ;
-    isRel = False
+    s      = pn.s ;
+    agr    = AgrP3 pn.num pn.gend ;
+    pol    = Pos ;
+    isRel  = False ;
+    isPron = False
   } ;
 
   -- Pron -> NP
   -- e.g. 'he'
   UsePron pron = {
-    s     = pron.s ;
-    agr   = pron.agr ;
-    pol   = pron.pol ;
-    isRel = False
+    s      = pron.s ;
+    agr    = pron.agr ;
+    pol    = pron.pol ;
+    isRel  = False ;
+    isPron = True
   } ;
 
   -- Predet -> NP -> NP
   -- e.g. 'only the man'
   PredetNP predet np = {
-    s     = \\c => predet.s ! (fromAgr np.agr).gend ++ np.s ! c ;
-    agr   = np.agr ;
-    pol   = np.pol ;
-    isRel = np.isRel
+    s      = \\c => predet.s ! (fromAgr np.agr).gend ++ np.s ! c ;
+    agr    = np.agr ;
+    pol    = np.pol ;
+    isRel  = np.isRel ;
+    isPron = False
   } ;
 
   -- NP -> V2 -> NP
   -- e.g. 'the man seen'
   PPartNP np v2 = {
-    s     = \\c => v2.s ! Pos ! (VPart Pass (fromAgr np.agr).gend (fromAgr np.agr).num c) ++ np.s ! c ;
-    agr   = np.agr ;
-    pol   = np.pol ;
-    isRel = np.isRel
+    s      = \\c => v2.s ! Pos ! (VPart Pass (fromAgr np.agr).gend (fromAgr np.agr).num c) ++ np.s ! c ;
+    agr    = np.agr ;
+    pol    = np.pol ;
+    isRel  = np.isRel ;
+    isPron = False
   } ;
 
   -- NP -> Adv -> NP
   -- e.g. 'Paris today'
   AdvNP np adv = {
-    s     = \\c => np.s ! c ++ adv.s ;
-    agr   = np.agr ;
-    pol   = np.pol ;
-    isRel = False
+    s      = \\c => np.s ! c ++ adv.s ;
+    agr    = np.agr ;
+    pol    = np.pol ;
+    isRel  = False ;
+    isPron = False
   } ;
 
   -- NP -> RS -> NP
   -- e.g. 'Paris, which is here'
   RelNP np rs = {
-    s     = \\c => np.s ! c ++ "," ++ rs.s ! np.agr ;
-    agr   = np.agr ;
-    pol   = np.pol ;
-    isRel = True
+    s      = \\c => np.s ! c ++ "," ++ rs.s ! np.agr ;
+    agr    = np.agr ;
+    pol    = np.pol ;
+    isRel  = True ;
+    isPron = False
   } ;
 
   -- CN -> NP
   MassNP cn = {
-    s     = cn.s ! Indef ! Sg ;  -- FIXME: bet 'šis alus'? un 'zaļš alus' vs. 'zaļais alus'?
-    agr   = AgrP3 Sg cn.gend ;
-    pol   = Pos ;
-    isRel = cn.isRel
+    s      = cn.s ! Indef ! Sg ;  -- FIXME: bet 'šis alus'? un 'zaļš alus' vs. 'zaļais alus'?
+    agr    = AgrP3 Sg cn.gend ;
+    pol    = Pos ;
+    isRel  = cn.isRel ;
+    isPron = False
   } ;
 
   -- Det -> NP
   -- e.g. 'these five'
   DetNP det = {
-    s     = \\c => det.s ! Masc ! c ;
-    agr   = AgrP3 det.num Masc ;
-    pol   = det.pol ;
-    isRel = False
+    s      = \\c => det.s ! Masc ! c ;
+    agr    = AgrP3 det.num Masc ;
+    pol    = det.pol ;
+    isRel  = False ;
+    isPron = False
   } | {
-    s     = \\c => det.s ! Fem ! c ;
-    agr   = AgrP3 det.num Fem ;
-    pol   = det.pol ;
-    isRel = False
+    s      = \\c => det.s ! Fem ! c ;
+    agr    = AgrP3 det.num Fem ;
+    pol    = det.pol ;
+    isRel  = False ;
+    isPron = False
   } ;
 
   -- Determiners

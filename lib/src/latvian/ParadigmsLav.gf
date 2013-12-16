@@ -143,7 +143,7 @@ oper
 
   -- Adverbs
 
-  mkAdv : Str -> Adv = \x -> lin Adv (ss x) ;
+  mkAdv : Str -> Adv = \x -> lin Adv {s = x ; isPron = False} ;
   mkAdV : Str -> AdV = \x -> lin AdV (ss x) ;
   mkAdA : Str -> AdA = \x -> lin AdA (ss x) ;
   mkAdN : Str -> AdN = \x -> lin AdN (ss x) ;

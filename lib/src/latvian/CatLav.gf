@@ -1,6 +1,6 @@
 --# -path=.:abstract:common:prelude
 
-concrete CatLav of Cat = CommonX - [CAdv, Voc] ** open ResLav, Prelude in {
+concrete CatLav of Cat = CommonX - [Adv, CAdv, Voc] ** open ResLav, Prelude in {
 
 flags
 
@@ -11,35 +11,35 @@ lincat
 
   -- Sentences and clauses
 
-  S, QS = { s : Str } ;
+  S, QS = {s : Str} ;
 
-  RS = { s : Agreement => Str } ;
+  RS = {s : Agreement => Str} ;
 
-  Cl = { s : VMood => Polarity => Str } ;
+  Cl = {s : VMood => Polarity => Str} ;
 
-  ClSlash = { s : VMood => Polarity => Str ; prep : Preposition } ;
+  ClSlash = {s : VMood => Polarity => Str ; prep : Preposition} ;
 
-  SSlash = { s : Str ; prep : Preposition } ;
+  SSlash = {s : Str ; prep : Preposition} ;
 
-  Imp = { s : Polarity => Number => Str } ;
+  Imp = {s : Polarity => Number => Str} ;
 
   -- Questions and interrogatives
 
-  QCl = { s : VMood => Polarity => Str } ;
+  QCl = {s : VMood => Polarity => Str} ;
 
-  IP = { s : Case => Str ; num : Number } ;
+  IP = {s : Case => Str ; num : Number} ;
 
-  -- TODO: IComp = { s : Str ; agr : Agreement } ;
+  -- TODO: IComp = {s : Str ; agr : Agreement} ;
 
-  IDet = { s : Gender => Str ; num : Number } ;
+  IDet = {s : Gender => Str ; num : Number} ;
 
-  IQuant = { s : Gender => Number => Str } ;
+  IQuant = {s : Gender => Number => Str} ;
 
   -- Relative clauses and pronouns
 
-  RCl = { s : VMood => Polarity => Agreement => Str } ;
+  RCl = {s : VMood => Polarity => Agreement => Str} ;
 
-  RP = { s : Gender => Case => Str } ;
+  RP = {s : Gender => Case => Str} ;
 
   -- Verb phrases
 
@@ -47,43 +47,43 @@ lincat
 
   VPSlash = ResLav.VPSlash ;
 
-  Comp = { s : Agreement => Str } ;
+  Comp = {s : Agreement => Str} ;
 
   -- Adjectival phrases
 
-  AP = { s : Definiteness => Gender => Number => Case => Str } ;
+  AP = {s : Definiteness => Gender => Number => Case => Str} ;
 
   -- Nouns and noun phrases
 
-  CN = { s : Definiteness => Number => Case => Str ; gend : Gender ; isRel : Bool } ;
+  CN = {s : Definiteness => Number => Case => Str ; gend : Gender ; isRel : Bool} ;
 
-  NP = { s : Case => Str ; agr : Agreement ; pol : Polarity ; isRel : Bool } ;
+  NP = {s : Case => Str ; agr : Agreement ; pol : Polarity ; isRel : Bool ; isPron : Bool} ;
 
   Pron = Pronoun ;
 
-  Det = { s : Gender => Case => Str ; num : Number ; defin : Definiteness ; pol : Polarity } ;
+  Det = {s : Gender => Case => Str ; num : Number ; defin : Definiteness ; pol : Polarity} ;
 
-  Predet = { s : Gender => Str } ;
+  Predet = {s : Gender => Str} ;
 
-  Quant = { s : Gender => Number => Case => Str ; defin : Definiteness ; pol : Polarity } ;
+  Quant = {s : Gender => Number => Case => Str ; defin : Definiteness ; pol : Polarity} ;
 
-  Num = { s : Gender => Case => Str ; num : Number ; hasCard : Bool } ;
+  Num = {s : Gender => Case => Str ; num : Number ; hasCard : Bool} ;
 
-  Card = { s : Gender => Case => Str ; num : Number } ;
+  Card = {s : Gender => Case => Str ; num : Number} ;
 
-  Ord = { s : Gender => Case => Str } ;
+  Ord = {s : Gender => Case => Str} ;
 
   -- Numerals
 
-  Numeral = { s : CardOrd => Gender => Case => Str ; num : Number } ;
+  Numeral = {s : CardOrd => Gender => Case => Str ; num : Number} ;
 
-  Digits = { s : CardOrd => Str ; num : Number } ;
+  Digits = {s : CardOrd => Str ; num : Number} ;
 
   -- Structural words
 
-  Conj = { s1, s2 : Str ; num : Number } ;
+  Conj = {s1, s2 : Str ; num : Number} ;
 
-  Subj = { s : Str } ;
+  Subj = {s : Str} ;
 
   Prep = Preposition ;
 
@@ -91,28 +91,30 @@ lincat
 
   V, VV, VQ, VA = Verb ;
 
-  V2, V2V, V2Q, V2A = Verb ** { rightVal : Preposition } ;
+  V2, V2V, V2Q, V2A = Verb ** {rightVal : Preposition} ;
 
-  V3 = Verb ** { rightVal1, rightVal2 : Preposition } ;
+  V3 = Verb ** {rightVal1, rightVal2 : Preposition} ;
 
-  VS = Verb ** { conj : Subj } ;
+  VS = Verb ** {conj : Subj} ;
 
-  V2S = Verb ** { conj : Subj ; rightVal : Preposition } ;
+  V2S = Verb ** {conj : Subj ; rightVal : Preposition} ;
 
   A = Adjective ;
 
-  A2 = Adjective ** { prep : Preposition } ;
+  A2 = Adjective ** {prep : Preposition} ;
 
   N = Noun ;
 
-  N2 = Noun ** { prep : Preposition ; isPre : Bool } ;
+  N2 = Noun ** {prep : Preposition ; isPre : Bool} ;
 
-  N3 = Noun ** { prep1, prep2 : Preposition ; isPre1, isPre2 : Bool } ;
+  N3 = Noun ** {prep1, prep2 : Preposition ; isPre1, isPre2 : Bool} ;
 
   PN = ProperNoun ;
 
   -- Overriden from CommonX
 
-  CAdv = { s, prep : Str ; deg : Degree } ;
+  Adv = {s : Str ; isPron : Bool} ;
+
+  CAdv = {s, prep : Str ; deg : Degree} ;
 
 }

@@ -65,17 +65,17 @@ param
 
 oper
 
-  Noun : Type = { s : Number => Case => Str ; gend : Gender } ;
+  Noun : Type = {s : Number => Case => Str ; gend : Gender} ;
 
-  ProperNoun : Type = { s : Case => Str ; gend : Gender ; num : Number } ;
+  ProperNoun : Type = {s : Case => Str ; gend : Gender ; num : Number} ;
   
-  Pronoun : Type = { s : Case => Str ; agr : Agreement ; poss : Gender => Number => Case => Str ; pol : Polarity } ;
+  Pronoun : Type = {s : Case => Str ; agr : Agreement ; poss : Gender => Number => Case => Str ; pol : Polarity} ;
 
-  Adjective : Type = { s : AForm => Str } ;
+  Adjective : Type = {s : AForm => Str} ;
 
-  Preposition : Type = { s : Str ; c : Number => Case } ;
+  Preposition : Type = {s : Str ; c : Number => Case} ;
 
-  Verb : Type = { s : Polarity => VForm => Str ; leftVal : Case } ;
+  Verb : Type = {s : Polarity => VForm => Str ; leftVal : Case} ;
 
   VP : Type = {
     v        : Verb ;
@@ -83,34 +83,36 @@ oper
     voice    : Voice ;
     leftVal  : Case ;              -- the left valence (typically, the subject)
     rightAgr : Agreement ;         -- for the potential subject-verb agreement (the subject can be on the right side)
-    rightPol : Polarity            -- for the potential double negation
+    rightPol : Polarity ;          -- for the potential double negation
+    objPron  : Bool                -- true, if object is a Pron (for modifying the neutral word order)
   } ;
 
-  VPSlash : Type = VP ** { rightVal : Preposition } ;  -- the right valence (typically, the object)
+  VPSlash : Type = VP ** {rightVal : Preposition} ;  -- the right valence (typically, the object)
 
   buildVP : VP -> Polarity -> VForm -> Agreement -> Str = \vp,pol,vf,agr ->
     vp.v.s ! pol ! vf ++ vp.compl ! agr ;
 
-  insertObj : (Agreement => Str) -> VP -> VP = \obj,vp -> {
+  insertObj : (Agreement => Str) -> Bool -> Bool -> VP -> VP = \obj,isPron,isPre,vp -> {
     v        = vp.v ;
-    compl    = \\agr => vp.compl ! agr ++ obj ! agr ;
+    compl    = \\agr => case isPre of {
+                 False => vp.compl ! agr ++ obj ! agr ;
+                 True  => obj ! agr ++ vp.compl ! agr
+               } ;
     voice    = vp.voice ;
     leftVal  = vp.leftVal ;
     rightAgr = vp.rightAgr ;
-    rightPol = vp.rightPol
+    rightPol = vp.rightPol ;
+    objPron  = isPron
   } ;
 
-  insertObjPre : (Agreement => Str) -> VP -> VP = \obj,vp -> {
-    v        = vp.v ;
-    compl    = \\agr => obj ! agr ++ vp.compl ! agr ;
-    voice    = vp.voice ;
-    leftVal  = vp.leftVal ;
-    rightAgr = vp.rightAgr ;
-    rightPol = vp.rightPol
-  } ;
+  insertObjReg : (Agreement => Str) -> Bool -> VP -> VP = \obj,isPron,vp ->
+    insertObj obj isPron False vp ;
+
+  insertObjPre : (Agreement => Str) -> VP -> VP = \obj,vp ->
+    insertObj obj True True vp ;
 
   insertObjSlash : (Agreement => Str) -> VPSlash -> VPSlash = \obj,vp ->
-    insertObj obj vp ** { rightVal = vp.rightVal } ;
+    insertObj obj vp.objPron False vp ** {rightVal = vp.rightVal} ;
 
   getInf : Verb -> Str = \v -> v.s ! Pos ! VInf ;
 
@@ -121,11 +123,11 @@ oper
       P3 => AgrP3 num gend
     } ;
 
-  fromAgr : Agreement -> { pers : Person ; num : Number ; gend : Gender } = \agr ->
+  fromAgr : Agreement -> {pers : Person ; num : Number ; gend : Gender} = \agr ->
     case agr of {
-      AgrP1 num gend => { pers = P1 ; num = num ; gend = gend } ;
-      AgrP2 num gend => { pers = P2 ; num = num ; gend = gend } ;
-      AgrP3 num gend => { pers = P3 ; num = num ; gend = gend }
+      AgrP1 num gend => {pers = P1 ; num = num ; gend = gend} ;
+      AgrP2 num gend => {pers = P2 ; num = num ; gend = gend} ;
+      AgrP3 num gend => {pers = P3 ; num = num ; gend = gend}
     } ;
 
   conjAgr : Agreement -> Agreement -> Agreement = \agr1,agr2 ->
