@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../api
 
 concrete AllGer of AllGerAbs = 
   LangGer,

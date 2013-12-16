@@ -8,8 +8,8 @@
 abstract Lang = 
   Grammar, 
   Lexicon
---  ,Construction  --- could be compiled here, but not in concretes, as they call Syntax and Grammar
---  ,Documentation
+  ,Construction  --- could be compiled here, but not in concretes, as they call Syntax and Grammar
+  ,Documentation
   ** {
   flags startcat=Phr ;
   } ;

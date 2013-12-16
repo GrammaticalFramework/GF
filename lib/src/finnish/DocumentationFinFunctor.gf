@@ -98,9 +98,10 @@ oper
            th "1.p"  ++ gforms Pl P1 ++ tdf (vfin (ImperP1Pl))) ++
        tr (th "2.p"  ++ gforms Pl P2 ++ tdf (vfin (Imper Pl))) ++
        tr (th "3.p"  ++ gforms Pl P3 ++ tdf (vfin (ImperP3 Pl))) ++
-       tr (intagAttr "th" "colspan=2" (heading passive_Parameter)  ++ 
-                          tdf (vfin (PassPresn True))  ++ tdf (vfin (PassImpf True)) ++ --# notpresent
-                          tdf (vfin (PassCondit True)) ++ tdf (vfin (PassPotent True)) ++ tdf (vfin (PassImper True))) ++ --# notpresent 
+       tr (intagAttr "th" "colspan=2" (heading passive_Parameter)  
+                         ++ tdf (vfin (PassPresn True))  ++ tdf (vfin (PassImpf True))  ++ --# notpresent
+                            tdf (vfin (PassCondit True)) ++ tdf (vfin (PassPotent True)) ++ tdf (vfin (PassImper True))  --# notpresent
+                          ) ++ 
        tr (intagAttr "th" "rowspan=3" (heading negative_Parameter) ++ 
 
              th (heading singular_Parameter) 
