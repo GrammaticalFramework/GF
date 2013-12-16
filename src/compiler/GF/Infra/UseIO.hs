@@ -139,6 +139,8 @@ instance  Monad IOE where
                   appIOE $ err raise f x         -- f :: a -> IOE a
   fail = raise
 
+maybeIO io = either (const Nothing) Just `fmap` liftIO (try io)
+
 useIOE :: a -> IOE a -> IO a
 useIOE a ioe = appIOE ioe >>= err (\s -> putStrLn s >> return a) return 
 
