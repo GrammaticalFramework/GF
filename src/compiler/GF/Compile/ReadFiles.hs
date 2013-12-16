@@ -43,9 +43,8 @@ import Control.Monad
 import Data.Maybe(isJust)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map
-import Data.Time
-import Data.Time.Compat (toUTCTime)
-import System.Directory
+import Data.Time(UTCTime)
+import GF.System.Directory
 import System.FilePath
 import Text.PrettyPrint
 
@@ -58,8 +57,8 @@ type ModEnv  = Map.Map ModName (UTCTime,[ModName])
 --getAllFiles :: (MonadIO m,ErrorMonad m) => Options -> [InitPath] -> ModEnv -> FileName -> m [FullPath]
 getAllFiles opts ps env file = do
   -- read module headers from all files recursively
-  ds <- liftM reverse $ get [] [] (justModuleName file)
-  liftIO $ putIfVerb opts $ "all modules:" +++ show [name | (name,_,_,_,_,_) <- ds]
+  ds <- reverse `fmap` get [] [] (justModuleName file)
+  putIfVerb opts $ "all modules:" +++ show [name | (name,_,_,_,_,_) <- ds]
   return $ paths ds
   where
     -- construct list of paths to read
@@ -99,13 +98,12 @@ getAllFiles opts ps env file = do
       (file,gfTime,gfoTime) <- do
           mb_gfFile <- getFilePath ps (gfFile name)
           case mb_gfFile of
-            Just gfFile -> do gfTime  <- liftIO $ toUTCTime `fmap` getModificationTime gfFile
-                              mb_gfoTime <- liftIO $ catch (liftM Just $ toUTCTime `fmap` getModificationTime (gf2gfo opts gfFile))
-                                                          (\_->return Nothing)
+            Just gfFile -> do gfTime  <- modtime gfFile
+                              mb_gfoTime <- maybeIO $ modtime (gf2gfo opts gfFile)
                               return (gfFile, Just gfTime, mb_gfoTime)
             Nothing     -> do mb_gfoFile <- getFilePath (maybe id (:) (flag optGFODir opts) ps) (gfoFile name)
                               case mb_gfoFile of
-                                Just gfoFile -> do gfoTime <- liftIO $ toUTCTime `fmap` getModificationTime gfoFile
+                                Just gfoFile -> do gfoTime <- modtime gfoFile
                                                    return (gfoFile, Nothing, Just gfoTime)
                                 Nothing      -> raise (render (text "File" <+> text (gfFile name) <+> text "does not exist." $$
                                                                       text "searched in:" <+> vcat (map text ps)))
@@ -129,6 +127,8 @@ getAllFiles opts ps env file = do
       testErr (mname == name)
               ("module name" +++ mname +++ "differs from file name" +++ name)
       return (name,st,t,isJust gfTime,imps,dropFileName file)
+
+modtime path = liftIO $ getModificationTime path
 
 isGFO :: FilePath -> Bool
 isGFO = (== ".gfo") . takeExtensions
