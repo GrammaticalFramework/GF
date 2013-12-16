@@ -9,9 +9,6 @@ Phrasebook.pgf: PhrasebookFre.pgf PhrasebookGer.pgf PhrasebookFin.pgf Phrasebook
 PhrasebookEng.pgf::
 	gf -make -s -optimize-pgf -name=PhrasebookEng PhrasebookEng.gf
 
-PhrasebookEng.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookEng PhrasebookEng.gf
-
 PhrasebookBul.pgf::
 	gf -make -s -optimize-pgf -name=PhrasebookBul PhrasebookBul.gf
 
