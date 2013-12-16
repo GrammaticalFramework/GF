@@ -32,12 +32,13 @@ lin
   SlashVS np vs sslash = mkClause
     np
     (lin VP {
-      v = vs ;
-      compl = \\_ => "," ++ vs.conj.s ++ sslash.s ;
-      voice = Act ;
-      leftVal = vs.leftVal ;
+      v        = vs ;
+      compl    = \\_ => "," ++ vs.conj.s ++ sslash.s ;
+      voice    = Act ;
+      leftVal  = vs.leftVal ;
       rightAgr = AgrP3 Sg Masc ;
       rightPol = Pos ;
+      objPron  = False
     }) ** { prep = sslash.prep } ;
 
   -- ComplVS v s  = { v = v ; compl = \\_ => "," ++ v.subj.s ++ s.s } ;
@@ -74,13 +75,25 @@ oper
     }
     in lin Cl {
       s = \\mood,pol =>
-        case mood of {                                     -- subject
+        case mood of {                                           -- subject
           Deb _ _ => np.s ! Dat ;  --# notpresent
           _       => np.s ! vp.leftVal
         } ++
-        closeRelCl np.isRel ++        
-        buildVerb vp.v mood pol agr np.pol vp.rightPol ++  -- verb
-        vp.compl ! np.agr                                  -- object(s), complements, adverbial modifiers
+        closeRelCl np.isRel ++                                   -- comma, if necessary
+        case vp.objPron of {
+          False =>
+            buildVerb vp.v mood pol agr np.pol vp.rightPol ++    -- verb
+            vp.compl ! np.agr ;                                  -- object(s), modifiers and other complements
+          True  =>
+            -- FIXME: the object should be separated from other complements that should remain on the right side
+            (
+              vp.compl ! np.agr ++                               -- object(s), modifiers and other complements
+              buildVerb vp.v mood pol agr np.pol vp.rightPol     -- verb
+            ) --| (
+              --buildVerb vp.v mood pol agr np.pol vp.rightPol ++  -- verb
+              --vp.compl ! np.agr                                  -- object(s), modifiers and other complements
+            --)
+        }
     } ;
 
   -- FIXME: quick&dirty - lai kompilētos pret RGL API

@@ -28,15 +28,19 @@ oper
     }
     in lin RCl {
       s = \\mood,pol,agr =>
-        case mood of {         -- subject
+        let verb : Str = case subjInTopic of {
+          True  => buildVerb vp.v mood pol (AgrP3 (fromAgr agr).num (fromAgr agr).gend) Pos vp.rightPol ;
+          False => buildVerb vp.v mood pol vp.rightAgr                                  Pos vp.rightPol
+        } in
+        case mood of {  -- subject
           Deb _ _ => rp.s ! Masc ! Dat ;  --# notpresent
           _       => rp.s ! Masc ! vp.leftVal
         } ++
-        case subjInTopic of {  -- verb
-          True  => buildVerb vp.v mood pol (AgrP3 (fromAgr agr).num (fromAgr agr).gend) Pos vp.rightPol ;
-          False => buildVerb vp.v mood pol vp.rightAgr                                  Pos vp.rightPol
-        } ++
-        vp.compl ! agr         -- object(s), complements, adverbial modifiers
+        case vp.objPron of {
+          False => verb ++ vp.compl ! agr ;
+          True  => (vp.compl ! agr ++ verb) --| (verb ++ vp.compl ! agr)
+          -- FIXME: the object should be separated from other complements that should remain on the right side
+        }
     } ;
 
 lin

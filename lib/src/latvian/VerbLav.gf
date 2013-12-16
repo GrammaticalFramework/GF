@@ -30,7 +30,8 @@ lin
     voice    = Act ;
     leftVal  = v.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
-    rightPol = Pos
+    rightPol = Pos ;
+    objPron  = False
   } ;
 
   -- VV -> VP -> VP
@@ -41,7 +42,8 @@ lin
     voice    = Act ;
     leftVal  = vv.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
-    rightPol = Pos
+    rightPol = Pos ;
+    objPron  = False
   } ;
 
   -- VS -> S -> VP
@@ -52,7 +54,8 @@ lin
     voice    = Act ;
     leftVal  = vs.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
-    rightPol = Pos
+    rightPol = Pos ;
+    objPron  = False
   } ;
 
   -- VQ -> QS -> VP
@@ -63,7 +66,8 @@ lin
     voice    = Act ;
     leftVal  = vq.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
-    rightPol = Pos
+    rightPol = Pos ;
+    objPron  = False
   } ;
 
   -- VA -> AP -> VP
@@ -74,18 +78,20 @@ lin
     voice    = Act ;
     leftVal  = va.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
-    rightPol = Pos
+    rightPol = Pos ;
+    objPron  = False
   } ;
 
   -- V2 -> VPSlash
   -- e.g. 'love (it)'
   SlashV2a v2 = {
     v        = v2 ;
-    compl    = \\_ => [] ;   -- will be overriden
+    compl    = \\_ => [] ;      -- will be overriden
     voice    = Act ;
     leftVal  = v2.leftVal ;
     rightAgr = AgrP3 Sg Masc ;  -- will be overriden
-    rightPol = Pos ;         -- will be overriden
+    rightPol = Pos ;            -- will be overriden
+    objPron  = False ;          -- will be overriden
     rightVal = v2.rightVal
   } ;
 
@@ -100,6 +106,7 @@ lin
       leftVal  = v3.leftVal ;
       rightAgr = np.agr ;
       rightPol = np.pol ;
+      objPron  = np.isPron ;
       rightVal = v3.rightVal1
     } ;
   -- FIXME: "vīrietis runā par ābolus ar sievieti" ("a man talks to a woman about apples")
@@ -117,6 +124,7 @@ lin
       leftVal  = v3.leftVal ;
       rightAgr = np.agr ;
       rightPol = np.pol ;
+      objPron  = np.isPron ;
       rightVal = v3.rightVal1
     } ;
 
@@ -129,6 +137,7 @@ lin
     leftVal  = v2v.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
     rightPol = Pos ;
+    objPron  = False ;  -- will be overriden
     rightVal = v2v.rightVal
   } ;
 
@@ -141,6 +150,7 @@ lin
     leftVal  = v2s.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
     rightPol = Pos ;
+    objPron  = False ;  -- will be overriden
     rightVal = v2s.rightVal
   } ;
 
@@ -153,6 +163,7 @@ lin
     leftVal  = v2q.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
     rightPol = Pos ;
+    objPron  = False ;  -- will be overriden
     rightVal = v2q.rightVal
   } ;
 
@@ -165,6 +176,7 @@ lin
     leftVal  = v2a.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
     rightPol = Pos ;
+    objPron  = False ;  -- will be overriden
     rightVal = v2a.rightVal
   } ;
 
@@ -189,7 +201,8 @@ lin
       leftVal  = vpslash.leftVal ;
       rightAgr = np.agr ;
       rightPol = np.pol ;
-      rightVal = vpslash.rightVal ;
+      objPron  = np.isPron ;
+      rightVal = vpslash.rightVal
     } ;
 
   -- VV -> VPSlash -> VPSlash
@@ -201,6 +214,7 @@ lin
     leftVal  = vv.leftVal ;
     rightAgr = AgrP3 Sg Masc ;
     rightPol = Pos ;
+    objPron  = False ;  -- will be overriden
     rightVal = nom_Prep
   } ;
 
@@ -215,6 +229,7 @@ lin
       leftVal  = v2v.leftVal ;
       rightAgr = np.agr ;
       rightPol = np.pol ;
+      objPron  = np.isPron ;
       rightVal = v2v.rightVal
     } ;
 
@@ -234,7 +249,8 @@ lin
     voice    = Act ;
     leftVal  = Nom ;
     rightAgr = AgrP3 Sg Masc ;
-    rightPol = Pos
+    rightPol = Pos ;
+    objPron  = False
   } ;
 
   -- V2 -> VP
@@ -245,7 +261,8 @@ lin
     voice    = Pass ;
     leftVal  = v2.rightVal.c ! Sg ;
     rightAgr = AgrP3 Sg Masc ;
-    rightPol = Pos
+    rightPol = Pos ;
+    objPron  = False
     --rightVal = mkPrep v2.leftVal
   } ;
   -- TODO: val - should not be overriden in ComplSlash etc.?
@@ -254,7 +271,7 @@ lin
 
   -- VP -> Adv -> VP
   -- e.g. 'sleep here'
-  AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+  AdvVP vp adv = insertObjReg (\\_ => adv.s) adv.isPron vp ;
 
   -- AdV -> VP -> VP
   -- e.g. 'always sleep'
@@ -268,7 +285,7 @@ lin
 
   -- VP -> Prep -> VPSlash
   -- e.g. 'live in (it)'
-  VPSlashPrep vp prep = vp ** { rightVal = prep } ;
+  VPSlashPrep vp prep = vp ** {rightVal = prep} ;
   -- TODO: šajā brīdī ir jāignorē prep (by8agent_Prep); tas jāaizstāj ar v2.left (?)
   -- Tad varēs dzēst ārā komentāru pie StructuralLav.by8agent_Prep (?)
 
@@ -276,19 +293,19 @@ lin
 
   -- AP -> Comp
   -- e.g. '(be) small'
-  CompAP ap = { s = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom } ;
+  CompAP ap = {s = \\agr => ap.s ! Indef ! (fromAgr agr).gend ! (fromAgr agr).num ! Nom} ;
 
   -- NP -> Comp
   -- e.g. '(be) the man'
-  CompNP np = { s = \\_ => np.s ! Nom } ;
+  CompNP np = {s = \\_ => np.s ! Nom} ;
 
   -- Adv -> Comp
   -- e.g. '(be) here'
-  CompAdv a = { s = \\_ => a.s } ;
+  CompAdv adv = {s = \\_ => adv.s} ;
 
   -- CN -> Comp
   -- e.g. '(be) a man/men'
-  CompCN cn = { s = \\agr => cn.s ! Indef ! (fromAgr agr).num ! Nom } ;
+  CompCN cn = {s = \\agr => cn.s ! Indef ! (fromAgr agr).num ! Nom} ;
 
   -- TODO: UseCopula : VP
   -- e.g. 'be'

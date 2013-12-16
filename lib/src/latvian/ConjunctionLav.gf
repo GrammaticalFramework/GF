@@ -14,17 +14,22 @@ lin
 
   ConjS = conjunctDistrSS ;
 
-  ConjAdv = conjunctDistrSS ;
-
-  ConjNP conj ss = conjunctDistrTable Case conj ss ** {
-    agr = toAgr (fromAgr ss.agr).pers (conjNumber (fromAgr ss.agr).num conj.num) (fromAgr ss.agr).gend;
-    pol = Pos ;
-    isRel = False
-  } ;
+  ConjRS conj ss = conjunctDistrTable Agreement conj ss ;
 
   ConjAP conj ss = conjunctDistrTable4 Definiteness Gender Number Case conj ss ;
 
-  ConjRS conj ss = conjunctDistrTable Agreement conj ss ;
+  -- Conj -> [NP] -> NP
+  -- e.g. "she or we"
+  ConjNP conj ss = conjunctDistrTable Case conj ss ** {
+    agr    = toAgr (fromAgr ss.agr).pers (conjNumber (fromAgr ss.agr).num conj.num) (fromAgr ss.agr).gend;
+    pol    = Pos ;
+    isRel  = False ;
+    isPron = False
+  } ;
+
+  -- Conj -> [Adv] -> Adv
+  -- e.g. "here or there"
+  ConjAdv or xs = (conjunctDistrSS or xs) ** {isPron = False};
 
   -- These fun's are generated from the list cat's:
   BaseS = twoSS ;
@@ -43,10 +48,13 @@ lin
 
 lincat
 
-  [S] = { s1, s2 : Str } ;
-  [Adv] = { s1, s2 : Str } ;
-  [NP] = { s1, s2 : Case => Str ; agr : Agreement } ;
-  [AP] = { s1, s2 : Definiteness => Gender => Number => Case => Str } ;
-  [RS] = { s1, s2 : Agreement => Str } ;
+  [S]   = {s1, s2 : Str} ;
+  [RS]  = {s1, s2 : Agreement => Str} ;
+  [NP]  = {s1, s2 : Case => Str ; agr : Agreement} ;
+  [AP]  = {s1, s2 : Definiteness => Gender => Number => Case => Str} ;
+  [Adv] = {s1, s2 : Str} ;
+  -- TODO: [AdV]{2}
+  -- TODO: [IAdv]{2}
+  -- TODO: [CN] {2}
 
 }
