@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common:prelude
+--# -path=.:../romance:../abstract:../common:../api
 
 concrete AllFre of AllFreAbs = 
   LangFre,
