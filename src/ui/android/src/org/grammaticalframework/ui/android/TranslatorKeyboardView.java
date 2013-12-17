@@ -10,8 +10,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 public class TranslatorKeyboardView extends KeyboardView {
 
@@ -34,18 +35,26 @@ public class TranslatorKeyboardView extends KeyboardView {
     	if (mLanguagesPopup == null) {
 	    	LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
 	                Context.LAYOUT_INFLATER_SERVICE);
-	    	LinearLayout popupContainer = (LinearLayout)
+	    	TableLayout popupContainer = (TableLayout)
 	    		inflater.inflate(R.layout.keyboard_languages_options, null);
 	
 	    	int index = 0;
+	    	TableRow row = null;
 	    	for (Language lang : mTranslator.getAvailableLanguages()) {
+	    		int col_index = index % 4;
+	    		if (col_index == 0) {
+	    			row = new TableRow(getContext());
+	    			popupContainer.addView(row);
+	    		}
+
 	    		Button item = new Button(getContext());
 	    		item.setText(TranslatorKeyboard.getLanguageKeyLabel(lang));
 	    		item.setTag(index);
 	    		item.setOnClickListener(this);
-	    		popupContainer.addView(item, index++);
+	    		row.addView(item, col_index);
+	    		index++;
 	    	}
-	
+
 	    	popupContainer.measure(
 	                MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST), 
 	                MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
