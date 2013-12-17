@@ -1,8 +1,9 @@
-module PGF.Binary where
+module PGF.Binary(putSplitAbs) where
 
 import PGF.CId
 import PGF.Data
 import PGF.Optimize
+import qualified PGF.OldBinary as Old
 import Data.Binary
 import Data.Binary.Put
 import Data.Binary.Get
@@ -14,7 +15,7 @@ import qualified Data.IntMap as IntMap
 import Control.Monad
 
 pgfMajorVersion, pgfMinorVersion :: Word16
-(pgfMajorVersion, pgfMinorVersion) = (2,0)
+version@(pgfMajorVersion, pgfMinorVersion) = (2,0)
 
 instance Binary PGF where
   put pgf = do putWord16be pgfMajorVersion
@@ -24,7 +25,11 @@ instance Binary PGF where
                put (concretes pgf)
   get = do v1 <- getWord16be
            v2 <- getWord16be
-           gflags <- get
+           case (v1,v2) of
+             v | v==version -> getPGF'
+               | v==Old.version -> Old.getPGF'
+
+getPGF'=do gflags <- get
            (absname,abstract) <- get
            concretes <- get
            return $ updateProductionIndices $
