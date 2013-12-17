@@ -1,6 +1,6 @@
 name: gf-server
 version: 1.0
-cabal-version: >= 1.2
+cabal-version: >= 1.8
 build-type: Custom
 license: GPL
 license-file: ../../LICENSE
@@ -16,19 +16,13 @@ flag http
   Description: Build pgf-http (deprecated, replaced by gf -server)
   Default: False
 
-executable pgf-http
-  main-is: pgf-http.hs
-  Hs-source-dirs: . transfer
-  ghc-options: -threaded
-  if impl(ghc>=7.0)
-    ghc-options: -rtsopts
+Library
+  exposed-modules: PGFService FastCGIUtils ServeStaticFile RunHTTP
+  other-modules: Cache URLEncoding Fold
+  hs-source-dirs: . transfer
 
-  if flag(http)
-    buildable: True
-    other-modules: PGFService FastCGIUtils Cache URLEncoding
-                   RunHTTP ServeStaticFile Fold
-    build-depends: base >=4.2 && <5,
-                   old-time,
+  build-depends:   base >=4.2 && <5,
+                   time, time-compat,
                    directory,
                    filepath,
                    containers,
@@ -36,23 +30,34 @@ executable pgf-http
                    gf >= 3.1,
                    cgi >= 3001.1.7.3,
                    httpd-shed,
+                   mtl,
                    network,
                    json >= 0.3.3,
                    utf8-string >= 0.3.1.1,
                    bytestring,
                    pretty,
                    random
-    if os(windows)
-      ghc-options: -optl-mwindows
-    else
-      build-depends: unix
+  if os(windows)
+    ghc-options: -optl-mwindows
+  else
+    build-depends: unix
+
+executable pgf-http
+  main-is: pgf-http.hs
+  Hs-source-dirs: exec
+  ghc-options: -threaded
+  if impl(ghc>=7.0)
+    ghc-options: -rtsopts
+
+  if flag(http)
+    buildable: True
+    build-depends: base >=4.2 && <5, gf-server, filepath, directory, cgi
   else
     buildable: False
 
 executable pgf-service
   main-is: pgf-fcgi.hs
-  Hs-source-dirs: . transfer
-  other-modules: PGFService FastCGIUtils Cache URLEncoding Fold
+  Hs-source-dirs: exec
   ghc-options: -threaded
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
@@ -60,22 +65,8 @@ executable pgf-service
   build-depends: fastcgi >= 3001.0.2.2
        -- Install it in Ubuntu with: apt-get install libghc-fastcgi-dev
 
-  build-depends: base >=4.2 && <5,
-                 mtl,
-                 time,
-                 time-compat,
-                 directory,
-                 filepath,
-                 containers,
-                 process,
-                 gf >= 3.1,
-                 cgi >= 3001.1.7.3,
-                 network,
-                 json >= 0.3.3,
-                 utf8-string >= 0.3.1.1,
-                 bytestring,
-                 pretty,
-                 random
+  build-depends: base >=4.2 && <5, gf-server
+
   if os(windows)
     ghc-options: -optl-mwindows
   else
@@ -93,3 +84,4 @@ executable content-service
     buildable: False
 
   main-is: ContentService.hs
+  Hs-source-dirs: exec
