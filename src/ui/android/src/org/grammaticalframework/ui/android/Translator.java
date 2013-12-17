@@ -39,17 +39,14 @@ public class Translator {
 	new Language("de-DE", "German", "ParseGer", 0, R.xml.qwerty), 
 	new Language("hi-IN", "Hindi", "ParseHin", 0, R.xml.qwerty), /// 
         new Language("sv-SE", "Swedish", "ParseSwe", R.xml.inflection_sv, R.xml.qwerty), 
-
     };
 
     private Context mContext;
 
-    private Language mSourceLanguage;
-
-    private Language mTargetLanguage;
-
-	private PGF mPGF;
-	private Thread mGrammarLoader;
+	private GrammarLoader mGrammarLoader;
+    private ConcrLoader mSourceLoader;
+    private ConcrLoader mTargetLoader;
+    private ConcrLoader mOtherLoader;
 
 	private static final String SOURCE_LANG_KEY = "source_lang";
 	private static final String TARGET_LANG_KEY = "target_lang";
@@ -77,36 +74,127 @@ public class Translator {
     public Translator(Context context) {
     	mContext = context;
 
-		mGrammarLoader = new GrammarLoader();
-		mGrammarLoader.start();
-
 		mSharedPref = context.getSharedPreferences(
 				context.getString(R.string.global_preferences_key), Context.MODE_PRIVATE);
+
+		mGrammarLoader = new GrammarLoader();
+		mGrammarLoader.start();
 		
-		mSourceLanguage = getPrefLang(SOURCE_LANG_KEY, 0);
-		mTargetLanguage = getPrefLang(TARGET_LANG_KEY, 1);
+        mSourceLoader = new ConcrLoader(getPrefLang(SOURCE_LANG_KEY, 0));
+        mSourceLoader.start();
+        
+        mTargetLoader = new ConcrLoader(getPrefLang(TARGET_LANG_KEY, 1));
+        mTargetLoader.start();
+        
+        mOtherLoader = null;
     }
 
     public List<Language> getAvailableLanguages() {
         return Arrays.asList(mLanguages);
     }
 
-    public void setSourceLanguage(Language language) {
-        mSourceLanguage = language;
-        setPrefLang(SOURCE_LANG_KEY, language);
-    }
-
-    public void setTargetLanguage(Language language) {
-        mTargetLanguage = language;
-        setPrefLang(TARGET_LANG_KEY, language);
-    }
-
     public Language getSourceLanguage() {
-        return mSourceLanguage;
+        return mSourceLoader.getLanguage();
+    }
+
+    public void setSourceLanguage(Language language) {
+    	setPrefLang(SOURCE_LANG_KEY, language);
+
+    	if (mSourceLoader.getLanguage() == language)
+    		return;
+    	if (mTargetLoader.getLanguage() == language) {
+    		cacheOrUnloadLanguage(mSourceLoader);
+    		mSourceLoader = mTargetLoader;
+    		return;
+    	}
+    	if (mOtherLoader != null &&
+    	    mOtherLoader.getLanguage() == language) {
+    		ConcrLoader tmp = mSourceLoader;
+    		mSourceLoader = mOtherLoader;
+    		mOtherLoader  = tmp;
+    		return;
+    	}
+
+    	try {
+    		mSourceLoader.join();
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Loading interrupted", e);
+		}
+
+    	if (mSourceLoader.getLanguage() != mTargetLoader.getLanguage()) {
+    		cacheOrUnloadLanguage(mSourceLoader);
+    	}
+
+        mSourceLoader = new ConcrLoader(language);
+        mSourceLoader.start();
+    }
+
+    private Concr getSourceConcr() {
+    	try {
+    		mSourceLoader.join();
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Loading interrupted", e);
+		}
+        return mSourceLoader.getConcr();
     }
 
     public Language getTargetLanguage() {
-        return mTargetLanguage;
+        return mTargetLoader.getLanguage();
+    }
+
+    public void setTargetLanguage(Language language) {
+    	setPrefLang(TARGET_LANG_KEY, language);
+
+    	if (mSourceLoader.getLanguage() == language) {
+    		cacheOrUnloadLanguage(mTargetLoader);
+    		mTargetLoader = mSourceLoader;
+    		return;
+    	}
+    	if (mTargetLoader.getLanguage() == language)
+    		return;
+    	if (mOtherLoader != null &&
+    	    mOtherLoader.getLanguage() == language) {
+    		ConcrLoader tmp = mTargetLoader;
+    		mTargetLoader = mOtherLoader;
+    		mOtherLoader  = tmp;
+    		return;
+    	}
+
+    	try {
+    		mTargetLoader.join();
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Loading interrupted", e);
+		}
+
+    	if (mSourceLoader.getLanguage() != mTargetLoader.getLanguage()) {
+    		cacheOrUnloadLanguage(mTargetLoader);
+    	}
+
+    	mTargetLoader = new ConcrLoader(language);
+    	mTargetLoader.start();
+    }
+
+    private Concr getTargetConcr() {
+    	try {
+    		mTargetLoader.join();
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Loading interrupted", e);
+		}
+        return mTargetLoader.getConcr();
+    }
+
+	private void cacheOrUnloadLanguage(ConcrLoader loader) {
+		if (mOtherLoader != null) {
+			mOtherLoader.getConcr().unload();
+			Log.d(TAG, mOtherLoader.getLanguage().getConcrete() + ".pgf_c unloaded");
+		}
+		mOtherLoader = loader;
+	}
+
+    public void switchLanguages() {
+    	ConcrLoader tmp = mSourceLoader;
+    	mSourceLoader = mTargetLoader;
+    	mTargetLoader = tmp;
     }
 
     private static String explode(String in) {
@@ -128,9 +216,9 @@ public class Translator {
         }
 
         try {
-            Concr sourceLang = getConcr(getSourceLanguage().getConcrete());
+            Concr sourceLang = getSourceConcr();
 	    Expr expr = sourceLang.parseBest(getGrammar().getStartCat(), input);
-            Concr targetLang = getConcr(getTargetLanguage().getConcrete());
+            Concr targetLang = getTargetConcr();
             String output = targetLang.linearize(expr);
             return output;
         } catch (ParseError e) {
@@ -206,8 +294,8 @@ public class Translator {
 
     public String generateLexiconEntry(String lemma) {
     	Expr e = Expr.readExpr(lemma);
-        Concr sourceLang = getConcr(getSourceLanguage().getConcrete());
-        Concr targetLang = getConcr(getTargetLanguage().getConcrete());
+        Concr sourceLang = getSourceConcr();
+        Concr targetLang = getTargetConcr();
         if (targetLang.hasLinearization(lemma))
         	return sourceLang.linearize(e) + " - " + getLemmaTag(lemma) + " " + targetLang.linearize(e);
         else
@@ -215,7 +303,7 @@ public class Translator {
     }
 
 	public String getInflectionTable(String lemma) {
-		Concr targetLang = getConcr(getTargetLanguage().getConcrete());
+		Concr targetLang = getTargetConcr();
 		
 		if (!targetLang.hasLinearization(lemma))
 			return null;
@@ -344,11 +432,7 @@ public class Translator {
 	}
 
     public List<MorphoAnalysis> lookupMorpho(String sentence) {
-    	return getConcr(getSourceLanguage().getConcrete()).lookupMorpho(sentence);
-    }
-
-    private Concr getConcr(String name) {
-        return getGrammar().getLanguages().get(name);
+    	return getSourceConcr().lookupMorpho(sentence);
     }
 
 	private PGF getGrammar() {
@@ -357,10 +441,20 @@ public class Translator {
 		} catch (InterruptedException e) {
 			Log.e(TAG, "Loading interrupted", e);
 		}
-		return mPGF;
+		return mGrammarLoader.getGrammar();
 	}
 
 	private class GrammarLoader extends Thread {
+		private PGF mPGF;
+		
+		public GrammarLoader() {
+			mPGF = null;
+		}
+
+		public PGF getGrammar() {
+			return mPGF;
+		}
+
 		public void run() {
 			InputStream in = null;
 			
@@ -370,11 +464,62 @@ public class Translator {
 		        long t1 = System.currentTimeMillis();
 		        mPGF = PGF.readPGF(in);
 		        long t2 = System.currentTimeMillis();
-		        Log.d(TAG, "Grammar loaded ("+(t2-t1)+" ms)");
+		        Log.d(TAG, mGrammar + " loaded ("+(t2-t1)+" ms)");		        
 		    } catch (FileNotFoundException e) {
 		        Log.e(TAG, "File not found", e);
 		    } catch (IOException e) {
 		        Log.e(TAG, "Error loading grammar", e);
+		    } finally {
+		    	if (in != null) {
+		    		try {
+		    			in.close();
+		    		} catch (IOException e) {
+		    			Log.e(TAG, "Error closing the stream", e);
+		    		}
+		    	}
+		    }
+		}
+	}
+
+	private class ConcrLoader extends Thread {
+		private Language mLanguage;
+		private Concr mConcr;
+
+		public ConcrLoader(Language lang) {
+			this.mLanguage = lang;
+			this.mConcr = null;
+		}
+
+		public Language getLanguage() {
+			return mLanguage;
+		}
+		
+		public Concr getConcr() {
+			return mConcr;
+		}
+
+		public void run() {
+			try {
+				mGrammarLoader.join();
+			} catch (InterruptedException e) {
+				Log.d(TAG, "interrupted", e);
+			}
+
+			InputStream in = null;
+
+		    try {
+		    	String name = mLanguage.getConcrete()+".pgf_c";
+		    	in = mContext.getAssets().open(name);
+		        Log.d(TAG, "Trying to load " + name);
+		        long t1 = System.currentTimeMillis();
+		        mConcr = mGrammarLoader.getGrammar().getLanguages().get(mLanguage.getConcrete());
+		        mConcr.load(in);
+		        long t2 = System.currentTimeMillis();
+		        Log.d(TAG, name + " loaded ("+(t2-t1)+" ms)");
+		    } catch (FileNotFoundException e) {
+		        Log.e(TAG, "File not found", e);
+		    } catch (IOException e) {
+		        Log.e(TAG, "Error loading concrete", e);
 		    } finally {
 		    	if (in != null) {
 		    		try {

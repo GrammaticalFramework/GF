@@ -361,10 +361,7 @@ public class TranslatorInputMethodService extends InputMethodService
             handleShift();
         } else if (primaryCode == TranslatorKeyboard.KEYCODE_SOURCE_LANGUAGE
                 && mInputView != null) {
-        	Language newSource = mTranslator.getTargetLanguage();
-            Language newTarget = mTranslator.getSourceLanguage();
-            mTranslator.setSourceLanguage(newSource);
-            mTranslator.setTargetLanguage(newTarget);
+        	mTranslator.switchLanguages();
             handleSwitchLanguages();
         } else if (primaryCode < TranslatorKeyboard.KEYCODE_SOURCE_LANGUAGE &&
         		   primaryCode > TranslatorKeyboard.KEYCODE_SOURCE_LANGUAGE-TranslatorKeyboard.MAX_LANGUAGE_KEYCODES) {
