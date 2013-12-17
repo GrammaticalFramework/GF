@@ -136,6 +136,16 @@ public class Translator {
         mSourceLoader.start();
     }
 
+    public boolean isSourceLanguageLoaded() {
+    	try {
+    		mSourceLoader.join();
+    		return true;
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Loading interrupted", e);
+		}
+    	return false;
+    }
+
     private Concr getSourceConcr() {
     	try {
     		mSourceLoader.join();
@@ -179,6 +189,16 @@ public class Translator {
 
     	mTargetLoader = new ConcrLoader(language);
     	mTargetLoader.start();
+    }
+
+    public boolean isTargetLanguageLoaded() {
+    	try {
+    		mTargetLoader.join();
+    		return true;
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Loading interrupted", e);
+		}
+    	return false;
     }
 
     private Concr getTargetConcr() {
