@@ -100,6 +100,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
   linref
     SSlash = \ss -> ss.s ++ ss.c2.s ! False  ;
     ClSlash = \cls -> cls.s ! Pres ! Simul ! Pos ++ cls.c2.s ! False ;
+    NP = \np -> np.s ! NPSep ;
 
     VP = vpRef ;
     VPSlash = \vps -> vpRef vps ++ vps.c2.s ! False ;

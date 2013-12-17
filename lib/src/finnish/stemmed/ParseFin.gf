@@ -1,9 +1,11 @@
 --# -path=.:..:../../abstract:../../common:../../api:../../english:../kotus
 
 concrete ParseFin of ParseEngAbs = 
-  TenseX, ---- - [Pol, PNeg, PPos],
+  TenseX,  ---- TODO add potential forms 
   CatFin,
-  NounFin - [PPartNP],
+  NounFin - [PPartNP,
+    UsePron, PossPron  -- replaced by variants with prodrop
+    ],
   AdjectiveFin,
   NumeralFin,
   SymbolFin [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
@@ -17,15 +19,23 @@ concrete ParseFin of ParseEngAbs =
   RelativeFin,
   IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ConstructionFin,
-  DocumentationFin,  ---- these blow up the pgf size enormously: from 26 to 81 M! 15/12/2013
+  DocumentationFin,  
   ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, Voc, RP, GenRP, PassVPSlash, PassAgentVPSlash,
       Temp, Tense, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
       VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV]
  , DictEngFin 
 ** 
-open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, StemFin, (E = ExtraFin), Prelude in {
+open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, StemFin, (E = ExtraFin), (G = GrammarFin), Prelude in {
 
 flags literal=Symb ; coding = utf8 ;
+
+-- the overrides -----
+lin
+
+ UsePron p = G.UsePron (E.ProDrop p) | G.UsePron p ;
+ PossPron p = E.ProDropPoss p | G.PossPron p ;
+
+----------------------
 
 lin
     ComplVV v ant pol vp = 
