@@ -80,12 +80,19 @@ public class Translator {
 		mGrammarLoader = new GrammarLoader();
 		mGrammarLoader.start();
 		
-        mSourceLoader = new ConcrLoader(getPrefLang(SOURCE_LANG_KEY, 0));
+		Language prefSourceLang = getPrefLang(SOURCE_LANG_KEY, 0);
+		Language prefTargetLang = getPrefLang(TARGET_LANG_KEY, 1);
+		
+        mSourceLoader = new ConcrLoader(prefSourceLang);
         mSourceLoader.start();
         
-        mTargetLoader = new ConcrLoader(getPrefLang(TARGET_LANG_KEY, 1));
-        mTargetLoader.start();
-        
+        if (prefSourceLang == prefTargetLang) {
+        	mTargetLoader = mSourceLoader;
+        } else {
+        	mTargetLoader = new ConcrLoader(prefTargetLang);
+        	mTargetLoader.start();
+        }
+
         mOtherLoader = null;
     }
 
