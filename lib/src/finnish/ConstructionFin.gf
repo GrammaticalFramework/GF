@@ -30,7 +30,7 @@ lincat
   Year = NP ;
 lin
   monday_Weekday = mkWeekday "maanantai" ;
-  tuesday_Weekday = mkWeekday "tiistaisi" ;
+  tuesday_Weekday = mkWeekday "tiistai" ;
   wednesday_Weekday = mkWeekday "keskiviikko" ;
   thursday_Weekday = mkWeekday "torstai" ;
   friday_Weekday = mkWeekday "perjantai" ;
