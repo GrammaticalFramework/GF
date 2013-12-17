@@ -209,11 +209,10 @@ public class MainActivity extends Activity {
     }
 
     void onSwitchLanguages() {
-        Language newSource = mTranslator.getTargetLanguage();
-        Language newTarget = mTranslator.getSourceLanguage();
-        mSourceLanguageView.setSelectedLanguage(newSource);
-        mTargetLanguageView.setSelectedLanguage(newTarget);
-        
+    	mTranslator.switchLanguages();
+        mSourceLanguageView.setSelectedLanguage(mTranslator.getSourceLanguage());
+        mTargetLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
+
         if (TranslatorInputMethodService.getInstance() != null) {
         	TranslatorInputMethodService.getInstance().handleSwitchLanguages();
         }
