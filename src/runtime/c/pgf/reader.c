@@ -1234,9 +1234,11 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
 
 	concr->pool = NULL;
 
-	if (with_content)
+	if (with_content) {
 		pgf_read_concrete_content(rdr, concr);
-	else {
+		
+		concr->fin.fn = NULL;
+	} else {
 		pgf_read_concrete_init_header(concr);
 
 		concr->fin.fn = gu_concr_fini;
@@ -1250,7 +1252,7 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
 void
 pgf_concrete_load(PgfConcr* concr, GuIn* in, GuExn* err)
 {
-	if (concr->pool != NULL)
+	if (concr->fin.fn == NULL || concr->pool != NULL)
 		return;    // already loaded
 
 	GuPool* pool = gu_new_pool();
@@ -1286,6 +1288,9 @@ pgf_concrete_load(PgfConcr* concr, GuIn* in, GuExn* err)
 void
 pgf_concrete_unload(PgfConcr* concr)
 {
+	if (concr->fin.fn == NULL)
+		return;
+
 	gu_concr_fini(&concr->fin);
 }
 
