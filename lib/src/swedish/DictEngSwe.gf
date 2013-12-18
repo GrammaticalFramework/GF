@@ -7761,7 +7761,7 @@ lin brownstone_N = variants {};
 lin browntail_N = variants {};
 lin browse_N = mkN "bläddrande"; -- comment=5
 lin browse_V = mkV "beta" "betar" "beta" "betog" "betagit" "betagen"; -- comment=4
-lin browser_N = variants {};
+lin browser_N = mkN "webbläsare";
 lin broxburn_PN = variants {};
 lin bruce_PN = variants {};
 lin brucellosis_N = variants {};
@@ -37868,7 +37868,7 @@ lin nog_N = variants {};
 lin noggin_N = variants {};
 lin nogging_N = variants {};
 lin nohow_Adv = variants {};
-lin noise_N = mkN "störning"; -- comment=12
+lin noise_N = mkN "ljud" neutrum;
 lin noise_V2 = mkV2 (mkV "brusar") | mkV2 (mkV "väsnas"); -- status=guess, src=wikt status=guess, src=wikt
 lin noiseless_A = variants {};
 lin noiselessness_N = variants {};
@@ -37879,7 +37879,7 @@ lin noisy_A = mkA "bullrig"; -- comment=5
 lin nom_de_plume_N = variants {};
 lin noma_N = variants {};
 lin nomad_N = mkN "nomad" "nomader";
-lin nomadic_A = variants {};
+lin nomadic_A = mkA "nomadisk";
 lin nombril_N = variants {};
 lin nomenclature_N = mkN "nomenklatur" "nomenklaturer"; -- comment=2
 lin nomenklatura_N = variants {};
