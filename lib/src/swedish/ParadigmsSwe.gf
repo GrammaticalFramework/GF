@@ -357,12 +357,9 @@ oper
     mkN : (museum,museet,museer,museerna : Str) -> N = mk4N ;
     mkN : (museum,museet,museer,museerna : Str) -> Gender -> N = mk5N ;
     mkN : (regering, makt : N) -> N = \a,b -> lin N {
-      s = \\n,d,c => a.co + b.s ! n ! d ! c ;
+      s = \\n,d,c => b.s ! n ! d ! c ;
       g = b.g ;
-      co = case b.co  of {
-        _ + "s" => a.co + b.co ;
-        co => a.co + co + "s"
-        }
+      co = ""
       } ;
     } ;
 
