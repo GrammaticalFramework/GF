@@ -1,4 +1,4 @@
---# -path=.:src/swedish:src/english
+--# -path=.:src/swedish:../english
 
 concrete DictEngSwe of DictEngAbs = CatSwe ** open ParadigmsSwe, (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
 
@@ -4049,7 +4049,7 @@ lin atypicality_N = variants {};
 lin au_fait_A = variants {};
 lin au_fond_Adv = variants {};
 lin au_pair_N = variants {};
-lin aubergine_N = variants {};
+lin aubergine_N = mkN "aubergine" "auberginer";
 lin aubrietia_N = variants {};
 lin auburn_A = variants {};
 lin auckland_PN = variants {};
@@ -8462,7 +8462,7 @@ lin caitiff_A = variants {};
 lin caitiff_N = variants {};
 lin cajole_V2 = variants {};
 lin cajolery_N = variants {};
-lin cake_N = mkN "skorpa"; -- comment=11
+lin cake_N = mkN "tårta";
 lin cake_V = mkV "bita" "bet" "bitit"; -- comment=2
 lin cake_V2 = variants {};
 lin cakewalk_N = variants {};
@@ -9022,7 +9022,8 @@ lin cardiographic_A = variants {};
 lin cardiography_N = variants {};
 lin cardioid_N = variants {};
 lin cardiologic_A = variants {};
-lin cardiologist_N = mkN "kardiolog" "kardiologer";
+lin cardiologistMasc_N = mkN "kardiolog" "kardiologer";
+lin cardiologistFem_N = mkN "kardiolog" "kardiologer";
 lin cardiology_N = mkN "kardiologi";
 lin cardiomegaly_N = variants {};
 lin cardiomyopathy_N = variants {};
@@ -10186,7 +10187,7 @@ lin cherimoya_N = variants {};
 lin cherish_V2 = variants {};
 lin cheroot_N = variants {};
 lin cherry_A = mkA "körsbärsröd";
-lin cherry_N = mkN "körsbärsträd" neutrum; -- comment=3
+lin cherry_N = mkN "körsbär" neutrum;
 lin cherrystone_N = variants {};
 lin chert_N = variants {};
 lin cherty_A = variants {};
@@ -10219,7 +10220,7 @@ lin chew_over_V2 = dirV2 (partV (mkV "tuggar")"om");
 lin chew_up_V2 = dirV2 (partV (mkV "tuggar")"om");
 lin chewable_A = variants {};
 lin chewer_N = variants {};
-lin chewing_gum_N = variants {};
+lin chewing_gum_N = mkN "tuggummi" "tuggummit" "tuggummin" "tuggummina";
 lin chewink_N = variants {};
 lin chewy_A = mkA "seg"; -- comment=2
 lin chez_Prep = variants {};
@@ -12654,7 +12655,7 @@ lin contiguous_A = mkA "intilliggande"; -- comment=2
 lin continence_N = mkN "avhållsamhet" | mkN "återhållsamhet" | mkN "måttlighet"; -- status=guess status=guess status=guess
 lin continent_A = mkA "avhållsam" "avhållsamt" "avhållsamma" "avhållsamma" "avhållsammare" "avhållsammast" "avhållsammaste"; -- comment=2
 lin continent_N = mkN "kontinent" "kontinenter"; -- comment=3
-lin continental_A = variants {};
+lin continental_A = mkA "kontinental";
 lin contingency_N = mkN "eventualitet" "eventualiteter"; -- comment=2
 lin contingent_A = mkA "avhängig"; -- status=guess
 lin contingent_N = mkN "andel" "andelen" "andelar" "andelarna"; -- status=guess
@@ -14640,6 +14641,7 @@ lin damask_A = variants {};
 lin damask_N = mkN "damast" "damaster";
 lin dame_N = variants {};
 lin dammar_N = variants {};
+lin dammit_Interj = mkInterj "fan";
 lin damn_A = compoundA (regA "förbannad"); -- comment=3
 lin damn_Interj = mkInterj "fan" ;
 lin damn_N = mkN "jäkel"; -- comment=5
@@ -15670,7 +15672,8 @@ lin dermatitis_N = mkN "dermatit" "dermatiter";
 lin dermatoglyphic_N = variants {};
 lin dermatoglyphics_N = variants {};
 lin dermatologic_A = variants {};
-lin dermatologist_N = mkN "dermatolog" "dermatologer";
+lin dermatologistMasc_N = mkN "dermatolog" "dermatologer";
+lin dermatologistFem_N = mkN "dermatolog" "dermatologer";
 lin dermatology_N = mkN "dermatologi";
 lin dermatome_N = variants {};
 lin dermatomycosis_N = variants {};
@@ -20587,7 +20590,7 @@ lin familiarity_N = mkN "närgångenhet" "närgångenheter"; -- comment=5
 lin familiarization_N = mkN "införande";
 lin familiarize_V2 = dirV2 (partV (mkV "sprida" "spred" "spritt")"ut");
 lin familiarizing_A = variants {};
-lin family_N = mkN "barn" neutrum; -- comment=9
+lin family_N = mkN "familj" "familjer";
 lin famine_N = mkN "svält";
 lin famish_V = variants {};
 lin famish_V2 = variants {};
@@ -21179,7 +21182,7 @@ lin fiery_A = mkA "hetsig"; -- comment=8
 lin fiesta_N = variants {};
 lin fife_N = variants {};
 lin fife_PN = variants {};
-lin fig_N = mkN "fikonträd" neutrum; -- comment=2
+lin fig_N = mkN "fikon" neutrum;
 lin fig_leaf_N = variants {};
 lin fight_N = mkN "kamp"; -- comment=11
 lin fight_V = mkV "strida" "stridde" "stritt"; -- comment=8
@@ -23319,7 +23322,8 @@ lin gastritis_N = mkN "kronisk gastrit"; -- status=guess
 lin gastrocnemius_N = variants {};
 lin gastroduodenal_A = variants {};
 lin gastroenteritis_N = variants {};
-lin gastroenterologist_N = variants {};
+lin gastroenterologistMasc_N = variants {};
+lin gastroenterologistFem_N = variants {};
 lin gastroenterology_N = variants {};
 lin gastroenterostomy_N = variants {};
 lin gastroesophageal_A = variants {};
@@ -24319,6 +24323,7 @@ lin golfing_N = variants {};
 lin goliard_N = variants {};
 lin goliath_N = variants {};
 lin golliwog_N = variants {};
+lin golly_Interj = variants {};
 lin golosh_N = variants {};
 lin gomphothere_N = variants {};
 lin gonad_N = mkN "könskörtel" | (mkN "gonad" "gonader"); -- status=guess status=guess
@@ -25179,7 +25184,8 @@ lin gynaecology_N = variants {};
 lin gynandromorphic_A = variants {};
 lin gynecocracy_N = variants {};
 lin gynecological_A = mkA "gynekologisk";
-lin gynecologist_N = mkN "gynekolog" "gynekologer";
+lin gynecologistMasc_N = mkN "gynekolog" "gynekologer";
+lin gynecologistFem_N = mkN "gynekolog" "gynekologer";
 lin gynecology_N = mkN "gynekologi";
 lin gynecomastia_N = variants {};
 lin gyneolatry_N = variants {};
@@ -30100,7 +30106,7 @@ lin japaneseMasc_N = mkN "japanska"; -- comment=3
 lin japanese_A = mkA "japansk";
 lin jape_N = variants {};
 lin japonica_N = variants {};
-lin jar_N = mkN "stöt"; -- comment=20
+lin jar_N = mkN "burk";
 lin jar_V = mkV "tvistar"; -- comment=17
 lin jar_V2 = dirV2 (partV (mkV "skakar")"om"); -- comment=2
 lin jarful_N = variants {};
@@ -32011,7 +32017,7 @@ lin lekvar_N = variants {};
 lin lemma_N = (mkN "lemma" "lemmat" "lemman" "lemmana") | (mkN "uppslagsord" neutrum); -- status=guess status=guess
 lin lemming_N = mkN "lämmel" "lämmeln" "lämlar" "lämlarna";
 lin lemniscus_N = variants {};
-lin lemon_N = mkN "citronträd" neutrum; -- comment=9
+lin lemon_N = mkN "citron" "citroner";
 lin lemonade_N = mkN "läskedryck" "läskedrycker"; -- comment=2
 lin lemongrass_N = mkN "citrongräs"; -- status=guess
 lin lemonwood_N = variants {};
@@ -33732,7 +33738,7 @@ lin majestic_A = mkA "majestätisk";
 lin majestically_Adv = variants {};
 lin majesty_N = mkN "majestät" neutrum; -- comment=2
 lin majolica_N = variants {};
-lin major_A = mkA "gammal" "gammalt" "gamla" "äldre" "äldst"; -- comment=4
+lin major_A = mkA "stor" "större" "störst";
 lin major_N = mkN "stor"; -- comment=4
 lin major_V = variants {};
 lin major_domo_N = variants {};
@@ -36284,7 +36290,7 @@ lin more_than_Predet = variants {};
 lin morecambe_PN = variants {};
 lin moreen_N = variants {};
 lin morel_N = mkN "murkla";
-lin morello_N = variants {};
+lin morello_N = mkN "surkörsbär" neutrum;
 lin moreover_Adv = mkAdv "dessutom"; -- comment=2
 lin mores_N = mkN "sedvänja";
 lin moresque_A = variants {};
@@ -36992,6 +36998,7 @@ lin nacre_N = mkN "pärlemor"; -- status=guess
 lin nacreous_A = variants {};
 lin nadir_N = variants {};
 lin nadolol_N = variants {};
+lin nae_Interj = mkInterj "nej";
 lin nafcillin_N = variants {};
 lin naff_off_V = variants {};
 lin nag_N = mkN "plåga"; -- comment=2
@@ -37489,7 +37496,7 @@ lin netting_N = variants {};
 lin nettle_N = mkN "nässla"; -- comment=2
 lin nettle_V2 = mkV2 (mkV "nässla") | mkV2 (mkV "brännä"); -- status=guess, src=wikt status=guess, src=wikt
 lin nettlerash_N = variants {};
-lin network_N = mkN "system" neutrum; -- comment=3
+lin network_N = mkN "nätverk" neutrum;
 lin networklike_A = variants {};
 lin neural_A = variants {};
 lin neuralgia_N = variants {};
@@ -37526,7 +37533,8 @@ lin neurolemma_N = variants {};
 lin neurolinguist_N = variants {};
 lin neurolinguistics_N = variants {};
 lin neurological_A = mkA "neurologisk";
-lin neurologist_N = mkN "neurolog" "neurologer";
+lin neurologistMasc_N = mkN "neurolog" "neurologer";
+lin neurologistFem_N = mkN "neurolog" "neurologer";
 lin neurology_N = variants {};
 lin neuroma_N = variants {};
 lin neuromatous_A = variants {};
@@ -38434,7 +38442,8 @@ lin numerator_N = mkN "täljare" utrum; -- comment=2
 lin numeric_A = mkA "numerisk";
 lin numerical_A = mkA "numerär"; -- comment=2
 lin numerological_A = variants {};
-lin numerologist_N = variants {};
+lin numerologistMasc_N = variants {};
+lin numerologistFem_N = variants {};
 lin numerology_N = variants {};
 lin numerous_A = mkA "talrik";
 lin numerousness_N = variants {};
@@ -39133,7 +39142,7 @@ lin operate_on_V2 = dirV2 (partV (mkV "arbetar")"av");
 lin operatic_A = mkA "teatralisk";
 lin operating_table_N = variants {};
 lin operating_theatre_N = variants {};
-lin operation_N = mkN "funktion" "funktioner"; -- comment=22
+lin operation_N = mkN "operation" "operationer";
 lin operational_A = mkA "funktionsduglig"; -- comment=2
 lin operationalism_N = variants {};
 lin operationalist_A = variants {};
@@ -39385,6 +39394,8 @@ lin ornithomimid_N = variants {};
 lin ornithopod_N = variants {};
 lin orogeny_N = variants {};
 lin oroide_N = variants {};
+lin orologistMasc_N = variants {};
+lin orologistFem_N = variants {};
 lin orology_N = variants {};
 lin oropharyngeal_A = variants {};
 lin oropharynx_N = variants {};
@@ -40727,7 +40738,7 @@ lin parthenogenesis_N = variants {};
 lin parthenote_N = variants {};
 lin parthian_A = variants {};
 lin parti_coloured_A = variants {};
-lin partial_A = mkA "partisk"; -- comment=6
+lin partial_A = mkA "partisk";
 lin partiality_N = variants {};
 lin partialness_N = variants {};
 lin partible_A = variants {};
@@ -41497,7 +41508,8 @@ lin performance_N = mkN "utförande"; -- comment=8
 lin performer_N = mkN "uppträdande";
 lin perfume_N = mkN "parfym" "parfymer"; -- comment=4
 lin perfume_V2 = variants {};
-lin perfumer_N = variants {};
+lin perfumerMasc_N = variants {};
+lin perfumerFem_N = variants {};
 lin perfumery_N = mkN "parfymeri" "parfymerit" "parfymerier" "parfymerierna";
 lin perfunctory_A = mkA "rutinmässig"; -- comment=4
 lin perfusion_N = variants {};
@@ -42549,7 +42561,7 @@ lin placard_V2 = variants {};
 lin placate_V2 = mkV2 (mkV "blidkar"); -- status=guess, src=wikt
 lin placatingly_Adv = variants {};
 lin placation_N = variants {};
-lin place_N = mkN "anställning"; -- comment=23
+lin place_N = mkN "plats" "platser";
 lin place_V2 = mkV2 (mkV (mkV "placera") "sig"); -- status=guess, src=wikt
 lin place_bet_N = variants {};
 lin place_name_N = variants {};
@@ -44303,7 +44315,7 @@ lin prisoner_N = mkN "fånge" utrum; -- comment=3
 lin prisonlike_A = variants {};
 lin pristine_A = variants {};
 lin privacy_N = mkN "privatliv" neutrum; -- comment=4
-lin private_A = mkA "sluten" "slutet"; -- comment=3
+lin private_A = mkA "privat" "privat";
 lin private_N = mkN "slut" neutrum;
 lin privateer_N = variants {};
 lin privation_N = mkN "umbärande";
@@ -48451,7 +48463,7 @@ lin rosario_PN = variants {};
 lin rosary_N = mkN "radband" neutrum; -- status=guess
 lin roscommon_PN = variants {};
 lin rose_A = mkA "rosa"; -- comment=2
-lin rose_N = mkN "stril"; -- comment=7
+lin rose_N = mkN "ros" "rosor";
 lin rose_PN = variants {};
 lin rose_V = mkV "rosar"; -- comment=3
 lin rose_V2 = variants {};
@@ -57033,7 +57045,7 @@ lin tayside_PN = variants {};
 lin tb_N = variants {};
 lin tbilisi_PN = variants {};
 lin te_deum_N = variants {};
-lin tea_N = mkN "teblad" neutrum; -- comment=3
+lin tea_N = mkN "te" "tet" "teer" "teerna";
 lin tea_bag_N = variants {};
 lin tea_break_N = variants {};
 lin tea_caddy_N = variants {};
@@ -57369,7 +57381,7 @@ lin tenpin_N = variants {};
 lin tenpins_N = variants {};
 lin tenrec_N = variants {};
 lin tense_A = mkA "spännande"; -- comment=4
-lin tense_N = mkN "spännande"; -- comment=2
+lin tense_N = mkN "tempus" neutrum;
 lin tense_V = mkV "spänna" "spände" "spänt"; -- comment=2
 lin tense_V2 = variants {};
 lin tenseness_N = variants {};
@@ -62218,6 +62230,9 @@ lin venerate_V2 = variants {};
 lin veneration_N = mkN "vördnad" "vördnader"; -- comment=2
 lin venerator_N = variants {};
 lin venereal_A = mkA "venerisk";
+lin venereologistMasc_N = mkN "venereologist";
+lin venereologistFem_N = mkN "venereologist";
+lin venereology_N = mkN "venereologi";
 lin venesection_N = variants {};
 lin venetian_A = variants {};
 lin venezia_PN = variants {};
