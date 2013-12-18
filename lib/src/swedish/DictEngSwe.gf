@@ -5371,7 +5371,7 @@ lin become_VA = L.become_VA;
 lin become_VS = mkVS (mkV "bli" "blev" "blivit"); -- status=guess, src=wikt
 lin becomingly_Adv = variants {};
 lin becomingness_N = variants {};
-lin bed_N = mkN "yta"; -- comment=7
+lin bed_N = mkN "säng";
 lin bed_V2 = dirV2 (partV (mkV "planterar")"om");
 lin bed_down_V = mkV "planterar"; -- comment=3
 lin bed_out_V2 = dirV2 (partV (mkV "planterar")"om");
@@ -26030,7 +26030,7 @@ lin heave_N = variants {};
 lin heave_V = mkV "häver";
 lin heave_V2 = variants {};
 lin heave_out_V = mkV "häver";
-lin heaven_N = mkN "himmel"; -- comment=2
+lin heaven_N = mkN "himmel";
 lin heavenly_A = variants {};
 lin heavensent_A = variants {};
 lin heavenward_A = variants {};
@@ -41660,7 +41660,7 @@ lin persianFem_N = mkN "persiska"; -- comment=3
 lin persianMasc_N = mkN "persiska"; -- comment=3
 lin persian_A = mkA "persisk";
 lin persiflage_N = variants {};
-lin persimmon_N = variants {};
+lin persimmon_N = mkN "persimon" "persimoner";
 lin persist_V = mkV "framhärdar"; -- comment=4
 lin persistence_N = mkN "ståndaktighet"; -- comment=6
 lin persistent_A = mkA "ihärdig"; -- comment=8
