@@ -62866,7 +62866,7 @@ lin waders_N = variants {};
 lin wadi_N = variants {};
 lin wading_N = mkN "vadande";
 lin wafer_N = mkN "rån" neutrum; -- comment=3
-lin waffle_N = mkN "våffla"; -- comment=3
+lin waffle_N = mkN "våffla";
 lin waffle_V = mkV "dillar"; -- comment=2
 lin waffle_V2 = variants {};
 lin waffler_N = variants {};
