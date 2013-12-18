@@ -23,7 +23,11 @@ function sitesearch() {
 document.write('<div style="text-align: right">  <form onsubmit="return sitesearch()" method=get action="http://www.google.com/search">  <input type=search name="q" placeholder="site search">  <input type=submit value="Search">  </form></div>')
 </script>
 <div class=center>
-<img class=grow src="doc/Logos/gf0.png" alt="">
+<img id=gflogo class=grow src="doc/Logos/gf0.png" alt="">
+  <script>
+  if(document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1"))
+    document.getElementById("gflogo").src="doc/Logos/gf0.svg"
+  </script>
 <H1>Grammatical Framework</H1>
 <P>
 Version 3.5
