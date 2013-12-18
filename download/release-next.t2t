@@ -14,15 +14,23 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 Over [...] changes have been pushed to the source repository since the release
 of GF 3.5.
 
-Closed issues: 25, 30, 41, 57, 60, 61, 68, 80.
+Closed issues: 25, 30, 41, 57, 60, 61, 68, 80, 81.
 
 ===GF compiler and run-time library===
 
+- Token gluing, BIND, SOFT_BIND [...]
+- ``nonExist`` now exists. [...]
 - The default character encoding in grammar files has been changed from
   Latin-1 to UTF-8. Also, alternate character encodings should now be specified
   as ``--# -coding=``//enc//, instead of ``flags coding=``//enc//.
   See the separate document
   [GF character encoding changes encoding-change.html] for more details.
+- Unicode characters in identifiers [...]
+- The PGF file format has changed in minor but backward incompatible ways
+  GF can still read the old format, thanks to a backward compatibility
+  module. Old PGF files can be converted to the new format by loading them
+  in the GF shell and writing out a new PGF file with the ``pg -pgf`` command.
+
 - Nonlinear patterns (i.e., patterns where the same variable appears more than
   once) in concrete syntax are now detected and reported as errors.
   (Section C.4.13 in the GF book explicitly states that patterns must be
@@ -33,8 +41,9 @@ Closed issues: 25, 30, 41, 57, 60, 61, 68, 80.
 - The refresh pass
 % (and thus the command line option --dump-refresh)
   had become obsolete and has been removed.
-- ``nonExist`` now exists. [...]
-- Unicode characters in identifiers [...]
+- The old partial evaluator
+  (and thus the command line options --new-comp and --old-comp)
+  has been removed.
 
 
 ===Resource Grammar Library===

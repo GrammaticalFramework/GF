@@ -83,7 +83,9 @@ Library
     build-depends: binary
 
   ghc-options: -fwarn-unused-imports
+  ghc-prof-options: -auto-all
   extensions: 
+
   exposed-modules: 
     PGF
     PGF.Data

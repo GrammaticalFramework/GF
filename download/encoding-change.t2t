@@ -6,16 +6,17 @@ Thomas Hallgren
 %!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-==Planned changes to character encodings in GF grammar files ==
+==Changes to character encodings in GF grammar files ==
 
-We plan to make two changes:
+Between the release of GF 3.5 and the next version, two changes were made
+relating to character encodings in GF grammar files:
 
-+ Currently the default character encoding in GF grammar files is Latin-1
-(also known as iso-8859-1, cp1252). We plan to change the default to UTF-8.
++ The default character encoding was changed from Latin-1
+(also known as iso-8859-1, cp1252) to UTF-8.
 
-+ It is currently possible to use another character encoding by specifying it
-with a ``flags coding = ...`` declaration in the source file. We plan to change
-this to use a pragma ``--# -coding=...`` at the top of the file instead.
++ They way you specify alternate character encodings was changed. Instead of
+  using a ``flags coding = ...`` declaration in the source file, you should now
+  use a pragma ``--# -coding=...`` at the top of the file instead.
 
 
 == Advantages ==
