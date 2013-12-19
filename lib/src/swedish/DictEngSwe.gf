@@ -3521,7 +3521,7 @@ lin arthrospore_N = variants {};
 lin arthrosporic_A = variants {};
 lin arthur_PN = variants {};
 lin artichoke_N = mkN "kronärtskocka"; -- status=guess
-lin article_N = mkN "sak" "saker"; -- comment=14
+lin article_N = mkN "artikel";
 lin article_V2 = variants {};
 lin articular_A = variants {};
 lin articulate_A = mkA "tydlig"; -- comment=6
