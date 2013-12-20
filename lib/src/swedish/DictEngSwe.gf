@@ -40424,7 +40424,7 @@ lin panoramic_A = variants {};
 lin panpipe_N = variants {};
 lin pansexual_N = variants {};
 lin pansinusitis_N = variants {};
-lin pansy_N = mkN "pensé"; -- status=guess
+lin pansy_N = mkN "pensé";
 lin pant_N = mkN "flåsande"; -- comment=3
 lin pant_V = mkV "flämtar"; -- comment=3
 lin pant_V2 = variants {};
@@ -51481,7 +51481,7 @@ lin showbiz_N = variants {};
 lin showboat_N = variants {};
 lin showcase_N = variants {};
 lin showdown_N = mkN "kraftmätning";
-lin shower_N = mkN "skur"; -- comment=5
+lin shower_N = mkN "dusch";
 lin shower_V = mkV "falla" "föll" "fallit"; -- comment=6
 lin shower_V2 = mkV2 (mkV "duschar"); -- status=guess, src=wikt
 lin shower_bath_N = variants {};
@@ -58189,13 +58189,13 @@ lin tilth_N = variants {};
 lin tiltyard_N = variants {};
 lin tim_PN = variants {};
 lin timbale_N = variants {};
-lin timber_N = mkN "virke"; -- comment=3
+lin timber_N = mkN "virke";
 lin timbered_A = variants {};
 lin timberman_N = variants {};
 lin timbre_N = (mkN "klang" "klanger") | mkN "klangfärg" | (mkN "timbre" utrum); -- status=guess status=guess status=guess
 lin timbrel_N = variants {};
-lin time_N = mkN "takt"; -- comment=8
-lin time_V2 = mkV2 (mkV (mkV "tajma") "[human decision]") | mkV2 (mkV (mkV "tidsinställa") "[of a device]"); -- status=guess, src=wikt status=guess, src=wikt
+lin time_N = mkN "tid" "tider";
+lin time_V2 = mkV2 (mkV "tajma" | mkV "tidsinställa"); -- status=guess, src=wikt status=guess, src=wikt
 lin time_ball_N = variants {};
 lin time_bomb_N = variants {};
 lin time_expired_A = variants {};
