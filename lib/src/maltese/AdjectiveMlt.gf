@@ -62,7 +62,7 @@ concrete AdjectiveMlt of Adjective = CatMlt ** open ResMlt, Prelude in {
     -- A2 -> AP
     -- married to itself
     ReflA2 a2 = {
-      s = \\gn => a2.s ! APosit gn ++ a2.c2.s ! Definite ++ reflPron ! (toVAgr gn) ;
+      s = \\gn => a2.s ! APosit gn ++ a2.c2.s ! Definite ++ prep_lil.enclitic ! (toAgr gn) ++ reflPron ! (toVAgr gn) ;
       isPre = False
       } ;
 

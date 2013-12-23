@@ -5,7 +5,7 @@
 -- Angelo Zammit 2012
 -- Licensed under LGPL
 
-concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
+concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude, Maybe in {
 
   flags
     optimize=noexpand ;
@@ -161,8 +161,8 @@ concrete NounMlt of Noun = CatMlt ** open ResMlt, Prelude in {
 
     -- NP -> V2 -> NP
     -- the man seen
-    PPartNP np v2 = case v2.hasPastPart of {
-      True  => overwriteNPs np (\\c => np.s ! c ++ (v2.s ! VPastPart (toGenNum np.a)).s1) ; -- raġel rieqed
+    PPartNP np v2 = case exists Participle v2.pastPart of {
+      True  => overwriteNPs np (\\c => np.s ! c ++ (fromJust Participle v2.pastPart ! (toGenNum np.a))) ; -- raġel rieqed
       False => overwriteNPs np (\\c => np.s ! c ++ (v2.s ! VImpf (toVAgr np.a)).s1)         -- mara tisma'
       } ;
 

@@ -5,7 +5,7 @@
 -- Angelo Zammit 2012
 -- Licensed under LGPL
 
-concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
+concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt, Maybe in {
   flags optimize=all_subs ;
 
   lin
@@ -136,12 +136,12 @@ concrete VerbMlt of Verb = CatMlt ** open Prelude, ResMlt in {
 
     -- VPSlash -> VP
     -- love himself
-    ReflVP vpslash = insertObjPre (\\agr => vpslash.s2 ! agr ++ reflPron ! toVAgr agr) vpslash ;
+    ReflVP vpslash = insertObjPre (\\agr => vpslash.s2 ! agr ++ prep_lil.enclitic ! agr ++ reflPron ! toVAgr agr) vpslash ;
 
     -- V2 -> VP
     -- be loved
-    PassV2 v2 = case v2.hasPastPart of {
-      True  => insertObj (\\agr => (v2.s ! VPastPart (toGenNum agr)).s1 ++ v2.c2.s ! Definite) CopulaVP ;
+    PassV2 v2 = case exists Participle v2.pastPart of {
+      True  => insertObj (\\agr => (fromJust Participle v2.pastPart ! (toGenNum agr)) ++ v2.c2.s ! Definite) CopulaVP ;
       False => insertObj (\\agr => (v2.s ! VPerf (toVAgr agr)).s1 ++ v2.c2.s ! Definite) CopulaVP
       } ;
 
