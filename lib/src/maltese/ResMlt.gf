@@ -393,6 +393,24 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       joinsVerb = False ;
       } ;
 
+    prep_lil : Preposition = {
+      s = table {
+        Indefinite => "lil" ;
+        Definite => makePreFull "lill-" "lil" "lil"
+      } ;
+      enclitic : Agr => Str = \\agr => case toVAgr agr of {
+        AgP1 Sg     => "lili" ;
+        AgP2 Sg     => "lilek" ;
+        AgP3Sg Masc => "lilu" ;
+        AgP3Sg Fem  => "lilha" ;
+        AgP1 Pl     => "lilna" ;
+        AgP2 Pl     => "lilkom" ;
+        AgP2Pl      => "lilhom"
+        } ;
+      takesDet = True ;
+      joinsVerb = True ;
+      } ;
+
   {- Pronoun -------------------------------------------------------------- -}
 
   oper
@@ -522,16 +540,19 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       \\vf => case vf of {
         VPerf _ => stemVariantsPerf (tbl ! vf) ;
         VImpf _ => stemVariantsImpf (tbl ! vf) ;
-        VImp  _ => stemVariantsImpf (tbl ! vf) ;
-        _  => mkVerbStems (tbl ! vf)
+        VImp  _ => stemVariantsImpf (tbl ! vf)
       } ;
 
     Verb : Type = {
       s : VForm => VerbStems ; --- need to store different "stems" already at verb level (ġera/ġerie/ġeri)
       i : VerbInfo ;
-      hasPresPart : Bool ;
-      hasPastPart : Bool ;
+      presPart : Maybe Participle ;
+      pastPart : Maybe Participle ;
       } ;
+
+    Participle : Type = GenNum => Str ;
+
+    noParticiple : Maybe Participle = Nothing Participle (\\_ => nonExist) ;
 
     VerbInfo : Type = {
       class : VClass ;
@@ -542,13 +563,10 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       } ;
 
   param
-    -- Possible verb forms (tense + person)
     VForm =
         VPerf VAgr    -- Perfect tense in all pronoun cases
       | VImpf VAgr    -- Imperfect tense in all pronoun cases
       | VImp Number   -- Imperative is always P2, Sg & Pl
-      | VPresPart GenNum  -- Present/active particible, e.g. RIEQED
-      | VPastPart GenNum  -- Passive/past particible, e.g. MAĦBUB
     ;
 
     VDerivedForm =
@@ -778,11 +796,12 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       } ;
 
     VerbPhrase : Type = {
-      v : {
-        s : VForm => VerbStems ;
-        hasPresPart : Bool ;
-        hasPastPart : Bool ;
-        } ;
+      v : Verb ;
+      -- v : {
+      --   s : VForm => VerbStems ;
+      --   presPart : Maybe Participle ;
+      --   pastPart : Maybe Participle ;
+      --   } ;
       s2  : Agr => Str ; -- complement
       dir : Maybe Agr ; -- direct object clitic
       ind : Maybe Agr ; -- indirect object clitic
@@ -866,9 +885,7 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
         <VImpf (AgP2 Pl), Neg>     => "tkunux" ;
         <VImpf (AgP3Pl), Neg>      => "jkunux" ;
         <VImp (Sg), Neg>           => "kunx" ;
-        <VImp (Pl), Neg>           => "kunux" ;
-        <VPresPart gn, _>          => nonExist ;
-        <VPastPart gn, _>          => nonExist
+        <VImp (Pl), Neg>           => "kunux"
         }
       } ;
 
@@ -908,13 +925,11 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
           VImpf (AgP2 Pl)     => mkVerbStems [] "m'intom" ;
           VImpf (AgP3Pl)      => mkVerbStems "huma" "m'humie" ;
           VImp (Sg)           => mkVerbStems "kun" ;
-          VImp (Pl)           => mkVerbStems "kunu" ;
-          VPresPart gn        => mkVerbStems nonExist ;
-          VPastPart gn        => mkVerbStems nonExist
+          VImp (Pl)           => mkVerbStems "kunu"
           } ;
         i = mkVerbInfo Irregular FormI ;
-        hasPresPart = False ;
-        hasPastPart = False ;
+        presPart = noParticiple ;
+        pastPart = noParticiple ;
         } ;
       s2 = \\agr => [] ;
       dir = NullAgr ;
@@ -949,13 +964,20 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       } ;
 
     reflPron : VAgr => Str = table {
-      AgP1 Sg      => "lili nnifsi" ;
-      AgP2 Sg      => "lilek innifsek" ;
-      AgP3Sg Masc  => "lilu nnifsu" ;
-      AgP3Sg Fem   => "lila nnifisha" ;
-      AgP1 Pl      => "lilna nfusna" ;
-      AgP2 Pl      => "lilkom infuskom" ;
-      AgP3Pl       => "lilhom infushom"
+      -- AgP1 Sg      => "lili nnifsi" ;
+      -- AgP2 Sg      => "lilek innifsek" ;
+      -- AgP3Sg Masc  => "lilu nnifsu" ;
+      -- AgP3Sg Fem   => "lila nnifisha" ;
+      -- AgP1 Pl      => "lilna nfusna" ;
+      -- AgP2 Pl      => "lilkom infuskom" ;
+      -- AgP3Pl       => "lilhom infushom"
+      AgP1 Sg      => "nnifsi" ;
+      AgP2 Sg      => "innifsek" ;
+      AgP3Sg Masc  => "nnifsu" ;
+      AgP3Sg Fem   => "nnifisha" ;
+      AgP1 Pl      => "nfusna" ;
+      AgP2 Pl      => "infuskom" ;
+      AgP3Pl       => "infushom"
       } ;
 
     huwa : VAgr => Str = table {

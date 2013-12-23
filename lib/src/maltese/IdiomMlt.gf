@@ -4,7 +4,7 @@
 -- John J. Camilleri 2011 -- 2013
 -- Licensed under LGPL
 
-concrete IdiomMlt of Idiom = CatMlt ** open Prelude, ResMlt in {
+concrete IdiomMlt of Idiom = CatMlt ** open Prelude, ResMlt, Maybe in {
 
   flags
     coding=utf8;
@@ -70,8 +70,8 @@ concrete IdiomMlt of Idiom = CatMlt ** open Prelude, ResMlt in {
     -- be sleeping
     ProgrVP vp = {
       v = CopulaVP.v ;
-      s2 = \\agr => case vp.v.hasPresPart of {
-        True  => (vp.v.s ! VPresPart (toGenNum agr)).s1 ;
+      s2 = \\agr => case exists Participle vp.v.presPart of {
+        True  => (fromJust Participle vp.v.presPart) ! (toGenNum agr) ;
         False => (vp.v.s ! VImpf (toVAgr agr)).s1
         } ;
       dir = NullAgr ;
@@ -93,6 +93,23 @@ concrete IdiomMlt of Idiom = CatMlt ** open Prelude, ResMlt in {
           Sg => "ħalli" ;
           Pl => "ħallu"
           }
+      } ;
+
+    -- VP -> VP
+    -- is at home himself
+    SelfAdvVP vp = insertObj (\\agr => reflPron ! (toVAgr agr)) vp ;
+
+    -- VP -> VP
+    -- is himself at home
+    SelfAdVVP vp = insertObjPre (\\agr => reflPron ! (toVAgr agr)) vp ;
+
+    -- NP -> NP
+    -- the president himself (is at home)
+    SelfNP np = {
+      s = \\c => np.s ! c ++ "stess" ;
+      a = np.a ;
+      isPron = np.isPron ;
+      isDefn = np.isDefn ;
       } ;
 
 }

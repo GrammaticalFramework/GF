@@ -659,9 +659,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num ;
-        VPresPart _ => nonExist ;
-        VPastPart _ => nonExist
+        VImp num  => imp ! num
       } ;
 
     conjFormII_quad : VerbInfo -> (VForm => Str) = \i ->
@@ -746,9 +744,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num ;
-        VPresPart _ => nonExist ;
-        VPastPart _ => nonExist
+        VImp num  => imp ! num
       } ;
 
     {- ~~~ Form III verbs ~~~ -}
@@ -788,9 +784,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num ;
-        VPresPart _ => nonExist ;
-        VPastPart _ => nonExist
+        VImp num  => imp ! num
       } ;
 
     {- ~~~ Form VII and VIII verbs ~~~ -}
@@ -859,9 +853,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num ;
-        VPresPart _ => nonExist ;
-        VPastPart _ => nonExist
+        VImp num  => imp ! num
       } ;
 
     {- ~~~ Form IX verbs ~~~ -}
@@ -895,9 +887,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num ;
-        VPresPart _ => nonExist ;
-        VPastPart _ => nonExist
+        VImp num  => imp ! num
       } ;
 
     {- ~~~ Form X verbs ~~~ -}
@@ -989,9 +979,7 @@ resource MorphoMlt = ResMlt ** open Prelude in {
       in table {
         VPerf agr => perf ! agr ;
         VImpf agr => impf ! agr ;
-        VImp num  => imp ! num ;
-        VPresPart _ => nonExist ;
-        VPastPart _ => nonExist
+        VImp num  => imp ! num
       } ;
 
 }
