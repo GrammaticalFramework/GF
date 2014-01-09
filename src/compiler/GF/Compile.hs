@@ -1,4 +1,4 @@
-module GF.Compile (batchCompile, link, compileToPGF, compileSourceGrammar) where
+module GF.Compile (batchCompile, link, srcAbsName, compileToPGF, compileSourceGrammar) where
 import Prelude hiding (catch)
 import GF.System.Catch
 
@@ -31,6 +31,7 @@ import System.FilePath
 import qualified Data.Map as Map
 --import qualified Data.Set as Set
 import Data.List(nub)
+import Data.Time(UTCTime)
 import Text.PrettyPrint
 
 import PGF.Optimize
@@ -38,33 +39,33 @@ import PGF
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.
 compileToPGF :: Options -> [FilePath] -> IOE PGF
-compileToPGF opts fs =
-    do gr <- batchCompile opts fs
-       let name = justModuleName (last fs)
-       link opts (identS name) gr
+compileToPGF opts fs = link opts =<< batchCompile opts fs
 
-link :: Options -> Ident -> SourceGrammar -> IOE PGF
-link opts cnc gr = do
-  let isv = (verbAtLeast opts Normal)
+link :: Options -> (Ident,t,SourceGrammar) -> IOE PGF
+link opts (cnc,_,gr) =
   putPointE Normal opts "linking ... " $ do
-    let abs = err (const cnc) id $ abstractOfConcrete gr cnc
+    let abs = srcAbsName gr cnc
     pgf <- mkCanon2pgf opts gr abs
     probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
     when (verbAtLeast opts Normal) $ putStrE "OK"
     return $ setProbabilities probs 
            $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
 
-batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
+srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc
+
+batchCompile :: Options -> [FilePath] -> IOE (Ident,UTCTime,SourceGrammar)
 batchCompile opts files = do
-  (_,gr,_) <- foldM (compileModule opts) emptyCompileEnv files
-  return gr
+  (_,gr,menv) <- foldM (compileModule opts) emptyCompileEnv files
+  let cnc = identS (justModuleName (last files))
+      t = maximum . map fst $ Map.elems menv
+  return (cnc,t,gr)
 
 -- to compile a set of modules, e.g. an old GF or a .cf file
 compileSourceGrammar :: Options -> SourceGrammar -> IOE SourceGrammar
 compileSourceGrammar opts gr = do
   cwd <- liftIO getCurrentDirectory
   (_,gr',_) <- foldM (\env -> compileSourceModule opts cwd env Nothing)
-                     (0,emptySourceGrammar,Map.empty)
+                     emptyCompileEnv
                      (modules gr)
   return gr'
 
@@ -83,9 +84,6 @@ warnOut opts warnings
     ws = if flag optVerbosity opts == Normal
          then '\n':warnings
          else warnings
-
--- | the environment
-type CompileEnv = (Int,SourceGrammar,ModEnv)
 
 -- | compile with one module as starting point
 -- command-line options override options (marked by --#) in the file
@@ -237,6 +235,9 @@ writeGFO opts file mo = do
 -- auxiliaries
 
 --reverseModules (MGrammar ms) = MGrammar $ reverse ms
+
+-- | The environment
+type CompileEnv = (Int,SourceGrammar,ModEnv)
 
 emptyCompileEnv :: CompileEnv
 emptyCompileEnv = (0,emptySourceGrammar,Map.empty)

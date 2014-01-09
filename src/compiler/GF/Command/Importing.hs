@@ -46,7 +46,7 @@ importSource :: SourceGrammar -> Options -> [FilePath] -> IO SourceGrammar
 importSource src0 opts files = do
   src <- appIOE $ batchCompile opts files
   case src of
-    Ok gr -> return gr
+    Ok (_,_,gr) -> return gr
     Bad msg -> do 
       putStrLn msg
       return src0
@@ -58,7 +58,7 @@ importCF opts files get = do
                Ok gf -> return gf
                Bad s -> error s ---- 
        Ok gr <- appIOE $ compileSourceGrammar opts gf
-       epgf <- appIOE $ link opts (identS (justModuleName (last files) ++ "Abs")) gr
+       epgf <- appIOE $ link opts (identS (justModuleName (last files) ++ "Abs"), (), gr)
        case epgf of
          Ok pgf -> return pgf
          Bad s  -> error s ----
