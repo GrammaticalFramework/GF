@@ -15,6 +15,8 @@ import GF.Infra.Ident(identS)
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
+import GF.System.Directory
+import GF.System.Catch
 
 import Data.Maybe
 import Data.Binary
@@ -23,7 +25,7 @@ import qualified Data.ByteString as BSS
 import qualified Data.ByteString.Lazy as BSL
 import System.FilePath
 import System.IO
-import Control.Exception
+import Control.Exception(bracket)
 import Control.Monad(unless,forM_)
 
 mainGFC :: Options -> [FilePath] -> IO ()
@@ -63,16 +65,28 @@ compileCFFiles opts fs =
                  writeOutputs opts pgf
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
-unionPGFFiles opts fs = 
-    do pgfs <- mapM readPGFVerbose fs
-       let pgf0 = foldl1 unionPGF pgfs
-           pgf  = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
-           pgfFile = grammarName opts pgf <.> "pgf"
-       if pgfFile `elem` fs
-         then putStrLnE $ "Refusing to overwrite " ++ pgfFile
-         else writePGF opts pgf
-       writeOutputs opts pgf
-  where readPGFVerbose f = putPointE Normal opts ("Reading " ++ f ++ "...") $ liftIO $ readPGF f
+unionPGFFiles opts fs = maybe doIt checkFirst (flag optName opts)
+  where
+    checkFirst name =
+      do let pgfFile = name <.> "pgf"
+         sourceTime <- liftIO $ maximum `fmap` mapM getModificationTime fs
+         targetTime <- maybeIO $ getModificationTime pgfFile
+         if targetTime >= Just sourceTime
+           then putIfVerb opts $ pgfFile ++ " is up-to-date."
+           else doIt
+
+    doIt =
+      do pgfs <- mapM readPGFVerbose fs
+         let pgf0 = foldl1 unionPGF pgfs
+             pgf  = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
+             pgfFile = grammarName opts pgf <.> "pgf"
+         if pgfFile `elem` fs
+           then putStrLnE $ "Refusing to overwrite " ++ pgfFile
+           else writePGF opts pgf
+         writeOutputs opts pgf
+
+    readPGFVerbose f =
+        putPointE Normal opts ("Reading " ++ f ++ "...") $ liftIO $ readPGF f
 
 writeOutputs :: Options -> PGF -> IOE ()
 writeOutputs opts pgf = do
