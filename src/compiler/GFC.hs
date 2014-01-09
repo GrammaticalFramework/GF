@@ -10,7 +10,7 @@ import GF.Compile
 import GF.Compile.Export
 
 import GF.Grammar.CF ---- should this be on a deeper level? AR 15/10/2008
-import GF.Infra.Ident(identS)
+import GF.Infra.Ident(identS,showIdent)
 
 import GF.Infra.UseIO
 import GF.Infra.Option
@@ -45,13 +45,19 @@ mainGFC opts fs = do
 
 compileSourceFiles :: Options -> [FilePath] -> IOE ()
 compileSourceFiles opts fs = 
-    do gr <- batchCompile opts fs
-       let cnc = justModuleName (last fs)
+    do cnc_gr@(cnc,t_src,gr) <- batchCompile opts fs
        unless (flag optStopAfterPhase opts == Compile) $
-              do pgf <- link opts (identS cnc) gr
-                 writePGF opts pgf
-                 writeByteCode opts pgf
-                 writeOutputs opts pgf
+              do let abs = showIdent (srcAbsName gr cnc)
+                     pgfFile = grammarName' opts abs<.>"pgf"
+                 t_pgf <- if outputJustPGF opts
+                          then maybeIO $ getModificationTime pgfFile
+                          else return Nothing
+                 if t_pgf >= Just t_src
+                   then putIfVerb opts $ pgfFile ++ " is up-to-date."
+                   else do pgf <- link opts cnc_gr
+                           writePGF opts pgf
+                           writeByteCode opts pgf
+                           writeOutputs opts pgf
 
 compileCFFiles :: Options -> [FilePath] -> IOE ()
 compileCFFiles opts fs = 
@@ -59,13 +65,13 @@ compileCFFiles opts fs =
        let cnc = justModuleName (last fs)
        gr <- compileSourceGrammar opts =<< getCF cnc s
        unless (flag optStopAfterPhase opts == Compile) $
-              do pgf <- link opts (identS cnc) gr
+              do pgf <- link opts (identS cnc, (), gr)
                  writePGF opts pgf
                  writeOutputs opts pgf
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs =
-    if null (outputFormats opts)
+    if outputJustPGF opts
     then maybe doIt checkFirst (flag optName opts)
     else doIt
   where
@@ -97,6 +103,7 @@ writeOutputs opts pgf = do
                    (name,str) <- exportPGF opts fmt pgf]
 
 outputFormats opts = [fmt | fmt <- flag optOutputFormats opts, fmt/=FmtByteCode]
+outputJustPGF opts = null (flag optOutputFormats opts) && not (flag optSplitPGF opts)
 
 writeByteCode :: Options -> PGF -> IOE ()
 writeByteCode opts pgf
@@ -132,7 +139,9 @@ writePGF opts pgf
                                putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ encodeFile outfile pgf
 
 grammarName :: Options -> PGF -> String
-grammarName opts pgf = fromMaybe (showCId (absname pgf)) (flag optName opts)
+grammarName opts pgf = --fromMaybe (showCId (absname pgf)) (flag optName opts)
+                       grammarName' opts (showCId (absname pgf))
+grammarName' opts abs = fromMaybe abs (flag optName opts)
 
 writeOutput :: Options -> FilePath-> String -> IOE ()
 writeOutput opts file str =
