@@ -16,7 +16,6 @@ import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
 import GF.System.Directory
-import GF.System.Catch
 
 import Data.Maybe
 import Data.Binary
@@ -65,7 +64,10 @@ compileCFFiles opts fs =
                  writeOutputs opts pgf
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
-unionPGFFiles opts fs = maybe doIt checkFirst (flag optName opts)
+unionPGFFiles opts fs =
+    if null (outputFormats opts)
+    then maybe doIt checkFirst (flag optName opts)
+    else doIt
   where
     checkFirst name =
       do let pgfFile = name <.> "pgf"
@@ -91,9 +93,10 @@ unionPGFFiles opts fs = maybe doIt checkFirst (flag optName opts)
 writeOutputs :: Options -> PGF -> IOE ()
 writeOutputs opts pgf = do
   sequence_ [writeOutput opts name str 
-                 | fmt <- flag optOutputFormats opts,
-                   fmt /= FmtByteCode,
+                 | fmt <- outputFormats opts,
                    (name,str) <- exportPGF opts fmt pgf]
+
+outputFormats opts = [fmt | fmt <- flag optOutputFormats opts, fmt/=FmtByteCode]
 
 writeByteCode :: Options -> PGF -> IOE ()
 writeByteCode opts pgf
