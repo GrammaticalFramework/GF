@@ -1,0 +1,19 @@
+Computational Grammars for the World
+The GF Resource Grammar Library
+
+
+
+Did you ever struggle with the inflection of French verbs? Or with getting the words in a German sentence into the right order? 
+Don't worry: these problems are as easy for a computer as to calculate 2+2. This page will give you access to computer programs that
+- help you construct sentences and other expressions
+- help you inflect words
+- help you covert sentences to different tenses, and other similar operations
+- help you compare languages by translating them and linking corresponding parts
+- allow you to practice your language skills by automatically generated and graded exercises
+- explain grammar rules in a mathematically precise and shortest possible manner
+
+
+//Coming soon!// for 29 languages.
+
+Powered by [GF ..] and its [Resource Grammar Library ../lib/doc/synopsis.html]
+
