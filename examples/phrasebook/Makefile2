@@ -1,70 +1,36 @@
 
-# Use e.g. 'make -j4' to compile with 4 parallel processes
+# Use 'make -j' to compile in parallel on all available cpu cores
+
+S=-s
+GFOPT=gf -make $S -optimize-pgf
 
 all: Phrasebook.pgf
 
-Phrasebook.pgf: PhrasebookFre.pgf PhrasebookGer.pgf PhrasebookFin.pgf PhrasebookEng.pgf PhrasebookBul.pgf PhrasebookCat.pgf PhrasebookDan.pgf PhrasebookDut.pgf PhrasebookHin.pgf PhrasebookIta.pgf PhrasebookLav.pgf PhrasebookNor.pgf PhrasebookPes.pgf PhrasebookPol.pgf PhrasebookRon.pgf PhrasebookRus.pgf PhrasebookSpa.pgf PhrasebookSwe.pgf PhrasebookTha.pgf PhrasebookUrd.pgf DisambPhrasebookEng.pgf
+Phrasebook.pgf: PhrasebookFre.pgf PhrasebookGer.pgf PhrasebookFin.pgf PhrasebookEng.pgf PhrasebookBul.pgf PhrasebookCat.pgf PhrasebookDan.pgf PhrasebookDut.pgf PhrasebookHin.pgf PhrasebookIta.pgf PhrasebookNor.pgf PhrasebookPes.pgf PhrasebookPol.pgf PhrasebookRon.pgf PhrasebookRus.pgf PhrasebookSpa.pgf PhrasebookSwe.pgf PhrasebookTha.pgf PhrasebookUrd.pgf DisambPhrasebookEng.pgf
 	gf -make $^
 
-PhrasebookEng.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookEng PhrasebookEng.gf
+#PhrasebookLav.pgf 
 
-PhrasebookBul.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookBul PhrasebookBul.gf
-
-PhrasebookCat.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookCat PhrasebookCat.gf
-
-PhrasebookDan.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookDan PhrasebookDan.gf
-
-PhrasebookDut.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookDut PhrasebookDut.gf
-
-PhrasebookFin.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookFin PhrasebookFin.gf +RTS -K32M
-
-PhrasebookFre.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookFre PhrasebookFre.gf
-
-PhrasebookGer.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookGer PhrasebookGer.gf
-
-PhrasebookHin.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookHin PhrasebookHin.gf
-
-PhrasebookIta.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookIta PhrasebookIta.gf
-
-PhrasebookLav.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookLav PhrasebookLav.gf
-
-PhrasebookNor.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookNor PhrasebookNor.gf
-
-PhrasebookPes.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookPes PhrasebookPes.gf
-
-PhrasebookPol.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookPol PhrasebookPol.gf
-
-PhrasebookRon.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookRon PhrasebookRon.gf +RTS -K32M
-
-PhrasebookRus.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookRus PhrasebookRus.gf
-
-PhrasebookSpa.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookSpa PhrasebookSpa.gf
-
-PhrasebookSwe.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookSwe PhrasebookSwe.gf
-
-PhrasebookTha.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookTha PhrasebookTha.gf
-
-PhrasebookUrd.pgf::
-	gf -make -s -optimize-pgf -name=PhrasebookUrd PhrasebookUrd.gf
+PhrasebookEng.pgf:: ; $(GFOPT) -name=PhrasebookEng PhrasebookEng.gf
+PhrasebookBul.pgf:: ; $(GFOPT) -name=PhrasebookBul PhrasebookBul.gf
+PhrasebookCat.pgf:: ; $(GFOPT) -name=PhrasebookCat PhrasebookCat.gf
+PhrasebookDan.pgf:: ; $(GFOPT) -name=PhrasebookDan PhrasebookDan.gf
+PhrasebookDut.pgf:: ; $(GFOPT) -name=PhrasebookDut PhrasebookDut.gf
+PhrasebookFin.pgf:: ; $(GFOPT) -name=PhrasebookFin PhrasebookFin.gf +RTS -K32M
+PhrasebookFre.pgf:: ; $(GFOPT) -name=PhrasebookFre PhrasebookFre.gf
+PhrasebookGer.pgf:: ; $(GFOPT) -name=PhrasebookGer PhrasebookGer.gf
+PhrasebookHin.pgf:: ; $(GFOPT) -name=PhrasebookHin PhrasebookHin.gf
+PhrasebookIta.pgf:: ; $(GFOPT) -name=PhrasebookIta PhrasebookIta.gf
+PhrasebookLav.pgf:: ; $(GFOPT) -name=PhrasebookLav PhrasebookLav.gf
+PhrasebookNor.pgf:: ; $(GFOPT) -name=PhrasebookNor PhrasebookNor.gf
+PhrasebookPes.pgf:: ; $(GFOPT) -name=PhrasebookPes PhrasebookPes.gf
+PhrasebookPol.pgf:: ; $(GFOPT) -name=PhrasebookPol PhrasebookPol.gf
+PhrasebookRon.pgf:: ; $(GFOPT) -name=PhrasebookRon PhrasebookRon.gf +RTS -K32M
+PhrasebookRus.pgf:: ; $(GFOPT) -name=PhrasebookRus PhrasebookRus.gf
+PhrasebookSpa.pgf:: ; $(GFOPT) -name=PhrasebookSpa PhrasebookSpa.gf
+PhrasebookSwe.pgf:: ; $(GFOPT) -name=PhrasebookSwe PhrasebookSwe.gf
+PhrasebookTha.pgf:: ; $(GFOPT) -name=PhrasebookTha PhrasebookTha.gf
+PhrasebookUrd.pgf:: ; $(GFOPT) -name=PhrasebookUrd PhrasebookUrd.gf
 
 DisambPhrasebookEng.pgf::
-	gf -make -s -optimize-pgf -name=DisambPhrasebookEng DisambPhrasebookEng.gf
+	$(GFOPT) -name=DisambPhrasebookEng DisambPhrasebookEng.gf
