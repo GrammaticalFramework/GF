@@ -1,0 +1,62 @@
+Translation with GF
+Powered by multilingual grammars
+
+
+
+
+=Try it online=
+
+**Coming soon**:
+//Here you will be able to select your source and target language and translate whatever you want.//
+
+
+
+
+
+=Download an app=
+
+**Coming soon**: //link to an Android app, with a barcode.//
+
+
+
+
+=What you can expect=
+
+The program is designed to translate anything, just like Google translate and Bing. It has some advantages over them:
+- It uses **grammars** (as opposed to statistics), which makes it more correct in many cases.
+- It is **open source**, which means you can inspect, copy, and modify it in what ever way you want.
+- It is **light weight**, so that you can run it on your own computer and even on a smartphone.
+- It gives you **linguistic information**, such as word inflections.
+- It gives you **confidence information**, warning about translations that it is not so sure about.
+
+
+However, this is not a mature product but a research prototype. It therefore has some shortcomings:
+- It has **limited coverage**, which means that it misses many words and syntactic constructions.
+- It can be **clumsy**, for instance when it doesn't detect an idiom but translates too literally.
+- It can be **slow**, in particular with long sentences and with some input languages.
+
+
+Here are some hints to use it in a satisfactory way:
+- Start with short sentences (less than ten words), preferably from English or Swedish, to get an idea of the best performance.
+- Take a look at the alternative translations, in particular for sentences with low confidence level.
+- Send us feedback, and consider contributing to the improvement of the system!
+
+
+
+=How it works=
+
+Powered by [Grammatical Framework ../]
+
+Publications explaining the translation method:
+
+
+=Get the sources=
+
+Download from [here ../download/]
+
+
+=Send us feedback=
+
+
+
+
