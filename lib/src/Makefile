@@ -3,7 +3,7 @@ RUNMAKE=$(RUNGHC) Make.hs
 
 PROBSFILE=../../treebanks/PennTreebank/ParseEngAbs.probs
 
-GF_LIB_PATH=..
+#GF_LIB_PATH=..
 
 .PHONY: all present alltenses full lang api math prelude test demo parse synopsis link compiled constructX clean
 
@@ -121,61 +121,48 @@ clean:
 
 
 
-
+# Dummy targets, just for convenience
 Parse: ParseEng ParseBul ParseChi ParseGer ParseSwe ParseHin ParseFin ParseFre Parse8
+ParseEng: ParseEng.pgf
+ParseBul: ParseBul.pgf
+ParseChi: ParseChi.pgf
+ParseGer: ParseGer.pgf
+ParseSwe: ParseSwe.pgf
+ParseHin: ParseHin.pgf
+ParseFin: ParseFin.pgf
+ParseFre: ParseFre.pgf
 
-Parse8: 
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=Parse8 ParseEng.pgf ParseBul.pgf ParseChi.pgf ParseGer.pgf ParseSwe.pgf ParseHin.pgf ParseFin.pgf ParseFre.pgf 
+S=-s
+GFMKP=mkdir -p ../parse8 && gf $S -make -literal=Symb -probs=$(PROBSFILE) -gfo-dir ../parse8
 
+PARSE8=ParseEng.pgf ParseBul.pgf ParseChi.pgf ParseGer.pgf ParseSwe.pgf ParseHin.pgf ParseFin.pgf ParseFre.pgf
 
+# Without dependencies:
+Parse8:
+	$(GFMKP) -name=Parse8 $(PARSE8) +RTS -K32M
 
-ParseEng:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEng english/ParseEng.gf
+# With dependencies:
+Parse8.pgf: $(PARSE8)
+	$(GFMKP) -name=Parse8 $(PARSE8) +RTS -K32M
 
-ParseFin:
-	gf -make -literal=Symb -src -probs=$(PROBSFILE) -name=ParseFin finnish/stemmed/ParseFin.gf
+# Parse grammars for individual languages
+ParseEng.pgf:: ; $(GFMKP) -name=ParseEng english/ParseEng.gf
+ParseBul.pgf:: ; $(GFMKP) -name=ParseBul bulgarian/ParseBul.gf
+ParseChi.pgf:: ; $(GFMKP) -name=ParseChi chinese/ParseChi.gf
+ParseFin.pgf:: ; $(GFMKP) -name=ParseFin finnish/stemmed/ParseFin.gf +RTS -K32M
+ParseGer.pgf:: ; $(GFMKP) -name=ParseGer german/ParseGer.gf
+ParseHin.pgf:: ; $(GFMKP) -name=ParseHin hindi/ParseHin.gf
+ParseFre.pgf:: ; $(GFMKP) -name=ParseFre french/ParseFre.gf
+ParseSwe.pgf:: ; $(GFMKP) -name=ParseSwe swedish/ParseSwe.gf
 
-ParseEngFin:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngFin ParseEng.pgf ParseFin.pgf
+ParseSpa.pgf:: ; $(GFMKP) -name=ParseSpa spanish/ParseSpa.gf
 
-ParseGer:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseGer german/ParseGer.gf
-
-ParseEngGer:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngGer ParseEng.pgf ParseGer.pgf
-
-ParseHin:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseHin hindi/ParseHin.gf
-
-ParseEngHin:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngHin ParseEng.pgf ParseHin.pgf
-
-ParseBul:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseBul bulgarian/ParseBul.gf
-
-ParseEngBul:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngBul ParseEng.pgf ParseBul.pgf
-
-ParseSpa:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseSpa spanish/ParseSpa.gf
-
-ParseEngSpa:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngSpa ParseEng.pgf ParseSpa.pgf
-
-ParseFre:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseFre french/ParseFre.gf
-
-ParseEngFre:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngFre ParseEng.pgf ParseFre.pgf
-
-ParseSwe:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseSwe swedish/ParseSwe.gf
-
-ParseEngSwe:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngSwe ParseEng.pgf ParseSwe.pgf
-
-ParseChi:
-	gf -make -s -literal=Symb -probs=$(PROBSFILE) -name=ParseChi chinese/ParseChi.gf
-
-ParseEngChi:
-	gf -make -literal=Symb -probs=$(PROBSFILE) -name=ParseEngChi ParseEng.pgf ParseChi.pgf
+# Selected language pairs:
+ParseEngFin: ; $(GFMKP) -name=ParseEngFin ParseEng.pgf ParseFin.pgf
+ParseEngGer: ; $(GFMKP) -name=ParseEngGer ParseEng.pgf ParseGer.pgf
+ParseEngHin: ; $(GFMKP) -name=ParseEngHin ParseEng.pgf ParseHin.pgf
+ParseEngBul: ; $(GFMKP) -name=ParseEngBul ParseEng.pgf ParseBul.pgf
+ParseEngSpa: ; $(GFMKP) -name=ParseEngSpa ParseEng.pgf ParseSpa.pgf
+ParseEngFre: ; $(GFMKP) -name=ParseEngFre ParseEng.pgf ParseFre.pgf
+ParseEngSwe: ; $(GFMKP) -name=ParseEngSwe ParseEng.pgf ParseSwe.pgf
+ParseEngChi: ; $(GFMKP) -name=ParseEngChi ParseEng.pgf ParseChi.pgf
