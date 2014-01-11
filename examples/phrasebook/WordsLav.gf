@@ -272,7 +272,7 @@ in {
 		mkSuperl : A -> Det = \a -> 
 			SyntaxLav.mkDet the_Art (SyntaxLav.mkOrd a) ;
 		
-		far_IAdv = ExtraLav.IAdvAdv (ss "tālu") ;
+		far_IAdv = ExtraLav.IAdvAdv (mkAdv "tālu") ;
 		
 --------------------------------------------------
 -- New 30/11/2011 AR
