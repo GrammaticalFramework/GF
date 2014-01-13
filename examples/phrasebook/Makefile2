@@ -1,15 +1,14 @@
 
-# Use 'make -j' to compile in parallel on all available cpu cores
+# Use 'make -j' to compile everything in parallel
+# Use e.g. 'make -j4' to compile at most 4 things in parallel
 
 S=-s
 GFOPT=gf -make $S -optimize-pgf
 
 all: Phrasebook.pgf
 
-Phrasebook.pgf: PhrasebookFre.pgf PhrasebookGer.pgf PhrasebookFin.pgf PhrasebookEng.pgf PhrasebookBul.pgf PhrasebookCat.pgf PhrasebookDan.pgf PhrasebookDut.pgf PhrasebookHin.pgf PhrasebookIta.pgf PhrasebookNor.pgf PhrasebookPes.pgf PhrasebookPol.pgf PhrasebookRon.pgf PhrasebookRus.pgf PhrasebookSpa.pgf PhrasebookSwe.pgf PhrasebookTha.pgf PhrasebookUrd.pgf DisambPhrasebookEng.pgf
+Phrasebook.pgf: PhrasebookFre.pgf PhrasebookGer.pgf PhrasebookFin.pgf PhrasebookEng.pgf PhrasebookBul.pgf PhrasebookCat.pgf PhrasebookDan.pgf PhrasebookDut.pgf PhrasebookHin.pgf PhrasebookIta.pgf PhrasebookLav.pgf PhrasebookNor.pgf PhrasebookPes.pgf PhrasebookPol.pgf PhrasebookRon.pgf PhrasebookRus.pgf PhrasebookSpa.pgf PhrasebookSwe.pgf PhrasebookTha.pgf PhrasebookUrd.pgf DisambPhrasebookEng.pgf
 	gf -make $^
-
-#PhrasebookLav.pgf 
 
 PhrasebookEng.pgf:: ; $(GFOPT) -name=PhrasebookEng PhrasebookEng.gf
 PhrasebookBul.pgf:: ; $(GFOPT) -name=PhrasebookBul PhrasebookBul.gf
