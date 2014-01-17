@@ -33544,6 +33544,7 @@ lin meronymy_N = mkN "meronymy" ;
 lin merozoite_N = mkN "merozoite" ;
 lin merriment_N = mkN "merriment" ;
 lin merry_A = mkA "merry" "merrier";
+lin merry_christmas_Interj = mkInterj "Merry Christmas" ;
 lin merry_go_round_N = mkN "merry-go-round" "merry-go-rounds";
 lin merrymaker_N = mkN "merrymaker" "merrymakers";
 lin merrymaking_N = mkN "merrymaking" ;

@@ -1358,7 +1358,7 @@ lin aim_VV = mkVV (mkV "siktar"); -- status=guess, src=wikt
 lin aim_at_V2 = dirV2 (partV (mkV "riktar")"till"); -- comment=2
 lin aimless_A = mkA "planlös";
 lin aioli_N = mkN "aioli"; -- status=guess
-lin air_N = mkN "torka"; -- comment=12
+lin air_N = mkN "luft" "lufter" ; 
 lin air_V = mkV "vädrar"; -- comment=6
 lin air_V2 = dirV2 (partV (mkV "torkar")"ut"); -- comment=4
 lin air_bladder_N = variants {};
@@ -5754,7 +5754,7 @@ lin bespoke_A = mkA "måttbeställd" "måttbeställt";
 lin besprent_A = variants {};
 lin bess_PN = variants {};
 lin bessie_PN = variants {};
-lin best_A = mkA "bra" "bra" "bra" "bättre" "bäst";
+lin best_A = mkA "bäst" ;
 lin best_Adv = mkAdv "bäst"; -- status=guess
 lin best_N = mkN "bästa"; -- status=guess
 lin best_V2 = mkV2 (mkV "besegrar"); -- status=guess, src=wikt
@@ -19801,10 +19801,10 @@ lin evasiveness_N = variants {};
 lin eve_N = mkN "helgdagsafton" "helgdagsaftonen" "helgdagsaftnar" "helgdagsaftnarna"; -- comment=2
 lin eve_PN = variants {};
 lin evelyn_PN = variants {};
-lin even_A = mkA "kvitt"; -- comment=3
-lin even_AdA = variants {};
-lin even_AdV = variants {};
-lin even_Adv = mkAdv "ännu"; -- comment=4
+lin even_A = mkA "jämn" ; --- mkA "kvitt"; -- comment=3
+lin even_AdA = mkAdA "till och med" ;
+lin even_AdV = mkAdV "till och med" ;
+lin even_Adv = mkAdv "till och med" ;
 lin even_N = mkN "kväll"; -- comment=3
 lin even_V2 = mkV2 (mkV "jämna") | mkV2 (mkV (mkV "jämna") "ut") | mkV2 (mkV (mkV "plana") "ut") | mkV2 (mkV (mkV "platta") "till"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin even_handed_A = variants {};
@@ -30539,20 +30539,20 @@ lin jury_box_N = variants {};
 lin jury_mast_N = variants {};
 lin jury_rigge_V2 = variants {};
 lin juryman_N = variants {};
-lin just_A = compoundA (regA "välgrundad"); -- comment=22
-lin just_AdV = variants {};
-lin just_Adv = mkAdv "rätt"; -- comment=13
-lin just_Predet = variants {};
+lin just_A = mkA "rättvis" ;
+lin just_AdV = mkAdV "bara" ;
+lin just_Adv = mkAdv "precis"; 
+lin just_Predet = M.mkPredet "bara" "bara" "bara" ;
 lin justice_N = mkN "domare" utrum; -- comment=10
 lin justiciar_N = variants {};
 lin justiciary_N = variants {};
 lin justifiable_A = compoundA (regA "berättigad");
 lin justification_N = mkN "berättigande";
 lin justificative_A = variants {};
-lin justify_V2 = variants {};
-lin justify_VV = variants {};
+lin justify_V2 = mkV2 "berättiga" ;
+lin justify_VV = mkVV (mkV "berättiga") ;
 lin justin_PN = variants {};
-lin justness_N = variants {};
+lin justness_N = mkN "rättfärdighet" "rättfärdigheter" ;
 lin jut_V = variants {};
 lin jute_N = variants {};
 lin juvenescence_N = variants {};
@@ -34955,6 +34955,7 @@ lin meronymy_N = mkN "meronymi" "meronymier"; -- status=guess
 lin merozoite_N = variants {};
 lin merriment_N = variants {};
 lin merry_A = mkA "uppsluppen" "uppsluppet"; -- comment=5
+lin merry_christmas_Interj = mkInterj "god jul" ;
 lin merry_go_round_N = variants {};
 lin merrymaker_N = variants {};
 lin merrymaking_N = variants {};
@@ -55608,7 +55609,7 @@ lin succulent_N = variants {};
 lin succumb_V = mkV "dö" "dog" "dött";
 lin succussion_N = variants {};
 lin such_Adv = mkAdv "verkligen";
-lin such_Predet = M.mkPredet "sådan" "sådant" "spdana"; --
+lin such_Predet = M.mkPredet "sådan" "sådant" "sådana"; --
 lin such_as_Prep = variants {};
 lin suchlike_A = variants {};
 lin suchow_PN = variants {};
@@ -64143,12 +64144,12 @@ lin wisecrack_V = variants {};
 lin wisent_N = (mkN "visent" "visenter") | mkN "europeisk bison"; -- status=guess status=guess
 lin wish_N = mkN "önskning";
 lin wish_V = mkV "önskar"; -- comment=3
-lin wish_V2 = mkV2 (mkV "tillönska"); -- status=guess, src=wikt
-lin wish_V2V = mkV2V (mkV "tillönska"); -- status=guess, src=wikt
-lin wish_VS = mkVS (mkV "tillönska"); -- status=guess, src=wikt
-lin wish_VV = mkVV (mkV "tillönska"); -- status=guess, src=wikt
+lin wish_V2 = mkV2 (mkV "önska"); 
+lin wish_V2V = mkV2V (mkV "önska"); 
+lin wish_VS = mkVS (mkV "önska"); 
+lin wish_VV = mkVV (mkV "önska"); 
 lin wishbone_N = variants {};
-lin wishful_A = mkA "längtansfull"; -- comment=3
+lin wishful_A = mkA "önskefull"; 
 lin wishfulness_N = variants {};
 lin wishing_cap_N = variants {};
 lin wishy_washy_A = variants {};

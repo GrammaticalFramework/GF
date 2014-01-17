@@ -33486,6 +33486,7 @@ fun meronymy_N : N;
 fun merozoite_N : N;
 fun merriment_N : N;
 fun merry_A : A;
+fun merry_christmas_Interj : Interj ;
 fun merry_go_round_N : N;
 fun merrymaker_N : N;
 fun merrymaking_N : N;

@@ -11139,6 +11139,7 @@ meritocracy_N = mkN "méritocratie" feminine;
 mermaid_N = mkN "sirène" feminine;
 meronym_N = mkN "méronyme" masculine;
 merry_A = mkA "joyeux";
+merry_christmas_Interj = mkInterj "joyeux noël" ;
 merry_go_round_N = mkN "carrousel" masculine;
 mesentery_N = mkN "mésentère";
 mesh_N = mkN "engrenage" masculine | mkN "maillage" masculine | mkN "maille" feminine;

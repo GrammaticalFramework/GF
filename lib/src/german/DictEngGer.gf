@@ -22932,6 +22932,7 @@ lin merman_N = variants {};
 lin merrily_Adv = variants {};
 lin merriment_N = variants {};
 lin merry_A = mk3A "fröhlich" "fröhlicher" "fröhlichste";
+lin merry_christmas_Interj = mkInterj "fröhliche Weihnachten" ;
 lin merry_go_round_N = variants {};
 lin merrymaker_N = variants {};
 lin merrymaking_N = variants {};

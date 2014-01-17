@@ -27783,6 +27783,7 @@ meronymy_N = mkWN (compoundN "osakäsitte" (k40 "isyys")) "merkityksen" ; --UNCH
 merozoite_N = mkWN "merotsoiitti" ; --UNCHK
 merriment_N = mkWN (k40 "hauskuus") ; --UNCHK
 merry_A = mkWA (k15 "nopea") ; --UNCHK
+merry_christmas_Interj = mkInterj "hyvää joulua" ;
 merrymaker_N = mkWN (k12 "juhlija") ; --UNCHK
 mesa_N = mkWN "Mesa" ; --UNCHK
 mesalliance_N = mkWN (compoundN "avio" (k1A "liitto")) "epäsäätyinen" ; --UNCHK
