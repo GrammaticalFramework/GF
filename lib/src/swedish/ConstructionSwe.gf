@@ -9,10 +9,10 @@ lin
   thirsty_VP = mkVP (mkA "törstig") ;
   has_age_VP card = mkVP (lin AP (mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> L.year_N))) L.old_A)) ;
 
-  have_name_Cl x y = mkCl (lin NP x) (mkV2 (mkV "heter" "hette" "hetat")) (lin NP y) ;
+  have_name_Cl x y = mkCl (lin NP x) (mkV2 (mkV "heta" "hette" "hetat")) (lin NP y) ;
   married_Cl x y = mkCl (lin NP x) L.married_A2 (lin NP y) | mkCl (mkNP and_Conj (lin NP x) (lin NP y)) (mkA "gift") ;
 
-  what_name_QCl x = mkQCl whatSg_IP (lin NP x) (mkV2 (mkV "heter")) ;
+  what_name_QCl x = mkQCl whatSg_IP (lin NP x) (mkV2 (mkV "heta" "hette" "hetat")) ;
   how_old_QCl x = mkQCl (E.ICompAP (mkAP L.old_A)) (lin NP x) ;
   how_far_QCl x = mkQCl (E.IAdvAdv L.far_Adv) (mkCl (mkVP (SyntaxSwe.mkAdv to_Prep (lin NP x)))) ;
 

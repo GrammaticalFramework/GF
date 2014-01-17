@@ -33527,6 +33527,7 @@ lin meronymy_N = variants {};
 lin merozoite_N = variants {};
 lin merriment_N = mkN072 "веселие"; ----
 lin merry_A = mkA076 "весел"; ----
+lin merry_christmas_Interj = ss "Весела Коледа" ;
 lin merry_go_round_N = variants {};
 lin merrymaker_N = variants {};
 lin merrymaking_N = variants {mkN007 "джумбуш"; mkN072 "увеселение"}; ----

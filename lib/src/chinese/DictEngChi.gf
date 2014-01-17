@@ -17077,5 +17077,6 @@ advert_N = mkN "广告"; -- 1
 across_Adv = mkAdv "横过"; -- 1
 absolve_V2 = mkV2 "免除"; -- 1
 
+merry_christmas_Interj = mkInterj "圣诞节快乐" ;
 
 }

@@ -16450,6 +16450,7 @@ lin meritorious_A = mkA "सराहनीय" ;       -- old       -- old
 lin mermaid_N = mkN "जलपरी" ;       -- old       -- old
 lin merriment_N = mkN "आनन्ध" ;       -- old       -- old
 lin merry_A = mkA "जिं़दादिल" ;       -- old       -- old
+lin merry_christmas_Interj = mkInterj "मेरी क्रिसमस" ;
 lin merrymaker_N = mkN "गुलछर्रे उड़ाने वाला" ;       -- old       -- old
 lin merrymaking_N = mkN "मस्ती" ;       -- old       -- old
 lin mesa_N = mkN "चपटे शिखर वाली पहाड़ी" ;       -- old
