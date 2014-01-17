@@ -72,11 +72,11 @@ readPGF filepath =
      return PGF {pgfPool = pool, pgf = pgf}
 
 
-getConcr :: PGF -> Language -> Concr
+getConcr :: PGF -> Language -> Maybe Concr
 getConcr p (CId lang) = unsafePerformIO $
     BS.useAsCString lang $ \lng -> do
         cnc <- pgf_get_language (pgf p) lng
-        return (Concr cnc p)
+        return (if cnc==nullPtr then Nothing else Just (Concr cnc p))
 
 
 
