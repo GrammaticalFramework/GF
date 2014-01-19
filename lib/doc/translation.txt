@@ -1,5 +1,6 @@
 From Resource Grammar to Wide Coverage Translation with GF
-Aarne Ranta
+Aarne Ranta et al.
+Work in progress, January 2014
 
 
 GF, Grammatical Framework, was originally designed for the purpose of **multilingual controlled language systems**,
@@ -73,6 +74,12 @@ Given that these issues get resolved, the strengths of the GF approach can be ma
   and linguistic information.
 
 - **Adaptability**, i.e. the ease of fixing bugs, adapting the system to special domains, and personalizing it.
+  This can be done with great precision, e.g. fixing a bug without breaking anything else.
+
+- **Light weight**. The system runs on standard laptops and even on mobile phones; the size of the run-time
+  system for all pairs of 8 languages is under 20MB, and recompiling the whole system (e.g. after bug fixes or
+  domain adaptation) is a matter of a few minutes, where corresponding sizes for SMT systems are gigabytes of size  
+  and days of retraining.
 
 - **Multilinguality**, in the sense that once the parsing of the input is settled, the output can be readily
   rendered into all other languages,
@@ -150,6 +157,39 @@ Thus the path chosen is a mixture of RGL and application grammar. In brief, the 
 - **Constructions**, inspired by (and partly derived from) Construction Grammars, to capture idioms that
   involve specific lexical items and are therefore "between the syntax and the lexicon".
 
+
+
+
+The following picture shows the principal module structure of the translation grammar.
+
+[translation.png]
+
+
+//Notice: the current module structure and naming do not yet quite correspond to the description here.//
+//Thus currently the top module is "Parse" and contains both "Translate" and "Extensions".//
+//The Dictionary module is "Dict", and coincides in the case of English with the monolingual// 
+//morphological dictionary. However, the more sense distinctions are introduced for the needs//
+//of translation, the less adequate it becomes to keep these two together.//
+
+Here is a description of each of the modules:
+
+- **Translate** is the top module, which combines the RGL syntax with syntax extensions and a dictionary.
+  The RGL syntax is not inherited in its entirety, which is indicated by a dashed line. The overridden abstract
+  syntax functions (common to all languages) are replaced by functions in the Extensions module, whereas the
+  overridden concrete syntax definitions (specific to each language) are defined in this Translate module.
+  This consists of the module named ``Translate``.
+
+- **RGLSyntax** stands for the standard RGL module for syntax, excluding the RGL test lexicon and 
+  the language-specific extensions of it. This consists of the standard module named ``Grammar`` and
+  the emerging module named ``Construction``.
+
+- **Extensions** stands for the syntax extensions added to the RGL syntax. This consists of the module
+  named ``Extensions``.
+
+- **Dictionary** is a large-scale multilingual dictionary. Its abstract syntax uses as identifiers English words
+  suffixed by categories and word sense information. This consists of the module named ``Dictionary``.
+
+- **RGLCategories** stands for the type system of the standard RGL, the module named ``Cat``.
 
 
 
