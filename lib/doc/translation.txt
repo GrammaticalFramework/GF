@@ -193,4 +193,28 @@ Here is a description of each of the modules:
 
 
 
+A guiding principle is thus that the translation grammar preserves //as much as possible// of the RGL, so that
+duplicated work is avoided. But as the purposes of the two are different, not everything is possible. Two 
+diverging principles have already been mentioned:
+
+- **Free variation**. The RGL bans free variation, because library users need to have full control on selecting
+  variants. For instance, English negation has two forms, contracted (//don't//) and uncontracted (//do not//),
+  which in the translation grammar are treated as variants. But RGL users sometimes need to choose the one or the
+  other, for instance, excluding contracted negation in formal style.
+
+- **Semantic distinctions**. The RGL avoids semantic distinctions that are not absolutely necessary for syntax.
+  The reason for this is the ambition to keep the library as simple as possible, in particular for the voluntary
+  implementors of new languages. But meaning-preserving translation needs more distinctions, for instance, in
+  word senses, subcategorizations, selection restrictions, and tense and aspect systems.
+
+
+The old design principles of the RGL are thus kept in force, and this is made possible by separating parts of the
+translation grammar modules from the RGL. 
+
+
+
+
+
+
+
 
