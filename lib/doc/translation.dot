@@ -1,0 +1,14 @@
+graph {
+  Translate ;
+  RGLSyntax ;
+  Extensions ;
+  Dictionary ;
+  Translate -- RGLSyntax [style = dashed] ;
+  Translate -- Extensions ;
+  Translate -- Dictionary ;
+  Extensions -- RGLCategories ;
+  RGLCategories ;
+  RGLSyntax -- RGLCategories ;
+  Dictionary -- RGLCategories ;
+}
+  
