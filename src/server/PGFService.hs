@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 module PGFService(cgiMain,cgiMain',getPath,
                   logFile,stderrToFile,
                   newPGFCache) where
@@ -7,6 +8,11 @@ import qualified PGF
 import Cache
 import FastCGIUtils
 import URLEncoding
+
+#if C_RUNTIME
+import qualified CRuntimeFFI as C
+import qualified CId as C
+#endif
 
 import Network.CGI
 import Text.JSON
@@ -36,7 +42,16 @@ catchIOE = E.catch
 logFile :: FilePath
 logFile = "pgf-error.log"
 
-newPGFCache = newCache PGF.readPGF
+#ifdef C_RUNTIME
+type Caches = (Cache PGF,Cache C.PGF)
+newPGFCache = do pgfCache <- newCache PGF.readPGF
+                 cCache <- newCache C.readPGF 
+                 return (pgfCache,cCache)
+#else
+type Caches = (Cache PGF,())
+newPGFCache = do pgfCache <- newCache PGF.readPGF
+                 return (pgfCache,())
+#endif
 
 getPath =
     do path <- getVarWithDefault "PATH_TRANSLATED" "" -- apache mod_fastcgi
@@ -44,30 +59,98 @@ getPath =
           then getVarWithDefault "SCRIPT_FILENAME" "" -- lighttpd
           else return path
 
-cgiMain :: Cache PGF -> CGI CGIResult
+cgiMain :: Caches -> CGI CGIResult
 cgiMain cache = handleErrors . handleCGIErrors $
                   cgiMain' cache =<< getPath
 
-cgiMain' :: Cache PGF -> FilePath -> CGI CGIResult
+cgiMain' :: Caches -> FilePath -> CGI CGIResult
 cgiMain' cache path =
     do command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString))
                         (getInput "command")
        case command of
          "download" -> outputBinary    =<< liftIO (BS.readFile path)
-         _          -> pgfMain command =<< liftIO (readCache cache path)
+#ifdef C_RUNTIME
+         'c':'-':_  -> cpgfMain command =<< liftIO (readCache (snd cache) path)
+#endif
+         _          -> pgfMain command =<< liftIO (readCache (fst cache) path)
+
+--------------------------------------------------------------------------------
+-- * C run-time functionality
+
+#ifdef C_RUNTIME
+cpgfMain :: String -> C.PGF -> CGI CGIResult
+cpgfMain command pgf =
+  case command of
+    "c-parse"     -> out =<< parse # input % from % limit % trie
+    "c-linearize" -> out =<< lin # tree % to
+    "c-translate" -> out =<< trans # input % from % to % limit % trie
+    _             -> badRequest "Unknown command" command
+  where
+    parse input (from,concr) mlimit trie =
+        showJSON [makeObj ("from".=from:"trees".=trees :[])]
+                                                    -- :addTrie trie trees
+      where
+        trees = parse' input concr mlimit
+
+    parse' input concr mlimit = 
+        map fst $ -- hmm
+        maybe id take mlimit (C.parse concr (C.startCat pgf) input)
+
+    lin tree tos = showJSON (lin' tree tos)
+    lin' tree tos = [makeObj ["to".=to,"text".=C.linearize c tree]|(to,c)<-tos]
+
+    trans input (from,concr) tos mlimit trie =
+      showJSON [ makeObj ["from".=from,
+                          "translations".=
+                            [makeObj ["tree".=tree,
+                                      "linearizations".=lin' tree tos]
+                              | tree <- parse' input concr mlimit]]]
+
+    from = maybe (missing "from") return =<< getLang "from"
+    
+    to = getLangs "to"
+
+    getLangs = getLangs' readLang
+    getLang = getLang' readLang
+
+    readLang :: String -> CGI (C.Language,C.Concr)
+    readLang l =
+      case C.readCId l of
+        Nothing -> badRequest "Bad language" l
+        Just lang ->
+          case C.getConcr pgf lang of
+            Just c -> return (lang,c)
+            _ -> badRequest "Unknown language" l
+
+    tree = do s <- maybe (missing "tree") return =<< getInput1 "tree"
+              let t = C.readExpr s
+              maybe (badRequest "bad tree" s) return t
+
+instance JSON C.CId where
+    readJSON x = readJSON x >>= maybe (fail "Bad language.") return . C.readCId
+    showJSON = showJSON . C.showCId
+
+instance JSON C.Expr where
+    readJSON x = readJSON x >>= maybe (fail "Bad expression.") return . C.readExpr
+    showJSON = showJSON . C.showExpr
+
+#endif
+
+--------------------------------------------------------------------------------
+-- * Haskell run-time functionality
 
 pgfMain :: String -> PGF -> CGI CGIResult
 pgfMain command pgf =
     case command of
-      "parse"          -> out =<< doParse pgf # text % cat % from % limit % trie
-      "complete"       -> out =<< doComplete pgf # text % cat % from % limit
+      "parse"          -> out =<< doParse pgf # input % cat % from % limit % trie
+      "complete"       -> out =<< doComplete pgf # input % cat % from % limit
       "linearize"      -> out =<< doLinearize pgf # tree % to
       "linearizeAll"   -> out =<< doLinearizes pgf # tree % to
       "linearizeTable" -> out =<< doLinearizeTabular pgf # tree % to
       "random"         -> cat >>= \c -> depth >>= \dp -> limit >>= \l -> to >>= \to -> liftIO (doRandom pgf c dp l to) >>= out
       "generate"       -> out =<< doGenerate pgf # cat % depth % limit % to
-      "translate"      -> out =<< doTranslate pgf # text % cat % from % to % limit % trie
-      "translategroup" -> out =<< doTranslateGroup pgf # text % cat % from % to % limit
+      "translate"      -> out =<< doTranslate pgf # input % cat % from % to % limit % trie
+      "translategroup" -> out =<< doTranslateGroup pgf # input % cat % from % to % limit
       "grammar"        -> out =<< doGrammar pgf # requestAcceptLanguage
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
@@ -78,15 +161,9 @@ pgfMain command pgf =
       "abstrjson"      -> out . jsonExpr =<< tree
       "browse"         -> join $ doBrowse pgf # optId % cssClass % href % format "html" % getIncludePrintNames
       "external"       -> do cmd <- getInput "external"
-                             input <- text
-                             doExternal cmd input
+                             doExternal cmd =<< input
       _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
-    out = outputJSONP
-
-    text :: CGI String
-    text = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
-
     tree :: CGI PGF.Tree
     tree = do ms <- getInput "tree"
               s <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return ms
@@ -101,10 +178,9 @@ pgfMain command pgf =
 
     cat :: CGI (Maybe PGF.Type)
     cat =
-       do mcat  <- getInput "cat"
+       do mcat  <- getInput1 "cat"
           case mcat of
             Nothing -> return Nothing
-            Just "" -> return Nothing
             Just cat -> case PGF.readType cat of
                           Nothing  -> throwCGIError 400 "Bad category" ["Bad category: " ++ cat]
                           Just typ -> return $ Just typ  -- typecheck the category
@@ -118,36 +194,6 @@ pgfMain command pgf =
     cssClass, href :: CGI (Maybe String)
     cssClass = getInput "css-class"
     href = getInput "href"
-
-    limit, depth :: CGI (Maybe Int)
-    limit = readInput "limit"
-    depth = readInput "depth"
-
-    from :: CGI (Maybe PGF.Language)
-    from = getLang "from"
-
-    to :: CGI [PGF.Language]
-    to = getLangs "to"
-
-    trie :: CGI Bool
-    trie = maybe False toBool # getInput "trie"
-
-    getLangs :: String -> CGI [PGF.Language]
-    getLangs i = mapM readLang . maybe [] words =<< getInput i
-
-    getLang :: String -> CGI (Maybe PGF.Language)
-    getLang i =
-       do mlang <- getInput i
-          case mlang of
-            Just l@(_:_) -> Just # readLang l
-            _            -> return Nothing
-
-    readLang :: String -> CGI PGF.Language
-    readLang l =
-      case PGF.readLanguage l of
-        Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
-        Just lang | lang `elem` PGF.languages pgf -> return lang
-                  | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
     
     getIncludePrintNames :: CGI Bool
     getIncludePrintNames = maybe False (const True) # getInput "printnames"
@@ -166,11 +212,58 @@ pgfMain command pgf =
         string name = maybe "" id # getInput name
         bool name = maybe False toBool # getInput name
 
-    toBool s = s `elem` ["","yes","true","True"]
+    from = getLang "from"
+    to = getLangs "to"
 
-errorMissingId = throwCGIError 400 "Missing identifier" []
+    getLangs = getLangs' readLang
+    getLang = getLang' readLang
+
+    readLang :: String -> CGI PGF.Language
+    readLang l =
+      case PGF.readLanguage l of
+        Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
+        Just lang | lang `elem` PGF.languages pgf -> return lang
+                  | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
+
+-- * Request parameter access and related auxiliary functions
+
+out = outputJSONP
+
+getInput1 x = nonEmpty # getInput x
+nonEmpty (Just "") = Nothing
+nonEmpty r = r
+
+
+input :: CGI String
+input = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
+
+getLangs' readLang i = mapM readLang . maybe [] words =<< getInput i
+
+getLang' readLang i =
+   do mlang <- getInput i
+      case mlang of
+        Just l@(_:_) -> Just # readLang l
+        _            -> return Nothing
+
+
+limit, depth :: CGI (Maybe Int)
+limit = readInput "limit"
+depth = readInput "depth"
+
+trie :: CGI Bool
+trie = maybe False toBool # getInput "trie"
+
+toBool s = s `elem` ["","yes","true","True"]
+
+missing = badRequest "Missing parameter"
+errorMissingId = badRequest "Missing identifier" ""
+
+badRequest msg extra =
+    throwCGIError 400 msg [msg ++(if null extra then "" else ": "++extra)]
 
 format def = maybe def id # getInput "format"
+
+-- * Request implementations
 
 -- Hook for simple extensions of the PGF service
 doExternal Nothing input = throwCGIError 400 "Unknown external command" ["Unknown external command"]

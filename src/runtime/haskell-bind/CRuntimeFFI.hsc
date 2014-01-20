@@ -15,8 +15,8 @@ module CRuntimeFFI(-- * PGF
                    ) where
 
 import Prelude hiding (fromEnum)
-import Control.Monad
-import System.IO
+--import Control.Monad
+--import System.IO
 import System.IO.Unsafe
 import CId (CId(..), 
             mkCId, wildCId,
@@ -26,11 +26,11 @@ import PgfLow
 
 import Foreign hiding ( Pool, newPool, unsafePerformIO )
 import Foreign.C
-import Foreign.C.String
-import Foreign.Ptr
+--import Foreign.C.String
+--import Foreign.Ptr
 
 
-import Data.Char
+--import Data.Char
 import qualified Data.ByteString as BS
 import Data.IORef
 
