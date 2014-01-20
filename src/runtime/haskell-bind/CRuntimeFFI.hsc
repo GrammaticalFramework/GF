@@ -3,7 +3,16 @@
 #include <gu/enum.h>
 #include <gu/exn.h>
 
-module CRuntimeFFI where
+module CRuntimeFFI(-- * PGF
+                   PGF,readPGF,abstractName,startCat,
+                   -- * Concrete syntax
+                   Concr,Language,{-languages,-}getConcr,parse,linearize,
+                   -- * Trees
+                   Expr,Tree,readExpr,showExpr,unApp,
+                   -- * Morphology
+                   MorphoAnalysis,lookupMorpho,fullFormLexicon,
+                   printLexEntry
+                   ) where
 
 import Prelude hiding (fromEnum)
 import Control.Monad
@@ -62,7 +71,7 @@ data PGF = PGF {pgfPool :: Pool, pgf :: Ptr PgfPGF} deriving Show
 data Concr = Concr {concr :: (Ptr PgfConcr), concrMaster :: PGF}
 type Language = CId
 
-readPGF :: String -> IO PGF
+readPGF :: FilePath -> IO PGF
 readPGF filepath =
   do pool <- newPool
      pgf <- withCString filepath $ \file -> 
