@@ -10,6 +10,9 @@
 <FONT SIZE="4">Work in progress, January 2014</FONT>
 </CENTER>
 
+
+<H2>GF and the RGL</H2>
+
 <P>
 GF, Grammatical Framework, was originally designed for the purpose of <B>multilingual controlled language systems</B>,
 which would enable high-quality translation on limited domains. The <B>abstract syntax</B> of GF defines the semantic
@@ -19,20 +22,24 @@ and thereby <B>translation</B> where the abstract syntax functions as an <B>inte
 </P>
 <P>
 As a bottle-neck of GF applications, it was soon realized that the definition of concrete syntax requires a lot 
-of manual work and linguistic skill, due to the complexities of natural language syntax and morphology. Some of
+of manual work and linguistic skill, because of the complexities of natural language syntax and morphology. Some of
 the complexities can be ignored in a small system. For instance, in a mathematical system, it may be enough to 
 use verbs in the present tense only. But very much the same linguistic problems must be solved again and again
-in new applications: French verb inflection is much the same in mathematics as in a tourist phrasebook. To solve
+in new applications: French verb inflection is the same in mathematics as in a tourist phrasebook. To solve
 this problem, the <B>GF Resource Grammar Library</B> (RGL) was developed, to take care of "low-level" linguistic
 rules such as inflection, agreement, and word order. This enables the authors of <B>application grammars</B> to focus
 on the semantics (when designing the abstract syntax) and on selecting RGL functions that produce the idioms they
 want. The RGL grew into an international open-source project, where more than 50 persons have contributed to
-implementing it for 29 languages at the time of writing.
+implementing it for 29 languages by the time of writing this.
 </P>
+
+<H2>Scaling up GF translation</H2>
+
 <P>
 The RGL was thus originally designed to be used just as its name says: as a library
-for application grammars, which were the ones used as <B>top-level grammars</B>, i.e. for
-parsing, generation, and translation at run time. Little attention was paid to the usability of RGL as a top-level
+for application grammars. Only the latter were meant to be used as <B>top-level grammars</B>, i.e. for
+parsing, generation, and translation at run time. Little attention was therefore
+paid to the usability of RGL as a top-level
 grammar by itself. But when applications accumulated, ranging from technical text to spoken dialogue, the coverage
 of the RGL grew into a coverage that approximates a "complete grammar" of many of the languages. 
 And recently, there has indeed been success in using the RGL as a wide-coverage translation grammar,
@@ -46,23 +53,25 @@ to open-text processing. This success is a result of four lines of development:
   This development is also based on the work of Peter Ljunglöf on GF parsing and Lauri Alanko on the C runtime.
 <P></P>
 <LI><B>Large-scale dictionaries</B>, both manually built and extracted from free sources, and linked into a multilingual
-  translation dictionary now covering 10k to 60k entries for eight languages. This work was started by Björn Bringert
-  porting the Oxford Advanced Learner's Dictionary for English to GF.
+  translation dictionary now covering 10k to 60k entries for eight languages. This work was started by Björn Bringert,
+  who ported the Oxford Advanced Learner's Dictionary of English to GF.
 <P></P>
 <LI><B>Probabilistic disambiguation</B>, using a model trained from the Penn Treebank. Due to the common abstract syntax,
   the same model can be readily used for other languages as well, even though the adequacy of this transfer has not
   been systematically evaluated.
 <P></P>
 <LI><B>Robust parsing</B>, which recovers from unknown words and syntax by introducing <B>metavariables</B> ("question marks")
-  and returning chunk-by-chunk translations; this leads to loss of quality, but fulfills the principle that 
+  and returning chunk-by-chunk translations. This leads to loss of quality, but fulfills the principle that 
   "something is better than nothing".
 </UL>
 
+<H2>Remaining problems</H2>
+
 <P>
-The result of this work is indeed a large-coverage translation system, which can be used in the same way as Google
+The result of all this work is a wide-coverage translation system, which can be used in the same way as Google
 Translate, Bing, Systran, and Apertium - to "translate anything", albeit with a varying quality. At the moment of
 writing, the performance is not yet generally on the level with the best of the competition, but shows some promising
-improvements in e.g. long-distance agreement and word order. In order to make these into absolute improvements, we
+improvements in e.g. long-distance agreement and word order. To make these advantages into absolute improvements, we
 will need to fix problems that the other systems (or at least some of them) get right but where GF translation 
 often fails:
 </P>
@@ -74,35 +83,41 @@ often fails:
 <P></P>
 <LI><B>Speed</B>, which gets worse with long sentences and with more complex languages.
 <P></P>
-<LI><B>Idiomacy</B>, due to lack of idiomatic constructions that are not compositional in the RGL but which are
-  often correct in phrase-based SMT.
+<LI><B>Idiomacy</B>, due to the lack of idiomatic constructions that are not compositional and therefore don't get right 
+  in the RGL but are often correct in phrase-based SMT.
 </UL>
+
+<H2>Advantages of GF translation</H2>
 
 <P>
 Given that these issues get resolved, the strengths of the GF approach can be made more visible:
 </P>
 
 <UL>
-<LI><B>Grammaticality</B>, in particular with the already mentioned agreement and word order.
+<LI><B>Grammaticality</B>, in particular the already mentioned issues of agreement and word order.
 <P></P>
-<LI><B>Predictability</B>, in the sense that a local change in the input usually results in just a corresponding
+<LI><B>Predictability</B>, in the sense that a local change in the input usually results in a corresponding
   local change in the output (unless otherwise required by idiomacy).
 <P></P>
 <LI><B>Feedback</B>, i.e. the ease of showing the confidence level of the translation, alternative translations,
   and linguistic information.
 <P></P>
 <LI><B>Adaptability</B>, i.e. the ease of fixing bugs, adapting the system to special domains, and personalizing it.
-  This can be done with great precision, e.g. fixing a bug without breaking anything else.
+  This can be done with great precision. For instance, a bug in a grammar can be fixed without 
+  breaking anything else.
 <P></P>
 <LI><B>Light weight</B>. The system runs on standard laptops and even on mobile phones; the size of the run-time
-  system for all pairs of 8 languages is under 20MB, and recompiling the whole system (e.g. after bug fixes or
-  domain adaptation) is a matter of a few minutes, where corresponding sizes for SMT systems are gigabytes of size  
+  system for all pairs of 8 languages is under 20MB (on the Android platform), and recompiling the whole 
+  system (e.g. after bug fixes or
+  domain adaptation) is a matter of a few minutes, where corresponding figures for SMT systems are gigabytes of size  
   and days of retraining.
 <P></P>
 <LI><B>Multilinguality</B>, in the sense that once the parsing of the input is settled, the output can be readily
   rendered into all other languages,
   and also in the sense that the GF model works equally well for any language pair.
 </UL>
+
+<H2>Wanted: more work, new ideas</H2>
 
 <P>
 The recipes for improvement are, as always, <B>more work</B> and <B>new ideas</B>. Each of the four weaknesses mentioned
@@ -147,6 +162,8 @@ it has serious restrictions:
   <B>Example</B>: the category <CODE>Adv</CODE>.
 </UL>
 
+<H2>What speaks for using RGL</H2>
+
 <P>
 Despite these problems, the RGL has shown to be a possible starting point for large-scale translation. It has a couple
 of advantages speaking for this:
@@ -167,6 +184,9 @@ similar to the ResourceDemo with flatter and more semantic structures. But this 
 the replication of many rules, even though it would be to a large extent doable by using a <B>functor</B>, that is,
 by just one set of rules covering all languages.
 </P>
+
+<H2>The structure of the wide-coverage translation grammar</H2>
+
 <P>
 Thus the path chosen is a mixture of RGL and application grammar. In brief, the translation grammar consists of
 </P>
@@ -223,6 +243,8 @@ Here is a description of each of the modules:
 <P></P>
 <LI><B>RGLCategories</B> stands for the type system of the standard RGL, the module named <CODE>Cat</CODE>.
 </UL>
+
+<H2>Where and why the translation grammar differs from the RGL</H2>
 
 <P>
 A guiding principle is thus that the translation grammar preserves <I>as much as possible</I> of the RGL, so that
