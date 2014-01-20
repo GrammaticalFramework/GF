@@ -351,8 +351,12 @@ run_gfc pkg lbi args =
 
 default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
   where
+    exeName' = "gf"
+    exeNameReal = exeName' <.> exeExtension
+    {- --old solution, could pick the wrong executable if there is more than one
     exeName' = (exeName . head . executables) pkg
     exeNameReal = exeName' <.> (if null $ takeExtension exeName' then exeExtension else "")
+    -}
 
 -- | Create autogen module with detailed version info by querying darcs
 extractDarcsVersion distFlag =

@@ -1,7 +1,7 @@
 name: gf
 version: 3.5.11-darcs
 
-cabal-version: >= 1.8
+cabal-version: >= 1.10
 build-type: Custom
 license: OtherLicense
 license-file: LICENSE
@@ -57,7 +57,12 @@ flag custom-binary
   Description: Use a customised version of the binary package
   Default:     True
 
+flag c-runtime
+  Description: Include functionality from the C run-time library (which must be installed already)
+  Default:     False
+
 Library
+  default-language:    Haskell2010
   build-depends: base >= 4.2 && <5,
                  array,
                  fst,
@@ -113,7 +118,16 @@ Library
     PGF.VisualizeTree
     PGF.OldBinary
 
+  if flag(c-runtime)
+    exposed-modules:     CId, CRuntimeFFI
+    other-modules:       Gu, PgfLow
+    hs-source-dirs:      src/runtime/haskell-bind
+    build-tools:         hsc2hs
+    extra-libraries:     gu pgf
+    cc-options:          -std=c99
+
 Executable gf
+  default-language:    Haskell2010
   build-depends: gf,
                  base >= 4.2 && <5,
                  array,
@@ -140,6 +154,8 @@ Executable gf
     other-modules: GFServer
     hs-source-dirs: src/server src/server/transfer src/example-based
 
+  if flag(c-runtime)
+    cpp-options: -DC_RUNTIME
 --if flag(new-comp)
 --  cpp-options: -DNEW_COMP
 
@@ -232,6 +248,13 @@ Executable gf
   else
     other-modules: GF.System.NoSignal
 
+executable pgf-shell
+  if !flag(c-runtime)
+    buildable: False
+  main-is:             pgf-shell.hs
+  hs-source-dirs:      src/runtime/haskell-bind/examples
+  build-depends:       gf, base
+  default-language:    Haskell2010
 
 test-suite rgl-tests
   type:           exitcode-stdio-1.0

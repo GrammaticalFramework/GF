@@ -19,6 +19,9 @@ buildInfo =
 #ifdef NEW_COMP
     ++" new-comp"
 #endif
+#ifdef C_RUNTIME
+    ++" c-runtime"
+#endif
   where
     details = either (const no_info) info darcs_info
     no_info = "No detailed version info available"
