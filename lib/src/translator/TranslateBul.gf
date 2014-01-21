@@ -1,4 +1,4 @@
---# -path=alltenses:../bulgarian:../english:../abstract
+--# -path=alltenses:../bulgarian:../abstract
 concrete TranslateBul of Translate = 
   TenseX - [IAdv, CAdv],
   CatBul,
