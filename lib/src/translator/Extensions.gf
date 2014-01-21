@@ -1,6 +1,5 @@
 abstract Extensions = 
-  Cat,
-  Extra [VPI]
+  Cat
   ** {
 
 ---- from ExtraEngAbs
@@ -50,7 +49,7 @@ fun
 ----            VPIForm, VPIInf, VPIPresPart, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
 
 
----- merge these two?
+---- merge these two? --- Sg/Pl CN CN CN --- four wheel drive, random number generator
     CompoundCN : Num -> N -> CN -> CN ;
     DashCN : N -> N -> N ;
 
@@ -63,7 +62,7 @@ fun
 ----  PartVP : VP -> AP ;                         -- (man) looking at Mary
     GerundAP : V -> AP ;                          -- sleeping (man)
 
-    PastPartAP : V2 -> AP ;                       -- lost (opportunity)
+    PastPartAP : V2 -> AP ;                       -- lost (opportunity) --- gen to VPSLash
 
 ---- why is this needed?
     OrdCompar : A -> Ord ;                                     -- (my) better (side)
@@ -81,9 +80,9 @@ fun
     EmptyRelSlash : ClSlash -> RCl ;            -- (the city) he lives in
 
 ---- overgenerating?
-    VPSlashVS  : VS -> VP -> VPSlash ;          -- to believe her to sleep
+    VPSlashVS  : VS -> VP -> VPSlash ;          -- to believe (her) to sleep --- she was believed to sleep
 
-    PastPartRS : Ant -> Pol -> VPSlash -> RS ;  -- (man) not seen by her 
+    PastPartRS : Ant -> Pol -> VPSlash -> RS ;  -- (man) not seen by her --- maybe no Anter
     PresPartRS : Ant -> Pol -> VP -> RS ;       -- (man) not having seen her
 
     ApposNP : NP -> NP -> NP ;                  -- Mr Hollande, the president of France,
