@@ -1,4 +1,4 @@
---# -path=.:../swedish/:../scandinavian:../english/:../abstract
+--# -path=.:../swedish/:../scandinavian:../abstract
 concrete TranslateSwe of Translate = 
   TenseSwe,
   NounSwe - [PPartNP],

@@ -1,4 +1,4 @@
---# -path=.:../finnish/stemmed:../finnish:../abstract:../common:../english:../finnish/kotus:../api
+--# -path=.:../finnish/stemmed:../finnish:../abstract:../common:../finnish/kotus:../api
 
 concrete TranslateFin of Translate = 
   TenseX,  ---- TODO add potential forms 

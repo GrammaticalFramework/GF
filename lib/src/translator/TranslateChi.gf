@@ -1,4 +1,4 @@
---# -path=.:../chinese:../english:../abstract
+--# -path=.:../chinese:../abstract
 
 concrete TranslateChi of Translate = 
   TenseChi,
