@@ -3,6 +3,38 @@ Aarne Ranta et al.
 Work in progress, January 2014
 
 
+==How to use it==
+
+This is a document about a wide-coverage translation system in GF. If you just want to try it before reading more, 
+here are the main modes of getting started:
+
+1. **Run on our server.** Forthcoming.
+
+2. **Get an Android app.** Forthcoming.
+
+3. **Compile and run in the shell.** Get the latest GF sources (with darcs or github) and then
+- compile and install the GF compiler and library and the C runtime (``pgf-translate``).
+
+- compile the translator:
+```
+  cd GF/lib/src
+  make Translate8.pgf
+```
+This will take a long time (ten minutes or more) and will probably require at least 8GB of RAM.
+
+- run the translator
+```
+  pgf-translate Translate8.pgf Phr TranslateEng TranslateSwe
+```
+with obviously the possibility to vary the source and the target language.
+
+4. To modify the sources, work on the files in
+```
+  GF/lib/src/translator/
+```
+It is these files that will be explained below.
+
+
 ==GF and the RGL==
 
 GF, Grammatical Framework, was originally designed for the purpose of **multilingual controlled language systems**,
@@ -182,13 +214,6 @@ Thus the path chosen is a mixture of RGL and application grammar. In brief, the 
 The following picture shows the principal module structure of the translation grammar.
 
 [translation.png]
-
-
-//Notice: the current module structure and naming do not yet quite correspond to the description here.//
-//Thus currently the top module is "Parse" and contains both "Translate" and "Extensions".//
-//The Dictionary module is "Dict", and coincides in the case of English with the monolingual// 
-//morphological dictionary. However, the more sense distinctions are introduced for the needs//
-//of translation, the less adequate it becomes to keep these two together.//
 
 Here is a description of each of the modules:
 

@@ -11,6 +11,51 @@
 </CENTER>
 
 
+<H2>How to use it</H2>
+
+<P>
+This is a document about a wide-coverage translation system in GF. If you just want to try it before reading more, 
+here are the main modes of getting started:
+</P>
+<P>
+1. <B>Run on our server.</B> Forthcoming.
+</P>
+<P>
+2. <B>Get an Android app.</B> Forthcoming.
+</P>
+<P>
+3. <B>Compile and run in the shell.</B> Get the latest GF sources (with darcs or github) and then
+</P>
+
+<UL>
+<LI>compile and install the GF compiler and library and the C runtime (<CODE>pgf-translate</CODE>).
+<P></P>
+<LI>compile the translator:
+
+<PRE>
+    cd GF/lib/src
+    make Translate8.pgf
+</PRE>
+
+This will take a long time (ten minutes or more) and will probably require at least 8GB of RAM.
+<P></P>
+<LI>run the translator
+
+<PRE>
+    pgf-translate Translate8.pgf Phr TranslateEng TranslateSwe
+</PRE>
+
+with obviously the possibility to vary the source and the target language.
+<P></P>
+4. To modify the sources, work on the files in
+
+<PRE>
+    GF/lib/src/translator/
+</PRE>
+
+It is these files that will be explained below.
+</UL>
+
 <H2>GF and the RGL</H2>
 
 <P>
@@ -212,13 +257,6 @@ The following picture shows the principal module structure of the translation gr
 </P>
 <P>
 <IMG ALIGN="middle" SRC="translation.png" BORDER="0" ALT="">
-</P>
-<P>
-<I>Notice: the current module structure and naming do not yet quite correspond to the description here.</I>
-<I>Thus currently the top module is "Parse" and contains both "Translate" and "Extensions".</I>
-<I>The Dictionary module is "Dict", and coincides in the case of English with the monolingual</I> 
-<I>morphological dictionary. However, the more sense distinctions are introduced for the needs</I>
-<I>of translation, the less adequate it becomes to keep these two together.</I>
 </P>
 <P>
 Here is a description of each of the modules:
