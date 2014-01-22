@@ -37,16 +37,11 @@ lin
 
 lin
 
-  CompoundCN num noun cn = {
-    s = \\n,c => num.s  ++ cn.s ! n ! c ++ noun.s ! num.n ! Dir;
+  CompoundCN noun cn = {
+    s = \\n,c => cn.s ! Sg ! Dir ++ noun.s ! n ! c;
     g = cn.g
   } ;
   
-  DashCN noun1 noun2 = {
-    s = \\n,c => noun1.s ! n ! Dir ++ "-" ++ noun2.s ! n ! c ;
-    g = noun2.g
-  } ;
-
   GerundN v = {
     s = \\n,c => v.cvp ++ v.s ! Inf ; -- v.s ! VF Imperf Pers2_Casual n Masc ++ hwa (Ag Masc n Pers2_Casual) ; --the main verb of compound verbs
     g = Masc
@@ -56,9 +51,9 @@ lin
     s = \\n,g,_,_ => v.cvp ++ v.s ! VF Imperf Pers2_Casual n g ++ hwa (Ag g n Pers2_Casual) ;   
   } ;
 
-  PastPartAP v = {
-    s = \\n,g,_,_ => v.cvp ++ v.s ! VF Imperf Pers2_Casual n g ; -- the main verb of compound versb needs to be attached here
-  } ;
+----  PastPartAP v = {
+----    s = \\n,g,_,_ => v.cvp ++ v.s ! VF Imperf Pers2_Casual n g ; -- the main verb of compound versb needs to be attached here
+----  } ;
 
   OrdCompar a = {s = a.s ! Sg ! Masc ! Dir ! Compar ; n = Sg } ;
 

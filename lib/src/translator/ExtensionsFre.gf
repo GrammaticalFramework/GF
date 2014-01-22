@@ -48,17 +48,12 @@ lin
 
 
 lin
-  CompoundCN num noun cn = {
-    s = \\n => cn.s ! n ++ elisDe ++ noun.s ! num.n ;
+  CompoundCN noun cn = {
+    s = \\n => cn.s ! n ++ elisDe ++ noun.s ! Sg ;
     g = cn.g
   } ;
 
 {-  
-  DashCN noun1 noun2 = {
-    s = \\n,c => noun1.s ! Sg ! Nom ++ "-" ++ noun2.s ! n ! c ;
-    g = noun2.g
-  } ;
-
   GerundN v = {
     s = \\n,c => v.s ! VPresPart ;
     g = Neutr
@@ -68,7 +63,7 @@ lin
     s = \\agr => v.s ! VPresPart ;
     isPre = True
   } ;
--}
+-- }
 
   PastPartAP v = {
     s = table {
@@ -78,7 +73,7 @@ lin
     isPre = True
   } ;
 
-{-
+ --{-
   OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;
 -}
 

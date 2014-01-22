@@ -89,8 +89,8 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     IAdvAdv adv = {s = "how" ++ adv.s} ;
 
     PartVP vp = {
-      s = \\a => vp.ad ! a ++ vp.prp ++ vp.s2 ! a ;
-      isPre = False ---- depends on whether there are complements
+      s = \\a => vp.ad ! a ++ vp.prp ++ vp.s2 ! a ++ vp.ext ;
+      isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
 
     EmbedPresPart vp = {s = infVP VVPresPart vp Simul CPos (agrP3 Sg)} ; --- agr
@@ -162,6 +162,7 @@ lin
     inf = be.inf ;
     ad = \\_ => [] ;
     s2 = \\a => vps.ad ! a ++ ppt ++ vps.p ++ ag ++ vps.s2 ! a ++ vps.c2 ; ---- place of agent
+    isSimple = False ;
     ext = vps.ext
     } ;
 
@@ -209,6 +210,36 @@ lin
     UncNegImpPl p imp = {s = p.s ++ imp.s ! unc p.p ! ImpF Pl False} ;
 
     CompoundCN a b = {s = \\n,c => a.s ! Sg ! Nom ++ b.s ! n ! c ; g = b.g} ;
+
+    FrontExtPredVP np vp = {
+      s = \\t,a,b,o => 
+        let 
+          subj  = np.s ! npNom ;
+          agr   = np.a ;
+          verb  = vp.s ! t ! a ! b ! o ! agr ;
+          compl = vp.s2 ! agr
+        in
+        case o of {
+          ODir _ => vp.ext ++ frontComma ++ subj ++ verb.aux ++ verb.adv ++ vp.ad ! agr ++ verb.fin ++ verb.inf ++ vp.p ++ compl ;
+          OQuest => verb.aux ++ subj ++ verb.adv ++ vp.ad ! agr ++ verb.fin ++ verb.inf ++ vp.p ++ compl ++ vp.ext
+          }
+    } ;
+
+    InvFrontExtPredVP np vp = {
+      s = \\t,a,b,o => 
+        let 
+          subj  = np.s ! npNom ;
+          agr   = np.a ;
+          verb  = vp.s ! t ! a ! b ! o ! agr ;
+          compl = vp.s2 ! agr
+        in
+        case o of {
+          ODir _ => vp.ext ++ verb.aux ++ verb.adv ++ vp.ad ! agr ++ verb.fin ++ subj ++ verb.inf ++ vp.p ++ compl ;
+          OQuest => verb.aux ++ subj ++ verb.adv ++ vp.ad ! agr ++ verb.fin ++ verb.inf ++ vp.p ++ compl ++ vp.ext
+          }
+    } ;
+
+
 
   oper
     unc : CPolarity -> CPolarity = \x -> case x of {

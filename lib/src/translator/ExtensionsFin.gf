@@ -47,17 +47,12 @@ lin
                }
          ) ;
 
-  CompoundCN num noun cn = {
-    s = \\nf => num.s ! Sg ! Nom ++ noun.s ! 10 ++ BIND ++ cn.s ! nf ;
+  CompoundCN noun cn = {
+    s = \\nf => noun.s ! 10 ++ BIND ++ cn.s ! nf ;
     h = cn.h
     } ;
 
-  DashCN noun1 noun2 = {
-    s = \\nf => noun1.s ! 10 ++ BIND ++ noun2.s ! nf ;
-    h = noun2.h
-    } ;
-
-  PastPartAP v = {s = \\_,nf => (sverb2verbSep v).s ! PastPartPass (AN nf)} ;
+----  PastPartAP vp = {s = \\_,nf => (sverb2verbSep v).s ! PastPartPass (AN nf)} ;
 
   PredVPosv np vp = mkCl np vp ; ----
 
