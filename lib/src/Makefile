@@ -121,6 +121,61 @@ clean:
 
 
 
+
+
+
+# the previous translation grammar "Parse" now replaced by Translate:
+
+# Dummy targets, just for convenience
+Translate: TranslateEng TranslateBul TranslateChi TranslateGer TranslateSwe TranslateHin TranslateFin TranslateFre Translate8
+TranslateEng: TranslateEng.pgf
+TranslateBul: TranslateBul.pgf
+TranslateChi: TranslateChi.pgf
+TranslateGer: TranslateGer.pgf
+TranslateSwe: TranslateSwe.pgf
+TranslateHin: TranslateHin.pgf
+TranslateFin: TranslateFin.pgf
+TranslateFre: TranslateFre.pgf
+
+S=-s
+GFMKT=mkdir -p ../translator && gf $S -make -literal=Symb -probs=$(PROBSFILE) -gfo-dir ../translator
+
+TRANSLATE8=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf
+
+# Without dependencies:
+Translate8:
+	$(GFMKT) -name=Translate8 $(TRANSLATE8) +RTS -K32M
+
+# With dependencies:
+Translate8.pgf: $(TRANSLATE8)
+	$(GFMKT) -name=Translate8 $(TRANSLATE8) +RTS -K32M
+
+# Translate grammars for individual languages
+TranslateEng.pgf:: ; $(GFMKT) -name=TranslateEng translator/TranslateEng.gf
+TranslateBul.pgf:: ; $(GFMKT) -name=TranslateBul translator/TranslateBul.gf
+TranslateChi.pgf:: ; $(GFMKT) -name=TranslateChi translator/TranslateChi.gf
+TranslateFin.pgf:: ; $(GFMKT) -name=TranslateFin translator/TranslateFin.gf +RTS -K32M
+TranslateGer.pgf:: ; $(GFMKT) -name=TranslateGer translator/TranslateGer.gf
+TranslateHin.pgf:: ; $(GFMKT) -name=TranslateHin translator/TranslateHin.gf
+TranslateFre.pgf:: ; $(GFMKT) -name=TranslateFre translator/TranslateFre.gf
+TranslateSwe.pgf:: ; $(GFMKT) -name=TranslateSwe translator/TranslateSwe.gf
+
+# Selected language pairs:
+TranslateEngFin: ; $(GFMKT) -name=TranslateEngFin TranslateEng.pgf TranslateFin.pgf
+TranslateEngGer: ; $(GFMKT) -name=TranslateEngGer TranslateEng.pgf TranslateGer.pgf
+TranslateEngHin: ; $(GFMKT) -name=TranslateEngHin TranslateEng.pgf TranslateHin.pgf
+TranslateEngBul: ; $(GFMKT) -name=TranslateEngBul TranslateEng.pgf TranslateBul.pgf
+TranslateEngSpa: ; $(GFMKT) -name=TranslateEngSpa TranslateEng.pgf TranslateSpa.pgf
+TranslateEngFre: ; $(GFMKT) -name=TranslateEngFre TranslateEng.pgf TranslateFre.pgf
+TranslateEngSwe: ; $(GFMKT) -name=TranslateEngSwe TranslateEng.pgf TranslateSwe.pgf
+TranslateEngChi: ; $(GFMKT) -name=TranslateEngChi TranslateEng.pgf TranslateChi.pgf
+
+
+
+
+############################## begin Parse
+## now obsolete
+
 # Dummy targets, just for convenience
 Parse: ParseEng ParseBul ParseChi ParseGer ParseSwe ParseHin ParseFin ParseFre Parse8
 ParseEng: ParseEng.pgf
@@ -167,51 +222,5 @@ ParseEngFre: ; $(GFMKP) -name=ParseEngFre ParseEng.pgf ParseFre.pgf
 ParseEngSwe: ; $(GFMKP) -name=ParseEngSwe ParseEng.pgf ParseSwe.pgf
 ParseEngChi: ; $(GFMKP) -name=ParseEngChi ParseEng.pgf ParseChi.pgf
 
+############################################## end Parse
 
-
-
-# the former for Parse to be replaced by Translate:
-
-# Dummy targets, just for convenience
-Translate: TranslateEng TranslateBul TranslateChi TranslateGer TranslateSwe TranslateHin TranslateFin TranslateFre Translate8
-TranslateEng: TranslateEng.pgf
-TranslateBul: TranslateBul.pgf
-TranslateChi: TranslateChi.pgf
-TranslateGer: TranslateGer.pgf
-TranslateSwe: TranslateSwe.pgf
-TranslateHin: TranslateHin.pgf
-TranslateFin: TranslateFin.pgf
-TranslateFre: TranslateFre.pgf
-
-S=-s
-GFMKT=mkdir -p ../translator && gf $S -make -literal=Symb -probs=$(PROBSFILE) -gfo-dir ../translator
-
-TRANSLATE8=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf
-
-# Without dependencies:
-Translate8:
-	$(GFMKT) -name=Translate8 $(TRANSLATE8) +RTS -K32M
-
-# With dependencies:
-Translate8.pgf: $(TRANSLATE8)
-	$(GFMKT) -name=Translate8 $(TRANSLATE8) +RTS -K32M
-
-# Translate grammars for individual languages
-TranslateEng.pgf:: ; $(GFMKT) -name=TranslateEng translator/TranslateEng.gf
-TranslateBul.pgf:: ; $(GFMKT) -name=TranslateBul translator/TranslateBul.gf
-TranslateChi.pgf:: ; $(GFMKT) -name=TranslateChi translator/TranslateChi.gf
-TranslateFin.pgf:: ; $(GFMKT) -name=TranslateFin translator/TranslateFin.gf +RTS -K32M
-TranslateGer.pgf:: ; $(GFMKT) -name=TranslateGer translator/TranslateGer.gf
-TranslateHin.pgf:: ; $(GFMKT) -name=TranslateHin translator/TranslateHin.gf
-TranslateFre.pgf:: ; $(GFMKT) -name=TranslateFre translator/TranslateFre.gf
-TranslateSwe.pgf:: ; $(GFMKT) -name=TranslateSwe translator/TranslateSwe.gf
-
-# Selected language pairs:
-TranslateEngFin: ; $(GFMKT) -name=TranslateEngFin TranslateEng.pgf TranslateFin.pgf
-TranslateEngGer: ; $(GFMKT) -name=TranslateEngGer TranslateEng.pgf TranslateGer.pgf
-TranslateEngHin: ; $(GFMKT) -name=TranslateEngHin TranslateEng.pgf TranslateHin.pgf
-TranslateEngBul: ; $(GFMKT) -name=TranslateEngBul TranslateEng.pgf TranslateBul.pgf
-TranslateEngSpa: ; $(GFMKT) -name=TranslateEngSpa TranslateEng.pgf TranslateSpa.pgf
-TranslateEngFre: ; $(GFMKT) -name=TranslateEngFre TranslateEng.pgf TranslateFre.pgf
-TranslateEngSwe: ; $(GFMKT) -name=TranslateEngSwe TranslateEng.pgf TranslateSwe.pgf
-TranslateEngChi: ; $(GFMKT) -name=TranslateEngChi TranslateEng.pgf TranslateChi.pgf
