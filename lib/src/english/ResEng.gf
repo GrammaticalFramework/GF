@@ -237,7 +237,8 @@ param
     inf : Str ;   -- the infinitive form ; VerbForms would be the logical place
     ad  : Agr => Str ; -- sentence adverb (can be Xself, hence Agr)
     s2  : Agr => Str ; -- complement
-    ext : Str          -- extreposed field such as S, QS, VP
+    ext : Str ;        -- extreposed field such as S, QS, VP
+    isSimple : Bool    -- regulates the place of participle used as adjective
     } ;
 
 
@@ -293,6 +294,7 @@ param
     inf  = verb.s ! VInf ;
     ad   = \\_ => [] ;
     ext  = [] ;
+    isSimple = True ; ---- but really depends on whether p == []
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
 
@@ -351,6 +353,7 @@ param
     inf = verb.inf ;
     ad = \\_ => [] ;
     ext = [] ;
+    isSimple = True ;
     s2 = \\_ => []
     } ;
         
@@ -374,6 +377,7 @@ param
     inf = vp.inf ;
     ad = vp.ad ;
     s2 = \\a => vp.s2 ! a ++ obj ! a ;
+    isSimple = False ;
     ext = vp.ext
     } ;
 
@@ -385,6 +389,7 @@ param
     inf = vp.inf ;
     ad = vp.ad ;
     s2 = \\a => obj ! a ++ vp.s2 ! a ;
+    isSimple = False ;
     ext = vp.ext 
     } ;
 
@@ -402,6 +407,7 @@ param
     inf = vp.inf ;
     ad = vp.ad ;
     s2 = \\a => obj ! a ++ vp.s2 ! a ++ vp.p ; -- and put it here ; corresponds to insertObjPre
+    isSimple = False ;
     ext = vp.ext    
     } ;
 
@@ -417,6 +423,7 @@ param
     inf = vp.inf ;
     ad  = \\a => vp.ad ! a ++ ad ! a ;
     s2 = \\a => vp.s2 ! a  ;
+    isSimple = False ;
     ext = vp.ext
     } ;
 
@@ -428,6 +435,7 @@ param
     inf = vp.inf ;
     ad  = vp.ad ;
     s2 =  vp.s2  ;
+    isSimple = False ;
     ext = vp.ext ++ e  --- there should be at most one, one might think; but: I would say that it will be raining if I saw clouds
     } ;
 

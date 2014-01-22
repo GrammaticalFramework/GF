@@ -33,32 +33,48 @@ lin
   EmptyRelSlash = E.EmptyRelSlash ;
 
 lin
-  CompoundCN num noun cn = {
-    s = \\n,c => num.s ! Nom ++ noun.s ! num.n ! Nom ++ cn.s ! n ! c ;
+  CompoundCN noun cn = {
+    s = (\\n,c => noun.s ! Sg ! Nom ++ cn.s ! n ! c) 
+      | (\\n,c => noun.s ! Pl ! Nom ++ cn.s ! n ! c)
+      | (\\n,c => noun.s ! Sg ! Nom ++ Predef.BIND ++ "-" ++ Predef.BIND ++ cn.s ! n ! c) 
+      | (\\n,c => noun.s ! Pl ! Nom ++ Predef.BIND ++ "-" ++ Predef.BIND ++ cn.s ! n ! c) 
+      ;
     g = cn.g
   } ;
   
-  DashCN noun1 noun2 = {
-    s = \\n,c => noun1.s ! Sg ! Nom ++ "-" ++ noun2.s ! n ! c ;
-    g = noun2.g
-  } ;
 
-  GerundN v = {
-    s = \\n,c => v.s ! VPresPart ;
-    g = Neutr
-  } ;
-  
-  GerundAP v = {
-    s = \\agr => v.s ! VPresPart ;
-    isPre = True
-  } ;
+   GerundCN vp = {
+     s = \\n,c => vp.ad ! AgP3Sg Neutr ++ vp.prp ++
+                  case <n,c> of {
+                    <Sg,Nom> => "" ;
+                    <Sg,Gen> => Predef.BIND ++ "'s" ;
+                    <Pl,Nom> => Predef.BIND ++ "s" ;
+                    <Pl,Gen> => Predef.BIND ++ "s'"
+                    } ++ 
+                  vp.s2 ! AgP3Sg Neutr ++ vp.ext ; 
+     g = Neutr
+     } ;
 
-  PastPartAP v = {
-    s = \\agr => v.s ! VPPart ;
-    isPre = True
-  } ;
+   GerundNP vp = 
+     let a = AgP3Sg Neutr
+     in 
+     {s = \\_ => vp.ad ! a ++ vp.prp ++ vp.s2 ! a ++ vp.ext ; a = a} ;
 
-  OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;
+   GerundAdv vp = 
+     let a = AgP3Sg Neutr
+     in 
+     {s = vp.ad ! a ++ vp.prp ++ vp.s2 ! a ++ vp.ext} ;
+
+   PresPartAP = E.PartVP ;
+
+   PastPartAP vp = { 
+      s = \\a => vp.ad ! a ++ vp.ptp ++ vp.c2 ++ vp.s2 ! a ++ vp.ext ;
+      isPre = vp.isSimple                 -- depends on whether there are complements
+      } ;
+   PastPartAgentAP vp np = { 
+      s = \\a => vp.ad ! a ++ vp.ptp ++ vp.c2 ++ vp.s2 ! a ++ "by" ++ np.s ! NPAcc ++ vp.ext ;
+      isPre = vp.isSimple                 -- depends on whether there are complements
+      } ;
 
   PositAdVAdj a = {s = a.s ! AAdv} ;
 
@@ -80,28 +96,18 @@ lin
                                          infVP v.typ vp a.a p.p agr)
                                (predVV v) ;
 
-  PredVPosv np vp = {
-      s = \\t,a,b,o => 
-        let 
-          verb  = vp.s ! t ! a ! b ! o ! np.a ;
-          compl = vp.s2 ! np.a
-        in
-        case o of {
-          ODir _ => compl ++ frontComma ++ np.s ! npNom ++ verb.aux ++ vp.ad ! np.a ++ verb.fin ++ verb.adv ++ verb.inf ;
-          OQuest => verb.aux ++ compl ++ frontComma ++ np.s ! npNom ++ verb.adv ++ vp.ad ! np.a ++ verb.fin ++ verb.inf 
-          }
+  PredFrontVS t np vs s = 
+    let 
+      cl = mkClause (np.s ! npNom) np.a (predV vs) | E.InvFrontExtPredVP np (predV vs)
+    in {
+      s = s.s ++ frontComma ++ t.s ++ t.s ++ cl.s ! t.t ! t.a ! CPos ! oDir
     } ;
-    
-  PredVPovs np vp = {
-      s = \\t,a,b,o => 
-        let 
-          verb  = vp.s ! t ! a ! b ! o ! np.a ;
-          compl = vp.s2 ! np.a
-        in
-        case o of {
-          ODir _ => compl ++ frontComma ++ verb.aux ++ verb.adv ++ vp.ad ! np.a ++ verb.fin ++ verb.inf ++ np.s ! npNom ;
-          OQuest => verb.aux ++ compl ++ verb.adv ++ vp.ad ! np.a ++ verb.fin ++ verb.inf ++ np.s ! npNom
-          }
+
+  PredFrontVQ t np vs s = 
+    let 
+      cl = mkClause (np.s ! npNom) np.a (predV vs) | E.InvFrontExtPredVP np (predV vs)
+    in {
+      s = s.s ! QDir ++ frontComma ++ t.s ++ cl.s ! t.t ! t.a ! CPos ! oDir
     } ;
 
   that_RP = {

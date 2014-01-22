@@ -35,16 +35,10 @@ lin
 
 
 lin
-  CompoundCN num noun cn = {
-      s = \\n,d,c => num.s ! cn.g ++ noun.co ++ BIND ++ cn.s ! n ! d ! c ; 
+  CompoundCN noun cn = {
+      s = \\n,d,c => noun.co ++ BIND ++ cn.s ! n ! d ! c ; 
       g = cn.g ;
       isMod = False
-      } ;
-
-  DashCN noun1 noun2 = {
-      s = \\n,d,c => noun1.co ++ BIND ++ noun2.s ! n ! d ! c ; 
-      g = noun2.g ;
-      co = noun1.co ++ BIND ++ noun2.co ---- add s if not already there
       } ;
 
   GerundN v = {
@@ -58,11 +52,7 @@ lin
     isPre = True
   } ;
 
-  PastPartAP v = {
-    s = \\afpos => v.s ! VI (VPtPret afpos Nom) ;
-    isPre = True
-  } ;
-
+----  PastPartAP vp
 
   OrdCompar a = {
       s = case a.isComp of {

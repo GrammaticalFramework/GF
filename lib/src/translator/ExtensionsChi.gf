@@ -44,8 +44,7 @@ lin
 
 --  but_Subj = {s = "pero" ; m = Indic} ; ---- strange to have this as Subj
 
-CompoundCN num noun cn = {s = num.s ++ noun.s ++ cn.s ; c = cn.c} ; ----
-DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
+CompoundCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
 
   GerundN v = {
     s = v.s ;
@@ -59,7 +58,7 @@ DashCN noun cn = {s = noun.s ++ cn.s ; c = cn.c} ; ----
   } ;
 
   PastPartAP v = {
-    s = v.s ++ de_s ;
+    s = v.verb.s ++ de_s ; ----
     monoSyl = False ;
     hasAdA = True ; --- 
   } ;

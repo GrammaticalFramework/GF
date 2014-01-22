@@ -63,15 +63,9 @@ lin
     PredVPosv = G.PredVP;
     PredVPovs = G.PredVP;
 
-  CompoundCN num noun cn = {
-    s = \\a,n,c => num.s ! noun.g ! Nom ++ glue (noun.s ! num.n ! Nom) (cn.s ! a ! n ! c) ;
+  CompoundCN noun cn = {
+    s = \\a,n,c => glue (noun.s ! Sg ! Nom) (cn.s ! a ! n ! c) ;
     g = cn.g
-  } ;
-
-
-  DashCN noun1 noun2 = { -- type-checking
-    s = \\n,c => glue (noun1.s ! Sg ! Nom) (noun2.s ! n ! c) ;
-    g = noun2.g
   } ;
 
   GerundN v = { -- parsing

@@ -36,8 +36,8 @@ lin
   EmptyRelSlash = E.EmptyRelSlash ;
 
 lin
-  CompoundCN num noun cn = {
-    s = \\nf => num.s ! CFNeut Indef ++ (noun.rel ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
+  CompoundCN noun cn = {
+    s = \\nf => (noun.rel ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
     g = cn.g
   } ;
 

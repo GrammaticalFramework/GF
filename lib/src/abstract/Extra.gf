@@ -95,4 +95,9 @@ abstract Extra = Cat ** {
     ComplBareVS  : VS  -> S  -> VP ;       -- say she runs
     SlashBareV2S : V2S -> S  -> VPSlash ;  -- answer (to him) it is good
 
+-- front the extraposed part
+
+    FrontExtPredVP : NP -> VP -> Cl ;      -- I am here, she said
+    InvFrontExtPredVP : NP -> VP -> Cl ;   -- I am here, said she
+
 }
