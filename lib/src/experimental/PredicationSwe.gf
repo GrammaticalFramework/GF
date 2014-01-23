@@ -1,22 +1,23 @@
-concrete PredicationEng of Predication = {
+concrete PredicationSwe of Predication = {
 
 param
   Agr      = Sg | Pl ;
   Case     = Nom | Acc ;
   Tense    = Pres | Past ;
   Polarity = Pos | Neg ;
+  VForm    = Inf | VT Tense ;
 
 lincat
   Arg = {s : Str} ;
 
   V = {
-    v  : Tense => Agr => Str ;             
+    v  : VForm => Str ;             
     c1 : Str ; 
     c2 : Str
     } ; 
 
   VP = {
-    v : Agr => Str * Str ; 
+    v : Str ; 
     inf : Str ; 
     c1 : Str ; 
     c2 : Str ; 
@@ -27,7 +28,7 @@ lincat
     } ;
  
   Cl = {
-    v : Str * Str ; 
+    v : Str ; 
     inf : Str ; 
     adj,obj1,obj2 : Str ; 
     adv : Str ; 
@@ -45,7 +46,7 @@ lincat
   S    = {s : Str} ;
   QS   = {s : Str} ;
   Utt  = {s : Str} ;
-  AP   = {s : Str ; c1 : Str ; c2 : Str ; obj1 : Agr => Str} ;
+  AP   = {s : Agr => Str ; c1 : Str ; c2 : Str ; obj1 : Agr => Str} ;
   IP   = {s : Str ; a : Agr} ;
   Prep = {s : Str} ;
 
@@ -59,24 +60,26 @@ lin
   PNeg  = {s = [] ; p = Neg} ;
 
   UseV t p _ v = {
-    v   = \\a => <t.s ++ p.s ++ do_Aux t.t a, p.s ++ neg p.p ++ v.v ! Pres ! Pl> ;  ---- always with "do"
-    inf = t.s ++ p.s ++ neg p.p ++ aux t.t ++ v.v ! Pres ! Pl ;
+    v   = t.s ++ v.v ! VT t.t ;
+    inf = t.s ++ aux t.t ++ v.v ! Inf ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj,obj1,obj2 = \\a => [] ;
-    adv,adV = [] ;
+    adV = p.s ++ neg p.p ;
+    adv = [] ;
     ext = [] ;
     } ;
 
   UseAP t p _ ap = {
-    v   = \\a => <t.s ++ be_Aux t.t a, p.s ++ neg p.p> ;  ---- always with "do"
-    inf = t.s ++ p.s ++ neg p.p ++ aux t.t ++ "be" ;
+    v   = t.s ++ be_Aux (VT t.t) ;
+    inf = t.s ++ p.s ++ aux t.t ++ be_Aux Inf ;
     c1  = ap.c1 ;
     c2  = ap.c2 ;
-    adj = \\_ => ap.s ;
+    adj = \\a => ap.s ! a ;
     obj1 = ap.obj1 ;
     obj2 = \\a => [] ;
-    adv,adV = [] ;
+    adV = p.s ++ neg p.p ;
+    adv = [] ;
     ext = [] ;
     } ;
 
@@ -212,7 +215,7 @@ lin
 
   PredVP x np vp = {
     subj = np.s ! Nom ;
-    v    = vp.v ! np.a ;
+    v    = vp.v ;
     inf  = vp.inf ;
     adj  = vp.adj ! np.a ;
     obj1 = vp.c1 ++ vp.obj1 ! np.a ;
@@ -238,73 +241,68 @@ lin
 
 
   DeclCl cl = {
-    s = cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
+    s = cl.subj ++ cl.v ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
     } ;
 
   QuestCl cl = {
-    s = cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
+    s = cl.v ++ cl.subj ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
     } ;
 
   QuestVP ip vp = {
-    s = ip.s ++ (vp.v ! ip.a).p1 ++ vp.adV ++ (vp.v ! ip.a).p2 ++ vp.adj ! ip.a ++ vp.c1 ++ vp.obj1 ! ip.a ++ vp.c2 ++ vp.obj2 ! ip.a ++ vp.adv ++ vp.ext
+    s = ip.s ++ vp.v ++ vp.adV ++ vp.adj ! ip.a ++ vp.c1 ++ vp.obj1 ! ip.a ++ vp.c2 ++ vp.obj2 ! ip.a ++ vp.adv ++ vp.ext
     } ;
 
   QuestSlash ip cl = {
-    s = ip.s ++ cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3
+    s = ip.s ++ cl.v ++ cl.subj ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3
     } ;
 
   UttS s = s ;
   UttQS s = s ;
 
-  sleep_V = mkV "sleep" ;
-  love_V2 = mkV "love" ;
-  believe_VS = mkV "believe" ;
-  tell_V2S = mkV "tell" ;
-  prefer_V3 = mkV "prefer" [] "to" ;
-  want_VV = mkV "want" [] "to" ;
-  force_V2V = mkV "force" [] "to" ;
+  sleep_V = mkV "sova" "sover" "sov" ;
+  love_V2 = mkV "älska" "älskar" "älskade" ;
+  believe_VS = mkV "tro" "tror" "trodde" ;
+  tell_V2S = mkV "berätta" "berättar" "berättade" "för" [] ;
+  prefer_V3 = mkV "föredra" "föredrar" "föredrog" [] "framför" ;
+  want_VV = mkV "vilja" "vill" "ville" ;
+  force_V2V = mkV "tvinga" "tvingar" "tvingade" [] "att" ;
 
-  old_A = {s = "old" ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
-  married_A2 = {s = "married" ; c1 = "to" ; c2 = [] ; obj1 = \\_ => []} ;
-  eager_AV = {s = "eager" ; c1 = [] ; c2 = "to" ; obj1 = \\_ => []} ;
-  easy_A2V = {s = "easy" ; c1 = "for" ; c2 = "to" ; obj1 = \\_ => []} ;
+  old_A = {s = table {Sg => "gammal" ; Pl => "gamla"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
+  married_A2 = {s = table {Sg => "gift" ; Pl => "gifta"} ; c1 = "med" ; c2 = [] ; obj1 = \\_ => []} ;
+  eager_AV = {s = table {Sg => "ivrig" ; Pl => "ivriga"} ; c1 = [] ; c2 = "att" ; obj1 = \\_ => []} ;
+  easy_A2V = {s = table {Sg => "lätt" ; Pl => "lätta"} ; c1 = "för" ; c2 = "att" ; obj1 = \\_ => []} ;
 
-  she_NP = {s = table {Nom => "she" ; Acc => "her"} ; a = Sg} ;
-  we_NP = {s = table {Nom => "we" ; Acc => "us"} ; a = Pl} ;
+  she_NP = {s = table {Nom => "hon" ; Acc => "henne"} ; a = Sg} ;
+  we_NP = {s = table {Nom => "vi" ; Acc => "oss"} ; a = Pl} ;
 
-  today_Adv = {s = "today"} ;
-  always_AdV = {s = "always"} ;
+  today_Adv = {s = "idag"} ;
+  always_AdV = {s = "alltid"} ;
 
-  who_IP = {s = "who" ; a = Sg} ;
+  who_IP = {s = "vem" ; a = Sg} ;
 
   PrepNP p np = {s = p.s ++ np.s ! Acc} ;
 
-  with_Prep = {s = "with"} ;
+  with_Prep = {s = "med"} ;
 
 oper
   mkV = overload {
-    mkV : Str -> V = \s -> lin V {v = \\_,_ => s ; c1 = [] ; c2 = []} ; 
-    mkV : Str -> Str -> Str -> V = \s,p,q -> lin V {v = \\_,_ => s ; c1 = p ; c2 = q} ; 
+    mkV : (x,y,z : Str) -> V = \x,y,z -> 
+      lin V {v = table {Inf => x ; VT Pres => y ; VT Past => z} ; c1 = [] ; c2 = []} ; 
+    mkV : (x,y,z : Str) -> Str -> Str -> V = \x,y,z,p,q -> 
+      lin V {v = table {Inf => x ; VT Pres => y ; VT Past => z} ; c1 = p ; c2 = q} ; 
     } ;
 
-  do_Aux : Tense -> Agr -> Str = \t,a -> case <t,a> of {
-    <Pres,Sg> => "does" ;
-    <Pres,Pl> => "do" ;
-    <Past,_>  => "did"
+  be_Aux : VForm -> Str = \t -> case t of {
+    Inf     => "vara" ;
+    VT Pres => "är" ;
+    VT Past => "var"
     } ;
 
-  be_Aux : Tense -> Agr -> Str = \t,a -> case <t,a> of {
-    <Pres,Sg> => "is" ;
-    <Pres,Pl> => "are" ;
-    <Past,Sg> => "was" ;
-    <Past,Pl> => "were"
-    } ;
+  neg : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "inte"} ;
 
-  neg : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "not"} ;
+  aux : Tense -> Str = \t -> case t of {Pres => [] ; Past => "ha"} ;
 
-  aux : Tense -> Str = \t -> case t of {Pres => [] ; Past => "have"} ;
-
-  reflPron : Agr -> Str = \a -> case a of {Sg => "herself" ; Pl => "ourselves"} ;
+  reflPron : Agr -> Str = \a -> case a of {Sg => "sig" ; Pl => "oss"} ;
 
   infVP : Agr -> VP -> Str = \a,vp -> vp.adV ++ vp.inf ++ vp.adj ! a ++ vp.c1 ++ vp.obj1 ! a ++ vp.c2 ++ vp.obj2 ! a ++ vp.adv ++ vp.ext ;
 
