@@ -26,12 +26,12 @@ fun
 
   UseV : Temp -> Pol -> (a : Arg) -> V a -> VP a ;
   
-  SlashVNP  : (a : Arg) -> VP (aNP a)               -> NP -> VP a ;         -- consuming first NP
-  SlashVNP2 : (a : Arg) -> VP (aNP (aNP a))         -> NP -> VP (aNP a) ;   -- consuming second NP
-  ComplVS   :              VP aS       -> S         -> VP aNone ;
-  ComplVV   :              VP aV       -> VP aNone  -> VP aNone ;
-  SlashV2S  :              VP (aNP aS) -> S         -> VP (aNP aNone) ;
-  SlashV2V  :              VP (aNP aV) -> VP aNone  -> VP (aNP aNone) ;
+  SlashVNP  : (a : Arg) -> VP (aNP a)                -> NP -> VP a ;         -- consuming first NP
+  SlashVNP2 : (a : Arg) -> VP (aNP (aNP a))          -> NP -> VP (aNP a) ;   -- consuming second NP
+  ComplVS   : (a : Arg) -> VP aS             -> Cl a -> VP a ;
+  ComplVV   : (a : Arg) -> VP aV             -> VP a -> VP a ;
+  SlashV2S  : (a : Arg) -> VP (aNP aS)       -> Cl a -> VP (aNP a) ; -- a:Arg gives slash propagation, SlashVS
+  SlashV2V  : (a : Arg) -> VP (aNP aV)       -> VP a -> VP (aNP a) ;      
 
   UseAP : Temp -> Pol -> (a : Arg) -> AP a -> VP a ;
 

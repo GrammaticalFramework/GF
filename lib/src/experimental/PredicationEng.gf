@@ -77,7 +77,7 @@ lin
     ext = vp.ext ;
     } ;
 
-  ComplVS vp s = {
+  ComplVS x vp cl = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
@@ -86,10 +86,10 @@ lin
     obj1 = vp.obj1 ;
     obj2 = vp.obj2 ;
     adv = vp.adv ;
-    ext = s.s ;
+    ext = (DeclCl (lin Cl cl)).s ;
     } ;
 
-  ComplVV vp vpo = {
+  ComplVV x vp vpo = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
@@ -101,7 +101,7 @@ lin
     ext = vp.ext ;
     } ;
 
-  SlashV2S vp s = {
+  SlashV2S x vp cl = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
@@ -110,10 +110,10 @@ lin
     obj1 = vp.obj1 ;
     obj2 = vp.obj2 ;
     adv = vp.adv ;
-    ext = s.s ;
+    ext = (DeclCl (lin Cl cl)).s ;
     } ;
 
-  SlashV2V vp vpo = {
+  SlashV2V x vp vpo = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
