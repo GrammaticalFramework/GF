@@ -1,26 +1,25 @@
 Translation with GF
 Powered by multilingual grammars
 
+%!style:../css/style.css
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.svg" alt=""></a>
+%!postproc(html): #GFWCT <iframe style="border: 0; width: 100%; height: 24ex;" src="wc.html"></iframe>
+
+==Try it online==
+
+%**Coming soon**:
+%//Here you will be able to select your source and target language and translate% whatever you want.//
+#GFWCT
 
 
-
-=Try it online=
-
-**Coming soon**:
-//Here you will be able to select your source and target language and translate whatever you want.//
-
-
-
-
-
-=Download an app=
+==Download an app==
 
 **Coming soon**: //link to an Android app, with a barcode.//
 
 
 
 
-=What you can expect=
+==What you can expect==
 
 The program is designed to translate anything, just like Google translate and Bing. It has some advantages over them:
 - It uses **grammars** (as opposed to statistics), which makes it more correct in many cases.
@@ -43,19 +42,19 @@ Here are some hints to use it in a satisfactory way:
 
 
 
-=How it works=
+==How it works==
 
 Powered by [Grammatical Framework ../]
 
 Publications explaining the translation method:
 
 
-=Get the sources=
+==Get the sources==
 
 Download from [here ../download/]
 
 
-=Send us feedback=
+==Send us feedback==
 
 
 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html> <head>
+<title>Demo: GF Wide Coverage Translation</title>
+<link rel=stylesheet href="../css/style.css">
+<meta name = "viewport" content = "width = device-width">
+<meta charset="UTF-8">
+<link rel=top href="../" title="GF">
+</head>
+
+<body>
+<div style="display: none">
+<h1><a href="../"><img class=nofloat style="height: 3ex" src="../doc/Logos/gf0.png" alt="GF"></a>
+Wide Coverage Translation</h1>
+</div>
+<form onsubmit="return wctranslate()">
+<div class=center>
+<p>
+  <textarea name=input rows=3 cols=50></textarea>
+  <br>
+  <big>⤷</big>
+  <select name=from>
+    <option value=Bul>Bulgarian</option>
+    <option value=Chi>Chinese</option>
+    <option value=Eng selected>English</option>
+    <option value=Fin>Finnish</option>
+    <option value=Fre>French</option>
+    <option value=Ger>German</option>
+    <option value=Hin>Hindi</option>
+    <option value=Swe>Swedish</option>
+  </select> →
+  <button name=translate type=submit><strong><big>Translate</big></strong></button> →
+  <select name=to>
+    <option value=Bul>Bulgarian</option>
+    <option value=Chi>Chinese</option>
+    <option value=Eng>English</option>
+    <option value=Fin>Finnish</option>
+    <option value=Fre>French</option>
+    <option value=Ger>German</option>
+    <option value=Hin>Hindi</option>
+    <option value=Swe selected>Swedish</option>
+  </select>
+  <big style="position: relative; top: 1ex">⤵</big>
+  <br>
+      <textarea name=output rows=3 cols=50 readonly></textarea>
+</div>
+</form>
+
+<div style="display: none" class=modtime><small>
+<!-- hhmts start -->Last modified: Thu Jan 23 15:22:27 CET 2014 <!-- hhmts end -->
+</small></div>
+<script src="../src/www/js/support.js"></script>
+<script src="../src/www/js/gftranslate.js"></script>
+<script>
+gftranslate.jsonurl="http://cloud.grammaticalframework.org/robust/Translate8.pgf"
+function wctranslate() {
+  var f=document.forms[0]
+  function showit(result) {
+    f.output.value=result
+    f.translate.disabled=false
+  }
+  f.translate.disabled=true
+  f.output.value=""
+  gftranslate.translate(f.input.value,f.from.value,f.to.value,showit)
+  return false;
+}
+</script>
+</body>
+</html>
