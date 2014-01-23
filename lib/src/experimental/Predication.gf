@@ -12,11 +12,13 @@ cat
   Cl Arg ;
   NP ;
   Adv ;
+  AdV ;
   S ;
   QS ;
   Utt ;
   AP Arg ;
   IP ;
+  Prep ;
 
 fun
   aNone, aS, aV : Arg ;
@@ -26,18 +28,21 @@ fun
 
   UseV : Temp -> Pol -> (a : Arg) -> V a -> VP a ;
   
-  SlashVNP  : (a : Arg) -> VP (aNP a)                -> NP -> VP a ;         -- consuming first NP
-  SlashVNP2 : (a : Arg) -> VP (aNP (aNP a))          -> NP -> VP (aNP a) ;   -- consuming second NP
+  SlashVNP  : (a : Arg) -> VP (aNP a)        -> NP   -> VP a ;         -- consuming first NP
+  SlashVNP2 : (a : Arg) -> VP (aNP (aNP a))  -> NP   -> VP (aNP a) ;   -- consuming second NP
   ComplVS   : (a : Arg) -> VP aS             -> Cl a -> VP a ;
   ComplVV   : (a : Arg) -> VP aV             -> VP a -> VP a ;
-  SlashV2S  : (a : Arg) -> VP (aNP aS)       -> Cl a -> VP (aNP a) ; -- a:Arg gives slash propagation, SlashVS
+  SlashV2S  : (a : Arg) -> VP (aNP aS)       -> Cl a -> VP (aNP a) ;   -- a:Arg gives slash propagation, SlashVS
   SlashV2V  : (a : Arg) -> VP (aNP aV)       -> VP a -> VP (aNP a) ;      
 
   UseAP : Temp -> Pol -> (a : Arg) -> AP a -> VP a ;
 
   PredVP : (a : Arg) -> NP -> VP a -> Cl a ;
 
+  PrepCl : Prep -> (a : Arg) -> Cl a -> Cl (aNP a) ;
+
   AdvVP  : Adv -> (a : Arg) -> VP a -> VP a ;
+  AdVVP  : AdV -> (a : Arg) -> VP a -> VP a ;
 
   ReflVP  : (a : Arg) -> VP (aNP a) -> VP a ;              -- refl on first position (direct object)
   ReflVP2 : (a : Arg) -> VP (aNP (aNP a)) -> VP (aNP a) ;  -- refl on second position (indirect object)
@@ -68,7 +73,11 @@ fun
   we_NP : NP ;
 
   today_Adv : Adv ;
-
+  always_AdV : AdV ;
   who_IP : IP ;
+
+  PrepNP : Prep -> NP -> Adv ;
+
+  with_Prep : Prep ;
 
 }
