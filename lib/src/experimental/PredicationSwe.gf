@@ -1,4 +1,4 @@
-concrete PredicationSwe of Predication = {
+concrete PredicationSwe of Predication = open Prelude in {
 
 param
   Agr      = Sg | Pl ;
@@ -38,17 +38,37 @@ lincat
     c3 : Str
     } ; 
 
+  QCl = {
+    v : Str ; 
+    inf : Str ; 
+    adj,obj1,obj2 : Str ; 
+    adv : Str ; 
+    adV : Str ;
+    ext : Str ; 
+    subj : Str ; 
+    c3  : Str ;
+    foc : Str ; -- the focal position at the beginning, e.g. *vem* älskar hon
+    hasFoc : Bool ; --- if already filled, then use other place: vem älskar *vem*
+    } ; 
+
+  VPC = {
+    v   : Agr => Str ;
+    inf : Agr => Str ; 
+    c1  : Str ; 
+    c2  : Str
+    } ;
+
   Temp = {s : Str ; t : Tense} ;
   Pol  = {s : Str ; p : Polarity} ;
   NP   = {s : Case => Str ; a : Agr} ;
   Adv  = {s : Str} ;
   AdV  = {s : Str} ;
   S    = {s : Str} ;
-  QS   = {s : Str} ;
   Utt  = {s : Str} ;
   AP   = {s : Agr => Str ; c1 : Str ; c2 : Str ; obj1 : Agr => Str} ;
   IP   = {s : Str ; a : Agr} ;
   Prep = {s : Str} ;
+  Conj = {s : Str} ;
 
 lin
   aNone, aS, aV = {s = []} ;
@@ -119,7 +139,20 @@ lin
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
-    ext = (DeclCl (lin Cl cl)).s ;
+    ext = declCl (lin Cl cl) ;
+    } ;
+
+  ComplVQ x vp qcl = {
+    v   = vp.v ;
+    inf = vp.inf ;
+    c1  = vp.c1 ;
+    c2  = vp.c2 ;
+    adj = vp.adj ;
+    obj1 = vp.obj1 ;
+    obj2 = vp.obj2 ;
+    adV = vp.adV ;
+    adv = vp.adv ;
+    ext = questCl qcl ;
     } ;
 
   ComplVV x vp vpo = {
@@ -145,7 +178,7 @@ lin
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
-    ext = (DeclCl (lin Cl cl)).s ;
+    ext = declCl (lin Cl cl) ;
     } ;
 
   SlashV2V x vp vpo = {
@@ -239,33 +272,82 @@ lin
     c3   = p.s ;      -- for one more prep to build ClSlash 
     } ;
 
+  QuestCl x cl = cl ** {foc = [] ; hasFoc = False} ;  -- verb first: älskar hon oss
 
-  DeclCl cl = {
-    s = cl.subj ++ cl.v ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
+  QuestVP x ip vp = {
+    foc  = ip.s ;   -- vem älskar henne
+    hasFoc = True ;
+    subj = [] ;
+    v    = vp.v ;
+    inf  = vp.inf ;
+    adj  = vp.adj ! ip.a ;
+    obj1 = vp.c1 ++ vp.obj1 ! ip.a ;
+    obj2 = vp.c2 ++ vp.obj2 ! ip.a ;
+    adV  = vp.adV ;
+    adv  = vp.adv ;
+    ext  = vp.ext ; 
+    c3   = [] ;      -- for one more prep to build ClSlash 
     } ;
 
-  QuestCl cl = {
-    s = cl.v ++ cl.subj ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
+  QuestSlash x ip cl =  
+    let
+      ips = cl.c3 ++ ip.s ;  ---- c3? 
+      focobj = case cl.hasFoc of {
+        True => <[],ips> ;
+        False => <ips,[]>
+        } ;
+    in {
+    foc  = focobj.p1 ;
+    hasFoc = True ;
+    subj = cl.subj ;
+    v    = cl.v ;
+    inf  = cl.inf ;
+    adj  = cl.adj ;
+    obj1 = cl.obj1 ++ focobj.p2 ;
+    obj2 = cl.obj2 ;        ---- slash to this part?
+    adV  = cl.adV ;
+    adv  = cl.adv ;
+    ext  = cl.ext ; 
+    c3   = [] ; 
     } ;
 
-  QuestVP ip vp = {
-    s = ip.s ++ vp.v ++ vp.adV ++ vp.adj ! ip.a ++ vp.c1 ++ vp.obj1 ! ip.a ++ vp.c2 ++ vp.obj2 ! ip.a ++ vp.adv ++ vp.ext
-    } ;
-
-  QuestSlash ip cl = {
-    s = ip.s ++ cl.v ++ cl.subj ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3
-    } ;
+  UseCl  cl = {s = declCl cl} ;
+  UseQCl cl = {s = questCl cl} ;
 
   UttS s = s ;
-  UttQS s = s ;
+
+  StartVPC c x v w = {
+    v = \\a => 
+          v.v ++ v.adV ++ v.adj ! a ++ v.c1 ++ v.obj1 ! a ++ v.c2 ++ v.obj2 ! a ++ v.adv ++ v.ext 
+            ++ c.s ++
+          w.v ++ w.adV ++ w.adj ! a ++ w.c1 ++ w.obj1 ! a ++ w.c2 ++ w.obj2 ! a ++ w.adv ++ w.ext ;
+    inf = \\a => 
+            infVP a (lin VP v) ++ c.s ++ infVP a (lin VP w) ;
+    c1 = [] ; --- w.c1 ; --- the full story is to unify v and w...
+    c2 = [] ; --- w.c2 ; 
+    } ;
+
+  UseVPC x vpc = {
+    v   = vpc.v ! Sg ;   ---- agreement
+    inf = vpc.inf ! Sg ; ---- agreement
+    c1  = vpc.c1 ;
+    c2  = vpc.c2 ;
+    adj,obj1,obj2 = \\a => [] ;
+    adv,adV = [] ;
+    ext = [] ;
+    } ;
+
 
   sleep_V = mkV "sova" "sover" "sov" ;
+  walk_V = mkV "gå" "går" "gick" ;
   love_V2 = mkV "älska" "älskar" "älskade" ;
+  look_V2 = mkV "titta" "tittar" "tittade" "på" [] ;
   believe_VS = mkV "tro" "tror" "trodde" ;
   tell_V2S = mkV "berätta" "berättar" "berättade" "för" [] ;
   prefer_V3 = mkV "föredra" "föredrar" "föredrog" [] "framför" ;
   want_VV = mkV "vilja" "vill" "ville" ;
   force_V2V = mkV "tvinga" "tvingar" "tvingade" [] "att" ;
+  wonder_VQ = mkV "undra" "undrar" "undrade" ;
 
   old_A = {s = table {Sg => "gammal" ; Pl => "gamla"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
   married_A2 = {s = table {Sg => "gift" ; Pl => "gifta"} ; c1 = "med" ; c2 = [] ; obj1 = \\_ => []} ;
@@ -283,6 +365,8 @@ lin
   PrepNP p np = {s = p.s ++ np.s ! Acc} ;
 
   with_Prep = {s = "med"} ;
+
+  and_Conj = {s = "och"} ;
 
 oper
   mkV = overload {
@@ -306,4 +390,6 @@ oper
 
   infVP : Agr -> VP -> Str = \a,vp -> vp.adV ++ vp.inf ++ vp.adj ! a ++ vp.c1 ++ vp.obj1 ! a ++ vp.c2 ++ vp.obj2 ! a ++ vp.adv ++ vp.ext ;
 
+  declCl  : Cl  -> Str = \cl -> cl.subj ++ cl.v ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
+  questCl : QCl -> Str = \cl -> cl.foc ++ cl.v ++ cl.subj ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
 }

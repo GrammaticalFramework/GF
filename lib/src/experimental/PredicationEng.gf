@@ -1,4 +1,4 @@
-concrete PredicationEng of Predication = {
+concrete PredicationEng of Predication = open Prelude in {
 
 param
   Agr      = Sg | Pl ;
@@ -37,17 +37,37 @@ lincat
     c3 : Str
     } ; 
 
+  QCl = {
+    v : Str * Str ; 
+    inf : Str ; 
+    adj,obj1,obj2 : Str ; 
+    adv : Str ; 
+    adV : Str ;
+    ext : Str ; 
+    subj : Str ; 
+    c3 : Str ;
+    foc : Str ; -- the focal position at the beginning, e.g. *vem* älskar hon
+    hasFoc : Bool ; --- if already filled, then use other place: vem älskar *vem*
+    } ; 
+
+  VPC = {
+    v   : Agr => Str ;
+    inf : Agr => Str ; 
+    c1  : Str ; 
+    c2  : Str
+    } ;
+
   Temp = {s : Str ; t : Tense} ;
   Pol  = {s : Str ; p : Polarity} ;
   NP   = {s : Case => Str ; a : Agr} ;
   Adv  = {s : Str} ;
   AdV  = {s : Str} ;
   S    = {s : Str} ;
-  QS   = {s : Str} ;
   Utt  = {s : Str} ;
   AP   = {s : Str ; c1 : Str ; c2 : Str ; obj1 : Agr => Str} ;
   IP   = {s : Str ; a : Agr} ;
   Prep = {s : Str} ;
+  Conj = {s : Str} ;
 
 lin
   aNone, aS, aV = {s = []} ;
@@ -116,7 +136,7 @@ lin
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
-    ext = (DeclCl (lin Cl cl)).s ;
+    ext = declCl (lin Cl cl) ;
     } ;
 
   ComplVV x vp vpo = {
@@ -142,7 +162,7 @@ lin
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
-    ext = (DeclCl (lin Cl cl)).s ;
+    ext = declCl (lin Cl cl) ;
     } ;
 
   SlashV2V x vp vpo = {
@@ -237,27 +257,76 @@ lin
     } ;
 
 
-  DeclCl cl = {
-    s = cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
+  QuestCl x cl = cl ** {foc = [] ; hasFoc = False} ;  -- verb first: älskar hon oss
+
+  QuestVP x ip vp = {
+    foc  = ip.s ;   -- vem älskar henne
+    hasFoc = True ;
+    subj = [] ;
+    v    = vp.v ! ip.a ;
+    inf  = vp.inf ;
+    adj  = vp.adj ! ip.a ;
+    obj1 = vp.c1 ++ vp.obj1 ! ip.a ;
+    obj2 = vp.c2 ++ vp.obj2 ! ip.a ;
+    adV  = vp.adV ;
+    adv  = vp.adv ;
+    ext  = vp.ext ; 
+    c3   = [] ;      -- for one more prep to build ClSlash 
     } ;
 
-  QuestCl cl = {
-    s = cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
+  QuestSlash x ip cl =  
+    let
+      ips = cl.c3 ++ ip.s ;  ---- c3? 
+      focobj = case cl.hasFoc of {
+        True => <[],ips> ;
+        False => <ips,[]>
+        } ;
+    in {
+    foc  = focobj.p1 ;
+    hasFoc = True ;
+    subj = cl.subj ;
+    v    = cl.v ;
+    inf  = cl.inf ;
+    adj  = cl.adj ;
+    obj1 = cl.obj1 ++ focobj.p2 ;
+    obj2 = cl.obj2 ;        ---- slash to this part?
+    adV  = cl.adV ;
+    adv  = cl.adv ;
+    ext  = cl.ext ; 
+    c3   = [] ; 
     } ;
 
-  QuestVP ip vp = {
-    s = ip.s ++ (vp.v ! ip.a).p1 ++ vp.adV ++ (vp.v ! ip.a).p2 ++ vp.adj ! ip.a ++ vp.c1 ++ vp.obj1 ! ip.a ++ vp.c2 ++ vp.obj2 ! ip.a ++ vp.adv ++ vp.ext
-    } ;
-
-  QuestSlash ip cl = {
-    s = ip.s ++ cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3
-    } ;
+  UseCl  cl = {s = declCl cl} ;
+  UseQCl cl = {s = questCl cl} ;
 
   UttS s = s ;
-  UttQS s = s ;
+
+  StartVPC c x v w = {
+    v = \\a => 
+          (v.v ! a).p1 ++ v.adV ++ (v.v ! a).p2 ++ v.adj ! a ++ v.c1 ++ v.obj1 ! a ++ v.c2 ++ v.obj2 ! a ++ v.adv ++ v.ext 
+            ++ c.s ++
+          (w.v ! a).p1 ++ w.adV ++ (w.v ! a).p2 ++ w.adj ! a ++ w.c1 ++ w.obj1 ! a ++ w.c2 ++ w.obj2 ! a ++ w.adv ++ w.ext ;
+    inf = \\a => 
+            infVP a (lin VP v) ++ c.s ++ infVP a (lin VP w) ;
+    c1 = w.c1 ; --- the full story is to unify v and w...
+    c2 = w.c2 ; 
+    } ;
+
+  UseVPC x vpc = {
+    v   = \\a => <do_Aux Pres a, vpc.v ! a> ;  ---- there is no uniform tense
+    inf = vpc.inf ! Sg ; ---- agreement
+    c1  = vpc.c1 ;
+    c2  = vpc.c2 ;
+    adj,obj1,obj2 = \\a => [] ;
+    adv,adV = [] ;
+    ext = [] ;
+    } ;
+
 
   sleep_V = mkV "sleep" ;
+  walk_V = mkV "walk" ;
   love_V2 = mkV "love" ;
+  look_V2 = mkV "look" "at" [] ;
   believe_VS = mkV "believe" ;
   tell_V2S = mkV "tell" ;
   prefer_V3 = mkV "prefer" [] "to" ;
@@ -280,6 +349,8 @@ lin
   PrepNP p np = {s = p.s ++ np.s ! Acc} ;
 
   with_Prep = {s = "with"} ;
+
+  and_Conj = {s = "and"} ;
 
 oper
   mkV = overload {
@@ -307,5 +378,9 @@ oper
   reflPron : Agr -> Str = \a -> case a of {Sg => "herself" ; Pl => "ourselves"} ;
 
   infVP : Agr -> VP -> Str = \a,vp -> vp.adV ++ vp.inf ++ vp.adj ! a ++ vp.c1 ++ vp.obj1 ! a ++ vp.c2 ++ vp.obj2 ! a ++ vp.adv ++ vp.ext ;
+
+  declCl : Cl -> Str = \cl ->cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
+
+  questCl : QCl -> Str = \cl -> cl.foc ++ cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
 
 }
