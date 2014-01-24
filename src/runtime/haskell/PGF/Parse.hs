@@ -387,6 +387,7 @@ process flit ftok cnc (item@(Active j ppos funid seqid args key0):items) acc cha
         Just funs -> foldl (\forest funid -> IntMap.insertWith Set.union fid2 (Set.singleton (PApply funid [PArg [] fid1])) forest) forest funs
         Nothing   -> forest
         
+    ftok_ [] item cnt         = ftok Map.empty cnt
     ftok_ (tok:toks) item cnt =
       ftok (Map.singleton tok (TrieMap.singleton toks (Set.singleton item))) cnt
 
