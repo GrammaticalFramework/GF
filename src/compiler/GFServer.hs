@@ -9,6 +9,7 @@ import Control.Monad.Error(ErrorT(..),Error(..))
 import System.Random(randomRIO)
 --import System.IO(stderr,hPutStrLn)
 import GF.System.Catch(try)
+import Control.Exception(bracket_)
 import System.IO.Error(isAlreadyExistsError)
 import GF.System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                            setCurrentDirectory,getCurrentDirectory,
@@ -57,7 +58,7 @@ server port optroot execute1 state0 =
      datadir <- getDataDir
      let root = maybe (datadir</>"www") id optroot
 --   debug $ "document root="++root
-     setCurrentDirectory root
+     setDir root
 --   FCGI.acceptLoop forkIO (handle_fcgi execute1 state0 state cache)
      -- if acceptLoop returns, then GF was not invoked as a FastCGI script
      http_server execute1 state0 state cache root
@@ -68,7 +69,7 @@ server port optroot execute1 state0 =
          logPutStrLn $ "Document root = "++root
          logPutStrLn $ "Starting HTTP server, open http://localhost:"
                        ++show port++"/ in your web browser."
-         initServer port (modifyMVar state . handle root state0 cache execute1)
+         initServer port (handle root state0 cache execute1 state)
 
 gf_version = "This is GF version "++showVersion version++".\n"++buildInfo
 
@@ -117,50 +118,51 @@ put_state state = do qs <- get_qs; put (qs,state)
 err :: Response -> HM s a
 err e = StateT $ \ s -> ErrorT $ return $ Left e
 
-hmtry :: HM s a -> HM s (Either (Either IOError Response) a)
-hmtry m = do s <- get
-             e <- liftIO $ try $ runErrorT $ runStateT m s
-             case e of
-               Left ioerror -> return (Left (Left ioerror))
-               Right (Left resp) -> return (Left (Right resp))
-               Right (Right (a,s)) -> do put s;return (Right a)
+hmbracket_ :: IO () -> IO () -> HM s a -> HM s a
+hmbracket_ pre post m =
+    do s <- get
+       e <- liftIO $ bracket_ pre post $ runErrorT $ runStateT m s
+       case e of
+         Left resp -> err resp
+         Right (a,s) -> do put s;return a
 
 -- | HTTP request handler
-handle documentroot state0 cache execute1
-       rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) state =
+handle documentroot state0 cache execute1 stateVar
+       rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) =
     case method of
-      "POST" -> run normal_request (utf8inputs body,state)
-      "GET"  -> run normal_request (utf8inputs q,state)
-      _ -> return (state,resp501 $ "method "++method)
+      "POST" -> normal_request (utf8inputs body)
+      "GET"  -> normal_request (utf8inputs q)
+      _ -> return (resp501 $ "method "++method)
   where
-    normal_request =
-      do -- Defend against unhandled errors under inDir:
-         liftIO $ setDir documentroot
-         qs <- get_qs
-         logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
+    normal_request qs =
+      do logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
+         let stateful m = modifyMVar stateVar $ \ s -> run m (qs,s)
+          -- stateful ensures mutual exclusion, so you can use/change the cwd
          case upath of
-           "/new" -> new
---         "/stop" ->
---         "/start" ->
-           "/gfshell" -> inDir command
-           "/parse" -> parse (decoded qs)
-           "/cloud" -> inDir cloud
+           "/new"     -> stateful $ new
+           "/gfshell" -> stateful $ inDir command
+           "/cloud"   -> stateful $ inDir cloud
+--         "/stop"    ->
+--         "/start"   ->
+           "/parse"   -> parse (decoded qs)
            "/version" -> return (ok200 gf_version)
            '/':rpath ->
+             -- This code runs without mutual exclusion, so it must *not*
+             -- use/change the cwd. Access files by absolute paths only.
              case (takeDirectory path,takeFileName path,takeExtension path) of
-               (_  ,_             ,".pgf") -> wrapCGI $ PS.cgiMain' cache path
+               (_  ,_             ,".pgf") -> do debug $ "PGF service: "++path
+                                                 wrapCGI $ PS.cgiMain' cache path
                (dir,"grammars.cgi",_     ) -> grammarList dir (decoded qs)
                (dir  ,"exb.fcgi"  ,_    ) -> wrapCGI $ ES.cgiMain' root dir (fst cache)
-               _ -> liftIO $ serveStaticFile path
+               _ -> serveStaticFile path
              where path = translatePath rpath
-           _ -> err $ resp400 upath
+           _ -> return $ resp400 upath
 
-    root = "."
+    root = documentroot
 
     translatePath rpath = root</>rpath -- hmm, check for ".."
 
-    wrapCGI cgi = 
-      liftIO $ cgiHandler root (handleErrors . handleCGIErrors $ cgi) rq
+    wrapCGI cgi = cgiHandler root (handleErrors . handleCGIErrors $ cgi) rq
 
     look field =
       do qs <- get_qs
@@ -173,17 +175,18 @@ handle documentroot state0 cache execute1
       where
         cd ('/':dir@('t':'m':'p':_)) =
           do cwd <- liftIO $ getCurrentDirectory
-             b <- liftIO $ try $ setDir dir
+             b <- liftIO $ doesDirectoryExist dir
              case b of
-               Left _ -> do b <- liftIO $ try $ readFile dir -- poor man's symbolic links
+               False  -> do b <- liftIO $ try $ readFile dir -- poor man's symbolic links
                             case b of
                               Left _ -> err $ resp404 dir
                               Right dir' -> cd dir'
-               Right _ -> do --logPutStrLn $ "cd "++dir
-                             r <- hmtry (ok dir)
-                             liftIO $ setDir cwd
-                             either (either (liftIO . ioError) err) return r
+               True  -> do --logPutStrLn $ "cd "++dir
+                           hmInDir dir (ok dir)
         cd dir = err $ resp400 $ "unacceptable directory "++dir
+
+    -- First ensure that only one thread that depends on the cwd is running!
+    hmInDir dir = hmbracket_ (setDir dir) (setDir documentroot)
 
     new = fmap ok200 $ liftIO $ newDirectory
 
@@ -262,9 +265,8 @@ handle documentroot state0 cache execute1
     download path = liftIO $ serveStaticFile path
 
     link_directories olddir newdir@('/':'t':'m':'p':'/':_) | old/=new =
-        liftIO $
-        do setDir ".."
-           logPutStrLn =<< getCurrentDirectory
+        hmInDir ".." $ liftIO $
+        do logPutStrLn =<< getCurrentDirectory
            logPutStrLn $ "link_dirs new="++new++", old="++old
 #ifdef mingw32_HOST_OS
            isDir <- doesDirectoryExist old
