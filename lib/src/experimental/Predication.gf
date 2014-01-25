@@ -37,7 +37,9 @@ fun
   ComplVQ   : (a : Arg) -> VP aQ             -> QCl a -> VP a ;
   ComplVA   : (a : Arg) -> VP aA             -> AP  a -> VP a ;
   SlashV2S  : (a : Arg) -> VP (aNP aS)       -> Cl a  -> VP (aNP a) ;   -- a:Arg gives slash propagation, SlashVS
-  SlashV2V  : (a : Arg) -> VP (aNP aV)       -> VP a  -> VP (aNP a) ;      
+  SlashV2V  : (a : Arg) -> VP (aNP aV)       -> VP a  -> VP (aNP a) ;  
+  SlashV2A  : (a : Arg) -> VP (aNP aA)       -> AP a  -> VP (aNP a) ;      
+  SlashV2Q  : (a : Arg) -> VP (aNP aA)       -> QCl a -> VP (aNP a) ;      
 
   UseAP : Temp -> Pol -> (a : Arg) -> AP a -> VP a ;
 
@@ -75,7 +77,11 @@ fun
   prefer_V3  : V (aNP (aNP aNone)) ;
   want_VV    : V aV ;
   force_V2V  : V (aNP aV) ;
+  promise_V2V  : V (aNP aV) ;
   wonder_VQ  : V aQ ;
+  become_VA  : V aA ;
+  make_V2A   : V (aNP aA) ;
+  ask_V2Q    : V (aNP aQ) ;
 
   old_A      : AP aNone ;
   married_A2 : AP (aNP aNone) ; -- married to her
