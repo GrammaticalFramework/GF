@@ -7,13 +7,17 @@ param
   Polarity = Pos | Neg ;
   VForm    = Inf | VT Tense ;
 
+oper
+  defaultAgr = Sg ;
+
 lincat
   Arg = {s : Str} ;
 
   V = {
     v  : VForm => Str ;             
     c1 : Str ; 
-    c2 : Str
+    c2 : Str ;
+    isSubjectControl : Bool ;
     } ; 
 
   VP = {
@@ -21,7 +25,9 @@ lincat
     inf : Str ; 
     c1 : Str ; 
     c2 : Str ; 
-    adj,obj1,obj2 : Agr => Str ; 
+    adj   : Agr => Str ; 
+    obj1  : (Agr => Str) * Agr ; 
+    obj2  : (Agr => Str) * Bool ; -- subject control = True 
     adv : Str ; 
     adV : Str ;
     ext : Str
@@ -71,7 +77,7 @@ lincat
   Conj = {s : Str} ;
 
 lin
-  aNone, aS, aV = {s = []} ;
+  aNone, aS, aV, aA, aQ = {s = []} ;
   aNP a = a ;
 
   TPres = {s = [] ; t = Pres} ;
@@ -84,7 +90,9 @@ lin
     inf = t.s ++ aux t.t ++ v.v ! Inf ;
     c1  = v.c1 ;
     c2  = v.c2 ;
-    adj,obj1,obj2 = \\a => [] ;
+    adj = \\a => [] ;
+    obj1 = <\\a => [], defaultAgr> ; ---- not used, just default value
+    obj2 = <\\a => [], v.isSubjectControl> ;
     adV = p.s ++ neg p.p ;
     adv = [] ;
     ext = [] ;
@@ -96,8 +104,8 @@ lin
     c1  = ap.c1 ;
     c2  = ap.c2 ;
     adj = \\a => ap.s ! a ;
-    obj1 = ap.obj1 ;
-    obj2 = \\a => [] ;
+    obj1 = <ap.obj1, defaultAgr> ;
+    obj2 = <\\a => [], True> ;
     adV = p.s ++ neg p.p ;
     adv = [] ;
     ext = [] ;
@@ -109,7 +117,7 @@ lin
     c1  = vp.c1 ;
     c2  = vp.c2 ;
     adj = vp.adj ;
-    obj1 = \\a => np.s ! Acc ;
+    obj1 = <\\a => np.s ! Acc, np.a> ;  -- np.a for object control
     obj2 = vp.obj2 ;
     adv = vp.adv ;
     adV = vp.adV ;
@@ -123,7 +131,7 @@ lin
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = \\a => np.s ! Acc ;
+    obj2 = <\\a => np.s ! Acc, vp.obj2.p2> ;
     adv = vp.adv ;
     adV = vp.adV ;
     ext = vp.ext ;
@@ -162,7 +170,20 @@ lin
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = \\a => infVP a vpo ;
+    obj2 = <\\a => infVP a vpo, vp.obj2.p2> ;
+    adV = vp.adV ;
+    adv = vp.adv ;
+    ext = vp.ext ;
+    } ;
+
+  ComplVA x vp ap = {
+    v   = vp.v ;
+    inf = vp.inf ;
+    c1  = vp.c1 ;
+    c2  = vp.c2 ;
+    adj = vp.adj ;
+    obj1 = vp.obj1 ;
+    obj2 = <\\a => ap.s ! a,vp.obj2.p2> ;
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -188,7 +209,7 @@ lin
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = \\a => infVP a vpo ;
+    obj2 = <\\a => infVP a (lin VP vpo), vp.obj2.p2> ;
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -226,7 +247,7 @@ lin
     c1  = vp.c1 ;
     c2  = vp.c2 ;
     adj = vp.adj ;
-    obj1 = \\a => reflPron a ;
+    obj1 = <\\a => reflPron a, defaultAgr> ; ---- defaultAgr will not be used but subj.a instead
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
@@ -240,7 +261,7 @@ lin
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = \\a => reflPron a ;
+    obj2 = <\\a => reflPron a, vp.obj2.p2> ;
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -251,8 +272,8 @@ lin
     v    = vp.v ;
     inf  = vp.inf ;
     adj  = vp.adj ! np.a ;
-    obj1 = vp.c1 ++ vp.obj1 ! np.a ;
-    obj2 = vp.c2 ++ vp.obj2 ! np.a ;
+    obj1 = vp.c1 ++ vp.obj1.p1 ! np.a ;
+    obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;
     adV  = vp.adV ;
     adv  = vp.adv ;
     ext  = vp.ext ; 
@@ -281,8 +302,8 @@ lin
     v    = vp.v ;
     inf  = vp.inf ;
     adj  = vp.adj ! ip.a ;
-    obj1 = vp.c1 ++ vp.obj1 ! ip.a ;
-    obj2 = vp.c2 ++ vp.obj2 ! ip.a ;
+    obj1 = vp.c1 ++ vp.obj1.p1 ! ip.a ;
+    obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => ip.a ; False => vp.obj1.p2}) ;
     adV  = vp.adV ;
     adv  = vp.adv ;
     ext  = vp.ext ; 
@@ -316,23 +337,25 @@ lin
 
   UttS s = s ;
 
-  StartVPC c x v w = {
+  StartVPC c x v w = {  ---- some loss of quality seems inevitable
     v = \\a => 
-          v.v ++ v.adV ++ v.adj ! a ++ v.c1 ++ v.obj1 ! a ++ v.c2 ++ v.obj2 ! a ++ v.adv ++ v.ext 
+          v.v ++ v.adV ++ v.adj ! a ++ v.c1 ++ v.obj1.p1 ! a ++ v.c2 ++ v.obj2.p1 ! a ++ v.adv ++ v.ext 
             ++ c.s ++
-          w.v ++ w.adV ++ w.adj ! a ++ w.c1 ++ w.obj1 ! a ++ w.c2 ++ w.obj2 ! a ++ w.adv ++ w.ext ;
+          w.v ++ w.adV ++ w.adj ! a ++ w.c1 ++ w.obj1.p1 ! a ++ w.c2 ++ w.obj2.p1 ! a ++ w.adv ++ w.ext ;
     inf = \\a => 
             infVP a (lin VP v) ++ c.s ++ infVP a (lin VP w) ;
     c1 = [] ; --- w.c1 ; --- the full story is to unify v and w...
     c2 = [] ; --- w.c2 ; 
     } ;
 
-  UseVPC x vpc = {
+  UseVPC x vpc = { ---- big loss of quality (overgeneration) seems inevitable
     v   = vpc.v ! Sg ;   ---- agreement
     inf = vpc.inf ! Sg ; ---- agreement
     c1  = vpc.c1 ;
     c2  = vpc.c2 ;
-    adj,obj1,obj2 = \\a => [] ;
+    adj = \\a => [] ;
+    obj1 = <\\a => [], defaultAgr> ;
+    obj2 = <\\a => [],True> ;
     adv,adV = [] ;
     ext = [] ;
     } ;
@@ -346,8 +369,13 @@ lin
   tell_V2S = mkV "berätta" "berättar" "berättade" "för" [] ;
   prefer_V3 = mkV "föredra" "föredrar" "föredrog" [] "framför" ;
   want_VV = mkV "vilja" "vill" "ville" ;
-  force_V2V = mkV "tvinga" "tvingar" "tvingade" [] "att" ;
+  force_V2V = {v = table {Inf => "tvinga" ; VT Pres => "tvingar" ; VT Past => "tvingade"} ; 
+               c1 = [] ; c2 = "att" ; isSubjectControl = False} ; 
+  promise_V2V = mkV "lova" "lovar" "lovade" [] "att" ;
   wonder_VQ = mkV "undra" "undrar" "undrade" ;
+  become_VA = mkV "bli" "blir" "blev" ;
+  make_V2A = {v = table {Inf => "göra" ; VT Pres => "gör" ; VT Past => "gjorde"} ; 
+               c1 = [] ; c2 = [] ; isSubjectControl = False} ; 
 
   old_A = {s = table {Sg => "gammal" ; Pl => "gamla"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
   married_A2 = {s = table {Sg => "gift" ; Pl => "gifta"} ; c1 = "med" ; c2 = [] ; obj1 = \\_ => []} ;
@@ -371,9 +399,9 @@ lin
 oper
   mkV = overload {
     mkV : (x,y,z : Str) -> V = \x,y,z -> 
-      lin V {v = table {Inf => x ; VT Pres => y ; VT Past => z} ; c1 = [] ; c2 = []} ; 
+      lin V {v = table {Inf => x ; VT Pres => y ; VT Past => z} ; c1 = [] ; c2 = [] ; isSubjectControl = True} ; 
     mkV : (x,y,z : Str) -> Str -> Str -> V = \x,y,z,p,q -> 
-      lin V {v = table {Inf => x ; VT Pres => y ; VT Past => z} ; c1 = p ; c2 = q} ; 
+      lin V {v = table {Inf => x ; VT Pres => y ; VT Past => z} ; c1 = p ; c2 = q  ; isSubjectControl = True} ; 
     } ;
 
   be_Aux : VForm -> Str = \t -> case t of {
@@ -388,7 +416,9 @@ oper
 
   reflPron : Agr -> Str = \a -> case a of {Sg => "sig" ; Pl => "oss"} ;
 
-  infVP : Agr -> VP -> Str = \a,vp -> vp.adV ++ vp.inf ++ vp.adj ! a ++ vp.c1 ++ vp.obj1 ! a ++ vp.c2 ++ vp.obj2 ! a ++ vp.adv ++ vp.ext ;
+  infVP : Agr -> VP -> Str = \a,vp -> 
+    let a2 = case vp.obj2.p2 of {True => a ; False => vp.obj1.p2} in
+    vp.adV ++ vp.inf ++ vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.adv ++ vp.ext ;
 
   declCl  : Cl  -> Str = \cl -> cl.subj ++ cl.v ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
   questCl : QCl -> Str = \cl -> cl.foc ++ cl.v ++ cl.subj ++ cl.adV ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
