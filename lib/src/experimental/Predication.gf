@@ -11,6 +11,7 @@ cat
   Temp ;
   Pol ;
   Cl Arg ;
+  ClC Arg ;  -- conjunction of Cl
   QCl Arg ;
   NP ;
   Adv ;
@@ -21,11 +22,12 @@ cat
   IP ;
   Prep ;
   Conj ;
+  IAdv ;
 
 fun
   aNone, aS, aV, aQ, aA : Arg ;
   aNP : Arg -> Arg ;
-  TPres, TPast : Temp ;
+  TPres, TPast, TPerf, TFut : Temp ;
   PPos, PNeg : Pol ;
 
   UseV : Temp -> Pol -> (a : Arg) -> V a -> VP a ;
@@ -45,7 +47,8 @@ fun
 
   PredVP : (a : Arg) -> NP -> VP a -> Cl a ;
 
-  PrepCl : Prep -> (a : Arg) -> Cl a -> Cl (aNP a) ;
+  PrepCl    : Prep -> (a : Arg) -> Cl a -> Cl (aNP a) ;  -- slash creation (S/NP): hon tittar på (oss)
+  SlashClNP : (a : Arg) -> Cl (aNP a) -> NP -> Cl a ;    -- slash consumption: hon tittar på + oss
 
   AdvVP  : Adv -> (a : Arg) -> VP a -> VP a ;
   AdVVP  : AdV -> (a : Arg) -> VP a -> VP a ;
@@ -53,18 +56,26 @@ fun
   ReflVP  : (a : Arg) -> VP (aNP a) -> VP a ;              -- refl on first position (direct object)
   ReflVP2 : (a : Arg) -> VP (aNP (aNP a)) -> VP (aNP a) ;  -- refl on second position (indirect object)
 
-  QuestVP    : (a : Arg) -> IP -> VP a         -> QCl a ; 
-  QuestSlash : (a : Arg) -> IP -> QCl (aNP a)  -> QCl a ;
-  QuestCl    : (a : Arg)       -> Cl a         -> QCl a ;
+  QuestVP    : (a : Arg) -> IP   -> VP a         -> QCl a ; 
+  QuestSlash : (a : Arg) -> IP   -> QCl (aNP a)  -> QCl a ;
+  QuestCl    : (a : Arg)         -> Cl a         -> QCl a ;
+  QuestIAdv  : (a : Arg) -> IAdv -> Cl a         -> QCl a ;
 
   UseCl  : Cl aNone  -> S ;
   UseQCl : QCl aNone -> S ; -- deprecate QS
   
   UttS  : S -> Utt ;
 
+-- VP coordination
+
   StartVPC : Conj -> (a : Arg) -> VP a -> VP a  -> VPC a ;
   ContVPC  :         (a : Arg) -> VP a -> VPC a -> VPC a ;
   UseVPC   : (a : Arg) -> VPC a -> VP a ;
+
+-- clause coordination, including "she loves and we look at (her)"
+  StartClC : Conj -> (a : Arg) -> Cl a -> Cl a  -> ClC a ;
+  ContClC  :         (a : Arg) -> Cl a -> ClC a -> ClC a ;
+  UseClC   : (a : Arg) -> ClC a -> Cl a ;
 
 -- lexicon
 
@@ -100,5 +111,7 @@ fun
   with_Prep : Prep ;
 
   and_Conj : Conj ;
+
+  why_IAdv : IAdv ;
 
 }
