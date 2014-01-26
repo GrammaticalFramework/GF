@@ -9,6 +9,8 @@ cat
   VP Arg ;
   VPC Arg ;  -- conjunction of VP
   Temp ;
+  Ant ;
+  Tense ;
   Pol ;
   Cl Arg ;
   ClC Arg ;  -- conjunction of Cl
@@ -19,16 +21,20 @@ cat
   S ;
   Utt ;
   AP Arg ;
+  CN Arg ; -- the country he became the president of
   IP ;
   Prep ;
   Conj ;
   IAdv ;
 
 fun
-  aNone, aS, aV, aQ, aA : Arg ;
+  aNone, aS, aV, aQ, aA, aN : Arg ;
   aNP : Arg -> Arg ;
-  TPres, TPast, TPerf, TFut : Temp ;
+  TPres, TPast, TFut, TCond : Tense ;
   PPos, PNeg : Pol ;
+  ASimul, AAnter : Ant ;
+
+  TTAnt : Tense -> Ant -> Temp ;
 
   UseV : Temp -> Pol -> (a : Arg) -> V a -> VP a ;
   

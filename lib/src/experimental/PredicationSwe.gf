@@ -3,7 +3,8 @@ concrete PredicationSwe of Predication = open Prelude in {
 param
   Agr      = Sg | Pl ;
   Case     = Nom | Acc ;
-  Tense    = Pres | Past | Perf | Fut ;
+  STense   = Pres | Past | Perf | Fut ;
+  Anteriority = Simul | Anter ;
   Polarity = Pos | Neg ;
   VForm    = Inf | VPres | VPret | VSup ;
 
@@ -23,8 +24,8 @@ lincat
     } ; 
 
   VP = {
-    v : Str * Str ; 
-    inf : Str ; 
+    v : Str * Str * Str ;  -- ska,ha,sovit 
+    inf : Str * Str ;      -- ha,sovit
     c1 : Str ; 
     c2 : Str ; 
     adj   : Agr => Str ; 
@@ -35,9 +36,9 @@ lincat
     ext : Str
     } ;
  
-  Cl = {
-    v : Str * Str ; 
-    inf : Str ; 
+oper Clause = {
+    v : Str * Str * Str ; 
+    inf : Str * Str ; 
     adj,obj1,obj2 : Str ; 
     adv : Str ; 
     adV : Str ;
@@ -46,15 +47,10 @@ lincat
     c3 : Str
     } ; 
 
-  QCl = {
-    v : Str * Str ; 
-    inf : Str ; 
-    adj,obj1,obj2 : Str ; 
-    adv : Str ; 
-    adV : Str ;
-    ext : Str ; 
-    subj : Str ; 
-    c3  : Str ;
+lincat
+  Cl = Clause ;
+
+  QCl = Clause ** {
     foc : Str ; -- the focal position at the beginning, e.g. *vem* älskar hon
     focType : FocusType ; --- if already filled, then use other place: vem älskar *vem*
     } ; 
@@ -71,8 +67,11 @@ lincat
     c3 : Str ; ---- which prep
     } ;
 
-  Temp = {s : Str ; t : Tense} ;
-  Pol  = {s : Str ; p : Polarity} ;
+  Temp  = {s : Str ; t : STense ; a : Anteriority} ;
+  Tense = {s : Str ; t : STense} ;
+  Ant   = {s : Str ; a : Anteriority} ;
+  Pol   = {s : Str ; p : Polarity} ;
+
   NP   = {s : Case => Str ; a : Agr} ;
   Adv  = {s : Str} ;
   AdV  = {s : Str} ;
@@ -88,16 +87,20 @@ lin
   aNone, aS, aV, aA, aQ = {s = []} ;
   aNP a = a ;
 
-  TPres = {s = [] ; t = Pres} ;
-  TPast = {s = [] ; t = Past} ;
-  TPerf = {s = [] ; t = Perf} ;
-  TFut  = {s = [] ; t = Fut} ;
+  TTAnt t a = {s = t.s ++ a.s ; t = t.t ; a = a.a} ;
+  TPres  = {s = [] ; t = Pres} ;
+  TPast  = {s = [] ; t = Past} ;
+  TFut   = {s = [] ; t = Fut} ;
+  TCond  = {s = [] ; t = Perf} ;
+  ASimul = {s = [] ; a = Simul} ;
+  AAnter = {s = [] ; a = Anter} ;
+
   PPos  = {s = [] ; p = Pos} ;
   PNeg  = {s = [] ; p = Neg} ;
 
   UseV t p _ v = {
-    v   = tenseV t.s t.t v ;
-    inf = t.s ++ auxInf t.t v ;
+    v   = tenseV t.s t.t t.a v ;
+    inf = tenseInfV t.s t.a v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj = \\a => [] ;
@@ -109,8 +112,8 @@ lin
     } ;
 
   UseAP t p _ ap = {
-    v   = tenseV t.s t.t be_V ;
-    inf = t.s ++ p.s ++ auxInf t.t be_V ;
+    v   = tenseV t.s t.t t.a be_V ;
+    inf = tenseInfV t.s t.a be_V ;
     c1  = ap.c1 ;
     c2  = ap.c2 ;
     adj = \\a => ap.s ! a ;
@@ -401,8 +404,8 @@ lin
     } ;
 
   UseVPC x vpc = { ---- big loss of quality (overgeneration) seems inevitable
-    v   = <[], vpc.v ! defaultAgr> ;   ---- agreement
-    inf = vpc.inf ! defaultAgr ; ---- agreement
+    v   = <[], [], vpc.v ! defaultAgr> ;   ---- agreement
+    inf = <[], vpc.inf ! defaultAgr> ; ---- agreement
     c1  = vpc.c1 ;
     c2  = vpc.c2 ;
     adj = \\a => [] ;
@@ -419,8 +422,8 @@ lin
 
   UseClC x cl = {
     subj = [] ;
-    v    = <[],cl.s> ; ----
-    inf  = [] ;
+    v    = <[],[],cl.s> ; ----
+    inf  = <[],[]> ;
     adj  = [] ;
     obj1 = [] ;
     obj2 = [] ;
@@ -484,34 +487,51 @@ oper
 
   neg : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "inte"} ;
 
-  auxInf : Tense -> V -> Str = \t,v -> case t of {Pres | Fut => v.v ! Inf ; _ => have_V.v ! Inf ++ v.v !  VSup} ; --- many tenses give the same form
-
   reflPron : Agr -> Str = \a -> case a of {Sg => "sig" ; Pl => "oss"} ;
 
   infVP : Agr -> VP -> Str = \a,vp -> 
-    let a2 = case vp.obj2.p2 of {True => a ; False => vp.obj1.p2} in
-    vp.adV ++ vp.inf ++ vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.adv ++ vp.ext ;
+    let 
+      a2 = case vp.obj2.p2 of {True => a ; False => vp.obj1.p2} 
+    in
+      vp.adV ++ (vp.inf.p1 | []) ++ vp.inf.p2 ++     ---- *hon tvingar oss att sovit 
+      vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.adv ++ vp.ext ;
 
-  tenseV : Str -> Tense -> V -> Str * Str = \s,t,v -> case t of {  --- s : Str is the dummy s field of Temp
-    Pres => <s ++ v.v ! VPres,      []> ;
-    Past => <s ++ v.v ! VPret,      []> ;
-    Perf => <have_V.v ! VPres,  s ++ v.v ! VSup> ;
-    Fut  => <shall_V.v ! VPres, s ++ v.v ! Inf>
+  tenseV : Str -> STense -> Anteriority -> V -> Str * Str * Str = \sta,t,a,v -> case <t,a> of {  --- sta dummy s field of Temp
+    <Pres,Simul> => <sta ++ v.v ! VPres,  [],               []> ;
+    <Past,Simul> => <sta ++ v.v ! VPret,  [],               []> ;
+    <Fut, Simul> => <shall_V.v ! VPres,   [],               sta ++ v.v ! Inf> ;
+    <Cond,Simul> => <shall_V.v ! VPret,   [],               sta ++ v.v ! Inf> ;
+    <Pres,Anter> => <[],                  have_V.v ! VPres, sta ++ v.v ! VSup> ;
+    <Past,Anter> => <[],                  have_V.v ! VPret, sta ++ v.v ! VSup> ;
+    <Fut, Anter> => <shall_V.v ! VPres,   have_V.v ! Inf,   sta ++ v.v ! VSup> ;
+    <Cond,Anter> => <shall_V.v ! VPret,   have_V.v ! Inf,   sta ++ v.v ! VSup> 
     } ;
 
-  declCl       : Cl -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
-  declSubordCl : Cl -> Str = \cl -> cl.subj ++ cl.adV ++ cl.v.p1 ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
-  declInvCl    : Cl -> Str = \cl -> cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
+  tenseInfV : Str -> Anteriority -> V -> Str * Str = \sta,a,v -> 
+    case a of {
+      Simul => <[],             sta ++ v.v ! Inf> ;  -- hon vill sova
+      Anter => <have_V.v ! Inf, sta ++ v.v !  VSup>  -- hon vill (ha) sovit
+      } ;
 
-  questCl : QCl -> Str = \cl -> 
-                         cl.foc ++ cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
+
+  declCl       : Clause -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
+  declSubordCl : Clause -> Str = \cl -> cl.subj ++ cl.adV ++ cl.v.p1 ++ (cl.v.p2 | []) ++ restCl cl ;
+  declInvCl    : Clause -> Str = \cl -> cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
+
+  questCl      : QCl    -> Str = \cl -> cl.foc ++ cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
+
   questSubordCl : QCl -> Str = \cl -> 
-    case cl.focType of {
-      NoFoc   => "om" ++ cl.foc          ++ cl.subj ++ cl.adV ++ cl.v.p1 ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
-      FocObj  =>         cl.foc          ++ cl.subj ++ cl.adV ++ cl.v.p1 ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
-      FocSubj =>         cl.foc ++ "som" ++ cl.subj ++ cl.adV ++ cl.v.p1 ++ cl.v.p2 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
+    let 
+      rest = cl.subj ++ cl.adV ++ cl.v.p1 ++ (cl.v.p2 | []) ++ restCl cl  
+    in case cl.focType of {
+      NoFoc   => "om" ++ cl.foc          ++ rest ;  -- om hon sover
+      FocObj  =>         cl.foc          ++ rest ;  -- vem älskar hon / varför hon sover
+      FocSubj =>         cl.foc ++ "som" ++ rest    -- vem som älskar henne
       } ;
 
   that_Compl : Str = "att" | [] ;
+
+  -- this part is usually the same in all reconfigurations
+  restCl : Clause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
 
 }
