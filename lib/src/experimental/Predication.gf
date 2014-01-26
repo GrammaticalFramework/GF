@@ -36,7 +36,9 @@ fun
 
   TTAnt : Tense -> Ant -> Temp ;
 
-  UseV : Temp -> Pol -> (a : Arg) -> V a -> VP a ;
+  UseV           : Temp -> Pol -> (a : Arg) -> V a       -> VP a ;
+  PassUseV       : Temp -> Pol -> (a : Arg) -> V (aNP a) -> VP a ;
+  AgentPassUseV  : Temp -> Pol -> (a : Arg) -> V (aNP a) -> NP -> VP a ;
   
   SlashVNP  : (a : Arg) -> VP (aNP a)        -> NP    -> VP a ;         -- consuming first NP
   SlashVNP2 : (a : Arg) -> VP (aNP (aNP a))  -> NP    -> VP (aNP a) ;   -- consuming second NP
