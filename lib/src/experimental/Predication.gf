@@ -44,9 +44,11 @@ fun
   ComplVV   : (a : Arg) -> VP aV             -> VP  a -> VP a ;
   ComplVQ   : (a : Arg) -> VP aQ             -> QCl a -> VP a ;
   ComplVA   : (a : Arg) -> VP aA             -> AP  a -> VP a ;
+  ComplVN   : (a : Arg) -> VP aN             -> CN  a -> VP a ;
   SlashV2S  : (a : Arg) -> VP (aNP aS)       -> Cl a  -> VP (aNP a) ;   -- a:Arg gives slash propagation, SlashVS
   SlashV2V  : (a : Arg) -> VP (aNP aV)       -> VP a  -> VP (aNP a) ;  
   SlashV2A  : (a : Arg) -> VP (aNP aA)       -> AP a  -> VP (aNP a) ;      
+  SlashV2N  : (a : Arg) -> VP (aNP aN)       -> CN a  -> VP (aNP a) ;      
   SlashV2Q  : (a : Arg) -> VP (aNP aA)       -> QCl a -> VP (aNP a) ;      
 
   UseAP : Temp -> Pol -> (a : Arg) -> AP a -> VP a ;
@@ -83,27 +85,35 @@ fun
   ContClC  :         (a : Arg) -> Cl a -> ClC a -> ClC a ;
   UseClC   : (a : Arg) -> ClC a -> Cl a ;
 
+--------------- from now on, to be inherited from standard RGL; here just for test purposes
+
+  PrepNP : Prep -> NP -> Adv ;
+
 -- lexicon
 
-  sleep_V    : V aNone ;
-  walk_V     : V aNone ;
-  love_V2    : V (aNP aNone) ;
-  look_V2    : V (aNP aNone) ;
-  believe_VS : V aS ;
-  tell_V2S   : V (aNP aS) ;  
-  prefer_V3  : V (aNP (aNP aNone)) ;
-  want_VV    : V aV ;
-  force_V2V  : V (aNP aV) ;
-  promise_V2V  : V (aNP aV) ;
-  wonder_VQ  : V aQ ;
-  become_VA  : V aA ;
-  make_V2A   : V (aNP aA) ;
-  ask_V2Q    : V (aNP aQ) ;
+  sleep_V     : V aNone ;
+  walk_V      : V aNone ;
+  love_V2     : V (aNP aNone) ;
+  look_V2     : V (aNP aNone) ;
+  believe_VS  : V aS ;
+  tell_V2S    : V (aNP aS) ;  
+  prefer_V3   : V (aNP (aNP aNone)) ;
+  want_VV     : V aV ;
+  force_V2V   : V (aNP aV) ;
+  promise_V2V : V (aNP aV) ;
+  wonder_VQ   : V aQ ;
+  become_VA   : V aA ;
+  become_VN   : V aN ;
+  make_V2A    : V (aNP aA) ;
+  ask_V2Q     : V (aNP aQ) ;
+  promote_V2N : V (aNP aN) ;
 
-  old_A      : AP aNone ;
-  married_A2 : AP (aNP aNone) ; -- married to her
-  eager_AV   : AP aV ;          -- eager to sleep
-  easy_A2V   : AP (aNP aV) ;    -- easy for him to sleep
+  old_A       : AP aNone ;
+  married_A2  : AP (aNP aNone) ; -- married to her
+  eager_AV    : AP aV ;          -- eager to sleep
+  easy_A2V    : AP (aNP aV) ;    -- easy for him to sleep
+  professor_N : CN aNone ;
+  manager_N2  : CN (aNP aNone) ; -- manager of X
 
   she_NP : NP ;
   we_NP : NP ;
@@ -112,12 +122,8 @@ fun
   always_AdV : AdV ;
   who_IP : IP ;
 
-  PrepNP : Prep -> NP -> Adv ;
-
   with_Prep : Prep ;
-
   and_Conj : Conj ;
-
   why_IAdv : IAdv ;
 
 }

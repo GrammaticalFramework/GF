@@ -78,13 +78,14 @@ lincat
   S    = {s : Str} ;
   Utt  = {s : Str} ;
   AP   = {s : Agr => Str ; c1 : Str ; c2 : Str ; obj1 : Agr => Str} ;
+  CN   = {s : Agr => Str ; c1 : Str ; c2 : Str ; obj1 : Agr => Str} ;
   IP   = {s : Str ; a : Agr} ;
   Prep = {s : Str} ;
   Conj = {s : Str} ;
   IAdv = {s : Str} ;
 
 lin
-  aNone, aS, aV, aA, aQ = {s = []} ;
+  aNone, aS, aV, aA, aQ, aN = {s = []} ;
   aNP a = a ;
 
   TTAnt t a = {s = t.s ++ a.s ; t = t.t ; a = a.a} ;
@@ -202,6 +203,19 @@ lin
     ext = vp.ext ;
     } ;
 
+  ComplVN x vp ap = {
+    v   = vp.v ;
+    inf = vp.inf ;
+    c1  = vp.c1 ;
+    c2  = vp.c2 ;
+    adj = vp.adj ;
+    obj1 = vp.obj1 ;
+    obj2 = <\\a => ap.s ! a,vp.obj2.p2> ;
+    adV = vp.adV ;
+    adv = vp.adv ;
+    ext = vp.ext ;
+    } ;
+
   SlashV2S x vp cl = {
     v   = vp.v ;
     inf = vp.inf ;
@@ -249,6 +263,19 @@ lin
     adj = vp.adj ;
     obj1 = vp.obj1 ;
     obj2 = <\\a => ap.s ! a, vp.obj2.p2> ;
+    adV = vp.adV ;
+    adv = vp.adv ;
+    ext = vp.ext ;
+    } ;
+
+  SlashV2N x vp ap = {
+    v   = vp.v ;
+    inf = vp.inf ;
+    c1  = vp.c1 ;
+    c2  = vp.c2 ;
+    adj = vp.adj ;
+    obj1 = vp.obj1 ;
+    obj2 = <\\a => vp.c2 ++ ap.s ! a, vp.obj2.p2> ;
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -446,14 +473,19 @@ lin
   promise_V2V = mkV "lova" "lovar" "lovade" "lovat" [] "att" ;
   wonder_VQ = mkV "undra" "undrar" "undrade" "undrat" ;
   become_VA = mkV "bli" "blir" "blev" "blivit" ;
+  become_VN = mkV "bli" "blir" "blev" "blivit" ;
   make_V2A = {v = table {Inf => "göra" ; VPres => "gör" ; VPret => "gjorde" ; VSup => "gjort"} ; 
                c1 = [] ; c2 = [] ; isSubjectControl = False} ; 
+  promote_V2N = {v = table {Inf => "befordra" ; VPres => "befordrar" ; VPret => "befordrade" ; VSup => "befordrat"} ; 
+               c1 = [] ; c2 = "till" ; isSubjectControl = False} ; ---- ? de befordrade dem till chefer för sig/dem 
   ask_V2Q = mkV "fråga" "frågar" "frågade" "frågat" ;
 
   old_A = {s = table {Sg => "gammal" ; Pl => "gamla"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
   married_A2 = {s = table {Sg => "gift" ; Pl => "gifta"} ; c1 = "med" ; c2 = [] ; obj1 = \\_ => []} ;
   eager_AV = {s = table {Sg => "ivrig" ; Pl => "ivriga"} ; c1 = [] ; c2 = "att" ; obj1 = \\_ => []} ;
   easy_A2V = {s = table {Sg => "lätt" ; Pl => "lätta"} ; c1 = "för" ; c2 = "att" ; obj1 = \\_ => []} ;
+  professor_N = {s = table {Sg => "professor" ; Pl => "professorer"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
+  manager_N2 = {s = table {Sg => "chef" ; Pl => "chefer"} ; c1 = "för" ; c2 = [] ; obj1 = \\_ => []} ;
 
   she_NP = {s = table {Nom => "hon" ; Acc => "henne"} ; a = Sg} ;
   we_NP = {s = table {Nom => "vi" ; Acc => "oss"} ; a = Pl} ;
