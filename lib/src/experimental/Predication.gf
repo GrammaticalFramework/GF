@@ -76,6 +76,12 @@ fun
   
   UttS  : S -> Utt ;
 
+-- participles as adjectives
+
+  PresPartAP      : (a : Arg) -> V a       -> AP a ;
+  PastPartAP      : (a : Arg) -> V (aNP a) -> AP a ;
+  AgentPastPartAP : (a : Arg) -> V (aNP a) -> NP -> AP a ;
+
 -- VP coordination
 
   StartVPC : Conj -> (a : Arg) -> VP a -> VP a  -> VPC a ;
