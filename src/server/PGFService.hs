@@ -12,6 +12,7 @@ import URLEncoding
 #if C_RUNTIME
 import qualified CRuntimeFFI as C
 import qualified CId as C
+import Data.Time.Clock(UTCTime,getCurrentTime,diffUTCTime)
 #endif
 
 import Network.CGI
@@ -43,9 +44,12 @@ logFile :: FilePath
 logFile = "pgf-error.log"
 
 #ifdef C_RUNTIME
-type Caches = (Cache PGF,Cache C.PGF)
+type Caches = (Cache PGF,Cache (C.PGF,MVar ParseCache))
+type ParseCache = Map.Map (C.Language,String) ([(C.Expr,Float)],UTCTime)
 newPGFCache = do pgfCache <- newCache PGF.readPGF
-                 cCache <- newCache C.readPGF 
+                 cCache <- newCache $ \ path -> do pgf <- C.readPGF path
+                                                   pc <- newMVar Map.empty
+                                                   return (pgf,pc)
                  return (pgfCache,cCache)
 #else
 type Caches = (Cache PGF,())
@@ -78,33 +82,45 @@ cgiMain' cache path =
 -- * C run-time functionality
 
 #ifdef C_RUNTIME
-cpgfMain :: String -> C.PGF -> CGI CGIResult
-cpgfMain command pgf =
+cpgfMain :: String -> (C.PGF,MVar ParseCache) -> CGI CGIResult
+cpgfMain command (pgf,pc) =
   case command of
-    "c-parse"     -> out =<< parse # input % from % limit % trie
+    "c-parse"     -> out =<< join (parse # input % from % start % limit % trie)
     "c-linearize" -> out =<< lin # tree % to
-    "c-translate" -> out =<< trans # input % from % to % limit % trie
+    "c-translate" -> out =<< join (trans # input % from % to % start % limit % trie)
     _             -> badRequest "Unknown command" command
   where
-    parse input (from,concr) mlimit trie =
-        showJSON [makeObj ("from".=from:"trees".=trees :[])]
-                                                    -- :addTrie trie trees
+    parse input (from,concr) start mlimit trie =
+        do trees <- parse' input (from,concr) start mlimit
+           return $ showJSON [makeObj ("from".=from:"trees".=trees :[])]
+                                                        -- :addTrie trie trees
       where
-        trees = parse' input concr mlimit
 
-    parse' input concr mlimit = 
-        map fst $ -- hmm
-        maybe id take mlimit (C.parse concr (C.startCat pgf) input)
+    parse' input (from,concr) start mlimit = 
+        liftIO $ do t <- getCurrentTime
+                    (map fst . maybe id take mlimit . drop start)
+                      # modifyMVar pc (parse'' t)
+      where
+        key = (from,input)
+        parse'' t pc = maybe new old $ Map.lookup key pc
+          where
+            new = return (update (res,t) pc,res)
+              where res = C.parse concr (C.startCat pgf) input
+            old (res,_) = return (update (res,t) pc,res)
+            update r = Map.mapMaybe purge . Map.insert key r
+            purge r@(_,t') = if diffUTCTime t t'<600 then Just r else Nothing
 
     lin tree tos = showJSON (lin' tree tos)
     lin' tree tos = [makeObj ["to".=to,"text".=C.linearize c tree]|(to,c)<-tos]
 
-    trans input (from,concr) tos mlimit trie =
-      showJSON [ makeObj ["from".=from,
-                          "translations".=
-                            [makeObj ["tree".=tree,
-                                      "linearizations".=lin' tree tos]
-                              | tree <- parse' input concr mlimit]]]
+    trans input (from,concr) tos start mlimit trie =
+      do trees <- parse' input (from,concr) start mlimit
+         return $
+           showJSON [ makeObj ["from".=from,
+                               "translations".=
+                                 [makeObj ["tree".=tree,
+                                           "linearizations".=lin' tree tos]
+                                  | tree <- trees]]]
 
     from = maybe (missing "from") return =<< getLang "from"
     
@@ -249,6 +265,7 @@ getLang' readLang i =
 limit, depth :: CGI (Maybe Int)
 limit = readInput "limit"
 depth = readInput "depth"
+start = maybe 0 id # readInput "start"
 
 trie :: CGI Bool
 trie = maybe False toBool # getInput "trie"
