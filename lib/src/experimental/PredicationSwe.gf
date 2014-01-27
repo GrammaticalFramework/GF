@@ -87,8 +87,18 @@ lincat
   AdV  = {s : Str} ;
   S    = {s : Str} ;
   Utt  = {s : Str} ;
-  AP   = {s : Agr => Str ; c1 : Str ; c2 : Str ; obj1 : Agr => Str} ;
-  CN   = {s : Agr => Str ; c1 : Str ; c2 : Str ; obj1 : Agr => Str} ;
+  AP   = {
+    s : Agr => Str ; 
+    c1, c2 : ComplCase ; 
+    obj1 : 
+    Agr => Str
+    } ;
+  CN   = {
+    s : Agr => Str ; 
+    c1, c2 : ComplCase ; 
+    obj1 : 
+    Agr => Str
+    } ;
   IP   = {s : Str ; a : Agr} ;
   Prep = {s : Str} ;
   Conj = {s : Str} ;
@@ -114,9 +124,9 @@ lin
     inf = tenseInfV t.s t.a Act v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
-    adj = \\a => [] ;
-    obj1 = <\\a => [], defaultAgr> ; ---- not used, just default value
-    obj2 = <\\a => [], v.isSubjectControl> ;
+    adj = noObj ;
+    obj1 = <noObj, defaultAgr> ; ---- not used, just default value
+    obj2 = <noObj, v.isSubjectControl> ;
     adV = p.s ++ neg p.p ;
     adv = [] ;
     ext = [] ;
@@ -127,9 +137,9 @@ lin
     inf = tenseInfV t.s t.a Pass v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
-    adj = \\a => [] ;
-    obj1 = <\\a => [], defaultAgr> ; ---- not used, just default value
-    obj2 = <\\a => [], True> ; -- becomes subject control even if object control otherwise "*she was promised by us to love ourselves"
+    adj = noObj ;
+    obj1 = <noObj, defaultAgr> ; ---- not used, just default value
+    obj2 = <noObj, True> ; -- becomes subject control even if object control otherwise "*she was promised by us to love ourselves"
     adV = p.s ++ neg p.p ;
     adv = [] ;
     ext = [] ;
@@ -141,8 +151,8 @@ lin
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj = \\a => [] ;
-    obj1 = <\\a => [], defaultAgr> ; 
-    obj2 = <\\a => [], True> ;
+    obj1 = <noObj, defaultAgr> ; 
+    obj2 = <noObj, True> ;
     adV = p.s ++ neg p.p ;
     adv = appComplCase agentCase np ; ---- add a specific field for agent?
     ext = [] ;
@@ -155,7 +165,7 @@ lin
     c2  = ap.c2 ;
     adj = \\a => ap.s ! a ;
     obj1 = <ap.obj1, defaultAgr> ;
-    obj2 = <\\a => [], True> ;
+    obj2 = <noObj, True> ; --- there are no A3's
     adV = p.s ++ neg p.p ;
     adv = [] ;
     ext = [] ;
@@ -164,10 +174,10 @@ lin
   SlashVNP x vp np = {
     v   = vp.v ;
     inf = vp.inf ;
-    c1  = vp.c1 ;
+    c1  = vp.c1 ;  ---- should be consumed now
     c2  = vp.c2 ;
     adj = vp.adj ;
-    obj1 = <\\a => np.s ! Acc, np.a> ;  -- np.a for object control
+    obj1 = <\\a => np.s ! Acc, np.a> ;  -- np.a for object control ---- Acc to be abstracted
     obj2 = vp.obj2 ;
     adv = vp.adv ;
     adV = vp.adV ;
@@ -178,10 +188,10 @@ lin
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
-    c2  = vp.c2 ;
+    c2  = vp.c2 ;  ---- should be consumed now
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => np.s ! Acc, vp.obj2.p2> ;
+    obj2 = <\\a => np.s ! Acc, vp.obj2.p2> ; -- control is preserved  ---- Acc to be abstracted
     adv = vp.adv ;
     adV = vp.adV ;
     ext = vp.ext ;
@@ -193,11 +203,11 @@ lin
     c1  = vp.c1 ;
     c2  = vp.c2 ;
     adj = vp.adj ;
-    obj1 = vp.obj1 ;
+    obj1 = vp.obj1 ; ---- consumed
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
-    ext = that_Compl ++ declSubordCl (lin Cl cl) ;
+    ext = that_Compl ++ declSubordCl (lin Cl cl) ; ---- sentence form
     } ;
 
   ComplVQ x vp qcl = {
@@ -206,11 +216,11 @@ lin
     c1  = vp.c1 ;
     c2  = vp.c2 ;
     adj = vp.adj ;
-    obj1 = vp.obj1 ;
+    obj1 = vp.obj1 ; ---- consumed
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
-    ext = questSubordCl qcl ;
+    ext = questSubordCl qcl ; ---- question form
     } ;
 
   ComplVV x vp vpo = {
@@ -220,7 +230,7 @@ lin
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => infVP a vpo, vp.obj2.p2> ;
+    obj2 = <\\a => infVP a vpo, vp.obj2.p2> ; ---- infForm
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -229,24 +239,24 @@ lin
   ComplVA x vp ap = {
     v   = vp.v ;
     inf = vp.inf ;
-    c1  = vp.c1 ;
+    c1  = vp.c1 ; ---- consumed
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => ap.s ! a,vp.obj2.p2> ;
+    obj2 = <\\a => ap.s ! a,vp.obj2.p2> ; ---- adjForm
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
     } ;
 
-  ComplVN x vp ap = {
+  ComplVN x vp cn = {
     v   = vp.v ;
     inf = vp.inf ;
-    c1  = vp.c1 ;
+    c1  = vp.c1 ; ---- consumed
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => ap.s ! a,vp.obj2.p2> ;
+    obj2 = <\\a => cn.s ! a,vp.obj2.p2> ; ---- cnForm
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -256,36 +266,36 @@ lin
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
-    c2  = vp.c2 ;
+    c2  = vp.c2 ; ---- consumed
     adj = vp.adj ;
     obj1 = vp.obj1 ;
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
-    ext = that_Compl ++ declSubordCl (lin Cl cl) ;
+    ext = that_Compl ++ declSubordCl (lin Cl cl) ; ---- sentence form
     } ;
 
   SlashV2Q x vp cl = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
-    c2  = vp.c2 ;
+    c2  = vp.c2 ; ---- consumed
     adj = vp.adj ;
     obj1 = vp.obj1 ;
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
-    ext = questSubordCl (lin QCl cl) ;
+    ext = questSubordCl (lin QCl cl) ; ---- question form
     } ;
 
   SlashV2V x vp vpo = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
-    c2  = vp.c2 ;
+    c2  = vp.c2 ; ---- consumed
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => infVP a (lin VP vpo), vp.obj2.p2> ;
+    obj2 = <\\a => infVP a (lin VP vpo), vp.obj2.p2> ; ---- infForm
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -295,29 +305,29 @@ lin
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
-    c2  = vp.c2 ;
+    c2  = vp.c2 ; ---- consumed
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => ap.s ! a, vp.obj2.p2> ;
+    obj2 = <\\a => ap.s ! a, vp.obj2.p2> ; ---- adjForm
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
     } ;
 
-  SlashV2N x vp ap = {
+  SlashV2N x vp cn = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
-    c2  = vp.c2 ;
+    c2  = vp.c2 ; ---- consumed
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => vp.c2 ++ ap.s ! a, vp.obj2.p2> ;
+    obj2 = <\\a => vp.c2 ++ cn.s ! a, vp.obj2.p2> ; ---- cn form
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
     } ;
 
-  AdvVP adv _ vp = {
+  AdvVP adv x vp = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
@@ -326,7 +336,7 @@ lin
     obj1 = vp.obj1 ;
     obj2 = vp.obj2 ;
     adV = vp.adV ;
-    adv = vp.adv ++ adv.s ;
+    adv = vp.adv ++ adv.s ; ---- all adverbs become one field - how to front one of them?
     ext = vp.ext ;
     } ;
 
@@ -338,7 +348,7 @@ lin
     adj = vp.adj ;
     obj1 = vp.obj1 ;
     obj2 = vp.obj2 ;
-    adV = vp.adV ++ adv.s ;
+    adV = vp.adV ++ adv.s ; ---- all adV's become one field - how to front one of them?
     adv = vp.adv ;
     ext = vp.ext ;
     } ;
@@ -346,10 +356,10 @@ lin
   ReflVP x vp = {
     v   = vp.v ;
     inf = vp.inf ;
-    c1  = vp.c1 ;
+    c1  = vp.c1 ; ---- consumed
     c2  = vp.c2 ;
     adj = vp.adj ;
-    obj1 = <\\a => reflPron a, defaultAgr> ; ---- defaultAgr will not be used but subj.a instead
+    obj1 = <\\a => reflPron a, defaultAgr> ; --- hack: defaultAgr will not be used but subj.a instead
     obj2 = vp.obj2 ;
     adV = vp.adV ;
     adv = vp.adv ;
@@ -360,10 +370,10 @@ lin
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
-    c2  = vp.c2 ;
+    c2  = vp.c2 ; ---- consumed
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => reflPron a, vp.obj2.p2> ;
+    obj2 = <\\a => reflPron a, vp.obj2.p2> ; --- subj/obj control doesn't matter any more
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -374,15 +384,15 @@ lin
     v    = vp.v ;
     inf  = vp.inf ;
     adj  = vp.adj ! np.a ;
-    obj1 = vp.c1 ++ vp.obj1.p1 ! np.a ;
-    obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;
+    obj1 = vp.c1 ++ vp.obj1.p1 ! np.a ;  ---- apply complCase
+    obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;   ---- apply complCase
     adV  = vp.adV ;
     adv  = vp.adv ;
     ext  = vp.ext ; 
-    c3   = [] ;      -- for one more prep to build ClSlash 
+    c3   = noComplCase ;      -- for one more prep to build ClSlash 
     } ;
 
-  PrepCl p x cl = {
+  PrepCl p x cl = {   -- Cl/NP ::= Cl PP/NP
     subj = cl.subj ;
     v    = cl.v ;
     inf  = cl.inf ;
@@ -392,10 +402,10 @@ lin
     adV  = cl.adV ;
     adv  = cl.adv ;
     ext  = cl.ext ; 
-    c3   = p.s ;      -- for one more prep to build ClSlash 
+    c3   = prepComplCase p ; 
     } ;
 
-  SlashClNP x cl np = {
+  SlashClNP x cl np = {  -- Cl ::= Cl/NP NP 
     subj = cl.subj ;
     v    = cl.v ;
     inf  = cl.inf ;
@@ -403,15 +413,16 @@ lin
     obj1 = cl.obj1 ;
     obj2 = cl.obj2 ;
     adV  = cl.adV ;
-    adv  = cl.adv ++ cl.c3 ++ np.s ! Acc ;
+    adv  = cl.adv ++ appComplCase cl.c3 np ; ---- again, adv just added
     ext  = cl.ext ; 
-    c3   = [] ;
+    c3   = noComplCase ;  -- complCase has been consumed
     } ;
 
 
+-- QCl ::= Cl by just adding focus field
+  QuestCl x cl = cl ** {foc = [] ; focType = NoFoc} ;  -- NoFoc implies verb first: älskar hon oss
 
-  QuestCl x cl = cl ** {foc = [] ; focType = NoFoc} ;  -- verb first: älskar hon oss
-  QuestIAdv x iadv cl = cl ** {foc = iadv.s ; focType = FocObj} ;
+  QuestIAdv x iadv cl = cl ** {foc = iadv.s ; focType = FocObj} ; -- FocObj implies Foc + V + Subj: varför älskar hon oss
 
   QuestVP x ip vp = {
     foc  = ip.s ;   -- vem älskar henne
@@ -420,20 +431,20 @@ lin
     v    = vp.v ;
     inf  = vp.inf ;
     adj  = vp.adj ! ip.a ;
-    obj1 = vp.c1 ++ vp.obj1.p1 ! ip.a ;
-    obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => ip.a ; False => vp.obj1.p2}) ;
+    obj1 = vp.c1 ++ vp.obj1.p1 ! ip.a ; ---- appComplCase
+    obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => ip.a ; False => vp.obj1.p2}) ; ---- appComplCase
     adV  = vp.adV ;
     adv  = vp.adv ;
     ext  = vp.ext ; 
-    c3   = [] ;      -- for one more prep to build ClSlash 
+    c3   = noComplCase ;      -- for one more prep to build ClSlash ---- ever needed for QCl?
     } ;
 
   QuestSlash x ip cl =  
     let
-      ips = cl.c3 ++ ip.s ;  ---- c3? 
+      ips = cl.c3 ++ ip.s ;     -- in Cl/NP, c3 is the only prep ---- appComplCase for ip
       focobj = case cl.focType of {
-        NoFoc => <ips, [], FocObj> ;  -- put ip object to focus  
-        t     => <[], ips, t>         -- put ip object in situ
+        NoFoc => <ips, [], FocObj> ;  -- put ip object to focus  if there is no focus yet
+        t     => <[], ips, t>         -- put ip object in situ   if there already is a focus
         } ;
     in {
     foc  = focobj.p1 ;
@@ -442,12 +453,12 @@ lin
     v    = cl.v ;
     inf  = cl.inf ;
     adj  = cl.adj ;
-    obj1 = cl.obj1 ++ focobj.p2 ;
-    obj2 = cl.obj2 ;        ---- slash to this part?
+    obj1 = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
+    obj2 = cl.obj2 ;                  ---- slash to this part? maybe with one more value of focType?
     adV  = cl.adV ;
     adv  = cl.adv ;
     ext  = cl.ext ; 
-    c3   = [] ; 
+    c3   = noComplCase ; 
     } ;
 
   UseCl  cl = {s = declCl cl} ;
@@ -455,34 +466,38 @@ lin
 
   UttS s = s ;
 
-  PresPartAP x v = {
+  PresPartAP x v = {            
     s = \\a => v.v ! PresPart ;
-    c1 = v.c1 ; 
+    c1 = v.c1 ;                    -- tittande på henne
     c2 = v.c2 ;
-    obj1 = \\_ => [] ;
+    obj1 = noObj ;
     } ;
+
   PastPartAP x v = {
     s = \\a => v.v ! PastPart a ;
     c1 = v.c1 ; 
     c2 = v.c2 ;
-    obj1 = \\_ => [] ;
+    obj1 = noObj ;
     } ;
+
   AgentPastPartAP x v np = {
     s = \\a => v.v ! PastPart a ;
     c1 = v.c1 ; 
     c2 = v.c2 ;
-    obj1 = \\_ => appComplCase agentCase np ;
+    obj1 = \\_ => appComplCase agentCase np ; ---- addObj
     } ;
 
   StartVPC c x v w = {  ---- some loss of quality seems inevitable
     v = \\a => 
-          v.v.p1 ++ v.adV ++ v.v.p2 ++ v.v.p3 ++ v.adj ! a ++ v.c1 ++ v.obj1.p1 ! a ++ v.c2 ++ v.obj2.p1 ! a ++ v.adv ++ v.ext 
-            ++ c.s ++
-          w.v.p1 ++ w.adV ++ w.v.p2 ++ w.v.p3 ++ w.adj ! a ++ w.c1 ++ w.obj1.p1 ! a ++ w.c2 ++ w.obj2.p1 ! a ++ w.adv ++ w.ext ;
+          v.v.p1 ++ v.adV ++ v.v.p2 ++ v.v.p3 ++ v.adj ! a ++ 
+          v.c1 ++ v.obj1.p1 ! a ++ v.c2 ++ v.obj2.p1 ! a ++ v.adv ++ v.ext   ---- appComplCase
+            ++ c.s ++  
+          w.v.p1 ++ w.adV ++ w.v.p2 ++ w.v.p3 ++ w.adj ! a ++                ---- appComplCase
+          w.c1 ++ w.obj1.p1 ! a ++ w.c2 ++ w.obj2.p1 ! a ++ w.adv ++ w.ext ;
     inf = \\a => 
             infVP a (lin VP v) ++ c.s ++ infVP a (lin VP w) ;
-    c1 = [] ; --- w.c1 ; --- the full story is to unify v and w...
-    c2 = [] ; --- w.c2 ; 
+    c1 = [] ; ---- w.c1 ? --- the full story is to unify v and w...
+    c2 = [] ; ---- w.c2 ? 
     } ;
 
   UseVPC x vpc = { ---- big loss of quality (overgeneration) seems inevitable
@@ -491,8 +506,8 @@ lin
     c1  = vpc.c1 ;
     c2  = vpc.c2 ;
     adj = \\a => [] ;
-    obj1 = <\\a => [], defaultAgr> ;
-    obj2 = <\\a => [],True> ;
+    obj1 = <noObj, defaultAgr> ;
+    obj2 = <noObj,True> ;
     adv,adV = [] ;
     ext = [] ;
     } ;
@@ -514,6 +529,8 @@ lin
     ext  = [] ;
     c3   = cl.c3 ;
     } ;
+
+---- the lexicon is just for testing: use standard Swe lexicon and morphology instead
 
   sleep_V = mkV "sova" "sover" "sov" "sovit" "soven" "sovna" ;
   walk_V = mkV "gå" "går" "gick" "gått" "gången" "gångna" ;
@@ -584,6 +601,9 @@ oper
 
   shall_V : V = mkV "skola" "ska" "skulle" "skolat" "skolad" "skolade" ;
 
+
+---- the following may become parameters for a functor
+
   neg : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "inte"} ;
 
   reflPron : Agr -> Str = \a -> case a of {Sg => "sig" ; Pl => "oss"} ;
@@ -636,5 +656,11 @@ oper
   agentCase : ComplCase = "av" ;
 
   appComplCase : ComplCase -> NP -> Str = \p,np -> p ++ np.s ! Acc ;
+
+  noComplCase : ComplCase = [] ;
+
+  prepComplCase : Prep -> ComplCase = \p -> p.s ; 
+
+  noObj : Agr => Str = \\_ => [] ;
 
 }
