@@ -243,7 +243,7 @@ lin
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => ap.s ! a,vp.obj2.p2> ; ---- adjForm
+    obj2 = <\\a => ap.s ! a ++ ap.obj1 ! a, vp.obj2.p2> ; ---- adjForm
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -256,7 +256,7 @@ lin
     c2  = vp.c2 ;
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => cn.s ! a,vp.obj2.p2> ; ---- cnForm
+    obj2 = <\\a => cn.s ! a ++ cn.obj1 ! a, vp.obj2.p2> ; ---- cnForm
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -308,7 +308,7 @@ lin
     c2  = vp.c2 ; ---- consumed
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => ap.s ! a, vp.obj2.p2> ; ---- adjForm
+    obj2 = <\\a => ap.s ! a ++ ap.obj1 ! a, vp.obj2.p2> ; ---- adjForm
     adV = vp.adV ;
     adv = vp.adv ;
     ext = vp.ext ;
@@ -321,34 +321,8 @@ lin
     c2  = vp.c2 ; ---- consumed
     adj = vp.adj ;
     obj1 = vp.obj1 ;
-    obj2 = <\\a => vp.c2 ++ cn.s ! a, vp.obj2.p2> ; ---- cn form
+    obj2 = <\\a => cn.s ! a ++ cn.obj1 ! a, vp.obj2.p2> ; ---- cn form
     adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  AdvVP adv x vp = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = vp.obj2 ;
-    adV = vp.adV ;
-    adv = vp.adv ++ adv.s ; ---- all adverbs become one field - how to front one of them?
-    ext = vp.ext ;
-    } ;
-
-  AdVVP adv _ vp = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = vp.obj2 ;
-    adV = vp.adV ++ adv.s ; ---- all adV's become one field - how to front one of them?
     adv = vp.adv ;
     ext = vp.ext ;
     } ;
@@ -465,6 +439,65 @@ lin
   UseQCl cl = {s = questCl cl} ;
 
   UttS s = s ;
+
+  AdvCl a x cl = {
+    subj = cl.subj ;
+    v    = cl.v ;
+    inf  = cl.inf ;
+    adj  = cl.adj ;
+    obj1 = cl.obj1 ;
+    obj2 = cl.obj2 ;
+    adV  = cl.adV ;
+    adv  = cl.adv ++ a.s ;
+    ext  = cl.ext ; 
+    c3   = cl.c3 ;
+    } ;
+
+  AdVCl a x cl = {
+    subj = cl.subj ;
+    v    = cl.v ;
+    inf  = cl.inf ;
+    adj  = cl.adj ;
+    obj1 = cl.obj1 ;
+    obj2 = cl.obj2 ;
+    adV  = cl.adV ++ a.s ;
+    adv  = cl.adv ;
+    ext  = cl.ext ; 
+    c3   = cl.c3 ;
+    } ;
+
+
+{-
+  AdvVP adv x vp = {
+    v   = vp.v ;
+    inf = vp.inf ;
+    c1  = vp.c1 ;
+    c2  = vp.c2 ;
+    adj = vp.adj ;
+    obj1 = vp.obj1 ;
+    obj2 = vp.obj2 ;
+    adV = vp.adV ;
+    adv = vp.adv ++ adv.s ; ---- all adverbs become one field - how to front one of them?
+    ext = vp.ext ;
+    } ;
+
+  AdVVP adv _ vp = {
+    v   = vp.v ;
+    inf = vp.inf ;
+    c1  = vp.c1 ;
+    c2  = vp.c2 ;
+    adj = vp.adj ;
+    obj1 = vp.obj1 ;
+    obj2 = vp.obj2 ;
+    adV = vp.adV ++ adv.s ; ---- all adV's become one field - how to front one of them?
+    adv = vp.adv ;
+    ext = vp.ext ;
+    } ;
+-}
+
+
+
+
 
   PresPartAP x v = {            
     s = \\a => v.v ! PresPart ;
@@ -641,7 +674,7 @@ oper
 
   questSubordCl : QCl -> Str = \cl -> 
     let 
-      rest = cl.subj ++ cl.adV ++ cl.v.p1 ++ (cl.v.p2 | []) ++ restCl cl  
+      rest = cl.subj ++ cl.adV ++ cl.v.p1 ++ (cl.v.p2 | []) ++ restCl cl 
     in case cl.focType of {
       NoFoc   => "om" ++ cl.foc          ++ rest ;  -- om hon sover
       FocObj  =>         cl.foc          ++ rest ;  -- vem älskar hon / varför hon sover
@@ -651,7 +684,7 @@ oper
   that_Compl : Str = "att" | [] ;
 
   -- this part is usually the same in all reconfigurations
-  restCl : Clause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
+  restCl : Clause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3 ;
 
   agentCase : ComplCase = "av" ;
 
