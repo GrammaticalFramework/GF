@@ -40,8 +40,8 @@ fun
   PassUseV       : Temp -> Pol -> (a : Arg) -> V (aNP a) -> VP a ;
   AgentPassUseV  : Temp -> Pol -> (a : Arg) -> V (aNP a) -> NP -> VP a ;
   
-  SlashVNP  : (a : Arg) -> VP (aNP a)        -> NP    -> VP a ;         -- consuming first NP
-  SlashVNP2 : (a : Arg) -> VP (aNP (aNP a))  -> NP    -> VP (aNP a) ;   -- consuming second NP
+  SlashV2   : (a : Arg) -> VP (aNP a)        -> NP    -> VP a ;         -- consuming first NP
+  SlashV3   : (a : Arg) -> VP (aNP (aNP a))  -> NP    -> VP (aNP a) ;   -- consuming second NP
   ComplVS   : (a : Arg) -> VP aS             -> Cl  a -> VP a ;
   ComplVV   : (a : Arg) -> VP aV             -> VP  a -> VP a ;
   ComplVQ   : (a : Arg) -> VP aQ             -> QCl a -> VP a ;
@@ -60,10 +60,6 @@ fun
   PrepCl    : Prep -> (a : Arg) -> Cl a -> Cl (aNP a) ;  -- slash creation (S/NP): hon tittar på (oss)
   SlashClNP : (a : Arg) -> Cl (aNP a) -> NP -> Cl a ;    -- slash consumption: hon tittar på + oss
 
-  AdvVP  : Adv -> (a : Arg) -> VP a -> VP a ; ---- these create many ambiguities
-  AdVVP  : AdV -> (a : Arg) -> VP a -> VP a ;
-  ---- "hon tvingar oss att sova idag": 196 parses, 13s. With AdvVP restricted to top level: 32 parses, 7s
-
   ReflVP  : (a : Arg) -> VP (aNP a) -> VP a ;              -- refl on first position (direct object)
   ReflVP2 : (a : Arg) -> VP (aNP (aNP a)) -> VP (aNP a) ;  -- refl on second position (indirect object)
 
@@ -76,6 +72,17 @@ fun
   UseQCl : QCl aNone -> S ; -- deprecate QS
   
   UttS  : S -> Utt ;
+
+-- when to add adverbs
+
+----  AdvVP  : Adv -> (a : Arg) -> VP a -> VP a ; ---- these create many ambiguities
+----  AdVVP  : AdV -> (a : Arg) -> VP a -> VP a ;
+  ---- "hon tvingar oss att sova idag": 196 parses, 13s. With AdvVP restricted to top level: 32 parses, 7s
+  ---- with AdvCl, just 16 parses, 0.2 s
+
+  AdvCl  : Adv -> (a : Arg) -> Cl a -> Cl a ; 
+  AdVCl  : AdV -> (a : Arg) -> Cl a -> Cl a ;
+
 
 -- participles as adjectives
 
