@@ -171,7 +171,7 @@ lin
     ext = [] ;
     } ;
 
-  SlashVNP x vp np = {
+  SlashV2 x vp np = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;  ---- should be consumed now
@@ -184,7 +184,7 @@ lin
     ext = vp.ext ;
     } ;
 
-  SlashVNP2 x vp np = {
+  SlashV3 x vp np = {
     v   = vp.v ;
     inf = vp.inf ;
     c1  = vp.c1 ;
@@ -585,7 +585,7 @@ oper
               PastPart Sg => v ; PastPart Pl => w ; PresPart => x + "nde"
               } ; 
         c1 = [] ; c2 = [] ; isSubjectControl = True} ; 
-    mkV : (x,y,z,u,v,w : Str) -> Str -> Str -> V = \x,y,z,u,p,q,v,w -> 
+    mkV : (x,y,z,u,v,w : Str) -> Str -> Str -> V = \x,y,z,u,v,w,p,q -> 
       lin V {
         v = table {
               TV Act VInf => x ; TV Act VPres => y ; TV Act VPret => z ; TV Act VSup => u ;
