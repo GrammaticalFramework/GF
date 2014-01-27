@@ -154,7 +154,7 @@ handle documentroot state0 cache execute1 stateVar
                                                  wrapCGI $ PS.cgiMain' cache path
                (dir,"grammars.cgi",_     ) -> grammarList dir (decoded qs)
                (dir  ,"exb.fcgi"  ,_    ) -> wrapCGI $ ES.cgiMain' root dir (fst cache)
-               _ -> serveStaticFile path
+               _ -> serveStaticFile rpath path
              where path = translatePath rpath
            _ -> return $ resp400 upath
 
@@ -262,7 +262,7 @@ handle documentroot state0 cache execute1 stateVar
            else err $ resp404 path
     rm path = err $ resp400 $ "unacceptable extension "++path
 
-    download path = liftIO $ serveStaticFile path
+    download path = liftIO $ serveStaticFile' path
 
     link_directories olddir newdir@('/':'t':'m':'p':'/':_) | old/=new =
         hmInDir ".." $ liftIO $
@@ -315,13 +315,13 @@ jsonresult cwd dir cmd (ecode,stdout,stderr) files =
 
 -- * Static content
 
-serveStaticFile path =
+serveStaticFile rpath path =
   do --logPutStrLn $ "Serving static file "++path
      b <- doesDirectoryExist path
      if b
-       then if path `elem` ["","."] || last path=='/'
+       then if rpath `elem` ["","."] || last path=='/'
             then serveStaticFile' (path </> "index.html")
-            else return (resp301 (path++"/"))
+            else return (resp301 ('/':rpath++"/"))
        else serveStaticFile' path
 
 serveStaticFile' path =
