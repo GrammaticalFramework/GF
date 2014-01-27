@@ -60,8 +60,9 @@ fun
   PrepCl    : Prep -> (a : Arg) -> Cl a -> Cl (aNP a) ;  -- slash creation (S/NP): hon tittar på (oss)
   SlashClNP : (a : Arg) -> Cl (aNP a) -> NP -> Cl a ;    -- slash consumption: hon tittar på + oss
 
-  AdvVP  : Adv -> (a : Arg) -> VP a -> VP a ;
+  AdvVP  : Adv -> (a : Arg) -> VP a -> VP a ; ---- these create many ambiguities
   AdVVP  : AdV -> (a : Arg) -> VP a -> VP a ;
+  ---- "hon tvingar oss att sova idag": 196 parses, 13s. With AdvVP restricted to top level: 32 parses, 7s
 
   ReflVP  : (a : Arg) -> VP (aNP a) -> VP a ;              -- refl on first position (direct object)
   ReflVP2 : (a : Arg) -> VP (aNP (aNP a)) -> VP (aNP a) ;  -- refl on second position (indirect object)
