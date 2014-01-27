@@ -265,6 +265,8 @@ getLang' readLang i =
 limit, depth :: CGI (Maybe Int)
 limit = readInput "limit"
 depth = readInput "depth"
+
+start :: CGI Int
 start = maybe 0 id # readInput "start"
 
 trie :: CGI Bool
