@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html> <head>
+<title>Demo: GF Wide Coverage Translation</title>
+<link rel="stylesheet" type="text/css" href="gfse/editor.css" title="Cloud">
+<meta name = "viewport" content = "width = device-width">
+<meta charset="UTF-8">
+<link rel=top href="../" title="GF">
+<style>
+div.center { text-align: center; }
+table.center { margin-left: auto; margin-right: auto; }
+textarea { margin: 0; }
+body:target h1, body:target div.modtime { display: none; }
+</style>
+</head>
+
+<body id=embed>
+<div class=center>
+<h1><a href="http://www.grammaticalframework.org/"><img class=nofloat src="P/gf-cloud.png" alt="GF"></a> Wide Coverage Translation</h1>
+</div>
+
+<table class="center">
+<tr><td>
+<form onsubmit="return wctranslate()">
+  <textarea name=input rows=3 style="width: 100%"></textarea>
+  <br>
+  <big>⤷</big>
+  <select name=from>
+    <option value=Bul>Bulgarian</option>
+    <option value=Chi>Chinese</option>
+    <option value=Eng selected>English</option>
+    <option value=Fin>Finnish</option>
+    <option value=Fre>French</option>
+    <option value=Ger>German</option>
+    <option value=Hin>Hindi</option>
+    <option value=Swe>Swedish</option>
+  </select> →
+  <button name=translate type=submit><strong><big>Translate</big></strong></button> →
+  <select name=to onchange="wctranslate()">
+    <option value=Bul>Bulgarian</option>
+    <option value=Chi>Chinese</option>
+    <option value=Eng>English</option>
+    <option value=Fin>Finnish</option>
+    <option value=Fre>French</option>
+    <option value=Ger>German</option>
+    <option value=Hin>Hindi</option>
+    <option value=Swe selected>Swedish</option>
+  </select>
+  <big style="position: relative; top: 1ex">⤵</big>
+    <button onclick="wcswap()">↑↓</button>
+  <br>
+      <textarea name=output rows=3 style="width: 100%" readonly></textarea>
+</form>
+  
+</table>
+<p>
+<div class=modtime><small>
+<!-- hhmts start -->Last modified: Tue Jan 28 17:38:32 CET 2014 <!-- hhmts end -->
+</small></div>
+<script src="js/support.js"></script>
+<script src="js/gftranslate.js"></script>
+<script src="js/localstorage.js"></script>
+<script src="gfse/localstorage.js"></script>
+<script src="gfse/cloud2.js"></script>
+<script>
+function wctranslate() {
+  var f=document.forms[0]
+  f.translate.disabled=true
+  f.output.value=""
+
+  function showit(result) {
+    f.output.value=result
+    f.translate.disabled=false
+  }
+  function step3(text) { unlextext(text,showit) }
+  function step2(text) {
+    gftranslate.translate(text,f.from.value,f.to.value,step3)
+  }
+  lextext(f.input.value,step2)
+  return false;
+}
+
+function wcswap() {
+  var f=document.forms[0]
+  f.input.value=f.output.value;
+  var from=f.from.value
+  f.from.value=f.to.value
+  f.to.value=from
+  wctranslate()
+}
+</script>
+</body>
+</html>

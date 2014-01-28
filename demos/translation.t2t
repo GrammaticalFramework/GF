@@ -3,7 +3,7 @@ Powered by multilingual grammars
 
 %!style:../css/style.css
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.svg" alt=""></a>
-%!postproc(html): #GFWCT <iframe style="border: 0; width: 100%; height: 24ex;" src="wc.html"></iframe>
+%!postproc(html): #GFWCT <iframe style="border: 0; width: 100%; height: 24ex;" src="http://cloud.grammaticalframework.org/wc.html#embed"></iframe>
 
 ==Try it online==
 

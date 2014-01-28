@@ -272,3 +272,7 @@ function check_exp(s,cont) {
     }
     gfshell("cc "+s,check);
 }
+
+// Lexing/unlexing text
+function lextext(txt,cont) { gfshell('ps -lextext "'+txt+'"',cont) }
+function unlextext(txt,cont) { gfshell('ps -bind -unlextext "'+txt+'"',cont) }
