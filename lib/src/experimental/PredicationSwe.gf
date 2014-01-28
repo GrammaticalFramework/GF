@@ -659,10 +659,11 @@ oper
     <Cond,Anter> => <shall_V.v  ! TV Act VPret,   have_V.v ! TV Act VInf,  sta ++ v.v ! TV o VSup> 
     } ;
 
-  tenseInfV : Str -> Anteriority -> Voice -> V -> Str * Str = \sta,a,o,v -> 
-    case a of {
-      Simul => <[],                     sta ++ v.v ! TV o VInf> ;  -- hon vill sova
-      Anter => <have_V.v ! TV Act VInf, sta ++ v.v ! TV o VSup>  -- hon vill (ha) sovit
+  tenseInfV : Str -> Anteriority -> Voice -> V -> Str * Str = \sta,a,o,v ->
+    let tenseMark = [] ---- sta, will produce ambiguity instead of metavariable 
+    in case a of {
+      Simul => <[],                      tenseMark ++ v.v ! TV o VInf> ;  -- hon vill sova
+      Anter => <have_V.v ! TV Act VInf,  tenseMark ++ v.v ! TV o VSup>  -- hon vill (ha) sovit
       } ;
 
 
