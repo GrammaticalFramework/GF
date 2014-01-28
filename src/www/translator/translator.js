@@ -1193,9 +1193,6 @@ function save_in_cloud(filename,document,cont) {
     with_dir(save)
 }
 
-function unlextext(txt,cont) { gfshell('ps -bind -unlextext "'+txt+'"',cont) }
-function lextext(txt,cont) { gfshell('ps -lextext "'+txt+'"',cont) }
-
 // Like lextext, but separate punctuation from the end
 function lexgfrobust(txt,cont) {
     function rmpunct(txt) {
