@@ -26,6 +26,7 @@ resource Maybe = open Prelude, Predef in {
 
     -- Functions
     exists   : (T : Type) -> Maybe T -> Bool = \_,m -> m.exists ;
+    isJust   : (T : Type) -> Maybe T -> Bool = \_,m -> m.exists ;
     fromJust : (T : Type) -> Maybe T -> T = \_,m -> case m.exists of {
       True  => m.inner ;
       False => Predef.error "Called fromJust with Nothing"
