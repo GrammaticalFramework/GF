@@ -9,6 +9,7 @@ import Foreign
 import Foreign.C
 import Foreign.C.String
 import Foreign.Ptr
+import Control.Exception
 
 
 data GuEnum
@@ -117,6 +118,10 @@ ptrToList appl arity = do
   let ptr = appl `plusPtr` (#offset PgfApplication, args) --args is not an argument, it's the actual field name
   sequence [peek (ptr `plusPtr` (i * (#size PgfExpr))) | i<-[0..arity-1]]
 
-
-
+withGuPool :: (Ptr GuPool -> IO a) -> IO a
+withGuPool f = do
+  pl <- gu_new_pool
+  f pl `finally` gu_pool_free pl
+  -- for true haskell persons
+  -- withGuPool f = bracket gu_new_pool gu_pool_free f
 

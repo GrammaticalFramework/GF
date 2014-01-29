@@ -80,7 +80,7 @@ foreign import ccall "pgf/pgf.h pgf_linearize"
 -- PgfExprEnum* pgf_parse(PgfConcr* concr, PgfCId cat, GuString sentence,
 --                        GuExn* err, GuPool* pool, GuPool* out_pool);
 foreign import ccall "pgf/pgf.h pgf_parse"
-  pgf_parse :: Ptr PgfConcr -> CString -> CString -> Ptr GuExn  -> Ptr GuPool -> Ptr GuPool -> IO (Ptr PgfExprEnum)
+  pgf_parse :: Ptr PgfConcr -> CString -> CString -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr PgfExprEnum)
 
 --void pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
 --                  PgfMorphoCallback* callback, GuExn* err);
