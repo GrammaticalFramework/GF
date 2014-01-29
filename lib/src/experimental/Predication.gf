@@ -8,7 +8,6 @@ cat
   V Arg ;
   VP Arg ;
   VPC Arg ;  -- conjunction of VP
-  Temp ;
   Ant ;
   Tense ;
   Pol ;
@@ -34,11 +33,9 @@ fun
   PPos, PNeg : Pol ;
   ASimul, AAnter : Ant ;
 
-  TTAnt : Tense -> Ant -> Temp ;
-
-  UseV           : Temp -> Pol -> (a : Arg) -> V a       -> VP a ;
-  PassUseV       : Temp -> Pol -> (a : Arg) -> V (aNP a) -> VP a ;
-  AgentPassUseV  : Temp -> Pol -> (a : Arg) -> V (aNP a) -> NP -> VP a ;
+  UseV           : Ant -> Tense -> Pol -> (a : Arg) -> V a       -> VP a ;
+  PassUseV       : Ant -> Tense -> Pol -> (a : Arg) -> V (aNP a) -> VP a ;
+  AgentPassUseV  : Ant -> Tense -> Pol -> (a : Arg) -> V (aNP a) -> NP -> VP a ;
   
   SlashV2   : (a : Arg) -> VP (aNP a)        -> NP    -> VP a ;         -- consuming first NP
   SlashV3   : (a : Arg) -> VP (aNP (aNP a))  -> NP    -> VP (aNP a) ;   -- consuming second NP
@@ -53,7 +50,7 @@ fun
   SlashV2N  : (a : Arg) -> VP (aNP aN)       -> CN a  -> VP (aNP a) ;      
   SlashV2Q  : (a : Arg) -> VP (aNP aA)       -> QCl a -> VP (aNP a) ;      
 
-  UseAP : Temp -> Pol -> (a : Arg) -> AP a -> VP a ;
+  UseAP : Ant -> Tense -> Pol -> (a : Arg) -> AP a -> VP a ;
 
   PredVP : (a : Arg) -> NP -> VP a -> Cl a ;
 
