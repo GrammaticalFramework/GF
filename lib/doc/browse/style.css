@@ -47,11 +47,19 @@ header h1 {
 #language_select {
   width:100%;
 }
+#recent {
+  border-bottom:1px #999 solid;
+}
+#recent a {
+  color: #999;
+}
+#recent a,
 #modules a {
   display: block;
   text-decoration: none;
   margin: 2px 5px;
 }
+#recent a:hover,
 #modules a:hover {
   text-decoration:underline;
 }
