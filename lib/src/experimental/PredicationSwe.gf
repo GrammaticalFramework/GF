@@ -77,7 +77,6 @@ lincat
     c3 : ComplCase ;
     } ;
 
-  Temp  = {s : Str ; t : STense ; a : Anteriority} ;
   Tense = {s : Str ; t : STense} ;
   Ant   = {s : Str ; a : Anteriority} ;
   Pol   = {s : Str ; p : Polarity} ;
@@ -108,7 +107,6 @@ lin
   aNone, aS, aV, aA, aQ, aN = {s = []} ;
   aNP a = a ;
 
-  TTAnt t a = {s = t.s ++ a.s ; t = t.t ; a = a.a} ;
   TPres  = {s = [] ; t = Pres} ;
   TPast  = {s = [] ; t = Past} ;
   TFut   = {s = [] ; t = Fut} ;
@@ -119,9 +117,9 @@ lin
   PPos  = {s = [] ; p = Pos} ;
   PNeg  = {s = [] ; p = Neg} ;
 
-  UseV t p _ v = {
-    v   = tenseV t.s t.t t.a Act v ;
-    inf = tenseInfV t.s t.a Act v ;
+  UseV a t p _ v = {
+    v   = tenseV (a.s ++ t.s) t.t a.a Act v ;
+    inf = tenseInfV a.s a.a Act v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj = noObj ;
@@ -132,9 +130,9 @@ lin
     ext = [] ;
     } ;
 
-  PassUseV t p _ v = {
-    v   = tenseV t.s t.t t.a Pass v ;
-    inf = tenseInfV t.s t.a Pass v ;
+  PassUseV a t p _ v = {
+    v   = tenseV (a.s ++ t.s) t.t a.a Pass v ;
+    inf = tenseInfV a.s a.a Pass v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj = noObj ;
@@ -145,9 +143,9 @@ lin
     ext = [] ;
     } ;
 
-  AgentPassUseV t p _ v np = {
-    v   = tenseV t.s t.t t.a Pass v ;
-    inf = tenseInfV t.s t.a Pass v ;
+  AgentPassUseV a t p _ v np = {
+    v   = tenseV (a.s ++ t.s) t.t a.a Pass v ;
+    inf = tenseInfV a.s a.a Pass v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj = \\a => [] ;
@@ -158,9 +156,9 @@ lin
     ext = [] ;
     } ;
 
-  UseAP t p _ ap = {
-    v   = tenseV t.s t.t t.a Act be_V ;
-    inf = tenseInfV t.s t.a Act be_V ;
+  UseAP a t p _ ap = {
+    v   = tenseV (a.s ++ t.s) t.t a.a Act be_V ;
+    inf = tenseInfV a.s a.a Act be_V ;
     c1  = ap.c1 ;
     c2  = ap.c2 ;
     adj = \\a => ap.s ! a ;
@@ -648,7 +646,7 @@ oper
       vp.adV ++ (vp.inf.p1 | []) ++ vp.inf.p2 ++     ---- *hon tvingar oss att sovit 
       vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.adv ++ vp.ext ;
 
-  tenseV : Str -> STense -> Anteriority -> Voice -> V -> Str * Str * Str = \sta,t,a,o,v -> case <t,a> of {  --- sta dummy s field of Temp
+  tenseV : Str -> STense -> Anteriority -> Voice -> V -> Str * Str * Str = \sta,t,a,o,v -> case <t,a> of {  --- sta dummy s field of Ant and Tense
     <Pres,Simul> => <sta ++ v.v ! TV o   VPres,   [],                      []> ;
     <Past,Simul> => <sta ++ v.v ! TV o   VPret,   [],                      []> ;
     <Fut, Simul> => <shall_V.v  ! TV Act VPres,   [],                      sta ++ v.v ! TV o VInf> ;
@@ -659,11 +657,10 @@ oper
     <Cond,Anter> => <shall_V.v  ! TV Act VPret,   have_V.v ! TV Act VInf,  sta ++ v.v ! TV o VSup> 
     } ;
 
-  tenseInfV : Str -> Anteriority -> Voice -> V -> Str * Str = \sta,a,o,v ->
-    let tenseMark = [] ---- sta, will produce ambiguity instead of metavariable 
-    in case a of {
-      Simul => <[],                      tenseMark ++ v.v ! TV o VInf> ;  -- hon vill sova
-      Anter => <have_V.v ! TV Act VInf,  tenseMark ++ v.v ! TV o VSup>  -- hon vill (ha) sovit
+  tenseInfV : Str -> Anteriority -> Voice -> V -> Str * Str = \sa,a,o,v ->
+    case a of {
+      Simul => <[],                     sa ++ v.v ! TV o VInf> ;  -- hon vill sova
+      Anter => <have_V.v ! TV Act VInf, sa ++ v.v ! TV o VSup>    -- hon vill (ha) sovit
       } ;
 
 
