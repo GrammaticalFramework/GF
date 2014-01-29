@@ -26,6 +26,7 @@ import PgfLow
 
 import Foreign hiding ( Pool, newPool, unsafePerformIO )
 import Foreign.C
+import Control.Exception
 --import Foreign.C.String
 --import Foreign.Ptr
 
@@ -51,34 +52,38 @@ type Out = (Ptr GuStringBuf, Ptr GuOut)
 newPool :: IO Pool
 newPool =
   do pl <- gu_new_pool
-     newForeignPtr_ pl --gu_pool_free_ptr pl
+     newForeignPtr_ pl --newForeignPtr gu_pool_free_ptr pl
 
 --when you create a GuOut, you create also a GuStringBuf
 --and when you give GuOut to a function that outputs something,
 --the result goes into that GuStringBuf
-newOut :: Pool -> IO Out 
-newOut pool =
-   do sb <- withForeignPtr pool $ \pl -> gu_string_buf pl
+newOut :: IO Out 
+newOut =
+   do sb <- withGuPool $ \pl -> gu_string_buf pl
       out <- gu_string_buf_out sb
       return (sb,out)
+--  gu_string_buf :: Ptr GuPool -> IO (Ptr GuStringBuf)
 
 -----------------------------------------------------------------------------
 -- Functions that take a PGF.
 -- PGF has many Concrs.
 -- A Concr retains its PGF in a field (memory management reasons?)
 
-data PGF = PGF {pgfPool :: Pool, pgf :: Ptr PgfPGF} deriving Show
+data PGF = PGF {pgfPool :: Ptr GuPool, pgf :: Ptr PgfPGF} deriving Show
 data Concr = Concr {concr :: (Ptr PgfConcr), concrMaster :: PGF}
 type Language = CId
 
 readPGF :: FilePath -> IO PGF
 readPGF filepath =
-  do pool <- newPool
+  do pool <- gu_new_pool
      pgf <- withCString filepath $ \file -> 
-             withForeignPtr pool $ \pl -> 
-              pgf_read file pl nullPtr
-     out <- newOut pool
+              pgf_read file pool nullPtr
      return PGF {pgfPool = pool, pgf = pgf}
+    -- withGuPool $ \pl ->
+    --   do pgf <- withCString filepath $ \file ->
+    --                pgf_read file pl nullPtr
+    --      return PGF {pgfPool = pl, pgf = pgf}       
+
 
 
 getConcr :: PGF -> Language -> Maybe Concr
@@ -99,12 +104,10 @@ getConcr p (CId lang) = unsafePerformIO $
 
 generateAll :: PGF -> CId -> [(Tree,Float)]
 generateAll p (CId cat) = unsafePerformIO $
-  do pool <- newPool
-     (sb,out) <- newOut pool
-     pgfExprs <- BS.useAsCString cat $ \cat ->
-                    withForeignPtr pool $ \pl ->
+  do pgfExprs <- BS.useAsCString cat $ \cat ->
+                    withGuPool $ \pl ->
                       pgf_generate_all (pgf p) cat pl
-     fromPgfExprEnum pgfExprs pool p
+     fromPgfExprEnum pgfExprs p
 
 abstractName :: PGF -> Language
 abstractName p = unsafePerformIO $ fmap CId (BS.packCString =<< pgf_abstract_name (pgf p))
@@ -114,11 +117,11 @@ startCat p = unsafePerformIO $ fmap CId (BS.packCString =<< pgf_start_cat (pgf p
 
 printGrammar :: PGF -> Pool -> String
 printGrammar p pool = unsafePerformIO $
-  do (sb,out) <- newOut pool
+  do (sb,out) <- newOut
      pgf_print (pgf p) out nullPtr
-     grammar <- withForeignPtr pool $ \pl ->
-                  gu_string_buf_freeze sb pl
-     peekCString grammar
+     withGuPool $ \pl ->
+         do grammar <- gu_string_buf_freeze sb pl
+            peekCString grammar
 
 
 -----------------------------------------------------------------------------
@@ -143,21 +146,16 @@ type Tree = Expr
 
 unApp :: Expr -> Maybe (CId,[Expr])
 unApp (Expr expr master) = unsafePerformIO $
-  do pl <- gu_new_pool
+  withGuPool $ \pl -> do
      pgfAppl <- pgf_expr_unapply expr pl
      if pgfAppl == nullPtr
-       then do
-          gu_pool_free pl
-          return Nothing
+       then return Nothing
        else do 
           fun <- peekCString =<< (#peek PgfApplication, fun) pgfAppl
           arity <- (#peek PgfApplication, n_args) pgfAppl :: IO CInt 
           pgfExprs <- ptrToList pgfAppl (fromIntegral arity) --CInt to Int
-          
           --print (arity,fun)
-
           let args = [Expr a master | a<-pgfExprs]
-          gu_pool_free pl
           return $ Just (mkCId fun, args)
 
 --Krasimir recommended not to use PgfApplication, but PgfExprApp instead.
@@ -169,31 +167,30 @@ unApp (Expr expr master) = unsafePerformIO $
 
 readExpr :: String -> Maybe Expr
 readExpr str = unsafePerformIO $
- do exprPool <- newPool
-    tmpPool <- newPool
+ do pool <- gu_new_pool  --we return this pool with the Expr
     withCString str $ \str ->
-     withForeignPtr exprPool $ \pool ->
-       withForeignPtr tmpPool $ \tmppool ->
-         do guin <- gu_string_in str tmppool
-            exn <- gu_new_exn nullPtr gu_type__type tmppool
+     withGuPool $ \pl1 ->   --these pools are freed right after
+       withGuPool $ \pl2 ->
+         do guin <- gu_string_in str pl1
+            exn <- gu_new_exn nullPtr gu_type__type pl2
             pgfExpr <- pgf_read_expr guin pool exn
             status <- gu_exn_is_raised exn
             if (status==False && pgfExpr /= nullPtr)
               then return $ Just (Expr pgfExpr pool)
-              else return Nothing
+              else do
+                   gu_pool_free pool --if Expr is not returned, free pool
+                   return Nothing
 
 showExpr :: Expr -> String
 showExpr e = unsafePerformIO $
- do pool <- newPool
-    tmpPool <- newPool
-    (sb,out) <- newOut pool
+ do (sb,out) <- newOut
     let printCtxt = nullPtr
-    exn <- withForeignPtr tmpPool $ \tmppool ->
-       gu_new_exn nullPtr gu_type__type tmppool
+    exn <- withGuPool $ \pl ->
+        gu_new_exn nullPtr gu_type__type pl
     pgf_print_expr (expr e) printCtxt 1 out exn
-    abstree <- withForeignPtr pool $ \pl ->
-                  gu_string_buf_freeze sb pl
-    peekCString abstree
+    withGuPool $ \pl ->
+       do abstree <- gu_string_buf_freeze sb pl
+          peekCString abstree
 
 
 -----------------------------------------------------------------------------
@@ -231,9 +228,9 @@ fullFormLexicon lang =
   where fullformLexicon' :: Concr -> [String]
         fullformLexicon' lang = unsafePerformIO $
           do pool <- newPool
-             lexEnum <- withForeignPtr pool $ \pl -> 
+             lexEnum <- withGuPool $ \pl -> 
                  pgf_fullform_lexicon (concr lang) pl
-             fromFullFormEntry lexEnum pool (concrMaster lang)
+             fromFullFormEntry lexEnum (concrMaster lang)
 
 printLexEntry :: (String, [MorphoAnalysis]) -> String
 printLexEntry (lemma, anals) = 
@@ -246,29 +243,33 @@ printLexEntry (lemma, anals) =
 --Also this returns a list of tuples (tree,prob) instead of just trees
 parse :: Concr -> CId -> String -> [(Tree,Float)]
 parse (Concr lang master) (CId cat) sent = unsafePerformIO $
-  do inpool <- newPool
-     outpool <- newPool
-     treesEnum <- parse_ lang cat sent inpool outpool
-     fromPgfExprEnum treesEnum inpool master
+  do treesEnum <- parse_ lang cat sent
+     fromPgfExprEnum treesEnum master
   where 
-    parse_ :: Ptr PgfConcr -> BS.ByteString -> String -> Pool -> Pool -> IO (Ptr PgfExprEnum)
-    parse_ pgfcnc cat sent inpool outpool =
-      do BS.useAsCString cat $ \cat ->
-           withCString sent $ \sent ->
-             withForeignPtr inpool $ \pl1 ->
-               withForeignPtr outpool $ \pl2 ->
-                  pgf_parse pgfcnc cat sent nullPtr pl1 pl2
+    parse_ :: Ptr PgfConcr -> BS.ByteString -> String -> IO (Ptr PgfExprEnum)
+    parse_ pgfcnc cat sent =
+      do putStrLn "foo"
+         inpool <- gu_new_pool
+         outpool <- gu_new_pool
+         BS.useAsCString cat $ \cat ->
+                   withCString sent $ \sent ->
+                     pgf_parse pgfcnc cat sent nullPtr inpool outpool 
+                           -- `finally` do (gu_pool_free inpool)
+                           --              (gu_pool_free outpool)
+         -- gu_pool_free inpool
+         -- gu_pool_free outpool
+         -- return enum
 
 --In Haskell library, this function has type signature PGF -> Language -> Tree -> String
 --Here we replace PGF -> Language with Concr
 linearize :: Concr -> Tree -> String
 linearize lang tree = unsafePerformIO $
   do pool <- newPool
-     (stringbuf,out) <- newOut pool
+     (sb,out) <- newOut
      pgf_linearize (concr lang) (expr tree) out nullPtr --linearization goes to stringbuf
-     lin <- withForeignPtr pool $ \pl ->
-             gu_string_buf_freeze stringbuf pl
-     peekCString lin
+     withGuPool $ \pl ->
+         do lin <- gu_string_buf_freeze sb pl
+            peekCString lin
 
 
 
@@ -276,28 +277,28 @@ linearize lang tree = unsafePerformIO $
 -- Helper functions
 
 -- # syntax: http://www.haskell.org/ghc/docs/7.2.1/html/users_guide/hsc2hs.html
-fromPgfExprEnum :: Ptr PgfExprEnum -> Pool -> a -> IO [(Tree, Float)]
-fromPgfExprEnum enum pool master = 
+fromPgfExprEnum :: Ptr PgfExprEnum -> a -> IO [(Tree, Float)]
+fromPgfExprEnum enum master = 
   do pgfExprProb <- alloca $ \ptr -> 
-                       withForeignPtr pool $ \pl -> 
+                      withGuPool $ \pl -> 
                         do gu_enum_next enum ptr pl
                            peek ptr
      if pgfExprProb == nullPtr
        then return []
        else do expr <- (#peek PgfExprProb, expr) pgfExprProb
                prob <- (#peek PgfExprProb, prob) pgfExprProb
-               ts <- unsafeInterleaveIO (fromPgfExprEnum enum pool master)
-               return ((Expr expr master,prob) : ts)
+               ts <- unsafeInterleaveIO (fromPgfExprEnum enum master)
+               return ((Expr expr master, prob) : ts)
 
-fromFullFormEntry :: Ptr GuEnum -> Pool -> PGF -> IO [String]
-fromFullFormEntry enum pool master = 
+fromFullFormEntry :: Ptr GuEnum -> PGF -> IO [String]
+fromFullFormEntry enum master = 
   do ffEntry <- alloca $ \ptr ->
-                  withForeignPtr pool $ \pl ->
+                  withGuPool $ \pl ->
                     do gu_enum_next enum ptr pl
                        peek ptr 
 --   ffEntry :: Ptr PgfFullFormEntry
      if ffEntry == nullPtr
        then return []
        else do tok <- peekCString =<< pgf_fullform_get_string ffEntry
-               toks <- unsafeInterleaveIO (fromFullFormEntry enum pool master)
+               toks <- unsafeInterleaveIO (fromFullFormEntry enum master)
                return (tok : toks)
