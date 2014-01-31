@@ -169,224 +169,54 @@ lin
     ext = [] ;
     } ;
 
-  SlashV2 x vp np = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;  ---- should be consumed now
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = <\\a => np.s ! Acc, np.a> ;  -- np.a for object control ---- Acc to be abstracted
-    obj2 = vp.obj2 ;
-    adv = vp.adv ;
-    adV = vp.adV ;
-    ext = vp.ext ;
+  SlashV2 x vp np = vp ** {
+    obj1 : (Agr => Str) * Agr = <\\a => np.s ! Acc, np.a>  -- np.a for object control ---- Acc to be abstracted
     } ;
 
-  SlashV3 x vp np = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ;  ---- should be consumed now
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = <\\a => np.s ! Acc, vp.obj2.p2> ; -- control is preserved  ---- Acc to be abstracted
-    adv = vp.adv ;
-    adV = vp.adV ;
-    ext = vp.ext ;
+  SlashV3 x vp np = addObj2VP vp (\\a => np.s ! Acc) ; -- control is preserved  ---- Acc to be abstracted
+
+  ComplVS x vp cl = addExtVP vp (that_Compl ++ declSubordCl (lin Cl cl)) ; ---- sentence form
+
+  ComplVQ x vp qcl = addExtVP vp (questSubordCl qcl) ; ---- question form
+
+  ComplVV x vp vpo = addObj2VP vp (\\a => infVP a vpo) ; ---- infForm
+
+  ComplVA x vp ap = addObj2VP vp (\\a => ap.s ! a ++ ap.obj1 ! a) ; ---- adjForm
+
+  ComplVN x vp cn = addObj2VP vp (\\a => cn.s ! a ++ cn.obj1 ! a) ; ---- cnForm
+
+  SlashV2S x vp cl = addExtVP vp (that_Compl ++ declSubordCl (lin Cl cl)) ; ---- sentence form
+
+  SlashV2Q x vp cl = addExtVP vp (questSubordCl (lin QCl cl)) ; ---- question form
+
+  SlashV2V x vp vpo = addObj2VP vp (\\a => infVP a (lin VP vpo)) ; ---- infForm
+
+  SlashV2A x vp ap = addObj2VP vp (\\a => ap.s ! a ++ ap.obj1 ! a) ; ---- adjForm
+
+  SlashV2N x vp cn = addObj2VP vp (\\a => cn.s ! a ++ cn.obj1 ! a) ; ---- cn form
+
+  ReflVP x vp = vp ** {
+    obj1 : (Agr => Str) * Agr = <\\a => reflPron a, defaultAgr> ; --- hack: defaultAgr will not be used but subj.a instead
     } ;
 
-  ComplVS x vp cl = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ; ---- consumed
-    obj2 = vp.obj2 ;
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = that_Compl ++ declSubordCl (lin Cl cl) ; ---- sentence form
+  ReflVP2 x vp = vp ** {
+    obj2 : (Agr => Str) * Bool = <\\a => reflPron a, vp.obj2.p2> ; --- subj/obj control doesn't matter any more
     } ;
 
-  ComplVQ x vp qcl = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ; ---- consumed
-    obj2 = vp.obj2 ;
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = questSubordCl qcl ; ---- question form
-    } ;
-
-  ComplVV x vp vpo = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = <\\a => infVP a vpo, vp.obj2.p2> ; ---- infForm
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  ComplVA x vp ap = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ; ---- consumed
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = <\\a => ap.s ! a ++ ap.obj1 ! a, vp.obj2.p2> ; ---- adjForm
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  ComplVN x vp cn = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ; ---- consumed
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = <\\a => cn.s ! a ++ cn.obj1 ! a, vp.obj2.p2> ; ---- cnForm
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  SlashV2S x vp cl = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ; ---- consumed
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = vp.obj2 ;
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = that_Compl ++ declSubordCl (lin Cl cl) ; ---- sentence form
-    } ;
-
-  SlashV2Q x vp cl = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ; ---- consumed
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = vp.obj2 ;
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = questSubordCl (lin QCl cl) ; ---- question form
-    } ;
-
-  SlashV2V x vp vpo = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ; ---- consumed
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = <\\a => infVP a (lin VP vpo), vp.obj2.p2> ; ---- infForm
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  SlashV2A x vp ap = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ; ---- consumed
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = <\\a => ap.s ! a ++ ap.obj1 ! a, vp.obj2.p2> ; ---- adjForm
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  SlashV2N x vp cn = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ; ---- consumed
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = <\\a => cn.s ! a ++ cn.obj1 ! a, vp.obj2.p2> ; ---- cn form
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  ReflVP x vp = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ; ---- consumed
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = <\\a => reflPron a, defaultAgr> ; --- hack: defaultAgr will not be used but subj.a instead
-    obj2 = vp.obj2 ;
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  ReflVP2 x vp = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ; ---- consumed
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = <\\a => reflPron a, vp.obj2.p2> ; --- subj/obj control doesn't matter any more
-    adV = vp.adV ;
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
-
-  PredVP x np vp = {
+  PredVP x np vp = vp ** {
     subj = np.s ! Nom ;
-    v    = vp.v ;
-    inf  = vp.inf ;
     adj  = vp.adj ! np.a ;
     obj1 = vp.c1 ++ vp.obj1.p1 ! np.a ;  ---- apply complCase
     obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;   ---- apply complCase
-    adV  = vp.adV ;
-    adv  = vp.adv ;
-    ext  = vp.ext ; 
     c3   = noComplCase ;      -- for one more prep to build ClSlash 
     } ;
 
-  PrepCl p x cl = {   -- Cl/NP ::= Cl PP/NP
-    subj = cl.subj ;
-    v    = cl.v ;
-    inf  = cl.inf ;
-    adj  = cl.adj ;
-    obj1 = cl.obj1 ;
-    obj2 = cl.obj2 ;
-    adV  = cl.adV ;
-    adv  = cl.adv ;
-    ext  = cl.ext ; 
+  PrepCl p x cl = cl ** {   -- Cl/NP ::= Cl PP/NP
     c3   = prepComplCase p ; 
     } ;
 
-  SlashClNP x cl np = {  -- Cl ::= Cl/NP NP 
-    subj = cl.subj ;
-    v    = cl.v ;
-    inf  = cl.inf ;
-    adj  = cl.adj ;
-    obj1 = cl.obj1 ;
-    obj2 = cl.obj2 ;
-    adV  = cl.adV ;
+  SlashClNP x cl np = cl ** {  -- Cl ::= Cl/NP NP 
     adv  = cl.adv ++ appComplCase cl.c3 np ; ---- again, adv just added
-    ext  = cl.ext ; 
     c3   = noComplCase ;  -- complCase has been consumed
     } ;
 
@@ -396,103 +226,39 @@ lin
 
   QuestIAdv x iadv cl = cl ** {foc = iadv.s ; focType = FocObj} ; -- FocObj implies Foc + V + Subj: varför älskar hon oss
 
-  QuestVP x ip vp = {
+  QuestVP x ip vp = vp ** {
     foc  = ip.s ;   -- vem älskar henne
     focType = FocSubj ;
     subj = [] ;
-    v    = vp.v ;
-    inf  = vp.inf ;
     adj  = vp.adj ! ip.a ;
     obj1 = vp.c1 ++ vp.obj1.p1 ! ip.a ; ---- appComplCase
     obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => ip.a ; False => vp.obj1.p2}) ; ---- appComplCase
-    adV  = vp.adV ;
-    adv  = vp.adv ;
-    ext  = vp.ext ; 
     c3   = noComplCase ;      -- for one more prep to build ClSlash ---- ever needed for QCl?
     } ;
 
-  QuestSlash x ip cl =  
+  QuestSlash x ip cl = 
     let
       ips = cl.c3 ++ ip.s ;     -- in Cl/NP, c3 is the only prep ---- appComplCase for ip
       focobj = case cl.focType of {
         NoFoc => <ips, [], FocObj> ;  -- put ip object to focus  if there is no focus yet
         t     => <[], ips, t>         -- put ip object in situ   if there already is a focus
         } ;
-    in {
-    foc  = focobj.p1 ;
-    focType = focobj.p3 ;
-    subj = cl.subj ;
-    v    = cl.v ;
-    inf  = cl.inf ;
-    adj  = cl.adj ;
-    obj1 = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
-    obj2 = cl.obj2 ;                  ---- slash to this part? maybe with one more value of focType?
-    adV  = cl.adV ;
-    adv  = cl.adv ;
-    ext  = cl.ext ; 
-    c3   = noComplCase ; 
-    } ;
+    in cl ** {
+      foc  = focobj.p1 ;
+      focType = focobj.p3 ;
+      subj = cl.subj ;
+      obj1 = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
+      c3   = noComplCase ; 
+      } ;
 
   UseCl  cl = {s = declCl cl} ;
   UseQCl cl = {s = questCl cl} ;
 
   UttS s = s ;
 
-  AdvCl a x cl = {
-    subj = cl.subj ;
-    v    = cl.v ;
-    inf  = cl.inf ;
-    adj  = cl.adj ;
-    obj1 = cl.obj1 ;
-    obj2 = cl.obj2 ;
-    adV  = cl.adV ;
-    adv  = cl.adv ++ a.s ;
-    ext  = cl.ext ; 
-    c3   = cl.c3 ;
-    } ;
+  AdvCl a x cl = cl ** {adv = cl.adv ++ a.s} ;
 
-  AdVCl a x cl = {
-    subj = cl.subj ;
-    v    = cl.v ;
-    inf  = cl.inf ;
-    adj  = cl.adj ;
-    obj1 = cl.obj1 ;
-    obj2 = cl.obj2 ;
-    adV  = cl.adV ++ a.s ;
-    adv  = cl.adv ;
-    ext  = cl.ext ; 
-    c3   = cl.c3 ;
-    } ;
-
-
-{-
-  AdvVP adv x vp = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = vp.obj2 ;
-    adV = vp.adV ;
-    adv = vp.adv ++ adv.s ; ---- all adverbs become one field - how to front one of them?
-    ext = vp.ext ;
-    } ;
-
-  AdVVP adv _ vp = {
-    v   = vp.v ;
-    inf = vp.inf ;
-    c1  = vp.c1 ;
-    c2  = vp.c2 ;
-    adj = vp.adj ;
-    obj1 = vp.obj1 ;
-    obj2 = vp.obj2 ;
-    adV = vp.adV ++ adv.s ; ---- all adV's become one field - how to front one of them?
-    adv = vp.adv ;
-    ext = vp.ext ;
-    } ;
--}
-
+  AdVCl a x cl = cl ** {adV  = cl.adV ++ a.s} ;
 
 
 
@@ -693,5 +459,14 @@ oper
   prepComplCase : Prep -> ComplCase = \p -> p.s ; 
 
   noObj : Agr => Str = \\_ => [] ;
+
+  addObj2VP : VP -> (Agr => Str) -> VP = \vp,obj -> vp ** {
+    obj2 = <\\a => vp.obj2.p1 ! a ++ obj ! a, vp.obj2.p2> ;
+    } ;
+
+  addExtVP : VP -> Str -> VP = \vp,ext -> vp ** {
+    ext = ext ;
+    } ;
+
 
 }
