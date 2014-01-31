@@ -173,49 +173,27 @@ lin
     obj1 : (Agr => Str) * Agr = <\\a => np.s ! Acc, np.a>  -- np.a for object control ---- Acc to be abstracted
     } ;
 
-  SlashV3 x vp np = vp ** {
-    obj2 : (Agr => Str) * Bool = <\\a => np.s ! Acc, vp.obj2.p2> ; -- control is preserved  ---- Acc to be abstracted
-    } ;
+  SlashV3 x vp np = addObj2VP vp (\\a => np.s ! Acc) ; -- control is preserved  ---- Acc to be abstracted
 
-  ComplVS x vp cl = vp ** {
-    ext = that_Compl ++ declSubordCl (lin Cl cl) ; ---- sentence form
-    } ;
+  ComplVS x vp cl = addExtVP vp (that_Compl ++ declSubordCl (lin Cl cl)) ; ---- sentence form
 
-  ComplVQ x vp qcl = vp ** {
-    ext = questSubordCl qcl ; ---- question form
-    } ;
+  ComplVQ x vp qcl = addExtVP vp (questSubordCl qcl) ; ---- question form
 
-  ComplVV x vp vpo = vp ** {
-    obj2 : (Agr => Str) * Bool = <\\a => infVP a vpo, vp.obj2.p2> ; ---- infForm
-    } ;
+  ComplVV x vp vpo = addObj2VP vp (\\a => infVP a vpo) ; ---- infForm
 
-  ComplVA x vp ap = vp ** {
-    obj2  : (Agr => Str) * Bool= <\\a => ap.s ! a ++ ap.obj1 ! a, vp.obj2.p2> ; ---- adjForm
-    } ;
+  ComplVA x vp ap = addObj2VP vp (\\a => ap.s ! a ++ ap.obj1 ! a) ; ---- adjForm
 
-  ComplVN x vp cn = vp ** {
-    obj2  : (Agr => Str) * Bool = <\\a => cn.s ! a ++ cn.obj1 ! a, vp.obj2.p2> ; ---- cnForm
-    } ;
+  ComplVN x vp cn = addObj2VP vp (\\a => cn.s ! a ++ cn.obj1 ! a) ; ---- cnForm
 
-  SlashV2S x vp cl = vp ** {
-    ext = that_Compl ++ declSubordCl (lin Cl cl) ; ---- sentence form
-    } ;
+  SlashV2S x vp cl = addExtVP vp (that_Compl ++ declSubordCl (lin Cl cl)) ; ---- sentence form
 
-  SlashV2Q x vp cl = vp ** {
-    ext = questSubordCl (lin QCl cl) ; ---- question form
-    } ;
+  SlashV2Q x vp cl = addExtVP vp (questSubordCl (lin QCl cl)) ; ---- question form
 
-  SlashV2V x vp vpo = vp ** {
-    obj2 : (Agr => Str) * Bool= <\\a => infVP a (lin VP vpo), vp.obj2.p2> ; ---- infForm
-    } ;
+  SlashV2V x vp vpo = addObj2VP vp (\\a => infVP a (lin VP vpo)) ; ---- infForm
 
-  SlashV2A x vp ap = vp ** {
-    obj2 : (Agr => Str) * Bool = <\\a => ap.s ! a ++ ap.obj1 ! a, vp.obj2.p2> ; ---- adjForm
-    } ;
+  SlashV2A x vp ap = addObj2VP vp (\\a => ap.s ! a ++ ap.obj1 ! a) ; ---- adjForm
 
-  SlashV2N x vp cn = vp ** {
-    obj2 : (Agr => Str) * Bool = <\\a => cn.s ! a ++ cn.obj1 ! a, vp.obj2.p2> ; ---- cn form
-    } ;
+  SlashV2N x vp cn = addObj2VP vp (\\a => cn.s ! a ++ cn.obj1 ! a) ; ---- cn form
 
   ReflVP x vp = vp ** {
     obj1 : (Agr => Str) * Agr = <\\a => reflPron a, defaultAgr> ; --- hack: defaultAgr will not be used but subj.a instead
@@ -481,5 +459,14 @@ oper
   prepComplCase : Prep -> ComplCase = \p -> p.s ; 
 
   noObj : Agr => Str = \\_ => [] ;
+
+  addObj2VP : VP -> (Agr => Str) -> VP = \vp,obj -> vp ** {
+    obj2 : (Agr => Str) * Bool = <\\a => vp.obj2.p1 ! a ++ obj ! a, vp.obj2.p2> ;
+    } ;
+
+  addExtVP : VP -> Str -> VP = \vp,ext -> vp ** {
+    ext = ext ;
+    } ;
+
 
 }
