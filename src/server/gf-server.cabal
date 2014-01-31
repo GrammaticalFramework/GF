@@ -16,6 +16,10 @@ flag http
   Description: Build pgf-http (deprecated, replaced by gf -server)
   Default: False
 
+flag c-runtime
+  Description: Include functionality from the C run-time library (which must be installed already)
+  Default:     False
+
 Library
   exposed-modules: PGFService FastCGIUtils ServeStaticFile RunHTTP
   other-modules: Cache URLEncoding Fold
@@ -27,7 +31,7 @@ Library
                    filepath,
                    containers,
                    process,
-                   gf >= 3.1,
+                   gf >= 3.5.12,
                    cgi >= 3001.1.7.3,
                    httpd-shed,
                    mtl,
@@ -41,6 +45,9 @@ Library
     ghc-options: -optl-mwindows
   else
     build-depends: unix
+
+  if flag(c-runtime)
+    cpp-options: -DC_RUNTIME
 
 executable pgf-http
   main-is: pgf-http.hs
