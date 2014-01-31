@@ -39,13 +39,11 @@ linearizeAllLang pgf t = [(lang,linearize pgf lang t) | lang <- Map.keys (concre
 
 -- | Linearizes given expression as a bracketed string in the language
 bracketedLinearize :: PGF -> Language -> Tree -> [BracketedString]
-bracketedLinearize pgf lang = concat . map (snd . untokn Nothing . firstLin cnc) . linTree pgf cnc
+bracketedLinearize pgf lang = head . map (snd . untokn Nothing . firstLin cnc) . linTree pgf cnc
   where
     cnc = lookMap (error "no lang") lang (concretes pgf)
 
---  head []       = error "cannot linearize"
-    head []       = Leaf ""
-            -- so that linearize = flattenBracketedString . bracketedLinearize
+    head []       = []
     head (bs:bss) = bs
 
 firstLin cnc arg@(ct@(cat,n_fid),fid,fun,es,(xs,lin)) =
