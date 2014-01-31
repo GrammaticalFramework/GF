@@ -100,7 +100,6 @@ inferLType gr g trm = case trm of
    Typed e t -> do
      t' <- computeLType gr g t
      checkLType gr g e t'
-     return (e,t')
 
    App f a -> do
      over <- getOverload gr g Nothing trm
