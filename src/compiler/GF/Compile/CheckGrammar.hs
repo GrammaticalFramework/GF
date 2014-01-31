@@ -26,7 +26,7 @@ import GF.Infra.Ident
 import GF.Infra.Option
 
 import GF.Compile.TypeCheck.Abstract
-import GF.Compile.TypeCheck.Concrete
+import GF.Compile.TypeCheck.RConcrete
 import qualified GF.Compile.TypeCheck.ConcreteNew as CN
 import qualified GF.Compile.Compute.ConcreteNew as CN
 
