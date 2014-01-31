@@ -222,10 +222,10 @@ oper
         dirV3    : V -> Prep -> V3 ;          -- dino,_,se
         dirdirV3 : V -> V3 ;                  -- dino,_,_
 
-
-        mmkV : V -> Str -> V ;
-        mmkV v s = v ** {s = s } ;
-        expressV : V -> Str -> V = \v,s -> mmkV v s ;
+--- type-incorrect to replace VForm => Str by Str. AR 31/1/2014
+---        mmkV : V -> Str -> V ;
+---        mmkV v s = v ** {s = s } ;
+---        expressV : V -> Str -> V = \v,s -> mmkV v s ;
 
         mmkV2 : V -> Prep -> V2 ;
         mmkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
