@@ -101,10 +101,15 @@ renameIdentTerm' env@(act,imps) t0 =
                                  text "given" <+> fsep (punctuate comma (map (ppIdent . fst) qualifs)))
                   fs   -> case nub [f c | f <- fs]  of
                             [tr]     -> return tr
+                            ts       -> return $ AdHocOverload ts  
+                                        -- name conflicts resolved as overloading in TypeCheck.RConcrete AR 31/1/2014
+                                        -- the old definition is below and still presupposed in TypeCheck.Concrete
+{-
                             ts@(t:_) -> do checkWarn (text "atomic term" <+> ppTerm Qualified 0 t0 $$
                                                       text "conflict" <+> hsep (punctuate comma (map (ppTerm Qualified 0) ts)) $$
                                                       text "given" <+> fsep (punctuate comma (map (ppIdent . fst) qualifs)))
                                            return t
+-}
             -- a warning will be generated in CheckGrammar, and the head returned
             -- in next V: 
             -- Bad $ "conflicting imports:" +++ unwords (map prt ts) 
