@@ -19,6 +19,6 @@ concrete PhraseLat of Phrase = CatLat ** open Prelude, ResLat in {
     PConjConj conj = {s = conj.s2} ; ---
 --
     NoVoc = {s = []} ;
-    VocNP np = {s = "," ++ np.s ! Voc} ;
+----    VocNP np = {s = "," ++ np.s ! Voc} ; ---- what is the compiler error here? AR 1/2/2014
 --
 }
