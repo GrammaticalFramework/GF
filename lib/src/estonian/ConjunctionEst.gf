@@ -16,7 +16,7 @@ concrete ConjunctionEst of Conjunction =
 
 --    ConjAP conj ss = conjunctDistrTable2 Bool NForm conj ss ** {
     ConjAP conj ss = conjunctDistrTableAdj conj ss ** {
-      infl = True ;
+      infl = ss.s2.infl ;  ---- was: True, which is of wrong type. AR 1/2/2014 
       lock_AP = <>
       } ;
 
