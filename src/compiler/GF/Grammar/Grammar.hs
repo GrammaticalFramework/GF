@@ -398,6 +398,8 @@ data Term =
  | ELincat Ident Term            -- ^ boxed linearization type of Ident
  | ELin Ident Term               -- ^ boxed linearization of type Ident
 
+ | AdHocOverload [Term]          -- ^ ad hoc overloading generated in Rename
+
  | FV [Term]                     -- ^ alternatives in free variation: @variants { s ; ... }@
 
  | Alts Term [(Term, Term)]      -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
