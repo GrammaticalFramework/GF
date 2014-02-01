@@ -26,6 +26,12 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
       ty' <- lookupResDef gr (m,ident)
       if ty' == ty then return ty else comp g ty' --- is this necessary to test?
 
+    AdHocOverload ts -> do
+     over <- getOverload gr g (Just typeType) t
+     case over of
+       Just (tr,_) -> return tr
+       _ -> checkError (text "unresolved overloading of constants" <+> ppTerm Qualified 0 t) 
+
     Vr ident  -> checkLookup ident g -- never needed to compute!
 
     App f a -> do
@@ -100,6 +106,12 @@ inferLType gr g trm = case trm of
    Typed e t -> do
      t' <- computeLType gr g t
      checkLType gr g e t'
+
+   AdHocOverload ts -> do
+     over <- getOverload gr g Nothing trm
+     case over of
+       Just trty -> return trty
+       _ -> checkError (text "unresolved overloading of constants" <+> ppTerm Qualified 0 trm) 
 
    App f a -> do
      over <- getOverload gr g Nothing trm
@@ -298,7 +310,6 @@ inferLType gr g trm = case trm of
      PChars _ -> return $ typeStr
      _ -> inferLType gr g (patt2term p) >>= return . snd
 
-
 -- type inference: Nothing, type checking: Just t
 -- the latter permits matching with value type
 getOverload :: SourceGrammar -> Context -> Maybe Type -> Term -> Check (Maybe (Term,Type))
@@ -309,8 +320,21 @@ getOverload gr g mt ot = case appForm ot of
          v <- matchOverload f typs ttys
          return $ Just v
        _ -> return Nothing
+     (AdHocOverload cs@(f:_), ts) -> do     --- the function name f is only used in error messages
+       let typs = concatMap collectOverloads cs
+       ttys <- mapM (inferLType gr g) ts
+       v <- matchOverload f typs ttys
+       return $ Just v
      _ -> return Nothing
+
  where
+   collectOverloads tr@(Q c) = case lookupOverload gr c of 
+     Ok typs -> typs
+     _ -> case lookupResType gr c of
+       Ok ty -> let (args,val) = typeFormCnc ty in [(map (\(b,x,t) -> t) args,(val,tr))]
+       _ -> []
+   collectOverloads _ = [] --- constructors QC
+
    matchOverload f typs ttys = do
      let (tts,tys) = unzip ttys
      let vfs = lookupOverloadInstance tys typs
@@ -354,11 +378,15 @@ getOverload gr g mt ot = case appForm ot of
 -----             "resolved by excluding partial applications:" ++++
 -----             unlines [prtType env ty | (ty,_) <- vfs', not (noProd ty)]
 
-
-         _ -> checkError $ text "ambiguous overloading of" <+> ppTerm Unqualified 0 f <+>
-                           text "for" <+> hsep (map ppType tys) $$ 
-                           text "with alternatives" $$
-                           nest 2 (vcat [ppType ty | (_,ty,_) <- if null vfs1 then vfs2 else vfs2])
+--- now forgiving ambiguity with a warning AR 1/2/2014
+--  This gives ad hoc overloading the same behaviour as the choice of the first match in renaming did before. 
+--  But it also gives a chance to ambiguous overloadings that were banned before. 
+         (nps1,nps2) -> do 
+              checkWarn $  text "ambiguous overloading of" <+> ppTerm Unqualified 0 f <+>
+                  ----     text "with argument types" <+> hsep (map (ppTerm Qualified 0) tys) $$ 
+                           text "resolved by selecting the first of the alternatives" $$
+                           nest 2 (vcat [ppTerm Qualified 0 fun | (_,ty,fun) <- vfs1 ++ if null vfs1 then vfs2 else []])
+              return $ head [(mkApp fun tts,val) | (val,fun) <- nps1 ++ nps2]
 
    matchVal mt v = elem mt [Nothing,Just v,Just (unlocked v)]
 
@@ -405,6 +433,12 @@ checkLType gr g trm typ0 = do
          _ -> do
           (trm',ty') <- inferLType gr g trm
           termWith trm' $ checkEqLType gr g typ ty' trm'
+
+    AdHocOverload ts -> do
+      over <- getOverload gr g Nothing trm
+      case over of
+        Just trty -> return trty
+        _ -> checkError (text "unresolved overloading of constants" <+> ppTerm Qualified 0 trm) 
 
     Q _ -> do
        over <- getOverload gr g (Just typ) trm
@@ -499,7 +533,8 @@ checkLType gr g trm typ0 = do
       ]
     Let (x,(mty,def)) body -> case mty of
       Just ty -> do
-        (def',ty') <- checkLType gr g def ty
+        (ty0,_)    <- checkLType gr g ty typeType
+        (def',ty') <- checkLType gr g def ty0
         body' <- justCheck ((Explicit,x,ty'):g) body typ
         return (Let (x,(Just ty',def')) body', typ)
       _ -> do
@@ -596,8 +631,8 @@ checkEqLType gr g t u trm = do
   case b of
     True  -> return t'
     False -> checkError $ text s <+> text "type of" <+> ppTerm Unqualified 0 trm $$
-                          text "expected:" <+> ppType t $$
-                          text "inferred:" <+> ppType u
+                          text "expected:" <+> ppTerm Qualified 0 t $$ -- ppqType t u $$
+                          text "inferred:" <+> ppTerm Qualified 0 u -- ppqType u t
 
 checkIfEqLType :: SourceGrammar -> Context -> Type -> Type -> Term -> Check (Bool,Type,Type,String)
 checkIfEqLType gr g t u trm = do
@@ -704,6 +739,11 @@ ppType ty =
                       _      -> ppTerm Unqualified 0 ty
     Prod _ x a b -> ppType a <+> text "->" <+> ppType b
     _            -> ppTerm Unqualified 0 ty
+
+ppqType :: Type -> Type -> Doc
+ppqType t u = case (ppType t, ppType u) of
+  (pt,pu) | render pt == render pu -> ppTerm Qualified 0 t
+  (pt,_) -> pt
 
 checkLookup :: Ident -> Context -> Check Type
 checkLookup x g =
