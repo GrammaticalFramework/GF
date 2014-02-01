@@ -9,7 +9,7 @@ incomplete concrete TenseScand of Tense =
     TPast = {s = []} ** {t = SPast} ;   --# notpresent
     TFut  = {s = []} ** {t = SFut} ;    --# notpresent
     TCond = {s = []} ** {t = SCond} ;   --# notpresent
-
+{- already defined in CommonScand
 param 
  STense =
       SPres
@@ -18,5 +18,5 @@ param
     | SFutKommer   --# notpresent
     | SCond   --# notpresent
     ;
-
+-}
 }
