@@ -9,8 +9,8 @@ lincat
 	A2V,A= ResAmh.Adjective ;--{s : Gender => Number => Species => Case => Str} ;
 	V = ResAmh.Verb ; 
 	V,V0,VS,VQ,VA,V2A,V2V,V2S,V2Q,VV= ResAmh.Verb ; -- = {s : VForm => Str} ;
-	V2 = ResAmh.Verb ** {c2 : Prep} ;
-	V3 = ResAmh.Verb ** {c2, c3 : Prep} ;
+	V2 = ResAmh.Verb ** {c2 : ResAmh.Prep} ;
+	V3 = ResAmh.Verb ** {c2, c3 : ResAmh.Prep} ;
 	Pron,NP = ResAmh.NP ;  --NP = {s : Case => Str ; a : Agr} ; 
 	VP = ResAmh.VP ;
         Comp =ResAmh.Comp;
