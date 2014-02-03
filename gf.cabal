@@ -261,9 +261,11 @@ test-suite rgl-tests
   main-is:        run.hs
   hs-source-dirs: lib/tests/
   build-depends:  base, HTF, process, HUnit, filepath, directory
+  default-language:    Haskell2010
 
 test-suite gf-tests
   type:           exitcode-stdio-1.0
   main-is:        run.hs
   hs-source-dirs: testsuite
   build-depends:  base>=4.2 && <5, Cabal>=1.8, directory, filepath, process
+  default-language:    Haskell2010
