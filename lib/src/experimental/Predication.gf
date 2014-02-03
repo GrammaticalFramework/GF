@@ -16,7 +16,6 @@ cat
   QCl Arg ;
   NP ;
   Adv ;
-  AdV ;
   S ;
   Utt ;
   AP Arg ;
@@ -67,18 +66,20 @@ fun
 
   UseCl  : Cl aNone  -> S ;
   UseQCl : QCl aNone -> S ; -- deprecate QS
+
+  UseAdvCl : Adv -> Cl aNone -> S ;  -- lift adv to front
   
   UttS  : S -> Utt ;
 
 -- when to add adverbs
 
 ----  AdvVP  : Adv -> (a : Arg) -> VP a -> VP a ; ---- these create many ambiguities
-----  AdVVP  : AdV -> (a : Arg) -> VP a -> VP a ;
   ---- "hon tvingar oss att sova idag": 196 parses, 13s. With AdvVP restricted to top level: 32 parses, 7s
   ---- with AdvCl, just 16 parses, 0.2 s
 
   AdvCl  : Adv -> (a : Arg) -> Cl a -> Cl a ; 
-  AdVCl  : AdV -> (a : Arg) -> Cl a -> Cl a ;
+
+  AdvQCl  : Adv -> (a : Arg) -> QCl a -> QCl a ; 
 
 
 -- participles as adjectives
@@ -132,7 +133,7 @@ fun
   we_NP : NP ;
 
   today_Adv : Adv ;
-  always_AdV : AdV ;
+  always_AdV : Adv ;
   who_IP : IP ;
 
   with_Prep : Prep ;
