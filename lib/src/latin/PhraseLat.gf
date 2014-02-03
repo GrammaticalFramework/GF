@@ -19,6 +19,6 @@ concrete PhraseLat of Phrase = CatLat ** open Prelude, ResLat in {
     PConjConj conj = {s = conj.s2} ; ---
 --
     NoVoc = {s = []} ;
-----    VocNP np = {s = "," ++ np.s ! Voc} ; ---- what is the compiler error here? AR 1/2/2014
+    VocNP np = {s = "," ++ np.s ! ResLat.Voc} ; ---- what is the compiler error here? AR 1/2/2014 -- answer: clash with the type name Voc 3/2
 --
 }
