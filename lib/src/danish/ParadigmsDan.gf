@@ -431,7 +431,7 @@ oper
   mkVS  v = v ** {lock_VS = <>} ;
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
   mkVV  v = v ** {c2 = mkComplement "at" ; lock_VV = <>} ;
-  mkV2V v p t = mk2V2 v p ** {c3 = mkComplement  "at" ; lock_V2V = <>} ;
+  mkV2V v p t = mk2V2 v p ** {c3 = mkComplement t.s ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mk2V2 v p ** {lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
