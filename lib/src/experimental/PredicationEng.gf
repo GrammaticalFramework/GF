@@ -9,7 +9,7 @@ concrete PredicationEng of Predication = open Prelude in {
 param
   Agr      = Sg | Pl ;
   Case     = Nom | Acc ;
-  STense   = Pres | Past | Perf | Fut ;
+  STense   = Pres | Past | Fut | Cond ;
   Anteriority = Simul | Anter ;
   Polarity = Pos | Neg ;
   VForm    = VInf | VPres | VPast | VPastPart | VPresPart ;
@@ -30,10 +30,11 @@ lincat
     c1 : ComplCase ; 
     c2 : ComplCase ;
     isSubjectControl : Bool ;
+    isAux : Bool ;
     } ; 
 
   VP = {
-    v : Str * Str * Str ;  -- ska,ha,sovit 
+    v : Agr => Str * Str * Str ;  -- ska,ha,sovit 
     inf : Str * Str ;      -- ha,sovit
     c1 : ComplCase ; 
     c2 : ComplCase ; 
@@ -108,7 +109,7 @@ lin
   TPres  = {s = [] ; t = Pres} ;
   TPast  = {s = [] ; t = Past} ;
   TFut   = {s = [] ; t = Fut} ;
-  TCond  = {s = [] ; t = Perf} ;
+  TCond  = {s = [] ; t = Cond} ;
   ASimul = {s = [] ; a = Simul} ;
   AAnter = {s = [] ; a = Anter} ;
 
@@ -116,53 +117,53 @@ lin
   PNeg  = {s = [] ; p = Neg} ;
 
   UseV a t p _ v = {
-    v   = tenseV (a.s ++ t.s) t.t a.a Act v ;
-    inf = tenseInfV a.s a.a Act v ;
+    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p Act agr v ;
+    inf = tenseInfV a.s a.a p.p Act v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj = noObj ;
     obj1 = <noObj, defaultAgr> ; ---- not used, just default value
     obj2 = <noObj, v.isSubjectControl> ;
-    adV = p.s ++ neg p.p ;
+    adV = negAdV p ;
     adv = [] ;
     ext = [] ;
     } ;
 
   PassUseV a t p _ v = {
-    v   = tenseV (a.s ++ t.s) t.t a.a Pass v ;
-    inf = tenseInfV a.s a.a Pass v ;
+    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass agr v ;
+    inf = tenseInfV a.s a.a p.p Pass v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj = noObj ;
     obj1 = <noObj, defaultAgr> ; ---- not used, just default value
     obj2 = <noObj, True> ; -- becomes subject control even if object control otherwise "*she was promised by us to love ourselves"
-    adV = p.s ++ neg p.p ;
+    adV = negAdV p ;
     adv = [] ;
     ext = [] ;
     } ;
 
   AgentPassUseV a t p _ v np = {
-    v   = tenseV (a.s ++ t.s) t.t a.a Pass v ;
-    inf = tenseInfV a.s a.a Pass v ;
+    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass agr v ;
+    inf = tenseInfV a.s a.a p.p Pass v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     adj = \\a => [] ;
     obj1 = <noObj, defaultAgr> ; 
     obj2 = <noObj, True> ;
-    adV = p.s ++ neg p.p ;
+    adV = negAdV p ;
     adv = appComplCase agentCase np ; ---- add a specific field for agent?
     ext = [] ;
     } ;
 
   UseAP a t p _ ap = {
-    v   = tenseV (a.s ++ t.s) t.t a.a Act be_V ;
-    inf = tenseInfV a.s a.a Act be_V ;
+    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p Act agr be_V ;
+    inf = tenseInfV a.s a.a p.p Act be_V ;
     c1  = ap.c1 ;
     c2  = ap.c2 ;
     adj = \\a => ap.s ! a ;
     obj1 = <ap.obj1, defaultAgr> ;
     obj2 = <noObj, True> ; --- there are no A3's
-    adV = p.s ++ neg p.p ;
+    adV = negAdV p ;
     adv = [] ;
     ext = [] ;
     } ;
@@ -202,6 +203,7 @@ lin
     } ;
 
   PredVP x np vp = vp ** {
+    v    = vp.v ! np.a ;
     subj = np.s ! Nom ;
     adj  = vp.adj ! np.a ;
     obj1 = vp.c1 ++ vp.obj1.p1 ! np.a ;  ---- apply complCase
@@ -225,6 +227,7 @@ lin
   QuestIAdv x iadv cl = cl ** {foc = iadv.s ; focType = FocObj} ; -- FocObj implies Foc + V + Subj: varför älskar hon oss
 
   QuestVP x ip vp = vp ** {
+    v    = vp.v ! ip.a ;
     foc  = ip.s ;   -- vem älskar henne
     focType = FocSubj ;
     subj = [] ;
@@ -284,10 +287,12 @@ lin
 
   StartVPC c x v w = {  ---- some loss of quality seems inevitable
     v = \\a => 
-          v.v.p1 ++ v.adV ++ v.v.p2 ++ v.v.p3 ++ v.adj ! a ++ 
+          let vv = v.v ! a ; wv = w.v ! a 
+          in 
+          vv.p1 ++ v.adV ++ vv.p2 ++ vv.p3 ++ v.adj ! a ++ 
           v.c1 ++ v.obj1.p1 ! a ++ v.c2 ++ v.obj2.p1 ! a ++ v.adv ++ v.ext   ---- appComplCase
             ++ c.s ++  
-          w.v.p1 ++ w.adV ++ w.v.p2 ++ w.v.p3 ++ w.adj ! a ++                ---- appComplCase
+          wv.p1 ++ w.adV ++ wv.p2 ++ wv.p3 ++ w.adj ! a ++                ---- appComplCase
           w.c1 ++ w.obj1.p1 ! a ++ w.c2 ++ w.obj2.p1 ! a ++ w.adv ++ w.ext ;
     inf = \\a => 
             infVP a (lin VP v) ++ c.s ++ infVP a (lin VP w) ;
@@ -296,7 +301,7 @@ lin
     } ;
 
   UseVPC x vpc = { ---- big loss of quality (overgeneration) seems inevitable
-    v   = <[], [], vpc.v ! defaultAgr> ;   ---- agreement
+    v   = \\a => <[], [], vpc.v ! a> ;
     inf = <[], vpc.inf ! defaultAgr> ; ---- agreement
     c1  = vpc.c1 ;
     c2  = vpc.c2 ;
@@ -337,7 +342,7 @@ oper
 
   be_V : V = lin V {v = mkVerb "be" "is" "was" "been" "being" ; c1,c2 = [] ; isAux = True ; isSubjectControl = False} ;
 
-  neg : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "not"} ;
+  negAdV : Pol -> Str = \p -> p.s ;
 
   reflPron : Agr -> Str = \a -> case a of {Sg => "herself" ; Pl => "us"} ;
 
@@ -348,31 +353,48 @@ oper
       vp.adV ++ (vp.inf.p1 | []) ++ vp.inf.p2 ++     ---- *hon tvingar oss att sovit 
       vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.adv ++ vp.ext ;
 
-  tenseV : Str -> STense -> Anteriority -> Voice -> V -> Str * Str * Str = \sta,t,a,o,v -> case o of {  --- sta dummy s field of Ant and Tense
-    Act  => tenseActV sta t a v ;
-    Pass => tensePassV sta t a v
+  tenseV : Str -> STense -> Anteriority -> Polarity -> Voice -> Agr -> V -> Str * Str * Str = 
+    \sta,t,a,p,o,agr,v -> case o of {  
+      Act  => tenseActV sta t a p agr v ;
+      Pass => tensePassV sta t a p agr v
+      } ;
+
+  tenseActV : Str -> STense -> Anteriority -> Polarity -> Agr -> V -> Str * Str * Str = \sta,t,a,p,agr,v -> 
+    let vt = case <t,agr> of {
+        <Pres,Sg>      => VPres ; 
+        <Past|Cond,_ > => VPast ; 
+        _              => VInf
+        }  
+    in 
+    case <t,a> of {  
+    <Pres|Past, Simul> =>
+      case v.isAux of {
+        True           => <sta ++ v.v ! vt,      [],                              []> ;
+        False          => case p of {
+          Pos          => <[],                   sta ++ v.v ! vt,                 []> ;
+          Neg          => <do_Aux       vt p,    [],                              sta ++ v.v ! VInf>
+                        | <do_Aux       vt Pos,  not_Str p,                       sta ++ v.v ! VInf>
+          }
+       } ;
+    <Pres|Past, Anter> => <have_Aux     vt p,    [],                              sta ++ v.v ! VPastPart> 
+                        | <have_Aux     vt Pos,  not_Str p,                       sta ++ v.v ! VPastPart> ;
+    <Fut|Cond,  Simul> => <will_Aux     vt p,    [],                              sta ++ v.v ! VInf> 
+                        | <will_Aux     vt Pos,  not_Str p,                       sta ++ v.v ! VInf> ;
+    <Fut|Cond,  Anter> => <will_Aux     vt p,    have_Aux VInf Pos,               sta ++ v.v ! VPastPart>
+                        | <will_Aux     vt Pos,  not_Str p ++ have_Aux VInf Pos,  sta ++ v.v ! VPastPart>
     } ;
-  tenseActV : Str -> STense -> Anteriority -> V -> Str * Str * Str = \sta,t,a,v -> case <t,a> of {  --- sta dummy s field of Ant and Tense
-    <Pres,Simul> => <sta ++ v.v ! VPres,   [],                      []> ;
-    <Past,Simul> => <sta ++ v.v ! VPast,   [],                      []> ;
-    <Fut, Simul> => <will_V.v   ! VPres,   [],                      sta ++ v.v ! VInf> ;
-    <Cond,Simul> => <will_V.v   ! VPast,   [],                      sta ++ v.v ! VInf> ;
-    <Pres,Anter> => <have_V.v   ! VPres,   [],                      sta ++ v.v ! VPastPart> ;
-    <Past,Anter> => <have_V.v   ! VPast,   [],                      sta ++ v.v ! VPastPart> ;
-    <Fut, Anter> => <will_V.v   ! VPres,   have_V.v ! VInf,         sta ++ v.v ! VPastPart> ;
-    <Cond,Anter> => <will_V.v   ! VPast,   have_V.v ! VInf,         sta ++ v.v ! VPastPart> 
-    } ;
-  tensePassV : Str -> STense -> Anteriority -> V -> Str * Str * Str = \sta,t,a,v -> 
+
+  tensePassV : Str -> STense -> Anteriority -> Polarity -> Agr -> V -> Str * Str * Str = \sta,t,a,p,agr,v -> 
     let 
-      be   = tenseActV sta t a be_V ;
+      be   = tenseActV sta t a p agr be_V ;
       done = v.v ! VPastPart
     in 
     <be.p1, be.p2, be.p3 ++ done> ;
 
-  tenseInfV : Str -> Anteriority -> Voice -> V -> Str * Str = \sa,a,o,v ->
+  tenseInfV : Str -> Anteriority -> Polarity -> Voice -> V -> Str * Str = \sa,a,p,o,v ->
     case a of {
-      Simul => <[],              sa ++ v.v ! VInf> ;       -- hon vill sova
-      Anter => <have_V.v ! VInf, sa ++ v.v ! VPastPart>    -- hon vill (ha) sovit
+      Simul => <[],                sa ++ v.v ! VInf> ;       -- hon vill sova
+      Anter => <have_Aux VInf Pos, sa ++ v.v ! VPastPart>    -- hon vill (ha) sovit
       } ;
 
 
@@ -479,12 +501,31 @@ oper
   edV  : Str -> Str = \s -> case s of {us + "e" => us ; _ => s} + "ed" ;
   ingV : Str -> Str = \s -> case s of {us + "e" => us ; _ => s} + "ing" ;
 
-  do_V : V = lin V {v = mkVerb "do" "does" "did" "done" "doing" ; c1,c2 = [] ; isAux = True ; isSubjectControl = False} ;
+  will_Aux : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
+    <VInf|VPres, Pos> => "will" ;
+    <VInf|VPres, Neg> => "won't" ;
+    <VPast|_   , Pos> => "would" ; 
+    <VPast|_   , Neg> => "wouldn't"
+    } ; 
 
-  have_V : V = lin V {v = mkVerb "have" "has" "had" "had" "having" ; c1,c2 = [] ; isAux = True ; isSubjectControl = False} ;
+  have_Aux : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
+    <VInf,     Pos> => "have" ;
+    <VInf,     Neg> => "haven't" ;
+    <VPres,    Pos> => "has" ;
+    <VPres,    Neg> => "hasn't" ;
+    <VPast|_ , Pos> => "had" ; 
+    <VPast|_ , Neg> => "hadn't"
+    } ; 
 
-  will_V : V = lin V {v = mkVerb "will" "will" "would" "would" "will" ; c1,c2 = [] ; isAux = True ; isSubjectControl = False} ;
+  do_Aux : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
+    <VInf,     Pos> => "do" ;
+    <VInf,     Neg> => "don't" ;
+    <VPres,    Pos> => "does" ;
+    <VPres,    Neg> => "doesn't" ;
+    <VPast|_ , Pos> => "did" ; 
+    <VPast|_ , Neg> => "didn't"
+    } ; 
 
-
+  not_Str : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "not"} ;
 
 }
