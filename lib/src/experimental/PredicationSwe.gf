@@ -82,8 +82,7 @@ lincat
   Pol   = {s : Str ; p : Polarity} ;
 
   NP   = {s : Case => Str ; a : Agr} ;
-  Adv  = {s : Str} ;
-  AdV  = {s : Str} ;
+  Adv  = {s : Str ; isAdV : Bool} ;
   S    = {s : Str} ;
   Utt  = {s : Str} ;
   AP   = {
@@ -254,13 +253,13 @@ lin
   UseCl  cl = {s = declCl cl} ;
   UseQCl cl = {s = questCl cl} ;
 
+  UseAdvCl adv cl = {s = adv.s ++ declInvCl cl} ;
+
   UttS s = s ;
 
-  AdvCl a x cl = cl ** {adv = cl.adv ++ a.s} ;
+  AdvCl a x cl = cl ** case a.isAdV of {True => {adV = cl.adV ++ a.s ; adv = cl.adv} ; False => {adv = cl.adv ++ a.s ; adV = cl.adV}} ;
 
-  AdVCl a x cl = cl ** {adV  = cl.adV ++ a.s} ;
-
-
+  AdvQCl a x cl = cl ** {adv = cl.adv ++ a.s} ;
 
 
   PresPartAP x v = {            
@@ -327,79 +326,10 @@ lin
     c3   = cl.c3 ;
     } ;
 
----- the lexicon is just for testing: use standard Swe lexicon and morphology instead
-
-  sleep_V = mkV "sova" "sover" "sov" "sovit" "soven" "sovna" ;
-  walk_V = mkV "gå" "går" "gick" "gått" "gången" "gångna" ;
-  love_V2 = mkV "älska" "älskar" "älskade" "älskat" "älskad" "älskade" ;
-  look_V2 = mkV "titta" "tittar" "tittade" "tittat" "tittad" "tittade" "på" [] ;
-  believe_VS = mkV "tro" "tror" "trodde" "trott" "trodd" "trodda" ;
-  tell_V2S = mkV "berätta" "berättar" "berättade" "berättat" "berättad" "berättade" "för" [] ;
-  prefer_V3 = mkV "föredra" "föredrar" "föredrog" "föredragit" "föredragen" "föredragna" [] "framför" ;
-  want_VV = mkV "vilja" "vill" "ville" "velat" "velad" "velade" ;
-  force_V2V = let tvinga : V = mkV "tvinga" "tvingar" "tvingade" "tvingat" "tvingad" "tvingade" in 
-              {v = tvinga.v ; c1 = [] ; c2 = "att" ; isSubjectControl = False} ; 
-  promise_V2V = mkV "lova" "lovar" "lovade" "lovat" "lovad" "lovade" [] "att" ;
-  wonder_VQ = mkV "undra" "undrar" "undrade" "undrat" "undrad" "undrade" ;
-  become_VA = mkV "bli" "blir" "blev" "blivit" "bliven" "blivna" ;
-  become_VN = mkV "bli" "blir" "blev" "blivit" "bliven" "blivna" ;
-  make_V2A = let gora : V = mkV "göra" "gör" "gjorde" "gjort" "gjord" "gjorda" in 
-             {v = table {TV Pass VPres => "görs" ; f => gora.v ! f} ; c1 = [] ; c2 = [] ; isSubjectControl = False} ; 
-  promote_V2N = let befordra : V = mkV "befordra" "befordrar" "befordrade" "befordrat" "befordrad" "befordrade"
-                in {v = befordra.v ; c1 = [] ; c2 = "till" ; isSubjectControl = False} ; ---- ? de befordrade dem till chefer för sig/dem 
-  ask_V2Q = mkV "fråga" "frågar" "frågade" "frågat" "frågad" "frågade" ;
-
-  old_A = {s = table {Sg => "gammal" ; Pl => "gamla"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
-  married_A2 = {s = table {Sg => "gift" ; Pl => "gifta"} ; c1 = "med" ; c2 = [] ; obj1 = \\_ => []} ;
-  eager_AV = {s = table {Sg => "ivrig" ; Pl => "ivriga"} ; c1 = [] ; c2 = "att" ; obj1 = \\_ => []} ;
-  easy_A2V = {s = table {Sg => "lätt" ; Pl => "lätta"} ; c1 = "för" ; c2 = "att" ; obj1 = \\_ => []} ;
-  professor_N = {s = table {Sg => "professor" ; Pl => "professorer"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
-  manager_N2 = {s = table {Sg => "chef" ; Pl => "chefer"} ; c1 = "för" ; c2 = [] ; obj1 = \\_ => []} ;
-
-  she_NP = {s = table {Nom => "hon" ; Acc => "henne"} ; a = Sg} ;
-  we_NP = {s = table {Nom => "vi" ; Acc => "oss"} ; a = Pl} ;
-
-  today_Adv = {s = "idag"} ;
-  always_AdV = {s = "alltid"} ;
-
-  who_IP = {s = "vem" ; a = Sg} ;
-
-  PrepNP p np = {s = p.s ++ np.s ! Acc} ;
-
-  with_Prep = {s = "med"} ;
-
-  and_Conj = {s = "och"} ;
-
-  why_IAdv = {s = "varför"} ;
-
-oper
-  mkV = overload {
-    mkV : (x,y,z,u,v,w : Str) -> V = \x,y,z,u,v,w -> 
-      lin V {
-        v = table {
-              TV Act VInf => x ; TV Act VPres => y ; TV Act VPret => z ; TV Act VSup => u ;
-              TV Pass VInf => x + "s" ; TV Pass VPres => init y + "s" ; TV Pass VPret => z + "s" ; TV Pass VSup => u + "s" ;
-              PastPart Sg => v ; PastPart Pl => w ; PresPart => x + "nde"
-              } ; 
-        c1 = [] ; c2 = [] ; isSubjectControl = True} ; 
-    mkV : (x,y,z,u,v,w : Str) -> Str -> Str -> V = \x,y,z,u,v,w,p,q -> 
-      lin V {
-        v = table {
-              TV Act VInf => x ; TV Act VPres => y ; TV Act VPret => z ; TV Act VSup => u ;
-              TV Pass VInf => x + "s" ; TV Pass VPres => init y + "s" ; TV Pass VPret => z + "s" ; TV Pass VSup => u + "s" ;
-              PastPart Sg => v ; PastPart Pl => w ; PresPart => x + "nde"
-              } ; 
-        c1 = p ; c2 = q  ; isSubjectControl = True} ; 
-    } ;
-
-  be_V : V = mkV "vara" "är" "var" "varit" "varen" "varna" ;
-
-  have_V : V = mkV "ha" "har" "hade" "haft" "havd" "havda" ;
-
-  shall_V : V = mkV "skola" "ska" "skulle" "skolat" "skolad" "skolade" ;
-
 
 ---- the following may become parameters for a functor
+oper
+  be_V : V = mkV "vara" "är" "var" "varit" "varen" "varna" ;
 
   neg : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "inte"} ;
 
@@ -417,8 +347,8 @@ oper
     <Past,Simul> => <sta ++ v.v ! TV o   VPret,   [],                      []> ;
     <Fut, Simul> => <shall_V.v  ! TV Act VPres,   [],                      sta ++ v.v ! TV o VInf> ;
     <Cond,Simul> => <shall_V.v  ! TV Act VPret,   [],                      sta ++ v.v ! TV o VInf> ;
-    <Pres,Anter> => <[],                          have_V.v ! TV Act VPres, sta ++ v.v ! TV o VSup> ;
-    <Past,Anter> => <[],                          have_V.v ! TV Act VPret, sta ++ v.v ! TV o VSup> ;
+    <Pres,Anter> => <have_V.v ! TV Act VPres,     [],                      sta ++ v.v ! TV o VSup> ;
+    <Past,Anter> => <have_V.v ! TV Act VPret,     [],                      sta ++ v.v ! TV o VSup> ;
     <Fut, Anter> => <shall_V.v  ! TV Act VPres,   have_V.v ! TV Act VInf,  sta ++ v.v ! TV o VSup> ;
     <Cond,Anter> => <shall_V.v  ! TV Act VPret,   have_V.v ! TV Act VInf,  sta ++ v.v ! TV o VSup> 
     } ;
@@ -468,5 +398,78 @@ oper
     ext = ext ;
     } ;
 
+
+
+
+
+---- the lexicon is just for testing: use standard Swe lexicon and morphology instead
+lin
+  sleep_V = mkV "sova" "sover" "sov" "sovit" "soven" "sovna" ;
+  walk_V = mkV "gå" "går" "gick" "gått" "gången" "gångna" ;
+  love_V2 = mkV "älska" "älskar" "älskade" "älskat" "älskad" "älskade" ;
+  look_V2 = mkV "titta" "tittar" "tittade" "tittat" "tittad" "tittade" "på" [] ;
+  believe_VS = mkV "tro" "tror" "trodde" "trott" "trodd" "trodda" ;
+  tell_V2S = mkV "berätta" "berättar" "berättade" "berättat" "berättad" "berättade" "för" [] ;
+  prefer_V3 = mkV "föredra" "föredrar" "föredrog" "föredragit" "föredragen" "föredragna" [] "framför" ;
+  want_VV = mkV "vilja" "vill" "ville" "velat" "velad" "velade" ;
+  force_V2V = let tvinga : V = mkV "tvinga" "tvingar" "tvingade" "tvingat" "tvingad" "tvingade" in 
+              {v = tvinga.v ; c1 = [] ; c2 = "att" ; isSubjectControl = False} ; 
+  promise_V2V = mkV "lova" "lovar" "lovade" "lovat" "lovad" "lovade" [] "att" ;
+  wonder_VQ = mkV "undra" "undrar" "undrade" "undrat" "undrad" "undrade" ;
+  become_VA = mkV "bli" "blir" "blev" "blivit" "bliven" "blivna" ;
+  become_VN = mkV "bli" "blir" "blev" "blivit" "bliven" "blivna" ;
+  make_V2A = let gora : V = mkV "göra" "gör" "gjorde" "gjort" "gjord" "gjorda" in 
+             {v = table {TV Pass VPres => "görs" ; f => gora.v ! f} ; c1 = [] ; c2 = [] ; isSubjectControl = False} ; 
+  promote_V2N = let befordra : V = mkV "befordra" "befordrar" "befordrade" "befordrat" "befordrad" "befordrade"
+                in {v = befordra.v ; c1 = [] ; c2 = "till" ; isSubjectControl = False} ; ---- ? de befordrade dem till chefer för sig/dem 
+  ask_V2Q = mkV "fråga" "frågar" "frågade" "frågat" "frågad" "frågade" ;
+
+  old_A = {s = table {Sg => "gammal" ; Pl => "gamla"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
+  married_A2 = {s = table {Sg => "gift" ; Pl => "gifta"} ; c1 = "med" ; c2 = [] ; obj1 = \\_ => []} ;
+  eager_AV = {s = table {Sg => "ivrig" ; Pl => "ivriga"} ; c1 = [] ; c2 = "att" ; obj1 = \\_ => []} ;
+  easy_A2V = {s = table {Sg => "lätt" ; Pl => "lätta"} ; c1 = "för" ; c2 = "att" ; obj1 = \\_ => []} ;
+  professor_N = {s = table {Sg => "professor" ; Pl => "professorer"} ; c1 = [] ; c2 = [] ; obj1 = \\_ => []} ;
+  manager_N2 = {s = table {Sg => "chef" ; Pl => "chefer"} ; c1 = "för" ; c2 = [] ; obj1 = \\_ => []} ;
+
+  she_NP = {s = table {Nom => "hon" ; Acc => "henne"} ; a = Sg} ;
+  we_NP = {s = table {Nom => "vi" ; Acc => "oss"} ; a = Pl} ;
+
+  today_Adv = {s = "idag" ; isAdV = False} ;
+  always_AdV = {s = "alltid" ; isAdV = True} ;
+
+  who_IP = {s = "vem" ; a = Sg} ;
+
+  PrepNP p np = {s = p.s ++ np.s ! Acc ; isAdV = False} ;
+
+  with_Prep = {s = "med"} ;
+
+  and_Conj = {s = "och"} ;
+
+  why_IAdv = {s = "varför"} ;
+
+oper
+  mkV = overload {
+    mkV : (x,y,z,u,v,w : Str) -> V = \x,y,z,u,v,w -> 
+      lin V {
+        v = table {
+              TV Act VInf => x ; TV Act VPres => y ; TV Act VPret => z ; TV Act VSup => u ;
+              TV Pass VInf => x + "s" ; TV Pass VPres => init y + "s" ; TV Pass VPret => z + "s" ; TV Pass VSup => u + "s" ;
+              PastPart Sg => v ; PastPart Pl => w ; PresPart => x + "nde"
+              } ; 
+        c1 = [] ; c2 = [] ; isSubjectControl = True} ; 
+    mkV : (x,y,z,u,v,w : Str) -> Str -> Str -> V = \x,y,z,u,v,w,p,q -> 
+      lin V {
+        v = table {
+              TV Act VInf => x ; TV Act VPres => y ; TV Act VPret => z ; TV Act VSup => u ;
+              TV Pass VInf => x + "s" ; TV Pass VPres => init y + "s" ; TV Pass VPret => z + "s" ; TV Pass VSup => u + "s" ;
+              PastPart Sg => v ; PastPart Pl => w ; PresPart => x + "nde"
+              } ; 
+        c1 = p ; c2 = q  ; isSubjectControl = True} ; 
+    } ;
+
+
+  have_V : V = mkV "ha" "har" "hade" "haft" "havd" "havda" ;
+
+  shall_V : V = mkV "skola" "ska" "skulle" "skolat" "skolad" "skolade" ;
 
 }
