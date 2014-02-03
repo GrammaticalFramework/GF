@@ -20,7 +20,7 @@ lin
   beautiful_A = mk3ADeg "vakker" "vakkert" "vakre" ;
   become_VA = mkVA (vaereV bli_V) ;
   beer_N = regGenN "øl" neutrum ;
-  beg_V2V = mkV2V be_V noPrep (mkPrep "at") ;
+  beg_V2V = mkV2V be_V noPrep (mkPrep "å") ;
   big_A = irregADeg "stor" "større" "størst";
   bike_N = mkN "sykkel" "sykkelen" "sykler" "syklene" ;
   bird_N = mk2N "fugl" "fuglen" ;
