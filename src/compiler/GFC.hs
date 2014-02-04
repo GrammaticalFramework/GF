@@ -18,7 +18,8 @@ import GF.Data.ErrM
 import GF.System.Directory
 
 import Data.Maybe
-import Data.Binary
+import Data.Binary(encode,encodeFile)
+import Data.Binary.Put(runPut)
 import qualified Data.Map as Map
 import qualified Data.ByteString as BSS
 import qualified Data.ByteString.Lazy as BSL
@@ -130,7 +131,8 @@ writePGF :: Options -> PGF -> IOE ()
 writePGF opts pgf
   | flag optSplitPGF opts = do let outfile = grammarName opts pgf <.> "pgf"
                                putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ do
-                                 encodeFile_ outfile (putSplitAbs pgf)
+                               --encodeFile_ outfile (putSplitAbs pgf)
+                                 BSL.writeFile outfile (runPut (putSplitAbs pgf))
                                forM_ (Map.toList (concretes pgf)) $ \cnc -> do
                                  let outfile = showCId (fst cnc) <.> "pgf_c"
                                  putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ encodeFile outfile cnc
