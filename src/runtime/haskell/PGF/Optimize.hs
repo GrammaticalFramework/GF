@@ -11,7 +11,7 @@ import PGF.Macros
 import Data.List (mapAccumL)
 import Data.Array.IArray
 import Data.Array.MArray
-import Data.Array.Unsafe(unsafeFreeze)
+import Data.Array.Unsafe as U(unsafeFreeze)
 import Data.Array.ST
 import Data.Array.Unboxed
 import qualified Data.Map as Map
@@ -124,7 +124,7 @@ topDownFilter startCat cnc =
             done (cat,indices) = do
               (s,e) <- getBounds indices
               reindex indices s e 0
-              indices <- unsafeFreeze indices
+              indices <- U.unsafeFreeze indices
               return (cat,indices)
               
             reindex indices i j k
