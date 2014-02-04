@@ -156,7 +156,7 @@ lin
     } ;
 
   UseAP a t p _ ap = {
-    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p Act agr be_V ;
+    v   = \\agr => be_Aux (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     inf = tenseInfV a.s a.a p.p Act be_V ;
     c1  = ap.c1 ;
     c2  = ap.c2 ;
@@ -371,7 +371,7 @@ oper
       case v.isAux of {
         True           => <sta ++ v.v ! vt,      [],                              []> ;
         False          => case p of {
-          Pos          => <[],                   sta ++ v.v ! vt,                 []> ;
+          Pos          => <[],                   sta ++ v.v ! vt,                 []> ;                 -- this is the deviating case
           Neg          => <do_Aux       vt p,    [],                              sta ++ v.v ! VInf>
                         | <do_Aux       vt Pos,  not_Str p,                       sta ++ v.v ! VInf>
           }
@@ -386,7 +386,7 @@ oper
 
   tensePassV : Str -> STense -> Anteriority -> Polarity -> Agr -> V -> Str * Str * Str = \sta,t,a,p,agr,v -> 
     let 
-      be   = tenseActV sta t a p agr be_V ;
+      be   = be_Aux sta t a p agr ;
       done = v.v ! VPastPart
     in 
     <be.p1, be.p2, be.p3 ++ done> ;
@@ -397,6 +397,28 @@ oper
       Anter => <have_Aux VInf Pos, sa ++ v.v ! VPastPart>    -- hon vill (ha) sovit
       } ;
 
+  be_Aux : Str -> STense -> Anteriority -> Polarity -> Agr -> Str * Str * Str = \sta,t,a,p,agr -> 
+    let 
+      beV = tenseActV sta t a p agr be_V 
+    in
+    case <t,a,p,agr> of {
+      <Pres,Simul,Pos,Sg> => <"is" ++ sta,                 [],    []> 
+                           | <Predef.BIND ++ "'s" ++ sta,  [],    []> ;
+      <Pres,Simul,Pos,Pl> => <"are" ++ sta,                [],    []> 
+                           | <Predef.BIND ++ "'re" ++ sta, [],    []> ;
+      <Pres,Simul,Neg,Sg> => <"is" ++ sta,                 "not", []> 
+                           | <Predef.BIND ++ "'s" ++ sta,  "not", []>
+                           | <"isn't" ++ sta,              [],    []> ;
+      <Pres,Simul,Neg,Pl> => <"are" ++ sta,                "not", []> 
+                           | <Predef.BIND ++ "'re" ++ sta, "not", []>
+                           | <"aren't" ++ sta,             [],    []> ;
+      <Past,Simul,Pos,Pl> => <"were" ++ sta,               [],    []> ; 
+      <Past,Simul,Neg,Sg> => <"was" ++ sta,                "not", []> 
+                           | <"wasn't" ++ sta,             [],    []>  ;
+      <Past,Simul,Neg,Pl> => <"were" ++ sta,               "not", []> 
+                           | <"weren't" ++ sta,            [],    []>  ;
+      _ => beV
+      } ;
 
   declCl       : Clause -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
   declSubordCl : Clause -> Str = declCl ;
@@ -502,18 +524,18 @@ oper
   ingV : Str -> Str = \s -> case s of {us + "e" => us ; _ => s} + "ing" ;
 
   will_Aux : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
-    <VInf|VPres, Pos> => "will" ;
+    <VInf|VPres, Pos> => "will" | Predef.BIND ++ "'ll" ;
     <VInf|VPres, Neg> => "won't" ;
-    <VPast|_   , Pos> => "would" ; 
+    <VPast|_   , Pos> => "would" | Predef.BIND ++ "'d" ; 
     <VPast|_   , Neg> => "wouldn't"
     } ; 
 
   have_Aux : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
-    <VInf,     Pos> => "have" ;
+    <VInf,     Pos> => "have" | Predef.BIND ++ "'ve" ;  --- slightly overgenerating as used in infinitive
     <VInf,     Neg> => "haven't" ;
-    <VPres,    Pos> => "has" ;
+    <VPres,    Pos> => "has" | Predef.BIND ++ "'s" ;
     <VPres,    Neg> => "hasn't" ;
-    <VPast|_ , Pos> => "had" ; 
+    <VPast|_ , Pos> => "had" | Predef.BIND ++ "'d" ; 
     <VPast|_ , Neg> => "hadn't"
     } ; 
 

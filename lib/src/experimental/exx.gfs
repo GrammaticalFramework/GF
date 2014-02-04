@@ -75,4 +75,6 @@ hon skulle befordras till professor av oss
 
 
 
+gt UttS (UseCl (PredVP aNone ? (UseAP ? ? ?  aNone old_A))) | l -list -bind
 
+gt UttS (UseCl (PredVP aNone ? (UseV ? ? ? aNone sleep_V))) | l -list -bind
