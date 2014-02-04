@@ -231,7 +231,24 @@ lin
     qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v ;
     } ;
 
+  UseAP a t p _ ap = {
+    v   = \\agr => be_Aux (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    inf = tenseInfV a.s a.a p.p Act be_V ;
+    c1  = ap.c1 ;
+    c2  = ap.c2 ;
+    part = [] ;
+    adj = \\a => ap.s ! agr2aagr a ;
+    obj1 = <ap.obj1, defaultAgr> ;
+    obj2 = <noObj, True> ; --- there are no A3's
+    adV = negAdV p ;
+    adv = [] ;
+    ext = [] ;
+    qforms = \\agr => qformsBe (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    } ;
 
+  SlashV2 x vp np = vp ** {
+    obj1 : (Agr => Str) * Agr = <\\a => np.s ! objCase, np.a>  -- np.a for object control 
+    } ;
 
   PredVP x np vp = vp ** {
     v    = vp.v ! agr2vagr np.a ;

@@ -5,10 +5,17 @@ concrete TransEng of Trans =
   ,PredEng
   ,DictionaryEng - [Pol]
 
-              ** open Prelude in {
+              ** open ResEng, Prelude in {
 
 lin
-  LiftV v = v ** {v = v.s ; c1,c2 = [] ; isSubjectControl, isAux = False} ;
+  LiftV  v = v ** {v = v.s ; c1,c2 = [] ; isSubjectControl, isAux = False} ;
+  LiftV2 v = v ** {v = v.s ; c1 = v.c2 ; c2 = [] ; isSubjectControl, isAux = False} ;
+  LiftVS v = v ** {v = v.s ; c1,c2 = [] ; isSubjectControl, isAux = False} ;
+
+  LiftAP ap = {s = \\_ => ap.s ! AgP3Sg Neutr ; c1,c2 = [] ; obj1 = \\_ => []} ;  --- agr, isPre
+
+  LiftAdv a = a ** {isAdV = False} ;
+  LiftAdV a = a ** {isAdV = True} ;
 
 
 {-
