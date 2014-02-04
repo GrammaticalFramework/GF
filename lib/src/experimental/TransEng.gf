@@ -1,14 +1,17 @@
 --# -path=.:../translator
 
 concrete TransEng of Trans =
-   RGLBaseEng
+   RGLBaseEng - [Pol]
   ,PredEng
-  ,DictionaryEng
+  ,DictionaryEng - [Pol]
 
-              ** {
-{-
+              ** open Prelude in {
+
 lin
-  LiftV  : V -> PrV aNone ;
+  LiftV v = v ** {v = v.s ; c1,c2 = [] ; isSubjectControl, isAux = False} ;
+
+
+{-
   LiftV2 : V2 -> PrV (aNP aNone) ;
   LiftVS : VS -> PrV aS ;
   LiftVQ : VQ -> PrV aQ ;
