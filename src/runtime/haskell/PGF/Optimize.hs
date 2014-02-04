@@ -11,6 +11,7 @@ import PGF.Macros
 import Data.List (mapAccumL)
 import Data.Array.IArray
 import Data.Array.MArray
+import Data.Array.Unsafe(unsafeFreeze)
 import Data.Array.ST
 import Data.Array.Unboxed
 import qualified Data.Map as Map
