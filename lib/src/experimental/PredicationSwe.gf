@@ -22,6 +22,7 @@ param
 oper
   defaultAgr = Sg ;
   ComplCase  = Str ; -- preposition
+  objCase = Acc ;
 
 lincat
   Arg = {s : Str} ;
@@ -82,7 +83,7 @@ lincat
   Pol   = {s : Str ; p : Polarity} ;
 
   NP   = {s : Case => Str ; a : Agr} ;
-  Adv  = {s : Str ; isAdV : Bool} ;
+  Adv  = {s : Str ; isAdV : Bool ; c1 : ComplCase} ;
   S    = {s : Str} ;
   Utt  = {s : Str} ;
   AP   = {
@@ -98,7 +99,6 @@ lincat
     Agr => Str
     } ;
   IP   = {s : Str ; a : Agr} ;
-  Prep = {s : Str} ;
   Conj = {s : Str} ;
   IAdv = {s : Str} ;
 
@@ -210,10 +210,6 @@ lin
     c3   = noComplCase ;      -- for one more prep to build ClSlash 
     } ;
 
-  PrepCl p x cl = cl ** {   -- Cl/NP ::= Cl PP/NP
-    c3   = prepComplCase p ; 
-    } ;
-
   SlashClNP x cl np = cl ** {  -- Cl ::= Cl/NP NP 
     adv  = cl.adv ++ appComplCase cl.c3 np ; ---- again, adv just added
     c3   = noComplCase ;  -- complCase has been consumed
@@ -235,20 +231,34 @@ lin
     c3   = noComplCase ;      -- for one more prep to build ClSlash ---- ever needed for QCl?
     } ;
 
+
   QuestSlash x ip cl = 
-    let
-      ips = cl.c3 ++ ip.s ;     -- in Cl/NP, c3 is the only prep ---- appComplCase for ip
+    let 
+      prep = cl.c3 ;
+      ips  = ip.s ;                     -- in Cl/NP, c3 is the only prep ---- appComplCase for ip
       focobj = case cl.focType of {
-        NoFoc => <ips, [], FocObj> ;  -- put ip object to focus  if there is no focus yet
-        t     => <[], ips, t>         -- put ip object in situ   if there already is a focus
+        NoFoc => <ips, [], FocObj,prep> ;         -- put ip object to focus  if there is no focus yet
+        t     => <[], prep ++ ips, t,noComplCase> -- put ip object in situ   if there already is a focus
         } ;
-    in cl ** {
-      foc  = focobj.p1 ;
+    in 
+    cl ** {     -- preposition stranding
+      foc     = focobj.p1 ;
       focType = focobj.p3 ;
-      subj = cl.subj ;
-      obj1 = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
-      c3   = noComplCase ; 
+      obj1    = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
+      c3      = focobj.p4 ; 
+      } ;  
+{-
+---- this is giving four records instead of two AR 5/2/2014 
+   |
+    cl ** {   -- pied piping
+      foc     = focobj.p4 ++ focobj.p1 ;
+      focType = focobj.p3 ;
+      obj1    = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
+      c3      = noComplCase ; 
       } ;
+-}
+
+
 
   UseCl  cl = {s = declCl cl} ;
   UseQCl cl = {s = questCl cl} ;
@@ -257,10 +267,15 @@ lin
 
   UttS s = s ;
 
-  AdvCl a x cl = cl ** case a.isAdV of {True => {adV = cl.adV ++ a.s ; adv = cl.adv} ; False => {adv = cl.adv ++ a.s ; adV = cl.adV}} ;
+  AdvCl x a cl = case a.isAdV of {
+    True  => cl ** {adV = cl.adV ++ a.s ; adv = cl.adv ; c3 = a.c1} ; 
+    False => cl ** {adv = cl.adv ++ a.s ; adV = cl.adV ; c3 = a.c1}
+    } ;
 
-  AdvQCl a x cl = cl ** {adv = cl.adv ++ a.s} ;
-
+  AdvQCl x a cl = case a.isAdV of {
+    True  => cl ** {adV = cl.adV ++ a.s ; adv = cl.adv ; c3 = a.c1} ; 
+    False => cl ** {adv = cl.adv ++ a.s ; adV = cl.adV ; c3 = a.c1}
+    } ;
 
   PresPartAP x v = {            
     s = \\a => v.v ! PresPart ;
@@ -326,6 +341,8 @@ lin
     c3   = cl.c3 ;
     } ;
 
+  ComplAdv x p np = {s = p.c1 ++ np.s ! objCase ; isAdV = p.isAdV ; c1 = []} ;
+
 
 ---- the following may become parameters for a functor
 oper
@@ -386,7 +403,7 @@ oper
 
   noComplCase : ComplCase = [] ;
 
-  prepComplCase : Prep -> ComplCase = \p -> p.s ; 
+  prepComplCase : {s : Str} -> ComplCase = \p -> p.s ; 
 
   noObj : Agr => Str = \\_ => [] ;
 
@@ -434,14 +451,14 @@ lin
   she_NP = {s = table {Nom => "hon" ; Acc => "henne"} ; a = Sg} ;
   we_NP = {s = table {Nom => "vi" ; Acc => "oss"} ; a = Pl} ;
 
-  today_Adv = {s = "idag" ; isAdV = False} ;
-  always_AdV = {s = "alltid" ; isAdV = True} ;
+  today_Adv = {s = "idag" ; isAdV = False ; c1 = []} ;
+  always_AdV = {s = "alltid" ; isAdV = True ; c1 = []} ;
 
   who_IP = {s = "vem" ; a = Sg} ;
 
   PrepNP p np = {s = p.s ++ np.s ! Acc ; isAdV = False} ;
 
-  with_Prep = {s = "med"} ;
+  with_Prep = {s = [] ; isAdV = False ; c1 = "med"} ;
 
   and_Conj = {s = "och"} ;
 

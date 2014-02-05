@@ -164,7 +164,7 @@ lincat
     c3 : ComplCase ;
     } ;
 
-  Adv   = {s : Str ; isAdV : Bool} ;
+  Adv   = {s : Str ; isAdV : Bool ; c1 : ComplCase} ;
   S     = {s : Str} ;
 
   AP   = {
@@ -183,7 +183,6 @@ lincat
 
   NP   = NounPhrase ; 
   IP   = {s : NPCase => Str ; n : IPAgr} ; ---- n : Number in Eng
-  Prep = Preposition ; 
   Conj = {s1,s2 : Str ; n : Number} ;
 
 oper
@@ -344,19 +343,30 @@ lin
     } ;
 
   QuestSlash x ip cl = 
-    let
-      ips = cl.c3 ++ ip.s ! objCase ;     -- in Cl/NP, c3 is the only prep ---- appComplCase for ip
+    let 
+      prep = cl.c3 ;
+      ips  = ip.s ! objCase ;                     -- in Cl/NP, c3 is the only prep ---- appComplCase for ip
       focobj = case cl.focType of {
-        NoFoc => <ips, [], FocObj> ;  -- put ip object to focus  if there is no focus yet
-        t     => <[], ips, t>         -- put ip object in situ   if there already is a focus
+        NoFoc => <ips, [], FocObj,prep> ;         -- put ip object to focus  if there is no focus yet
+        t     => <[], prep ++ ips, t,noComplCase> -- put ip object in situ   if there already is a focus
         } ;
-    in cl ** {
-      foc  = focobj.p1 ;
+    in 
+    cl ** {     -- preposition stranding
+      foc     = focobj.p1 ;
       focType = focobj.p3 ;
-      subj = cl.subj ;
-      obj1 = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
-      c3   = noComplCase ; 
+      obj1    = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
+      c3      = focobj.p4 ; 
+      } ;  
+{-
+---- this is giving four records instead of two AR 5/2/2014 
+   |
+    cl ** {   -- pied piping
+      foc     = focobj.p4 ++ focobj.p1 ;
+      focType = focobj.p3 ;
+      obj1    = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
+      c3      = noComplCase ; 
       } ;
+-}
 
   UseCl  cl = {s = declCl cl} ;
   UseQCl cl = {s = questCl cl} ;
@@ -365,9 +375,15 @@ lin
 
   UttS s = s ;
 
-  AdvCl a x cl = cl ** case a.isAdV of {True => {adV = cl.adV ++ a.s ; adv = cl.adv} ; False => {adv = cl.adv ++ a.s ; adV = cl.adV}} ;
+  AdvCl x a cl = case a.isAdV of {
+    True  => cl ** {adV = cl.adV ++ a.s ; adv = cl.adv ; c3 = a.c1} ; 
+    False => cl ** {adv = cl.adv ++ a.s ; adV = cl.adV ; c3 = a.c1}
+    } ;
 
-  AdvQCl a x cl = cl ** {adv = cl.adv ++ a.s} ;
+  AdvQCl x a cl = case a.isAdV of {
+    True  => cl ** {adV = cl.adV ++ a.s ; adv = cl.adv ; c3 = a.c1} ; 
+    False => cl ** {adv = cl.adv ++ a.s ; adV = cl.adV ; c3 = a.c1}
+    } ;
 
 
   PresPartAP x v = {            
@@ -442,7 +458,7 @@ lin
     qforms = <[],[]> ; ---- qforms
     } ;
 
-
+  ComplAdv x p np = {s = p.c1 ++ np.s ! objCase ; isAdV = p.isAdV ; c1 = []} ;
 
 
 ---- the following may become parameters for a functor
@@ -673,14 +689,12 @@ lin
   she_NP = {s = table {NCase Nom => "she" ; _ => "her"} ; a = AgP3Sg Fem} ;
   we_NP = {s = table {NCase Nom => "we" ; _ => "us"} ; a = AgP1 Pl} ;
 
-  today_Adv = {s = "today" ; isAdV = False} ;
-  always_AdV = {s = "always" ; isAdV = True} ;
+  today_Adv = {s = "today" ; isAdV = False ; c1 = []} ;
+  always_AdV = {s = "always" ; isAdV = True ; c1 = []} ;
 
   who_IP = {s = \\_ => "who" ; n = Sg} ;
 
-  PrepNP p np = {s = p.s ++ np.s ! objCase ; isAdV = False} ;
-
-  with_Prep = {s = "with"} ;
+  with_Prep = {s = [] ; c1 = "with" ; isAdV = False} ;
 
   and_Conj = {s1 = [] ; s2 = "and" ; n = Pl} ;
 

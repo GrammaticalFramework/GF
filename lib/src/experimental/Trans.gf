@@ -13,7 +13,7 @@ flags
   meta_token_prob=1.1965149246222233e-9;
 
 fun
-  LiftV  : V -> PrV aNone ;
+  LiftV  : V  -> PrV aNone ;
   LiftV2 : V2 -> PrV (aNP aNone) ;
   LiftVS : VS -> PrV aS ;
   LiftVQ : VQ -> PrV aQ ;
@@ -29,8 +29,10 @@ fun
   LiftV2N : V2A -> PrV (aNP aN) ; ----
 
   LiftAP  : AP  -> PrAP aNone ;
+  LiftCN  : AP  -> PrCN aNone ;
 
-  LiftAdv : Adv -> PrAdv ;
-  LiftAdV : Adv -> PrAdv ;
+  LiftAdv  : Adv  -> PrAdv aNone ;
+  LiftAdV  : Adv  -> PrAdv aNone ;
+  LiftPrep : Prep -> PrAdv (aNP aNone) ;
 
 }

@@ -7,6 +7,9 @@ concrete TransEng of Trans =
 
               ** open ResEng, Prelude in {
 
+flags 
+  literal=Symb ;
+
 lin
   LiftV  v = v ** {v = v.s ; c1,c2 = [] ; isSubjectControl, isAux = False} ;
   LiftV2 v = v ** {v = v.s ; c1 = v.c2 ; c2 = [] ; isSubjectControl, isAux = False} ;
@@ -14,13 +17,11 @@ lin
 
   LiftAP ap = {s = \\_ => ap.s ! AgP3Sg Neutr ; c1,c2 = [] ; obj1 = \\_ => []} ;  --- agr, isPre
 
-  LiftAdv a = a ** {isAdV = False} ;
-  LiftAdV a = a ** {isAdV = True} ;
-
+  LiftAdv  a = a ** {isAdV = False ; c1 = []} ;
+  LiftAdV  a = a ** {isAdV = True ; c1 = []} ;
+  LiftPrep p = {s = [] ; isAdV = False ; c1 = p.s} ;
 
 {-
-  LiftV2 : V2 -> PrV (aNP aNone) ;
-  LiftVS : VS -> PrV aS ;
   LiftVQ : VQ -> PrV aQ ;
   LiftVV : VV -> PrV aV ;
   LiftVA : VA -> PrV aA ;
