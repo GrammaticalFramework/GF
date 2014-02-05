@@ -79,7 +79,7 @@
 
 
   mkPN  = overload {
-    mkPN : Str -> Gender -> PN 
+    mkPN : Str -> Gender -> CatHeb.PN 
     = mkProperNoun ;
    } ;
 
