@@ -19,7 +19,7 @@ pgf_match_string_lit(PgfConcr* concr, PgfSymbol* psym, size_t lin_idx,
 	gu_assert(lin_idx == 0);
 
 	size_t offset = *poffset;
-	while (!gu_is_space(sentence[offset]))
+	while (sentence[offset] && !gu_is_space(sentence[offset]))
 		offset++;
 
 	size_t len = offset - *poffset;
@@ -61,7 +61,7 @@ pgf_match_int_lit(PgfConcr* concr, PgfSymbol* psym, size_t lin_idx,
 	gu_assert(lin_idx == 0);
 
 	size_t offset = *poffset;
-	while (!gu_is_space(sentence[offset]))
+	while (sentence[offset] && !gu_is_space(sentence[offset]))
 		offset++;
 
 	size_t len = offset - *poffset;
@@ -108,7 +108,7 @@ pgf_match_float_lit(PgfConcr* concr, PgfSymbol* psym, size_t lin_idx,
 	gu_assert(lin_idx == 0);
 
 	size_t offset = *poffset;
-	while (!gu_is_space(sentence[offset]))
+	while (sentence[offset] && !gu_is_space(sentence[offset]))
 		offset++;
 
 	size_t len = offset - *poffset;
