@@ -1,4 +1,4 @@
-concrete PredEng of Pred = CatEng - [Pol] ** open ResEng, TenseX, Prelude in {
+concrete PredSwe of Pred = CatSwe - [Pol] ** open ResSwe, CommonScand, TenseX, ParamX, Prelude in {
 
 ---------------------
 -- parameters -------
@@ -12,37 +12,47 @@ param
   Anteriority = Simul | Anter ;
   Polarity = Pos | Neg ;
   STense   = Pres | Past | Fut | Cond ;
--}
+
   Voice    = Act | Pass ;
+-}
   Unit     = UUnit ;
 
 -- predication specific   
   FocusType = NoFoc | FocSubj | FocObj ;  -- sover hon/om hon sover, vem älskar hon/vem hon älskar, vem sover/vem som sover 
 
 {-
--- standard English
-  Gender   = Neutr | Masc | Fem ;
-  Agr      = AgP1 Number | AgP2 Number | AgP3Sg Gender | AgP3Pl ;
-  Case     = Nom | Acc ;
-  NPCase   = NCase Case | NPAcc | NPNomPoss ;
-  VForm    = VInf | VPres | VPast | VPPart | VPresPart ;
+-- standard Swedish
+  Gender   = Utr | Neutr ;
+  Agr      = {g : Gender ; n : Number ; p : Person} ;
+  Case     = Nom | Gen ;
+  NPForm   = NPNom | NPAcc | NPPoss GenNum Case ; 
+  VForm    = VF VFin | VI VInf ;
+
+-- above, type names shared with Eng, below Scandinavian only
+  VFin = VPres Voice | VPret Voice | VImper Voice ;
+  VInf = VInfin  Voice | VSupin  Voice | VPtPret AFormPos Case | VPtPres Number Species Case ;
+  VType = VAct | VPass | VRefl ;
+  GenNum = GSg Gender | GPl ;
+  AFormPos = Strong GenNum | Weak Number ;
+  Species = Indef | Def ;
 -}
+
 oper
-  STense = ResEng.Tense ;
+  STense = ParamX.Tense ;
 
 -- language dependent
-param
-  VAgr     = VASgP1 | VASgP3 | VAPl ;
+oper
+  VAgr = Unit ;
 
 oper
-  subjCase : NPCase = NCase Nom ;
-  objCase  : NPCase = NPAcc ;
+  subjCase : NPForm = NPNom ;
+  objCase  : NPForm = NPAcc ;
 
-  agentCase : ComplCase = "by" ;
+  agentCase : ComplCase = "av" ;
 
   ComplCase = Str ; -- preposition
 
-  NounPhrase = {s : NPCase => Str ; a : Agr} ;
+  NounPhrase = {s : NPForm => Str ; a : Agr} ;
   Preposition = {s : Str} ;
 
   appComplCase  : ComplCase -> NounPhrase -> Str = \p,np -> p ++ np.s ! objCase ;
@@ -51,48 +61,32 @@ oper
 
   noObj : Agr => Str = \\_ => [] ;
 
-  NAgr = Number ;
-  AAgr = Unit ;
-  IPAgr = Number ;
+  NAgr = Number ; --- only Indef Nom forms are needed here
+  AAgr = AFormPos ;
+  IPAgr = {g : Gender ; n : Number} ; --- two separate fields in RGL
 
-  defaultAgr : Agr = AgP3Sg Neutr ;
+  defaultAgr : Agr = {g = Utr ; n = Sg ; p = P3} ;
 
 -- omitting rich Agr information
-  agr2vagr : Agr -> VAgr = \a -> case a of {
-    AgP1 Sg  => VASgP1 ;
-    AgP3Sg _ => VASgP3 ;
-    _        => VAPl
+  agr2vagr : Agr -> VAgr = \a -> UUnit ;
+
+  agr2aagr : Agr -> AAgr = \a -> case a.n of {
+    Sg => Strong (GSg a.g) ;
+    Pl => Strong GPl
     } ;
 
-  agr2aagr : Agr -> AAgr = \n -> UUnit ;
-
-  agr2nagr : Agr -> NAgr = \a -> case a of {
-    AgP1 n => n ;
-    AgP2 n => n ;
-    AgP3Sg _ => Sg ;
-    AgP3Pl => Pl
-    } ;
+  agr2nagr : Agr -> NAgr = \a -> a.n ;
 
 -- restoring full Agr
-  ipagr2agr : IPAgr -> Agr = \n -> case n of {
-    Sg => AgP3Sg Neutr ; ---- gender
-    Pl => AgP3Pl
-    } ;
+  ipagr2agr : IPAgr -> Agr = \a -> a ** {p = P3} ;
 
-  ipagr2vagr : IPAgr -> VAgr = \n -> case n of {
-    Sg => VASgP3 ;
-    Pl => VAPl
-    } ;
+  ipagr2vagr : IPAgr -> VAgr = \n -> UUnit ;
 
 --- this is only needed in VPC formation
-  vagr2agr : VAgr -> Agr = \a -> case a of {
-    VASgP1 => AgP1 Sg ;
-    VASgP3 => AgP3Sg Neutr ;
-    VAPl   => AgP3Pl
-    } ;
+  vagr2agr : VAgr -> Agr = \a -> defaultAgr ;
 
-  vPastPart : AAgr -> VForm = \_ ->  VPPart ;
-  vPresPart : AAgr -> VForm = \_ ->  VPresPart ;
+  vPastPart : AAgr -> VForm = \a -> VI (VPtPret a Nom) ;
+  vPresPart : AAgr -> VForm = \a -> VI (VPtPres Sg Indef Nom) ; ---- Sg
 
 ------------------------------------
 -- lincats
@@ -134,7 +128,7 @@ oper
     adv : Str ; 
     adV : Str ;
     ext : Str ;
-    qforms : VAgr => Str * Str     -- special Eng for introducing "do" in questions
+    qforms : VAgr => Str * Str     -- special Swe for introducing "do" in questions
     } ;
  
   PrClause = {
@@ -188,10 +182,11 @@ lincat
 {-
 -- language specific
   NP   = {s : NPCase => Str ; a : Agr} ;
-  IP   = {s : NPCase => Str ; n : IPAgr} ; ---- n : Number in Eng
+  IP   = {s : NPCase => Str ; n : IPAgr} ; ---- n : Number in Swe
   Conj = {s1,s2 : Str ; n : Number} ;
 -}
 
+{- -----------------------------------
 
 -- reference linearizations for chunking
 
@@ -242,7 +237,7 @@ lin
     adj = noObj ;
     obj1 = <case v.isRefl of {True => \\a => reflPron ! a ; False => \\_ => []}, defaultAgr> ; ---- not used, just default value
     obj2 = <noObj, v.isSubjectControl> ;
-    adV = negAdV p ; --- just p.s in Eng
+    adV = negAdV p ; --- just p.s in Swe
     adv = [] ;
     ext = [] ;
     qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v ;
@@ -390,7 +385,7 @@ lin
       obj1    = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
       c3      = noComplCase ; 
       } ;
--}
+- }
 
   UseCl  cl = {s = declCl cl} ;
   UseQCl cl = {s = questCl cl} ;
@@ -446,7 +441,7 @@ lin
           wv.p1 ++ w.adV ++ wv.p2 ++ wv.p3 ++ w.adj ! vpa ++                ---- appComplCase
           w.c1 ++ w.obj1.p1 ! vpa ++ w.c2 ++ w.obj2.p1 ! vpa ++ w.adv ++ w.ext ;
     inf = \\a => 
-            PredEng.infVP a v ++ c.s2 ++ PredEng.infVP a w ;
+            PredSwe.infVP a v ++ c.s2 ++ PredSwe.infVP a w ;
     c1 = [] ; ---- w.c1 ? --- the full story is to unify v and w...
     c2 = [] ; ---- w.c2 ? 
     } ;
@@ -527,7 +522,7 @@ oper
     case o of {  
       Act  => tenseActVContracted sta t a p agr v ;
       Pass => tensePassVContracted sta t a p agr v
-      -} ;
+      - } ;
 
   tenseActV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrV -> Str * Str * Str = \sta,t,a,p,agr,v -> 
     let vt : VForm = case <t,agr> of {
@@ -681,7 +676,7 @@ oper
     p,c1,c2 = [] ; isAux = True ; isSubjectControl,isRefl = False
     } ;
 
-  negAdV : PredEng.Pol -> Str = \p -> p.s ;
+  negAdV : PredSwe.Pol -> Str = \p -> p.s ;
 
 
 
@@ -733,5 +728,6 @@ oper
   varAuxC : Str -> Str -> Str = \long,short ->              Predef.BIND ++ ("'" + short) ;
 
   not_Str : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "not"} ;
+-}
 
 }
