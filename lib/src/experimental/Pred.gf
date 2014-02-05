@@ -1,4 +1,4 @@
-abstract Pred = Cat [Ant,Tense,Pol,NP,Utt,IP,IAdv,Conj,Prep] ** {
+abstract Pred = Cat [Ant,Tense,Pol,NP,Utt,IP,IAdv,Conj] ** {
 
 cat
   Arg ;
@@ -12,13 +12,12 @@ cat
   ClC Arg ;  -- conjunction of Cl
   PrQCl Arg ;
 --  NP ;
-  PrAdv ;
+  PrAdv Arg ;
   PrS ;
 --  Utt ;
   PrAP Arg ;
   PrCN Arg ; -- the country he became the president of
 --  IP ;
---  Prep ;
 --  Conj ;
 --  IAdv ;
 
@@ -50,7 +49,6 @@ fun
 
   PredVP : (a : Arg) -> NP -> PrVP a -> PrCl a ;
 
-  PrepCl    : Prep -> (a : Arg) -> PrCl a -> PrCl (aNP a) ;  -- slash creation (S/NP): hon tittar på (oss)
   SlashClNP : (a : Arg) -> PrCl (aNP a) -> NP -> PrCl a ;    -- slash consumption: hon tittar på + oss
 
   ReflVP  : (a : Arg) -> PrVP (aNP a) -> PrVP a ;              -- refl on first position (direct object)
@@ -64,20 +62,13 @@ fun
   UseCl  : PrCl aNone  -> PrS ;
   UseQCl : PrQCl aNone -> PrS ; -- deprecate QS
 
-  UseAdvCl : PrAdv -> PrCl aNone -> PrS ;  -- lift adv to front
+  UseAdvCl : PrAdv aNone -> PrCl aNone -> PrS ;  -- lift adv to front
   
   UttS  : PrS -> Utt ;
 
--- when to add adverbs
+  AdvCl   : (a : Arg) -> PrAdv a -> PrCl aNone  -> PrCl a ; 
 
-----  AdvVP  : Adv -> (a : Arg) -> PrVP a -> PrVP a ; ---- these create many ambiguities
-  ---- "hon tvingar oss att sova idag": 196 parses, 13s. With AdvVP restricted to top level: 32 parses, 7s
-  ---- with AdvCl, just 16 parses, 0.2 s
-
-  AdvCl  : Adv -> (a : Arg) -> PrCl a -> PrCl a ; 
-
-  AdvQCl  : Adv -> (a : Arg) -> PrQCl a -> PrQCl a ; 
-
+  AdvQCl  : (a : Arg) -> PrAdv a -> PrQCl aNone -> PrQCl a ; 
 
 -- participles as adjectives
 
@@ -96,5 +87,6 @@ fun
   ContClC  :         (a : Arg) -> PrCl a -> ClC a -> ClC a ;
   UseClC   : (a : Arg) -> ClC a -> PrCl a ;
 
+  ComplAdv : (a : Arg) -> PrAdv (aNP a) -> NP -> PrAdv a ; -- typically: formation of preposition phrase
 
 }

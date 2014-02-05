@@ -15,13 +15,12 @@ cat
   ClC Arg ;  -- conjunction of Cl
   QCl Arg ;
   NP ;
-  Adv ;
+  Adv Arg ;  -- preposition is Adv aNP
   S ;
   Utt ;
   AP Arg ;
-  CN Arg ; -- the country he became the president of
+  CN Arg ;   -- the country he became the president of
   IP ;
-  Prep ;
   Conj ;
   IAdv ;
 
@@ -53,8 +52,7 @@ fun
 
   PredVP : (a : Arg) -> NP -> VP a -> Cl a ;
 
-  PrepCl    : Prep -> (a : Arg) -> Cl a -> Cl (aNP a) ;  -- slash creation (S/NP): hon tittar på (oss)
-  SlashClNP : (a : Arg) -> Cl (aNP a) -> NP -> Cl a ;    -- slash consumption: hon tittar på + oss
+  SlashClNP : (a : Arg) -> Cl (aNP a) -> NP -> Cl a ;      -- slash consumption: hon tittar på + oss
 
   ReflVP  : (a : Arg) -> VP (aNP a) -> VP a ;              -- refl on first position (direct object)
   ReflVP2 : (a : Arg) -> VP (aNP (aNP a)) -> VP (aNP a) ;  -- refl on second position (indirect object)
@@ -67,7 +65,7 @@ fun
   UseCl  : Cl aNone  -> S ;
   UseQCl : QCl aNone -> S ; -- deprecate QS
 
-  UseAdvCl : Adv -> Cl aNone -> S ;  -- lift adv to front
+  UseAdvCl : Adv aNone -> Cl aNone -> S ;  -- lift adv to front
   
   UttS  : S -> Utt ;
 
@@ -77,9 +75,9 @@ fun
   ---- "hon tvingar oss att sova idag": 196 parses, 13s. With AdvVP restricted to top level: 32 parses, 7s
   ---- with AdvCl, just 16 parses, 0.2 s
 
-  AdvCl  : Adv -> (a : Arg) -> Cl a -> Cl a ; 
+  AdvCl   : (a : Arg) -> Adv a -> Cl aNone  -> Cl a ; 
 
-  AdvQCl  : Adv -> (a : Arg) -> QCl a -> QCl a ; 
+  AdvQCl  : (a : Arg) -> Adv a -> QCl aNone -> QCl a ; 
 
 
 -- participles as adjectives
@@ -99,9 +97,10 @@ fun
   ContClC  :         (a : Arg) -> Cl a -> ClC a -> ClC a ;
   UseClC   : (a : Arg) -> ClC a -> Cl a ;
 
+  ComplAdv : (a : Arg) -> Adv (aNP a) -> NP -> Adv a ; -- typically: formation of preposition phrase
+
 --------------- from now on, to be inherited from standard RGL; here just for test purposes
 
-  PrepNP : Prep -> NP -> Adv ;
 
 -- lexicon
 
@@ -132,11 +131,11 @@ fun
   she_NP : NP ;
   we_NP : NP ;
 
-  today_Adv : Adv ;
-  always_AdV : Adv ;
+  today_Adv : Adv aNone ;
+  always_AdV : Adv aNone ;
   who_IP : IP ;
 
-  with_Prep : Prep ;
+  with_Prep : Adv (aNP aNone) ;
   and_Conj : Conj ;
   why_IAdv : IAdv ;
 

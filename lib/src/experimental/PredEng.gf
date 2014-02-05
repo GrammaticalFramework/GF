@@ -170,7 +170,7 @@ lincat
     c3 : ComplCase ;
     } ;
 
-  PrAdv   = {s : Str ; isAdV : Bool} ;
+  PrAdv   = {s : Str ; isAdV : Bool ; c1 : Str} ;
   PrS     = {s : Str} ;
 
   PrAP = {
@@ -189,11 +189,28 @@ lincat
 -- language specific
   NP   = {s : NPCase => Str ; a : Agr} ;
   IP   = {s : NPCase => Str ; n : IPAgr} ; ---- n : Number in Eng
-  Prep = {s : Str} ;
   Conj = {s1,s2 : Str ; n : Number} ;
 -}
 
 
+-- reference linearizations for chunking
+
+linref
+  PrVP  = \vp  -> 
+    let 
+      agr  = defaultAgr ;
+      vagr = agr2vagr agr ;
+      verb = vp.v ! vagr ;
+    in
+    verb.p1 ++ verb.p2 ++ vp.adV ++ verb.p3 ++ vp.part ++ 
+    vp.adj ! agr ++ vp.obj1.p1 ! agr ++ vp.obj2.p1 ! agr ++ vp.adv ++ vp.ext ;
+ 
+  PrCl  = \cl  -> declCl cl ;
+----  PrQCl = \qcl -> questCl (lin PrQCl qcl) ;
+  PrAdv = \adv -> adv.c1 ++ adv.s ;
+  PrAP  = \ap  -> ap.s ! UUnit ++ ap.obj1 ! defaultAgr ;  
+  PrCN  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
+  
 ----------------------------
 --- linearization rules ----
 ----------------------------
