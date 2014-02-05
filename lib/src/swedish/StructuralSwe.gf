@@ -152,7 +152,7 @@ lin
   except_Prep = ss "utom" ;
 
   as_CAdv = X.mkCAdv "lika" "som" ;
-  have_V2 = dirV2 (mkV "ha" "har" "ha" "hade" "haft" "haft") ; ---- pp
+  have_V2 = dirV2 (mkV "ha" "har" "ha" "hade" "haft" "havd") ;
 
   lin language_title_Utt = ss "svenska" ;
 
