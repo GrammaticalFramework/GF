@@ -38,7 +38,6 @@ oper
 param
   VAgr     = VASgP1 | VASgP3 | VAPl ;
   VType    = VTAct | VTRefl | VTAux ;
-  VVPType  = VVPBare | VVPInf | VVPPresPart ; -- type of VV complement
 
 oper
   subjCase : NPCase = NCase Nom ;
@@ -124,19 +123,20 @@ lincat
     c2 : ComplCase ;
     isSubjectControl : Bool ;
     vtype : VType ;  
-    vvptype : VVPType ;
+    vvtype : VVType ;
     } ; 
 
 oper
   PrVerbPhrase = {
     v : VAgr => Str * Str * Str ;  -- would,have,slept
-    inf : Str * Str ;              -- have,slept
+    inf : VVType => Str ;         -- (not) ((to)(sleep|have slept) | (sleeping|having slept)
     c1 : ComplCase ; 
     c2 : ComplCase ; 
     part  : Str ;                  -- (look) up
     adj   : Agr => Str ; 
     obj1  : (Agr => Str) * Agr ;   -- agr for object control
     obj2  : (Agr => Str) * Bool ;  -- subject control = True 
+    vvtype : VVType ;              -- type of VP complement
     adv : Str ; 
     adV : Str ;
     ext : Str ;
@@ -145,7 +145,6 @@ oper
  
   PrClause = {
     v : Str * Str * Str ; 
-    inf : Str * Str ; 
     adj,obj1,obj2 : Str ; 
     adv : Str ; 
     adV : Str ;
@@ -248,6 +247,7 @@ lin
     adj = noObj ;
     obj1 = <case v.vtype of {VTRefl => \\a => reflPron ! a ; _ => \\_ => []}, defaultAgr> ; ---- not used, just default value
     obj2 = <noObj, v.isSubjectControl> ;
+    vvtype = v.vvtype ;
     adV = negAdV p ; --- just p.s in Eng
     adv = [] ;
     ext = [] ;
@@ -264,6 +264,7 @@ lin
     adj = noObj ;
     obj1 = <noObj, defaultAgr> ; ---- not used, just default value
     obj2 = <noObj, True> ; -- becomes subject control even if object control otherwise "*she was promised by us to love ourselves"
+    vvtype = v.vvtype ;
     adV = negAdV p ;
     adv = [] ;
     ext = [] ;
@@ -279,6 +280,7 @@ lin
     adj = \\a => [] ;
     obj1 = <noObj, defaultAgr> ; 
     obj2 = <noObj, True> ;
+    vvtype = v.vvtype ;
     adV = negAdV p ;
     adv = appComplCase agentCase np ;
     ext = [] ;
@@ -294,6 +296,7 @@ lin
     adj = \\a => ap.s ! agr2aagr a ;
     obj1 = <ap.obj1, defaultAgr> ;
     obj2 = <noObj, True> ; --- there are no A3's
+    vvtype = be_V.vvtype ;
     adV = negAdV p ;
     adv = [] ;
     ext = [] ;
@@ -310,7 +313,7 @@ lin
 
   ComplVQ x vp qcl = addExtVP vp (questSubordCl qcl) ; ---- question form
 
-  ComplVV x vp vpo = addObj2VP vp (\\a => infVP a vpo) ; ---- infForm
+  ComplVV x vp vpo = addObj2VP vp (\\a => infVP vp.vvtype a vpo) ;
 
   ComplVA x vp ap = addObj2VP vp (\\a => ap.s ! agr2aagr a ++ ap.obj1 ! a) ; ---- adjForm
 
@@ -320,7 +323,7 @@ lin
 
   SlashV2Q x vp cl = addExtVP vp (questSubordCl (lin QCl cl)) ; ---- question form
 
-  SlashV2V x vp vpo = addObj2VP vp (\\a => infVP a (lin VP vpo)) ; ---- infForm
+  SlashV2V x vp vpo = addObj2VP vp (\\a => infVP vp.vvtype a (lin VP vpo)) ;
 
   SlashV2A x vp ap = addObj2VP vp (\\a => ap.s ! agr2aagr a ++ ap.obj1 ! a) ; ---- adjForm
 
@@ -452,20 +455,21 @@ lin
           wv.p1 ++ w.adV ++ wv.p2 ++ wv.p3 ++ w.adj ! vpa ++                ---- appComplCase
           w.c1 ++ w.obj1.p1 ! vpa ++ w.c2 ++ w.obj2.p1 ! vpa ++ w.adv ++ w.ext ;
     inf = \\a => 
-            PredEng.infVP a v ++ c.s2 ++ PredEng.infVP a w ;
+            PredEng.infVP v.vvtype a v ++ c.s2 ++ PredEng.infVP w.vvtype a w ;
     c1 = [] ; ---- w.c1 ? --- the full story is to unify v and w...
     c2 = [] ; ---- w.c2 ? 
     } ;
 
   UseVPC x vpc = { ---- big loss of quality (overgeneration) seems inevitable
     v   = \\a => <[], [], vpc.v ! a> ;
-    inf = <[], vpc.inf ! defaultAgr> ; ---- agreement
+    inf = \\_ => vpc.inf ! defaultAgr ; ---- agreement
     c1  = vpc.c1 ;
     c2  = vpc.c2 ;
     part = [] ;
     adj = \\a => [] ;
     obj1 = <noObj, defaultAgr> ;
     obj2 = <noObj,True> ;
+    vvtype = VVInf ; ----
     adv,adV = [] ;
     ext = [] ;
     qforms = \\a => <"do", vpc.inf ! defaultAgr> ; ---- do/does/did
@@ -479,7 +483,7 @@ lin
   UseClC x cl = {
     subj = [] ;
     v    = <[],[],cl.s> ; ----
-    inf  = <[],[]> ;
+    inf  = [] ;
     adj  = [] ;
     obj1 = [] ;
     obj2 = [] ;
@@ -497,11 +501,11 @@ lin
 
 
 oper
-  infVP : Agr -> PrVerbPhrase -> Str = \a,vp -> 
+  infVP : VVType -> Agr -> PrVerbPhrase -> Str = \vt, a,vp -> 
     let 
-      a2 = case vp.obj2.p2 of {True => a ; False => vp.obj1.p2} 
+      a2 = case vp.obj2.p2 of {True => a ; False => vp.obj1.p2} ;
     in
-      vp.adV ++ vp.inf.p1 ++ vp.inf.p2 ++ vp.part ++
+      vp.adV ++ vp.inf ! vt ++ vp.part ++
       vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.adv ++ vp.ext ;
 
   qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrV -> Str * Str = 
@@ -595,11 +599,27 @@ oper
     in 
     <be.p1, be.p2, be.p3 ++ done> ;
 
-  tenseInfV : Str -> Anteriority -> Polarity -> Voice -> PrV -> Str * Str = \sa,a,p,o,v ->
-    case a of {
-      Simul => <[],                sa ++ v.s ! VInf> ;       -- (she wants to) sleep
-      Anter => <have_Aux VInf Pos, sa ++ v.s ! VPPart>       -- (she wants to) have slept
-      } ;
+  tenseInfV : Str -> Anteriority -> Polarity -> Voice -> PrV -> VVType => Str = \sa,a,p,o,v -> \\vt => 
+    let 
+      not = case p of {Pos => [] ; Neg => "not"} ;
+    in
+    case vt of {
+      VVInf => 
+        case a of {
+          Simul => not ++ "to" ++                      sa ++ v.s ! VInf ;       -- (she wants) (not) to sleep
+          Anter => not ++ "to" ++ have_Aux VInf Pos ++ sa ++ v.s ! VPPart       -- (she wants) (not) to have slept
+          } ;
+      VVAux =>
+        case a of {
+          Simul => not ++                              sa ++ v.s ! VInf ;       -- (she must) (not) sleep
+          Anter => not ++         have_Aux VInf Pos ++ sa ++ v.s ! VPPart       -- (she must) (not) have slept
+          } ;
+     VVPresPart =>
+        case a of {
+          Simul => not ++                              sa ++ v.s ! VPresPart ;  -- (she starts) (not) sleeping
+          Anter => not ++         "having"          ++ sa ++ v.s ! VPPart       -- (she starts) (not) having slept
+          }
+     } ;
 
 ----- dangerous variants for PMCFG generation - keep apart as long as possible
   be_Aux : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \sta,t,a,p,agr -> 
@@ -684,7 +704,7 @@ oper
       VPPart => "been" ;
       VPresPart => "being"
       } ;
-    p,c1,c2 = [] ; vtype = VTAux ; vvptype = VVPInf ; isSubjectControl = False
+    p,c1,c2 = [] ; vtype = VTAux ; vvtype = VVInf ; isSubjectControl = False
     } ;
 
   negAdV : PredEng.Pol -> Str = \p -> p.s ;
