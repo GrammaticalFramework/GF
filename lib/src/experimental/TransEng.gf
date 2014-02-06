@@ -11,9 +11,11 @@ flags
   literal=Symb ;
 
 lin
-  LiftV  v = v ** {v = v.s ; c1,c2 = [] ; isSubjectControl, isAux = False} ;
-  LiftV2 v = v ** {v = v.s ; c1 = v.c2 ; c2 = [] ; isSubjectControl, isAux = False} ;
-  LiftVS v = v ** {v = v.s ; c1,c2 = [] ; isSubjectControl, isAux = False} ;
+  LiftV  v = {s = v.s ; p = v.p ; c1,c2 = [] ;          isSubjectControl = False ; vtype = VTAct ; vvptype = VVPInf} ;
+  LiftV2 v = {s = v.s ; p = v.p ; c1 = v.c2 ; c2 = [] ; isSubjectControl = False ; vtype = VTAct ; vvptype = VVPInf} ;
+  LiftVS v = {s = v.s ; p = v.p ; c1,c2 = [] ;          isSubjectControl = False ; vtype = VTAct ; vvptype = VVPInf} ;
+  LiftVQ v = {s = v.s ; p = v.p ; c1,c2 = [] ;          isSubjectControl = False ; vtype = VTAct ; vvptype = VVPInf} ;
+  LiftVV v = {s = \\f => v.s ! VVF f ; p = v.p ; c1,c2 = [] ;          isSubjectControl = False ; vtype = VTAct ; vvptype = VVPInf} ; ---- c1?
 
   LiftAP ap = {s = \\_ => ap.s ! AgP3Sg Neutr ; c1,c2 = [] ; obj1 = \\_ => []} ;  --- agr, isPre
 
@@ -22,8 +24,6 @@ lin
   LiftPrep p = {s = [] ; isAdV = False ; c1 = p.s} ;
 
 {-
-  LiftVQ : VQ -> PrV aQ ;
-  LiftVV : VV -> PrV aV ;
   LiftVA : VA -> PrV aA ;
   LiftVN : VA -> PrV aN ; ----
 
