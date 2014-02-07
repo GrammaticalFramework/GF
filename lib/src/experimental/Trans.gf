@@ -1,9 +1,9 @@
 --# -path=.:../translator
 
 abstract Trans =
-   RGLBase
+   RGLBase - [Pol,Tense]
   ,Pred
-  ,Dictionary
+  ,Dictionary - [Pol,Tense]
 
               ** {
 flags

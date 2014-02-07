@@ -1,11 +1,11 @@
 --# -path=.:../translator
 
 concrete TransEng of Trans =
-   RGLBaseEng - [Pol]
+   RGLBaseEng - [Pol,Tense]
   ,PredEng
-  ,DictionaryEng - [Pol]
+  ,DictionaryEng - [Pol,Tense]
 
-              ** open ResEng, Prelude, (Pr = PredEng) in {
+              ** open ResEng, PredInstanceEng, Prelude, (Pr = PredEng) in {
 
 flags 
   literal=Symb ;
