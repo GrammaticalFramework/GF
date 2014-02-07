@@ -29,7 +29,7 @@ fun
   LiftV2N : V2A -> PrV (aNP aN) ; ----
 
   LiftAP  : AP  -> PrAP aNone ;
-  LiftCN  : AP  -> PrCN aNone ;
+  LiftCN  : CN  -> PrCN aNone ;
 
   LiftAdv  : Adv  -> PrAdv aNone ;
   LiftAdV  : Adv  -> PrAdv aNone ;
