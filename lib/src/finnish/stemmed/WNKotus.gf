@@ -64,9 +64,9 @@ oper
   mkWV2 = overload {
     mkWV2 : (_ : Str)             -> V2   = \s -> mkV2 s ;
     mkWV2 : (_ : VForms)          -> V2   = \vf -> mkV2 (lin VK {s = vf}) ;
-    mkWV2 : (_ : VForms) -> Case  -> V2   = \vf,c -> mkV2 (mkV (lin VK {s = vf})) c ;
+    mkWV2 : (_ : VForms) -> ParadigmsFin.Case  -> V2   = \vf,c -> mkV2 (mkV (lin VK {s = vf})) c ;
     mkWV2 : (_ : V)               -> V2   = \v -> mkV2 v ;
-    mkWV2 : (_ : V) -> Case       -> V2   = \v,c -> mkV2 v c ;
+    mkWV2 : (_ : V) -> ParadigmsFin.Case       -> V2   = \v,c -> mkV2 v c ;
     mkWV2 : (_ : V) -> Str        -> V2   = \v,s -> mkV2 (mkV v s) ;
     mkWV2 : VForms       -> Str   -> V2   = \vf,s -> mkV2 (mkV (mkV (lin VK {s = vf})) s) ;
     } ;
