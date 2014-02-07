@@ -1,25 +1,19 @@
-abstract Pred = Cat [Ant,Tense,Pol,NP,Utt,IP,IAdv,Conj] ** {
+abstract Pred = Cat [Ant,NP,Utt,IP,IAdv,Conj] ** {
 
 cat
   Arg ;
   PrV Arg ;
   PrVP Arg ;
   VPC Arg ;  -- conjunction of VP
---  Ant ;
---  Tense ;
---  Pol ;
+  Tense ;
+  Pol ;
   PrCl Arg ;
   ClC Arg ;  -- conjunction of Cl
   PrQCl Arg ;
---  NP ;
   PrAdv Arg ;
   PrS ;
---  Utt ;
   PrAP Arg ;
   PrCN Arg ; -- the country he became the president of
---  IP ;
---  Conj ;
---  IAdv ;
 
 fun
   aNone, aS, aV, aQ, aA, aN : Arg ;
