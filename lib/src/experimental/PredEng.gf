@@ -57,7 +57,7 @@ oper
   noObj : Agr => Str = \\_ => [] ;
 
   NAgr = Number ;
-  AAgr = Unit ;
+  AAgr = Agr ;  -- because of reflexives: "happy with itself"
   IPAgr = Number ;
 
   defaultAgr : Agr = AgP3Sg Neutr ;
@@ -69,7 +69,7 @@ oper
     _        => VAPl
     } ;
 
-  agr2aagr : Agr -> AAgr = \n -> UUnit ;
+  agr2aagr : Agr -> AAgr = \a -> a ;
 
   agr2nagr : Agr -> NAgr = \a -> case a of {
     AgP1 n => n ;
@@ -213,7 +213,7 @@ linref
   PrCl  = \cl  -> declCl cl ;
 ----  PrQCl = \qcl -> questCl (lin PrQCl qcl) ;
   PrAdv = \adv -> adv.c1 ++ adv.s ;
-  PrAP  = \ap  -> ap.s ! UUnit ++ ap.obj1 ! defaultAgr ;  
+  PrAP  = \ap  -> ap.s ! defaultAgr ++ ap.obj1 ! defaultAgr ;  
   PrCN  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
   
 ----------------------------
