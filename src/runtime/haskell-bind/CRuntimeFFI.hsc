@@ -6,14 +6,12 @@
 module CRuntimeFFI(-- * PGF
                    PGF,readPGF,abstractName,startCat,
                    -- * Concrete syntax
-                   Concr,Language,{-languages,-}getConcr,parse,linearize,
+                   Concr,Language,languages,getConcr,parse,linearize,
                    -- * Trees
                    Expr,Tree,readExpr,showExpr,unApp,
                    -- * Morphology
                    MorphoAnalysis,lookupMorpho,fullFormLexicon,
                    printLexEntry,
-                   -- * Don't export these for real, just for testing
-                   generateAll, printGrammar
                    ) where
 
 import Prelude hiding (fromEnum)
@@ -33,6 +31,7 @@ import Foreign.Ptr
 
 
 import Data.Char
+import Data.Map (Map, empty, insert)
 import qualified Data.ByteString as BS
 import Data.IORef
 
@@ -49,12 +48,6 @@ import Data.IORef
 type Pool = ForeignPtr GuPool
 type Out = (Ptr GuStringBuf, Ptr GuOut)
 
-     
---Not used anymore, see withGuPool in Gu.hsc
-newPool :: IO Pool
-newPool =
-  do pl <- gu_new_pool
-     newForeignPtr_ pl --gu_pool_free_ptr pl
 
 --when you create a GuOut, you create also a GuStringBuf
 --and when you give GuOut to a function that outputs something,
@@ -101,14 +94,23 @@ getConcr p (CId lang) = unsafePerformIO $
         return (if cnc==nullPtr then Nothing else Just (Concr cnc p))
 
 
+languages :: PGF -> Map Language Concr
+languages p = unsafePerformIO $
+    do ref <- newIORef empty
+       allocaBytes (#size GuMapItor) $ \itor ->
+                   do fptr <- wrapLanguages (getLanguages ref)
+                      (#poke GuMapItor, fn) itor fptr
+                      pgf_iter_languages (pgf p) itor nullPtr
+       readIORef ref
+    where
+       getLanguages :: IORef (Map Language Concr) -> Languages
+       getLanguages ref itor key value exn = do
+         langs <- readIORef ref
+         key'  <- fmap CId  $ BS.packCString (castPtr key)
+         value' <- fmap (\ptr -> Concr ptr p) $  peek (castPtr value)
+         writeIORef ref (insert key' value' langs)
+--type Languages = Ptr GuMapItor -> Ptr () -> Ptr () -> Ptr GuExn -> IO (
 
--- languages :: PGF -> [Concr]
--- languages p = undefined
---TODO 
--- void pgf_iter_languages(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
--- {
--- 	gu_map_iter(pgf->concretes, fn, err);
--- }
 
 generateAll :: PGF -> CId -> [(Tree,Float)]
 generateAll p (CId cat) = unsafePerformIO $
@@ -195,15 +197,13 @@ readExpr str = unsafePerformIO $
 -- TODO: do we need 3 different pools for this?
 showExpr :: Expr -> String
 showExpr e = unsafePerformIO $
-  withGuPool $ \outPl ->
-   withGuPool $ \exnPl ->
-     withGuPool $ \printPl ->
-       do (sb,out) <- newOut outPl
-          let printCtxt = nullPtr
-          exn <- gu_new_exn nullPtr gu_type__type exnPl
-          pgf_print_expr (expr e) printCtxt 1 out exn
-          abstree <- gu_string_buf_freeze sb printPl
-          peekCString abstree
+  withGuPool $ \pl ->
+    do (sb,out) <- newOut pl
+       let printCtxt = nullPtr
+       exn <- gu_new_exn nullPtr gu_type__type pl
+       pgf_print_expr (expr e) printCtxt 1 out exn
+       abstree <- gu_string_buf_freeze sb pl
+       peekCString abstree
 
 
 -----------------------------------------------------------------------------
@@ -239,11 +239,9 @@ fullFormLexicon lang =
   in  zip lexicon analyses
   where fullformLexicon' :: Concr -> [String]
         fullformLexicon' lang = unsafePerformIO $
-          withGuPool $ \iterPl -> 
             do pl <- gu_new_pool
                lexEnum <- pgf_fullform_lexicon (concr lang) pl
-               fromFullFormEntry lexEnum pl (concrMaster lang)
---Something weird happens if I use iterPl ^- here
+               fromFullFormEntry lexEnum  pl (concrMaster lang)
 
 printLexEntry :: (String, [MorphoAnalysis]) -> String
 printLexEntry (lemma, anals) = 
@@ -257,12 +255,12 @@ printLexEntry (lemma, anals) =
 parse :: Concr -> CId -> String -> [(Tree,Float)]
 parse (Concr lang master) (CId cat) sent = unsafePerformIO $
    withGuPool $ \iterPl ->   -- this pool will get freed eventually
-     do inpool <- gu_new_pool  --these pools not ???
-        outpool <- gu_new_pool --if I add them into withGuPool, I get segfault
-        treesEnum <- parse_ lang cat sent inpool outpool
-        fromPgfExprEnum treesEnum iterPl master --see previous fromPgfExprEnum comment, why giving a pool as an argument here instead of creating them in fromPgfExprEnum
+     do inpool      <- gu_new_pool
+        outpool     <- gu_new_pool
+        treesEnum   <- parse_ lang cat sent inpool outpool
+        outpoolFPtr <- newForeignPtr gu_pool_free_ptr outpool
+        fromPgfExprEnum treesEnum iterPl (master,outpoolFPtr)
   where  
-    --tried adding withGuPool stuff inside here, segfaults as well
     parse_ :: Ptr PgfConcr -> BS.ByteString -> String -> Ptr GuPool -> Ptr GuPool -> IO (Ptr PgfExprEnum)
     parse_ pgfcnc cat sent inpool outpool =
       do BS.useAsCString cat $ \cat ->
@@ -289,9 +287,8 @@ linearize lang tree = unsafePerformIO $
 fromPgfExprEnum :: Ptr PgfExprEnum -> Ptr GuPool -> a -> IO [(Tree, Float)]
 fromPgfExprEnum enum pl master = 
   do pgfExprProb <- alloca $ \ptr -> 
---                      withGuPool $ \pl -> 
-                        do gu_enum_next enum ptr pl
-                           peek ptr
+                      do gu_enum_next enum ptr pl
+                         peek ptr
      if pgfExprProb == nullPtr
        then return []
        else do expr <- (#peek PgfExprProb, expr) pgfExprProb
@@ -299,7 +296,7 @@ fromPgfExprEnum enum pl master =
                ts <- unsafeInterleaveIO (fromPgfExprEnum enum pl master)
                return ((Expr expr master,prob) : ts)
 
---TODO
+
 fromFullFormEntry :: Ptr GuEnum -> Ptr GuPool -> PGF -> IO [String]
 fromFullFormEntry enum pl master = 
   do ffEntry <- alloca $ \ptr ->
@@ -311,16 +308,3 @@ fromFullFormEntry enum pl master =
        else do tok <- peekCString =<< pgf_fullform_get_string ffEntry
                toks <- unsafeInterleaveIO (fromFullFormEntry enum pl master)
                return (tok : toks)
-
--- fromFullFormEntry :: Ptr GuEnum -> PGF -> IO [String]
--- fromFullFormEntry enum master = 
---   do ffEntry <- alloca $ \ptr ->
---                   withGuPool $ \pl ->
---                     do gu_enum_next enum ptr pl
---                        peek ptr 
--- --   ffEntry :: Ptr PgfFullFormEntry
---      if ffEntry == nullPtr
---        then return []
---        else do tok <- peekCString =<< pgf_fullform_get_string ffEntry
---                toks <- unsafeInterleaveIO (fromFullFormEntry enum master)
---                return (tok : toks)
