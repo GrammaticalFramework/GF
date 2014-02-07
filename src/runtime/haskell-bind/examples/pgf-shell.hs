@@ -9,6 +9,7 @@
 
 import Control.Monad(forever)
 import Data.Char(isSpace)
+import qualified Data.Map as M
 import System.IO(hFlush,stdout)
 import System.IO.Error(catchIOError)
 import System.Environment
@@ -22,9 +23,10 @@ getPGF [path] = pgfShell =<< readPGF path
 getPGF _ = putStrLn "Usage: pgf-shell <path to pgf>"
 
 pgfShell pgf =
-  forever $ do performGC
-               putStr "> "; hFlush stdout
-               execute pgf =<< readLn
+  do putStrLn . unwords . map (show.fst) . M.toList $ languages pgf
+     forever $ do performGC
+                  putStr "> "; hFlush stdout
+                  execute pgf =<< readLn
 
 execute pgf cmd =
   case cmd of
