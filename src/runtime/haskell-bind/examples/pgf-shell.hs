@@ -14,6 +14,7 @@ import System.IO.Error(catchIOError)
 import System.Environment
 import CRuntimeFFI
 import CId
+import System.Mem(performGC)
 
 main = getPGF =<< getArgs
 
@@ -21,7 +22,8 @@ getPGF [path] = pgfShell =<< readPGF path
 getPGF _ = putStrLn "Usage: pgf-shell <path to pgf>"
 
 pgfShell pgf =
-  forever $ do putStr "> "; hFlush stdout
+  forever $ do performGC
+               putStr "> "; hFlush stdout
                execute pgf =<< readLn
 
 execute pgf cmd =
