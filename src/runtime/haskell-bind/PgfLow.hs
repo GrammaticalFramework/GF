@@ -92,6 +92,10 @@ type Callback = Ptr PgfMorphoCallback -> CString -> CString -> Float -> Ptr GuEx
 foreign import ccall "wrapper"
   wrapLookupMorpho :: Callback -> IO (FunPtr Callback)
 
+type Languages = Ptr GuMapItor -> Ptr () -> Ptr () -> Ptr GuExn -> IO ()
+
+foreign import ccall "wrapper"
+  wrapLanguages :: Languages -> IO (FunPtr Languages)
 
 --GuEnum* pgf_fullform_lexicon(PgfConcr *concr, GuPool* pool);
 foreign import ccall "pgf/pgf.h pgf_fullform_lexicon"
