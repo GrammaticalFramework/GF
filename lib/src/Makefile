@@ -153,7 +153,7 @@ Translate8.pgf: $(TRANSLATE8)
 # Translate grammars for individual languages
 TranslateEng.pgf:: ; $(GFMKT) -name=TranslateEng translator/TranslateEng.gf
 TranslateBul.pgf:: ; $(GFMKT) -name=TranslateBul translator/TranslateBul.gf
-TranslateChi.pgf:: ; $(GFMKT) -name=TranslateChi translator/TranslateChi.gf
+TranslateChi.pgf:: ; $(GFMKT) -name=TranslateChi translator/TranslateChi.gf +RTS -K64M
 TranslateFin.pgf:: ; $(GFMKT) -name=TranslateFin translator/TranslateFin.gf +RTS -K32M
 TranslateGer.pgf:: ; $(GFMKT) -name=TranslateGer translator/TranslateGer.gf
 TranslateHin.pgf:: ; $(GFMKT) -name=TranslateHin translator/TranslateHin.gf
