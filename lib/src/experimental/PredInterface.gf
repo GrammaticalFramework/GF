@@ -46,7 +46,7 @@ oper
 
   ComplCase : Type ; -- e.g. preposition
   agentCase : ComplCase ;
-
+  strComplCase : ComplCase -> Str ;
 
   NounPhrase : Type = {s : NPCase => Str ; a : Agr} ;
 
@@ -173,8 +173,8 @@ oper
     \a,t,p -> {
     v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
-    c1 = [] ;
-    c2 = [] ;
+    c1 = noComplCase ;
+    c2 = noComplCase ;
     part = [] ;
     adj = \\_ => [] ;
     obj1 = <noObj,defaultAgr> ;

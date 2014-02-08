@@ -33,7 +33,7 @@ lincat
     c3 : ComplCase ;
     } ;
 
-  PrAdv   = {s : Str ; isAdV : Bool ; c1 : Str} ;
+  PrAdv   = {s : Str ; isAdV : Bool ; c1 : ComplCase} ;
   PrS     = {s : Str} ;
 
   PrAP = {
@@ -62,7 +62,7 @@ linref
  
   PrCl  = \cl  -> declCl cl ;
   PrQCl = \qcl -> questCl qcl ;
-  PrAdv = \adv -> adv.c1 ++ adv.s ;
+  PrAdv = \adv -> strComplCase adv.c1 ++ adv.s ;
   PrAP  = \ap  -> ap.s ! defaultAgr ++ ap.obj1 ! defaultAgr ;  
   PrCN  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
   
@@ -197,8 +197,8 @@ lin
     v    = vp.v ! agr2vagr np.a ;
     subj = np.s ! subjCase ;
     adj  = vp.adj ! np.a ;
-    obj1 = vp.part ++ vp.c1 ++ vp.obj1.p1 ! np.a ;  ---- apply complCase ---- place of part depends on obj
-    obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;   ---- apply complCase
+    obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! np.a ;  ---- apply complCase ---- place of part depends on obj
+    obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;   ---- apply complCase
     c3   = noComplCase ;      -- for one more prep to build ClSlash 
     qforms = vp.qforms ! agr2vagr np.a ;
     } ;
@@ -221,8 +221,8 @@ lin
     focType = FocSubj ;
     subj = [] ;
     adj  = vp.adj ! ipa ;
-    obj1 = vp.part ++ vp.c1 ++ vp.obj1.p1 ! ipa ; ---- appComplCase
-    obj2 = vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => ipa ; False => vp.obj1.p2}) ; ---- appComplCase
+    obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! ipa ; ---- appComplCase
+    obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => ipa ; False => vp.obj1.p2}) ; ---- appComplCase
     c3   = noComplCase ;      -- for one more prep to build ClSlash ---- ever needed for QCl?
     adv  = vp.adv ;
     adV  = vp.adV ;
@@ -237,7 +237,7 @@ lin
       ips  = ip.s ! objCase ;                     -- in Cl/NP, c3 is the only prep ---- appComplCase for ip
       focobj = case cl.focType of {
         NoFoc => <ips, [], FocObj,prep> ;         -- put ip object to focus  if there is no focus yet
-        t     => <[], prep ++ ips, t,noComplCase> -- put ip object in situ   if there already is a focus
+        t     => <[], strComplCase prep ++ ips, t,noComplCase> -- put ip object in situ   if there already is a focus
         } ;
     in 
     cl ** {     -- preposition stranding
@@ -310,8 +310,8 @@ lin
           w.c1 ++ w.obj1.p1 ! vpa ++ w.c2 ++ w.obj2.p1 ! vpa ++ w.adv ++ w.ext ;
     inf = \\a => 
             infVP v.vvtype a v ++ c.s2 ++ infVP w.vvtype a w ;
-    c1 = [] ; ---- w.c1 ? --- the full story is to unify v and w...
-    c2 = [] ; ---- w.c2 ? 
+    c1 = noComplCase ; ---- w.c1 ? --- the full story is to unify v and w...
+    c2 = noComplCase ; ---- w.c2 ? 
     } ;
 
   ContVPC x v w = {  ---- some loss of quality seems inevitable
@@ -327,8 +327,8 @@ lin
           wv ;
     inf = \\a => 
             infVP v.vvtype a v ++ "," ++ w.inf ! a ;
-    c1 = [] ; ---- w.c1 ? --- the full story is to unify v and w...
-    c2 = [] ; ---- w.c2 ? 
+    c1 = noComplCase ; ---- w.c1 ? --- the full story is to unify v and w...
+    c2 = noComplCase ; ---- w.c2 ? 
     } ;
 
   UseVPC x vpc = { ---- big loss of quality (overgeneration) seems inevitable
@@ -370,6 +370,6 @@ lin
     qforms = <[],[]> ; ---- qforms
     } ;
 
-  ComplAdv x p np = {s = p.c1 ++ np.s ! objCase ; isAdV = p.isAdV ; c1 = []} ;
+  ComplAdv x p np = {s = appComplCase p.c1 np ; isAdV = p.isAdV ; c1 = noComplCase} ;
 
 }
