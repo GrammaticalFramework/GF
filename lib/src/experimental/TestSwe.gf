@@ -1,14 +1,14 @@
 --# -path=.:../translator
 
-concrete TransSwe of Trans =
-   RGLBaseSwe - [Pol,Tense]
+concrete TestSwe of Test =
+   RGLBaseSwe - [Pol,Tense,MkSymb]
   ,PredSwe
-  ,DictionarySwe - [Pol,Tense]
+  ,LexiconSwe - [Pol,Tense]
+  ,StructuralSwe - [Pol,Tense]
 
               ** open CommonScand, ResSwe, PredInstanceSwe, Prelude in {
 
-flags 
-  literal=Symb ;
+--flags literal=Symb ;
 
 oper
   liftV = PredInstanceSwe.liftV ;

@@ -134,7 +134,7 @@ oper
     \s,a,p,vt -> tenseInfV s a p CommonScand.Act (liftV be_V) vt ;
 
   hava_V : Verb = P.mkV "ha" "har" "ha" "hade" "haft" "havd" ; -- havd not used
-  be_V : Verb = P.mkV "vara" "är" "var" "varit" "varen" "varna" ;
+  be_V : Verb = P.mkV "vara" "är" "var" "var" "varit" "varen" ; -- varen not used
   skola_V : Verb = P.mkV "skola" "ska" "ska" "skulle" "skolat" "skolad" ; ---- not used but ska and skulle
 
   noObj : Agr => Str = \\_ => [] ;
