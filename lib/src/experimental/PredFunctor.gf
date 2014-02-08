@@ -314,6 +314,23 @@ lin
     c2 = [] ; ---- w.c2 ? 
     } ;
 
+  ContVPC x v w = {  ---- some loss of quality seems inevitable
+    v = \\a => 
+          let 
+            vv = v.v ! a ; 
+            wv = w.v ! a ;
+            vpa = vagr2agr a ;
+          in 
+          vv.p1 ++ v.adV ++ vv.p2 ++ vv.p3 ++ v.adj ! vpa ++ 
+          v.c1 ++ v.obj1.p1 ! vpa ++ v.c2 ++ v.obj2.p1 ! vpa ++ v.adv ++ v.ext   ---- appComplCase
+            ++ "," ++  
+          wv ;
+    inf = \\a => 
+            infVP v.vvtype a v ++ "," ++ w.inf ! a ;
+    c1 = [] ; ---- w.c1 ? --- the full story is to unify v and w...
+    c2 = [] ; ---- w.c2 ? 
+    } ;
+
   UseVPC x vpc = { ---- big loss of quality (overgeneration) seems inevitable
     v   = \\a => <[], [], vpc.v ! a> ;
     inf = \\_ => vpc.inf ! defaultAgr ; ---- agreement
@@ -330,7 +347,12 @@ lin
     } ;
 
   StartClC x c a b = {
-    s  = declCl (lin Cl a) ++ c.s2 ++ declCl (lin Cl b) ;
+    s  = declCl a ++ c.s2 ++ declCl b ;
+    c3 = b.c3 ; ---- 
+    } ;
+
+  ContClC x a b = {
+    s  = declCl a ++ "," ++ b.s ;
     c3 = b.c3 ; ---- 
     } ;
 
