@@ -169,4 +169,21 @@ oper
 
   not_Str : Polarity -> Str ;
 
+  useCopula : {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerbPhrase =
+    \a,t,p -> {
+    v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
+    c1 = [] ;
+    c2 = [] ;
+    part = [] ;
+    adj = \\_ => [] ;
+    obj1 = <noObj,defaultAgr> ;
+    obj2 = <noObj, True> ; 
+    vvtype = vvInfinitive ;
+    adV = negAdV p ;
+    adv = [] ;
+    ext = [] ;
+    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    } ;
+
 }

@@ -61,7 +61,7 @@ linref
     vp.adj ! agr ++ vp.obj1.p1 ! agr ++ vp.obj2.p1 ! agr ++ vp.adv ++ vp.ext ;
  
   PrCl  = \cl  -> declCl cl ;
-----  PrQCl = \qcl -> questCl (lin PrQCl qcl) ;
+  PrQCl = \qcl -> questCl qcl ;
   PrAdv = \adv -> adv.c1 ++ adv.s ;
   PrAP  = \ap  -> ap.s ! defaultAgr ++ ap.obj1 ! defaultAgr ;  
   PrCN  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
@@ -88,7 +88,7 @@ lin
   aNone, aS, aV, aA, aQ, aN = {s = []} ;
   aNP a = a ;
 
-  UseV a t p _ v = {
+  UseV x a t p v = {
     v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
     inf = \\vt => tenseInfV a.s a.a p.p active v vt ;
     c1  = v.c1 ;
@@ -104,7 +104,7 @@ lin
     qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v ;
     } ;
 
-  PassUseV a t p _ v = {
+  PassUseV x a t p v = {
     v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p passive agr v ;
     inf = \\vt => tenseInfV a.s a.a p.p passive v vt ;
     c1  = v.c1 ;
@@ -120,7 +120,7 @@ lin
     qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
-  AgentPassUseV a t p _ v np = {
+  AgentPassUseV x a t p v np = {
     v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p passive agr v ;
     inf = \\vt => tenseInfV a.s a.a p.p passive v vt ;
     c1  = v.c1 ;
@@ -136,29 +136,34 @@ lin
     qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
-  UseAP a t p _ ap = {
-    v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
-    inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
+  UseAP x a t p ap = useCopula a t p ** {
     c1  = ap.c1 ;
     c2  = ap.c2 ;
-    part = [] ;
     adj = \\a => ap.s ! agr2aagr a ;
     obj1 = <ap.obj1, defaultAgr> ;
-    obj2 = <noObj, True> ; --- there are no A3's
-    vvtype = vvInfinitive ;  ---- should come from AP: "eager to please" - "good at dancing"
-    adV = negAdV p ;
-    adv = [] ;
-    ext = [] ;
-    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
-  SlashV2 x vp np = vp ** {
+  UseCN x a t p cn = useCopula a t p ** {
+    c1  = cn.c1 ;
+    c2  = cn.c2 ;
+    adj = \\a => cn.s ! agr2nagr a ;
+    obj1 = <cn.obj1, defaultAgr> ;
+    } ;
+
+  UseAdv x a t p adv = useCopula a t p ** {
+    c1  = adv.c1 ;
+    adj = \\a => adv.s ;
+    } ;
+
+  UseNP a t p np = useCopula a t p ** {
+    adj = \\a => np.s ! subjCase ;
+    } ;
+
+  ComplV2 x vp np = vp ** {
     obj1 = <\\a => np.s ! objCase, np.a>  -- np.a for object control 
     } ;
 
-  SlashV3 x vp np = addObj2VP vp (\\a => np.s ! objCase) ; -- control is preserved 
-
-  ComplVS x vp cl = addExtVP vp (that_Compl ++ declSubordCl (lin Cl cl)) ; ---- sentence form
+  ComplVS x vp cl = addExtVP vp (that_Compl ++ declSubordCl cl) ; ---- sentence form
 
   ComplVQ x vp qcl = addExtVP vp (questSubordCl qcl) ; ---- question form
 
@@ -168,9 +173,11 @@ lin
 
   ComplVN x vp cn = addObj2VP vp (\\a => cn.s ! agr2nagr a ++ cn.obj1 ! a) ; ---- cnForm
 
-  SlashV2S x vp cl = addExtVP vp (that_Compl ++ declSubordCl (lin Cl cl)) ; ---- sentence form
+  SlashV3 x vp np = addObj2VP vp (\\a => np.s ! objCase) ; -- control is preserved 
 
-  SlashV2Q x vp cl = addExtVP vp (questSubordCl (lin QCl cl)) ; ---- question form
+  SlashV2S x vp cl = addExtVP vp (that_Compl ++ declSubordCl cl) ; ---- sentence form
+
+  SlashV2Q x vp cl = addExtVP vp (questSubordCl cl) ; ---- question form
 
   SlashV2V x vp vpo = addObj2VP vp (\\a => infVP vp.vvtype a (lin VP vpo)) ;
 
@@ -253,7 +260,7 @@ lin
   UseCl  cl = {s = declCl cl} ;
   UseQCl cl = {s = questCl cl} ;
 
-----  UseAdvCl adv cl = {s = adv.s ++ declInvCl cl} ;
+  UseAdvCl adv cl = {s = adv.s ++ declInvCl cl} ;
 
   UttS s = s ;
 
@@ -289,7 +296,7 @@ lin
     obj1 = \\_ => appComplCase agentCase np ; ---- addObj
     } ;
 
-  StartVPC c x v w = {  ---- some loss of quality seems inevitable
+  StartVPC x c v w = {  ---- some loss of quality seems inevitable
     v = \\a => 
           let 
             vv = v.v ! a ; 
@@ -322,7 +329,7 @@ lin
     qforms = \\a => <"do", vpc.inf ! defaultAgr> ; ---- do/does/did
     } ;
 
-  StartClC c x a b = {
+  StartClC x c a b = {
     s  = declCl (lin Cl a) ++ c.s2 ++ declCl (lin Cl b) ;
     c3 = b.c3 ; ---- 
     } ;
