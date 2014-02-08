@@ -30,6 +30,7 @@ oper
 
   appComplCase  : ComplCase -> NounPhrase -> Str = \p,np -> p ++ np.s ! objCase ;
   noComplCase   : ComplCase = [] ;
+  strComplCase  : ComplCase -> Str = \c -> c ;
 
   noObj : Agr => Str = \\_ => [] ;
 
