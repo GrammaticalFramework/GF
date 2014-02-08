@@ -11,14 +11,18 @@ oper
   NPCase = ResEng.NPCase ;
   VForm  = ResEng.VForm ;
   VVType = ResEng.VVType ;
-
---oper STense = ResEng.Tense ;
-
-param
-  VAgr     = VASgP1 | VASgP3 | VAPl ;
-  VType    = VTAct | VTRefl | VTAux ;
+  SVoice = Voice ;
+  
+  VAgr = EVAgr ;
+  VType = EVType ; 
+param  --- have to do this clumsy way because param P and oper P : PType don't unify
+  EVAgr  = VASgP1 | VASgP3 | VAPl ;
+  EVType = VTAct | VTRefl | VTAux ;
 
 oper
+  active : SVoice = Act ;
+  passive : SVoice = Pass ;
+
   subjCase : NPCase = NCase Nom ;
   objCase  : NPCase = NPAcc ;
 
@@ -77,6 +81,8 @@ oper
 
   vvInfinitive : VVType = VVInf ;
 
+  isRefl : PrVerb -> Bool = \v -> case v.vtype of {VTRefl => True ; _ => False} ;
+
 -----------------------
 -- concrete opers
 -----------------------
@@ -104,12 +110,17 @@ oper
       _  => <averb.p1, averb.p2>
       } ;
 
-  qformsBe : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str = 
+  qformsCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str = 
     \sta,t,a,p,agr -> 
     let verb = be_AuxL sta t a p agr
     in <verb.p1, verb.p2> ;                     -- is , not  ---- TODO isn't , 
 
-  tenseV : Str -> STense -> Anteriority -> Polarity -> Voice -> VAgr -> PrVerb -> Str * Str * Str = 
+  tenseCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \s,t,a,p,agr ->
+    be_Aux s t a p agr ;
+  tenseInfCopula : Str -> Anteriority -> Polarity -> VVType -> Str = \s,a,p,vt ->
+    tenseInfV s a p Act be_V vt ;
+
+  tenseV : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str = 
     \sta,t,a,p,o,agr,v -> 
     case o of {  
       Act  => tenseActV sta t a p agr v ;
@@ -182,7 +193,7 @@ oper
     in 
     <be.p1, be.p2, be.p3 ++ done> ;
 
-  tenseInfV : Str -> Anteriority -> Polarity -> Voice -> PrVerb -> VVType => Str = \sa,a,p,o,v -> \\vt => 
+  tenseInfV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str = \sa,a,p,o,v,vt -> 
     let 
       not = case p of {Pos => [] ; Neg => "not"} ;
     in
@@ -274,9 +285,6 @@ oper
   addExtVP : PrVerbPhrase -> Str -> PrVerbPhrase = \vp,ext -> vp ** {
     ext = ext ;
     } ;
-
-
-
 
 oper
   be_V : PrVerb = {

@@ -11,6 +11,7 @@ oper
   Anteriority : PType = X.Anteriority ;
   Polarity : PType = X.Polarity ;
   STense : PType = X.Tense ;
+  SVoice : PType ;
 
 param
   Voice = Act | Pass ;  --- should be in ParamX
@@ -32,11 +33,14 @@ oper
 
 
 -- language dependent
-param
-  VAgr ;    -- agr features that a verb form depends on
-  VType ;   -- reflexive, auxiliary, deponent,...
+
+  VAgr : PType ;      -- agr features that a verb form depends on
+  VType : PType ;     -- reflexive, auxiliary, deponent,...
 
 oper
+  active : SVoice ;
+  passive : SVoice ;
+
   subjCase : NPCase ;
   objCase  : NPCase ;
 
@@ -75,6 +79,13 @@ oper
   vPresPart : PrVerb -> AAgr -> Str ;
 
   vvInfinitive : VVType ;
+
+  isRefl : PrVerb -> Bool ;
+
+--- only needed in Eng because of do questions
+  qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str ;
+  qformsCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str ;
+
 
 -------------------------------
 --- type synonyms
@@ -132,9 +143,12 @@ oper
 
   infVP : VVType -> Agr -> PrVerbPhrase -> Str ;
 
-  tenseV : Str -> STense -> Anteriority -> Polarity -> Voice -> VAgr -> PrVerb -> Str * Str * Str ;
+  tenseV : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str ;
 
-  tenseInfV : Str -> Anteriority -> Polarity -> Voice -> PrVerb -> VVType => Str ;
+  tenseInfV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str ;
+
+  tenseCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str ;
+  tenseInfCopula : Str -> Anteriority -> Polarity -> VVType -> Str ;
 
   declCl       : PrClause -> Str ;
   declSubordCl : PrClause -> Str ;
