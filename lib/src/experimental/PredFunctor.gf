@@ -89,13 +89,13 @@ lin
   aNP a = a ;
 
   UseV a t p _ v = {
-    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p Act agr v ;
-    inf = tenseInfV a.s a.a p.p Act v ;
+    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
+    inf = \\vt => tenseInfV a.s a.a p.p active v vt ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     part = v.p ;
     adj = noObj ;
-    obj1 = <case v.vtype of {VTRefl => \\a => reflPron a ; _ => \\_ => []}, defaultAgr> ; ---- not used, just default value
+    obj1 = <case isRefl v of {True => \\a => reflPron a ; _ => \\_ => []}, defaultAgr> ; ---- not used, just default value
     obj2 = <noObj, v.isSubjectControl> ;
     vvtype = v.vvtype ;
     adV = negAdV p ; --- just p.s in Eng
@@ -105,8 +105,8 @@ lin
     } ;
 
   PassUseV a t p _ v = {
-    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass agr v ;
-    inf = tenseInfV a.s a.a p.p Pass v ;
+    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p passive agr v ;
+    inf = \\vt => tenseInfV a.s a.a p.p passive v vt ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     part = v.p ;
@@ -117,12 +117,12 @@ lin
     adV = negAdV p ;
     adv = [] ;
     ext = [] ;
-    qforms = \\agr => qformsBe (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
   AgentPassUseV a t p _ v np = {
-    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass agr v ;
-    inf = tenseInfV a.s a.a p.p Pass v ;
+    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p passive agr v ;
+    inf = \\vt => tenseInfV a.s a.a p.p passive v vt ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     part = v.p ;
@@ -133,23 +133,23 @@ lin
     adV = negAdV p ;
     adv = appComplCase agentCase np ;
     ext = [] ;
-    qforms = \\agr => qformsBe (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
   UseAP a t p _ ap = {
-    v   = \\agr => be_Aux (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
-    inf = tenseInfV a.s a.a p.p Act be_V ;
+    v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
     c1  = ap.c1 ;
     c2  = ap.c2 ;
     part = [] ;
     adj = \\a => ap.s ! agr2aagr a ;
     obj1 = <ap.obj1, defaultAgr> ;
     obj2 = <noObj, True> ; --- there are no A3's
-    vvtype = be_V.vvtype ;
+    vvtype = vvInfinitive ;  ---- should come from AP: "eager to please" - "good at dancing"
     adV = negAdV p ;
     adv = [] ;
     ext = [] ;
-    qforms = \\agr => qformsBe (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
   SlashV2 x vp np = vp ** {
