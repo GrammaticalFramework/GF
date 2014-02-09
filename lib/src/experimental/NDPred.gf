@@ -11,6 +11,10 @@ cat
   PrVP_none ; PrVP_np ; PrVP_v ; PrVP_s ; PrVP_q ; PrVP_a ; PrVP_n ;
              PrVP_np_np ; PrVP_np_v ; PrVP_np_s ; PrVP_np_q ; PrVP_np_a ; PrVP_np_n ;
 
+--<  PrVPI Arg ;  -- infinitive VP
+  PrVPI_none ; 
+  PrVPI_np ;
+
 --<  VPC Arg ;  -- conjunction of VP
   VPC_none ; 
   VPC_np ;
@@ -92,9 +96,9 @@ fun
   ComplVS_none : PrVP_s -> PrCl_none -> PrVP_none ;
   ComplVS_np   : PrVP_s -> PrCl_np   -> PrVP_np ;
 
---<  ComplVV   : (a : Arg) -> PrVP aV             -> PrVP  a -> PrVP a ;         -- she wants to sleep
-  ComplVV_none : PrVP_v -> PrVP_none -> PrVP_none ;
-  ComplVV_np   : PrVP_v -> PrVP_np   -> PrVP_np ;
+--<  ComplVV   : (a : Arg) -> PrVP aV             -> PrVPI  a -> PrVP a ;        -- she wants to sleep
+  ComplVV_none : PrVP_v -> PrVPI_none -> PrVP_none ;
+  ComplVV_np   : PrVP_v -> PrVPI_np   -> PrVP_np ;
 
 --<  ComplVQ   : (a : Arg) -> PrVP aQ             -> PrQCl a -> PrVP a ;         -- she wonders who is here
   ComplVQ_none : PrVP_q -> PrQCl_none -> PrVP_none ;
@@ -111,9 +115,9 @@ fun
 --<  SlashV2S  : (a : Arg) -> PrVP (aNP aS)       -> PrCl a  -> PrVP (aNP a) ;   -- she tells X that I am here
   SlashV2S_none : PrVP_np_s -> PrCl_none -> PrVP_np ;
 
---<  SlashV2V  : (a : Arg) -> PrVP (aNP aV)       -> PrVP a  -> PrVP (aNP a) ;   -- she forces X to sleep
-  SlashV2V_none : PrVP_np_v -> PrVP_none -> PrVP_np ;
-  SlashV2V_np   : PrVP_np_v -> PrVP_np -> PrVP_np_np ;
+--<  SlashV2V  : (a : Arg) -> PrVP (aNP aV)       -> PrVPI a -> PrVP (aNP a) ;   -- she forces X to sleep
+  SlashV2V_none : PrVP_np_v -> PrVPI_none -> PrVP_np ;
+  SlashV2V_np   : PrVP_np_v -> PrVPI_np -> PrVP_np_np ;
 
 --<  SlashV2A  : (a : Arg) -> PrVP (aNP aA)       -> PrAP a  -> PrVP (aNP a) ;   -- she makes X crazy
   SlashV2A_none : PrVP_np_a -> PrAP_none -> PrVP_np ;
@@ -138,6 +142,10 @@ fun
 
 --<  UseNP     :              Ant -> Tense -> Pol -> NP      -> PrVP aNone ;     -- she is the person
   UseNP_none : Ant -> Tense -> Pol -> NP -> PrVP_none ;
+
+--<  InfVP    : (a : Arg) -> PrVP a -> PrVPI a ;
+  InfVP_none : PrVP_none -> PrVPI_none ;
+  InfVP_np   : PrVP_np -> PrVPI_np ;
 
 --<  PredVP    : (a : Arg) -> NP -> PrVP a -> PrCl a ;
   PredVP_none : NP -> PrVP_none -> PrCl_none ;

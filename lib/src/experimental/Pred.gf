@@ -4,6 +4,7 @@ cat
   Arg ;
   PrV Arg ;
   PrVP Arg ;
+  PrVPI Arg ;
   VPC Arg ;  -- conjunction of VP
   Tense ;
   Pol ;
@@ -28,16 +29,18 @@ fun
 
   ComplV2   : (a : Arg) -> PrVP (aNP a)        -> NP      -> PrVP a ;         -- she loves him
   ComplVS   : (a : Arg) -> PrVP aS             -> PrCl  a -> PrVP a ;         -- she says that I am here
-  ComplVV   : (a : Arg) -> PrVP aV             -> PrVP  a -> PrVP a ;         -- she wants to sleep
+  ComplVV   : (a : Arg) -> PrVP aV             -> PrVPI a -> PrVP a ;         -- she wants to sleep
   ComplVQ   : (a : Arg) -> PrVP aQ             -> PrQCl a -> PrVP a ;         -- she wonders who is here
   ComplVA   : (a : Arg) -> PrVP aA             -> PrAP  a -> PrVP a ;         -- she becomes old
   ComplVN   : (a : Arg) -> PrVP aN             -> PrCN  a -> PrVP a ;         -- she becomes a professor
   SlashV3   : (a : Arg) -> PrVP (aNP (aNP a))  -> NP      -> PrVP (aNP a) ;   -- she shows X to him
   SlashV2S  : (a : Arg) -> PrVP (aNP aS)       -> PrCl a  -> PrVP (aNP a) ;   -- she tells X that I am here
-  SlashV2V  : (a : Arg) -> PrVP (aNP aV)       -> PrVP a  -> PrVP (aNP a) ;   -- she forces X to sleep
+  SlashV2V  : (a : Arg) -> PrVP (aNP aV)       -> PrVPI a -> PrVP (aNP a) ;   -- she forces X to sleep
   SlashV2A  : (a : Arg) -> PrVP (aNP aA)       -> PrAP a  -> PrVP (aNP a) ;   -- she makes X crazy
   SlashV2N  : (a : Arg) -> PrVP (aNP aN)       -> PrCN a  -> PrVP (aNP a) ;   -- she makes X a professor
   SlashV2Q  : (a : Arg) -> PrVP (aNP aA)       -> PrQCl a -> PrVP (aNP a) ;   -- she asks X who is here
+
+  InfVP     : (a : Arg) -> PrVP a -> PrVPI a ;                                -- to love X
 
   UseAP     : (a : Arg) -> Ant -> Tense -> Pol -> PrAP a  -> PrVP a ;         -- she is married to X
   UseAdv    : (a : Arg) -> Ant -> Tense -> Pol -> PrAdv a -> PrVP a ;         -- she is in X

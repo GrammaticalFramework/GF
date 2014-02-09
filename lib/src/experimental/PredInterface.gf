@@ -84,10 +84,15 @@ oper
 
   isRefl : PrVerb -> Bool ;
 
+  applyVerb : PrVerbPhrase -> VAgr -> Str * Str * Str 
+    = \vp,a -> vp.v ! a ;
+
 --- only needed in Eng because of do questions
   qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str ;
   qformsCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str ;
 
+  qformsVP : PrVerbPhrase -> VAgr -> Str * Str 
+   = \vp,vagr -> vp.qforms ! vagr ;
 
 -------------------------------
 --- type synonyms

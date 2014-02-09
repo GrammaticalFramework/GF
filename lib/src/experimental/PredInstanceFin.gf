@@ -1,8 +1,9 @@
 instance PredInstanceFin of 
   PredInterface - [
-    NounPhrase,
+    NounPhrase, 
     PrVerb, initPrVerb,
-    PrVerbPhrase, initPrVerbPhrase, initPrVerbPhraseV, useCopula
+    PrVerbPhrase, initPrVerbPhrase, initPrVerbPhraseV, useCopula, linrefPrVP, qformsVP, applyVerb, addObj2VP,
+    PrClause, initPrClause
   ] = 
       open ResFin, (P = ParadigmsFin), (S = StemFin), (X = ParamX), Prelude in {
 
@@ -14,70 +15,103 @@ oper
   PrVerb = StemFin.SVerb1 ** {
     c1 : ComplCase ; 
     c2 : ComplCase ;
-    isSubjectControl : Bool ;
-    vtype : VType ;  
     vvtype : VVType ;
     } ; 
 
   initPrVerb : PrVerb = {
     s = \\_ => [] ;
-    sc = subjCase ;
+    sc = SCNom ;
     h = Back ;
     p = [] ; 
-    c1,c2 = noComplCase ; isSubjectControl = True ; vtype = defaultVType ; vvtype = vvInfinitive
+    c1,c2 = noComplCase ; isSubjectControl = True ; vtype = Act ; vvtype = vvInfinitive
     } ; 
 
   PrVerbPhrase = {
-    v   : S.SVerb1 ;                
-    atp : {a : Anteriority ; t : STense ; p : Polarity ; as,ts,ps : Str} ;
-    vtype : VType ;
-    c1 : ComplCase ; 
-    c2 : ComplCase ; 
-    part  : Str ;                  -- (look) up
-    adj   : Agr => Str ; 
-    obj1  : (Agr => Str) * Agr ;   -- agr for object control
-    obj2  : (Agr => Str) * Bool ;  -- subject control = True 
-    vvtype : VVType ;              -- type of VP complement
-    adv : Str ; 
-    adV : Str ;
-    ext : Str 
+    v   : Agr => {fin,inf : Str} ;
+    inf : VVType => Str ;
+    obj1 : Agr => Str ;             -- Bool => Polarity => Agr => Str ; -- talo/talon/taloa
+    obj2 : Agr => Str ;             -- Bool => Polarity => Agr => Str ; -- talo/talon/taloa
+    adv : Str ;                     -- Polarity => Str ;        -- ainakin/ainakaan
+    adV : Str ;                     -- Polarity => Str ;        -- ainakin/ainakaan
+    ext : Str ;
+    isNeg : Bool ;  -- True if some complement is negative
+    isPass : Bool ; -- True if the verb is rendered in the passive
+    vvtype : VVType ;
+    sc : SubjCase ;
+    h  : Harmony ;
+    c1 : Compl ;
+    c2 : Compl ;
+    qforms : VAgr => Str * Str ;
     } ;
 
   initPrVerbPhrase : PrVerbPhrase = {
-    v : S.SVerb1 = initPrVerb ;
-    atp = {a = Simul ; t = Pres ; p = Pos ; as,ts,ps = []} ;
-    vtype = defaultVType ;
-    c1 : ComplCase = noComplCase ; 
-    c2 : ComplCase = noComplCase ; 
-    part  : Str = [] ;                  -- (look) up
-    adj   : Agr => Str = noObj ; 
-    obj1  : (Agr => Str) * Agr = <\\_ => [], defaultAgr> ;   -- agr for object control
-    obj2  : (Agr => Str) * Bool = <\\_ => [], True>;  -- subject control = True 
-    vvtype : VVType = vvInfinitive ;              -- type of VP complement
-    adv : Str = [] ; 
+    v : Agr => {fin,inf : Str} = \\_ => {fin,inf = []} ;
+    inf : VVType => Str = \\vtt => [] ;
+    obj1 : Agr => Str = \\_ => [] ;
+    obj2 : Agr => Str = \\_ => [] ;
+    adv : Str = [] ;
     adV : Str = [] ;
     ext : Str = [] ;
+    isNeg : Bool = True ;
+    isPass : Bool = False ;
+    c1 : Compl = noComplCase ;
+    c2 : Compl = noComplCase ;
+    vvtype = defaultVVType ;
+    sc = SCNom ;
+    h = Back ;
     qforms : VAgr => Str * Str = \\_ => <[],[]>    -- special Eng for introducing "do" in questions
     } ;
 
   initPrVerbPhraseV : 
        {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> PrVerbPhrase = 
-  \a,t,p,v -> initPrVerbPhrase ** {
-    v   : S.SVerb1 = v ;
-    atp = {a = a.a ; t = t.t ; p = p.p ; as = a.s ; ts = t.s ; ps = p.s} ;
-    vtype = v.vtype ;
-    c1  = v.c1 ;
-    c2  = v.c2 ;
-    part = v.p ;
-    obj1 = <case isRefl v of {True => \\a => reflPron a ; _ => \\_ => []}, defaultAgr> ; ---- not used, just default value
-    obj2 = <noObj, v.isSubjectControl> ;
-    vvtype = v.vvtype ;
-    adV = negAdV p ; --- just p.s in Fin
+  \a,t,p,verb -> 
+  initPrVerbPhrase ** {
+    v : Agr => {fin,inf : Str} = case verb.sc of {
+       SCNom => \\agr => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Act agr        (lin PrV verb) ;
+       _     => \\_   => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Act defaultAgr (lin PrV verb)
+       } ;
+    inf : VVType => Str = \\vtt => infV (a.s ++ p.s) a.a p.p Act (lin PrV verb) vtt ;
+    obj1 : Agr => Str = \\_ => [] ;
+    obj2 : Agr => Str = \\_ => [] ;
+    adv : Str = [] ;
+    adV : Str = [] ;
+    ext : Str = [] ;
+    isNeg : Bool = True ;
+    isPass : Bool = False ;
+    c1 : Compl = verb.c1 ;
+    c2 : Compl = verb.c2 ;
+    vvtype = verb.vvtype ;
+    sc = verb.sc ;
+    h = case a.a of {Anter => Back ; _ => verb.h} ;
     } ;
 
   useCopula : {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerbPhrase =
     \a,t,p -> initPrVerbPhraseV a t p (liftV P.olla_V) ;
 
+  linrefPrVP : PrVerbPhrase -> Str = \_ -> "verbphrase" ; ----
+
+  PrClause = {
+    subj : Str ;
+    verb : {fin,inf : Str} ;
+    obj1 : Str ; 
+    obj2 : Str ; 
+    adv  : Str ;
+    adV  : Str ;
+    ext  : Str ; 
+    h    : Harmony ;
+    c3   : Compl ;
+    } ;
+  initPrClause : PrClause = {
+    subj : Str = [] ;
+    verb : {fin,inf : Str} = {fin,inf = []} ;
+    obj1 : Str = [] ; 
+    obj2 : Str = [] ; 
+    adv  : Str = [] ;
+    adV  : Str = [] ;
+    ext  : Str = [] ; 
+    h    : Harmony = Back ;
+    c3   : Compl = noComplCase ;
+    } ;
 
 ---------------------
 -- parameters -------
@@ -88,7 +122,7 @@ oper
   Case   = ResFin.Case ;
   NPCase = ResFin.NPForm ;
   VForm  = S.SVForm ;
-  VVType = ResFin.InfForm ;
+  VVType = ResFin.VVType ;
   VType  = Voice ; ----
   Gender = Unit ; ----
 
@@ -101,13 +135,14 @@ oper
   passive = Pass ;
 
   defaultVType = Act ;
+  defaultVVType = VVInf ;
 
   subjCase : NPCase = ResFin.NPCase Nom ;
   objCase  : NPCase = NPAcc ;
 
   ComplCase = ResFin.Compl ; -- preposition
   agentCase : ComplCase = P.postGenPrep "toimesta" ;
-  strComplCase : ComplCase -> Str = \c -> c.s ! False ;
+  strComplCase : ComplCase -> Str = \c -> c.s.p1 ++ c.s.p2 ;
 
   appComplCase  : ComplCase -> NounPhrase -> Str = \p,np -> appCompl True Pos p np ;
   noComplCase   : ComplCase = P.postGenPrep [] ; ----
@@ -137,7 +172,7 @@ oper
   vPastPart : PrVerb -> AAgr -> Str = \v,a -> (S.sverb2verbSep v).s ! PastPartPass (AN (NCase Sg Part)) ; ---- case
   vPresPart : PrVerb -> AAgr -> Str = \v,a -> (S.sverb2verbSep v).s ! PresPartAct (AN (NCase Sg Part)) ; ---- case
 
-  vvInfinitive : VVType = Inf1 ;
+  vvInfinitive : VVType = VVInf ;
 
   isRefl : PrVerb -> Bool = \_ -> False ; ----
 
@@ -149,36 +184,39 @@ oper
 oper 
   reflPron : Agr -> Str = \a -> (ResFin.reflPron a).s ! NPAcc ; ---- case
 
-  infVP : VVType -> Agr -> PrVerbPhrase -> Str = \vt, a, pvp -> 
-    let
-      ipol = pvp.atp.p ;
-      sc   = pvp.v.sc ;
-      pol  = Pos ; ----
-      agr  = a ;
-      vi   = vt ;
-      vp0  : S.VP = {
-        s = pvp.v ;
-        s2 = \\b,p,agr => pvp.obj1.p1 ! agr ++ pvp.obj2.p1 ! agr ;
-        adv = \\_ => pvp.adV ++ pvp.adv ;
-        ext = pvp.ext ;
-        vptyp = {isNeg = False ; isPass = case pvp.vtype of {Pass => True ; _ => False}} ;
-        }
+  finV : Str -> STense -> Anteriority -> Polarity -> SVoice -> Agr -> PrVerb -> {fin,inf : Str} =
+       \sta,t,a,pol,o,agr,v -> 
+    let 
+      ovps = (S.vp2old_vp (S.predV v)).s ! VIFin t ! a ! pol ! agr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
     in
-    S.infVPGen -- : Polarity -> NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
-        ipol sc pol agr vp0 vi ;
+    {fin = sta ++ ovps.fin ; inf = ovps.inf} ;
 
-  declCl       : PrClause -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
-  declSubordCl : PrClause -> Str = \cl -> cl.subj ++ cl.adV ++ cl.v.p1 ++ (cl.v.p2 | []) ++ restCl cl ;
-  declInvCl    : PrClause -> Str = \cl -> cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
+  infV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str = 
+      \sa,a,pol,o,v,vvt ->
+   let 
+     vt = Inf1 ; ----vvtype2inform vvt 
+     ovps = (S.vp2old_vp (S.predV v)).s ! VIInf vt ! a ! pol ! defaultAgr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
+   in
+   sa ++ ovps.fin ++ ovps.inf ;
 
-  questCl      : PrQuestionClause -> Str = \cl -> cl.foc ++ cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
+  infVP : VVType -> Agr -> PrVerbPhrase -> Str = \vvt,agr,vp ->
+    vp.inf ! vvt ++ vp.adV ++ vp.obj1 ! agr ++ vp.obj2 ! agr ++ vp.adv ++ vp.ext ;
+
+  declCl : PrClause -> Str = \cl ->
+    cl.subj ++ cl.verb.fin ++ cl.adV ++ cl.verb.inf ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
+
+  declSubordCl : PrClause -> Str = declCl ;
+  declInvCl    : PrClause -> Str = declCl ; ---
+
+  questCl      : PrQuestionClause -> Str = \cl -> 
+    cl.verb.fin ++ Predef.BIND ++ "ko" ++ cl.subj ++ cl.adV ++ cl.verb.inf ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
 
   questSubordCl : PrQuestionClause -> Str = questCl ;
 
   that_Compl : Str = "että" ;
 
   -- this part is usually the same in all reconfigurations
-  restCl : PrClause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3.s ! False ; ---- c3
+---  restCl : PrClause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3.s.p1 ++ cl.c3.s.p2 ; ---- c3
 
   negAdV :  {s : Str ; p : Polarity} -> Str = \p -> p.s ;
 
@@ -204,8 +242,11 @@ oper
 
   noObj : Agr => Str = \\_ => [] ;
 
+  applyVerb : PrVerbPhrase -> VAgr -> {inf,fin : Str}
+    = \vp,agr -> vp.v ! agr ;
+
   addObj2VP : PrVerbPhrase -> (Agr => Str) -> PrVerbPhrase = \vp,obj -> vp ** {
-    obj2 = <\\a => vp.obj2.p1 ! a ++ obj ! a, vp.obj2.p2> ;
+    obj2 = \\a => vp.obj2 ! a ++ obj ! a ;
     } ;
 
   addExtVP : PrVerbPhrase -> Str -> PrVerbPhrase = \vp,ext -> vp ** {
@@ -222,5 +263,9 @@ oper
     \sta,t,a,p,agr,v -> <[],[]> ;
   qformsCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str = 
     \sta,t,a,p,agr -> <[],[]> ;
+
+  qformsVP : PrVerbPhrase -> VAgr -> Str * Str 
+   = \vp,vagr -> <[],[]> ;
+
 
 }
