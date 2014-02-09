@@ -1,0 +1,232 @@
+{-# LANGUAGE ExistentialQuantification #-}
+#include <pgf/pgf.h>
+#include <gu/enum.h>
+#include <gu/exn.h>
+
+module PGF2 (-- * PGF
+             PGF,readPGF,abstractName,startCat,
+             -- * Concrete syntax
+             Concr,languages,parse,linearize,
+             -- * Trees
+             Expr,readExpr,showExpr,unApp,
+             -- * Morphology
+             MorphoAnalysis, lookupMorpho, fullFormLexicon,
+            ) where
+
+import Prelude hiding (fromEnum)
+import Control.Exception
+import System.IO
+import System.IO.Unsafe
+import PGF2.FFI
+
+import Foreign hiding ( Pool, newPool, unsafePerformIO )
+import Foreign.C
+import Foreign.C.String
+import Foreign.Ptr
+import Data.Char
+import qualified Data.Map as Map
+import qualified Data.ByteString as BS
+import Data.IORef
+
+
+-----------------------------------------------------------------------------
+-- Functions that take a PGF.
+-- PGF has many Concrs.
+--
+-- A Concr retains its PGF in a field in order to retain a reference to
+-- the foreign pointer in case if the application still has a reference
+-- to Concr but has lost its reference to PGF.
+
+data PGF = PGF {pgf :: Ptr PgfPGF, pgfMaster :: ForeignPtr GuPool}
+data Concr = Concr {concr :: Ptr PgfConcr, concrMaster :: PGF}
+
+readPGF :: FilePath -> IO PGF
+readPGF fpath =
+  do pool <- gu_new_pool
+     pgf  <- withCString fpath $ \c_fpath -> 
+               pgf_read c_fpath pool nullPtr
+     master <- newForeignPtr gu_pool_finalizer pool
+     return PGF {pgf = pgf, pgfMaster = master}
+
+languages :: PGF -> Map.Map String Concr
+languages p =
+  unsafePerformIO $
+    do ref <- newIORef Map.empty
+       allocaBytes (#size GuMapItor) $ \itor ->
+                   do fptr <- wrapMapItorCallback (getLanguages ref)
+                      (#poke GuMapItor, fn) itor fptr
+                      pgf_iter_languages (pgf p) itor nullPtr
+       readIORef ref
+  where
+    getLanguages :: IORef (Map.Map String Concr) -> MapItorCallback
+    getLanguages ref itor key value exn = do
+      langs <- readIORef ref
+      name  <- peekCString (castPtr key)
+      concr <- fmap (\ptr -> Concr ptr p) $ peek (castPtr value)
+      writeIORef ref $! Map.insert name concr langs
+
+generateAll :: PGF -> String -> [(Expr,Float)]
+generateAll p cat =
+  unsafePerformIO $
+    do genPl  <- gu_new_pool
+       exprPl <- gu_new_pool
+       enum   <- withCString cat $ \cat ->
+                   pgf_generate_all (pgf p) cat genPl
+       genFPl  <- newForeignPtr gu_pool_finalizer genPl
+       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+       fromPgfExprEnum enum genFPl (p,exprFPl)
+
+abstractName :: PGF -> String
+abstractName p = unsafePerformIO (peekCString =<< pgf_abstract_name (pgf p))
+
+startCat :: PGF -> String
+startCat p = unsafePerformIO (peekCString =<< pgf_start_cat (pgf p))
+ 
+
+-----------------------------------------------------------------------------
+-- Expressions
+
+-- The C structure for the expression may point to other structures
+-- which are allocated from other pools. In order to ensure that
+-- they are not released prematurely we use the exprMaster to
+-- store references to other Haskell objects
+
+data Expr = forall a . Expr {expr :: PgfExpr, exprMaster :: a}
+
+instance Show Expr where
+  show = showExpr
+
+unApp :: Expr -> Maybe (String,[Expr])
+unApp (Expr expr master) =
+  unsafePerformIO $
+    withGuPool $ \pl -> do
+      appl <- pgf_expr_unapply expr pl
+      if appl == nullPtr
+        then return Nothing
+        else do 
+           fun <- peekCString =<< (#peek PgfApplication, fun) appl
+           arity <- (#peek PgfApplication, n_args) appl :: IO CInt 
+           c_args <- peekArray (fromIntegral arity) (appl `plusPtr` (#offset PgfApplication, args))
+           return $ Just (fun, [Expr c_arg master | c_arg <- c_args])
+
+readExpr :: String -> Maybe Expr
+readExpr str =
+  unsafePerformIO $
+    do exprPl <- gu_new_pool
+       withGuPool $ \tmpPl ->
+         withCString str $ \c_str ->
+           do guin <- gu_string_in c_str tmpPl
+              exn <- gu_new_exn nullPtr gu_type__type tmpPl
+              c_expr <- pgf_read_expr guin exprPl exn
+              status <- gu_exn_is_raised exn
+              if (not status && c_expr /= nullPtr)
+                then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+                        return $ Just (Expr c_expr exprFPl)
+                else do gu_pool_free exprPl
+                        return Nothing
+
+showExpr :: Expr -> String
+showExpr e = 
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+      do (sb,out) <- newOut tmpPl
+         let printCtxt = nullPtr
+         exn <- gu_new_exn nullPtr gu_type__type tmpPl
+         pgf_print_expr (expr e) printCtxt 1 out exn
+         s <- gu_string_buf_freeze sb tmpPl
+         peekCString s
+
+
+-----------------------------------------------------------------------------
+-- Functions using Concr
+-- Morpho analyses, parsing & linearization
+
+type MorphoAnalysis = (String,String,Float)
+
+lookupMorpho :: Concr -> String -> [MorphoAnalysis]
+lookupMorpho (Concr concr master) sent = unsafePerformIO $
+  do ref <- newIORef []
+     allocaBytes (#size PgfMorphoCallback) $ \cback -> 
+                        do fptr <- wrapLookupMorphoCallback (getAnalysis ref)
+                           (#poke PgfMorphoCallback, callback) cback fptr
+                           withCString sent $ \c_sent ->
+                             pgf_lookup_morpho concr c_sent cback nullPtr
+     readIORef ref
+
+fullFormLexicon :: Concr -> [(String, [MorphoAnalysis])]
+fullFormLexicon lang =
+  unsafePerformIO $
+    do pl <- gu_new_pool
+       enum <- pgf_fullform_lexicon (concr lang) pl
+       fpl <- newForeignPtr gu_pool_finalizer pl
+       fromFullFormEntry enum fpl
+  where
+    fromFullFormEntry :: Ptr GuEnum -> ForeignPtr GuPool -> IO [(String, [MorphoAnalysis])]
+    fromFullFormEntry enum fpl =
+      do ffEntry <- alloca $ \ptr ->
+                      withForeignPtr fpl $ \pl ->
+                        do gu_enum_next enum ptr pl
+                           peek ptr
+         if ffEntry == nullPtr
+           then do finalizeForeignPtr fpl
+                   return []
+           else do tok  <- peekCString =<< pgf_fullform_get_string ffEntry
+                   ref  <- newIORef []
+                   allocaBytes (#size PgfMorphoCallback) $ \cback ->
+                        do fptr <- wrapLookupMorphoCallback (getAnalysis ref)
+                           (#poke PgfMorphoCallback, callback) cback fptr
+                           pgf_fullform_get_analyses ffEntry cback nullPtr
+                   ans  <- readIORef ref
+                   toks <- unsafeInterleaveIO (fromFullFormEntry enum fpl)
+                   return ((tok,ans) : toks)
+
+getAnalysis :: IORef [MorphoAnalysis] -> LookupMorphoCallback
+getAnalysis ref self c_lemma c_anal prob exn = do
+  ans <- readIORef ref
+  lemma <- peekCString c_lemma
+  anal  <- peekCString c_anal
+  writeIORef ref ((lemma, anal, prob):ans)
+
+parse :: Concr -> String -> String -> [(Expr,Float)]
+parse lang cat sent =
+  unsafePerformIO $
+    do parsePl <- gu_new_pool
+       exprPl  <- gu_new_pool
+       enum    <- withCString cat $ \cat ->
+                    withCString sent $ \sent ->
+                      pgf_parse (concr lang) cat sent nullPtr parsePl exprPl
+       parseFPl <- newForeignPtr gu_pool_finalizer parsePl
+       exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
+       fromPgfExprEnum enum parseFPl (lang,exprFPl)
+
+linearize :: Concr -> Expr -> String
+linearize lang e = unsafePerformIO $
+  withGuPool $ \pl ->
+    do (sb,out) <- newOut pl
+       pgf_linearize (concr lang) (expr e) out nullPtr
+       lin <- gu_string_buf_freeze sb pl
+       peekCString lin
+
+
+-----------------------------------------------------------------------------
+-- Helper functions
+
+newOut :: Ptr GuPool -> IO (Ptr GuStringBuf, Ptr GuOut)
+newOut pool =
+   do sb <- gu_string_buf pool
+      out <- gu_string_buf_out sb
+      return (sb,out)
+
+fromPgfExprEnum :: Ptr GuEnum -> ForeignPtr GuPool -> a -> IO [(Expr, Float)]
+fromPgfExprEnum enum fpl master =
+  do pgfExprProb <- alloca $ \ptr ->
+                      withForeignPtr fpl $ \pl ->
+                        do gu_enum_next enum ptr pl
+                           peek ptr
+     if pgfExprProb == nullPtr
+       then do finalizeForeignPtr fpl
+               return []
+       else do expr <- (#peek PgfExprProb, expr) pgfExprProb
+               ts <- unsafeInterleaveIO (fromPgfExprEnum enum fpl master)
+               prob <- (#peek PgfExprProb, prob) pgfExprProb
+               return ((Expr expr master,prob) : ts)
