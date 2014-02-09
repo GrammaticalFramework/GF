@@ -100,7 +100,7 @@ oper
   ollaSVerbForms : SVForm => Str = verbOlla.s ;
 
   -- used in Cat
-  SVerb1 = {s : SVForm => Str ; sc : NPForm ; h : Harmony ; p : Str} ;
+  SVerb1 = {s : SVForm => Str ; sc : SubjCase ; h : Harmony ; p : Str} ;
 
   sverb2verbBind : SVerb -> Verb = sverb2verb True ;
   sverb2verbSep  : SVerb -> Verb = sverb2verb False ;
@@ -161,12 +161,12 @@ oper
 ---- a hack to make VerbFin compile accurately for library (here), 
 ---- and in a simplified way for ParseFin (in stemmed/)
 
-  slashV2VNP : (SVerb1 ** {c2 : Compl ; vi : InfForm}) -> (NP ** {isNeg : Bool}) -> 
+  slashV2VNP : (SVerb1 ** {c2 : Compl ; vi : VVType}) -> (NP ** {isNeg : Bool}) -> 
     (VP ** {c2 : Compl}) -> (VP ** {c2 : Compl}) 
     = \v, np, vp -> 
       insertObjPre np.isNeg
         (\fin,b,a ->  appCompl fin b v.c2 np ++ 
-                      infVP v.sc b a vp v.vi) 
+                      infVP v.sc b a vp (vvtype2infform v.vi)) 
           (predSV v) ** {c2 = vp.c2} ;
 
 
@@ -182,7 +182,7 @@ oper
 
   defaultVPTyp = {isNeg = False ; isPass = False} ;
     
-  HVerb : Type = Verb ** {sc : NPForm ; h : Harmony ; p : Str} ;
+  HVerb : Type = Verb ** {sc : SubjCase ; h : Harmony ; p : Str} ;
  
   predV : HVerb -> VP = \verb -> {
     s = verb ;
@@ -197,7 +197,7 @@ oper
     s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
     adv : Polarity => Str ; -- ainakin/ainakaan
     ext : Str ;
-    sc  : NPForm ;
+    sc  : SubjCase ;
     isNeg : Bool ; -- True if some complement is negative
     h   : Harmony
     } ;
@@ -316,8 +316,8 @@ oper
     } ;
 
   passVP : VP -> Compl -> VP = \vp,pr -> {
-    s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = pr.c} ; -- minusta pidetään ---- TODO minun katsotaan päälle
-    s2 = \\b,p,a => pr.s ! False ++ vp.s2 ! b ! p ! a ;  ---- prep after verb
+    s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = npform2subjcase pr.c} ; -- minusta pidetään ---- TODO minun katsotaan päälle
+    s2 = \\b,p,a => pr.s.p1 ++ vp.s2 ! b ! p ! a ++ pr.s.p2 ; ---- possessive suffix
     ext = vp.ext ;
     adv = vp.adv ;
     vptyp = {isNeg = vp.vptyp.isNeg ; isPass = True} ; 
@@ -362,7 +362,7 @@ oper
       s = \\t,a,b => 
         let 
           agrfin = case vp.sc of {
-                    NPCase Nom => <agr,True> ;
+                    SCNom => <agr,True> ;
                     _ => <agrP3 Sg,False>      -- minun täytyy, minulla on
                     } ;
           verb  = vp.s ! VIFin t ! a ! b ! agrfin.p1 ;
@@ -387,17 +387,17 @@ oper
 
 -- the first Polarity is VP-internal, the second comes form the main verb:
 -- ([main] tahdon | en tahdo) ([internal] nukkua | olla nukkumatta)
-  infVPGen : Polarity -> NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
+  infVPGen : Polarity -> SubjCase -> Polarity -> Agr -> VP -> InfForm -> Str =
     \ipol,sc,pol,agr,vp0,vi ->
         let 
           vp = vp2old_vp vp0 ;
           fin = case sc of {     -- subject case
-            NPCase Nom => True ; -- minä tahdon nähdä auton
+            SCNom => True ; -- minä tahdon nähdä auton
             _ => False           -- minun täytyy nähdä auto
             } ;
           verb = case ipol of {
             Pos => <vp.s ! VIInf vi ! Simul ! Pos ! agr, []> ; -- nähdä/näkemään
-            Neg => <(vp2old_vp (predV (verbOlla ** {sc = NPCase Nom ; h = Back ; p = []}))).s ! VIInf vi ! Simul ! Pos ! agr,
+            Neg => <(vp2old_vp (predV (verbOlla ** {sc = SCNom ; h = Back ; p = []}))).s ! VIInf vi ! Simul ! Pos ! agr,
                     (vp.s ! VIInf Inf3Abess ! Simul ! Pos ! agr).fin> -- olla/olemaan näkemättä
             } ;
           vph = vp.h ;
@@ -409,8 +409,8 @@ oper
         in
         verb.p1.fin ++ verb.p1.inf ++ poss ++ verb.p2 ++ compl ;
 
-  infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str = infVPGen Pos ;
+  infVP : SubjCase -> Polarity -> Agr -> VP -> InfForm -> Str = infVPGen Pos ;
 
-  vpVerbOlla : HVerb = verbOlla ** {sc = NPCase Nom ; h = Back ; p = []} ;
+  vpVerbOlla : HVerb = verbOlla ** {sc = SCNom ; h = Back ; p = []} ;
 
 }

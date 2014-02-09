@@ -85,7 +85,7 @@ oper
     } ;
 
   accusative : Prep
-    = {c = NPAcc ; s : Bool => Str = \\_ => [] ; isPre = True ; h = Back ; lock_Prep = <>} ;
+    = lin Prep {c = NPAcc ; s = <[],[],\\_ => []>} ;
 
   NK : Type ;   -- Noun from DictFin (Kotus)
   AK : Type ;   -- Adjective from DictFin (Kotus)
@@ -279,7 +279,7 @@ mkVS = overload {
     mkV2V : V -> Prep -> V2V  -- e.g. "käskeä" genitive
      = \v,p -> mkV2Vf v p infIllat ;
     mkV2Vf  : V -> Prep -> InfForm -> V2V -- e.g. "kieltää" partitive infElatv 
-     = \v,p,f -> mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
+     = \v,p,f -> mk2V2 v p ** {vi = infform2vvtype f ; lock_V2V = <>} ;
     } ;
 
   mkV0  : V -> V0 ; --%
@@ -367,21 +367,28 @@ mkVS = overload {
   infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ; infIness = Inf3Iness ; infPresPart = InfPresPart ; infPresPartAgr = InfPresPartAgr ;
 
   prePrep  : Case -> Str -> Prep = 
-    \c,p -> lin Prep {c = NPCase c ; s = \\_ => p ; isPre = True ; h = Back} ; --- no possessive suffix
+    \c,p -> lin Prep {c = NPCase c ; s = <p, [],\\_ => []>} ; -- no possessive suffix
 
   postPrep : Case -> Str -> Prep =
-    \c,p -> let h = guessHarmony p in case p of {
-       mukaa + "n" => lin Prep {c = NPCase c ; s = table {False => p ; True => mukaa} ; isPre = False ; h = h} ;
-       _           => lin Prep {c = NPCase c ; s : Bool => Str = \\_ => p ; isPre = False ; h = h}
-      } ;
+    \c,p -> 
+       let 
+         h = guessHarmony p ;
+         a2p : Agr => Str = case c of {
+           Gen => \\a => p ++ Predef.BIND ++ possSuffixGen h a ;
+           _ => \\a => p 
+           } ;
+       in case p of {
+         mukaa + "n" => lin Prep {c = NPCase c ; s = <[],p, a2p>} ;
+         _           => lin Prep {c = NPCase c ; s = <[],p, a2p>}
+         } ;
 
   postGenPrep = postPrep genitive ;
 
   casePrep : Case -> Prep =
-    \c -> lin Prep {c = NPCase c ; s : Bool => Str = \\_ => [] ; isPre = True ; h = Back} ;
+    \c -> lin Prep {c = NPCase c ; s = <[],[],\\_ => []>} ;
 
-  accPrep =  
-    lin Prep {c = NPAcc ; s : Bool => Str = \\_ => [] ; isPre = True ; h = Back} ;
+  accPrep : Prep =  
+    lin Prep {c = NPAcc ; s = <[],[],\\_ => []>} ;
 
   NK = {s : NForms ; lock_NK : {}} ;
   AK = {s : NForms ; lock_AK : {}} ;
@@ -574,8 +581,11 @@ mkVS = overload {
     } ;
   
   mkIsPre : Prep -> Bool = \p -> case p.c of {
-    NPCase Gen => notB p.isPre ;  -- Jussin veli (prep is <Gen,"",True>, isPre becomes False)
-    _ => True                     -- syyte Jussia vastaan, puhe Jussin puolesta
+    NPCase Gen => case p.s.p2 of {
+      "" => False ;      -- Jussin veli 
+      _  => True         -- puhe Jussin puolesta
+      } ;
+    _ => True            -- syyte Jussia vastaan ; puhe Jussille
     } ;
 
   mkPN = overload {
@@ -631,22 +641,22 @@ mkVS = overload {
     mkV : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
-    mkV : (sana : VK) -> V = \w -> vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+    mkV : (sana : VK) -> V = \w -> vforms2sverb w.s ** {sc = SCNom ; lock_V = <> ; p = []} ;
     mkV : V -> Str -> V = \w,p -> {s = w.s ; sc = w.sc ; lock_V = <> ; h = w.h ; p = p} ;
     mkV : Str -> V -> V = \s,v -> {s = \\f => s + v.s ! f ; sc = v.sc ; lock_V = <> ; h = v.h ; p = v.p} ;
   } ;
 
   mk1V : Str -> V = \s -> 
     let vfs = vforms2sverb (vForms1 s) in 
-      vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+      vfs ** {sc = SCNom ; lock_V = <> ; p = []} ;
   mk2V : (_,_ : Str) -> V = \x,y -> 
-    let vfs = vforms2sverb (vForms2 x y) in vfs ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+    let vfs = vforms2sverb (vForms2 x y) in vfs ** {sc = SCNom ; lock_V = <> ; p = []} ;
   mk3V : (huutaa,huudan,huusi : Str) -> V = \x,_,y -> mk2V x y ; ----
   mk12V : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = 
      \a,b,c,d,e,f,g,h,i,j,k,l -> 
-        vforms2sverb (vForms12 a b c d e f g h i j k l) ** {sc = NPCase Nom ; lock_V = <> ; p = []} ;
+        vforms2sverb (vForms12 a b c d e f g h i j k l) ** {sc = SCNom ; lock_V = <> ; p = []} ;
 
   vForms1 : Str -> VForms = \ottaa ->
     let
@@ -709,11 +719,11 @@ mkVS = overload {
 
 
 
-  caseV c v = {s = v.s ; sc = NPCase c ; h = v.h ; lock_V = <> ; p = v.p} ;
+  caseV c v = {s = v.s ; sc = npform2subjcase (NPCase c) ; h = v.h ; lock_V = <> ; p = v.p} ;
 
   vOlla = {
     s = ollaSVerbForms ;
-    sc = NPCase Nom ; h = Back ; lock_V = <> ; p = []} ; ---- lieneekö
+    sc = SCNom ; h = Back ; lock_V = <> ; p = []} ; ---- lieneekö
 
   mk2V2 : V -> Prep -> V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 
@@ -730,7 +740,7 @@ mkVS = overload {
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : V -> Case -> V2 = caseV2 ;
     mkV2 : V -> Prep -> V2 = mk2V2 ;
-    mkV2 : VK -> V2 = \w -> dirV2 (vforms2sverb w.s ** {sc = NPCase Nom ; lock_V = <> ; p = []}) ;
+    mkV2 : VK -> V2 = \w -> dirV2 (vforms2sverb w.s ** {sc = SCNom ; lock_V = <> ; p = []}) ;
     } ;
 
   mk2V2 : V -> Prep -> V2 ;
@@ -741,7 +751,7 @@ mkVS = overload {
   dirdirV3 v = dirV3 v allative ;
 
 
-  mkVVf  v f = v ** {vi = f ; lock_VV = <>} ;
+  mkVVf  v f = v ** {vi = infform2vvtype f ; lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
   V0 : Type = V ;
@@ -754,7 +764,7 @@ mkVS = overload {
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
   mkV2Vbare : V -> V2V = \v -> mkV2Vf v (casePrep partitive) infIllat ; ----
 --  mkV2V v p = mkV2Vf v p infIllat ;
-  mkV2Vf v p f = mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
+  mkV2Vf v p f = mk2V2 v p ** {vi = infform2vvtype f ; lock_V2V = <>} ;
 
   mkVAbare : V -> VA = \v -> mkVA v (casePrep partitive) ; ----
   mkVA  v p = v ** {c2 = p ; lock_VA = <>} ;

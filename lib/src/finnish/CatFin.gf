@@ -85,8 +85,8 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
     V, VS, VQ = SVerb1 ; 
     V2, VA, V2Q, V2S = SVerb1 ** {c2 : Compl} ;
     V2A = SVerb1 ** {c2, c3 : Compl} ;
-    VV = SVerb1 ** {vi : InfForm} ; ---- infinitive form
-    V2V = SVerb1 ** {c2 : Compl ; vi : InfForm} ; ---- infinitive form
+    VV = SVerb1 ** {vi : VVType} ; ---- infinitive form
+    V2V = SVerb1 ** {c2 : Compl ; vi : VVType} ; ---- infinitive form
     V3 = SVerb1 ** {c2, c3 : Compl} ;
 
     A  = {s : Degree => SAForm => Str ; h : Harmony} ;
@@ -98,22 +98,22 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
     PN = SPN ;
 
   linref
-    SSlash = \ss -> ss.s ++ ss.c2.s ! False  ;
-    ClSlash = \cls -> cls.s ! Pres ! Simul ! Pos ++ cls.c2.s ! False ;
-    NP = \np -> np.s ! NPSep ;
+    SSlash = \ss -> ss.s ++ ss.c2.s.p1  ;
+    ClSlash = \cls -> cls.s ! Pres ! Simul ! Pos ++ cls.c2.s.p1 ;
+    NP = \np -> np.s ! NPAcc ; ----NPSep ;
 
     VP = vpRef ;
-    VPSlash = \vps -> vpRef vps ++ vps.c2.s ! False ;
+    VPSlash = \vps -> vpRef vps ++ vps.c2.s.p1 ;
 
     V, VS, VQ, VA = \v -> vpRef (predV v) ;
-    V2, V2A, V2Q, V2S = \v -> vpRef (predV v) ++ v.c2.s ! False ;
-    V3 = \v -> vpRef (predV v) ++ v.c2.s ! False ++ v.c3.s ! False ;
+    V2, V2A, V2Q, V2S = \v -> vpRef (predV v) ++ v.c2.s.p1 ;
+    V3 = \v -> vpRef (predV v) ++ v.c2.s.p1 ++ v.c3.s.p1 ;
     VV = \v -> vpRef (predV v) ;
-    V2V = \v -> vpRef (predV v) ++ v.c2.s ! False ;
+    V2V = \v -> vpRef (predV v) ++ v.c2.s.p1 ;
 
     Conj = \c -> c.s1 ++ c.s2 ;
 
   oper
-   vpRef : StemFin.VP -> Str = \vp -> infVP (NPCase Nom) Pos (agrP3 Sg) vp Inf1 ;
+   vpRef : StemFin.VP -> Str = \vp -> infVP SCNom Pos (agrP3 Sg) vp Inf1 ;
 
 }
