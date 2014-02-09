@@ -35,8 +35,8 @@ lincat
     s1 : Str ;
     } ;
 
-  PrAdv   = {s : Str ; isAdV : Bool ; c1 : ComplCase} ;
-  PrS     = {s : Str} ;
+  PrAdv = PrAdverb ;
+  PrS   = {s : Str} ;
 
   PrAP = {
     s : AAgr => Str ; 
@@ -53,20 +53,10 @@ lincat
 -- reference linearizations for chunking
 
 linref
-  PrVP  = \vp  -> 
-    let 
-      agr  = defaultAgr ;
-      vagr = agr2vagr agr ;
-      verb = vp.v ! vagr ;
-    in
-    verb.p1 ++ verb.p2 ++ vp.adV ++ verb.p3 ++ vp.part ++ 
-    vp.adj ! agr ++ vp.obj1.p1 ! agr ++ vp.obj2.p1 ! agr ++ vp.adv ++ vp.ext ;
- 
-  PrCl  = \cl  -> declCl cl ;
-  PrQCl = \qcl -> questCl qcl ;
-  PrAdv = \adv -> strComplCase adv.c1 ++ adv.s ;
-  PrAP  = \ap  -> ap.s ! defaultAgr ++ ap.obj1 ! defaultAgr ;  
-  PrCN  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
+  PrVP  = linrefPrVP ;
+  PrCl  = linrefPrCl ;
+  PrQCl = linrefPrQCl ;
+  PrAdv = linrefPrAdv ;
   
 ----------------------------
 --- linearization rules ----

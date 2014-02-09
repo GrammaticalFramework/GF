@@ -186,6 +186,24 @@ oper
     focType : FocusType ;         --- if already filled, then use other place: who loves *who*
     } ; 
 
+  PrAdverb = {s : Str ; isAdV : Bool ; c1 : ComplCase} ;
+
+  linrefPrVP : PrVerbPhrase -> Str = \vp  -> 
+    let 
+      agr  = defaultAgr ;
+      vagr = agr2vagr agr ;
+      verb = vp.v ! vagr ;
+    in
+    verb.p1 ++ verb.p2 ++ vp.adV ++ verb.p3 ++ vp.part ++ 
+    vp.adj ! agr ++ vp.obj1.p1 ! agr ++ vp.obj2.p1 ! agr ++ vp.adv ++ vp.ext ;
+ 
+  linrefPrCl : PrClause -> Str = \cl  -> declCl cl ;
+  linrefPrQCl : PrQuestionClause -> Str = \qcl -> questCl qcl ;
+  linrefPrAdv : PrAdverb -> Str = \adv -> strComplCase adv.c1 ++ adv.s ;
+----  linrefPrAP  = \ap  -> ap.s ! defaultAgr ++ ap.obj1 ! defaultAgr ;  
+----  linrefPrCN  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
+
+
 ---------------------------
 ---- concrete syntax opers
 ---------------------------
