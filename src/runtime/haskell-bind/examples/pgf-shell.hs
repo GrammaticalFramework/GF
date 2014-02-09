@@ -13,9 +13,9 @@ import qualified Data.Map as M
 import System.IO(hFlush,stdout)
 import System.IO.Error(catchIOError)
 import System.Environment
-import CRuntimeFFI
-import CId
+import PGF2
 import System.Mem(performGC)
+import qualified Data.Map as Map
 
 main = getPGF =<< getArgs
 
@@ -42,13 +42,13 @@ execute pgf cmd =
 
 getConcr' pgf lang =
     maybe (fail $ "Concrete syntax not found: "++show lang) return $
-    getConcr pgf lang
+    Map.lookup lang (languages pgf)
 
 printl xs = putl $ map show xs
 putl = putStr . unlines
 
 -- | Abstracy syntax of shell commands
-data Command = P CId String | L CId Tree | T CId CId String deriving Show
+data Command = P String String | L String Expr | T String String String deriving Show
 
 -- | Shell command parser
 instance Read Command where
