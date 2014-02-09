@@ -21,6 +21,8 @@ oper
   active = CommonScand.Act ;
   passive = CommonScand.Pass ;
 
+  defaultVType = VAct ;
+
   subjCase : NPCase = NPNom ;
   objCase  : NPCase = NPAcc ;
 

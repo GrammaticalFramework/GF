@@ -23,6 +23,8 @@ oper
   active : SVoice = Act ;
   passive : SVoice = Pass ;
 
+  defaultVType : VType = VTAct ;
+
   subjCase : NPCase = NCase Nom ;
   objCase  : NPCase = NPAcc ;
 

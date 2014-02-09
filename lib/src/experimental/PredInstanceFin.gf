@@ -1,5 +1,9 @@
-instance PredInstanceFin of PredInterface - [NounPhrase,PrVerb] = 
-  open ResFin, (P = ParadigmsFin), (S = StemFin), (X = ParamX), Prelude in {
+instance PredInstanceFin of 
+  PredInterface - [
+    NounPhrase,
+    PrVerb, initPrVerb
+  ] = 
+      open ResFin, (P = ParadigmsFin), (S = StemFin), (X = ParamX), Prelude in {
 
 -- overrides
 
@@ -22,7 +26,7 @@ oper
   Case   = ResFin.Case ;
   NPCase = ResFin.NPForm ;
   VForm  = S.SVForm ;
-  VVType = ResFin.InfForm ;
+  VVType = Unit ; ----ResFin.InfForm ;
   VType  = Unit ; ----
   Gender = Unit ; ----
 
@@ -33,6 +37,8 @@ oper
 oper
   active = Act ;
   passive = Pass ;
+
+  defaultVType = UUnit ;
 
   subjCase : NPCase = ResFin.NPCase Nom ;
   objCase  : NPCase = NPAcc ;
@@ -69,7 +75,7 @@ oper
   vPastPart : PrVerb -> AAgr -> Str = \v,a -> (S.sverb2verbSep v).s ! PastPartPass (AN (NCase Sg Part)) ; ---- case
   vPresPart : PrVerb -> AAgr -> Str = \v,a -> (S.sverb2verbSep v).s ! PresPartAct (AN (NCase Sg Part)) ; ---- case
 
-  vvInfinitive : VVType = Inf1 ;
+  vvInfinitive : VVType = UUnit ; ----  vvInfinitive : VVType = Inf1 ;
 
   isRefl : PrVerb -> Bool = \_ -> False ; ----
 
@@ -117,7 +123,7 @@ oper
 
   tenseInfV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str = 
       \sa,a,pol,o,v,vt ->
-   let 
+   let vt = Inf1 ; ----
      ovps = (S.vp2old_vp (S.predV v)).s ! VIInf vt ! a ! pol ! defaultAgr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
    in
    sa ++ ovps.fin ++ ovps.inf ;
@@ -139,8 +145,15 @@ oper
 
   not_Str : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "inte"} ;
 
-  liftV : S.SVerb1 -> PrVerb = \v -> 
-    v ** {c1,c2 = noComplCase ; isSubjectControl = False ; vtype = UUnit ; vvtype = vvInfinitive} ; 
+  liftV : S.SVerb1 -> PrVerb = \v -> initPrVerb ** v ;
+
+  initPrVerb : PrVerb = {
+    s = \\_ => [] ;
+    sc = subjCase ;
+    h = Back ;
+    p = [] ; 
+    c1,c2 = noComplCase ; isSubjectControl = True ; vtype = defaultVType ; vvtype = vvInfinitive
+    } ; 
 
 --- junk
 

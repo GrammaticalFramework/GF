@@ -25,12 +25,14 @@ lincat
     v   : VAgr => Str ;
     inf : Agr => Str ; 
     c1  : ComplCase ; 
-    c2  : ComplCase
+    c2  : ComplCase ;
+    s1  : Str ; -- storing both in both-and
     } ;
 
   ClC = {
     s  : Str ;
     c3 : ComplCase ;
+    s1 : Str ;
     } ;
 
   PrAdv   = {s : Str ; isAdV : Bool ; c1 : ComplCase} ;
@@ -88,51 +90,20 @@ lin
   aNone, aS, aV, aA, aQ, aN = {s = []} ;
   aNP a = a ;
 
-  UseV x a t p v = {
-    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
-    inf = \\vt => tenseInfV a.s a.a p.p active v vt ;
-    c1  = v.c1 ;
-    c2  = v.c2 ;
-    part = v.p ;
-    adj = noObj ;
-    obj1 = <case isRefl v of {True => \\a => reflPron a ; _ => \\_ => []}, defaultAgr> ; ---- not used, just default value
-    obj2 = <noObj, v.isSubjectControl> ;
-    vvtype = v.vvtype ;
-    adV = negAdV p ; --- just p.s in Eng
-    adv = [] ;
-    ext = [] ;
-    qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v ;
-    } ;
+  UseV x a t p v = initPrVerbPhraseV a t p v ;
 
-  PassUseV x a t p v = {
+  PassUseV x a t p v = initPrVerbPhraseV a t p v ** {
     v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p passive agr v ;
     inf = \\vt => tenseInfV a.s a.a p.p passive v vt ;
-    c1  = v.c1 ;
-    c2  = v.c2 ;
-    part = v.p ;
-    adj = noObj ;
-    obj1 = <noObj, defaultAgr> ; ---- not used, just default value
     obj2 = <noObj, True> ; -- becomes subject control even if object control otherwise "*she was promised by us to love ourselves"
-    vvtype = v.vvtype ;
-    adV = negAdV p ;
-    adv = [] ;
-    ext = [] ;
     qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
-  AgentPassUseV x a t p v np = {
+  AgentPassUseV x a t p v np = initPrVerbPhraseV a t p v ** {
     v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p passive agr v ;
     inf = \\vt => tenseInfV a.s a.a p.p passive v vt ;
-    c1  = v.c1 ;
-    c2  = v.c2 ;
-    part = v.p ;
-    adj = \\a => [] ;
-    obj1 = <noObj, defaultAgr> ; 
-    obj2 = <noObj, True> ;
-    vvtype = v.vvtype ;
-    adV = negAdV p ;
+    obj2 = <noObj, True> ; -- becomes subject control even if object control otherwise "*she was promised by us to love ourselves"
     adv = appComplCase agentCase np ;
-    ext = [] ;
     qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
@@ -312,6 +283,7 @@ lin
             infVP v.vvtype a v ++ c.s2 ++ infVP w.vvtype a w ;
     c1 = noComplCase ; ---- w.c1 ? --- the full story is to unify v and w...
     c2 = noComplCase ; ---- w.c2 ? 
+    s1 = c.s1 ;
     } ;
 
   ContVPC x v w = {  ---- some loss of quality seems inevitable
@@ -329,45 +301,32 @@ lin
             infVP v.vvtype a v ++ "," ++ w.inf ! a ;
     c1 = noComplCase ; ---- w.c1 ? --- the full story is to unify v and w...
     c2 = noComplCase ; ---- w.c2 ? 
+    s1 = w.s1 ;
     } ;
 
-  UseVPC x vpc = { ---- big loss of quality (overgeneration) seems inevitable
-    v   = \\a => <[], [], vpc.v ! a> ;
+  UseVPC x vpc = initPrVerbPhrase ** { ---- big loss of quality (overgeneration) seems inevitable
+    v   = \\a => <[], [], vpc.s1 ++ vpc.v ! a> ;
     inf = \\_ => vpc.inf ! defaultAgr ; ---- agreement
     c1  = vpc.c1 ;
     c2  = vpc.c2 ;
-    part = [] ;
-    adj = \\a => [] ;
-    obj1 = <noObj, defaultAgr> ;
-    obj2 = <noObj,True> ;
-    vvtype = vvInfinitive ; ----
-    adv,adV = [] ;
-    ext = [] ;
     qforms = \\a => <"do", vpc.inf ! defaultAgr> ; ---- do/does/did
     } ;
 
   StartClC x c a b = {
     s  = declCl a ++ c.s2 ++ declCl b ;
     c3 = b.c3 ; ---- 
+    s1 = c.s1 ;
     } ;
 
   ContClC x a b = {
     s  = declCl a ++ "," ++ b.s ;
     c3 = b.c3 ; ---- 
+    s1 = b.s1 ;
     } ;
 
-  UseClC x cl = {
-    subj = [] ;
-    v    = <[],[],cl.s> ; ----
-    inf  = [] ;
-    adj  = [] ;
-    obj1 = [] ;
-    obj2 = [] ;
-    adV  = [] ;
-    adv  = [] ;
-    ext  = [] ;
+  UseClC x cl = initPrClause ** {
+    v    = <[],[], cl.s1 ++ cl.s> ; ----
     c3   = cl.c3 ;
-    qforms = <[],[]> ; ---- qforms
     } ;
 
   ComplAdv x p np = {s = appComplCase p.c1 np ; isAdV = p.isAdV ; c1 = noComplCase} ;
