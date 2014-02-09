@@ -28,9 +28,34 @@ resource ResFin = ParamX ** open Prelude in {
           | NPossTransl Number | NPossIllat Number 
           | NCompound ;  -- special compound form, e.g. "nais"
 
+--- These cases are possible for subjects.
+
+    SubjCase = SCNom | SCGen | SCPart | SCElat | SCAdess | SCAblat ; 
+
+oper
+  appSubjCase : SubjCase -> ResFin.NP -> Str = \sc,np -> np.s ! subjcase2npform sc ;
+
+  subjcase2npform : SubjCase -> NPForm = \sc -> case sc of {
+    SCNom  => NPCase Nom ;
+    SCGen  => NPCase Gen ;
+    SCPart => NPCase Part ;
+    SCElat => NPCase Elat ;
+    SCAdess => NPCase Adess ;
+    SCAblat => NPCase Ablat
+    } ;
+
+  npform2subjcase : NPForm -> SubjCase = \sc -> case sc of {
+    NPCase Gen => SCGen ;
+    NPCase Part => SCPart ;
+    NPCase Elat => SCElat ;
+    NPCase Adess => SCAdess ;
+    NPCase Ablat => SCAblat ;
+    _ => SCNom
+    } ;
+
 -- Agreement of $NP$ has number*person and the polite second ("te olette valmis").
 
-
+param
     Agr = Ag Number Person | AgPol ;
     
     
@@ -72,7 +97,7 @@ oper
 -- have a uniform, special accusative form ("minut", etc).
 
 param 
-  NPForm = NPCase Case | NPAcc | NPSep ;  -- NPSep is NP used alone, e.g. in an Utt. Equals NPCase Nom except for pro-drop
+  NPForm = NPCase Case | NPAcc ; -- | NPSep ;  -- NPSep is NP used alone, e.g. in an Utt. Equals NPCase Nom except for pro-drop
 
 oper
   npform2case : Number -> NPForm -> Case = \n,f ->
@@ -81,8 +106,8 @@ oper
     case <<f,n> : NPForm * Number> of {
       <NPCase c,_> => c ;
       <NPAcc,Sg>   => Gen ;-- appCompl does the job
-      <NPAcc,Pl>   => Nom ;
-      <NPSep,_>    => Nom
+      <NPAcc,Pl>   => Nom 
+----      <NPSep,_>    => Nom
     } ;
 
   n2nform : NForm -> NForm = \nf -> case nf of {
@@ -142,6 +167,25 @@ param
    | InfPresPartAgr -- puhuva(mme)
    ;
 
+-- These forms appear in complements to VV and V2V.
+
+  VVType = VVInf | VVIness | VVIllat | VVPresPart ;
+
+oper
+  vvtype2infform : VVType -> InfForm = \vt -> case vt of {
+    VVInf => Inf1 ;
+    VVIness => Inf3Iness ;
+    VVIllat => Inf3Illat ;
+    VVPresPart => InfPresPart
+    } ;
+  infform2vvtype : InfForm -> VVType = \vt -> case vt of {
+    Inf3Iness => VVIness ;
+    Inf3Illat => VVIllat ;
+    InfPresPart => VVPresPart ;
+    _ => VVInf
+    } ;
+
+param
   SType = SDecl | SQuest ;
 
 --2 For $Relative$
@@ -168,13 +212,11 @@ param
 ---
 
   Compl : Type = {
-    s : Bool => Str ; -- perää(n) 
-    c : NPForm ;      -- NP Gen
-    isPre : Bool ;    -- False           postposition
-    h : Harmony       -- hänen peräänsä
+    s : Str * Str * (Agr => Str) ;
+    c : NPForm ; 
     } ;
 
-  appCompl : Bool -> Polarity -> Compl -> NP -> Str = \isFin,b,co,np ->
+  appCompl : Bool -> Polarity -> Compl -> ResFin.NP -> Str = \isFin,b,co,np ->
     let
       c = case co.c of {
         NPAcc => case b of {
@@ -190,18 +232,16 @@ param
         _        => co.c
         } ;
       nps = np.s ! c ;
-      cos = case c of {
+      cos1 = co.s.p1 ;
+      cos2 = case c of {
            NPCase Gen => case np.isPron of {
-               True  => co.s ! True ++ BIND ++ case co.h of {
-                  Back  => possSuffix np.a ; 
-                  Front => possSuffixFront np.a
-                  } ; 
-               False => co.s ! False
+               True  => co.s.p3 ! np.a ;
+               False => co.s.p2
               } ;
-           _ => co.s ! False
+           _ => co.s.p2
            } ;
     in
-    preOrPost co.isPre cos nps ;
+    cos1 ++ nps ++ cos2 ;
 
 -- For $Verb$.
 
@@ -268,8 +308,8 @@ oper
 
 -- This is used for subjects of passives: therefore isFin in False.
 
-  subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
-    appCompl False b {s = \\_ => [] ; c = sc ; isPre = True ; h = Back} np ;
+  subjForm : NP -> SubjCase -> Polarity -> Str = \np,sc,b -> 
+    appCompl False b {s = <[],[],\\_ => []> ; c = subjcase2npform sc} np ;
 
   questPart : Harmony -> Str = \b -> case b of {Back => "ko" ; _ => "kö"} ;
 
@@ -519,7 +559,7 @@ oper
       nsa  = possSuffixFront agr
     in {
       s = table {
-        NPCase Nom | NPSep => itse ! NPossNom Sg ;
+        NPCase Nom         => itse ! NPossNom Sg ;
         NPCase Gen | NPAcc => itse ! NPossNom Sg + nsa ;
         NPCase Transl      => itse ! NPossTransl Sg + nsa ;
         NPCase Illat       => itse ! NPossIllat Sg + nsa ;

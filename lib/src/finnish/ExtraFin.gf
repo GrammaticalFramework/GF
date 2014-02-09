@@ -30,27 +30,27 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       } ;
 
   lincat
-    VPI   = {s : InfForm => Str} ;
-    [VPI] = {s1,s2 : InfForm => Str} ;
+    VPI   = {s : VVType => Str} ;
+    [VPI] = {s1,s2 : VVType => Str} ;
   lin
-    BaseVPI = twoTable InfForm ;
-    ConsVPI = consrTable InfForm comma ;
+    BaseVPI = twoTable VVType ;
+    ConsVPI = consrTable VVType comma ;
 
-    MkVPI vp = {s = \\i => infVP (NPCase Nom) Pos (agrP3 Sg) vp i} ;
-    ConjVPI = conjunctDistrTable InfForm ;
+    MkVPI vp = {s = \\i => infVP SCNom Pos (agrP3 Sg) vp (vvtype2infform i)} ;
+    ConjVPI = conjunctDistrTable VVType ;
     ComplVPIVV vv vpi = 
       insertObj (\\_,_,_ => vpi.s ! vv.vi) (predSV vv) ;
 
   lincat
     VPS = {
       s   : Agr  => Str ; 
-      sc  : NPForm ;  --- can be different for diff parts
+      sc  : SubjCase ;  --- can be different for diff parts
       h   : Harmony   --- can be different for diff parts
       } ;
 
     [VPS] = {
       s1,s2 : Agr  => Str ; 
-      sc    : NPForm ;   --- take the first: minä osaan kutoa ja täytyy virkata
+      sc    : SubjCase ;   --- take the first: minä osaan kutoa ja täytyy virkata
       h     : Harmony    --- take the first: osaanko minä kutoa ja käyn koulua
       } ;
 
@@ -112,7 +112,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     IAdvPredNP iadv v np =
       let cl = mkClause (\_ -> iadv.s) np.a (insertObj 
-                 (\\_,b,_ => np.s ! v.sc) (predSV v)) ;
+                 (\\_,b,_ => np.s ! subjcase2npform v.sc) (predSV v)) ;
       in  {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
       } ;
@@ -255,7 +255,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 -- advantage though: works for all V2 verbs, need not be transitive
 
   PassAgentVPSlash vp np = {
-      s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = vp.c2.c} ; 
+      s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = npform2subjcase vp.c2.c} ; 
       s2 = \\b,p,a => np.s ! NPCase Nom ++ vp.s2 ! b ! p ! a ;
       adv = vp.adv ;
       ext = vp.ext ;

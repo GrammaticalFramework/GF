@@ -19,10 +19,10 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 
     ComplVV v vp = 
       insertObj 
-        (\\_,b,a => infVP v.sc b a vp v.vi) 
+        (\\_,b,a => infVP v.sc b a vp (vvtype2infform v.vi)) 
         (predSV {s = v.s ; 
                 sc = case vp.s.sc of {
-                  NPCase Nom => v.sc ;   -- minun täytyy pestä auto
+                  SCNom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
                 h = v.h ; p = v.p
@@ -43,7 +43,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
     SlashV2Q v q = 
       insertExtrapos ("," ++ q.s) (predSV v) ** {c2 = v.c2} ;
     SlashV2V v vp = 
-      insertObj (\\_,b,a => infVP v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
+      insertObj (\\_,b,a => infVP v.sc b a vp (vvtype2infform v.vi)) (predSV v) ** {c2 = v.c2} ;
     SlashV2A v ap = 
       insertObj 
         (\\fin,b,_ => 
@@ -59,7 +59,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 
     SlashVV v vp = {
       s  = v ; 
-      s2 = \\_,b,a => infVP v.sc b a vp v.vi ;
+      s2 = \\_,b,a => infVP v.sc b a vp (vvtype2infform v.vi) ;
       adv = \\_ => v.p ;
       vptyp = vp.vptyp ;
       ext = [] ;
