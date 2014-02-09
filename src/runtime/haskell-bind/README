@@ -1,32 +1,26 @@
-This is a work in progress, but usable as it is now.
-Some memory leaks and segfaults to be expected. 
+This is a binding to the new GF runtime in C.
 
+The files are:
 
-The files are 
-
-CRuntimeFFI.hsc  -- user-friendly functions, almost the same as in the real Haskell PGF library.
-Gu.hsc           -- mindlessly copypasted functions from various files in gu/
-PgfLow.hs        -- mindlessly copypasted functions from various files in pgf/
-
-The first two files (.hsc) use some special constructions for accessing C objects from Haskell.
-See the syntax here: http://www.haskell.org/ghc/docs/7.2.1/html/users_guide/hsc2hs.html
+PGF2.hsc         -- a user API similar to Python and Java APIs
+PGF2/FFI.hs      -- an internal module with FFI definitions for 
+                 -- the relevant C functions
 
 HOW TO COMPILE:
 
-hsc2hs Gu.hsc CRuntimeFFI.hsc -v --cflag="-std=c99" && ghc -lpgf -lgu --make CRuntimeFFI 
+cabal install
 
 HOW TO USE:
 
-- Symlink or copy the files in this directory to the directory you're working with; these files are not included in any makefiles
-- Import CRuntimeFFI to a Haskell program you're writing
+- Import PGF to the Haskell program that you're writing. 
+  The Cabal infrastructure will make sure to tell the compiler
+  where to find the relevant modules. Example:
 
   module Main where
-  import CRuntimeFFI
 
-- Use the functions in your program
+  import PGF2
+  import qualified Data.Map as Map
 
   main = do
     pgf <- readPGF "Foo.pgf"
-    let english = getConcr pgf (mkCId ("FooEng"))
-
-I haven't managed to make it work in ghci, get errors about unknown symbols (low level C functions).
+    let Just english = Map.lookup "FooEng" (languages pgf)
