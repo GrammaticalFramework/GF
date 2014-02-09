@@ -43,20 +43,12 @@ lincat
 linref
   PrVP_none, PrVP_np, PrVP_v, PrVP_s, PrVP_q, PrVP_a, PrVP_n,
              PrVP_np_np, PrVP_np_v, PrVP_np_s, PrVP_np_q, PrVP_np_a, PrVP_np_n
-    = \vp  -> 
-    let 
-      agr  = defaultAgr ;
-      vagr = agr2vagr agr ;
-      verb = vp.v ! vagr ;
-    in
-    verb.p1 ++ verb.p2 ++ vp.adV ++ verb.p3 ++ vp.part ++ 
-    vp.adj ! agr ++ vp.obj1.p1 ! agr ++ vp.obj2.p1 ! agr ++ vp.adv ++ vp.ext ;
- 
-  PrCl_none, PrCl_np  = \cl  -> declCl cl ;
-  PrQCl_none, PrQCl_np = \qcl -> questCl qcl ;
-  PrAdv_none, PrAdv_np = \adv -> strComplCase adv.c1 ++ adv.s ;
-  PrAP_none, PrAP_np  = \ap  -> ap.s ! defaultAgr ++ ap.obj1 ! defaultAgr ;  
-  PrCN_none, PrCN_np  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
+    = linrefPrVP ;
+  PrCl_none, PrCl_np  = linrefPrCl ;
+  PrQCl_none, PrQCl_np = linrefPrQCl ;
+  PrAdv_none, PrAdv_np = linrefPrAdv ;
+----  PrAP_none, PrAP_np  = \ap  -> ap.s ! defaultAgr ++ ap.obj1 ! defaultAgr ;  
+----  PrCN_none, PrCN_np  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
   
 ----------------------------
 --- linearization rules ----
