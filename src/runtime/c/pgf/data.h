@@ -159,7 +159,7 @@ typedef struct PgfItem PgfItem;
 typedef GuMap PgfCallbacksMap;
 extern GU_DECLARE_TYPE(PgfCallbacksMap, GuMap);
 
-typedef struct GuVariant PgfSymbol;
+typedef GuVariant PgfSymbol;
 
 typedef enum {
 	PGF_SYMBOL_CAT,

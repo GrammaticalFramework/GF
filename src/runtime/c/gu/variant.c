@@ -33,11 +33,11 @@ gu_alloc_variant(uint8_t tag, size_t size,
 		uint8_t* alloc = gu_malloc_aligned(pool, align + size, align);
 		alloc[align - 1] = tag;
 		void* p = &alloc[align];
-		variant_out->p = (uintptr_t)p;
+		*variant_out = (uintptr_t)p;
 		return p;
 	}
 	void* p = gu_malloc_aligned(pool, size, align);
-	variant_out->p = ((uintptr_t)p) | (tag + 1);
+	*variant_out = ((uintptr_t)p) | (tag + 1);
 	return p;
 }
 
@@ -57,9 +57,9 @@ gu_variant_tag(GuVariant variant)
 	if (gu_variant_is_null(variant)) {
 		return GU_VARIANT_NULL;
 	}
-	int u = variant.p % GU_VARIANT_ALIGNMENT;
+	int u = variant % GU_VARIANT_ALIGNMENT;
 	if (u == 0) {
-		uint8_t* mem = (uint8_t*)variant.p;
+		uint8_t* mem = (uint8_t*)variant;
 		return mem[-1];
 	}
 	return u - 1;
@@ -71,7 +71,7 @@ gu_variant_data(GuVariant variant)
 	if (gu_variant_is_null(variant)) {
 		return NULL;
 	}
-	return (void*)gu_align_backward(variant.p, GU_VARIANT_ALIGNMENT);
+	return (void*)gu_align_backward(variant, GU_VARIANT_ALIGNMENT);
 }
 
 GuVariantInfo gu_variant_open(GuVariant variant)
@@ -88,10 +88,10 @@ GuVariant gu_variant_close(GuVariantInfo info)
 	GuVariant variant;
 
 	if (((size_t)info.tag) > GU_VARIANT_ALIGNMENT - 2) {
-		variant.p = (uintptr_t)info.data;
+		variant = (uintptr_t)info.data;
 		assert(gu_variant_tag(variant) == info.tag);
 	} else {
-		variant.p = ((uintptr_t)info.data) | (info.tag + 1);
+		variant = ((uintptr_t)info.data) | (info.tag + 1);
 	}
 
 	return variant;
@@ -100,12 +100,12 @@ GuVariant gu_variant_close(GuVariantInfo info)
 int 
 gu_variant_intval(GuVariant variant)
 {
-	int u = variant.p % GU_VARIANT_ALIGNMENT;
+	int u = variant % GU_VARIANT_ALIGNMENT;
 	if (u == 0) {
-		int* mem = (int*)variant.p;
+		int* mem = (int*)variant;
 		return *mem;
 	}
-	return (variant.p / GU_VARIANT_ALIGNMENT);
+	return (variant / GU_VARIANT_ALIGNMENT);
 }
 
 const GuVariant gu_null_variant = { (GuWord) NULL };
