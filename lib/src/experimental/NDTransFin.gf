@@ -1,4 +1,4 @@
---# -path=.:../finnish/stemmed:../finnish:../translator:alltenses
+--# -path=.:../finnish/stemmed:../finnish:../api:../translator:alltenses
 
 concrete NDTransFin of NDTrans =
    NDLiftFin

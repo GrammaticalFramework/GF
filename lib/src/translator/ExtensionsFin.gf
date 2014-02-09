@@ -1,7 +1,7 @@
 --# -path=.:../abstract
 
 concrete ExtensionsFin of Extensions = 
-  CatFin ** open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, (G = GrammarFin), (E = ExtraFin), Prelude in {
+  CatFin ** open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, (G = GrammarFin), (E = ExtraFin), StemFin, Prelude in {
 
 flags coding = utf8 ;
 
@@ -32,15 +32,15 @@ lin
   PassVPSlash = E.PassVPSlash ;
   PassAgentVPSlash = E.PassAgentVPSlash ;
 
-  EmptyRelSlash = E.EmptyRelSlash ;
+----  EmptyRelSlash = E.EmptyRelSlash ;
 
 lin
     ComplVV v ant pol vp = 
       insertObj 
-        (\\_,b,a => infVPGen pol.p v.sc b a vp v.vi) 
+        (\\_,b,a => infVPGen pol.p v.sc b a vp (vvtype2infform v.vi)) 
         (predSV {s = v.s ; 
                 sc = case vp.s.sc of {
-                  NPCase Nom => v.sc ;   -- minun täytyy pestä auto
+                  NCNom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
                   } ;
                 h = v.h ; p = v.p
@@ -82,7 +82,7 @@ lin
       } ;
 
   SlashV2V v ant p vp = 
-      insertObj (\\_,b,a => infVP v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ; ----
+      insertObj (\\_,b,a => infVP v.sc b a vp (vvtype2infform v.vi)) (predSV v) ** {c2 = v.c2} ; ----
       ---- insertObj (\\_,b,a => infVPGen p.p v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
 
   CompS s = {s = \\_ => "että" ++ s.s} ;  -- S -> Comp            ---- what are these expected to do ? 29/3/2013
@@ -101,7 +101,7 @@ lin
      PredVPosv np vp = mkCl np vp ; ---- OSV yes, but not for Cl
      PredVPovs np vp = mkCl np vp ; ---- SVO
 
-    EmptyRelSlash cls = mkRCl which_RP cls ;
+   EmptyRelSlash cls = mkRCl which_RP cls ;
 
   CompQS qs = {s = \\_ => qs.s} ;
 
@@ -113,7 +113,7 @@ lin
 
    VPSlashVS v vp = -- : VS -> VP -> VPSlash ; -- hän sanoo (minun) menevän (!) ---- menneen ?
       insertObj (\\_,b,a => infVP v.sc b a vp InfPresPart) (predSV v) ** 
-                   {c2 = {c = NPCase Gen ; s = \\_ => [] ; h = Back ; isPre = True}} ;
+                   {c2 = mkPrep []} ;
      
 --   SlashSlashV2V v ant pol vps = -- : V2V -> Ant -> Pol -> VPSlash -> VPSlash ; --- not implemented in Eng so far
 --      insertObj (\\_,b,a => infVPGen pol.p v.sc b a vps v.vi) (predSV v) ** {c2 = v.c2} ; --- or vps.c2 ??
