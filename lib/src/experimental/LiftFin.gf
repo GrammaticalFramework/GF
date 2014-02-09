@@ -1,40 +1,38 @@
 concrete LiftFin of Lift =
    RGLBaseFin - [Pol,Tense]
   ,PredFin
-
               ** open ResFin, 
                       StemFin,
-                      PredInstanceFin, 
+                      PredInstanceFin,
                       Prelude in {
 
 --flags literal=Symb ;
 
-oper
-  vliftV : SVerb1 -> PrVerb = PredInstanceFin.liftV ;
-
 lin
-  LiftV  v = vliftV v ;
-  LiftV2 v = vliftV v ** {c1 = v.c2} ;
-  LiftVS v = vliftV v ;
-  LiftVQ v = vliftV v ;
-  LiftVA v = vliftV v ** {c1 = v.c2} ;
-  LiftVN v = vliftV v ** {c1 = v.c2} ;
-  LiftVV v = vliftV v ** {vvType = v.vi} ;
+  LiftV  v = liftV v ;
+  LiftV2 v = liftV v ** {c1 = v.c2} ;
+  LiftVS v = liftV v ;
+  LiftVQ v = liftV v ;
+  LiftVA v = liftV v ** {c1 = v.c2} ;
+  LiftVN v = liftV v ** {c1 = v.c2} ;
+  LiftVV v = liftV v ** {vvType = v.vi} ;
 
-  LiftV3  v = vliftV v ** {c1 = v.c2 ; c2 = v.c3} ;
+  LiftV3  v = liftV v ** {c1 = v.c2 ; c2 = v.c3} ;
 
-  LiftV2S v = vliftV v ** {c1 = v.c2} ;
-  LiftV2Q v = vliftV v ** {c1 = v.c2} ;
-  LiftV2V v = vliftV v ** {c1 = v.c2 ; vvType = v.vi} ;
-  LiftV2A v = vliftV v ** {c1 = v.c2 ; c2 = v.c3} ;
-  LiftV2N v = vliftV v ** {c1 = v.c2 ; c2 = v.c3} ;
+  LiftV2S v = liftV v ** {c1 = v.c2} ;
+  LiftV2Q v = liftV v ** {c1 = v.c2} ;
+  LiftV2V v = liftV v ** {c1 = v.c2 ; vvType = v.vi} ;
+  LiftV2A v = liftV v ** {c1 = v.c2 ; c2 = v.c3} ;
+  LiftV2N v = liftV v ** {c1 = v.c2 ; c2 = v.c3} ;
+
+  LiftAP ap = {s = \\a => ap.s ! False ! NCase (complNumAgr a) Nom ; c1,c2 = noComplCase ; obj1 = \\_ => []} ;  --- Part in Pl
+----  LiftA2 ap = {s = \\a => ap.s ! AF (APosit (agr2aformpos a)) Nom ; c1 = ap.c2.s ; c2 = noComplCase ; obj1 = \\_ => []} ;  --- isPre
+
+  LiftCN cn = {s = \\n => cn.s ! NCase n Nom ; c1,c2 = noComplCase ; obj1 = \\_ => []} ; 
+----  LiftN2 cn = {s = \\n => cn.s ! n ! specDet DIndef ! Nom ; c1 = cn.c2.s ; c2 = [] ; obj1 = \\_ => []} ; 
+
+  LiftA2,LiftN2,AppAPCN = variants {} ; ---- for functor use
 {-
-  LiftAP ap = {s = \\a => ap.s ! agr2aformpos a ; c1,c2 = [] ; obj1 = \\_ => []} ;  --- isPre
-  LiftA2 ap = {s = \\a => ap.s ! AF (APosit (agr2aformpos a)) Nom ; c1 = ap.c2.s ; c2 = [] ; obj1 = \\_ => []} ;  --- isPre
-
-  LiftCN cn = {s = \\n => cn.s ! n ! DIndef ! Nom ; c1,c2 = [] ; obj1 = \\_ => []} ; 
-  LiftN2 cn = {s = \\n => cn.s ! n ! specDet DIndef ! Nom ; c1 = cn.c2.s ; c2 = [] ; obj1 = \\_ => []} ; 
-
   AppAPCN ap cn = 
     {s = \\n,d,c => 
          let 
@@ -50,11 +48,9 @@ lin
          g = cn.g ; 
          isMod = True
     } ; 
-
-  LiftAdv  a = a ** {isAdV = False ; c1 = []} ;
-  LiftAdV  a = a ** {isAdV = True ; c1 = []} ;
-  LiftPrep p = {s = [] ; isAdV = False ; c1 = p.s} ;
 -}
-
+  LiftAdv  a = a ** {isAdV = False ; c1 = noComplCase} ;
+  LiftAdV  a = a ** {isAdV = True ; c1 = noComplCase} ;
+  LiftPrep p = {s = [] ; isAdV = False ; c1 = p} ;
 }
 

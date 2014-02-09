@@ -21,6 +21,8 @@ lincat
 
   PrQCl = PrQuestionClause ;
 
+  PrVPI = {s : PredInterface.VVType => Agr => Str} ;
+
   VPC = {
     v   : VAgr => Str ;
     inf : Agr => Str ; 
@@ -128,7 +130,7 @@ lin
 
   ComplVQ x vp qcl = addExtVP vp (questSubordCl qcl) ; ---- question form
 
-  ComplVV x vp vpo = addObj2VP vp (\\a => infVP vp.vvtype a vpo) ;
+  ComplVV x vp vpo = addObj2VP vp (\\a => vpo.s ! vp.vvtype ! a) ;
 
   ComplVA x vp ap = addObj2VP vp (\\a => ap.s ! agr2aagr a ++ ap.obj1 ! a) ; ---- adjForm
 
@@ -140,7 +142,7 @@ lin
 
   SlashV2Q x vp cl = addExtVP vp (questSubordCl cl) ; ---- question form
 
-  SlashV2V x vp vpo = addObj2VP vp (\\a => infVP vp.vvtype a (lin VP vpo)) ;
+  SlashV2V x vp vpo = addObj2VP vp (\\a => vpo.s ! vp.vvtype ! a) ;
 
   SlashV2A x vp ap = addObj2VP vp (\\a => ap.s ! agr2aagr a ++ ap.obj1 ! a) ; ---- adjForm
 
@@ -154,14 +156,16 @@ lin
     obj2 = <\\a => reflPron a, vp.obj2.p2> ; --- subj/obj control doesn't matter any more
     } ;
 
+  InfVP x vp = {s = \\vvt,a => infVP vvt a vp} ;
+
   PredVP x np vp = vp ** {
-    v    = vp.v ! agr2vagr np.a ;
+    v    = applyVerb vp (agr2vagr np.a) ;
     subj = np.s ! subjCase ;
     adj  = vp.adj ! np.a ;
     obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! np.a ;  ---- apply complCase ---- place of part depends on obj
     obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;   ---- apply complCase
     c3   = noComplCase ;      -- for one more prep to build ClSlash 
-    qforms = vp.qforms ! agr2vagr np.a ;
+    qforms = qformsVP vp (agr2vagr np.a) ; 
     } ;
 
   SlashClNP x cl np = cl ** {  -- Cl ::= Cl/NP NP 
@@ -177,7 +181,7 @@ lin
    let 
        ipa = ipagr2agr ip.n 
    in {
-    v    = vp.v ! ipagr2vagr ip.n ;
+    v    = applyVerb vp (ipagr2vagr ip.n) ;
     foc  = ip.s ! subjCase ;                      -- who (loves her)
     focType = FocSubj ;
     subj = [] ;
@@ -188,9 +192,8 @@ lin
     adv  = vp.adv ;
     adV  = vp.adV ;
     ext  = vp.ext ; 
-    qforms = vp.qforms ! ipagr2vagr ip.n ;
+    qforms = qformsVP vp (ipagr2vagr ip.n) ;
     } ;
-
 
   QuestSlash x ip cl = 
     let 

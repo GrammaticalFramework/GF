@@ -21,6 +21,8 @@ lincat
   PrVP_none, PrVP_np, PrVP_v, PrVP_s, PrVP_q, PrVP_a, PrVP_n,
              PrVP_np_np, PrVP_np_v, PrVP_np_s, PrVP_np_q, PrVP_np_a, PrVP_np_n = Pred.PrVP ;
 
+  PrVPI_none, PrVPI_np = Pred.PrVPI ;
+
   PrCl_none, PrCl_np = Pred.PrCl ;
 
   PrQCl_none, PrQCl_np = Pred.PrQCl ;
@@ -114,6 +116,8 @@ lin
   ReflVP2_np
     = Pred.ReflVP2 Pred.aNone ;
 
+  InfVP_none, InfVP_np 
+    = Pred.InfVP Pred.aNone ;
 
   PredVP_none, PredVP_np 
     = Pred.PredVP Pred.aNone ;
