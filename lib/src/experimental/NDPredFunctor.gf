@@ -54,7 +54,7 @@ linref
  
   PrCl_none, PrCl_np  = \cl  -> declCl cl ;
   PrQCl_none, PrQCl_np = \qcl -> questCl qcl ;
-  PrAdv_none, PrAdv_np = \adv -> adv.c1 ++ adv.s ;
+  PrAdv_none, PrAdv_np = \adv -> strComplCase adv.c1 ++ adv.s ;
   PrAP_none, PrAP_np  = \ap  -> ap.s ! defaultAgr ++ ap.obj1 ! defaultAgr ;  
   PrCN_none, PrCN_np  = \cn  -> cn.s ! Sg ++ cn.obj1 ! defaultAgr ; 
   

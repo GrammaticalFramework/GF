@@ -41,6 +41,8 @@ oper
   active : SVoice ;
   passive : SVoice ;
 
+  defaultVType : VType ;
+
   subjCase : NPCase ;
   objCase  : NPCase ;
 
@@ -102,6 +104,16 @@ oper
     vvtype : VVType ;
     } ; 
 
+  initPrVerb : PrVerb = {
+    s = \\_ => [] ;
+    p = [] ;
+    c1 = noComplCase ;
+    c2 = noComplCase ;
+    isSubjectControl = True ;
+    vtype = defaultVType ;
+    vvtype = vvInfinitive ;
+    } ;
+
   PrVerbPhrase = {
     v : VAgr => Str * Str * Str ;  -- would,have,slept
     inf : VVType => Str ;          -- (not) ((to)(sleep|have slept) | (sleeping|having slept)
@@ -117,6 +129,37 @@ oper
     ext : Str ;
     qforms : VAgr => Str * Str     -- special Eng for introducing "do" in questions
     } ;
+
+  initPrVerbPhrase : PrVerbPhrase = {
+    v : VAgr => Str * Str * Str  = \\_ => <[],[],[]> ;
+    inf : VVType => Str = \\_ => [] ;
+    c1 : ComplCase = noComplCase ; 
+    c2 : ComplCase = noComplCase ; 
+    part  : Str = [] ;                  -- (look) up
+    adj   : Agr => Str = noObj ; 
+    obj1  : (Agr => Str) * Agr = <\\_ => [], defaultAgr> ;   -- agr for object control
+    obj2  : (Agr => Str) * Bool = <\\_ => [], True>;  -- subject control = True 
+    vvtype : VVType = vvInfinitive ;              -- type of VP complement
+    adv : Str = [] ; 
+    adV : Str = [] ;
+    ext : Str = [] ;
+    qforms : VAgr => Str * Str = \\_ => <[],[]>    -- special Eng for introducing "do" in questions
+    } ;
+
+  initPrVerbPhraseV : 
+       {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> PrVerbPhrase = 
+  \a,t,p,v -> initPrVerbPhrase ** {
+    v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
+    inf = \\vt => tenseInfV a.s a.a p.p active v vt ;
+    c1  = v.c1 ;
+    c2  = v.c2 ;
+    part = v.p ;
+    obj1 = <case isRefl v of {True => \\a => reflPron a ; _ => \\_ => []}, defaultAgr> ; ---- not used, just default value
+    obj2 = <noObj, v.isSubjectControl> ;
+    vvtype = v.vvtype ;
+    adV = negAdV p ; --- just p.s in Eng
+    qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v ;
+    } ;
  
   PrClause = {
     v : Str * Str * Str ; 
@@ -127,6 +170,15 @@ oper
     subj : Str ; 
     c3  : ComplCase ;              -- for a slashed adjunct, not belonging to the verb valency
     qforms : Str * Str
+    } ; 
+
+  initPrClause : PrClause = {
+    v : Str * Str * Str = <[],[],[]> ; 
+    adj,obj1,obj2 : Str = [] ; 
+    adv,adV,ext : Str = [] ; 
+    subj : Str = [] ; 
+    c3  : ComplCase = noComplCase ;              -- for a slashed adjunct, not belonging to the verb valency
+    qforms : Str * Str = <[],[]>
     } ; 
 
   PrQuestionClause = PrClause ** {
@@ -170,19 +222,10 @@ oper
   not_Str : Polarity -> Str ;
 
   useCopula : {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerbPhrase =
-    \a,t,p -> {
+    \a,t,p -> initPrVerbPhrase ** {
     v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
-    c1 = noComplCase ;
-    c2 = noComplCase ;
-    part = [] ;
-    adj = \\_ => [] ;
-    obj1 = <noObj,defaultAgr> ;
-    obj2 = <noObj, True> ; 
-    vvtype = vvInfinitive ;
     adV = negAdV p ;
-    adv = [] ;
-    ext = [] ;
     qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 

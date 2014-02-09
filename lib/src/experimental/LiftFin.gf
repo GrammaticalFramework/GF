@@ -3,32 +3,32 @@ concrete LiftFin of Lift =
   ,PredFin
 
               ** open ResFin, 
+                      StemFin,
                       PredInstanceFin, 
                       Prelude in {
 
 --flags literal=Symb ;
 
-{-
 oper
-  liftV = PredInstanceFin.liftV ;
+  vliftV : SVerb1 -> PrVerb = PredInstanceFin.liftV ;
 
 lin
-  LiftV  v = liftV v ;
-  LiftV2 v = <liftV <v : Verb> : PrVerb> ** {c1 = v.c2.s} ;
-  LiftVS v = liftV v ;
-  LiftVQ v = liftV v ;
-  LiftVA v = liftV v ; ---- c1?
-  LiftVN v = liftV v ; ---- c1?
-  LiftVV v = <liftV <v : Verb> : PrVerb> ** {c1 = v.c2.s} ;
+  LiftV  v = vliftV v ;
+  LiftV2 v = vliftV v ** {c1 = v.c2} ;
+  LiftVS v = vliftV v ;
+  LiftVQ v = vliftV v ;
+  LiftVA v = vliftV v ** {c1 = v.c2} ;
+  LiftVN v = vliftV v ** {c1 = v.c2} ;
+  LiftVV v = vliftV v ** {vvType = v.vi} ;
 
-  LiftV3  v = <liftV <v : Verb> : PrVerb> ** {c1 = v.c2.s ; c2 = v.c3.s} ;
+  LiftV3  v = vliftV v ** {c1 = v.c2 ; c2 = v.c3} ;
 
-  LiftV2S v = <liftV <v : Verb> : PrVerb> ** {c1 = v.c2.s} ;
-  LiftV2Q v = <liftV <v : Verb> : PrVerb> ** {c1 = v.c2.s} ;
-  LiftV2V v = <liftV <v : Verb> : PrVerb> ** {c1 = v.c2.s ; c2 = v.c3.s} ;
-  LiftV2A v = <liftV <v : Verb> : PrVerb> ** {c1 = v.c2.s} ;
-  LiftV2N v = <liftV <v : Verb> : PrVerb> ** {c1 = v.c2.s} ;
-
+  LiftV2S v = vliftV v ** {c1 = v.c2} ;
+  LiftV2Q v = vliftV v ** {c1 = v.c2} ;
+  LiftV2V v = vliftV v ** {c1 = v.c2 ; vvType = v.vi} ;
+  LiftV2A v = vliftV v ** {c1 = v.c2 ; c2 = v.c3} ;
+  LiftV2N v = vliftV v ** {c1 = v.c2 ; c2 = v.c3} ;
+{-
   LiftAP ap = {s = \\a => ap.s ! agr2aformpos a ; c1,c2 = [] ; obj1 = \\_ => []} ;  --- isPre
   LiftA2 ap = {s = \\a => ap.s ! AF (APosit (agr2aformpos a)) Nom ; c1 = ap.c2.s ; c2 = [] ; obj1 = \\_ => []} ;  --- isPre
 
