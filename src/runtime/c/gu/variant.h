@@ -33,7 +33,7 @@
  * @{
  */
 
-typedef struct GuVariant GuVariant;
+typedef uintptr_t GuVariant;
 
 
 void* gu_alloc_variant(uint8_t tag, 
@@ -84,32 +84,25 @@ struct GuVariantInfo {
 GuVariantInfo gu_variant_open(GuVariant variant);
 GuVariant gu_variant_close(GuVariantInfo info);
 
-/** @privatesection */
-struct GuVariant {
-	uintptr_t p;
-	/**< @private */
-};
-
 /** @} */
 
 static inline void*
 gu_variant_to_ptr(GuVariant variant)
 {
-	return (void*)variant.p;
+	return (void*) variant;
 }
 
 static inline GuVariant
 gu_variant_from_ptr(const void* p)
 {
-	GuVariant v = { (uintptr_t)p };
-	return v;
+	return (uintptr_t) p;
 }
 
 extern const GuVariant gu_null_variant;
 
 static inline bool
 gu_variant_is_null(GuVariant v) {
-	return ((void*)v.p == NULL);
+	return ((void*)v == NULL);
 }
 
 
