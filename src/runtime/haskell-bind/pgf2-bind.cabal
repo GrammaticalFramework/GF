@@ -30,7 +30,7 @@ library
 executable pgf-shell
   main-is:             pgf-shell.hs
   hs-source-dirs:      examples
-  build-depends:       base, haskell-bind, containers
+  build-depends:       base, pgf2-bind, containers
   default-language:    Haskell2010
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
