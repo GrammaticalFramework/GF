@@ -23,7 +23,7 @@ getPGF [path] = pgfShell =<< readPGF path
 getPGF _ = putStrLn "Usage: pgf-shell <path to pgf>"
 
 pgfShell pgf =
-  do putStrLn . unwords . map (show.fst) . M.toList $ languages pgf
+  do putStrLn . unwords . map fst . M.toList $ languages pgf
      forever $ do performGC
                   putStr "> "; hFlush stdout
                   execute pgf =<< readLn
@@ -54,13 +54,10 @@ data Command = P String String | L String Expr | T String String String deriving
 instance Read Command where
   readsPrec _ s =
           [(P l r2,"") | ("p",r1)<-lex s,
-                         (l,r2) <- reads' r1]
+                         (l,r2) <- lex r1]
        ++ [(L l t,"") | ("l",r1)<-lex s,
-                        (l,r2)<- reads' r1,
+                        (l,r2)<- lex r1,
                         Just t<-[readExpr r2]]
        ++ [(T l1 l2 r3,"") | ("t",r1)<-lex s,
-                             (l1,r2)<-reads' r1,
-                             (l2,r3)<-reads' r2]
-
--- | Workaround for deficiency in instance Read CId
-reads' s = reads (dropWhile isSpace s)
+                             (l1,r2)<-lex r1,
+                             (l2,r3)<-lex r2]
