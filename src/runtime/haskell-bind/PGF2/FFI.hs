@@ -15,6 +15,7 @@ data GuEnum
 data GuExn
 data GuIn
 data GuKind
+data GuType
 data GuString
 data GuStringBuf
 data GuMapItor
@@ -36,8 +37,20 @@ foreign import ccall "gu/exn.h gu_new_exn"
 foreign import ccall "gu/exn.h gu_exn_is_raised"
   gu_exn_is_raised :: Ptr GuExn -> IO Bool
 
+foreign import ccall "gu/exn.h gu_exn_caught"
+  gu_exn_caught :: Ptr GuExn -> IO (Ptr GuType)
+
 foreign import ccall "gu/type.h &gu_type__type"
   gu_type__type :: Ptr GuKind
+
+foreign import ccall "gu/type.h &gu_type__GuErrno"
+  gu_type__GuErrno :: Ptr GuType
+
+foreign import ccall "gu/type.h &gu_type__PgfLinNonExist"
+  gu_type__PgfLinNonExist :: Ptr GuType
+
+foreign import ccall "gu/type.h &gu_type__PgfExn"
+  gu_type__PgfExn :: Ptr GuType
 
 foreign import ccall "gu/string.h gu_string_in"
   gu_string_in :: CString -> Ptr GuPool -> IO (Ptr GuIn)

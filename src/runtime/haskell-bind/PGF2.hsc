@@ -1,4 +1,4 @@
-{-# LANGUAGE ExistentialQuantification #-}
+{-# LANGUAGE ExistentialQuantification, DeriveDataTypeable #-}
 #include <pgf/pgf.h>
 #include <gu/enum.h>
 #include <gu/exn.h>
@@ -11,6 +11,8 @@ module PGF2 (-- * PGF
              Expr,readExpr,showExpr,unApp,
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
+             -- * Exceptions
+             PGFError(..)
             ) where
 
 import Prelude hiding (fromEnum)
@@ -23,13 +25,13 @@ import Foreign hiding ( Pool, newPool, unsafePerformIO )
 import Foreign.C
 import Foreign.C.String
 import Foreign.Ptr
-import Data.Char
+import Data.Typeable
 import qualified Data.Map as Map
 import qualified Data.ByteString as BS
 import Data.IORef
 
-
------------------------------------------------------------------------------
+ 
+-----------------------------------------------------------------------
 -- Functions that take a PGF.
 -- PGF has many Concrs.
 --
@@ -43,8 +45,19 @@ data Concr = Concr {concr :: Ptr PgfConcr, concrMaster :: PGF}
 readPGF :: FilePath -> IO PGF
 readPGF fpath =
   do pool <- gu_new_pool
-     pgf  <- withCString fpath $ \c_fpath -> 
-               pgf_read c_fpath pool nullPtr
+     pgf  <- withCString fpath $ \c_fpath ->
+               withGuPool $ \tmpPl -> do
+                 exn <- gu_new_exn nullPtr gu_type__type tmpPl
+                 pgf <- pgf_read c_fpath pool exn
+                 failed <- gu_exn_is_raised exn
+                 if failed
+                   then do ty <- gu_exn_caught exn
+                           if ty == gu_type__GuErrno
+                             then do perrno <- (#peek GuExn, data.data) exn
+                                     errno  <- peek perrno
+                                     ioError (errnoToIOError "readPGF" (Errno errno) Nothing (Just fpath))
+                             else throw (PGFError "The grammar cannot be loaded")
+                   else return pgf
      master <- newForeignPtr gu_pool_finalizer pool
      return PGF {pgf = pgf, pgfMaster = master}
 
@@ -203,9 +216,20 @@ linearize :: Concr -> Expr -> String
 linearize lang e = unsafePerformIO $
   withGuPool $ \pl ->
     do (sb,out) <- newOut pl
-       pgf_linearize (concr lang) (expr e) out nullPtr
-       lin <- gu_string_buf_freeze sb pl
-       peekCString lin
+       exn <- gu_new_exn nullPtr gu_type__type pl
+       pgf_linearize (concr lang) (expr e) out exn
+       failed <- gu_exn_is_raised exn
+       if failed
+         then do ty <- gu_exn_caught exn
+                 if ty == gu_type__PgfLinNonExist
+                   then return ""
+                   else if ty == gu_type__PgfExn
+                          then do c_msg <- (#peek GuExn, data.data) exn
+                                  msg <- peekCString c_msg
+                                  throw (PGFError msg)
+                          else throw (PGFError "The abstract tree cannot be linearized")
+         else do lin <- gu_string_buf_freeze sb pl
+                 peekCString lin
 
 
 -----------------------------------------------------------------------------
@@ -230,3 +254,11 @@ fromPgfExprEnum enum fpl master =
                ts <- unsafeInterleaveIO (fromPgfExprEnum enum fpl master)
                prob <- (#peek PgfExprProb, prob) pgfExprProb
                return ((Expr expr master,prob) : ts)
+
+-----------------------------------------------------------------------
+-- Exceptions
+
+newtype PGFError = PGFError String
+     deriving (Show, Typeable)
+
+instance Exception PGFError
