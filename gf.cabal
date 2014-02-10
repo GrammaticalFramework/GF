@@ -119,8 +119,8 @@ Library
     PGF.OldBinary
 
   if flag(c-runtime)
-    exposed-modules:     CId, CRuntimeFFI
-    other-modules:       Gu, PgfLow
+    exposed-modules:     PGF2
+    other-modules:       PGF2.FFI
     hs-source-dirs:      src/runtime/haskell-bind
     build-tools:         hsc2hs
     extra-libraries:     gu pgf
