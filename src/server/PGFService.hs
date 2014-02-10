@@ -10,8 +10,7 @@ import FastCGIUtils
 import URLEncoding
 
 #if C_RUNTIME
-import qualified CRuntimeFFI as C
-import qualified CId as C
+import qualified PGF2 as C
 import Data.Time.Clock(UTCTime,getCurrentTime,diffUTCTime)
 #endif
 
@@ -35,6 +34,7 @@ import System.Process
 import System.Exit
 import System.IO
 import System.Directory(removeFile)
+import System.Mem(performGC)
 import Fold(fold) -- transfer function for OpenMath LaTeX
 
 catchIOE :: IO a -> (E.IOException -> IO a) -> IO a
@@ -45,7 +45,7 @@ logFile = "pgf-error.log"
 
 #ifdef C_RUNTIME
 type Caches = (Cache PGF,Cache (C.PGF,MVar ParseCache))
-type ParseCache = Map.Map (C.Language,String) ([(C.Expr,Float)],UTCTime)
+type ParseCache = Map.Map (String,String) ([(C.Expr,Float)],UTCTime)
 newPGFCache = do pgfCache <- newCache PGF.readPGF
                  cCache <- newCache $ \ path -> do pgf <- C.readPGF path
                                                    pc <- newMVar Map.empty
@@ -88,8 +88,13 @@ cpgfMain command (pgf,pc) =
     "c-parse"     -> out =<< join (parse # input % from % start % limit % trie)
     "c-linearize" -> out =<< lin # tree % to
     "c-translate" -> out =<< join (trans # input % from % to % start % limit % trie)
+    "c-flush"     -> out =<< flush
     _             -> badRequest "Unknown command" command
   where
+    flush = liftIO $ do modifyMVar_ pc $ const $ return Map.empty
+                        performGC
+                        return $ showJSON ()
+
     parse input (from,concr) start mlimit trie =
         do trees <- parse' input (from,concr) start mlimit
            return $ showJSON [makeObj ("from".=from:"trees".=trees :[])]
@@ -108,7 +113,8 @@ cpgfMain command (pgf,pc) =
               where res = C.parse concr (C.startCat pgf) input
             old (res,_) = return (update (res,t) pc,res)
             update r = Map.mapMaybe purge . Map.insert key r
-            purge r@(_,t') = if diffUTCTime t t'<600 then Just r else Nothing
+            purge r@(_,t') = if diffUTCTime t t'<120 then Just r else Nothing
+                             -- remove unused parse results after 2 minutes
 
     lin tree tos = showJSON (lin' tree tos)
     lin' tree tos = [makeObj ["to".=to,"text".=C.linearize c tree]|(to,c)<-tos]
@@ -129,23 +135,20 @@ cpgfMain command (pgf,pc) =
     getLangs = getLangs' readLang
     getLang = getLang' readLang
 
-    readLang :: String -> CGI (C.Language,C.Concr)
-    readLang l =
-      case C.readCId l of
-        Nothing -> badRequest "Bad language" l
-        Just lang ->
-          case C.getConcr pgf lang of
-            Just c -> return (lang,c)
-            _ -> badRequest "Unknown language" l
+    readLang :: String -> CGI (String,C.Concr)
+    readLang lang =
+      case Map.lookup lang (C.languages pgf) of
+        Nothing -> badRequest "Bad language" lang
+        Just c -> return (lang,c)
 
     tree = do s <- maybe (missing "tree") return =<< getInput1 "tree"
               let t = C.readExpr s
               maybe (badRequest "bad tree" s) return t
-
+{-
 instance JSON C.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . C.readCId
     showJSON = showJSON . C.showCId
-
+-}
 instance JSON C.Expr where
     readJSON x = readJSON x >>= maybe (fail "Bad expression.") return . C.readExpr
     showJSON = showJSON . C.showExpr
