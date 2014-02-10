@@ -37482,7 +37482,7 @@ lin nestling_N = mkN "gröngöling";
 lin neston_PN = variants {};
 lin nestor_PN = variants {};
 lin net_A = mkA "netto"; --
-lin net_N = mkN "nätverk" neutrum; -- comment=5
+lin net_N = mkN "nät" neutrum; -- comment=5
 lin net_V2 = variants {};
 lin net_out_V = mkV "förtjänar";
 lin netball_N = variants {};
@@ -40708,10 +40708,10 @@ lin parrotfish_N = variants {};
 lin parrotlike_A = variants {};
 lin parry_N = mkN "parering"; -- comment=2
 lin parry_V2 = variants {};
-lin parse_V2 = variants {};
+lin parse_V2 = mkV2 "parsa" ;
 lin parsec_N = variants {};
 lin parsee_N = variants {};
-lin parser_N = mkN "parser"; -- status=guess
+lin parser_N = mkN "parsare" "parsare" | mkN "parser" ; -- status=guess
 lin parsimonious_A = mkA "snål";
 lin parsimony_N = mkN "sparsamhet"; -- status=guess
 lin parsley_N = mkN "persilja";
@@ -63412,7 +63412,7 @@ lin weave_V2 = mkV2 (mkV "väva"); -- status=guess, src=wikt
 lin weaver_N = mkN "vävare" utrum;
 lin weaverbird_N = variants {};
 lin weaving_N = variants {};
-lin web_N = mkN "spindelväv";
+lin web_N = mkN "väv" ;
 lin web_footed_A = variants {};
 lin web_toed_A = variants {};
 lin webbed_A = variants {};
@@ -64408,9 +64408,9 @@ lin wormy_A = variants {};
 lin worriedly_Adv = variants {};
 lin worrier_N = variants {};
 lin worrisome_A = variants {};
-lin worry_N = mkN "plåga"; -- comment=5
-lin worry_V = mkV "oroar"; -- comment=8
-lin worry_V2 = mkV2 (mkV (mkV "oroa") "sig"); -- status=guess, src=wikt
+lin worry_N = mkN "bekymmer" "bekymmer" ; -- comment=5
+lin worry_V = mkV (mkV "oroa") "sig"; -- comment=8
+lin worry_V2 = mkV2 (mkV "oroa") ; -- status=guess, src=wikt
 lin worry_VS = mkVS (mkV (mkV "oroa") "sig"); -- status=guess, src=wikt
 lin worrying_N = mkN "enerverande"; -- comment=3
 lin worryingly_Adv = variants {};
