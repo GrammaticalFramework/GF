@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 -- | pgf-shell: A simple shell to illustrate the use of the Haskell binding
 --   to the C implementation of the PGF run-time system.
 --
@@ -11,7 +12,7 @@ import Control.Monad(forever)
 import Data.Char(isSpace)
 import qualified Data.Map as M
 import System.IO(hFlush,stdout)
-import System.IO.Error(catchIOError)
+import qualified System.IO.Error as S
 import System.Environment
 import PGF2
 import System.Mem(performGC)
@@ -23,7 +24,7 @@ getPGF [path] = pgfShell =<< readPGF path
 getPGF _ = putStrLn "Usage: pgf-shell <path to pgf>"
 
 pgfShell pgf =
-  do putStrLn . unwords . map fst . M.toList $ languages pgf
+  do putStrLn . unwords . M.keys $ languages pgf
      forever $ do performGC
                   putStr "> "; hFlush stdout
                   execute pgf =<< readLn
@@ -38,7 +39,7 @@ execute pgf cmd =
                       cto   <- getConcr' pgf to
                       putl [linearize cto t|(t,_)<-parse cfrom (startCat pgf) s]
     _ -> putStrLn "Huh?"
-  `catchIOError` print
+  `catch` print
 
 getConcr' pgf lang =
     maybe (fail $ "Concrete syntax not found: "++show lang) return $
@@ -61,3 +62,7 @@ instance Read Command where
        ++ [(T l1 l2 r3,"") | ("t",r1)<-lex s,
                              (l1,r2)<-lex r1,
                              (l2,r3)<-lex r2]
+
+#if MIN_VERSION_base(4,6,0)
+catch = S.catchIOError
+#endif
