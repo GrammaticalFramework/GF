@@ -203,13 +203,19 @@ Translator.prototype.update_translation=function(i) {
 	    upd3(["[Apertium does not support "+show_translation(o)+"]"])
     }
     function update_gfrobust_translation() {
-	function upd3s(txt) { update_segment("GFRobust",[txt]) }
-	function upd2(ts,punct) {
-	    switch(ts.length) {
-	    case 0: upd3s("[no translation]");break;
-	    default:
-		if(punct) ts=ts+" "+punct
-		unlextext(ts,upd3s);
+	function upd3(txts) { update_segment("GFRobust",txts) }
+	function upd3s(txt) { upd3([txt]) }
+	function upd2(trans,punct) {
+	    if(trans.length==0) upd3s("[no translation]")
+	    else if(trans[0].error)
+		upd3s("[GF robust translation: "+trans[0].error+"]")
+	    else {
+		var ts=[]
+		for(var i=0;i<trans.length;i++) {
+		    ts[i]=trans[i].linearizations[0].text
+		    if(punct) ts[i]=ts[i]+" "+punct
+		}
+		mapc(unlextext,ts,upd3)
 	    }
 	}
 	function upd0(source,punct) {
@@ -217,7 +223,7 @@ Translator.prototype.update_translation=function(i) {
 		//console.log(translate_output)
 		upd2(translate_output,punct)
 	    }
-	    gftranslate.translate(source,o.from,o.to,upd1)
+	    gftranslate.translate(source,o.from,o.to,0,2,upd1)
 	}
 	if(!window.gftranslate)
 		upd3s("[GF robust parser is not available]")
