@@ -1,4 +1,5 @@
 resource HTML = open Prelude in {
+
   oper
     tag : Str -> Str = \t -> "<" + t + ">" ;
     endtag : Str -> Str = \t -> tag ("/" + t) ;

@@ -5,6 +5,7 @@ concrete LangSwe of Lang =
   LexiconSwe
   ,ConstructionSwe
   ,DocumentationSwe
+  ,MarkupSwe
   ** {
 
 flags startcat = Phr ;  unlexer = text ; lexer = text ;
