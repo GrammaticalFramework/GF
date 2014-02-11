@@ -10,6 +10,7 @@ div.center { text-align: center; }
 table.center { margin-left: auto; margin-right: auto; }
 textarea { margin: 0; }
 body:target h1, body:target div.modtime { display: none; }
+#extra { color: #666; }
 </style>
 </head>
 
@@ -49,12 +50,14 @@ body:target h1, body:target div.modtime { display: none; }
     <button onclick="wcswap()">↑↓</button>
   <br>
       <textarea name=output rows=3 style="width: 100%" readonly></textarea>
+  <br>
 </form>
   
 </table>
+<div class=center><small id=extra></small></div>
 <p>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Tue Jan 28 17:38:32 CET 2014 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Tue Feb 11 17:37:40 CET 2014 <!-- hhmts end -->
 </small></div>
 <script src="js/support.js"></script>
 <script src="js/gftranslate.js"></script>
@@ -64,16 +67,21 @@ body:target h1, body:target div.modtime { display: none; }
 <script>
 function wctranslate() {
   var f=document.forms[0]
+  var e=element("extra")
   f.translate.disabled=true
   f.output.value=""
+  clear(e)
 
   function showit(result) {
     f.output.value=result
     f.translate.disabled=false
   }
-  function step3(text) { unlextext(text,showit) }
+  function step3(trans) {
+    if(e) e.innerHTML=trans[0].prob+"<br>"+trans[0].tree
+    unlextext(trans[0].linearizations[0].text,showit)
+  }
   function step2(text) {
-    gftranslate.translate(text,f.from.value,f.to.value,step3)
+    gftranslate.translate(text,f.from.value,f.to.value,0,1,step3)
   }
   lextext(f.input.value,step2)
   return false;

@@ -89,21 +89,30 @@ cpgfMain command (pgf,pc) =
     "c-linearize" -> out =<< lin # tree % to
     "c-translate" -> out =<< join (trans # input % from % to % start % limit % trie)
     "c-flush"     -> out =<< flush
+    "c-grammar"   -> out grammar
     _             -> badRequest "Unknown command" command
   where
     flush = liftIO $ do modifyMVar_ pc $ const $ return Map.empty
                         performGC
                         return $ showJSON ()
 
+    grammar = showJSON $ makeObj
+                 ["name".=C.abstractName pgf,
+                  "startcat".=C.startCat pgf,
+                  "languages".=languages]
+      where
+        languages = [makeObj ["name".= l] | (l,_)<-Map.toList (C.languages pgf)]
+
     parse input (from,concr) start mlimit trie =
         do trees <- parse' input (from,concr) start mlimit
-           return $ showJSON [makeObj ("from".=from:"trees".=trees :[])]
+           return $ showJSON [makeObj ("from".=from:"trees".=map tp trees :[])]
                                                         -- :addTrie trie trees
-      where
+
+    tp (tree,prob) = makeObj ["tree".=tree,"prob".=prob]
 
     parse' input (from,concr) start mlimit = 
         liftIO $ do t <- getCurrentTime
-                    (map fst . maybe id take mlimit . drop start)
+                    (maybe id take mlimit . drop start)
                       # modifyMVar pc (parse'' t)
       where
         key = (from,input)
@@ -120,13 +129,14 @@ cpgfMain command (pgf,pc) =
     lin' tree tos = [makeObj ["to".=to,"text".=C.linearize c tree]|(to,c)<-tos]
 
     trans input (from,concr) tos start mlimit trie =
-      do trees <- parse' input (from,concr) start mlimit
+      do parses <- parse' input (from,concr) start mlimit
          return $
            showJSON [ makeObj ["from".=from,
                                "translations".=
                                  [makeObj ["tree".=tree,
+                                           "prob".=prob,
                                            "linearizations".=lin' tree tos]
-                                  | tree <- trees]]]
+                                  | (tree,prob) <- parses]]]
 
     from = maybe (missing "from") return =<< getLang "from"
     
