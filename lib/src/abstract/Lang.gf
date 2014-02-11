@@ -10,7 +10,7 @@ abstract Lang =
   Lexicon
   ,Construction  --- could be compiled here, but not in concretes, as they call Syntax and Grammar
   ,Documentation
-  ,Markup
+  ,Markup - [stringMark]
   ** {
   flags startcat=Phr ;
   } ;
