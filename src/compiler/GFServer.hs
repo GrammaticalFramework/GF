@@ -23,7 +23,7 @@ import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
 import System.Posix.Files(getSymbolicLinkStatus,isSymbolicLink,removeLink,
                           createSymbolicLink)
 #endif
-import Control.Concurrent(newMVar,modifyMVar)
+import Control.Concurrent(forkIO,newMVar,modifyMVar,newChan,writeChan,getChanContents)
 import Network.URI(URI(..))
 import Network.Shed.Httpd(initServer,Request(..),Response(..),noCache)
 --import qualified Network.FastCGI as FCGI -- from hackage direct-fastcgi
@@ -65,11 +65,14 @@ server port optroot execute1 state0 =
   where
     -- | HTTP server
     http_server execute1 state0 state cache root =
-      do logPutStrLn gf_version
-         logPutStrLn $ "Document root = "++root
-         logPutStrLn $ "Starting HTTP server, open http://localhost:"
-                       ++show port++"/ in your web browser."
-         initServer port (handle root state0 cache execute1 state)
+      do log <- newChan -- to avoid intertwined log messages
+         forkIO $ mapM_ ePutStrLn =<< getChanContents log
+         let logLn = writeChan log
+         logLn gf_version
+         logLn $ "Document root = "++root
+         logLn $ "Starting HTTP server, open http://localhost:"
+                 ++show port++"/ in your web browser."
+         initServer port (handle logLn root state0 cache execute1 state)
 
 gf_version = "This is GF version "++showVersion version++".\n"++buildInfo
 
@@ -127,13 +130,16 @@ hmbracket_ pre post m =
          Right (a,s) -> do put s;return a
 
 -- | HTTP request handler
-handle documentroot state0 cache execute1 stateVar
+handle logLn documentroot state0 cache execute1 stateVar
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) =
     case method of
       "POST" -> normal_request (utf8inputs body)
       "GET"  -> normal_request (utf8inputs q)
       _ -> return (resp501 $ "method "++method)
   where
+    logPutStrLn msg = liftIO $ logLn msg
+    debug msg = logPutStrLn msg
+
     normal_request qs =
       do logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
          let stateful m = modifyMVar stateVar $ \ s -> run m (qs,s)
@@ -150,7 +156,7 @@ handle documentroot state0 cache execute1 stateVar
              -- This code runs without mutual exclusion, so it must *not*
              -- use/change the cwd. Access files by absolute paths only.
              case (takeDirectory path,takeFileName path,takeExtension path) of
-               (_  ,_             ,".pgf") -> do debug $ "PGF service: "++path
+               (_  ,_             ,".pgf") -> do --debug $ "PGF service: "++path
                                                  wrapCGI $ PS.cgiMain' cache path
                (dir,"grammars.cgi",_     ) -> grammarList dir (decoded qs)
                (dir  ,"exb.fcgi"  ,_    ) -> wrapCGI $ ES.cgiMain' root dir (fst cache)
