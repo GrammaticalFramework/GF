@@ -685,7 +685,11 @@ oper
     mkV2 : (läser : Str) -> V2 = \v -> dirV2 (regV v) ;
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : Str -> Prep -> V2 = \v -> mmkV2 (regV v) ;
-    mkV2 : V -> Prep -> V2 = mmkV2
+    mkV2 : V -> Prep -> V2 = mmkV2 ;
+    mkV2 : (slita, slet : Str) -> V2 = \x,y -> dirV2 (reg2V x y) ;
+    mkV2 : (dricka,drack,druckit : Str) -> V2 = \x,y,z -> dirV2 (irregV x y z) ;
+    mkV2 : (supa,super,sup,söp,supit,supen : Str) -> V2 = \x,y,z,u,v,w -> dirV2 (mk6V x y z u v w) ;
+    mkV2 : (supa,super,sup,söp,supit,supen,supande : Str) -> V2 = \x,y,z,u,v,w,s -> dirV2 (mk7V x y z u v w s) ;
     } ;
 
 
@@ -694,6 +698,7 @@ oper
 
   mkV3 = overload {
     mkV3 : Str -> V3 = \v -> dirdirV3 (regV v) ;
+    mkV3 : (x,y,z : Str) -> V3 = \x,y,z -> dirdirV3 (irregV x y z) ;
     mkV3 : V   -> V3 = dirdirV3 ;
     mkV3 : V   -> Prep -> V3 = dirV3 ;
     mkV3 : V   -> Prep -> Prep -> V3 = mmkV3
@@ -736,6 +741,8 @@ oper
      \v -> mmkV2 v (mkPrep []) ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
     mkV2V : V -> Prep -> Prep -> V2V =
      \v, p, t -> mmkV2 v p ** {c3 = mkComplement p.s ; lock_V2V = <>} ;
+    mkV2V : (x,y,z : Str) -> V2V = \x,y,z -> mmkV2 (irregV x y z) (mkPrep []) ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
+    mkV2V : (x,y,z,u,v,w : Str) -> V2V = \x,y,z,u,v,w -> mmkV2 (mkV x y z u v w) (mkPrep []) ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
     } ;
 
   mkV2Q = overload {
