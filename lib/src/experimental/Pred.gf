@@ -1,4 +1,4 @@
-abstract Pred = Cat [Ant,NP,Utt,IP,IAdv,Conj] ** {
+abstract Pred = Cat [Ant,NP,Utt,IP,IAdv,Conj,RS,Imp,IComp] ** {
 
 cat
   Arg ;
@@ -58,17 +58,28 @@ fun
   QuestSlash : (a : Arg) -> IP   -> PrQCl (aNP a)  -> PrQCl a ;
   QuestCl    : (a : Arg)         -> PrCl a         -> PrQCl a ;
   QuestIAdv  : (a : Arg) -> IAdv -> PrCl a         -> PrQCl a ;
+  QuestIComp :                     IComp -> NP     -> PrQCl aNone ;
 
   UseCl  : PrCl aNone  -> PrS ;
   UseQCl : PrQCl aNone -> PrS ; -- deprecate QS
 
   UseAdvCl : PrAdv aNone -> PrCl aNone -> PrS ;  -- lift adv to front
   
-  UttS  : PrS -> Utt ;
+  UttPrS  : PrS -> Utt ;
 
   AdvCl   : (a : Arg) -> PrAdv a -> PrCl aNone  -> PrCl a ; 
 
   AdvQCl  : (a : Arg) -> PrAdv a -> PrQCl aNone -> PrQCl a ; 
+
+-- relatives
+  RelCl    : PrCl aNone             -> RS ;
+  RelVP    : RP -> PrVP aNone       -> RS ;
+  RelSlash : RP -> PrCl (aNP aNone) -> RS ;
+
+-- imperatives
+
+  ImpVP    : PrVP aNone -> Imp ;
+  
 
 -- participles as adjectives
 

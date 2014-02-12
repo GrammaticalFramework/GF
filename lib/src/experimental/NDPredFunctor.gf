@@ -145,8 +145,8 @@ lin
   UseAdvCl_none
     = Pred.UseAdvCl ;
 
-  UttS 
-    = Pred.UttS ;
+  UttPrS 
+    = Pred.UttPrS ;
 
   AdvCl_none, AdvCl_np
     = Pred.AdvCl Pred.aNone ;

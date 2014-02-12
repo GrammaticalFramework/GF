@@ -109,7 +109,7 @@ oper
   -- this part is usually the same in all reconfigurations
   restCl : PrClause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3 ;
 
-  negAdV :  {s : Str ; p : Polarity} -> Str = \p -> p.s ++ case p.p of {Pos => [] ; Neg => "inte"} ;
+  negAdV :  {s : Str ; p : Polarity} -> Str = \p -> p.s ++ case p.p of {Pos => [] ; Neg => inte_Str} ;
 
   tenseV : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str = --- Polarity, VAgr not needed in Swe
        \sta,t,a,_,o,_,v -> 
@@ -138,7 +138,7 @@ oper
 
   hava_V : Verb = P.mkV "ha" "har" "ha" "hade" "haft" "havd" ; -- havd not used
   be_V : Verb = P.mkV "vara" "är" "var" "var" "varit" "varen" ; -- varen not used
-  skola_V : Verb = P.mkV "skola" "ska" "ska" "skulle" "skolat" "skolad" ; ---- not used but ska and skulle
+  skola_V : Verb = P.mkV "skola" ("ska" | "skall") "ska" "skulle" "skolat" "skolad" ; ---- not used but ska and skulle
 
   noObj : Agr => Str = \\_ => [] ;
 
@@ -150,7 +150,9 @@ oper
     ext = ext ;
     } ;
 
-  not_Str : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => "inte"} ;
+  not_Str : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => inte_Str} ;
+
+  inte_Str = "inte" | "icke" | "ej" ;
 
   liftV : Verb -> PrVerb = \v ->
     {s = v.s ; p = v.part ; c1,c2 = [] ; isSubjectControl = False ; vtype = v.vtype ; vvtype = vvInfinitive} ; ---- vvtype
