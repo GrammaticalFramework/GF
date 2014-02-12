@@ -7440,7 +7440,7 @@ lin breast_fed_A = variants {} ;
 lin breast_high_Adv = variants {} ;
 lin breast_plate_N = variants {} ;
 lin breastfeed_V = mkV "ammar" ;
-lin breastfeed_V2 = mkV2 (mkV "ammar"); -- status=guess, src=wikt
+lin breastfeed_V2 = mkV2 (mkV "ammar");
 lin breastless_A = variants {} ;
 lin breaston_PN = variants {} ;
 lin breastplate_N = variants {} ;
@@ -20886,7 +20886,7 @@ lin feeblemindedness_N = variants {} ;
 lin feebleness_N = mkN "otydlighet" "otydligheter" ; -- comment=3
 lin feed_N = mkN "djurfoder" neutrum; -- comment=3
 lin feed_V = mkV "fodrar" ; -- comment=5
-lin feed_V2 = mkV2 (mkV (mkV "livnära") "sig") | mkV2 (mkV (mkV "leva") "på"); -- status=guess, src=wikt status=guess, src=wikt
+lin feed_V2 = mkV2 (mkV "matar");
 lin feed_off_V2 = variants {} ;
 lin feed_on_V2 = variants {} ;
 lin feed_up_V2 = variants {} ;
@@ -53882,7 +53882,7 @@ lin spoon_V = variants {} ;
 lin spoon_V2 = variants {} ;
 lin spoonbill_N = mkN "skedstork" ; -- status=guess
 lin spoonerism_N = variants {} ;
-lin spoonfeed_V2 = mkV2 (mkV "skedmata") | mkV2 (mkV "matar"); -- status=guess, src=wikt status=guess, src=wikt
+lin spoonfeed_V2 = mkV2 (mkV "skedmata");
 lin spoonfeeding_N = variants {} ;
 lin spoonful_N = mkN "sked" ;
 lin spoor_N = variants {} ;
