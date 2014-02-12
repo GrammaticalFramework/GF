@@ -188,7 +188,7 @@ fun
 --<  UseAdvCl : PrAdv aNone -> PrCl aNone -> PrS ;  -- lift adv to front
   UseAdvCl_none : PrAdv_none -> PrCl_none -> PrS ;
 
-  UttS  : PrS -> Utt ;
+  UttPrS  : PrS -> Utt ;
 
 --<  AdvCl   : (a : Arg) -> PrAdv a -> PrCl aNone  -> PrCl a ; 
   AdvCl_none : PrAdv_none -> PrCl_none -> PrCl_none ;

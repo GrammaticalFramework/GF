@@ -226,7 +226,7 @@ lin
 
   UseAdvCl adv cl = {s = adv.s ++ declInvCl cl} ;
 
-  UttS s = s ;
+  UttPrS s = s ;
 
 
   AdvCl x a cl = case a.isAdV of {

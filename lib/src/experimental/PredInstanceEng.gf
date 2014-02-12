@@ -9,8 +9,8 @@ oper
   Agr    = ResEng.Agr ;
   Case   = ResEng.Case ;
   NPCase = ResEng.NPCase ;
-  VForm  = ResEng.VForm ;
-  VVType = ResEng.VVType ;
+  VForm  = ResEng.VForm ;  ---- VVForm to get contracted aux verbs
+  VVType = ResEng.VVType ; 
   SVoice = Voice ;
   
   VAgr = EVAgr ;
@@ -146,7 +146,10 @@ oper
     case <t,a> of {  
     <Pres|Past, Simul> =>
       case v.vtype of {
-        VTAux          => <sta ++ v.s ! vt,      [],                              []> ;
+        VTAux  => case t of {
+          Pres         => <sta ++ v.s ! VPres,   [],                              []> ;  -- can I/she/we
+          _            => <sta ++ v.s ! vt,      [],                              []>    -- could ...
+          } ;
         _              => case p of {
           Pos          => <[],                   sta ++ v.s ! vt,                 []> ;                 -- this is the deviating case
           Neg          => <do_Aux       vt Pos,  not_Str p,                       sta ++ v.s ! VInf>

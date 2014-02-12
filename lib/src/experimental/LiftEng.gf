@@ -16,7 +16,8 @@ lin
   LiftVQ v = liftV v ;
   LiftVA v = liftV v ; ---- c1?
   LiftVN v = liftV v ; ---- c1?
-  LiftVV v = {s = \\f => v.s ! VVF f ; p = v.p ; c1,c2 = [] ; isSubjectControl = False ; vtype = VTAct ; vvtype = VVInf} ; ---- c1? ---- VVF
+  LiftVV v = {s = \\f => v.s ! VVF f ; p = v.p ; c1,c2 = [] ; isSubjectControl = False ; 
+              vtype = case v.typ of {VAux => VTAux ; _ => VTAct} ; vvtype = v.typ} ; ---- c1? ---- VVF
 
   LiftV3  v = liftV v ** {c1 = v.c2 ; c2 = v.c3} ;
   LiftV2S v = liftV v ** {c1 = v.c2} ;
