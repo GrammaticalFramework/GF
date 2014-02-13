@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Script for building tags files for all RGL
-# John J. Camilleri, 2012
+# John J. Camilleri, 2014
 #
 #set -o errexit
 
@@ -11,6 +11,16 @@ tagsdir=${dir}/tags
 index=${dir}/index.json
 ignore="demo old-demo tmp"
 start=`date +%s`
+
+# Commands on GNU linux
+# FIND="find -maxdepth 1 -name '*.gf'"
+# STAT="stat --format=%Y"
+# SED='sed'
+
+# Commands on OSX
+FIND="find *.gf -maxdepth 1"
+STAT="stat -f %a"
+SED='gsed'
 
 # Function for testing array membership
 in_ignore() {
@@ -23,6 +33,9 @@ in_ignore() {
     return 1
 }
 
+# Make the dir just to be sure
+[ -d ${tagsdir} ] || mkdir ${tagsdir}
+
 # Iterate and build all the tags (takes some time)
 rm -f $index
 echo "{\n\"urlprefix\": \"/\"," >> $index
@@ -33,10 +46,10 @@ do
         cd $basedir/$dir
         echo "Processing folder:" `pwd`
         echo "  \"${dir}\": [" >> $index
-        find -maxdepth 1 -name '*.gf' | while read -r file
+        $FIND | while read -r file
         do
             echo "    \""`echo $file | sed 's|./||;s|.gf||'`"\"," >> $index
-            filemtime=`stat -c %Y "${tagsdir}/${file}-tags"` 2>/dev/null
+            filemtime=`$STAT "${tagsdir}/${file}-tags"` 2>/dev/null
             if [ -z "$filemtime" ] || [ "$filemtime" -lt "$start" ]
             then
                 gf --batch --quiet --tags --output-dir=${tagsdir} $file 2>/dev/null
@@ -50,6 +63,6 @@ echo "  \"\":{}\n}\n}" >> $index
 # Replace all URLs
 echo "Replacing URLs"
 cd $tagsdir
-sed --in-place --regexp-extended "s|\S+?/lib/|/lib/|g" *.gf-tags
+$SED --in-place --regexp-extended "s|\S+?/lib/|/lib/|g" *.gf-tags
 
 exit 0
