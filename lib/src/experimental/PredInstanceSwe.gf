@@ -42,6 +42,7 @@ oper
   NAgr = Number ; --- only Indef Nom forms are needed here
   IPAgr = Number ; ----{g : Gender ; n : Number} ; --- two separate fields in RGL
   RPAgr = RAgr ;
+  ICAgr = AFormPos ;
 
   defaultAgr : Agr = {g = Utr ; n = Sg ; p = P3} ;
 
@@ -49,6 +50,8 @@ oper
   agr2vagr : Agr -> VAgr = \a -> UUnit ;
 
   agr2aagr : Agr -> AAgr = \a -> a ;
+
+  agr2icagr : Agr -> ICAgr = agr2aformpos ;
 
 --- could use this?
   agr2aformpos : Agr -> AFormPos = \a ->

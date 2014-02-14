@@ -9,7 +9,7 @@ concrete RGLBaseSwe of RGLBase =
   AdverbSwe,
   PhraseSwe,
 ----  Sentence,
-----  Question,
+  QuestionSwe - [QuestCl,QuestVP,QuestSlash,QuestIAdv,QuestIComp],
   RelativeSwe - [RelCl,RelVP,RelSlash],
 ----  Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP], ---- why only these?
 

@@ -9,7 +9,7 @@ abstract RGLBase =
   Adverb,
   Phrase,
 ----  Sentence,
-----  Question,
+  Question - [QuestCl,QuestVP,QuestSlash,QuestIAdv,QuestIComp],
   Relative - [RelCl,RelVP,RelSlash],
 ----  Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP], ---- why only these?
 

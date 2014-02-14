@@ -47,6 +47,7 @@ oper
   NAgr = Number ;
   IPAgr = Number ;
   RPAgr = ResEng.RAgr ;
+  ICAgr = Unit ;
 
   defaultAgr : Agr = AgP3Sg Neutr ;
 
@@ -65,6 +66,8 @@ oper
     AgP3Sg _ => Sg ;
     AgP3Pl => Pl
     } ;
+
+  agr2icagr : Agr -> ICAgr = \a -> UUnit ;
 
 -- restoring full Agr
   ipagr2agr : IPAgr -> Agr = \n -> case n of {

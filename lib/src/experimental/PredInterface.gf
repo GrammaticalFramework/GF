@@ -66,14 +66,16 @@ oper
   AAgr = Agr ;  -- because of reflexives: "happy with itself"
   IPAgr : PType ; -- agreement of IP
   RPAgr : PType ; -- agreement of RP
+  ICAgr : PType ; -- agreement to IComp
 
   defaultAgr : Agr ;
 
 -- omitting parts of Agr information
 
-  agr2vagr : Agr -> VAgr ;
-  agr2aagr : Agr -> AAgr ;
-  agr2nagr : Agr -> NAgr ;
+  agr2vagr  : Agr -> VAgr ;
+  agr2aagr  : Agr -> AAgr ;
+  agr2nagr  : Agr -> NAgr ;
+  agr2icagr : Agr -> ICAgr ;
 
 -- restoring full Agr
   ipagr2agr  : IPAgr -> Agr ;
