@@ -1,4 +1,4 @@
-incomplete concrete PredFunctor of Pred = Cat [Ant,NP,Utt,IP,IAdv,Conj] ** 
+incomplete concrete PredFunctor of Pred = Cat [Ant,NP,Utt,IP,IAdv,Conj,RP,RS] ** 
   open 
     PredInterface,
     ParamX,
@@ -220,6 +220,30 @@ lin
       c3      = noComplCase ; 
       } ;
 -}
+
+  RelVP rp vp = 
+    let 
+      cl : Agr -> PrClause = \a -> 
+        let rpa = rpagr2agr rp.a a in
+        
+        vp ** {
+        v    = applyVerb vp (agr2vagr rpa) ;
+        subj = rp.s ! subjRPCase a ;
+        adj  = vp.adj ! rpa ;
+        obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! rpa ;  ---- apply complCase ---- place of part depends on obj
+        obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => rpa ; False => vp.obj1.p2}) ;   ---- apply complCase
+        c3   = noComplCase ;      -- for one more prep to build ClSlash 
+        qforms = qformsVP vp (agr2vagr rpa) ; 
+        }
+    in {s = \\a => declCl (cl a) ; c = subjCase} ;
+
+  RelSlash rp cl = {
+    s = \\a => rp.s ! subjRPCase (rpagr2agr rp.a a) ++ declCl cl ; ---- rp case 
+    c = objCase
+    } ;
+
+  PrImpSg vp = {s = impVP Sg vp} ;
+  PrImpPl vp = {s = impVP Pl vp} ;
 
   UseCl  cl = {s = declCl cl} ;
   UseQCl cl = {s = questCl cl} ;

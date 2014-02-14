@@ -13,6 +13,8 @@ oper
   STense : PType = X.Tense ;
   SVoice : PType ;
 
+  ImpType : PType = Number ;
+
 param
   Voice = Act | Pass ;  --- should be in ParamX
   Unit = UUnit ;        --- should be in Prelude
@@ -57,9 +59,13 @@ oper
 
   noObj : Agr => Str = \\_ => [] ;
 
+  RPCase : PType ;
+  subjRPCase : Agr -> RPCase ;
+
   NAgr : PType ;
   AAgr = Agr ;  -- because of reflexives: "happy with itself"
-  IPAgr : PType ;
+  IPAgr : PType ; -- agreement of IP
+  RPAgr : PType ; -- agreement of RP
 
   defaultAgr : Agr ;
 
@@ -72,6 +78,7 @@ oper
 -- restoring full Agr
   ipagr2agr  : IPAgr -> Agr ;
   ipagr2vagr : IPAgr -> VAgr ;
+  rpagr2agr  : RPAgr -> Agr -> Agr ; -- the agr can come from the RP itself or from above
 
 --- this is only needed in VPC formation
   vagr2agr : VAgr -> Agr ;
@@ -122,6 +129,7 @@ oper
   PrVerbPhrase = {
     v : VAgr => Str * Str * Str ;  -- would,have,slept
     inf : VVType => Str ;          -- (not) ((to)(sleep|have slept) | (sleeping|having slept)
+    imp : ImpType => Str ;
     c1 : ComplCase ; 
     c2 : ComplCase ; 
     part  : Str ;                  -- (look) up
@@ -138,6 +146,7 @@ oper
   initPrVerbPhrase : PrVerbPhrase = {
     v : VAgr => Str * Str * Str  = \\_ => <[],[],[]> ;
     inf : VVType => Str = \\_ => [] ;
+    imp : ImpType => Str = \\_ => [] ;
     c1 : ComplCase = noComplCase ; 
     c2 : ComplCase = noComplCase ; 
     part  : Str = [] ;                  -- (look) up
@@ -156,6 +165,7 @@ oper
   \a,t,p,v -> initPrVerbPhrase ** {
     v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
     inf = \\vt => tenseInfV a.s a.a p.p active v vt ;
+    imp = \\it => imperativeV p.s p.p it v ;
     c1  = v.c1 ;
     c2  = v.c2 ;
     part = v.p ;
@@ -218,9 +228,13 @@ oper
 
   infVP : VVType -> Agr -> PrVerbPhrase -> Str ;
 
+  impVP : Number -> PrVerbPhrase -> Str ;
+
   tenseV : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str ;
 
   tenseInfV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str ;
+
+  imperativeV : Str -> Polarity -> ImpType -> PrVerb -> Str ;
 
   tenseCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str ;
   tenseInfCopula : Str -> Anteriority -> Polarity -> VVType -> Str ;
