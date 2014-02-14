@@ -1,4 +1,4 @@
-abstract NDPred = Cat [Ant,NP,Utt,IP,IAdv,Conj] ** {
+abstract NDPred = Cat [Ant,NP,Utt,IP,IAdv,IComp,Conj,RS,RP] ** {
 
 cat
 --<  Arg ;
@@ -179,6 +179,9 @@ fun
 --<  QuestIAdv  : (a : Arg) -> IAdv -> PrCl a         -> PrQCl a ;
   QuestIAdv_none : IAdv -> PrCl_none -> PrQCl_none ;
 
+  QuestIComp_none : Ant -> Tense -> Pol -> IComp -> NP  -> PrQCl_none ; -- where is she
+
+
 --<  UseCl  : PrCl aNone  -> PrS ;
   UseCl_none : PrCl_none -> PrS ;
 
@@ -198,6 +201,15 @@ fun
   AdvQCl_none : PrAdv_none -> PrQCl_none -> PrQCl_none ;
   AdvQCl_np : PrAdv_np -> PrQCl_none -> PrQCl_np ;
 
+-- relatives: just one of each
+  RelCl_none    : PrCl_none         -> RS ;
+  RelVP_none    : RP -> PrVP_none   -> RS ;
+  RelSlash_none : RP -> PrCl_np     -> RS ;
+
+-- imperatives: just one of each
+
+  PrImpSg : PrVP_none -> Utt ;
+  PrImpPl : PrVP_none -> Utt ;  
 
 -- participles as adjectives
 
