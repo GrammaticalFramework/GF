@@ -1,4 +1,4 @@
-incomplete concrete PredFunctor of Pred = Cat [Ant,NP,Utt,IP,IAdv,Conj,RP,RS] ** 
+incomplete concrete PredFunctor of Pred = Cat [Ant,NP,Utt,IP,IAdv,IComp,Conj,RP,RS] ** 
   open 
     PredInterface,
     ParamX,
@@ -220,6 +220,17 @@ lin
       c3      = noComplCase ; 
       } ;
 -}
+
+  QuestIComp a t p icomp np = 
+    let vagr = (agr2vagr np.a) in
+    initPrClause ** {
+    v    = tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p vagr ;
+    subj = np.s ! subjCase ;
+    adV = negAdV p ;
+    foc = icomp.s ! agr2icagr np.a ; 
+    focType = FocObj ;
+    qforms = qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p vagr ; 
+    } ;
 
   RelVP rp vp = 
     let 

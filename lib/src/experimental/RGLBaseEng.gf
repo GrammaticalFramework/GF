@@ -9,7 +9,7 @@ concrete RGLBaseEng of RGLBase =
   AdverbEng,
   PhraseEng,
 ----  Sentence,
-----  Question,
+  QuestionEng - [QuestCl,QuestVP,QuestSlash,QuestIAdv,QuestIComp],
   RelativeEng - [RelCl,RelVP,RelSlash],
 ----  Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP], ---- why only these?
 

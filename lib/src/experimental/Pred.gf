@@ -58,7 +58,7 @@ fun
   QuestSlash : (a : Arg) -> IP   -> PrQCl (aNP a)  -> PrQCl a ;
   QuestCl    : (a : Arg)         -> PrCl a         -> PrQCl a ;
   QuestIAdv  : (a : Arg) -> IAdv -> PrCl a         -> PrQCl a ;
-  QuestIComp :                     IComp -> NP     -> PrQCl aNone ;
+  QuestIComp : Ant -> Tense -> Pol -> IComp -> NP  -> PrQCl aNone ; -- where is she
 
   UseCl  : PrCl aNone  -> PrS ;
   UseQCl : PrQCl aNone -> PrS ; -- deprecate QS
