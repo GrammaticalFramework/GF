@@ -15,6 +15,7 @@ oper
   
   VAgr = EVAgr ;
   VType = EVType ; 
+
 param  --- have to do this clumsy way because param P and oper P : PType don't unify
   EVAgr  = VASgP1 | VASgP3 | VAPl ;
   EVType = VTAct | VTRefl | VTAux ;
@@ -40,8 +41,12 @@ oper
 
   noObj : Agr => Str = \\_ => [] ;
 
+  RPCase = ResEng.RCase ; 
+  subjRPCase : Agr -> RPCase = \a -> RC (fromAgr a).g npNom ;
+
   NAgr = Number ;
   IPAgr = Number ;
+  RPAgr = ResEng.RAgr ;
 
   defaultAgr : Agr = AgP3Sg Neutr ;
 
@@ -72,6 +77,11 @@ oper
     Pl => VAPl
     } ;
 
+  rpagr2agr : RPAgr -> Agr -> Agr = \ra,a -> case ra of {
+    RAg ag => ag ;
+    RNoAg => a
+    } ;
+
 --- this is only needed in VPC formation
   vagr2agr : VAgr -> Agr = \a -> case a of {
     VASgP1 => AgP1 Sg ;
@@ -99,6 +109,13 @@ oper
     in
       vp.adV ++ vp.inf ! vt ++ vp.part ++
       vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.adv ++ vp.ext ;
+
+  impVP : Number -> PrVerbPhrase -> Str = \n,vp ->
+    let
+      a = AgP2 n
+    in 
+      vp.adV ++ vp.imp ! n ++ vp.part ++
+      vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a ++ vp.adv ++ vp.ext ;
 
   qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str = 
     \sta,t,a,p,agr,v -> 
@@ -220,6 +237,13 @@ oper
           Anter => not ++         "having"          ++ sa ++ v.s ! VPPart       -- (she starts) (not) having slept
           }
      } ;
+
+  imperativeV : Str -> Polarity -> ImpType -> PrVerb -> Str = \s,p,it,v -> 
+    s ++ case p of {
+      Pos => v.s ! VInf ;
+      Neg => ("do not" | "don't") ++ v.s ! VInf
+      } ;
+
 
 ----- dangerous variants for PMCFG generation - keep apart as long as possible
   be_Aux : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \sta,t,a,p,agr -> 

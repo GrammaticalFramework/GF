@@ -1,4 +1,4 @@
-abstract Pred = Cat [Ant,NP,Utt,IP,IAdv,Conj,RS,Imp,IComp] ** {
+abstract Pred = Cat [Ant,NP,Utt,IP,IAdv,Conj,RS,RP] ** {
 
 cat
   Arg ;
@@ -78,8 +78,8 @@ fun
 
 -- imperatives
 
-  ImpVP    : PrVP aNone -> Imp ;
-  
+  PrImpSg : PrVP aNone -> Utt ;
+  PrImpPl : PrVP aNone -> Utt ;  
 
 -- participles as adjectives
 

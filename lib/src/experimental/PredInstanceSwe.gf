@@ -36,8 +36,12 @@ oper
 
   noObj : Agr => Str = \\_ => [] ;
 
+  RPCase = CommonScand.RCase ; 
+  subjRPCase : Agr -> RPCase = \a -> RNom ;
+
   NAgr = Number ; --- only Indef Nom forms are needed here
   IPAgr = Number ; ----{g : Gender ; n : Number} ; --- two separate fields in RGL
+  RPAgr = RAgr ;
 
   defaultAgr : Agr = {g = Utr ; n = Sg ; p = P3} ;
 
@@ -59,6 +63,11 @@ oper
   ipagr2agr : IPAgr -> Agr = \a -> {g = Utr ; n = a ; p = P3} ; ----
 
   ipagr2vagr : IPAgr -> VAgr = \n -> UUnit ;
+
+  rpagr2agr : RPAgr -> Agr -> Agr = \ra,a -> case ra of {
+    RAg g n p => {g = g ; n = n ; p = p} ;
+    RNoAg => a
+    } ;
 
 --- this is only needed in VPC formation
   vagr2agr : VAgr -> Agr = \a -> defaultAgr ;
@@ -84,6 +93,14 @@ oper
     in
       vp.adV ++ vp.inf ! UUnit ++ 
       vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.adv ++ vp.ext ;
+
+  impVP : Number -> PrVerbPhrase -> Str = \n,vp ->
+    let
+      a = {g = Utr ; n = n ; p = P2}
+    in 
+      vp.imp ! n ++ vp.part ++  ---- AdV contains inte
+      vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a ++ vp.adv ++ vp.ext ;
+
 
   qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str = 
     \sta,t,a,p,agr,v -> <[],[]> ; ----- not needed in Swedish
@@ -129,6 +146,12 @@ oper
     case a of {
       Simul =>                                           sa ++ v.s ! VI (VInfin o) ;  -- hon vill sova
       Anter => hava_V.s ! VI (VInfin CommonScand.Act) ++ sa ++ v.s ! VI (VSupin o)    -- hon vill (ha) sovit ---- discont?
+      } ;
+
+  imperativeV : Str -> Polarity -> ImpType -> PrVerb -> Str = \s,p,it,v -> 
+    s ++ case p of {
+      Pos => v.s ! VF (VImper CommonScand.Act) ;   ---- deponents
+      Neg => v.s ! VF (VImper CommonScand.Act) ++ inte_Str
       } ;
 
   tenseCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str =
