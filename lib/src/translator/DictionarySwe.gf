@@ -23858,7 +23858,7 @@ lin gitano_N = variants {} ;
 lin give_N = mkN "räcka" | mkN "elasticitet" "elasticiteter"  ; -- SaldoWN -- comment=2
 lin give_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- SaldoWN
 lin give_V2 = mkV2 "ge" "ger" "ge" "gav" "gett" "given" | mkV2 (mkV "ge" "ger" "ge" "gav" "givit" "given") | dirV2 (partV (mkV "lämnar")"över") ; -- SaldoWN -- comment=3
-lin give_V3 = L.give_V3 ;
+lin give_V3 = mkV3 (mkV "ge" "ger" "ge" "gav" "givit" "given") | L.give_V3 ;
 lin give_away_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
 lin give_away_V2 = dirV2 (partV (mkV "lämnar")"över"); -- comment=3
 lin give_back_V2 = dirV2 (partV (mkV "lämnar")"över"); -- comment=3
@@ -48558,6 +48558,7 @@ lin roughen_V = variants {} ;
 lin roughen_V2 = variants {} ;
 lin roughhewn_A = variants {} ;
 lin roughish_A = variants {} ;
+lin roughly_AdV = mkAdV "ungefär" ;
 lin roughneck_N = mkN "råskinn" neutrum  ; -- SaldoWN
 lin roughness_N = mkN "tuffhet" ; -- comment=2
 lin roughrider_N = variants {} ;
