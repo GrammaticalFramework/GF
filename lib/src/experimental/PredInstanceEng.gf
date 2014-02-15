@@ -142,6 +142,8 @@ oper
     be_Aux s t a p agr ;
   tenseInfCopula : Str -> Anteriority -> Polarity -> VVType -> Str = \s,a,p,vt ->
     tenseInfV s a p Act be_V vt ;
+  tenseImpCopula : Str -> Polarity -> ImpType -> Str = \s,p,n ->
+    imperativeV s p n be_V ;
 
   tenseV : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str = 
     \sta,t,a,p,o,agr,v -> 

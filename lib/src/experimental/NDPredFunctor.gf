@@ -84,6 +84,12 @@ lin
     = Pred.UseAdv Pred.aNone ;
   UseNP_none
     = Pred.UseNP ;
+  UseS_none
+    = Pred.UseS ;
+  UseQ_none
+    = Pred.UseQ ;
+  UseVP_none
+    = Pred.UseVP ;
 
   ComplV2_none
     = Pred.ComplV2 Pred.aNone ;
@@ -176,6 +182,22 @@ lin
 
   AgentPastPartAP_none
     = Pred.AgentPastPartAP Pred.aNone ;
+
+  NomVPNP_none
+    = Pred.NomVPNP ;
+
+  ByVP_none
+    = Pred.ByVP Pred.aNone ;
+  WhenVP_none
+    = Pred.WhenVP Pred.aNone ;
+  BeforeVP_none
+    = Pred.BeforeVP Pred.aNone ;
+  AfterVP_none
+    = Pred.AfterVP Pred.aNone ;
+  InOrderVP_none
+    = Pred.InOrderVP Pred.aNone ;
+  WithoutVP_none
+    = Pred.WithoutVP Pred.aNone ;
 
   StartVPC_none, StartVPC_np
     = Pred.StartVPC Pred.aNone ;

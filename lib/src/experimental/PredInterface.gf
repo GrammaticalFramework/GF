@@ -240,6 +240,7 @@ oper
 
   tenseCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str ;
   tenseInfCopula : Str -> Anteriority -> Polarity -> VVType -> Str ;
+  tenseImpCopula : Str -> Polarity -> ImpType -> Str ;
 
   declCl       : PrClause -> Str ;
   declSubordCl : PrClause -> Str ;
@@ -264,6 +265,7 @@ oper
     \a,t,p -> initPrVerbPhrase ** {
     v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
+    imp = \\n => tenseImpCopula p.s p.p n ;
     adV = negAdV p ;
     qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;

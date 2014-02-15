@@ -122,6 +122,10 @@ lin
     adj = \\a => np.s ! subjCase ;
     } ;
 
+  UseS  a t p cl = addExtVP (useCopula a t p) (that_Compl ++ declSubordCl cl) ; ---- sentence form
+  UseQ  a t p cl = addExtVP (useCopula a t p) (questSubordCl cl) ; 
+  UseVP a t p vp = addExtVP (useCopula a t p) (vp.s ! vvInfinitive ! defaultAgr) ;
+
   ComplV2 x vp np = vp ** {
     obj1 = <\\a => np.s ! objCase, np.a>  -- np.a for object control 
     } ;

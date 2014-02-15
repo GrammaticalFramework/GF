@@ -28,4 +28,16 @@ lin
     c = objCase
     } ;
 
+  NomVPNP vpi = {
+    s = \\c => "att" ++ vpi.s ! vvInfinitive ! defaultAgr ;
+    a = defaultAgr ** {g = Neutr} ;
+    } ;
+
+  ByVP x vp vpi = vp ** {adv = "genom att" ++ vpi.s ! vvInfinitive ! defaultAgr} ; ---- agr
+  WhenVP x vp vpi = vp ** {adv = "vid att" ++ vpi.s ! vvInfinitive ! defaultAgr} ; ---- agr ----
+  BeforeVP x vp vpi = vp ** {adv = "innan att" ++ vpi.s ! vvInfinitive ! defaultAgr} ; ---- agr ----
+  AfterVP x vp vpi = vp ** {adv = "efter att" ++ vpi.s ! vvInfinitive ! defaultAgr} ; ---- agr
+  InOrderVP x vp vpi = vp ** {adv = "för att" ++ vpi.s ! vvInfinitive ! defaultAgr} ; ---- agr
+  WithoutVP x vp vpi = vp ** {adv = "utan att" ++ vpi.s ! vvInfinitive ! defaultAgr} ; ---- agr
+
 }
