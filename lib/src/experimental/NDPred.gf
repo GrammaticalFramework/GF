@@ -140,8 +140,11 @@ fun
   UseCN_none : Ant -> Tense -> Pol -> PrCN_none -> PrVP_none ;
   UseCN_np   : Ant -> Tense -> Pol -> PrCN_np   -> PrVP_np ;
 
---<  UseNP     :              Ant -> Tense -> Pol -> NP      -> PrVP aNone ;     -- she is the person
+-- the following are only for aNone
   UseNP_none : Ant -> Tense -> Pol -> NP -> PrVP_none ;
+  UseS_none  : Ant -> Tense -> Pol -> PrCl_none  -> PrVP_none ; -- the fact is that she sleeps
+  UseQ_none  : Ant -> Tense -> Pol -> PrQCl_none -> PrVP_none ; -- the question is who sleeps
+  UseVP_none : Ant -> Tense -> Pol -> PrVPI_none -> PrVP_none ; -- the goal is to sleep
 
 --<  InfVP    : (a : Arg) -> PrVP a -> PrVPI a ;
   InfVP_none : PrVP_none -> PrVPI_none ;
@@ -222,6 +225,28 @@ fun
 
 --<  AgentPastPartAP : (a : Arg) -> PrV (aNP a) -> NP -> PrAP a ;
   AgentPastPartAP_none : PrV_np -> NP -> PrAP_none ;
+
+-- for aNone only
+  NomVPNP_none   : PrVPI_none -> NP ;   -- translating a document
+
+--<  ByVP      : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- by translating a document
+  ByVP_none    :      PrVP_none -> PrVPI_none -> PrVP_none ; 
+  
+--<  WhenVP    : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- when translating a document
+  WhenVP_none    :      PrVP_none -> PrVPI_none -> PrVP_none ; 
+
+--<  BeforeVP  : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- before translating a document
+  BeforeVP_none    :      PrVP_none -> PrVPI_none -> PrVP_none ; 
+
+--<  AfterVP   : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- after translating a document
+  AfterVP_none    :      PrVP_none -> PrVPI_none -> PrVP_none ; 
+
+--<  InOrderVP : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- in order to translate a document
+  InOrderVP_none    :      PrVP_none -> PrVPI_none -> PrVP_none ; 
+
+--<  WithoutVP : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- without translating a document
+  WithoutVP_none    :      PrVP_none -> PrVPI_none -> PrVP_none ; 
+
 
 -- PrVP coordination
 

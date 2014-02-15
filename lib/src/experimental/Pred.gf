@@ -42,10 +42,13 @@ fun
 
   InfVP     : (a : Arg) -> PrVP a -> PrVPI a ;                                -- to love X
 
-  UseAP     : (a : Arg) -> Ant -> Tense -> Pol -> PrAP a  -> PrVP a ;         -- she is married to X
-  UseAdv    : (a : Arg) -> Ant -> Tense -> Pol -> PrAdv a -> PrVP a ;         -- she is in X
-  UseCN     : (a : Arg) -> Ant -> Tense -> Pol -> PrCN a  -> PrVP a ;         -- she is a member of X
-  UseNP     :              Ant -> Tense -> Pol -> NP      -> PrVP aNone ;     -- she is the person
+  UseAP     : (a : Arg) -> Ant -> Tense -> Pol -> PrAP a      -> PrVP a ;     -- she is married to X
+  UseAdv    : (a : Arg) -> Ant -> Tense -> Pol -> PrAdv a     -> PrVP a ;     -- she is in X
+  UseCN     : (a : Arg) -> Ant -> Tense -> Pol -> PrCN a      -> PrVP a ;     -- she is a member of X
+  UseNP     :              Ant -> Tense -> Pol -> NP          -> PrVP aNone ; -- she is the person
+  UseS      :              Ant -> Tense -> Pol -> PrCl aNone  -> PrVP aNone ; -- the fact is that she sleeps
+  UseQ      :              Ant -> Tense -> Pol -> PrQCl aNone -> PrVP aNone ; -- the question is who sleeps
+  UseVP     :              Ant -> Tense -> Pol -> PrVPI aNone -> PrVP aNone ; -- the goal is to sleep
 
   PredVP    : (a : Arg) -> NP -> PrVP a -> PrCl a ;
 
@@ -86,6 +89,17 @@ fun
   PresPartAP      : (a : Arg) -> PrV a       -> PrAP a ;
   PastPartAP      : (a : Arg) -> PrV (aNP a) -> PrAP a ;
   AgentPastPartAP : (a : Arg) -> PrV (aNP a) -> NP -> PrAP a ;
+
+-- nominalization
+  NomVPNP   : PrVPI aNone -> NP ;   -- translating a document
+
+-- other uses of VP's
+  ByVP      : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- by translating a document
+  WhenVP    : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- when translating a document
+  BeforeVP  : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- before translating a document
+  AfterVP   : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- after translating a document
+  InOrderVP : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- in order to translate a document
+  WithoutVP : (a : Arg) -> PrVP a -> PrVPI aNone -> PrVP a ;  -- without translating a document
 
 -- PrVP coordination
 

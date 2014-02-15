@@ -161,6 +161,8 @@ oper
     \s,t,a,p,_ -> tenseV s t a p CommonScand.Act UUnit (liftV be_V) ;
   tenseInfCopula : Str -> Anteriority -> Polarity -> VVType -> Str =
     \s,a,p,vt -> tenseInfV s a p CommonScand.Act (liftV be_V) vt ;
+  tenseImpCopula : Str -> Polarity -> ImpType -> Str =
+    \s,p,n -> imperativeV s p n (liftV be_V) ;
 
   hava_V : Verb = P.mkV "ha" "har" "ha" "hade" "haft" "havd" ; -- havd not used
   be_V : Verb = P.mkV "vara" "är" "var" "var" "varit" "varen" ; -- varen not used
