@@ -19893,7 +19893,7 @@ lin examen_N = variants {} ;
 lin examination_N = mkN "prov" neutrum | mkN "tentamen" "tentamen" "tentamina" "tentamina"  ; -- SaldoWN = mkN "prov" neutrum ; -- comment=13
 lin examine_V2 = mkV2 (mkV "undersöka"); -- status=guess, src=wikt
 lin examiner_N = mkN "examinator" "examinatorer" ;
-lin example_N = mkN "föredöme" | mkN "exempel" neutrum ; -- SaldoWN -- comment=7
+lin example_N = mkN "exempel" neutrum ; --- | mkN "föredöme" ; 
 lin exanthem_N = variants {} ;
 lin exarch_N = variants {} ;
 lin exasperate_V2 = variants {} ;
@@ -21498,7 +21498,7 @@ lin fistulous_A = variants {} ;
 lin fit_A = mkA "lämplig" ; -- comment=12
 lin fit_N = mkN "konvulsion" "konvulsioner" | mkN "passform"  ; -- SaldoWN -- comment=8
 lin fit_V = mkV "utrustar" ; -- comment=17
-lin fit_V2 = dirV2 (partV (mkV "passar")"på");
+lin fit_V2 = dirV2 (mkV "passar");
 lin fit_in_V = mkV "utrustar" ; -- comment=17
 lin fit_in_V2 = dirV2 (partV (mkV "passar")"på");
 lin fit_in_with_V2 = dirV2 (partV (mkV "passar")"på");
@@ -36380,7 +36380,7 @@ lin mossback_N = variants {} ;
 lin mossley_PN = variants {} ;
 lin mossy_A = variants {} ;
 lin most_Adv = mkAdv "ytterst" ; -- comment=3
-lin most_Det = M.mkDet "flesta" plural; --
+lin most_Det = M.mkDet "de flesta" plural; --
 lin mostaccioli_N = variants {} ;
 lin mostly_Adv = mkAdv "mestadels" ;
 lin mote_N = mkN "smolk" neutrum | mkN "smolk" neutrum ; -- SaldoWN -- comment=2
@@ -47115,7 +47115,7 @@ lin reluctant_A = mkA "motvillig" ; -- comment=2
 lin reluctivity_N = variants {} ;
 lin rely_V = mkV (mkV "lita") "på" ; -- status=guess, src=wikt
 lin rely_on_V = variants {} ;
-lin rely_V2 = mkV2 (depV (mkV "basera")) on_Prep ;
+lin rely_V2 = mkV2 "lita" (mkPrep "på") ;
 lin rely_on_V2V = variants {} ;
 lin remain_V = mkV "kvarstå" "kvarstod" "kvarstått" | mkV "förbli" "förblev" "förblivit"  ; -- SaldoWN -- comment=5
 lin remain_V2 = mkV2 "kvarstå" "kvarstod" "kvarstått" | mkV2 (mkV "kvarlämnas") ; -- SaldoWN -- status=guess, src=wikt
@@ -59025,7 +59025,7 @@ lin transitivity_N = variants {} ;
 lin transitory_A = (mkA "kortvarig") | (mkA "flyktig") | mkA "förgänglig" ; -- status=guess status=guess status=guess
 lin translatable_A = variants {} ;
 lin translate_V = mkV "översätta" "översätter" "översätt" "översatte" "översatt" "översatt" ;
-lin translate_V2 = mkV2 (mkV "översätta"); -- status=guess, src=wikt
+lin translate_V2 = mkV2 (mkV "översätta" "översätter" "översätt" "översatte" "översatt" "översatt") ;
 lin translation_N = mkN "översättning" ;
 lin translational_A = variants {} ;
 lin translator_N = mkN "översättare" utrum; -- comment=2
