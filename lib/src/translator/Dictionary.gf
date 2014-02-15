@@ -46656,6 +46656,7 @@ fun roughen_V : V;
 fun roughen_V2 : V2;
 fun roughhewn_A : A;
 fun roughish_A : A;
+fun roughly_AdV : AdV ;
 fun roughneck_N : N;
 fun roughness_N : N;
 fun roughrider_N : N;

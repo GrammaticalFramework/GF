@@ -46734,6 +46734,7 @@ lin roughen_V = mkV "roughen" "roughens" "roughened" "roughened" "roughening";
 lin roughen_V2 = mkV2 (mkV "roughen" "roughens" "roughened" "roughened" "roughening");
 lin roughhewn_A = mkA "roughhewn" ;
 lin roughish_A = compoundA (mkA "roughish");
+lin roughly_AdV = mkAdV "roughly" ;
 lin roughneck_N = mkN "roughneck" "roughnecks";
 lin roughness_N = mkN "roughness" ;
 lin roughrider_N = mkN "roughrider" "roughriders";

@@ -28,7 +28,7 @@ fun
   AppAPCN : PrAP_none -> CN -> CN ;
 
   LiftAdv  : Adv  -> PrAdv_none ;
-  LiftAdV  : Adv  -> PrAdv_none ;
+  LiftAdV  : AdV  -> PrAdv_none ;
   LiftPrep : Prep -> PrAdv_np ;
 
 
