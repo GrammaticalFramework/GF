@@ -9,7 +9,7 @@ concrete RGLBaseFin of RGLBase =
   AdverbFin,
   PhraseFin,
 ----  Sentence,
-----  Question,
+  QuestionFin - [QuestCl,QuestVP,QuestSlash,QuestIAdv,QuestIComp],
   RelativeFin - [RelCl,RelVP,RelSlash],
 ----  Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP], ---- why only these?
 
