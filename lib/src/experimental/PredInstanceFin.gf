@@ -82,7 +82,7 @@ oper
     adv : Str = [] ;
     adV : Str = [] ;
     ext : Str = [] ;
-    isNeg : Bool = True ;
+    isNeg : Bool = False ;
     isPass : Bool = False ;
     c1 : Compl = verb.c1 ;
     c2 : Compl = verb.c2 ;
