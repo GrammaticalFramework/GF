@@ -30,7 +30,6 @@ with
 lin
   UseV x a t p verb = initPrVerbPhraseV a t p verb ;
 
-
   UseAP x a t p ap = useCopula a t p ** {
     c1  = ap.c1 ;
     c2  = ap.c2 ;
@@ -130,8 +129,23 @@ lin
 
        ,PresPartAP
        ,PastPartAP,AgentPastPartAP
-       ,PassUseV, AgentPassUseV
+       ,AgentPassUseV
            = variants {} ;
+
+  PassUseV x a t p verb = initPrVerbPhraseV a t p verb ** {
+    v : Agr => {fin,inf : Str} = case verb.sc of {
+       SCNom => \\agr => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass agr        (lin PrV verb) ;
+       _     => \\_   => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass defaultAgr (lin PrV verb)
+       } ;
+    inf : VVType => Str = \\vtt => tenseInfV (a.s ++ p.s) a.a p.p Pass (lin PrV verb) vtt ;
+    imp : ImpType => Str = \\it => imperativeV p.s p.p it (lin PrV verb) ;
+    isPass : Bool = True ;
+    c1 : Compl = noComplCase ;
+    c2 : Compl = verb.c2 ;
+    vvtype = verb.vvtype ;
+    sc = npform2subjcase verb.c1.c ;
+    h = case a.a of {Anter => Back ; _ => verb.h} ;
+    } ;
 
 ---- this will be fun!
 
