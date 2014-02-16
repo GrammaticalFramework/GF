@@ -15,13 +15,13 @@ lin
   LiftVQ v = liftV v ;
   LiftVA v = liftV v ** {c1 = v.c2} ;
   LiftVN v = liftV v ** {c1 = v.c2} ;
-  LiftVV v = liftV v ** {vvType = v.vi} ;
+  LiftVV v = liftV v ** {vvtype = v.vi} ;
 
   LiftV3  v = liftV v ** {c1 = v.c2 ; c2 = v.c3} ;
 
   LiftV2S v = liftV v ** {c1 = v.c2} ;
   LiftV2Q v = liftV v ** {c1 = v.c2} ;
-  LiftV2V v = liftV v ** {c1 = v.c2 ; vvType = v.vi} ;
+  LiftV2V v = liftV v ** {c1 = v.c2 ; vvtype = v.vi} ;
   LiftV2A v = liftV v ** {c1 = v.c2 ; c2 = v.c3} ;
   LiftV2N v = liftV v ** {c1 = v.c2 ; c2 = v.c3} ;
 

@@ -52,7 +52,7 @@ lin
     adj  : Str = vp.adj ! np.a ;
     obj1 : Str = vp.obj1 ! np.a ;
     obj2 : Str = vp.obj2 ! np.a ; 
-    c3 : Compl = noComplCase ;
+    c3 : Compl = vp.c1 ; ---- could be c2
     } ;
 
   ReflVP x vp = vp ** {
@@ -137,8 +137,8 @@ lin
        SCNom => \\agr => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass agr        (lin PrV verb) ;
        _     => \\_   => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass defaultAgr (lin PrV verb)
        } ;
-    inf : VVType => Str = \\vtt => tenseInfV (a.s ++ p.s) a.a p.p Pass (lin PrV verb) vtt ;
-    imp : ImpType => Str = \\it => imperativeV p.s p.p it (lin PrV verb) ;
+    inf : VVType => Str = \\vtt => tenseInfV (a.s ++ p.s) a.a p.p Pass (lin PrV verb) vtt ; ---- still Act
+    imp : ImpType => Str = \\it => imperativeV p.s p.p it (lin PrV verb) ; ---- still Act
     isPass : Bool = True ;
     c1 : Compl = noComplCase ;
     c2 : Compl = verb.c2 ;

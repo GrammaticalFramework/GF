@@ -153,7 +153,7 @@ oper
   strComplCase : ComplCase -> Str = \c -> c.s.p1 ++ c.s.p2 ;
 
   appComplCase  : ComplCase -> NounPhrase -> Str = \p,np -> appCompl True Pos p np ;
-  noComplCase   : ComplCase = P.postGenPrep [] ; ----
+  noComplCase   : ComplCase = P.accPrep ; ----
 
   noObj : Agr => Str = \\_ => [] ;
 
@@ -207,14 +207,15 @@ oper
   finV : Str -> STense -> Anteriority -> Polarity -> SVoice -> Agr -> PrVerb -> {fin,inf : Str} =
        \sta,t,a,pol,o,agr,v -> 
     let 
-      ovps = (S.vp2old_vp (S.predV v)).s ! VIFin t ! a ! pol ! agr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
+      vit = case o of {Act => VIFin t ; Pass => VIPass t} ;
+      ovps = (S.vp2old_vp (S.predV v)).s ! vit ! a ! pol ! agr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
     in
     {fin = sta ++ ovps.fin ; inf = ovps.inf} ;
 
   infV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str = 
       \sa,a,pol,o,v,vvt ->
    let 
-     vt = Inf1 ; ----vvtype2inform vvt 
+     vt = vvtype2infform vvt ; 
      ovps = (S.vp2old_vp (S.predV v)).s ! VIInf vt ! a ! pol ! defaultAgr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
    in
    sa ++ ovps.fin ++ ovps.inf ;
@@ -248,8 +249,8 @@ oper
     case cl.focType of { 
       NoFoc => cl.verb.fin ++ Predef.BIND ++ ko ++ 
                cl.subj ++ cl.adV ++ cl.verb.inf ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
-      _     => cl.foc ++ cl.verb.fin ++ 
-               cl.subj ++ cl.adV ++ cl.verb.inf ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
+      _     => cl.foc ++ cl.subj ++ cl.verb.fin ++ 
+               cl.adV ++ cl.verb.inf ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext
       } ;
 
   questSubordCl : PrQuestionClause -> Str = questCl ;
@@ -264,8 +265,8 @@ oper
   tenseV : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str = 
        \sta,t,a,pol,o,agr,v -> 
    let 
-     ovps = (S.vp2old_vp (S.predV v)).s ! VIFin t ! a ! pol ! agr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
-     act = Act 
+      vit = case o of {Act => VIFin t ; Pass => VIPass t} ;
+      ovps = (S.vp2old_vp (S.predV v)).s ! vit ! a ! pol ! agr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
    in
    <sta ++ ovps.fin, ovps.inf, []> ;
 
