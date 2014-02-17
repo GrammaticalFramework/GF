@@ -16,6 +16,7 @@ resource HTML = open Prelude in {
    heading1 : Str -> Str = intag "h1" ;
    heading2 : Str -> Str = intag "h2" ;
    heading3 : Str -> Str = intag "h3" ;
+   heading4 : Str -> Str = intag "h4" ;
 
 -- for building tables
    frameTable : Str -> Str = intagAttr "table" ("rules=all border=yes") ;

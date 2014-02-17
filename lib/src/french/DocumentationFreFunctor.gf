@@ -14,7 +14,8 @@ in {
 
 
 lincat
-  Inflection = {s : Str} ; 
+  Inflection = {s : Str} ;
+  Document = {s : Str} ;
   
 oper
    tdf : Str -> Str = \s -> td (intag "i" s) ;
@@ -49,7 +50,7 @@ lin
   InflectionVV v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin VV v) (S.mkVP (L.sleep_V)))) (lin V v) ;
   InflectionV2V v = inflectionVerb (verbExample (S.mkCl S.she_NP (lin V2V v) S.we_NP (S.mkVP (L.sleep_V)))) (lin V v) ;
 
-  ExplainInflection e i = ss (i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
+  MkDocument b i e = ss (paragraph e.s ++ i.s ++ paragraph e.s) ;  -- explanation appended in a new paragraph
 
 oper 
   verbExample : CatFre.Cl -> Str = \cl ->

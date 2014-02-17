@@ -72,43 +72,5 @@ fun CompoundCN : Num -> N -> CN -> CN ;
 	AdAdV : AdA -> AdV -> AdV ;
 
 	UttAdV : AdV -> Utt;
-	
-cat Feat;
-fun FeatN  : N  -> Feat;
-    FeatN2 : N2 -> Feat;
-    FeatV  : V  -> Feat;
-    FeatV2 : V2 -> Feat;
-    FeatV3 : V3 -> Feat;
-    FeatV2V : V2V -> Feat;
-    FeatV2S : V2S -> Feat;
-    FeatV2Q : V2Q -> Feat;
-    FeatV2A : V2A -> Feat;
-    FeatVV : VV -> Feat;
-    FeatVS : VS -> Feat;
-    FeatVQ : VQ -> Feat;
-    FeatVA : VA -> Feat;
-
-
--- for displaying inflection tables ---- TODO soon obsolete
-
-cat 
-  NDisplay ; ADisplay ; VDisplay ;
-fun 
-  DisplayN   : N -> NDisplay ;
-  DisplayN2  : N2 -> NDisplay ;
-  DisplayN3  : N3 -> NDisplay ;
-  DisplayA   : A -> ADisplay ;
-  DisplayA2  : A2 -> ADisplay ;
-  DisplayV   : V -> VDisplay ;
-  DisplayV2  : V2 -> VDisplay ;
-  DisplayV3  : V3 -> VDisplay ;
-  DisplayVA  : VA -> VDisplay ;
-  DisplayVQ  : VQ -> VDisplay ;
-  DisplayVS  : VS -> VDisplay ;
-  DisplayVV  : VV -> VDisplay ;
-  DisplayV2A : V2A -> VDisplay ;
-  DisplayV2Q : V2Q -> VDisplay ;
-  DisplayV2S : V2S -> VDisplay ;
-  DisplayV2V : V2V -> VDisplay ;
 
 }
