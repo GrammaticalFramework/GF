@@ -392,6 +392,7 @@ vapply v vs =
         msg = bug . (("Applying Predef."++showIdent (predefName pre)++": ")++)
     VS (VV t pvs fs) s -> VS (VV t pvs [vapply f vs|f<-fs]) s
     VFV fs -> vfv [vapply f vs|f<-fs]
+    VCApp f vs0 -> VCApp f (vs0++vs)
     v -> bug $ "vapply "++show v++" "++show vs
 
 vbeta bt f (v:vs) =
