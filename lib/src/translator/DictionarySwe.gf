@@ -62951,7 +62951,7 @@ lin waking_N = variants {} ;
 lin wale_N = variants {} ;
 lin wales_PN = variants {} ;
 lin walk_N = mkN "promenad" "promenader" ;
-lin walk_V = mkV "gå" "går" "gå" "gick" "gått" "gången" | L.walk_V ; -- SaldoWN
+lin walk_V = L.walk_V;
 lin walk_V2 = mkV2 "gå" "går" "gå" "gick" "gått" "gången" | dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- SaldoWN -- comment=17
 lin walk_away_from_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=17
 lin walk_away_with_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=17
