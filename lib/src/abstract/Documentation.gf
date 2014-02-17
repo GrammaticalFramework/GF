@@ -5,12 +5,14 @@ abstract Documentation = Cat ** {
 
 cat
   Inflection ;     -- inflection table
+  Document ;
 
 fun
   InflectionN   : N -> Inflection ;
   InflectionN2  : N2 -> Inflection ;
   InflectionN3  : N3 -> Inflection ;
   InflectionA   : A -> Inflection ;
+  InflectionA2  : A2 -> Inflection ;
   InflectionV   : V -> Inflection ;
   InflectionV2  : V2 -> Inflection ;
   InflectionVV  : VV -> Inflection ;
@@ -25,7 +27,7 @@ fun
   InflectionAdv : Adv -> Inflection ;
   InflectionPrep : Prep -> Inflection ;
 
-  ExplainInflection : String -> Inflection -> Inflection ;
-
+fun
+  MkDocument : String -> Inflection -> String -> Document ;
 
 }
