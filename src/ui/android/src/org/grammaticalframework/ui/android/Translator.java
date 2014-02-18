@@ -162,13 +162,13 @@ public class Translator {
     public void setTargetLanguage(Language language) {
     	setPrefLang(TARGET_LANG_KEY, language);
 
+    	if (mTargetLoader.getLanguage() == language)
+    		return;
     	if (mSourceLoader.getLanguage() == language) {
     		cacheOrUnloadLanguage(mTargetLoader);
     		mTargetLoader = mSourceLoader;
     		return;
     	}
-    	if (mTargetLoader.getLanguage() == language)
-    		return;
     	if (mOtherLoader != null &&
     	    mOtherLoader.getLanguage() == language) {
     		ConcrLoader tmp = mTargetLoader;
