@@ -11,7 +11,7 @@ table.center { margin-left: auto; margin-right: auto; }
 textarea { margin: 0; }
 body:target h1, body:target div.modtime { display: none; }
 #extra { color: #666; }
-#pick span { padding: 0 0.5ex; }
+#pick>* { padding: 0 0.5ex; }
 </style>
 </head>
 
@@ -50,97 +50,26 @@ body:target h1, body:target div.modtime { display: none; }
   <big style="position: relative; top: 1ex">⤵</big>
     <button onclick="wc.swap()">↑↓</button>
   <br>
-      <textarea name=output rows=3 style="width: 100%" readonly>
-      </textarea>
-  <br>
+  <textarea name=output rows=3 style="width: 100%" readonly></textarea>
 </form>
-  
+
 </table>
 <div class=center>
+  <!--input type=button onclick="wc.try_google()" value="Google Translate"-->
   <div id=pick></div>
-  <small id=extra></small></div>
+  <small id=extra></small>
+  </div>
 <p>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Wed Feb 12 16:23:01 CET 2014 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Wed Feb 19 14:56:13 CET 2014 <!-- hhmts end -->
 </small></div>
 <script src="js/support.js"></script>
 <script src="js/gftranslate.js"></script>
 <script src="js/localstorage.js"></script>
 <script src="gfse/localstorage.js"></script>
 <script src="gfse/cloud2.js"></script>
-<script>
-var wc={}
-wc.f=document.forms[0]
-wc.e=element("extra")
-wc.p=element("pick")
-wc.translate=function() {
-  var f=wc.f, e=wc.e, p=wc.p
-  f.translate.disabled=true
-  f.output.value=""
-  wc.r=[]
-  wc.current=0
-  clear(e)
-  clear(p)
-
-  function show_error(msg) {
-    if(e) e.innerHTML=msg
-    else f.output.value="["+msg+"]"
-  }
-  function show_pick(i) { return function() { show_trans(i); return false; } }
-  function show_picks() {
-    clear(p)
-    for(var i=0;i<wc.r.length;i++) {
-      p.appendChild(text(" "))
-      var pick=text(i+1) // +"⃝"
-      if(i!=wc.current) {
-        var pick=node("a",{href:"#"},[pick])
-        pick.onclick=pick.onmouseover=show_pick(i)
-      }
-      p.appendChild(span_class("pick",pick))
-    }
-  }
-  function show_trans(i) {
-    var r=wc.r[i]
-    f.output.value=r.text
-    if(e) e.innerHTML=r.prob+"<br>"+r.tree
-    wc.current=i
-    if(wc.p && wc.r.length>1) show_picks()
-  }
-
-  function trans(text,i) {
-    function showit(result) {
-      wc.r[i].text=result
-      if(wc.current==i) show_trans(i)
-else show_picks()
-      f.translate.disabled=false
-      if(wc.p && i<9) trans(text,i+1)
-    }
-    function step3(trans) {
-      if(trans.length>=1) {
-        if(trans[0].error) show_error(trans[0].error)
-        else {
-          var r=wc.r[i]=trans[0]
-          if(e && wc.current==i) e.innerHTML=r.prob+"<br>"+r.tree
-          unlextext(r.linearizations[0].text,showit)
-        }
-      }
-      else if(i==0) show_error("Unable to translate")
-    }
-    gftranslate.translate(text,f.from.value,f.to.value,i,1,step3)
-  }
-  function step2(text) { trans(text,0) }
-  lextext(f.input.value,step2)
-  return false;
-}
-
-wc.swap=function() {
-  var f=wc.f
-  f.input.value=f.output.value;
-  var from=f.from.value
-  f.from.value=f.to.value
-  f.to.value=from
-  wc.translate()
-}
+<script src="js/langcode.js"></script>
+<script src="js/wc.js"></script>
 </script>
 </body>
 </html>
