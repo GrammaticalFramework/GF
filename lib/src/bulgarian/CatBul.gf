@@ -120,6 +120,12 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
                                }
                       in linrefVP vp;
 
+    Conj = \conj -> let s = linCoord ! conj.conj 
+                    in case conj.distr of {
+                         True  => s ++ s;
+                         False => s
+                       } ;
+
     V, VS, VQ, VA = \v -> linrefVP (predV v);
     V2, V2A = \v -> linrefVP (predV v) ++ v.c2.s;
     V2V = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s ++ "да";
