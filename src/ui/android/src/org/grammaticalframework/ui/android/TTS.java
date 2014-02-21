@@ -23,6 +23,9 @@ public class TTS {
     // TODO: handle speak() calls before service connects
     public void speak(String language, String text) {
     	if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+    		if (language.equals("cmn-Hans-CN")) {
+    			language = "yue";
+    		}
 	        Locale locale = LocaleUtils.parseJavaLocale(language.replace('-', '_'),
 	                                                    Locale.getDefault());
 

@@ -26,19 +26,18 @@ public class Translator {
     private static final String TAG = "Translator";
 
     // TODO: allow changing
-    private String mGrammar = "Parse8.pgf";
+    private String mGrammar = "ParseEngAbs.pgf";
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
-
-	new Language("en-US", "English", "ParseEng", R.xml.inflection_en, R.xml.qwerty),
-        new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.inflection_bg, R.xml.cyrillic),
-        new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.inflection_cmn, R.xml.qwerty),   
-        new Language("fi-FI", "Finnish", "ParseFin", R.xml.inflection_fi, R.xml.qwerty),
-	new Language("fr-FR", "French", "ParseFre", R.xml.inflection_fr, R.xml.qwerty),  
-	new Language("de-DE", "German", "ParseGer", 0, R.xml.qwerty), 
-	new Language("hi-IN", "Hindi", "ParseHin", 0, R.xml.qwerty), /// 
-        new Language("sv-SE", "Swedish", "ParseSwe", R.xml.inflection_sv, R.xml.qwerty), 
+	    new Language("en-US", "English", "ParseEng", R.xml.qwerty),
+        new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.cyrillic),
+        new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.qwerty),   
+        new Language("fr-FR", "French", "ParseFre", R.xml.qwerty),  
+        new Language("de-DE", "German", "ParseGer", R.xml.qwerty), 
+        new Language("hi-IN", "Hindi", "ParseHin", R.xml.qwerty), /// 
+        new Language("sv-SE", "Swedish", "ParseSwe", R.xml.qwerty), 
+        new Language("fi-FI", "Finnish", "ParseFin", R.xml.qwerty),
     };
 
     private Context mContext;
@@ -254,208 +253,44 @@ public class Translator {
         }
     }
 
-    private String getLemmaTag(String lemma) {
-    	String cat = getGrammar().getFunctionType(lemma).getCategory();
-    	
-		int res = getTargetLanguage().getInflectionResource();
-		if (res == 0)
-			return "";
-
-		XmlResourceParser parser = mContext.getResources().getXml(res);
-
-		try {
-			int state = 0;
-			int event = parser.next();
-			String tag = null;
-			boolean found = false;
-			while (event != XmlResourceParser.END_DOCUMENT) {
-				switch (event) {
-				case XmlResourceParser.START_TAG:
-					if (state == 0 && "inflection".equals(parser.getName())) {
-						state = 1;
-						tag   = null;
-						found = false;
-					} else if (state == 1 && "cat".equals(parser.getName())) {
-						state = 2;
-					} else if (state == 1 && "tag".equals(parser.getName())) {
-						state = 3;
-					} else if (state == 1 && "template".equals(parser.getName())) {
-						state = 4;
-					}
-					break;
-				case XmlResourceParser.END_TAG:
-					if (state == 1 && "inflection".equals(parser.getName())) {
-						state = 0;
-						if (found)
-							return tag+".";
-					} else if (state == 2 && "cat".equals(parser.getName())) {
-						state = 1;
-					} else if (state == 3 && "tag".equals(parser.getName())) {
-						state = 1;
-					} else if (state == 4 && "template".equals(parser.getName())) {
-						state = 1;
-					}
-					break;
-				case XmlResourceParser.TEXT:
-					if (state == 2) {
-						if (cat.equals(parser.getText())) {
-							found = true;
-						}
-					} else if (state == 3) {
-						tag = parser.getText();
-					}
-					break;
-				}
-				event = parser.next();
-			}
-		} catch (IOException e) {
-			Log.e(TAG, "getLemmaTag", e);
-		} catch (XmlPullParserException e) {
-			Log.e(TAG, "getLemmaTag", e);
-		} finally {
-			parser.close();
-		}
-		
-		return "";
-    }
-
     public String generateLexiconEntry(String lemma) {
-    	Expr e = Expr.readExpr(lemma);
         Concr sourceLang = getSourceConcr();
         Concr targetLang = getTargetConcr();
-        if (targetLang.hasLinearization(lemma))
-        	return sourceLang.linearize(e) + " - " + getLemmaTag(lemma) + " " + targetLang.linearize(e);
-        else
-        	return sourceLang.linearize(e) + " " + getLemmaTag(lemma);        
+    	String cat = getGrammar().getFunctionType(lemma).getCategory();
+		
+    	Expr e1 = Expr.readExpr(lemma);
+    	Expr e2 = Expr.readExpr("MkTag (Inflection"+cat+" "+lemma+")");
+
+    	if (targetLang.hasLinearization("Inflection"+cat)) {
+	        if (targetLang.hasLinearization(lemma))
+	        	return sourceLang.linearize(e1) + " - " + targetLang.linearize(e2) + ". " + targetLang.linearize(e1);
+	        else
+	        	return sourceLang.linearize(e1) + " " + targetLang.linearize(e2)+".";
+    	} else {
+    		if (targetLang.hasLinearization(lemma))
+    			return sourceLang.linearize(e1) + " - " + targetLang.linearize(e1);
+    		else
+    			return sourceLang.linearize(e1);
+    	}
     }
 
 	public String getInflectionTable(String lemma) {
 		Concr targetLang = getTargetConcr();
-		
+		String cat = getGrammar().getFunctionType(lemma).getCategory();
+
 		if (!targetLang.hasLinearization(lemma))
 			return null;
 
-		int res = getTargetLanguage().getInflectionResource();
-		if (res == 0)
-			return "";
+		if (!targetLang.hasLinearization("Inflection"+cat))
+			return null;
 
-		Map<String,Map<String,String>> cache = new HashMap<String,Map<String,String>>();
+		Expr e = Expr.readExpr("MkDocument \"\" (Inflection"+cat+" "+lemma+") \"\"");
+		String html =
+			"<html><head><meta charset=\"UTF-8\"/></head><body>" +
+			targetLang.linearize(e) +
+			"</body>";
 
-		String cat = getGrammar().getFunctionType(lemma).getCategory();
-
-		XmlResourceParser parser = mContext.getResources().getXml(res);
-		StringBuilder builder = new StringBuilder();
-		builder.append("<html><head><meta charset=\"UTF-8\"/></head><body>");
-
-		try {
-			int state = 0;
-			int event = parser.next();
-			boolean emit = false;
-			boolean form = false;
-			boolean lin  = false;
-			String formName = null;
-			StringBuilder abstrBuilder = null;
-			while (event != XmlResourceParser.END_DOCUMENT) {
-				switch (event) {
-				case XmlResourceParser.START_TAG:
-					if (state == 0 && "inflection".equals(parser.getName())) {
-						state = 1;
-					} else if (state == 1 && "cat".equals(parser.getName())) {
-						state = 2;
-					} else if (state == 1 && "template".equals(parser.getName())) {
-						state = 4;
-					} else if (state == 4 && "form".equals(parser.getName())) {
-						form = true;
-					} else if (state == 4 && emit && "lin".equals(parser.getName())) {
-						lin = true;
-						emit = false;
-						abstrBuilder = new StringBuilder();
-						formName = parser.getAttributeValue(null, "form");
-					} else if (state == 4 && lin && "cat".equals(parser.getName())) {
-						abstrBuilder.append(cat);
-					} else if (state == 4 && lin && "lemma".equals(parser.getName())) {
-						abstrBuilder.append(lemma);
-					} else if (state == 4 && emit) {
-						builder.append("<"+parser.getName());
-						int n_attrs = parser.getAttributeCount();
-						for (int i = 0; i < n_attrs; i++) {
-							builder.append(' ');
-							builder.append(parser.getAttributeName(i));
-							builder.append("=\"");
-							builder.append(parser.getAttributeValue(i));
-							builder.append("\"");
-						}
-						builder.append(">");
-					}
-					break;
-				case XmlResourceParser.END_TAG:
-					if (state == 1 && "inflection".equals(parser.getName())) {
-						state = 0;
-					} else if (state == 2 && "cat".equals(parser.getName())) {
-						state = 1;
-					} else if (state == 4 && "template".equals(parser.getName())) {
-						state = 1;
-						emit = false;
-					} else if (state == 4 && "form".equals(parser.getName())) {
-						form = false;
-					} else if (state == 4 && lin && "lin".equals(parser.getName())) {
-						String s = abstrBuilder.toString();
-						if (formName == null) {
-							Expr expr = Expr.readExpr(s);
-							builder.append(TextUtils.htmlEncode(targetLang.linearize(expr)));
-						} else {
-							Map<String,String> elins = cache.get(s);
-							if (elins == null) {
-								Expr expr = Expr.readExpr(s);
-								elins = targetLang.tabularLinearize(expr);
-								cache.put(s, elins);
-							}
-							String elin = elins.get(formName);
-							builder.append(TextUtils.htmlEncode(elin));
-						}
-
-						lin  = false;
-						emit = true;
-					} else if (state == 4 && emit) {
-						builder.append("</"+parser.getName()+">");
-					}
-					break;
-				case XmlResourceParser.TEXT:
-					if (state == 2) {
-						if (cat.equals(parser.getText()))
-							emit = true;
-					} else if (state == 4 && emit) {
-						if (form) {
-							Map<String,String> elins = cache.get(lemma);
-							if (elins == null) {
-								Expr expr = Expr.readExpr(lemma);
-								elins = targetLang.tabularLinearize(expr);
-								cache.put(lemma, elins);
-							}
-							String s = elins.get(parser.getText());
-							if (s != null)
-								builder.append(TextUtils.htmlEncode(s));
-						} else {
-							builder.append(parser.getText());
-						}
-					} else if (state == 4 && lin) {
-						abstrBuilder.append(parser.getText());
-					}
-					break;
-				}
-				event = parser.next();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			e.printStackTrace();
-		} finally {
-			parser.close();
-		}
-		
-		builder.append("</body>");
-
-		return builder.toString();
+		return html;
 	}
 
     public List<MorphoAnalysis> lookupMorpho(String sentence) {
