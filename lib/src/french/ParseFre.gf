@@ -1,4 +1,4 @@
---# -path=.:../english/:../abstract:../romance:alltenses
+--# -path=.:../english/:../abstract:../romance:alltenses:../translator
 concrete ParseFre of ParseEngAbs = 
   TenseFre,
 --  CatFre,
@@ -21,7 +21,7 @@ concrete ParseFre of ParseEngAbs =
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash],
 
-  DictEngFre ** 
+  DictionaryFre ** 
 open PhonoFre, MorphoFre, ResFre, CommonRomance, ParadigmsFre, SyntaxFre, Prelude, (G = GrammarFre) in {
 
 flags
