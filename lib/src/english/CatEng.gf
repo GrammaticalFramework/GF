@@ -132,6 +132,8 @@ concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
     VP = \vp -> infVP VVAux vp Simul CPos (agrP3 Sg) ;
     VPSlash = \vps -> infVP VVAux vps Simul CPos (agrP3 Sg) ++ vps.c2;
 
+    Conj = \conj -> conj.s1 ++ conj.s2 ;
+
     V, VS, VQ, VA = \v -> infVP VVAux (predV v) Simul CPos (agrP3 Sg);
     V2, V2A, V2Q, V2S = \v -> infVP VVAux (predV v) Simul CPos (agrP3 Sg) ++ v.c2;
     V3 = \v -> infVP VVAux (predV v) Simul CPos (agrP3 Sg) ++ v.c2 ++ v.c3;
