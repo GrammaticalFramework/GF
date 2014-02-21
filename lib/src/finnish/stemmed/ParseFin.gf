@@ -1,4 +1,4 @@
---# -path=.:..:../../abstract:../../common:../../api:../../english:../kotus
+--# -path=.:..:../../abstract:../../common:../../api:../../english:../kotus:../../translator
 
 concrete ParseFin of ParseEngAbs = 
   TenseX,  ---- TODO add potential forms 
@@ -23,7 +23,7 @@ concrete ParseFin of ParseEngAbs =
   ExtraFin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, Voc, RP, GenRP, PassVPSlash, PassAgentVPSlash,
       Temp, Tense, Pol, Conj, VPS, ListVPS, S, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
       VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV]
- , DictEngFin 
+ , DictionaryFin
 ** 
 open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, StemFin, (E = ExtraFin), (G = GrammarFin), Prelude in {
 
@@ -38,7 +38,7 @@ lin
 ----------------------
 
 lin
-    ComplVV v ant pol vp = 
+   {- ComplVV v ant pol vp = 
       insertObj 
         (\\_,b,a => infVPGen pol.p v.sc b a vp v.vi) 
         (predSV {s = v.s ; 
@@ -49,7 +49,7 @@ lin
                 h = v.h ; p = v.p
                }
          ) ;
-
+-}
 
   ---- what is this...
   myself_NP = mkPronounGen False "itse" "itsen" "itseä" "itsenä" "itseen" Sg P1  ** {isPron = True ; isNeg = False} ;
@@ -104,10 +104,10 @@ lin
       isNeg = quant.isNeg
       } ;
 
-  SlashV2V v ant p vp = 
+{-  SlashV2V v ant p vp = 
       insertObj (\\_,b,a => infVP v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ; ----
       ---- insertObj (\\_,b,a => infVPGen p.p v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
-
+-}
   CompS s = {s = \\_ => "että" ++ s.s} ;  -- S -> Comp            ---- what are these expected to do ? 29/3/2013
   CompVP ant pol vp = {s = \\a => infVPGen pol.p vp.s.sc Pos a vp Inf1} ; -- VP -> Comp
 
@@ -134,32 +134,14 @@ lin
    SlashVPIV2V v pol vpi = -- : V2V -> Pol -> VPI -> VPSlash ;
       insertObj (\\_,b,a => vpi.s ! v.vi) (predSV v) ** {c2 = v.c2} ;
 
-   VPSlashVS v vp = -- : VS -> VP -> VPSlash ; -- hän sanoo (minun) menevän (!) ---- menneen ?
+ {-  VPSlashVS v vp = -- : VS -> VP -> VPSlash ; -- hän sanoo (minun) menevän (!) ---- menneen ?
       insertObj (\\_,b,a => infVP v.sc b a vp InfPresPart) (predSV v) ** 
                    {c2 = {c = NPCase Gen ; s = \\_ => [] ; h = Back ; isPre = True}} ;
-     
+   -}  
 --   SlashSlashV2V v ant pol vps = -- : V2V -> Ant -> Pol -> VPSlash -> VPSlash ; --- not implemented in Eng so far
 --      insertObj (\\_,b,a => infVPGen pol.p v.sc b a vps v.vi) (predSV v) ** {c2 = v.c2} ; --- or vps.c2 ??
 
 --in Verb,   SlashV2VNP : V2V -> NP -> VPSlash -> VPSlash
-
----- these will be obsolete
-lincat 
-  NDisplay = {s : NForm => Str} ;
-  ADisplay = {s : Degree => NForm => Str} ; 
-  VDisplay = {s : VForm => Str} ; 
-
-lin
-  DisplayN n = snoun2nounSep n ;
-  DisplayA a = {
-    s = table {
-       Posit  => (snoun2nounSep {s = \\f => a.s ! Posit  ! sAN f ; h = a.h}).s ; 
-       Compar => (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s ; 
-       Superl => (snoun2nounSep {s = \\f => a.s ! Superl ! sAN f ; h = a.h}).s 
-      }
-    } ;
- 
-  DisplayV v = sverb2verbSep v ;
 
 }
 

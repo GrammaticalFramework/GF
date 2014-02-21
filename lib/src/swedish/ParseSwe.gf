@@ -1,4 +1,4 @@
---# -path=.:../english/:../scandinavian:alltenses:../abstract
+--# -path=.:../english/:../scandinavian:alltenses:../abstract:../translator
 concrete ParseSwe of ParseEngAbs = 
   TenseSwe,
   NounSwe - [PPartNP],
@@ -20,7 +20,7 @@ concrete ParseSwe of ParseEngAbs =
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash],
 
-  DictEngSwe ** 
+  DictionarySwe ** 
 open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Prelude in {
 
 flags
@@ -123,60 +123,4 @@ lin
   AdAdV = cc2 ;
   
   UttAdV adv = adv;
-
-lincat
-    Feat = Str;
-lin FeatN2, FeatN = \n ->
-      case n.g of {
-        Utr   => "(utr)" ;
-        Neutr => "(neutr)"
-      } ;
-    FeatV = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ;
-    FeatV2 = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++ v.c2.s ++
-      "<object>";
-    FeatV3 = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      v.c2.s ++ "<arg1>" ++
-      v.c3.s ++ "<arg2>";
-    FeatV2V = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      v.c2.s ++ "<object>" ++
-      v.c3.s ++ "<verb>";
-    FeatV2S = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      v.c2.s ++ "<object>" ++
-      "that" ++ "<sentence>";
-    FeatV2Q = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      v.c2.s ++ "<object>" ++
-      "that" ++ "<question>";
-    FeatV2A = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      v.c2.s ++ "<object>" ++
-      "<adjective>";
-    FeatVV = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      "<verb>" ;
-    FeatVS = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      "that" ++ "<sentence>";
-    FeatVQ = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      "<question>";
-    FeatVA = \v ->
-      "<subject>" ++
-      v.s ! VI (VInfin Act) ++ v.part ++
-      "<adjective>";
 }

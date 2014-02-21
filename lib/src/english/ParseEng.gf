@@ -1,4 +1,4 @@
---# -path=.:../abstract
+--# -path=.:../abstract:../translator
 
 concrete ParseEng of ParseEngAbs = 
   TenseX - [Pol, PNeg, PPos],
@@ -23,7 +23,7 @@ concrete ParseEng of ParseEngAbs =
             ComplSlashPartLast,
             ClSlash, RCl, EmptyRelSlash, VS, V2S, ComplBareVS, SlashBareV2S],
 
-  DictEng ** 
+  DictionaryEng ** 
 open MorphoEng, ResEng, ParadigmsEng, (S = SentenceEng), (E = ExtraEng), Prelude in {
 
 flags
@@ -156,68 +156,4 @@ lin
   PPos = {s = [] ; p = CPos} ;
   PNeg = {s = [] ; p = CNeg True} | {s = [] ; p = CNeg False} ;
 
-lincat
-    Feat = Str;
-lin FeatN, FeatN2 = \n -> 
-      case n.g of {
-        Neutr => "";
-        Masc  => "(masc)";
-        Fem   => "(fem)"
-      };
-    FeatV = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ;
-    FeatV2 = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++ v.c2 ++
-      "<object>";
-    FeatV3 = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++
-      v.c2 ++ "<arg1>" ++
-      v.c3 ++ "<arg2>";
-    FeatV2V = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++
-      v.c2 ++ "<object>" ++
-      v.c3 ++ case v.typ of {
-                VVAux => "<verb>" ;
-                VVInf => "to" ++ "<verb>" ;
-                VVPresPart => "<verb+ing>"
-              };
-    FeatV2S = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++
-      v.c2 ++ "<object>" ++
-      "that" ++ "<sentence>";
-    FeatV2Q = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++
-      v.c2 ++ "<object>" ++
-      "that" ++ "<question>";
-    FeatV2A = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++
-      v.c2 ++ "<object>" ++
-      "<adjective>";
-    FeatVV = \v ->
-      "<subject>" ++
-      v.s ! VVF VInf ++ v.p ++
-      case v.typ of {
-        VVAux => "<verb>" ;
-        VVInf => "to" ++ "<verb>" ;
-        VVPresPart => "<verb+ing>"
-      };
-    FeatVS = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++
-      "that" ++ "<sentence>";
-    FeatVQ = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++
-      "<question>";
-    FeatVA = \v ->
-      "<subject>" ++
-      v.s ! VInf ++ v.p ++
-      "<adjective>";
 }

@@ -1,15 +1,16 @@
 --# -path=.:../abstract:../common
 concrete DocumentationBul of Documentation = CatBul ** open 
   ResBul,
-  SyntaxBul,
   HTML in {
 
 lincat
-  Inflection = {s1,s2,s3 : Str} ;
+  Inflection = {t : Str; s1,s2,s3 : Str} ;
   Document   = {s : Str} ;
+  Tag        = {s : Str} ;
 
 lin
   InflectionN n = {
+    t = "същ" ;
     s1= heading1 ("Съществително"++
                   case n.g of {
                     AMasc Human    => "(м.р.л.)" ;
@@ -49,6 +50,7 @@ lin
   } ;
 
   InflectionN2,InflectionN3 = \n -> {
+    t = "същ" ;
     s1= heading1 ("Съществително "++
                   case n.g of {
                     AMasc Human    => "(м.р.л.)" ;
@@ -71,6 +73,7 @@ lin
     } ;
 
   InflectionA, InflectionA2 = \a -> {
+    t = "пр" ;
     s1= heading1 ("Прилагателно") ;
     s2= frameTable (
           tr (intagAttr "th" "rowspan=\"7\"" "ед.ч." ++ 
@@ -93,20 +96,23 @@ lin
     } ;
 
   InflectionAdv = \adv -> {
+    t = "нар" ;
     s1= heading1 ("Наречие") ;
     s2= paragraph (adv.s) ;
     s3= ""
     } ;
 
   InflectionPrep = \prep -> {
+    t = "пр" ;
     s1= heading1 ("Предлог") ;
     s2= paragraph (prep.s) ;
     s3= ""
     } ;
 
   InflectionV v = {
+    t = "гл" ;
     s1= heading1 ("Глагол") ++
-        "<подлог>" ++
+        pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
@@ -117,8 +123,9 @@ lin
   } ;
 
   InflectionV2 v = {
+    t = "гл" ;
     s1= heading1 ("Глагол") ++
-        "<подлог>" ++
+        pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
@@ -126,14 +133,15 @@ lin
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
-        "<допълнение>";
+        pp "допълнение";
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionV3 v = {
+    t = "гл" ;
     s1= heading1 ("Глагол") ++
-        "<подлог>" ++
+        pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
@@ -141,15 +149,16 @@ lin
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
-        "<арг1>"++
+        pp "арг1"++
         v.c3.s ++
-        "<арг2>";
+        pp "арг2";
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionV2V v = {
-    s1= "<подлог>" ++
+    t = "гл" ;
+    s1= pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
@@ -157,15 +166,16 @@ lin
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
-        "<допълнение>"++
+        pp "допълнение"++
         v.c3.s ++
-        "да" ++ "<глагол>";
+        "да" ++ pp "глагол";
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionV2S v = {
-    s1= "<подлог>" ++
+    t = "гл" ;
+    s1= pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
@@ -173,15 +183,16 @@ lin
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
-        "<допълнение>"++
+        pp "допълнение"++
         v.c3.s ++
-        "че" ++ "<изречение>";
+        "че" ++ pp "изречение";
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionV2Q v = {
-    s1= "<подлог>" ++
+    t = "гл" ;
+    s1= pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
@@ -189,15 +200,16 @@ lin
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
-        "<допълнение>"++
+        pp "допълнение"++
         v.c3.s ++
-        "<въпрос>";
+        pp "въпрос";
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionV2A v = {
-    s1= "<подлог>" ++
+    t = "гл" ;
+    s1= pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
@@ -205,14 +217,15 @@ lin
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
-        "<допълнение>"++
-        "<прилагателно>";
+        pp "допълнение"++
+        pp "прилагателно";
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionVV = \v -> {
-    s1= "<подлог>" ++
+    t = "гл" ;
+    s1= pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
@@ -220,48 +233,51 @@ lin
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         case v.typ of {
-          VVInf => "да" ++ "<глагол>";
-          VVGerund => "<деепричастие>"
+          VVInf => "да" ++ pp "глагол";
+          VVGerund => pp "деепричастие"
         };
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionVS = \v -> {
-    s1= "<подлог>" ++
+    t = "гл" ;
+    s1= pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
           VPhrasal c => personalClitics ! c ! GSg Masc ! P3
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
-        "че" ++ "<изречение>";
+        "че" ++ pp "изречение";
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionVQ = \v -> {
-    s1= "<подлог>" ++
+    t = "гл" ;
+    s1= pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
           VPhrasal c => personalClitics ! c ! GSg Masc ! P3
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
-        "<въпрос>";
+        pp "въпрос";
     s2= inflVerb v ;
     s3= ""
   } ;
 
   InflectionVA = \v -> {
-    s1= "<подлог>" ++
+    t = "гл" ;
+    s1= pp "подлог" ++
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
           VPhrasal c => personalClitics ! c ! GSg Masc ! P3
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
-        "<прилагателно>";
+        pp "прилагателно";
     s2= inflVerb v ;
     s3= ""
   } ;
@@ -367,9 +383,12 @@ oper
             td (v.s ! aspect ! f (APl Def)))
       ) ;
   } ;
-  
+
+  pp : Str -> Str = \s -> "&lt;"+s+"&gt;";
+
 lin
   MkDocument b i e = {s = i.s1 ++ b.s ++ i.s2 ++ i.s3 ++ e.s} ;
+  MkTag i = {s = i.t} ;
 
 }
 

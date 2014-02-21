@@ -6,6 +6,7 @@ abstract Documentation = Cat ** {
 cat
   Inflection ;     -- inflection table
   Document ;
+  Tag ;
 
 fun
   InflectionN   : N -> Inflection ;
@@ -29,5 +30,6 @@ fun
 
 fun
   MkDocument : String -> Inflection -> String -> Document ;
+  MkTag : Inflection -> Tag ;
 
 }

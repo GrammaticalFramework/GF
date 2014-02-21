@@ -1,4 +1,4 @@
---# -path=alltenses:.:../english:../abstract
+--# -path=alltenses:.:../english:../abstract:../translator
 concrete ParseGer of ParseEngAbs = 
   TenseGer,
   NounGer - [PPartNP],
@@ -20,7 +20,7 @@ concrete ParseGer of ParseEngAbs =
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash],
             
-  DictEngGer ** 
+  DictionaryGer ** 
 open MorphoGer, ResGer, ParadigmsGer, SyntaxGer, Prelude, HTML in {
 
 flags literal=Symb ; coding = utf8 ;

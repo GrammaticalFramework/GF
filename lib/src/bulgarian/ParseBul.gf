@@ -1,4 +1,4 @@
---# -path=alltenses:../english:../abstract
+--# -path=alltenses:../english:../translator:../abstract
 concrete ParseBul of ParseEngAbs = 
   TenseX - [IAdv, CAdv],
   CatBul,
@@ -19,8 +19,8 @@ concrete ParseBul of ParseEngAbs =
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ComplSlashPartLast,
             ClSlash, RCl, EmptyRelSlash],
-
-  DictEngBul ** 
+  DocumentationBul,
+  DictionaryBul ** 
 open ResBul, Prelude in {
 
 flags
