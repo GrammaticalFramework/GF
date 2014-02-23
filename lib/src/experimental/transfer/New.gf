@@ -8,7 +8,7 @@ abstract New =
   NDPred - [Pol,Tense],
   NDLift [LiftV,LiftV2,LiftVS,LiftVQ,LiftVA,LiftVN,LiftVV,
                 LiftV3,LiftV2S,LiftV2Q,LiftV2A,LiftV2N,LiftV2V,
-                LiftAP,LiftA2,LiftCN,LiftN2,LiftAdV,LiftPrep,
+                LiftAP,LiftA2,LiftCN,LiftN2,LiftAdv,LiftAdV,LiftPrep,
 
                 AppAPCN
          ],

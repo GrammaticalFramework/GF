@@ -429,6 +429,7 @@ data Tree :: * -> * where
   GPresPartAP_np :: GPrV_np -> Tree GPrAP_np_
   GComplAdv_none :: GPrAdv_np -> GNP -> Tree GPrAdv_none_
   GLiftAdV :: GAdV -> Tree GPrAdv_none_
+  GLiftAdv :: GAdv -> Tree GPrAdv_none_
   GLiftPrep :: GPrep -> Tree GPrAdv_np_
   GLiftCN :: GCN -> Tree GPrCN_none_
   GLiftN2 :: GN2 -> Tree GPrCN_np_
@@ -786,6 +787,7 @@ instance Eq (Tree a) where
     (GPresPartAP_np x1,GPresPartAP_np y1) -> and [ x1 == y1 ]
     (GComplAdv_none x1 x2,GComplAdv_none y1 y2) -> and [ x1 == y1 , x2 == y2 ]
     (GLiftAdV x1,GLiftAdV y1) -> and [ x1 == y1 ]
+    (GLiftAdv x1,GLiftAdv y1) -> and [ x1 == y1 ]
     (GLiftPrep x1,GLiftPrep y1) -> and [ x1 == y1 ]
     (GLiftCN x1,GLiftCN y1) -> and [ x1 == y1 ]
     (GLiftN2 x1,GLiftN2 y1) -> and [ x1 == y1 ]
@@ -1618,11 +1620,13 @@ instance Gf GPrAP_np where
 instance Gf GPrAdv_none where
   gf (GComplAdv_none x1 x2) = mkApp (mkCId "ComplAdv_none") [gf x1, gf x2]
   gf (GLiftAdV x1) = mkApp (mkCId "LiftAdV") [gf x1]
+  gf (GLiftAdv x1) = mkApp (mkCId "LiftAdv") [gf x1]
 
   fg t =
     case unApp t of
       Just (i,[x1,x2]) | i == mkCId "ComplAdv_none" -> GComplAdv_none (fg x1) (fg x2)
       Just (i,[x1]) | i == mkCId "LiftAdV" -> GLiftAdV (fg x1)
+      Just (i,[x1]) | i == mkCId "LiftAdv" -> GLiftAdv (fg x1)
 
 
       _ -> error ("no PrAdv_none " ++ show t)
@@ -2826,6 +2830,7 @@ instance Compos Tree where
     GPresPartAP_np x1 -> r GPresPartAP_np `a` f x1
     GComplAdv_none x1 x2 -> r GComplAdv_none `a` f x1 `a` f x2
     GLiftAdV x1 -> r GLiftAdV `a` f x1
+    GLiftAdv x1 -> r GLiftAdv `a` f x1
     GLiftPrep x1 -> r GLiftPrep `a` f x1
     GLiftCN x1 -> r GLiftCN `a` f x1
     GLiftN2 x1 -> r GLiftN2 `a` f x1
