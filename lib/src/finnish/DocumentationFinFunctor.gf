@@ -12,11 +12,13 @@ incomplete concrete DocumentationFinFunctor of Documentation = CatFin ** open
   HTML
 in {
 
-
 lincat
   Inflection = {t : Str; s1,s2 : Str} ;
   Document = {s : Str} ;
   Tag = {s : Str} ;
+
+{-
+-} --# notpresent
 
 oper
   heading : N -> Str = \n -> (nounHeading n).s ;
@@ -129,7 +131,8 @@ lin
 
 oper 
   verbExample : CatFin.Cl -> Str = \cl -> (S.mkUtt cl).s ;
-
+{-
+-} --# notpresent
   inflVerb : CatFin.V -> Str = \verb0 ->
      let 
        verb = sverb2verbSep verb0 ;
@@ -289,5 +292,8 @@ oper
 lin
   MkDocument b i e = ss (i.s1 ++ paragraph b.s ++ i.s2 ++ paragraph e.s) ;  -- explanation appended in a new paragraph
   MkTag i = ss (i.t) ;
+
+{- --# notpresent
+-} 
 
 }
