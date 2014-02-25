@@ -30,7 +30,8 @@ public class LexicalEntryActivity extends ListActivity {
 
 	private Translator mTranslator;
 	private LanguageSelector mShowLanguageView;
-
+	private View mProgressBarView = null;
+	
 	/** Called when the activity is first created. */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,8 @@ public class LexicalEntryActivity extends ListActivity {
 	    TextView descrView = (TextView) findViewById(R.id.lexical_desc);
 	    descrView.setText(getIntent().getExtras().getString("source"));
 
+	    mProgressBarView = findViewById(R.id.progressBarView);
+	    
 	    updateTranslations();
      }
 
@@ -79,33 +82,12 @@ public class LexicalEntryActivity extends ListActivity {
 		mShowLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
 	}
 
-	private View mProgressBar = null;
-
 	private void showProgressBar() {
-		TextView localTextView = (TextView) getWindow().findViewById(
-                android.R.id.title);
-        if (localTextView != null) {
-            ViewParent localViewParent = localTextView.getParent();
-            if (localViewParent != null && (localViewParent instanceof FrameLayout)) {
-            	mProgressBar = ((LayoutInflater) getSystemService("layout_inflater"))
-                        .inflate(R.layout.progress_bar, null);
-                FrameLayout.LayoutParams params = 
-                		new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                				                     FrameLayout.LayoutParams.WRAP_CONTENT,
-                				                     Gravity.RIGHT);
-                ((FrameLayout) localViewParent).addView(mProgressBar, params);
-            }
-        }
+		mProgressBarView.setVisibility(View.VISIBLE);
 	}
 	
 	private void hideProgressBar() {
-		if (mProgressBar != null) {
-			ViewParent localViewParent = mProgressBar.getParent();
-			
-			if (localViewParent != null && (localViewParent instanceof FrameLayout)) {
-				((FrameLayout) localViewParent).removeView(mProgressBar);
-			}
-		}
+		mProgressBarView.setVisibility(View.GONE);
 	}
 
 	private View expandedView;
