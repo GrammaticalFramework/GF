@@ -52,6 +52,9 @@ public class MainActivity extends Activity {
     private boolean input_mode;
 
     private SpeechInputListener mSpeechListener;
+    
+	private View mProgressBarView = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class MainActivity extends Activity {
         mSourceLanguageView = (LanguageSelector) findViewById(R.id.source_language);
         mTargetLanguageView = (LanguageSelector) findViewById(R.id.target_language);
         mSwitchLanguagesButton = (ImageView) findViewById(R.id.switch_languages);
+        mProgressBarView = findViewById(R.id.progressBarView);
         
         mStartStopButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -133,33 +137,12 @@ public class MainActivity extends Activity {
 		mTargetLanguageView.setSelectedLanguage(mTranslator.getTargetLanguage());
 	}
 
-	private View mProgressBar = null;
-
 	private void showProgressBar() {
-		TextView localTextView = (TextView) getWindow().findViewById(
-                android.R.id.title);
-        if (localTextView != null) {
-            ViewParent localViewParent = localTextView.getParent();
-            if (localViewParent != null && (localViewParent instanceof FrameLayout)) {
-            	mProgressBar = ((LayoutInflater) getSystemService("layout_inflater"))
-                        .inflate(R.layout.progress_bar, null);
-                FrameLayout.LayoutParams params = 
-                		new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                				                     FrameLayout.LayoutParams.WRAP_CONTENT,
-                				                     Gravity.RIGHT);
-                ((FrameLayout) localViewParent).addView(mProgressBar, params);
-            }
-        }
+		mProgressBarView.setVisibility(View.VISIBLE);
 	}
 	
 	private void hideProgressBar() {
-		if (mProgressBar != null) {
-			ViewParent localViewParent = mProgressBar.getParent();
-			
-			if (localViewParent != null && (localViewParent instanceof FrameLayout)) {
-				((FrameLayout) localViewParent).removeView(mProgressBar);
-			}
-		}
+		mProgressBarView.setVisibility(View.GONE);
 	}
 
 	@Override

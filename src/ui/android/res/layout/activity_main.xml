@@ -1,83 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        >
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
     <RelativeLayout
-            android:id="@+id/top_bg"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:padding="8dp"
-            android:background="#C0C0C0"
-            >
-
-        <ImageView
-                android:id="@+id/start_stop"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_alignTop="@+id/source_language"
-                android:layout_alignBottom="@+id/target_language"
-                android:layout_alignParentRight="true"
-                android:padding="8dp"
-                android:src="@drawable/ic_mic"
-                android:contentDescription="@string/microphone"
-                />
-
-        <ImageView
-                android:id="@+id/switch_languages"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_alignTop="@+id/source_language"
-                android:layout_alignBottom="@+id/target_language"
-                android:layout_toLeftOf="@id/start_stop"
-                android:padding="8dp"
-                android:src="@drawable/ic_action_switch"
-                android:contentDescription="@string/switch_languages"
-                />
-
-        <org.grammaticalframework.ui.android.LanguageSelector
-                android:id="@+id/source_language"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@id/switch_languages"
-                android:padding="0dp"
-                />
-
-        <org.grammaticalframework.ui.android.LanguageSelector
-                android:id="@+id/target_language"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_below="@id/source_language"
-                android:layout_toLeftOf="@id/switch_languages"
-                android:padding="0dp"
-                />
-
-    </RelativeLayout>
-
-    <org.grammaticalframework.ui.android.ConversationView
-            android:id="@+id/conversation"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/top_bg"
-            >
-        <LinearLayout
-                android:id="@+id/conversation_content"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp"
-                >
-        </LinearLayout>
-    </org.grammaticalframework.ui.android.ConversationView>
-
-</RelativeLayout>
+		android:layout_height="match_parent"
+		android:layout_width="match_parent">
+	
+	    <RelativeLayout
+	       	android:id="@+id/top_bg"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentRight="true"
+			android:padding="8dp"
+			android:background="#C0C0C0">
+	
+	        <ImageView
+				android:id="@+id/start_stop"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_alignTop="@+id/source_language"
+				android:layout_alignBottom="@+id/target_language"
+				android:layout_alignParentRight="true"
+				android:padding="8dp"
+				android:src="@drawable/ic_mic"
+				android:contentDescription="@string/microphone"/>
+	
+	        <ImageView
+				android:id="@+id/switch_languages"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_alignTop="@+id/source_language"
+				android:layout_alignBottom="@+id/target_language"
+				android:layout_toLeftOf="@id/start_stop"
+				android:padding="8dp"
+				android:src="@drawable/ic_action_switch"
+				android:contentDescription="@string/switch_languages"/>
+	
+			<org.grammaticalframework.ui.android.LanguageSelector
+				android:id="@+id/source_language"
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentTop="true"
+				android:layout_toLeftOf="@id/switch_languages"
+				android:padding="0dp"/>
+	
+			<org.grammaticalframework.ui.android.LanguageSelector
+				android:id="@+id/target_language"
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:layout_below="@id/source_language"
+				android:layout_toLeftOf="@id/switch_languages"
+				android:padding="0dp"/>
+		</RelativeLayout>
+	
+		<org.grammaticalframework.ui.android.ConversationView
+			android:id="@+id/conversation"
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			android:layout_below="@id/top_bg">
+			
+			<LinearLayout
+				android:id="@+id/conversation_content"
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:orientation="vertical"
+				android:padding="16dp"/>
+		</org.grammaticalframework.ui.android.ConversationView>
+	</RelativeLayout>
+	
+	<LinearLayout
+		android:id="@+id/progressBarView" 
+		android:gravity="center"
+		android:visibility="gone"
+		android:background="#00000000"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent">
+		
+		<ProgressBar
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>	
+	</LinearLayout>
+</FrameLayout>
