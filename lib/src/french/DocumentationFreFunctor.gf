@@ -18,6 +18,9 @@ lincat
   Document = {s : Str} ;
   Tag = {s : Str} ;
   
+{-
+-} --# notpresent
+
 oper
    heading : N -> Str = \n -> (nounHeading n).s ;
    
@@ -208,5 +211,8 @@ oper
           tr (th (heading past_Parameter)    ++ td (vfin (VPart Masc Sg))) ++
           tr (th (heading present_Parameter) ++ td (vfin VGer))
           ) ; 
+
+{- --# notpresent
+-} 
 
 }

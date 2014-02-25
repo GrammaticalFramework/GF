@@ -18,6 +18,10 @@ in {
 lincat
   Inflection = {s : Str} ;
   Document = {s : Str} ;
+
+{-
+-} --# notpresent
+
   
 oper
    tdf : Str -> Str = \s -> td (intag "i" s) ;
@@ -120,5 +124,8 @@ oper
        tr (th (heading perfect_Parameter ++ heading participle_Parameter) ++ tdf (verb.s ! (VI (VPtPret (Strong (GSg Utr)) Nom))))
        ))
      } ;
+
+{- --# notpresent
+-} 
 
 }

@@ -9,6 +9,10 @@ lincat
   Document = {s : Str} ;
   Tag = {s : Str} ;
 
+{-
+-} --# notpresent
+
+
 lin
   InflectionN, InflectionN2, InflectionN3 = \noun -> {
     t  = "s" ;
@@ -230,4 +234,8 @@ oper
     ) ;
     
   pp : Str -> Str = \s -> "&lt;"+s+"&gt;";
+
+{- --# notpresent
+-}
+
 }
