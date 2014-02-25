@@ -1,4 +1,4 @@
---# -path=.:../english:../abstract
+--# -path=.:../english:../abstract:../translator
 
 concrete ParseChi of ParseEngAbs = 
   TenseChi,
@@ -16,12 +16,13 @@ concrete ParseChi of ParseEngAbs =
   RelativeChi,
   IdiomChi [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ConstructionChi,
+  DocumentationChi,
   ExtraChi [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash, PassAgentVPSlash,
             Temp, Pol, Conj, VPS, ListVPS, S, Num, CN, RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash, ListCN, ConjCN, BaseCN, ConsCN],
 
-  DictEngChi
+  DictionaryChi
 
    ** 
 open ResChi, ParadigmsChi, SyntaxChi, Prelude, (G = GrammarChi), (E = ExtraChi) in {
