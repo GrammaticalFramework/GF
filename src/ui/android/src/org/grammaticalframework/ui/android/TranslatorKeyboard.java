@@ -36,9 +36,12 @@ public class TranslatorKeyboard extends Keyboard {
 	}
 
     public static String getLanguageKeyLabel(Language lang) {
-    	return
-    		LocaleUtils.parseJavaLocale(lang.getLangCode(), Locale.getDefault())
-    		           .getISO3Language();
+    	if ("cmn-hans-cn".equalsIgnoreCase(lang.getLangCode())) // this one has no ISO code 
+    		return "chi";
+    	else
+	    	return
+	    		LocaleUtils.parseJavaLocale(lang.getLangCode(), Locale.getDefault())
+	    		           .getISO3Language();
     }
     
     @Override
