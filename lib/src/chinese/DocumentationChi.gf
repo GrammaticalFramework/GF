@@ -12,7 +12,7 @@ lin
   InflectionN, InflectionN2, InflectionN3 = \noun -> {
     t  = "n" ;
     s1 = heading1 "Noun" ;
-    s2 = noun.c ++ noun.s
+    s2 = noun.s ++ "c." ++ noun.c ;
     } ;
 
   InflectionA, InflectionA2 = \adj -> {
@@ -118,7 +118,7 @@ oper
          tr (th ""      ++ td (vtbl ! Pos ! APlain) ++ td (vtbl ! Neg ! APlain)) ++
          tr (th "perf"  ++ td (vtbl ! Pos ! APerf) ++ td (vtbl ! Neg ! APerf)) ++
          tr (th "stat"  ++ td (vtbl ! Pos ! ADurStat) ++ td (vtbl ! Neg ! ADurStat)) ++
-         tr (th "prog"  ++ td (vtbl ! Pos ! ADurProg) ++ td (vtbl ! Neg ! ADurProg)) ++
+         tr (th "progr" ++ td (vtbl ! Pos ! ADurProg) ++ td (vtbl ! Neg ! ADurProg)) ++
          tr (th "exper" ++ td (vtbl ! Pos ! AExper) ++ td (vtbl ! Neg ! AExper))) ;
 
   pp : Str -> Str = \s -> "&lt;"+s+"&gt;" ;
