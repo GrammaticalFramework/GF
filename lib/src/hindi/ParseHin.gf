@@ -1,4 +1,4 @@
---# -path=.:../abstract:../english:../hindustani
+--# -path=.:../abstract:../english:../hindustani:../translator
 concrete ParseHin of ParseEngAbs = 
   TenseX - [AdN,Adv,SC,PPos,PNeg],
 --  TextX - [AdN,Adv,SC],
@@ -19,8 +19,8 @@ concrete ParseHin of ParseEngAbs =
   ExtraHin [NP, Quant, VPSlash, VP, Tense, GenNP, PassVPSlash,Temp,Pol,Conj,VPS,ListVPS,S,Num, CN,
   RP, MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS, GenRP,VPI, VPIForm, VPIInf, VPIPresPart, ListVPI,
   VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,ClSlash, RCl, EmptyRelSlash],
---  DictHinMath **
-  DictEngHin ** 
+  DocumentationHin,
+  DictionaryHin ** 
 open MorphoHin, ResHin, ParadigmsHin,CommonX, CommonHindustani, Prelude in {
 
 flags
@@ -132,8 +132,7 @@ CompVP ant p vp = {s = \\a => ant.s ++ p.s ++
 
 lin
   PPos = {s = [] ; p = Pos} ;
-  PNeg = {s = [] ; p = Neg} ; -- contracted: don't
-  UncNeg = {s = [] ; p = Neg} ;
+  PNeg = {s = [] ; p = Neg} ;
   
   VPSlashPrep vp p = vp ** {c2 = {s = p.s!Masc ; c = VTrans}} ;
 
