@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fglasgow-exts #-}
 
-module Old2New where
+module Old2New (transfer) where
 import PGF hiding (Tree)
 import qualified PGF
 import PGF.Data
@@ -39,7 +39,6 @@ on t = case t of
   GUseRCl (GTTAnt t a) p (GRelSlash rp cls) -> GRelSlash_none rp (onClSlash t a p cls)
 
 -- NP
-  GRelNP np rs -> GRelNP (on np) (on rs)
 
 -- Adv
   GComparAdvAdjS cadv a s -> error "GComparAdvAdjS cadv a (onS s)"
@@ -89,6 +88,7 @@ getAdvs :: GVP -> ([GPrAdv_none],GVP)
 getAdvs vp = case vp of
   GAdvVP vp1 adv -> let (advs,vp2) = getAdvs vp1 in (advs ++ [GLiftAdv adv],vp2)
   GAdVVP adv vp1 -> let (advs,vp2) = getAdvs vp1 in (advs ++ [GLiftAdV adv],vp2)
+  _ -> ([],vp)
 
 appAdvCl :: [GPrAdv_none] -> GPrCl_none -> GPrCl_none
 appAdvCl advs cl = foldr GAdvCl_none cl advs
