@@ -5,15 +5,20 @@ import Both
 
 onUtt :: Tree a -> Tree a ----GUtt_ -> Tree GUtt_
 onUtt t = case t of
-  GUttS s -> GUttPrS (onS s)
-  GUttQS qs -> GUttPrS (GUseQCl_none (onQS2QCl qs))
+  GUttAP ap -> GUttAP (onAP ap)
+  GUttAdv adv -> GUttAdv (onAdv adv)
+  GUttCN cn -> GUttCN (onCN cn)
+  GUttNP np -> GUttNP (onNP np)
   GUttImpPl pol (GImpVP vp) -> GPrImpPl (onVP GTPres GASimul pol vp)
   GUttImpPol pol (GImpVP vp) -> GPrImpSg (onVP GTPres GASimul pol vp) ----
   GUttImpSg pol (GImpVP vp) -> GPrImpSg (onVP GTPres GASimul pol vp)
-  GUttNP np -> GUttNP (onNP np)
-  GUttCN cn -> GUttCN (onCN cn)
+  GUttQS qs -> GUttPrS (GUseQCl_none (onQS2QCl qs))
+  GUttS s -> GUttPrS (onS s)
+----  GUttVP s -> GUttPrVPI (GInfVP_none (onVP GTPres ant pol vp)) ----+
 
-  _ -> t ---- composOp onUtt t
+
+
+  _ -> composOp onUtt t
 
 onS :: Tree GS_ -> Tree GPrS_
 onS s = case s of
@@ -60,10 +65,10 @@ onVP t a p vp = case vp of
   GComplVV vv ant pol vp -> GComplVV_none (GUseV_v a t p (GLiftVV vv)) (GInfVP_none (onVP GTPres ant pol vp)) -- !!
   GComplSlash vps np -> GComplV2_none (onVPSlash t a p vps) np
   GUseComp comp -> case comp of
-    GCompAP  ap  -> GUseAP_none a t p (GLiftAP ap)
-    GCompAdv adv -> GUseAdv_none a t p (GLiftAdv adv)
-    GCompCN  cn  -> GUseCN_none a t p (GLiftCN cn)
-    GCompNP  np  -> GUseNP_none a t p np
+    GCompAP  ap  -> GUseAP_none a t p (GLiftAP (onAP ap))
+    GCompAdv adv -> GUseAdv_none a t p (GLiftAdv (onAdv adv))
+    GCompCN  cn  -> GUseCN_none a t p (GLiftCN (onCN cn))
+    GCompNP  np  -> GUseNP_none a t p (onNP np)
     GCompS   s   -> GUseS_none a t p (onS2Cl s)
     GCompQS  qs  -> GUseQ_none a t p (onQS2QCl qs)
     GCompVP  ant pol vp  -> GUseVP_none a t p (GInfVP_none (onVP GTPres ant pol vp)) -- !!
@@ -118,6 +123,22 @@ onCN cn = case cn of
   GRelCN cn rs -> GRelCN (onCN cn) (onRS rs)
   _ -> cn ----composOp onCN cn
 
+onAdv :: Tree GAdv_ -> Tree GAdv_
+onAdv adv = case adv of
+  GAdAdv ada adv -> GAdAdv ada (onAdv adv)
+  GComparAdvAdj cadv a np -> GComparAdvAdj cadv a (onNP np)
+----  GComparAdvAdjS cadv a s -> GComparAdvAdjS cadv a (onS s)
+  GPrepNP prep np -> GPrepNP prep (onNP np)
+  GSubjS subj s -> error "GSubjS"
+  GConjAdv conj (GListAdv advs) -> GConjAdv conj (GListAdv (map onAdv advs))
+  _ -> adv
+
+onAP :: Tree GAP_ -> Tree GAP_
+onAP ap = case ap of
+  GAdAP ada ap -> GAdAP ada (onAP ap)
+  GAdvAP ap adv -> GAdvAP (onAP ap) (onAdv adv)
+  GComparA a np -> GComparA a (onNP np)
+  _ -> ap ----composOp onNP np
 
 old2new :: Tree a -> Tree a
 old2new t = case t of
