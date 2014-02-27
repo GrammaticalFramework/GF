@@ -121,8 +121,8 @@ onVP t a p vp = case vp of
 ---- ComplSlashPartLast : VPSlash -> NP -> VP ;
 ---- ComplVPIVV : VV -> VPI -> VP ;
 ---- ExtAdvVP : VP -> Adv -> VP ;
----- PassAgentVPSlash : VPSlash -> NP -> VP ;
----- PassVPSlash : VPSlash -> VP ;
+  GPassVPSlash vps -> onVPSlashPass t a p vps
+  GPassAgentVPSlash vps np -> onVPSlashPassAgent t a p vps np
 ---- ProgrVP : VP -> VP ;
 ---- ReflVP : VPSlash -> VP ;
 ---- SelfAdVVP : VP -> VP ;
@@ -137,6 +137,21 @@ onVPSlash t a p vps = case vps of
   GSlashV2V v2v ant pol vp -> GSlashV2V_none (GUseV_np_v a t p (GLiftV2V v2v)) (GInfVP_none (onVP GTPres ant pol vp)) -- !!
 
   GSlashVV vv vps -> GComplVV_np (GUseV_v a t p (GLiftVV vv)) (GInfVP_np (onVPSlash GTPres GASimul GPPos vps)) -- !!
+
+onVPSlashPass :: GTense -> GAnt -> GPol -> Tree GVPSlash_ -> Tree GPrVP_none_
+onVPSlashPass t a p vps = case vps of
+  GSlashV2a v2 -> GPassUseV_none a t p (GLiftV2 v2)
+  GSlashV2S v2s s -> GComplVS_none (GPassUseV_s a t p (GLiftV2S v2s)) (onS2Cl s)
+  GSlashV2Q v2q q -> GComplVQ_none (GPassUseV_q a t p (GLiftV2Q v2q)) (onQS2QCl q)
+----  GSlashV2A v2a ap -> (GPassUseV_np_a a t p (GLiftV2A v2a)) (GLiftAP ap)
+----  GSlashV2V v2v ant pol vp -> (GPassUseV_np_v a t p (GLiftV2V v2v)) (GInfVP_none (onVP GTPres ant pol vp)) -- !!
+
+--  GSlashVV vv vps -> GComplVV_np (GUseV_v a t p (GLiftVV vv)) (GInfVP_np (onVPSlash GTPres GASimul GPPos vps)) -- !!
+
+onVPSlashPassAgent :: GTense -> GAnt -> GPol -> Tree GVPSlash_ -> GNP -> Tree GPrVP_none_
+onVPSlashPassAgent t a p vps np = case vps of
+  GSlashV2a v2 -> GAgentPassUseV_none a t p (GLiftV2 v2) np
+  GSlashV2S v2s s -> GComplVS_none (GAgentPassUseV_s a t p (GLiftV2S v2s) np) (onS2Cl s)
 
 onClSlash :: GTense -> GAnt -> GPol -> Tree GClSlash_ -> Tree GPrCl_np_
 onClSlash t a p cls = case cls of
