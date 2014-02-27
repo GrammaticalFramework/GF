@@ -7739,7 +7739,7 @@ lin broomweed_N = variants {} ;
 lin bros_PN = variants {} ;
 lin broth_N = mkN "buljong" "buljonger" ; -- comment=4
 lin brothel_N = mkN "bordell" "bordeller" ; -- SaldoWN
-lin brother_N = mkN "kompis" | mkN "medbroder" "medbrodern" "medbröder" "medbröderna"  ; -- SaldoWN -- comment=7
+lin brother_N = mkN "bror" "brodern" "bröder" "bröderna" | mkN "broder" "brodern" "bröder" "bröderna" ; 
 lin brother_in_law_N = variants {} ;
 lin brotherhood_N = mkN "brödraskap" neutrum; -- comment=3
 lin brotherly_A = mkA "medmänsklig" | mkA "broderlig"  ; -- SaldoWN -- comment=2
@@ -11967,7 +11967,7 @@ lin companionable_A = mkA "sällskaplig" ; -- comment=2
 lin companionate_A = variants {} ;
 lin companionship_N = mkN "kamratkänsla" ;
 lin companionway_N = variants {} ;
-lin company_N = mkN "sällskap" neutrum | mkN "sällskap" neutrum ; -- SaldoWN -- comment=11
+lin company_N = mkN "bolag" "bolag" | mkN "sällskap" neutrum | mkN "sällskap" neutrum ; --- sense
 lin comparability_N = mkN "likvärdighet" ; -- comment=2
 lin comparable_A = mkA "jämförbar" | mkA "likvärdig"  ; -- SaldoWN -- comment=3
 lin comparative_A = mkA "komparativ" ; -- comment=3
@@ -20748,7 +20748,7 @@ lin fate_N = mkN "öde" ; -- comment=5
 lin fate_V2 = variants {} ;
 lin fateful_A = compoundA (regA "ödesmättad"); -- comment=3
 lin fathead_N = variants {} ;
-lin father_N = mkN "far" "fadern" "fäder" "fäderna" ; -- SaldoWN
+lin father_N = mkN "far" "fadern" "fäder" "fäderna" | mkN "pappa" ; -- SaldoWN
 lin father_V2 = variants {} ;
 lin father_in_law_N = variants {} ;
 lin fatherhood_N = variants {} ;
@@ -21357,7 +21357,7 @@ lin finiteness_N = variants {} ;
 lin fink_N = variants {} ;
 lin fink_on_V2 = variants {} ;
 lin fink_out_V = variants {} ;
-lin finland_PN = variants {} ;
+lin finland_PN = mkPN "Finland" neutrum ;
 lin finn_N = variants {} ;
 lin finnan_N = variants {} ;
 lin finnan_haddie_N = variants {} ;
@@ -24343,7 +24343,7 @@ lin gonococcus_N = variants {} ;
 lin gonorrhea_N = mkN "gonorré" "gonorréer" ;
 lin gonorrhoea_N = mkN "gonorré" "gonorréer" ; -- SaldoWN
 lin goo_N = mkN "sentimentalitet" "sentimentaliteter" ; -- comment=4
-lin good_A = mkA "god" | mkA "bra"  ; -- SaldoWN -- comment=31
+lin good_A = mkA "god" "gott" "goda" "goda" "bättre" "bäst" "bästa" | mkA "bra" "bra" "bra" "goda" "bättre" "bäst" "bästa" ;
 lin good_N = mkN "nytta" | mkN "tilltalande"  ; -- SaldoWN -- comment=9
 lin good_afternoon_Interj = mkInterj "god eftermiddag" ;
 lin good_evening_Interj = mkInterj "god afron" ;
@@ -27191,7 +27191,7 @@ lin hourlong_A = variants {} ;
 lin hourly_A = variants {} ;
 lin hourly_Adv = variants {} ;
 lin hours_N = variants {} ;
-lin house_N = mkN "kammare" "kammaren" "kamrar" "kamrarna" | L.house_N ; -- SaldoWN
+lin house_N = L.house_N ; 
 lin house_V2 = variants {} ;
 lin house_party_N = variants {} ;
 lin house_warming_N = variants {} ;
@@ -31475,7 +31475,7 @@ lin langlaufer_N = variants {} ;
 lin langley_N = variants {} ;
 lin langsyne_Adv = variants {} ;
 lin langsyne_N = variants {} ;
-lin language_N = mkN "terminologi" "terminologier" | L.language_N ; -- SaldoWN
+lin language_N = L.language_N ;
 lin languid_A = variants {} ;
 lin languish_V = mkV "försmäktar" ; -- comment=2
 lin languisher_N = variants {} ;
@@ -36389,7 +36389,7 @@ lin motet_N = mkN "motett" "motetter" ;
 lin moth_N = mkN "mott" neutrum; -- comment=2
 lin moth_eaten_A = variants {} ;
 lin mothball_N = variants {} ;
-lin mother_N = mkN "mor" "moren" "morer" "morerna" ; -- SaldoWN
+lin mother_N = mkN "mor" "modern" "mödrar" "mödrarna" | mkN "mamma" ;
 lin mother_V2 = variants {} ;
 lin mother_in_law_N = variants {} ;
 lin mother_of_pearl_N = variants {} ;
@@ -44431,7 +44431,7 @@ lin prodromal_A = variants {} ;
 lin prodrome_N = variants {} ;
 lin produce_N = mkN "avkastning" | mkN "produktion" "produktioner"  ; -- SaldoWN -- comment=6
 lin produce_V = mkV "presterar" ; -- comment=19
-lin produce_V2 = dirV2 (partV (mkV "bryggar")"över");
+lin produce_V2 = mkV2 "producera" ;
 lin producer_N = mkN "producent" "producenter" ; -- SaldoWN
 lin product_N = mkN "produkt" "produkter" ; -- SaldoWN
 lin production_N = mkN "tillverkning" | mkN "uppsättning"  ; -- SaldoWN -- comment=3
@@ -48047,10 +48047,10 @@ lin rigatoni_N = variants {} ;
 lin rigg_up_V = variants {} ;
 lin rigger_N = variants {} ;
 lin rigging_N = variants {} ;
-lin right_A = mkA "rätt" | mkA "riktig"  ; -- SaldoWN -- comment=6
-lin right_Adv = mkAdv "rätt" ;
+lin right_A = mkA "rätt" | mkA "riktig"  ; -- SaldoWN
+lin right_Adv = mkAdv "rätt" | mkAdv "just" ; --- sense
 lin right_N = mkN "rättighet" "rättigheter" ; -- SaldoWN
-lin right_V2 = mkV2 (mkV "rätta") | mkV2 (mkV (mkV "korrigera") "[minor corrections]"); -- status=guess, src=wikt status=guess, src=wikt
+lin right_V2 = mkV2 (mkV "rätta") | mkV2 (mkV "korrigera") ; --- ?
 lin right_angled_A = variants {} ;
 lin right_down_A = variants {} ;
 lin right_down_Adv = variants {} ;
@@ -50820,11 +50820,11 @@ lin serve_V2 = dirV2 (partV (mkV "tjänar")"ut"); -- comment=2
 lin serve_VS = mkVS (mkV (mkV "vara") "rätt åt någon"); -- status=guess, src=wikt
 lin serve_VV = mkVV (mkV (mkV "vara") "rätt åt någon"); -- status=guess, src=wikt
 lin server_N = mkN "servitör" "servitörer" | mkN "server"  ; -- SaldoWN
-lin service_N = mkN "service" utrum | mkN "tjänstgöring"  ; -- SaldoWN -- comment=21
-lin service_V2 = variants {} ;
+lin service_N = mkN "tjänst" "tjänster" | mkN "service" utrum | mkN "tjänstgöring" ; 
+lin service_V2 = mkV2 "serva" ;
 lin serviceability_N = variants {} ;
 lin serviceable_A = variants {} ;
-lin serviceman_N = mkN "militär" "militärer" ; -- SaldoWN
+lin serviceman_N = mkN "serviceperson" "servicepersoner" | mkN "militär" "militärer" ; --- sense
 lin servicing_N = mkN "betäckning" ;
 lin serviette_N = mkN "servett" "servetter" ; -- SaldoWN
 lin servile_A = mkA "servil" | mkA "tjänstvillig"  ; -- SaldoWN -- comment=2
@@ -53005,7 +53005,7 @@ lin softie_N = variants {} ;
 lin softish_A = variants {} ;
 lin softland_V = variants {} ;
 lin softness_N = mkN "mjukhet" "mjukheter" ;
-lin software_N = mkN "program" "programmet" "program" "programmen" | mkN "programvara"  ; -- SaldoWN -- comment=4
+lin software_N = mkN "mjukvara" | mkN "programvara"  ; 
 lin softwood_N = variants {} ;
 lin softy_N = variants {} ;
 lin sogginess_N = variants {} ;
@@ -53306,7 +53306,7 @@ lin sour_N = mkN "surkörsbär" ; -- status=guess
 lin sour_V = variants {} ;
 lin sour_V2 = variants {} ;
 lin sourball_N = variants {} ;
-lin source_N = mkN "ursprung" neutrum | mkN "källa"  ; -- SaldoWN -- comment=3
+lin source_N = mkN "källa" | mkN "ursprung" neutrum ; 
 lin sourdine_N = variants {} ;
 lin sourdough_N = mkN "surdeg" ;
 lin souring_N = variants {} ;
@@ -56227,10 +56227,10 @@ lin sweater_N = mkN "tröja" ; -- SaldoWN
 lin sweatshirt_N = variants {} ;
 lin sweatshop_N = variants {} ;
 lin sweaty_A = mkA "svettig" ; -- comment=2
-lin swedeFem_N = mkN "svenska" ; -- comment=3
-lin swedeMasc_N = mkN "svenska" ; -- comment=3
+lin swedeFem_N = mkN "svenska" ;
+lin swedeMasc_N = mkN "svensk" ;
 lin swede_A = mkA "svensk" ;
-lin sweden_PN = variants {} ;
+lin sweden_PN = mkPN "Sverige" neutrum ;
 lin swedish_A = mkA "svensk" ;
 lin swedish_N = mkN "svenska" ; -- comment=3
 lin sweep_N = mkN "sopa" | mkN "fara"  ; -- SaldoWN -- comment=11
