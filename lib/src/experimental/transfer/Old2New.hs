@@ -37,14 +37,18 @@ on t = case t of
 -- RS
   GUseRCl (GTTAnt t a) p (GRelVP rp vp) -> GRelVP_none rp (onVP t a p vp)
   GUseRCl (GTTAnt t a) p (GRelSlash rp cls) -> GRelSlash_none rp (onClSlash t a p cls)
+  GUseRCl (GTTAnt t a) p (GRelCl cl) -> GRelCl_none (onCl t a p cl)
+  GPastPartRS _ _ _ -> error "PastPartRS : Ant -> Pol -> VPSlash -> RS"
+  GPresPartRS _ _ _ -> error "PresPartRS : Ant -> Pol -> VPSlash -> RS"
 
 -- NP
 
 -- Adv
   GComparAdvAdjS cadv a s -> error "GComparAdvAdjS cadv a (onS s)"
-  GSubjS subj s -> error "GSubjS subj s"
+  GSubjS subj s -> error "AdvSubjS subj s"
 
 -- AP
+---- SentAP : AP -> SC -> AP
 
   _ -> composOp on t
 
@@ -62,8 +66,6 @@ onS s = case s of
 mkClC conj cls = foldr GContClC_none (GStartClC_none conj cl1 cl2) cls2
   where 
     (cls2,[cl1,cl2]) = splitAt (length cls - 2) cls
-
-
 
 onVPS2VP :: Tree GVPS_ -> Tree GPrVP_none_
 onVPS2VP vps = case vps of
@@ -88,6 +90,8 @@ getAdvs :: GVP -> ([GPrAdv_none],GVP)
 getAdvs vp = case vp of
   GAdvVP vp1 adv -> let (advs,vp2) = getAdvs vp1 in (advs ++ [GLiftAdv adv],vp2)
   GAdVVP adv vp1 -> let (advs,vp2) = getAdvs vp1 in (advs ++ [GLiftAdV adv],vp2)
+  GExtAdvVP vp1 adv -> let (advs,vp2) = getAdvs vp1 in (advs ++ [GLiftAdv adv],vp2) ---- as a variant
+
   _ -> ([],vp)
 
 appAdvCl :: [GPrAdv_none] -> GPrCl_none -> GPrCl_none
@@ -118,15 +122,19 @@ onVP t a p vp = case vp of
     GCompS   s   -> GUseS_none a t p (onS2Cl s)
     GCompQS  qs  -> GUseQ_none a t p (onQS2QCl qs)
     GCompVP  ant pol vp  -> GUseVP_none a t p (GInfVP_none (onVP GTPres ant pol vp)) -- !!
----- ComplSlashPartLast : VPSlash -> NP -> VP ;
----- ComplVPIVV : VV -> VPI -> VP ;
----- ExtAdvVP : VP -> Adv -> VP ;
+  GComplSlashPartLast vps np -> GComplV2_none (onVPSlash t a p vps) np ---- as a variant
+  GComplVPIVV vv vpi -> GComplVV_none (GUseV_v a t p (GLiftVV vv)) (GInfVP_none (onVPI2VP vpi))
   GPassVPSlash vps -> onVPSlashPass t a p vps
   GPassAgentVPSlash vps np -> onVPSlashPassAgent t a p vps np
 ---- ProgrVP : VP -> VP ;
 ---- ReflVP : VPSlash -> VP ;
 ---- SelfAdVVP : VP -> VP ;
 ---- SelfAdvVP : VP -> VP ;
+
+onVPI2VP :: Tree GVPI_ -> Tree GPrVP_none_
+onVPI2VP vpi = case vpi of
+  GMkVPI vp -> onVP GTPres GASimul GPPos vp
+  GConjVPI conj (GListVPI vs) -> GUseVPC_none (mkVPC conj [onVPI2VP v | v <- vs])
 
 onVPSlash :: GTense -> GAnt -> GPol -> Tree GVPSlash_ -> Tree GPrVP_np_
 onVPSlash t a p vps = case vps of
@@ -156,7 +164,11 @@ onVPSlashPassAgent t a p vps np = case vps of
 onClSlash :: GTense -> GAnt -> GPol -> Tree GClSlash_ -> Tree GPrCl_np_
 onClSlash t a p cls = case cls of
   GSlashVP np vps -> GPredVP_np np (onVPSlash t a p vps)
+  GSlashPrep cl prep -> GAdvCl_np (GLiftPrep prep) (onCl t a p cl)
+---- GSlashVS np vs sslash -> 
+---- GAdvSlash cls adv -> GAdvCl_none (GLiftAdv adv) (onClSlash t a p cls)
 
+---- UseSlash : Temp -> Pol -> ClSlash -> SSlash ;
 
 onS2Cl :: Tree GS_ -> Tree GPrCl_none_
 onS2Cl s = case s of
