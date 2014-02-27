@@ -74,12 +74,12 @@ lin
     s1 = heading1 "Verb" ;
     s2 = heading2 "Root" ++
          paragraph (verb.s ! Root) ++
-         heading2 "Subj" ++
-         forms CommonHindustani.Subj ++
-         heading2 "Perfective" ++
-         forms Perf ++
-         heading2 "Imperfective" ++
+         heading2 "Present" ++
          forms Imperf ++
+         heading2 "Past" ++
+         forms CommonHindustani.Subj ++
+         heading2 "Past Perfect" ++
+         forms Perf ++
          heading2 "Infinitive" ++
          frameTable (
            tr (th ""    ++ td (verb.s ! Inf)) ++
