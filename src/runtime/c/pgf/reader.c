@@ -14,6 +14,7 @@
 #include <gu/utf8.h>
 #include <math.h>
 #include <stdlib.h>
+#include <malloc.h>
 
 //
 // PgfReader
