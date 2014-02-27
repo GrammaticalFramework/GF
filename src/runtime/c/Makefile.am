@@ -1,10 +1,7 @@
-
-LDADD = libgu.la
-
-lib_LTLIBRARIES = libgu.la libpgf.la libteyjus.la
+lib_LTLIBRARIES = libgu.la libpgf.la
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libgu.pc libpgf.pc libteyjus.pc
+pkgconfig_DATA = libgu.pc libpgf.pc
 
 configincludedir = $(libdir)/libgu/include
 
@@ -65,23 +62,7 @@ libgu_la_SOURCES = \
 	gu/utf8.c \
 	gu/ucs.c \
 	gu/variant.c
-
-libteyjus_la_SOURCES = \
-	teyjus/simulator/abstmachine.c \
-	teyjus/simulator/dataformats.c \
-	teyjus/simulator/hnorm.c \
-	teyjus/simulator/hnormlocal.c \
-	teyjus/simulator/hopu.c \
-	teyjus/simulator/io-datastructures.c \
-	teyjus/simulator/mcstring.c \
-	teyjus/simulator/printterm.c \
-	teyjus/simulator/simdispatch.c \
-	teyjus/simulator/siminit.c \
-	teyjus/simulator/siminstr.c \
-	teyjus/simulator/siminstrlocal.c \
-	teyjus/simulator/simulator.c \
-	teyjus/simulator/trail.c \
-	teyjus/simulator/types.c
+libgu_la_LDFLAGS = -no-undefined
 
 libpgf_la_SOURCES = \
 	pgf/data.c \
@@ -103,6 +84,8 @@ libpgf_la_SOURCES = \
 	pgf/graphviz.c \
 	pgf/pgf.c \
 	pgf/pgf.h
+libpgf_la_LDFLAGS = "-no-undefined"
+libpgf_la_LIBADD = libgu.la
 
 bin_PROGRAMS = \
 	utils/pgf-print \
@@ -126,5 +109,4 @@ EXTRA_DIST = \
 	Doxyfile \
 	DoxygenLayout.xml \
 	libgu.pc.in \
-	libteyjus.pc.in \
 	libpgf.pc.in
