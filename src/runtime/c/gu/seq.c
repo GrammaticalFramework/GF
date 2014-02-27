@@ -4,6 +4,7 @@
 #include <gu/str.h>
 #include <gu/assert.h>
 #include <stdlib.h>
+#include <malloc.h>
 
 struct GuSeq {
 	size_t len;
