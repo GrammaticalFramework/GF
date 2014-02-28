@@ -18181,13 +18181,13 @@ lin easy_V2V = variants {} ;
 lin easygoing_A = mkA "lättsam" | mkA "lättsamt" | mkA "lättsamma" ; -- status=guess status=guess status=guess
 lin easygoingness_N = variants {} ;
 lin eat_V = mkV "äta" "åt" "ätit" ; -- SaldoWN
-lin eat_V2 = mkV2 "äta" "åt" "ätit" | L.eat_V2 ; -- SaldoWN
-lin eat_away_V = mkV "äta" "åt" "ätit" ; -- comment=9
-lin eat_away_V2 = dirV2 (partV (mkV "slickar")"av");
-lin eat_in_V = mkV "äta" "åt" "ätit" ; -- comment=9
+lin eat_V2 = L.eat_V2 ; -- SaldoWN
+lin eat_away_V = partV (mkV "äta" "åt" "ätit")"upp" ;
+lin eat_away_V2 = dirV2 (partV (mkV "äta" "åt" "ätit")"upp");
+lin eat_in_V = mkV "äta" "åt" "ätit" ; 
 lin eat_into_V2 = dirV2 (partV (mkV "slickar")"av");
 lin eat_out_V = mkV "äta" "åt" "ätit" ; -- comment=9
-lin eat_up_V2 = dirV2 (partV (mkV "slickar")"av");
+lin eat_up_V2 = dirV2 (partV (mkV "äta" "åt" "ätit")"upp");
 lin eatable_A = mkA "ätbar" ; -- SaldoWN
 lin eatable_N = variants {} ;
 lin eatage_N = variants {} ;
@@ -19166,7 +19166,7 @@ lin enterostomy_N = variants {} ;
 lin enterotoxemia_N = variants {} ;
 lin enterotoxin_N = variants {} ;
 lin enterovirus_N = variants {} ;
-lin enterprise_N = mkN "vågstycke" ; -- comment=6
+lin enterprise_N = mkN "företag" "företag" ;
 lin enterprising_A = mkA "driftig" ; -- comment=3
 lin entertain_V2 = mkV2 (mkV "underhålla"); -- status=guess, src=wikt
 lin entertainer_N = mkN "underhållare" utrum; -- comment=2
@@ -22848,7 +22848,7 @@ lin fulfill_V2 = mkV2 "fullfölja" ;
 lin fulfillment_N = variants {} ;
 lin fulfilment_N = mkN "tillfredsställelse" utrum; -- comment=3
 lin fulgurating_A = variants {} ;
-lin full_A = mkA "mätt" | L.full_A ; -- SaldoWN
+lin full_A = L.full_A | mkA "mätt" ; 
 lin full_blooded_A = variants {} ;
 lin full_blown_A = variants {} ;
 lin full_dress_A = variants {} ;
