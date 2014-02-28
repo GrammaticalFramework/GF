@@ -4,7 +4,7 @@ abstract NDTrans =
    NDLift
   ,Extensions [CN,NP,AdA,AdV,CompoundCN,AdAdV,UttAdV,ApposNP]
   ,Dictionary - [Pol,Tense]
-
+  ,Chunk
               ** {
 flags
   startcat=Phr;
