@@ -1,4 +1,24 @@
-instance PredInstanceChi of PredInterface = open ResChi, (P = ParadigmsChi), (X = ParamX), (S = SyntaxChi), Prelude in {
+instance PredInstanceChi of 
+  PredInterface - [PrVerb,initPrVerb] = 
+
+   open ResChi, (P = ParadigmsChi), (X = ParamX), (S = SyntaxChi), Prelude in {
+
+-- overrides
+
+oper
+  PrVerb = {
+    s    : ResChi.Verb ;
+    p    : Str ;                 -- verb particle             
+    c1   : ComplCase ; 
+    c2   : ComplCase ;
+    hasPrep : Bool ;
+
+    isSubjectControl : Bool ;   --- junk in Chi
+    vtype : VType ;  
+    vvtype : VVType ;
+
+    } ; 
+
 
 ---------------------
 -- parameters -------
@@ -32,9 +52,9 @@ oper
 
   ComplCase = Preposition ;
 
-  appComplCase  : ComplCase -> NounPhrase -> Str = \p,np -> ss (appPrep p np.s ; ---- advType
+  appComplCase  : ComplCase -> NounPhrase -> Str = \p,np -> appPrep p (np.s ! UUnit) ; ---- advType
   noComplCase   : ComplCase = P.mkPrep [] ;
-  strComplCase  : ComplCase -> Str = \c -> P.mkPrep c ;
+  strComplCase  : ComplCase -> Str = \c -> c.prepPre ++ c.prepPost ;
 
   noObj : Agr => Str = \\_ => [] ;
 
@@ -55,9 +75,6 @@ oper
 
   agr2icagr : Agr -> ICAgr = \a -> a ;
 
---- could use this?
-  agr2aformpos : Agr -> AFormPos = \a -> a ;
-
   agr2nagr : Agr -> NAgr = \a -> a ;
 
 -- restoring full Agr
@@ -70,8 +87,8 @@ oper
 --- this is only needed in VPC formation
   vagr2agr : VAgr -> Agr = \a -> defaultAgr ;
 
-  vPastPart : PrVerb -> AAgr -> Str = \v,a -> v.s ; ----
-  vPresPart : PrVerb -> AAgr -> Str = \v,a -> v.s ; ----
+  vPastPart : PrVerb -> AAgr -> Str = \v,a -> v.s.s ; ----
+  vPresPart : PrVerb -> AAgr -> Str = \v,a -> v.s.s ; ----
 
   vvInfinitive : VVType = UUnit ; ----
 
@@ -83,12 +100,12 @@ oper
 ------------------
 
 oper 
-  reflPron : Agr -> Str = \a -> ResChi.mkNP ResChi.reflPron ;
+  reflPron : Agr -> Str = \a -> (ResChi.mkNP ResChi.reflPron).s ;
 
   infVP : VVType -> Agr -> PrVerbPhrase -> Str = \vt, a,vp -> 
     vp.adV ++ vp.adv ++  ---- adv order
     vp.inf ! UUnit ++ 
-    vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a2 ++ vp.ext ;
+    vp.adj ! a ++ appPrep vp.c1 (vp.obj1.p1 ! a) ++ appPrep vp.c2 (vp.obj2.p1 ! a) ++ vp.ext ;
 
   impVP : Number -> PrVerbPhrase -> Str = \n,vp ->
     infVP UUnit UUnit vp ;
@@ -97,63 +114,51 @@ oper
     \sta,t,a,p,agr,v -> <[],[]> ; ----- not needed in Chinese
  
 
-  declCl       : PrClause -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl,adv ++ cl.v.p2 ++ restCl cl ;
+  declCl       : PrClause -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.adv ++ cl.v.p2 ++ restCl cl ;
   declSubordCl : PrClause -> Str = declCl ;
-  declInvCl    : PrClause -> Str = declInvCl ;
+  declInvCl    : PrClause -> Str = declCl ;
 
-  questCl      : PrQuestionClause -> Str = \cl -> cl.foc ++ cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.adv ++ cl.v.p2 ++ restCl cl ;
+  questCl      : PrQuestionClause -> Str = \cl -> 
+    cl.foc ++ cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.adv ++ cl.v.p2 ++ restCl cl ++ question_s ; ---- plus redupl
 
-  questSubordCl : PrQuestionClause -> Str = \cl -> questCl ;
+  questSubordCl : PrQuestionClause -> Str = questCl ;
 
   that_Compl : Str = say_s ;
 
   -- this part is usually the same in all reconfigurations
-  restCl : PrClause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.ext ++ cl.c3 ;
+  restCl : PrClause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.ext ; ---- c3
 
-  negAdV :  {s : Str ; p : Polarity} -> Str = \p -> p.s ++ case p.p of {Pos => [] ; Neg => neg_s} ;
+  negAdV :  {s : Str ; p : Polarity} -> Str = \p -> p.s ++ not_Str p.p ;
+
+  not_Str = \p -> case p of {Pos => [] ; Neg => neg_s} ;
+
+  tenseV : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str = 
+       \sta,t,a,p,o,_,v -> 
+       let
+          bu_neg = not_Str p ;
+          vneg   = case p of {Pos => [] ; Neg => v.s.neg} ;
+          pass   = case o of {CAct => [] ; CPass => passive_s}
+       in case <t,a> of {
+          <X.Past,_>  => <pass,  bu_neg,  sta ++ v.s.s ++ v.s.pp> ;
+          <_,X.Anter> => <pass,  bu_neg,  sta ++ v.s.s ++ v.s.pp> ;
+          _          => <pass,  vneg,    sta ++ v.s.s> 
+          } ;   ---- other aspects
 
 
 
-
-
-
-
-  tenseV : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str = --- Polarity, VAgr not needed in Chi
-       \sta,t,a,_,o,_,v -> 
-   let act = CommonScand.Act in
-   case <t,a> of {  --- sta dummy s field of Ant and Tense
-    <Pres,Simul> => <sta ++ v.s ! VF (VPres o),   [],                          []> ;
-    <Past,Simul> => <sta ++ v.s ! VF (VPret o),   [],                          []> ;
-    <Fut, Simul> => <skola_V.s  ! VF (VPres act), [],                          sta ++ v.s ! VI (VInfin o)> ;
-    <Cond,Simul> => <skola_V.s  ! VF (VPret act), [],                          sta ++ v.s ! VI (VInfin o)> ;
-    <Pres,Anter> => <hava_V.s   ! VF (VPres act), [],                          sta ++ v.s ! VI (VSupin o)> ;
-    <Past,Anter> => <hava_V.s   ! VF (VPret act), [],                          sta ++ v.s ! VI (VSupin o)> ;
-    <Fut, Anter> => <skola_V.s  ! VF (VPres act), hava_V.s ! VI (VInfin act),  sta ++ v.s ! VI (VSupin o)> ;
-    <Cond,Anter> => <skola_V.s  ! VF (VPret act), hava_V.s ! VI (VInfin act),  sta ++ v.s ! VI (VSupin o)> 
-    } ;
-
-  tenseInfV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str = \sa,a,_,o,v,_ -> ---- vvtype
-    case a of {
-      Simul =>                                           sa ++ v.s ! VI (VInfin o) ;  -- hon vill sova
-      Anter => hava_V.s ! VI (VInfin CommonScand.Act) ++ sa ++ v.s ! VI (VSupin o)    -- hon vill (ha) sovit ---- discont?
-      } ;
-
+  tenseInfV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str = \sa,a,p,o,v,_ -> ---- vvtype
+       let tv = tenseV sa X.Pres a p o UUnit v 
+       in tv.p1 ++ tv.p2 ++ tv.p3 ;
+ 
   imperativeV : Str -> Polarity -> ImpType -> PrVerb -> Str = \s,p,it,v -> 
-    s ++ case p of {
-      Pos => v.s ! VF (VImper CommonScand.Act) ;   ---- deponents
-      Neg => v.s ! VF (VImper CommonScand.Act) ++ inte_Str
-      } ;
+    tenseInfV s X.Simul p CAct v UUnit ;
 
   tenseCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str =
-    \s,t,a,p,_ -> tenseV s t a p CommonScand.Act UUnit (liftV be_V) ;
+    \s,t,a,p,agr -> tenseV s t a p CAct agr (liftV copula) ;
   tenseInfCopula : Str -> Anteriority -> Polarity -> VVType -> Str =
-    \s,a,p,vt -> tenseInfV s a p CommonScand.Act (liftV be_V) vt ;
+    \s,a,p,vt -> tenseInfV s a p CAct (liftV copula) vt ;
   tenseImpCopula : Str -> Polarity -> ImpType -> Str =
-    \s,p,n -> imperativeV s p n (liftV be_V) ;
-
-  hava_V : Verb = P.mkV "ha" "har" "ha" "hade" "haft" "havd" ; -- havd not used
-  be_V : Verb = P.mkV "vara" "är" "var" "var" "varit" "varen" ; -- varen not used
-  skola_V : Verb = P.mkV "skola" ("ska" | "skall") "ska" "skulle" "skolat" "skolad" ; ---- not used but ska and skulle
+    \s,p,n -> imperativeV s p n (liftV copula) ;
 
   noObj : Agr => Str = \\_ => [] ;
 
@@ -165,12 +170,8 @@ oper
     ext = ext ;
     } ;
 
-  not_Str : Polarity -> Str = \p -> case p of {Pos => [] ; Neg => inte_Str} ;
-
-  inte_Str = "inte" | "icke" | "ej" ;
-
   liftV : Verb -> PrVerb = \v ->
-    {s = v.s ; p = v.part ; c1,c2 = [] ; isSubjectControl = False ; vtype = v.vtype ; vvtype = vvInfinitive} ; ---- vvtype
+    {s = v ; p = [] ; c1,c2 = P.mkPrep [] ; isSubjectControl = False ; vtype = UUnit ; vvtype = UUnit ; hasPrep = False} ; 
 
 --- junk
 

@@ -60537,9 +60537,9 @@ lin underslung_A = variants {} ;
 lin underspend_V = variants {} ;
 lin underspend_V2 = variants {} ;
 lin understaffed_A = variants {} ;
-lin understand_V = mkV "begripa" "begrep" "begripit" | mkV "underförstå" "underförstod" "underförstådd"  ; -- SaldoWN -- comment=10
+lin understand_V = mkV "begripa" "begrep" "begripit" | mkV "förstå" "förstod" "förstått"  ; -- SaldoWN -- comment=10
 lin understand_V2 = mkV2 "begripa" "begrep" "begripit" | L.understand_V2 ; -- SaldoWN
-lin understand_V2V = mkV2V "begripa" "begrep" "begripit" | mkV2V (mkV "förstå") ; -- SaldoWN -- status=guess, src=wikt
+lin understand_V2V = mkV2V "begripa" "begrep" "begripit" | mkV2V (mkV "förstå" "förstod" "förstått") ; -- SaldoWN -- status=guess, src=wikt
 lin understand_VS = mkV "begripa" "begrep" "begripit" | mkVS (mkV "förstå") ; -- SaldoWN -- status=guess, src=wikt
 lin understandable_A = mkA "förståelig" ; -- comment=4
 lin understanding_N = mkN "förståelse" utrum | mkN "förståelse" "förståelser"  ; -- SaldoWN
@@ -61893,8 +61893,8 @@ lin useful_A = mkA "nyttig" ; -- SaldoWN
 lin usefulness_N = mkN "användbarhet" "användbarheter" ; -- comment=4
 lin useless_A = mkA "värdelös" | mkA "onyttig"  ; -- SaldoWN -- comment=9
 lin uselessness_N = mkN "lönlöshet" ;
-lin userFem_N = mkN "knarkare" utrum; -- comment=4
-lin userMasc_N = mkN "knarkare" utrum; -- comment=4
+lin userFem_N = mkN "användare" ; --- mkN "knarkare" utrum; -- comment=4
+lin userMasc_N = mkN "användare" ; --- mkN "knarkare" utrum; -- comment=4
 lin ushaw_moor_PN = variants {} ;
 lin usher_N = mkN "vaktmästare" utrum; -- comment=3
 lin usher_V2 = dirV2 (partV (mkV "visar")"in");
