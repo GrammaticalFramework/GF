@@ -34,7 +34,7 @@ print_result(PgfExprProb* ep, PgfConcr* to_concr,
 		gu_putc(' ', out, err);
 		// Linearize the concrete tree as a simple
 		// sequence of strings.
-		pgf_lzr_linearize_simple(to_concr, ctree, 0, out, err);
+		pgf_linearize(to_concr, ctree, out, err);
 		if (gu_exn_caught(err) == gu_type(PgfLinNonExist)) {
 			// encountered nonExist. Unfortunately there
 			// might be some output printed already. The
