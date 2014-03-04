@@ -470,7 +470,7 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 
 	size_t n_lins;
 	GuString* labels;
-	pgf_lzr_linearize_table(concr, ctree, &n_lins, &labels);
+	pgf_lzr_get_table(concr, ctree, &n_lins, &labels);
 
 	for (size_t lin_idx = 0; lin_idx < n_lins; lin_idx++) {
 		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
