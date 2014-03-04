@@ -237,5 +237,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 	*recall = ((double) state.matches)/((double) gu_buf_length(state.phrases));
 	*exact = pgf_expr_eq(expr, ep->expr) ? 1 : 0;
 
+	gu_pool_free(pool);
+
 	return true;
 }
