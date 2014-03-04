@@ -159,7 +159,12 @@ Executable gf
 --if flag(new-comp)
 --  cpp-options: -DNEW_COMP
 
-  build-tools: happy, alex>=3
+  build-tools: happy
+
+  if impl(ghc>=7.8)
+    build-tools: happy>=1.19, alex>=3.1
+  else
+    build-tools: happy, alex>=3
 
   if os(windows)
     build-depends: Win32

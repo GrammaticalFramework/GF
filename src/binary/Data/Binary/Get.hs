@@ -89,6 +89,9 @@ import Control.Applicative (Applicative(..))
 import Foreign
 
 -- used by splitAtST
+#if MIN_VERSION_base(4,6,0)
+import Control.Monad.ST.Unsafe(unsafeInterleaveST)
+#endif
 import Control.Monad.ST
 import Data.STRef
 
