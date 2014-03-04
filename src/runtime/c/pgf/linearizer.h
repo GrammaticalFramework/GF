@@ -75,8 +75,8 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 
 
 void
-pgf_lzr_linearize_table(PgfConcr* concr, PgfCncTree ctree, 
-                        size_t* n_lins, GuString** labels);
+pgf_lzr_get_table(PgfConcr* concr, PgfCncTree ctree, 
+                  size_t* n_lins, GuString** labels);
 #endif
 
 #ifdef PGF_PARSER_H_
