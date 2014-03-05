@@ -60,17 +60,6 @@ public class ConversationView extends ScrollView {
         final View view = 
         	mInflater.inflate(R.layout.input_box, mContent, false);
         EditText edittext = (EditText) view.findViewById(R.id.input_text);
-        edittext.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                	InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (inputMethodManager != null) {
-                        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                    }
-                }
-            }
-        });
         edittext.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -93,6 +82,11 @@ public class ConversationView extends ScrollView {
         extras.putBoolean("show_language_toggle", false);
 
         mContent.addView(view);
+        
+        edittext.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(edittext, InputMethodManager.SHOW_IMPLICIT);
+
         post(new Runnable() {
             public void run() {
                 fullScroll(FOCUS_DOWN);
