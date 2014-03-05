@@ -13,8 +13,7 @@
  *
  * Because of the \c variants construct in GF, there may be several
  * possible concrete syntax trees that correspond to a given abstract
- * syntax tree. These can be enumerated with #pgf_lzr_concretize and
- * #pgf_cnc_trees_next.
+ * syntax tree. These can be enumerated with #pgf_concretize.
  *
  * @{
  */
@@ -35,15 +34,17 @@ typedef struct {
 
 extern GU_DECLARE_TYPE(PgfLinNonExist, abstract);
 
+PgfCncTree
+pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool);
+
+
+
 typedef struct PgfLinFuncs PgfLinFuncs;
 
 struct PgfLinFuncs
 {
 	/// Output tokens
 	void (*symbol_token)(PgfLinFuncs** self, PgfToken tok);
-
-	/// Output literal
-	void (*expr_literal)(PgfLinFuncs** self, PgfLiteral lit);
 
 	/// Begin phrase
 	void (*begin_phrase)(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCId fun);
@@ -58,20 +59,16 @@ struct PgfLinFuncs
 	void (*symbol_bind)(PgfLinFuncs** self);
 };
 
-
-PgfCncTree
-pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool);
-
 /// Linearize a concrete syntax tree.
 void
-pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
-		  PgfLinFuncs** fnsp);
-
+pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, 
+                  PgfLinFuncs** funcs, GuPool* tmp_pool);
 
 /// Linearize a concrete syntax tree as space-separated tokens.
 void
-pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
-			 size_t lin_idx, GuOut* out, GuExn* err);
+pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, 
+                         GuOut* out, GuExn* err,
+                         GuPool* tmp_pool);
 
 
 void

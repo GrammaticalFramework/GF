@@ -127,41 +127,6 @@ pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_bracket_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
-{
-	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
-
-	GuString label = NULL;
-
-	GuVariantInfo i = gu_variant_open(lit);
-    switch (i.tag) {
-    case PGF_LITERAL_STR: {
-        PgfLiteralStr* lstr = i.data;
-        label = lstr->val;
-		break;
-	}
-    case PGF_LITERAL_INT: {
-        PgfLiteralInt* lint = i.data;
-        label = gu_format_string(state->pool, "%d", lint->val);
-		break;
-	}
-    case PGF_LITERAL_FLT: {
-        PgfLiteralFlt* lflt = i.data;
-        label = gu_format_string(state->pool, "%f", lflt->val);
-		break;
-	}
-	default:
-		gu_impossible();
-	}
-	
-	PgfParseNode* node = gu_new(PgfParseNode, state->pool);
-	node->id     = 100000 + gu_buf_length(state->leaves);
-	node->parent = state->parent;
-	node->label  = label;
-	gu_buf_push(state->leaves, PgfParseNode*, node);
-}
-
-static void
 pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
@@ -211,7 +176,6 @@ pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex,
 
 static PgfLinFuncs pgf_bracket_lin_funcs = {
 	.symbol_token  = pgf_bracket_lzn_symbol_token,
-	.expr_literal  = pgf_bracket_lzn_expr_literal,
 	.begin_phrase  = pgf_bracket_lzn_begin_phrase,
 	.end_phrase    = pgf_bracket_lzn_end_phrase,
 	.symbol_ne     = NULL,
@@ -283,7 +247,7 @@ pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 	state.level     = -1;
 	state.internals = gu_new_buf(GuBuf*, tmp_pool);
 	state.leaves    = gu_new_buf(PgfParseNode*, tmp_pool);
-	pgf_lzr_linearize(concr, ctree, 0, &state.funcs);
+	pgf_lzr_linearize(concr, ctree, 0, &state.funcs, tmp_pool);
 
 	size_t len = gu_buf_length(state.internals);
 	for (size_t i = 0; i < len; i++) {

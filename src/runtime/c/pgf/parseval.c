@@ -46,43 +46,6 @@ pgf_metrics_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_metrics_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
-{
-	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
-
-	GuVariantInfo i = gu_variant_open(lit);
-    switch (i.tag) {
-    case PGF_LITERAL_STR: {
-        PgfLiteralStr* lstr = i.data;
-        if (state->out != NULL)
-			gu_string_write(lstr->val, state->out, state->err);
-		state->pos += strlen(lstr->val);
-		break;
-	}
-    case PGF_LITERAL_INT: {
-        PgfLiteralInt* lint = i.data;
-		GuString tok =
-			gu_format_string(state->pool, "%d", lint->val);
-		if (state->out != NULL)
-			gu_string_write(tok, state->out, state->err);
-		state->pos += strlen(tok);
-		break;
-	}
-    case PGF_LITERAL_FLT: {
-        PgfLiteralFlt* lflt = i.data;
-		GuString tok =
-			gu_format_string(state->pool, "%f", lflt->val);
-		if (state->out != NULL)
-			gu_string_write(tok, state->out, state->err);
-		state->pos += strlen(tok);
-		break;
-	}
-	default:
-		gu_impossible();
-	}
-}
-
-static void
 pgf_metrics_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_index, PgfCId fun)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
@@ -149,7 +112,6 @@ pgf_metrics_lzn_end_phrase2(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_id
 
 static PgfLinFuncs pgf_metrics_lin_funcs1 = {
 	.symbol_token = pgf_metrics_lzn_symbol_token,
-	.expr_literal = pgf_metrics_lzn_expr_literal,
 	.begin_phrase = pgf_metrics_lzn_begin_phrase,
 	.end_phrase   = pgf_metrics_lzn_end_phrase1,
 	.symbol_ne    = pgf_metrics_symbol_ne,
@@ -158,7 +120,6 @@ static PgfLinFuncs pgf_metrics_lin_funcs1 = {
 
 static PgfLinFuncs pgf_metrics_lin_funcs2 = {
 	.symbol_token = pgf_metrics_lzn_symbol_token,
-	.expr_literal = pgf_metrics_lzn_expr_literal,
 	.begin_phrase = pgf_metrics_lzn_begin_phrase,
 	.end_phrase   = pgf_metrics_lzn_end_phrase2,
 	.symbol_ne    = pgf_metrics_symbol_ne,
@@ -201,7 +162,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 	state.found = 0;
 	state.pool = pool;
 
-	pgf_lzr_linearize(concr, ctree1, 0, &state.funcs);
+	pgf_lzr_linearize(concr, ctree1, 0, &state.funcs, pool);
 	if (!gu_ok(state.err)) {
 		gu_pool_free(pool);
 		return false;
@@ -231,7 +192,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 	state.bind = true;
 	state.out  = NULL;
 	state.pos  = 0;
-	pgf_lzr_linearize(concr, ctree2, 0, &state.funcs);
+	pgf_lzr_linearize(concr, ctree2, 0, &state.funcs, pool);
 
 	*precision = ((double) state.matches)/((double) state.found);
 	*recall = ((double) state.matches)/((double) gu_buf_length(state.phrases));
