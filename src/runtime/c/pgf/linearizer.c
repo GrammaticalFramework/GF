@@ -65,15 +65,13 @@ pgf_lzr_index(PgfConcr* concr,
 	}
 }
 
-typedef struct PgfLzn PgfLzn;
-
-struct PgfLzn {
+typedef struct {
 	PgfConcr* concr;
 	GuChoice* ch;
 	PgfExpr expr;
 	int fid;
 	GuEnum en;
-};
+} PgfCnc;
 
 
 //
@@ -181,19 +179,19 @@ pgf_print_cnc_tree(PgfCncTree ctree, GuOut* out, GuExn* err)
 #endif
 
 static PgfCncTree
-pgf_lzn_resolve(PgfLzn* lzn, 
+pgf_cnc_resolve(PgfCnc* cnc,
                 PgfPrintContext* context, PgfExpr expr,
                 PgfCCat* ccat,
                 GuPool* pool);
 
 static PgfCncTree
-pgf_lzn_resolve_app(PgfLzn* lzn,
+pgf_cnc_resolve_app(PgfCnc* cnc,
                     size_t n_vars, PgfPrintContext* context,
                     PgfCCat* ccat, GuBuf* buf, GuBuf* args,
                     GuPool* pool)
 {
-	GuChoiceMark mark = gu_choice_mark(lzn->ch);
-	int save_fid = lzn->fid;
+	GuChoiceMark mark = gu_choice_mark(cnc->ch);
+	int save_fid = cnc->fid;
 
 	size_t n_args = gu_buf_length(args);
 
@@ -207,7 +205,7 @@ pgf_lzn_resolve_app(PgfLzn* lzn,
 	capp->context = context;
 
 redo:;
-	int index = gu_choice_next(lzn->ch, gu_buf_length(buf));
+	int index = gu_choice_next(cnc->ch, gu_buf_length(buf));
 	if (index < 0) {
 		return gu_null_variant;
 	}
@@ -226,15 +224,15 @@ redo:;
 
 		PgfCCat* ccat = NULL;
 		GuBuf* coercions =
-			gu_map_get(lzn->concr->coerce_idx, parg->ccat, GuBuf*);
+			gu_map_get(cnc->concr->coerce_idx, parg->ccat, GuBuf*);
 		if (coercions == NULL) {
 			ccat = parg->ccat;
 		} else {
-			int index = gu_choice_next(lzn->ch, gu_buf_length(coercions));
+			int index = gu_choice_next(cnc->ch, gu_buf_length(coercions));
 			if (index < 0) {
-				lzn->fid = save_fid;
-				gu_choice_reset(lzn->ch, mark);
-				if (!gu_choice_advance(lzn->ch))
+				cnc->fid = save_fid;
+				gu_choice_reset(cnc->ch, mark);
+				if (!gu_choice_advance(cnc->ch))
 					return gu_null_variant;
 				goto redo;
 			}
@@ -245,23 +243,23 @@ redo:;
 		}
 
 		capp->args[i] =
-			pgf_lzn_resolve(lzn, context, earg, ccat, pool);
+			pgf_cnc_resolve(cnc, context, earg, ccat, pool);
 		if (gu_variant_is_null(capp->args[i])) {
-			lzn->fid = save_fid;
-			gu_choice_reset(lzn->ch, mark);
-			if (!gu_choice_advance(lzn->ch))
+			cnc->fid = save_fid;
+			gu_choice_reset(cnc->ch, mark);
+			if (!gu_choice_advance(cnc->ch))
 				return gu_null_variant;
 			goto redo;
 		}
 	}
 
-	capp->fid = lzn->fid++;
+	capp->fid = cnc->fid++;
 
 	return ret;
 }
 
 static PgfCncTree
-pgf_lzn_resolve_def(PgfLzn* lzn,
+pgf_cnc_resolve_def(PgfCnc* cnc,
                     size_t n_vars, PgfPrintContext* context,
                     PgfCCat* ccat, GuString s, GuPool* pool)
 {
@@ -274,7 +272,7 @@ pgf_lzn_resolve_def(PgfLzn* lzn,
 					   &lit, pool);
 	clit->n_vars  = 0;
 	clit->context = context;
-	clit->fid = lzn->fid++;
+	clit->fid = cnc->fid++;
 	PgfLiteralStr* lit_str =
 		gu_new_flex_variant(PGF_LITERAL_STR,
 					        PgfLiteralStr,
@@ -286,7 +284,7 @@ pgf_lzn_resolve_def(PgfLzn* lzn,
 		return lit;
 
 	int index =
-		gu_choice_next(lzn->ch, gu_seq_length(ccat->lindefs));
+		gu_choice_next(cnc->ch, gu_seq_length(ccat->lindefs));
 	if (index < 0) {
 		return ret;
 	}
@@ -296,7 +294,7 @@ pgf_lzn_resolve_def(PgfLzn* lzn,
 							args, 1, &ret, pool);
 	capp->ccat = ccat;
 	capp->fun = gu_seq_get(ccat->lindefs, PgfCncFun*, index);
-	capp->fid = lzn->fid++;
+	capp->fid = cnc->fid++;
 	capp->n_vars  = n_vars;
 	capp->context = context;
 	capp->n_args  = 1;
@@ -310,12 +308,12 @@ typedef struct {
 	int index;
 	PgfCCat* ccat;
 	GuBuf* buf;
-} PgfLznItor;
+} PgfCncItor;
 
 static void
-pgf_lzn_cat_resolve_itor(GuMapItor* fn, const void* key, void* value, GuExn* err)
+pgf_cnc_cat_resolve_itor(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
-	PgfLznItor* clo = (PgfLznItor*) fn;
+	PgfCncItor* clo = (PgfCncItor*) fn;
 	PgfCCat* ccat = (PgfCCat*) key;
 	GuBuf* buf = *((GuBuf**) value);
 
@@ -360,7 +358,7 @@ pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool)
 }
 
 static PgfCncTree
-pgf_lzn_resolve(PgfLzn* lzn, 
+pgf_cnc_resolve(PgfCnc* cnc, 
                 PgfPrintContext* context, PgfExpr expr,
                 PgfCCat* ccat, 
                 GuPool* pool)
@@ -400,7 +398,7 @@ pgf_lzn_resolve(PgfLzn* lzn,
 				               &ret, pool);
 			clit->n_vars  = n_vars;
 			clit->context = context;
-			clit->fid = lzn->fid++;
+			clit->fid = cnc->fid++;
 			clit->lit = elit->lit;
 			goto done;
 		}
@@ -418,7 +416,7 @@ pgf_lzn_resolve(PgfLzn* lzn,
 
 			for (size_t i = 0; i < n_args; i++) {
 				PgfExpr earg = gu_buf_get(args, PgfExpr, n_args-i-1);
-				chunks->args[i] = pgf_lzn_resolve(lzn, context, earg, NULL, pool);
+				chunks->args[i] = pgf_cnc_resolve(cnc, context, earg, NULL, pool);
 				if (gu_variant_is_null(chunks->args[i])) {
 					ret = gu_null_variant;
 					goto done;
@@ -436,7 +434,7 @@ pgf_lzn_resolve(PgfLzn* lzn,
 			}
 
 			int index =
-				gu_choice_next(lzn->ch, gu_seq_length(ccat->lindefs));
+				gu_choice_next(cnc->ch, gu_seq_length(ccat->lindefs));
 			if (index < 0) {
 				return ret;
 			}
@@ -446,7 +444,7 @@ pgf_lzn_resolve(PgfLzn* lzn,
 									args, 1, &ret, pool);
 			capp->ccat = ccat;
 			capp->fun = gu_seq_get(ccat->lindefs, PgfCncFun*, index);
-			capp->fid = lzn->fid++;
+			capp->fid = cnc->fid++;
 			capp->n_vars = 0;
 			capp->context = context;
 			capp->n_args = 1;
@@ -458,7 +456,7 @@ pgf_lzn_resolve(PgfLzn* lzn,
 			PgfExprFun* efun = i.data;
 
 			PgfCncOverloadMap* overl_table =
-				gu_map_get(lzn->concr->fun_indices, efun->fun, PgfCncOverloadMap*);
+				gu_map_get(cnc->concr->fun_indices, efun->fun, PgfCncOverloadMap*);
 			if (overl_table == NULL) {
 				if (ccat != NULL && ccat->lindefs == NULL) {
 					goto done;
@@ -475,7 +473,7 @@ pgf_lzn_resolve(PgfLzn* lzn,
 				GuString s = gu_string_buf_freeze(sbuf, tmp_pool);
 
 				if (ccat != NULL) {
-					ret = pgf_lzn_resolve_def(lzn, n_vars, context, ccat, s, pool);
+					ret = pgf_cnc_resolve_def(cnc, n_vars, context, ccat, s, pool);
 				} else {
 					PgfCncTreeLit* clit = 
 						gu_new_variant(PGF_CNC_TREE_LIT,
@@ -483,7 +481,7 @@ pgf_lzn_resolve(PgfLzn* lzn,
 									   &ret, pool);
 					clit->n_vars = 0;
 					clit->context = context;
-					clit->fid = lzn->fid++;
+					clit->fid = cnc->fid++;
 					PgfLiteralStr* lit = 
 						gu_new_flex_variant(PGF_LITERAL_STR,
 									        PgfLiteralStr,
@@ -498,22 +496,22 @@ pgf_lzn_resolve(PgfLzn* lzn,
 
 			if (ccat == NULL) {
 				size_t n_count = gu_map_count(overl_table);
-				GuChoiceMark mark = gu_choice_mark(lzn->ch);
+				GuChoiceMark mark = gu_choice_mark(cnc->ch);
 
 redo:;
-				int index = gu_choice_next(lzn->ch, n_count);
+				int index = gu_choice_next(cnc->ch, n_count);
 				if (index < 0) {
 					goto done;
 				}
 
-				PgfLznItor clo = { { pgf_lzn_cat_resolve_itor }, index, NULL, NULL };
+				PgfCncItor clo = { { pgf_cnc_cat_resolve_itor }, index, NULL, NULL };
 				gu_map_iter(overl_table, &clo.fn, NULL);
 				assert(clo.ccat != NULL && clo.buf != NULL);
 
-				ret = pgf_lzn_resolve_app(lzn, n_vars, context, clo.ccat, clo.buf, args, pool);
+				ret = pgf_cnc_resolve_app(cnc, n_vars, context, clo.ccat, clo.buf, args, pool);
 				if (gu_variant_is_null(ret)) {
-					gu_choice_reset(lzn->ch, mark);
-					if (gu_choice_advance(lzn->ch))
+					gu_choice_reset(cnc->ch, mark);
+					if (gu_choice_advance(cnc->ch))
 						goto redo;
 				}
 			} else {
@@ -523,7 +521,7 @@ redo:;
 					goto done;
 				}
 
-				ret = pgf_lzn_resolve_app(lzn, n_vars, context, ccat, buf, args, pool);
+				ret = pgf_cnc_resolve_app(cnc, n_vars, context, ccat, buf, args, pool);
 			}
 			goto done;
 		}
@@ -543,7 +541,7 @@ redo:;
 			}
 
 			if (ccat != NULL) {
-				ret = pgf_lzn_resolve_def(lzn, n_vars, context, ccat, ctxt->name, pool);
+				ret = pgf_cnc_resolve_def(cnc, n_vars, context, ccat, ctxt->name, pool);
 			} else {
 				PgfCncTreeLit* clit = 
 					gu_new_variant(PGF_CNC_TREE_LIT,
@@ -551,7 +549,7 @@ redo:;
 								   &ret, pool);
 				clit->n_vars  = 0;
 				clit->context = context;
-				clit->fid = lzn->fid++;
+				clit->fid = cnc->fid++;
 				PgfLiteralStr* lit = 
 					gu_new_flex_variant(PGF_LITERAL_STR,
 								        PgfLiteralStr,
@@ -585,7 +583,7 @@ done:
 static void
 pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 {
-	PgfLzn* lzn = gu_container(self, PgfLzn, en);
+	PgfCnc* lzn = gu_container(self, PgfCnc, en);
 	PgfCncTree* toc = to;
 
 	if (lzn->ch == NULL) {
@@ -596,7 +594,7 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 	lzn->fid = 0;
 
 	GuChoiceMark mark = gu_choice_mark(lzn->ch);
-	*toc = pgf_lzn_resolve(lzn, NULL, lzn->expr, NULL, pool);
+	*toc = pgf_cnc_resolve(lzn, NULL, lzn->expr, NULL, pool);
 	gu_choice_reset(lzn->ch, mark);
 
 #ifdef PGF_LINEARIZER_DEBUG
@@ -629,17 +627,184 @@ pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuExn* err, GuPool* pool)
 		}
 	}
 
-	PgfLzn* lzn = gu_new(PgfLzn, pool);
-	lzn->concr = concr;
-	lzn->expr = expr;
-	lzn->fid = 0;
-	lzn->ch = gu_new_choice(pool);
-	lzn->en.next = pgf_cnc_tree_enum_next;
-	return &lzn->en;
+	PgfCnc* cnc = gu_new(PgfCnc, pool);
+	cnc->concr = concr;
+	cnc->expr = expr;
+	cnc->fid = 0;
+	cnc->ch = gu_new_choice(pool);
+	cnc->en.next = pgf_cnc_tree_enum_next;
+	return &cnc->en;
 }
 
-void
-pgf_lzr_linearize_var(PgfConcr* concr, PgfCncTree ctree, size_t var_idx, PgfLinFuncs** fnsp)
+typedef struct {
+	PgfConcr* concr;
+	PgfLinFuncs** funcs;
+	GuPool* tmp_pool;
+} PgfLzr;
+
+static PgfLzr*
+pgf_new_lzr(PgfConcr* concr, PgfLinFuncs** funcs, GuPool* tmp_pool)
+{
+	PgfLzr* lzr = gu_new(PgfLzr, tmp_pool);
+	lzr->concr    = concr;
+	lzr->funcs    = funcs;
+	lzr->tmp_pool = tmp_pool;
+	return lzr;
+}
+
+typedef enum {
+	PGF_CACHED_BEGIN,
+	PGF_CACHED_END,
+	PGF_CACHED_BIND,
+	PGF_CACHED_NE
+} PgfLzrCachedTag;
+
+typedef struct {
+	PgfLzrCachedTag tag;
+	PgfCId cat;
+	int fid;
+	int lin_idx;
+	PgfCId fun;
+} PgfLzrCached;
+
+typedef struct {
+	PgfLinFuncs*   funcs;
+	PgfCncTreeApp* app;
+	PgfSymbolKP*   kp;
+	GuBuf* events;
+	PgfLzr* lzr;
+	PgfLinFuncs**  prev;
+} PgfLzrCache;
+
+static void
+pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTreeApp* fapp,
+                          PgfSymbols* syms, uint16_t sym_idx);
+                          
+static void
+pgf_lzr_linearize_tree(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx);
+
+static void
+pgf_lzr_cache_flush(PgfLzrCache* cache, PgfSymbols* form)
+{
+	cache->lzr->funcs = cache->prev;
+	pgf_lzr_linearize_symbols(cache->lzr, cache->app, form, 0);
+
+	size_t n_cached = gu_buf_length(cache->events);
+	for (size_t i = 0; i < n_cached; i++) {
+		PgfLzrCached* event =
+			gu_buf_index(cache->events, PgfLzrCached, i);
+			
+		switch (event->tag) {
+		case PGF_CACHED_BEGIN:
+			if ((*cache->lzr->funcs)->begin_phrase) {
+				(*cache->lzr->funcs)->begin_phrase(
+				                        cache->lzr->funcs,
+				                        event->cat,
+				                        event->fid,
+				                        event->lin_idx,
+				                        event->fun);
+			}
+			break;
+		case PGF_CACHED_END:
+			if ((*cache->lzr->funcs)->end_phrase) {
+				(*cache->lzr->funcs)->end_phrase(
+				                        cache->lzr->funcs,
+				                        event->cat,
+				                        event->fid,
+				                        event->lin_idx,
+				                        event->fun);
+			}
+			break;
+		case PGF_CACHED_BIND:
+			if ((*cache->lzr->funcs)->symbol_bind) {
+				(*cache->lzr->funcs)->symbol_bind(cache->lzr->funcs);
+			}
+			break;
+		case PGF_CACHED_NE:
+			if ((*cache->lzr->funcs)->symbol_ne) {
+				(*cache->lzr->funcs)->symbol_ne(cache->lzr->funcs);
+			}
+			break;
+		}
+	}
+}
+
+static void
+pgf_lzr_cache_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
+{
+	PgfLzrCache* cache = gu_container(funcs, PgfLzrCache, funcs);
+
+	PgfSymbols* form = cache->kp->default_form;
+	for (size_t i = 0; i < cache->kp->n_forms; i++) {
+		GuStrings* prefixes = cache->kp->forms[i].prefixes;
+		size_t n_prefixes = gu_seq_length(prefixes);
+		for (size_t j = 0; j < n_prefixes; j++) {
+			GuString prefix = gu_seq_get(prefixes, GuString, j);
+			
+			if (gu_string_is_prefix(prefix, tok)) {
+				form = cache->kp->forms[i].form;
+				goto found;
+			}
+		}
+	}
+found:
+
+	pgf_lzr_cache_flush(cache, form);
+	if ((*cache->lzr->funcs)->symbol_token) {
+		(*cache->lzr->funcs)->symbol_token(cache->lzr->funcs, tok);
+	}
+}
+
+static void
+pgf_lzr_cache_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_idx, PgfCId fun)
+{
+	PgfLzrCache*  cache = gu_container(funcs, PgfLzrCache, funcs);
+	PgfLzrCached* event = gu_buf_extend(cache->events);
+	event->tag     = PGF_CACHED_BEGIN;
+	event->cat     = cat;
+	event->fid     = fid;
+	event->lin_idx = lin_idx;
+	event->fun     = fun;
+}
+
+static void
+pgf_lzr_cache_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_idx, PgfCId fun)
+{
+	PgfLzrCache*  cache = gu_container(funcs, PgfLzrCache, funcs);
+	PgfLzrCached* event = gu_buf_extend(cache->events);
+	event->tag     = PGF_CACHED_END;
+	event->cat     = cat;
+	event->fid     = fid;
+	event->lin_idx = lin_idx;
+	event->fun     = fun;
+}
+
+static void
+pgf_lzr_cache_symbol_ne(PgfLinFuncs** funcs)
+{
+	PgfLzrCache*  cache = gu_container(funcs, PgfLzrCache, funcs);
+	PgfLzrCached* event = gu_buf_extend(cache->events);
+	event->tag     = PGF_CACHED_NE;
+}
+
+static void
+pgf_lzr_cache_symbol_bind(PgfLinFuncs** funcs)
+{
+	PgfLzrCache*  cache = gu_container(funcs, PgfLzrCache, funcs);
+	PgfLzrCached* event = gu_buf_extend(cache->events);
+	event->tag     = PGF_CACHED_BIND;
+}
+
+static PgfLinFuncs pgf_lzr_cache_funcs = {
+	.symbol_token = pgf_lzr_cache_symbol_token,
+	.begin_phrase = pgf_lzr_cache_begin_phrase,
+	.end_phrase   = pgf_lzr_cache_end_phrase,
+	.symbol_ne    = pgf_lzr_cache_symbol_ne,
+	.symbol_bind  = pgf_lzr_cache_symbol_bind
+};
+
+static void
+pgf_lzr_linearize_var(PgfLzr* lzr, PgfCncTree ctree, size_t var_idx)
 {
 	GuVariantInfo cti = gu_variant_open(ctree);
 
@@ -675,15 +840,14 @@ pgf_lzr_linearize_var(PgfConcr* concr, PgfCncTree ctree, size_t var_idx, PgfLinF
 		n_vars--;
 	}
 
-	if ((*fnsp)->symbol_token) {
-		(*fnsp)->symbol_token(fnsp, context->name);
+	if ((*lzr->funcs)->symbol_token) {
+		(*lzr->funcs)->symbol_token(lzr->funcs, context->name);
 	}
 }
 
-void
-pgf_lzr_linearize_symbols(PgfConcr* concr, PgfCncTreeApp* fapp,
-                          PgfSymbols* syms, uint16_t sym_idx,
-                          PgfLinFuncs** fnsp)
+static void
+pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTreeApp* fapp,
+                          PgfSymbols* syms, uint16_t sym_idx)
 {
 	size_t nsyms = gu_seq_length(syms);
 	for (size_t i = sym_idx; i < nsyms; i++) {
@@ -699,7 +863,7 @@ pgf_lzr_linearize_symbols(PgfConcr* concr, PgfCncTreeApp* fapp,
 			gu_assert((unsigned) sidx->d < fapp->n_args);
 
 			PgfCncTree argf = fapp->args[sidx->d];
-			pgf_lzr_linearize(concr, argf, sidx->r, fnsp);
+			pgf_lzr_linearize_tree(lzr, argf, sidx->r);
 			break;
 		}
 		case PGF_SYMBOL_VAR: {
@@ -710,32 +874,40 @@ pgf_lzr_linearize_symbols(PgfConcr* concr, PgfCncTreeApp* fapp,
 			gu_assert((unsigned) sidx->d < fapp->n_args);
 
 			PgfCncTree argf = fapp->args[sidx->d];
-			pgf_lzr_linearize_var(concr, argf, sidx->r, fnsp);
+			pgf_lzr_linearize_var(lzr, argf, sidx->r);
 			break;
 		}
 		case PGF_SYMBOL_KS: {
 			PgfSymbolKS* ks = sym_i.data;
-			if ((*fnsp)->symbol_token) {
-				(*fnsp)->symbol_token(fnsp, ks->token);
+			if ((*lzr->funcs)->symbol_token) {
+				(*lzr->funcs)->symbol_token(lzr->funcs, ks->token);
 			}
 			break;
 		}
 		case PGF_SYMBOL_KP: {
 			// TODO: correct prefix-dependencies
 			PgfSymbolKP* kp = sym_i.data;
-			pgf_lzr_linearize_symbols(concr, fapp, kp->default_form, 0, fnsp);
+			//gu_buf_push(pres, PgfSymbolKP*, kp);
+			PgfLzrCache* cache = gu_new(PgfLzrCache, lzr->tmp_pool);
+			cache->funcs = &pgf_lzr_cache_funcs;
+			cache->app   = fapp;
+			cache->kp    = kp;
+			cache->events= gu_new_buf(PgfLzrCached, lzr->tmp_pool);
+			cache->lzr   = lzr;
+			cache->prev  = lzr->funcs;
+			lzr->funcs = &cache->funcs;
 			break;
 		}
 		case PGF_SYMBOL_NE: {
-			if ((*fnsp)->symbol_ne) {
-				(*fnsp)->symbol_ne(fnsp);
+			if ((*lzr->funcs)->symbol_ne) {
+				(*lzr->funcs)->symbol_ne(lzr->funcs);
 			}
 			break;
 		}
 		case PGF_SYMBOL_BIND:
 		case PGF_SYMBOL_SOFT_BIND: {
-			if ((*fnsp)->symbol_bind) {
-				(*fnsp)->symbol_bind(fnsp);
+			if ((*lzr->funcs)->symbol_bind) {
+				(*lzr->funcs)->symbol_bind(lzr->funcs);
 			}
 			break;
 		}
@@ -745,10 +917,9 @@ pgf_lzr_linearize_symbols(PgfConcr* concr, PgfCncTreeApp* fapp,
 	}
 }
 
-void
-pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs** fnsp)
+static void
+pgf_lzr_linearize_tree(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx)
 {
-	PgfLinFuncs* fns = *fnsp;
 	GuVariantInfo cti = gu_variant_open(ctree);
 
 	switch (cti.tag) {
@@ -756,21 +927,21 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		PgfCncTreeApp* fapp = cti.data;
 		PgfCncFun* fun = fapp->fun;
 
-		if (fns->begin_phrase && fapp->ccat != NULL) {
-			fns->begin_phrase(fnsp,
-							  fun->absfun->type->cid,
-							  fapp->fid, lin_idx,
-							  fun->absfun->name);
+		if ((*lzr->funcs)->begin_phrase && fapp->ccat != NULL) {
+			(*lzr->funcs)->begin_phrase(lzr->funcs,
+			                            fun->absfun->type->cid,
+			                            fapp->fid, lin_idx,
+			                            fun->absfun->name);
 		}
 
 		gu_require(lin_idx < fun->n_lins);
-		pgf_lzr_linearize_symbols(concr, fapp, fun->lins[lin_idx]->syms, 0, fnsp);
+		pgf_lzr_linearize_symbols(lzr, fapp, fun->lins[lin_idx]->syms, 0);
 		
-		if (fns->end_phrase && fapp->ccat != NULL) {
-			fns->end_phrase(fnsp,
-							fun->absfun->type->cid,
-							fapp->fid, lin_idx,
-							fun->absfun->name);
+		if ((*lzr->funcs)->end_phrase && fapp->ccat != NULL) {
+			(*lzr->funcs)->end_phrase(lzr->funcs,
+			                          fun->absfun->type->cid,
+			                          fapp->fid, lin_idx,
+			                          fun->absfun->name);
 		}
 		break;
 	}
@@ -779,12 +950,12 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		PgfCncTreeChunks* fchunks = cti.data;
 
 		if (fchunks->n_args == 0) {
-			if ((*fnsp)->symbol_token) {
-				(*fnsp)->symbol_token(fnsp, "?");
+			if ((*lzr->funcs)->symbol_token) {
+				(*lzr->funcs)->symbol_token(lzr->funcs, "?");
 			}
 		} else {
 			for (size_t i = 0; i < fchunks->n_args; i++) {
-				pgf_lzr_linearize(concr, fchunks->args[i], 0, fnsp);
+				pgf_lzr_linearize_tree(lzr, fchunks->args[i], 0);
 			}
 		}
 		break;
@@ -794,22 +965,44 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 		PgfCncTreeLit* flit = cti.data;
 
 		PgfCId cat =
-			pgf_literal_cat(concr, flit->lit)->cnccat->abscat->name;
+			pgf_literal_cat(lzr->concr, flit->lit)->cnccat->abscat->name;
 		
-		if (fns->begin_phrase) {
-			fns->begin_phrase(fnsp,
-							  cat, flit->fid, 0,
-							  "");
+		if ((*lzr->funcs)->begin_phrase) {
+			(*lzr->funcs)->begin_phrase(lzr->funcs,
+			                            cat, flit->fid, 0,
+			                            "");
 		}
 
-		if (fns->expr_literal) {
-			fns->expr_literal(fnsp, flit->lit);
+		GuVariantInfo i = gu_variant_open(flit->lit);
+		PgfToken tok = NULL;
+		switch (i.tag) {
+		case PGF_LITERAL_STR: {
+			PgfLiteralStr* lstr = i.data;
+			tok = lstr->val;
+			break;
+		}
+		case PGF_LITERAL_INT: {
+			PgfLiteralInt* lint = i.data;
+			tok = gu_format_string(lzr->tmp_pool, "%d", lint->val);
+			break;
+		}
+		case PGF_LITERAL_FLT: {
+			PgfLiteralFlt* lflt = i.data;
+			tok = gu_format_string(lzr->tmp_pool, "%lf", lflt->val);
+			break;
+		}
+		default:
+			gu_impossible();
 		}
 
-		if (fns->end_phrase) {
-			fns->end_phrase(fnsp,
-							cat, flit->fid, 0,
-							"");
+		if ((*lzr->funcs)->symbol_token) {
+			(*lzr->funcs)->symbol_token(lzr->funcs, tok);
+		}
+
+		if ((*lzr->funcs)->end_phrase) {
+			(*lzr->funcs)->end_phrase(lzr->funcs,
+							          cat, flit->fid, 0,
+							          "");
 		}
 
 		break;
@@ -819,7 +1012,18 @@ pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, PgfLinFuncs
 	}
 }
 
-
+void
+pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, 
+                  PgfLinFuncs** funcs, GuPool* tmp_pool)
+{
+	PgfLzr* lzr = pgf_new_lzr(concr, funcs, tmp_pool);
+	pgf_lzr_linearize_tree(lzr, ctree, lin_idx);
+	
+	while (lzr->funcs != funcs) {
+		PgfLzrCache* cache = gu_container(lzr->funcs, PgfLzrCache, funcs);
+		pgf_lzr_cache_flush(cache, cache->kp->default_form);
+	}
+}
 
 typedef struct PgfSimpleLin PgfSimpleLin;
 
@@ -854,38 +1058,6 @@ pgf_file_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_file_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
-{
-	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
-	if (!gu_ok(flin->err)) {
-		return;
-	}
-
-	pgf_file_lzn_put_space(flin);
-
-	GuVariantInfo i = gu_variant_open(lit);
-    switch (i.tag) {
-    case PGF_LITERAL_STR: {
-        PgfLiteralStr* lstr = i.data;
-		gu_string_write(lstr->val, flin->out, flin->err);
-		break;
-	}
-    case PGF_LITERAL_INT: {
-        PgfLiteralInt* lint = i.data;
-		gu_printf(flin->out, flin->err, "%d", lint->val);
-		break;
-	}
-    case PGF_LITERAL_FLT: {
-        PgfLiteralFlt* lflt = i.data;
-		gu_printf(flin->out, flin->err, "%lf", lflt->val);
-		break;
-	}
-	default:
-		gu_impossible();
-	}
-}
-
-static void
 pgf_file_lzn_symbol_ne(PgfLinFuncs** funcs)
 {
 	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
@@ -901,7 +1073,6 @@ pgf_file_lzn_symbol_bind(PgfLinFuncs** funcs)
 
 static PgfLinFuncs pgf_file_lin_funcs = {
 	.symbol_token = pgf_file_lzn_symbol_token,
-	.expr_literal = pgf_file_lzn_expr_literal,
 	.begin_phrase = NULL,
 	.end_phrase   = NULL,
 	.symbol_ne    = pgf_file_lzn_symbol_ne,
@@ -909,8 +1080,9 @@ static PgfLinFuncs pgf_file_lin_funcs = {
 };
 
 void
-pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
-			 size_t lin_idx, GuOut* out, GuExn* err)
+pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
+                         GuOut* out, GuExn* err,
+                         GuPool* tmp_pool)
 {
 	PgfSimpleLin flin = {
 		.funcs = &pgf_file_lin_funcs,
@@ -918,7 +1090,7 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree,
 		.out = out,
 		.err = err
 	};
-	pgf_lzr_linearize(concr, ctree, lin_idx, &flin.funcs);
+	pgf_lzr_linearize(concr, ctree, lin_idx, &flin.funcs, tmp_pool);
 }
 
 void
@@ -963,7 +1135,7 @@ pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (!gu_variant_is_null(ctree)) {
 		ctree = pgf_lzr_wrap_linref(ctree, tmp_pool);
-		pgf_lzr_linearize_simple(concr, ctree, 0, out, err);
+		pgf_lzr_linearize_simple(concr, ctree, 0, out, err, tmp_pool);
 	}
 
 	gu_pool_free(tmp_pool);
@@ -984,7 +1156,13 @@ pgf_get_tokens(PgfSymbols* syms, uint16_t sym_idx, GuPool* pool)
 		.err = err
 	};
 
-	pgf_lzr_linearize_symbols(NULL, NULL, syms, sym_idx, &flin.funcs);
+	PgfLzr* lzr = pgf_new_lzr(NULL, &flin.funcs, tmp_pool);
+	pgf_lzr_linearize_symbols(lzr, NULL, syms, sym_idx);
+	
+	while (lzr->funcs != &flin.funcs) {
+		PgfLzrCache* cache = gu_container(lzr->funcs, PgfLzrCache, funcs);
+		pgf_lzr_cache_flush(cache, cache->kp->default_form);
+	}
 
 	GuString tokens = gu_ok(err) ? gu_string_buf_freeze(sbuf, pool)
 	                             : "";
