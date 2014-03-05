@@ -169,7 +169,7 @@ public class TranslatorInputMethodService extends InputMethodService
                 updateShiftKeyState(attribute);
         }
         
-        mActionId = attribute.imeOptions & EditorInfo.IME_MASK_ACTION;
+        mActionId = attribute.imeOptions & (EditorInfo.IME_MASK_ACTION | EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
 
         mInstance = this;
@@ -392,7 +392,10 @@ public class TranslatorInputMethodService extends InputMethodService
                 current.setShifted(false);
             }
         } else if (primaryCode == 10) {
-        	getCurrentInputConnection().performEditorAction(mActionId);
+        	if ((mActionId & EditorInfo.IME_FLAG_NO_ENTER_ACTION) == 0)
+        		getCurrentInputConnection().performEditorAction(mActionId & EditorInfo.IME_MASK_ACTION);
+        	else
+        		handleCharacter(primaryCode, keyCodes);
         } else if (primaryCode == ' ' && mComposing.length() == 0) {
         	getCurrentInputConnection().commitText(" ", 1);
         } else {
@@ -489,7 +492,10 @@ public class TranslatorInputMethodService extends InputMethodService
         }
 
         mComposing.append((char) primaryCode);
-        getCurrentInputConnection().setComposingText(mComposing, 1);
+        if (primaryCode == 10)
+        	commitTyped(getCurrentInputConnection());
+        else
+        	getCurrentInputConnection().setComposingText(mComposing, 1);
         updateShiftKeyState(getCurrentInputEditorInfo());
 
         if (mPredictionOn) {
