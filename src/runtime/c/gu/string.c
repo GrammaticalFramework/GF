@@ -6,7 +6,9 @@
 #include <gu/utf8.h>
 #include <gu/assert.h>
 #include <stdlib.h>
+#ifdef __MINGW32__
 #include <malloc.h>
+#endif
 
 struct GuStringBuf {
 	GuBuf* buf;
