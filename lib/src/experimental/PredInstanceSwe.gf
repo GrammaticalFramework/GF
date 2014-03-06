@@ -183,7 +183,7 @@ oper
   inte_Str = "inte" | "icke" | "ej" ;
 
   liftV : Verb -> PrVerb = \v ->
-    {s = v.s ; p = v.part ; c1,c2 = [] ; isSubjectControl = False ; vtype = v.vtype ; vvtype = vvInfinitive} ; ---- vvtype
+    {s = v.s ; p = v.part ; c1,c2 = [] ; isSubjectControl = True ; vtype = v.vtype ; vvtype = vvInfinitive} ; ---- vvtype
 
 --- junk
 
