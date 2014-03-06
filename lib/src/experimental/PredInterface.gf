@@ -57,6 +57,9 @@ oper
   appComplCase  : ComplCase -> NounPhrase -> Str ;
   noComplCase   : ComplCase ;
 
+  appSubjCase : NounPhrase -> Str = \np -> np.s ! subjCase ;
+  appObjCase  : NounPhrase -> Str = \np -> np.s ! objCase ;
+
   noObj : Agr => Str = \\_ => [] ;
 
   RPCase : PType ;

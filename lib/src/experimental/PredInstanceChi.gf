@@ -1,5 +1,5 @@
 instance PredInstanceChi of 
-  PredInterface - [PrVerb,initPrVerb] = 
+  PredInterface - [PrVerb,initPrVerb,NounPhrase,appSubjCase,appObjCase] = 
 
    open ResChi, (P = ParadigmsChi), (X = ParamX), (S = SyntaxChi), Prelude in {
 
@@ -18,6 +18,10 @@ oper
     vvtype : VVType ;
 
     } ; 
+
+  NounPhrase = {s : Str} ;
+  appSubjCase : NounPhrase -> Str = \np -> np.s ;
+  appObjCase : NounPhrase -> Str = \np -> np.s ;
 
 
 ---------------------
@@ -52,7 +56,7 @@ oper
 
   ComplCase = Preposition ;
 
-  appComplCase  : ComplCase -> NounPhrase -> Str = \p,np -> appPrep p (np.s ! UUnit) ; ---- advType
+  appComplCase  : ComplCase -> NounPhrase -> Str = \p,np -> appPrep p np.s ; ---- advType
   noComplCase   : ComplCase = P.mkPrep [] ;
   strComplCase  : ComplCase -> Str = \c -> c.prepPre ++ c.prepPost ;
 

@@ -145,6 +145,8 @@ onVPSlash t a p vps = case vps of
   GSlashV2V v2v ant pol vp -> GSlashV2V_none (GUseV_np_v a t p (GLiftV2V v2v)) (GInfVP_none (onVP GTPres ant pol vp)) -- !!
 
   GSlashVV vv vps -> GComplVV_np (GUseV_v a t p (GLiftVV vv)) (GInfVP_np (onVPSlash GTPres GASimul GPPos vps)) -- !!
+---  GSlashSlashV2V vv ant pol vps -> GComplVV_np (GUseV_np_v a t p (GLiftV2V vv)) (GInfVP_np (onVPSlash GTPres ant pol vps))
+  GSlashVPIV2V v2v pol vpi -> GSlashV2V_none (GUseV_np_v a t p (GLiftV2V v2v)) (GInfVP_none (onVPI2VP vpi)) 
 
 onVPSlashPass :: GTense -> GAnt -> GPol -> Tree GVPSlash_ -> Tree GPrVP_none_
 onVPSlashPass t a p vps = case vps of
