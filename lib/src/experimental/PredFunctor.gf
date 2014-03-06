@@ -120,7 +120,7 @@ lin
     } ;
 
   UseNP a t p np = useCopula a t p ** {
-    adj = \\a => np.s ! subjCase ;
+    adj = \\a => appSubjCase np ;
     } ;
 
   UseS  a t p cl = addExtVP (useCopula a t p) (that_Compl ++ declSubordCl cl) ; ---- sentence form
@@ -128,7 +128,7 @@ lin
   UseVP a t p vp = addExtVP (useCopula a t p) (vp.s ! vvInfinitive ! defaultAgr) ;
 
   ComplV2 x vp np = vp ** {
-    obj1 = <\\a => np.s ! objCase, np.a>  -- np.a for object control 
+    obj1 = <\\a => appObjCase np, np.a>  -- np.a for object control 
     } ;
 
   ComplVS x vp cl = addExtVP vp (that_Compl ++ declSubordCl cl) ; ---- sentence form
@@ -141,7 +141,7 @@ lin
 
   ComplVN x vp cn = addObj2VP vp (\\a => cn.s ! agr2nagr a ++ cn.obj1 ! a) ; ---- cnForm
 
-  SlashV3 x vp np = addObj2VP vp (\\a => np.s ! objCase) ; -- control is preserved 
+  SlashV3 x vp np = addObj2VP vp (\\a => appObjCase np) ; -- control is preserved 
 
   SlashV2S x vp cl = addExtVP vp (that_Compl ++ declSubordCl cl) ; ---- sentence form
 
@@ -165,7 +165,7 @@ lin
 
   PredVP x np vp = vp ** {
     v    = applyVerb vp (agr2vagr np.a) ;
-    subj = np.s ! subjCase ;
+    subj = appSubjCase np ;
     adj  = vp.adj ! np.a ;
     obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! np.a ;  ---- apply complCase ---- place of part depends on obj
     obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;   ---- apply complCase
@@ -187,7 +187,7 @@ lin
        ipa = ipagr2agr ip.n 
    in {
     v    = applyVerb vp (ipagr2vagr ip.n) ;
-    foc  = ip.s ! subjCase ;                      -- who (loves her)
+    foc  = ip.s ! subjCase ;
     focType = FocSubj ;
     subj = [] ;
     adj  = vp.adj ! ipa ;
@@ -230,7 +230,7 @@ lin
     let vagr = (agr2vagr np.a) in
     initPrClause ** {
     v    = tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p vagr ;
-    subj = np.s ! subjCase ;
+    subj = appSubjCase np ;
     adV = negAdV p ;
     foc = icomp.s ! agr2icagr np.a ; 
     focType = FocObj ;
