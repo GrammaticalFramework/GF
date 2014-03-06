@@ -14,7 +14,9 @@
 #include <gu/utf8.h>
 #include <math.h>
 #include <stdlib.h>
+#ifdef __MINGW32__
 #include <malloc.h>
+#endif
 
 //
 // PgfReader
