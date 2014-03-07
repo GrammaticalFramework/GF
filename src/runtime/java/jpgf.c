@@ -476,7 +476,7 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 
-		pgf_lzr_linearize_simple(concr, ctree, lin_idx, out, err);
+		pgf_lzr_linearize_simple(concr, ctree, lin_idx, out, err, tmp_pool);
 
 		jstring jstr = NULL;
 		if (gu_ok(err)) {
