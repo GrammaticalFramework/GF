@@ -26,6 +26,10 @@ public class Concr {
 
 	public native List<MorphoAnalysis> lookupMorpho(String sentence);
 
+	public Iterable<FullFormEntry> lookupWordPrefix(String prefix) {
+		return new Lexicon(this, prefix);
+	}
+
 	public native boolean hasLinearization(String id);
 
 	public native void load(String path) throws FileNotFoundException;
