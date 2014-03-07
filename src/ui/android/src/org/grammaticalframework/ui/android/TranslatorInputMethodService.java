@@ -439,10 +439,9 @@ public class TranslatorInputMethodService extends InputMethodService
     private void updateCandidates() {
         if (!mCompletionOn) {
             if (mComposing.length() > 0) {
-                ArrayList<String> list = new ArrayList<String>();
-                list.add(mComposing.toString());
-                list.add("alfa");
-                list.add("beta");
+                List<String> list = 
+                	mTranslator.lookupWordPrefix(mComposing.toString());
+                list.add(0, mComposing.toString());
                 setSuggestions(list, true, true);
                 Log.d("KEYBOARD", mComposing.toString());
             } else {

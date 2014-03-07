@@ -8,6 +8,7 @@ import android.util.Log;
 
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
+import org.grammaticalframework.pgf.FullFormEntry;
 import org.grammaticalframework.pgf.MorphoAnalysis;
 import org.grammaticalframework.pgf.PGF;
 import org.grammaticalframework.pgf.ParseError;
@@ -16,10 +17,13 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class Translator {
 
@@ -295,6 +299,41 @@ public class Translator {
 
     public List<MorphoAnalysis> lookupMorpho(String sentence) {
     	return getSourceConcr().lookupMorpho(sentence);
+    }
+
+    private static class WordProb implements Comparable<WordProb> {
+    	String word;
+    	double prob;
+
+		@Override
+		public int compareTo(WordProb another) {
+			return Double.compare(prob, another.prob);
+		}
+    }
+
+    public List<String> lookupWordPrefix(String prefix) {
+    	PriorityQueue<WordProb> queue = new PriorityQueue<WordProb>(); 
+    	for (FullFormEntry entry : getSourceConcr().lookupWordPrefix(prefix)) {
+    		WordProb wp = new WordProb();
+    		wp.word = entry.getForm();
+    		wp.prob = 0;
+    		
+    		for (MorphoAnalysis an : entry.getAnalyses()) {
+    			wp.prob += an.getProb();
+    		}
+
+    		queue.add(wp);
+    		if (queue.size() >= 1000)
+    			break;
+    	}
+
+    	List<String> list = new ArrayList<String>();
+    	while (list.size() < 5 && queue.size() > 0) {
+    		list.add(queue.poll().word);
+    	}
+    	Collections.sort(list);
+
+    	return list;
     }
 
 	private PGF getGrammar() {
