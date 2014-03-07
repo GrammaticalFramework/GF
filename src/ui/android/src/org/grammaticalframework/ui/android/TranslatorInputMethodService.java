@@ -502,16 +502,16 @@ public class TranslatorInputMethodService extends InputMethodService
     }
     
     private void handleCharacter(int primaryCode, int[] keyCodes) {
-        if (isInputViewShown()) {
-            if (mInputView.isShifted()) {
-                primaryCode = Character.toUpperCase(primaryCode);
-            }
-        }
-
         if (keyCodes.length > 0 && keyCodes[0] > 0) {
-	        for (int i = 0; i < keyCodes.length && keyCodes[i] > 0; i++)
-	        	mComposing.append((char) keyCodes[i]);
+	        for (int i = 0; i < keyCodes.length && keyCodes[i] > 0; i++) {
+	        	int code = keyCodes[i];
+	        	if (mInputView.isShifted())
+	                code = Character.toUpperCase(code);
+	        	mComposing.append((char) code);
+	        }
         } else {
+        	if (mInputView.isShifted())
+                primaryCode = Character.toUpperCase(primaryCode);
         	mComposing.append((char) primaryCode);
         }
 
