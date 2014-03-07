@@ -35,7 +35,7 @@ public class Translator {
         new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.qwerty),   
         new Language("fr-FR", "French", "ParseFre", R.xml.qwerty),  
         new Language("de-DE", "German", "ParseGer", R.xml.qwerty), 
-        new Language("hi-IN", "Hindi", "ParseHin", R.xml.qwerty), /// 
+        new Language("hi-IN", "Hindi", "ParseHin", R.xml.devanagari_page1, R.xml.devanagari_page2), 
         new Language("sv-SE", "Swedish", "ParseSwe", R.xml.qwerty), 
         new Language("fi-FI", "Finnish", "ParseFin", R.xml.qwerty),
     };

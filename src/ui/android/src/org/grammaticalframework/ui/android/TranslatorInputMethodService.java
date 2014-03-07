@@ -29,9 +29,10 @@ public class TranslatorInputMethodService extends InputMethodService
     private long mLastShiftTime;
     private long mMetaState;
     
-    private TranslatorKeyboard mSymbolsKeyboard;
-    private TranslatorKeyboard mSymbolsShiftedKeyboard;
-    private TranslatorKeyboard mLanguageKeyboard;
+    private TranslatorKeyboard mSymbolsPage1Keyboard;
+    private TranslatorKeyboard mSymbolsPage2Keyboard;
+    private TranslatorKeyboard mLanguagePage1Keyboard;
+    private TranslatorKeyboard mLanguagePage2Keyboard;
 
     private TranslatorKeyboard mCurKeyboard;
 
@@ -45,9 +46,10 @@ public class TranslatorInputMethodService extends InputMethodService
         
         mTranslator = ((GFTranslator) getApplicationContext()).getTranslator();
         
-        mSymbolsKeyboard = null;
-        mSymbolsShiftedKeyboard = null;
-       	mLanguageKeyboard = null;
+        mSymbolsPage1Keyboard = null;
+        mSymbolsPage2Keyboard = null;
+        mLanguagePage1Keyboard = null;
+        mLanguagePage2Keyboard = null;
     }
 
     @Override
@@ -92,17 +94,20 @@ public class TranslatorInputMethodService extends InputMethodService
         mCompletionOn = false;
         mCompletions = null;
     
-    	int res =
-           	mTranslator.getSourceLanguage().getKeyboardResource();
+    	int res1 =
+           	mTranslator.getSourceLanguage().getKeyboardPage1Resource();
+    	int res2 =
+            mTranslator.getSourceLanguage().getKeyboardPage2Resource();
     	mModeId = R.string.normalKeyboardMode;
        	if (attribute.extras != null &&
             !attribute.extras.getBoolean("show_language_toggle", true)) {
        		mModeId = R.string.internalKeyboardMode;
        	}
        	mAttribute = attribute;
-       	mLanguageKeyboard = new TranslatorKeyboard(this, res, mModeId);
-       	mSymbolsKeyboard = new TranslatorKeyboard(this, R.xml.symbols, mModeId);
-        mSymbolsShiftedKeyboard = new TranslatorKeyboard(this, R.xml.symbols_shift, mModeId);
+       	mLanguagePage1Keyboard = new TranslatorKeyboard(this, res1, mModeId);
+       	mLanguagePage2Keyboard = new TranslatorKeyboard(this, res2, mModeId);
+       	mSymbolsPage1Keyboard = new TranslatorKeyboard(this, R.xml.symbols_page1, mModeId);
+        mSymbolsPage2Keyboard = new TranslatorKeyboard(this, R.xml.symbols_page2, mModeId);
 
         // We are now going to initialize our state based on the type of
         // text being edited.
@@ -111,13 +116,13 @@ public class TranslatorInputMethodService extends InputMethodService
             case InputType.TYPE_CLASS_DATETIME:
                 // Numbers and dates default to the symbols keyboard, with
                 // no extra features.
-                mCurKeyboard = mSymbolsKeyboard;
+                mCurKeyboard = mSymbolsPage1Keyboard;
                 break;
                 
             case InputType.TYPE_CLASS_PHONE:
                 // Phones will also default to the symbols keyboard, though
                 // often you will want to have a dedicated phone keyboard.
-                mCurKeyboard = mSymbolsKeyboard;
+                mCurKeyboard = mSymbolsPage1Keyboard;
                 break;
                 
             case InputType.TYPE_CLASS_TEXT:
@@ -125,7 +130,7 @@ public class TranslatorInputMethodService extends InputMethodService
                 // normal alphabetic keyboard, and assume that we should
                 // be doing predictive text (showing candidates as the
                 // user types).
-                mCurKeyboard = mLanguageKeyboard;
+                mCurKeyboard = mLanguagePage1Keyboard;
                 mPredictionOn = true;
                 
                 // We now look for a few special variations of text that will
@@ -165,12 +170,13 @@ public class TranslatorInputMethodService extends InputMethodService
             default:
                 // For all unknown input types, default to the alphabetic
                 // keyboard with no special features.
-                mCurKeyboard = mLanguageKeyboard;
+                mCurKeyboard = mLanguagePage1Keyboard;
                 updateShiftKeyState(attribute);
         }
         
         mActionId = attribute.imeOptions & (EditorInfo.IME_MASK_ACTION | EditorInfo.IME_FLAG_NO_ENTER_ACTION);
-        mCurKeyboard.setImeOptions(getResources(), attribute.imeOptions);
+        mLanguagePage1Keyboard.setImeOptions(getResources(), attribute.imeOptions);
+        mLanguagePage2Keyboard.setImeOptions(getResources(), attribute.imeOptions);
 
         mInstance = this;
     }
@@ -189,7 +195,7 @@ public class TranslatorInputMethodService extends InputMethodService
         // its window.
         setCandidatesViewShown(false);
         
-        mCurKeyboard = mLanguageKeyboard;
+        mCurKeyboard = mLanguagePage1Keyboard;
         if (mInputView != null) {
             mInputView.closing();
         }
@@ -332,8 +338,9 @@ public class TranslatorInputMethodService extends InputMethodService
      * editor state.
      */
     private void updateShiftKeyState(EditorInfo attr) {
-        if (attr != null 
-                && mInputView != null && mLanguageKeyboard == mInputView.getKeyboard()) {
+        if (attr != null && mInputView != null && 
+            (mLanguagePage1Keyboard == mInputView.getKeyboard() ||
+             mLanguagePage2Keyboard == mInputView.getKeyboard())) {
             int caps = 0;
             EditorInfo ei = getCurrentInputEditorInfo();
             if (ei != null && ei.inputType != InputType.TYPE_NULL) {
@@ -379,19 +386,28 @@ public class TranslatorInputMethodService extends InputMethodService
          		mTranslator.getAvailableLanguages().get(TranslatorKeyboard.KEYCODE_TARGET_LANGUAGE-primaryCode-1);
              mTranslator.setTargetLanguage(newTarget);
              handleChangeTargetLanguage(newTarget);
-         } else if (primaryCode == TranslatorKeyboard.KEYCODE_MODE_CHANGE
-                && mInputView != null) {
+         } else if (primaryCode == TranslatorKeyboard.KEYCODE_MODE_CHANGE &&
+                    mInputView != null) {
         	TranslatorKeyboard current = (TranslatorKeyboard) mInputView.getKeyboard();
-            if (current == mSymbolsKeyboard || current == mSymbolsShiftedKeyboard) {
-                current = mLanguageKeyboard;
+            if (current == mSymbolsPage1Keyboard || current == mSymbolsPage2Keyboard) {
+                current = mLanguagePage1Keyboard;
             } else {
-                current = mSymbolsKeyboard;
+                current = mSymbolsPage1Keyboard;
             }
             mInputView.setKeyboard(current);
-            if (current == mSymbolsKeyboard) {
+            if (current == mSymbolsPage1Keyboard) {
                 current.setShifted(false);
             }
-        } else if (primaryCode == 10) {
+        } else if (primaryCode == TranslatorKeyboard.KEYCODE_PAGE_CHANGE &&
+                   mInputView != null) {
+        	TranslatorKeyboard current = (TranslatorKeyboard) mInputView.getKeyboard();
+            if (current == mLanguagePage1Keyboard) {
+                current = mLanguagePage2Keyboard;
+            } else {
+                current = mLanguagePage1Keyboard;
+            }
+            mInputView.setKeyboard(current);
+    	} else if (primaryCode == 10) {
         	if ((mActionId & EditorInfo.IME_FLAG_NO_ENTER_ACTION) == 0)
         		getCurrentInputConnection().performEditorAction(mActionId & EditorInfo.IME_MASK_ACTION);
         	else
@@ -469,18 +485,19 @@ public class TranslatorInputMethodService extends InputMethodService
         }
         
         TranslatorKeyboard currentKeyboard = (TranslatorKeyboard) mInputView.getKeyboard();
-        if (mLanguageKeyboard == currentKeyboard) {
+        if (mLanguagePage1Keyboard == currentKeyboard ||
+        	mLanguagePage2Keyboard == currentKeyboard) {
             // Alphabet keyboard
             checkToggleCapsLock();
             mInputView.setShifted(mCapsLock || !mInputView.isShifted());
-        } else if (currentKeyboard == mSymbolsKeyboard) {
-            mSymbolsKeyboard.setShifted(true);
-            mInputView.setKeyboard(mSymbolsShiftedKeyboard);
-            mSymbolsShiftedKeyboard.setShifted(true);
-        } else if (currentKeyboard == mSymbolsShiftedKeyboard) {
-            mSymbolsShiftedKeyboard.setShifted(false);
-            mInputView.setKeyboard(mSymbolsKeyboard);
-            mSymbolsKeyboard.setShifted(false);
+        } else if (currentKeyboard == mSymbolsPage1Keyboard) {
+            mSymbolsPage1Keyboard.setShifted(true);
+            mInputView.setKeyboard(mSymbolsPage2Keyboard);
+            mSymbolsPage2Keyboard.setShifted(true);
+        } else if (currentKeyboard == mSymbolsPage2Keyboard) {
+            mSymbolsPage2Keyboard.setShifted(false);
+            mInputView.setKeyboard(mSymbolsPage1Keyboard);
+            mSymbolsPage1Keyboard.setShifted(false);
         }
     }
     
@@ -491,7 +508,9 @@ public class TranslatorInputMethodService extends InputMethodService
             }
         }
 
-        mComposing.append((char) primaryCode);
+        for (int i = 0; i < keyCodes.length && keyCodes[i] > 0; i++)
+        	mComposing.append((char) keyCodes[i]);
+
         if (primaryCode == 10)
         	commitTyped(getCurrentInputConnection());
         else
@@ -511,17 +530,18 @@ public class TranslatorInputMethodService extends InputMethodService
 
     void handleChangeSourceLanguage(Language newSource) {
        	updateLanguageKeyboard(newSource);
-       	mSymbolsKeyboard.updateLanguageKeyLabels();
-        mSymbolsShiftedKeyboard.updateLanguageKeyLabels();
+       	mSymbolsPage1Keyboard.updateLanguageKeyLabels();
+        mSymbolsPage2Keyboard.updateLanguageKeyLabels();
         if (mInputView != null) {
         	mInputView.setKeyboard(mCurKeyboard);
         }
     }
 
     void handleChangeTargetLanguage(Language newTarget) {
-    	mLanguageKeyboard.updateLanguageKeyLabels();
-    	mSymbolsKeyboard.updateLanguageKeyLabels();
-    	mSymbolsShiftedKeyboard.updateLanguageKeyLabels();
+    	mLanguagePage1Keyboard.updateLanguageKeyLabels();
+    	mLanguagePage2Keyboard.updateLanguageKeyLabels();
+    	mSymbolsPage1Keyboard.updateLanguageKeyLabels();
+    	mSymbolsPage2Keyboard.updateLanguageKeyLabels();
     	if (mInputView != null) {
     		mInputView.invalidateAllKeys();
     	}
@@ -530,20 +550,26 @@ public class TranslatorInputMethodService extends InputMethodService
     void handleSwitchLanguages() {
     	Language newSource = mTranslator.getSourceLanguage();
     	updateLanguageKeyboard(newSource);
-       	mSymbolsKeyboard.updateLanguageKeyLabels();
-        mSymbolsShiftedKeyboard.updateLanguageKeyLabels();
+       	mSymbolsPage1Keyboard.updateLanguageKeyLabels();
+        mSymbolsPage2Keyboard.updateLanguageKeyLabels();
         if (mInputView != null)
         	mInputView.setKeyboard(mCurKeyboard);
     }
 
 	private void updateLanguageKeyboard(Language language) {
-		TranslatorKeyboard keyboard =
-       		new TranslatorKeyboard(this, language.getKeyboardResource(), mModeId);
-		keyboard.setImeOptions(getResources(), mAttribute.imeOptions);
-		if (mCurKeyboard == mLanguageKeyboard) {
-			mCurKeyboard = keyboard;
+		TranslatorKeyboard keyboard1 =
+       		new TranslatorKeyboard(this, language.getKeyboardPage1Resource(), mModeId);
+		TranslatorKeyboard keyboard2 =
+	       	new TranslatorKeyboard(this, language.getKeyboardPage2Resource(), mModeId);
+		keyboard1.setImeOptions(getResources(), mAttribute.imeOptions);
+		keyboard2.setImeOptions(getResources(), mAttribute.imeOptions);
+		if (mCurKeyboard == mLanguagePage1Keyboard) {
+			mCurKeyboard = keyboard1;
+		} else if (mCurKeyboard == mLanguagePage2Keyboard) {
+			mCurKeyboard = keyboard2;
 		}
-		mLanguageKeyboard = keyboard;
+		mLanguagePage1Keyboard = keyboard1;
+		mLanguagePage2Keyboard = keyboard2;
 	}
 
     private void checkToggleCapsLock() {
