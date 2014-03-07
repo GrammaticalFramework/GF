@@ -3,6 +3,7 @@ instance PredInstanceFin of
     NounPhrase, 
     PrVerb, initPrVerb,
     PrVerbPhrase, initPrVerbPhrase, initPrVerbPhraseV, useCopula, linrefPrVP, qformsVP, applyVerb, addObj2VP,
+    initBasePrVerbPhrase, initBasePrVerbPhraseV, 
     PrClause, initPrClause
   ] = 
       open ResFin, (P = ParadigmsFin), (S = StemFin), (X = ParamX), Prelude in {

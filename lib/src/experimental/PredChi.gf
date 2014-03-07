@@ -29,7 +29,6 @@ lin
         obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! rpa ;  ---- apply complCase ---- place of part depends on obj
         obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => rpa ; False => vp.obj1.p2}) ;   ---- apply complCase
         c3   = noComplCase ;      -- for one more prep to build ClSlash 
-        qforms = qformsVP vp (agr2vagr rpa) ; 
         }
     in {s = declCl cl ; c = subjCase} ;
 
@@ -47,7 +46,6 @@ lin
     obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! npa ;  ---- apply complCase ---- place of part depends on obj
     obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! npa ;
     c3   = vp.c1 ; -- in case there is any free slot left ---- could be c2 
-    qforms = qformsVP vp (agr2vagr npa) ; 
     } ;
 
   StartVPC x c v w = {  ---- some loss of quality seems inevitable
@@ -112,7 +110,6 @@ lin
     adv  = vp.adv ;
     adV  = vp.adV ;
     ext  = vp.ext ; 
-    qforms = qformsVP vp (ipagr2vagr UUnit) ;
     } ;
 
   QuestSlash x ip cl = 
