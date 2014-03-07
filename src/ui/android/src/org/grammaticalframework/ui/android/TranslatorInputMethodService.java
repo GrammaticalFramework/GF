@@ -508,8 +508,12 @@ public class TranslatorInputMethodService extends InputMethodService
             }
         }
 
-        for (int i = 0; i < keyCodes.length && keyCodes[i] > 0; i++)
-        	mComposing.append((char) keyCodes[i]);
+        if (keyCodes.length > 0 && keyCodes[0] > 0) {
+	        for (int i = 0; i < keyCodes.length && keyCodes[i] > 0; i++)
+	        	mComposing.append((char) keyCodes[i]);
+        } else {
+        	mComposing.append((char) primaryCode);
+        }
 
         if (primaryCode == 10)
         	commitTyped(getCurrentInputConnection());
