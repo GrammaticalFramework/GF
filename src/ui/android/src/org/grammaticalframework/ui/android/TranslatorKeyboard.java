@@ -14,6 +14,7 @@ public class TranslatorKeyboard extends Keyboard {
     private Key mSourceLanguageKey;
     private Key mTargetLanguageKey;
 
+    static final int KEYCODE_PAGE_CHANGE     = -10;
     static final int KEYCODE_SOURCE_LANGUAGE = -100;
     static final int KEYCODE_TARGET_LANGUAGE = -200;
     static final int MAX_LANGUAGE_KEYCODES = 99;

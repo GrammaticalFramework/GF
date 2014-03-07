@@ -8,14 +8,25 @@ public class Language implements Serializable {
 	private final String mLangCode;
     private final String mLangName;
     private final String mConcrete;
-    private final int    mKeyboardResource;
+    private final int    mKeyboardPage1Resource;
+    private final int    mKeyboardPage2Resource;
 
     public Language(String langCode, String langName, String concrete,
     		        int keyboardResource) {
         mLangCode = langCode;
         mLangName = langName;
         mConcrete = concrete;
-        mKeyboardResource = keyboardResource;
+        mKeyboardPage1Resource = keyboardResource;
+        mKeyboardPage2Resource = keyboardResource;
+    }
+
+    public Language(String langCode, String langName, String concrete,
+	                int keyboardPage1Resource, int keyboardPage2Resource) {
+    	mLangCode = langCode;
+    	mLangName = langName;
+    	mConcrete = concrete;
+    	mKeyboardPage1Resource = keyboardPage1Resource;
+    	mKeyboardPage2Resource = keyboardPage2Resource;
     }
 
     public String getLangCode() {
@@ -26,8 +37,12 @@ public class Language implements Serializable {
         return mLangName;
     }
         
-    public int getKeyboardResource() {
-    	return mKeyboardResource;
+    public int getKeyboardPage1Resource() {
+    	return mKeyboardPage1Resource;
+    }
+
+    public int getKeyboardPage2Resource() {
+    	return mKeyboardPage2Resource;
     }
 
     String getConcrete() {
