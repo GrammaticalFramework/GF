@@ -131,6 +131,10 @@ void
 pgf_fullform_get_analyses(PgfFullFormEntry* entry,
                           PgfMorphoCallback* callback, GuExn* err);
 
+GuEnum*
+pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
+                       GuPool* pool, GuExn* err);
+
 PgfExprEnum*
 pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, 
                           GuString sentence, double heuristics,

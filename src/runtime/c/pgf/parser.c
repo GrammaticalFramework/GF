@@ -2581,6 +2581,7 @@ pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
 typedef struct {
 	GuEnum en;
 	PgfSequences* sequences;
+	GuString prefix;
 	size_t seq_idx;
 } PgfFullFormState;
 
@@ -2600,6 +2601,12 @@ gu_fullform_enum_next(GuEnum* self, void* to, GuPool* pool)
 		while (st->seq_idx < n_seqs) {
 			PgfSymbols* syms = gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->syms;
 			GuString tokens = pgf_get_tokens(syms, 0, pool);
+			
+			if (!gu_string_is_prefix(st->prefix, tokens)) {
+				st->seq_idx = n_seqs;
+				break;
+			}
+				
 			if (strlen(tokens) > 0 &&
 				gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->idx != NULL) {
 				entry = gu_new(PgfFullFormEntry, pool);
@@ -2609,7 +2616,7 @@ gu_fullform_enum_next(GuEnum* self, void* to, GuPool* pool)
 				st->seq_idx++;
 				break;
 			}
-			
+
 			st->seq_idx++;
 		}
 	}
@@ -2623,6 +2630,7 @@ pgf_fullform_lexicon(PgfConcr *concr, GuPool* pool)
 	PgfFullFormState* st = gu_new(PgfFullFormState, pool);
 	st->en.next   = gu_fullform_enum_next;
 	st->sequences = concr->sequences;
+	st->prefix    = "";
 	st->seq_idx   = 0;
 	return &st->en;
 }
@@ -2638,6 +2646,33 @@ pgf_fullform_get_analyses(PgfFullFormEntry* entry,
                           PgfMorphoCallback* callback, GuExn* err)
 {
 	pgf_morpho_iter(entry->idx, callback, err);
+}
+
+GuEnum*
+pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
+                       GuPool* pool, GuExn* err)
+{
+	if (concr->sequences == NULL) {
+		GuExnData* err_data = gu_raise(err, PgfExn);
+		if (err_data) {
+			err_data->data = "The concrete syntax is not loaded";
+			return NULL;
+		}
+	}
+
+	PgfFullFormState* state = gu_new(PgfFullFormState, pool);
+	state->en.next   = gu_fullform_enum_next;
+	state->sequences = concr->sequences;
+	state->prefix    = prefix;
+	state->seq_idx   = 0;
+
+	if (!gu_seq_binsearch_index(concr->sequences, pgf_sequence_order,
+	                            PgfSequence, (void*) prefix, 
+	                            &state->seq_idx)) {
+		state->seq_idx++;
+	}
+
+	return &state->en;
 }
 
 // The 'pre' construction needs a special handling since
