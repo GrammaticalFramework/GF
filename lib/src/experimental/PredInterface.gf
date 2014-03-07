@@ -99,19 +99,24 @@ oper
   applyVerb : PrVerbPhrase -> VAgr -> Str * Str * Str 
     = \vp,a -> vp.v ! a ;
 
---- only needed in Eng because of do questions
-  qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str ;
-  qformsCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str ;
-
-  qformsVP : PrVerbPhrase -> VAgr -> Str * Str 
-   = \vp,vagr -> vp.qforms ! vagr ;
-
 -------------------------------
 --- type synonyms
 -------------------------------
 
 oper
-  PrVerb = {
+  PrVerb = BasePrVerb ;
+  PrVerbPhrase = BasePrVerbPhrase ;
+  PrClause = BasePrClause ;
+  PrQuestionClause = BasePrQuestionClause ;
+
+  initPrVerb = initBasePrVerb ;
+  initPrVerbPhrase = initBasePrVerbPhrase ;
+  initPrVerbPhraseV = initBasePrVerbPhraseV ;
+  initPrClause = initBasePrClause ;
+
+
+
+  BasePrVerb = {
     s  : VForm => Str ;
     p  : Str ;                 -- verb particle             
     c1 : ComplCase ; 
@@ -121,7 +126,7 @@ oper
     vvtype : VVType ;
     } ; 
 
-  initPrVerb : PrVerb = {
+  initBasePrVerb : BasePrVerb = {
     s = \\_ => [] ;
     p = [] ;
     c1 = noComplCase ;
@@ -131,7 +136,7 @@ oper
     vvtype = vvInfinitive ;
     } ;
 
-  PrVerbPhrase = {
+  BasePrVerbPhrase = {
     v : VAgr => Str * Str * Str ;  -- would,have,slept
     inf : VVType => Str ;          -- (not) ((to)(sleep|have slept) | (sleeping|having slept)
     imp : ImpType => Str ;
@@ -145,10 +150,9 @@ oper
     adv : Str ; 
     adV : Str ;
     ext : Str ;
-    qforms : VAgr => Str * Str     -- special Eng for introducing "do" in questions
     } ;
 
-  initPrVerbPhrase : PrVerbPhrase = {
+  initBasePrVerbPhrase : BasePrVerbPhrase = {
     v : VAgr => Str * Str * Str  = \\_ => <[],[],[]> ;
     inf : VVType => Str = \\_ => [] ;
     imp : ImpType => Str = \\_ => [] ;
@@ -162,12 +166,11 @@ oper
     adv : Str = [] ; 
     adV : Str = [] ;
     ext : Str = [] ;
-    qforms : VAgr => Str * Str = \\_ => <[],[]>    -- special Eng for introducing "do" in questions
     } ;
 
-  initPrVerbPhraseV : 
-       {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> PrVerbPhrase = 
-  \a,t,p,v -> initPrVerbPhrase ** {
+  initBasePrVerbPhraseV : 
+       {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> BasePrVerbPhrase = 
+  \a,t,p,v -> initBasePrVerbPhrase ** {
     v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
     inf = \\vt => tenseInfV a.s a.a p.p active v vt ;
     imp = \\it => imperativeV p.s p.p it v ;
@@ -178,10 +181,9 @@ oper
     obj2 = <noObj, v.isSubjectControl> ;
     vvtype = v.vvtype ;
     adV = negAdV p ; --- just p.s in Eng
-    qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v ;
     } ;
  
-  PrClause = {
+  BasePrClause = {
     v : Str * Str * Str ; 
     adj,obj1,obj2 : Str ; 
     adv : Str ; 
@@ -189,24 +191,33 @@ oper
     ext : Str ; 
     subj : Str ; 
     c3  : ComplCase ;              -- for a slashed adjunct, not belonging to the verb valency
-    qforms : Str * Str
     } ; 
 
-  initPrClause : PrClause = {
+  initBasePrClause : BasePrClause = {
     v : Str * Str * Str = <[],[],[]> ; 
     adj,obj1,obj2 : Str = [] ; 
     adv,adV,ext : Str = [] ; 
     subj : Str = [] ; 
     c3  : ComplCase = noComplCase ;              -- for a slashed adjunct, not belonging to the verb valency
-    qforms : Str * Str = <[],[]>
     } ; 
 
-  PrQuestionClause = PrClause ** {
+  BasePrQuestionClause = PrClause ** {
     foc : Str ;                   -- the focal position at the beginning: *who* does she love
     focType : FocusType ;         --- if already filled, then use other place: who loves *who*
     } ; 
 
   PrAdverb = {s : Str ; isAdV : Bool ; c1 : ComplCase} ;
+
+
+  useCopula : {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> 
+                 PrVerbPhrase =
+    \a,t,p -> initPrVerbPhrase ** {
+    v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
+    imp = \\n => tenseImpCopula p.s p.p n ;
+    adV = negAdV p ;
+    } ;
+
 
   linrefPrVP : PrVerbPhrase -> Str = \vp  -> 
     let 
@@ -263,14 +274,5 @@ oper
     } ;
 
   not_Str : Polarity -> Str ;
-
-  useCopula : {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerbPhrase =
-    \a,t,p -> initPrVerbPhrase ** {
-    v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
-    inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
-    imp = \\n => tenseImpCopula p.s p.p n ;
-    adV = negAdV p ;
-    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
-    } ;
 
 }

@@ -105,10 +105,6 @@ oper
       vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a ++ vp.adv ++ vp.ext ;
 
 
-  qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str = 
-    \sta,t,a,p,agr,v -> <[],[]> ; ----- not needed in Swedish
- 
-
   declCl       : PrClause -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
   declSubordCl : PrClause -> Str = \cl -> cl.subj ++ cl.adV ++ cl.v.p1 ++ (cl.v.p2 | []) ++ restCl cl ;
   declInvCl    : PrClause -> Str = \cl -> cl.v.p1 ++ cl.subj ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
@@ -185,12 +181,6 @@ oper
   liftV : Verb -> PrVerb = \v ->
     {s = v.s ; p = v.part ; c1,c2 = [] ; isSubjectControl = True ; vtype = v.vtype ; vvtype = vvInfinitive} ; ---- vvtype
 
---- junk
-
-  qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str = 
-    \sta,t,a,p,agr,v -> <[],[]> ;
-  qformsCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str = 
-    \sta,t,a,p,agr -> <[],[]> ;
 
 
 }

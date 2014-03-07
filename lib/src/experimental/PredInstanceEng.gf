@@ -1,4 +1,50 @@
-instance PredInstanceEng of PredInterface = open ResEng, (X = ParamX), Prelude in {
+instance PredInstanceEng of PredInterface - [
+   PrVerbPhrase, PrClause,
+   initPrVerbPhrase, initPrVerbPhraseV, initPrClause, 
+   useCopula, questCl, linrefPrQCl
+   ] = 
+
+  open ResEng, (X = ParamX), Prelude in {
+
+----- overrides ----------------
+
+oper
+
+  PrVerbPhrase = BasePrVerbPhrase ** {qforms : VAgr => Str * Str} ;
+  PrClause = BasePrClause ** {qforms : Str * Str} ;
+
+  initPrVerbPhrase : PrVerbPhrase = initBasePrVerbPhrase ** {
+    qforms = \\agr => <[],[]> ;
+    } ;
+
+  initPrVerbPhraseV : 
+       {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> PrVerbPhrase = 
+  \a,t,p,v -> initBasePrVerbPhraseV a t p v ** {
+    qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v
+    } ;
+ 
+
+  initPrClause : PrClause = initBasePrClause ** {
+    qforms = <[],[]> ;
+    } ; 
+
+  useCopula : {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> 
+                 PrVerbPhrase =
+    \a,t,p -> initPrVerbPhrase ** {
+    v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
+    imp = \\n => tenseImpCopula p.s p.p n ;
+    adV = negAdV p ;
+    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    } ;
+
+  questCl : PrQuestionClause -> Str = \cl -> case cl.focType of {
+    NoFoc   => cl.foc ++ cl.qforms.p1 ++ cl.subj ++ cl.adV ++ cl.qforms.p2 ++ restCl cl ;  -- does she sleep
+    FocObj  => cl.foc ++ cl.qforms.p1 ++ cl.subj ++ cl.adV ++ cl.qforms.p2 ++ restCl cl ;  -- who does she love
+    FocSubj => cl.foc ++ cl.v.p1      ++ cl.subj ++ cl.adV ++ cl.v.p2      ++ restCl cl    -- who loves her
+    } ;
+
+  linrefPrQCl : PrQuestionClause -> Str = \qcl -> questCl qcl ;
 
 ---------------------
 -- parameters -------
@@ -292,12 +338,6 @@ oper
   declSubordCl : PrClause -> Str = declCl ;
   declInvCl    : PrClause -> Str = declCl ;
 
-  questCl : PrQuestionClause -> Str = \cl -> case cl.focType of {
-    NoFoc   => cl.foc ++ cl.qforms.p1 ++ cl.subj ++ cl.adV ++ cl.qforms.p2 ++ restCl cl ;  -- does she sleep
-    FocObj  => cl.foc ++ cl.qforms.p1 ++ cl.subj ++ cl.adV ++ cl.qforms.p2 ++ restCl cl ;  -- who does she love
-    FocSubj => cl.foc ++ cl.v.p1      ++ cl.subj ++ cl.adV ++ cl.v.p2      ++ restCl cl    -- who loves her
-    } ;
-
   questSubordCl : PrQuestionClause -> Str = \cl -> 
     let 
       rest = cl.subj ++ cl.adV ++ cl.v.p1 ++ cl.v.p2 ++ restCl cl 
@@ -306,6 +346,15 @@ oper
       FocObj  =>         cl.foc ++ rest ;  -- who she loves / why she sleeps
       FocSubj =>         cl.foc ++ rest    -- who loves her
       } ;
+
+
+--- only needed in Eng because of do questions
+  qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str ;
+  qformsCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str ;
+
+  qformsVP : PrVerbPhrase -> VAgr -> Str * Str 
+   = \vp,vagr -> vp.qforms ! vagr ;
+
 
   that_Compl : Str = "that" | [] ;
 

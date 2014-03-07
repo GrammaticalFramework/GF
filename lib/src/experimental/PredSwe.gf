@@ -19,7 +19,6 @@ lin
         obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! rpa ;  ---- apply complCase ---- place of part depends on obj
         obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => rpa ; False => vp.obj1.p2}) ;   ---- apply complCase
         c3   = noComplCase ;      -- for one more prep to build ClSlash 
-        qforms = qformsVP vp (agr2vagr rpa) ; 
         }
     in {s = \\a,c => declCl (cl a c) ; c = subjCase} ;
 

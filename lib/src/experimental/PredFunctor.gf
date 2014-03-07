@@ -89,7 +89,6 @@ lin
     v   = \\agr => tenseV (a.s ++ t.s ++ p.s) t.t a.a p.p passive agr v ;
     inf = \\vt => tenseInfV a.s a.a p.p passive v vt ;
     obj2 = <noObj, True> ; -- becomes subject control even if object control otherwise "*she was promised by us to love ourselves"
-    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
   AgentPassUseV x a t p v np = initPrVerbPhraseV a t p v ** {
@@ -97,7 +96,6 @@ lin
     inf = \\vt => tenseInfV a.s a.a p.p passive v vt ;
     obj2 = <noObj, True> ; -- becomes subject control even if object control otherwise "*she was promised by us to love ourselves"
     adv = appComplCase agentCase np ;
-    qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
   UseAP x a t p ap = useCopula a t p ** {
@@ -170,7 +168,6 @@ lin
     obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! np.a ;  ---- apply complCase ---- place of part depends on obj
     obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => np.a ; False => vp.obj1.p2}) ;   ---- apply complCase
     c3   = vp.c1 ; -- in case there is any free slot left ---- could be c2 
-    qforms = qformsVP vp (agr2vagr np.a) ; 
     } ;
 
   SlashClNP x cl np = cl ** {  -- Cl ::= Cl/NP NP 
@@ -197,7 +194,6 @@ lin
     adv  = vp.adv ;
     adV  = vp.adV ;
     ext  = vp.ext ; 
-    qforms = qformsVP vp (ipagr2vagr ip.n) ;
     } ;
 
   QuestSlash x ip cl = 
@@ -234,7 +230,6 @@ lin
     adV = negAdV p ;
     foc = icomp.s ! agr2icagr np.a ; 
     focType = FocObj ;
-    qforms = qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p vagr ; 
     } ;
 
   RelVP rp vp = 
@@ -249,7 +244,6 @@ lin
         obj1 = vp.part ++ strComplCase vp.c1 ++ vp.obj1.p1 ! rpa ;  ---- apply complCase ---- place of part depends on obj
         obj2 = strComplCase vp.c2 ++ vp.obj2.p1 ! (case vp.obj2.p2 of {True => rpa ; False => vp.obj1.p2}) ;   ---- apply complCase
         c3   = noComplCase ;      -- for one more prep to build ClSlash 
-        qforms = qformsVP vp (agr2vagr rpa) ; 
         }
     in {s = \\a => declCl (cl a) ; c = subjCase} ;
 
@@ -347,7 +341,7 @@ lin
     imp = vpc.imp ;
     c1  = vpc.c1 ;
     c2  = vpc.c2 ;
-    qforms = \\a => <"do", vpc.inf ! defaultAgr ! vvInfinitive> ; ---- do/does/did
+
     } ;
 
   StartClC x c a b = {
