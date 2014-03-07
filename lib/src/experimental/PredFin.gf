@@ -15,6 +15,7 @@ concrete PredFin of Pred =
 -- overridden
        ,UseV
        ,UseAP
+       ,UseNP
        ,UseCN
        ,QuestVP
        ,PredVP
@@ -34,6 +35,10 @@ lin
     c1  = ap.c1 ;
     c2  = ap.c2 ;
     adj = \\a => ap.s ! agr2aagr a ;
+    } ;
+
+  UseNP a t p np = useCopula a t p ** {
+    adj = \\a => np.s ! subjCase ;
     } ;
 
   UseCN x a t p cn = useCopula a t p ** {

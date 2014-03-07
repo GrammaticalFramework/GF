@@ -55,7 +55,7 @@ oper
   Agr    = ResEng.Agr ;
   Case   = ResEng.Case ;
   NPCase = ResEng.NPCase ;
-  VForm  = ResEng.VForm ;  ---- VVForm to get contracted aux verbs
+  VForm  = ResEng.VVForm ;  ---- VVForm to get contracted aux verbs
   VVType = ResEng.VVType ; 
   SVoice = Voice ;
   
@@ -138,8 +138,8 @@ oper
     VAPl   => AgP3Pl
     } ;
 
-  vPastPart : PrVerb -> AAgr -> Str = \v,_ -> v.s ! VPPart ;
-  vPresPart : PrVerb -> AAgr -> Str = \v,_ -> v.s ! VPresPart ;
+  vPastPart : PrVerb -> AAgr -> Str = \v,_ -> v.s ! VVF VPPart ;
+  vPresPart : PrVerb -> AAgr -> Str = \v,_ -> v.s ! VVF VPresPart ;
 
   vvInfinitive : VVType = VVInf ;
 
@@ -205,7 +205,7 @@ oper
       -} ;
 
   tenseActV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str * Str = \sta,t,a,p,agr,v -> 
-    let vt : VForm = case <t,agr> of {
+    let vt : ResEng.VForm = case <t,agr> of {
         <Pres,VASgP3>  => VPres ; 
         <Past|Cond,_ > => VPast ; 
         _              => VInf
@@ -215,55 +215,58 @@ oper
     <Pres|Past, Simul> =>
       case v.vtype of {
         VTAux  => case t of {
-          Pres         => <sta ++ v.s ! VPres,   [],                              []> ;  -- can I/she/we
-          _            => <sta ++ v.s ! vt,      [],                              []>    -- could ...
+          Pres         => <sta ++ v.s ! VVF VPres,   not_Str p,                   []> ;  -- can I/she/we
+          _            => <sta ++ v.s ! VVF vt,      not_Str p,                   []>    -- could ...
           } ;
         _              => case p of {
-          Pos          => <[],                   sta ++ v.s ! vt,                 []> ;                 -- this is the deviating case
-          Neg          => <do_Aux       vt Pos,  not_Str p,                       sta ++ v.s ! VInf>
+          Pos          => <[],                   sta ++ v.s ! VVF vt,             []> ;                 -- this is the deviating case
+          Neg          => <do_Aux       vt Pos,  not_Str p,                       sta ++ v.s ! VVF VInf>
           }
        } ;
 
-    <Pres|Past, Anter> => <have_Aux     vt Pos,  not_Str p,                       sta ++ v.s ! VPPart> ;
-    <Fut|Cond,  Simul> => <will_Aux     vt Pos,  not_Str p,                       sta ++ v.s ! VInf> ;
-    <Fut|Cond,  Anter> => <will_Aux     vt Pos,  not_Str p ++ have_Aux VInf Pos,  sta ++ v.s ! VPPart>
+    <Pres|Past, Anter> => <have_Aux     vt Pos,  not_Str p,                       sta ++ v.s ! VVF VPPart> ;
+    <Fut|Cond,  Simul> => <will_Aux     vt Pos,  not_Str p,                       sta ++ v.s ! VVF VInf> ;
+    <Fut|Cond,  Anter> => <will_Aux     vt Pos,  not_Str p ++ have_Aux VInf Pos,  sta ++ v.s ! VVF VPPart>
     } ;
 
   tenseActVContracted : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str * Str = \sta,t,a,p,agr,v -> 
-    let vt : VForm = case <t,agr> of {
-        <Pres,VASgP3>  => VPres ; 
-        <Past|Cond,_ > => VPast ; 
-        _              => VInf
+    let vt : ResEng.VForm * VVForm = case <t,agr> of {
+        <Pres,VASgP3>  => <VPres, VVPresNeg> ; 
+        <Past|Cond,_ > => <VPast, VVPastNeg> ; 
+        _              => <VInf,  VVF VInf>
         } ; 
     in 
 
     case <t,a> of {  
     <Pres|Past, Simul> =>
       case v.vtype of {
-        VTAux          => <sta ++ v.s ! vt,      [],                              []> ;
-        _              => case p of {
-          Pos          => <[],                   sta ++ v.s ! vt,                 []> ;                 -- this is the deviating case
-          Neg          => <do_Aux       vt p,    [],                              sta ++ v.s ! VInf>
+        VTAux  => case p of {
+          Pos          => <sta ++ v.s ! VVF vt.p1,  [],                              []> ;
+          Neg          => <sta ++ v.s ! vt.p2,      [],                              []>
+          } ;
+        _ => case p of {
+          Pos          => <[],                     sta ++ v.s ! VVF vt.p1,           []> ;                 -- this is the deviating case
+          Neg          => <do_Aux       vt.p1 p,    [],                              sta ++ v.s ! VVF VInf>
           }
        } ;
-    <Pres|Past, Anter> => <have_AuxC    vt p,    [],                              sta ++ v.s ! VPPart>
-                        | <have_AuxC    vt Pos,  not_Str p,                       sta ++ v.s ! VPPart> ; 
-    <Fut|Cond,  Simul> => <will_AuxC    vt p,    [],                              sta ++ v.s ! VInf>
-                        | <will_AuxC    vt Pos,  not_Str p,                       sta ++ v.s ! VInf> ; 
-    <Fut|Cond,  Anter> => <will_AuxC    vt p,    have_Aux VInf Pos,               sta ++ v.s ! VPPart>
-                        | <will_AuxC    vt Pos,  not_Str p ++ have_Aux VInf Pos,  sta ++ v.s ! VPPart> 
+    <Pres|Past, Anter> => <have_AuxC    vt.p1 p,    [],                              sta ++ v.s ! VVF VPPart>
+                        | <have_AuxC    vt.p1 Pos,  not_Str p,                       sta ++ v.s ! VVF VPPart> ; 
+    <Fut|Cond,  Simul> => <will_AuxC    vt.p1 p,    [],                              sta ++ v.s ! VVF VInf>
+                        | <will_AuxC    vt.p1 Pos,  not_Str p,                       sta ++ v.s ! VVF VInf> ; 
+    <Fut|Cond,  Anter> => <will_AuxC    vt.p1 p,    have_Aux VInf Pos,               sta ++ v.s ! VVF VPPart>
+                        | <will_AuxC    vt.p1 Pos,  not_Str p ++ have_Aux VInf Pos,  sta ++ v.s ! VVF VPPart> 
     } ;
 
   tensePassV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str * Str = \sta,t,a,p,agr,v -> 
     let 
       be   = be_AuxL sta t a p agr ;
-      done = v.s ! VPPart
+      done = v.s ! VVF VPPart
     in 
     <be.p1, be.p2, be.p3 ++ done> ;
   tensePassVContracted : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str * Str = \sta,t,a,p,agr,v -> 
     let 
       be   = be_AuxC sta t a p agr ;
-      done = v.s ! VPPart
+      done = v.s ! VVF VPPart
     in 
     <be.p1, be.p2, be.p3 ++ done> ;
 
@@ -274,25 +277,25 @@ oper
     case vt of {
       VVInf => 
         case a of {
-          Simul => not ++ "to" ++                      sa ++ v.s ! VInf ;       -- (she wants) (not) to sleep
-          Anter => not ++ "to" ++ have_Aux VInf Pos ++ sa ++ v.s ! VPPart       -- (she wants) (not) to have slept
+          Simul => not ++ "to" ++                      sa ++ v.s ! VVF VInf ;       -- (she wants) (not) to sleep
+          Anter => not ++ "to" ++ have_Aux VInf Pos ++ sa ++ v.s ! VVF VPPart       -- (she wants) (not) to have slept
           } ;
       VVAux =>
         case a of {
-          Simul => not ++                              sa ++ v.s ! VInf ;       -- (she must) (not) sleep
-          Anter => not ++         have_Aux VInf Pos ++ sa ++ v.s ! VPPart       -- (she must) (not) have slept
+          Simul => not ++                              sa ++ v.s ! VVF VInf ;       -- (she must) (not) sleep
+          Anter => not ++         have_Aux VInf Pos ++ sa ++ v.s ! VVF VPPart       -- (she must) (not) have slept
           } ;
      VVPresPart =>
         case a of {
-          Simul => not ++                              sa ++ v.s ! VPresPart ;  -- (she starts) (not) sleeping
-          Anter => not ++         "having"          ++ sa ++ v.s ! VPPart       -- (she starts) (not) having slept
+          Simul => not ++                              sa ++ v.s ! VVF VPresPart ;  -- (she starts) (not) sleeping
+          Anter => not ++         "having"          ++ sa ++ v.s ! VVF VPPart       -- (she starts) (not) having slept
           }
      } ;
 
   imperativeV : Str -> Polarity -> ImpType -> PrVerb -> Str = \s,p,it,v -> 
     s ++ case p of {
-      Pos => v.s ! VInf ;
-      Neg => ("do not" | "don't") ++ v.s ! VInf
+      Pos => v.s ! VVF VInf ;
+      Neg => ("do not" | "don't") ++ v.s ! VVF VInf
       } ;
 
 
@@ -373,11 +376,13 @@ oper
 oper
   be_V : PrVerb = {
     s = table {
-      VInf => "be" ;
-      VPres => "is" ;
-      VPast => "was" ;
-      VPPart => "been" ;
-      VPresPart => "being"
+      VVF VInf => "be" ;
+      VVF VPres => "is" ;
+      VVF VPast => "was" ;
+      VVF VPPart => "been" ;
+      VVF VPresPart => "being" ;
+      VVPresNeg => "isn't" ;
+      VVPastNeg => "wasn't"
       } ;
     p,c1,c2 = [] ; vtype = VTAux ; vvtype = VVInf ; isSubjectControl = False
     } ;
@@ -389,20 +394,20 @@ oper
 
 oper
 ---- have to split the tables to two to get reasonable PMCFG generation
-  will_Aux : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
+  will_Aux : ResEng.VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
     <VInf|VPres, Pos> => varAux "will" "ll" ;
     <VInf|VPres, Neg> => "won't" ;
     <VPast|_   , Pos> => varAux "would" "d" ; 
     <VPast|_   , Neg> => "wouldn't"
     } ; 
-  will_AuxC : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
+  will_AuxC : ResEng.VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
     <VInf|VPres, Pos> => varAuxC "will" "ll" ;
     <VInf|VPres, Neg> => "won't" ;
     <VPast|_   , Pos> => varAuxC "would" "d" ; 
     <VPast|_   , Neg> => "wouldn't"
     } ; 
 
-  have_Aux : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
+  have_Aux : ResEng.VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
     <VInf,     Pos> => varAux "have" "ve" ;  --- slightly overgenerating if used in infinitive
     <VInf,     Neg> => "haven't" ;
     <VPres,    Pos> => varAux "has" "s" ;
@@ -410,7 +415,7 @@ oper
     <VPast|_ , Pos> => varAux "had" "d" ; 
     <VPast|_ , Neg> => "hadn't"
     } ; 
-  have_AuxC : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
+  have_AuxC : ResEng.VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
     <VInf,     Pos> => varAuxC "have" "ve" ;  --- slightly overgenerating if used in infinitive
     <VInf,     Neg> => "haven't" ;
     <VPres,    Pos> => varAuxC "has" "s" ;
@@ -419,7 +424,7 @@ oper
     <VPast|_ , Neg> => "hadn't"
     } ; 
 
-  do_Aux : VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
+  do_Aux : ResEng.VForm -> Polarity -> Str = \vf,p -> case <vf,p> of {
     <VInf,     Pos> => "do" ;
     <VInf,     Neg> => "don't" ;
     <VPres,    Pos> => "does" ;

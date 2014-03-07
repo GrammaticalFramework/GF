@@ -114,9 +114,6 @@ oper
   impVP : Number -> PrVerbPhrase -> Str = \n,vp ->
     infVP UUnit UUnit vp ;
 
-  qformsV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str = 
-    \sta,t,a,p,agr,v -> <[],[]> ; ----- not needed in Chinese
- 
 
   declCl       : PrClause -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.adv ++ cl.v.p2 ++ restCl cl ;
   declSubordCl : PrClause -> Str = declCl ;

@@ -7,7 +7,11 @@ concrete LiftEng of Lift =
 --flags literal=Symb ;
 
 oper
-  liftV : ResEng.Verb -> Pr.PrV = \v -> lin PrV {s = v.s ; p = v.p ; c1,c2 = [] ; isSubjectControl = True ; vtype = VTAct ; vvtype = VVInf} ;
+  liftV : ResEng.Verb -> Pr.PrV = \v -> lin PrV {
+    s = table {VVF f => v.s ! f ; VVPresNeg | VVPastNeg => v.s ! VInf} ;  ---- only used for Aux  
+    p = v.p ; 
+    c1,c2 = [] ; isSubjectControl = True ; vtype = VTAct ; vvtype = VVInf
+    } ;
 
 lin
   LiftV  v = liftV v ;
@@ -16,8 +20,8 @@ lin
   LiftVQ v = liftV v ;
   LiftVA v = liftV v ; ---- c1?
   LiftVN v = liftV v ; ---- c1?
-  LiftVV v = {s = \\f => v.s ! VVF f ; p = v.p ; c1,c2 = [] ; isSubjectControl = True ; 
-              vtype = case v.typ of {VAux => VTAux ; _ => VTAct} ; vvtype = v.typ} ; ---- c1? ---- VVF
+  LiftVV v = {s = v.s ; p = v.p ; c1,c2 = [] ; isSubjectControl = True ; 
+              vtype = case v.typ of {VVAux => VTAux ; _ => VTAct} ; vvtype = v.typ} ; ---- c1? ---- VVF
 
   LiftV3  v = liftV v ** {c1 = v.c2 ; c2 = v.c3} ;
   LiftV2S v = liftV v ** {c1 = v.c2} ;
