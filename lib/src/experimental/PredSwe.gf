@@ -1,5 +1,5 @@
 concrete PredSwe of Pred = 
-  CatSwe [Ant,NP,Utt,IP,IAdv,IComp,Conj,RP,RS,Imp] ** 
+  CatSwe [Ant,NP,Utt,IP,IAdv,IComp,Conj,RP,RS,Imp,Subj] ** 
     PredFunctor - [RelVP,RelSlash]  ---- incompatible arity: to be fixed in RGL
     with 
       (PredInterface = PredInstanceSwe) 

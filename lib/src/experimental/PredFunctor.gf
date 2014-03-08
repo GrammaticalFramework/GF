@@ -1,4 +1,4 @@
-incomplete concrete PredFunctor of Pred = Cat [Ant,NP,Utt,IP,IAdv,IComp,Conj,RP,RS] ** 
+incomplete concrete PredFunctor of Pred = Cat [Ant,NP,Utt,IP,IAdv,IComp,Conj,RP,RS,Subj] ** 
   open 
     PredInterface,
     ParamX,
@@ -362,5 +362,8 @@ lin
     } ;
 
   ComplAdv x p np = {s = appComplCase p.c1 np ; isAdV = p.isAdV ; c1 = noComplCase} ;
+
+  SubjUttPre subj cl utt = ss (subj.s ++ declSubordCl cl ++ ("," | []) ++ utt.s) ; ----- inv for S
+  SubjUttPost subj cl utt = ss (utt.s ++ ("," | []) ++ subj.s ++ declSubordCl cl) ;
 
 }

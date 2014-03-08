@@ -1,5 +1,5 @@
 concrete PredEng of Pred = 
-  CatEng [Ant,NP,Utt,IP,IAdv,IComp,Conj,RP,RS] ** 
+  CatEng [Ant,NP,Utt,IP,IAdv,IComp,Conj,RP,RS,Subj] ** 
     PredFunctor - [
       -- for all these, special qforms added in Eng
       PassUseV,
