@@ -12,7 +12,7 @@ lin
   OneChunk c = c ;
   PlusChunk c cs = cc2 c cs ;
 
-  ChunkPhr c = c ;
+  ChunkPhr c = ss ("*" ++ c.s) | c ;
 
 lin
 

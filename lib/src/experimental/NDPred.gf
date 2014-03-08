@@ -281,4 +281,12 @@ fun
 --<  ComplAdv : (a : Arg) -> PrAdv (aNP a) -> NP -> PrAdv a ; -- typically: formation of preposition phrase
   ComplAdv_none : PrAdv_np -> NP -> PrAdv_none ;
 
+--<  SubjUttPreS  : Subj -> PrCl aNone -> PrCl aNone -> Utt ;
+  SubjUttPreS  : Subj -> PrCl_none -> PrCl_none -> Utt ;
+--<  SubjUttPreQ  : Subj -> PrCl aNone -> PrQCl aNone -> Utt ;
+  SubjUttPreQ  : Subj -> PrCl_none -> PrQCl_none -> Utt ;
+--<  SubjUttPost  : Subj -> PrCl aNone -> Utt -> Utt ;
+  SubjUttPost  : Subj -> PrCl_none -> Utt -> Utt ;
+
+
 }

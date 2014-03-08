@@ -216,4 +216,11 @@ lin
   ComplAdv_none 
     = Pred.ComplAdv Pred.aNone ;
 
+  SubjUttPreS
+    = Pred.SubjUttPreS ;
+  SubjUttPreQ
+    = Pred.SubjUttPreQ ;
+  SubjUttPost
+    = Pred.SubjUttPost ;
+
 }
