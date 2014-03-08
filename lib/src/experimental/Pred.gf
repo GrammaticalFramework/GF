@@ -115,8 +115,11 @@ fun
   ComplAdv : (a : Arg) -> PrAdv (aNP a) -> NP -> PrAdv a ; -- typically: formation of preposition phrase
 
 -- subjunction ; we want to preserve the order in translation
+-- Pre is more specialized to make inverted S order
+---- Imp to do
 
-  SubjUttPre  : Subj -> PrCl aNone -> Utt -> Utt ;
-  SubjUttPost : Subj -> PrCl aNone -> Utt -> Utt ;
+  SubjUttPreS  : Subj -> PrCl aNone -> PrCl aNone -> Utt ;
+  SubjUttPreQ  : Subj -> PrCl aNone -> PrQCl aNone -> Utt ;
+  SubjUttPost  : Subj -> PrCl aNone -> Utt -> Utt ;
 
 }
