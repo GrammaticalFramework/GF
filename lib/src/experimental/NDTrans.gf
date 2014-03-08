@@ -3,6 +3,7 @@
 abstract NDTrans =
    NDLift
   ,Extensions [CN,NP,AdA,AdV,CompoundCN,AdAdV,UttAdV,ApposNP]
+  ,Documentation - [Pol,Tense]
   ,Dictionary - [Pol,Tense]
   ,Chunk
               ** {
