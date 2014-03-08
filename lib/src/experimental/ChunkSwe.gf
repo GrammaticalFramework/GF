@@ -43,7 +43,10 @@ lin
   RP_Acc_Chunk rp = ss (rp.s ! Utr ! Sg ! RNom) ;
   RP_Gen_Chunk rp = ss (rp.s ! Utr ! Sg ! RGen) ;
   Subj_Chunk subj = subj ;
-  VP_none_Chunk, VP_np_Chunk, VP_s_Chunk, VP_v_VChunk = \vp -> 
+  VP_none_Chunk, 
+  VP_np_Chunk, 
+  VP_s_Chunk, 
+  VP_v_Chunk = \vp -> 
     let verb = vp.v ! PI.UUnit
     in
     allAgrSS (\a -> 
@@ -51,7 +54,26 @@ lin
       vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a ++ vp.adv ++ vp.ext
       ) ;
 
-  refl_SgP3_Chunk = ss "sig" | ss "själv" ;
+  VP_none_inf_Chunk, 
+  VP_np_inf_Chunk, 
+  VP_s_inf_Chunk, 
+  VP_v_inf_Chunk = \vp -> allAgrSS (\a -> PI.infVP PI.UUnit a vp) ;
+  V_np_prespart_Chunk,
+  V_none_prespart_Chunk,
+  V_s_prespart_Chunk,
+  V_v_prespart_Chunk = \v -> ss (PI.vPresPart v PI.defaultAgr) ;
+  V_np_pastpart_Chunk,
+  V_none_pastpart_Chunk,
+  V_s_pastpart_Chunk,
+  V_v_pastpart_Chunk = \v -> ss (PI.vPastPart v PI.defaultAgr) ;
+  copula_inf_Chunk = ss "att vara" | ss "vara" ;
+
+  refl_SgP1_Chunk = ss "mig själv" ;
+  refl_SgP2_Chunk = ss "dig själv" ;
+  refl_SgP3_Chunk = ss "sig själv" ;
+  refl_PlP1_Chunk = ss "oss själva" ;
+  refl_PlP2_Chunk = ss "er själva" ;
+  refl_PlP3_Chunk = ss "sig själva" ;
   neg_Chunk = ss "inte" ;
   copula_Chunk = ss "är" ;
   copula_neg_Chunk = ss "är inte" ;

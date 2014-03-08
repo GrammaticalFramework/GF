@@ -43,7 +43,10 @@ lin
   RP_Acc_Chunk rp = ss (rp.s ! RPrep Masc) ; ----
   RP_Gen_Chunk rp = ss (rp.s ! RC Neutr (NCase Gen)) ;
   Subj_Chunk subj = subj ;
-  VP_none_Chunk, VP_np_Chunk, VP_s_Chunk, VP_v_VChunk = \vp -> 
+  VP_none_Chunk, 
+  VP_np_Chunk, 
+  VP_s_Chunk, 
+  VP_v_Chunk = \vp -> 
     let verb = vp.v ! (PI.VASgP1 | PI.VASgP3 | PI.VAPl) 
     in
     allAgrSS (\a -> 
@@ -51,7 +54,27 @@ lin
       vp.adj ! a ++ vp.c1 ++ vp.obj1.p1 ! a ++ vp.c2 ++ vp.obj2.p1 ! a ++ vp.adv ++ vp.ext
       ) ;
 
+  VP_none_inf_Chunk, 
+  VP_np_inf_Chunk, 
+  VP_s_inf_Chunk, 
+  VP_v_inf_Chunk = \vp -> allAgrSS (\a -> PI.infVP (VVInf | VVAux) a vp) ;
+  V_np_prespart_Chunk,
+  V_none_prespart_Chunk,
+  V_s_prespart_Chunk,
+  V_v_prespart_Chunk = \v -> ss (PI.vPresPart v PI.defaultAgr) ;
+  V_np_pastpart_Chunk,
+  V_none_pastpart_Chunk,
+  V_s_pastpart_Chunk,
+  V_v_pastpart_Chunk = \v -> ss (PI.vPastPart v PI.defaultAgr) ;
+  copula_inf_Chunk = ss "to be" | ss "be" ;
+
+
+  refl_SgP1_Chunk = ss "myself" ;
+  refl_SgP2_Chunk = ss "yourself" ;
   refl_SgP3_Chunk = ss "himself" | ss "herself" | ss "itself" ;
+  refl_PlP1_Chunk = ss "ourselves" ;
+  refl_PlP2_Chunk = ss "yourselves" ;
+  refl_PlP3_Chunk = ss "themselves" ;
   neg_Chunk = ss "not" | ss "doesn't" | ss "don't" ;
   copula_Chunk = ss "is" | ss "are" | ss "am" ;
   copula_neg_Chunk = ss "isn't" | ss "aren't" ;

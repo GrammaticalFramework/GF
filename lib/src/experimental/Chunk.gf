@@ -38,15 +38,33 @@ fun
   RP_Gen_Chunk : RP -> Chunk ;
   RP_Acc_Chunk : RP -> Chunk ;
   Subj_Chunk : Subj -> Chunk ;
-  VP_np_Chunk : PrVP_np -> Chunk ;
-  VP_none_Chunk : PrVP_none -> Chunk ;
-  VP_s_Chunk : PrVP_s -> Chunk ;
+  VP_np_Chunk,
+  VP_none_Chunk,
+  VP_s_Chunk,
   VP_v_Chunk : PrVP_v -> Chunk ;
+  VP_np_inf_Chunk,
+  VP_none_inf_Chunk,
+  VP_s_inf_Chunk,
+  VP_v_inf_Chunk : PrVP_v -> Chunk ;
+  V_np_prespart_Chunk,
+  V_none_prespart_Chunk,
+  V_s_prespart_Chunk,
+  V_v_prespart_Chunk : PrV_np -> Chunk ;
+  V_np_pastpart_Chunk,
+  V_none_pastpart_Chunk,
+  V_s_pastpart_Chunk,
+  V_v_pastpart_Chunk : PrV_v -> Chunk ;
 
-  refl_SgP3_Chunk : Chunk ;
+  refl_SgP1_Chunk,
+  refl_SgP2_Chunk,
+  refl_SgP3_Chunk,
+  refl_PlP1_Chunk,
+  refl_PlP2_Chunk,
+  refl_PlP3_Chunk : Chunk ;
   neg_Chunk : Chunk ;
   copula_Chunk : Chunk ;
   copula_neg_Chunk : Chunk ;
+  copula_inf_Chunk : Chunk ;
   past_copula_Chunk : Chunk ;
   past_copula_neg_Chunk : Chunk ;
   future_Chunk : Chunk ;
