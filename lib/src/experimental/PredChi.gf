@@ -1,7 +1,8 @@
 concrete PredChi of Pred = 
-  CatChi [NP,Utt,IP,IAdv,IComp,Conj,RP,RS,Imp] ** 
+  CatChi [NP,Utt,IP,IAdv,IComp,Conj,RP,RS,Imp,Subj] ** 
     PredFunctor - [UseNP,ComplV2,SlashV3,ContVPC, StartVPC, StartClC,
-                   RelVP, RelSlash, QuestVP, QuestSlash, QuestIComp,PredVP]
+                   RelVP, RelSlash, QuestVP, QuestSlash, QuestIComp,PredVP,
+                   SubjUttPreS, SubjUttPreQ, SubjUttPost]
     with 
       (PredInterface = PredInstanceChi) ** open ResChi, (P = ParadigmsChi), TenseX in {
 
