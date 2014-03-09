@@ -1,34 +1,42 @@
 --# -path=.:../finnish/stemmed:../finnish:../common:alltenses
 
 concrete PredFin of Pred = 
-  CatFin [Ant,NP,Utt,IP,IAdv,IComp,Conj,RP,RS] ** 
+  CatFin [Ant,NP,Utt,IP,IAdv,IComp,Conj,Subj,RP,RS] ** 
     PredFunctor 
      - [
 
--- not yet
-        UseVPC,StartVPC,ContVPC
-
-       ,PresPartAP
-       ,PastPartAP,AgentPastPartAP
-       ,PassUseV, AgentPassUseV
-
 -- overridden
-       ,UseV
+        UseV
        ,UseAP
        ,UseNP
        ,UseCN
        ,QuestVP
        ,PredVP
        ,ComplV2
-       ,ReflVP2,ReflVP
-       ,RelVP,RelSlash
+       ,ReflVP2
+       ,ReflVP
+       ,RelVP
+       ,RelSlash
        ,QuestIComp
+       ,PassUseV
+       ,PresPartAP
+       ,PastPartAP
+       ,AgentPastPartAP
+       ,AgentPassUseV
+       ,UseVPC
+       ,StartVPC
+       ,ContVPC
+       ,ComplVV
+       ,SlashV2V
      ]
 
 with 
-      (PredInterface = PredInstanceFin) ** open PredInstanceFin, ResFin in {
+      (PredInterface = PredInstanceFin) ** open PredInstanceFin, (S = StemFin), ResFin in {
 
 lin
+  ComplVV x vp vpo = addObj2VP vp (\\a => vpo.s ! VPIVV vp.vvtype ! a) ;
+  SlashV2V x vp vpo = addObj2VP vp (\\a => vpo.s ! VPIVV vp.vvtype ! a) ;
+
   UseV x a t p verb = initPrVerbPhraseV a t p verb ;
 
   UseAP x a t p ap = useCopula a t p ** {
@@ -130,19 +138,13 @@ lin
     a = defaultAgr
     } ;
 
-        UseVPC,StartVPC,ContVPC
-
-       ,PresPartAP
-       ,PastPartAP,AgentPastPartAP
-       ,AgentPassUseV
-           = variants {} ;
 
   PassUseV x a t p verb = initPrVerbPhraseV a t p verb ** {
     v : Agr => {fin,inf : Str} = case verb.sc of {
        SCNom => \\agr => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass agr        (lin PrV verb) ;
        _     => \\_   => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Pass defaultAgr (lin PrV verb)
        } ;
-    inf : VVType => Str = \\vtt => tenseInfV (a.s ++ p.s) a.a p.p Pass (lin PrV verb) vtt ; ---- still Act
+    inf : VPIType => Str = \\vtt => tenseInfV (a.s ++ p.s) a.a p.p Pass (lin PrV verb) vtt ; ---- still Act
     imp : ImpType => Str = \\it => imperativeV p.s p.p it (lin PrV verb) ; ---- still Act
     isPass : Bool = True ;
     c1 : Compl = noComplCase ;
@@ -152,14 +154,90 @@ lin
     h = case a.a of {Anter => Back ; _ => verb.h} ;
     } ;
 
----- this will be fun!
+  AgentPassUseV x a t p verb np = initPrVerbPhraseV a t p verb ** {
+    sc = npform2subjcase verb.c1.c ;
+    obj1 = \\a => appSubjCase verb.sc np ;
+    } ;
 
-  ByVP,       -- tekemällä
-  WhenVP,     -- tehdessä
-  BeforeVP,   -- ennen tekemistä
-  AfterVP,    -- tehtyä
-  InOrderVP,  -- tehdäkseen
-  WithoutVP   -- tekemättä
+  PresPartAP x v = {            
+    s = \\a => vPresPart v a ;
+    c1 = v.c1 ;                    -- looking at her
+    c2 = v.c2 ;
+    obj1 = noObj ;
+    } ;
+
+  PastPartAP x v = {            
+    s = \\a => vPastPart v a ;
+    c1 = v.c1 ;                    -- looking at her
+    c2 = v.c2 ;
+    obj1 = noObj ;
+    } ;
+
+  AgentPastPartAP x v np = {
+    s = \\a => (S.sverb2verbSep v).s ! AgentPart (aForm a) ;
+    c1 = v.c1 ; 
+    c2 = v.c2 ;
+    obj1 = \\_ => appComplCase agentCase np ; ---- addObj
+    } ;
+
+
+  StartVPC x c v w = {  ---- some loss of quality seems inevitable
+    v = \\a => 
+          let 
+            vv = v.v ! a ; 
+            wv = w.v ! a ;
+            vpa = vagr2agr a ;
+          in 
+          vv.fin ++ v.adV ++ vv.inf ++ v.adj ! vpa ++ 
+          v.obj1 ! vpa ++ v.obj2 ! vpa ++ v.adv ++ v.ext
+            ++ c.s2 ++  
+          wv.fin ++ w.adV ++ wv.inf ++ w.adj ! vpa ++   
+          w.obj1 ! vpa ++ w.obj2 ! vpa ++ w.adv ++ w.ext ;
+    inf = \\a,vt => 
+            infVP vt a v ++ c.s2 ++ infVP vt a w ;
+    imp = \\i => 
+            impVP i v ++ c.s2 ++ impVP i w ;
+    c1 = noComplCase ; ---- w.c1 ? --- the full story is to unify v and w...
+    c2 = noComplCase ; ---- w.c2 ? 
+    s1 = c.s1 ;
+    } ;
+
+  ContVPC x v w = {  ---- some loss of quality seems inevitable
+    v = \\a => 
+          let 
+            vv = v.v ! a ; 
+            wv = w.v ! a ;
+            vpa = vagr2agr a ;
+          in 
+          vv.fin ++ v.adV ++ vv.inf ++ v.adj ! vpa ++ 
+          v.obj1 ! vpa ++ v.obj2 ! vpa ++ v.adv ++ v.ext
+            ++ "," ++  
+          wv ;
+    inf = \\a,vt => 
+            infVP vt a v ++ "," ++ w.inf ! a ! vt ;
+    imp = \\i => 
+            impVP i v ++ "," ++ w.imp ! i ;
+    c1 = noComplCase ; ---- w.c1 ? --- the full story is to unify v and w...
+    c2 = noComplCase ; ---- w.c2 ? 
+    s1 = w.s1 ;
+    } ;
+
+  UseVPC x vpc = initPrVerbPhrase ** { ---- big loss of quality (overgeneration) seems inevitable
+    v   = \\a => {fin = vpc.s1 ++ vpc.v ! a ; inf = []} ;
+    inf = \\vt => vpc.inf ! defaultAgr ! vt ; ---- agr 
+    imp = vpc.imp ;
+    c1  = vpc.c1 ;
+    c2  = vpc.c2 ;
+    } ;
+
+
+  ByVP x vp vpi = vp ** {adv = vpi.s ! VPIInf3Adess ! defaultAgr} ;        -- tekemällä
+  WhenVP x vp vpi = vp ** {adv = vpi.s ! VPIInf2Iness ! defaultAgr} ;      -- tehdessä ---- agr
+  BeforeVP x vp vpi = vp ** {adv = "ennen" ++ vpi.s ! VPIInf4Part ! defaultAgr} ;    -- ennen tekemistä
+  InOrderVP  x vp vpi = vp ** {adv = vpi.s ! VPIInf1Long ! defaultAgr} ;  -- tehdäkseen ---- agr
+  WithoutVP x vp vpi = vp ** {adv = vpi.s ! VPIInf3Abess ! defaultAgr} ;    -- tekemättä
+
+  AfterVP    -- tehtyä
            = variants {} ;
 
 }

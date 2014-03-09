@@ -25,7 +25,7 @@ lincat
 
   VPC = {
     v   : VAgr => Str ;
-    inf : Agr => VVType => Str ; 
+    inf : Agr => PredInterface.VVType => Str ; 
     imp : ImpType => Str ;
     c1  : ComplCase ; 
     c2  : ComplCase ;

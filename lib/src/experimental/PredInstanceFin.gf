@@ -16,7 +16,7 @@ oper
   PrVerb = StemFin.SVerb1 ** {
     c1 : ComplCase ; 
     c2 : ComplCase ;
-    vvtype : VVType ;
+    vvtype : ResFin.VVType ;
     } ; 
 
   initPrVerb : PrVerb = {
@@ -24,12 +24,12 @@ oper
     sc = SCNom ;
     h = Back ;
     p = [] ; 
-    c1,c2 = noComplCase ; isSubjectControl = True ; vtype = Act ; vvtype = vvInfinitive
+    c1,c2 = noComplCase ; isSubjectControl = True ; vtype = Act ; vvtype = VVInf ;
     } ; 
 
   PrVerbPhrase = {
     v   : Agr => {fin,inf : Str} ;
-    inf : VVType => Str ;
+    inf : VPIType => Str ;
     imp : ImpType => Str ;
     adj : Agr => Str ;
     obj1 : Agr => Str ;             -- Bool => Polarity => Agr => Str ; -- talo/talon/taloa
@@ -39,7 +39,7 @@ oper
     ext : Str ;
     isNeg : Bool ;  -- True if some complement is negative
     isPass : Bool ; -- True if the verb is rendered in the passive
-    vvtype : VVType ;
+    vvtype : ResFin.VVType ;
     sc : SubjCase ;
     h  : Harmony ;
     c1 : Compl ;
@@ -49,7 +49,7 @@ oper
 
   initPrVerbPhrase : PrVerbPhrase = {
     v : Agr => {fin,inf : Str} = \\_ => {fin,inf = []} ;
-    inf : VVType => Str = \\vtt => [] ;
+    inf : VPIType => Str = \\vtt => [] ;
     imp : ImpType => Str = \\_ => [] ;
     adj : Agr => Str = \\_ => [] ;
     obj1 : Agr => Str = \\_ => [] ;
@@ -61,7 +61,7 @@ oper
     isPass : Bool = False ;
     c1 : Compl = noComplCase ;
     c2 : Compl = noComplCase ;
-    vvtype = defaultVVType ;
+    vvtype = VVInf ;
     sc = SCNom ;
     h = Back ;
     qforms : VAgr => Str * Str = \\_ => <[],[]>    -- special Eng for introducing "do" in questions
@@ -75,7 +75,7 @@ oper
        SCNom => \\agr => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Act agr        (lin PrV verb) ;
        _     => \\_   => finV (a.s ++ t.s ++ p.s) t.t a.a p.p Act defaultAgr (lin PrV verb)
        } ;
-    inf : VVType => Str = \\vtt => tenseInfV (a.s ++ p.s) a.a p.p Act (lin PrV verb) vtt ;
+    inf : VPIType => Str = \\vtt => tenseInfV (a.s ++ p.s) a.a p.p Act (lin PrV verb) vtt ;
     imp : ImpType => Str = \\it => imperativeV p.s p.p it (lin PrV verb) ;
     adj : Agr => Str = \\_ => [] ;
     obj1 : Agr => Str = \\_ => [] ;
@@ -131,7 +131,7 @@ oper
   Case   = ResFin.Case ;
   NPCase = ResFin.NPForm ;
   VForm  = S.SVForm ;
-  VVType = ResFin.VVType ;
+  VVType = VPIType ;
   VType  = Voice ; ----
   Gender = Unit ; ----
 
@@ -144,7 +144,7 @@ oper
   passive = Pass ;
 
   defaultVType = Act ;
-  defaultVVType = VVInf ;
+  defaultVVType = vvInfinitive ;
 
   subjCase : NPCase = ResFin.NPCase Nom ;
   objCase  : NPCase = NPAcc ;
@@ -190,13 +190,25 @@ oper
 --- this is only needed in VPC formation
   vagr2agr : VAgr -> Agr = \a -> a ;
 
-  vPastPart : PrVerb -> AAgr -> Str = \v,a -> (S.sverb2verbSep v).s ! PastPartPass (AN (NCase Sg Part)) ; ---- case
-  vPresPart : PrVerb -> AAgr -> Str = \v,a -> (S.sverb2verbSep v).s ! PresPartAct (AN (NCase Sg Part)) ; ---- case
+  vPastPart : PrVerb -> AAgr -> Str = \v,a -> (S.sverb2verbSep v).s ! PastPartPass (aForm a) ;
+  vPresPart : PrVerb -> AAgr -> Str = \v,a -> (S.sverb2verbSep v).s ! PresPartAct (aForm a) ;
 
-  vvInfinitive : VVType = VVInf ;
+-- predicative adjective form
+  aForm : AAgr -> AForm = \a -> case a of {
+    Ag Pl _ => AN (NCase Pl Part) ;
+    _       => AN (NCase Sg Nom)
+    } ;
+---- TODO: case system of PrAP
+
+  vvInfinitive : VVType = VPIVV VVInf ;
 
   isRefl : PrVerb -> Bool = \_ -> False ; ----
 
+-- the forms outside VPIVV to be used in adverbials such as "tekemällä" 
+param
+  VPIType = VPIVV (ResFin.VVType) 
+          | VPIInf3Adess | VPIInf3Abess | VPIInf2Iness | VPIInf1Long {- | VPIPastPartPassPart -} | VPIInf4Part ;
+         -- tekemällä, tekemättä, tehdessä, tehdäkseen, tehtyään, tekemistä
 
 ------------------
 --- opers --------
@@ -213,11 +225,19 @@ oper
     in
     {fin = sta ++ ovps.fin ; inf = ovps.inf} ;
 
-  infV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VVType -> Str = 
+  infV : Str -> Anteriority -> Polarity -> SVoice -> PrVerb -> VPIType -> Str = 
       \sa,a,pol,o,v,vvt ->
    let 
-     vt = vvtype2infform vvt ; 
-     ovps = (S.vp2old_vp (S.predV v)).s ! VIInf vt ! a ! pol ! defaultAgr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
+     vt = case vvt of {
+       VPIVV vi => VIInf (vvtype2infform vi) ;
+       VPIInf3Adess => VIInf Inf3Adess ;
+       VPIInf3Abess => VIInf Inf3Abess ;
+       VPIInf2Iness => VIInf Inf2Iness ;
+       VPIInf1Long  => VIInf Inf1Long ;
+----       VPIPastPartPassPart => PastPartPass (AN (NCase Sg Part)) ; 
+       VPIInf4Part => VIInf Inf4Part 
+       } ;
+     ovps = (S.vp2old_vp (S.predV v)).s ! vt ! a ! pol ! defaultAgr ; -- VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ;
    in
    sa ++ ovps.fin ++ ovps.inf ;
 
