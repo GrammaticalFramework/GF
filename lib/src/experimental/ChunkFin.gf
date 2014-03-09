@@ -45,10 +45,19 @@ lin
   RP_Acc_Chunk rp = ss (rp.s ! Sg ! NPAcc) ;
   RP_Gen_Chunk rp = ss (rp.s ! Sg ! NPCase Gen) ;
   Subj_Chunk subj = subj ;
+
   VP_none_Chunk, 
   VP_np_Chunk, 
   VP_s_Chunk, 
-  VP_v_Chunk = \vp -> 
+  VP_v_Chunk,
+  VP_a_Chunk,
+  VP_q_Chunk,
+  VP_np_np_Chunk, 
+  VP_np_s_Chunk, 
+  VP_np_a_Chunk,
+  VP_np_q_Chunk,
+  VP_np_v_Chunk 
+   = \vp -> 
     let verb = vp.v ! PI.defaultAgr ;
     in
     allAgrSS (\a -> 
@@ -59,15 +68,42 @@ lin
   VP_none_inf_Chunk, 
   VP_np_inf_Chunk, 
   VP_s_inf_Chunk, 
-  VP_v_inf_Chunk = \vp -> allAgrSS (\a -> PI.infVP VVInf a vp) ;
-  V_np_prespart_Chunk,
+  VP_a_inf_Chunk, 
+  VP_q_inf_Chunk, 
+  VP_v_inf_Chunk,
+  VP_np_np_inf_Chunk, 
+  VP_np_s_inf_Chunk, 
+  VP_np_a_inf_Chunk, 
+  VP_np_q_inf_Chunk, 
+  VP_np_v_inf_Chunk 
+    = \vp -> allAgrSS (\a -> PI.infVP VVInf a vp) ;
+
   V_none_prespart_Chunk,
+  V_np_prespart_Chunk,
   V_s_prespart_Chunk,
-  V_v_prespart_Chunk = \v -> ss (PI.vPresPart v PI.defaultAgr) ;
-  V_np_pastpart_Chunk,
+  V_a_prespart_Chunk,
+  V_q_prespart_Chunk,
+  V_v_prespart_Chunk,
+  V_np_np_prespart_Chunk,
+  V_np_s_prespart_Chunk,
+  V_np_a_prespart_Chunk,
+  V_np_q_prespart_Chunk,
+  V_np_v_prespart_Chunk 
+    = \v -> ss (PI.vPresPart v PI.defaultAgr) ;
+
   V_none_pastpart_Chunk,
+  V_np_pastpart_Chunk,
   V_s_pastpart_Chunk,
-  V_v_pastpart_Chunk = \v -> ss (PI.vPastPart v PI.defaultAgr) ;
+  V_a_pastpart_Chunk,
+  V_q_pastpart_Chunk,
+  V_v_pastpart_Chunk,
+  V_np_np_pastpart_Chunk,
+  V_np_s_pastpart_Chunk,
+  V_np_a_pastpart_Chunk,
+  V_np_q_pastpart_Chunk,
+  V_np_v_pastpart_Chunk 
+    = \v -> ss (PI.vPastPart v PI.defaultAgr) ;
+
   copula_inf_Chunk = ss "olla" ;
 
   refl_SgP1_Chunk = ss "itseni" ;
