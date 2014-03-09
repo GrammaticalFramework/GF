@@ -194,21 +194,21 @@ PARSE8=ParseEng.pgf ParseBul.pgf ParseChi.pgf ParseGer.pgf ParseSwe.pgf ParseHin
 
 # Without dependencies:
 Parse8:
-	$(GFMKP) -name=Parse8 $(PARSE8) +RTS -K32M
+	$(GFMKP) -name=Parse8 $(PARSE8) +RTS -K200M
 
 # With dependencies:
 Parse8.pgf: $(PARSE8)
-	$(GFMKP) -name=Parse8 $(PARSE8) +RTS -K32M
+	$(GFMKP) -name=Parse8 $(PARSE8) +RTS -K200M
 
 # Parse grammars for individual languages
-ParseEng.pgf:: ; $(GFMKP) -name=ParseEng english/ParseEng.gf
-ParseBul.pgf:: ; $(GFMKP) -name=ParseBul bulgarian/ParseBul.gf
-ParseChi.pgf:: ; $(GFMKP) -name=ParseChi chinese/ParseChi.gf
-ParseFin.pgf:: ; $(GFMKP) -name=ParseFin finnish/stemmed/ParseFin.gf +RTS -K32M
-ParseGer.pgf:: ; $(GFMKP) -name=ParseGer german/ParseGer.gf
-ParseHin.pgf:: ; $(GFMKP) -name=ParseHin hindi/ParseHin.gf
-ParseFre.pgf:: ; $(GFMKP) -name=ParseFre french/ParseFre.gf
-ParseSwe.pgf:: ; $(GFMKP) -name=ParseSwe swedish/ParseSwe.gf
+ParseEng.pgf:: ; $(GFMKP) -name=ParseEng english/ParseEng.gf +RTS -K32M
+ParseBul.pgf:: ; $(GFMKP) -name=ParseBul bulgarian/ParseBul.gf +RTS -K32M
+ParseChi.pgf:: ; $(GFMKP) -name=ParseChi chinese/ParseChi.gf +RTS -K200M
+ParseFin.pgf:: ; $(GFMKP) -name=ParseFin finnish/stemmed/ParseFin.gf +RTS -K200M
+ParseGer.pgf:: ; $(GFMKP) -name=ParseGer german/ParseGer.gf +RTS -K200M
+ParseHin.pgf:: ; $(GFMKP) -name=ParseHin hindi/ParseHin.gf +RTS -K200M
+ParseFre.pgf:: ; $(GFMKP) -name=ParseFre french/ParseFre.gf +RTS -K200M
+ParseSwe.pgf:: ; $(GFMKP) -name=ParseSwe swedish/ParseSwe.gf +RTS -K32M
 
 ParseSpa.pgf:: ; $(GFMKP) -name=ParseSpa spanish/ParseSpa.gf
 
