@@ -18,6 +18,9 @@ fun
   AdV_Chunk : AdV -> Chunk ;
   AdN_Chunk : AdN -> Chunk ;
   Cl_Chunk : PrCl_none -> Chunk ;
+  Cl_np_Chunk : PrCl_np -> Chunk ;
+  QCl_Chunk : PrQCl_none -> Chunk ;
+  QCl_np_Chunk : PrQCl_np -> Chunk ;
   CN_Pl_Chunk : CN -> Chunk ;
   CN_Sg_Chunk : CN -> Chunk ;
   CN_Pl_Gen_Chunk : CN -> Chunk ;

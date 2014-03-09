@@ -24,7 +24,8 @@ lin
   Adv_Chunk adv = adv ;
   AdV_Chunk adv = adv ;
   AdN_Chunk adn = adn ;
-  Cl_Chunk cl = ss (PI.declCl cl) ;
+  Cl_Chunk, Cl_np_Chunk = \cl -> ss (PI.declCl cl) ;
+  QCl_Chunk, QCl_np_Chunk = \cl -> ss (PI.questCl cl) ;
   CN_Pl_Chunk cn = ss (cn.s ! NCase Pl Nom) ;
   CN_Sg_Chunk cn = ss (cn.s ! NCase Sg Nom) ;
   CN_Pl_Gen_Chunk cn = ss (cn.s ! NCase Pl Gen) ;

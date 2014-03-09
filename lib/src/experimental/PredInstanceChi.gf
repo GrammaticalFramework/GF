@@ -1,5 +1,5 @@
 instance PredInstanceChi of 
-  PredInterface - [PrVerb,initPrVerb,NounPhrase,appSubjCase,appObjCase] = 
+  PredInterface - [PrVerb,initPrVerb,NounPhrase,appSubjCase,appObjCase,PrAdverb,linrefPrAdv] = 
 
    open ResChi, (P = ParadigmsChi), (X = ParamX), (S = SyntaxChi), Prelude in {
 
@@ -23,6 +23,9 @@ oper
   appSubjCase : NounPhrase -> Str = \np -> np.s ;
   appObjCase : NounPhrase -> Str = \np -> np.s ;
 
+  PrAdverb = Preposition ;
+
+  linrefPrAdv : PrAdverb -> Str = \adv -> adv.prepPre ++ adv.prepPost ;
 
 ---------------------
 -- parameters -------
@@ -129,7 +132,7 @@ oper
   -- this part is usually the same in all reconfigurations
   restCl : PrClause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.ext ; ---- c3
 
-  negAdV :  {s : Str ; p : Polarity} -> Str = \p -> p.s ++ not_Str p.p ;
+  negAdV :  {s : Str ; p : Polarity} -> Str = \p -> p.s ; ---- not used in negation formation   ++ not_Str p.p ;
 
   not_Str = \p -> case p of {Pos => [] ; Neg => neg_s} ;
 

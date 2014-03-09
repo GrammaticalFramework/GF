@@ -171,7 +171,7 @@ lin
     } ;
 
   SlashClNP x cl np = cl ** {  -- Cl ::= Cl/NP NP 
-    adv  = cl.adv ++ appComplCase cl.c3 np ; ---- again, adv just added
+    obj2  = cl.obj2 ++ appComplCase cl.c3 np ; ---- again, adv just added
     c3   = noComplCase ;  -- complCase has been consumed
     } ;
 
@@ -261,6 +261,8 @@ lin
   UseAdvCl adv cl = {s = adv.s ++ declInvCl cl} ;
 
   UttPrS s = s ;
+
+
 
 
   AdvCl x a cl = case a.isAdV of {

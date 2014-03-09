@@ -1,5 +1,10 @@
-concrete NDPredChi of Pred = 
+concrete NDPredChi of NDPred = 
   CatChi [NP,Utt,IP,IAdv,IComp,Conj,RS,RP,Subj] ** 
-    NDPredFunctor with 
+    NDPredFunctor
+     with 
       (PredInterface = PredInstanceChi),
-      (Pred = PredChi) ;
+      (Pred = PredChi) ** open PredChi in {
+
+lincat Ant = PredChi.Ant ;
+
+}
