@@ -32,11 +32,11 @@ lin
   LiftCN cn = {s = \\n => cn.s ; c1,c2 = noComplCase ; obj1 = \\_ => []} ; 
   LiftN2 cn = {s = \\n => cn.s ; c1 = cn.c2 ; c2 = noComplCase ; obj1 = \\_ => []} ; 
 
-----  AppAPCN ap cn = 
+  AppAPCN ap cn = {s = ap.s ! UUnit ++ cn.s ; c = cn.c} ; ----
 
-  LiftAdv  a = a ** {isAdV = False ; c1 = noComplCase} ;
-  LiftAdV  a = a ** {isAdV = True ; c1 = noComplCase} ;
-  LiftPrep p = {s = [] ; isAdV = False ; c1 = p} ;
+  LiftAdv  a = {advType = a.advType ; prepPre = a.s ; prepPost = []} ;
+  LiftAdV  a = {advType = ATTime ; prepPre = a.s ; prepPost = []} ;  ---- the first adv place
+  LiftPrep p = p ;
 
 }
 

@@ -2,17 +2,41 @@ concrete PredChi of Pred =
   CatChi [NP,Utt,IP,IAdv,IComp,Conj,RP,RS,Imp,Subj] ** 
     PredFunctor - [UseNP,ComplV2,SlashV3,ContVPC, StartVPC, StartClC,
                    RelVP, RelSlash, QuestVP, QuestSlash, QuestIComp,PredVP,
-                   SubjUttPreS, SubjUttPreQ, SubjUttPost]
+                   SubjUttPreS, SubjUttPreQ, SubjUttPost,
+                   UseAdv, ComplAdv, UseAdvCl, AdvQCl, AdvCl
+                  ]
     with 
       (PredInterface = PredInstanceChi) ** open ResChi, (P = ParadigmsChi), TenseX in {
 
 lincat 
-  Ant = {s : Str ; a : Anteriority} ;
+  Ant = {s : Str ; a : PredInstanceChi.Anteriority} ;
 
 lin
   UseNP a t p np = useCopula a t p ** {
     adj = \\a => np.s
     } ;
+
+  UseAdv x a t p adv = 
+    let verb = case adv.advType of {
+      ATPlace True => liftV noVerb ;
+      _ => liftV zai_V
+      }
+    in initPrVerbPhraseV a t p verb ** {
+      adv = adv.prepPre ++ adv.prepPost ;
+      } ;
+
+  ComplAdv x p np = {prepPre = appComplCase p np ; prepPost = [] ; advType = p.advType} ;
+
+  UseAdvCl adv cl = {s = adv.prepPre ++ adv.prepPost ++ declInvCl cl} ;
+
+  AdvCl, AdvQCl = \x,adv,cl -> 
+    let advs = adv.prepPre ++ adv.prepPost in
+    case adv.advType of {
+      ATManner      => cl ** {obj1 = deVAdv_s ++ advs ++ cl.obj1} ;   -- he sleeps *well*
+      ATPlace True  => cl ** {adv = cl.adv ++ advs} ;                 -- he today *in the house* sleeps
+      ATPlace False => cl ** {adv = cl.adv ++ zai_V.s ++ advs} ;      -- he today *here* sleeps
+      ATTime        => cl ** {adv = advs ++ cl.adv}                   -- he *today* here sleeps ---- also: **today** he here sleeps
+      } ;
 
   ComplV2 x vp np = vp ** {
     obj1 : (Agr => Str) * Agr = <\\a => appObjCase np, UUnit>
@@ -128,5 +152,33 @@ lin
       obj1    = cl.obj1 ++ focobj.p2 ;     ---- just add to a field?
       c3      = focobj.p4 ; 
       } ;  
+
+  QuestIComp a t p icomp np = 
+    let vagr = UUnit in
+    initPrClause ** {
+    v    = tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p vagr ;
+    subj = appSubjCase np ;
+    adV = negAdV p ;
+    foc = icomp.s ;
+    focType = FocObj ;
+    } ;
+
+  NomVPNP vp = ss (vp.s ! UUnit ! UUnit) ;----
+
+
+  SubjUttPreS subj cl s = ss (subj.prePart ++ declSubordCl cl ++ subj.sufPart ++ declInvCl s) ; 
+  SubjUttPreQ subj cl q = ss (subj.prePart ++ declSubordCl cl ++ subj.sufPart ++ questCl q) ;
+  SubjUttPost subj cl utt = ss (utt.s ++ subj.prePart ++ declSubordCl cl ++ subj.sufPart) ;
+
+
+---- todo
+
+  AfterVP,
+  BeforeVP,
+  ByVP,
+  InOrderVP,
+  WhenVP,
+  WithoutVP
+    = variants {} ;
 
 }
