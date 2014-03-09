@@ -29,6 +29,10 @@ public class Translator {
 
     private static final String TAG = "Translator";
 
+    // /*
+
+    // old
+
     // TODO: allow changing
     private String mGrammar = "ParseEngAbs.pgf";
 
@@ -43,6 +47,22 @@ public class Translator {
         new Language("sv-SE", "Swedish", "ParseSwe", R.xml.qwerty), 
         new Language("fi-FI", "Finnish", "ParseFin", R.xml.qwerty),
     };
+    // */
+
+    /*
+    // new
+
+    // TODO: allow changing
+    private String mGrammar = "TransEngFinSwe.pgf";
+
+    // TODO: build dynamically?
+    private Language[] mLanguages = {
+	    new Language("en-US", "English", "NDTransEng", R.xml.qwerty),
+	    //        new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.qwerty),   
+        new Language("sv-SE", "Swedish", "NDTransSwe", R.xml.qwerty), 
+        new Language("fi-FI", "Finnish", "NDTransFin", R.xml.qwerty),
+    };
+    */
 
     private Context mContext;
 
