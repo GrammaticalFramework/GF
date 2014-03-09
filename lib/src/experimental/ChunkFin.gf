@@ -76,7 +76,7 @@ lin
   VP_np_a_inf_Chunk, 
   VP_np_q_inf_Chunk, 
   VP_np_v_inf_Chunk 
-    = \vp -> allAgrSS (\a -> PI.infVP VVInf a vp) ;
+    = \vp -> allAgrSS (\a -> PI.infVP PI.vvInfinitive a vp) ;
 
   V_none_prespart_Chunk,
   V_np_prespart_Chunk,
