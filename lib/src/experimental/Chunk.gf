@@ -38,22 +38,31 @@ fun
   RP_Gen_Chunk : RP -> Chunk ;
   RP_Acc_Chunk : RP -> Chunk ;
   Subj_Chunk : Subj -> Chunk ;
-  VP_np_Chunk,
-  VP_none_Chunk,
-  VP_s_Chunk,
-  VP_v_Chunk : PrVP_v -> Chunk ;
-  VP_np_inf_Chunk,
-  VP_none_inf_Chunk,
-  VP_s_inf_Chunk,
-  VP_v_inf_Chunk : PrVP_v -> Chunk ;
-  V_np_prespart_Chunk,
-  V_none_prespart_Chunk,
-  V_s_prespart_Chunk,
-  V_v_prespart_Chunk : PrV_np -> Chunk ;
-  V_np_pastpart_Chunk,
-  V_none_pastpart_Chunk,
-  V_s_pastpart_Chunk,
-  V_v_pastpart_Chunk : PrV_v -> Chunk ;
+
+  VP_none_Chunk, VP_none_inf_Chunk : PrVP_none -> Chunk ;
+  VP_np_Chunk,   VP_np_inf_Chunk : PrVP_np -> Chunk ;
+  VP_s_Chunk,    VP_s_inf_Chunk : PrVP_s -> Chunk ;
+  VP_v_Chunk,   VP_v_inf_Chunk : PrVP_v -> Chunk ;
+  VP_a_Chunk,   VP_a_inf_Chunk : PrVP_a -> Chunk ;
+  VP_q_Chunk,   VP_q_inf_Chunk : PrVP_q -> Chunk ;
+  VP_np_np_Chunk,   VP_np_np_inf_Chunk : PrVP_np_np -> Chunk ;
+  VP_np_s_Chunk,    VP_np_s_inf_Chunk : PrVP_np_s -> Chunk ;
+  VP_np_v_Chunk,   VP_np_v_inf_Chunk : PrVP_np_v -> Chunk ;
+  VP_np_q_Chunk,   VP_np_q_inf_Chunk : PrVP_np_q -> Chunk ;
+  VP_np_a_Chunk,   VP_np_a_inf_Chunk : PrVP_np_a -> Chunk ;
+
+  V_none_prespart_Chunk,  V_none_pastpart_Chunk : PrV_none -> Chunk ;
+  V_np_prespart_Chunk,  V_np_pastpart_Chunk : PrV_np -> Chunk ;
+  V_s_prespart_Chunk,  V_s_pastpart_Chunk : PrV_s -> Chunk ;
+  V_v_prespart_Chunk,  V_v_pastpart_Chunk : PrV_v -> Chunk ;
+  V_q_prespart_Chunk,  V_q_pastpart_Chunk : PrV_q -> Chunk ;
+  V_a_prespart_Chunk,  V_a_pastpart_Chunk : PrV_q -> Chunk ;
+
+  V_np_np_prespart_Chunk,  V_np_np_pastpart_Chunk : PrV_np_np -> Chunk ;
+  V_np_s_prespart_Chunk,  V_np_s_pastpart_Chunk : PrV_np_s -> Chunk ;
+  V_np_v_prespart_Chunk,  V_np_v_pastpart_Chunk : PrV_np_v -> Chunk ;
+  V_np_q_prespart_Chunk,  V_np_q_pastpart_Chunk : PrV_np_q -> Chunk ;
+  V_np_a_prespart_Chunk,  V_np_a_pastpart_Chunk : PrV_np_q -> Chunk ;
 
   refl_SgP1_Chunk,
   refl_SgP2_Chunk,
