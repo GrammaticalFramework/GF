@@ -280,8 +280,8 @@ public class MainActivity extends Activity {
 
     private void outputText(String text) {
         if (DBG) Log.d(TAG, "Speaking: " + text);
-        mConversationView.addSecondPersonUtterance(text);
-        mTts.speak(getTargetLanguageCode(), text);
+        CharSequence text2 = mConversationView.addSecondPersonUtterance(text);
+        mTts.speak(getTargetLanguageCode(), text2.toString());
     }
 
     private class SpeechInputListener implements ASR.Listener {

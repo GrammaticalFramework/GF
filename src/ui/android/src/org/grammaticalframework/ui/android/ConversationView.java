@@ -94,9 +94,31 @@ public class ConversationView extends ScrollView {
         });
     }
 
-    public void addSecondPersonUtterance(CharSequence text) {
-        TextView view = (TextView) 
-        	mInflater.inflate(R.layout.second_person_utterance, mContent, false);
+    public CharSequence addSecondPersonUtterance(CharSequence text) {
+
+	// parse by chunks, marked by *, red colour
+	TextView view ;
+	if (text.charAt(0) == '*') {
+                 view = (TextView) 
+                	mInflater.inflate(R.layout.second_person_chunk_utterance, mContent, false) ;
+		 text = text.subSequence(2, text.length()) ;
+	}
+	// parse error or unknown translations (in []) present, red colour
+	else if (text.toString().contains("parse error:") || text.toString().contains("[")) {
+                 view = (TextView) 
+                	mInflater.inflate(R.layout.second_person_chunk_utterance, mContent, false) ;
+	}
+	// parse by domain grammar, marked by +, green colour
+	else 	if (text.charAt(0) == '+') {
+                 view = (TextView) 
+                	mInflater.inflate(R.layout.second_person_best_utterance, mContent, false) ;
+		 text = text.subSequence(2, text.length()) ;
+	}
+	// parse by resource grammar, no mark, yellow colour
+	else
+                 view = (TextView) 
+          	       mInflater.inflate(R.layout.second_person_utterance, mContent, false);
+
         view.setText(text);
         mContent.addView(view);
         post(new Runnable() {
@@ -104,6 +126,7 @@ public class ConversationView extends ScrollView {
                 fullScroll(FOCUS_DOWN);
             }
         });
+	return text ;
     }
 
     public void updateLastUtterance(CharSequence text, Object lexicon) {
