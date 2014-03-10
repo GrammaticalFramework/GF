@@ -62401,6 +62401,7 @@ lin ask_after_V2 = prepV2 (mkV "ask") (mkPrep "after");
 lin ask_around_V = partV (mkV "ask") "around";
 lin ask_around_V2 = mkV2 (partV (mkV "ask") "around");
 lin ask_for_V2 = prepV2 (mkV "ask") (mkPrep "for");
+lin ask_for_V3 = mkV3 (mkV "ask") noPrep (mkPrep "for");
 lin ask_in_V2 = mkV2 (partV (mkV "ask") "in");
 lin ask_out_V2 = mkV2 (partV (mkV "ask") "out");
 lin ask_over_V2 = mkV2 (partV (mkV "ask") "over");

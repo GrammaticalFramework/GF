@@ -62306,6 +62306,7 @@ fun ask_after_V2 : V2;
 fun ask_around_V : V;
 fun ask_around_V2 : V2;
 fun ask_for_V2 : V2;
+fun ask_for_V3 : V3;
 fun ask_in_V2 : V2;
 fun ask_out_V2 : V2;
 fun ask_over_V2 : V2;
