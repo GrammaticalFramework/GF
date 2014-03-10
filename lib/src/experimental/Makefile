@@ -7,3 +7,10 @@ bigtranslator:
 midtranslator:
 	gf -s -make -literal=Symb -probs=NDPredTrans.probs -name=TransEngChiSwe NDTransEng.gf NDTransSwe.gf NDTransChi.gf +RTS -K200M
 
+
+
+app:
+	gf -s -make -literal=Symb -probs=NDPredTrans.probs -name=AppEngSwe AppEng.gf AppSwe.gf
+bigapp:
+	gf -s -make -literal=Symb -probs=NDPredTrans.probs -name=AppEngChiFinSwe AppEng.gf AppSwe.gf AppChi.gf AppFin.gf +RTS -K200M
+
