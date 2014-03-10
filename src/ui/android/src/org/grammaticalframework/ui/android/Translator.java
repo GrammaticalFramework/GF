@@ -29,7 +29,7 @@ public class Translator {
 
     private static final String TAG = "Translator";
 
-    // /*
+    /*
 
     // old
 
@@ -47,22 +47,22 @@ public class Translator {
         new Language("sv-SE", "Swedish", "ParseSwe", R.xml.qwerty), 
         new Language("fi-FI", "Finnish", "ParseFin", R.xml.qwerty),
     };
-    // */
+     */
 
-    /*
+    // /*
     // new
 
     // TODO: allow changing
-    private String mGrammar = "TransEngFinSwe.pgf";
+    private String mGrammar = "App.pgf" ;
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
-	    new Language("en-US", "English", "NDTransEng", R.xml.qwerty),
-	    //        new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.qwerty),   
-        new Language("sv-SE", "Swedish", "NDTransSwe", R.xml.qwerty), 
-        new Language("fi-FI", "Finnish", "NDTransFin", R.xml.qwerty),
+	new Language("en-US", "English", "AppEng", R.xml.qwerty),
+	new Language("cmn-Hans-CN", "Chinese", "AppChi", R.xml.qwerty),   
+        new Language("sv-SE", "Swedish", "AppSwe", R.xml.qwerty), 
+        new Language("fi-FI", "Finnish", "AppFin", R.xml.qwerty),
     };
-    */
+    // */
 
     private Context mContext;
 
@@ -318,6 +318,7 @@ public class Translator {
 	}
 
     public List<MorphoAnalysis> lookupMorpho(String sentence) {
+        Log.e(TAG, "lookupMorpho " + getSourceConcr());
     	return getSourceConcr().lookupMorpho(sentence);
     }
 
