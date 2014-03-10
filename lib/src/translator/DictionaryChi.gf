@@ -11572,6 +11572,7 @@ balmy_A = mkA "芳香" ; -- 1
 awry_A = mkA "曲解" ; -- 1
 atrocity_N = mkN "暴行" ; -- 1
 ask_for_V2 = mkV2 "请求" ; -- 1
+ask_for_V3 = variants {} ;
 aria_N = mkN "咏叹调" "首" ; -- 1
 aplomb_N = mkN "泰然自若" [] ; -- 1
 angst_N = mkN "焦虑" [] ; -- 1

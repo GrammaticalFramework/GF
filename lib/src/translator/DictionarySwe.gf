@@ -3659,6 +3659,7 @@ lin ask_after_V2 = dirV2 (partV (mkV "frågar")"ut");
 lin ask_around_V = mkV "rådfrågar" ; -- comment=8
 lin ask_around_V2 = dirV2 (partV (mkV "frågar")"ut");
 lin ask_for_V2 = dirV2 (partV (mkV "frågar")"ut");
+lin ask_for_V3 = variants {} ;
 lin ask_in_V2 = dirV2 (partV (mkV "frågar")"ut");
 lin ask_out_V2 = dirV2 (partV (mkV "frågar")"ut");
 lin ask_over_V2 = dirV2 (partV (mkV "frågar")"ut");
