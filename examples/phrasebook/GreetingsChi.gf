@@ -1,6 +1,6 @@
 concrete GreetingsChi of Greetings = 
   SentencesChi [Greeting,mkGreeting] ** 
-  open (D = DictEngChi), ParadigmsChi, ResChi, Prelude in {
+  open (D = DictionaryChi), ParadigmsChi, ResChi, Prelude in {
 
 flags coding = utf8 ;
 

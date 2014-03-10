@@ -4,7 +4,7 @@ concrete WordsChi of Words = SentencesChi **
       ParadigmsChi,
       (P = ParadigmsChi),
       (R = ResChi),
-      (D = DictEngChi),
+      (D = DictionaryChi),
       (L = LexiconChi),
       Prelude in {
 
