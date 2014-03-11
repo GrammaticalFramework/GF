@@ -19,10 +19,17 @@ oper
 
   initPrVerbPhraseV : 
        {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> PrVerbPhrase = 
-  \a,t,p,v -> initBasePrVerbPhraseV a t p v ** {
+    \a,t,p,v -> initBasePrVerbPhraseV a t p v ** {
     qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v
     } ;
  
+  initPrVerbPhraseVContracted : 
+    {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> PrVerbPhrase = 
+    \a,t,p,v -> initPrVerbPhraseV a t p v ** {
+    v   = \\agr => tenseVContracted (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
+    qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v
+    } ;
+
 
   initPrClause : PrClause = initBasePrClause ** {
     qforms = <[],[]> ;
@@ -196,13 +203,17 @@ oper
     case o of {  
       Act  => tenseActV sta t a p agr v ;
       Pass => tensePassV sta t a p agr v 
-      } {-
-      |    ---- leaving out these variants makes compilation time go down from 900ms to 300ms. 
+      } ;
+       
+           ---- leaving out these variants makes compilation time go down from 900ms to 300ms. 
            ---- parsing time of "she sleeps" goes down from 300ms to 60ms. 4/2/2014 
+
+  tenseVContracted : Str -> STense -> Anteriority -> Polarity -> SVoice -> VAgr -> PrVerb -> Str * Str * Str = 
+    \sta,t,a,p,o,agr,v -> 
     case o of {  
       Act  => tenseActVContracted sta t a p agr v ;
       Pass => tensePassVContracted sta t a p agr v
-      -} ;
+      } ;
 
   tenseActV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str * Str = \sta,t,a,p,agr,v -> 
     let vt : ResEng.VForm = case <t,agr> of {
@@ -221,6 +232,7 @@ oper
         _              => case p of {
           Pos          => <[],                   sta ++ v.s ! VVF vt,             []> ;                 -- this is the deviating case
           Neg          => <do_Aux       vt Pos,  not_Str p,                       sta ++ v.s ! VVF VInf>
+----slow                | <do_Aux       vt Neg,  [],                              sta ++ v.s ! VVF VInf>
           }
        } ;
 
@@ -301,7 +313,9 @@ oper
 
 ----- dangerous variants for PMCFG generation - keep apart as long as possible
   be_Aux : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \sta,t,a,p,agr -> 
-    be_AuxL sta t a p agr | be_AuxC sta t a p agr ; 
+    be_AuxL sta t a p agr
+  | be_AuxC sta t a p agr ; 
+
   be_AuxL : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \sta,t,a,p,agr -> 
     let 
       beV = tenseActV sta t a p agr be_V 
@@ -362,7 +376,7 @@ oper
   that_Compl : Str = "that" | [] ;
 
   -- this part is usually the same in all reconfigurations
-  restCl : PrClause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ++ cl.c3 ;
+  restCl : PrClause -> Str = \cl -> cl.v.p3 ++ cl.adj ++ cl.obj1 ++ cl.obj2 ++ cl.adv ++ cl.ext ;
 
 
   addObj2VP : PrVerbPhrase -> (Agr => Str) -> PrVerbPhrase = \vp,obj -> vp ** {
