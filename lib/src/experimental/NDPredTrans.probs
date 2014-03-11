@@ -65312,4 +65312,7 @@ perfect_Chunk	5.751177721092363e-4
 perfect_neg_Chunk	5.751177721092363e-4
 past_perfect_Chunk	5.751177721092363e-4
 past_perfect_neg_Chunk	5.751177721092363e-4
-
+SFullstop		0.9
+SQuestmark		0.06
+SExclmark		0.01
+SUnmarked		0.03

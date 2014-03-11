@@ -12,5 +12,14 @@ concrete NDTransFin of NDTrans =
 flags 
   literal=Symb ;
 
+lincat
+  TransUnit = {s : Str} ;
+
+lin
+  SFullstop p = {s = p.s ++ "."} ;
+  SQuestmark p = {s = p.s ++ "?"} ;
+  SExclmark p = {s = p.s ++ "!"} ;
+  SUnmarked p = {s = p.s} ;
+
 }
 
