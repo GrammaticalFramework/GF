@@ -11,5 +11,13 @@ concrete NDTransChi of NDTrans =
 flags 
   literal=Symb ;
 
+lincat
+  TransUnit = {s : Str} ;
+
+lin
+  SFullstop p = {s = p.s ++ fullstop_s} ;
+  SQuestmark p = {s = p.s ++ questmark_s} ;
+  SExclmark p = {s = p.s ++ exclmark_s} ;
+  SUnmarked p = {s = p.s} ;
 }
 
