@@ -68,7 +68,7 @@ setupWeb gf args dest pkg lbi =
       where
         tmp_dir = gfo_dir</>tmp
         cmd = gf++" -make -s -optimize-pgf --gfo-dir="++tmp_dir++
-              " --gf-lib-path=dist"</>"build"</>"rgl"++
+              " --gf-lib-path="++buildDir lbi </> "rgl"++
            -- " --output-dir="++grammars_dir++  -- has no effect?!
               " "++src
 
