@@ -68,7 +68,7 @@ mkProbabilities pgf probs =
           where
             deflt = case length [f | (Nothing,f) <- pfs] of
                       0 -> 0
-                      n -> (1 - sum [d | (Just d,f) <- pfs]) / fromIntegral n
+                      n -> max 0 ((1 - sum [d | (Just d,f) <- pfs]) / fromIntegral n)
 
 -- | Returns the default even distibution.
 defaultProbabilities :: PGF -> Probabilities
