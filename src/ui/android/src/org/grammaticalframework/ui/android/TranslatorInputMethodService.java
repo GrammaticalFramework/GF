@@ -3,16 +3,12 @@ package org.grammaticalframework.ui.android;
 import android.inputmethodservice.InputMethodService;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
-import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class TranslatorInputMethodService extends InputMethodService 
@@ -437,7 +433,6 @@ public class TranslatorInputMethodService extends InputMethodService
                 mCompletions = 
                 	mTranslator.lookupWordPrefix(mComposing.toString());
                 setSuggestions(mCompletions, true, true);
-                Log.d("KEYBOARD", mComposing.toString());
             } else {
                 setSuggestions(null, false, false);
             }
