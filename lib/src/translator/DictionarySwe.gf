@@ -31743,7 +31743,7 @@ lin lawyer_N = mkN "advokat" "advokater" ; -- SaldoWN
 lin lawyerbush_N = variants {} ;
 lin lax_A = mkA "släpphänt" "släpphänt" ; -- comment=6
 lin laxative_A = variants {} ;
-lin laxative_N = mkN "laxermedel" neutrum | mkN "laxermedel" neutrum ; -- SaldoWN -- comment=2
+lin laxative_N = mkN "laxermedel" neutrum ; -- SaldoWN -- comment=2
 lin laxity_N = variants {} ;
 lin laxness_N = variants {} ;
 lin lay_A = mkA "täck" ; -- comment=4
@@ -31803,7 +31803,7 @@ lin lead_to_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"
 lin lead_up_V = mkV "resulterar" ; -- comment=13
 lin leaded_A = variants {} ;
 lin leaden_A = mkA "matt" ; -- comment=5
-lin leader_N = mkN "ledare" utrum | mkN "ledare" utrum ; -- SaldoWN
+lin leader_N = mkN "ledare" utrum ; -- SaldoWN
 lin leaderless_A = variants {} ;
 lin leadership_N = mkN "ledarskap" neutrum | mkN "ledning"  ; -- SaldoWN -- comment=2
 lin leading_N = mkN "ledande" ;
