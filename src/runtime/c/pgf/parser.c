@@ -2532,7 +2532,9 @@ pgf_morpho_iter(PgfProductionIdx* idx,
 
 		PgfCId lemma = entry->papp->fun->absfun->name;
 		GuString analysis = entry->ccat->cnccat->labels[entry->lin_idx];
-		prob_t prob = entry->papp->fun->absfun->ep.prob;
+		
+		prob_t prob = entry->ccat->cnccat->abscat->prob +
+		              entry->papp->fun->absfun->ep.prob;
 		callback->callback(callback,
 						   lemma, analysis, prob, err);
 		if (!gu_ok(err))

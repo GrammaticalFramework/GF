@@ -1515,7 +1515,7 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
 	state.funcs = &pgf_bracket_lin_funcs;
 	state.stack = gu_new_buf(PyObject*, tmp_pool);
 	state.list  = list;
-	pgf_lzr_linearize(self->concr, ctree, 0, &state.funcs);
+	pgf_lzr_linearize(self->concr, ctree, 0, &state.funcs, tmp_pool);
 
 	gu_pool_free(tmp_pool);
 

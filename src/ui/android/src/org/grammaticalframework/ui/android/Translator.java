@@ -324,28 +324,16 @@ public class Translator {
     	return getSourceConcr().lookupMorpho(sentence);
     }
 
-    private static class WordProb implements Comparable<WordProb> {
-    	String word;
-    	double prob;
-
-		@Override
-		public int compareTo(WordProb another) {
-			return Double.compare(prob, another.prob);
-		}
-    }
-
     public CompletionInfo[] lookupWordPrefix(String prefix) {
-    	PriorityQueue<WordProb> queue = new PriorityQueue<WordProb>(); 
+    	PriorityQueue<FullFormEntry> queue = 
+    		new PriorityQueue<FullFormEntry>(500, new Comparator<FullFormEntry>() {
+				@Override
+				public int compare(FullFormEntry lhs, FullFormEntry rhs) {
+					return Double.compare(lhs.getProb(), rhs.getProb());
+				}
+			});
     	for (FullFormEntry entry : getSourceConcr().lookupWordPrefix(prefix)) {
-    		WordProb wp = new WordProb();
-    		wp.word = entry.getForm();
-    		wp.prob = 0;
-    		
-    		for (MorphoAnalysis an : entry.getAnalyses()) {
-    			wp.prob += an.getProb();
-    		}
-
-    		queue.add(wp);
+    		queue.add(entry);
     		if (queue.size() >= 1000)
     			break;
     	}
@@ -353,7 +341,7 @@ public class Translator {
     	CompletionInfo[] completions = new CompletionInfo[Math.min(queue.size(), 5)+1];
     	completions[0] = new CompletionInfo(0, 0, prefix);
     	for (int i = 1; i < completions.length; i++) {
-    		completions[i] = new CompletionInfo(i,i,queue.poll().word);
+    		completions[i] = new CompletionInfo(i,i,queue.poll().getForm());
     	}
 
     	if (completions.length > 1) {
