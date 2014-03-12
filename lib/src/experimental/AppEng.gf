@@ -1,8 +1,13 @@
 --# -path=.:../translator:../../../examples/phrasebook
 
 concrete AppEng of App =
-    NDTransEng
+    SmallPredEng
+  , ExtensionsEng [CN,NP,AdA,AdV,CompoundCN,AdAdV,UttAdV,ApposNP]
+  , DocumentationEng - [Pol,Tense]
+  , DictionaryEng - [Pol,Tense]
+
   , PhrasebookEng
+
               ** {
 
 flags
