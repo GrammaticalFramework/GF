@@ -171,27 +171,14 @@ oper
      } ;
 
 lin
-  UseAP_none = \a,t,p,v -> mkVP (P.UseAP P.aNone a t p v) ;
   UseAdv_none = \a,t,p,v -> mkVP (P.UseAdv P.aNone a t p v) ;
   UseCN_none  = \a,t,p,v -> mkVP (P.UseCN P.aNone a t p v) ;
   UseNP_none  = \a,t,p,v -> mkVP (P.UseNP a t p v) ;
 
---  QuestCl_none cl = {s = cl.q} ;
+  QuestCl_none cl = {s = cl.q} ;
 
   UseCl_none cl = lin PrS {s = cl.s} ;
---  UseQCl_none cl = lin PrS cl ;
-
-{-
-  QuestVP_none,
-
-
-  QuestIAdv_none,
-  QuestIComp_none,
-
-
-  PrImpSg,
-  PrImpPl
--}
+  UseQCl_none cl = lin PrS cl ;
 
   PredVP_none, PredVP_np, PredVP_v, PredVP_a, PredVP_q, PredVP_s,
   PredVP_np_np, PredVP_np_v, PredVP_np_a, PredVP_np_q, PredVP_np_s
@@ -207,6 +194,12 @@ lin
       q = let qq = v.qq ! (agr2vagr s.a) in qq.p1 ++ appSubjCase s ++ qq.p2 ++ appObjCase o ; 
       } ;
 
+  PredAP_none
+   = \a, t, p, np, ap -> 
+     let cl = P.PredVP P.aNone np (P.UseAP P.aNone a t p ap) in {
+       s = declCl cl ;
+       q = questCl (P.QuestCl P.aNone cl)
+       } ;
 
   Cl_Chunk cl = cl ;
   QCl_Chunk cl = cl ;

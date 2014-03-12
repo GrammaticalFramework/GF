@@ -5,8 +5,7 @@ concrete AppFin of App =
   , ExtensionsFin [CN,NP,AdA,AdV,CompoundCN,AdAdV,UttAdV,ApposNP]
   , DocumentationFin - [Pol,Tense]
   , DictionaryFin - [Pol,Tense]
-
-  , PhrasebookFin
+  , PhrasebookFin - [open_A]
 
               ** {
 

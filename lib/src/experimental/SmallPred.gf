@@ -46,7 +46,7 @@ fun
 
 --  ComplV2_none : PrVP_np -> NP -> PrVP_none ;
 
-  UseAP_none : Ant -> Tense -> Pol -> PrAP_none -> PrVP_none ;
+--  UseAP_none : Ant -> Tense -> Pol -> PrAP_none -> PrVP_none ;
 
   UseAdv_none : Ant -> Tense -> Pol -> PrAdv_none -> PrVP_none ;
 
@@ -78,23 +78,17 @@ fun
   Pred2VP_np_s : NP -> PrVP_s -> NP -> PrCl_none ;
   Pred2VP_np_q : NP -> PrVP_q -> NP -> PrCl_none ;
 
+  PredAP_none : Ant -> Tense -> Pol -> NP -> PrAP_none -> PrCl_none ;
+
   QuestVP_none : IP -> PrVP_none -> PrQCl_none ;
 
   QuestCl_none : PrCl_none -> PrQCl_none ;
-
-  QuestIAdv_none : IAdv -> PrCl_none -> PrQCl_none ;
-
-  QuestIComp_none : Ant -> Tense -> Pol -> IComp -> NP  -> PrQCl_none ; -- where is she
 
   UseCl_none : PrCl_none -> PrS ;
 
   UseQCl_none : PrQCl_none -> PrS ;
 
   UttPrS  : PrS -> Utt ;
-
-  PrImpSg : PrVP_none -> Utt ;
-  PrImpPl : PrVP_none -> Utt ;  
-
 
 ---- Lift
 
