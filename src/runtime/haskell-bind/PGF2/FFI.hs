@@ -2,7 +2,7 @@
 
 module PGF2.FFI where
 
-import Foreign.C
+--import Foreign.C
 import Foreign.C.String
 import Foreign.Ptr
 import Foreign.ForeignPtr
