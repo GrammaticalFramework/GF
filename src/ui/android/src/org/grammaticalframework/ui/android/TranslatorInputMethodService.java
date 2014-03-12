@@ -18,7 +18,8 @@ public class TranslatorInputMethodService extends InputMethodService
     private CompletionsView mCandidateView;
     private CompletionInfo[] mCompletions;
     
-    private StringBuilder mComposing = new StringBuilder();
+    private StringBuilder mComposingText = new StringBuilder();
+    private StringBuilder mComposingWord = new StringBuilder();
     private boolean mPredictionOn;
     private boolean mCompletionOn;
     private boolean mCapsLock;
@@ -78,7 +79,8 @@ public class TranslatorInputMethodService extends InputMethodService
 
         // Reset our state.  We want to do this even if restarting, because
         // the underlying state of the text editor could have changed in any way.
-        mComposing.setLength(0);
+        mComposingText.setLength(0);
+        mComposingWord.setLength(0);
         updateCandidates();
 
         if (!restarting) {
@@ -182,7 +184,8 @@ public class TranslatorInputMethodService extends InputMethodService
         super.onFinishInput();
         
         // Clear current composing text and candidates.
-        mComposing.setLength(0);
+        mComposingText.setLength(0);
+        mComposingWord.setLength(0);
         updateCandidates();
         
         // We only hide the candidates window when finishing input on
@@ -217,9 +220,10 @@ public class TranslatorInputMethodService extends InputMethodService
         
         // If the current selection in the text view changes, we should
         // clear whatever candidate text we have.
-        if (mComposing.length() > 0 && (newSelStart != candidatesEnd
-                || newSelEnd != candidatesEnd)) {
-            mComposing.setLength(0);
+        if (mComposingText.length() + mComposingWord.length() > 0 && 
+        	(newSelStart != candidatesEnd || newSelEnd != candidatesEnd)) {
+            mComposingText.setLength(0);
+            mComposingWord.setLength(0);
             updateCandidates();
             InputConnection ic = getCurrentInputConnection();
             if (ic != null) {
@@ -260,13 +264,13 @@ public class TranslatorInputMethodService extends InputMethodService
             c = c & KeyCharacterMap.COMBINING_ACCENT_MASK;
         }
         
-        if (mComposing.length() > 0) {
-            char accent = mComposing.charAt(mComposing.length() -1 );
-            int composed = KeyEvent.getDeadChar(accent, c);
+        if (mComposingWord.length() > 0) {
+            char accent   = mComposingWord.charAt(mComposingWord.length()-1);
+            int  composed = KeyEvent.getDeadChar(accent, c);
 
             if (composed != 0) {
                 c = composed;
-                mComposing.setLength(mComposing.length()-1);
+                mComposingWord.setLength(mComposingWord.length()-1);
             }
         }
         
@@ -294,7 +298,7 @@ public class TranslatorInputMethodService extends InputMethodService
                 // Special handling of the delete key: if we currently are
                 // composing text for the user, we want to modify that instead
                 // of let the application to the delete itself.
-                if (mComposing.length() > 0) {
+                if (mComposingText.length() + mComposingWord.length() > 0) {
                     onKey(TranslatorKeyboard.KEYCODE_DELETE, null);
                     return true;
                 }
@@ -317,9 +321,11 @@ public class TranslatorInputMethodService extends InputMethodService
      * Helper function to commit any text being composed in to the editor.
      */
     private void commitTyped(InputConnection inputConnection) {
-        if (mComposing.length() > 0) {
-            inputConnection.commitText(mComposing, mComposing.length());
-            mComposing.setLength(0);
+        if (mComposingText.length() + mComposingWord.length() > 0) {
+        	String s = getComposingString();
+            inputConnection.commitText(s, s.length());
+            mComposingText.setLength(0);
+            mComposingWord.setLength(0);
             updateCandidates();
         }
     }
@@ -368,7 +374,7 @@ public class TranslatorInputMethodService extends InputMethodService
             mTranslator.setSourceLanguage(newSource);
             handleChangeSourceLanguage(newSource);
         } else if (primaryCode == TranslatorKeyboard.KEYCODE_TARGET_LANGUAGE) {
-        	String translation = mTranslator.translate(mComposing.toString());
+        	String translation = mTranslator.translate(mComposingText.toString());
         	getCurrentInputConnection().commitText(translation, 1);
             return;
         }  else if (primaryCode < TranslatorKeyboard.KEYCODE_TARGET_LANGUAGE &&
@@ -403,8 +409,18 @@ public class TranslatorInputMethodService extends InputMethodService
         		getCurrentInputConnection().performEditorAction(mActionId & EditorInfo.IME_MASK_ACTION);
         	else
         		handleCharacter(primaryCode, keyCodes);
-        } else if (primaryCode == ' ' && mComposing.length() == 0) {
-        	getCurrentInputConnection().commitText(" ", 1);
+        } else if (primaryCode == ' ') {
+        	if (mComposingText.length() + mComposingWord.length() == 0)
+        		getCurrentInputConnection().commitText(" ", 1);
+        	else if (mComposingWord.length() > 0) {
+        		mComposingText.append(mComposingWord);
+        		mComposingText.append(' ');
+        		mComposingWord.setLength(0);
+        		getCurrentInputConnection().setComposingText(getComposingString(), 1);
+        	} else {
+        		mComposingText.append(' ');
+        		getCurrentInputConnection().setComposingText(getComposingString(), 1);
+        	}
         } else {
             handleCharacter(primaryCode, keyCodes);
         }
@@ -414,7 +430,7 @@ public class TranslatorInputMethodService extends InputMethodService
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
         ic.beginBatchEdit();
-        if (mComposing.length() > 0) {
+        if (mComposingText.length() > 0) {
             commitTyped(ic);
         }
         ic.commitText(text, 0);
@@ -429,9 +445,9 @@ public class TranslatorInputMethodService extends InputMethodService
      */
     private void updateCandidates() {
         if (!mCompletionOn) {
-            if (mComposing.length() > 1) {
+            if (mComposingWord.length() > 1) {
                 mCompletions = 
-                	mTranslator.lookupWordPrefix(mComposing.toString());
+                	mTranslator.lookupWordPrefix(mComposingWord.toString());
                 setSuggestions(mCompletions, true, true);
             } else {
                 setSuggestions(null, false, false);
@@ -452,14 +468,33 @@ public class TranslatorInputMethodService extends InputMethodService
     }
     
     private void handleBackspace() {
-        final int length = mComposing.length();
-        if (length > 1) {
-            mComposing.delete(length - 1, length);
-            getCurrentInputConnection().setComposingText(mComposing, 1);
+        int wordLength = mComposingWord.length();
+        int textLength = mComposingText.length();
+        if (wordLength > 1) {
+        	mComposingWord.delete(wordLength - 1, wordLength);
+            getCurrentInputConnection().setComposingText(getComposingString(), 1);
             updateCandidates();
-        } else if (length > 0) {
-            mComposing.setLength(0);
-            getCurrentInputConnection().commitText("", 0);
+        } else if (wordLength > 0) {
+            mComposingWord.setLength(0);
+            getCurrentInputConnection().setComposingText(getComposingString(), 1);
+            updateCandidates();
+        } else if (textLength > 0) {
+        	if (mComposingText.charAt(textLength - 1) == ' ') {
+	        	mComposingText.delete(textLength - 1, textLength);
+	            getCurrentInputConnection().setComposingText(getComposingString(), 1);
+        	} else {
+        		mComposingText.delete(textLength - 1, textLength);
+        		textLength--;
+        		int index = mComposingText.lastIndexOf(" ");
+        		if (index == -1) {
+        			mComposingWord.append(mComposingText.toString());
+        			mComposingText.setLength(0);
+        		} else {
+        			mComposingWord.append(mComposingText.substring(index+1, textLength));
+        			mComposingText.delete(index+1, textLength);
+        		}
+        		getCurrentInputConnection().setComposingText(getComposingString(), 1);
+        	}
             updateCandidates();
         } else {
             keyDownUp(KeyEvent.KEYCODE_DEL);
@@ -488,25 +523,29 @@ public class TranslatorInputMethodService extends InputMethodService
             mSymbolsPage1Keyboard.setShifted(false);
         }
     }
-    
+
+    private String getComposingString() {
+    	return mComposingText.toString() + mComposingWord.toString();
+    }
+
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         if (keyCodes.length > 0 && keyCodes[0] > 0) {
 	        for (int i = 0; i < keyCodes.length && keyCodes[i] > 0; i++) {
 	        	int code = keyCodes[i];
 	        	if (mInputView.isShifted())
 	                code = Character.toUpperCase(code);
-	        	mComposing.append((char) code);
+	        	mComposingWord.append((char) code);
 	        }
         } else {
         	if (mInputView.isShifted())
                 primaryCode = Character.toUpperCase(primaryCode);
-        	mComposing.append((char) primaryCode);
+        	mComposingWord.append((char) primaryCode);
         }
 
         if (primaryCode == 10)
         	commitTyped(getCurrentInputConnection());
         else
-        	getCurrentInputConnection().setComposingText(mComposing, 1);
+        	getCurrentInputConnection().setComposingText(getComposingString(), 1);
         updateShiftKeyState(getCurrentInputEditorInfo());
 
         if (mPredictionOn) {
@@ -586,8 +625,8 @@ public class TranslatorInputMethodService extends InputMethodService
             if (mCompletionOn)
             	getCurrentInputConnection().commitCompletion(ci);
             else {
-            	mComposing.setLength(0);
-            	mComposing.append(ci.getText());
+            	mComposingWord.setLength(0);
+            	mComposingWord.append(ci.getText());
             	commitTyped(getCurrentInputConnection());
             }
 
