@@ -140,10 +140,20 @@ function sameOrigin(url) {
     return hasPrefix(a.href,location.protocol+"//"+location.host+"/");
 }
 
+/*
 // Use AJAX when possible, fallback to JSONP
 function http_get_json(url,cont,errorcallback) {
     if(sameOrigin(url)) ajax_http_get_json(url,cont,errorcallback);
     else jsonpf(url,cont,errorcallback);
+}
+*/
+
+// For better error handling, always use AJAX, don't fallback to JSONP
+// Cross-origin requests are allowed by the PGF service and are supported in
+// all modern browsers.
+// See http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+function http_get_json(url,cont,errorcallback) {
+    ajax_http_get_json(url,cont,errorcallback);
 }
 
 /* --- URL construction ----------------------------------------------------- */
