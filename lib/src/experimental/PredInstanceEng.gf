@@ -10,28 +10,25 @@ instance PredInstanceEng of PredInterface - [
 
 oper
 
-  PrVerbPhrase = BasePrVerbPhrase ** {qforms : VAgr => Str * Str} ;
-  PrClause = BasePrClause ** {qforms : Str * Str} ;
+-- add contracted verb forms and forms for question
+
+  PrVerbPhrase = BasePrVerbPhrase ** {vc : VAgr => Str * Str * Str ; qforms : VAgr => Str * Str} ;
+  PrClause = BasePrClause ** {vc : Str * Str * Str ; qforms : Str * Str} ;
 
   initPrVerbPhrase : PrVerbPhrase = initBasePrVerbPhrase ** {
+    vc : VAgr => Str * Str * Str  = \\_ => <[],[],[]> ;
     qforms = \\agr => <[],[]> ;
     } ;
 
   initPrVerbPhraseV : 
        {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> PrVerbPhrase = 
     \a,t,p,v -> initBasePrVerbPhraseV a t p v ** {
+    vc   = \\agr => tenseVContracted (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
     qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v
     } ;
  
-  initPrVerbPhraseVContracted : 
-    {s : Str ; a : Anteriority} -> {s : Str ; t : STense} -> {s : Str ; p : Polarity} -> PrVerb -> PrVerbPhrase = 
-    \a,t,p,v -> initPrVerbPhraseV a t p v ** {
-    v   = \\agr => tenseVContracted (a.s ++ t.s ++ p.s) t.t a.a p.p active agr v ;
-    qforms = \\agr => qformsV (a.s ++ t.s ++ p.s) t.t a.a p.p agr v
-    } ;
-
-
   initPrClause : PrClause = initBasePrClause ** {
+    vc = <[],[],[]> ; 
     qforms = <[],[]> ;
     } ; 
 
@@ -39,6 +36,7 @@ oper
                  PrVerbPhrase =
     \a,t,p -> initPrVerbPhrase ** {
     v   = \\agr => tenseCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
+    vc  = \\agr => tenseCopulaC (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     inf = \\vt => tenseInfCopula a.s a.a p.p vt ;
     imp = \\n => tenseImpCopula p.s p.p n ;
     adV = negAdV p ;
@@ -192,7 +190,9 @@ oper
     in <verb.p1, verb.p2> ;                     -- is , not  ---- TODO isn't , 
 
   tenseCopula : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \s,t,a,p,agr ->
-    be_Aux s t a p agr ;
+    be_AuxL s t a p agr ;
+  tenseCopulaC : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \s,t,a,p,agr ->
+    be_AuxC s t a p agr ;
   tenseInfCopula : Str -> Anteriority -> Polarity -> VVType -> Str = \s,a,p,vt ->
     tenseInfV s a p Act be_V vt ;
   tenseImpCopula : Str -> Polarity -> ImpType -> Str = \s,p,n ->
@@ -232,7 +232,6 @@ oper
         _              => case p of {
           Pos          => <[],                   sta ++ v.s ! VVF vt,             []> ;                 -- this is the deviating case
           Neg          => <do_Aux       vt Pos,  not_Str p,                       sta ++ v.s ! VVF VInf>
-----slow                | <do_Aux       vt Neg,  [],                              sta ++ v.s ! VVF VInf>
           }
        } ;
 
@@ -261,12 +260,12 @@ oper
           Neg          => <do_Aux       vt.p1 p,    [],                              sta ++ v.s ! VVF VInf>
           }
        } ;
-    <Pres|Past, Anter> => <have_AuxC    vt.p1 p,    [],                              sta ++ v.s ! VVF VPPart>
-                        | <have_AuxC    vt.p1 Pos,  not_Str p,                       sta ++ v.s ! VVF VPPart> ; 
-    <Fut|Cond,  Simul> => <will_AuxC    vt.p1 p,    [],                              sta ++ v.s ! VVF VInf>
-                        | <will_AuxC    vt.p1 Pos,  not_Str p,                       sta ++ v.s ! VVF VInf> ; 
+    <Pres|Past, Anter> => <have_AuxC    vt.p1 p,    [],                              sta ++ v.s ! VVF VPPart> ;
+----                        | <have_AuxC    vt.p1 Pos,  not_Str p,                       sta ++ v.s ! VVF VPPart> ; 
+    <Fut|Cond,  Simul> => <will_AuxC    vt.p1 p,    [],                              sta ++ v.s ! VVF VInf> ;
+----                        | <will_AuxC    vt.p1 Pos,  not_Str p,                       sta ++ v.s ! VVF VInf> ; 
     <Fut|Cond,  Anter> => <will_AuxC    vt.p1 p,    have_Aux VInf Pos,               sta ++ v.s ! VVF VPPart>
-                        | <will_AuxC    vt.p1 Pos,  not_Str p ++ have_Aux VInf Pos,  sta ++ v.s ! VVF VPPart> 
+----                        | <will_AuxC    vt.p1 Pos,  not_Str p ++ have_Aux VInf Pos,  sta ++ v.s ! VVF VPPart> 
     } ;
 
   tensePassV : Str -> STense -> Anteriority -> Polarity -> VAgr -> PrVerb -> Str * Str * Str = \sta,t,a,p,agr,v -> 
@@ -313,8 +312,7 @@ oper
 
 ----- dangerous variants for PMCFG generation - keep apart as long as possible
   be_Aux : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \sta,t,a,p,agr -> 
-    be_AuxL sta t a p agr
-  | be_AuxC sta t a p agr ; 
+    be_AuxL sta t a p agr ;
 
   be_AuxL : Str -> STense -> Anteriority -> Polarity -> VAgr -> Str * Str * Str = \sta,t,a,p,agr -> 
     let 
@@ -340,26 +338,28 @@ oper
       <Pres,Simul,Pos,VASgP3> => <Predef.BIND ++ "'s" ++ sta,  [],    []> ;
       <Pres,Simul,Pos,VASgP1> => <Predef.BIND ++ "'m" ++ sta,  [],    []> ;
       <Pres,Simul,Pos,VAPl>   => <Predef.BIND ++ "'re" ++ sta, [],    []> ;
-      <Pres,Simul,Neg,VASgP3> => <Predef.BIND ++ "'s" ++ sta,  "not", []>
-                               | <"isn't" ++ sta,              [],    []> ;
+      <Pres,Simul,Neg,VASgP3> => ---- <Predef.BIND ++ "'s" ++ sta,  "not", []>
+                                 <"isn't" ++ sta,              [],    []> ;
       <Pres,Simul,Neg,VASgP1> => <Predef.BIND ++ "'m" ++ sta,  "not", []> ;
-      <Pres,Simul,Neg,VAPl>   => <Predef.BIND ++ "'re" ++ sta, "not", []>
-                               | <"aren't" ++ sta,             [],    []> ;
+      <Pres,Simul,Neg,VAPl>   => ---- <Predef.BIND ++ "'re" ++ sta, "not", []>
+                                 <"aren't" ++ sta,             [],    []> ;
       <Past,Simul,Pos,VAPl>   => <"were" ++ sta,               [],    []> ; 
       <Past,Simul,Neg,VAPl>   => <"weren't" ++ sta,            [],    []> ;
       <Past,Simul,Neg,_>      => <"wasn't" ++ sta,            [],    []> ;
       _ => beV
       } ;
 
-  declCl       : PrClause -> Str = \cl -> cl.subj ++ cl.v.p1 ++ cl.adV ++ cl.v.p2 ++ restCl cl ;
+  declCl       : PrClause -> Str = \cl -> cl.subj ++ cl.v.p1  ++ cl.adV ++ cl.v.p2  ++ restCl cl ;
   declSubordCl : PrClause -> Str = declCl ;
   declInvCl    : PrClause -> Str = declCl ;
+
+  declClContracted : PrClause -> Str = \cl -> cl.subj ++ cl.vc.p1 ++ cl.adV ++ cl.vc.p2 ++ restCl cl ; -- contracted forms
 
   questSubordCl : PrQuestionClause -> Str = \cl -> 
     let 
       rest = cl.subj ++ cl.adV ++ cl.v.p1 ++ cl.v.p2 ++ restCl cl 
     in case cl.focType of {
-      NoFoc   => "if" ++ cl.foc ++ rest ;  -- om she sleeps
+      NoFoc   => "if" ++ cl.foc ++ rest ;  -- if she sleeps
       FocObj  =>         cl.foc ++ rest ;  -- who she loves / why she sleeps
       FocSubj =>         cl.foc ++ rest    -- who loves her
       } ;

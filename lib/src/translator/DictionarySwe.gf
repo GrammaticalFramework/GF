@@ -15712,7 +15712,7 @@ lin descent_N = mkN "börd" | mkN "överfall" neutrum ; -- SaldoWN -- comment=15
 lin describable_A = mkA "beskrivbar" ;
 lin describe_V = mkV "beskriva" "beskrev" "beskrivit" ; -- SaldoWN
 lin describe_V2 = mkV2 "beskriva" "beskrev" "beskrivit" | dirV2 (partV (mkV "kallar")"ut") ; -- SaldoWN
-lin describe_VS = mkVS (mkV "beskriva" "beskrev" "beskrivit" ; -- SaldoWN -- status=guess, src=wikt
+lin describe_VS = mkVS (mkV "beskriva" "beskrev" "beskrivit") ; -- SaldoWN 
 lin description_N = mkN "slag" neutrum; -- comment=7
 lin descriptive_A = mkA "beskrivande" ; -- comment=2
 lin descriptivism_N = variants {} ;
@@ -15766,7 +15766,7 @@ lin desire_V2 = mkV2 (mkV "begära") | mkV2 (mkV "åtrå"); -- status=guess, src
 lin desirous_A = mkA "lysten" "lystet" ; -- SaldoWN
 lin desist_V = mkV "avstå" "avstod" "avstått" ; -- comment=2
 lin desk_N = mkN "skolbänk" ; -- SaldoWN
-lin desktop_N = mkN "c-p" ; -- status=guess
+lin desktop_N = mkN "PC" ; 
 lin desmid_N = variants {} ;
 lin desmond_PN = variants {} ;
 lin desolate_A = mkA "öde" ; -- comment=5
