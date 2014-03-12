@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.CompletionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class CompletionsView extends View {
     private static final int OUT_OF_BOUNDS = -1;
 
     private TranslatorInputMethodService mService;
-    private List<String> mSuggestions;
+    private CompletionInfo[] mSuggestions;
     private int mSelectedIndex;
     private int mTouchX = OUT_OF_BOUNDS;
     private Drawable mSelectionHighlight;
@@ -153,7 +154,7 @@ public class CompletionsView extends View {
             }
         }
         int x = 0;
-        final int count = mSuggestions.size(); 
+        final int count = mSuggestions.length; 
         final int height = getHeight();
         final Rect bgPadding = mBgPadding;
         final Paint paint = mPaint;
@@ -164,7 +165,7 @@ public class CompletionsView extends View {
         final int y = (int) (((height - mPaint.getTextSize()) / 2) - mPaint.ascent());
 
         for (int i = 0; i < count; i++) {
-            String suggestion = mSuggestions.get(i);
+            String suggestion = mSuggestions[i].getText().toString();
             float textWidth = paint.measureText(suggestion);
             final int wordWidth = (int) textWidth + X_GAP * 2;
 
@@ -222,11 +223,11 @@ public class CompletionsView extends View {
     }
     
     @SuppressLint("WrongCall")
-	public void setSuggestions(List<String> suggestions, boolean completions,
+	public void setSuggestions(CompletionInfo[] suggestions, boolean completions,
             boolean typedWordValid) {
         clear();
         if (suggestions != null) {
-            mSuggestions = new ArrayList<String>(suggestions);
+            mSuggestions = suggestions;
         }
         mTypedWordValid = typedWordValid;
         scrollTo(0, 0);
@@ -238,7 +239,7 @@ public class CompletionsView extends View {
     }
 
     public void clear() {
-        mSuggestions = EMPTY_LIST;
+        mSuggestions = new CompletionInfo[0];
         mTouchX = OUT_OF_BOUNDS;
         mSelectedIndex = -1;
         invalidate();
@@ -283,22 +284,6 @@ public class CompletionsView extends View {
             break;
         }
         return true;
-    }
-    
-    /**
-     * For flick through from keyboard, call this method with the x coordinate of the flick 
-     * gesture.
-     * @param x
-     */
-    @SuppressLint("WrongCall")
-	public void takeSuggestionAt(float x) {
-        mTouchX = (int) x;
-        // To detect candidate
-        onDraw(null);
-        if (mSelectedIndex >= 0) {
-            mService.pickSuggestionManually(mSelectedIndex);
-        }
-        invalidate();
     }
 
     private void removeHighlight() {

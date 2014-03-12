@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.inputmethod.CompletionInfo;
 
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -332,7 +334,7 @@ public class Translator {
 		}
     }
 
-    public List<String> lookupWordPrefix(String prefix) {
+    public CompletionInfo[] lookupWordPrefix(String prefix) {
     	PriorityQueue<WordProb> queue = new PriorityQueue<WordProb>(); 
     	for (FullFormEntry entry : getSourceConcr().lookupWordPrefix(prefix)) {
     		WordProb wp = new WordProb();
@@ -348,13 +350,23 @@ public class Translator {
     			break;
     	}
 
-    	List<String> list = new ArrayList<String>();
-    	while (list.size() < 5 && queue.size() > 0) {
-    		list.add(queue.poll().word);
+    	CompletionInfo[] completions = new CompletionInfo[Math.min(queue.size(), 5)+1];
+    	completions[0] = new CompletionInfo(0, 0, prefix);
+    	for (int i = 1; i < completions.length; i++) {
+    		completions[i] = new CompletionInfo(i,i,queue.poll().word);
     	}
-    	Collections.sort(list);
 
-    	return list;
+    	if (completions.length > 1) {
+	    	Arrays.sort(completions, 1, completions.length-1, new Comparator<CompletionInfo>() {
+				@Override
+				public int compare(CompletionInfo arg0, CompletionInfo arg1) {
+					// TODO Auto-generated method stub
+					return ((String) arg0.getText()).compareTo((String) arg1.getText());
+				}
+	    	});
+    	}
+
+    	return completions;
     }
 
 	private PGF getGrammar() {

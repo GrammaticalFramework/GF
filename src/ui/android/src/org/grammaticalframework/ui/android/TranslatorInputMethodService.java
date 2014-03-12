@@ -241,12 +241,7 @@ public class TranslatorInputMethodService extends InputMethodService
                 return;
             }
             
-            List<String> stringList = new ArrayList<String>();
-            for (int i = 0; i < completions.length; i++) {
-                CompletionInfo ci = completions[i];
-                if (ci != null) stringList.add(ci.getText().toString());
-            }
-            setSuggestions(stringList, true, true);
+            setSuggestions(completions, true, true);
         }
     }
     
@@ -438,11 +433,10 @@ public class TranslatorInputMethodService extends InputMethodService
      */
     private void updateCandidates() {
         if (!mCompletionOn) {
-            if (mComposing.length() > 0) {
-                List<String> list = 
+            if (mComposing.length() > 1) {
+                mCompletions = 
                 	mTranslator.lookupWordPrefix(mComposing.toString());
-                list.add(0, mComposing.toString());
-                setSuggestions(list, true, true);
+                setSuggestions(mCompletions, true, true);
                 Log.d("KEYBOARD", mComposing.toString());
             } else {
                 setSuggestions(null, false, false);
@@ -450,15 +444,15 @@ public class TranslatorInputMethodService extends InputMethodService
         }
     }
     
-    public void setSuggestions(List<String> suggestions, boolean completions,
+    public void setSuggestions(CompletionInfo[] completions, boolean isCompletions,
             boolean typedWordValid) {
-        if (suggestions != null && suggestions.size() > 0) {
+        if (completions != null && completions.length > 0) {
             setCandidatesViewShown(true);
         } else if (isExtractViewShown()) {
             setCandidatesViewShown(true);
         }
         if (mCandidateView != null) {
-            mCandidateView.setSuggestions(suggestions, completions, typedWordValid);
+            mCandidateView.setSuggestions(completions, isCompletions, typedWordValid);
         }
     }
     
@@ -590,19 +584,22 @@ public class TranslatorInputMethodService extends InputMethodService
     }
     
     public void pickSuggestionManually(int index) {
-        if (mCompletionOn && mCompletions != null && index >= 0
-                && index < mCompletions.length) {
-            CompletionInfo ci = mCompletions[index];
-            getCurrentInputConnection().commitCompletion(ci);
+        if (mCompletions != null && 
+        	index >= 0 && index < mCompletions.length) {
+        	CompletionInfo ci = mCompletions[index];            
+
+            if (mCompletionOn)
+            	getCurrentInputConnection().commitCompletion(ci);
+            else {
+            	mComposing.setLength(0);
+            	mComposing.append(ci.getText());
+            	commitTyped(getCurrentInputConnection());
+            }
+
             if (mCandidateView != null) {
                 mCandidateView.clear();
             }
             updateShiftKeyState(getCurrentInputEditorInfo());
-        } else if (mComposing.length() > 0) {
-            // If we were generating candidate suggestions for the current
-            // text, we would commit one of them here.  But for this sample,
-            // we will just commit the current text.
-            commitTyped(getCurrentInputConnection());
         }
     }
     
