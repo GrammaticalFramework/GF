@@ -17,17 +17,17 @@ module PGF2 (-- * PGF
 
 import Prelude hiding (fromEnum)
 import Control.Exception
-import System.IO
+--import System.IO
 import System.IO.Unsafe
 import PGF2.FFI
 
 import Foreign hiding ( Pool, newPool, unsafePerformIO )
 import Foreign.C
-import Foreign.C.String
-import Foreign.Ptr
+--import Foreign.C.String
+--import Foreign.Ptr
 import Data.Typeable
 import qualified Data.Map as Map
-import qualified Data.ByteString as BS
+--import qualified Data.ByteString as BS
 import Data.IORef
 
  
