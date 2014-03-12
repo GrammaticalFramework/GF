@@ -11969,7 +11969,8 @@ lin companionable_A = mkA "sällskaplig" ; -- comment=2
 lin companionate_A = variants {} ;
 lin companionship_N = mkN "kamratkänsla" ;
 lin companionway_N = variants {} ;
-lin company_N = mkN "bolag" "bolag" | mkN "sällskap" neutrum ; --- sense
+lin company_1_N = mkN "bolag" "bolag" ;
+lin company_2_N = mkN "sällskap" neutrum ;
 lin comparability_N = mkN "likvärdighet" ; -- comment=2
 lin comparable_A = mkA "jämförbar" | mkA "likvärdig"  ; -- SaldoWN -- comment=3
 lin comparative_A = mkA "komparativ" ; -- comment=3
@@ -22283,7 +22284,8 @@ lin forgivingly_Adv = variants {} ;
 lin forgivingness_N = variants {} ;
 lin forgo_V2 = variants {} ;
 lin forint_N = variants {} ;
-lin fork_N = mkN "gaffel" | mkN "vägskäl" neutrum ; -- SaldoWN -- comment=5
+lin fork_1_N = mkN "gaffel" ;
+lin fork_3_N = mkN "vägskäl" neutrum ;
 lin fork_V = mkV "ta" "tar" "ta" "tog" "tagit" "tagen" ; -- comment=5
 lin fork_V2 = dirV2 (partV (mkV "ta" "tar" "ta" "tog" "tagit" "tagen")"ut"); -- comment=4
 lin fork_out_V = mkV "ta" "tar" "ta" "tog" "tagit" "tagen" ; -- comment=5
