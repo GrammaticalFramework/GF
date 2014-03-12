@@ -4,6 +4,7 @@
 #include <gu/mem.h>
 #include <gu/exn.h>
 #include <gu/utf8.h>
+#include <math.h>
 #include <jni.h>
 #ifndef __MINGW32__
 #include <alloca.h>
@@ -504,6 +505,7 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 typedef struct {
 	PgfMorphoCallback fn;
 	jobject analyses;
+	prob_t prob;
 	JNIEnv* env;
 	jmethodID addId;
 	jclass an_class;
@@ -530,6 +532,8 @@ jpgf_collect_morpho(PgfMorphoCallback* self,
 	(*env)->DeleteLocalRef(env, jan);
 	(*env)->DeleteLocalRef(env, janalysis);
 	(*env)->DeleteLocalRef(env, jlemma);
+	
+	callback->prob += exp(-prob);
 }
 
 JNIEXPORT jobject JNICALL
@@ -548,7 +552,7 @@ Java_org_grammaticalframework_pgf_Concr_lookupMorpho(JNIEnv* env, jobject self, 
 	
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 
-	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, env, addId, an_class, an_constrId };
+	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, 0, env, addId, an_class, an_constrId };
 	pgf_lookup_morpho(get_ref(env, self), j2gu_string(env, sentence, tmp_pool),
 	                  &callback.fn, err);
 	if (!gu_ok(err)) {
@@ -604,21 +608,10 @@ Java_org_grammaticalframework_pgf_FullFormIterator_fetchFullFormEntry
 
 	GuString form = pgf_fullform_get_string(entry);
 
-	jclass entry_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/FullFormEntry");
-	jmethodID entry_constrId = (*env)->GetMethodID(env, entry_class, "<init>", "(Ljava/lang/String;JLorg/grammaticalframework/pgf/Concr;)V");
-	jobject jentry = (*env)->NewObject(env, entry_class, entry_constrId, gu2j_string(env,form), p2l(entry), jconcr);
-
-	return jentry;
-}
-
-JNIEXPORT jobject JNICALL
-Java_org_grammaticalframework_pgf_FullFormEntry_getAnalyses
-  (JNIEnv* env, jobject self)
-{
 	jclass list_class = (*env)->FindClass(env, "java/util/ArrayList");
 	jmethodID list_constrId = (*env)->GetMethodID(env, list_class, "<init>", "()V");
 	jobject analyses = (*env)->NewObject(env, list_class, list_constrId);
-	
+
 	jmethodID addId = (*env)->GetMethodID(env, list_class, "add", "(Ljava/lang/Object;)Z");
 
 	jclass an_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/MorphoAnalysis");
@@ -627,8 +620,8 @@ Java_org_grammaticalframework_pgf_FullFormEntry_getAnalyses
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
 
-	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, env, addId, an_class, an_constrId };
-	pgf_fullform_get_analyses(get_ref(env, self), &callback.fn, err);	
+	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, 0, env, addId, an_class, an_constrId };
+	pgf_fullform_get_analyses(entry, &callback.fn, err);
 	if (!gu_ok(err)) {
 		if (gu_exn_caught(err) == gu_type(PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
@@ -641,7 +634,11 @@ Java_org_grammaticalframework_pgf_FullFormEntry_getAnalyses
 
 	gu_pool_free(tmp_pool);
 
-	return analyses;
+	jclass entry_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/FullFormEntry");
+	jmethodID entry_constrId = (*env)->GetMethodID(env, entry_class, "<init>", "(Ljava/lang/String;DLjava/util/List;)V");
+	jobject jentry = (*env)->NewObject(env, entry_class, entry_constrId, gu2j_string(env,form), - log(callback.prob), analyses);
+
+	return jentry;
 }
 
 JNIEXPORT jboolean JNICALL
