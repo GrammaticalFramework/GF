@@ -404,7 +404,7 @@ doParse pgf input mcat mfrom mlimit trie = showJSON $ map makeObj
         PGF.ParseOk trees   -> ["trees".=maybe id take mlimit trees]
                                ++addTrie trie trees
         PGF.TypeError errs  -> jsonTypeErrors errs
-        PGF.ParseIncomplete -> ["incomlete".=True]
+        PGF.ParseIncomplete -> ["incomplete".=True]
         PGF.ParseFailed n   -> ["parseFailed".=n]
 
 addTrie trie trees =
