@@ -1,11 +1,15 @@
 --# -path=.:../translator:../../../examples/phrasebook
 
 abstract App =
-    NDTrans
+    SmallPred
+  , Extensions [CN,NP,AdA,AdV,CompoundCN,AdAdV,UttAdV,ApposNP]
+  , Documentation - [Pol,Tense]
+  , Dictionary - [Pol,Tense]
+
   , Phrasebook
               ** {
 flags
-  startcat=Phr;
+  startcat=Phr ;
 
 fun
   PhrasePhr : Phrase -> Phr ;

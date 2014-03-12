@@ -65288,8 +65288,8 @@ V_np_v_pastpart_Chunk	0.01
 V_np_a_pastpart_Chunk	0.001
 V_np_q_pastpart_Chunk	0.001
 PhrasePhr	0.8
-PhrUtt 		0.19
-PhrChunk 	0.01
+PhrUtt 		0.199
+PhrChunk 	1.0e-6
 OneChunk 	0.8
 PlusChunk 	0.2
 refl_SgP1_Chunk	5.751177721092363e-4
