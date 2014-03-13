@@ -9,6 +9,8 @@ concrete PredEng of Pred =
       QuestVP,
       RelVP,
 
+      UseCN,  -- insert article
+
       UseCl,  -- for contracted forms
 
       QuestIComp  ---- IComp has no parameters in Eng
@@ -38,6 +40,12 @@ lin
     qforms = \\agr => qformsCopula (a.s ++ t.s ++ p.s) t.t a.a p.p agr ;
     } ;
 
+  UseCN x a t p cn = useCopula a t p ** {
+    c1  = cn.c1 ;
+    c2  = cn.c2 ;
+    adj = \\a => case agr2nagr a of {Sg => R.artIndef ++ cn.s ! Sg ; Pl => cn.s ! Pl} ;
+    obj1 = <cn.obj1, defaultAgr> ;
+    } ;
 
   PredVP x np vp = vp ** {
     v    = applyVerb vp (agr2vagr np.a) ;
