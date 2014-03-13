@@ -19605,4 +19605,9 @@ zygomatic_A = mkA "zygomatique";
 zygote_N = mkN "zygote" masculine;
 zymase_N = mkN "zymase" feminine;
 
+lin at_Prep = ParadigmsFre.dative ;
+lin of_Prep = ParadigmsFre.genitive ;
+lin by_Prep = mkPrep "par" ;
+lin as_Prep = mkPrep "comme" ;
+
 }
