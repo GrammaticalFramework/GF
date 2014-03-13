@@ -64,6 +64,7 @@ public class Translator {
         new Language("sv-SE", "Swedish", "AppSwe", R.xml.qwerty), 
         new Language("fi-FI", "Finnish", "AppFin", R.xml.qwerty),
         new Language("fr-FR", "French", "AppFre", R.xml.qwerty),
+        new Language("it-IT", "Italian", "AppIta", R.xml.qwerty),
     };
     // */
 
