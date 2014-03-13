@@ -1,7 +1,7 @@
 concrete RGLBaseFre of RGLBase = 
 
 -- modules in Grammar, excluding Structural, Verb, Sentence, Question
-----  Tense,
+  TenseFre - [TTAnt],
   NounFre - [PPartNP],               -- to be generalized
   AdjectiveFre,
   NumeralFre,
