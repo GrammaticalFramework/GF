@@ -4,7 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="key_height">50dip</dimen>
-    <dimen name="candidate_font_height">16sp</dimen>
+    <dimen name="candidate_font_height">25sp</dimen>
     <dimen name="candidate_vertical_padding">6sp</dimen>
 
 </resources>
