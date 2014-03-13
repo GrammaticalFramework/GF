@@ -3,8 +3,8 @@
 concrete AppFre of App =
     SmallPredFre
   , ExtensionsFre [CN,NP,AdA,AdV,CompoundCN,AdAdV,UttAdV,ApposNP]
-  , DocumentationFre - [Pol,Tense]
-  , DictionaryFre - [Pol,Tense]
+  , DocumentationFre
+  , DictionaryFre
   , PhrasebookFre - [open_A]
 
               ** {
