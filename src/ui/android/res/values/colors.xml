@@ -3,5 +3,5 @@
     <color name="candidate_normal">#FF000000</color>
     <color name="candidate_recommended">#FFE35900</color>
     <color name="candidate_other">#ff808080</color>
-    <color name="candidate_background">#bbffffff</color>
+    <color name="candidate_background">#ffffffff</color>
 </resources>
