@@ -63,6 +63,7 @@ public class Translator {
 	new Language("cmn-Hans-CN", "Chinese", "AppChi", R.xml.qwerty),   
         new Language("sv-SE", "Swedish", "AppSwe", R.xml.qwerty), 
         new Language("fi-FI", "Finnish", "AppFin", R.xml.qwerty),
+        new Language("fr-FR", "French", "AppFre", R.xml.qwerty),
     };
     // */
 
