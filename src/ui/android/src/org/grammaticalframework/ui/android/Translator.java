@@ -320,7 +320,6 @@ public class Translator {
 	}
 
     public List<MorphoAnalysis> lookupMorpho(String sentence) {
-        Log.e(TAG, "lookupMorpho " + getSourceConcr());
     	return getSourceConcr().lookupMorpho(sentence);
     }
 
