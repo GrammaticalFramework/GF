@@ -1,8 +1,9 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:../abstract:../common:../api
 
 concrete LangBul of Lang = 
   GrammarBul,
-  LexiconBul
+  LexiconBul,
+  DocumentationBul
   ** {
 
 flags startcat = Phr ;
