@@ -2,7 +2,8 @@
 
 concrete LangSpa of Lang = 
   GrammarSpa,
-  LexiconSpa
+  LexiconSpa,
+  DocumentationSpa
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
