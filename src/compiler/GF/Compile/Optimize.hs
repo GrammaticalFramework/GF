@@ -191,8 +191,9 @@ mkLinReference gr typ =
                             []     -> Bad "no string"
                             (p:ps) -> mkDefField ty (S trm p)
        Sort s | s == cStr -> return trm
-       QC p -> Bad "no string"
-       RecType rs  -> do
+       QC p       -> Bad "no string"
+       RecType [] -> Bad "no string"
+       RecType rs -> do
          msum (map (\(l,ty) -> mkDefField ty (P trm l)) (sortRec rs))
        _ | Just _ <- isTypeInts typ -> Bad "no string"
        _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
