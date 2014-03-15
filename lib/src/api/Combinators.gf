@@ -33,8 +33,9 @@ incomplete resource Combinators = open Cat, Structural, Constructors in {
       app : N  -> NP ;               -- the bottom
       app : N2 -> NP -> NP ;         -- the successor of x
       app : N3 -> NP -> NP -> NP ;   -- the distance from x to y
+      appCN : CN -> NP -> NP ;         -- the absolute value of x
+      appCNc : CN -> [NP] -> NP ;       -- the greatest common divisor of x , y and z
       app : N2 -> NP -> NP -> NP ;   -- the sum of x and y
-
       app : N2 -> N  -> CN ;         -- set of integers
       app : N2 -> NP -> CN ;         -- divisor of x
       app : N3 -> NP -> NP -> CN ;   -- path from x to y
@@ -120,6 +121,11 @@ incomplete resource Combinators = open Cat, Structural, Constructors in {
            = \n,x -> mkNP the_Art (mkCN n x) ;  --# notminimal
       app : N3 -> NP -> NP -> NP  --# notminimal
            = \n,x,y -> mkNP the_Art (mkCN n x y) ;  --# notminimal
+      appCN : CN -> NP -> NP        --# notminimal ? 
+           = \cn,x -> mkNP (mkNP the_Art cn) (mkAdv possess_Prep x) ; -- mkNP the_Art (PossNP cn x) ;
+      appCNc : CN -> [NP] -> NP      --# notminimal ?
+           = \cn,xs -> let np : NP = mkNP and_Conj xs
+                       in mkNP (mkNP the_Art cn) (mkAdv possess_Prep np) ; -- mkNP the_Art (PossNP cn np) ; 
       app : N2 -> NP -> NP -> NP  --# notminimal
            = \n,x,y -> mkNP the_Art (mkCN n (mkNP and_Conj x y)) ;  --# notminimal
       app : N2 -> N -> CN  --# notminimal
