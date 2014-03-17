@@ -38,6 +38,7 @@ wc.translate=function() {
 	if(e) e.innerHTML=r.prob+"<br>"+r.tree
 	wc.current=i
 	if(wc.p /*&& wc.r.length>1*/) show_picks()
+	if(f.speak.checked) wc.speak(r.text,f.to.value)
     }
 
     function trans(text,i) {
@@ -66,6 +67,15 @@ wc.translate=function() {
     return false;
 }
 
+wc.speak=function(text,lang) {
+    if(wc.speech) {
+	var u=new SpeechSynthesisUtterance(text)
+	u.lang=add_country(alangcode(lang))
+	speechSynthesis.cancel()
+	speechSynthesis.speak(u)
+    }
+}
+
 wc.swap=function() {
     var f=wc.f
     f.input.value=f.output.value;
@@ -88,3 +98,11 @@ wc.try_google=function() {
     w.focus()
 }
 */
+
+function init_speech() {
+    wc.speech=window.speechSynthesis && window.speechSynthesis.getVoices().length>0
+    if(wc.speech) element("speak").style.display="inline"
+}
+
+init_speech()
+setTimeout(init_speech,500) // A hack for Chrome.

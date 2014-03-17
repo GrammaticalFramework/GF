@@ -25,3 +25,17 @@ for(var i in languages) {
 
 function concname(code) { return langname[code] || code; }
 function alangcode(code) { return langcode2[code] || code; }
+
+// Add a country code to the language code
+function add_country(code) {
+    switch(code) {
+    case "en": return "en-US"  // "en-scotland" // or "en-GB"
+    case "sv": return "sv-SE"
+    case "fr": return "fr-FR"
+    case "de": return "de-DE"
+    case "fi": return "fi-FI"
+    case "zh": return "zh-CN"
+    case "hi": return "hi-IN"
+    default: return code
+    }
+}
