@@ -280,7 +280,8 @@ strsFromValue t = case t of
            ]
   VFV ts -> mapM strsFromValue ts >>= return . concat
   VStrs ts -> mapM strsFromValue ts >>= return . concat  
-  _ -> fail "cannot get Str from value"
+
+  _ -> fail ("cannot get Str from value " ++ show t)
 
 vfv vs = case nub vs of
            [v] -> v
