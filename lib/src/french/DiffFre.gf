@@ -29,7 +29,7 @@ instance DiffFre of DiffRomance - [
 
     artDef : Gender -> Number -> Case -> Str = \g,n,c ->
       case <g,n,c> of {
-        <Masc,Sg, CPrep P_de> => pre {"du" ; ["de l'"] / voyelle} ;
+        <Masc,Sg, CPrep P_de> => pre {"du" ; ("de l'" ++ Predef.BIND) / voyelle} ;
         <Masc,Sg, CPrep P_a>  => pre {"au" ; ["à l'"]  / voyelle} ;
         <Masc,Sg, _>    => elisLe ;
         <Fem, Sg, _>    => prepCase c ++ elisLa ;
