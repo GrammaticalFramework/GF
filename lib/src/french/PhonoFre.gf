@@ -20,7 +20,7 @@ oper
   elisLa  = pre {"la" ; ("l'" ++ Predef.BIND) / voyelle} ;
   elisLe  = elision "l" ;
   elisNe  = elision "n" ;
-  elisQue = elision "qu" ;
+  elisQue = elision "qu" ; 
 
 -- The subjunction "si" has a special kind of elision. The rule is
 -- only approximatively correct, for "si" is not really elided before
