@@ -30,7 +30,7 @@ instance DiffFre of DiffRomance - [
     artDef : Gender -> Number -> Case -> Str = \g,n,c ->
       case <g,n,c> of {
         <Masc,Sg, CPrep P_de> => pre {"du" ; ("de l'" ++ Predef.BIND) / voyelle} ;
-        <Masc,Sg, CPrep P_a>  => pre {"au" ; ["à l'"]  / voyelle} ;
+        <Masc,Sg, CPrep P_a>  => pre {"au" ; ("à l'"  ++ Predef.BIND)  / voyelle} ;
         <Masc,Sg, _>    => elisLe ;
         <Fem, Sg, _>    => prepCase c ++ elisLa ;
         <_,   Pl, CPrep P_de> => "des" ;
@@ -168,7 +168,19 @@ instance DiffFre of DiffRomance - [
 
     relPron : Bool => AAgr => Case => Str = \\b,a,c => 
       let
-        lequel = artDef a.g a.n c + quelPron ! a
+        lequel = case <a.g,a.n,c> of {
+        <Masc,Sg, CPrep P_de> => "duquel" ;
+        <Masc,Sg, CPrep P_a>  => "auquel" ;
+        <Masc,Sg, _>    => prepCase c ++ "lequel" ;
+        <Fem, Sg, _>    => prepCase c ++ "laquelle" ;
+        <Fem, Pl, CPrep P_de> => "desquelles" ;
+        <_,   Pl, CPrep P_de> => "desquels" ;
+        <Fem, Pl, CPrep P_a>  => "auxquelles" ;
+        <_,   Pl, CPrep P_a>  => "auxquels" ;
+        <Fem, Pl, _ >   => "lesquelles" ;
+        <_,   Pl, _ >   => "lesquels"
+        } ;
+      ---- artDef a.g a.n c ++ quelPron ! a  ---- doesn't compile properly AR 17/3/2014
       in
       case b of {
       False => case c of {
