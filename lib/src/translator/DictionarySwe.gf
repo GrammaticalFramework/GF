@@ -62452,8 +62452,8 @@ lin vicarage_N = mkN "pastorat" neutrum; -- status=guess
 lin vicarial_A = variants {} ;
 lin vicariate_N = variants {} ;
 lin vicarious_A = mkA "vikarierande" ; -- comment=2
-lin vice_N = mkN "skruvstäd" neutrum; -- comment=2
-lin vice_Prep = variants {} ;
+lin vice_N = changeCompoundN "skruvstäds" (mkN "skruvstäd" neutrum) ;
+lin vice_Prep = mkPrep "vice" ;
 lin vice_versa_Adv = variants {} ;
 lin vicegerent_N = variants {} ;
 lin vicenary_A = variants {} ;
