@@ -1187,7 +1187,7 @@ pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state)
 					PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
 					entry->idx       = seq->idx;
 					entry->bind_type = bind_type;
-					entry->offset    = (current - ps->sentence);					
+					entry->offset    = (current - ps->sentence);
 				}
 				i = k+1;
 				goto next;
@@ -1339,7 +1339,7 @@ pgf_parsing_td_predict(PgfParsing* ps,
 		// Top-down prediction for syntactic rules
 		for (size_t i = 0; i < ccat->n_synprods; i++) {
 			PgfProduction prod =
-				gu_seq_get(ccat->prods, PgfProduction, i);		
+				gu_seq_get(ccat->prods, PgfProduction, i);
 			pgf_parsing_production(ps, ps->before, conts, prod);
 		}
 
@@ -1363,7 +1363,7 @@ pgf_parsing_td_predict(PgfParsing* ps,
 
 				if (value != NULL) {
                     pgf_parsing_predict_lexeme(ps, state, conts, value);
-                    
+
                     PgfProductionIdxEntry* start =
 						gu_buf_data(lentry->idx);
 					PgfProductionIdxEntry* end =
