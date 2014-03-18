@@ -63,7 +63,9 @@ public class Translator {
 	new Language("cmn-Hans-CN", "Chinese", "AppChi", R.xml.qwerty),   
 	new Language("en-US", "English", "AppEng", R.xml.qwerty),
         new Language("fi-FI", "Finnish", "AppFin", R.xml.qwerty),
-        new Language("fr-FR", "French", "AppFre", R.xml.qwerty),
+        new Language("fr-FR", "French",  "AppFre", R.xml.qwerty),
+        new Language("de-DE", "German",  "AppGer", R.xml.qwerty),
+        new Language("hi-IN", "Hindi",   "AppHin", R.xml.qwerty),
         new Language("it-IT", "Italian", "AppIta", R.xml.qwerty),
         new Language("es-ES", "Spanish", "AppSpa", R.xml.qwerty), 
         new Language("sv-SE", "Swedish", "AppSwe", R.xml.qwerty), 
@@ -278,7 +280,7 @@ public class Translator {
             String output = targetLang.linearize(expr);
             return output;
         } catch (ParseError e) {
-            Log.e(TAG, "Parse error: " + e);
+            Log.e(TAG, "Parse error: " + e); //lookupMorpho
             return "parse error: " + e.getMessage();
         }
     }
