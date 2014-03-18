@@ -2,6 +2,7 @@ concrete RGLBaseHin of RGLBase =
 
 -- modules in Grammar, excluding Structural, Verb, Sentence, Question
 ----  Tense,
+  TenseX - [TTAnt,Adv,AdN,SC],
   NounHin - [PPartNP],               -- to be generalized
   AdjectiveHin,
   NumeralHin,
