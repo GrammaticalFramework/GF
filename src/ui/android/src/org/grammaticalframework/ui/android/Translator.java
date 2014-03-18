@@ -264,6 +264,36 @@ public class Translator {
     	}
     	return out;
     }
+
+    public String translateWord(String input) {
+
+	List<MorphoAnalysis> morphos = lookupMorpho(input) ;
+
+	String output = "[" + input + "]" ;
+
+        Concr targetLang = getTargetConcr();
+
+	for (MorphoAnalysis ana : morphos) {
+	    if (targetLang.hasLinearization(ana.getLemma())) {
+		output = targetLang.linearize(Expr.readExpr(ana.getLemma())) ;
+		    break ;
+		} 
+	} 
+	return output ;
+    }
+
+    public String parseByLookup(String input) {
+	String[] words = input.split(" ") ;
+
+        String output = "%" ;
+
+        for (String w : words) {
+	    output = output + " " + translateWord(w) ; 
+        }
+
+	return output ;
+    }
+
     /**
      * Takes a lot of time. Must not be called on the main thread.
      */
@@ -280,8 +310,10 @@ public class Translator {
             String output = targetLang.linearize(expr);
             return output;
         } catch (ParseError e) {
-            Log.e(TAG, "Parse error: " + e); //lookupMorpho
-            return "parse error: " + e.getMessage();
+	    //            Log.e(TAG, "Parse error: " + e); //lookupMorpho
+	    //            return "parse error: " + e.getMessage();
+	    String output = parseByLookup(input) ;
+	    return output ;
         }
     }
 
