@@ -1,4 +1,4 @@
-module Cache (Cache,newCache,readCache) where
+module Cache (Cache,newCache,flushCache,readCache) where
 
 import Control.Concurrent.MVar
 import Data.Map (Map)
@@ -16,6 +16,9 @@ newCache :: (FilePath -> IO a) -> IO (Cache a)
 newCache load = 
     do objs <- newMVar Map.empty
        return $ Cache { cacheLoad = load, cacheObjects = objs }
+
+flushCache :: Cache a -> IO ()
+flushCache c = modifyMVar_ (cacheObjects c) (const (return Map.empty))
 
 readCache :: Cache a -> FilePath -> IO a
 readCache c file = 

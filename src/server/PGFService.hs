@@ -1,7 +1,7 @@
 {-# LANGUAGE CPP #-}
 module PGFService(cgiMain,cgiMain',getPath,
                   logFile,stderrToFile,
-                  newPGFCache) where
+                  newPGFCache,flushPGFCache) where
 
 import PGF (PGF)
 import qualified PGF
@@ -51,10 +51,12 @@ newPGFCache = do pgfCache <- newCache PGF.readPGF
                                                    pc <- newMVar Map.empty
                                                    return (pgf,pc)
                  return (pgfCache,cCache)
+flushPGFCache (c1,c2) = flushCache c1 >> flushCache c2
 #else
 type Caches = (Cache PGF,())
 newPGFCache = do pgfCache <- newCache PGF.readPGF
                  return (pgfCache,())
+flushPGFCache (c1,_) = flushCache c1
 #endif
 
 getPath =

@@ -152,6 +152,7 @@ handle logLn documentroot state0 cache execute1 stateVar
 --         "/start"   ->
            "/parse"   -> parse (decoded qs)
            "/version" -> return (ok200 gf_version)
+           "/flush"   -> do PS.flushPGFCache cache; return (ok200 "flushed")
            '/':rpath ->
              -- This code runs without mutual exclusion, so it must *not*
              -- use/change the cwd. Access files by absolute paths only.
