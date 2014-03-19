@@ -1,7 +1,7 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
 
 concrete LexiconIta of Lexicon = CatIta ** open 
-  MorphoIta, ParadigmsIta, BeschIta in {
+  MorphoIta, ParadigmsIta, BeschIta, IrregIta in {
 
 flags 
   optimize=values ; coding=utf8 ;
