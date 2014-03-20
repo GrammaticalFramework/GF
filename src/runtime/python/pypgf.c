@@ -1402,39 +1402,6 @@ pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_bracket_lzn_expr_literal(PgfLinFuncs** funcs, PgfLiteral lit)
-{
-	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
-
-	GuVariantInfo i = gu_variant_open(lit);
-    switch (i.tag) {
-    case PGF_LITERAL_STR: {
-        PgfLiteralStr* lstr = i.data;
-        PyObject* str = PyString_FromString(lstr->val);
-		PyList_Append(state->list, str);
-		Py_DECREF(str);
-		break;
-	}
-    case PGF_LITERAL_INT: {
-        PgfLiteralInt* lint = i.data;
-        PyObject* str = PyString_FromFormat("%d", lint->val);
-        PyList_Append(state->list, str);
-        Py_DECREF(str);
-		break;
-	}
-    case PGF_LITERAL_FLT: {
-        PgfLiteralFlt* lflt = i.data;
-        PyObject* str = PyString_FromFormat("%f", lflt->val);
-        PyList_Append(state->list, str);
-        Py_DECREF(str);
-		break;
-	}
-	default:
-		gu_impossible();
-	}
-}
-
-static void
 pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
@@ -1471,7 +1438,6 @@ pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex,
 
 static PgfLinFuncs pgf_bracket_lin_funcs = {
 	.symbol_token  = pgf_bracket_lzn_symbol_token,
-	.expr_literal  = pgf_bracket_lzn_expr_literal,
 	.begin_phrase  = pgf_bracket_lzn_begin_phrase,
 	.end_phrase    = pgf_bracket_lzn_end_phrase,
 	.symbol_ne     = NULL,
