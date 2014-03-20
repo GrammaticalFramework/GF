@@ -22,7 +22,7 @@ lin
     by8means_Prep = mkPrep [] "旁边" mannerAdvType ;
 --    in_Prep = mkPrep "里" [];  --- in Paris
     in_Prep = mkPrep "在" "中"  ;  --- in the house, the car, etc
-    possess_Prep = mkPrep [] "的" ;
+    possess_Prep = mkPrep [] "的" ATPoss ;
     with_Prep = mkPrep "和" "一起" ;
 ----    with_Prep = mkPrep [] "和"; -- an alternative for some uses
  
@@ -102,7 +102,7 @@ no_Utt = ss neg_s ;
 
 lin
   always_AdV = ssword "一直" ;
-  part_Prep = mkPrep possessive_s ;
+  part_Prep = mkPrep [] "的" ATPoss ;
   language_title_Utt = ssword "中文" ;
   please_Voc = ss "请" ;
   quite_Adv = mkAdA "得很" ;
