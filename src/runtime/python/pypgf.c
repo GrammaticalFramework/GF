@@ -1489,6 +1489,19 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
 }
 
 static PyObject*
+Concr_hasLinearization(ConcrObject* self, PyObject *args)
+{
+	PgfCId id;
+	if (!PyArg_ParseTuple(args, "s", &id))
+        return NULL;
+
+	if (pgf_has_linearization(self->concr, id))
+		Py_RETURN_TRUE;
+	else
+		Py_RETURN_FALSE;
+}
+
+static PyObject*
 Concr_getName(ConcrObject *self, void *closure)
 {
     return PyString_FromString(pgf_concrete_name(self->concr));
@@ -1742,6 +1755,9 @@ static PyMethodDef Concr_methods[] = {
     },
     {"bracketedLinearize", (PyCFunction)Concr_bracketedLinearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a bracketed string"
+    },
+    {"hasLinearization", (PyCFunction)Concr_hasLinearization, METH_VARARGS,
+     "hasLinearization(f) returns true if the function f has linearization in the concrete syntax"
     },
     {"graphvizParseTree", (PyCFunction)Concr_graphvizParseTree, METH_VARARGS,
      "Renders an abstract syntax tree as a parse tree in Graphviz format"
