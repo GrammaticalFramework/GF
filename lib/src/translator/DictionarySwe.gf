@@ -2839,16 +2839,16 @@ lin anxiety_N = mkN "ångest" | mkN "iver"  ; -- SaldoWN -- comment=7
 lin anxiolytic_A = variants {} ;
 lin anxious_A = mkA "ängslig" ; -- comment=8
 lin anxiousness_N = variants {} ;
-lin anyPl_Det = M.mkDet "vilka som helst" plural; --
-lin anySg_Det = variants {} ;
+lin anyPl_Det = M.mkDet "några" plural; ---
+lin anySg_Det = M.mkDet "någon" "något" singular ; ---
 lin any_Adv = mkAdv "alls" ;
-lin anybody_NP = variants {} ;
+lin anybody_NP = S.mkNP (mkPN "någon" utrum) ;
 lin anyhow_Adv = mkAdv "hur som helst" ; -- status=guess
-lin anymore_Adv = variants {} ;
-lin anyone_NP = variants {} ;
-lin anyplace_Adv = variants {} ;
-lin anything_NP = variants {} ;
-lin anyway_Adv = mkAdv "alltid" ;
+lin anymore_Adv = mkAdv "längre" ;
+lin anyone_NP = S.mkNP (mkPN "någon" utrum) ;
+lin anyplace_Adv = mkAdv "något håll" ; -- comment=2
+lin anything_NP = S.mkNP (mkPN "något" neutrum) ;
+lin anyway_Adv = mkAdv "i alla fall" ;
 lin anywhere_Adv = mkAdv "någonstans" ; -- comment=2
 lin aorist_N = variants {} ;
 lin aoristic_A = variants {} ;
