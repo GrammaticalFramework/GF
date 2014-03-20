@@ -35,7 +35,7 @@ lin
       ATManner      => cl ** {obj1 = deVAdv_s ++ advs ++ cl.obj1} ;   -- he sleeps *well*
       ATPlace True  => cl ** {adv = cl.adv ++ advs} ;                 -- he today *in the house* sleeps
       ATPlace False => cl ** {adv = cl.adv ++ zai_V.s ++ advs} ;      -- he today *here* sleeps
-      ATTime        => cl ** {adv = advs ++ cl.adv}                   -- he *today* here sleeps ---- also: **today** he here sleeps
+      ATTime | _    => cl ** {adv = advs ++ cl.adv}                   -- he *today* here sleeps ---- also: **today** he here sleeps
       } ;
 
   ComplV2 x vp np = vp ** {

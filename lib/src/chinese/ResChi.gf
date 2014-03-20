@@ -94,7 +94,7 @@ param
     CPosType = CAPhrase | CNPhrase | CVPhrase ;
     DeForm = DeNoun | NdNoun ;    -- parameter created for noun with/out partical "de"
 
-    AdvType = ATPlace Bool | ATTime | ATManner ; -- ATPlace True = has zai_s already
+    AdvType = ATPlace Bool | ATTime | ATManner | ATPoss ; -- ATPlace True = has zai_s already
 
 -- parts of speech
 
@@ -275,8 +275,14 @@ oper
     } ;
     
   getAdvType : Str -> AdvType = \s -> case s of {
+    "的"     => ATPoss ;
     "在" + _ => ATPlace True ; -- certain that True
     _ => ATPlace False         -- uncertain whether ATPlace
+    } ;
+
+  possessiveIf : AdvType -> Str = \at -> case at of {
+    ATPoss => [] ;   --- to avoid double "de" 
+    _ => possessive_s
     } ;
 
   mkSubj : Str -> Str -> {prePart : Str ; sufPart : Str} = \p,s -> {
