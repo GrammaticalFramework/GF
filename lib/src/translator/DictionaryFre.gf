@@ -10273,7 +10273,6 @@ left_N = mkN "gauche" feminine;
 left_handed_A = mkA "gaucher";
 leftover_A = mkA "restant";
 leftover_N = mkN "reste" masculine;
-leftovers_N = mkN "restes";
 legacy_N = mkN "héritage" masculine;
 legal_A = mkA "légal";
 legalization_N = mkN "légalisation" feminine;

@@ -31949,7 +31949,6 @@ lin leftist_N = variants {} ;
 lin leftmost_A = variants {} ;
 lin leftover_A = variants {} ;
 lin leftover_N = mkN "rest" "rester" ;
-lin leftovers_N = mkN "rest" "rester" ; -- SaldoWN
 lin leg_N = L.leg_N ;
 lin leg_pull_N = variants {} ;
 lin leg_pulling_N = variants {} ;
@@ -31994,7 +31993,6 @@ lin legitimize_V2 = variants {} ;
 lin legitimize_V2V = variants {} ;
 lin legless_A = variants {} ;
 lin leglike_A = variants {} ;
-lin legs_N = variants {} ;
 lin legume_N = mkN "baljväxt" ; -- status=guess
 lin leguminous_A = variants {} ;
 lin lei_N = variants {} ;

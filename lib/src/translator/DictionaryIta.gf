@@ -8471,7 +8471,7 @@ lin leeway_N = mkN "margine di azione" ; -- status=guess
 lin left_A = mkA "sinistro" ; -- status=guess
 lin left_N = mkN "sinistra" ; -- status=guess
 lin left_Ord = L.left_Ord ; -- comment=CHECKED
-lin leftovers_N = mkN "avanzi" | mkN "avanzi" ; -- status=guess status=guess
+lin leftover_N = mkN "avanzi" ;
 lin leg_N = L.leg_N ; -- comment=CHECKED
 lin legacy_N = mkN "eredità" ; -- status=guess
 lin legal_A = mkA "legale" ; -- status=guess

@@ -25518,7 +25518,6 @@ legitimize_V2 = mkWV2 (k62 "legitimoida") ; --UNCHK
 legitimize_V2V = mkWV2V (k62 "legitimoida") ; --UNCHK
 legless_A = mkWA "jalaton" ; --UNCHK
 leglike_A = mkWA (compoundA "jalan" (k38 "omainen")) ; --UNCHK
-legs_N = mkWN (k1 "sisu") ; --UNCHK
 legume_N = mkWN (k1A "palko") ; --UNCHK
 leguminous_A = mkWA (k38 "omainen") "palkokasvin" ; --UNCHK
 lei_N = mkWN (k5 "kranssi") ; --UNCHK
