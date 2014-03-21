@@ -26,7 +26,7 @@ $i = [$l $d _ ']          -- identifier character
 $u = [.\n]                -- universal: any character
 
 @rsyms =    -- symbols and non-identifier-like reserved words
-   \; | \= | \{ | \} | \( | \) | \~ | \* \* | \: | \- \> | \, | \[ | \] | \- | \. | \| | \% | \? | \< | \> | \@ | \# | \! | \* | \+ | \+ \+ | \\ | \\\\ | \= \> | \_ | \$ | \/
+   \; | \= | \{ | \} | \( | \) | \~ | \* \* | \: | \- \> | \, | \[ | \] | \- | \. | \| | \% | \? | \< | \> | \@ | \# | \! | \* | \+ | \+ \+ | \\ | \\\\ | \= \> | \_ | \$ | \/ | \: \= | \: \: \=
 
 :-
 "--" [.]* ; -- Toss single line comments
@@ -83,6 +83,7 @@ data Token
  | T_ccurly
  | T_underscore
  | T_at
+ | T_cfarrow
  | T_PType
  | T_Str
  | T_Strs
@@ -169,6 +170,8 @@ resWords = Map.fromList
  , b "|"  T_bar
  , b "_"  T_underscore
  , b "@"  T_at
+ , b "::=" T_cfarrow
+ , b ":="  T_cfarrow
  , b "PType"      T_PType
  , b "Str"        T_Str
  , b "Strs"       T_Strs

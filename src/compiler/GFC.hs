@@ -8,10 +8,11 @@ import PGF.Optimize
 import PGF.Binary(putSplitAbs)
 import GF.Compile
 import GF.Compile.Export
+import GF.Compile.CFGtoPGF
+import GF.Compile.GetGrammar
+import GF.Grammar.CFG
 
-import GF.Grammar.CF ---- should this be on a deeper level? AR 15/10/2008
 import GF.Infra.Ident(identS,showIdent)
-
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
@@ -21,6 +22,7 @@ import Data.Maybe
 import Data.Binary(encode,encodeFile)
 import Data.Binary.Put(runPut)
 import qualified Data.Map as Map
+import qualified Data.Set as Set
 import qualified Data.ByteString as BSS
 import qualified Data.ByteString.Lazy as BSL
 import System.FilePath
@@ -61,14 +63,18 @@ compileSourceFiles opts fs =
                            writeOutputs opts pgf
 
 compileCFFiles :: Options -> [FilePath] -> IOE ()
-compileCFFiles opts fs = 
-    do s  <- liftIO $ fmap unlines $ mapM readFile fs
-       let cnc = justModuleName (last fs)
-       gr <- compileSourceGrammar opts =<< getCF cnc s
-       unless (flag optStopAfterPhase opts == Compile) $
-              do pgf <- link opts (identS cnc, (), gr)
-                 writePGF opts pgf
-                 writeOutputs opts pgf
+compileCFFiles opts fs = do
+  rules <- fmap concat $ mapM (getCFRules opts) fs
+  startCat <- case rules of
+                (CFRule cat _ _ : _) -> return cat
+                _                    -> fail "empty CFG"
+  let gf = cf2gf (last fs) (uniqueFuns (mkCFG startCat Set.empty rules))
+  gr <- compileSourceGrammar opts gf
+  let cnc = justModuleName (last fs)
+  unless (flag optStopAfterPhase opts == Compile) $
+     do pgf <- link opts (identS cnc, (), gr)
+        writePGF opts pgf
+        writeOutputs opts pgf
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs =

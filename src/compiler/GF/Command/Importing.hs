@@ -5,23 +5,25 @@ import PGF.Data
 
 import GF.Compile
 import GF.Compile.Multi (readMulti)
+import GF.Compile.GetGrammar (getCFRules, getEBNFRules)
 import GF.Grammar (identS, SourceGrammar) -- for cc command
-import GF.Grammar.CF
+import GF.Grammar.CFG
 import GF.Grammar.EBNF
+import GF.Compile.CFGtoPGF
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
 
---import Data.List (nubBy)
 import System.FilePath
+import qualified Data.Set as Set
 
 -- import a grammar in an environment where it extends an existing grammar
 importGrammar :: PGF -> Options -> [FilePath] -> IO PGF
 importGrammar pgf0 _ [] = return pgf0
 importGrammar pgf0 opts files =
   case takeExtensions (last files) of
-    ".cf"   -> importCF opts files getCF
-    ".ebnf" -> importCF opts files getEBNF
+    ".cf"   -> importCF opts files getCFRules id
+    ".ebnf" -> importCF opts files getEBNFRules ebnf2cf
     ".gfm"  -> do
       ascss <- mapM readMulti files
       let cs = concatMap snd ascss
@@ -52,13 +54,17 @@ importSource src0 opts files = do
       return src0
 
 -- for different cf formats
-importCF opts files get = do
-       s  <- fmap unlines $ mapM readFile files 
-       gf <- case get (last files) s of
-               Ok gf -> return gf
-               Bad s -> error s ---- 
-       Ok gr <- appIOE $ compileSourceGrammar opts gf
-       epgf <- appIOE $ link opts (identS (justModuleName (last files) ++ "Abs"), (), gr)
-       case epgf of
-         Ok pgf -> return pgf
-         Bad s  -> error s ----
+importCF opts files get convert = do
+  res <- appIOE impCF
+  case res of
+    Ok pgf -> return pgf
+    Bad s  -> error s
+  where
+    impCF = do
+      rules <- fmap (convert . concat) $ mapM (get opts) files
+      startCat <- case rules of
+                    (CFRule cat _ _ : _) -> return cat
+                    _                    -> fail "empty CFG"
+      let gf = cf2gf (last files) (uniqueFuns (mkCFG startCat Set.empty rules))
+      gr <- compileSourceGrammar opts gf
+      link opts (identS (justModuleName (last files) ++ "Abs"), (), gr)

@@ -21,7 +21,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
 import GF.Data.Utilities
 --import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Speech.CFG
+import GF.Grammar.CFG
 import GF.Speech.PGFToCFG
 --import GF.Data.Relation
 --import GF.Speech.FiniteState

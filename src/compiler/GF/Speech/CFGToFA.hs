@@ -17,7 +17,7 @@ import qualified Data.Set as Set
 --import PGF.CId
 import PGF.Data
 import GF.Data.Utilities
-import GF.Speech.CFG
+import GF.Grammar.CFG
 --import GF.Speech.PGFToCFG
 --import GF.Infra.Ident (Ident)
 

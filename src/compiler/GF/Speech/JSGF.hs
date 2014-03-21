@@ -14,7 +14,7 @@ module GF.Speech.JSGF (jsgfPrinter) where
 
 --import GF.Data.Utilities
 import GF.Infra.Option
-import GF.Speech.CFG
+import GF.Grammar.CFG
 import GF.Speech.RegExp
 import GF.Speech.SISR
 import GF.Speech.SRG

@@ -7,6 +7,8 @@ module GF.Grammar.Parser
          , pModHeader
          , pExp
          , pTopDef
+         , pCFRules
+         , pEBNFRules
          ) where
 
 import GF.Infra.Ident
@@ -14,17 +16,23 @@ import GF.Infra.Option
 import GF.Data.Operations
 import GF.Grammar.Predef
 import GF.Grammar.Grammar
+import GF.Grammar.CFG
+import GF.Grammar.EBNF
 import GF.Grammar.Macros
 import GF.Grammar.Lexer
 import GF.Compile.Update (buildAnyTree)
---import Codec.Binary.UTF8.String(decodeString)
---import Data.Char(toLower)
+import Data.List(intersperse)
+import Data.Char(isAlphaNum)
+import PGF(mkCId)
+
 }
 
 %name pModDef ModDef
 %name pTopDef TopDef
 %partial pModHeader ModHeader
 %name pExp Exp
+%name pCFRules ListCFRule
+%name pEBNFRules ListEBNFRule
 
 -- no lexer declaration
 %monad { P } { >>= } { return }
@@ -64,6 +72,7 @@ import GF.Compile.Update (buildAnyTree)
  '\\\\'       { T_lamlam    }
  '_'          { T_underscore}
  '|'          { T_bar       }
+ '::='        { T_cfarrow   }
  'PType'      { T_PType     }
  'Str'        { T_Str       }
  'Strs'       { T_Strs      }
@@ -601,6 +610,70 @@ ListDDecl :: { [Hypo] }
 ListDDecl
   : {- empty -}     { []       } 
   | DDecl ListDDecl { $1 ++ $2 }
+
+ListCFRule :: { [CFRule] }
+ListCFRule
+  : CFRule            { $1       }
+  | CFRule ListCFRule { $1 ++ $2 }
+
+CFRule :: { [CFRule] }
+CFRule
+  : Ident '.' Ident '::=' ListCFSymbol ';' { [CFRule (showIdent $3) $5 (CFObj (mkCId (showIdent $1)) [])]
+                                           }
+  | Ident '::=' ListCFRHS ';'              { let { cat = showIdent $1;
+                                                   mkFun cat its =
+                                                     case its of {
+                                                       [] -> cat ++ "_";
+                                                       _  -> concat $ intersperse "_" (cat : filter (not . null) (map clean its)) -- CLE style
+                                                     };
+                                                   clean sym = 
+                                                     case sym of {
+                                                       Terminal    c -> filter isAlphaNum c;
+                                                       NonTerminal t -> t
+                                                     }
+                                             } in map (\rhs -> CFRule cat rhs (CFObj (mkCId (mkFun cat rhs)) [])) $3
+                                           }
+
+ListCFRHS :: { [[CFSymbol]] }
+ListCFRHS
+  : ListCFSymbol                { [$1]    }
+  | ListCFSymbol '|' ListCFRHS  { $1 : $3 }
+
+ListCFSymbol :: { [CFSymbol] }
+ListCFSymbol
+  : {- empty -}           { []      } 
+  | CFSymbol ListCFSymbol { $1 : $2 }
+
+CFSymbol :: { CFSymbol }
+  : String                { Terminal $1 }
+  | Ident                 { NonTerminal (showIdent $1) }
+
+ListEBNFRule :: { [ERule] }
+ListEBNFRule
+  : EBNFRule              { [$1]    }
+  | EBNFRule ListEBNFRule { $1 : $2 }
+
+EBNFRule :: { ERule }
+  : Ident '::=' ERHS0 ';' { ((showIdent $1,[]),$3) }
+
+ERHS0 :: { ERHS }
+  : ERHS1                 { $1         }
+  | ERHS1 '|' ERHS0       { EAlt $1 $3 }
+
+ERHS1 :: { ERHS }
+  : ERHS2                 { $1         }
+  | ERHS2 ERHS1           { ESeq $1 $2 }
+
+ERHS2 :: { ERHS }
+  : ERHS3 '*'             { EStar $1 }
+  | ERHS3 '+'             { EPlus $1 }
+  | ERHS3 '?'             { EOpt $1  }
+  | ERHS3                 { $1       }
+
+ERHS3 :: { ERHS }
+  : String                { ETerm $1 }
+  | Ident                 { ENonTerm (showIdent $1,[]) }
+  | '(' ERHS0 ')'         { $2         }
 
 Posn :: { Posn }
 Posn

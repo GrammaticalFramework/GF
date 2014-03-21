@@ -9,7 +9,7 @@ module GF.Speech.SRGS_XML (srgsXmlPrinter, srgsXmlNonRecursivePrinter) where
 --import GF.Data.Utilities
 import GF.Data.XML
 import GF.Infra.Option
-import GF.Speech.CFG
+import GF.Grammar.CFG
 import GF.Speech.RegExp
 import GF.Speech.SISR as SISR
 import GF.Speech.SRG
