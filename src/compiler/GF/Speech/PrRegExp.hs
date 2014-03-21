@@ -7,7 +7,7 @@
 
 module GF.Speech.PrRegExp (regexpPrinter,multiRegexpPrinter) where
 
-import GF.Speech.CFG
+import GF.Grammar.CFG
 import GF.Speech.CFGToFA
 import GF.Speech.PGFToCFG
 import GF.Speech.RegExp

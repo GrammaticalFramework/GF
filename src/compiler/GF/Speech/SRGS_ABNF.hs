@@ -21,7 +21,7 @@ module GF.Speech.SRGS_ABNF (srgsAbnfPrinter, srgsAbnfNonRecursivePrinter) where
 
 --import GF.Data.Utilities
 import GF.Infra.Option
-import GF.Speech.CFG
+import GF.Grammar.CFG
 import GF.Speech.SISR as SISR
 import GF.Speech.SRG
 import GF.Speech.RegExp

@@ -13,7 +13,7 @@ import Data.List
 --import GF.Data.Utilities
 --import GF.Infra.Ident
 import GF.Infra.Option (SISRFormat(..))
-import GF.Speech.CFG
+import GF.Grammar.CFG
 import GF.Speech.SRG (SRGNT)
 import PGF(showCId)
 

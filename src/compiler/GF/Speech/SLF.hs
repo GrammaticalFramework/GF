@@ -13,7 +13,7 @@ module GF.Speech.SLF (slfPrinter,slfGraphvizPrinter,
                         slfSubPrinter,slfSubGraphvizPrinter) where
 
 import GF.Data.Utilities
-import GF.Speech.CFG
+import GF.Grammar.CFG
 import GF.Speech.FiniteState
 --import GF.Speech.CFG
 import GF.Speech.CFGToFA

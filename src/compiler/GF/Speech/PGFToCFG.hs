@@ -10,7 +10,7 @@ import PGF(showCId)
 import PGF.Data as PGF
 import PGF.Macros
 --import GF.Infra.Ident
-import GF.Speech.CFG hiding (Symbol)
+import GF.Grammar.CFG hiding (Symbol)
 
 import Data.Array.IArray as Array
 --import Data.List

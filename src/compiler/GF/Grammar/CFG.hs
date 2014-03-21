@@ -4,7 +4,7 @@
 --
 -- Context-free grammar representation and manipulation.
 ----------------------------------------------------------------------
-module GF.Speech.CFG where
+module GF.Grammar.CFG where
 
 import GF.Data.Utilities
 import PGF
@@ -52,6 +52,7 @@ data CFG = CFG { cfgStartCat :: Cat,
                  cfgExternalCats :: Set Cat,
                  cfgRules :: Map Cat (Set CFRule) }
   deriving (Eq, Ord, Show)
+
 
 --
 -- * Grammar filtering
@@ -221,6 +222,21 @@ mkCFG start ext rs = CFG { cfgStartCat = start, cfgExternalCats = ext, cfgRules 
 
 groupProds :: [CFRule] -> Map Cat (Set CFRule)
 groupProds = Map.fromListWith Set.union . map (\r -> (lhsCat r,Set.singleton r))
+
+uniqueFuns :: CFG -> CFG
+uniqueFuns cfg = CFG {cfgStartCat     = cfgStartCat cfg
+                     ,cfgExternalCats = cfgExternalCats cfg
+                     ,cfgRules        = Map.fromList (snd (mapAccumL uniqueFunSet Set.empty (Map.toList (cfgRules cfg))))
+                     }
+  where
+    uniqueFunSet funs (cat,rules) =
+      let (funs',rules') = mapAccumL uniqueFun funs (Set.toList rules)
+      in (funs',(cat,Set.fromList rules'))
+    uniqueFun funs (CFRule cat items (CFObj fun args)) = (Set.insert fun' funs,CFRule cat items (CFObj fun' args))
+      where
+        fun' = head [fun'|suffix<-"":map show ([2..]::[Int]),
+                          let fun'=mkCId (showCId fun++suffix),
+                          not (fun' `Set.member` funs)]
 
 -- | Gets all rules in a CFG.
 allRules :: CFG -> [CFRule]

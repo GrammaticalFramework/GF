@@ -9,7 +9,7 @@
 module GF.Speech.GSL (gslPrinter) where
 
 --import GF.Data.Utilities
-import GF.Speech.CFG
+import GF.Grammar.CFG
 import GF.Speech.SRG
 import GF.Speech.RegExp
 import GF.Infra.Option

@@ -12,27 +12,25 @@
 -- this module builds the internal GF grammar that is sent to the type checker
 -----------------------------------------------------------------------------
 
-module GF.Compile.GetGrammar (getSourceModule) where
+module GF.Compile.GetGrammar (getSourceModule, getCFRules, getEBNFRules) where
 
 import Prelude hiding (catch)
 
 import GF.Data.Operations
 
---import GF.System.Catch
 import GF.Infra.UseIO
 import GF.Infra.Option(Options,optPreprocessors,addOptions,renameEncoding,optEncoding,flag,defaultEncoding)
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar
---import GF.Compile.Coding
+import GF.Grammar.CFG
+import GF.Grammar.EBNF
 import GF.Compile.ReadFiles(parseSource,lift)
---import GF.Text.Coding(decodeUnicodeIO)
 
 import qualified Data.ByteString.Char8 as BS
 import Data.Char(isAscii)
 import Control.Monad (foldM,when,unless)
 import System.Cmd (system)
---import System.IO(mkTextEncoding) --,utf8
 import System.Directory(removeFile,getCurrentDirectory)
 import System.FilePath(makeRelative)
 
@@ -64,17 +62,25 @@ getSourceModule opts file0 =
           --lift $ transcodeModule' (i,mi) -- old lexer
             return (i,mi) -- new lexer
 
-{-
-transcodeModule sm00 =
-  do enc <- mkTextEncoding (getEncoding (mflags (snd sm00)))
-     let sm = decodeStringsInModule enc sm00
-     return sm
+getCFRules :: Options -> FilePath -> IOE [CFRule]
+getCFRules opts fpath = do
+  raw <- liftIO (BS.readFile fpath)
+  (optCoding,parsed) <- parseSource opts pCFRules raw
+  case parsed of
+    Left (Pn l c,msg) -> do cwd <- lift $ getCurrentDirectory
+                            let location = makeRelative cwd fpath++":"++show l++":"++show c
+                            raise (location++":\n   "++msg)
+    Right rules       -> return rules
 
-transcodeModule' sm00 =
-  do let enc = utf8
-     let sm = decodeStringsInModule enc sm00
-     return sm
--}
+getEBNFRules :: Options -> FilePath -> IOE [ERule]
+getEBNFRules opts fpath = do
+  raw <- liftIO (BS.readFile fpath)
+  (optCoding,parsed) <- parseSource opts pEBNFRules raw
+  case parsed of
+    Left (Pn l c,msg) -> do cwd <- lift $ getCurrentDirectory
+                            let location = makeRelative cwd fpath++":"++show l++":"++show c
+                            raise (location++":\n   "++msg)
+    Right rules       -> return rules
 
 runPreprocessor :: Temporary -> String -> IO Temporary
 runPreprocessor tmp0 p =
