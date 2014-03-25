@@ -706,7 +706,7 @@ static PgfItem*
 pgf_new_item(PgfParsing* ps, PgfItemConts* conts, PgfProduction prod)
 {
 	PgfItem* item;
-	if (ps == NULL || ps->free_item == NULL)
+	if (ps->free_item == NULL)
 	  item = gu_new(PgfItem, ps->pool);
 	else {
 	  item = ps->free_item;
@@ -769,10 +769,8 @@ pgf_new_item(PgfParsing* ps, PgfItemConts* conts, PgfProduction prod)
 	pgf_item_set_curr_symbol(item, ps->pool);
 
 #ifdef PGF_COUNTS_DEBUG
-	if (ps != NULL) {
-		ps->item_full_count++;
-		ps->item_real_count++;
-	}
+	ps->item_full_count++;
+	ps->item_real_count++;
 #endif
 
 	return item;
