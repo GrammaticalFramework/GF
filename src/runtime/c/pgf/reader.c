@@ -1133,12 +1133,6 @@ pgf_ccat_set_cnccat(PgfCCat* ccat, PgfProduction prod)
 extern prob_t
 pgf_ccat_set_viterbi_prob(PgfCCat* ccat);
 
-typedef struct {
-	GuMapItor fn;
-	PgfConcr* concr;
-	GuPool* pool;
-} PgfIndexFn;
-
 static void
 pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
