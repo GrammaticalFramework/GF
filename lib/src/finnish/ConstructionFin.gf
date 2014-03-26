@@ -23,6 +23,11 @@ lin
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> (lin CN cn))))) (lin A a) ;
 
+  bottle_of_CN np = variants {} ; -- mkCN (lin N2 (mkN2 (mkN "pullo" | mkN "pullollinen") (mkPrep partitive))  (lin NP np) ;
+  cup_of_CN    np = variants {} ; -- mkCN (lin N2 (mkN2 (mkN "kuppi" | mkN "kupillinen") (mkPrep partitive))  (lin NP np) ;
+  glass_of_CN  np = variants {} ; -- mkCN (lin N2 (mkN2 (mkN "lasi" | mkN "lasillinen") (mkPrep partitive)) (lin NP np) ;
+
+
 lincat
   Weekday = {noun : N ; habitual : SyntaxFin.Adv} ;
   Monthday = NP ;

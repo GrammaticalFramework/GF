@@ -34,6 +34,11 @@ fun
 
   n_units_AP    : Card -> CN -> A -> AP ;  -- x inches long
 
+-- containers
+  bottle_of_CN : NP -> CN ;       -- bottle of beer / flaska öl (Swe)
+  cup_of_CN    : NP -> CN ;       -- cup of tea / kupillinen teetä (Fin)
+  glass_of_CN  : NP -> CN ;
+  
 -- time expressions
 
 cat 
@@ -59,7 +64,7 @@ fun
   intYear     : Int -> Year ;
   intMonthday : Int -> Monthday ;
 
-  monday_Weekday, tuesday_Weekday, wednesday_Weekday, thursday_Weekday, friday_Weekday, sunday_Weekday : Weekday ;
+  monday_Weekday, tuesday_Weekday, wednesday_Weekday, thursday_Weekday, friday_Weekday, saturday_Weekday, sunday_Weekday : Weekday ;
 
   january_Month, february_Month, march_Month, april_Month, may_Month, june_Month, july_Month : Month ;
   august_Month, september_Month, october_Month, november_Month, december_Month : Month ;
