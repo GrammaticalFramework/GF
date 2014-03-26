@@ -2,7 +2,7 @@
 
 concrete ConstructionGer of Construction = CatGer ** 
   open SyntaxGer, SymbolicGer, ParadigmsGer, 
-       (L = LexiconGer), (E = ExtraGer), (G = GrammarGer), (I = IrregGer), (R = ResGer), Prelude in {
+       (L = LexiconGer), (E = ExtraGer), (G = GrammarGer), (I = IrregGer), (R = ResGer), (N = NounGer), Prelude in {
 
 
 lin
@@ -27,7 +27,9 @@ lin
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
  
-
+  bottle_of_CN np = N.ApposCN (mkCN (mkN "Flasche")) (lin NP np) ;
+  cup_of_CN np    = N.ApposCN (mkCN (mkN "Tasse"))   (lin NP np) ;
+  glass_of_CN np  = N.ApposCN (mkCN (mkN "Glas"))    (lin NP np) ;
 
 lincat
   Weekday = N ;
