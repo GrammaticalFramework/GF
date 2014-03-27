@@ -7,7 +7,10 @@ gftranslate.jsonurl="/robust/Translate8.pgf"
 gftranslate.grammar="Translate" // the name of the grammar
 
 gftranslate.call=function(querystring,cont) {
-    http_get_json(gftranslate.jsonurl+querystring,cont)
+    function errcont(text,code) {
+	cont([{translations:[{error:code+" "+text}]}])
+    }
+    http_get_json(gftranslate.jsonurl+querystring,cont,errcont)
 }
 
 // Translate a sentence
