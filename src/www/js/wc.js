@@ -6,14 +6,19 @@ wc.translate=function() {
     var f=wc.f, e=wc.e, p=wc.p
     f.translate.disabled=true
     f.output.value=""
+    f.output.className=""
     wc.r=[]
     wc.current=0
     clear(e)
     clear(p)
 
     function show_error(msg) {
-	if(e) e.innerHTML=msg
-	else f.output.value="["+msg+"]"
+	if(e) e.innerHTML="<span class=low_quality>"+msg+"</span>"
+	else {
+	    f.output.value="["+msg+"]"
+	    f.output.className="low_quality"
+	}
+	f.translate.disabled=false
     }
     function show_pick(i) { return function() { show_trans(i); return false; } }
     function show_picks() {
@@ -34,11 +39,21 @@ wc.translate=function() {
     }
     function show_trans(i) {
 	var r=wc.r[i]
-	f.output.value=r.text
+	var text=r.text
+	var quality="default_quality"
+	switch(text[0]) {
+	case '+': text=text.substr(1); quality="high_quality"; break;
+	case '*': text=text.substr(1); quality="low_quality"; break;
+	default:
+	    if(r.tree[0]=="?") quality="low_quality"
+	}
+	if(text[0]==" ") text=text.substr(1)
+	f.output.value=text
+	f.output.className=quality
 	if(e) e.innerHTML=r.prob+"<br>"+r.tree
 	wc.current=i
 	if(wc.p /*&& wc.r.length>1*/) show_picks()
-	if(f.speak.checked) wc.speak(r.text,f.to.value)
+	if(f.speak.checked) wc.speak(text,f.to.value)
     }
 
     function trans(text,i) {
