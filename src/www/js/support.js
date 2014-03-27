@@ -125,14 +125,31 @@ function ajax_http_post(url,formdata,callback,errorcallback) {
 
 // JSON via AJAX
 function ajax_http_get_json(url,cont,errorcallback) {
-    ajax_http_get(url, with_json(cont), errorcallback);
+    ajax_http_get(url, with_json(cont,errorcallback), errorcallback);
 }
 
 function ajax_http_post_json(url,formdata,cont,errorcallback) {
-    ajax_http_post(url, formdata, with_json(cont), errorcallback);
+    ajax_http_post(url, formdata, with_json(cont,errorcallback), errorcallback);
 }
 
-function with_json(cont) { return function(txt){cont(eval("("+txt+")"));} }
+function with_json(cont,errorcallback) {
+    return function(txt){
+	if(txt) {
+	    try {
+		var json=eval("("+txt+")")
+	    } catch (e) {
+		if(errorcallback)
+		    errorcallback("JSON parsing problem",500,"text/plain")
+		return
+	    }
+	    cont(json);
+	}
+	else {
+	    if(errorcallback)
+		errorcallback("Empty response form server (crash?)",500,"text/plain")
+	}
+    }
+}
 
 function sameOrigin(url) {
     var a=empty("a");
