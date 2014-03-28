@@ -9047,7 +9047,7 @@ lin careerism_N = variants {} ;
 lin careerist_N = mkN "karriärist" "karriärister" ; -- comment=2
 lin carefree_A = mkA "bekymmerslös" ;
 lin carefreeness_N = mkN "sorglöshet" "sorglösheter" ;
-lin careful_A = mkA "försiktig" | mkA "grundlig"  ; -- SaldoWN -- comment=10
+lin careful_A = mkA "försiktig" | mkA "grundlig" | mkA "noga" ; -- SaldoWN -- comment=10
 lin carefulness_N = mkN "noggrannhet" "noggrannheter" ; -- comment=3
 lin caregiver_N = variants {} ;
 lin careladen_A = variants {} ;
@@ -21305,12 +21305,12 @@ lin finback_N = variants {} ;
 lin finch_N = mkN "fink" ; -- status=guess
 lin find_N = mkN "fynd" neutrum; -- comment=4
 lin find_V = mkV "anse" "ansåg" "ansett" ; -- comment=27
-lin find_V2 = L.find_V2;
+lin find_V2 = L.find_V2 | mkV2 (mkV "hitta") ;
 lin find_V2A = mkV2A (mkV "finna" "fann" "funnit") | mkV2A (mkV "konstaterar"); -- status=guess, src=wikt status=guess, src=wikt
 lin find_V2V = mkV2V (mkV "finna" "fann" "funnit") | mkV2V (mkV "konstaterar"); -- status=guess, src=wikt status=guess, src=wikt
 lin find_VS = mkVS (mkV "anse" "ansåg" "ansett"); --
 lin find_out_V = mkV "anse" "ansåg" "ansett" ; -- comment=27
-lin find_out_V2 = dirV2 (partV (mkV "hittar")"på"); -- comment=7
+lin find_out_V2 = dirV2 (partV (mkV "hitta")"på"); -- comment=7
 lin finder_N = mkN "upphittare" utrum;
 lin finding_N = variants {} ;
 lin findings_N = mkN "rön" neutrum | mkN "rön" neutrum ; -- SaldoWN
@@ -27855,7 +27855,7 @@ lin identifiable_A = mkA "identifierbar" ;
 lin identification_N = mkN "legitimation" "legitimationer" | mkN "identifikation" "identifikationer"  ; -- SaldoWN -- comment=2
 lin identifier_N = variants {} ;
 lin identify_V = mkV "identifierar" ; -- comment=5
-lin identify_V2 = dirV2 (partV (mkV "hittar")"på");
+lin identify_V2 = dirV2 (partV (mkV "hitta")"på");
 lin identikit_N = variants {} ;
 lin identity_N = mkN "identitet" "identiteter" ; -- SaldoWN
 lin ideogram_N = variants {} ;
@@ -33038,7 +33038,7 @@ lin loo_N = mkN "toa" ;
 lin loofa_N = variants {} ;
 lin loofah_N = variants {} ;
 lin look_N = mkN "utseende" | mkN "blick"  ; -- SaldoWN -- comment=8
-lin look_V = mkV "uttrycker" ; -- comment=13
+lin look_V = mkV "titta" | partV (mkV "se" "såg" "sett") "ut" ; -- comment=13
 lin look_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut"); -- comment=9
 lin look_V2V = mkV2V (mkV "passar"); -- status=guess, src=wikt
 lin look_VA = mkVA (mkV "passar"); -- status=guess, src=wikt
@@ -50189,8 +50189,8 @@ lin seaquake_N = variants {} ;
 lin sear_A = variants {} ;
 lin sear_V2 = variants {} ;
 lin search_N = mkN "undersökning" | mkN "sök" neutrum ; -- SaldoWN
-lin search_V = mkV "söker" ; -- comment=4
-lin search_V2 = mkV2 (mkV "genomsöka") | mkV2 (mkV "söka"); -- status=guess, src=wikt status=guess, src=wikt
+lin search_V = mkV "söka" | mkV "leta" ; -- comment=4
+lin search_V2 = mkV2 (mkV "leta") | mkV2 (mkV "söka");
 lin search_party_N = variants {} ;
 lin search_warrant_N = variants {} ;
 lin searcher_N = variants {} ;
@@ -53280,7 +53280,7 @@ lin soulful_A = variants {} ;
 lin soulless_A = mkA "själlös" ;
 lin sound_A = mkA "sund" | mkA "säker"  ; -- SaldoWN -- comment=13
 lin sound_Adv = variants {} ;
-lin sound_N = mkN "sund" neutrum | mkN "sund" neutrum ; -- SaldoWN -- comment=10
+lin sound_N = mkN "ljud" neutrum ; -- comment=10
 lin sound_V = mkV "sonderar" ; -- comment=11
 lin sound_V2 = dirV2 (partV (mkV "spelar")"in");
 lin sound_VA = mkVA (mkV "ljudar") | mkVA (mkV "låta"); -- status=guess, src=wikt status=guess, src=wikt
