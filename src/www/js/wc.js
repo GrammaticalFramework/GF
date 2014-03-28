@@ -20,6 +20,18 @@ wc.translate=function() {
 	}
 	f.translate.disabled=false
     }
+    function trans_quality(r) {
+	var text=r.text
+	var quality="default_quality"
+	switch(text[0]) {
+	case '+': text=text.substr(1); quality="high_quality"; break;
+	case '*': text=text.substr(1); quality="low_quality"; break;
+	default:
+	    if(r.tree[0]=="?") quality="low_quality"
+	}
+	if(text[0]==" ") text=text.substr(1)
+	return {quality:quality,text:text}
+    }
     function show_pick(i) { return function() { show_trans(i); return false; } }
     function show_picks() {
 	clear(p)
@@ -30,7 +42,8 @@ wc.translate=function() {
 		var pick=node("a",{href:"#"},[pick])
 		pick.onclick=pick.onmouseover=show_pick(i)
 	    }
-	    p.appendChild(span_class("pick",pick))
+	    var q=trans_quality(wc.r[i]).quality
+	    p.appendChild(span_class("pick "+q,pick))
 	}
 	p.appendChild(wrap_class("small","pick",
 				 node("a",{href:wc.google_translate_url(),
@@ -39,21 +52,13 @@ wc.translate=function() {
     }
     function show_trans(i) {
 	var r=wc.r[i]
-	var text=r.text
-	var quality="default_quality"
-	switch(text[0]) {
-	case '+': text=text.substr(1); quality="high_quality"; break;
-	case '*': text=text.substr(1); quality="low_quality"; break;
-	default:
-	    if(r.tree[0]=="?") quality="low_quality"
-	}
-	if(text[0]==" ") text=text.substr(1)
-	f.output.value=text
-	f.output.className=quality
+	var t=trans_quality(r)
+	f.output.value=t.text
+	f.output.className=t.quality
 	if(e) e.innerHTML=r.prob+"<br>"+r.tree
 	wc.current=i
 	if(wc.p /*&& wc.r.length>1*/) show_picks()
-	if(f.speak.checked) wc.speak(text,f.to.value)
+	if(f.speak.checked) wc.speak(t.text,f.to.value)
     }
 
     function trans(text,i) {
@@ -114,10 +119,28 @@ wc.try_google=function() {
 }
 */
 
+// Update language selection menus with the languages supported by the grammar
+function init_languages() {
+    function init2(langs) {
+	var langset=toSet(langs)
+	function update_menu(m) {
+	    var l=m.value
+	    clear(m)
+	    for(var i=0;i<langs.length;i++)
+		m.appendChild(option(concname(langs[i]),langs[i]))
+	    if(langset[l]) m.value=l
+	}
+	update_menu(wc.f.from)
+	update_menu(wc.f.to)
+    }
+    gftranslate.get_languages(init2)
+}
+
 function init_speech() {
     wc.speech=window.speechSynthesis && window.speechSynthesis.getVoices().length>0
     if(wc.speech) element("speak").style.display="inline"
 }
 
+init_languages()
 init_speech()
 setTimeout(init_speech,500) // A hack for Chrome.

@@ -36,6 +36,16 @@ function add_country(code) {
     case "fi": return "fi-FI"
     case "zh": return "zh-CN"
     case "hi": return "hi-IN"
+    case "es": return "es-ES"
+    case "it": return "it-IT"
+    case "bg": return "bg-BG" // ?
+    case "da": return "da-DK"
+    case "nb": return "nb-NO"
+    case "nl": return "nl-NL"
+    case "ja": return "ja-JP"
+    case "ro": return "ja-RO"
+    case "el": return "el-GR"
+    // ...
     default: return code
     }
 }
