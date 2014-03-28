@@ -24,5 +24,6 @@ lin
   GCongratulations = mkGreeting "grattis";
   GHappyBirthday = mkGreeting "grattis på födelsedagen" ;
   GGoodLuck = mkGreeting "lycka till" ; 
+  GWhatTime = mkGreeting "vad är klockan" | mkGreeting "hur mycket är klockan" ;
 
 }

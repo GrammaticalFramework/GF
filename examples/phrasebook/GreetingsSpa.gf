@@ -26,6 +26,6 @@ lin
   GSorryPol = mkGreeting "disculpe" ; 
   GThanks = mkGreeting "gracias" ;
   GTheCheck = mkGreeting "la cuenta" ;
-
+  GWhatTime = mkGreeting "qué ora es" ;
 
 }

@@ -27,5 +27,6 @@ lin
   GCongratulations = mkInterj "祝贺您" ;
   GHappyBirthday = mkInterj "祝你生日快乐" ;
   GGoodLuck = D.good_luck_Interj ;
+  GWhatTime = mkInterj "现在是什么时候" ;
 
 }

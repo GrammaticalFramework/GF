@@ -23,5 +23,6 @@ fun
   GCongratulations : Greeting ;
   GHappyBirthday : Greeting ;
   GGoodLuck : Greeting ; 
+  GWhatTime : Greeting ;
 
 }
