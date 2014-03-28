@@ -23,10 +23,20 @@ lin
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> (lin CN cn))))) (lin A a) ;
 
-  bottle_of_CN np = variants {} ; -- mkCN (lin N2 (mkN2 (mkN "pullo" | mkN "pullollinen") (mkPrep partitive))  (lin NP np) ;
-  cup_of_CN    np = variants {} ; -- mkCN (lin N2 (mkN2 (mkN "kuppi" | mkN "kupillinen") (mkPrep partitive))  (lin NP np) ;
-  glass_of_CN  np = variants {} ; -- mkCN (lin N2 (mkN2 (mkN "lasi" | mkN "lasillinen") (mkPrep partitive)) (lin NP np) ;
+  bottle_of_CN np = mkCN (lin N2 (mkN2 (mkN "pullo") (mkPrep partitive)))  (lin NP np) |  mkCN (lin N2 (mkN2 (mkN "pullollinen") (mkPrep partitive)))  (lin NP np);
+  cup_of_CN    np = mkCN (lin N2 (mkN2 (mkN "kuppi") (mkPrep partitive)))  (lin NP np) | mkCN (lin N2 (mkN2 (mkN "kupillinen") (mkPrep partitive)))  (lin NP np) ;
+  glass_of_CN  np =  mkCN (lin N2 (mkN2 (mkN "lasi") (mkPrep partitive))) (lin NP np) | mkCN (lin N2 (mkN2 (mkN "lasillinen") (mkPrep partitive))) (lin NP np) ;
 
+  where_go_QCl np = mkQCl (lin IAdv (ss "minne")) (mkCl np (mkVP L.go_V)) ;
+  where_come_from_QCl np =  mkQCl (lin IAdv (ss "mistä")) (mkCl np (mkVP L.come_V)) ;
+  
+  go_here_VP = mkVP (mkVP L.go_V) (mkAdv "tänne") ;
+  come_here_VP = mkVP (mkVP L.come_V) (mkAdv "tänne") ;
+  come_from_here_VP = mkVP (mkVP L.come_V) (mkAdv "täältä") ;
+
+  go_there_VP = mkVP (mkVP L.go_V) (mkAdv "sinne") ;
+  come_there_VP = mkVP (mkVP L.come_V) (mkAdv "sinne") ;
+  come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "sieltä") ;
 
 lincat
   Weekday = {noun : N ; habitual : SyntaxFin.Adv} ;

@@ -26,9 +26,23 @@ lin
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
 
-  bottle_of_CN np = mkCN (lin N2 (mkN2 (mkN "bouteille" feminine) part_Prep)) (lin NP np) ;
-  -- cup_of_CN    np = mkCN (lin N2 (mkN2 "cup"))    (lin NP np) ;
-  -- glass_of_CN  np = mkCN (lin N2 (mkN2 "glass"))  (lin NP np) ;
+  bottle_of_CN np = mkCN (lin N2 (mkN2 (mkN "bouteille" feminine) part_Prep)) np ;
+  cup_of_CN    np = mkCN (lin N2 (mkN2 (mkN "tasse") part_Prep)) np ;
+  glass_of_CN  np = mkCN (lin N2 (mkN2 (mkN "verre") part_Prep)) np ;
+
+
+-- spatial deixis and motion verbs
+
+  where_go_QCl np = mkQCl where_IAdv (mkCl np (mkVP L.go_V)) ;
+  where_come_from_QCl np =  mkQCl (lin IAdv (ss "d'où")) (mkCl np (mkVP L.go_V)) ;
+  
+  go_here_VP = mkVP (mkVP L.go_V) here_Adv ;
+  come_here_VP = mkVP (mkVP L.come_V) here_Adv ;
+  come_from_here_VP = mkVP (mkVP L.come_V) (mkAdv "d'ici") ;
+
+  go_there_VP = mkVP (mkVP L.go_V)  there_Adv ;
+  come_there_VP = mkVP (mkVP L.come_V) there_Adv ;
+  come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "de là") ;
   
 lincat
   Weekday = N ;
