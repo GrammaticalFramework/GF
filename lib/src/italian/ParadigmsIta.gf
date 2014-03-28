@@ -382,7 +382,7 @@ oper
       i   = last ci ;
       verb = case are of {
         "ire" =>  finire_100 x ;
-        "ere" =>  assistere_24 x ;
+        "ere" =>  temere_20 x ;
         _ => case i of {
           "c" => cercare_7 x ;
           "g" => legare_8 x ;
