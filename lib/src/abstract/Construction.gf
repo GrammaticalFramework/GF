@@ -39,6 +39,20 @@ fun
   cup_of_CN    : NP -> CN ;       -- cup of tea / kupillinen teetä (Fin)
   glass_of_CN  : NP -> CN ;
   
+-- spatial deixis and motion verbs
+-- verbs like `walk' or `run' can take both: there or to there
+
+  where_go_QCl   : NP -> QCl ;      -- where did X go / vart gick X (Swe)
+  where_come_from_QCl : NP -> QCl ; -- where did X come from / mistä X tuli (Fin)
+  
+  go_here_VP   : VP ;      -- X went here / X gick hit (Swe)
+  come_here_VP : VP ;      -- X came here / X tuli tänne (Fin)
+  come_from_here_VP : VP ; -- X came from here / X tuli täältä (Fin)
+
+  go_there_VP   : VP ;      -- X went here / X gick dit (Swe)
+  come_there_VP : VP ;      -- X came there / X tuli sinne (Fin)
+  come_from_there_VP : VP ; -- X came from there / X tuli sieltä (Fin)
+
 -- time expressions
 
 cat 

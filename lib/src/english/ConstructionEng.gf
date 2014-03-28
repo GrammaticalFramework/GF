@@ -1,7 +1,7 @@
 --# -path=.:../abstract
 
 concrete ConstructionEng of Construction = CatEng ** 
-  open SyntaxEng, SymbolicEng, ParadigmsEng, (L = LexiconEng), (E = ExtraEng), (G = GrammarEng), (R = ResEng), Prelude in {
+  open SyntaxEng, SymbolicEng, ParadigmsEng, (L = LexiconEng), (E = ExtraEng), (G = GrammarEng), (R = ResEng), (S = StructuralEng), Prelude in {
 
 
 lin
@@ -27,6 +27,22 @@ lin
   bottle_of_CN np = mkCN (lin N2 (mkN2 "bottle")) (lin NP np) ;
   cup_of_CN    np = mkCN (lin N2 (mkN2 "cup"))    (lin NP np) ;
   glass_of_CN  np = mkCN (lin N2 (mkN2 "glass"))  (lin NP np) ;
+
+-- spatial deixis and motion verbs
+
+  where_go_QCl np = mkQCl where_IAdv (mkCl np (mkVP L.go_V)) ;
+  where_come_from_QCl np =  mkQCl from_where_IAdv (mkCl np (mkVP L.go_V)) ;
+  
+  go_here_VP = mkVP (mkVP L.go_V) S.here_Adv ;
+  come_here_VP = mkVP (mkVP L.come_V) S.here_Adv ;
+  come_from_here_VP = mkVP (mkVP L.come_V) (mkAdv "from here") ;
+
+  go_there_VP = mkVP (mkVP L.go_V)  S.there_Adv ;
+  come_there_VP = mkVP (mkVP L.come_V) S.there_Adv ;
+  come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "from there") ;
+
+--TODO "where did X come from" instead of "from where did X come"
+oper from_where_IAdv : IAdv = lin IAdv (ss "from where") ;
 
 lincat
   Weekday = N ;
