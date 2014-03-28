@@ -25,6 +25,7 @@ lin
   GCongratulations = mkGreeting "herzlichen Glückwunsch";
   GHappyBirthday = mkGreeting "alles Gute zum Geburtstag" ;
   GGoodLuck = mkGreeting "viel Glück" ; 
+  GWhatTime = mkGreeting "wieviel Uhr ist es" | mkGreeting "wie spät ist es" ;
 
 }
 

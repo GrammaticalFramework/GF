@@ -25,4 +25,6 @@ lin
   GCongratulations = mkGreeting "onnittelut";
   GHappyBirthday = mkGreeting "hyv‰‰ syntym‰p‰iv‰‰" ;
   GGoodLuck = mkGreeting "onnea" ; 
+  GWhatTime = mkGreeting "paljonko kello on" | mkGreeting "mit‰ kello on" ;
+
 }

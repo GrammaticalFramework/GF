@@ -26,4 +26,6 @@ lin
   GCongratulations = P.ss "बधाई हो";
   GHappyBirthday = P.ss "जन्मदिन की शुभकामनाएँ" ;
   GGoodLuck = P.ss "शुभकामनाएँ" ; 
+  GWhatTime = P.ss "कितने बजे हैं" ;
+
 }
