@@ -10979,7 +10979,8 @@ lin launder_V2 = mkV2 (mkV "lavar") ; -- status=guess, src=wikt
 lin launderette_N = mkN "lavandería" ; -- status=guess
 lin laundry_N = mkN "colada" ; -- status=guess
 lin laureate_A = mkA "laureado" | mkA "galardonado" ; -- status=guess status=guess
-lin laureate_N = mkN "laureado" | mkN "galardonado" ; -- status=guess status=guess
+lin laureateMasc_N = mkN "laureado" | mkN "galardonado" ; -- status=guess status=guess
+lin laureateFem_N = mkN "laureado" | mkN "galardonado" ; -- status=guess status=guess
 lin laurel_N = mkN "corona de laurel" ; -- status=guess
 lin lav_N = mkN "retrete" ; -- status=guess
 lin lava_N = mkN "lava" ; -- status=guess

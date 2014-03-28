@@ -31704,7 +31704,8 @@ lin laundryman_N = variants {} ;
 lin laundrywoman_N = variants {} ;
 lin laura_PN = variants {} ;
 lin laureate_A = variants {} ;
-lin laureate_N = variants {} ;
+lin laureateMasc_N = mkN "laureate";
+lin laureateFem_N = mkN "laureate";
 lin laurel_N = mkN "lager" ; -- comment=3
 lin laureled_A = variants {} ;
 lin laurelled_A = variants {} ;

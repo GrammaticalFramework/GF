@@ -1223,6 +1223,18 @@ oper
                     g   = g ;
                     lock_N = <>
                    };
+  mkN077 : Str -> N ;
+  mkN077 base = let v0 = base;
+                    g  = AFem
+                in {s = mkNoun (v0)
+                               nonExist
+                               nonExist
+                               (v0)
+                               g ;
+                    rel = \\_ => base ;
+                    g   = g ;
+                    lock_N = <>
+                   };
   mkA076 : Str -> A ;
   mkA076 base = let v0 = base
                 in mkAdjective (v0)
