@@ -1805,8 +1805,8 @@ lin alright_A = variants {} ;
 lin alright_Adv = variants {} ;
 lin alsatianMasc_N = variants {} ;
 lin alsatianFem_N = variants {} ;
-lin also_AdV = mkAdV "även" ; --
-lin also_Adv = mkAdv "även" ; -- comment=5
+lin also_AdV = mkAdV "också" | mkAdV "även" ; --
+lin also_Adv = mkAdv "också" | mkAdv "även" ; -- comment=5
 lin also_ran_N = variants {} ;
 lin alstroemeria_N = variants {} ;
 lin altar_N = mkN "altare" "altaret" "altaren" "altarna" ; -- SaldoWN
@@ -23159,7 +23159,7 @@ lin gambol_N = variants {} ;
 lin gambol_V = variants {} ;
 lin gambrel_N = variants {} ;
 lin game_A = mkA "lek" | mkA "vild" "vilt"  ; -- SaldoWN -- comment=5
-lin game_N = mkN "spel" neutrum | mkN "vilt" neutrum ; -- SaldoWN -- comment=15
+lin game_N = mkN "lek" utrum | mkN "spel" neutrum | mkN "vilt" neutrum ; -- SaldoWN -- comment=15
 lin game_V = mkV "spelar" ; -- comment=3
 lin game_V2 = dirV2 (partV (mkV "spelar")"in");
 lin game_bag_N = variants {} ;
@@ -33045,7 +33045,7 @@ lin look_VA = mkVA (mkV "passar"); -- status=guess, src=wikt
 lin look_VV = mkVV (mkV "passar"); -- status=guess, src=wikt
 lin look_after_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut"); -- comment=9
 lin look_ahead_to_V2 = variants {} ;
-lin look_around_V = mkV "uttrycker" ; -- comment=13
+lin look_around_V = partV (mkV "kolla") "runt" ; 
 lin look_around_at_V2 = variants {} ;
 lin look_at_V2 = variants {} ;
 lin look_back_V = mkV "uttrycker" ; -- comment=13
@@ -45698,7 +45698,7 @@ lin quibble_N = variants {} ;
 lin quibble_V = variants {} ;
 lin quibbler_N = variants {} ;
 lin quiche_N = (mkN "paj" "pajer") | mkN "quiche" ; -- status=guess status=guess
-lin quick_A = mkA "kvick" ; -- comment=12
+lin quick_A = mkA "snabb" ; --"kvick" ; -- comment=12
 lin quick_Adv = mkAdv "fort" ;
 lin quick_N = mkN "fort" neutrum; -- comment=4
 lin quick_change_A = variants {} ;
@@ -58613,7 +58613,7 @@ lin topology_N = variants {} ;
 lin toponymy_N = variants {} ;
 lin topos_N = variants {} ;
 lin topper_N = variants {} ;
-lin topping_N = mkN "pålägg" | mkN "strössel" | (mkN "ingrediens" "ingredienser") | (mkN "garnering") | mkN "also useful is ovanpå" ; -- status=guess status=guess status=guess status=guess status=guess
+lin topping_N = mkN "pålägg" | mkN "strössel" | (mkN "ingrediens" "ingredienser") | (mkN "garnering") ; -- status=guess status=guess status=guess status=guess status=guess
 lin topple_V = (mkV "tippar") | mkV "välta" ; -- status=guess, src=wikt status=guess, src=wikt
 lin topple_V2 = mkV2 (mkV "tippar") | mkV2 (mkV "välta"); -- status=guess, src=wikt status=guess, src=wikt
 lin topsail_N = variants {} ;
