@@ -175,6 +175,7 @@ abstract IrregSweAbs = Cat ** {
   utskriva_V : V ;
   vända_V : V ;
   veta_V : V ;
+  vilja_V : V ;
   vina_V : V ;
   vinna_V : V ;
   vrida_V : V ;
