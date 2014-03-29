@@ -13678,6 +13678,7 @@ lin firm_V = variants {};
 lin firm_V2 = variants {};
 lin firmament_N = variants {};
 lin firmness_N = variants {};
+lin first_Adv = variants {};
 lin first_class_A = variants {};
 lin first_class_Adv = variants {};
 lin first_hand_A = variants {};

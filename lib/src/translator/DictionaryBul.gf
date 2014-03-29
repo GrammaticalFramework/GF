@@ -20685,6 +20685,7 @@ lin firmament_N = variants {mkN041 "висина"; mkN007 "небосвод"}; -
 lin firmamental_A = variants {};
 lin firmness_N = variants {mkN041 "коравина"; mkN049 "монолитност"; mkN049 "непоклатимост"; mkN049 "стабилност"; mkN049 "стегнатост"; mkN049 "твърдост"; mkN049 "устойчивост"}; ----
 lin firmware_N = variants {};
+lin first_Adv = variants {};
 lin first_class_A = mkA079 "първокласен";
 lin first_class_Adv = variants {};
 lin first_hand_A = variants {};

@@ -5801,6 +5801,7 @@ lin fireplace_N = mkN "camino" ; -- status=guess
 lin firewood_N = mkN "legna" ;
 lin firework_N = mkN "fuoco d'artificio" | mkN "fuoco artificiale" ; -- status=guess status=guess
 lin firm_A = mkA "ferreo" ; -- status=guess
+lin first_Adv = variants {};
 lin firstborn_A = mkA "primogenito" ; -- status=guess
 lin firstborn_N = mkN "primogenito" ; -- status=guess
 lin fiscal_A = mkA "fiscale" ; -- status=guess

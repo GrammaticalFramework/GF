@@ -17274,6 +17274,7 @@ firmament_N = mkWN (k40 "avaruus") ; --UNCHK
 firmamental_A = mkWA "taivaan-" ; --UNCHK
 firmness_N = mkWN (kH1 "vakaus") ; --UNCHK
 firmware_N = mkWN (k10 "ohjelma") "sulautettu" ; --UNCHK
+first_Adv = mkAdv "ensimmäisenä" | mkAdv "ensimmäiseksi" | mkAdv "ensiksi" ;
 first_class_Adv = mkWAdv (compoundAdv "luo" (k9 "kassa")) "ensimmäisessä" ; --UNCHK
 firstborn_A = mkWA (k36 "vanhin") ; --UNCHK
 firstborn_N = mkWN (k36 "vanhin") ; --UNCHK

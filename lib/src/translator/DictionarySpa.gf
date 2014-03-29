@@ -7614,6 +7614,7 @@ lin firewood_N = mkN "leña" ; -- status=guess
 lin firework_N = mkN "fuego artificial" ; -- status=guess
 lin firmament_N = mkN "firmamento" ; -- status=guess
 lin firmware_N = mkN "firmware" ; -- status=guess
+lin first_Adv = mkAdv "primero" ;
 lin firstborn_N = mkN "primogénito" | mkN "primogénita" ; -- status=guess status=guess
 lin fish_N = L.fish_N  ; -- comment=CHECKED
 lin fish_V = mkV "pescar" ; -- status=guess, src=wikt
