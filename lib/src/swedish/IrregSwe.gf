@@ -74,6 +74,7 @@ concrete IrregSwe of IrregSweAbs = CatSwe ** open ParadigmsSwe in {
   försvinna_V = irregV "försvinna" "försvann" "försvunnit" ;
   förtiga_V = irregV "förtiga" "förteg" "förtigit" ;
   frysa_V = irregV "frysa" "frös" "frusit" ;
+  få_V = irregV "få" "fick" "fått" ;
   gå_V = irregV "gå" "gick" "gått" ;
   göra_V = mkV "göra" "gör" "gör" "gjorde" "gjort" "gjord" ;
   genomdriva_V = irregV "genomdriva" "genomdrev" "genomdrivit" ;

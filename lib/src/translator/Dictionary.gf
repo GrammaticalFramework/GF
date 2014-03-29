@@ -43751,8 +43751,8 @@ fun poikilotherm_N : N;
 fun poikilothermic_A : A;
 fun poilu_N : N;
 fun poinsettia_N : N;
-fun point_1_N : A ; -- | at this point
-fun point_2_N : A ; -- | he got six points
+fun point_1_N : N ; -- | at this point
+fun point_2_N : N ; -- | he got six points
 fun point_N : N;
 fun point_V : V;
 fun point_V2 : V2;
