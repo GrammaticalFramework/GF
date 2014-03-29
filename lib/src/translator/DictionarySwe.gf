@@ -1,6 +1,6 @@
 --# -path=.:../swedish
 
-concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
+concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
 
 flags
   coding = utf8;
@@ -63039,10 +63039,10 @@ lin wank_N = mkN "runk" neutrum; -- status=guess
 lin wank_V = mkV "runkar" ; -- status=guess, src=wikt
 lin wanness_N = variants {} ;
 lin want_N = mkN "vilja" | mkN "behov" neutrum ; -- SaldoWN -- comment=8
-lin want_V = mkV "söker" ; -- comment=10
-lin want_V2 = mkV2 (mkV "vilja"); -- status=guess, src=wikt
-lin want_V2V = mkV2V (mkV "vilja"); -- status=guess, src=wikt
-lin want_VS = mkVS (mkV "vilja"); -- status=guess, src=wikt
+lin want_V = I.vilja_V ; 
+lin want_V2 = mkV2 I.vilja_V ; 
+lin want_V2V = mkV2V I.vilja_V ;
+lin want_VS = mkVS I.vilja_V ;
 lin want_VV = S.want_VV;
 lin want_ad_N = variants {} ;
 lin want_in_V = mkV "söker" ; -- comment=10
