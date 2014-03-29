@@ -37312,11 +37312,11 @@ lin ned_PN = variants {} ;
 lin neddy_PN = variants {} ;
 lin nee_A = mkA "född" | mkA "tidigare" ; -- status=guess status=guess
 lin need_N = mkN "nöd" | mkN "behov" neutrum ; -- SaldoWN -- comment=6
-lin need_V = mkV "behöva" ; -- comment=3
-lin need_V2 = mkV2 "behöva" ; --
-lin need_V2V = mkV2V (mkV "behöva") ;
-lin need_VS = mkVS (mkV "behöva") ;
-lin need_VV = mkVV (mkV "behöva") ;
+lin need_V = mkV "behöver" ; -- comment=3
+lin need_V2 = mkV2 "behöver" ; --
+lin need_V2V = mkV2V (mkV "behöver") ;
+lin need_VS = mkVS (mkV "behöver") ;
+lin need_VV = mkVV (mkV "behöver") ;
 lin needful_A = mkA "nödvändig" ; -- comment=2
 lin neediness_N = mkN "nöd" ;
 lin needle_N = mkN "nål" | mkN "sticka"  ; -- SaldoWN -- comment=11
@@ -50190,8 +50190,8 @@ lin seaquake_N = variants {} ;
 lin sear_A = variants {} ;
 lin sear_V2 = variants {} ;
 lin search_N = mkN "undersökning" | mkN "sök" neutrum ; -- SaldoWN
-lin search_V = mkV "söka" | mkV "leta" ; -- comment=4
-lin search_V2 = mkV2 (mkV "leta") | mkV2 (mkV "söka");
+lin search_V = mkV "söker" | mkV "leta" ; -- comment=4
+lin search_V2 = mkV2 (mkV "leta") | mkV2 (mkV "söker") ;
 lin search_party_N = variants {} ;
 lin search_warrant_N = variants {} ;
 lin searcher_N = variants {} ;
