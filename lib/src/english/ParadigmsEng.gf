@@ -270,6 +270,10 @@ oper
 
   reflV  : V -> V ;  -- reflexive e.g. behave oneself
 
+-- Verbs with variant American-British spelling
+
+  us_britishV : Str -> V ;  -- travel - traveled/travelled
+
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
@@ -538,6 +542,12 @@ mkInterj : Str -> Interj
 
   partV v p = lin V {s = \\f => v.s ! f ; p = p ; isRefl = v.isRefl} ;
   reflV v = lin V {s = v.s ; p = v.p ; isRefl = True} ;
+
+  us_britishV : Str -> V = \s -> case s of {
+    _ + ("el" | "al" | "ol") => regV s | mkV s (s + "s") (s + "led") (s + "led") (s + "ling") ;
+    _ + "or" => regV s | regV (Predef.tk 2 s + "our") ;
+    _ => regV s
+    } ;
 
   prepV2 v p = lin V2 {s = v.s ; p = v.p ; s1 = v.s1 ; c2 = p.s ; isRefl = v.isRefl} ;
   dirV2 v = prepV2 v noPrep ;
