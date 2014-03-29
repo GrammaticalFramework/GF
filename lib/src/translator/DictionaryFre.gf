@@ -7215,6 +7215,7 @@ fireplace_N = mkN "foyer" feminine;
 fireproof_A = mkA "ignifuge";
 firewall_N = mkN "pare-feu" masculine;
 firmware_N = mkN "micrologiciel" masculine;
+first_Adv = variants {};
 firstborn_N = mkN "premier-né";
 fishbone_N = mkN "arête" feminine;
 fisher_N = mkN "pékan" masculine | mkN "pêcheur";

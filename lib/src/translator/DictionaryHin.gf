@@ -10034,6 +10034,7 @@ lin firm_V2 = mkV2 (compoundV "मजबूत" (mkV "बनाना")) ;
 lin firm_up_V2 = mkV2 (mkV "बनाना") ;
 lin firmament_N = mkN "आकाश" ;       -- old       -- old
 lin firmness_N = mkN "दृढ़ता" ;       -- old       -- old
+lin first_Adv = variants {};
 lin first_class_A = mkA "उत्कृष्ट" ;       -- old
 lin first_class_Adv = mkAdv "प्रथम श्रेणि द्वारा" ;       -- old
 lin firsthand_A = mkA "प्रत्यक्ष" ;       -- old

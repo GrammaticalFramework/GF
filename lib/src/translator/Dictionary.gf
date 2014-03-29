@@ -20664,6 +20664,7 @@ fun firmament_N : N;
 fun firmamental_A : A;
 fun firmness_N : N;
 fun firmware_N : N;
+fun first_Adv : Adv ;
 fun first_class_A : A;
 fun first_class_Adv : Adv;
 fun first_hand_A : A;
