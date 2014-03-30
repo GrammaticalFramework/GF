@@ -3121,7 +3121,9 @@ fun applied_A : A ;
 fun applique_N : N ;
 fun applique_V2 : V2 ;
 fun apply_V : V ;
-fun apply_V2 : V2 ;
+fun apply_V2 : V2 ; ---
+fun apply_1_V2 : V2 ; -- | we apply the newest methods
+fun apply_2_V2 : V2 ; -- | we apply for a job
 fun apply_V2V : V2V ;
 fun apply_VV : VV ;
 fun appoint_V2 : V2 ;
@@ -3443,7 +3445,9 @@ fun arity_N : N ;
 fun arizona_PN : PN ;
 fun ark_N : N ;
 fun arkansas_PN : PN ;
-fun arm_N : N ;
+fun arm_N : N ; ---
+fun arm_1_N : N ; -- | arms and legs
+fun arm_2_N : N ; -- | a farewell to arms
 fun arm_V : V ;
 fun arm_V2 : V2 ;
 fun arm_hole_N : N ;
@@ -12428,7 +12432,8 @@ fun condescendingly_Adv : Adv ;
 fun condescension_N : N ;
 fun condign_A : A ;
 fun condiment_N : N ;
-fun condition_N : N ;
+fun condition_1_N : N ; -- | there is one condition
+fun condition_2_N : N ; -- | he is in a bad condition
 fun condition_V2 : V2 ;
 fun conditional_A : A ;
 fun conditionality_N : N ;
@@ -17813,7 +17818,8 @@ fun draughtsman_N : N ;
 fun draughty_A : A ;
 fun draw_N : N ;
 fun draw_V : V ;
-fun draw_V2 : V2 ;
+fun draw_1_V2 : V2 ; -- | draw the carriage
+fun draw_2_V2 : V2 ; -- | draw a picture
 fun draw_V2V : V2V ;
 fun draw_back_V2 : V2 ;
 fun draw_down_V2 : V2 ;
@@ -23608,8 +23614,9 @@ fun gamboge_N : N ;
 fun gambol_N : N ;
 fun gambol_V : V ;
 fun gambrel_N : N ;
-fun game_1_N : N  ;  -- | play a game
-fun game_2_N : N  ;  -- | eat game
+fun game_1_N : N  ;  -- | card game
+fun game_2_N : N  ;  -- | children's game
+fun game_3_N : N  ;  -- | eat game
 fun game_A : A ;
 fun game_N : N ;
 fun game_V : V ;
@@ -28847,7 +28854,8 @@ fun imputation_N : N ;
 fun impute_V2 : V2 ;
 fun imputrescible_A : A ;
 fun in_A : A ;
-fun in_Adv : Adv ;
+fun in_1_Adv : Adv ; -- | he is in
+fun in_2_Adv : Adv ; -- | he goes in
 fun in_N : N ;
 fun in_Prep : Prep ;
 fun in_accordance_with_Prep : Prep ;
@@ -32197,7 +32205,8 @@ fun lassie_N : N ;
 fun lassitude_N : N ;
 fun lasso_N : N ;
 fun lasso_V2 : V2 ;
-fun last_A : A ;
+fun last_1_A : A ; -- | the last supper
+fun last_2_A : A ; -- | last week
 fun last_Adv : Adv  ;
 fun last_N : N ;
 fun last_V : V ;
@@ -32895,8 +32904,8 @@ fun lidar_N : N ;
 fun lidded_A : A ;
 fun lidless_A : A ;
 fun lido_N : N ;
-fun lie_1_V : V ;
-fun lie_2_V : V ;
+fun lie_1_V : V ; -- | lie on the ground
+fun lie_2_V : V ; -- | tell a lie
 fun lie_N : N ;
 fun lie_VS : VS ;
 fun lie_abed_N : N ;
@@ -34834,7 +34843,8 @@ fun marke_up_V : V ;
 fun marked_A : A ;
 fun markedly_Adv : Adv  ;
 fun marker_N : N ;
-fun market_N : N ;
+fun market_1_N : N ; -- | fish market (place)
+fun market_2_N : N ; -- | stock market (abstract)
 fun market_V : V ;
 fun market_V2 : V2 ;
 fun market_cross_N : N ;
@@ -35112,7 +35122,8 @@ fun matsyendra_N : N ;
 fun matt_A : A ;
 fun matt_PN : PN ;
 fun matte_N : N ;
-fun matter_N : N ;
+fun matter_1_N : N ; -- | matter and form
+fun matter_2_N : N ; -- | what is the matter
 fun matter_V : V ;
 fun matter_of_course_A : A ;
 fun matter_of_fact_A : A ;
@@ -49347,7 +49358,8 @@ fun rook_N : N ;
 fun rook_V2 : V2 ;
 fun rookery_N : N ;
 fun rookie_N : N ;
-fun room_N : N ;
+fun room_1_N : N ; -- | five rooms
+fun room_2_N : N ; -- | there is room for five
 fun room_V : V ;
 fun room_in_V2 : V2 ;
 fun room_mate_N : N ;
@@ -58339,7 +58351,8 @@ fun tell_V2 : V2 ;
 fun tell_V2Q : V2Q ;
 fun tell_V2S : V2S ;
 fun tell_V2V : V2V ;
-fun tell_V3 : V3 ;
+fun tell_1_V3 : V3 ; -- | tell him a story
+fun tell_2_V3 : V3 ; -- | tell heaven from hell
 fun tell_VS : VS ;
 fun tell_VV : VV ;
 fun tell_apart_V2 : V2 ;
@@ -64358,7 +64371,8 @@ fun waster_N : N ;
 fun wastrel_N : N ;
 fun watch_N : N ;
 fun watch_V : V ;
-fun watch_V2 : V2 ;
+fun watch_1_V2 : V2 ; -- | watch the tv
+fun watch_2_V2 : V2 ; -- | watch the bank
 fun watch_V2V : V2V ;
 fun watch_VS : VS ;
 fun watch_chain_N : N ;
