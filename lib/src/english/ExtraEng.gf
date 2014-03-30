@@ -133,7 +133,35 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       VVF VPresPart => ["being obliged to"] ;
       VVF VPast => "should" ; --# notpresent
       VVPastNeg => "shouldn't" ; --# notpresent
-      VVPresNeg => "shall not"  --- shan't
+      VVPresNeg => "shan't" 
+      } ;
+    p = [] ;
+    typ = VVAux
+    } ;
+
+   ought_VV = lin VV {
+     s = table { 
+      VVF VInf => ["be obliged to"] ; ---
+      VVF VPres => "ought to" ;
+      VVF VPPart => ["been obliged to"] ;
+      VVF VPresPart => ["being obliged to"] ;
+      VVF VPast => "ought to" ; --# notpresent
+      VVPastNeg => "oughtn't to" ; --# notpresent
+      VVPresNeg => "oughtn't to"  --- shan't
+      } ;
+    p = [] ;
+    typ = VVAux
+    } ;
+
+   used_VV = lin VV {
+     s = table { 
+      VVF VInf => Predef.nonExist ; ---
+      VVF VPres => Predef.nonExist ;
+      VVF VPPart => ["used to"] ;
+      VVF VPresPart => ["being used to"] ;
+      VVF VPast => "used to" ; --# notpresent
+      VVPastNeg => "used not to" ; --# notpresent
+      VVPresNeg => Predef.nonExist 
       } ;
     p = [] ;
     typ = VVAux
