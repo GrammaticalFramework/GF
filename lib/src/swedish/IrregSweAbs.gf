@@ -17,6 +17,7 @@ abstract IrregSweAbs = Cat ** {
   avskriva_V : V ;
   avstiga_V : V ;
   bära_V : V ;
+  bedja_V : V ;
   bedraga_V : V ;
   bedriva_V : V ;
   befinna_V : V ;

@@ -22,6 +22,7 @@ concrete IrregSwe of IrregSweAbs = CatSwe ** open ParadigmsSwe in {
   avskriva_V = irregV "avskriva" "avskrev" "avskrivit" ;
   avstiga_V = irregV "avstiga" "avsteg" "avstigit" ;
   bära_V = irregV "bära" "bar" "burit" ;
+  bedja_V = irregV "be" "bad" "bett" ; 
   bedraga_V = irregV "bedraga" "bedrog" "bedragit" ;
   bedriva_V = irregV "bedriva" "bedrev" "bedrivit" ;
   befinna_V = irregV "befinna" "befann" "befunnit" ;

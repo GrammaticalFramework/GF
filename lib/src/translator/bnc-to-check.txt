@@ -90,6 +90,8 @@ more_Adv
 about_Prep
 now_Adv
 last_A
+last_1_A
+last_2_A
 other_A
 give_V3
 give_V2
@@ -140,6 +142,8 @@ thing_N
 tell_VV
 tell_VS
 tell_V3
+tell_1_V3
+tell_2_V3
 tell_V2V
 tell_V2S
 tell_V2Q
@@ -183,7 +187,6 @@ leave_V2
 leave_V
 life_N
 great_A
-where_Adv
 case_N
 woman_N
 over_Adv
@@ -263,6 +266,8 @@ about_Adv
 something_NP
 school_N
 in_Adv
+in_1_Adv
+in_2_Adv
 small_A
 place_N
 before_Prep
@@ -406,6 +411,8 @@ hear_V2V
 hear_V2
 hear_V
 room_N
+room_1_N
+room_2_N
 whether_Subj
 water_N
 form_N
@@ -498,6 +505,8 @@ sit_VA
 sit_V2
 sit_V
 market_N
+market_1_N
+market_2_N
 appear_VV
 appear_VS
 appear_VA
@@ -614,6 +623,8 @@ low_A
 cost_N
 little_Det
 matter_N
+matter_1_N
+matter_2_N
 community_N
 remain_VV
 remain_VS
@@ -685,6 +696,8 @@ spend_V2
 spend_V
 force_N
 condition_N
+condition_1_N
+condition_2_N
 paper_N
 off_Prep
 major_A
@@ -756,6 +769,8 @@ management_N
 morning_N
 draw_V2V
 draw_V2
+draw_1_V2
+draw_2_V2
 draw_V
 hope_VV
 hope_VS
@@ -782,6 +797,7 @@ foot_N
 clear_A
 boy_N
 game_N
+game_3_N
 game_2_N
 game_1_N
 food_N
@@ -826,6 +842,8 @@ cause_VS
 cause_V2V
 cause_V2
 arm_N
+arm_1_N
+arm_2_N
 history_N
 parent_N
 land_N
@@ -833,6 +851,8 @@ trade_N
 watch_VS
 watch_V2V
 watch_V2
+watch_1_V2
+watch_2_V2
 watch_V
 white_A
 situation_N
@@ -882,6 +902,8 @@ cover_V2
 apply_VV
 apply_V2V
 apply_V2
+apply_1_V2
+apply_2_V2
 apply_V
 project_N
 raise_V2V
