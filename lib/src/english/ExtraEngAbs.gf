@@ -22,8 +22,9 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
    do_VV : VV ;
 
    may_VV : VV ;
-
    shall_VV : VV ;
+   ought_VV : VV ;
+   used_VV : VV ;
 
    --- AR 7/3/2013
    ComplSlashPartLast : VPSlash -> NP -> VP ;
