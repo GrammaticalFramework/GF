@@ -1,10 +1,19 @@
 var wc={}
+wc.cnl="Phrasebook" // try this controlled natural language first
 wc.f=document.forms[0]
 wc.e=element("extra")
 wc.p=element("pick")
+wc.serial=0
 wc.translate=function() {
+    var current= ++wc.serial
     var f=wc.f, e=wc.e, p=wc.p
-    f.translate.disabled=true
+
+    function disable(yes) {
+	f.translate.disabled=yes
+	f.to.disabled=yes
+	f.swap.disabled=yes
+    }
+    disable(true)
     f.output.value=""
     f.output.className=""
     wc.r=[]
@@ -18,19 +27,22 @@ wc.translate=function() {
 	    f.output.value="["+msg+"]"
 	    f.output.className="low_quality"
 	}
-	f.translate.disabled=false
+	disable(false)
     }
     function trans_quality(r) {
 	var text=r.text
-	var quality="default_quality"
-	switch(text[0]) {
-	case '+': text=text.substr(1); quality="high_quality"; break;
-	case '*': text=text.substr(1); quality="low_quality"; break;
-	default:
-	    if(r.tree[0]=="?") quality="low_quality"
+	if(r.prob==0) return {quality:"high_quality",text:text}
+	else {
+	    var quality="default_quality"
+	    switch(text[0]) {
+	    case '+': text=text.substr(1); quality="high_quality"; break;
+	    case '*': text=text.substr(1); quality="low_quality"; break;
+	    default:
+		if(r.tree[0]=="?") quality="low_quality"
+	    }
+	    if(text[0]==" ") text=text.substr(1)
+	    return {quality:quality,text:text}
 	}
-	if(text[0]==" ") text=text.substr(1)
-	return {quality:quality,text:text}
     }
     function show_pick(i) { return function() { show_trans(i); return false; } }
     function show_picks() {
@@ -55,35 +67,57 @@ wc.translate=function() {
 	var t=trans_quality(r)
 	f.output.value=t.text
 	f.output.className=t.quality
-	if(e) e.innerHTML=r.prob+"<br>"+r.tree
+	if(e) e.innerHTML=(r.prob||"")+"<br>"+r.tree
 	wc.current=i
 	if(wc.p /*&& wc.r.length>1*/) show_picks()
 	if(f.speak.checked) wc.speak(t.text,f.to.value)
     }
 
+    function showit(r,text) {
+	wc.r.push(r)
+	var j=wc.r.length-1
+	wc.r[j].text=text
+	if(wc.current==j) show_trans(j)
+	else show_picks()
+	disable(false)
+    }
     function trans(text,i) {
-	function showit(result) {
-	    wc.r[i].text=result
-	    if(wc.current==i) show_trans(i)
-	    else show_picks()
-	    f.translate.disabled=false
-	    if(wc.p && i<9) trans(text,i+1)
-	}
-	function step3(trans) {
-	    if(trans.length>=1) {
-		if(trans[0].error) show_error(trans[0].error)
-		else {
-		    var r=wc.r[i]=trans[0]
-		    if(e && wc.current==i) e.innerHTML=r.prob+"<br>"+r.tree
-		    unlextext(r.linearizations[0].text,showit)
+	function step3(tra) {
+	    if(wc.serial==current) {
+		if(tra.length>=1) {
+		    if(tra[0].error) show_error(tra[0].error)
+		    else {
+			var r=tra[0]
+			r.text=r.linearizations[0].text
+			// Two server requests in parallel:
+			unlextext(r.text,function(text){showit(r,text)})
+			if(wc.p && i<9) trans(text,i+1)
+		    }
 		}
+		else if(i==0) show_error("Unable to translate")
 	    }
-	    else if(i==0) show_error("Unable to translate")
 	}
 	gftranslate.translate(text,f.from.value,f.to.value,i,1,step3)
     }
     function step2(text) { trans(text,0) }
-    lextext(f.input.value,step2)
+    function step2cnl(text) {
+	function step3cnl(results) {
+	    var trans=results[0].translations
+	    if(trans && trans.length>=1) {
+		var r=trans[0]
+		r.text=r.linearizations[0].text
+		r.prob=0
+		unlextext(r.text,function(text){showit(r,text)})
+	    }
+	    step2(text)
+	}
+	wc.pgf_online.translate({from:wc.cnl+f.from.value,
+				 to:wc.cnl+f.to.value,
+				 input:text},
+				step3cnl,
+				function(){step2(text)})
+    }
+    lextext(f.input.value,wc.cnl ? step2cnl : step2)
     return false;
 }
 
@@ -102,7 +136,7 @@ wc.swap=function() {
     var from=f.from.value
     f.from.value=f.to.value
     f.to.value=from
-    wc.translate()
+    //wc.translate() // changing f.to.value is enough to start the translation
 }
 
 wc.google_translate_url=function() {
@@ -144,3 +178,7 @@ function init_speech() {
 init_languages()
 init_speech()
 setTimeout(init_speech,500) // A hack for Chrome.
+if(wc.cnl) {
+    wc.pgf_online=pgf_online({});
+    wc.pgf_online.switch_grammar(wc.cnl+".pgf")
+}
