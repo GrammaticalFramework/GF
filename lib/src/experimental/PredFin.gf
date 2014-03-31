@@ -56,7 +56,7 @@ lin
     } ;
 
   ComplV2 x vp np =  vp ** {
-    obj1 = \\_ => appCompl True Pos vp.c1 np ;
+    obj1 = \\_ => appCompl True Pos vp.c1 np ; ---- True,Pos ?
     } ;
 
   PredVP x np vp = vp ** {
