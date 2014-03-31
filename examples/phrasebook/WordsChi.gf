@@ -129,7 +129,7 @@ concrete WordsChi of Words = SentencesChi **
     AHasAge p nu =  mkCl (lin NP {s = p.name.s ++ nu.s}) (mkV "岁") ; ----
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasRoom p num = mkCl p.name have_V2 
-      (mkNP (mkNP a_Det D.room_N) (SyntaxChi.mkAdv for_Prep (mkNP num D.person_N))) ;
+      (mkNP (mkNP a_Det D.room_1_N) (SyntaxChi.mkAdv for_Prep (mkNP num D.person_N))) ;
     AHasTable p num = mkCl p.name have_V2 
       (mkNP (mkNP a_Det D.table_N) (SyntaxChi.mkAdv for_Prep (mkNP num D.person_N))) ;
     AHasName p name = mkCl p.name (mkV2 "叫") name ; 
