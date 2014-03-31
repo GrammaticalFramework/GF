@@ -62683,7 +62683,8 @@ lin vicariate_N = variants {} ;
 lin vicarious_A = mkA "vikarierande" ; -- comment=2
 lin vice_N = changeCompoundN "skruvstäds" (mkN "skruvstäd" neutrum) ;
 lin vice_Prep = mkPrep "vice" ;
-lin vice_versa_Adv = variants {} ;
+lin vice_president_N = mkN "vicepresident" "vicepresidenter" ;
+lin vice_versa_Adv = mkAdv "vice versa" ;
 lin vicegerent_N = variants {} ;
 lin vicenary_A = variants {} ;
 lin vicennial_A = variants {} ;
