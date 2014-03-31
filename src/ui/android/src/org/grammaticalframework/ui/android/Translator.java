@@ -59,13 +59,13 @@ public class Translator {
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
-	new Language("bg-BG", "Bulgarian", "AppBul", R.xml.qwerty),
+	new Language("bg-BG", "Bulgarian", "AppBul", R.xml.cyrillic),
 	new Language("cmn-Hans-CN", "Chinese", "AppChi", R.xml.qwerty),   
 	new Language("en-US", "English", "AppEng", R.xml.qwerty),
         new Language("fi-FI", "Finnish", "AppFin", R.xml.qwerty),
         new Language("fr-FR", "French",  "AppFre", R.xml.qwerty),
         new Language("de-DE", "German",  "AppGer", R.xml.qwerty),
-        new Language("hi-IN", "Hindi",   "AppHin", R.xml.qwerty),
+        new Language("hi-IN", "Hindi",   "AppHin", R.xml.devanagari_page1, R.xml.devanagari_page2),
         new Language("it-IT", "Italian", "AppIta", R.xml.qwerty),
         new Language("es-ES", "Spanish", "AppSpa", R.xml.qwerty), 
         new Language("sv-SE", "Swedish", "AppSwe", R.xml.qwerty), 
