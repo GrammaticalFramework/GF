@@ -1,6 +1,6 @@
 1. Create a check list for Swe
 
-do
+  do
   bnc <- readFile "bnc-to-check.txt" >>= return . words                               -- list of BNC funs
   dict <- readFile "DictionarySwe.gf" >>= return . map words . lines                  -- current Swe lexicon
   let dictmap = Data.Map.fromList [(f,unwords ws) | "lin":f:"=":ws <- dict]
@@ -35,7 +35,7 @@ Verify the result by compiling DictionaryEng.gf
 
 4. Extend the Swe lexicon
 
-do
+  do
   old <- readFile "DictionarySwe.gf" >>= return . map words . lines       -- read old lexicon
   new <- readFile "correctswe.txt" >>= return . map words . lines         -- read corrected and new words
   let oldmap = Data.Map.fromList [(f,unwords ws) | "lin":f:"=":ws <- old]
@@ -56,5 +56,18 @@ Or take note of the last word that was checked already.
 
 
 
+6. Generate a spreadsheet view
+
+Here for Swe and Bul:
+
+  do
+  bnc <- readFile "bnc-to-check.txt" >>= return . words
+  swe <- readFile "DictionarySwe.gf" >>= return . map words . lines
+  let swemap = Data.Map.fromList [(f,unwords ws) | "lin":f:"=":ws <- swe]
+  bul <- readFile "DictionaryBul.gf" >>= return . map words . lines
+  let bulmap = Data.Map.fromList [(f,unwords ws) | "lin":f:"=":ws <- bul]
+  let look f m = maybe "-" id $ Data.Map.lookup f m
+  let line f = f ++ "\t" ++ look f swemap ++ "\t" ++ look f bulmap
+  writeFile "bnc-swe-bul.tsv" $ unlines $ map line bnc
 
 
