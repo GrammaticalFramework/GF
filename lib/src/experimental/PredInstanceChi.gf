@@ -143,9 +143,9 @@ oper
           vneg   = case p of {Pos => [] ; Neg => v.s.neg} ;
           pass   = case o of {CAct => [] ; CPass => passive_s}
        in case <t,a> of {
-          <X.Past,_>  => <pass,  bu_neg,  sta ++ v.s.s ++ v.s.pp> ;
-          <_,X.Anter> => <pass,  bu_neg,  sta ++ v.s.s ++ v.s.pp> ;
-          _          => <pass,  vneg,    sta ++ v.s.s> 
+          <X.Past,_>  => <sta ++ pass,  bu_neg,  v.s.s ++ v.s.pp> ;
+          <_,X.Anter> => <sta ++ pass,  bu_neg,  v.s.s ++ v.s.pp> ;
+          _           => <sta ++ pass,  vneg,    v.s.s> 
           } ;   ---- other aspects
 
 
