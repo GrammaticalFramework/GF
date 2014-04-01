@@ -57200,7 +57200,7 @@ lin tasteless_A = mkA "smaklös" ; -- comment=2
 lin tastelessness_N = variants {} ;
 lin taster_N = variants {} ;
 lin tasting_N = variants {} ;
-lin tasty_A = mkA "god" | mkA "smakfull" ; -- SaldoWN -- comment=4
+lin tasty_A = mkA "god" "gott" | mkA "smakfull" ; -- SaldoWN -- comment=4
 lin tat_N = variants {} ;
 lin tat_V = variants {} ;
 lin tat_V2 = variants {} ;
