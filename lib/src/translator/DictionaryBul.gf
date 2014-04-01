@@ -1,6 +1,6 @@
 --# -path=.:../bulgarian:../abstract:../common
 
-concrete DictionaryBul of Dictionary = CatBul ** open MorphoBul, ResBul, ParadigmsBul, Prelude in {
+concrete DictionaryBul of Dictionary = CatBul ** open MorphoBul, ResBul, (S = StructuralBul), ParadigmsBul, Prelude in {
 
 flags
   coding=utf8 ;
@@ -8428,7 +8428,8 @@ lin camshaft_N = variants {};
 lin camwood_N = variants {};
 lin can_N = mkN041 "консерва" ;
 lin can_V2 = dirV2 (singleV (mkV186 "консервирам"));
-lin can_VV = mkVV (singleV (mkV166 "мога"));
+lin can_1_VV = S.can_VV ;
+lin can_2_VV = S.can8know_VV ;
 lin canada_PN = mkPN "Канада" Fem;
 lin canadian_A = mkA078 "канадски" ;
 lin canadian_N = mkN008a "канадец";

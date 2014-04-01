@@ -8834,7 +8834,8 @@ fun camshaft_N : N ;
 fun camwood_N : N ;
 fun can_N : N ;
 fun can_V2 : V2 ;
-fun can_VV : VV ;
+fun can_1_VV : VV ; -- | I can come with you (possibility)
+fun can_2_VV : VV ; -- | I can speak English (know-how)
 fun canada_PN : PN ;
 fun canadian_A : A ;
 fun canadian_N : N ;

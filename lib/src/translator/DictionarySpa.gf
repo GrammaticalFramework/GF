@@ -3128,7 +3128,8 @@ lin camshaft_N = mkN "árbol de levas" ; -- status=guess
 lin can8know_VV = S.can8know_VV  ; -- comment=CHECKED
 lin can_N = mkN "regadera" ; -- status=guess
 lin can_V2 = mkV2 (poder_V) ; -- status=guess, src=wikt
-lin can_VV = S.can_VV  ; -- comment=CHECKED
+lin can_1_VV = S.can_VV ;
+lin can_2_VV = S.can8know_VV ;
 lin canal_N = mkN "canal" ; -- status=guess
 lin canard_N = mkN "bulo" | mkN "filfa" ; -- status=guess status=guess
 lin canary_N = mkN "canario" ; -- status=guess

@@ -7215,7 +7215,8 @@ varied_A
 predictable_A
 mutation_N
 equal_V2
-can_VV
+can_1_VV
+can_2_VV
 can_V2
 burst_N
 retrieve_V2
