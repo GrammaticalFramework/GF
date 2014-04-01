@@ -397,8 +397,9 @@ convertTerm opts sel ctype (C t1 t2)    = do v1 <- convertTerm opts sel ctype t1
 convertTerm opts sel ctype (K t)        = return (CStr [SymKS t])
 convertTerm opts sel ctype Empty        = return (CStr [])
 convertTerm opts sel ctype (Alts s alts)= do CStr s <- convertTerm opts CNil ctype s
-                                             alts <- forM alts $ \(u,Strs ps) -> do 
+                                             alts <- forM alts $ \(u,alt) -> do
                                                             CStr u <- convertTerm opts CNil ctype u
+                                                            Strs ps <- unPatt alt
                                                             ps     <- mapM (convertTerm opts CNil ctype) ps
                                                             return (u,map unSym ps)
                                              return (CStr [SymKP s alts])
@@ -406,6 +407,18 @@ convertTerm opts sel ctype (Alts s alts)= do CStr s <- convertTerm opts CNil cty
     unSym (CStr [])        = ""
     unSym (CStr [SymKS t]) = t
     unSym _                = ppbug $ hang (text "invalid prefix in pre expression:") 4 (ppU 0 (Alts s alts))
+
+    unPatt (EPatt p) = fmap Strs (getPatts p)
+    unPatt u         = return u
+
+    getPatts p = case p of
+      PAlt a b  -> liftM2 (++) (getPatts a) (getPatts b)
+      PString s -> return [K s]
+      PSeq a b  -> do
+        as <- getPatts a
+        bs <- getPatts b
+        return [K (s ++ t) | K s <- as, K t <- bs]
+      _ -> fail (render (text "not valid pattern in pre expression" <+> ppPatt Unqualified 0 p))
 
 convertTerm opts sel ctype (Q (m,f))
   | m == cPredef &&
