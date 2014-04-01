@@ -115,7 +115,7 @@ incomplete concrete NounRomance of Noun =
         g = cn.g ;
         n = Sg
       in heavyNP {
-        s = \\c => partitive g c ++ cn.s ! n ;
+        s = table {Nom => artDef g n Nom ++ cn.s ! n ; c => partitive g c ++ cn.s ! n} ; -- le vin est bon ; je bois du vin
         a = agrP3 g n ;
         hasClit = False ;
         isNeg = False
