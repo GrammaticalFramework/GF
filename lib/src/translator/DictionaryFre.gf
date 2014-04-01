@@ -33,8 +33,8 @@ lin
   but_PConj = S.but_PConj; --CHECKED
   by8agent_Prep = S.by8agent_Prep; --CHECKED
   by8means_Prep = S.by8means_Prep; --CHECKED
-  can8know_VV = S.can8know_VV; --CHECKED
-  can_VV = S.can_VV; --CHECKED
+  can_1_VV = S.can_VV ;
+  can_2_VV = S.can8know_VV ;
   during_Prep = S.during_Prep; --CHECKED
   either7or_DConj = S.either7or_DConj; --CHECKED
   every_Det = S.every_Det; --CHECKED
