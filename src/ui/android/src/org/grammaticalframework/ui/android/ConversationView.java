@@ -104,17 +104,20 @@ public class ConversationView extends ScrollView {
                 	mInflater.inflate(R.layout.second_person_worst_utterance, mContent, false) ;
 	     		text = text.subSequence(2, text.length()) ;
 	}
+
+	// parse error or unknown translations (in []) present, darkest red colour
+	else if (text.toString().contains("parse error:") || text.toString().contains("[")) {
+                 view = (TextView) 
+                	mInflater.inflate(R.layout.second_person_worst_utterance, mContent, false) ;
+	}
+
 	// parse by chunks, marked by *, red colour
 	else if (text.charAt(0) == '*') {
                  view = (TextView) 
                 	mInflater.inflate(R.layout.second_person_chunk_utterance, mContent, false) ;
 		 text = text.subSequence(2, text.length()) ;
 	}
-	// parse error or unknown translations (in []) present, red colour
-	else if (text.toString().contains("parse error:") || text.toString().contains("[")) {
-                 view = (TextView) 
-                	mInflater.inflate(R.layout.second_person_worst_utterance, mContent, false) ;
-	}
+
 	// parse by domain grammar, marked by +, green colour
 	else 	if (text.charAt(0) == '+') {
                  view = (TextView) 

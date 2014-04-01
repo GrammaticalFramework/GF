@@ -267,19 +267,30 @@ public class Translator {
 
     public String translateWord(String input) {
 
-	List<MorphoAnalysis> morphos = lookupMorpho(input) ;
+	String output = "[" + input + "]" ;  // if all else fails, return the word itself in brackets
+	Concr sourceLang = getSourceConcr() ;
+	Concr targetLang = getTargetConcr() ;
 
-	String output = "[" + input + "]" ;
+	String lowerinput = input.toLowerCase() ;  // also consider lower-cased versions of the word
 
-        Concr targetLang = getTargetConcr();
+        try {
+	    Expr expr = sourceLang.parseBest("Chunk", input) ; // try parse as chunk
+            output = targetLang.linearize(expr);
+            return output ;
+        } catch (ParseError e) {                               // if this fails
 
-	for (MorphoAnalysis ana : morphos) {
-	    if (targetLang.hasLinearization(ana.getLemma())) {
-		output = targetLang.linearize(Expr.readExpr(ana.getLemma())) ;
-		    break ;
+	    List<MorphoAnalysis> morphos = lookupMorpho(input) ;  // lookup morphological analyses
+
+	    morphos.addAll(lookupMorpho(lowerinput)) ;  // including the analyses of the lower-cased word
+
+	    for (MorphoAnalysis ana : morphos) {
+		if (targetLang.hasLinearization(ana.getLemma())) {    // check that the word has linearization in target
+		    output = targetLang.linearize(Expr.readExpr(ana.getLemma())) ;
+		    break ;                                           // if yes, don't search any more
 		} 
-	} 
-	return output ;
+	    } 
+	    return output ;
+	}
     }
 
     public String parseByLookup(String input) {
