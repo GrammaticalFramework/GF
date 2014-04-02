@@ -1,4 +1,4 @@
---# -path=.:../abstract:../english
+--# -path=.:src/chunk
 
 concrete TranslateEng of Translate = 
   TenseX - [Pol, PNeg, PPos],
@@ -26,6 +26,8 @@ concrete TranslateEng of Translate =
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ConstructionEng,
   DocumentationEng,
+
+  ChunkEng - [VPS,VPI],
 
   ExtensionsEng,
   DictionaryEng ** 

@@ -2,6 +2,7 @@ RUNGHC=runghc
 RUNMAKE=$(RUNGHC) Make.hs
 
 PROBSFILE=../../treebanks/PennTreebank/ParseEngAbs.probs
+TPROBSFILE=translator/translate.probs
 
 #GF_LIB_PATH=..
 
@@ -138,7 +139,7 @@ TranslateFin: TranslateFin.pgf
 TranslateFre: TranslateFre.pgf
 
 S=-s
-GFMKT=mkdir -p ../translator && gf $S -make -literal=Symb -probs=$(PROBSFILE) -gfo-dir ../translator
+GFMKT=mkdir -p ../translator && gf $S -make -literal=Symb -probs=$(TPROBSFILE) -gfo-dir ../translator
 
 TRANSLATE8=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf
 

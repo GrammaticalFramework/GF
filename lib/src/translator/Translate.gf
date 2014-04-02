@@ -19,6 +19,8 @@ abstract Translate =
 
   Symbol [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],          ---- why only these?
 
+  Chunk - [VPS,VPI],
+
   Construction,
   Extensions,
   Dictionary,
@@ -27,8 +29,9 @@ abstract Translate =
               ** {
 flags
   startcat=Phr;
-  heuristic_search_factor=0.60;
-  meta_prob=1.0e-5;
-  meta_token_prob=1.1965149246222233e-9;
+---- robustness by Chunk now
+----  heuristic_search_factor=0.60;
+----  meta_prob=1.0e-5;
+----  meta_token_prob=1.1965149246222233e-9;
 
 }
