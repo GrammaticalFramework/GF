@@ -12,12 +12,15 @@ concrete TranslateEng of Translate =
     ],
   ConjunctionEng,
   VerbEng - [
-    SlashV2V, PassV2, UseCopula, ComplVV,  -- generalized in Extensions
-    ComplVS, SlashV2S, ComplSlash          -- have variants in Eng
+    UseCopula,  
+--    SlashV2V, PassV2, ComplVV,  -- generalized in Extensions
+    ComplVS, SlashV2S, ComplSlash,          -- have variants in Eng
+    SlashV2VNP, SlashVV, AdVVPSlash,AdvVPSlash,VPSlashPrep -----
     ],
   AdverbEng,
   PhraseEng,
   SentenceEng - [
+    SlashVS, -----
 ----    PredVP,   -- to be replaced by PredVPS, QuestVPS, QuestIAdvVPS in Extensions
     UseCl     -- replaced by UseCl | ContractedUseCl
     ],        
@@ -27,9 +30,11 @@ concrete TranslateEng of Translate =
   ConstructionEng,
   DocumentationEng,
 
-  ChunkEng - [VPS,VPI],
+  ChunkEng,
 
-  ExtensionsEng,
+  ExtensionsEng - [
+     VPI,VPS,PredFrontVQ,PredFrontVS,SlashSlashV2V,SlashV2V,SlashVPIV2V,ComplVV,PassVPSlash,PassAgentVPSlash
+     ],
   DictionaryEng ** 
 open MorphoEng, ResEng, ParadigmsEng, (G = GrammarEng), (E = ExtraEng), Prelude in {
 
