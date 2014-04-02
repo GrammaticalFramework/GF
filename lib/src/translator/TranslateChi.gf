@@ -8,7 +8,8 @@ concrete TranslateChi of Translate =
   SymbolChi [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
   ConjunctionChi,
   VerbChi - [
-    SlashV2V, PassV2, UseCopula, ComplVV,
+    UseCopula,  -- just removed
+    SlashV2V, PassV2, ComplVV, -- generalized
     CompAP, AdvVP  -- Chi exceptions
     ],
   AdverbChi,

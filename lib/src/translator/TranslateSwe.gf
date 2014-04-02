@@ -11,8 +11,7 @@ concrete TranslateSwe of Translate =
   ConjunctionSwe,
   VerbSwe -  [
     UseCopula,  
---    SlashV2V, PassV2, ComplVV,  -- generalized in Extensions
-    SlashV2VNP, SlashVV, AdVVPSlash,AdvVPSlash,VPSlashPrep -----
+    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
     ],
   AdverbSwe,
   PhraseSwe,
@@ -29,7 +28,7 @@ concrete TranslateSwe of Translate =
   ChunkSwe,
 
   ExtensionsSwe - [
-     VPI,VPS,PredFrontVQ,PredFrontVS,SlashSlashV2V,SlashV2V,SlashVPIV2V,ComplVV,PassVPSlash,PassAgentVPSlash
+     VPI,VPS
      ],
   DictionarySwe ** 
 open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Prelude in {

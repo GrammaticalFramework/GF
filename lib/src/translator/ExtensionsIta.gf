@@ -1,22 +1,22 @@
 concrete ExtensionsIta of Extensions = 
     CatIta ** 
   open 
-    PhonoIta, MorphoIta, ResIta, CommonRomance, ParadigmsIta, SyntaxIta, Prelude, (G = GrammarIta) in {
+    PhonoIta, MorphoIta, ResIta, CommonRomance, ParadigmsIta, SyntaxIta, Prelude, (G = GrammarIta), (E = ExtraIta) in {
 
-----lincat
-----  VPI = E.VPI ;
+lincat
+  VPI = E.VPI ;
 ----  ListVPI = E.ListVPI ;
-----  VPS = E.VPS ;
+  VPS = E.VPS ;
 ----  ListVPS = E.ListVPS ;
   
-----lin
-----  MkVPI = E.MkVPI ;
+lin
+  MkVPI = E.MkVPI ;
 ----  ConjVPI = E.ConjVPI ;
 ----  ComplVPIVV = E.ComplVPIVV ;
 
-----  MkVPS = E.MkVPS ;
+  MkVPS = E.MkVPS ;
 ----  ConjVPS = E.ConjVPS ;
-----  PredVPS = E.PredVPS ;
+  PredVPS = E.PredVPS ;
 
 ----  BaseVPI = E.BaseVPI ;
 ----  ConsVPI = E.ConsVPI ;

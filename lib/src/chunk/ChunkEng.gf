@@ -4,6 +4,10 @@ concrete ChunkEng of Chunk = CatEng, ExtensionsEng [VPS,VPI] **
     SyntaxEng, (E = ExtensionsEng), Prelude, 
     (R = ResEng), (P = ParadigmsEng) in {
 
+lin
+  NP_Acc_Chunk np = ss (np.s ! R.NPAcc) ;
+  NP_Gen_Chunk np = ss (np.s ! R.NCase R.Gen) | ss (np.s ! R.NPNomPoss) ;
+
 oper
   emptyNP = mkNP (P.mkPN []) ;
 
