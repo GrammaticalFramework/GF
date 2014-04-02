@@ -1,5 +1,8 @@
 compile = runghc Compile 
 
+Chi:
+	$(compile) Chi
+
 all: demo missing gfos
 
 gfos:
