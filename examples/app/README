@@ -1,0 +1,43 @@
+Grammar for coloured translation app.
+
+(c) Aarne Ranta 2014 under GPL
+
+1. Make sure you have the latest RGL compiled.
+
+2. Prepare Phrasebook for this: you need to have the gfo's in the subdir phrasebook/gfos/
+
+   cd ../phrasebook
+   make
+   make Chi
+   make gfos
+   cd ../app
+
+3. Back in this directory, make sure you have GF_LIB_PATH pointing to a place under which you can find all of
+
+  $(GF_LIB_PATH)/alltenses
+  $(GF_LIB_PATH)/prelude
+  $(GF_LIB_PATH)/src/translator
+  $(GF_LIB_PATH)/src/finnish
+  $(GF_LIB_PATH)/src/finnish/stemmed
+  $(GF_LIB_PATH)/src/api
+  $(GF_LIB_PATH)/src/chunk
+  $(GF_LIB_PATH)/../examples/phrasebook
+  $(GF_LIB_PATH)/../examples/app
+
+This is what I have since I am compiling RGL with 'make' in lib/src. But the standard procedure builds RGL elsewhere and 
+you cannot reach the non-standard source files relative to GF_LIB_PATH. Fix this by symbolic links or other means.
+
+4. Do 'make' and take a cup of coffee.
+
+5. Go to GF/src/ui/android and follow the README
+
+6. Before the final 'ant debug install', do the following:
+
+  cd assets/
+  rm *
+  cp -p <Your-GF>/examples/app/App10.pgf .
+  gf -make -split-pgf App10.pgf +RTS -K200M
+  rm App10.pgf 
+  cd ..
+  ant debug install
+
