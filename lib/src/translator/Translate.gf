@@ -7,7 +7,7 @@ abstract Translate =
   Numeral,
   Conjunction,
   Verb - [
------     SlashV2V, PassV2, ComplVV,   -- to be generalized
+     SlashV2V, PassV2, ComplVV,   -- to be generalized
      UseCopula                    ---- overgenerating ?? 
      ],
   Adverb,
@@ -22,7 +22,7 @@ abstract Translate =
   Chunk,
 
   Construction,
-  Extensions - [VPI,VPS,PredFrontVQ,PredFrontVS,SlashSlashV2V,SlashV2V,SlashVPIV2V,ComplVV,PassVPSlash,PassAgentVPSlash],
+  Extensions - [VPI,VPS],
   Dictionary,
   Documentation
 

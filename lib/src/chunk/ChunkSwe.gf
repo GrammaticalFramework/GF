@@ -2,7 +2,11 @@ concrete ChunkSwe of Chunk = CatSwe, ExtensionsSwe [VPS,VPI] **
   ChunkFunctor with (Syntax = SyntaxSwe), (Extensions = ExtensionsSwe) **
   open 
     SyntaxSwe, (E = ExtensionsSwe), Prelude, 
-    (R = ResSwe), (P = ParadigmsSwe) in {
+    (C=CommonScand), (R=ResSwe), (P = ParadigmsSwe) in {
+
+lin
+  NP_Acc_Chunk np = ss (np.s ! C.NPAcc) ;
+  NP_Gen_Chunk np = ss (np.s ! C.NPPoss (C.GSg C.Utr) C.Nom) ;
 
 oper
   emptyNP = mkNP (P.mkPN []) ;
