@@ -1,6 +1,6 @@
 --# -path=.:../swedish
 
-concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
+concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
 
 flags
   coding = utf8;
@@ -11211,6 +11211,7 @@ lin close_to_Prep = variants {} ;
 lin close_up_N = variants {} ;
 lin close_up_V = mkV "sluta" "slöt" "slutit" ; -- comment=11
 lin close_up_V2 = variants {} ;
+lin closed_A = mkA "stängd" "stängt" ;
 lin closefisted_A = variants {} ;
 lin closeness_N = variants {} ;
 lin closeout_N = variants {} ;
@@ -11533,7 +11534,7 @@ lin coextension_N = variants {} ;
 lin coextensive_A = variants {} ;
 lin coextrude_V2 = variants {} ;
 lin cofactor_N = variants {} ;
-lin coffee_N = mkN "kaffe" "kaffe" ;
+lin coffee_N = mkN "kaffe" "kaffet" "kaffe" "kaffen" ;
 lin coffee_house_N = variants {} ;
 lin coffee_mill_N = variants {} ;
 lin coffee_stall_N = variants {} ;
@@ -27347,7 +27348,7 @@ lin hover_V = mkV "sväva" ; -- status=guess, src=wikt
 lin hover_around_V = variants {} ;
 lin hovercraft_N = mkN "svävare" utrum | mkN "svävfarkost" "svävfarkoster" ; -- SaldoWN -- comment=2
 lin how8many_IDet = S.how8many_IDet;
-lin how8much_IDet = variants {} ;
+lin how8much_IDet = {s = \\_ => ["hur mycket"] ; n = singular ; det = C.DDef C.Indef} ;
 lin how_IAdv = S.how_IAdv;
 lin how_d'ye_do_N = variants {} ;
 lin howard_PN = variants {} ;
@@ -34384,8 +34385,8 @@ lin married_A = mkA "gift" "gift" ;
 lin married_N = mkN "gift" "giftet" "gifter" "gifterna" ; -- SaldoWN
 lin marrow_N = mkN "märg" ;
 lin marrowbone_N = variants {} ;
-lin marry_V = mkV "viger" ; -- comment=3
-lin marry_V2 = mkV2 (mkV "förena"); -- status=guess, src=wikt
+lin marry_V = depV (mkV "gifter") ; 
+lin marry_V2 = mkV2 (mkV "gifter") ;
 lin marry_in_V = mkV "viger" ; -- comment=3
 lin marry_out_V = mkV "viger" ; -- comment=3
 lin mars_PN = variants {} ;
@@ -58550,6 +58551,7 @@ lin tire_V = mkV "ringer" ; -- comment=2
 lin tire_V2 = variants {} ;
 lin tire_of_V2 = variants {} ;
 lin tire_out_V2 = variants {} ;
+lin tired_A = mkA "trött" "trött" ;
 lin tiredly_Adv = variants {} ;
 lin tiredness_N = mkN "trötthet" ; -- status=guess
 lin tireless_A = mkA "outtröttlig" ; -- comment=2
