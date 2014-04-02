@@ -1,4 +1,5 @@
---# -path=.:../swedish/:../scandinavian:../abstract
+--# -path=.:src/chunk:alltenses
+
 concrete TranslateSwe of Translate = 
   TenseSwe,
   NounSwe - [PPartNP],
@@ -20,6 +21,8 @@ concrete TranslateSwe of Translate =
     ],
   ConstructionSwe,
   DocumentationSwe,
+
+  ChunkSwe - [VPS,VPI],
 
   ExtensionsSwe,
   DictionarySwe ** 
