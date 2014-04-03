@@ -15,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
@@ -68,6 +70,30 @@ public class MainActivity extends Activity {
         mSwitchLanguagesButton = (ImageView) findViewById(R.id.switch_languages);
         mProgressBarView = findViewById(R.id.progressBarView);
         
+        OnTouchListener touchFeedbackListener = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+	                case MotionEvent.ACTION_DOWN: {
+	                    ImageView view = (ImageView) v;
+	                    view.getDrawable().setColorFilter(0x40808080,android.graphics.PorterDuff.Mode.DARKEN);
+	                    view.invalidate();
+	                    break;
+	                }
+	                case MotionEvent.ACTION_UP:
+	                case MotionEvent.ACTION_CANCEL: {
+	                    ImageView view = (ImageView) v;
+	                    //clear the overlay
+	                    view.getDrawable().clearColorFilter();
+	                    view.invalidate();
+	                    break;
+	                }
+	            }
+	
+	            return false;
+			}
+		};
+
         mStartStopButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +104,7 @@ public class MainActivity extends Activity {
                 }
             }
         });
+        mStartStopButton.setOnTouchListener(touchFeedbackListener);
 
         SharedPreferences pref = getPreferences(MODE_PRIVATE);
         input_mode = pref.getBoolean("input_mode", true);
@@ -127,6 +154,7 @@ public class MainActivity extends Activity {
                 onSwitchLanguages();
             }
         });
+        mSwitchLanguagesButton.setOnTouchListener(touchFeedbackListener);
     }
 
 	@Override
