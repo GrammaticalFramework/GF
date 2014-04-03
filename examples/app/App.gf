@@ -8,6 +8,7 @@ abstract App =
   Conjunction,
   Verb [
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
      ],
   Adverb,
   Phrase,

@@ -13,6 +13,7 @@ concrete AppEng of App =
   ConjunctionEng,
   VerbEng [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbEng,
   PhraseEng,

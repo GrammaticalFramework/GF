@@ -15,6 +15,7 @@ concrete AppFin of App =
   ConjunctionFin,
   VerbFin [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbFin,
   PhraseFin,

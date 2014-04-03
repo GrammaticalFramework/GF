@@ -11,6 +11,7 @@ concrete AppGer of App =
   ConjunctionGer,
   VerbGer [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbGer,
   PhraseGer,
