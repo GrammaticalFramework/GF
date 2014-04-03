@@ -38,7 +38,7 @@ public class LexicalEntryActivity extends ListActivity {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_lexical_entry);
 
-        mTranslator = ((GFTranslator) getApplicationContext()).getTranslator();
+        mTranslator = ((DGTranslator) getApplicationContext()).getTranslator();
 
 	    mShowLanguageView = (LanguageSelector) findViewById(R.id.show_language);
 	    mShowLanguageView.setLanguages(mTranslator.getAvailableLanguages());

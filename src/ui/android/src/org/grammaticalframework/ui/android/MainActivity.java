@@ -104,7 +104,7 @@ public class MainActivity extends Activity {
 
         mTts = new TTS(this);
 
-        mTranslator = ((GFTranslator) getApplicationContext()).getTranslator();
+        mTranslator = ((DGTranslator) getApplicationContext()).getTranslator();
 
         mSourceLanguageView.setLanguages(mTranslator.getAvailableLanguages());
         mSourceLanguageView.setOnLanguageSelectedListener(new OnLanguageSelectedListener() {
