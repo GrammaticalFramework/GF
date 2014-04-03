@@ -374,7 +374,7 @@ public class TranslatorInputMethodService extends InputMethodService
             mTranslator.setSourceLanguage(newSource);
             handleChangeSourceLanguage(newSource);
         } else if (primaryCode == TranslatorKeyboard.KEYCODE_TARGET_LANGUAGE) {
-        	String translation = mTranslator.translate(mComposingText.toString());
+        	String translation = mTranslator.translate(getComposingString());
         	getCurrentInputConnection().commitText(translation, 1);
             return;
         }  else if (primaryCode < TranslatorKeyboard.KEYCODE_TARGET_LANGUAGE &&
