@@ -11,6 +11,7 @@ concrete AppIta of App =
   ConjunctionIta,
   VerbIta [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbIta,
   PhraseIta,

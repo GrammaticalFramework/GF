@@ -11,6 +11,7 @@ concrete AppFre of App =
   ConjunctionFre,
   VerbFre [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbFre,
   PhraseFre,

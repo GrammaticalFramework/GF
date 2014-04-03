@@ -11,6 +11,7 @@ concrete AppBul of App =
   ConjunctionBul,
   VerbBul [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbBul,
   PhraseBul,

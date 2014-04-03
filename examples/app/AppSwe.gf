@@ -11,6 +11,7 @@ concrete AppSwe of App =
   ConjunctionSwe,
   VerbSwe [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbSwe,
   PhraseSwe,

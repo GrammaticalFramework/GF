@@ -11,6 +11,7 @@ concrete AppSpa of App =
   ConjunctionSpa,
   VerbSpa [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbSpa,
   PhraseSpa,

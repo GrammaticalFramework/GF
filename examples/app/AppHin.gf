@@ -11,6 +11,7 @@ concrete AppHin of App =
   ConjunctionHin,
   VerbHin [ 
     UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompAP,CompNP,CompAdv,CompCN
+    ,AdvVP,AdVVP
     ],
   AdverbHin,
   PhraseHin,
