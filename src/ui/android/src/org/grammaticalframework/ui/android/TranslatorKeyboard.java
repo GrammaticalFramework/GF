@@ -24,7 +24,7 @@ public class TranslatorKeyboard extends Keyboard {
     public TranslatorKeyboard(Context context, int xmlLayoutResId, int modeId) {
     	super(context, xmlLayoutResId, modeId);
 
-    	mTranslator = ((GFTranslator) context.getApplicationContext()).getTranslator();
+    	mTranslator = ((DGTranslator) context.getApplicationContext()).getTranslator();
     	updateLanguageKeyLabels();
     }
 
