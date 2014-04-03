@@ -2,8 +2,6 @@ package org.grammaticalframework.ui.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.XmlResourceParser;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.inputmethod.CompletionInfo;
 
@@ -13,18 +11,13 @@ import org.grammaticalframework.pgf.FullFormEntry;
 import org.grammaticalframework.pgf.MorphoAnalysis;
 import org.grammaticalframework.pgf.PGF;
 import org.grammaticalframework.pgf.ParseError;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
 
 public class Translator {

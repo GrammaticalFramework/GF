@@ -185,6 +185,10 @@ public class MainActivity extends Activity {
 	        	editor.commit();
 
 	            return true;
+	        case R.id.help:
+	        	Intent myIntent = new Intent(MainActivity.this, HelpActivity.class);
+            	MainActivity.this.startActivity(myIntent);
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
