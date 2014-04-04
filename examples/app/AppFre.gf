@@ -16,7 +16,7 @@ concrete AppFre of App =
   AdverbFre,
   PhraseFre,
   SentenceFre [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionFre - [

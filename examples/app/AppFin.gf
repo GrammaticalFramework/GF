@@ -20,7 +20,7 @@ concrete AppFin of App =
   AdverbFin,
   PhraseFin,
   SentenceFin [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionFin - [

@@ -16,7 +16,7 @@ concrete AppBul of App =
   AdverbBul,
   PhraseBul,
   SentenceBul [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionBul - [

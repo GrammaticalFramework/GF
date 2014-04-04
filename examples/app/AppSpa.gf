@@ -16,7 +16,7 @@ concrete AppSpa of App =
   AdverbSpa,
   PhraseSpa,
   SentenceSpa [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionSpa - [

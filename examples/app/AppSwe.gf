@@ -16,7 +16,7 @@ concrete AppSwe of App =
   AdverbSwe,
   PhraseSwe,
   SentenceSwe [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionSwe - [

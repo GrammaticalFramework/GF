@@ -16,7 +16,7 @@ concrete AppHin of App =
   AdverbHin,
   PhraseHin,
   SentenceHin [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionHin - [

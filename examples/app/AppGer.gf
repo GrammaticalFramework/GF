@@ -16,7 +16,7 @@ concrete AppGer of App =
   AdverbGer,
   PhraseGer,
   SentenceGer [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionGer - [
