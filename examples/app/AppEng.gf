@@ -18,7 +18,7 @@ concrete AppEng of App =
   AdverbEng,
   PhraseEng,
   SentenceEng [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionEng - [

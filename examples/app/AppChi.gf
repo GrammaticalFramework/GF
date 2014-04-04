@@ -17,7 +17,7 @@ concrete AppChi of App =
   AdverbChi,
   PhraseChi,
   SentenceChi [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionChi - [
@@ -54,7 +54,7 @@ flags
 lin
   CompAP = G.CompAP | E.CompBareAP ;                     -- he is good | he good
 
-  AdvVP vp adv = E.TopicAdvVP vp adv | G.AdvVP vp adv ;  -- he *today* here sleeps | *today* he here sleeps
+  AdvVP vp adv = G.AdvVP vp adv | E.TopicAdvVP vp adv  ; -- he *today* here sleeps | *today* he here sleeps
 
   QuestCl cl = G.QuestCl cl | E.QuestRepV cl ;           -- he comes 'ma' | he come not come
 

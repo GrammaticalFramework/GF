@@ -16,7 +16,7 @@ concrete AppIta of App =
   AdverbIta,
   PhraseIta,
   SentenceIta [
-    PredVP,SlashVP,ImpVP,
+    PredVP,SlashVP,ImpVP,AdvS,
     UseCl,UseQCl,UseSlash,SSubjS,UseRCl
     ],        
   QuestionIta - [
