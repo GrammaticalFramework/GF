@@ -32,10 +32,10 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
     we8fem_Pron = mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
       Fem Pl P1 ;
     whoPl8fem_IP = 
-      {s = \\c => artDef a.g a.n c + quelPron ! a ; a = a}
-      where {a = aagr Fem Sg} ;
+      {s = \\c => "les" + quelPron ! a ; a = a}
+      where {a = aagr Fem Pl} ;
     whoSg8fem_IP = 
-      {s = \\c => artDef a.g a.n c + quelPron ! a ; a = a}
+      {s = \\c => "la" + quelPron ! a ; a = a}
       where {a = aagr Fem Pl} ;
 
     youSg8fem_Pron = mkPronoun 

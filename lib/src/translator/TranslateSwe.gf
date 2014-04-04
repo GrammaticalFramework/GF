@@ -15,7 +15,7 @@ concrete TranslateSwe of Translate =
     ],
   AdverbSwe,
   PhraseSwe,
-  SentenceSwe - [SlashVS],
+  SentenceSwe,
   QuestionSwe,
   RelativeSwe,
   IdiomSwe [
@@ -26,10 +26,8 @@ concrete TranslateSwe of Translate =
   DocumentationSwe,
 
   ChunkSwe,
+  ExtensionsSwe [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
 
-  ExtensionsSwe - [
-     VPI,VPS
-     ],
   DictionarySwe ** 
 open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Prelude in {
 

@@ -28,10 +28,8 @@ concrete TranslateEng of Translate =
   DocumentationEng,
 
   ChunkEng,
+  ExtensionsEng [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
 
-  ExtensionsEng - [
-     VPI,VPS
-     ],
   DictionaryEng ** 
 open MorphoEng, ResEng, ParadigmsEng, (G = GrammarEng), (E = ExtraEng), Prelude in {
 

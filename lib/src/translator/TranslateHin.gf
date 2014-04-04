@@ -1,28 +1,38 @@
---# -path=.:../abstract:../hindi:../hindustani
+--# -path=.:src/chunk:alltenses
+
 concrete TranslateHin of Translate = 
   TenseX - [AdN,Adv,SC],
---  TextX - [AdN,Adv,SC],
   CatHin,
   NounHin - [PPartNP],
   AdjectiveHin,
   NumeralHin,
+  SymbolHin [
+    PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP
+    ],
   ConjunctionHin,
-  VerbHin - [SlashV2V, PassV2, UseCopula, ComplVV, VPSlashPrep],
+  VerbHin -  [
+    UseCopula,  
+    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    ],
   AdverbHin,
   PhraseHin,
   SentenceHin,
-  RelativeHin,
   QuestionHin,
-  IdiomHin [NP, VP, Tense, Cl, ProgrVP, ExistNP],
+  RelativeHin,
+  IdiomHin [
+    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
+    neutr, sjalv
+    ],
+--  ConstructionHin,
+  DocumentationHin,
 
-  SymbolHin [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP, addGenitiveS],
+  ChunkHin,
+  ExtensionsHin [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
 
-  ExtensionsHin,
   DictionaryHin ** 
-open MorphoHin, ResHin, ParadigmsHin, Prelude in {
+open MorphoHin, ResHin, ParadigmsHin, SyntaxHin, CommonScand, (E = ExtraHin), Prelude in {
 
 flags
   literal=Symb ;
-  coding=utf8 ;
 
 }
