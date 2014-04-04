@@ -51,6 +51,9 @@ foreign import ccall "gu/type.h &gu_type__PgfLinNonExist"
 
 foreign import ccall "gu/type.h &gu_type__PgfExn"
   gu_type__PgfExn :: Ptr GuType
+  
+foreign import ccall "gu/type.h &gu_type__PgfParseError"
+  gu_type__PgfParseError :: Ptr GuType
 
 foreign import ccall "gu/string.h gu_string_in"
   gu_string_in :: CString -> Ptr GuPool -> IO (Ptr GuIn)

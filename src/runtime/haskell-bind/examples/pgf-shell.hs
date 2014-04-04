@@ -34,10 +34,14 @@ execute pgf cmd =
     L lang tree -> do c <- getConcr' pgf lang
                       putStrLn $ linearize c tree
     P lang s    -> do c <- getConcr' pgf lang
-                      printl $ parse c (startCat pgf) s
+                      case parse c (startCat pgf) s of
+                        Left tok -> putStrLn ("parse error: "++tok)
+                        Right ts -> printl ts
     T from to s -> do cfrom <- getConcr' pgf from
                       cto   <- getConcr' pgf to
-                      putl [linearize cto t|(t,_)<-parse cfrom (startCat pgf) s]
+                      putl [linearize cto t|(t,_)<-case parse cfrom (startCat pgf) s of
+                                                     Left _   -> []
+                                                     Right ts -> ts]
     _ -> putStrLn "Huh?"
   `catch` print
 
