@@ -4,21 +4,23 @@
     android:layout_height="wrap_content"
     android:background="@drawable/first_person_utterance_bg" >
 
-	<TextView
-	    android:id="@+id/text"
+	<EditText
+	    android:id="@+id/input_text"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:layout_marginBottom="16dp"
 		android:layout_gravity="left"
 		android:padding="8dp"
 		android:textSize="20sp"
+		android:inputType="text"
+		android:background="@drawable/first_person_utterance_bg"
 		/>
 
    	<ImageView
 		android:id="@+id/show_word"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:layout_toRightOf="@id/text"
+		android:layout_toRightOf="@id/input_text"
 		android:padding="8dp"
 		android:src="@drawable/ic_dictionary"
 		android:visibility="gone"
