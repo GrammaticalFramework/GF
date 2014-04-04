@@ -14984,7 +14984,9 @@ lin till_V2 = mkV2 (mkV "arare") ; -- status=guess, src=wikt
 lin tillage_N = mkN "coltivazione" ; -- status=guess
 lin timber_N = mkN "legno" ; -- status=guess
 lin timbre_N = mkN "timbro" ; -- status=guess
-lin time_N = mkN "volta" ; -- status=guess
+lin time_N = mkN "tempo" ; 
+lin time_1_N = mkN "tempo" ;
+lin time_2_N = mkN "volta" ;
 lin time_V2 = mkV2 (mkV "fissare") | mkV2 (mkV "programmare") ; -- status=guess, src=wikt status=guess, src=wikt
 lin timeliness_N = mkN "tempestività" ; -- status=guess
 lin timer_N = mkN "temporizzatore" ; -- status=guess
