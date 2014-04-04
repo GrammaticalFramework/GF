@@ -650,7 +650,7 @@ checkIfEqLType gr g t u trm = do
 
   where
 
-   -- t is a subtype of u 
+   -- check that u is a subtype of t
    --- quick hack version of TC.eqVal
    alpha g t u = case (t,u) of  
 
@@ -662,12 +662,13 @@ checkIfEqLType gr g t u trm = do
                               
      -- record subtyping
      (RecType rs, RecType ts) -> all (\ (l,a) -> 
-                                   any (\ (k,b) -> alpha g a b && l == k) ts) rs
+                                   any (\ (k,b) -> l == k && alpha g a b) ts) rs
      (ExtR r s, ExtR r' s') -> alpha g r r' && alpha g s s'
      (ExtR r s, t) -> alpha g r t || alpha g s t
 
      -- the following say that Ints n is a subset of Int and of Ints m >= n
-     (t,u) | Just m <- isTypeInts t, Just n <- isTypeInts t -> m >= n
+     -- But why does it also allow Int as a subtype of Ints m? /TH 2014-04-04
+     (t,u) | Just m <- isTypeInts t, Just n <- isTypeInts u -> m >= n
            | Just _ <- isTypeInts t, u == typeInt           -> True ---- check size!
            | t == typeInt,           Just _ <- isTypeInts u -> True ---- why this ???? AR 11/12/2005
 
