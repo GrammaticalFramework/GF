@@ -25,7 +25,7 @@ public class ConversationView extends ScrollView {
     private ASR.Listener mSpeechListener;
 
     public ConversationView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+        super(context, attrs, defStyle);        
     }
 
     public ConversationView(Context context, AttributeSet attrs) {
@@ -42,127 +42,136 @@ public class ConversationView extends ScrollView {
         mContent = (ViewGroup) findViewById(R.id.conversation_content);
         mInflater = LayoutInflater.from(getContext());
     }
+    		
+    private class EditorListener implements OnEditorActionListener, OnClickListener {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if ((actionId & EditorInfo.IME_MASK_ACTION) != 0) {
+            	CharSequence text = v.getText();
+            	InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager != null) {
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+                }
+                v.setFocusable(false);
+                mLastUtterance = (View) v.getParent();
+                if (mSpeechListener != null)
+                	mSpeechListener.onSpeechInput(text.toString().trim());
+                return true;
+            }
+            return false;
+        }
 
-    public void addFirstPersonUtterance(CharSequence text) {
+		@Override
+		public void onClick(View v) {
+			v.setFocusableInTouchMode(true);
+			v.requestFocus();
+	        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+	        imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
+		}
+	};
+
+    private EditorListener mEditorListener = new EditorListener();
+    private View mLastUtterance = null;
+
+    public void addFirstPersonUtterance(CharSequence text, boolean focused) {
         View view = 
         	mInflater.inflate(R.layout.first_person_utterance, mContent, false);
-        TextView textview = (TextView) view.findViewById(R.id.text);
-        textview.setText(text);
-        mContent.addView(view);
-        post(new Runnable() {
-            public void run() {
-                fullScroll(FOCUS_DOWN);
-            }
-        });
-    }
-
-    public void addInputBox() {
-        final View view = 
-        	mInflater.inflate(R.layout.input_box, mContent, false);
         EditText edittext = (EditText) view.findViewById(R.id.input_text);
-        edittext.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId & EditorInfo.IME_MASK_ACTION) != 0) {
-                	CharSequence text = v.getText();
-                	mContent.removeView(view);
-                	addFirstPersonUtterance("...");
-                	InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (inputMethodManager != null) {
-                        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-                    }
-                    if (mSpeechListener != null)
-                    	mSpeechListener.onSpeechInput(text.toString().trim());
-                    return true;
-                }
-                return false;
-            }
-        });
+        edittext.setText(text);
+        edittext.setOnEditorActionListener(mEditorListener);
+        edittext.setOnClickListener(mEditorListener);
         Bundle extras = edittext.getInputExtras(true);
         extras.putBoolean("show_language_toggle", false);
-
         mContent.addView(view);
-        
-        edittext.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(edittext, InputMethodManager.SHOW_IMPLICIT);
+
+        if (focused) {
+	        edittext.requestFocus();
+	        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+	        imm.showSoftInput(edittext, InputMethodManager.SHOW_IMPLICIT);
+        } else {
+        	edittext.setFocusable(false);
+        }
 
         post(new Runnable() {
             public void run() {
                 fullScroll(FOCUS_DOWN);
             }
         });
+        
+        mLastUtterance = view;
     }
 
-    public CharSequence addSecondPersonUtterance(CharSequence text) {
+    @SuppressWarnings("deprecation")
+	public CharSequence addSecondPersonUtterance(CharSequence text) {
+    	TextView view;
+    	if (mLastUtterance != null && mLastUtterance.getTag() != null)
+    		view = (TextView) mLastUtterance.getTag();
+    	else {
+    		view = (TextView) 
+    			mInflater.inflate(R.layout.second_person_utterance, mContent, false);
+        	mContent.addView(view);
+            post(new Runnable() {
+                public void run() {
+                    fullScroll(FOCUS_DOWN);
+                }
+            });
 
-	TextView view ;
+    		mLastUtterance.setTag(view);
+    	}
 
-	// parse by words, marked by %, darkest red colour
-	if (text.charAt(0) == '%') {
-                 view = (TextView) 
-                	mInflater.inflate(R.layout.second_person_worst_utterance, mContent, false) ;
-	     		text = text.subSequence(2, text.length()) ;
-	}
+    	// parse by words, marked by %, darkest red colour
+    	if (text.charAt(0) == '%') {
+    		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
+    		text = text.subSequence(2, text.length()) ;
+    	}
 
-	// parse error or unknown translations (in []) present, darkest red colour
-	else if (text.toString().contains("parse error:") || text.toString().contains("[")) {
-                 view = (TextView) 
-                	mInflater.inflate(R.layout.second_person_worst_utterance, mContent, false) ;
-	}
+    	// parse error or unknown translations (in []) present, darkest red colour
+    	else if (text.toString().contains("parse error:") || text.toString().contains("[")) {
+    		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
+    	}
 
-	// parse by chunks, marked by *, red colour
-	else if (text.charAt(0) == '*') {
-                 view = (TextView) 
-                	mInflater.inflate(R.layout.second_person_chunk_utterance, mContent, false) ;
-		 text = text.subSequence(2, text.length()) ;
-	}
+    	// parse by chunks, marked by *, red colour
+    	else if (text.charAt(0) == '*') {
+    		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_chunk_utterance_bg));
+    		text = text.subSequence(2, text.length()) ;
+    	}
 
-	// parse by domain grammar, marked by +, green colour
-	else 	if (text.charAt(0) == '+') {
-                 view = (TextView) 
-                	mInflater.inflate(R.layout.second_person_best_utterance, mContent, false) ;
-		 text = text.subSequence(2, text.length()) ;
-	}
-	// parse by resource grammar, no mark, yellow colour
-	else
-                 view = (TextView) 
-          	       mInflater.inflate(R.layout.second_person_utterance, mContent, false);
+    	// parse by domain grammar, marked by +, green colour
+    	else if (text.charAt(0) == '+') {
+    		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_best_utterance_bg));
+    		text = text.subSequence(2, text.length()) ;
+    	}
 
-        view.setText(text);
-        mContent.addView(view);
-        post(new Runnable() {
-            public void run() {
-                fullScroll(FOCUS_DOWN);
-            }
-        });
-	return text ;
+    	view.setText(text);
+        return text ;
     }
 
     public void updateLastUtterance(CharSequence text, Object lexicon) {
-        int count = mContent.getChildCount();
-        if (count > 0) {
-            View view = mContent.getChildAt(count - 1);
-            TextView textview = (TextView) view.findViewById(R.id.text);
-            textview.setText(text);
-            
-            if (lexicon != null && mWordListener != null) {
-            	ImageView showWordButton = (ImageView) view.findViewById(R.id.show_word);
-            	showWordButton.setVisibility(VISIBLE);
+    	if (mLastUtterance == null)
+    		return;
 
-            	final Object lexicon2 = lexicon;
-    	        showWordButton.setOnClickListener(new OnClickListener() {
-    	        	@Override
-    	        	public void onClick(View v) {
-    	        		if (mWordListener != null) {
-    	        			TextView textview = (TextView)
-    	        				((View) v.getParent()).findViewById(R.id.text);
-    	        			CharSequence text = textview.getText();
-    	        			mWordListener.onWordSelected(text, lexicon2);
-    	        		}
-    	        	}
-    	        });    	        
-            }
+        EditText textview = (EditText) mLastUtterance.findViewById(R.id.input_text);
+        if (textview == null)
+        	return;
+
+        textview.setText(text);
+        
+        if (lexicon != null && mWordListener != null) {
+        	ImageView showWordButton = (ImageView) mLastUtterance.findViewById(R.id.show_word);
+        	showWordButton.setVisibility(VISIBLE);
+
+        	final Object lexicon2 = lexicon;
+	        showWordButton.setOnClickListener(new OnClickListener() {
+	        	@Override
+	        	public void onClick(View v) {
+	        		if (mWordListener != null) {
+	        			TextView textview = (TextView)
+	        				((View) v.getParent()).findViewById(R.id.input_text);
+	        			CharSequence text = textview.getText();
+	        			mWordListener.onWordSelected(text, lexicon2);
+	        		}
+	        	}
+	        });    	        
         }
     }
 

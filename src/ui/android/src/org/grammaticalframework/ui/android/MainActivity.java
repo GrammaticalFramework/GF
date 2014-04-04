@@ -269,11 +269,11 @@ public class MainActivity extends Activity {
 
     private void startRecognition() {
     	if (input_mode) {
-    		mConversationView.addFirstPersonUtterance("...");
+    		mConversationView.addFirstPersonUtterance("...", false);
             mAsr.setLanguage(getSourceLanguageCode());
             mAsr.startRecognition();
     	} else {
-    		mConversationView.addInputBox();
+    		mConversationView.addFirstPersonUtterance("", true);
     	}
     }
 
