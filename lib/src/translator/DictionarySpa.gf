@@ -19418,7 +19418,9 @@ lin tilt_V = mkV "ladear" | mkV "ladearse" ; -- status=guess, src=wikt status=gu
 lin tilt_V2 = mkV2 (mkV "ladear") | mkV2 (mkV "ladearse") ; -- status=guess, src=wikt status=guess, src=wikt
 lin timber_N = mkN "viga" | mkN "polín" ; -- status=guess status=guess
 lin timbre_N = mkN "timbre" ; -- status=guess
-lin time_N = mkN "bomba de relojería" ; -- status=guess
+lin time_N = mkN "tiempo" ;
+lin time_1_N = mkN "tiempo" ;
+lin time_2_N = mkN "vez" "veces" feminine ;
 lin time_V2 = mkV2 (mkV "cronometrar") ; -- status=guess, src=wikt
 lin timeline_N = mkN "diagrama cronológico" | mkN "línea de tiempo" ; -- status=guess status=guess
 lin timely_A = mkA "oportuno" ; -- status=guess
