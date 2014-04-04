@@ -147,6 +147,14 @@ TRANSLATE8=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf T
 TRANSLATE10=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf TranslateIta.pgf TranslateSpa.pgf
 
 # Without dependencies:
+Translate10:
+	$(GFMKT) -name=Translate10 $(TRANSLATE8) +RTS -K32M
+
+# With dependencies:
+Translate8.pgf: $(TRANSLATE10)
+	$(GFMKT) -name=Translate8 $(TRANSLATE10) +RTS -K32M
+
+# Without dependencies:
 Translate8:
 	$(GFMKT) -name=Translate8 $(TRANSLATE8) +RTS -K32M
 

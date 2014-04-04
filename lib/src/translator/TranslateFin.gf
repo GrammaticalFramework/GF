@@ -1,31 +1,39 @@
---# -path=.:../finnish/stemmed:../finnish:../abstract:../common:../finnish/kotus:../api
+--# -path=.:src/chunk:src/finnish/stemmed:src/finnish:src/api
 
 concrete TranslateFin of Translate = 
-  TenseX,  ---- TODO add potential forms 
+  TenseX,
   CatFin,
   NounFin - [
-    PPartNP,
-    UsePron, PossPron  -- Fin specific: replaced by variants with prodrop
+    PPartNP
+    ,UsePron, PossPron  -- Fin specific: replaced by variants with prodrop
     ],
   AdjectiveFin,
   NumeralFin,
-  SymbolFin [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
+  SymbolFin [
+    PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP
+    ],
   ConjunctionFin,
-  VerbFin - [
-    SlashV2V, PassV2, UseCopula, ComplVV,
-             VPSlashPrep -- with empty prepositions, a cyclic rule that leads to overgeneration
-    ],  
+  VerbFin -  [
+    UseCopula,  
+    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    ],
   AdverbFin,
   PhraseFin,
   SentenceFin,
   QuestionFin,
   RelativeFin,
-  IdiomFin [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
+  IdiomFin [
+    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
+    neutr, sjalv
+    ],
   ConstructionFin,
   DocumentationFin,
--- ExtensionsFin,  
-  DictionaryFin 
-** 
+
+  ChunkFin,
+  ExtensionsFin [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
+
+  DictionaryFin ** 
+
 open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, StemFin, (E = ExtraFin), (G = GrammarFin), Prelude in {
 
 flags literal=Symb ; coding = utf8 ;
