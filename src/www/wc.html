@@ -7,10 +7,11 @@
 <link rel=top href="../" title="GF">
 <style>
 div.center { text-align: center; }
-table.center { margin-left: auto; margin-right: auto; }
+table { border-collapse: collapse; table-layout: fixed; width: 100%; }
+td { padding: 0 5px; }
 textarea { margin: 0; }
 body:target h1, body:target div.modtime { display: none; }
-#extra { color: #666; }
+small { color: #666; }
 #pick>* { padding: 0 0.5ex; }
 #speak { display: none; }
 .default_quality { background-color: #ffc; }
@@ -20,16 +21,13 @@ body:target h1, body:target div.modtime { display: none; }
 </head>
 
 <body id=embed>
-<div class=center>
+<div>
 <h1><a href="http://www.grammaticalframework.org/"><img class=nofloat src="P/gf-cloud.png" alt="GF"></a> Wide Coverage Translation</h1>
 </div>
 
-<table class="center">
+<form onsubmit="return wc.translate()" style="width: 100%">
+<table>
 <tr><td>
-<form onsubmit="return wc.translate()">
-  <textarea name=input rows=3 style="width: 100%"></textarea>
-  <br>
-  <big>⤷</big>
   <select name=from>
     <option value=Bul>Bulgarian</option>
     <option value=Chi>Chinese</option>
@@ -39,8 +37,10 @@ body:target h1, body:target div.modtime { display: none; }
     <option value=Ger>German</option>
     <option value=Hin>Hindi</option>
     <option value=Swe>Swedish</option>
-  </select> →
-  <button name=translate type=submit><strong><big>Translate</big></strong></button> →
+  </select>
+  <td style="text-align: right">
+  <input type=button name=swap onclick="wc.swap()" value="⇆">
+  <td>
   <select name=to onchange="wc.translate()">
     <option value=Bul>Bulgarian</option>
     <option value=Chi>Chinese</option>
@@ -51,14 +51,18 @@ body:target h1, body:target div.modtime { display: none; }
     <option value=Hin>Hindi</option>
     <option value=Swe selected>Swedish</option>
   </select>
-  <big style="position: relative; top: 1ex">⤵</big>
-    <button name=swap onclick="wc.swap()">↑↓</button>
-  <br>
-  <textarea name=output rows=3 style="width: 100%" readonly></textarea>
-  <small id=speak><input name=speak type=checkbox> Speak</small>
+  <td><button name=translate type=submit><strong><big>Translate</big></strong></button>
+  <tr><td colspan=2>
+  <textarea name=input rows=5 style="width: 100%" onkeyup="wc.delayed_translate()"></textarea>
+  <td colspan=2>
+  <textarea name=output rows=5 style="width: 100%" readonly></textarea>
+  <tr><td colspan=2>
+    <small>Enter text to translate above.</small>
+    <td colspan=2>
+  <small id=speak><input name=speak type=checkbox> Enable speech synthesis</small>
+</table>
 </form>
 
-</table>
 <div class=center>
   <!--input type=button onclick="wc.try_google()" value="Google Translate"-->
   <div id=pick></div>
@@ -66,7 +70,7 @@ body:target h1, body:target div.modtime { display: none; }
   </div>
 <p>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Mon Mar 31 16:07:06 CEST 2014 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Fri Apr  4 13:47:19 CEST 2014 <!-- hhmts end -->
 </small></div>
 <script src="js/support.js"></script>
 <script src="js/gftranslate.js"></script>
