@@ -185,13 +185,13 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
     UseN2 n = snoun2nounSep n ;
 
     Use2N3 f = {
-      s = (snoun2nounSep f).s ;
+      s = f.s ;
       c2 = f.c2 ;
       h = f.h ;
       isPre = f.isPre
       } ;
     Use3N3 f = {
-      s = (snoun2nounSep f).s ;
+      s = f.s ;
       c2 = f.c3 ;
       h = f.h ;
       isPre = f.isPre2

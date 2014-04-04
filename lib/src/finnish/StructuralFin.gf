@@ -33,10 +33,9 @@ concrete StructuralFin of Structural = CatFin **
   can_VV = mkVV (mkV "voida" "voi") ;
   during_Prep = postGenPrep "aikana" ;
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
-  everybody_NP = lin NP (makeNP (lin N (snoun2nounBind (mkN "jokainen"))) Sg) ;
+  everybody_NP = lin NP (makeNP (((mkN "jokainen"))) Sg) ;
   every_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "jokainen")) ;
-  everything_NP = makeNP (((snoun2nounBind (mkN "kaikki" "kaiken" "kaikkena"))) **
-    {lock_N = <>}) Sg ;
+  everything_NP = makeNP ((((mkN "kaikki" "kaiken" "kaikkena")))) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
   few_Det  = MorphoFin.mkDet Sg (snoun2nounBind (mkN "harva")) ;
 ---  first_Ord = {s = \\n,c => (mkN "ensimmäinen").s ! NCase n c} ;
@@ -270,11 +269,10 @@ oper
         }
       } ;
 
-
 oper
-  makeNP  : N -> MorphoFin.Number -> CatFin.NP ; 
+  makeNP  : SNoun -> MorphoFin.Number -> CatFin.NP ; 
   makeNP noun num = {
-    s = \\c => noun.s ! NCase num (npform2case num c) ; 
+    s = \\c => (snoun2nounBind noun).s ! NCase num (npform2case num c) ; 
     a = agrP3 num ;
     isPron, isNeg = False ;
     lock_NP = <>
