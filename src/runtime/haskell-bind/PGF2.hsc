@@ -200,17 +200,31 @@ getAnalysis ref self c_lemma c_anal prob exn = do
   anal  <- peekCString c_anal
   writeIORef ref ((lemma, anal, prob):ans)
 
-parse :: Concr -> String -> String -> [(Expr,Float)]
+parse :: Concr -> String -> String -> Either String [(Expr,Float)]
 parse lang cat sent =
   unsafePerformIO $
     do parsePl <- gu_new_pool
        exprPl  <- gu_new_pool
+       exn     <- gu_new_exn nullPtr gu_type__type parsePl
        enum    <- withCString cat $ \cat ->
                     withCString sent $ \sent ->
-                      pgf_parse (concr lang) cat sent nullPtr parsePl exprPl
-       parseFPl <- newForeignPtr gu_pool_finalizer parsePl
-       exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
-       fromPgfExprEnum enum parseFPl (lang,exprFPl)
+                      pgf_parse (concr lang) cat sent exn parsePl exprPl
+       failed  <- gu_exn_is_raised exn
+       if failed
+         then do ty <- gu_exn_caught exn
+                 if ty == gu_type__PgfParseError
+                   then do c_tok <- (#peek GuExn, data.data) exn
+                           tok <- peekCString c_tok
+                           return (Left tok)
+                   else if ty == gu_type__PgfExn
+                          then do c_msg <- (#peek GuExn, data.data) exn
+                                  msg <- peekCString c_msg
+                                  throw (PGFError msg)
+                          else throw (PGFError "Parsing failed")
+         else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
+                 exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
+                 exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
+                 return (Right exprs)
 
 linearize :: Concr -> Expr -> String
 linearize lang e = unsafePerformIO $
