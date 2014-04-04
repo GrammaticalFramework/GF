@@ -22,7 +22,7 @@ wc.translate=function() {
     clear(p)
 
     function show_error(msg) {
-	if(e) e.innerHTML="<span class=low_quality>"+msg+"</span>"
+	if(e) e.innerHTML="<span class=low_quality>Translation problem: "+msg+"</span>"
 	else {
 	    f.output.value="["+msg+"]"
 	    f.output.className="low_quality"
