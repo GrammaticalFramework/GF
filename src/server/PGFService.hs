@@ -45,7 +45,9 @@ logFile = "pgf-error.log"
 
 #ifdef C_RUNTIME
 type Caches = (Cache PGF,Cache (C.PGF,MVar ParseCache))
-type ParseCache = Map.Map (String,String) ([(C.Expr,Float)],UTCTime)
+type ParseCache = Map.Map (String,String) (ParseResult,UTCTime)
+type ParseResult = Either String [(C.Expr,Float)]
+
 newPGFCache = do pgfCache <- newCache PGF.readPGF
                  cCache <- newCache $ \ path -> do pgf <- C.readPGF path
                                                    pc <- newMVar Map.empty
@@ -106,15 +108,18 @@ cpgfMain command (pgf,pc) =
         languages = [makeObj ["name".= l] | (l,_)<-Map.toList (C.languages pgf)]
 
     parse input (from,concr) start mlimit trie =
-        do trees <- parse' input (from,concr) start mlimit
-           return $ showJSON [makeObj ("from".=from:"trees".=map tp trees :[])]
-                                                        -- :addTrie trie trees
+        do r <- parse' input (from,concr) start mlimit
+           return $ showJSON [makeObj ("from".=from:jsonParseResult r)]
 
-    tp (tree,prob) = makeObj ["tree".=tree,"prob".=prob]
+    jsonParseResult = either bad good
+      where
+        bad err = ["parseFailed".=err]
+        good trees = "trees".=map tp trees :[]  -- :addTrie trie trees
+        tp (tree,prob) = makeObj ["tree".=tree,"prob".=prob]
 
     parse' input (from,concr) start mlimit = 
         liftIO $ do t <- getCurrentTime
-                    (maybe id take mlimit . drop start)
+                    fmap (maybe id take mlimit . drop start)
                       # modifyMVar pc (parse'' t)
       where
         key = (from,input)
@@ -134,11 +139,15 @@ cpgfMain command (pgf,pc) =
       do parses <- parse' input (from,concr) start mlimit
          return $
            showJSON [ makeObj ["from".=from,
-                               "translations".=
-                                 [makeObj ["tree".=tree,
-                                           "prob".=prob,
-                                           "linearizations".=lin' tree tos]
-                                  | (tree,prob) <- parses]]]
+                               "translations".= jsonParses parses]]
+      where
+        jsonParses = either bad good
+          where
+            bad err = [makeObj ["error".=err]]
+            good parses = [makeObj ["tree".=tree,
+                                     "prob".=prob,
+                                     "linearizations".=lin' tree tos]
+                                    | (tree,prob) <- parses]
 
     from = maybe (missing "from") return =<< getLang "from"
     
