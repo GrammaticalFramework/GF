@@ -1,21 +1,35 @@
---# -path=.:../French:../abstract:../romance:alltenses
+--# -path=.:src/chunk:alltenses
+
 concrete TranslateFre of Translate = 
   TenseFre,
   NounFre - [PPartNP],
   AdjectiveFre,
   NumeralFre,
-  SymbolFre [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
+  SymbolFre [
+    PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP
+    ],
   ConjunctionFre,
-  VerbFre - [SlashV2V, PassV2, UseCopula, ComplVV],
+  VerbFre -  [
+    UseCopula,  
+    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    ],
   AdverbFre,
   PhraseFre,
   SentenceFre,
-  QuestionFre - [QuestCl, QuestIAdv], -- more variants here
+  QuestionFre - [
+    QuestCl,QuestIAdv -- french-specific overrides
+    ],
   RelativeFre,
-  IdiomFre [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
+  IdiomFre [
+    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
+    neutr, sjalv
+    ],
   ConstructionFre,
   DocumentationFre,
-  ExtensionsFre,
+
+  ChunkFre,
+  ExtensionsFre [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
+
   DictionaryFre ** 
 open PhonoFre, MorphoFre, ResFre, CommonRomance, ParadigmsFre, SyntaxFre, Prelude, (G = GrammarFre) in {
 

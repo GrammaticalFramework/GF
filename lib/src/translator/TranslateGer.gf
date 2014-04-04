@@ -1,26 +1,37 @@
---# -path=alltenses:.:../german:../abstract
+--# -path=.:src/chunk:alltenses
+
 concrete TranslateGer of Translate = 
   TenseGer,
   NounGer - [PPartNP],
   AdjectiveGer,
   NumeralGer,
-  SymbolGer [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
+  SymbolGer [
+    PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP
+    ],
   ConjunctionGer,
-  VerbGer - [SlashV2V, PassV2, UseCopula, ComplVV],
+  VerbGer -  [
+    UseCopula,  
+    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    ],
   AdverbGer,
   PhraseGer,
   SentenceGer,
   QuestionGer,
   RelativeGer,
-  IdiomGer [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, geben],
+  IdiomGer [
+    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
+    neutr, sjalv
+    ],
   ConstructionGer,
   DocumentationGer,
-  ExtensionsGer,
-  DictionaryGer ** 
-open MorphoGer, ResGer, ParadigmsGer, SyntaxGer, Prelude in {
 
-flags 
-  literal=Symb ; 
-  coding = utf8 ;
+  ChunkGer,
+  ExtensionsGer [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
+
+  DictionaryGer ** 
+open MorphoGer, ResGer, ParadigmsGer, SyntaxGer, CommonScand, (E = ExtraGer), Prelude in {
+
+flags
+  literal=Symb ;
 
 }
