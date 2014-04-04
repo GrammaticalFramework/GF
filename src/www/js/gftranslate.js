@@ -18,7 +18,7 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     var encsrc=encodeURIComponent(source)
     var g=gftranslate.grammar
     function extract(result) { cont(result[0].translations) }
-    if(encsrc.length<200) // match limit in runtime/c/utils/pgf-server.c
+    if(encsrc.length<500)
 	gftranslate.call("?command=c-translate&input="+encsrc
 		      +"&from="+g+from+"&to="+g+to
 		      +"&start="+start+"&limit="+limit,extract)
