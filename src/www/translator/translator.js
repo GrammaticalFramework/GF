@@ -223,7 +223,7 @@ Translator.prototype.update_translation=function(i) {
 		//console.log(translate_output)
 		upd2(translate_output,punct)
 	    }
-	    gftranslate.translate(source,o.from,o.to,0,2,upd1)
+	    gftranslate.translate(source,o.from,o.to,0,5,upd1)
 	}
 	if(!window.gftranslate)
 		upd3s("[GF robust parser is not available]")
