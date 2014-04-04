@@ -1,4 +1,4 @@
---# -path=.:src/chunk:src/finnish/stemmed:src/finnish:src/api
+--# -path=.:../chunk:../finnish/stemmed:../finnish:../api
 
 concrete TranslateFin of Translate = 
   TenseX,

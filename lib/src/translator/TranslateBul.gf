@@ -1,4 +1,4 @@
---# -path=.:src/chunk:alltenses
+--# -path=.:../chunk:alltenses
 
 concrete TranslateBul of Translate = 
   TenseX - [IAdv, CAdv],

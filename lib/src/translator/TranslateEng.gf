@@ -1,4 +1,4 @@
---# -path=.:src/chunk
+--# -path=.:../chunk
 
 concrete TranslateEng of Translate = 
   TenseX - [Pol, PNeg, PPos],
