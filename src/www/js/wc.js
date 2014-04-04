@@ -4,6 +4,13 @@ wc.f=document.forms[0]
 wc.e=element("extra")
 wc.p=element("pick")
 wc.serial=0
+
+wc.delayed_translate=function() {
+    function restart(){ if(wc.f.input.value!=wc.translating) wc.translate() }
+    if(wc.timer) clearTimeout(wc.timer);
+    wc.timer=setTimeout(restart,500)
+}
+
 wc.translate=function() {
     var current= ++wc.serial
     var f=wc.f, e=wc.e, p=wc.p
@@ -18,6 +25,7 @@ wc.translate=function() {
     f.output.className=""
     wc.r=[]
     wc.current=0
+    wc.translating=f.input.value
     clear(e)
     clear(p)
 
@@ -117,7 +125,7 @@ wc.translate=function() {
 				step3cnl,
 				function(){step2(text)})
     }
-    lextext(f.input.value,wc.cnl ? step2cnl : step2)
+    lextext(wc.translating,wc.cnl ? step2cnl : step2)
     return false;
 }
 
@@ -132,11 +140,13 @@ wc.speak=function(text,lang) {
 
 wc.swap=function() {
     var f=wc.f
+    var old_input=f.input.value
     f.input.value=f.output.value;
+    f.output.value=old_input
     var from=f.from.value
     f.from.value=f.to.value
     f.to.value=from
-    //wc.translate() // changing f.to.value is enough to start the translation
+    wc.translate()
 }
 
 wc.google_translate_url=function() {
@@ -182,3 +192,4 @@ if(wc.cnl) {
     wc.pgf_online=pgf_online({});
     wc.pgf_online.switch_grammar(wc.cnl+".pgf")
 }
+wc.f.input.focus()
