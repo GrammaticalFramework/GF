@@ -208,7 +208,7 @@ Translator.prototype.update_translation=function(i) {
 	function upd2(trans,punct) {
 	    if(trans.length==0) upd3s("[no translation]")
 	    else if(trans[0].error)
-		upd3s("[GF robust translation: "+trans[0].error+"]")
+		upd3s("[GF robust translation problem: "+trans[0].error+"]")
 	    else {
 		var ts=[]
 		for(var i=0;i<trans.length;i++) {
