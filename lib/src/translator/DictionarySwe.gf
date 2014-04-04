@@ -1141,7 +1141,7 @@ lin aforethought_Adv = variants {} ;
 lin afoul_Adv = variants {} ;
 lin afraid_A = mkA "rädd" ; -- SaldoWN
 lin afresh_Adv = mkAdv "ånyo" ;
-lin africa_PN = variants {} ;
+lin africa_PN = mkPN "Afrika" neutrum ;
 lin africanFem_N = mkN "afrikan" "afrikaner" ; -- comment=2
 lin africanMasc_N = mkN "afrikan" "afrikaner" ; -- comment=2
 lin african_A = mkA "afrikansk" ;
@@ -1460,7 +1460,7 @@ lin alarming_A = mkA "alarmerande" ;
 lin alarmism_N = variants {} ;
 lin alarmist_N = variants {} ;
 lin alas_Interj = mkInterj "ack" ;
-lin alaska_PN = variants {} ;
+lin alaska_PN = mkPN "Alaska" neutrum ;
 lin alastrim_N = variants {} ;
 lin alate_A = variants {} ;
 lin alb_N = variants {} ;
@@ -1974,7 +1974,7 @@ lin amenorrhea_N = variants {} ;
 lin amenorrheic_A = variants {} ;
 lin amentiferous_A = variants {} ;
 lin amerciable_A = variants {} ;
-lin america_PN = variants {} ;
+lin america_PN = mkPN "Amerika" neutrum ;
 lin americanFem_N = mkN "amerikan" "amerikaner" ; -- comment=4
 lin americanMasc_N = mkN "amerikan" "amerikaner" ; -- comment=4
 lin american_A = mkA "amerikansk" ;
@@ -2114,7 +2114,7 @@ lin amputation_N = mkN "amputation" "amputationer" ; -- comment=2
 lin amputator_N = variants {} ;
 lin amputee_N = variants {} ;
 lin amrinone_N = variants {} ;
-lin amsterdam_PN = variants {} ;
+lin amsterdam_PN = mkPN "Amsterdam" neutrum ;
 lin amuck_A = variants {} ;
 lin amuck_Adv = mkAdv "amok" ;
 lin amulet_N = mkN "amulett" "amuletter" ; -- SaldoWN
@@ -4110,7 +4110,7 @@ lin augment_V = mkV "utvidgar" ; -- comment=6
 lin augment_V2 = dirV2 (partV (mkV "ökar")"till"); -- comment=2
 lin augmentation_N = variants {} ;
 lin augmentative_A = variants {} ;
-lin augsburg_PN = variants {} ;
+lin augsburg_PN = mkPN "Augsburg" neutrum ;
 lin augur_N = mkN "båda" ;
 lin augur_V = mkV "förespår" ; -- comment=6
 lin augur_V2 = mkV2 (mkV "bådar"); -- status=guess, src=wikt
@@ -4155,13 +4155,13 @@ lin austereness_N = variants {} ;
 lin austerity_N = mkN "åtstramning" | mkN "åtstramningspolitik" | mkN "svångremspolitik" ; -- status=guess status=guess status=guess
 lin austral_A = variants {} ;
 lin austral_N = variants {} ;
-lin australia_PN = variants {} ;
+lin australia_PN = mkPN "Australien" neutrum ;
 lin australianFem_N = variants {} ;
 lin australianMasc_N = variants {} ;
 lin australian_A = mkA "australiensisk" ;
 lin australopithecine_A = variants {} ;
 lin australopithecine_N = variants {} ;
-lin austria_PN = variants {} ;
+lin austria_PN = mkPN "Österrike" neutrum ;
 lin austrianFem_N = variants {} ;
 lin austrianMasc_N = variants {} ;
 lin austrian_A = variants {} ;
@@ -4788,7 +4788,7 @@ lin balsa_N = variants {} ;
 lin balsam_N = mkN "balsamin" "balsaminer" ; -- comment=2
 lin balsamic_A = variants {} ;
 lin balsamroot_N = variants {} ;
-lin baltimore_PN = variants {} ;
+lin baltimore_PN = mkPN "Baltimore" neutrum ;
 lin baluster_N = variants {} ;
 lin balustrade_N = mkN "balustrad" "balustrader" ;
 lin bambino_N = variants {} ;
@@ -4949,7 +4949,7 @@ lin barbiturate_N = mkN "barbiturat" neutrum;
 lin barbu_N = variants {} ;
 lin barcarole_N = variants {} ;
 lin barcarolle_N = variants {} ;
-lin barcelona_PN = variants {} ;
+lin barcelona_PN = mkPN "Barcelona" neutrum ;
 lin bard_N = mkN "bard" "barder" ; -- comment=3
 lin bardic_A = variants {} ;
 lin bardolatry_N = variants {} ;
@@ -5140,7 +5140,7 @@ lin basin_N = mkN "handfat" neutrum | mkN "bassäng" "bassänger" ; -- SaldoWN -
 lin basinal_A = variants {} ;
 lin basined_A = variants {} ;
 lin basinet_N = variants {} ;
-lin basingstoke_PN = variants {} ;
+lin basingstoke_PN = mkPN "Basingstoke" neutrum ;
 lin basipetal_A = variants {} ;
 lin basis_N = mkN "grundval" | mkN "basis" ;
 lin basiscopic_A = variants {} ;
@@ -5279,7 +5279,7 @@ lin bayonet_V2 = variants {} ;
 lin bayou_N = variants {} ;
 lin bazaar_N = mkN "basar" "basarer" ; -- comment=3
 lin bazooka_N = mkN "bazooka" ; -- SaldoWN
-lin bbc_PN = variants {} ;
+lin bbc_PN = mkPN "BBC" neutrum ;
 lin bdellium_N = variants {} ;
 lin beach_N = mkN "strand" "stränder" ; -- SaldoWN
 lin beach_V2 = mkV2 (mkV "strandar"); -- status=guess, src=wikt
@@ -5531,7 +5531,7 @@ lin behove_V2 = variants {} ;
 lin beige_A = mkA "beige" "beiget" ;
 lin beige_N = mkN "beige" ;
 lin being_N = mkN "väsen" neutrum; -- comment=6
-lin beirut_PN = variants {} ;
+lin beirut_PN = mkPN "Beirut" neutrum ;
 lin beith_PN = variants {} ;
 lin bejewelled_A = variants {} ;
 lin belabour_V2 = variants {} ;
@@ -5730,9 +5730,9 @@ lin berkelium_N = mkN "berkelium" neutrum; -- status=guess
 lin berkhamsted_PN = variants {} ;
 lin berkshire_PN = variants {} ;
 lin berlin_N = variants {} ;
-lin berlin_PN = variants {} ;
+lin berlin_PN = mkPN "Berlin" neutrum ;
 lin berm_N = variants {} ;
-lin bermuda_PN = variants {} ;
+lin bermuda_PN = mkPN "Bermuda" neutrum ;
 lin bermudan_A = variants {} ;
 lin bermudan_N = variants {} ;
 lin bern_PN = variants {} ;
@@ -6206,7 +6206,7 @@ lin bisexual_A = compoundA (regA "tvåkönad"); -- comment=2
 lin bisexual_N = mkN "bi" "bit" "bin" "bien" ; -- status=guess
 lin bisexuality_N = mkN "bisexualitet" "bisexualiteter" ;
 lin bishop's_cleeve_PN = variants {} ;
-lin bishop's_stortford_PN = variants {} ;
+lin bishop's_stortford_PN = mkPN "Bishop's Stortford" neutrum ;
 lin bishop_N = mkN "biskop" ; -- SaldoWN
 lin bishop_auckland_PN = variants {} ;
 lin bishopbriggs_PN = variants {} ;
@@ -7090,7 +7090,7 @@ lin boss_around_V2 = dirV2 (partV (mkV "ordnar")"om");
 lin boss_eyed_A = variants {} ;
 lin bossism_N = variants {} ;
 lin bossy_A = mkA "bossig" ;
-lin boston_PN = variants {} ;
+lin boston_PN = mkPN "Boston" neutrum ;
 lin bot_N = mkN "bot" ; -- status=guess
 lin bota_N = variants {} ;
 lin botanic_A = mkA "botanisk" ;
@@ -7400,7 +7400,7 @@ lin brazen_A = mkA "skamlös" ; -- comment=3
 lin brazen_V2 = variants {} ;
 lin brazen_faced_A = variants {} ;
 lin brazier_N = variants {} ;
-lin brazil_PN = variants {} ;
+lin brazil_PN = mkPN "Brasilien" neutrum ;
 lin brazilian_A = mkA "brasiliansk" ;
 lin brazilian_N = variants {} ;
 lin brazilwood_N = variants {} ;
@@ -7598,7 +7598,7 @@ lin brighten_up_V = mkV "polerar" ; -- comment=2
 lin brighten_up_V2 = dirV2 (partV (mkV "polerar")"om"); -- comment=2
 lin brightlingsea_PN = variants {} ;
 lin brightness_N = variants {} ;
-lin brighton_PN = variants {} ;
+lin brighton_PN = mkPN "Brighton" neutrum ;
 lin brill_N = variants {} ;
 lin brilliance_N = mkN "prakt" ; -- comment=5
 lin brilliancy_N = variants {} ;
@@ -7642,7 +7642,7 @@ lin briquet_N = variants {} ;
 lin briquette_N = variants {} ;
 lin brisance_N = variants {} ;
 lin brisant_A = variants {} ;
-lin brisbane_PN = variants {} ;
+lin brisbane_PN = mkPN "Brisbane" neutrum ;
 lin brisk_A = mkA "rask" ; -- comment=4
 lin brisket_N = mkN "bringa" ; -- SaldoWN
 lin brisling_N = variants {} ;
@@ -7652,7 +7652,7 @@ lin bristlegrass_N = variants {} ;
 lin bristlelike_A = variants {} ;
 lin bristletail_N = variants {} ;
 lin bristly_A = mkA "borstig" ; -- comment=2
-lin bristol_PN = variants {} ;
+lin bristol_PN = mkPN "Bristol" neutrum ;
 lin brit_N = variants {} ;
 lin britain_PN = mkPN "Britannien" neutrum; --
 lin britannic_A = variants {} ;
@@ -7821,7 +7821,7 @@ lin brushwood_N = mkN "småskog" ; -- comment=7
 lin brushwork_N = variants {} ;
 lin brusque_A = mkA "burdus" ; -- comment=4
 lin brusqueness_N = variants {} ;
-lin brussels_PN = variants {} ;
+lin brussels_PN = mkPN "Bryssel" neutrum ;
 lin brut_A = variants {} ;
 lin brutal_A = mkA "brutal" ; -- comment=4
 lin brutality_N = mkN "brutalitet" "brutaliteter" ; -- comment=2
@@ -7964,7 +7964,7 @@ lin bulbil_N = variants {} ;
 lin bulblike_A = variants {} ;
 lin bulbous_A = mkA "lökformig" ;
 lin bulbul_N = variants {} ;
-lin bulgaria_PN = variants {} ;
+lin bulgaria_PN = mkPN "Bulgarien" neutrum ;
 lin bulgarianFem_N = mkN "bulgar" "bulgarer" ;
 lin bulgarianMasc_N = mkN "bulgar" "bulgarer" ;
 lin bulgarian_A = mkA "bulgarisk" ;
@@ -8480,7 +8480,7 @@ lin caiman_N = variants {} ;
 lin cairn_N = mkN "röse" ; -- comment=2
 lin cairned_A = variants {} ;
 lin cairngorm_N = variants {} ;
-lin cairo_PN = variants {} ;
+lin cairo_PN = mkPN "Kairo" neutrum ;
 lin caisson_N = variants {} ;
 lin caitiff_A = variants {} ;
 lin caitiff_N = variants {} ;
@@ -8667,7 +8667,7 @@ lin cambodian_A = variants {} ;
 lin cambodian_N = mkN "kambodjanska" ;
 lin cambourne_PN = variants {} ;
 lin cambric_N = mkN "kambrik" ; -- comment=2
-lin cambridge_PN = variants {} ;
+lin cambridge_PN = mkPN "Cambridge" neutrum ;
 lin cambridgeshire_PN = variants {} ;
 lin cambuslang_PN = variants {} ;
 lin camcorder_N = variants {} ;
@@ -8728,7 +8728,7 @@ lin can_1_VV = S.can_VV ;
 lin can_2_VV = S.can8know_VV ;
 lin can_N = mkN "dunk" ;
 lin can_V2 = dirV2 (mkV "konserverar");
-lin canada_PN = variants {} ;
+lin canada_PN = mkPN "Kanada" neutrum ;
 lin canadian_A = mkA "kanadensisk" ;
 lin canadian_N = mkN "kanadensiska" ;
 lin canal_N = mkN "kanal" "kanaler" ;
@@ -9037,7 +9037,7 @@ lin cardenden_PN = variants {} ;
 lin cardholder_N = variants {} ;
 lin cardia_N = variants {} ;
 lin cardiac_A = variants {} ;
-lin cardiff_PN = variants {} ;
+lin cardiff_PN = mkPN "Cardiff" neutrum ;
 lin cardigan_N = mkN "kofta" ; -- SaldoWN
 lin cardigan_PN = variants {} ;
 lin cardinal_A = mkA "högröd" ; -- comment=4
@@ -10267,7 +10267,7 @@ lin chiasmal_A = variants {} ;
 lin chiasmus_N = variants {} ;
 lin chic_A = mkA "chic" ; -- comment=7
 lin chic_N = mkN "stil" ; -- comment=2
-lin chicago_PN = variants {} ;
+lin chicago_PN = mkPN "Chicago" neutrum ;
 lin chicane_N = variants {} ;
 lin chicanery_N = variants {} ;
 lin chichester_PN = variants {} ;
@@ -10316,7 +10316,7 @@ lin childishness_N = mkN "barnslighet" "barnsligheter" ;
 lin childless_A = mkA "barnlös" ;
 lin childlessness_N = variants {} ;
 lin childlike_A = variants {} ;
-lin chile_PN = variants {} ;
+lin chile_PN = mkPN "Chile" neutrum ;
 lin chileanFem_N = variants {} ;
 lin chileanMasc_N = variants {} ;
 lin chilean_A = variants {} ;
@@ -10599,7 +10599,7 @@ lin christlike_A = variants {} ;
 lin christmas_N = mkN "jul" ;
 lin christmas_PN = variants {} ;
 lin christmas_box_N = variants {} ;
-lin christmas_tree_N = variants {} ;
+lin christmas_tree_N = mkN "julgran" ; -- status=guess
 lin christmastide_N = variants {} ;
 lin christmastime_N = variants {} ;
 lin christopher_PN = variants {} ;
@@ -12952,7 +12952,7 @@ lin copartnership_N = variants {} ;
 lin cope_N = variants {} ;
 lin cope_V = variants {} ;
 lin copeck_N = variants {} ;
-lin copenhagen_PN = variants {} ;
+lin copenhagen_PN = mkPN "Köpenhamn" neutrum ;
 lin copepod_N = variants {} ;
 lin copernican_A = variants {} ;
 lin copilot_N = mkN "andrepilot" ; -- status=guess
@@ -13099,7 +13099,7 @@ lin cornstalk_N = variants {} ;
 lin cornstarch_N = mkN "majsmjöl" neutrum; -- comment=2
 lin cornu_N = variants {} ;
 lin cornucopia_N = mkN "ymnighetshorn" neutrum;
-lin cornwall_PN = variants {} ;
+lin cornwall_PN = mkPN "Cornwall" neutrum ;
 lin corny_A = compoundA (regA "förlegad"); -- comment=4
 lin corolla_N = variants {} ;
 lin corollary_N = mkN "följdsats" | (mkN "korollarium" "korollariet" "korollarier" "korollarierna"); -- status=guess status=guess
@@ -14162,7 +14162,7 @@ lin ctenidium_N = variants {} ;
 lin ctenoid_A = variants {} ;
 lin ctenophore_N = variants {} ;
 lin cub_N = mkN "björn" ; -- comment=4
-lin cuba_PN = variants {} ;
+lin cuba_PN = mkPN "Kuba" neutrum ;
 lin cuban_A = variants {} ;
 lin cuban_N = variants {} ;
 lin cubby_N = variants {} ;
@@ -14557,7 +14557,7 @@ lin cypriot_A = variants {} ;
 lin cypriot_N = variants {} ;
 lin cypripedia_N = variants {} ;
 lin cyproheptadine_N = variants {} ;
-lin cyprus_PN = variants {} ;
+lin cyprus_PN = mkPN "Cypern" neutrum ;
 lin cyril_PN = variants {} ;
 lin cyrilla_N = variants {} ;
 lin cyrillic_A = variants {} ;
@@ -14678,7 +14678,7 @@ lin dale_N = mkN "dal" ;
 lin dalesman_N = variants {} ;
 lin daleth_N = variants {} ;
 lin dalkeith_PN = variants {} ;
-lin dallas_PN = variants {} ;
+lin dallas_PN = mkPN "Dallas" neutrum ;
 lin dalliance_N = mkN "flört" "flörter" ;
 lin dallier_N = variants {} ;
 lin dallisgrass_N = variants {} ;
@@ -15573,7 +15573,7 @@ lin denim_N = mkN "denim" ;
 lin denis_PN = variants {} ;
 lin denise_PN = variants {} ;
 lin denizen_N = mkN "invånare" utrum;
-lin denmark_PN = variants {} ;
+lin denmark_PN = mkPN "Danmark" neutrum ;
 lin dennis_PN = variants {} ;
 lin denny_PN = variants {} ;
 lin denominate_V2 = dirV2 (partV (mkV "kallar")"ut");
@@ -15608,7 +15608,7 @@ lin denture_N = mkN "tandprotes" "tandproteser" ; -- SaldoWN
 lin denudation_N = variants {} ;
 lin denude_V2 = variants {} ;
 lin denunciation_N = mkN "uppsägning" ; -- comment=2
-lin denver_PN = variants {} ;
+lin denver_PN = mkPN "Denver" neutrum ;
 lin deny_V2 = mkV2 (mkV "förneka"); -- status=guess, src=wikt
 lin deny_V3 = mkV3 (mkV "förneka"); -- status=guess, src=wikt
 lin deny_VS = mkVS (mkV "förneka"); -- status=guess, src=wikt
@@ -15944,7 +15944,7 @@ lin detribalize_V2 = variants {} ;
 lin detriment_N = mkN "skada" ;
 lin detrimental_A = mkA "skadlig" ; -- comment=2
 lin detritus_N = mkN "slam" "slammen" "slammar" "slammarna" ;
-lin detroit_PN = variants {} ;
+lin detroit_PN = mkPN "Detroit" neutrum ;
 lin detumescence_N = variants {} ;
 lin deuce_N = mkN "djävel" | mkN "djävul" | mkN "fan" neutrum; -- status=guess status=guess status=guess
 lin deuced_A = variants {} ;
@@ -17883,7 +17883,7 @@ lin dubbing_N = variants {} ;
 lin dubiety_N = variants {} ;
 lin dubious_A = mkA "tveksam" "tveksamt" "tveksamma" "tveksamma" "tveksammare" "tveksammast" "tveksammaste" ;
 lin dubiousness_N = variants {} ;
-lin dublin_PN = variants {} ;
+lin dublin_PN = mkPN "Dublin" neutrum ;
 lin dubliner_N = variants {} ;
 lin dubnium_N = mkN "dubnium" ; -- status=guess
 lin ducal_A = variants {} ;
@@ -18231,8 +18231,8 @@ lin east_kilbride_PN = variants {} ;
 lin east_retford_PN = variants {} ;
 lin eastbound_A = variants {} ;
 lin eastbourne_PN = variants {} ;
-lin easter_N = variants {} ;
-lin easter_PN = variants {} ;
+lin easter_N = mkN "påsk" ;
+lin easter_PN = mkPN "Påsk" ;
 lin easterly_A = mkA "östlig" ; -- comment=2
 lin easterly_Adv = mkAdv "österut" ;
 lin eastern_A = mkA "ostlig" ;
@@ -18531,7 +18531,7 @@ lin egregious_A = mkA "flagrant" "flagrant" ; -- comment=2
 lin egremont_PN = variants {} ;
 lin egress_N = variants {} ;
 lin egret_N = variants {} ;
-lin egypt_PN = variants {} ;
+lin egypt_PN = mkPN "Egypten" neutrum ;
 lin egyptian_A = variants {} ;
 lin egyptian_N = variants {} ;
 lin eiche_PN = variants {} ;
@@ -19120,7 +19120,7 @@ lin engineer_V = mkV "iscensätta" "iscensätter" "iscensätt" "iscensatte" "isc
 lin engineer_V2 = variants {} ;
 lin engineering_N = variants {} ;
 lin enginery_N = variants {} ;
-lin england_PN = variants {} ;
+lin england_PN = mkPN "England" neutrum ;
 lin english_A = mkA "engelsk" ;
 lin english_N = mkN "engelska" ; -- comment=2
 lin englishman_N = variants {} ;
@@ -21917,7 +21917,7 @@ lin floret_N = variants {} ;
 lin floricultural_A = variants {} ;
 lin floriculture_N = variants {} ;
 lin florid_A = variants {} ;
-lin florida_PN = variants {} ;
+lin florida_PN = mkPN "Florida" neutrum ;
 lin florilegium_N = variants {} ;
 lin florin_N = variants {} ;
 lin florist_N = mkN "blomsterhandlare" utrum; -- comment=2
@@ -22587,7 +22587,7 @@ lin framing_N = variants {} ;
 lin frampton_cotterell_PN = variants {} ;
 lin fran_PN = variants {} ;
 lin franc_N = variants {} ;
-lin france_PN = variants {} ;
+lin france_PN = mkPN "Frankrike" neutrum ;
 lin frances_PN = variants {} ;
 lin franchise_N = mkN "koncession" "koncessioner" | mkN "rösträtt" ; -- SaldoWN -- comment=6
 lin francis_PN = variants {} ;
@@ -22601,7 +22601,7 @@ lin frank_A = mkA "rättfram" "rättframt" "rättframma" "rättframma" "rättfra
 lin frank_N = mkN "frank" "franker" ;
 lin frank_PN = variants {} ;
 lin frank_V2 = variants {} ;
-lin frankfurt_PN = variants {} ;
+lin frankfurt_PN = mkPN "Frankfurt" neutrum ;
 lin frankfurter_N = mkN "wienerkorv" ; -- SaldoWN
 lin frankie_PN = variants {} ;
 lin frankincense_N = mkN "rökelse" ; -- status=guess
@@ -23241,7 +23241,7 @@ lin galvanizer_N = variants {} ;
 lin galvanometer_N = variants {} ;
 lin galway_PN = variants {} ;
 lin gam_N = variants {} ;
-lin gambia_PN = variants {} ;
+lin gambia_PN = mkPN "Gambia" neutrum;
 lin gambian_A = variants {} ;
 lin gambian_N = variants {} ;
 lin gambist_N = variants {} ;
@@ -23712,7 +23712,7 @@ lin germaneness_N = variants {} ;
 lin germanic_A = mkA "germansk" ;
 lin germanite_N = variants {} ;
 lin germanium_N = mkN "germanium" neutrum; -- status=guess
-lin germany_PN = variants {} ;
+lin germany_PN = mkPN "Tyskland" neutrum ;
 lin germfree_A = variants {} ;
 lin germicide_N = variants {} ;
 lin germinal_A = variants {} ;
@@ -23879,7 +23879,7 @@ lin gibe_V = variants {} ;
 lin gibibit_N = variants {} ;
 lin gibingly_Adv = variants {} ;
 lin giblet_N = variants {} ;
-lin gibraltar_PN = variants {} ;
+lin gibraltar_PN = mkPN "Gibraltar" neutrum ;
 lin gibraltarian_A = variants {} ;
 lin gibraltarian_N = variants {} ;
 lin giddiness_N = mkN "yrsel" ; -- comment=2
@@ -24034,7 +24034,7 @@ lin glare_N = mkN "glans" ; -- comment=2
 lin glare_V = mkV "glor" ; -- comment=3
 lin glare_V2 = variants {} ;
 lin glaring_A = mkA "iögonfallande" ; -- comment=8
-lin glasgow_PN = variants {} ;
+lin glasgow_PN = mkPN "Glasgow" neutrum ;
 lin glasnost_N = mkN "glasnost" ; -- status=guess
 lin glass_N = mkN "spegel" ;
 lin glass_V2 = variants {} ;
@@ -24530,7 +24530,7 @@ lin gossip_V = mkV "skvallrar" ; -- comment=3
 lin gossiping_N = variants {} ;
 lin goteborg_PN = variants {} ;
 lin goth_N = variants {} ;
-lin gothenburg_PN = variants {} ;
+lin gothenburg_PN = mkPN "Göteborg" neutrum ;
 lin gothic_A = mkA "gotisk" ;
 lin gothic_N = variants {} ;
 lin gottingen_PN = variants {} ;
@@ -24784,7 +24784,7 @@ lin greave_N = variants {} ;
 lin greaves_N = variants {} ;
 lin grebe_N = mkN "dopping" ; -- SaldoWN
 lin grecian_A = variants {} ;
-lin greece_PN = variants {} ;
+lin greece_PN = mkPN "Grekland" neutrum ;
 lin greed_N = mkN "glupskhet" ; -- comment=3
 lin greediness_N = variants {} ;
 lin greedy_A = mkA "lysten" "lystet" ; -- comment=5
@@ -24819,7 +24819,7 @@ lin greenshank_N = variants {} ;
 lin greenside_A = variants {} ;
 lin greenskeeper_N = variants {} ;
 lin greensward_N = mkN "gräsvall" ; -- comment=2
-lin greenwich_PN = variants {} ;
+lin greenwich_PN = mkPN "Greenwich" neutrum ;
 lin greenwing_N = variants {} ;
 lin greenwood_N = variants {} ;
 lin greet_V2 = dirV2 (partV (mkV "hälsar")"på");
@@ -25548,7 +25548,7 @@ lin ham_up_V2 = variants {} ;
 lin hamadryad_N = variants {} ;
 lin hamartoma_N = variants {} ;
 lin hamate_N = variants {} ;
-lin hamburg_PN = variants {} ;
+lin hamburg_PN = mkPN "Hamburg" neutrum ;
 lin hamburger_N = mkN "köttfärs" ; -- comment=2
 lin hame_N = variants {} ;
 lin hamelia_N = variants {} ;
@@ -25563,7 +25563,7 @@ lin hammer_into_V2 = variants {} ;
 lin hammer_out_V2 = variants {} ;
 lin hammerhead_N = variants {} ;
 lin hammerlock_N = variants {} ;
-lin hammersmith_PN = variants {} ;
+lin hammersmith_PN = mkPN "Hammersmith" neutrum ;
 lin hammertoe_N = variants {} ;
 lin hamming_N = variants {} ;
 lin hammock_N = mkN "hängmatta" ; -- status=guess
@@ -25858,7 +25858,7 @@ lin haste_N = mkN "hast" ;
 lin hasten_V = mkV "påskyndar" ; -- comment=2
 lin hasten_V2 = dirV2 (partV (mkV "ilar")"igenom");
 lin hastiness_N = variants {} ;
-lin hastings_PN = variants {} ;
+lin hastings_PN = mkPN "Hastings" neutrum ;
 lin hasty_A = compoundA (regA "överilad"); -- comment=6
 lin hat_N = L.hat_N ;
 lin hatband_N = mkN "hattrem" ; -- status=guess
@@ -25941,7 +25941,7 @@ lin havoc_N = mkN "förödelse" "förödelser" ;
 lin haw_N = variants {} ;
 lin haw_V = variants {} ;
 lin haw_haw_N = variants {} ;
-lin hawaii_PN = variants {} ;
+lin hawaii_PN = mkPN "Hawaii" neutrum ;
 lin hawala_N = variants {} ;
 lin hawfinch_N = variants {} ;
 lin hawick_PN = variants {} ;
@@ -26286,7 +26286,7 @@ lin helpless_A = mkA "hjälplös" ; -- SaldoWN
 lin helplessness_N = mkN "hjälplöshet" ; -- comment=2
 lin helpmate_N = variants {} ;
 lin helpmeet_N = variants {} ;
-lin helsinki_PN = variants {} ;
+lin helsinki_PN = mkPN "Helsingfors" neutrum ;
 lin helston_PN = variants {} ;
 lin helter_skelter_Adv = variants {} ;
 lin helter_skelter_N = variants {} ;
@@ -26737,7 +26737,7 @@ lin hire_V2 = mkV2 (mkV "anställa"); -- status=guess, src=wikt
 lin hire_V2V = mkV2V (mkV "anställa"); -- status=guess, src=wikt
 lin hire_VS = mkVS (mkV "anställa"); -- status=guess, src=wikt
 lin hireling_N = variants {} ;
-lin hiroshima_PN = variants {} ;
+lin hiroshima_PN = mkPN "Hiroshima" neutrum ;
 lin hirsute_A = mkA "hårig" | mkA "luden" "ludet"; -- status=guess status=guess
 lin hirsuteness_N = variants {} ;
 lin hispid_A = variants {} ;
@@ -26923,7 +26923,7 @@ lin hollowness_N = variants {} ;
 lin hollowware_N = variants {} ;
 lin holly_N = mkN "järnek" ; -- status=guess
 lin hollyhock_N = variants {} ;
-lin hollywood_PN = variants {} ;
+lin hollywood_PN = mkPN "Hollywood" neutrum ;
 lin holm_oak_N = variants {} ;
 lin holmfirth_PN = variants {} ;
 lin holmium_N = mkN "holmium" neutrum; -- status=guess
@@ -27340,7 +27340,7 @@ lin housewifery_N = variants {} ;
 lin housework_N = mkN "hushållsarbete" ; -- status=guess
 lin housewrecker_N = variants {} ;
 lin housing_N = mkN "boende" | mkN "skydd" neutrum ; -- SaldoWN = mkN "boende" "boenden" "boende" "boendena" ; -- comment=13
-lin houston_PN = variants {} ;
+lin houston_PN = mkPN "Houston" neutrum ;
 lin hove_PN = variants {} ;
 lin hovea_N = variants {} ;
 lin hovel_N = mkN "kyffe" ; -- comment=3
@@ -27492,7 +27492,7 @@ lin hung_on_V = variants {} ;
 lin hung_out_V = variants {} ;
 lin hungarian_A = mkA "ungersk" ;
 lin hungarian_N = mkN "ungrare" utrum; -- comment=3
-lin hungary_PN = variants {} ;
+lin hungary_PN = mkPN "Ungern" neutrum ;
 lin hunger_N = mkN "hunger" ;
 lin hunger_V = variants {} ;
 lin hunger_march_N = variants {} ;
@@ -27903,10 +27903,10 @@ lin icefield_N = variants {} ;
 lin icefloe_N = variants {} ;
 lin icefree_A = variants {} ;
 lin icehouse_N = variants {} ;
-lin iceland_PN = variants {} ;
+lin iceland_PN = mkPN "Island" neutrum ;
 lin icelander_A = variants {} ;
 lin icelander_N = variants {} ;
-lin icelandic_A = variants {} ;
+lin icelandic_A = mkA "isländsk" ;
 lin icelandic_N = variants {} ;
 lin iceman_N = variants {} ;
 lin icepack_N = variants {} ;
@@ -28758,7 +28758,7 @@ lin indexer_N = variants {} ;
 lin indexical_A = variants {} ;
 lin indexing_N = variants {} ;
 lin indexless_A = variants {} ;
-lin india_PN = variants {} ;
+lin india_PN = mkPN "Indien" neutrum ;
 lin india_rubber_N = variants {} ;
 lin indiaman_N = variants {} ;
 lin indian_A = variants {} ;
@@ -29871,11 +29871,11 @@ lin ipso_facto_Adv = variants {} ;
 lin ipswich_PN = variants {} ;
 lin iq_N = variants {} ;
 lin ira_N = variants {} ;
-lin iran_PN = variants {} ;
+lin iran_PN = mkPN "Iran" neutrum ;
 lin iranianFem_N = variants {} ;
 lin iranianMasc_N = variants {} ;
 lin iranian_A = variants {} ;
-lin iraq_PN = variants {} ;
+lin iraq_PN = mkPN "Irak" neutrum ;
 lin iraqi_A = variants {} ;
 lin iraqi_N = variants {} ;
 lin irascibility_N = mkN "hetsighet" "hetsigheter" ; -- comment=3
@@ -29883,7 +29883,7 @@ lin irascible_A = mkA "hetsig" ; -- comment=5
 lin irate_A = mkA "ilsken" "ilsket" ;
 lin ire_N = variants {} ;
 lin ireful_A = variants {} ;
-lin ireland_PN = variants {} ;
+lin ireland_PN = mkPN "Irland" neutrum ;
 lin irene_PN = variants {} ;
 lin irenic_A = variants {} ;
 lin iridaceous_A = variants {} ;
@@ -30065,7 +30065,7 @@ lin isotopic_A = variants {} ;
 lin isotropic_A = mkA "isotropisk" ; -- status=guess
 lin isotropically_Adv = variants {} ;
 lin isotropy_N = mkN "isotropi" ; -- status=guess
-lin israel_PN = variants {} ;
+lin israel_PN = mkPN "Israel" neutrum ;
 lin israeli_A = variants {} ;
 lin israeli_N = variants {} ;
 lin issue_1_N = mkN "fråga" | mkN "spörsmål" neutrum ;
@@ -30075,7 +30075,7 @@ lin issue_V = mkV "utfärdar" ;
 lin issue_V2 = mkV2 (mkV (mkV "släpper") "ut"); --
 lin issue_forth_V = mkV "utfärdar" ;
 lin issuer_N = variants {} ;
-lin istanbul_PN = variants {} ;
+lin istanbul_PN = mkPN "Istanbul" neutrum ;
 lin isthmian_A = variants {} ;
 lin isthmus_N = mkN "näs" neutrum; -- comment=2
 lin it_Pron = S.it_Pron;
@@ -30084,7 +30084,7 @@ lin italian_N = mkN "italienska" ; -- comment=3
 lin italic_A = mkA "kursiv" ;
 lin italic_N = mkN "kursiv" "kursiver" ;
 lin italicize_V2 = variants {} ;
-lin italy_PN = variants {} ;
+lin italy_PN = mkPN "Italien" neutrum ;
 lin itch_N = mkN "klåda" ; -- comment=4
 lin itch_V = mkV "kliar" ; -- comment=2
 lin itchy_A = mkA "skabbig" ; -- comment=3
@@ -30648,7 +30648,7 @@ lin junkyard_N = mkN "skrot" ; -- comment=3
 lin junoesque_A = variants {} ;
 lin junta_N = mkN "junta" ;
 lin jupati_N = variants {} ;
-lin jupiter_PN = variants {} ;
+lin jupiter_PN = mkPN "Jupiter";
 lin jural_A = variants {} ;
 lin juridical_A = variants {} ;
 lin jurisdiction_N = mkN "jurisdiktion" "jurisdiktioner" ; -- SaldoWN
@@ -30714,7 +30714,7 @@ lin kanamycin_N = variants {} ;
 lin kanchil_N = variants {} ;
 lin kangaroo_N = mkN "känguru" "kängurun" "kängurur" "kängururna" ; -- SaldoWN
 lin kanpur_PN = variants {} ;
-lin kansas_PN = variants {} ;
+lin kansas_PN = mkPN "Kansas" neutrum ;
 lin kansas_city_PN = variants {} ;
 lin kanzu_N = variants {} ;
 lin kaohsiung_PN = variants {} ;
@@ -30838,7 +30838,7 @@ lin kennel_V2 = variants {} ;
 lin kenneth_PN = variants {} ;
 lin kenning_N = variants {} ;
 lin kenny_PN = variants {} ;
-lin kensington_PN = variants {} ;
+lin kensington_PN = mkPN "Kensington" neutrum ;
 lin kent_PN = variants {} ;
 lin kentucky_PN = variants {} ;
 lin kenya_PN = variants {} ;
@@ -31336,7 +31336,7 @@ lin kyat_N = variants {} ;
 lin kylie_N = variants {} ;
 lin kylix_N = variants {} ;
 lin kymograph_N = variants {} ;
-lin kyoto_PN = variants {} ;
+lin kyoto_PN = mkPN "Kyoto" neutrum ;
 lin kyphosis_N = variants {} ;
 lin l_plate_N = variants {} ;
 lin la_N = variants {} ;
@@ -31705,7 +31705,7 @@ lin laryngospasm_N = variants {} ;
 lin laryngostenosis_N = variants {} ;
 lin laryngotracheobronchitis_N = variants {} ;
 lin larynx_N = mkN "struphuvud" "struphuvudet" "struphuvuden" "struphuvudena" ;
-lin las_palmas_PN = variants {} ;
+lin las_palmas_PN = mkPN "Las Palmas" neutrum ;
 lin lasagna_N = mkN "lasagne" utrum; -- status=guess
 lin lascar_N = variants {} ;
 lin lascivious_A = mkA "vällustig" | (mkA "liderlig"); -- status=guess status=guess
@@ -32704,7 +32704,7 @@ lin lint_N = mkN "ludd" ;
 lin lintel_N = mkN "överstycke" ;
 lin linuron_N = variants {} ;
 lin linwood_PN = variants {} ;
-lin linz_PN = variants {} ;
+lin linz_PN = mkPN "Linz" neutrum ;
 lin lion_N = mkN "lejon" neutrum | mkN "lejon" neutrum ; -- SaldoWN
 lin lion_hearted_A = variants {} ;
 lin lion_hunter_N = variants {} ;
@@ -32885,7 +32885,7 @@ lin liven_V2 = variants {} ;
 lin liver_N = L.liver_N ;
 lin liveried_A = variants {} ;
 lin liverish_A = variants {} ;
-lin liverpool_PN = variants {} ;
+lin liverpool_PN = mkPN "Liverpool" neutrum ;
 lin liverpudlian_A = variants {} ;
 lin liverpudlian_N = variants {} ;
 lin liverwort_N = mkN "levermossa" ; -- status=guess
@@ -33268,7 +33268,7 @@ lin lorn_A = variants {} ;
 lin lorna_PN = variants {} ;
 lin lorry_N = mkN "lastbil" ; -- comment=2
 lin lory_N = variants {} ;
-lin los_angeles_PN = variants {} ;
+lin los_angeles_PN = mkPN "Los Angeles" neutrum ;
 lin lose_V = mkV "förlora" ;
 lin lose_V2 = L.lose_V2 ;
 lin lose_out_V = mkV "tappar" ; -- comment=7
@@ -33738,7 +33738,7 @@ lin madonna_N = variants {} ;
 lin madras_N = variants {} ;
 lin madras_PN = variants {} ;
 lin madrasa_N = variants {} ;
-lin madrid_PN = variants {} ;
+lin madrid_PN = mkPN "Madrid" neutrum ;
 lin madrigal_N = variants {} ;
 lin madrigalist_N = variants {} ;
 lin madrilene_N = variants {} ;
@@ -33832,7 +33832,7 @@ lin maidenlike_A = variants {} ;
 lin maidenliness_N = variants {} ;
 lin maidenly_A = variants {} ;
 lin maidservant_N = variants {} ;
-lin maidstone_PN = variants {} ;
+lin maidstone_PN = mkPN "Maidstone" neutrum ;
 lin maigre_N = variants {} ;
 lin mail_N = mkN "post" | mkN "postverk" neutrum ; -- SaldoWN = mkN "post" "poster" ; -- comment=9
 lin mail_V2 = mkV2 (mkV "postar"); -- status=guess, src=wikt
@@ -33936,7 +33936,7 @@ lin maladjustment_N = variants {} ;
 lin maladroit_A = variants {} ;
 lin maladroitness_N = variants {} ;
 lin malady_N = mkN "sjuka" ; -- comment=4
-lin malaga_PN = variants {} ;
+lin malaga_PN = mkPN "Malaga" neutrum ;
 lin malahini_N = variants {} ;
 lin malaise_N = mkN "olustkänsla" ; -- comment=2
 lin malamute_N = variants {} ;
@@ -34002,7 +34002,7 @@ lin mallet_N = mkN "klubba" ; -- status=guess
 lin malleus_N = variants {} ;
 lin mallow_N = mkN "malva" ; -- status=guess
 lin mallow_PN = variants {} ;
-lin malmo_PN = variants {} ;
+lin malmo_PN = mkPN "Malmö" neutrum ;
 lin malmsey_N = variants {} ;
 lin malnourished_A = mkA "undernärd" "undernärt" ;
 lin malnutrition_N = mkN "undernäring" ; -- comment=2
@@ -34017,7 +34017,7 @@ lin malpractice_N = variants {} ;
 lin malt_N = mkN "malt" ;
 lin malt_V = mkV "maler" ;
 lin malt_V2 = mkV2 (mkV "mälta"); -- status=guess, src=wikt
-lin malta_PN = variants {} ;
+lin malta_PN = mkPN "Malta" neutrum ;
 lin maltby_PN = variants {} ;
 lin malted_N = variants {} ;
 lin maltese_A = variants {} ;
@@ -34075,7 +34075,7 @@ lin manakin_N = variants {} ;
 lin manana_N = variants {} ;
 lin manat_N = variants {} ;
 lin manatee_N = mkN "sjöko" ; -- status=guess
-lin manchester_PN = variants {} ;
+lin manchester_PN = mkPN "Manchester" neutrum ;
 lin mancunian_A = variants {} ;
 lin mancunian_N = variants {} ;
 lin mandala_N = variants {} ;
@@ -34122,7 +34122,7 @@ lin mangosteen_N = mkN "mangostan" ; -- status=guess
 lin mangrove_N = mkN "mangrove" "mangrover" ; -- status=guess
 lin mangy_A = mkA "skabbig" ; -- comment=3
 lin manhandle_V2 = variants {} ;
-lin manhattan_PN = variants {} ;
+lin manhattan_PN = mkPN "Manhattan" neutrum ;
 lin manhole_N = mkN "gatubrunn" | mkN "manhål" ; -- status=guess status=guess
 lin manhood_N = mkN "mandom" ;
 lin manhunt_N = variants {} ;
@@ -34980,7 +34980,7 @@ lin memorization_N = variants {} ;
 lin memorize_V2 = mkV2 (mkV (mkV "lära") "sig utantill") | mkV2 (mkV "memorerar") | mkV2 (mkV (mkV "lägga") "på minnet"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin memorizer_N = variants {} ;
 lin memory_N = mkN "minne" ;
-lin memphis_PN = variants {} ;
+lin memphis_PN = mkPN "Memphis" neutrum ;
 lin memsahib_N = variants {} ;
 lin menace_N = mkN "plåga" ; -- comment=5
 lin menace_V2 = variants {} ;
@@ -35317,9 +35317,9 @@ lin metz_PN = variants {} ;
 lin mew_N = mkN "mås" ; -- status=guess
 lin mew_V = variants {} ;
 lin mews_N = variants {} ;
-lin mexican_A = variants {} ;
+lin mexican_A = mkA "mexikansk" ;
 lin mexican_N = variants {} ;
-lin mexico_PN = variants {} ;
+lin mexico_PN = mkPN "Mexiko" neutrum ;
 lin mexico_city_PN = variants {} ;
 lin mexiletine_N = variants {} ;
 lin mezereon_N = variants {} ;
@@ -35336,7 +35336,7 @@ lin mho_N = variants {} ;
 lin mi5_PN = variants {} ;
 lin mi6_PN = variants {} ;
 lin mi_N = mkN "mi" ; -- status=guess
-lin miami_PN = variants {} ;
+lin miami_PN = mkPN "Miami" neutrum ;
 lin miaou_N = variants {} ;
 lin miaou_V = variants {} ;
 lin miaow_N = variants {} ;
@@ -36512,7 +36512,7 @@ lin morula_N = variants {} ;
 lin mosaic_A = variants {} ;
 lin mosaic_N = mkN "mosaik" "mosaiker" ; -- SaldoWN
 lin mosaicism_N = variants {} ;
-lin moscow_PN = variants {} ;
+lin moscow_PN = mkPN "Moskva" neutrum ;
 lin moselle_N = variants {} ;
 lin mosey_V = variants {} ;
 lin moshav_N = variants {} ;
@@ -38414,8 +38414,8 @@ lin northwestward_Adv = variants {} ;
 lin northwich_PN = variants {} ;
 lin norton_PN = variants {} ;
 lin nortriptyline_N = variants {} ;
-lin norway_PN = variants {} ;
-lin norwegian_A = variants {} ;
+lin norway_PN = mkPN "Norge" neutrum ;
+lin norwegian_A = mkA "norsk" ;
 lin norwegian_N = variants {} ;
 lin norwich_PN = variants {} ;
 lin nose_N = L.nose_N ;
@@ -38497,7 +38497,7 @@ lin notochord_N = variants {} ;
 lin notoriety_N = mkN "ökändhet" ; -- comment=2
 lin notorious_A = mkA "ökänd" ; -- comment=4
 lin notornis_N = variants {} ;
-lin nottingham_PN = variants {} ;
+lin nottingham_PN = mkPN "Nottingham" neutrum ;
 lin nottinghamshire_PN = variants {} ;
 lin notwithstanding_Adv = mkAdv "likväl" | mkAdv "ändå" ; -- status=guess status=guess
 lin notwithstanding_Prep = variants {} ;
@@ -39483,7 +39483,7 @@ lin ordnance_N = variants {} ;
 lin ordure_N = variants {} ;
 lin ore_N = mkN "malm" "malmer" ; -- comment=4
 lin oregano_N = mkN "oregano" ;
-lin oregon_PN = variants {} ;
+lin oregon_PN = mkPN "Oregon" neutrum ;
 lin oreo_N = variants {} ;
 lin organ_N = mkN "orgel" ; -- SaldoWN
 lin organ_blower_N = variants {} ;
@@ -39632,7 +39632,7 @@ lin oscine_N = variants {} ;
 lin oscitancy_N = variants {} ;
 lin osculation_N = mkN "oskulation" ; -- status=guess
 lin osier_N = mkN "vide" ;
-lin oslo_PN = variants {} ;
+lin oslo_PN = mkPN "Oslo" neutrum ;
 lin osmiridium_N = variants {} ;
 lin osmium_N = mkN "osmium" neutrum; -- status=guess
 lin osmoreceptor_N = variants {} ;
@@ -40197,7 +40197,7 @@ lin oxcart_N = variants {} ;
 lin oxeye_N = mkN "tusensköna" ; -- comment=2
 lin oxeyed_A = variants {} ;
 lin oxford_N = variants {} ;
-lin oxford_PN = variants {} ;
+lin oxford_PN = mkPN "Oxford" neutrum ;
 lin oxfordshire_PN = variants {} ;
 lin oxidant_N = variants {} ;
 lin oxidase_N = variants {} ;
@@ -40449,7 +40449,7 @@ lin paleopathology_N = variants {} ;
 lin paleornithology_N = variants {} ;
 lin paleozoology_N = variants {} ;
 lin palermo_PN = variants {} ;
-lin palestine_PN = variants {} ;
+lin palestine_PN = mkPN "Palestina" neutrum ;
 lin palestinian_A = variants {} ;
 lin palestinian_N = variants {} ;
 lin palestra_N = variants {} ;
@@ -41890,7 +41890,7 @@ lin pertinent_A = variants {} ;
 lin pertness_N = variants {} ;
 lin perturb_V2 = variants {} ;
 lin perturbation_N = variants {} ;
-lin peru_PN = variants {} ;
+lin peru_PN = mkPN "Peru" neutrum ;
 lin perugia_PN = variants {} ;
 lin peruke_N = mkN "peruk" "peruker" ; -- status=guess
 lin peruked_A = variants {} ;
@@ -42077,7 +42077,7 @@ lin pheromone_N = mkN "feromon" ; -- status=guess
 lin phi_N = variants {} ;
 lin phial_N = variants {} ;
 lin phil_PN = variants {} ;
-lin philadelphia_PN = variants {} ;
+lin philadelphia_PN = mkPN "Philadelphia" neutrum ;
 lin philadelphus_N = variants {} ;
 lin philander_V = variants {} ;
 lin philanderer_N = variants {} ;
@@ -42654,7 +42654,7 @@ lin pirouette_N = mkN "piruett" "piruetter" ;
 lin pirouette_V = variants {} ;
 lin piroxicam_N = variants {} ;
 lin pis_aller_N = variants {} ;
-lin pisa_PN = variants {} ;
+lin pisa_PN = mkPN "Pisa" neutrum ;
 lin pisanosaur_N = variants {} ;
 lin piscatorial_A = variants {} ;
 lin pisces_PN = variants {} ;
@@ -43166,7 +43166,7 @@ lin plus_N = mkN "positiv" "positiver" ; -- comment=5
 lin plush_A = mkA "vräkig" ; -- comment=3
 lin plush_N = mkN "plysch" "plyscher" | mkN "flott" neutrum ; -- SaldoWN -- comment=2
 lin plushy_A = variants {} ;
-lin pluto_PN = variants {} ;
+lin pluto_PN = mkPN "Pluto" ;
 lin plutocracy_N = variants {} ;
 lin plutocrat_N = variants {} ;
 lin plutocratic_A = variants {} ;
@@ -43283,7 +43283,7 @@ lin poker_face_N = variants {} ;
 lin pokeweed_N = variants {} ;
 lin poky_A = mkA "trång" ; -- comment=7
 lin polack_N = variants {} ;
-lin poland_PN = variants {} ;
+lin poland_PN = mkPN "Polen" neutrum ;
 lin polar_A = mkA "polar" ;
 lin polarimeter_N = variants {} ;
 lin polaris_N = variants {} ;
@@ -43648,7 +43648,7 @@ lin portiere_N = variants {} ;
 lin portion_N = mkN "portion" "portioner" ;
 lin portion_V2 = variants {} ;
 lin portishead_PN = variants {} ;
-lin portland_PN = variants {} ;
+lin portland_PN = mkPN "Portland" neutrum ;
 lin portly_A = variants {} ;
 lin portmanteau_N = mkN "teleskopord" ; -- status=guess
 lin porto_alegre_PN = variants {} ;
@@ -43658,7 +43658,7 @@ lin portraiture_N = mkN "porträttering" ;
 lin portray_V2 = variants {} ;
 lin portrayal_N = mkN "porträttering" ; -- comment=4
 lin portsmouth_PN = variants {} ;
-lin portugal_PN = variants {} ;
+lin portugal_PN = mkPN "Portugal" neutrum ;
 lin portuguese_A = mkA "portugisisk" ;
 lin portuguese_N = mkN "portugis" "portugiser" ;
 lin portulaca_N = variants {} ;
@@ -43929,7 +43929,7 @@ lin pragmatically_Adv = variants {} ;
 lin pragmatics_N = variants {} ;
 lin pragmatism_N = variants {} ;
 lin pragmatist_N = variants {} ;
-lin prague_PN = variants {} ;
+lin prague_PN = mkPN "Prag" neutrum ;
 lin prairie_N = mkN "prärie" "prärier" ; -- SaldoWN
 lin praise_N = mkN "pris" ; -- comment=15
 lin praise_V2 = mkV2 (mkV "lovar"); -- status=guess, src=wikt
@@ -46568,7 +46568,7 @@ lin reader_N = mkN "läsare" utrum | mkN "läsare" utrum ; -- SaldoWN -- comment
 lin readership_N = mkN "läsekrets" ; -- SaldoWN
 lin readiness_N = mkN "beredvillighet" "beredvilligheter" ; -- comment=2
 lin reading_N = mkN "uppläsning" ; -- comment=6
-lin reading_PN = variants {} ;
+lin reading_PN = mkPN "Reading" neutrum ;
 lin reading_lamp_N = variants {} ;
 lin reading_room_N = variants {} ;
 lin readjust_V2 = variants {} ;
@@ -48065,7 +48065,7 @@ lin rewrite_N = variants {} ;
 lin rewrite_V2 = variants {} ;
 lin rewriting_N = variants {} ;
 lin rex_PN = variants {} ;
-lin reykjavik_PN = variants {} ;
+lin reykjavik_PN = mkPN "Reykjavik" neutrum ;
 lin rhabdomyoma_N = variants {} ;
 lin rhabdomyosarcoma_N = variants {} ;
 lin rhabdovirus_N = variants {} ;
@@ -48573,7 +48573,7 @@ lin romance_N = mkN "romantik" ; -- comment=3
 lin romance_V = variants {} ;
 lin romance_V2 = variants {} ;
 lin romanesque_N = variants {} ;
-lin romania_PN = variants {} ;
+lin romania_PN = mkPN "Rumanien" neutrum ;
 lin romanian_A = mkA "rumänsk" ;
 lin romanian_N = mkN "rumänska" ; -- comment=3
 lin romantic_A = mkA "romantisk" ; -- SaldoWN
@@ -48585,7 +48585,7 @@ lin romanticize_V = variants {} ;
 lin romanticize_V2 = variants {} ;
 lin romany_A = variants {} ;
 lin romany_N = variants {} ;
-lin rome_PN = variants {} ;
+lin rome_PN = mkPN "Rom" neutrum ;
 lin romish_A = variants {} ;
 lin romp_N = variants {} ;
 lin romp_V = mkV "stojar" ;
@@ -48739,7 +48739,7 @@ lin rotten_A = L.rotten_A ;
 lin rottenness_N = variants {} ;
 lin rottenstone_N = variants {} ;
 lin rotter_N = mkN "fuling" ;
-lin rotterdam_PN = variants {} ;
+lin rotterdam_PN = mkPN "Rotterdam" neutrum ;
 lin rotund_A = variants {} ;
 lin rotunda_N = variants {} ;
 lin rotundity_N = variants {} ;
@@ -49070,7 +49070,7 @@ lin rushy_A = variants {} ;
 lin rusk_N = mkN "skorpa" ;
 lin russet_A = mkA "rödbrun" ; -- status=guess
 lin russet_N = mkN "vadmal" ;
-lin russia_PN = variants {} ;
+lin russia_PN = mkPN "Ryssland" neutrum ;
 lin russian_A = mkA "rysk" ;
 lin russian_N = mkN "ryss" ; -- comment=3
 lin rust_A = variants {} ;
@@ -49440,8 +49440,8 @@ lin samuel_PN = variants {} ;
 lin samurai_N = mkN "samuraj" "samurajer" ;
 lin san_antonio_PN = variants {} ;
 lin san_bernardino_PN = variants {} ;
-lin san_diego_PN = variants {} ;
-lin san_francisco_PN = variants {} ;
+lin san_diego_PN = mkPN "San Diego" neutrum ;
+lin san_francisco_PN = mkPN "San Fransisco" neutrum ;
 lin san_jose_PN = variants {} ;
 lin san_juan_PN = variants {} ;
 lin san_marinese_A = variants {} ;
@@ -49662,7 +49662,7 @@ lin saturate_V2 = variants {} ;
 lin saturation_N = mkN "mättnad" "mättnader" ; -- comment=2
 lin saturday_N = mkN "lördag" ;
 lin saturday_PN = variants {} ;
-lin saturn_PN = variants {} ;
+lin saturn_PN = mkPN "Saturnus" ;
 lin saturnalia_N = variants {} ;
 lin saturniid_N = variants {} ;
 lin saturnine_A = variants {} ;
@@ -50093,7 +50093,7 @@ lin scotch_V2 = variants {} ;
 lin scotchman_N = variants {} ;
 lin scotchwoman_N = variants {} ;
 lin scoter_N = variants {} ;
-lin scotland_PN = variants {} ;
+lin scotland_PN = mkPN "Skottland" neutrum ;
 lin scotland_yard_PN = variants {} ;
 lin scotoma_N = variants {} ;
 lin scotomatous_A = variants {} ;
@@ -50428,7 +50428,7 @@ lin seating_N = mkN "placering" ; -- comment=2
 lin seating_room_N = variants {} ;
 lin seaton_burn_PN = variants {} ;
 lin seaton_delaval_PN = variants {} ;
-lin seattle_PN = variants {} ;
+lin seattle_PN = mkPN "Seattle" neutrum ;
 lin seaward_A = variants {} ;
 lin seaward_Adv = variants {} ;
 lin seaward_N = variants {} ;
@@ -52135,7 +52135,7 @@ lin sing_out_V = mkV "tjallar" ; -- comment=11
 lin sing_up_V = mkV "tjallar" ; -- comment=11
 lin singable_A = variants {} ;
 lin singalong_N = variants {} ;
-lin singapore_PN = variants {} ;
+lin singapore_PN = mkPN "Singapore" neutrum ;
 lin singaporeanFem_N = variants {} ;
 lin singaporeanMasc_N = variants {} ;
 lin singaporean_A = variants {} ;
@@ -53630,7 +53630,7 @@ lin spadix_N = mkN "kolv" ;
 lin spaff_away_V2 = variants {} ;
 lin spaghetti_N = mkN "spagetti" | mkN "spaghetti" ; -- status=guess status=guess
 lin spaghettini_N = variants {} ;
-lin spain_PN = variants {} ;
+lin spain_PN = mkPN "Spanien" neutrum ;
 lin spalding_PN = variants {} ;
 lin spall_N = variants {} ;
 lin spallation_N = variants {} ;
@@ -54566,7 +54566,7 @@ lin standoffishness_N = variants {} ;
 lin standpipe_N = variants {} ;
 lin standpoint_N = mkN "ståndpunkt" "ståndpunkter" ;
 lin standstill_N = mkN "stopp" ; -- comment=4
-lin stanford_PN = variants {} ;
+lin stanford_PN = mkPN "Stanford" neutrum ;
 lin stanhope_N = variants {} ;
 lin stanhopea_N = variants {} ;
 lin stanley_PN = variants {} ;
@@ -55060,7 +55060,7 @@ lin stocker_N = variants {} ;
 lin stockfish_N = mkN "lutfisk" ; -- SaldoWN
 lin stockholder_N = mkN "aktieägare" ; -- status=guess
 lin stockholding_N = variants {} ;
-lin stockholm_PN = variants {} ;
+lin stockholm_PN = mkPN "Stockholm" neutrum ;
 lin stockinet_N = variants {} ;
 lin stockinette_N = variants {} ;
 lin stocking_N = mkN "strumpa" ;
@@ -56560,7 +56560,7 @@ lin switchboard_N = mkN "telefonväxel" | mkN "elcentral" | mkN "gruppcentral" ;
 lin switcher_N = variants {} ;
 lin switcheroo_N = variants {} ;
 lin switchman_N = variants {} ;
-lin switzerland_PN = variants {} ;
+lin switzerland_PN = mkPN "Schweiz" neutrum ;
 lin swivel_N = variants {} ;
 lin swivel_V = variants {} ;
 lin swivel_V2 = variants {} ;
@@ -56601,7 +56601,7 @@ lin syconium_N = variants {} ;
 lin sycophancy_N = variants {} ;
 lin sycophant_N = variants {} ;
 lin sycophantic_A = (mkA "lismande") | (mkA "smickrande"); -- status=guess status=guess
-lin sydney_PN = variants {} ;
+lin sydney_PN = mkPN "Sydney" neutrum ;
 lin syllabary_N = variants {} ;
 lin syllabic_A = variants {} ;
 lin syllabically_Adv = variants {} ;
@@ -56750,7 +56750,7 @@ lin syphon_V = variants {} ;
 lin syphon_V2 = variants {} ;
 lin syphon_off_V2 = variants {} ;
 lin syracuse_PN = variants {} ;
-lin syria_PN = variants {} ;
+lin syria_PN = mkPN "Syrien" neutrum ;
 lin syrian_A = mkA "syrisk" ;
 lin syrian_N = mkN "syrier" "syriern" "syrier" "syrierna" ;
 lin syringa_N = variants {} ;
@@ -57035,7 +57035,7 @@ lin tammy_N = variants {} ;
 lin tamp_N = variants {} ;
 lin tamp_V2 = variants {} ;
 lin tamper_V = variants {} ;
-lin tampere_PN = variants {} ;
+lin tampere_PN = mkPN "Tammerfors" neutrum ;
 lin tampion_N = variants {} ;
 lin tampon_N = mkN "tampong" "tamponger" ; -- SaldoWN
 lin tamponade_N = variants {} ;
@@ -57817,7 +57817,7 @@ lin teutonic_A = variants {} ;
 lin tewkesbury_PN = variants {} ;
 lin texan_A = variants {} ;
 lin texan_N = variants {} ;
-lin texas_PN = variants {} ;
+lin texas_PN = mkPN "Texas" neutrum ;
 lin text_N = mkN "text" "texter" ;
 lin text_out_V = variants {} ;
 lin textbook_N = mkN "lärobok" "läroböcker" ; -- SaldoWN
@@ -57828,7 +57828,7 @@ lin texture_N = mkN "struktur" "strukturer" ; -- SaldoWN
 lin textured_A = variants {} ;
 lin thai_A = mkA "thailändsk" ;
 lin thai_N = variants {} ;
-lin thailand_PN = variants {} ;
+lin thailand_PN = mkPN "Thailand" neutrum ;
 lin thalamocortical_A = variants {} ;
 lin thalamus_N = variants {} ;
 lin thalassemia_N = variants {} ;
@@ -58082,7 +58082,7 @@ lin thither_Adv = mkAdv "dit" ;
 lin tho'_Adv = variants {} ;
 lin thole_N = variants {} ;
 lin tholepin_N = variants {} ;
-lin thomas_PN = variants {} ;
+lin thomas_PN = mkPN "Thomas" ;
 lin thong_N = variants {} ;
 lin thoracocentesis_N = variants {} ;
 lin thoracotomy_N = variants {} ;
@@ -58683,7 +58683,7 @@ lin tokamak_N = variants {} ;
 lin tokay_N = variants {} ;
 lin toke_N = variants {} ;
 lin token_N = (mkN "minne") | mkN "minnesgåva" ; -- status=guess status=guess
-lin tokyo_PN = variants {} ;
+lin tokyo_PN = mkPN "Tokyo" neutrum ;
 lin tolazamide_N = variants {} ;
 lin tolazoline_N = variants {} ;
 lin tolbutamide_N = variants {} ;
@@ -58874,7 +58874,7 @@ lin tormentor_N = variants {} ;
 lin tornado_N = mkN "tromb" "tromber" ;
 lin toroid_N = variants {} ;
 lin toroidal_A = variants {} ;
-lin toronto_PN = variants {} ;
+lin toronto_PN = mkPN "Toronto" neutrum ;
 lin torpedo_N = mkN "torped" "torpeder" ;
 lin torpedo_V2 = variants {} ;
 lin torpedo_boat_N = variants {} ;
@@ -59931,8 +59931,8 @@ lin tunic_N = mkN "vapenrock" ; -- comment=2
 lin tunicate_N = variants {} ;
 lin tuning_N = mkN "stämgaffel" ; -- status=guess
 lin tuning_fork_N = variants {} ;
-lin tunis_PN = variants {} ;
-lin tunisia_PN = variants {} ;
+lin tunis_PN = mkPN "Tunis" neutrum ;
+lin tunisia_PN = mkPN "Tunisien" neutrum ;
 lin tunisian_A = mkA "tunisisk" ;
 lin tunisian_N = mkN "tunisiska" ;
 lin tunnel_N = mkN "tunnel" ; -- SaldoWN
@@ -59964,13 +59964,13 @@ lin turf_V2 = variants {} ;
 lin turgid_A = (mkA "uppsvullen" "uppsvullet") | (mkA "svulstig"); -- status=guess status=guess
 lin turgidity_N = variants {} ;
 lin turgor_N = variants {} ;
-lin turin_PN = variants {} ;
+lin turin_PN = mkPN "Turin" neutrum ;
 lin turk_N = mkN "turk" ;
 lin turkey_N = mkN "kalkon" "kalkoner" ; -- SaldoWN
-lin turkey_PN = variants {} ;
+lin turkey_PN = mkPN "Turkiet" neutrum ;
 lin turkish_A = mkA "turkisk" ;
 lin turkish_N = mkN "turkiska" ; -- comment=2
-lin turku_PN = variants {} ;
+lin turku_PN = mkPN "Åbo" neutrum ;
 lin turmeric_N = mkN "gurkmeja" ; -- status=guess
 lin turmoil_N = mkN "tumult" neutrum;
 lin turn_N = mkN "vända" | mkN "vändning" ; -- SaldoWN -- comment=35
@@ -62046,7 +62046,7 @@ lin uracil_N = variants {} ;
 lin uraninite_N = variants {} ;
 lin uranium_N = mkN "uran" ;
 lin uranoplasty_N = variants {} ;
-lin uranus_PN = variants {} ;
+lin uranus_PN = mkPN "Uranus" ;
 lin uranyl_N = variants {} ;
 lin urate_N = variants {} ;
 lin uratemia_N = variants {} ;
@@ -62109,12 +62109,12 @@ lin ursine_A = variants {} ;
 lin ursinia_N = variants {} ;
 lin ursula_PN = variants {} ;
 lin urtication_N = variants {} ;
-lin uruguay_PN = variants {} ;
+lin uruguay_PN = mkPN "Uruguay" neutrum ;
 lin uruguayan_A = variants {} ;
 lin uruguayan_N = variants {} ;
 lin urumchi_PN = variants {} ;
 lin us_PN = variants {} ;
-lin usa_PN = variants {} ;
+lin usa_PN = mkPN "USA" neutrum ;
 lin usable_A = mkA "användbar" ;
 lin usaf_N = variants {} ;
 lin usage_N = mkN "språkbruk" neutrum; -- comment=10
@@ -62154,7 +62154,7 @@ lin usurp_V2 = mkV2 (mkV "usurperar") | mkV2 (mkV (mkV "tillskansa") "sig") | mk
 lin usurpation_N = variants {} ;
 lin usurper_N = variants {} ;
 lin usury_N = mkN "ocker" neutrum;
-lin utah_PN = variants {} ;
+lin utah_PN = mkPN "Utah" neutrum ;
 lin utahraptor_N = variants {} ;
 lin utensil_N = variants {} ;
 lin uterine_A = variants {} ;
@@ -62171,7 +62171,7 @@ lin utmost_A = mkA "yttersta" ; -- status=guess
 lin utmost_N = variants {} ;
 lin utopia_N = mkN "utopi" "utopier" ;
 lin utopian_A = variants {} ;
-lin utrecht_PN = variants {} ;
+lin utrecht_PN = mkPN "Utrecht" neutrum ;
 lin utricle_N = variants {} ;
 lin utter_A = mkA "fullkomlig" ; -- comment=4
 lin utter_V2 = mkV2 (mkV (mkV "ge") "till"); -- status=guess, src=wikt
@@ -62296,7 +62296,7 @@ lin vanadate_N = variants {} ;
 lin vanadinite_N = variants {} ;
 lin vanadium_N = mkN "vanadin" ; -- status=guess
 lin vancomycin_N = variants {} ;
-lin vancouver_PN = variants {} ;
+lin vancouver_PN = mkPN "Vancouver" neutrum ;
 lin vanda_N = variants {} ;
 lin vandal_N = mkN "vandal" "vandaler" ;
 lin vandalism_N = mkN "vandalism" "vandalismer" ; -- SaldoWN
@@ -62392,7 +62392,7 @@ lin vasovesiculitis_N = variants {} ;
 lin vassal_N = mkN "vasall" "vasaller" ; -- comment=4
 lin vassalage_N = variants {} ;
 lin vast_A = mkA "ofantlig" ; -- comment=3
-lin vasteras_PN = variants {} ;
+lin vasteras_PN = mkPN "Västerås" neutrum ;
 lin vastness_N = mkN "vidsträckthet" ; -- comment=3
 lin vat_N = mkN "kar" neutrum ; -- SaldoWN
 lin vatican_N = variants {} ;
@@ -62485,7 +62485,7 @@ lin venezuelan_N = variants {} ;
 lin vengeance_N = mkN "hämnd" ;
 lin vengeful_A = variants {} ;
 lin venial_A = variants {} ;
-lin venice_PN = variants {} ;
+lin venice_PN = mkPN "Venedig" neutrum ;
 lin venipuncture_N = variants {} ;
 lin venison_N = variants {} ;
 lin venogram_N = variants {} ;
@@ -62520,7 +62520,7 @@ lin venturi_N = variants {} ;
 lin venturous_A = variants {} ;
 lin venue_N = mkN "arena" ;
 lin venule_N = variants {} ;
-lin venus_PN = variants {} ;
+lin venus_PN = mkPN "Venus" neutrum ;
 lin vera_PN = variants {} ;
 lin veracious_A = mkA "sannfärdig" ;
 lin veracity_N = mkN "sanning" ;
@@ -62579,7 +62579,7 @@ lin vernal_A = variants {} ;
 lin vernation_N = variants {} ;
 lin vernix_N = variants {} ;
 lin vernon_PN = variants {} ;
-lin verona_PN = variants {} ;
+lin verona_PN = mkPN "Verona" neutrum ;
 lin veronica_N = variants {} ;
 lin veronica_PN = variants {} ;
 lin verruca_N = variants {} ;
@@ -63409,7 +63409,7 @@ lin washing_day_N = variants {} ;
 lin washing_machine_N = variants {} ;
 lin washing_up_N = variants {} ;
 lin washington_PN = mkPN "Washington" neutrum; --
-lin washington_dc_PN = variants {} ;
+lin washington_dc_PN = mkPN "Washington DC" neutrum ;
 lin washout_N = variants {} ;
 lin washroom_N = mkN "toalett" "toaletter" ;
 lin washstand_N = variants {} ;
@@ -63524,7 +63524,7 @@ lin waterless_A = variants {} ;
 lin waterline_N = variants {} ;
 lin waterlogged_A = mkA "sank" ;
 lin waterloo_N = variants {} ;
-lin waterloo_PN = variants {} ;
+lin waterloo_PN = mkPN "Waterloo" neutrum ;
 lin waterman_N = variants {} ;
 lin watermark_N = mkN "vattenstämpel" ;
 lin watermeal_N = variants {} ;
@@ -63856,7 +63856,7 @@ lin westernize_V2 = variants {} ;
 lin westernmost_A = variants {} ;
 lin westhoughton_PN = variants {} ;
 lin westmeath_PN = variants {} ;
-lin westminster_PN = variants {} ;
+lin westminster_PN = mkPN "Westminster" neutrum ;
 lin westmoreland_PN = variants {} ;
 lin weston_super_mare_PN = variants {} ;
 lin westside_A = variants {} ;
@@ -65005,7 +65005,7 @@ lin yon_Adv = variants {} ;
 lin yonder_A = variants {} ;
 lin yonder_Adv = variants {} ;
 lin yore_N = variants {} ;
-lin york_PN = variants {} ;
+lin york_PN = mkPN "York" neutrum ;
 lin yorkley_PN = variants {} ;
 lin yorkshire_PN = variants {} ;
 lin yottabit_N = variants {} ;
@@ -65173,7 +65173,7 @@ lin zoot_suit_N = variants {} ;
 lin zoril_N = variants {} ;
 lin zoysia_N = variants {} ;
 lin zucchini_N = variants {} ;
-lin zurich_PN = variants {} ;
+lin zurich_PN = mkPN "Zürich" neutrum ;
 lin zwieback_N = variants {} ;
 lin zydeco_N = variants {} ;
 lin zygodactyl_A = variants {} ;
