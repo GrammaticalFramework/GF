@@ -17,7 +17,7 @@ import GF.Grammar.Lookup (allOpers,allOpersTo)
 import GF.Compile.Rename(renameSourceTerm)
 --import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
 import qualified GF.Compile.Compute.ConcreteNew as CN(normalForm,resourceValues)
-import GF.Compile.TypeCheck.Concrete (inferLType,ppType)
+import GF.Compile.TypeCheck.RConcrete as TC(inferLType,ppType)
 import GF.Infra.Dependencies(depGraph)
 import GF.Infra.CheckM
 import GF.Infra.UseIO(ioErrorText)
@@ -226,7 +226,7 @@ execute1 opts gfenv0 s0 =
           let sigs = [(op,ty) | ((mo,op),ty,pos) <- ops]
           let printer = if isRaw 
                           then showTerm sgr TermPrintDefault Qualified
-                          else (render . GF.Compile.TypeCheck.Concrete.ppType)
+                          else (render . TC.ppType)
           let printed = [unwords [showIdent op, ":", printer ty] | (op,ty) <- sigs]
           mapM_ putStrLn [l | l <- printed, all (flip isInfixOf l) greps]
           continue gfenv

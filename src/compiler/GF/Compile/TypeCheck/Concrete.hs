@@ -1,6 +1,6 @@
 {-# LANGUAGE PatternGuards #-}
-module GF.Compile.TypeCheck.Concrete( checkLType, inferLType, computeLType, ppType ) where
-
+module GF.Compile.TypeCheck.Concrete( {-checkLType, inferLType, computeLType, ppType-} ) where
+{-
 import GF.Infra.CheckM
 import GF.Data.Operations
 
@@ -714,3 +714,4 @@ checkLookup x g =
   case [ty | (b,y,ty) <- g, x == y] of
     []     -> checkError (text "unknown variable" <+> ppIdent x)
     (ty:_) -> return ty
+-}
