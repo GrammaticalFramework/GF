@@ -22,7 +22,7 @@ oper
     compoundAdv : Str -> Str    -> Adv = \s,t  -> mkAdv (s + t) ;
     } ;
 
-  compoundV : Str -> VForms -> V = \s,vf -> mkV (lin VK {s = table (Predef.Ints 11) {f => s + vf ! f}}) ;
+  compoundV : Str -> VForms -> V = \s,vf -> mkV (lin VK {s = <table {f => s + vf ! f} : VForms>}) ;
 
   mkWN = overload {
     mkWN : (_ : Str)     -> N = \s -> mkN s ;
