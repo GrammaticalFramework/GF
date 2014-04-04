@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../hindi:../hindustani
 concrete TranslateHin of Translate = 
-  TenseX - [AdN,Adv,SC,PPos,PNeg],
+  TenseX - [AdN,Adv,SC],
 --  TextX - [AdN,Adv,SC],
   CatHin,
   NounHin - [PPartNP],
