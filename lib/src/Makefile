@@ -151,8 +151,8 @@ Translate10:
 	$(GFMKT) -name=Translate10 $(TRANSLATE10) +RTS -K32M
 
 # With dependencies:
-Translate8.pgf: $(TRANSLATE10)
-	$(GFMKT) -name=Translate8 $(TRANSLATE10) +RTS -K32M
+Translate10.pgf: $(TRANSLATE10)
+	$(GFMKT) -name=Translate10 $(TRANSLATE10) +RTS -K32M
 
 # Without dependencies:
 Translate8:

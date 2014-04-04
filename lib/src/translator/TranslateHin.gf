@@ -1,4 +1,4 @@
---# -path=.:src/chunk:alltenses
+--# -path=.:../chunk:alltenses
 
 concrete TranslateHin of Translate = 
   TenseX - [AdN,Adv,SC],

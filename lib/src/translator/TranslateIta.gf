@@ -1,4 +1,4 @@
---# -path=.:src/chunk:alltenses
+--# -path=.:../chunk:alltenses
 
 concrete TranslateIta of Translate = 
   TenseIta,
