@@ -683,7 +683,8 @@ checkIfEqLType gr g t u trm = do
      (Q  (m,a), QC (n,b)) | a == b -> elem m (allExtendsPlus gr n) 
                                    || elem n (allExtendsPlus gr m)
 
-     (Table a b,  Table c d)  -> alpha g a c && alpha g b d
+     -- contravariance
+     (Table a b,  Table c d)  -> alpha g c a && alpha g b d
      (Vr x,       Vr y)       -> x == y || elem (x,y) g || elem (y,x) g
      _                        -> t == u 
      --- the following should be one-way coercions only. AR 4/1/2001
