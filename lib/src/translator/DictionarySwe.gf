@@ -1,5 +1,3 @@
---# -path=.:../swedish
-
 concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
 
 flags
