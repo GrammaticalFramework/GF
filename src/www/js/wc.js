@@ -93,14 +93,15 @@ wc.translate=function() {
 	function step3(tra) {
 	    if(wc.serial==current) {
 		if(tra.length>=1) {
-		    if(tra[0].error) show_error(tra[0].error)
-		    else {
-			var r=tra[0]
+		    var r=tra[0]
+		    if(r.error) show_error(tra[0].error)
+		    else if(r.linearizations) {
 			r.text=r.linearizations[0].text
 			// Two server requests in parallel:
 			unlextext(r.text,function(text){showit(r,text)})
 			if(wc.p && i<9) trans(text,i+1)
 		    }
+		    else show_error("no linearizations")
 		}
 		else if(i==0) show_error("Unable to translate")
 	    }
