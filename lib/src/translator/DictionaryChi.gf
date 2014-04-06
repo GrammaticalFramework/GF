@@ -1,5 +1,3 @@
---# -path=.:alltenses
-
 concrete DictionaryChi of Dictionary = CatChi ** open ParadigmsChi,
   (S = StructuralChi),
   (L = LexiconChi),

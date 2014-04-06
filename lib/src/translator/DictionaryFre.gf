@@ -1,6 +1,3 @@
---# -coding=utf8
---# -path=.:../english
-
 concrete DictionaryFre of Dictionary = CatFre ** open ParadigmsFre,
   (S = StructuralFre),
   (L = LexiconFre),

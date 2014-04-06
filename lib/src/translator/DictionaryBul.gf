@@ -1,5 +1,3 @@
---# -path=.:../bulgarian:../abstract:../common
-
 concrete DictionaryBul of Dictionary = CatBul ** open MorphoBul, ResBul, (S = StructuralBul), ParadigmsBul, Prelude in {
 
 flags
