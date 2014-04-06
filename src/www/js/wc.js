@@ -94,7 +94,7 @@ wc.translate=function() {
 	    if(wc.serial==current) {
 		if(tra.length>=1) {
 		    var r=tra[0]
-		    if(r.error) show_error(tra[0].error)
+		    if(r.error!=undefined) show_error(tra[0].error)
 		    else if(r.linearizations) {
 			r.text=r.linearizations[0].text
 			// Two server requests in parallel:
