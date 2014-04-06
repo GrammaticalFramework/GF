@@ -1,3 +1,5 @@
+concrete TopDictSwe of TopDict = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
+
 lin element_N = mkN "grundämne" | mkN "element" neutrum ; -- SaldoWN -- comment=8
 lin finish_VA = mkVA (mkV "fullfölja") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin finish_V2 = dirV2 (partV (mkV "putsar")"av"); -- comment=3
@@ -419,8 +421,8 @@ lin perform_V = mkV "framträda" "framträdde" "framträtt" | mkV "verkställer"
 lin sentence_N = mkN "mening" ; -- SaldoWN
 lin crime_N = mkN "brott" neutrum | mkN "brottslighet" "brottsligheter" ; -- SaldoWN = mkN "brott" neutrum ; -- comment=7
 lin ball_N = mkN "boll" | mkN "klot" "klot" ;
-lin marry_V2 = mkV2 (mkV "förena"); -- status=guess, src=wikt
-lin marry_V = mkV "viger" ; -- comment=3
+lin marry_V2 = mkV2 (mkV "gifter") ;
+lin marry_V = depV (mkV "gifter") ;
 lin wind_N = L.wind_N ;
 lin truth_N = mkN "sanning" ; -- SaldoWN
 lin protect_V2 = mkV2 (mkV "skyddar"); -- status=guess, src=wikt
@@ -789,7 +791,7 @@ lin award_V3 = variants {} ;
 lin award_V2 = mkV2 (mkV "bevilja");
 lin existence_N = mkN "existens" "existenser" ;
 lin improvement_N = mkN "förbättring" ; -- SaldoWN
-lin coffee_N = mkN "kaffe" "kaffe" ;
+lin coffee_N = mkN "kaffe" "kaffet" "kaffe" "kaffen" ;
 lin appearance_N = mkN "utseende" ;
 lin standard_A = mkA "standard" "standart" ;
 lin attack_V2 = mkV2 "anfalla" "anföll" "anfallit" | mkV2 (mkV "attackerar") | mkV2 (mkV "angripa" "angrep" "angripit") ; -- SaldoWN -- status=guess, src=wikt status=guess, src=wikt
@@ -1860,7 +1862,7 @@ lin relax_V2 = dirV2 (partV (mkV "slappnar")"av"); -- comment=2
 lin relax_V = mkV "mildrar" ; -- comment=8
 lin penalty_N = mkN "straff" | mkN "bestraffning" ; -- SaldoWN = mkN "straff" neutrum ; -- comment=9
 lin purchase_V2 = mkV2 "köper" ; --
-lin tired_A = variants{} ;
+lin tired_A = mkA "trött" "trött" ;
 lin beer_N = L.beer_N ;
 lin specify_VS = variants {} ;
 lin specify_V2 = mkV2 "specificera" ;
@@ -4191,7 +4193,7 @@ lin flash_V = mkV "anfalla" "anföll" "anfallit" ; -- comment=14
 lin destination_N = mkN "bestämmelseort" "bestämmelseorter" ; -- comment=4
 lin actively_Adv = variants{} ;
 lin regiment_N = mkN "regemente" ;
-lin closed_A = variants{} ;
+lin closed_A = mkA "stängd" "stängt" ;
 lin boom_N = mkN "boom" | mkN "uppsving" neutrum ; -- SaldoWN -- comment=11
 lin handful_N = mkN "näve" utrum; -- comment=2
 lin remarkably_Adv = variants{} ;
@@ -5699,7 +5701,7 @@ lin sleeping_A = variants{} ;
 lin poorly_Adv = variants{} ;
 lin accord_V2 = variants {} ;
 lin accord_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=3
-lin vice_president_N = variants{} ;
+lin vice_president_N = mkN "vicepresident" "vicepresidenter" ;
 lin duly_Adv = variants{} ;
 lin blast_N = mkN "explosion" "explosioner" | mkN "tryckvåg" "tryckvågor" ; -- SaldoWN -- comment=8
 lin square_V2 = dirV2 (partV (mkV "rättar")"till");
@@ -5861,7 +5863,8 @@ lin varied_A = variants{} ;
 lin predictable_A = mkA "förutsägbar" ; -- SaldoWN
 lin mutation_N = mkN "mutation" "mutationer" ; -- SaldoWN
 lin equal_V2 = mkV2 (mkV (mkV "vara") "lika med"); -- status=guess, src=wikt
-lin can_VV = S.can_VV;
+lin can_1_VV = S.can_VV ;
+lin can_2_VV = S.can8know_VV ;
 lin can_V2 = dirV2 (mkV "konserverar");
 lin burst_N = mkN "salva" ; -- comment=8
 lin retrieve_V2 = mkV2 (mkV "minnas"); -- status=guess, src=wikt
@@ -6494,3 +6497,4 @@ lin wildly_Adv = variants{} ;
 lin reformer_N = mkN "reformator" "reformatorer" ; -- status=guess
 lin quantum_N = mkN "kvantum" neutrum;
 lin considering_Subj = variants{} ;
+}

@@ -1,0 +1,108 @@
+Checking GF Translation Dictionaries
+Aarne Ranta
+April 2014
+
+==Call for contributions: the generic translation dictionaries of GF==
+
+**Wanted**: manual checking of TopDict???.gf files in
+[this directory http://www.grammaticalframework.org/lib/src/translator/todo].
+
+**Abstract syntax**: [TopDict ./TopDict.gf], the top-7000 English words from British National Corpus, as sorted by frequency
+[here http://www.kilgarriff.co.uk/BNClists/lemma.num]. 
+
+**Usage**: part of the general translation dictionaries, used for instance in the 
+[GF translation demo http://www.grammaticalframework.org/demos/translation.html]. The full dictionaties are the Dictionary* modules
+in the [parent directory ../].
+
+**Who**: anyone with good knowledge of the target language and with reasonable knowledge of the GF resource grammar paradigms for it.
+
+
+==How to do it==
+
+Follow these steps for your language. For instance, ToCheckFre.gf, with Fre substituted for any language in this directory.
++ Make sure to download the latest version of the file.
++ Make sure you can compile the original file:
+```
+  gf ToCheckFre.gf +RTS -K64M
+```
++ Edit the ``lin`` rules line by line, starting from the beginning. Follow the guidelines in the next section.
++ Mark the last rule you edit with "---- END edits by AR", where AR is your initials.
++ Make sure the resulting file compiles again.
++ Perform ``diff`` with the old and the new file, just to make sure your changes look reasonable.
++ Commit your edits into darcs, if you have access to it, or to GF Contributions, or by email to Aarne Ranta. In the last case, 
+  it is enough to send those lin rules that you have processed.
++ Inform the gf-dev list that you have done this.
+
+
+A reasonable batch of revisions is 500 words or more, which should be doable in less than 2 hours. To avoid conflicts and overlapping work,
+don't spend more than one day on a batch of work.
+
+
+
+
+
+
+
+
+
+==Guidelines==
+
+When editing a lin rule, do one of the following:
+- **accept the rule as it is**: replace the tail comment after the rule's terminating semicolon, if there is one, by your initials
+  in a systematic way. For example:
+```
+  lin maintain_V2 = mkV2 (mkV I.entretenir_V2) | mkV2 (mkV I.maintenir_V2) ; -- tocheck
+```    
+   becomes
+```
+  lin maintain_V2 = mkV2 (mkV I.entretenir_V2) | mkV2 (mkV I.maintenir_V2) ; -- AR
+```    
+  - change the linearization, and if the result is OK for you, just leaving your initials as comment. For example,
+```
+  lin obviously_Adv = variants{} ;
+```    
+  becomes
+```
+  lin obviously_Adv = mkAdv "évidemment" ; -- AR
+```    
+- **suggest split of sense**: add a comment prefixed by "--- split" and more senses, explaining them. For example,
+```
+  lin labour_N = mkN "accouchement" masculine | mkN "ouvrage" masculine ; -- tocheck
+```
+  might become
+```
+  lin labour_N = mkN "travail" "travaux" masculine ; --- mkN "accouchement" childbirth labour -- AR
+```
+  To check the meanings of senses that have already been split (by using numbers, e.g. ``time_1_N``), look up the explanations in
+  [Dictionary.gf ../Dictionary.gf].
+- **report an anomaly**: change or leave the rule, and add a comment prefixed by "---- ". For example,
+```
+  lin back_Adv = variants{} ;
+``` 
+  might become
+```
+  lin back_Adv = mkAdv "en retour" ; ---- no exact translation in Fre -- AR
+``` 
+
+
+As general guidelines,
+- **Don't just do nothing**, but do one of the things above, until the point where you quit checking.
+- **Maintain the format** of one rule per line, prefixed by ``lin``.
+- **Put the most standard translation as the first variant**, deprecated and slang words later.
+- **Make sure that the morphology comes out correct**.
+- **Make sure to return correct verb subcategorization**.
+- **Don't split senses** if the difference is very small, e.g. one in stylistic rather than semantic value.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
