@@ -11,6 +11,8 @@ lin
   NP_Acc_Chunk np = ss (np.s ! NPAcc) ;
   NP_Gen_Chunk np = ss (np.s ! NPCase Gen) ;
 
+  VPI_Chunk vpi = {s = vpi.s ! (VVIllat | VVInf)} ;
+
 lin
   copula_inf_Chunk = ss "olla" ;
 

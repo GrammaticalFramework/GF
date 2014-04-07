@@ -8,6 +8,8 @@ lin
   NP_Acc_Chunk np = ss (np.s ! C.NPAcc) ;
   NP_Gen_Chunk np = ss (np.s ! C.NPPoss (C.GSg C.Utr) C.Nom) ;
 
+  VPI_Chunk vpi = {s = optStr "att" ++ vpi.s ! R.VPIInf ! R.agrP3 (C.Utr | C.Neutr) C.Sg} ;
+
 oper
   emptyNP = mkNP (P.mkPN []) ;
 

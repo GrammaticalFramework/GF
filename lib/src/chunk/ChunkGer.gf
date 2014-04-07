@@ -11,6 +11,8 @@ lin
   NP_Acc_Chunk np = ss (np.s ! NPC Acc) ;
   NP_Gen_Chunk np = ss (np.s ! NPC Gen) ;
 
+  VPI_Chunk vpi = {s = vpi.s ! (True | False)} ;
+
 lin
   copula_inf_Chunk = ss "sein" ;
 
