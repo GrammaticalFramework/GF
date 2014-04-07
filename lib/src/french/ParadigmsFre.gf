@@ -232,6 +232,10 @@ oper
 -- reused as one-place verbs.
 
     mkV : V2 -> V ; -- make 2-place to 1-place (e.g. from IrregFre)
+
+-- Particle verbs ("avoir" + "besoin")
+
+    mkV : V -> Str -> V  ;
   } ;
 
 -- The function $mkV$ gives the default compound auxiliary "avoir".
@@ -277,6 +281,7 @@ oper
 
   mkV0  : V -> V0 ;  --%
   mkVS  : V -> VS ;
+  subjVS  : V -> VS ;
   mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
   deVV  : V -> VV ;  -- "j'essaie de parler"
   aVV   : V -> VV ;  -- "j'arrive à parler"
@@ -414,7 +419,8 @@ oper
   A2S, A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V0 = <>} ;
-  mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  ---- more moods
+  mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ; 
+  subjVS  v = v ** {m = \\_ => Conjunct ; lock_VS = <>} ;
 
   mkV2S = overload {
     mkV2S : V -> V2S = \v -> mmkV2 v dative ** {mn,mp = Indic ; lock_V2S = <>} ;
@@ -484,6 +490,8 @@ oper
       {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
    mkV : V -> V
     = \v -> v ;
+    mkV : V -> Str -> V 
+    = \v,_ -> v ;  ---- to recognize particles in dict, not yet in lincat V
   } ;
 
   regV : Str -> V ;
