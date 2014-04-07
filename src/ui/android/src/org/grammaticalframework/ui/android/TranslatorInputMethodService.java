@@ -375,6 +375,8 @@ public class TranslatorInputMethodService extends InputMethodService
             handleChangeSourceLanguage(newSource);
         } else if (primaryCode == TranslatorKeyboard.KEYCODE_TARGET_LANGUAGE) {
         	String translation = mTranslator.translate(getComposingString()).first;
+	    	if (translation.startsWith("% ") || translation.startsWith("* ") || translation.startsWith("+ "))
+	    		translation = translation.substring(2);
         	getCurrentInputConnection().commitText(translation, 1);
             return;
         }  else if (primaryCode < TranslatorKeyboard.KEYCODE_TARGET_LANGUAGE &&
