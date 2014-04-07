@@ -1,6 +1,10 @@
 package org.grammaticalframework.pgf;
 
-public class ExprProb {
+import java.io.Serializable;
+
+public class ExprProb implements Serializable {
+	private static final long serialVersionUID = -3112602244416576742L;
+
 	private Expr expr;
 	private double prob;
 
