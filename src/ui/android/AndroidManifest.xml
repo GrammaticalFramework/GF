@@ -25,7 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="LexicalEntryActivity"></activity>
+        <activity android:name="AlternativesActivity"></activity>
         <activity android:name="HelpActivity"></activity>
         <service android:name="TranslatorInputMethodService"
                 android:permission="android.permission.BIND_INPUT_METHOD">
