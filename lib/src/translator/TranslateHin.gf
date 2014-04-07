@@ -27,7 +27,7 @@ concrete TranslateHin of Translate =
   DocumentationHin,
 
   ChunkHin,
-  ExtensionsHin [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
+  ExtensionsHin [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash],
 
   DictionaryHin ** 
 open MorphoHin, ResHin, ParadigmsHin, SyntaxHin, CommonScand, (E = ExtraHin), Prelude in {

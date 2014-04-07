@@ -30,7 +30,7 @@ concrete TranslateFin of Translate =
   DocumentationFin,
 
   ChunkFin,
-  ExtensionsFin [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
+  ExtensionsFin [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash],
 
   DictionaryFin ** 
 

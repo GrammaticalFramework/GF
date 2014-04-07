@@ -26,7 +26,7 @@ concrete TranslateIta of Translate =
   DocumentationIta,
 
   ChunkIta,
-  ExtensionsIta [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
+  ExtensionsIta [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash],
 
   DictionaryIta ** 
 open MorphoIta, ResIta, ParadigmsIta, SyntaxIta, CommonScand, (E = ExtraIta), Prelude in {

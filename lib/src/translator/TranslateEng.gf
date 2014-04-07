@@ -22,13 +22,13 @@ concrete TranslateEng of Translate =
     UseCl     -- replaced by UseCl | ContractedUseCl
     ],        
   QuestionEng,
-  RelativeEng,
+  RelativeEng - [IdRP],
   IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
   ConstructionEng,
   DocumentationEng,
 
   ChunkEng,
-  ExtensionsEng [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, that_RP, who_RP],
+  ExtensionsEng [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash],
 
   DictionaryEng ** 
 open MorphoEng, ResEng, ParadigmsEng, (G = GrammarEng), (E = ExtraEng), Prelude in {
@@ -50,5 +50,13 @@ lin
   PPos = {s = [] ; p = CPos} ;
   PNeg = {s = [] ; p = CNeg True} | {s = [] ; p = CNeg False} ;
 
+    IdRP = ExtensionsEng.that_RP | G.IdRP | ExtensionsEng.who_RP |
+     { s = table {
+        RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
+        RC _ NPAcc    => [] ;
+        _     => "which"
+        } ;
+      a = RNoAg
+      } ;
 
 }
