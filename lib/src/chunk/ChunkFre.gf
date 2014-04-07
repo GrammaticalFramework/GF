@@ -12,6 +12,8 @@ lin
   NP_Acc_Chunk np = ss (np.s ! Acc).ton ;
   NP_Gen_Chunk np = ss (np.s ! genitive).comp ;
 
+  VPI_Chunk vpi = vpi ;
+
 oper
   emptyNP = mkNP (P.mkPN []) ;
 

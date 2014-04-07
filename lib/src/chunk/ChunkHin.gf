@@ -17,6 +17,8 @@ lin
   NP_Acc_Chunk np = mkUtt np ;
   NP_Gen_Chunk np = mkUtt (mkAdv possess_Prep np) ;
 
+----  VPI_Chunk vpi = vpi ;
+
   copula_inf_Chunk = pss " है " ;
 
   refl_SgP1_Chunk,

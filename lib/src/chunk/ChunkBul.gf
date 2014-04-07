@@ -8,6 +8,7 @@ concrete ChunkBul of Chunk = CatBul, ExtensionsBul [VPS,VPI] **
     SyntaxBul, (E = ExtensionsBul), Prelude, 
     ResBul, MorphoFunsBul, (P = ParadigmsBul) in {
 
+lin VPI_Chunk vpi = {s = vpi.s ! {gn = GSg allGender ; p = P3}} ;
 
 lin CN_Pl_Chunk, CN_Pl_Gen_Chunk = \cn -> {s = cn.s ! (NF Pl allSpecies | NFPlCount)} ;
 lin CN_Sg_Chunk, CN_Sg_Gen_Chunk = \cn -> {s = cn.s ! (NF Sg allSpecies | NFSgDefNom)} ;

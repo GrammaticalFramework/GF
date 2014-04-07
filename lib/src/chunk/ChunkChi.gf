@@ -24,6 +24,8 @@ lin
   NP_Acc_Chunk np = np ;
   NP_Gen_Chunk np = ss (np.s ++ de_s) ;
 
+  VPI_Chunk vpi = vpi ;
+
   copula_inf_Chunk = ss copula_s ;
 
   refl_SgP1_Chunk = ss reflPron ;

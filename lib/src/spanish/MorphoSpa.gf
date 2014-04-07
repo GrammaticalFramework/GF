@@ -49,6 +49,7 @@ oper
       _ + ("o" | "e" | "é" | "á") => mkNoun (nomVino mec) Masc ;  --bebé, papá; how about other accented vocal endings? champú champúes
       _ + "a" => mkNoun (nomVino mec) Fem ;
       _ + "z" => mkNounIrreg mec (init mec + "ces") Fem ;
+      _ + "ión" => mkNounIrreg mec (tk 2 mec + "ones") Fem ;
       _ + "án" => mkNounIrreg mec (tk 2 mec + "anes") Masc ;
       _ + "én" => mkNounIrreg mec (tk 2 mec + "enes") Masc ;
       _ + "ín" => mkNounIrreg mec (tk 2 mec + "ines") Masc ;

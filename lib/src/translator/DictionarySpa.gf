@@ -12473,7 +12473,7 @@ lin mostly_Adv = mkAdv "principalmente" ; -- status=guess
 lin mote_N = mkN "mota" ; -- status=guess
 lin motet_N = mkN "motete" ; -- status=guess
 lin moth_N = mkN "polilla" ; -- status=guess
-lin mother_N = mkN "madre" ; -- status=guess
+lin mother_N = mkN "madre" feminine ;
 lin mother_N2 = L.mother_N2  ; -- comment=CHECKED
 lin motherhood_N = mkN "maternidad" ; -- status=guess
 lin motherland_N = mkN "patria" ; -- status=guess
