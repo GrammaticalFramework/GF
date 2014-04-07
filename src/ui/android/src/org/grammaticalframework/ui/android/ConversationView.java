@@ -1,6 +1,7 @@
 package org.grammaticalframework.ui.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ public class ConversationView extends ScrollView {
 
     private ViewGroup mContent;
     
-    private OnWordSelectedListener mWordListener;
+    private OnAlternativesListener mAlternativesListener;
     private ASR.Listener mSpeechListener;
 
     public ConversationView(Context context, AttributeSet attrs, int defStyle) {
@@ -53,7 +54,7 @@ public class ConversationView extends ScrollView {
                     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
                 }
                 v.setFocusable(false);
-                mLastUtterance = (View) v.getParent();
+                mLastUtterance = v;
                 if (mSpeechListener != null)
                 	mSpeechListener.onSpeechInput(text.toString().trim());
                 return true;
@@ -71,18 +72,17 @@ public class ConversationView extends ScrollView {
 	};
 
     private EditorListener mEditorListener = new EditorListener();
-    private View mLastUtterance = null;
+    private TextView mLastUtterance = null;
 
     public void addFirstPersonUtterance(CharSequence text, boolean focused) {
-        View view = 
+    	EditText edittext = (EditText) 
         	mInflater.inflate(R.layout.first_person_utterance, mContent, false);
-        EditText edittext = (EditText) view.findViewById(R.id.input_text);
         edittext.setText(text);
         edittext.setOnEditorActionListener(mEditorListener);
         edittext.setOnClickListener(mEditorListener);
         Bundle extras = edittext.getInputExtras(true);
         extras.putBoolean("show_language_toggle", false);
-        mContent.addView(view);
+        mContent.addView(edittext);
 
         if (focused) {
 	        edittext.requestFocus();
@@ -98,16 +98,16 @@ public class ConversationView extends ScrollView {
             }
         });
         
-        mLastUtterance = view;
+        mLastUtterance = edittext;
     }
 
     @SuppressWarnings("deprecation")
-	public CharSequence addSecondPersonUtterance(CharSequence text) {
+	public CharSequence addSecondPersonUtterance(final CharSequence source, CharSequence target, final Object alternatives) {
     	TextView view;
     	if (mLastUtterance != null && mLastUtterance.getTag() != null)
     		view = (TextView) mLastUtterance.getTag();
     	else {
-    		view = (TextView) 
+    		view = (TextView)
     			mInflater.inflate(R.layout.second_person_utterance, mContent, false);
         	mContent.addView(view);
             post(new Runnable() {
@@ -119,71 +119,55 @@ public class ConversationView extends ScrollView {
     		mLastUtterance.setTag(view);
     	}
 
-    	// parse by words, marked by %, darkest red colour
-    	if (text.charAt(0) == '%') {
+		view.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View v) {
+        		if (mAlternativesListener != null)
+        			mAlternativesListener.onAlternativesSelected(source, alternatives);
+        	}
+        });
+
+    	// parse by words, marked by %, darkest red color
+    	if (target.charAt(0) == '%') {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
-    		text = text.subSequence(2, text.length()) ;
+    		target = target.subSequence(2, target.length()) ;
     	}
 
-    	// parse error or unknown translations (in []) present, darkest red colour
-    	else if (text.toString().contains("parse error:") || text.toString().contains("[")) {
+    	// parse error or unknown translations (in []) present, darkest red color
+    	else if (target.toString().contains("parse error:") || target.toString().contains("[")) {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
     	}
 
-    	// parse by chunks, marked by *, red colour
-    	else if (text.charAt(0) == '*') {
+    	// parse by chunks, marked by *, red color
+    	else if (target.charAt(0) == '*') {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_chunk_utterance_bg));
-    		text = text.subSequence(2, text.length()) ;
+    		target = target.subSequence(2, target.length()) ;
     	}
 
-    	// parse by domain grammar, marked by +, green colour
-    	else if (text.charAt(0) == '+') {
+    	// parse by domain grammar, marked by +, green color
+    	else if (target.charAt(0) == '+') {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_best_utterance_bg));
-    		text = text.subSequence(2, text.length()) ;
+    		target = target.subSequence(2, target.length()) ;
     	}
 
-    	view.setText(text);
-        return text ;
+    	view.setText(target);
+        return target;
     }
 
-    public void updateLastUtterance(CharSequence text, Object lexicon) {
-    	if (mLastUtterance == null)
-    		return;
-
-        EditText textview = (EditText) mLastUtterance.findViewById(R.id.input_text);
-        if (textview == null)
-        	return;
-
-        textview.setText(text);
-        
-        if (lexicon != null && mWordListener != null) {
-        	ImageView showWordButton = (ImageView) mLastUtterance.findViewById(R.id.show_word);
-        	showWordButton.setVisibility(VISIBLE);
-
-        	final Object lexicon2 = lexicon;
-	        showWordButton.setOnClickListener(new OnClickListener() {
-	        	@Override
-	        	public void onClick(View v) {
-	        		if (mWordListener != null) {
-	        			TextView textview = (TextView)
-	        				((View) v.getParent()).findViewById(R.id.input_text);
-	        			CharSequence text = textview.getText();
-	        			mWordListener.onWordSelected(text, lexicon2);
-	        		}
-	        	}
-	        });    	        
-        }
+    public void updateLastUtterance(CharSequence text) {
+    	if (mLastUtterance != null)
+    		mLastUtterance.setText(text);
     }
 
-    public void setOnWordSelectedListener(OnWordSelectedListener listener) {
-    	mWordListener = listener;
+    public void setOnAlternativesListener(OnAlternativesListener listener) {
+    	mAlternativesListener = listener;
     }
     
     public void setSpeechInputListener(ASR.Listener listener) {
     	mSpeechListener = listener;
     }
     
-    public interface OnWordSelectedListener {
-    	public void onWordSelected(CharSequence word, Object lexicon);
+    public interface OnAlternativesListener {
+    	public void onAlternativesSelected(CharSequence word, Object lexicon);
     }
 }

@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +28,8 @@ import android.widget.TextView;
 
 import org.grammaticalframework.ui.android.ASR.State;
 import org.grammaticalframework.ui.android.LanguageSelector.OnLanguageSelectedListener;
-import org.grammaticalframework.ui.android.ConversationView.OnWordSelectedListener;
+import org.grammaticalframework.ui.android.ConversationView.OnAlternativesListener;
+import org.grammaticalframework.pgf.ExprProb;
 import org.grammaticalframework.pgf.MorphoAnalysis;
 
 public class MainActivity extends Activity {
@@ -115,11 +117,11 @@ public class MainActivity extends Activity {
 
         mSpeechListener = new SpeechInputListener();
         
-        mConversationView.setOnWordSelectedListener(new OnWordSelectedListener() {
+        mConversationView.setOnAlternativesListener(new OnAlternativesListener() {
             @Override
-            public void onWordSelected(CharSequence word, Object lexicon) {
-            	Intent myIntent = new Intent(MainActivity.this, LexicalEntryActivity.class);
-            	myIntent.putExtra("source", word);
+            public void onAlternativesSelected(CharSequence input, Object lexicon) {
+            	Intent myIntent = new Intent(MainActivity.this, AlternativesActivity.class);
+            	myIntent.putExtra("source", input);
             	myIntent.putExtra("analyses", (Serializable) lexicon);
             	MainActivity.this.startActivity(myIntent);
             }
@@ -282,38 +284,36 @@ public class MainActivity extends Activity {
     }
 
     private void handlePartialSpeechInput(String input) {
-        mConversationView.updateLastUtterance(input, null);
+        mConversationView.updateLastUtterance(input);
     }
 
     private void handleSpeechInput(final String input) {
-    	List<MorphoAnalysis> list = mTranslator.lookupMorpho(input);
-    	if (list.size() == 0)
-    		list = null;
+    	final List<MorphoAnalysis> list = mTranslator.lookupMorpho(input);
 
-        mConversationView.updateLastUtterance(input, list);
-        new AsyncTask<Void,Void,String>() {
+        mConversationView.updateLastUtterance(input);
+        new AsyncTask<Void,Void,Pair<String,List<ExprProb>>>() {
         	@Override
         	protected void onPreExecute() {
         		showProgressBar();
         	}
 
             @Override
-            protected String doInBackground(Void... params) {
+            protected Pair<String,List<ExprProb>> doInBackground(Void... params) {
                 return mTranslator.translate(input);
             }
 
             @Override
-            protected void onPostExecute(String result) {
-                outputText(result);
+            protected void onPostExecute(Pair<String,List<ExprProb>> res) {
+            	String text = res.first;
+            	List<ExprProb> alts = res.second;
+                if (DBG) Log.d(TAG, "Speaking: " + res.first);
+                CharSequence text2 = 
+                	mConversationView.addSecondPersonUtterance(input, text, (list.size() == 0) ? alts : list);
+                mTts.speak(getTargetLanguageCode(), text2.toString());
+
                 hideProgressBar();
             }
         }.execute();
-    }
-
-    private void outputText(String text) {
-        if (DBG) Log.d(TAG, "Speaking: " + text);
-        CharSequence text2 = mConversationView.addSecondPersonUtterance(text);
-        mTts.speak(getTargetLanguageCode(), text2.toString());
     }
 
     private class SpeechInputListener implements ASR.Listener {

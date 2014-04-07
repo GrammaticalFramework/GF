@@ -1,6 +1,5 @@
 package org.grammaticalframework.ui.android;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -8,17 +7,13 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewParent;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,7 +21,7 @@ import android.widget.TextView;
 import org.grammaticalframework.pgf.*;
 import org.grammaticalframework.ui.android.LanguageSelector.OnLanguageSelectedListener;
 
-public class LexicalEntryActivity extends ListActivity {
+public class AlternativesActivity extends ListActivity {
 
 	private Translator mTranslator;
 	private LanguageSelector mShowLanguageView;
@@ -94,17 +89,10 @@ public class LexicalEntryActivity extends ListActivity {
 
 	private void updateTranslations() {
 	    @SuppressWarnings("unchecked")
-		List<MorphoAnalysis> list = (List<MorphoAnalysis>)
+		List<Object> list = (List<Object>)
 	    	getIntent().getExtras().getSerializable("analyses");
 
-		List<String> data = new ArrayList<String>();
-	    for (MorphoAnalysis a : list) {
-	    	if (!data.contains(a.getLemma())) {
-		    	data.add(a.getLemma());
-	    	}
-	    }
-
-        setListAdapter(new LexicalAdapter(this, data));
+        setListAdapter(new AlternativesAdapter(this, list));
         expandedView = null;
 	}
 	
@@ -144,39 +132,86 @@ public class LexicalEntryActivity extends ListActivity {
 		expandedView = view;
 	}
 
-    private class LexicalAdapter extends ArrayAdapter<String> {
-    	public LexicalAdapter(Context context, List<String> data) {
+	private void expandExpr(View view, Expr expr) {
+		ImageView arrow = (ImageView) view.findViewById(R.id.arrow);
+		arrow.setImageResource(R.drawable.close_arrow);
+		
+		WebView inflectionView = (WebView) view.findViewById(R.id.lexical_inflection);
+		if (inflectionView == null) {
+			inflectionView = new WebView(this);
+			inflectionView.setId(R.id.lexical_inflection);
+			RelativeLayout.LayoutParams params = 
+					new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.addRule(RelativeLayout.BELOW, R.id.lexical_desc);
+			((RelativeLayout) view).addView(inflectionView, params);
+		}
+
+		inflectionView.loadData(expr.toString(), "text/plain; charset=UTF-8", null);
+
+		expandedView = view;
+	}
+
+    private class AlternativesAdapter extends ArrayAdapter<Object> {
+    	public AlternativesAdapter(Context context, List<Object> data) {
     		super(context, android.R.layout.simple_list_item_1, data);
     	}
 
     	public View getView(int position, View convertView, ViewGroup parent) {
-			final String lemma = getItem(position);
-			
-			LayoutInflater inflater = (LayoutInflater) getContext()
-	                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-	        if (convertView == null) {
-	            convertView = inflater.inflate(R.layout.lexical_item, null);
+			Object item = getItem(position);
+
+			if (convertView == null) {
+				LayoutInflater inflater = (LayoutInflater) 
+						getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+	            convertView = inflater.inflate(R.layout.alternative_item, null);
 	        }
 
-	        TextView descView =
-	        		(TextView) convertView.findViewById(R.id.lexical_desc);
+	        TextView descView = (TextView)
+	        	convertView.findViewById(R.id.lexical_desc);
 
-	    	String phrase = mTranslator.generateLexiconEntry(lemma);
-	        descView.setText(phrase);
+			if (item instanceof MorphoAnalysis) {
+				final String lemma = ((MorphoAnalysis) item).getLemma();
+		
+		    	String phrase = mTranslator.generateLexiconEntry(lemma);
+		        descView.setText(phrase);
+	
+		        convertView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						if (expandedView == view)
+							collapse();
+						else if (expandedView == null)
+							expand(view, lemma);
+						else {
+							collapse();
+							expand(view, lemma);
+						}
+					}
+				});
+			} else {
+				if (item instanceof ExprProb) {
+					final Expr expr = ((ExprProb) item).getExpr();
+		
+			    	String phrase = mTranslator.linearize(expr);
+			    	if (phrase.startsWith("% ") || phrase.startsWith("* ") || phrase.startsWith("+ "))
+			    		phrase = phrase.substring(2);
 
-	        convertView.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					if (expandedView == view)
-						collapse();
-					else if (expandedView == null)
-						expand(view, lemma);
-					else {
-						collapse();
-						expand(view, lemma);
-					}					
+			        descView.setText(phrase);
+
+			        convertView.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							if (expandedView == view)
+								collapse();
+							else if (expandedView == null)
+								expandExpr(view, expr);
+							else {
+								collapse();
+								expandExpr(view, expr);
+							}
+						}
+					});
 				}
-			});
+			}
 
 			return convertView;
 	    }

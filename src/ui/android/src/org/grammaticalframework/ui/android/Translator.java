@@ -3,10 +3,12 @@ package org.grammaticalframework.ui.android;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.util.Pair;
 import android.view.inputmethod.CompletionInfo;
 
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
+import org.grammaticalframework.pgf.ExprProb;
 import org.grammaticalframework.pgf.FullFormEntry;
 import org.grammaticalframework.pgf.MorphoAnalysis;
 import org.grammaticalframework.pgf.PGF;
@@ -15,6 +17,7 @@ import org.grammaticalframework.pgf.ParseError;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -74,6 +77,8 @@ public class Translator {
 
 	private static final String SOURCE_LANG_KEY = "source_lang";
 	private static final String TARGET_LANG_KEY = "target_lang";
+	
+	private static final int NUM_ALT_TRANSLATIONS = 10;
 	
 	private SharedPreferences mSharedPref;
 	
@@ -258,67 +263,79 @@ public class Translator {
     	return out;
     }
 
-    public String translateWord(String input) {
+    private String translateWord(String input) {
 
-	String output = "[" + input + "]" ;  // if all else fails, return the word itself in brackets
-	Concr sourceLang = getSourceConcr() ;
-	Concr targetLang = getTargetConcr() ;
+    	String output = "[" + input + "]" ;  // if all else fails, return the word itself in brackets
+    	Concr sourceLang = getSourceConcr() ;
+    	Concr targetLang = getTargetConcr() ;
 
-	String lowerinput = input.toLowerCase() ;  // also consider lower-cased versions of the word
+    	String lowerinput = input.toLowerCase() ;  // also consider lower-cased versions of the word
 
         try {
-	    Expr expr = sourceLang.parseBest("Chunk", input) ; // try parse as chunk
+        	Expr expr = sourceLang.parseBest("Chunk", input) ; // try parse as chunk
             output = targetLang.linearize(expr);
             return output ;
-        } catch (ParseError e) {                               // if this fails
+        } catch (ParseError e) {                               	  // if this fails
+        	List<MorphoAnalysis> morphos = lookupMorpho(input) ;  // lookup morphological analyses
 
-	    List<MorphoAnalysis> morphos = lookupMorpho(input) ;  // lookup morphological analyses
+        	morphos.addAll(lookupMorpho(lowerinput)) ;  // including the analyses of the lower-cased word
 
-	    morphos.addAll(lookupMorpho(lowerinput)) ;  // including the analyses of the lower-cased word
-
-	    for (MorphoAnalysis ana : morphos) {
-		if (targetLang.hasLinearization(ana.getLemma())) {    // check that the word has linearization in target
-		    output = targetLang.linearize(Expr.readExpr(ana.getLemma())) ;
-		    break ;                                           // if yes, don't search any more
-		} 
-	    } 
-	    return output ;
-	}
+        	for (MorphoAnalysis ana : morphos) {
+        		if (targetLang.hasLinearization(ana.getLemma())) {    // check that the word has linearization in target
+        			output = targetLang.linearize(Expr.readExpr(ana.getLemma())) ;
+        			break ;                                           // if yes, don't search any more
+        		} 
+        	} 
+        	return output ;
+        }
     }
 
-    public String parseByLookup(String input) {
-	String[] words = input.split(" ") ;
+    private String translateByLookup(String input) {
+    	String[] words = input.split(" ") ;
 
         String output = "%" ;
-
         for (String w : words) {
-	    output = output + " " + translateWord(w) ; 
+        	output = output + " " + translateWord(w) ; 
         }
 
-	return output ;
+        return output ;
     }
 
     /**
      * Takes a lot of time. Must not be called on the main thread.
      */
-    public String translate(String input) {
+    public Pair<String, List<ExprProb>> translate(String input) {
         if (getSourceLanguage().getLangCode().equals("cmn-Hans-CN")) {
         	// for Chinese we need to put space after every character
         	input = explode(input);
         }
 
+        String output = null;
+        List<ExprProb> exprs = new ArrayList<ExprProb>();
+
         try {
             Concr sourceLang = getSourceConcr();
-	    Expr expr = sourceLang.parseBest(getGrammar().getStartCat(), input);
             Concr targetLang = getTargetConcr();
-            String output = targetLang.linearize(expr);
-            return output;
+
+            Expr expr = sourceLang.parseBest(getGrammar().getStartCat(), input);
+
+            int count = NUM_ALT_TRANSLATIONS;
+            for (ExprProb ep : sourceLang.parse(getGrammar().getStartCat(), input)) {
+            	if (count-- <= 0)
+            		break;
+            	exprs.add(ep);
+            	output = targetLang.linearize(expr);
+            }
         } catch (ParseError e) {
-	    //            Log.e(TAG, "Parse error: " + e); //lookupMorpho
-	    //            return "parse error: " + e.getMessage();
-	    String output = parseByLookup(input) ;
-	    return output ;
+        	output = translateByLookup(input);
         }
+        
+        return new Pair<String,List<ExprProb>>(output, exprs);
+    }
+
+    public String linearize(Expr expr) {
+    	Concr targetLang = getTargetConcr();
+    	return targetLang.linearize(expr);
     }
 
     public String generateLexiconEntry(String lemma) {
