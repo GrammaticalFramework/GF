@@ -28431,22 +28431,22 @@ lin impute_V2 = mkV2 (mkV "tillskriva" "tillskrev" "tillskrivit"); -- status=gue
 lin imputrescible_A = variants {} ;
 lin in_1_Adv = mkAdv "inne" ;
 lin in_2_Adv = mkAdv "in" ;
-lin in_A = mkA "av" ; -- comment=4
-lin in_Adv = mkAdv "av" ; -- comment=14
-lin in_N = mkN "under" neutrum; -- comment=7
+lin in_A = mkA "inne" ; ---- fashionable, innegrej
+lin in_Adv = mkAdv "inne" ; 
+lin in_N = mkN "mode" ; ----
 lin in_Prep = S.in_Prep ;
-lin in_accordance_with_Prep = variants {} ;
-lin in_addition_Adv = mkAdv "dessutom" ; -- comment=2
+lin in_accordance_with_Prep = mkPrep "i enlighet med" ;
+lin in_addition_Adv = mkAdv "dessutom" ; 
 lin in_addition_to_Prep = mkPrep "jämte" ;
-lin in_case_of_Prep = variants {} ;
+lin in_case_of_Prep = mkPrep "i fall av" ;
 lin in_chief_A = variants {} ;
 lin in_fighting_N = variants {} ;
-lin in_front_of_Prep = variants {} ;
-lin in_general_Adv = variants {} ;
-lin in_lieu_of_Prep = variants {} ;
+lin in_front_of_Prep = mkPrep "framför" ;
+lin in_general_Adv = mkPrep "i allmänhet" ;
+lin in_lieu_of_Prep = mkPrep "i stället för" ;
 lin in_loco_parentis_Adv = variants {} ;
-lin in_order_to_Prep = mkPrep "i syftet av" ;
-lin in_particular_Adv = variants {} ;
+lin in_order_to_Prep = mkPrep "i syftet av att" ;
+lin in_particular_Adv = mkPrep "i synnerhet" ;
 lin in_patient_N = variants {} ;
 lin in_place_of_Prep = variants {} ;
 lin in_point_of_Prep = variants {} ;
@@ -30199,7 +30199,7 @@ lin jamaican_N = mkN "jamaicanska" ;
 lin jamb_N = variants {} ;
 lin jambalaya_N = variants {} ;
 lin jamboree_N = variants {} ;
-lin james_PN = variants {} ;
+lin james_PN = mkPN "James" ;
 lin jamjar_N = mkN "syltburk" ; -- status=guess
 lin jammer_N = variants {} ;
 lin jamming_N = variants {} ;
@@ -34427,7 +34427,7 @@ lin marvellous_A = mkA "underbar" ;
 lin marxism_N = variants {} ;
 lin marxistFem_N = variants {} ;
 lin marxistMasc_N = variants {} ;
-lin mary_PN = variants {} ;
+lin mary_PN = mkPN "Mary" ;
 lin maryland_PN = variants {} ;
 lin maryport_PN = variants {} ;
 lin marzipan_N = mkN "marsipan" ; -- SaldoWN
