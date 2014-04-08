@@ -1,6 +1,4 @@
---# -path=.:../german:../abstract:../common
-
-concrete DictionaryGer of Dictionary = CatGer ** open ParadigmsGer, (S = StructuralGer), 
+concrete DictionaryGer of Dictionary = CatGer ** open ParadigmsGer, (S = SyntaxGer),
   IrregGer, (R = ResGer), (M = MorphoGer), (I = IrregGer), Prelude in {
 
 flags
@@ -1471,10 +1469,10 @@ lin anybody_NP = variants {};
 lin anyhow_Adv = variants {};
 lin anymore_Adv = variants {};
 lin anyone_NP = variants {};
-lin anyplace_Adv = variants {};
-lin anything_NP = variants {};
-lin anyway_Adv = variants {};
-lin anywhere_Adv = variants {};
+lin anyplace_Adv = mkAdv "irgendwo" ;
+lin anything_NP = S.mkNP (mkPN "irgendwas") ;
+lin anyway_Adv = mkAdv "jedenfalls" ;
+lin anywhere_Adv = mkAdv "irgendwo" ;
 lin aorta_N = reg2N  "Aorta" "Aorten" feminine;
 lin apace_Adv = variants {};
 lin apache_N = variants {};
@@ -24988,8 +24986,8 @@ lin noviciate_N = variants {};
 lin novitiate_N = variants {};
 lin novokuznetsk_PN = variants {};
 lin novosibirsk_PN = variants {};
-lin now_Adv = variants {};
-lin now_AdV = variants {};
+lin now_Adv = mkAdv "jetzt" | mkAdv "nun" ;
+lin now_AdV = lin AdV {s = "jetzt"} | lin AdV {s = "nun"} ;
 lin nowadays_Adv = variants {};
 lin nowhere_Adv = variants {};
 lin nowise_Adv = variants {};
@@ -39288,10 +39286,10 @@ lin transition_N = reg2N  "Übergang" "Übergänge" masculine;
 lin transitional_A = regA "vorläufig";
 lin transitive_A = regA "transitiv";
 lin transitory_A = mk3A "flüchtig" "flüchtiger" "flüchtigste";
-lin translatable_A = variants {};
+lin translatable_A = mkA "übersetzbar" ;
 lin translate_V = irregV "übersetzen" "übersetzt" "übersetzte" "übersetzte" "übersetzt";
 lin translate_V2 = dirV2 (irregV "übersetzen" "übersetzt" "übersetzte" "übersetzte" "übersetzt");
-lin translation_N = mkN "Translation";
+lin translation_N = mkN "Übersetzung" ;
 lin translator_N = reg2N  "Übersetzer" "Übersetzer" masculine;
 lin transliterate_V2 = variants {};
 lin transliteration_N = mkN "Transkription";
