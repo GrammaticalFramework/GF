@@ -506,7 +506,10 @@ oper
   regADeg : Str -> A ;
 
   mkV = overload {
-    mkV : Str -> V = regV ;
+    mkV : Str -> V = \s -> case s of {
+      _ + "rsi" => reflV (regV (Predef.tk 2 s + "e")) ;
+      _ => regV s
+      } ;
     mkV : Verbo -> V = verboV ;
     mkV : 
      (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V = mk11V ; 
