@@ -53,19 +53,21 @@ oper
      vin = init vino ;
      n = last vin
    in
-   case o of {
-     "o" => {s = case n of {
+   case vino of {
+     _ + "o" => {s = case n of {
        "c" | "g" => numForms vino (vin + "hi") ;
        "i"       => numForms vino vin ;
        _         => numForms vino (vin + "i")
        } ; g = Masc} ;
-     "a" => {s = case n of {
+     _ + "a" => {s = case n of {
        "c" | "g" => numForms vino (vin + "he") ;
        _         => numForms vino (vin + "e")
        } ; g = Fem} ;
-     "e" => {s = numForms vino (vin + "i")
+     _ + ("ione" | "tudine") => {s = numForms vino (vin + "i")
+       ; g = Fem} ;
+     _ + "e" => {s = numForms vino (vin + "i")
        ; g = Masc} ;
-     "à" | "ù" => {s = numForms vino vino
+     _ + "à" | "ù" => {s = numForms vino vino
        ; g = Fem} ;
      _ => {s = numForms vino vino
        ; g = Masc}

@@ -50,6 +50,7 @@ oper
       _ + "a" => mkNoun (nomVino mec) Fem ;
       _ + "z" => mkNounIrreg mec (init mec + "ces") Fem ;
       _ + "ión" => mkNounIrreg mec (tk 2 mec + "ones") Fem ;
+      _ + "tud" => mkNounIrreg mec (mec + "es") Fem ;
       _ + "án" => mkNounIrreg mec (tk 2 mec + "anes") Masc ;
       _ + "én" => mkNounIrreg mec (tk 2 mec + "enes") Masc ;
       _ + "ín" => mkNounIrreg mec (tk 2 mec + "ines") Masc ;
