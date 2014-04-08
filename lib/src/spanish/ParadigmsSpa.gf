@@ -503,7 +503,10 @@ oper
   prefixA = prefA ;
 
   mkV = overload {
-    mkV : (pagar : Str) -> V = regV ;
+    mkV : (pagar : Str) -> V = \s -> case s of {
+     far + "se" => reflV (regV far) ;
+      _ => regV s
+      } ;
     mkV : (mostrar,muestro : Str) -> V = regAltV ;
     mkV : Verbum -> V = verboV ;
 
