@@ -27,6 +27,10 @@ Follow these steps for your language. For instance, ToCheckFre.gf, with Fre subs
 ```
 + Edit the ``lin`` rules line by line, starting from the beginning. Follow the guidelines in the next section.
 + Mark the last rule you edit with "---- END edits by AR", where AR is your initials.
++ Put, as the first line of the file, a comment indicating your last edited rule:
+```
+  ---- checked by AR till once_Adv
+```
 + Make sure the resulting file compiles again.
 + Perform ``diff`` with the old and the new file, just to make sure your changes look reasonable.
 + Commit your edits into darcs, if you have access to it, or to GF Contributions, or by email to Aarne Ranta. In the last case, 
@@ -75,6 +79,7 @@ When editing a lin rule, do one of the following:
 ```
   To check the meanings of senses that have already been split (by using numbers, e.g. ``time_1_N``), look up the explanations in
   [Dictionary.gf ../Dictionary.gf].
+
 - **report an anomaly**: change or leave the rule, and add a comment prefixed by "---- ". For example,
 ```
   lin back_Adv = variants{} ;
@@ -82,6 +87,18 @@ When editing a lin rule, do one of the following:
   might become
 ```
   lin back_Adv = mkAdv "en retour" ; ---- no exact translation in Fre -- AR
+``` 
+
+- **report on bad subcategory instance** (a common special case of anomaly): 
+add a comment prefixed by "---- subcat" to say that the current verb subcat instance
+doesn't make sense to you. This may happen since the subcategories have partly been automatically extracted. It is still good to
+put a suitable verb in place. For example,
+```
+  lin come_VS = variants {} ; 
+``` 
+  might become
+```
+  lin come_VS = mkVS I.venir_V ; ---- subcat
 ``` 
 
 

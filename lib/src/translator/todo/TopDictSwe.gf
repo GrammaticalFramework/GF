@@ -1,6 +1,6 @@
-concrete TopDictSwe of TopDict = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
+---- checked by AR till element_N
 
----- AR checked till element_N: you can start from there
+concrete TopDictSwe of TopDict = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe) in {
 
 lin of_Prep = mkPrep "av" ;
 lin and_Conj = S.and_Conj ;

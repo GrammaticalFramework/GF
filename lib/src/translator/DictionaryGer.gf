@@ -41891,12 +41891,7 @@ lin want_V = regV "wollen";
 lin want_V2 = dirV2 (regV "wollen");
 lin want_V2V = variants {};
 lin want_VS = variants {};
-lin want_VV = R.auxVV 
-      (R.mkV 
-        "wollen" "will" "willst" "will" "wollt" "woll" 
-        "wollte" "wolltest" "wollten" "wolltet"
-        "wollte" "gewollt" [] 
-        R.VHaben) ;
+lin want_VV = S.want_VV ;
 lin want_ad_N = variants {};
 lin wantage_PN = variants {};
 lin wanton_A = variants {};
