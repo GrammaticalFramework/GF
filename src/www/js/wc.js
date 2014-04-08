@@ -37,7 +37,7 @@ wc.translate=function() {
 	return s.split(/([.!?]+[ \t\n]+|\n\n+|[ \t\n]*[-•*+#]+[ \t\n]+)/)
     }
     function trans_quality(r) {
-	var text=r.text
+	var text=r.linearizations[0].text
 	if(r.prob==0) return {quality:"high_quality",text:text}
 	else {
 	    var quality="default_quality"
@@ -47,7 +47,7 @@ wc.translate=function() {
 	    default:
 		if(r.tree[0]=="?") quality="low_quality"
 	    }
-	    if(text[0]==" ") text=text.substr(1)
+	    text=text.trimLeft()
 	    return {quality:quality,text:text}
 	}
     }
@@ -77,7 +77,7 @@ wc.translate=function() {
 		    var pick=node("a",{href:"#"},[pick])
 		    pick.onclick=pick.onmouseover=show_pick(i)
 		}
-		var q=trans_quality(rs[i]).quality
+		var q=rs[i].t.quality
 		p.appendChild(span_class("pick "+q,pick))
 	    }
 	    /*
@@ -103,19 +103,18 @@ wc.translate=function() {
 
 	function show_trans(i) {
 	    var r=rs[i]
-	    var t=trans_quality(r)
-	    replaceChildren(output,text(t.text))
-	    wc.os[si].text=t.text
-	    output.className=t.quality
+	    replaceChildren(output,text(r.text))
+	    wc.os[si].text=r.text
+	    output.className=r.t.quality
 	    current_pick=i
 	    if(selected==si) show_more()
 	}
 
 	function showit(r,text) {
 	    text=text.trimRight()
+	    r.text=text
 	    rs.push(r)
 	    var j=rs.length-1
-	    rs[j].text=text
 	    if(current_pick==j) show_trans(j)
 	    else if(selected==si) show_picks()
 	    disable(false)
@@ -127,8 +126,8 @@ wc.translate=function() {
 			var r=tra[0]
 			if(r.error!=undefined) show_error(tra[0].error)
 			else if(r.linearizations) {
-			    r.text=r.linearizations[0].text
-			    unlextext(r.text,function(text){showit(r,text)})
+			    r.t=trans_quality(r)
+			    unlextext(r.t.text,function(text){showit(r,text)})
 			    if(wc.p && i<9) {
 				if(si==selected) trans(text,i+1)
 				else get_more=function() { trans(text,i+1) }
@@ -147,9 +146,9 @@ wc.translate=function() {
 		var trans=results[0].translations
 		if(trans && trans.length>=1) {
 		    var r=trans[0]
-		    r.text=r.linearizations[0].text
 		    r.prob=0
-		    unlextext(r.text,function(text){showit(r,text)})
+		    r.t=trans_quality(r)
+		    unlextext(r.t.text,function(text){showit(r,text)})
 		}
 		step2(text)
 	    }
