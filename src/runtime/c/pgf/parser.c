@@ -1148,7 +1148,8 @@ pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state)
 {
 	PgfSequence* epsilon_seq =
 		gu_seq_index(ps->concr->sequences, PgfSequence, 0);
-	if (gu_seq_length(epsilon_seq->syms) == 0) {
+	if (gu_seq_length(epsilon_seq->syms) == 0 &&
+	    epsilon_seq->idx != NULL) {
 		// Since the sequences are sorted, the epsilon sequence will
 		// always be the first if there is any at all. We should
 		// always add the epsilon in the index, because we do
