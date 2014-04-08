@@ -36,6 +36,7 @@ abstract App =
               ** {
 flags
   startcat=Phr ;
+----  heuristic_search_factor=0.90; -- doesn't seem to affect speed or quality much
 
 fun
   PhrasePhr : Phrase -> Phr ;

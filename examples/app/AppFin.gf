@@ -44,7 +44,7 @@ concrete AppFin of App =
 
   ,PhrasebookFin - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A]
 
-    ** open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, CommonScand, (E = ExtraFin), (G = GrammarFin), Prelude in {
+    ** open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, (E = ExtraFin), (G = GrammarFin), Prelude in {
 
 flags
   literal=Symb ;
