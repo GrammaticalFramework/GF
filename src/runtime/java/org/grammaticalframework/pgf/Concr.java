@@ -38,6 +38,8 @@ public class Concr {
 
 	public native void unload();
 
+	public native void addLiteral(String cat, LiteralCallback callback);
+
 	//////////////////////////////////////////////////////////////////
 	// private stuff
 	
