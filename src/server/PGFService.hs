@@ -5,6 +5,7 @@ module PGFService(cgiMain,cgiMain',getPath,
 
 import PGF (PGF)
 import qualified PGF
+import PGF.Lexing
 import Cache
 import FastCGIUtils
 import URLEncoding
@@ -89,9 +90,9 @@ cgiMain' cache path =
 cpgfMain :: String -> (C.PGF,MVar ParseCache) -> CGI CGIResult
 cpgfMain command (pgf,pc) =
   case command of
-    "c-parse"     -> out =<< join (parse # input % from % start % limit % trie)
+    "c-parse"     -> out =<< join (parse#lexer%input%from%start%limit%trie)
     "c-linearize" -> out =<< lin # tree % to
-    "c-translate" -> out =<< join (trans # input % from % to % start % limit % trie)
+    "c-translate" -> out =<< join (trans#lexer%input%from%to%start%limit%trie)
     "c-flush"     -> out =<< flush
     "c-grammar"   -> out grammar
     _             -> badRequest "Unknown command" command
@@ -107,8 +108,8 @@ cpgfMain command (pgf,pc) =
       where
         languages = [makeObj ["name".= l] | (l,_)<-Map.toList (C.languages pgf)]
 
-    parse input (from,concr) start mlimit trie =
-        do r <- parse' input (from,concr) start mlimit
+    parse lexer input (from,concr) start mlimit trie =
+        do r <- parse' (lexer input) (from,concr) start mlimit
            return $ showJSON [makeObj ("from".=from:jsonParseResult r)]
 
     jsonParseResult = either bad good
@@ -135,8 +136,8 @@ cpgfMain command (pgf,pc) =
     lin tree tos = showJSON (lin' tree tos)
     lin' tree tos = [makeObj ["to".=to,"text".=C.linearize c tree]|(to,c)<-tos]
 
-    trans input (from,concr) tos start mlimit trie =
-      do parses <- parse' input (from,concr) start mlimit
+    trans lexer input (from,concr) tos start mlimit trie =
+      do parses <- parse' (lexer input) (from,concr) start mlimit
          return $
            showJSON [ makeObj ["from".=from,
                                "translations".= jsonParses parses]]
@@ -165,6 +166,16 @@ cpgfMain command (pgf,pc) =
     tree = do s <- maybe (missing "tree") return =<< getInput1 "tree"
               let t = C.readExpr s
               maybe (badRequest "bad tree" s) return t
+
+lexer = maybe (return id) lexerfun =<< getInput "lexer" 
+  where
+    lexerfun name =
+       case name of
+         "text" -> return (unwords . lexText)
+         "code" -> return (unwords . lexCode)
+         "mixed" -> return (unwords . lexMixed)
+         _ -> throwCGIError 400 "Unknown lexer" ["Unknown lexer: "++name]
+
 {-
 instance JSON C.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . C.readCId
@@ -182,15 +193,15 @@ instance JSON C.Expr where
 pgfMain :: String -> PGF -> CGI CGIResult
 pgfMain command pgf =
     case command of
-      "parse"          -> out =<< doParse pgf # input % cat % from % limit % trie
+      "parse"          -> out =<< parse#lexer%input%cat%from%limit%trie
       "complete"       -> out =<< doComplete pgf # input % cat % from % limit
       "linearize"      -> out =<< doLinearize pgf # tree % to
       "linearizeAll"   -> out =<< doLinearizes pgf # tree % to
       "linearizeTable" -> out =<< doLinearizeTabular pgf # tree % to
       "random"         -> cat >>= \c -> depth >>= \dp -> limit >>= \l -> to >>= \to -> liftIO (doRandom pgf c dp l to) >>= out
       "generate"       -> out =<< doGenerate pgf # cat % depth % limit % to
-      "translate"      -> out =<< doTranslate pgf # input % cat % from % to % limit % trie
-      "translategroup" -> out =<< doTranslateGroup pgf # input % cat % from % to % limit
+      "translate"      -> out =<< trans#lexer%input%cat%from%to%limit%trie
+      "translategroup" -> out =<< transgroup#lexer%input%cat%from%to%limit
       "grammar"        -> out =<< doGrammar pgf # requestAcceptLanguage
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
@@ -204,6 +215,10 @@ pgfMain command pgf =
                              doExternal cmd =<< input
       _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
+    parse lexer input = doParse pgf (lexer input)
+    trans lexer input = doTranslate pgf (lexer input)
+    transgroup lexer input = doTranslateGroup pgf (lexer input)
+
     tree :: CGI PGF.Tree
     tree = do ms <- getInput "tree"
               s <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return ms
