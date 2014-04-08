@@ -124,7 +124,9 @@ wc.translate=function() {
 		if(wc.serial==current) {
 		    if(tra.length>=1) {
 			var r=tra[0]
-			if(r.error!=undefined) show_error(tra[0].error)
+			if(r.error!=undefined) {
+			    if(i==0 && rs.length==0) show_error(tra[0].error)
+			}
 			else if(r.linearizations) {
 			    r.t=trans_quality(r)
 			    unlextext(r.t.text,function(text){showit(r,text)})
@@ -135,7 +137,8 @@ wc.translate=function() {
 			}
 			else show_error("no linearizations")
 		    }
-		    else if(i==0) show_error("Unable to translate")
+		    else if(i==0 && rs.length==0)
+			show_error("Unable to translate")
 		}
 	    }
 	    gftranslate.translate(text,f.from.value,f.to.value,i,1,step3)
@@ -154,11 +157,13 @@ wc.translate=function() {
 	    }
 	    wc.pgf_online.translate({from:wc.cnl+f.from.value,
 				     to:wc.cnl+f.to.value,
-				     input:text},
+				     lexer:"text",input:text},
 				    step3cnl,
 				    function(){step2(text)})
 	}
-	lextext(is[si],wc.cnl ? step2cnl : step2)
+	//lextext(is[si],wc.cnl ? step2cnl : step2)
+	if(wc.cnl) step2cnl(is[si])
+	else step2(is[si])
     }
     wc.translating=f.input.value
     var is=wc.is=split_punct(wc.translating+"\n")
