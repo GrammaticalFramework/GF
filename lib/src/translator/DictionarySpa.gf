@@ -2548,7 +2548,7 @@ lin bombshell_N = mkN "pibón"  ; -- status=guess
 lin bond_N = mkN "enlace" masculine ; -- status=guess
 lin bondsman_N = mkN "aval"  | mkN "fiador" masculine ; -- status=guess status=guess
 lin bone_N = L.bone_N ; -- comment=CHECKED
-lin bone_V2 = mkV2 (mkV (mkV "joder") "con") | mkV2 (mkV (mkV "[Spain]") "follar con") | mkV2 (mkV (mkV "") "coger con") | mkV2 (mkV (mkV "culear") "") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
+lin bone_V2 = variants {} ; ----
 lin boner_N = mkN "erección" feminine | mkN "tieso"  ; -- status=guess status=guess
 lin bonfire_N = mkN "hoguera"  ; -- status=guess
 lin bong_N = mkN "tuberia de barrilete" ; -- status=guess
@@ -7773,8 +7773,8 @@ lin fluff_N = mkN "pelusa"  | mkN "plumón" masculine ; -- status=guess status=g
 lin fluid_A = mkA "fluido" ; -- status=guess
 lin fluid_N = mkN "fluido"  ; -- status=guess
 lin fluke_N = mkN "muerte" feminine ; -- status=guess
-lin flunk_V = mkV (mkV "[South") "America] aplazar" | mkV (mkV "[specially") "Central America" | mkV (mkV "Mexico]") "reprobar" | mkV (mkV "[Spain]") "suspender" | mkV (mkV "[colloquial]") "bochar [Argentina]" | mkV (mkV "[Spain]") "catear" | mkV (mkV "[Peru]") "jalar" | mkV "[Chile" | mkV (mkV "Colombia]") "rajar" | mkV (mkV "[Venezuela]") "raspar" | mkV (mkV "[Costa") "Rica] poner nota roja" | mkV (mkV "") "tronar" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin flunk_V2 = mkV2 (mkV (mkV "[South") "America] aplazar") | mkV2 (mkV (mkV "[specially") "Central America") | mkV2 (mkV (mkV "Mexico]") "reprobar") | mkV2 (mkV (mkV "[Spain]") "suspender") | mkV2 (mkV (mkV "[colloquial]") "bochar [Argentina]") | mkV2 (mkV (mkV "[Spain]") "catear") | mkV2 (mkV (mkV "[Peru]") "jalar") | mkV2 (mkV "[Chile") | mkV2 (mkV (mkV "Colombia]") "rajar") | mkV2 (mkV (mkV "[Venezuela]") "raspar") | mkV2 (mkV (mkV "[Costa") "Rica] poner nota roja") | mkV2 (mkV (mkV "") "tronar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
+lin flunk_V = mkV "catear" ; 
+lin flunk_V2 = mkV2 (mkV "catear") ;
 lin fluorine_N = mkN "flúor" masculine ; -- status=guess
 lin fluoxetine_N = mkN "fluoxetina"  ; -- status=guess
 lin flurry_N = mkN "ráfaga"  ; -- status=guess
@@ -7965,7 +7965,7 @@ lin foxglove_N = mkN "digital" feminine ; -- status=guess
 lin foyer_N = mkN "zaguán" masculine ; -- status=guess
 lin fracas_N = mkN "alboroto"  | mkN "tumulto"  | mkN "altercado"  | mkN "gresca"  ; -- status=guess status=guess status=guess status=guess
 lin fractal_N = mkN "fractal" masculine ; -- status=guess
-lin fraction_N = mkN "fracción" feminine | mkN ""  | mkN "quebrado"  ; -- status=guess status=guess status=guess
+lin fraction_N = mkN "fracción" feminine | mkN "quebrado"  ; -- status=guess status=guess status=guess
 lin fractious_A = mkA "quisquilloso" ; -- status=guess
 lin fracture_N = mkN "fractura"  ; -- status=guess
 lin fragile_A = mkA "frágil" ; -- status=guess
@@ -8081,9 +8081,9 @@ lin fry_V2 = mkV2 (mkV "freírse") ; -- status=guess, src=wikt
 lin frying_N = mkN "sartén" feminine ; -- status=guess
 lin fuchsia_N = mkN "fucsia"  ; -- status=guess
 lin fuck_N = mkN "polvo" feminine ; -- status=guess
-lin fuck_V = mkV "joder" | mkV "molestar" | mkV (mkV "") "huevear" | mkV (mkV "[Ecuador]") "fregar" | mkV (mkV "") "mamar" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin fuck_V2 = mkV2 (mkV "joder") | mkV2 (mkV "molestar") | mkV2 (mkV (mkV "") "huevear") | mkV2 (mkV (mkV "[Ecuador]") "fregar") | mkV2 (mkV (mkV "") "mamar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin fucking_Adv = mkAdv "jodidamente" | mkAdv "[" | mkAdv "is used as adverb by some people even if identical to the adjective)] pinche" ; -- status=guess status=guess status=guess
+lin fuck_V = mkV "joder" | mkV "molestar" | mkV "huevear" | mkV "fregar" | mkV "mamar" ; 
+lin fuck_V2 = mkV2 (mkV "joder") | mkV2 (mkV "molestar") | mkV2 (mkV "huevear") | mkV2 (mkV "fregar") | mkV2 (mkV "mamar") ; 
+lin fucking_Adv = mkAdv "jodidamente" ;
 lin fuel_N = mkN "pila de combustible" | mkN "célula de combustible" ; -- status=guess status=guess
 lin fugitive_A = mkA "fugitivo" ; -- status=guess
 lin fugitive_N = mkN "fugitivo"  ; -- status=guess
@@ -13582,7 +13582,7 @@ lin palm_V2 = mkV2 (mkV (mkV "agarrar") "con la palma") | mkV2 (mkV (mkV "mover"
 lin palpable_A = mkA "palpable" ; -- status=guess
 lin palpitation_N = mkN "palpitación" feminine ; -- status=guess
 lin palsy_N = mkN "parálisis" feminine ; -- status=guess
-lin pamper_V2 = mkV2 (mkV "mimar") | mkV2 (consentir_V) | mkV2 (mkV (mkV "") "regalonear") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
+lin pamper_V2 = mkV2 (mkV "mimar") | mkV2 (consentir_V) ;
 lin pan_N = mkN "panarabismo"  ; -- status=guess
 lin panacea_N = mkN "panacea"  ; -- status=guess
 lin panache_N = mkN "gracia"  | mkN "garbo"  ; -- status=guess status=guess
@@ -16281,7 +16281,7 @@ lin royal_N = mkN "escalera real mayor" | mkN "flor imperial" ; -- status=guess 
 lin rub_V = mkV "frotar" ; -- status=guess, src=wikt
 lin rub_V2 = L.rub_V2 ; -- comment=CHECKED
 lin rubber_N = L.rubber_N ; -- comment=CHECKED
-lin rubberneck_V = mkV (mkV "") "sapear" | mkV "mirar" ; -- status=guess, src=wikt status=guess, src=wikt
+lin rubberneck_V = mkV "sapear" | mkV "mirar" ; -- status=guess, src=wikt status=guess, src=wikt
 lin rubbery_A = mkA "gomoso" | mkA "elástico" ; -- status=guess status=guess
 lin rubbish_N = mkN "desperdicios" masculine ; -- status=guess
 lin rubble_N = mkN "escombros" masculine ; -- status=guess
@@ -16638,7 +16638,7 @@ lin scholarly_A = mkA "erudito" | mkA "universitario" ; -- status=guess status=g
 lin scholarship_N = mkN "erudición" feminine | mkN "sabiduría"  ; -- status=guess status=guess
 lin scholasticism_N = mkN "escolástica"  ; -- status=guess
 lin school_N = L.school_N ; -- comment=CHECKED
-lin schoolchild_N = mkN "escolar" masculine | mkN ""  | mkN "or unspecified sex) alumno" | mkN "alumna"  | mkN "colegiala"  ; -- status=guess status=guess status=guess status=guess status=guess
+lin schoolchild_N = mkN "escolar" masculine | mkN "alumna"  | mkN "colegiala" ; 
 lin schoolmate_N = mkN "condiscípulo"  | mkN "condiscípula"  | mkN "compañero de clase" ; -- status=guess status=guess status=guess
 lin schooner_N = mkN "goleta"  ; -- status=guess
 lin schwa_N = mkN "schwa" masculine ; -- status=guess
@@ -16718,8 +16718,8 @@ lin scrotal_A = mkA "escrotal" ; -- status=guess
 lin scrotum_N = mkN "escroto"  ; -- status=guess
 lin scrounge_V = mkV "gorrear" | mkV "gorronear" | mkV "pepenar" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin scrounge_V2 = mkV2 (mkV "gorrear") | mkV2 (mkV "gorronear") | mkV2 (mkV "pepenar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin scrub_V = fregar_V | mkV (mkV "tallar") "" ; -- status=guess, src=wikt status=guess, src=wikt
-lin scrub_V2 = mkV2 (fregar_V) | mkV2 (mkV (mkV "tallar") "") ; -- status=guess, src=wikt status=guess, src=wikt
+lin scrub_V = fregar_V | mkV "tallar" ;
+lin scrub_V2 = mkV2 (fregar_V) | mkV2 (mkV "tallar") ; 
 lin scruffy_A = mkA "desaliñado" ; -- status=guess
 lin scruple_N = mkN "escrúpulo"  ; -- status=guess
 lin scrutinize_V2 = mkV2 (mkV "escrutar") | mkV2 (mkV "examinar") | mkV2 (mkV "escudriñar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
@@ -19302,7 +19302,7 @@ lin thirst_V2 = mkV2 (mkV (mkV "tener") "sed") ; -- status=guess, src=wikt
 lin thirsty_A = mkA "sediento" ; -- status=guess
 lin this_Quant = S.this_Quant ; -- comment=CHECKED
 lin thistle_N = mkN "cardo"  ; -- status=guess
-lin thistledown_N = mkN "vilano"  | mkN "vilano de cardo" | mkN ""  ; -- status=guess status=guess status=guess
+lin thistledown_N = mkN "vilano" ;
 lin thither_Adv = mkAdv "por allí" | mkAdv "hacia allá" ; -- status=guess status=guess
 lin thong_N = mkN "chancla"  | mkN "bamba"  ; -- status=guess status=guess
 lin thorax_N = mkN "tórax" masculine ; -- status=guess
