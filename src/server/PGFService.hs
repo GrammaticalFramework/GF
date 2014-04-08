@@ -167,15 +167,6 @@ cpgfMain command (pgf,pc) =
               let t = C.readExpr s
               maybe (badRequest "bad tree" s) return t
 
-lexer = maybe (return id) lexerfun =<< getInput "lexer" 
-  where
-    lexerfun name =
-       case name of
-         "text" -> return (unwords . lexText)
-         "code" -> return (unwords . lexCode)
-         "mixed" -> return (unwords . lexMixed)
-         _ -> throwCGIError 400 "Unknown lexer" ["Unknown lexer: "++name]
-
 {-
 instance JSON C.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . C.readCId
@@ -186,6 +177,15 @@ instance JSON C.Expr where
     showJSON = showJSON . C.showExpr
 
 #endif
+
+lexer = maybe (return id) lexerfun =<< getInput "lexer" 
+  where
+    lexerfun name =
+       case name of
+         "text" -> return (unwords . lexText)
+         "code" -> return (unwords . lexCode)
+         "mixed" -> return (unwords . lexMixed)
+         _ -> throwCGIError 400 "Unknown lexer" ["Unknown lexer: "++name]
 
 --------------------------------------------------------------------------------
 -- * Haskell run-time functionality
