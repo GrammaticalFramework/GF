@@ -19472,7 +19472,7 @@ lin to_Adv = mkAdv "además" ; -- status=guess
 lin to_Prep = S.to_Prep ; -- comment=CHECKED
 lin toad_N = mkN "sapo"  ; -- status=guess
 lin toadstool_N = mkN "seta venenosa" ; -- status=guess
-lin toady_N = mkN "arrastrado" | mkN "[Colombia] cepillero" | mkN "[River Plate region] chupamedias" | mkN " lambiscón" | mkN "lameculos"  | mkN "pelotillero" | mkN "sobon" | mkN "[Miami"  | mkN "Latin America] come mierda" | mkN "[Peru] franelero" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess
+lin toady_N = mkN "arrastrado" ;
 lin toast_N = mkN "brindis" masculine ; -- status=guess
 lin toast_V = mkV (mkV "brindar") "por" ; -- status=guess, src=wikt
 lin toast_V2 = mkV2 (mkV (mkV "brindar") "por") ; -- status=guess, src=wikt
