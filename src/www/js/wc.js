@@ -5,6 +5,7 @@ wc.o=element("output")
 wc.e=element("extra")
 wc.p=element("pick")
 wc.serial=0
+wc.os=[]
 
 wc.delayed_translate=function() {
     function restart(){ if(wc.f.input.value!=wc.translating) wc.translate() }
@@ -13,10 +14,6 @@ wc.delayed_translate=function() {
     var h=wc.f.input.scrollHeight,bh=document.body.clientHeight
     if(h>bh) h=bh
     if(wc.f.input.clientHeight<h) wc.f.input.style.height=h+15+"px"
-}
-
-wc.split_punct=function(s) {
-    return s.split(/([.!?]+[ \t\n]+|\n\n+|[ \t\n]*[-•*+#]+[ \t\n]+)/)
 }
 
 wc.translate=function() {
@@ -31,14 +28,35 @@ wc.translate=function() {
     }
     disable(true)
     clear(wc.o)
+    wc.os=[]
     clear(e)
     clear(p)
+
+
+    function split_punct(s) {
+	return s.split(/([.!?]+[ \t\n]+|\n\n+|[ \t\n]*[-•*+#]+[ \t\n]+)/)
+    }
+    function trans_quality(r) {
+	var text=r.text
+	if(r.prob==0) return {quality:"high_quality",text:text}
+	else {
+	    var quality="default_quality"
+	    switch(text[0]) {
+	    case '+': text=text.substr(1); quality="high_quality"; break;
+	    case '*': text=text.substr(1); quality="low_quality"; break;
+	    default:
+		if(r.tree[0]=="?") quality="low_quality"
+	    }
+	    if(text[0]==" ") text=text.substr(1)
+	    return {quality:quality,text:text}
+	}
+    }
 
     function translate_segment(si) {
 	var rs=[]
 	var current_pick=0
 	var get_more
-	var output=os[si].target
+	var output=wc.os[si].target
 
 	function show_error(msg) {
 	    //if(e) e.innerHTML="<span class=low_quality>Translation problem: "+msg+"</span>"
@@ -48,21 +66,6 @@ wc.translate=function() {
 		output.className="error"
 	    }
 	    disable(false)
-	}
-	function trans_quality(r) {
-	    var text=r.text
-	    if(r.prob==0) return {quality:"high_quality",text:text}
-	    else {
-		var quality="default_quality"
-		switch(text[0]) {
-		case '+': text=text.substr(1); quality="high_quality"; break;
-		case '*': text=text.substr(1); quality="low_quality"; break;
-		default:
-		    if(r.tree[0]=="?") quality="low_quality"
-		}
-		if(text[0]==" ") text=text.substr(1)
-		return {quality:quality,text:text}
-	    }
 	}
 	function show_pick(i) { return function() { show_trans(i); return false; } }
 	function show_picks() {
@@ -102,14 +105,14 @@ wc.translate=function() {
 	    var r=rs[i]
 	    var t=trans_quality(r)
 	    replaceChildren(output,text(t.text))
+	    wc.os[si].text=t.text
 	    output.className=t.quality
 	    current_pick=i
 	    if(selected==si) show_more()
 	}
 
 	function showit(r,text) {
-	    if(text.length>0 && text[text.length-1]=="\n")
-		text=text.substr(0,text.length-1)
+	    text=text.trimRight()
 	    rs.push(r)
 	    var j=rs.length-1
 	    rs[j].text=text
@@ -159,15 +162,15 @@ wc.translate=function() {
 	lextext(is[si],wc.cnl ? step2cnl : step2)
     }
     wc.translating=f.input.value
-    var is=wc.is=wc.split_punct(wc.translating+"\n")
-    var os=[]
+    var is=wc.is=split_punct(wc.translating+"\n")
     for(var i=0;i<is.length;i++) {
-	if(i&1) { // punctiation
+	wc.os[i]={text:is[i]}
+	if(i&1) { // punctuation
 	    wc.o.appendChild(span_class("punct",text(is[i])))
 	}
 	else { // segment
-	    var o=os[i]={target:span_class("placeholder",text(is[i]))}
-	    wc.o.appendChild(o.target)
+	    var o=wc.os[i].target=span_class("placeholder",text(is[i]))
+	    wc.o.appendChild(o)
 	    translate_segment(i)
 	}
     }
@@ -185,9 +188,8 @@ wc.speak=function(text,lang) {
 
 wc.swap=function() {
     var f=wc.f
-    var old_input=f.input.value
-    f.input.value=f.output.value;
-    f.output.value=old_input
+    function txt(r) { return r.text }
+    f.input.value=wc.os.map(txt).join("").trimRight()
     var from=f.from.value
     f.from.value=f.to.value
     f.to.value=from
