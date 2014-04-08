@@ -46,6 +46,12 @@ Follow these steps for your language. For instance, ToCheckFre.gf, with Fre subs
 
 <LI>Edit the <CODE>lin</CODE> rules line by line, starting from the beginning. Follow the guidelines in the next section.
 <LI>Mark the last rule you edit with "---- END edits by AR", where AR is your initials.
+<LI>Put, as the first line of the file, a comment indicating your last edited rule:
+
+<PRE>
+    ---- checked by AR till once_Adv
+</PRE>
+
 <LI>Make sure the resulting file compiles again.
 <LI>Perform <CODE>diff</CODE> with the old and the new file, just to make sure your changes look reasonable.
 <LI>Commit your edits into darcs, if you have access to it, or to GF Contributions, or by email to Aarne Ranta. In the last case, 
@@ -104,6 +110,9 @@ When editing a lin rule, do one of the following:
     lin labour_N = mkN "travail" "travaux" masculine ; --- mkN "accouchement" childbirth labour -- AR
 </PRE>
 
+  To check the meanings of senses that have already been split (by using numbers, e.g. <CODE>time_1_N</CODE>), look up the explanations in
+  <A HREF="../Dictionary.gf">Dictionary.gf</A>.
+<P></P>
 <LI><B>report an anomaly</B>: change or leave the rule, and add a comment prefixed by "---- ". For example,
 
 <PRE>
@@ -114,6 +123,22 @@ When editing a lin rule, do one of the following:
 
 <PRE>
     lin back_Adv = mkAdv "en retour" ; ---- no exact translation in Fre -- AR
+</PRE>
+
+<P></P>
+<LI><B>report on bad subcategory instance</B> (a common special case of anomaly): 
+add a comment prefixed by "---- subcat" to say that the current verb subcat instance
+doesn't make sense to you. This may happen since the subcategories have partly been automatically extracted. It is still good to
+put a suitable verb in place. For example,
+
+<PRE>
+    lin come_VS = variants {} ; 
+</PRE>
+
+  might become
+
+<PRE>
+    lin come_VS = mkVS I.venir_V ; ---- subcat
 </PRE>
 
 </UL>

@@ -1,8 +1,5 @@
-concrete TopDictGer of TopDict = CatGer ** open ParadigmsGer, (S = StructuralGer), 
+concrete TopDictGer of TopDict = CatGer ** open ParadigmsGer, (S = SyntaxGer),
   IrregGer, (R = ResGer), (M = MorphoGer), (I = IrregGer), Prelude in {
-
-flags
-  coding=utf8 ;
 
 lin of_Prep = von_Prep ;
 lin and_Conj = {s1 = [] ; s2 = "und" ; n = R.Pl};
@@ -91,7 +88,7 @@ lin come_V = seinV (mk6V "kommen" "kommt" "komm" "kam" "käme" "gekommen");
 lin than_Subj = variants{} ;
 lin more_Adv = variants {};
 lin about_Prep = variants {};
-lin now_Adv = variants {};
+lin now_Adv = mkAdv "jetzt" | mkAdv "nun" ;
 lin last_A = variants {};
 lin last_1_A = variants{} ;
 lin last_2_A = variants{} ;
@@ -127,6 +124,7 @@ lin find_V2A = variants {};
 lin find_V2 = dirV2 (irregV "finden" "findet" "fand" "fände" "gefunden");
 lin find_V = irregV "finden" "findet" "fand" "fände" "gefunden" ;
 lin man_N = reg2N "Mann" "Männer" masculine;
+lin want_VV = S.want_VV ;
 lin want_VS = variants {};
 lin want_V2V = variants {};
 lin want_V2 = dirV2 (regV "wollen");
@@ -564,7 +562,7 @@ lin suggest_V2 = variants {};
 lin suggest_V = variants {};
 lin far_A = mk3A "entfernt" "entfernter" "entfernteste";
 lin towards_Prep = variants {};
-lin anything_NP = variants {};
+lin anything_NP = S.mkNP (mkPN "irgendwas") ;
 lin period_N = reg2N "Zeitraum" "Zeiträume" masculine;
 lin period_3_N = variants{} ;
 lin period_2_N = variants{} ;
@@ -1330,7 +1328,7 @@ lin recently_Adv = variants{} ;
 lin publish_V2 = dirV2 (regV "publizieren");
 lin publish_V = regV "publizieren";
 lin serious_A = mk3A "ernst" "ernster" "ernsteste";
-lin anyway_Adv = variants {};
+lin anyway_Adv = mkAdv "jedenfalls" ;
 lin visit_V2V = variants {};
 lin visit_V2 = dirV2 (regV "besuchen");
 lin visit_V = regV "besuchen";
@@ -3043,7 +3041,7 @@ lin republic_N = reg2N "Republik" "Republiken" feminine;
 lin shadow_N = reg2N "Schatten" "Schatten" masculine;
 lin dear_A = mk3A "teuer" "teurer" "teuerste";
 lin analyse_V2 = variants {};
-lin anywhere_Adv = variants {};
+lin anywhere_Adv = mkAdv "irgendwo" ;
 lin average_N = variants {};
 lin phrase_N = reg2N "Phrase" "Phrasen" feminine;
 lin long_term_A = variants {};
@@ -5052,7 +5050,7 @@ lin breed_N = variants {};
 lin assistant_A = variants{} ;
 lin pint_N = variants {};
 lin abolish_V2 = dirV2 (irregV "vernichten" "vernichtet" "vernichtete" "vernichte" "vernichtet" );
-lin translation_N = mkN "Translation";
+lin translation_N = mkN "Übersetzung" ;
 lin princess_N = reg2N "Prinzessin" "Prinzessinnen" feminine;
 lin line_V2 = variants {};
 lin line_V = variants {};
