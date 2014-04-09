@@ -15,7 +15,7 @@ import GF.System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                            setCurrentDirectory,getCurrentDirectory,
                            getDirectoryContents,removeFile,removeDirectory,
                            getModificationTime)
-import Data.Time (formatTime)
+import Data.Time (getCurrentTime,formatTime)
 import System.Locale(defaultTimeLocale,rfc822DateFormat)
 import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
                        (</>))
@@ -132,6 +132,7 @@ hmbracket_ pre post m =
 -- | HTTP request handler
 handle logLn documentroot state0 cache execute1 stateVar
        rq@(Request method URI{uriPath=upath,uriQuery=q} hdrs body) =
+    addDate $
     case method of
       "POST" -> normal_request (utf8inputs body)
       "GET"  -> normal_request (utf8inputs q)
@@ -139,6 +140,12 @@ handle logLn documentroot state0 cache execute1 stateVar
   where
     logPutStrLn msg = liftIO $ logLn msg
     debug msg = logPutStrLn msg
+
+    addDate m =
+      do t <- getCurrentTime
+         r <- m
+         let fmt = formatTime defaultTimeLocale rfc822DateFormat t
+         return r{resHeaders=("Date",fmt):resHeaders r}
 
     normal_request qs =
       do logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
