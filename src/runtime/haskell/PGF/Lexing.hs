@@ -30,12 +30,12 @@ unlexText = capitInit . unlext where
     _ -> []
 
 -- | Bind tokens separated by Prelude.BIND, i.e. &+
-bindTok :: [String] -> String
+bindTok :: [String] -> [String]
 bindTok ws = case ws of
-    w:"&+":ws2 -> w ++ bindTok ws2
-    w:[]       -> w
-    w:ws2      -> w ++ " " ++ bindTok ws2
-    []         -> ""
+               w1:"&+":w2:ws -> bindTok ((w1++w2):ws)
+               "&+":ws       -> bindTok ws
+               w:ws          -> w:bindTok ws
+               []            -> []
 
 -- * Code lexing
 
