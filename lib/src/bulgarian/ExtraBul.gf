@@ -109,4 +109,9 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     PassVPSlash vp = insertObj (\\a => vp.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc)) ++
                                        vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe) ;
 
+    PassAgentVPSlash vp np = ---- AR 9/4/2014: to be verified
+      insertObj (\\_ => "קנוח" ++ np.s ! RObj Acc) Pos
+                     (insertObj (\\a => vp.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc)) ++
+                                       vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe)) ;
+
 } 

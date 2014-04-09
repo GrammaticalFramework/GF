@@ -30,8 +30,8 @@ lin
 ----  GenIP = E.GenIP ;
 ----  GenRP = E.GenRP ;
 
-----  PassVPSlash = E.PassVPSlash ;
-----  PassAgentVPSlash = E.PassAgentVPSlash ;
+  PassVPSlash = E.PassVPSlash ;
+  PassAgentVPSlash = E.PassAgentVPSlash ;
 
   EmptyRelSlash = E.EmptyRelSlash ;
 

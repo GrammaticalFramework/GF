@@ -1,2 +1,2 @@
 concrete ExtraRomanceIta of ExtraRomanceAbs = CatIta ** ExtraRomance with
-  (ResRomance = ResIta) ;
+  (ResRomance = ResIta), (Grammar = GrammarIta) ;
