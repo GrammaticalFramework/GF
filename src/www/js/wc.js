@@ -29,6 +29,7 @@ wc.save=function() {
     wc.local.put("from",f.from.value)
     wc.local.put("to",f.to.value)
     wc.local.put("input",f.input.value)
+    wc.local.put("colors",f.colors.checked)
 }
 
 wc.load=function() {
@@ -36,6 +37,8 @@ wc.load=function() {
     f.input.value=wc.local.get("input",f.input.value)
     f.from.value=wc.local.get("from",f.from.value)
     f.to.value=wc.local.get("to",f.to.value)
+    f.colors.checked=wc.local.get("colors",f.colors.checked)
+    wc.colors()
     wc.delayed_translate()
 }
 
@@ -212,6 +215,11 @@ wc.speak=function(text,lang) {
     }
 }
 
+wc.colors=function() {
+  wc.o.className=wc.f.colors.checked ? "colors" : ""
+  wc.local.put("colors",wc.f.colors.checked)
+}
+
 wc.swap=function() {
     var f=wc.f
     function txt(r) { return r.text }
@@ -228,13 +236,13 @@ wc.google_translate_url=function() {
 	+"/"+alangcode(wc.f.to.value)
 	+"/"+encodeURIComponent(wc.f.input.value)
 }
-/*
+
 wc.try_google=function() {
     var w=window.open(wc.google_translate_url(),
 		      "google_translate")
     w.focus()
 }
-*/
+
 
 // Update language selection menus with the languages supported by the grammar
 function init_languages() {
