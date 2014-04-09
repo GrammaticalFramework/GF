@@ -1,78 +1,49 @@
 --# -path=.:src/chunk:src/translator:../examples/phrasebook/gfos
 
 concrete AppChi of App = 
-  TenseChi,
-  NounChi - [PPartNP],
-  AdjectiveChi,
-  NumeralChi,
-  SymbolChi [
-    PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP
-    ],
-  ConjunctionChi,
-  VerbChi [ 
-    UseV,ComplVV,SlashV2a,ComplSlash,UseComp,CompNP,CompAdv,CompCN
---    ,AdvVP -- overridden
-    ,AdVVP
-    ],
-  AdverbChi,
-  PhraseChi,
-  SentenceChi [
-    PredVP,SlashVP,ImpVP,AdvS,
-    UseCl,UseQCl,UseSlash,SSubjS,UseRCl
-    ],        
-  QuestionChi - [
+
+  TranslateChi - [
+  -- Verb
+    ComplVS, ComplVQ, ComplVA,
+    Slash2V3, Slash3V3, SlashV2V, SlashV2S, SlashV2Q, SlashV2A,
+    SlashVV, SlashV2VNP,
+    ReflVP,
+    AdvVPSlash, AdVVPSlash, VPSlashPrep,
+  -- Sentence
+    PredSCVP, 
+    AdvSlash, SlashPrep, SlashVS,
+    EmbedS, EmbedQS, EmbedVP, RelS,
+  -- Question
     ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP,
-    QuestCl -- overridden
-    ],
-  RelativeChi,
-  IdiomChi [
-    NP, VP, Tense, Cl, ProgrVP, ExistNP, 
-    neutr, sjalv
-    ],
-----  ConstructionChi,
-
-  ChunkChi,
-
-  ExtensionsChi [
-     CompoundCN,AdAdV,UttAdV,ApposNP,
-     MkVPI, MkVPS, PredVPS, that_RP, who_RP
-     ],
-
-  DocumentationChi,
-  DictionaryChi 
+  -- Idiom
+    CleftNP, CleftAdv,
+    ExistIP,
+    ExistNPAdv, ExistIPAdv,
+    ImpP3,
+    SelfAdvVP, SelfAdVVP, SelfNP,
+  -- Construction
+    hungry_VP, thirsty_VP, has_age_VP, have_name_Cl, married_Cl, what_name_QCl, how_old_QCl, how_far_QCl,
+    weather_adjCl, is_right_VP, is_wrong_VP, n_units_AP, bottle_of_CN, cup_of_CN, glass_of_CN, 
+    where_go_QCl, where_come_from_QCl, go_here_VP, come_here_VP, come_from_here_VP, go_there_VP, come_there_VP, come_from_there_VP,
+  -- Extensions
+    PassVPSlash, PassAgentVPSlash
+  ]
 
   ,PhrasebookChi - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep]
 
-    ** open ResChi, ParadigmsChi, SyntaxChi, CommonScand, (E = ExtraChi), (G = GrammarChi), Prelude in {
+    ** open ParadigmsChi, SyntaxChi, Prelude in {
 
 flags
   literal=Symb ;
-
-
--- Chinese-specific overrides
-
-lin
-  CompAP = G.CompAP | E.CompBareAP ;                     -- he is good | he good
-
-  AdvVP vp adv = G.AdvVP vp adv | E.TopicAdvVP vp adv  ; -- he *today* here sleeps | *today* he here sleeps
-
-  QuestCl cl = G.QuestCl cl | E.QuestRepV cl ;           -- he comes 'ma' | he come not come
-
-
-
 
 
 -- to suppress punctuation
 lin
   PSentence, PQuestion = \s -> lin Text (mkUtt s) ;
   PGreetingMale, PGreetingFemale = \s -> lin Text s ;
-
   GObjectPlease o = lin Text (mkUtt o) ;
 
-
-lin
   PhrasePhr p = {s = "+" ++ p.s} | p ;
-
   Phrase_Chunk p = p ;
 
 }
