@@ -16,9 +16,9 @@ stringOp name = case name of
   "words"      -> Just $ appLexer words
   "bind"       -> Just $ appUnlexer bindTok
   "unchars"    -> Just $ appUnlexer concat
-  "unlextext"  -> Just $ capitInit . appUnlexer (unlexText . unquote)
+  "unlextext"  -> Just $ appUnlexer (unlexText . unquote)
   "unlexcode"  -> Just $ appUnlexer unlexCode
-  "unlexmixed" -> Just $ capitInit . appUnlexer (unlexMixed . unquote)
+  "unlexmixed" -> Just $ appUnlexer (unlexMixed . unquote)
   "unwords"    -> Just $ appUnlexer unwords
   "to_html"    -> Just wrapHTML
   _ -> transliterate name
