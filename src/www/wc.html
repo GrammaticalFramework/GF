@@ -17,9 +17,9 @@ body:target h1, body:target div.modtime { display: none; }
 small { color: #666; }
 #pick>* { padding: 0 0.5ex; }
 #speak { display: none; }
-.default_quality { background-color: #ffc; }
-.high_quality { background-color: #cfc; }
-.low_quality { background-color: #fcc; }
+.colors .default_quality { background-color: #ffc; }
+.colors .high_quality { background-color: #cfc; }
+.colors .low_quality { background-color: #fcc; }
 .placeholder { color: #999; }
 .error { color: #c00; }
 </style>
@@ -57,7 +57,8 @@ small { color: #666; }
     <option value=Hin>Hindi</option>
     <option value=Swe selected>Swedish</option>
   </select>
-  <td><button name=translate type=submit><strong><big>Translate</big></strong></button>
+  <input name=colors type=checkbox checked onchange="wc.colors()"> Colors
+  <td><button name=translate type=submit><strong>Translate</strong></button>
   <tr><td class=input colspan=2>
   <textarea name=input rows=5 style="width: 100%" onkeyup="wc.delayed_translate()"></textarea>
     <small>Enter text to translate above.</small>
@@ -72,13 +73,13 @@ small { color: #666; }
 </form>
 
 <div class=center>
-  <!--input type=button onclick="wc.try_google()" value="Google Translate"-->
+  <input type=button onclick="wc.try_google()" value="Try Google Translate">
   <div id=pick></div>
   <small id=extra></small>
   </div>
 <p>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Wed Apr  9 20:57:07 CEST 2014 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Wed Apr  9 22:35:17 CEST 2014 <!-- hhmts end -->
 </small></div>
 <script src="js/support.js"></script>
 <script src="js/gftranslate.js"></script>
