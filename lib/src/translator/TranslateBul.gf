@@ -12,17 +12,14 @@ concrete TranslateBul of Translate =
   ConjunctionBul,
   VerbBul -  [
     UseCopula,  
-    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    PassV2  -- generalized in Extensions
     ],
   AdverbBul,
   PhraseBul,
   SentenceBul,
   QuestionBul,
   RelativeBul,
-  IdiomBul [
-    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
-    neutr, sjalv
-    ],
+  IdiomBul,
 --  ConstructionBul,
   DocumentationBul,
 

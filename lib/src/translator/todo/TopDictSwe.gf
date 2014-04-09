@@ -1346,7 +1346,7 @@ lin note_3_N = mkN "not" "noter" ;
 lin note_2_N = mkN "anmärkning" | mkN "notis" "notiser" ;
 lin note_1_N = mkN "anteckning" ;
 lin season_N = mkN "årstid" "årstider" ;
-lin argument_N = mkN "argumentat" "argument" ;
+lin argument_N = mkN "argument" "argument" ;
 lin listen_V = mkV "lyssnar" ; -- comment=2
 lin show_N = mkN "show" "shower" ;
 lin responsibility_N = mkN "ansvar" neutrum | mkN "tillräknelighet" ; -- SaldoWN -- comment=7

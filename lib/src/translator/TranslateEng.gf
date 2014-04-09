@@ -12,8 +12,8 @@ concrete TranslateEng of Translate =
     ],
   ConjunctionEng,
   VerbEng - [
-    UseCopula,               -- just removed
-    SlashV2V, PassV2, ComplVV,  -- generalized in Extensions
+    UseCopula,                    -- just removed: not needed
+    PassV2,                       -- generalized in Extensions
     ComplVS, SlashV2S, ComplSlash -- Eng exceptions
     ],
   AdverbEng,
@@ -23,7 +23,7 @@ concrete TranslateEng of Translate =
     ],        
   QuestionEng,
   RelativeEng - [IdRP],
-  IdiomEng [NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP],
+  IdiomEng,
   ConstructionEng,
   DocumentationEng,
 

@@ -10,18 +10,15 @@ concrete TranslateSwe of Translate =
     ],
   ConjunctionSwe,
   VerbSwe -  [
-    UseCopula,  
-    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    UseCopula,  -- not needed  
+    PassV2      -- generalized in Extensions
     ],
   AdverbSwe,
   PhraseSwe,
   SentenceSwe,
   QuestionSwe,
   RelativeSwe,
-  IdiomSwe [
-    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
-    neutr, sjalv
-    ],
+  IdiomSwe,
   ConstructionSwe,
   DocumentationSwe,
 

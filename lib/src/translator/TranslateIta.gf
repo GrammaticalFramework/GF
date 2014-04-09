@@ -11,17 +11,14 @@ concrete TranslateIta of Translate =
   ConjunctionIta,
   VerbIta -  [
     UseCopula,  
-    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    PassV2  -- generalized in Extensions
     ],
   AdverbIta,
   PhraseIta,
   SentenceIta,
   QuestionIta,
   RelativeIta,
-  IdiomIta [
-    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
-    neutr, sjalv
-    ],
+  IdiomIta,
 --  ConstructionIta,
   DocumentationIta,
 

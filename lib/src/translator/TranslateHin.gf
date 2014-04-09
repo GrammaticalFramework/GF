@@ -12,17 +12,14 @@ concrete TranslateHin of Translate =
   ConjunctionHin,
   VerbHin -  [
     UseCopula,  
-    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    PassV2  -- generalized in Extensions
     ],
   AdverbHin,
   PhraseHin,
   SentenceHin,
   QuestionHin,
   RelativeHin,
-  IdiomHin [
-    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
-    neutr, sjalv
-    ],
+  IdiomHin,
 --  ConstructionHin,
   DocumentationHin,
 
