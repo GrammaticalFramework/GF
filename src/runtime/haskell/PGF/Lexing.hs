@@ -20,7 +20,7 @@ lexText' uncap1 = uncap . lext where
     _ -> s
 
 unlexText :: [String] -> String
-unlexText = unlext where
+unlexText = capitInit . unlext where
   unlext s = case s of
     w:[] -> w
     w:[c]:[] | isPunct c -> w ++ [c]
@@ -67,7 +67,7 @@ lexMixed = concat . alternate False where
   lex env = if env then lexCode else lexText
 
 unlexMixed :: [String] -> String
-unlexMixed = concat . alternate False where
+unlexMixed = capitInit . concat . alternate False where
   alternate env s = case s of
     _:_ -> case break (=="$") s of
       (t,[])  -> unlex env t : []
