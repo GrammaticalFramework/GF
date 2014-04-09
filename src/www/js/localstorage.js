@@ -15,15 +15,15 @@ var fakedLocalStorage = [] // a shared substitute for persistent localStorage
 // An interface to localStorage, to store JSON data under a unique prefix
 function appLocalStorage(appPrefix,privateStorage) {
 
-    function parse(s) {
-	try { return JSON.parse(s) } catch(e) { return null }
+    function parse(s,def) {
+	try { return JSON.parse(s) } catch(e) { return def }
     }
 
     function methods(storage) {
 	return {
 	    get: function (name,def) {
 		var id=appPrefix+name
-		return storage[id] && parse(storage[id]) || def;
+		return parse(storage[id]||"",def);
 	    },
 	    put: function (name,value) {
 		var id=appPrefix+name;
@@ -34,7 +34,7 @@ function appLocalStorage(appPrefix,privateStorage) {
 		delete storage[id]
 	    },
 	    ls: function(prefix) {
-		var pre=appPrefix+prefix
+		var pre=appPrefix+(prefix||"")
 		var files=[]
 		for(var i in storage)
 		    if(hasPrefix(i,pre)) files.push(i.substr(pre.length))
