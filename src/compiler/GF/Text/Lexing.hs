@@ -14,7 +14,7 @@ stringOp name = case name of
   "lexcode"    -> Just $ appLexer lexCode
   "lexmixed"   -> Just $ appLexer lexMixed
   "words"      -> Just $ appLexer words
-  "bind"       -> Just $ appUnlexer bindTok
+  "bind"       -> Just $ appUnlexer (unwords . bindTok)
   "unchars"    -> Just $ appUnlexer concat
   "unlextext"  -> Just $ appUnlexer (unlexText . unquote)
   "unlexcode"  -> Just $ appUnlexer unlexCode
