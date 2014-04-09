@@ -77,8 +77,8 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
     ExistsNP np = 
       mkClause "il" True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (regV "exister"))) ;
 
-
-    PassAgentVPSlash vps np = passVPSlash 
-      vps ("par" ++ (np.s ! Acc).ton) ;
+--- in ExtraRomance
+--    PassAgentVPSlash vps np = passVPSlash 
+--      vps ("par" ++ (np.s ! Acc).ton) ;
 
 }
