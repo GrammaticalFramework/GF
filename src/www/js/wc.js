@@ -5,7 +5,7 @@ wc.o=element("output")
 wc.e=element("extra")
 wc.p=element("pick")
 wc.serial=0
-wc.os=[]
+wc.os=[] // output segment list
 wc.local=appLocalStorage("gf.wc.")
 
 wc.delayed_translate=function() {
@@ -75,11 +75,11 @@ wc.translate=function() {
 	}
     }
 
-    function translate_segment(si) {
-	var rs=[]
-	var current_pick=0
-	var get_more
-	var output=wc.os[si].target
+    function translate_segment(si) { // si = segment index
+	var rs=[] // list of alternative translations for this segment
+	var current_pick=0 // index of currently selected alternative
+	var get_more // if defined, a function that will fetch more alternatives
+	var output=wc.os[si].target // the element where this segment is shown
 
 	function show_error(msg) {
 	    //if(e) e.innerHTML="<span class=low_quality>Translation problem: "+msg+"</span>"
@@ -133,9 +133,10 @@ wc.translate=function() {
 	    if(selected==si) show_more()
 	}
 
-	function showit(r,text) {
-	    text=text.trimRight()
-	    r.text=text
+	function showit(r) {
+	    r.t=trans_quality(r)
+	    //r.t.text=r.t.text.trimRight()
+	    r.text=r.t.text
 	    rs.push(r)
 	    var j=rs.length-1
 	    if(current_pick==j) show_trans(j)
@@ -151,8 +152,7 @@ wc.translate=function() {
 			    if(i==0 && rs.length==0) show_error(tra[0].error)
 			}
 			else if(r.linearizations) {
-			    r.t=trans_quality(r)
-			    unlextext(r.t.text,function(text){showit(r,text)})
+			    showit(r)
 			    if(wc.p && i<9) {
 				if(si==selected) trans(text,i+1)
 				else get_more=function() { trans(text,i+1) }
@@ -173,18 +173,16 @@ wc.translate=function() {
 		if(trans && trans.length>=1) {
 		    var r=trans[0]
 		    r.prob=0
-		    r.t=trans_quality(r)
-		    unlextext(r.t.text,function(text){showit(r,text)})
+		    showit(r)
 		}
 		step2(text)
 	    }
 	    wc.pgf_online.translate({from:wc.cnl+f.from.value,
 				     to:wc.cnl+f.to.value,
-				     lexer:"text",input:text},
+				     lexer:"text",unlexer:"text",input:text},
 				    step3cnl,
 				    function(){step2(text)})
 	}
-	//lextext(is[si],wc.cnl ? step2cnl : step2)
 	if(wc.cnl) step2cnl(is[si])
 	else step2(is[si])
     }
