@@ -20,7 +20,7 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     function extract(result) { cont(result[0].translations) }
     if(encsrc.length<500)
 	gftranslate.call("?command=c-translate&input="+encsrc
-		      +"&lexer=text&from="+g+from+"&to="+g+to
+		      +"&lexer=text&unlexer=text&from="+g+from+"&to="+g+to
 		      +"&start="+start+"&limit="+limit,extract)
     else cont([{error:"sentence too long"}])
 }
