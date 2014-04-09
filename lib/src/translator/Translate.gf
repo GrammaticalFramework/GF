@@ -7,22 +7,23 @@ abstract Translate =
   Numeral,
   Conjunction,
   Verb - [
-     SlashV2V, PassV2, ComplVV,   -- to be generalized
-     UseCopula                    ---- overgenerating ?? 
+     PassV2,                -- generalized to VPSlash and agents
+--     SlashV2V, ComplVV,   -- generalized. But (1) more expensive (2) not available for all languages
+     UseCopula              ---- overgenerating, unnecessary
      ],
   Adverb,
   Phrase,
   Sentence,
   Question,
   Relative,
-  Idiom [NP, VP, Cl, Tense, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP], ---- why only these?
+  Idiom,
 
   Symbol [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],          ---- why only these?
 
   Chunk,
 
   Construction,
-  Extensions - [VPI,VPS],
+  Extensions - [VPI,VPS,SlashV2V,ComplVV],
   Dictionary,
   Documentation
 

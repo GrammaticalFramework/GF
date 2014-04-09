@@ -11,7 +11,7 @@ concrete TranslateFre of Translate =
   ConjunctionFre,
   VerbFre -  [
     UseCopula,  
-    SlashV2V, PassV2, ComplVV  -- generalized in Extensions
+    PassV2  -- generalized in Extensions
     ],
   AdverbFre,
   PhraseFre,
@@ -20,10 +20,7 @@ concrete TranslateFre of Translate =
     QuestCl,QuestIAdv -- french-specific overrides
     ],
   RelativeFre,
-  IdiomFre [
-    NP, VP, Tense, Cl, ProgrVP, ExistNP, SelfAdvVP, SelfAdVVP, SelfNP, 
-    neutr, sjalv
-    ],
+  IdiomFre,
   ConstructionFre,
   DocumentationFre,
 
