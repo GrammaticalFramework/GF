@@ -78,8 +78,11 @@ cgiMain' cache path =
                         (getInput "command")
        case command of
          "download" -> outputBinary    =<< liftIO (BS.readFile path)
+         'c':'-':_  ->
 #ifdef C_RUNTIME
-         'c':'-':_  -> cpgfMain command =<< liftIO (readCache (snd cache) path)
+                   cpgfMain command =<< liftIO (readCache (snd cache) path)
+#else
+                   serverError "Server configured without C run-time support" ""
 #endif
          _          -> pgfMain command =<< liftIO (readCache (fst cache) path)
 
@@ -90,9 +93,9 @@ cgiMain' cache path =
 cpgfMain :: String -> (C.PGF,MVar ParseCache) -> CGI CGIResult
 cpgfMain command (pgf,pc) =
   case command of
-    "c-parse"     -> out =<< join (parse#lexer%input%from%start%limit%trie)
+    "c-parse"     -> out =<< join (parse # input % from % start % limit % trie)
     "c-linearize" -> out =<< lin # tree % to
-    "c-translate" -> out =<< join (trans#lexer%input%from%to%start%limit%trie)
+    "c-translate" -> out =<< join (trans#input%from%to%start%limit%trie)
     "c-flush"     -> out =<< flush
     "c-grammar"   -> out grammar
     _             -> badRequest "Unknown command" command
@@ -108,8 +111,9 @@ cpgfMain command (pgf,pc) =
       where
         languages = [makeObj ["name".= l] | (l,_)<-Map.toList (C.languages pgf)]
 
-    parse lexer input (from,concr) start mlimit trie =
-        do r <- parse' (lexer input) (from,concr) start mlimit
+    parse input (from,concr) start mlimit trie =
+        do lex <- c_lexer concr
+           r <- parse' (from,concr) start mlimit (lex input)
            return $ showJSON [makeObj ("from".=from:jsonParseResult r)]
 
     jsonParseResult = either bad good
@@ -118,7 +122,7 @@ cpgfMain command (pgf,pc) =
         good trees = "trees".=map tp trees :[]  -- :addTrie trie trees
         tp (tree,prob) = makeObj ["tree".=tree,"prob".=prob]
 
-    parse' input (from,concr) start mlimit = 
+    parse' (from,concr) start mlimit input = 
         liftIO $ do t <- getCurrentTime
                     fmap (maybe id take mlimit . drop start)
                       # modifyMVar pc (parse'' t)
@@ -136,8 +140,9 @@ cpgfMain command (pgf,pc) =
     lin tree tos = showJSON (lin' tree tos)
     lin' tree tos = [makeObj ["to".=to,"text".=C.linearize c tree]|(to,c)<-tos]
 
-    trans lexer input (from,concr) tos start mlimit trie =
-      do parses <- parse' (lexer input) (from,concr) start mlimit
+    trans input (from,concr) tos start mlimit trie =
+      do lex <- c_lexer concr
+         parses <- parse' (from,concr) start mlimit (lex input)
          return $
            showJSON [ makeObj ["from".=from,
                                "translations".= jsonParses parses]]
@@ -167,6 +172,11 @@ cpgfMain command (pgf,pc) =
               let t = C.readExpr s
               maybe (badRequest "bad tree" s) return t
 
+    --c_lexer concr = lexer
+    c_lexer concr = ilexer (not . null . C.lookupMorpho concr)
+
+--------------------------------------------------------------------------------
+
 {-
 instance JSON C.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . C.readCId
@@ -178,14 +188,27 @@ instance JSON C.Expr where
 
 #endif
 
-lexer = maybe (return id) lexerfun =<< getInput "lexer" 
+--------------------------------------------------------------------------------
+-- * Lexing
+
+-- | Lexers with a text lexer that tries to be a more clever with the first word
+ilexer good = lexer' uncap
+  where
+    uncap s = if good s
+              then s
+              else uncapitInit s
+
+-- | Standard lexers
+lexer = lexer' uncapitInit
+
+lexer' uncap = maybe (return id) lexerfun =<< getInput "lexer" 
   where
     lexerfun name =
        case name of
-         "text" -> return (unwords . lexText)
-         "code" -> return (unwords . lexCode)
+         "text"  -> return (unwords . lexText' uncap)
+         "code"  -> return (unwords . lexCode)
          "mixed" -> return (unwords . lexMixed)
-         _ -> throwCGIError 400 "Unknown lexer" ["Unknown lexer: "++name]
+         _ -> badRequest "Unknown lexer" name
 
 --------------------------------------------------------------------------------
 -- * Haskell run-time functionality
@@ -193,15 +216,15 @@ lexer = maybe (return id) lexerfun =<< getInput "lexer"
 pgfMain :: String -> PGF -> CGI CGIResult
 pgfMain command pgf =
     case command of
-      "parse"          -> out =<< parse#lexer%input%cat%from%limit%trie
+      "parse"          -> out =<< join (parse#input%cat%from%limit%trie)
       "complete"       -> out =<< doComplete pgf # input % cat % from % limit
       "linearize"      -> out =<< doLinearize pgf # tree % to
       "linearizeAll"   -> out =<< doLinearizes pgf # tree % to
       "linearizeTable" -> out =<< doLinearizeTabular pgf # tree % to
       "random"         -> cat >>= \c -> depth >>= \dp -> limit >>= \l -> to >>= \to -> liftIO (doRandom pgf c dp l to) >>= out
       "generate"       -> out =<< doGenerate pgf # cat % depth % limit % to
-      "translate"      -> out =<< trans#lexer%input%cat%from%to%limit%trie
-      "translategroup" -> out =<< transgroup#lexer%input%cat%from%to%limit
+      "translate"      -> out =<< join (trans#input%cat%from%to%limit%trie)
+      "translategroup" -> out =<< join (transgroup#input%cat%from%to%limit)
       "grammar"        -> out =<< doGrammar pgf # requestAcceptLanguage
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
@@ -213,20 +236,31 @@ pgfMain command pgf =
       "browse"         -> join $ doBrowse pgf # optId % cssClass % href % format "html" % getIncludePrintNames
       "external"       -> do cmd <- getInput "external"
                              doExternal cmd =<< input
-      _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
+      _                -> badRequest "Unknown command" command
   where
-    parse lexer input = doParse pgf (lexer input)
-    trans lexer input = doTranslate pgf (lexer input)
-    transgroup lexer input = doTranslateGroup pgf (lexer input)
+    parse input cat from limit trie =
+        do lex <- mlexer from
+           return (doParse pgf (lex input) cat from limit trie)
+    trans input cat from to limit trie =
+        do lex <- mlexer from
+           return (doTranslate pgf (lex input) cat from to limit trie)
+    transgroup input cat from to limit =
+        do lex <- mlexer from
+           return (doTranslateGroup pgf (lex input) cat from to limit)
+
+--  mlexer _ = lexer
+    mlexer (Just lang) = ilexer (PGF.isInMorpho morpho)
+      where morpho = PGF.buildMorpho pgf lang
 
     tree :: CGI PGF.Tree
     tree = do ms <- getInput "tree"
-              s <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return ms
-              t <- maybe (throwCGIError 400 "Bad tree" ["tree: " ++ s]) return (PGF.readExpr s)
-              t <- either (\err -> throwCGIError 400 "Type incorrect tree"
-                                                     ["tree: " ++ PGF.showExpr [] t
-                                                     ,render (PP.text "error:" <+> PGF.ppTcError err)
-                                                     ])
+              s <- maybe (badRequest "No tree given" "") return ms
+              t <- maybe (badRequest "Bad tree" s) return (PGF.readExpr s)
+              t <- either (\err -> badRequest "Type incorrect tree"
+                                              (unlines $
+                                              [PGF.showExpr [] t
+                                              ,render (PP.text "error:" <+> PGF.ppTcError err)
+                                              ]))
                           (return . fst)
                           (PGF.inferExpr pgf t)
               return t
@@ -237,14 +271,14 @@ pgfMain command pgf =
           case mcat of
             Nothing -> return Nothing
             Just cat -> case PGF.readType cat of
-                          Nothing  -> throwCGIError 400 "Bad category" ["Bad category: " ++ cat]
+                          Nothing  -> badRequest "Bad category" cat
                           Just typ -> return $ Just typ  -- typecheck the category
 
     optId :: CGI (Maybe PGF.CId)
     optId = maybe (return Nothing) rd =<< getInput "id"
       where
         rd = maybe err (return . Just) . PGF.readCId
-        err = throwCGIError 400 "Bad identifier" []
+        err = badRequest "Bad identifier" []
 
     cssClass, href :: CGI (Maybe String)
     cssClass = getInput "css-class"
@@ -276,9 +310,9 @@ pgfMain command pgf =
     readLang :: String -> CGI PGF.Language
     readLang l =
       case PGF.readLanguage l of
-        Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
+        Nothing -> badRequest "Bad language" l
         Just lang | lang `elem` PGF.languages pgf -> return lang
-                  | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
+                  | otherwise -> badRequest "Unknown language" l
 
 -- * Request parameter access and related auxiliary functions
 
@@ -316,15 +350,18 @@ toBool s = s `elem` ["","yes","true","True"]
 missing = badRequest "Missing parameter"
 errorMissingId = badRequest "Missing identifier" ""
 
-badRequest msg extra =
-    throwCGIError 400 msg [msg ++(if null extra then "" else ": "++extra)]
+badRequest = throw 400
+serverError = throw 500
+
+throw code msg extra =
+    throwCGIError code msg [msg ++(if null extra then "" else ": "++extra)]
 
 format def = maybe def id # getInput "format"
 
 -- * Request implementations
 
 -- Hook for simple extensions of the PGF service
-doExternal Nothing input = throwCGIError 400 "Unknown external command" ["Unknown external command"]
+doExternal Nothing input = badRequest "Unknown external command" ""
 doExternal (Just cmd) input =
   do liftIO $ logError ("External command: "++cmd)
      cmds <- liftIO $ (fmap lines $ readFile "external_services")
@@ -332,7 +369,7 @@ doExternal (Just cmd) input =
      liftIO $ logError ("External services: "++show cmds)
      if cmd `elem` cmds then ok else err
   where
-    err = throwCGIError 400 "Unknown external command" ["Unknown external command: "++cmd]
+    err = badRequest "Unknown external command" cmd
     ok =
       do let tmpfile1 = "external_input.txt"
              tmpfile2 = "external_output.txt"

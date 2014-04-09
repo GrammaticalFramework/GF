@@ -2,8 +2,13 @@ module PGF.Lexing where
 import Data.Char(isSpace,toLower,toUpper)
 
 -- * Text lexing
+-- | Text lexing with standard word capitalization of the first word of every sentence
 lexText :: String -> [String]
-lexText = uncap . lext where
+lexText = lexText' uncapitInit
+
+-- | Text lexing with custom treatment of the first word of every sentence.
+lexText' :: (String->String) -> String -> [String]
+lexText' uncap1 = uncap . lext where
   lext s = case s of
     c:cs | isMajorPunct c -> [c] : uncap (lext cs)
     c:cs | isMinorPunct c -> [c] : lext cs
@@ -11,7 +16,7 @@ lexText = uncap . lext where
     _:_ -> let (w,cs) = break (\x -> isSpace x || isPunct x) s in w : lext cs
     _ -> [s]
   uncap s = case s of
-    (c:cs):ws -> (toLower c : cs):ws
+    w:ws -> uncap1 w:ws
     _ -> s
 
 unlexText :: [String] -> String
@@ -76,6 +81,11 @@ unlexMixed = concat . alternate False where
 -- | Capitalize first letter
 capitInit s = case s of
   c:cs -> toUpper c : cs
+  _ -> s
+
+-- | Uncapitalize first letter
+uncapitInit s = case s of
+  c:cs -> toLower c : cs
   _ -> s
 
 -- | Unquote each string wrapped in double quotes
