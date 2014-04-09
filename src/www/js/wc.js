@@ -6,6 +6,7 @@ wc.e=element("extra")
 wc.p=element("pick")
 wc.serial=0
 wc.os=[]
+wc.local=appLocalStorage("gf.wc.")
 
 wc.delayed_translate=function() {
     function restart(){ if(wc.f.input.value!=wc.translating) wc.translate() }
@@ -14,6 +15,28 @@ wc.delayed_translate=function() {
     var h=wc.f.input.scrollHeight,bh=document.body.clientHeight
     if(h>bh) h=bh
     if(wc.f.input.clientHeight<h) wc.f.input.style.height=h+15+"px"
+}
+
+wc.clear=function() {
+    wc.f.input.value=""
+    wc.f.input.style.height=""
+    clear(wc.o)
+    wc.delayed_translate()
+}
+
+wc.save=function() {
+    var f=wc.f
+    wc.local.put("from",f.from.value)
+    wc.local.put("to",f.to.value)
+    wc.local.put("input",f.input.value)
+}
+
+wc.load=function() {
+    var f=wc.f
+    f.input.value=wc.local.get("input",f.input.value)
+    f.from.value=wc.local.get("from",f.from.value)
+    f.to.value=wc.local.get("to",f.to.value)
+    wc.delayed_translate()
 }
 
 wc.translate=function() {
@@ -178,6 +201,7 @@ wc.translate=function() {
 	    translate_segment(i)
 	}
     }
+    wc.save()
     return false;
 }
 
@@ -246,4 +270,5 @@ if(wc.cnl) {
     wc.pgf_online=pgf_online({});
     wc.pgf_online.switch_grammar(wc.cnl+".pgf")
 }
+wc.load()
 wc.f.input.focus()
