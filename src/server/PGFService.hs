@@ -47,14 +47,14 @@ logFile :: FilePath
 logFile = "pgf-error.log"
 
 #ifdef C_RUNTIME
-type Caches = (Cache PGF,Cache (C.PGF,MVar ParseCache))
-type ParseCache = Map.Map (String,String) (ParseResult,UTCTime)
-type ParseResult = Either String [(C.Expr,Float)]
+type Caches = (Cache PGF,Cache (C.PGF,({-MVar ParseCache-})))
+--type ParseCache = Map.Map (String,String) (ParseResult,UTCTime)
+--type ParseResult = Either String [(C.Expr,Float)]
 
 newPGFCache = do pgfCache <- newCache PGF.readPGF
                  cCache <- newCache $ \ path -> do pgf <- C.readPGF path
-                                                   pc <- newMVar Map.empty
-                                                   return (pgf,pc)
+                                                 --pc <- newMVar Map.empty
+                                                   return (pgf,({-pc-}))
                  return (pgfCache,cCache)
 flushPGFCache (c1,c2) = flushCache c1 >> flushCache c2
 #else
@@ -102,7 +102,7 @@ cpgfMain command (t,(pgf,pc)) =
     "c-grammar"   -> out t grammar
     _             -> badRequest "Unknown command" command
   where
-    flush = liftIO $ do modifyMVar_ pc $ const $ return Map.empty
+    flush = liftIO $ do --modifyMVar_ pc $ const $ return Map.empty
                         performGC
                         return $ showJSON ()
 
@@ -123,6 +123,12 @@ cpgfMain command (t,(pgf,pc)) =
         good trees = "trees".=map tp trees :[]  -- :addTrie trie trees
         tp (tree,prob) = makeObj ["tree".=tree,"prob".=prob]
 
+    -- Without caching parse results:
+    parse' start mlimit ((_,concr),input) =
+      return $
+      maybe id take mlimit . drop start # C.parse concr (C.startCat pgf) input
+{-
+    -- Caching parse results:
     parse' start mlimit ((from,concr),input) = 
         liftIO $ do t <- getCurrentTime
                     fmap (maybe id take mlimit . drop start)
@@ -137,7 +143,7 @@ cpgfMain command (t,(pgf,pc)) =
             update r = Map.mapMaybe purge . Map.insert key r
             purge r@(_,t') = if diffUTCTime t t'<120 then Just r else Nothing
                              -- remove unused parse results after 2 minutes
-
+-}
     lin tree to = showJSON (lin' tree to)
     lin' tree (tos,unlex) =
         [makeObj ["to".=to,"text".=unlex (C.linearize c tree)]|(to,c)<-tos]
@@ -835,6 +841,8 @@ langCodeLanguage :: PGF -> String -> Maybe PGF.Language
 langCodeLanguage pgf code = listToMaybe [l | l <- PGF.languages pgf, PGF.languageCode pgf l == Just code]
 
 -- * General utilities
+
+infixl 2 #,%
 
 f .= v = (f,showJSON v)
 f # x = fmap f x
