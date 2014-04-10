@@ -1,0 +1,264 @@
+fun actor_1_N : N  ;  -- | a Shakespeare actor
+fun actor_2_N : N  ;  -- | an important actor
+fun apply_1_V2 : V2 ; -- | we apply the newest methods
+fun apply_2_V2 : V2 ; -- | we apply for a job
+fun area_1_N : N ;
+fun area_2_N : N ;
+fun area_3_N : N ;
+fun area_4_N : N ;
+fun area_5_N : N ;
+fun area_6_N : N ;
+fun arm_1_N : N ; -- | arms and legs
+fun arm_2_N : N ; -- | a farewell to arms
+fun authority_1_N : N  ; -- | he is an authority in his field
+fun authority_2_N : N  ; -- | the police and other authorities
+fun away_1_Adv : Adv  ; -- | she is away
+fun away_2_Adv : Adv  ; -- | she went away
+fun bar_1_N : N  ; -- | have a drink in the bar
+fun bar_2_N : N  ; -- | bars in front of the window
+fun board_1_N : N  ; -- | write it on the board
+fun board_2_N : N  ; -- | board member
+fun brassiere_1_N : N ;
+fun brassiere_2_N : N ;
+fun can_1_VV : VV ; -- | I can come with you (possibility)
+fun can_2_VV : VV ; -- | I can speak English (know-how)
+fun canon_1_N : N ;
+fun canon_2_N : N ;
+fun capital_1_N : N  ; -- | the capital of France
+fun capital_2_N : N  ; -- | risk capital
+fun capital_3_N : N  ; -- | written in capitals
+fun certain_1_A : A  ; -- | I am certain
+fun certain_2_A : A  ; -- | a certain house
+fun charabanc_1_N : N ;
+fun charabanc_2_N : N ;
+fun character_1_N : N ;
+fun character_2_N : N ;
+fun charge_1_N : N  ; -- | battery charge
+fun charge_2_N : N  ; -- | charge against him
+fun club_1_N : N  ; -- | member of the club
+fun club_2_N : N  ; -- | hit the ball with a club
+fun coach_1_N : N  ; -- | football coach
+fun coach_2_N : N  ; -- | coach in a train
+fun coach_3_N : N  ; -- | bus
+fun command_1_N : N  ; -- | she gave us commands
+fun command_2_N : N  ; -- | she took the command
+fun common_1_A : A  ; -- | very common
+fun common_2_A : A  ; -- | common to us
+fun company_1_N : N ;
+fun company_2_N : N ;
+fun condition_1_N : N ; -- | there is one condition
+fun condition_2_N : N ; -- | he is in a bad condition
+fun cortege_1_N : N ;
+fun cortege_2_N : N ;
+fun court_1_N : N  ; -- | the emperor's court
+fun court_2_N : N  ; -- | the supreme court
+fun crepe_1_N : N ;
+fun crepe_2_N : N ;
+fun critical_1_A : A  ; -- | you are very critical
+fun critical_2_A : A  ; -- | of critical importance
+fun cure_1_N : N ;
+fun cure_2_N : N ;
+fun date_1_N : N ;  -- | the specified day of the month
+fun date_3_N : N  ; -- | she was my first date
+fun date_3_N : N ;  -- | a meeting arranged in advance
+fun date_7_N : N ;  -- | sweet edible fruit of the date palm with a single long woody seed
+fun debris_1_N : N ;
+fun debris_2_N : N ;
+fun debut_1_N : N ;
+fun debut_2_N : N ;
+fun debutante_1_N : N ;
+fun debutante_2_N : N ;
+fun degree_1_N : N ;  -- | a position on a scale of intensity or amount or quality
+fun degree_2_N : N ;  -- | an award conferred by a college or university signifying that the recipient has satisfactorily completed a course of study
+fun degree_3_N : N ;  -- | a unit of temperature on a specified scale
+fun division_1_N : N  ; -- | division at university
+fun division_2_N : N  ; -- | division in the army 
+fun division_3_N : N  ; -- | multiplication and division 
+fun draw_1_V2 : V2 ; -- | draw the carriage
+fun draw_2_V2 : V2 ; -- | draw a picture
+fun economy_1_N : N  ; -- | the country has a good economy
+fun economy_2_N : N  ; -- | saving money
+fun end_1_N : N  ; -- | the end of his life
+fun end_2_N : N  ; -- | the other end of the room
+fun entry_1_N : N  ; -- | no entry
+fun entry_2_N : N  ; -- | lexical entry
+fun evidence_1_N : N  ; -- | give me some evidence
+fun evidence_2_N : N  ; -- | the evidence of his opinion
+fun fall_1_N : N  ; -- | rise and fall
+fun fall_2_N : N  ; -- | autumn
+fun fan_1_N : N ;
+fun fan_2_N : N ;
+fun fan_3_N : N ;
+fun field_1_N : N  ; -- | cotton field
+fun field_2_N : N  ; -- | field work
+fun field_3_N : N  ; -- | sports field
+fun field_4_N : N  ; -- | algebraic structure
+fun figure_1_N : N  ;  -- | a round figure
+fun figure_2_N : N  ;  -- | convincing figures
+fun film_1_N : N  ;  -- | movie
+fun film_2_N : N  ;  -- | thin layer
+fun fire_1_N : N ; --- ??
+fun fire_2_N : N ; --- ??
+fun foreign_1_A : A  ; -- | a foreign citizen
+fun foreign_2_A : A  ; -- | don't throw foreign objects into the toilet
+fun fork_1_N : N ;
+fun fork_3_N : N ;
+fun fork_4_N : N ;
+fun future_1_N : N ;
+fun future_3_N : N ;
+fun game_1_N : N  ;  -- | card game
+fun game_2_N : N  ;  -- | children's game
+fun game_3_N : N  ;  -- | eat game
+fun get_on_1_V2 : V2 ;
+fun get_on_2_V2 : V2 ;
+fun ground_1_N : N  ; -- | ground zero
+fun ground_2_N : N  ; -- | on dubious grounds
+fun hard_1_A : A  ; -- | hard surface
+fun hard_2_A : A  ; -- | hard problem
+fun in_1_Adv : Adv ; -- | he is in
+fun in_2_Adv : Adv ; -- | he goes in
+fun independent_1_A : A  ; -- | independent of her parents
+fun independent_2_A : A  ; -- | Andorra is an independent state
+fun intelligence_1_N : N ;
+fun intelligence_2_N : N ;
+fun interest_1_N : N  ; -- | interest in literature
+fun interest_2_N : N  ; -- | loan with a high interest rate
+fun interest_4_N : N ;
+fun issue_1_N : N  ; -- | this is not an issue
+fun issue_2_N : N  ; -- | the next issue of the magazine
+fun key_1_N : N  ; -- | key to my house
+fun key_2_N : N  ; -- | the D major key
+fun last_1_A : A ; -- | the last supper
+fun last_2_A : A ; -- | last week
+fun law_1_N : N  ;  -- | the law forbids it
+fun law_2_N : N  ;  -- | he studies law
+fun league_1_N : N  ; -- | league of criminals
+fun league_2_N : N  ; -- | football league
+fun letter_1_N : N ; ---- which is which??
+fun letter_2_N : N ;
+fun level_1_N : N  ; -- | reach a high level
+fun level_2_N : N  ; -- | level 4 of the building
+fun lie_1_V : V ; -- | lie on the ground
+fun lie_2_V : V ; -- | tell a lie
+fun market_1_N : N ; -- | fish market (place)
+fun market_2_N : N ; -- | stock market (abstract)
+fun master_1_N : N  ; -- | master and slave
+fun master_2_N : N  ; -- | school master
+fun match_1_N : N  ; -- | football match
+fun match_2_N : N  ; -- | match box
+fun match_3_N : N  ; -- | perfect match
+fun mate_1_N : N ;
+fun mate_2_N : N ;
+fun matter_1_N : N ; -- | matter and form
+fun matter_2_N : N ; -- | what is the matter
+fun maturity_1_N : N ;
+fun maturity_2_N : N ;
+fun maturity_3_N : N ;
+fun may_1_VV : VV ;  -- be possible
+fun may_2_VV : VV ;  -- be allowed
+fun minister_1_N : N  ; -- | prime minister
+fun minister_2_N : N  ; -- | minister in church
+fun move_1_V : V  ; -- | it doesn't move any more
+fun move_2_V : V  ; -- | move to a new house
+fun naive_1_A : A ;
+fun naive_2_A : A ;
+fun note_1_N : N  ; -- | take notes
+fun note_2_N : N  ; -- | make notes
+fun note_3_N : N  ; -- | notes in music
+fun number_1_N : N  ;  -- | number five
+fun number_2_N : N  ;  -- | a number of people
+fun number_3_N : N  ;  -- | numbers singular and plural
+fun officer_1_N : N  ; -- | financial officer
+fun officer_2_N : N  ; -- | army officer
+fun officer_3_N : N  ; -- | police officer
+fun orange_1_N : N ;  -- | round yellow to orange fruit of any of several citrus trees
+fun orange_2_N : N ;  -- | orange color or pigment ; any of a range of colors between red and yellow
+fun party_1_N : N  ; -- | birthday party
+fun party_2_N : N  ; -- | political party
+fun pate_1_N : N ;
+fun pate_2_N : N ;
+fun performance_1_N : N  ; -- | high level of performance
+fun performance_2_N : N  ; -- | he made a strange performance
+fun period_1_N : N  ; -- | it was a long period in her life
+fun period_2_N : N  ; -- | period or comma
+fun period_3_N : N  ; -- | she had her period
+fun play_1_V : V  ;  -- | play in a football team
+fun play_1_V2 : V2  ;  -- | play football
+fun play_2_V : V  ;  -- | children play
+fun play_2_V2 : V2  ;  -- | play mum and dad
+fun play_3_V : V  ;  -- | play in the band
+fun play_3_V2 : V2  ;  -- | play the guitar
+fun point_1_N : N  ; -- | at this point
+fun point_2_N : N  ; -- | he got six points
+fun poor_1_A : A  ; -- | poor or rich
+fun poor_2_A : A  ; -- | poor him
+fun poor_3_A : A  ; -- | poor quality
+fun property_1_N : N  ; -- | some bad properties
+fun property_2_N : N  ; -- | an enormous property
+fun race_1_N : N  ; -- | win the race
+fun race_2_N : N  ; -- | the human race
+fun recognize_1_V2 : V2 ;
+fun recognize_4_V2 : V2 ;
+fun record_1_N : N  ; -- | Guinness book of records
+fun record_2_N : N  ; -- | Beatles records
+fun record_3_N : N  ; -- | we keep a record of visitors
+fun regime_1_N : N ;
+fun regime_2_N : N ;
+fun right_1_A : A  ; -- | right or wrong
+fun right_1_Adv : Adv  ; -- | right or wrong
+fun right_2_A : A  ; -- | right or left
+fun right_2_Adv : Adv  ; -- | right or left
+fun ring_4_V2 : V2 ;    -- | get or try to get into communication (with someone) by telephone
+fun ring_6_V2 : V2 ;    -- | attach a ring to the foot of, in order to identify
+fun role_1_N : N ;
+fun role_2_N : N ;
+fun room_1_N : N ; -- | five rooms
+fun room_2_N : N ; -- | there is room for five
+fun sake_1_N : N ;
+fun sake_2_N : N ;
+fun set_1_N : N  ;  -- | a reparation set
+fun set_2_N : N  ; -- | an infinite set
+fun single_1_A : A  ; -- | a single ticket
+fun single_2_A : A  ; -- | a single woman
+fun staff_1_N : N  ; -- | staff of 50 persons
+fun staff_2_N : N  ; -- | pike staff
+fun starter_1_N : N ;
+fun starter_2_N : N ;
+fun starter_3_N : N ;
+fun starter_4_N : N ;
+fun starter_5_N : N ;
+fun starter_6_N : N ;
+fun starter_7_N : N ;
+fun state_1_N : N  ; -- | independent state
+fun state_2_N : N  ; -- | state of affairs
+fun strike_1_N : N ;  -- | a group's refusal to work in protest against low pay or bad work conditions
+fun strike_2_N : N ;  -- | an attack that is intended to seize or inflict damage on or destroy an objective
+fun subject_1_N : N  ; -- | subject matter
+fun subject_2_N : N  ; -- | subject and object
+fun tell_1_V3 : V3 ; -- | tell him a story
+fun tell_2_V3 : V3 ; -- | tell heaven from hell
+fun time_1_N : N  ;  -- | we have no time
+fun time_2_N : N  ;  -- | I was there four times
+fun typical_1_A : A ;
+fun typical_2_A : A ;
+fun typical_3_A : A ;
+fun unit_1_N : N ;
+fun unit_2_N : N ;
+fun unit_3_N : N ;
+fun unit_4_N : N ;
+fun unit_5_N : N ;
+fun unit_6_N : N ;
+fun variety_1_N : N  ; -- | there's a great variety
+fun variety_2_N : N  ; -- | the best variety
+fun view_1_N : N  ; -- | room with a view
+fun view_2_N : N  ; -- | people with strange views
+fun watch_1_V2 : V2 ; -- | watch the tv
+fun watch_2_V2 : V2 ; -- | watch the bank
+fun way_1_N : N  ; -- | the way to the city
+fun way_2_N : N  ; -- | do it the proper way
+fun web_1_N : N  ; -- | www
+fun web_2_N : N  ; -- | spider web
+fun work_1_V : V  ; -- | I just work here
+fun work_2_V : V  ; -- | the computer doesn't work
+fun yet_1_Adv : Adv  ; -- | we are not there yet
+fun yet_2_Adv : Adv  ; -- | yet he was not satisfied
