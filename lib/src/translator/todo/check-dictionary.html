@@ -49,7 +49,7 @@ Follow these steps for your language. For instance, ToCheckFre.gf, with Fre subs
 <LI>Put, as the first line of the file, a comment indicating your last edited rule:
 
 <PRE>
-    ---- checked by AR till once_Adv
+    ---- checked by AR till once_Adv in the BNC order
 </PRE>
 
 <LI>Make sure the resulting file compiles again.
@@ -74,8 +74,7 @@ When editing a lin rule, do one of the following:
 </P>
 
 <UL>
-<LI><B>accept the rule as it is</B>: replace the tail comment after the rule's terminating semicolon, if there is one, by your initials
-  in a systematic way. For example:
+<LI><B>accept the rule as it is</B>: remove the tail comment after the rule's terminating semicolon, if there is one. For example:
 
 <PRE>
     lin maintain_V2 = mkV2 (mkV I.entretenir_V2) | mkV2 (mkV I.maintenir_V2) ; -- tocheck
@@ -84,20 +83,20 @@ When editing a lin rule, do one of the following:
    becomes
 
 <PRE>
-    lin maintain_V2 = mkV2 (mkV I.entretenir_V2) | mkV2 (mkV I.maintenir_V2) ; -- AR
+    lin maintain_V2 = mkV2 (mkV I.entretenir_V2) | mkV2 (mkV I.maintenir_V2) ;
 </PRE>
 
   <UL>
-  <LI>change the linearization, and if the result is OK for you, just leaving your initials as comment. For example,
+  <LI>change the linearization, and if the result is OK for you, also deleting the comment. For example,
 
 <PRE>
-    lin obviously_Adv = variants{} ;
+    lin obviously_Adv = variants{} ; -- 
 </PRE>
 
   becomes
 
 <PRE>
-    lin obviously_Adv = mkAdv "évidemment" ; -- AR
+    lin obviously_Adv = mkAdv "évidemment" ; 
 </PRE>
 
   </UL>
@@ -110,7 +109,7 @@ When editing a lin rule, do one of the following:
   might become
 
 <PRE>
-    lin labour_N = mkN "travail" "travaux" masculine ; --- mkN "accouchement" childbirth labour -- AR
+    lin labour_N = mkN "travail" "travaux" masculine ; --- mkN "accouchement" childbirth labour
 </PRE>
 
   To check the meanings of senses that have already been split (by using numbers, e.g. <CODE>time_1_N</CODE>), look up the explanations in
@@ -125,7 +124,7 @@ When editing a lin rule, do one of the following:
   might become
 
 <PRE>
-    lin back_Adv = mkAdv "en retour" ; ---- no exact translation in Fre -- AR
+    lin back_Adv = mkAdv "en retour" ; ---- no exact translation in Fre
 </PRE>
 
 <P></P>
