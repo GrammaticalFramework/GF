@@ -5354,7 +5354,7 @@ let t_ = Predef.tk 5 tòrcer in
  VI Part =>  t_ + "ort" ;
 -- VI Part =>  t_ + "orçut" ;  -- AR why duplicate?
  VP (Pres Ind Pl  P1) => t_ + "orcem" ;
- VP (Pres Ind Sg  P1) => t_ + "orcem" ;
+ VP (Pres Ind Sg  P1) => t_ + "orço" ;
  VP (Pres Ind Pl  P2) => t_ + "orceu" ;
  VP (Pres Ind Sg  P2) => t_ + "orces" ;
  VP (Pres Ind Pl  P3) => t_ + "orcen" ;
@@ -6044,8 +6044,92 @@ VP (Imp Sg P1) => variants {}
     VGer                   => amar.s ! VI Ger
     }
   } ;
---
---
+
+
+--Meta paradigms for verbs that end in -er. 
+--Handles accents in infinitive and changes for j/g, ç/c.
+oper verbEr : Str -> Verbum = \vèncer ->
+let vènc = Predef.tk 2 vèncer ; 
+    venc = deaccent vènc ;
+    venç = soften venc ;
+in {s = table { 
+ VI Ger => venc + "ent" ;
+ VI Part =>  venç + "ut" ;
+ VP (Pres Ind Pl  P1) => venc + "em" ;
+ VP (Pres Ind Sg  P1) => venç + "o" ;
+ VP (Pres Ind Pl  P2) => venc + "eu" ;
+ VP (Pres Ind Sg  P2) => venc + "es" ;
+ VP (Pres Ind Pl  P3) => venc + "en" ;
+ VP (Pres Ind Sg  P3) => venç ;
+ VP (Pres Sub Pl  P1) => venc + "em" ;
+ VP (Pres Sub Sg  P1) => venc + "i" ;
+ VP (Pres Sub Pl  P2) => venc + "eu" ;
+ VP (Pres Sub Sg  P2) => venc + "is" ;
+ VP (Pres Sub Pl  P3) => venc + "in" ;
+ VP (Pres Sub Sg  P3) => venc + "i" ;
+ VP (Impf Ind Pl  P1) => venc + "íem" ;--# notpresent
+ VP (Impf Ind Sg  P1) => venc + "ia" ;--# notpresent
+ VP (Impf Ind Pl  P2) => venc + "íeu" ;--# notpresent
+ VP (Impf Ind Sg  P2) => venc + "ies" ;--# notpresent
+ VP (Impf Ind Pl  P3) => venc + "ien" ;--# notpresent
+ VP (Impf Ind Sg  P3) => venc + "ia" ;--# notpresent
+ VP (Impf Sub Pl  P1) => venc + "éssim" ;--# notpresent
+ VP (Impf Sub Sg  P1) => venc + "és" ;--# notpresent
+ VP (Impf Sub Pl  P2) => venc + "éssiu" ;--# notpresent
+ VP (Impf Sub Sg  P2) => venc + "essis" ;--# notpresent
+ VP (Impf Sub Pl  P3) => venc + "essin" ;--# notpresent
+ VP (Impf Sub Sg  P3) => venc + "és" ;--# notpresent
+ VP (Fut Pl  P1)  => venc + "erem" ;--# notpresent
+ VP (Fut Sg  P1)  => venc + "eré" ;--# notpresent
+ VP (Fut Pl  P2) => venc + "ereu" ;--# notpresent
+ VP (Fut Sg  P2) => venc + "eràs" ;--# notpresent
+ VP (Fut Pl  P3) => venc + "eran" ;--# notpresent
+ VP (Fut Sg  P3) => venc + "erà" ;--# notpresent
+ VP (Pret Pl  P1)  => venc + "éssim" ;--# notpresent
+ VP (Pret Sg  P1)  => venc + "és" ;--# notpresent
+ VP (Pret Pl  P2) => venc + "éssiu" ;--# notpresent
+ VP (Pret Sg  P2) => venc + "essis" ;--# notpresent
+ VP (Pret Pl  P3) => venc + "essin" ;--# notpresent
+ VP (Pret Sg  P3) => venc + "és" ;--# notpresent
+ VP (Cond Pl  P1)  => venc + "eríem" ;--# notpresent
+ VP (Cond Sg  P1)  => venc + "eria" ;--# notpresent
+ VP (Cond Pl  P2) => venc + "eríeu" ;--# notpresent
+ VP (Cond Sg  P2) => venc + "eries" ;--# notpresent
+ VP (Cond Pl  P3) => venc + "erien" ;--# notpresent
+ VP (Cond Sg  P3) => venc + "eria" ;--# notpresent
+ VP (Imp Pl  P1)  => venc + "em" ;
+ VP (Imp Pl  P2) => venc + "eu" ;
+ VP (Imp Sg  P2) => venç ;
+ VP (Imp Pl  P3) => venc + "in" ;
+ VP (Imp Sg  P3) => venc + "i" ;
+ VP (Pass Pl  Fem) => venç + "udes" ;
+ VP (Pass Sg  Fem) => venç + "uda" ;
+ VP (Pass Pl  Masc) => venç + "uts" ;
+ VP (Pass Sg  Masc) => venç + "ut" ;
+ VI Infn => vèncer ;
+VP (Imp Sg P1) => variants {} 
+}
+} ;
+
+
+oper deaccent : Str -> Str = \témer ->
+  case témer of {
+    t@_ + "à" + mer@_ => t + "a" + mer ;
+    t@_ + "é" + mer@_ => t + "e" + mer ;
+    t@_ + "è" + mer@_ => t + "e" + mer ;
+    t@_ + "í" + mer@_ => t + "i" + mer ;
+    t@_ + "ó" + mer@_ => t + "o" + mer ;
+    t@_ + "ò" + mer@_ => t + "o" + mer ;
+    t@_ + "ú" + mer@_ => t + "u" + mer ;
+    _                 => témer 
+  } ;
+
+oper soften : Str -> Str = \venc ->
+  case venc of {
+    ven + "c" => ven + "ç" ;
+    men + "g" => men + "j" ;
+    _         => venc  
+  } ;
 ---- The full conjunction is a table on $VForm$:
 --
 param

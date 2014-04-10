@@ -140,11 +140,10 @@ lin
    when_IAdv = ss "quan" ;
    when_Subj = ss "quan" ** {m = Indic} ;
    where_IAdv = ss "on" ;
-   which_IQuant = {s = table {
-      Sg => \\g,c => prepCase c ++ "quin" ;  --per fer: femenÌ quina
-      Pl => \\g,c => prepCase c ++ "quins"
-      }
-     } ;  --per fer: femenÌ quines
+   which_IQuant = {
+    s = \\n,g,c => 
+        prepCase c ++ aagrForms "quin" "quina" "quins" "quines" ! aagr g n
+    } ;
     whoPl_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Fem Pl} ;
     whoSg_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Fem Sg} ;
     why_IAdv = ss ["per quË"] ;
