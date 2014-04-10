@@ -8363,7 +8363,6 @@ fun but_Conj : Conj ;
 fun but_N : N  ;
 fun but_PConj : PConj ;
 fun but_Prep : Prep ;
-fun but_Subj : Subj ;
 fun butacaine_N : N ;
 fun butadiene_N : N ;
 fun butane_N : N ;
