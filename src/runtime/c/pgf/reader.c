@@ -1243,8 +1243,6 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
 	}
 	gu_return_on_exn(rdr->err, NULL);
 
-	pgf_parser_add_literal(concr, "Symb", &pgf_nerc_literal_callback);
-
 	return concr;
 }
 
@@ -1283,7 +1281,7 @@ pgf_concrete_load(PgfConcr* concr, GuIn* in, GuExn* err)
 	if (gu_exn_is_raised(rdr->err)) 
 		goto end;
 
-end:	
+end:
 	gu_pool_free(tmp_pool);
 }
 
@@ -1338,6 +1336,8 @@ pgf_read_pgf(PgfReader* rdr) {
 		gu_variant_is_null(gu_map_get(pgf->gflags, "split", PgfLiteral));
 	pgf->concretes = pgf_read_concretes(rdr, &pgf->abstract, with_content);
 	gu_return_on_exn(rdr->err, NULL);
+	
+	pgf->pool = rdr->opool;
 
 	return pgf;
 }

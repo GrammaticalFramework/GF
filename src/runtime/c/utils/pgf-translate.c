@@ -88,8 +88,8 @@ int main(int argc, char* argv[]) {
 	}
 	
 	// Register a callback for the literal category Symbol
-	pgf_parser_add_literal(from_concr, "Symb",
-	                       &pgf_nerc_literal_callback);
+	pgf_concr_add_literal(from_concr, "Symb",
+	                      &pgf_nerc_literal_callback, err);
 
 	// Create an output stream for stdout
 	GuOut* out = gu_file_out(stdout, pool);

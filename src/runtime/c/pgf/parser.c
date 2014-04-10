@@ -155,7 +155,7 @@ pgf_prev_extern_sym(PgfSymbol sym)
 	}
 }
 
-void
+static void
 pgf_add_extern_tok(PgfSymbol* psym, PgfToken tok, GuPool* pool) {
 	PgfSymbol new_sym;
 	size_t tok_len = strlen(tok);
@@ -169,7 +169,7 @@ pgf_add_extern_tok(PgfSymbol* psym, PgfToken tok, GuPool* pool) {
 	*psym = new_sym;
 }
 
-void
+static void
 pgf_add_extern_cat(PgfSymbol* psym, int d, int r, GuPool* pool) {
 	PgfSymbol new_sym;
 	PgfSymbolCat* scat = (PgfSymbolCat*)
@@ -181,6 +181,32 @@ pgf_add_extern_cat(PgfSymbol* psym, int d, int r, GuPool* pool) {
 	scat->d = d;
 	scat->r = r;
 	*psym = new_sym;
+}
+
+PgfSymbol
+pgf_collect_extern_tok(PgfParsing* ps, size_t start, size_t end)
+{
+	PgfSymbol sym = gu_null_variant;
+
+	size_t offset = start;
+	while (offset < end) {
+		size_t len = 0;
+		while (!gu_is_space(ps->sentence[offset+len])) {
+			len++;
+		}
+
+		PgfToken tok = gu_malloc(ps->pool, len+1);
+		memcpy((char*) tok, ps->sentence+offset, len);
+		((char*) tok)[len] = 0;
+
+		pgf_add_extern_tok(&sym, tok, ps->pool);
+
+		offset  += len;
+		while (gu_is_space(ps->sentence[offset]))
+			offset++;
+	}
+
+	return sym;
 }
 
 static size_t
@@ -1581,13 +1607,13 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 							   PgfLiteralCallback*);
 
 				if (callback != NULL) {
-					size_t offset = ps->before->end_offset;
-					PgfSymbol curr_sym = gu_null_variant;
+					size_t start  = ps->before->end_offset;
+					size_t offset = start;
 					PgfExprProb *ep =
-						callback->match(ps->concr, &curr_sym,
+						callback->match(callback,
 						                slit->r,
 				                        ps->sentence, &offset,
-				                        ps->pool, ps->out_pool);
+				                        ps->out_pool);
 
 					if (ep != NULL) {
 						PgfProduction prod;
@@ -1602,7 +1628,7 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 							pgf_new_parse_state(ps, offset, BIND_NONE);
 						PgfItem* item =
 							pgf_new_item(ps, conts, prod);
-						item->curr_sym = curr_sym;
+						item->curr_sym = pgf_collect_extern_tok(ps,start,offset);
 						item->sym_idx  = pgf_item_symbols_length(item);
 						gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
 					}
@@ -2504,19 +2530,6 @@ pgf_complete(PgfConcr* concr, PgfCId cat, GuString sentence,
 
 	// Now begin enumerating the resulting syntax trees
 	return pgf_parsing_completions(ps, prefix);
-}
-
-void
-pgf_parser_add_literal(PgfConcr *concr, PgfCId cat,
-                       PgfLiteralCallback* callback)
-{
-	PgfCncCat* cnccat =
-		gu_map_get(concr->cnccats, cat, PgfCncCat*);
-	if (cnccat == NULL)
-		return;
-
-	gu_map_put(concr->callbacks, cnccat,
-	           PgfLiteralCallback*, callback);
 }
 
 static void

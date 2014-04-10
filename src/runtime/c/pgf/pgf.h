@@ -151,6 +151,23 @@ GuEnum*
 pgf_complete(PgfConcr* concr, PgfCId cat, GuString string, 
              GuString prefix, GuExn* err, GuPool* pool);
 
+GuPool*
+pgf_concr_get_pool(PgfConcr* concr);
+
+typedef struct PgfLiteralCallback PgfLiteralCallback;
+
+struct PgfLiteralCallback {
+	PgfExprProb* (*match)(PgfLiteralCallback* self,
+	                      size_t lin_idx,
+	                      GuString sentence, size_t* poffset,
+	                      GuPool *out_pool);
+};
+
+void
+pgf_concr_add_literal(PgfConcr *concr, PgfCId cat,
+                      PgfLiteralCallback* callback,
+                      GuExn* err);
+
 /// @}
 
 void
