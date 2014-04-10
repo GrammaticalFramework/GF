@@ -61,7 +61,10 @@ oper
   genitive   : Prep ; -- genitive, constructed with "de"
   dative     : Prep ; -- dative, usually constructed with "à"
 
-  mkPrep : Str -> Prep ; -- preposition (other than "de" and "à")
+  mkPrep : overload {
+    mkPrep : Str -> Prep  ;         -- simple preposition (other than "de" and "à")
+    mkPrep : Str -> Prep -> Prep ;  -- complex preposition e.g. "à côté de"
+    } ;
 
 
 --2 Nouns
@@ -333,12 +336,15 @@ oper
   accusative = complAcc ** {lock_Prep = <>} ;
   genitive = complGen ** {lock_Prep = <>} ;
   dative = complDat ** {lock_Prep = <>} ;
-  mkPrep p = {s = p ; c = CPrep PNul ; isDir = False ; lock_Prep = <>} ;
+  mkPrep = overload {
+    mkPrep : Str -> Prep  = \p -> {s = p ; c = CPrep PNul ; isDir = False ; lock_Prep = <>} ;
+    mkPrep : Str -> Prep -> Prep = \s,c-> {s = s ; c = c.c ; isDir = False ; lock_Prep = <>}
+    } ;
 
   --- obsolete
   Preposition : Type ;
   mkPreposition : Str -> Preposition ;
-  mkPreposition = mkPrep ;
+  mkPreposition s = mkPrep s ;
 
   regGenN : Str -> Gender -> N ;
   regN : Str -> N ;

@@ -29,7 +29,7 @@ mergeDict lang = do
   new <- readFile (gfFile "todo/TopDictionary" lang) >>= return . lines                   -- read corrected and new words
   let header = getHeader new
   let oldmap = Data.Map.fromList [(f,unwords ws) | "lin":f:"=":ws <- map words old]
-  let newlist = [(f,unwords (takeWhile (/= "--") ws)) | "lin":f:"=":ws <- map words new]  -- drop comments from corrected words
+  let newlist = [(f,unwords ws) | "lin":f:"=":ws <- map words new]                        
   let newmap = foldr (uncurry Data.Map.insert) oldmap newlist                             -- insert corrected words
   writeFile (gfFile "tmp/Dictionary" lang) $ 
     unlines $ fromTop header ++ [unwords ("lin":f:"=":[ws]) | (f,ws) <- Data.Map.assocs newmap] ++ ["}"]  -- print revised file to tmp/
@@ -52,12 +52,13 @@ fromTop = map tt where
 -- try to find lin rules by searching first literally, then subcategories in priority order
 
 lookupFun f dictmap = case look f of
-  Just rule -> rule
-  _ -> case [r | Just r <- map look (subCats f), head (words r) `notElem` ["variants","variants{}"]] of
+  Just rule | notEmpty rule -> rule
+  _ -> case [r | Just r <- map look (subCats f), notEmpty r] of
     rule:_ -> "variants{}; -- " ++ rule  -- cannot return it as such, as probably type incorrect
     _ -> "variants{} ; -- "
  where
   look = flip Data.Map.lookup dictmap
+  notEmpty r = head (words r) `notElem` ["variants","variants{}"]
 
 subCats f = case splitFun f of
   (fun,cat) -> case cat of
