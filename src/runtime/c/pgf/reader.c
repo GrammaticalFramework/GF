@@ -1276,11 +1276,14 @@ pgf_concrete_load(PgfConcr* concr, GuIn* in, GuExn* err)
 	concr->pool = pool;
 
 	pgf_read_flags(rdr);
-	gu_return_on_exn(rdr->err, );
+	if (gu_exn_is_raised(rdr->err)) 
+		goto end;
 
 	pgf_read_concrete_content(rdr, concr);
-	gu_return_on_exn(rdr->err, );
-	
+	if (gu_exn_is_raised(rdr->err)) 
+		goto end;
+
+end:	
 	gu_pool_free(tmp_pool);
 }
 
