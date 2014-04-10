@@ -108,7 +108,7 @@ struct PgfPGF {
 	PgfFlags* gflags;
 	PgfAbstr abstract;
 	PgfCIdMap* concretes; // |-> PgfConcr*
-	GuPool* pool;
+	GuPool* pool;         // the pool in which the grammar is allocated
 };
 
 typedef struct {
@@ -202,12 +202,6 @@ typedef struct {
 
 typedef struct {
 } PgfSymbolBIND;
-
-typedef struct {
-	PgfExprProb* (*match)(PgfConcr* concr, PgfSymbol* psym, size_t lin_idx,
-	                      GuString sentence, size_t* poffset,
-	                      GuPool *pool, GuPool *out_pool);
-} PgfLiteralCallback;
 
 typedef GuBuf PgfProductionIdx;
 
