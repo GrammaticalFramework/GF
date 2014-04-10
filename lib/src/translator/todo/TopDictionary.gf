@@ -1,8 +1,12 @@
-abstract TopDict = Cat ** {
+abstract TopDictionary = Cat **{
 fun of_Prep : Prep ;
 fun and_Conj : Conj ;
 fun in_Prep : Prep ;
+fun have_VV : VV ;
+fun have_VS : VS ;
+fun have_V2V : V2V ;
 fun have_V2 : V2 ;
+fun have_V : V ;
 fun it_Pron : Pron ;
 fun to_Prep : Prep ;
 fun for_Prep : Prep ;

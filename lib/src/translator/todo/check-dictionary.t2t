@@ -4,10 +4,10 @@ April 2014
 
 ==Call for contributions: the generic translation dictionaries of GF==
 
-**Wanted**: manual checking of TopDict???.gf files in
+**Wanted**: manual checking of TopDictionary???.gf files in
 [this directory http://www.grammaticalframework.org/lib/src/translator/todo].
 
-**Abstract syntax**: [TopDict ./TopDict.gf], the top-7000 English words from British National Corpus, as sorted by frequency
+**Abstract syntax**: [TopDictionary ./TopDictionary.gf], the top-7000 English words from British National Corpus, as sorted by frequency
 [here http://www.kilgarriff.co.uk/BNClists/lemma.num]. 
 
 **Usage**: part of the general translation dictionaries, used for instance in the 
@@ -41,7 +41,7 @@ Follow these steps for your language. For instance, ToCheckFre.gf, with Fre subs
 A reasonable batch of revisions is 500 words or more, which should be doable in less than 2 hours. To avoid conflicts and overlapping work,
 don't spend more than one day on a batch of work.
 
-
+The already split senses are explained [here ../senses-in-Dictionary.txt].
 
 
 
