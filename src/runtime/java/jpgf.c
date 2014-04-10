@@ -680,7 +680,9 @@ jpgf_literal_callback_fn(PgfLiteralCallback* self,
 
 	jstring jsentence = gu2j_string(env, sentence);
 	jobject result = (*env)->CallObjectMethod(env, callback->jcallback, callback->match_methodId, lin_idx, jsentence, *poffset);
-	
+	if (result == NULL)
+		return NULL;
+
 	jclass result_class = (*env)->GetObjectClass(env, result);
 	
 	jfieldID epId = (*env)->GetFieldID(env, result_class, "ep", "Lorg/grammaticalframework/pgf/ExprProb;");
