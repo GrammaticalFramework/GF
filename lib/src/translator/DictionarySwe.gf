@@ -31221,14 +31221,14 @@ lin knothole_N = variants {} ;
 lin knottingley_PN = variants {} ;
 lin knotty_A = variants {} ;
 lin knout_N = variants {} ;
-lin know_N = (mkN "viktigpetter") | (mkN "besserwisser"); -- status=guess status=guess
+lin know_N = mkN "vetande" ;
 lin know_V = L.know_VS ;
 lin know_V2 = L.know_V2 ;
 lin know_V2V = mkV2V "känna" "kände" "känt" ;
 lin know_VQ = L.know_VQ ;
 lin know_VS = L.know_VS ;
 lin know_all_N = variants {} ;
-lin know_how_N = variants {} ;
+lin know_how_N = mkN "kunskap" "kunskaper" ;
 lin knowable_A = variants {} ;
 lin knower_N = variants {} ;
 lin knowing_N = mkN "menande" ;
