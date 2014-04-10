@@ -4,6 +4,7 @@ import Control.Concurrent.MVar
 import Data.Map (Map)
 import qualified Data.Map as Map 
 import System.Directory (getModificationTime)
+import System.Mem(performGC)
 import Data.Time (UTCTime)
 import Data.Time.Compat (toUTCTime)
 
@@ -18,7 +19,8 @@ newCache load =
        return $ Cache { cacheLoad = load, cacheObjects = objs }
 
 flushCache :: Cache a -> IO ()
-flushCache c = modifyMVar_ (cacheObjects c) (const (return Map.empty))
+flushCache c = do modifyMVar_ (cacheObjects c) (const (return Map.empty))
+                  performGC
 
 readCache :: Cache a -> FilePath -> IO a
 readCache c file = snd `fmap` readCache' c file
