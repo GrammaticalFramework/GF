@@ -20,12 +20,15 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
       CPrep P_a  => "a"
       } ;
 
+
     artDef : Gender -> Number -> Case -> Str = \g,n,c ->
       case <g,n,c> of {
         <Masc,Sg, CPrep P_de> => "del" ;
         <Masc,Sg, CPrep P_a>  => "al" ;
         <Masc,Sg, _>          => prepCase c ++ "el" ;
-        <Fem ,Sg, _> => prepCase c ++ "la" ;
+        <Fem ,Sg, CPrep P_de> => chooseDeLa ;
+        <Fem ,Sg, CPrep P_a>  => chooseALa ;
+	<Fem, Sg, _> => prepCase c ++ chooseLa ;
         <Masc,Pl, _> => prepCase c ++ "los" ;
         <Fem ,Pl, _> => prepCase c ++ "las"
         } ;

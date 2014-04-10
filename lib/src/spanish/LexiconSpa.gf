@@ -18,7 +18,7 @@ lin
    bad_A = prefA (mkADeg (regA "malo") (regA "peor")) ;
    bank_N = regN "banco" ;
    beautiful_A = prefA (regADeg "bello") ;	-- bella
-   become_VA = reflV (regV "convertir") ;  --- convertirse en, volverse, ponerse
+   become_VA = reflV (mkV "convertir" "convierto") ;  --- convertirse en, volverse, ponerse
    beer_N = regN "cerveza" ;
    beg_V2V = mkV2V (mkV "rogar" "ruego") accusative dative ;   -- pedir
    big_A = prefA (regADeg "grande") ;
@@ -205,7 +205,7 @@ lin
    warm_A = regADeg "caliente" ;
    war_N = mkN "guerra" ;
    watch_V2 = dirV2 (regV "mirar") ;		-- ver
-   water_N = mkN "agua" ; ---- feminine, but uses masculine article "el". TODO defArt pre {} thingy for the nouns (limited set) that behave like this.
+   water_N = mkN "agua" ; 
    white_A = compADeg (regA "blanco") ;
    window_N = regN "ventana" ;
    wine_N = regN "vino" ;
