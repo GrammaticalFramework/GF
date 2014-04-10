@@ -1243,6 +1243,8 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
 	}
 	gu_return_on_exn(rdr->err, NULL);
 
+	pgf_parser_add_literal(concr, "Symb", &pgf_nerc_literal_callback);
+
 	return concr;
 }
 
