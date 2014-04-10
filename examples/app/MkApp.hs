@@ -1,4 +1,6 @@
 -- update the import list of every language
+-- the new files are produced in ./tmp/
+-- usage: runghc MkApp.hs
 
 langs = words "Bul Chi Eng Fin Fre Ger Hin Ita Spa Swe"
 appCnc lang = "App" ++ lang ++ ".gf"
