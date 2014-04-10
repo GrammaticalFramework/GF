@@ -20980,7 +20980,7 @@ lin feedstock_N = variants {} ;
 lin feel_N = mkN "känsla" ; -- comment=3
 lin feel_V = mkV "känna" "kände" "känt" ;
 lin feel_V2 = mkV2 "känna" "kände" "känt" ;
-lin feel_VA = mkVA (reflV (mkV "känna" "känne" "känt")) ;
+lin feel_VA = mkVA (reflV (mkV "känna" "kände" "känt")) ;
 lin feel_VS = mkV "känna" "kände" "känt" ;
 lin feel_out_V = mkV "anse" "ansåg" "ansett" ; -- comment=12
 lin feel_up_V2 = variants {} ;
@@ -31224,7 +31224,7 @@ lin knout_N = variants {} ;
 lin know_N = (mkN "viktigpetter") | (mkN "besserwisser"); -- status=guess status=guess
 lin know_V = L.know_VS ;
 lin know_V2 = L.know_V2 ;
-lin know_V2V = mkV2V "känna" "känne" "känt" ;
+lin know_V2V = mkV2V "känna" "kände" "känt" ;
 lin know_VQ = L.know_VQ ;
 lin know_VS = L.know_VS ;
 lin know_all_N = variants {} ;
