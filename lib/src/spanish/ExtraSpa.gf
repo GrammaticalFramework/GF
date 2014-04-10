@@ -45,10 +45,18 @@ concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa **
       "su" "su" "sus" "sus"
       Fem Pl P3 ;
 
-   --IL 2012-10-12
    ImpNeg np vp = lin Utt{ 
       s = (mkClause (np.s ! Nom).comp np.hasClit False np.a vp).s 
           ! DInv ! RPres ! Simul ! RNeg False ! Conjunct
+      } ;
+
+   InvQuestCl cl = {
+      s = \\t,a,p => 
+            let cls = cl.s ! DInv ! t ! a ! p 
+            in table {
+              QDir   => cls ! Indic ;
+              QIndir => subjIf ++ cls ! Indic
+              }
       } ;
 
     -- ExtraRomance.PassVPSlash uses estar 
