@@ -200,10 +200,11 @@ oper
 
     mkV : (cantar : Str) -> V ; -- regular in models I, IIa, IIb
 
--- Verbs with vowel alternatition in the stem - easiest to give with
--- two forms, e.g. "mostrar"/"muestro". TODO
+-- Verbs with predictable alternation: 
+-- a) inchoative verbs, servir serveixo
+-- b) re verbs with c/g in root, vendre venc ; subj. vengui
 
---JS: Needed?    mkV : (mostrar,muestro : Str) -> V ;
+    mkV : (servir,serveixo : Str) -> V ; --inchoative verbs and "re" verbs whose 1st person ends in c 
 
 -- Most irregular verbs are found in $IrregCat$. If this is not enough,
 -- the module $BeschCat$ gives all the patterns of the "Bescherelle"
@@ -340,15 +341,50 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = -- cantar, perdre, tÈmer, dormir, (servir)
-    let 
-      verb = case (Predef.dp 2 x) of {
-        "re" =>  perdre_83 x ;
-        "er" =>  témer_107 x ;
-		"ir" =>  dormir_44 x ; -- JS TODO: Consider "servir" 
-		_	 => cantar_15 x 
-		}
-    in verbBesch verb ** {vtyp = VHabere ; lock_V = <>} ;
+  regV x = -- cantar, perdre, témer, dormir, (servir)
+    case (Predef.dp 3 x) of {
+        "jar"    => envejar_48 x ;
+	"çar"    => començar_22 x ;
+	"gir"    => fugir_58 x ;
+	"ure"    => beure_11 x ;
+        _ + "re" => perdre_83 x ;
+        _ + "er" => verbEr x ; -- handles accents in infinitives & c/ç, g/j
+	_ + "ir" => dormir_44 x ; -- inchoative verbs with regAltV 
+	_ + "ur" => dur_45 x ;
+	_        => cantar_15 x } ;
+
+  regAltV x y =
+     let ure  = Predef.dp 3 x ;
+	 venc = Predef.dp 4 y ;
+     in  case <ure,venc> of {
+	   <"ure",_>      => regV x ; --caure,viure etc. with non-smart paradigms
+
+           <_+"ir",_+"ixo"> => servir_101 x ;
+	   <_+"ir","tinc">  => tenir_108 x ; --tenir,obtenir, ...
+	   <_+"ir","vinc">  => venir_117 x ; --venir,prevenir, ...
+	   <_+"ir","tenc">  => tenir_108 x ; --recognises balear, returns central
+	   <_+"ir","venc">  => venir_117 x ;
+	   
+           <_+"er",_+"ig">  => fer_56 x ;
+	   <_+"re",_+"ig">  => veure_118 x ;
+	   <_+"ar",_+"ig">  => anar_4 x ;
+           <_+"er",_+ "c">  => valer_114 x ;
+	   <_+"re",_+ "c">  => absoldre_1 x ; --participes of type "absolt"
+	                                      --for other types, mk3V
+	   <_   ,_>      => regV x } ;
+
+  mk3V x y z =
+     let ure  = Predef.dp 3 x ;
+	 venc = Predef.dp 4 y ;
+	 ut   = Predef.dp 2 z 
+     in  case <ure,venc,ut> of {
+           <"ure",_,_> => regAltV x y ;
+           <_,_,"st"> => veure_118 x ; --TODO check
+	   <_,_,"it"> => coure_32 x ;  --TODO check
+	   <"dre",_,"ut"> => vendre_116 x ;
+	   <_+"re",_,"ès">  => atendre_8 x ;
+	   <_+"re",_,"às">  => romandre_97 x ;
+	   <_,_,_>        => regAltV x y } ;
 
   reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
 
@@ -365,7 +401,7 @@ oper
     vtyp = VHabere
     } ;
 
---  regAltV x y = verbV (regAlternV x y) ;
+
 
   mk2V2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
   dirV2 v = mk2V2 v accusative ;
@@ -439,16 +475,18 @@ oper
   prefixA = prefA ;
 
   mkV = overload {
-    mkV : (cantar : Str) -> V = regV ;
---JS    mkV : (mostrar,muestro : Str) -> V = regAltV ;
+    mkV : (cantar : Str) -> V            = \x -> verbV (regV x) ;
+    mkV : (servir,serveixo : Str) -> V   = \x,y -> verbV (regAltV x y) ;
+    mkV : (vendre,venc,venut : Str) -> V = \x,y,z -> verbV (mk3V x y z) ;
     mkV : Verbum -> V = verbV
     } ;
-  regV : Str -> V ;
---JS  regAltV : (mostrar,muestro : Str) -> V ;
+  regV : Str -> Verbum ;
+  regAltV : (servir,serveixo : Str) -> Verbum ;
+  mk3V : (vendre,venc,venut : Str) -> Verbum ;
   verbV : Verbum -> V ;
 
   mkV2 = overload {
-    mkV2 : Str -> V2 = \s -> dirV2 (regV s) ;
+    mkV2 : Str -> V2 = \s -> dirV2 (mkV s) ;
     mkV2 : V -> V2 = dirV2 ;  
     mkV2 : V -> Prep -> V2 = mk2V2
     } ;
