@@ -133,6 +133,7 @@ TranslateEng: TranslateEng.pgf
 TranslateBul: TranslateBul.pgf
 TranslateChi: TranslateChi.pgf
 TranslateGer: TranslateGer.pgf
+TranslateDut: TranslateDut.pgf
 TranslateSwe: TranslateSwe.pgf
 TranslateHin: TranslateHin.pgf
 TranslateFin: TranslateFin.pgf
@@ -146,6 +147,8 @@ GFMKT=mkdir -p ../translator && gf $S -make -literal=Symb -probs=$(TPROBSFILE) -
 TRANSLATE8=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf
 TRANSLATE10=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf TranslateIta.pgf TranslateSpa.pgf
 
+TRANSLATE11=$(TRANSLATE10) TranslateDut.pgf
+
 # Without dependencies:
 Translate10:
 	$(GFMKT) -name=Translate10 $(TRANSLATE10) +RTS -K32M
@@ -153,6 +156,14 @@ Translate10:
 # With dependencies:
 Translate10.pgf: $(TRANSLATE10)
 	$(GFMKT) -name=Translate10 $(TRANSLATE10) +RTS -K32M
+
+# Without dependencies:
+Translate11:
+	$(GFMKT) -name=Translate11 $(TRANSLATE11) +RTS -K32M
+
+# With dependencies:
+Translate11.pgf: $(TRANSLATE10)
+	$(GFMKT) -name=Translate11 $(TRANSLATE11) +RTS -K32M
 
 # Without dependencies:
 Translate8:
@@ -168,6 +179,7 @@ TranslateBul.pgf:: ; $(GFMKT) -name=TranslateBul translator/TranslateBul.gf
 TranslateChi.pgf:: ; $(GFMKT) -name=TranslateChi translator/TranslateChi.gf +RTS -K64M
 TranslateFin.pgf:: ; $(GFMKT) -name=TranslateFin translator/TranslateFin.gf +RTS -K64M
 TranslateGer.pgf:: ; $(GFMKT) -name=TranslateGer translator/TranslateGer.gf
+TranslateDut.pgf:: ; $(GFMKT) -name=TranslateDut translator/TranslateDut.gf
 TranslateHin.pgf:: ; $(GFMKT) -name=TranslateHin translator/TranslateHin.gf
 TranslateFre.pgf:: ; $(GFMKT) -name=TranslateFre translator/TranslateFre.gf +RTS -K64M
 TranslateSwe.pgf:: ; $(GFMKT) -name=TranslateSwe translator/TranslateSwe.gf
