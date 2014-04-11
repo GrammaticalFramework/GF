@@ -22,6 +22,10 @@ AppSpa: AppSpa.pgf
 
 TRANSLATE10=AppEng.pgf AppBul.pgf AppChi.pgf AppGer.pgf AppSwe.pgf AppHin.pgf AppFin.pgf AppFre.pgf AppIta.pgf AppSpa.pgf
 TRANSLATE11=$(TRANSLATE10) AppDut.pgf
+# With dependencies:
+App11.pgf: $(TRANSLATE11)
+	$(GFMKT) -name=App11 $(TRANSLATE11) +RTS -K200M
+
 # Without dependencies:
 App11:
 	$(GFMKT) -name=App11 $(TRANSLATE11) +RTS -K200M
