@@ -1,0 +1,227 @@
+Steps for Extending RGL to a Large Scale Translation Grammar
+
+
+
+We will add Dutch to the system of big translation grammars.
+
+=The Translate grammar=
+
+This is where we are
+
+  $ pwd
+  /Users/aarne/GF/lib/src/translator
+
+We start from files for German
+
+  $ ls -l *Ger.gf
+  -rw-r--r--  1 aarne  staff  1615550 Apr 10 23:38 DictionaryGer.gf
+  -rw-r--r--  1 aarne  staff     3042 Jan 22 15:39 ExtensionsGer.gf
+  -rw-r--r--  1 aarne  staff      662 Apr  9 11:14 TranslateGer.gf
+
+We make copies of these ones
+
+  $ cp -p ExtensionsGer.gf ExtensionsDut.gf
+  $ cp -p TranslateGer.gf TranslateDut.gf
+
+Then we change Ger->Dut in these files
+
+We take the common parts of a dictionary ; Ger doesn't have them this way but Spa does
+
+  $ grep "L\." DictionarySpa.gf >DictionaryDut.gf
+  $ grep "S\." DictionarySpa.gf >>DictionaryDut.gf
+
+Then we add a header, copying from DictionarySpa and changing Spa->Dut. And of course a "}"  to the end!
+
+  concrete DictionarySpa of Dictionary = CatSpa
+    ** open ParadigmsSpa, MorphoSpa, IrregSpa, (L=LexiconSpa), (S=StructuralSpa), Prelude in {
+
+We can now try compile this, using -s to suppress 60k warnings about missing linearizations:
+
+  $ gf -s DictionaryDut.gf
+
+This goes fine - but what about the translator itself?
+
+  $ gf -s TranslateDut.gf 
+  File TenseDut.gf does not exist.
+
+Just change it to TenseX as in many other languages, as Dutch has no special tenses. Try again (in GF shell):
+
+  > i TranslateDut.gf 
+  File ConstructionDut.gf does not exist.
+
+Let us just comment this inheritance out from TranslateDut, like in some other languages where 
+this module is not yet available. The same with DocumentationDut.
+
+  ----  ConstructionDut,
+  ----  DocumentationDut,
+
+I use four dashes for comments meaning "to be fixed soon". Try again:
+
+  > i TranslateDut.gf 
+  File ChunkDut.gf does not exist.
+
+This is more critical, since we want a robust translator! Let's fix this:
+
+  $ cd ../chunk/
+  $ cp -p ChunkGer.gf ChunkDut.gf
+  $ cd ../translator/
+
+Again, go to ChunkDut.gf and change Ger->Dut. Also look for double quotes and change strings in them. E.g.
+
+  copula_inf_Chunk = ss "sein"  -->  copula_inf_Chunk = ss "zijn"
+
+Now try again (in GF):
+
+  > i TranslateDut.gf 
+   Warning: In inherited module Extensions,
+  ...
+  no occurrence of element BaseVPI
+
+Now we notice that ExtraDut is just a dummy module. We comment out all references to it in ExtensionsDut; of course we 
+will fix ExtraDut later. E.g.
+
+  ----  BaseVPI = E.BaseVPI ;
+
+We could continue commenting out things that don't compile. We could just give up and comment out ExtensionsDut from TranslateDut.
+It doesn't use many functions anyway...
+
+  ---- ExtensionsDut [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash],
+
+Unfortunately, ChunkDut also needs it. So let's at least make it compile by commenting out all offensive functions.
+There is not much left, and in ChunkDut we also comment out whatever the compiler complains about, with four dashes.
+We obtain
+
+  concrete ChunkDut of Chunk = CatDut
+  ----  , ExtensionsDut 
+   ** 
+    ChunkFunctor - [UseVC, VPS_Chunk, emptyNP, VPI_Chunk]
+      with (Syntax = SyntaxDut), (Extensions = ExtensionsDut) 
+      **
+    open 
+      SyntaxDut, (E = ExtensionsDut), Prelude, 
+      ResDut, (P = ParadigmsDut) in {
+
+Et voilà:
+
+  > i TranslateDut.gf 
+  linking ... OK
+
+  Languages: TranslateDut
+
+Let us try it:
+
+  > gr | l -treebank
+  Translate: ChunkPhr (PlusChunk fullstop_Chunk (OneChunk refl_SgP1_Chunk))
+  TranslateDut: * . mij zelf
+
+Let us make it compilable in GF/lib/src/Makefile by adding entries for TranslateDut and Translate11 - since we now have 11 languages.
+Again, we can look for TranslateGer and make a copy beside it, as well as Translate10:
+
+  TranslateGer: TranslateGer.pgf
+  TranslateDut: TranslateDut.pgf
+
+  TranslateDut.pgf:: ; $(GFMKT) -name=TranslateDut translator/TranslateDut.gf
+
+  # Without dependencies:
+  Translate11:
+          $(GFMKT) -name=Translate11 $(TRANSLATE11) +RTS -K32M
+
+  # With dependencies:
+  Translate11.pgf: $(TRANSLATE10)
+          $(GFMKT) -name=Translate11 $(TRANSLATE11) +RTS -K32M
+
+Since we have everything up to date in Translate10, let us just add the necessary new things to include Dut:
+
+  $ pwd
+  /Users/aarne/GF/lib/src
+
+  $ make TranslateDut.pgf
+
+  $ make Translate11
+
+We can first try it in the plain C runtime:
+
+  $ pgf-translate Translate11.pgf Phr TranslateEng TranslateDut
+  > what is this
+  0.07 sec
+  [18.070923] ChunkPhr (OneChunk (QS_Chunk (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whatSg_IP) 
+  (DetNP (DetQuant this_Quant NumSg))))))
+  * wat is dit
+  wat is dit
+  > can we translate now
+  0.19 sec
+  [35.258053] ChunkPhr (OneChunk (QS_Chunk (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePron we_Pron) 
+  (AdvVP (ComplVV can_1_VV (UseV translate_V)) now_Adv))))))
+  * kunnen we nu [translate_V]
+  kunnen we nu [translate_V]
+
+What about the web application?
+
+First make the new grammar accessible:
+
+  cd GF/src/www/robust/
+  $ ls
+  App10.pgf	Translate10.pgf	Translate8.pgf
+  $ ln -s /Users/aarne/GF/lib/src/Translate11.pgf 
+
+Then update the reference to this grammar - change Translate10 to Translate11 in one place:
+
+  $ cd ..
+  $ grep Translate10 */*.js
+  js/gftranslate.js:gftranslate.jsonurl="/robust/Translate10.pgf"
+
+Try start the gf server
+
+  gf -server --document-root=/Users/aarne/GF/src/www/
+
+Point your browser to http://localhost:41296/wc.html
+
+Wait a bit, and you will see Dutch among the available languages!
+
+
+
+=Building the Android app=
+
+Navigate to the App directory and create AppDut; also change Ger->Dut as before
+
+  $ pwd
+  /Users/aarne/GF/examples/app
+
+  $ cp -p AppGer.gf AppDut.gf
+
+Extend the Makefile as before:
+
+  TRANSLATE11=$(TRANSLATE10) AppDut.pgf
+  # Without dependencies:
+  App11:
+          $(GFMKT) -name=App11 $(TRANSLATE11) +RTS -K200M
+
+Make it:
+
+  $ make AppDut.pgf
+  $ make App11
+
+Check that all languages are consistently included:
+
+  $ gf +RTS -K200M App11.pgf
+  Languages: AppBul AppChi AppDut AppEng AppFin AppFre AppGer AppHin AppIta AppSpa AppSwe
+
+  App> l house_N
+  къща
+  房 子
+  huis
+  house
+  talo
+  maison
+  Haus
+  शाला
+  casa
+  casa
+  hus  
+
+Now follow the instructions in README in the app/ directory.
+You also need to add to Translator.java, in a place near AppGer reference,
+
+   new Language("nl-NL", "Dutch", "AppDut", R.xml.qwerty),
+
+

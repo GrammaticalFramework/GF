@@ -1,41 +1,42 @@
 --# -path=.:../abstract
 
-concrete ExtensionsGer of Extensions = 
-  CatGer ** open MorphoGer, ResGer, ParadigmsGer, SyntaxGer, (E = ExtraGer), (G = GrammarGer), Prelude in {
+concrete ExtensionsDut of Extensions = 
+  CatDut ** open MorphoDut, ResDut, ParadigmsDut, SyntaxDut, (E = ExtraDut), (G = GrammarDut), Prelude in {
 
 flags literal=Symb ; coding = utf8 ;
 
-lincat
-  VPI = E.VPI ;
-  ListVPI = E.ListVPI ;
-  VPS = E.VPS ;
-  ListVPS = E.ListVPS ;
+----lincat
+----  VPI = E.VPI ;
+----  ListVPI = E.ListVPI ;
+----  VPS = E.VPS ;
+----  ListVPS = E.ListVPS ;
   
-lin
-  MkVPI = E.MkVPI ;
-  ConjVPI = E.ConjVPI ;
-  ComplVPIVV = E.ComplVPIVV ;
+--- lin
+----  MkVPI = E.MkVPI ;
+----  ConjVPI = E.ConjVPI ;
+----  ComplVPIVV = E.ComplVPIVV ;
 
-  MkVPS = E.MkVPS ;
-  ConjVPS = E.ConjVPS ;
-  PredVPS = E.PredVPS ;
+----  MkVPS = E.MkVPS ;
+----  ConjVPS = E.ConjVPS ;
+----  PredVPS = E.PredVPS ;
 
-  BaseVPI = E.BaseVPI ;
-  ConsVPI = E.ConsVPI ;
-  BaseVPS = E.BaseVPS ;
-  ConsVPS = E.ConsVPS ;
+----  BaseVPI = E.BaseVPI ;
+----  ConsVPI = E.ConsVPI ;
+----  BaseVPS = E.BaseVPS ;
+----  ConsVPS = E.ConsVPS ;
 
 ----  GenNP = E.GenNP ;
 ----  GenIP = E.GenIP ;
 ----  GenRP = E.GenRP ;
 
-  PassVPSlash = E.PassVPSlash ;
-  PassAgentVPSlash = E.PassAgentVPSlash ;
+----  PassVPSlash = E.PassVPSlash ;
+----  PassAgentVPSlash = E.PassAgentVPSlash ;
 
-  EmptyRelSlash = E.EmptyRelSlash ;
+----  EmptyRelSlash = E.EmptyRelSlash ;
 
 
 lin
+{-
     ComplVV v ant p vp = 
       let 
         vpi = infVP v.isAux vp 
@@ -59,15 +60,15 @@ lin
                      (vp.nn ! agr).p1 ++ (vp.nn ! agr).p2;
       c = Nom
       } ;
-
+-}
     PredVPosv = G.PredVP;
     PredVPovs = G.PredVP;
-
+{-
   CompoundCN noun cn = {
     s = \\a,n,c => glue (noun.s ! Sg ! Nom) (cn.s ! a ! n ! c) ;
     g = cn.g
   } ;
-
+-}
   GerundN v = { -- parsing
     s = \\n,c => v.s ! VInf False ; --- formalisieren, not formalisierung
     g = Neutr
@@ -90,7 +91,7 @@ lin
 
   UseQuantPN q pn = {s = \\c => q.s ! False ! Sg ++ pn.s ! npcase2case c ; a = agrgP3 Sg pn.g} ;  -- this London
 
-  SlashV2V v p vp = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "nicht"} ++  -- force not to sleep
+  SlashV2V v p vp = insertObjc (\\a => p.s ++ case p.p of {CPos => ""; _ => "niet"} ++  -- force not to sleep
                                        v.c3 ++ 
                                        infVP v.typ vp a)
                                (predVc v) ;
@@ -107,13 +108,13 @@ lin
           }
     } ;
 -}
-  CompS s = {s = \\_ => "dass" ++ s.s ! Main} ;  -- S -> Comp
+  CompS s = {s = \\_ => "dat" ++ s.s ! Main} ;  -- S -> Comp
   CompVP ant p vp = {s = \\_ => useInfVP True vp} ; -- VP -> Comp
 
 lin
   that_RP = which_RP ;
 
-  UttAdV adv = adv;
+----  UttAdV adv = adv;
 
 
 }

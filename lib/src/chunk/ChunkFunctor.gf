@@ -24,7 +24,7 @@ lin
   S_Chunk s = mkUtt s ;
   SSlash_Chunk s = mkUtt <lin S s : S> ;
   QS_Chunk qs = mkUtt qs ;
-  CN_Pl_Chunk cn = mkUtt (mkNP aPl_Det cn) ;
+  CN_Pl_Chunk cn = mkUtt (Syntax.mkNP aPl_Det cn) ;
   CN_Sg_Chunk cn = mkUtt cn ;
 ----  CN_Pl_Gen_Chunk cn = ss (cn.s ! Pl ! Gen) ;
 ----  CN_Sg_Gen_Chunk cn = ss (cn.s ! Sg ! Gen) ;
@@ -34,11 +34,11 @@ lin
   NP_Nom_Chunk np = mkUtt np ;
 ----  NP_Acc_Chunk np = ss (np.s ! NPAcc) ;
 ----  NP_Gen_Chunk np = ss (np.s ! NCase Gen) | ss (np.s ! NPNomPoss) ;
-  Numeral_Nom_Chunk num = mkUtt (mkNP (mkDet num)) ;
+  Numeral_Nom_Chunk num = mkUtt (Syntax.mkNP (Syntax.mkDet num)) ;
 ----  Numeral_Gen_Chunk num = ss (num.s ! NCard ! Gen) ;
 ----  Ord_Nom_Chunk ord = ss (ord.s ! Nom) ;
 ----  Ord_Gen_Chunk ord = ss (ord.s ! Gen) ;
-  Predet_Chunk predet = mkUtt (mkNP predet emptyNP) ;
+  Predet_Chunk predet = mkUtt (Syntax.mkNP predet emptyNP) ;
   Prep_Chunk prep = mkAdv prep emptyNP ; ----
 ----  RP_Nom_Chunk rp = ss (rp.s ! RC Neutr (NCase Nom)) ;
 ----  RP_Acc_Chunk rp = ss (rp.s ! RPrep Masc) ; ----
