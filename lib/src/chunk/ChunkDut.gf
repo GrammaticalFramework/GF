@@ -1,7 +1,6 @@
-concrete ChunkDut of Chunk = CatDut
-----  , ExtensionsDut 
+concrete ChunkDut of Chunk = CatDut, ExtensionsDut [VPS,VPI]
  ** 
-  ChunkFunctor - [UseVC, VPS_Chunk, emptyNP, VPI_Chunk]
+  ChunkFunctor - [emptyNP]
     with (Syntax = SyntaxDut), (Extensions = ExtensionsDut) 
     **
   open 
@@ -11,9 +10,9 @@ concrete ChunkDut of Chunk = CatDut
  oper
   emptyNP = SyntaxDut.mkNP (P.mkPN []) ;
 
-----lin
-----  NP_Acc_Chunk np = ss (np.s ! NPC Acc) ;
-----  NP_Gen_Chunk np = ss (np.s ! NPC Gen) ;
+lin
+  NP_Acc_Chunk np = ss (np.s ! NPAcc) ;
+  NP_Gen_Chunk np = ss ("van" ++ np.s ! NPAcc) ; ----
 
 ----  VPI_Chunk vpi = {s = vpi.s ! (True | False)} ;
 

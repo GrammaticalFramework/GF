@@ -1,17 +1,17 @@
 --# -coding=latin1
 concrete ExtraDut of ExtraDutAbs = CatDut ** 
-  open ResDut, MorphoDut, Coordination, Prelude, IrregDut in 
+  open ResDut, MorphoDut, Coordination, Prelude, IrregDut, (P = ParadigmsDut) in 
 {
---{
---
---  lincat
---    VPI   = {s : Bool => Str} ;
---    [VPI] = {s1,s2 : Bool => Str} ;
---  lin
---    BaseVPI = twoTable Bool ;
---    ConsVPI = consrTable Bool comma ;
---
---    MkVPI vp = {s = \\b => useInfVP b vp} ;
+
+
+  lincat
+    VPI   = {s : Bool => Str} ;
+    [VPI] = {s1,s2 : Bool => Str} ;
+  lin
+    BaseVPI = twoTable Bool ;
+    ConsVPI = consrTable Bool comma ;
+
+    MkVPI vp = {s = \\b => useInfVP b vp} ;
 --    ConjVPI = conjunctDistrTable Bool ;
 --
 --    ComplVPIVV v vpi = 
@@ -113,6 +113,11 @@ lin
     } ;
 
     ConjVPS = conjunctDistrTable2 Order Agr ;
+
+    PassVPSlash vps = 
+      insertInf (vps.s.s ! VPerf) (predV ResDut.worden_V) ;
+    PassAgentVPSlash vps np = 
+      insertAdv (appPrep "door" np.s) (insertInf (vps.s.s ! VPerf) (predV ResDut.worden_V)) ;
 
 lin
  NominalizeVPSlashNP vpslash np = 

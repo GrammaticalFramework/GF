@@ -5,20 +5,20 @@ concrete ExtensionsDut of Extensions =
 
 flags literal=Symb ; coding = utf8 ;
 
-----lincat
-----  VPI = E.VPI ;
-----  ListVPI = E.ListVPI ;
-----  VPS = E.VPS ;
-----  ListVPS = E.ListVPS ;
+lincat
+  VPI = E.VPI ;
+  ListVPI = E.ListVPI ;
+  VPS = E.VPS ;
+  ListVPS = E.ListVPS ;
   
---- lin
-----  MkVPI = E.MkVPI ;
+lin
+  MkVPI = E.MkVPI ;
 ----  ConjVPI = E.ConjVPI ;
 ----  ComplVPIVV = E.ComplVPIVV ;
 
-----  MkVPS = E.MkVPS ;
+  MkVPS = E.MkVPS ;
 ----  ConjVPS = E.ConjVPS ;
-----  PredVPS = E.PredVPS ;
+  PredVPS = E.PredVPS ;
 
 ----  BaseVPI = E.BaseVPI ;
 ----  ConsVPI = E.ConsVPI ;
@@ -29,8 +29,8 @@ flags literal=Symb ; coding = utf8 ;
 ----  GenIP = E.GenIP ;
 ----  GenRP = E.GenRP ;
 
-----  PassVPSlash = E.PassVPSlash ;
-----  PassAgentVPSlash = E.PassAgentVPSlash ;
+  PassVPSlash = E.PassVPSlash ;
+  PassAgentVPSlash = E.PassAgentVPSlash ;
 
 ----  EmptyRelSlash = E.EmptyRelSlash ;
 

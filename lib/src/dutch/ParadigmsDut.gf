@@ -164,13 +164,27 @@ oper
 
   mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
-  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
-  mkV2V : V -> Prep -> V2V ;
+
+  mkV2V : overload {
+    mkV2V : V -> Prep -> V2V ;
+    mkV2V : V -> V2V ;
+    } ;
+  mkV2S : overload {
+    mkV2S : V -> Prep -> V2S ;
+    mkV2S : V -> V2S ;
+    } ;
+  mkV2A : overload {
+    mkV2A : V -> Prep -> V2A ;
+    mkV2A : V -> V2A ;
+    } ;
+  mkV2Q : overload {
+    mkV2Q : V -> Prep -> V2Q ;
+    mkV2Q : V -> V2Q ;
+    } ;
+
   mkVA  : V -> VA ;
-  mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Prep -> V2Q ;
 
 --
 --  mkAS  : A -> AS ;
@@ -197,6 +211,8 @@ oper
     = \a -> lin N (regNoun a) ;
     mkN : (bit : Str) -> Gender -> N 
     = \a,b -> lin N (regNounG a b) ;
+    mkN : (bit : Str) -> Gender -> Gender -> N 
+    = \a,g1,g2 -> lin N (regNounG a g1) | lin N (regNounG a g2) ; -- there are many nouns with variant genders
     mkN : (gat,gaten : Str) -> Gender -> N 
     = \a,b,c -> lin N (mkNoun a b c) ;
    mkN : (huis,boot : N) -> N
@@ -245,6 +261,7 @@ oper
     mkV : (aai,aait,aaien,aaide,aaiden,geaaid : Str) -> V =
       \a,b,c,d,f,g -> lin V (v2vv (mkVerb a b c d d f g)) ;
     mkV : Str -> V -> V = \v,s ->lin V (prefixV v s) ;
+    mkV : V -> Str -> V = \s,v ->lin V (prefixV v s) ; ---- the same, in order matching Wiktionary-generated lexicon
     } ;
   zijnV v = lin V (v2vvAux v VZijn) ;
   reflV v = lin V {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = VRefl} ;
@@ -467,11 +484,26 @@ oper
 --  A2V : Type = A2 ;
 
   mkV0 v = v ;
-  mkV2S v p = lin V2S (prepV2 v p) ;
-  mkV2V v p = lin V2V (prepV2 v p ** {isAux = False}) ;
+
+  mkV2V = overload {
+    mkV2V : V -> Prep -> V2V = \v,p -> lin V2V (prepV2 v p ** {isAux = False}) ;
+    mkV2V : V -> V2V = \v -> lin V2V (prepV2 v (mkPrep []) ** {isAux = False}) ;
+    } ;
+  mkV2S = overload {
+    mkV2S : V -> Prep -> V2S = \v,p -> lin V2S (prepV2 v p) ;
+    mkV2S : V -> V2S = \v -> lin V2S (prepV2 v (mkPrep [])) ;
+    } ;
+  mkV2A = overload {
+    mkV2A : V -> Prep -> V2A = \v,p -> lin V2A (prepV2 v p) ;
+    mkV2A : V -> V2A = \v -> lin V2A (prepV2 v (mkPrep [])) ;
+    } ;
+  mkV2Q = overload {
+    mkV2Q : V -> Prep -> V2Q = \v,p -> lin V2Q (prepV2 v p) ;
+    mkV2Q : V -> V2Q = \v -> lin V2Q (prepV2 v (mkPrep [])) ;
+    } ;
+
+
   mkVA  v   = lin VA v ;
-  mkV2A v p = lin V2A (prepV2 v p) ;
-  mkV2Q v p = lin V2Q (prepV2 v p) ;
 --
 --  mkAS  v = v ** {lock_A = <>} ;
 --  mkA2S v p = mkA2 v p ** {lock_A = <>} ;

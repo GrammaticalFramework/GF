@@ -3,7 +3,8 @@ abstract ExtraDutAbs = Extra [
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,
   Temp,Pol,S,NP,
   VV,VP,Conj,IComp,ICompAP,IAdvAdv,Adv,AP,IAdv,
-  VPSlash, NominalizeVPSlashNP] ** 
+  VPSlash, NominalizeVPSlashNP,
+  PassVPSlash, PassAgentVPSlash] ** 
 {
   flags coding=utf8;
 --{
