@@ -18,7 +18,7 @@ class ExprIterator implements Iterator<ExprProb> {
 		this.fetched  = false;
 	}
 
-	private native ExprProb fetchExprProb(long ref, Pool pool, PGF gr);
+	private native static ExprProb fetchExprProb(long ref, Pool pool, PGF gr);
 
 	private void fetch() {
 		if (!fetched) {

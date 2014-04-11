@@ -388,9 +388,58 @@ Java_org_grammaticalframework_pgf_Parser_parse
 	return jexpiter;
 }
 
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_Completer_complete(JNIEnv* env, jclass clazz, jobject jconcr, jstring jstartCat, jstring js, jstring jprefix)
+{
+	GuPool* pool = gu_new_pool();
+
+    GuString startCat = j2gu_string(env, jstartCat, pool);
+    GuString s = j2gu_string(env, js, pool);
+    GuString prefix = j2gu_string(env, jprefix, pool);
+    GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), pool);
+
+	GuEnum* res =
+		pgf_complete(get_ref(env, jconcr), startCat, s, prefix, parse_err, pool);
+
+	if (!gu_ok(parse_err)) {
+		if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(parse_err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+		} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
+			GuString tok = (GuString) gu_exn_caught_data(parse_err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/ParseError", tok);
+		}
+
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	jclass tokiter_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/TokenIterator");
+	jmethodID constrId = (*env)->GetMethodID(env, tokiter_class, "<init>", "(JJ)V");
+	jobject jtokiter = (*env)->NewObject(env, tokiter_class, constrId, p2l(pool), p2l(res));
+
+	return jtokiter;
+}
+
+JNIEXPORT jobject JNICALL 
+Java_org_grammaticalframework_pgf_TokenIterator_fetchTokenProb(JNIEnv* env, jclass clazz, jlong enumRef, jobject jpool)
+{
+	GuEnum* res = (GuEnum*) l2p(enumRef);
+
+	PgfTokenProb* tp = gu_next(res, PgfTokenProb*, get_ref(env, jpool));
+	if (tp == NULL)
+		return NULL;
+
+	jclass tp_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/TokenProb");
+	jmethodID tp_constrId = (*env)->GetMethodID(env, tp_class, "<init>", "(Ljava/lang/String;D)V");
+	jobject jtp = (*env)->NewObject(env, tp_class, tp_constrId, gu2j_string(env,tp->tok), tp->prob);
+
+	return jtp;
+}
+
 JNIEXPORT jobject JNICALL 
 Java_org_grammaticalframework_pgf_ExprIterator_fetchExprProb
-  (JNIEnv* env, jobject self, jlong enumRef, jobject pool, jobject gr)
+  (JNIEnv* env, jclass clazz, jlong enumRef, jobject pool, jobject gr)
 {
 	GuEnum* res = (GuEnum*) l2p(enumRef);
 
