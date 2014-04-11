@@ -1,7 +1,7 @@
 import qualified Data.Map
 import Data.List
 
-langs = words "Bul Chi Eng Fin Fre Ger Hin Ita Spa Swe"
+langs = words "Bul Chi Dut Eng Fin Fre Ger Hin Ita Spa Swe"
 
 createAllConcretes = do
   createAbstract
