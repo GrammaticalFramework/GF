@@ -50,3 +50,24 @@ gftranslate.get_support=function(cont) {
     if(gftranslate.targets) cont(support,support)
     else gftranslate.get_languages(init2)
 }
+
+// trans_text_quality : String -> {quality:String, text:String}
+function trans_text_quality(text) {
+    var quality="default_quality"
+    switch(text[0]) {
+    case '+': text=text.substr(1).trimLeft(); quality="high_quality"; break;
+    case '*': text=text.substr(1).trimLeft(); quality="low_quality"; break;
+    }
+    return {quality:quality,text:text}
+}
+
+function trans_quality(r) {
+    var text=r.linearizations[0].text
+    if(r.prob==0) return {quality:"high_quality",text:text}
+    else {
+	var t=trans_text_quality(text)
+	if(t.quality=="default_quality" && r.tree[0]=="?")
+	    t.quality="low_quality"
+	return t
+    }
+}
