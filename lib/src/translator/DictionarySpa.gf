@@ -6447,8 +6447,8 @@ lin divulge_V2 = mkV2 (mkV "propalar") ; -- status=guess, src=wikt
 lin dizziness_N = mkN "mareo" | mkN "vértigo" ; -- status=guess status=guess
 lin dizzy_A = mkA "vertiginoso" | mkA "mareado" ; -- status=guess status=guess
 lin do_N = mkN "do" ; -- status=guess
-lin do_V = mkV "largarse" ;
-lin do_V2 = mkV2 (mkV "largarse") ;
+lin do_V = hacer_V ;
+lin do_V2 = mkV2 hacer_V ;
 lin dobra_N = mkN "dobra" ; -- status=guess
 lin docile_A = mkA "dócil" ; -- status=guess
 lin docility_N = mkN "docilidad" feminine ; -- status=guess

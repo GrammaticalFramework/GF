@@ -4592,8 +4592,8 @@ lin divorce_V2 = mkV2 (mkV "divorziare") ; -- status=guess, src=wikt
 lin divorcee_N = mkN "divorziato"  | mkN "divorziata"  | mkN "divorziati m plural" | mkN "divorziate f plural" ; -- status=guess status=guess status=guess status=guess
 lin divulge_V2 = mkV2 (mkV "divulgare") ; -- status=guess, src=wikt
 lin do_N = mkN "buonista" masculine ; -- status=guess
-lin do_V = andare_V ; -- status=guess, src=wikt
-lin do_V2 = mkV2 (andare_V) ; -- status=guess, src=wikt
+lin do_V = fare_V ;
+lin do_V2 = mkV2 fare_V ;
 lin dobra_N = mkN "dobra"  ; -- status=guess
 lin docile_A = mkA "docile" | mkA "mansueto" ; -- status=guess status=guess
 lin docker_N = mkN "portuale" feminine | mkN "scaricatore"  | mkN "scaricatore di porto" ; -- status=guess status=guess status=guess
