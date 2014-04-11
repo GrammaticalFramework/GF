@@ -80,7 +80,7 @@ static JavaVM* cachedJVM;
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void *reserved)
 {
     cachedJVM = jvm;
-    return JNI_VERSION_1_1;
+    return JNI_VERSION_1_6;
 }
 
 JNIEXPORT jobject JNICALL 
