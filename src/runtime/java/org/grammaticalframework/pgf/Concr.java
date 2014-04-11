@@ -20,6 +20,10 @@ public class Concr {
 		}
 	}
 
+	public Iterable<TokenProb> complete(String startCat, String s, String prefix) throws ParseError {
+		return new Completer(this, startCat, s, prefix);
+	}
+
 	public native String linearize(Expr expr);
 
 	public native Map<String, String> tabularLinearize(Expr expr);

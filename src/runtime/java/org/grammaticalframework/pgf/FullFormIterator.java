@@ -18,7 +18,7 @@ class FullFormIterator implements Iterator<FullFormEntry> {
 		this.fetched  = false;
 	}
 
-	private native FullFormEntry fetchFullFormEntry(long ref, Pool pool, Concr concr);
+	private native static FullFormEntry fetchFullFormEntry(long ref, Pool pool, Concr concr);
 
 	private void fetch() {
 		if (!fetched) {

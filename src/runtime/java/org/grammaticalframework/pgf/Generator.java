@@ -16,7 +16,7 @@ class Generator implements Iterable<ExprProb> {
 	public Iterator<ExprProb> iterator() {
 		if (iter == null) {
 			// If someone has asked for a second iterator over
-			// the same parse results then we have to parse again.
+			// the same results then we have to generate again.
 			return generateAll(gr, startCat);
 		} else {
 			ExprIterator tmp_iter = iter;
@@ -25,5 +25,5 @@ class Generator implements Iterable<ExprProb> {
 		}
 	}
 
-	static native ExprIterator generateAll(PGF gr, String startCat);
+	private native static ExprIterator generateAll(PGF gr, String startCat);
 }
