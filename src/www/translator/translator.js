@@ -212,10 +212,12 @@ Translator.prototype.update_translation=function(i) {
 	    else {
 		var ts=[]
 		for(var i=0;i<trans.length;i++) {
-		    ts[i]=trans[i].linearizations[0].text
-		    if(punct) ts[i]=ts[i]+" "+punct
+		    var t=trans[i].linearizations[0].text
+		    if(punct) t=t+" "+punct
+		    if(!elem(t,ts)) ts.push(t)
 		}
-		mapc(unlextext,ts,upd3)
+		//mapc(unlextext,ts,upd3)
+		upd3(ts)
 	    }
 	}
 	function upd0(source,punct) {
@@ -223,7 +225,7 @@ Translator.prototype.update_translation=function(i) {
 		//console.log(translate_output)
 		upd2(translate_output,punct)
 	    }
-	    gftranslate.translate(source,o.from,o.to,0,5,upd1)
+	    gftranslate.translate(source,o.from,o.to,0,10,upd1)
 	}
 	if(!window.gftranslate)
 		upd3s("[GF robust parser is not available]")
@@ -235,8 +237,8 @@ Translator.prototype.update_translation=function(i) {
 		    var want={from:o.from, to:o.to, method:"GFRobust"}
 		    if(!eq_options(segment.options,want)) {
 			//console.log("Updating "+i)
-			lexgfrobust(segment.source,upd0)
-			//upd0(segment.source)
+			//lexgfrobust(segment.source,upd0)
+			upd0(segment.source,"")
 		    }
 		    //else console.log("No update ",want,segment.options)
 		}
@@ -259,7 +261,10 @@ Translator.prototype.update_translation=function(i) {
 	function upd2(ts) {
 	    switch(ts.length) {
 	    case 0: upd3(["[no translation]"]);break;
-	    default: mapc(unlextext,ts,upd3); break;
+	    default:
+		//mapc(unlextext,ts,upd3);
+		upd3(ts)
+		break;
 	    }
 	}
 	function upd1(translate_output) {
@@ -267,7 +272,8 @@ Translator.prototype.update_translation=function(i) {
 	    upd2(collect_texts(translate_output[0].translations))
 	}
 	function upd0(source) {
-	    server.translate({from:gfrom,to:gto,input:source},upd1)
+	    server.translate({from:gfrom,to:gto,lexer:"text",unlexer:"text",
+			      input:source},upd1)
 	}
 	var fls=t.gf_supported(grammar,o.from)
 	var tls=t.gf_supported(grammar,o.to)
@@ -275,7 +281,8 @@ Translator.prototype.update_translation=function(i) {
 	    var want={from:o.from, to:o.to, method:grammar}
 	    if(!eq_options(segment.options,want)) {
 		//console.log("Updating "+i)
-		lextext(segment.source,upd0)
+		//lextext(segment.source,upd0)
+		upd0(segment.source)
 	    }
 	    //else console.log("No update ",want,segment.options)
 	}
@@ -1173,6 +1180,7 @@ function save_in_cloud(filename,document,cont) {
     with_dir(save)
 }
 
+/*
 // Like lextext, but separate punctuation from the end
 function lexgfrobust(txt,cont) {
     function rmpunct(txt) {
@@ -1184,7 +1192,7 @@ function lexgfrobust(txt,cont) {
     }
     lextext(txt,rmpunct)
 }
-
+*/
 /* --- DOM Support ---------------------------------------------------------- */
 
 function a(url,linked) { return node("a",{href:url},linked); }
