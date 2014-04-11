@@ -171,7 +171,8 @@ Translator.prototype.update_translation=function(i) {
 	}
 	else if(ts) {
 	    clear(ts[i])
-	    ts[i].appendChild(text(segment.target+" "))
+	    ts[i].appendChild(qtext(segment.target))
+	    ts[i].appendChild(text(" "))
 	}
     }
     function update_segment(m,txts) {
@@ -186,25 +187,33 @@ Translator.prototype.update_translation=function(i) {
 
 	function upd3(txts) { update_segment("Apertium",txts) }
 
+	function upd3s(txt) { upd3([{quality:"error",text:txt}]) }
+
 	function upd1(res) {
 	    //console.log(translate_output)
 	    if(res.translation) upd3([res.translation])
-	    else upd3(["["+res.error.message+"]"])
+	    else upd3s("["+res.error.message+"]")
 	}
 
 	function upd0(source) { apertium.translate(source,afrom,ato,upd1) }
 
 	if(!window.apertium)
-	    upd3(["[Apertium is not available]"])
+	    upd3s("[Apertium is not available]")
 	else if(apertium.isTranslatablePair(afrom,ato)) {
 	    if(!eq_options(segment.options,o)) upd0(segment.source)
 	}
 	else
-	    upd3(["[Apertium does not support "+show_translation(o)+"]"])
+	    upd3s("[Apertium does not support "+show_translation(o)+"]")
     }
     function update_gfrobust_translation() {
-	function upd3(txts) { update_segment("GFRobust",txts) }
-	function upd3s(txt) { upd3([txt]) }
+	function upd3(txts) {
+	    update_segment("GFRobust",txts.map(trans_text_quality))
+	}
+
+	function upd3s(txt) {
+	    update_segment("GFRobust",[{quality:"error",text:txt}])
+	}
+
 	function upd2(trans,punct) {
 	    if(trans.length==0) upd3s("[no translation]")
 	    else if(trans[0].error)
@@ -258,9 +267,10 @@ Translator.prototype.update_translation=function(i) {
     function update_gf_translation(grammar,gfrom,gto) {
 	var server=t.servers[grammar]
 	function upd3(txts) { update_segment(grammar,txts) }
+	function upd3s(txt) { upd3([{quality:"error",text:txt}]) }
 	function upd2(ts) {
 	    switch(ts.length) {
-	    case 0: upd3(["[no translation]"]);break;
+	    case 0: upd3s("[no translation]");break;
 	    default:
 		//mapc(unlextext,ts,upd3);
 		upd3(ts)
@@ -294,7 +304,7 @@ Translator.prototype.update_translation=function(i) {
 	    var is=" is "+sup
 	    var msg= fls ? tn+isnot : tls ? fn+isnot :
 		      "Neither "+fn+" nor "+tn+is
-	    upd3(["["+msg+"]"])
+	    upd3s("["+msg+"]")
 	}
     }
 
@@ -825,12 +835,13 @@ Translator.prototype.edit_translation=function(i) {
 	set_manual(s)
 	s.options.from=t.document.options.from
 	s.options.to=t.document.options.to
-	s.target=inp.value // side effect, updating the document in-place
+	s.target={quality:"manual_quality",text:inp.value}
+	         // side effect, updating the document in-place
 	restore();
 	return false;
     }
 
-    var inp=node("input",{name:"it",value:s.target})
+    var inp=node("input",{name:"it",value:qstring(s.target)})
     var e=form({},[inp, submit(), button("Cancel",restore)])
     var target=wrap_class("td","target",e)
     var edit=t.draw_segment_given_target(s,target,i)
@@ -852,7 +863,12 @@ function hide_menu(el) {
 /*
 type Document = { name:String, options:DocOptions, segments:[Segment],
                   globalsight : GlobalSight|null }
-type Segment = { source:String, target:String, options:Options }
+type Segment = { source:String, target:QText, options:Options }
+               & ( {} | { choices:[QText] } )
+type QText = { quality:Quality, text:String }
+             | String  // mostly for backward compatibility
+type Quality = "default_quality" | "low_quality" | "high_quality" 
+             | "manual_quality"
 type DocOptions = Options & { view:View, cloud:Bool }
 type Options = {from: Lang, to: Lang, method:Method}
 type Lang = String // Eng, Swe, Ita, etc
@@ -886,7 +902,7 @@ Translator.prototype.draw_document=function() {
 	function src(seg) { return seg.source }
 	function trg(seg) { return seg.target }
 	function fmt(txt,i) {
-	    var sd=span_class("segment",text(txt+" "))
+	    var sd=span_class("segment",[qtext(txt),text(" ")])
 	    function setclass(cls) {
 		return function() {
 		    targets[i].className=sources[i].className=cls
@@ -913,7 +929,7 @@ Translator.prototype.draw_segment=function(s,i) {
     var t=this
     var dopt=t.document.options
     var opt=s.options
-    var txt=text(s.target)
+    var txt=qtext(s.target)
     if(opt.from!=dopt.from || opt.to!=dopt.to) txt=span_class("error",txt)
     var target=wrap_class("td","target",txt)
     function edit() { t.edit_translation(i) }
@@ -923,9 +939,23 @@ Translator.prototype.draw_segment=function(s,i) {
     return t.draw_segment_given_target(s,target,i)
 }
 
+function qtext(t) {
+    switch(typeof(t)) {
+    case "string": return text(t)
+    default: return span_class(t.quality||"",text(t.text))
+    }
+}
+
+function qstring(t) {
+    switch(typeof(t)) {
+    case "string": return t
+    default: return t.text
+    }
+}
+
 function draw_choices(txts,onclick) {
     function opt(txt) { 
-	var o=dt(text(txt))
+	var o=dt(qtext(txt))
 	o.onclick=function(ev) { ev.stopPropagation(); onclick(txt) }
 	return o
     }
@@ -1156,7 +1186,7 @@ function export_globalsight_download_file(doc) {
     var gs=doc.globalsight.segments
     var ss=doc.segments
     for(var i=0;i<gs.length && i<ss.length;i++)
-	ls=ls.concat(gs[i],ss[i].target)
+	ls=ls.concat(gs[i],qstring(ss[i].target))
 
     ls.push("")
     ls.push("# END GlobalSight Download File")

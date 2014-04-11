@@ -1,5 +1,5 @@
 var wc={}
-//wc.cnl="Phrasebook" // try this controlled natural language first
+wc.cnl="Phrasebook" // try this controlled natural language first
 wc.f=document.forms[0]
 wc.o=element("output")
 wc.e=element("extra")
@@ -57,22 +57,6 @@ wc.translate=function() {
 
     function split_punct(s) {
 	return s.split(/([.!?]+[ \t\n]+|\n\n+|[ \t\n]*[-•*+#]+[ \t\n]+)/)
-    }
-
-    function trans_quality(r) {
-	var text=r.linearizations[0].text
-	if(r.prob==0) return {quality:"high_quality",text:text}
-	else {
-	    var quality="default_quality"
-	    switch(text[0]) {
-	    case '+': text=text.substr(1); quality="high_quality"; break;
-	    case '*': text=text.substr(1); quality="low_quality"; break;
-	    default:
-		if(r.tree[0]=="?") quality="low_quality"
-	    }
-	    text=text.trimLeft()
-	    return {quality:quality,text:text}
-	}
     }
 
     function translate_segment(si) { // si = segment index

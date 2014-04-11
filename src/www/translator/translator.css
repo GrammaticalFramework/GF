@@ -99,6 +99,10 @@ span.arrow, span.actions { color: blue; }
 span.error { color: red; }
 span.choices { color: blue; font-weight: bold; font-family: sans-serif; }
 
+.default_quality { background-color: #ffc; background-color: rgba(255,255,0,0.20) }
+.high_quality { background-color: #cfc; background-color: rgba(0,255,0,0.20); }
+.low_quality { background-color: #fcc; background-color: rgba(255,0,0,0.20); }
+.manual_quality { background-color: #ccf; background-color: rgba(0,0,255,0.20); }
 
 div.overlay {
     display: none;
