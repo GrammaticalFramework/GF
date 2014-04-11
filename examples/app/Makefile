@@ -21,6 +21,10 @@ AppIta: AppIta.pgf
 AppSpa: AppSpa.pgf
 
 TRANSLATE10=AppEng.pgf AppBul.pgf AppChi.pgf AppGer.pgf AppSwe.pgf AppHin.pgf AppFin.pgf AppFre.pgf AppIta.pgf AppSpa.pgf
+TRANSLATE11=$(TRANSLATE10) AppDut.pgf
+# Without dependencies:
+App11:
+	$(GFMKT) -name=App11 $(TRANSLATE11) +RTS -K200M
 
 # Without dependencies:
 App10:
@@ -34,6 +38,7 @@ App10.pgf: $(TRANSLATE10)
 AppEng.pgf:: ; $(GFMKT) -name=AppEng AppEng.gf
 AppBul.pgf:: ; $(GFMKT) -name=AppBul AppBul.gf
 AppChi.pgf:: ; $(GFMKT) -name=AppChi AppChi.gf +RTS -K64M
+AppDut.pgf:: ; $(GFMKT) -name=AppDut AppDut.gf +RTS -K64M
 AppFin.pgf:: ; $(GFMKT) -name=AppFin AppFin.gf +RTS -K64M
 AppGer.pgf:: ; $(GFMKT) -name=AppGer AppGer.gf +RTS -K64M
 AppHin.pgf:: ; $(GFMKT) -name=AppHin AppHin.gf
