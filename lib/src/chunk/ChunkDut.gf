@@ -14,7 +14,7 @@ lin
   NP_Acc_Chunk np = ss (np.s ! NPAcc) ;
   NP_Gen_Chunk np = ss ("van" ++ np.s ! NPAcc) ; ----
 
-----  VPI_Chunk vpi = {s = vpi.s ! (True | False)} ;
+  VPI_Chunk vpi = {s = vpi.s ! (True | False)} ;
 
 lin
   copula_inf_Chunk = ss "zijn" ;

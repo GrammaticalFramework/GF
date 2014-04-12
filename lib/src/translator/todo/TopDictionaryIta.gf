@@ -31,8 +31,8 @@ lin that_Subj = S.that_Subj ;
 lin he_Pron = S.he_Pron ; 
 lin on_Prep = S.on_Prep ; 
 lin with_Prep = S.with_Prep ; 
-lin do_V2 = mkV2 (andare_V) ; -- status=guess, src=wikt
-lin do_V = andare_V ; -- status=guess, src=wikt
+lin do_V2 = mkV2 (fare_V) ; 
+lin do_V = fare_V ; 
 lin at_Prep = ParadigmsIta.dative ;
 lin by_Prep = mkPrep "per" ;
 lin but_Conj = variants{} ; -- 
