@@ -48,6 +48,7 @@ fun
   GenRP       : Num -> CN -> RP ;   -- whose car(s)
  
   CompoundCN  : N -> CN -> CN ;     -- control system / controls system / control-system
+  CompoundAP  : N -> A  -> AP ;     -- language independent / language-independent
 
   GerundCN    : VP -> CN ;         -- publishing of the document (can get a determiner)
   GerundNP    : VP -> NP ;         -- publishing the document (by nature definite)

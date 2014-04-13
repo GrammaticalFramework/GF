@@ -42,6 +42,12 @@ lin
     g = cn.g
   } ;
   
+  CompoundAP noun adj = {
+    s = (\\_ => noun.s ! Sg ! Nom ++ Predef.BIND ++ "-" ++ Predef.BIND ++ adj.s ! AAdj Posit Nom)
+      | (\\_ => noun.s ! Sg ! Nom ++ adj.s ! AAdj Posit Nom)
+      ;
+    isPre = True
+    } ;
 
    GerundCN vp = {
      s = \\n,c => vp.ad ! AgP3Sg Neutr ++ vp.prp ++

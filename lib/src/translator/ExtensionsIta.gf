@@ -53,6 +53,12 @@ lin
     g = cn.g
   } ;
 
+    CompoundAP noun adj = {
+      s = \\af => adj.s ! Posit ! af ++ "di" ++ noun.s ! Sg  ;
+      isPre = False
+      } ;
+
+
 {-  
   GerundN v = {
     s = \\n,c => v.s ! VPresPart ;
