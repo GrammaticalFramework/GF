@@ -68,6 +68,11 @@ lin
     g = cn.g
   } ;
 
+    CompoundAP noun adj = {
+      s = \\af => glue (noun.s ! Sg ! Nom) (adj.s ! Posit ! af) ;
+      isPre = True
+      } ;
+
   GerundN v = { -- parsing
     s = \\n,c => v.s ! VInf False ; --- formalisieren, not formalisierung
     g = Neutr

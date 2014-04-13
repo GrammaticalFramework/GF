@@ -52,6 +52,10 @@ lin
     h = cn.h
     } ;
 
+  CompoundAP  noun adj = {
+    s = \\_ => (snoun2nounSep {s = \\f => noun.s ! 10 ++ BIND ++ adj.s ! Posit ! sAN f ; h = adj.h}).s
+    } ;
+
 ----  PastPartAP vp = {s = \\_,nf => (sverb2verbSep v).s ! PastPartPass (AN nf)} ;
 
   PredVPosv np vp = mkCl np vp ; ----

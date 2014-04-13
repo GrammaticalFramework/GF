@@ -41,6 +41,11 @@ lin
       isMod = False
       } ;
 
+  CompoundAP noun adj = {
+      s = \\ap => noun.co ++ BIND ++ adj.s ! AF (APosit ap) Nom ; 
+      isPre = True
+      } ;
+
   GerundN v = {
     s = \\n,d,c => v.s ! VI (VPtPres n d c) ;
     g = Neutr ;

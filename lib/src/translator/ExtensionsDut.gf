@@ -63,12 +63,18 @@ lin
 -}
     PredVPosv = G.PredVP;
     PredVPovs = G.PredVP;
-{-
+
   CompoundCN noun cn = {
-    s = \\a,n,c => glue (noun.s ! Sg ! Nom) (cn.s ! a ! n ! c) ;
+    s = \\af,nf => glue (noun.s ! NF Sg Nom) (cn.s ! af ! nf) ;
     g = cn.g
-  } ;
--}
+    } ;
+
+  CompoundAP noun adj = {
+      s = \\af => glue (noun.s ! NF Sg Nom) (adj.s ! Posit ! af) ;
+      isPre = True
+      } ;
+
+
   GerundN v = { -- parsing
     s = \\n,c => v.s ! VInf False ; --- formalisieren, not formalisierung
     g = Neutr
