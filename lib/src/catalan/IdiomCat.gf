@@ -33,7 +33,7 @@ concrete IdiomCat of Idiom = CatCat **
         ip.s ! Nom ++ 
         (mkClause [] True False
           (agrP3 Masc Sg) 
-          (insertClit3 "hi" (insertComplement (\\_ => ip.s ! Acc) (predV haver_V))))
+          (insertClit3 "hi" (predV haver_V)))
           .s ! DDir ! t ! a ! p ! Indic
       } ;
 

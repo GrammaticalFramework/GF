@@ -341,15 +341,19 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = -- cantar, perdre, témer, dormir, (servir)
+  regV x = -- cantar, perdre, témer, dormir
     case (Predef.dp 3 x) of {
+        --regular changes in stem
+        "iar"    => canviar_16 x ; --esglaiar with non-smart paradigm
         "jar"    => envejar_48 x ;
 	"çar"    => començar_22 x ;
 	"gir"    => fugir_58 x ;
 	"ure"    => beure_11 x ;
+	"xer"    => créixer_33 x ; --conèixer,aparèixer with regAltV
+
         _ + "re" => perdre_83 x ;
-        _ + "er" => verbEr x ; -- handles accents in infinitives & c/ç, g/j
-	_ + "ir" => dormir_44 x ; -- inchoative verbs with regAltV 
+        _ + "er" => verbEr x ; --handles accents in infinitives and c/ç, g/j
+	_ + "ir" => dormir_44 x ; --inchoative verbs with regAltV 
 	_ + "ur" => dur_45 x ;
 	_        => cantar_15 x } ;
 
@@ -357,33 +361,57 @@ oper
      let ure  = Predef.dp 3 x ;
 	 venc = Predef.dp 4 y ;
      in  case <ure,venc> of {
-	   <"ure",_>      => regV x ; --caure,viure etc. with non-smart paradigms
+           <_+"ir",_+"ixo"> => servir_101 x ; --inchoative verbs
 
-           <_+"ir",_+"ixo"> => servir_101 x ;
-	   <_+"ir","tinc">  => tenir_108 x ; --tenir,obtenir, ...
-	   <_+"ir","vinc">  => venir_117 x ; --venir,prevenir, ...
-	   <_+"ir","tenc">  => tenir_108 x ; --recognises balear, returns central
-	   <_+"ir","venc">  => venir_117 x ;
-	   
+	   <"ure",_+"c"> => regV x ; --caure,viure etc. with non-smart paradigms
+
+	   --small set of irregular verbs that have unique P1 Sg
+	   <_+"ir","tinc">  => tenir_108 x ; --tenir, obtenir, ...
+	   <_+"ir","vinc">  => venir_117 x ; --venir, prevenir, ...
            <_+"er",_+"ig">  => fer_56 x ;
 	   <_+"re",_+"ig">  => veure_118 x ;
 	   <_+"ar",_+"ig">  => anar_4 x ;
+
+	   <"xer" ,_+ "c">  => conèixer_27 x ; --créixer, merèixer with regV
            <_+"er",_+ "c">  => valer_114 x ;
-	   <_+"re",_+ "c">  => absoldre_1 x ; --participes of type "absolt"
-	                                      --for other types, mk3V
-	   <_   ,_>      => regV x } ;
+	   <_+"re",_+ "c">  => doldre_42 x ; --participles of type dolgut
+	                                     --for absolt, pres, ... use mk3V
+	   <_ ,_>           => regV x } ;
 
   mk3V x y z =
      let ure  = Predef.dp 3 x ;
 	 venc = Predef.dp 4 y ;
-	 ut   = Predef.dp 2 z 
-     in  case <ure,venc,ut> of {
-           <"ure",_,_> => regAltV x y ;
-           <_,_,"st"> => veure_118 x ; --TODO check
-	   <_,_,"it"> => coure_32 x ;  --TODO check
-	   <"dre",_,"ut"> => vendre_116 x ;
-	   <_+"re",_,"ès">  => atendre_8 x ;
-	   <_+"re",_,"às">  => romandre_97 x ;
+	 gut  = Predef.dp 3 z 
+     in  case <ure,venc,gut> of {
+	   <_+"re",_,"gut"> => regAltV x y ; --default participle of type dolgut
+	                                     
+	   --if these are overfitting, just comment out.
+           --still doesn't catch creure, seure; mk4V with creiem as 4th arg?
+	   <"ure",_, "uit"> => coure_32 x ;    --coure coem cuit
+	   <"ure",_,_+"it"> => escriure_50 x ; --escriure escrivim escrit
+	   <"ure",_,_+"et"> => treure_113 x ;  --treure traiem tret
+           <"ure",_,_+"st"> => veure_118 x ;   --veure veiem vist
+           <"ure",_, "cut"> => viure_119 x ;   --viure vivim viscut
+
+	   <"dre",_,_+"st"> => compondre_26 x ; --compondre compost
+
+	   <"rir", _+"ixo",_+"rt"> => cobrir_20 x ;  --cob|rir cob|ert
+	   <_+"ir",_+"ixo",_+"rt"> => complir_25 x ; --compl|ir compl|ert
+
+	   <_+"ir",_+"ixo",_+"ït"> => lluir_64 x ; --lluir lluïm lluït
+
+	   <"dre",_,"nut"> => vendre_116 x ;
+
+	   <_+"re",_+"c",_+"t"> => absoldre_1 x ; --c in sgP1 and subj, not in part
+
+	   <_+"re",_,_+"es"> => prendre_87 x ;
+	   <_+"re",_,_+"ès"> => atendre_8 x ;
+	   <_+"re",_,_+"as"> => raure_91 x ;
+	   <_+"re",_,_+"às"> => romandre_97 x ;
+	   <_+"re",_,_+"os"> => cloure_19 x ;
+	   <_+"re",_,_+"ós"> => confondre_28 x ;
+	   <_+"re",_,_+"òs"> => recloure_93 x ;
+
 	   <_,_,_>        => regAltV x y } ;
 
   reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
