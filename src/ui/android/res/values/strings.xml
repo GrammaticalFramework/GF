@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DG Translator</string>
+    <string name="app_name">Language Compiler</string>
 
     <string name="microphone">Microphone</string>
     <string name="switch_languages">Switch languages</string>
