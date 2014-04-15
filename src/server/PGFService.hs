@@ -12,7 +12,7 @@ import URLEncoding
 
 #if C_RUNTIME
 import qualified PGF2 as C
-import Data.Time.Clock(UTCTime,getCurrentTime,diffUTCTime)
+--import Data.Time.Clock(UTCTime,getCurrentTime,diffUTCTime)
 #endif
 
 import Data.Time.Format(formatTime)
@@ -98,6 +98,7 @@ cpgfMain command (t,(pgf,pc)) =
     "c-parse"     -> out t=<< join (parse # input % start % limit % trie)
     "c-linearize" -> out t=<< lin # tree % to
     "c-translate" -> out t=<< join (trans # input % to % start % limit % trie)
+    "c-lookupmorpho" -> out t=<< morpho # from1 % textInput
     "c-flush"     -> out t=<< flush
     "c-grammar"   -> out t grammar
     _             -> badRequest "Unknown command" command
@@ -162,13 +163,21 @@ cpgfMain command (t,(pgf,pc)) =
                                      "linearizations".=lin' tree to]
                                     | (tree,prob) <- parses]
 
+    morpho (from,concr) input =
+        showJSON [makeObj ["lemma".=l,"analysis".=a,"prob".=p]|(l,a,p)<-ms]
+      where ms = C.lookupMorpho concr input
+
+
     input = lexit # from % textInput
       where
         lexit (from,lex) input = (from,lex input)
 
-        from = maybe (missing "from") getlexer =<< getLang "from"
+        from = maybe (missing "from") getlexer =<< from'
           where
             getlexer f@(_,concr) = (,) f # c_lexer concr
+
+    from1 = maybe (missing "from") return =<< from'
+    from' = getLang "from"
 
     to = (,) # getLangs "to" % unlexer
 
@@ -255,6 +264,7 @@ pgfMain command (t,pgf) =
       "generate"       -> o =<< doGenerate pgf # cat % depth % limit % to
       "translate"      -> o =<< doTranslate pgf # input % cat % to % limit %trie
       "translategroup" -> o =<< doTranslateGroup pgf # input % cat % to % limit
+      "lookupmorpho"   -> o =<< doLookupMorpho pgf # from1 % textInput
       "grammar"        -> o =<< doGrammar pgf # requestAcceptLanguage
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
@@ -328,6 +338,7 @@ pgfMain command (t,pgf) =
         string name = maybe "" id # getInput name
         bool name = maybe False toBool # getInput name
 
+    from1 = maybe (missing "from") return =<< from
     from = getLang "from"
     to = (,) # getLangs "to" % unlexer
 
@@ -409,6 +420,14 @@ doExternal (Just cmd) input =
          liftIO $ removeFile tmpfile2
          return r
 
+doLookupMorpho :: PGF -> PGF.Language -> String -> JSValue
+doLookupMorpho pgf from input =
+    showJSON [makeObj ["lemma".=l,"analysis".=a]|(l,a)<-ms]
+  where
+    ms = PGF.lookupMorpho (PGF.buildMorpho pgf from) input
+
+
+type From = (Maybe PGF.Language,String)
 type To = ([PGF.Language],Unlexer)
 
 doTranslate :: PGF -> From -> Maybe PGF.Type -> To -> Maybe Int -> Bool -> JSValue
@@ -484,8 +503,6 @@ doTranslateGroup pgf (mfrom,input) mcat (tos,unlex) mlimit =
        else "AST " ++ PGF.showExpr [] t                   -- else show abstract tree
 
    notDisamb = (/="Disamb") . take 6 . PGF.showLanguage
-
-type From = (Maybe PGF.Language,String)
 
 doParse :: PGF -> From -> Maybe PGF.Type -> Maybe Int -> Bool -> JSValue
 doParse pgf (mfrom,input) mcat mlimit trie = showJSON $ map makeObj
