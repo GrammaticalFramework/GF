@@ -2,7 +2,10 @@
 
 concrete TranslateSpa of Translate = 
   TenseSpa,
-  NounSpa - [PPartNP],
+  NounSpa - [
+    PPartNP
+    ,UsePron -- override with a prodrop variant
+    ],
   AdjectiveSpa,
   NumeralSpa,
   SymbolSpa [
@@ -26,10 +29,15 @@ concrete TranslateSpa of Translate =
   ExtensionsSpa [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
 
   DictionarySpa ** 
-open MorphoSpa, ResSpa, ParadigmsSpa, SyntaxSpa, CommonScand, (E = ExtraSpa), Prelude in {
+open MorphoSpa, ResSpa, ParadigmsSpa, SyntaxSpa, (E = ExtraSpa), (G = GrammarSpa), Prelude in {
 
 flags
   literal=Symb ;
+
+-- the overrides -----
+lin
+
+ UsePron p = G.UsePron p | G.UsePron (E.ProDrop p) ;
 
 }
 
