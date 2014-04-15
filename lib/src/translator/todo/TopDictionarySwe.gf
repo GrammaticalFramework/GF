@@ -38,11 +38,11 @@ lin say_VA = mkV "säga" "sade" "sagt" ;
 lin say_V2 = mkV2 "säga" "sade" "sagt" ;
 lin say_V = mkV "säga" "sade" "sagt" ;
 lin if_Subj = S.if_Subj;
+lin go_V = L.go_V | mkV "åker" ;
+lin go_V2 = mkV2 L.go_V (mkPrep "till") | mkV2 (mkV "åker") (mkPrep "till") ;
 lin go_VV = mkVV L.go_V ;
 lin go_VS = mkVS L.go_V ;
 lin go_VA = mkVA I.bliva_V ;
-lin go_V2 = mkV2 L.go_V ;
-lin go_V = L.go_V ;
 lin get_VV = mkVV I.få_V ;
 lin get_VS = mkVS I.få_V ;
 lin get_VA = mkVA I.få_V ;
@@ -2253,7 +2253,7 @@ lin sing_V = L.sing_V ;
 lin whereas_Subj = variants{} ; -- 
 lin own_V2 = mkV2 "äger" ; --
 lin own_V = mkV "äger" ; -- comment=4
-lin head_V2 = mkV2 (mkV "åka"); -- status=guess, src=wikt
+lin head_V2 = mkV2 (mkV "åker") (mkPrep "till") ;
 lin head_V = mkV "falla" "föll" "fallit" ; -- comment=14
 lin examination_N = mkN "prov" neutrum | mkN "tentamen" "tentamen" "tentamina" "tentamina" ; -- SaldoWN = mkN "prov" neutrum ; -- comment=13
 lin deliver_V2 = mkV2 "undsätta" "undsätter" "undsätt" "undsatte" "undsatt" "undsatt" | dirV2 (partV (mkV "riktar")"till") ; -- SaldoWN -- comment=2
@@ -2608,7 +2608,7 @@ lin illustrate_VS = variants{}; -- mkV "illustrerar" ; -- comment=4
 lin illustrate_V2 = variants{}; -- mkV "illustrerar" ; -- comment=4
 lin illustrate_V = mkV "illustrerar" ; -- comment=4
 lin pay_N = mkN "visa" ; -- comment=7
-lin ride_V2 = mkV2 (mkV "åka"); -- status=guess, src=wikt
+lin ride_V2 = mkV2 (mkV "åker"); -- status=guess, src=wikt
 lin ride_V = mkV "rida" "red" "ridit" ;
 lin foundation_N = mkN "stiftelse" "stiftelser" ; -- SaldoWN
 lin restaurant_N = L.restaurant_N ;

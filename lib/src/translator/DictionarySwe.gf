@@ -21389,7 +21389,7 @@ lin field_2_N = mkN "fält" "fält" ;
 lin field_3_N = mkN "plan" "planer" ;
 lin field_4_N = mkN "kropp" ;
 lin field_N = mkN "plan" "planer" | mkN "slagfält" neutrum ; ---
-lin field_V = mkV "åker" ;
+lin field_V = mkV "planera" ;
 lin field_V2 = variants {} ;
 lin field_hospital_N = variants {} ;
 lin field_officer_N = variants {} ;
@@ -24408,8 +24408,8 @@ lin gnp_N = mkN "bruttonationalprodukt" "bruttonationalprodukter" ;
 lin gnu_N = mkN "gnu" "gnun" "gnuer" "gnuerna" ; -- comment=2
 lin go_A = mkA "dö" | mkA "gäll" ; -- SaldoWN -- comment=3
 lin go_N = mkN "tur" ; -- comment=12
-lin go_V = L.go_V ;
-lin go_V2 = mkV2 L.go_V ;
+lin go_V = L.go_V | mkV "åker" ;
+lin go_V2 = mkV2 L.go_V (mkPrep "till") | mkV2 (mkV "åker") (mkPrep "till") ;
 lin go_VA = mkVA I.bliva_V ;
 lin go_VS = mkVS L.go_V ;
 lin go_VV = mkVV L.go_V ;
@@ -26165,7 +26165,7 @@ lin he_man_N = variants {} ;
 lin head_A = variants{} ; --
 lin head_N = L.head_N ;
 lin head_V = mkV "falla" "föll" "fallit" ; -- comment=14
-lin head_V2 = mkV2 (mkV "åka"); -- status=guess, src=wikt
+lin head_V2 = mkV2 (mkV "åker") (mkPrep "till") ;
 lin head_for_V2 = variants {} ;
 lin head_hunter_N = variants {} ;
 lin head_off_V = mkV "falla" "föll" "fallit" ; -- comment=14
@@ -48534,7 +48534,7 @@ lin riddle_N = mkN "såll" neutrum; -- comment=2
 lin riddle_V2 = variants {} ;
 lin ride_N = mkN "ritt" "ritter" ; -- comment=2
 lin ride_V = mkV "rida" "red" "ridit" ;
-lin ride_V2 = mkV2 (mkV "åka"); -- status=guess, src=wikt
+lin ride_V2 = mkV2 (mkV "åker") ; 
 lin ride_off_V = mkV "rida" "red" "ridit" ;
 lin ride_on_V2 = variants {} ;
 lin ride_out_V2 = variants {} ;
@@ -51569,6 +51569,7 @@ lin shaking_N = variants {} ;
 lin shaky_A = mkA "skakig" ; -- comment=12
 lin shale_N = mkN "skiffer" ;
 lin shale_oil_N = variants {} ;
+lin shall_VV = auxVV (mkV "skola" ("skall" | "ska") "skola" "skulle" "skolat" "skolande" | mkV "böra" "borde" "bort");
 lin shallot_N = mkN "schalottenlök" ; -- status=guess
 lin shallow_A = mkA "grund" | mkA "ytlig" ; -- SaldoWN -- comment=3
 lin shallow_N = mkN "grund" "grunder" | mkN "grund" neutrum ; -- SaldoWN = mkN "grund" neutrum ; -- comment=2
@@ -52634,7 +52635,7 @@ lin sizzle_N = variants {} ;
 lin sizzle_V = variants {} ;
 lin skank_N = variants {} ;
 lin skate_N = (mkN "skena") | (mkN "skridsko" "skridskor"); -- status=guess status=guess
-lin skate_V = (mkV "skrinnar") | mkV (mkV "åka") "skridskor" ; -- status=guess, src=wikt status=guess, src=wikt
+lin skate_V = (mkV "skrinnar") | mkV (mkV "åker") "skridskor" ; -- status=guess, src=wikt status=guess, src=wikt
 lin skateboard_N = mkN "skateboard" "skateboarden" "skateboard" "skateboarden" | mkN "rullbräda" ; -- SaldoWN -- comment=2
 lin skateboarder_N = variants {} ;
 lin skateboarding_N = variants {} ;
