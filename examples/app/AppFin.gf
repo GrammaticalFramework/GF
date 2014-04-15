@@ -29,7 +29,7 @@ concrete AppFin of App =
   -- Extensions
   ]
 
-  ,PhrasebookFin - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A]
+  ,PhrasebookFin - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, open_Adv]
 
     ** open ParadigmsFin, SyntaxFin, Prelude in {
 
