@@ -17,7 +17,7 @@ oper
     } ;
 
   elision : (_,_,_ : Str) -> Str = \il, l', lo -> 
-    pre {il ; (l' ++ Predef.BIND) / vocale ; lo / sImpuro} ;
----    pre {vocale => l' ;  sImpuro => lo ; _ => il} ;
+----    pre {il ; (l' ++ Predef.SOFT_BIND) / vocale ; lo / sImpuro} ;
+    pre {vocale => l' ;  sImpuro => lo ; _ => il} ;  --- doesn't work properly 15/4/2014
 
 }
