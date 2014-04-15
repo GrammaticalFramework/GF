@@ -172,6 +172,9 @@ oper
     mkA : AK -> A ;  -- adjective from DictFin (Kotus)
   } ;
 
+  invarA : Str -> A  -- invariant adjective, e.g. "kelpo"
+    = \s -> lin A {s = \\_,_ => s ; h = Back} ; ----- stemming adds bogus endings
+
 -- Two-place adjectives need a case for the second argument.
 
   mkA2 = overload {
@@ -272,14 +275,16 @@ mkVS = overload {
   } ;
 
   mkV2V = overload {
-    mkV2V : Str -> V2V 
+    mkV2V : Str -> V2V  -- reg verb, partitive + infIllat 
      = \s -> mkV2Vf (mkV s) (casePrep partitive) infIllat ; ----
-    mkV2V : V -> V2V 
+    mkV2V : V -> V2V    -- partitive + infillat
      = \v -> mkV2Vf v (casePrep partitive) infIllat ; ----
-    mkV2V : V -> Prep -> V2V  -- e.g. "käskeä" genitive
+    mkV2V : V -> Prep -> V2V  -- e.g. "käskeä" genitive + infFiilat
      = \v,p -> mkV2Vf v p infIllat ;
-    mkV2Vf  : V -> Prep -> InfForm -> V2V -- e.g. "kieltää" partitive infElatv 
+    mkV2V  : V -> Prep -> InfForm -> V2V -- e.g. "kieltää" partitive infElat 
      = \v,p,f -> mk2V2 v p ** {vi = infform2vvtype f ; lock_V2V = <>} ;
+    mkV2V  : V -> Case -> InfForm -> V2V 
+     = \v,c,f -> mk2V2 v (casePrep c) ** {vi = infform2vvtype f ; lock_V2V = <>} ;
     } ;
 
   mkV0  : V -> V0 ; --%
