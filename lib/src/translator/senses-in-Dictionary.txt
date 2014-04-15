@@ -2,12 +2,12 @@ fun actor_1_N : N  ;  -- | a Shakespeare actor
 fun actor_2_N : N  ;  -- | an important actor
 fun apply_1_V2 : V2 ; -- | we apply the newest methods
 fun apply_2_V2 : V2 ; -- | we apply for a job
-fun area_1_N : N ;
-fun area_2_N : N ;
-fun area_3_N : N ;
-fun area_4_N : N ;
-fun area_5_N : N ;
-fun area_6_N : N ;
+fun area_1_N : N ; -- | mountaineous area
+fun area_2_N : N ; -- | area of specialization
+fun area_3_N : N ; -- | the abdominal area
+fun area_4_N : N ; -- | closed area of employment
+fun area_5_N : N ; -- | cooking area
+fun area_6_N : N ; -- | the area of a rectangle
 fun arm_1_N : N ; -- | arms and legs
 fun arm_2_N : N ; -- | a farewell to arms
 fun authority_1_N : N  ; -- | he is an authority in his field
@@ -44,8 +44,8 @@ fun command_1_N : N  ; -- | she gave us commands
 fun command_2_N : N  ; -- | she took the command
 fun common_1_A : A  ; -- | very common
 fun common_2_A : A  ; -- | common to us
-fun company_1_N : N ;
-fun company_2_N : N ;
+fun company_1_N : N ; -- | start-up company
+fun company_2_N : N ; -- | enjoy their company
 fun condition_1_N : N ; -- | there is one condition
 fun condition_2_N : N ; -- | he is in a bad condition
 fun cortege_1_N : N ;
