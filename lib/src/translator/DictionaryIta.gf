@@ -1,7 +1,6 @@
----- checked by AR up to set_V in BNC
-
 concrete DictionaryIta of Dictionary = CatIta
-** open ParadigmsIta, IrregIta, (I=IrregIta), MorphoIta, (L=LexiconIta), (S=StructuralIta), Prelude in {
+** open ParadigmsIta, (P = ParadigmsIta), 
+        IrregIta, (I=IrregIta), MorphoIta, (L=LexiconIta), (S=StructuralIta), Prelude in {
 
 oper mkInterj : Str -> Interj
 = \s -> lin Interj (ss s) ;
@@ -14,6 +13,8 @@ oper mkConj : Str -> Conj
   = \s -> lin Conj {s1 = [] ; s2 = s ; n = Pl} ;
 oper mkSubj : Str -> Subj
   = \s -> lin Subj {s = [] ; m = Indic} ; ----
+oper subSubj : Str -> Subj
+  = \s -> lin Subj {s = [] ; m = Conjunct} ; ----
 
 lin aardvark_N = mkN "oritteropo" ; -- status=guess
 lin aardwolf_N = mkN "protele" ; -- status=guess
@@ -397,7 +398,7 @@ lin aforesaid_A = mkA "succitato" | mkA "suddetto" ; -- status=guess status=gues
 lin afraid_A = mkA "paura" ; -- status=guess
 lin after_Adv = mkAdv "poi" | mkAdv "dopo" ; -- status=guess status=guess
 lin after_Prep = S.after_Prep ;
-lin after_Subj = variants{} ; --
+lin after_Subj = mkSubj "dopo" ;
 lin afterlife_N = mkN "oltretomba" | mkN "aldilà" | mkN "altro mondo" ; -- status=guess status=guess status=guess
 lin aftermath_N = mkN "conseguenze" feminine ; -- status=guess
 lin afternoon_N = mkN "pomeriggio" ; -- status=guess
@@ -999,13 +1000,13 @@ lin archive_N = mkN "archivio" ; -- status=guess
 lin arctic_N = mkN "lepre artica" ; -- status=guess
 lin arduous_A = mkA "arduo" | mkA "ardua" ; -- status=guess status=guess
 lin are_N = mkN "ara" ; -- status=guess
-lin area_1_N = mkN "areale" ;
-lin area_2_N = variants{} ; --
-lin area_3_N = variants{} ; --
-lin area_4_N = variants{} ; --
-lin area_5_N = variants{} ; --
-lin area_6_N = variants{} ; --
-lin area_N = variants{} ; --
+lin area_1_N = mkN "regione" ;
+lin area_2_N = mkN "area" ;
+lin area_3_N = mkN "area" ;
+lin area_4_N = mkN "area" ;
+lin area_5_N = mkN "area" ;
+lin area_6_N = mkN "areale" ;
+lin area_N = mkN "area" ; --
 lin areal_A = mkA "areale" ; -- status=guess
 lin arena_N = mkN "arena" ; -- status=guess
 lin argent_A = mkA "argento" ; -- status=guess
@@ -1089,7 +1090,7 @@ lin artistically_Adv = mkAdv "artisticamente" ; -- status=guess
 lin artistry_N = mkN "artisticità" feminine ; -- status=guess
 lin as_CAdv = S.as_CAdv ; -- comment=CHECKED
 lin as_Prep = mkPrep "come" ;
-lin as_Subj = variants{} ; --
+lin as_Subj = mkSubj "quando" ;
 lin ascend_V = salire_V ; -- status=guess, src=wikt
 lin ascend_V2 = mkV2 (salire_V) ; -- status=guess, src=wikt
 lin ascendancy_N = mkN "influsso" ; -- status=guess
@@ -1306,8 +1307,8 @@ lin authentically_Adv = mkAdv "autenticamente" ; -- status=guess
 lin authenticity_N = mkN "autenticità" feminine ; -- status=guess
 lin author_N = mkN "autore" | mkN "autrice" feminine ; -- status=guess status=guess
 lin authoritative_A = mkA "autoritario" ; -- status=guess
-lin authority_1_N = variants{} ; --
-lin authority_2_N = variants{} ; --
+lin authority_1_N = mkN "autorità" ;
+lin authority_2_N = mkN "autorità" ;
 lin authority_N = mkN "autorità" feminine ; -- status=guess
 lin authorization_N = mkN "autorizzazione" feminine ; -- status=guess
 lin authorize_V2 = variants{} ; --
@@ -1656,7 +1657,7 @@ lin beetle_N = mkN "coleottero" | mkN "scarabeo" ; -- status=guess status=guess
 lin beetroot_N = mkN "barbabietola" ; -- status=guess
 lin before_Adv = mkAdv "prima" ; -- status=guess
 lin before_Prep = S.before_Prep ;
-lin before_Subj = variants{} ; --
+lin before_Subj = subSubj "primo che" ;
 lin beg_V = mkV "mendicare" | mkV "elemosinare" ; -- status=guess, src=wikt status=guess, src=wikt
 lin beg_V2 = mkV2 (mkV "mendicare") | mkV2 (mkV "elemosinare") ; -- status=guess, src=wikt status=guess, src=wikt
 lin beg_V2V = L.beg_V2V ; -- comment=CHECKED
@@ -2401,7 +2402,7 @@ lin bust_V = mkV "scoppiare" ;
 lin bust_V2 = mkV2 (mkV I.fare_V "scoppiare") ;
 lin busy_A = mkA "occupato" ; -- status=guess
 lin busybody_N = mkN "intrigante" masculine | mkN "ficcanaso" ; -- status=guess status=guess
-lin but_Conj = variants{} ; --
+lin but_Conj = mkConj "ma" ;
 lin but_PConj = S.but_PConj ; -- comment=CHECKED
 lin butane_N = mkN "butano" ; -- status=guess
 lin butcher_N = mkN "macellaio" ; -- status=guess
@@ -3754,13 +3755,13 @@ lin conservative_N = variants{} ; --
 lin conservatoire_N = mkN "conservatorio" ; -- status=guess
 lin conservatory_N = mkN "conservatorio" ; -- status=guess
 lin conserve_V2 = mkV2 (mkV "conservare") ; -- status=guess, src=wikt
-lin consider_V = variants{} ; --
-lin consider_V2 = variants{} ; --
+lin consider_V = mkV "considerare" ;
+lin consider_V2 = mkV2 "considerare" ;
 lin consider_V2A = variants{} ; --
 lin consider_V2V = variants{} ; --
 lin consider_V3 = variants{} ; --
 lin consider_VS = variants{} ; --
-lin consider_VV = variants{} ; --
+lin consider_VV = mkVV (mkV "considerare") ;
 lin considerable_A = variants{} ; --
 lin considerably_Adv = variants{} ; --
 lin consideration_N = variants{} ; --
@@ -5121,7 +5122,7 @@ lin discharge_V = variants{} ; --
 lin discharge_V2 = variants{} ; --
 lin discipleship_N = mkN "discepolato" ; -- status=guess
 lin disciplinary_A = variants{} ; --
-lin discipline_N = variants{} ; --
+lin discipline_N = mkN "disciplina" ;
 lin discipline_V2 = variants{} ; --
 lin disclose_V = mkV "svelare" | mkV "scoperchiare" | mkV (mkV "far") "noto" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin disclose_V2 = mkV2 (mkV "svelare") | mkV2 (mkV "scoperchiare") | mkV2 (mkV (mkV "far") "noto") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
@@ -5232,7 +5233,7 @@ lin distant_A = variants{} ; --
 lin distemper_N = mkN "cimurro" ; -- status=guess
 lin distillery_N = mkN "distilleria" ; -- status=guess
 lin distinct_A = mkA "distinto" | mkA "distinta" | mkA "diverso" | mkA "diversa" ; -- status=guess status=guess status=guess status=guess
-lin distinction_N = variants{} ; --
+lin distinction_N = mkN "distinzione" ;
 lin distinctive_A = variants{} ; --
 lin distinctly_Adv = variants{} ; --
 lin distinguish_V = variants{} ; --
@@ -5294,8 +5295,8 @@ lin divorce_V2 = mkV2 (mkV "divorziare") ; -- status=guess, src=wikt
 lin divorcee_N = mkN "divorziato" | mkN "divorziata" | mkN "divorziati m plural" | mkN "divorziate f plural" ; -- status=guess status=guess status=guess status=guess
 lin divulge_V2 = mkV2 (mkV "divulgare") ; -- status=guess, src=wikt
 lin do_N = mkN "buonista" masculine ; -- status=guess
-lin do_V = fare_V ; 
-lin do_V2 = mkV2 (fare_V) ; 
+lin do_V = fare_V ;
+lin do_V2 = mkV2 (fare_V) ;
 lin dobra_N = mkN "dobra" ; -- status=guess
 lin docile_A = mkA "docile" | mkA "mansueto" ; -- status=guess status=guess
 lin dock_N = variants{} ; --
@@ -7007,7 +7008,7 @@ lin fork_3_N = variants{} ; --
 lin fork_4_N = variants{} ; --
 lin fork_N = variants{} ; --
 lin forklift_N = mkN "transpallet" masculine ; -- status=guess
-lin form_N = mkN "formulario" ; -- status=guess
+lin form_N = mkN "formulario" ; --- split -- | geometric form -- | fill a form
 lin form_V = mkV "formare" ; -- status=guess, src=wikt
 lin form_V2 = mkV2 (mkV "formare") ; -- status=guess, src=wikt
 lin formal_A = variants{} ; --
@@ -7582,7 +7583,7 @@ lin gourmet_N = mkN "buongustaio" ; -- status=guess
 lin gout_N = mkN "gotta" | mkN "podagra" ;
 lin govern_V = variants{} ; --
 lin govern_V2 = variants{} ; --
-lin government_N = variants{} ; --
+lin government_N = mkN "governamento" ;
 lin governor_N = mkN "governatore" masculine ; -- status=guess
 lin gown_N = mkN "toga" ; -- status=guess
 lin grab_N = mkN "afferrare" ; -- status=guess
@@ -9084,10 +9085,10 @@ lin interception_N = mkN "intercetto" ; -- status=guess
 lin intercom_N = mkN "citofono" ; -- status=guess
 lin intercontinental_A = mkA "intercontinentale" ; -- status=guess
 lin intercourse_N = mkN "rapporto sessuale" ; -- status=guess
-lin interest_1_N = variants{} ; --
-lin interest_2_N = variants{} ; --
-lin interest_4_N = variants{} ; --
-lin interest_N = variants{} ; --
+lin interest_1_N = mkN "interesse" ;
+lin interest_2_N = mkN "interesse" ;
+lin interest_4_N = mkN "interesse" ;
+lin interest_N = mkN "interesse" ;
 lin interest_V = variants{} ; --
 lin interest_V2 = variants{} ; --
 lin interested_A = mkA "interessato" | mkA "interessata" ; -- status=guess status=guess
@@ -9680,8 +9681,8 @@ lin lava_N = mkN "lava" ; -- status=guess
 lin lavender_N = mkN "lavanda" ; -- status=guess
 lin lavish_A = mkA "eccessivo" | mkA "smodato" | mkA "sovrabbondante" ; -- status=guess status=guess status=guess
 lin lavish_V2 = mkV2 (mkV "prodigare") | mkV2 (profondere_V) | mkV2 (mkV (mkV "spendere") "profusamente") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin law_1_N = variants{} ; --
-lin law_2_N = variants{} ; --
+lin law_1_N = mkN "legge" feminine ;
+lin law_2_N = mkN "diritto" ;
 lin law_N = mkN "diritto" ; -- status=guess
 lin lawn_N = mkN "prato" ; -- status=guess
 lin lawrencium_N = mkN "laurenzio" ; -- status=guess
@@ -9812,10 +9813,10 @@ lin less_CAdv = S.less_CAdv ; -- comment=CHECKED
 lin less_Det = variants{} ; --
 lin lesser_A = variants{} ; --
 lin lesson_N = mkN "lezione" feminine ; -- status=guess
-lin let_V = mkV (mkV "acqua") "passata non macina più" ; -- status=guess, src=wikt
-lin let_V2 = mkV2 (mkV (mkV "acqua") "passata non macina più") ; -- status=guess, src=wikt
-lin let_V2V = mkV2V (mkV (mkV "acqua") "passata non macina più") ; -- status=guess, src=wikt
-lin let_VS = mkVS (mkV (mkV "acqua") "passata non macina più") ; -- status=guess, src=wikt
+lin let_V = mkV "lasciare" | I.permettere_V ;
+lin let_V2 = mkV2 (mkV "lasciare") ;
+lin let_V2V = mkV2V (mkV "lasciare") ;
+lin let_VS = mkVS (mkV "lasciare") ;
 lin lethal_A = mkA "letale" ; -- status=guess
 lin lethargic_A = mkA "letargico" ; -- status=guess
 lin letter_1_N = variants{} ; --
@@ -9825,8 +9826,8 @@ lin lettuce_N = mkN "lattuga" ; -- status=guess
 lin leukocyte_N = mkN "leucocita" masculine ; -- status=guess
 lin leukorrhea_N = mkN "leucorrea" ; -- status=guess
 lin levator_N = mkN "elevatore del labbro superiore e dell'ala del naso" | mkN "muscolo elevatore del labbro superiore e dell'ala del naso" ; -- status=guess status=guess
-lin level_1_N = variants{} ; --
-lin level_2_N = variants{} ; --
+lin level_1_N = mkN "livello" ;
+lin level_2_N = mkN "livello" ;
 lin level_A = mkA "livellato" ; -- status=guess
 lin level_N = mkN "livello" ; -- status=guess
 lin level_V = mkV "livellare" ; -- status=guess, src=wikt
@@ -10056,7 +10057,7 @@ lin loneliness_N = mkN "solitudine" feminine ; -- status=guess
 lin lonely_A = mkA "solo" | mkA "solitario" | mkA "malinconico" ; -- status=guess status=guess status=guess
 lin loner_N = mkN "eremita" masculine ; -- status=guess
 lin long_A = L.long_A ;
-lin long_Adv = variants{} ; --
+lin long_Adv = mkAdv "lungo tempo" ;
 lin long_N = mkN "braccio della legge" ; -- status=guess
 lin long_V = mkV "bramare" ; -- status=guess, src=wikt
 lin long_term_A = variants{} ; --
@@ -10400,8 +10401,8 @@ lin mark_V2 = mkV2 (mkV "macchiare") ; -- status=guess, src=wikt
 lin mark_V3 = mkV3 (mkV "macchiare") ; -- status=guess, src=wikt
 lin marked_A = variants{} ; --
 lin marker_N = mkN "marcatore" ; -- status=guess
-lin market_1_N = variants{} ; --
-lin market_2_N = variants{} ; --
+lin market_1_N = mkN "mercato" ;
+lin market_2_N = mkN "mercato" ;
 lin market_N = mkN "mercato" ; -- status=guess
 lin market_V = variants{} ; --
 lin market_V2 = variants{} ; --
@@ -10417,7 +10418,7 @@ lin marquee_N = mkN "padiglione" | mkN "tendone" masculine ; -- status=guess sta
 lin marquess_N = mkN "marchese" masculine ; -- status=guess
 lin marquetry_N = mkN "intarsio" ; -- status=guess
 lin marriage_N = mkN "connubio" | mkN "unione" feminine ; -- status=guess status=guess
-lin married_A = variants{} ; --
+lin married_A = mkA "sposato" ;
 lin married_A2 = L.married_A2 ; -- comment=CHECKED
 lin marrow_N = mkN "zucchina" ; -- status=guess
 lin marry_V = mkV "sposarsi" ; -- status=guess, src=wikt
@@ -11031,8 +11032,8 @@ lin moustache_N = mkN "baffi" masculine ; -- status=guess
 lin mouth_N = L.mouth_N ;
 lin mouthful_N = mkN "boccone" masculine ; -- status=guess
 lin mouthpiece_N = mkN "imboccatura" ; -- status=guess
-lin move_1_V = variants{} ; --
-lin move_2_V = variants{} ; --
+lin move_1_V = reflV I.muovere_V ;
+lin move_2_V = reflV I.muovere_V ;
 lin move_N = mkN "passo" ; -- status=guess
 lin move_V = mkV "smuoversi" | mkV (mkV "darsi") "una mossa" | mkV "agire" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin move_V2 = mkV2 (mkV "smuoversi") | mkV2 (mkV (mkV "darsi") "una mossa") | mkV2 (mkV "agire") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
@@ -11833,7 +11834,7 @@ lin osteotomy_N = mkN "osteotomia" ; -- status=guess
 lin ostracism_N = mkN "ostracismo" ; -- status=guess
 lin ostrich_N = mkN "struzzo" ; -- status=guess
 lin other_A = mkA "altro" ;
-lin other_N = variants{} ; --
+lin other_N = mkN "altro" ;
 lin otherwise_Adv = mkAdv "differentemente" ; -- status=guess
 lin otherwise_PConj = S.otherwise_PConj ; -- comment=CHECKED
 lin otter_N = mkN "lontra" ; -- status=guess
@@ -12344,7 +12345,7 @@ lin perfume_N = mkN "profumo" ; -- status=guess
 lin perfume_V2 = mkV2 (mkV "profumare") ; -- status=guess, src=wikt
 lin perfunctory_A = mkA "superficiale" ; -- status=guess
 lin pergola_N = mkN "pergola" | mkN "graticcio" | mkN "pergolato" ; -- status=guess status=guess status=guess
-lin perhaps_Adv = mkAdv "forse" ; -- status=guess
+lin perhaps_Adv = mkAdv "forse" | mkAdv "magari" ; -- status=guess
 lin perianth_N = mkN "perigonio" ; -- status=guess
 lin pericardium_N = mkN "pericardio" ; -- status=guess
 lin pericarp_N = mkN "pericarpo" ; -- status=guess
@@ -12684,14 +12685,14 @@ lin platoon_N = mkN "plotone" ; -- status=guess
 lin platypus_N = mkN "ornitorinco" ; -- status=guess
 lin platyrrhine_A = mkA "platirrino" ; -- status=guess
 lin plausible_A = variants{} ; --
-lin play_1_V = variants{} ; --
-lin play_1_V2 = variants{} ; --
-lin play_2_V = variants{} ; --
-lin play_2_V2 = variants{} ; --
-lin play_3_V = variants{} ; --
-lin play_3_V2 = variants{} ; --
+lin play_1_V = lin V L.play_V ;
+lin play_1_V2 = L.play_V2 ;
+lin play_2_V = lin V L.play_V2 ;
+lin play_2_V2 = L.play_V2 ;
+lin play_3_V = lin V L.play_V2 ;
+lin play_3_V2 = L.play_V2 ;
 lin play_N = mkN "gioco" ; -- status=guess
-lin play_V = L.play_V ;
+lin play_V = lin V L.play_V2 ;
 lin play_V2 = L.play_V2 ;
 lin play_VV = mkVV (mkV "giocare") ; -- status=guess, src=wikt
 lin playbill_N = mkN "manifesto" | mkN "locandina" ; -- status=guess status=guess
@@ -13779,10 +13780,10 @@ lin reactionary_A = mkA "codino" | mkA "codina" ; -- status=guess status=guess
 lin reactionary_N = mkN "codino" | mkN "codina" | mkN "reazionario" ; -- status=guess status=guess status=guess
 lin reactor_N = variants{} ; --
 lin read_N = mkN "memoria a sola lettura" | mkN "memoria ROM" ; -- status=guess status=guess
-lin read_V = mkV "ricevere" ; -- status=guess, src=wikt
+lin read_V = lin V L.read_V2 ;
 lin read_V2 = L.read_V2 ;
-lin read_VA = mkVA (mkV "ricevere") ; -- status=guess, src=wikt
-lin read_VS = mkVS (mkV "ricevere") ; -- status=guess, src=wikt
+lin read_VA = mkVA I.leggere_V ; --- subcat
+lin read_VS = mkVS I.leggere_V ;
 lin readable_A = mkA "leggibile" ; -- status=guess
 lin reader_N = mkN "lettore" masculine | mkN "lettrice" feminine ; -- status=guess status=guess
 lin readily_Adv = variants{} ; --
@@ -14408,11 +14409,11 @@ lin rig_N = mkN "apparecchiatura" ; -- status=guess
 lin rig_V = mkV "attrezzare" ; -- status=guess, src=wikt
 lin rig_V2 = mkV2 (mkV "attrezzare") ; -- status=guess, src=wikt
 lin rigging_N = mkN "cordame" masculine ; -- status=guess
-lin right_1_A = variants{} ; --
+lin right_1_A = mkA "corretto" ;
 lin right_1_Adv = mkAdv "correttamente" ;
-lin right_2_A = variants{} ; --
+lin right_2_A = mkA "destro" ;
 lin right_2_Adv = mkAdv "destra" ;
-lin right_A = mkA "destrimano" ; -- status=guess
+lin right_A = mkA "destro" ; -- status=guess
 lin right_Adv = mkAdv "corretto" ;
 lin right_Interj = variants{} ; --
 lin right_N = mkN "angolo retto" ; -- status=guess
@@ -14508,8 +14509,8 @@ lin roof_N = L.roof_N ;
 lin rook_N = mkN "corvo comune" ; -- status=guess
 lin rook_V2 = mkV2 (mkV "imbrogliare") ; -- status=guess, src=wikt
 lin rookie_N = mkN "principiante" ; -- status=guess
-lin room_1_N = variants{} ; --
-lin room_2_N = variants{} ; --
+lin room_1_N = mkN "stanza" | mkN "camera" ;
+lin room_2_N = mkN "spazio" ;
 lin room_N = mkN "stanza" | mkN "camera" | mkN "sala" ; -- status=guess status=guess status=guess
 lin roommate_N = mkN "compagno di stanza" ; -- status=guess
 lin roost_N = mkN "pollaio" ; -- status=guess
@@ -15435,7 +15436,7 @@ lin sin_N = mkN "peccato" ; -- status=guess
 lin sin_V = mkV "peccare" ; -- status=guess, src=wikt
 lin since_Adv = variants{} ; --
 lin since_Prep = variants{} ; --
-lin since_Subj = variants{} ; --
+lin since_Subj = mkSubj "fino da che" ; ----
 lin sincere_A = mkA "sincero" | mkA "fervido" | mkA "zelante" | mkA "assiduo" ; -- status=guess status=guess status=guess status=guess
 lin sincerely_Adv = variants{} ; --
 lin sincerity_N = mkN "sincerità" feminine ; -- status=guess
@@ -15712,7 +15713,7 @@ lin snuffbox_N = mkN "tabacchiera" ; -- status=guess
 lin snug_A = mkA "confortevole" ; -- status=guess
 lin so_AdA = S.so_AdA ; -- comment=CHECKED
 lin so_Adv = mkAdv "così" ;
-lin so_Subj = variants{} ; --
+lin so_Subj = subSubj "finché" ;
 lin soak_N = mkN "immersione" feminine ; -- status=guess
 lin soak_V = mkV "assorbire" ; -- status=guess, src=wikt
 lin soak_V2 = mkV2 (mkV "assorbire") ; -- status=guess, src=wikt
@@ -16355,9 +16356,9 @@ lin stride_N = mkN "falcata" ; -- status=guess
 lin stride_V = mkV "scavalcare" ; -- status=guess, src=wikt
 lin stride_V2 = mkV2 (mkV "scavalcare") ; -- status=guess, src=wikt
 lin strife_N = mkN "disputa" ; -- status=guess
-lin strike_1_N = variants{} ; --
-lin strike_2_N = variants{} ; --
-lin strike_N = variants{} ; --
+lin strike_1_N = mkN "sciopero" ;
+lin strike_2_N = mkN "attacco" ;
+lin strike_N = mkN "sciopero" ;
 lin strike_V = mkV (essere_V) "respinto" ; -- status=guess, src=wikt
 lin strike_V2 = mkV2 (mkV (essere_V) "respinto") ; -- status=guess, src=wikt
 lin strikebreaker_N = mkN "crumiro" | mkN "crumira" ; -- status=guess status=guess
@@ -16988,8 +16989,8 @@ lin telephone_V2 = mkV2 (mkV "telefonare") ; -- status=guess, src=wikt
 lin teleportation_N = mkN "teletrasporto" ; -- status=guess
 lin telescope_N = mkN "telescopio" | mkN "cannocchiale" masculine ; -- status=guess status=guess
 lin television_N = L.television_N ;
-lin tell_1_V3 = variants{} ; --
-lin tell_2_V3 = variants{} ; --
+lin tell_1_V3 = mkV3 (mkV "raccontare") ;
+lin tell_2_V3 = mkV3 I.distinguere_V P.accusative P.genitive ;
 lin tell_V = mkV "raccontare" ;
 lin tell_V2 = mkV2 "raccontare" ;
 lin tell_V2Q = variants{}; -- mkV2 "raccontare" ;
@@ -17166,7 +17167,7 @@ lin thorny_A = mkA "spinoso" ; -- status=guess
 lin thorough_A = mkA "minuzioso" | mkA "accurato" ; -- status=guess status=guess
 lin thoroughly_Adv = variants{} ; --
 lin though_Adv = mkAdv "comunque" | mkAdv "nonostante" | mkAdv "in ogni caso" | mkAdv "ad ogni modo" ; -- status=guess status=guess status=guess status=guess
-lin though_Subj = variants{} ; --
+lin though_Subj = subSubj "benché" ;
 lin thought_N = mkN "esperimento mentale" ; -- status=guess
 lin thoughtful_A = mkA "premuroso" ; -- status=guess
 lin thread_N = mkN "filo" | mkN "filo conduttore" ; -- status=guess status=guess
@@ -17966,7 +17967,7 @@ lin unsympathetic_A = mkA "antipatico" ; -- status=guess
 lin untie_V = mkV "sciogliersi" ; -- status=guess, src=wikt
 lin untie_V2 = mkV2 (mkV "sciogliersi") ; -- status=guess, src=wikt
 lin until_Prep = variants{} ; --
-lin until_Subj = variants{} ; --
+lin until_Subj = subSubj "fino a che" ;
 lin untraceable_A = mkA "non tracciabile" | mkA "irrintracciabile" | mkA "irreperibile" ; -- status=guess status=guess status=guess
 lin untruth_N = mkN "bugia" ; -- status=guess
 lin untruthful_A = mkA "bugiardo" ; -- status=guess
@@ -18226,8 +18227,8 @@ lin videocassette_N = mkN "videocassetta" ; -- status=guess
 lin videotape_N = mkN "videonastro" ; -- status=guess
 lin videotape_V2 = mkV2 (mkV "videoregistrare") ; -- status=guess, src=wikt
 lin vie_V = mkV "competere" ; -- status=guess, src=wikt
-lin view_1_N = variants{} ; --
-lin view_2_N = variants{} ; --
+lin view_1_N = mkN "vista" ;
+lin view_2_N = mkN "opinione" ;
 lin view_N = mkN "vista" masculine ; -- status=guess
 lin view_V2 = mkV2 (mkV "guardare") ; -- status=guess, src=wikt
 lin viewer_N = mkN "spettatore" masculine ; -- status=guess
@@ -18591,7 +18592,7 @@ lin where_Subj = mkSubj "dove" ;
 lin whereas_Subj = variants{} ; --
 lin whereby_Adv = variants{} ; --
 lin wherever_Adv = variants{} ; --
-lin whether_Subj = variants{} ; --
+lin whether_Subj = mkSubj "se" ;
 lin whey_N = mkN "siero di latte" ; -- status=guess
 lin which_IQuant = S.which_IQuant ; -- comment=CHECKED
 lin whichever_Quant = variants{} ; --
@@ -18904,9 +18905,9 @@ lin yes_Interj = mkInterj "sì" ; -- status=guess
 lin yes_Utt = S.yes_Utt ; -- comment=CHECKED
 lin yesterday_Adv = mkAdv "ieri" ; -- status=guess
 lin yesterday_N = mkN "ieri" masculine ; -- status=guess
-lin yet_1_Adv = variants{} ; --
-lin yet_2_Adv = variants{} ; --
-lin yet_Adv = mkAdv "ancora" ; -- status=guess
+lin yet_1_Adv = mkAdv "ancora" ;
+lin yet_2_Adv = mkAdv "però" ;
+lin yet_Adv = mkAdv "ancora" ;
 lin yew_N = mkN "tasso" ; -- status=guess
 lin yield_N = mkN "raccolto" | mkN "produzione" feminine ; -- status=guess status=guess
 lin yield_V = mkV "cedere" | mkV "arrendersi" | mkV "arrendere" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
