@@ -95,24 +95,28 @@ cgiMain' cache path =
 --cpgfMain :: String -> (C.PGF,MVar ParseCache) -> CGI CGIResult
 cpgfMain command (t,(pgf,pc)) =
   case command of
-    "c-parse"     -> out t=<< join (parse # input % start % limit % trie)
-    "c-linearize" -> out t=<< lin # tree % to
-    "c-translate" -> out t=<< join (trans # input % to % start % limit % trie)
-    "c-lookupmorpho" -> out t=<< morpho # from1 % textInput
-    "c-flush"     -> out t=<< flush
-    "c-grammar"   -> out t grammar
-    _             -> badRequest "Unknown command" command
+    "c-parse"       -> out t=<< join (parse # input % start % limit % trie)
+    "c-linearize"   -> out t=<< lin # tree % to
+    "c-translate"   -> out t=<< join (trans # input % to % start % limit % trie)
+    "c-lookupmorpho"-> out t=<< morpho # from1 % textInput
+    "c-flush"       -> out t=<< flush
+    "c-grammar"     -> out t grammar
+    "c-wordforword" -> out t =<< wordforword # input % to
+    _               -> badRequest "Unknown command" command
   where
     flush = liftIO $ do --modifyMVar_ pc $ const $ return Map.empty
                         performGC
                         return $ showJSON ()
+
+    cat = C.startCat pgf
+    langs = C.languages pgf
 
     grammar = showJSON $ makeObj
                  ["name".=C.abstractName pgf,
                   "startcat".=C.startCat pgf,
                   "languages".=languages]
       where
-        languages = [makeObj ["name".= l] | (l,_)<-Map.toList (C.languages pgf)]
+        languages = [makeObj ["name".= l] | (l,_)<-Map.toList langs]
 
     parse input@((from,_),_) start mlimit trie =
         do r <- parse' start mlimit input
@@ -127,7 +131,7 @@ cpgfMain command (t,(pgf,pc)) =
     -- Without caching parse results:
     parse' start mlimit ((_,concr),input) =
       return $
-      maybe id take mlimit . drop start # C.parse concr (C.startCat pgf) input
+      maybe id take mlimit . drop start # C.parse concr cat input
 {-
     -- Caching parse results:
     parse' start mlimit ((from,concr),input) = 
@@ -139,7 +143,7 @@ cpgfMain command (t,(pgf,pc)) =
         parse'' t pc = maybe new old $ Map.lookup key pc
           where
             new = return (update (res,t) pc,res)
-              where res = C.parse concr (C.startCat pgf) input
+              where res = C.parse concr cat input
             old (res,_) = return (update (res,t) pc,res)
             update r = Map.mapMaybe purge . Map.insert key r
             purge r@(_,t') = if diffUTCTime t t'<120 then Just r else Nothing
@@ -168,6 +172,46 @@ cpgfMain command (t,(pgf,pc)) =
       where ms = C.lookupMorpho concr input
 
 
+    wordforword input@((from,_),_) = jsonWFW from . wordforword' input
+
+    jsonWFW from rs =
+      showJSON
+        [makeObj
+          ["from".=from,
+           "translations".=[makeObj ["linearizations".=
+                                        [makeObj["to".=to,"text".=text]
+                                         | (to,text)<-rs]]]]]
+
+    wordforword' inp@((from,concr),input) (tos,unlex) =
+        [(to,unlex . unwords . map (trans_word' c) $ words input)
+         |(to,c)<-tos]
+      where
+        trans_word' c w = if all (\c->isSpace c||isPunctuation c) w
+                          then w
+                          else trans_word c w
+
+        trans_word c w = 
+            maybe ("["++w++"]") id $ msum [trans1 w,trans1 ow,morph w,morph ow]
+          where
+            ow = if w==lw then capitInit w else lw
+            lw = uncapitInit w
+
+            trans1 = fmap lin1 . parse1
+
+            parse1 = either (const Nothing) (fmap fst . listToMaybe) .
+                     C.parse concr cat
+
+            lin1 = dropq . C.linearize c
+            dropq (q:' ':s) | q `elem` "+*" = s
+            dropq s = s
+
+            morph w = listToMaybe
+                        [l | (f,a,p)<-C.lookupMorpho concr w,
+                             t<-maybeToList (C.readExpr f),
+                             let l=lin1 t]
+
+    ---
+
     input = lexit # from % textInput
       where
         lexit (from,lex) input = (from,lex input)
@@ -186,7 +230,7 @@ cpgfMain command (t,(pgf,pc)) =
 
     readLang :: String -> CGI (String,C.Concr)
     readLang lang =
-      case Map.lookup lang (C.languages pgf) of
+      case Map.lookup lang langs of
         Nothing -> badRequest "Bad language" lang
         Just c -> return (lang,c)
 
