@@ -97,7 +97,7 @@ wc.translate=function() {
 	function show_more() {
 	    selected=si
 	    var r=rs[current_pick]
-	    if(e) e.innerHTML=(r.prob||"")+"<br>"+r.tree
+	    if(e) e.innerHTML=(r.prob||"")+"<br>"+(r.tree||"")
 	    if(wc.p /*&& rs.length>1*/) show_picks()
 	    //if(f.speak.checked) wc.speak(t.text,f.to.value)
 	    if(get_more) {
@@ -116,24 +116,54 @@ wc.translate=function() {
 	    current_pick=i
 	    if(selected==si) show_more()
 	}
-
-	function showit(r) {
-	    r.t=trans_quality(r)
-	    //r.t.text=r.t.text.trimRight()
-	    r.text=r.t.text
+	function showit2(r) {
 	    rs.push(r)
 	    var j=rs.length-1
 	    if(current_pick==j) show_trans(j)
 	    else if(selected==si) show_picks()
 	    //disable(false)
 	}
-	function trans(text,i,count) {
+	function showit(r) {
+	    r.t=trans_quality(r)
+	    r.text=r.t.text
+	    showit2(r)
+	}
+	function show_words(r) {
+	    r.text=r.linearizations[0].text
+	    r.t={quality:"bad_quality",text:r.text}
+	    showit2(r)
+	}
+
+	function word_for_word(text,cont) {
 	    function step3(tra) {
 		if(wc.serial==current) {
 		    if(tra.length>=1) {
 			var r=tra[0]
 			if(r.error!=undefined) {
 			    if(i==0 && rs.length==0) show_error(tra[0].error)
+			}
+			else {
+			    var r=tra[0]
+			    if(r.linearizations) show_words(r)
+			}
+		    }
+		    else if(i==0 && rs.length==0)
+			show_error("Unable to translate")
+		}
+	    }
+	    gftranslate.wordforword(text,f.from.value,f.to.value,step3)
+	}
+
+	function trans(text,i,count) {
+	    function step3(tra) {
+		if(wc.serial==current) {
+		    if(tra.length>=1) {
+			var r=tra[0]
+			if(r.error!=undefined) {
+			    if(i==0 && rs.length==0) {
+				//show_error(tra[0].error)
+				word_for_word(text)
+			    }
 			}
 			else {
 			    for(var ti=0;ti<tra.length;ti++) {
