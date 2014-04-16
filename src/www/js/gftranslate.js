@@ -27,6 +27,20 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     else cont([{error:"sentence too long"}])
 }
 
+// Translate a sentence word for word (if all else fails...)
+gftranslate.wordforword=function(source,from,to,cont) {
+    var g=gftranslate.grammar
+    var lexer="&lexer=text"
+    if(from=="Chi") lexer="",source=source.split("").join(" ")
+    var encsrc=encodeURIComponent(source)
+    function extract(result) { cont(result[0].translations) }
+    if(encsrc.length<500)
+	gftranslate.call("?command=c-wordforword&input="+encsrc
+			 +lexer+"&unlexer=text&from="+g+from+"&to="+g+to
+			 ,extract)
+    else cont([{error:"sentence too long"}])
+}
+
 // Get list of supported languages
 gftranslate.get_languages=function(cont) {
     function init2(grammar_info) {
