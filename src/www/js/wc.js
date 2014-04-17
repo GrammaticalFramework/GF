@@ -4,8 +4,8 @@ wc.f=document.forms[0]
 wc.o=element("output")
 wc.e=element("extra")
 wc.p=element("pick")
-wc.serial=0
 wc.os=[] // output segment list
+wc.cache={} // output segment cache, indexed by source text
 wc.local=appLocalStorage("gf.wc.")
 
 wc.delayed_translate=function() {
@@ -43,9 +43,7 @@ wc.load=function() {
 }
 
 wc.translate=function() {
-    var current= ++wc.serial
     var f=wc.f, e=wc.e, p=wc.p
-    var selected= -1
 
     /*
     function disable(yes) {
@@ -59,18 +57,16 @@ wc.translate=function() {
 	return s.split(/([.!?]+[ \t\n]+|\n\n+|[ \t\n]*[-•*+#]+[ \t\n]+)/)
     }
 
-    function translate_segment(si) { // si = segment index
+    function translate_segment(so) { // so = segment output
 	var rs=[] // list of alternative translations for this segment
 	var current_pick=0 // index of currently selected alternative
-	var get_more // if defined, a function that will fetch more alternatives
-	var output=wc.os[si].target // the element where this segment is shown
 
 	function show_error(msg) {
 	    //if(e) e.innerHTML="<span class=low_quality>Translation problem: "+msg+"</span>"
 	    //else
 	    {
-		replaceChildren(output,text("["+msg+"]"))
-		output.className="error"
+		replaceChildren(so.target,text("["+msg+"]"))
+		so.target.className="error"
 	    }
 	    //disable(false)
 	}
@@ -95,32 +91,27 @@ wc.translate=function() {
 	    */
 	}
 	function show_more() {
-	    selected=si
+	    wc.selected=so
 	    var r=rs[current_pick]
 	    if(e) e.innerHTML=(r.prob||"")+"<br>"+(r.tree||"")
 	    if(wc.p /*&& rs.length>1*/) show_picks()
 	    //if(f.speak.checked) wc.speak(t.text,f.to.value)
-	    if(get_more) {
-		var f=get_more
-		get_more=null
-		f()
-	    }
 	}
-	output.onclick=show_more
+	so.target.onclick=show_more
 
 	function show_trans(i) {
 	    var r=rs[i]
-	    replaceChildren(output,text(r.text))
-	    wc.os[si].text=r.text
-	    output.className=r.t.quality
+	    replaceChildren(so.target,text(r.text))
+	    so.text=r.text
+	    so.target.className=r.t.quality
 	    current_pick=i
-	    if(selected==si) show_more()
+	    if(wc.selected==so) show_more()
 	}
 	function showit2(r) {
 	    rs.push(r)
 	    var j=rs.length-1
 	    if(current_pick==j) show_trans(j)
-	    else if(selected==si) show_picks()
+	    else if(wc.selected==so) show_picks()
 	    //disable(false)
 	}
 	function showit(r) {
@@ -136,52 +127,42 @@ wc.translate=function() {
 
 	function word_for_word(text,cont) {
 	    function step3(tra) {
-		if(wc.serial==current) {
-		    if(tra.length>=1) {
-			var r=tra[0]
-			if(r.error!=undefined) {
-			    if(i==0 && rs.length==0) show_error(tra[0].error)
-			}
-			else {
-			    var r=tra[0]
-			    if(r.linearizations) show_words(r)
-			}
+		if(tra.length>=1) {
+		    var r=tra[0]
+		    if(r.error!=undefined) {
+			if(i==0 && rs.length==0) show_error(tra[0].error)
 		    }
-		    else if(i==0 && rs.length==0)
-			show_error("Unable to translate")
+		    else {
+			var r=tra[0]
+			if(r.linearizations) show_words(r)
+		    }
 		}
+		else if(i==0 && rs.length==0)
+		    show_error("Unable to translate")
 	    }
 	    gftranslate.wordforword(text,f.from.value,f.to.value,step3)
 	}
 
 	function trans(text,i,count) {
 	    function step3(tra) {
-		if(wc.serial==current) {
-		    if(tra.length>=1) {
-			var r=tra[0]
-			if(r.error!=undefined) {
-			    if(i==0 && rs.length==0) {
-				//show_error(tra[0].error)
-				word_for_word(text)
-			    }
-			}
-			else {
-			    for(var ti=0;ti<tra.length;ti++) {
-				var r=tra[ti]
-				if(r.linearizations) showit(r)
-				//else show_error("no linearizations")
-			    }
-			    /*
-			    if(wc.p && i==0 && count==1) {
-				if(si==selected) trans(text,1,9)
-				else get_more=function() { trans(text,1,9) }
-			    }
-			    */
+		if(tra.length>=1) {
+		    var r=tra[0]
+		    if(r.error!=undefined) {
+			if(i==0 && rs.length==0) {
+			    //show_error(tra[0].error)
+			    word_for_word(text)
 			}
 		    }
-		    else if(i==0 && rs.length==0)
-			show_error("Unable to translate")
+		    else {
+			for(var ti=0;ti<tra.length;ti++) {
+			    var r=tra[ti]
+			    if(r.linearizations) showit(r)
+			    //else show_error("no linearizations")
+			}
+		    }
 		}
+		else if(i==0 && rs.length==0)
+		    show_error("Unable to translate")
 	    }
 	    gftranslate.translate(text,f.from.value,f.to.value,i,count,step3)
 	}
@@ -202,8 +183,8 @@ wc.translate=function() {
 				    step3cnl,
 				    function(){step2(text)})
 	}
-	if(wc.cnl) step2cnl(is[si])
-	else step2(is[si])
+	if(wc.cnl) step2cnl(so.input)
+	else step2(so.input)
     }
 
     //disable(true)
@@ -212,7 +193,9 @@ wc.translate=function() {
     clear(p)
 
 
-    var old={}
+    var old=wc.cache
+    var old_selected=wc.selected
+    wc.selected=null
     for(var i=0;i<wc.os.length;i++) old[wc.os[i].input]=wc.os[i] 
        // could also keep all copies if the same text occurs more than once...
     wc.os=[]
@@ -222,21 +205,25 @@ wc.translate=function() {
 
     for(var i=0;i<is.length;i++) {
 	var same=old[is[i]]
-	if(same && same.to==f.to.value) { // reuse unchanged segment?
+	if(same && same.to==f.to.value && same.from==f.from.value) {
+	    // reuse an unchanged segment
 	    wc.os[i]=same
 	    wc.o.appendChild(same.target)
+	    if(same==old_selected) wc.selected=same
 	    delete old[is[i]] // can't use the same node twice
 	}
 	else {
-	    wc.os[i]={input:is[i],text:is[i],to:f.to.value}
+	    // create a new output segment
+	    var o=wc.os[i]={input:is[i],text:is[i],
+			    from:f.from.value,to:f.to.value}
 	    if(i&1) { // punctuation
-		var o=wc.os[i].target=span_class("punct",text(is[i]))
-		wc.o.appendChild(o)
+		o.target=span_class("punct",text(is[i]))
+		wc.o.appendChild(o.target)
 	    }
 	    else { // text segment to be translated
-		var o=wc.os[i].target=span_class("placeholder",text(is[i]))
-		wc.o.appendChild(o)
-		translate_segment(i)
+		o.target=span_class("placeholder",text(is[i]))
+		wc.o.appendChild(o.target)
+		translate_segment(o)
 	    }
 	}
     }

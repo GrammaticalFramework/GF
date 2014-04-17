@@ -9,18 +9,19 @@
 div.center { text-align: center; }
 table { border-collapse: collapse; table-layout: fixed; width: 100%; }
 td { padding: 0 5px; vertical-align: top; }
-td.output { background: #fcfcfc; }
+td.output { background: #fcfcfc; border: 1px solid grey; }
 td.input, td.output { font-family: sans-serif; font-size: 90%; }
 div#output { white-space: pre-line; }
-textarea { margin: 0; font: inherit; }
+div.input { margin-right: 5px; }
+textarea { font: inherit; }
 body:target h1, body:target div.modtime { display: none; }
 small { color: #666; }
 #pick>* { padding: 0 0.5ex; }
 #speak { display: none; }
-.colors .default_quality { background-color: #ffc; }
-.colors .high_quality { background-color: #cfc; }
-.colors .low_quality { background-color: #fba; }
-.colors .bad_quality { background-color: #f88; }
+.colors .default_quality { background-color: #ffb; }
+.colors .high_quality { background-color: #bfb; }
+.colors .low_quality { background-color: #fa7; }
+.colors .bad_quality { background-color: #f89; }
 .placeholder { color: #999; }
 .error { color: #c00; }
 </style>
@@ -61,12 +62,14 @@ small { color: #666; }
   <input name=colors type=checkbox checked onchange="wc.colors()"> Colors
   <td><button name=translate type=submit><strong>Translate</strong></button>
   <tr><td class=input colspan=2>
+    <div class=input>
   <textarea name=input rows=5 style="width: 100%" onkeyup="wc.delayed_translate()"></textarea>
-    <small>Enter text to translate above.</small>
+      </div>
   <td class=output colspan=2>
 
   <div id=output></div>
   <tr><td colspan=2>
+    <small>Enter text to translate above.</small>
     <td colspan=2>
   <!--<small id=speak><input name=speak type=checkbox> Enable speech synthesis</small>-->
 
@@ -80,7 +83,7 @@ small { color: #666; }
   </div>
 <p>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Wed Apr 16 16:48:16 CEST 2014 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Thu Apr 17 15:45:17 CEST 2014 <!-- hhmts end -->
 </small></div>
 <script src="js/support.js"></script>
 <script src="js/gftranslate.js"></script>
