@@ -162,7 +162,7 @@ Translate11:
 	$(GFMKT) -name=Translate11 $(TRANSLATE11) +RTS -K32M
 
 # With dependencies:
-Translate11.pgf: $(TRANSLATE10)
+Translate11.pgf: $(TRANSLATE11)
 	$(GFMKT) -name=Translate11 $(TRANSLATE11) +RTS -K32M
 
 # Without dependencies:

@@ -32195,7 +32195,7 @@ lin leap_upon_V2 = dirV2 (partV (mkV "hoppar")"över"); -- comment=2
 lin leap_year_N = variants {} ;
 lin leapfrog_N = variants {} ;
 lin leapfrog_V2 = variants {} ;
-lin learn_V = reflV (mkV "lär") ;
+lin learn_V = reflV (mkV "lära" "lär" "lär" "lärde" "lärt" "lärd") ;
 lin learn_V2 = L.learn_V2;
 lin learn_VS = mkVS (lin V L.learn_V2);
 lin learn_VV = mkVV (lin V L.learn_V2);
