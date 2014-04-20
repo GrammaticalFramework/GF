@@ -24,9 +24,10 @@ concrete SentenceChi of Sentence = CatChi **
       
 
     -- yet another reason for discontinuity of clauses
-    AdvSlash slash adv = 
-      mkClauseCompl slash.np <insertAdv adv slash.vp : VP> []
-         ** {c2 = slash.c2} ;
+    AdvSlash slash adv = slash ** {vp = insertAdv adv slash.vp} ;
+---- parser loops with unknown tokens if this version is used AR 20/4/2014
+----      mkClauseCompl slash.np <insertAdv adv slash.vp : VP> []
+----         ** {c2 = slash.c2} ;
   
     SlashPrep cl prep = cl ** {c2 = prep} ;
   
