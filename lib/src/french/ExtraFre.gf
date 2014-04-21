@@ -50,6 +50,11 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
       in 
       {s = vous.s ; hasClit = vous.hasClit ; poss = vous.poss ; a = vous.a ; isPol = True ; isNeg = False} ;
 
+    ce_Pron = 
+      let ce = elision "c" 
+      in 
+      mkPronoun ce ce ce ("cela" | "ça") "son" (elisPoss "s") "ses" Masc Sg P3 ; ---- variants?
+
     AdvDatVP = insertClit3 datClit ;
     AdvGenVP = insertClit3 genClit ;
 
