@@ -32,6 +32,8 @@ abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
     youPl8fem_Pron : Pron ;
     youPol8fem_Pron : Pron ;
 
+    ce_Pron : Pron ;
+
 -- clitic adverbs
 
     AdvDatVP : VP -> VP ;  -- j'y vais
