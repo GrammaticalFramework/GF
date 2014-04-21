@@ -1,5 +1,5 @@
 concrete DictionarySpa of Dictionary = CatSpa
-** open ParadigmsSpa, MorphoSpa, IrregSpa, (L=LexiconSpa), (S=StructuralSpa), Prelude in {
+** open ParadigmsSpa, MorphoSpa, IrregSpa, (L=LexiconSpa), (S=StructuralSpa), (E=ExtraSpa), Prelude in {
 
 oper  mkInterj : Str -> Interj 
     = \s -> lin Interj (ss s) ;
@@ -7,6 +7,7 @@ oper  mkDet : Str -> Det = \s -> lin Det {s,sp
     = \\_,c => prepCase c ++ s ; n = Sg ; s2 = [] ; isNeg = False} ;
 oper  mkConj : Str -> Conj 
     = \s -> lin Conj {s1 = [] ; s2 = s ; n = Pl} ;
+oper optProDrop : Pron -> Pron = \p -> p | E.ProDrop p ;
 
 lin aalii_N = mkN "chirca" ; -- status=guess
 lin aardvark_N = mkN "cerdo hormiguero" ; -- status=guess
@@ -9680,7 +9681,7 @@ lin hazardous_A = mkA "aventurado" ; -- status=guess
 lin haze_N = mkN "bruma" ; -- status=guess
 lin hazel_N = mkN "avellana" ; -- status=guess
 lin hazelnut_N = mkN "avellana" ; -- status=guess
-lin he_Pron = S.he_Pron ;
+lin he_Pron = optProDrop S.he_Pron ;
 lin head_A = variants{} ;
 lin head_N = L.head_N ;
 lin head_V = mkV (mkV "echarse") "a andar" ;
@@ -10291,7 +10292,8 @@ lin hyrax_N = mkN "damán" masculine ; -- status=guess
 lin hysterectomy_N = mkN "histerectomía" ; -- status=guess
 lin hysteresis_N = mkN "histéresis" feminine ; -- status=guess
 lin hysteria_N = mkN "histérico" ; -- status=guess
-lin i_Pron = S.i_Pron ;
+lin i_Pron = optProDrop S.i_Pron ;
+lin iFem_Pron = optProDrop E.i8fem_Pron ;
 lin iamb_N = mkN "yambo" ; -- status=guess
 lin iambic_A = mkA "yámbico" ; -- status=guess
 lin ibex_N = mkN "íbice" | mkN "ibex" masculine ; -- status=guess status=guess
@@ -18327,7 +18329,7 @@ lin shave_V2 = mkV2 (mkV "afeitar") | mkV2 (mkV "rapar") | mkV2 (mkV "rasurar") 
 lin shaver_N = mkN "maquinilla de afeitar" | mkN "máquina de afeitar" | mkN "afeitadora" ; -- status=guess status=guess status=guess
 lin shawl_N = mkN "chal" masculine ; -- status=guess
 lin shawm_N = mkN "caramillo" ; -- status=guess
-lin she_Pron = S.she_Pron ;
+lin she_Pron = optProDrop S.she_Pron ;
 lin sheaf_N = mkN "atado" | mkN "atada" ; -- status=guess status=guess
 lin shear_N = mkN "cizalla" ; -- status=guess
 lin shear_V2 = mkV2 (mkV "cizallar") ; -- status=guess, src=wikt
@@ -20691,7 +20693,8 @@ lin thermotherapy_N = mkN "termoterapia" ; -- status=guess
 lin thesaurus_N = mkN "tesauro" ; -- status=guess
 lin thesis_N = mkN "tesis" feminine ;
 lin theta_N = mkN "onda theta" ; -- status=guess
-lin they_Pron = S.they_Pron ;
+lin they_Pron = optProDrop S.they_Pron ;
+lin theyFem_Pron = optProDrop E.they8fem_Pron ;
 lin thick_A = L.thick_A ;
 lin thick_Adv = variants{} ;
 lin thick_N = mkN "espeso" ; -- status=guess
@@ -22326,7 +22329,8 @@ lin way_2_N = variants{} ;
 lin way_Adv = mkAdv "muy" ; -- status=guess
 lin way_N = mkN "medios" masculine ;
 lin wayfarer_N = mkN "caminante" masculine ; -- status=guess
-lin we_Pron = S.we_Pron ;
+lin we_Pron = optProDrop S.we_Pron ;
+lin weFem_Pron = optProDrop E.we8fem_Pron ;
 lin weak_A = mkA "débil" | mkA "feble" | mkA "flaco" | mkA "flojo" ;
 lin weaken_V = mkV "debilitarse" ;
 lin weaken_V2 = mkV2 (mkV "debilitarse") ;
@@ -22823,9 +22827,11 @@ lin yokel_N = mkN "paleto" | mkN "palurdo" ; -- status=guess status=guess
 lin yolk_N = mkN "yema" ; -- status=guess
 lin yonder_Adv = mkAdv "de allá" ; -- status=guess
 lin yore_N = mkN "antaño" ; -- status=guess
-lin youPl_Pron = S.youPl_Pron ; -- comment=CHECKED
-lin youPol_Pron = S.youPol_Pron ; -- comment=CHECKED
-lin youSg_Pron = S.youSg_Pron ; -- comment=CHECKED
+lin youPl_Pron = optProDrop S.youPl_Pron | optProDrop E.youPolPl_Pron ; ---- split 
+lin youPlFem_Pron = optProDrop E.youPl8fem_Pron | optProDrop E.youPolPl8fem_Pron ; ---- split 
+lin youPolFem_Pron = optProDrop E.youPol8fem_Pron ; 
+lin youSg_Pron = optProDrop S.youSg_Pron ;
+lin youSgFem_Pron = optProDrop E.youSg8fem_Pron ;
 lin young_A = L.young_A ;
 lin young_N = mkN "jóvenes" ; -- status=guess
 lin youngster_N = mkN "jovenzuelo" ;

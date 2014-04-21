@@ -4,7 +4,6 @@ concrete TranslateSpa of Translate =
   TenseSpa,
   NounSpa - [
     PPartNP
-    ,UsePron -- override with a prodrop variant
     ],
   AdjectiveSpa,
   NumeralSpa,
@@ -33,11 +32,6 @@ open MorphoSpa, ResSpa, ParadigmsSpa, SyntaxSpa, (E = ExtraSpa), (G = GrammarSpa
 
 flags
   literal=Symb ;
-
--- the overrides -----
-lin
-
- UsePron p = G.UsePron p | G.UsePron (E.ProDrop p) ;
 
 }
 

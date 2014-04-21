@@ -7517,7 +7517,8 @@ lin hypotenuse_N = mkN "hypotenusa" masculine feminine | mkN "schuine zijde" mas
 lin hypothesis_N = mkN "hypothese" ; -- status=guess
 lin hypoxia_N = mkN "hypoxie" feminine ; -- status=guess
 lin hysterectomy_N = mkN "hysterectomie" ; -- status=guess
-lin i_Pron = S.i_Pron  ; -- 
+lin i_Pron = S.i_Pron ;  
+lin iFem_Pron = S.i_Pron ; 
 lin iambic_A = mkA "jambisch" ; -- status=guess
 lin iatrogenic_A = mkA "iatrogeen" ; -- status=guess
 lin ibex_N = mkN "steenbok" masculine | mkN "ibex" masculine ; -- status=guess status=guess
@@ -15347,7 +15348,8 @@ lin thermosphere_N = mkN "thermosfeer" ; -- status=guess
 lin thesaurus_N = mkN "thesaurus" masculine | mkN "synoniemenboek" neuter ; -- status=guess status=guess
 lin thesis_N = mkN "these" ; -- status=guess
 lin theta_N = mkN "thèta" masculine feminine ; -- status=guess
-lin they_Pron = S.they_Pron  ; -- 
+lin they_Pron = S.they_Pron ;
+lin theyFem_Pron = S.they_Pron ;
 lin thick_A = L.thick_A  ; -- 
 lin thick_Adv = mkAdv "dik" ; -- status=guess
 lin thick_N = mkN "het vuur van de strijd" ; -- status=guess
@@ -16583,7 +16585,8 @@ lin way_N = mkN "manier" ; -- status=guess
 lin wayfarer_N = mkN "trekker" masculine ; -- status=guess
 lin waylay_V2 = mkV2 (mkV "onderscheppen") ; -- status=guess, src=wikt
 lin wayward_A = mkA "eigenzinnig" ; -- status=guess
-lin we_Pron = S.we_Pron  ; -- 
+lin we_Pron = S.we_Pron ; 
+lin weFem_Pron = S.we_Pron ; 
 lin weak_A = mkA "flauw" ; -- status=guess
 lin weaken_V = mkV "verzwakken" ; -- status=guess, src=wikt
 lin weaken_V2 = mkV2 (mkV "verzwakken") ; -- status=guess, src=wikt
@@ -16999,8 +17002,11 @@ lin yolk_N = mkN "dooier" masculine | mkN "eidooier" masculine | mkN "eigeel" ne
 lin yonder_Adv = mkAdv "ginder" ; -- status=guess
 lin yore_N = mkN "ver verleden" | mkN "weleer" | mkN "eertijds" ; -- status=guess status=guess status=guess
 lin youPl_Pron = S.youPl_Pron  ; -- 
+lin youPlFem_Pron = S.youPl_Pron  ; -- 
 lin youPol_Pron = S.youPol_Pron  ; -- 
+lin youPolFem_Pron = S.youPol_Pron  ; -- 
 lin youSg_Pron = S.youSg_Pron  ; -- 
+lin youSgFem_Pron = S.youSg_Pron  ; -- 
 lin young_A = L.young_A  ; -- 
 lin young_N = mkN "jongeman" masculine ; -- status=guess
 lin youngster_N = mkN "jongere" masculine feminine ; -- status=guess

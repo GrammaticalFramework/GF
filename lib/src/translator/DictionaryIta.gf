@@ -1,6 +1,6 @@
 concrete DictionaryIta of Dictionary = CatIta
 ** open ParadigmsIta, (P = ParadigmsIta), 
-        IrregIta, (I=IrregIta), MorphoIta, (L=LexiconIta), (S=StructuralIta), Prelude in {
+        IrregIta, (I=IrregIta), MorphoIta, (L=LexiconIta), (S=StructuralIta), (E=ExtraIta),Prelude in {
 
 oper mkInterj : Str -> Interj
 = \s -> lin Interj (ss s) ;
@@ -15,6 +15,7 @@ oper mkSubj : Str -> Subj
   = \s -> lin Subj {s = [] ; m = Indic} ; ----
 oper subSubj : Str -> Subj
   = \s -> lin Subj {s = [] ; m = Conjunct} ; ----
+oper optProDrop : Pron -> Pron = \p -> p | E.ProDrop p ;
 
 lin aardvark_N = mkN "oritteropo" ; -- status=guess
 lin aardwolf_N = mkN "protele" ; -- status=guess
@@ -8008,7 +8009,7 @@ lin haze_N = mkN "smog" | mkN "nebbia" ; -- status=guess status=guess
 lin hazel_A = mkA "nocciola" ; -- status=guess
 lin hazel_N = mkN "nocciola" ; -- status=guess
 lin hazelnut_N = mkN "nocciola" ; -- status=guess
-lin he_Pron = S.he_Pron ;
+lin he_Pron = optProDrop S.he_Pron ;
 lin head_A = variants{} ; --
 lin head_N = L.head_N ;
 lin head_V = variants{} ; --
@@ -8550,7 +8551,8 @@ lin hysterectomy_N = mkN "isterectomia" ; -- status=guess
 lin hysteresis_N = mkN "isterisi" feminine ; -- status=guess
 lin hysteria_N = mkN "isteria" ; -- status=guess
 lin hysterical_A = mkA "isterico" ; -- status=guess
-lin i_Pron = S.i_Pron ;
+lin i_Pron = optProDrop S.i_Pron ;
+lin iFem_Pron = optProDrop E.i8fem_Pron ;
 lin iamb_N = mkN "giambo" ; -- status=guess
 lin iambic_A = mkA "giambico" ; -- status=guess
 lin ibex_N = mkN "stambecco" ; -- status=guess
@@ -9865,14 +9867,14 @@ lin lichen_N = mkN "lichene" masculine ; -- status=guess
 lin lick_V = mkV "leccare" ; -- status=guess, src=wikt
 lin lick_V2 = mkV2 (mkV "leccare") ; -- status=guess, src=wikt
 lin lid_N = mkN "coperchio" ; -- status=guess
-lin lie_1_V = variants{} ; --
-lin lie_2_V = variants{} ; --
+lin lie_1_V = L.lie_V ; 
+lin lie_2_V = mkV "mentire" ;
 lin lie_N = mkN "bugia" | mkN "menzogna" | mkN "frottola" | mkN "baggianata" | mkN "fola" | mkN "balla" | mkN "fandonia" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
-lin lie_V = L.lie_V ; -- comment=CHECKED
+lin lie_V = L.lie_V ; 
 lin lie_VS = mkVS (mkV (essere_V) "sdraiato") | mkVS (mkV (essere_V) "disteso") | mkVS (mkV "giacere") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin lieutenancy_N = mkN "luogotenenza" ; -- status=guess
 lin lieutenant_N = mkN "tenente" | mkN "luogotenente" ; -- status=guess status=guess
-lin life_N = mkN "vita" masculine ; -- status=guess
+lin life_N = mkN "vita" feminine ;
 lin lifeboat_N = mkN "scialuppa di salvataggio" ; -- status=guess
 lin lifespan_N = variants{} ; --
 lin lifestyle_N = variants{} ; --
@@ -15229,7 +15231,7 @@ lin shave_V = radere_V ; -- status=guess, src=wikt
 lin shave_V2 = mkV2 (radere_V) ; -- status=guess, src=wikt
 lin shawl_N = mkN "scialle" masculine ; -- status=guess
 lin shawm_N = mkN "zufolo" | mkN "cennamella" ; -- status=guess status=guess
-lin she_Pron = S.she_Pron ;
+lin she_Pron = optProDrop S.she_Pron ;
 lin sheaf_N = mkN "fascio" ; -- status=guess
 lin shear_V2 = mkV2 (mkV "tagliare") ; -- status=guess, src=wikt
 lin shears_N = mkN "cesoie" feminine ; -- status=guess
@@ -17134,9 +17136,10 @@ lin thermonuclear_A = mkA "termonucleare" ; -- status=guess
 lin thermos_N = mkN "termos" masculine ; -- status=guess
 lin thermosphere_N = mkN "termosfera" ; -- status=guess
 lin thermotropism_N = mkN "termotropismo" ; -- status=guess
-lin thesaurus_N = mkN "dizionario dei sinonimi" | mkN "tesoro" ; -- status=guess status=guess
-lin thesis_N = mkN "tesi" feminine | mkN "tema" masculine ; -- status=guess status=guess
-lin they_Pron = S.they_Pron ;
+lin thesaurus_N = mkN "tesoro" ; 
+lin thesis_N = mkN "tesi" feminine ;
+lin they_Pron = optProDrop S.they_Pron ;
+lin theyFem_Pron = optProDrop E.they8fem_Pron ;
 lin thick_A = L.thick_A ;
 lin thick_Adv = variants{} ; --
 lin thick_N = mkN "folto" ; -- status=guess
@@ -18493,7 +18496,8 @@ lin way_1_N = mkN "strada" | mkN "via" ;
 lin way_2_N = mkN "maniera" ;
 lin way_N = mkN "maniera" ;
 lin wayfarer_N = mkN "viaggiatore" | mkN "viandante" masculine ; -- status=guess status=guess
-lin we_Pron = S.we_Pron ;
+lin we_Pron = optProDrop S.we_Pron ;
+lin weFem_Pron = optProDrop E.we8fem_Pron ;
 lin weak_A = mkA "debole" ; -- status=guess
 lin weaken_V = variants{} ; --
 lin weaken_V2 = variants{} ; --
@@ -18919,9 +18923,11 @@ lin yoke_V = mkV "aggiogare" ; -- status=guess, src=wikt
 lin yoke_V2 = mkV2 (mkV "aggiogare") ; -- status=guess, src=wikt
 lin yolk_N = mkN "tuorlo" ; -- status=guess
 lin yonder_Adv = mkAdv "laggiù" ; -- status=guess
-lin youPl_Pron = S.youPl_Pron ; -- comment=CHECKED
-lin youPol_Pron = S.youPol_Pron ; -- comment=CHECKED
-lin youSg_Pron = S.youSg_Pron ; -- comment=CHECKED
+lin youPl_Pron = optProDrop S.youPl_Pron | optProDrop E.youPolPl_Pron ; ---- split 
+lin youPlFem_Pron = optProDrop E.youPl8fem_Pron | optProDrop E.youPolPl8fem_Pron ; ---- split 
+lin youPolFem_Pron = optProDrop E.youPol8fem_Pron ; 
+lin youSg_Pron = optProDrop S.youSg_Pron ;
+lin youSgFem_Pron = optProDrop E.youSg8fem_Pron ;
 lin young_A = L.young_A ;
 lin younger_A = mkA "minore" ; -- status=guess
 lin youngster_N = variants{} ; --
