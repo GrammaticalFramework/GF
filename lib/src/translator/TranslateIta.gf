@@ -4,7 +4,6 @@ concrete TranslateIta of Translate =
   TenseIta,
   NounIta - [
     PPartNP
-    ,UsePron -- override with a prodrop variant
     ],
   AdjectiveIta,
   NumeralIta,
@@ -33,11 +32,6 @@ open MorphoIta, ResIta, ParadigmsIta, SyntaxIta, (E = ExtraIta), (G = GrammarIta
 
 flags
   literal=Symb ;
-
--- the overrides -----
-lin
-
- UsePron p = G.UsePron p | G.UsePron (E.ProDrop p) ;
 
 }
 

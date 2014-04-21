@@ -5,7 +5,7 @@ concrete TranslateFin of Translate =
   CatFin,
   NounFin - [
     PPartNP
-    ,UsePron, PossPron  -- Fin specific: replaced by variants with prodrop
+    ,PossPron  -- Fin specific: replaced by variants with prodrop
     ],
   AdjectiveFin,
   NumeralFin,
@@ -38,7 +38,6 @@ flags literal=Symb ; coding = utf8 ;
 -- the overrides -----
 lin
 
- UsePron p = G.UsePron p | G.UsePron (E.ProDrop p) ;
  PossPron p = G.PossPron p | E.ProDropPoss p ;
 }
 

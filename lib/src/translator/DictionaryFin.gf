@@ -3,13 +3,13 @@
 concrete DictionaryFin of Dictionary = CatFin ** open ParadigmsFin,
   (S = StructuralFin),
   (L = LexiconFin),
-  MorphoFin, ParadigmsFin, Kotus, WNKotus, StemFin, Prelude in {
+  MorphoFin, ParadigmsFin, Kotus, WNKotus, StemFin, (E=ExtraFin), Prelude in {
 
 flags coding=utf8 ; 
 
-oper 
-  tehda_V = mkV (lin VK {s = c71 "tehdä"}) ; 
-  nahda_V = mkV (lin VK {s = c71 "nähdä"}) ; 
+oper tehda_V = mkV (lin VK {s = c71 "tehdä"}) ; 
+oper nahda_V = mkV (lin VK {s = c71 "nähdä"}) ; 
+oper optProDrop : Pron -> Pron = \p -> p | E.ProDrop p ;
 
 lin a_fortiori_Adv = mkWAdv "suuremmalla" "syyllä" ; --UNCHK
 lin a_la_carte_Adv = mkWAdv "a" "la" "carte" ; --UNCHK
@@ -24675,7 +24675,8 @@ lin hysterics_N = mkWN (k39 "kohtaus") "hysteerinen" ; --UNCHK
 lin hysterocatalepsy_N = mkWN (k12 "hysteria") "kataleptinen" ; --UNCHK
 lin hysterosalpingogram_N = mkWN "hysterosalpingografia" ; --UNCHK
 lin hysteroscopy_N = mkWN (compoundN "hysterosko" (k5A "oppi")) ; --UNCHK
-lin i_Pron = S.i_Pron ;
+lin i_Pron = optProDrop S.i_Pron ;
+lin iFem_Pron = optProDrop S.i_Pron ;
 lin iamb_N = mkWN (k5 "jambi") ; --UNCHK
 lin iambic_A = mkWA (compoundA "jambi" (k38 "nen")) ; --UNCHK
 lin iambic_N = mkWN (k48A "säe") "jambinen" ; --UNCHK
@@ -51411,7 +51412,8 @@ lin thespian_A = mkWA (k38 "traaginen") ; --UNCHK
 lin thespian_N = mkWN (k12 "näyttelijä") ; --UNCHK
 lin theta_N = mkWN (k9 "theeta") ; --UNCHK
 lin theurgy_N = mkWN "teurgia" ; --UNCHK
-lin they_Pron = S.they_Pron ;
+lin they_Pron = S.they_Pron | mkPronoun "ne" "niiden" "niitä" "niinä" "niihin"  Pl P3 ; ---- split
+lin theyFem_Pron = S.they_Pron ;
 lin thiabendazole_N = mkWN "tiabendatsoli" ; --UNCHK
 lin thiazide_N = mkWN (k5A "diureetti") ; --UNCHK
 lin thiazine_N = mkWN (k5A "diureetti") ; --UNCHK
@@ -56446,7 +56448,8 @@ lin waylay_V2 = mkWV2 (k53A "odottaa") "makuulla" ; --UNCHK
 lin ways_N = mkWN (compoundN "vesillelasku" (k5A "ramppi")) ; --UNCHK
 lin wayside_N = mkWN (compoundN "tien" (k9A "laita")) ; --UNCHK
 lin wayward_A = mkWA (k34A "kuriton") ; --UNCHK
-lin we_Pron = S.we_Pron ;
+lin we_Pron = optProDrop S.we_Pron ;
+lin weFem_Pron = optProDrop S.we_Pron ;
 lin weak_A = mkWA (k1A "heikko") ; --f133
 lin weak_kneed_A = mkA "pelokas" ;
 lin weaken_V = mkWV (k72A "heiketä") ;
@@ -57598,9 +57601,12 @@ lin yonder_A = mkWA (k101 "tuo") ; --UNCHK
 lin yore_N = mkWN "ennen" "vanhaan" ; --UNCHK
 lin yottabit_N = mkWN (compoundN "jotta" (k5A "bitti")) ; --UNCHK
 lin yottabyte_N = mkWN (compoundN "jotta" (k1 "tavu")) ; --UNCHK
-lin youPl_Pron = S.youPl_Pron ;
-lin youPol_Pron = S.youPol_Pron ;
-lin youSg_Pron = S.youSg_Pron ;
+lin youPl_Pron = optProDrop S.youPl_Pron ;
+lin youPlFem_Pron = optProDrop S.youPl_Pron ;
+lin youPol_Pron = optProDrop S.youPol_Pron ;
+lin youPolFem_Pron = optProDrop S.youPol_Pron ;
+lin youSg_Pron = optProDrop S.youSg_Pron ;
+lin youSgFem_Pron = optProDrop S.youSg_Pron ;
 lin young_A = L.young_A ;
 lin young_N = mkWN (k38 "jälkeläinen") ; --UNCHK
 lin younger_A = mkWA "nuorempi" ; --UNCHK

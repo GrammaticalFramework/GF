@@ -28044,6 +28044,7 @@ lin hysteroscopy_N = variants {} ;
 lin hysterotomy_N = variants {} ;
 lin hythe_PN = variants {} ;
 lin i_Pron = S.i_Pron;
+lin iFem_Pron = S.i_Pron;
 lin i_e__Adv = variants {} ;
 lin iamb_N = variants {} ;
 lin iambic_A = mkA "jambisk" ; -- status=guess
@@ -58401,6 +58402,7 @@ lin theta_N = variants {} ;
 lin thetford_PN = variants {} ;
 lin theurgy_N = variants {} ;
 lin they_Pron = S.they_Pron;
+lin theyFem_Pron = S.they_Pron;
 lin thiabendazole_N = variants {} ;
 lin thiazide_N = variants {} ;
 lin thiazine_N = variants {} ;
@@ -64030,6 +64032,7 @@ lin wayside_N = variants {} ;
 lin wayward_A = mkA "nyckfull" ; -- comment=5
 lin wc_N = mkN "toalett" "toaletter" ; -- comment=2
 lin we_Pron = S.we_Pron;
+lin weFem_Pron = S.we_Pron;
 lin weak_A = mkA "svag" | mkA "klen" ; -- SaldoWN -- comment=15
 lin weak_kneed_A = variants {} ;
 lin weaken_V = mkV "försvagar" ; -- comment=2
@@ -65457,7 +65460,11 @@ lin yorkshire_PN = variants {} ;
 lin yottabit_N = variants {} ;
 lin yottabyte_N = variants {} ;
 lin youPl_Pron = S.youPl_Pron;
+lin youPlFem_Pron = S.youPol_Pron;
+lin youPol_Pron = S.youPol_Pron;
+lin youPolFem_Pron = S.youPl_Pron;
 lin youSg_Pron = S.youSg_Pron;
+lin youSgFem_Pron = S.youSg_Pron;
 lin young_A = L.young_A ;
 lin young_N = mkN "unge" utrum;
 lin younger_A = mkA "ung" "yngre" "yngst" ;
