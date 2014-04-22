@@ -20,12 +20,12 @@ public class TranslatorKeyboardView extends KeyboardView {
 
     public TranslatorKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mTranslator = ((DGTranslator) context.getApplicationContext()).getTranslator();
+        mTranslator = ((HLCompiler) context.getApplicationContext()).getTranslator();
     }
 
     public TranslatorKeyboardView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mTranslator = ((DGTranslator) context.getApplicationContext()).getTranslator();
+        mTranslator = ((HLCompiler) context.getApplicationContext()).getTranslator();
     }
 
     private PopupWindow mLanguagesPopup = null;

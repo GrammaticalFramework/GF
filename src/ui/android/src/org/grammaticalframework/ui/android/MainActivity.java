@@ -133,7 +133,7 @@ public class MainActivity extends Activity {
 
         mTts = new TTS(this);
 
-        mTranslator = ((DGTranslator) getApplicationContext()).getTranslator();
+        mTranslator = ((HLCompiler) getApplicationContext()).getTranslator();
 
         mSourceLanguageView.setLanguages(mTranslator.getAvailableLanguages());
         mSourceLanguageView.setOnLanguageSelectedListener(new OnLanguageSelectedListener() {

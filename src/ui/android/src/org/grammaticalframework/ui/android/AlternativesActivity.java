@@ -33,7 +33,7 @@ public class AlternativesActivity extends ListActivity {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_lexical_entry);
 
-        mTranslator = ((DGTranslator) getApplicationContext()).getTranslator();
+        mTranslator = ((HLCompiler) getApplicationContext()).getTranslator();
 
 	    mShowLanguageView = (LanguageSelector) findViewById(R.id.show_language);
 	    mShowLanguageView.setLanguages(mTranslator.getAvailableLanguages());
