@@ -88,6 +88,8 @@ Library
     build-depends: binary
 
   ghc-options: -fwarn-unused-imports
+  if impl(ghc>=7.8)
+    ghc-options: -j +RTS -A20M -RTS
   ghc-prof-options: -auto-all
   extensions: 
 
@@ -157,13 +159,15 @@ Executable gf
 
   if flag(c-runtime)
     cpp-options: -DC_RUNTIME
---if flag(new-comp)
---  cpp-options: -DNEW_COMP
 
-  build-tools: happy
+  if impl(ghc>=7.0)
+    ghc-options: -rtsopts
+    if impl(ghc<7.8)
+      ghc-options: -with-rtsopts=-K64M
 
   if impl(ghc>=7.8)
     build-tools: happy>=1.19, alex>=3.1
+    ghc-options: -j +RTS -A20M -RTS
   else
     build-tools: happy, alex>=3
 
@@ -174,8 +178,6 @@ Executable gf
 
   ghc-prof-options: -auto-all
 
-  if impl(ghc>=7.0)
-    ghc-options: -rtsopts
   hs-source-dirs: src/compiler
 
   if !flag(custom-binary)
