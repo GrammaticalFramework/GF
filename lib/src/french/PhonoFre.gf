@@ -12,14 +12,14 @@ oper
     "I" ; "Î" ; "O" ; "Ô" ; "U" ; "Û" ; "Y"
     } ;
 
-  elision : Str -> Str = \d -> d + pre {"e" ; "'" / voyelle} ;
-----  elision : Str -> Str = \d -> d + pre {"e" ; ("'" ++ Predef.SOFT_BIND) / voyelle} ;
+----  elision : Str -> Str = \d -> d + pre {"e" ; "'" / voyelle} ;
+  elision : Str -> Str = \d -> d + pre {"e" ; ("'" ++ Predef.BIND) / voyelle} ;
 
 -- The following morphemes are the most common uses of elision.
 
   elisDe  = elision "d" ;
-  elisLa  = pre {"la" ; ("l'") / voyelle} ;
-----  elisLa  = pre {"la" ; ("l'" ++ Predef.SOFT_BIND) / voyelle} ; --- doesn't work properly 15/4/2014
+----  elisLa  = pre {"la" ; ("l'") / voyelle} ;
+  elisLa  = pre {"la" ; ("l'" ++ Predef.BIND) / voyelle} ; --- doesn't work properly 15/4/2014
   elisLe  = elision "l" ;
   elisNe  = elision "n" ;
   elisQue = elision "qu" ; 
