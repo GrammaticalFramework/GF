@@ -49,7 +49,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
 -- The $Bool$ tells if a possessive suffix is attached, which affects the case.
 
     CN   = {s : NForm => Str ; h : Harmony} ;
-    Pron = {s : NPForm => Str ; a : Agr ; hasPoss : Bool} ;
+    Pron = {s : NPForm => Str ; a : Agr ; hasPoss : Bool ; poss : Str} ;
     NP   = {s : NPForm => Str ; a : Agr ; isPron : Bool ; isNeg : Bool} ;
     Det  = {
       s1 : Case => Str ;       -- minun kolme
