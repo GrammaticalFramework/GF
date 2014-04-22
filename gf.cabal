@@ -63,7 +63,7 @@ flag c-runtime
 
 Library
   default-language:    Haskell2010
-  build-depends: base >= 4.2 && <5,
+  build-depends: base >= 4.3 && <5,
                  array,
                  fst,
                  containers,
@@ -132,7 +132,7 @@ Library
 Executable gf
   default-language:    Haskell2010
   build-depends: gf,
-                 base >= 4.2 && <5,
+                 base >= 4.3 && <5,
                  array,
                  containers,
                  bytestring,
@@ -277,5 +277,5 @@ test-suite gf-tests
   type:           exitcode-stdio-1.0
   main-is:        run.hs
   hs-source-dirs: testsuite
-  build-depends:  base>=4.2 && <5, Cabal>=1.8, directory, filepath, process
+  build-depends:  base>=4.3 && <5, Cabal>=1.8, directory, filepath, process
   default-language:    Haskell2010
