@@ -1,4 +1,4 @@
-GF x.y Release Notes
+GF 3.6 Release Notes
 Not released yet
 
 %!style:../css/style.css
@@ -14,7 +14,8 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 Over [...] changes have been pushed to the source repository since the release
 of GF 3.5.
 
-Closed issues: 25, 30, 41, 57, 60, 61, 68, 80, 81.
+Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
+ 25, 30, 41, 57, 60, 61, 68, 80, 81, 82.
 
 ===GF compiler and run-time library===
 
@@ -33,7 +34,7 @@ Closed issues: 25, 30, 41, 57, 60, 61, 68, 80, 81.
 
 - Nonlinear patterns (i.e., patterns where the same variable appears more than
   once) in concrete syntax are now detected and reported as errors.
-  (Section C.4.13 in the GF book explicitly states that patterns must be
+  (Section C.4.13 in the GF book states that patterns must be
   linear.)
 - A pattern matching bug which prevented variables in patterns to be bound to
   table values has been fixed.
@@ -42,7 +43,7 @@ Closed issues: 25, 30, 41, 57, 60, 61, 68, 80, 81.
 % (and thus the command line option --dump-refresh)
   had become obsolete and has been removed.
 - The old partial evaluator
-  (and thus the command line options --new-comp and --old-comp)
+  (and thus the command line options ``--new-comp`` and ``--old-comp``)
   has been removed.
 
 
