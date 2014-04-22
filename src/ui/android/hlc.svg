@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<?xml-stylesheet type="text/css" href="http://fonts.googleapis.com/css?family=Inconsolata"?>
+
+<svg width="250" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<desc>Digital Grammar Logo</desc>
+
+	<path d="M205,200 a110,110 0 1,1 0,-150 M125,15 v110 h80 M165,95 v60 M205,95 v60" fill="none" stroke="red" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>
