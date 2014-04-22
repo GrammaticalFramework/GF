@@ -321,6 +321,8 @@ public class Translator {
         	// for Chinese we need to put space after every character
         	input = explode(input);
         }
+
+	/* not needed any more
         if (getSourceLanguage().getLangCode().equals("fr-FR")) {
         	// for French and Italian we need to separate apostrophe by space...
         	input = sepApo(input);
@@ -328,6 +330,7 @@ public class Translator {
         if (getSourceLanguage().getLangCode().equals("it-IT")) {
         	input = sepApo(input);
         }
+	*/
 
         String output = null;
         List<ExprProb> exprs = new ArrayList<ExprProb>();
