@@ -56,7 +56,8 @@ concrete StructuralFin of Structural = CatFin **
   it_Pron = {
     s = \\c => pronSe.s ! npform2case Sg c ; 
     a = agrP3 Sg ; 
-    hasPoss = False
+    hasPoss = False ;
+    poss = "sen" ;
     } ;
   less_CAdv = X.mkCAdv "vähemmän" "kuin" ;
   many_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "moni" "monia")) ;
@@ -162,7 +163,7 @@ concrete StructuralFin of Structural = CatFin **
   youPl_Pron = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 ;
   youPol_Pron = 
     let p = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 in
-    {s = p.s ; a = AgPol ; hasPoss = True} ;
+    {s = p.s ; a = AgPol ; hasPoss = True ; poss = p.poss} ;
 
 oper
   jokuPron : MorphoFin.Number => (MorphoFin.Case) => Str =

@@ -933,10 +933,10 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 -- Personal pronouns have possessive suffix (hänen talonsa) but "se" doesn't (sen talo)
 
   mkPronoun : (_,_,_,_,_ : Str) ->  Number -> Person -> 
-    {s : NPForm => Str ; a : Agr ; hasPoss : Bool} = mkPronounGen True ;
+    {s : NPForm => Str ; a : Agr ; hasPoss : Bool ; poss : Str} = mkPronounGen True ;
 
   mkPronounGen : Bool -> (_,_,_,_,_ : Str) ->  Number -> Person -> 
-    {s : NPForm => Str ; a : Agr ; hasPoss : Bool} = 
+    {s : NPForm => Str ; a : Agr ; hasPoss : Bool ; poss : Str} = 
     \hasPoss, mina, minun, minua, minuna, minuun, n, p ->
     let {
       minu = Predef.tk 2 minuna ;
@@ -958,7 +958,8 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       NPAcc         => Predef.tk 1 minun + "t"
       } ;
      a = Ag n p ;
-     hasPoss = hasPoss
+     hasPoss = hasPoss ;
+     poss = minun ;
     } ; 
 
   mkDemPronoun : (_,_,_,_,_ : Str) ->  Number -> 

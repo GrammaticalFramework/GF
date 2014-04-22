@@ -116,7 +116,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
       } ;
 
     PossPron p = {
-      s1,sp = \\_,_ => p.s ! NPCase Gen ;
+      s1,sp = \\_,_ => p.poss ;
       s2 = case p.hasPoss of {
              True => table {Front => BIND ++ possSuffixFront p.a ; 
                             Back  => BIND ++ possSuffix p.a } ;
