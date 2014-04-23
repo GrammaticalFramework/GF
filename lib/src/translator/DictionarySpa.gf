@@ -3230,11 +3230,11 @@ lin californium_N = mkN "californio" ; -- status=guess
 lin caliph_N = mkN "califa" masculine ; -- status=guess
 lin calisthenics_N = mkN "calistenia" ; -- status=guess
 lin call_N = mkN "convocatoria" ;
-lin call_V = mkV (mkV "llamar") "al pan" | mkV (mkV "pan") "y al vino" | mkV "vino" ;
-lin call_V2 = mkV2 (mkV (mkV "llamar") "al pan") | mkV2 (mkV (mkV "pan") "y al vino") | mkV2 (mkV "vino") ;
-lin call_V2A = mkV2A (mkV (mkV "llamar") "al pan") | mkV2A (mkV (mkV "pan") "y al vino") | mkV2A (mkV "vino") ;
-lin call_V2V = mkV2V (mkV (mkV "llamar") "al pan") | mkV2V (mkV (mkV "pan") "y al vino") | mkV2V (mkV "vino") ;
-lin call_V3 = mkV3 (mkV (mkV "llamar") "al pan") | mkV3 (mkV (mkV "pan") "y al vino") | mkV3 (mkV "vino") ;
+lin call_V = mkV "llamar" ;
+lin call_V2 = mkV2  (mkV "llamar") ;
+lin call_V2A = mkV2A  (mkV "llamar") ; 
+lin call_V2V = mkV2V  (mkV "llamar") ;
+lin call_V3 = mkV3 (mkV "llamar") ;
 lin calligrapher_N = mkN "calígrafo" ; -- status=guess
 lin calligraphic_A = mkA "caligráfico" ; -- status=guess
 lin calligraphy_N = mkN "caligrafía" ; -- status=guess
@@ -14145,7 +14145,7 @@ lin omniscience_N = mkN "omnisciencia" ; -- status=guess
 lin omniscient_A = mkA "omniscio" | mkA "omnisciente" ; -- status=guess status=guess
 lin omnivore_N = mkN "omnívoro" ; -- status=guess
 lin omnivorous_A = mkA "omnívoro" ; -- status=guess
-lin on_Adv = mkAdv "a cuatro patas" ;
+lin on_Adv = mkAdv "sobre" ;
 lin on_Prep = S.on_Prep ;
 lin onager_N = mkN "onagro" ; -- status=guess
 lin once_Adv = mkAdv "una vez más" ;
