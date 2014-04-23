@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.util.Pair;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,11 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.grammaticalframework.ui.android.ASR.State;
 import org.grammaticalframework.ui.android.LanguageSelector.OnLanguageSelectedListener;
@@ -58,7 +52,6 @@ public class MainActivity extends Activity {
     private SpeechInputListener mSpeechListener;
     
 	private View mProgressBarView = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,6 +150,10 @@ public class MainActivity extends Activity {
             }
         });
         mSwitchLanguagesButton.setOnTouchListener(touchFeedbackListener);
+        
+		if (savedInstanceState != null) {
+			mConversationView.restoreConversation(savedInstanceState);
+		}
     }
 
 	@Override
@@ -178,8 +175,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		
-		outState.putBoolean("input_mode", input_mode);
+		mConversationView.saveConversation(outState);
 	}
 
 	@Override
@@ -305,10 +301,10 @@ public class MainActivity extends Activity {
             @Override
             protected void onPostExecute(Pair<String,List<ExprProb>> res) {
             	String text = res.first;
-            	List<ExprProb> alts = res.second;
+            	Object alts = (list.size() == 0) ? res.second : list;
                 if (DBG) Log.d(TAG, "Speaking: " + res.first);
-                CharSequence text2 = 
-                	mConversationView.addSecondPersonUtterance(input, text, (list.size() == 0) ? alts : list);
+            	CharSequence text2 = 
+            		mConversationView.addSecondPersonUtterance(input, text, alts);
                 mTts.speak(getTargetLanguageCode(), text2.toString());
 
                 hideProgressBar();

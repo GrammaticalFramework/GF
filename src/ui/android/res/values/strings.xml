@@ -10,6 +10,10 @@
 	<string name="help">Help</string>
 	<string name="global_preferences_key">org.grammaticalframework.ui.android.GLOBAL_PREFERENCES</string>
 
+	<string name="source_key">source_key</string>
+	<string name="target_key">target_key</string>
+	<string name="alternatives_key">alternatives_key</string>
+
     <!-- Labels on soft keys -->
     <string name="label_done_key">Done</string>
     <string name="label_go_key">Go</string>
