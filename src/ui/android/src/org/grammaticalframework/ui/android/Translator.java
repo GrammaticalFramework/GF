@@ -428,7 +428,6 @@ public class Translator {
 	    	Arrays.sort(completions, 1, completions.length-1, new Comparator<CompletionInfo>() {
 				@Override
 				public int compare(CompletionInfo arg0, CompletionInfo arg1) {
-					// TODO Auto-generated method stub
 					return ((String) arg0.getText()).compareTo((String) arg1.getText());
 				}
 	    	});
