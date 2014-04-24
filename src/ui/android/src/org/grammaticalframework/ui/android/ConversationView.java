@@ -205,26 +205,21 @@ public class ConversationView extends ScrollView {
     }
 
 	public void restoreConversation(Bundle state) {
-		final ArrayList<String> firstPersonUtterances  = state.getStringArrayList("first_person_uterances");
-		final ArrayList<String> secondPersonUtterances = state.getStringArrayList("second_person_uterances");
-		final ArrayList<Object> translationAlternatives= (ArrayList<Object>) state.getSerializable("translation_alternatives");
+		ArrayList<String> firstPersonUtterances  = state.getStringArrayList("first_person_uterances");
+		ArrayList<String> secondPersonUtterances = state.getStringArrayList("second_person_uterances");
+		ArrayList<Object> translationAlternatives= (ArrayList<Object>) state.getSerializable("translation_alternatives");
 
-		post(new Runnable() {
-			@Override
-			public void run() {
-				int i = 0;
-				while (i < firstPersonUtterances.size() && 
-					   i < Math.min(secondPersonUtterances.size(), translationAlternatives.size())) {
-					String text = firstPersonUtterances.get(i);
-					addFirstPersonUtterance(text, false);
+		int i = 0;
+		while (i < firstPersonUtterances.size() && 
+			   i < Math.min(secondPersonUtterances.size(), translationAlternatives.size())) {
+			String text = firstPersonUtterances.get(i);
+			addFirstPersonUtterance(text, false);
 
-					String translation  = secondPersonUtterances.get(i);
-					Object alternatives = translationAlternatives.get(i);
-					addSecondPersonUtterance(text, translation, alternatives);
+			String translation  = secondPersonUtterances.get(i);
+			Object alternatives = translationAlternatives.get(i);
+			addSecondPersonUtterance(text, translation, alternatives);
 
-					i++;
-				}
-			}
-		});		
+			i++;
+		}
 	}
 }
