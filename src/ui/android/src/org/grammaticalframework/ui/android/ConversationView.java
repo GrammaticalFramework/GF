@@ -81,6 +81,8 @@ public class ConversationView extends ScrollView {
         edittext.setText(text);
         edittext.setOnEditorActionListener(mEditorListener);
         edittext.setOnClickListener(mEditorListener);
+        edittext.setHorizontallyScrolling(false);
+        edittext.setMaxLines(Integer.MAX_VALUE);
         Bundle extras = edittext.getInputExtras(true);
         extras.putBoolean("show_language_toggle", false);
         mContent.addView(edittext);
