@@ -193,8 +193,33 @@ public class AlternativesActivity extends ListActivity {
 					final ExprProb ep = (ExprProb) item;
 		
 			    	String phrase = mTranslator.linearize(ep.getExpr());
-			    	if (phrase.startsWith("% ") || phrase.startsWith("* ") || phrase.startsWith("+ "))
+
+			    	// parse by words, marked by %, darkest red color
+			    	if (phrase.charAt(0) == '%') {
+			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
 			    		phrase = phrase.substring(2);
+			    	}
+
+			    	// parse error or unknown translations (in []) present, darkest red color
+			    	else if (phrase.contains("parse error:") || phrase.contains("[")) {
+			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
+			    	}
+
+			    	// parse by chunks, marked by *, red color
+			    	else if (phrase.charAt(0) == '*') {
+			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_chunk_utterance_bg));
+			    		phrase = phrase.substring(2);
+			    	}
+
+			    	// parse by domain grammar, marked by +, green color
+			    	else if (phrase.charAt(0) == '+') {
+			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_best_utterance_bg));
+			    		phrase = phrase.substring(2);
+			    	}
+			    	
+			    	else {
+			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_utterance_bg));
+			    	}
 
 			        descView.setText(phrase);
 
