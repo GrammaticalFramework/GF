@@ -629,7 +629,7 @@ public class TranslatorInputMethodService extends InputMethodService
             else {
             	mComposingWord.setLength(0);
             	mComposingWord.append(ci.getText());
-            	commitTyped(getCurrentInputConnection());
+            	getCurrentInputConnection().setComposingText(getComposingString(), 1);
             }
 
             if (mCandidateView != null) {
