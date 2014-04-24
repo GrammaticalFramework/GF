@@ -35,8 +35,6 @@ public class CompletionsView extends View {
     private int[] mWordX = new int[MAX_SUGGESTIONS];
 
     private static final int X_GAP = 10;
-    
-    private static final List<String> EMPTY_LIST = new ArrayList<String>();
 
     private int mColorNormal;
     private int mColorRecommended;
