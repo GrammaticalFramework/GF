@@ -216,7 +216,7 @@ Translator.prototype.update_translation=function(i) {
 
 	function upd2(trans,punct) {
 	    if(trans.length==0) upd3s("[no translation]")
-	    else if(trans[0].error)
+	    else if(trans[0].error!=undefined)
 		upd3s("[GF robust translation problem: "+trans[0].error+"]")
 	    else {
 		var ts=[]
@@ -247,7 +247,8 @@ Translator.prototype.update_translation=function(i) {
 		    if(!eq_options(segment.options,want)) {
 			//console.log("Updating "+i)
 			//lexgfrobust(segment.source,upd0)
-			upd0(segment.source,"")
+			var sp=rmpunct(segment.source)
+			upd0(sp.txt,sp.punct)
 		    }
 		    //else console.log("No update ",want,segment.options)
 		}
@@ -1223,6 +1224,26 @@ function lexgfrobust(txt,cont) {
     lextext(txt,rmpunct)
 }
 */
+function rmpunct(txt) {
+    function ispunct(c) {
+	switch(c) {
+	case ' ':
+	case '\t':
+	case '\n':
+	case '.':
+	case '?':
+	case '!':
+	    return true
+	default:
+	    return false
+	}
+    }
+    var i=txt.length-1
+    while(i>=0 && ispunct(txt[i])) i--
+    i++
+    return {txt:txt.substr(0,i),punct:txt.substr(i)}
+}
+
 /* --- DOM Support ---------------------------------------------------------- */
 
 function a(url,linked) { return node("a",{href:url},linked); }
