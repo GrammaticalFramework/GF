@@ -58,7 +58,7 @@ lookupFun f dictmap = case look f of
     _ -> "variants{} ; -- "
  where
   look = flip Data.Map.lookup dictmap
-  notEmpty r = head (words r) `notElem` ["variants","variants{}"]
+  notEmpty r = take 1 (words r) `notElem` [["variants"],["variants{}"]]
 
 subCats f = case splitFun f of
   (fun,cat) -> case cat of

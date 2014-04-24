@@ -18,7 +18,8 @@ lin have_V = mkV (mkV "een") "appeltje te schillen hebben" ; -- status=guess, sr
 lin it_Pron = S.it_Pron ; --
 lin to_Prep = S.to_Prep ; --
 lin for_Prep = S.for_Prep ; --
-lin i_Pron = S.i_Pron ; --
+lin i_Pron = S.i_Pron ;
+lin iFem_Pron = S.i_Pron ;
 lin that_Subj = S.that_Subj ; --
 lin he_Pron = S.he_Pron ; --
 lin on_Prep = S.on_Prep ; --
@@ -29,11 +30,13 @@ lin at_Prep = variants{} ; --
 lin by_Prep = variants{} ; -- 
 lin but_Conj = mkConj "maar" ; -- status=guess
 lin from_Prep = S.from_Prep ; --
-lin they_Pron = S.they_Pron ; --
+lin they_Pron = S.they_Pron ;
+lin theyFem_Pron = S.they_Pron ;
 lin she_Pron = S.she_Pron ; --
 lin or_Conj = S.or_Conj ; --
 lin as_Subj = variants{} ; -- 
-lin we_Pron = S.we_Pron ; --
+lin we_Pron = S.we_Pron ;
+lin weFem_Pron = S.we_Pron ;
 lin say_VV = mkVV (mkV (mkV "zeg") "gedag") ; -- status=guess, src=wikt
 lin say_VS = L.say_VS ; --
 lin say_VA = mkVA (mkV (mkV "zeg") "gedag") ; -- status=guess, src=wikt

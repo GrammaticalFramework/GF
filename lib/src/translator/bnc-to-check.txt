@@ -10,6 +10,7 @@ it_Pron
 to_Prep
 for_Prep
 i_Pron
+iFem_Pron
 that_Subj
 he_Pron
 on_Prep
@@ -21,10 +22,12 @@ by_Prep
 but_Conj
 from_Prep
 they_Pron
+theyFem_Pron
 she_Pron
 or_Conj
 as_Subj
 we_Pron
+weFem_Pron
 say_VV
 say_VS
 say_VA

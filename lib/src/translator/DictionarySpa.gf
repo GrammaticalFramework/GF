@@ -1,5 +1,5 @@
 concrete DictionarySpa of Dictionary = CatSpa
-** open ParadigmsSpa, MorphoSpa, IrregSpa, (L=LexiconSpa), (S=StructuralSpa), (E=ExtraSpa), Prelude in {
+** open ParadigmsSpa, MorphoSpa, IrregSpa, (L=LexiconSpa), (S=StructuralSpa), (E = ExtraSpa), Prelude in {
 
 oper  mkInterj : Str -> Interj 
     = \s -> lin Interj (ss s) ;
@@ -3231,9 +3231,9 @@ lin caliph_N = mkN "califa" masculine ; -- status=guess
 lin calisthenics_N = mkN "calistenia" ; -- status=guess
 lin call_N = mkN "convocatoria" ;
 lin call_V = mkV "llamar" ;
-lin call_V2 = mkV2  (mkV "llamar") ;
-lin call_V2A = mkV2A  (mkV "llamar") ; 
-lin call_V2V = mkV2V  (mkV "llamar") ;
+lin call_V2 = mkV2 (mkV "llamar") ;
+lin call_V2A = mkV2A (mkV "llamar") ;
+lin call_V2V = mkV2V (mkV "llamar") ;
 lin call_V3 = mkV3 (mkV "llamar") ;
 lin calligrapher_N = mkN "calígrafo" ; -- status=guess
 lin calligraphic_A = mkA "caligráfico" ; -- status=guess
@@ -9898,7 +9898,7 @@ lin hierarchical_A = mkA "jerárquico" ; -- status=guess
 lin hierarchy_N = mkN "jerarquía" ;
 lin hieratic_A = mkA "hierático" ; -- status=guess
 lin hieroglyph_N = mkN "jeroglífico" ; -- status=guess
-lin high_A = mkA "de nivel alto" | mkA "lujoso" | mkA "exclusivo" ;
+lin high_A = mkA "alto" | mkA "lujoso" | mkA "exclusivo" ;
 lin high_Adv = variants{} ;
 lin high_N = mkN "luz larga" | mkN "luz de carretera" ; -- status=guess status=guess
 lin highbrow_A = mkA "intelectual" | mkA "culturado" | mkA "élite" ; -- status=guess status=guess status=guess
@@ -10292,8 +10292,8 @@ lin hyrax_N = mkN "damán" masculine ; -- status=guess
 lin hysterectomy_N = mkN "histerectomía" ; -- status=guess
 lin hysteresis_N = mkN "histéresis" feminine ; -- status=guess
 lin hysteria_N = mkN "histérico" ; -- status=guess
-lin i_Pron = optProDrop S.i_Pron ;
 lin iFem_Pron = optProDrop E.i8fem_Pron ;
+lin i_Pron = optProDrop S.i_Pron ;
 lin iamb_N = mkN "yambo" ; -- status=guess
 lin iambic_A = mkA "yámbico" ; -- status=guess
 lin ibex_N = mkN "íbice" | mkN "ibex" masculine ; -- status=guess status=guess
@@ -11208,7 +11208,7 @@ lin issue_N = mkN "flujo" ;
 lin issue_V = mkV "proceder" | crecer_V | mkV "recibir" | mkV "lucrar" | mkV "natar" ;
 lin issue_V2 = mkV2 (mkV "proceder") | mkV2 (crecer_V) | mkV2 (mkV "recibir") | mkV2 (mkV "lucrar") | mkV2 (mkV "natar") ;
 lin isthmus_N = mkN "istmo" ; -- status=guess
-lin it_Pron = S.it_Pron ;
+lin it_Pron = optProDrop S.it_Pron ;
 lin italic_A = mkA "cursivo" ; -- status=guess
 lin italic_N = mkN "cursiva" | mkN "itálica" | mkN "letra bastardilla" ; -- status=guess status=guess status=guess
 lin itch_N = mkN "picazón" | mkN "escozor" | mkN "picor" masculine | mkN "comezón" masculine ; -- status=guess status=guess status=guess status=guess
@@ -14718,9 +14718,9 @@ lin partner_N = mkN "compañero" ;
 lin partnership_N = variants{} ;
 lin partridge_N = mkN "perdiz" feminine ; -- status=guess
 lin parturition_N = mkN "parto" | mkN "nacimiento" feminine ; -- status=guess status=guess
-lin party_1_N = variants{} ;
-lin party_2_N = variants{} ;
-lin party_N = mkN "fiestero" | mkN "fiestera" | mkN "marchoso" | mkN "marchosa" ;
+lin party_1_N = mkN "fiesta" ;
+lin party_2_N = mkN "partido" ;
+lin party_N = mkN "partido" ; --mkN "fiestero" | mkN "fiestera" | mkN "marchoso" | mkN "marchosa" ;
 lin parvenu_A = mkA "parvenido" ; -- status=guess
 lin pasha_N = mkN "pachá" | mkN "bajá" masculine ; -- status=guess status=guess
 lin pass_N = variants{} ;
@@ -20693,8 +20693,8 @@ lin thermotherapy_N = mkN "termoterapia" ; -- status=guess
 lin thesaurus_N = mkN "tesauro" ; -- status=guess
 lin thesis_N = mkN "tesis" feminine ;
 lin theta_N = mkN "onda theta" ; -- status=guess
-lin they_Pron = optProDrop S.they_Pron ;
 lin theyFem_Pron = optProDrop E.they8fem_Pron ;
+lin they_Pron = optProDrop S.they_Pron ;
 lin thick_A = L.thick_A ;
 lin thick_Adv = variants{} ;
 lin thick_N = mkN "espeso" ; -- status=guess
@@ -20848,9 +20848,9 @@ lin tilt_V = mkV "ladear" | mkV "ladearse" ; -- status=guess, src=wikt status=gu
 lin tilt_V2 = mkV2 (mkV "ladear") | mkV2 (mkV "ladearse") ; -- status=guess, src=wikt status=guess, src=wikt
 lin timber_N = mkN "viga" | mkN "polín" masculine ;
 lin timbre_N = mkN "timbre" masculine ; -- status=guess
-lin time_1_N = mkN "tiempo" feminine ;
+lin time_1_N = mkN "tiempo" ;
 lin time_2_N = mkN "vez" "veces" feminine ;
-lin time_N = mkN "tiempo" feminine ;
+lin time_N = mkN "tiempo" ;
 lin time_V2 = mkV2 (mkV "cronometrar") ;
 lin timeline_N = mkN "diagrama cronológico" | mkN "línea de tiempo" ; -- status=guess status=guess
 lin timely_A = mkA "oportuno" ; -- status=guess
@@ -22329,8 +22329,8 @@ lin way_2_N = variants{} ;
 lin way_Adv = mkAdv "muy" ; -- status=guess
 lin way_N = mkN "medios" masculine ;
 lin wayfarer_N = mkN "caminante" masculine ; -- status=guess
-lin we_Pron = optProDrop S.we_Pron ;
 lin weFem_Pron = optProDrop E.we8fem_Pron ;
+lin we_Pron = optProDrop S.we_Pron ;
 lin weak_A = mkA "débil" | mkA "feble" | mkA "flaco" | mkA "flojo" ;
 lin weaken_V = mkV "debilitarse" ;
 lin weaken_V2 = mkV2 (mkV "debilitarse") ;
@@ -22827,11 +22827,11 @@ lin yokel_N = mkN "paleto" | mkN "palurdo" ; -- status=guess status=guess
 lin yolk_N = mkN "yema" ; -- status=guess
 lin yonder_Adv = mkAdv "de allá" ; -- status=guess
 lin yore_N = mkN "antaño" ; -- status=guess
-lin youPl_Pron = optProDrop S.youPl_Pron | optProDrop E.youPolPl_Pron ; ---- split 
-lin youPlFem_Pron = optProDrop E.youPl8fem_Pron | optProDrop E.youPolPl8fem_Pron ; ---- split 
-lin youPolFem_Pron = optProDrop E.youPol8fem_Pron ; 
-lin youSg_Pron = optProDrop S.youSg_Pron ;
+lin youPlFem_Pron = optProDrop E.youPl8fem_Pron | optProDrop E.youPolPl8fem_Pron ; ---- split
+lin youPl_Pron = optProDrop S.youPl_Pron | optProDrop E.youPolPl_Pron ; ---- split
+lin youPolFem_Pron = optProDrop E.youPol8fem_Pron ;
 lin youSgFem_Pron = optProDrop E.youSg8fem_Pron ;
+lin youSg_Pron = optProDrop S.youSg_Pron ;
 lin young_A = L.young_A ;
 lin young_N = mkN "jóvenes" ; -- status=guess
 lin youngster_N = mkN "jovenzuelo" ;
