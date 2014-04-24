@@ -18,6 +18,7 @@ lin it_Pron = variants{} ; --
 lin to_Prep = mkPrep "को" "को" ; -- ** {lock_Prep = <>};
 lin for_Prep = mkPrep ["के लिये"] ["के लिये"] ;
 lin i_Pron = personalPN "मैं" "मुझ" "" "मेरा" "मेरी" "मेरे" "मेरी" Sg Masc Pers1;
+lin iFem_Pron = personalPN "मैं" "मुझ" "" "मेरा" "मेरी" "मेरे" "मेरी" Sg Masc Pers1; ----
 lin that_Subj = ss "कि";
 lin he_Pron = personalPN "वह" "उस" "" "उस का" "उस की" "उस के" "उस की" Sg Masc Pers3_Distant ;
 lin on_Prep = mkPrep "पर" "पर" ;
@@ -29,10 +30,12 @@ lin by_Prep = mkPrep "से" "से" ;
 lin but_Conj = variants{} ; -- 
 lin from_Prep = mkPrep "से" "से" ;
 lin they_Pron = personalPN "वे" "वे" "वे" "उन का" "उन की" "उन के" "उन की" Pl Masc Pers3_Distant ; ----
+lin theyFem_Pron = personalPN "वे" "वे" "वे" "उन का" "उन की" "उन के" "उन की" Pl Fem Pers3_Distant ; ----
 lin she_Pron = personalPN "वह" "उस" "उस" "उस का" "उस की" "उस के" "उस की" Sg Fem Pers3_Distant ; -- chek with prasad about 'Us'
 lin or_Conj = sd2 [] "या" ** {n = Sg} ;
 lin as_Subj = variants{} ; -- 
 lin we_Pron = personalPN "हम" "हम" "हम" "हमारा" "हमारी" "हमारे" "हमारी" Pl Masc Pers1 ;
+lin weFem_Pron = personalPN "हम" "हम" "हम" "हमारा" "हमारी" "हमारे" "हमारी" Pl Fem Pers1 ; ----
 lin say_VV = variants{}; -- mkV "बोलनाना" ; -- tocheck
 lin say_VS = mkV "कहना" ; -- tocheck
 lin say_VA = mkV "बोलनाना" ; -- tocheck

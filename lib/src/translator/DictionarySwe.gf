@@ -2871,14 +2871,14 @@ lin anxiousness_N = variants {} ;
 lin anyPl_Det = M.mkDet "några" plural; ---
 lin anySg_Det = M.mkDet "någon" "något" singular ; ---
 lin any_Adv = mkAdv "alls" ;
-lin anybody_NP = S.mkNP (mkPN "någon" utrum) ;
+lin anybody_NP = S.mkNP (mkPN "vem som helst" utrum) | S.mkNP (mkPN "någon" utrum) ; --- split pos/neg
 lin anyhow_Adv = mkAdv "hur som helst" ; -- status=guess
 lin anymore_Adv = mkAdv "längre" ;
-lin anyone_NP = S.mkNP (mkPN "någon" utrum) ;
+lin anyone_NP = S.mkNP (mkPN "vem som helst" utrum) | S.mkNP (mkPN "någon" utrum) ; --- split pos/neg
 lin anyplace_Adv = mkAdv "något håll" ; -- comment=2
-lin anything_NP = S.mkNP (mkPN "något" neutrum) ;
+lin anything_NP = S.mkNP (mkPN "vad som helst" neutrum) | S.mkNP (mkPN "något" neutrum) ; --- split pos/neg
 lin anyway_Adv = mkAdv "i alla fall" ;
-lin anywhere_Adv = mkAdv "någonstans" ; -- comment=2
+lin anywhere_Adv = mkAdv "var som helst" | mkAdv "någonstans" ; --- split pos/neg
 lin aorist_N = variants {} ;
 lin aoristic_A = variants {} ;
 lin aorta_N = mkN "aorta" ; -- SaldoWN
@@ -12396,8 +12396,8 @@ lin conferment_N = mkN "utdelande" ; -- comment=2
 lin conferrer_N = variants {} ;
 lin conferva_N = variants {} ;
 lin confess_V = mkV "erkänna" "erkände" "erkänt" ; -- comment=4
-lin confess_V2 = variants{}; -- mkV "erkänna" "erkände" "erkänt" ; -- comment=4
-lin confess_VS = variants{}; -- mkV "erkänna" "erkände" "erkänt" ; -- comment=4
+lin confess_V2 = mkV2 (mkV "erkänna" "erkände" "erkänt") ;
+lin confess_VS = mkVS (mkV "erkänna" "erkände" "erkänt") ;
 lin confessedly_Adv = variants {} ;
 lin confession_N = mkN "erkännande" | mkN "trosbekännelse" "trosbekännelser" ; -- SaldoWN -- comment=8
 lin confessional_N = mkN "biktstol" ;
@@ -23074,11 +23074,11 @@ lin ft_PN = variants {} ;
 lin fuchsia_N = mkN "fuchsia" ; -- status=guess
 lin fuck_N = mkN "knull" neutrum; -- comment=2
 lin fuck_V = mkV "knullar" ;
-lin fuck_V2 = dirV2 (partV (mkV "knullar")"runt");
+lin fuck_V2 = dirV2 (mkV "knullar") ;
 lin fuck_all_N = variants {} ;
 lin fucker_N = variants {} ;
-lin fucking_A = variants{} ; --
-lin fucking_Adv = variants{} ; --
+lin fucking_A = mkA "jävla" ;
+lin fucking_Adv = mkAdv "in i helvete" ; -----
 lin fucoid_N = variants {} ;
 lin fucus_N = variants {} ;
 lin fuddle_V2 = variants {} ;
@@ -28043,8 +28043,8 @@ lin hysterosalpingogram_N = variants {} ;
 lin hysteroscopy_N = variants {} ;
 lin hysterotomy_N = variants {} ;
 lin hythe_PN = variants {} ;
-lin i_Pron = S.i_Pron;
 lin iFem_Pron = S.i_Pron;
+lin i_Pron = S.i_Pron;
 lin i_e__Adv = variants {} ;
 lin iamb_N = variants {} ;
 lin iambic_A = mkA "jambisk" ; -- status=guess
@@ -32196,7 +32196,7 @@ lin leap_upon_V2 = dirV2 (partV (mkV "hoppar")"över"); -- comment=2
 lin leap_year_N = variants {} ;
 lin leapfrog_N = variants {} ;
 lin leapfrog_V2 = variants {} ;
-lin learn_V = reflV (mkV "lära" "lär" "lär" "lärde" "lärt" "lärd") ;
+lin learn_V = reflV (mkV "lär") ;
 lin learn_V2 = L.learn_V2;
 lin learn_VS = mkVS (lin V L.learn_V2);
 lin learn_VV = mkVV (lin V L.learn_V2);
@@ -58401,8 +58401,8 @@ lin thessaloniki_PN = variants {} ;
 lin theta_N = variants {} ;
 lin thetford_PN = variants {} ;
 lin theurgy_N = variants {} ;
-lin they_Pron = S.they_Pron;
 lin theyFem_Pron = S.they_Pron;
+lin they_Pron = S.they_Pron;
 lin thiabendazole_N = variants {} ;
 lin thiazide_N = variants {} ;
 lin thiazine_N = variants {} ;
@@ -64031,8 +64031,8 @@ lin ways_N = mkN "väg" ;
 lin wayside_N = variants {} ;
 lin wayward_A = mkA "nyckfull" ; -- comment=5
 lin wc_N = mkN "toalett" "toaletter" ; -- comment=2
-lin we_Pron = S.we_Pron;
 lin weFem_Pron = S.we_Pron;
+lin we_Pron = S.we_Pron;
 lin weak_A = mkA "svag" | mkA "klen" ; -- SaldoWN -- comment=15
 lin weak_kneed_A = variants {} ;
 lin weaken_V = mkV "försvagar" ; -- comment=2
@@ -65459,12 +65459,12 @@ lin yorkley_PN = variants {} ;
 lin yorkshire_PN = variants {} ;
 lin yottabit_N = variants {} ;
 lin yottabyte_N = variants {} ;
-lin youPl_Pron = S.youPl_Pron;
 lin youPlFem_Pron = S.youPol_Pron;
-lin youPol_Pron = S.youPol_Pron;
+lin youPl_Pron = S.youPl_Pron;
 lin youPolFem_Pron = S.youPl_Pron;
-lin youSg_Pron = S.youSg_Pron;
+lin youPol_Pron = S.youPol_Pron;
 lin youSgFem_Pron = S.youSg_Pron;
+lin youSg_Pron = S.youSg_Pron;
 lin young_A = L.young_A ;
 lin young_N = mkN "unge" utrum;
 lin younger_A = mkA "ung" "yngre" "yngst" ;
