@@ -132,15 +132,15 @@ public class ConversationView extends ScrollView {
     		target = target.subSequence(2, target.length()) ;
     	}
 
-    	// parse error or unknown translations (in []) present, darkest red color
-    	else if (target.toString().contains("parse error:") || target.toString().contains("[")) {
-    		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
-    	}
-
     	// parse by chunks, marked by *, red color
     	else if (target.charAt(0) == '*') {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_chunk_utterance_bg));
     		target = target.subSequence(2, target.length()) ;
+    	}
+
+    	// parse error or unknown translations (in []) present, darkest red color
+    	else if (target.toString().contains("parse error:") || target.toString().contains("[")) {
+    		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
     	}
 
     	// parse by domain grammar, marked by +, green color

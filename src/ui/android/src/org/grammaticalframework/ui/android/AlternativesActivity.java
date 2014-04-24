@@ -200,15 +200,15 @@ public class AlternativesActivity extends ListActivity {
 			    		phrase = phrase.substring(2);
 			    	}
 
-			    	// parse error or unknown translations (in []) present, darkest red color
-			    	else if (phrase.contains("parse error:") || phrase.contains("[")) {
-			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
-			    	}
-
 			    	// parse by chunks, marked by *, red color
 			    	else if (phrase.charAt(0) == '*') {
 			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_chunk_utterance_bg));
 			    		phrase = phrase.substring(2);
+			    	}
+
+			    	// parse error or unknown translations (in []) present, darkest red color
+			    	else if (phrase.contains("parse error:") || phrase.contains("[")) {
+			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
 			    	}
 
 			    	// parse by domain grammar, marked by +, green color
