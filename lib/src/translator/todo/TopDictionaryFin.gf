@@ -3,7 +3,8 @@
 concrete TopDictionaryFin of TopDictionary = CatFin ** open ParadigmsFin,
   (S = StructuralFin),
   (L = LexiconFin),
-  MorphoFin, ParadigmsFin, Kotus, WNKotus, StemFin, Prelude in {
+  (R = ResFin),
+  MorphoFin, ParadigmsFin, (E = ExtraFin), Kotus, WNKotus, StemFin, Prelude in {
 
 flags coding=utf8 ; 
 
@@ -530,10 +531,9 @@ lin after_Subj = lin Subj (ss "sen jälkeen kun") ;
 lin only_Predet = S.only_Predet ;
 lin before_Subj = lin Subj (ss "ennen kuin") ;
 lin bit_N = mkN "palanen" ; --- split mkN "bitti"
-lin face_N = mkN "kasvo" ;
----- checked by IL till face_N in the BNC order
-lin sit_VA = mkWVA (k53A "pitää") "istuntoa" ; --UNCHK
-lin sit_V2 = mkWV2 (k53A "pitää") "istuntoa" ; --UNCHK
+lin face_N = mkN "kasvo" | mkN "naama" ; ---- plural "kasvot" also possible
+lin sit_VA = mkVA (mkV "istua") (mkPrep inessive) ; ---- subcat ; no idea
+lin sit_V2 = mkV2 (mkV "istua") ; 
 lin sit_V = L.sit_V ;
 lin market_N = mkN "markkina" ;
 lin market_1_N = mkN "tori" ;
@@ -781,7 +781,7 @@ lin staff_2_N = mkN "sauva" ;
 lin staff_1_N = mkN "henkilökunta" ;
 lin certain_A = mkA (mkN "varma") "varmempi" "varmin" ;
 lin certain_2_A = mkA "tietty" ;
-lin certain_1_A = mkA "varma" ; 
+lin certain_1_A = mkA (mkN "varma") "varmempi" "varmin" ;
 lin student_N = mkN "opiskelija" ; 
 lin half_Predet = mkPredet "puoliksi" ;
 lin around_Prep = mkPrep "ympärillä" ;
@@ -1213,7 +1213,7 @@ lin success_N = mkN "menestys" ; --f93
 lin natural_A = mkA "luonnollinen" ; --f126
 lin wrong_A = mkWA (k10 "väärä") ;
 lin near_Prep = postPrep genitive "lähellä" ;
-lin round_Adv = mkWAdv (k99 "ympäri") ; 
+lin round_Adv = mkAdv "ympäri" ; 
 lin thought_N = mkN "ajatus" | mkN "ajattelu" ;
 lin list_N = mkN "lista" ;
 lin argue_VS = mkVS (mkV "väittää") ;
@@ -1357,9 +1357,9 @@ lin recently_Adv = mkAdv "äskettäin" | mkAdv "hiljattain" ;
 lin publish_V2 = mkWV2 (k66 "julkaista") ; --f65
 lin publish_V = mkWV (k66 "julkaista") ; --f74
 lin serious_A = mkWA (k10 "vakava") ; --f132
-lin anyway_Adv = mkWAdv (k99 "joka tapauksessa") ; 
-lin visit_V2V = mkWV2V (k73A "kohdata") ; --UNCHK
-lin visit_V2 = mkV2 "vierailla" inessive ;
+lin anyway_Adv = mkAdv "joka tapauksessa" ; 
+lin visit_V2V = mkV2V (mkV "vierailla") ; ---- subcat
+lin visit_V2 = mkV2 (mkV "vierailla") (postGenPrep "luona") ; --- agreement to prep, "minun luonani" 
 lin visit_V = mkV "vierailla" ;
 lin capital_N = mkN "pää" (mkN "oma") ;
 lin capital_3_N = mkN "isokirjain" ; ---- iso kirjain : CN
@@ -1382,7 +1382,7 @@ lin economy_N = mkN "talous" "talouden" "talouksia" ;
 lin economy_2_N = mkN "säästö" ;
 lin economy_1_N = mkN "talous" ;
 lin element_N = mkN "alku" (mkN "aine") ;
-lin finish_VA = mkWVA (k53A "lopettaa") ; 
+lin finish_VA = mkWVA (k53A "lopettaa") ; ---- subcat
 lin finish_V2 = mkWV2 (k53A "lopettaa") ; 
 lin finish_V = mkWV (k53A "lopettaa") ; 
 lin duty_N = mkN (lin NK {s = d40 "velvollisuus"}) ;
@@ -1512,7 +1512,7 @@ lin exactly_Adv = mkAdv "täsmälleen" ;
 lin above_Adv = mkAdv "yläpuolella" ;
 lin commission_N = mkN (lin NK {s = d03 "komissio"}) ;
 lin intend_VV = mkVV (mkV "aikoa") ;
-lin intend_V2V = mkV2V "kaavailla" genitive infPresPart ;
+lin intend_V2V = mkV2V (mkV "kaavailla") genitive infPresPart ;
 lin intend_V2 = mkV2 "yrittää" | mkV2 "ajatella" ;
 lin intend_V = mkV "tarkoittaa" ; --mkWV (k67A "ajatella") ;
 lin beyond_Prep = mkPrep "saavuttamattomissa" ;
