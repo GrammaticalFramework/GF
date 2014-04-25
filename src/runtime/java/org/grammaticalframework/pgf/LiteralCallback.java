@@ -1,8 +1,12 @@
 package org.grammaticalframework.pgf;
 
+import java.util.Iterator;
+
 public interface LiteralCallback {
 	public CallbackResult match(int lin_idx, String sentence, int start_offset);
-	
+
+	public Iterator<TokenProb> predict(int lin_idx, String prefix);
+
 	public static class CallbackResult {
 		private ExprProb ep;
 		private int offset;

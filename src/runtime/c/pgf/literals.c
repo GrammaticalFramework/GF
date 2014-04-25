@@ -48,8 +48,25 @@ pgf_match_string_lit(PgfLiteralCallback* self,
 	}
 }
 
+static void
+pgf_predict_empty_next(GuEnum* self, void* to, GuPool* pool)
+{
+	*((PgfTokenProb**) to) = NULL;
+}
+
+static GuEnum*
+pgf_predict_empty(PgfLiteralCallback* self,
+	              size_t lin_idx,
+	              GuString prefix,
+	              GuPool *out_pool)
+{
+	GuEnum* en = gu_new(GuEnum, out_pool);
+	en->next = pgf_predict_empty_next;
+	return en;
+}
+
 static PgfLiteralCallback pgf_string_literal_callback =
-  { pgf_match_string_lit } ;
+  { pgf_match_string_lit, pgf_predict_empty } ;
 
 
 
@@ -101,7 +118,7 @@ pgf_match_int_lit(PgfLiteralCallback* self,
 }
 
 static PgfLiteralCallback pgf_int_literal_callback =
-  { pgf_match_int_lit } ;
+  { pgf_match_int_lit, pgf_predict_empty } ;
 
 
 
@@ -153,7 +170,7 @@ pgf_match_float_lit(PgfLiteralCallback* self,
 }
 
 static PgfLiteralCallback pgf_float_literal_callback =
-  { pgf_match_float_lit } ;
+  { pgf_match_float_lit, pgf_predict_empty } ;
 
 
 
@@ -231,7 +248,7 @@ pgf_match_name_lit(PgfLiteralCallback* self,
 }
 
 PgfLiteralCallback pgf_nerc_literal_callback =
-  { pgf_match_name_lit } ;
+  { pgf_match_name_lit, pgf_predict_empty } ;
 
 
 PgfCallbacksMap*
