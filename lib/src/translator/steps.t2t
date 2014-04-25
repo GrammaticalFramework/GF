@@ -225,3 +225,23 @@ You also need to add to Translator.java, in a place near AppGer reference,
    new Language("nl-NL", "Dutch", "AppDut", R.xml.qwerty),
 
 
+=The TopDictionary=
+
+Once you have DictionaryDut, go to GF/lib/src/translate/ and do
+
+  $ ghci
+  Prelude> :l CheckDict.hs 
+  *Main> createConcrete "Dut"
+
+This creates the file GF/lib/src/translate/todo/tmp/TopDictionaryDut.gf, which has words in frequency order.
+Copy this one level up, to GF/lib/src/translate/todo/TopDictionaryDut.gf, and follow the instructions in
+
+  http://www.grammaticalframework.org/lib/src/translator/todo/check-dictionary.html
+
+
+to improve the dictionary in frequency order.
+
+
+
+  
+
