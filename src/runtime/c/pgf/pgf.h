@@ -161,6 +161,10 @@ struct PgfLiteralCallback {
 	                      size_t lin_idx,
 	                      GuString sentence, size_t* poffset,
 	                      GuPool *out_pool);
+    GuEnum*    (*predict)(PgfLiteralCallback* self,
+	                      size_t lin_idx,
+	                      GuString prefix,
+	                      GuPool *out_pool);
 };
 
 void

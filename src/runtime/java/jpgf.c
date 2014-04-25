@@ -713,19 +713,26 @@ typedef struct {
 	PgfLiteralCallback callback;
 	jobject jcallback;
 	jmethodID match_methodId;
+	jmethodID predict_methodId;
 	GuFinalizer fin;
 } JPgfLiteralCallback;
 
-static PgfExprProb* 
-jpgf_literal_callback_fn(PgfLiteralCallback* self,
-                         size_t lin_idx,
-                         GuString sentence, size_t* poffset,
-                         GuPool *out_pool)
+typedef struct {
+	GuEnum en;
+	jobject jiterator;
+	GuFinalizer fin;
+} JPgfTokenProbEnum;
+
+static PgfExprProb*
+jpgf_literal_callback_match(PgfLiteralCallback* self,
+                            size_t lin_idx,
+                            GuString sentence, size_t* poffset,
+                            GuPool *out_pool)
 {
 	JPgfLiteralCallback* callback = gu_container(self, JPgfLiteralCallback, callback);
 
 	JNIEnv *env;
-    (*cachedJVM)->AttachCurrentThread(cachedJVM, (void **)&env, NULL);
+    (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
 
 	jstring jsentence = gu2j_string(env, sentence);
 	jobject result = (*env)->CallObjectMethod(env, callback->jcallback, callback->match_methodId, lin_idx, jsentence, *poffset);
@@ -783,12 +790,49 @@ jpgf_literal_callback_fn(PgfLiteralCallback* self,
 }
 
 static void 
+jpgf_token_prob_enum_fin(GuFinalizer* self)
+{
+	JPgfTokenProbEnum* en = gu_container(self, JPgfTokenProbEnum, fin);
+	
+	JNIEnv *env;
+    (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
+
+	(*env)->DeleteGlobalRef(env, en->jiterator);
+}
+
+static GuEnum*
+jpgf_literal_callback_predict(PgfLiteralCallback* self,
+	                          size_t lin_idx,
+	                          GuString prefix,
+	                          GuPool *out_pool)
+{
+	JPgfLiteralCallback* callback = gu_container(self, JPgfLiteralCallback, callback);
+
+	JNIEnv *env;
+    (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
+
+	jstring jprefix = gu2j_string(env, prefix);
+	jobject jiterator = (*env)->CallObjectMethod(env, callback->jcallback, callback->predict_methodId, lin_idx, jprefix);
+	if (jiterator == NULL)
+		return NULL;
+
+	JPgfTokenProbEnum* en = gu_new(JPgfTokenProbEnum, out_pool);
+	en->en.next = NULL;
+	en->jiterator = (*env)->NewGlobalRef(env, jiterator);
+	en->fin.fn = jpgf_token_prob_enum_fin;
+
+	gu_pool_finally(out_pool, &en->fin);
+
+	return &en->en;
+}
+
+static void 
 jpgf_literal_callback_fin(GuFinalizer* self)
 {
 	JPgfLiteralCallback* callback = gu_container(self, JPgfLiteralCallback, fin);
 	
 	JNIEnv *env;
-    (*cachedJVM)->AttachCurrentThread(cachedJVM, (void **)&env, NULL);
+    (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
 
 	(*env)->DeleteGlobalRef(env, callback->jcallback);
 }
@@ -800,12 +844,14 @@ Java_org_grammaticalframework_pgf_Concr_addLiteral(JNIEnv* env, jobject self, js
 	GuPool* pool = pgf_concr_get_pool(concr);
 	
 	JPgfLiteralCallback* callback = gu_new(JPgfLiteralCallback, pool);
-	callback->callback.match = jpgf_literal_callback_fn;
+	callback->callback.match   = jpgf_literal_callback_match;
+	callback->callback.predict = jpgf_literal_callback_predict;
 	callback->jcallback = (*env)->NewGlobalRef(env, jcallback);
 	callback->fin.fn = jpgf_literal_callback_fin;
 
 	jclass callback_class = (*env)->GetObjectClass(env, jcallback);
 	callback->match_methodId = (*env)->GetMethodID(env, callback_class, "match", "(ILjava/lang/String;I)Lorg/grammaticalframework/pgf/LiteralCallback$CallbackResult;");
+	callback->predict_methodId = (*env)->GetMethodID(env, callback_class, "predict", "(ILjava/lang/String;)Ljava/util/Iterator;");
 
 	gu_pool_finally(pool, &callback->fin);
 	

@@ -1,5 +1,8 @@
 package org.grammaticalframework.pgf;
 
+import java.util.Collections;
+import java.util.Iterator;
+
 public class NercLiteralCallback implements LiteralCallback {
 	public CallbackResult match(int lin_idx, String sentence, int offset) {
 		StringBuilder sbuilder = new StringBuilder();
@@ -32,5 +35,9 @@ public class NercLiteralCallback implements LiteralCallback {
 		}
 
 		return null;
+	}
+	
+	public Iterator<TokenProb> predict(int lin_idx, String prefix) {
+		return Collections.<TokenProb>emptyList().iterator();
 	}
 }
