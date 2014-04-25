@@ -27295,7 +27295,6 @@ lin hook_up_to_V2 = variants {} ;
 lin hookah_N = mkN "vattenpipa" ; -- status=guess
 lin hooker_N = (mkN "hora") | (mkN "luder" neutrum); -- status=guess status=guess
 lin hooklike_A = variants {} ;
-lin hooks_N = variants {} ;
 lin hookup_N = variants {} ;
 lin hookworm_N = variants {} ;
 lin hooky_N = variants {} ;
@@ -48827,7 +48826,6 @@ lin rock_salmon_N = variants {} ;
 lin rock_salt_N = variants {} ;
 lin rockabilly_N = variants {} ;
 lin rocker_N = mkN "gungstol" ;
-lin rockers_N = variants {} ;
 lin rockery_N = variants {} ;
 lin rocket_N = mkN "raket" "raketer" ; -- SaldoWN
 lin rocket_V = variants {} ;
