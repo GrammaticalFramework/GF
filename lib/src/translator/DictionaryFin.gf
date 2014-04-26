@@ -48243,12 +48243,8 @@ lin staff_N = mkN "henkilökunta" ;
 lin staff_V2 = mkWV2 (k53A "miehittää") ; --UNCHK
 lin staff_office_N = mkWN (compoundN "henkilöstö" (k2 "osasto")) ; --UNCHK
 lin stag_N = mkWN (compoundN "uros" (k7 "hirvi")) ; --UNCHK
-lin stag_V = variants{} ; --
-v v v v v v v
-lin stage_N = mkN "näyttämö" ; --- split mkWN (k5A "etappi") ; --f57
-*************
-lin stage_N = mkN "vaihe" | mkWN (k5A "etappi") ; --- split näyttämö
-^ ^ ^ ^ ^ ^ ^
+lin stag_V = variants{} ; 
+lin stage_N = mkN "vaihe" | mkN "näyttämö" ; --- split
 lin stage_V = mkWV (k71 "tehdä") ; --UNCHK
 lin stage_V2 = mkWV2 (k71 "tehdä") ; --UNCHK
 lin stage_whisper_N = mkWN (compoundN "teatteri" (k39 "kuiskaus")) ; --UNCHK
