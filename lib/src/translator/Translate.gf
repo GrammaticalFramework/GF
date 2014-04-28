@@ -23,7 +23,10 @@ abstract Translate =
   Chunk,
 
   Construction,
-  Extensions [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
+  Extensions [
+    CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
+----    , PastPartAP, PastPartAgentAP, PresPartAP ---- not yet available for all languages
+    ],
   Dictionary,
   Documentation
 
