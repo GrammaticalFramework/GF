@@ -31,7 +31,9 @@ module GF.Data.Operations (-- * misc functions
 		   lookupTree, --lookupTreeMany,
                    lookupTreeManyAll, updateTree,
 		   buildTree, filterBinTree,
-		   sorted2tree, mapTree, mapMTree, tree2list,
+		   --sorted2tree,
+                   mapTree, --mapMTree,
+                   tree2list,
  
 
 		   -- * printing
@@ -167,16 +169,16 @@ updateTree (a,b) = Map.insert a b
 
 buildTree :: (Ord a) => [(a,b)] -> BinTree a b
 buildTree = Map.fromList
-
+{-
 sorted2tree :: Ord a => [(a,b)] -> BinTree a b
 sorted2tree = Map.fromAscList
-
+-}
 mapTree :: ((a,b) -> c) -> BinTree a b -> BinTree a c
 mapTree f = Map.mapWithKey (\k v -> f (k,v))
-
+{-
 mapMTree :: (Ord a,Monad m) => ((a,b) -> m c) -> BinTree a b -> m (BinTree a c)
 mapMTree f t = liftM Map.fromList $ sequence [liftM ((,) k) (f (k,x)) | (k,x) <- Map.toList t]
-
+-}
 filterBinTree :: Ord a => (a -> b -> Bool) -> BinTree a b -> BinTree a b
 filterBinTree = Map.filterWithKey
 
