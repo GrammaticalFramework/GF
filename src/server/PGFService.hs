@@ -304,7 +304,7 @@ pgfMain command (t,pgf) =
       "linearize"      -> o =<< doLinearize pgf # tree % to
       "linearizeAll"   -> o =<< doLinearizes pgf # tree % to
       "linearizeTable" -> o =<< doLinearizeTabular pgf # tree % to
-      "random"         -> cat >>= \c -> depth >>= \dp -> limit >>= \l -> to >>= \to -> liftIO (doRandom pgf c dp l to) >>= o
+      "random"         -> o =<< join (doRandom pgf # cat % depth % limit % to)
       "generate"       -> o =<< doGenerate pgf # cat % depth % limit % to
       "translate"      -> o =<< doTranslate pgf # input % cat % to % limit %trie
       "translategroup" -> o =<< doTranslateGroup pgf # input % cat % to % limit
@@ -312,10 +312,7 @@ pgfMain command (t,pgf) =
       "grammar"        -> o =<< doGrammar pgf # requestAcceptLanguage
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
-      "parsetree"      -> do t <- tree
-                             Just l <- from
-                             opts <- graphvizOptions
-                             outputGraphviz (parseTree pgf l opts t)
+      "parsetree"      -> outputGraphviz =<< parseTree pgf # from1 % graphvizOptions % tree
       "abstrjson"      -> o . jsonExpr =<< tree
       "browse"         -> join $ doBrowse pgf # optId % cssClass % href % format "html" % getIncludePrintNames
       "external"       -> do cmd <- getInput "external"
@@ -595,8 +592,9 @@ doLinearizeTabular pgf tree (tos,unlex) = showJSON
                          | (ps,ts)<-texts]]
        | (to,texts) <- linearizeTabular pgf tos tree]
 
-doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> To -> IO JSValue
+doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> To -> CGI JSValue
 doRandom pgf mcat mdepth mlimit to =
+  liftIO $
   do g <- newStdGen
      let trees = PGF.generateRandomDepth g pgf cat (Just depth)
      return $ showJSON

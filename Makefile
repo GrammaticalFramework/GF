@@ -2,7 +2,7 @@
 
 all: build
 
-dist/setup-config: gf.cabal Setup.hs
+dist/setup-config: gf.cabal Setup.hs WebSetup.hs
 	cabal configure
 
 build: dist/setup-config
