@@ -222,7 +222,7 @@ Translator.prototype.update_translation=function(i) {
 		var ts=[]
 		for(var i=0;i<trans.length;i++) {
 		    var t=trans[i].linearizations[0].text
-		    if(punct) t=t+" "+punct
+		    if(punct) t=t+punct
 		    if(!elem(t,ts)) ts.push(t)
 		}
 		//mapc(unlextext,ts,upd3)
