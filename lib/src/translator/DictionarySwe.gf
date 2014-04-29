@@ -8615,7 +8615,7 @@ lin calk_N = mkN "driva" ;
 lin calk_V2 = variants {} ;
 lin call_N = mkN "anrop" "anrop" | mkN "kallelse" "kallelser" | mkN "telefonsamtal" neutrum ; --- split -- | function call -- | phone call
 lin call_V = mkV "kalla" | mkV "anropa" ;
-lin call_V2 = mkV2 "kalla" | mkV2 "anropa" | mkV2 I.heta_V ; ---- heta = be called
+lin call_V2 = mkV2 "kalla" | mkV2 "anropa" | mkV2 (mkV "heter") ; ---- heta = be called
 lin call_V2A = mkV2A (mkV "kallar") ;
 lin call_V2V = mkV2V (mkV "kalla") ;
 lin call_V3 = mkV3 "kalla" ;
