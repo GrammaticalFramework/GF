@@ -24873,7 +24873,8 @@ lin shortlist_V2 = mkV2 (compoundV "संक्षिप्त सूची म
 lin shot_N = mkN "छर्रा" ; -- tocheck              
 lin shot_put_N = mkN "गोला फेंक" ; -- tocheck       
 lin shotgun_N = mkN "बन्दूक" ; -- tocheck              
-lin should_VV= mkV "चाहियेना" ** { isAux = True} ;
+lin shall_VV= mkV "चाहियेना" ** { isAux = True} ;
+lin should_VV= mkV "चाहियेना" ** { isAux = True} ; ----
 lin shoulder_N = mkN "बोतल" ; -- tocheck              
 lin shoulder_V2 = mkV2 (compoundV "आगे" (mkV "बढना")) ; -- tocheck
 lin shout_N = mkN "चीत्कार" ; -- tocheck              

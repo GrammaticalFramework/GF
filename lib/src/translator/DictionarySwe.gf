@@ -8615,7 +8615,7 @@ lin calk_N = mkN "driva" ;
 lin calk_V2 = variants {} ;
 lin call_N = mkN "anrop" "anrop" | mkN "kallelse" "kallelser" | mkN "telefonsamtal" neutrum ; --- split -- | function call -- | phone call
 lin call_V = mkV "kalla" | mkV "anropa" ;
-lin call_V2 = mkV2 "kalla" | mkV2 "anropa" ;
+lin call_V2 = mkV2 "kalla" | mkV2 "anropa" | mkV2 I.heta_V ; ---- heta = be called
 lin call_V2A = mkV2A (mkV "kallar") ;
 lin call_V2V = mkV2V (mkV "kalla") ;
 lin call_V3 = mkV3 "kalla" ;
@@ -51569,6 +51569,7 @@ lin shaky_A = mkA "skakig" ; -- comment=12
 lin shale_N = mkN "skiffer" ;
 lin shale_oil_N = variants {} ;
 lin shall_VV = auxVV (mkV "skola" ("skall" | "ska") "skola" "skulle" "skolat" "skolande" | mkV "böra" "borde" "bort");
+lin should_VV = auxVV (mkV "skola" ("skall" | "ska") "skola" "skulle" "skolat" "skolande" | mkV "böra" "borde" "bort"); ----
 lin shallot_N = mkN "schalottenlök" ; -- status=guess
 lin shallow_A = mkA "grund" | mkA "ytlig" ; -- SaldoWN -- comment=3
 lin shallow_N = mkN "grund" "grunder" | mkN "grund" neutrum ; -- SaldoWN = mkN "grund" neutrum ; -- comment=2
@@ -52007,7 +52008,6 @@ lin shot_tower_N = variants {} ;
 lin shotgun_N = mkN "hagelgevär" neutrum;
 lin shotton_PN = variants {} ;
 lin shotts_PN = variants {} ;
-lin should_VV = auxVV (mkV "skola" ("ska" | "skall") "skola" "skulle" "skolat" "skolande" | mkV "böra" "borde" "bort");
 lin shoulder_N = mkN "skulder" "skulder" ;
 lin shoulder_V2 = dirV2 (partV (mkV "knuffar")"ut");
 lin shoulder_blade_N = variants {} ;
