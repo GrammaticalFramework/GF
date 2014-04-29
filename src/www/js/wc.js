@@ -58,8 +58,8 @@ wc.translate=function() {
     }
 
     function translate_segment(so) { // so = segment output
-	var rs=[] // list of alternative translations for this segment
-	var current_pick=0 // index of currently selected alternative
+	so.rs=[] // list of alternative translations for this segment
+	so.current_pick=0 // index of currently selected alternative
 
 	function show_error(msg) {
 	    //if(e) e.innerHTML="<span class=low_quality>Translation problem: "+msg+"</span>"
@@ -73,14 +73,14 @@ wc.translate=function() {
 	function show_pick(i) { return function() { show_trans(i); return false; } }
 	function show_picks() {
 	    clear(p)
-	    for(var i=0;i<rs.length;i++) {
+	    for(var i=0;i<so.rs.length;i++) {
 		p.appendChild(text(" "))
 		var pick=text(i+1) // +"⃝"
-		if(i!=current_pick) {
+		if(i!=so.current_pick) {
 		    var pick=node("a",{href:"#"},[pick])
 		    pick.onclick=pick.onmouseover=show_pick(i)
 		}
-		var q=rs[i].t.quality
+		var q=so.rs[i].t.quality
 		p.appendChild(span_class("pick "+q,pick))
 	    }
 	    /*
@@ -92,35 +92,37 @@ wc.translate=function() {
 	}
 	function show_more() {
 	    wc.selected=so
-	    var r=rs[current_pick]
+	    var r=so.rs[so.current_pick]
 	    if(e) e.innerHTML=(r.prob||"")+"<br>"+(r.tree||"")
-	    if(wc.p /*&& rs.length>1*/) show_picks()
+	    if(wc.p /*&& so.rs.length>1*/) show_picks()
 	    //if(f.speak.checked) wc.speak(t.text,f.to.value)
 	}
 	so.target.onclick=show_more
 
 	function show_trans(i) {
-	    var r=rs[i]
+	    var r=so.rs[i]
 	    replaceChildren(so.target,text(r.text))
 	    so.text=r.text
 	    so.target.className=r.t.quality
-	    current_pick=i
+	    so.current_pick=i
 	    if(wc.selected==so) show_more()
 	}
 	function showit2(r) {
-	    rs.push(r)
-	    var j=rs.length-1
-	    if(current_pick==j) show_trans(j)
+	    so.rs.push(r)
+	    var j=so.rs.length-1
+	    if(so.current_pick==j) show_trans(j)
 	    else if(wc.selected==so) show_picks()
 	    //disable(false)
 	}
-	function showit(r) {
-	    r.t=trans_quality(r)
+	function showit(r,grammar) {
+	    r.grammar=grammar
+	    r.t=trans_quality(r,grammar+f.to.value)
 	    r.text=r.t.text
 	    showit2(r)
 	}
 	function show_words(r) {
-	    r.text=r.linearizations[0].text
+	    var ix=find_to(gftranslate.grammar+f.to.value,r.linearizations)
+	    r.text=r.linearizations[ix].text
 	    r.t={quality:"bad_quality",text:r.text}
 	    showit2(r)
 	}
@@ -130,17 +132,17 @@ wc.translate=function() {
 		if(tra.length>=1) {
 		    var r=tra[0]
 		    if(r.error!=undefined) {
-			if(i==0 && rs.length==0) show_error(tra[0].error)
+			if(i==0 && so.rs.length==0) show_error(tra[0].error)
 		    }
 		    else {
 			var r=tra[0]
 			if(r.linearizations) show_words(r)
 		    }
 		}
-		else if(i==0 && rs.length==0)
+		else if(i==0 && so.rs.length==0)
 		    show_error("Unable to translate")
 	    }
-	    gftranslate.wordforword(text,f.from.value,f.to.value,step3)
+	    gftranslate.wordforword(text,f.from.value,wc.languages || f.to.value,step3)
 	}
 
 	function trans(text,i,count) {
@@ -148,7 +150,7 @@ wc.translate=function() {
 		if(tra.length>=1) {
 		    var r=tra[0]
 		    if(r.error!=undefined) {
-			if(i==0 && rs.length==0) {
+			if(i==0 && so.rs.length==0) {
 			    //show_error(tra[0].error)
 			    word_for_word(text)
 			}
@@ -156,15 +158,15 @@ wc.translate=function() {
 		    else {
 			for(var ti=0;ti<tra.length;ti++) {
 			    var r=tra[ti]
-			    if(r.linearizations) showit(r)
+			    if(r.linearizations) showit(r,gftranslate.grammar)
 			    //else show_error("no linearizations")
 			}
 		    }
 		}
-		else if(i==0 && rs.length==0)
+		else if(i==0 && so.rs.length==0)
 		    show_error("Unable to translate")
 	    }
-	    gftranslate.translate(text,f.from.value,f.to.value,i,count,step3)
+	    gftranslate.translate(text,f.from.value,wc.languages || f.to.value,i,count,step3)
 	}
 	function step2(text) { trans(text,0,10) }
 	function step2cnl(text) {
@@ -173,18 +175,34 @@ wc.translate=function() {
 		if(trans && trans.length>=1) {
 		    var r=trans[0]
 		    r.prob=0
-		    showit(r)
+		    showit(r,wc.cnl)
 		}
 		step2(text)
 	    }
 	    wc.pgf_online.translate({from:wc.cnl+f.from.value,
-				     to:wc.cnl+f.to.value,
+				     //to:wc.cnl+f.to.value,
 				     lexer:"text",unlexer:"text",input:text},
 				    step3cnl,
 				    function(){step2(text)})
 	}
 	if(wc.cnl) step2cnl(so.input)
 	else step2(so.input)
+    }
+
+    function change_segment_to(so,to) {
+	var rs=so.rs
+	if(rs) {
+	    for(var i=0;i<rs.length;i++) {
+		var r=rs[i]
+		r.t=trans_quality(r,r.grammar+to)
+		r.text=r.t.text
+		if(i==so.current_pick) {
+		    so.text=r.text
+		    replaceChildren(so.target,text(r.text))
+		}
+	    }
+	}
+	so.to=to
     }
 
     //disable(true)
@@ -205,12 +223,13 @@ wc.translate=function() {
 
     for(var i=0;i<is.length;i++) {
 	var same=old[is[i]]
-	if(same && same.to==f.to.value && same.from==f.from.value) {
+	if(same /*&& same.to==f.to.value*/ && same.from==f.from.value) {
 	    // reuse an unchanged segment
 	    wc.os[i]=same
 	    wc.o.appendChild(same.target)
 	    if(same==old_selected) wc.selected=same
 	    delete old[is[i]] // can't use the same node twice
+	    if(same.to!=f.to.value) change_segment_to(same,f.to.value)
 	}
 	else {
 	    // create a new output segment
@@ -272,6 +291,7 @@ wc.try_google=function() {
 // Update language selection menus with the languages supported by the grammar
 function init_languages() {
     function init2(langs) {
+	wc.languages=langs
 	var langset=toSet(langs)
 	function update_menu(m) {
 	    var l=m.value
