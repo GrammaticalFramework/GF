@@ -13,6 +13,12 @@ gftranslate.call=function(querystring,cont) {
     http_get_json(gftranslate.jsonurl+querystring,cont,errcont)
 }
 
+function enc_langs(g,to) {
+    return Array.isArray(to)
+             ? to.map(function(l){return g+l}).join("+")
+	     : g+to
+}
+
 // Translate a sentence
 gftranslate.translate=function(source,from,to,start,limit,cont) {
     var g=gftranslate.grammar
@@ -22,7 +28,7 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     function extract(result) { cont(result[0].translations) }
     if(encsrc.length<500)
 	gftranslate.call("?command=c-translate&input="+encsrc
-		      +lexer+"&unlexer=text&from="+g+from+"&to="+g+to
+		      +lexer+"&unlexer=text&from="+g+from+"&to="+enc_langs(g,to)
 		      +"&start="+start+"&limit="+limit,extract)
     else cont([{error:"sentence too long"}])
 }
@@ -34,9 +40,10 @@ gftranslate.wordforword=function(source,from,to,cont) {
     if(from=="Chi") lexer="",source=source.split("").join(" ")
     var encsrc=encodeURIComponent(source)
     function extract(result) { cont(result[0].translations) }
+    var enc_to = enc_langs(g,to)
     if(encsrc.length<500)
 	gftranslate.call("?command=c-wordforword&input="+encsrc
-			 +lexer+"&unlexer=text&from="+g+from+"&to="+g+to
+			 +lexer+"&unlexer=text&from="+g+from+"&to="+enc_to
 			 ,extract)
     else cont([{error:"sentence too long"}])
 }
@@ -77,12 +84,20 @@ function trans_text_quality(text) {
     return {quality:quality,text:text}
 }
 
-function trans_quality(r) {
-    var text=r.linearizations[0].text
+// find_to :: Lang -> [{to:Lang,...}] -> Int
+find_to=function(to,lins) {
+    for(var i=0;i<lins.length;i++)
+	if(lins[i].to==to) return i
+    return 0 // Hmm....
+}
+
+trans_quality=function(r,to) {
+    var ix=to ? find_to(to,r.linearizations) : 0
+    var text=r.linearizations[ix].text
     if(r.prob==0) return {quality:"high_quality",text:text}
     else {
 	var t=trans_text_quality(text)
-	if(t.quality=="default_quality" && r.tree[0]=="?")
+	if(t.quality=="default_quality" && r.tree && r.tree[0]=="?")
 	    t.quality="low_quality"
 	return t
     }
