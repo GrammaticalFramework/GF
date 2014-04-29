@@ -183,32 +183,35 @@ cpgfMain command (t,(pgf,pc)) =
                                          | (to,text)<-rs]]]]]
 
     wordforword' inp@((from,concr),input) (tos,unlex) =
-        [(to,unlex . unwords . map (trans_word' c) $ words input)
-         |(to,c)<-tos]
+        [(to,unlex . unwords $ map (lin_word' c) pws)
+         |let pws=map parse_word' (words input),(to,c)<-tos]
       where
-        trans_word' c w = if all (\c->isSpace c||isPunctuation c) w
-                          then w
-                          else trans_word c w
+        lin_word' c = either id (lin1 c)
 
-        trans_word c w = 
-            maybe ("["++w++"]") id $ msum [trans1 w,trans1 ow,morph w,morph ow]
+        lin1 c = dropq . C.linearize c
           where
-            ow = if w==lw then capitInit w else lw
-            lw = uncapitInit w
-
-            trans1 = fmap lin1 . parse1
-
-            parse1 = either (const Nothing) (fmap fst . listToMaybe) .
-                     C.parse concr cat
-
-            lin1 = dropq . C.linearize c
             dropq (q:' ':s) | q `elem` "+*" = s
             dropq s = s
 
+        parse_word' w = if all (\c->isSpace c||isPunctuation c) w
+                        then Left w
+                        else parse_word w
+
+
+        parse_word w =
+            maybe (Left ("["++w++"]")) Right $
+            msum [{-parse1 w,parse1 ow,-}morph w,morph ow]
+               -- omit parsing for now, to avoid space leaks
+          where
+            ow = if w==lw then capitInit w else lw
+            lw = uncapitInit w
+{-
+            parse1 = either (const Nothing) (fmap fst . listToMaybe) .
+                     C.parse concr cat
+-}
             morph w = listToMaybe
-                        [l | (f,a,p)<-C.lookupMorpho concr w,
-                             t<-maybeToList (C.readExpr f),
-                             let l=lin1 t]
+                        [t | (f,a,p)<-C.lookupMorpho concr w,
+                             t<-maybeToList (C.readExpr f)]
 
     ---
 
