@@ -13493,7 +13493,7 @@ lin musketeer_N = mkN "mosquetero" ; -- status=guess
 lin muskrat_N = mkN "rata almizclera" ; -- status=guess
 lin mussel_N = mkN "mejillón" masculine ; -- status=guess
 lin must_N = mkN "mosto" ; -- status=guess
-lin must_VV = S.must_VV ; -- comment=CHECKED
+lin must_VV = S.must_VV ; 
 lin mustard_N = mkN "mostaza" ; -- status=guess
 lin musty_A = mkA "mohoso" ; -- status=guess
 lin mutability_N = mkN "mutabilidad" feminine ; -- status=guess
@@ -18432,6 +18432,8 @@ lin shorthand_N = mkN "taquigrafía" ; -- status=guess
 lin shortly_Adv = variants{} ; --
 lin shot_N = mkN "chupito" ;
 lin shotgun_N = mkN "escopeta" ; -- status=guess
+lin shall_VV = S.must_VV ;
+lin should_VV = S.must_VV ; ----
 lin shoulder_N = mkN "omóplato" | mkN "escápula" ;
 lin shout_N = mkN "grito" ;
 lin shout_V = mkV "gritar" ;

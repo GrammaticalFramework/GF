@@ -15113,7 +15113,8 @@ lin shortage_N = mkN "krapte" feminine | mkN "tekort" neuter ; -- status=guess s
 lin shortly_Adv = variants{} ; --
 lin shot_N = mkN "kogel" masculine ; -- status=guess
 lin shotgun_N = mkN "hagelgeweer" neuter | mkN "jachtgeweer" neuter | mkN "buks" masculine feminine ; -- status=guess status=guess status=guess
-lin should_VV = mkVV (mkV "mochten") ; -- status=guess, src=wikt
+lin shall_VV = auxVV R.zullen_V ;
+lin should_VV = auxVV R.zullen_V ; ----
 lin shoulder_N = mkN "schouderblad" neuter ; -- status=guess
 lin shout_N = mkN "schreeuw" masculine ; -- status=guess
 lin shout_V = mkV "schreeuwen" ; -- status=guess, src=wikt

@@ -273,7 +273,8 @@ mkV2 : overload {
   mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
-  mkVV  : V -> VV ;
+  mkVV  : V -> VV ;  -- with zu
+  auxVV : V -> VV ;  -- without zu
   mkV2V : V -> Prep -> V2V ;
   mkVA  : V -> VA ;
   mkV2A : V -> Prep -> V2A ;
@@ -491,6 +492,7 @@ mkV2 : overload {
   mkVS v = v ** {lock_VS = <>} ;
   mkVQ v = v ** {lock_VQ = <>} ;
   mkVV v = v ** {isAux = False ; lock_VV = <>} ;
+  auxVV v = v ** {isAux = True ; lock_VV = <>} ;
 
   V0 : Type = V ;
 --  V2S, V2V, V2Q : Type = V2 ;

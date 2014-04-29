@@ -15317,6 +15317,8 @@ lin shortcut_N = mkN "scorciatoia" ; -- status=guess
 lin shorthand_N = mkN "stenografia" ; -- status=guess
 lin shortly_Adv = variants{} ; --
 lin shot_N = mkN "tiro" ; -- status=guess
+lin shall_VV = S.must_VV ;
+lin should_VV = S.must_VV ; ----
 lin shoulder_N = mkN "spalla" ; -- status=guess
 lin shout_N = mkN "grido" ; -- status=guess
 lin shout_V = mkV "offrire" ; -- status=guess, src=wikt
