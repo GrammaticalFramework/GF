@@ -265,7 +265,7 @@ lin try_V = mkV "försöker" ;
 lin call_V3 = mkV3 "kalla" ;
 lin call_V2V = mkV2V (mkV "kalla") ;
 lin call_V2A = mkV2A (mkV "kallar") ;
-lin call_V2 = mkV2 "kalla" | mkV2 "anropa" | mkV2 I.heta_V ; ---- heta = be called
+lin call_V2 = mkV2 "kalla" | mkV2 "anropa" | mkV2 (mkV "heter") ; ---- heta = be called
 lin call_V = mkV "kalla" | mkV "anropa" ;
 lin hand_N = L.hand_N ;
 lin party_N = mkN "parti" "partit" "partier" "partierna" | mkN "grupp" "grupper" ; ---
