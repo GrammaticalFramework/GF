@@ -107,7 +107,8 @@ wc.translate=function() {
 	    so.current_pick=i
 	    if(wc.selected==so) show_more()
 	}
-	function showit2(r) {
+	function showit2(r,grammar) {
+	    r.grammar=grammar
 	    so.rs.push(r)
 	    var j=so.rs.length-1
 	    if(so.current_pick==j) show_trans(j)
@@ -115,16 +116,16 @@ wc.translate=function() {
 	    //disable(false)
 	}
 	function showit(r,grammar) {
-	    r.grammar=grammar
 	    r.t=trans_quality(r,grammar+f.to.value)
 	    r.text=r.t.text
-	    showit2(r)
+	    showit2(r,grammar)
 	}
 	function show_words(r) {
-	    var ix=find_to(gftranslate.grammar+f.to.value,r.linearizations)
+	    var g=gftranslate.grammar
+	    var ix=find_to(g+f.to.value,r.linearizations)
 	    r.text=r.linearizations[ix].text
 	    r.t={quality:"bad_quality",text:r.text}
-	    showit2(r)
+	    showit2(r,g)
 	}
 
 	function word_for_word(text,cont) {
