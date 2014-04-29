@@ -164,7 +164,8 @@ oper
 
   mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
-  mkVV  : V -> VV ;
+  mkVV  : V -> VV ;  -- with "te"
+  auxVV : V -> VV ;  -- without "te"
 
   mkV2V : overload {
     mkV2V : V -> Prep -> V2V ;
@@ -478,6 +479,7 @@ oper
   mkVS v = lin VS v ;
   mkVQ v = lin VQ v ;
   mkVV v = lin VV (v ** {isAux = False}) ;
+  auxVV v = lin VV (v ** {isAux = True}) ;
 
   V0 : Type = V ;
 --  AS, A2S, AV : Type = A ;
