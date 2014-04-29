@@ -17085,7 +17085,6 @@ lin tilde_N = mkN "tilde" ; -- status=guess
 lin tile_N = mkN "tegel" masculine | mkN "vloertegel" feminine | mkN "muurtegel" masculine | mkN "pan" feminine | mkN "dakpan" feminine ; -- status=guess status=guess status=guess status=guess status=guess
 lin tile_V2 = mkV2 (mkV "tegelen") | mkV2 (mkV "betegelen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin tiling_N = mkN "betegeling" feminine ; -- status=guess
-lin till_Prep = variants{} ; --
 lin till_Subj = variants{} ; --
 lin till_V2 = mkV2 (mkV "ploegen") | mkV2 (mkV "bewerken") | mkV2 (mkV "bebouwen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin tiller_N = mkN "graafmachine" ; -- status=guess
@@ -17782,7 +17781,7 @@ lin unthinkable_A = mkA "ondenkbaar" ; -- status=guess
 lin untidy_A = mkA "slordigmorsig" ; -- status=guess
 lin untie_V = mkV "loskomen" ; -- status=guess, src=wikt
 lin untie_V2 = mkV2 (mkV "loskomen") ; -- status=guess, src=wikt
-lin until_Prep = variants{} ; --
+lin until_Prep = mkPrep "tot" | mkPrep "totdat" ;
 lin until_Subj = mkSubj "tot" | mkSubj "totdat" ;
 lin untoward_A = mkA "ongunstigschadelijk" ; -- status=guess
 lin untranslatable_A = mkA "onvertaalbaar" ; -- status=guess

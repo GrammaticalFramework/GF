@@ -20841,7 +20841,6 @@ lin tile_N = mkN "azulejo" | mkN "alicatado" | mkN "baldosa" | mkN "teja" ;
 lin tile_V2 = mkV2 (mkV (mkV "alicatar") "o azulejar") | mkV2 (mkV "embaldosar") | mkV2 (mkV "tejar.") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin tiler_N = mkN "embaldosador" | mkN "solador" masculine ; -- status=guess status=guess
 lin till_N = mkN "caja" ; -- status=guess
-lin till_Prep = variants{} ; --
 lin till_Subj = variants{} ; --
 lin till_V2 = mkV2 (mkV "arar") ; -- status=guess, src=wikt
 lin tillage_N = mkN "labranza" ; -- status=guess
@@ -21691,7 +21690,7 @@ lin unthinkable_A = mkA "impensable" ; -- status=guess
 lin untidy_A = mkA "descuidado" ; -- status=guess
 lin untie_V = mkV "desatarse" ; -- status=guess, src=wikt
 lin untie_V2 = mkV2 (mkV "desatarse") ; -- status=guess, src=wikt
-lin until_Prep = variants{} ; --
+lin until_Prep = mkPrep "hasta" ;
 lin until_Subj = ss "hasta que" ** {m = Conjunct} ;
 lin untouchable_A = mkA "intocable" ; -- status=guess
 lin untoward_A = mkA "desfavorable" | mkA "adverso" | mkA "desventajoso" ; -- status=guess status=guess status=guess

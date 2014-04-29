@@ -17256,7 +17256,6 @@ lin tightrope_N = mkN "funambolo" ; -- status=guess
 lin tights_N = mkN "calzamaglia" ; -- status=guess
 lin tile_N = mkN "[floor and wall tile] piastrella" | mkN "[roof tile] tegola" | mkN "coppo" ; -- status=guess status=guess status=guess
 lin tile_V2 = mkV2 (mkV "piastrellare") ; -- status=guess, src=wikt
-lin till_Prep = variants{} ; --
 lin till_Subj = variants{} ; --
 lin till_V2 = mkV2 (mkV "arare") ; -- status=guess, src=wikt
 lin tillage_N = mkN "coltivazione" feminine ; -- status=guess
@@ -17971,7 +17970,7 @@ lin unsure_A = mkA "incerto" ; -- status=guess
 lin unsympathetic_A = mkA "antipatico" ; -- status=guess
 lin untie_V = mkV "sciogliersi" ; -- status=guess, src=wikt
 lin untie_V2 = mkV2 (mkV "sciogliersi") ; -- status=guess, src=wikt
-lin until_Prep = variants{} ; --
+lin until_Prep = mkPrep "fine" ;
 lin until_Subj = subSubj "fino a che" ;
 lin untraceable_A = mkA "non tracciabile" | mkA "irrintracciabile" | mkA "irreperibile" ; -- status=guess status=guess status=guess
 lin untruth_N = mkN "bugia" ; -- status=guess
