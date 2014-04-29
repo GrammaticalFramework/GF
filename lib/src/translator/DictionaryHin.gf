@@ -31258,6 +31258,7 @@ lin untidy_A = mkA "मैला" ; -- tocheck
 lin untie_V = mkV "खोलना" ; -- tocheck              
 lin untie_V2 = mkV2 (mkV "खोलना") ; -- tocheck
 lin untied_A = mkA "खुला" ; -- tocheck       
+lin until_Prep = variants {} ;
 lin untilled_A = mkA "अकृरित" ; -- tocheck       
 lin untimbered_A = mkA "अवृक्षावृत" ; -- tocheck       
 lin untimely_A = mkA "बेमौका" ; -- tocheck              

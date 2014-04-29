@@ -58805,7 +58805,6 @@ lin tights_N = mkN "trikå" "trikåer" ; -- comment=2
 lin tiglon_N = variants {} ;
 lin tigress_N = mkN "tigerhona" | mkN "tigrinna" ; -- status=guess status=guess
 lin tike_N = variants {} ;
-lin til_Prep = variants {} ;
 lin tilburg_PN = variants {} ;
 lin tilbury_PN = variants {} ;
 lin tilde_N = mkN "tilde" ; -- status=guess
@@ -58815,7 +58814,6 @@ lin tilefish_N = variants {} ;
 lin tiler_N = variants {} ;
 lin tiling_N = variants {} ;
 lin till_N = mkN "kassalåda" ; -- comment=4
-lin till_Prep = mkPrep "till" ;
 lin till_Subj = variants{} ; --
 lin till_V2 = dirV2 (partV (mkV "yxar")"till"); -- comment=71
 lin tillage_N = mkN "odling" ;
@@ -62236,7 +62234,7 @@ lin untidy_A = compoundA (regA "ovårdad"); -- comment=10
 lin untie_V = variants {} ;
 lin untie_V2 = variants {} ;
 lin untied_A = variants {} ;
-lin until_Prep = mkPrep "ända till" ; --
+lin until_Prep = mkPrep "ända till" | mkPrep "till" ;
 lin until_Subj = M.mkSubj "tills" ;
 lin untilled_A = variants {} ;
 lin untimbered_A = variants {} ;
