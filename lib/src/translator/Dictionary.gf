@@ -4079,6 +4079,8 @@ fun attainder_N : N ;
 fun attainment_N : N ;
 fun attar_N : N ;
 fun attempt_N : N ;
+fun attempt_1_N : N ;
+fun attempt_2_N : N ;
 fun attempt_V2 : V2 ;
 fun attempt_VV : VV ;
 fun attempted_A : A  ;
