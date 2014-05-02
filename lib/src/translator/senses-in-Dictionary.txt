@@ -10,6 +10,8 @@ fun area_5_N : N ; -- | cooking area
 fun area_6_N : N ; -- | the area of a rectangle
 fun arm_1_N : N ; -- | arms and legs
 fun arm_2_N : N ; -- | a farewell to arms
+fun attempt_1_N : N ; -- | first attempt at driving a car
+fun attempt_2_N : N ; -- | an attempt on his life
 fun authority_1_N : N  ; -- | he is an authority in his field
 fun authority_2_N : N  ; -- | the police and other authorities
 fun away_1_Adv : Adv  ; -- | she is away
@@ -31,8 +33,8 @@ fun certain_1_A : A  ; -- | I am certain
 fun certain_2_A : A  ; -- | a certain house
 fun charabanc_1_N : N ;
 fun charabanc_2_N : N ;
-fun character_1_N : N ;
-fun character_2_N : N ;
+fun character_1_N : N ; --| personality
+fun character_2_N : N ; --| unicode
 fun charge_1_N : N  ; -- | battery charge
 fun charge_2_N : N  ; -- | charge against him
 fun club_1_N : N  ; -- | member of the club
@@ -134,7 +136,8 @@ fun law_1_N : N  ;  -- | the law forbids it
 fun law_2_N : N  ;  -- | he studies law
 fun league_1_N : N  ; -- | league of criminals
 fun league_2_N : N  ; -- | football league
-fun letter_1_N : N ; ---- which is which??
+fun letter_1_N : N ; ---- which is which?? -- at least in finnish this
+is letter to your mom, and letter2 is like letter H
 fun letter_2_N : N ;
 fun level_1_N : N  ; -- | reach a high level
 fun level_2_N : N  ; -- | level 4 of the building
