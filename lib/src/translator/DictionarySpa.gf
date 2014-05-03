@@ -926,7 +926,7 @@ lin amphetamine_N = mkN "anfetamina" ; -- status=guess
 lin amphibian_N = mkN "anfibio" ; -- status=guess
 lin amphibious_A = mkA "anfibio" ; -- status=guess
 lin amphibole_N = mkN "anfíbol" masculine ; -- status=guess
-lin amphitheater_N = mkN "anfiteatro" ; -- status=guess
+lin amphitheatre_N = mkN "anfiteatro" ; -- status=guess
 lin amphora_N = mkN "cántaro" ; -- status=guess
 lin ample_A = mkA "abundante" | mkA "generoso" ;
 lin amplification_N = mkN "amplificación" feminine ; -- status=guess

@@ -31801,7 +31801,7 @@ lin
   pi_ja__V = stateV (mkV163 "пия") ;
   pi_ja_vica_N = mkN041 "пиявица" ;
   pi_ja_n_A = mkA076 "пиян" ;
-  pi_ja_nica_N = mkN041 "пияница" ;
+  pi_ja_nica_N = mkN038 "пияница" ;
   pi_ja_nski_A = mkA078 "пиянски" ;
   pi_ja_nstvam_V = stateV (mkV186 "пиянствам") ;
   pi_ja_nstvane_N = mkN071 "пиянстване" ;

@@ -233,7 +233,6 @@ lin absent_A = mkA "frånvarande" | mkA "tankspridd" ; -- SaldoWN -- comment=3
 lin absent_Prep = variants {} ;
 lin absent_V2 = variants {} ;
 lin absent_minded_A = variants {} ;
-lin absent_mindedness_N = variants {} ;
 lin absentee_N = variants {} ;
 lin absenteeism_N = mkN "frånvaro" ;
 lin absentmindedness_N = variants {} ;
@@ -2111,7 +2110,6 @@ lin amphipod_N = variants {} ;
 lin amphiprostylar_A = variants {} ;
 lin amphisbaena_N = variants {} ;
 lin amphistylar_A = variants {} ;
-lin amphitheater_N = variants {} ;
 lin amphitheatre_N = mkN "amfiteater" ; -- comment=3
 lin amphitheatric_A = variants {} ;
 lin amphitropous_A = variants {} ;
@@ -5549,11 +5547,9 @@ lin behave_V = mkV "uppträda" "uppträdde" "uppträtt" | mkV "handlar" ; -- Sal
 lin behaved_A = variants {} ;
 lin behavior_N = mkN "beteende" ; -- comment=5
 lin behavioral_A = variants {} ;
-lin behaviorism_N = mkN "behaviorism" "behaviorismer" ; -- comment=2
-lin behaviorist_N = variants {} ;
 lin behavioristic_A = variants {} ;
 lin behaviour_N = mkN "beteende" | mkN "uppförande" ;
-lin behaviourism_N = mkN "behaviorism" "behaviorismer" ; -- SaldoWN
+lin behaviourism_N = mkN "behaviorism" "behaviorismer";
 lin behaviourist_N = variants {} ;
 lin behead_V2 = mkV2 "halshugga" "halshögg" "halshuggit" ; -- SaldoWN -- status=guess, src=wikt
 lin behest_N = (mkN "order") | (mkN "befallning"); -- status=guess status=guess
@@ -9031,7 +9027,6 @@ lin carapace_N = variants {} ;
 lin carat_N = mkN "karat" neutrum;
 lin caravan_N = mkN "karavan" "karavaner" ; -- comment=2
 lin caravanning_N = variants {} ;
-lin caravansary_N = variants {} ;
 lin caravanserai_N = variants {} ;
 lin caraway_N = mkN "kummin" ;
 lin carbamate_N = variants {} ;
@@ -13406,7 +13401,6 @@ lin counsel_N = mkN "överläggning" ; -- comment=10
 lin counsel_V2 = variants {} ;
 lin counselling_N = variants{} ; --
 lin counsellor_N = mkN "konsulent" "konsulenter" ; -- comment=3
-lin counselor_N = variants {} ;
 lin counselorship_N = variants {} ;
 lin count_N = mkN "räkning" ; -- comment=4
 lin count_V = mkV "skattar" ; -- comment=7
@@ -18029,7 +18023,6 @@ lin due_to_Prep = mkPrep "på grund av" ;
 lin duel_N = mkN "duell" "dueller" ; -- comment=4
 lin duel_V = mkV "duellerar" ;
 lin dueler_N = variants {} ;
-lin duelist_N = variants {} ;
 lin duellist_N = variants {} ;
 lin duenna_N = variants {} ;
 lin duet_N = mkN "duett" "duetter" ; -- comment=2
@@ -40878,7 +40871,6 @@ lin pantomime_N = mkN "pantomim" "pantomimer" ; -- SaldoWN
 lin pantropical_A = variants {} ;
 lin pantry_N = mkN "skafferi" "skafferit" "skafferier" "skafferierna" ; -- comment=2
 lin pantryman_N = variants {} ;
-lin panty_hose_N = variants {} ;
 lin pantyhose_N = mkN "strumpbyxa" ;
 lin panzer_A = variants {} ;
 lin panzer_N = variants {} ;
@@ -42238,7 +42230,6 @@ lin petrifaction_N = variants {} ;
 lin petrify_V = mkV "petrifierar" ; -- comment=2
 lin petrify_V2 = mkV2 (mkV "förstena"); -- status=guess, src=wikt
 lin petrissage_N = variants {} ;
-lin petro_chemical_N = variants {} ;
 lin petrochemical_N = variants {} ;
 lin petroglyph_N = mkN "hällristning" ; -- SaldoWN
 lin petrol_N = mkN "bensin" ; -- SaldoWN
@@ -42579,7 +42570,6 @@ lin piano_Adv = mkAdv "piano" ;
 lin piano_N = mkN "piano" "pianot" "pianon" "pianona" ;
 lin pianoforte_N = variants {} ;
 lin pianola_N = variants {} ;
-lin piaster_N = variants {} ;
 lin piastre_N = variants {} ;
 lin piazza_N = variants {} ;
 lin pibroch_N = variants {} ;
