@@ -39,7 +39,7 @@ concrete WordsChi of Words = SentencesChi **
     Expensive = D.expensive_A ;
     Fresh = D.fresh_A ;
     Good = D.good_A ;
---    Suspect = D.suspect_A ;
+    Suspect = mkA "可疑" ;
     Warm = L.warm_A ;
 
 -- Places require different prepositions to express location; in some languages 
@@ -47,14 +47,14 @@ concrete WordsChi of Words = SentencesChi **
 -- defined by $mkPlace$.
 
     Airport = mkPlace ((D.airport_N)) ;
----    AmusementPark = mkPlace (placeN (D.amusement_park_N)) ;
+    AmusementPark = mkPlace (mkN "游乐园") ;
     Bank = mkPlace ((D.bank_N)) ;
     Bar = mkPlace ((D.bar_N)) ;
     Cafeteria = mkPlace ((D.bank_N)) ;
----    Center = mkPlace D.center_N ;
----    Cinema = mkPlace D.cinema_N ;
+    Center = mkPlace (mkN "中心") ;
+    Cinema = mkPlace (mkN "电影院") ;
     Church = mkPlace D.church_N ;
----    Disco = mkPlace D.disco_N ;
+    Disco = mkPlace (mkN "迪斯科") ;
     Hospital = mkPlace D.hospital_N ;
     Hotel = mkPlace D.hotel_N ;
     Museum = mkPlace D.museum_N ;
@@ -209,8 +209,7 @@ concrete WordsChi of Words = SentencesChi **
 
     HowFar place = lin QS {s = place.name.s ++ R.word "有多远"} ; 
 
---    HowFarFrom x y = 
---      mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) (lin AP (R.thbind from_Prep x.name)))) ; --- no yuu
+    HowFarFrom x y = lin QS {s = y.name.s ++ "从" ++ x.name.s ++ R.word "有多远"} ; ----
 
 --    HowFarFromBy x y t = 
 --      mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far) 
