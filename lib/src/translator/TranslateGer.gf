@@ -1,4 +1,4 @@
---# -path=.:../chunk:alltenses
+--# -path=.:../chunk:alltenses:../german
 
 concrete TranslateGer of Translate = 
   TenseGer,

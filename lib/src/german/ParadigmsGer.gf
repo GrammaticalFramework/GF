@@ -598,6 +598,8 @@ mkV2 : overload {
     mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N = mk6N ;
     mkN : Str -> N -> N  -- Auto + Fahrer -> Autofahrer
     = \s,x -> lin N {s = \\n,c => s + Predef.toLower (x.s ! n ! c) ; g = x.g} ;
+    mkN : Str -> Gender -> Gender -> N 
+    = \s,g,h -> reg1N s g | reg1N s h ;
     };
 
 
