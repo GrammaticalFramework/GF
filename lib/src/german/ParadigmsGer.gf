@@ -79,6 +79,8 @@ mkN : overload {
 
   mkN : (Bild,Bilder : Str) -> Gender -> N ; -- sg and pl nom, and gender
 
+  mkN : (Frau : Str) -> Gender -> N ;  -- masc: e, neutr: er, fem: en
+
 -- Worst case: give all four singular forms, two plural forms (others + dative),
 -- and the gender.
 
@@ -354,6 +356,29 @@ mkV2 : overload {
     _  => mk6N hund hund hund (genitS (True | False) hund) (hund + "e") (pluralN hund) Masc
     } ;
 
+  reg1N : (x1 : Str) -> Gender -> N = \hund,g -> 
+    case <hund,g> of {
+      <_ + ("el"|"er"|"en"), Masc | Neutr> => 
+        let hunde = hund ; hunden = pluralN hunde in
+        mk6N hund hund hund (genitS (True | False) hund) hunde hunden g ;
+      <_ + "e", Masc> => 
+        let hunde = hund + "n" in
+        mk6N hund hunde hunde hunde hunde hunde g ;
+      <_, Masc> =>  
+        let hunde = hund + "e" ; hunden = pluralN hunde in
+        variants {mk6N hund hund (dativE True  hund) (genitS True  hund) hunde hunden g ;
+                  mk6N hund hund (dativE False hund) (genitS False hund) hunde hunden g} ;
+      <_, Neutr> =>  
+        let hunde = hund + "er" ; hunden = pluralN hunde in
+        variants {mk6N hund hund (dativE True  hund) (genitS True  hund) hunde hunden g ;
+                  mk6N hund hund (dativE False hund) (genitS False hund) hunde hunden g} ;
+      <_,  Fem> => 
+        let hunde : Str = case hund of {_ + "e" => hund + "n" ; _ => hund + "en"} ; 
+            hunden = hunde
+        in mk6N hund hund hund hund hunde hunden g ;
+      _ => {s = (regN hund).s ; g = g ; lock_N = <>}
+    } ;
+
   reg2N : (x1,x2 : Str) -> Gender -> N = \hund,hunde,g -> 
     let hunden = pluralN hunde
     in
@@ -568,6 +593,7 @@ mkV2 : overload {
 
   mkN = overload {
     mkN : Str -> N = regN ;
+    mkN : (x1 : Str) -> Gender -> N = reg1N ;
     mkN : (x1,x2 : Str) -> Gender -> N = reg2N ;
     mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N = mk6N ;
     mkN : Str -> N -> N  -- Auto + Fahrer -> Autofahrer
