@@ -27950,7 +27950,6 @@ lin pigtail_N = reg2N "Zopf" "Zöpfe" masculine;
 lin pigwash_N = variants {};
 lin pike_N = reg2N "Hecht" "Hechte" masculine;
 lin pikestaff_N = variants {};
-lin pilaf_N = variants {};
 lin pilaff_N = variants {};
 lin pilaster_N = variants {};
 lin pilau_N = variants {};
