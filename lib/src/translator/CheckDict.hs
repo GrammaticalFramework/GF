@@ -34,6 +34,20 @@ mergeDict lang = do
   writeFile (gfFile "tmp/Dictionary" lang) $ 
     unlines $ fromTop header ++ [unwords ("lin":f:"=":[ws]) | (f,ws) <- Data.Map.assocs newmap] ++ ["}"]  -- print revised file to tmp/
 
+changeFunNames nameFile lang = do
+  ns <- readFile nameFile
+  let names = Data.Map.fromList [(old,new) | old:new:_ <- map words (lines ns)]      -- format: "old new" on separate lines
+  let look w = Data.Map.lookup w names
+  dict <- readFile (gfFile "Dictionary" lang) >>= return . lines                     -- read old lexicon
+  let 
+    change line = case words line of
+      "lin":f:ws -> case look f of
+        Just g -> unwords $ "lin":g:ws
+        _ -> line
+      _ -> line
+  writeFile (gfFile "tmp/Dictionary" lang) $ unlines $ map change dict
+
+
 -- get the part of Dict before the first lin rule
 getHeader = takeWhile ((/= "lin") . take 3)
 
