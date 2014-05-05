@@ -986,7 +986,6 @@ lin anchorite_N = mkN "anacoreta" ; -- status=guess
 lin anchorman_N = mkN "presentador de noticias" ; -- status=guess
 lin anchovy_N = mkN "anchoa" | mkN "boquerón" masculine ; -- status=guess status=guess
 lin ancient_A = mkA "antiguo" ;
-lin ancients_N = mkN "los antiguos" ; -- status=guess
 lin ancillary_A = mkA "secundario" | mkA "auxiliar" ; -- status=guess status=guess
 lin and_Conj = S.and_Conj ;
 lin andiron_N = mkN "morillo" ; -- status=guess

@@ -1787,7 +1787,6 @@ lin almsgiver_N = variants {} ;
 lin alnwick_PN = variants {} ;
 lin alocasia_N = variants {} ;
 lin aloe_N = variants {} ;
-lin aloes_N = variants {} ;
 lin aloft_Adv = variants {} ;
 lin aloha_N = variants {} ;
 lin alone_A = mkA "ensam" "ensamt" "ensamma" "ensamma" "ensammare" "ensammast" "ensammaste" ; -- comment=4
@@ -2283,7 +2282,6 @@ lin anchusa_N = variants {} ;
 lin ancient_A = mkA "uråldrig" ;
 lin ancient_N = variants {} ;
 lin ancientness_N = variants {} ;
-lin ancients_N = variants {} ;
 lin ancillary_A = variants {} ;
 lin ancona_PN = variants {} ;
 lin and_Conj = S.and_Conj ;
@@ -6023,7 +6021,6 @@ lin bile_N = mkN "galla" ; -- comment=3
 lin bile_duct_N = variants {} ;
 lin bilge_N = mkN "struntprat" neutrum; -- comment=2
 lin bilge_water_N = variants {} ;
-lin bilges_N = variants {} ;
 lin bilgy_A = variants {} ;
 lin bilharzia_N = variants {} ;
 lin biliary_A = variants {} ;
@@ -11932,7 +11929,6 @@ lin comfortably_Adv = variants{} ; --
 lin comforter_N = mkN "tröstare" utrum; -- comment=3
 lin comforting_A = variants {} ;
 lin comfortless_A = mkA "tröstlös" ; -- comment=3
-lin comforts_N = variants {} ;
 lin comfrey_N = variants {} ;
 lin comfy_A = variants {} ;
 lin comic_A = mkA "komisk" ;
@@ -31746,7 +31742,6 @@ lin lance_corporal_N = variants {} ;
 lin lancelet_N = variants {} ;
 lin lanceolate_A = variants {} ;
 lin lancer_N = variants {} ;
-lin lancers_N = variants {} ;
 lin lancet_N = mkN "lansett" "lansetter" ; -- status=guess
 lin lancetfish_N = variants {} ;
 lin lancewood_N = variants {} ;
@@ -42707,7 +42702,6 @@ lin pika_N = variants {} ;
 lin pike_N = mkN "gädda" ;
 lin pikeblenny_N = variants {} ;
 lin pikestaff_N = variants {} ;
-lin pilaf_N = variants {} ;
 lin pilaff_N = variants {} ;
 lin pilar_A = variants {} ;
 lin pilaster_N = variants {} ;
