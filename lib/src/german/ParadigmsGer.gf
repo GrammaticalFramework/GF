@@ -262,8 +262,11 @@ mkV2 : overload {
 
   accdatV3 : V -> V3 ;                  -- geben + acc + dat
   dirV3    : V -> Prep -> V3 ;          -- senden + acc + nach
-  mkV3     : V -> Prep -> Prep -> V3 ;  -- sprechen + mit + über
 
+  mkV3 : overload {
+    mkV3     : V ->                 V3 ;  -- geben + acc + dat
+    mkV3     : V -> Prep -> Prep -> V3 ;  -- sprechen + mit + über
+    } ;
 
 --3 Other complement patterns
 --
@@ -272,14 +275,32 @@ mkV2 : overload {
 
   mkV0  : V -> V0 ; --%
   mkVS  : V -> VS ;
-  mkV2S : V -> Prep -> V2S ;
+
+  mkV2V : overload {
+    mkV2V : V -> V2V ;
+    mkV2V : V -> Prep -> V2V ;
+    } ;
+  mkV2A : overload {
+    mkV2A : V -> V2A ; 
+    mkV2A : V -> Prep -> V2A ;
+    } ;
+  mkV2S : overload {
+    mkV2S : V -> V2S ;
+    mkV2S : V -> Prep -> V2S ;
+    } ;
+  mkV2Q : overload {
+    mkV2Q : V -> V2Q ;
+    mkV2Q : V -> Prep -> V2Q ;
+    } ;
+
+
   mkVV  : V -> VV ;  -- with zu
   auxVV : V -> VV ;  -- without zu
-  mkV2V : V -> Prep -> V2V ;
+
   mkVA  : V -> VA ;
-  mkV2A : V -> Prep -> V2A ;
+
   mkVQ  : V -> VQ ;
-  mkV2Q : V -> Prep -> V2Q ;
+
 
   mkAS  : A -> AS ; --%
   mkA2S : A -> Prep -> A2S ; --%
@@ -485,7 +506,13 @@ mkV2 : overload {
   dirV2 v = prepV2 v accPrep ;
   datV2 v = prepV2 v datPrep ;
 
-  mkV3 v c d = v ** {c2 = c ; c3 = d ; lock_V3 = <>} ;
+  mkV3 = overload {
+    mkV3 : V -> V3 
+      = \v -> lin V3 (v ** {c2 = mkPrep [] accusative ; c3 = mkPrep [] dative}) ; 
+    mkV3 : V -> Prep -> Prep -> V3
+      = \v,c,d -> v ** {c2 = c ; c3 = d ; lock_V3 = <>} ;
+    } ;
+
   dirV3 v p = mkV3 v (mkPrep [] accusative) p ;
   accdatV3 v = dirV3 v (mkPrep [] dative) ; 
 
@@ -500,11 +527,33 @@ mkV2 : overload {
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
-  mkV2S v p = prepV2 v p ** {lock_V2S = <>} ;
-  mkV2V v p = prepV2 v p ** {isAux = False ; lock_V2V = <>} ;
+
+  mkV2V = overload {
+    mkV2V : V -> V2V 
+      = \v -> dirV2 v ** {isAux = False ; lock_V2V = <>} ;
+    mkV2V : V -> Prep -> V2V 
+      = \v,p -> prepV2 v p ** {isAux = False ; lock_V2V = <>} ;
+    } ;
+  mkV2A = overload {
+    mkV2A : V -> V2A 
+      = \v -> dirV2 v ** {isAux = False ; lock_V2A = <>} ;
+    mkV2A : V -> Prep -> V2A 
+      = \v,p -> prepV2 v p ** {isAux = False ; lock_V2A = <>} ;
+    } ;
+  mkV2S = overload {
+    mkV2S : V -> V2S 
+      = \v -> dirV2 v ** {isAux = False ; lock_V2S = <>} ;
+    mkV2S : V -> Prep -> V2S 
+      = \v,p -> prepV2 v p ** {isAux = False ; lock_V2S = <>} ;
+    } ;
+  mkV2Q = overload {
+    mkV2Q : V -> V2Q 
+      = \v -> dirV2 v ** {isAux = False ; lock_V2Q = <>} ;
+    mkV2Q : V -> Prep -> V2Q 
+      = \v,p -> prepV2 v p ** {isAux = False ; lock_V2Q = <>} ;
+    } ;
+
   mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
-  mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
