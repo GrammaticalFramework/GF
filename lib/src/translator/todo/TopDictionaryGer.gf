@@ -158,8 +158,8 @@ lin thing_N = mkN "Sache" | mkN "Ding" "Dinge" neuter ;
 lin tell_VV = mkVV (no_geV (mkV "erzählen")) ; -- comment=subcat
 lin tell_VS = mkVS (no_geV (mkV "erzählen")) ;
 lin tell_V3 = mkV3 (no_geV (mkV "erzählen")) ;
-lin tell_1_V3 = mkV3 (no_geV (mkV "erzählen")) ;
-lin tell_2_V3 = mkV3 (fixprefixV "unter" I.scheiden_V) accPrep von_Prep ;
+lin tell_1_V3 = variants{} ; -- 
+lin tell_2_V3 = variants{} ; -- 
 lin tell_V2V = mkV2V (no_geV (mkV "erzählen")) ;
 lin tell_V2S = mkV2S (no_geV (mkV "erzählen")) ;
 lin tell_V2Q = mkV2Q (no_geV (mkV "erzählen")) ;

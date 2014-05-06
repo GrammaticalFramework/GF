@@ -15821,7 +15821,6 @@ lin telescope_N = mkN "望远镜" ;
 lin televise_V2 = mkV2 "转播" ;
 lin television_N = L.television_N ;
 lin telex_N = mkN "电传" ;
-lin tell_V3 = mkV3 "告诉" ;--"说" ; ----
 lin tell_from_V3 = mkV3 "告诉" ;--"说" ; ----
 lin tell_V = mkV "告诉" ;
 lin tell_V2 = mkV2 "告诉" ;

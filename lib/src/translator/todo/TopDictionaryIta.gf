@@ -163,9 +163,9 @@ lin so_Subj = subSubj "finché" ;
 lin thing_N = mkN "cosa" ; -- status=guess
 lin tell_VV = variants{}; -- mkV "raccontare" ;
 lin tell_VS = variants{}; -- mkV2 "raccontare" ;
-lin tell_V3 = variants{}; -- mkV2 "raccontare" ;
-lin tell_1_V3 = mkV3 (mkV "raccontare") ;
-lin tell_2_V3 = mkV3 I.distinguere_V P.accusative P.genitive ;
+lin tell_V3 = mkV3 (mkV "raccontare") ;
+lin tell_1_V3 = variants{} ; -- 
+lin tell_2_V3 = variants{} ; -- 
 lin tell_V2V = variants{}; -- mkV2 "raccontare" ;
 lin tell_V2S = variants{}; -- mkV2 "raccontare" ;
 lin tell_V2Q = variants{}; -- mkV2 "raccontare" ;
@@ -2145,7 +2145,7 @@ lin insist_VS = variants{} ; --
 lin insist_V2 = variants{} ; -- 
 lin insist_V = variants{} ; -- 
 lin farmer_N = mkN "agricoltore" masculine | mkN "fattore" masculine ; -- status=guess status=guess
-lin until_Prep = variants{} ; -- 
+lin until_Prep = mkPrep "fine" ;
 lin traffic_N = mkN "rotatoria" ; -- status=guess
 lin dinner_N = mkN "cena" ; -- status=guess
 lin consumer_N = mkN "consumatore" | mkN "consumatrice" feminine ; -- status=guess status=guess

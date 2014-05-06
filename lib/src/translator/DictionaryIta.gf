@@ -17000,7 +17000,6 @@ lin tell_V2 = mkV2 "raccontare" ;
 lin tell_V2Q = variants{}; -- mkV2 "raccontare" ;
 lin tell_V2S = variants{}; -- mkV2 "raccontare" ;
 lin tell_V2V = variants{}; -- mkV2 "raccontare" ;
-lin tell_V3 = variants{}; -- mkV2 "raccontare" ;
 lin tell_VS = variants{}; -- mkV2 "raccontare" ;
 lin tell_VV = variants{}; -- mkV "raccontare" ;
 lin telltale_N = mkN "mostravento" ; -- status=guess

@@ -20509,7 +20509,6 @@ lin telescope_N = mkN "telescopio" ; -- status=guess
 lin telescopic_A = mkA "telescópico" ; -- status=guess
 lin televise_V2 = mkV2 (mkV "televisar") ; -- status=guess, src=wikt
 lin television_N = L.television_N ;
-lin tell_V3 = mkV3 (mkV "contar") ;
 lin tell_from_V3 = mkV3 (mkV "distinguir");
 lin tell_V = mkV "contar" ;
 lin tell_V2 = mkV2 (mkV "contar") ;

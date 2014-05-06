@@ -50946,7 +50946,6 @@ lin television_N = L.television_N ;
 lin telex_N = mkWN (compoundN "tele" (k6 "printteri")) ; --UNCHK
 lin telfer_N = mkWN (k33 "nostin") ; --UNCHK
 lin teliospore_N = mkWN (compoundN "teliosp" (k48 "ori")) ; --UNCHK
-lin tell_V3 = mkV3 (mkV "kertoa") accusative (mkPrep allative) ;
 lin tell_from_V3 = mkV3 (mkV "erottaa") accusative (mkPrep elative) ;
 lin tell_V = mkV "kertoa" ;
 lin tell_V2 = mkV2 "kertoa" ;
