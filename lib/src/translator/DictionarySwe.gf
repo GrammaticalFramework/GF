@@ -57870,8 +57870,8 @@ lin telex_N = mkN "telex" neutrum; -- comment=2
 lin telfer_N = variants {} ; -- status=guess
 lin telford_PN = variants {} ; -- status=guess
 lin teliospore_N = variants {} ; -- status=guess
-lin tell_1_V3 = mkV3 (mkV "berätta") (mkPrep "för") ;
-lin tell_2_V3 = mkV3 (mkV "skilja" "skiljer" "skilt") (mkPrep "från") ;
+lin tell_V3 = mkV3 (mkV "berätta") (mkPrep "för") ;
+lin tell_from_V3 = mkV3 (mkV "skilja" "skiljer" "skilt") (mkPrep "från") ;
 lin tell_V = mkV "avgöra" "avgjorde" "avgjort" ;
 lin tell_V2 = mkV2 "berätta" ;
 lin tell_V2Q = mkV2Q (mkV "berätta") (mkPrep "för") ;

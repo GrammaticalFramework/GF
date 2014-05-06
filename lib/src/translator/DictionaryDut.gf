@@ -16804,8 +16804,8 @@ lin telephone_V = mkV "telefoneren" ; -- status=guess, src=wikt
 lin telephone_V2 = mkV2 (mkV "telefoneren") ; -- status=guess, src=wikt
 lin telescope_N = mkN "telescoop" masculine | mkN "kijker" masculine ; -- status=guess status=guess
 lin television_N = L.television_N ;
-lin tell_1_V3 = mkV3 (mkV "vertellen") ;
-lin tell_2_V3 = mkV3 (mkV "onderscheiden") ;
+lin tell_V3 = mkV3 (mkV "vertellen") ;
+lin tell_from_V3 = mkV3 (mkV "onderscheiden") ;
 lin tell_V = mkV "vertellen" ;
 lin tell_V2 = mkV2 (mkV "vertellen") ;
 lin tell_V2Q = mkV2Q (mkV "vertellen") ; ---- subcat

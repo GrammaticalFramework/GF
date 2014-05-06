@@ -20134,8 +20134,8 @@ lin telescopy_N = mkN "Telescopie" feminine ; -- status=guess
 lin televise_V2 = mkV2 (junkV (mkV "durch") "Fernsehsender übertragen") ; -- status=guess, src=wikt
 lin television_N = L.television_N ;
 lin telex_N = mkN "Telex" neuter ; -- status=guess
-lin tell_1_V3 = mkV3 (no_geV (mkV "erzählen")) ;
-lin tell_2_V3 = mkV3 (fixprefixV "unter" I.scheiden_V) accPrep von_Prep ;
+lin tell_V3 = mkV3 (no_geV (mkV "erzählen")) ;
+lin tell_from_V3 = mkV3 (fixprefixV "unter" I.scheiden_V) accPrep von_Prep ;
 lin tell_V = no_geV (mkV "erzählen") ;
 lin tell_V2 = mkV2 (no_geV (mkV "erzählen")) ;
 lin tell_V2Q = mkV2Q (no_geV (mkV "erzählen")) ;
