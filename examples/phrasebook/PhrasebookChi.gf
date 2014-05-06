@@ -1,4 +1,4 @@
---# -path=.:alltenses:../../lib/src/chinese:../../lib/src/translator
+--# -path=.:alltenses
 
 concrete PhrasebookChi of Phrasebook = 
   GreetingsChi,
