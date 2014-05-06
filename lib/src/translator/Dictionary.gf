@@ -4074,7 +4074,6 @@ fun attainable_A : A ;
 fun attainder_N : N ;
 fun attainment_N : N ;
 fun attar_N : N ;
-fun attempt_N : N ;
 fun attempt_1_N : N ;
 fun attempt_2_N : N ;
 fun attempt_V2 : V2 ;
@@ -58336,8 +58335,8 @@ fun tell_V2 : V2 ;
 fun tell_V2Q : V2Q ;
 fun tell_V2S : V2S ;
 fun tell_V2V : V2V ;
-fun tell_1_V3 : V3 ; -- | tell him a story
-fun tell_2_V3 : V3 ; -- | tell heaven from hell
+fun tell_V3 : V3 ; -- | tell him a story
+fun tell_from_V3 : V3 ; -- | tell heaven from hell
 fun tell_VS : VS ;
 fun tell_VV : VV ;
 fun tell_apart_V2 : V2 ;

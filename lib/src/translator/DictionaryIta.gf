@@ -16993,8 +16993,8 @@ lin telephone_V2 = mkV2 (mkV "telefonare") ; -- status=guess, src=wikt
 lin teleportation_N = mkN "teletrasporto" ; -- status=guess
 lin telescope_N = mkN "telescopio" | mkN "cannocchiale" masculine ; -- status=guess status=guess
 lin television_N = L.television_N ;
-lin tell_1_V3 = mkV3 (mkV "raccontare") ;
-lin tell_2_V3 = mkV3 I.distinguere_V P.accusative P.genitive ;
+lin tell_V3 = mkV3 (mkV "raccontare") ;
+lin tell_from_V3 = mkV3 I.distinguere_V P.accusative P.genitive ;
 lin tell_V = mkV "raccontare" ;
 lin tell_V2 = mkV2 "raccontare" ;
 lin tell_V2Q = variants{}; -- mkV2 "raccontare" ;
