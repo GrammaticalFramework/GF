@@ -1,43 +1,34 @@
 Grammar for coloured translation app.
 
-(c) Aarne Ranta 2014 under GPL
+(c) Aarne Ranta 2014 under GPL. Last modified 6/5/2014.
 
-1. Make sure you have the latest RGL compiled.
+1. Make sure you have the latest RGL compiled and available. Test this for instance in GF shell by typing
 
-2. Prepare Phrasebook for this: you need to have the gfo's in the subdir phrasebook/gfos/
+  import alltenses/LangEng.gfo
 
-   cd ../phrasebook
-   make
-   make Chi
-   make gfos
-   cd ../app
+2. Check that you have the following file structure, which holds in the standard GF
+repository (darcs or github):
 
-3. Back in this directory, make sure you have GF_LIB_PATH pointing to a place under which you can find all of
+  GF/lib/src/translator      -- the translator extensions of RGL
+  GF/lib/src/german          -- German RGL sources, needed for DictGer (morphological Dict)
+  GF/lib/src/finnish         -- Finnish RGL sources, needed for StemFin
+  GF/lib/src/finnish/stemmed -- StemFin, a special file for compact Finnish runtime
+  GF/lib/src/api             -- Syntax sources
+  GF/lib/src/chunk           -- Chunk sources
+  GF/examples/phrasebook     -- Phrasebook sources
+  GF/examples/app            -- App sources (this directory)
 
-  $(GF_LIB_PATH)/alltenses
-  $(GF_LIB_PATH)/prelude
-  $(GF_LIB_PATH)/src/translator
-  $(GF_LIB_PATH)/src/finnish
-  $(GF_LIB_PATH)/src/finnish/stemmed
-  $(GF_LIB_PATH)/src/api
-  $(GF_LIB_PATH)/src/chunk
-  $(GF_LIB_PATH)/../examples/phrasebook
-  $(GF_LIB_PATH)/../examples/app
+3. Do 'make' and take a cup of coffee. If you have multiple cores, do 'make -j' and take an espresso.
 
-This is what I have since I am compiling RGL with 'make' in lib/src. But the standard procedure builds RGL elsewhere and 
-you cannot reach the non-standard source files relative to GF_LIB_PATH. Fix this by symbolic links or other means.
+4. Go to GF/src/ui/android and follow the README
 
-4. Do 'make' and take a cup of coffee.
-
-5. Go to GF/src/ui/android and follow the README
-
-6. Before the final 'ant debug install', do the following:
+5. Before the final 'ant debug install', do the following:
 
   cd assets/
   rm *
-  cp -p <Your-GF>/examples/app/App10.pgf .
-  gf -make -split-pgf App10.pgf +RTS -K200M
-  rm App10.pgf 
+  cp -p <Your-GF>/examples/app/App11.pgf .
+  gf -make -split-pgf App11.pgf +RTS -K200M
+  rm App11.pgf 
   cd ..
   ant debug install
 

@@ -1,4 +1,5 @@
---# -path=.:src/chunk:src/translator:../examples/phrasebook/gfos
+--# -path=.:../../lib/src/chunk:../../lib/src/translator:../examples/phrasebook/gfos
+
 
 concrete AppSpa of App = 
 

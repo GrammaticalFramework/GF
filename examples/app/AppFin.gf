@@ -1,4 +1,4 @@
---# -path=.:src/chunk:src/finnish/stemmed:src/finnish:src/api:src/translator:../examples/phrasebook/gfos
+--# -path=.:../../lib/src/chunk:../../lib/src/finnish/stemmed:../../lib/src/finnish:src/api:../../lib/src/translator:../examples/phrasebook/gfos
 
 concrete AppFin of App = 
 
