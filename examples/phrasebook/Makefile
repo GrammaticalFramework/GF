@@ -1,5 +1,9 @@
 compile = runghc Compile 
 
+forApp: compdemo fin Chi gfos
+
+.PHONY: gfos
+
 Chi:
 	$(compile) Chi
 
