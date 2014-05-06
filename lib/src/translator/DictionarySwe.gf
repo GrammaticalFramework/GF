@@ -57877,7 +57877,6 @@ lin tell_V2 = mkV2 "berätta" ;
 lin tell_V2Q = mkV2Q (mkV "berätta") (mkPrep "för") ;
 lin tell_V2S = mkV2S (mkV "berätta") (mkPrep "för") ;
 lin tell_V2V = mkV2V (mkV "berätta") (mkPrep []) (mkPrep "för") ;
-lin tell_V3 = mkV3 (mkV "skvallrar");
 lin tell_VS = mkVS (mkV "berätta") ;
 lin tell_VV = mkVV (mkV "berätta") ;
 lin tell_apart_V2 = dirV2 (partV (mkV "skilja" "skilde" "skilt") "av") ; -- status=guess

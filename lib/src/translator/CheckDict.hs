@@ -97,7 +97,7 @@ splitFun f = case span (/='_') (reverse f) of (tac,nuf) -> (reverse nuf, reverse
 ------ word statistics
 
 isUnchecked line = isInfixOf "--" line           -- checked = no comments
-isUnknown line = isInfixOf "variants" line       -- known = not variants {}
+isUnknown line = isInfixOf "{}" line       -- known = not variants {}
 
 statLang lang = do
   dict <- readFile (gfFile "Dictionary" lang) >>= return . lines

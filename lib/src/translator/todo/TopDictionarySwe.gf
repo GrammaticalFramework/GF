@@ -151,9 +151,9 @@ lin so_Subj = lin Subj {s = "så att"};
 lin thing_N = mkN "ting" "ting" ;
 lin tell_VV = mkVV (mkV "berätta") ;
 lin tell_VS = mkVS (mkV "berätta") ;
-lin tell_V3 = mkV3 (mkV "skvallrar");
-lin tell_1_V3 = mkV3 (mkV "berätta") (mkPrep "för") ;
-lin tell_2_V3 = mkV3 (mkV "skilja" "skiljer" "skilt") (mkPrep "från") ;
+lin tell_V3 = mkV3 (mkV "berätta") (mkPrep "för") ;
+lin tell_1_V3 = variants{} ; -- 
+lin tell_2_V3 = variants{} ; -- 
 lin tell_V2V = mkV2V (mkV "berätta") (mkPrep []) (mkPrep "för") ;
 lin tell_V2S = mkV2S (mkV "berätta") (mkPrep "för") ;
 lin tell_V2Q = mkV2Q (mkV "berätta") (mkPrep "för") ;
