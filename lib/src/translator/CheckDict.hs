@@ -93,3 +93,19 @@ subCats f = case splitFun f of
 
 splitFun f = case span (/='_') (reverse f) of (tac,nuf) -> (reverse nuf, reverse tac)
 
+
+------ word statistics
+
+isUnchecked line = isInfixOf "--" line           -- checked = no comments
+isUnknown line = isInfixOf "variants" line       -- known = not variants {}
+
+statLang lang = do
+  dict <- readFile (gfFile "Dictionary" lang) >>= return . lines
+  let lins = filter ((==["lin"]) . take 1 . words) dict
+  let nall     = length $ filter (not . isUnknown) lins
+  let nchecked = length $ filter (not . (\x -> isUnknown x || isUnchecked x)) lins
+  putStrLn $ lang ++ "\t" ++ show nall ++ "\t" ++ show nchecked
+
+statAll = mapM_ statLang langs
+
+
