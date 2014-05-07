@@ -57,9 +57,15 @@ wc.translate=function() {
 	return s.split(/([.!?]+[ \t\n]+|\n\n+|[ \t\n]*[-•*+#]+[ \t\n]+)/)
     }
 
+    function find_pick(rs) {
+	for(var i=0;i<rs.length && !rs[i].t;i++)
+	    ;
+	return i
+    }
+
     function translate_segment(so) { // so = segment output
 	so.rs=[] // list of alternative translations for this segment
-	so.current_pick=0 // index of currently selected alternative
+	so.current_pick= -1 // index of currently selected alternative
 
 	function show_error(msg) {
 	    //if(e) e.innerHTML="<span class=low_quality>Translation problem: "+msg+"</span>"
@@ -74,14 +80,16 @@ wc.translate=function() {
 	function show_picks() {
 	    clear(p)
 	    for(var i=0;i<so.rs.length;i++) {
-		p.appendChild(text(" "))
-		var pick=text(i+1) // +"⃝"
-		if(i!=so.current_pick) {
-		    var pick=node("a",{href:"#"},[pick])
-		    pick.onclick=pick.onmouseover=show_pick(i)
+		if(so.rs[i].t) {
+		    var pick=text(i+1) // +"⃝"
+		    if(i!=so.current_pick) {
+			var pick=node("a",{href:"#"},[pick])
+			pick.onclick=pick.onmouseover=show_pick(i)
+		    }
+		    var q=so.rs[i].t.quality
+		    p.appendChild(text(" "))
+		    p.appendChild(span_class("pick "+q,pick))
 		}
-		var q=so.rs[i].t.quality
-		p.appendChild(span_class("pick "+q,pick))
 	    }
 	    /*
 	    p.appendChild(wrap_class("small","pick",
@@ -101,31 +109,37 @@ wc.translate=function() {
 
 	function show_trans(i) {
 	    var r=so.rs[i]
-	    replaceChildren(so.target,text(r.text))
-	    so.text=r.text
-	    so.target.className=r.t.quality
-	    so.current_pick=i
-	    if(wc.selected==so) show_more()
+	    if(!r.t) {
+		i=find_pick(so.rs)
+		r=so.rs[i]
+	    }
+	    if(r && r.t) {
+		replaceChildren(so.target,text(r.t.text))
+		so.text=r.t.text
+		so.target.className=r.t.quality
+		so.current_pick=i
+		if(wc.selected==so) show_more()
+	    }
 	}
 	function showit2(r,grammar) {
 	    r.grammar=grammar
 	    so.rs.push(r)
 	    var j=so.rs.length-1
-	    if(so.current_pick==j) show_trans(j)
+	    if(so.current_pick<0 || so.current_pick==j) show_trans(j)
 	    else if(wc.selected==so) show_picks()
 	    //disable(false)
 	}
 	function showit(r,grammar) {
 	    r.t=trans_quality(r,grammar+f.to.value)
-	    r.text=r.t.text
 	    showit2(r,grammar)
 	}
 	function show_words(r) {
 	    var g=gftranslate.grammar
 	    var ix=find_to(g+f.to.value,r.linearizations)
-	    r.text=r.linearizations[ix].text
-	    r.t={quality:"bad_quality",text:r.text}
-	    showit2(r,g)
+	    if(ix>=0) {
+		r.t={quality:"bad_quality",text:r.linearizations[ix].text}
+		showit2(r,g)
+	    }
 	}
 
 	function word_for_word(text,cont) {
@@ -174,9 +188,11 @@ wc.translate=function() {
 	    function step3cnl(results) {
 		var trans=results[0].translations
 		if(trans && trans.length>=1) {
-		    var r=trans[0]
-		    r.prob=0
-		    showit(r,wc.cnl)
+		    for(var i=0;i<trans.length;i++) {
+			var r=trans[i]
+			r.prob=0
+			showit(r,wc.cnl)
+		    }
 		}
 		step2(text)
 	    }
@@ -193,15 +209,19 @@ wc.translate=function() {
     function change_segment_to(so,to) {
 	var rs=so.rs
 	if(rs) {
-	    for(var i=0;i<rs.length;i++) {
-		var r=rs[i]
-		r.t=trans_quality(r,r.grammar+to)
-		r.text=r.t.text
-		if(i==so.current_pick) {
-		    so.text=r.text
-		    replaceChildren(so.target,text(r.text))
-		}
+	    for(var i=0;i<rs.length;i++)
+		rs[i].t=trans_quality(rs[i],rs[i].grammar+to)
+	    var i=so.current_pick
+	    if(!rs[i].t) {
+		i=find_pick(rs)
+		so.current_pick=i
+		clear(p)
+		wc.selected=null
 	    }
+	    var r=rs[i]
+	    so.text=r.t.text
+	    replaceChildren(so.target,text(r.t.text))
+	    so.target.className=r.t.quality
 	}
 	so.to=to
     }
@@ -267,7 +287,7 @@ wc.colors=function() {
 
 wc.swap=function() {
     var f=wc.f
-    function txt(r) { return r.text }
+    function txt(r) { return r.t.text }
     f.input.value=wc.os.map(txt).join("").trimRight()
     var from=f.from.value
     f.from.value=f.to.value
