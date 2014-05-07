@@ -9,11 +9,10 @@
 
 import Control.Monad(forever)
 import Control.Monad.State(evalStateT,put,get,gets,liftIO)
-import Control.Exception.Lifted(catch)
+import Control.Exception.Lifted as L(catch)
 import Data.Char(isSpace)
 import qualified Data.Map as M
 import System.IO(hFlush,stdout)
-import qualified System.IO.Error as S
 import System.Environment
 import PGF2
 import System.Mem(performGC)
@@ -56,7 +55,7 @@ execute cmd =
                  put (pgf,[])
     Empty -> pop
     Unknown s -> putln ("Unknown command: "++s)       
-  `catch` (liftIO . print . (id::IOError->IOError))
+  `L.catch` (liftIO . print . (id::IOError->IOError))
 
 pop = do (pgf,ls) <- get
          let (ls1,ls2) = splitAt 1 ls
