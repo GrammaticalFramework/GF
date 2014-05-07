@@ -230,11 +230,15 @@ oper
   mkN011 : Str -> N ;
   mkN011 base = let v0 = tk 2 base;
                     g  = AMasc NonHuman
-                in {s = mkNoun (v0+"ъм")
-                               (v0+"ми")
-                               (v0+"ъма")
-                               (v0+"ме")
-                               g ;
+                in {s = table {
+                          NF Sg Indef => v0+"ъм" ;
+                          NF Sg Def   => v0+"ма" ;
+                          NF Pl Indef => v0+"ми" ;
+                          NF Pl Def   => v0+"мите" ;
+                          NFSgDefNom  => v0+"мът" ;
+                          NFPlCount   => v0+"ма" ;
+                          NFVocative  => v0+"ме"
+                        } ;
                     rel = \\_ => base ;
                     g   = g ;
                     lock_N = <>
