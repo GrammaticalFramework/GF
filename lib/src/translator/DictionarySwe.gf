@@ -40825,7 +40825,7 @@ lin panhandle_N = variants {} ; -- status=guess
 lin panhandle_V = variants {} ; -- status=guess
 lin panhandler_N = variants {} ; -- status=guess
 lin panic_N = mkN "panik" ; -- SaldoWN
-lin panic_V = variants {} ; -- status=guess
+lin panic_V = mkV (mkV "få" "fick" "fått") "panik" ;
 lin panic_V2 = variants {} ; -- status=guess
 lin panic_stricken_A = variants {} ; -- status=guess
 lin panicky_A = compoundA (regA "panikartad"); -- status=guess
