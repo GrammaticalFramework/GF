@@ -85,20 +85,23 @@ function trans_text_quality(text) {
 }
 
 // find_to :: Lang -> [{to:Lang,...}] -> Int
-find_to=function(to,lins) {
+function find_to(to,lins) {
     for(var i=0;i<lins.length;i++)
 	if(lins[i].to==to) return i
-    return 0 // Hmm....
+    return -1 // Hmm....
 }
 
-trans_quality=function(r,to) {
+function trans_quality(r,to) {
     var ix=to ? find_to(to,r.linearizations) : 0
-    var text=r.linearizations[ix].text
-    if(r.prob==0) return {quality:"high_quality",text:text}
+    if(ix<0) return null
     else {
-	var t=trans_text_quality(text)
-	if(t.quality=="default_quality" && r.tree && r.tree[0]=="?")
-	    t.quality="low_quality"
-	return t
+	var text=r.linearizations[ix].text
+	if(r.prob==0) return {quality:"high_quality",text:text}
+	else {
+	    var t=trans_text_quality(text)
+	    if(t.quality=="default_quality" && r.tree && r.tree[0]=="?")
+		t.quality="low_quality"
+	    return t
+	}
     }
 }
