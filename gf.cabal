@@ -261,7 +261,7 @@ executable pgf-shell
     buildable: False
   main-is:             pgf-shell.hs
   hs-source-dirs:      src/runtime/haskell-bind/examples
-  build-depends:       gf, base, containers
+  build-depends:       gf, base, containers, mtl, lifted-base
   default-language:    Haskell2010
   if impl(ghc>=7.0)
     ghc-options: -rtsopts

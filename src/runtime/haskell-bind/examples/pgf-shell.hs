@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 -- | pgf-shell: A simple shell to illustrate the use of the Haskell binding
 --   to the C implementation of the PGF run-time system.
 --
@@ -9,6 +8,8 @@
 --     * translate: t <lang> <lang> <text> 
 
 import Control.Monad(forever)
+import Control.Monad.State(evalStateT,put,get,gets,liftIO)
+import Control.Exception.Lifted(catch)
 import Data.Char(isSpace)
 import qualified Data.Map as M
 import System.IO(hFlush,stdout)
@@ -25,48 +26,64 @@ getPGF _ = putStrLn "Usage: pgf-shell <path to pgf>"
 
 pgfShell pgf =
   do putStrLn . unwords . M.keys $ languages pgf
-     forever $ do performGC
-                  putStr "> "; hFlush stdout
-                  execute pgf =<< readLn
+     flip evalStateT (pgf,[]) $ forever $ do liftIO performGC
+                                             puts "> "; liftIO $ hFlush stdout
+                                             execute =<< liftIO readLn
 
-execute pgf cmd =
+execute cmd =
   case cmd of
-    L lang tree -> do c <- getConcr' pgf lang
-                      putStrLn $ linearize c tree
-    P lang s    -> do c <- getConcr' pgf lang
+    L lang tree -> do pgf <- gets fst
+                      c <- getConcr' pgf lang
+                      put (pgf,[])
+                      putln $ linearize c tree
+    P lang s    -> do pgf <- gets fst
+                      c <- getConcr' pgf lang
                       case parse c (startCat pgf) s of
-                        Left tok -> putStrLn ("parse error: "++tok)
-                        Right ts -> printl ts
-    T from to s -> do cfrom <- getConcr' pgf from
+                        Left tok -> do put (pgf,[])
+                                       putln ("Parse error: "++tok)
+                        Right ts -> do put (pgf,map show ts)
+                                       pop
+    T from to s -> do pgf <- gets fst
+                      cfrom <- getConcr' pgf from
                       cto   <- getConcr' pgf to
-                      putl [linearize cto t|(t,_)<-case parse cfrom (startCat pgf) s of
-                                                     Left _   -> []
-                                                     Right ts -> ts]
-    _ -> putStrLn "Huh?"
-  `catch` print
+                      case parse cfrom (startCat pgf) s of
+                        Left tok -> do put (pgf,[])
+                                       putln ("Parse error: "++tok)
+                        Right ts -> do put (pgf,map (linearize cto.fst) ts)
+                                       pop
+    I path -> do pgf <- liftIO (readPGF path)
+                 putln . unwords . M.keys $ languages pgf
+                 put (pgf,[])
+    Empty -> pop
+    Unknown s -> putln ("Unknown command: "++s)       
+  `catch` (liftIO . print . (id::IOError->IOError))
+
+pop = do (pgf,ls) <- get
+         let (ls1,ls2) = splitAt 1 ls
+         putl ls1
+         put (pgf,ls2)
 
 getConcr' pgf lang =
     maybe (fail $ "Concrete syntax not found: "++show lang) return $
     Map.lookup lang (languages pgf)
 
-printl xs = putl $ map show xs
-putl = putStr . unlines
+printl xs = liftIO $ putl $ map show xs
+putl ls = liftIO . putStr $ unlines ls
+putln s = liftIO $ putStrLn s
+puts s = liftIO $ putStr s
 
 -- | Abstracy syntax of shell commands
-data Command = P String String | L String Expr | T String String String deriving Show
+data Command = P String String | L String Expr | T String String String
+             | I FilePath | Empty | Unknown String
+             deriving Show
 
 -- | Shell command parser
 instance Read Command where
   readsPrec _ s =
-          [(P l r2,"") | ("p",r1)<-lex s,
-                         (l,r2) <- lex r1]
-       ++ [(L l t,"") | ("l",r1)<-lex s,
-                        (l,r2)<- lex r1,
-                        Just t<-[readExpr r2]]
-       ++ [(T l1 l2 r3,"") | ("t",r1)<-lex s,
-                             (l1,r2)<-lex r1,
-                             (l2,r3)<-lex r2]
-
-#if MIN_VERSION_base(4,6,0)
-catch = S.catchIOError
-#endif
+      take 1 $
+          [(P l r2,"") | ("p",r1)<-lex s, (l,r2) <- lex r1]
+       ++ [(L l t,"") | ("l",r1)<-lex s, (l,r2)<- lex r1, Just t<-[readExpr r2]]
+       ++ [(T l1 l2 r3,"") | ("t",r1)<-lex s, (l1,r2)<-lex r1, (l2,r3)<-lex r2]
+       ++ [(I (dropWhile isSpace r),"") | ("i",r)<-lex s]
+       ++ [(Empty,"") | ("","") <- lex s]
+       ++ [(Unknown s,"")]
