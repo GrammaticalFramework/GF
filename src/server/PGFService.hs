@@ -200,15 +200,12 @@ cpgfMain command (t,(pgf,pc)) =
 
         parse_word w =
             maybe (Left ("["++w++"]")) Right $
-            msum [{-parse1 w,parse1 ow,-}morph w,morph ow]
-               -- omit parsing for now, to avoid space leaks
+            msum [parse1 w,parse1 ow,morph w,morph ow]
           where
             ow = if w==lw then capitInit w else lw
             lw = uncapitInit w
-{-
             parse1 = either (const Nothing) (fmap fst . listToMaybe) .
                      C.parse concr cat
--}
             morph w = listToMaybe
                         [t | (f,a,p)<-C.lookupMorpho concr w,
                              t<-maybeToList (C.readExpr f)]
