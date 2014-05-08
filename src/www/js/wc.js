@@ -273,7 +273,7 @@ wc.colors=function() {
 
 wc.swap=function() {
     var f=wc.f
-    function txt(r) { return r.t.text }
+    function txt(so) { return so.text }
     f.input.value=wc.os.map(txt).join("").trimRight()
     var from=f.from.value
     f.from.value=f.to.value
