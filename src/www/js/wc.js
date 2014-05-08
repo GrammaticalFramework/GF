@@ -101,7 +101,8 @@ wc.translate=function() {
 	function show_more() {
 	    wc.selected=so
 	    var r=so.rs[so.current_pick]
-	    if(e) e.innerHTML=(r.prob||"")+"<br>"+(r.tree||"")
+	    var prob=r.prob<=0 ? "" : r.prob || ""
+	    if(e) e.innerHTML=prob+"<br>"+(r.tree||"")
 	    if(wc.p /*&& so.rs.length>1*/) show_picks()
 	    //if(f.speak.checked) wc.speak(t.text,f.to.value)
 	}
@@ -121,40 +122,24 @@ wc.translate=function() {
 		if(wc.selected==so) show_more()
 	    }
 	}
-	function showit2(r,grammar) {
+	function showit(r,grammar) {
 	    r.grammar=grammar
+	    r.t=trans_quality(r,grammar+f.to.value)
 	    so.rs.push(r)
 	    var j=so.rs.length-1
 	    if(so.current_pick<0 || so.current_pick==j) show_trans(j)
 	    else if(wc.selected==so) show_picks()
 	    //disable(false)
 	}
-	function showit(r,grammar) {
-	    r.t=trans_quality(r,grammar+f.to.value)
-	    showit2(r,grammar)
-	}
-	function show_words(r) {
-	    var g=gftranslate.grammar
-	    var ix=find_to(g+f.to.value,r.linearizations)
-	    if(ix>=0) {
-		r.t={quality:"bad_quality",text:r.linearizations[ix].text}
-		showit2(r,g)
-	    }
-	}
 
 	function word_for_word(text,cont) {
 	    function step3(tra) {
 		if(tra.length>=1) {
 		    var r=tra[0]
-		    if(r.error!=undefined) {
-			if(i==0 && so.rs.length==0) show_error(tra[0].error)
-		    }
-		    else {
-			var r=tra[0]
-			if(r.linearizations) show_words(r)
-		    }
+		    r.prob = -1
+		    if(r.linearizations) showit(r,gftranslate.grammar)
 		}
-		else if(i==0 && so.rs.length==0)
+		else if(so.rs.length==0)
 		    show_error("Unable to translate")
 	    }
 	    gftranslate.wordforword(text,f.from.value,wc.languages || f.to.value,step3)
@@ -214,6 +199,7 @@ wc.translate=function() {
 	    var i=so.current_pick
 	    if(!rs[i].t) {
 		i=find_pick(rs)
+		//console.log("Change pick",so.current_pick,i)
 		so.current_pick=i
 		clear(p)
 		wc.selected=null
