@@ -46,10 +46,10 @@ oper
 --2 Nouns
 
   mkN : overload {
-    mkN : (muis : Str) -> N ;   -- de muis-muisen, with some predictable exceptions
+    mkN : (boek : Str) -> N ;   -- de boek-boeken, with some predictable exceptions
     mkN : (bit : Str) -> Gender -> N ; -- if gender is not predictable
-    mkN : (gat,gaten : Str) -> Gender -> N ; -- worst-case for nouns
-    mkN : (huis, boot : N) -> N ; -- compound huisboot
+    mkN : (gat, gaten : Str) -> Gender -> N ; -- worst-case for nouns
+    mkN : (werk, plaats : N) -> N ; -- compound werkplaats
     mkN : (station, hal : N) -> Case -> N ; -- compound stationshal
   } ;
 
