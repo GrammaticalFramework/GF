@@ -97,6 +97,7 @@ function trans_quality(r,to) {
     else {
 	var text=r.linearizations[ix].text
 	if(r.prob==0) return {quality:"high_quality",text:text}
+	else if(r.prob<0) return {quality:"bad_quality",text:text}
 	else {
 	    var t=trans_text_quality(text)
 	    if(t.quality=="default_quality" && r.tree && r.tree[0]=="?")
