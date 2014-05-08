@@ -215,12 +215,18 @@ parse lang cat sent =
                  if ty == gu_type__PgfParseError
                    then do c_tok <- (#peek GuExn, data.data) exn
                            tok <- peekCString c_tok
+                           gu_pool_free parsePl
+                           gu_pool_free exprPl
                            return (Left tok)
                    else if ty == gu_type__PgfExn
                           then do c_msg <- (#peek GuExn, data.data) exn
                                   msg <- peekCString c_msg
+                                  gu_pool_free parsePl
+                                  gu_pool_free exprPl
                                   throw (PGFError msg)
-                          else throw (PGFError "Parsing failed")
+                          else do gu_pool_free parsePl
+                                  gu_pool_free exprPl
+                                  throw (PGFError "Parsing failed")
          else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
                  exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
                  exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
