@@ -45,6 +45,27 @@ j2gu_string(JNIEnv *env, jstring s, GuPool* pool) {
 	return copy;
 }
 
+static size_t
+gu2j_string_offset(GuString s, size_t offset) {
+	const char* utf8 = s;
+	size_t joffset = 0;
+	while (utf8-s < offset) {
+		gu_utf8_decode((const uint8_t**) &utf8);
+		joffset++;
+	}
+	return joffset;
+}
+
+static size_t
+j2gu_string_offset(GuString s, size_t joffset) {
+	const char* utf8 = s;
+	while (joffset > 0) {
+		gu_utf8_decode((const uint8_t**) &utf8);
+		joffset--;
+	}
+	return utf8-s;
+}
+
 static void*
 get_ref(JNIEnv *env, jobject self) {
 	jfieldID refId = (*env)->GetFieldID(env, (*env)->GetObjectClass(env, self), "ref", "J");
@@ -735,7 +756,8 @@ jpgf_literal_callback_match(PgfLiteralCallback* self,
     (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
 
 	jstring jsentence = gu2j_string(env, sentence);
-	jobject result = (*env)->CallObjectMethod(env, callback->jcallback, callback->match_methodId, lin_idx, jsentence, *poffset);
+	size_t  joffset   = gu2j_string_offset(sentence, *poffset);
+	jobject result = (*env)->CallObjectMethod(env, callback->jcallback, callback->match_methodId, lin_idx, jsentence, joffset);
 	if (result == NULL)
 		return NULL;
 
@@ -750,8 +772,8 @@ jpgf_literal_callback_match(PgfLiteralCallback* self,
 	double prob = (*env)->GetDoubleField(env, jep, probId);
 
 	jfieldID offsetId = (*env)->GetFieldID(env, result_class, "offset", "I");
-	*poffset = (*env)->GetIntField(env, result, offsetId);
-	
+	*poffset = j2gu_string_offset(sentence, (*env)->GetIntField(env, result, offsetId));
+
 	PgfExprProb* ep = gu_new(PgfExprProb, out_pool);
 	ep->expr = gu_variant_from_ptr(get_ref(env, jexpr));
 	ep->prob = prob;
