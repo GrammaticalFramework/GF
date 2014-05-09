@@ -79,7 +79,7 @@ concrete NounPes of Noun = CatPes ** open ResPes, Prelude in {
     OrdSuperl a = {s = a.s ! bEzafa ++ taryn; n = Sg} ; -- check the form of adjective
 
     DefArt = {s = \\_ => [] ; a = defaultAgrPes ; fromPron = False} ;
-    IndefArt = {s = \\_ => IndefArticle ; a =defaultAgrPes ; fromPron = False} ;
+    IndefArt = {s = table { Sg => IndefArticle ; Pl => []} ; a =defaultAgrPes ; fromPron = False} ;
 
     MassNP cn = {s =\\c => case c of {
       NPC bEzafa => cn.s ! bEzafa ! Sg ;
