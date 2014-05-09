@@ -2,6 +2,13 @@ Checking GF Translation Dictionaries
 Aarne Ranta
 April 2014
 
+**News**
+
+9/5 Link to the current status: https://docs.google.com/spreadsheets/d/1NuLRp86UPjd298LxjhCAGlHsoPypxKpcBJfDab0De90/edit#gid=0
+
+9/5/2014 Removed many bogus subcat's revealed by dictionary authors and by FrameNet. Please upgrade your TopDictionary from darcs or github!
+
+
 ==Call for contributions: the generic translation dictionaries of GF==
 
 **Wanted**: manual checking of TopDictionary???.gf files in
