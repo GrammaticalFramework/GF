@@ -1,6 +1,6 @@
 ---- checked by EdG till force_N in the BNC order
 concrete DictionaryDut of Dictionary = CatDut
-** open ParadigmsDut, (L = LexiconDut), (S = SyntaxDut), IrregDut, (R = ResDut) in {
+** open ParadigmsDut, (L = LexiconDut), (S = SyntaxDut), IrregDut, (I = IrregDut), (R = ResDut) in {
 
 ---- these should be somewhere else, in a library module
 oper mkInterj : Str -> Interj = \s -> lin Interj {s = s} ;
@@ -561,8 +561,8 @@ lin allomorphic_A = mkA "allomorfisch" ; -- status=guess
 lin allot_V2 = mkV2 (mkV "verdelen") | mkV2 (mkV "toekennen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin allotment_N = mkN "moestuin" masculine ; -- status=guess
 lin allow_V = mkV (mkV "laten" "liet" "lieten" "gelaten") "doen" | mkV "toestaan" ;
-lin allow_V2 = mkV2 allow_V ;
-lin allow_V2V = mkV2V (allow_V) ;
+lin allow_V2 = mkV2 I.laten_V ;
+lin allow_V2V = mkV2V I.laten_V ;
 lin allow_VS = mkVS (allow_V) ;
 lin allowance_N = mkN "toestemming" ; -- status=guess
 lin alloy_N = mkN "legering" feminine ; -- status=guess
@@ -9630,7 +9630,7 @@ lin lesser_A = variants{} ; --
 lin lesson_N = mkN "les" ; -- status=guess
 lin let_V = mkV "laten" ;
 lin let_V2 = mkV2 let_V ; ---- subcat
-lin let_V2V = mkV2V let_V ;
+lin let_V2V = mkV2V I.laten_V ;
 lin let_VS = mkVS let_V ; ---- subcat
 lin lethal_A = mkA "dodelijk" ; -- status=guess
 lin letter_1_N = variants{} ; --
@@ -11459,11 +11459,11 @@ lin offensive_A = mkA "weerzinwekkend" | mkA "walgelijk" | mkA "beledigend" ; --
 lin offensive_N = mkN "offensief" neuter | mkN "aanval" masculine | mkN "inval" masculine ; -- status=guess status=guess status=guess
 lin offer_N = mkN "bod" neuter ; -- status=guess
 lin offer_V = mkV "aan" (mkV "bieden" "bood" "geboden") ;
-lin offer_V2 = mkV2 offer_V ;
+lin offer_V2 = mkV2 (mkV "aan" I.bieden_V) ;
 lin offer_V2V = mkV2V offer_V ;
 lin offer_V3 = mkV3 offer_V ;
 lin offer_VS = mkVS offer_V ;
-lin offer_VV = mkVV offer_V ;
+lin offer_VV = mkVV (mkV "aan" I.bieden_V) ;
 lin offering_N = variants{} ; --
 lin offertory_N = mkN "collecte" ; -- status=guess
 lin office_N = mkN "kantoor" neuter | mkN "bureau" neuter | mkN "dienst" masculine | mkN "overheidsdienst" masculine ;
@@ -16662,7 +16662,7 @@ lin tailor_N = mkN "kleermaker" masculine | mkN "kleermaakster" feminine ; -- st
 lin tailor_V2 = mkV2 (mkV "kleermaken") ; -- status=guess, src=wikt
 lin take_N = mkN "nemen" ; -- status=guess
 lin take_V = mkV "nemen" | mkV "pakken" | mkV "weg" (mkV "halen") | mkV "weg" (mkV "nemen") | mkV "af" (mkV "pakken") ;
-lin take_V2 = mkV2 take_V ;
+lin take_V2 = mkV2 I.nemen_V ;
 lin take_V2A = mkV2A take_V ;
 lin take_V2V = mkV2V take_V ;
 lin take_VA = mkVA (take_V) ;

@@ -2,8 +2,6 @@ of_Prep
 and_Conj
 in_Prep
 have_VV
-have_VS
-have_V2V
 have_V2
 have_V
 it_Pron
@@ -16,7 +14,6 @@ he_Pron
 on_Prep
 with_Prep
 do_V2
-do_V
 at_Prep
 by_Prep
 but_Conj
@@ -28,27 +25,15 @@ or_Conj
 as_Subj
 we_Pron
 weFem_Pron
-say_VV
 say_VS
-say_VA
 say_V2
 say_V
 if_Subj
 go_VV
-go_VS
 go_VA
-go_V2
 go_V
 get_VV
-get_VS
-get_VA
 get_V2V
-get_V2
-get_V
-make_VV
-make_VS
-make_VA
-make_V3
 make_V2V
 make_V2A
 make_V2
@@ -58,35 +43,24 @@ out_Adv
 up_Adv
 see_VS
 see_VQ
-see_VA
 see_V2V
 see_V2
 see_V
 know_VS
 know_VQ
-know_V2V
 know_V2
 know_V
 time_N
 time_2_N
 time_1_N
-take_VA
-take_V2V
-take_V2A
 take_V2
-take_V
 so_Adv
 year_N
 into_Prep
 then_Adv
 think_VS
-think_V2A
 think_V2
 think_V
-come_VV
-come_VS
-come_VA
-come_V2
 come_V
 than_Subj
 more_Adv
@@ -109,26 +83,21 @@ when_Subj
 way_N
 way_2_N
 way_1_N
-look_VV
 look_VA
-look_V2V
 look_V2
 look_V
 like_Prep
 use_VV
-use_V2V
 use_V2
 use_V
 because_Subj
 good_A
 find_VS
-find_V2V
 find_V2A
 find_V2
 find_V
 man_N
 want_VV
-want_VS
 want_V2V
 want_V2
 want_V
@@ -142,14 +111,12 @@ down_Adv
 yeah_Interj
 so_Subj
 thing_N
-tell_VV
 tell_VS
 tell_V3
 tell_1_V3
 tell_2_V3
 tell_V2V
 tell_V2S
-tell_V2Q
 tell_V2
 tell_V
 through_Prep
@@ -159,18 +126,13 @@ child_N
 here_Adv
 over_Prep
 too_Adv
-put_VS
-put_V2V
 put_V2
-put_V
 on_Adv
 no_Interj
-work_VV
 work_V2
 work_V
 work_2_V
 work_1_V
-become_VS
 become_VA
 become_V2
 become_V
@@ -178,13 +140,9 @@ old_A
 government_N
 mean_VV
 mean_VS
-mean_VA
 mean_V2V
 mean_V2
-mean_V
 part_N
-leave_VV
-leave_VS
 leave_V2V
 leave_V2
 leave_V
@@ -196,13 +154,9 @@ over_Adv
 seem_VV
 seem_VS
 seem_VA
-seem_V2
-seem_V
 work_N
 need_VV
 need_VV
-need_VS
-need_V2V
 need_V2
 need_V
 feel_VS
@@ -214,8 +168,6 @@ each_Det
 may_2_VV
 may_1_VV
 much_Adv
-ask_VV
-ask_VS
 ask_VQ
 ask_V2V
 ask_V2
@@ -239,7 +191,6 @@ area_2_N
 area_1_N
 show_VS
 show_VQ
-show_V2V
 show_V2
 show_V
 course_N
@@ -252,12 +203,8 @@ never_Adv
 most_Adv
 service_N
 try_VV
-try_V2V
 try_V2
 try_V
-call_V3
-call_V2V
-call_V2A
 call_V2
 call_V
 hand_N
@@ -279,8 +226,6 @@ away_Adv
 away_2_Adv
 away_1_Adv
 keep_VV
-keep_VS
-keep_VA
 keep_V2A
 keep_V2
 keep_V
@@ -291,13 +236,10 @@ house_N
 different_A
 country_N
 really_Adv
-provide_VS
 provide_V2
 provide_V
 week_N
 hold_VS
-hold_V3
-hold_V2V
 hold_V2
 hold_V
 large_A
@@ -309,7 +251,6 @@ follow_V2
 follow_V
 without_Prep
 turn_VA
-turn_V2A
 turn_V2
 turn_V
 end_N
@@ -320,7 +261,6 @@ local_A
 where_Subj
 during_Prep
 bring_V3
-bring_V2V
 bring_V2
 most_Det
 word_N
@@ -334,10 +274,8 @@ rather_Adv
 fact_N
 like_VV
 like_VS
-like_V2V
 like_V2
 social_A
-write_VV
 write_VS
 write_V2
 write_V
@@ -349,19 +287,13 @@ quite_Adv
 both_Det
 start_V2
 start_V
-run_VS
 run_V2
 run_V
 long_A
 right_Adv
 right_2_Adv
 right_1_Adv
-set_VV
-set_VS
 set_V2
-set_V
-help_VV
-help_VS
 help_V2V
 help_V2
 help_V
@@ -376,7 +308,6 @@ head_N
 information_N
 question_N
 business_N
-play_VV
 play_V2
 play_V
 play_3_V2
@@ -388,9 +319,6 @@ play_1_V
 power_N
 money_N
 change_N
-move_VV
-move_V2V
-move_V2A
 move_V2
 move_V
 move_2_V
@@ -425,7 +353,6 @@ yet_Adv
 yet_2_Adv
 yet_1_Adv
 perhaps_Adv
-meet_V2V
 meet_V2
 meet_V
 level_N
@@ -434,11 +361,9 @@ level_1_N
 until_Subj
 though_Subj
 policy_N
-include_VV
 include_V2
 include_V
 believe_VS
-believe_V2V
 believe_V2
 believe_V
 council_N
@@ -446,27 +371,20 @@ already_Adv
 possible_A
 nothing_NP
 line_N
-allow_VS
 allow_V2V
 allow_V2
-allow_V
 need_N
 effect_N
 big_A
 use_N
-lead_VS
 lead_V2V
 lead_V2
 lead_V
-stand_VV
-stand_VS
 stand_V2
 stand_V
 idea_N
 study_N
 lot_N
-live_VV
-live_V2
 live_V
 job_N
 since_Subj
@@ -474,7 +392,6 @@ name_N
 result_N
 body_N
 happen_VV
-happen_V2
 happen_V
 friend_N
 right_N
@@ -504,7 +421,6 @@ only_Predet
 before_Subj
 bit_N
 face_N
-sit_VA
 sit_V2
 sit_V
 market_N
@@ -513,10 +429,8 @@ market_2_N
 appear_VV
 appear_VS
 appear_VA
-appear_V2
 appear_V
 continue_VV
-continue_VS
 continue_V2
 continue_V
 able_A
@@ -532,10 +446,7 @@ court_N
 court_2_N
 court_1_N
 office_N
-let_VS
 let_V2V
-let_V2
-let_V
 war_N
 produce_V2
 produce_V
@@ -555,7 +466,6 @@ involve_VS
 involve_V2
 involve_V
 sort_N
-require_VV
 require_VS
 require_V2V
 require_V2
@@ -578,7 +488,6 @@ consider_V2A
 consider_V2
 consider_V
 read_VS
-read_VA
 read_V2
 read_V
 change_V2
@@ -587,11 +496,7 @@ society_N
 process_N
 mother_N
 offer_VV
-offer_VS
-offer_V3
-offer_V2V
 offer_V2
-offer_V
 late_A
 voice_N
 both_Adv
@@ -630,7 +535,6 @@ matter_1_N
 matter_2_N
 community_N
 remain_VV
-remain_VS
 remain_VA
 remain_V2
 remain_V
@@ -641,8 +545,6 @@ type_N
 research_N
 actually_Adv
 education_N
-fall_VA
-fall_V2
 fall_V
 speak_V2
 speak_V
@@ -665,7 +567,6 @@ stop_V2
 stop_V
 control_N
 value_N
-send_VS
 send_V2V
 send_V2
 send_V
@@ -678,7 +579,6 @@ main_A
 win_V2
 win_V
 understand_VS
-understand_V2V
 understand_V2
 understand_V
 decision_N
@@ -690,7 +590,6 @@ receive_V2
 receive_V
 back_N
 several_Det
-return_V2V
 return_V2
 return_V
 build_V2
@@ -706,10 +605,8 @@ off_Prep
 major_A
 describe_VS
 describe_V2
-describe_V
 agree_VV
 agree_VS
-agree_V2
 agree_V
 economic_A
 increase_V2
@@ -731,8 +628,6 @@ road_N
 table_N
 including_Prep
 church_N
-reach_VA
-reach_V2V
 reach_V2
 reach_V
 real_A
@@ -761,7 +656,6 @@ around_Prep
 language_N
 walk_V2
 walk_V
-die_V2
 die_V
 special_A
 difficult_A
@@ -770,7 +664,6 @@ particularly_Adv
 department_N
 management_N
 morning_N
-draw_V2V
 draw_V2
 draw_1_V2
 draw_2_V2
@@ -790,7 +683,6 @@ ground_1_N
 letter_N
 letter_2_N
 letter_1_N
-create_VV
 create_V2
 create_V
 evidence_N
@@ -811,8 +703,6 @@ practice_N
 bank_N
 else_Adv
 support_N
-sell_VS
-sell_VA
 sell_V2
 sell_V
 event_N
@@ -821,10 +711,8 @@ range_N
 behind_Prep
 sure_A
 report_VS
-report_V2V
 report_V2
 report_V
-pass_V2
 pass_V
 black_A
 stage_N
@@ -841,7 +729,6 @@ further_Adv
 club_N
 club_2_N
 club_1_N
-cause_VS
 cause_V2V
 cause_V2
 arm_N
@@ -881,15 +768,12 @@ free_A
 break_V2
 break_V
 yesterday_Adv
-support_VV
 support_V2
 window_N
 account_N
 explain_VS
 explain_V2
-stay_VS
 stay_VA
-stay_V2
 stay_V
 few_Det
 wait_VV
@@ -900,7 +784,6 @@ difference_N
 material_N
 air_N
 wife_N
-cover_VS
 cover_V2
 apply_VV
 apply_V2V
@@ -909,13 +792,11 @@ apply_1_V2
 apply_2_V2
 apply_V
 project_N
-raise_V2V
 raise_V2
 sale_N
 relationship_N
 indeed_Adv
 light_N
-claim_VV
 claim_VS
 claim_V2
 claim_V
@@ -929,12 +810,9 @@ everything_NP
 certainly_Adv
 rule_N
 home_Adv
-cut_V2A
 cut_V2
 cut_V
-grow_VS
 grow_VA
-grow_V2V
 grow_V2
 grow_V
 similar_A
@@ -993,10 +871,7 @@ chapter_N
 scheme_N
 theory_N
 choose_VV
-choose_VS
-choose_V2V
 choose_V2
-choose_V
 wish_VV
 wish_VS
 wish_V2V
@@ -1020,7 +895,6 @@ charge_N
 charge_2_N
 charge_1_N
 director_N
-drive_VS
 drive_V2V
 drive_V2
 drive_V
@@ -1041,7 +915,6 @@ amount_N
 son_N
 operation_N
 fail_VV
-fail_V2V
 fail_V2
 fail_V
 human_A
@@ -1056,12 +929,9 @@ firm_N
 picture_N
 source_N
 security_N
-serve_VV
-serve_VS
 serve_V2
 serve_V
 according_to_Prep
-end_VA
 end_V2
 end_V
 contract_N
@@ -1071,8 +941,6 @@ agreement_N
 better_Adv
 kill_V2
 kill_V
-act_VA
-act_V2V
 act_V2
 act_V
 site_N
@@ -1089,15 +957,11 @@ test_N
 eat_V2
 eat_V
 loss_N
-close_VS
-close_VA
-close_V2V
 close_V2
 close_V
 represent_V2
 represent_V
 love_VV
-love_V2V
 love_V2
 colour_N
 clearly_Adv
@@ -1110,7 +974,6 @@ purpose_N
 standard_N
 due_A
 secretary_N
-rise_VA
 rise_V2
 rise_V
 date_N
@@ -1124,7 +987,6 @@ hard_1_A
 music_N
 hair_N
 prepare_VV
-prepare_VS
 prepare_V2V
 prepare_V2
 prepare_V
@@ -1140,7 +1002,6 @@ discuss_VS
 discuss_V2
 prove_VS
 prove_VA
-prove_V2V
 prove_V2
 prove_V
 front_N
@@ -1152,9 +1013,7 @@ fine_A
 plant_N
 pressure_N
 response_N
-catch_VS
 catch_V2
-catch_V
 street_N
 pick_V2
 pick_V
@@ -1169,7 +1028,6 @@ enjoy_VV
 enjoy_V2
 individual_N
 suppose_VS
-suppose_V2V
 suppose_V2
 rest_N
 instead_Adv
@@ -1202,7 +1060,6 @@ analysis_N
 enter_V2
 enter_V
 space_N
-arrive_V2
 arrive_V
 ensure_VS
 ensure_V2
@@ -1243,7 +1100,6 @@ present_A
 award_N
 village_N
 control_V2
-control_V
 organisation_N
 whatever_Det
 news_N
@@ -1296,7 +1152,6 @@ force_V2V
 force_V2
 force_V
 answer_N
-compare_V2
 compare_V
 suffer_V2
 suffer_V
@@ -1318,7 +1173,6 @@ quickly_Adv
 army_N
 indicate_VS
 indicate_V2
-indicate_V
 forget_VS
 forget_V2
 forget_V
@@ -1332,7 +1186,6 @@ publish_V2
 publish_V
 serious_A
 anyway_Adv
-visit_V2V
 visit_V2
 visit_V
 capital_N
@@ -1356,11 +1209,9 @@ economy_N
 economy_2_N
 economy_1_N
 element_N
-finish_VA
 finish_V2
 finish_V
 duty_N
-fight_V2V
 fight_V2
 fight_V
 train_V2V
@@ -1375,7 +1226,6 @@ investment_N
 save_V2
 save_V
 throughout_Prep
-design_V2V
 design_V2
 design_V
 suddenly_Adv
@@ -1385,11 +1235,9 @@ improve_V
 avoid_VV
 avoid_V2
 wonder_VQ
-wonder_V2
 wonder_V
 tend_VV
 tend_V2
-tend_V
 title_N
 hotel_N
 aspect_N
@@ -1405,13 +1253,11 @@ determine_V2
 determine_V
 generally_Adv
 daughter_N
-exist_V2V
 exist_V
 share_V2
 share_V
 baby_N
 nearly_Adv
-smile_V2
 smile_V
 sorry_A
 sea_N
@@ -1448,7 +1294,6 @@ fill_V
 king_N
 assume_VS
 assume_V2
-assume_V
 image_N
 oil_N
 obviously_Adv
@@ -1467,7 +1312,6 @@ admit_VS
 admit_V2
 admit_V
 though_Adv
-replace_VV
 replace_V2
 basic_A
 hard_Adv
@@ -1486,9 +1330,6 @@ exactly_Adv
 above_Adv
 commission_N
 intend_VV
-intend_V2V
-intend_V2
-intend_V
 beyond_Prep
 seat_N
 president_N
@@ -1509,7 +1350,6 @@ professional_A
 less_Det
 once_Subj
 item_N
-fly_VS
 fly_V2
 fly_V
 reveal_VS
@@ -1525,7 +1365,6 @@ heavy_A
 advice_N
 institution_N
 discover_VS
-discover_V2V
 discover_V2
 discover_V
 surface_N
@@ -1613,7 +1452,6 @@ context_N
 survey_N
 notice_VS
 notice_V2
-notice_V
 complete_A
 turn_N
 direct_A
@@ -1679,7 +1517,6 @@ opinion_N
 drug_N
 quarter_N
 option_N
-sign_V2V
 sign_V2
 sign_V
 worth_Prep
@@ -1736,7 +1573,6 @@ scene_N
 slightly_Adv
 kitchen_N
 speech_N
-arise_VS
 arise_V
 network_N
 tea_N
@@ -1817,7 +1653,6 @@ spirit_N
 college_N
 accident_N
 star_V2
-star_V
 hope_N
 mark_V3
 mark_V2
@@ -1825,7 +1660,6 @@ works_N
 league_N
 league_2_N
 league_1_N
-clear_V2V
 clear_V2
 clear_V
 imagine_VS
@@ -1877,7 +1711,6 @@ late_Adv
 speed_N
 review_N
 test_V2
-order_VV
 order_VS
 order_V2V
 order_V2
@@ -1897,9 +1730,6 @@ latter_A
 practical_A
 commercial_A
 rich_A
-emerge_VS
-emerge_V2V
-emerge_V2
 emerge_V
 apparently_Adv
 ring_V
@@ -1935,7 +1765,6 @@ impact_N
 collect_V2
 collect_V
 debate_N
-lay_VS
 lay_V2
 lay_V
 rise_N
@@ -1946,7 +1775,6 @@ vote_N
 aim_N
 politics_N
 reply_VS
-reply_V2
 reply_V
 press_V2V
 press_V2
@@ -1963,17 +1791,14 @@ estate_N
 boat_N
 prison_N
 additional_A
-settle_VA
 settle_V2
 settle_V
 largely_Adv
 wine_N
 observe_VS
 observe_V2
-observe_V
 limit_V2V
 limit_V2
-deny_VS
 deny_V3
 deny_V2
 for_PConj
@@ -1998,13 +1823,11 @@ possibly_Adv
 cross_V2
 cross_V
 colleague_N
-charge_VS
 charge_V2
 charge_V
 lead_N
 farm_N
 respond_VS
-respond_V2
 respond_V
 employer_N
 carefully_Adv
@@ -2044,7 +1867,6 @@ somewhere_Adv
 arrange_V2
 arrange_V
 will_N
-sleep_V2
 sleep_V
 progress_N
 volume_N
@@ -2086,8 +1908,6 @@ administration_N
 tonight_Adv
 adult_N
 prefer_VV
-prefer_VS
-prefer_V2V
 prefer_V2
 author_N
 actual_A
@@ -2104,7 +1924,6 @@ contrast_N
 extremely_Adv
 wage_N
 domestic_A
-commit_V2V
 commit_V2
 threat_N
 bus_N
@@ -2188,14 +2007,11 @@ judge_N
 formal_A
 housing_N
 past_Prep
-concern_VS
 concern_V2
-concern_V
 freedom_N
 gentleman_N
 attract_V2
 explanation_N
-appoint_VS
 appoint_V3
 appoint_V2V
 appoint_V2
@@ -2232,7 +2048,6 @@ god_N
 favour_N
 before_Adv
 name_V3
-name_V2V
 name_V2
 equal_A
 capacity_N
@@ -2248,7 +2063,6 @@ sing_V2
 sing_V
 whereas_Subj
 own_V2
-own_V
 head_V2
 head_V
 examination_N
@@ -2262,14 +2076,12 @@ intention_N
 egg_N
 reasonable_A
 onto_Prep
-retain_V2V
 retain_V2
 aircraft_N
 decade_N
 cheap_A
 quiet_A
 bright_A
-contribute_V2V
 contribute_V2
 contribute_V
 row_N
@@ -2277,8 +2089,6 @@ search_N
 limit_N
 definition_N
 unemployment_N
-spread_VS
-spread_V2V
 spread_V2
 spread_V
 mark_N
@@ -2286,7 +2096,6 @@ flight_N
 account_V2
 account_V
 output_N
-last_V2
 last_V
 tour_N
 address_N
@@ -2299,7 +2108,6 @@ promote_V
 everybody_NP
 suitable_A
 growing_A
-nod_V2
 nod_V
 reject_V2
 while_N
@@ -2312,7 +2120,6 @@ vote_V
 divide_V2
 divide_V
 declare_VS
-declare_V2V
 declare_V2
 declare_V
 handle_V2
@@ -2345,8 +2152,6 @@ quick_A
 sufficient_A
 appointment_N
 match_V2
-match_V
-transfer_V2
 transfer_V
 acid_N
 spring_N
@@ -2381,7 +2186,6 @@ whilst_Subj
 contact_V2
 implication_N
 combine_VV
-combine_V2V
 combine_V2
 combine_V
 temperature_N
@@ -2412,7 +2216,6 @@ dress_V
 dangerous_A
 familiar_A
 asset_N
-belong_V
 educational_A
 sum_N
 publication_N
@@ -2481,7 +2284,6 @@ display_V2
 heat_N
 gun_N
 shut_V2
-shut_V
 journey_N
 imply_VS
 imply_V2
@@ -2528,7 +2330,6 @@ tool_N
 spot_N
 bridge_N
 double_A
-direct_VS
 direct_V2
 direct_V
 conclude_VS
@@ -2590,7 +2391,6 @@ suggestion_N
 aye_Interj
 entitle_VS
 entitle_V2V
-entitle_V2
 tone_N
 attractive_A
 wing_N
@@ -2615,8 +2415,6 @@ burn_V
 map_N
 united_A
 device_N
-jump_VV
-jump_V2V
 jump_V2
 jump_V
 estimate_VS
@@ -2637,7 +2435,6 @@ advise_V
 advance_N
 motor_N
 satisfy_V2
-satisfy_V
 hell_N
 winner_N
 effectively_Adv
@@ -2679,8 +2476,6 @@ flow_N
 matter_V
 external_A
 capable_A
-recover_V2V
-recover_V2
 recover_V
 shot_N
 request_N
@@ -2688,7 +2483,6 @@ impression_N
 neighbour_N
 theatre_N
 beneath_Prep
-hurt_VS
 hurt_V2
 hurt_V
 mechanism_N
@@ -2702,7 +2496,6 @@ slip_V
 chain_N
 accompany_V2
 wonderful_A
-earn_VA
 earn_V2
 earn_V
 enemy_N
@@ -2747,14 +2540,12 @@ alright_Adv
 first_A
 fuel_N
 mine_N
-appeal_V2V
 appeal_V2
 appeal_V
 servant_N
 liability_N
 constant_A
 hate_VV
-hate_V2V
 hate_V2
 shoe_N
 expense_N
@@ -2764,9 +2555,7 @@ writing_N
 nose_N
 origin_N
 lord_N
-rest_VA
 rest_V2
-rest_V
 drive_N
 ticket_N
 editor_N
@@ -2823,7 +2612,6 @@ afterwards_Adv
 paint_V2
 paint_V
 judge_VS
-judge_V2V
 judge_V2
 judge_V
 citizen_N
@@ -2883,12 +2671,10 @@ formation_N
 queen_N
 waste_N
 virtually_Adv
-expand_V2V
 expand_V2
 expand_V
 contemporary_A
 politician_N
-back_V2
 back_V
 territory_N
 championship_N
@@ -2996,9 +2782,7 @@ glance_V
 dominate_V2
 dominate_V
 trust_VS
-trust_V2V
 trust_V2
-trust_V
 naturally_Adv
 interpret_V2
 interpret_V
@@ -3012,7 +2796,6 @@ spokesman_N
 friendly_A
 acknowledge_VS
 acknowledge_V2
-acknowledge_V
 register_V2
 register_V
 regime_N
@@ -3059,11 +2842,9 @@ heavily_Adv
 extensive_A
 glad_A
 charity_N
-oppose_VS
 oppose_V2
 oppose_V
 defend_V2
-defend_V
 alter_V2
 alter_V
 warning_N
@@ -3087,12 +2868,7 @@ distinguish_V2
 distinguish_V
 gently_Adv
 reckon_VS
-reckon_V2
-reckon_V
 incorporate_V2
-incorporate_V
-proceed_VV
-proceed_V2
 proceed_V
 assist_V2
 assist_V
@@ -3166,7 +2942,6 @@ recovery_N
 cast_V2
 cast_V
 premise_N
-resolve_VV
 resolve_V2
 resolve_V
 regularly_Adv
@@ -3244,7 +3019,6 @@ locate_V2
 locate_V
 being_N
 struggle_VV
-struggle_VS
 struggle_V
 lifespan_N
 flat_A
@@ -3284,7 +3058,6 @@ net_A
 sensitive_A
 ratio_N
 kiss_V2
-kiss_V
 amount_V
 sleep_N
 finance_V2
@@ -3394,7 +3167,6 @@ rank_N
 compete_V
 sweet_A
 decline_VV
-decline_VS
 decline_V2
 decline_V
 rent_N
@@ -3487,8 +3259,6 @@ tourist_N
 policeman_N
 castle_N
 figure_VS
-figure_V2V
-figure_V2
 figure_V
 race_VV
 race_V2V
@@ -3507,9 +3277,6 @@ maximum_A
 wish_N
 earning_N
 priest_N
-resign_VV
-resign_VS
-resign_V2V
 resign_V2
 resign_V
 store_V2
@@ -3530,7 +3297,6 @@ zone_N
 mean_A
 altogether_Adv
 rush_VV
-rush_V2V
 rush_V2
 rush_V
 numerous_A
@@ -3671,7 +3437,6 @@ strategic_A
 disabled_A
 smell_N
 operator_N
-mount_VS
 mount_V2
 mount_V
 advance_V2
@@ -3773,7 +3538,6 @@ bite_V2
 bite_V
 dear_Interj
 consultation_N
-range_V2
 range_V
 residential_A
 conduct_N
@@ -3812,11 +3576,9 @@ monetary_A
 confuse_V2
 dare_VV
 dare_V2
-dare_V
 smoke_N
 movie_N
 seed_N
-cease_V2V
 cease_V2
 cease_V
 open_Adv
@@ -3833,8 +3595,6 @@ perceive_V2
 lack_V2
 lack_V
 strengthen_V2
-strengthen_V
-snap_VS
 snap_V2
 snap_V
 readily_Adv
@@ -3901,7 +3661,6 @@ project_VS
 project_V2V
 project_V2
 project_V
-shrug_VS
 shrug_V2
 sensible_A
 limitation_N
@@ -3930,12 +3689,9 @@ scream_VS
 scream_V2
 scream_V
 rid_V2
-rid_V
 acceptance_N
 detective_N
-sail_V2
 sail_V
-adjust_V2V
 adjust_V2
 adjust_V
 designer_N
@@ -4074,7 +3830,6 @@ horror_N
 gesture_N
 moon_N
 remark_VS
-remark_V2
 remark_V
 clever_A
 van_N
@@ -4136,7 +3891,6 @@ plain_A
 innovation_N
 opera_N
 lock_N
-grin_V2
 grin_V
 shelf_N
 pole_N
@@ -4148,8 +3902,6 @@ inside_N
 carriage_N
 fit_A
 conversion_N
-hurry_V2V
-hurry_V2
 hurry_V
 essay_N
 integration_N
@@ -4186,7 +3938,6 @@ instal_V
 suspend_V2
 suspend_V
 blow_N
-wander_V2
 wander_V
 notably_Adv
 disappoint_V2
@@ -4221,7 +3972,6 @@ frequent_A
 loose_A
 intense_A
 retail_A
-wind_V2
 wind_V
 lost_A
 grain_N
@@ -4237,14 +3987,12 @@ rival_N
 steam_N
 back_A
 chancellor_N
-crash_V2
 crash_V
 belt_N
 logic_N
 premium_N
 confront_V2
 precede_V2
-precede_V
 experimental_A
 alarm_N
 rational_A
@@ -4300,7 +4048,6 @@ bet_V
 modify_V2
 bare_A
 swear_VV
-swear_V2V
 swear_V2
 swear_V
 final_N
@@ -4449,7 +4196,6 @@ left_N
 flee_V2
 flee_V
 yield_V2
-yield_V
 discount_N
 above_A
 uncle_N
@@ -4524,16 +4270,12 @@ colony_N
 wound_N
 hardware_N
 satellite_N
-float_VA
-float_V2
 float_V
 bible_N
 statistical_A
 marked_A
-hire_VS
 hire_V2V
 hire_V2
-hire_V
 cathedral_N
 motive_N
 correct_VS
@@ -4547,7 +4289,6 @@ accommodate_V2
 accommodate_V
 mutter_V2
 mutter_V
-induce_V2V
 induce_V2
 trap_V2
 trap_V
@@ -4616,7 +4357,6 @@ assert_V
 terrace_N
 uncertain_A
 twist_V2
-twist_V
 insight_N
 undermine_V2
 tragedy_N
@@ -4702,7 +4442,6 @@ seminar_N
 target_V2V
 target_V2
 label_V3
-label_V2A
 label_V2
 label_V
 fig_N
@@ -4751,7 +4490,6 @@ virus_N
 reporter_N
 fool_N
 pop_V2
-pop_V
 capitalism_N
 painful_A
 correctly_Adv
@@ -4898,7 +4636,6 @@ export_V
 forth_Adv
 lamp_N
 allege_VS
-allege_V2V
 allege_V2
 pavement_N
 brand_N
@@ -5041,11 +4778,9 @@ entertain_V2
 cling_V
 vertical_A
 fetch_V2
-fetch_V
 strip_V2
 strip_V
 plead_VS
-plead_VA
 plead_V2
 plead_V
 duck_N
@@ -5085,7 +4820,6 @@ progressive_A
 intensity_N
 crack_N
 fly_N
-fancy_V3
 fancy_V2
 alternatively_Adv
 waiting_A
@@ -5106,7 +4840,6 @@ delighted_A
 sponsor_V2
 carer_N
 crack_V2
-crack_V
 substantially_Adv
 occupational_A
 trainer_N
@@ -5114,7 +4847,6 @@ remainder_N
 related_A
 inherit_V2
 inherit_V
-resume_VS
 resume_V2
 resume_V
 assignment_N
@@ -5151,7 +4883,6 @@ casualty_N
 steadily_Adv
 painter_N
 opt_VV
-opt_V2V
 opt_V
 handsome_A
 banking_N
@@ -5358,7 +5089,6 @@ founder_N
 utility_N
 signal_VS
 signal_V2
-signal_V
 shelter_N
 poster_N
 hitherto_Adv
@@ -5370,7 +5100,6 @@ fucking_A
 confess_VS
 confess_V2
 confess_V
-age_V2
 age_V
 miracle_N
 magic_A
@@ -5403,7 +5132,6 @@ centre_V
 orange_N
 orange_2_N
 orange_1_N
-explode_V2
 explode_V
 comedy_N
 classify_V2
@@ -5492,7 +5220,6 @@ lighting_N
 harbour_N
 empirical_A
 shallow_A
-seal_V2A
 seal_V2
 seal_V
 decrease_V2
@@ -5510,7 +5237,6 @@ plain_N
 magnetic_A
 evil_N
 widen_V2
-widen_V
 hazard_N
 dispose_V2
 dispose_V
@@ -5543,7 +5269,6 @@ seldom_Adv
 coming_A
 cab_N
 grandfather_N
-flash_V2
 flash_V
 destination_N
 actively_Adv
@@ -5652,7 +5377,6 @@ reportedly_Adv
 hedge_N
 formulate_V2
 associated_A
-position_V2V
 position_V2
 thief_N
 tomato_N
@@ -5692,7 +5416,6 @@ suck_V
 missing_A
 extended_A
 valuation_N
-delight_VS
 delight_V2
 delight_V
 beat_N
@@ -5711,8 +5434,6 @@ drown_V
 stem_N
 lump_N
 applicable_A
-rate_VS
-rate_VA
 rate_V2
 rate_V
 mobility_N
@@ -5815,7 +5536,6 @@ minimal_A
 clarify_V2
 clarify_V
 strain_V2
-strain_V
 novel_A
 try_N
 coastal_A
@@ -5883,7 +5603,6 @@ contrast_V
 tobacco_N
 middle_class_A
 grip_V2
-grip_V
 clergy_N
 trading_A
 passive_A
@@ -5897,7 +5616,6 @@ banker_N
 compensate_V2
 compensate_V
 make_up_N
-seat_V2
 popularity_N
 interior_A
 eligible_A
@@ -5905,7 +5623,6 @@ continuity_N
 bunch_N
 hook_N
 wicket_N
-pronounce_VS
 pronounce_V2
 pronounce_V
 ballet_N
@@ -5942,7 +5659,6 @@ radical_N
 diverse_A
 revive_V2
 revive_V
-trip_V2
 trip_V
 lounge_N
 dwelling_N
@@ -5999,7 +5715,6 @@ exploitation_N
 explicitly_Adv
 utterance_N
 linear_A
-chat_V2
 chat_V
 revision_N
 distress_N
@@ -6229,7 +5944,6 @@ unacceptable_A
 confrontation_N
 swiftly_Adv
 paid_A
-joke_VS
 joke_V
 instant_A
 illusion_N
@@ -6307,7 +6021,6 @@ printing_N
 onion_N
 dislike_V2
 embody_V2
-curl_V2
 curl_V
 sunshine_N
 sponsorship_N
@@ -6315,7 +6028,6 @@ rage_N
 loop_N
 halt_N
 cop_V2
-cop_V
 bang_V2
 bang_V
 toxic_A
@@ -6370,7 +6082,6 @@ steer_V2
 steer_V
 selected_A
 like_N
-confer_V2
 confer_V
 usage_N
 portray_V2
@@ -6425,7 +6136,6 @@ ideally_Adv
 endure_V2
 endure_V
 verbal_A
-stride_V2
 stride_V
 nursing_N
 exert_V2
@@ -6448,7 +6158,6 @@ interim_A
 intent_N
 chosen_A
 applied_A
-shiver_V2
 shiver_V
 pie_N
 fury_N
@@ -6460,7 +6169,6 @@ kind_A
 dead_Adv
 nursing_A
 contempt_N
-prevail_V2
 prevail_V
 murderer_N
 liberal_N
@@ -6550,7 +6258,6 @@ archive_N
 jump_N
 philosopher_N
 revival_N
-presume_VV
 presume_VS
 presume_V2
 presume_V
@@ -6566,7 +6273,6 @@ fair_N
 broadcast_V2
 broadcast_V
 annoy_V2
-divert_V2
 divert_V
 accelerate_V2
 accelerate_V
@@ -6616,7 +6322,6 @@ tolerate_V2
 salvation_N
 pudding_N
 counter_VS
-counter_V2
 counter_V
 propaganda_N
 cage_N
@@ -6677,13 +6382,9 @@ accumulate_V
 unchanged_A
 sediment_N
 sample_V2
-exclaim_VQ
 exclaim_V2
-exclaim_V
 fan_V2
 fan_V
-volunteer_VS
-volunteer_V2V
 volunteer_V2
 volunteer_V
 root_V2
@@ -6716,7 +6417,6 @@ controlled_A
 flush_V2
 flush_V
 racism_N
-flourish_V2
 flourish_V
 resentment_N
 pillow_N
@@ -6756,7 +6456,6 @@ ambiguity_N
 triangle_N
 terminate_V2
 terminate_V
-retreat_V2
 retreat_V
 pony_N
 outdoor_A
@@ -6833,7 +6532,6 @@ stool_N
 prosecute_V2
 commentary_N
 bass_N
-sniff_VS
 sniff_V2
 sniff_V
 repetition_N
@@ -6941,7 +6639,6 @@ sexually_Adv
 ministerial_A
 bitch_N
 wheat_N
-stagger_V2
 stagger_V
 snake_N
 ribbon_N
@@ -7027,7 +6724,6 @@ cargo_N
 theorist_N
 reluctantly_Adv
 preferred_A
-dash_V2
 dash_V
 total_V2
 total_V
@@ -7054,7 +6750,6 @@ smooth_V2
 smooth_V
 sleeping_A
 poorly_Adv
-accord_V2
 accord_V
 vice_president_N
 duly_Adv
@@ -7065,7 +6760,6 @@ prohibit_V2
 prohibit_V
 brake_N
 asylum_N
-obscure_VA
 obscure_V2
 nun_N
 heap_N
@@ -7205,7 +6899,6 @@ scenario_N
 frankly_Adv
 slap_V2
 recreation_N
-rank_VS
 rank_V2
 rank_V
 spy_N
@@ -7346,7 +7039,6 @@ boxing_N
 rear_V2
 rear_V
 lick_V2
-lick_V
 constrain_V2
 clerical_A
 hire_N
@@ -7439,8 +7131,6 @@ deteriorate_V2
 deteriorate_V
 dependency_N
 swift_A
-scramble_VV
-scramble_V2V
 scramble_V2
 scramble_V
 overview_N
@@ -7479,7 +7169,6 @@ ulcer_N
 slab_N
 detector_N
 detection_N
-cough_V2
 cough_V
 whichever_Quant
 spelling_N
@@ -7497,7 +7186,6 @@ postcard_N
 managing_A
 alien_A
 trouble_V2
-trouble_V
 reverse_N
 odour_N
 fundamentally_Adv
@@ -7563,13 +7251,11 @@ continuation_N
 reliance_N
 justified_A
 fool_V2
-fool_V
 detain_V2
 damaging_A
 orbit_N
 mains_N
 discard_V2
-dine_V2
 dine_V
 compartment_N
 revised_A
@@ -7584,7 +7270,6 @@ basement_N
 slump_V2
 slump_V
 puzzle_V2
-puzzle_V
 monitoring_N
 talented_A
 nominal_A
@@ -7595,7 +7280,6 @@ fork_4_N
 fork_3_N
 fork_1_N
 board_V2
-board_V
 want_N
 disposition_N
 cemetery_N
@@ -7642,7 +7326,6 @@ quest_N
 mole_N
 marathon_N
 feast_N
-crouch_V2
 crouch_V
 storm_V2
 storm_V
@@ -7841,7 +7524,6 @@ garlic_N
 suitcase_N
 skipper_N
 moan_VS
-moan_V2
 moan_V
 manpower_N
 manifest_V2
