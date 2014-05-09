@@ -3,6 +3,12 @@ import Data.List
 
 langs = words "Bul Chi Dut Eng Fin Fre Ger Hin Ita Spa Swe"
 
+-- apply a function to every line
+changeLinesLang :: (String -> String) -> String -> IO ()
+changeLinesLang f lang = do
+  dict <- readFile (gfFile "Dictionary" lang) >>= return . lines 
+  writeFile (gfFile "tmp/Dictionary" lang) $ unlines $ map f dict
+
 createAllConcretes = do
   createAbstract
   mapM_ createConcrete langs
