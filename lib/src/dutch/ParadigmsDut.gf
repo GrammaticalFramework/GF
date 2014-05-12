@@ -46,7 +46,7 @@ oper
 --2 Nouns
 
   mkN : overload {
-    mkN : (boek : Str) -> N ;   -- de boek-boeken, with some predictable exceptions
+    mkN : (bank : Str) -> N ;   -- de bank-banken, with some predictable exceptions
     mkN : (bit : Str) -> Gender -> N ; -- if gender is not predictable
     mkN : (gat, gaten : Str) -> Gender -> N ; -- worst-case for nouns
     mkN : (werk, plaats : N) -> N ; -- compound werkplaats
@@ -208,7 +208,7 @@ oper
   mkOrd : A -> Ord = \a -> lin Ord {s = a.s ! Posit} ;
 
   mkN = overload {
-    mkN : (muis : Str) -> N 
+    mkN : (bank : Str) -> N 
     = \a -> lin N (regNoun a) ;
     mkN : (bit : Str) -> Gender -> N 
     = \a,b -> lin N (regNounG a b) ;
@@ -216,10 +216,10 @@ oper
     = \a,g1,g2 -> lin N (regNounG a g1) | lin N (regNounG a g2) ; -- there are many nouns with variant genders
     mkN : (gat,gaten : Str) -> Gender -> N 
     = \a,b,c -> lin N (mkNoun a b c) ;
-   mkN : (huis,boot : N) -> N
-    = \huis,boot -> lin N {s = \\n => huis.s ! NF Sg Nom + boot.s ! n ; g = boot.g} ;
-   mkN : (huis,boot : N) -> Case -> N
-    = \huis,boot,c -> lin N {s = \\n => huis.s ! NF Sg c + boot.s ! n ; g = boot.g} ;
+   mkN : (werk,plaats : N) -> N
+    = \werk,plaats -> lin N {s = \\n => werk.s ! NF Sg Nom + plaats.s ! n ; g = plaats.g} ;
+   mkN : (werk,plaats : N) -> Case -> N
+    = \werk,plaats,c -> lin N {s = \\n => werk.s ! NF Sg c + plaats.s ! n ; g = plaats.g} ;
   } ;
 
   mkN2 = overload {
