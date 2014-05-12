@@ -18,7 +18,7 @@ import GF.System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
 import Data.Time (getCurrentTime,formatTime)
 import System.Locale(defaultTimeLocale,rfc822DateFormat)
 import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
-                       (</>))
+                       (</>),makeRelative)
 #ifndef mingw32_HOST_OS
 import System.Posix.Files(getSymbolicLinkStatus,isSymbolicLink,removeLink,
                           createSymbolicLink)
@@ -158,7 +158,9 @@ handle logLn documentroot state0 cache execute1 stateVar
 --         "/stop"    ->
 --         "/start"   ->
            "/parse"   -> parse (decoded qs)
-           "/version" -> return (ok200 gf_version)
+           "/version" -> do (c1,c2) <- PS.listPGFCache cache
+                            let rel = map (makeRelative documentroot)
+                            return $ ok200 (unlines (gf_version:"":rel c1++"":rel c2))
            "/flush"   -> do PS.flushPGFCache cache; return (ok200 "flushed")
            '/':rpath ->
              -- This code runs without mutual exclusion, so it must *not*
