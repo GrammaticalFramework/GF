@@ -1,4 +1,4 @@
-module Cache (Cache,newCache,flushCache,readCache,readCache') where
+module Cache (Cache,newCache,flushCache,listCache,readCache,readCache') where
 
 import Control.Concurrent.MVar
 import Data.Map (Map)
@@ -21,6 +21,9 @@ newCache load =
 flushCache :: Cache a -> IO ()
 flushCache c = do modifyMVar_ (cacheObjects c) (const (return Map.empty))
                   performGC
+
+listCache :: Cache a -> IO [FilePath]
+listCache = fmap Map.keys . readMVar . cacheObjects
 
 readCache :: Cache a -> FilePath -> IO a
 readCache c file = snd `fmap` readCache' c file
