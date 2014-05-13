@@ -55,8 +55,10 @@ readPGF fpath =
                            if ty == gu_type__GuErrno
                              then do perrno <- (#peek GuExn, data.data) exn
                                      errno  <- peek perrno
+                                     gu_pool_free pool
                                      ioError (errnoToIOError "readPGF" (Errno errno) Nothing (Just fpath))
-                             else throw (PGFError "The grammar cannot be loaded")
+                             else do gu_pool_free pool
+                                     throw (PGFError "The grammar cannot be loaded")
                    else return pgf
      master <- newForeignPtr gu_pool_finalizer pool
      return PGF {pgf = pgf, pgfMaster = master}
