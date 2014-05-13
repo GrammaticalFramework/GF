@@ -6,7 +6,9 @@ graph {
   Translate -- RGLSyntax [style = dashed] ;
   Translate -- Extensions ;
   Translate -- Dictionary ;
+  Translate -- Chunk ;
   Extensions -- RGLCategories ;
+  Chunk -- RGLCategories ;
   RGLCategories ;
   RGLSyntax -- RGLCategories ;
   Dictionary -- RGLCategories ;
