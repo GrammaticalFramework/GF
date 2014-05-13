@@ -15,45 +15,46 @@ that are currently available via http://grammaticalframework.org
 are marked in the table
 
 
-|| ISO  | Language     | Darcs | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | tested | publ   | authors       ||
-| Afr   | Afrikaans    | +     | -    | ++    | +   | +    | +   | -    | -     | -    | -      | -      | *LP,LM
-| Amh   | Amharic      | +     | +    | ++    | +   | +    | -   | -    | -     | -    | -      | +      | *MK
-| Ara   | Arabic       | +     | +    | +     | +   | -    | -   | -    | -     | -    | -      | +      | AD
-| Bul   | Bulgarian    | +     | +    | +     | +   | +    | +   | +    | +     | +    | ++     | +      | *KA
-| Cat   | Catalan      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | ++     | -      | *JS, IL
-| Chi   | Chinese      | +     | -    | ++    | +   | +    | +   | -    | -     | +    | -      | +      | ZL,*AR,*CP,QH
-| Dan   | Danish       | +     | +    | ++    | +   | +    | +   | +    | +     | -    | +      | -      | *AR
-| Dut   | Dutch        | +     | +    | ++    | +   | +    | +   | +    | +     | -    | +      | -      | *AR,FJ
-| Eng   | English      | +     | +    | ++    | +   | +    | +   | +    | +     | +    | ++     | +      | *AR,BB,KA
-| Est   | Estonian     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | +      | -      | *KK,IL
-| Fin   | Finnish      | +     | +    | ++    | +   | +    | +   | +    | -     | +    | ++     | +      | *AR,IL
-| Fre   | French       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | ++     | -      | *AR,RE
-| Ger   | German       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | ++     | -      | *AR,HH,EG
-| Gre   | Greek        | +     | -    | ++    | +   | +    | +   | -    | -     | -    | -      | +      | *IP
-| Heb   | Hebrew       | +     | -    | -     | -   | -    | -   | -    | -     | -    | -      | +      | *DD
-| Hin   | Hindi        | +     | +    | ++    | +   | +    | +   | +    | -     | -    | +      | +      | *SV,*KP,MH,AR
-| Ina   | Interlingua  | +     | +    | ++    | +   | +    | -   | -    | -     | -    | -      | -      | JB
-| Ita   | Italian      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | ++     | -      | *AR,*RE,GP
-| Jpn   | Japanese     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | -      | +      | *LZ
-| Lat   | Latin        | +     | -    | -     | -   | -    | -   | -    | -     | -    | -      | -      | *AR
-| Lav   | Latvian      | +     | -    | ++    | +   | +    | +   | -    | -     | -    | +      | +      | *NG,*PP
-| Mlt   | Maltese      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | -      | +      | *JC
-| Mon   | Mongolian    | -     | -    | -     | -   | -    | -   | -    | -     | -    | -      | -      | *NE
-| Nep   | Nepali       | +     | +    | ++    | +   | +    | -   | -    | -     | -    | -      | +      | *DS
-| Nor   | Norwegian(b) | +     | +    | ++    | +   | +    | +   | +    | +     | -    | +      | -      | *AR
-| Pes   | Persian      | +     | -    | +     | +   | +    | +   | -    | -     | -    | +      | +      | *SV,*EA,SM
-| Pnb   | Punjabi      | +     | +    | +     | +   | +    | +   | +    | -     | -    | -      | +      | *SV,MH
-| Pol   | Polish       | +     | +    | +     | +   | +    | +   | +    | -     | -    | +      | +      | IN,*AS
-| Ron   | Romanian     | +     | +    | ++    | +   | +    | +   | +    | -     | -    | +      | +      | *RE
-| Rus   | Russian      | +     | +    | ++    | +   | +    | +   | -    | -     | -    | +      | +      | JK,*NF
-| Snd   | Sindhi       | +     | +    | ++    | +   | +    | +   | +    | -     | -    | -      | +      | *SV,*JD
-| Spa   | Spanish      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | ++     | -      | *AR,IA,TS,IL
-| Swa   | Swahili      | +     | -    | -     | -   | -    | -   | -    | -     | -    | -      | +      | *WN,JM
-| Swe   | Swedish      | +     | +    | ++    | +   | +    | +   | +    | +     | +    | ++     | +      | *MA,*AR,MF
-| Tha   | Thai         | +     | -    | ++    | +   | +    | +   | +    | -     | -    | -      | -      | *AR,CK
-| Tsn   | Tswana       | -     | -    | -     | -   | -    | -   | -    | -     | -    | -      | -      | *LPs,AB
-| Tur   | Turkish      | +     | -    | ++    | +   | -    | -   | -    | -     | +    | -      | -      | *SC,KA
-| Urd   | Urdu         | +     | +    | ++    | +   | +    | +   | +    | -     | -    | +      | +      | *SV,MH
+|| ISO  | Language     | Darcs | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | Trans | tested | publ   | authors       ||
+| Afr   | Afrikaans    | +     | -    | ++    | +   | +    | +   | -    | -     | -    | -     | -      | -      | *LP,LM
+| Amh   | Amharic      | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | +      | *MK
+| Ara   | Arabic       | +     | +    | +     | +   | -    | -   | -    | -     | -    | - | -      | +      | AD
+| Bul   | Bulgarian    | +     | +    | +     | +   | +    | +   | +    | +     | +    | + | ++     | +      | *KA
+| Cat   | Catalan      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | - | ++     | -      | *JS,*IL
+| Chi   | Chinese      | +     | -    | ++    | +   | +    | +   | -    | -     | +    | + | -      | +      | ZL,*AR,*CP,QH
+| Dan   | Danish       | +     | +    | ++    | +   | +    | +   | +    | +     | -    | - | +      | -      | *AR
+| Dut   | Dutch        | +     | +    | ++    | +   | +    | +   | +    | +     | -    | + | +      | -      | *AR,FJ
+| Eng   | English      | +     | +    | ++    | +   | +    | +   | +    | +     | +    | + | ++     | +      | *AR,BB,KA
+| Est   | Estonian     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | - | +      | +      | *KK,*IL
+| Fin   | Finnish      | +     | +    | ++    | +   | +    | +   | +    | -     | +    | + | ++     | +      | *AR,*IL
+| Fre   | French       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | + | ++     | -      | *AR,RE
+| Ger   | German       | +     | +    | ++    | +   | +    | +   | +    | +     | +    | + | ++     | -      | *AR,HH,EG
+| Gre   | Greek(mod)   | +     | -    | ++    | +   | +    | +   | -    | -     | -    | - | -      | +      | *IP
+| Grc   | Greek(anc)   | -     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | +      | *HLe
+| Heb   | Hebrew       | +     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | +      | *DD
+| Hin   | Hindi        | +     | +    | ++    | +   | +    | +   | +    | -     | -    | + | +      | +      | *SV,*KP,MH,AR,PK
+| Ina   | Interlingua  | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | -      | JB
+| Ita   | Italian      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | + | ++     | -      | *AR,*RE,GP
+| Jpn   | Japanese     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | - | -      | +      | *LZ
+| Lat   | Latin        | +     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | -      | *AR,*HLa
+| Lav   | Latvian      | +     | -    | ++    | +   | +    | +   | -    | -     | -    | - | +      | +      | *NG,*PP
+| Mlt   | Maltese      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | -      | +      | *JC
+| Mon   | Mongolian    | -     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | -      | *NE
+| Nep   | Nepali       | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | +      | *DS
+| Nor   | Norwegian(b) | +     | +    | ++    | +   | +    | +   | +    | +     | -    | - | +      | -      | *AR
+| Pes   | Persian      | +     | -    | +     | +   | +    | +   | -    | -     | -    | - | +      | +      | *SV,*EA,SM
+| Pnb   | Punjabi      | +     | +    | +     | +   | +    | +   | +    | -     | -    | - | -      | +      | *SV,MH
+| Pol   | Polish       | +     | +    | +     | +   | +    | +   | +    | -     | -    | - | +      | +      | IN,*AS
+| Ron   | Romanian     | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | +      | +      | *RE
+| Rus   | Russian      | +     | +    | ++    | +   | +    | +   | -    | -     | -    | - | -      | +      | JK,*NF
+| Snd   | Sindhi       | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | -      | +      | *SV,*JD
+| Spa   | Spanish      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | + | ++     | -      | *AR,IA,TS,*IL
+| Swa   | Swahili      | +     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | +      | *WN,JM
+| Swe   | Swedish      | +     | +    | ++    | +   | +    | +   | +    | +     | +    | + | ++     | +      | *MA,*AR,MF
+| Tha   | Thai         | +     | -    | ++    | +   | +    | +   | +    | -     | -    | - | -      | -      | *AR,CK
+| Tsn   | Tswana       | -     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | -      | *LPs,AB
+| Tur   | Turkish      | +     | -    | ++    | +   | -    | -   | -    | -     | +    | - | -      | -      | *SC,KA
+| Urd   | Urdu         | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | +      | +      | *SV,MH
 
 ISO = 3-letter ISO language code, used in library file names
 (mostly ISO 639-2 B (bibliographic))
@@ -75,6 +76,8 @@ API = the ``Symbolic`` API compiles
 Irreg = the ``Irreg`` module with irregular verbs exists
 
 Dict = the ``Dict`` module, large-scale morphological lexicon, exists
+
+Trans = large-scale translation module and dictionary exists
 
 tested = tested in some applications, ++ means extensively tested with no major issues
 
@@ -99,6 +102,8 @@ EA Elnaz Abolahrar,
 EG Erzsébet Galgóczy
 FJ Femke Johansson,
 HH Harald Hammarström,
+HLa Herbert Lange,
+HLe Hans Leiss,
 GP Gabriele Paganelli,
 IA Ingrid Andersson,
 IL Inari Listenmaa,
@@ -137,8 +142,8 @@ ZL Zhuo Lin Qiqige
 
 ==Rules==
 
-Only components available at http://grammaticalframework.org are included in the table
-(exceptions: Estonian and Mongolian, to appear soon).
+Only components available at http://grammaticalframework.org are indicated in the table
+(exceptions: Ancient Greek, Mongolian, to appear soon).
 
 If you want to work on a language already in the table, please be kind and contact the
 active authors of it.
