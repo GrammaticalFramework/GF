@@ -1,16 +1,25 @@
 From Resource Grammar to Wide Coverage Translation with GF
 Aarne Ranta et al.
-Work in progress, January 2014
+January-May 2014
+
+%!Encoding:utf8
+
+
+==Scope==
+
+Wide-coverage interlingual translator for
+Bulgarian, Chinese, Dutch, English, Finnish, French, German, 
+Hindi, Italian, Spanish, Swedish.
 
 
 ==How to use it==
 
-This is a document about a wide-coverage translation system in GF. If you just want to try it before reading more, 
-here are the main modes of getting started:
+If you just want to try it before reading more, 
+here are the main ways to get started:
 
-1. **Run on our server.** Forthcoming.
+1. **Run on our server.** http://www.grammaticalframework.org/demos/translation.html
 
-2. **Get an Android app.** Forthcoming.
+2. **Get an Android app.** http://www.grammaticalframework.org/demos/app.html
 
 3. **Compile and run in the shell.** Get the latest GF sources (with darcs or github) and then
 - compile and install the GF compiler and library and the C runtime (``pgf-translate``).
@@ -18,13 +27,13 @@ here are the main modes of getting started:
 - compile the translator:
 ```
   cd GF/lib/src
-  make Translate8.pgf
+  make -j Translate11.pgf
 ```
-This will take a long time (ten minutes or more) and will probably require at least 8GB of RAM.
+This will take a long time (fifteen minutes or more) and will probably require at least 8GB of RAM.
 
 - run the translator
 ```
-  pgf-translate Translate8.pgf Phr TranslateEng TranslateSwe
+  pgf-translate Translate11.pgf Phr TranslateEng TranslateSwe
 ```
 with obviously the possibility to vary the source and the target language.
 
@@ -73,15 +82,15 @@ to open-text processing. This success is a result of four lines of development:
   This development is also based on the work of Peter Ljunglöf on GF parsing and Lauri Alanko on the C runtime.
 
 - **Large-scale dictionaries**, both manually built and extracted from free sources, and linked into a multilingual
-  translation dictionary now covering 10k to 60k entries for eight languages. This work was started by Björn Bringert,
+  translation dictionary now covering 10k to 60k entries for eleven languages. This work was started by Björn Bringert,
   who ported the Oxford Advanced Learner's Dictionary of English to GF.
 
 - **Probabilistic disambiguation**, using a model trained from the Penn Treebank. Due to the common abstract syntax,
-  the same model can be readily used for other languages as well, even though the adequacy of this transfer has not
+  the same model can be used for other languages as well, even though the adequacy of this transfer has not
   been systematically evaluated.
 
-- **Robust parsing**, which recovers from unknown words and syntax by introducing **metavariables** ("question marks")
-  and returning chunk-by-chunk translations. This leads to loss of quality, but fulfills the principle that 
+- **Robust parsing**, which recovers from unknown words and syntax 
+  by using chunk-by-chunk translations. This leads to loss of quality, but fulfills the principle that 
   "something is better than nothing".
 
 
@@ -121,7 +130,7 @@ Given that these issues get resolved, the strengths of the GF approach can be ma
   breaking anything else.
 
 - **Light weight**. The system runs on standard laptops and even on mobile phones; the size of the run-time
-  system for all pairs of 8 languages is under 20MB (on the Android platform), and recompiling the whole 
+  system for all pairs of 11 languages is under 25MB (on the Android platform), and recompiling the whole 
   system (e.g. after bug fixes or
   domain adaptation) is a matter of a few minutes, where corresponding figures for SMT systems are gigabytes of size  
   and days of retraining.
@@ -236,6 +245,9 @@ Here is a description of each of the modules:
 
 - **RGLCategories** stands for the type system of the standard RGL, the module named ``Cat``.
 
+- **Chunk** is the grammar defining what chunks (noun phrases, verbs,
+    adverbs, etc) can be used and how they are combined, when exact
+    syntactic combination fails.
 
 
 ==Where and why the translation grammar differs from the RGL==

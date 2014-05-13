@@ -2,26 +2,35 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.org">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf8">
 <TITLE>From Resource Grammar to Wide Coverage Translation with GF</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <CENTER>
 <H1>From Resource Grammar to Wide Coverage Translation with GF</H1>
 <FONT SIZE="4"><I>Aarne Ranta et al.</I></FONT><BR>
-<FONT SIZE="4">Work in progress, January 2014</FONT>
+<FONT SIZE="4">January-May 2014</FONT>
 </CENTER>
 
+
+<H2>Scope</H2>
+
+<P>
+Wide-coverage interlingual translator for
+Bulgarian, Chinese, Dutch, English, Finnish, French, German, 
+Hindi, Italian, Spanish, Swedish.
+</P>
 
 <H2>How to use it</H2>
 
 <P>
-This is a document about a wide-coverage translation system in GF. If you just want to try it before reading more, 
-here are the main modes of getting started:
+If you just want to try it before reading more, 
+here are the main ways to get started:
 </P>
 <P>
-1. <B>Run on our server.</B> Forthcoming.
+1. <B>Run on our server.</B> <A HREF="http://www.grammaticalframework.org/demos/translation.html">http://www.grammaticalframework.org/demos/translation.html</A>
 </P>
 <P>
-2. <B>Get an Android app.</B> Forthcoming.
+2. <B>Get an Android app.</B> <A HREF="http://www.grammaticalframework.org/demos/app.html">http://www.grammaticalframework.org/demos/app.html</A>
 </P>
 <P>
 3. <B>Compile and run in the shell.</B> Get the latest GF sources (with darcs or github) and then
@@ -34,27 +43,31 @@ here are the main modes of getting started:
 
 <PRE>
     cd GF/lib/src
-    make Translate8.pgf
+    make -j Translate11.pgf
 </PRE>
 
-This will take a long time (ten minutes or more) and will probably require at least 8GB of RAM.
+This will take a long time (fifteen minutes or more) and will probably require at least 8GB of RAM.
 <P></P>
 <LI>run the translator
 
 <PRE>
-    pgf-translate Translate8.pgf Phr TranslateEng TranslateSwe
+    pgf-translate Translate11.pgf Phr TranslateEng TranslateSwe
 </PRE>
 
 with obviously the possibility to vary the source and the target language.
-<P></P>
+</UL>
+
+<P>
 4. To modify the sources, work on the files in
+</P>
 
 <PRE>
     GF/lib/src/translator/
 </PRE>
 
+<P>
 It is these files that will be explained below.
-</UL>
+</P>
 
 <H2>GF and the RGL</H2>
 
@@ -98,15 +111,15 @@ to open-text processing. This success is a result of four lines of development:
   This development is also based on the work of Peter Ljunglöf on GF parsing and Lauri Alanko on the C runtime.
 <P></P>
 <LI><B>Large-scale dictionaries</B>, both manually built and extracted from free sources, and linked into a multilingual
-  translation dictionary now covering 10k to 60k entries for eight languages. This work was started by Björn Bringert,
+  translation dictionary now covering 10k to 60k entries for eleven languages. This work was started by Björn Bringert,
   who ported the Oxford Advanced Learner's Dictionary of English to GF.
 <P></P>
 <LI><B>Probabilistic disambiguation</B>, using a model trained from the Penn Treebank. Due to the common abstract syntax,
-  the same model can be readily used for other languages as well, even though the adequacy of this transfer has not
+  the same model can be used for other languages as well, even though the adequacy of this transfer has not
   been systematically evaluated.
 <P></P>
-<LI><B>Robust parsing</B>, which recovers from unknown words and syntax by introducing <B>metavariables</B> ("question marks")
-  and returning chunk-by-chunk translations. This leads to loss of quality, but fulfills the principle that 
+<LI><B>Robust parsing</B>, which recovers from unknown words and syntax 
+  by using chunk-by-chunk translations. This leads to loss of quality, but fulfills the principle that 
   "something is better than nothing".
 </UL>
 
@@ -152,7 +165,7 @@ Given that these issues get resolved, the strengths of the GF approach can be ma
   breaking anything else.
 <P></P>
 <LI><B>Light weight</B>. The system runs on standard laptops and even on mobile phones; the size of the run-time
-  system for all pairs of 8 languages is under 20MB (on the Android platform), and recompiling the whole 
+  system for all pairs of 11 languages is under 25MB (on the Android platform), and recompiling the whole 
   system (e.g. after bug fixes or
   domain adaptation) is a matter of a few minutes, where corresponding figures for SMT systems are gigabytes of size  
   and days of retraining.
@@ -280,6 +293,10 @@ Here is a description of each of the modules:
   suffixed by categories and word sense information. This consists of the module named <CODE>Dictionary</CODE>.
 <P></P>
 <LI><B>RGLCategories</B> stands for the type system of the standard RGL, the module named <CODE>Cat</CODE>.
+<P></P>
+<LI><B>Chunk</B> is the grammar defining what chunks (noun phrases, verbs,
+    adverbs, etc) can be used and how they are combined, when exact
+    syntactic combination fails.
 </UL>
 
 <H2>Where and why the translation grammar differs from the RGL</H2>
