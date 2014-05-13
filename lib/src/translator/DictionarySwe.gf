@@ -17957,7 +17957,7 @@ lin dry_up_V = mkV "torkar" ; -- comment=3
 lin dry_up_V2 = dirV2 (partV (mkV "torkar")"ut"); -- comment=3
 lin dry_walling_N = variants {} ; -- status=guess
 lin dryad_N = variants {} ; -- status=guess
-lin dryer_N = variants {} ; -- status=guess
+lin dryer_N = mkN "torktumlare" "torktumlare" ; -- status=guess
 lin drygoods_N = variants {} ; -- status=guess
 lin dryness_N = mkN "torrhet" ; -- status=guess
 lin dryopithecine_N = variants {} ; -- status=guess
@@ -21607,7 +21607,7 @@ lin fire_eater_N = variants {} ; -- status=guess
 lin fire_engine_N = variants {} ; -- status=guess
 lin fire_escape_N = variants {} ; -- status=guess
 lin fire_extinguisher_N = variants {} ; -- status=guess
-lin fire_fighter_N = variants {} ; -- status=guess
+lin fire_fighter_N = mkN "brandman" "brandmannen" "brandmän" "brandmännen" ; -- status=guess
 lin fire_hose_N = variants {} ; -- status=guess
 lin fire_off_V2 = dirV2 (partV (mkV "torkar")"ut"); -- comment=6
 lin fire_power_N = variants {} ; -- status=guess
@@ -24744,7 +24744,7 @@ lin grading_N = variants {} ; -- status=guess
 lin gradual_A = mkA "successiv" | mkA "gradvis" ; -- SaldoWN -- comment=2
 lin gradual_N = variants {} ; -- status=guess
 lin graduality_N = variants {} ; -- status=guess
-lin gradually_Adv = variants{} ;
+lin gradually_Adv = mkAdv "gradvis" ; -- status=guess
 lin gradualness_N = variants {} ; -- status=guess
 lin graduate_N = mkN "alumn" "alumner" | mkN "akademiker" "akademikern" "akademiker" "akademikerna" ; -- SaldoWN -- comment=2
 lin graduate_V = mkV "examinerar" ; -- comment=3
@@ -33629,6 +33629,7 @@ lin lucifugous_A = variants {} ; -- status=guess
 lin luck_N = mkN "lycka" ; -- comment=6
 lin luck_into_V2 = variants {} ; -- status=guess
 lin luck_out_V = variants {} ; -- status=guess
+lin luckily_Adv = mkAdv "lyckligtvis" ;
 lin luckless_A = variants {} ; -- status=guess
 lin lucknow_PN = variants {} ; -- status=guess
 lin lucky_A = mkA "lyckosam" "lyckosamt" "lyckosamma" "lyckosamma" "lyckosammare" "lyckosammast" "lyckosammaste" | mkA "lycklig" ; -- SaldoWN -- comment=2
@@ -53749,7 +53750,7 @@ lin sonority_N = variants {} ; -- status=guess
 lin sonorous_A = variants {} ; -- status=guess
 lin sonsy_A = variants {} ; -- status=guess
 lin soochow_PN = variants {} ; -- status=guess
-lin soon_AdV = variants {} ; -- status=guess
+lin soon_AdV = mkAdV "snart" ; -- status=guess
 lin soon_Adv = mkAdv "snart" ;
 lin sooner_Adv = mkAdv "förr" ; -- comment=3
 lin soonest_Adv = variants {} ; -- status=guess
