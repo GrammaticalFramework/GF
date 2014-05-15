@@ -206,35 +206,49 @@ Translator.prototype.update_translation=function(i) {
 	    upd3s("[Apertium does not support "+show_translation(o)+"]")
     }
     function update_gfrobust_translation() {
-	function upd3(txts) {
-	    update_segment("GFRobust",txts.map(trans_text_quality))
+	function upd3(trans,sp,qf) {
+	    var ts=[]
+	    for(var i=0;i<trans.length;i++) {
+		var t=trans[i].linearizations[0].text
+		if(sp.punct) t=t+sp.punct
+		if(!elem(t,ts)) ts.push(t)
+	    }
+	    update_segment("GFRobust",ts.map(qf || trans_text_quality))
 	}
 
 	function upd3s(txt) {
 	    update_segment("GFRobust",[{quality:"error",text:txt}])
 	}
 
-	function upd2(trans,punct) {
+	function upd2b(trans,sp) {
+	    function badq(txt) { return {quality:"bad_quality",text:txt} }
 	    if(trans.length==0) upd3s("[no translation]")
-	    else if(trans[0].error!=undefined)
-		upd3s("[GF robust translation problem: "+trans[0].error+"]")
-	    else {
-		var ts=[]
-		for(var i=0;i<trans.length;i++) {
-		    var t=trans[i].linearizations[0].text
-		    if(punct) t=t+punct
-		    if(!elem(t,ts)) ts.push(t)
-		}
-		//mapc(unlextext,ts,upd3)
-		upd3(ts)
-	    }
+	    else upd3(trans,sp,badq)
 	}
-	function upd0(source,punct) {
+
+	// upd0b :: {txt:String,punct:String} -> ()
+	function upd0b(sp) {
+	    function upd1b(translate_output) {
+		//console.log(translate_output)
+		upd2b(translate_output,sp)
+	    }
+	    gftranslate.wordforword(sp.txt,o.from,o.to,upd1b)
+	}
+
+	function upd2(trans,sp) {
+	    if(trans.length==0) upd0b(sp) // upd3s("[no translation]")
+	    else if(trans[0].error!=undefined)
+		//upd3s("[GF robust translation problem: "+trans[0].error+"]")
+		upd0b(sp)
+	    else upd3(trans,sp)
+	}
+	// upd0 :: {txt:String,punct:String} -> ()
+	function upd0(sp) {
 	    function upd1(translate_output) {
 		//console.log(translate_output)
-		upd2(translate_output,punct)
+		upd2(translate_output,sp)
 	    }
-	    gftranslate.translate(source,o.from,o.to,0,10,upd1)
+	    gftranslate.translate(sp.txt,o.from,o.to,0,10,upd1)
 	}
 	if(!window.gftranslate)
 		upd3s("[GF robust parser is not available]")
@@ -247,8 +261,7 @@ Translator.prototype.update_translation=function(i) {
 		    if(!eq_options(segment.options,want)) {
 			//console.log("Updating "+i)
 			//lexgfrobust(segment.source,upd0)
-			var sp=rmpunct(segment.source)
-			upd0(sp.txt,sp.punct)
+			upd0(rmpunct(segment.source))
 		    }
 		    //else console.log("No update ",want,segment.options)
 		}
@@ -1224,6 +1237,7 @@ function lexgfrobust(txt,cont) {
     lextext(txt,rmpunct)
 }
 */
+// rmpunct :: String -> {txt:String,punct:String}
 function rmpunct(txt) {
     function ispunct(c) {
 	switch(c) {
