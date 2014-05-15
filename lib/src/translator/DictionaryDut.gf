@@ -259,7 +259,7 @@ lin active_A = mkA "actief" ; -- status=guess
 lin active_N = mkN "bedrijvende vorm" | mkN "actief" neuter | mkN "activum" neuter ; -- status=guess status=guess status=guess
 lin actively_Adv = variants{} ; --
 lin activism_N = mkN "activisme" neuter ; -- status=guess
-lin activist_N = variants{} ; --
+lin activistMasc_N = variants{} ; --
 lin activity_N = mkN "activiteit" feminine | mkN "actief" feminine ; -- status=guess status=guess
 lin actor_1_N = variants{} ; --
 lin actor_2_N = variants{} ; --
@@ -331,7 +331,7 @@ lin administer_V2 = mkV2 (mkV "toedienen") ; -- status=guess, src=wikt
 lin administration_N = mkN "administratie" feminine ; -- status=guess
 lin administrative_A = mkA "bestuurlijk" | mkA "administratief" ; -- status=guess status=guess
 lin administratively_Adv = mkAdv "bestuurlijk" ; -- status=guess
-lin administrator_N = mkN "beheerder" masculine ; -- status=guess
+lin administratorMasc_N = mkN "beheerder" masculine ; -- status=guess
 lin admirable_A = mkA "bewonderenswaardig" ; -- status=guess
 lin admiralty_N = mkN "admiraliteit" | mkN "admiraalschap" ; -- status=guess status=guess
 lin admiration_N = mkN "bewondering" feminine ; -- status=guess
@@ -381,10 +381,10 @@ lin advisable_A = mkA "raadzaam" ; -- status=guess
 lin advise_V = mkV "adviseren" | mkV "raadgeven" | mkV (mkV "advies") "geven" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin advise_V2 = mkV2 (mkV "adviseren") | mkV2 (mkV "raadgeven") | mkV2 (mkV (mkV "advies") "geven") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin advise_VS = mkVS (mkV "adviseren") | mkVS (mkV "raadgeven") | mkVS (mkV (mkV "advies") "geven") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin adviser_N = mkN "adviseur" masculine ; -- status=guess
+lin adviserMasc_N = mkN "adviseur" masculine ; -- status=guess
 lin advisor_N = mkN "adviseur" masculine | mkN "raadgever" masculine feminine ; -- status=guess status=guess
 lin advisory_A = variants{} ; --
-lin advocate_N = mkN "advocaat" masculine | mkN "advocate" feminine | mkN "verdediger" masculine | mkN "verdedigster" feminine ; -- status=guess status=guess status=guess status=guess
+lin advocateMasc_N = mkN "advocaat" masculine | mkN "advocate" feminine | mkN "verdediger" masculine | mkN "verdedigster" feminine ; -- status=guess status=guess status=guess status=guess
 lin advocate_V2 = mkV2 (mkV "bepleiten") ; -- status=guess, src=wikt
 lin advocate_VS = mkVS (mkV "bepleiten") ; -- status=guess, src=wikt
 lin adze_N = mkN "dissel" ; -- status=guess
@@ -433,7 +433,7 @@ lin age_V = mkV (mkV "oud") "worden" | mkV "verouderen" ; -- status=guess, src=w
 lin aged_Prep = variants{} ; --
 lin agency_N = mkN "macht" | mkN "kracht" ; -- status=guess status=guess
 lin agenda_N = mkN "agenda" masculine | mkN "programma" neuter ; -- status=guess status=guess
-lin agent_N = mkN "bewerker" ; -- status=guess
+lin agentMasc_N = mkN "bewerker" ; -- status=guess
 lin agglomeration_N = mkN "agglomeratie" feminine ; -- status=guess
 lin agglutinative_A = mkA "agglutinerend" ; -- status=guess
 lin aggravate_V2 = mkV2 (mkV "verergeren") ; -- status=guess, src=wikt
@@ -525,7 +525,7 @@ lin algebraic_A = mkA "algebraïsch" ; -- status=guess
 lin algorithm_N = mkN "algoritme" neuter ; -- status=guess
 lin alibi_N = mkN "alibi" neuter ; -- status=guess
 lin alien_A = variants{} ; --
-lin alien_N = mkN "buitenlander" | mkN "allochtoon" | mkN "vluchteling" ; -- status=guess status=guess status=guess
+lin alienMasc_N = mkN "buitenlander" | mkN "allochtoon" | mkN "vluchteling" ; -- status=guess status=guess status=guess
 lin alienate_V2 = mkV2 (mkV "vervreemden") ; -- status=guess, src=wikt
 lin alienation_N = mkN "vervreemding" ; -- status=guess
 lin alike_A = mkA "gelijk" | mkA "hetzelfde" ; -- status=guess status=guess
@@ -623,7 +623,7 @@ lin amanuensis_N = mkN "stenograaf" ; -- status=guess
 lin amaranth_N = mkN "amarant" masculine ; -- status=guess
 lin amaretto_N = mkN "amaretto" masculine ; -- status=guess
 lin amateur_A = variants{} ; --
-lin amateur_N = mkN "niet-professioneel" ; -- status=guess
+lin amateurMasc_N = mkN "niet-professioneel" ; -- status=guess
 lin amazement_N = mkN "verwondering" ; -- status=guess
 lin amazing_A = mkA "wonderbaarlijk" | mkA "prachtig" | mkA "verbluffend" ; -- status=guess status=guess status=guess
 lin ambassador_N = mkN "ambassadeur" masculine ; -- status=guess
@@ -700,7 +700,7 @@ lin anaphora_N = mkN "anafoor" feminine | mkN "anafora" feminine ; -- status=gue
 lin anaphylaxis_N = mkN "anafylaxie" ; -- status=guess
 lin anarchic_A = mkA "anarchistisch" ; -- status=guess
 lin anarchism_N = mkN "anarchisme" ; -- status=guess
-lin anarchist_N = mkN "anarchist" masculine ; -- status=guess
+lin anarchistMasc_N = mkN "anarchist" masculine ; -- status=guess
 lin anarchy_N = mkN "anarchie" feminine | mkN "regeringsloosheid" feminine ; -- status=guess status=guess
 lin anatomy_N = mkN "anatomie" ; -- status=guess
 lin ancestor_N = mkN "voorloper" masculine ; -- status=guess
@@ -790,7 +790,7 @@ lin anthem_N = mkN "strijdlied" neuter ; -- status=guess
 lin anthology_N = mkN "bloemlezing" feminine ; -- status=guess
 lin anthrax_N = mkN "miltvuur" ; -- status=guess
 lin anthropological_A = mkA "antropologisch" ; -- status=guess
-lin anthropologist_N = mkN "antropoloog" masculine ; -- status=guess
+lin anthropologistMasc_N = mkN "antropoloog" masculine ; -- status=guess
 lin anthropomorphic_A = mkA "antropomorfisch" ; -- status=guess
 lin anti_N = mkN "antisemiet" masculine ; -- status=guess
 lin antibiotic_N = mkN "antibioticum" neuter ; -- status=guess
@@ -956,7 +956,7 @@ lin archduke_N = mkN "aartshertog" ; -- status=guess
 lin archer_N = mkN "boogschutter" masculine ; -- status=guess
 lin archery_N = mkN "boogschieten" neuter ; -- status=guess
 lin archipelago_N = mkN "archipel" masculine | mkN "eilandengroep " masculine ; -- status=guess status=guess
-lin architect_N = mkN "architect" masculine | mkN "bouwmeester" masculine ; -- status=guess status=guess
+lin architectMasc_N = mkN "architect" masculine | mkN "bouwmeester" masculine ; -- status=guess status=guess
 lin architectural_A = variants{} ; --
 lin architecture_N = mkN "architectuur" feminine ; -- status=guess
 lin architrave_N = mkN "architraaf" ; -- status=guess
@@ -2390,7 +2390,7 @@ lin buttress_V2 = mkV2 (mkV "ondersteunen") | mkV2 (mkV "onderbouwen") ; -- stat
 lin buxom_A = mkA "rondborstig" ; -- status=guess
 lin buy_V = kopen_V ;
 lin buy_V2 = L.buy_V2 ;
-lin buyer_N = mkN "koper" masculine | mkN "aankoper" masculine | mkN "inkoper" masculine | mkN "klant" masculine feminine ; -- status=guess status=guess status=guess status=guess
+lin buyerMasc_N = mkN "koper" masculine | mkN "aankoper" masculine | mkN "inkoper" masculine | mkN "klant" masculine feminine ; -- status=guess status=guess status=guess status=guess
 lin buzz_N = mkN "opwinding" feminine | mkN "roes" masculine ; -- status=guess status=guess
 lin buzz_V = mkV "zoemen" ; -- status=guess, src=wikt
 lin buzz_V2 = mkV2 (mkV "zoemen") ; -- status=guess, src=wikt
@@ -2502,7 +2502,7 @@ lin cancer_N = mkN "kanker" ; -- status=guess
 lin candelabrum_N = mkN "kandelaar" masculine | mkN "kaarshouder" masculine ; -- status=guess status=guess
 lin candid_A = mkA "neutraal" | mkA "objectief" ; -- status=guess status=guess
 lin candidacy_N = mkN "kandidatuur" feminine ; -- status=guess
-lin candidate_N = mkN "kandidaat" masculine | mkN "kandidate" feminine ; -- status=guess status=guess
+lin candidateMasc_N = mkN "kandidaat" masculine | mkN "kandidate" feminine ; -- status=guess status=guess
 lin candidature_N = mkN "kandidatuur" feminine ; -- status=guess
 lin candle_N = mkN "kaars" feminine ; -- status=guess
 lin candlepower_N = mkN "normaalkaars" feminine ; -- status=guess
@@ -2630,7 +2630,7 @@ lin carsickness_N = mkN "wagenziekte" feminine ; -- status=guess
 lin cart_N = variants{} ; --
 lin cartel_N = mkN "kartel" neuter ; -- status=guess
 lin cartilage_N = mkN "kraakbeen" neuter ; -- status=guess
-lin cartoonist_N = mkN "striptekenaar" masculine | mkN "striptekenares" feminine ; -- status=guess status=guess
+lin cartoonistMasc_N = mkN "striptekenaar" masculine | mkN "striptekenares" feminine ; -- status=guess status=guess
 lin cartridge_N = mkN "patroon" masculine feminine ; -- status=guess
 lin cartwheel_N = mkN "radslag" masculine ; -- status=guess
 lin carve_V = variants{} ; --
@@ -2891,7 +2891,7 @@ lin cheetah_N = mkN "jachtluipaard " neuter | mkN "cheeta" masculine ; -- status
 lin chef_N = mkN "chefkok" ; -- status=guess
 lin chemical_A = mkA "chemisch" | mkA "scheikundig" ; -- status=guess status=guess
 lin chemical_N = mkN "verslavend middel" neuter ; -- status=guess
-lin chemist_N = mkN "scheikundige" masculine feminine | mkN "chemicus" masculine ; -- status=guess status=guess
+lin chemistMasc_N = mkN "scheikundige" masculine feminine | mkN "chemicus" masculine ; -- status=guess status=guess
 lin chemistry_N = mkN "chemie" feminine | mkN "scheikunde" feminine ; -- status=guess status=guess
 lin chemotherapy_N = mkN "chemokuur" masculine feminine | mkN "chemotherapie" feminine ; -- status=guess status=guess
 lin cheque_N = mkN "cheque" masculine ; -- status=guess
@@ -2918,7 +2918,7 @@ lin chicory_N = mkN "cichorei" utrum | mkN "witlof" neuter ; -- status=guess sta
 lin chief_A = variants{} ; --
 lin chief_N = mkN "oppergod" masculine ; -- status=guess
 lin chiefly_Adv = mkAdv "voornamelijk" ; -- status=guess
-lin chieftain_N = mkN "stamhoofd" neuter | mkN "opperhoofd" neuter ; -- status=guess status=guess
+lin chieftainMasc_N = mkN "stamhoofd" neuter | mkN "opperhoofd" neuter ; -- status=guess status=guess
 lin child_N = L.child_N ;
 lin childhood_N = mkN "kinderjaren" neuter | mkN "kindertijd" masculine ; -- status=guess status=guess
 lin childish_A = mkA "kinderachtig" | mkA "infantiel" ; -- status=guess status=guess
@@ -3012,7 +3012,7 @@ lin cirrus_N = mkN "windveer" | mkN "cirrus" | mkN "vederwolk" ; -- status=guess
 lin cistern_N = mkN "stortbak" masculine ; -- status=guess
 lin cisterna_N = mkN "cisterne" feminine ; -- status=guess
 lin cite_V2 = variants{} ; --
-lin citizen_N = mkN "burger" masculine | mkN "particulier" masculine ; -- status=guess status=guess
+lin citizenMasc_N = mkN "burger" masculine | mkN "particulier" masculine ; -- status=guess status=guess
 lin citizenship_N = mkN "burgerschap" neuter ; -- status=guess
 lin citrus_N = mkN "citrusvrucht" feminine ; -- status=guess
 lin city_N = L.city_N ;
@@ -4225,7 +4225,7 @@ lin cusp_N = mkN "piek" | mkN "spits" ; -- status=guess status=guess
 lin custodian_N = mkN "bewaarder" masculine ; -- status=guess
 lin custody_N = variants{} ; --
 lin custom_N = mkN "aangepast" | mkN "aangepast" ; -- status=guess status=guess
-lin customer_N = mkN "klant" masculine ; -- status=guess
+lin customerMasc_N = mkN "klant" masculine ; -- status=guess
 lin customs_N = mkN "douanerechten {p}" ; -- status=guess
 lin cut_N = mkN "snit" ; -- status=guess
 lin cut_V = mkV "spijbelen" ; -- status=guess, src=wikt
@@ -4471,7 +4471,7 @@ lin defence_N = mkN "verdediging" feminine | mkN "weer" feminine ; -- status=gue
 --subcat lin defend_V = variants{} ; --
 lin defend_V2 = variants{} ; --
 lin defendant_N = variants{} ; --
-lin defender_N = mkN "verdediger" masculine ; -- status=guess
+lin defenderMasc_N = mkN "verdediger" masculine ; -- status=guess
 lin defense_N = mkN "verdediging" feminine | mkN "weer" feminine ; -- status=guess status=guess
 lin defenseless_A = mkA "weerloos" ; -- status=guess
 lin defensive_A = variants{} ; --
@@ -5268,7 +5268,7 @@ lin drive_V2V = mkV2V (mkV "aandrijven") ; -- status=guess, src=wikt
 --subcat lin drive_VS = mkVS (mkV "aandrijven") ; -- status=guess, src=wikt
 lin drivel_N = mkN "kwijl" neuter | mkN "speeksel" neuter ; -- status=guess status=guess
 lin drivel_V = mkV "kwijlen" ; -- status=guess, src=wikt
-lin driver_N = mkN "bestuurder" masculine | mkN "chauffeur" masculine ; -- status=guess status=guess
+lin driverMasc_N = mkN "bestuurder" masculine | mkN "chauffeur" masculine ; -- status=guess status=guess
 lin driving_A = variants{} ; --
 lin drizzle_N = mkN "drop" | mkN "dropregen" | mkN "drup" | mkN "drupregen" | mkN "gemiezer" | mkN "motregen" | mkN "miezer" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
 lin drizzle_V = mkV "druppelen" ; -- status=guess, src=wikt
@@ -6113,7 +6113,7 @@ lin exploitation_N = mkN "uitbuiting" feminine | mkN "exploitatie" feminine | mk
 lin exploration_N = mkN "verkenning" feminine | mkN "exploratie" ; -- status=guess status=guess
 lin explore_V2 = mkV2 (mkV "verkennen") | mkV2 (mkV "exploreren") ; -- status=guess, src=wikt status=guess, src=wikt
 lin explore_VS = mkVS (mkV "verkennen") | mkVS (mkV "exploreren") ; -- status=guess, src=wikt status=guess, src=wikt
-lin explorer_N = mkN "ontdekker" | mkN "ontdekkingsreiziger" masculine ; -- status=guess status=guess
+lin explorerMasc_N = mkN "ontdekker" | mkN "ontdekkingsreiziger" masculine ; -- status=guess status=guess
 lin explosion_N = mkN "explosie" ; -- status=guess
 lin explosive_N = mkN "explosief" neuter ; -- status=guess
 lin exponential_A = mkA "exponentieel" ; -- status=guess
@@ -6328,7 +6328,7 @@ lin favour_V2 = variants{} ; --
 lin favour_VS = variants{} ; --
 lin favourable_A = variants{} ; --
 lin favourite_A = variants{} ; --
-lin favourite_N = variants{} ; --
+lin favouriteMasc_N = variants{} ; --
 lin fawn_N = mkN "reebruin" neuter ; -- status=guess
 lin fawn_V = mkV "vleien" ; -- status=guess, src=wikt
 lin fax_N = mkN "fax" masculine ; -- status=guess
@@ -6384,7 +6384,7 @@ lin feminine_A = variants{} ; --
 lin feminine_N = mkN "vrouwelijke" neuter ; -- status=guess
 lin feminism_N = mkN "feminisme" neuter ; -- status=guess
 lin feminist_A = mkA "feministisch" ; -- status=guess
-lin feminist_N = mkN "feminist" masculine | mkN "feministe" feminine ; -- status=guess status=guess
+lin feministMasc_N = mkN "feminist" masculine | mkN "feministe" feminine ; -- status=guess status=guess
 lin femur_N = mkN "dijbeen" neuter ; -- status=guess
 lin fence_N = mkN "hek" neuter | mkN "omheining" feminine ; -- status=guess status=guess
 lin fencer_N = mkN "schermer" masculine | mkN "schermster" feminine ; -- status=guess status=guess
@@ -7097,7 +7097,7 @@ lin garage_N = mkN "vrijmarkt" masculine feminine ; -- status=guess
 lin garbage_N = mkN "huisvuil" neuter | mkN "vuilnis " neuter | mkN "vuil" neuter ; -- status=guess status=guess status=guess
 lin garden_N = L.garden_N ;
 lin garden_V = mkV "tuinieren" ; -- status=guess, src=wikt
-lin gardener_N = mkN "hovenier" masculine | mkN "tuinier" masculine | mkN "tuinman" masculine | mkN "tuinlieden {p}" ; -- status=guess status=guess status=guess status=guess
+lin gardenerMasc_N = mkN "hovenier" masculine | mkN "tuinier" masculine | mkN "tuinman" masculine | mkN "tuinlieden {p}" ; -- status=guess status=guess status=guess status=guess
 lin garganey_N = mkN "zomertaling" ; -- status=guess
 lin gargantuan_A = mkA "immens" ; -- status=guess
 lin gargle_N = mkN "gorgeldrank" ; -- status=guess
@@ -7193,7 +7193,7 @@ lin geographically_Adv = mkAdv "geografisch" ; -- status=guess
 lin geography_N = mkN "geografie" feminine | mkN "aardrijkskunde" feminine ; -- status=guess status=guess
 lin geologic_A = mkA "geologisch" ; -- status=guess
 lin geological_A = variants{} ; --
-lin geologist_N = mkN "geoloog" masculine | mkN "geologe" feminine | mkN "aardkundige" masculine feminine ; -- status=guess status=guess status=guess
+lin geologistMasc_N = mkN "geoloog" masculine | mkN "geologe" feminine | mkN "aardkundige" masculine feminine ; -- status=guess status=guess status=guess
 lin geology_N = mkN "geologie" feminine | mkN "aardkunde" feminine ; -- status=guess status=guess
 lin geometry_N = mkN "geometrie" | mkN "meetkunde" feminine ; -- status=guess status=guess
 lin geranium_N = mkN "geranium" feminine ; -- status=guess
@@ -9780,7 +9780,7 @@ lin list_V2 = variants{} ; --
 lin list_V2V = variants{} ; --
 lin listen_V = mkV "gehoorzamen" | mkV (mkV "luisteren") "naar" ; -- status=guess, src=wikt status=guess, src=wikt
 lin listen_V2 = L.listen_V2 ;
-lin listener_N = mkN "luisteraar" masculine ; -- status=guess
+lin listenerMasc_N = mkN "luisteraar" masculine ; -- status=guess
 lin listening_N = mkN "luisteren" neuter ; -- status=guess
 lin listless_A = mkA "lusteloos" ; -- status=guess
 lin listlessness_N = mkN "lusteloosheid" feminine ; -- status=guess
@@ -10299,7 +10299,7 @@ lin maternal_A = mkA "moederlijk" ; -- status=guess
 lin maternity_N = mkN "materniteit" feminine | mkN "moederschap" neuter ; -- status=guess status=guess
 lin math_N = mkN "wiskunde" ; -- status=guess
 lin mathematical_A = mkA "wiskundig" ; -- status=guess
-lin mathematician_N = mkN "wiskundige" masculine | mkN "mathematicus" masculine ; -- status=guess status=guess
+lin mathematicianMasc_N = mkN "wiskundige" masculine | mkN "mathematicus" masculine ; -- status=guess status=guess
 lin mathematics_N = mkN "wiskunde" feminine ; -- status=guess
 lin maths_N = mkN "wiskunde" feminine ; -- status=guess
 lin matriarch_N = mkN "aartsmoeder" feminine | mkN "matriarch" feminine ; -- status=guess status=guess
@@ -10944,7 +10944,7 @@ lin mushroom_N = mkN "paddenstoel" masculine | mkN "zwam" masculine ; -- status=
 lin music_N = L.music_N ;
 lin musical_A = mkA "muzikaal" ; -- status=guess
 lin musical_N = mkN "musical" masculine ; -- status=guess
-lin musician_N = mkN "muzikant" masculine | mkN "muzikante" feminine | mkN "musicus" masculine feminine ; -- status=guess status=guess status=guess
+lin musicianMasc_N = mkN "muzikant" masculine | mkN "muzikante" feminine | mkN "musicus" masculine feminine ; -- status=guess status=guess status=guess
 lin musicologist_N = mkN "musicoloog" masculine ; -- status=guess
 lin musk_N = mkN "muskusos" masculine ; -- status=guess
 lin muskrat_N = mkN "muskusrat" feminine ; -- status=guess
@@ -11213,7 +11213,7 @@ lin no_Utt = S.no_Utt ;
 lin nobelium_N = mkN "nobelium" neuter ; -- status=guess
 lin nobility_N = mkN "adel" ; -- status=guess
 lin noble_A = mkA "edel" | mkA "adellijk" | mkA "eervol" | mkA "fatsoenlijk" | mkA "nobel" ; -- status=guess status=guess status=guess status=guess status=guess
-lin noble_N = mkN "edele" masculine | mkN "aristocraat" masculine | mkN "adellijke" masculine ; -- status=guess status=guess status=guess
+lin nobleMasc_N = mkN "edele" masculine | mkN "aristocraat" masculine | mkN "adellijke" masculine ; -- status=guess status=guess status=guess
 lin nobody_NP = S.nobody_NP ;
 lin nocturnal_A = mkA "nachtelijk" | mkA "nacht-" ; -- status=guess status=guess
 lin nod_N = mkN "knik" ; -- status=guess
@@ -11454,7 +11454,7 @@ lin offal_N = mkN "lijk" | mkN "kreng" ; -- status=guess status=guess
 lin offence_N = variants{} ; --
 lin offend_V = mkV "ergeren" | mkV "kwellen" | mkV "irriteren" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin offend_V2 = mkV2 (mkV "ergeren") | mkV2 (mkV "kwellen") | mkV2 (mkV "irriteren") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin offender_N = mkN "schuldige" masculine feminine ; -- status=guess
+lin offenderMasc_N = mkN "schuldige" masculine feminine ; -- status=guess
 lin offensive_A = mkA "weerzinwekkend" | mkA "walgelijk" | mkA "beledigend" ; -- status=guess status=guess status=guess
 lin offensive_N = mkN "offensief" neuter | mkN "aanval" masculine | mkN "inval" masculine ; -- status=guess status=guess status=guess
 lin offer_N = mkN "bod" neuter ; -- status=guess
@@ -11472,7 +11472,7 @@ lin officer_2_N = variants{} ; --
 lin officer_3_N = variants{} ; --
 lin officer_N = mkN "officier" masculine ; -- status=guess
 lin official_A = mkA "officieel" | mkA "ambtelijk" ; -- status=guess status=guess
-lin official_N = mkN "beambte" masculine | mkN "functionaris" masculine ; -- status=guess status=guess
+lin officialMasc_N = mkN "beambte" masculine | mkN "functionaris" masculine ; -- status=guess status=guess
 lin officially_Adv = mkAdv "officieel" ; -- status=guess
 lin offline_A = mkA "ontkoppeld" | mkA "offline" ; -- status=guess status=guess
 lin offset_N = mkN "compensatie" ; -- status=guess
@@ -11564,7 +11564,7 @@ lin opine_VS = mkVS (mkV (mkV "van") "mening zijn") | mkVS (mkV "opiniëren") | 
 lin opinion_N = mkN "mening" feminine | mkN "opinie" feminine | mkN "visie" feminine | mkN "zienswijze" feminine | mkN "gedachte" feminine ; -- status=guess status=guess status=guess status=guess status=guess
 lin opium_N = mkN "opium " neuter ; -- status=guess
 lin opossum_N = mkN "opossum" | mkN "Amerikaanse buidelrat" ; -- status=guess status=guess
-lin opponent_N = mkN "opponent" | mkN "tegenstander" ; -- status=guess status=guess
+lin opponentMasc_N = mkN "opponent" | mkN "tegenstander" ; -- status=guess status=guess
 lin opportunity_N = mkN "kans" feminine ; -- status=guess
 lin oppose_V = mkV "tegenhouden" ; -- status=guess, src=wikt
 lin oppose_V2 = mkV2 (mkV "tegenhouden") ; -- status=guess, src=wikt
@@ -12065,7 +12065,7 @@ lin peak_N = mkN "piek" ; -- status=guess
 lin peanut_N = mkN "pinda" masculine | mkN "aardnoot" feminine | mkN "apennoot" feminine | mkN "arachidenoot" feminine | mkN "grondnoot" feminine | mkN "olienoot" feminine ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin pear_N = mkN "peer" feminine ; -- status=guess
 lin pearl_N = mkN "parel" ; -- status=guess
-lin peasant_N = mkN "boer" masculine | mkN "plattelander" masculine | mkN "landman" masculine ; -- status=guess status=guess status=guess
+lin peasantMasc_N = mkN "boer" masculine | mkN "plattelander" masculine | mkN "landman" masculine ; -- status=guess status=guess status=guess
 lin peasantry_N = mkN "boerenstand" masculine ; -- status=guess
 lin peat_N = mkN "turf" masculine | mkN "veen" neuter ; -- status=guess status=guess
 lin pebble_N = mkN "kiezel" ; -- status=guess
@@ -12337,7 +12337,7 @@ lin physiologist_N = mkN "fysioloog" masculine feminine ; -- status=guess
 lin physiology_N = mkN "fysiologie" feminine ; -- status=guess
 lin physiotherapy_N = mkN "fysiotherapie" feminine ; -- status=guess
 lin pi_N = mkN "pi" masculine feminine ; -- status=guess
-lin pianist_N = mkN "pianist" masculine ; -- status=guess
+lin pianistMasc_N = mkN "pianist" masculine ; -- status=guess
 lin piano_N = mkN "piano" masculine ; -- status=guess
 lin piccolo_N = mkN "piccolo" ; -- status=guess
 lin pick_V = mkV "pulken" ; -- status=guess, src=wikt
@@ -12619,7 +12619,7 @@ lin police_N = mkN "politie" feminine ;
 lin policeman_N = L.policeman_N ;
 lin policy_N = mkN "beleid" neuter | mkN "politiek" ;
 lin polish_A = variants{} ; --
-lin polish_N = mkN "glans" masculine ; -- status=guess
+lin polishMasc_N = mkN "glans" masculine ; -- status=guess
 lin polish_V = mkV "polijsten" | mkV "poetsen" | mkV "oppoetsen" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin polish_V2 = mkV2 (mkV "polijsten") | mkV2 (mkV "poetsen") | mkV2 (mkV "oppoetsen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin polite_A = mkA "beleefd" ; -- status=guess
@@ -12894,7 +12894,7 @@ lin preservative_N = mkN "conserveermiddel" neuter ; -- status=guess
 lin preserve_V2 = mkV2 (mkV "bewaren") | mkV2 (mkV (mkV "in") "stand houden") ; -- status=guess, src=wikt status=guess, src=wikt
 lin preside_V = mkV "voorzitten" ; -- status=guess, src=wikt
 lin presidency_N = variants{} ; --
-lin president_N = mkN "president" masculine ; -- status=guess
+lin presidentMasc_N = mkN "president" masculine ; -- status=guess
 lin presidential_A = variants{} ; --
 lin press_N = mkN "persagentschap" neuter ; -- status=guess
 lin press_V = mkV "aanklagen" | mkV "vervolgen" ; -- status=guess, src=wikt status=guess, src=wikt
@@ -13143,7 +13143,7 @@ lin proscribe_V2 = mkV2 (mkV "verbannen") | mkV2 (mkV "uitsluiten") ; -- status=
 lin prose_N = mkN "proza" neuter ; -- status=guess
 lin prosecute_V2 = variants{} ; --
 lin prosecution_N = variants{} ; --
-lin prosecutor_N = mkN "aanklager" masculine ; -- status=guess
+lin prosecutorMasc_N = mkN "aanklager" masculine ; -- status=guess
 lin proselyte_N = mkN "bekeerling" masculine ; -- status=guess
 lin proselytize_V = mkV "bekeren" ; -- status=guess, src=wikt
 lin proselytize_V2 = mkV2 (mkV "bekeren") ; -- status=guess, src=wikt
@@ -13926,7 +13926,7 @@ lin renaissance_N = variants{} ; --
 lin rename_V2 = mkV2 (mkV "hernoemen") ; -- status=guess, src=wikt
 lin rename_V3 = mkV3 (mkV "hernoemen") ; -- status=guess, src=wikt
 lin render_V2 = mkV2 (mkV "veroorzaken") ; -- status=guess, src=wikt
-lin renegade_N = mkN "renegaat" masculine | mkN "outlaw" | mkN "afvallige" | mkN "overloper" ; -- status=guess status=guess status=guess status=guess
+lin renegadeMasc_N = mkN "renegaat" masculine | mkN "outlaw" | mkN "afvallige" | mkN "overloper" ; -- status=guess status=guess status=guess status=guess
 lin renege_V = mkV (mkV "belofte") "breken" ; -- status=guess, src=wikt
 lin renew_V2 = mkV2 (mkV "hernieuwen") | mkV2 (mkV "vernieuwen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin renewal_N = variants{} ; --
@@ -13975,7 +13975,7 @@ lin report_V2 = mkV2 (mkV "afkomen") | mkV2 (verschijnen_V) ; -- status=guess, s
 --subcat lin report_V2V = mkV2V (mkV "afkomen") | mkV2V (verschijnen_V) ; -- status=guess, src=wikt status=guess, src=wikt
 lin report_VS = mkVS (mkV "afkomen") | mkVS (verschijnen_V) ; -- status=guess, src=wikt status=guess, src=wikt
 lin reportedly_Adv = variants{} ; --
-lin reporter_N = mkN "verslaggever" masculine ; -- status=guess
+lin reporterMasc_N = mkN "verslaggever" masculine ; -- status=guess
 lin repose_N = mkN "rust" masculine feminine ; -- status=guess
 lin repository_N = mkN "opslagruimte" ; -- status=guess
 lin reprehensible_A = mkA "afkeurenswaardig" | mkA "schuldig" ; -- status=guess status=guess
@@ -13983,7 +13983,7 @@ lin represent_V = mkV "voorstellen" ; -- status=guess, src=wikt
 lin represent_V2 = mkV2 (mkV "voorstellen") ; -- status=guess, src=wikt
 lin representation_N = mkN "weergave" ; -- status=guess
 lin representative_A = mkA "representatief" ; -- status=guess
-lin representative_N = mkN "vertegenwoordiger" masculine ; -- status=guess
+lin representativeMasc_N = mkN "vertegenwoordiger" masculine ; -- status=guess
 lin reprobate_N = mkN "onverlaat" masculine | mkN "schurk" masculine ; -- status=guess status=guess
 lin reprobate_V2 = mkV2 (mkV "verlaten") ; -- status=guess, src=wikt
 lin reproduce_V = mkV "voortpanten" ; -- status=guess, src=wikt
@@ -14015,7 +14015,7 @@ lin rescue_V2 = mkV2 (mkV "ontzetten") ; -- status=guess, src=wikt
 lin research_N = mkN "onderzoek" neuter | mkN "speurwerk" neuter ;
 lin research_V = mkV "onderzoeken" | mkV "uitvissen" | mkV "uitzoeken" | mkV "nagaan" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin research_V2 = mkV2 (mkV "onderzoeken") | mkV2 (mkV "uitvissen") | mkV2 (mkV "uitzoeken") | mkV2 (mkV "nagaan") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin researcher_N = mkN "onderzoeker" ; -- status=guess
+lin researcherMasc_N = mkN "onderzoeker" ; -- status=guess
 lin resell_V2 = mkV2 (mkV "dooverkopen") ; -- status=guess, src=wikt
 lin resemble_V2 = mkV2 (mkV (mkV "gelijken") "op") | mkV2 (mkV (mkV "lijken") "op") ; -- status=guess, src=wikt status=guess, src=wikt
 lin resent_V2 = mkV2 (mkV (mkV "zijn") "ongenoegen uiten") | mkV2 (reflMkV "storen aan") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -14212,7 +14212,7 @@ lin riddle_V2 = mkV2 (mkV "doordringen") | mkV2 (mkV "doorspekt") ; -- status=gu
 lin ride_N = variants{} ; --
 lin ride_V = mkV (mkV "met") "de voeten treden" ; -- status=guess, src=wikt
 lin ride_V2 = mkV2 (mkV (mkV "met") "de voeten treden") ; -- status=guess, src=wikt
-lin rider_N = mkN "ruiter" masculine feminine | mkN "motorrijder" masculine feminine ; -- status=guess status=guess
+lin riderMasc_N = mkN "ruiter" masculine feminine | mkN "motorrijder" masculine feminine ; -- status=guess status=guess
 lin ridge_N = mkN "heuvelkam" masculine ; -- status=guess
 lin ridiculous_A = mkA "belachelijk" ; -- status=guess
 lin riding_N = mkN "rijzweep" ; -- status=guess
@@ -14857,7 +14857,7 @@ lin sell_V2 = mkV2 (mkV "uitverkopen") ; -- status=guess, src=wikt
 lin sell_V3 = L.sell_V3 ;
 --subcat lin sell_VA = mkVA (mkV "uitverkopen") ; -- status=guess, src=wikt
 --subcat lin sell_VS = mkVS (mkV "uitverkopen") ; -- status=guess, src=wikt
-lin seller_N = mkN "verkoper" masculine | mkN "verkoopster" feminine ; -- status=guess status=guess
+lin sellerMasc_N = mkN "verkoper" masculine | mkN "verkoopster" feminine ; -- status=guess status=guess
 lin semantic_A = mkA "semantisch" ; -- status=guess
 lin semantics_N = mkN "semantiek" feminine ; -- status=guess
 lin semaphore_N = mkN "semafoor" masculine ; -- status=guess
@@ -14932,7 +14932,7 @@ lin serpent_N = mkN "serpent" neuter | mkN "slang" feminine ; -- status=guess st
 lin serrate_A = mkA "gekarteld" ; -- status=guess
 lin serrated_A = mkA "gekarteld" ; -- status=guess
 lin serum_N = variants{} ; --
-lin servant_N = mkN "hulp" | mkN "hulpje" | mkN "" | mkN "huishoudhulp" | mkN "bediende" | mkN "knecht" masculine | mkN "meid" feminine ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
+lin servantMasc_N = mkN "hulp" | mkN "hulpje" | mkN "" | mkN "huishoudhulp" | mkN "bediende" | mkN "knecht" masculine | mkN "meid" feminine ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
 lin serve_V = mkV (mkV "zijn") "verdiende loon" ; -- status=guess, src=wikt
 lin serve_V2 = mkV2 (mkV (mkV "zijn") "verdiende loon") ; -- status=guess, src=wikt
 --subcat lin serve_VS = mkVS (mkV (mkV "zijn") "verdiende loon") ; -- status=guess, src=wikt
@@ -15605,7 +15605,7 @@ lin sole_V2 = mkV2 (mkV "zolen") ; -- status=guess, src=wikt
 lin solely_Adv = variants{} ; --
 lin solemn_A = mkA "ernstig" ; -- status=guess
 lin solenoid_N = mkN "solenoïde" feminine ; -- status=guess
-lin solicitor_N = mkN "rechtskundig adviseur" masculine ; -- status=guess
+lin solicitorMasc_N = mkN "rechtskundig adviseur" masculine ; -- status=guess
 lin solicitude_N = mkN "zorg" | mkN "aandacht" ; -- status=guess status=guess
 lin solid_A = mkA "zwaar" ; -- status=guess
 lin solid_N = mkN "vast" ; -- status=guess
@@ -15753,7 +15753,7 @@ lin speck_N = mkN "vlek de" ; -- status=guess
 lin spectacle_N = mkN "spektakel" neuter ; -- status=guess
 lin spectacles_N = mkN "bril" masculine ; -- status=guess
 lin spectacular_A = variants{} ; --
-lin spectator_N = mkN "toeschouwer" masculine ; -- status=guess
+lin spectatorMasc_N = mkN "toeschouwer" masculine ; -- status=guess
 lin spectrograph_N = mkN "spectrograaf" masculine ; -- status=guess
 lin spectrum_N = variants{} ; --
 lin speculation_N = mkN "speculatie" feminine ; -- status=guess
@@ -15851,7 +15851,7 @@ lin spot_N = mkN "spot" masculine | mkN "reclamespot" masculine ; -- status=gues
 lin spot_V = mkV "lenen" | mkV "matsen" ; -- status=guess, src=wikt status=guess, src=wikt
 lin spot_V2 = mkV2 (mkV "lenen") | mkV2 (mkV "matsen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin spot_VS = mkVS (mkV "lenen") | mkVS (mkV "matsen") ; -- status=guess, src=wikt status=guess, src=wikt
-lin spouse_N = mkN "echtgenoot" | mkN "eega" | mkN "gade" ; -- status=guess status=guess status=guess
+lin spouseMasc_N = mkN "echtgenoot" | mkN "eega" | mkN "gade" ; -- status=guess status=guess status=guess
 lin sprain_V2 = mkV2 (mkV "verstuiken") ; -- status=guess, src=wikt
 lin sprat_N = mkN "sprot" masculine ; -- status=guess
 lin spray_N = variants{} ; --
@@ -16249,7 +16249,7 @@ lin stubble_N = mkN "stoppelbaard" masculine ; -- status=guess
 lin stubborn_A = mkA "hardnekkig" | mkA "koppig" ; -- status=guess status=guess
 lin stucco_N = mkN "stuc" | mkN "pleisterkalk" ; -- status=guess status=guess
 lin stud_N = mkN "stoeterij" feminine ; -- status=guess
-lin student_N = L.student_N ;
+lin studentMasc_N = L.student_N ;
 lin studio_N = mkN "atelier" neuter ; -- status=guess
 lin study_N = mkN "studie"; ---- mkN "studiezaal" the room one studies in
 lin study_V = mkV "studeren" | mkV "leren" ; -- status=guess, src=wikt status=guess, src=wikt
@@ -16762,7 +16762,7 @@ lin tea_N = mkN "theemuts" feminine ; -- status=guess
 lin teach_V = mkV "aanleren" | mkV "leren" | mkV "onderwijzen" | mkV "lesgeven" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin teach_V2 = L.teach_V2 ;
 lin teach_V2V = mkV2V (mkV "aanleren") | mkV2V (mkV "leren") | mkV2V (mkV "onderwijzen") | mkV2V (mkV "lesgeven") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin teacher_N = L.teacher_N ;
+lin teacherMasc_N = L.teacher_N ;
 lin teaching_N = mkN "onderwijzing" feminine ; -- status=guess
 lin teacup_N = mkN "theekopje" neuter ; -- status=guess
 lin teahouse_N = mkN "theehuis" neuter ; -- status=guess
@@ -16984,7 +16984,7 @@ lin think_V2 = mkV2 (denken_V) ;
 --subcat lin think_V2A = mkV2A (vinden_V) ;
 lin think_VS = mkVS (denken_V) ;
 lin thinkable_A = mkA "denkbaar" ; -- status=guess
-lin thinker_N = mkN "denker" masculine | mkN "intellectueel" ; -- status=guess status=guess
+lin thinkerMasc_N = mkN "denker" masculine | mkN "intellectueel" ; -- status=guess status=guess
 lin thinking_A = variants{} ; --
 lin thinking_N = variants{} ; --
 lin thirst_N = mkN "dorst" ; -- status=guess
@@ -17866,7 +17866,7 @@ lin used_A = mkA "gewend te" ; -- status=guess
 lin useful_A = mkA "nuttig" | mkA "bruikbaar" | mkA "dienstig" ; -- status=guess status=guess status=guess
 lin usefulness_N = mkN "bruikbaarheid" feminine ; -- status=guess
 lin useless_A = mkA "nutteloos" | mkA "onbruikbaar" ; -- status=guess status=guess
-lin user_N = mkN "gebruikersvriendelijkheid" | mkN "gebruiksvriendelijkheid" ; -- status=guess status=guess
+lin userMasc_N = mkN "gebruikersvriendelijkheid" | mkN "gebruiksvriendelijkheid" ; -- status=guess status=guess
 lin usher_N = mkN "plaatsaanwijzer" masculine ; -- status=guess
 lin usher_V2 = mkV2 (mkV "begeleiden") ; -- status=guess, src=wikt
 lin usual_A = mkA "gewoon" ; -- status=guess
@@ -18089,7 +18089,7 @@ lin violent_A = mkA "gewelddadig" ; -- status=guess
 lin violently_Adv = mkAdv "gewelddadig" ; -- status=guess
 lin violet_N = mkN "violet" ; -- status=guess
 lin violin_N = mkN "viool" ; -- status=guess
-lin violinist_N = mkN "violist" masculine ; -- status=guess
+lin violinistMasc_N = mkN "violist" masculine ; -- status=guess
 lin viper_N = mkN "adder" ; -- status=guess
 lin virgin_A = mkA "maagdelijk" ; -- status=guess
 lin virgin_N = mkN "maagd" feminine | mkN "jufrouw" feminine ; -- status=guess status=guess
@@ -18162,7 +18162,7 @@ lin volume_N = mkN "jaargang" masculine ; -- status=guess
 lin voluminous_A = mkA "volumineus" ; -- status=guess
 lin voluntarily_Adv = mkAdv "vrijwillig" ; -- status=guess
 lin voluntary_A = mkA "vrijwillig" ; -- status=guess
-lin volunteer_N = mkN "vrijwilliger" masculine ; -- status=guess
+lin volunteerMasc_N = mkN "vrijwilliger" masculine ; -- status=guess
 lin volunteer_V = variants{} ; --
 lin volunteer_V2 = variants{} ; --
 --subcat lin volunteer_V2V = variants{} ; --

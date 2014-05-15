@@ -668,7 +668,7 @@ lin staff_1_N = variants{} ; --
 lin certain_A = mkA "certo" ; -- status=guess
 lin certain_2_A = variants{} ; -- 
 lin certain_1_A = variants{} ; -- 
-lin student_N = L.student_N ;
+lin studentMasc_N = L.student_N ;
 lin half_Predet = variants{} ; -- 
 lin half_Predet = variants{} ; -- 
 lin around_Prep = variants{} ; -- 
@@ -766,7 +766,7 @@ lin watch_V = mkV "attento!" ; -- status=guess, src=wikt
 lin white_A = L.white_A ;
 lin situation_N = mkN "situazione" feminine ; -- status=guess
 lin ago_Adv = mkAdv "fa" ; -- status=guess
-lin teacher_N = L.teacher_N ;
+lin teacherMasc_N = L.teacher_N ;
 lin record_N = mkN "primato" ; -- status=guess
 lin record_3_N = variants{} ; -- 
 lin record_2_N = variants{} ; -- 
@@ -1178,7 +1178,7 @@ lin individual_A = variants{} ; --
 lin forward_Adv = mkAdv "avanti" ; -- status=guess
 lin announce_VS = variants{} ; -- 
 lin announce_V2 = variants{} ; -- 
-lin user_N = variants{} ; -- 
+lin userMasc_N = variants{} ; -- 
 lin fund_N = mkN "fondo" ; -- status=guess
 lin character_2_N = variants{} ; -- 
 lin character_1_N = variants{} ; -- 
@@ -1292,7 +1292,7 @@ lin left_A = mkA "sinistro" ; -- status=guess
 lin dead_A = mkA "morto" ; -- status=guess
 lin discussion_N = mkN "discussione" feminine ; -- status=guess
 lin specific_A = mkA "specifico" ; -- status=guess
-lin customer_N = variants{} ; -- 
+lin customerMasc_N = variants{} ; -- 
 lin box_N = mkN "bosso" ; -- status=guess
 lin outside_Prep = variants{} ; -- 
 lin state_VS = mkVS (mkV "dichiarare") ; -- status=guess, src=wikt
@@ -1351,7 +1351,7 @@ lin commission_N = variants{} ; --
 lin intend_VV = variants{} ; -- 
 lin beyond_Prep = variants{} ; -- 
 lin seat_N = mkN "sedile" masculine ; -- status=guess
-lin president_N = variants{} ; -- 
+lin presidentMasc_N = variants{} ; -- 
 lin encourage_V2V = mkV2V (mkV "incoraggiare") ; -- status=guess, src=wikt
 lin encourage_V2 = mkV2 (mkV "incoraggiare") ; -- status=guess, src=wikt
 lin addition_N = mkN "addizione" feminine ; -- status=guess
@@ -1492,7 +1492,7 @@ lin check_V = mkV "controllare" ; -- status=guess, src=wikt
 lin sun_N = L.sun_N ;
 lin species_N = mkN "specie" feminine ; -- status=guess
 lin possibility_N = mkN "possibilità" feminine ; -- status=guess
-lin official_N = variants{} ; -- 
+lin officialMasc_N = variants{} ; -- 
 lin chairman_N = mkN "presidente" masculine ; -- status=guess
 lin speaker_N = mkN "altoparlante" masculine ; -- status=guess
 lin second_N = mkN "secondo" ; -- status=guess
@@ -1705,7 +1705,7 @@ lin supply_V2 = mkV2 (mkV "supplire") ; -- status=guess, src=wikt
 lin beat_V2 = mkV2 (mkV (mkV "menare") "il can per l'aia") ; -- status=guess, src=wikt
 lin beat_V = mkV (mkV "menare") "il can per l'aia" ; -- status=guess, src=wikt
 lin artist_N = mkN "artista" masculine ; -- status=guess
-lin agent_N = variants{} ; -- 
+lin agentMasc_N = variants{} ; -- 
 lin presence_N = mkN "presenza" ; -- status=guess
 lin along_Adv = variants{} ; -- 
 lin environmental_A = mkA "ambientale" ; -- status=guess
@@ -1742,7 +1742,7 @@ lin proportion_N = variants{} ; --
 lin primary_A = mkA "primario" ; -- status=guess
 lin consideration_N = variants{} ; -- 
 lin reform_N = variants{} ; -- 
-lin driver_N = mkN "patente di guida" ; -- status=guess
+lin driverMasc_N = mkN "patente di guida" ; -- status=guess
 lin annual_A = mkA "annuale" ; -- status=guess
 lin nuclear_A = mkA "nucleare" ; -- status=guess
 lin latter_A = variants{} ; -- 
@@ -1769,7 +1769,7 @@ lin credit_N = mkN "credito" ; -- status=guess
 lin usual_A = mkA "solito" | mkA "usuale" | mkA "consueto" ; -- status=guess status=guess status=guess
 lin link_V2 = mkV2 (mkV "collegare") | mkV2 (mkV "connettere") | mkV2 (mkV "linkare") ;
 lin link_V = mkV "collegare" | mkV "connettere" | mkV "linkare" ;
-lin candidate_N = variants{} ; -- 
+lin candidateMasc_N = variants{} ; -- 
 lin track_N = mkN "atletica leggera" ; -- status=guess
 lin safe_A = mkA "sicuro" ; -- status=guess
 lin interested_A = mkA "interessato" | mkA "interessata" ; -- status=guess status=guess
@@ -2163,7 +2163,7 @@ lin hide_V = mkV "nascondersi" ; -- status=guess, src=wikt
 lin offence_N = variants{} ; -- 
 lin absence_N = mkN "assenza" ; -- status=guess
 lin error_N = mkN "errore" masculine ; -- status=guess
-lin representative_N = variants{} ; -- 
+lin representativeMasc_N = variants{} ; -- 
 lin enterprise_N = mkN "impresa" ; -- status=guess
 lin criticism_N = mkN "critica" ; -- status=guess
 lin average_A = mkA "medio" | mkA "media" ; -- status=guess status=guess
@@ -2286,7 +2286,7 @@ lin fast_Adv = mkAdv "in anticipo" ; -- status=guess
 lin fast_A = mkA "avanti" ; -- status=guess
 lin closely_Adv = variants{} ; -- 
 lin thin_A = L.thin_A ;
-lin solicitor_N = variants{} ; -- 
+lin solicitorMasc_N = variants{} ; -- 
 lin secure_V2 = variants{} ; -- 
 lin plate_N = mkN "piatto" | mkN "portata" ; -- status=guess status=guess
 lin pool_N = mkN "bacino" | mkN "invaso" ; -- status=guess status=guess
@@ -2561,7 +2561,7 @@ lin fuel_N = variants{} ; --
 lin mine_N = mkN "mina" ; -- status=guess
 lin appeal_V2 = variants{} ; -- 
 lin appeal_V = variants{} ; -- 
-lin servant_N = variants{} ; -- 
+lin servantMasc_N = variants{} ; -- 
 lin liability_N = mkN "responsabilità" feminine ; -- status=guess
 lin constant_A = mkA "costante" ; -- status=guess
 lin hate_VV = mkVV (mkV "odiare") ; -- status=guess, src=wikt
@@ -2633,7 +2633,7 @@ lin paint_V = mkV "verniciare" ; -- status=guess, src=wikt
 lin judge_VS = mkVS (mkV "giudicare") ; -- status=guess, src=wikt
 lin judge_V2 = mkV2 (mkV "giudicare") ; -- status=guess, src=wikt
 lin judge_V = mkV "giudicare" ; -- status=guess, src=wikt
-lin citizen_N = variants{} ; -- 
+lin citizenMasc_N = variants{} ; -- 
 lin permanent_A = mkA "permanente" ; -- status=guess
 lin weak_A = mkA "debole" ; -- status=guess
 lin separate_V2 = mkV2 (mkV "separare") ; -- status=guess, src=wikt
@@ -2754,7 +2754,7 @@ lin crown_N = mkN "corona" ; -- status=guess
 lin permit_V2V = variants{} ; -- 
 lin permit_V2 = variants{} ; -- 
 lin permit_V = variants{} ; -- 
-lin buyer_N = variants{} ; -- 
+lin buyerMasc_N = variants{} ; -- 
 lin gift_N = mkN "dono" | mkN "talento" ; -- status=guess status=guess
 lin resolution_N = mkN "risoluzione" feminine ; -- status=guess
 lin angry_A = mkA "arrabbiato" ; -- status=guess
@@ -3223,7 +3223,7 @@ lin qualify_V = variants{} ; --
 lin paragraph_N = mkN "paragrafo" ; -- status=guess
 lin sick_A = mkA "ammalato" | mkA "ammalata" ; -- status=guess status=guess
 lin near_A = L.near_A ;
-lin researcher_N = variants{} ; -- 
+lin researcherMasc_N = variants{} ; -- 
 lin consent_N = mkN "consenso" ; -- status=guess
 lin written_A = variants{} ; -- 
 lin literary_A = mkA "letterario" ; -- status=guess
@@ -3248,7 +3248,7 @@ lin birthday_N = mkN "compleanno" ; -- status=guess
 lin knife_N = mkN "lama" masculine ; -- status=guess
 lin extreme_A = mkA "profondo" | mkA "profonda" ; -- status=guess status=guess
 lin core_N = mkN "caparra" ; -- status=guess
-lin peasant_N = variants{} ; -- 
+lin peasantMasc_N = variants{} ; -- 
 lin armed_A = variants{} ; -- 
 lin permission_N = mkN "permesso" ; -- status=guess
 lin supreme_A = mkA "supremo" | mkA "suprema" ; -- status=guess status=guess
@@ -3339,7 +3339,7 @@ lin tower_N = mkN "la torre" | mkN "il fulmine" ; -- status=guess status=guess
 lin deposit_N = mkN "caparra" ; -- status=guess
 lin pace_N = mkN "passo" ; -- status=guess
 lin compensation_N = variants{} ; -- 
-lin adviser_N = variants{} ; -- 
+lin adviserMasc_N = variants{} ; -- 
 lin consultant_N = variants{} ; -- 
 lin drag_V2 = mkV2 (mkV "trainare") ; -- status=guess, src=wikt
 lin drag_V = mkV "trainare" ; -- status=guess, src=wikt
@@ -3489,7 +3489,7 @@ lin apple_N = L.apple_N ;
 lin catalogue_N = mkN "catalogo" | mkN "cataloghi" masculine ; -- status=guess status=guess
 lin tip_N = mkN "punta" ; -- status=guess
 lin publisher_N = mkN "editore" masculine ; -- status=guess
-lin opponent_N = variants{} ; -- 
+lin opponentMasc_N = variants{} ; -- 
 lin live_A = mkA "vivo" ; -- status=guess
 lin burden_N = mkN "preoccupazione" feminine | mkN "fardello" ; -- status=guess status=guess
 lin tackle_V2 = mkV2 (mkV "affrontare") | mkV2 (mkV "contrastare") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -3544,7 +3544,7 @@ lin considerably_Adv = variants{} ; --
 lin distant_A = variants{} ; -- 
 lin lower_V2 = mkV2 (mkV "abbassare") ; -- status=guess, src=wikt
 lin lower_V = mkV "abbassare" ; -- status=guess, src=wikt
-lin favourite_N = variants{} ; -- 
+lin favouriteMasc_N = variants{} ; -- 
 lin tear_V2 = mkV2 (mkV "strappare") ; -- status=guess, src=wikt
 lin tear_V = mkV "strappare" ; -- status=guess, src=wikt
 lin fixed_A = variants{} ; -- 
@@ -3781,7 +3781,7 @@ lin album_N = variants{} ; --
 lin guideline_N = mkN "linea guida" ; -- status=guess
 lin disturb_V2 = variants{} ; -- 
 lin amendment_N = variants{} ; -- 
-lin architect_N = variants{} ; -- 
+lin architectMasc_N = variants{} ; -- 
 lin objection_N = mkN "obiezione" feminine ; -- status=guess
 lin chart_N = mkN "carta" | mkN "carta nautica" | mkN "carta geografica" ; -- status=guess status=guess status=guess
 lin cattle_N = mkN "bestiame" masculine ; -- status=guess
@@ -3861,7 +3861,7 @@ lin gaze_V = mkV "guardare" | mkV (mkV "puntare") "gli occhi" | mkV (volgere_V) 
 lin burst_V2 = mkV2 (mkV "scoppiare") | mkV2 (esplodere_V) ; -- status=guess, src=wikt status=guess, src=wikt
 lin burst_V = mkV "scoppiare" | esplodere_V ; -- status=guess, src=wikt status=guess, src=wikt
 lin charter_N = mkN "carta" ; -- status=guess
-lin feminist_N = variants{} ; -- 
+lin feministMasc_N = variants{} ; -- 
 lin discourse_N = mkN "discorso" ; -- status=guess
 lin reflection_N = mkN "riflessione" ; -- status=guess
 lin carbon_N = mkN "carbonio" ; -- status=guess
@@ -3937,7 +3937,7 @@ lin murder_V2 = mkV2 (mkV "massacrare") ; -- status=guess, src=wikt
 lin sigh_VS = mkVS (mkV "sospirare") ; -- status=guess, src=wikt
 lin sigh_V2 = mkV2 (mkV "sospirare") ; -- status=guess, src=wikt
 lin sigh_V = mkV "sospirare" ; -- status=guess, src=wikt
-lin seller_N = variants{} ; -- 
+lin sellerMasc_N = variants{} ; -- 
 lin lease_N = variants{} ; -- 
 lin bitter_A = mkA "aspro" | mkA "aspra" ; -- status=guess status=guess
 lin double_V2 = variants{} ; -- 
@@ -4157,7 +4157,7 @@ lin oblige_V2 = variants{} ; --
 lin accountant_N = mkN "contabile" | mkN "ragioniere" masculine ; -- status=guess status=guess
 lin mutual_A = mkA "mutuo" | mkA "vicendevole" ; -- status=guess status=guess
 lin fat_N = L.fat_N ;
-lin volunteer_N = variants{} ; -- 
+lin volunteerMasc_N = variants{} ; -- 
 lin laughter_N = mkN "risata" ; -- status=guess
 lin trick_N = variants{} ; -- 
 lin load_V2 = variants{} ; -- 
@@ -4506,7 +4506,7 @@ lin productivity_N = mkN "produttività" feminine ; -- status=guess
 lin initiate_V2 = mkV2 (mkV "iniziare") | mkV2 (mkV "cominciare") | mkV2 (mkV "presentare") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin probability_N = mkN "probabilità" feminine ; -- status=guess
 lin virus_N = variants{} ; -- 
-lin reporter_N = variants{} ; -- 
+lin reporterMasc_N = variants{} ; -- 
 lin fool_N = mkN "il matto" | mkN "il folle" ; -- status=guess status=guess
 lin pop_V2 = mkV2 (mkV "spuntare") | mkV2 (mkV (mkV "saltare") "fuori") ; -- status=guess, src=wikt status=guess, src=wikt
 lin capitalism_N = mkN "capitalismo" ; -- status=guess
@@ -4610,7 +4610,7 @@ lin fade_V = variants{} ; --
 lin chemistry_N = mkN "chimica" ; -- status=guess
 lin unnecessary_A = mkA "inutile" ; -- status=guess
 lin hit_N = mkN "colpo" ; -- status=guess
-lin defender_N = variants{} ; -- 
+lin defenderMasc_N = variants{} ; -- 
 lin stance_N = mkN "postura" ; -- status=guess
 lin sin_N = mkN "peccato" ; -- status=guess
 lin realistic_A = mkA "realistico" ; -- status=guess
@@ -4713,7 +4713,7 @@ lin extract_V2 = mkV2 (mkV "cavare") ; -- status=guess, src=wikt
 lin concession_N = variants{} ; -- 
 lin autonomy_N = mkN "autonomia" ; -- status=guess
 lin norm_N = mkN "norma" ; -- status=guess
-lin musician_N = variants{} ; -- 
+lin musicianMasc_N = variants{} ; -- 
 lin graduate_N = mkN "diplomato" | mkN "diplomata" ; -- status=guess status=guess
 lin glory_N = mkN "gloria" ; -- status=guess
 lin bear_N = mkN "cucciolo di orso" | mkN "orsetto" ; -- status=guess status=guess
@@ -4879,7 +4879,7 @@ lin mild_A = mkA "delicato" | mkA "delicata" | mkA "mite" ; -- status=guess stat
 lin chronic_A = mkA "cronico" ; -- status=guess
 lin splendid_A = mkA "splendido" ; -- status=guess
 lin function_V = mkV "funzionare" ; -- status=guess, src=wikt
-lin rider_N = variants{} ; -- 
+lin riderMasc_N = variants{} ; -- 
 lin clay_N = mkN "argilla" | mkN "creta" ; -- status=guess status=guess
 lin firstly_Adv = variants{} ; -- 
 lin conceive_V2 = mkV2 (mkV "concepire") ; -- status=guess, src=wikt
@@ -4890,7 +4890,7 @@ lin accuracy_N = mkN "esattezza" | mkN "precisione" feminine | mkN "accuratezza"
 lin coup_N = mkN "colpo di stato" ; -- status=guess
 lin ambulance_N = mkN "ambulanza" ; -- status=guess
 lin living_N = mkN "soggiorno" | mkN "salotto" ; -- status=guess status=guess
-lin offender_N = variants{} ; -- 
+lin offenderMasc_N = variants{} ; -- 
 lin similarity_N = variants{} ; -- 
 lin orchestra_N = mkN "orchestra" ; -- status=guess
 lin brush_N = mkN "spazzola" | mkN "pennello" ; -- status=guess status=guess
@@ -5311,7 +5311,7 @@ lin discipline_V2 = variants{} ; --
 lin halt_V2 = mkV2 (mkV "fermare") ; -- status=guess, src=wikt
 lin halt_V = mkV "fermare" ; -- status=guess, src=wikt
 lin electronics_N = mkN "elettronica" ; -- status=guess
-lin administrator_N = variants{} ; -- 
+lin administratorMasc_N = variants{} ; -- 
 lin sentence_V2 = mkV2 (mkV "condannare") ; -- status=guess, src=wikt
 lin sentence_V = mkV "condannare" ; -- status=guess, src=wikt
 lin ill_Adv = variants{} ; -- 
@@ -5664,7 +5664,7 @@ lin managerial_A = mkA "manageriale" ; -- status=guess
 lin elaborate_A = mkA "elaborato" | mkA "elaborata" ; -- status=guess status=guess
 lin restraint_N = mkN "ritegno" | mkN "ritegni" masculine ; -- status=guess status=guess
 lin renew_V2 = variants{} ; -- 
-lin gardener_N = variants{} ; -- 
+lin gardenerMasc_N = variants{} ; -- 
 lin dilemma_N = mkN "dilemma" masculine ; -- status=guess
 lin configuration_N = mkN "configurazione" feminine ; -- status=guess
 lin rear_A = variants{} ; -- 
@@ -5784,7 +5784,7 @@ lin disagree_VS = mkVS (mkV "discordare") ; -- status=guess, src=wikt
 lin disagree_V2 = mkV2 (mkV "discordare") ; -- status=guess, src=wikt
 lin disagree_V = mkV "discordare" ; -- status=guess, src=wikt
 lin boyfriend_N = mkN "ragazzo" | mkN "fidanzato" ; -- status=guess status=guess
-lin activist_N = variants{} ; -- 
+lin activistMasc_N = variants{} ; -- 
 lin viewer_N = mkN "spettatore" masculine ; -- status=guess
 lin slim_A = mkA "snello" | mkA "magro" | mkA "affusolato" ; -- status=guess status=guess status=guess
 lin textile_N = variants{} ; -- 
@@ -5988,7 +5988,7 @@ lin prescribe_V = variants{} ; --
 lin calcium_N = mkN "calcio" ; -- status=guess
 lin redundant_A = variants{} ; -- 
 lin marker_N = mkN "marcatore" ; -- status=guess
-lin chemist_N = variants{} ; -- 
+lin chemistMasc_N = variants{} ; -- 
 lin mammal_N = mkN "mammifero" ; -- status=guess
 lin legacy_N = mkN "eredità" feminine ; -- status=guess
 lin debtor_N = mkN "debitore" | mkN "debitrice" feminine ; -- status=guess status=guess
@@ -6216,7 +6216,7 @@ lin patience_N = mkN "pazienza" ; -- status=guess
 lin legally_Adv = variants{} ; -- 
 lin habitat_N = variants{} ; -- 
 lin queue_N = mkN "coda" ; -- status=guess
-lin spectator_N = variants{} ; -- 
+lin spectatorMasc_N = variants{} ; -- 
 lin given_A = variants{} ; -- 
 lin purple_A = variants{} ; -- 
 lin outlook_N = mkN "punto di vista" ; -- status=guess
@@ -6385,7 +6385,7 @@ lin disclosure_N = variants{} ; --
 lin lace_N = mkN "laccio" | mkN "stringa" ; -- status=guess status=guess
 lin inability_N = variants{} ; -- 
 lin motif_N = variants{} ; -- 
-lin listener_N = variants{} ; -- 
+lin listenerMasc_N = variants{} ; -- 
 lin hunt_N = mkN "caccia" masculine | mkN "spedizione di caccia" ; -- status=guess status=guess
 lin delicious_A = mkA "squisito" | mkA "delizioso" ; -- status=guess status=guess
 lin term_VS = variants{} ; -- 
@@ -7028,7 +7028,7 @@ lin witch_N = mkN "strega" | mkN "fattucchiera" ; -- status=guess status=guess
 lin renewed_A = variants{} ; -- 
 lin jar_N = mkN "teglia" | mkN "vaso" | mkN "giara" ; -- status=guess status=guess status=guess
 lin approved_A = variants{} ; -- 
-lin advocate_N = variants{} ; -- 
+lin advocateMasc_N = variants{} ; -- 
 lin worrying_A = variants{} ; -- 
 lin minimize_V2 = mkV2 (mkV "minimizzare") ; -- status=guess, src=wikt
 lin footstep_N = mkN "pedata" ; -- status=guess
@@ -7063,7 +7063,7 @@ lin clerical_A = variants{} ; --
 lin hire_N = variants{} ; -- 
 lin contend_VS = variants{} ; -- 
 lin contend_V = variants{} ; -- 
-lin amateur_N = variants{} ; -- 
+lin amateurMasc_N = variants{} ; -- 
 lin instrumental_A = variants{} ; -- 
 lin terminal_A = variants{} ; -- 
 lin electorate_N = mkN "elettorato" ; -- status=guess
@@ -7523,7 +7523,7 @@ lin latin_A = variants{} ; --
 lin hover_V = mkV "librarsi" | mkV "volteggiare" ; -- status=guess, src=wikt status=guess, src=wikt
 lin greeting_N = mkN "saluto" ; -- status=guess
 lin chase_N = mkN "caccia" masculine | mkN "cacciare" ; -- status=guess status=guess
-lin spouse_N = variants{} ; -- 
+lin spouseMasc_N = variants{} ; -- 
 lin produce_N = mkN "prodotto" ; -- status=guess
 lin forge_V2 = variants{} ; -- 
 lin forge_V = variants{} ; -- 
