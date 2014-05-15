@@ -649,7 +649,7 @@ staff_1_N
 certain_A
 certain_2_A
 certain_1_A
-student_N
+studentMasc_N
 half_Predet
 half_Predet
 around_Prep
@@ -747,7 +747,7 @@ watch_V
 white_A
 situation_N
 ago_Adv
-teacher_N
+teacherMasc_N
 record_N
 record_3_N
 record_2_N
@@ -1159,7 +1159,7 @@ individual_A
 forward_Adv
 announce_VS
 announce_V2
-user_N
+userMasc_N
 fund_N
 character_2_N
 character_1_N
@@ -1273,7 +1273,7 @@ left_A
 dead_A
 discussion_N
 specific_A
-customer_N
+customerMasc_N
 box_N
 outside_Prep
 state_VS
@@ -1332,7 +1332,7 @@ commission_N
 intend_VV
 beyond_Prep
 seat_N
-president_N
+presidentMasc_N
 encourage_V2V
 encourage_V2
 addition_N
@@ -1473,7 +1473,7 @@ check_V
 sun_N
 species_N
 possibility_N
-official_N
+officialMasc_N
 chairman_N
 speaker_N
 second_N
@@ -1686,7 +1686,7 @@ supply_V2
 beat_V2
 beat_V
 artist_N
-agent_N
+agentMasc_N
 presence_N
 along_Adv
 environmental_A
@@ -1723,7 +1723,7 @@ proportion_N
 primary_A
 consideration_N
 reform_N
-driver_N
+driverMasc_N
 annual_A
 nuclear_A
 latter_A
@@ -1750,7 +1750,7 @@ credit_N
 usual_A
 link_V2
 link_V
-candidate_N
+candidateMasc_N
 track_N
 safe_A
 interested_A
@@ -2144,7 +2144,7 @@ hide_V
 offence_N
 absence_N
 error_N
-representative_N
+representativeMasc_N
 enterprise_N
 criticism_N
 average_A
@@ -2267,7 +2267,7 @@ fast_Adv
 fast_A
 closely_Adv
 thin_A
-solicitor_N
+solicitorMasc_N
 secure_V2
 plate_N
 pool_N
@@ -2542,7 +2542,7 @@ fuel_N
 mine_N
 appeal_V2
 appeal_V
-servant_N
+servantMasc_N
 liability_N
 constant_A
 hate_VV
@@ -2614,7 +2614,7 @@ paint_V
 judge_VS
 judge_V2
 judge_V
-citizen_N
+citizenMasc_N
 permanent_A
 weak_A
 separate_V2
@@ -2735,7 +2735,7 @@ crown_N
 permit_V2V
 permit_V2
 permit_V
-buyer_N
+buyerMasc_N
 gift_N
 resolution_N
 angry_A
@@ -3204,7 +3204,7 @@ qualify_V
 paragraph_N
 sick_A
 near_A
-researcher_N
+researcherMasc_N
 consent_N
 written_A
 literary_A
@@ -3229,7 +3229,7 @@ birthday_N
 knife_N
 extreme_A
 core_N
-peasant_N
+peasantMasc_N
 armed_A
 permission_N
 supreme_A
@@ -3320,7 +3320,7 @@ tower_N
 deposit_N
 pace_N
 compensation_N
-adviser_N
+adviserMasc_N
 consultant_N
 drag_V2
 drag_V
@@ -3470,7 +3470,7 @@ apple_N
 catalogue_N
 tip_N
 publisher_N
-opponent_N
+opponentMasc_N
 live_A
 burden_N
 tackle_V2
@@ -3525,7 +3525,7 @@ considerably_Adv
 distant_A
 lower_V2
 lower_V
-favourite_N
+favouriteMasc_N
 tear_V2
 tear_V
 fixed_A
@@ -3762,7 +3762,7 @@ album_N
 guideline_N
 disturb_V2
 amendment_N
-architect_N
+architectMasc_N
 objection_N
 chart_N
 cattle_N
@@ -3842,7 +3842,7 @@ gaze_V
 burst_V2
 burst_V
 charter_N
-feminist_N
+feministMasc_N
 discourse_N
 reflection_N
 carbon_N
@@ -3918,7 +3918,7 @@ murder_V2
 sigh_VS
 sigh_V2
 sigh_V
-seller_N
+sellerMasc_N
 lease_N
 bitter_A
 double_V2
@@ -4138,7 +4138,7 @@ oblige_V2
 accountant_N
 mutual_A
 fat_N
-volunteer_N
+volunteerMasc_N
 laughter_N
 trick_N
 load_V2
@@ -4487,7 +4487,7 @@ productivity_N
 initiate_V2
 probability_N
 virus_N
-reporter_N
+reporterMasc_N
 fool_N
 pop_V2
 capitalism_N
@@ -4591,7 +4591,7 @@ fade_V
 chemistry_N
 unnecessary_A
 hit_N
-defender_N
+defenderMasc_N
 stance_N
 sin_N
 realistic_A
@@ -4694,7 +4694,7 @@ extract_V2
 concession_N
 autonomy_N
 norm_N
-musician_N
+musicianMasc_N
 graduate_N
 glory_N
 bear_N
@@ -4860,7 +4860,7 @@ mild_A
 chronic_A
 splendid_A
 function_V
-rider_N
+riderMasc_N
 clay_N
 firstly_Adv
 conceive_V2
@@ -4871,7 +4871,7 @@ accuracy_N
 coup_N
 ambulance_N
 living_N
-offender_N
+offenderMasc_N
 similarity_N
 orchestra_N
 brush_N
@@ -5292,7 +5292,7 @@ discipline_V2
 halt_V2
 halt_V
 electronics_N
-administrator_N
+administratorMasc_N
 sentence_V2
 sentence_V
 ill_Adv
@@ -5645,7 +5645,7 @@ managerial_A
 elaborate_A
 restraint_N
 renew_V2
-gardener_N
+gardenerMasc_N
 dilemma_N
 configuration_N
 rear_A
@@ -5765,7 +5765,7 @@ disagree_VS
 disagree_V2
 disagree_V
 boyfriend_N
-activist_N
+activistMasc_N
 viewer_N
 slim_A
 textile_N
@@ -5969,7 +5969,7 @@ prescribe_V
 calcium_N
 redundant_A
 marker_N
-chemist_N
+chemistMasc_N
 mammal_N
 legacy_N
 debtor_N
@@ -6197,7 +6197,7 @@ patience_N
 legally_Adv
 habitat_N
 queue_N
-spectator_N
+spectatorMasc_N
 given_A
 purple_A
 outlook_N
@@ -6366,7 +6366,7 @@ disclosure_N
 lace_N
 inability_N
 motif_N
-listener_N
+listenerMasc_N
 hunt_N
 delicious_A
 term_VS
@@ -7009,7 +7009,7 @@ witch_N
 renewed_A
 jar_N
 approved_A
-advocate_N
+advocateMasc_N
 worrying_A
 minimize_V2
 footstep_N
@@ -7044,7 +7044,7 @@ clerical_A
 hire_N
 contend_VS
 contend_V
-amateur_N
+amateurMasc_N
 instrumental_A
 terminal_A
 electorate_N
@@ -7504,7 +7504,7 @@ latin_A
 hover_V
 greeting_N
 chase_N
-spouse_N
+spouseMasc_N
 produce_N
 forge_V2
 forge_V
