@@ -180,6 +180,7 @@ proj l v =
       VFV vs -> liftM vfv (mapM (proj l) vs)
       VRec rs -> lookup l rs
       VExtR v1 v2 -> proj l v2 `mplus` proj l v1 -- hmm
+      VS (VV pty pvs rs) v2 -> flip VS v2 . VV pty pvs # mapM (proj l) rs
       _ -> return (ok1 VP v l)
 
 ok1 f v1@(VError {}) _ = v1
