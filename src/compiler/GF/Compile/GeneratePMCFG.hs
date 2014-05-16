@@ -154,9 +154,7 @@ convert opts gr cenv loc term ty@(_,val) pargs =
             then-} normalForm cenv loc (expand ty term) -- new evaluator
             --else term -- old evaluator is invoked from GF.Compile.Optimize
 
-expand ty@(context,val) = recordExpand val . etaExpand ty
-
-etaExpand (context,val) = mkAbs pars . flip mkApp args
+expand (context,val) = mkAbs pars . recordExpand val . flip mkApp args
   where pars = [(Explicit,v) | v <- vars]
         args = map Vr vars
         vars = map (\(bt,x,t) -> x) context
