@@ -32,7 +32,8 @@ fun
   is_right_VP   : VP ;                 -- he is right / il a raison (Fre) 
   is_wrong_VP   : VP ;                 -- he is wrong / han har fel (Swe)
 
-  n_units_AP    : Card -> CN -> A -> AP ;  -- x inches long
+  n_units_AP    : Card -> CN -> A  -> AP ;  -- x inches long
+  n_units_of_NP : Card -> CN -> NP -> NP ;  -- x ounces of this flour
 
 -- containers
   bottle_of_CN : NP -> CN ;       -- bottle of beer / flaska öl (Swe)
