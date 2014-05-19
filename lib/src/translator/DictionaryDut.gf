@@ -12128,7 +12128,7 @@ lin peninsula_N = mkN "schiereiland" neuter ; -- status=guess
 lin penis_N = mkN "penis" | mkN "lid" neuter | mkN "mannelijk lid" neuter | mkN "penis" ; -- status=guess status=guess status=guess status=guess
 lin pennant_N = mkN "vaan" ; -- status=guess
 lin penny_N = mkN "hoge bi" masculine feminine ; -- status=guess
-lin pension_N = mkN "" ; -- status=guess
+lin pension_N = mkN "pension" neuter ;
 lin pension_V2 = mkV2 (mkV "pensioneren") | mkV2 (mkV (mkV "met") "pensioen sturen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin pensioner_N = mkN "gepensioneerde" masculine feminine ; -- status=guess
 lin pent_A = mkA "onderdrukt" | mkA "onuitgesproken" ; -- status=guess status=guess
