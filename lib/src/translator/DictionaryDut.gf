@@ -18357,8 +18357,8 @@ lin wearer_N = mkN "drager" masculine | mkN "draagster" feminine ; -- status=gue
 lin weary_A = variants {} ; --mkA "uitputting" feminine | mkA "vermoeidheid" feminine ; -- status=guess status=guess
 lin weary_V = mkV "uitputten" | mkV "vermoeien" ; -- status=guess, src=wikt status=guess, src=wikt
 lin weary_V2 = mkV2 (mkV "uitputten") | mkV2 (mkV "vermoeien") ; -- status=guess, src=wikt status=guess, src=wikt
-lin weasel_N = mkN "wezel " masculine ; -- status=guess
-lin weather_N = mkN "weerballon" masculine ; -- status=guess
+lin weasel_N = mkN "wezel" masculine ; -- status=guess
+lin weather_N = mkN "weer" neuter ;
 lin weave_N = mkN "weefsel" neuter ; -- status=guess
 lin weave_V = weven_V ; -- status=guess, src=wikt
 lin weave_V2 = mkV2 (weven_V) ; -- status=guess, src=wikt
