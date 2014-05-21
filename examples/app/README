@@ -18,7 +18,7 @@ repository (darcs or github):
   GF/examples/phrasebook     -- Phrasebook sources
   GF/examples/app            -- App sources (this directory)
 
-3. Do 'make' and take a cup of coffee. If you have multiple cores, do 'make -j' and take an espresso.
+3. Do 'make' and take a cup of coffee. If you have multiple cores, do first 'make Phrasebook' and then 'make -j App11.pgf' and take an espresso.
 
 4. Go to GF/src/ui/android and follow the README
 
