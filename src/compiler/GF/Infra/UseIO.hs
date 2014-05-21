@@ -93,7 +93,8 @@ extendPathEnv opts = liftIO $ do
       _   -> do exists <- doesDirectoryExist p
                 if exists
                   then return [p]
-                  else return []
+                  else do when (verbAtLeast opts Verbose) $ putStrLn ("ignore path "++p)
+                          return []
 
 getSubdirs :: FilePath -> IO [FilePath]
 getSubdirs dir = do
