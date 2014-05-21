@@ -10857,10 +10857,9 @@ lin mouse_V = mkV (mkV "muizen") "vangen" ; -- status=guess, src=wikt
 lin moustache_N = mkN "snor" feminine ; -- status=guess
 lin mouth_N = L.mouth_N ;
 lin movable_A = mkA "beweegbaar" ; -- status=guess
-lin move_1_V = move_V ;
+lin move_1_V = mkV "bewegen" "bewoog" "bewogen" "bewogen" | mkV "verplaatsen";
 lin move_2_V = mkV "verhuizen" ;
 lin move_N = mkN "stap" masculine | mkN "maatregel" masculine ; -- status=guess status=guess
-lin move_V = mkV "bewegen" "bewoog" "bewogen" "bewogen" | mkV "verplaatsen";
 lin move_V2 = mkV2 move_V | mkV2 move_V ;
 --subcat lin move_V2A = mkV2A move_V ;
 --subcat lin move_V2V = mkV2V (mkV "bewegen") ; ---- subcat
