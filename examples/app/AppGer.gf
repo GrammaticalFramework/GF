@@ -1,4 +1,4 @@
---# -path=.:../../lib/src/chunk:../../lib/src/translator:../examples/phrasebook/gfos:alltenses::../../lib/src/german
+--# -path=.:../../lib/src/chunk:../../lib/src/translator:../phrasebook/gfos:alltenses::../../lib/src/german
 
 concrete AppGer of App = 
 
