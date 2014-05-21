@@ -1,4 +1,4 @@
---# -path=.:../../lib/src/chunk:../../lib/src/translator:../examples/phrasebook/gfos
+--# -path=.:../../lib/src/chunk:../../lib/src/translator:../phrasebook/gfos
 
 concrete AppFre of App = 
 
