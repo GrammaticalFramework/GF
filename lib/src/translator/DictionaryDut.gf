@@ -6535,7 +6535,6 @@ lin firm_A = variants{} ; --
 lin firm_N = variants{} ; --
 lin firmament_N = mkN "hemelgewelf" neuter ; -- status=guess
 lin firmly_Adv = mkAdv "stevig" ; -- status=guess
-lin first_A = mkA "eerst" ; -- status=guess
 lin firstborn_N = mkN "eerstgeborene" masculine ; -- status=guess
 lin firstly_Adv = variants{} ; --
 lin fiscal_A = mkA "fiscaal" ; -- status=guess

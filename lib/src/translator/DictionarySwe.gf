@@ -21652,7 +21652,6 @@ lin firmamental_A = variants {} ; -- status=guess
 lin firmly_Adv = variants{} ;
 lin firmness_N = variants {} ; -- status=guess
 lin firmware_N = mkN "firmware" ; -- status=guess
-lin first_A = mkA "först" ; -- status=guess
 lin first_Adv = mkAdv "först" ; -- status=guess
 lin first_class_A = variants {} ; -- status=guess
 lin first_class_Adv = variants {} ; -- status=guess
