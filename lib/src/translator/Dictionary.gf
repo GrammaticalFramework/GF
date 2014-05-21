@@ -666,12 +666,10 @@ fun activism_N : N ;
 fun activistFem_N : N ;
 fun activistMasc_N : N ;
 fun activist_A : A ;
-fun activist_N : N  ;
 fun activity_N : N ;
 fun actomyosin_N : N ;
 fun actor_1_N : N  ;  -- | a Shakespeare actor
 fun actor_2_N : N  ;  -- | an important actor
-fun actor_N : N ;
 fun actress_N : N ;
 fun actual_A : A ;
 fun actuality_N : N ;
@@ -852,7 +850,6 @@ fun administrative_A : A ;
 fun administratively_Adv : Adv  ;
 fun administratorFem_N : N ;
 fun administratorMasc_N : N ;
-fun administrator_N : N  ;
 fun administrivia_N : N ;
 fun admirability_N : N ;
 fun admirable_A : A ;
@@ -997,14 +994,12 @@ fun advise_VS : VS ;
 fun advisee_N : N ;
 fun adviserFem_N : N ;
 fun adviserMasc_N : N ;
-fun adviser_N : N  ;
 fun advisor_N : N  ;
 fun advisory_A : A ;
 fun advisory_N : N ;
 fun advocacy_N : N ;
 fun advocateFem_N : N ;
 fun advocateMasc_N : N ;
-fun advocate_N : N  ;
 fun advocate_V2 : V2 ;
 fun advocate_VS : VS ;
 fun advowson_N : N ;
@@ -1243,7 +1238,6 @@ fun agenda_N : N ;
 fun agenesis_N : N ;
 fun agentFem_N : N ;
 fun agentMasc_N : N ;
-fun agent_N : N  ;
 fun agent_provocateur_N : N ;
 fun agential_A : A ;
 fun agerasia_N : N ;
@@ -1608,7 +1602,6 @@ fun alidade_N : N ;
 fun alienFem_N : N ;
 fun alienMasc_N : N ;
 fun alien_A : A ;
-fun alien_N : N  ;
 fun alienable_A : A ;
 fun alienage_N : N ;
 fun alienate_V2 : V2 ;
@@ -1929,7 +1922,6 @@ fun amastia_N : N ;
 fun amateurFem_N : N ;
 fun amateurMasc_N : N ;
 fun amateur_A : A ;
-fun amateur_N : N  ;
 fun amateurish_A : A ;
 fun amateurishness_N : N ;
 fun amateurism_N : N ;
@@ -2259,7 +2251,6 @@ fun anarchically_Adv : Adv ;
 fun anarchism_N : N ;
 fun anarchistFem_N : N ;
 fun anarchistMasc_N : N ;
-fun anarchist_N : N  ;
 fun anarchistic_A : A ;
 fun anarchy_N : N ;
 fun anarthria_N : N ;
@@ -2691,7 +2682,6 @@ fun anthropolatry_N : N ;
 fun anthropological_A : A ;
 fun anthropologistFem_N : N ;
 fun anthropologistMasc_N : N ;
-fun anthropologist_N : N  ;
 fun anthropology_N : N ;
 fun anthropometric_A : A ;
 fun anthropometry_N : N ;
@@ -3117,9 +3107,8 @@ fun applied_A : A ;
 fun applique_N : N ;
 fun applique_V2 : V2 ;
 fun apply_V : V ;
-fun apply_V2 : V2 ; ---
-fun apply_1_V2 : V2 ; -- | we apply the newest methods
-fun apply_2_V2 : V2 ; -- | we apply for a job
+fun apply_V2 : V2 ;     -- | we apply the newest methods
+fun apply_for_V2 : V2 ; -- | we apply for a job
 fun apply_V2V : V2V ;
 fun apply_VV : VV ;
 fun appoint_V2 : V2 ;
@@ -3333,7 +3322,6 @@ fun archipelagic_A : A ;
 fun archipelago_N : N ;
 fun architectFem_N : N ;
 fun architectMasc_N : N ;
-fun architect_N : N  ;
 fun architectonics_N : N ;
 fun architectural_A : A ;
 fun architecture_N : N ;
@@ -3366,7 +3354,6 @@ fun area_3_N : N ;
 fun area_4_N : N ;
 fun area_5_N : N ;
 fun area_6_N : N ;
-fun area_N : N  ;
 fun areal_A : A ;
 fun areaway_N : N ;
 fun areca_N : N ;
@@ -3441,7 +3428,6 @@ fun arity_N : N ;
 fun arizona_PN : PN ;
 fun ark_N : N ;
 fun arkansas_PN : PN ;
-fun arm_N : N ; ---
 fun arm_1_N : N ; -- | arms and legs
 fun arm_2_N : N ; -- | a farewell to arms
 fun arm_V : V ;
@@ -3847,7 +3833,8 @@ fun assist_V : V ;
 fun assist_V2 : V2 ;
 fun assistance_N : N ;
 fun assistant_A : A ;
-fun assistant_N : N ;
+fun assistantMasc_N : N ;
+fun assistantFem_N : N ;
 fun assistive_A : A ;
 fun assize_N : N ;
 fun assizes_N : N ;
@@ -4251,7 +4238,6 @@ fun authoritarianism_N : N ;
 fun authoritative_A : A ;
 fun authority_1_N : N  ; -- | he is an authority in his field
 fun authority_2_N : N  ; -- | the police and other authorities
-fun authority_N : N ;
 fun authorization_N : N ;
 fun authorize_V2 : V2 ;
 fun authorize_V2V : V2V ;
@@ -4386,7 +4372,6 @@ fun aviary_N : N ;
 fun aviation_N : N ;
 fun aviatorFem_N : N ;
 fun aviatorMasc_N : N ;
-fun aviator_N : N  ;
 fun aviatrix_N : N ;
 fun avid_A : A ;
 fun avidity_N : N ;
@@ -4433,7 +4418,6 @@ fun awash_A : A ;
 fun away_1_Adv : Adv  ; -- | she is away
 fun away_2_Adv : Adv  ; -- | she went away
 fun away_A : A ;
-fun away_Adv : Adv ;
 fun awayness_N : N ;
 fun awe_N : N ;
 fun awe_V2 : V2 ;
@@ -4984,7 +4968,6 @@ fun baptist_N : N ;
 fun baptize_V2 : V2 ;
 fun bar_1_N : N  ; -- | have a drink in the bar
 fun bar_2_N : N  ; -- | bars in front of the window
-fun bar_N : N ;
 fun bar_Prep : Prep ;
 fun bar_V2 : V2 ;
 fun baracaldo_PN : PN ;
@@ -5891,7 +5874,8 @@ fun betrayal_N : N ;
 fun betrayer_N : N ;
 fun betroth_V2 : V2 ;
 fun betrothal_N : N ;
-fun betrothed_N : N ;
+fun betrothedMasc_N : N ;
+fun betrothedFem_N : N ;
 fun betsy_PN : PN ;
 fun better_A : A ;
 fun better_Adv : Adv ;
@@ -6782,7 +6766,6 @@ fun boa_constrictor_N : N ;
 fun boar_N : N ;
 fun board_1_N : N  ; -- | write it on the board
 fun board_2_N : N  ; -- | board member
-fun board_N : N ;
 --subcat fun board_V : V ;
 fun board_V2 : V2 ;
 fun board_out_V2 : V2 ;
@@ -7458,7 +7441,6 @@ fun brasserie_N : N ;
 fun brassie_N : N ;
 fun brassiere_1_N : N ;
 fun brassiere_2_N : N ;
-fun brassiere_N : N ;
 fun brassy_A : A ;
 fun brat_N : N ;
 fun bratislava_PN : PN ;
@@ -8429,7 +8411,6 @@ fun buy_out_V2 : V2 ;
 fun buy_up_V2 : V2 ;
 fun buyerFem_N : N ;
 fun buyerMasc_N : N ;
-fun buyer_N : N  ;
 fun buying_N : N ;
 fun buyout_N : N ;
 fun buzz_N : N ;
@@ -8867,7 +8848,6 @@ fun candida_N : N ;
 fun candidacy_N : N ;
 fun candidateFem_N : N ;
 fun candidateMasc_N : N ;
-fun candidate_N : N  ;
 fun candidature_N : N ;
 fun candidiasis_N : N ;
 fun candle_N : N ;
@@ -8930,7 +8910,6 @@ fun canoe_V2 : V2 ;
 fun canoeist_N : N ;
 fun canon_1_N : N ;
 fun canon_2_N : N ;
-fun canon_N : N ;
 fun canonic_A : A ;
 fun canonical_A : A ;
 fun canonist_A : A ;
@@ -9006,7 +8985,6 @@ fun capital_1_N : N  ; -- | the capital of France
 fun capital_2_N : N  ; -- | risk capital
 fun capital_3_N : N  ; -- | written in capitals
 fun capital_A : A ;
-fun capital_N : N ;
 fun capitalism_A : A ;
 fun capitalism_N : N ;
 fun capitalist_A : A ;
@@ -9057,7 +9035,8 @@ fun captious_A : A ;
 fun captivate_V2 : V2 ;
 fun captivation_N : N ;
 fun captive_A : A ;
-fun captive_N : N ;
+fun captiveMasc_N : N ;
+fun captiveFem_N : N ;
 fun captivity_N : N ;
 fun captopril_N : N ;
 fun captor_N : N ;
@@ -9339,7 +9318,6 @@ fun cartoon_N : N ;
 fun cartoon_V2 : V2 ;
 fun cartoonistFem_N : N ;
 fun cartoonistMasc_N : N ;
-fun cartoonist_N : N  ;
 fun cartouche_N : N ;
 fun cartridge_N : N ;
 fun cartridge_belt_N : N ;
@@ -9743,7 +9721,6 @@ fun cellarage_N : N ;
 fun cellblock_N : N ;
 fun cellistFem_N : N ;
 fun cellistMasc_N : N ;
-fun cellist_N : N  ;
 fun cello_N : N ;
 fun cellophane_N : N ;
 fun cellular_A : A ;
@@ -9898,7 +9875,6 @@ fun cerous_A : A ;
 fun cert_N : N ;
 fun certain_1_A : A  ; -- | I am certain
 fun certain_2_A : A  ; -- | a certain house
-fun certain_A : A ;
 fun certainly_Adv : Adv  ;
 fun certainty_N : N ;
 fun certifiable_A : A ;
@@ -10116,7 +10092,6 @@ fun chard_N : N ;
 fun chard_PN : PN ;
 fun charge_1_N : N  ; -- | battery charge
 fun charge_2_N : N  ; -- | charge against him
-fun charge_N : N ;
 fun charge_V : V ;
 fun charge_V2 : V2 ;
 --subcat fun charge_VS : VS ;
@@ -10315,7 +10290,6 @@ fun chemisorption_N : N ;
 fun chemisorptive_A : A ;
 fun chemistFem_N : N ;
 fun chemistMasc_N : N ;
-fun chemist_N : N  ;
 fun chemistry_N : N ;
 fun chemoreceptive_A : A ;
 fun chemoreceptor_N : N ;
@@ -10411,7 +10385,6 @@ fun chief_N : N ;
 fun chiefly_Adv : Adv  ;
 fun chieftainFem_N : N ;
 fun chieftainMasc_N : N ;
-fun chieftain_N : N  ;
 fun chieftaincy_N : N ;
 fun chiffon_N : N ;
 fun chiffonier_N : N ;
@@ -10932,7 +10905,6 @@ fun cite_V2 : V2 ;
 fun citified_A : A ;
 fun citizenFem_N : N ;
 fun citizenMasc_N : N ;
-fun citizen_N : N  ;
 fun citizenry_N : N ;
 fun citizenship_N : N ;
 fun citrange_N : N ;
@@ -11404,7 +11376,6 @@ fun clozapine_N : N ;
 fun cloze_A : A ;
 fun club_1_N : N  ; -- | member of the club
 fun club_2_N : N  ; -- | hit the ball with a club
-fun club_N : N ;
 fun club_V : V ;
 fun club_V2 : V2 ;
 fun club_footed_A : A ;
@@ -11461,7 +11432,6 @@ fun co_star_V2 : V2 ;
 fun coach_1_N : N  ; -- | football coach
 fun coach_2_N : N  ; -- | coach in a train
 fun coach_3_N : N  ; -- | bus
-fun coach_N : N ;
 fun coach_V : V ;
 fun coach_V2 : V2 ;
 fun coach_builder_N : N ;
@@ -11908,7 +11878,6 @@ fun columniation_N : N ;
 fun columniform_A : A ;
 fun columnistFem_N : N ;
 fun columnistMasc_N : N ;
-fun columnist_N : N  ;
 fun colwyn_bay_PN : PN ;
 fun coma_N : N ;
 fun comate_A : A ;
@@ -12031,7 +12000,6 @@ fun comity_N : N ;
 fun comma_N : N ;
 fun command_1_N : N  ; -- | she gave us commands
 fun command_2_N : N  ; -- | she took the command
-fun command_N : N ;
 fun command_V : V ;
 fun command_V2 : V2 ;
 fun commandant_N : N ;
@@ -12102,7 +12070,6 @@ fun commodity_N : N ;
 fun commodore_N : N ;
 fun common_1_A : A  ; -- | very common
 fun common_2_A : A  ; -- | common to us
-fun common_A : A ;
 fun common_N : N ;
 fun common_room_N : N ;
 fun commonage_N : N ;
@@ -13362,7 +13329,6 @@ fun corsham_PN : PN ;
 fun corslet_N : N ;
 fun cortege_1_N : N ;
 fun cortege_2_N : N ;
-fun cortege_N : N ;
 fun cortex_N : N ;
 fun cortical_A : A ;
 fun corticoafferent_A : A ;
@@ -13655,7 +13621,6 @@ fun coursework_N : N ;
 fun coursing_N : N ;
 fun court_1_N : N  ; -- | the emperor's court
 fun court_2_N : N  ; -- | the supreme court
-fun court_N : N ;
 fun court_V : V ;
 fun court_V2 : V2 ;
 fun court_card_N : N ;
@@ -13975,7 +13940,6 @@ fun creosol_N : N ;
 fun creosote_N : N ;
 fun crepe_1_N : N ;
 fun crepe_2_N : N ;
-fun crepe_N : N ;
 fun crepitate_V : V ;
 fun crepitation_N : N ;
 fun crepuscular_A : A ;
@@ -14066,7 +14030,6 @@ fun crith_N : N ;
 fun critic_N : N ;
 fun critical_1_A : A  ; -- | you are very critical
 fun critical_2_A : A  ; -- | of critical importance
-fun critical_A : A ;
 fun criticality_N : N ;
 fun critically_Adv : Adv  ;
 fun criticism_N : N ;
@@ -14497,7 +14460,6 @@ fun curdle_V2 : V2 ;
 fun curdling_N : N ;
 fun cure_1_N : N ;
 fun cure_2_N : N ;
-fun cure_N : N  ;
 fun cure_V : V ;
 fun cure_V2 : V2 ;
 fun cure_all_N : N ;
@@ -14596,7 +14558,6 @@ fun custom_made_A : A ;
 fun customary_A : A ;
 fun customerFem_N : N ;
 fun customerMasc_N : N ;
-fun customer_N : N  ;
 fun customhouse_N : N ;
 fun customize_V2 : V2 ;
 fun customs_N : N ;
@@ -15021,7 +14982,6 @@ fun date_1_N : N ;  -- | the specified day of the month
 fun date_3_N : N  ; -- | she was my first date
 fun date_3_N : N ;  -- | a meeting arranged in advance
 fun date_7_N : N ;  -- | sweet edible fruit of the date palm with a single long woody seed
-fun date_N : N  ;
 fun date_V : V ;
 fun date_V2 : V2 ;
 fun dateless_A : A ;
@@ -15186,7 +15146,8 @@ fun debate_V2 : V2 ;
 fun debater_N : N ;
 fun debauch_N : N ;
 fun debauch_V2 : V2 ;
-fun debauchee_N : N ;
+fun debaucheeMasc_N : N ;
+fun debaucheeFem_N : N ;
 fun debauchery_N : N ;
 fun debbie_PN : PN ;
 fun debby_PN : PN ;
@@ -15208,7 +15169,6 @@ fun debrief_V2 : V2 ;
 fun debriefing_N : N ;
 fun debris_1_N : N ;
 fun debris_2_N : N ;
-fun debris_N : N ;
 fun debt_N : N ;
 fun debtor_N : N ;
 fun debug_V2 : V2 ;
@@ -15216,11 +15176,9 @@ fun debugger_N : N ;
 fun debunk_V2 : V2 ;
 fun debut_1_N : N ;
 fun debut_2_N : N ;
-fun debut_N : N ;
 fun debut_V2 : V2 ;
 fun debutante_1_N : N ;
 fun debutante_2_N : N ;
-fun debutante_N : N ;
 fun dec_PN : PN ;
 fun decade_N : N ;
 fun decadence_N : N ;
@@ -15463,7 +15421,6 @@ fun defendable_A : A ;
 fun defendant_N : N ;
 fun defenderFem_N : N ;
 fun defenderMasc_N : N ;
-fun defender_N : N  ;
 fun defenestration_N : N ;
 fun defense_N : N  ;
 fun defenseless_A : A ;
@@ -15552,7 +15509,6 @@ fun degrade_V2 : V2 ;
 fun degree_1_N : N ;  -- | a position on a scale of intensity or amount or quality
 fun degree_2_N : N ;  -- | an award conferred by a college or university signifying that the recipient has satisfactorily completed a course of study
 fun degree_3_N : N ;  -- | a unit of temperature on a specified scale
-fun degree_N : N  ;
 fun degressive_A : A ;
 fun dehiscence_N : N ;
 fun dehiscent_A : A ;
@@ -16819,7 +16775,6 @@ fun discover_V2 : V2 ;
 fun discover_VS : VS ;
 fun discovererFem_N : N ;
 fun discovererMasc_N : N ;
-fun discoverer_N : N  ;
 fun discovery_N : N ;
 fun discredit_N : N ;
 fun discredit_V2 : V2 ;
@@ -17288,7 +17243,6 @@ fun divisible_A : A ;
 fun division_1_N : N  ; -- | division at university
 fun division_2_N : N  ; -- | division in the army 
 fun division_3_N : N  ; -- | multiplication and division 
-fun division_N : N ;
 fun divisional_A : A ;
 fun divisor_N : N ;
 fun divorce_N : N ;
@@ -17960,9 +17914,9 @@ fun drive_up_V2 : V2 ;
 fun drivel_N : N ;
 fun drivel_V : V ;
 fun driveller_N : N ;
-fun driverFem_N : N ;
-fun driverMasc_N : N ;
-fun driver_N : N ;
+fun driver_N : N ;       -- | device driver
+fun driverFem_N : N ;    -- | taxi driver
+fun driverMasc_N : N ;   -- | taxi driver
 fun driveshaft_N : N ;
 fun driveway_N : N ;
 fun driving_A : A  ;
@@ -18583,7 +18537,6 @@ fun economize_V2 : V2 ;
 fun economizer_N : N ;
 fun economy_1_N : N  ; -- | the country has a good economy
 fun economy_2_N : N  ; -- | saving money
-fun economy_N : N ;
 fun ecosystem_N : N ;
 fun ecoterrorism_N : N ;
 fun ecotourism_N : N ;
@@ -19252,7 +19205,6 @@ fun encyclopedist_N : N ;
 fun encysted_A : A ;
 fun end_1_N : N  ; -- | the end of his life
 fun end_2_N : N  ; -- | the other end of the room
-fun end_N : N ;
 fun end_V : V ;
 fun end_V2 : V2 ;
 --subcat fun end_VA : VA ;
@@ -19554,7 +19506,6 @@ fun entropy_N : N  ;
 fun entrust_V2 : V2 ;
 fun entry_1_N : N  ; -- | no entry
 fun entry_2_N : N  ; -- | lexical entry
-fun entry_N : N ;
 fun entwin_V : V ;
 fun entwine_V2 : V2 ;
 fun enucleation_N : N ;
@@ -20185,7 +20136,6 @@ fun evict_V2 : V2 ;
 fun eviction_N : N ;
 fun evidence_1_N : N  ; -- | give me some evidence
 fun evidence_2_N : N  ; -- | the evidence of his opinion
-fun evidence_N : N ;
 fun evidence_V2 : V2 ;
 fun evident_A : A ;
 fun evidential_A : A ;
@@ -20541,7 +20491,6 @@ fun explore_V2 : V2 ;
 fun explore_VS : VS ;
 fun explorerFem_N : N ;
 fun explorerMasc_N : N ;
-fun explorer_N : N  ;
 fun explosion_N : N ;
 fun explosive_A : A ;
 fun explosive_N : N ;
@@ -20902,7 +20851,6 @@ fun falconry_N : N ;
 fun falkirk_PN : PN ;
 fun fall_1_N : N  ; -- | rise and fall
 fun fall_2_N : N  ; -- | autumn
-fun fall_N : N ;
 fun fall_V : V ;
 --subcat fun fall_V2 : V2 ;
 --subcat fun fall_VA : VA ;
@@ -20972,7 +20920,6 @@ fun famulus_N : N ;
 fun fan_1_N : N ;
 fun fan_2_N : N ;
 fun fan_3_N : N ;
-fun fan_N : N  ;
 fun fan_V : V ;
 fun fan_V2 : V2 ;
 fun fan_belt_N : N ;
@@ -21194,7 +21141,6 @@ fun favourable_A : A ;
 fun favouriteFem_N : N ;
 fun favouriteMasc_N : N ;
 fun favourite_A : A ;
-fun favourite_N : N  ;
 fun favouritism_N : N ;
 fun favus_N : N ;
 fun fawley_PN : PN ;
@@ -21344,7 +21290,6 @@ fun feminism_N : N ;
 fun feministFem_N : N ;
 fun feministMasc_N : N ;
 fun feminist_A : A ;
-fun feminist_N : N ;
 fun feminization_N : N ;
 fun femoral_A : A ;
 fun femtochemistry_N : N ;
@@ -21556,7 +21501,6 @@ fun field_1_N : N  ; -- | cotton field
 fun field_2_N : N  ; -- | field work
 fun field_3_N : N  ; -- | sports field
 fun field_4_N : N  ; -- | algebraic structure
-fun field_N : N ;
 fun field_V : V ;
 fun field_V2 : V2 ;
 fun field_hospital_N : N ;
@@ -21596,7 +21540,6 @@ fun figuration_N : N ;
 fun figurative_A : A ;
 fun figure_1_N : N  ;  -- | a round figure
 fun figure_2_N : N  ;  -- | convincing figures
-fun figure_N : N ;
 fun figure_V : V ;
 --subcat fun figure_V2 : V2 ;
 --subcat fun figure_V2V : V2V ;
@@ -21656,7 +21599,6 @@ fun fillip_N : N ;
 fun filly_N : N ;
 fun film_1_N : N  ;  -- | movie
 fun film_2_N : N  ;  -- | thin layer
-fun film_N : N ;
 fun film_V : V ;
 fun film_V2 : V2 ;
 fun film_star_N : N ;
@@ -21779,7 +21721,6 @@ fun fir_N : N ;
 fun fir_cone_N : N ;
 fun fire_1_N : N ; --- ??
 fun fire_2_N : N ; --- ??
-fun fire_N : N  ;
 fun fire_V : V ;
 fun fire_V2 : V2 ;
 fun fire_alarm_N : N ;
@@ -22625,7 +22566,6 @@ fun forehanded_A : A ;
 fun forehead_N : N ;
 fun foreign_1_A : A  ; -- | a foreign citizen
 fun foreign_2_A : A  ; -- | don't throw foreign objects into the toilet
-fun foreign_A : A ;
 fun foreigner_N : N ;
 fun foreignness_N : N ;
 fun foreknow_V : V ;
@@ -22711,7 +22651,6 @@ fun forint_N : N ;
 fun fork_1_N : N ;
 fun fork_3_N : N ;
 fun fork_4_N : N ;
-fun fork_N : N  ;
 fun fork_V : V ;
 fun fork_V2 : V2 ;
 fun fork_out_V : V ;
@@ -23457,7 +23396,6 @@ fun futon_N : N ;
 fun future_1_N : N ;
 fun future_3_N : N ;
 fun future_A : A ;
-fun future_N : N  ;
 fun futureless_A : A ;
 fun futurism_N : N ;
 fun futuristFem_N : N ;
@@ -23608,7 +23546,6 @@ fun game_1_N : N  ;  -- | card game
 fun game_2_N : N  ;  -- | children's game
 fun game_3_N : N  ;  -- | eat game
 fun game_A : A ;
-fun game_N : N ;
 fun game_V : V ;
 fun game_V2 : V2 ;
 fun game_bag_N : N ;
@@ -23691,7 +23628,6 @@ fun garden_V : V ;
 fun garden_truck_N : N ;
 fun gardenerFem_N : N ;
 fun gardenerMasc_N : N ;
-fun gardener_N : N  ;
 fun gardenia_N : N ;
 fun gardening_N : N ;
 fun gareth_PN : PN ;
@@ -24016,7 +23952,6 @@ fun geologic_A : A  ;
 fun geological_A : A ;
 fun geologistFem_N : N ;
 fun geologistMasc_N : N ;
-fun geologist_N : N  ;
 fun geology_N : N ;
 fun geomancer_N : N ;
 fun geomancy_N : N ;
@@ -25337,7 +25272,6 @@ fun grouch_V : V ;
 fun grouchy_A : A ;
 fun ground_1_N : N  ; -- | ground zero
 fun ground_2_N : N  ; -- | on dubious grounds
-fun ground_N : N ;
 fun ground_V : V ;
 fun ground_V2 : V2 ;
 fun ground_bait_N : N ;
@@ -26108,7 +26042,6 @@ fun harbour_V2 : V2 ;
 fun harbourage_N : N ;
 fun hard_1_A : A  ; -- | hard surface
 fun hard_2_A : A  ; -- | hard problem
-fun hard_A : A ;
 fun hard_Adv : Adv ;
 fun hard_baked_A : A ;
 fun hard_bitten_A : A ;
@@ -29164,7 +29097,6 @@ fun indenture_V2 : V2 ;
 fun independence_N : N ;
 fun independent_1_A : A  ; -- | independent of her parents
 fun independent_2_A : A  ; -- | Andorra is an independent state
-fun independent_A : A ;
 fun independent_N : N ;
 fun independently_Adv : Adv  ;
 fun indescribable_A : A ;
@@ -29859,7 +29791,6 @@ fun intellectual_N : N ;
 fun intellectualization_N : N ;
 fun intelligence_1_N : N ;
 fun intelligence_2_N : N ;
-fun intelligence_N : N  ;
 fun intelligent_A : A ;
 fun intelligentsia_N : N ;
 fun intelligibility_N : N ;
@@ -29934,7 +29865,6 @@ fun interdisciplinary_A : A ;
 fun interest_1_N : N  ; -- | interest in literature
 fun interest_2_N : N  ; -- | loan with a high interest rate
 fun interest_4_N : N ;
-fun interest_N : N ;
 fun interest_V : V ;
 fun interest_V2 : V2 ;
 fun interested_A : A ;
@@ -30523,7 +30453,6 @@ fun israeli_A : A ;
 fun israeli_N : N ;
 fun issue_1_N : N  ; -- | this is not an issue
 fun issue_2_N : N  ; -- | the next issue of the magazine
-fun issue_N : N ;
 fun issue_V : V ;
 fun issue_V2 : V2 ;
 fun issue_forth_V : V ;
@@ -31360,8 +31289,8 @@ fun keurboom_N : N ;
 fun kevin_PN : PN ;
 fun key_1_N : N  ; -- | key to my house
 fun key_2_N : N  ; -- | the D major key
+fun key_3_N : N  ; -- | the keyboard key
 fun key_A : A ;
-fun key_N : N ;
 fun key_V2 : V2 ;
 fun key_down_V : V ;
 fun key_in_V2 : V2 ;
@@ -32317,7 +32246,6 @@ fun lavish_V2 : V2 ;
 fun lavishness_N : N ;
 fun law_1_N : N  ;  -- | the law forbids it
 fun law_2_N : N  ;  -- | he studies law
-fun law_N : N ;
 fun law_abiding_A : A ;
 fun law_officer_N : N ;
 fun lawbreaker_N : N ;
@@ -32418,7 +32346,6 @@ fun leaflike_A : A ;
 fun leafy_A : A ;
 fun league_1_N : N  ; -- | league of criminals
 fun league_2_N : N  ; -- | football league
-fun league_N : N ;
 fun league_V : V ;
 fun league_V2 : V2 ;
 fun leak_N : N ;
@@ -32735,7 +32662,6 @@ fun lethargy_N : N ;
 fun lethe_PN : PN ;
 fun letter_1_N : N ; ---- which is which??
 fun letter_2_N : N ;
-fun letter_N : N  ;
 fun letter_box_N : N ;
 fun letter_card_N : N ;
 fun letter_case_N : N ;
@@ -32776,7 +32702,6 @@ fun levee_N : N ;
 fun level_1_N : N  ; -- | reach a high level
 fun level_2_N : N  ; -- | level 4 of the building
 fun level_A : A ;
-fun level_N : N ;
 fun level_V : V ;
 fun level_V2 : V2 ;
 fun level_headed_A : A ;
@@ -33259,7 +33184,6 @@ fun listen_out_for_V2 : V2 ;
 fun listen_up_V : V ;
 fun listenerFem_N : N ;
 fun listenerMasc_N : N ;
-fun listener_N : N  ;
 fun listening_N : N ;
 fun lister_N : N ;
 fun listeria_N : N ;
@@ -34996,7 +34920,6 @@ fun mastectomy_N : N ;
 fun masted_A : A ;
 fun master_1_N : N  ; -- | master and slave
 fun master_2_N : N  ; -- | school master
-fun master_N : N ;
 fun master_V2 : V2 ;
 fun master_at_arms_N : N ;
 fun master_key_N : N ;
@@ -35037,7 +34960,6 @@ fun matai_N : N ;
 fun match_1_N : N  ; -- | football match
 fun match_2_N : N  ; -- | match box
 fun match_3_N : N  ; -- | perfect match
-fun match_N : N ;
 --subcat fun match_V : V ;
 fun match_V2 : V2 ;
 fun match_point_N : N ;
@@ -35053,8 +34975,10 @@ fun matchmaking_N : N ;
 fun matchstick_N : N ;
 fun matchweed_N : N ;
 fun matchwood_N : N ;
-fun mate_1_N : N ;
-fun mate_2_N : N ;
+fun mateMasc_1_N : N ;
+fun mateFem_1_N : N ;
+fun mateMasc_2_N : N ;
+fun mateFem_2_N : N ;
 fun mate_N : N ;
 fun mate_V : V ;
 fun mate_V2 : V2 ;
@@ -35082,7 +35006,6 @@ fun mathematical_A : A ;
 fun mathematically_Adv : Adv  ;
 fun mathematicianFem_N : N ;
 fun mathematicianMasc_N : N ;
-fun mathematician_N : N  ;
 fun mathematics_N : N ;
 fun maths_N : N ;
 fun matinee_N : N ;
@@ -35129,7 +35052,6 @@ fun mature_V2 : V2 ;
 fun maturity_1_N : N ;
 fun maturity_2_N : N ;
 fun maturity_3_N : N ;
-fun maturity_N : N  ;
 fun matutinal_A : A ;
 fun matzo_N : N ;
 fun maud_PN : PN ;
@@ -36238,7 +36160,6 @@ fun miniseries_N : N  ;
 fun miniskirt_N : N ;
 fun minister_1_N : N  ; -- | prime minister
 fun minister_2_N : N  ; -- | minister in church
-fun minister_N : N ;
 fun minister_V : V ;
 fun ministerial_A : A ;
 fun ministrant_A : A ;
@@ -37187,7 +37108,6 @@ fun movable_A : A ;
 fun move_1_V : V  ; -- | it doesn't move any more
 fun move_2_V : V  ; -- | move to a new house
 fun move_N : N ;
-fun move_V : V ;
 fun move_V2 : V2 ;
 --subcat fun move_V2A : V2A ;
 --subcat fun move_V2V : V2V ;
@@ -37488,7 +37408,6 @@ fun musicality_N : N ;
 fun musically_Adv : Adv  ;
 fun musicianFem_N : N ;
 fun musicianMasc_N : N ;
-fun musician_N : N  ;
 fun musicianship_N : N ;
 fun musicological_A : A ;
 fun musicologist_N : N ;
@@ -37719,7 +37638,6 @@ fun nairn_PN : PN ;
 fun nairobi_PN : PN ;
 fun naive_1_A : A ;
 fun naive_2_A : A ;
-fun naive_A : A ;
 fun naivete_N : N ;
 fun naivety_N : N ;
 fun naked_A : A ;
@@ -38545,7 +38463,6 @@ fun nobility_N : N ;
 fun nobleFem_N : N ;
 fun nobleMasc_N : N ;
 fun noble_A : A ;
-fun noble_N : N  ;
 fun noble_mindedness_N : N ;
 fun nobleman_N : N ;
 fun noblesse_N : N ;
@@ -39021,7 +38938,6 @@ fun notch_V2 : V2 ;
 fun note_1_N : N  ; -- | take notes
 fun note_2_N : N  ; -- | make notes
 fun note_3_N : N  ; -- | notes in music
-fun note_N : N ;
 fun note_V : V ;
 fun note_V2 : V2 ;
 fun note_VS : VS ;
@@ -39148,7 +39064,6 @@ fun numbat_N : N ;
 fun number_1_N : N  ;  -- | number five
 fun number_2_N : N  ;  -- | a number of people
 fun number_3_N : N  ;  -- | numbers singular and plural
-fun number_N : N ;
 fun number_V2 : V2 ;
 fun numberless_A : A ;
 fun numberplate_N : N ;
@@ -39538,7 +39453,6 @@ fun offend_V : V ;
 fun offend_V2 : V2 ;
 fun offenderFem_N : N ;
 fun offenderMasc_N : N ;
-fun offender_N : N  ;
 fun offense_N : N ;
 fun offenseless_A : A ;
 fun offensive_A : A ;
@@ -39569,11 +39483,9 @@ fun officeholder_N : N ;
 fun officer_1_N : N  ; -- | financial officer
 fun officer_2_N : N  ; -- | army officer
 fun officer_3_N : N  ; -- | police officer
-fun officer_N : N ;
 fun officialFem_N : N ;
 fun officialMasc_N : N ;
 fun official_A : A ;
-fun official_N : N  ;
 fun officialdom_N : N ;
 fun officialese_N : N ;
 fun officially_Adv : Adv  ;
@@ -39926,7 +39838,6 @@ fun opp_PN : PN ;
 fun opponentFem_N : N ;
 fun opponentMasc_N : N ;
 fun opponent_A : A ;
-fun opponent_N : N  ;
 fun opportune_A : A ;
 fun opportuneness_N : N ;
 fun opportunism_N : N ;
@@ -39997,7 +39908,6 @@ fun orang_utan_N : N ;
 fun orange_1_N : N ;  -- | round yellow to orange fruit of any of several citrus trees
 fun orange_2_N : N ;  -- | orange color or pigment ; any of a range of colors between red and yellow
 fun orange_A : A ;
-fun orange_N : N  ;
 fun orangeade_N : N ;
 fun orangeman_N : N ;
 fun orangery_N : N ;
@@ -40007,7 +39917,6 @@ fun orate_V : V ;
 fun oration_N : N ;
 fun oratorFem_N : N ;
 fun oratorMasc_N : N ;
-fun orator_N : N  ;
 fun oratorical_A : A ;
 fun oratorio_N : N ;
 fun oratory_N : N ;
@@ -40121,7 +40030,6 @@ fun originate_V : V ;
 fun originate_V2 : V2 ;
 fun originatorFem_N : N ;
 fun originatorMasc_N : N ;
-fun originator_N : N  ;
 fun oriole_N : N ;
 fun orison_N : N ;
 fun orkney_PN : PN ;
@@ -40868,7 +40776,6 @@ fun pacifier_N : N ;
 fun pacifism_N : N ;
 fun pacifistFem_N : N ;
 fun pacifistMasc_N : N ;
-fun pacifist_N : N  ;
 fun pacifistically_Adv : Adv ;
 fun pacify_V2 : V2 ;
 fun pacing_N : N ;
@@ -41119,7 +41026,8 @@ fun pampas_grass_N : N ;
 fun pamper_V2 : V2 ;
 fun pamperer_N : N ;
 fun pamphlet_N : N ;
-fun pamphleteer_N : N ;
+fun pamphleteerMasc_N : N ;
+fun pamphleteerFem_N : N ;
 fun pamplona_PN : PN ;
 fun pan_N : N ;
 fun pan_V : V ;
@@ -41550,7 +41458,6 @@ fun parturient_A : A ;
 fun parturition_N : N ;
 fun party_1_N : N  ; -- | birthday party
 fun party_2_N : N  ; -- | political party
-fun party_N : N ;
 fun party_spirit_N : N ;
 fun party_spirited_A : A ;
 fun party_wall_N : N ;
@@ -41677,7 +41584,6 @@ fun patchwork_N : N ;
 fun patchy_A : A ;
 fun pate_1_N : N ;
 fun pate_2_N : N ;
-fun pate_N : N ;
 fun pate_de_foie_gras_N : N ;
 fun patella_N : N ;
 fun patellar_A : A ;
@@ -41899,7 +41805,6 @@ fun pearly_A : A ;
 fun pearmain_N : N ;
 fun peasantFem_N : N ;
 fun peasantMasc_N : N ;
-fun peasant_N : N  ;
 fun peasanthood_N : N ;
 fun peasantry_N : N ;
 fun pease_N : N ;
@@ -42281,7 +42186,6 @@ fun perform_V : V ;
 fun perform_V2 : V2 ;
 fun performance_1_N : N  ; -- | high level of performance
 fun performance_2_N : N  ; -- | he made a strange performance
-fun performance_N : N ;
 fun performer_N : N ;
 fun perfume_N : N ;
 fun perfume_V2 : V2 ;
@@ -42329,7 +42233,6 @@ fun perineurium_N : N ;
 fun period_1_N : N  ; -- | it was a long period in her life
 fun period_2_N : N  ; -- | period or comma
 fun period_3_N : N  ; -- | she had her period
-fun period_N : N ;
 fun periodic_A : A ;
 fun periodical_A : A ;
 fun periodical_N : N ;
@@ -42910,7 +42813,6 @@ fun pianissimo_A : A ;
 fun pianissimo_Adv : Adv ;
 fun pianistFem_N : N ;
 fun pianistMasc_N : N ;
-fun pianist_N : N  ;
 fun pianistic_A : A ;
 fun piano_A : A ;
 fun piano_Adv : Adv ;
@@ -43507,15 +43409,13 @@ fun platysma_N : N ;
 fun plaudit_N : N ;
 fun plausibility_N : N ;
 fun plausible_A : A ;
-fun play_1_V : V  ;  -- | play in a football team
+fun play_1_V : V  ;    -- | play in a football team
 fun play_1_V2 : V2  ;  -- | play football
-fun play_2_V : V  ;  -- | children play
+fun play_2_V : V  ;    -- | children play
 fun play_2_V2 : V2  ;  -- | play mum and dad
-fun play_3_V : V  ;  -- | play in the band
+fun play_3_V : V  ;    -- | play in the band
 fun play_3_V2 : V2  ;  -- | play the guitar
 fun play_N : N ;
-fun play_V : V ;
-fun play_V2 : V2 ;
 --subcat fun play_VV : VV ;
 fun play_acting_N : N ;
 fun play_actor_N : N ;
@@ -43854,7 +43754,6 @@ fun poilu_N : N ;
 fun poinsettia_N : N ;
 fun point_1_N : N  ; -- | at this point
 fun point_2_N : N  ; -- | he got six points
-fun point_N : N ;
 fun point_V : V ;
 fun point_V2 : V2 ;
 fun point_blank_A : A ;
@@ -44154,7 +44053,6 @@ fun poop_out_on_V2 : V2 ;
 fun poor_1_A : A  ; -- | poor or rich
 fun poor_2_A : A  ; -- | poor him
 fun poor_3_A : A  ; -- | poor quality
-fun poor_A : A ;
 fun poor_box_N : N ;
 fun poor_rate_N : N ;
 fun poor_spirited_A : A ;
@@ -44895,7 +44793,6 @@ fun preside_V : V ;
 fun presidency_N : N ;
 fun presidentFem_N : N ;
 fun presidentMasc_N : N ;
-fun president_N : N  ;
 fun presidential_A : A ;
 fun presidio_N : N ;
 fun presidium_N : N ;
@@ -45346,7 +45243,6 @@ fun programme_N : N ;
 fun programme_V2 : V2 ;
 fun programmerFem_N : N ;
 fun programmerMasc_N : N ;
-fun programmer_N : N  ;
 fun programming_N : N ;
 fun progress_N : N ;
 fun progress_V : V ;
@@ -45505,7 +45401,6 @@ fun properly_Adv : Adv  ;
 fun propertied_A : A ;
 fun property_1_N : N  ; -- | some bad properties
 fun property_2_N : N  ; -- | an enormous property
-fun property_N : N ;
 fun property_man_N : N ;
 fun property_master_N : N ;
 fun propertyless_A : A ;
@@ -45577,7 +45472,6 @@ fun prosecute_V2 : V2 ;
 fun prosecution_N : N ;
 fun prosecutorFem_N : N ;
 fun prosecutorMasc_N : N ;
-fun prosecutor_N : N  ;
 fun proselyte_N : N ;
 fun proselytism_N : N ;
 fun proselytize_V : V ;
@@ -46705,7 +46599,6 @@ fun rabies_N : N ;
 fun raccoon_N : N ;
 fun race_1_N : N  ; -- | win the race
 fun race_2_N : N  ; -- | the human race
-fun race_N : N ;
 fun race_V : V ;
 fun race_V2 : V2 ;
 fun race_V2V : V2V ;
@@ -47509,7 +47402,6 @@ fun record_1_N : N  ; -- | Guinness book of records
 fun record_2_N : N  ; -- | Beatles records
 fun record_3_N : N  ; -- | we keep a record of visitors
 fun record_A : A  ;
-fun record_N : N ;
 fun record_V2 : V2 ;
 fun record_breaking_A : A ;
 fun record_player_N : N ;
@@ -47824,7 +47716,6 @@ fun reggae_N : N ;
 fun regicide_N : N ;
 fun regime_1_N : N ;
 fun regime_2_N : N ;
-fun regime_N : N  ;
 fun regimen_N : N ;
 fun regiment_N : N ;
 fun regiment_V2 : V2 ;
@@ -48110,7 +48001,6 @@ fun rending_A : A ;
 fun rendition_N : N ;
 fun renegadeFem_N : N ;
 fun renegadeMasc_N : N ;
-fun renegade_N : N  ;
 fun renegade_V : V ;
 fun renege_V : V ;
 fun renegotiate_V2 : V2 ;
@@ -48245,7 +48135,6 @@ fun reportage_N : N ;
 fun reportedly_Adv : Adv ;
 fun reporterFem_N : N ;
 fun reporterMasc_N : N ;
-fun reporter_N : N  ;
 fun reporting_N : N  ;
 fun repose_N : N ;
 fun repose_V : V ;
@@ -48271,7 +48160,6 @@ fun representations_N : N  ;
 fun representativeFem_N : N ;
 fun representativeMasc_N : N ;
 fun representative_A : A ;
-fun representative_N : N  ;
 fun repress_V2 : V2 ;
 fun repression_N : N ;
 fun repressive_A : A ;
@@ -48367,7 +48255,6 @@ fun research_V : V ;
 fun research_V2 : V2 ;
 fun researcherFem_N : N ;
 fun researcherMasc_N : N ;
-fun researcher_N : N  ;
 fun reseat_V2 : V2 ;
 fun reseau_N : N ;
 fun resection_N : N ;
@@ -48932,7 +48819,6 @@ fun ride_out_V2 : V2 ;
 fun ride_up_V : V ;
 fun riderFem_N : N ;
 fun riderMasc_N : N ;
-fun rider_N : N  ;
 fun riderless_A : A ;
 fun ridge_N : N ;
 fun ridge_V2 : V2 ;
@@ -48978,8 +48864,6 @@ fun right_1_A : A  ; -- | right or wrong
 fun right_1_Adv : Adv  ; -- | right or wrong
 fun right_2_A : A  ; -- | right or left
 fun right_2_Adv : Adv  ; -- | right or left
-fun right_A : A ;
-fun right_Adv : Adv ;
 fun right_Interj : Interj ;
 fun right_N : N ;
 fun right_V2 : V2 ;
@@ -49258,7 +49142,6 @@ fun roil_V2 : V2 ;
 fun roisterer_N : N ;
 fun role_1_N : N ;
 fun role_2_N : N ;
-fun role_N : N ;
 fun roleplaying_N : N ;
 fun roll_N : N ;
 fun roll_V : V ;
@@ -50011,7 +49894,6 @@ fun saintliness_N : N ;
 fun saintly_A : A ;
 fun sake_1_N : N ;
 fun sake_2_N : N ;
-fun sake_N : N ;
 fun saki_N : N ;
 fun sal_volatile_N : N ;
 fun salaam_N : N ;
@@ -51467,7 +51349,6 @@ fun sell_out_V2 : V2 ;
 fun sell_up_V2 : V2 ;
 fun sellerFem_N : N ;
 fun sellerMasc_N : N ;
-fun seller_N : N  ;
 fun selling_N : N ;
 fun selloff_N : N ;
 fun sellout_N : N ;
@@ -51774,7 +51655,6 @@ fun serum_N : N ;
 fun serval_N : N ;
 fun servantFem_N : N ;
 fun servantMasc_N : N ;
-fun servant_N : N  ;
 fun serve_N : N ;
 fun serve_V : V ;
 fun serve_V2 : V2 ;
@@ -51806,8 +51686,7 @@ fun sessile_A : A ;
 fun session_N : N ;
 fun sestet_N : N ;
 fun set_1_N : N  ;  -- | a reparation set
-fun set_2_N : N  ; -- | an infinite set
-fun set_N : N ;
+fun set_2_N : N  ;  -- | an infinite set
 --subcat fun set_V : V ;
 fun set_V2 : V2 ;
 --subcat fun set_VS : VS ;
@@ -52912,7 +52791,6 @@ fun singhalese_A : A ;
 fun singing_N : N ;
 fun single_1_A : A  ; -- | a single ticket
 fun single_2_A : A  ; -- | a single woman
-fun single_A : A ;
 fun single_N : N ;
 fun single_V2 : V2 ;
 fun single_breasted_A : A ;
@@ -54062,7 +53940,6 @@ fun solicit_V2 : V2 ;
 fun solicitation_N : N ;
 fun solicitorFem_N : N ;
 fun solicitorMasc_N : N ;
-fun solicitor_N : N  ;
 fun solicitor_general_N : N ;
 fun solicitorship_N : N ;
 fun solicitous_A : A ;
@@ -54562,7 +54439,6 @@ fun spectacular_A : A ;
 fun spectacular_N : N ;
 fun spectatorFem_N : N ;
 fun spectatorMasc_N : N ;
-fun spectator_N : N  ;
 fun spectinomycin_N : N ;
 fun spectral_A : A ;
 fun spectre_N : N ;
@@ -54942,7 +54818,6 @@ fun spotty_A : A ;
 fun spousal_A : A ;
 fun spouseFem_N : N ;
 fun spouseMasc_N : N ;
-fun spouse_N : N  ;
 fun spout_N : N ;
 fun spout_V : V ;
 fun spout_V2 : V2 ;
@@ -55217,7 +55092,6 @@ fun staddle_N : N ;
 fun stadium_N : N ;
 fun staff_1_N : N  ; -- | staff of 50 persons
 fun staff_2_N : N  ; -- | pike staff
-fun staff_N : N ;
 fun staff_V2 : V2 ;
 fun staff_office_N : N ;
 fun staff_up_V2 : V2 ;
@@ -55439,7 +55313,6 @@ fun starter_4_N : N ;
 fun starter_5_N : N ;
 fun starter_6_N : N ;
 fun starter_7_N : N ;
-fun starter_N : N  ;
 fun starting_gate_N : N ;
 fun starting_point_N : N ;
 fun starting_post_N : N ;
@@ -55456,7 +55329,6 @@ fun stash_away_V2 : V2 ;
 fun stasis_N : N ;
 fun state_1_N : N  ; -- | independent state
 fun state_2_N : N  ; -- | state of affairs
-fun state_N : N ;
 fun state_V2 : V2 ;
 fun state_VS : VS ;
 fun statecraft_N : N ;
@@ -56201,7 +56073,6 @@ fun stridulation_N : N ;
 fun strife_N : N ;
 fun strike_1_N : N ;  -- | a group's refusal to work in protest against low pay or bad work conditions
 fun strike_2_N : N ;  -- | an attack that is intended to seize or inflict damage on or destroy an objective
-fun strike_N : N  ;
 fun strike_V : V ;
 fun strike_V2 : V2 ;
 fun strike_back_V : V ;
@@ -56320,7 +56191,6 @@ fun stud_mare_N : N ;
 fun studbook_N : N ;
 fun studentFem_N : N ;
 fun studentMasc_N : N ;
-fun student_N : N  ;
 fun studentship_N : N ;
 fun studio_N : N ;
 fun studious_A : A ;
@@ -56466,7 +56336,6 @@ fun subject_1_N : N  ; -- | subject matter
 fun subject_2_N : N  ; -- | subject and object
 fun subject_A : A ;
 fun subject_A2 : A2 ;
-fun subject_N : N ;
 fun subject_V2 : V2 ;
 fun subject_to_Prep : Prep ;
 fun subjection_N : N ;
@@ -58141,7 +58010,6 @@ fun teach_in_N : N ;
 fun teachable_A : A ;
 fun teacherFem_N : N ;
 fun teacherMasc_N : N ;
-fun teacher_N : N  ;
 fun teachership_N : N ;
 fun teaching_N : N ;
 fun teacup_N : N ;
@@ -58904,7 +58772,6 @@ fun think_up_V2 : V2 ;
 fun thinkable_A : A ;
 fun thinkerFem_N : N ;
 fun thinkerMasc_N : N ;
-fun thinker_N : N  ;
 fun thinking_A : A ;
 fun thinking_N : N ;
 fun thinness_N : N ;
@@ -59284,7 +59151,6 @@ fun timbre_N : N ;
 fun timbrel_N : N ;
 fun time_1_N : N  ;  -- | we have no time
 fun time_2_N : N  ;  -- | I was there four times
-fun time_N : N ;
 fun time_V2 : V2 ;
 fun time_ball_N : N ;
 fun time_bomb_N : N ;
@@ -61038,7 +60904,6 @@ fun typhus_N : N ;
 fun typical_1_A : A ;
 fun typical_2_A : A ;
 fun typical_3_A : A ;
-fun typical_A : A  ;
 fun typicality_N : N ;
 fun typically_Adv : Adv  ;
 fun typification_N : N ;
@@ -61652,7 +61517,8 @@ fun understanding_N : N ;
 fun understate_V2 : V2 ;
 fun understatement_N : N ;
 fun understock_V2 : V2 ;
-fun understudy_N : N ;
+fun understudyMasc_N : N ;
+fun understudyFem_N : N ;
 fun understudy_V2 : V2 ;
 fun undersurface_N : N ;
 fun undertake_V2 : V2 ;
@@ -62088,7 +61954,6 @@ fun unit_3_N : N ;
 fun unit_4_N : N ;
 fun unit_5_N : N ;
 fun unit_6_N : N ;
-fun unit_N : N  ;
 fun unit_V2V : V2V ;
 fun unitarian_A : A ;
 fun unitarian_N : N ;
@@ -63023,7 +62888,6 @@ fun useless_A : A ;
 fun uselessness_N : N ;
 fun userFem_N : N ;
 fun userMasc_N : N ;
-fun user_N : N  ;
 fun ushaw_moor_PN : PN ;
 fun usher_N : N ;
 fun usher_V2 : V2 ;
@@ -63246,7 +63110,6 @@ fun variegation_N : N ;
 fun varietal_N : N ;
 fun variety_1_N : N  ; -- | there's a great variety
 fun variety_2_N : N  ; -- | the best variety
-fun variety_N : N ;
 fun variform_A : A ;
 fun variolar_A : A ;
 fun variolation_N : N ;
@@ -63642,7 +63505,6 @@ fun vietnamese_A : A ;
 fun vietnamese_N : N ;
 fun view_1_N : N  ; -- | room with a view
 fun view_2_N : N  ; -- | people with strange views
-fun view_N : N ;
 fun view_V2 : V2 ;
 fun viewable_A : A ;
 fun viewer_N : N ;
@@ -63720,7 +63582,6 @@ fun violet_PN : PN ;
 fun violin_N : N ;
 fun violinistFem_N : N ;
 fun violinistMasc_N : N ;
-fun violinist_N : N  ;
 fun violistFem_N : N ;
 fun violistMasc_N : N ;
 fun viomycin_N : N ;
@@ -63924,7 +63785,6 @@ fun voluntary_A : A ;
 fun voluntary_N : N ;
 fun volunteerFem_N : N ;
 fun volunteerMasc_N : N ;
-fun volunteer_N : N  ;
 fun volunteer_V : V ;
 fun volunteer_V2 : V2 ;
 --subcat fun volunteer_V2V : V2V ;
@@ -64501,7 +64361,6 @@ fun waxycap_N : N ;
 fun way_1_N : N  ; -- | the way to the city
 fun way_2_N : N  ; -- | do it the proper way
 fun way_Adv : Adv ;
-fun way_N : N ;
 fun way_out_A : A ;
 fun waybill_N : N ;
 fun wayfarer_N : N ;
@@ -64575,12 +64434,12 @@ fun weathervane_N : N ;
 fun weave_N : N ;
 fun weave_V : V ;
 fun weave_V2 : V2 ;
-fun weaver_N : N ;
+fun weaverMasc_N : N ;
+fun weaverFem_N : N ;
 fun weaverbird_N : N ;
 fun weaving_N : N ;
 fun web_1_N : N  ; -- | www
 fun web_2_N : N  ; -- | spider web
-fun web_N : N ;
 fun web_footed_A : A ;
 fun web_toed_A : A ;
 fun webbed_A : A ;
@@ -65531,7 +65390,6 @@ fun wordy_A : A ;
 fun work_1_V : V  ; -- | I just work here
 fun work_2_V : V  ; -- | the computer doesn't work
 fun work_N : N ;
-fun work_V : V ;
 fun work_V2 : V2 ;
 --subcat fun work_VV : VV ;
 fun work_in_N : N ;
@@ -65905,7 +65763,6 @@ fun yesterday_N : N ;
 fun yet_1_Adv : Adv  ; -- | we are not there yet
 fun yet_2_Adv : Adv  ; -- | yet he was not satisfied
 fun yet_AdV : AdV ;
-fun yet_Adv : Adv ;
 fun yeti_N : N ;
 fun yew_N : N ;
 fun yew_tree_N : N ;
