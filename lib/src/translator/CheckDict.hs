@@ -1,13 +1,14 @@
 import qualified Data.Map
+import qualified Data.Set
 import Data.List
 
 langs = words "Bul Chi Dut Eng Fin Fre Ger Hin Ita Spa Swe"
 
--- apply a function to every line
-changeLinesLang :: (String -> String) -> String -> IO ()
+-- apply a function to every line, changing it to a list 
+changeLinesLang :: (String -> [String]) -> String -> IO ()
 changeLinesLang f lang = do
   dict <- readFile (gfFile "Dictionary" lang) >>= return . lines 
-  writeFile (gfFile "tmp/Dictionary" lang) $ unlines $ map f dict
+  writeFile (gfFile "tmp/Dictionary" lang) $ unlines $ concatMap f dict
 
 createAllConcretes = do
   createAbstract
@@ -113,5 +114,22 @@ statLang lang = do
   putStrLn $ lang ++ "\t" ++ show nall ++ "\t" ++ show nchecked
 
 statAll = mapM_ statLang langs
+
+
+{-
+-- lin f = def ; -- comment
+analyseLine :: String -> (String,String,String,String,String)
+analyseLine s = case words s of
+  k:f:s:dc -> (k,f,s)
+
+
+-------
+
+-- handle split senses: remove the unsplit variant ; if the split ones are empty, copy the unsplit to them
+
+handleSplit :: Data.Set.Set String -> String -> [String]
+handleSplit sset line = 
+  let (keyw,fun,sep,def,comment) = analyseLine line
+-}
 
 
