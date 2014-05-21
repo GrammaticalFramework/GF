@@ -8156,7 +8156,6 @@ lin firm_N = mkN "firma" | mkN "empresa" ; --- split
 lin firmament_N = mkN "firmamento" ; -- status=guess
 lin firmly_Adv = variants{} ;
 lin firmware_N = mkN "firmware" masculine ; -- status=guess
-lin first_A = variants{} ;
 lin first_Adv = mkAdv "primero" ; -- status=guess
 lin firstborn_N = mkN "primogénito" | mkN "primogénita" ; -- status=guess status=guess
 lin firstly_Adv = variants{} ;

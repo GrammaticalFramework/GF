@@ -7908,7 +7908,6 @@ lin firm_A = variants{} ; --
 lin firm_N = variants{} ; --
 lin firmly_Adv = variants{} ; --
 lin firmware_N = mkN "micrologiciel" masculine ; -- tocheck
-lin first_A = variants{} ; --
 lin first_Adv = variants {} ; -- tocheck
 lin firstborn_N = mkN "premier-né" ; -- tocheck
 lin firstly_Adv = variants{} ; --

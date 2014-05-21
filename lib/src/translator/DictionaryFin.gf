@@ -19191,7 +19191,6 @@ lin firmamental_A = mkWA "taivaan-" ; --UNCHK
 lin firmly_Adv = variants{} ; --
 lin firmness_N = mkWN (kH1 "vakaus") ; --UNCHK
 lin firmware_N = mkWN (k10 "ohjelma") "sulautettu" ; --UNCHK
-lin first_A = variants{} ; --
 lin first_Adv = mkAdv "ensimmäisenä" | mkAdv "ensimmäiseksi" | mkAdv "ensiksi" ;
 lin first_class_A = mkA (mkN "ensi" (mkN "luokkainen")) ;
 lin first_class_Adv = mkWAdv (compoundAdv "luo" (k9 "kassa")) "ensimmäisessä" ; --UNCHK

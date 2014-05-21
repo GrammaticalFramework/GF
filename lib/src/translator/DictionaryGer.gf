@@ -7750,7 +7750,6 @@ lin firm_N = firma_N ; -- status=guess
 lin firmament_N = mkN "Firmament" neuter ; -- status=guess
 lin firmly_Adv = mkAdv "sicher" | mkAdv "fest" ; -- status=guess status=guess
 lin firmware_N = mkN "Firmware" feminine ; -- status=guess
-lin first_A = mkA "erst" ;
 lin first_Adv = erstens_Adv | an_Adv ; -- status=guess status=guess
 lin firstborn_A = mkA "erstgeboren" ; -- status=guess
 lin firstborn_N = mkN "Erstgeborene" feminine | mkN "{m}" ; -- status=guess status=guess

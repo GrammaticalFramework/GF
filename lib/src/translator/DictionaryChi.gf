@@ -5970,7 +5970,6 @@ lin firm_V = mkV "公司" ;
 lin firm_V2 = mkV2 "使+牢固" ;
 lin firmly_Adv = variants{} ; --
 lin firmness_N = mkN "坚定" [] ;
-lin first_A = variants{} ; --
 lin first_class_A = mkA "第一" ;
 lin first_hand_A = mkA "一手" ;
 lin first_rate_A = mkA "一流" ;

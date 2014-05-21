@@ -6735,7 +6735,6 @@ lin firework_N = mkN "fuoco d'artificio" | mkN "fuoco artificiale" ; -- status=g
 lin firm_A = mkA "ferreo" ; -- status=guess
 lin firm_N = variants{} ; --
 lin firmly_Adv = variants{} ; --
-lin first_A = variants{} ; --
 lin first_Adv = variants {};
 lin firstborn_A = mkA "primogenito" ; -- status=guess
 lin firstborn_N = mkN "primogenito" ; -- status=guess
