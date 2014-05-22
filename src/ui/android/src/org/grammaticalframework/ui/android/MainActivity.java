@@ -286,6 +286,25 @@ public class MainActivity extends Activity {
     private void handleSpeechInput(final String input) {
     	final List<MorphoAnalysis> list = mTranslator.lookupMorpho(input);
 
+    	// filter out duplicates
+    	int i = 0;
+    	while (i < list.size()) {
+    		MorphoAnalysis an = list.get(i);
+    		boolean found = false;
+    		for (int j = 0; j < i; j++) {
+    			if (list.get(j).getLemma().equals(an.getLemma())) {
+    				found = true;
+    				break;
+    			}
+    		}
+    		
+    		if (found)
+    			list.remove(i);
+    		else {
+ 				i++;
+ 			}
+    	}
+
         mConversationView.updateLastUtterance(input);
         new AsyncTask<Void,Void,Pair<String,List<ExprProb>>>() {
         	@Override
