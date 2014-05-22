@@ -1317,6 +1317,8 @@ Concr_tabularLinearize(ConcrObject* self, PyObject *args)
 			pystr = PyString_FromString(str);
 		} else {
 			gu_exn_clear(err);
+			pystr = Py_None;
+			Py_INCREF(pystr);
 		}
 
 		if (PyDict_SetItemString(table, labels[lin_idx], pystr) < 0)
