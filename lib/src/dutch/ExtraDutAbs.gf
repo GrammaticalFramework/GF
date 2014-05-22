@@ -19,5 +19,6 @@ abstract ExtraDutAbs = Extra [
 
 fun
   zullen_VV : VV ;  -- ik zal slapen
+  StressedPron : Pron -> NP ;
 
 }

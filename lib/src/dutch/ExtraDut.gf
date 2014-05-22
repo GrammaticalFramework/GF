@@ -133,4 +133,10 @@ lin
 lin
   zullen_VV = lin VV (zullen_V ** {isAux = True}) ;
 
+  StressedPron pron = {
+      s = table {NPNom => pron.stressed.nom ; NPAcc => pron.stressed.acc} ;
+      a = pron.a ;
+      isPron = True
+      } ; 
+
 }
