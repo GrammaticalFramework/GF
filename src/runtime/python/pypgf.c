@@ -1263,6 +1263,74 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 	return pystr;
 }
 
+static PyObject*
+Concr_tabularLinearize(ConcrObject* self, PyObject *args)
+{
+	ExprObject* pyexpr;
+	if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &pyexpr))
+        return NULL;
+
+	PyObject* table = PyDict_New();
+	if (table == NULL)
+		return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	GuEnum* cts = 
+		pgf_lzr_concretize(self->concr,
+		                   pyexpr->expr,
+		                   err,
+		                   tmp_pool);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(PgfLinNonExist))
+			Py_RETURN_NONE;
+		else if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+			return NULL;
+		} else {
+			PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+			return NULL;
+		}
+	}
+
+	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
+	if (gu_variant_is_null(ctree)) {
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	size_t n_lins;
+	GuString* labels;
+	pgf_lzr_get_table(self->concr, ctree, &n_lins, &labels);
+
+	for (size_t lin_idx = 0; lin_idx < n_lins; lin_idx++) {
+		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+
+		pgf_lzr_linearize_simple(self->concr, ctree, lin_idx, out, err, tmp_pool);
+
+		PyObject* pystr = NULL;
+		if (gu_ok(err)) {
+			GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+			pystr = PyString_FromString(str);
+		} else {
+			gu_exn_clear(err);
+		}
+
+		if (PyDict_SetItemString(table, labels[lin_idx], pystr) < 0)
+			return NULL;
+
+		Py_XDECREF(pystr);
+	}
+	
+	gu_pool_free(tmp_pool);
+
+	return table;
+}
+
+
 typedef struct {
 	PyObject_HEAD
 	PyObject* cat;
@@ -1753,6 +1821,9 @@ static PyMethodDef Concr_methods[] = {
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a string"
     },
+    {"tabularLinearize", (PyCFunction)Concr_tabularLinearize, METH_VARARGS,
+     "Takes an abstract tree and linearizes it to a table containing all fields"
+	},
     {"bracketedLinearize", (PyCFunction)Concr_bracketedLinearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a bracketed string"
     },
