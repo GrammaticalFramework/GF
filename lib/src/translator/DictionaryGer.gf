@@ -705,7 +705,8 @@ lin amaranth_N = mkN "Amarant" masculine ; -- status=guess
 lin amaretto_N = amaretto_N ; -- status=guess
 lin amaryllis_N = mkN "Amaryllis" feminine | mkN "Narzissenlilie" feminine | mkN "Ritterstern" masculine ; -- status=guess status=guess status=guess
 lin amateur_A = mkA "amateurhaft" ; -- status=guess
-lin amateurMasc_N = amateur_N | mkN "Amateurin" feminine ; -- status=guess status=guess
+lin amateurMasc_N = amateur_N ; -- status=guess status=guess
+lin amateurFem_N = mkN "Amateurin" feminine ; -- status=guess status=guess
 lin amateurish_A = mkA "amateurhaft" | mkA "laienhaft" ; -- status=guess status=guess
 lin amaze_V2 = mkV2 (mkV "verwundern") ; -- status=guess, src=wikt
 lin amaze_V2V = mkV2V (mkV "verwundern") ; -- status=guess, src=wikt
@@ -3167,7 +3168,8 @@ lin cartographic_A = mkA "kartographisch" | mkA "kartografisch" ; -- status=gues
 lin cartography_N = mkN "Kartographie" feminine | mkN "Kartografie" feminine ; -- status=guess status=guess
 lin carton_N = mkN "Karton" masculine ; -- status=guess
 lin cartoon_N = zeichentrickfilm_N ; -- status=guess
-lin cartoonistMasc_N = cartoonist_N | cartoonistin_N | zeichner_N | zeichnerin_N | comiczeichner_N | comiczeichnerin_N | karikaturist_N | karikaturistin_N | mkN "Karikaturenzeichner" masculine | mkN "Karikaturenzeichnerin" feminine | mkN "Trickzeichner" masculine | mkN "Trickzeichnerin" feminine ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess
+lin cartoonistMasc_N = cartoonist_N | zeichner_N | comiczeichner_N | karikaturist_N | mkN "Karikaturenzeichner" masculine | mkN "Trickzeichner" masculine ; -- status=guess status=guess status=guess status=guess status=guess status=guess
+lin cartoonistFem_N = cartoonistin_N | zeichnerin_N | comiczeichnerin_N | karikaturistin_N | mkN "Karikaturenzeichnerin" feminine | mkN "Trickzeichnerin" feminine ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin cartouche_N = kartusche_N ; -- status=guess
 lin cartridge_N = patrone_N ; -- status=guess
 lin cartwheel_N = rad_N ; -- status=guess
@@ -3308,7 +3310,8 @@ lin celibate_A = mkA "ehelos" | unverheiratet_A | keusch_A | mkA "zölibatär" |
 lin celibate_N = mkN "Unverheirateter" masculine | mkN "Unverheiratete" feminine | junggeselle_N | mkN "Junggesellin" feminine | mkN "Zölibatär" masculine | mkN "Zölibatärin" feminine ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin cell_N = zelle_N ; -- status=guess
 lin cellar_N = keller_N ; -- status=guess
-lin cellistMasc_N = cellist_N | cellistin_N ; -- status=guess status=guess
+lin cellistMasc_N = cellist_N ; -- status=guess status=guess
+lin cellistFem_N = cellistin_N ; -- status=guess status=guess
 lin cello_N = cello_N | mkN "Violoncello" neuter ; -- status=guess status=guess
 lin cellophane_N = mkN "Cellophan" neuter | mkN "Zellglas" neuter ; -- status=guess status=guess
 lin cellular_A = mkA "Zell-" | mkA "zellulär" ; -- status=guess status=guess
@@ -3995,7 +3998,8 @@ lin coltsfoot_N = huflattich_N ; -- status=guess
 lin columbarium_N = mkN "Taubenhaus" neuter | mkN "Taubenschlag" neuter | kolumbarium_N | mkN "Columbarium" neuter ; -- status=guess status=guess status=guess status=guess
 lin columbine_N = akelei_N ; -- status=guess
 lin column_N = kolonne_N ; -- status=guess
-lin columnistMasc_N = mkN "Kolumnist" masculine | mkN "Kolumnistin" feminine ; -- status=guess status=guess
+lin columnistMasc_N = mkN "Kolumnist" masculine ; -- status=guess
+lin columnistFem_N = mkN "Kolumnistin" feminine ; -- status=guess
 lin coma_N = mkN "Koma" feminine ; -- status=guess
 lin comb_N = kamm_N ; -- status=guess
 lin comb_V = mkV "kämmen" ; -- status=guess, src=wikt
@@ -7573,7 +7577,8 @@ lin feminine_N = frau_N | mkN "Weib" neuter ; -- status=guess status=guess
 lin femininity_N = weiblichkeit_N | mkN "Fraulichkeit" feminine ; -- status=guess status=guess
 lin feminism_N = feminismus_N ; -- status=guess
 lin feminist_A = mkA "feministisch" ; -- status=guess
-lin feministMasc_N = mkN "Feminist" masculine | mkN "Feministin" feminine ; -- status=guess status=guess
+lin feministMasc_N = mkN "Feminist" masculine ;
+lin feministFem_N = mkN "Feministin" feminine ;
 lin femoral_A = mkA "femoral" | mkA "Femoral-" | mkA "Oberschenkel-" | mkA "Schenkel-" | mkA "Femoralis-" ; -- status=guess status=guess status=guess status=guess status=guess
 lin femur_N = mkN "Femur" masculine | oberschenkelknochen_N ; -- status=guess status=guess
 lin fence_N = zaun_N | hag_N | mkN "Fence" masculine | mkN "" | mkN "South Africa ] Fenz" feminine ; -- status=guess status=guess status=guess status=guess status=guess
@@ -11684,7 +11689,8 @@ lin list_V2 = mkV2 (mkV "aufzählen") ; -- status=guess, src=wikt
 lin list_V2V = mkV2V (mkV "aufzählen") ; -- status=guess, src=wikt
 lin listen_V = mkV "zuhören" ; -- status=guess, src=wikt
 lin listen_V2 = L.listen_V2 ;
-lin listenerMasc_N = mkN "Zuhörer" masculine | mkN "Zuhörerin" feminine ; -- status=guess status=guess
+lin listenerMasc_N = mkN "Zuhörer" masculine ; -- status=guess
+lin listenerFem_N = mkN "Zuhörerin" feminine ; -- status=guess
 lin listening_N = mkN "Horchposten" masculine ; -- status=guess
 lin listless_A = lasch_A | lustlos_A ; -- status=guess status=guess
 lin listlessness_N = mkN "Lustlosigkeit" feminine ; -- status=guess
@@ -15663,7 +15669,8 @@ lin prognosticate_V2 = mkV2 (prognostizieren_V) ; -- status=guess, src=wikt
 lin program_N = programm_N ; -- status=guess
 lin program_V2 = mkV2 (mkV "programmieren") ; -- status=guess, src=wikt
 lin program_V2V = mkV2V (mkV "programmieren") ; -- status=guess, src=wikt
-lin programmerMasc_N = programmierer_N | mkN "Programmiererin" feminine ; -- status=guess status=guess
+lin programmerMasc_N = programmierer_N ;
+lin programmerFem_N = mkN "Programmiererin" feminine ;
 lin programming_N = mkN "Programmierung" feminine | mkN "Programmieren" neuter ; -- status=guess status=guess
 lin progress_N = fortschritt_N ; -- status=guess
 lin progression_N = mkN "Progression" feminine | reihe_N ; -- status=guess status=guess
@@ -16980,7 +16987,8 @@ lin riddle_N = mkN "Rätsel" neuter ; -- status=guess
 lin riddle_V2 = mkV2 (mkV "durchlöchern") ; -- status=guess, src=wikt
 lin ride_V = fahren_7_V ; -- status=guess, src=wikt
 lin ride_V2 = mkV2 (fahren_7_V) ; -- status=guess, src=wikt
-lin riderMasc_N = reiter_N | reiterin_N | mitfahrer_N | mkN "Mitfahrerin" ; -- status=guess status=guess status=guess status=guess
+lin riderMasc_N = reiter_N | mitfahrer_N ; -- status=guess status=guess status=guess status=guess
+lin riderFem_N = reiterin_N | mkN "Mitfahrerin" ; -- status=guess status=guess status=guess status=guess
 lin ridge_N = grat_N ; -- status=guess
 lin ridiculous_A = mkA "lächerlich" ; -- status=guess
 lin riel_N = mkN "Riel" masculine ; -- status=guess
@@ -17867,7 +17875,8 @@ lin serpent_N = schlange_N ; -- status=guess
 lin serpentine_A = mkA "schlangenförmig" ; -- status=guess
 lin serum_N = serum_N ; -- status=guess
 lin serval_N = mkN "Serval" masculine ; -- status=guess
-lin servantMasc_N = diener_N | mkN "Dienerin" feminine ; -- status=guess status=guess
+lin servantMasc_N = diener_N ; -- status=guess status=guess
+lin servantFem_N = mkN "Dienerin" feminine ; -- status=guess status=guess
 lin serve_V = junkV (mkV "jemandem") "recht geschehen" ; -- status=guess, src=wikt
 lin serve_V2 = mkV2 (junkV (mkV "jemandem") "recht geschehen") ; -- status=guess, src=wikt
 --subcat lin serve_VS = mkVS (junkV (mkV "jemandem") "recht geschehen") ; -- status=guess, src=wikt
@@ -21750,7 +21759,8 @@ lin violent_A = grell_A ; -- status=guess
 lin violently_Adv = mkAdv "gewalttätig" ; -- status=guess
 lin violet_N = mkN "Violett" ; -- status=guess
 lin violin_N = geige_N | violine_N ; -- status=guess status=guess
-lin violinistMasc_N = violinist_N | violinistin_N ; -- status=guess status=guess
+lin violinistMasc_N = violinist_N ; -- status=guess status=guess
+lin violinistFem_N = violinistin_N ; -- status=guess status=guess
 lin viper_N = kreuzotter_N | otter_N | viper_N ; -- status=guess status=guess status=guess
 lin viral_A = viral_A ; -- status=guess
 lin virgin_A = mkA "jungfräulich" ; -- status=guess
@@ -21834,7 +21844,7 @@ lin volume_N = jahrgang_N ; -- status=guess
 lin voluminous_A = mkA "voluminös" ; -- status=guess
 lin voluntarily_Adv = mkAdv "freiwillig" ; -- status=guess
 lin voluntary_A = freiwillig_A ; -- status=guess
-lin volunteerMasc_N = mkN "Freiwillige {m}" feminine ; -- status=guess
+lin volunteerMasc_N = mkN "Freiwillige" feminine ; -- status=guess
 lin volunteer_V = anbieten_V | mkReflV "anbieten" ; -- status=guess, src=wikt status=guess, src=wikt
 lin volunteer_V2 = mkV2 (anbieten_V) | mkV2 (mkReflV "anbieten") ; -- status=guess, src=wikt status=guess, src=wikt
 --subcat lin volunteer_V2V = mkV2V (anbieten_V) | mkV2V (mkReflV "anbieten") ; -- status=guess, src=wikt status=guess, src=wikt
