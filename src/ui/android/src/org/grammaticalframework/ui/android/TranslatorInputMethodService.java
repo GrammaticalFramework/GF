@@ -135,15 +135,16 @@ public class TranslatorInputMethodService extends InputMethodService
                 // modify our behavior.
                 int variation = attribute.inputType & InputType.TYPE_MASK_VARIATION;
                 if (variation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
-                        variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+                	variation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD ||
+                    variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
                     // Do not display predictions / what the user is typing
                     // when they are entering a password.
                     mPredictionOn = false;
                 }
                 
-                if (variation == InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-                        || variation == InputType.TYPE_TEXT_VARIATION_URI
-                        || variation == InputType.TYPE_TEXT_VARIATION_FILTER) {
+                if (variation == InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS ||
+                	variation == InputType.TYPE_TEXT_VARIATION_URI ||
+                	variation == InputType.TYPE_TEXT_VARIATION_FILTER) {
                     // Our predictions are not useful for e-mail addresses
                     // or URIs.
                     mPredictionOn = false;
@@ -475,7 +476,8 @@ public class TranslatorInputMethodService extends InputMethodService
         if (wordLength > 1) {
         	mComposingWord.delete(wordLength - 1, wordLength);
             getCurrentInputConnection().setComposingText(getComposingString(), 1);
-            updateCandidates();
+            if (mPredictionOn)
+            	updateCandidates();
         } else if (wordLength > 0) {
             mComposingWord.setLength(0);
             getCurrentInputConnection().setComposingText(getComposingString(), 1);
