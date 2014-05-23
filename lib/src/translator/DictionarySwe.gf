@@ -11563,7 +11563,6 @@ lin coercive_A = mkA "tvingande" ; -- status=guess
 lin coetaneous_A = variants {} ; -- status=guess
 lin coeval_A = variants {} ; -- status=guess
 lin coeval_N = variants {} ; -- status=guess
-lin coevals_N = variants {} ; -- status=guess
 lin coexist_V = variants {} ; -- status=guess
 lin coexistence_N = mkN "samlevnad" "samlevnader" ; -- SaldoWN
 lin coexistent_A = variants {} ; -- status=guess
@@ -25856,7 +25855,6 @@ lin happy_A = mkA "lycklig" | mkA "glad" ;
 lin happy_go_lucky_A = variants {} ; -- status=guess
 lin haptic_A = variants {} ; -- status=guess
 lin haptoglobin_N = variants {} ; -- status=guess
-lin hara_kiri_N = variants {} ; -- status=guess
 lin harakiri_N = variants {} ; -- status=guess
 lin harangue_N = mkN "harang" "haranger" ; -- SaldoWN
 lin harangue_V = variants {} ; -- status=guess
@@ -43592,7 +43590,6 @@ lin polling_booth_N = variants {} ; -- status=guess
 lin polling_day_N = variants {} ; -- status=guess
 lin polling_station_N = variants {} ; -- status=guess
 lin pollinium_N = variants {} ; -- status=guess
-lin polls_N = variants {} ; -- status=guess
 lin pollster_N = variants {} ; -- status=guess
 lin pollucite_N = variants {} ; -- status=guess
 lin pollutant_N = mkN "förorening" ; -- status=guess
@@ -52075,7 +52072,6 @@ lin shtik_N = variants {} ; -- status=guess
 lin shtikl_N = variants {} ; -- status=guess
 lin shuck_N = variants {} ; -- status=guess
 lin shuck_V2 = variants {} ; -- status=guess
-lin shucks_N = variants {} ; -- status=guess
 lin shudder_N = mkN "rysning" ; -- comment=4
 lin shudder_V = mkV "darrar" ; -- comment=4
 lin shudderingly_Adv = variants {} ; -- status=guess
