@@ -124,4 +124,14 @@ lin
 
 --in Verb,   SlashV2VNP : V2V -> NP -> VPSlash -> VPSlash
 
+  DirectComplVS t np vs utt = 
+    mkS (lin Adv (optCommaSS utt)) (mkS t positivePol (mkCl np (lin V vs))) ;
+
+  DirectComplVQ t np vs q = 
+    mkS (lin Adv (optCommaSS (mkUtt q))) (mkS t positivePol (mkCl np (lin V vs))) ;
+
+  FocusObjS np sslash = 
+    mkS (lin Adv (optCommaSS (ss (appCompl True Pos sslash.c2 np)))) <lin S sslash : S> ; ---- Pos could be Neg: häntä minä en tunne
+
+
 }
