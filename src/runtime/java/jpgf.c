@@ -487,7 +487,9 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 	
 	pgf_linearize(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), out, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err) == gu_type(PgfLinNonExist))
+			return NULL;
+		else if (gu_exn_caught(err) == gu_type(PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
