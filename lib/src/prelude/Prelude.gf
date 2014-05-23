@@ -115,8 +115,12 @@ oper
 
 -- Embed between commas, where the latter one disappears in front of other punctuation
 
-    embedInCommas : Str -> Str = \s -> SOFT_BIND ++ "," ++ s ++ endComma ;
-    endComma : Str = pre {"," | "." => []; "" => SOFT_BIND ++ ","; _ => []} ;
+    embedInCommas : Str -> Str = \s -> bindComma ++ s ++ endComma ;
+    endComma : Str = pre {"," | "." => []; "" => bindComma ; _ => []} ;
+
+    bindComma : Str = SOFT_BIND ++ "," ;
+    optComma : Str = bindComma | [] ;
+    optCommaSS : SS -> SS = \s -> ss (s.s ++ optComma) ;
 
 --2 Miscellaneous
 
