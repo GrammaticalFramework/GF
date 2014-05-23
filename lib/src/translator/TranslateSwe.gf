@@ -23,7 +23,8 @@ concrete TranslateSwe of Translate =
   DocumentationSwe,
 
   ChunkSwe,
-  ExtensionsSwe [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
+  ExtensionsSwe [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
+                 DirectComplVS, DirectComplVQ, FocusObjS],
 
   DictionarySwe ** 
 open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Prelude in {

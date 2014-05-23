@@ -1,7 +1,7 @@
 --# -path=.:../abstract
 
 concrete ExtensionsEng of Extensions = 
-  CatEng ** open MorphoEng, ResEng, ParadigmsEng, (S = SentenceEng), (E = ExtraEng), Prelude in {
+  CatEng ** open MorphoEng, ResEng, ParadigmsEng, (S = SentenceEng), (E = ExtraEng), SyntaxEng, Prelude in {
 
 lincat
   VPI = E.VPI ;
@@ -153,5 +153,14 @@ lin
   AdAdV = cc2 ;
   
   UttAdV adv = adv;
+
+  DirectComplVS t np vs utt = 
+    mkS (lin Adv (optCommaSS utt)) (mkS t positivePol (mkCl np (lin V vs))) ;
+
+  DirectComplVQ t np vs q = 
+    mkS (lin Adv (optCommaSS (mkUtt q))) (mkS t positivePol (mkCl np (lin V vs))) ;
+
+  FocusObjS np sslash = 
+    mkS (lin Adv (optCommaSS (ss (sslash.c2 ++ np.s ! NPAcc)))) <lin S sslash : S> ;
 
 }

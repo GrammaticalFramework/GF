@@ -85,6 +85,11 @@ fun
   
     SlashSlashV2V : V2V -> Ant -> Pol -> VPSlash -> VPSlash ;  -- induce them to sell (it) -- analogous to Verb.SlashVV
 
+    DirectComplVS : Temp -> NP -> VS -> Utt  -> S ;    -- I am here, she said / she said: I am here  -- no negation possible
+    DirectComplVQ : Temp -> NP -> VQ -> QS -> S   ;    -- who is there, she asked / she asked: who is there  -- no negation possible
+
+    FocusObjS : NP -> SSlash -> S ;                    -- this woman I love  -- in declarative S, not in QS
+
 
 }
 

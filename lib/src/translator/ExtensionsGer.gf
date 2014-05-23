@@ -120,5 +120,15 @@ lin
 
   UttAdV adv = adv;
 
+  DirectComplVS t np vs utt = 
+    mkS (lin Adv (optCommaSS utt)) (mkS t positivePol (mkCl np (lin V vs))) ;
+
+  DirectComplVQ t np vs q = 
+    mkS (lin Adv (optCommaSS (mkUtt q))) (mkS t positivePol (mkCl np (lin V vs))) ;
+
+  FocusObjS np sslash = 
+    mkS (lin Adv (ss (appPrep sslash.c2 np.s))) <lin S sslash : S> ;
+
+
 
 }
