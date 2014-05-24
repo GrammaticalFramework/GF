@@ -2,11 +2,12 @@ module GF.Command.Importing (importGrammar, importSource) where
 
 import PGF
 import PGF.Data
+import PGF.Optimize
 
 import GF.Compile
 import GF.Compile.Multi (readMulti)
 import GF.Compile.GetGrammar (getCFRules, getEBNFRules)
-import GF.Grammar (identS, SourceGrammar) -- for cc command
+import GF.Grammar (SourceGrammar) -- for cc command
 import GF.Grammar.CFG
 import GF.Grammar.EBNF
 import GF.Compile.CFGtoPGF
@@ -65,6 +66,7 @@ importCF opts files get convert = do
       startCat <- case rules of
                     (CFRule cat _ _ : _) -> return cat
                     _                    -> fail "empty CFG"
-      let gf = cf2gf (last files) (uniqueFuns (mkCFG startCat Set.empty rules))
-      gr <- compileSourceGrammar opts gf
-      link opts (identS (justModuleName (last files) ++ "Abs"), (), gr)
+      let pgf = cf2pgf (last files) (uniqueFuns (mkCFG startCat Set.empty rules))
+      probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
+      return $ setProbabilities probs 
+             $ if flag optOptimizePGF opts then optimizePGF pgf else pgf

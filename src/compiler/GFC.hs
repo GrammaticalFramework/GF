@@ -12,7 +12,7 @@ import GF.Compile.CFGtoPGF
 import GF.Compile.GetGrammar
 import GF.Grammar.CFG
 
-import GF.Infra.Ident(identS,showIdent)
+import GF.Infra.Ident(showIdent)
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
@@ -68,13 +68,13 @@ compileCFFiles opts fs = do
   startCat <- case rules of
                 (CFRule cat _ _ : _) -> return cat
                 _                    -> fail "empty CFG"
-  let gf = cf2gf (last fs) (uniqueFuns (mkCFG startCat Set.empty rules))
-  gr <- compileSourceGrammar opts gf
+  let pgf = cf2pgf (last fs) (uniqueFuns (mkCFG startCat Set.empty rules))
   let cnc = justModuleName (last fs)
   unless (flag optStopAfterPhase opts == Compile) $
-     do pgf <- link opts (identS cnc, (), gr)
-        writePGF opts pgf
-        writeOutputs opts pgf
+     do probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
+        let pgf' = setProbabilities probs $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
+        writePGF opts pgf'
+        writeOutputs opts pgf'
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs =
