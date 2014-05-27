@@ -10,6 +10,7 @@ flags
 
 oper mkReflV : Str -> V = \s -> reflV (mkV s) accusative ;
 oper junkV : V -> Str -> V = \_,_ -> variants {} ; ---- to match Wiktionary-extracted non-verbs
+oper compoundV : Str -> V -> V = \s,v -> mkV s v ;
 
 lin aardvark_N = mkN "Erdferkel" neuter ; -- status=guess
 lin aardwolf_N = erdwolf_N ; -- status=guess
@@ -151,7 +152,7 @@ lin academic_A = mkA "akademisch" ; -- status=guess
 lin academicianMasc_N = reg2N "Akademiker" "Akademiker" masculine;
 lin academicianFem_N = reg2N "Akademikerin" "Akademikerinnen" feminine;
 lin academy_N = mkN "akademische Einrichtung" feminine ; -- status=guess
-lin accelerate_V = junkV (mkV "schneller") "werden" | beschleunigen_V ; -- status=guess, src=wikt status=guess, src=wikt
+lin accelerate_V = compoundV "schneller" werden_V | beschleunigen_V ; -- status=guess, src=wikt status=guess, src=wikt
 lin accelerate_V2 = mkV2 (junkV (mkV "schneller") "werden") | mkV2 (beschleunigen_V) ; -- status=guess, src=wikt status=guess, src=wikt
 lin acceleration_N = beschleunigung_N ; -- status=guess
 lin accelerator_N = mkN "Beschleuniger" masculine ; -- status=guess
