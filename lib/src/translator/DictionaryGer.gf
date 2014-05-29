@@ -1,4 +1,5 @@
----- edited by AR till way_N and some structural words below
+--# -path=.:../chunk:alltenses:../german
+---- edited by SS till director_N and some structural words and compound verbs
 
 concrete DictionaryGer of Dictionary = CatGer ** 
   open 
@@ -5804,7 +5805,7 @@ lin direct_A = direkt_A | unmittelbar_A ; -- status=guess status=guess
 lin direction_N = richtung_N ; -- status=guess
 lin directive_N = anweisung_N | anordnung_N | befehl_N | direktive_N ; -- status=guess status=guess status=guess status=guess
 lin directly_Adv = mkAdv "direkt" | mkAdv "gerade" ; -- status=guess status=guess
-lin director_N = mkN "Direktor" "Direktoren" masculine | mkN "Regisseur" ; --- split: director of the company / director of the movie
+lin director_N = mkN "Direktor" "Direktoren" masculine | mkN "Regisseur" ; --- split: director of the company / director of the movie -- END edit SS
 lin directory_N = verzeichnis_N ; -- status=guess
 lin dirigible_N = luftschiff_N ; -- status=guess
 lin dirndl_N = mkN "Dirndl" neuter ; -- status=guess
