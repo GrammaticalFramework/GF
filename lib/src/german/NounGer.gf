@@ -139,19 +139,18 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
 
     ComplN3 f x = {
       s = \\n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
+      co = f.co ++ appPrep f.c2 x.s ; ---- should not occur at all; the abstract syntax is problematic in giving N2
+      uncap = {
+        s = \\n,c => f.uncap.s ! n ! c ++ appPrep f.c2 x.s ;
+        co = f.uncap.co ++ appPrep f.c2 x.s ; ---- should not occur at all; the abstract syntax is problematic in giving N2
+       } ;
       g = f.g ; 
       c2 = f.c3
       } ;
 
-    Use2N3 f = {
-      s = f.s ;
-      g = f.g ; 
-      c2 = f.c2
-      } ;
+    Use2N3 f = f ;
 
-    Use3N3 f = {
-      s = f.s ;
-      g = f.g ; 
+    Use3N3 f = f ** {
       c2 = f.c3
       } ;
 

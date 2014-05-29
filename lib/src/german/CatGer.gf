@@ -88,9 +88,9 @@ concrete CatGer of Cat =
     A  = {s : Degree => AForm => Str} ;
     A2 = {s : Degree => AForm => Str ; c2 : Preposition} ;
 
-    N  = {s : Number => Case => Str ; g : Gender} ;
-    N2 = {s : Number => Case => Str ; g : Gender} ** {c2 : Preposition} ;
-    N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Preposition} ;
+    N  = ResGer.Noun ;
+    N2 = ResGer.Noun ** {c2 : Preposition} ;
+    N3 = ResGer.Noun ** {c2,c3 : Preposition} ;
     PN = {s : Case => Str} ;
 
 -- tense with possibility to choose conjunctive forms

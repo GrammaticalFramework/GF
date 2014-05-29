@@ -217,15 +217,46 @@ resource ResGer = ParamX ** open Prelude in {
 -- are always the same except for the dative. Actually the six forms are never
 -- needed at the same time, but just subsets of them.
 
-  Noun : Type = {s : Number => Case => Str ; g : Gender} ;
+  Noun : Type = {
+    s : Number => Case => Str ; 
+    co : Str ;  -- compound form, first part
+    uncap : {   -- compound form, second part, uncapitalized
+      s : Number => Case => Str ;  --- just a copy of the normal noun; would be nicer with run-time uncap
+      co : Str ;
+      } ;
+    g : Gender
+    } ;
 
-  mkN  : (x1,_,_,_,_,x6 : Str) -> Gender -> Noun = 
-    \mann, mannen, manne, mannes, maenner, maennern, g -> {
+  mkN  : (x1,_,_,_,_,x6,x7 : Str) -> Gender -> Noun = 
+    \Mann, Mannen, Manne, Mannes, Maenner, Maennern, Mann_, g -> {
      s = table {
-       Sg => caselist mann mannen manne mannes ;
-       Pl => caselist maenner maenner maennern maenner
+       Sg => caselist Mann Mannen Manne Mannes ;
+       Pl => caselist Maenner Maenner Maennern Maenner
        } ; 
+     co = Mann_ ;
+     uncap = 
+       let
+         mann = toLowerFirst Mann ;
+         mannen = toLowerFirst Mannen ;
+         manne = toLowerFirst Manne ;
+         mannes = toLowerFirst Mannes ;
+         maenner = toLowerFirst Maenner ;
+         maennern = toLowerFirst Maennern ;
+         mann_ = toLowerFirst Mann_ ;
+       in {
+         s = table {
+           Sg => caselist mann mannen manne mannes ;
+           Pl => caselist maenner maenner maennern maenner
+           } ; 
+         co = mann_ ;
+         } ;
      g = g
+    } ;
+
+  mkCompoundForm : Str -> Str = \s -> case s of {
+    _ + "e" => s + "n" ;
+    _ + ("ung" | "heit" | "keit") => s + "s" ;
+    _ => s  ---- any more predictable cases?
     } ;
 
 -- Adjectives need four forms: two for the positive and one for the other degrees.
@@ -246,7 +277,8 @@ resource ResGer = ParamX ** open Prelude in {
 
   Verb : Type = {
     s : VForm => Str ; 
-    prefix : Str ; 
+    prefix : Str ;
+    particle : Str ; 
     aux : VAux ; 
     vtype : VType
     } ;
@@ -288,6 +320,7 @@ resource ResGer = ParamX ** open Prelude in {
       VPastPart a      => ein + (regA gegeben).s ! Posit ! a
       } ;
      prefix = ein ;
+     particle = [] ;
      aux = aux ;
      vtype = VAct
      } ;
@@ -311,6 +344,7 @@ resource ResGer = ParamX ** open Prelude in {
       VPastPart a => ein + vs ! VPastPart a
       } ;
      prefix = ein ;
+     particle = verb.particle ;
      aux = verb.aux ;
      vtype = verb.vtype
      } ;
@@ -320,7 +354,7 @@ resource ResGer = ParamX ** open Prelude in {
 -- defined in $MorphoGer$.
 
   mkN4 : (x1,_,_,x4 : Str) -> Gender -> Noun = \wein,weines,weine,weinen ->
-    mkN wein wein wein weines weine weinen ;
+    mkN wein wein wein weines weine weinen (mkCompoundForm wein) ;
 
   regA : Str -> Adjective = \blau ->
    let blauest : Str = case blau of {
@@ -486,7 +520,7 @@ resource ResGer = ParamX ** open Prelude in {
 
       vf : Bool -> Str -> Str -> {fin,inf : Str} = \b,fin,inf -> {
         fin = fin ; 
-        inf = if_then_Str b [] auf ++ inf  --- negation of main b
+        inf = verb.particle ++ if_then_Str b [] auf ++ inf  --- negation of main b
         } ;
 
     in {
@@ -515,6 +549,7 @@ resource ResGer = ParamX ** open Prelude in {
     s = {
      s = verb.s ;
      prefix = verb.prefix ;
+     particle = verb.particle ;
      aux = verb.aux ;
      vtype = verb.vtype
      } ;
@@ -574,6 +609,7 @@ resource ResGer = ParamX ** open Prelude in {
       v => sein.s ! v 
       } ;
      prefix = [] ;
+     particle = [] ;
      aux = VSein ;
      vtype = VAct
     } ;
