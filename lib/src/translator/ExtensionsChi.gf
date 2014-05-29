@@ -44,7 +44,7 @@ lin
 
 --  but_Subj = {s = "pero" ; m = Indic} ; ---- strange to have this as Subj
 
-  CompoundCN noun cn  = {s = noun.s ++ cn.s ; c = cn.c} ; ----
+  CompoundN noun cn  = {s = noun.s ++ cn.s ; c = cn.c} ; ----
   CompoundAP noun adj = complexAP (noun.s ++ possessive_s ++ adj.s) ; ----
 
   GerundN v = {

@@ -35,10 +35,11 @@ lin
 
 
 lin
-  CompoundCN noun cn = {
+  CompoundN noun cn = {
       s = \\n,d,c => noun.co ++ BIND ++ cn.s ! n ! d ! c ; 
-      g = cn.g ;
-      isMod = False
+      co = noun.co ++ BIND ++ cn.s ! Sg ! Indef ! Gen   -- (last+bil)s + chaufför 
+        | noun.co ++ cn.co ;
+      g = cn.g
       } ;
 
   CompoundAP noun adj = {

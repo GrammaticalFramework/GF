@@ -48,7 +48,7 @@ lin
 
 
 lin
-  CompoundCN noun cn = {
+  CompoundN noun cn = {
     s = \\n => cn.s ! n ++ elisDe ++ noun.s ! Sg ;
     g = cn.g
   } ;

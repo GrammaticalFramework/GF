@@ -33,7 +33,7 @@ lin
   EmptyRelSlash = E.EmptyRelSlash ;
 
 lin
-  CompoundCN noun cn = {
+  CompoundN noun cn = {
     s = (\\n,c => noun.s ! Sg ! Nom ++ cn.s ! n ! c) 
       | (\\n,c => noun.s ! Pl ! Nom ++ cn.s ! n ! c)
       | (\\n,c => noun.s ! Sg ! Nom ++ Predef.BIND ++ "-" ++ Predef.BIND ++ cn.s ! n ! c) 

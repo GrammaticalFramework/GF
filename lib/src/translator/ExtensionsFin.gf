@@ -47,7 +47,7 @@ lin
                }
          ) ;
 
-  CompoundCN noun cn = {
+  CompoundN noun cn = {
     s = \\nf => noun.s ! 10 ++ BIND ++ cn.s ! nf ;
     h = cn.h
     } ;
