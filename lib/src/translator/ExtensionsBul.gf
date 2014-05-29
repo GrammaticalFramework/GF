@@ -36,8 +36,9 @@ lin
   EmptyRelSlash = E.EmptyRelSlash ;
 
 lin
-  CompoundCN noun cn = {
+  CompoundN noun cn = {
     s = \\nf => (noun.rel ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
+    rel = \\af => (noun.rel ! af) ++ (cn.rel ! af) ; ---- is this correct? AR 29/5/2014
     g = cn.g
   } ;
 

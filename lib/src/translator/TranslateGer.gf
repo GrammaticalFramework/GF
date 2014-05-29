@@ -23,7 +23,7 @@ concrete TranslateGer of Translate =
   DocumentationGer,
 
   ChunkGer,
-  ExtensionsGer [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
+  ExtensionsGer [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
                  DirectComplVS, DirectComplVQ, FocusObjS],
 
   DictionaryGer ** 

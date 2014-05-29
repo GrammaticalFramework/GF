@@ -64,8 +64,8 @@ lin
     PredVPosv = G.PredVP;
     PredVPovs = G.PredVP;
 
-  CompoundCN noun cn = {
-    s = \\af,nf => glue (noun.s ! NF Sg Nom) (cn.s ! af ! nf) ;
+  CompoundN noun cn = {
+    s = \\nf => glue (noun.s ! NF Sg Nom) (cn.s ! nf) ; ---- TODO: introduce compound form
     g = cn.g
     } ;
 

@@ -27,7 +27,7 @@ concrete TranslateChi of Translate =
   DocumentationChi,
 
   ChunkChi,
-  ExtensionsChi [CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
+  ExtensionsChi [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
 
   DictionaryChi ** 
  

@@ -24,7 +24,7 @@ abstract Translate =
 
   Construction,
   Extensions [
-    CompoundCN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
+    CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
     DirectComplVS, DirectComplVQ, FocusObjS
 ----    , PastPartAP, PastPartAgentAP, PresPartAP ---- not yet available for all languages
     ],
