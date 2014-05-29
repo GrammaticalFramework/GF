@@ -18,7 +18,7 @@ oper
 -- For $StructuralGer$.
 
   mkPrep : Str -> PCase -> Preposition = \s,c -> 
-    {s = s ; c = c ; isPrep = True} ;
+    {s = s ; s2 = [] ; c = c ; isPrep = True} ;
 
   nameNounPhrase : {s : Case => Str} ->  {s : PCase => Str ; a : Agr ; isPron : Bool} = \name -> heavyNP {
       s = \\c => usePrepC c (\k -> name.s ! k) ;
