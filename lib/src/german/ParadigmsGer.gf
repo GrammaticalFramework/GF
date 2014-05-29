@@ -178,8 +178,12 @@ mkN : overload {
 
 -- A preposition is formed from a string and a case.
 
-  mkPrep : Str -> Case -> Prep ; -- e.g. "durch" + accusative
-  
+  mkPrep : overload {
+    mkPrep : Str -> Case -> Prep ; -- e.g. "durch" + accusative
+    mkPrep : Case -> Str -> Prep ; -- postposition
+    mkPrep : Str -> Case -> Str -> Prep ; -- both sides
+    } ;
+
 -- Often just a case with the empty string is enough.
 
   accPrep : Prep ; -- no string, just accusative case
@@ -483,10 +487,14 @@ mkV2 : overload {
 
   mkAdv s = {s = s ; lock_Adv = <>} ;
 
-  mkPrep s c = {s = s ; c = c ; isPrep = True ; lock_Prep = <>} ;
-  accPrep = {s = [] ; c = accusative ; isPrep = False ; lock_Prep = <>} ;
-  datPrep = {s = [] ; c = dative ; isPrep = False ; lock_Prep = <>} ;
-  genPrep = {s = [] ; c = genitive ; isPrep = False ; lock_Prep = <>} ;
+  mkPrep = overload {
+    mkPrep : Str -> PCase -> Prep = \s,c -> {s = s ; s2 = [] ; c = c ; isPrep = True ; lock_Prep = <>} ;
+    mkPrep : PCase -> Str -> Prep = \c,s -> {s = [] ; s2 = s ; c = c ; isPrep = True ; lock_Prep = <>} ;
+    mkPrep : Str -> PCase -> Str -> Prep = \s,c,t -> {s = s ; s2 = t ; c = c ; isPrep = True ; lock_Prep = <>}
+    } ;
+  accPrep = {s,s2 = [] ; c = accusative ; isPrep = False ; lock_Prep = <>} ;
+  datPrep = {s,s2 = [] ; c = dative ; isPrep = False ; lock_Prep = <>} ;
+  genPrep = {s,s2 = [] ; c = genitive ; isPrep = False ; lock_Prep = <>} ;
   --von_Prep = mkPrep "von" dative ;
   von_Prep = mkPrep [] vonDat_Case ;
   zu_Prep = mkPrep [] zuDat_Case ;
@@ -562,7 +570,7 @@ mkV2 : overload {
 
   mkV3 = overload {
     mkV3 : V -> V3 
-      = \v -> lin V3 (v ** {c2 = mkPrep [] accusative ; c3 = mkPrep [] dative}) ; 
+      = \v -> lin V3 (v ** {c2 = accPrep ; c3 = datPrep}) ;
     mkV3 : V -> Prep -> Prep -> V3
       = \v,c,d -> v ** {c2 = c ; c3 = d ; lock_V3 = <>} ;
     } ;
@@ -631,6 +639,10 @@ mkV2 : overload {
       = \n,x -> mkCompoundN n.co x ;
     mkN : Str -> Gender -> Gender -> N 
       = \s,g,h -> reg1N s g | reg1N s h ;
+
+    mkN : (x1,_,_,_,_,x6 : Str) -> N  
+      = \a,b,c,d,e,f -> mk6N a b c d e f ((regN a).g) ; ---- temporary: to deal with genderless uses AR 29/5/2014
+
     };
 
     mkCompoundN : Str -> N -> N  -- Auto + Fahrer -> Autofahrer
@@ -683,7 +695,7 @@ mkV2 : overload {
     mkV2 : Str -> V2 = \s -> dirV2 (regV s) ;
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : V -> Prep -> V2 = prepV2;
-    mkV2 : V -> Case -> V2 = \v,c -> prepV2 v (lin Prep {s = [] ; c = c ; isPrep = False}) ;
+    mkV2 : V -> Case -> V2 = \v,c -> prepV2 v (lin Prep {s,s2 = [] ; c = c ; isPrep = False}) ;
     } ;
 
 }
