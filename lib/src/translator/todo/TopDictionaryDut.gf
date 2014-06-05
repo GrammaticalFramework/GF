@@ -102,7 +102,7 @@ lin use_VV = mkVV (mkV "gebruiken") ; ---- subcat, not to be used as "used to ..
 lin use_V2 = mkV2 (mkV "gebruiken") ; -- status=guess, src=wikt
 lin use_V = mkV "gebruiken" ;
 lin because_Subj = S.because_Subj ;
-lin good_A = mkA "goed" ;
+lin good_A = L.good_A ;
 lin find_VS = mkVS (vinden_V) ; ---- split senses 'to be of opinion of' and 'to locate'. V2V is only applicable with the first sense, and there is a synonym for the first one (van mening zijn dat).
 lin find_V2A = mkV2A (vinden_V) ;
 lin find_V2 = L.find_V2 ;
