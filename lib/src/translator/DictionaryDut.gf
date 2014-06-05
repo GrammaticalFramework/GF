@@ -7348,7 +7348,7 @@ lin gondola_N = mkN "gondel" ; -- status=guess
 lin gong_N = mkN "gong" masculine ; -- status=guess
 lin gonorrhea_N = mkN "gonorroe" ; -- status=guess
 lin goo_N = mkN "stroperigheid" ; -- status=guess
-lin good_A = mkA "goed" ;
+lin good_A = L.good_A ;
 lin good_N = mkN "goed" | mkN "goede" ; -- status=guess status=guess
 lin goodbye_Interj = mkInterj "tot ziens" | mkInterj "doei" | mkInterj "dag" | mkInterj "houdoe" ; -- status=guess status=guess status=guess status=guess
 lin goodness_N = mkN "goedheid" feminine ; -- status=guess

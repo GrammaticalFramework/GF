@@ -9120,7 +9120,7 @@ lin gondola_N = mkN "góndola" ; -- status=guess
 lin gong_N = mkN "gongo" | mkN "gong" masculine ; -- status=guess status=guess
 lin goniometer_N = mkN "goniómetro" ; -- status=guess
 lin gonorrhea_N = mkN "gonorrea" ; -- status=guess
-lin good_A = mkA "bueno" ;
+lin good_A = L.good_A ;
 lin good_N = mkN "bien" masculine ; -- status=guess
 lin goodbye_Interj = mkInterj "adiós" | mkInterj "hasta luego" | mkInterj "hasta la vista" | mkInterj "hasta pronto" | mkInterj "nos vemos" ; -- status=guess status=guess status=guess status=guess status=guess
 lin goodness_N = mkN "bondad" feminine ; -- status=guess
