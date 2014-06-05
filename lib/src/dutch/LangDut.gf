@@ -2,4 +2,6 @@
 
 concrete LangDut of Lang = 
   GrammarDut,
-  LexiconDut ;
+  LexiconDut 
+----  ,DocumentationDut
+;
