@@ -20,7 +20,7 @@ concrete TranslateDut of Translate =
   RelativeDut,
   IdiomDut,
 ----  ConstructionDut,
-----  DocumentationDut,
+  DocumentationDut,
 
   ChunkDut,
   ExtensionsDut [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
