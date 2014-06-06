@@ -30,40 +30,39 @@ lin
                    }) ;
     s2 = frameTable ( 
            tr (th "" ++ th (heading singular_Parameter)            ++ th (heading plural_Parameter)   ) ++
-           tr (th (heading nominative_Parameter) ++ td (noun.s ! Sg ! Nom) ++ td (noun.s ! NF Pl Nom)) ++
-           tr (th (heading genitive_Parameter)   ++ td (noun.s ! Sg ! Gen) ++ td (noun.s ! NF Pl Gen))
+           tr (th (heading nominative_Parameter) ++ td (noun.s ! NF Sg Nom) ++ td (noun.s ! NF Pl Nom)) ++
+           tr (th (heading genitive_Parameter)   ++ td (noun.s ! NF Sg Gen) ++ td (noun.s ! NF Pl Gen))
            )
     } ;
 
   InflectionA, InflectionA2 = \adj ->
     let
-      gforms : Degree -> ResDut.Case -> Str = \d,c ->
-        td (adj.s ! d ! (AMod (GSg Utr)  c)) ++
-        td (adj.s ! d ! (AMod (GSg Neutr) c)) ++
-        td (adj.s ! d ! (AMod GPl         c)) ;
-      dtable : Parameter -> Degree -> Str = \s,d ->
-        paragraph (heading2 (heading s) ++ frameTable ( 
-          tr (th []  ++ th (heading uter_Parameter) ++ th (heading neuter_Parameter) ++ 
-                        th (heading plural_Parameter)) ++
-          tr (th (heading nominative_Parameter) ++ gforms d Nom) ++
-          tr (th (heading genitive_Parameter)   ++ gforms d Gen) ++
-          tr (th (heading dative_Parameter)     ++ gforms d Dat) ++
-          tr (th (heading accusative_Parameter) ++ gforms d Acc) ++
-          tr (th (heading predicative_Parameter) ++ intagAttr "td" "colspan=4" (adj.s ! d ! APred))
-          ))
+      gforms : AForm -> Str = \a ->
+        td (adj.s ! Posit  ! a) ++
+        td (adj.s ! Compar ! a) ++
+        td (adj.s ! Superl ! a) ;
+
+      dtable : Str = 
+        frameTable ( 
+          tr (th []  ++ th (heading positive_Parameter) ++ th (heading comparative_Parameter) ++ 
+                        th (heading superlative_Parameter)) ++
+          tr (th (heading predicative_Parameter) ++ gforms APred) ++
+          tr (th (heading attributive_Parameter) ++ gforms APred) ++
+          tr (th (heading partitive_Parameter)   ++ gforms AGen)
+          )
     in { t  = "a" ;
          s1 = heading1 (nounHeading adjective_Category).s ;
-         s2 = dtable positive_Parameter Posit ++ dtable comparative_Parameter Compar ++ dtable superlative_Parameter Superl
+         s2 = dtable
        } ;
 
   InflectionAdv adv = {
-    t  = "adverb" ;
+    t  = "adv" ;
     s1 = heading1 (heading preposition_Category) ;
     s2 = paragraph adv.s
     } ;
 
   InflectionPrep p = {
-    t  = "präp" ;
+    t  = "prep" ;
     s1 = heading1 (heading preposition_Category) ;
     s2 = paragraph (S.mkAdv (lin Prep p) (S.mkNP S.a_Det L.computer_N)).s
     } ;
@@ -148,34 +147,30 @@ oper
      ++ ";" ++ (S.mkUtt (S.mkS S.anteriorAnt cl)).s  --# notpresent
      ;
 
-  inflVerb : Verb -> Str = \verb -> 
+  inflVerb : VVerb -> Str = \verb -> 
      let 
        vfin : VForm -> Str = \f ->
          verb.s ! f ++ verb.prefix ; 
-       gforms : Number -> Person -> Str = \n,p -> 
-         td (vfin (VFin False (VPresInd  n p))) ++
-         td (vfin (VFin False (VPresSubj n p)))
-         ++ td (vfin (VFin False (VImpfInd  n p))) --# notpresent
-         ++ td (vfin (VFin False (VImpfSubj n p)))  --# notpresent
-         ;
+       gforms : VForm -> Str = \f -> 
+         td (vfin f) ;
+
      in frameTable (
-          tr (th "" ++ intagAttr "th" "colspan=2" (heading present_Parameter) ++  intagAttr "th" "colspan=2" (heading past_Parameter)) ++  
-          tr (th "" ++ th (heading indicative_Parameter) ++ th (heading conjunctive_Parameter ++ "I")  ++  
-                       th (heading indicative_Parameter) ++ th (heading conjunctive_Parameter ++ "II"))  ++  
-          tr (th "Sg.1"  ++ gforms Sg P1) ++
-          tr (th "Sg.2"  ++ gforms Sg P2) ++
-          tr (th "Sg.3"  ++ gforms Sg P3) ++
-          tr (th "Pl.1"  ++ gforms Pl P1) ++
-          tr (th "Pl.2"  ++ gforms Pl P2) ++
-          tr (th "Pl.3"  ++ gforms Pl P3)
-          ) ++
+          tr (th "" ++ th (heading present_Parameter) ++  th (heading past_Parameter)) ++  
+          tr (th "Sg.1"  ++ gforms VPresSg1  
+             ++ intagAttr "td" "rowspan=3" (vfin VPastSg) --# notpresent
+             ) ++
+          tr (th "Sg.2"  ++ gforms VPresSg2) ++
+          tr (th "Sg.3"  ++ gforms VPresSg3) ++
+          tr (th "Pl"    ++ gforms VPresPl   
+             ++ td (vfin VPastPl)  --# notpresent
+          )) ++
         frameTable (
-          tr (th (heading imperative_Parameter ++ "Sg.2")  ++ td (vfin (VImper Sg))) ++
-          tr (th (heading imperative_Parameter ++ "Pl.2")  ++ td (vfin (VImper Pl))) ++
-          tr (th (heading infinitive_Parameter)            ++ td (verb.s ! (VInf False))) ++
-          tr (th (heading present_Parameter ++ heading participle_Parameter) ++ td (verb.s ! (VPresPart APred))) ++
-          tr (th (heading perfect_Parameter ++ heading participle_Parameter) ++ td (verb.s ! (VPastPart APred))) ++
-          tr (th (heading aux_verb_Parameter)       ++ td (case verb.aux of {VHaben => "haben" ; VSein => "sein"}))
+          tr (th (heading imperative_Parameter ++ "Sg.2")  ++ td (vfin VImp2)) ++
+          tr (th (heading imperative_Parameter ++ "Sg.3")  ++ td (vfin VImp3)) ++
+          tr (th (heading imperative_Parameter ++ "Pl.2")  ++ td (vfin (VImpPl))) ++
+          tr (th (heading infinitive_Parameter)            ++ td (verb.s ! VInf)) ++
+          tr (th (heading perfect_Parameter ++ heading participle_Parameter) ++ td (verb.s ! VPerf)) ++
+          tr (th (heading aux_verb_Parameter)       ++ td (case verb.aux of {VHebben => "hebben" ; VZijn => "zijn"}))
         ) ;
 
 }

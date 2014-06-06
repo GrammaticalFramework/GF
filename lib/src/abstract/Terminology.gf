@@ -82,6 +82,7 @@ fun
   comparative_Parameter : Parameter ;
   superlative_Parameter : Parameter ;
   predicative_Parameter : Parameter ;
+  attributive_Parameter : Parameter ;
   negative_Parameter : Parameter ;
   positivePol_Parameter : Parameter ; -- as opposed to negative, e.g. for verbs
 

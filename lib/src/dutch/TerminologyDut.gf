@@ -38,17 +38,18 @@ lin
   genitive_Parameter = mkN "genitief" ;
   dative_Parameter = mkN "datief" ;
   accusative_Parameter = mkN "accusatief" ;
-  
-  imperative_Parameter = mkN "imperatief" ;
-  indicative_Parameter = mkN "indicatief" ;
-  conjunctive_Parameter = mkN "conjunctief" ;
-  infinitive_Parameter = mkN "infinitief" ;
+  partitive_Parameter = mkN "partitief" ;
 
-  present_Parameter = mkN "tegenwoordige tijd" ;
-  past_Parameter = mkN "verleden tijd" ;
-  future_Parameter = mkN "toekomende tijd" ;
-  conditional_Parameter = mkN "voorwaardelijke wijs" ;
-  perfect_Parameter = mkN "voltooide tijd" ;
+  imperative_Parameter = mkN "gebiedend" ;
+  indicative_Parameter = mkN "aantonend" ;
+  conjunctive_Parameter = mkN "aanvoegend" ;
+  infinitive_Parameter = mkN "onbepaald" ;
+
+  present_Parameter = mkN "tegenwoordig" ;
+  past_Parameter = mkN "verleden" ;
+  future_Parameter = mkN "toekomend" ;
+  conditional_Parameter = mkN "voorwaardelijk" ;
+  perfect_Parameter = mkN "voltooid" ;
 
   participle_Parameter = mkN "deelwoord" ;
   aux_verb_Parameter = mkN "hulpwerkwoord" ;
@@ -56,7 +57,8 @@ lin
   positive_Parameter = mkN "stellend" ;
   comparative_Parameter = mkN "vergrotend" ;
   superlative_Parameter = mkN "overtreffend" ;
-  predicative_Parameter = mkN "predicatief" ;
+  predicative_Parameter = mkN "onverbogen" ;
+  attributive_Parameter = mkN "verbogen" ;
 
   nounHeading n = ss (n.s ! NF Sg Nom) ;
 
