@@ -5,7 +5,7 @@ abstract Konstruktikon = Lang ** {
 
 fun
   reflexiv_resultativVP        : V -> AP -> VP ;      -- jag dricker mig smal
-  indirekt_kausativ_bortVP     : V -> NP -> VP ;      -- jag äter bort min huvudverk 
+  indirekt_kausativ_bortVP     : V -> NP -> VP ;      -- jag äter bort min huvudvärk 
   verba_pa_fortsVP             : V -> VP ;            -- jag jobbar på
   adjektiv_som_nom_abstraktNP  : A -> NP ;            -- det materiella       --- should be AP but case is not available in AFormPos
   adjektiv_som_nom_anaforiskNP : NPAgr -> A -> NP ;   -- den blåa ; det röda  ---- should be AP
@@ -16,6 +16,11 @@ fun
 --  ellips_samordningXP  ---- TODO     : 
   -- en klänning med skärp och en 0 utan 0
   -- en röd 0 och en grön stol
+
+----  ellips_samordningNP : Conj -> Det -> AP -> Det -> AP -> CN -> NP ;
+---- should be [DAP] -> CN -> NP with Conj -> Det -> AP -> DAP
+---- e.g. en röd och två gula eller tre svarta stolar
+
   -- Alf sitter i soffan och Barbro 0 i stolen
   -- humrarna var beställda och borden 0 dukade
   -- hon började gilla Simon och han 0 henne                                 
@@ -54,7 +59,7 @@ fun
   i_adjaste_lagetComp : A -> Comp ;   -- i sötaste laget     --- AP i K, but this would be overgenerating
 
   progpart_saettVP    : V -> V -> VP ;  -- en kille kommer springande ur en affär
-  progpart_addVP      : V -> V -> VP ;  -- han gick skrikande fram till fotograferna --- what is the difference?
+  progpart_addVP      : V -> V -> VP ;  -- han gick skrikande fram till fotograferna 
 
   reaktiv_dubbel_auxUtt  : VV -> NP -> Pol -> Utt ; -- måste måste man väl inte men ...  --- the "men" clause is not there in the first K example
   reaktiv_x_och_xUtt  : Utt -> Utt ;    -- många och många  ---- XP in K ; what exactly are the restrictions? can we use a lower category?
