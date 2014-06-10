@@ -11,13 +11,15 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
-Over [...] changes have been pushed to the source repository since the release
-of GF 3.5.
+Over 1200 changes have been pushed to the source repository since the release
+of GF 3.5 in August 2013.
 
 Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
  25, 30, 41, 57, 60, 61, 68, 80, 81, 82.
 
 ===GF compiler and run-time library===
+
+====New features and notable changes====
 
 - Token gluing, BIND, SOFT_BIND [...]
 - ``nonExist`` now exists. [...]
@@ -27,10 +29,20 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
   See the separate document
   [GF character encoding changes encoding-change.html] for more details.
 - Unicode characters in identifiers [...]
-- The PGF file format has changed in minor but backward incompatible ways
+- The PGF file format has changed in minor but backward incompatible ways.
   GF can still read the old format, thanks to a backward compatibility
-  module. Old PGF files can be converted to the new format by loading them
-  in the GF shell and writing out a new PGF file with the ``pg -pgf`` command.
+  module. The C run-time system supports only the new format. Old PGF files
+  can be converted to the new format by loading them in the GF shell and
+  writing out a new PGF file with the ``pg -pgf`` command.
+- The PGF run-time library includes some new modules, e.g.
+ ``PGF.Lexing`` which contains lexing and unlexing functions, and
+  ``PGF2``, which is a binding to the C run-time system. The latter is included
+  only if GF is configured with ``-fc-runtime``, which is not the default,
+  since the C run-time system still has to be compiled and installed
+  separately before installing GF.
+
+
+====Bug fixes and minor changes====
 
 - Nonlinear patterns (i.e., patterns where the same variable appears more than
   once) in concrete syntax are now detected and reported as errors.
@@ -39,24 +51,53 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
 - A pattern matching bug which prevented variables in patterns to be bound to
   table values has been fixed.
 - A bug with local variable name shadowing has been fixed.
+- Type checking fixes: record extension change, correction of
+  subtyping check for ``Ints n<=Ints m``, contravariance in table types [...]
 - The refresh pass
 % (and thus the command line option --dump-refresh)
   had become obsolete and has been removed.
 - The old partial evaluator
   (and thus the command line options ``--new-comp`` and ``--old-comp``)
   has been removed.
+- A missing rewrite rule has been added to the partial evaluator. It
+  can significantly reduce the compilation time for certain grammars.
+- Some additional datestamp checks have been added to ``gf -make`` to avoid
+  recreating a PGF file when an uptodate PGF file already exists.
 
 
 ===Resource Grammar Library===
 
 - New languages in the Resource Grammar Library: Estonian
   (see the [updated synopsis ../lib/doc/synopsis.html]).
+- Grammars and dictionaries for wide coverage translation [...]
 - [...]
 
 
 ===GF Cloud services===
 
-- [...]
+- There is a preliminary new [Wide Coverage Translation Demo http://cloud.grammaticalframework.org/wc.html] web app. [...] Wide coverage translation is also
+  availble in the Simple Translation Tool.
+- PGF web service API: the ``lookupmorpho`` request has been added. [...]
+- PGF web service API:
+  requests like ``parse`` and ``translate`` that parse text input now
+  accept a ``lexer`` parameter to apply a lexer to the input text before
+  parsing. The lexer can be ``text``, ``code`` or ``mixed``.
+- PGF web service API:
+  requests like ``linearize`` and ``translate`` that produce
+  linearizations now accept an ``unlexer`` parameter to apply an unlexer to the
+  linearizations. The unlexer can be ``text``, ``code`` or ``mixed``.
+- The PGF web service API has been extended with following new requests
+  to access the C run-time system:
+  - ``c-parse``, ``c-linearize``, ``c-translate``, ``c-lookupmorpho``,
+    ``c-grammar``. These work in the same way as the corresponding requests
+    without the ``c-`` prefix. Since the ``c-parse`` and ``c-translate`` can
+    produce very many (even infinitely many) results when used with large
+    grammars, there is a ``limit`` parameter to restrict number of results
+    to a given number, e.g. ``limit=10``.
+  - ``c-wordforword``: this works as ``c-translate`` but does a
+    word-for-word lookup to create a (potentially very low quality)
+    translation that can be used if all else fails.
+
 
 --------------------
 
