@@ -16,18 +16,14 @@ module PGF2 (-- * PGF
             ) where
 
 import Prelude hiding (fromEnum)
-import Control.Exception
---import System.IO
-import System.IO.Unsafe
+import Control.Exception(Exception,throwIO)
+import System.IO.Unsafe(unsafePerformIO,unsafeInterleaveIO)
 import PGF2.FFI
 
 import Foreign hiding ( Pool, newPool, unsafePerformIO )
 import Foreign.C
---import Foreign.C.String
---import Foreign.Ptr
 import Data.Typeable
 import qualified Data.Map as Map
---import qualified Data.ByteString as BS
 import Data.IORef
 
  
@@ -58,7 +54,7 @@ readPGF fpath =
                                      gu_pool_free pool
                                      ioError (errnoToIOError "readPGF" (Errno errno) Nothing (Just fpath))
                              else do gu_pool_free pool
-                                     throw (PGFError "The grammar cannot be loaded")
+                                     throwIO (PGFError "The grammar cannot be loaded")
                    else return pgf
      master <- newForeignPtr gu_pool_finalizer pool
      return PGF {pgf = pgf, pgfMaster = master}
@@ -225,10 +221,10 @@ parse lang cat sent =
                                   msg <- peekCString c_msg
                                   gu_pool_free parsePl
                                   gu_pool_free exprPl
-                                  throw (PGFError msg)
+                                  throwIO (PGFError msg)
                           else do gu_pool_free parsePl
                                   gu_pool_free exprPl
-                                  throw (PGFError "Parsing failed")
+                                  throwIO (PGFError "Parsing failed")
          else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
                  exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
                  exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
@@ -248,8 +244,8 @@ linearize lang e = unsafePerformIO $
                    else if ty == gu_type__PgfExn
                           then do c_msg <- (#peek GuExn, data.data) exn
                                   msg <- peekCString c_msg
-                                  throw (PGFError msg)
-                          else throw (PGFError "The abstract tree cannot be linearized")
+                                  throwIO (PGFError msg)
+                          else throwIO (PGFError "The abstract tree cannot be linearized")
          else do lin <- gu_string_buf_freeze sb pl
                  peekCString lin
 
