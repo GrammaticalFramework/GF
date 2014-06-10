@@ -27,6 +27,9 @@ lin
     a = agrP3 Utr Pl
     } ;
 
+----  ellips_samordningNP conj det1 ap1 det2 ap2 cn = -- : Conj -> Det -> AP -> Det -> AP -> CN -> NP
+----    mkNP conj (mkNP de11 (mkCN ap1 cn)) (mkNP det2 (mkCN ap2 cn)) ;
+
   saa_gradAP ap s = {
       s = \\a => "så" ++ ap.s ! a ++ (mkSC (lin S s)).s ;
       isPre = False ----
