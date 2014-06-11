@@ -14,17 +14,27 @@ body {
 
 h1,h2,h3,h4 { font-size: 20px; }
 
-img.grow { display: none; }
-
+img.logo, img.grow { display: none; }
 
 a { color: #ecc800; }
 a:hover { color: #fcd800; }
+
+div.links {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 1em;
+}
 
 table.news td {
     background: inherit;
     border: 0;
     vertical-align: baseline;
     padding: 0.25ex 0.5ex;
+}
+
+table.news td:nth-child(1) {
+    /* Don't want the hyphens in dates (2012-06-29) to cause line breaks */
+    white-space: nowrap;
 }
 
 ol.languages {
