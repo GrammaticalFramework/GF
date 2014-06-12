@@ -53,6 +53,7 @@ lin
 
   participle_Parameter = mkN "deelwoord" ;
   aux_verb_Parameter = mkN "hulpwerkwoord" ;
+  gerund_Parameter = mkN "gerundivum" ;
 
   positive_Parameter = mkN "stellend" ;
   comparative_Parameter = mkN "vergrotend" ;
