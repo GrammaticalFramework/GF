@@ -3,7 +3,10 @@
 concrete TranslateEng of Translate = 
   TenseX - [Pol, PNeg, PPos],
   CatEng,
-  NounEng - [PPartNP],
+  NounEng - [
+    PPartNP
+    ,DetNP  -- Eng exception
+    ],
   AdjectiveEng,
   NumeralEng,
   SymbolEng [
@@ -53,7 +56,7 @@ lin
   PPos = {s = [] ; p = CPos} ;
   PNeg = {s = [] ; p = CNeg True} | {s = [] ; p = CNeg False} ;
 
-    IdRP = ExtensionsEng.that_RP | G.IdRP | ExtensionsEng.who_RP |
+  IdRP = ExtensionsEng.that_RP | G.IdRP | ExtensionsEng.who_RP |
      { s = table {
         RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
         RC _ NPAcc    => [] ;
@@ -61,5 +64,7 @@ lin
         } ;
       a = RNoAg
       } ;
+
+  DetNP d = G.DetNP d | G.DetCN d (UseN (mkN "one")) ; -- I like this / I like this one ; it / the one
 
 }
