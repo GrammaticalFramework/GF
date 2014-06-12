@@ -17,7 +17,7 @@ import GF.Grammar.Printer(ppParams,ppTerm,getAbs,TermPrintQual(..))
 import GF.Grammar.Parser(runP,pModDef)
 import GF.Grammar.Lexer(Posn(..))
 import GF.Data.ErrM
-import PGF.Data(Literal(LStr))
+import PGF.Internal(Literal(LStr))
 
 import SimpleEditor.Syntax as S
 import SimpleEditor.JSON

@@ -29,8 +29,7 @@ import GF.Infra.Option
 import GF.Grammar.Values
 import GF.Grammar.Grammar
 
-import PGF.Data (ppMeta, ppLit)
-import PGF.Printer (ppFId, ppFunId, ppSeqId, ppSeq)
+import PGF.Internal (ppMeta, ppLit, ppFId, ppFunId, ppSeqId, ppSeq)
 
 import Text.PrettyPrint
 import Data.Maybe (isNothing)

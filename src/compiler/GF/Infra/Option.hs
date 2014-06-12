@@ -43,7 +43,7 @@ import GF.Data.Operations(Err,ErrorMonad(..),liftErr)
 import Data.Set (Set)
 import qualified Data.Set as Set
 
-import PGF.Data(Literal(..))
+import PGF.Internal(Literal(..))
 
 usageHeader :: String
 usageHeader = unlines 

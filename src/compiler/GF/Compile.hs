@@ -34,7 +34,7 @@ import Data.List(nub)
 import Data.Time(UTCTime)
 import Text.PrettyPrint
 
-import PGF.Optimize
+import PGF.Internal(optimizePGF)
 import PGF
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.

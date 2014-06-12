@@ -76,7 +76,7 @@ Library
 
   if flag(custom-binary)
     hs-source-dirs: src/binary
-    exposed-modules:
+    other-modules:
       -- not really part of GF but I have changed the original binary library
       -- and we have to keep the copy for now.
       Data.Binary
@@ -95,14 +95,15 @@ Library
 
   exposed-modules: 
     PGF
+    PGF.Internal
+    PGF.Lexing
+    PGF.Utilities
+  other-modules:
     PGF.Data
     PGF.Macros
     PGF.Binary
     PGF.Optimize
     PGF.Printer
-    PGF.Utilities
-    PGF.Lexing
-  other-modules:
     PGF.CId
     PGF.Expr
     PGF.Generate

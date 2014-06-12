@@ -4,9 +4,7 @@ import GF.Grammar.CFG
 import GF.Infra.UseIO
 
 import PGF
-import PGF.Data
-import PGF.Macros
-import PGF.Optimize
+import PGF.Internal
 
 import qualified Data.Set as Set
 import qualified Data.Map as Map

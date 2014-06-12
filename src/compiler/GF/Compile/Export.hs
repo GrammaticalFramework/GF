@@ -1,7 +1,7 @@
 module GF.Compile.Export where
 
 import PGF
-import PGF.Printer(ppPGF)
+import PGF.Internal(ppPGF)
 import GF.Compile.PGFtoHaskell
 import GF.Compile.PGFtoProlog
 import GF.Compile.PGFtoLProlog

@@ -14,14 +14,14 @@ import Prelude hiding (putStrLn)
 
 import PGF
 
-import PGF.Macros(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
-import PGF.Data(abstract,funs,cats,Literal(LStr),Expr(EFun,ELit)) ----
+import PGF.Internal(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
+import PGF.Internal(abstract,funs,cats,Literal(LStr),Expr(EFun,ELit)) ----
 --import PGF.Morphology(isInMorpho,morphoKnown)
-import PGF.Printer(ppFun,ppCat)
+import PGF.Internal(ppFun,ppCat)
 --import PGF.Probabilistic(rankTreesByProbs,probTree,setProbabilities)
 --import PGF.Generate (generateRandomFrom) ----
 --import PGF.Tree (Tree(Fun), expr2tree, tree2expr)
-import PGF.Optimize(optimizePGF)
+import PGF.Internal(optimizePGF)
 
 import GF.Compile.Export
 import GF.Compile.ToAPI
@@ -41,7 +41,7 @@ import GF.Command.TreeOperations ---- temporary place for typecheck and compute
 
 import GF.Data.Operations
 
-import Data.Binary (encodeFile)
+import PGF.Internal (encodeFile)
 import Data.List(intersperse,nub)
 import Data.Maybe
 import qualified Data.Map as Map

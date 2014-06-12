@@ -1,4 +1,13 @@
 {-# LANGUAGE ExistentialQuantification, DeriveDataTypeable #-}
+-------------------------------------------------
+-- |
+-- Maintainer  : Krasimir Angelov
+-- Stability   : stable
+-- Portability : portable
+--
+-- This is the Haskell binding to the C run-time system for
+-- loading and interpreting grammars compiled in Portable Grammar Format (PGF).
+-------------------------------------------------
 #include <pgf/pgf.h>
 #include <gu/enum.h>
 #include <gu/exn.h>

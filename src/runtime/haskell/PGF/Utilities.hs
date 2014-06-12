@@ -3,10 +3,10 @@ module PGF.Utilities where
 import Data.Set(empty,member,insert)
 
 
--- | Like 'nub', but O(n log n) instead of O(n^2), since it uses a set to lookup previous things.
+-- | Like 'Data.List.nub', but O(n log n) instead of O(n^2), since it uses a set to lookup previous things.
 --   The result list is stable (the elements are returned in the order they occur), and lazy.
 --   Requires that the list elements can be compared by Ord.
---   Code ruthlessly taken from http://hpaste.org/54411
+--   Code ruthlessly taken from <http://hpaste.org/54411>
 nub' :: Ord a => [a] -> [a]
 nub' = loop empty
     where loop _    []            = []

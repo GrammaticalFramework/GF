@@ -18,8 +18,7 @@ import GF.Grammar.CFG
 import GF.Speech.RegExp
 import GF.Speech.SISR
 import GF.Speech.SRG
---import PGF.CId
-import PGF.Data
+import PGF
 
 import Data.Char
 import Data.List

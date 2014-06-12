@@ -12,8 +12,7 @@ module GF.Speech.VoiceXML (grammar2vxml) where
 import GF.Data.XML
 --import GF.Infra.Ident
 import PGF
-import PGF.Data
-import PGF.Macros
+import PGF.Internal
 
 --import Control.Monad (liftM)
 import Data.List (intersperse) -- isPrefixOf, find

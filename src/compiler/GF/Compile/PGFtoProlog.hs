@@ -9,7 +9,7 @@
 module GF.Compile.PGFtoProlog (grammar2prolog) where
 
 import PGF(mkCId,wildCId,showCId)
-import PGF.Data
+import PGF.Internal
 --import PGF.Macros
 
 import GF.Data.Operations

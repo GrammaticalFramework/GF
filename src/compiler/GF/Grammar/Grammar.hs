@@ -66,7 +66,7 @@ import GF.Infra.Option ---
 
 import GF.Data.Operations
 
-import PGF.Data (FId, FunId, SeqId, LIndex, Sequence, BindType(..))
+import PGF.Internal (FId, FunId, SeqId, LIndex, Sequence, BindType(..))
 
 --import Data.List
 import Data.Array.IArray

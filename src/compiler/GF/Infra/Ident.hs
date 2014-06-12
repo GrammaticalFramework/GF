@@ -30,7 +30,7 @@ import qualified Data.ByteString.Char8 as BS(append,isPrefixOf)
                  -- Limit use of BS functions to the ones that work correctly on
                  -- UTF-8-encoded bytestrings!
 import Data.Char(isDigit)
-import Data.Binary(Binary(..))
+import PGF.Internal(Binary(..))
 import Text.PrettyPrint(Doc,text)
 
 
