@@ -11,7 +11,8 @@ oper
 
 -- lexicon constructors
 
-  separateN : Str -> N -> N = \s,n -> mkN (s + "_") n ;
+  separateN : Str -> N -> N = mkSeparateN ; -- pennin raha
+---  separateN : Str -> N -> N = \s,n -> mkN (s + "_") n ; -- pennin_raha
 
   compoundN : Str -> NForms -> N = \s,nf -> lin N (mkStrN s (nforms2snoun nf)) ;
 
