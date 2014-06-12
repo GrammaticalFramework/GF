@@ -2,13 +2,13 @@ module GF.Compile.GenerateBC(generateByteCode) where
 
 import GF.Grammar
 import GF.Compile.Instructions
-import PGF.Data
+import PGF.Internal(Binary(..),encode,BCAddr)
 
 import Data.Maybe
 import qualified Data.IntMap as IntMap
 import qualified Data.ByteString as BSS
 import qualified Data.ByteString.Lazy as BS
-import Data.Binary
+import PGF.Internal()
 
 generateByteCode :: [(QIdent,Info)] -> ([(QIdent,Info,BCAddr)], BSS.ByteString)
 generateByteCode = runGenM . mapM genFun

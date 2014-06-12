@@ -9,8 +9,7 @@
 module GF.Compile.PGFtoPython (pgf2python) where
 
 import PGF(showCId)
-import PGF.Data
-import qualified PGF.Macros as M
+import PGF.Internal as M
 
 import GF.Data.Operations
 

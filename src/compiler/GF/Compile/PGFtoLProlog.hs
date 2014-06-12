@@ -1,7 +1,7 @@
 module GF.Compile.PGFtoLProlog(grammar2lambdaprolog_mod, grammar2lambdaprolog_sig) where
 
 import PGF(mkCId,ppCId,showCId,wildCId)
-import PGF.Data hiding (ppExpr, ppType, ppHypo)
+import PGF.Internal hiding (ppExpr,ppType,ppHypo,ppCat,ppFun)
 --import PGF.Macros
 import Data.List
 import Data.Maybe

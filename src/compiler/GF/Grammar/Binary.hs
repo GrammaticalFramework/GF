@@ -13,7 +13,7 @@ import Prelude hiding (catch)
 import Control.Exception(catch,ErrorCall(..),throwIO)
 
 --import Data.Char
-import Data.Binary
+import PGF.Internal(Binary(..),Word8,putWord8,getWord8,encodeFile,decodeFile)
 --import Control.Monad
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
@@ -24,7 +24,7 @@ import GF.Infra.Option
 import GF.Grammar.Grammar
 
 import PGF() -- Binary instances
-import PGF.Data(Literal(..))
+import PGF.Internal(Literal(..))
 
 -- Please change this every time when the GFO format is changed
 gfoVersion = "GF03"

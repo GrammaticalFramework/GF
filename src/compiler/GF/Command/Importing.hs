@@ -1,8 +1,7 @@
 module GF.Command.Importing (importGrammar, importSource) where
 
 import PGF
-import PGF.Data
-import PGF.Optimize
+import PGF.Internal(optimizePGF,unionPGF,msgUnionPGF)
 
 import GF.Compile
 import GF.Compile.Multi (readMulti)

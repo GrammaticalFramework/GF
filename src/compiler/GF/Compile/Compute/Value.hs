@@ -1,6 +1,6 @@
 module GF.Compile.Compute.Value where
 import GF.Grammar.Grammar(Label,Type,MetaId,Patt,QIdent)
-import PGF.Data(BindType)
+import PGF.Internal(BindType)
 import GF.Infra.Ident(Ident)
 import Text.Show.Functions()
 import Data.Ix(Ix)

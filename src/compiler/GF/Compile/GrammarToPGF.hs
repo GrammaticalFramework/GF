@@ -6,11 +6,11 @@ import GF.Compile.GeneratePMCFG
 import GF.Compile.GenerateBC
 
 import PGF(CId,mkCId,utf8CId)
-import PGF.Data(fidInt,fidFloat,fidString,fidVar)
-import PGF.Optimize(updateProductionIndices)
+import PGF.Internal(fidInt,fidFloat,fidString,fidVar)
+import PGF.Internal(updateProductionIndices)
 --import qualified PGF.Macros as CM
-import qualified PGF.Data as C
-import qualified PGF.Data as D
+import qualified PGF.Internal as C
+import qualified PGF.Internal as D
 import GF.Grammar.Predef
 --import GF.Grammar.Printer
 import GF.Grammar.Grammar

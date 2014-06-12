@@ -5,7 +5,7 @@ module GF.Command.TreeOperations (
   ) where
 
 import PGF
-import PGF.Data
+import PGF.Internal(Expr(..),unAppForm)
 import Data.List
 
 type TreeOp = [Expr] -> [Expr]

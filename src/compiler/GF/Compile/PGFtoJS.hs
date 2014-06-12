@@ -1,8 +1,7 @@
 module GF.Compile.PGFtoJS (pgf2js) where
 
-import PGF(showCId)
-import PGF.Data hiding (mkStr)
-import qualified PGF.Macros as M
+import PGF(CId,showCId)
+import PGF.Internal as M
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 

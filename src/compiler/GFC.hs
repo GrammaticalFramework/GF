@@ -2,10 +2,8 @@ module GFC (mainGFC, writePGF) where
 -- module Main where
 
 import PGF
---import PGF.CId
-import PGF.Data
-import PGF.Optimize
-import PGF.Binary(putSplitAbs)
+import PGF.Internal(PGF(..),code,funs,cats,optimizePGF,unionPGF)
+import PGF.Internal(putSplitAbs)
 import GF.Compile
 import GF.Compile.Export
 import GF.Compile.CFGtoPGF
@@ -19,8 +17,7 @@ import GF.Data.ErrM
 import GF.System.Directory
 
 import Data.Maybe
-import Data.Binary(encode,encodeFile)
-import Data.Binary.Put(runPut)
+import PGF.Internal(encode,encodeFile,runPut)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.ByteString as BSS

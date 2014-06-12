@@ -12,7 +12,7 @@ import GF.Command.Commands
 import GF.Command.Abstract
 import GF.Command.Parse
 import PGF
-import PGF.Data
+import PGF.Internal
 --import PGF.Morphology
 import GF.Infra.SIO
 

@@ -7,8 +7,7 @@
 module GF.Speech.PGFToCFG (bnfPrinter, pgfToCFG) where
 
 import PGF(showCId)
-import PGF.Data as PGF
-import PGF.Macros
+import PGF.Internal as PGF
 --import GF.Infra.Ident
 import GF.Grammar.CFG hiding (Symbol)
 

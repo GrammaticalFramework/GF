@@ -1,10 +1,7 @@
 module GF.Compile.Instructions where
 
 --import Data.IORef
-import Data.Binary
-import Data.Binary.Put
-import Data.Binary.Get
-import Data.Binary.IEEE754
+import PGF.Internal -- Binary
 import PGF(CId)
 --import PGF.CId
 --import PGF.Binary

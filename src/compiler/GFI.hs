@@ -29,8 +29,7 @@ import qualified System.Console.Haskeline as Haskeline
 --import GF.Compile.Coding(codeTerm)
 
 import PGF
-import PGF.Data
-import PGF.Macros
+import PGF.Internal(emptyPGF,abstract,funs,lookStartCat)
 
 import Data.Char
 import Data.List(nub,isPrefixOf,isInfixOf,partition)
