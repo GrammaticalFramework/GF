@@ -77,6 +77,7 @@ lin
 
   participle_Parameter = mkN "participle" ;
   aux_verb_Parameter = mkN "auxiliary" ;
+  gerund_Parameter = mkN "Gerund" ;
 
   positive_Parameter = mkN "positive" ;
   comparative_Parameter = mkN "comparative" ;

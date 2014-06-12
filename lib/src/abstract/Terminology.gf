@@ -77,6 +77,7 @@ fun
   participle_Parameter : Parameter ;
   aux_verb_Parameter : Parameter ;
   agent_Parameter : Parameter ;
+  gerund_Parameter : Parameter ;
 
   positive_Parameter : Parameter ;  -- as degree of verbs
   comparative_Parameter : Parameter ;
