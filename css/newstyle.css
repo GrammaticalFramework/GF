@@ -6,8 +6,8 @@ div.header { text-align: center; }
 
 div.sky {
     margin: 0 -8px;
-    background-image: -webkit-linear-gradient(top, #bbe0ff, #f6f6f6 70%);
-    background-image: -moz-linear-gradient(top, #a0d0ff, #f6f6f6 70%);
+    background-image: -webkit-linear-gradient(top, #a8d8ff, #f6f6f6 70%);
+    background-image: -moz-linear-gradient(top, #a8d8ff, #f6f6f6 70%);
 }
 
 div.header h1 {
@@ -17,15 +17,18 @@ div.header h1 {
      /*text-decoration: underline;*/
    }
 
+.tagline { font-family: sans-serif; }
+
+h2.noclear { clear: none; }
+
+
 div.red h1 {
      color: #e80000;
      text-shadow: rgba(232,0,0,0.25) 2px 2px 5px;
 }
-
-.tagline { font-family: sans-serif; }
 div.red .tagline { color: #e00000; }
 
-h2.noclear { clear: none; }
+div.blue h1, div.blue .tagline { color: #06c; }
 
 div.links {
     display: inline-block;
