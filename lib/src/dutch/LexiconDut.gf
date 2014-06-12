@@ -28,7 +28,7 @@ lin
   brown_A = mkA "bruin" ;
   buy_V2 = mkV2 (mkV "kopen" "kocht" "gekocht") ;
   child_N = mkN "kind" "kinderen" neuter ;
-  come_V = zijnV (mkV "kom" "komt" "komen" "kwam" "kwame" "gekomen") ;
+  come_V = zijnV (mkV "kom" "komt" "komen" "kwam" "kwamen" "gekomen") ;
   die_V = zijnV (mkV "sterven" "stierf" "gestorven") ;
   distance_N3 = mkN3 (mkN "afstand") van_Prep (mkPrep "naar") ;
   drink_V2 = mkV2 drinken_V ;

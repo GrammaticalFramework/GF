@@ -40,14 +40,16 @@ lin
       gforms : AForm -> Str = \a ->
         td (adj.s ! Posit  ! a) ++
         td (adj.s ! Compar ! a) ++
-        td (adj.s ! Superl ! a) ;
-
+        case a of {
+          AGen => td "-" ;    -- superlative partitive not used
+          _ => td (adj.s ! Superl ! a)
+          } ;
       dtable : Str = 
         frameTable ( 
           tr (th []  ++ th (heading positive_Parameter) ++ th (heading comparative_Parameter) ++ 
                         th (heading superlative_Parameter)) ++
           tr (th (heading predicative_Parameter) ++ gforms APred) ++
-          tr (th (heading attributive_Parameter) ++ gforms APred) ++
+          tr (th (heading attributive_Parameter) ++ gforms AAttr) ++
           tr (th (heading partitive_Parameter)   ++ gforms AGen)
           )
     in { t  = "a" ;
@@ -165,11 +167,12 @@ oper
              ++ td (vfin VPastPl)  --# notpresent
           )) ++
         frameTable (
-          tr (th (heading imperative_Parameter ++ "Sg.2")  ++ td (vfin VImp2)) ++
-          tr (th (heading imperative_Parameter ++ "Sg.3")  ++ td (vfin VImp3)) ++
-          tr (th (heading imperative_Parameter ++ "Pl.2")  ++ td (vfin (VImpPl))) ++
+          tr (th (heading imperative_Parameter ++ heading singular_Parameter) ++ td (vfin VImp2 ++ Predef.BIND ++ "," ++ vfin VImp3)) ++
+          tr (th (heading imperative_Parameter ++ heading plural_Parameter)  ++ td (vfin (VImpPl))) ++
           tr (th (heading infinitive_Parameter)            ++ td (verb.s ! VInf)) ++
-          tr (th (heading perfect_Parameter ++ heading participle_Parameter) ++ td (verb.s ! VPerf)) ++
+          tr (th (heading past_Parameter ++ heading participle_Parameter) ++ td (verb.s ! VPerf)) ++
+          tr (th (heading present_Parameter ++ heading participle_Parameter) ++ td (verb.s ! VPresPart)) ++
+          tr (th (heading gerund_Parameter)            ++ td (verb.s ! VGer)) ++
           tr (th (heading aux_verb_Parameter)       ++ td (case verb.aux of {VHebben => "hebben" ; VZijn => "zijn"}))
         ) ;
 

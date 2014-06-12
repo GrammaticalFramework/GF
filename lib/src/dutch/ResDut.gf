@@ -76,8 +76,8 @@ resource ResDut = ParamX ** open Prelude in {
     mkAdjective : (_,_,_,_,_ : Str) -> Adjective = \ap,aa,ag,ac,as -> {
       s = table {
         Posit  => table {APred => ap ; AAttr => aa ; AGen => ag} ; 
-        Compar => table {APred => ac ; AAttr => ac + "e" ; AGen => ac + "es"} ; ----
-        Superl => table {APred => as ; AAttr => as + "e" ; AGen => as + "es"}   ----
+        Compar => table {APred => ac ; AAttr => ac + "e" ; AGen => ac + "s"} ; ----
+        Superl => table {APred => as ; AAttr => as + "e" ; AGen => as + "s"}   ----
         }
       } ;
     regAdjective : Str -> Adjective = \s ->  ----
@@ -114,6 +114,8 @@ resource ResDut = ParamX ** open Prelude in {
      | VImp3     -- weest
      | VImpPl    -- wezen
      | VPerf     -- geweest
+     | VPresPart -- zijnde
+     | VGer      -- zijnde
      ;
 
     VPart = VPart_aan | VPart_af | VPart_be ;
@@ -129,7 +131,9 @@ resource ResDut = ParamX ** open Prelude in {
     		VPresSg2 | VPresSg3 | VImp3 => aait; -- jij aait
     		VPastSg => aaide; -- ik aaide  --# notpresent
     		VPastPl => aaiden; -- hij/zij/het/wij aaiden --# notpresent
-    		VPerf   => geaaid -- ik heb geaaid 
+    		VPerf   => geaaid ; -- ik heb geaaid 
+                VPresPart => aaien + "de" ;
+                VGer => aaien + "d"
     	}
     };
     
@@ -287,7 +291,9 @@ resource ResDut = ParamX ** open Prelude in {
        VImp2     => "wees" ;
        VImp3     => "weest" ;
        VImpPl    => "wezen" ;
-       VPerf     => "geweest" 
+       VPerf     => "geweest" ;
+       VPresPart => "zijnde" ;
+       VGer      => "wezend"
        } ;
     aux = VZijn ;
     prefix = [] ;
@@ -306,7 +312,9 @@ resource ResDut = ParamX ** open Prelude in {
        VImp2     => "heb" ;
        VImp3     => "heeft" ;
        VImpPl    => "hebben" ;
-       VPerf     => "gehad" 
+       VPerf     => "gehad" ;
+       VPresPart => "hebbende" ;
+       VGer      => "hebbend"
        } ;
     aux = VHebben ;
     prefix = [] ;
@@ -325,7 +333,9 @@ resource ResDut = ParamX ** open Prelude in {
        VImp2     => "zoud" ;  ---- not used
        VImp3     => "zoudt" ;
        VImpPl    => "zouden" ; ----
-       VPerf     => "gezoudt" 
+       VPerf     => "gezoudt" ;
+       VPresPart => "zullende" ;
+       VGer      => "zullend" 
        } ;
     aux = VHebben ;
     prefix = [] ;
@@ -344,7 +354,9 @@ resource ResDut = ParamX ** open Prelude in {
        VImp2     => "kan" ;  ---- not used
        VImp3     => "kant" ;
        VImpPl    => "kunnen" ; ----
-       VPerf     => "gekund" 
+       VPerf     => "gekund" ;
+       VPresPart => "kunnende" ;
+       VGer      => "kunnend"
        } ;
     aux = VHebben ;
     prefix = [] ;
