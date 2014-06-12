@@ -50,6 +50,7 @@ lin
   future_Parameter = mkN "toekomend" ;
   conditional_Parameter = mkN "voorwaardelijk" ;
   perfect_Parameter = mkN "voltooid" ;
+  imperfect_Parameter = mkN "onvoltooid" ;
 
   participle_Parameter = mkN "deelwoord" ;
   aux_verb_Parameter = mkN "hulpwerkwoord" ;

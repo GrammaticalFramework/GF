@@ -84,6 +84,7 @@ abstract Cat = Common ** {
     Num ;    -- number determining element          e.g. "seven"
     Card ;   -- cardinal number                     e.g. "seven"
     Ord ;    -- ordinal number (used in Det)        e.g. "seventh"
+    DAP ;    -- determiner with adjective           e.g. "three small"
 
 --2 Numerals
 

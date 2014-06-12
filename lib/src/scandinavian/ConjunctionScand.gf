@@ -26,6 +26,12 @@ incomplete concrete ConjunctionScand of Conjunction =
     ConjCN co ns = conjunctDistrTable3 Number DetSpecies Case co ns ** 
       {g = neutrum ; isMod = False} ; ----
 
+    ConjDet conj ss = let css = (conjunctDistrTable2 Bool NGender conj ss).s in {
+      s,sp = css ;
+      n = ss.n ; 
+      det = ss.det ;
+      } ;
+
 
 -- These fun's are generated from the list cat's.
 
@@ -50,6 +56,9 @@ incomplete concrete ConjunctionScand of Conjunction =
     BaseCN = twoTable3 Number DetSpecies Case ;
     ConsCN = consrTable3 Number DetSpecies Case comma ;
 
+    BaseDAP x y = twoTable2 Bool NGender x y ** {n = y.n ; det = y.det} ;
+    ConsDAP x xs = consrTable2 Bool NGender comma x xs ** {n = xs.n ; det = xs.det} ;
+
   lincat
     [S] = {s1,s2 : Order => Str} ;
     [Adv] = {s1,s2 : Str} ;
@@ -58,5 +67,7 @@ incomplete concrete ConjunctionScand of Conjunction =
     [AP] = {s1,s2 : AFormPos => Str ; isPre : Bool} ;
     [RS] = {s1,s2 : Agr => RCase => Str ; c : NPForm} ;
     [CN] = {s1,s2 : Number => DetSpecies => Case => Str} ; --- g : NGender ; isMod : Bool} ;
+    [DAP] = {s1,s2 : Bool => NGender => Str ; n : Number ; det : DetSpecies} ;
+
 
 }

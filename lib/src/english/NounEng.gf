@@ -152,4 +152,11 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       a = agrP3 det.n
       } ;
 
+    AdjDAP det ap = {
+      s = det.s ++ ap.s ! agrgP3 det.n Masc ;       --- post-ap's ? "this larger than life (movie)"
+      n = det.n ;
+      } ;
+
+    DetDAP d = d ;  -- forgetting sp and hasNumber
+
 }
