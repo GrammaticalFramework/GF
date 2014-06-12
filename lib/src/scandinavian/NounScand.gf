@@ -228,5 +228,12 @@ incomplete concrete NounScand of Noun =
         a = agrP3 g det.n
       } ;
 
+    AdjDAP det ap = {
+      s = \\b,g => det.s ! b ! g ++ ap.s ! agrAdj (gennum (ngen2gen g) det.n) det.det ; 
+      n = det.n ;
+      det = det.det ;
+      } ;
+
+    DetDAP d = d ;  -- forgetting sp
 
 }

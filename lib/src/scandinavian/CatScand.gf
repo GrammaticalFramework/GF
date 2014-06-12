@@ -75,6 +75,7 @@ incomplete concrete CatScand of Cat =
     Num = {s : NGender => Str ; isDet : Bool ; n : Number} ;
     Card = {s : NGender => Str ; n : Number} ;
     Ord = {s : Str} ;
+    DAP = {s : Bool => NGender => Str ; n : Number ; det : DetSpecies} ;
 
 -- Numeral
 

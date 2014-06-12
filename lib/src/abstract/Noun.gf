@@ -146,4 +146,9 @@ abstract Noun = Cat ** {
 
     CountNP : Det -> NP -> NP ;    -- three of them, some of the boys
 
+--3 Conjoinable determiners and ones with adjectives
+
+    AdjDAP : DAP -> AP -> DAP ;    -- the large (one)
+    DetDAP : Det -> DAP ;          -- this (or that) 
+
 }

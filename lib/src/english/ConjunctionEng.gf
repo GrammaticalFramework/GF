@@ -26,6 +26,8 @@ concrete ConjunctionEng of Conjunction =
 
     ConjCN co ns = conjunctDistrTable2 Number Case co ns ** {g = Neutr} ; --- gender?
 
+    ConjDet c xs = let cxs = (conjunctDistrSS c xs).s in {s = cxs ; sp = \\_ => cxs ++ "one" ; hasNum = False ; n = xs.n} ;   
+
 -- These fun's are generated from the list cat's.
 
     BaseS = twoSS ;
@@ -44,6 +46,8 @@ concrete ConjunctionEng of Conjunction =
     ConsIAdv = consrSS comma ;
     BaseCN = twoTable2 Number Case ;
     ConsCN = consrTable2 Number Case comma ;
+    BaseDAP x y = twoSS x y ** {n = y.n} ; --- the last number decides: one big and two small cars
+    ConsDAP x xs = consrSS comma x xs ** {n = xs.n} ;
 
   lincat
     [S] = {s1,s2 : Str} ;
@@ -54,5 +58,7 @@ concrete ConjunctionEng of Conjunction =
     [AP] = {s1,s2 : Agr => Str ; isPre : Bool} ;
     [RS] = {s1,s2 : Agr => Str ; c : NPCase} ;
     [CN] = {s1,s2 : Number => Case => Str} ;
+    [DAP] = {s1,s2 : Str ; n : Number} ;
+
 
 }

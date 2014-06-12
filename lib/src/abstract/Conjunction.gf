@@ -25,6 +25,7 @@ abstract Conjunction = Cat ** {
     ConjAdV  : Conj -> [AdV] -> AdV ;
     ConjIAdv : Conj -> [IAdv] -> IAdv ; -- "where and with whom"
     ConjCN   : Conj -> [CN] -> CN ;     -- "man and woman"
+    ConjDet  : Conj -> [DAP] -> Det ;   -- "his or her"
 
 --2 Categories
 
@@ -39,6 +40,7 @@ abstract Conjunction = Cat ** {
     [AP]{2} ;
     [IAdv]{2} ;
     [CN] {2} ;
+    [DAP] {2} ;
 
 --2 List constructors
 
