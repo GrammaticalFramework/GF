@@ -434,6 +434,11 @@ mkVS = overload {
         : Str) -> N = \a,b,c,d,e,f,g,h,i,j -> 
         lin N (nforms2snoun (nForms10 a b c d e f g h i j)) ;
 
+  mkSeparateN : Str -> N -> N = \unissa,kulkija -> {
+    s = \\c => unissa ++ kulkija.s ! c ; 
+    h = kulkija.h ;
+    lock_N = <>
+    } ;
   mkStrN : Str -> N -> N = \sora,tie -> {
     s = \\c => sora + tie.s ! c ; 
     h = tie.h ;
