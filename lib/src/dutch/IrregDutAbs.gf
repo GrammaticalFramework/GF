@@ -61,6 +61,7 @@ fun klimmen_V : V ; -- to climb
 fun klinken_V : V ; -- to sound, to ring, to clink
 fun kluiven_V : V ; -- to pick (a bone), to nibble
 fun knijpen_V : V ; -- to pinch, to squeeze
+fun komen_V : V ; -- to come
 fun kopen_V : V ; -- to buy
 fun krijgen_V : V ; -- to get
 fun krimpen_V : V ; -- to shrink
