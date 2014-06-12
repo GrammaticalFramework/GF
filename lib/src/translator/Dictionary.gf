@@ -51901,6 +51901,8 @@ fun shard_N : N ;
 fun share_N : N ;
 fun share_V : V ;
 fun share_V2 : V2 ;
+fun share_1_V2 : V2 ;
+fun share_2_V2 : V2 ;
 fun share_out_N : N ;
 fun share_out_V : V ;
 fun sharecropper_N : N ;

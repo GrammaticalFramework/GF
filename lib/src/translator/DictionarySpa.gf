@@ -18306,7 +18306,9 @@ lin shape_VV = variants{} ;
 lin shard_N = mkN "casco" | mkN "añicos" masculine ; -- status=guess status=guess
 lin share_N = mkN "cuota" ;
 lin share_V = mkV "dividir" ; -- status=guess
-lin share_V2 = mkV2 (mkV "dividir") ; -- status=guess
+lin share_V2 = mkV2 (mkV "dividir") ;
+lin share_1_V2 = mkV2 (mkV "dividir") ;
+lin share_2_V2 = mkV2 (mkV "compartir") ;
 lin shared_A = variants{} ;
 lin shareholder_N = mkN "accionista" masculine ; -- status=guess
 lin shark_N = mkN "tiburón" masculine ; -- status=guess
