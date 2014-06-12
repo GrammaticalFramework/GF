@@ -221,6 +221,8 @@ fun sake_1_N : N ;
 fun sake_2_N : N ;
 fun set_1_N : N  ;  -- | a reparation set
 fun set_2_N : N  ; -- | an infinite set
+fun share_1_V2 : V2 ; -- | share the wealth
+fun share_2_V2 : V2 ; -- | we share a language (have in common)
 fun single_1_A : A  ; -- | a single ticket
 fun single_2_A : A  ; -- | a single woman
 fun staff_1_N : N  ; -- | staff of 50 persons
