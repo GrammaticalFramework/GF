@@ -34,7 +34,7 @@ $u = [.\n]                -- universal: any character
 
 $white+ ;
 @rsyms                          { tok ident }
-\' ([. # [\' \\ \n]] | (\\ (\' | \\)))+ \' { tok (res T_Ident . identS . unescapeInitTail . unpack) }
+\' ([. # [\' \\ \n]] | (\\ (\' | \\)))+ \' { tok (T_Ident . identS . unescapeInitTail . unpack) }
 (\_ | $l)($l | $d | \_ | \')*   { tok ident }
 
 \" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \" { tok (T_String . unescapeInitTail . unpack) }
