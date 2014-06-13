@@ -3752,8 +3752,10 @@ lin cheat_N = mkN "mentiroso" ; -- status=guess
 lin cheat_V = mkV "engañar" ; -- status=guess, src=wikt
 lin cheat_V2 = mkV2 (mkV "engañar") ; -- status=guess, src=wikt
 lin check_N = mkN "cuenta" ; -- status=guess
-lin check_V = mkV "registrarse" ; -- status=guess
-lin check_V2 = mkV2 (mkV "registrarse") ; -- status=guess
+lin check_V = mkV "concordar" ;
+lin check_V2 = mkV2 (mkV "comprobar") | mkV2 (mkV "examinar")  | mkV2 (mkV "inspeccionar") ;
+lin check_1_V2 = mkV2 (mkV "comprobar") | mkV2 (mkV "examinar")  | mkV2 (mkV "inspeccionar") ;
+lin check_2_V2 = mkV2 (mkV "cotejar") ;
 lin checkerboard_N = mkN "tablero" | mkN "tablero de damas" | mkN "damero" ; -- status=guess status=guess status=guess
 lin checkmate_N = mkN "jaque mate" | mkN "mate" masculine ; -- status=guess status=guess
 lin checkmate_V2 = mkV2 (mkV (mkV "dar") "jaque mate") | mkV2 (mkV (mkV "dar") "mate") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -8175,8 +8177,10 @@ lin fist_N = mkN "puño" ; -- status=guess
 lin fistula_N = mkN "fístula" ; -- status=guess
 lin fit_A = mkA "en forma" ; -- status=guess
 lin fit_N = mkN "convulción" feminine ; -- status=guess
-lin fit_V = mkV (mkV "hacer") "juego" ; -- status=guess
-lin fit_V2 = mkV2 (mkV (mkV "hacer") "juego") ; -- status=guess
+lin fit_V = mkV "caber" ;
+lin fit_V2 = mkV2 (mkV "ajustar") ;
+lin fit_1_V2 = mkV2 (mkV "quedar") ;
+lin fit_2_V2 = mkV2 (mkV "ajustar") ;
 lin fitful_A = mkA "irregular" | mkA "inestable" ; -- status=guess status=guess
 lin fitness_N = mkN "capacidad" feminine | mkN "nivel físico" ; -- status=guess
 lin fitting_N = variants{} ;
@@ -9080,7 +9084,10 @@ lin go_V = L.go_V ;
 lin go_VA = mkVA L.go_V ;
 --subcat lin go_VS = mkVS L.go_V ;
 lin go_VV = mkVV L.go_V ;
-lin goal_N = mkN "portería" ; -- status=guess
+lin goal_N = mkN "gol" ;
+lin goal_1_N = mkN "meta" ;
+lin goal_2_N = mkN "portería" ;
+lin goal_3_N = mkN "gol" ;
 lin goalkeeper_N = mkN "arquero" | mkN "guardameta" | mkN "portero" ; -- status=guess
 lin goat_N = mkN "cabra" | mkN "chivo" ; -- status=guess
 lin goatee_N = mkN "perilla" | mkN "piocha " | mkN "barba de chivo" | mkN "chiva" | mkN "chivera" ; -- status=guess status=guess status=guess status=guess status=guess
@@ -13135,6 +13142,9 @@ lin misopedia_N = mkN "misopedia" ; -- status=guess
 lin miss_N = mkN "señorita" ; -- status=guess
 lin miss_V = perder_V ; -- status=guess
 lin miss_V2 = mkV2 (perder_V) ; -- status=guess
+lin miss_1_V2 = mkV2 perder_V ;
+lin miss_2_V2 = mkV2 (mkV (mkV "echar") "de menos") | mkV2 (mkV "extrañar") ;
+lin miss_3_V2 = mkV2 (mkV "faltar") of_Prep ;
 lin missile_N = mkN "proyectil" masculine ; -- status=guess
 lin missing_A = variants{} ;
 lin mission_N = mkN "misión" feminine ; -- status=guess
@@ -15820,7 +15830,9 @@ lin prescribe_V2 = mkV2 (prescribir_V) | mkV2 (mkV "recetar") ; -- status=guess
 lin prescription_N = mkN "receta" ; -- status=guess
 lin presence_N = mkN "presencia" ; -- status=guess
 lin present_A = mkA "presente" ;
-lin present_N = mkN "presente" masculine | mkN "actual" | mkN "ahora" masculine ; -- status=guess
+lin present_N = mkN "presente" masculine ;
+lin present_1_N = mkN "regalo" ;
+lin present_2_N = mkN "presente" | mkN "actualidad" feminine ;
 lin present_V2 = mkV2 (mkV "presentar") ;
 lin presentable_A = mkA "presentable" ; -- status=guess
 lin presentation_N = mkN "presentación" feminine ; -- status=guess

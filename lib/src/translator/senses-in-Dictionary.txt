@@ -37,6 +37,8 @@ fun character_1_N : N ; --| personality
 fun character_2_N : N ; --| unicode
 fun charge_1_N : N  ; -- | battery charge
 fun charge_2_N : N  ; -- | charge against him
+fun check_1_V2 : V2 ; -- | inspect, examine
+fun check_2_V2 : V2 ; -- | mark with a checkmark
 fun club_1_N : N  ; -- | member of the club
 fun club_2_N : N  ; -- | hit the ball with a club
 fun coach_1_N : N  ; -- | football coach
@@ -101,6 +103,8 @@ fun film_1_N : N  ;  -- | movie
 fun film_2_N : N  ;  -- | thin layer
 fun fire_1_N : N ; --- ??
 fun fire_2_N : N ; --- ??
+fun fit_1_V2 : V2 ; -- | this shirt doesn't fit me
+fun fit_2_V2 : V2 ; -- | fit a line to the data
 fun foreign_1_A : A  ; -- | a foreign citizen
 fun foreign_2_A : A  ; -- | don't throw foreign objects into the toilet
 fun fork_1_N : N ;
@@ -113,6 +117,9 @@ fun game_2_N : N  ;  -- | children's game
 fun game_3_N : N  ;  -- | eat game
 fun get_on_1_V2 : V2 ;
 fun get_on_2_V2 : V2 ;
+fun goal_1_N : N ; --| my goal in life
+fun goal_2_N : N ; --| sports: area in which you try to put an object
+fun goal_3_N : N ; --| sports: act of placing the object into the goal
 fun ground_1_N : N  ; -- | ground zero
 fun ground_2_N : N  ; -- | on dubious grounds
 fun hard_1_A : A  ; -- | hard surface
@@ -161,6 +168,9 @@ fun may_1_VV : VV ;  -- be possible
 fun may_2_VV : VV ;  -- be allowed
 fun minister_1_N : N  ; -- | prime minister
 fun minister_2_N : N  ; -- | minister in church
+fun miss_1_V2 : V2 ; --| missed my chance
+fun miss_2_V2 : V2 ; --| I miss you
+fun miss_3_V2 : V2 ; --| missed the class
 fun move_1_V : V  ; -- | it doesn't move any more
 fun move_2_V : V  ; -- | move to a new house
 fun naive_1_A : A ;
@@ -196,12 +206,14 @@ fun point_2_N : N  ; -- | he got six points
 fun poor_1_A : A  ; -- | poor or rich
 fun poor_2_A : A  ; -- | poor him
 fun poor_3_A : A  ; -- | poor quality
+fun present_1_N : N ; -- | I bought you a present
+fun present_2_N : N ; -- | past and present
 fun property_1_N : N  ; -- | some bad properties
 fun property_2_N : N  ; -- | an enormous property
 fun race_1_N : N  ; -- | win the race
 fun race_2_N : N  ; -- | the human race
-fun recognize_1_V2 : V2 ;
-fun recognize_4_V2 : V2 ;
+fun recognize_1_V2 : V2 ; --| acknowledge; I recognize my mistake
+fun recognize_4_V2 : V2 ; --| distinguish from something
 fun record_1_N : N  ; -- | Guinness book of records
 fun record_2_N : N  ; -- | Beatles records
 fun record_3_N : N  ; -- | we keep a record of visitors
@@ -223,6 +235,8 @@ fun set_1_N : N  ;  -- | a reparation set
 fun set_2_N : N  ; -- | an infinite set
 fun share_1_V2 : V2 ; -- | share the wealth
 fun share_2_V2 : V2 ; -- | we share a language (have in common)
+fun sign_1_N : N ; --| sign language
+fun sign_2_N : N ; --| visible indication
 fun single_1_A : A  ; -- | a single ticket
 fun single_2_A : A  ; -- | a single woman
 fun staff_1_N : N  ; -- | staff of 50 persons
