@@ -1,4 +1,4 @@
----- edits by AR till concentrate_V
+---- edits by AR till formal_A
 
 concrete TopDictionarySwe of TopDictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe), Prelude in {
 
@@ -21,7 +21,7 @@ lin he_Pron = S.he_Pron;
 lin on_Prep = S.on_Prep;
 lin with_Prep = S.with_Prep;
 lin do_V2 = mkV2 I.göra_V ;
-lin at_Prep = mkPrep "vid" ;
+lin at_Prep = mkPrep "vid" | mkPrep "hos" ; ---- split
 lin by_Prep = mkPrep "genom" ;
 lin but_Conj = M.mkConj "men" ;
 lin from_Prep = S.from_Prep;
@@ -1844,174 +1844,174 @@ lin comment_N = mkN "kommentar" "kommentarer" ;
 lin grant_V3 = mkV3 (mkV "bevilja") ;
 lin grant_V2 = mkV2 "bevilja" ;
 lin concentrate_V2 = mkV2 "koncentrera" ;
-lin concentrate_V = reflV (mkV "koncentrerar") ; ---- END edits by AR
-lin ignore_V2 = mkV2 (mkV "ignorerar"); -- status=guess, src=wikt
-lin ignore_V = mkV "ignorerar" ; -- comment=4
-lin phone_N = mkN "telefon" "telefoner" ; -- status=guess
-lin hole_N = mkN "röra" | mkN "knipa" ; -- SaldoWN = mkN "röra" ; -- comment=9
-lin insurance_N = mkN "försäkring" ; -- SaldoWN
-lin content_N = mkN "innehåll" neutrum ; -- status=guess
-lin confidence_N = mkN "tillförsikt" ; -- comment=6
-lin sample_N = mkN "prov" neutrum | mkN "varuprov" neutrum ; -- SaldoWN = mkN "prov" neutrum ; -- comment=3
-lin transport_N = mkN "transport" "transporter" | mkN "transportmedel" neutrum ; -- SaldoWN -- comment=6
-lin objective_N = mkN "mål" neutrum; -- comment=2
-lin alone_A = mkA "ensam" "ensamt" "ensamma" "ensamma" "ensammare" "ensammast" "ensammaste" ; -- comment=4
+lin concentrate_V = reflV (mkV "koncentrerar") ;
+lin ignore_V2 = mkV2 (mkV "ignorerar"); 
+lin ignore_V = mkV "ignorerar" ; 
+lin phone_N = mkN "telefon" "telefoner" ; 
+lin hole_N = mkN "hål" "hål" ;
+lin insurance_N = mkN "försäkring" ; 
+lin content_N = mkN "innehåll" neutrum ; 
+lin confidence_N = mkN "förtroende" | mkN "tillförsikt" ; 
+lin sample_N = mkN "prov" neutrum ;
+lin transport_N = mkN "transport" "transporter" ;
+lin objective_N = mkN "mål" neutrum ; 
+lin alone_A = mkA "ensam" "ensamt" "ensamma" "ensamma" "ensammare" "ensammast" "ensammaste" ; 
 lin flower_N = L.flower_N ;
-lin injury_N = mkN "skada" ; -- SaldoWN
-lin lift_V2 = mkV2 (mkV "lyfta" "lyfter" "lyft" "lyfte" "lyft" "lyft"); -- status=guess, src=wikt
-lin lift_V = mkV "upphäver" ; -- comment=14
-lin stick_V2 = mkV2 "binda" "band" "bundit" | dirV2 (partV (mkV "stoppar")"till") ; -- SaldoWN -- comment=21
-lin stick_V = mkV "binda" "band" "bundit" | mkV "bita" "bet" "bitit" ; -- SaldoWN -- comment=25
-lin front_A = mkA "främre" ; -- status=guess
-lin mainly_Adv = mkAdv "huvudsakligen" ; -- status=guess
-lin battle_N = mkN "kamp" | mkN "slag" neutrum ; -- status=guess
-lin generation_N = mkN "generation" "generationer" | mkN "årsmodell" "årsmodeller" ; -- SaldoWN -- comment=7
-lin currently_Adv = mkAdv "nuförtiden" ; -- status=guess
-lin winter_N = mkN "vinter" ; -- SaldoWN
-lin inside_Prep = mkPrep "innanför" ; -- status=guess
-lin impossible_A = mkA "omöjlig" ; -- SaldoWN
+lin injury_N = mkN "skada" ; 
+lin lift_V2 = mkV2 (mkV "lyfta" "lyfter" "lyft" "lyfte" "lyft" "lyft") ; 
+lin lift_V = (mkV "lyfta" "lyfter" "lyft" "lyfte" "lyft" "lyft") ; 
+lin stick_V2 = mkV2 I.sticka_V ;
+lin stick_V = depV I.sticka_V ;
+lin front_A = mkA "främre" ; 
+lin mainly_Adv = mkAdv "huvudsakligen" ; 
+lin battle_N = mkN "kamp" | mkN "slag" neutrum ; 
+lin generation_N = mkN "generation" "generationer" ;
+lin currently_Adv = mkAdv "nuförtiden" ; 
+lin winter_N = mkN "vinter" ; 
+lin inside_Prep = mkPrep "innanför" | mkPrep "inne" ; 
+lin impossible_A = mkA "omöjlig" ; 
 lin somewhere_Adv = S.somewhere_Adv;
-lin arrange_V2 = dirV2 (partV (mkV "ordnar")"om"); -- status=guess
-lin arrange_V = mkV "planerar" ; -- comment=12
-lin will_N = mkN "vilja" | mkN "kan" "kaner" ; -- SaldoWN -- comment=3
+lin arrange_V2 = mkV2 "arrangera" | mkV2 "anordna" ;
+lin arrange_V = mkV "arrangera" ; 
+lin will_N = mkN "vilja" ;
 lin sleep_V = L.sleep_V;
-lin progress_N = mkN "framsteg" neutrum | mkN "framsteg" neutrum ; -- SaldoWN -- comment=4
-lin volume_N = mkN "volym" "volymer" ; -- status=guess
+lin progress_N = mkN "framsteg" neutrum ;
+lin volume_N = mkN "volym" "volymer" ; 
 lin ship_N = L.ship_N;
-lin legislation_N = mkN "lagstiftning" ; -- SaldoWN
-lin commitment_N = mkN "lojalitet" "lojaliteter" | mkN "åtagande" ; -- SaldoWN -- comment=12
-lin enough_Predet = M.mkPredet "tillräckligt" "tillräckligt" "tillräckligt" ; -- status=guess
-lin conflict_N = mkN "konflikt" "konflikter" ; -- status=guess
-lin bag_N = mkN "handväska" | mkN "väska" ; -- SaldoWN -- comment=12
-lin fresh_A = mkA "färsk" | mkA "uppfriskande" ; -- SaldoWN -- comment=13
-lin entry_N = mkN "ingång" | mkN "uppslagsord" neutrum ; -- SaldoWN -- comment=14
-lin entry_2_N = mkN "uppslagsord" neutrum ; -- status=guess
-lin entry_1_N = mkN "ingång" ; -- status=guess
-lin smile_N = mkN "leende" ; -- SaldoWN
-lin fair_A = mkA "rättvis" ; -- comment=13
-lin promise_VV = mkVV (mkV "lovar"); -- status=guess, src=wikt
-lin promise_VS = mkVS (mkV "lovar"); -- status=guess, src=wikt
-lin promise_V2 = mkV2 (mkV "lovar"); -- status=guess, src=wikt
-lin promise_V = mkV "lovar" ; -- comment=4
-lin introduction_N = mkN "introduktion" "introduktioner" | mkN "introducering" ; -- status=guess
-lin senior_A = mkA "senior" | mkA "äldre" ; -- status=guess
-lin manner_N = mkN "manér" neutrum | mkN "uppträdande" ; -- SaldoWN -- comment=14
-lin background_N = mkN "bakgrund" "bakgrunder" ; -- status=guess
-lin key_N = mkN "tonart" "tonarter" ; -- SaldoWN
-lin key_2_N = mkN "tonart" "tonarter" ; -- status=guess
-lin key_1_N = mkN "nyckel" ; -- status=guess
-lin touch_V2 = mkV2 "röra" "rörde" "rört" | dirV2 (partV (mkV "stämplar")"ut") ; -- SaldoWN -- comment=6
-lin touch_V = mkV "röra" "rörde" "rört" | mkV "skisserar" ; -- SaldoWN -- comment=17
-lin vary_V2 = dirV2 (partV (mkV "växlar")"in"); -- comment=2
-lin vary_V = mkV "varierar" ; -- comment=4
-lin sexual_A = mkA "sexuell" ; -- SaldoWN
-lin ordinary_A = mkA "vanlig" ; -- SaldoWN
-lin cabinet_N = mkN "skåp" neutrum ; -- SaldoWN -- comment=9
-lin painting_N = mkN "tavla" ; -- comment=5
-lin entirely_Adv = mkAdv "helt" ; -- status=guess
-lin engine_N = mkN "motor" "motorer" ; -- status=guess
-lin previously_Adv = mkAdv "förr" ; -- status=guess
-lin administration_N = mkN "förvaltning" ; -- status=guess
-lin tonight_Adv = mkAdv "ikväll" | mkAdv "inatt" ; -- status=guess
-lin adult_N = mkN "vuxen" ; -- status=guess
-lin prefer_VV = mkVV (mkV "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen") ; -- SaldoWN
-lin prefer_V2 = mkV2 "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen" ; -- SaldoWN
-lin author_N = mkN "upphovsman" "upphovsmannen" "upphovsmän" "upphovsmännen" ; -- status=guess
-lin actual_A = mkA "faktisk" ; -- status=guess
+lin legislation_N = mkN "lagstiftning" ; 
+lin commitment_N = mkN "åtagande" ; 
+lin enough_Predet = M.mkPredet "tillräckligt" "tillräckligt" "tillräckligt" ; 
+lin conflict_N = mkN "konflikt" "konflikter" ; 
+lin bag_N = mkN "väska" ; 
+lin fresh_A = mkA "färsk" ;
+lin entry_N = mkN "ingång" ; 
+lin entry_2_N = mkN "uppslagsord" neutrum ; 
+lin entry_1_N = mkN "ingång" ; 
+lin smile_N = mkN "leende" ;
+lin fair_A = mkA "rättvis" ;
+lin promise_VV = mkVV (mkV "lovar");
+lin promise_VS = mkVS (mkV "lovar");
+lin promise_V2 = mkV2 (mkV "lovar") | mkV2 "utlova" ;
+lin promise_V = mkV "lovar" ; 
+lin introduction_N = mkN "introduktion" "introduktioner" | mkN "inledning" ;
+lin senior_A = mkA "senior" | mkA "äldre" ; 
+lin manner_N = mkN "manér" neutrum ;
+lin background_N = mkN "bakgrund" "bakgrunder" ;
+lin key_N = mkN "nyckel" ;
+lin key_2_N = mkN "tonart" "tonarter" ; 
+lin key_1_N = mkN "nyckel" ; 
+lin touch_V2 = mkV2 "röra" "rörde" "rört" | mkV2 (mkV "röra" "rörde" "rört") (mkPrep "vid") ;
+lin touch_V = mkV "röra" "rörde" "rört" ;
+lin vary_V2 = mkV2 "varierae" ;
+lin vary_V = mkV "varierar" ;
+lin sexual_A = mkA "sexuell" ; 
+lin ordinary_A = mkA "vanlig" ;
+lin cabinet_N = mkN "skåp" neutrum | mkN "regering" ; ---- split cupboard vs. government
+lin painting_N = mkN "målning" ;
+lin entirely_Adv = mkAdv "helt" ; 
+lin engine_N = mkN "motor" "motorer" ; 
+lin previously_Adv = mkAdv "förr" ; 
+lin administration_N = mkN "förvaltning" | mkN "administration" ; 
+lin tonight_Adv = mkAdv "i kväll" | mkAdv "i natt" ; ---- split in the evening ; in the night
+lin adult_N = mkN "vuxen" "vuxen" "vuxna" "vuxna" ; 
+lin prefer_VV = mkVV (mkV "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen") ; 
+lin prefer_V2 = mkV2 "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen" ; 
+lin author_N = mkN "författare" "författare" | mkN "upphovsman" "upphovsmannen" "upphovsmän" "upphovsmännen" ;
+lin actual_A = mkA "faktisk" | mkA "nuvarande" ; ---- split real vs. contemporary
 lin song_N = L.song_N;
-lin investigation_N = mkN "efterforskning" | mkN "undersökning" ; -- SaldoWN -- comment=3
-lin debt_N = mkN "skuld" "skulder" ; -- SaldoWN
-lin visitor_N = mkN "besökare" utrum | mkN "besökare" utrum ; -- SaldoWN -- comment=5
-lin forest_N = mkN "skog" ; -- SaldoWN
-lin repeat_VS = mkVS (mkV "repeterar") | mkVS (mkV "upprepar"); -- status=guess, src=wikt status=guess, src=wikt
-lin repeat_V2 = mkV2 (mkV "repeterar") | mkV2 (mkV "upprepar"); -- status=guess, src=wikt status=guess, src=wikt
-lin repeat_V = mkV "upprepar" ; -- comment=2
+lin investigation_N = mkN "undersökning" | mkN "efterforskning" ;
+lin debt_N = mkN "skuld" "skulder" ; 
+lin visitor_N = mkN "besökare" "besökare" ;
+lin forest_N = mkN "skog" ; 
+lin repeat_VS = mkVS (mkV "repeterar") | mkVS (mkV "upprepar"); 
+lin repeat_V2 = mkV2 (mkV "repeterar") | mkV2 (mkV "upprepar"); 
+lin repeat_V = mkV "upprepar" ; 
 lin wood_N = L.wood_N ;
-lin contrast_N = mkN "motsats" "motsatser" | mkN "kontrast" "kontraster" ; -- SaldoWN -- comment=2
-lin extremely_Adv = mkAdv "extremt" ; -- status=guess
-lin wage_N = mkN "lön" "löner" | mkN "driva" ; -- SaldoWN -- comment=4
-lin domestic_A = mkA "inhemsk" | mkA "inrikes" ; -- SaldoWN -- comment=4
-lin commit_V2 = dirV2 (partV (mkV "skickar")"ut"); -- comment=5
-lin threat_N = mkN "hot" ; -- SaldoWN = mkN "hot" neutrum ;
-lin bus_N = mkN "buss" ; -- status=guess
+lin contrast_N = mkN "kontrast" "kontraster" | mkN "motsats" "motsatser" ;
+lin extremely_Adv = mkAdv "extremt" ; 
+lin wage_N = mkN "lön" "löner" | mkN "driva" ; ---- sense
+lin domestic_A = mkA "inhemsk" | mkA "inrikes" ; 
+lin commit_V2 = dirV2 (partV (mkV "skickar")"ut"); 
+lin threat_N = mkN "hot" "hot" ;
+lin bus_N = mkN "buss" ; 
 lin warm_A = L.warm_A ;
-lin sir_N = mkN "magister" ; -- status=guess
-lin regulation_N = mkN "bestämmelse" "bestämmelser" | mkN "reglerande" ; -- SaldoWN -- comment=7
-lin drink_N = mkN "fylleri" neutrum | mkN "spritdryck" "spritdrycker" ; -- SaldoWN -- comment=15
-lin relief_N = mkN "lättnad" "lättnader" | mkN "undsättning" ; -- SaldoWN -- comment=14
-lin internal_A = mkA "invärtes" ; -- comment=2
-lin strange_A = mkA "säregen" "säreget" | mkA "obekant" "obekant" ; -- SaldoWN -- comment=10
-lin excellent_A = mkA "utmärkt" "utmärkt" ; -- comment=12
-lin run_N = mkN "springa" | mkN "sats" "satser" ; -- SaldoWN -- comment=37
-lin fairly_Adv = mkAdv "någorlunda" ; -- status=guess
-lin technical_A = mkA "teknisk" ; -- SaldoWN
-lin tradition_N = mkN "tradition" "traditioner" ; -- status=guess
-lin measure_V2 = mkV2 (mkV "mäta"); -- status=guess, src=wikt
-lin measure_V = mkV "mäter" ; -- comment=4
-lin insist_VS = mkVS (mkV "vidhålla" "vidhöll" "vidhållit") | mkVS (mkV "insistera") ; -- status=guess
-lin insist_V2 = mkV2 "insistera" ; -- status=guess
-lin insist_V = mkV "insistera" | mkV "vidhålla" "vidhöll" "vidhållit" ; -- status=guess
-lin farmer_N = mkN "bonde" "bönder" | mkN "lantbrukare" utrum ; -- SaldoWN -- comment=2
+lin sir_N = mkN "herr" ; ---- 
+lin regulation_N = mkN "bestämmelse" "bestämmelser" | mkN "reglerande" ; ---- split rule vs. regulating
+lin drink_N = mkN "dryck" "drycker" | mkN "dricka" ;
+lin relief_N = mkN "lättnad" "lättnader" | mkN "undsättning" ; 
+lin internal_A = mkA "intern" ; 
+lin strange_A = mkA "konstig" | mkA "märklig" | mkA "säregen" "säreget" | mkA "obekant" "obekant" ; 
+lin excellent_A = mkA "utmärkt" "utmärkt" ; 
+lin run_N = mkN "lopp" "loppet" ;
+lin fairly_Adv = mkAdv "någorlunda" ; 
+lin technical_A = mkA "teknisk" ; 
+lin tradition_N = mkN "tradition" "traditioner" ; 
+lin measure_V2 = mkV2 (mkV "mäter") ; 
+lin measure_V = mkV "mäter" ; 
+lin insist_VS = mkVS (mkV "vidhålla" "vidhöll" "vidhållit") | mkVS (mkV "insistera") ; 
+lin insist_V2 = mkV2 "insistera" ; 
+lin insist_V = mkV "insistera" | mkV "vidhålla" "vidhöll" "vidhållit" ; 
+lin farmer_N = mkN "bonde" "bönder" | mkN "lantbrukare" "lantbrukare" | mkN "jordbrukare" "jordbrukare" ; 
 lin until_Prep = mkPrep "ända till" ;
-lin traffic_N = mkN "trafik" "trafiker" ; -- status=guess
-lin dinner_N = mkN "middag" ; -- SaldoWN
-lin consumer_N = mkN "konsument" "konsumenter" ; -- SaldoWN
-lin meal_N = mkN "måltid" "måltider" ; -- SaldoWN
-lin warn_VS = mkVS (mkV "varnar"); -- status=guess, src=wikt
-lin warn_V2V = mkV2V (mkV "varnar"); -- status=guess, src=wikt
-lin warn_V2 = mkV2 (mkV "varnar"); -- status=guess, src=wikt
-lin warn_V = mkV "varnar" ; -- comment=2
-lin living_A = mkA "bosatt" | mkA "levande" ; -- SaldoWN
-lin package_N = mkN "paket" neutrum | mkN "emballerande" ; -- SaldoWN -- comment=8
-lin half_N = mkN "halva" ; -- status=guess
-lin increasingly_Adv = mkAdv "alltmer" ; -- status=guess
-lin description_N = mkN "slag" neutrum; -- comment=7
-lin soft_A = mkA "mjuk" ; -- SaldoWN
-lin stuff_N = mkN "material" neutrum; -- comment=5
-lin award_V3 = mkV3 (mkV "bevilja"); -- status=guess
-lin award_V2 = mkV2 (mkV "bevilja"); -- status=guess
-lin existence_N = mkN "existens" "existenser" ; -- status=guess
-lin improvement_N = mkN "förbättring" ; -- SaldoWN
-lin coffee_N = mkN "kaffe" "kaffet" "kaffe" "kaffen" ; -- status=guess
-lin appearance_N = mkN "utseende" ; -- status=guess
-lin standard_A = mkA "standard" "standart" ; -- status=guess
-lin attack_V2 = mkV2 "anfalla" "anföll" "anfallit" | mkV2 (mkV "attackerar") | mkV2 (mkV "angripa" "angrep" "angripit") ; -- SaldoWN -- status=guess, src=wikt status=guess, src=wikt
-lin sheet_N = mkN "segel" neutrum | mkN "tidning" ; -- SaldoWN -- comment=17
-lin category_N = mkN "kategori" "kategorier" | mkN "klass" "klasser" ; -- SaldoWN -- comment=3
-lin distribution_N = mkN "spridning" ; -- status=guess
-lin equally_Adv = mkAdv "likvärdigt" ; -----
-lin session_N = mkN "session" "sessioner" | mkN "termin" "terminer" ; -- SaldoWN -- comment=4
-lin cultural_A = mkA "kulturell" ; -- status=guess
-lin loan_N = mkN "lån" neutrum | mkN "utlåning" ; -- SaldoWN -- comment=2
-lin bind_V2 = mkV2 "binda" "band" "bundit" | dirV2 (partV (mkV "kantar")"av") ; -- SaldoWN
-lin bind_V = mkV "binda" "band" "bundit" | mkV "kantar" ; -- SaldoWN -- comment=12
-lin museum_N = mkN "museum" "museet" "museer" "museerna" ; -- SaldoWN
-lin conversation_N = mkN "samtal" neutrum | mkN "samtalsämne" ; -- SaldoWN -- comment=5
-lin threaten_VV = mkVV (mkV "hotar"); -- status=guess, src=wikt
-lin threaten_VS = mkVS (mkV "hotar"); -- status=guess, src=wikt
-lin threaten_V2 = mkV2 (mkV "hotar"); -- status=guess, src=wikt
-lin threaten_V = mkV "hotar" ; -- status=guess
-lin link_N = mkN "länk" | mkN "före" ; -- status=guess
-lin launch_V2 = mkV2 (mkV "sjösätta" "sjösatte" "sjösatt") ; -- status=guess, src=wikt
-lin launch_V = mkV "färjar" ; -- comment=3
-lin proper_A = mkA "passande" | mkA "rätt" ; -- SaldoWN -- comment=18
-lin victim_N = mkN "offer" neutrum | mkN "slaktoffer" neutrum ; -- SaldoWN -- comment=2
-lin audience_N = mkN "publik" "publiker" ; -- SaldoWN
-lin famous_A = mkA "berömd" "berömt" ; -- status=guess
-lin master_N = mkN "mästare" utrum | mkN "styresman" "styresmannen" "styresmän" "styresmännen" ; -- SaldoWN -- comment=21
-lin master_2_N = mkN "magister" ; -- status=guess
-lin master_1_N = mkN "mästare" utrum ; -- status=guess
-lin lip_N = mkN "läpp" | mkN "oförskämdhet" "oförskämdheter" ; -- SaldoWN -- comment=4
-lin religious_A = mkA "religiös" ; -- status=guess
-lin joint_A = mkA "led" | mkA "samfälld" "samfällt" ; -- SaldoWN -- comment=5
-lin cry_V2 = mkV2 "gråta" "grät" "gråtit" | dirV2 (partV (mkV "ropar")"till") ; -- SaldoWN
-lin cry_V = mkV "gråta" "grät" "gråtit" | mkV "skrika" "skrek" "skrikit" ; -- SaldoWN -- comment=6
-lin potential_A = mkA "potentiell" ; -- SaldoWN
+lin traffic_N = mkN "trafik" "trafiker" ; 
+lin dinner_N = mkN "middag" ; 
+lin consumer_N = mkN "konsument" "konsumenter" ;
+lin meal_N = mkN "måltid" "måltider" ; 
+lin warn_VS = mkVS (mkV "varnar"); 
+lin warn_V2V = mkV2V (mkV "varnar"); 
+lin warn_V2 = mkV2 (mkV "varnar"); 
+lin warn_V = mkV "varnar" ; 
+lin living_A = mkA "levande" ; 
+lin package_N = mkN "paket" neutrum ;
+lin half_N = mkN "halva" | mkN "hälft" "hälfter" ;
+lin increasingly_Adv = mkAdv "alltmer" ;
+lin description_N = mkN "beskrivning" ;
+lin soft_A = mkA "mjuk" ; 
+lin stuff_N = mkN "material" neutrum ;
+lin award_V3 = mkV3 (mkV "bevilja") ;
+lin award_V2 = mkV2 (mkV "bevilja") ;
+lin existence_N = mkN "existens" "existenser" ; 
+lin improvement_N = mkN "förbättring" ; 
+lin coffee_N = mkN "kaffe" "kaffet" "kaffe" "kaffen" ;
+lin appearance_N = mkN "utseende" ; 
+lin standard_A = mkA "standard" "standart" ; 
+lin attack_V2 = mkV2 "anfalla" "anföll" "anfallit" | mkV2 (mkV "attackerar") | mkV2 (mkV "angripa" "angrep" "angripit") ;
+lin sheet_N = mkN "ark" "ark" | mkN "lakan" "lakan" ; ---- split
+lin category_N = mkN "kategori" "kategorier" ;
+lin distribution_N = mkN "spridning" ; 
+lin equally_Adv = mkAdv "likvärdigt" ; 
+lin session_N = mkN "session" "sessioner" ;
+lin cultural_A = mkA "kulturell" ; 
+lin loan_N = mkN "lån" neutrum ;
+lin bind_V2 = mkV2 "binda" "band" "bundit" ;
+lin bind_V = mkV "binda" "band" "bundit" ;
+lin museum_N = mkN "museum" "museet" "museer" "museerna" ; 
+lin conversation_N = mkN "samtal" neutrum ;
+lin threaten_VV = mkVV (mkV "hotar") ; 
+lin threaten_VS = mkVS (mkV "hotar") ;
+lin threaten_V2 = mkV2 (mkV "hotar") ;
+lin threaten_V = mkV "hotar" ;
+lin link_N = mkN "länk" ;
+lin launch_V2 = mkV2 (mkV "sjösätta" "sjösatte" "sjösatt") ;
+lin launch_V = depV (mkV "lancera") ; ----
+lin proper_A = mkA "passande" | mkA "riktig" ;
+lin victim_N = mkN "offer" neutrum ;
+lin audience_N = mkN "publik" "publiker" ;
+lin famous_A = mkA "berömd" "berömt" ; 
+lin master_N = mkN "mästare" utrum ;
+lin master_2_N = mkN "magister" ; 
+lin master_1_N = mkN "mästare" utrum ;
+lin lip_N = mkN "läpp" ;
+lin religious_A = mkA "religiös" ;
+lin joint_A = mkA "samfälld" "samfällt" ; 
+lin cry_V2 = mkV2 I.gråta_V | mkV2 I.skrika_V | mkV2 "ropa" ;
+lin cry_V = I.gråta_V | I.skrika_V | mkV "ropa" ;
+lin potential_A = mkA "potentiell" ; 
 lin broad_A = L.broad_A;
-lin exhibition_N = mkN "utställning" ; -- SaldoWN
-lin experience_V2 = mkV2 (mkV "upplever"); -- status=guess, src=wikt
-lin judge_N = mkN "domare" utrum ; -- SaldoWN -- comment=2
-lin formal_A = mkA "formell" ; -- SaldoWN
+lin exhibition_N = mkN "utställning" ; 
+lin experience_V2 = mkV2 (mkV "upplever") ; 
+lin judge_N = mkN "domare" "domare" ;
+lin formal_A = mkA "formell" ; ---- END check by AR
 lin housing_N = mkN "boende" | mkN "skydd" neutrum ; -- SaldoWN = mkN "boende" "boenden" "boende" "boendena" ; -- comment=13
 lin past_Prep = mkPrep "förbi" ; -- status=guess
 lin concern_V2 = mkV2 "gäller" ; -- status=guess

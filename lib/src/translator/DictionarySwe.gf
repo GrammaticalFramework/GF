@@ -1,4 +1,4 @@
----- edits by AR till concentrate_V
+---- edits by AR till formal_A
 
 concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe), Prelude in {
 
@@ -218,7 +218,7 @@ lin abrogate_V2 = variants {} ; -- status=guess
 lin abrogation_N = variants {} ; -- status=guess
 lin abrogator_N = variants {} ; -- status=guess
 lin abrupt_A = mkA "abrupt" "abrupt" ; -- comment=8
-lin abruptly_Adv = variants{} ;
+lin abruptly_Adv = variants{} ; --
 lin abruptness_N = variants {} ; -- status=guess
 lin abscess_N = mkN "böld" "bölder" ; -- comment=3
 lin abscessed_A = variants {} ; -- status=guess
@@ -404,7 +404,6 @@ lin accomplishable_A = variants {} ; -- status=guess
 lin accomplishment_N = mkN "skicklighet" "skickligheter" ; -- comment=5
 lin accord_N = mkN "överensstämmelse" "överensstämmelser" ; -- comment=5
 lin accord_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=3
---subcat lin accord_V2 = variants{}; -- mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=3
 lin accordance_N = mkN "enlighet" | mkN "överensstämmelse" ; -- status=guess status=guess
 lin accordant_A = variants {} ; -- status=guess
 lin according_to_Prep = mkPrep "enligt" ;
@@ -422,7 +421,7 @@ lin accountable_A = mkA "förklarlig" ; -- comment=2
 lin accountancy_N = mkN "bokföring" ; -- comment=2
 lin accountant_N = mkN "kamrer" "kamrerer" ; -- SaldoWN
 lin accountantship_N = variants {} ; -- status=guess
-lin accounting_A = variants{} ;
+lin accounting_A = variants{} ; --
 lin accounting_N = mkN "bokföring" | mkN "räkenskap" ; -- status=guess status=guess
 lin accoutered_A = variants {} ; -- status=guess
 lin accra_PN = variants {} ; -- status=guess
@@ -444,7 +443,7 @@ lin accumulative_A = variants {} ; -- status=guess
 lin accumulator_N = mkN "ackumulator" "ackumulatorer" ; -- status=guess
 lin accuracy_N = mkN "exakthet" "exaktheter" ; -- status=guess
 lin accurate_A = mkA "korrekt" "korrekt" | mkA "exakt" "exakt" ; -- SaldoWN -- comment=5
-lin accurately_Adv = variants{} ;
+lin accurately_Adv = variants{} ; --
 lin accursed_A = variants {} ; -- status=guess
 lin accurst_A = variants {} ; -- status=guess
 lin accusation_N = mkN "anklagelse" "anklagelser" ; -- comment=2
@@ -452,7 +451,7 @@ lin accusative_A = mkA "ackusativ" ; -- status=guess
 lin accusative_N = mkN "ackusativ" "ackusativer" ; -- status=guess
 lin accusatorial_A = variants {} ; -- status=guess
 lin accuse_V2 = mkV2 (mkV "anklagar"); -- status=guess, src=wikt
-lin accused_A = variants{} ;
+lin accused_A = variants{} ; --
 lin accused_N = variants {} ; -- status=guess
 lin accuserFem_N = mkN "anklagare" utrum; -- status=guess
 lin accuserMasc_N = mkN "anklagare" utrum; -- status=guess
@@ -544,7 +543,6 @@ lin acinar_A = variants {} ; -- status=guess
 lin acinus_N = variants {} ; -- status=guess
 lin ack_ack_N = variants {} ; -- status=guess
 lin ackee_N = variants {} ; -- status=guess
---subcat lin acknowledge_V = mkV "erkänna" "erkände" "erkänt" ; -- comment=5
 lin acknowledge_V2 = mkV2 (mkV "erkänna" "erkände" "erkänt") ; -- comment=5
 lin acknowledge_VS = mkVS (mkV "erkänna" "erkände" "erkänt") ; -- comment=5
 lin acknowledgeable_A = variants {} ; -- status=guess
@@ -624,8 +622,6 @@ lin acrylic_N = mkN "akryl" ; -- status=guess
 lin act_N = mkN "handling" | mkN "gärning" ;
 lin act_V = mkV "agerar" ;
 lin act_V2 = dirV2 (partV (mkV "agerar")"ut");
---subcat lin act_V2V = mkV2V (mkV "agerar") | mkV2V (mkV "handlar");
---subcat lin act_VA = mkVA (mkV "agerar") | mkVA (mkV "handlar");
 lin act_on_V2 = dirV2 (partV (mkV "agerar")"ut"); -- comment=2
 lin act_out_V2 = dirV2 (partV (mkV "agerar")"ut"); -- comment=2
 lin act_up_V = mkV "agerar" ; -- comment=12
@@ -660,11 +656,11 @@ lin activation_N = mkN "aktivering" ; -- status=guess
 lin activator_N = variants {} ; -- status=guess
 lin active_A = mkA "aktiv" ;
 lin active_N = mkN "aktiv" "aktiver" ; -- SaldoWN
-lin actively_Adv = variants{} ;
+lin actively_Adv = variants{} ; --
 lin activeness_N = variants {} ; -- status=guess
 lin activism_N = mkN "aktivism" "aktivismer" ; -- status=guess
 lin activistFem_N = mkN "aktivist" "aktivister" ; -- status=guess
-lin activistMasc_N = mkN "aktivist" "aktivister" ; -- status=guess
+lin activistMasc_N = variants{} ; --
 lin activist_A = variants {} ; -- status=guess
 lin activity_N = mkN "aktivitet" "aktiviteter" | mkN "verksamhet" "verksamheter" ;
 lin actomyosin_N = variants {} ; -- status=guess
@@ -672,7 +668,7 @@ lin actor_1_N = mkN "skådespelare" "skådespelare" ; -- status=guess
 lin actor_2_N = mkN "aktör" "aktörer" ; -- status=guess
 lin actor_N = mkN "aktör" "aktörer" ; -- comment=3
 lin actress_N = mkN "aktris" "aktriser" ; -- status=guess
-lin actual_A = mkA "faktisk" ; -- status=guess
+lin actual_A = mkA "faktisk" | mkA "nuvarande" ; ---- split real vs. contemporary
 lin actuality_N = mkN "faktum" neutrum; -- comment=2
 lin actually_Adv = mkAdv "faktiskt" ;
 lin actuarial_A = variants {} ; -- status=guess
@@ -739,7 +735,7 @@ lin add_up_V2 = dirV2 (partV (mkV "ökar")"till"); -- comment=3
 lin add_up_to_V2 = dirV2 (partV (mkV "ökar")"till"); -- comment=3
 lin addable_A = variants {} ; -- status=guess
 lin addax_N = variants {} ; -- status=guess
-lin added_A = variants{} ;
+lin added_A = variants{} ; --
 lin addend_N = mkN "addend" "addender" ; -- status=guess
 lin addendum_N = variants {} ; -- status=guess
 lin adder_N = mkN "räknare" utrum; -- status=guess
@@ -791,7 +787,7 @@ lin adept_N = variants {} ; -- status=guess
 lin adeptness_N = variants {} ; -- status=guess
 lin adequacy_N = mkN "tillräcklighet" ; -- status=guess
 lin adequate_A = mkA "fullvärdig" | mkA "tillräcklig" ; -- SaldoWN -- comment=7
-lin adequately_Adv = variants{} ;
+lin adequately_Adv = variants{} ; --
 lin adesite_N = variants {} ; -- status=guess
 lin adhere_V = mkV (mkV "hålla") "fast" | mkV (mkV "hålla") "sig till" ; -- status=guess, src=wikt status=guess, src=wikt
 lin adherence_N = mkN "följsamhet" ; -- status=guess
@@ -833,7 +829,6 @@ lin adjuratory_A = variants {} ; -- status=guess
 lin adjure_V2 = variants {} ; -- status=guess
 lin adjust_V = mkV "reglerar" ; -- comment=11
 lin adjust_V2 = dirV2 (partV (mkV "ordnar")"om"); -- status=guess
---subcat lin adjust_V2V = variants{}; -- dirV2 (partV (mkV "ordnar")"om");
 lin adjustable_A = mkA "inställbar" ; -- comment=6
 lin adjuster_N = variants {} ; -- status=guess
 lin adjustive_A = variants {} ; -- status=guess
@@ -845,17 +840,17 @@ lin admass_N = variants {} ; -- status=guess
 lin administer_V = mkV "sköter" ; -- comment=10
 lin administer_V2 = mkV2 (mkV "administrerar"); -- status=guess, src=wikt
 lin administrable_A = variants {} ; -- status=guess
-lin administration_N = mkN "förvaltning" ; -- status=guess
+lin administration_N = mkN "förvaltning" | mkN "administration" ;
 lin administrative_A = mkA "administrativ" ; -- SaldoWN
 lin administratorFem_N = mkN "boutredningsman" "boutredningsmannen" "boutredningsmän" "boutredningsmännen" ; -- comment=4
-lin administratorMasc_N = mkN "boutredningsman" "boutredningsmannen" "boutredningsmän" "boutredningsmännen" ; -- comment=4
+lin administratorMasc_N = variants{} ; --
 lin administrivia_N = variants {} ; -- status=guess
 lin admirability_N = variants {} ; -- status=guess
 lin admirable_A = mkA "beundransvärd" "beundransvärt" ; -- status=guess
 lin admiral_N = mkN "amiral" "amiraler" ; -- status=guess
 lin admiralty_N = variants {} ; -- status=guess
 lin admiration_N = mkN "beundran" ; -- status=guess
-lin admire_V2 = variants{} ;
+lin admire_V2 = variants{} ; --
 lin admirer_N = mkN "beundrare" utrum; -- status=guess
 lin admiringly_Adv = variants {} ; -- status=guess
 lin admissibility_N = variants {} ; -- status=guess
@@ -924,7 +919,7 @@ lin adsorption_N = variants {} ; -- status=guess
 lin adulation_N = variants {} ; -- status=guess
 lin adulatory_A = variants {} ; -- status=guess
 lin adult_A = mkA "vuxen" "vuxet" | mkA "mogen" "moget" ; -- SaldoWN -- comment=3
-lin adult_N = mkN "vuxen" ; -- status=guess
+lin adult_N = mkN "vuxen" "vuxen" "vuxna" "vuxna" ;
 lin adulterant_N = variants {} ; -- status=guess
 lin adulterate_A = variants {} ; -- status=guess
 lin adulterate_V2 = mkV2 (mkV "korrumperar"); -- status=guess, src=wikt
@@ -944,7 +939,7 @@ lin adust_A = variants {} ; -- status=guess
 lin advance_N = mkN "förskott" neutrum | mkN "tillmötesgående" ; -- SaldoWN -- comment=21
 lin advance_V = mkV "fortskrida" "fortskred" "fortskridit" | mkV "framställer" ; -- SaldoWN -- comment=18
 lin advance_V2 = mkV2 "fortskrida" "fortskred" "fortskridit" | mkV2 (mkV "förskottera") ; -- SaldoWN -- status=guess, src=wikt
-lin advanced_A = variants{} ;
+lin advanced_A = variants{} ; --
 lin advancement_N = mkN "förskott" neutrum; -- comment=8
 lin advancer_N = variants {} ; -- status=guess
 lin advantage_N = mkN "fördel" ;
@@ -972,7 +967,7 @@ lin adverbial_A = mkA "adverbiell" ; -- status=guess
 lin adverbial_N = mkN "adverbial" neutrum; -- status=guess
 lin adversary_N = mkN "motståndare" utrum; -- status=guess
 lin adversative_A = variants {} ; -- status=guess
-lin adverse_A = variants{} ;
+lin adverse_A = variants{} ; --
 lin adversity_N = mkN "motgång" ; -- status=guess
 lin advert_N = mkN "annons" "annonser" ; -- comment=5
 lin advert_V = variants {} ; -- status=guess
@@ -992,12 +987,12 @@ lin advise_V2 = mkV2 (mkV "råda"); -- status=guess, src=wikt
 lin advise_VS = mkVS (mkV "råda"); -- status=guess, src=wikt
 lin advisee_N = variants {} ; -- status=guess
 lin adviserFem_N = mkN "konsulent" "konsulenter" ; -- status=guess
-lin adviserMasc_N = mkN "konsulent" "konsulenter" ; -- status=guess
+lin adviserMasc_N = variants{} ; --
 lin advisory_A = mkA "rådgivande" ; -- status=guess
 lin advisory_N = variants {} ; -- status=guess
 lin advocacy_N = variants {} ; -- status=guess
 lin advocateFem_N = mkN "förespråkare" utrum; -- comment=3
-lin advocateMasc_N = mkN "förespråkare" utrum; -- comment=3
+lin advocateMasc_N = variants{} ; --
 lin advocate_V2 = mkV2 (mkV "plädera"); -- status=guess, src=wikt
 lin advocate_VS = mkVS (mkV "plädera"); -- status=guess, src=wikt
 lin advowson_N = variants {} ; -- status=guess
@@ -1210,7 +1205,6 @@ lin agave_N = mkN "agave" "agaver" ; -- status=guess
 lin agaze_A = variants {} ; -- status=guess
 lin age_N = mkN "ålder" "åldrar" ;
 lin age_V = mkV "åldras" ; -- status=guess, src=wikt
---subcat lin age_V2 = mkV2 (mkV "åldras"); -- status=guess, src=wikt
 lin age_bracket_N = variants {} ; -- status=guess
 lin age_group_N = variants {} ; -- status=guess
 lin age_long_A = variants {} ; -- status=guess
@@ -1227,7 +1221,7 @@ lin agency_N = mkN "kontor" "kontor" | mkN "byrå" "byråer" ;
 lin agenda_N = mkN "dagordning" ; -- SaldoWN
 lin agenesis_N = variants {} ; -- status=guess
 lin agentFem_N = mkN "agent" "agenter" ; -- comment=5
-lin agentMasc_N = mkN "agent" "agenter" ; -- comment=5
+lin agentMasc_N = mkN "agent" "agenter" ;
 lin agent_provocateur_N = variants {} ; -- status=guess
 lin agential_A = variants {} ; -- status=guess
 lin agerasia_N = variants {} ; -- status=guess
@@ -1312,14 +1306,13 @@ lin agraphia_N = variants {} ; -- status=guess
 lin agraphic_A = variants {} ; -- status=guess
 lin agrarian_A = variants {} ; -- status=guess
 lin agree_V = mkV I.hålla_V "med" ;
---subcat lin agree_V2 = mkV2 (mkV (mkV "komma" "kom" "kommit") "överens") (mkPrep "om") ;
 lin agree_VS = mkVS (mkV I.hålla_V "med") ;
 lin agree_VV = mkVV (mkV (mkV "komma" "kom" "kommit") "överens om") ;
 lin agree_on_V = mkV "enar" ; -- comment=6
 lin agree_with_V2 = variants {} ; -- status=guess
 lin agreeable_A = mkA "angenäm" ; -- comment=7
 lin agreeableness_N = variants {} ; -- status=guess
-lin agreed_A = variants{} ;
+lin agreed_A = variants{} ; --
 lin agreement_N = mkN "överenskommelse" "överenskommelser" | mkN "avtal" neutrum ;
 lin agrestic_A = variants {} ; -- status=guess
 lin agribusiness_N = variants {} ; -- status=guess
@@ -1464,7 +1457,7 @@ lin alan_PN = variants {} ; -- status=guess
 lin alanine_N = variants {} ; -- status=guess
 lin alar_A = variants {} ; -- status=guess
 lin alarm_N = mkN "larm" neutrum | mkN "väckarklocka" ; -- SaldoWN -- comment=10
-lin alarm_V2 = variants{} ;
+lin alarm_V2 = variants{} ; --
 lin alarm_clock_N = variants {} ; -- status=guess
 lin alarming_A = mkA "alarmerande" ; -- status=guess
 lin alarmism_N = variants {} ; -- status=guess
@@ -1480,7 +1473,7 @@ lin albanian_A = mkA "albansk" ; -- status=guess
 lin albanian_N = mkN "alban" "albaner" ; -- comment=4
 lin albatross_N = mkN "kvarnsten" "kvarnstenen" "kvarnstenar" "kvarnstenarna" ; -- comment=2
 lin albedo_N = variants {} ; -- status=guess
-lin albeit_Subj = variants{} ;
+lin albeit_Subj = variants{} ; --
 lin albert_PN = variants {} ; -- status=guess
 lin alberta_PN = variants {} ; -- status=guess
 lin albescent_A = variants {} ; -- status=guess
@@ -1534,7 +1527,7 @@ lin aleph_N = variants {} ; -- status=guess
 lin aleppo_PN = variants {} ; -- status=guess
 lin alert_A = mkA "alert" "alert" | mkA "vaken" "vaket" ; -- SaldoWN -- comment=6
 lin alert_N = mkN "vak" neutrum; -- comment=6
-lin alert_V2 = variants{} ;
+lin alert_V2 = variants{} ; --
 lin alertness_N = variants {} ; -- status=guess
 lin alessandria_PN = variants {} ; -- status=guess
 lin aleurone_N = variants {} ; -- status=guess
@@ -1606,7 +1599,7 @@ lin align_V = variants {} ; -- status=guess
 lin align_V2 = variants {} ; -- status=guess
 lin alignment_N = mkN "allians" "allianser" ; -- comment=3
 lin alike_A = mkA "lik" | (mkA "likadan") | (mkA "lika") | (mkA "liknande") ; -- SaldoWN -- status=guess status=guess status=guess
-lin alike_Adv = variants{} ;
+lin alike_Adv = variants{} ; --
 lin alimentary_A = variants {} ; -- status=guess
 lin alimentative_A = variants {} ; -- status=guess
 lin alimony_N = mkN "underhåll" ; -- status=guess
@@ -1656,12 +1649,11 @@ lin allargando_A = variants {} ; -- status=guess
 lin allay_V2 = variants {} ; -- status=guess
 lin allegation_N = mkN "anklagelse" "anklagelser" ; -- status=guess
 lin allege_V2 = mkV2 "förege" "föreger" "förege" "föregav" "föregett" "föregiven" | mkV2 (mkV "påstå" "påstod" "påstått") ; -- status=guess
---subcat lin allege_V2V = mkV2V "förege" "föreger" "förege" "föregav" "föregett" "föregiven" | mkV2V (mkV "påstå" "påstod" "påstått") ; -- status=guess
 lin allege_VS = mkV "förege" "föreger" "förege" "föregav" "föregett" "föregiven" | mkVS (mkV "påstå" "påstod" "påstått") ; -- status=guess
-lin alleged_A = variants{} ;
+lin alleged_A = variants{} ; --
 lin allegedly_AdA = variants {} ; -- status=guess
 lin allegedly_AdV = variants {} ; -- status=guess
-lin allegedly_Adv = variants{} ;
+lin allegedly_Adv = variants{} ; --
 lin allegiance_N = mkN "trohet" "troheter" ; -- comment=2
 lin allegiant_A = variants {} ; -- status=guess
 lin allegoric_A = mkA "allegorisk" ; -- status=guess
@@ -1692,7 +1684,7 @@ lin alley_N = mkN "gång" "gånger" ; -- comment=7
 lin alleyway_N = mkN "bakgata" ; -- status=guess
 lin alliaceous_A = variants {} ; -- status=guess
 lin alliance_N = mkN "förbund" neutrum; -- comment=5
-lin allied_A = variants{} ;
+lin allied_A = variants{} ; --
 lin allies_N = variants {} ; -- status=guess
 lin alligator_N = mkN "alligator" "alligatorer" ; -- status=guess
 lin alligatored_A = variants {} ; -- status=guess
@@ -1734,10 +1726,8 @@ lin allotrope_N = variants {} ; -- status=guess
 lin allotropic_A = mkA "allotropisk" ; -- status=guess
 lin allotropy_N = variants {} ; -- status=guess
 lin allover_A = variants {} ; -- status=guess
---subcat lin allow_V = mkV "tillåta" "tillät" "tillåtit" ;
 lin allow_V2 = mkV2 "tillåta" "tillät" "tillåtit" ;
 lin allow_V2V = mkV2V "tillåta" "tillät" "tillåtit" ;
---subcat lin allow_VS = mkV "tillåta" "tillät" "tillåtit" ;
 lin allow_for_V2 = variants {} ; -- status=guess
 lin allow_of_V2 = variants {} ; -- status=guess
 lin allowable_A = variants {} ; -- status=guess
@@ -1784,7 +1774,7 @@ lin alocasia_N = variants {} ; -- status=guess
 lin aloe_N = variants {} ; -- status=guess
 lin aloft_Adv = variants {} ; -- status=guess
 lin aloha_N = variants {} ; -- status=guess
-lin alone_A = mkA "ensam" "ensamt" "ensamma" "ensamma" "ensammare" "ensammast" "ensammaste" ; -- comment=4
+lin alone_A = mkA "ensam" "ensamt" "ensamma" "ensamma" "ensammare" "ensammast" "ensammaste" ;
 lin alone_Adv = mkAdv "ensamt" ; -- status=guess
 lin aloneness_N = variants {} ; -- status=guess
 lin along_Adv = mkAdv "med" ;
@@ -1817,7 +1807,7 @@ lin alpinist_N = variants {} ; -- status=guess
 lin alprazolam_N = variants {} ; -- status=guess
 lin already_AdV = mkAdV "redan" ; -- status=guess
 lin already_Adv = L.already_Adv ;
-lin alright_A = variants{} ;
+lin alright_A = variants{} ; --
 lin alright_Adv = mkAdv "okej" ; -- status=guess
 lin alsatianFem_N = variants {} ; -- status=guess
 lin alsatianMasc_N = variants {} ; -- status=guess
@@ -1842,7 +1832,7 @@ lin alternate_V2 = dirV2 (partV (mkV "växlar")"in"); -- comment=2
 lin alternation_N = mkN "förändring" ; -- status=guess
 lin alternative_A = mkA "alternativ" ; -- SaldoWN
 lin alternative_N = mkN "alternativ" neutrum ; -- SaldoWN -- comment=2
-lin alternatively_Adv = variants{} ;
+lin alternatively_Adv = variants{} ; --
 lin alternator_N = variants {} ; -- status=guess
 lin althea_N = variants {} ; -- status=guess
 lin although_Subj = S.although_Subj;
@@ -1905,8 +1895,8 @@ lin amaryllis_N = mkN "amaryllis" ; -- status=guess
 lin amass_V2 = variants {} ; -- status=guess
 lin amastia_N = variants {} ; -- status=guess
 lin amateurFem_N = mkN "amatör" "amatörer" ; -- comment=2
-lin amateurMasc_N = mkN "amatör" "amatörer" ; -- comment=2
-lin amateur_A = variants{} ;
+lin amateurMasc_N = variants{} ; --
+lin amateur_A = variants{} ; --
 lin amateurish_A = variants {} ; -- status=guess
 lin amateurishness_N = variants {} ; -- status=guess
 lin amateurism_N = variants {} ; -- status=guess
@@ -2081,7 +2071,7 @@ lin amour_N = mkN "kärleksaffär" "kärleksaffärer" ; -- status=guess
 lin amour_propre_N = variants {} ; -- status=guess
 lin amoxicillin_N = variants {} ; -- status=guess
 lin amp_Conj = M.mkConj [] "&" plural; -- status=guess
-lin amp_N = variants{} ;
+lin amp_N = variants{} ; --
 lin amperage_N = variants {} ; -- status=guess
 lin ampere_N = mkN "ampere" "amperen" "ampere" "amperena" ; -- status=guess
 lin ampersand_N = mkN "och-tecken" | mkN "ampersand" ; -- status=guess status=guess
@@ -2130,7 +2120,7 @@ lin amsterdam_PN = mkPN "Amsterdam" neutrum ; -- status=guess
 lin amuck_A = variants {} ; -- status=guess
 lin amuck_Adv = mkAdv "amok" ; -- status=guess
 lin amulet_N = mkN "amulett" "amuletter" ; -- SaldoWN
-lin amuse_V2 = variants{} ;
+lin amuse_V2 = variants{} ; --
 lin amusement_N = mkN "underhållning" ; -- comment=3
 lin amusing_A = mkA "underhållande" ; -- comment=4
 lin amy_PN = variants {} ; -- status=guess
@@ -2201,7 +2191,7 @@ lin analogy_N = mkN "analogi" "analogier" ; -- SaldoWN
 lin analphabet_N = mkN "analfabet" "analfabeter" ; -- status=guess
 lin analphabetic_A = variants {} ; -- status=guess
 lin analysand_N = variants {} ; -- status=guess
-lin analyse_V2 = variants{} ;
+lin analyse_V2 = variants{} ; --
 lin analysis_N = mkN "analys" "analyser" ;
 lin analyst_N = mkN "psykoanalytiker" "psykoanalytikern" "psykoanalytiker" "psykoanalytikerna" | mkN "analytiker" "analytikern" "analytiker" "analytikerna" ; -- SaldoWN
 lin analytic_A = mkA "analytisk" ; -- status=guess
@@ -2414,7 +2404,7 @@ lin angolan_N = variants {} ; -- status=guess
 lin angora_N = variants {} ; -- status=guess
 lin angostura_N = variants {} ; -- status=guess
 lin angrecum_N = variants {} ; -- status=guess
-lin angrily_Adv = variants{} ;
+lin angrily_Adv = variants{} ; --
 lin angry_A = mkA "arg" | mkA "elak" ; -- SaldoWN -- comment=9
 lin angst_N = variants {} ; -- status=guess
 lin angstrom_N = mkN "ångström" ; -- status=guess
@@ -2524,12 +2514,12 @@ lin announce_V2 = mkV2 "utlyser" ;
 lin announce_VS = mkVS (mkV "annonserar") ;
 lin announcement_N = mkN "bud" neutrum | mkN "tillkännagivande" ; -- SaldoWN -- comment=10
 lin announcer_N = mkN "hallåa" ; -- status=guess
-lin annoy_V2 = variants{} ;
+lin annoy_V2 = variants{} ; --
 lin annoyance_N = mkN "irritation" "irritationer" ; -- status=guess
 lin annoying_A = mkA "förarglig" ; -- status=guess
 lin annual_A = mkA "årlig" ;
 lin annual_N = mkN "årsbok" "årsböcker" ; -- comment=3
-lin annually_Adv = variants{} ;
+lin annually_Adv = variants{} ; --
 lin annuitant_N = variants {} ; -- status=guess
 lin annuity_N = mkN "livränta" ; -- SaldoWN
 lin annul_V2 = variants {} ; -- status=guess
@@ -2974,7 +2964,7 @@ lin apologetic_A = variants {} ; -- status=guess
 lin apologetically_Adv = variants {} ; -- status=guess
 lin apologetics_N = variants {} ; -- status=guess
 lin apologist_N = mkN "apologet" "apologeter" ; -- status=guess
-lin apologize_V = variants{} ;
+lin apologize_V = variants{} ; --
 lin apology_N = mkN "avbön" "avböner" | mkN "ursäkt" "ursäkter" ; -- SaldoWN -- comment=4
 lin apomict_N = variants {} ; -- status=guess
 lin apomictic_A = variants {} ; -- status=guess
@@ -3029,15 +3019,13 @@ lin apparitional_A = variants {} ; -- status=guess
 lin appeal_N = mkN "attraktion" "attraktioner" | mkN "vädjan" "vädjan" "vädjan" "vädjan" ; --- split
 lin appeal_V = mkV "överklagar" ; -- comment=7
 lin appeal_V2 = dirV2 (partV (mkV "lockar")"in"); -- status=guess
---subcat lin appeal_V2V = mkV2V (mkV "överklaga"); -- status=guess, src=wikt
 lin appealable_A = variants {} ; -- status=guess
 lin appealingly_Adv = variants {} ; -- status=guess
 lin appear_V = partV I.dyka_V "upp" ;
---subcat lin appear_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ;
 lin appear_VA = mkVA (mkV "verka") ;
 lin appear_VS = mkVS (mkV "verka") ;
 lin appear_VV = mkVV (mkV "verka") ;
-lin appearance_N = mkN "utseende" ; -- status=guess
+lin appearance_N = mkN "utseende" ;
 lin appeasable_A = variants {} ; -- status=guess
 lin appease_V2 = mkV2 (mkV "blidkar") | mkV2 (mkV "stillar") | mkV2 (mkV "lugnar") | mkV2 (mkV "släcker") | mkV2 (mkV "mildrar"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin appeasement_N = mkN "blidkande" ; -- comment=3
@@ -3083,7 +3071,7 @@ lin applicant_N = mkN "sökande" ; -- SaldoWN = mkN "sökande" "sökanden" "sök
 lin application_N = mkN "tillämpning" ;
 lin applicative_A = variants {} ; -- status=guess
 lin applicator_N = variants {} ; -- status=guess
-lin applied_A = variants{} ;
+lin applied_A = variants{} ; --
 lin applique_N = mkN "applikation" "applikationer" ; -- status=guess
 lin applique_V2 = variants {} ; -- status=guess
 lin apply_1_V2 = mkV2 "tillämpa" ;
@@ -3095,8 +3083,7 @@ lin apply_VV = mkVV (mkV "ansöker") ;
 lin appoint_V2 = mkV2 "utse" "utsåg" "utsett" ; -- SaldoWN
 lin appoint_V2V = mkV2V "utse" "utsåg" "utsett" ; -- SaldoWN
 lin appoint_V3 = mkV3 "utse" "utsåg" "utsett" ; -- SaldoWN
---subcat lin appoint_VS = mkV "utse" "utsåg" "utsett" ; -- SaldoWN
-lin appointed_A = variants{} ;
+lin appointed_A = variants{} ; --
 lin appointee_N = variants {} ; -- status=guess
 lin appointive_A = variants {} ; -- status=guess
 lin appointment_N = mkN "förordnande" | mkN "utnämning" ; -- SaldoWN -- comment=2
@@ -3135,7 +3122,7 @@ lin approbation_N = variants {} ; -- status=guess
 lin appropriable_A = variants {} ; -- status=guess
 lin appropriate_A = mkA "lämplig" ;
 lin appropriate_V2 = variants {} ; -- status=guess
-lin appropriately_Adv = variants{} ;
+lin appropriately_Adv = variants{} ; --
 lin appropriateness_N = variants {} ; -- status=guess
 lin appropriation_N = mkN "beslagtagande" ; -- comment=3
 lin appropriative_A = variants {} ; -- status=guess
@@ -3143,7 +3130,7 @@ lin appropriator_N = variants {} ; -- status=guess
 lin approval_N = mkN "välsignelse" "välsignelser" | mkN "godkännande" ; -- SaldoWN -- comment=6
 lin approve_V = mkV "godkänna" "godkände" "godkänt" | mkV "tillstyrker" ; -- SaldoWN -- comment=8
 lin approve_V2 = mkV2 "godkänna" "godkände" "godkänt" | mkV2 "godkänner" ; -- SaldoWN
-lin approved_A = variants{} ;
+lin approved_A = variants{} ; --
 lin approver_N = variants {} ; -- status=guess
 lin approvingly_Adv = variants {} ; -- status=guess
 lin approx_PN = variants {} ; -- status=guess
@@ -3297,9 +3284,9 @@ lin archipallium_N = variants {} ; -- status=guess
 lin archipelagic_A = variants {} ; -- status=guess
 lin archipelago_N = mkN "arkipelag" "arkipelager" ; -- comment=4
 lin architectFem_N = mkN "skapare" utrum; -- comment=3
-lin architectMasc_N = mkN "skapare" utrum; -- comment=3
+lin architectMasc_N = variants{} ; --
 lin architectonics_N = variants {} ; -- status=guess
-lin architectural_A = variants{} ;
+lin architectural_A = variants{} ; --
 lin architecture_N = mkN "arkitektur" "arkitekturer" | mkN "byggnad" "byggnader" ; -- SaldoWN -- comment=6
 lin architeuthis_N = variants {} ; -- status=guess
 lin architrave_N = variants {} ; -- status=guess
@@ -3390,7 +3377,6 @@ lin ariled_A = variants {} ; -- status=guess
 lin ariose_A = variants {} ; -- status=guess
 lin arioso_N = variants {} ; -- status=guess
 lin arise_V = mkV "uppstå" "uppstod" "uppstått" ;
---subcat lin arise_VS = mkVS (mkV "uppstå" "uppstod" "uppstått") ;
 lin arista_N = variants {} ; -- status=guess
 lin aristocracy_N = mkN "aristokrati" "aristokratier" ; -- comment=2
 lin aristocrat_N = mkN "aristokrat" "aristokrater" ; -- SaldoWN
@@ -3420,7 +3406,7 @@ lin armamentarium_N = variants {} ; -- status=guess
 lin armature_N = mkN "armatur" "armaturer" ; -- SaldoWN
 lin armband_N = variants {} ; -- status=guess
 lin armchair_N = mkN "fåtölj" "fåtöljer" ; -- SaldoWN
-lin armed_A = variants{} ;
+lin armed_A = variants{} ; --
 lin armenian_N = mkN "armenier" "armeniern" "armenier" "armenierna" ; -- comment=3
 lin armet_N = variants {} ; -- status=guess
 lin armful_N = mkN "fång" ; -- comment=2
@@ -3471,8 +3457,8 @@ lin arr_PN = variants {} ; -- status=guess
 lin arrack_N = mkN "arrak" ; -- status=guess
 lin arraign_V2 = variants {} ; -- status=guess
 lin arraignment_N = mkN "anklagelse" "anklagelser" ; -- status=guess
-lin arrange_V = mkV "planerar" ; -- comment=12
-lin arrange_V2 = dirV2 (partV (mkV "ordnar")"om"); -- status=guess
+lin arrange_V = mkV "arrangera" ;
+lin arrange_V2 = mkV2 "arrangera" | mkV2 "anordna" ;
 lin arrangement_N = mkN "arrangemang" neutrum | mkN "åtgärd" "åtgärder" ;
 lin arranger_N = mkN "arrangör" "arrangörer" ; -- comment=2
 lin arrant_A = variants {} ; -- status=guess
@@ -3488,7 +3474,6 @@ lin arrhythmic_A = variants {} ; -- status=guess
 lin arriere_pensee_N = variants {} ; -- status=guess
 lin arrival_N = mkN "uppnående" ; -- comment=3
 lin arrive_V = mkV "ankomma" "ankom" "ankommit" ;
---subcat lin arrive_V2 = mkV2 (mkV "ankomma" "ankom" "ankommit") ;
 lin arroba_N = variants {} ; -- status=guess
 lin arrogance_N = mkN "arrogans" ; -- comment=5
 lin arrogant_A = mkA "förmäten" "förmätet" | mkA "arrogant" "arrogant" ; -- SaldoWN -- comment=5
@@ -3618,7 +3603,7 @@ lin ascender_N = variants {} ; -- status=guess
 lin ascension_N = mkN "uppstigning" ; -- comment=2
 lin ascensional_A = variants {} ; -- status=guess
 lin ascent_N = mkN "uppstigning" ; -- comment=4
-lin ascertain_V2 = variants{} ;
+lin ascertain_V2 = variants{} ; --
 lin ascertainable_A = variants {} ; -- status=guess
 lin ascetic_A = mkA "asketisk" ; -- status=guess
 lin ascetic_N = mkN "asket" "asketer" ; -- SaldoWN
@@ -3684,8 +3669,6 @@ lin ask_V = mkV "fråga" ;
 lin ask_V2 = mkV2 "fråga" ;
 lin ask_V2V = mkV2V I.bedja_V ;
 lin ask_VQ = mkVQ (mkV "fråga") ;
---subcat lin ask_VS = mkVS I.bedja_V ;
---subcat lin ask_VV = mkVV I.bedja_V ;
 lin ask_about_V2 = dirV2 (partV (mkV "frågar")"ut"); -- status=guess
 lin ask_after_V2 = dirV2 (partV (mkV "frågar")"ut"); -- status=guess
 lin ask_around_V = mkV "rådfrågar" ; -- comment=8
@@ -3704,7 +3687,7 @@ lin askew_Adv = variants {} ; -- status=guess
 lin asking_N = variants {} ; -- status=guess
 lin aslant_A = variants {} ; -- status=guess
 lin aslant_Adv = variants {} ; -- status=guess
-lin asleep_A = variants{} ;
+lin asleep_A = variants{} ; --
 lin asleep_Adv = variants {} ; -- status=guess
 lin asocial_A = mkA "asocial" ; -- comment=2
 lin asp_N = mkN "asp" ; -- status=guess
@@ -3753,7 +3736,7 @@ lin assassin_N = mkN "mördare" utrum; -- comment=2
 lin assassinate_V2 = mkV2 (mkV "lönnmörda"); -- status=guess, src=wikt
 lin assassination_N = mkN "lönnmord" neutrum; -- comment=3
 lin assault_N = mkN "överfall" neutrum | mkN "anfall" neutrum ; -- SaldoWN -- comment=6
-lin assault_V2 = variants{} ;
+lin assault_V2 = variants{} ; --
 lin assaultive_A = variants {} ; -- status=guess
 lin assay_N = mkN "prövning" ; -- comment=2
 lin assay_V2 = dirV2 (partV (mkV "prövar")"på"); -- status=guess
@@ -3790,8 +3773,8 @@ lin asshole_N = mkN "arsle" ; -- comment=2
 lin assibilation_N = variants {} ; -- status=guess
 lin assiduity_N = mkN "nit" ; -- comment=6
 lin assiduous_A = mkA "flitig" ; -- comment=2
-lin assign_V2 = variants{} ;
-lin assign_V2V = variants{} ;
+lin assign_V2 = variants{} ; --
+lin assign_V2V = variants{} ; --
 lin assignable_A = variants {} ; -- status=guess
 lin assignation_N = variants {} ; -- status=guess
 lin assignee_N = variants {} ; -- status=guess
@@ -3818,7 +3801,7 @@ lin associate_A = mkA "förbunden" "förbundet" ; -- status=guess
 lin associate_N = mkN "före" ; -- comment=8
 lin associate_V = mkV "associera" ;
 lin associate_V2 = mkV2 "associera" ;
-lin associated_A = variants{} ;
+lin associated_A = variants{} ; --
 lin associateship_N = variants {} ; -- status=guess
 lin association_N = mkN "förening" | mkN "association" ; --- split
 lin associational_A = variants {} ; -- status=guess
@@ -3831,7 +3814,6 @@ lin assortment_N = mkN "blandning" ; -- comment=4
 lin asst_N = variants {} ; -- status=guess
 lin assuage_V2 = variants {} ; -- status=guess
 lin assuasive_A = variants {} ; -- status=guess
---subcat lin assume_V = mkV "förutsätta" "förutsatte" "förutsatt" ;
 lin assume_V2 = mkV2 "förutsätta" "förutsatte" "förutsatt" | mkV2 (mkV "anta" "antar" "anta" "antog" "antagit" "antagen") ;
 lin assume_VS = mkVS (mkV "anta" "antar" "anta" "antog" "antagit" "antagen") ;
 lin assumption_N = mkN "antagande" | mkN "övertagande" ; -- SaldoWN -- comment=2
@@ -3934,7 +3916,7 @@ lin asynergic_A = variants {} ; -- status=guess
 lin asynergy_N = variants {} ; -- status=guess
 lin asystole_N = variants {} ; -- status=guess
 lin at_N = mkN "för" ; -- comment=6
-lin at_Prep = mkPrep "vid" ;
+lin at_Prep = mkPrep "vid" | mkPrep "hos" ; ---- split
 lin at_all_Adv = variants {} ; -- status=guess
 lin at_home_Adv = mkAdv "hemma" ; -- status=guess
 lin at_home_N = variants {} ; -- status=guess
@@ -4025,7 +4007,7 @@ lin attachable_A = variants {} ; -- status=guess
 lin attache_N = mkN "attaché" "attachéer" ; -- status=guess
 lin attachment_N = mkN "tillgivenhet" "tillgivenheter" | mkN "hängivenhet" ; -- SaldoWN -- comment=16
 lin attack_N = mkN "anfall" neutrum ;
-lin attack_V2 = mkV2 "anfalla" "anföll" "anfallit" | mkV2 (mkV "attackerar") | mkV2 (mkV "angripa" "angrep" "angripit") ; -- SaldoWN -- status=guess, src=wikt status=guess, src=wikt
+lin attack_V2 = mkV2 "anfalla" "anföll" "anfallit" | mkV2 (mkV "attackerar") | mkV2 (mkV "angripa" "angrep" "angripit") ;
 lin attacker_N = mkN "angripare" utrum; -- status=guess
 lin attain_V = mkV "förvärvar" ; -- status=guess
 lin attain_V2 = variants{}; -- mkV "förvärvar" ;
@@ -4036,7 +4018,7 @@ lin attar_N = variants {} ; -- status=guess
 lin attempt_N = mkN "försök" neutrum;
 lin attempt_V2 = mkV2 (mkV "försöker") ;
 lin attempt_VV = mkVV (mkV "försöker") ;
-lin attempted_A = variants{} ;
+lin attempted_A = variants{} ; --
 lin attend_V = mkV "delta" "deltar" "delta" "deltog" "deltagit" "deltagen" ;
 lin attend_V2 = mkV2 (mkV "delta" "deltar" "delta" "deltog" "deltagit" "deltagen") (mkPrep "i") ;
 lin attendance_N = mkN "närvaro" ; -- comment=9
@@ -4098,7 +4080,7 @@ lin audacity_N = mkN "oförskämdhet" "oförskämdheter" ; -- comment=4
 lin audibility_N = variants {} ; -- status=guess
 lin audible_A = mkA "hörbar" ; -- SaldoWN
 lin audible_N = variants {} ; -- status=guess
-lin audience_N = mkN "publik" "publiker" ; -- SaldoWN
+lin audience_N = mkN "publik" "publiker" ;
 lin audile_N = variants {} ; -- status=guess
 lin audio_N = variants {} ; -- status=guess
 lin audio_lingual_A = variants {} ; -- status=guess
@@ -4198,7 +4180,7 @@ lin authentically_Adv = variants {} ; -- status=guess
 lin authenticate_V2 = variants {} ; -- status=guess
 lin authentication_N = mkN "verifiering" ; -- comment=2
 lin authenticity_N = variants {} ; -- status=guess
-lin author_N = mkN "upphovsman" "upphovsmannen" "upphovsmän" "upphovsmännen" ; -- status=guess
+lin author_N = mkN "författare" "författare" | mkN "upphovsman" "upphovsmannen" "upphovsmän" "upphovsmännen" ;
 lin authore_V2 = variants {} ; -- status=guess
 lin authoress_N = mkN "författarinna" ; -- status=guess
 lin authorial_A = variants {} ; -- status=guess
@@ -4210,8 +4192,8 @@ lin authority_1_N = mkN "auktoritet" "auktoriteter" ;
 lin authority_2_N = mkN "myndighet" "myndigheter" ;
 lin authority_N = mkN "auktoritet" "auktoriteter" | mkN "myndighet" "myndigheter" ;
 lin authorization_N = mkN "bemyndigande" ; -- comment=4
-lin authorize_V2 = variants{} ;
-lin authorize_V2V = variants{} ;
+lin authorize_V2 = variants{} ; --
+lin authorize_V2V = variants{} ; --
 lin authorizer_N = variants {} ; -- status=guess
 lin authorship_N = mkN "författarskap" neutrum; -- status=guess
 lin autism_N = variants {} ; -- status=guess
@@ -4379,8 +4361,8 @@ lin awake_V = mkV "väcker" ; -- comment=2
 lin awaken_V2 = variants {} ; -- status=guess
 lin awakening_N = mkN "uppvaknande" | mkN "väckande" ; -- SaldoWN -- comment=3
 lin award_N = mkN "pris" "priset" "priser" "priserna" | mkN "tillerkännande" ;
-lin award_V2 = mkV2 (mkV "bevilja"); -- status=guess
-lin award_V3 = mkV3 (mkV "bevilja"); -- status=guess
+lin award_V2 = mkV2 (mkV "bevilja") ;
+lin award_V3 = mkV3 (mkV "bevilja") ;
 lin aware_A = mkA "medveten" "medvetet" ;
 lin aware_of_A2 = variants {} ; -- status=guess
 lin awareness_N = mkN "kännedom" ; -- comment=5
@@ -4523,11 +4505,10 @@ lin bachelorhood_N = variants {} ; -- status=guess
 lin bacillar_A = variants {} ; -- status=guess
 lin bacillus_N = mkN "bacill" "baciller" ; -- status=guess
 lin bacitracin_N = variants {} ; -- status=guess
-lin back_A = variants{} ;
+lin back_A = variants{} ; --
 lin back_Adv = mkAdv "tillbaka" ;
 lin back_N = L.back_N ;
 lin back_V = mkV "backar" ; -- comment=10
---subcat lin back_V2 = dirV2 (partV (mkV "backar")"ur"); -- comment=15
 lin back_away_V = mkV "backar" ; -- comment=10
 lin back_breaking_A = variants {} ; -- status=guess
 lin back_down_N = variants {} ; -- status=guess
@@ -4566,7 +4547,7 @@ lin backfire_N = variants {} ; -- status=guess
 lin backfire_V = variants {} ; -- status=guess
 lin backflow_N = variants {} ; -- status=guess
 lin backgammon_N = mkN "backgammon" ; -- status=guess
-lin background_N = mkN "bakgrund" "bakgrunder" ; -- status=guess
+lin background_N = mkN "bakgrund" "bakgrunder" ;
 lin backgrounder_N = variants {} ; -- status=guess
 lin backhand_A = mkA "tvetydig" ; -- comment=3
 lin backhand_N = mkN "backhand" ; -- status=guess
@@ -4660,7 +4641,7 @@ lin baffle_N = variants {} ; -- status=guess
 lin baffle_V2 = mkV2 (mkV "gäcka") | mkV2 (mkV "förvirra") | mkV2 (mkV "förbrylla"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin baffled_N = variants {} ; -- status=guess
 lin baffling_A = mkA "förvirrande" | mkA "förbryllande" ; -- status=guess status=guess
-lin bag_N = mkN "handväska" | mkN "väska" ; -- SaldoWN -- comment=12
+lin bag_N = mkN "väska" ;
 lin bag_V = mkV "styrker" ; -- comment=8
 lin bag_V2 = mkV2 (mkV "packar"); -- status=guess, src=wikt
 lin bag_out_V2 = variants {} ; -- status=guess
@@ -4728,7 +4709,7 @@ lin balance_V = mkV "balanserar" ; -- comment=15
 lin balance_V2 = mkV2 (mkV "balanserar") | mkV2 (mkV (mkV "jämna") "ut sig") | mkV2 (mkV (mkV "stå") "och väga") | mkV2 (mkV (mkV "vara") "i jämvikt"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin balance_sheet_N = variants {} ; -- status=guess
 lin balance_wheel_N = variants {} ; -- status=guess
-lin balanced_A = variants{} ;
+lin balanced_A = variants{} ; --
 lin balancer_N = variants {} ; -- status=guess
 lin balanitis_N = variants {} ; -- status=guess
 lin balanoposthitis_N = variants {} ; -- status=guess
@@ -4994,7 +4975,7 @@ lin barefooted_Adv = variants {} ; -- status=guess
 lin barehanded_A = variants {} ; -- status=guess
 lin bareheaded_A = compoundA (regA "barhuvad"); -- status=guess
 lin barelegged_A = mkA "barbent" "barbent" ; -- status=guess
-lin barely_Adv = variants{} ;
+lin barely_Adv = variants{} ; --
 lin bareness_N = variants {} ; -- status=guess
 lin bargain_N = mkN "affärsuppgörelse" "affärsuppgörelser" ; -- comment=3
 lin bargain_V = mkV "förhandlar" ; -- comment=4
@@ -5259,7 +5240,7 @@ lin batter_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut"); -- comment=14
 lin battering_N = variants {} ; -- status=guess
 lin battery_N = mkN "misshandel" | mkN "batteri" "batterit" "batterier" "batterierna" ; -- SaldoWN -- comment=9
 lin batting_N = variants {} ; -- status=guess
-lin battle_N = mkN "kamp" | mkN "slag" neutrum ; -- status=guess
+lin battle_N = mkN "kamp" | mkN "slag" neutrum ;
 lin battle_V = mkV "kämpar" ; -- comment=2
 lin battle_V2 = mkV2 (mkV "strida" "stridde" "stritt"); -- status=guess, src=wikt
 lin battle_axe_N = variants {} ; -- status=guess
@@ -5393,7 +5374,7 @@ lin beauteous_A = variants {} ; -- status=guess
 lin beautician_N = variants {} ; -- status=guess
 lin beautification_N = variants {} ; -- status=guess
 lin beautiful_A = L.beautiful_A ;
-lin beautifully_Adv = variants{} ;
+lin beautifully_Adv = variants{} ; --
 lin beautify_V2 = variants {} ; -- status=guess
 lin beauty_N = mkN "skönhet" ; -- comment=6
 lin beauty_parlour_N = variants {} ; -- status=guess
@@ -5416,7 +5397,6 @@ lin beckon_V2 = variants {} ; -- status=guess
 lin become_V = mkV "bli" "blev" "blivit" ;
 lin become_V2 = mkV2 "bli" "blev" "blivit" ;
 lin become_VA = L.become_VA ;
---subcat lin become_VS = mkVS (mkV "bli" "blev" "blivit") ;
 lin becomingly_Adv = variants {} ; -- status=guess
 lin becomingness_N = variants {} ; -- status=guess
 lin bed_N = mkN "säng" ;
@@ -5533,7 +5513,7 @@ lin beguilement_N = variants {} ; -- status=guess
 lin beguiling_A = variants {} ; -- status=guess
 lin beguine_N = variants {} ; -- status=guess
 lin begum_N = variants {} ; -- status=guess
-lin behalf_N = variants{} ;
+lin behalf_N = variants{} ; --
 lin behave_V = mkV "uppträda" "uppträdde" "uppträtt" | mkV "handlar" ; -- SaldoWN -- comment=3
 lin behaved_A = variants {} ; -- status=guess
 lin behavior_N = mkN "beteende" ; -- comment=5
@@ -5585,7 +5565,6 @@ lin belief_N = mkN "tro" ;
 lin believable_A = variants {} ; -- status=guess
 lin believe_V = mkV "tror" ;
 lin believe_V2 = mkV2 (mkV "tror") ;
---subcat lin believe_V2V = mkV2V (mkV "tror") ;
 lin believe_VS = mkVS (mkV "tro") ;
 lin believer_N = variants {} ; -- status=guess
 lin believing_N = variants {} ; -- status=guess
@@ -5641,7 +5620,6 @@ lin bellylaugh_N = variants {} ; -- status=guess
 lin bellylaugh_V = variants {} ; -- status=guess
 lin bellyless_A = variants {} ; -- status=guess
 lin belo_horizonte_PN = variants {} ; -- status=guess
---subcat lin belong_V = mkV "tillhöra" "tillhörde" "tillhört" ; -- SaldoWN
 lin belong_to_V2 = dirV2 (partV (mkV "passar")"på"); -- status=guess
 lin belong_with_V2 = dirV2 (partV (mkV "passar")"på"); -- status=guess
 lin belonging_N = mkN "tillhörande" ; -- comment=2
@@ -6091,12 +6069,12 @@ lin binary_N = mkN "dubbel" ; -- status=guess
 lin binate_A = variants {} ; -- status=guess
 lin binaural_A = variants {} ; -- status=guess
 lin bind_N = mkN "binda" | mkN "före" ; -- SaldoWN -- comment=6
-lin bind_V = mkV "binda" "band" "bundit" | mkV "kantar" ; -- SaldoWN -- comment=12
-lin bind_V2 = mkV2 "binda" "band" "bundit" | dirV2 (partV (mkV "kantar")"av") ; -- SaldoWN
+lin bind_V = mkV "binda" "band" "bundit" ;
+lin bind_V2 = mkV2 "binda" "band" "bundit" ;
 lin bindable_A = variants {} ; -- status=guess
 lin binder_N = mkN "mapp" ; -- comment=3
 lin bindery_N = variants {} ; -- status=guess
-lin binding_A = variants{} ;
+lin binding_A = variants{} ; --
 lin binding_N = mkN "bård" "bårder" ; -- comment=6
 lin bindweed_N = mkN "vinda" ; -- comment=2
 lin bine_N = variants {} ; -- status=guess
@@ -6267,7 +6245,7 @@ lin bitter_N = mkN "bitande" ; -- comment=5
 lin bitter_sweet_A = variants {} ; -- status=guess
 lin bittercress_N = variants {} ; -- status=guess
 lin bitterish_A = variants {} ; -- status=guess
-lin bitterly_Adv = variants{} ;
+lin bitterly_Adv = variants{} ; --
 lin bittern_N = mkN "rördrom" "rördrommen" "rördrommar" "rördrommarna" ; -- status=guess
 lin bitterness_N = mkN "bitterhet" "bitterheter" ; -- status=guess
 lin bitternut_N = variants {} ; -- status=guess
@@ -6726,7 +6704,6 @@ lin boar_N = mkN "galt" ; -- comment=2
 lin board_1_N = mkN "tavla" ;
 lin board_2_N = mkN "nämnd" "nämnder" | mkN "styrelse" "styrelser" ;
 lin board_N = mkN "nämnd" "nämnder" | mkN "styrelse" "styrelser" ; ---
---subcat lin board_V = mkV "råda" "rådde" "rått" ; -- comment=10
 lin board_V2 = dirV2 (partV (mkV "plattar")"ut"); -- comment=2
 lin board_out_V2 = dirV2 (partV (mkV "plattar")"ut"); -- comment=2
 lin board_up_V2 = dirV2 (partV (mkV "plattar")"ut"); -- comment=2
@@ -7077,7 +7054,7 @@ lin bore_V = mkV "röra" "rörde" "rört" ; -- comment=2
 lin bore_V2 = mkV2 (mkV (mkV "tråka") "ut"); -- status=guess, src=wikt
 lin bore_hole_N = variants {} ; -- status=guess
 lin boreal_A = mkA "nordlig" ; -- status=guess
-lin bored_A = variants{} ;
+lin bored_A = variants{} ; --
 lin boredom_N = mkN "leda" ; -- SaldoWN
 lin borer_N = mkN "borrmaskin" "borrmaskiner" ; -- status=guess
 lin boric_A = variants {} ; -- status=guess
@@ -7382,7 +7359,7 @@ lin brand_new_A = variants {} ; -- status=guess
 lin branderburgh_PN = variants {} ; -- status=guess
 lin branding_iron_N = variants {} ; -- status=guess
 lin brandish_V2 = mkV2 (mkV "svingar") | mkV2 (mkV "fäkta"); -- status=guess, src=wikt status=guess, src=wikt
-lin brandy_N = variants{} ;
+lin brandy_N = variants{} ; --
 lin brandy_ball_N = variants {} ; -- status=guess
 lin brandy_snap_N = variants {} ; -- status=guess
 lin brandyball_N = variants {} ; -- status=guess
@@ -7607,7 +7584,7 @@ lin brief_V2 = variants {} ; -- status=guess
 lin briefcase_N = mkN "portfölj" "portföljer" ; -- SaldoWN
 lin briefing_N = mkN "genomgång" ; -- comment=2
 lin briefless_A = variants {} ; -- status=guess
-lin briefly_Adv = variants{} ;
+lin briefly_Adv = variants{} ; --
 lin briefness_N = variants {} ; -- status=guess
 lin brier_N = variants {} ; -- status=guess
 lin brig_N = variants {} ; -- status=guess
@@ -7641,7 +7618,6 @@ lin brimstone_N = mkN "svavel" neutrum; -- status=guess
 lin brindled_A = variants {} ; -- status=guess
 lin brine_N = mkN "saltlake" utrum; -- status=guess
 lin bring_V2 = mkV2 "bringer" ;
---subcat lin bring_V2V = mkV2V (mkV "bringer") ;
 lin bring_V3 = mkV3 "bringer" ;
 lin bring_about_V2 = dirV2 (partV (mkV "få" "fick" "fått")"till"); -- comment=5
 lin bring_along_V2 = dirV2 (partV (mkV "få" "fick" "fått")"till"); -- comment=5
@@ -7717,7 +7693,7 @@ lin broadening_N = variants {} ; -- status=guess
 lin broadleaf_A = mkA "bredbladig" ; -- status=guess
 lin broadloom_A = variants {} ; -- status=guess
 lin broadloom_N = mkN "heltäckningsmatta" ; -- status=guess
-lin broadly_Adv = variants{} ;
+lin broadly_Adv = variants{} ; --
 lin broadness_N = variants {} ; -- status=guess
 lin broadsheet_N = mkN "plakat" neutrum; -- comment=3
 lin broadside_A = variants {} ; -- status=guess
@@ -7741,7 +7717,7 @@ lin broil_V = mkV "grillar" ; -- comment=5
 lin broil_V2 = variants {} ; -- status=guess
 lin broiler_N = mkN "broiler" ; -- comment=6
 lin broke_A = compoundA (regA "barskrapad"); -- comment=4
-lin broken_A = variants{} ;
+lin broken_A = variants{} ; --
 lin broken_hearted_A = variants {} ; -- status=guess
 lin brokenhearted_A = variants {} ; -- status=guess
 lin broker_N = mkN "mäklare" utrum ; -- SaldoWN -- comment=3
@@ -8198,7 +8174,7 @@ lin burn_up_V2 = variants {} ; -- status=guess
 lin burnable_A = variants {} ; -- status=guess
 lin burner_N = mkN "gasbrännare" utrum; -- comment=2
 lin burnham_on_sea_PN = variants {} ; -- status=guess
-lin burning_A = variants{} ;
+lin burning_A = variants{} ; --
 lin burning_N = mkN "brännande" ; -- comment=5
 lin burnish_V = mkV "polerar" ; -- status=guess
 lin burnish_V2 = dirV2 (partV (mkV "polerar")"om"); -- comment=2
@@ -8247,7 +8223,7 @@ lin bury_V2 = mkV2 (mkV "begraver") | mkV2 (mkV "gömma"); -- status=guess, src=
 lin bury_st__edmunds_PN = variants {} ; -- status=guess
 lin burying_N = variants {} ; -- status=guess
 lin burying_ground_N = variants {} ; -- status=guess
-lin bus_N = mkN "buss" ; -- status=guess
+lin bus_N = mkN "buss" ;
 lin bus_V = mkV "bussar" ; -- status=guess
 lin bus_V2 = variants {} ; -- status=guess
 lin busbar_N = variants {} ; -- status=guess
@@ -8364,7 +8340,7 @@ lin buy_off_V2 = variants {} ; -- status=guess
 lin buy_out_V2 = variants {} ; -- status=guess
 lin buy_up_V2 = variants {} ; -- status=guess
 lin buyerFem_N = mkN "köpare" utrum; -- comment=4
-lin buyerMasc_N = mkN "köpare" utrum; -- comment=4
+lin buyerMasc_N = mkN "köpare" "köpare" ; -- status=guess
 lin buying_N = variants {} ; -- status=guess
 lin buyout_N = variants {} ; -- status=guess
 lin buzz_N = mkN "surr" neutrum; -- comment=12
@@ -8414,7 +8390,7 @@ lin cabbageworm_N = variants {} ; -- status=guess
 lin cabby_N = variants {} ; -- status=guess
 lin caber_N = variants {} ; -- status=guess
 lin cabin_N = mkN "stuga" | mkN "hytt" "hytter" ; -- SaldoWN -- comment=9
-lin cabinet_N = mkN "skåp" neutrum ; -- SaldoWN -- comment=9
+lin cabinet_N = mkN "skåp" neutrum | mkN "regering" ; ---- split cupboard vs. government
 lin cabinet_maker_N = variants {} ; -- status=guess
 lin cabinetmaker_N = variants {} ; -- status=guess
 lin cabinetmaking_N = variants {} ; -- status=guess
@@ -8601,9 +8577,6 @@ lin calk_V2 = variants {} ; -- status=guess
 lin call_N = mkN "anrop" "anrop" | mkN "kallelse" "kallelser" | mkN "telefonsamtal" neutrum ; --- split -- | function call -- | phone call
 lin call_V = mkV "kalla" | mkV "anropa" ;
 lin call_V2 = mkV2 "kalla" | mkV2 "anropa" | mkV2 (mkV "heter") ; ---- heta = be called
---subcat lin call_V2A = mkV2A (mkV "kallar") ;
---subcat lin call_V2V = mkV2V (mkV "kalla") ;
---subcat lin call_V3 = mkV3 "kalla" ;
 lin call_after_V2 = dirV2 (partV (mkV "ropar")"till"); -- comment=2
 lin call_around_V = mkV "ropar" ; -- comment=11
 lin call_back_V2 = dirV2 (partV (mkV "ropar")"till"); -- comment=2
@@ -8796,7 +8769,7 @@ lin candid_A = mkA "öppen" "öppet" ; -- comment=4
 lin candida_N = variants {} ; -- status=guess
 lin candidacy_N = mkN "kandidatur" "kandidaturer" ; -- status=guess
 lin candidateFem_N = mkN "aspirant" "aspiranter" ; -- status=guess
-lin candidateMasc_N = mkN "aspirant" "aspiranter" ; -- status=guess
+lin candidateMasc_N = mkN "kandidat" "kandidater" ;
 lin candidature_N = mkN "kandidatur" "kandidaturer" ; -- status=guess
 lin candidiasis_N = variants {} ; -- status=guess
 lin candle_N = mkN "ljus" neutrum | mkN "stearinljus" neutrum ; -- SaldoWN
@@ -8996,7 +8969,7 @@ lin capulin_N = variants {} ; -- status=guess
 lin caput_N = variants {} ; -- status=guess
 lin capybara_N = variants {} ; -- status=guess
 lin car_N = L.car_N ;
-lin car_V = variants{} ;
+lin car_V = variants{} ; --
 lin car_ferry_N = variants {} ; -- status=guess
 lin carabao_N = variants {} ; -- status=guess
 lin carabiner_N = mkN "karbinhake" utrum; -- status=guess
@@ -9111,7 +9084,7 @@ lin caregiver_N = variants {} ; -- status=guess
 lin careladen_A = variants {} ; -- status=guess
 lin careless_A = mkA "vårdslös" ; -- comment=9
 lin carelessness_N = mkN "slarv" neutrum; -- comment=7
-lin carer_N = variants{} ;
+lin carer_N = variants{} ; --
 lin caress_N = mkN "smekning" ; -- comment=2
 lin caress_V2 = mkV2 (mkV "smeker"); -- status=guess, src=wikt
 lin caressing_A = variants {} ; -- status=guess
@@ -9439,9 +9412,7 @@ lin catboat_N = variants {} ; -- status=guess
 lin catcall_N = variants {} ; -- status=guess
 lin catcall_V = variants {} ; -- status=guess
 lin catch_N = mkN "aber" neutrum | mkN "lyra" ; -- SaldoWN -- comment=6
---subcat lin catch_V = mkV "fånga" ;
 lin catch_V2 = mkV2 "fånga" ;
---subcat lin catch_VS = mkVS (mkV "begripa" "begrep" "begripit") ;
 lin catch_at_V2 = dirV2 (partV (mkV "träffar")"på"); -- comment=6
 lin catch_crop_N = variants {} ; -- status=guess
 lin catch_on_V = mkV "överraskar" ; -- comment=17
@@ -9480,11 +9451,11 @@ lin categoric_A = variants {} ; -- status=guess
 lin categorical_A = mkA "kategorisk" ; -- comment=3
 lin categorization_N = variants {} ; -- status=guess
 lin categorize_V2 = variants {} ; -- status=guess
-lin category_N = mkN "kategori" "kategorier" | mkN "klass" "klasser" ; -- SaldoWN -- comment=3
+lin category_N = mkN "kategori" "kategorier" ;
 lin catena_N = variants {} ; -- status=guess
 lin catenary_N = mkN "kedjekurva" ; -- status=guess
 lin catenulate_A = variants {} ; -- status=guess
-lin cater_V = variants{} ;
+lin cater_V = variants{} ; --
 lin cater_for_V2 = variants {} ; -- status=guess
 lin cater_to_V2 = variants {} ; -- status=guess
 lin caterer_N = variants {} ; -- status=guess
@@ -9551,7 +9522,7 @@ lin cauliflower_N = mkN "blomkål" ; -- status=guess
 lin cauline_A = variants {} ; -- status=guess
 lin caulk_N = mkN "driva" ; -- status=guess
 lin caulk_V2 = variants {} ; -- status=guess
-lin causal_A = variants{} ;
+lin causal_A = variants{} ; --
 lin causalgia_N = variants {} ; -- status=guess
 lin causality_N = variants {} ; -- status=guess
 lin causation_N = variants {} ; -- status=guess
@@ -9559,7 +9530,6 @@ lin causative_A = mkA "kausativ" ; -- status=guess
 lin cause_N = mkN "orsak" "orsaker" ;
 lin cause_V2 = mkV2 "förorsaka" ;
 lin cause_V2V = mkV2V (mkV "orsakar") | mkV2V (mkV "förorsaka") ;
---subcat lin cause_VS = mkVS (mkV "orsakar") | mkVS (mkV "förorsaka") ;
 lin causeless_A = variants {} ; -- status=guess
 lin causerie_N = mkN "kåseri" "kåserit" "kåserier" "kåserierna" | mkN "pratstund" "pratstunder" ; -- SaldoWN -- comment=3
 lin causeway_N = variants {} ; -- status=guess
@@ -9569,7 +9539,7 @@ lin caustic_N = mkN "bitande" ; -- comment=3
 lin caustically_Adv = variants {} ; -- status=guess
 lin cauterize_V2 = variants {} ; -- status=guess
 lin cautery_N = variants {} ; -- status=guess
-lin caution_N = variants{} ;
+lin caution_N = variants{} ; --
 lin caution_V = variants {} ; -- status=guess
 lin caution_V2 = variants {} ; -- status=guess
 lin caution_V2V = variants {} ; -- status=guess
@@ -9614,7 +9584,6 @@ lin cdre_PN = variants {} ; -- status=guess
 lin cease_N = mkN "uppehåll" neutrum; -- status=guess
 lin cease_V = mkV "uppehålla" "uppehöll" "uppehållit" ; -- comment=5
 lin cease_V2 = mkV2 (mkV "upphöra" "upphörde" "upphört") ; -- status=guess, src=wikt
---subcat lin cease_V2V = mkV2V (mkV "upphöra" "upphörde" "upphört") ; ---- subcat
 lin cease_fire_N = variants {} ; -- status=guess
 lin ceaseless_A = mkA "ändlös" ; -- comment=2
 lin cecal_A = variants {} ; -- status=guess
@@ -9642,7 +9611,7 @@ lin ceiling_N = L.ceiling_N ;
 lin ceilinged_A = variants {} ; -- status=guess
 lin celandine_N = variants {} ; -- status=guess
 lin celebrant_N = mkN "officiant" "officianter" ; -- status=guess
-lin celebrate_V2 = variants{} ;
+lin celebrate_V2 = variants{} ; --
 lin celebrated_A = variants {} ; -- status=guess
 lin celebration_N = mkN "firande" ; -- SaldoWN
 lin celebratory_A = variants {} ; -- status=guess
@@ -9891,7 +9860,7 @@ lin chain_smoker_N = variants {} ; -- status=guess
 lin chain_stitch_N = variants {} ; -- status=guess
 lin chain_store_N = variants {} ; -- status=guess
 lin chair_N = L.chair_N ;
-lin chair_V2 = variants{} ;
+lin chair_V2 = variants{} ; --
 lin chair_lift_N = variants {} ; -- status=guess
 lin chairlift_N = variants {} ; -- status=guess
 lin chairman_N = mkN "ordförande" "ordföranden" "ordförande" "ordförandena" | mkN "talman" "talmannen" "talmän" "talmännen" ;
@@ -9981,7 +9950,7 @@ lin changelessness_N = variants {} ; -- status=guess
 lin changeling_N = mkN "bortbyting" ; -- status=guess
 lin changeover_N = mkN "övergång" ; -- comment=3
 lin changer_N = variants {} ; -- status=guess
-lin changing_A = variants{} ;
+lin changing_A = variants{} ; --
 lin changsha_PN = variants {} ; -- status=guess
 lin channel_N = mkN "kanal" "kanaler" ; -- status=guess
 lin channel_V2 = mkV2 (mkV "kanaliserar") | mkV2 (mkV "ledar"); -- status=guess, src=wikt status=guess, src=wikt
@@ -10026,7 +9995,7 @@ lin characteristic_A = mkA "karakteristisk" ; -- SaldoWN
 lin characteristic_N = mkN "särdrag" neutrum | mkN "kännetecken" "kännetecknet" "kännetecken" "kännetecknen" ; -- SaldoWN -- comment=10
 lin characteristically_Adv = variants {} ; -- status=guess
 lin characterization_N = mkN "karakterisering" ; -- comment=2
-lin characterize_V2 = variants{} ;
+lin characterize_V2 = variants{} ; --
 lin characterless_A = mkA "vanlig" ; -- status=guess
 lin charade_N = mkN "charad" "charader" ; -- comment=4
 lin charades_N = variants {} ; -- status=guess
@@ -10041,7 +10010,6 @@ lin charge_2_N = mkN "åläggande" ;
 lin charge_N = mkN "laddning" | mkN "åläggande" ; ---
 lin charge_V = mkV "ladda" ;
 lin charge_V2 = mkV2 "ladda" ;
---subcat lin charge_VS = mkVS (mkV "laddar") ; ---- subcat
 lin charge_account_N = variants {} ; -- status=guess
 lin charge_d'affaires_N = variants {} ; -- status=guess
 lin charge_off_V = mkV "noterar" ; -- comment=16
@@ -10071,7 +10039,7 @@ lin charm_N = mkN "amulett" "amuletter" | mkN "trollformel" "trollformeln" "trol
 lin charm_V = mkV "trollar" ; -- comment=6
 lin charm_V2 = variants {} ; -- status=guess
 lin charmer_N = mkN "charmör" "charmörer" ; -- comment=2
-lin charming_A = variants{} ;
+lin charming_A = variants{} ; --
 lin charmingly_Adv = variants {} ; -- status=guess
 lin charnel_A = variants {} ; -- status=guess
 lin charnel_house_N = variants {} ; -- status=guess
@@ -10110,7 +10078,6 @@ lin chastity_N = mkN "kyskhet" "kyskheter" ; -- comment=3
 lin chasuble_N = mkN "mässhake" ; -- status=guess
 lin chat_N = mkN "prata" ; -- comment=8
 lin chat_V = mkV "pratar" ; -- comment=4
---subcat lin chat_V2 = mkV2 (mkV "småprata") | mkV2 (mkV "konverserar") | mkV2 (mkV "tjatta") | mkV2 (mkV "snackar"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin chat_up_V2 = variants {} ; -- status=guess
 lin chateau_N = variants {} ; -- status=guess
 lin chatelaine_N = variants {} ; -- status=guess
@@ -10235,7 +10202,7 @@ lin chemise_N = variants {} ; -- status=guess
 lin chemisorption_N = variants {} ; -- status=guess
 lin chemisorptive_A = variants {} ; -- status=guess
 lin chemistFem_N = mkN "kemist" "kemister" ; -- comment=2
-lin chemistMasc_N = mkN "kemist" "kemister" ; -- comment=2
+lin chemistMasc_N = variants{} ; --
 lin chemistry_N = mkN "kemi" ; -- SaldoWN
 lin chemoreceptive_A = variants {} ; -- status=guess
 lin chemoreceptor_N = variants {} ; -- status=guess
@@ -10547,10 +10514,7 @@ lin chondritic_A = variants {} ; -- status=guess
 lin chondroma_N = variants {} ; -- status=guess
 lin chondrosarcoma_N = variants {} ; -- status=guess
 lin chondrule_N = variants {} ; -- status=guess
---subcat lin choose_V = mkV "välja" "valde" "valt" ;
 lin choose_V2 = mkV2 (mkV "välja" "valde" "valt") ;
---subcat lin choose_V2V = mkV2V (mkV "välja" "valde" "valt") ;
---subcat lin choose_VS = mkVS (mkV "välja" "valde" "valt") ;
 lin choose_VV = mkVV (mkV "välja" "valde" "valt") ;
 lin choose_up_V = mkV "välja" "valde" "valt" ; -- comment=6
 lin choose_up_V2 = variants {} ; -- status=guess
@@ -10603,7 +10567,7 @@ lin chortle_V = variants {} ; -- status=guess
 lin chorus_N = mkN "kör" "körer" | mkN "refräng" "refränger" ; -- SaldoWN -- comment=6
 lin chorus_V2 = variants {} ; -- status=guess
 lin chorus_girl_N = variants {} ; -- status=guess
-lin chosen_A = variants{} ;
+lin chosen_A = variants{} ; --
 lin chosen_N = variants {} ; -- status=guess
 lin chough_N = variants {} ; -- status=guess
 lin chow_N = variants {} ; -- status=guess
@@ -10843,7 +10807,7 @@ lin citation_N = variants {} ; -- status=guess
 lin cite_V2 = dirV2 (partV (mkV "kallar")"ut"); -- status=guess
 lin citified_A = variants {} ; -- status=guess
 lin citizenFem_N = mkN "medborgare" utrum; -- status=guess
-lin citizenMasc_N = mkN "medborgare" utrum; -- status=guess
+lin citizenMasc_N = mkN "medborgare" "medborgare" ; -- status=guess
 lin citizenry_N = mkN "befolkning" ; -- status=guess
 lin citizenship_N = mkN "medborgarskap" neutrum; -- status=guess
 lin citrange_N = variants {} ; -- status=guess
@@ -10887,7 +10851,6 @@ lin claim_N = mkN "påstående" ;
 lin claim_V = mkV "utkräver" ;
 lin claim_V2 = mkV2 "utkräver" ;
 lin claim_VS = mkVS (mkV "hävda") ;
---subcat lin claim_VV = mkVV (reflV (mkV "hävda")) ;
 lin claimant_N = variants {} ; -- status=guess
 lin clairvoyance_N = mkN "klärvoajans" ; -- status=guess
 lin clairvoyant_A = mkA "klärvoajant" | mkA "synsk"; -- status=guess status=guess
@@ -11046,7 +11009,6 @@ lin clear_Adv = mkAdv "ren" ; -- comment=2
 lin clear_N = mkN "bana" ; -- comment=5
 lin clear_V = mkV "klarna" ;
 lin clear_V2 = mkV2 "rensa" ;
---subcat lin clear_V2V = mkV2V (mkV "rensa") ; ---- subcat
 lin clear_away_V = mkV "rensar" ; -- comment=25
 lin clear_away_V2 = dirV2 (partV (mkV "rensar")"ut"); -- comment=10
 lin clear_cut_Adv = variants {} ; -- status=guess
@@ -11091,7 +11053,7 @@ lin clerestory_N = variants {} ; -- status=guess
 lin clergy_N = mkN "prästerskap" neutrum; -- comment=2
 lin clergyman_N = mkN "präst" "präster" ; -- status=guess
 lin cleric_N = mkN "prästman" "prästmannen" "prästmän" "prästmännen" ; -- status=guess
-lin clerical_A = variants{} ;
+lin clerical_A = variants{} ; --
 lin clericalism_N = variants {} ; -- status=guess
 lin clericalist_N = variants {} ; -- status=guess
 lin clerihew_N = variants {} ; -- status=guess
@@ -11148,7 +11110,7 @@ lin cling_on_to_V2 = variants {} ; -- status=guess
 lin cling_to_V2 = variants {} ; -- status=guess
 lin clingfish_N = variants {} ; -- status=guess
 lin clinic_N = mkN "klinik" "kliniker" ; -- SaldoWN
-lin clinical_A = variants{} ;
+lin clinical_A = variants{} ; --
 lin clinician_N = variants {} ; -- status=guess
 lin clinid_N = variants {} ; -- status=guess
 lin clink_N = mkN "klirrande" ; -- comment=7
@@ -11223,9 +11185,6 @@ lin close_Adv = mkAdv "nära" ;
 lin close_N = mkN "slut" neutrum; -- comment=9
 lin close_V = mkV "stänger" ;
 lin close_V2 = L.close_V2 ;
---subcat lin close_V2V = mkV2V (mkV "stänger") ;
---subcat lin close_VA = mkV "stänger" ;
---subcat lin close_VS = mkV "stänger" ;
 lin close_cropped_A = variants {} ; -- status=guess
 lin close_cut_A = variants {} ; -- status=guess
 lin close_down_N = variants {} ; -- status=guess
@@ -11418,7 +11377,7 @@ lin coast_N = mkN "kust" "kuster" ; -- status=guess
 lin coast_V = variants {} ; -- status=guess
 lin coast_V2 = variants {} ; -- status=guess
 lin coast_along_V = variants {} ; -- status=guess
-lin coastal_A = variants{} ;
+lin coastal_A = variants{} ; --
 lin coaster_N = mkN "underlägg" | mkN "ölunderlägg" | mkN "karottunderlägg" | mkN "grytunderlägg" ; -- status=guess status=guess status=guess status=guess
 lin coastguard_N = mkN "kustbevakning" ; -- status=guess
 lin coastguardsman_N = variants {} ; -- status=guess
@@ -11570,7 +11529,7 @@ lin coextension_N = variants {} ; -- status=guess
 lin coextensive_A = variants {} ; -- status=guess
 lin coextrude_V2 = variants {} ; -- status=guess
 lin cofactor_N = variants {} ; -- status=guess
-lin coffee_N = mkN "kaffe" "kaffet" "kaffe" "kaffen" ; -- status=guess
+lin coffee_N = mkN "kaffe" "kaffet" "kaffe" "kaffen" ;
 lin coffee_house_N = variants {} ; -- status=guess
 lin coffee_mill_N = variants {} ; -- status=guess
 lin coffee_stall_N = variants {} ; -- status=guess
@@ -11782,7 +11741,7 @@ lin colour_blind_A = variants {} ; -- status=guess
 lin colour_code_V2 = variants {} ; -- status=guess
 lin colour_up_V = mkV "färglägga" "färglade" "färglagt" ; -- comment=2
 lin colour_wash_N = variants {} ; -- status=guess
-lin coloured_A = variants{} ;
+lin coloured_A = variants{} ; --
 lin colourful_A = mkA "färgstark" | mkA "färgrik" ; -- SaldoWN
 lin colouring_N = variants {} ; -- status=guess
 lin colourless_A = compoundA (regA "ofärgad"); -- comment=2
@@ -11833,9 +11792,8 @@ lin combinatorial_A = variants {} ; -- status=guess
 lin combine_N = mkN "kombinat" neutrum; -- comment=4
 lin combine_V = mkV "kombinerar" ; -- comment=2
 lin combine_V2 = mkV2 "kombinerar" ; -- comment=2
---subcat lin combine_V2V = mkV2V (mkV "kombinerar") ; -- comment=2
 lin combine_VV = mkVV (mkV "kombinerar") ; -- comment=2
-lin combined_A = variants{} ;
+lin combined_A = variants{} ; --
 lin combining_N = variants {} ; -- status=guess
 lin combretum_N = variants {} ; -- status=guess
 lin comburent_A = variants {} ; -- status=guess
@@ -11844,10 +11802,6 @@ lin combustible_A = mkA "brännbar" ; -- comment=2
 lin combustible_N = variants {} ; -- status=guess
 lin combustion_N = mkN "förbränning" ; -- status=guess
 lin come_V = L.come_V;
---subcat lin come_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid");
---subcat lin come_VA = mkVA (mkV "bli" "blev" "blivit") ;
---subcat lin come_VS = mkVS (mkV "inträffa") ;
---subcat lin come_VV = mkVV L.come_V ;
 lin come_about_V = mkV "når" ; -- comment=4
 lin come_across_V = mkV "når" ; -- comment=4
 lin come_across_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid"); -- comment=5
@@ -11910,10 +11864,10 @@ lin comet_N = mkN "komet" "kometer" ; -- SaldoWN
 lin cometary_A = variants {} ; -- status=guess
 lin comfit_N = variants {} ; -- status=guess
 lin comfort_N = mkN "tröst" ; -- SaldoWN = mkN "tröst" ;
-lin comfort_V2 = variants{} ;
+lin comfort_V2 = variants{} ; --
 lin comfortable_A = mkA "bekväm" | mkA "trygg" ; -- SaldoWN -- comment=10
 lin comfortableness_N = variants {} ; -- status=guess
-lin comfortably_Adv = variants{} ;
+lin comfortably_Adv = variants{} ; --
 lin comforter_N = mkN "tröstare" utrum; -- comment=3
 lin comforting_A = variants {} ; -- status=guess
 lin comfortless_A = mkA "tröstlös" ; -- comment=3
@@ -11923,7 +11877,7 @@ lin comic_A = mkA "komisk" ; -- status=guess
 lin comic_N = mkN "serietidning" ; -- comment=2
 lin comical_A = mkA "komisk" ; -- comment=3
 lin comicality_N = variants {} ; -- status=guess
-lin coming_A = variants{} ;
+lin coming_A = variants{} ; --
 lin coming_N = mkN "lovande" ; -- comment=5
 lin comity_N = mkN "belevenhet" "belevenheter" ; -- comment=2
 lin comma_N = mkN "komma" "kommat" "komman" "kommana" ; -- comment=2
@@ -11979,15 +11933,14 @@ lin commissar_N = variants {} ; -- status=guess
 lin commissariat_N = mkN "intendentur" "intendenturer" ; -- status=guess
 lin commissary_N = mkN "intendent" "intendenter" ; -- comment=4
 lin commission_N = mkN "kommissionen" "kommissioner" | mkN "provision" "provisioner" ; ---- split
-lin commission_V2 = variants{} ;
-lin commission_V2V = variants{} ;
+lin commission_V2 = variants{} ; --
+lin commission_V2V = variants{} ; --
 lin commissionaire_N = mkN "dörrvakt" "dörrvakter" ; -- comment=2
 lin commissioner_N = mkN "utredare" utrum; -- comment=7
 lin commissure_N = variants {} ; -- status=guess
-lin commit_V2 = dirV2 (partV (mkV "skickar")"ut"); -- comment=5
---subcat lin commit_V2V = mkV2V (mkV (mkV "begå") "självmord") | mkV2V (mkV (mkV "ta") "livet av sig") | mkV2V (mkV (mkV "ta") "sitt liv"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
+lin commit_V2 = dirV2 (partV (mkV "skickar")"ut");
 lin commital_N = variants {} ; -- status=guess
-lin commitment_N = mkN "lojalitet" "lojaliteter" | mkN "åtagande" ; -- SaldoWN -- comment=12
+lin commitment_N = mkN "åtagande" ;
 lin committedness_N = variants {} ; -- status=guess
 lin committee_N = mkN "kommitté" "kommittéer" | mkN "utskott" neutrum ;
 lin committeeman_N = variants {} ; -- status=guess
@@ -12009,9 +11962,9 @@ lin commonly_Adv = mkAdv "vanligen" ; -- status=guess
 lin commonness_N = variants {} ; -- status=guess
 lin commonplace_A = mkA "alldaglig" ; -- comment=5
 lin commonplace_N = mkN "vardagsmat" ; -- comment=5
-lin commons_N = variants{} ;
+lin commons_N = variants{} ; --
 lin commonsense_A = variants {} ; -- status=guess
-lin commonwealth_N = variants{} ;
+lin commonwealth_N = variants{} ; --
 lin commotion_N = mkN "liv" neutrum; -- status=guess
 lin communal_A = mkA "kommunal" ; -- comment=3
 lin communalism_N = variants {} ; -- status=guess
@@ -12060,10 +12013,9 @@ lin comparability_N = mkN "likvärdighet" ; -- comment=2
 lin comparable_A = mkA "jämförbar" | mkA "likvärdig" ; -- SaldoWN -- comment=3
 lin comparative_A = mkA "komparativ" ; -- comment=3
 lin comparative_N = mkN "komparativ" "komparativer" ; -- status=guess
-lin comparatively_Adv = variants{} ;
+lin comparatively_Adv = variants{} ; --
 lin compare_N = variants {} ; -- status=guess
 lin compare_V = mkV "jämföra" "jämförde" "jämfört" ;
---subcat lin compare_V2 = mkV2 "jämföra" "jämförde" "jämfört" ;
 lin comparison_N = mkN "jämförelse" "jämförelser" | mkN "komparering" ; -- SaldoWN -- comment=4
 lin compartment_N = mkN "fack" neutrum | mkN "kupé" "kupéer" ; -- SaldoWN -- comment=2
 lin compartmental_A = variants {} ; -- status=guess
@@ -12079,9 +12031,9 @@ lin compatible_A = mkA "förenlig" ; -- SaldoWN
 lin compatriotFem_N = mkN "landsmaninna" ; -- status=guess
 lin compatriotMasc_N = mkN "landsman" "landsmannen" "landsmän" "landsmännen" ; -- status=guess
 lin compeer_N = mkN "jämlike" utrum; -- comment=2
-lin compel_V2 = variants{} ;
-lin compel_V2V = variants{} ;
-lin compel_VV = variants{} ;
+lin compel_V2 = variants{} ; --
+lin compel_V2V = variants{} ; --
+lin compel_VV = variants{} ; --
 lin compelling_A = mkA "tilltalande" ; -- status=guess
 lin compendious_A = variants {} ; -- status=guess
 lin compendium_N = mkN "kompendium" "kompendiet" "kompendier" "kompendierna" ; -- comment=2
@@ -12113,10 +12065,10 @@ lin complaint_N = mkN "klagomål" "klagomål" ; -- status=guess
 lin complaisance_N = variants {} ; -- status=guess
 lin complaisant_A = mkA "foglig" ; -- status=guess
 lin complement_N = mkN "komplettering" ; -- comment=5
-lin complement_V2 = variants{} ;
+lin complement_V2 = variants{} ; --
 lin complemental_A = variants {} ; -- status=guess
 lin complementarity_N = variants {} ; -- status=guess
-lin complementary_A = variants{} ;
+lin complementary_A = variants{} ; --
 lin complementation_N = variants {} ; -- status=guess
 lin complete_A = mkA "fullständig" | mkA "komplett" ;
 lin complete_V = mkV "kompletterar" ;
@@ -12131,8 +12083,8 @@ lin complexion_N = mkN "karaktär" "karaktärer" ; -- comment=3
 lin complexity_N = (mkN "komplikation" "komplikationer") | mkN "krånglighet" ; -- status=guess status=guess
 lin compliance_N = mkN "tillmötesgående" ; -- SaldoWN
 lin compliant_A = mkA "undfallande" | mkA "eftergiven" "eftergivet" ; -- SaldoWN -- comment=2
-lin complicate_V2 = variants{} ;
-lin complicated_A = variants{} ;
+lin complicate_V2 = variants{} ; --
+lin complicated_A = variants{} ; --
 lin complicatedness_N = variants {} ; -- status=guess
 lin complication_N = mkN "komplikation" "komplikationer" ; -- SaldoWN
 lin complicity_N = variants {} ; -- status=guess
@@ -12202,7 +12154,7 @@ lin computer_N = L.computer_N ;
 lin computer_science_N = mkN "datavetenskap" "datavetenskaper" ; -- status=guess
 lin computerization_N = mkN "datorisering" ; -- comment=2
 lin computerize_V2 = variants {} ; -- status=guess
-lin computing_N = variants{} ;
+lin computing_N = variants{} ; --
 lin comrade_N = mkN "kamrat" "kamrater" ; -- comment=3
 lin comradely_A = variants {} ; -- status=guess
 lin comradely_Adv = variants {} ; -- status=guess
@@ -12228,7 +12180,7 @@ lin conceivableness_N = variants {} ; -- status=guess
 lin conceive_V = mkV "uppfattar" ; -- comment=4
 lin conceive_V2 = variants{}; -- mkV "uppfattar" ; -- comment=4
 lin concentrate_N = mkN "koncentrat" neutrum; -- comment=2
-lin concentrate_V = reflV (mkV "koncentrerar") ; ---- END edits by AR
+lin concentrate_V = reflV (mkV "koncentrerar") ;
 lin concentrate_V2 = mkV2 "koncentrera" ;
 lin concentration_N = mkN "koncentration" "koncentrationer" ; -- SaldoWN
 lin concentric_A = mkA "koncentrisk" ; -- status=guess
@@ -12242,9 +12194,7 @@ lin conceptualism_N = variants {} ; -- status=guess
 lin conceptualistic_A = variants {} ; -- status=guess
 lin conceptualization_N = variants {} ; -- status=guess
 lin concern_N = mkN "omsorg" "omsorger" | mkN "oro" ; ---- split
---subcat lin concern_V = mkV "gäller" ; -- status=guess
 lin concern_V2 = mkV2 "gäller" ; -- status=guess
---subcat lin concern_VS = mkVS (mkV "gäller") ; -- status=guess
 lin concerned_A = mkA "orolig" | mkA "involverad" ; --- split
 lin concernedly_Adv = variants {} ; -- status=guess
 lin concerning_Prep = mkPrep "gällande" ; -- status=guess
@@ -12368,7 +12318,6 @@ lin confederate_V = variants {} ; -- status=guess
 lin confederate_V2 = variants {} ; -- status=guess
 lin confederation_N = mkN "konfederation" "konfederationer" ; -- status=guess
 lin confer_V = mkV "tilldelar" ; -- comment=5
---subcat lin confer_V2 = mkV2 (mkV "tilldelar"); -- status=guess, src=wikt
 lin conferee_N = variants {} ; -- status=guess
 lin conference_N = mkN "konferens" "konferenser" ;
 lin conferment_N = mkN "utdelande" ; -- comment=2
@@ -12388,7 +12337,7 @@ lin confidante_N = variants {} ; -- status=guess
 lin confide_V = mkV "anförtror" ; -- status=guess
 lin confide_V2 = variants {} ; -- status=guess
 lin confide_VS = variants {} ; -- status=guess
-lin confidence_N = mkN "tillförsikt" ; -- comment=6
+lin confidence_N = mkN "förtroende" | mkN "tillförsikt" ;
 lin confident_A = mkA "trosviss" | mkA "tillitsfull" ; -- SaldoWN -- comment=4
 lin confidential_A = mkA "konfidentiell" ; -- comment=2
 lin confidentiality_N = mkN "sekretess" ; -- status=guess
@@ -12409,7 +12358,7 @@ lin confiscation_N = mkN "beslag" neutrum; -- comment=3
 lin confit_N = variants {} ; -- status=guess
 lin confiture_N = variants {} ; -- status=guess
 lin conflagration_N = mkN "storbrand" "storbränder" ; -- comment=2
-lin conflict_N = mkN "konflikt" "konflikter" ; -- status=guess
+lin conflict_N = mkN "konflikt" "konflikter" ;
 lin conflict_V = mkV "kämpar" ; -- status=guess
 lin confluence_N = variants {} ; -- status=guess
 lin confluent_A = variants {} ; -- status=guess
@@ -12423,7 +12372,7 @@ lin conformity_N = mkN "konformitet" "konformiteter" ; -- comment=3
 lin confound_V2 = mkV2 (mkV "fördöma"); -- status=guess, src=wikt
 lin confounding_A = variants {} ; -- status=guess
 lin confrere_N = variants {} ; -- status=guess
-lin confront_V2 = variants{} ;
+lin confront_V2 = variants{} ; --
 lin confrontation_N = mkN "konfrontation" "konfrontationer" ; -- SaldoWN
 lin confrontational_A = variants {} ; -- status=guess
 lin confucian_A = variants {} ; -- status=guess
@@ -12468,7 +12417,7 @@ lin congratulatory_A = variants {} ; -- status=guess
 lin congregant_N = variants {} ; -- status=guess
 lin congregate_V = mkV "samlar" ; -- comment=2
 lin congregate_V2 = variants {} ; -- status=guess
-lin congregation_N = variants{} ;
+lin congregation_N = variants{} ; --
 lin congregational_A = variants {} ; -- status=guess
 lin congress_N = mkN "kongress" "kongresser" | mkN "samlag" neutrum ; -- SaldoWN -- comment=2
 lin congressional_A = variants {} ; -- status=guess
@@ -12569,7 +12518,7 @@ lin consentaneous_A = variants {} ; -- status=guess
 lin consequence_N = mkN "konsekvens" "konsekvenser" | mkN "följd" "följder" ;
 lin consequent_A = mkA "följande" ; -- status=guess
 lin consequential_A = mkA "betydelsefull" ; -- comment=5
-lin consequently_Adv = variants{} ;
+lin consequently_Adv = variants{} ; --
 lin conservancy_N = mkN "naturvård" ; -- comment=3
 lin conservation_N = mkN "bevarande" ; -- SaldoWN
 lin conservatism_N = mkN "konservatism" "konservatismer" ; -- SaldoWN
@@ -12589,12 +12538,12 @@ lin consider_V3 = mkV3 (mkV "betraktar") (mkPrep "som") ;
 lin consider_VS = mkVS (mkV "överväger") ;
 lin consider_VV = mkVV (mkV "överväger") ;
 lin considerable_A = mkA "avsevärd" "avsevärt" | mkA "ansenlig" ;
-lin considerably_Adv = variants{} ;
+lin considerably_Adv = variants{} ; --
 lin considerate_A = mkA "hänsynsfull" ; -- comment=4
 lin considerateness_N = variants {} ; -- status=guess
 lin consideration_N = mkN "övervägande" ;
 lin considering_Prep = mkPrep "med hänsyn till" ; -- status=guess
-lin considering_Subj = variants{} ;
+lin considering_Subj = variants{} ; --
 lin consign_V2 = variants {} ; -- status=guess
 lin consignee_N = variants {} ; -- status=guess
 lin consigner_N = variants {} ; -- status=guess
@@ -12604,7 +12553,7 @@ lin consist_V = (mkV "varar") | mkV "bestå" "bestod" "bestått" ; -- status=gue
 lin consistence_N = variants {} ; -- status=guess
 lin consistency_N = mkN "konsistens" "konsistenser" ; -- comment=8
 lin consistent_A = mkA "förenlig" | mkA "konsekvent" "konsekvent" ; -- SaldoWN -- comment=6
-lin consistently_Adv = variants{} ;
+lin consistently_Adv = variants{} ; --
 lin consistory_N = variants {} ; -- status=guess
 lin consolable_A = variants {} ; -- status=guess
 lin consolation_N = mkN "tröst" ; -- comment=2
@@ -12641,7 +12590,7 @@ lin constancy_N = mkN "varaktighet" "varaktigheter" ; -- comment=2
 lin constant_A = mkA "ständig" ; -- SaldoWN
 lin constant_N = mkN "konstant" "konstanter" ; -- comment=2
 lin constantan_N = variants {} ; -- status=guess
-lin constantly_Adv = variants{} ;
+lin constantly_Adv = variants{} ; --
 lin constellation_N = mkN "konstellation" "konstellationer" | mkN "förband" neutrum ; -- SaldoWN -- comment=3
 lin consternation_N = mkN "bestörtning" ; -- comment=3
 lin constipate_V2 = variants {} ; -- status=guess
@@ -12693,7 +12642,7 @@ lin consultative_A = mkA "rådgivande" ; -- status=guess
 lin consumable_A = variants {} ; -- status=guess
 lin consume_V = mkV "förtära" "förtärde" "förtärt" ; -- comment=7
 lin consume_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut"); -- comment=6
-lin consumer_N = mkN "konsument" "konsumenter" ; -- SaldoWN
+lin consumer_N = mkN "konsument" "konsumenter" ;
 lin consumerism_N = variants {} ; -- status=guess
 lin consummate_A = variants {} ; -- status=guess
 lin consummate_V2 = variants {} ; -- status=guess
@@ -12734,7 +12683,7 @@ lin contend_V = mkV "kämpa" ; -- status=guess, src=wikt
 lin contend_VS = mkVS (mkV "kämpa"); -- status=guess, src=wikt
 lin contender_N = variants {} ; -- status=guess
 lin content_A = mkA "nöjd" "nöjt" ; -- SaldoWN
-lin content_N = mkN "innehåll" neutrum ; -- status=guess
+lin content_N = mkN "innehåll" neutrum ;
 lin content_V2 = mkV2 (mkV "nöja"); -- status=guess, src=wikt
 lin contentedly_Adv = variants {} ; -- status=guess
 lin contentedness_N = variants {} ; -- status=guess
@@ -12763,19 +12712,18 @@ lin contingency_N = mkN "eventualitet" "eventualiteter" ; -- comment=2
 lin contingent_A = mkA "avhängig" ; -- status=guess
 lin contingent_N = mkN "andel" "andelen" "andelar" "andelarna" ; -- status=guess
 lin continual_A = mkA "kontinuerlig" ; -- SaldoWN
-lin continually_Adv = variants{} ;
+lin continually_Adv = variants{} ; --
 lin continuance_N = mkN "kvarstannande" ; -- comment=4
 lin continuation_N = mkN "förlängning" ; -- SaldoWN
 lin continue_V = mkV "fortsätta" "fortsätter" "fortsätt" "fortsatte" "fortsatt" "fortsatt" ;
 lin continue_V2 = mkV2 (mkV "fortsätta" "fortsatte" "fortsatt") ;
---subcat lin continue_VS = mkVS (mkV "fortsätta" "fortsatte" "fortsatt") ;
 lin continue_VV = mkVV (mkV "fortsätta" "fortsatte" "fortsatt") ;
 lin continue_on_V = mkV "fortsätta" "fortsätter" "fortsätt" "fortsatte" "fortsatt" "fortsatt" ; -- comment=4
-lin continued_A = variants{} ;
-lin continuing_A = variants{} ;
-lin continuity_N = variants{} ;
+lin continued_A = variants{} ; --
+lin continuing_A = variants{} ; --
+lin continuity_N = variants{} ; --
 lin continuous_A = mkA "oavbruten" "oavbrutet" | mkA "kontinuerlig" ; -- SaldoWN -- comment=4
-lin continuously_Adv = variants{} ;
+lin continuously_Adv = variants{} ; --
 lin continuousness_N = variants {} ; -- status=guess
 lin continuum_N = mkN "kontinuum" neutrum; -- status=guess
 lin conto_N = variants {} ; -- status=guess
@@ -12827,7 +12775,7 @@ lin contrarious_A = variants {} ; -- status=guess
 lin contrariwise_Adv = variants {} ; -- status=guess
 lin contrary_A = mkA "motsatt" ; -- comment=5
 lin contrary_N = mkN "motsats" "motsatser" | mkN "stridande" ; -- SaldoWN -- comment=2
-lin contrast_N = mkN "motsats" "motsatser" | mkN "kontrast" "kontraster" ; -- SaldoWN -- comment=2
+lin contrast_N = mkN "kontrast" "kontraster" | mkN "motsats" "motsatser" ;
 lin contrast_V = mkV "kontrasterar" ; -- comment=2
 lin contrast_V2 = variants{}; -- mkV "kontrasterar" ; -- comment=2
 lin contrastingly_Adv = variants {} ; -- status=guess
@@ -12838,7 +12786,6 @@ lin contravention_N = variants {} ; -- status=guess
 lin contretemps_N = (mkN "motighet" "motigheter") | mkN "oförmodat hinder" | mkN "streck i räkningen" | mkN "missöde" ; -- status=guess status=guess status=guess status=guess
 lin contribute_V = mkV "bidra" "bidrar" "bidra" "bidrog" "bidragit" "bidragen" ; -- comment=4
 lin contribute_V2 = dirV2 (partV (mkV "lämnar")"över"); -- comment=3
---subcat lin contribute_V2V = mkV2V (mkV "bidra" "bidrar" "bidra" "bidrog" "bidragit" "bidragen") | mkV2V (mkV "bidraga"); -- status=guess, src=wikt status=guess, src=wikt
 lin contribution_N = mkN "bidrag" neutrum ;
 lin contributor_N = mkN "bidragsgivare" utrum; -- comment=2
 lin contributory_A = mkA "medverkande" ; -- comment=2
@@ -12849,10 +12796,9 @@ lin contrive_V = mkV (mkV "tänka") "ut" ; -- status=guess, src=wikt
 lin contrive_V2 = mkV2 (mkV (mkV "tänka") "ut"); -- status=guess, src=wikt
 lin contriver_N = variants {} ; -- status=guess
 lin control_N = mkN "kontroll" "kontroller" ;
---subcat lin control_V = mkV "kontrollerar" | mkV "kolla" ;
 lin control_V2 = mkV2 "kontrollera" | mkV2 "kolla" ;
 lin controllable_A = variants {} ; -- status=guess
-lin controlled_A = variants{} ;
+lin controlled_A = variants{} ; --
 lin controller_N = mkN "ledare" utrum; -- comment=6
 lin controllership_N = variants {} ; -- status=guess
 lin controlling_A = variants {} ; -- status=guess
@@ -12891,13 +12837,13 @@ lin converge_V = mkV "konvergerar" ; -- status=guess
 lin convergence_N = mkN "konvergens" ; -- status=guess
 lin convergent_A = mkA "konvergent" "konvergent" ; -- status=guess
 lin conversant_A = mkA "insatt" ; -- comment=3
-lin conversation_N = mkN "samtal" neutrum | mkN "samtalsämne" ; -- SaldoWN -- comment=5
+lin conversation_N = mkN "samtal" neutrum ;
 lin conversational_A = variants {} ; -- status=guess
 lin conversationalist_N = variants {} ; -- status=guess
 lin converse_A = mkA "omvänd" ; -- comment=2
 lin converse_N = mkN "motsats" "motsatser" ; -- status=guess
 lin converse_V = mkV "omvänder" ; -- comment=3
-lin conversely_Adv = variants{} ;
+lin conversely_Adv = variants{} ; --
 lin conversion_N = mkN "omvändning" ; -- comment=7
 lin convert_N = mkN "konvertit" "konvertiter" ; -- status=guess
 lin convert_V = mkV "omvänder" ; -- comment=7
@@ -12915,7 +12861,7 @@ lin conveyer_N = mkN "överbringare" utrum; -- comment=2
 lin conveyer_belt_N = variants {} ; -- status=guess
 lin conveyor_N = mkN "överbringare" utrum; -- comment=2
 lin convict_N = mkN "fälla" | mkN "straffånge" utrum ; -- SaldoWN -- comment=2
-lin convict_V2 = variants{} ;
+lin convict_V2 = variants{} ; --
 lin conviction_N = mkN "övertygelse" "övertygelser" ; -- SaldoWN
 lin convince_V2 = mkV2 (mkV "övertyga"); -- status=guess, src=wikt
 lin convince_V2V = mkV2V (mkV "övertyga"); -- status=guess, src=wikt
@@ -12991,7 +12937,6 @@ lin coordinator_N = mkN "samordnare" utrum; -- status=guess
 lin coot_N = mkN "sothöna" ; -- status=guess
 lin cooter_N = variants {} ; -- status=guess
 lin cop_N = mkN "snut" ; -- comment=9
---subcat lin cop_V = mkV "haffar" ; -- comment=2
 lin cop_V2 = variants{}; -- mkV "haffar" ; -- comment=2
 lin cop_it_V = mkV "haffar" ; -- comment=2
 lin cop_off_V = mkV "haffar" ; -- comment=2
@@ -13005,7 +12950,7 @@ lin copalite_N = variants {} ; -- status=guess
 lin copartner_N = variants {} ; -- status=guess
 lin copartnership_N = variants {} ; -- status=guess
 lin cope_N = variants {} ; -- status=guess
-lin cope_V = variants{} ;
+lin cope_V = variants{} ; --
 lin copeck_N = variants {} ; -- status=guess
 lin copenhagen_PN = mkPN "Köpenhamn" neutrum ; -- status=guess
 lin copepod_N = variants {} ; -- status=guess
@@ -13199,7 +13144,7 @@ lin corrections_N = variants {} ; -- status=guess
 lin correctitude_N = variants {} ; -- status=guess
 lin corrective_A = variants {} ; -- status=guess
 lin corrective_N = variants {} ; -- status=guess
-lin correctly_Adv = variants{} ;
+lin correctly_Adv = variants{} ; --
 lin correctness_N = mkN "korrekthet" ; -- comment=2
 lin correlate_N = mkN "korrelat" neutrum; -- status=guess
 lin correlate_V = mkV "korrelerar" ; -- status=guess
@@ -13212,7 +13157,7 @@ lin correspond_V = mkV "brevväxlar" ; -- comment=2
 lin correspond_V2 = mkV2 (mkV "motsvarar") ; -- status=guess
 lin correspondence_N = mkN "korrespondens" "korrespondenser" | mkN "överensstämmelse" "överensstämmelser" ; -- SaldoWN -- comment=4
 lin correspondent_N = mkN "kund" "kunder" ; -- comment=5
-lin corresponding_A = variants{} ;
+lin corresponding_A = variants{} ; --
 lin correspondingly_Adv = variants {} ; -- status=guess
 lin corridor_N = mkN "korridor" "korridoren" "korridorer" "korridorerna" ; -- SaldoWN
 lin corrie_N = variants {} ; -- status=guess
@@ -13369,7 +13314,6 @@ lin couchette_N = variants {} ; -- status=guess
 lin cougar_N = mkN "puma" ; -- status=guess
 lin cough_N = mkN "hosta" ; -- SaldoWN
 lin cough_V = mkV "hostar" ; -- comment=3
---subcat lin cough_V2 = dirV2 (partV (mkV "hackar")"av"); -- status=guess
 lin cough_up_V2 = dirV2 (partV (mkV "hackar")"av"); -- status=guess
 lin coulisse_N = variants {} ; -- status=guess
 lin coulomb_N = variants {} ; -- status=guess
@@ -13377,13 +13321,13 @@ lin coulter_N = variants {} ; -- status=guess
 lin council_N = mkN "råd" neutrum ;
 lin council_board_N = variants {} ; -- status=guess
 lin council_chamber_N = variants {} ; -- status=guess
-lin councillor_N = variants{} ;
+lin councillor_N = variants{} ; --
 lin councillorship_N = variants {} ; -- status=guess
 lin councilman_N = variants {} ; -- status=guess
 lin councilwoman_N = variants {} ; -- status=guess
 lin counsel_N = mkN "överläggning" ; -- comment=10
 lin counsel_V2 = variants {} ; -- status=guess
-lin counselling_N = variants{} ;
+lin counselling_N = variants{} ; --
 lin counsellor_N = mkN "konsulent" "konsulenter" ; -- comment=3
 lin counselorship_N = variants {} ; -- status=guess
 lin count_N = mkN "räkning" ; -- comment=4
@@ -13407,7 +13351,6 @@ lin countenance_V2 = variants {} ; -- status=guess
 lin counter_Adv = variants {} ; -- status=guess
 lin counter_N = mkN "disk" | mkN "räknare" utrum ; -- SaldoWN -- comment=5
 lin counter_V = mkV "motarbetar" ; -- comment=2
---subcat lin counter_V2 = mkV2 (mkV (mkV "gå") "till motanfallmotattack") ; -- status=guess, src=wikt status=guess, src=wikt
 lin counter_VS = mkVS (mkV (mkV "gå") "till motanfallmotattack") ; -- status=guess, src=wikt status=guess, src=wikt
 lin counter_example_N = variants {} ; -- status=guess
 lin counter_revolution_N = variants {} ; -- status=guess
@@ -13577,7 +13520,6 @@ lin covenant_V2 = mkV2 (mkV "avtalar"); -- status=guess, src=wikt
 lin coventry_PN = variants {} ; -- status=guess
 lin cover_N = mkN "täcke" | mkN "täckning" ; -- SaldoWN -- comment=17
 lin cover_V2 = mkV2 "täcker" ;
---subcat lin cover_VS = mkVS (mkV "täcker") ;
 lin cover_for_V2 = variants {} ; -- status=guess
 lin cover_up_N = variants {} ; -- status=guess
 lin cover_up_V2 = variants {} ; -- status=guess
@@ -13654,7 +13596,6 @@ lin crabbiness_N = variants {} ; -- status=guess
 lin crabgrass_N = variants {} ; -- status=guess
 lin crabwise_A = variants {} ; -- status=guess
 lin crack_N = mkN "spricka" | mkN "spydighet" "spydigheter" ; -- SaldoWN -- comment=17
---subcat lin crack_V = mkV "spricka" "sprack" "spruckit" | mkV "spränger" ; -- SaldoWN -- comment=23
 lin crack_V2 = mkV2 "spricka" "sprack" "spruckit" | dirV2 (partV (mkV "smälla" "small" "smäll")"av") ; -- SaldoWN
 lin crack_down_N = variants {} ; -- status=guess
 lin crack_down_V = mkV "spränger" ; -- comment=23
@@ -13742,7 +13683,6 @@ lin crapulous_A = variants {} ; -- status=guess
 lin crash_Adv = variants {} ; -- status=guess
 lin crash_N = mkN "olycka" | mkN "spricka" ; -- SaldoWN -- comment=16
 lin crash_V = mkV "kvaddar" ; -- comment=14
---subcat lin crash_V2 = dirV2 (partV (mkV "störtar")"in"); -- status=guess
 lin crash_dive_N = variants {} ; -- status=guess
 lin crash_dive_V = variants {} ; -- status=guess
 lin crash_helmet_N = variants {} ; -- status=guess
@@ -13796,7 +13736,6 @@ lin creaseless_A = variants {} ; -- status=guess
 lin creaseproof_A = mkA "skrynkelfri" "skrynkelfritt" ; -- SaldoWN
 lin create_V = mkV "skapa" ;
 lin create_V2 = mkV2 "skapa" ;
---subcat lin create_VV = mkVV (mkV "skapar");
 lin creatine_N = variants {} ; -- status=guess
 lin creation_N = mkN "skapande" | mkN "utnämning" ; -- status=guess
 lin creationism_N = mkN "kreationism" ; -- status=guess
@@ -14080,8 +14019,7 @@ lin crotchety_A = variants {} ; -- status=guess
 lin croton_N = variants {} ; -- status=guess
 lin crottle_N = variants {} ; -- status=guess
 lin crouch_N = variants {} ; -- status=guess
-lin crouch_V = variants{} ;
---subcat lin crouch_V2 = variants{} ;
+lin crouch_V = variants{} ; --
 lin croup_N = mkN "krupp" ; -- comment=4
 lin croupier_N = mkN "croupier" "croupierer" ; -- status=guess
 lin croupy_A = variants {} ; -- status=guess
@@ -14166,8 +14104,8 @@ lin crutch_N = mkN "krycka" | mkN "skrev" neutrum ; -- SaldoWN -- comment=5
 lin crux_N = mkN "krux" neutrum ; -- SaldoWN -- comment=3
 lin cruzeiro_N = variants {} ; -- status=guess
 lin cry_N = mkN "skrika" ; -- comment=7
-lin cry_V = mkV "gråta" "grät" "gråtit" | mkV "skrika" "skrek" "skrikit" ; -- SaldoWN -- comment=6
-lin cry_V2 = mkV2 "gråta" "grät" "gråtit" | dirV2 (partV (mkV "ropar")"till") ; -- SaldoWN
+lin cry_V = I.gråta_V | I.skrika_V | mkV "ropa" ;
+lin cry_V2 = mkV2 I.gråta_V | mkV2 I.skrika_V | mkV2 "ropa" ;
 lin cry_off_V2 = dirV2 (partV (mkV "ropar")"till"); -- status=guess
 lin cry_out_V = mkV "skrika" "skrek" "skrikit" ; -- comment=6
 lin crybaby_N = mkN "lipsill" ; -- comment=2
@@ -14296,7 +14234,7 @@ lin cultivar_N = variants {} ; -- status=guess
 lin cultivate_V2 = mkV2 (mkV "odlar"); -- status=guess, src=wikt
 lin cultivation_N = mkN "odling" ; -- comment=5
 lin cultivator_N = mkN "kultivator" "kultivatorer" ; -- comment=2
-lin cultural_A = mkA "kulturell" ; -- status=guess
+lin cultural_A = mkA "kulturell" ;
 lin culturati_N = variants {} ; -- status=guess
 lin culture_N = mkN "kultur" "kulturer" ;
 lin cultured_A = compoundA (regA "kultiverad"); -- status=guess
@@ -14374,8 +14312,8 @@ lin curdle_V = mkV "stelnar" ; -- comment=2
 lin curdle_V2 = mkV2 (mkV "stelnar"); -- status=guess, src=wikt
 lin curdling_N = variants {} ; -- status=guess
 lin cure_1_N = mkN "vulkanisering" ; -- comment=14
-lin cure_2_N = variants{} ;
-lin cure_N = variants{} ;
+lin cure_2_N = variants{} ; --
+lin cure_N = variants{} ; --
 lin cure_V = mkV "vulkaniserar" ; -- comment=8
 lin cure_V2 = dirV2 (partV (mkV "saltar")"in"); -- status=guess
 lin cure_all_N = variants {} ; -- status=guess
@@ -14387,13 +14325,12 @@ lin curio_N = mkN "kuriositet" "kuriositeter" ; -- status=guess
 lin curiosa_N = variants {} ; -- status=guess
 lin curiosity_N = mkN "nyfikenhet" "nyfikenheter" ; -- comment=6
 lin curious_A = mkA "nyfiken" "nyfiket" ; -- SaldoWN
-lin curiously_Adv = variants{} ;
+lin curiously_Adv = variants{} ; --
 lin curiousness_N = variants {} ; -- status=guess
 lin curitiba_PN = variants {} ; -- status=guess
 lin curium_N = mkN "curium" neutrum; -- status=guess
 lin curl_N = mkN "ring" neutrum; -- comment=12
 lin curl_V = mkV "ringer" ; -- comment=7
---subcat lin curl_V2 = dirV2 (partV (mkV "lockar")"in"); -- status=guess
 lin curl_up_V = mkV "ringer" ; -- comment=7
 lin curler_N = mkN "papiljott" "papiljotter" ; -- SaldoWN
 lin curlew_N = variants {} ; -- status=guess
@@ -14406,7 +14343,7 @@ lin currawong_N = variants {} ; -- status=guess
 lin currency_N = mkN "valuta" ; -- SaldoWN
 lin current_A = mkA "aktuell" ;
 lin current_N = mkN "ström" "strömmen" "strömmar" "strömmarna" | mkN "rådande" ; -- SaldoWN -- comment=10
-lin currently_Adv = mkAdv "nuförtiden" ; -- status=guess
+lin currently_Adv = mkAdv "nuförtiden" ;
 lin currentness_N = variants {} ; -- status=guess
 lin curricular_A = variants {} ; -- status=guess
 lin curriculum_N = mkN "läroplan" "läroplaner" ; -- SaldoWN
@@ -14473,14 +14410,13 @@ lin custom_built_A = variants {} ; -- status=guess
 lin custom_made_A = variants {} ; -- status=guess
 lin customary_A = mkA "vanlig" ; -- comment=3
 lin customerFem_N = mkN "kund" "kunder" ; -- comment=6
-lin customerMasc_N = mkN "kund" "kunder" ; -- comment=6
+lin customerMasc_N = mkN "kund" "kunder" ;
 lin customhouse_N = variants {} ; -- status=guess
 lin customize_V2 = variants {} ; -- status=guess
 lin customs_N = mkN "tull" ; -- comment=2
 lin cut_N = mkN "sår" neutrum | mkN "andel" "andelen" "andelar" "andelarna" ; -- SaldoWN -- comment=23
 lin cut_V = mkV "klipper" | I.skära_V ;
 lin cut_V2 = L.cut_V2 ;
---subcat lin cut_V2A = mkV2A (mkV "klipper") ;
 lin cut_across_V2 = dirV2 (partV (mkV "kapar")"av"); -- comment=19
 lin cut_back_V2 = dirV2 (partV (mkV "kapar")"av"); -- comment=19
 lin cut_back_on_V2 = dirV2 (partV (mkV "kapar")"av"); -- comment=19
@@ -14750,7 +14686,7 @@ lin dam_V2 = variants {} ; -- status=guess
 lin damage_N = mkN "skada" ;
 lin damage_V2 = mkV2 (mkV "skadar"); -- status=guess, src=wikt
 lin damages_N = mkN "skadestånd" neutrum ; -- SaldoWN
-lin damaging_A = variants{} ;
+lin damaging_A = variants{} ; --
 lin damascene_A = variants {} ; -- status=guess
 lin damascene_N = variants {} ; -- status=guess
 lin damascene_V2 = variants {} ; -- status=guess
@@ -14832,7 +14768,6 @@ lin dapsone_N = variants {} ; -- status=guess
 lin daraf_N = variants {} ; -- status=guess
 lin darby_PN = variants {} ; -- status=guess
 lin dare_N = mkN "utmaning" ; -- status=guess
---subcat lin dare_V = mkV "vågar" ; -- comment=3
 lin dare_V2 = mkV2 (mkV "riskerar"); -- status=guess, src=wikt
 lin dare_VV = mkVV (mkV "riskerar"); -- status=guess, src=wikt
 lin daredevil_A = variants {} ; -- status=guess
@@ -14875,7 +14810,6 @@ lin darts_N = mkN "dart" ; -- SaldoWN
 lin darwen_PN = variants {} ; -- status=guess
 lin dash_N = mkN "tankstreck" neutrum; -- comment=22
 lin dash_V = mkV "slå" "slog" "slagit" ; -- comment=15
---subcat lin dash_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut"); -- comment=22
 lin dash_down_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut"); -- comment=22
 lin dash_off_V = mkV "slå" "slog" "slagit" ; -- comment=15
 lin dash_off_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut"); -- comment=22
@@ -15010,7 +14944,7 @@ lin deal_V2 = mkV2 (mkV "handlar") ;
 lin dealer_N = mkN "återförsäljare" utrum | mkN "handlande" ; -- SaldoWN -- comment=6
 lin dealfish_N = variants {} ; -- status=guess
 lin dealignment_N = variants {} ; -- status=guess
-lin dealing_N = variants{} ;
+lin dealing_N = variants{} ; --
 lin dealings_N = mkN "uppförande" ; -- comment=7
 lin deamination_N = variants {} ; -- status=guess
 lin dean_N = mkN "domprost" ; -- comment=4
@@ -15019,7 +14953,7 @@ lin deanery_N = variants {} ; -- status=guess
 lin deanship_N = variants {} ; -- status=guess
 lin dear_A = mkA "kär" ; -- comment=6
 lin dear_Adv = variants {} ; -- status=guess
-lin dear_Interj = variants{} ;
+lin dear_Interj = variants{} ; --
 lin dear_N = mkN "raring" ; -- comment=2
 lin dearest_N = variants {} ; -- status=guess
 lin dearie_N = variants {} ; -- status=guess
@@ -15081,13 +15015,13 @@ lin debriefing_N = variants {} ; -- status=guess
 lin debris_1_N = mkN "skräp" neutrum; -- comment=2
 lin debris_2_N = variants {} ; -- status=guess
 lin debris_N = mkN "skräp" neutrum; -- comment=2
-lin debt_N = mkN "skuld" "skulder" ; -- SaldoWN
+lin debt_N = mkN "skuld" "skulder" ;
 lin debtor_N = mkN "gäldenär" "gäldenärer" ; -- SaldoWN
 lin debug_V2 = mkV2 (mkV "felsöka"); -- status=guess, src=wikt
 lin debugger_N = mkN "avlusare" ; -- status=guess
 lin debunk_V2 = variants {} ; -- status=guess
 lin debut_1_N = mkN "debut" "debuter" ; -- status=guess
-lin debut_2_N = variants{} ;
+lin debut_2_N = variants{} ; --
 lin debut_N = mkN "debut" "debuter" ; -- status=guess
 lin debut_V2 = variants {} ; -- status=guess
 lin debutante_1_N = mkN "debutant" "debutanter" ; -- status=guess
@@ -15169,7 +15103,7 @@ lin decipher_V2 = mkV2 (mkV "dechiffrerar") | mkV2 (mkV "avkodar") | mkV2 (mkV "
 lin decipherable_A = variants {} ; -- status=guess
 lin decipherer_N = variants {} ; -- status=guess
 lin decision_N = mkN "beslut" neutrum ;
-lin decision_making_N = variants{} ;
+lin decision_making_N = variants{} ; --
 lin decisive_A = mkA "avgörande" | mkA "fast" "fast" ; -- SaldoWN -- comment=5
 lin decisiveness_N = mkN "beslutsamhet" "beslutsamheter" ; -- status=guess
 lin deck_N = mkN "kortlek" | mkN "däck" neutrum ; -- SaldoWN -- comment=9
@@ -15189,7 +15123,6 @@ lin declaration_N = mkN "deklaration" "deklarationer" | mkN "förklaring" ; -- S
 lin declarative_A = variants {} ; -- status=guess
 lin declare_V = mkV "förklarar" ; -- comment=9
 lin declare_V2 = mkV2 (mkV "deklarerar"); -- status=guess, src=wikt
---subcat lin declare_V2V = mkV2V (mkV "deklarerar"); -- status=guess, src=wikt
 lin declare_VS = mkVS (mkV "deklarerar"); -- status=guess, src=wikt
 lin declassification_N = variants {} ; -- status=guess
 lin declassify_V2 = variants {} ; -- status=guess
@@ -15198,7 +15131,6 @@ lin declination_N = variants {} ; -- status=guess
 lin decline_N = mkN "sluttning" ; -- comment=10
 lin decline_V = mkV "lutar" ; -- comment=14
 lin decline_V2 = dirV2 (partV (mkV "lutar")"av"); -- status=guess
---subcat lin decline_VS = variants{}; -- dirV2 (partV (mkV "lutar")"av");
 lin decline_VV = mkVV (mkV (mkV "avstå" "avstod" "avstått") "från");
 lin declinometer_N = variants {} ; -- status=guess
 lin declivitous_A = variants {} ; -- status=guess
@@ -15259,7 +15191,7 @@ lin decubitus_N = variants {} ; -- status=guess
 lin decumary_N = variants {} ; -- status=guess
 lin decurved_A = variants {} ; -- status=guess
 lin decussate_A = variants {} ; -- status=guess
-lin dedicate_V2 = variants{} ;
+lin dedicate_V2 = variants{} ; --
 lin dedication_N = mkN "invigning" ; -- comment=7
 lin dedifferentiated_A = variants {} ; -- status=guess
 lin dedifferentiation_N = variants {} ; -- status=guess
@@ -15273,9 +15205,9 @@ lin deductive_A = variants {} ; -- status=guess
 lin deed_N = mkN "gärning" ; -- comment=4
 lin deed_box_N = variants {} ; -- status=guess
 lin deedpoll_N = variants {} ; -- status=guess
-lin deem_V2 = variants{} ;
-lin deem_V2A = variants{} ;
-lin deem_V2V = variants{} ;
+lin deem_V2 = variants{} ; --
+lin deem_V2A = variants{} ; --
+lin deem_V2V = variants{} ; --
 lin deep_A = mkA "djup" ;
 lin deep_Adv = mkAdv "långt" ; -- status=guess
 lin deep_N = mkN "djup" neutrum ; -- SaldoWN -- comment=5
@@ -15290,7 +15222,7 @@ lin deep_water_A = variants {} ; -- status=guess
 lin deepen_V = mkV "förvärrar" ; -- comment=3
 lin deepen_V2 = variants {} ; -- status=guess
 lin deepening_N = variants {} ; -- status=guess
-lin deeply_Adv = variants{} ;
+lin deeply_Adv = variants{} ; --
 lin deepness_N = mkN "djuphet" ; -- status=guess
 lin deer_N = mkN "hjort" ; -- SaldoWN
 lin deerberry_N = variants {} ; -- status=guess
@@ -15325,12 +15257,11 @@ lin defector_N = mkN "avfälling" ; -- comment=3
 lin defence_N = mkN "försvar" "försvar" ;
 lin defenceless_A = mkA "värnlös" ; -- comment=2
 lin defencelessness_N = variants {} ; -- status=guess
---subcat lin defend_V = mkV "skyddar" ; -- comment=5
 lin defend_V2 = mkV2 "försvara" ; -- status=guess
 lin defendable_A = variants {} ; -- status=guess
 lin defendant_N = mkN "svarande" ; -- SaldoWN = mkN "svarande" "svaranden" "svarande" "svarandena" ;
 lin defenderFem_N = mkN "försvarare" utrum; -- status=guess
-lin defenderMasc_N = mkN "försvarare" utrum; -- status=guess
+lin defenderMasc_N = variants{} ; --
 lin defenestration_N = variants {} ; -- status=guess
 lin defenseless_A = mkA "försvarslös" ; -- status=guess
 lin defenseless_Adv = variants {} ; -- status=guess
@@ -15365,7 +15296,7 @@ lin definable_A = variants {} ; -- status=guess
 lin define_V = mkV "definiera" ;
 lin define_V2 = mkV2 "definiera" ;
 lin definite_A = mkA "bestämd" "bestämt" | mkA "avgjord" "avgjort" ; -- SaldoWN -- comment=5
-lin definitely_Adv = variants{} ;
+lin definitely_Adv = variants{} ; --
 lin definition_N = mkN "definition" "definitioner" | mkN "skärpa" ; -- SaldoWN -- comment=9
 lin definitive_A = mkA "föredömlig" ; -- comment=6
 lin deflagration_N = variants {} ; -- status=guess
@@ -15402,8 +15333,8 @@ lin deft_A = mkA "skicklig" ; -- comment=3
 lin deftness_N = variants {} ; -- status=guess
 lin defunct_A = variants {} ; -- status=guess
 lin defuse_V2 = variants {} ; -- status=guess
-lin defy_V2 = variants{} ;
-lin defy_V2V = variants{} ;
+lin defy_V2 = variants{} ; --
+lin defy_V2V = variants{} ; --
 lin degage_A = variants {} ; -- status=guess
 lin degauss_V2 = variants {} ; -- status=guess
 lin degaussing_N = variants {} ; -- status=guess
@@ -15464,7 +15395,7 @@ lin delegate_N = mkN "delegat" "delegater" ; -- SaldoWN
 lin delegate_V2 = dirV2 (partV (mkV "sänder")"efter"); -- status=guess
 lin delegating_N = mkN "delegering" ; -- status=guess
 lin delegation_N = mkN "delegering" ; -- comment=7
-lin delete_V2 = variants{} ;
+lin delete_V2 = variants{} ; --
 lin deleterious_A = mkA "menlig" ; -- status=guess
 lin deletion_N = mkN "borttagande" ; -- status=guess
 lin delf_N = variants {} ; -- status=guess
@@ -15473,7 +15404,7 @@ lin delhi_PN = variants {} ; -- status=guess
 lin deliberate_A = mkA "överlagd" "överlagt" ; -- comment=8
 lin deliberate_V = mkV "överväger" ; -- comment=6
 lin deliberate_V2 = mkV2 (mkV "överlägga" "överlade" "överlagt"); -- status=guess, src=wikt
-lin deliberately_Adv = variants{} ;
+lin deliberately_Adv = variants{} ; --
 lin deliberation_N = mkN "övervägande" ; -- comment=10
 lin deliberative_A = mkA "rådgivande" ; -- comment=3
 lin delible_A = variants {} ; -- status=guess
@@ -15484,8 +15415,7 @@ lin delicious_A = mkA "utsökt" "utsökt" ; -- comment=2
 lin delight_N = mkN "glädje" utrum; -- comment=6
 lin delight_V = mkV "fröjdar" ; -- comment=2
 lin delight_V2 = mkV2 (mkV "glädja" "gladde" "glatt"); -- status=guess, src=wikt
---subcat lin delight_VS = mkVS (mkV "glädja" "gladde" "glatt"); -- status=guess, src=wikt
-lin delighted_A = variants{} ;
+lin delighted_A = variants{} ; --
 lin delightedly_Adv = variants {} ; -- status=guess
 lin delightful_A = mkA "behaglig" ; -- comment=7
 lin delimit_V2 = variants {} ; -- status=guess
@@ -15677,7 +15607,6 @@ lin denunciation_N = mkN "uppsägning" ; -- comment=2
 lin denver_PN = mkPN "Denver" neutrum ; -- status=guess
 lin deny_V2 = mkV2 (mkV "förneka");
 lin deny_V3 = mkV3 (mkV "förneka");
---subcat lin deny_VS = mkVS (mkV "förneka");
 lin deodar_N = variants {} ; -- status=guess
 lin deodorant_N = mkN "deodorant" "deodoranter" ; -- SaldoWN
 lin deodorize_V2 = variants {} ; -- status=guess
@@ -15693,17 +15622,17 @@ lin departed_A = compoundA (regA "svunnen"); -- status=guess
 lin departed_N = mkN "bortgång" ; -- comment=3
 lin departer_N = variants {} ; -- status=guess
 lin department_N = mkN "avdelning" | mkN "institution" "institutioner" ;
-lin departmental_A = variants{} ;
+lin departmental_A = variants{} ; --
 lin departure_N = mkN "avresa" ; -- SaldoWN
 lin depend_V = mkV "bero" ;
 lin dependability_N = variants {} ; -- status=guess
 lin dependable_A = variants {} ; -- status=guess
 lin dependant_N = variants {} ; -- status=guess
 lin dependence_N = mkN "beroende" ; -- SaldoWN = mkN "beroende" ;
-lin dependency_N = variants{} ;
+lin dependency_N = variants{} ; --
 lin dependent_A = mkA "tillvand" | mkA "beroende" ; -- SaldoWN -- comment=4
 lin dependent_N = mkN "beroende" ; -- comment=2
-lin depending_A = variants{} ;
+lin depending_A = variants{} ; --
 lin depersonalization_N = variants {} ; -- status=guess
 lin depict_V2 = mkV2 (mkV "framställer") | mkV2 (mkV "skildrar"); -- status=guess, src=wikt status=guess, src=wikt
 lin depicting_N = variants {} ; -- status=guess
@@ -15750,7 +15679,7 @@ lin depreciatory_A = mkA "nedsättande" ; -- status=guess
 lin depredation_N = mkN "räd" ; -- status=guess
 lin depress_V2 = variants {} ; -- status=guess
 lin depressant_A = mkA "lugnande" ; -- status=guess
-lin depressed_A = variants{} ;
+lin depressed_A = variants{} ; --
 lin depressing_A = mkA "deprimerande" ; -- comment=4
 lin depression_N = mkN "sänka" ; -- SaldoWN
 lin depressive_A = mkA "deprimerande" ; -- comment=2
@@ -15837,10 +15766,9 @@ lin descendants_N = variants {} ; -- status=guess
 lin descender_N = variants {} ; -- status=guess
 lin descent_N = mkN "börd" | mkN "överfall" neutrum ; -- SaldoWN -- comment=15
 lin describable_A = mkA "beskrivbar" ; -- status=guess
---subcat lin describe_V = mkV "beskriva" "beskrev" "beskrivit" ;
 lin describe_V2 = mkV2 "beskriva" "beskrev" "beskrivit" ;
 lin describe_VS = mkVS (mkV "beskriva" "beskrev" "beskrivit") ;
-lin description_N = mkN "slag" neutrum; -- comment=7
+lin description_N = mkN "beskrivning" ;
 lin descriptive_A = mkA "beskrivande" ; -- comment=2
 lin descriptivism_N = variants {} ; -- status=guess
 lin descriptor_N = variants {} ; -- status=guess
@@ -15873,7 +15801,6 @@ lin desideratum_N = variants {} ; -- status=guess
 lin design_N = mkN "design" "designer" ;
 lin design_V = mkV "designa" ;
 lin design_V2 = mkV2 "designa" ;
---subcat lin design_V2V = mkV2V (mkV "avse" "avsåg" "avsett") ;
 lin designate_A = variants {} ; -- status=guess
 lin designate_V = mkV "utse" "utsåg" "utsett" ; -- comment=8
 lin designate_V2 = mkV2 (mkV "utse" "utsåg" "utsett"); -- status=guess
@@ -15890,7 +15817,7 @@ lin desirability_N = variants {} ; -- status=guess
 lin desirable_A = mkA "begärlig" | mkA "önskvärd" "önskvärt" ; -- SaldoWN -- comment=4
 lin desire_N = mkN "begär" neutrum | mkN "önskning" ; -- SaldoWN -- comment=5
 lin desire_V2 = mkV2 (mkV "begära") | mkV2 (mkV "åtrå"); -- status=guess, src=wikt status=guess, src=wikt
-lin desired_A = variants{} ;
+lin desired_A = variants{} ; --
 lin desirous_A = mkA "lysten" "lystet" ; -- SaldoWN
 lin desist_V = mkV "avstå" "avstod" "avstått" ; -- comment=2
 lin desk_N = mkN "skolbänk" ; -- SaldoWN
@@ -15909,7 +15836,7 @@ lin despatch_V2 = variants {} ; -- status=guess
 lin desperado_N = variants {} ; -- status=guess
 lin desperate_A = mkA "desperat" "desperat" ; -- comment=3
 lin desperate_N = variants {} ; -- status=guess
-lin desperately_Adv = variants{} ;
+lin desperately_Adv = variants{} ; --
 lin desperation_N = mkN "desperation" "desperationer" ; -- status=guess
 lin despicable_A = mkA "avskyvärd" "avskyvärt" ; -- status=guess
 lin despisal_N = variants {} ; -- status=guess
@@ -15957,7 +15884,7 @@ lin detain_V2 = mkV2 (mkV "gripa" "grep" "gripit") | mkV2 (mkV "internerar"); --
 lin detainee_N = variants {} ; -- status=guess
 lin detect_V2 = dirV2 (partV (mkV "spårar")"ur"); -- status=guess
 lin detectable_A = variants {} ; -- status=guess
-lin detection_N = variants{} ;
+lin detection_N = variants{} ; --
 lin detective_N = mkN "detektiv" "detektiver" ; -- SaldoWN
 lin detector_N = mkN "sensor" "sensorer" | mkN "detektor" "detektorer" ; -- SaldoWN
 lin detente_N = mkN "avspänning" ; -- status=guess
@@ -15983,7 +15910,7 @@ lin determine_V2 = mkV2 (mkV "avgöra" "avgjorde" "avgjort") | mkV2 (mkV "bestä
 lin determine_V2V = mkV2V (mkV "bestämmer") ;
 lin determine_VS = mkVS (reflV (mkV "bestämmer")) ;
 lin determine_VV = mkVV (reflV (mkV "bestämmer")) ;
-lin determined_A = variants{} ;
+lin determined_A = variants{} ; --
 lin determinedly_Adv = variants {} ; -- status=guess
 lin determiner_N = variants {} ; -- status=guess
 lin determinism_N = mkN "determinism" "determinismer" ; -- status=guess
@@ -16033,9 +15960,9 @@ lin devastate_V2 = mkV2 (mkV "ödelägga" "ödelade" "ödelagt") ; -- status=gue
 lin devastation_N = mkN "förstörelse" "förstörelser" ; -- comment=2
 lin develop_V = mkV "utvecklar" ;
 lin develop_V2 = mkV2 "utveckla" ;
-lin developed_A = variants{} ;
+lin developed_A = variants{} ; --
 lin developer_N = mkN "exploatör" "exploatörer" ; -- status=guess
-lin developing_A = variants{} ;
+lin developing_A = variants{} ; --
 lin development_N = mkN "utveckling" ;
 lin developmental_A = variants {} ; -- status=guess
 lin deviant_A = mkA "avvikande" ; -- status=guess
@@ -16059,7 +15986,7 @@ lin devious_A = mkA "oärlig" ; -- status=guess
 lin deviousness_N = variants {} ; -- status=guess
 lin devisal_N = variants {} ; -- status=guess
 lin devise_N = variants {} ; -- status=guess
-lin devise_V2 = variants{} ;
+lin devise_V2 = variants{} ; --
 lin devisee_N = variants {} ; -- status=guess
 lin devising_N = variants {} ; -- status=guess
 lin devisor_N = variants {} ; -- status=guess
@@ -16073,7 +16000,7 @@ lin devolve_V = mkV "överlåta" "överlät" "överlåtit" ; -- status=guess
 lin devolve_V2 = variants {} ; -- status=guess
 lin devon_PN = variants {} ; -- status=guess
 lin devote_V2 = mkV2 (mkV "devote"); -- status=guess
-lin devoted_A = variants{} ;
+lin devoted_A = variants{} ; --
 lin devotedly_Adv = variants {} ; -- status=guess
 lin devotee_N = mkN "fantast" "fantaster" ; -- comment=2
 lin devotion_N = mkN "tillgivenhet" "tillgivenheter" ; -- comment=8
@@ -16264,7 +16191,6 @@ lin dideoxycytosine_N = variants {} ; -- status=guess
 lin dideoxyinosine_N = variants {} ; -- status=guess
 lin die_N = mkN "tärning" ; -- comment=13
 lin die_V = L.die_V ;
---subcat lin die_V2 = mkV2 "dö" "dog" "dött" ;
 lin die_away_V = mkV "slocknar" ; -- comment=4
 lin die_back_V = mkV "slocknar" ; -- comment=4
 lin die_cast_A = variants {} ; -- status=guess
@@ -16303,7 +16229,7 @@ lin differentiate_V = mkV "skilja" "skilde" "skilt" ; -- comment=3
 lin differentiate_V2 = dirV2 (partV (mkV "skilja" "skilde" "skilt") "av"); -- comment=2
 lin differentiation_N = mkN "differentiering" ; -- status=guess
 lin differentiator_N = variants {} ; -- status=guess
-lin differently_Adv = variants{} ;
+lin differently_Adv = variants{} ; --
 lin difficult_A = mkA "svår" ;
 lin difficulty_N = mkN "svårighet" "svårigheter" ;
 lin diffidence_N = variants {} ; -- status=guess
@@ -16421,7 +16347,6 @@ lin din_V = variants {} ; -- status=guess
 lin din_V2 = variants {} ; -- status=guess
 lin dinar_N = variants {} ; -- status=guess
 lin dine_V = mkV "dinerar" ; -- status=guess
---subcat lin dine_V2 = variants{}; -- mkV "dinerar" ;
 lin dine_out_V = mkV "dinerar" ; -- status=guess
 lin dine_out_on_V2 = variants {} ; -- status=guess
 lin diner_N = mkN "restaurangvagn" ; -- comment=3
@@ -16437,13 +16362,13 @@ lin dingle_N = variants {} ; -- status=guess
 lin dingle_PN = variants {} ; -- status=guess
 lin dingo_N = mkN "dingo" "dingor" ; -- status=guess
 lin dingy_A = variants {} ; -- status=guess
-lin dining_N = variants{} ;
+lin dining_N = variants{} ; --
 lin dining_car_N = variants {} ; -- status=guess
 lin dining_room_N = variants {} ; -- status=guess
 lin dining_table_N = variants {} ; -- status=guess
 lin dinky_A = variants {} ; -- status=guess
 lin dinky_N = variants {} ; -- status=guess
-lin dinner_N = mkN "middag" ; -- SaldoWN
+lin dinner_N = mkN "middag" ;
 lin dinner_jacket_N = variants {} ; -- status=guess
 lin dinner_party_N = variants {} ; -- status=guess
 lin dinner_service_N = variants {} ; -- status=guess
@@ -16465,7 +16390,7 @@ lin diol_N = variants {} ; -- status=guess
 lin dioon_N = variants {} ; -- status=guess
 lin diopter_N = variants {} ; -- status=guess
 lin diorite_N = variants {} ; -- status=guess
-lin dioxide_N = variants{} ;
+lin dioxide_N = variants{} ; --
 lin dioxin_N = variants {} ; -- status=guess
 lin dip_N = mkN "titt" ; -- comment=17
 lin dip_V = mkV "sänker" ; -- comment=11
@@ -16507,7 +16432,6 @@ lin direct_A = mkA "direkt" "direkt" ;
 lin direct_Adv = mkAdv "direkt" ; -- comment=2
 lin direct_V = mkV "visar" ; -- comment=22
 lin direct_V2 = dirV2 (partV (mkV "visar")"in"); -- comment=9
---subcat lin direct_VS = mkVS (mkV "riktar"); -- status=guess, src=wikt
 lin direction_N = mkN "riktning" ;
 lin direction_finder_N = variants {} ; -- status=guess
 lin directional_A = variants {} ; -- status=guess
@@ -16536,7 +16460,7 @@ lin dirty_V2 = mkV2 (mkV (mkV "bli") "smutsig"); -- status=guess, src=wikt
 lin disa_N = variants {} ; -- status=guess
 lin disability_N = mkN "handikapp" neutrum | mkN "oduglighet" ; -- SaldoWN -- comment=6
 lin disable_V2 = mkV2 (mkV "deaktivera") | mkV2 (mkV "avaktivera"); -- status=guess, src=wikt status=guess, src=wikt
-lin disabled_A = variants{} ;
+lin disabled_A = variants{} ; --
 lin disabled_N = mkN "färdtjänst" ; -- SaldoWN
 lin disablement_N = mkN "invaliditet" "invaliditeter" | mkN "oduglighet" ; -- SaldoWN -- comment=2
 lin disabling_A = variants {} ; -- status=guess
@@ -16617,7 +16541,7 @@ lin discipleship_N = variants {} ; -- status=guess
 lin disciplinarian_N = variants {} ; -- status=guess
 lin disciplinary_A = mkA "disciplinär" ; -- status=guess
 lin discipline_N = mkN "bestraffning" | mkN "övning" ; -- SaldoWN -- comment=12
-lin discipline_V2 = variants{} ;
+lin discipline_V2 = variants{} ; --
 lin disclaim_V2 = variants {} ; -- status=guess
 lin disclaimer_N = mkN "friskrivning" ; -- status=guess
 lin disclose_V = mkV "visar" ; -- comment=6
@@ -16673,7 +16597,6 @@ lin discourteous_A = mkA "ohövlig" ; -- status=guess
 lin discourtesy_N = variants {} ; -- status=guess
 lin discover_V = mkV "upptäcker" ;
 lin discover_V2 = mkV2 (mkV "upptäcker") ;
---subcat lin discover_V2V = mkV2V (mkV "avslöja") ; ---- subcat
 lin discover_VS = mkVS (mkV "upptäcker") ;
 lin discovererFem_N = variants {} ; -- status=guess
 lin discovererMasc_N = variants {} ; -- status=guess
@@ -16748,7 +16671,7 @@ lin disgraceful_A = mkA "skamlig" ; -- comment=2
 lin disgruntled_A = mkA "sur" ; -- comment=3
 lin disgruntlement_N = variants {} ; -- status=guess
 lin disguise_N = mkN "förklädnad" "förklädnader" ; -- comment=2
-lin disguise_V2 = variants{} ;
+lin disguise_V2 = variants{} ; --
 lin disgust_N = mkN "motvilja" ; -- comment=7
 lin disgust_V2 = variants {} ; -- status=guess
 lin disgustedly_Adv = variants {} ; -- status=guess
@@ -17021,12 +16944,12 @@ lin distinct_A = mkA "distinkt" "distinkt" | mkA "tydlig" ; -- SaldoWN -- commen
 lin distinction_N = mkN "åtskillnad" "åtskillnader" ; -- comment=7
 lin distinctive_A = mkA "utmärkande" ; -- comment=7
 lin distinctiveness_N = mkN "egenart" ; -- comment=2
-lin distinctly_Adv = variants{} ;
+lin distinctly_Adv = variants{} ; --
 lin distinctness_N = variants {} ; -- status=guess
 lin distinguish_V = mkV "kännetecknar" ; -- comment=6
 lin distinguish_V2 = dirV2 (partV (mkV "skiljer" "skilde" "skilt")"av"); -- comment=2
 lin distinguishable_A = mkA "urskiljbar" ; -- status=guess
-lin distinguished_A = variants{} ;
+lin distinguished_A = variants{} ; --
 lin distort_V2 = mkV2 (mkV "förvränga"); -- status=guess, src=wikt
 lin distortable_A = variants {} ; -- status=guess
 lin distortion_N = mkN "förvrängning" ; -- SaldoWN
@@ -17045,8 +16968,8 @@ lin distressful_A = mkA "bedrövlig" ; -- comment=7
 lin distressing_A = mkA "bedrövlig" ; -- comment=8
 lin distributary_N = variants {} ; -- status=guess
 lin distribute_V2 = dirV2 (partV (mkV "sprida" "spred" "spritt")"ut"); -- status=guess
-lin distributed_A = variants{} ;
-lin distribution_N = mkN "spridning" ; -- status=guess
+lin distributed_A = variants{} ; --
+lin distribution_N = mkN "spridning" ;
 lin distributional_A = variants {} ; -- status=guess
 lin distributive_A = mkA "distributiv" ; -- status=guess
 lin distributor_N = mkN "distributör" "distributörer" ; -- SaldoWN
@@ -17109,7 +17032,6 @@ lin diversionary_A = variants {} ; -- status=guess
 lin diversionist_N = variants {} ; -- status=guess
 lin diversity_N = mkN "mångfald" "mångfalder" ; -- status=guess
 lin divert_V = mkV "roar" ; -- comment=10
---subcat lin divert_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut"); -- comment=6
 lin diverticulitis_N = variants {} ; -- status=guess
 lin diverticulosis_N = variants {} ; -- status=guess
 lin diverticulum_N = variants {} ; -- status=guess
@@ -17172,7 +17094,6 @@ lin dm_N = mkN "decimeter" ; -- status=guess
 lin dna_N = variants {} ; -- status=guess
 lin dnepropetrovsk_PN = variants {} ; -- status=guess
 lin do_N = mkN "tillställning" ; -- comment=4
---subcat lin do_V = I.göra_V ;
 lin do_V2 = mkV2 I.göra_V ;
 lin do_gooder_N = variants {} ; -- status=guess
 lin dob_in_V2 = variants {} ; -- status=guess
@@ -17203,7 +17124,7 @@ lin doctrinaire_N = variants {} ; -- status=guess
 lin doctrinal_A = mkA "dogmatisk" ; -- status=guess
 lin doctrine_N = mkN "doktrin" "doktriner" ; -- status=guess
 lin document_N = mkN "dokument" neutrum ;
-lin document_V2 = variants{} ;
+lin document_V2 = variants{} ; --
 lin documentary_A = mkA "dokumentär" ; -- SaldoWN
 lin documentary_N = mkN "dokumentär" "dokumentärer" ; -- SaldoWN
 lin documentation_N = mkN "dokumentation" "dokumentationer" ; -- comment=2
@@ -17265,7 +17186,7 @@ lin dogwatch_N = variants {} ; -- status=guess
 lin dogwood_N = variants {} ; -- status=guess
 lin doh_N = variants {} ; -- status=guess
 lin doily_N = variants {} ; -- status=guess
-lin doing_N = variants{} ;
+lin doing_N = variants{} ; --
 lin dol_N = variants {} ; -- status=guess
 lin dolabriform_A = variants {} ; -- status=guess
 lin dolce_Adv = variants {} ; -- status=guess
@@ -17307,7 +17228,7 @@ lin dombeya_N = variants {} ; -- status=guess
 lin dome_N = mkN "kupol" "kupoler" ; -- SaldoWN
 lin domed_A = mkA "kupolformig" ; -- comment=2
 lin domesday_PN = variants {} ; -- status=guess
-lin domestic_A = mkA "inhemsk" | mkA "inrikes" ; -- SaldoWN -- comment=4
+lin domestic_A = mkA "inhemsk" | mkA "inrikes" ;
 lin domestic_N = mkN "hemhjälp" ; -- status=guess
 lin domestically_Adv = variants {} ; -- status=guess
 lin domesticate_V2 = variants {} ; -- status=guess
@@ -17555,7 +17476,7 @@ lin downstage_Adv = variants {} ; -- status=guess
 lin downstage_N = variants {} ; -- status=guess
 lin downstair_A = variants {} ; -- status=guess
 lin downstairs_A = variants {} ; -- status=guess
-lin downstairs_Adv = variants{} ;
+lin downstairs_Adv = variants{} ; --
 lin downstream_A = variants {} ; -- status=guess
 lin downstream_Adv = mkAdv "nedströms" ; -- status=guess
 lin downstroke_N = variants {} ; -- status=guess
@@ -17663,7 +17584,6 @@ lin draw_2_V2 = mkV2 "rita" | mkV2 "teckna" ;
 lin draw_N = mkN "skocka" ; -- comment=19
 lin draw_V = mkV "dra" "drar" "dra" "drog" "dragit" "dragen" ;
 lin draw_V2 = mkV2 "dra" "drar" "dra" "drog" "dragit" "dragen" ;
---subcat lin draw_V2V = mkV2V "dra" "drar" "dra" "drog" "dragit" "dragen" ;
 lin draw_back_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut"); -- comment=38
 lin draw_down_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut"); -- comment=38
 lin draw_even_V = mkV "attraherar" ; -- comment=45
@@ -17772,7 +17692,7 @@ lin drill_down_V = mkV "övar" ; -- comment=6
 lin drill_down_through_V2 = variants {} ; -- status=guess
 lin drill_into_V3 = variants {} ; -- status=guess
 lin drilling_N = mkN "borrning" ; -- status=guess
-lin drink_N = mkN "fylleri" neutrum | mkN "spritdryck" "spritdrycker" ; -- SaldoWN -- comment=15
+lin drink_N = mkN "dryck" "drycker" | mkN "dricka" ;
 lin drink_V = mkV "dricka" "drack" "druckit" | mkV "supa" "söp" "supit" ;
 lin drink_V2 = L.drink_V2 ;
 lin drink_up_V2 = variants {} ; -- status=guess
@@ -17799,7 +17719,6 @@ lin drive_N = mkN "åktur" "åkturer" | mkN "timmerflotte" utrum ; -- SaldoWN --
 lin drive_V = mkV "köra" "körde" "kört" ;
 lin drive_V2 = mkV2 (mkV "köra" "körde" "kört") ;
 lin drive_V2V = mkV2V (mkV "driva" "drev" "drivit") ;
---subcat lin drive_VS = mkVS (mkV "driva" "drev" "drivit") ;
 lin drive_away_V2 = mkV2 (mkV I.driva_V "bort") ; -- status=guess
 lin drive_back_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut"); -- comment=17
 lin drive_by_V = mkV "slå" "slog" "slagit" ; -- comment=21
@@ -17813,10 +17732,10 @@ lin drivel_N = mkN "dravel" neutrum; -- comment=6
 lin drivel_V = mkV "pladdrar" ; -- comment=3
 lin driveller_N = variants {} ; -- status=guess
 lin driverFem_N = mkN "chaufför" "chaufförer" ; -- status=guess
-lin driverMasc_N = mkN "chaufför" "chaufförer" ; -- status=guess
+lin driverMasc_N = mkN "förare" utrum ;
 lin driveshaft_N = variants {} ; -- status=guess
 lin driveway_N = variants {} ; -- status=guess
-lin driving_A = variants{} ;
+lin driving_A = variants{} ; --
 lin driving_N = mkN "körning" ; -- comment=7
 lin driving_belt_N = variants {} ; -- status=guess
 lin driving_wheel_N = variants {} ; -- status=guess
@@ -17951,7 +17870,7 @@ lin dsc_N = variants {} ; -- status=guess
 lin dscdna_N = variants {} ; -- status=guess
 lin dss_N = variants {} ; -- status=guess
 lin dti_N = variants {} ; -- status=guess
-lin dual_A = variants{} ;
+lin dual_A = variants{} ; --
 lin dualism_N = mkN "dualism" "dualismer" ; -- status=guess
 lin dualist_N = variants {} ; -- status=guess
 lin dualistic_A = mkA "tvåfaldig" ; -- comment=2
@@ -18030,7 +17949,7 @@ lin dullard_N = mkN "tjockskalle" utrum; -- comment=2
 lin dullness_N = variants {} ; -- status=guess
 lin dulse_N = variants {} ; -- status=guess
 lin duly_AdV = variants {} ; -- status=guess
-lin duly_Adv = variants{} ;
+lin duly_Adv = variants{} ; --
 lin dumb_A = mkA "tystlåten" "tystlåtet" ; -- comment=4
 lin dumb_down_V2 = variants {} ; -- status=guess
 lin dumbarton_PN = variants {} ; -- status=guess
@@ -18261,13 +18180,12 @@ lin earmark_V2 = mkV2 (mkV "öronmärker"); -- status=guess, src=wikt
 lin earmuff_N = variants {} ; -- status=guess
 lin earn_V = mkV "förtjänar" ; -- comment=5
 lin earn_V2 = mkV2 (mkV "tjäna") ; -- status=guess
---subcat lin earn_VA = mkVA (mkV "tjäna") ; --- subcat
 lin earner_N = variants {} ; -- status=guess
 lin earnest_A = mkA "allvarlig" ; -- comment=8
 lin earnest_N = mkN "handpenning" ; -- comment=7
 lin earnest_money_N = variants {} ; -- status=guess
 lin earnestness_N = variants {} ; -- status=guess
-lin earning_N = variants{} ;
+lin earning_N = variants{} ; --
 lin earphone_N = mkN "hörlur" ; -- status=guess
 lin earpiece_N = mkN "skalm" ; -- status=guess
 lin earplug_N = variants {} ; -- status=guess
@@ -18420,7 +18338,7 @@ lin econometrician_N = variants {} ; -- status=guess
 lin econometrics_N = mkN "ekonometri" ; -- status=guess
 lin economic_A = mkA "ekonomisk" ;
 lin economical_A = mkA "ekonomisk" ; -- comment=3
-lin economically_Adv = variants{} ;
+lin economically_Adv = variants{} ; --
 lin economics_N = mkN "ekonomi" "ekonomier" | mkN "nationalekonomi" ; -- SaldoWN -- comment=2
 lin economist_N = mkN "ekonom" "ekonomer" ; -- SaldoWN
 lin economize_V = mkV "sparar" ; -- comment=4
@@ -18554,7 +18472,7 @@ lin efficacious_A = variants {} ; -- status=guess
 lin efficacy_N = mkN "effektivitet" "effektiviteter" ; -- status=guess
 lin efficiency_N = mkN "effektivitet" "effektiviteter" ; -- comment=5
 lin efficient_A = mkA "effektiv" ; -- SaldoWN
-lin efficiently_Adv = variants{} ;
+lin efficiently_Adv = variants{} ; --
 lin effigy_N = variants {} ; -- status=guess
 lin effleurage_N = variants {} ; -- status=guess
 lin efflorescence_N = variants {} ; -- status=guess
@@ -18690,7 +18608,7 @@ lin elect_V = mkV "välja" "valde" "valt" | mkV "utvälja" "utvalde" "utvalt" ; 
 lin elect_V2 = mkV2 "välja" "valde" "valt" ; -- status=guess
 lin elect_V2V = mkV2V (mkV "välja" "valde" "valt") ; -- SaldoWN -- status=guess, src=wikt
 lin elect_V3 = mkV3 (mkV "välja" "valde" "valt") ; -- SaldoWN -- status=guess, src=wikt
-lin elected_A = variants{} ;
+lin elected_A = variants{} ; --
 lin election_N = mkN "val" "val" ;
 lin electioneering_N = variants {} ; -- status=guess
 lin elective_A = variants {} ; -- status=guess
@@ -18857,13 +18775,13 @@ lin embalmment_N = variants {} ; -- status=guess
 lin embankment_N = mkN "invallning" ; -- comment=6
 lin embargo_N = mkN "embargo" ; -- status=guess
 lin embargo_V2 = variants {} ; -- status=guess
-lin embark_V = variants{} ;
-lin embark_V2 = variants{} ;
+lin embark_V = variants{} ; --
+lin embark_V2 = variants{} ; --
 lin embark_on_V2 = variants {} ; -- status=guess
 lin embark_upon_V2 = variants {} ; -- status=guess
 lin embarkation_N = mkN "ilastning" ; -- comment=2
 lin embarrass_V2 = mkV2 (mkV "generar"); -- status=guess, src=wikt
-lin embarrassed_A = variants{} ;
+lin embarrassed_A = variants{} ; --
 lin embarrassing_A = mkA "genant" "genant" ; -- comment=4
 lin embarrassment_N = mkN "bryderi" "bryderit" "bryderier" "bryderierna" | mkN "förlägenhet" "förlägenheter" ; -- SaldoWN -- comment=6
 lin embassy_N = mkN "ambassad" "ambassader" ; -- SaldoWN
@@ -18911,9 +18829,6 @@ lin emend_V2 = variants {} ; -- status=guess
 lin emendation_N = variants {} ; -- status=guess
 lin emerald_N = mkN "smaragd" "smaragder" ; -- status=guess
 lin emerge_V = mkV "framträda" "framträdde" "framträtt" ;
---subcat lin emerge_V2 = mkV2 (partV I.taga_V "ut") ;
---subcat lin emerge_V2V = mkV2V (mkV "framträda" "framträdde" "framträtt") ; ---- subcat
---subcat lin emerge_VS = mkVS (mkV "framträda" "framträdde" "framträtt") ; ---- subcat
 lin emergence_N = mkN "uppkomst" ; -- comment=3
 lin emergency_N = mkN "nödfall" neutrum | mkN "nödsituation" "nödsituationer" ; -- SaldoWN -- comment=4
 lin emergent_A = variants {} ; -- status=guess
@@ -19093,7 +19008,6 @@ lin end_2_N = mkN "ände" utrum | mkN "ända" ;
 lin end_N = mkN "ände" utrum | mkN "ända" ; ---
 lin end_V = mkV "sluta" ;
 lin end_V2 = mkV2 "avsluta" ;
---subcat lin end_VA = mkVA (mkV "sluta") ;
 lin end_all_N = variants {} ; -- status=guess
 lin end_in_V2 = variants {} ; -- status=guess
 lin end_tail_V2 = variants {} ; -- status=guess
@@ -19190,7 +19104,7 @@ lin enfield_PN = variants {} ; -- status=guess
 lin enfilade_N = variants {} ; -- status=guess
 lin enflurane_N = variants {} ; -- status=guess
 lin enfold_V2 = variants {} ; -- status=guess
-lin enforce_V2 = variants{} ;
+lin enforce_V2 = variants{} ; --
 lin enforceable_A = variants {} ; -- status=guess
 lin enforcement_N = mkN "kronofogde" utrum | mkN "genomdrivande" ; -- SaldoWN -- comment=4
 lin enfranchise_V2 = mkV2 (mkV "befriar") | mkV2 (mkV "frige" "friger" "frige" "frigav" "frigett" "frigiven"); -- status=guess, src=wikt status=guess, src=wikt
@@ -19200,7 +19114,7 @@ lin engage_V2 = mkV2 "engagera" ; -- status=guess
 lin engagement_N = mkN "förlovning" | mkN "överenskommelse" "överenskommelser" ; -- SaldoWN -- comment=12
 lin engelmannia_N = variants {} ; -- status=guess
 lin engender_V2 = variants {} ; -- status=guess
-lin engine_N = mkN "motor" "motorer" ; -- status=guess
+lin engine_N = mkN "motor" "motorer" ;
 lin engine_driver_N = variants {} ; -- status=guess
 lin engineer_N = mkN "ingenjör" "ingenjörer" | mkN "maskinist" "maskinister" ; -- SaldoWN -- comment=7
 lin engineer_V = mkV "konstruera" ; -- status=guess
@@ -19221,7 +19135,7 @@ lin engraving_N = mkN "inristning" ; -- comment=4
 lin engross_V2 = variants {} ; -- status=guess
 lin engulf_V2 = variants {} ; -- status=guess
 lin enhance_V2 = mkV2 "förhöja" "förhöjde" "förhöjt" | mkV2 (mkV "förbättra") ; -- SaldoWN -- status=guess, src=wikt
-lin enhanced_A = variants{} ;
+lin enhanced_A = variants{} ; --
 lin enhancement_N = mkN "stärkande" ; -- comment=4
 lin enigma_N = mkN "enigma" ; -- status=guess
 lin enigmatic_A = mkA "enigmatisk" ; -- status=guess
@@ -19262,13 +19176,13 @@ lin enology_N = variants {} ; -- status=guess
 lin enophile_N = variants {} ; -- status=guess
 lin enormity_N = mkN "ofantlighet" ; -- comment=8
 lin enormous_A = mkA "enorm" ; -- comment=5
-lin enormously_Adv = variants{} ;
+lin enormously_Adv = variants{} ; --
 lin enormousness_N = variants {} ; -- status=guess
 lin enosis_N = variants {} ; -- status=guess
 lin enough_A = mkA "tillräcklig" ; -- comment=2
 lin enough_Adv = mkAdv "tillräckligt" ;
 lin enough_N = variants {} ; -- status=guess
-lin enough_Predet = M.mkPredet "tillräckligt" "tillräckligt" "tillräckligt" ; -- status=guess
+lin enough_Predet = M.mkPredet "tillräckligt" "tillräckligt" "tillräckligt" ;
 lin enplane_V = variants {} ; -- status=guess
 lin enplane_V2 = variants {} ; -- status=guess
 lin enquire_V = mkV "frågar" ; -- status=guess
@@ -19303,7 +19217,7 @@ lin ensure_V2 = mkV2 (mkV "säkerställer") ;
 lin ensure_VS = mkVS (mkV (mkV "se") "till") | mkVS (mkV "säkerställer") ;
 lin entablature_N = variants {} ; -- status=guess
 lin entail_N = variants {} ; -- status=guess
-lin entail_V2 = variants{} ;
+lin entail_V2 = variants{} ; --
 lin entangle_V2 = dirV2 (partV (mkV "trasslar")"till"); -- comment=2
 lin entanglement_N = mkN "förveckling" ; -- comment=2
 lin entasis_N = variants {} ; -- status=guess
@@ -19346,13 +19260,12 @@ lin enthusiastic_A = mkA "entusiastisk" ; -- SaldoWN
 lin entice_V2 = dirV2 (partV (mkV "lockar")"in"); -- status=guess
 lin enticement_N = variants {} ; -- status=guess
 lin entire_A = mkA "hel" ; -- status=guess
-lin entirely_Adv = mkAdv "helt" ; -- status=guess
+lin entirely_Adv = mkAdv "helt" ;
 lin entirety_N = mkN "helhet" "helheter" ; -- status=guess
---subcat lin entitle_V2 = mkV2 "berättiga" ; -- status=guess
 lin entitle_V2V = mkV2V (mkV "berättiga") ; -- status=guess
 lin entitle_VS = mkVS (mkV "berättiga") ; -- status=guess
 lin entitlement_N = mkN "rättighet" "rättigheter" | mkN "berättigande" ; -- SaldoWN -- comment=2
-lin entity_N = variants{} ;
+lin entity_N = variants{} ; --
 lin entomb_V2 = variants {} ; -- status=guess
 lin entomion_N = variants {} ; -- status=guess
 lin entomological_A = variants {} ; -- status=guess
@@ -19386,9 +19299,9 @@ lin entrepot_N = variants {} ; -- status=guess
 lin entrepreneur_N = mkN "entreprenör" "entreprenörer" ; -- comment=2
 lin entrepreneurial_A = mkA "entreprenöriell" ; -- status=guess
 lin entrust_V2 = variants {} ; -- status=guess
-lin entry_1_N = mkN "ingång" ; -- status=guess
-lin entry_2_N = mkN "uppslagsord" neutrum ; -- status=guess
-lin entry_N = mkN "ingång" | mkN "uppslagsord" neutrum ; -- SaldoWN -- comment=14
+lin entry_1_N = mkN "ingång" ;
+lin entry_2_N = mkN "uppslagsord" neutrum ;
+lin entry_N = mkN "ingång" ;
 lin entwin_V = variants {} ; -- status=guess
 lin entwine_V2 = variants {} ; -- status=guess
 lin enucleation_N = variants {} ; -- status=guess
@@ -19411,7 +19324,7 @@ lin environmental_A = mkA "miljömässig" ;
 lin environmentalism_N = mkN "miljömedvetenhet" ; -- status=guess
 lin environmentalist_N = mkN "miljöaktivist" "miljöaktivister" ; -- status=guess
 lin environs_N = mkN "omnejd" ; -- comment=3
-lin envisage_V2 = variants{} ;
+lin envisage_V2 = variants{} ; --
 lin envision_V2 = variants {} ; -- status=guess
 lin envision_VS = variants {} ; -- status=guess
 lin envisioned_A = variants {} ; -- status=guess
@@ -19577,7 +19490,7 @@ lin equality_N = mkN "jämlikhet" "jämlikheter" ; -- comment=2
 lin equalization_N = mkN "utjämning" ; -- status=guess
 lin equalize_V2 = variants {} ; -- status=guess
 lin equalizer_N = variants {} ; -- status=guess
-lin equally_Adv = mkAdv "likvärdigt" ; -----
+lin equally_Adv = mkAdv "likvärdigt" ;
 lin equanimity_N = mkN "jämnmod" neutrum | mkN "sinneslugn" neutrum ; -- SaldoWN
 lin equatability_N = variants {} ; -- status=guess
 lin equate_V2 = variants {} ; -- status=guess
@@ -19625,7 +19538,7 @@ lin erbium_N = mkN "erbium" neutrum; -- status=guess
 lin ere_Adv = variants {} ; -- status=guess
 lin ere_Prep = variants {} ; -- status=guess
 lin erect_A = mkA "upprätt" ; -- comment=8
-lin erect_V2 = variants{} ;
+lin erect_V2 = variants{} ; --
 lin erectile_A = variants {} ; -- status=guess
 lin erecting_N = variants {} ; -- status=guess
 lin erection_N = mkN "uppförande" ; -- comment=9
@@ -19780,10 +19693,10 @@ lin essence_N = mkN "parfym" "parfymer" | mkN "väsen" neutrum ; -- SaldoWN -- c
 lin essential_A = mkA "väsentlig" ;
 lin essential_N = mkN "grundläggande" | mkN "nödvändighet" "nödvändigheter" ; -- SaldoWN -- comment=3
 lin essentiality_N = variants {} ; -- status=guess
-lin essentially_Adv = variants{} ;
+lin essentially_Adv = variants{} ; --
 lin essex_PN = variants {} ; -- status=guess
 lin establish_V2 = mkV2 (mkV "etablerar") ;
-lin established_A = variants{} ;
+lin established_A = variants{} ; --
 lin establishment_N = mkN "upprättande" ; -- comment=26
 lin establishmentarianism_N = variants {} ; -- status=guess
 lin estaminet_N = variants {} ; -- status=guess
@@ -19805,7 +19718,7 @@ lin estimate_V = mkV "uppskattar" ; -- status=guess
 lin estimate_V2 = mkV2 "uppskatta" ; -- status=guess
 lin estimate_V2V = mkV2V (mkV "uppskatta") ; -- status=guess
 lin estimate_VS = mkVS (mkV "uppskatta") ; -- status=guess
-lin estimated_A = variants{} ;
+lin estimated_A = variants{} ; --
 lin estimation_N = mkN "uppskattning" ; -- comment=11
 lin estivation_N = variants {} ; -- status=guess
 lin estoppel_N = variants {} ; -- status=guess
@@ -20019,7 +19932,7 @@ lin evidence_V2 = variants {} ; -- status=guess
 lin evident_A = mkA "uppenbar" ; -- comment=3
 lin evidential_A = variants {} ; -- status=guess
 lin evidentiary_A = variants {} ; -- status=guess
-lin evidently_Adv = variants{} ;
+lin evidently_Adv = variants{} ; --
 lin evil_A = mkA "skadlig" ; -- comment=13
 lin evil_N = mkN "ont" neutrum; -- comment=9
 lin evil_doer_N = variants {} ; -- status=guess
@@ -20033,7 +19946,7 @@ lin evocation_N = mkN "framkallande" ; -- comment=2
 lin evocative_A = variants {} ; -- status=guess
 lin evoke_V2 = mkV2 (mkV "frammanar"); -- status=guess, src=wikt
 lin evolution_N = mkN "evolution" "evolutioner" ; -- SaldoWN
-lin evolutionary_A = variants{} ;
+lin evolutionary_A = variants{} ; --
 lin evolutionistFem_N = variants {} ; -- status=guess
 lin evolutionistMasc_N = variants {} ; -- status=guess
 lin evolve_V = mkV "utvecklar" ; -- status=guess
@@ -20081,14 +19994,14 @@ lin excavate_V = mkV "gräver" ; -- comment=2
 lin excavate_V2 = variants {} ; -- status=guess
 lin excavation_N = mkN "utgrävning" | mkN "utgrävningsplats" "utgrävningsplatser" ; -- SaldoWN -- comment=2
 lin excavator_N = mkN "grävare" ; -- status=guess
-lin exceed_V2 = variants{} ;
+lin exceed_V2 = variants{} ; --
 lin exceedance_N = mkN "överskridande" ; -- status=guess
 lin exceeding_A = variants {} ; -- status=guess
 lin excel_V = mkV "överträffar" ; -- status=guess
 lin excel_V2 = mkV2 (mkV "excellerar") | mkV2 (mkV "briljerar") | mkV2 (mkV "glänsa") | mkV2 (mkV "stilar"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin excellence_N = mkN "utmärkthet" ; -- comment=3
 lin excellency_N = variants {} ; -- status=guess
-lin excellent_A = mkA "utmärkt" "utmärkt" ; -- comment=12
+lin excellent_A = mkA "utmärkt" "utmärkt" ;
 lin excelsior_N = variants {} ; -- status=guess
 lin except_Conj = M.mkConj "förutom" ;
 lin except_Prep = S.except_Prep;
@@ -20097,9 +20010,9 @@ lin except_for_Prep = variants {} ; -- status=guess
 lin exception_N = mkN "undantag" neutrum ; -- SaldoWN -- comment=2
 lin exceptionable_A = variants {} ; -- status=guess
 lin exceptional_A = mkA "exceptionell" ; -- comment=5
-lin exceptionally_Adv = variants{} ;
+lin exceptionally_Adv = variants{} ; --
 lin excerpt_N = mkN "utdrag" neutrum ; -- SaldoWN -- comment=2
-lin excess_A = variants{} ;
+lin excess_A = variants{} ; --
 lin excess_N = mkN "överflöd" neutrum | mkN "överskridande" ; -- SaldoWN -- comment=5
 lin excessive_A = mkA "överdriven" "överdrivet" ; -- comment=5
 lin exchange_N = mkN "utbyte" | mkN "växling" ; --- -- | student exchange -- | money exchange
@@ -20116,22 +20029,20 @@ lin excitability_N = variants {} ; -- status=guess
 lin excitable_A = compoundA (regA "lättretad"); -- comment=2
 lin excitant_A = variants {} ; -- status=guess
 lin excitation_N = mkN "stimulering" ; -- status=guess
-lin excite_V2 = variants{} ;
-lin excited_A = variants{} ;
+lin excite_V2 = variants{} ; --
+lin excited_A = variants{} ; --
 lin excitedly_Adv = variants {} ; -- status=guess
 lin excitement_N = mkN "tumult" neutrum | mkN "upphetsning" ; -- SaldoWN -- comment=5
 lin exciting_A = mkA "spännande" ; -- SaldoWN
 lin excl_PN = variants {} ; -- status=guess
---subcat lin exclaim_V = mkV "utropar" ; -- comment=4
 lin exclaim_V2 = dirV2 (partV (mkV "ropar")"till"); -- status=guess
---subcat lin exclaim_VQ = mkVQ (mkV "utbrista" "utbrast" "utbrustit"); -- status=guess, src=wikt
 lin exclamation_N = mkN "utrop" neutrum; -- status=guess
 lin exclamatory_A = variants {} ; -- status=guess
 lin exclude_V2 = mkV2 "utesluta" "uteslöt" "uteslutit" | mkV2 (mkV "utelämna") | mkV2 (mkV "exkluderar") ; -- SaldoWN -- status=guess, src=wikt status=guess, src=wikt
 lin exclusion_N = mkN "uteslutning" ; -- comment=2
 lin exclusive_A = mkA "exklusiv" | compoundA (regA "odelad") ; -- SaldoWN -- comment=10
 lin exclusive_N = mkN "uteslutande" ; -- comment=2
-lin exclusively_Adv = variants{} ;
+lin exclusively_Adv = variants{} ; --
 lin excogitate_V2 = variants {} ; -- status=guess
 lin excogitation_N = variants {} ; -- status=guess
 lin excogitative_A = variants {} ; -- status=guess
@@ -20186,7 +20097,7 @@ lin exercise_V = mkV "utövar" ; -- comment=5
 lin exercise_V2 = mkV2 (mkV "öva") | mkV2 (mkV "träna") | mkV2 (mkV "praktiserar"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin exercise_VV = mkVV (mkV "öva") | mkVV (mkV "träna") | mkVV (mkV "praktiserar"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin exergonic_A = variants {} ; -- status=guess
-lin exert_V2 = variants{} ;
+lin exert_V2 = variants{} ; --
 lin exertion_N = mkN "utövande" ; -- comment=7
 lin exeter_PN = variants {} ; -- status=guess
 lin exfoliation_N = variants {} ; -- status=guess
@@ -20194,15 +20105,15 @@ lin exhalation_N = variants {} ; -- status=guess
 lin exhale_V = mkV (mkV "andas") "ut" ; -- status=guess, src=wikt
 lin exhale_V2 = mkV2 (mkV (mkV "andas") "ut"); -- status=guess, src=wikt
 lin exhaust_N = mkN "utblåsning" ; -- comment=3
-lin exhaust_V2 = variants{} ;
+lin exhaust_V2 = variants{} ; --
 lin exhaust_pipe_N = variants {} ; -- status=guess
 lin exhaustible_A = variants {} ; -- status=guess
 lin exhausting_A = variants {} ; -- status=guess
 lin exhaustion_N = mkN "uttömmande" ; -- comment=6
 lin exhaustive_A = mkA "uttömmande" ; -- comment=5
 lin exhibit_N = mkN "visa" ; -- SaldoWN
-lin exhibit_V2 = variants{} ;
-lin exhibition_N = mkN "utställning" ; -- SaldoWN
+lin exhibit_V2 = variants{} ; --
+lin exhibition_N = mkN "utställning" ;
 lin exhibitioner_N = variants {} ; -- status=guess
 lin exhibitionism_N = mkN "exhibitionism" "exhibitionismer" ; -- status=guess
 lin exhibitionist_N = mkN "exhibitionist" "exhibitionister" ; -- status=guess
@@ -20223,8 +20134,7 @@ lin exile_N = mkN "utvisning" | mkN "landsflykting" ; -- SaldoWN -- comment=4
 lin exile_V2 = variants {} ; -- status=guess
 lin exilic_A = variants {} ; -- status=guess
 lin exist_V = mkV "existera" ;
---subcat lin exist_V2V = mkV2V (mkV "existerar") ; ---- subcat
-lin existence_N = mkN "existens" "existenser" ; -- status=guess
+lin existence_N = mkN "existens" "existenser" ;
 lin existent_A = mkA "befintlig" ; -- comment=2
 lin existential_A = mkA "existentiell" ; -- status=guess
 lin existentialism_N = mkN "existentialism" "existentialismer" ; -- status=guess
@@ -20269,7 +20179,6 @@ lin exoticism_N = variants {} ; -- status=guess
 lin exotoxin_N = variants {} ; -- status=guess
 lin expand_V = mkV "utvidgar" ; -- comment=6
 lin expand_V2 = dirV2 (partV (mkV "växa" "växer" "växa" "växte" "vuxit" "vuxen")"ur"); -- comment=5
---subcat lin expand_V2V = mkV2V (mkV "faktoriseras"); -- status=guess, src=wikt
 lin expandable_A = variants {} ; -- status=guess
 lin expanse_N = mkN "vidd" "vidder" ; -- status=guess
 lin expansion_N = mkN "expansion" "expansioner" ; -- SaldoWN
@@ -20290,7 +20199,7 @@ lin expectable_A = variants {} ; -- status=guess
 lin expectancy_N = variants {} ; -- status=guess
 lin expectant_A = mkA "gravid" ; -- comment=3
 lin expectation_N = mkN "sannolikhet" "sannolikheter" ; -- comment=3
-lin expected_A = variants{} ;
+lin expected_A = variants{} ; --
 lin expectedness_N = variants {} ; -- status=guess
 lin expectorant_N = variants {} ; -- status=guess
 lin expectorate_V = variants {} ; -- status=guess
@@ -20304,7 +20213,7 @@ lin expedite_V2 = variants {} ; -- status=guess
 lin expedition_N = mkN "expedition" "expeditioner" | mkN "skyndsamhet" ; -- SaldoWN -- comment=10
 lin expeditionary_A = variants {} ; -- status=guess
 lin expeditious_A = mkA "rask" ; -- comment=3
-lin expel_V2 = variants{} ;
+lin expel_V2 = variants{} ; --
 lin expend_V2 = mkV2 (mkV "förbruka"); -- status=guess, src=wikt
 lin expendable_A = variants {} ; -- status=guess
 lin expending_N = variants {} ; -- status=guess
@@ -20313,7 +20222,7 @@ lin expense_N = mkN "utgift" "utgifter" ; -- comment=7
 lin expensive_A = mkA "dyr" | mkA "dyrbar" ; -- SaldoWN -- comment=5
 lin expensiveness_N = variants {} ; -- status=guess
 lin experience_N = mkN "erfarenhet" "erfarenheter" ;
-lin experience_V2 = mkV2 (mkV "upplever"); -- status=guess, src=wikt
+lin experience_V2 = mkV2 (mkV "upplever") ;
 lin experienced_A = mkA "erfaren" "erfaret" ; -- SaldoWN
 lin experiential_A = variants {} ; -- status=guess
 lin experiment_N = mkN "experiment" neutrum | mkN "försöksverksamhet" "försöksverksamheter" ; -- SaldoWN -- comment=7
@@ -20351,10 +20260,9 @@ lin explicandum_N = variants {} ; -- status=guess
 lin explicate_V2 = variants {} ; -- status=guess
 lin explication_N = variants {} ; -- status=guess
 lin explicit_A = mkA "explicit" "explicit" | mkA "tydlig" ; -- SaldoWN -- comment=10
-lin explicitly_Adv = variants{} ;
+lin explicitly_Adv = variants{} ; --
 lin explicitness_N = variants {} ; -- status=guess
 lin explode_V = mkV "spränger" ; -- comment=5
---subcat lin explode_V2 = mkV2 (mkV "exploderar") | mkV2 (mkV "spränga"); -- status=guess, src=wikt status=guess, src=wikt
 lin exploit_N = mkN "bedrift" "bedrifter" ; -- comment=4
 lin exploit_V2 = mkV2 (mkV "exploaterar"); -- status=guess, src=wikt
 lin exploitation_N = mkN "exploatering" ; -- comment=3
@@ -20427,13 +20335,13 @@ lin extemporize_V = variants {} ; -- status=guess
 lin extemporize_V2 = variants {} ; -- status=guess
 lin extend_V = mkV "räcker" ;
 lin extend_V2 = mkV2 "utvidga" ;
-lin extended_A = variants{} ;
+lin extended_A = variants{} ; --
 lin extendible_A = variants {} ; -- status=guess
 lin extensile_A = variants {} ; -- status=guess
 lin extension_N = mkN "utvidgning" | mkN "utbyggnad" "utbyggnader" ; -- SaldoWN
 lin extensional_A = variants {} ; -- status=guess
 lin extensive_A = mkA "vidsträckt" "vidsträckt" ; -- status=guess
-lin extensively_Adv = variants{} ;
+lin extensively_Adv = variants{} ; --
 lin extent_N = mkN "omfattning" ;
 lin extenuate_V2 = variants {} ; -- status=guess
 lin extenuating_A = mkA "förmildrande" ; -- status=guess
@@ -20504,7 +20412,7 @@ lin extravasation_N = mkN "utgjutning" ; -- comment=2
 lin extraversion_N = variants {} ; -- status=guess
 lin extreme_A = mkA "utomordentlig" ; -- comment=3
 lin extreme_N = mkN "ytterlighet" "ytterligheter" ; -- SaldoWN
-lin extremely_Adv = mkAdv "extremt" ; -- status=guess
+lin extremely_Adv = mkAdv "extremt" ;
 lin extremeness_N = variants {} ; -- status=guess
 lin extremism_N = mkN "extremism" "extremismer" ; -- status=guess
 lin extremist_A = mkA "extremistisk" ; -- comment=2
@@ -20669,7 +20577,6 @@ lin faience_N = mkN "fajans" "fajanser" ; -- status=guess
 lin fail_N = variants {} ; -- status=guess
 lin fail_V = mkV "misslyckas" ;
 lin fail_V2 = mkV2 "underkänner" ;
---subcat lin fail_V2V = mkV2V (mkV "underkänner") ;
 lin fail_VV = mkVV (mkV "misslyckas") ;
 lin fail_safe_A = variants {} ; -- status=guess
 lin failing_N = variants {} ; -- status=guess
@@ -20684,14 +20591,14 @@ lin faint_V = mkV "svimmar" ; -- comment=2
 lin faint_hearted_A = variants {} ; -- status=guess
 lin faintheartedness_N = variants {} ; -- status=guess
 lin faintness_N = variants {} ; -- status=guess
-lin fair_A = mkA "rättvis" ; -- comment=13
+lin fair_A = mkA "rättvis" ;
 lin fair_Adv = mkAdv "just" ; -- status=guess
 lin fair_N = mkN "karneval" "karnevaler" | mkN "lovande" ; -- SaldoWN -- comment=3
 lin fair_minded_A = variants {} ; -- status=guess
 lin fairground_N = variants {} ; -- status=guess
 lin fairish_A = variants {} ; -- status=guess
 lin fairlead_N = variants {} ; -- status=guess
-lin fairly_Adv = mkAdv "någorlunda" ; -- status=guess
+lin fairly_Adv = mkAdv "någorlunda" ;
 lin fairness_N = mkN "ärlighet" "ärligheter" ; -- comment=5
 lin fairway_N = mkN "farled" "farleder" ; -- status=guess
 lin fairy_N = mkN "älva" | mkN "fikus" ; -- SaldoWN -- comment=3
@@ -20723,8 +20630,6 @@ lin fall_1_N = mkN "fall" "fall" ; -- status=guess
 lin fall_2_N = mkN "höst" ; -- status=guess
 lin fall_N = mkN "skymning" | mkN "höst" ; -- SaldoWN -- comment=7
 lin fall_V = mkV "falla" "föll" "fallit" ;
---subcat lin fall_V2 = mkV2 "falla" "föll" "fallit" ;
---subcat lin fall_VA = mkV "falla" "föll" "fallit" ;
 lin fall_about_V = mkV "sluttar" ; -- comment=12
 lin fall_apart_V = mkV "sluttar" ; -- comment=12
 lin fall_back_V = mkV "sluttar" ; -- comment=12
@@ -20784,12 +20689,12 @@ lin famine_N = mkN "svält" ; -- status=guess
 lin famish_V = variants {} ; -- status=guess
 lin famish_V2 = variants {} ; -- status=guess
 lin famotidine_N = variants {} ; -- status=guess
-lin famous_A = mkA "berömd" "berömt" ; -- status=guess
+lin famous_A = mkA "berömd" "berömt" ;
 lin famulus_N = variants {} ; -- status=guess
 lin fan_1_N = mkN "fläkt" ; ---- sense
 lin fan_2_N = mkN "fan" "fans" ; ---- sense ; inflection
 lin fan_3_N = mkN "solfjäder" ; ---- sense
-lin fan_N = variants{} ;
+lin fan_N = variants{} ; --
 lin fan_V = mkV "underblåser" ; -- comment=4
 lin fan_V2 = dirV2 (partV (mkV "sprida" "spred" "spritt")"ut"); -- status=guess
 lin fan_belt_N = variants {} ; -- status=guess
@@ -20803,8 +20708,7 @@ lin fancier_N = variants {} ; -- status=guess
 lin fanciful_A = variants {} ; -- status=guess
 lin fancy_A = mkA "dyr" ; -- comment=3
 lin fancy_N = mkN "tycke" ; -- comment=10
-lin fancy_V2 = variants{} ;
---subcat lin fancy_V3 = variants{} ;
+lin fancy_V2 = variants{} ; --
 lin fancy_free_A = variants {} ; -- status=guess
 lin fandango_N = mkN "fandango" "fandangor" ; -- status=guess
 lin fandom_N = variants {} ; -- status=guess
@@ -20859,7 +20763,7 @@ lin farm_N = mkN "gård" | mkN "lantgård" | mkN "lantbruk" neutrum ;
 lin farm_V = mkV "odlar" ; -- comment=2
 lin farm_V2 = mkV2 (mkV "brukar") | mkV2 (mkV "odlar"); -- status=guess, src=wikt status=guess, src=wikt
 lin farm_out_V2 = variants {} ; -- status=guess
-lin farmer_N = mkN "bonde" "bönder" | mkN "lantbrukare" utrum ; -- SaldoWN -- comment=2
+lin farmer_N = mkN "bonde" "bönder" | mkN "lantbrukare" "lantbrukare" | mkN "jordbrukare" "jordbrukare" ;
 lin farmerette_N = variants {} ; -- status=guess
 lin farmhand_N = mkN "dräng" ; -- SaldoWN
 lin farmhouse_N = mkN "säteri" "säterit" "säterier" "säterierna" ; -- status=guess
@@ -20894,8 +20798,8 @@ lin fasces_N = variants {} ; -- status=guess
 lin fascia_N = mkN "fascia" ; -- status=guess
 lin fascicle_N = variants {} ; -- status=guess
 lin fasciculation_N = variants {} ; -- status=guess
-lin fascinate_V2 = variants{} ;
-lin fascinating_A = variants{} ;
+lin fascinate_V2 = variants{} ; --
+lin fascinating_A = variants{} ; --
 lin fascination_N = mkN "tjusning" ; -- comment=2
 lin fascioliasis_N = variants {} ; -- status=guess
 lin fasciolopsiasis_N = variants {} ; -- status=guess
@@ -20995,13 +20899,13 @@ lin favism_N = variants {} ; -- status=guess
 lin favorableness_N = variants {} ; -- status=guess
 lin favoritism_N = variants {} ; -- status=guess
 lin favour_N = mkN "tjänst" "tjänster" | mkN "ynnest" ; -- SaldoWN = mkN "tjänst" "tjänster" ; -- comment=15
-lin favour_V = variants{} ;
-lin favour_V2 = variants{} ;
-lin favour_VS = variants{} ;
+lin favour_V = variants{} ; --
+lin favour_V2 = variants{} ; --
+lin favour_VS = variants{} ; --
 lin favourable_A = mkA "välvillig" ; -- comment=4
 lin favouriteFem_N = mkN "favorit" "favoriter" ; -- comment=3
-lin favouriteMasc_N = mkN "favorit" "favoriter" ; -- comment=3
-lin favourite_A = variants{} ;
+lin favouriteMasc_N = variants{} ; --
+lin favourite_A = variants{} ; --
 lin favouritism_N = variants {} ; -- status=guess
 lin favus_N = variants {} ; -- status=guess
 lin fawley_PN = variants {} ; -- status=guess
@@ -21009,7 +20913,7 @@ lin fawn_N = (mkN "kid" neutrum) | (mkN "kalv"); -- status=guess status=guess
 lin fawn_V = mkV "lismar" ; -- status=guess
 lin fawn_on_V2 = variants {} ; -- status=guess
 lin fawn_over_V2 = variants {} ; -- status=guess
-lin fax_N = variants{} ;
+lin fax_N = variants{} ; --
 lin fbi_PN = variants {} ; -- status=guess
 lin fealty_N = variants {} ; -- status=guess
 lin fear_N = mkN "rädsla" ;
@@ -21126,7 +21030,7 @@ lin fell_through_V = mkV "fäller" ; -- comment=4
 lin fellah_N = variants {} ; -- status=guess
 lin fellatio_N = mkN "fellatio" ; -- status=guess
 lin felloe_N = variants {} ; -- status=guess
-lin fellow_A = variants{} ;
+lin fellow_A = variants{} ; --
 lin fellow_N = mkN "pojkvän" "pojkvännen" "pojkvänner" "pojkvännerna" ; -- comment=11
 lin fellow_feeling_N = variants {} ; -- status=guess
 lin fellow_traveller_N = variants {} ; -- status=guess
@@ -21148,7 +21052,7 @@ lin feminine_N = mkN "feminin" "femininer" ; -- status=guess
 lin femininity_N = variants {} ; -- status=guess
 lin feminism_N = mkN "feminism" "feminismer" ; -- status=guess
 lin feministFem_N = mkN "feminist" "feminister" ; -- status=guess
-lin feministMasc_N = mkN "feminist" "feminister" ; -- status=guess
+lin feministMasc_N = variants{} ; --
 lin feminist_A = mkA "feministisk" ; -- status=guess
 lin feminization_N = variants {} ; -- status=guess
 lin femoral_A = variants {} ; -- status=guess
@@ -21250,7 +21154,6 @@ lin festoon_V2 = variants {} ; -- status=guess
 lin festschrift_N = variants {} ; -- status=guess
 lin fetal_A = variants {} ; -- status=guess
 lin fetch_N = mkN "apport" "apporter" | mkN "gengångare" utrum ; -- SaldoWN -- comment=10
---subcat lin fetch_V = mkV "utdelar" ; -- comment=18
 lin fetch_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut"); -- comment=6
 lin fetching_A = mkA "tilltalande" ; -- comment=5
 lin fete_N = variants {} ; -- status=guess
@@ -21289,7 +21192,7 @@ lin few_Det = M.mkDet "få" plural ;
 lin few_N = mkN "fåtal" neutrum ;
 lin few_Num = variants {} ; -- status=guess
 lin fewer_A = mkA "få" "få" "få" "färre" "färst" ; -- status=guess
-lin fewer_Det = variants{} ;
+lin fewer_Det = variants{} ; --
 lin fewer_than_AdN = variants {} ; -- status=guess
 lin fewness_N = variants {} ; -- status=guess
 lin fey_A = variants {} ; -- status=guess
@@ -21375,7 +21278,7 @@ lin fieldworker_N = mkN "fältassistent" "fältassistenter" ; -- SaldoWN
 lin fiend_N = mkN "djävul" "djävulen" "djävlar" "djävlarna" ; -- comment=9
 lin fiendish_A = mkA "djävulsk" ; -- comment=6
 lin fierce_A = mkA "vild" "vilt" ; -- comment=10
-lin fiercely_Adv = variants{} ;
+lin fiercely_Adv = variants{} ; --
 lin fierceness_N = variants {} ; -- status=guess
 lin fieriness_N = variants {} ; -- status=guess
 lin fiery_A = mkA "hetsig" ; -- comment=8
@@ -21387,7 +21290,6 @@ lin fig_leaf_N = variants {} ; -- status=guess
 lin fight_N = mkN "strid" "strider" | mkN "kamp" ; -- status=guess
 lin fight_V = mkV "kämper" ;
 lin fight_V2 = L.fight_V2;
---subcat lin fight_V2V = mkV2V (mkV "kämper") ; ---- subcat
 lin fight_back_V = mkV "strida" "stridde" "stritt" ; -- comment=8
 lin fight_back_V2 = variants {} ; -- status=guess
 lin fight_it_out_V2 = variants {} ; -- status=guess
@@ -21402,8 +21304,6 @@ lin figure_1_N = mkN "figur" "figurer" ;
 lin figure_2_N = mkN "siffra" ;
 lin figure_N = mkN "figur" "figurer" | mkN "uppgift" "uppgifter" ; ---
 lin figure_V = mkV "tänker" ; -- comment=2
---subcat lin figure_V2 = variants{}; -- mkV "tänker" ; -- comment=2
---subcat lin figure_V2V = variants{}; -- mkV "tänker" ; -- comment=2
 lin figure_VS = variants{}; -- mkV "tänker" ; -- comment=2
 lin figure_on_V2 = variants {} ; -- status=guess
 lin figure_out_V2 = variants {} ; -- status=guess
@@ -21500,7 +21400,7 @@ lin finally_Adv = mkAdv "äntligen" ;
 lin finance_N = mkN "finans" "finanser" ; -- status=guess
 lin finance_V2 = mkV2 (mkV "finansierar"); -- status=guess, src=wikt
 lin financial_A = mkA "finansiell" ;
-lin financially_Adv = variants{} ;
+lin financially_Adv = variants{} ; --
 lin financier_N = mkN "finansiär" "finansiärer" ; -- SaldoWN
 lin financing_N = mkN "finansiering" ; -- status=guess
 lin finback_N = variants {} ; -- status=guess
@@ -21509,7 +21409,6 @@ lin find_N = mkN "fynd" neutrum; -- comment=4
 lin find_V = mkV "hitta" ;
 lin find_V2 = L.find_V2;
 lin find_V2A = mkV2A (mkV "finna" "fann" "funnit") ;
---subcat lin find_V2V = mkV2V (mkV "finna" "fann" "funnit") ;
 lin find_VS = mkVS (mkV "anse" "ansåg" "ansett");
 lin find_out_V = mkV "anse" "ansåg" "ansett" ; -- comment=27
 lin find_out_V2 = dirV2 (partV (mkV "hitta")"på"); -- comment=7
@@ -21552,12 +21451,11 @@ lin finis_N = variants {} ; -- status=guess
 lin finish_N = mkN "slut" neutrum; -- comment=15
 lin finish_V = mkV "sluta" ;
 lin finish_V2 = mkV2 "avsluta" ;
---subcat lin finish_VA = mkVA (mkV "avsluta") ; ---- subcat
 lin finish_off_V2 = dirV2 (partV (mkV "putsar")"av"); -- comment=3
 lin finish_up_V = mkV "upphöra" "upphörde" "upphört" ; -- comment=17
 lin finish_up_with_V2 = dirV2 (partV (mkV "putsar")"av"); -- comment=3
 lin finish_with_V2 = dirV2 (partV (mkV "putsar")"av"); -- comment=3
-lin finished_A = variants{} ;
+lin finished_A = variants{} ; --
 lin finisher_N = variants {} ; -- status=guess
 lin finite_A = mkA "ändlig" | mkA "begränsad" ; -- status=guess status=guess
 lin finiteness_N = variants {} ; -- status=guess
@@ -21648,9 +21546,10 @@ lin firm_V2 = variants {} ; -- status=guess
 lin firm_up_V2 = variants {} ; -- status=guess
 lin firmament_N = mkN "firmament" neutrum; -- comment=2
 lin firmamental_A = variants {} ; -- status=guess
-lin firmly_Adv = variants{} ;
+lin firmly_Adv = variants{} ; --
 lin firmness_N = variants {} ; -- status=guess
 lin firmware_N = mkN "firmware" ; -- status=guess
+lin first_A = mkA "först" ; -- status=guess
 lin first_Adv = mkAdv "först" ; -- status=guess
 lin first_class_A = variants {} ; -- status=guess
 lin first_class_Adv = variants {} ; -- status=guess
@@ -21662,7 +21561,7 @@ lin firstborn_A = variants {} ; -- status=guess
 lin firstborn_N = variants {} ; -- status=guess
 lin firsthand_A = mkA "direkt" "direkt" ; -- SaldoWN
 lin firsthand_Adv = variants {} ; -- status=guess
-lin firstly_Adv = variants{} ;
+lin firstly_Adv = variants{} ; --
 lin firth_N = variants {} ; -- status=guess
 lin fisc_N = variants {} ; -- status=guess
 lin fiscal_A = mkA "skattemässig" ; -- status=guess
@@ -21737,7 +21636,7 @@ lin fix_up_V2 = dirV2 (partV (mkV "riktar")"till"); -- comment=4
 lin fixate_V2 = variants {} ; -- status=guess
 lin fixation_N = mkN "fixering" ; -- status=guess
 lin fixative_N = variants {} ; -- status=guess
-lin fixed_A = variants{} ;
+lin fixed_A = variants{} ; --
 lin fixedly_Adv = mkAdv "stint" ; -- status=guess
 lin fixedness_N = variants {} ; -- status=guess
 lin fixer_N = variants {} ; -- status=guess
@@ -21825,7 +21724,6 @@ lin flare_up_N = variants {} ; -- status=guess
 lin flare_up_V = mkV "vidgar" ; -- comment=6
 lin flash_N = mkN "ögonblick" neutrum | mkN "utbrott" neutrum ; -- SaldoWN -- comment=16
 lin flash_V = mkV "anfalla" "anföll" "anfallit" ; -- comment=14
---subcat lin flash_V2 = dirV2 (partV (mkV "sprida" "spred" "spritt")"ut"); -- status=guess
 lin flashback_N = mkN "tillbakablick" ; -- comment=2
 lin flashboard_N = variants {} ; -- status=guess
 lin flashbulb_N = variants {} ; -- status=guess
@@ -21985,8 +21883,6 @@ lin flit_V = variants {} ; -- status=guess
 lin flitch_N = variants {} ; -- status=guess
 lin float_N = mkN "handkassa" ; -- comment=2
 lin float_V = L.float_V;
---subcat lin float_V2 = dirV2 (partV (mkV "svävar")"ut"); -- status=guess
---subcat lin float_VA = mkVA (mkV "flyta" "flöt" "flutit"); -- status=guess, src=wikt
 lin floatation_N = variants {} ; -- status=guess
 lin floater_N = variants {} ; -- status=guess
 lin floating_N = mkN "flytande" ; -- comment=2
@@ -22054,7 +21950,6 @@ lin flour_N = mkN "mjöl" "mjölet" "mjöler" "mjölerna" ; -- SaldoWN
 lin flour_V2 = mkV2 (mkV "mjöla"); -- status=guess, src=wikt
 lin flourish_N = mkN "snirkel" ; -- comment=8
 lin flourish_V = mkV "svänger" ; -- comment=9
---subcat lin flourish_V2 = mkV2 (mkV "blomstrar") | mkV2 (mkV "frodas"); -- status=guess, src=wikt status=guess, src=wikt
 lin floury_A = mkA "mjölig" ; -- status=guess
 lin flout_V2 = variants {} ; -- status=guess
 lin flow_N = mkN "stigande" ; -- comment=8
@@ -22146,7 +22041,6 @@ lin fly_A = mkA "skärpt" "skärpt" ; -- status=guess
 lin fly_N = mkN "fluga" | mkN "flagga" ; -- SaldoWN -- comment=6
 lin fly_V = L.fly_V ;
 lin fly_V2 = mkV2 "flyga" "flög" "flugit" ;
---subcat lin fly_VS = mkVS (mkV "flyga" "flög" "flugit") ; ---- subcat
 lin fly_about_V = mkV "flaggar" ; -- comment=9
 lin fly_around_V = mkV "flaggar" ; -- comment=9
 lin fly_at_V2 = dirV2 (partV (mkV "rusar")"ut"); -- comment=3
@@ -22276,7 +22170,6 @@ lin food_N = mkN "mat" "mater" ;
 lin foodless_A = variants {} ; -- status=guess
 lin foodstuff_N = variants {} ; -- status=guess
 lin fool_N = mkN "narr" ; -- SaldoWN
---subcat lin fool_V = mkV "skämtar" ; -- comment=5
 lin fool_V2 = dirV2 (partV (mkV "lurar")"till"); -- comment=2
 lin fool_about_V = mkV "skämtar" ; -- comment=5
 lin fool_around_V = mkV "skämtar" ; -- comment=5
@@ -22328,7 +22221,7 @@ lin footrace_N = variants {} ; -- status=guess
 lin footslog_V = variants {} ; -- status=guess
 lin footslogger_N = variants {} ; -- status=guess
 lin footsore_A = variants {} ; -- status=guess
-lin footstep_N = variants{} ;
+lin footstep_N = variants{} ; --
 lin footstool_N = mkN "fotpall" ; -- status=guess
 lin footsure_A = variants {} ; -- status=guess
 lin footwall_N = variants {} ; -- status=guess
@@ -22452,7 +22345,7 @@ lin foreshore_N = variants {} ; -- status=guess
 lin foreshorten_V2 = variants {} ; -- status=guess
 lin foresight_N = variants {} ; -- status=guess
 lin foreskin_N = variants {} ; -- status=guess
-lin forest_N = mkN "skog" ; -- SaldoWN
+lin forest_N = mkN "skog" ;
 lin forestall_V2 = variants {} ; -- status=guess
 lin forestay_N = variants {} ; -- status=guess
 lin forested_A = variants {} ; -- status=guess
@@ -22500,8 +22393,8 @@ lin forgo_V2 = variants {} ; -- status=guess
 lin forint_N = variants {} ; -- status=guess
 lin fork_1_N = mkN "gaffel" ; -- status=guess
 lin fork_3_N = mkN "vägskäl" neutrum ; -- status=guess
-lin fork_4_N = variants{} ;
-lin fork_N = variants{} ;
+lin fork_4_N = variants{} ; --
+lin fork_N = variants{} ; --
 lin fork_V = mkV "ta" "tar" "ta" "tog" "tagit" "tagen" ; -- comment=5
 lin fork_V2 = dirV2 (partV (mkV "ta" "tar" "ta" "tog" "tagit" "tagen")"ut"); -- comment=4
 lin fork_out_V = mkV "ta" "tar" "ta" "tog" "tagit" "tagen" ; -- comment=5
@@ -22513,7 +22406,7 @@ lin forlornness_N = variants {} ; -- status=guess
 lin form_N = mkN "form" "former" ;
 lin form_V = mkV "bilda" ;
 lin form_V2 = mkV2 "bilda" ;
-lin formal_A = mkA "formell" ; -- SaldoWN
+lin formal_A = mkA "formell" ; ---- END check by AR
 lin formaldehyde_N = mkN "formaldehyd" "formaldehyder" ; -- status=guess
 lin formalin_N = mkN "formalin" ; -- SaldoWN
 lin formalism_N = mkN "formalism" "formalismer" ; -- status=guess
@@ -22521,7 +22414,7 @@ lin formalistic_A = mkA "formell" ; -- status=guess
 lin formality_N = mkN "formalitet" "formaliteter" ; -- status=guess
 lin formalization_N = variants {} ; -- status=guess
 lin formalize_V2 = variants {} ; -- status=guess
-lin formally_Adv = variants{} ;
+lin formally_Adv = variants{} ; --
 lin formalwear_N = variants {} ; -- status=guess
 lin format_N = mkN "format" neutrum ; -- status=guess
 lin formation_N = mkN "formation" "formationer" | mkN "formering" ; -- SaldoWN -- comment=2
@@ -22542,7 +22435,7 @@ lin formula_N = mkN "formel" "formeln" "formler" "formlerna" ; -- SaldoWN
 lin formulaic_A = variants {} ; -- status=guess
 lin formulary_A = variants {} ; -- status=guess
 lin formulary_N = variants {} ; -- status=guess
-lin formulate_V2 = variants{} ;
+lin formulate_V2 = variants{} ; --
 lin formulation_N = mkN "formulering" ; -- comment=2
 lin fornenst_Prep = variants {} ; -- status=guess
 lin fornent_Prep = variants {} ; -- status=guess
@@ -22565,7 +22458,7 @@ lin forte_Adv = mkAdv "forte" ; -- status=guess
 lin forte_N = mkN "styrka" ; -- comment=2
 lin fortemente_A = variants {} ; -- status=guess
 lin forth_Adv = mkAdv "framåt" ; -- comment=4
-lin forthcoming_A = variants{} ;
+lin forthcoming_A = variants{} ; --
 lin forthright_A = variants {} ; -- status=guess
 lin forthwith_Adv = mkAdv "omedelbart" | mkAdv "genast" | mkAdv "med en gång" ; -- status=guess status=guess status=guess
 lin fortification_N = mkN "fästning" ; -- status=guess
@@ -22573,14 +22466,14 @@ lin fortify_V2 = variants {} ; -- status=guess
 lin fortissimo_A = variants {} ; -- status=guess
 lin fortissimo_Adv = variants {} ; -- status=guess
 lin fortitude_N = mkN "själsstyrka" ; -- SaldoWN
-lin fortnight_N = variants{} ;
+lin fortnight_N = variants{} ; --
 lin fortnightly_A = variants {} ; -- status=guess
 lin fortnightly_Adv = variants {} ; -- status=guess
 lin fortress_N = mkN "borg" ; -- comment=2
 lin fortuitous_A = mkA "tillfällig" ; -- comment=2
 lin fortuitousness_N = variants {} ; -- status=guess
 lin fortunate_A = mkA "gynnsam" "gynnsamt" "gynnsamma" "gynnsamma" "gynnsammare" "gynnsammast" "gynnsammaste" ; -- comment=2
-lin fortunately_Adv = variants{} ;
+lin fortunately_Adv = variants{} ; --
 lin fortune_N = mkN "öde" ; -- SaldoWN
 lin fortuneteller_N = variants {} ; -- status=guess
 lin fortunetelling_N = variants {} ; -- status=guess
@@ -22606,7 +22499,7 @@ lin fossilize_V = variants {} ; -- status=guess
 lin fossilize_V2 = variants {} ; -- status=guess
 lin fossorial_A = variants {} ; -- status=guess
 lin foster_A = mkA "nära" "nära" "nära" "närmare" "närmast" ; -- status=guess
-lin foster_V2 = variants{} ;
+lin foster_V2 = variants{} ; --
 lin foster_brother_N = variants {} ; -- status=guess
 lin foster_child_N = variants {} ; -- status=guess
 lin foster_father_N = variants {} ; -- status=guess
@@ -22731,7 +22624,7 @@ lin frankie_PN = variants {} ; -- status=guess
 lin frankincense_N = mkN "rökelse" ; -- status=guess
 lin franking_machine_N = variants {} ; -- status=guess
 lin franklin_N = variants {} ; -- status=guess
-lin frankly_Adv = variants{} ;
+lin frankly_Adv = variants{} ; --
 lin frankness_N = mkN "öppenhet" "öppenheter" ; -- comment=2
 lin frantic_A = mkA "hektisk" ; -- comment=6
 lin frantically_Adv = variants {} ; -- status=guess
@@ -22803,7 +22696,7 @@ lin freelance_N = mkN "frilans" | mkN "frilansande" ; -- SaldoWN
 lin freelance_V = variants {} ; -- status=guess
 lin freelancer_N = variants {} ; -- status=guess
 lin freeloader_N = mkN "snyltare" utrum; -- status=guess
-lin freely_Adv = variants{} ;
+lin freely_Adv = variants{} ; --
 lin freemail_N = variants {} ; -- status=guess
 lin freeman_N = variants {} ; -- status=guess
 lin freemason_N = mkN "frimurare" utrum; -- status=guess
@@ -22847,7 +22740,7 @@ lin frequentative_N = variants {} ; -- status=guess
 lin frequently_Adv = mkAdv "ofta" ; -- status=guess
 lin fresco_N = variants {} ; -- status=guess
 lin fresco_V2 = variants {} ; -- status=guess
-lin fresh_A = mkA "färsk" | mkA "uppfriskande" ; -- SaldoWN -- comment=13
+lin fresh_A = mkA "färsk" ;
 lin fresh_Adv = mkAdv "ren" ; -- comment=3
 lin freshen_V = variants {} ; -- status=guess
 lin freshen_V2 = variants {} ; -- status=guess
@@ -22901,7 +22794,7 @@ lin fright_V2 = variants {} ; -- status=guess
 lin frighten_V2 = mkV2 (mkV "skrämma"); -- status=guess, src=wikt
 lin frighten_away_V2 = variants {} ; -- status=guess
 lin frighten_off_V2 = variants {} ; -- status=guess
-lin frightened_A = variants{} ;
+lin frightened_A = variants{} ; --
 lin frightening_A = mkA "skrämmande" ; -- comment=2
 lin frightful_A = mkA "förskräcklig" ; -- comment=5
 lin frightfulness_N = variants {} ; -- status=guess
@@ -22956,7 +22849,7 @@ lin from_Prep = S.from_Prep;
 lin from_home_Adv = mkAdv "hemifrån" ; -- status=guess
 lin frome_PN = variants {} ; -- status=guess
 lin frond_N = mkN "palmblad" neutrum; -- status=guess
-lin front_A = mkA "främre" ; -- status=guess
+lin front_A = mkA "främre" ;
 lin front_N = mkN "front" "fronter" ;
 lin front_V = mkV "fasar" ; -- comment=2
 lin front_V2 = dirV2 (partV (mkV "fasar")"ut"); -- comment=2
@@ -23003,7 +22896,7 @@ lin frowningly_Adv = variants {} ; -- status=guess
 lin frowsty_A = variants {} ; -- status=guess
 lin frowsy_A = variants {} ; -- status=guess
 lin frowzy_A = variants {} ; -- status=guess
-lin frozen_A = variants{} ;
+lin frozen_A = variants{} ; --
 lin frs_N = variants {} ; -- status=guess
 lin fructification_N = variants {} ; -- status=guess
 lin fructify_V = variants {} ; -- status=guess
@@ -23030,7 +22923,7 @@ lin frumenty_N = variants {} ; -- status=guess
 lin frump_N = variants {} ; -- status=guess
 lin frumpish_A = variants {} ; -- status=guess
 lin frumpy_A = variants {} ; -- status=guess
-lin frustrate_V2 = variants{} ;
+lin frustrate_V2 = variants{} ; --
 lin frustrating_A = variants {} ; -- status=guess
 lin frustration_N = mkN "frustration" "frustrationer" ; -- SaldoWN
 lin frustum_N = variants {} ; -- status=guess
@@ -23074,7 +22967,7 @@ lin fugue_N = variants {} ; -- status=guess
 lin fuhrer_N = variants {} ; -- status=guess
 lin fuji_N = variants {} ; -- status=guess
 lin fulcrum_N = mkN "rotationspunkt" ; -- status=guess
-lin fulfil_V2 = variants{} ;
+lin fulfil_V2 = variants{} ; --
 lin fulfill_V2 = mkV2 "fullfölja" ; -- status=guess
 lin fulfillment_N = variants {} ; -- status=guess
 lin fulfilment_N = mkN "tillfredsställelse" utrum; -- comment=3
@@ -23089,7 +22982,7 @@ lin full_grown_A = variants {} ; -- status=guess
 lin full_length_A = variants {} ; -- status=guess
 lin full_page_A = variants {} ; -- status=guess
 lin full_scale_A = variants {} ; -- status=guess
-lin full_time_A = variants{} ;
+lin full_time_A = variants{} ; --
 lin full_time_Adv = variants {} ; -- status=guess
 lin fullback_N = variants {} ; -- status=guess
 lin fuller_N = variants {} ; -- status=guess
@@ -23120,7 +23013,7 @@ lin fumigate_V2 = variants {} ; -- status=guess
 lin fumigation_N = variants {} ; -- status=guess
 lin fumigator_N = variants {} ; -- status=guess
 lin fumitory_N = variants {} ; -- status=guess
-lin fun_A = variants{} ;
+lin fun_A = variants{} ; --
 lin fun_N = mkN "skoj" neutrum | mkN "lekfullhet" "lekfullheter" ; -- SaldoWN -- comment=5
 lin funambulism_N = variants {} ; -- status=guess
 lin funambulistFem_N = variants {} ; -- status=guess
@@ -23139,9 +23032,9 @@ lin fundamental_N = mkN "grund" neutrum; -- comment=2
 lin fundamentalism_N = mkN "fundamentalism" "fundamentalismer" ; -- status=guess
 lin fundamentalist_A = variants {} ; -- status=guess
 lin fundamentalist_N = mkN "fundamentalist" "fundamentalister" ; -- SaldoWN
-lin fundamentally_Adv = variants{} ;
+lin fundamentally_Adv = variants{} ; --
 lin fundamentals_N = variants {} ; -- status=guess
-lin funding_N = variants{} ;
+lin funding_N = variants{} ; --
 lin fundraiser_N = variants {} ; -- status=guess
 lin funds_N = mkN "medel" neutrum; -- comment=3
 lin fundus_N = variants {} ; -- status=guess
@@ -23473,7 +23366,7 @@ lin garden_N = L.garden_N ;
 lin garden_V = mkV "odlar" ; -- status=guess
 lin garden_truck_N = variants {} ; -- status=guess
 lin gardenerFem_N = mkN "trädgårdsmästare" utrum; -- comment=2
-lin gardenerMasc_N = mkN "trädgårdsmästare" utrum; -- comment=2
+lin gardenerMasc_N = variants{} ; --
 lin gardenia_N = variants {} ; -- status=guess
 lin gardening_N = mkN "trädgårdsskötsel" ; -- comment=2
 lin gareth_PN = variants {} ; -- status=guess
@@ -23709,7 +23602,7 @@ lin generalize_V2 = variants {} ; -- status=guess
 lin generally_Adv = mkAdv "allmänt" | mkAdv "generellt" ;
 lin generalship_N = variants {} ; -- status=guess
 lin generate_V2 = mkV2 (mkV "skapar"); -- status=guess, src=wikt
-lin generation_N = mkN "generation" "generationer" | mkN "årsmodell" "årsmodeller" ; -- SaldoWN -- comment=7
+lin generation_N = mkN "generation" "generationer" ;
 lin generational_A = variants {} ; -- status=guess
 lin generative_A = variants {} ; -- status=guess
 lin generator_N = mkN "generator" "generatorer" ; -- comment=2
@@ -23777,7 +23670,7 @@ lin genuflect_V = mkV "knäfalla" "knäföll" "knäfallit" | mkV "knäböjer" ; 
 lin genuflection_N = variants {} ; -- status=guess
 lin genuflexion_N = variants {} ; -- status=guess
 lin genuine_A = mkA "autentisk" | mkA "äkta" ; -- SaldoWN -- comment=11
-lin genuinely_Adv = variants{} ;
+lin genuinely_Adv = variants{} ; --
 lin genuineness_N = mkN "äkthet" "äktheter" ; -- status=guess
 lin genus_N = mkN "genus" neutrum; -- status=guess
 lin geocentric_A = variants {} ; -- status=guess
@@ -23877,11 +23770,7 @@ lin gestural_A = variants {} ; -- status=guess
 lin gesture_N = mkN "gest" "gester" ; -- SaldoWN
 lin gesture_V = mkV "gestikulerar" ; -- status=guess, src=wikt
 lin get_N = mkN "skada" ; -- comment=2
---subcat lin get_V = I.få_V ;
---subcat lin get_V2 = mkV2 I.få_V ;
 lin get_V2V = mkV2V I.få_V ;
---subcat lin get_VA = mkVA I.få_V ;
---subcat lin get_VS = mkVS I.få_V ;
 lin get_VV = mkVV I.få_V ;
 lin get_about_V = mkV "anländer" ; -- comment=17
 lin get_above_V2 = dirV2 (partV (mkV "träffar")"på"); -- comment=18
@@ -23994,7 +23883,7 @@ lin ghoulish_A = mkA "makaber" ; -- comment=3
 lin ghq_PN = variants {} ; -- status=guess
 lin ghrelin_N = variants {} ; -- status=guess
 lin gi_N = variants {} ; -- status=guess
-lin giant_A = variants{} ;
+lin giant_A = variants{} ; --
 lin giant_N = mkN "jätte" utrum ; -- SaldoWN -- comment=5
 lin giantess_N = mkN "jättinna" ; -- status=guess
 lin giantism_N = variants {} ; -- status=guess
@@ -24128,7 +24017,7 @@ lin give_way_to_V2 = dirV2 (partV (mkV "lämnar")"över"); -- comment=3
 lin give_yourself_up_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
 lin give_yourself_up_to_V2 = dirV2 (partV (mkV "lämnar")"över"); -- comment=3
 lin giveaway_N = variants {} ; -- status=guess
-lin given_A = variants{} ;
+lin given_A = variants{} ; --
 lin given_N = mkN "giv" ; -- status=guess
 lin givenness_N = variants {} ; -- status=guess
 lin giver_N = mkN "givare" utrum; -- status=guess
@@ -24379,9 +24268,7 @@ lin gnu_N = mkN "gnu" "gnun" "gnuer" "gnuerna" ; -- comment=2
 lin go_A = mkA "dö" | mkA "gäll" ; -- SaldoWN -- comment=3
 lin go_N = mkN "tur" ; -- comment=12
 lin go_V = L.go_V | mkV "åker" ;
---subcat lin go_V2 = mkV2 L.go_V (mkPrep "till") | mkV2 (mkV "åker") (mkPrep "till") ;
 lin go_VA = mkVA I.bliva_V ;
---subcat lin go_VS = mkVS L.go_V ;
 lin go_VV = mkVV L.go_V ;
 lin go_about_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
 lin go_about_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut"); -- comment=34
@@ -24527,7 +24414,7 @@ lin goiter_N = mkN "struma" ; -- status=guess
 lin goitre_N = mkN "struma" ; -- status=guess
 lin goitrogen_N = variants {} ; -- status=guess
 lin golbourne_PN = variants {} ; -- status=guess
-lin gold_A = variants{} ;
+lin gold_A = variants{} ; --
 lin gold_N = L.gold_N ;
 lin gold_beater_N = variants {} ; -- status=guess
 lin gold_digger_N = variants {} ; -- status=guess
@@ -24916,7 +24803,7 @@ lin greatcoat_N = mkN "överrock" ; -- status=guess
 lin greater_A = mkA "hög" "högre" "högst" ; -- status=guess
 lin greatest_A = mkA "hög" "högre" "högst" ; -- status=guess
 lin greathearted_A = variants {} ; -- status=guess
-lin greatly_Adv = variants{} ;
+lin greatly_Adv = variants{} ; --
 lin greatness_N = mkN "storlek" ; -- comment=3
 lin greave_N = variants {} ; -- status=guess
 lin greaves_N = variants {} ; -- status=guess
@@ -25020,7 +24907,6 @@ lin grimsby_PN = variants {} ; -- status=guess
 lin grimy_A = mkA "smutsig" ; -- comment=2
 lin grin_N = mkN "grin" neutrum; -- comment=3
 lin grin_V = mkV "grinar" ; -- comment=2
---subcat lin grin_V2 = mkV2 (mkV "flinar"); -- status=guess, src=wikt
 lin grind_N = mkN "skrapa" ; -- comment=8
 lin grind_V = mkV "slipar" ; -- comment=14
 lin grind_V2 = dirV2 (partV (mkV "skrapar")"ut"); -- comment=3
@@ -25038,7 +24924,6 @@ lin grinner_N = variants {} ; -- status=guess
 lin grinstead_PN = variants {} ; -- status=guess
 lin griot_N = variants {} ; -- status=guess
 lin grip_N = mkN "väggrepp" neutrum | mkN "scenarbetare" utrum ; -- SaldoWN -- comment=8
---subcat lin grip_V = mkV "gripa" "grep" "gripit" ; -- comment=3
 lin grip_V2 = mkV2 (mkV "gripa" "grep" "gripit"); -- status=guess, src=wikt
 lin gripe_N = variants {} ; -- status=guess
 lin gripe_VS = variants {} ; -- status=guess
@@ -25138,7 +25023,7 @@ lin group_V = mkV "grupperar" ; -- status=guess
 lin group_V2 = mkV2 (mkV "grupperar"); -- status=guess, src=wikt
 lin grouper_N = variants {} ; -- status=guess
 lin groupie_N = variants {} ; -- status=guess
-lin grouping_N = variants{} ;
+lin grouping_N = variants{} ; --
 lin groupthink_N = variants {} ; -- status=guess
 lin groupware_N = variants {} ; -- status=guess
 lin grouse_N = mkN "ripa" ; -- status=guess
@@ -25151,9 +25036,7 @@ lin grovel_V = mkV "krypa" "kröp" "krupit" ; -- status=guess
 lin groveller_N = variants {} ; -- status=guess
 lin grow_V = mkV "växer" ;
 lin grow_V2 = mkV2 (mkV "växer") ;
---subcat lin grow_V2V = mkV2V (mkV "växer") ;
 lin grow_VA = mkVA (mkV "växer") ;
---subcat lin grow_VS = mkVS (mkV "växer") ;
 lin grow_apart_V = mkV "bli" "blev" "blivit" ; -- comment=7
 lin grow_away_from_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan"); -- comment=13
 lin grow_back_V = mkV "bli" "blev" "blivit" ; -- comment=7
@@ -25271,7 +25154,7 @@ lin guffaw_N = mkN "gapskratt" neutrum; -- comment=4
 lin guffaw_V = mkV "gapskrattar" ; -- comment=3
 lin guidance_N = mkN "ledning" ; -- comment=4
 lin guide_N = mkN "guide" "guider" | mkN "vägvisare" utrum ; -- SaldoWN -- comment=6
-lin guide_V2 = variants{} ;
+lin guide_V2 = variants{} ; --
 lin guidebook_N = mkN "resehandbok" "resehandböcker" ; -- status=guess
 lin guideline_N = mkN "riktlinje" "riktlinjer" ; -- SaldoWN
 lin guidepost_N = variants {} ; -- status=guess
@@ -25462,7 +25345,7 @@ lin h'm_V = variants {} ; -- status=guess
 lin h_bomb_N = variants {} ; -- status=guess
 lin ha'p'orth_N = variants {} ; -- status=guess
 lin ha'penny_N = variants {} ; -- status=guess
-lin ha_Interj = variants{} ;
+lin ha_Interj = variants{} ; --
 lin haarlem_PN = variants {} ; -- status=guess
 lin habanera_N = variants {} ; -- status=guess
 lin habeas_corpus_N = variants {} ; -- status=guess
@@ -25592,8 +25475,8 @@ lin hale_A = variants {} ; -- status=guess
 lin haler_N = variants {} ; -- status=guess
 lin halesowen_PN = variants {} ; -- status=guess
 lin half_A = mkA "halv" ; -- SaldoWN
-lin half_Adv = variants{} ;
-lin half_N = mkN "halva" ; -- status=guess
+lin half_Adv = variants{} ; --
+lin half_N = mkN "halva" | mkN "hälft" "hälfter" ;
 lin half_Predet = M.mkPredet "halva" "halva" "halva" ;
 lin half_baked_A = variants {} ; -- status=guess
 lin half_blood_N = variants {} ; -- status=guess
@@ -25749,8 +25632,8 @@ lin handedness_N = variants {} ; -- status=guess
 lin handful_N = mkN "näve" utrum; -- comment=2
 lin handhold_N = variants {} ; -- status=guess
 lin handicap_N = mkN "handikapp" neutrum; -- status=guess
-lin handicap_V2 = variants{} ;
-lin handicapped_A = variants{} ;
+lin handicap_V2 = variants{} ; --
+lin handicapped_A = variants{} ; --
 lin handicraft_N = mkN "hantverksskicklighet" "hantverksskickligheter" ; -- comment=4
 lin handiness_N = variants {} ; -- status=guess
 lin handiwork_N = mkN "hantverk" neutrum; -- status=guess
@@ -25846,10 +25729,9 @@ lin haplosporidian_N = variants {} ; -- status=guess
 lin haplotype_N = variants {} ; -- status=guess
 lin haply_Adv = variants {} ; -- status=guess
 lin happen_V = mkV "händer" ;
---subcat lin happen_V2 = mkV2 (mkV "händer") | mkV2 (mkV "ske" "skedde" "skett") | mkV2 (mkV "inträffa") ;
 lin happen_VV = mkVV (mkV "händer") | mkVV (mkV "ske" "skedde" "skett") | mkVV (mkV "inträffa") ;
 lin happening_N = mkN "tilldragelse" "tilldragelser" ; -- comment=3
-lin happily_Adv = variants{} ;
+lin happily_Adv = variants{} ; --
 lin happiness_N = mkN "lycka" ; -- comment=3
 lin happy_A = mkA "lycklig" | mkA "glad" ;
 lin happy_go_lucky_A = variants {} ; -- status=guess
@@ -25920,7 +25802,7 @@ lin harley_street_PN = variants {} ; -- status=guess
 lin harlot_N = mkN "sköka" ; -- SaldoWN
 lin harlow_PN = variants {} ; -- status=guess
 lin harm_N = mkN "skada" ; -- SaldoWN
-lin harm_V2 = variants{} ;
+lin harm_V2 = variants{} ; --
 lin harmattan_N = variants {} ; -- status=guess
 lin harmful_A = mkA "skadlig" ; -- comment=3
 lin harmfulness_N = variants {} ; -- status=guess
@@ -25999,7 +25881,7 @@ lin hastate_A = variants {} ; -- status=guess
 lin haste_N = mkN "hast" ; -- status=guess
 lin hasten_V = mkV "påskyndar" ; -- comment=2
 lin hasten_V2 = dirV2 (partV (mkV "ilar")"igenom"); -- status=guess
-lin hastily_Adv = variants{} ;
+lin hastily_Adv = variants{} ; --
 lin hastiness_N = variants {} ; -- status=guess
 lin hastings_PN = mkPN "Hastings" neutrum ; -- status=guess
 lin hasty_A = compoundA (regA "överilad"); -- comment=6
@@ -26018,7 +25900,6 @@ lin hatchling_N = variants {} ; -- status=guess
 lin hatchway_N = variants {} ; -- status=guess
 lin hate_N = mkN "hat" neutrum ; -- SaldoWN
 lin hate_V2 = L.hate_V2;
---subcat lin hate_V2V = mkV2V (mkV "hatar"); -- status=guess, src=wikt
 lin hate_VV = mkVV (mkV "hatar"); -- status=guess, src=wikt
 lin hate_on_V2 = variants {} ; -- status=guess
 lin hateful_A = mkA "hatisk" ; -- comment=2
@@ -26057,8 +25938,6 @@ lin havana_N = variants {} ; -- status=guess
 lin havana_PN = variants {} ; -- status=guess
 lin have_V = lin V S.have_V2 ;
 lin have_V2 = S.have_V2;
---subcat lin have_V2V = mkV2V I.göra_V ;
---subcat lin have_VS = mkVS (mkV "tänker") ;
 lin have_VV = auxVV (mkV "böra" "borde" "bort") ;
 lin have_against_V2 = dirV2 (partV (mkV "visar")"in"); -- comment=8
 lin have_around_V2 = dirV2 (partV (mkV "visar")"in"); -- comment=8
@@ -26131,7 +26010,7 @@ lin hazy_A = mkA "disig" ; -- comment=6
 lin he_Pron = S.he_Pron;
 lin he_goat_N = variants {} ; -- status=guess
 lin he_man_N = variants {} ; -- status=guess
-lin head_A = variants{} ;
+lin head_A = variants{} ; --
 lin head_N = L.head_N ;
 lin head_V = mkV "falla" "föll" "fallit" ; -- comment=14
 lin head_V2 = mkV2 (mkV "åker") (mkPrep "till") ; -- status=guess
@@ -26174,7 +26053,7 @@ lin headmistressship_N = variants {} ; -- status=guess
 lin headpiece_N = mkN "huvudbonad" "huvudbonader" ; -- comment=3
 lin headpin_N = variants {} ; -- status=guess
 lin headquarter_N = mkN "högkvarter" "högkvarteret" "högkvarter" "högkvarteren" ; -- status=guess
-lin headquarters_N = variants{} ;
+lin headquarters_N = variants{} ; --
 lin headrace_N = variants {} ; -- status=guess
 lin headrest_N = variants {} ; -- status=guess
 lin headroom_N = variants {} ; -- status=guess
@@ -26295,7 +26174,7 @@ lin heavenwards_A = variants {} ; -- status=guess
 lin heavenwards_Adv = variants {} ; -- status=guess
 lin heaver_N = variants {} ; -- status=guess
 lin heaves_N = variants {} ; -- status=guess
-lin heavily_Adv = variants{} ;
+lin heavily_Adv = variants{} ; --
 lin heaviness_N = variants {} ; -- status=guess
 lin heaviside_PN = variants {} ; -- status=guess
 lin heavy_A = L.heavy_A ;
@@ -26419,8 +26298,6 @@ lin help_N = mkN "hjälp" ;
 lin help_V = mkV "hjälper" ;
 lin help_V2 = mkV2 "hjälper" ;
 lin help_V2V = mkV2V (mkV "hjälper") ;
---subcat lin help_VS = mkVS (mkV "hjälper") ;
---subcat lin help_VV = mkVV (mkV "hjälper") ;
 lin help_out_V2 = variants {} ; -- status=guess
 lin help_to_VV = variants {} ; -- status=guess
 lin helperFem_N = mkN "hjälpreda" ; -- status=guess
@@ -26711,7 +26588,7 @@ lin hick_A = variants {} ; -- status=guess
 lin hick_N = mkN "bondläpp" ; -- status=guess
 lin hickey_N = mkN "sugmärke" ; -- status=guess
 lin hickory_N = variants {} ; -- status=guess
-lin hidden_A = variants{} ;
+lin hidden_A = variants{} ; --
 lin hiddenite_N = variants {} ; -- status=guess
 lin hiddenness_N = variants {} ; -- status=guess
 lin hide_N = mkN "gömma" | mkN "gömställe" ; -- SaldoWN -- comment=5
@@ -26795,7 +26672,7 @@ lin highland_N = mkN "högland" "höglandet" "högländer" "högländerna" ; -- 
 lin highland_PN = variants {} ; -- status=guess
 lin highlander_N = variants {} ; -- status=guess
 lin highlight_N = mkN "höjdpunkt" "höjdpunkter" ; -- SaldoWN
-lin highlight_V2 = variants{} ;
+lin highlight_V2 = variants{} ; --
 lin highlighter_N = mkN "överstrykningspenna" ; -- status=guess
 lin highly_Adv = mkAdv "i högsta grad" ;
 lin highness_N = variants {} ; -- status=guess
@@ -26879,10 +26756,8 @@ lin hippopotamus_N = mkN "flodhäst" ; -- status=guess
 lin hippy_N = variants {} ; -- status=guess
 lin hircine_A = variants {} ; -- status=guess
 lin hire_N = mkN "hyra" ; -- comment=5
---subcat lin hire_V = mkV "hyra" "hyrde" "hyrt" ; -- comment=7
 lin hire_V2 = mkV2 (mkV "anställer") ; -- status=guess
 lin hire_V2V = mkV2V (mkV "anställer") ; -- status=guess
---subcat lin hire_VS = mkVS (mkV "anställer") ; --- subcat
 lin hireling_N = variants {} ; -- status=guess
 lin hiroshima_PN = mkPN "Hiroshima" neutrum ; -- status=guess
 lin hirsute_A = mkA "hårig" | mkA "luden" "ludet"; -- status=guess status=guess
@@ -26908,7 +26783,7 @@ lin histone_N = variants {} ; -- status=guess
 lin historian_N = mkN "historiker" "historikern" "historiker" "historikerna" ; -- SaldoWN
 lin historic_A = mkA "historisk" ; -- status=guess
 lin historical_A = mkA "historisk" ; -- status=guess
-lin historically_Adv = variants{} ;
+lin historically_Adv = variants{} ; --
 lin historicalness_N = variants {} ; -- status=guess
 lin historicism_N = variants {} ; -- status=guess
 lin historicize_V2 = variants {} ; -- status=guess
@@ -27013,8 +26888,6 @@ lin hoity_toity_A = variants {} ; -- status=guess
 lin hold_N = mkN "arrest" "arrester" | mkN "äga" ; -- SaldoWN -- comment=12
 lin hold_V = mkV "bevara" ;
 lin hold_V2 = L.hold_V2;
---subcat lin hold_V2V = mkV2V I.hålla_V ;
---subcat lin hold_V3 = mkV3 I.hålla_V ;
 lin hold_VS = mkVS I.hålla_V ;
 lin hold_against_V3 = variants {} ; -- status=guess
 lin hold_back_V = mkV "bevarar" ; -- comment=13
@@ -27045,7 +26918,7 @@ lin holding_N = mkN "innehav" neutrum; -- status=guess
 lin holdout_N = variants {} ; -- status=guess
 lin holdover_N = variants {} ; -- status=guess
 lin holdup_N = variants {} ; -- status=guess
-lin hole_N = mkN "röra" | mkN "knipa" ; -- SaldoWN = mkN "röra" ; -- comment=9
+lin hole_N = mkN "hål" "hål" ;
 lin hole_V = mkV "röra" "rörde" "rört" | mkV "knipa" "knep" "knipit" ; -- SaldoWN -- comment=3
 lin hole_V2 = mkV2 "röra" "rörde" "rört" | dirV2 (partV (mkV "bor")"över") ; -- SaldoWN
 lin hole_and_corner_A = variants {} ; -- status=guess
@@ -27207,7 +27080,7 @@ lin hone_N = (mkN "bryne") | (mkN "brynsten" "brynstenen" "brynstenar" "brynsten
 lin hone_V2 = mkV2 (mkV "finslipar"); -- status=guess, src=wikt
 lin hone_in_on_V2 = variants {} ; -- status=guess
 lin honest_A = mkA "ärlig" ; -- SaldoWN
-lin honestly_Adv = variants{} ;
+lin honestly_Adv = variants{} ; --
 lin honesty_N = mkN "ärlighet" "ärligheter" ; -- comment=3
 lin honey_A = variants {} ; -- status=guess
 lin honey_N = mkN "honung" ; -- SaldoWN
@@ -27295,7 +27168,7 @@ lin hope_V = mkV "hoppas" ;
 lin hope_VS = L.hope_VS ;
 lin hope_VV = mkVV (mkV "hoppas") ;
 lin hopeful_A = mkA "lovande" ; -- comment=3
-lin hopefully_Adv = variants{} ;
+lin hopefully_Adv = variants{} ; --
 lin hopefulness_N = variants {} ; -- status=guess
 lin hopeless_A = mkA "hopplös" ; -- comment=2
 lin hopelessness_N = mkN "hopplöshet" "hopplösheter" ; -- comment=2
@@ -27407,7 +27280,7 @@ lin hospitality_N = mkN "gästfrihet" | mkN "gästvänlighet" ; -- SaldoWN
 lin hospitalization_N = variants {} ; -- status=guess
 lin hospitalize_V2 = variants {} ; -- status=guess
 lin host_N = mkN "värd" ; -- status=guess
-lin host_V2 = variants{} ;
+lin host_V2 = variants{} ; --
 lin hostage_N = mkN "gisslan" ; -- SaldoWN
 lin hostel_N = mkN "härbärge" ; -- status=guess
 lin hosteller_N = variants {} ; -- status=guess
@@ -27677,13 +27550,10 @@ lin hurricane_N = mkN "orkan" "orkaner" ; -- SaldoWN
 lin hurried_A = mkA "hastig" ; -- comment=2
 lin hurry_N = mkN "jäkt" neutrum; -- comment=4
 lin hurry_V = mkV "brådskar" ; -- comment=5
---subcat lin hurry_V2 = dirV2 (partV (mkV "kilar")"in"); -- comment=3
---subcat lin hurry_V2V = mkV2V (mkV (mkV "skynda") "sig"); -- status=guess, src=wikt
 lin hurstpierpoint_PN = variants {} ; -- status=guess
 lin hurt_N = mkN "skada" ; -- SaldoWN
 lin hurt_V = mkV "sårar" ; -- comment=3
 lin hurt_V2 = mkV2 (mkV (mkV "göra") "ont"); -- status=guess, src=wikt
---subcat lin hurt_VS = mkVS (mkV (mkV "göra") "ont"); -- status=guess, src=wikt
 lin hurtful_A = variants {} ; -- status=guess
 lin hurtle_V = mkV "störtar" ; -- comment=5
 lin husband_N = L.husband_N ;
@@ -28104,7 +27974,7 @@ lin idealistic_A = mkA "ideell" ; -- SaldoWN
 lin ideality_N = variants {} ; -- status=guess
 lin idealization_N = variants {} ; -- status=guess
 lin idealize_V2 = variants {} ; -- status=guess
-lin ideally_Adv = variants{} ;
+lin ideally_Adv = variants{} ; --
 lin ideation_N = variants {} ; -- status=guess
 lin idem_PN = variants {} ; -- status=guess
 lin idempotent_A = mkA "idempotent" ; -- status=guess
@@ -28175,8 +28045,8 @@ lin ignoramus_N = mkN "dumhuvud" "dumhuvudet" "dumhuvuden" "dumhuvudena" ; -- st
 lin ignorance_N = mkN "okunnighet" "okunnigheter" ; -- SaldoWN
 lin ignorant_A = mkA "okunnig" ; -- SaldoWN
 lin ignorantness_N = variants {} ; -- status=guess
-lin ignore_V = mkV "ignorerar" ; -- comment=4
-lin ignore_V2 = mkV2 (mkV "ignorerar"); -- status=guess, src=wikt
+lin ignore_V = mkV "ignorerar" ;
+lin ignore_V2 = mkV2 (mkV "ignorerar");
 lin iguana_N = mkN "leguan" "leguaner" ; -- status=guess
 lin iguanid_N = variants {} ; -- status=guess
 lin iguanodon_N = variants {} ; -- status=guess
@@ -28238,7 +28108,7 @@ lin illogicalness_N = variants {} ; -- status=guess
 lin illume_V2 = variants {} ; -- status=guess
 lin illuminance_N = variants {} ; -- status=guess
 lin illuminant_N = variants {} ; -- status=guess
-lin illuminate_V2 = variants{} ;
+lin illuminate_V2 = variants{} ; --
 lin illumination_N = mkN "illuminering" ; -- comment=6
 lin illumine_V2 = variants {} ; -- status=guess
 lin illusion_N = mkN "illusion" "illusioner" | mkN "synvilla" ; -- SaldoWN -- comment=5
@@ -28492,7 +28362,7 @@ lin import_N = mkN "import" "importer" | mkN "vikt" "vikter" ; -- SaldoWN -- com
 lin import_V2 = mkV2 (mkV "importerar") ; -- status=guess
 lin importance_N = mkN "viktighet" "viktigheter" | mkN "vikt" "vikter" ;
 lin important_A = L.important_A ;
-lin importantly_Adv = variants{} ;
+lin importantly_Adv = variants{} ; --
 lin importation_N = variants {} ; -- status=guess
 lin importerFem_N = mkN "importör" "importörer" ; -- status=guess
 lin importerMasc_N = mkN "importör" "importörer" ; -- status=guess
@@ -28504,7 +28374,7 @@ lin impose_V = mkV "påtvinga" ; -- status=guess
 lin impose_V2 = mkV2 "påtvinga" ; -- status=guess
 lin imposition_N = mkN "påläggande" ; -- comment=7
 lin impossibility_N = variants {} ; -- status=guess
-lin impossible_A = mkA "omöjlig" ; -- SaldoWN
+lin impossible_A = mkA "omöjlig" ;
 lin impossible_N = variants {} ; -- status=guess
 lin imposter_N = mkN "bedragare" utrum; -- comment=2
 lin impostor_N = mkN "bedragare" utrum; -- comment=2
@@ -28557,8 +28427,8 @@ lin impropriety_N = mkN "oanständighet" "oanständigheter" ; -- comment=2
 lin improvable_A = variants {} ; -- status=guess
 lin improve_V = mkV "förbättra" ;
 lin improve_V2 = mkV2 "förbättra" ;
-lin improved_A = variants{} ;
-lin improvement_N = mkN "förbättring" ; -- SaldoWN
+lin improved_A = variants{} ; --
+lin improvement_N = mkN "förbättring" ;
 lin improver_N = variants {} ; -- status=guess
 lin improvidence_N = variants {} ; -- status=guess
 lin improvident_A = variants {} ; -- status=guess
@@ -28709,7 +28579,7 @@ lin incident_A = variants {} ; -- status=guess
 lin incident_N = mkN "händelse" "händelser" | mkN "olyckshändelse" "olyckshändelser" ; -- SaldoWN -- comment=7
 lin incidental_A = variants {} ; -- status=guess
 lin incidental_N = variants {} ; -- status=guess
-lin incidentally_Adv = variants{} ;
+lin incidentally_Adv = variants{} ; --
 lin incinerate_V2 = mkV2 (mkV "förbränning"); -- status=guess, src=wikt
 lin incineration_N = mkN "förbränning" ; -- comment=2
 lin incinerator_N = variants {} ; -- status=guess
@@ -28733,13 +28603,12 @@ lin incline_N = mkN "sluttning" ; -- comment=3
 lin incline_V = mkV "böja" "böjde" "böjt" ; -- status=guess
 lin incline_V2 = variants {} ; -- status=guess
 lin incline_V2V = variants {} ; -- status=guess
-lin inclined_A = variants{} ;
+lin inclined_A = variants{} ; --
 lin inclinometer_N = variants {} ; -- status=guess
 lin inclose_V2 = variants {} ; -- status=guess
 lin inclosure_N = variants {} ; -- status=guess
 lin include_V = mkV "innehålla" "innehöll" "innehållit" | mkV "inkluderar" ;
 lin include_V2 = mkV2 "innehålla" "innehöll" "innehållit" ;
---subcat lin include_VV = mkVV (mkV "innehålla" "innehöll" "innehållit") | mkVV (mkV "inkluderar") | mkVV (mkV "innefattar") ;
 lin including_Prep = mkPrep "inklusive" ;
 lin inclusion_N = mkN "inbegripande" ; -- status=guess
 lin inclusive_A = mkA "allomfattande" ; -- status=guess
@@ -28807,7 +28676,6 @@ lin inconvertibility_N = variants {} ; -- status=guess
 lin inconvertible_A = variants {} ; -- status=guess
 lin incoordination_N = variants {} ; -- status=guess
 lin incorporate_A = variants {} ; -- status=guess
---subcat lin incorporate_V = mkV "inkorporerar" ; -- comment=4
 lin incorporate_V2 = mkV2 (mkV "uppta" "upptar" "uppta" "upptog" "upptagit" "upptagen"); -- status=guess, src=wikt
 lin incorporation_N = mkN "inkorporering" ; -- comment=2
 lin incorporative_A = variants {} ; -- status=guess
@@ -28823,13 +28691,13 @@ lin increase_N = mkN "ökning" ;
 lin increase_V = mkV "öka" ;
 lin increase_V2 = mkV2 "öka" ;
 lin increased_A = mkA "ökad" ; -- status=guess
-lin increasing_A = variants{} ;
+lin increasing_A = variants{} ; --
 lin increasingly_AdA = variants {} ; -- status=guess
 lin increasingly_AdV = variants {} ; -- status=guess
-lin increasingly_Adv = mkAdv "alltmer" ; -- status=guess
+lin increasingly_Adv = mkAdv "alltmer" ;
 lin incredibility_N = variants {} ; -- status=guess
 lin incredible_A = mkA "otrolig" ; -- SaldoWN
-lin incredibly_Adv = variants{} ;
+lin incredibly_Adv = variants{} ; --
 lin incredulity_N = mkN "misstrogenhet" ; -- status=guess
 lin incredulous_A = (mkA "misstrogen" "misstroget") | (mkA "skeptisk"); -- status=guess status=guess
 lin increment_N = variants {} ; -- status=guess
@@ -28903,7 +28771,7 @@ lin independent_1_A = mkA "oberoende" ;
 lin independent_2_A = mkA "självständig" ;
 lin independent_A = mkA "oberoende" | mkA "självständig" | mkA "särskild" "särskilt" ;
 lin independent_N = mkN "oberoende" ; -- comment=2
-lin independently_Adv = variants{} ;
+lin independently_Adv = variants{} ; --
 lin indescribable_A = mkA "obeskrivlig" ; -- comment=2
 lin indestructibility_N = variants {} ; -- status=guess
 lin indestructible_A = mkA "oförstörbar" ; -- status=guess
@@ -28924,7 +28792,6 @@ lin indian_A = variants {} ; -- status=guess
 lin indian_N = variants {} ; -- status=guess
 lin indiana_PN = variants {} ; -- status=guess
 lin indianapolis_PN = variants {} ; -- status=guess
---subcat lin indicate_V = mkV "indikera" ;
 lin indicate_V2 = mkV2 (mkV "indikera") | mkV2 (mkV "visa") ;
 lin indicate_VS = mkVS (mkV "indikera") | mkVS (mkV "visa") ;
 lin indication_N = mkN "indikation" "indikationer" | mkN "tecken" "tecknet" "tecken" "tecknen" ; -- SaldoWN -- comment=7
@@ -28955,7 +28822,7 @@ lin indigo_N = variants {} ; -- status=guess
 lin indinavir_N = variants {} ; -- status=guess
 lin indirect_A = mkA "indirekt" "indirekt" ; -- SaldoWN
 lin indirection_N = variants {} ; -- status=guess
-lin indirectly_Adv = variants{} ;
+lin indirectly_Adv = variants{} ; --
 lin indirectness_N = variants {} ; -- status=guess
 lin indiscernible_A = variants {} ; -- status=guess
 lin indiscipline_N = variants {} ; -- status=guess
@@ -28999,7 +28866,7 @@ lin indomitable_A = mkA "okuvlig" ; -- comment=3
 lin indonesia_PN = variants {} ; -- status=guess
 lin indonesian_A = variants {} ; -- status=guess
 lin indonesian_N = variants {} ; -- status=guess
-lin indoor_A = variants{} ;
+lin indoor_A = variants{} ; --
 lin indoors_Adv = mkAdv "inomhus" ; -- status=guess
 lin indore_PN = variants {} ; -- status=guess
 lin indorse_V2 = variants {} ; -- status=guess
@@ -29007,7 +28874,6 @@ lin indrawn_A = variants {} ; -- status=guess
 lin indri_N = variants {} ; -- status=guess
 lin indubitable_A = mkA "otvivelaktig" ; -- status=guess
 lin induce_V2 = dirV2 (partV (mkV "få" "fick" "fått")"till"); -- status=guess
---subcat lin induce_V2V = variants{}; -- dirV2 (partV (mkV "få" "fick" "fått")"till");
 lin inducement_N = variants {} ; -- status=guess
 lin inducer_N = variants {} ; -- status=guess
 lin induct_V2 = mkV2 (mkV "inkallar") | mkV2 (mkV (mkV "kalla") "in"); -- status=guess, src=wikt status=guess, src=wikt
@@ -29077,7 +28943,7 @@ lin inestimable_A = variants {} ; -- status=guess
 lin inevitability_N = mkN "ofrånkomlighet" ; -- status=guess
 lin inevitable_A = mkA "ofrånkomlig" ; -- SaldoWN
 lin inevitable_N = variants {} ; -- status=guess
-lin inevitably_Adv = variants{} ;
+lin inevitably_Adv = variants{} ; --
 lin inexact_A = mkA "oexakt" | (mkA "oprecis"); -- status=guess status=guess
 lin inexactitude_N = variants {} ; -- status=guess
 lin inexactness_N = variants {} ; -- status=guess
@@ -29174,7 +29040,7 @@ lin inflectional_A = mkA "inflektionell" ; -- status=guess
 lin inflexibility_N = mkN "stelhet" "stelheter" ; -- comment=3
 lin inflexible_A = mkA "oböjlig" ; -- comment=5
 lin inflexion_N = mkN "modulation" "modulationer" ; -- comment=6
-lin inflict_V2 = variants{} ;
+lin inflict_V2 = variants{} ; --
 lin infliction_N = variants {} ; -- status=guess
 lin infliximab_N = variants {} ; -- status=guess
 lin inflorescence_N = mkN "blomställning" ; -- status=guess
@@ -29293,7 +29159,7 @@ lin initiate_N = variants {} ; -- status=guess
 lin initiate_V2 = mkV2 (mkV "initierar"); -- status=guess, src=wikt
 lin initiation_N = mkN "upptagande" ; -- comment=2
 lin initiative_N = mkN "initiativ" neutrum | mkN "initiativkraft" ; -- SaldoWN -- comment=4
-lin inject_V2 = variants{} ;
+lin inject_V2 = variants{} ; --
 lin injectable_A = variants {} ; -- status=guess
 lin injection_N = mkN "injektion" "injektioner" ; -- SaldoWN
 lin injector_N = mkN "injektor" "injektorer" ; -- status=guess
@@ -29301,9 +29167,9 @@ lin injudicious_A = mkA "omdömeslös" ; -- status=guess
 lin injudiciousness_N = variants {} ; -- status=guess
 lin injunction_N = mkN "föreläggande" ; -- comment=4
 lin injure_V2 = mkV2 (mkV "skadar"); -- status=guess, src=wikt
-lin injured_A = variants{} ;
+lin injured_A = variants{} ; --
 lin injurious_A = mkA "skadlig" ; -- comment=3
-lin injury_N = mkN "skada" ; -- SaldoWN
+lin injury_N = mkN "skada" ;
 lin injustice_N = mkN "orättvisa" ; -- status=guess
 lin ink_N = mkN "trycksvärta" ; -- comment=3
 lin ink_V2 = mkV2 (mkV "bläcka"); -- status=guess, src=wikt
@@ -29317,7 +29183,7 @@ lin inkling_N = mkN "aning" ; -- comment=4
 lin inkstand_N = mkN "bläckhorn" neutrum; -- status=guess
 lin inkwell_N = mkN "bläckhorn" neutrum; -- status=guess
 lin inky_A = variants {} ; -- status=guess
-lin inland_A = variants{} ;
+lin inland_A = variants{} ; --
 lin inland_Adv = variants {} ; -- status=guess
 lin inlay_N = mkN "inläggning" ; -- comment=2
 lin inlay_V2 = variants {} ; -- status=guess
@@ -29368,8 +29234,8 @@ lin inositol_N = variants {} ; -- status=guess
 lin inpatient_N = variants {} ; -- status=guess
 lin inpouring_A = variants {} ; -- status=guess
 lin inpouring_N = variants {} ; -- status=guess
-lin input_N = variants{} ;
-lin inquest_N = variants{} ;
+lin input_N = variants{} ; --
+lin inquest_N = variants{} ; --
 lin inquietude_N = variants {} ; -- status=guess
 lin inquire_V = mkV "frågar" ; -- comment=2
 lin inquire_V2 = dirV2 (partV (mkV "frågar")"ut"); -- status=guess
@@ -29418,7 +29284,7 @@ lin insentience_N = variants {} ; -- status=guess
 lin insentient_A = variants {} ; -- status=guess
 lin inseparable_A = mkA "oskiljaktig" ; -- status=guess
 lin insert_N = mkN "inlägg" neutrum; -- comment=4
-lin insert_V2 = variants{} ;
+lin insert_V2 = variants{} ; --
 lin insertion_N = mkN "insättande" ; -- comment=8
 lin inset_N = mkN "inlägg" neutrum; -- comment=2
 lin inset_V2 = variants {} ; -- status=guess
@@ -29427,7 +29293,7 @@ lin inshore_Adv = mkAdv "nära land" | mkAdv "vid land" | mkAdv "vid kusten" ; -
 lin inside_A = mkA "intern" ; -- comment=3
 lin inside_Adv = mkAdv "inuti" ; -- comment=5
 lin inside_N = mkN "insida" ; -- SaldoWN
-lin inside_Prep = mkPrep "innanför" ; -- status=guess
+lin inside_Prep = mkPrep "innanför" | mkPrep "inne" ;
 lin inside_of_Prep = variants {} ; -- status=guess
 lin insider_N = mkN "insider" ; -- SaldoWN
 lin insidious_A = mkA "försåtlig" ; -- comment=3
@@ -29446,9 +29312,9 @@ lin insinuation_N = mkN "insmygande" ; -- comment=4
 lin insipid_A = variants {} ; -- status=guess
 lin insipidity_N = variants {} ; -- status=guess
 lin insipidness_N = variants {} ; -- status=guess
-lin insist_V = mkV "insistera" | mkV "vidhålla" "vidhöll" "vidhållit" ; -- status=guess
-lin insist_V2 = mkV2 "insistera" ; -- status=guess
-lin insist_VS = mkVS (mkV "vidhålla" "vidhöll" "vidhållit") | mkVS (mkV "insistera") ; -- status=guess
+lin insist_V = mkV "insistera" | mkV "vidhålla" "vidhöll" "vidhållit" ;
+lin insist_V2 = mkV2 "insistera" ;
+lin insist_VS = mkVS (mkV "vidhålla" "vidhöll" "vidhållit") | mkVS (mkV "insistera") ;
 lin insistence_N = mkN "insisterande" | mkN "envishet" ; -- SaldoWN -- comment=5
 lin insistent_A = mkA "envis" ; -- comment=5
 lin insofar_Adv = variants {} ; -- status=guess
@@ -29483,7 +29349,7 @@ lin inspiring_A = variants {} ; -- status=guess
 lin inspissation_N = variants {} ; -- status=guess
 lin inst_PN = variants {} ; -- status=guess
 lin instability_N = mkN "ostadighet" ; -- comment=2
-lin instal_V = variants{} ;
+lin instal_V = variants{} ; --
 lin install_V = mkV "monterar" ; -- comment=3
 lin install_V2 = mkV2 (mkV "installerar"); -- status=guess, src=wikt
 lin installation_N = mkN "installation" "installationer" ; -- status=guess
@@ -29495,7 +29361,7 @@ lin instant_A = mkA "omedelbar" ; -- comment=2
 lin instant_N = mkN "ögonblick" neutrum; -- status=guess
 lin instantaneous_A = mkA "ögonblicklig" ; -- comment=2
 lin instantiation_N = variants {} ; -- status=guess
-lin instantly_Adv = variants{} ;
+lin instantly_Adv = variants{} ; --
 lin instar_N = variants {} ; -- status=guess
 lin instead_Adv = mkAdv "i stället" ;
 lin instead_of_Prep = variants {} ; -- status=guess
@@ -29512,11 +29378,11 @@ lin instinctive_A = mkA "instinktiv" ; -- comment=2
 lin institute_N = mkN "institut" neutrum; -- status=guess
 lin institute_V2 = variants {} ; -- status=guess
 lin institution_N = mkN "institution" "institutioner" ;
-lin institutional_A = variants{} ;
+lin institutional_A = variants{} ; --
 lin institutionalization_N = mkN "institutionalisering" ; -- status=guess
 lin institutionalize_V2 = variants {} ; -- status=guess
 lin instroke_N = variants {} ; -- status=guess
-lin instruct_V2 = variants{} ;
+lin instruct_V2 = variants{} ; --
 lin instruction_N = mkN "undervisning" ; -- SaldoWN
 lin instructional_A = variants {} ; -- status=guess
 lin instructive_A = mkA "lärorik" | mkA "instruktiv" ; -- SaldoWN
@@ -29551,7 +29417,7 @@ lin insuperable_A = mkA "oöverkomlig" ; -- comment=2
 lin insupportable_A = variants {} ; -- status=guess
 lin insurability_N = variants {} ; -- status=guess
 lin insurable_A = variants {} ; -- status=guess
-lin insurance_N = mkN "försäkring" ; -- SaldoWN
+lin insurance_N = mkN "försäkring" ;
 lin insure_V = mkV "försäkrar" ; -- comment=2
 lin insure_V2 = variants{}; -- mkV "försäkrar" ; -- comment=2
 lin insure_VS = variants{}; -- mkV "försäkrar" ; -- comment=2
@@ -29576,7 +29442,7 @@ lin integral_A = (mkA "hel") | (mkA "enhetlig"); -- status=guess status=guess
 lin integral_N = mkN "integral" "integraler" ; -- status=guess
 lin integrate_V = mkV "integrerar" ; -- status=guess
 lin integrate_V2 = mkV2 (mkV "integrerar"); -- status=guess, src=wikt
-lin integrated_A = variants{} ;
+lin integrated_A = variants{} ; --
 lin integration_N = mkN "integration" "integrationer" ; -- SaldoWN
 lin integrative_A = variants {} ; -- status=guess
 lin integrator_N = variants {} ; -- status=guess
@@ -29589,16 +29455,13 @@ lin intellectual_N = mkN "djup" neutrum; -- status=guess
 lin intellectualization_N = variants {} ; -- status=guess
 lin intelligence_1_N = mkN "förstånd" neutrum; -- status=guess
 lin intelligence_2_N = mkN "underrättelse" "underrättelser" ; -- status=guess
-lin intelligence_N = variants{} ;
+lin intelligence_N = variants{} ; --
 lin intelligent_A = mkA "intelligent" "intelligent" ; -- SaldoWN
 lin intelligentsia_N = mkN "intelligentia" ; -- status=guess
 lin intelligibility_N = variants {} ; -- status=guess
 lin intelligible_A = mkA "begriplig" ; -- comment=4
 lin intemperance_N = variants {} ; -- status=guess
 lin intemperate_A = variants {} ; -- status=guess
---subcat lin intend_V = mkV "ämnar" ; ---- subcat
---subcat lin intend_V2 = mkV2 "ämna" ; ---- subcat
---subcat lin intend_V2V = mkV2V (mkV "ämna") ; ---- subcat
 lin intend_VV = mkVV (mkV "tänker") ;
 lin intense_A = mkA "intensiv" | mkA "lidelsefull" ; -- SaldoWN -- comment=4
 lin intensification_N = mkN "intensifiering" ; -- comment=3
@@ -29609,7 +29472,7 @@ lin intension_N = variants {} ; -- status=guess
 lin intensional_A = variants {} ; -- status=guess
 lin intensity_N = mkN "styrka" ; -- comment=2
 lin intensive_A = mkA "intensiv" ; -- status=guess
-lin intent_A = variants{} ;
+lin intent_A = variants{} ; --
 lin intent_N = mkN "uppsåt" neutrum; -- comment=3
 lin intention_N = mkN "avsikt" "avsikter" ; -- SaldoWN
 lin intentional_A = mkA "avsiktlig" ; -- SaldoWN
@@ -29718,7 +29581,7 @@ lin intermolecular_A = variants {} ; -- status=guess
 lin intermural_A = variants {} ; -- status=guess
 lin intern_N = variants {} ; -- status=guess
 lin intern_V2 = variants {} ; -- status=guess
-lin internal_A = mkA "invärtes" ; -- comment=2
+lin internal_A = mkA "intern" ;
 lin internalization_N = mkN "internalisering" ; -- status=guess
 lin internalize_V2 = mkV2 (mkV "internaliserar"); -- status=guess, src=wikt
 lin international_A = mkA "internationell" ;
@@ -29805,7 +29668,7 @@ lin intervenor_N = variants {} ; -- status=guess
 lin intervention_N = mkN "ingripande" ; -- SaldoWN
 lin intervertebral_A = variants {} ; -- status=guess
 lin interview_N = mkN "intervju" "intervjun" "intervjuer" "intervjuerna" ; -- status=guess
-lin interview_V2 = variants{} ;
+lin interview_V2 = variants{} ; --
 lin interviewee_N = mkN "intervjuobjekt" neutrum; -- status=guess
 lin interviewer_N = mkN "intervjuare" utrum; -- comment=2
 lin interweave_V2 = mkV2 (mkV "sammanfläta"); -- status=guess, src=wikt
@@ -29875,7 +29738,7 @@ lin intrinsic_A = mkA "inneboende" ; -- status=guess
 lin intrinsically_Adv = mkAdv "egentligen" ; -- status=guess
 lin intro_N = variants {} ; -- status=guess
 lin introduce_V2 = mkV2 "införa" "införde" "infört" | mkV2 "introducera" ;
-lin introduction_N = mkN "introduktion" "introduktioner" | mkN "introducering" ; -- status=guess
+lin introduction_N = mkN "introduktion" "introduktioner" | mkN "inledning" ;
 lin introductory_A = mkA "inledande" ; -- status=guess
 lin introit_N = variants {} ; -- status=guess
 lin introitus_N = variants {} ; -- status=guess
@@ -29930,7 +29793,7 @@ lin invaluable_A = mkA "ovärderlig" ; -- comment=2
 lin invaluableness_N = variants {} ; -- status=guess
 lin invariability_N = variants {} ; -- status=guess
 lin invariable_A = variants {} ; -- status=guess
-lin invariably_Adv = variants{} ;
+lin invariably_Adv = variants{} ; --
 lin invariance_N = variants {} ; -- status=guess
 lin invariant_A = mkA "oföränderlig" ; -- status=guess
 lin invariant_N = variants {} ; -- status=guess
@@ -29962,7 +29825,7 @@ lin invest_V = mkV "investerar" ; -- comment=2
 lin invest_V2 = mkV2 (mkV "investerar"); -- status=guess, src=wikt
 lin investigate_V = mkV "undersöker" ; -- comment=3
 lin investigate_V2 = mkV2 "undersöker" ; -- comment=3
-lin investigation_N = mkN "efterforskning" | mkN "undersökning" ; -- SaldoWN -- comment=3
+lin investigation_N = mkN "undersökning" | mkN "efterforskning" ;
 lin investigator_N = mkN "utredare" utrum ; -- SaldoWN
 lin investing_N = variants {} ; -- status=guess
 lin investiture_N = variants {} ; -- status=guess
@@ -29991,7 +29854,7 @@ lin invite_in_V = mkV "uppfordrar" ; -- comment=5
 lin invocation_N = mkN "anropande" ; -- comment=3
 lin invoice_N = mkN "faktura" ; -- SaldoWN
 lin invoice_V2 = mkV2 (mkV "fakturerar"); -- status=guess, src=wikt
-lin invoke_V2 = variants{} ;
+lin invoke_V2 = variants{} ; --
 lin involucrate_A = variants {} ; -- status=guess
 lin involucre_N = variants {} ; -- status=guess
 lin involuntary_A = mkA "ofrivillig" ; -- comment=2
@@ -30000,7 +29863,7 @@ lin involution_N = variants {} ; -- status=guess
 lin involve_V = mkV "involverar" ;
 lin involve_V2 = mkV2 "involvera" ;
 lin involve_VS = mkVS (mkV "involvera") ;
-lin involved_A = variants{} ;
+lin involved_A = variants{} ; --
 lin involvement_N = mkN "inblandning" ; -- comment=6
 lin invulnerability_N = mkN "osårbarhet" ; -- comment=2
 lin invulnerable_A = mkA "osårbar" ; -- status=guess
@@ -30088,7 +29951,7 @@ lin ironclad_A = variants {} ; -- status=guess
 lin ironclad_N = variants {} ; -- status=guess
 lin ironic_A = mkA "ironisk" ; -- status=guess
 lin ironical_A = variants {} ; -- status=guess
-lin ironically_Adv = variants{} ;
+lin ironically_Adv = variants{} ; --
 lin ironing_N = mkN "strykning" ; -- status=guess
 lin ironing_board_N = variants {} ; -- status=guess
 lin ironlike_A = variants {} ; -- status=guess
@@ -30202,7 +30065,7 @@ lin isogram_N = variants {} ; -- status=guess
 lin isohel_N = variants {} ; -- status=guess
 lin isolable_A = variants {} ; -- status=guess
 lin isolate_V2 = variants {} ; -- status=guess
-lin isolated_A = variants{} ;
+lin isolated_A = variants{} ; --
 lin isolation_N = mkN "isolering" ; -- SaldoWN
 lin isolationism_N = mkN "isolationism" "isolationismer" ; -- status=guess
 lin isolationist_A = mkA "isolationistisk" ; -- status=guess
@@ -30351,7 +30214,7 @@ lin jaggy_A = variants {} ; -- status=guess
 lin jaguar_N = mkN "jaguar" "jaguarer" ; -- status=guess
 lin jaguarundi_N = variants {} ; -- status=guess
 lin jail_N = mkN "arrest" "arrester" ; -- comment=3
-lin jail_V2 = variants{} ;
+lin jail_V2 = variants{} ; --
 lin jailer_N = mkN "fångvaktare" ; -- status=guess
 lin jailor_N = variants {} ; -- status=guess
 lin jaipur_PN = variants {} ; -- status=guess
@@ -30446,7 +30309,7 @@ lin jealousy_N = mkN "månhet" ; -- comment=5
 lin jean_N = variants {} ; -- status=guess
 lin jean_PN = variants {} ; -- status=guess
 lin jeanie_PN = variants {} ; -- status=guess
-lin jeans_N = variants{} ;
+lin jeans_N = variants{} ; --
 lin jedburgh_PN = variants {} ; -- status=guess
 lin jeep_N = mkN "jeep" ; -- SaldoWN
 lin jeer_N = mkN "glåpord" neutrum ; -- SaldoWN
@@ -30639,16 +30502,15 @@ lin join_up_V = mkV "förenar" ; -- comment=6
 lin joiner_N = mkN "snickare" utrum; -- status=guess
 lin joinery_N = mkN "snickeri" "snickerit" "snickerier" "snickerierna" ; -- comment=2
 lin joining_N = variants {} ; -- status=guess
-lin joint_A = mkA "led" | mkA "samfälld" "samfällt" ; -- SaldoWN -- comment=5
+lin joint_A = mkA "samfälld" "samfällt" ;
 lin joint_N = mkN "led" "leder" | mkN "hak" neutrum ; -- SaldoWN = mkN "led" neutrum ; = mkN "led" neutrum ; -- comment=11
 lin joint_V2 = variants {} ; -- status=guess
 lin jointer_N = variants {} ; -- status=guess
-lin jointly_Adv = variants{} ;
+lin jointly_Adv = variants{} ; --
 lin jointure_N = variants {} ; -- status=guess
 lin joist_N = mkN "takbjälke" utrum; -- comment=3
 lin joke_N = mkN "skämt" neutrum ; -- SaldoWN -- comment=6
 lin joke_V = mkV "skämtar" ; -- comment=4
---subcat lin joke_VS = mkVS (mkV "skämta") | mkVS (mkV "skojar"); -- status=guess, src=wikt status=guess, src=wikt
 lin joke_around_V = mkV "skämtar" ; -- comment=4
 lin joker_N = mkN "spefågel" ; -- comment=5
 lin jokingly_Adv = variants {} ; -- status=guess
@@ -30727,10 +30589,9 @@ lin judaism_N = variants {} ; -- status=guess
 lin judas_N = variants {} ; -- status=guess
 lin judas_PN = variants {} ; -- status=guess
 lin judder_V = variants {} ; -- status=guess
-lin judge_N = mkN "domare" utrum ; -- SaldoWN -- comment=2
+lin judge_N = mkN "domare" "domare" ;
 lin judge_V = mkV "anse" "ansåg" "ansett" ; -- comment=6
 lin judge_V2 = dirV2 (partV (mkV "dömer")"ut"); -- status=guess
---subcat lin judge_V2V = mkV2V (mkV "bedömer") ; -- status=guess
 lin judge_VS = mkVS (mkV "bedömer") ; -- status=guess
 lin judgement_N = mkN "bedömning" ; -- comment=8
 lin judgeship_N = variants {} ; -- status=guess
@@ -30786,8 +30647,6 @@ lin jumentous_A = variants {} ; -- status=guess
 lin jump_N = mkN "hopp" neutrum | mkN "smita" ; -- SaldoWN -- comment=6
 lin jump_V = L.jump_V;
 lin jump_V2 = dirV2 (partV (mkV "hoppar")"över"); -- comment=2
---subcat lin jump_V2V = mkV2V (mkV "hoppar"); -- status=guess, src=wikt
---subcat lin jump_VV = mkVV (mkV "hoppar"); -- status=guess, src=wikt
 lin jump_at_V2 = dirV2 (partV (mkV "hoppar")"över"); -- comment=2
 lin jump_in_V = mkV "hoppar" ; -- comment=9
 lin jump_on_V2 = dirV2 (partV (mkV "hoppar")"över"); -- comment=2
@@ -30845,7 +30704,7 @@ lin justiciary_N = variants {} ; -- status=guess
 lin justifiable_A = compoundA (regA "berättigad"); -- status=guess
 lin justification_N = mkN "berättigande" ; -- SaldoWN
 lin justificative_A = variants {} ; -- status=guess
-lin justified_A = variants{} ;
+lin justified_A = variants{} ; --
 lin justify_V2 = mkV2 "berättiga" ; -- status=guess
 lin justify_VV = mkVV (mkV "berättiga") ; -- status=guess
 lin justin_PN = variants {} ; -- status=guess
@@ -30959,8 +30818,6 @@ lin keep_N = mkN "äga" ; -- comment=4
 lin keep_V = mkV "behålla" "behöll" "behållit" ;
 lin keep_V2 = mkV2 (mkV "behålla" "behöll" "behållit") ;
 lin keep_V2A = mkV2A (mkV "hålla" "höll" "hållit") ;
---subcat lin keep_VA = mkVA (mkV "hålla" "höll" "hållit") ;
---subcat lin keep_VS = mkVS (mkV "hålla" "höll" "hållit") ;
 lin keep_VV = mkVV (partV (mkV "hålla" "höll" "hållit") "på") ;
 lin keep_around_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=16
 lin keep_at_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=16
@@ -31072,10 +30929,10 @@ lin kettle_N = mkN "kittel" | mkN "vattenkokare" utrum ; -- SaldoWN
 lin kettledrum_N = variants {} ; -- status=guess
 lin keurboom_N = variants {} ; -- status=guess
 lin kevin_PN = variants {} ; -- status=guess
-lin key_1_N = mkN "nyckel" ; -- status=guess
-lin key_2_N = mkN "tonart" "tonarter" ; -- status=guess
+lin key_1_N = mkN "nyckel" ;
+lin key_2_N = mkN "tonart" "tonarter" ;
 lin key_A = mkA "huvudsaklig" ; ---- cat
-lin key_N = mkN "tonart" "tonarter" ; -- SaldoWN
+lin key_N = mkN "nyckel" ;
 lin key_V2 = variants {} ; -- status=guess
 lin key_down_V = mkV "stämmer" ; -- status=guess
 lin key_in_V2 = variants {} ; -- status=guess
@@ -31208,7 +31065,7 @@ lin kindle_V2 = dirV2 (partV (mkV "tänder")"på"); -- status=guess
 lin kindliness_N = variants {} ; -- status=guess
 lin kindling_N = mkN "tändved" ; -- status=guess
 lin kindly_A = mkA "vänlig" ; -- comment=2
-lin kindly_Adv = variants{} ;
+lin kindly_Adv = variants{} ; --
 lin kindness_N = mkN "godhet" "godheter" ; -- status=guess
 lin kindred_A = compoundA (regA "besläktad"); -- comment=2
 lin kindred_N = mkN "släkting" | mkN "släktskap" ; -- SaldoWN -- comment=3
@@ -31276,7 +31133,6 @@ lin kirtle_N = variants {} ; -- status=guess
 lin kishke_N = variants {} ; -- status=guess
 lin kismet_N = variants {} ; -- status=guess
 lin kiss_N = mkN "kyss" ; -- comment=2
---subcat lin kiss_V = mkV "kysser" ; -- comment=2
 lin kiss_V2 = mkV2 (mkV "kyssas") | mkV2 (mkV "pussas"); -- status=guess, src=wikt status=guess, src=wikt
 lin kiss_off_V = mkV "kysser" ; -- comment=2
 lin kiss_off_V2 = variants {} ; -- status=guess
@@ -31401,7 +31257,6 @@ lin knout_N = variants {} ; -- status=guess
 lin know_N = (mkN "viktigpetter") | (mkN "besserwisser"); -- status=guess status=guess
 lin know_V = L.know_VS ;
 lin know_V2 = L.know_V2 ;
---subcat lin know_V2V = mkV2V "känna" "kände" "känt" ;
 lin know_VQ = L.know_VQ ;
 lin know_VS = L.know_VS ;
 lin know_all_N = variants {} ; -- status=guess
@@ -31413,7 +31268,7 @@ lin knowingness_N = variants {} ; -- status=guess
 lin knowledge_N = mkN "kunskap" "kunskaper" ;
 lin knowledgeability_N = variants {} ; -- status=guess
 lin knowledgeable_A = mkA "kunnig" ; -- comment=3
-lin known_A = variants{} ;
+lin known_A = variants{} ; --
 lin knuckle_N = mkN "knoge" utrum ; -- SaldoWN -- comment=4
 lin knuckle_V = mkV "lida" "led" "lidit" ; -- comment=2
 lin knuckle_down_V = mkV "lida" "led" "lidit" ; -- comment=2
@@ -31529,7 +31384,6 @@ lin labdanum_N = variants {} ; -- status=guess
 lin label_N = mkN "etikett" "etiketter" ; -- status=guess
 lin label_V = mkV "etiketterar" ; -- comment=3
 lin label_V2 = mkV2 (mkV "betecknar") | mkV2 (mkV "etiketterar"); -- status=guess, src=wikt status=guess, src=wikt
---subcat lin label_V2A = mkV2A (mkV "betecknar") | mkV2A (mkV "etiketterar"); -- status=guess, src=wikt status=guess, src=wikt
 lin label_V3 = mkV3 (mkV "betecknar") | mkV3 (mkV "etiketterar"); -- status=guess, src=wikt status=guess, src=wikt
 lin labeled_A = variants {} ; -- status=guess
 lin labetalol_N = variants {} ; -- status=guess
@@ -31575,7 +31429,7 @@ lin lack_V2 = mkV2 (mkV "saknar") | mkV2 (mkV "fattas"); -- status=guess, src=wi
 lin lack_lustre_A = variants {} ; -- status=guess
 lin lackadaisical_A = mkA "likgiltig" ; -- comment=3
 lin lackey_N = mkN "lakej" "lakejer" ; -- status=guess
-lin lacking_A = variants{} ;
+lin lacking_A = variants{} ; --
 lin lackluster_A = variants {} ; -- status=guess
 lin laconic_A = mkA "lakonisk" ; -- status=guess
 lin laconically_Adv = variants {} ; -- status=guess
@@ -31836,7 +31690,7 @@ lin large_A = mkA "stor" "större" "störst" ;
 lin large_Adv = variants {} ; -- status=guess
 lin large_N = mkN "stor" ; -- SaldoWN
 lin large_it_up_V2 = variants {} ; -- status=guess
-lin large_scale_A = variants{} ;
+lin large_scale_A = variants{} ; --
 lin largely_Adv = mkAdv "i stort" ;
 lin largemouth_N = variants {} ; -- status=guess
 lin largeness_N = mkN "storlek" ; -- comment=3
@@ -31912,7 +31766,6 @@ lin last_A = mkA "sista" | mkA "förra" | mkA "förra" ;
 lin last_Adv = mkAdv "till sist" ; -- status=guess
 lin last_N = mkN "återstående" ; -- status=guess
 lin last_V = mkV "bestå" "bestod" "bestått" | mkV "hålla" "höll" "hållit" ; -- status=guess
---subcat lin last_V2 = mkV2 "bestå" "bestod" "bestått" ; -- status=guess
 lin lasting_A = mkA "varaktig" ; -- comment=5
 lin lastingness_N = variants {} ; -- status=guess
 lin lat_N = variants {} ; -- status=guess
@@ -31932,7 +31785,7 @@ lin late_Adv = mkAdv "sen" ;
 lin latecomer_N = mkN "eftersläntrare" utrum; -- status=guess
 lin lateen_A = variants {} ; -- status=guess
 lin lateen_N = mkN "latinsegel" neutrum; -- status=guess
-lin lately_Adv = variants{} ;
+lin lately_Adv = variants{} ; --
 lin latency_N = variants {} ; -- status=guess
 lin lateness_N = variants {} ; -- status=guess
 lin latent_A = mkA "latent" "latent" ; -- status=guess
@@ -31989,8 +31842,8 @@ lin laughing_gas_N = variants {} ; -- status=guess
 lin laughing_stock_N = variants {} ; -- status=guess
 lin laughter_N = mkN "skratt" neutrum; -- comment=2
 lin launch_N = mkN "motorbåt" ; -- comment=3
-lin launch_V = mkV "färjar" ; -- comment=3
-lin launch_V2 = mkV2 (mkV "sjösätta" "sjösatte" "sjösatt") ; -- status=guess, src=wikt
+lin launch_V = depV (mkV "lancera") ; ----
+lin launch_V2 = mkV2 (mkV "sjösätta" "sjösatte" "sjösatt") ;
 lin launcher_N = mkN "bärraket" "bärraketer" ; -- status=guess
 lin launching_N = variants {} ; -- status=guess
 lin launching_pad_N = variants {} ; -- status=guess
@@ -32056,7 +31909,6 @@ lin lay_A = mkA "täck" ; -- comment=4
 lin lay_N = mkN "läge" ; -- comment=6
 lin lay_V = mkV "lägga" "lade" "lagt" ;
 lin lay_V2 = mkV2 "lägga" "lade" "lagt" ;
---subcat lin lay_VS = mkV "lägga" "lade" "lagt" ;
 lin lay_away_V2 = dirV2 (partV (mkV "visar")"in"); -- status=guess
 lin lay_down_V = mkV "värper" ; -- comment=10
 lin lay_down_V2 = dirV2 (partV (mkV "visar")"in"); -- status=guess
@@ -32101,7 +31953,6 @@ lin lead_N = mkN "ledarskap" neutrum | mkN "sänke" ;
 lin lead_V = mkV "leda" "ledde" "lett" | mkV "leder" ;
 lin lead_V2 = mkV2 "leda" "ledde" "lett" | mkV2 (mkV "leder") ;
 lin lead_V2V = mkV2V "leda" "ledde" "lett" | mkV2V (mkV "leder") ;
---subcat lin lead_VS = mkV "leda" "ledde" "lett" | mkVS (mkV "leder") ;
 lin lead_in_N = variants {} ; -- status=guess
 lin lead_on_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=15
 lin lead_ore_N = variants {} ; -- status=guess
@@ -32167,7 +32018,7 @@ lin learn_V = reflV (mkV "lär") ;
 lin learn_V2 = L.learn_V2;
 lin learn_VS = mkVS (lin V L.learn_V2);
 lin learn_VV = mkVV (lin V L.learn_V2);
-lin learner_N = variants{} ;
+lin learner_N = variants{} ; --
 lin learning_N = mkN "lärdom" ; -- comment=2
 lin lease_N = mkN "leasing" | mkN "hyra" ; -- SaldoWN -- comment=6
 lin lease_V2 = variants {} ; -- status=guess
@@ -32194,8 +32045,6 @@ lin leave_N = mkN "permission" "permissioner" | mkN "resa" ; -- SaldoWN -- comme
 lin leave_V = mkV "avgå" "avgick" "avgått" ;
 lin leave_V2 = L.leave_V2;
 lin leave_V2V = mkV2V (mkV "lämna");
---subcat lin leave_VS = mkVS (mkV "lämna");
---subcat lin leave_VV = mkVV (mkV "lämna");
 lin leave_behind_V = mkV "överlåta" "överlät" "överlåtit" ; -- comment=29
 lin leave_off_V = mkV "överlåta" "överlät" "överlåtit" ; -- comment=29
 lin leave_on_V2 = dirV2 (partV (mkV "lämnar")"över"); -- comment=10
@@ -32267,7 +32116,7 @@ lin legalistic_A = variants {} ; -- status=guess
 lin legality_N = mkN "laglighet" "lagligheter" ; -- comment=2
 lin legalization_N = mkN "legalisering" ; -- comment=2
 lin legalize_V2 = variants {} ; -- status=guess
-lin legally_Adv = variants{} ;
+lin legally_Adv = variants{} ; --
 lin legate_N = variants {} ; -- status=guess
 lin legatee_N = variants {} ; -- status=guess
 lin legation_N = mkN "legation" "legationer" ; -- status=guess
@@ -32288,7 +32137,7 @@ lin legionary_N = variants {} ; -- status=guess
 lin legionnaire_N = variants {} ; -- status=guess
 lin legislate_V = mkV "lagstiftar" ; -- status=guess
 lin legislate_V2 = mkV2 (mkV "lagstiftar"); -- status=guess, src=wikt
-lin legislation_N = mkN "lagstiftning" ; -- SaldoWN
+lin legislation_N = mkN "lagstiftning" ;
 lin legislative_A = mkA "legislativ" ; -- SaldoWN
 lin legislator_N = variants {} ; -- status=guess
 lin legislatorship_N = variants {} ; -- status=guess
@@ -32421,15 +32270,12 @@ lin less_than_AdN = lin AdN {s = "mindre än"}; -- status=guess
 lin lessee_N = mkN "hyresgäst" "hyresgäster" ; -- status=guess
 lin lessen_V = mkV "minskar" ; -- status=guess, src=wikt
 lin lessen_V2 = mkV2 (mkV "minskar"); -- status=guess, src=wikt
-lin lesser_A = variants{} ;
+lin lesser_A = variants{} ; --
 lin lesson_N = mkN "lektion" "lektioner" | mkN "undervisningstimme" utrum ; -- SaldoWN -- comment=4
 lin lessor_N = mkN "utarrenderare" | mkN "hyresvärd" | mkN "uthyrare" ; -- status=guess status=guess status=guess
 lin lest_Prep = variants {} ; -- status=guess
 lin let_N = variants {} ; -- status=guess
---subcat lin let_V = mkV "låta" "lät" "låtit" ;
---subcat lin let_V2 = mkV2 (mkV "låta");
 lin let_V2V = mkV2V (mkV "låta" "lät" "låtit");
---subcat lin let_VS = mkVS (mkV "låta" "lät" "låtit");
 lin let_down_N = variants {} ; -- status=guess
 lin let_down_V2 = variants {} ; -- status=guess
 lin let_in_V2 = variants {} ; -- status=guess
@@ -32518,7 +32364,7 @@ lin lewes_PN = variants {} ; -- status=guess
 lin lewis_PN = variants {} ; -- status=guess
 lin lewisham_PN = variants {} ; -- status=guess
 lin lexeme_N = mkN "lexem" neutrum; -- status=guess
-lin lexical_A = variants{} ;
+lin lexical_A = variants{} ; --
 lin lexicalization_N = variants {} ; -- status=guess
 lin lexicalized_A = variants {} ; -- status=guess
 lin lexicographerFem_N = mkN "lexikograf" "lexikografer" ; -- status=guess
@@ -32537,7 +32383,7 @@ lin liabilities_N = variants {} ; -- status=guess
 lin liability_N = mkN "ansvar" neutrum | mkN "mottaglighet" ; -- SaldoWN -- comment=12
 lin liable_A = mkA "mottaglig" ; -- comment=7
 lin liaise_V = variants {} ; -- status=guess
-lin liaison_N = variants{} ;
+lin liaison_N = variants{} ; --
 lin liana_N = variants {} ; -- status=guess
 lin liar_N = mkN "lögnhals" | mkN "lögnare" utrum ; -- SaldoWN -- comment=2
 lin lib_N = mkN "frigörande" ; -- comment=2
@@ -32592,7 +32438,6 @@ lin lichi_N = variants {} ; -- status=guess
 lin licit_A = variants {} ; -- status=guess
 lin licitness_N = variants {} ; -- status=guess
 lin lick_N = mkN "slickning" ; -- comment=8
---subcat lin lick_V = mkV "slickar" ; -- comment=8
 lin lick_V2 = dirV2 (partV (mkV "slickar")"av"); -- comment=15
 lin licking_N = variants {} ; -- status=guess
 lin licorice_N = variants {} ; -- status=guess
@@ -32651,13 +32496,13 @@ lin lifeline_N = mkN "livslinje" "livslinjer" ; -- status=guess
 lin lifelong_A = mkA "livslång" ; -- status=guess
 lin lifer_N = variants {} ; -- status=guess
 lin lifesaving_N = variants {} ; -- status=guess
-lin lifespan_N = variants{} ;
-lin lifestyle_N = variants{} ;
+lin lifespan_N = variants{} ; --
+lin lifestyle_N = variants{} ; --
 lin lifetime_N = mkN "livstid" ; -- SaldoWN
 lin lifework_N = variants {} ; -- status=guess
 lin lift_N = mkN "skjuts" | mkN "stigning" ; -- SaldoWN -- comment=11
-lin lift_V = mkV "upphäver" ; -- comment=14
-lin lift_V2 = mkV2 (mkV "lyfta" "lyfter" "lyft" "lyfte" "lyft" "lyft"); -- status=guess, src=wikt
+lin lift_V = (mkV "lyfta" "lyfter" "lyft" "lyfte" "lyft" "lyft") ;
+lin lift_V2 = mkV2 (mkV "lyfta" "lyfter" "lyft" "lyfte" "lyft" "lyft") ;
 lin lift_off_N = variants {} ; -- status=guess
 lin lift_off_V = mkV "upphäver" ; -- comment=14
 lin liftman_N = variants {} ; -- status=guess
@@ -32700,7 +32545,7 @@ lin lighthouse_N = mkN "fyr" ; -- comment=2
 lin lighting_N = mkN "lyse" ; -- comment=4
 lin lighting_up_A = variants {} ; -- status=guess
 lin lightless_A = variants {} ; -- status=guess
-lin lightly_Adv = variants{} ;
+lin lightly_Adv = variants{} ; --
 lin lightness_N = variants {} ; -- status=guess
 lin lightning_N = mkN "blixt" ; -- status=guess
 lin lightning_conductor_N = variants {} ; -- status=guess
@@ -32724,9 +32569,8 @@ lin like_A = mkA "typisk" ; -- comment=7
 lin like_Adv = mkAdv "som" ; -- comment=2
 lin like_N = mkN "liknande" ; -- comment=2
 lin like_Prep = mkPrep "likt" ;
-lin like_Subj = variants{} ;
+lin like_Subj = variants{} ; --
 lin like_V2 = L.like_V2;
---subcat lin like_V2V = mkV2V (mkV (mkV "tycker") "om") | mkV2V (mkV "gillar") ;
 lin like_VS = mkVS (mkV (mkV "tycker") "om") | mkVS (mkV "gillar") ;
 lin like_VV = mkVV (mkV (mkV "tycker") "om") | mkVV (mkV "gillar") ;
 lin like_minded_A = variants {} ; -- status=guess
@@ -32865,7 +32709,7 @@ lin lingulate_A = variants {} ; -- status=guess
 lin liniment_N = variants {} ; -- status=guess
 lin linin_N = variants {} ; -- status=guess
 lin lining_N = mkN "foder" neutrum; -- comment=3
-lin link_N = mkN "länk" | mkN "före" ; -- status=guess
+lin link_N = mkN "länk" ;
 lin link_V = mkV "länka" | mkV "förenar" ;
 lin link_V2 = mkV2 "förbinda" "förband" "förbundit" | mkV2 (mkV "länka") ;
 lin link_up_N = variants {} ; -- status=guess
@@ -32898,7 +32742,7 @@ lin lionet_N = variants {} ; -- status=guess
 lin lionfish_N = variants {} ; -- status=guess
 lin lionhearted_A = variants {} ; -- status=guess
 lin lionize_V2 = variants {} ; -- status=guess
-lin lip_N = mkN "läpp" | mkN "oförskämdhet" "oförskämdheter" ; -- SaldoWN -- comment=4
+lin lip_N = mkN "läpp" ;
 lin lip_read_V2 = variants {} ; -- status=guess
 lin lip_reading_N = variants {} ; -- status=guess
 lin liparis_N = variants {} ; -- status=guess
@@ -32963,7 +32807,7 @@ lin listen_in_V = mkV "lyssnar" ; -- comment=2
 lin listen_out_for_V2 = variants {} ; -- status=guess
 lin listen_up_V = mkV "lyssnar" ; -- comment=2
 lin listenerFem_N = mkN "åhörare" utrum; -- comment=2
-lin listenerMasc_N = mkN "åhörare" utrum; -- comment=2
+lin listenerMasc_N = variants{} ; --
 lin listening_N = mkN "lyssnande" ; -- status=guess
 lin lister_N = variants {} ; -- status=guess
 lin listeria_N = variants {} ; -- status=guess
@@ -32980,7 +32824,7 @@ lin literacy_N = mkN "läskunnighet" "läskunnigheter" | mkN "skrivkunnighet" ; 
 lin literal_A = mkA "bokstavlig" | mkA "fantasilös" ; -- SaldoWN -- comment=8
 lin literal_N = variants {} ; -- status=guess
 lin literalism_N = mkN "bokstavstro" ; -- status=guess
-lin literally_Adv = variants{} ;
+lin literally_Adv = variants{} ; --
 lin literalness_N = variants {} ; -- status=guess
 lin literary_A = mkA "litterär" ; -- SaldoWN
 lin literate_A = variants {} ; -- status=guess
@@ -33041,8 +32885,6 @@ lin livable_A = mkA "dräglig" ; -- comment=3
 lin live_A = mkA "live" | mkA "levande" ; -- status=guess
 lin live_Adv = mkAdv "direkt" ; -- status=guess
 lin live_V = L.live_V;
---subcat lin live_V2 = mkV2 "lever" ;
---subcat lin live_VV = mkVV (mkV "lever");
 lin live_birth_N = variants {} ; -- status=guess
 lin live_by_V2 = dirV2 (partV (mkV "bor")"över"); -- comment=3
 lin live_down_V2 = dirV2 (partV (mkV "bor")"över"); -- comment=3
@@ -33083,7 +32925,7 @@ lin livestock_N = mkN "boskap" ; -- SaldoWN
 lin livid_A = mkA "rosenrasande" ; -- comment=3
 lin lividity_N = variants {} ; -- status=guess
 lin lividness_N = variants {} ; -- status=guess
-lin living_A = mkA "bosatt" | mkA "levande" ; -- SaldoWN
+lin living_A = mkA "levande" ;
 lin living_N = mkN "livsuppehälle" ; -- comment=4
 lin living_room_N = variants {} ; -- status=guess
 lin living_space_N = variants {} ; -- status=guess
@@ -33127,7 +32969,7 @@ lin loafer_N = mkN "dagdrivare" utrum | mkN "dagdrivare" utrum ; -- SaldoWN
 lin loam_N = (mkN "mylla") | (mkN "lerjord"); -- status=guess status=guess
 lin loamless_A = variants {} ; -- status=guess
 lin loamy_A = variants {} ; -- status=guess
-lin loan_N = mkN "lån" neutrum | mkN "utlåning" ; -- SaldoWN -- comment=2
+lin loan_N = mkN "lån" neutrum ;
 lin loan_V2 = variants {} ; -- status=guess
 lin loan_collection_N = variants {} ; -- status=guess
 lin loan_office_N = variants {} ; -- status=guess
@@ -33176,7 +33018,7 @@ lin localism_N = variants {} ; -- status=guess
 lin locality_N = mkN "lokalitet" "lokaliteter" ; -- comment=3
 lin localization_N = variants {} ; -- status=guess
 lin localize_V2 = variants {} ; -- status=guess
-lin locally_Adv = variants{} ;
+lin locally_Adv = variants{} ; --
 lin locate_V = mkV "placerar" ; -- comment=4
 lin locate_V2 = mkV2 (mkV "placerar"); -- status=guess, src=wikt
 lin location_N = mkN "belägenhet" "belägenheter" | mkN "plats" "platser" ; -- status=guess
@@ -33359,9 +33201,7 @@ lin loofah_N = variants {} ; -- status=guess
 lin look_N = mkN "utseende" | mkN "blick" ;
 lin look_V = mkV "titta" ;
 lin look_V2 = mkV2 (mkV "titta") (mkPrep "på") ;
---subcat lin look_V2V = mkV2V (mkV "tittar");
 lin look_VA = mkVA (partV I.se_V "ut") ;
---subcat lin look_VV = mkVV (partV I.se_V "ut") ;
 lin look_after_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut"); -- comment=9
 lin look_ahead_to_V2 = variants {} ; -- status=guess
 lin look_around_V = partV (mkV "kolla") "runt" ; -- status=guess
@@ -33446,7 +33286,7 @@ lin lordliness_N = variants {} ; -- status=guess
 lin lordly_A = variants {} ; -- status=guess
 lin lordolatry_N = variants {} ; -- status=guess
 lin lordosis_N = variants {} ; -- status=guess
-lin lordship_N = variants{} ;
+lin lordship_N = variants{} ; --
 lin lore_N = variants {} ; -- status=guess
 lin lorgnette_N = variants {} ; -- status=guess
 lin lorica_N = variants {} ; -- status=guess
@@ -33469,7 +33309,7 @@ lin loss_leader_N = variants {} ; -- status=guess
 lin lossiemouth_PN = variants {} ; -- status=guess
 lin lossless_A = variants {} ; -- status=guess
 lin lossy_A = variants {} ; -- status=guess
-lin lost_A = variants{} ;
+lin lost_A = variants{} ; --
 lin lot_N = mkN "mängd" "mängder" | mkN "allt" neutrum ;
 lin lota_N = variants {} ; -- status=guess
 lin loth_A = variants {} ; -- status=guess
@@ -33484,9 +33324,9 @@ lin lotus_eater_N = variants {} ; -- status=guess
 lin lotusland_N = variants {} ; -- status=guess
 lin louche_A = variants {} ; -- status=guess
 lin loud_A = mkA "högljudd" | mkA "hög" "högre" "högst" ; -- SaldoWN -- comment=7
-lin loud_Adv = variants{} ;
+lin loud_Adv = variants{} ; --
 lin loud_hailer_N = variants {} ; -- status=guess
-lin loudly_Adv = variants{} ;
+lin loudly_Adv = variants{} ; --
 lin loudmouth_N = mkN "gaphals" ; -- SaldoWN
 lin loudness_N = mkN "ljudstyrka" ; -- status=guess
 lin loudspeaker_N = mkN "högtalare" utrum | mkN "högtalare" utrum ; -- SaldoWN
@@ -33520,7 +33360,6 @@ lin lovage_N = variants {} ; -- status=guess
 lin lovastatin_N = variants {} ; -- status=guess
 lin love_N = L.love_N ;
 lin love_V2 = L.love_V2 ;
---subcat lin love_V2V = mkV2V (mkV "älska") ;
 lin love_VV = mkVV (mkV "älska") ;
 lin love_affair_N = variants {} ; -- status=guess
 lin love_child_N = variants {} ; -- status=guess
@@ -33549,7 +33388,7 @@ lin loving_cup_N = variants {} ; -- status=guess
 lin loving_kindness_N = variants {} ; -- status=guess
 lin lovingness_N = variants {} ; -- status=guess
 lin low_A = mkA "låg" "lägre" "lägst" ;
-lin low_Adv = variants{} ;
+lin low_Adv = variants{} ; --
 lin low_N = mkN "bottenläge" ; -- comment=8
 lin low_V = mkV "råmar" ; -- comment=3
 lin low_down_A = variants {} ; -- status=guess
@@ -33752,7 +33591,7 @@ lin luxuriant_A = compoundA (regA "överlastad"); -- comment=4
 lin luxuriate_V = variants {} ; -- status=guess
 lin luxuriation_N = variants {} ; -- status=guess
 lin luxurious_A = mkA "lyxig" ; -- status=guess
-lin luxury_A = variants{} ;
+lin luxury_A = variants{} ; --
 lin luxury_N = mkN "lyx" ; -- comment=3
 lin lvov_PN = variants {} ; -- status=guess
 lin lwei_N = variants {} ; -- status=guess
@@ -33961,7 +33800,7 @@ lin magical_A = mkA "magisk" ; -- status=guess
 lin magician_N = mkN "magiker" "magikern" "magiker" "magikerna" ; -- status=guess
 lin magisterial_A = variants {} ; -- status=guess
 lin magistracy_N = variants {} ; -- status=guess
-lin magistrate_N = variants{} ;
+lin magistrate_N = variants{} ; --
 lin magma_N = mkN "magma" ; -- status=guess
 lin magnanimity_N = variants {} ; -- status=guess
 lin magnanimous_A = mkA "storsint" "storsint" ; -- comment=2
@@ -34045,13 +33884,13 @@ lin main_N = mkN "huvudledning" ; -- status=guess
 lin maine_PN = variants {} ; -- status=guess
 lin mainframe_N = mkN "stordator" "stordatorer" ; -- status=guess
 lin mainland_N = mkN "fastland" neutrum | mkN "fastland" neutrum ; -- SaldoWN -- status=guess
-lin mainly_Adv = mkAdv "huvudsakligen" ; -- status=guess
+lin mainly_Adv = mkAdv "huvudsakligen" ;
 lin mainmast_N = mkN "stormast" "stormaster" ; -- status=guess
-lin mains_N = variants{} ;
+lin mains_N = variants{} ; --
 lin mainsail_N = variants {} ; -- status=guess
 lin mainspring_N = variants {} ; -- status=guess
 lin mainstay_N = mkN "stöttepelare" utrum; -- status=guess
-lin mainstream_N = variants{} ;
+lin mainstream_N = variants{} ; --
 lin mainstreamed_A = variants {} ; -- status=guess
 lin maintain_V = mkV "underhålla" "underhöll" "underhållit" ;
 lin maintain_V2 = mkV2 (mkV "upprätthålla" "upprätthöll" "upprätthållit") ;
@@ -34080,10 +33919,6 @@ lin make_V = I.göra_V ;
 lin make_V2 = mkV2 I.göra_V ;
 lin make_V2A = mkV2A I.göra_V ;
 lin make_V2V = mkV2V I.göra_V ;
---subcat lin make_V3 = mkV3 I.göra_V (mkPrep "till") ;
---subcat lin make_VA = mkVA I.göra_V ;
---subcat lin make_VS = mkVS (mkV "göra" "gjorde" "gjort");
---subcat lin make_VV = mkVV I.göra_V ;
 lin make_after_V = mkV "varar" ; -- comment=29
 lin make_away_with_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan"); -- comment=13
 lin make_believe_N = variants {} ; -- status=guess
@@ -34100,7 +33935,7 @@ lin make_out_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan"); -- comment=13
 lin make_out_with_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan"); -- comment=13
 lin make_over_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan"); -- comment=13
 lin make_towards_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan"); -- comment=13
-lin make_up_N = variants{} ;
+lin make_up_N = variants{} ; --
 lin make_up_V = mkV "varar" ; -- comment=29
 lin make_up_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan"); -- comment=13
 lin make_up_for_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan"); -- comment=13
@@ -34261,9 +34096,9 @@ lin manageable_A = mkA "lättskött" ; -- comment=5
 lin management_N = mkN "ledning" ;
 lin manager_N = mkN "ledare" utrum | mkN "föreståndare" utrum | mkN "manager" "managern" "manager" "managerna" ;
 lin manageress_N = mkN "kallskänka" ; -- SaldoWN
-lin managerial_A = variants{} ;
+lin managerial_A = variants{} ; --
 lin managership_N = variants {} ; -- status=guess
-lin managing_A = variants{} ;
+lin managing_A = variants{} ; --
 lin manakin_N = variants {} ; -- status=guess
 lin manana_N = variants {} ; -- status=guess
 lin manat_N = variants {} ; -- status=guess
@@ -34331,7 +34166,7 @@ lin manicure_V2 = variants {} ; -- status=guess
 lin manicurist_N = variants {} ; -- status=guess
 lin manifest_A = mkA "uppenbar" ; -- comment=3
 lin manifest_N = variants {} ; -- status=guess
-lin manifest_V2 = variants{} ;
+lin manifest_V2 = variants{} ; --
 lin manifestation_N = mkN "utslag" neutrum; -- comment=7
 lin manifesto_N = mkN "programförklaring" ; -- comment=2
 lin manifold_A = mkA "mångfaldig" ; -- comment=2
@@ -34348,14 +34183,14 @@ lin manipulative_A = variants {} ; -- status=guess
 lin manipulator_N = variants {} ; -- status=guess
 lin maniraptor_N = variants {} ; -- status=guess
 lin manitoba_PN = variants {} ; -- status=guess
-lin mankind_N = variants{} ;
+lin mankind_N = variants{} ; --
 lin manky_A = variants {} ; -- status=guess
 lin manlike_A = variants {} ; -- status=guess
 lin manliness_N = variants {} ; -- status=guess
 lin manly_A = mkA "manlig" ; -- status=guess
 lin manna_N = mkN "manna" ; -- status=guess
 lin mannequin_N = mkN "skyltdocka" ; -- comment=2
-lin manner_N = mkN "manér" neutrum | mkN "uppträdande" ; -- SaldoWN -- comment=14
+lin manner_N = mkN "manér" neutrum ;
 lin mannered_A = variants {} ; -- status=guess
 lin mannerism_N = variants {} ; -- status=guess
 lin mannerly_A = variants {} ; -- status=guess
@@ -34403,8 +34238,8 @@ lin manubrium_N = variants {} ; -- status=guess
 lin manufacture_N = mkN "tillverkning" ; -- SaldoWN
 lin manufacture_V2 = mkV2 (mkV "tillverkar"); -- status=guess, src=wikt
 lin manufacturer_N = mkN "producent" "producenter" | mkN "tillverkare" utrum ; -- SaldoWN -- comment=3
-lin manufacturing_A = variants{} ;
-lin manufacturing_N = variants{} ;
+lin manufacturing_A = variants{} ; --
+lin manufacturing_N = variants{} ; --
 lin manul_N = mkN "manul" | mkN "pallaskatt" ; -- status=guess status=guess
 lin manumission_N = variants {} ; -- status=guess
 lin manumit_V2 = variants {} ; -- status=guess
@@ -34659,7 +34494,7 @@ lin masque_N = variants {} ; -- status=guess
 lin masquerade_N = mkN "maskerad" "maskerader" ; -- status=guess
 lin masquerade_V = mkV "maskerar" ; -- status=guess
 lin masquerader_N = variants {} ; -- status=guess
-lin mass_A = variants{} ;
+lin mass_A = variants{} ; --
 lin mass_N = mkN "massa" | mkN "mässa" ; -- SaldoWN = mkN "massa" ; -- comment=5
 lin mass_V = mkV "mässar" ; -- comment=4
 lin mass_V2 = variants {} ; -- status=guess
@@ -34685,10 +34520,10 @@ lin mastaba_N = variants {} ; -- status=guess
 lin mastalgia_N = variants {} ; -- status=guess
 lin mastectomy_N = variants {} ; -- status=guess
 lin masted_A = variants {} ; -- status=guess
-lin master_1_N = mkN "mästare" utrum ; -- status=guess
-lin master_2_N = mkN "magister" ; -- status=guess
-lin master_N = mkN "mästare" utrum | mkN "styresman" "styresmannen" "styresmän" "styresmännen" ; -- SaldoWN -- comment=21
-lin master_V2 = variants{} ;
+lin master_1_N = mkN "mästare" utrum ;
+lin master_2_N = mkN "magister" ;
+lin master_N = mkN "mästare" utrum ;
+lin master_V2 = variants{} ; --
 lin master_at_arms_N = variants {} ; -- status=guess
 lin master_key_N = variants {} ; -- status=guess
 lin masterful_A = mkA "mästerlig" ; -- comment=5
@@ -34729,7 +34564,6 @@ lin match_1_N = mkN "match" "matcher" ;
 lin match_2_N = mkN "tändsticka" ;
 lin match_3_N = mkN "överenskommelse" "överenskommelser" ;
 lin match_N = mkN "tändsticka" ;
---subcat lin match_V = mkV "matchar" ; -- comment=2
 lin match_V2 = mkV2 (mkV "matchar") | mkV2 (mkV (mkV "vara") "lika") | mkV2 (mkV (mkV "passa") "ihop"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin match_point_N = variants {} ; -- status=guess
 lin match_up_V = mkV "matchar" ; -- comment=2
@@ -34745,7 +34579,7 @@ lin matchstick_N = variants {} ; -- status=guess
 lin matchweed_N = variants {} ; -- status=guess
 lin matchwood_N = variants {} ; -- status=guess
 lin mate_1_N = mkN "kompis" ; -- comment=8
-lin mate_2_N = variants{} ;
+lin mate_2_N = variants{} ; --
 lin mate_N = mkN "kompis" ; -- comment=8
 lin mate_V = mkV "parar" ; -- comment=2
 lin mate_V2 = variants {} ; -- status=guess
@@ -34818,7 +34652,7 @@ lin mature_V2 = mkV2 (mkV "mognar"); -- status=guess, src=wikt
 lin maturity_1_N = mkN "mognad" "mognader" ; -- status=guess
 lin maturity_2_N = mkN "mognad" "mognader" ; -- status=guess
 lin maturity_3_N = mkN "mognad" "mognader" ; -- status=guess
-lin maturity_N = variants{} ;
+lin maturity_N = variants{} ; --
 lin matutinal_A = variants {} ; -- status=guess
 lin matzo_N = variants {} ; -- status=guess
 lin maud_PN = variants {} ; -- status=guess
@@ -34909,7 +34743,7 @@ lin meager_A = mkA "mager" ; -- status=guess
 lin meagerness_N = variants {} ; -- status=guess
 lin meagre_A = mkA "mager" ; -- comment=8
 lin meagreness_N = variants {} ; -- status=guess
-lin meal_N = mkN "måltid" "måltider" ; -- SaldoWN
+lin meal_N = mkN "måltid" "måltider" ;
 lin mealie_N = variants {} ; -- status=guess
 lin mealtime_N = variants {} ; -- status=guess
 lin mealworm_N = variants {} ; -- status=guess
@@ -34920,10 +34754,8 @@ lin mealybug_N = variants {} ; -- status=guess
 lin mealymouthed_A = variants {} ; -- status=guess
 lin mean_A = mkA "elak" ; -- status=guess
 lin mean_N = mkN "medelvärde" ; -- status=guess
---subcat lin mean_V = mkV "betyda" "betydde" "betytt" | mkV "avse" "avsåg" "avsett" ;
 lin mean_V2 = mkV2 "betyda" "betydde" "betytt" | mkV2 "mena"| mkV2 (mkV "innebär" "innebar" "inneburit") ;
 lin mean_V2V = mkV2V (mkV "betyda" "betydde" "betytt") | mkV2V (mkV "mena") ;
---subcat lin mean_VA = mkVA (mkV "mena") | mkVA (mkV "betyda" "betydde" "betytt") ;
 lin mean_VS = mkVS (mkV "betyda" "betydde" "betytt") | mkVS (mkV "mena") ;
 lin mean_VV = mkVV (mkV "mena") ;
 lin meander_N = mkN "meander" ; -- comment=2
@@ -34939,15 +34771,15 @@ lin meanness_N = variants {} ; -- status=guess
 lin means_N = mkN "medel" neutrum ;
 lin meanspiritedly_Adv = variants {} ; -- status=guess
 lin meantime_Adv = variants {} ; -- status=guess
-lin meantime_N = variants{} ;
+lin meantime_N = variants{} ; --
 lin meanwhile_Adv = mkAdv "samtidigt" ;
 lin meany_N = variants {} ; -- status=guess
 lin measles_N = mkN "mässling" ; -- SaldoWN
 lin measly_A = variants {} ; -- status=guess
 lin measurable_A = mkA "mätbar" ; -- status=guess
 lin measure_N = mkN "mått" neutrum | mkN "åtgärd" "åtgärder" ; ---- split
-lin measure_V = mkV "mäter" ; -- comment=4
-lin measure_V2 = mkV2 (mkV "mäta"); -- status=guess, src=wikt
+lin measure_V = mkV "mäter" ;
+lin measure_V2 = mkV2 (mkV "mäter") ;
 lin measure_against_V3 = variants {} ; -- status=guess
 lin measure_off_V2 = variants {} ; -- status=guess
 lin measure_out_V2 = variants {} ; -- status=guess
@@ -35055,7 +34887,6 @@ lin meet_A = mkA "täck" ; -- status=guess
 lin meet_N = mkN "råka" ; -- comment=4
 lin meet_V = mkV "träffas" ;
 lin meet_V2 = mkV2 "möter" ;
---subcat lin meet_V2V = mkV2V (mkV "möter") ;
 lin meet_up_V = mkV "upplever" ; -- comment=19
 lin meet_with_V2 = dirV2 (partV (mkV "träffar")"på"); -- comment=5
 lin meeting_N = mkN "möte" | mkN "sammanträde" ;
@@ -35226,7 +35057,7 @@ lin mensuration_N = variants {} ; -- status=guess
 lin mental_A = mkA "psykisk" | mkA "själslig" ; -- SaldoWN -- comment=3
 lin mentalism_N = variants {} ; -- status=guess
 lin mentality_N = mkN "mentalitet" "mentaliteter" ; -- comment=5
-lin mentally_Adv = variants{} ;
+lin mentally_Adv = variants{} ; --
 lin menthol_N = variants {} ; -- status=guess
 lin mentholated_A = variants {} ; -- status=guess
 lin mention_N = mkN "omnämnande" ; -- status=guess
@@ -35505,7 +35336,7 @@ lin metrology_N = mkN "metrologi" ; -- status=guess
 lin metronidazole_N = variants {} ; -- status=guess
 lin metronome_N = variants {} ; -- status=guess
 lin metropolis_N = mkN "metropol" "metropoler" ; -- status=guess
-lin metropolitan_A = variants{} ;
+lin metropolitan_A = variants{} ; --
 lin metropolitan_N = mkN "ärkebiskop" ; -- status=guess
 lin metroptosis_N = variants {} ; -- status=guess
 lin metrorrhagia_N = variants {} ; -- status=guess
@@ -35626,7 +35457,7 @@ lin microtubule_N = variants {} ; -- status=guess
 lin microvolt_N = variants {} ; -- status=guess
 lin microwave_N = mkN "mikrovåg" "mikrovågor" ; -- status=guess
 lin micturition_N = variants {} ; -- status=guess
-lin mid_A = variants{} ;
+lin mid_A = variants{} ; --
 lin mid_Prep = variants {} ; -- status=guess
 lin mid_off_N = variants {} ; -- status=guess
 lin mid_on_N = variants {} ; -- status=guess
@@ -35639,7 +35470,7 @@ lin midden_N = variants {} ; -- status=guess
 lin middle_A = mkA "mellerst" ; -- status=guess
 lin middle_N = mkN "mitt" ; -- SaldoWN
 lin middle_aged_A = invarA "medelålders" ; -- status=guess
-lin middle_class_A = variants{} ;
+lin middle_class_A = variants{} ; --
 lin middle_distance_A = variants {} ; -- status=guess
 lin middle_of_the_road_A = variants {} ; -- status=guess
 lin middlebrow_N = variants {} ; -- status=guess
@@ -35922,7 +35753,7 @@ lin minister_1_N = mkN "minister" | mkN "statsråd" neutrum ;
 lin minister_2_N = mkN "pastor" "pastorer" ;
 lin minister_N = mkN "pastor" "pastorer" | mkN "statsråd" neutrum ; ---
 lin minister_V = variants {} ; -- status=guess
-lin ministerial_A = variants{} ;
+lin ministerial_A = variants{} ; --
 lin ministrant_A = variants {} ; -- status=guess
 lin ministrant_N = variants {} ; -- status=guess
 lin ministration_N = variants {} ; -- status=guess
@@ -36077,7 +35908,7 @@ lin mislaid_A = variants {} ; -- status=guess
 lin mislay_V2 = variants {} ; -- status=guess
 lin mislead_V2 = mkV2 "vilseleda" "vilseledde" "vilselett" | dirV2 (partV (mkV "lurar")"till") ; -- SaldoWN -- comment=2
 lin misleader_N = variants {} ; -- status=guess
-lin misleading_A = variants{} ;
+lin misleading_A = variants{} ; --
 lin mismanage_V2 = variants {} ; -- status=guess
 lin mismanagement_N = variants {} ; -- status=guess
 lin mismatch_N = variants {} ; -- status=guess
@@ -36117,7 +35948,7 @@ lin miss_out_on_V2 = dirV2 (partV (mkV "bommar")"till"); -- comment=2
 lin missal_N = variants {} ; -- status=guess
 lin misshapen_A = variants {} ; -- status=guess
 lin missile_N = mkN "projektil" "projektiler" ; -- SaldoWN
-lin missing_A = variants{} ;
+lin missing_A = variants{} ; --
 lin mission_N = mkN "uppdrag" "uppdrag" | mkN "mission" "missioner" ; -- status=guess
 lin missionary_A = variants {} ; -- status=guess
 lin missionary_N = variants {} ; -- status=guess
@@ -36184,7 +36015,7 @@ lin mix_V = mkV "blanda" ; -- status=guess
 lin mix_V2 = mkV2 "blanda" ; -- status=guess
 lin mix_up_N = variants {} ; -- status=guess
 lin mix_up_V2 = dirV2 (partV (mkV "blandar")"ut"); -- comment=4
-lin mixed_A = variants{} ;
+lin mixed_A = variants{} ; --
 lin mixed_up_A = variants {} ; -- status=guess
 lin mixer_N = mkN "sällskapsmänniska" ; -- comment=6
 lin mixology_N = variants {} ; -- status=guess
@@ -36207,7 +36038,6 @@ lin mo_PN = variants {} ; -- status=guess
 lin moa_N = mkN "moafåglar" ; -- status=guess
 lin moan_N = mkN "knot" neutrum; -- comment=7
 lin moan_V = mkV "gnäller" ; -- comment=4
---subcat lin moan_V2 = variants{}; -- mkV "gnäller" ; -- comment=4
 lin moan_VS = variants{}; -- mkV "gnäller" ; -- comment=4
 lin moat_N = mkN "vallgrav" ; -- comment=2
 lin moated_A = variants {} ; -- status=guess
@@ -36241,7 +36071,7 @@ lin mod_N = mkN "mods" neutrum; -- comment=2
 lin mod_cons_N = variants {} ; -- status=guess
 lin modal_A = variants {} ; -- status=guess
 lin modality_N = mkN "modalitet" "modaliteter" ; -- status=guess
-lin mode_N = variants{} ;
+lin mode_N = variants{} ; --
 lin model_N = mkN "modell" "modeller" ;
 lin model_V = mkV "visar" ; -- comment=4
 lin model_V2 = dirV2 (partV (mkV "visar")"in"); -- comment=2
@@ -36276,7 +36106,7 @@ lin modicum_N = variants {} ; -- status=guess
 lin modifiable_A = variants {} ; -- status=guess
 lin modification_N = mkN "modifiering" ; -- comment=2
 lin modifier_N = mkN "bestämningsord" neutrum; -- comment=2
-lin modify_V2 = variants{} ;
+lin modify_V2 = variants{} ; --
 lin modillion_N = variants {} ; -- status=guess
 lin modiolus_N = variants {} ; -- status=guess
 lin modish_A = variants {} ; -- status=guess
@@ -36426,7 +36256,7 @@ lin monition_N = variants {} ; -- status=guess
 lin monitor_N = mkN "övervakare" utrum; -- comment=9
 lin monitor_V = mkV "övervakar" ; -- comment=4
 lin monitor_V2 = mkV2 (mkV "övervaka") | mkV2 (mkV "kontrollerar"); -- status=guess, src=wikt status=guess, src=wikt
-lin monitoring_N = variants{} ;
+lin monitoring_N = variants{} ; --
 lin monk_N = mkN "munk" ; -- SaldoWN
 lin monkey_N = mkN "apa" ; -- SaldoWN
 lin monkey_V = mkV "härmar" ; -- status=guess
@@ -36813,7 +36643,6 @@ lin mound_N = mkN "vall" ; -- comment=3
 lin mount_N = mkN "underlag" neutrum; -- comment=11
 lin mount_V = mkV "stiga" "steg" "stigit" ; -- comment=10
 lin mount_V2 = dirV2 (partV (mkV "växa" "växer" "växa" "växte" "vuxit" "vuxen")"ur"); -- comment=7
---subcat lin mount_VS = mkVS (mkV "monterar"); -- status=guess, src=wikt
 lin mount_up_V = mkV "stiga" "steg" "stigit" ; -- comment=10
 lin mountain_N = L.mountain_N ;
 lin mountain_ash_PN = variants {} ; -- status=guess
@@ -36861,9 +36690,6 @@ lin move_2_V = mkV "flyttar" ;
 lin move_N = mkN "drag" "drag" ;
 lin move_V = mkV "rör" | mkV "flyttar" ;
 lin move_V2 = mkV2 "beröra" "berörde" "berört" | mkV2 "flytta" ;
---subcat lin move_V2A = mkV2A (mkV "rör") ;
---subcat lin move_V2V = mkV2V (mkV "rör") ;
---subcat lin move_VV = mkVV (reflV (mkV "rör")) ;
 lin move_ahead_V = mkV "flyttar" ; -- comment=24
 lin move_along_V = mkV "flyttar" ; -- comment=24
 lin move_away_V = mkV "flyttar" ; -- comment=24
@@ -36884,7 +36710,7 @@ lin mover_N = variants {} ; -- status=guess
 lin movie_N = mkN "film" "filmer" ; -- status=guess
 lin moviegoer_N = variants {} ; -- status=guess
 lin moviemaking_N = variants {} ; -- status=guess
-lin moving_A = variants{} ;
+lin moving_A = variants{} ; --
 lin movingly_Adv = variants {} ; -- status=guess
 lin mow_N = mkN "klippa" ; -- comment=2
 lin mow_V = mkV "klipper" ; -- comment=3
@@ -37141,7 +36967,7 @@ lin muse_V = mkV "funderar" ; -- comment=2
 lin muse_VS = variants {} ; -- status=guess
 lin muser_N = variants {} ; -- status=guess
 lin musette_N = variants {} ; -- status=guess
-lin museum_N = mkN "museum" "museet" "museer" "museerna" ; -- SaldoWN
+lin museum_N = mkN "museum" "museet" "museer" "museerna" ;
 lin mush_N = variants {} ; -- status=guess
 lin musher_N = variants {} ; -- status=guess
 lin mushiness_N = variants {} ; -- status=guess
@@ -37158,7 +36984,7 @@ lin musical_N = mkN "musikal" "musikaler" ; -- SaldoWN
 lin musical_box_N = variants {} ; -- status=guess
 lin musicality_N = variants {} ; -- status=guess
 lin musicianFem_N = mkN "musiker" "musikern" "musiker" "musikerna" ; -- comment=4
-lin musicianMasc_N = mkN "musiker" "musikern" "musiker" "musikerna" ; -- comment=4
+lin musicianMasc_N = mkN "musiker" "musikern" "musiker" "musikerna" ; -- status=guess
 lin musicianship_N = variants {} ; -- status=guess
 lin musicological_A = variants {} ; -- status=guess
 lin musicologist_N = variants {} ; -- status=guess
@@ -37398,7 +37224,6 @@ lin namby_pamby_A = variants {} ; -- status=guess
 lin namby_pamby_N = variants {} ; -- status=guess
 lin name_N = L.name_N ;
 lin name_V2 = mkV2 (mkV "utnämna"); -- status=guess, src=wikt
---subcat lin name_V2V = mkV2V (mkV "utnämna"); -- status=guess, src=wikt
 lin name_V3 = mkV3 (mkV "utnämna"); -- status=guess, src=wikt
 lin name_after_V3 = variants {} ; -- status=guess
 lin name_day_N = variants {} ; -- status=guess
@@ -37407,7 +37232,7 @@ lin name_dropping_N = variants {} ; -- status=guess
 lin name_part_N = variants {} ; -- status=guess
 lin nameko_N = variants {} ; -- status=guess
 lin nameless_A = mkA "namnlös" ; -- status=guess
-lin namely_Adv = variants{} ;
+lin namely_Adv = variants{} ; --
 lin nameplate_N = mkN "namnskylt" ; -- status=guess
 lin namer_N = variants {} ; -- status=guess
 lin namesake_N = mkN "namne" utrum | mkN "namne" utrum ; -- SaldoWN
@@ -37517,7 +37342,7 @@ lin nationalistic_A = mkA "nationalistisk" ; -- status=guess
 lin nationality_N = mkN "nationalitet" "nationaliteter" ; -- SaldoWN
 lin nationalization_N = mkN "nationalisering" ; -- status=guess
 lin nationalize_V2 = variants {} ; -- status=guess
-lin nationally_Adv = variants{} ;
+lin nationally_Adv = variants{} ; --
 lin nationhood_N = variants {} ; -- status=guess
 lin nationwide_A = mkA "riksomfattande" ; -- status=guess
 lin nationwide_Adv = variants {} ; -- status=guess
@@ -37617,7 +37442,7 @@ lin nearside_N = variants {} ; -- status=guess
 lin nearsighted_A = variants {} ; -- status=guess
 lin neat_A = mkA "fyndig" ; -- comment=21
 lin neath_PN = variants {} ; -- status=guess
-lin neatly_Adv = variants{} ;
+lin neatly_Adv = variants{} ; --
 lin neatness_N = mkN "prydlighet" ; -- status=guess
 lin nebbish_N = variants {} ; -- status=guess
 lin nebraska_PN = variants {} ; -- status=guess
@@ -37669,8 +37494,6 @@ lin nee_A = mkA "född" | mkA "tidigare" ; -- status=guess status=guess
 lin need_N = mkN "behov" neutrum ;
 lin need_V = mkV "behöver" ;
 lin need_V2 = mkV2 "behöver" ;
---subcat lin need_V2V = mkV2V (mkV "behöver") ;
---subcat lin need_VS = mkVS (mkV "behöver") ;
 lin need_VV = mkVV (mkV "behöver") ;
 lin needful_A = mkA "nödvändig" ; -- comment=2
 lin neediness_N = mkN "nöd" ; -- status=guess
@@ -37729,7 +37552,7 @@ lin neighbour_N = mkN "granne" utrum | mkN "grannland" "grannlandet" "grannländ
 lin neighbour_V = mkV "nästar" ; -- status=guess
 lin neighbour_V2 = variants {} ; -- status=guess
 lin neighbourhood_N = mkN "omgivning" | mkN "närhet" "närheter" ; -- SaldoWN -- comment=5
-lin neighbouring_A = variants{} ;
+lin neighbouring_A = variants{} ; --
 lin neighbourliness_N = variants {} ; -- status=guess
 lin neighbourly_A = variants {} ; -- status=guess
 lin neil_PN = variants {} ; -- status=guess
@@ -37973,7 +37796,7 @@ lin newfound_A = variants {} ; -- status=guess
 lin newfoundland_PN = variants {} ; -- status=guess
 lin newham_PN = variants {} ; -- status=guess
 lin newhaven_PN = variants {} ; -- status=guess
-lin newly_Adv = variants{} ;
+lin newly_Adv = variants{} ; --
 lin newlywed_N = variants {} ; -- status=guess
 lin newmains_PN = variants {} ; -- status=guess
 lin newmarket_N = variants {} ; -- status=guess
@@ -38040,7 +37863,7 @@ lin nicaraguan_A = variants {} ; -- status=guess
 lin nicaraguan_N = variants {} ; -- status=guess
 lin nice_A = mkA "trevlig" | mkA "snäll" | mkA "snygg" ; --- split
 lin nice_PN = variants {} ; -- status=guess
-lin nicely_Adv = variants{} ;
+lin nicely_Adv = variants{} ; --
 lin niceness_N = variants {} ; -- status=guess
 lin nicety_N = variants {} ; -- status=guess
 lin niche_N = mkN "nisch" "nischer" ; -- status=guess
@@ -38219,7 +38042,6 @@ lin nocturnal_A = mkA "nattlig" ; -- comment=2
 lin nocturne_N = mkN "nocturne" "nocturner" ; -- status=guess
 lin nod_N = mkN "nick" ; -- status=guess
 lin nod_V = mkV "nickar" ; -- status=guess
---subcat lin nod_V2 = mkV2 "nickar" ; --- subcat
 lin nod_off_V = mkV "nickar" ; -- comment=2
 lin nod_through_V2 = variants {} ; -- status=guess
 lin noddle_N = variants {} ; -- status=guess
@@ -38254,7 +38076,7 @@ lin nominal_A = mkA "nominell" ; -- comment=3
 lin nominalism_N = variants {} ; -- status=guess
 lin nominalist_N = variants {} ; -- status=guess
 lin nominalistic_A = variants {} ; -- status=guess
-lin nominate_V2 = variants{} ;
+lin nominate_V2 = variants{} ; --
 lin nomination_N = mkN "nominering" ; -- SaldoWN
 lin nominative_A = mkA "nominativ" ; -- status=guess
 lin nominative_N = mkN "nominativ" "nominativer" ; -- status=guess
@@ -38359,7 +38181,7 @@ lin nonequivalence_N = variants {} ; -- status=guess
 lin nonequivalent_A = variants {} ; -- status=guess
 lin nones_N = variants {} ; -- status=guess
 lin nonesuch_N = variants {} ; -- status=guess
-lin nonetheless_Adv = variants{} ;
+lin nonetheless_Adv = variants{} ; --
 lin nonevent_N = variants {} ; -- status=guess
 lin nonexempt_A = variants {} ; -- status=guess
 lin nonexistence_N = variants {} ; -- status=guess
@@ -38694,7 +38516,6 @@ lin nothingness_N = variants {} ; -- status=guess
 lin nothings_N = variants {} ; -- status=guess
 lin nothosaur_N = variants {} ; -- status=guess
 lin notice_N = mkN "varsel" neutrum | mkN "uppsägning" ; -- SaldoWN -- comment=12
---subcat lin notice_V = (mkV "notera") | (mkV "märker") ;
 lin notice_V2 = mkV2 (mkV "notera") | mkV2 (mkV "märker") ;
 lin notice_VS = mkVS (mkV "notera") | mkVS (mkV "märker") ;
 lin notice_board_N = variants {} ; -- status=guess
@@ -38729,7 +38550,7 @@ lin novation_N = variants {} ; -- status=guess
 lin novel_A = mkA "ny" "nytt" ; -- comment=2
 lin novel_N = mkN "roman" "romaner" ; -- status=guess
 lin novelette_N = variants {} ; -- status=guess
-lin novelist_N = variants{} ;
+lin novelist_N = variants{} ; --
 lin novelization_N = variants {} ; -- status=guess
 lin novelty_N = mkN "nyhet" "nyheter" ; -- comment=3
 lin november_N = mkN "november" ; -- status=guess
@@ -38841,7 +38662,7 @@ lin nursemaid_N = mkN "barnflicka" | (mkN "barnflicka") | mkN "barnpassare" ; --
 lin nurser_N = variants {} ; -- status=guess
 lin nursery_N = mkN "plantskola" ; -- SaldoWN
 lin nurseryman_N = variants {} ; -- status=guess
-lin nursing_A = variants{} ;
+lin nursing_A = variants{} ; --
 lin nursing_N = mkN "vård" ; -- comment=6
 lin nursing_home_N = variants {} ; -- status=guess
 lin nursling_N = mkN "dibarn" neutrum; -- comment=2
@@ -38951,7 +38772,7 @@ lin objectification_N = mkN "objektivering" ; -- status=guess
 lin objection_N = mkN "invändning" ; -- SaldoWN
 lin objectionable_A = mkA "förkastlig" ; -- comment=5
 lin objective_A = mkA "saklig" ; -- SaldoWN
-lin objective_N = mkN "mål" neutrum; -- comment=2
+lin objective_N = mkN "mål" neutrum ;
 lin objectivity_N = mkN "objektivitet" "objektiviteter" ; -- status=guess
 lin objector_N = variants {} ; -- status=guess
 lin objurgate_V2 = variants {} ; -- status=guess
@@ -38967,8 +38788,8 @@ lin obligate_V2V = variants {} ; -- status=guess
 lin obligation_N = mkN "förpliktelse" "förpliktelser" | mkN "skyldighet" "skyldigheter" ; -- SaldoWN -- comment=4
 lin obligational_A = variants {} ; -- status=guess
 lin obligatory_A = mkA "obligatorisk" ; -- status=guess
-lin oblige_V2 = variants{} ;
-lin oblige_V2V = variants{} ;
+lin oblige_V2 = variants{} ; --
+lin oblige_V2V = variants{} ; --
 lin obliger_N = variants {} ; -- status=guess
 lin obliging_A = variants {} ; -- status=guess
 lin oblique_A = mkA "sned" ; -- comment=4
@@ -38996,8 +38817,7 @@ lin obscenity_N = mkN "obscenitet" "obsceniteter" ; -- status=guess
 lin obscurantism_N = mkN "obskurantism" "obskurantismer" ; -- status=guess
 lin obscurantist_N = mkN "obskurantist" "obskurantister" ; -- comment=2
 lin obscure_A = mkA "obskyr" | mkA "otydlig" ; -- SaldoWN -- comment=12
-lin obscure_V2 = variants{} ;
---subcat lin obscure_VA = variants{} ;
+lin obscure_V2 = variants{} ; --
 lin obscureness_N = variants {} ; -- status=guess
 lin obscurity_N = mkN "otydlighet" "otydligheter" ; -- comment=7
 lin obsequious_A = mkA "underdånig" | mkA "krypande" ; -- status=guess status=guess
@@ -39007,7 +38827,6 @@ lin observance_N = mkN "efterlevnad" "efterlevnader" ; -- comment=7
 lin observant_A = mkA "observant" "observant" ; -- comment=2
 lin observation_N = mkN "iakttagelse" "iakttagelser" | mkN "yttrande" ; -- SaldoWN -- comment=9
 lin observatory_N = mkN "observatorium" "observatoriet" "observatorier" "observatorierna" ; -- status=guess
---subcat lin observe_V = mkV "observerar" ;
 lin observe_V2 = dirV2 (mkV "observera") ;
 lin observe_VS = mkVS (mkV "iaktta" "iakttar" "iaktta" "iakttog" "iakttagit" "iakttagen");
 lin observer_N = mkN "observatör" "observatörer" ; -- SaldoWN
@@ -39060,7 +38879,7 @@ lin ocarina_N = mkN "okarina" ; -- status=guess
 lin occasion_N = mkN "tillfälle" | mkN "evenemang" neutrum ;
 lin occasion_V2 = variants {} ; -- status=guess
 lin occasional_A = mkA "tillfällig" ; -- comment=3
-lin occasionally_Adv = variants{} ;
+lin occasionally_Adv = variants{} ; --
 lin occasions_N = variants {} ; -- status=guess
 lin occident_PN = variants {} ; -- status=guess
 lin occidental_A = mkA "västerländsk" ; -- status=guess
@@ -39134,7 +38953,7 @@ lin oculist_N = variants {} ; -- status=guess
 lin oculomotor_N = variants {} ; -- status=guess
 lin odalisque_N = variants {} ; -- status=guess
 lin odd_A = mkA "udda" | mkA "underlig" ; -- SaldoWN -- comment=22
-lin odd_N = variants{} ;
+lin odd_N = variants{} ; --
 lin odd_job_A = variants {} ; -- status=guess
 lin oddish_A = variants {} ; -- status=guess
 lin oddity_N = mkN "underlighet" "underligheter" ; -- comment=2
@@ -39186,18 +39005,14 @@ lin offenceless_A = variants {} ; -- status=guess
 lin offend_V = mkV "förolämpar" ; -- comment=4
 lin offend_V2 = mkV2 (mkV "såra"); -- status=guess, src=wikt
 lin offenderFem_N = variants {} ; -- status=guess
-lin offenderMasc_N = variants{} ;
+lin offenderMasc_N = variants{} ; --
 lin offense_N = variants {} ; -- status=guess
 lin offenseless_A = variants {} ; -- status=guess
 lin offensive_A = mkA "offensiv" ; -- SaldoWN
 lin offensive_N = mkN "offensiv" "offensiver" ; -- SaldoWN
 lin offensiveness_N = variants {} ; -- status=guess
 lin offer_N = mkN "erbjudande" ;
---subcat lin offer_V = mkV "erbjuda" "erbjöd" "erbjudit" ;
 lin offer_V2 = mkV2 "erbjuda" "erbjöd" "erbjudit" ;
---subcat lin offer_V2V = mkV2V "erbjuda" "erbjöd" "erbjudit" ;
---subcat lin offer_V3 = mkV3 "erbjuda" "erbjöd" "erbjudit" ;
---subcat lin offer_VS = mkVS (mkV "erbjuda" "erbjöd" "erbjudit") ;
 lin offer_VV = mkVV (mkV "erbjuda" "erbjöd" "erbjudit") ;
 lin offer_up_V = mkV "utfästa" "utfäster" "utfäst" "utfäste" "utfäst" "utfäst" ; -- comment=8
 lin offerer_N = variants {} ; -- status=guess
@@ -39219,7 +39034,7 @@ lin officer_2_N = mkN "officer" "officern" "officer" "officerna" ;
 lin officer_3_N = mkN "polis" "poliser" ;
 lin officer_N = mkN "polis" | mkN "ämbetsman" "ämbetsmannen" "ämbetsmän" "ämbetsmännen" ; ---
 lin officialFem_N = mkN "tjänsteman" "tjänstemannen" "tjänstemän" "tjänstemännen" ; -- comment=4
-lin officialMasc_N = mkN "tjänsteman" "tjänstemannen" "tjänstemän" "tjänstemännen" ; -- comment=4
+lin officialMasc_N = mkN "myndighet" "myndigheter" ;
 lin official_A = mkA "officiell" ; -- status=guess
 lin officialdom_N = variants {} ; -- status=guess
 lin officialese_N = variants {} ; -- status=guess
@@ -39233,7 +39048,7 @@ lin offing_N = variants {} ; -- status=guess
 lin offish_A = variants {} ; -- status=guess
 lin offprint_N = variants {} ; -- status=guess
 lin offset_N = mkN "motvikt" "motvikter" ; -- comment=3
-lin offset_V2 = variants{} ;
+lin offset_V2 = variants{} ; --
 lin offshoot_N = mkN "utgrening" ; -- comment=3
 lin offshore_A = mkA "offshore" ; -- status=guess
 lin offshore_Adv = variants {} ; -- status=guess
@@ -39304,7 +39119,7 @@ lin okra_N = mkN "okra" ; -- status=guess
 lin ola_N = variants {} ; -- status=guess
 lin old_A = L.old_A ;
 lin old_N = mkN "gubbe" utrum; -- status=guess
-lin old_fashioned_A = variants{} ;
+lin old_fashioned_A = variants{} ; --
 lin old_maidish_A = variants {} ; -- status=guess
 lin old_time_A = variants {} ; -- status=guess
 lin old_timer_N = variants {} ; -- status=guess
@@ -39378,7 +39193,7 @@ lin ominous_A = mkA "illavarslande" ; -- comment=2
 lin omissible_A = variants {} ; -- status=guess
 lin omission_N = mkN "förbiseende" | mkN "utelämnande" ; -- SaldoWN -- comment=3
 lin omissive_A = variants {} ; -- status=guess
-lin omit_V2 = variants{} ;
+lin omit_V2 = variants{} ; --
 lin ommastrephes_N = variants {} ; -- status=guess
 lin ommatidium_N = variants {} ; -- status=guess
 lin omnibus_N = mkN "omnibus" ; -- status=guess
@@ -39459,7 +39274,7 @@ lin ontology_N = mkN "ontologi" "ontologier" ; -- status=guess
 lin onus_N = variants {} ; -- status=guess
 lin onward_A = variants {} ; -- status=guess
 lin onward_Adv = mkAdv "framåt" ; -- status=guess
-lin onwards_Adv = variants{} ;
+lin onwards_Adv = variants{} ; --
 lin onycholysis_N = variants {} ; -- status=guess
 lin onychophoran_N = variants {} ; -- status=guess
 lin onychosis_N = variants {} ; -- status=guess
@@ -39493,7 +39308,7 @@ lin opaque_A = mkA "opak" ; -- comment=4
 lin opaqueness_N = variants {} ; -- status=guess
 lin opec_PN = variants {} ; -- status=guess
 lin open_A = mkA "öppen" "öppet" ;
-lin open_Adv = variants{} ;
+lin open_Adv = variants{} ; --
 lin open_N = mkN "löpande" ; -- comment=2
 lin open_V = mkV "öppnas" ;
 lin open_V2 = L.open_V2 ;
@@ -39511,7 +39326,7 @@ lin opencast_A = variants {} ; -- status=guess
 lin opener_N = mkN "öppnare" utrum; -- status=guess
 lin openhearted_A = variants {} ; -- status=guess
 lin opening_N = mkN "öppning" ; -- comment=8
-lin openly_Adv = variants{} ;
+lin openly_Adv = variants{} ; --
 lin openness_N = mkN "öppenhet" "öppenheter" ; -- comment=3
 lin openwork_N = variants {} ; -- status=guess
 lin opepe_N = variants {} ; -- status=guess
@@ -39527,7 +39342,7 @@ lin operate_V = mkV "sköter" ;
 lin operate_V2 = mkV2 "operera" | mkV2 "sköter" ;
 lin operate_on_V2 = dirV2 (partV (mkV "arbetar")"av"); -- status=guess
 lin operatic_A = mkA "teatralisk" ; -- status=guess
-lin operating_N = variants{} ;
+lin operating_N = variants{} ; --
 lin operating_table_N = variants {} ; -- status=guess
 lin operating_theatre_N = variants {} ; -- status=guess
 lin operation_N = mkN "operation" "operationer" ;
@@ -39568,7 +39383,7 @@ lin opopanax_N = variants {} ; -- status=guess
 lin opossum_N = mkN "pungråtta" ; -- comment=2
 lin opp_PN = variants {} ; -- status=guess
 lin opponentFem_N = mkN "opponent" "opponenter" ; -- comment=6
-lin opponentMasc_N = mkN "opponent" "opponenter" ; -- comment=6
+lin opponentMasc_N = variants{} ; --
 lin opponent_A = variants {} ; -- status=guess
 lin opportune_A = mkA "opportun" ; -- SaldoWN
 lin opportuneness_N = variants {} ; -- status=guess
@@ -39580,10 +39395,9 @@ lin opportunity_N = mkN "tillfälle" ;
 lin opposable_A = variants {} ; -- status=guess
 lin oppose_V = mkV "motarbetar" ; -- comment=4
 lin oppose_V2 = mkV2 (mkV "opponerar"); -- status=guess, src=wikt
---subcat lin oppose_VS = mkVS (mkV "opponerar"); -- status=guess, src=wikt
-lin opposed_A = variants{} ;
+lin opposed_A = variants{} ; --
 lin opposite_A = mkA "motsatt" ; -- SaldoWN
-lin opposite_Adv = variants{} ;
+lin opposite_Adv = variants{} ; --
 lin opposite_N = mkN "motsats" "motsatser" | mkN "motstående" ; -- SaldoWN -- comment=3
 lin opposite_Prep = variants {} ; -- status=guess
 lin opposition_N = mkN "opposition" "oppositioner" ;
@@ -39598,7 +39412,6 @@ lin opsin_N = variants {} ; -- status=guess
 lin opsonin_N = variants {} ; -- status=guess
 lin opsonization_N = variants {} ; -- status=guess
 lin opt_V = mkV "välja" "valde" "valt" ; -- status=guess
---subcat lin opt_V2V = mkV2V (mkV "välja" "valde" "valt"); -- status=guess, src=wikt
 lin opt_VV = mkVV (mkV "välja" "valde" "valt"); -- status=guess, src=wikt
 lin opt_for_V2 = variants {} ; -- status=guess
 lin opt_in_V = mkV "välja" "valde" "valt" ; -- status=guess
@@ -39639,7 +39452,7 @@ lin orang_utan_N = variants {} ; -- status=guess
 lin orange_1_N = mkN "orange" "oranger" ; -- comment=3
 lin orange_2_N = mkN "orange" "oranger" ; -- comment=3
 lin orange_A = mkA "orange" "orange" ; -- status=guess
-lin orange_N = variants{} ;
+lin orange_N = variants{} ; --
 lin orangeade_N = variants {} ; -- status=guess
 lin orangeman_N = variants {} ; -- status=guess
 lin orangery_N = mkN "orangeri" "orangerit" "orangerier" "orangerierna" ; -- status=guess
@@ -39682,7 +39495,6 @@ lin order_V = mkV "beställer" ;
 lin order_V2 = mkV2 "beställer" ;
 lin order_V2V = mkV2V (mkV "befaller") ;
 lin order_VS = mkVS (mkV "befaller") ;
---subcat lin order_VV = mkVV (mkV "befaller") ; ---- subcat
 lin order_book_N = variants {} ; -- status=guess
 lin order_form_N = variants {} ; -- status=guess
 lin order_paper_N = variants {} ; -- status=guess
@@ -39696,7 +39508,7 @@ lin ordinal_N = (mkN "ordningstal" neutrum) | mkN "ordinaltal" ; -- status=guess
 lin ordinance_N = mkN "förordning" ; -- status=guess
 lin ordinand_N = variants {} ; -- status=guess
 lin ordinariness_N = variants {} ; -- status=guess
-lin ordinary_A = mkA "vanlig" ; -- SaldoWN
+lin ordinary_A = mkA "vanlig" ;
 lin ordinary_N = mkN "ordinär differentialekvation" ; -- status=guess
 lin ordinate_N = variants {} ; -- status=guess
 lin ordination_N = variants {} ; -- status=guess
@@ -39983,7 +39795,7 @@ lin outcry_N = mkN "ramaskri" "ramaskrit" "ramaskrin" "ramaskrien" ; -- SaldoWN
 lin outdated_A = variants {} ; -- status=guess
 lin outdistance_V2 = variants {} ; -- status=guess
 lin outdo_V2 = variants {} ; -- status=guess
-lin outdoor_A = variants{} ;
+lin outdoor_A = variants{} ; --
 lin outdoors_Adv = mkAdv "utomhus" ; -- status=guess
 lin outdoors_N = variants {} ; -- status=guess
 lin outdoorsman_N = variants {} ; -- status=guess
@@ -40024,7 +39836,7 @@ lin outleap_V2 = variants {} ; -- status=guess
 lin outlet_N = mkN "kontakt" "kontakter" | mkN "utlopp" neutrum ; -- SaldoWN -- comment=8
 lin outlier_N = mkN "utliggare" ; -- status=guess
 lin outline_N = mkN "skiss" "skisser" | mkN "utkast" neutrum ; -- SaldoWN -- comment=7
-lin outline_V2 = variants{} ;
+lin outline_V2 = variants{} ; --
 lin outlive_V2 = variants {} ; -- status=guess
 lin outlook_N = mkN "åskådning" ; -- SaldoWN
 lin outlying_A = variants {} ; -- status=guess
@@ -40061,7 +39873,7 @@ lin outrival_V2 = variants {} ; -- status=guess
 lin outrun_V2 = variants {} ; -- status=guess
 lin outsail_V2 = variants {} ; -- status=guess
 lin outsell_V2 = variants {} ; -- status=guess
-lin outset_N = variants{} ;
+lin outset_N = variants{} ; --
 lin outshine_V2 = variants {} ; -- status=guess
 lin outside_A = mkA "utvändig" ; -- comment=3
 lin outside_Adv = mkAdv "utomhus" ; -- comment=5
@@ -40128,7 +39940,7 @@ lin overactivity_N = variants {} ; -- status=guess
 lin overage_A = variants {} ; -- status=guess
 lin overage_N = variants {} ; -- status=guess
 lin overall_A = mkA "övergripande" ; -- status=guess
-lin overall_Adv = variants{} ;
+lin overall_Adv = variants{} ; --
 lin overall_N = mkN "overall" "overaller" | mkN "rock" ; -- SaldoWN -- comment=5
 lin overambitious_A = mkA "överambitiös" ; -- status=guess
 lin overanxiety_N = variants {} ; -- status=guess
@@ -40268,7 +40080,7 @@ lin overmuch_A = variants {} ; -- status=guess
 lin overmuch_Adv = variants {} ; -- status=guess
 lin overnervous_A = variants {} ; -- status=guess
 lin overnight_A = mkA "nattlig" ; -- status=guess
-lin overnight_Adv = variants{} ;
+lin overnight_Adv = variants{} ; --
 lin overnighter_N = variants {} ; -- status=guess
 lin overpass_N = variants {} ; -- status=guess
 lin overpay_V = variants {} ; -- status=guess
@@ -40367,7 +40179,7 @@ lin overweight_A = mkA "överviktig" ; -- status=guess
 lin overweight_N = mkN "övervikt" ; -- SaldoWN
 lin overweighted_A = variants {} ; -- status=guess
 lin overwhelm_V2 = mkV2 (mkV "överväldiga"); -- status=guess, src=wikt
-lin overwhelming_A = variants{} ;
+lin overwhelming_A = variants{} ; --
 lin overwhelmingly_Adv = variants {} ; -- status=guess
 lin overwork_N = mkN "överansträngning" ; -- status=guess
 lin overwork_V = variants {} ; -- status=guess
@@ -40397,7 +40209,6 @@ lin owl_N = mkN "uggla" ; -- SaldoWN
 lin owlet_N = variants {} ; -- status=guess
 lin owlish_A = variants {} ; -- status=guess
 lin own_A = mkA "egen" "eget" ; -- status=guess
---subcat lin own_V = mkV "äger" ; -- comment=4
 lin own_V2 = mkV2 "äger" ;
 lin own_up_V = mkV "äger" ; -- comment=4
 lin owner_N = mkN "ägare" utrum ;
@@ -40518,7 +40329,7 @@ lin pack_thread_N = variants {} ; -- status=guess
 lin pack_up_V = mkV "tätar" ; -- comment=11
 lin pack_up_V2 = dirV2 (partV (mkV "packar")"ur"); -- comment=5
 lin packable_A = variants {} ; -- status=guess
-lin package_N = mkN "paket" neutrum | mkN "emballerande" ; -- SaldoWN -- comment=8
+lin package_N = mkN "paket" neutrum ;
 lin package_V2 = mkV2 (mkV "packar"); -- status=guess, src=wikt
 lin packaging_N = mkN "packning" ; -- comment=5
 lin packer_N = variants {} ; -- status=guess
@@ -40578,7 +40389,7 @@ lin paging_N = variants {} ; -- status=guess
 lin pagoda_N = mkN "pagod" "pagoder" ; -- status=guess
 lin pahautea_N = variants {} ; -- status=guess
 lin pahoehoe_N = variants {} ; -- status=guess
-lin paid_A = variants{} ;
+lin paid_A = variants{} ; --
 lin pail_N = mkN "ämbar" neutrum; -- comment=5
 lin pailful_N = mkN "hink" ; -- status=guess
 lin paillasse_N = variants {} ; -- status=guess
@@ -40599,7 +40410,7 @@ lin paintbox_N = variants {} ; -- status=guess
 lin paintbrush_N = variants {} ; -- status=guess
 lin painter_N = mkN "målare" utrum | mkN "målare" utrum ; -- SaldoWN
 lin painterly_A = variants {} ; -- status=guess
-lin painting_N = mkN "tavla" ; -- comment=5
+lin painting_N = mkN "målning" ;
 lin pair_N = mkN "par" neutrum ;
 lin pair_V = mkV "spinna" "spann" "spunnit" ; -- status=guess
 lin pair_V2 = mkV2 (mkV "parar") | mkV2 (mkV (mkV "para") "ihop"); -- status=guess, src=wikt status=guess, src=wikt
@@ -40895,7 +40706,7 @@ lin papuan_N = variants {} ; -- status=guess
 lin papule_N = variants {} ; -- status=guess
 lin papulovesicle_N = variants {} ; -- status=guess
 lin papyrus_N = variants {} ; -- status=guess
-lin par_N = variants{} ;
+lin par_N = variants{} ; --
 lin par_down_V = variants {} ; -- status=guess
 lin par_excellence_Adv = variants {} ; -- status=guess
 lin para_N = variants {} ; -- status=guess
@@ -41120,7 +40931,7 @@ lin part_of_N2 = mkN2 (mkN "del") (mkPrep "av"); -- status=guess
 lin part_owner_N = variants {} ; -- status=guess
 lin part_singing_N = variants {} ; -- status=guess
 lin part_song_N = variants {} ; -- status=guess
-lin part_time_A = variants{} ;
+lin part_time_A = variants{} ; --
 lin part_time_Adv = variants {} ; -- status=guess
 lin part_timer_N = variants {} ; -- status=guess
 lin part_with_V2 = dirV2 (partV (mkV "skilja" "skiljer" "skilt") "av"); -- comment=3
@@ -41135,7 +40946,7 @@ lin parthian_A = variants {} ; -- status=guess
 lin parti_coloured_A = variants {} ; -- status=guess
 lin partial_A = mkA "partisk" ; -- status=guess
 lin partiality_N = variants {} ; -- status=guess
-lin partially_Adv = variants{} ;
+lin partially_Adv = variants{} ; --
 lin partialness_N = variants {} ; -- status=guess
 lin partible_A = variants {} ; -- status=guess
 lin participant_N = mkN "deltagare" utrum | mkN "deltagare" utrum ; -- SaldoWN -- comment=2
@@ -41147,7 +40958,7 @@ lin participial_A = variants {} ; -- status=guess
 lin participle_N = mkN "particip" neutrum; -- status=guess
 lin particle_N = mkN "partikel" ; -- SaldoWN
 lin particular_A = mkA "särskild" "särskilt" ;
-lin particular_N = variants{} ;
+lin particular_N = variants{} ; --
 lin particularism_N = variants {} ; -- status=guess
 lin particularistic_A = variants {} ; -- status=guess
 lin particularity_N = mkN "noggrannhet" "noggrannheter" ; -- status=guess
@@ -41197,7 +41008,6 @@ lin pashto_N = variants {} ; -- status=guess
 lin pasqueflower_N = variants {} ; -- status=guess
 lin pass_N = mkN "passersedel" | mkN "räcka" ; -- SaldoWN -- comment=14
 lin pass_V = mkV "passera" ;
---subcat lin pass_V2 = mkV2 "överlåta" "överlät" "överlåtit" ;
 lin pass_around_V2 = dirV2 (partV (mkV "väntar")"ut"); -- comment=22
 lin pass_as_V2 = dirV2 (partV (mkV "väntar")"ut"); -- comment=22
 lin pass_away_V = mkV "passerar" ; -- comment=26
@@ -41238,7 +41048,7 @@ lin passing_N = mkN "övergående" ; -- comment=4
 lin passing_out_A = variants {} ; -- status=guess
 lin passion_N = mkN "passion" "passioner" ; -- SaldoWN
 lin passion_flower_N = variants {} ; -- status=guess
-lin passionate_A = variants{} ;
+lin passionate_A = variants{} ; --
 lin passionflower_N = variants {} ; -- status=guess
 lin passionless_A = variants {} ; -- status=guess
 lin passive_A = mkA "passiv" ; -- SaldoWN
@@ -41525,7 +41335,7 @@ lin pearlwort_N = variants {} ; -- status=guess
 lin pearly_A = variants {} ; -- status=guess
 lin pearmain_N = variants {} ; -- status=guess
 lin peasantFem_N = mkN "bonde" "bönder" ; -- status=guess
-lin peasantMasc_N = mkN "bonde" "bönder" ; -- status=guess
+lin peasantMasc_N = variants{} ; --
 lin peasanthood_N = variants {} ; -- status=guess
 lin peasantry_N = variants {} ; -- status=guess
 lin pease_N = variants {} ; -- status=guess
@@ -41846,7 +41656,7 @@ lin perceivable_A = variants {} ; -- status=guess
 lin perceive_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut"); -- comment=4
 lin perceive_V2V = mkV2V (mkV "begripa" "begrep" "begripit"); -- status=guess, src=wikt
 lin perceive_VS = mkVS (mkV "begripa" "begrep" "begripit"); -- status=guess, src=wikt
-lin perceived_A = variants{} ;
+lin perceived_A = variants{} ; --
 lin perceiver_N = variants {} ; -- status=guess
 lin percent_N = mkN "procent" "procenten" "procent" "procenten" ;
 lin percentage_N = mkN "procent" "procenten" "procent" "procenten" ; -- comment=4
@@ -42010,7 +41820,7 @@ lin permafrost_N = variants {} ; -- status=guess
 lin permanence_N = mkN "beständighet" "beständigheter" ; -- comment=3
 lin permanency_N = mkN "beständighet" "beständigheter" ; -- comment=3
 lin permanent_A = mkA "permanent" "permanent" ; -- SaldoWN
-lin permanently_Adv = variants{} ;
+lin permanently_Adv = variants{} ; --
 lin permanganate_N = variants {} ; -- status=guess
 lin permeability_N = mkN "genomtränglighet" ; -- status=guess
 lin permeable_A = variants {} ; -- status=guess
@@ -42082,7 +41892,7 @@ lin personal_A = mkA "personlig" ;
 lin personal_N = mkN "kränkande" ; -- comment=2
 lin personality_N = mkN "personlighet" ; -- SaldoWN = mkN "personlighet" "personligheter" ;
 lin personalize_V2 = variants {} ; -- status=guess
-lin personally_Adv = variants{} ;
+lin personally_Adv = variants{} ; --
 lin personalty_N = variants {} ; -- status=guess
 lin personate_V2 = variants {} ; -- status=guess
 lin personation_N = variants {} ; -- status=guess
@@ -42370,7 +42180,7 @@ lin phoenicophorium_N = variants {} ; -- status=guess
 lin phoenix_N = mkN "fenix" ; -- status=guess
 lin phoenix_PN = variants {} ; -- status=guess
 lin phon_N = variants {} ; -- status=guess
-lin phone_N = mkN "telefon" "telefoner" ; -- status=guess
+lin phone_N = mkN "telefon" "telefoner" ;
 lin phone_V = mkV "telefonerar" ; -- comment=3
 lin phone_V2 = mkV2 (mkV "ringar") | mkV2 (mkV "telefonerar"); -- status=guess, src=wikt status=guess, src=wikt
 lin phone_in_N = variants {} ; -- status=guess
@@ -42502,7 +42312,7 @@ lin phylum_N = mkN "provins" "provinser" ; -- status=guess
 lin physa_N = variants {} ; -- status=guess
 lin physic_N = variants {} ; -- status=guess
 lin physical_A = mkA "fysisk" ;
-lin physically_Adv = variants{} ;
+lin physically_Adv = variants{} ; --
 lin physician_N = mkN "läkare" utrum; -- comment=2
 lin physicist_N = mkN "fysiker" "fysikern" "fysiker" "fysikerna" ; -- status=guess
 lin physicochemical_A = variants {} ; -- status=guess
@@ -42745,7 +42555,7 @@ lin pimple_N = mkN "finne" utrum; -- status=guess
 lin pimpled_A = variants {} ; -- status=guess
 lin pimply_A = variants {} ; -- status=guess
 lin pin_N = mkN "PIN-kod" "PIN-koder" | mkN "skruv" ; -- SaldoWN -- comment=13
-lin pin_V2 = variants{} ;
+lin pin_V2 = variants{} ; --
 lin pin_down_V2 = variants {} ; -- status=guess
 lin pin_money_N = variants {} ; -- status=guess
 lin pin_on_V3 = variants {} ; -- status=guess
@@ -43050,8 +42860,8 @@ lin planking_N = mkN "plank" neutrum; -- comment=2
 lin plankton_N = mkN "plankton" neutrum | mkN "plankton" neutrum ; -- SaldoWN
 lin planktonic_A = variants {} ; -- status=guess
 lin planless_A = variants {} ; -- status=guess
-lin planned_A = variants{} ;
-lin planner_N = variants{} ;
+lin planned_A = variants{} ; --
+lin planner_N = variants{} ; --
 lin planning_N = mkN "planering" ;
 lin planoconcave_A = variants {} ; -- status=guess
 lin planoconvex_A = variants {} ; -- status=guess
@@ -43138,7 +42948,6 @@ lin play_3_V2 = mkV2 "spela" ;
 lin play_N = mkN "pjäs" "pjäser" ;
 lin play_V = L.play_V;
 lin play_V2 = L.play_V2;
---subcat lin play_VV = mkVV (mkV "spela") ;
 lin play_acting_N = variants {} ; -- status=guess
 lin play_actor_N = variants {} ; -- status=guess
 lin play_along_V = mkV "spelar" ; -- comment=16
@@ -43197,7 +43006,6 @@ lin plea_N = mkN "ursäkt" "ursäkter" ; -- comment=9
 lin pleach_V2 = variants {} ; -- status=guess
 lin plead_V = mkV "be" "bad" "bett" ; -- comment=9
 lin plead_V2 = dirV2 (partV (mkV "talar")"om"); -- status=guess
---subcat lin plead_VA = variants{}; -- mkV "be" "bad" "bett" ; -- comment=9
 lin plead_VS = variants{}; -- dirV2 (partV (mkV "talar")"om");
 lin plead_out_V = mkV "be" "bad" "bett" ; -- comment=9
 lin pleading_N = mkN "bedjande" ; -- status=guess
@@ -43556,7 +43364,7 @@ lin poliosis_N = variants {} ; -- status=guess
 lin poliovirus_N = variants {} ; -- status=guess
 lin polishFem_N = mkN "polsk" ; -- status=guess
 lin polishMasc_N = mkN "polsk" ; -- status=guess
-lin polish_A = variants{} ;
+lin polish_A = variants{} ; --
 lin polish_V = mkV "slipar" ; -- comment=8
 lin polish_V2 = dirV2 (partV (mkV "skurar")"av"); -- comment=5
 lin polish_off_V2 = dirV2 (partV (mkV "skurar")"av"); -- comment=5
@@ -43567,7 +43375,7 @@ lin polite_A = mkA "artig" | compoundA (regA "bildad") ; -- SaldoWN -- comment=7
 lin politeness_N = mkN "artighet" "artigheter" ; -- comment=2
 lin politic_A = mkA "välbetänkt" "välbetänkt" ; -- comment=2
 lin political_A = mkA "politisk" ;
-lin politically_Adv = variants{} ;
+lin politically_Adv = variants{} ; --
 lin politician_N = mkN "politiker" "politikern" "politiker" "politikerna" | mkN "statsman" "statsmannen" "statsmän" "statsmännen" ; -- status=guess
 lin politicize_V = mkV "politiserar" ; -- status=guess
 lin politicize_V2 = variants {} ; -- status=guess
@@ -43690,7 +43498,7 @@ lin polysyllabic_A = mkA "flerstavig" ; -- status=guess
 lin polysyllabically_Adv = variants {} ; -- status=guess
 lin polysyllable_N = variants {} ; -- status=guess
 lin polysyndeton_N = variants {} ; -- status=guess
-lin polytechnic_N = variants{} ;
+lin polytechnic_N = variants{} ; --
 lin polytheism_N = variants {} ; -- status=guess
 lin polytheist_N = variants {} ; -- status=guess
 lin polytheistic_A = mkA "polyteistisk" ; -- status=guess
@@ -43776,14 +43584,13 @@ lin poor_rate_N = variants {} ; -- status=guess
 lin poor_spirited_A = variants {} ; -- status=guess
 lin poorhouse_N = (mkN "fattighus" neutrum) | (mkN "fattigstuga"); -- status=guess status=guess
 lin poorly_A = mkA "fattig" ; -- comment=6
-lin poorly_Adv = variants{} ;
+lin poorly_Adv = variants{} ; --
 lin poorness_N = variants {} ; -- status=guess
 lin poorwill_N = variants {} ; -- status=guess
 lin pootle_along_V = variants {} ; -- status=guess
 lin pop_A = variants {} ; -- status=guess
 lin pop_Adv = variants {} ; -- status=guess
 lin pop_N = mkN "smälla" | mkN "pop" "poper" ; -- SaldoWN -- comment=3
---subcat lin pop_V = mkV "smälla" "small" "smäll" ; -- SaldoWN
 lin pop_V2 = mkV2 "smälla" "small" "smäll" ; -- SaldoWN
 lin pop_in_V = variants {} ; -- status=guess
 lin pop_off_V = variants {} ; -- status=guess
@@ -43885,7 +43692,7 @@ lin porto_alegre_PN = variants {} ; -- status=guess
 lin portrait_N = mkN "porträtt" neutrum | mkN "porträtt" neutrum ; -- SaldoWN -- comment=6
 lin portraitist_N = variants {} ; -- status=guess
 lin portraiture_N = mkN "porträttering" ; -- status=guess
-lin portray_V2 = variants{} ;
+lin portray_V2 = variants{} ; --
 lin portrayal_N = mkN "porträttering" ; -- comment=4
 lin portsmouth_PN = variants {} ; -- status=guess
 lin portugal_PN = mkPN "Portugal" neutrum ; -- status=guess
@@ -43904,12 +43711,11 @@ lin posh_V2 = variants {} ; -- status=guess
 lin posit_V2 = mkV2 (mkV "postulerar") ; -- status=guess
 lin position_N = mkN "ställning" | mkN "anställning" ;
 lin position_V2 = mkV2 (mkV "placerar") | mkV2 (mkV (mkV "placera") "ut"); -- status=guess, src=wikt status=guess, src=wikt
---subcat lin position_V2V = mkV2V (mkV "placerar") | mkV2V (mkV (mkV "placera") "ut"); -- status=guess, src=wikt status=guess, src=wikt
 lin positionable_A = variants {} ; -- status=guess
 lin positional_A = variants {} ; -- status=guess
 lin positive_A = mkA "positiv" ;
 lin positive_N = mkN "positiv" "positiver" ; -- SaldoWN = mkN "positiv" neutrum ;
-lin positively_Adv = variants{} ;
+lin positively_Adv = variants{} ; --
 lin positiveness_N = variants {} ; -- status=guess
 lin positivism_N = variants {} ; -- status=guess
 lin positivist_A = variants {} ; -- status=guess
@@ -43944,7 +43750,7 @@ lin post_mortem_A = variants {} ; -- status=guess
 lin post_mortem_N = variants {} ; -- status=guess
 lin post_paid_A = variants {} ; -- status=guess
 lin post_paid_Adv = variants {} ; -- status=guess
-lin post_war_A = variants{} ;
+lin post_war_A = variants{} ; --
 lin postage_N = mkN "porto" "portot" "porton" "portona" ; -- status=guess
 lin postage_stamp_N = variants {} ; -- status=guess
 lin postal_A = variants {} ; -- status=guess
@@ -44036,10 +43842,10 @@ lin poteen_N = variants {} ; -- status=guess
 lin potency_N = mkN "styrka" ; -- comment=5
 lin potent_A = mkA "stark" ; -- comment=4
 lin potentate_N = variants {} ; -- status=guess
-lin potential_A = mkA "potentiell" ; -- SaldoWN
+lin potential_A = mkA "potentiell" ;
 lin potential_N = mkN "potential" "potentialer" ; -- SaldoWN
 lin potentiality_N = variants {} ; -- status=guess
-lin potentially_Adv = variants{} ;
+lin potentially_Adv = variants{} ; --
 lin potentiation_N = variants {} ; -- status=guess
 lin potentiometer_N = variants {} ; -- status=guess
 lin pothead_N = variants {} ; -- status=guess
@@ -44118,7 +43924,7 @@ lin powderer_N = variants {} ; -- status=guess
 lin powderpuff_N = variants {} ; -- status=guess
 lin powdery_A = variants {} ; -- status=guess
 lin power_N = mkN "makt" "makter" ;
-lin power_V2 = variants{} ;
+lin power_V2 = variants{} ; --
 lin power_dive_N = variants {} ; -- status=guess
 lin power_dive_V2 = variants {} ; -- status=guess
 lin power_down_V2 = variants {} ; -- status=guess
@@ -44144,7 +43950,7 @@ lin practicability_N = variants {} ; -- status=guess
 lin practicable_A = mkA "gångbar" ; -- status=guess
 lin practical_A = mkA "praktisk" ;
 lin practicality_N = mkN "praktiskhet" "praktiskheter" ; -- comment=2
-lin practically_Adv = variants{} ;
+lin practically_Adv = variants{} ; --
 lin practice_N = mkN "övning" | mkN "praktik" "praktiker" ;
 lin practice_V = mkV "övar" ; -- comment=7
 lin practice_V2 = mkV2 (mkV "öva") | mkV2 (mkV "träna"); -- status=guess, src=wikt status=guess, src=wikt
@@ -44238,7 +44044,6 @@ lin precast_A = variants {} ; -- status=guess
 lin precatory_A = variants {} ; -- status=guess
 lin precaution_N = mkN "försiktighetsåtgärd" "försiktighetsåtgärder" ; -- status=guess
 lin precautionary_A = variants {} ; -- status=guess
---subcat lin precede_V = mkV "föregå" "föregår" "föregå" "föregick" "föregått" "föregången" | mkV "inleda" "inledde" "inlett" ; -- SaldoWN -- comment=2
 lin precede_V2 = mkV2 "föregå" "föregår" "föregå" "föregick" "föregått" "föregången" ; -- SaldoWN
 lin precedence_N = mkN "företräde" ; -- status=guess
 lin precedent_A = variants {} ; -- status=guess
@@ -44270,7 +44075,7 @@ lin precipitous_A = mkA "plötslig" ; -- comment=5
 lin precis_N = variants {} ; -- status=guess
 lin precis_V2 = variants {} ; -- status=guess
 lin precise_A = mkA "precis" | mkA "exakt" "exakt" ; -- SaldoWN
-lin precisely_Adv = variants{} ;
+lin precisely_Adv = variants{} ; --
 lin preciseness_N = variants {} ; -- status=guess
 lin precision_N = mkN "precision" "precisioner" ; -- SaldoWN
 lin preclinical_A = variants {} ; -- status=guess
@@ -44329,7 +44134,7 @@ lin prednisolone_N = variants {} ; -- status=guess
 lin prednisone_N = variants {} ; -- status=guess
 lin predominance_N = variants {} ; -- status=guess
 lin predominant_A = (mkA "dominerande") | mkA "förhärskande" | mkA "övervägande" ; -- status=guess status=guess status=guess
-lin predominantly_Adv = variants{} ;
+lin predominantly_Adv = variants{} ; --
 lin predominate_V = variants {} ; -- status=guess
 lin predomination_N = variants {} ; -- status=guess
 lin preeclampsia_N = variants {} ; -- status=guess
@@ -44350,15 +44155,13 @@ lin prefatory_A = variants {} ; -- status=guess
 lin prefect_N = mkN "prefekt" "prefekter" ; -- SaldoWN
 lin prefectural_A = variants {} ; -- status=guess
 lin prefecture_N = variants {} ; -- status=guess
-lin prefer_V2 = mkV2 "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen" ; -- SaldoWN
---subcat lin prefer_V2V = mkV2V (mkV "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen") ; -- SaldoWN
---subcat lin prefer_VS = mkVS (mkV "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen") ; -- SaldoWN
-lin prefer_VV = mkVV (mkV "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen") ; -- SaldoWN
+lin prefer_V2 = mkV2 "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen" ;
+lin prefer_VV = mkVV (mkV "föredra" "föredrar" "föredra" "föredrog" "föredragit" "föredragen") ;
 lin preferable_A = variants {} ; -- status=guess
 lin preference_N = mkN "förkärlek" | mkN "preferens" "preferenser" ; -- SaldoWN -- comment=3
 lin preferential_A = variants {} ; -- status=guess
 lin preferment_N = mkN "befordran" "befordran" "befordringar" "befordringarna" ; -- status=guess
-lin preferred_A = variants{} ;
+lin preferred_A = variants{} ; --
 lin prefiguration_N = variants {} ; -- status=guess
 lin prefigure_V2 = variants {} ; -- status=guess
 lin prefix_N = mkN "prefix" neutrum | mkN "prefix" neutrum ; -- SaldoWN
@@ -44430,7 +44233,6 @@ lin preparatory_A = mkA "förberedande" ; -- status=guess
 lin prepare_V = reflV (mkV "förbereder") ;
 lin prepare_V2 = mkV2 (mkV "förbereder") ;
 lin prepare_V2V = mkV2V (mkV "förbereder") ;
---subcat lin prepare_VS = mkVS (reflV (mkV "förbereder")) ;
 lin prepare_VV = mkVV (reflV (mkV "förbereder")) ;
 lin preparedness_N = mkN "beredskap" "beredskaper" ; -- status=guess
 lin prepay_V2 = variants {} ; -- status=guess
@@ -44487,7 +44289,7 @@ lin presenter_N = mkN "presentatör" "presentatörer" ; -- status=guess
 lin presentiment_N = mkN "förkänsla" ; -- comment=3
 lin presentism_N = variants {} ; -- status=guess
 lin presentist_N = variants {} ; -- status=guess
-lin presently_Adv = variants{} ;
+lin presently_Adv = variants{} ; --
 lin presentment_N = variants {} ; -- status=guess
 lin presentness_N = variants {} ; -- status=guess
 lin preservable_A = mkA "hållbar" ; -- status=guess
@@ -44502,7 +44304,7 @@ lin preset_A = variants {} ; -- status=guess
 lin preside_V = variants {} ; -- status=guess
 lin presidency_N = mkN "presidentskap" neutrum | mkN "presidentskap" neutrum ; -- SaldoWN
 lin presidentFem_N = mkN "president" "presidenter" ; -- status=guess
-lin presidentMasc_N = mkN "president" "presidenter" ; -- status=guess
+lin presidentMasc_N = mkN "president" "presidenter" ;
 lin presidential_A = mkA "presidentmässig" ; -- SaldoWN
 lin presidio_N = variants {} ; -- status=guess
 lin presidium_N = variants {} ; -- status=guess
@@ -44554,11 +44356,10 @@ lin prestressed_A = variants {} ; -- status=guess
 lin prestwich_PN = variants {} ; -- status=guess
 lin prestwick_PN = variants {} ; -- status=guess
 lin presumable_A = mkA "trolig" ; -- comment=2
-lin presumably_Adv = variants{} ;
+lin presumably_Adv = variants{} ; --
 lin presume_V = mkV "anta" "antar" "anta" "antog" "antagit" "antagen" ; -- comment=3
 lin presume_V2 = mkV2 (mkV "förmoda") | mkV2 (mkV "förutsätta" "förutsatte" "förutsatt") ; -- status=guess
 lin presume_VS = mkVS (mkV "förmoda") | mkVS (mkV "förutsätta" "förutsatte" "förutsatt") ; -- status=guess
---subcat lin presume_VV = mkVV (mkV "förmoda") | mkVV (mkV "förutsätta" "förutsatte" "förutsatt") ; -- status=guess
 lin presumption_N = mkN "övermod" neutrum; -- comment=2
 lin presumptive_A = variants {} ; -- status=guess
 lin presumptuous_A = mkA "förmäten" "förmätet" ; -- status=guess
@@ -44597,7 +44398,6 @@ lin pretty_N = mkN "skön" ; -- status=guess
 lin pretty_pretty_A = variants {} ; -- status=guess
 lin pretzel_N = mkN "kringla" ; -- SaldoWN
 lin prevail_V = mkV "segrar" ; -- comment=4
---subcat lin prevail_V2 = mkV2 (mkV "förhärska"); -- status=guess, src=wikt
 lin prevalence_N = mkN "överväldigande" ; -- SaldoWN
 lin prevalent_A = mkA "förhärskande" ; -- comment=3
 lin prevaricate_V = variants {} ; -- status=guess
@@ -44611,7 +44411,7 @@ lin preventive_N = mkN "förebyggande" ; -- status=guess
 lin preview_N = mkN "förhandsvisning" ; -- status=guess
 lin preview_V2 = mkV2 (mkV "förhandsvisa"); -- status=guess, src=wikt
 lin previous_A = mkA "föregående" ;
-lin previously_Adv = mkAdv "förr" ; -- status=guess
+lin previously_Adv = mkAdv "förr" ;
 lin prevision_N = mkN "föraning" ; -- status=guess
 lin prewar_A = variants {} ; -- status=guess
 lin prey_N = mkN "byte" | mkN "byte" "byten" "byte" "bytena" ; -- SaldoWN = mkN "byte" "byten" "byte" "bytena" ; -- comment=5
@@ -44711,7 +44511,7 @@ lin princewood_N = variants {} ; -- status=guess
 lin principal_A = mkA "kapital" ; -- comment=2
 lin principal_N = mkN "uppdragsgivare" utrum; -- comment=7
 lin principality_N = mkN "furstendöme" ; -- status=guess
-lin principally_Adv = variants{} ;
+lin principally_Adv = variants{} ; --
 lin principalship_N = variants {} ; -- status=guess
 lin principle_N = mkN "princip" "principer" ;
 lin principled_A = mkA "principiell" ; -- status=guess
@@ -44723,9 +44523,9 @@ lin print_out_V2 = dirV2 (partV (mkV "präntar")"i"); -- status=guess
 lin print_seller_N = variants {} ; -- status=guess
 lin print_shop_N = variants {} ; -- status=guess
 lin printable_A = mkA "tryckbar" ; -- status=guess
-lin printed_A = variants{} ;
+lin printed_A = variants{} ; --
 lin printer_N = mkN "skrivare" utrum | mkN "skrivare" utrum ; -- SaldoWN -- comment=2
-lin printing_N = variants{} ;
+lin printing_N = variants{} ; --
 lin printing_ink_N = variants {} ; -- status=guess
 lin printing_press_N = variants {} ; -- status=guess
 lin printmaker_N = variants {} ; -- status=guess
@@ -44754,9 +44554,9 @@ lin privacy_N = mkN "privatliv" neutrum | mkN "privatliv" neutrum ; -- SaldoWN -
 lin private_A = mkA "privat" "privat" ;
 lin private_N = mkN "slut" neutrum; -- status=guess
 lin privateer_N = variants {} ; -- status=guess
-lin privately_Adv = variants{} ;
+lin privately_Adv = variants{} ; --
 lin privation_N = mkN "umbärande" ; -- status=guess
-lin privatisation_N = variants{} ;
+lin privatisation_N = variants{} ; --
 lin privatization_N = mkN "privatisering" ; -- status=guess
 lin privatize_V2 = mkV2 (mkV "privatiserar"); -- status=guess, src=wikt
 lin privet_N = mkN "liguster" ; -- status=guess
@@ -44810,10 +44610,8 @@ lin procaine_N = variants {} ; -- status=guess
 lin procarbazine_N = variants {} ; -- status=guess
 lin procedural_A = variants {} ; -- status=guess
 lin procedure_N = mkN "procedur" "procedurer" | mkN "tillvägagångssätt" neutrum ;
-lin proceed_N = variants{} ;
+lin proceed_N = variants{} ; --
 lin proceed_V = mkV "fortsätta" "fortsätter" "fortsätt" "fortsatte" "fortsatt" "fortsatt" ; -- comment=9
---subcat lin proceed_V2 = dirV2 (partV (mkV "börjar")"om"); -- status=guess
---subcat lin proceed_VV = variants{}; -- mkV "fortsätta" "fortsätter" "fortsätt" "fortsatte" "fortsatt" "fortsatt" ; -- comment=9
 lin proceeding_N = mkN "framsteg" "framsteg" ; ---- sense
 lin process_N = mkN "process" "processer" ;
 lin process_V = mkV "framkallar" ; -- comment=6
@@ -44823,7 +44621,7 @@ lin processing_N = mkN "bearbetning" ; -- comment=2
 lin procession_N = mkN "tåg" neutrum; -- comment=2
 lin processional_A = variants {} ; -- status=guess
 lin processional_N = variants {} ; -- status=guess
-lin processor_N = variants{} ;
+lin processor_N = variants{} ; --
 lin prochlorperazine_N = variants {} ; -- status=guess
 lin proclaim_V2 = dirV2 (partV (mkV "visar")"in"); -- status=guess
 lin proclaim_VS = mkVS (mkV "förkunna"); -- status=guess, src=wikt
@@ -44909,7 +44707,7 @@ lin profit_V = mkV "gagnar" ; -- comment=2
 lin profit_V2 = variants{}; -- mkV "gagnar" ; -- comment=2
 lin profit_margin_N = variants {} ; -- status=guess
 lin profit_sharing_N = variants {} ; -- status=guess
-lin profitability_N = variants{} ;
+lin profitability_N = variants{} ; --
 lin profitable_A = mkA "nyttig" ; -- comment=9
 lin profitableness_N = variants {} ; -- status=guess
 lin profiteer_N = mkN "profitör" "profitörer" ; -- comment=2
@@ -44946,7 +44744,7 @@ lin programme_V2 = dirV2 (partV (mkV "programmerar")"in"); -- status=guess
 lin programmerFem_N = mkN "programmerare" utrum; -- status=guess
 lin programmerMasc_N = mkN "programmerare" utrum; -- status=guess
 lin programming_N = mkN "programmering" ; -- status=guess
-lin progress_N = mkN "framsteg" neutrum | mkN "framsteg" neutrum ; -- SaldoWN -- comment=4
+lin progress_N = mkN "framsteg" neutrum ;
 lin progress_V = mkV "utvecklar" ; -- comment=3
 lin progress_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=15
 lin progression_N = variants {} ; -- status=guess
@@ -44996,7 +44794,7 @@ lin prologue_N = mkN "prolog" "prologer" ; -- SaldoWN
 lin prolong_V2 = variants {} ; -- status=guess
 lin prolongation_N = mkN "förlängning" ; -- status=guess
 lin prolonge_N = variants {} ; -- status=guess
-lin prolonged_A = variants{} ;
+lin prolonged_A = variants{} ; --
 lin prolusory_A = variants {} ; -- status=guess
 lin prom_N = mkN "strandpromenad" "strandpromenader" ; -- comment=2
 lin promenade_N = variants {} ; -- status=guess
@@ -45009,10 +44807,10 @@ lin prominent_A = mkA "prominent" "prominent" ; -- status=guess
 lin promiscuity_N = variants {} ; -- status=guess
 lin promiscuous_A = mkA "urskillningslös" ; -- comment=5
 lin promise_N = mkN "löfte" ; -- SaldoWN
-lin promise_V = mkV "lovar" ; -- comment=4
-lin promise_V2 = mkV2 (mkV "lovar"); -- status=guess, src=wikt
-lin promise_VS = mkVS (mkV "lovar"); -- status=guess, src=wikt
-lin promise_VV = mkVV (mkV "lovar"); -- status=guess, src=wikt
+lin promise_V = mkV "lovar" ;
+lin promise_V2 = mkV2 (mkV "lovar") | mkV2 "utlova" ;
+lin promise_VS = mkVS (mkV "lovar");
+lin promise_VV = mkVV (mkV "lovar");
 lin promisee_N = variants {} ; -- status=guess
 lin promiser_N = variants {} ; -- status=guess
 lin promisingly_Adv = variants {} ; -- status=guess
@@ -45034,7 +44832,7 @@ lin promptbook_N = variants {} ; -- status=guess
 lin prompter_N = mkN "anstiftare" utrum; -- comment=5
 lin prompting_N = variants {} ; -- status=guess
 lin promptitude_N = variants {} ; -- status=guess
-lin promptly_Adv = variants{} ;
+lin promptly_Adv = variants{} ; --
 lin promptness_N = mkN "punktlighet" ; -- comment=2
 lin promulgate_V2 = dirV2 (partV (mkV "sprida" "spred" "spritt")"ut"); -- status=guess
 lin promulgation_N = variants {} ; -- status=guess
@@ -45051,7 +44849,6 @@ lin pronominal_A = variants {} ; -- status=guess
 lin pronoun_N = mkN "pronomen" neutrum | mkN "pronomen" neutrum ; -- SaldoWN
 lin pronounce_V = mkV "uttalar" ; -- comment=6
 lin pronounce_V2 = mkV2 (mkV "uttalar"); -- status=guess, src=wikt
---subcat lin pronounce_VS = mkVS (mkV "uttalar"); -- status=guess, src=wikt
 lin pronounceable_A = variants {} ; -- status=guess
 lin pronounced_A = compoundA (regA "uttalad"); -- comment=11
 lin pronouncement_N = mkN "uttalande" ; -- comment=3
@@ -45094,7 +44891,7 @@ lin propenal_N = variants {} ; -- status=guess
 lin propenoate_N = variants {} ; -- status=guess
 lin propenonitrile_N = variants {} ; -- status=guess
 lin propensity_N = mkN "benägenhet" ; -- status=guess
-lin proper_A = mkA "passande" | mkA "rätt" ; -- SaldoWN -- comment=18
+lin proper_A = mkA "passande" | mkA "riktig" ;
 lin properly_Adv = mkAdv "rätt" | mkAdv "på riktigt" ; -- status=guess
 lin propertied_A = mkA "besutten" "besuttet" ; -- status=guess
 lin property_1_N = mkN "egenskap" "egenskaper" ;
@@ -45135,7 +44932,7 @@ lin propose_V = mkV "ämnar" ; -- comment=4
 lin propose_V2 = mkV2 (mkV "föreslå" "föreslog" "föreslagit");
 lin propose_VS = mkVS (mkV "friar"); -- status=guess, src=wikt
 lin propose_VV = mkVV (mkV "friar"); -- status=guess, src=wikt
-lin proposed_A = variants{} ;
+lin proposed_A = variants{} ; --
 lin proposer_N = variants {} ; -- status=guess
 lin proposition_N = mkN "sats" "satser" | mkN "förslag" neutrum ; -- SaldoWN -- comment=2
 lin proposition_V2 = variants {} ; -- status=guess
@@ -45167,7 +44964,7 @@ lin prosciutto_N = variants {} ; -- status=guess
 lin proscribe_V2 = variants {} ; -- status=guess
 lin proscription_N = variants {} ; -- status=guess
 lin prose_N = mkN "prosa" ; -- status=guess
-lin prosecute_V2 = variants{} ;
+lin prosecute_V2 = variants{} ; --
 lin prosecution_N = mkN "åtal" neutrum | mkN "åtal" neutrum ; -- SaldoWN -- comment=5
 lin prosecutorFem_N = mkN "åklagare" utrum; -- comment=3
 lin prosecutorMasc_N = mkN "åklagare" utrum; -- comment=3
@@ -45223,7 +45020,7 @@ lin protection_N = mkN "skydd" neutrum ;
 lin protectionism_N = mkN "protektionism" "protektionismer" ; -- SaldoWN
 lin protectionistFem_N = variants {} ; -- status=guess
 lin protectionistMasc_N = variants {} ; -- status=guess
-lin protective_A = variants{} ;
+lin protective_A = variants{} ; --
 lin protectiveness_N = variants {} ; -- status=guess
 lin protector_N = mkN "beskyddare" utrum; -- comment=2
 lin protectorate_N = variants {} ; -- status=guess
@@ -45286,7 +45083,6 @@ lin proud_A = mkA "stolt" "stolt" ; -- SaldoWN
 lin provable_A = variants {} ; -- status=guess
 lin prove_V = mkV "bevisar" ;
 lin prove_V2 = mkV2 "bevisar" ;
---subcat lin prove_V2V = mkV2V (mkV "bevisar") ;
 lin prove_VA = mkVA (reflV (mkV "visar")) ;
 lin prove_VS = mkVS (mkV "visar") | mkVS (mkV "bevisar");
 lin provenance_N = variants {} ; -- status=guess
@@ -45296,14 +45092,13 @@ lin proverb_N = mkN "ordspråk" neutrum | mkN "ordspråk" ; -- SaldoWN -- status
 lin proverbial_A = variants {} ; -- status=guess
 lin provide_V = mkV "förse" "försåg" "försett" | mkV "tillhandahålla" "tillhandahöll" "tillhandahållit" ;
 lin provide_V2 = mkV2 "förse" "försåg" "försett" | mkV2 (mkV "erbjuda" "erbjöd" "erbjudit") ;
---subcat lin provide_VS = mkVS (mkV "förse" "försåg" "försett") ;
 lin provided_Subj = M.mkSubj "förutsatt" ; -- status=guess
 lin providence_N = mkN "försyn" ; -- status=guess
 lin providence_PN = variants {} ; -- status=guess
 lin provident_A = variants {} ; -- status=guess
 lin providential_A = variants {} ; -- status=guess
 lin provider_N = mkN "familjeförsörjare" utrum; -- status=guess
-lin providing_Subj = variants{} ;
+lin providing_Subj = variants{} ; --
 lin province_N = mkN "provins" "provinser" ; -- status=guess
 lin provincial_A = mkA "provinsiell" ; -- SaldoWN
 lin provincial_N = variants {} ; -- status=guess
@@ -45486,13 +45281,13 @@ lin publication_N = mkN "publikation" "publikationer" ; -- SaldoWN
 lin publicist_N = mkN "publicist" "publicister" ; -- SaldoWN
 lin publicity_N = mkN "publicitet" "publiciteter" | mkN "reklam" "reklamer" ; -- SaldoWN -- comment=4
 lin publicize_V2 = variants {} ; -- status=guess
-lin publicly_Adv = variants{} ;
+lin publicly_Adv = variants{} ; --
 lin publish_V = mkV "publicerar" ;
 lin publish_V2 = mkV2 "publicera" ;
 lin publishable_A = variants {} ; -- status=guess
 lin publisher_N = mkN "utgivare" utrum | mkN "bokförläggare" utrum ; -- SaldoWN -- comment=3
 lin publishing_A = variants {} ; -- status=guess
-lin publishing_N = variants{} ;
+lin publishing_N = variants{} ; --
 lin puccoon_N = variants {} ; -- status=guess
 lin puce_N = variants {} ; -- status=guess
 lin puck_N = mkN "puck" ; -- SaldoWN
@@ -45694,7 +45489,7 @@ lin purdah_N = variants {} ; -- status=guess
 lin pure_A = mkA "ren" | mkA "äkta" ; -- SaldoWN -- comment=6
 lin purebred_A = mkA "renrasig" ; -- status=guess
 lin puree_N = mkN "puré" "puréer" ; -- status=guess
-lin purely_Adv = variants{} ;
+lin purely_Adv = variants{} ; --
 lin pureness_N = variants {} ; -- status=guess
 lin purgation_N = variants {} ; -- status=guess
 lin purgative_A = variants {} ; -- status=guess
@@ -45720,7 +45515,7 @@ lin purl_V = mkV "välter" ; -- comment=6
 lin purl_V2 = variants {} ; -- status=guess
 lin purloin_V2 = variants {} ; -- status=guess
 lin purloo_N = variants {} ; -- status=guess
-lin purple_A = variants{} ;
+lin purple_A = variants{} ; --
 lin purple_N = mkN "lila" | mkN "violett" | mkN "gredelin" ; -- status=guess status=guess status=guess
 lin purplish_A = variants {} ; -- status=guess
 lin purport_N = variants {} ; -- status=guess
@@ -45791,10 +45586,7 @@ lin pussycat_N = mkN "kissekatt" "kissekatter" ; -- comment=2
 lin pussyfoot_V = variants {} ; -- status=guess
 lin pustule_N = variants {} ; -- status=guess
 lin put_N = mkN "sticka" ; -- status=guess
---subcat lin put_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ;
 lin put_V2 = L.put_V2;
---subcat lin put_V2V = mkV2V I.sätta_V ;
---subcat lin put_VS = mkVS I.sätta_V ;
 lin put_across_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
 lin put_across_V2 = dirV2 (partV (mkV "stoppar")"till"); -- comment=3
 lin put_aside_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
@@ -45857,8 +45649,7 @@ lin putty_V2 = variants {} ; -- status=guess
 lin puttyroot_N = variants {} ; -- status=guess
 lin putz_N = variants {} ; -- status=guess
 lin puzzle_N = mkN "pussel" neutrum | mkN "gåta" ; -- SaldoWN
---subcat lin puzzle_V = variants{} ;
-lin puzzle_V2 = variants{} ;
+lin puzzle_V2 = variants{} ; --
 lin puzzlement_N = variants {} ; -- status=guess
 lin puzzler_N = variants {} ; -- status=guess
 lin pwllheli_PN = variants {} ; -- status=guess
@@ -46022,7 +45813,7 @@ lin quake_N = mkN "skalv" neutrum | mkN "skälva" ; -- SaldoWN -- comment=2
 lin quake_V = mkV "skälva" "skalv" "skälv" ; -- comment=2
 lin quaker_N = mkN "kväkare" utrum; -- status=guess
 lin qualification_N = mkN "förbehåll" neutrum | mkN "merit" "meriter" ; -- SaldoWN -- comment=11
-lin qualified_A = variants{} ;
+lin qualified_A = variants{} ; --
 lin qualifier_N = variants {} ; -- status=guess
 lin qualify_V = mkV "modifierar" ; -- comment=11
 lin qualify_V2 = variants{}; -- mkV "modifierar" ; -- comment=11
@@ -46122,7 +45913,7 @@ lin quercitron_N = variants {} ; -- status=guess
 lin quern_N = variants {} ; -- status=guess
 lin querulous_A = variants {} ; -- status=guess
 lin querulousness_N = variants {} ; -- status=guess
-lin query_N = variants{} ;
+lin query_N = variants{} ; --
 lin query_V = variants {} ; -- status=guess
 lin query_V2 = variants {} ; -- status=guess
 lin quesadilla_N = variants {} ; -- status=guess
@@ -46480,8 +46271,7 @@ lin rainy_A = mkA "regnig" ; -- status=guess
 lin raisable_A = variants {} ; -- status=guess
 lin raise_N = mkN "lönelyft" neutrum; -- comment=5
 lin raise_V2 = mkV2 "lyfter" ;
---subcat lin raise_V2V = mkV2V (mkV "lyfter") ;
-lin raised_A = variants{} ;
+lin raised_A = variants{} ; --
 lin raiser_N = variants {} ; -- status=guess
 lin raisin_N = mkN "russin" neutrum | mkN "russin" neutrum ; -- SaldoWN
 lin raising_A = variants {} ; -- status=guess
@@ -46563,7 +46353,6 @@ lin ranee_N = variants {} ; -- status=guess
 lin rang_up_V = variants {} ; -- status=guess
 lin range_N = mkN "urval" neutrum ;
 lin range_V = mkV "kedjar" ; -- comment=6
---subcat lin range_V2 = dirV2 (partV (mkV "skalar")"av"); -- status=guess
 lin rangefinder_N = variants {} ; -- status=guess
 lin rangeland_N = variants {} ; -- status=guess
 lin ranger_N = mkN "skogvaktare" utrum; -- comment=2
@@ -46576,7 +46365,6 @@ lin rank_A = mkA "stinkande" ; -- comment=9
 lin rank_N = mkN "status" | mkN "stinkande" ; -- SaldoWN -- comment=13
 lin rank_V = mkV "rankar" ; -- comment=7
 lin rank_V2 = dirV2 (partV (mkV "ordnar")"om"); -- status=guess
---subcat lin rank_VS = mkVS (mkV "graderar") | mkVS (mkV "klassificerar") | mkVS (mkV "klassar") | mkVS (mkV "placerar"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin ranker_N = variants {} ; -- status=guess
 lin ranking_N = variants {} ; -- status=guess
 lin rankle_V = variants {} ; -- status=guess
@@ -46664,8 +46452,6 @@ lin ratchet_up_V2 = variants {} ; -- status=guess
 lin rate_N = mkN "takt" "takter" | mkN "grad" "grader" ;
 lin rate_V = mkV "mår" ; -- comment=9
 lin rate_V2 = dirV2 (partV (mkV "räknar")"ut"); -- comment=5
---subcat lin rate_VA = variants{}; -- mkV "mår" ; -- comment=9
---subcat lin rate_VS = variants{}; -- dirV2 (partV (mkV "räknar")"ut"); -- comment=5
 lin rateability_N = variants {} ; -- status=guess
 lin rateable_A = variants {} ; -- status=guess
 lin ratel_N = variants {} ; -- status=guess
@@ -46797,8 +46583,6 @@ lin re_supply_V2 = variants {} ; -- status=guess
 lin reach_N = mkN "sträcka" ; -- comment=13
 lin reach_V = mkV "når" ;
 lin reach_V2 = mkV2 "nå" | mkV2 (reflV (mkV "sträcker")) (mkPrep "till") ;
---subcat lin reach_V2V = mkV2V (mkV "uppnå") ;
---subcat lin reach_VA = mkVA (mkV "uppnå") ;
 lin reach_out_V = mkV "når" ; -- comment=9
 lin reach_out_for_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=15
 lin reach_out_to_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=15
@@ -46816,7 +46600,6 @@ lin reactor_N = mkN "reaktor" "reaktorer" ; -- SaldoWN
 lin read_N = variants {} ; -- status=guess
 lin read_V = mkV "läser" ;
 lin read_V2 = L.read_V2;
---subcat lin read_VA = mkVA (mkV "läser") ;
 lin read_VS = mkVS (mkV "läser") ;
 lin read_off_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut"); -- comment=9
 lin read_out_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut"); -- comment=9
@@ -46825,7 +46608,7 @@ lin readability_N = mkN "läsvärdhet" "läsvärdheter" ; -- comment=5
 lin readable_A = mkA "läsbar" ; -- status=guess
 lin reader_N = mkN "läsare" utrum ;
 lin readership_N = mkN "läsekrets" ; -- SaldoWN
-lin readily_Adv = variants{} ;
+lin readily_Adv = variants{} ; --
 lin readiness_N = mkN "beredvillighet" "beredvilligheter" ; -- comment=2
 lin reading_N = mkN "uppläsning" ; -- comment=6
 lin reading_PN = mkPN "Reading" neutrum ; -- status=guess
@@ -46877,7 +46660,7 @@ lin reappoint_V = variants {} ; -- status=guess
 lin reappoint_V2 = variants {} ; -- status=guess
 lin reappraisal_N = variants {} ; -- status=guess
 lin reappraise_V2 = variants {} ; -- status=guess
-lin rear_A = variants{} ;
+lin rear_A = variants{} ; --
 lin rear_N = mkN "baksida" ; -- comment=4
 lin rear_V = mkV "lyfta" "lyfter" "lyft" "lyfte" "lyft" "lyft" ; -- status=guess
 lin rear_V2 = variants{}; -- mkV "lyfta" "lyfter" "lyft" "lyfte" "lyft" "lyft" ;
@@ -46899,7 +46682,7 @@ lin reason_VS = variants {} ; -- status=guess
 lin reason_out_V2 = variants {} ; -- status=guess
 lin reasonable_A = mkA "rimlig" | mkA "överkomlig" ; -- SaldoWN -- comment=10
 lin reasonableness_N = mkN "rimlighet" "rimligheter" ; -- status=guess
-lin reasonably_Adv = variants{} ;
+lin reasonably_Adv = variants{} ; --
 lin reasoner_N = variants {} ; -- status=guess
 lin reasoning_N = mkN "resonemang" neutrum; -- comment=5
 lin reasonless_A = variants {} ; -- status=guess
@@ -46914,8 +46697,8 @@ lin reassign_V2 = variants {} ; -- status=guess
 lin reassignment_N = variants {} ; -- status=guess
 lin reassume_V2 = variants {} ; -- status=guess
 lin reassurance_N = mkN "uppmuntran" "uppmuntran" "uppmuntringar" "uppmuntringarna" ; -- status=guess
-lin reassure_V2 = variants{} ;
-lin reassure_V2S = variants{} ;
+lin reassure_V2 = variants{} ; --
+lin reassure_V2S = variants{} ; --
 lin reassuring_A = variants {} ; -- status=guess
 lin reattribute_V2 = variants {} ; -- status=guess
 lin rebarbative_A = variants {} ; -- status=guess
@@ -46939,7 +46722,7 @@ lin rebroadcast_N = variants {} ; -- status=guess
 lin rebuff_N = mkN "motstånd" neutrum; -- comment=7
 lin rebuff_V = mkV "tillbakavisar" ; -- comment=3
 lin rebuff_V2 = dirV2 (partV (mkV "snäser")"av"); -- status=guess
-lin rebuild_V2 = variants{} ;
+lin rebuild_V2 = variants{} ; --
 lin rebuilding_N = mkN "ombyggnad" "ombyggnader" ; -- SaldoWN
 lin rebuke_N = variants {} ; -- status=guess
 lin rebuke_V2 = variants {} ; -- status=guess
@@ -46994,7 +46777,7 @@ lin receptionist_N = mkN "portier" "portierer" ; -- SaldoWN
 lin receptive_A = mkA "mottaglig" ; -- status=guess
 lin receptiveness_N = mkN "mottaglighet" ; -- status=guess
 lin receptivity_N = mkN "mottaglighet" ; -- comment=2
-lin receptor_N = variants{} ;
+lin receptor_N = variants{} ; --
 lin recess_N = mkN "skrymsle" ; -- comment=9
 lin recess_V2 = variants {} ; -- status=guess
 lin recession_N = mkN "recession" "recessioner" ; -- SaldoWN
@@ -47030,8 +46813,6 @@ lin reciter_N = mkN "uppläsare" utrum; -- status=guess
 lin reckless_A = mkA "våghalsig" ; -- SaldoWN
 lin recklessness_N = mkN "vårdslöshet" "vårdslösheter" ; -- comment=3
 lin recklinghausen_PN = variants {} ; -- status=guess
---subcat lin reckon_V = mkV "beräknar" ; -- comment=5
---subcat lin reckon_V2 = dirV2 (partV (mkV "räknar")"ut"); -- comment=5
 lin reckon_VS = variants{}; -- dirV2 (partV (mkV "räknar")"ut"); -- comment=5
 lin reckon_on_V2 = dirV2 (partV (mkV "räknar")"ut"); -- comment=5
 lin reckoner_N = variants {} ; -- status=guess
@@ -47071,7 +46852,7 @@ lin recommit_V2 = variants {} ; -- status=guess
 lin recompense_N = mkN "ersättning" ; -- comment=4
 lin recompense_V2 = variants {} ; -- status=guess
 lin reconcilable_A = mkA "förenlig" ; -- status=guess
-lin reconcile_V2 = variants{} ;
+lin reconcile_V2 = variants{} ; --
 lin reconciliation_N = mkN "försoning" ; -- status=guess
 lin recondite_A = variants {} ; -- status=guess
 lin reconditeness_N = variants {} ; -- status=guess
@@ -47103,8 +46884,6 @@ lin recount_VS = variants {} ; -- status=guess
 lin recoup_V2 = variants {} ; -- status=guess
 lin recourse_N = mkN "tillflykt" ; -- comment=2
 lin recover_V = reflV (mkV "återhämta") ; -- status=guess
---subcat lin recover_V2 = mkV2 "återvinna" "återvann" "återvunnit" ; -- comment=5
---subcat lin recover_V2V = mkV2V (mkV "återvinna" "återvann" "återvunnit") ; -- comment=5
 lin recoverable_A = variants {} ; -- status=guess
 lin recovery_N = mkN "återhämtning" | mkN "återvinnande" ; -- SaldoWN -- comment=6
 lin recreant_A = variants {} ; -- status=guess
@@ -47227,7 +47006,7 @@ lin redstart_N = mkN "rödstjärt" ; -- status=guess
 lin redtail_N = variants {} ; -- status=guess
 lin reduce_V = mkV "minska" ;
 lin reduce_V2 = mkV2 "sänker" | mkV2 "reducera" ;
-lin reduced_A = variants{} ;
+lin reduced_A = variants{} ; --
 lin reducer_N = variants {} ; -- status=guess
 lin reducible_A = mkA "reducerbar" ; -- status=guess
 lin reducing_N = variants {} ; -- status=guess
@@ -47377,7 +47156,7 @@ lin refutable_A = variants {} ; -- status=guess
 lin refutation_N = mkN "vederläggning" ; -- comment=3
 lin refute_V2 = mkV2 (mkV "vederlägga" "vederlade" "vederlagt") | mkV2 (mkV "motbevisar") ; -- status=guess
 lin reg_PN = variants {} ; -- status=guess
-lin regain_V2 = variants{} ;
+lin regain_V2 = variants{} ; --
 lin regal_A = mkA "kunglig" ; -- status=guess
 lin regale_V2 = variants {} ; -- status=guess
 lin regalia_N = variants {} ; -- status=guess
@@ -47387,7 +47166,7 @@ lin regard_V2 = mkV2 "betrakta" ;
 lin regardful_A = mkA "uppmärksam" "uppmärksamt" "uppmärksamma" "uppmärksamma" "uppmärksammare" "uppmärksammast" "uppmärksammaste" ; -- comment=4
 lin regarding_Prep = mkPrep "med hänsyn till" ; -- status=guess
 lin regardless_A = mkA "oavsedd" ; -- status=guess
-lin regardless_Adv = variants{} ;
+lin regardless_Adv = variants{} ; --
 lin regardless_of_Prep = variants {} ; -- status=guess
 lin regatta_N = mkN "regatta" ; -- SaldoWN
 lin regency_N = variants {} ; -- status=guess
@@ -47440,13 +47219,13 @@ lin regular_N = mkN "normal" "normaler" ; -- status=guess
 lin regularity_N = mkN "regelbundenhet" "regelbundenheter" ; -- status=guess
 lin regularization_N = variants {} ; -- status=guess
 lin regularize_V2 = variants {} ; -- status=guess
-lin regularly_Adv = variants{} ;
+lin regularly_Adv = variants{} ; --
 lin regulate_V2 = dirV2 (partV (mkV "ordnar")"om"); -- status=guess
 lin regulation_A = variants {} ; -- status=guess
-lin regulation_N = mkN "bestämmelse" "bestämmelser" | mkN "reglerande" ; -- SaldoWN -- comment=7
+lin regulation_N = mkN "bestämmelse" "bestämmelser" | mkN "reglerande" ; ---- split rule vs. regulating
 lin regulative_A = variants {} ; -- status=guess
 lin regulator_N = mkN "regulator" "regulatorer" ; -- comment=2
-lin regulatory_A = variants{} ;
+lin regulatory_A = variants{} ; --
 lin regum_V2 = variants {} ; -- status=guess
 lin regur_N = variants {} ; -- status=guess
 lin regurgitate_V = variants {} ; -- status=guess
@@ -47522,10 +47301,10 @@ lin rekindle_V = variants {} ; -- status=guess
 lin rekindle_V2 = variants {} ; -- status=guess
 lin relapse_N = mkN "återfall" neutrum; -- comment=2
 lin relapse_V = mkV "återfalla" "återföll" "återfallit" ; -- status=guess
-lin relate_N = variants{} ;
+lin relate_N = variants{} ; --
 lin relate_V = mkV "relatera" ;
 lin relate_V2 = mkV2 "relatera" ;
-lin related_A = variants{} ;
+lin related_A = variants{} ; --
 lin relatedness_N = variants {} ; -- status=guess
 lin relation_N = mkN "relation" "relationer" | mkN "förhållande" ;
 lin relational_A = mkA "relativ" ; -- status=guess
@@ -47563,14 +47342,14 @@ lin reliance_N = mkN "tillit" ; -- SaldoWN
 lin reliant_A = variants {} ; -- status=guess
 lin relic_N = mkN "relikt" "relikter" ; -- comment=3
 lin relict_N = variants {} ; -- status=guess
-lin relief_N = mkN "lättnad" "lättnader" | mkN "undsättning" ; -- SaldoWN -- comment=14
+lin relief_N = mkN "lättnad" "lättnader" | mkN "undsättning" ;
 lin relieve_V2 = mkV2 "undsätta" "undsätter" "undsätt" "undsatte" "undsatt" "undsatt" ; -- SaldoWN
 lin reliever_N = variants {} ; -- status=guess
 lin religion_N = L.religion_N;
 lin religionism_N = variants {} ; -- status=guess
 lin religionist_N = variants {} ; -- status=guess
 lin religiosity_N = mkN "religiositet" "religiositeter" ; -- status=guess
-lin religious_A = mkA "religiös" ; -- status=guess
+lin religious_A = mkA "religiös" ;
 lin religious_N = mkN "klosterbroder" "klosterbrodern" "klosterbröder" "klosterbröderna" ; -- comment=3
 lin religiousness_N = mkN "religiositet" "religiositeter" ; -- status=guess
 lin reline_V2 = variants {} ; -- status=guess
@@ -47587,17 +47366,16 @@ lin relocate_V2 = variants {} ; -- status=guess
 lin relocation_N = mkN "omflyttning" ; -- status=guess
 lin reluctance_N = mkN "betänklighet" "betänkligheter" | mkN "motvillighet" ; -- SaldoWN
 lin reluctant_A = mkA "motvillig" ; -- comment=2
-lin reluctantly_Adv = variants{} ;
+lin reluctantly_Adv = variants{} ; --
 lin reluctivity_N = variants {} ; -- status=guess
 lin rely_V = mkV (mkV "lita") "på" ; -- status=guess, src=wikt
 lin rely_V2 = mkV2 "lita" (mkPrep "på") ; -- status=guess
 lin rely_on_V = variants {} ; -- status=guess
 lin rely_on_V2V = variants {} ; -- status=guess
-lin remain_N = variants{} ;
+lin remain_N = variants{} ; --
 lin remain_V = mkV "kvarstå" "kvarstod" "kvarstått" ;
 lin remain_V2 = mkV2 (mkV "förbli" "förblev" "förblivit") ;
 lin remain_VA = mkVA (mkV "förbli" "förblev" "förblivit") ;
---subcat lin remain_VS = mkVS (mkV "kvarstå" "kvarstod" "kvarstått") ;
 lin remain_VV = mkVV (mkV "kvarstå" "kvarstod" "kvarstått") ;
 lin remainder_N = mkN "rest" "rester" ; -- comment=2
 lin remaining_A = mkA "återstående" ; -- status=guess
@@ -47608,10 +47386,9 @@ lin remand_N = variants {} ; -- status=guess
 lin remand_V2 = variants {} ; -- status=guess
 lin remark_N = mkN "anmärkning" ; -- SaldoWN
 lin remark_V = mkV "iaktta" "iakttar" "iaktta" "iakttog" "iakttagit" "iakttagen" ; -- comment=3
---subcat lin remark_V2 = variants{}; -- mkV "iaktta" "iakttar" "iaktta" "iakttog" "iakttagit" "iakttagen" ; -- comment=3
 lin remark_VS = variants{}; -- mkV "iaktta" "iakttar" "iaktta" "iakttog" "iakttagit" "iakttagen" ; -- comment=3
 lin remarkable_A = mkA "anmärkningsvärd" "anmärkningsvärt" ; -- comment=8
-lin remarkably_Adv = variants{} ;
+lin remarkably_Adv = variants{} ; --
 lin remarriage_N = variants {} ; -- status=guess
 lin remarry_V = variants {} ; -- status=guess
 lin remarry_V2 = variants {} ; -- status=guess
@@ -47673,7 +47450,7 @@ lin renascence_N = variants {} ; -- status=guess
 lin renascent_A = variants {} ; -- status=guess
 lin rend_V2 = variants {} ; -- status=guess
 lin render_N = variants {} ; -- status=guess
-lin render_V2 = variants{} ;
+lin render_V2 = variants{} ; --
 lin rendering_N = variants {} ; -- status=guess
 lin rendezvous_N = mkN "träff" ; -- comment=3
 lin rendezvous_V = mkV "träffar" ; -- comment=2
@@ -47689,7 +47466,7 @@ lin renegue_V = variants {} ; -- status=guess
 lin renew_V2 = mkV2 (mkV "förnya"); -- status=guess, src=wikt
 lin renewable_A = mkA "förnyelsebar" ; -- status=guess
 lin renewal_N = mkN "förnyelse" "förnyelser" ; -- status=guess
-lin renewed_A = variants{} ;
+lin renewed_A = variants{} ; --
 lin renewing_A = variants {} ; -- status=guess
 lin renfrew_PN = variants {} ; -- status=guess
 lin reniform_A = variants {} ; -- status=guess
@@ -47759,11 +47536,11 @@ lin repayment_N = mkN "återbetalning" ; -- comment=5
 lin repeal_N = variants {} ; -- status=guess
 lin repeal_V2 = variants {} ; -- status=guess
 lin repeat_N = mkN "repris" "repriser" ; -- comment=2
-lin repeat_V = mkV "upprepar" ; -- comment=2
-lin repeat_V2 = mkV2 (mkV "repeterar") | mkV2 (mkV "upprepar"); -- status=guess, src=wikt status=guess, src=wikt
-lin repeat_VS = mkVS (mkV "repeterar") | mkVS (mkV "upprepar"); -- status=guess, src=wikt status=guess, src=wikt
+lin repeat_V = mkV "upprepar" ;
+lin repeat_V2 = mkV2 (mkV "repeterar") | mkV2 (mkV "upprepar");
+lin repeat_VS = mkVS (mkV "repeterar") | mkVS (mkV "upprepar");
 lin repeatable_A = variants {} ; -- status=guess
-lin repeated_A = variants{} ;
+lin repeated_A = variants{} ; --
 lin repeatedly_Adv = mkAdv "stundligen" ; -- status=guess
 lin repeater_N = variants {} ; -- status=guess
 lin repechage_N = variants {} ; -- status=guess
@@ -47783,7 +47560,6 @@ lin repetitive_A = mkA "tjatig" ; -- comment=2
 lin repetitiveness_N = variants {} ; -- status=guess
 lin repine_V = mkV "klagar" ; -- status=guess
 lin replace_V2 = mkV2 "ersätta" "ersätter" "ersätt" "ersatte" "ersatt" "ersatt" ;
---subcat lin replace_VV = mkVV (mkV "ersätta" "ersätter" "ersätt" "ersatte" "ersatt" "ersatt") ; ---- subcat
 lin replaceability_N = variants {} ; -- status=guess
 lin replaceable_A = mkA "ersättlig" ; -- comment=2
 lin replacement_N = mkN "ersättare" utrum | mkN "ersättning" ; -- SaldoWN -- comment=5
@@ -47800,7 +47576,6 @@ lin replicate_V2 = variants {} ; -- status=guess
 lin replication_N = variants {} ; -- status=guess
 lin reply_N = mkN "svar" neutrum; -- comment=3
 lin reply_V = mkV "svarar" ;
---subcat lin reply_V2 = mkV2 (mkV "svarar");
 lin reply_VS = mkVS (mkV "svarar");
 lin reply_paid_A = variants {} ; -- status=guess
 lin repoint_V2 = variants {} ; -- status=guess
@@ -47808,14 +47583,13 @@ lin repond_V = variants {} ; -- status=guess
 lin report_N = mkN "rapport" "rapporter" | mkN "redogörelse" "redogörelser" | mkN "utlåtande" ;
 lin report_V = mkV "rapportera" ;
 lin report_V2 = mkV2 "rapportera" ;
---subcat lin report_V2V = mkV2V (mkV "rapporterar") ;
 lin report_VS = mkVS (mkV "rapportera") ;
 lin report_in_V = mkV (mkV "rapportera") "in" ; -- status=guess
 lin reportable_A = variants {} ; -- status=guess
 lin reportage_N = variants {} ; -- status=guess
-lin reportedly_Adv = variants{} ;
+lin reportedly_Adv = variants{} ; --
 lin reporterFem_N = mkN "reporter" ; -- status=guess
-lin reporterMasc_N = mkN "reporter" ; -- status=guess
+lin reporterMasc_N = variants{} ; --
 lin repose_N = variants {} ; -- status=guess
 lin repose_V = variants {} ; -- status=guess
 lin repose_V2 = variants {} ; -- status=guess
@@ -47837,7 +47611,7 @@ lin representable_A = variants {} ; -- status=guess
 lin representation_N = mkN "föreställning" ; -- comment=10
 lin representational_A = mkA "representativ" ; -- status=guess
 lin representativeFem_N = mkN "representant" "representanter" ; -- comment=3
-lin representativeMasc_N = mkN "representant" "representanter" | mkN "ledamot" "ledamöter" ;
+lin representativeMasc_N = mkN "representant" "representanter" | mkN "ledamot" "ledamöter" ; -- status=guess
 lin representative_A = mkA "representativ" ; -- SaldoWN
 lin repress_V2 = variants {} ; -- status=guess
 lin repression_N = mkN "repression" "repressioner" ; -- status=guess
@@ -47901,8 +47675,7 @@ lin require_V = mkV "kräver" ;
 lin require_V2 = mkV2 "kräver" ;
 lin require_V2V = mkV2V (mkV "kräver");
 lin require_VS = mkVS (mkV "kräver");
---subcat lin require_VV = mkVV (mkV "kräver");
-lin required_A = variants{} ;
+lin required_A = variants{} ; --
 lin requirement_N = mkN "krav" neutrum ;
 lin requisite_A = mkA "erforderlig" ; -- comment=3
 lin requisite_N = variants {} ; -- status=guess
@@ -47931,7 +47704,7 @@ lin research_N = mkN "forskning" ;
 lin research_V = mkV "forskar" ; -- status=guess
 lin research_V2 = dirV2 (partV (mkV "forskar")"igenom"); -- status=guess
 lin researcherFem_N = mkN "forskare" utrum; -- comment=2
-lin researcherMasc_N = mkN "forskare" utrum; -- comment=2
+lin researcherMasc_N = variants{} ; --
 lin reseat_V2 = variants {} ; -- status=guess
 lin reseau_N = variants {} ; -- status=guess
 lin resection_N = variants {} ; -- status=guess
@@ -47940,8 +47713,8 @@ lin reseed_V2 = variants {} ; -- status=guess
 lin resell_V2 = variants {} ; -- status=guess
 lin resemblance_N = mkN "likhet" "likheter" ; -- status=guess
 lin resemble_V2 = mkV2 (mkV "liknar"); -- status=guess, src=wikt
-lin resent_V2 = variants{} ;
-lin resent_VS = variants{} ;
+lin resent_V2 = variants{} ; --
+lin resent_VS = variants{} ; --
 lin resentful_A = compoundA (regA "förbittrad"); -- comment=2
 lin resentment_N = mkN "harm" ; -- SaldoWN
 lin reserpine_N = variants {} ; -- status=guess
@@ -47975,9 +47748,6 @@ lin residuary_A = variants {} ; -- status=guess
 lin residue_N = mkN "rest" "rester" ; -- comment=3
 lin resign_V = mkV "avgå" "avgår" "avgå" "avgick" "avgått" "avgången" | mkV "resignerar" ; -- SaldoWN -- comment=8
 lin resign_V2 = mkV2 "avgå" "avgår" "avgå" "avgick" "avgått" "avgången" ; -- status=guess
---subcat lin resign_V2V = mkV2V "avgå" "avgår" "avgå" "avgick" "avgått" "avgången" ; -- status=guess
---subcat lin resign_VS = mkV "avgå" "avgår" "avgå" "avgick" "avgått" "avgången" ; -- status=guess
---subcat lin resign_VV = mkVV (mkV "avgå" "avgår" "avgå" "avgick" "avgått" "avgången") ; -- SaldoWN ---
 lin resignation_N = mkN "underkastelse" utrum | mkN "resignation" "resignationer" ; -- SaldoWN -- comment=9
 lin resignedly_Adv = variants {} ; -- status=guess
 lin resilience_N = mkN "elasticitet" "elasticiteter" ; -- status=guess
@@ -48008,7 +47778,6 @@ lin resolvable_A = variants {} ; -- status=guess
 lin resolve_N = mkN "beslut" neutrum; -- comment=2
 lin resolve_V = mkV "sönderdelar" ; -- comment=7
 lin resolve_V2 = dirV2 (partV (mkV "löser")"ut"); -- status=guess
---subcat lin resolve_VV = mkVV (mkV "löser"); -- status=guess, src=wikt
 lin resonance_N = mkN "resonans" ; -- status=guess
 lin resonant_A = variants {} ; -- status=guess
 lin resonate_V = variants {} ; -- status=guess
@@ -48032,7 +47801,7 @@ lin respectable_A = mkA "anständig" | mkA "respektabel" ; -- SaldoWN -- comment
 lin respecter_N = variants {} ; -- status=guess
 lin respectful_A = mkA "respektfull" ; -- comment=2
 lin respective_A = mkA "respektive" ; -- status=guess
-lin respectively_Adv = variants{} ;
+lin respectively_Adv = variants{} ; --
 lin respects_N = variants {} ; -- status=guess
 lin respiration_N = mkN "andning" ; -- comment=5
 lin respirator_N = mkN "respirator" "respiratorer" ; -- comment=2
@@ -48044,7 +47813,6 @@ lin resplendence_N = variants {} ; -- status=guess
 lin resplendency_N = variants {} ; -- status=guess
 lin resplendent_A = mkA "glänsande" ; -- comment=3
 lin respond_V = mkV "svarar" ;
---subcat lin respond_V2 = mkV2 "besvara" ;
 lin respond_VS = mkVS (mkV "svara") ;
 lin respondent_N = mkN "svarande" ; -- comment=2
 lin response_N = mkN "respons" "responser" ;
@@ -48053,9 +47821,7 @@ lin responsible_A = mkA "ansvarig" ;
 lin responsive_A = mkA "tillgänglig" ; -- comment=2
 lin responsiveness_N = variants {} ; -- status=guess
 lin rest_N = mkN "vila" ;
---subcat lin rest_V = mkV "vilar" ; -- comment=4
 lin rest_V2 = dirV2 (partV (mkV "vilar")"ut"); -- comment=2
---subcat lin rest_VA = mkVA (mkV "vilar") | mkVA (mkV (mkV "låta") "vila"); -- status=guess, src=wikt status=guess, src=wikt
 lin rest_cure_N = variants {} ; -- status=guess
 lin rest_day_N = variants {} ; -- status=guess
 lin rest_home_N = variants {} ; -- status=guess
@@ -48081,14 +47847,14 @@ lin restock_V2 = variants {} ; -- status=guess
 lin restoration_N = mkN "restaurering" ; -- SaldoWN
 lin restorative_A = variants {} ; -- status=guess
 lin restorative_N = variants {} ; -- status=guess
-lin restore_V2 = variants{} ;
+lin restore_V2 = variants{} ; --
 lin restorer_N = variants {} ; -- status=guess
 lin restrain_V2 = dirV2 (partV (mkV "spärrar")"ut"); -- comment=3
 lin restrainer_N = variants {} ; -- status=guess
 lin restraint_N = mkN "behärskning" | mkN "hinder" neutrum ; -- SaldoWN -- comment=10
 lin restrict_V = mkV "begränsar" ; -- comment=2
 lin restrict_V2 = mkV2 (mkV "inskränka") | mkV2 (mkV "begränsa"); -- status=guess, src=wikt status=guess, src=wikt
-lin restricted_A = variants{} ;
+lin restricted_A = variants{} ; --
 lin restriction_N = mkN "begränsning" | mkN "förbehåll" neutrum ; -- SaldoWN -- comment=4
 lin restrictive_A = mkA "restriktiv" ; -- SaldoWN
 lin restrictiveness_N = variants {} ; -- status=guess
@@ -48099,11 +47865,10 @@ lin result_N = mkN "resultat" neutrum ;
 lin result_V = mkV "resultera" | mkV "utfalla" "utföll" "utfallit" ;
 lin resultant_A = variants {} ; -- status=guess
 lin resultant_N = variants {} ; -- status=guess
-lin resulting_A = variants{} ;
+lin resulting_A = variants{} ; --
 lin resume_N = variants {} ; -- status=guess
 lin resume_V = mkV "återuppta" "återupptar" "återuppta" "återupptog" "återupptagit" "återupptagen" ; -- status=guess
 lin resume_V2 = mkV2 (mkV "återuppta" "återupptar" "återuppta" "återupptog" "återupptagit" "återupptagen") ; -- status=guess
---subcat lin resume_VS = mkVS (mkV "återuppta" "återupptar" "återuppta" "återupptog" "återupptagit" "återupptagen") ; -- status=guess
 lin resumption_N = mkN "fortsättning" ; -- comment=2
 lin resurface_V = variants {} ; -- status=guess
 lin resurface_V2 = variants {} ; -- status=guess
@@ -48120,7 +47885,7 @@ lin resuscitator_N = variants {} ; -- status=guess
 lin resuspension_N = variants {} ; -- status=guess
 lin ret_PN = variants {} ; -- status=guess
 lin ret_V2 = variants {} ; -- status=guess
-lin retail_A = variants{} ;
+lin retail_A = variants{} ; --
 lin retail_Adv = variants {} ; -- status=guess
 lin retail_N = mkN "detaljhandel" ; -- status=guess
 lin retail_V = mkV "sprida" "spred" "spritt" ; -- status=guess
@@ -48128,7 +47893,6 @@ lin retail_V2 = dirV2 (partV (mkV "sprida" "spred" "spritt")"ut"); -- status=gue
 lin retailer_N = mkN "återförsäljare" utrum | mkN "återförsäljare" utrum ; -- SaldoWN -- comment=2
 lin retailing_N = mkN "detaljhandel" ; -- SaldoWN
 lin retain_V2 = mkV2 (mkV "behålla" "behöll" "behållit") | mkV2 (mkV "bevarar") ; -- status=guess
---subcat lin retain_V2V = mkV2V (mkV "behålla" "behöll" "behållit") | mkV2V (mkV "bevarar") ; --- subcat
 lin retainer_N = mkN "vasall" "vasaller" ; -- comment=4
 lin retake_N = mkN "återtagning" ; -- status=guess
 lin retake_V2 = variants {} ; -- status=guess
@@ -48143,7 +47907,7 @@ lin retch_V = mkV "hulkar" ; -- status=guess, src=wikt
 lin retd_PN = variants {} ; -- status=guess
 lin retell_V2 = variants {} ; -- status=guess
 lin retem_N = variants {} ; -- status=guess
-lin retention_N = variants{} ;
+lin retention_N = variants{} ; --
 lin retentive_A = mkA "fast" "fast" ; -- status=guess
 lin retentiveness_N = variants {} ; -- status=guess
 lin retford_PN = variants {} ; -- status=guess
@@ -48170,7 +47934,7 @@ lin retinue_N = mkN "följe" ; -- status=guess
 lin retire_N = mkN "vila" ; -- status=guess
 lin retire_V = mkV "retirerar" ; -- comment=6
 lin retire_V2 = dirV2 (partV (mkV "vilar")"ut"); -- status=guess
-lin retired_A = variants{} ;
+lin retired_A = variants{} ; --
 lin retiree_N = variants {} ; -- status=guess
 lin retirement_N = mkN "avgång" | mkN "tillbakadragenhet" ; -- SaldoWN -- comment=3
 lin retool_V2 = variants {} ; -- status=guess
@@ -48192,7 +47956,6 @@ lin retread_N = variants {} ; -- status=guess
 lin retread_V2 = variants {} ; -- status=guess
 lin retreat_N = mkN "fristad" "fristäder" | mkN "återtåg" neutrum ; -- SaldoWN -- comment=3
 lin retreat_V = mkV "retirerar" ; -- status=guess
---subcat lin retreat_V2 = mkV2 (mkV "retirerar"); -- status=guess, src=wikt
 lin retreatant_N = variants {} ; -- status=guess
 lin retreated_N = variants {} ; -- status=guess
 lin retrench_V = variants {} ; -- status=guess
@@ -48232,7 +47995,6 @@ lin retsina_N = variants {} ; -- status=guess
 lin return_N = mkN "återkomst" "återkomster" | mkN "retur" "returer" ;
 lin return_V = mkV "återvänder" ;
 lin return_V2 = mkV2 "återföra" "återförde" "återfört" | mkV2 (mkV "returnerar") ;
---subcat lin return_V2V = mkV2V "återföra" "återförde" "återfört" | mkV2V (mkV "returnerar") ;
 lin returnable_A = variants {} ; -- status=guess
 lin reunification_N = mkN "återförening" ; -- status=guess
 lin reunion_N = mkN "återseende" ; -- comment=2
@@ -48288,7 +48050,7 @@ lin reversible_N = variants {} ; -- status=guess
 lin reversion_N = mkN "återgång" ; -- comment=4
 lin reversionary_A = variants {} ; -- status=guess
 lin reversioner_N = variants {} ; -- status=guess
-lin revert_V = variants{} ;
+lin revert_V = variants{} ; --
 lin revertible_A = variants {} ; -- status=guess
 lin revetment_N = variants {} ; -- status=guess
 lin review_N = mkN "granskning" | mkN "översyn" "översyner" ;
@@ -48300,9 +48062,9 @@ lin revile_V2 = variants {} ; -- status=guess
 lin revise_N = variants {} ; -- status=guess
 lin revise_V = mkV "revidera" ; -- status=guess
 lin revise_V2 = mkV2 "revidera" ; -- status=guess
-lin revised_A = variants{} ;
+lin revised_A = variants{} ; --
 lin reviser_N = variants {} ; -- status=guess
-lin revision_N = variants{} ;
+lin revision_N = variants{} ; --
 lin revisionism_N = mkN "revisionism" "revisionismer" ; -- status=guess
 lin revisionistFem_N = variants {} ; -- status=guess
 lin revisionistMasc_N = variants {} ; -- status=guess
@@ -48480,7 +48242,6 @@ lin ricochet_V = variants {} ; -- status=guess
 lin ricochet_V2 = variants {} ; -- status=guess
 lin ricotta_N = variants {} ; -- status=guess
 lin rictus_N = variants {} ; -- status=guess
---subcat lin rid_V = mkV "befriar" ; -- comment=2
 lin rid_V2 = dirV2 (partV (mkV "rensar")"ut"); -- comment=2
 lin riddance_N = variants {} ; -- status=guess
 lin riddle_N = mkN "såll" neutrum; -- comment=2
@@ -48493,7 +48254,7 @@ lin ride_on_V2 = variants {} ; -- status=guess
 lin ride_out_V2 = variants {} ; -- status=guess
 lin ride_up_V = mkV "rida" "red" "ridit" ; -- status=guess
 lin riderFem_N = mkN "ryttare" utrum; -- status=guess
-lin riderMasc_N = mkN "ryttare" utrum; -- status=guess
+lin riderMasc_N = variants{} ; --
 lin riderless_A = variants {} ; -- status=guess
 lin ridge_N = mkN "ås" | mkN "kam" "kammen" "kammar" "kammarna" ; -- SaldoWN -- comment=6
 lin ridge_V2 = variants {} ; -- status=guess
@@ -48541,7 +48302,7 @@ lin right_2_A = mkA "höger" ;
 lin right_2_Adv = mkAdv "till höger" ;
 lin right_A = mkA "rätt" | mkA "riktig" ;
 lin right_Adv = mkAdv "rätt" | mkAdv "just" ; --- sense
-lin right_Interj = variants{} ;
+lin right_Interj = variants{} ; --
 lin right_N = mkN "rättighet" "rättigheter" ;
 lin right_V2 = mkV2 (mkV "rätta") | mkV2 (mkV "korrigera") ; --- ?
 lin right_angled_A = variants {} ; -- status=guess
@@ -48563,7 +48324,7 @@ lin rightish_A = variants {} ; -- status=guess
 lin rightism_N = variants {} ; -- status=guess
 lin rightist_A = variants {} ; -- status=guess
 lin rightist_N = variants {} ; -- status=guess
-lin rightly_Adv = variants{} ;
+lin rightly_Adv = variants{} ; --
 lin rightmost_A = variants {} ; -- status=guess
 lin rightness_N = variants {} ; -- status=guess
 lin rigid_A = mkA "stel" ; -- SaldoWN
@@ -48658,12 +48419,11 @@ lin risca_PN = variants {} ; -- status=guess
 lin rise_N = mkN "uppgång" | mkN "ökning" ;
 lin rise_V = mkV "stiga" "steg" "stigit" ;
 lin rise_V2 = mkV2 "stiga" "steg" "stigit" ;
---subcat lin rise_VA = mkV "stiga" "steg" "stigit" ;
 lin riser_N = variants {} ; -- status=guess
 lin rishton_PN = variants {} ; -- status=guess
 lin risibility_N = variants {} ; -- status=guess
 lin risible_A = variants {} ; -- status=guess
-lin rising_A = variants{} ;
+lin rising_A = variants{} ; --
 lin rising_N = mkN "resning" ; -- comment=3
 lin risk_N = mkN "risk" "risker" ;
 lin risk_V2 = mkV2 (mkV "riskerar") | mkV2 (mkV (mkV "ta") "en risk"); -- status=guess, src=wikt status=guess, src=wikt
@@ -48684,7 +48444,7 @@ lin ritualist_N = variants {} ; -- status=guess
 lin ritualistic_A = mkA "ritualistisk" ; -- status=guess
 lin ritz_N = variants {} ; -- status=guess
 lin ritzy_A = variants {} ; -- status=guess
-lin rival_A = variants{} ;
+lin rival_A = variants{} ; --
 lin rival_N = mkN "rivaliserande" ; -- comment=4
 lin rival_V2 = variants {} ; -- status=guess
 lin rivalry_N = mkN "rivalitet" "rivaliteter" ; -- SaldoWN
@@ -49156,7 +48916,7 @@ lin rub_up_N = variants {} ; -- status=guess
 lin rub_up_against_V2 = dirV2 (partV (mkV "skrubbar")"av"); -- comment=2
 lin rub_up_on_V2 = dirV2 (partV (mkV "skrubbar")"av"); -- comment=2
 lin rubato_N = variants {} ; -- status=guess
-lin rubber_A = variants{} ;
+lin rubber_A = variants{} ; --
 lin rubber_N = L.rubber_N;
 lin rubber_V2 = variants {} ; -- status=guess
 lin rubber_necking_V = variants {} ; -- status=guess
@@ -49218,7 +48978,7 @@ lin ruffle_V = mkV "rufsar" ; -- status=guess
 lin ruffle_V2 = variants {} ; -- status=guess
 lin rug_N = mkN "tupé" "tupéer" ; -- comment=2
 lin ruga_N = variants {} ; -- status=guess
-lin rugby_N = variants{} ;
+lin rugby_N = variants{} ; --
 lin rugby_PN = variants {} ; -- status=guess
 lin rugeley_PN = variants {} ; -- status=guess
 lin rugged_A = mkA "ojämn" ; -- comment=14
@@ -49238,7 +48998,7 @@ lin rule_VS = mkVS (mkV "styra" "styrde" "styrt") | mkVS (mkV "regerar"); -- sta
 lin rule_out_V2 = variants {} ; -- status=guess
 lin ruler_N = mkN "makthavare" utrum; -- comment=2
 lin rulership_N = variants {} ; -- status=guess
-lin ruling_A = variants{} ;
+lin ruling_A = variants{} ; --
 lin ruling_N = mkN "avgörande" ; -- comment=3
 lin ruly_A = variants {} ; -- status=guess
 lin rum_N = mkN "rom" "romer" ; -- status=guess
@@ -49270,10 +49030,9 @@ lin rump_steak_N = variants {} ; -- status=guess
 lin rumple_V2 = variants {} ; -- status=guess
 lin rumpus_N = variants {} ; -- status=guess
 lin rumrunner_N = variants {} ; -- status=guess
-lin run_N = mkN "springa" | mkN "sats" "satser" ; -- SaldoWN -- comment=37
+lin run_N = mkN "lopp" "loppet" ;
 lin run_V = L.run_V ;
 lin run_V2 = mkV2 I.driva_V ;
---subcat lin run_VS = mkVS I.driva_V ;
 lin run_across_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=41
 lin run_after_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=41
 lin run_against_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=41
@@ -49319,7 +49078,7 @@ lin runic_A = variants {} ; -- status=guess
 lin runnel_N = mkN "rännil" ; -- SaldoWN
 lin runner_N = mkN "löpare" utrum | mkN "utlöpare" utrum ; -- SaldoWN -- comment=8
 lin runner_up_N = variants {} ; -- status=guess
-lin running_A = variants{} ;
+lin running_A = variants{} ; --
 lin running_N = mkN "skötsel" ; -- status=guess
 lin running_board_N = variants {} ; -- status=guess
 lin runny_A = variants {} ; -- status=guess
@@ -49345,7 +49104,6 @@ lin ruse_N = mkN "list" "lister" ; -- status=guess
 lin rush_N = mkN "hast" | mkN "driva" ; -- SaldoWN -- comment=11
 lin rush_V = mkV "störtar" ; -- comment=13
 lin rush_V2 = dirV2 (partV (mkV "störtar")"in"); -- comment=3
---subcat lin rush_V2V = variants{}; -- dirV2 (partV (mkV "störtar")"in"); -- comment=3
 lin rush_VV = variants{}; -- mkV "störtar" ; -- comment=13
 lin rush_away_V = mkV "störtar" ; -- comment=13
 lin rush_into_V2 = dirV2 (partV (mkV "störtar")"in"); -- comment=3
@@ -49485,7 +49243,7 @@ lin sadhu_N = variants {} ; -- status=guess
 lin sadism_N = mkN "sadism" "sadismer" ; -- SaldoWN
 lin sadist_N = mkN "sadist" "sadister" ; -- SaldoWN
 lin sadistic_A = mkA "sadistisk" ; -- SaldoWN
-lin sadly_Adv = variants{} ;
+lin sadly_Adv = variants{} ; --
 lin sadness_N = mkN "sorgsenhet" ; -- comment=2
 lin sadomasochism_N = mkN "sadomasochism" ; -- status=guess
 lin sadomasochistFem_N = variants {} ; -- status=guess
@@ -49504,7 +49262,7 @@ lin safeguard_N = mkN "säkerhet" "säkerheter" ; -- comment=4
 lin safeguard_V2 = variants {} ; -- status=guess
 lin safehold_N = variants {} ; -- status=guess
 lin safekeeping_N = mkN "förvar" neutrum | mkN "förvar" neutrum ; -- SaldoWN
-lin safely_Adv = variants{} ;
+lin safely_Adv = variants{} ; --
 lin safeness_N = variants {} ; -- status=guess
 lin safety_N = mkN "säkerhet" "säkerheter" | mkN "trygghet" "tryggheter" ;
 lin safety_belt_N = variants {} ; -- status=guess
@@ -49545,7 +49303,6 @@ lin saiga_N = mkN "saigaantilop" ; -- status=guess
 lin saigon_PN = variants {} ; -- status=guess
 lin sail_N = mkN "kryssning" | mkN "segel" neutrum ; -- SaldoWN
 lin sail_V = mkV "seglar" ; -- status=guess
---subcat lin sail_V2 = dirV2 (partV (mkV "seglar")"ut"); -- comment=4
 lin sail_into_V2 = dirV2 (partV (mkV "seglar")"ut"); -- comment=4
 lin sail_through_V2 = dirV2 (partV (mkV "seglar")"ut"); -- comment=4
 lin sailboat_N = mkN "segelbåt" ; -- status=guess
@@ -49566,9 +49323,9 @@ lin sainthood_N = variants {} ; -- status=guess
 lin saintlike_A = variants {} ; -- status=guess
 lin saintliness_N = variants {} ; -- status=guess
 lin saintly_A = mkA "helig" ; -- status=guess
-lin sake_1_N = variants{} ;
-lin sake_2_N = variants{} ;
-lin sake_N = variants{} ;
+lin sake_1_N = variants{} ; --
+lin sake_2_N = variants{} ; --
+lin sake_N = variants{} ; --
 lin saki_N = variants {} ; -- status=guess
 lin sal_volatile_N = variants {} ; -- status=guess
 lin salaam_N = variants {} ; -- status=guess
@@ -49721,8 +49478,8 @@ lin samoan_N = variants {} ; -- status=guess
 lin samosa_N = variants {} ; -- status=guess
 lin samovar_N = mkN "samovar" "samovarer" ; -- status=guess
 lin sampan_N = mkN "sampan" "sampaner" ; -- status=guess
-lin sample_N = mkN "prov" neutrum | mkN "varuprov" neutrum ; -- SaldoWN = mkN "prov" neutrum ; -- comment=3
-lin sample_V2 = variants{} ;
+lin sample_N = mkN "prov" neutrum ;
+lin sample_V2 = variants{} ; --
 lin sampler_N = mkN "märkduk" ; -- status=guess
 lin sampling_N = mkN "provtagning" ; -- status=guess
 lin samsara_N = variants {} ; -- status=guess
@@ -49943,7 +49700,6 @@ lin satisfactoriness_N = variants {} ; -- status=guess
 lin satisfactory_A = mkA "tillfredsställande" ; -- SaldoWN
 lin satisfied_A = mkA "nöjd" "nöjt" ; -- SaldoWN
 lin satisfier_N = variants {} ; -- status=guess
---subcat lin satisfy_V = mkV "uppfyller" ; -- comment=6
 lin satisfy_V2 = mkV2 (mkV "tillfredsställer") ; -- status=guess
 lin satori_N = variants {} ; -- status=guess
 lin satrap_N = variants {} ; -- status=guess
@@ -50052,9 +49808,7 @@ lin saxophonist_N = variants {} ; -- status=guess
 lin say_N = mkN "visa" ; -- status=guess
 lin say_V = mkV "säga" "sade" "sagt" ;
 lin say_V2 = mkV2 "säga" "sade" "sagt" ;
---subcat lin say_VA = mkV "säga" "sade" "sagt" ;
 lin say_VS = L.say_VS ;
---subcat lin say_VV = mkVV (mkV "säga" "sade" "sagt") ;
 lin saying_N = mkN "ordspråk" | mkN "ordstäv" ; -- status=guess status=guess
 lin scab_N = mkN "skorpa" ; -- comment=2
 lin scabbard_N = mkN "skida" ; -- status=guess
@@ -50142,12 +49896,12 @@ lin scapular_A = variants {} ; -- status=guess
 lin scapular_N = variants {} ; -- status=guess
 lin scapulohumeral_A = variants {} ; -- status=guess
 lin scar_N = mkN "ärr" neutrum; -- status=guess
-lin scar_V = variants{} ;
-lin scar_V2 = variants{} ;
+lin scar_V = variants{} ; --
+lin scar_V2 = variants{} ; --
 lin scarab_N = variants {} ; -- status=guess
 lin scarborough_PN = variants {} ; -- status=guess
 lin scarce_A = mkA "knapp" ; -- SaldoWN
-lin scarcely_Adv = variants{} ;
+lin scarcely_Adv = variants{} ; --
 lin scarcity_N = mkN "brist" "brister" ; -- SaldoWN
 lin scare_N = mkN "skrämsel" ; -- comment=2
 lin scare_V = mkV "skrämmer" ; -- comment=2
@@ -50156,7 +49910,7 @@ lin scare_away_V2 = variants {} ; -- status=guess
 lin scare_off_V2 = variants {} ; -- status=guess
 lin scarecrow_N = mkN "fågelskrämma" ; -- status=guess
 lin scarecrowish_A = variants {} ; -- status=guess
-lin scared_A = variants{} ;
+lin scared_A = variants{} ; --
 lin scaremonger_N = variants {} ; -- status=guess
 lin scarf_N = mkN "skarf" ; -- comment=3
 lin scarf_pin_N = variants {} ; -- status=guess
@@ -50426,10 +50180,8 @@ lin scraggly_A = variants {} ; -- status=guess
 lin scraggy_A = mkA "skrovlig" ; -- comment=4
 lin scram_V = variants {} ; -- status=guess
 lin scramble_N = variants {} ; -- status=guess
-lin scramble_V = variants{} ;
-lin scramble_V2 = variants{} ;
---subcat lin scramble_V2V = variants{} ;
---subcat lin scramble_VV = variants{} ;
+lin scramble_V = variants{} ; --
+lin scramble_V2 = variants{} ; --
 lin scrambler_N = variants {} ; -- status=guess
 lin scrap_N = mkN "bit" | mkN "skrot" ; -- SaldoWN = mkN "bit" ; -- comment=11
 lin scrap_V = mkV "skrotar" ; -- comment=9
@@ -50663,7 +50415,6 @@ lin seakale_N = variants {} ; -- status=guess
 lin seal_N = mkN "säl" ; -- SaldoWN
 lin seal_V = mkV "försluta" "förslöt" "förslutit" ; -- comment=4
 lin seal_V2 = variants{}; -- mkV "försluta" "förslöt" "förslutit" ; -- comment=4
---subcat lin seal_V2A = variants{}; -- mkV "försluta" "förslöt" "förslutit" ; -- comment=4
 lin seal_ring_N = variants {} ; -- status=guess
 lin sealant_N = variants {} ; -- status=guess
 lin sealer_N = variants {} ; -- status=guess
@@ -50714,7 +50465,6 @@ lin seasonal_A = mkA "säsongsmässig" ; -- SaldoWN
 lin seasoner_N = variants {} ; -- status=guess
 lin seasoning_N = variants {} ; -- status=guess
 lin seat_N = mkN "stol" ;
---subcat lin seat_V2 = variants{} ;
 lin seat_belt_N = variants {} ; -- status=guess
 lin seating_N = mkN "placering" ; -- comment=2
 lin seating_room_N = variants {} ; -- status=guess
@@ -50762,7 +50512,7 @@ lin secondary_N = variants {} ; -- status=guess
 lin seconder_N = variants {} ; -- status=guess
 lin secondhand_A = compoundA (regA "begagnad"); -- status=guess
 lin secondhand_Adv = variants {} ; -- status=guess
-lin secondly_Adv = variants{} ;
+lin secondly_Adv = variants{} ; --
 lin secondment_N = variants {} ; -- status=guess
 lin secondo_N = variants {} ; -- status=guess
 lin secrecy_N = mkN "sekretess" ; -- status=guess
@@ -50828,7 +50578,6 @@ lin see_N = mkN "biskopsstol" ; -- comment=4
 lin see_V = mkV "se" "såg" "sett" ;
 lin see_V2 = L.see_V2 ;
 lin see_V2V = mkV2V "se" "såg" "sett" ;
---subcat lin see_VA = mkVA (mkV (mkV "vinka") "av") ;
 lin see_VQ = mkV "se" "såg" "sett" ;
 lin see_VS = mkVS (mkV "se" "såg" "sett") ;
 lin see_about_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut"); -- comment=9
@@ -50857,13 +50606,11 @@ lin seek_VV = mkVV (mkV "söker") ;
 lin seek_out_V2 = mkV2 (mkV "söker"); -- status=guess
 lin seeker_N = variants {} ; -- status=guess
 lin seeking_N = variants {} ; -- status=guess
---subcat lin seem_V = partV I.se_V "ut" ;
---subcat lin seem_V2 = mkV2 (mkV "förefalla" "föreföll" "förefallit") | mkV2 (mkV "verkar") ;
 lin seem_VA = mkVA (mkV "förefalla" "föreföll" "förefallit") | mkVA (mkV "verkar") | mkVA (depV (mkV "tycker")) ;
 lin seem_VS = mkVS (mkV "förefalla" "föreföll" "förefallit") | mkVS (mkV "verkar") ;
 lin seem_VV = auxVV (mkV "verka") ;
 lin seeming_A = mkA "skenbar" ; -- status=guess
-lin seemingly_Adv = variants{} ;
+lin seemingly_Adv = variants{} ; --
 lin seemliness_N = variants {} ; -- status=guess
 lin seemly_A = mkA "passande" ; -- status=guess
 lin seep_V = mkV "droppar" ; -- comment=4
@@ -50924,7 +50671,7 @@ lin selectwoman_N = variants {} ; -- status=guess
 lin selenium_N = mkN "selen" neutrum; -- status=guess
 lin selenology_N = mkN "selenologi" ; -- status=guess
 lin self_A = mkA "självhäftande" ; -- status=guess
-lin self_N = mkN "jag" neutrum ; -- SaldoWN -- comment=2
+lin self_N = mkN "jag" neutrum | mkN "jag" neutrum ; -- SaldoWN -- comment=2
 lin self_abasement_N = variants {} ; -- status=guess
 lin self_abnegation_N = variants {} ; -- status=guess
 lin self_absorbed_A = variants {} ; -- status=guess
@@ -51010,8 +50757,6 @@ lin selkirk_PN = variants {} ; -- status=guess
 lin sell_N = mkN "skoj" neutrum; -- comment=6
 lin sell_V = mkV "sälja" "sålde" "sålt" ;
 lin sell_V2 = mkV2 "sälja" "sålde" "sålt" ;
---subcat lin sell_VA = mkV "sälja" "sålde" "sålt" ;
---subcat lin sell_VS = mkV "sälja" "sålde" "sålt" ;
 lin sell_back_V = mkV "förråda" "förrådde" "förrått" ; -- comment=12
 lin sell_off_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=18
 lin sell_on_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=18
@@ -51019,7 +50764,7 @@ lin sell_out_V = mkV "förråda" "förrådde" "förrått" ; -- comment=12
 lin sell_out_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=18
 lin sell_up_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut"); -- comment=18
 lin sellerFem_N = mkN "säljare" utrum; -- comment=2
-lin sellerMasc_N = mkN "säljare" utrum; -- comment=2
+lin sellerMasc_N = variants{} ; --
 lin selling_N = mkN "försäljning" ; -- SaldoWN
 lin selloff_N = variants {} ; -- status=guess
 lin sellout_N = variants {} ; -- status=guess
@@ -51041,7 +50786,7 @@ lin semblance_N = mkN "skepnad" "skepnader" ; -- status=guess
 lin semen_N = mkN "sädesvätska" | (mkN "sperma") | mkN "sagge" ; -- status=guess status=guess status=guess
 lin semester_N = mkN "termin" "terminer" ; -- status=guess
 lin semestral_A = variants {} ; -- status=guess
-lin semi_final_N = variants{} ;
+lin semi_final_N = variants{} ; --
 lin semiabstract_A = variants {} ; -- status=guess
 lin semiannual_A = variants {} ; -- status=guess
 lin semiaquatic_A = variants {} ; -- status=guess
@@ -51120,7 +50865,6 @@ lin senatorship_N = variants {} ; -- status=guess
 lin send_V = mkV "sänder" ;
 lin send_V2 = mkV2 "skicka" | mkV2 "sänder" ;
 lin send_V2V = mkV2V (mkV "skickar") | mkV2V (mkV "sänder") ;
---subcat lin send_VS = mkVS (mkV "skickar") | mkVS (mkV "sändar") ;
 lin send_back_V2 = dirV2 (partV (mkV "sänder")"efter"); -- comment=10
 lin send_for_V2 = dirV2 (partV (mkV "sänder")"efter"); -- comment=10
 lin send_in_V = mkV "sänder" ; -- comment=6
@@ -51145,7 +50889,7 @@ lin senescent_A = variants {} ; -- status=guess
 lin seneschal_N = variants {} ; -- status=guess
 lin senile_A = mkA "dement" ; -- comment=2
 lin senility_N = variants {} ; -- status=guess
-lin senior_A = mkA "senior" | mkA "äldre" ; -- status=guess
+lin senior_A = mkA "senior" | mkA "äldre" ;
 lin senior_N = mkN "senior" ; -- SaldoWN = mkN "senior" "senioren" "seniorer" "seniorerna" ;
 lin seniority_N = (mkN "anciennitet" "ancienniteter") | mkN "tjänsteålder" ; -- status=guess status=guess
 lin seniti_N = variants {} ; -- status=guess
@@ -51160,8 +50904,8 @@ lin sensational_A = mkA "sensationell" ; -- status=guess
 lin sensationalism_N = variants {} ; -- status=guess
 lin sensationalist_N = variants {} ; -- status=guess
 lin sense_N = mkN "sinne" | mkN "vett" neutrum ;
-lin sense_V2 = variants{} ;
-lin sense_VS = variants{} ;
+lin sense_V2 = variants{} ; --
+lin sense_VS = variants{} ; --
 lin sense_organ_N = variants {} ; -- status=guess
 lin senseless_A = mkA "vettlös" ; -- comment=5
 lin senselessness_N = variants {} ; -- status=guess
@@ -51217,7 +50961,7 @@ lin separate_A = mkA "separat" "separat" | mkA "skild" "skilt" ;
 lin separate_N = mkN "separat" neutrum | mkN "särtryck" neutrum ; -- SaldoWN -- comment=2
 lin separate_V = mkV "skilja" "skilde" "skilt" ; -- SaldoWN
 lin separate_V2 = mkV2 "skilja" "skilde" "skilt" | dirV2 (partV (mkV "skilja")"av") ; -- SaldoWN -- comment=3
-lin separately_Adv = variants{} ;
+lin separately_Adv = variants{} ; --
 lin separateness_N = mkN "avskildhet" "avskildheter" ; -- status=guess
 lin separation_N = mkN "separation" "separationer" | mkN "skilsmässa" ; -- SaldoWN -- comment=2
 lin separationism_N = variants {} ; -- status=guess
@@ -51323,12 +51067,10 @@ lin sertularian_N = variants {} ; -- status=guess
 lin serum_N = mkN "serum" neutrum | mkN "serum" neutrum ; -- SaldoWN
 lin serval_N = variants {} ; -- status=guess
 lin servantFem_N = mkN "tjänare" utrum; -- comment=2
-lin servantMasc_N = mkN "tjänare" utrum; -- comment=2
+lin servantMasc_N = mkN "betjänt" "betjänter" ; -- status=guess
 lin serve_N = mkN "serve" utrum | mkN "serve" utrum ; -- SaldoWN
 lin serve_V = mkV "tjäna" ;
 lin serve_V2 = mkV2 "tjäna" ;
---subcat lin serve_VS = mkVS (mkV "tjäna") ;
---subcat lin serve_VV = mkVV (mkV "tjäna") ;
 lin server_N = mkN "servitör" "servitörer" | mkN "server" ; -- SaldoWN
 lin service_N = mkN "tjänst" "tjänster" | mkN "service" utrum | mkN "tjänstgöring" ;
 lin service_V2 = mkV2 "serva" ; -- status=guess
@@ -51352,15 +51094,12 @@ lin sesquipedalian_A = variants {} ; -- status=guess
 lin sesquipedalian_N = variants {} ; -- status=guess
 lin sesquipedality_N = variants {} ; -- status=guess
 lin sessile_A = mkA "sessil" | mkA "fastsittande" ; -- status=guess status=guess
-lin session_N = mkN "session" "sessioner" | mkN "termin" "terminer" ; -- SaldoWN -- comment=4
+lin session_N = mkN "session" "sessioner" ;
 lin sestet_N = variants {} ; -- status=guess
 lin set_1_N = mkN "uppsättning" ;
 lin set_2_N = mkN "mängd" "mängder" ;
 lin set_N = mkN "uppsättning" ; ---- has been split
---subcat lin set_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ;
 lin set_V2 = mkV2 I.sätta_V ;
---subcat lin set_VS = mkVS I.sätta_V ;
---subcat lin set_VV = mkVV I.sätta_V ;
 lin set_about_V2 = dirV2 (partV (mkV "planterar")"om"); -- comment=2
 lin set_apart_V2 = dirV2 (partV (mkV "planterar")"om"); -- comment=2
 lin set_aside_V2 = dirV2 (partV (mkV "planterar")"om"); -- comment=2
@@ -51392,7 +51131,6 @@ lin setting_N = mkN "sättning" ; -- status=guess
 lin settle_N = variants {} ; -- status=guess
 lin settle_V = mkV "sjunka" "sjönk" "sjunkit" ;
 lin settle_V2 = mkV2 I.sätta_V ;
---subcat lin settle_VA = mkVA I.sjunka_V ;
 lin settle_back_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=25
 lin settle_down_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=25
 lin settle_for_V2 = dirV2 (partV (mkV "ordnar")"om"); -- comment=4
@@ -51416,7 +51154,7 @@ lin severally_Adv = variants {} ; -- status=guess
 lin severalty_N = variants {} ; -- status=guess
 lin severance_N = mkN "avskiljande" ; -- comment=3
 lin severe_A = mkA "sträng" ; -- comment=13
-lin severely_Adv = variants{} ;
+lin severely_Adv = variants{} ; --
 lin severity_N = mkN "stränghet" ; -- comment=5
 lin sevilla_PN = variants {} ; -- status=guess
 lin seville_PN = variants {} ; -- status=guess
@@ -51451,9 +51189,9 @@ lin sextette_N = variants {} ; -- status=guess
 lin sextillion_N = variants {} ; -- status=guess
 lin sexton_N = variants {} ; -- status=guess
 lin sextuple_A = variants {} ; -- status=guess
-lin sexual_A = mkA "sexuell" ; -- SaldoWN
+lin sexual_A = mkA "sexuell" ;
 lin sexuality_N = mkN "sexualitet" "sexualiteter" ; -- SaldoWN
-lin sexually_Adv = variants{} ;
+lin sexually_Adv = variants{} ; --
 lin sexy_A = mkA "sexig" ; -- status=guess
 lin seychelles_PN = variants {} ; -- status=guess
 lin seychellois_A = variants {} ; -- status=guess
@@ -51578,7 +51316,7 @@ lin share_V2 = mkV2 "dela" ;
 lin share_out_N = variants {} ; -- status=guess
 lin share_out_V = mkV "delar" ; -- comment=2
 lin sharecropper_N = variants {} ; -- status=guess
-lin shared_A = variants{} ;
+lin shared_A = variants{} ; --
 lin shareholder_N = mkN "aktieägare" utrum | mkN "aktieägare" utrum ; -- SaldoWN
 lin shareholding_N = variants {} ; -- status=guess
 lin shareware_N = variants {} ; -- status=guess
@@ -51600,7 +51338,7 @@ lin sharpen_V2 = mkV2 (mkV "vässa"); -- status=guess, src=wikt
 lin sharpener_N = variants {} ; -- status=guess
 lin sharper_N = variants {} ; -- status=guess
 lin sharpie_N = variants {} ; -- status=guess
-lin sharply_Adv = variants{} ;
+lin sharply_Adv = variants{} ; --
 lin sharpness_N = mkN "skärpa" ; -- status=guess
 lin sharpshooter_N = mkN "skarpskytt" ; -- status=guess
 lin shatter_V = mkV "uppröra" "upprörde" "upprört" ; -- comment=5
@@ -51652,11 +51390,11 @@ lin sheepshead_N = variants {} ; -- status=guess
 lin sheepshearing_N = variants {} ; -- status=guess
 lin sheepskin_N = variants {} ; -- status=guess
 lin sheepwalk_N = variants {} ; -- status=guess
-lin sheer_A = variants{} ;
+lin sheer_A = variants{} ; --
 lin sheer_Adv = variants {} ; -- status=guess
 lin sheer_V = variants {} ; -- status=guess
 lin sheerness_PN = variants {} ; -- status=guess
-lin sheet_N = mkN "segel" neutrum | mkN "tidning" ; -- SaldoWN -- comment=17
+lin sheet_N = mkN "ark" "ark" | mkN "lakan" "lakan" ; ---- split
 lin sheet_anchor_N = variants {} ; -- status=guess
 lin sheet_lightning_N = variants {} ; -- status=guess
 lin sheeting_N = variants {} ; -- status=guess
@@ -51729,7 +51467,7 @@ lin shiksa_N = variants {} ; -- status=guess
 lin shildon_PN = variants {} ; -- status=guess
 lin shill_N = variants {} ; -- status=guess
 lin shillelagh_N = variants {} ; -- status=guess
-lin shilling_N = variants{} ;
+lin shilling_N = variants{} ; --
 lin shillyshally_N = variants {} ; -- status=guess
 lin shillyshally_V = variants {} ; -- status=guess
 lin shim_N = variants {} ; -- status=guess
@@ -51821,7 +51559,6 @@ lin shiva_N = variants {} ; -- status=guess
 lin shivaree_N = variants {} ; -- status=guess
 lin shiver_N = mkN "skälvning" ; -- comment=4
 lin shiver_V = mkV "darrar" ; -- comment=5
---subcat lin shiver_V2 = dirV2 (partV (mkV "skakar")"om"); -- comment=2
 lin shivery_A = mkA "darrande" ; -- comment=3
 lin shmegegge_N = variants {} ; -- status=guess
 lin shmooze_N = variants {} ; -- status=guess
@@ -51829,12 +51566,12 @@ lin shoal_N = mkN "grund" neutrum; -- comment=2
 lin shoal_V = variants {} ; -- status=guess
 lin shock_Adv = variants {} ; -- status=guess
 lin shock_N = mkN "stöt" | mkN "våg" ; -- SaldoWN -- comment=10
-lin shock_V2 = variants{} ;
+lin shock_V2 = variants{} ; --
 lin shock_brigade_N = variants {} ; -- status=guess
 lin shock_headed_A = variants {} ; -- status=guess
 lin shock_worker_N = variants {} ; -- status=guess
 lin shockable_A = variants {} ; -- status=guess
-lin shocked_A = variants{} ;
+lin shocked_A = variants{} ; --
 lin shocker_N = mkN "rysare" utrum; -- status=guess
 lin shocking_A = mkA "förfärlig" ; -- comment=8
 lin shod_A = variants {} ; -- status=guess
@@ -51927,7 +51664,7 @@ lin short_out_V = mkV "kortsluta" "kortslöt" "kortslutit" ; -- comment=3
 lin short_range_A = variants {} ; -- status=guess
 lin short_sighted_A = variants {} ; -- status=guess
 lin short_tempered_A = variants {} ; -- status=guess
-lin short_term_A = variants{} ;
+lin short_term_A = variants{} ; --
 lin short_winded_A = variants {} ; -- status=guess
 lin shortage_N = mkN "svält" | mkN "brist" "brister" ; -- SaldoWN -- comment=3
 lin shortbread_N = variants {} ; -- status=guess
@@ -51983,7 +51720,6 @@ lin shovelhead_N = variants {} ; -- status=guess
 lin show_N = mkN "show" "shower" ;
 lin show_V = mkV "visa" ;
 lin show_V2 = mkV2 "visa" ;
---subcat lin show_V2V = mkV2V (mkV "visa") ;
 lin show_VQ = mkVQ (mkV "visa") ;
 lin show_VS = mkVS (mkV "visa") ;
 lin show_around_V2 = dirV2 (partV (mkV "visar")"in"); -- comment=22
@@ -52066,7 +51802,6 @@ lin shrubby_A = variants {} ; -- status=guess
 lin shrublet_N = variants {} ; -- status=guess
 lin shrug_N = mkN "axelryckning" ; -- status=guess
 lin shrug_V2 = mkV2 (mkV (mkV "rycka") "på axlarna"); -- status=guess, src=wikt
---subcat lin shrug_VS = mkVS (mkV (mkV "rycka") "på axlarna"); -- status=guess, src=wikt
 lin shrug_off_V2 = variants {} ; -- status=guess
 lin shtik_N = variants {} ; -- status=guess
 lin shtikl_N = variants {} ; -- status=guess
@@ -52088,7 +51823,6 @@ lin shunt_V2 = variants {} ; -- status=guess
 lin shunter_N = variants {} ; -- status=guess
 lin shush_V = mkV "hyssjar" ; -- status=guess
 lin shush_V2 = variants {} ; -- status=guess
---subcat lin shut_V = mkV "stänger" ; -- comment=4
 lin shut_V2 = mkV2 (mkV "stänga"); -- status=guess, src=wikt
 lin shut_away_V2 = variants {} ; -- status=guess
 lin shut_down_V2 = variants {} ; -- status=guess
@@ -52250,7 +51984,6 @@ lin sigmoidoscopy_N = variants {} ; -- status=guess
 lin sign_N = mkN "tecken" "tecknet" "tecken" "tecknen" ;
 lin sign_V = mkV "undertecknar" ;
 lin sign_V2 = mkV2 "underteckna" | mkV2 (mkV I.skriva_V "på") ;
---subcat lin sign_V2V = mkV2V I.skriva_V ; ---- subcat
 lin sign_away_V2 = variants {} ; -- status=guess
 lin sign_for_V3 = variants {} ; -- status=guess
 lin sign_in_V = mkV "tecknar" ; -- comment=8
@@ -52271,7 +52004,6 @@ lin sign_with_V2 = variants {} ; -- status=guess
 lin signage_N = variants {} ; -- status=guess
 lin signal_A = mkA "betydande" ; -- comment=2
 lin signal_N = mkN "signal" "signaler" ; -- comment=2
---subcat lin signal_V = mkV "signalerar" ; -- comment=3
 lin signal_V2 = variants{}; -- mkV "signalerar" ; -- comment=3
 lin signal_VS = variants{}; -- mkV "signalerar" ; -- comment=3
 lin signal_box_N = variants {} ; -- status=guess
@@ -52311,7 +52043,7 @@ lin silence_V2 = variants {} ; -- status=guess
 lin silencer_N = variants {} ; -- status=guess
 lin silene_N = variants {} ; -- status=guess
 lin silent_A = mkA "tystgående" ; -- comment=2
-lin silently_Adv = variants{} ;
+lin silently_Adv = variants{} ; --
 lin silenus_N = variants {} ; -- status=guess
 lin silesia_N = variants {} ; -- status=guess
 lin silex_N = variants {} ; -- status=guess
@@ -52415,7 +52147,7 @@ lin simulator_N = mkN "simulator" "simulatorer" ; -- SaldoWN
 lin simulcast_N = variants {} ; -- status=guess
 lin simultaneity_N = mkN "samtidighet" "samtidigheter" ; -- status=guess
 lin simultaneous_A = mkA "samtidig" ; -- status=guess
-lin simultaneously_Adv = variants{} ;
+lin simultaneously_Adv = variants{} ; --
 lin simultaneousness_N = variants {} ; -- status=guess
 lin simvastatin_N = variants {} ; -- status=guess
 lin sin_N = mkN "synd" "synder" ; -- SaldoWN
@@ -52425,7 +52157,7 @@ lin since_Prep = mkPrep "sedan" ;
 lin since_Subj = M.mkSubj "sedan" ;
 lin since_then_Adv = variants {} ; -- status=guess
 lin sincere_A = mkA "ärlig" ; -- comment=3
-lin sincerely_Adv = variants{} ;
+lin sincerely_Adv = variants{} ; --
 lin sincerity_N = mkN "ärlighet" "ärligheter" ; -- comment=2
 lin sinciput_N = variants {} ; -- status=guess
 lin sine_N = mkN "sinus" ; -- status=guess
@@ -52516,7 +52248,7 @@ lin siphon_V2 = variants {} ; -- status=guess
 lin siphone_off_V = variants {} ; -- status=guess
 lin siphonophore_N = variants {} ; -- status=guess
 lin sipper_N = variants {} ; -- status=guess
-lin sir_N = mkN "magister" ; -- status=guess
+lin sir_N = mkN "herr" ; ----
 lin sir_roger_de_coverley_N = variants {} ; -- status=guess
 lin siracusa_PN = variants {} ; -- status=guess
 lin sirdar_N = variants {} ; -- status=guess
@@ -52540,7 +52272,6 @@ lin sisterly_A = variants {} ; -- status=guess
 lin siswati_N = variants {} ; -- status=guess
 lin sit_V = L.sit_V ;
 lin sit_V2 = mkV2 "sitta" "satt" "suttit" ;
---subcat lin sit_VA = mkV "sitta" "satt" "suttit" ;
 lin sit_about_V = mkV "värper" ; -- comment=8
 lin sit_around_V = mkV "värper" ; -- comment=8
 lin sit_back_V = mkV "värper" ; -- comment=8
@@ -52564,7 +52295,7 @@ lin sitter_N = mkN "modell" "modeller" ; -- comment=2
 lin sitting_N = mkN "sittning" ; -- status=guess
 lin sitting_room_N = variants {} ; -- status=guess
 lin sittingbourne_PN = variants {} ; -- status=guess
-lin situate_V2 = variants{} ;
+lin situate_V2 = variants{} ; --
 lin situation_N = mkN "situation" "situationer" ;
 lin six_footer_N = variants {} ; -- status=guess
 lin six_shooter_N = variants {} ; -- status=guess
@@ -52640,7 +52371,7 @@ lin skiffle_group_N = variants {} ; -- status=guess
 lin skiing_N = mkN "skidåkning" ; -- status=guess
 lin skilful_A = mkA "skicklig" ; -- comment=2
 lin skill_N = mkN "färdighet" "färdigheter" ;
-lin skill_V = variants{} ;
+lin skill_V = variants{} ; --
 lin skilled_A = mkA "skicklig" ; -- SaldoWN
 lin skillet_N = mkN "stekpanna" ; -- comment=2
 lin skillfully_Adv = variants {} ; -- status=guess
@@ -52844,7 +52575,6 @@ lin sleek_V2 = variants {} ; -- status=guess
 lin sleekness_N = variants {} ; -- status=guess
 lin sleep_N = mkN "sömn" ; -- SaldoWN
 lin sleep_V = L.sleep_V;
---subcat lin sleep_V2 = dirV2 (partV (mkV "sova" "sov" "sovit")"ut"); -- comment=2
 lin sleep_in_V = mkV "sova" "sov" "sovit" ; -- comment=2
 lin sleep_off_V2 = dirV2 (partV (mkV "sova" "sov" "sovit")"ut"); -- comment=2
 lin sleep_on_V2 = dirV2 (partV (mkV "sova" "sov" "sovit")"ut"); -- comment=2
@@ -52852,7 +52582,7 @@ lin sleep_over_V = mkV "sova" "sov" "sovit" ; -- comment=2
 lin sleep_through_V2 = dirV2 (partV (mkV "sova" "sov" "sovit")"ut"); -- comment=2
 lin sleeper_N = mkN "syll" ; -- status=guess
 lin sleepiness_N = variants {} ; -- status=guess
-lin sleeping_A = variants{} ;
+lin sleeping_A = variants{} ; --
 lin sleeping_N = mkN "sovsäck" ; -- status=guess
 lin sleeping_bag_N = variants {} ; -- status=guess
 lin sleeping_car_N = variants {} ; -- status=guess
@@ -53127,9 +52857,8 @@ lin smelt_V2 = variants {} ; -- status=guess
 lin smelter_N = variants {} ; -- status=guess
 lin smew_N = mkN "salskrake" utrum; -- status=guess
 lin smilax_N = variants {} ; -- status=guess
-lin smile_N = mkN "leende" ; -- SaldoWN
+lin smile_N = mkN "leende" ;
 lin smile_V = mkV "le" "log" "lett" ;
---subcat lin smile_V2 = mkV2 (mkV "le" "log" "lett") ;
 lin smiler_N = variants {} ; -- status=guess
 lin smiley_N = mkN "smiley" "smileyn" "smileys" "smileysen" ; -- status=guess
 lin smilingly_Adv = variants {} ; -- status=guess
@@ -53183,7 +52912,7 @@ lin smoothhound_N = variants {} ; -- status=guess
 lin smoothie_N = mkN "smoothie" ; -- status=guess
 lin smoothing_iron_N = variants {} ; -- status=guess
 lin smoothing_plane_N = variants {} ; -- status=guess
-lin smoothly_Adv = variants{} ;
+lin smoothly_Adv = variants{} ; --
 lin smoothness_N = mkN "jämnhet" ; -- comment=4
 lin smorgasbord_N = variants {} ; -- status=guess
 lin smother_N = variants {} ; -- status=guess
@@ -53231,7 +52960,6 @@ lin snaky_A = variants {} ; -- status=guess
 lin snap_N = mkN "nafsande" ; -- comment=11
 lin snap_V = mkV "brista" "brast" "brustit" | mkV "nafsar" ; -- SaldoWN = mkV "brista" "brast" "brustit" ; -- comment=14
 lin snap_V2 = mkV2 "brista" "brast" "brustit" | dirV2 (partV (mkV "smälla" "small" "smäll")"av") ; -- SaldoWN = mkV "brista" "brast" "brustit" ; -- comment=2
---subcat lin snap_VS = mkV "brista" "brast" "brustit" | mkVS (mkV "snäppa") ; -- SaldoWN = mkV "brista" "brast" "brustit" ; -- status=guess, src=wikt
 lin snap_back_V = mkV "nafsar" ; -- comment=14
 lin snap_fastener_N = variants {} ; -- status=guess
 lin snap_off_V2 = dirV2 (partV (mkV "smälla" "small" "smäll")"av"); -- comment=2
@@ -53284,7 +53012,6 @@ lin snide_A = mkA "spydig" ; -- comment=3
 lin sniff_N = variants {} ; -- status=guess
 lin sniff_V = mkV "sniffar" ; -- comment=2
 lin sniff_V2 = variants{}; -- mkV "sniffar" ; -- comment=2
---subcat lin sniff_VS = variants{}; -- mkV "sniffar" ; -- comment=2
 lin sniff_around_V2 = variants {} ; -- status=guess
 lin sniff_at_V2 = variants {} ; -- status=guess
 lin sniff_out_V2 = variants {} ; -- status=guess
@@ -53454,7 +53181,7 @@ lin sobriety_N = mkN "nykterhet" "nykterheter" ; -- status=guess
 lin sobriquet_N = variants {} ; -- status=guess
 lin soc_N = variants {} ; -- status=guess
 lin socage_N = variants {} ; -- status=guess
-lin socalled_A = variants{} ;
+lin socalled_A = variants{} ; --
 lin soccer_N = mkN "fotboll" ; -- SaldoWN = mkN "fotboll" ;
 lin sociability_N = variants {} ; -- status=guess
 lin sociable_A = mkA "sällskaplig" ; -- SaldoWN
@@ -53471,7 +53198,7 @@ lin sociality_N = variants {} ; -- status=guess
 lin socialization_N = variants {} ; -- status=guess
 lin socialize_V2 = mkV2 (mkV "umgås"); -- status=guess, src=wikt
 lin socializer_N = variants {} ; -- status=guess
-lin socially_Adv = variants{} ;
+lin socially_Adv = variants{} ; --
 lin society_N = mkN "samhälle" ;
 lin sociobiologic_A = variants {} ; -- status=guess
 lin sociobiologically_Adv = variants {} ; -- status=guess
@@ -53515,7 +53242,7 @@ lin sodomy_N = variants {} ; -- status=guess
 lin sofa_N = mkN "soffa" ; -- status=guess
 lin soffit_N = variants {} ; -- status=guess
 lin sofia_PN = variants {} ; -- status=guess
-lin soft_A = mkA "mjuk" ; -- SaldoWN
+lin soft_A = mkA "mjuk" ;
 lin soft_boiled_A = variants {} ; -- status=guess
 lin soft_footed_A = variants {} ; -- status=guess
 lin soft_headed_A = variants {} ; -- status=guess
@@ -53538,7 +53265,7 @@ lin softheartedness_N = variants {} ; -- status=guess
 lin softie_N = variants {} ; -- status=guess
 lin softish_A = variants {} ; -- status=guess
 lin softland_V = variants {} ; -- status=guess
-lin softly_Adv = variants{} ;
+lin softly_Adv = variants{} ; --
 lin softness_N = mkN "mjukhet" "mjukheter" ; -- status=guess
 lin software_N = mkN "mjukvara" | mkN "programvara" ;
 lin softwood_N = variants {} ; -- status=guess
@@ -53585,7 +53312,7 @@ lin sole_N = mkN "sula" ; -- comment=8
 lin sole_V2 = mkV2 (mkV "sular"); -- status=guess, src=wikt
 lin solecism_N = variants {} ; -- status=guess
 lin soleless_A = variants {} ; -- status=guess
-lin solely_Adv = variants{} ;
+lin solely_Adv = variants{} ; --
 lin solemn_A = mkA "högtidlig" ; -- comment=4
 lin solemnity_N = variants {} ; -- status=guess
 lin solemnization_N = variants {} ; -- status=guess
@@ -53600,7 +53327,7 @@ lin solicit_V = mkV "uppvaktar" ; -- status=guess, src=wikt
 lin solicit_V2 = mkV2 (mkV "uppvaktar"); -- status=guess, src=wikt
 lin solicitation_N = variants {} ; -- status=guess
 lin solicitorFem_N = mkN "jurist" "jurister" ; -- comment=2
-lin solicitorMasc_N = mkN "jurist" "jurister" ; -- comment=2
+lin solicitorMasc_N = mkN "domare" "domare" ; ---- sense
 lin solicitor_general_N = variants {} ; -- status=guess
 lin solicitorship_N = variants {} ; -- status=guess
 lin solicitous_A = variants {} ; -- status=guess
@@ -54057,14 +53784,14 @@ lin spec_N = variants {} ; -- status=guess
 lin special_A = mkA "speciell" ;
 lin special_N = mkN "special" "specialer" ; -- comment=3
 lin specialism_N = variants {} ; -- status=guess
-lin specialist_A = variants{} ;
+lin specialist_A = variants{} ; --
 lin specialist_N = mkN "fackman" "fackmannen" "fackmän" "fackmännen" | mkN "specialist" "specialister" ; -- SaldoWN
 lin specialistic_A = variants {} ; -- status=guess
 lin speciality_N = variants {} ; -- status=guess
 lin specialization_N = mkN "specialisering" ; -- status=guess
-lin specialize_V = variants{} ;
-lin specialize_V2 = variants{} ;
-lin specially_Adv = variants{} ;
+lin specialize_V = variants{} ; --
+lin specialize_V2 = variants{} ; --
+lin specially_Adv = variants{} ; --
 lin specialty_N = mkN "specialitet" "specialiteter" ; -- comment=2
 lin speciation_N = variants {} ; -- status=guess
 lin specie_N = mkN "art" "arter" ; -- status=guess
@@ -54072,10 +53799,10 @@ lin species_N = mkN "art" "arter" | mkN "slag" neutrum ;
 lin specifiable_A = variants {} ; -- status=guess
 lin specific_A = mkA "specifik" | mkA "särskild" ;
 lin specific_N = variants {} ; -- status=guess
-lin specifically_Adv = variants{} ;
+lin specifically_Adv = variants{} ; --
 lin specification_N = mkN "specifikation" "specifikationer" ; -- status=guess
 lin specificity_N = mkN "noggrannhet" "noggrannheter" ; -- comment=3
-lin specified_A = variants{} ;
+lin specified_A = variants{} ; --
 lin specifier_N = variants {} ; -- status=guess
 lin specify_V = mkV "specificerar" ; -- comment=2
 lin specify_V2 = mkV2 "specificera" ; -- status=guess
@@ -54094,7 +53821,7 @@ lin spectacles_N = mkN "glasöga" "glasögat" "glasögon" "glasögonen" ; -- sta
 lin spectacular_A = mkA "spektakulär" ; -- comment=4
 lin spectacular_N = mkN "imponerande" ; -- comment=2
 lin spectatorFem_N = mkN "åskådare" utrum; -- status=guess
-lin spectatorMasc_N = mkN "åskådare" utrum; -- status=guess
+lin spectatorMasc_N = variants{} ; --
 lin spectinomycin_N = variants {} ; -- status=guess
 lin spectral_A = mkA "spöklik" ; -- status=guess
 lin spectre_N = mkN "spöke" ; -- comment=2
@@ -54384,7 +54111,7 @@ lin spoilage_N = variants {} ; -- status=guess
 lin spoiler_N = variants {} ; -- status=guess
 lin spoilsport_N = mkN "glädjedödare" ; -- status=guess
 lin spoke_N = mkN "eker" ; -- comment=3
-lin spoken_A = variants{} ;
+lin spoken_A = variants{} ; --
 lin spokeshave_N = variants {} ; -- status=guess
 lin spokesman_N = mkN "förespråkare" utrum | mkN "talesman" "talesmannen" "talesmän" "talesmännen" ; -- SaldoWN -- comment=3
 lin spokesperson_N = mkN "talesman" "talesmannen" "talesmän" "talesmännen" | mkN "talesperson" "talespersoner" ; -- SaldoWN -- status=guess
@@ -54409,7 +54136,7 @@ lin spongioblast_N = variants {} ; -- status=guess
 lin spongy_A = variants {} ; -- status=guess
 lin sponsor_N = mkN "sponsor" "sponsorer" ; -- comment=4
 lin sponsor_V2 = mkV2 (mkV "sponsa") | mkV2 (mkV "sponsrar"); -- status=guess, src=wikt status=guess, src=wikt
-lin sponsorship_N = variants{} ;
+lin sponsorship_N = variants{} ; --
 lin spontaneity_N = variants {} ; -- status=guess
 lin spontaneous_A = mkA "spontan" ; -- SaldoWN
 lin spontaneousness_N = variants {} ; -- status=guess
@@ -54470,7 +54197,7 @@ lin spotter_N = variants {} ; -- status=guess
 lin spotty_A = mkA "ojämn" ; -- comment=2
 lin spousal_A = variants {} ; -- status=guess
 lin spouseFem_N = mkN "maka" ; -- status=guess
-lin spouseMasc_N = mkN "make" ; -- status=guess
+lin spouseMasc_N = variants{} ; --
 lin spout_N = mkN "pip" neutrum; -- comment=2
 lin spout_V = mkV "pipa" "pep" "pipit" ; -- status=guess
 lin spout_V2 = variants {} ; -- status=guess
@@ -54493,8 +54220,6 @@ lin spraying_N = variants {} ; -- status=guess
 lin spread_N = mkN "ranch" "rancher" | mkN "utbredning" ; -- SaldoWN -- comment=6
 lin spread_V = mkV "sprida" "spred" "spritt" ; -- comment=6
 lin spread_V2 = dirV2 (partV (mkV "sprida" "spred" "spritt")"ut"); -- comment=4
---subcat lin spread_V2V = mkV2V (mkV (mkV "sprida") "sig som en präriebrand"); -- status=guess, src=wikt
---subcat lin spread_VS = mkVS (mkV (mkV "sprida") "sig som en präriebrand"); -- status=guess, src=wikt
 lin spread_out_V2 = mkV2 (mkV "sprida" "spred" "spritt"); -- comment=6
 lin spread_over_N = variants {} ; -- status=guess
 lin spreadeagle_N = variants {} ; -- status=guess
@@ -54746,13 +54471,13 @@ lin stadium_N = mkN "stadion" neutrum | mkN "stadion" neutrum ; -- SaldoWN -- co
 lin staff_1_N = mkN "personal" "personaler" ;
 lin staff_2_N = mkN "stav" "stäver" ;
 lin staff_N = mkN "stav" | mkN "personal" "personaler" ; ---
-lin staff_V2 = variants{} ;
+lin staff_V2 = variants{} ; --
 lin staff_office_N = variants {} ; -- status=guess
 lin staff_up_V2 = variants {} ; -- status=guess
 lin stafford_PN = variants {} ; -- status=guess
 lin staffordshire_PN = variants {} ; -- status=guess
 lin stag_N = mkN "börsjobbare" utrum; -- status=guess
-lin stag_V = variants{} ;
+lin stag_V = variants{} ; --
 lin stag_party_N = variants {} ; -- status=guess
 lin stage_N = mkN "stadium" "stadiet" "stadier" "stadierna" | mkN "skede" ;
 lin stage_V = mkV "arrangerar" ; -- comment=4
@@ -54767,7 +54492,6 @@ lin stagflation_N = mkN "stagflation" "stagflationer" ; -- status=guess
 lin stagflationary_A = variants {} ; -- status=guess
 lin stagger_N = variants {} ; -- status=guess
 lin stagger_V = mkV "stapplar" ; -- comment=2
---subcat lin stagger_V2 = mkV2 (mkV "vacklar"); -- status=guess, src=wikt
 lin staggerbush_N = variants {} ; -- status=guess
 lin staggerer_N = variants {} ; -- status=guess
 lin staggeringly_Adv = variants {} ; -- status=guess
@@ -54798,7 +54522,7 @@ lin stairhead_N = variants {} ; -- status=guess
 lin stairway_N = mkN "trappa" ; -- status=guess
 lin stairwell_N = mkN "trapphus" neutrum; -- status=guess
 lin stake_N = mkN "insats" "insatser" | mkN "stötta" ; -- SaldoWN -- comment=8
-lin stake_V2 = variants{} ;
+lin stake_V2 = variants{} ; --
 lin stake_holder_N = variants {} ; -- status=guess
 lin stakeford_PN = variants {} ; -- status=guess
 lin stakeholder_N = mkN "intressent" "intressenter" ; -- status=guess
@@ -54852,8 +54576,6 @@ lin stanchion_N = mkN "stolpe" utrum; -- comment=2
 lin stand_N = mkN "ståndpunkt" "ståndpunkter" | mkN "stånd" neutrum ; -- SaldoWN -- comment=10
 lin stand_V = L.stand_V ;
 lin stand_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ;
---subcat lin stand_VS = mkVS (mkV "stå" "stod" "stått") ;
---subcat lin stand_VV = mkVV (mkV "stå" "stod" "stått") ;
 lin stand_about_V = mkV "ställer" ; -- comment=6
 lin stand_around_V = mkV "ställer" ; -- comment=6
 lin stand_aside_V = mkV "ställer" ; -- comment=6
@@ -54871,7 +54593,7 @@ lin stand_up_V = mkV "ställer" ; -- comment=6
 lin stand_up_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut"); -- comment=5
 lin stand_up_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut"); -- comment=5
 lin stand_up_to_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut"); -- comment=5
-lin standard_A = mkA "standard" "standart" ; -- status=guess
+lin standard_A = mkA "standard" "standart" ;
 lin standard_N = mkN "standard" "standarder" ;
 lin standard_bearer_N = variants {} ; -- status=guess
 lin standardization_N = mkN "standardisering" ; -- comment=3
@@ -54906,7 +54628,6 @@ lin staple_V2 = variants {} ; -- status=guess
 lin stapler_N = mkN "häftapparat" "häftapparater" ; -- status=guess
 lin stapling_machine_N = variants {} ; -- status=guess
 lin star_N = L.star_N ;
---subcat lin star_V = mkV "agerar" ; ---- sense
 lin star_V2 = dirV2 (partV (mkV "agerar")"ut") ; ---- sense
 lin starboard_A = variants {} ; -- status=guess
 lin starboard_N = mkN "styrbord" ; -- SaldoWN
@@ -54970,7 +54691,7 @@ lin starting_gate_N = variants {} ; -- status=guess
 lin starting_point_N = variants {} ; -- status=guess
 lin starting_post_N = variants {} ; -- status=guess
 lin startle_N = mkN "väcka" ; -- status=guess
-lin startle_V2 = variants{} ;
+lin startle_V2 = variants{} ; --
 lin startling_A = mkA "häpnadsväckande" ; -- comment=4
 lin startup_N = variants {} ; -- status=guess
 lin starvation_N = mkN "svält" ; -- status=guess
@@ -55026,7 +54747,7 @@ lin statuette_N = mkN "statyett" "statyetter" ; -- status=guess
 lin stature_N = mkN "längd" "längder" ; -- comment=4
 lin status_N = mkN "status" | mkN "ställning" ;
 lin status_quo_N = variants {} ; -- status=guess
-lin statute_N = variants{} ;
+lin statute_N = variants{} ; --
 lin statute_book_N = variants {} ; -- status=guess
 lin statutory_A = compoundA (regA "lagstadgad"); -- status=guess
 lin staunch_A = variants {} ; -- status=guess
@@ -55040,9 +54761,7 @@ lin stave_in_V2 = variants {} ; -- status=guess
 lin stave_off_V2 = variants {} ; -- status=guess
 lin stay_N = mkN "vistelse" "vistelser" ; -- comment=5
 lin stay_V = mkV "stannar" ;
---subcat lin stay_V2 = mkV2 "stanna" ;
 lin stay_VA = mkVA (mkV "förbli" "förblev" "förblivit") ;
---subcat lin stay_VS = mkVS (mkV "stannar") ;
 lin stay_at_home_N = variants {} ; -- status=guess
 lin stay_away_V = mkV "stannar" ; -- comment=5
 lin stay_away_from_V2 = dirV2 (partV (mkV "bor")"över"); -- status=guess
@@ -55057,7 +54776,7 @@ lin std_PN = variants {} ; -- status=guess
 lin stead_N = variants {} ; -- status=guess
 lin steadfast_A = mkA "ståndaktig" ; -- status=guess
 lin steadfastness_N = variants {} ; -- status=guess
-lin steadily_Adv = variants{} ;
+lin steadily_Adv = variants{} ; --
 lin steadiness_N = mkN "stadighet" ; -- status=guess
 lin steady_A = mkA "stadig" ; -- SaldoWN
 lin steady_Adv = variants {} ; -- status=guess
@@ -55239,8 +54958,8 @@ lin steyning_PN = variants {} ; -- status=guess
 lin sthene_N = variants {} ; -- status=guess
 lin stibnite_N = variants {} ; -- status=guess
 lin stick_N = L.stick_N ;
-lin stick_V = mkV "binda" "band" "bundit" | mkV "bita" "bet" "bitit" ; -- SaldoWN -- comment=25
-lin stick_V2 = mkV2 "binda" "band" "bundit" | dirV2 (partV (mkV "stoppar")"till") ; -- SaldoWN -- comment=21
+lin stick_V = depV I.sticka_V ;
+lin stick_V2 = mkV2 I.sticka_V ;
 lin stick_around_V = mkV "bita" "bet" "bitit" ; -- comment=25
 lin stick_at_V2 = dirV2 (partV (mkV "stoppar")"till"); -- comment=21
 lin stick_by_V2 = dirV2 (partV (mkV "stoppar")"till"); -- comment=21
@@ -55422,7 +55141,7 @@ lin stokehold_N = variants {} ; -- status=guess
 lin stokehole_N = variants {} ; -- status=guess
 lin stoker_N = mkN "eldare" utrum; -- status=guess
 lin stole_N = variants {} ; -- status=guess
-lin stolen_A = variants{} ;
+lin stolen_A = variants{} ; --
 lin stolid_A = variants {} ; -- status=guess
 lin stolidity_N = variants {} ; -- status=guess
 lin stolidness_N = variants {} ; -- status=guess
@@ -55588,7 +55307,6 @@ lin straightforward_A = mkA "rättfram" "rättframt" "rättframma" "rättframma"
 lin straightness_N = variants {} ; -- status=guess
 lin straightway_Adv = variants {} ; -- status=guess
 lin strain_N = mkN "ätt" "ätter" ; -- comment=33
---subcat lin strain_V = mkV "spänna" "spände" "spänt" | mkV "trycker" ; -- SaldoWN -- comment=19
 lin strain_V2 = mkV2 "spänna" "spände" "spänt" | dirV2 (partV (mkV "silar")"ifrån") ; -- SaldoWN -- comment=4
 lin strainer_N = mkN "sil" ; -- status=guess
 lin strait_A = mkA "sund" ; -- status=guess
@@ -55599,8 +55317,8 @@ lin straitjacket_N = mkN "tvångströja" ; -- status=guess
 lin strand_N = mkN "slinga" ; -- status=guess
 lin strand_V = variants {} ; -- status=guess
 lin strand_V2 = variants {} ; -- status=guess
-lin strange_A = mkA "säregen" "säreget" | mkA "obekant" "obekant" ; -- SaldoWN -- comment=10
-lin strangely_Adv = variants{} ;
+lin strange_A = mkA "konstig" | mkA "märklig" | mkA "säregen" "säreget" | mkA "obekant" "obekant" ;
+lin strangely_Adv = variants{} ; --
 lin strangeness_N = mkN "egendomlighet" "egendomligheter" ; -- comment=2
 lin stranger_N = mkN "främling" ; -- status=guess
 lin strangle_V2 = variants {} ; -- status=guess
@@ -55667,7 +55385,6 @@ lin streetlight_N = mkN "gatlykta" | mkN "gatubelysning" ; -- SaldoWN
 lin streetwalker_N = variants {} ; -- status=guess
 lin streetwise_A = variants {} ; -- status=guess
 lin strength_N = mkN "styrka" ;
---subcat lin strengthen_V = mkV "stärker" ; -- comment=4
 lin strengthen_V2 = variants{}; -- mkV "stärker" ; -- comment=4
 lin strengthener_N = variants {} ; -- status=guess
 lin strengthening_N = mkN "stärkande" ; -- status=guess
@@ -55684,8 +55401,8 @@ lin streptomyces_N = variants {} ; -- status=guess
 lin streptomycin_N = variants {} ; -- status=guess
 lin streptothricin_N = variants {} ; -- status=guess
 lin stress_N = mkN "belastning" | mkN "vikt" "vikter" ; -- SaldoWN -- comment=8
-lin stress_V2 = variants{} ;
-lin stress_VS = variants{} ;
+lin stress_V2 = variants{} ; --
+lin stress_VS = variants{} ; --
 lin stress_mark_N = variants {} ; -- status=guess
 lin stressor_N = variants {} ; -- status=guess
 lin stretch_A = variants {} ; -- status=guess
@@ -55707,12 +55424,11 @@ lin striated_A = variants {} ; -- status=guess
 lin stricken_A = variants {} ; -- status=guess
 lin strickle_N = variants {} ; -- status=guess
 lin strict_A = mkA "strikt" "strikt" ; -- SaldoWN
-lin strictly_Adv = variants{} ;
+lin strictly_Adv = variants{} ; --
 lin strictness_N = variants {} ; -- status=guess
 lin stricture_N = variants {} ; -- status=guess
 lin stride_N = mkN "skrev" neutrum; -- comment=5
 lin stride_V = mkV "kliva" "klev" "klivit" | mkV "skriva" "skrev" "skrivit" ; -- SaldoWN -- comment=5
---subcat lin stride_V2 = mkV2 "kliva" "klev" "klivit" ; -- SaldoWN
 lin strident_A = mkA "skärande" ; -- comment=3
 lin strider_N = variants {} ; -- status=guess
 lin stridor_N = variants {} ; -- status=guess
@@ -55801,11 +55517,10 @@ lin stroud_PN = variants {} ; -- status=guess
 lin structural_A = mkA "strukturell" ; -- SaldoWN
 lin structuralism_N = variants {} ; -- status=guess
 lin structure_N = mkN "struktur" "strukturer" ;
-lin structure_V2 = variants{} ;
+lin structure_V2 = variants{} ; --
 lin strudel_N = mkN "strudel" ; -- status=guess
 lin struggle_N = mkN "kamp" ; -- SaldoWN = mkN "kamp" "kamper" ;
 lin struggle_V = mkV "kämpar" ; -- comment=5
---subcat lin struggle_VS = variants{}; -- mkV "kämpar" ; -- comment=5
 lin struggle_VV = variants{}; -- mkV "kämpar" ; -- comment=5
 lin struggle_back_V = mkV "kämpar" ; -- comment=5
 lin struggler_N = variants {} ; -- status=guess
@@ -55837,7 +55552,7 @@ lin stud_farm_N = variants {} ; -- status=guess
 lin stud_mare_N = variants {} ; -- status=guess
 lin studbook_N = mkN "stambok" "stamböcker" ; -- status=guess
 lin studentFem_N = L.student_N;
-lin studentMasc_N = L.student_N;
+lin studentMasc_N = mkN "student" "studenter" ;
 lin studentship_N = mkN "studentskap" ; -- status=guess
 lin studio_N = mkN "studio" "studior" | mkN "ateljé" "ateljéer" ;
 lin studious_A = variants {} ; -- status=guess
@@ -55846,7 +55561,7 @@ lin studley_PN = variants {} ; -- status=guess
 lin study_N = mkN "studie" "studiet" "studier" "studierna" ;
 lin study_V = mkV "studera" ;
 lin study_V2 = mkV2 "studera" ;
-lin stuff_N = mkN "material" neutrum; -- comment=5
+lin stuff_N = mkN "material" neutrum ;
 lin stuff_V2 = dirV2 (partV (mkV "stoppar")"till"); -- comment=3
 lin stuff_up_V2 = dirV2 (partV (mkV "stoppar")"till"); -- comment=3
 lin stuffer_N = variants {} ; -- status=guess
@@ -55984,7 +55699,7 @@ lin subject_2_N = mkN "subjekt" "subjekter" ;
 lin subject_A = mkA "underlydande" ; -- comment=3
 lin subject_A2 = variants {} ; -- status=guess
 lin subject_N = mkN "ämne" ; ---
-lin subject_V2 = variants{} ;
+lin subject_V2 = variants{} ; --
 lin subject_to_Prep = variants {} ; -- status=guess
 lin subjection_N = mkN "mjöldryga" ; -- comment=2
 lin subjective_A = mkA "subjektiv" ; -- SaldoWN
@@ -56087,7 +55802,7 @@ lin substance_N = mkN "substans" "substanser" ; -- comment=7
 lin substandard_A = mkA "underhaltig" ; -- comment=2
 lin substantial_A = mkA "fullgod" ; -- comment=31
 lin substantiality_N = mkN "äkthet" "äktheter" ; -- comment=11
-lin substantially_Adv = variants{} ;
+lin substantially_Adv = variants{} ; --
 lin substantiate_V2 = variants {} ; -- status=guess
 lin substantiation_N = variants {} ; -- status=guess
 lin substantival_A = variants {} ; -- status=guess
@@ -56147,7 +55862,7 @@ lin succeed_V = mkV "följa" "följde" "följt" ; -- comment=3
 lin succeed_V2 = mkV2 (mkV "lyckas"); -- status=guess, src=wikt
 lin success_N = mkN "framgång" ;
 lin successful_A = mkA "framgångsrik" ;
-lin successfully_Adv = variants{} ;
+lin successfully_Adv = variants{} ; --
 lin succession_N = mkN "tronföljd" "tronföljder" ; -- comment=6
 lin successive_A = mkA "successiv" ; -- status=guess
 lin successor_N = mkN "efterträdare" utrum; -- comment=2
@@ -56203,9 +55918,9 @@ lin sudorific_N = variants {} ; -- status=guess
 lin sudra_N = variants {} ; -- status=guess
 lin suds_N = variants {} ; -- status=guess
 lin sue_PN = variants {} ; -- status=guess
-lin sue_V = variants{} ;
-lin sue_V2 = variants{} ;
-lin sue_V2V = variants{} ;
+lin sue_V = variants{} ; --
+lin sue_V2 = variants{} ; --
+lin sue_V2V = variants{} ; --
 lin suede_N = variants {} ; -- status=guess
 lin suer_N = variants {} ; -- status=guess
 lin suet_N = variants {} ; -- status=guess
@@ -56214,14 +55929,14 @@ lin suffer_V = mkV "lida" "led" "lidit" ;
 lin suffer_V2 = mkV2 "lida" "led" "lidit" ;
 lin sufferable_A = variants {} ; -- status=guess
 lin sufferance_N = variants {} ; -- status=guess
-lin sufferer_N = variants{} ;
+lin sufferer_N = variants{} ; --
 lin suffering_N = mkN "lidande" | mkN "smärta" ; -- SaldoWN -- comment=3
 lin suffice_V = mkV "räcker" | mkV (mkV "räcker") "till" | mkV "förslå" "förslog" "förslagit" ; -- SaldoWN
 lin suffice_V2 = mkV2 (mkV "räcker") | mkV2 "förslå" "förslog" "förslagit" ; -- SaldoWN -- status=guess, src=wikt
 lin suffice_V2V = mkV2V "förslå" "förslog" "förslagit" | mkV2V (mkV "räcker") ; -- SaldoWN -- status=guess, src=wikt
 lin sufficiency_N = mkN "tillräcklighet" ; -- status=guess
 lin sufficient_A = mkA "tillräcklig" ; -- SaldoWN
-lin sufficiently_Adv = variants{} ;
+lin sufficiently_Adv = variants{} ; --
 lin suffix_N = mkN "ändelse" "ändelser" ; -- comment=2
 lin suffixation_N = variants {} ; -- status=guess
 lin suffocate_V = mkV "kväver" ; -- status=guess
@@ -56536,16 +56251,14 @@ lin supply_N = mkN "tillgång" ;
 lin supply_V2 = dirV2 (mkV "förse" "försåg" "försett") ;
 lin support_N = mkN "stöd" "stöd" ;
 lin support_V2 = mkV2 "stödjer" | mkV2 "stöttar" ;
---subcat lin support_VV = mkVV (mkV "stödjer");
 lin supportable_A = mkA "uthärdlig" ; -- comment=2
 lin supporter_N = mkN "stöd" neutrum; -- comment=10
-lin supporting_A = variants{} ;
+lin supporting_A = variants{} ; --
 lin supportive_A = variants {} ; -- status=guess
 lin suppose_V2 = mkV2 "anta" "antar" "anta" "antog" "antagit" "antagen" ;
---subcat lin suppose_V2V = mkV2V "anta" "antar" "anta" "antog" "antagit" "antagen" ;
 lin suppose_VS = mkV "anta" "antar" "anta" "antog" "antagit" "antagen" ;
 lin supposed_A = mkA "förment" "förment" ; -- status=guess
-lin supposedly_Adv = variants{} ;
+lin supposedly_Adv = variants{} ; --
 lin supposition_N = mkN "antagande" ; -- comment=4
 lin suppository_N = mkN "stolpiller" neutrum | mkN "stolpiller" neutrum ; -- SaldoWN
 lin suppress_V2 = mkV2 (mkV "undertrycker"); -- status=guess, src=wikt
@@ -56623,16 +56336,16 @@ lin surpass_V2 = mkV2 (mkV "överskrida"); -- status=guess, src=wikt
 lin surpassing_A = variants {} ; -- status=guess
 lin surplice_N = mkN "mässkjorta" ; -- status=guess
 lin surpliced_A = variants {} ; -- status=guess
-lin surplus_A = variants{} ;
+lin surplus_A = variants{} ; --
 lin surplus_N = mkN "överskott" neutrum | mkN "överskott" neutrum ; -- SaldoWN
 lin surprise_N = mkN "överraskning" ; -- SaldoWN
 lin surprise_V2 = mkV2 (mkV "överraska"); -- status=guess, src=wikt
 lin surprise_V2V = mkV2V (mkV "överraska"); -- status=guess, src=wikt
-lin surprised_A = variants{} ;
+lin surprised_A = variants{} ; --
 lin surprisedly_Adv = variants {} ; -- status=guess
 lin surpriser_N = variants {} ; -- status=guess
 lin surprising_A = mkA "överraskande" ; -- SaldoWN
-lin surprisingly_Adv = variants{} ;
+lin surprisingly_Adv = variants{} ; --
 lin surrealism_N = mkN "surrealism" "surrealismer" ; -- status=guess
 lin surrealist_N = variants {} ; -- status=guess
 lin surrealistic_A = mkA "surrealistisk" ; -- status=guess
@@ -56650,7 +56363,7 @@ lin surrogate_N = mkN "surrogat" neutrum; -- status=guess
 lin surround_N = variants {} ; -- status=guess
 lin surround_V2 = mkV2 (mkV "omge" "omger" "omge" "omgav" "omgett" "omgiven"); -- status=guess, src=wikt
 lin surrounding_A = mkA "kringliggande" ; -- status=guess
-lin surrounding_N = variants{} ;
+lin surrounding_N = variants{} ; --
 lin surtax_N = variants {} ; -- status=guess
 lin surtax_V2 = variants {} ; -- status=guess
 lin surtout_N = variants {} ; -- status=guess
@@ -56687,7 +56400,7 @@ lin suspicious_A = mkA "misstänkt" "misstänkt" ; -- comment=3
 lin suss_V2 = variants {} ; -- status=guess
 lin suss_out_V2 = variants {} ; -- status=guess
 lin sussex_PN = variants {} ; -- status=guess
-lin sustain_V2 = variants{} ;
+lin sustain_V2 = variants{} ; --
 lin sustainability_N = mkN "hållbarhet" | mkN "uthållighet" | mkN "långsiktighet" ; -- status=guess status=guess status=guess
 lin sustainable_A = mkA "hållbar" ; -- status=guess
 lin sustenance_N = variants {} ; -- status=guess
@@ -56776,7 +56489,6 @@ lin swazi_N = variants {} ; -- status=guess
 lin swaziland_PN = variants {} ; -- status=guess
 lin swear_V = mkV "svära" "svor" "svurit" ; -- status=guess
 lin swear_V2 = mkV2 "svära" "svor" "svurit" ; -- status=guess
---subcat lin swear_V2V = mkV2V "svära" "svor" "svurit" ; -- status=guess
 lin swear_VV = mkVV (mkV "svära" "svor" "svurit") ; -- status=guess
 lin swear_by_V2 = variants {} ; -- status=guess
 lin swear_down_V = mkV "bedyrar" ; -- status=guess
@@ -56839,7 +56551,7 @@ lin swerve_V2 = dirV2 (partV (mkV "slänger")"ut"); -- status=guess
 lin swift_A = mkA "strid" ; -- comment=2
 lin swift_N = mkN "strid" "strider" ; -- status=guess
 lin swiftlet_N = variants {} ; -- status=guess
-lin swiftly_Adv = variants{} ;
+lin swiftly_Adv = variants{} ; --
 lin swiftness_N = variants {} ; -- status=guess
 lin swig_N = mkN "spöktimme" utrum; -- comment=2
 lin swig_V = variants {} ; -- status=guess
@@ -57068,7 +56780,7 @@ lin synovial_A = variants {} ; -- status=guess
 lin synovitis_N = variants {} ; -- status=guess
 lin synsemantic_A = variants {} ; -- status=guess
 lin synset_N = variants {} ; -- status=guess
-lin syntactic_A = variants{} ;
+lin syntactic_A = variants{} ; --
 lin syntactically_Adv = variants {} ; -- status=guess
 lin syntagma_N = mkN "syntagm" neutrum; -- status=guess
 lin syntagmatic_A = variants {} ; -- status=guess
@@ -57111,7 +56823,7 @@ lin systolic_A = variants {} ; -- status=guess
 lin syston_PN = variants {} ; -- status=guess
 lin syzygy_N = mkN "syzygie" | (mkN "konjunktion" "konjunktioner"); -- status=guess status=guess
 lin t_junction_N = variants {} ; -- status=guess
-lin t_shirt_N = variants{} ;
+lin t_shirt_N = variants{} ; --
 lin t_square_N = variants {} ; -- status=guess
 lin tab_N = mkN "räkning" ; -- comment=6
 lin tabard_N = variants {} ; -- status=guess
@@ -57258,11 +56970,7 @@ lin taiwanese_A = mkA "taiwanesisk" ; -- status=guess
 lin taiyuan_PN = variants {} ; -- status=guess
 lin taka_N = variants {} ; -- status=guess
 lin take_N = mkN "tro" ; -- comment=5
---subcat lin take_V = I.taga_V ;
 lin take_V2 = mkV2 I.taga_V ;
---subcat lin take_V2A = mkV2A I.taga_V ;
---subcat lin take_V2V = mkV2V I.taga_V ;
---subcat lin take_VA = mkVA I.taga_V ;
 lin take_after_V2 = dirV2 (partV (mkV "ta" "tar" "ta" "tog" "tagit" "tagen")"ut"); -- comment=6
 lin take_apart_V2 = dirV2 (partV (mkV "ta" "tar" "ta" "tog" "tagit" "tagen")"ut"); -- comment=6
 lin take_aside_V2 = dirV2 (partV (mkV "ta" "tar" "ta" "tog" "tagit" "tagen")"ut"); -- comment=6
@@ -57334,7 +57042,7 @@ lin talk_yourself_out_V = mkV "diskuterar" ; -- comment=6
 lin talkative_A = mkA "pratsam" "pratsamt" "pratsamma" "pratsamma" "pratsammare" "pratsammast" "pratsammaste" ; -- SaldoWN
 lin talker_N = variants {} ; -- status=guess
 lin talkie_N = (mkN "ljudfilm" "ljudfilmer") | mkN "talfilm" ; -- status=guess status=guess
-lin talking_N = variants{} ;
+lin talking_N = variants{} ; --
 lin talking_point_N = variants {} ; -- status=guess
 lin talking_to_N = variants {} ; -- status=guess
 lin tall_A = mkA "lång" "längre" "längst" ; -- SaldoWN
@@ -57488,8 +57196,8 @@ lin tardive_A = variants {} ; -- status=guess
 lin tardy_A = mkA "senkommen" "senkommet" "senkomna" "senkomna" "senkomnare" "senkomnast" "senkomnaste" ; -- comment=2
 lin tare_N = mkN "tara" ; -- status=guess
 lin target_N = mkN "mål" neutrum ;
-lin target_V2 = variants{} ;
-lin target_V2V = variants{} ;
+lin target_V2 = variants{} ; --
+lin target_V2V = variants{} ; --
 lin tariff_N = mkN "tariff" "tariffer" | mkN "taxa" ; -- SaldoWN -- comment=3
 lin tarmac_N = mkN "asfalt" "asfalter" ; -- status=guess
 lin tarmac_V2 = variants {} ; -- status=guess
@@ -57644,7 +57352,7 @@ lin teach_V2V = mkV2V (mkV "lär") ;
 lin teach_in_N = variants {} ; -- status=guess
 lin teachable_A = variants {} ; -- status=guess
 lin teacherFem_N = L.teacher_N;
-lin teacherMasc_N = L.teacher_N;
+lin teacherMasc_N = mkN "lärare" "lärare" ;
 lin teachership_N = variants {} ; -- status=guess
 lin teaching_N = mkN "undervisning" ; -- status=guess
 lin teacup_N = mkN "tekopp" ; -- status=guess
@@ -57700,10 +57408,10 @@ lin tec_N = variants {} ; -- status=guess
 lin tech_N = variants {} ; -- status=guess
 lin techie_N = variants {} ; -- status=guess
 lin technetium_N = mkN "teknetium" neutrum; -- status=guess
-lin technical_A = mkA "teknisk" ; -- SaldoWN
+lin technical_A = mkA "teknisk" ;
 lin technical_N = (mkN "ritning") | (mkN "ritande") | mkN "uppritning" ; -- status=guess status=guess status=guess
 lin technicality_N = mkN "teknikalitet" "teknikaliteter" ; -- status=guess
-lin technically_Adv = variants{} ;
+lin technically_Adv = variants{} ; --
 lin technician_N = mkN "tekniker" "teknikern" "tekniker" "teknikerna" ; -- comment=3
 lin technicolor_N = variants {} ; -- status=guess
 lin technique_N = mkN "teknik" "tekniker" ;
@@ -57767,7 +57475,7 @@ lin tel_aviv_PN = variants {} ; -- status=guess
 lin telecast_N = variants {} ; -- status=guess
 lin telecast_V2 = variants {} ; -- status=guess
 lin telecaster_N = variants {} ; -- status=guess
-lin telecommunication_N = variants{} ;
+lin telecommunication_N = variants{} ; --
 lin telecommuting_N = variants {} ; -- status=guess
 lin teleconference_N = variants {} ; -- status=guess
 lin telefilm_N = variants {} ; -- status=guess
@@ -57830,16 +57538,16 @@ lin telex_N = mkN "telex" neutrum; -- comment=2
 lin telfer_N = variants {} ; -- status=guess
 lin telford_PN = variants {} ; -- status=guess
 lin teliospore_N = variants {} ; -- status=guess
-lin tell_V3 = mkV3 (mkV "berätta") (mkPrep "för") ;
-lin tell_from_V3 = mkV3 (mkV "skilja" "skiljer" "skilt") (mkPrep "från") ;
+lin tell_1_V3 = variants{} ; --
+lin tell_2_V3 = variants{} ; --
 lin tell_V = mkV "avgöra" "avgjorde" "avgjort" ;
 lin tell_V2 = mkV2 "berätta" ;
---subcat lin tell_V2Q = mkV2Q (mkV "berätta") (mkPrep "för") ;
 lin tell_V2S = mkV2S (mkV "berätta") (mkPrep "för") ;
 lin tell_V2V = mkV2V (mkV "berätta") (mkPrep []) (mkPrep "för") ;
+lin tell_V3 = mkV3 (mkV "berätta") (mkPrep "för") ;
 lin tell_VS = mkVS (mkV "berätta") ;
---subcat lin tell_VV = mkVV (mkV "berätta") ;
 lin tell_apart_V2 = dirV2 (partV (mkV "skilja" "skilde" "skilt") "av") ; -- status=guess
+lin tell_from_V3 = mkV3 (mkV "skilja" "skiljer" "skilt") (mkPrep "från") ;
 lin tell_off_V2 = dirV2 (partV (mkV "skilja" "skilde" "skilt") "av"); -- comment=8
 lin tell_on_V2 = dirV2 (partV (mkV "skilja" "skiljer" "skilt") "av"); -- comment=8
 lin teller_N = mkN "kassör" "kassörer" ; -- status=guess
@@ -57851,7 +57559,7 @@ lin tellurian_N = variants {} ; -- status=guess
 lin telluric_A = variants {} ; -- status=guess
 lin telluride_N = variants {} ; -- status=guess
 lin tellurium_N = mkN "tellur" ; -- status=guess
-lin telly_N = variants{} ;
+lin telly_N = variants{} ; --
 lin telocentric_A = variants {} ; -- status=guess
 lin telomerase_N = variants {} ; -- status=guess
 lin telomere_N = variants {} ; -- status=guess
@@ -57884,13 +57592,13 @@ lin tempo_N = mkN "tempo" "tempot" "tempon" "tempona" ; -- status=guess
 lin temporal_A = mkA "temporär" ; -- status=guess
 lin temporality_N = variants {} ; -- status=guess
 lin temporalty_N = variants {} ; -- status=guess
-lin temporarily_Adv = variants{} ;
+lin temporarily_Adv = variants{} ; --
 lin temporariness_N = variants {} ; -- status=guess
 lin temporary_A = mkA "temporär" | mkA "tillfällig" ; -- SaldoWN -- comment=3
 lin temporize_V = variants {} ; -- status=guess
 lin temporizer_N = variants {} ; -- status=guess
-lin tempt_V2 = variants{} ;
-lin tempt_V2V = variants{} ;
+lin tempt_V2 = variants{} ; --
+lin tempt_V2V = variants{} ; --
 lin temptable_A = variants {} ; -- status=guess
 lin temptation_N = mkN "frestelse" "frestelser" | mkN "lockelse" "lockelser" ; -- SaldoWN -- comment=2
 lin tempter_N = variants {} ; -- status=guess
@@ -57908,7 +57616,6 @@ lin tenant_V2 = mkV2 (mkV "hyra" "hyrde" "hyrt") | mkV2 (mkV "arrenderar"); -- s
 lin tenantry_N = mkN "hyresgäst" "hyresgäster" ; -- comment=2
 lin tenby_PN = variants {} ; -- status=guess
 lin tench_N = mkN "sutare" utrum; -- status=guess
---subcat lin tend_V = mkV "tendera" ; ---- subcat
 lin tend_V2 = mkV2 "spänner" ;
 lin tend_VV = mkVV (mkV "tendera") ;
 lin tendency_N = mkN "tendens" "tendenser" ; -- SaldoWN
@@ -58047,11 +57754,11 @@ lin terrarium_N = variants {} ; -- status=guess
 lin terreplein_N = variants {} ; -- status=guess
 lin terrestrial_A = mkA "jordisk" ; -- status=guess
 lin terrible_A = mkA "hemsk" ; -- comment=9
-lin terribly_Adv = variants{} ;
+lin terribly_Adv = variants{} ; --
 lin terrier_N = mkN "terrier" "terriern" "terrier" "terrierna" ; -- SaldoWN
 lin terrific_A = mkA "jättefin" ; -- comment=2
 lin terrifically_Adv = variants {} ; -- status=guess
-lin terrify_V2 = variants{} ;
+lin terrify_V2 = variants{} ; --
 lin terrine_N = variants {} ; -- status=guess
 lin territorial_A = mkA "territoriell" ; -- status=guess
 lin territorial_N = variants {} ; -- status=guess
@@ -58089,7 +57796,7 @@ lin test_tube_N = variants {} ; -- status=guess
 lin testa_N = variants {} ; -- status=guess
 lin testacean_N = variants {} ; -- status=guess
 lin testaceous_A = variants {} ; -- status=guess
-lin testament_N = variants{} ;
+lin testament_N = variants{} ; --
 lin testamentary_A = variants {} ; -- status=guess
 lin testate_A = variants {} ; -- status=guess
 lin testate_N = variants {} ; -- status=guess
@@ -58390,7 +58097,6 @@ lin thingummy_N = variants {} ; -- status=guess
 lin think_N = mkN "tro" ; -- comment=2
 lin think_V = L.think_V;
 lin think_V2 = mkV2 "tänker" ;
---subcat lin think_V2A = mkV2A (mkV "tänker") (mkPrep "som") ;
 lin think_VS = mkVS (mkV "tänker") ;
 lin think_over_V2 = dirV2 (partV (mkV "funderar")"ut"); -- status=guess
 lin think_tank_N = variants {} ; -- status=guess
@@ -58399,7 +58105,7 @@ lin think_up_V2 = dirV2 (partV (mkV "funderar")"ut"); -- status=guess
 lin thinkable_A = mkA "tänkbar" ; -- status=guess
 lin thinkerFem_N = mkN "tänkare" utrum; -- status=guess
 lin thinkerMasc_N = mkN "tänkare" utrum; -- status=guess
-lin thinking_A = variants{} ;
+lin thinking_A = variants{} ; --
 lin thinking_N = mkN "tänkande" ; -- comment=3
 lin thinness_N = variants {} ; -- status=guess
 lin thiobacillus_N = variants {} ; -- status=guess
@@ -58447,7 +58153,7 @@ lin thoroughbred_A = variants {} ; -- status=guess
 lin thoroughbred_N = variants {} ; -- status=guess
 lin thoroughfare_N = mkN "stråk" neutrum; -- status=guess
 lin thoroughgoing_A = variants {} ; -- status=guess
-lin thoroughly_Adv = variants{} ;
+lin thoroughly_Adv = variants{} ; --
 lin thoroughness_N = mkN "grundlighet" "grundligheter" ; -- status=guess
 lin thortveitite_N = variants {} ; -- status=guess
 lin though_Adv = mkAdv "ändå" ;
@@ -58474,11 +58180,11 @@ lin threadbare_A = mkA "trådsliten" "trådslitet" ; -- comment=4
 lin threadfin_N = variants {} ; -- status=guess
 lin threadfish_N = variants {} ; -- status=guess
 lin threadlike_A = variants {} ; -- status=guess
-lin threat_N = mkN "hot" ; -- SaldoWN = mkN "hot" neutrum ;
-lin threaten_V = mkV "hotar" ; -- status=guess
-lin threaten_V2 = mkV2 (mkV "hotar"); -- status=guess, src=wikt
-lin threaten_VS = mkVS (mkV "hotar"); -- status=guess, src=wikt
-lin threaten_VV = mkVV (mkV "hotar"); -- status=guess, src=wikt
+lin threat_N = mkN "hot" "hot" ;
+lin threaten_V = mkV "hotar" ;
+lin threaten_V2 = mkV2 (mkV "hotar") ;
+lin threaten_VS = mkVS (mkV "hotar") ;
+lin threaten_VV = mkVV (mkV "hotar") ;
 lin threateningly_Adv = variants {} ; -- status=guess
 lin three_cornered_A = variants {} ; -- status=guess
 lin three_d_A = variants {} ; -- status=guess
@@ -58741,7 +58447,7 @@ lin tighten_V = mkV "skärper" ; -- comment=5
 lin tighten_V2 = variants{}; -- mkV "skärper" ; -- comment=5
 lin tighten_up_V2 = variants {} ; -- status=guess
 lin tightening_N = variants {} ; -- status=guess
-lin tightly_Adv = variants{} ;
+lin tightly_Adv = variants{} ; --
 lin tightness_N = variants {} ; -- status=guess
 lin tightrope_N = variants {} ; -- status=guess
 lin tights_N = mkN "trikå" "trikåer" ; -- comment=2
@@ -58758,7 +58464,7 @@ lin tiler_N = variants {} ; -- status=guess
 lin tiling_N = variants {} ; -- status=guess
 lin till_N = mkN "kassalåda" ; -- comment=4
 lin till_Prep = mkPrep "till" ; -- status=guess
-lin till_Subj = variants{} ;
+lin till_Subj = variants{} ; --
 lin till_V2 = dirV2 (partV (mkV "yxar")"till"); -- comment=71
 lin tillage_N = mkN "odling" ; -- status=guess
 lin tiller_N = mkN "rorkult" ; -- comment=2
@@ -59110,7 +58816,7 @@ lin tonic_A = variants {} ; -- status=guess
 lin tonic_N = (mkN "sodavatten" "sodavattnet" "sodavatten" "sodavattnen") | (mkN "tonic") | (mkN "soda"); -- status=guess status=guess status=guess
 lin tonic_sol_fa_N = variants {} ; -- status=guess
 lin tonicity_N = variants {} ; -- status=guess
-lin tonight_Adv = mkAdv "ikväll" | mkAdv "inatt" ; -- status=guess
+lin tonight_Adv = mkAdv "i kväll" | mkAdv "i natt" ; ---- split in the evening ; in the night
 lin tonight_N = mkN "natt" "nätter" ; -- status=guess
 lin tonnage_N = mkN "tonnage" ; -- comment=2
 lin tonne_N = mkN "ton" "tonnet" "ton" "tonnen" ; -- comment=2
@@ -59302,8 +59008,8 @@ lin tottery_A = variants {} ; -- status=guess
 lin toucan_N = mkN "tukan" "tukaner" ; -- status=guess
 lin toucanet_N = variants {} ; -- status=guess
 lin touch_N = mkN "röra" | mkN "stämpel" ; -- SaldoWN = mkN "röra" ; -- comment=32
-lin touch_V = mkV "röra" "rörde" "rört" | mkV "skisserar" ; -- SaldoWN -- comment=17
-lin touch_V2 = mkV2 "röra" "rörde" "rört" | dirV2 (partV (mkV "stämplar")"ut") ; -- SaldoWN -- comment=6
+lin touch_V = mkV "röra" "rörde" "rört" ;
+lin touch_V2 = mkV2 "röra" "rörde" "rört" | mkV2 (mkV "röra" "rörde" "rört") (mkPrep "vid") ;
 lin touch_and_go_A = variants {} ; -- status=guess
 lin touch_down_V = mkV "skisserar" ; -- comment=17
 lin touch_for_V3 = variants {} ; -- status=guess
@@ -59460,17 +59166,17 @@ lin trader_N = mkN "handlare" utrum; -- comment=3
 lin trades_union_N = variants {} ; -- status=guess
 lin tradesman_N = mkN "detaljhandlare" utrum; -- comment=2
 lin tradespeople_N = variants {} ; -- status=guess
-lin trading_A = variants{} ;
-lin trading_N = variants{} ;
-lin tradition_N = mkN "tradition" "traditioner" ; -- status=guess
+lin trading_A = variants{} ; --
+lin trading_N = variants{} ; --
+lin tradition_N = mkN "tradition" "traditioner" ;
 lin traditional_A = mkA "traditionell" ;
 lin traditionalism_N = variants {} ; -- status=guess
 lin traditionalist_N = variants {} ; -- status=guess
 lin traditionalistic_A = variants {} ; -- status=guess
-lin traditionally_Adv = variants{} ;
+lin traditionally_Adv = variants{} ; --
 lin traduce_V2 = variants {} ; -- status=guess
 lin traducer_N = variants {} ; -- status=guess
-lin traffic_N = mkN "trafik" "trafiker" ; -- status=guess
+lin traffic_N = mkN "trafik" "trafiker" ;
 lin traffic_V = variants {} ; -- status=guess
 lin trafficator_N = variants {} ; -- status=guess
 lin trafficker_N = mkN "handlare" utrum; -- comment=2
@@ -59498,7 +59204,7 @@ lin train_up_V2 = variants {} ; -- status=guess
 lin trainband_N = variants {} ; -- status=guess
 lin trainbandsman_N = variants {} ; -- status=guess
 lin trainbearer_N = variants {} ; -- status=guess
-lin trained_A = variants{} ;
+lin trained_A = variants{} ; --
 lin trainee_N = mkN "praktikant" "praktikanter" ; -- comment=5
 lin traineeship_N = mkN "praktisering" ; -- status=guess
 lin trainer_N = mkN "tränare" utrum | mkN "tränare" utrum ; -- SaldoWN -- comment=3
@@ -59576,7 +59282,6 @@ lin transept_N = variants {} ; -- status=guess
 lin transeunt_A = variants {} ; -- status=guess
 lin transfer_N = mkN "transfer" | mkN "överlåtelse" "överlåtelser" ; -- SaldoWN -- comment=2
 lin transfer_V = mkV "överföra" "överförde" "överfört" | mkV "överlåta" "överlät" "överlåtit" ; -- SaldoWN -- comment=4
---subcat lin transfer_V2 = mkV2 "överföra" "överförde" "överfört" ; -- status=guess
 lin transferability_N = variants {} ; -- status=guess
 lin transferable_A = mkA "överförbar" ; -- status=guess
 lin transferase_N = variants {} ; -- status=guess
@@ -59588,7 +59293,7 @@ lin transferrin_N = variants {} ; -- status=guess
 lin transfiguration_N = variants {} ; -- status=guess
 lin transfigure_V2 = variants {} ; -- status=guess
 lin transfix_V2 = variants {} ; -- status=guess
-lin transform_V2 = variants{} ;
+lin transform_V2 = variants{} ; --
 lin transformable_A = variants {} ; -- status=guess
 lin transformation_N = mkN "omvandling" ; -- comment=3
 lin transformer_N = mkN "transformator" "transformatorer" ; -- SaldoWN
@@ -59655,7 +59360,7 @@ lin transplantation_N = variants {} ; -- status=guess
 lin transplanter_N = variants {} ; -- status=guess
 lin transpolar_A = variants {} ; -- status=guess
 lin transponder_N = mkN "transponder" ; -- status=guess
-lin transport_N = mkN "transport" "transporter" | mkN "transportmedel" neutrum ; -- SaldoWN -- comment=6
+lin transport_N = mkN "transport" "transporter" ;
 lin transport_V2 = dirV2 (partV (mkV "forslar")"in"); -- comment=2
 lin transportable_A = mkA "bärbar" ; -- status=guess
 lin transportation_N = mkN "transport" "transporter" ; -- comment=4
@@ -59946,7 +59651,6 @@ lin triose_N = variants {} ; -- status=guess
 lin trioxide_N = variants {} ; -- status=guess
 lin trip_N = mkN "tripp" neutrum; -- comment=11
 lin trip_V = mkV "utlöser" ; -- comment=8
---subcat lin trip_V2 = mkV2 (mkV (mkV "göra") "en resa"); -- status=guess, src=wikt
 lin trip_out_V = mkV "utlöser" ; -- comment=8
 lin trip_over_V = mkV "utlöser" ; -- comment=8
 lin trip_over_V2 = variants {} ; -- status=guess
@@ -60062,7 +59766,6 @@ lin troth_N = variants {} ; -- status=guess
 lin trotter_N = variants {} ; -- status=guess
 lin troubadour_N = mkN "trubadur" "trubadurer" ; -- SaldoWN
 lin trouble_N = mkN "problem" neutrum | mkN "bekymmer" neutrum ;
---subcat lin trouble_V = mkV "besvärar" ; -- status=guess
 lin trouble_V2 = variants{}; -- mkV "besvärar" ;
 lin troublemaker_N = mkN "bråkmakare" utrum | mkN "bråkstake" | mkN "bråkmakare" ; -- SaldoWN -- status=guess status=guess
 lin troubleshooter_N = variants {} ; -- status=guess
@@ -60076,7 +59779,7 @@ lin trounce_V2 = variants {} ; -- status=guess
 lin trouncing_N = variants {} ; -- status=guess
 lin troupe_N = mkN "skådespelartrupp" "skådespelartrupper" ; -- comment=2
 lin trouper_N = variants {} ; -- status=guess
-lin trouser_N = variants{} ;
+lin trouser_N = variants{} ; --
 lin trousseau_N = variants {} ; -- status=guess
 lin trout_N = mkN "forell" "foreller" ; -- status=guess
 lin trove_N = variants {} ; -- status=guess
@@ -60109,7 +59812,7 @@ lin truelove_N = variants {} ; -- status=guess
 lin trueness_N = variants {} ; -- status=guess
 lin truffle_N = mkN "tryffel" ; -- comment=2
 lin truism_N = mkN "truism" "truismer" ; -- SaldoWN
-lin truly_Adv = variants{} ;
+lin truly_Adv = variants{} ; --
 lin trump_N = mkN "trumf" ; -- status=guess
 lin trump_V = variants {} ; -- status=guess
 lin trump_V2 = variants {} ; -- status=guess
@@ -60137,9 +59840,7 @@ lin truro_PN = variants {} ; -- status=guess
 lin truss_N = mkN "takstol" ; -- comment=5
 lin truss_V2 = variants {} ; -- status=guess
 lin trust_N = mkN "förtroende" | mkN "tillit" | mkN "förvaltning" ;
---subcat lin trust_V = mkV "lita" ; -- status=guess
 lin trust_V2 = mkV2 (mkV "lita") (mkPrep "på") ; -- status=guess
---subcat lin trust_V2V = mkV2V (mkV "lita") (mkPrep "på") (mkPrep []) ; -- status=guess
 lin trust_VS = mkVS (mkV (mkV "lita") "på") ; -- status=guess
 lin trustbuster_N = variants {} ; -- status=guess
 lin trustee_N = mkN "förvaltare" utrum | mkN "förmyndare" utrum ; -- SaldoWN -- comment=3
@@ -60155,7 +59856,6 @@ lin truthfulness_N = mkN "trovärdighet" ; -- status=guess
 lin try_N = mkN "försök" neutrum; -- status=guess
 lin try_V = mkV "försöker" ;
 lin try_V2 = mkV2 "försöker" ;
---subcat lin try_V2V = mkV2V (mkV "pröva") ;
 lin try_VV = mkVV (mkV "försöker") ;
 lin try_back_V = mkV "behandlar" ; -- comment=7
 lin try_for_V2 = dirV2 (partV (mkV "prövar")"på"); -- comment=2
@@ -60211,8 +59911,8 @@ lin tubular_A = mkA "rörformig" ; -- status=guess
 lin tubule_N = variants {} ; -- status=guess
 lin tuc_N = variants {} ; -- status=guess
 lin tuck_N = variants {} ; -- status=guess
-lin tuck_V = variants{} ;
-lin tuck_V2 = variants{} ;
+lin tuck_V = variants{} ; --
+lin tuck_V2 = variants{} ; --
 lin tuck_away_V2 = variants {} ; -- status=guess
 lin tuck_in_N = variants {} ; -- status=guess
 lin tuck_in_V = variants {} ; -- status=guess
@@ -60329,7 +60029,6 @@ lin turmoil_N = mkN "tumult" neutrum; -- status=guess
 lin turn_N = mkN "vändning" | mkN "tur" "turer" ; --- split -- | make a turn -- | your turn
 lin turn_V = L.turn_V ;
 lin turn_V2 = mkV2 I.vrida_V ;
---subcat lin turn_V2A = mkV2A (mkV "göra" "gjorde" "gjort") ;
 lin turn_VA = mkVA I.bliva_V ;
 lin turn_against_V2 = dirV2 (partV (mkV "rundar")"till"); -- comment=10
 lin turn_around_V2 = dirV2 (partV (mkV "rundar")"till"); -- comment=10
@@ -60465,7 +60164,6 @@ lin twirl_V = mkV "snurrar" ; -- status=guess
 lin twirl_V2 = variants {} ; -- status=guess
 lin twirlingly_Adv = variants {} ; -- status=guess
 lin twist_N = mkN "skiftnyckel" | mkN "vändning" ; -- SaldoWN -- comment=6
---subcat lin twist_V = mkV "vrida" "vred" "vridit" | mkV "kröker" ; -- SaldoWN -- comment=7
 lin twist_V2 = mkV2 "vrida" "vred" "vridit" | dirV2 (partV (mkV "skruvar")"till") ; -- SaldoWN -- comment=6
 lin twist_together_V = mkV "kröker" ; -- comment=7
 lin twister_N = mkN "bedragare" utrum; -- comment=4
@@ -60609,7 +60307,7 @@ lin ultima_N = variants {} ; -- status=guess
 lin ultimacy_N = variants {} ; -- status=guess
 lin ultimate_A = mkA "slutlig" | mkA "slutgiltig" ; -- SaldoWN -- comment=3
 lin ultimate_N = variants {} ; -- status=guess
-lin ultimately_Adv = variants{} ;
+lin ultimately_Adv = variants{} ; --
 lin ultimatum_N = mkN "ultimatum" neutrum | mkN "ultimatum" neutrum ; -- SaldoWN
 lin ultimo_A = variants {} ; -- status=guess
 lin ultra_vires_A = variants {} ; -- status=guess
@@ -60980,7 +60678,7 @@ lin uncouple_V2 = variants {} ; -- status=guess
 lin uncousinly_A = variants {} ; -- status=guess
 lin uncouth_A = variants {} ; -- status=guess
 lin uncouthness_N = variants {} ; -- status=guess
-lin uncover_V2 = variants{} ;
+lin uncover_V2 = variants{} ; --
 lin uncrannied_A = variants {} ; -- status=guess
 lin uncreative_A = variants {} ; -- status=guess
 lin uncreativeness_N = variants {} ; -- status=guess
@@ -61131,7 +60829,6 @@ lin underspend_V2 = variants {} ; -- status=guess
 lin understaffed_A = variants {} ; -- status=guess
 lin understand_V = mkV "begripa" "begrep" "begripit" | mkV "förstå" "förstod" "förstått" ;
 lin understand_V2 = L.understand_V2 ;
---subcat lin understand_V2V = mkV2V (mkV "förstå" "föstod" "förstått") | mkV2V (mkV "begripa" "begrep" "begripit") ;
 lin understand_VS = mkVS (mkV "förstå" "föstod" "förstått") | mkVS (mkV "begripa" "begrep" "begripit") ;
 lin understandable_A = mkA "förståelig" ; -- comment=4
 lin understanding_N = mkN "förståelse" utrum | mkN "förståelse" "förståelser" ;
@@ -61215,7 +60912,7 @@ lin undoing_N = mkN "fördärv" ; -- status=guess
 lin undomestic_A = variants {} ; -- status=guess
 lin undomesticated_A = variants {} ; -- status=guess
 lin undoubted_A = mkA "obestridlig" ; -- status=guess
-lin undoubtedly_Adv = variants{} ;
+lin undoubtedly_Adv = variants{} ; --
 lin undrained_A = variants {} ; -- status=guess
 lin undramatic_A = variants {} ; -- status=guess
 lin undramatically_Adv = variants {} ; -- status=guess
@@ -61308,7 +61005,7 @@ lin unexcused_A = variants {} ; -- status=guess
 lin unexhausted_A = variants {} ; -- status=guess
 lin unexpansive_A = variants {} ; -- status=guess
 lin unexpected_A = compoundA (regA "oväntad"); -- comment=2
-lin unexpectedly_Adv = variants{} ;
+lin unexpectedly_Adv = variants{} ; --
 lin unexpectedness_N = variants {} ; -- status=guess
 lin unexpendable_A = variants {} ; -- status=guess
 lin unexpired_A = variants {} ; -- status=guess
@@ -61327,7 +61024,7 @@ lin unfairness_N = mkN "orättvisa" ; -- status=guess
 lin unfaithful_A = mkA "trolös" ; -- comment=2
 lin unfaithfulness_N = mkN "otrohet" "otroheter" ; -- SaldoWN
 lin unfaltering_A = variants {} ; -- status=guess
-lin unfamiliar_A = variants{} ;
+lin unfamiliar_A = variants{} ; --
 lin unfamiliarity_N = variants {} ; -- status=guess
 lin unfashionable_A = mkA "otidsenlig" | mkA "omodern" ; -- SaldoWN -- comment=2
 lin unfasten_V = variants {} ; -- status=guess
@@ -61554,7 +61251,7 @@ lin uninvolved_A = compoundA (regA "oengagerad"); -- status=guess
 lin union_A = mkA "facklig" ; -- SaldoWN
 lin union_N = mkN "union" "unioner" ;
 lin unionism_N = variants {} ; -- status=guess
-lin unionist_N = variants{} ;
+lin unionist_N = variants{} ; --
 lin unionization_N = variants {} ; -- status=guess
 lin uniovular_A = variants {} ; -- status=guess
 lin uniparous_A = variants {} ; -- status=guess
@@ -62228,7 +61925,7 @@ lin ununquadium_N = mkN "ununquadium" ; -- status=guess
 lin ununtrium_N = mkN "ununtrium" ; -- status=guess
 lin unused_A = mkA "oanvänd" ; -- comment=4
 lin unusual_A = mkA "ovanlig" ; -- comment=4
-lin unusually_Adv = variants{} ;
+lin unusually_Adv = variants{} ; --
 lin unusualness_N = mkN "ovanlighet" "ovanligheter" ; -- SaldoWN
 lin unutterable_A = variants {} ; -- status=guess
 lin unvaccinated_A = variants {} ; -- status=guess
@@ -62304,7 +62001,7 @@ lin up_beat_N = variants {} ; -- status=guess
 lin up_holland_PN = variants {} ; -- status=guess
 lin up_market_A = variants {} ; -- status=guess
 lin up_to_Prep = variants {} ; -- status=guess
-lin up_to_date_A = variants{} ;
+lin up_to_date_A = variants{} ; --
 lin up_to_the_minute_A = variants {} ; -- status=guess
 lin upbeat_N = mkN "upptakt" "upptakter" ; -- status=guess
 lin upbound_A = variants {} ; -- status=guess
@@ -62364,7 +62061,7 @@ lin uproar_N = mkN "kalabalik" "kalabaliker" ; -- comment=5
 lin uproarious_A = variants {} ; -- status=guess
 lin uproot_V2 = variants {} ; -- status=guess
 lin upscale_A = variants {} ; -- status=guess
-lin upset_A = variants{} ;
+lin upset_A = variants{} ; --
 lin upset_N = mkN "rubbning" ; -- comment=2
 lin upset_V = mkV "uppröra" "upprörde" "upprört" | mkV "kullkastar" ; -- SaldoWN -- comment=7
 lin upset_V2 = mkV2 "uppröra" "upprörde" "upprört" ; -- SaldoWN
@@ -62378,8 +62075,8 @@ lin upstage_N = variants {} ; -- status=guess
 lin upstage_V2 = variants {} ; -- status=guess
 lin upstager_N = variants {} ; -- status=guess
 lin upstairs_A = variants {} ; -- status=guess
-lin upstairs_Adv = variants{} ;
-lin upstairs_N = variants{} ;
+lin upstairs_Adv = variants{} ; --
+lin upstairs_N = variants{} ; --
 lin upstanding_A = variants {} ; -- status=guess
 lin upstart_A = variants {} ; -- status=guess
 lin upstart_N = mkN "uppkomling" ; -- status=guess
@@ -62442,7 +62139,7 @@ lin urge_on_V2 = variants {} ; -- status=guess
 lin urge_upon_V2 = variants {} ; -- status=guess
 lin urgency_N = mkN "brådska" ; -- SaldoWN
 lin urgent_A = mkA "enträgen" "enträget" ; -- comment=9
-lin urgently_Adv = variants{} ;
+lin urgently_Adv = variants{} ; --
 lin urging_N = variants {} ; -- status=guess
 lin urial_N = variants {} ; -- status=guess
 lin uric_A = variants {} ; -- status=guess
@@ -62484,7 +62181,6 @@ lin usance_N = mkN "usans" "usanser" ; -- status=guess
 lin use_N = mkN "användning" ;
 lin use_V = mkV "använder" ;
 lin use_V2 = dirV2 (mkV "använder") ;
---subcat lin use_V2V = mkV2V (mkV "använder");
 lin use_VV = mkVV (mkV "bruka") ;
 lin use_up_V = mkV "använder" ; -- comment=12
 lin use_up_V2 = dirV2 (partV (mkV "visar")"in"); -- comment=7
@@ -62495,7 +62191,7 @@ lin usefulness_N = mkN "användbarhet" "användbarheter" ; -- comment=4
 lin useless_A = mkA "värdelös" | mkA "onyttig" ; -- SaldoWN -- comment=9
 lin uselessness_N = mkN "lönlöshet" ; -- status=guess
 lin userFem_N = mkN "användare" ; --- mkN "knarkare" utrum; -- comment=4
-lin userMasc_N = mkN "användare" ; --- mkN "knarkare" utrum; -- comment=4
+lin userMasc_N = mkN "användare" "användare" ;
 lin ushaw_moor_PN = variants {} ; -- status=guess
 lin usher_N = mkN "vaktmästare" utrum; -- comment=3
 lin usher_V2 = dirV2 (partV (mkV "visar")"in"); -- status=guess
@@ -62537,9 +62233,9 @@ lin utrecht_PN = mkPN "Utrecht" neutrum ; -- status=guess
 lin utricle_N = variants {} ; -- status=guess
 lin utter_A = mkA "fullkomlig" ; -- comment=4
 lin utter_V2 = mkV2 (mkV (mkV "ge") "till"); -- status=guess, src=wikt
-lin utterance_N = variants{} ;
+lin utterance_N = variants{} ; --
 lin utterer_N = variants {} ; -- status=guess
-lin utterly_Adv = variants{} ;
+lin utterly_Adv = variants{} ; --
 lin uttermost_A = variants {} ; -- status=guess
 lin uttermost_N = variants {} ; -- status=guess
 lin uttoxeter_PN = variants {} ; -- status=guess
@@ -62594,7 +62290,7 @@ lin vagrancy_N = variants {} ; -- status=guess
 lin vagrant_A = variants {} ; -- status=guess
 lin vagrant_N = mkN "tattare" utrum; -- comment=2
 lin vague_A = mkA "vag" ; -- SaldoWN
-lin vaguely_Adv = variants{} ;
+lin vaguely_Adv = variants{} ; --
 lin vagueness_N = mkN "vaghet" ; -- comment=3
 lin vagus_N = variants {} ; -- status=guess
 lin vain_A = mkA "fåfäng" ; -- SaldoWN
@@ -62711,7 +62407,7 @@ lin varicoloured_A = variants {} ; -- status=guess
 lin varicose_A = variants {} ; -- status=guess
 lin varicosis_N = variants {} ; -- status=guess
 lin varicosity_N = variants {} ; -- status=guess
-lin varied_A = variants{} ;
+lin varied_A = variants{} ; --
 lin variedness_N = variants {} ; -- status=guess
 lin variegated_A = mkA "färgsprakande" ; -- status=guess
 lin variegation_N = variants {} ; -- status=guess
@@ -62735,9 +62431,9 @@ lin varnish_V2 = mkV2 (mkV "lackar"); -- status=guess, src=wikt
 lin varnisher_N = variants {} ; -- status=guess
 lin varsity_N = mkN "universitet" neutrum; -- status=guess
 lin varus_N = variants {} ; -- status=guess
-lin vary_V = mkV "varierar" ; -- comment=4
-lin vary_V2 = dirV2 (partV (mkV "växlar")"in"); -- comment=2
-lin varying_A = variants{} ;
+lin vary_V = mkV "varierar" ;
+lin vary_V2 = mkV2 "varierae" ;
+lin varying_A = variants{} ; --
 lin vascular_A = mkA "vaskulär" ; -- status=guess
 lin vascularity_N = variants {} ; -- status=guess
 lin vascularization_N = variants {} ; -- status=guess
@@ -63075,7 +62771,7 @@ lin vicious_A = mkA "giftig" | mkA "illvillig" ; -- SaldoWN -- comment=4
 lin viciousness_N = variants {} ; -- status=guess
 lin vicissitude_N = variants {} ; -- status=guess
 lin vicky_PN = variants {} ; -- status=guess
-lin victim_N = mkN "offer" neutrum | mkN "slaktoffer" neutrum ; -- SaldoWN -- comment=2
+lin victim_N = mkN "offer" neutrum ;
 lin victimization_N = mkN "förföljelse" "förföljelser" ; -- status=guess
 lin victimize_V2 = variants {} ; -- status=guess
 lin victimizer_N = variants {} ; -- status=guess
@@ -63096,7 +62792,7 @@ lin victualler_N = variants {} ; -- status=guess
 lin vicuna_N = variants {} ; -- status=guess
 lin videlicet_Adv = variants {} ; -- status=guess
 lin video_N = mkN "video" "videor" ;
-lin video_taped_A = variants{} ;
+lin video_taped_A = variants{} ; --
 lin videocassette_N = mkN "videokassett" ; -- status=guess
 lin videodisk_N = variants {} ; -- status=guess
 lin videotape_N = mkN "videoband" neutrum; -- status=guess
@@ -63254,11 +62950,10 @@ lin visionary_N = mkN "visionär" "visionärer" ; -- status=guess
 lin visit_N = mkN "besök" neutrum | mkN "visit" "visiter" | mkN "vistelse" "vistelser" ;
 lin visit_V = mkV "besöker" ;
 lin visit_V2 = mkV2 (mkV "besöker") ;
---subcat lin visit_V2V = mkV2V (mkV "besöker") ;
 lin visitant_N = variants {} ; -- status=guess
 lin visitation_N = mkN "umgänge" ; -- comment=5
 lin visiting_N = mkN "besökande" ; -- comment=2
-lin visitor_N = mkN "besökare" utrum | mkN "besökare" utrum ; -- SaldoWN -- comment=5
+lin visitor_N = mkN "besökare" "besökare" ;
 lin visor_N = mkN "skärm" | mkN "mösskärm" ; -- status=guess status=guess
 lin visored_A = variants {} ; -- status=guess
 lin vista_N = mkN "utsikt" "utsikter" ; -- status=guess
@@ -63371,7 +63066,7 @@ lin volte_face_N = variants {} ; -- status=guess
 lin voltmeter_N = mkN "voltmätare" utrum; -- status=guess
 lin volubility_N = mkN "svada" ; -- SaldoWN
 lin voluble_A = variants {} ; -- status=guess
-lin volume_N = mkN "volym" "volymer" ; -- status=guess
+lin volume_N = mkN "volym" "volymer" ;
 lin volumed_A = variants {} ; -- status=guess
 lin volumeter_N = variants {} ; -- status=guess
 lin volumetric_A = variants {} ; -- status=guess
@@ -63380,11 +63075,9 @@ lin voluminous_A = mkA "voluminös" ; -- comment=6
 lin voluntary_A = mkA "frivillig" ; -- SaldoWN
 lin voluntary_N = variants {} ; -- status=guess
 lin volunteerFem_N = mkN "volontär" "volontärer" ; -- status=guess
-lin volunteerMasc_N = mkN "volontär" "volontärer" ; -- status=guess
-lin volunteer_V = variants{} ;
-lin volunteer_V2 = variants{} ;
---subcat lin volunteer_V2V = variants{} ;
---subcat lin volunteer_VS = variants{} ;
+lin volunteerMasc_N = variants{} ; --
+lin volunteer_V = variants{} ; --
+lin volunteer_V2 = variants{} ; --
 lin voluptuary_N = variants {} ; -- status=guess
 lin voluptuous_A = variants {} ; -- status=guess
 lin voluptuousness_N = variants {} ; -- status=guess
@@ -63490,7 +63183,7 @@ lin waft_V2 = variants {} ; -- status=guess
 lin wag_N = mkN "skojare" utrum; -- comment=2
 lin wag_V = mkV "skolkar" ; -- status=guess, src=wikt
 lin wag_V2 = mkV2 (mkV "skolkar"); -- status=guess, src=wikt
-lin wage_N = mkN "lön" "löner" | mkN "driva" ; -- SaldoWN -- comment=4
+lin wage_N = mkN "lön" "löner" | mkN "driva" ; ---- sense
 lin wage_V2 = variants {} ; -- status=guess
 lin wage_claim_N = variants {} ; -- status=guess
 lin wage_earner_N = variants {} ; -- status=guess
@@ -63544,8 +63237,8 @@ lin wait_up_V = mkV "dröja" "dröjde" "dröjt" ; -- comment=7
 lin wait_up_for_V2 = dirV2 (partV (mkV "väntar")"ut"); -- status=guess
 lin wait_upon_V2 = dirV2 (partV (mkV "väntar")"ut"); -- status=guess
 lin waiter_N = mkN "kypare" utrum; -- comment=4
-lin waiting_A = variants{} ;
-lin waiting_N = variants{} ;
+lin waiting_A = variants{} ; --
+lin waiting_N = variants{} ; --
 lin waiting_list_N = variants {} ; -- status=guess
 lin waiting_room_N = variants {} ; -- status=guess
 lin waitress_N = mkN "servitris" "servitriser" ; -- SaldoWN
@@ -63587,7 +63280,7 @@ lin walkabout_N = variants {} ; -- status=guess
 lin walkaway_N = variants {} ; -- status=guess
 lin walker_N = mkN "fotgängare" utrum; -- comment=2
 lin walkie_talkie_N = variants {} ; -- status=guess
-lin walking_A = variants{} ;
+lin walking_A = variants{} ; --
 lin walking_N = mkN "vandring" ; -- status=guess
 lin walkout_N = variants {} ; -- status=guess
 lin walkover_N = variants {} ; -- status=guess
@@ -63634,7 +63327,6 @@ lin wampum_N = variants {} ; -- status=guess
 lin wan_A = mkA "blek" ; -- comment=4
 lin wand_N = mkN "trollspö" "trollspöet" "trollspön" "trollspöna" ; -- comment=2
 lin wander_V = mkV "avvika" "avvek" "avvikit" | mkV "yra" "yrde" "yrt" ; -- SaldoWN -- comment=6
---subcat lin wander_V2 = mkV2 "avvika" "avvek" "avvikit" | dirV2 (partV (mkV "strövar")"igenom") ; -- SaldoWN -- comment=2
 lin wander_off_V = mkV "yra" "yrde" "yrt" ; -- comment=6
 lin wanderer_N = mkN "vandrare" utrum; -- comment=3
 lin wandering_N = mkN "vandring" ; -- status=guess
@@ -63653,7 +63345,6 @@ lin want_N = mkN "vilja" | mkN "behov" neutrum ; -- SaldoWN -- comment=8
 lin want_V = I.vilja_V ;
 lin want_V2 = mkV2 I.vilja_V ;
 lin want_V2V = mkV2V I.vilja_V ;
---subcat lin want_VS = mkVS I.vilja_V ;
 lin want_VV = S.want_VV;
 lin want_ad_N = variants {} ; -- status=guess
 lin want_in_V = mkV "söker" ; -- comment=10
@@ -63719,10 +63410,10 @@ lin warminster_PN = variants {} ; -- status=guess
 lin warmonger_N = mkN "krigshetsare" utrum; -- status=guess
 lin warmongering_N = variants {} ; -- status=guess
 lin warmth_N = mkN "värme" ; -- comment=2
-lin warn_V = mkV "varnar" ; -- comment=2
-lin warn_V2 = mkV2 (mkV "varnar"); -- status=guess, src=wikt
-lin warn_V2V = mkV2V (mkV "varnar"); -- status=guess, src=wikt
-lin warn_VS = mkVS (mkV "varnar"); -- status=guess, src=wikt
+lin warn_V = mkV "varnar" ;
+lin warn_V2 = mkV2 (mkV "varnar");
+lin warn_V2V = mkV2V (mkV "varnar");
+lin warn_VS = mkVS (mkV "varnar");
 lin warner_N = variants {} ; -- status=guess
 lin warning_N = mkN "varning" | mkN "varsel" neutrum ; -- SaldoWN -- comment=4
 lin warp_N = mkN "varp" neutrum; -- comment=2
@@ -63747,7 +63438,7 @@ lin warship_N = mkN "krigsskepp" neutrum; -- comment=2
 lin warsop_PN = variants {} ; -- status=guess
 lin wart_N = mkN "vårta" ; -- status=guess
 lin warthog_N = variants {} ; -- status=guess
-lin wartime_N = variants{} ;
+lin wartime_N = variants{} ; --
 lin warwick_PN = variants {} ; -- status=guess
 lin warwickshire_PN = variants {} ; -- status=guess
 lin wary_A = mkA "rädd" ; -- status=guess
@@ -64160,7 +63851,7 @@ lin well_heeled_A = variants {} ; -- status=guess
 lin well_informed_A = variants {} ; -- status=guess
 lin well_intentioned_A = variants {} ; -- status=guess
 lin well_knit_A = variants {} ; -- status=guess
-lin well_known_A = variants{} ;
+lin well_known_A = variants{} ; --
 lin well_lined_A = variants {} ; -- status=guess
 lin well_marked_A = variants {} ; -- status=guess
 lin well_meaning_A = variants {} ; -- status=guess
@@ -64276,7 +63967,7 @@ lin whatever_Det = M.mkDet "vilken somhelst" "vilket somhelst" singular ;
 lin whatnot_N = variants {} ; -- status=guess
 lin whatsoe'er_A = variants {} ; -- status=guess
 lin whatsoever_A = mkA "alls" ; -- status=guess
-lin whatsoever_Adv = variants{} ;
+lin whatsoever_Adv = variants{} ; --
 lin wheat_N = mkN "vete" | mkN "durumvete" ; -- SaldoWN -- comment=3
 lin wheatear_N = variants {} ; -- status=guess
 lin wheaten_A = variants {} ; -- status=guess
@@ -64334,7 +64025,7 @@ lin wheresoever_Adv = variants {} ; -- status=guess
 lin whereto_Adv = mkAdv "vart" ; -- status=guess
 lin whereunto_Adv = variants {} ; -- status=guess
 lin whereupon_Adv = mkAdv "varpå" ; -- status=guess
-lin wherever_Adv = variants{} ;
+lin wherever_Adv = variants{} ; --
 lin wherewith_Adv = mkAdv "varmed" ; -- status=guess
 lin wherewithal_Adv = variants {} ; -- status=guess
 lin wherewithal_N = mkN "varmed" ; -- status=guess
@@ -64346,7 +64037,7 @@ lin whetstone_N = mkN "bryne" ; -- SaldoWN
 lin whey_N = (mkN "vassle" utrum) | (mkN "vassla"); -- status=guess status=guess
 lin which_IQuant = S.which_IQuant;
 lin whichever_A = variants {} ; -- status=guess
-lin whichever_Quant = variants{} ;
+lin whichever_Quant = variants{} ; --
 lin whichsoever_A = variants {} ; -- status=guess
 lin whiff_N = variants {} ; -- status=guess
 lin whiffer_N = variants {} ; -- status=guess
@@ -64415,7 +64106,7 @@ lin whisk_away_V2 = variants {} ; -- status=guess
 lin whisker_N = mkN "morrhår" ; -- status=guess
 lin whiskered_A = variants {} ; -- status=guess
 lin whiskey_N = mkN "whisky" | mkN "visky" ; -- status=guess status=guess
-lin whisky_N = variants{} ;
+lin whisky_N = variants{} ; --
 lin whisper_N = mkN "viska" | mkN "viskning" ; -- SaldoWN -- comment=5
 lin whisper_V = mkV "viskar" ; -- comment=6
 lin whisper_V2 = mkV2 (mkV "viskar"); -- status=guess, src=wikt
@@ -64486,7 +64177,7 @@ lin whoPl_IP = S.whoPl_IP;
 lin whoSg_IP = S.whoSg_IP;
 lin who_N = variants {} ; -- status=guess
 lin whodunit_N = mkN "deckare" utrum; -- status=guess
-lin whoever_NP = variants{} ;
+lin whoever_NP = variants{} ; --
 lin whole_A = mkA "hel" | mkA "välbehållen" "välbehållet" ;
 lin whole_N = mkN "helhet" "helheter" ;
 lin whole_wheat_N = variants {} ; -- status=guess
@@ -64501,7 +64192,7 @@ lin wholesale_V2 = variants {} ; -- status=guess
 lin wholesaler_N = mkN "grossist" "grossister" ; -- status=guess
 lin wholesome_A = mkA "hälsosam" "hälsosamt" "hälsosamma" "hälsosamma" "hälsosammare" "hälsosammast" "hälsosammaste" ; -- status=guess
 lin wholesomeness_N = variants {} ; -- status=guess
-lin wholly_Adv = variants{} ;
+lin wholly_Adv = variants{} ; --
 lin whoop_N = mkN "skrika" ; -- comment=4
 lin whoop_V = mkV "tjuta" "tjöt" "tjutit" ; -- comment=3
 lin whoop_V2 = dirV2 (partV (mkV "ropar")"till"); -- status=guess
@@ -64539,7 +64230,6 @@ lin wide_A = L.wide_A ;
 lin wide_Adv = mkAdv "vid" ; -- comment=2
 lin wide_awake_A = variants {} ; -- status=guess
 lin widely_Adv = mkAdv "allmänt" ; -- status=guess
---subcat lin widen_V = mkV "breddar" ; -- comment=4
 lin widen_V2 = mkV2 (mkV "vidgar"); -- status=guess, src=wikt
 lin wideness_N = variants {} ; -- status=guess
 lin widening_N = mkN "vidgande" ; -- status=guess
@@ -64589,7 +64279,7 @@ lin wildflower_N = variants {} ; -- status=guess
 lin wildfowl_N = mkN "vildfågel" ; -- status=guess
 lin wilding_N = variants {} ; -- status=guess
 lin wildlife_N = mkN "djurliv" neutrum | (mkN "vilt" neutrum) | (mkN "natur") | (mkN "fauna") | (mkN "flora") ; -- SaldoWN -- status=guess status=guess status=guess status=guess
-lin wildly_Adv = variants{} ;
+lin wildly_Adv = variants{} ; --
 lin wildness_N = variants {} ; -- status=guess
 lin wile_N = variants {} ; -- status=guess
 lin wilf_PN = variants {} ; -- status=guess
@@ -64597,7 +64287,7 @@ lin wilfrid_PN = variants {} ; -- status=guess
 lin wilful_A = mkA "uppsåtlig" ; -- comment=2
 lin wilfulness_N = variants {} ; -- status=guess
 lin wilhelmshaven_PN = variants {} ; -- status=guess
-lin will_N = mkN "vilja" | mkN "kan" "kaner" ; -- SaldoWN -- comment=3
+lin will_N = mkN "vilja" ;
 lin will_PN = variants {} ; -- status=guess
 lin will_V = mkV "brukar" ; -- comment=5
 lin will_V2 = dirV2 (partV (mkV "få" "fick" "fått")"till"); -- status=guess
@@ -64608,7 +64298,7 @@ lin william_PN = variants {} ; -- status=guess
 lin willie_PN = variants {} ; -- status=guess
 lin willies_N = variants {} ; -- status=guess
 lin willing_A = mkA "villig" ; -- comment=3
-lin willingness_N = variants{} ;
+lin willingness_N = variants{} ; --
 lin willington_PN = variants {} ; -- status=guess
 lin willow_N = mkN "pil" ; -- comment=3
 lin willow_pattern_N = variants {} ; -- status=guess
@@ -64648,7 +64338,6 @@ lin winch_V2 = mkV2 (mkV "vinschar"); -- status=guess, src=wikt
 lin winchester_PN = variants {} ; -- status=guess
 lin wind_N = L.wind_N ;
 lin wind_V = mkV "virar" ; -- comment=10
---subcat lin wind_V2 = dirV2 (partV (mkV "virar")"om"); -- comment=8
 lin wind_down_V = mkV "virar" ; -- comment=10
 lin wind_down_V2 = dirV2 (partV (mkV "virar")"om"); -- comment=8
 lin wind_gauge_N = variants {} ; -- status=guess
@@ -64726,7 +64415,7 @@ lin winkle_out_V2 = variants {} ; -- status=guess
 lin winless_A = variants {} ; -- status=guess
 lin winner_N = mkN "vinnare" utrum | mkN "segrare" utrum ; -- status=guess
 lin winnie_PN = variants {} ; -- status=guess
-lin winning_A = variants{} ;
+lin winning_A = variants{} ; --
 lin winning_N = mkN "vinnande" ; -- status=guess
 lin winning_post_N = variants {} ; -- status=guess
 lin winnings_N = variants {} ; -- status=guess
@@ -64736,7 +64425,7 @@ lin winnow_V2 = dirV2 (partV (mkV "kastar")"ut"); -- comment=5
 lin winsford_PN = variants {} ; -- status=guess
 lin winsome_A = mkA "trevlig" ; -- comment=4
 lin winsomeness_N = variants {} ; -- status=guess
-lin winter_N = mkN "vinter" ; -- SaldoWN
+lin winter_N = mkN "vinter" ;
 lin winter_V = variants {} ; -- status=guess
 lin wintergreen_N = variants {} ; -- status=guess
 lin wintery_A = variants {} ; -- status=guess
@@ -64893,7 +64582,6 @@ lin wombat_N = variants {} ; -- status=guess
 lin wombourne_PN = variants {} ; -- status=guess
 lin wonder_N = mkN "underverk" neutrum | mkN "underverk" neutrum ; -- SaldoWN -- comment=4
 lin wonder_V = mkV "undrar" ;
---subcat lin wonder_V2 = mkV2 "undra" ; ---- subcat
 lin wonder_VQ = L.wonder_VQ ;
 lin wonder_struck_A = variants {} ; -- status=guess
 lin wonderer_N = variants {} ; -- status=guess
@@ -64981,7 +64669,6 @@ lin work_2_V = mkV "fungera" | mkV "funka" ;
 lin work_N = mkN "jobb" neutrum | mkN "arbete" "arbeten" ;
 lin work_V = mkV "arbetar" ;
 lin work_V2 = dirV2 (partV (mkV "ordnar")"om");
---subcat lin work_VV = mkVV (mkV "fungerar") ;
 lin work_in_N = variants {} ; -- status=guess
 lin work_off_V2 = dirV2 (partV (mkV "ordnar")"om"); -- comment=29
 lin work_on_V2 = dirV2 (partV (mkV "ordnar")"om"); -- comment=29
@@ -65005,12 +64692,12 @@ lin workbook_N = mkN "arbetsbok" "arbetsböcker" ; -- status=guess
 lin workbox_N = variants {} ; -- status=guess
 lin workday_N = variants {} ; -- status=guess
 lin worker_N = mkN "arbetare" utrum ;
-lin workforce_N = variants{} ;
+lin workforce_N = variants{} ; --
 lin workhorse_N = mkN "arbetshäst" ; -- status=guess
 lin workhouse_N = variants {} ; -- status=guess
 lin working_A = mkA "fungerande" | mkA "arbetande" ; ---- split
 lin working_N = mkN "uträkning" ; -- comment=23
-lin working_class_A = variants{} ;
+lin working_class_A = variants{} ; --
 lin working_out_N = variants {} ; -- status=guess
 lin workington_PN = variants {} ; -- status=guess
 lin workload_N = mkN "arbetsbörda" ; -- comment=2
@@ -65027,7 +64714,7 @@ lin workshop_N = mkN "verkstad" "verkstäder" ; -- SaldoWN
 lin workshy_A = mkA "arbetsskygg" ; -- status=guess
 lin worksop_PN = variants {} ; -- status=guess
 lin workspace_N = variants {} ; -- status=guess
-lin workstation_N = variants{} ;
+lin workstation_N = variants{} ; --
 lin worktable_N = variants {} ; -- status=guess
 lin workwear_N = variants {} ; -- status=guess
 lin workweek_N = mkN "arbetsvecka" ; -- status=guess
@@ -65036,8 +64723,8 @@ lin world_weary_A = variants {} ; -- status=guess
 lin worldliness_N = variants {} ; -- status=guess
 lin worldling_N = variants {} ; -- status=guess
 lin worldly_A = mkA "världslig" ; -- SaldoWN
-lin worldwide_A = variants{} ;
-lin worldwide_Adv = variants{} ;
+lin worldwide_A = variants{} ; --
+lin worldwide_Adv = variants{} ; --
 lin worm_N = L.worm_N ;
 lin worm_V2 = variants {} ; -- status=guess
 lin worm_eaten_A = variants {} ; -- status=guess
@@ -65046,7 +64733,7 @@ lin wormcast_N = variants {} ; -- status=guess
 lin wormhole_N = mkN "maskhål" neutrum; -- status=guess
 lin wormwood_N = mkN "malört" ; -- SaldoWN
 lin wormy_A = variants {} ; -- status=guess
-lin worried_A = variants{} ;
+lin worried_A = variants{} ; --
 lin worriedly_Adv = variants {} ; -- status=guess
 lin worrier_N = variants {} ; -- status=guess
 lin worrisome_A = variants {} ; -- status=guess
@@ -65054,11 +64741,11 @@ lin worry_N = mkN "bekymmer" "bekymmer" ; -- comment=5
 lin worry_V = reflV (mkV "oroa") ;
 lin worry_V2 = mkV2 (mkV "oroa") ;
 lin worry_VS = mkVS (reflV (mkV "oroa"));
-lin worrying_A = variants{} ;
+lin worrying_A = variants{} ; --
 lin worrying_N = mkN "enerverande" ; -- comment=3
 lin worryingly_Adv = variants {} ; -- status=guess
 lin worse_A = mkA "värre" ; -- status=guess
-lin worse_Adv = variants{} ;
+lin worse_Adv = variants{} ; --
 lin worse_N = variants {} ; -- status=guess
 lin worsen_V = mkV "försämrar" ; -- status=guess
 lin worsen_V2 = mkV2 (mkV "förvärras"); -- status=guess, src=wikt
@@ -65082,7 +64769,7 @@ lin worthiness_N = mkN "värdighet" "värdigheter" ; -- comment=3
 lin worthing_PN = variants {} ; -- status=guess
 lin worthless_A = mkA "kass" ; -- comment=6
 lin worthlessness_N = mkN "värdelöshet" ; -- status=guess
-lin worthwhile_A = variants{} ;
+lin worthwhile_A = variants{} ; --
 lin worthwhileness_N = variants {} ; -- status=guess
 lin worthy_A = mkA "värdig" ; -- SaldoWN
 lin worthy_N = variants {} ; -- status=guess
@@ -65162,7 +64849,6 @@ lin writ_large_A = variants {} ; -- status=guess
 lin write_V = mkV "skriva" "skrev" "skrivit" ;
 lin write_V2 = L.write_V2 ;
 lin write_VS = mkV "skriva" "skrev" "skrivit" ;
---subcat lin write_VV = mkVV (mkV "skriva" "skrev" "skrivit") ;
 lin write_down_V2 = dirV2 (partV (mkV "präntar")"i"); -- status=guess
 lin write_in_V = mkV "skriva" "skrev" "skrivit" ; -- comment=3
 lin write_off_N = variants {} ; -- status=guess
@@ -65176,7 +64862,7 @@ lin writing_N = mkN "skrivande" ; -- comment=7
 lin writing_desk_N = variants {} ; -- status=guess
 lin writing_ink_N = variants {} ; -- status=guess
 lin writing_paper_N = variants {} ; -- status=guess
-lin written_A = variants{} ;
+lin written_A = variants{} ; --
 lin writtle_PN = variants {} ; -- status=guess
 lin wrns_N = variants {} ; -- status=guess
 lin wroclaw_PN = variants {} ; -- status=guess
@@ -65208,7 +64894,7 @@ lin wymondham_PN = variants {} ; -- status=guess
 lin wyoming_PN = variants {} ; -- status=guess
 lin wythall_PN = variants {} ; -- status=guess
 lin wyvern_N = variants {} ; -- status=guess
-lin x_ray_N = variants{} ;
+lin x_ray_N = variants{} ; --
 lin x_ray_V2 = variants {} ; -- status=guess
 lin xanthate_N = variants {} ; -- status=guess
 lin xanthelasma_N = variants {} ; -- status=guess
@@ -65342,7 +65028,7 @@ lin yenta_N = variants {} ; -- status=guess
 lin yeoman_N = variants {} ; -- status=guess
 lin yeomanry_N = variants {} ; -- status=guess
 lin yeovil_PN = variants {} ; -- status=guess
-lin yep_Interj = variants{} ;
+lin yep_Interj = variants{} ; --
 lin yerevan_PN = variants {} ; -- status=guess
 lin yes_Interj = mkInterj "ja" ;
 lin yeshiva_N = variants {} ; -- status=guess
@@ -65358,7 +65044,6 @@ lin yew_tree_N = variants {} ; -- status=guess
 lin yha_N = variants {} ; -- status=guess
 lin yiddish_N = variants {} ; -- status=guess
 lin yield_N = mkN "avkastning" ; -- comment=7
---subcat lin yield_V = mkV "överlämnar" ; -- comment=16
 lin yield_V2 = mkV2 "producera" ;
 lin yield_to_V2 = variants {} ; -- status=guess
 lin yield_up_V = mkV "överlämnar" ; -- comment=16
