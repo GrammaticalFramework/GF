@@ -54786,8 +54786,8 @@ lin steady_V2 = variants {} ; -- status=guess
 lin steak_N = mkN "stek" | mkN "biff" ; -- SaldoWN = mkN "stek" neutrum ; -- comment=5
 lin steakhouse_N = mkN "stekhus" neutrum; -- comment=2
 lin steal_N = mkN "slinka" ; -- comment=2
-lin steal_V = mkV "stjäla" "stjäl" "stjäl" "stal" "stulit" "stulen" ; -- comment=6
-lin steal_V2 = mkV2 (mkV "stjäla"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
+lin steal_V = mkV "stjäla" "stjäl" "stjäl" "stal" "stulit" "stulen" ; 
+lin steal_V2 = mkV2 (mkV "stjäla" "stjäl" "stjäl" "stal" "stulit" "stulen") ; 
 lin steal_away_V = mkV "stjäla" "stjäl" "stjäl" "stal" "stulit" "stulen" ; -- comment=6
 lin steal_out_V = mkV "stjäla" "stjäl" "stjäl" "stal" "stulit" "stulen" ; -- comment=6
 lin steal_over_V2 = variants {} ; -- status=guess

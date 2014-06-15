@@ -2590,7 +2590,7 @@ lin terrible_A = mkA "hemsk" ; -- comment=9
 lin knee_N = L.knee_N ;
 lin dress_N = mkN "krydda" ; -- comment=9
 lin unfortunately_Adv = mkAdv "tyvärr" | mkAdv "olyckligtvis" ;
-lin steal_V2 = mkV2 (mkV "stjäla"); -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
+lin steal_V2 = mkV2 (mkV "stjäla" "stjäl" "stjäl" "stal" "stulit" "stulen") ; 
 lin steal_V = mkV "stjäla" "stjäl" "stjäl" "stal" "stulit" "stulen" ; -- comment=6
 lin criminal_A = mkA "brottslig" | mkA "kriminell" ;
 lin signal_N = mkN "signal" "signaler" ; -- comment=2
