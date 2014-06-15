@@ -21472,7 +21472,7 @@ lin finnish_N = mkN "finska" ; -- comment=2
 lin fiona_PN = variants {} ; -- status=guess
 lin fiord_N = variants {} ; -- status=guess
 lin fipple_N = variants {} ; -- status=guess
-lin fir_N = mkN "gran" neutrum; -- comment=2
+lin fir_N = mkN "gran" ;
 lin fir_cone_N = variants {} ; -- status=guess
 lin fire_1_N = L.fire_N;
 lin fire_2_N = mkN "brand" "bränder" ;
