@@ -4478,6 +4478,7 @@ fun ayin_N : N ;
 fun aylesbury_PN : PN ;
 fun aylesford_PN : PN ;
 fun ayr_PN : PN ;
+fun ayran_N : N;
 fun azadirachtin_N : N ;
 fun azalea_N : N ;
 fun azathioprine_N : N ;
