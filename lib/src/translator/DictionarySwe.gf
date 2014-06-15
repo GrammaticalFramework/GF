@@ -4431,6 +4431,7 @@ lin ayin_N = variants {} ; -- status=guess
 lin aylesbury_PN = variants {} ; -- status=guess
 lin aylesford_PN = variants {} ; -- status=guess
 lin ayr_PN = variants {} ; -- status=guess
+lin ayran_N = mkN (variants {"ayran"; "airan"});
 lin azadirachtin_N = variants {} ; -- status=guess
 lin azalea_N = mkN "azalea" ; -- SaldoWN
 lin azathioprine_N = variants {} ; -- status=guess
@@ -8299,7 +8300,7 @@ lin butterfat_N = variants {} ; -- status=guess
 lin butterfingers_N = variants {} ; -- status=guess
 lin butterfish_N = variants {} ; -- status=guess
 lin butterfly_N = mkN "fjäril" ; -- SaldoWN
-lin buttermilk_N = mkN "kärnmjölk" ; -- SaldoWN
+lin buttermilk_N = mkN "kärnmjölk";
 lin butternut_N = variants {} ; -- status=guess
 lin butterscotch_N = mkN "knäck" neutrum; -- comment=2
 lin butterweed_N = variants {} ; -- status=guess

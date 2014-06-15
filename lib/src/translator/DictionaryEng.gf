@@ -4481,6 +4481,7 @@ lin ayin_N = mkN "ayin" ;
 lin aylesbury_PN = mkPN "Aylesbury";
 lin aylesford_PN = mkPN "Aylesford";
 lin ayr_PN = mkPN "Ayr";
+lin ayran_N = mkN "ayran";
 lin azadirachtin_N = mkN "azadirachtin" ;
 lin azalea_N = mkN "azalea" "azaleas";
 lin azathioprine_N = mkN "azathioprine" ;
