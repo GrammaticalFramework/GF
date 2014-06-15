@@ -1,11 +1,15 @@
 concrete ChunkFin of Chunk = CatFin, ExtensionsFin [VPS,VPI] ** 
-  ChunkFunctor with (Syntax = SyntaxFin), (Extensions = ExtensionsFin) **
+  ChunkFunctor - [Prep_Chunk] with (Syntax = SyntaxFin), (Extensions = ExtensionsFin) **
   open 
     SyntaxFin, (E = ExtensionsFin), Prelude, 
     ResFin, (P = ParadigmsFin) in {
 
 oper
   emptyNP = mkNP (lin PN {s = \\_ => []}) ;
+
+-- overridden, to avoid the generation of dangling case endings
+lin
+  Prep_Chunk prep = mkAdv prep something_NP ;
 
 lin
   NP_Acc_Chunk np = ss (np.s ! NPAcc) ;

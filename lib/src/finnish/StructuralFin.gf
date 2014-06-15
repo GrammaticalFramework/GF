@@ -289,13 +289,13 @@ lin
 
   if_then_Conj = {s1 = "jos" ; s2 = "niin" ; n = Sg} ;
   nobody_NP = {
-    s = \\c => kukaanPron ! Sg ! npform2case Sg c ; -- requires negative or question polarity
+    s = \\c => kukaanPron ! Sg ! npform2case Sg c ; --- requires negative polarity
     a = agrP3 Sg ; 
     isPron = False ; isNeg = True
     } ;
 
   nothing_NP = {
-    s = \\c => mikaanPron ! Sg ! npform2case Sg c ; --- requires negative or question polarity
+    s = \\c => mikaanPron ! Sg ! npform2case Sg c ; --- requires negative polarity
     a = agrP3 Sg ; 
     isPron = False ; isNeg = True
     } ;
