@@ -12,11 +12,21 @@ Powered by multilingual grammars
 #GFWCT
 
 
-==Download an app==
+==Download the app==
 
-**Coming soon**: //link to an Android app, with a barcode.//
+[App description and download page ./app.html]
 
 
+==Colours==
+
+- **Green: semantic translation**, should be correct.
+                 But not necessarily the only correct one. 
+- **Yellow: syntactic translation**, should be grammatically correct.
+                 But can be very strange in its interpretation and choice of words.
+- **Light red: chunk translation**, probably incorrect.
+                 Builds the translation from small pieces.
+- **Dark red: word-by-word translation**, almost certainly incorrect.
+                 Builds the translation word by word and returns unknown words verbatim.
 
 
 ==What you can expect==
