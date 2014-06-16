@@ -3989,7 +3989,8 @@ fun athenaeum_N : N ;
 fun athenianFem_N : N ;
 fun athenianMasc_N : N ;
 fun athenian_A : A ;
-fun athens_PN : PN ;
+fun athens_1_PN : PN ;  -- | city in Greece
+fun athens_2_PN : PN ;  -- | city in America
 fun atherogenesis_N : N ;
 fun atheroma_N : N ;
 fun atheromatous_A : A ;
@@ -22180,7 +22181,8 @@ fun floppy_A : A ;
 fun flora_N : N  ;
 fun flora_PN : PN ;
 fun floral_A : A ;
-fun florence_PN : PN ;
+fun florence_1_PN : PN;   -- | the country name
+fun florence_2_PN : PN;   -- | personal name
 fun floret_N : N ;
 fun floricultural_A : A ;
 fun floriculture_N : N ;
@@ -24831,7 +24833,6 @@ fun gossamer_N : N ;
 fun gossip_N : N ;
 fun gossip_V : V ;
 fun gossiping_N : N ;
-fun goteborg_PN : PN ;
 fun goth_N : N ;
 fun gothenburg_PN : PN ;
 fun gothic_A : A ;
@@ -33973,7 +33974,6 @@ fun lux_N : N ;
 fun luxation_N : N ;
 fun luxe_A : A ;
 fun luxembourg_PN : PN ;
-fun luxemburg_PN : PN ;
 fun luxemburger_A : A ;
 fun luxemburger_N : N ;
 fun luxuriance_N : N ;
@@ -36970,7 +36970,8 @@ fun morula_N : N ;
 fun mosaic_A : A ;
 fun mosaic_N : N ;
 fun mosaicism_N : N ;
-fun moscow_PN : PN ;
+fun moscow_1_PN : PN ;  -- | the Russian capital
+fun moscow_2_PN : PN ;  -- | city in America
 fun moselle_N : N ;
 fun mosey_V : V ;
 fun moshav_N : N ;
@@ -41331,7 +41332,8 @@ fun pariah_dog_N : N ;
 fun parietal_A : A ;
 fun parimutuel_N : N ;
 fun paring_N : N ;
-fun paris_PN : PN ;
+fun paris_1_PN : PN ;  -- | capital of France
+fun paris_2_PN : PN ;  -- | city in America
 fun parish_N : N ;
 fun parishioner_N : N ;
 fun parisian_A : A ;
