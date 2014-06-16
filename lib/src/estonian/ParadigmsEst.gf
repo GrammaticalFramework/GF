@@ -336,53 +336,92 @@ oper
     s = \\c => oma.s ! c + tunto.s ! c ; lock_N = <>
     } ; ---- TODO: oma in possessive suffix forms
 
-  nForms2 : (_,_ : Str) -> NForms = \link,lingi -> 
+
+  -- This rule uses the additional information that can be derived from the
+  -- singular genitive:
+  --   - stem vowel (the sg gen always ends with a vowel)
+  --   - e-deletion (laager/laagri vs paber/paberi)
+  --   - adjectives with different genitive ending compared to nouns
+  --     vahe/vaheda -> vahedat
+  --   - type VII (tõuge)
+  nForms2 : (_,_ : Str) -> NForms = \link,lingi ->
     let
       i = last lingi ;
       reegl = init lingi ;
     in
-      case <link,lingi> of { 
-        <_ + "el", _ + #c + "li"> => hjk_type_IVb_audit1 link reegl ;
-        <_ + "er", _ + #c + "ri"> => hjk_type_IVb_audit1 link reegl ;
+      case <link,lingi> of {
+        -- e-deletion
+        <_ + #c + "el", _ + #c + "li"> => hjk_type_IVb_audit1 link reegl ;
+        <_ + #c + "er", _ + #c + "ri"> => hjk_type_IVb_audit1 link reegl ;
         <_ + #c + "el", _ + #c + "eli"> => hjk_type_IVb_audit link i ;
         <_ + #c + "er", _ + #c + "eri"> => hjk_type_IVb_audit link i ;
 
-        <_ + "be", _ + "pe">  => hjk_type_VII_touge2 link lingi ;
-        <_ + "de", _ + "te">  => hjk_type_VII_touge2 link lingi ;
-        <_ + "ge", _ + "ke">  => hjk_type_VII_touge2 link lingi ;
-        <_ + "pe", _ + "ppe">  => hjk_type_VII_touge2 link lingi ;
-        <_ + "te", _ + "tte">  => hjk_type_VII_touge2 link lingi ;
-        <_ + "ke", _ + "kke">  => hjk_type_VII_touge2 link lingi ;
-        <_ + "nne", _ + "nde">  => hjk_type_VII_touge2 link lingi ;
+        -- This applies only to adjectives.
+        -- If genitive just adds 'da' to the nominative, then construct
+        -- the paradigm using IVa_aasta, giving it the genitive as the argument.
+        -- We assume here that the the nominative is overriten by the calling rule.
+        -- Example: vahe, vaheda, vahedaT, vahedaSSE, vahedaTE, vahedaID
+        <_ + "e", _ + "eda"> => hjk_type_IVa_aasta lingi ;
 
-	--below 3 don't add much, could just delete
-	--t6uge recognition is easy, because that doesn't introduce lot of other errors
-	--but probably pointless to fill this with all cases
-	<_ + "e", _ + #c + "me"> => hjk_type_VII_touge2 link lingi ;
-        <_ + "se", _ + "ske">  => hjk_type_VII_touge2 link lingi ;
-        <_ + "re", _ + "rde">  => hjk_type_VII_touge2 link lingi ;
-	<_ + #v + "e", _+"de"> => hjk_type_VII_touge2 link lingi ; --riie:riide
+        -- More specific VII rules (which work reliably)
+        -- These cannot be easily integrated into 'stronger'.
+        <_ + "e", _ + #c + "me"> => hjk_type_VII_touge2 link lingi ;
+        <_ + "se", _ + "ske"> => hjk_type_VII_touge2 link lingi ;
+        <_ + "re", _ + "rde"> => hjk_type_VII_touge2 link lingi ;
+        <_ + #v + "e", _ + "de"> => hjk_type_VII_touge2 link lingi ;--riie:riide
 
-	--improved total count a little, but introduced new errors
-	--not recommended, not stable and productive word class
-	--<_ + "i", _ + "e">  => dMeri link lingi ;
 
-	--introduced a couple of errors, "aine" recognized as "kõne"
+        -- This is not allowed in GF (not linear)
+        --<stronger + "e", stronger + "e"> => hjk_type2 link i ;
+        --<_ + "e", stronger + "e"> => hjk_type_VII_touge2 link lingi ;
+
+        -- General VII rule
+        -- If both forms end with 'e' then we check if the stronger
+        -- form of nominative equals the given genitive. In this case
+        -- there is reason to believe that type VII applies.
+        -- We additionally require that both forms are different.
+        -- TODO: this is not always ortographically visible: makse -> `makse
+        <_ + "e", _ + "e"> =>
+            let
+                stronger = stronger_noun (init link) ;
+                noChange = pbool2bool (Predef.eqStr link lingi) ;
+                equal = pbool2bool (Predef.eqStr stronger reegl)
+            in case <noChange, equal> of {
+                <False, True> => hjk_type_VII_touge2 link lingi ;
+                            _ => hjk_type2 link i
+            } ;
+
+
+        -- Some commented out experiments follow
+        --improved total count a little, but introduced new errors
+        --not recommended, not stable and productive word class
+        --<_ + "i", _ + "e">  => dMeri link lingi ;
+
+        --introduced a couple of errors, "aine" recognized as "kõne"
         --<_ + "ne", _ + "ne">  => hjk_type_III_ratsu link ;
 
-        --heuristics to catch palk:palga but not maakas:maaka (for longer words, same with more ?s)
-        --didn't work, don't try this
-        --<? + ? + #c, ? + ? + #c + #v> => hjk_type_IVb_audit link i ; 
+        -- Selecting the correct vowel for IVa_audit.
+        -- visin/visina, pidžin/pidžini
+        -- TODO: we could cover more cases here, e.g. tudeng/tudengi
+        <_ + #c + "in", _ + #c + "in" + #v> =>
+            case (syl_type link) of {
+                S2 => hjk_type_IVb_audit link i ;
+                 _ => hjk_type2 link i
+            } ;
+
+        -- catch all calls hjk_type with the correct stem vowel
         _ => hjk_type2 link i
       } ;
 
   nForms3 : (_,_,_ : Str) -> NForms = \tukk,tuku,tukku ->
     let u = last tuku ;
     in  case <tukk,tuku,tukku> of {
-      --cases handled reliabl(ish) by 1- and 2-arg opers
-      <_+"nd",_,_> => hjk_type tukk ;
-      <_+"el",_,_> => nForms2 tukk tuku ;
-      <_+"er",_,_> => nForms2 tukk tuku ;
+
+      -- koi/koi/koid
+      <_ + #v + #v, _ + #v + #v, _ + #v + #v + "d"> => hjk_type_I_koi tukk ;
+
+      -- ema/ema/ema
+      <_ + #v, _ + #v, _ + #v> => hjk_type_II_ema tukk ;
 
       --distinguish between hammas and maakas
       <_+"as",_+"a",_+"ast"> => dHammas tukk tuku ;
@@ -393,7 +432,23 @@ oper
       <_ + "ik", _ + "iku", _ + "ikku"> => hjk_type_VI_imelik tukk ; --imelik:_:imelikku caught here
 
       <_ + "ud", _ + "u", _ + "ut"> => nForms2 tukk tuku ;  -- -nud/-tud participles are not like 'voolik'
-      <_ + #c, _ + #v, _ + #v + "t"> => hjk_type_IVb_audit tukk u ;  --voolik:_:voolikut caught here
+
+      -- cases handled reliabl(ish) by 1- and 2-arg opers
+      <_ + ("nd"|"el"|"er"), _, _> => nForms2 tukk tuku ;
+
+      -- Type VI (sg gen and sg part end with a vowel)
+      -- Note that we use the sg part as the argument for the constructor
+      -- because it's more informative than sg nom, compare:
+      -- link/lingi/linki
+      -- kabinet/kabineti/kabinetti
+      -- TODO: check that the genitive is actually weaker
+      -- TODO: distinguish between the subtypes of VI
+      -- TODO: do this also in nForms2
+      <_ + #c, _ + #v, _ + #v> => hjk_type_VI_link2 (init tukku) u ;
+
+      -- voolik/vooliku/voolikut
+      <_ + #c, _ + #v, _ + #v + "t"> => hjk_type_IVb_audit tukk u ;
+
       _ => nForms2 tukk tuku 
     } ;
 
