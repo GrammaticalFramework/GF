@@ -52,7 +52,7 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 	-- IVa additionally needs the stem vowel.
 	hjk_type_IVb_audit,
 	hjk_type_IVb_audit1 : Str -> Str -> NForms ;
-	
+
 	hjk_type_VI_link2 : Str -> Str -> NForms ;
 
 	hjk_type2 : Str -> Str -> NForms ;
@@ -85,6 +85,7 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 		nForms6 x (x+v_g) (x+v_g+"t") (x+v_g+"sse") (x+v_g+"te") (x+v_pl+"id") ;
 
 	-- TODO: clean this up
+	-- 2nd argument is sg gen without the final vowel
 	hjk_type_IVb_audit1 x y =
 		nForms6 x (y + "i") (y+"it") (y+"isse") (y+"ite") (y+"eid") ;
 
@@ -140,6 +141,10 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 		in
 		nForms6 x (f+"e") (f+"t") (f+"esse") (f+"te") (f+"i") ;
 
+	-- Examples:
+	-- siid, link, president, romanss, tendents
+	-- rostbiif, portfell, seersant, impulss
+	-- TODO: remove: never called
 	hjk_type_VI_link x =
 		let
 			x_n : Str = weaker_noun x
@@ -153,6 +158,7 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			-- TODO: think about it
 			e : Str = case i of {
 				"a" => "asid" ; -- pikk/pika -> pikkasid
+				"e" => "i" ; -- sulg/sule -> sulgi
 				_ => "e"
 			}
 		in
@@ -180,11 +186,11 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 		in
 		nForms6 x x_t (x+"t") (x_t+"sse") (x+"te") (x_t+"id") ;
 
-        --Identical to the above, just taking 2 arguments (nom + gen)
-        --There are 67 nouns in test cases where stronger_noun gets it wrong
-        --handles liige:liikme as well
+	--Identical to the above, just taking 2 arguments (nom + gen)
+	--There are 67 nouns in test cases where stronger_noun gets it wrong
+	--handles liige:liikme as well
 	hjk_type_VII_touge2 : (_,_ : Str) -> NForms ;
-	hjk_type_VII_touge2 touge touke  =
+	hjk_type_VII_touge2 touge touke =
 	        let
 	                liikme : Str = case touke of {
 	                        _ + "me" => touke ;
@@ -404,6 +410,7 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			<_, _ + #v + "s", _>
 				=> hjk_type_Va_otsene x ;
 
+			-- TODO: only for adjectives?
 			<_, _ + ("v"|"tav"), _>
 				=> hjk_type_IVb_audit x "a" ;
 
@@ -532,7 +539,7 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			#c + #v + #c + #v => S21 ;
 			#c + #v + #v + #v => S22 ; -- muie, neiu, riie
 			? + ? + ? + ? => S1 ;
-			-- all 5-letters
+			-- at least 5-letters
 			_ + #c + "ia" => S2 ; -- aaria, minia, orgia, kirurgia, nostalgia
 			#v + #c + #c + #v + #v => S1 ; -- armee
 			#c + #v + #c + #v + #v => S1 ; -- depoo
@@ -559,7 +566,7 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			_ + ? + #v + #vv + #c => S1 ; -- -ioos, kruiis
 			#c + #c + #v + #v + #v + #c => S2 ; -- flaier
 			_ + ? + #c + #v + #c + #v => S3 ; -- oluline
-			-- all 6-letters
+			-- at least 6-letters
 			#v + #c + #c + #v + #v + #c => S1 ; -- aplaus
 			#v + #c + #c + #v + #c + #c => S2 ; -- astang, ellips
 			#c + #vv + #c + #v + #v => S23 ; -- muumia, raadio, TODO: exclude 'vaarao'
@@ -570,15 +577,18 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			#v + #c + #v + #c + #v + #v => S1 ; -- agoraa
 			#c + #v + #c + #v + #c + #c => S2 ;
 			#c + #v + #c + #v + #c + #v => S3 ;
-			#v + #c + #v + #c + #c + #v => S3 ; -- yheksa
+			_ + #c + #v + #vv + #c + #v => S2 ; -- koaala
+			_ + #c + #v + #v + #v + #c + #v => S3 ; -- saiake
+			#v + #c + #v + #c + #c + #v => S3 ; -- üheksa
 			#c + #v + #c + #c + #v + #c => S2 ; -- rektor
 			#c + #v + #c + #v + #v + #c => S2 ; -- paleus
 			#c + #v + #v + #c + #v + #c => S2 ; -- meeter, reegel
 			#v + #v + #c + #c + #v + #c => S2 ; -- aastak
 			#v + #c + #c + #c + #v + #c => S2 ; -- andmik
 			#v + #c + #c + #v + #c + #v => S3 ;
+			_ + #v + #v + #v + #c + #v + #v => S1 ; -- meierei
 			_ + #v + #c + #v + #c + #v + #c => S3 ; -- alevik, elanik
-			-- all 7-letters
+			-- at least 7-letters
 			_ + ? + ? + #c + #vv + #c => S1 ; -- double vowel in the last syllable: bensiin, benseen, bensool
 			#c + #v + #v + #c + #c + #v + #c => S2 ; -- jooksik
 			#c + #v + #c + #c + #c + #v + #c => S2 ; -- hurtsik
@@ -605,6 +615,7 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			_ + #v + #v + #c + #v + #c + #c + #v + #c => S3 ; -- ainestik
 			_ + #c + #c + #v + #c + #c + #v + #c + #c => S3 ; -- ampersand
 			_ + #c + #v + #c + #v + #c + #c => S1 ; -- dividend
+			_ + #v + #vv => S1 ; -- buržuaa
 			_ + #v + #c + #c + #c + #v + #v => S1 ; -- displei
 			_ + #c + #v + #c + #c + #v + #v => S1 ; -- politsei
 			     _ + #c + #v + #c + #v + #v => S1 ; -- defilee, kompanii
