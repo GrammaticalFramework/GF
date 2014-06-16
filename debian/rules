@@ -4,18 +4,22 @@
 	+dh $@
 
 override_dh_auto_build:
-	cabal build
+	LD_LIBRARY_PATH=$(CURDIR)/src/runtime/c/.libs cabal build
 
 override_dh_auto_clean:
 	rm -fr dist/build
+	-cd src/runtime/c && make clean
 
 override_dh_auto_configure:
+	cd src/runtime/c && ./setup.sh configure --prefix=/usr
+	cd src/runtime/c && ./setup.sh build
 	cabal update
 	cabal install --only-dependencies
-	cabal configure --prefix=/usr -fserver
+	cabal configure --prefix=/usr -fserver -fc-runtime --extra-lib-dirs=$(CURDIR)/src/runtime/c/.libs --extra-include-dirs=$(CURDIR)/src/runtime/c
 
 override_dh_auto_install:
-	cabal copy --destdir=$(CURDIR)/debian/gf
+	LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(CURDIR)/src/runtime/c/.libs cabal copy --destdir=$(CURDIR)/debian/gf
+	cd src/runtime/c && ./setup.sh copy prefix=$(CURDIR)/debian/gf/usr
 
 override_dh_auto_test:
 ifneq (nocheck,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
