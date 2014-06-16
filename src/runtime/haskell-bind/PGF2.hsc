@@ -76,6 +76,7 @@ languages p =
                    do fptr <- wrapMapItorCallback (getLanguages ref)
                       (#poke GuMapItor, fn) itor fptr
                       pgf_iter_languages (pgf p) itor nullPtr
+                      freeHaskellFunPtr fptr
        readIORef ref
   where
     getLanguages :: IORef (Map.Map String Concr) -> MapItorCallback
@@ -171,6 +172,7 @@ lookupMorpho (Concr concr master) sent = unsafePerformIO $
                            (#poke PgfMorphoCallback, callback) cback fptr
                            withCString sent $ \c_sent ->
                              pgf_lookup_morpho concr c_sent cback nullPtr
+                           freeHaskellFunPtr fptr
      readIORef ref
 
 fullFormLexicon :: Concr -> [(String, [MorphoAnalysis])]
