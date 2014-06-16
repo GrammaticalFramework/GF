@@ -19176,12 +19176,12 @@ lin enologist_N = variants {} ; -- status=guess
 lin enology_N = variants {} ; -- status=guess
 lin enophile_N = variants {} ; -- status=guess
 lin enormity_N = mkN "ofantlighet" ; -- comment=8
-lin enormous_A = mkA "enorm" ; -- comment=5
-lin enormously_Adv = variants{} ; --
+lin enormous_A = mkA "enorm" | mkA "väldig" ; -- comment=5
+lin enormously_Adv = mkAdv "väldigt" | mkAdv "enormt" ;
 lin enormousness_N = variants {} ; -- status=guess
 lin enosis_N = variants {} ; -- status=guess
-lin enough_A = mkA "tillräcklig" ; -- comment=2
-lin enough_Adv = mkAdv "tillräckligt" ;
+lin enough_A = mkA "tillräcklig" | invarA "lagom" ; ---- lagom = just enough
+lin enough_Adv = mkAdv "tillräckligt" | mkAdv "lagom" ; ---- it is enough = det räcker
 lin enough_N = variants {} ; -- status=guess
 lin enough_Predet = M.mkPredet "tillräckligt" "tillräckligt" "tillräckligt" ;
 lin enplane_V = variants {} ; -- status=guess
@@ -36082,10 +36082,10 @@ lin modeller_N = variants {} ; -- status=guess
 lin modelling_N = variants {} ; -- status=guess
 lin modem_N = mkN "modem" neutrum | mkN "modem" neutrum ; -- SaldoWN
 lin modena_PN = variants {} ; -- status=guess
-lin moderate_A = mkA "måttlig" ; -- comment=15
+lin moderate_A = mkA "måttlig" | invarA "lagom" ; -- comment=15
 lin moderate_N = mkN "moderat" "moderater" ; -- comment=2
 lin moderate_V = mkV "modererar" ; -- comment=7
-lin moderate_V2 = variants {} ; -- status=guess
+lin moderate_V2 = mkV2 "moderera" ;
 lin moderation_N = mkN "måtta" ; -- status=guess
 lin moderationism_N = variants {} ; -- status=guess
 lin moderationist_N = variants {} ; -- status=guess
