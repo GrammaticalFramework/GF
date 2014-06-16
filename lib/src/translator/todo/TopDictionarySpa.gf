@@ -1,6 +1,6 @@
 concrete TopDictionarySpa of TopDictionary = CatSpa
 ** open ParadigmsSpa, MorphoSpa, IrregSpa, (L=LexiconSpa), (S=StructuralSpa), (E = ExtraSpa), Prelude in {
----- checked by IL till science_N in the BNC order
+---- checked by IL till shape_N in the BNC order
 oper  mkInterj : Str -> Interj 
     = \s -> lin Interj (ss s) ;
 oper  mkDet : Str -> Det = \s -> lin Det {s,sp 
@@ -8,6 +8,7 @@ oper  mkDet : Str -> Det = \s -> lin Det {s,sp
 oper  mkConj : Str -> Conj 
     = \s -> lin Conj {s1 = [] ; s2 = s ; n = Pl} ;
 oper optProDrop : Pron -> Pron = \p -> p | E.ProDrop p ;
+oper mkSubj : Str -> Subj = \s -> ss s ** {m = Conjunct ; lock_Subj = <>} ;
 
 lin of_Prep = ParadigmsSpa.genitive ;
 lin and_Conj = S.and_Conj ;
@@ -1154,634 +1155,651 @@ lin technology_N = mkN "tecnología" ;
 lin style_N = mkN "estilo" ;
 lin feeling_N = mkN "sentimiento" | mkN "emoción" feminine ;
 lin science_N = L.science_N ;
-lin relate_V2 = variants{} ; -- 
-lin relate_V = variants{} ; -- 
-lin doubt_N = mkN "duda" | mkN "incertidumbre" feminine ; -- status=guess
+lin relate_V2 = mkV2 (mkV "relacionar") with_Prep ;
+lin relate_V = mkV "relacionar" ;
+lin doubt_N = mkN "duda" | mkN "incertidumbre" feminine ;
 lin horse_N = L.horse_N ;
-lin force_VS = mkVS (forzar_V) ; -- status=guess
-lin force_V2V = mkV2V (forzar_V) ; -- status=guess
-lin force_V2 = mkV2 (forzar_V) ; -- status=guess
-lin force_V = forzar_V ; -- status=guess
-lin answer_N = mkN "contestación" feminine ; -- status=guess
-lin compare_V = mkV "comparar" ; -- status=guess
-lin suffer_V2 = mkV2 (mkV "empeorar") ; -- status=guess
-lin suffer_V = mkV "empeorar" ; -- status=guess
-lin individual_A = mkA "individual" ; -- status=guess
-lin forward_Adv = mkAdv "adelante" | mkAdv "avante" ; -- status=guess
-lin announce_VS = mkVS (mkV "anunciar") ; -- status=guess
-lin announce_V2 = mkV2 (mkV "anunciar") ; -- status=guess
-lin userMasc_N = variants{} ; -- 
-lin fund_N = mkN "fondo" ; -- status=guess
-lin character_2_N = variants{} ; -- 
-lin character_1_N = variants{} ; -- 
-lin risk_N = mkN "riesgo" ; -- status=guess
-lin normal_A = mkA "normal" ; -- status=guess
-lin nor_Conj = mkConj "ni" ; -- status=guess
+lin force_VS = mkVS forzar_V ;
+lin force_V2V = mkV2V (forzar_V) ;
+lin force_V2 = mkV2 (forzar_V) ;
+lin force_V = forzar_V ;
+lin answer_N = mkN "respuesta" ;
+lin compare_V = mkV "comparar" ;
+lin suffer_V2 = mkV2 (mkV "sufrir") ;
+lin suffer_V = mkV "sufrir" ;
+lin individual_A = mkA "individual" ;
+lin forward_Adv = mkAdv "adelante" ;
+lin announce_VS = mkVS (mkV "anunciar") ; 
+lin announce_V2 = mkV2 (mkV "anunciar") ;
+lin userMasc_N = mkN "usuario" ;
+lin fund_N = mkN "fondo" ;
+lin character_2_N = mkN "personaje" ;
+lin character_1_N = mkN "carácter" ;
+lin risk_N = mkN "riesgo" ; 
+lin normal_A = mkA "normal" ;
+lin nor_Conj = mkConj "ni" ; 
 lin dog_N = L.dog_N ;
-lin obtain_V2 = mkV2 (obtener_V) ; -- status=guess
-lin obtain_V = obtener_V ; -- status=guess
-lin quickly_Adv = variants{} ; -- 
-lin army_N = mkN "multitud" feminine ; -- status=guess
-lin indicate_VS = mkVS (mkV "indicar") ; -- status=guess
-lin indicate_V2 = mkV2 (mkV "indicar") ; -- status=guess
-lin forget_VS = mkVS (mkV "olvídalo") ; -- status=guess
+lin obtain_V2 = mkV2 (obtener_V) ;
+lin obtain_V = obtener_V ;
+lin quickly_Adv = mkAdv "rápidamente" ;
+lin army_N = mkN "ejército" ;
+lin indicate_VS = mkVS (mkV "indicar") ;
+lin indicate_V2 = mkV2 (mkV "indicar") ;
+lin forget_VS = mkVS (mkV "olvídalo") ;
 lin forget_V2 = L.forget_V2 ;
-lin forget_V = mkV "olvídalo" ; -- status=guess
+lin forget_V = mkV "olvidar" ;
 lin station_N = mkN "estación" feminine ; -- status=guess
-lin glass_N = mkN "vidrio" feminine ; -- status=guess
-lin cup_N = mkN "copa" ; -- status=guess
-lin previous_A = mkA "previo" | mkA "anterior" ; -- status=guess
+lin glass_N = mkN "vidrio" ;
+lin cup_N = mkN "copa" ;
+lin previous_A = mkA "previo" | mkA "anterior" ; 
 lin husband_N = L.husband_N ;
-lin recently_Adv = variants{} ; -- 
-lin publish_V2 = mkV2 (mkV "publicar") | mkV2 (mkV "divulgar") ; -- status=guess
-lin publish_V = mkV "publicar" | mkV "divulgar" ; -- status=guess
-lin serious_A = mkA "serio" ; -- status=guess
-lin anyway_Adv = mkAdv "en fin" | mkAdv "de todos modos" ; -- status=guess
-lin visit_V2 = mkV2 (mkV "visitar") ; -- status=guess
-lin visit_V = mkV "visitar" ; -- status=guess
-lin capital_N = mkN "capital" masculine ; -- status=guess
-lin capital_3_N = variants{} ; -- 
-lin capital_2_N = variants{} ; -- 
-lin capital_1_N = variants{} ; -- 
-lin either_Det = mkDet "cada" ; -- status=guess
-lin note_N = mkN "nota" ; -- status=guess
-lin note_3_N = variants{} ; -- 
-lin note_2_N = variants{} ; -- 
-lin note_1_N = variants{} ; -- 
-lin season_N = mkN "temporada" ; -- status=guess
-lin argument_N = mkN "argumento" ; -- status=guess
-lin listen_V = mkV "escuchar" ; -- status=guess
-lin show_N = mkN "programa" masculine ; -- status=guess
-lin responsibility_N = mkN "responsabilidad" feminine ; -- status=guess
-lin significant_A = mkA "significativo" ; -- status=guess
-lin deal_N = mkN "acuerdo" ; -- status=guess
-lin prime_A = mkA "primo" | mkA "primoroso" | mkA "excelente" ; -- status=guess
-lin economy_N = mkN "economía" ; -- status=guess
-lin economy_2_N = variants{} ; -- 
-lin economy_1_N = variants{} ; -- 
-lin element_N = mkN "elemento" feminine ; -- status=guess
-lin finish_V2 = mkV2 (mkV "terminar") ; -- status=guess
-lin finish_V = mkV "terminar" ; -- status=guess
-lin duty_N = mkN "arancel" masculine ; -- status=guess
+lin recently_Adv = mkAdv "recién" | mkAdv "recientemente" ;
+lin publish_V2 = mkV2 (mkV "publicar") ;
+lin publish_V = mkV "publicar" ;
+lin serious_A = mkA "serio" ;
+lin anyway_Adv = mkAdv "de todos modos" |  mkAdv "en fin" ;
+lin visit_V2 = mkV2 (mkV "visitar") ;
+lin visit_V = mkV "visitar" ;
+lin capital_N = mkN "capital" masculine ;
+lin capital_3_N = mkN "mayúscula" ;
+lin capital_2_N = mkN "capital" masculine ;
+lin capital_1_N = mkN "capital" feminine ;
+lin either_Det = mkDet "cualquiera de los dos" ;
+lin note_N = mkN "nota" ;
+lin note_3_N = mkN "nota" ;
+lin note_2_N = mkN "nota" ;
+lin note_1_N = mkN "apunte" ;
+lin season_N = mkN "temporada" | mkN "estación" ;
+lin argument_N = mkN "argumento" ;
+lin listen_V = mkV "escuchar" ;
+lin show_N = mkN "programa" masculine ;
+lin responsibility_N = mkN "responsabilidad" feminine ;
+lin significant_A = mkA "significativo" ;
+lin deal_N = mkN "acuerdo" ;
+lin prime_A = mkA "primo" | mkA "primoroso" | mkA "excelente" ;
+lin economy_N = mkN "economía" ;
+lin economy_2_N = mkN "economía" ;
+lin economy_1_N = mkN "economía" ;
+lin element_N = mkN "elemento" ;
+lin finish_V2 = mkV2 (mkV "terminar") | mkV2 (mkV "acabar") ;
+lin finish_V = mkV "terminar" | mkV "acabar" ;
+lin duty_N = mkN "obligación" feminine | mkN "deber" ;
 lin fight_V2 = L.fight_V2 ;
-lin fight_V = mkV "pelear" | mkV "luchar" ; -- status=guess
-lin train_V2V = mkV2V (mkV "entrenar") ; -- status=guess
-lin train_V2 = mkV2 (mkV "entrenar") ; -- status=guess
-lin train_V = mkV "entrenar" ; -- status=guess
-lin maintain_VS = mkVS (mantener_V) ; -- status=guess
-lin maintain_V2 = mkV2 (mantener_V) ; -- status=guess
-lin maintain_V = mantener_V ; -- status=guess
-lin attempt_N = mkN "atentado" ; -- status=guess
+lin fight_V = mkV "pelear" | mkV "luchar" ; 
+lin train_V2V = mkV2V (mkV "entrenar") ; 
+lin train_V2 = mkV2 (mkV "entrenar") ;
+lin train_V = mkV "entrenar" ; 
+lin maintain_VS = mkVS (mantener_V) ;
+lin maintain_V2 = mkV2 (mantener_V) ;
+lin maintain_V = mantener_V ;
+lin attempt_N = mkN "intento" ;
+lin attempt_1_N = mkN "intento" ;
+lin attempt_2_N = mkN "atentado" ; 
 lin leg_N = L.leg_N ;
-lin investment_N = mkN "inversión" feminine ; -- status=guess
-lin save_V2 = mkV2 (mkV "ahorrar") ; -- status=guess
-lin save_V = mkV "ahorrar" ; -- status=guess
-lin throughout_Prep = variants{} ; -- 
-lin design_V2 = mkV2 (mkV "diseñar") ; -- status=guess
-lin design_V = mkV "diseñar" ; -- status=guess
-lin suddenly_Adv = variants{} ; -- 
-lin brother_N = mkN "cuñado" ; -- status=guess
-lin improve_V2 = mkV2 (mkV "mejorar") ; -- status=guess
-lin improve_V = mkV "mejorar" ; -- status=guess
-lin avoid_VV = mkVV (mkV "evitar") ; -- status=guess
-lin avoid_V2 = mkV2 (mkV "evitar") ; -- status=guess
+lin investment_N = mkN "inversión" feminine ;
+lin save_V2 = mkV2 (mkV "ahorrar") ;
+lin save_V = mkV "ahorrar" ;
+lin throughout_Prep = mkPrep "a lo largo de" | mkPrep "durante" ;
+lin design_V2 = mkV2 (mkV "diseñar") ;
+lin design_V = mkV "diseñar" ;
+lin suddenly_Adv = mkAdv "de repente" | mkAdv "súbitamente" ;
+lin brother_N = mkN "hermano" ;
+lin improve_V2 = mkV2 (mkV "mejorar") ;
+lin improve_V = mkV "mejorar" ;
+lin avoid_VV = mkVV (mkV "evitar") ;
+lin avoid_V2 = mkV2 (mkV "evitar") ;
 lin wonder_VQ = L.wonder_VQ ;
-lin wonder_V = mkV "preguntarse" | mkV "ponderar" ; -- status=guess
-lin tend_VV = mkVV (tender_V) ; -- status=guess
-lin tend_V2 = mkV2 (tender_V) ; -- status=guess
-lin title_N = mkN "escritura de propiedad" | mkN "título traslativo de dominio" ; -- status=guess
-lin hotel_N = mkN "hotel" | mkN "albergue" masculine ; -- status=guess
-lin aspect_N = mkN "aspecto" ; -- status=guess
-lin increase_N = variants{} ; -- 
-lin help_N = mkN "ayuda" | mkN "socorro" | mkN "auxilio" ; -- status=guess
-lin industrial_A = mkA "industrial" ; -- status=guess
-lin express_V2 = mkV2 (mkV "expresar") ; -- status=guess
-lin summer_N = mkN "verano" ; -- status=guess
-lin determine_VV = mkVV (mkV "determinar") ; -- status=guess
-lin determine_VS = mkVS (mkV "determinar") ; -- status=guess
-lin determine_V2V = mkV2V (mkV "determinar") ; -- status=guess
-lin determine_V2 = mkV2 (mkV "determinar") ; -- status=guess
-lin determine_V = mkV "determinar" ; -- status=guess
-lin generally_Adv = variants{} ; -- 
-lin daughter_N = mkN "hija" ; -- status=guess
-lin exist_V = mkV "existir" ; -- status=guess
-lin share_V2 = mkV2 (mkV "dividir") ; -- status=guess
-lin share_V = mkV "dividir" ; -- status=guess
+lin wonder_V = mkV "preguntarse" | mkV "ponderar" ;
+lin tend_VV = mkVV (mkV "soler" "suelo") ;
+lin tend_V2 = mkV2 (mkV "cuidar") of_Prep ;
+lin title_N = mkN "título" ;
+lin hotel_N = mkN "hotel" ; -- hostel: mkN "albergue" masculine ;
+lin aspect_N = mkN "aspecto" ; 
+lin increase_N = mkN "incremento" | mkN "aumento" ;
+lin help_N = mkN "ayuda" | mkN "socorro" | mkN "auxilio" ;
+lin industrial_A = mkA "industrial" ;
+lin express_V2 = mkV2 (mkV "expresar") ;
+lin summer_N = mkN "verano" ;
+lin determine_VV = mkVV (mkV "determinar") ;
+lin determine_VS = mkVS (mkV "determinar") ;
+lin determine_V2V = mkV2V (mkV "determinar") ;
+lin determine_V2 = mkV2 (mkV "determinar") ;
+lin determine_V = mkV "determinar" ;
+lin generally_Adv = mkAdv "generalmente" | mkAdv "por lo general" ;
+lin daughter_N = mkN "hija" ;
+lin exist_V = mkV "existir" ;
+lin share_V2 = mkV2 (mkV "dividir") ;
+lin share_1_V2 = mkV2 (mkV "dividir") ;
+lin share_2_V2 = mkV2 (mkV "compartir") ;
+lin share_V = mkV "dividir" ;
 lin baby_N = L.baby_N ;
-lin nearly_Adv = variants{} ; -- 
-lin smile_V = sonreír_V ; -- status=guess
-lin sorry_A = mkA "lo siento" | mkA "pobre" ; -- status=guess
+lin nearly_Adv = mkAdv "casi" ;
+lin smile_V = sonreír_V ;
+lin sorry_A = mkA "lamentable" | mkA "pobre" ;
 lin sea_N = L.sea_N ;
-lin skill_N = mkN "habilidad" feminine | mkN "talento" | mkN "destreza" | mkN "maña" ; -- status=guess
-lin claim_N = mkN "concesión" feminine ; -- status=guess
-lin treat_V2 = mkV2 (mkV "tratar") ; -- status=guess
-lin treat_V = mkV "tratar" ; -- status=guess
-lin remove_V2 = mkV2 (mkV "quitar") | mkV2 (remover_V) ; -- status=guess
-lin remove_V = mkV "quitar" | remover_V ; -- status=guess
-lin concern_N = mkN "preocupación" feminine ; -- status=guess
+lin skill_N = mkN "habilidad" feminine | mkN "talento" | mkN "destreza" | mkN "maña" ;
+lin claim_N = mkN "afirmación" feminine | mkN "reclamación" ; -- mkN "concesión" feminine ;
+lin treat_V2 = mkV2 (mkV "tratar") ;
+lin treat_V = mkV "tratar" ;
+lin remove_V2 = mkV2 (mkV "quitar") | mkV2 (remover_V) ;
+lin remove_V = mkV "quitar" | remover_V ; 
+lin concern_N = mkN "preocupación" feminine ;
 lin university_N = L.university_N ;
-lin left_A = mkA "zurdo" ; -- status=guess
-lin dead_A = mkA "muerto" ; -- status=guess
-lin discussion_N = mkN "discusión" feminine ; -- status=guess
-lin specific_A = mkA "específico" ; -- status=guess
-lin customerMasc_N = variants{} ; -- 
-lin box_N = mkN "boj" masculine ; -- status=guess
-lin outside_Prep = variants{} ; -- 
-lin state_VS = mkVS (mkV "declarar") ; -- status=guess
-lin state_V2 = mkV2 (mkV "declarar") ; -- status=guess
-lin conference_N = mkN "conferencia" ; -- status=guess
-lin whole_N = mkN "totalidad" feminine ; -- status=guess
-lin total_A = mkA "total" ; -- status=guess
-lin profit_N = mkN "ganancia" | mkN "beneficio" ; -- status=guess
-lin division_N = mkN "división" feminine ; -- status=guess
-lin division_3_N = variants{} ; -- 
-lin division_2_N = variants{} ; -- 
-lin division_1_N = variants{} ; -- 
+lin left_A = mkA "izquierdo" ;
+lin dead_A = mkA "muerto" ;
+lin discussion_N = mkN "discusión" feminine ;
+lin specific_A = mkA "específico" ;
+lin customerMasc_N = mkN "cliente" ;
+lin box_N = mkN "caja" masculine ;
+lin outside_Prep = mkPrep "fuera de" ;
+lin state_VS = mkVS (mkV "declarar") ;
+lin state_V2 = mkV2 (mkV "declarar") ;
+lin conference_N = mkN "conferencia" ;
+lin whole_N = mkN "totalidad" feminine ;
+lin total_A = mkA "total" ;
+lin profit_N = mkN "ganancia" | mkN "beneficio" ;
+lin division_N = mkN "división" feminine ;
+lin division_3_N = mkN "división" feminine ;
+lin division_2_N = mkN "división" feminine ;
+lin division_1_N = mkN "división" feminine ; --demarcación/división administrativa ???
 lin throw_V2 = L.throw_V2 ;
-lin throw_V = mkV "tirar" | mkV "echar" | mkV "desechar" ; -- status=guess
-lin procedure_N = mkN "procedimiento" ; -- status=guess
-lin fill_V2 = mkV2 (mkV "llenar") ; -- status=guess
-lin fill_V = mkV "llenar" ; -- status=guess
+lin throw_V = mkV "tirar" | mkV "echar" ;
+lin procedure_N = mkN "procedimiento" ;
+lin fill_V2 = mkV2 (mkV "llenar") ;
+lin fill_V = mkV "llenar" | mkV "llenarse" ;
 lin king_N = L.king_N ;
-lin assume_VS = mkVS (mkV "asumir") ; -- status=guess
-lin assume_V2 = mkV2 (mkV "asumir") ; -- status=guess
-lin image_N = mkN "imagen" feminine ; -- status=guess
+lin assume_VS = mkVS (mkV "asumir") | mkVS suponer_V ;
+lin assume_V2 = mkV2 (mkV "asumir") | mkV2 suponer_V ;
+lin image_N = mkN "imagen" "imágenes" feminine ;
 lin oil_N = L.oil_N ;
-lin obviously_Adv = variants{} ; -- 
-lin unless_Subj = variants{} ; -- 
-lin appropriate_A = mkA "apropiado" ; -- status=guess
-lin circumstance_N = mkN "circunstancia" ; -- status=guess
-lin military_A = mkA "militar" ; -- status=guess
-lin proposal_N = mkN "propuesta" ; -- status=guess
-lin mention_VS = mkVS (mkV "mencionar") ; -- status=guess
-lin mention_V2 = mkV2 (mkV "mencionar") ; -- status=guess
-lin mention_V = mkV "mencionar" ; -- status=guess
-lin client_N = mkN "cliente" masculine ; -- status=guess
-lin sector_N = mkN "sector" masculine ; -- status=guess
-lin direction_N = mkN "dirección" feminine ; -- status=guess
-lin admit_VS = mkVS (mkV (mkV "dejar") "entrar") ; -- status=guess
-lin admit_V2 = mkV2 (mkV (mkV "dejar") "entrar") ; -- status=guess
-lin admit_V = mkV (mkV "dejar") "entrar" ; -- status=guess
-lin though_Adv = mkAdv "no obstante" ; -- status=guess
-lin replace_V2 = mkV2 (mkV "reemplazar") ; -- status=guess
-lin basic_A = mkA "básico" ; -- status=guess
-lin hard_Adv = variants{} ; -- 
-lin instance_N = mkN "caso" ; -- status=guess
-lin sign_N = mkN "símbolo" ; -- status=guess
-lin original_A = mkA "original" ; -- status=guess
-lin successful_A = mkA "exitoso" | mkA "triunfador" ; -- status=guess
-lin okay_Adv = variants{} ; -- 
-lin reflect_V2 = mkV2 (mkV "reflejar") ; -- status=guess
-lin reflect_V = mkV "reflejar" ; -- status=guess
-lin aware_A = mkA "consciente" ; -- status=guess
-lin measure_N = mkN "medición" feminine ; -- status=guess
-lin attitude_N = mkN "actitud" feminine ; -- status=guess
-lin disease_N = mkN "enfermedad" feminine ; -- status=guess
-lin exactly_Adv = variants{} ; -- 
-lin above_Adv = mkAdv "sobre todo" ; -- status=guess
-lin commission_N = mkN "comisión" feminine ; -- status=guess
-lin intend_VV = mkVV (mkV "intentar") ; -- status=guess
-lin beyond_Prep = variants{} ; -- 
-lin seat_N = mkN "asiento" ; -- status=guess
-lin presidentMasc_N = variants{} ; -- 
-lin encourage_V2V = mkV2V (mkV "animar") | mkV2V (alentar_V) ; -- status=guess
-lin encourage_V2 = mkV2 (mkV "animar") | mkV2 (alentar_V) ; -- status=guess
-lin addition_N = mkN "adición" feminine | mkN "añadidura" ; -- status=guess
-lin goal_N = mkN "portería" ; -- status=guess
-lin round_Prep = variants{} ; -- 
-lin miss_V2 = mkV2 (perder_V) ; -- status=guess
-lin miss_V = perder_V ; -- status=guess
-lin popular_A = mkA "popular" ; -- status=guess
-lin affair_N = mkN "amorío" | mkN "aventura" ; -- status=guess
-lin technique_N = mkN "técnica" ; -- status=guess
-lin respect_N = mkN "respeto" ; -- status=guess
-lin drop_V2 = mkV2 (regar_V) | mkV2 (mkV "esparcir") ; -- status=guess
-lin drop_V = regar_V | mkV "esparcir" ; -- status=guess
-lin professional_A = mkA "profesional" ; -- status=guess
-lin less_Det = variants{} ; -- 
-lin once_Subj = variants{} ; -- 
-lin item_N = mkN "ítem" ; -- status=guess
-lin fly_V2 = mkV2 (mkV (mkV "perder") "los estribos") ; -- status=guess
+lin obviously_Adv = mkAdv "óbviamente" ;
+lin unless_Subj = mkSubj "a menos que" ;
+lin appropriate_A = mkA "apropiado" ;
+lin circumstance_N = mkN "circunstancia" ;
+lin military_A = mkA "militar" ;
+lin proposal_N = mkN "propuesta" ;
+lin mention_VS = mkVS (mkV "mencionar") ;
+lin mention_V2 = mkV2 (mkV "mencionar") ;
+lin mention_V = mkV "mencionar" ;
+lin client_N = mkN "cliente" masculine ;
+lin sector_N = mkN "sector" masculine ;
+lin direction_N = mkN "dirección" feminine ;
+lin admit_VS = mkVS (mkV "admitir") ;
+lin admit_V2 = mkV2 (mkV "admitir") | mkV2 (mkV (mkV "dejar") "entrar") ; --- split: allow to enter
+lin admit_V = mkV "admitir" | mkV (mkV "dejar") "entrar" ; --- split: allow to enter
+lin though_Adv = mkAdv "no obstante" ;
+lin replace_V2 = mkV2 (mkV "reemplazar") ;
+lin basic_A = mkA "básico" ;
+lin hard_Adv = mkAdv "arduamente" ;
+lin instance_N = mkN "caso" ;
+lin sign_N = mkN "símbolo" | mkN "signo" | mkN "seña" ; --- split: visible indication ; sign in sign language
+lin original_A = mkA "original" ;
+lin successful_A = mkA "exitoso" | mkA "triunfador" ;
+lin okay_Adv = mkAdv "bien" ; 
+lin reflect_V2 = mkV2 (mkV "reflejar") ;
+lin reflect_V = mkV "reflejar" ;
+lin aware_A = mkA "consciente" ;
+lin measure_N = mkN "medida" feminine ;
+lin attitude_N = mkN "actitud" feminine ;
+lin disease_N = mkN "enfermedad" feminine ;
+lin exactly_Adv = mkAdv "exactamente" ;
+lin above_Adv = mkAdv "sobre" ;
+lin commission_N = mkN "comisión" feminine ;
+lin intend_VV = mkVV (mkV "intentar") ;
+lin beyond_Prep = mkPrep "más allá de" ;
+lin seat_N = mkN "asiento" ;
+lin presidentMasc_N = mkN "presidente" ;
+lin encourage_V2V = mkV2V (mkV "animar") | mkV2V (alentar_V) ;
+lin encourage_V2 = mkV2 (mkV "animar") | mkV2 (alentar_V) ;
+lin addition_N = mkN "adición" feminine | mkN "añadidura" ;
+lin goal_N = mkN "gol" ;
+lin goal_1_N = mkN "meta" ;
+lin goal_2_N = mkN "portería" ;
+lin goal_3_N = mkN "gol" ;
+lin round_Prep = mkPrep "alrededor de" ;
+lin miss_V2 = mkV2 (perder_V) ;
+lin miss_1_V2 = mkV2 perder_V ;
+lin miss_2_V2 = mkV2 (mkV (mkV "echar") "de menos") | mkV2 (mkV "extrañar") ;
+lin miss_3_V2 = mkV2 (mkV "faltar") of_Prep ;
+lin miss_V = perder_V | mkV "faltar" ;
+lin popular_A = mkA "popular" ;
+lin affair_N = mkN "asunto" | mkN "amorío" | mkN "aventura" ; -- split adulterous relationship
+lin technique_N = mkN "técnica" ;
+lin respect_N = mkN "respeto" ;
+lin drop_V2 = mkV2 caer_V | mkV2 (mkV "descender") ;
+lin drop_V = caer_V | (mkV "descender") ;
+lin professional_A = mkA "profesional" ;
+lin less_Det = mkDet "menos" ;
+lin once_Subj = mkSubj "una vez que" ;
+lin item_N = mkN "ítem" ;
+lin fly_V2 = mkV2 L.fly_V | mkV2 (mkV hacer_V "volar") ;
 lin fly_V = L.fly_V ;
-lin reveal_VS = mkVS (mkV "revelar") | mkVS (mkV "propalar") ; -- status=guess
-lin reveal_V2 = mkV2 (mkV "revelar") | mkV2 (mkV "propalar") ; -- status=guess
-lin version_N = mkN "versión" feminine ; -- status=guess
-lin maybe_Adv = mkAdv "es posible" ; -- status=guess
-lin ability_N = mkN "capacidad" feminine ; -- status=guess
-lin operate_V2 = mkV2 (mkV "operar") ; -- status=guess
-lin operate_V = mkV "operar" ; -- status=guess
-lin good_N = mkN "bien" masculine ; -- status=guess
-lin campaign_N = mkN "campaña" ; -- status=guess
+lin reveal_VS = mkVS (mkV "revelar") | mkVS (mkV "propalar") ;
+lin reveal_V2 = mkV2 (mkV "revelar") | mkV2 (mkV "propalar") ;
+lin version_N = mkN "versión" feminine ;
+lin maybe_Adv = mkAdv "quizás" | mkAdv "quizá" ;
+lin ability_N = mkN "capacidad" feminine ;
+lin operate_V2 = mkV2 (mkV "operar") ;
+lin operate_V = mkV "operar" ;
+lin good_N = mkN "bien" masculine ;
+lin campaign_N = mkN "campaña" ;
 lin heavy_A = L.heavy_A ;
-lin advice_N = mkN "aviso" ; -- status=guess
-lin institution_N = mkN "institución" feminine ; -- status=guess
-lin discover_VS = mkVS (descubrir_V) | mkVS (mkV "destapar") ; -- status=guess
-lin discover_V2 = mkV2 (descubrir_V) | mkV2 (mkV "destapar") ; -- status=guess
-lin discover_V = descubrir_V | mkV "destapar" ; -- status=guess
-lin surface_N = mkN "superficie" feminine ; -- status=guess
-lin library_N = mkN "biblioteca" masculine | mkN "librería" ; -- status=guess
-lin pupil_N = mkN "alumno" | mkN "alumna" ; -- status=guess
-lin record_V2 = mkV2 (mkV "registrar") | mkV2 (mkV "anotar") ; -- status=guess
-lin refuse_VV = mkVV (mkV "rehusar") ; -- status=guess
-lin refuse_V2 = mkV2 (mkV "rehusar") ; -- status=guess
-lin refuse_V = mkV "rehusar" ; -- status=guess
-lin prevent_V2 = mkV2 (impedir_V) | mkV2 (prevenir_V) ; -- status=guess
-lin advantage_N = mkN "ventaja" ; -- status=guess
-lin dark_A = mkA "oscuro" ; -- status=guess
-lin teach_V2V = mkV2V (mkV "enseñar") ; -- status=guess
+lin advice_N = mkN "aviso" ;
+lin institution_N = mkN "institución" feminine ;
+lin discover_VS = mkVS (descubrir_V) | mkVS (mkV "destapar") ;
+lin discover_V2 = mkV2 (descubrir_V) | mkV2 (mkV "destapar") ;
+lin discover_V = descubrir_V | mkV "destapar" ;
+lin surface_N = mkN "superficie" feminine ;
+lin library_N = mkN "biblioteca" | mkN "librería" ;
+lin pupil_N = mkN "alumno" | mkN "alumna" ; --- split Masc and Fem
+lin record_V2 = mkV2 (mkV "registrar") | mkV2 (mkV "anotar") ;
+lin refuse_VV = mkVV (mkV "rehusar") ; 
+lin refuse_V2 = mkV2 (mkV "rehusar") ; 
+lin refuse_V = mkV "rehusar" ;
+lin prevent_V2 = mkV2 (impedir_V) | mkV2 (prevenir_V) ;
+lin advantage_N = mkN "ventaja" ;
+lin dark_A = mkA "oscuro" ;
+lin teach_V2V = mkV2V (mkV "enseñar") ;
 lin teach_V2 = L.teach_V2 ;
-lin teach_V = mkV "enseñar" ; -- status=guess
-lin memory_N = mkN "memoria" ; -- status=guess
-lin culture_N = mkN "cultura" masculine ; -- status=guess
+lin teach_V = mkV "enseñar" ;
+lin memory_N = mkN "memoria" | mkN "recuerdo" ;
+lin culture_N = mkN "cultura" ;
 lin blood_N = L.blood_N ;
-lin cost_V2 = mkV2 (costar_V) ; -- status=guess
-lin cost_V = costar_V ; -- status=guess
-lin majority_N = mkN "mayoría" ; -- status=guess
-lin answer_V2 = mkV2 (mkV "responder") | mkV2 (mkV "contestar") ; -- status=guess
-lin answer_V = mkV "responder" | mkV "contestar" ; -- status=guess
-lin variety_N = mkN "variedad" feminine ; -- status=guess
-lin variety_2_N = variants{} ; -- 
-lin variety_1_N = variants{} ; -- 
-lin press_N = mkN "rueda de prensa" ; -- status=guess
-lin depend_V = variants{} ; -- 
-lin bill_N = mkN "pico" feminine ; -- status=guess
-lin competition_N = mkN "competición" feminine ; -- status=guess
-lin ready_A = mkA "preparado" | mkA "listo" ; -- status=guess
-lin general_N = mkN "general" masculine ; -- status=guess
-lin access_N = mkN "código de acceso" ; -- status=guess
+lin cost_V2 = mkV2 (costar_V) ;
+lin cost_V = costar_V ;
+lin majority_N = mkN "mayoría" ;
+lin answer_V2 = mkV2 (mkV "responder") | mkV2 (mkV "contestar") ;
+lin answer_V = mkV "responder" | mkV "contestar" ;
+lin variety_N = mkN "variedad" feminine ;
+lin variety_2_N = mkN "variedad" feminine | mkN "tipo" ;
+lin variety_1_N = mkN "variedad" feminine ;
+lin press_N = mkN "prensa" ;
+lin depend_V = mkV "depender" ;
+lin bill_N = mkN "factura" ;
+lin competition_N = mkN "concurso" | mkN "competición" feminine ;
+lin ready_A = mkA "preparado" | mkA "listo" ;
+lin general_N = mkN "general" masculine ;
+lin access_N = mkN "acceso" ;
 lin hit_V2 = L.hit_V2 ;
-lin hit_V = mkV "simpatizar" ; -- status=guess
+lin hit_V = mkV "golpear" | mkV "pegar" ;
 lin stone_N = L.stone_N ;
-lin useful_A = mkA "útil" ; -- status=guess
-lin extent_N = variants{} ; -- 
-lin employment_N = mkN "agencia de empleo" ; -- status=guess
-lin regard_V2 = variants{} ; -- 
-lin regard_V = variants{} ; -- 
-lin apart_Adv = mkAdv "aparte" ; -- status=guess
-lin present_N = mkN "presente" masculine | mkN "actual" | mkN "ahora" masculine ; -- status=guess
-lin appeal_N = mkN "apelación" feminine ; -- status=guess
-lin text_N = mkN "texto" ; -- status=guess
-lin parliament_N = mkN "parlamento" ; -- status=guess
-lin cause_N = mkN "causa" ; -- status=guess
-lin terms_N = variants{} ; -- 
-lin bar_N = mkN "bar" masculine ; -- status=guess
-lin bar_2_N = variants{} ; -- 
-lin bar_1_N = variants{} ; -- 
-lin attack_N = mkN "ataque" masculine ; -- status=guess
-lin effective_A = mkA "efectivo" | mkA "eficaz" ; -- status=guess
+lin useful_A = mkA "útil" ; 
+lin extent_N = mkN "grado" ;
+lin employment_N = mkN "empleo" ;
+lin regard_V2 = mkV2 (mkV "considerar") ;
+lin regard_V = mkV "considerar" ;
+lin apart_Adv = mkAdv "aparte" ;
+lin present_N = mkN "presente" masculine ;
+lin present_1_N = mkN "regalo" ;
+lin present_2_N = mkN "presente" | mkN "actualidad" feminine ;
+lin appeal_N = mkN "apelación" feminine ;
+lin text_N = mkN "texto" ;
+lin parliament_N = mkN "parlamento" ;
+lin cause_N = mkN "causa" ;
+lin terms_N = mkN "término" ; ---- why plural in abstract syntax?
+lin bar_N = mkN "bar" masculine ;
+lin bar_2_N = mkN "barra" ;
+lin bar_1_N = mkN "bar" ;
+lin attack_N = mkN "ataque" masculine ;
+lin effective_A = mkA "efectivo" | mkA "eficaz" ;
 lin mouth_N = L.mouth_N ;
-lin down_Prep = variants{} ; -- 
-lin result_V = mkV "resultar" ; -- status=guess
+lin down_Prep = mkPrep "por" ;
+lin result_V = mkV "resultar" ;
 lin fish_N = L.fish_N ;
-lin future_A = mkA "futuro" ; -- status=guess
-lin visit_N = mkN "visita" ; -- status=guess
-lin little_Adv = variants{} ; -- 
-lin easily_Adv = variants{} ; -- 
-lin attempt_VV = mkVV (mkV "intentar") | mkVV (mkV (mkV "tratar") "de") ; -- status=guess
-lin attempt_V2 = mkV2 (mkV "intentar") | mkV2 (mkV (mkV "tratar") "de") ; -- status=guess
-lin enable_VS = mkVS (mkV "habilitar") ; -- status=guess
-lin enable_V2V = mkV2V (mkV "habilitar") ; -- status=guess
-lin enable_V2 = mkV2 (mkV "habilitar") ; -- status=guess
-lin trouble_N = mkN "problema" masculine | mkN "pena" ; -- status=guess
-lin traditional_A = mkA "tradicional" ; -- status=guess
-lin payment_N = mkN "pago" ; -- status=guess
-lin best_Adv = variants{} ; -- 
-lin post_N = mkN "poste" | mkN "estaca" ; -- status=guess
-lin county_N = mkN "condado" ; -- status=guess
-lin lady_N = mkN "ama" ; -- status=guess
-lin holiday_N = mkN "día feriado" ; -- status=guess
-lin realize_VS = mkVS (mkV (mkV "darse") "cuenta") | mkVS (mkV "comprender") ; -- status=guess
-lin realize_V2 = mkV2 (mkV (mkV "darse") "cuenta") | mkV2 (mkV "comprender") ; -- status=guess
-lin importance_N = mkN "importancia" ; -- status=guess
+lin future_A = mkA "futuro" ;
+lin visit_N = mkN "visita" ;
+lin little_Adv = mkAdv "poco"  ;
+lin easily_Adv = mkAdv "fácilmente" ;
+lin attempt_VV = mkVV (mkV "intentar") | deVV (mkV "tratar") ;
+lin attempt_V2 = mkV2 (mkV "intentar") | mkV2 (mkV "tratar") of_Prep ;
+lin enable_VS = mkVS (mkV "habilitar") ;
+lin enable_V2V = mkV2V (mkV "habilitar") ;
+lin enable_V2 = mkV2 (mkV "habilitar") ;
+lin trouble_N = mkN "problema" masculine | mkN "pena" ;
+lin traditional_A = mkA "tradicional" ;
+lin payment_N = mkN "pago" ;
+lin best_Adv = mkAdv "mejor" | mkAdv "lo mejor" ;
+lin post_N = mkN "poste" | mkN "estaca" ; --- split
+lin county_N = mkN "condado" ;
+lin lady_N = mkN "ama" ;
+lin holiday_N = mkN "vacación" feminine | mkN "festividad" | mkN "fiesta" ;
+lin realize_VS = mkVS (mkV (mkV "darse") "cuenta") | mkVS (mkV "comprender") ;
+lin realize_V2 = mkV2 (mkV (mkV "darse") "cuenta") | mkV2 (mkV "comprender") ;
+lin importance_N = mkN "importancia" ;
 lin chair_N = L.chair_N ;
-lin facility_N = mkN "facilidad" feminine ; -- status=guess
-lin complete_V2 = mkV2 (mkV "terminar") ; -- status=guess
-lin complete_V = mkV "terminar" ; -- status=guess
-lin article_N = mkN "artículo" ; -- status=guess
-lin object_N = mkN "complemento" | mkN "objeto" ; -- status=guess
-lin context_N = mkN "contexto" | mkN "marco" ; -- status=guess
-lin survey_N = mkN "encuesta" ; -- status=guess
-lin notice_VS = mkVS (mkV (mkV "darse") "cuenta") ; -- status=guess
-lin notice_V2 = mkV2 (mkV (mkV "darse") "cuenta") ; -- status=guess
-lin complete_A = mkA "completo" ; -- status=guess
-lin turn_N = mkN "turno" ; -- status=guess
-lin direct_A = mkA "directo" ; -- status=guess
-lin immediately_Adv = variants{} ; -- 
-lin collection_N = mkN "recogida" | mkN "recolección" feminine ; -- status=guess
-lin reference_N = mkN "referencia" ; -- status=guess
-lin card_N = mkN "carta" | mkN "tarjeta" ; -- status=guess
-lin interesting_A = mkA "interesante" ; -- status=guess
-lin considerable_A = mkA "considerable" ; -- status=guess
+lin facility_N = mkN "facilidad" feminine ;
+lin complete_V2 = mkV2 (mkV "terminar") | mkV2 (mkV "cumplir");
+lin complete_V = mkV "terminar" | mkV "cumplir" ;
+lin article_N = mkN "artículo" ;
+lin object_N =  mkN "objeto" | mkN "complemento" ;
+lin context_N = mkN "contexto" | mkN "marco" ;
+lin survey_N = mkN "encuesta" ;
+lin notice_VS = mkVS (mkV "notar") | mkVS (mkV (mkV "darse") "cuenta") ;
+lin notice_V2 = mkV2 (mkV "notar") | mkV2 (mkV (mkV "darse") "cuenta") ; -- status=guess
+lin complete_A = mkA "completo" ;
+lin turn_N = mkN "turno" ;
+lin direct_A = mkA "directo" ;
+lin immediately_Adv = mkAdv "inmediatamente" ;
+lin collection_N = mkN "recogida" | mkN "recolección" feminine ;
+lin reference_N = mkN "referencia" ;
+lin card_N = mkN "carta" | mkN "tarjeta" ;
+lin interesting_A = mkA "interesante" ;
+lin considerable_A = mkA "considerable" ;
 lin television_N = L.television_N ;
-lin extend_V2 = mkV2 (extender_V) | mkV2 (mkV "ampliar") ; -- status=guess
-lin extend_V = extender_V | mkV "ampliar" ; -- status=guess
-lin communication_N = mkN "comunicación" feminine ; -- status=guess
-lin agency_N = mkN "albedrío" | mkN "agency" | mkN "agencia" ; -- status=guess
-lin physical_A = mkA "físico" ; -- status=guess
-lin except_Conj = variants{} ; -- 
-lin check_V2 = mkV2 (mkV "registrarse") ; -- status=guess
-lin check_V = mkV "registrarse" ; -- status=guess
+lin extend_V2 = mkV2 (extender_V) | mkV2 (mkV "ampliar") ;
+lin extend_V = extender_V | mkV "ampliar" ;
+lin communication_N = mkN "comunicación" feminine ;
+lin agency_N = mkN "agencia" ;
+lin physical_A = mkA "físico" ;
+lin except_Conj = mkConj "excepto" | mkConj "salvo" ;
+lin check_V2 = mkV2 (mkV "comprobar") | mkV2 (mkV "examinar")  | mkV2 (mkV "inspeccionar") ;
+lin check_1_V2 = mkV2 (mkV "comprobar") | mkV2 (mkV "examinar")  | mkV2 (mkV "inspeccionar") ;
+lin check_2_V2 = mkV2 (mkV "cotejar") ;
+lin check_V = mkV "concordar" ; --their stories don't check
 lin sun_N = L.sun_N ;
-lin species_N = mkN "especie" feminine ; -- status=guess
-lin possibility_N = mkN "posibilidad" feminine ; -- status=guess
-lin officialMasc_N = variants{} ; -- 
-lin chairman_N = mkN "presidente" masculine ; -- status=guess
-lin speaker_N = mkN "altavoz" masculine ; -- status=guess
-lin second_N = mkN "segundo" ; -- status=guess
-lin career_N = mkN "carrera" ; -- status=guess
-lin laugh_VS = mkVS (mkV (mkV "reírse") "de") ; -- status=guess
-lin laugh_V2 = mkV2 (mkV (mkV "reírse") "de") ; -- status=guess
+lin species_N = mkN "especie" feminine ;
+lin possibility_N = mkN "posibilidad" feminine ;
+lin officialMasc_N = mkN "oficial" | mkN "funcionario" ;
+lin chairman_N = mkN "presidente" masculine ;
+lin speaker_N = mkN "altavoz" masculine ;
+lin second_N = mkN "segundo" ;
+lin career_N = mkN "carrera" ;
+lin laugh_VS = mkVS (mkV (mkV "reírse") "de") ;
+lin laugh_V2 = mkV2 (mkV (mkV "reírse") "de") ;
 lin laugh_V = L.laugh_V ;
-lin weight_N = mkN "masa" ; -- status=guess
-lin sound_VS = mkVS (mkV "sondear") ; -- status=guess
-lin sound_VA = mkVA (mkV "sondear") ; -- status=guess
-lin sound_V2 = mkV2 (mkV "sondear") ; -- status=guess
-lin sound_V = mkV "sondear" ; -- status=guess
-lin responsible_A = mkA "responsable" ; -- status=guess
-lin base_N = mkN "base" feminine ; -- status=guess
-lin document_N = mkN "documento" ; -- status=guess
-lin solution_N = mkN "solución" feminine ; -- status=guess
-lin return_N = mkN "regresar" | mkN "retornar" | mkN "volver" ; -- status=guess
-lin medical_A = variants{} ; -- 
+lin weight_N = mkN "masa" ;
+lin sound_VS = mkVS (mkV "sondear") ;
+lin sound_VA = mkVA (mkV "sonar" "sueno") ;
+lin sound_V2 = mkV2 (mkV "sondear") ;
+lin sound_V = mkV "sondear" | mkV "sonar" "sueno" ;
+lin responsible_A = mkA "responsable" ;
+lin base_N = mkN "base" feminine ;
+lin document_N = mkN "documento" ;
+lin solution_N = mkN "solución" feminine ;
+lin return_N = mkN "volver" | mkN "regresar" ;
+lin medical_A = mkA "medical" ;
 lin hot_A = L.hot_A ;
-lin recognize_VS = mkVS (reconocer_V) ; -- status=guess
-lin recognize_4_V2 = variants{} ; -- 
-lin recognize_1_V2 = variants{} ; -- 
-lin talk_N = mkN "conversación" feminine ; -- status=guess
-lin budget_N = mkN "presupuesto" ; -- status=guess
+lin recognize_VS = mkVS reconocer_V ; 
+lin recognize_4_V2 = mkV2 reconocer_V ;
+lin recognize_1_V2 = mkV2 reconocer_V ;
+lin talk_N = mkN "conversación" feminine | mkN "charla" ;
+lin budget_N = mkN "presupuesto" ;
 lin river_N = L.river_N ;
-lin fit_V2 = mkV2 (mkV (mkV "hacer") "juego") ; -- status=guess
-lin fit_V = mkV (mkV "hacer") "juego" ; -- status=guess
-lin organization_N = mkN "organización" feminine ; -- status=guess
-lin existing_A = variants{} ; -- 
-lin start_N = mkN "inicio" | mkN "comienzo" ; -- status=guess
-lin push_VS = mkVS (mkV "pujar") ; -- status=guess
-lin push_V2V = mkV2V (mkV "pujar") ; -- status=guess
+lin fit_V2 = mkV2 (mkV "ajustar") ;
+lin fit_1_V2 = mkV2 (mkV "quedar") ;
+lin fit_2_V2 = mkV2 (mkV "ajustar") ;
+lin fit_V = mkV "caber" ;
+lin organization_N = mkN "organización" feminine ;
+lin existing_A = mkA "existente" ;
+lin start_N = mkN "inicio" | mkN "comienzo" ;
+lin push_VS = mkVS (mkV "presionar") ;
+lin push_V2V = mkV2V (mkV "presionar") ;
 lin push_V2 = L.push_V2 ;
-lin push_V = mkV "pujar" ; -- status=guess
-lin tomorrow_Adv = mkAdv "mañana" ; -- status=guess
-lin requirement_N = mkN "exigencia" | mkN "requisito" ; -- status=guess
+lin push_V = mkV "pulsar" ;
+lin tomorrow_Adv = mkAdv "mañana" ;
+lin requirement_N = mkN "exigencia" | mkN "requisito" ;
 lin cold_A = L.cold_A ;
-lin edge_N = mkN "ventaja" ; -- status=guess
-lin opposition_N = variants{} ; -- 
-lin opinion_N = mkN "opinión" feminine ; -- status=guess
-lin drug_N = mkN "drogadicto" | mkN "toxicómano" | mkN "pichicatero" ; -- status=guess
-lin quarter_N = mkN "cora" | mkN "cuarto" ; -- status=guess
-lin option_N = mkN "opción financiera" | mkN "opciones" feminine ; -- status=guess
-lin sign_V2 = mkV2 (mkV (mkV "hablar") "a señas") ; -- status=guess
-lin sign_V = mkV (mkV "hablar") "a señas" ; -- status=guess
-lin worth_Prep = variants{} ; -- 
-lin call_N = mkN "convocatoria" ; -- status=guess
-lin define_V2 = mkV2 (mkV "delimitar") | mkV2 (mkV "demarcar") | mkV2 (mkV "definir") ; -- status=guess
-lin define_V = mkV "delimitar" | mkV "demarcar" | mkV "definir" ; -- status=guess
-lin stock_N = mkN "caldo" ; -- status=guess
-lin influence_N = mkN "influencia" ; -- status=guess
-lin occasion_N = mkN "ocasión" feminine ; -- status=guess
-lin eventually_Adv = variants{} ; -- 
-lin software_N = mkN "software" | mkN "programa" masculine ; -- status=guess
-lin highly_Adv = variants{} ; -- 
-lin exchange_N = mkN "intercambio" ; -- status=guess
-lin lack_N = mkN "falta" | mkN "carencia" ; -- status=guess
-lin shake_V2 = mkV2 (mkV "agitar") ; -- status=guess
-lin shake_V = mkV "agitar" ; -- status=guess
-lin study_V2 = mkV2 (mkV "estudiar") | mkV2 (mkV "examinar") ; -- status=guess
-lin study_V = mkV "estudiar" | mkV "examinar" ; -- status=guess
-lin concept_N = mkN "concepto" ; -- status=guess
+lin edge_N = mkN "borde" | mkN "arista" ; --- split: arista = edge in graph
+lin opposition_N = mkN "oposición" feminine ;
+lin opinion_N = mkN "opinión" feminine ;
+lin drug_N = mkN "droga" ;
+lin quarter_N = mkN "cuarto" | mkN "barrio" ; --- split: 1/4, latin quarter
+lin option_N = mkN "opción" feminine ;
+lin sign_V2 = mkV2 (mkV "firmar") | mkV2 (mkV (mkV "hablar") "a señas") ; --- split: sign a document; talk in sign language
+lin sign_V = mkV (mkV "hablar") "a señas" ;
+lin worth_Prep = mkPrep "digno de" ;
+lin call_N = mkN "llamada" | mkN "convocatoria" ; --- split: call for papers ; phone call
+lin define_V2 = mkV2 (mkV "definir") | mkV2 (mkV "delimitar") | mkV2 (mkV "demarcar") ;
+lin define_V = mkV "delimitar" | mkV "demarcar" | mkV "definir" ;
+lin stock_N = mkN "reserva" | mkN "caldo" ; --- split
+lin influence_N = mkN "influencia" ;
+lin occasion_N = mkN "ocasión" feminine ;
+lin eventually_Adv = mkAdv "eventualmente" ;
+lin software_N = mkN "programa" masculine | mkN "software" ;
+lin highly_Adv = mkAdv "altamente" | mkAdv "sumamente" ;
+lin exchange_N = mkN "intercambio" ;
+lin lack_N = mkN "falta" | mkN "carencia" ;
+lin shake_V2 = mkV2 (mkV "agitar") | mkV2 (mkV "sacudir") ; --- split
+lin shake_V = mkV "temblar" "tiemblo" ;
+lin study_V2 = mkV2 (mkV "estudiar") | mkV2 (mkV "examinar") ;
+lin study_V = mkV "estudiar" | mkV "examinar" ;
+lin concept_N = mkN "concepto" ;
 lin blue_A = L.blue_A ;
 lin star_N = L.star_N ;
 lin radio_N = L.radio_N ;
-lin arrangement_N = mkN "arreglo" ; -- status=guess
-lin examine_V2 = variants{} ; -- 
+lin arrangement_N = mkN "arreglo" ;
+lin examine_V2 = mkV2 (mkV "examinar") ;
 lin bird_N = L.bird_N ;
 lin green_A = L.green_A ;
-lin band_N = mkN "curita" | mkN " parche curita" | mkN "tirita" | mkN "apósito" | mkN "esparadrapo" ; -- status=guess
-lin sex_N = mkN "sexo" ; -- status=guess
-lin finger_N = mkN "dedo" feminine ; -- status=guess
-lin past_N = mkN "pretérito" ; -- status=guess
-lin independent_A = mkA "independiente" ; -- status=guess
-lin independent_2_A = variants{} ; -- 
-lin independent_1_A = variants{} ; -- 
-lin equipment_N = mkN "equipamiento" | mkN "equipo" ; -- status=guess
-lin north_N = mkN "norte" masculine ; -- status=guess
-lin mind_VS = variants{} ; -- 
-lin mind_V2 = variants{} ; -- 
-lin mind_V = variants{} ; -- 
-lin move_N = mkN "mudanza" ; -- status=guess
-lin message_N = mkN "mensaje" | mkN "recado" ; -- status=guess
-lin fear_N = mkN "miedo" ; -- status=guess
-lin afternoon_N = mkN "tarde" feminine ; -- status=guess
+lin band_N = mkN "banda" | mkN "grupo" ; --- split
+lin sex_N = mkN "sexo" ;
+lin finger_N = mkN "dedo" ;
+lin past_N = mkN "pasado" | mkN "pretérito" ; --- split: history ; past tense
+lin independent_A = mkA "independiente" ;
+lin independent_2_A = mkA "independiente" ;
+lin independent_1_A = mkA "independiente" ;
+lin equipment_N = mkN "equipamiento" | mkN "equipo" ;
+lin north_N = mkN "norte" masculine ;
+lin mind_VS = mkVS (mkV (mkV "preocuparse") "de") ;
+lin mind_V2 = mkV2 (mkV "preocuparse") of_Prep | mkV2 (mkV (mkV "hacer") "caso") of_Prep ; 
+lin mind_V = mkV "preocuparse" ;
+lin move_N = mkN "movimiento" | mkN "paso" | mkN "mudanza" ;
+lin message_N = mkN "mensaje" ;
+lin fear_N = mkN "miedo" ; 
+lin afternoon_N = mkN "tarde" feminine ;
 lin drink_V2 = L.drink_V2 ;
-lin drink_V = mkV "beber" | mkV "tomar" ; -- status=guess
-lin fully_Adv = variants{} ; -- 
-lin race_N = mkN "raza" ; -- status=guess
-lin race_2_N = variants{} ; -- 
-lin race_1_N = variants{} ; -- 
-lin gain_V2 = mkV2 (mkV "ganar") ; -- status=guess
-lin gain_V = mkV "ganar" ; -- status=guess
-lin strategy_N = mkN "estrategia" ; -- status=guess
-lin extra_A = mkA "exceso" ; -- status=guess
-lin scene_N = mkN "escena" ; -- status=guess
-lin slightly_Adv = variants{} ; -- 
-lin kitchen_N = mkN "cocina" masculine ; -- status=guess
-lin speech_N = mkN "discurso" ; -- status=guess
-lin arise_V = surgir_V | mkV "levantarse" ; -- status=guess
-lin network_N = mkN "red" feminine ; -- status=guess
-lin tea_N = mkN "taza de té" ; -- status=guess
+lin drink_V = mkV "beber" | mkV "tomar" ;
+lin fully_Adv = mkAdv "completamente" ;
+lin race_N = mkN "raza" ;
+lin race_2_N = mkN "raza" ;
+lin race_1_N = mkN "carrera" ;
+lin gain_V2 = mkV2 (mkV "ganar") ; 
+lin gain_V = mkV "ganar" ; 
+lin strategy_N = mkN "estrategia" ; 
+lin extra_A = mkA "exceso" ;
+lin scene_N = mkN "escena" ;
+lin slightly_Adv = mkAdv "levemente" | mkAdv "ligeramente" ;
+lin kitchen_N = mkN "cocina" ;
+lin speech_N = mkN "habla" | mkN "discurso" ;
+lin arise_V = surgir_V ; 
+lin network_N = mkN "red" feminine ; 
+lin tea_N = mkN "té" ;
 lin peace_N = L.peace_N ;
-lin failure_N = mkN "fracasado" ; -- status=guess
-lin employee_N = mkN "empleado" | mkN "empleada" ; -- status=guess
-lin ahead_Adv = mkAdv "enfrente de" ; -- status=guess
-lin scale_N = mkN "escala" ; -- status=guess
-lin hardly_Adv = variants{} ; -- 
-lin attend_V2 = mkV2 (mkV "asistir") ; -- status=guess
-lin attend_V = mkV "asistir" ; -- status=guess
-lin shoulder_N = mkN "omóplato" | mkN "escápula" ; -- status=guess
-lin otherwise_Adv = mkAdv "de otra manera" ; -- status=guess
-lin railway_N = mkN "estación de ferrocarril" | mkN "estación" feminine ; -- status=guess
-lin directly_Adv = variants{} ; -- 
-lin supply_N = mkN "abasto" | mkN "abastecimiento" | mkN "suministro" ; -- status=guess
-lin expression_N = mkN "expresión" feminine ; -- status=guess
-lin owner_N = mkN "propietario" | mkN "dueño" | mkN "poseedor" masculine ; -- status=guess
-lin associate_V2 = mkV2 (mkV "asociar") ; -- status=guess
-lin associate_V = mkV "asociar" ; -- status=guess
-lin corner_N = mkN "ángulo" | mkN "rincón" masculine ; -- status=guess
-lin past_A = variants{} ; -- 
-lin match_N = mkN "igual" ; -- status=guess
-lin match_3_N = variants{} ; -- 
-lin match_2_N = variants{} ; -- 
-lin match_1_N = variants{} ; -- 
-lin sport_N = mkN "espécimen raro" ; -- status=guess
-lin status_N = mkN "estado" ; -- status=guess
+lin failure_N = mkN "fracaso" | mkN "fracasado" ;
+lin employee_N = mkN "empleado" | mkN "empleada" ; --- split masc fem
+lin ahead_Adv = mkAdv "enfrente" ;
+lin scale_N = mkN "escala" ;
+lin hardly_Adv = mkAdv "apenas" ;
+lin attend_V2 = mkV2 (mkV "asistir") ;
+lin attend_V = mkV "asistir" ;
+lin shoulder_N = mkN "hombro" ;
+lin otherwise_Adv = mkAdv "de otra manera" | mkAdv "por otra parte" ;
+lin railway_N = mkN "ferrocarril" ;
+lin directly_Adv = mkAdv "directamente" ;
+lin supply_N = mkN "suministro" | mkN "abasto" | mkN "abastecimiento" ;
+lin expression_N = mkN "expresión" feminine ;
+lin owner_N = mkN "propietario" | mkN "dueño" | mkN "poseedor" masculine ;
+lin associate_V2 = mkV2 (mkV "asociar") ;
+lin associate_V = mkV "asociar" ; 
+lin corner_N = mkN "ángulo" | mkN "rincón" masculine ;
+lin past_A = mkA "pasado" ;
+lin match_N = mkN "igual" ;
+lin match_3_N = mkN "igual" ;
+lin match_2_N = mkN "cerilla" | mkN "fósforo" ;
+lin match_1_N = mkN "partido" ;
+lin sport_N = mkN "deporte" ;
+lin status_N = mkN "estado" ;
 lin beautiful_A = L.beautiful_A ;
-lin offer_N = mkN "oferta" ; -- status=guess
-lin marriage_N = mkN "agencia matrimonial" ; -- status=guess
-lin hang_V2 = mkV2 (mkV "aguantar") ; -- status=guess
-lin hang_V = mkV "aguantar" ; -- status=guess
-lin civil_A = mkA "civil" ; -- status=guess
-lin perform_V2 = mkV2 (hacer_V) ; -- status=guess
-lin perform_V = hacer_V ; -- status=guess
-lin sentence_N = mkN "sentencia" | mkN "condena" ; -- status=guess
-lin crime_N = mkN "delito" ; -- status=guess
-lin ball_N = mkN "bala" ; -- status=guess
-lin marry_V2 = mkV2 (mkV "casar") | mkV2 (mkV "casarse") ; -- status=guess
-lin marry_V = mkV "casar" | mkV "casarse" ; -- status=guess
+lin offer_N = mkN "oferta" ;
+lin marriage_N = mkN "matrimonio" ;
+lin hang_V2 = mkV2 (mkV "ahorcar") ; --- split: hang a lamp / hang a criminal
+lin hang_V = mkV "colgar" ;
+lin civil_A = mkA "civil" ;
+lin perform_V2 = mkV2 (hacer_V) | mkV2 (mkV "realizar") | mkV2 (mkV "ejecutar") | mkV2 (mkV "actuar") | mkV2 (mkV "interpretar") ;
+lin perform_V = mkV "actuar" | mkV "interpretar" ;
+lin sentence_N = mkN "frase" | mkN "sentencia" | mkN "condena" ; --- split "this sentence is short" / death sentence
+lin crime_N = mkN "crimen" "crímenes" masculine | mkN "delito" ;
+lin ball_N = mkN "pelota" | mkN "bala" ;
+lin marry_V2 = mkV2 (mkV "casarse") with_Prep | mkV2 (mkV "casar") ;
+lin marry_V = mkV "casar" | mkV "casarse" ;
 lin wind_N = L.wind_N ;
-lin truth_N = mkN "verdad" feminine ; -- status=guess
-lin protect_V2 = mkV2 (proteger_V) ; -- status=guess
-lin protect_V = proteger_V ; -- status=guess
-lin safety_N = mkN "cinturón de seguridad" ; -- status=guess
-lin partner_N = mkN "compañero" ; -- status=guess
-lin completely_Adv = variants{} ; -- 
-lin copy_N = mkN "corrector" masculine ; -- status=guess
-lin balance_N = mkN "equilibrio" ; -- status=guess
+lin truth_N = mkN "verdad" feminine ;
+lin protect_V2 = mkV2 (proteger_V) ;
+lin protect_V = proteger_V ;
+lin safety_N = mkN "seguridad" feminine ;
+lin partner_N = mkN "compañero" ;
+lin completely_Adv = mkAdv "completamente" ;
+lin copy_N = mkN "copia" ;
+lin balance_N = mkN "equilibrio" ;
 lin sister_N = L.sister_N ;
-lin reader_N = mkN "lector" | mkN "lectora" ; -- status=guess
-lin below_Adv = mkAdv "abajo" ; -- status=guess
-lin trial_N = mkN "ensayo y error" | mkN "tanteo" ; -- status=guess
+lin reader_N = mkN "lector" | mkN "lectora" ; --- split masc fem
+lin below_Adv = mkAdv "abajo" ;
+lin trial_N = mkN "ensayo" | mkN "prueba" | mkN "exprimento" | mkN "juicio" | mkN "proceso" ; --- split: trial and error / trial at court
 lin rock_N = L.rock_N ;
-lin damage_N = mkN "daño" ; -- status=guess
-lin adopt_V2 = mkV2 (mkV "adoptar") | mkV2 (mkV "ahijar") ; -- status=guess
+lin damage_N = mkN "daño" ;
+lin adopt_V2 = mkV2 (mkV "adoptar") | mkV2 (mkV "ahijar") ;
 lin newspaper_N = L.newspaper_N ;
-lin meaning_N = mkN "significado" ; -- status=guess
-lin light_A = mkA "con leche" ; -- status=guess
-lin essential_A = mkA "esencial" ; -- status=guess
-lin obvious_A = mkA "obvio" ; -- status=guess
-lin nation_N = mkN "nación" feminine ; -- status=guess
-lin confirm_VS = mkVS (mkV "confirmar") ; -- status=guess
-lin confirm_V2 = mkV2 (mkV "confirmar") ; -- status=guess
-lin south_N = mkN "sur" masculine ; -- status=guess
-lin length_N = mkN "largo" | mkN "eslora" | mkN "longitud" feminine ; -- status=guess
-lin branch_N = mkN "sucursal" feminine ; -- status=guess
-lin deep_A = mkA "profundo" ; -- status=guess
-lin none_NP = variants{} ; -- 
-lin planning_N = variants{} ; -- 
-lin trust_N = mkN "consorcio" ; -- status=guess
-lin working_A = variants{} ; -- 
-lin pain_N = mkN "dolor" masculine ; -- status=guess
-lin studio_N = mkN "estudio" ; -- status=guess
-lin positive_A = mkA "positivo" ; -- status=guess
-lin spirit_N = mkN "alcohol" masculine | mkN "bebida espirituosa" ; -- status=guess
-lin college_N = mkN "facultad" feminine ; -- status=guess
-lin accident_N = mkN "accidente" masculine ; -- status=guess
-lin star_V2 = mkV2 (mkV "estelarizar") | mkV2 (mkV "protagonizar") ; -- status=guess
-lin hope_N = mkN "esperanza" ; -- status=guess
-lin mark_V3 = mkV3 (mkV "marcar") ; -- status=guess
-lin mark_V2 = mkV2 (mkV "marcar") ; -- status=guess
-lin works_N = variants{} ; -- 
-lin league_N = mkN "alianza" | mkN "liga" ; -- status=guess
-lin league_2_N = variants{} ; -- 
-lin league_1_N = variants{} ; -- 
-lin clear_V2 = mkV2 (mkV "carraspear") ; -- status=guess
-lin clear_V = mkV "carraspear" ; -- status=guess
-lin imagine_VS = mkVS (mkV "imaginar") ; -- status=guess
-lin imagine_V2 = mkV2 (mkV "imaginar") ; -- status=guess
-lin imagine_V = mkV "imaginar" ; -- status=guess
-lin through_Adv = variants{}; -- S.through_Prep ;
-lin cash_N = mkN "fuente de ingresos" | mkN "mina" ; -- status=guess
-lin normally_Adv = variants{} ; -- 
-lin play_N = mkN "juego" ; -- status=guess
-lin strength_N = mkN "fuerza" ; -- status=guess
+lin meaning_N = mkN "significado" | mkN "sentido" ;
+lin light_A = mkA "ligero" | mkA "luminoso" | mkA "claro" ; --- split: not heavy / not dark
+lin essential_A = mkA "esencial" ;
+lin obvious_A = mkA "obvio" ;
+lin nation_N = mkN "nación" feminine ;
+lin confirm_VS = mkVS (mkV "confirmar") ;
+lin confirm_V2 = mkV2 (mkV "confirmar") ;
+lin south_N = mkN "sur" masculine ;
+lin length_N = mkN "largo" | mkN "longitud" feminine ;
+lin branch_N = mkN "rama" | mkN "sucursal" feminine ; --- split: branch of a tree / branch of a compan
+lin deep_A = mkA "profundo" | mkA "hondo" ;
+lin none_NP = makeNP "ninguno" Masc Sg ;
+lin planning_N = mkN "plan" ;
+lin trust_N = mkN "confianza" | mkN "consorcio" ; --- split
+lin working_A = mkA "funcional" | mkA "laboral" ; --- split
+lin pain_N = mkN "dolor" ;
+lin studio_N = mkN "estudio" ; 
+lin positive_A = mkA "positivo" ;
+lin spirit_N = mkN "espíritu" | mkN "alcohol" masculine ; --- split
+lin college_N = mkN "universidad" | mkN "college" | mkN "facultad" feminine ;
+lin accident_N = mkN "accidente" masculine ; 
+lin star_V2 = mkV2 (mkV "protagonizar") ;
+lin hope_N = mkN "esperanza" ;
+lin mark_V3 = mkV3 (mkV "marcar") ;
+lin mark_V2 = mkV2 (mkV "marcar") ;
+lin works_N = mkN "trabajo" | mkN "obra" ; 
+lin league_N = mkN "alianza" | mkN "liga" ;
+lin league_2_N = mkN "liga" ;
+lin league_1_N = mkN "asociación" feminine | mkN "comunidad" feminine ;
+lin clear_V2 = mkV2 (mkV "clarificar") | mkV2 (mkV "aclarar") | mkV2 (mkV "despejar") | mkV2 (mkV "desobstruir") ; --- split
+lin clear_V = mkV "aclararse" | mkV "despejarse" ;
+lin imagine_VS = mkVS (mkV "imaginar") ;
+lin imagine_V2 = mkV2 (mkV "imaginar") ;
+lin imagine_V = mkV "imaginar" ;
+lin through_Adv = mkAdv "a través" ;
+lin cash_N = mkN "efectivo" ;
+lin normally_Adv = mkAdv "normalmente" ;
+lin play_N = mkN "juego" ; --- split play in theatre ; "press play" ;
+lin strength_N = mkN "fuerza" ;
 lin train_N = L.train_N ;
-lin travel_V2 = mkV2 (mkV "viajar") ; -- status=guess
+lin travel_V2 = mkV2 (mkV "viajar") ;
 lin travel_V = L.travel_V ;
-lin target_N = mkN "blanco" ; -- status=guess
-lin very_A = variants{} ; -- 
-lin pair_N = mkN "par" masculine ; -- status=guess
-lin male_A = mkA "masculino" | mkA "macho" ; -- status=guess
-lin gas_N = mkN "gas" masculine ; -- status=guess
-lin issue_V2 = mkV2 (mkV "proceder") | mkV2 (crecer_V) | mkV2 (mkV "recibir") | mkV2 (mkV "lucrar") | mkV2 (mkV "natar") ; -- status=guess
-lin issue_V = mkV "proceder" | crecer_V | mkV "recibir" | mkV "lucrar" | mkV "natar" ; -- status=guess
-lin contribution_N = mkN "contribución" | mkN "aporte" masculine ; -- status=guess
-lin complex_A = mkA "complexo" ; -- status=guess
-lin supply_V2 = mkV2 (mkV "suplir") ; -- status=guess
-lin beat_V2 = mkV2 (mkV (mkV "irse") "por los cerros de Úbeda") | mkV2 (mkV (mkV "andarse") "por las ramas") | mkV2 (mkV (mkV "darle") "vueltas al asunto") ; -- status=guess
-lin beat_V = mkV (mkV "irse") "por los cerros de Úbeda" | mkV (mkV "andarse") "por las ramas" | mkV (mkV "darle") "vueltas al asunto" ; -- status=guess
-lin artist_N = mkN "artista" masculine ; -- status=guess
-lin agentMasc_N = variants{} ; -- 
-lin presence_N = mkN "presencia" ; -- status=guess
-lin along_Adv = mkAdv "a lo largo de" ; -- status=guess
-lin environmental_A = mkA "ambiental" ; -- status=guess
-lin strike_V2 = mkV2 (mkV "ponchar") ; -- status=guess
-lin strike_V = mkV "ponchar" ; -- status=guess
-lin contact_N = mkN "contacto" ; -- status=guess
-lin protection_N = mkN "protección" feminine ; -- status=guess
-lin beginning_N = mkN "comienzo" | mkN "principio" | mkN "inicio" ; -- status=guess
-lin demand_VS = mkVS (exigir_V) ; -- status=guess
-lin demand_V2 = mkV2 (exigir_V) ; -- status=guess
-lin media_N = mkN "medios" masculine ; -- status=guess
-lin relevant_A = mkA "pertinente" ; -- status=guess
-lin employ_V2 = mkV2 (mkV "contratar") | mkV2 (mkV "emplear") ; -- status=guess
-lin shoot_V2 = mkV2 (mkV (mkV "tirar") "piedras al propio tejado") ; -- status=guess
-lin shoot_V = mkV (mkV "tirar") "piedras al propio tejado" ; -- status=guess
-lin executive_N = variants{} ; -- 
-lin slowly_Adv = variants{} ; -- 
-lin relatively_Adv = variants{} ; -- 
-lin aid_N = mkN "ayudante" masculine | mkN "asistente" masculine ; -- status=guess
-lin huge_A = mkA "enorme" | mkA "grandote" ; -- status=guess
-lin late_Adv = mkAdv "tarde" ; -- status=guess
-lin speed_N = variants{} ; -- 
-lin review_N = mkN "crítica" ; -- status=guess
-lin test_V2 = mkV2 (probar_V) | mkV2 (mkV "testear") ; -- status=guess
-lin order_VS = mkVS (mkV "ordenar") | mkVS (mkV "mandar") ; -- status=guess
-lin order_V2V = mkV2V (mkV "ordenar") | mkV2V (mkV "mandar") ; -- status=guess
-lin order_V2 = mkV2 (mkV "ordenar") | mkV2 (mkV "mandar") ; -- status=guess
-lin order_V = mkV "ordenar" | mkV "mandar" ; -- status=guess
-lin route_N = mkN "ruta" masculine ; -- status=guess
-lin consequence_N = mkN "consecuencia" ; -- status=guess
-lin telephone_N = mkN "teléfono" ; -- status=guess
-lin release_V2 = mkV2 (mkV "liberar") ; -- status=guess
-lin proportion_N = mkN "proporción" feminine ; -- status=guess
-lin primary_A = mkA "primario" ; -- status=guess
-lin consideration_N = mkN "consideración" feminine ; -- status=guess
-lin reform_N = mkN "reforma" ; -- status=guess
-lin driverMasc_N = mkN "conductor" masculine | mkN "conductora" ; -- status=guess
-lin annual_A = mkA "anual" | mkA "añal" ; -- status=guess
-lin nuclear_A = mkA "nuclear" ; -- status=guess
-lin latter_A = mkA "último" ; -- status=guess
-lin practical_A = mkA "práctico" | mkA "práctica" ; -- status=guess
-lin commercial_A = variants{} ; -- 
-lin rich_A = mkA "rico" ; -- status=guess
-lin emerge_V = emerger_V ; -- status=guess
-lin apparently_Adv = variants{} ; -- 
-lin ring_V = mkV (mkV "sonarle") "a alguien" ; -- status=guess
-lin ring_6_V2 = variants{} ; -- 
-lin ring_4_V2 = variants{} ; -- 
-lin distance_N = mkN "distancia" ; -- status=guess
-lin exercise_N = mkN "ejercicio" ; -- status=guess
-lin key_A = mkA "clave" ; -- status=guess
-lin close_Adv = variants{} ; -- 
+lin target_N = mkN "objetivo" | mkN "blanco" ; --- split: goal, objetive / thing that you shoot
+lin very_A = mkA "mismo" ;
+lin pair_N = mkN "par" masculine | mkN "pareja" ;
+lin male_A = mkA "masculino" | mkA "macho" ;
+lin gas_N = mkN "gas" masculine ;
+lin issue_V2 = mkV2 (mkV "proceder") | mkV2 (mkV "emitir") | mkV2 (mkV "extender") |  mkV2 (crecer_V) | mkV2 (mkV "recibir") | mkV2 (mkV "lucrar") | mkV2 (mkV "natar") ;
+lin issue_V = mkV "proceder" | mkV "emitir" | mkV "extender" | crecer_V | mkV "recibir" | mkV "lucrar" | mkV "natar" ;
+lin contribution_N = mkN "contribución" feminine | mkN "aporte" masculine ;
+lin complex_A = mkA "complicado" | mkA "complexo" ; --- split: not simple / complex function
+lin supply_V2 = mkV2 (mkV "proveer") | mkV2 (mkV "abastecer") |  mkV2 (mkV "suministrar") ; --mkV2 (mkV "suplir") ;
+lin beat_V2 = mkV2 (mkV "golpear") | mkV2 (mkV "pegar") | mkV2 (mkV "batir") | mkV2 (mkV "sacudir") | mkV2 (mkV "vencer") | mkV2 (mkV "derrotar") ; --- split: beat the horse / beat in football
+lin beat_V = mkV "latir" ;
+lin artist_N = mkN "artista" masculine ; ---split: masc fem
+lin agentMasc_N = mkN "agente" masculine ;
+lin presence_N = mkN "presencia" ; 
+lin along_Adv = mkAdv "a lo largo de" ;
+lin environmental_A = mkA "ambiental" ;
+lin strike_V2 = mkV2 (mkV "golpear") | mkV2 (mkV "pegar") | mkV2 (mkV "tachar") | mkV2 (mkV "borrar") ; --- split: hit / cross out text
+lin strike_V = mkV (mkV "hacer") "la huelga" ;
+lin contact_N = mkN "contacto" ;
+lin protection_N = mkN "protección" feminine ;
+lin beginning_N = mkN "comienzo" | mkN "principio" | mkN "inicio" ;
+lin demand_VS = mkVS (exigir_V) ;
+lin demand_V2 = mkV2 (exigir_V) ;
+lin media_N = mkN "medios" masculine ; ---- plurale tantum
+lin relevant_A = mkA "pertinente" ;
+lin employ_V2 = mkV2 (mkV "contratar") | mkV2 (mkV "emplear") ;
+lin shoot_V2 = mkV2 (mkV "tirar") ;
+lin shoot_V = mkV "tirar" ;
+lin executive_N = mkN "ejecutivo" | mkN "director" ;
+lin slowly_Adv = mkAdv "lentamente" ;
+lin relatively_Adv = mkAdv "relativamente" ;
+lin aid_N = mkN "ayuda" | mkN "ayudante" | mkN "asistente" ; --- split: help / person who helps (masc, fem)
+lin huge_A = mkA "enorme" | mkA "grandote" ;
+lin late_Adv = mkAdv "tarde" ;
+lin speed_N = mkN "velocidad" ;
+lin review_N = mkN "crítica" ;
+lin test_V2 = mkV2 (probar_V) | mkV2 (mkV "testear") ;
+lin order_VS = mkVS (mkV "ordenar") | mkVS (mkV "mandar") ;
+lin order_V2V = mkV2V (mkV "ordenar") | mkV2V (mkV "mandar") ;
+lin order_V2 = mkV2 (mkV "ordenar") | mkV2 (mkV "mandar") ;
+lin order_V = mkV "ordenar" | mkV "mandar" ;
+lin route_N = mkN "ruta" ;
+lin consequence_N = mkN "consecuencia" ;
+lin telephone_N = mkN "teléfono" ;
+lin release_V2 = mkV2 (mkV "liberar") ;
+lin proportion_N = mkN "proporción" feminine ;
+lin primary_A = mkA "primario" ;
+lin consideration_N = mkN "consideración" feminine ;
+lin reform_N = mkN "reforma" ;
+lin driverMasc_N = mkN "conductor" ;
+lin annual_A = mkA "anual" | mkA "añal" ;
+lin nuclear_A = mkA "nuclear" ;
+lin latter_A = mkA "último" ;
+lin practical_A = mkA "práctico" ;
+lin commercial_A = mkA "comercial" ;
+lin rich_A = mkA "rico" ; 
+lin emerge_V = emerger_V ;
+lin apparently_Adv = mkAdv "aparentemente" | mkAdv "evidentemente" ;
+lin ring_V = mkV "sonar" ;
+lin ring_6_V2 = mkV2 (mkV "anillar") ;
+lin ring_4_V2 = mkV2 (mkV "llamar") to_Prep ;
+lin distance_N = mkN "distancia" ;
+lin exercise_N = mkN "ejercicio" ;
+lin key_A = mkA "clave" ;
+lin close_Adv = mkAdv "cerca" ;
 lin skin_N = L.skin_N ;
-lin island_N = mkN "isla" ; -- status=guess
-lin separate_A = mkA "separado" ; -- status=guess
-lin aim_VV = mkVV (mkV "apuntar") | mkVV (mkV "pretender") ; -- status=guess
-lin aim_V2 = mkV2 (mkV "apuntar") | mkV2 (mkV "pretender") ; -- status=guess
-lin aim_V = mkV "apuntar" | mkV "pretender" ; -- status=guess
-lin danger_N = mkN "peligro" ; -- status=guess
-lin credit_N = mkN "crédito" ; -- status=guess
-lin usual_A = mkA "usual" ; -- status=guess
-lin link_V2 = variants{} ; -- 
-lin link_V = variants{} ; -- 
-lin candidateMasc_N = variants{} ; -- 
-lin track_N = mkN "pista" ; -- status=guess
-lin safe_A = mkA "sano y salvo" ; -- status=guess
-lin interested_A = mkA "interesado" ; -- status=guess
-lin assessment_N = mkN "evaluación" feminine | mkN "valoración" feminine ; -- status=guess
-lin path_N = mkN "senda" | mkN "sendero" ; -- status=guess
-lin merely_Adv = variants{} ; -- 
-lin plus_Prep = variants{} ; -- 
-lin district_N = mkN "distrito" ; -- status=guess
-lin regular_A = mkA "regular" ; -- status=guess
-lin reaction_N = mkN "reacción" feminine ; -- status=guess
-lin impact_N = mkN "impacto" ; -- status=guess
-lin collect_V2 = mkV2 (mkV "coleccionar") ; -- status=guess
-lin collect_V = mkV "coleccionar" ; -- status=guess
-lin debate_N = mkN "debate" masculine ; -- status=guess
-lin lay_V2 = mkV2 (mkV "ordenar") | mkV2 (mkV "organizar") ; -- status=guess
-lin lay_V = mkV "ordenar" | mkV "organizar" ; -- status=guess
-lin rise_N = mkN "subida" ; -- status=guess
-lin belief_N = mkN "creencia" ; -- status=guess
-lin conclusion_N = mkN "conclusión" feminine ; -- status=guess
-lin shape_N = mkN "forma" ; -- status=guess
+lin island_N = mkN "isla" ;
+lin separate_A = mkA "separado" ;
+lin aim_VV = mkVV (mkV "aspirar") ;
+lin aim_V2 = mkV2 (mkV "apuntar") | mkV2 (mkV "pretender") | mkV2 (mkV "dirigir") ;
+lin aim_V = mkV "apuntar" | mkV "pretender" | mkV "dirigir" ;
+lin danger_N = mkN "peligro" ;
+lin credit_N = mkN "crédito" ;
+lin usual_A = mkA "usual" ;
+lin link_V2 = mkV2 (mkV "enlazar") | mkV2 (mkV "relacionar") ; ---split: connect things / hyperlink
+lin link_V = mkV "enlazar" | mkV "relacionar" ;
+lin candidateMasc_N = mkN "candidato" ;
+lin track_N = mkN "pista" ;
+lin safe_A = mkA "seguro" ;
+lin interested_A = mkA "interesado" ;
+lin assessment_N = mkN "evaluación" feminine | mkN "valoración" feminine ;
+lin path_N = mkN "camino" | mkN "senda" | mkN "sendero" ;
+lin merely_Adv = mkAdv "meramente" ;
+lin plus_Prep = mkPrep "más" ;
+lin district_N = mkN "distrito" ;
+lin regular_A = mkA "regular" ;
+lin reaction_N = mkN "reacción" feminine ;
+lin impact_N = mkN "impacto" ;
+lin collect_V2 = mkV2 (mkV "coleccionar") ;
+lin collect_V = mkV "coleccionar" ;
+lin debate_N = mkN "debate" masculine | mkN "discusión" feminine | mkN "disputa" ;
+lin lay_V2 = mkV2 (mkV "acostar") | mkV2 (mkV "colocar") | mkV2 (mkV "poner") ;
+lin lay_V = mkV "yacer" ;
+lin rise_N = mkN "subida" ;
+lin belief_N = mkN "creencia" ;
+lin conclusion_N = mkN "conclusión" feminine ;
+lin shape_N = mkN "forma" ;
+
 lin vote_N = mkN "voto" ; -- status=guess
 lin aim_N = mkN "objetivo" | mkN "intención" feminine ; -- status=guess
 lin politics_N = mkN "política" ; -- status=guess
@@ -2169,8 +2187,6 @@ lin spring_N = mkN "resorte" | mkN "muelle" masculine ; -- status=guess
 lin birth_N = mkN "nacimiento" feminine ; -- status=guess
 lin ear_N = L.ear_N ;
 lin recognize_VS = mkVS (reconocer_V) ; -- status=guess
-lin recognize_4_V2 = variants{} ; -- 
-lin recognize_1_V2 = variants{} ; -- 
 lin recommend_V2V = mkV2V (recomendar_V) ; -- status=guess
 lin recommend_V2 = mkV2 (recomendar_V) ; -- status=guess
 lin module_N = variants{} ; -- 
