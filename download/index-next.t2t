@@ -8,7 +8,7 @@ Grammatical Framework Download and Installation
 %!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 
-**GF 3.6** has not been released yet.
+**GF 3.6** will probably be released on 19 June 2014.
 
 What's new? See the [Release notes release-3.6.html].
 
@@ -33,7 +33,7 @@ You will probably need to set the ``PATH`` and ``GF_LIB_PATH`` environment
 variables, see Inari's notes on
 [Installing GF on Windows http://www.grammaticalframework.org/~inari/gf-windows.html#toc3].
 
-The ``.deb`` packages work on Ubuntu 12.04, 12.10 and 13.04.
+The ``.deb`` packages work on Ubuntu 12.04, 13.10 and 14.04.
 
 %The ``.pkg`` package works on MacOS X 10.6 (Snow Leopard).
 The Mac OS tar package works on 10.8 (Mountain Lion) and 10.9 (Mavericks).
