@@ -32570,7 +32570,7 @@ lin like_A = mkA "typisk" ; -- comment=7
 lin like_Adv = mkAdv "som" ; -- comment=2
 lin like_N = mkN "liknande" ; -- comment=2
 lin like_Prep = mkPrep "likt" ;
-lin like_Subj = variants{} ; --
+lin like_Subj = mkSubj "såsom" ;
 lin like_V2 = L.like_V2;
 lin like_VS = mkVS (mkV (mkV "tycker") "om") | mkVS (mkV "gillar") ;
 lin like_VV = mkVV (mkV (mkV "tycker") "om") | mkVV (mkV "gillar") ;
@@ -36545,8 +36545,8 @@ lin morula_N = variants {} ; -- status=guess
 lin mosaic_A = variants {} ; -- status=guess
 lin mosaic_N = mkN "mosaik" "mosaiker" ; -- SaldoWN
 lin mosaicism_N = variants {} ; -- status=guess
-lin moscow_1_PN = mkPN "Moskva" neurum;
-lin moscow_2_PN = mkPN "Moscow" neurum;
+lin moscow_1_PN = mkPN "Moskva" neutrum;
+lin moscow_2_PN = mkPN "Moscow" neutrum;
 lin moselle_N = variants {} ; -- status=guess
 lin mosey_V = variants {} ; -- status=guess
 lin moshav_N = variants {} ; -- status=guess
