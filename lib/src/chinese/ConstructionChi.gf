@@ -44,25 +44,9 @@ lin
   intYear i = lin NP i ;
   intMonthday i = lin NP i ;
 
-  monday_Weekday = mkN "星期一" ;
-  tuesday_Weekday = mkN "星期二" ;
-  wednesday_Weekday = mkN "星期三" ;
-  thursday_Weekday = mkN "星期四" ;
-  friday_Weekday = mkN "星期五" ;
-  saturday_Weekday = mkN "星期六" ;
-  sunday_Weekday = mkN "星期日" ;
+lincat Language = PN ;
 
-  january_Month = mkN "一月" ; 
-  february_Month = mkN "二月" ; 
-  march_Month = mkN "三月" ; 
-  april_Month = mkN "四月" ;
-  may_Month = mkN "五月" ;
-  june_Month = mkN "六月" ;
-  july_Month = mkN "七月" ;
-  august_Month = mkN "八月t" ;
-  september_Month = mkN "九月" ;
-  october_Month = mkN "十月" ;
-  november_Month = mkN "十一月" ;
-  december_Month = mkN "十二月" ;
+lin InLanguage l = SyntaxChi.mkAdv (mkPrep "在") (mkNP l) ;
+
 
 }

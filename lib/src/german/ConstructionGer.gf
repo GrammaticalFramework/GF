@@ -49,14 +49,6 @@ lincat
   Month = N ;
   Year = NP ;
 lin
-  monday_Weekday = mkN "Montag" ;
-  tuesday_Weekday = mkN "Dienstag" ;
-  wednesday_Weekday = mkN "Mittwoch" ;
-  thursday_Weekday = mkN "Donnerstag" ;
-  friday_Weekday = mkN "Freitag" ;
-  saturday_Weekday = mkN "Samstag" ;
-  sunday_Weekday = mkN "Sonntag" ;
-
   weekdayPunctualAdv w = SyntaxGer.mkAdv anDat_Prep (mkNP the_Det w) ;         -- am Montag
   weekdayHabitualAdv w = SyntaxGer.mkAdv (mkPrep "" accusative) (mkNP every_Det w) ;            ---- jeden Montag
   weekdayLastAdv w = SyntaxGer.mkAdv (mkPrep "am letzten" dative) (mkNP w)  ; -- letzten Montag ----
@@ -70,18 +62,9 @@ lin
 
   intYear = symb ;
   intMonthday = symb ;
+
+lincat Language = PN ;
+
+lin InLanguage l = SyntaxGer.mkAdv on_Prep (mkNP l) ;
   
-  january_Month = mkN "Januar" ; 
-  february_Month = mkN "Februar" ; 
-  march_Month = mkN "März" ; 
-  april_Month = mkN "April" ;
-  may_Month = mkN "Mai" ;
-  june_Month = mkN "Juni" ;
-  july_Month = mkN "Juli" ;
-  august_Month = mkN "August" ;
-  september_Month = mkN "September" ;
-  october_Month = mkN "Oktober" ;
-  november_Month = mkN "November" ;
-  december_Month = mkN "Dezember" ;
- 
 }

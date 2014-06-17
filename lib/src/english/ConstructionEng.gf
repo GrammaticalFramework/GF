@@ -64,25 +64,9 @@ lin
   intYear = symb ;
   intMonthday = symb ;
 
-  monday_Weekday = mkN "Monday" ;
-  tuesday_Weekday = mkN "Tuesday" ;
-  wednesday_Weekday = mkN "Wednesday" ;
-  thursday_Weekday = mkN "Thursday" ;
-  friday_Weekday = mkN "Friday" ;
-  saturday_Weekday = mkN "Saturday" ;
-  sunday_Weekday = mkN "Sunday" ;
+lincat Language = PN ;
 
-  january_Month = mkN "January" ; 
-  february_Month = mkN "February" ; 
-  march_Month = mkN "March" ; 
-  april_Month = mkN "April" ;
-  may_Month = mkN "May" ;
-  june_Month = mkN "June" ;
-  july_Month = mkN "July" ;
-  august_Month = mkN "August" ;
-  september_Month = mkN "September" ;
-  october_Month = mkN "October" ;
-  november_Month = mkN "November" ;
-  december_Month = mkN "December" ;
+lin InLanguage l = SyntaxEng.mkAdv in_Prep (mkNP l) ;
+
 
 }

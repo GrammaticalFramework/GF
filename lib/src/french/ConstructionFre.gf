@@ -53,14 +53,6 @@ oper
   noPrep : Prep = mkPrep [] ;
 
 lin
-  monday_Weekday = mkN "lundi" ;
-  tuesday_Weekday = mkN "mardi" ;
-  wednesday_Weekday = mkN "mercredi" ;
-  thursday_Weekday = mkN "jeudi" ;
-  friday_Weekday = mkN "vendredi" ;
-  saturday_Weekday = mkN "samedi" ;
-  sunday_Weekday = mkN "dimanche" masculine ;
-
   weekdayPunctualAdv w = lin Adv {s = w.s ! C.Sg} ;         -- lundi
   weekdayHabitualAdv w = SyntaxFre.mkAdv noPrep (mkNP the_Det w) ; -- le lundi
   weekdayLastAdv w = SyntaxFre.mkAdv noPrep (mkNP the_Det (mkCN (mkA "dernier") w)) ; -- le lundi dernier
@@ -75,17 +67,10 @@ lin
   intYear = symb ;
   intMonthday = symb ;
   
-  january_Month = mkN "janvier" ; 
-  february_Month = mkN "février" ; 
-  march_Month = mkN "mars" ; 
-  april_Month = mkN "avril" ;
-  may_Month = mkN "mai" ;
-  june_Month = mkN "juin" ;
-  july_Month = mkN "juillet" ;
-  august_Month = mkN "août" ;
-  september_Month = mkN "septembre" ;
-  october_Month = mkN "octobre" ;
-  november_Month = mkN "novembre" ;
-  december_Month = mkN "décembre" ;
+
+lincat Language = PN ;
+
+lin InLanguage l = SyntaxFre.mkAdv (mkPrep "en") (mkNP l) ;
+
 
 }
