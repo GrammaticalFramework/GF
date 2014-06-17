@@ -1,4 +1,3 @@
-
 import Distribution.Simple
 import Distribution.Simple.LocalBuildInfo
 import Distribution.Simple.BuildPaths
@@ -10,7 +9,7 @@ import Data.List(isPrefixOf,intersect)
 import Data.Maybe(listToMaybe)
 --import System.IO
 import qualified Control.Exception as E
-import System.Cmd
+import System.Process
 import System.FilePath
 import System.Directory
 import System.Process
