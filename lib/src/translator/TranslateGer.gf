@@ -20,6 +20,7 @@ concrete TranslateGer of Translate =
   RelativeGer,
   IdiomGer,
   ConstructionGer,
+  NamesGer,
   DocumentationGer,
 
   ChunkGer,

@@ -24,6 +24,7 @@ concrete TranslateChi of Translate =
   RelativeChi,
   IdiomChi,
   ConstructionChi,
+  NamesChi,
   DocumentationChi,
 
   ChunkChi,
