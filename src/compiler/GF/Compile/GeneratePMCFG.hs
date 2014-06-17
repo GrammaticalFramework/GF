@@ -39,6 +39,7 @@ import Data.Array.Unboxed
 import Control.Monad
 import Control.Monad.Identity
 --import Control.Exception
+--import Debug.Trace(trace)
 
 ----------------------------------------------------------------------
 -- main conversion function
@@ -67,6 +68,7 @@ mapAccumWithKeyM f a m = do let xs = Map.toAscList m
 
 addPMCFG :: Options -> SourceGrammar -> GlobalEnv -> Maybe FilePath -> Ident -> Ident -> SeqSet -> Ident -> Info -> IOE (SeqSet, Info)
 addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L loc term)) mprn Nothing) = do
+--when (verbAtLeast opts Verbose) $ ePutStr ("\n+ "++showIdent id++" ...")
   let pres  = protoFCat gr res val
       pargs = [protoFCat gr (snd $ catSkeleton ty) lincat | ((_,_,ty),(_,_,lincat)) <- zip ctxt cont]
 
@@ -85,7 +87,8 @@ addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont
                        !funs_cnt        = e-s+1
                    in (prods_cnt,funs_cnt)
 
-  when (verbAtLeast opts Verbose) $ ePutStr ("\n+ "++showIdent id ++ " " ++ show (product (map catFactor pargs)))
+  when (verbAtLeast opts Verbose) $
+    ePutStr ("\n+ "++showIdent id++" "++show (product (map catFactor pargs)))
   seqs1 `seq` stats `seq` return ()
   when (verbAtLeast opts Verbose) $ ePutStr (" "++show stats)
   return (seqs1,GF.Grammar.CncFun mty mlin mprn (Just pmcfg))
@@ -146,12 +149,19 @@ floc opath loc id = maybe (L loc id) (\path->L (External path loc) id) opath
 convert opts gr cenv loc term ty@(_,val) pargs =
     case term' of
       Error s -> fail $ render $ ppL loc (text $ "Predef.error: "++s)
-      _ -> return $ runCnvMonad gr (conv term') (pargs,[])
+      _ -> do {-when (verbAtLeast opts Verbose) $
+                ePutStrLn $
+                  "\n"++take 10000 (renderStyle style{mode=OneLineMode}
+                    (text "term:"<+>ppU 0 term $$
+                     text "eta expanded:"<+>ppU 0 eterm $$
+                     text "normalized:"<+>ppU 0 term'))--}
+              return $ runCnvMonad gr (conv term') (pargs,[])
   where
     conv t = convertTerm opts CNil val =<< unfactor t
 
+    eterm = expand ty term
     term' = {-if flag optNewComp opts
-            then-} normalForm cenv loc (expand ty term) -- new evaluator
+            then-} normalForm cenv loc eterm -- new evaluator
             --else term -- old evaluator is invoked from GF.Compile.Optimize
 
 expand (context,val) = mkAbs pars . recordExpand val . flip mkApp args
@@ -175,12 +185,16 @@ recordExpand typ trm =
 unfactor :: Term -> CnvMonad Term
 unfactor t = CM (\gr c -> c (unfac gr t))
   where
-    unfac gr t = 
+    unfac gr t =
       case t of
         T (TTyped ty) [(PV x,u)] -> let u' = unfac gr u
-                                    in V ty [restore x v u' | v <- allparams ty]
+                                        vs = allparams ty
+                                    in --trace ("expand single variable table into "++show (length vs)++" branches.\n"++render (ppU 0 t)) $
+                                       V ty [restore x v u' | v <- vs]
         T (TTyped ty) [(PW  ,u)] -> let u' = unfac gr u
-                                    in V ty [u' | _ <- allparams ty]
+                                        vs = allparams ty
+                                    in --trace ("expand wildcard table into "++show (length vs)++ "branches.\n"++render (ppU 0 t)) $
+                                       V ty [u' | _ <- vs]
         T (TTyped ty) _ -> -- convertTerm doesn't handle these tables
                            ppbug $
                            sep [text "unfactor"<+>ppU 10 t,

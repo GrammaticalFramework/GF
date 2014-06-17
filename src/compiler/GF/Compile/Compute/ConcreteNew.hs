@@ -298,6 +298,7 @@ select env vv =
             --let vs = map (value0 env) ats
             i <- maybeErr "no match" $ findIndex (==v2) vs
             return (ix (gloc env) "select" rs i)
+      (VT _ _ [(PW,Bind b)],_) -> {-trace "eliminate wild card table" $-} b []
       (v1@(VT _ _ cs),v2) ->
                  err (\_->ok2 VS v1 v2) (err bug id . valueMatch env) $
                  match (gloc env) cs v2
