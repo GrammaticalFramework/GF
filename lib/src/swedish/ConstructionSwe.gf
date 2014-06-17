@@ -48,14 +48,6 @@ lincat
   Month = N ;
   Year = NP ;
 lin
-  monday_Weekday = mkN "måndag" ;
-  tuesday_Weekday = mkN "tisdag" ;
-  wednesday_Weekday = mkN "onsdag" ;
-  thursday_Weekday = mkN "torsdag" ;
-  friday_Weekday = mkN "fredag" ;
-  saturday_Weekday = mkN "lördag" ;
-  sunday_Weekday = mkN "söndag" ;
-
   weekdayPunctualAdv w = SyntaxSwe.mkAdv on_Prep (mkNP w) ;         -- på söndag
   weekdayHabitualAdv w = SyntaxSwe.mkAdv on_Prep (mkNP aPl_Det w) ; -- på söndagar
   weekdayLastAdv w = SyntaxSwe.mkAdv in_Prep (mkNP (E.GenNP (mkNP w))) ; -- i söndags
@@ -70,17 +62,10 @@ lin
   intYear = symb ;
   intMonthday = symb ;
   
-  january_Month = mkN "januari" ; 
-  february_Month = mkN "februari" ; 
-  march_Month = mkN "mars" ; 
-  april_Month = mkN "april" ;
-  may_Month = mkN "maj" ;
-  june_Month = mkN "juni" ;
-  july_Month = mkN "juli" ;
-  august_Month = mkN "augusti" ;
-  september_Month = mkN "september" ;
-  october_Month = mkN "oktober" ;
-  november_Month = mkN "november" ;
-  december_Month = mkN "december" ;
+
+lincat Language = PN ;
+
+lin InLanguage l = SyntaxSwe.mkAdv on_Prep (mkNP l) ;
+
 
 }
