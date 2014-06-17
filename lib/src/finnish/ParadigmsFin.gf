@@ -155,6 +155,10 @@ oper
     mkPN : N -> PN      -- any noun made into name
     } ;
 
+-- A special function for foreign names: no grade alternation, no final aspiration.
+
+  foreignPN : Str -> PN ; -- Dieppe-Dieppen
+
 --2 Adjectives
 
 -- Non-comparison one-place adjectives are just like nouns.
@@ -604,6 +608,16 @@ mkVS = overload {
     } ;
 
   mkPN_1 : Str -> PN = \s -> lin PN (snoun2spn (mk1N s)) ;
+
+  foreignPN : Str -> PN = \s -> (lin PN (snoun2spn (nforms2snoun (noun s)))) where {
+    noun : Str -> NForms = \s -> case s of {
+      _ + "i" => dPaatti s (s + "n") ;
+      _ + "e" => dNukke s (s + "n") ;
+      _ + ("a" | "o" | "u" | "y" | "ä" | "ö" | "ü") => dUkko s (s + "n") ;
+      _ => dUnix s
+      }
+    } ;
+     
 
 -- adjectives
 
