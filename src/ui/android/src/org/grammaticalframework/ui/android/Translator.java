@@ -495,7 +495,7 @@ public class Translator {
 		        long t1 = System.currentTimeMillis();
 		        mConcr = mGrammarLoader.getGrammar().getLanguages().get(mLanguage.getConcrete());
 		        mConcr.load(in);
-		        mConcr.addLiteral("Symb", new NercLiteralCallback());
+		        mConcr.addLiteral("PN", new NercLiteralCallback(mGrammarLoader.getGrammar(), mConcr));
 		        long t2 = System.currentTimeMillis();
 		        Log.d(TAG, name + " loaded ("+(t2-t1)+" ms)");
 		    } catch (FileNotFoundException e) {
