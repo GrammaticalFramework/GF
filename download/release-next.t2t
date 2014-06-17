@@ -1,5 +1,5 @@
 GF 3.6 Release Notes
-Not released yet
+June 2014
 
 %!style:../css/style.css
 %!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
@@ -34,12 +34,13 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
   module. The C run-time system supports only the new format. Old PGF files
   can be converted to the new format by loading them in the GF shell and
   writing out a new PGF file with the ``pg -pgf`` command.
-- The PGF run-time library includes some new modules, e.g.
+- The PGF run-time Haskell library includes some new modules, e.g.
  ``PGF.Lexing`` which contains lexing and unlexing functions, and
   ``PGF2``, which is a binding to the C run-time system. The latter is included
   only if GF is configured with ``-fc-runtime``, which is not the default,
   since the C run-time system still has to be compiled and installed
-  separately before installing GF.
+  separately before installing GF. The binary packages for GF 3.6 available
+  from the download page will include C run-time support.
 
 
 ====Bug fixes and minor changes====
@@ -75,28 +76,27 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
 
 ===GF Cloud services===
 
-- There is a preliminary new [Wide Coverage Translation Demo http://cloud.grammaticalframework.org/wc.html] web app. [...] Wide coverage translation is also
-  availble in the Simple Translation Tool.
-- PGF web service API: the ``lookupmorpho`` request has been added. [...]
+- There is a preliminary new [Wide Coverage Translation Demo http://cloud.grammaticalframework.org/wc.html] web app. [...] The same wide coverage translation
+  method has also been added to the
+  [Simple Translation Tool http://cloud.grammaticalframework.org/translator/].
 - PGF web service API:
-  requests like ``parse`` and ``translate`` that parse text input now
-  accept a ``lexer`` parameter to apply a lexer to the input text before
-  parsing. The lexer can be ``text``, ``code`` or ``mixed``.
-- PGF web service API:
-  requests like ``linearize`` and ``translate`` that produce
-  linearizations now accept an ``unlexer`` parameter to apply an unlexer to the
-  linearizations. The unlexer can be ``text``, ``code`` or ``mixed``.
-- The PGF web service API has been extended with following new requests
-  to access the C run-time system:
-  - ``c-parse``, ``c-linearize``, ``c-translate``, ``c-lookupmorpho``,
-    ``c-grammar``. These work in the same way as the corresponding requests
-    without the ``c-`` prefix. Since the ``c-parse`` and ``c-translate`` can
-    produce very many (even infinitely many) results when used with large
-    grammars, there is a ``limit`` parameter to restrict number of results
-    to a given number, e.g. ``limit=10``.
-  - ``c-wordforword``: this works as ``c-translate`` but does a
-    word-for-word lookup to create a (potentially very low quality)
-    translation that can be used if all else fails.
+  - the ``lookupmorpho`` request has been added. [...]
+  - Requests like ``parse`` and ``translate`` that parse text input now
+    accept a ``lexer`` parameter to apply a lexer to the input text before
+    parsing. The lexer can be ``text``, ``code`` or ``mixed``.
+  - Requests like ``linearize`` and ``translate`` that produce
+    linearizations now accept an ``unlexer`` parameter to apply an unlexer to the
+    linearizations. The unlexer can be ``text``, ``code`` or ``mixed``.
+  - Preliminary new requests to access the C run-time system have been added:
+    - ``c-parse``, ``c-linearize``, ``c-translate``, ``c-lookupmorpho``,
+      ``c-grammar``. These work in the same way as the corresponding requests
+      without the ``c-`` prefix. Since the ``c-parse`` and ``c-translate`` can
+      produce very many (even infinitely many) results when used with large
+      ambiguous grammars, using the ``limit`` parameter to restrict number of
+      results, e.g. ``limit=10``, is recommended.
+    - ``c-wordforword``: this works as ``c-translate`` but does a
+      word-for-word lookup to create a (potentially very low quality)
+      translation that can be used if all else fails.
 
 
 --------------------
