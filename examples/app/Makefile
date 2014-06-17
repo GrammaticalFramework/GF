@@ -9,7 +9,7 @@ Phrasebook:
 	cd ../phrasebook ; make forApp ; cd ../app
 
 S=-s
-GFMKT=mkdir -p $(GFODIR) && gf $S -make -literal=Symb -probs=$(PROBSFILE) -gfo-dir $(GFODIR)
+GFMKT=mkdir -p $(GFODIR) && gf $S -make -literal=PN -probs=$(PROBSFILE) -gfo-dir $(GFODIR)
 
 APP=AppEng.pgf AppBul.pgf AppChi.pgf AppGer.pgf AppSwe.pgf AppHin.pgf AppFin.pgf AppFre.pgf AppIta.pgf AppSpa.pgf AppDut.pgf
 
