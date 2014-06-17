@@ -142,7 +142,7 @@ TranslateIta: TranslateIta.pgf
 TranslateSpa: TranslateSpa.pgf
 
 S=-s
-GFMKT=mkdir -p ../translator && gf $S -make -literal=Symb -probs=$(TPROBSFILE) -gfo-dir ../translator
+GFMKT=mkdir -p ../translator && gf $S -make -literal=PN -probs=$(TPROBSFILE) -gfo-dir ../translator
 
 TRANSLATE8=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf
 TRANSLATE10=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf TranslateIta.pgf TranslateSpa.pgf
@@ -214,7 +214,7 @@ ParseFin: ParseFin.pgf
 ParseFre: ParseFre.pgf
 
 S=-s
-GFMKP=mkdir -p ../parse8 && gf $S -make -literal=Symb -probs=$(PROBSFILE) -gfo-dir ../parse8
+GFMKP=mkdir -p ../parse8 && gf $S -make -literal=PN -probs=$(PROBSFILE) -gfo-dir ../parse8
 
 PARSE8=ParseEng.pgf ParseBul.pgf ParseChi.pgf ParseGer.pgf ParseSwe.pgf ParseHin.pgf ParseFin.pgf ParseFre.pgf
 
