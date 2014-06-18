@@ -35,11 +35,14 @@ fun
   n_units_AP    : Card -> CN -> A  -> AP ;  -- x inches long
   n_units_of_NP : Card -> CN -> NP -> NP ;  -- x ounces of this flour
 
+
 -- containers
   bottle_of_CN : NP -> CN ;       -- bottle of beer / flaska öl (Swe)
   cup_of_CN    : NP -> CN ;       -- cup of tea / kupillinen teetä (Fin)
   glass_of_CN  : NP -> CN ;
-  
+
+{- 
+---- postponed  
 -- spatial deixis and motion verbs
 -- verbs like `walk' or `run' can take both: there or to there
 
@@ -54,6 +57,8 @@ fun
   come_there_VP : VP ;      -- X came there / X tuli sinne (Fin)
   come_from_there_VP : VP ; -- X came from there / X tuli sieltä (Fin)
 
+-}
+
 -- time expressions
 
 cat 
@@ -63,8 +68,6 @@ cat
   Year ;
 
 fun
---  weekdayN   : Weekday -> N ; --weekdays are already as nouns in Dict
---  monthN     : Month -> N     --months are already as nouns in Dict
   weekdayPunctualAdv : Weekday -> Adv ;  -- on Monday
   weekdayHabitualAdv : Weekday -> Adv ;  -- on Mondays
   weekdayLastAdv : Weekday -> Adv ;      -- last Monday
@@ -85,6 +88,12 @@ fun
 cat
   Language ;
 fun
-  InLanguage : Language -> Adv ;
+  InLanguage : Language -> Adv ; -- in English, auf englisch, englanniksi, etc
+
+-- coercions to RGL categories
+
+  weekdayN   : Weekday -> N ; 
+  monthN     : Month -> N ;
+  languagePN : Language -> PN ;
 
 }

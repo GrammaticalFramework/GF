@@ -48,5 +48,9 @@ lincat Language = PN ;
 
 lin InLanguage l = SyntaxChi.mkAdv (mkPrep "在") (mkNP l) ;
 
+lin
+  weekdayN w = w ;
+  monthN m = m ;
+  languagePN l = l ;
 
 }
