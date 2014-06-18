@@ -23,7 +23,6 @@ concrete TranslateFin of Translate =
   RelativeFin,
   IdiomFin,
   ConstructionFin,
-  NamesFin,
   DocumentationFin,
 
   ChunkFin,

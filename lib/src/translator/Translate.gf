@@ -23,7 +23,6 @@ abstract Translate =
   Chunk,
 
   Construction,
-  Names,
   Extensions [
     CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
     DirectComplVS, DirectComplVQ, FocusObjS

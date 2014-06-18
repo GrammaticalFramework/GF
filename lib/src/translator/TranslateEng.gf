@@ -28,7 +28,6 @@ concrete TranslateEng of Translate =
   RelativeEng - [IdRP],
   IdiomEng,
   ConstructionEng,
-  NamesEng,
   DocumentationEng,
 
   ChunkEng,
