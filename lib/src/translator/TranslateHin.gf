@@ -20,7 +20,7 @@ concrete TranslateHin of Translate =
   QuestionHin,
   RelativeHin,
   IdiomHin,
---  ConstructionHin,
+  ConstructionHin,
   DocumentationHin,
 
   ChunkHin,

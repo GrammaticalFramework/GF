@@ -3,7 +3,8 @@
 concrete LangHin of Lang = 
   GrammarHin,
   LexiconHin
- , DocumentationHin
+ ,DocumentationHin
+ ,ConstructionHin
   ** {
 
 flags startcat = Phr ; unlexer=unwords ; lexer=words ;
