@@ -3,6 +3,7 @@
 concrete LangBul of Lang = 
   GrammarBul,
   LexiconBul,
+  ConstructionBul,
   DocumentationBul
   ** {
 
