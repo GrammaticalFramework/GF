@@ -25,10 +25,12 @@ repository (darcs or github):
 5. Before the final 'ant debug install', do the following:
 
   cd assets/
-  rm *
+  rm *pgf*
   cp -p <Your-GF>/examples/app/App11.pgf .
   gf -make -split-pgf App11.pgf +RTS -K200M
   rm App11.pgf 
   cd ..
   ant debug install
 
+Removing superfluous pgf files is recommended, because otherwise they will be copied to the app and 
+increase its size unnecessarily.
