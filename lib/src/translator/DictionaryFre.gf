@@ -22132,1582 +22132,1582 @@ lin zymase_N = mkN "zymase" feminine ; -- tocheck
 
 -- names from geonames
 
-lin aachen_PN = mkPN "Aix-la-Chapelle" ;
-lin abercarn_PN = mkPN "Abercarn" ;
-lin aberdare_PN = mkPN "Aberdare" ;
-lin aberdeen_PN = mkPN "Aberdeen" ;
-lin abergavenny_PN = mkPN "Abergavenny" ;
-lin abergele_PN = mkPN "Abergele" ;
-lin abertillery_PN = mkPN "Abertillery" ;
-lin aberystwyth_PN = mkPN "Aberystwyth" ;
-lin abingdon_PN = mkPN "Abingdon" ;
-lin accra_PN = mkPN "Accra" ;
-lin accrington_PN = mkPN "Accrington" ;
-lin ada_PN = mkPN "Ada" ;
-lin addis_ababa_PN = mkPN "Addis-Abeba" ;
-lin adelaide_PN = mkPN "Adélaïde" ;
-lin adrian_PN = mkPN "Adrian" ;
-lin afghanistan_PN = mkPN "Afghanistan" ;
-lin agra_PN = mkPN "Agra" ;
-lin ahmedabad_PN = mkPN "Ahmedabad" ;
-lin airdrie_PN = mkPN "Airdrie" ;
-lin akron_PN = mkPN "Akron" ;
-lin albania_PN = mkPN "Albanie" ;
-lin albert_PN = mkPN "Albert" ;
-lin aldershot_PN = mkPN "Aldershot" ;
-lin aleppo_PN = mkPN "Alep" ;
-lin alessandria_PN = mkPN "Alexandrie" ;
-lin alexander_PN = mkPN "Alexander" ;
-lin alexandra_PN = mkPN "Alexandra" ;
+lin aachen_PN = mkPN "Aix-la-Chapelle" ; -- status=guess src=geonames
+lin abercarn_PN = mkPN "Abercarn" ; -- status=guess src=geonames
+lin aberdare_PN = mkPN "Aberdare" ; -- status=guess src=geonames
+lin aberdeen_PN = mkPN "Aberdeen" ; -- status=guess src=geonames
+lin abergavenny_PN = mkPN "Abergavenny" ; -- status=guess src=geonames
+lin abergele_PN = mkPN "Abergele" ; -- status=guess src=geonames
+lin abertillery_PN = mkPN "Abertillery" ; -- status=guess src=geonames
+lin aberystwyth_PN = mkPN "Aberystwyth" ; -- status=guess src=geonames
+lin abingdon_PN = mkPN "Abingdon" ; -- status=guess src=geonames
+lin accra_PN = mkPN "Accra" ; -- status=guess src=geonames
+lin accrington_PN = mkPN "Accrington" ; -- status=guess src=geonames
+lin ada_PN = mkPN "Ada" ; -- status=guess src=geonames
+lin addis_ababa_PN = mkPN "Addis-Abeba" ; -- status=guess src=geonames
+lin adelaide_PN = mkPN "Adélaïde" ; -- status=guess src=geonames
+lin adrian_PN = mkPN "Adrian" ; -- status=guess src=geonames
+lin afghanistan_PN = mkPN "Afghanistan" ; -- status=guess src=geonames
+lin agra_PN = mkPN "Agra" ; -- status=guess src=geonames
+lin ahmedabad_PN = mkPN "Ahmedabad" ; -- status=guess src=geonames
+lin airdrie_PN = mkPN "Airdrie" ; -- status=guess src=geonames
+lin akron_PN = mkPN "Akron" ; -- status=guess src=geonames
+lin albania_PN = mkPN "Albanie" ; -- status=guess src=geonames
+lin albert_PN = mkPN "Albert" ; -- status=guess src=geonames
+lin aldershot_PN = mkPN "Aldershot" ; -- status=guess src=geonames
+lin aleppo_PN = mkPN "Alep" ; -- status=guess src=geonames
+lin alessandria_PN = mkPN "Alexandrie" ; -- status=guess src=geonames
+lin alexander_PN = mkPN "Alexander" ; -- status=guess src=geonames
+lin alexandra_PN = mkPN "Alexandra" ; -- status=guess src=geonames
 lin alexandria_PN = mkPN ("Alexandria" | "Alexandrie");
-lin alf_PN = mkPN "Alf" ;
-lin alfred_PN = mkPN "Alfred" ;
-lin alfreton_PN = mkPN "Alfreton" ;
-lin algeria_PN = mkPN "Algérie" ;
-lin alicante_PN = mkPN "Alicante" ;
-lin alice_PN = mkPN "Alice" ;
-lin allan_PN = mkPN "Allan" ;
-lin allen_PN = mkPN "Allen" ;
-lin alloa_PN = mkPN "Alloa" ;
-lin almeria_PN = mkPN "Almeria" ;
-lin alnwick_PN = mkPN "Alnwick" ;
-lin alton_PN = mkPN "Alton" ;
-lin altrincham_PN = mkPN "Altrincham" ;
-lin alvechurch_PN = mkPN "Alvechurch" ;
-lin amesbury_PN = mkPN "Amesbury" ;
-lin amiens_PN = mkPN "Amiens" ;
-lin ammanford_PN = mkPN "Ammanford" ;
-lin amsterdam_PN = mkPN "Amsterdam" ;
-lin ancona_PN = mkPN "Ancône" ;
-lin andorra_PN = mkPN "Andorre" ;
-lin andover_PN = mkPN "Andover" ;
-lin angers_PN = mkPN "Angers" ;
-lin angola_PN = mkPN "Angola" ;
-lin anguilla_PN = mkPN "Anguilla" ;
-lin angus_PN = mkPN "Angus" ;
-lin ankara_PN = mkPN "Ankara" ;
-lin annan_PN = mkPN "Annan" ;
-lin anshan_PN = mkPN "Anshan" ;
-lin anthony_PN = mkPN "Anthony" ;
-lin antigua_PN = mkPN "Antigua" ;
-lin antony_PN = mkPN "Antony" ;
-lin antrim_PN = mkPN "Antrim" ;
-lin antwerp_PN = mkPN "Antwerp" ;
-lin apeldoorn_PN = mkPN "Apeldoorn" ;
-lin arbroath_PN = mkPN "Arbroath" ;
-lin ardrossan_PN = mkPN "Ardrossan" ;
-lin argentina_PN = mkPN "Argentine" ;
-lin argentine_PN = mkPN "Argentine" ;
-lin arizona_PN = mkPN "Arizona" ;
-lin armadale_PN = mkPN "Armadale" ;
-lin armagh_PN = mkPN "Armagh" ;
-lin arnhem_PN = mkPN "Arnhem" ;
-lin arnold_PN = mkPN "Arnold" ;
-lin arthur_PN = mkPN "Arthur" ;
-lin ascot_PN = mkPN "Ascot" ;
-lin ashbourne_PN = mkPN "Ashbourne" ;
-lin ashby_PN = mkPN "Ashby" ;
-lin ashby_de_la_zouch_PN = mkPN "Ashby de la Zouch" ;
-lin ashford_PN = mkPN "Ashford" ;
-lin ashington_PN = mkPN "Ashington" ;
-lin askern_PN = mkPN "Askern" ;
-lin athens_1_PN = mkPN "Athènes" ;
-lin athens_2_PN = mkPN "Athènes" ;
-lin atherstone_PN = mkPN "Atherstone" ;
-lin athlone_PN = mkPN "Athlone" ;
-lin atlanta_PN = mkPN "Atlanta" ;
-lin atlantic_PN = mkPN "Atlantic" ;
-lin auckland_PN = mkPN "Auckland" ;
-lin audley_PN = mkPN "Audley" ;
-lin augsburg_PN = mkPN "Augsbourg" ;
-lin august_PN = mkPN "August" ;
-lin australia_PN = mkPN "Australie" ;
-lin austria_PN = mkPN "Autriche" ;
-lin aveley_PN = mkPN "Aveley" ;
-lin avignon_PN = mkPN "Avignon" ;
-lin avon_PN = mkPN "Avon" ;
-lin aylesbury_PN = mkPN "Aylesbury" ;
-lin aylesford_PN = mkPN "Aylesford" ;
-lin ayr_PN = mkPN "Ayr" ;
-lin backworth_PN = mkPN "Backworth" ;
-lin bacup_PN = mkPN "Bacup" ;
-lin badajoz_PN = mkPN "Badajoz" ;
-lin badalona_PN = mkPN "Badalona" ;
-lin baghdad_PN = mkPN "Bagdad" ;
-lin bahamas_PN = mkPN "Bahamas" ;
-lin bahrain_PN = mkPN "Bahreïn" ;
-lin baku_PN = mkPN "Bakou" ;
-lin baldock_PN = mkPN "Baldock" ;
-lin baltimore_PN = mkPN "Baltimore" ;
-lin banbury_PN = mkPN "Banbury" ;
-lin bandung_PN = mkPN "Bandung" ;
-lin bangalore_PN = mkPN "Bangalore" ;
-lin bangkok_PN = mkPN "Bangkok" ;
-lin bangladesh_PN = mkPN "Pakistan oriental" ;
-lin bangor_PN = mkPN "Bangor" ;
-lin bannockburn_PN = mkPN "Bannockburn" ;
-lin bantry_PN = mkPN "Bantry" ;
-lin barbados_PN = mkPN "Barbade" ;
-lin barbara_PN = mkPN "Barbara" ;
+lin alf_PN = mkPN "Alf" ; -- status=guess src=geonames
+lin alfred_PN = mkPN "Alfred" ; -- status=guess src=geonames
+lin alfreton_PN = mkPN "Alfreton" ; -- status=guess src=geonames
+lin algeria_PN = mkPN "Algérie" ; -- status=guess src=geonames
+lin alicante_PN = mkPN "Alicante" ; -- status=guess src=geonames
+lin alice_PN = mkPN "Alice" ; -- status=guess src=geonames
+lin allan_PN = mkPN "Allan" ; -- status=guess src=geonames
+lin allen_PN = mkPN "Allen" ; -- status=guess src=geonames
+lin alloa_PN = mkPN "Alloa" ; -- status=guess src=geonames
+lin almeria_PN = mkPN "Almeria" ; -- status=guess src=geonames
+lin alnwick_PN = mkPN "Alnwick" ; -- status=guess src=geonames
+lin alton_PN = mkPN "Alton" ; -- status=guess src=geonames
+lin altrincham_PN = mkPN "Altrincham" ; -- status=guess src=geonames
+lin alvechurch_PN = mkPN "Alvechurch" ; -- status=guess src=geonames
+lin amesbury_PN = mkPN "Amesbury" ; -- status=guess src=geonames
+lin amiens_PN = mkPN "Amiens" ; -- status=guess src=geonames
+lin ammanford_PN = mkPN "Ammanford" ; -- status=guess src=geonames
+lin amsterdam_PN = mkPN "Amsterdam" ; -- status=guess src=geonames
+lin ancona_PN = mkPN "Ancône" ; -- status=guess src=geonames
+lin andorra_PN = mkPN "Andorre" ; -- status=guess src=geonames
+lin andover_PN = mkPN "Andover" ; -- status=guess src=geonames
+lin angers_PN = mkPN "Angers" ; -- status=guess src=geonames
+lin angola_PN = mkPN "Angola" ; -- status=guess src=geonames
+lin anguilla_PN = mkPN "Anguilla" ; -- status=guess src=geonames
+lin angus_PN = mkPN "Angus" ; -- status=guess src=geonames
+lin ankara_PN = mkPN "Ankara" ; -- status=guess src=geonames
+lin annan_PN = mkPN "Annan" ; -- status=guess src=geonames
+lin anshan_PN = mkPN "Anshan" ; -- status=guess src=geonames
+lin anthony_PN = mkPN "Anthony" ; -- status=guess src=geonames
+lin antigua_PN = mkPN "Antigua" ; -- status=guess src=geonames
+lin antony_PN = mkPN "Antony" ; -- status=guess src=geonames
+lin antrim_PN = mkPN "Antrim" ; -- status=guess src=geonames
+lin antwerp_PN = mkPN "Antwerp" ; -- status=guess src=geonames
+lin apeldoorn_PN = mkPN "Apeldoorn" ; -- status=guess src=geonames
+lin arbroath_PN = mkPN "Arbroath" ; -- status=guess src=geonames
+lin ardrossan_PN = mkPN "Ardrossan" ; -- status=guess src=geonames
+lin argentina_PN = mkPN "Argentine" ; -- status=guess src=geonames
+lin argentine_PN = mkPN "Argentine" ; -- status=guess src=geonames
+lin arizona_PN = mkPN "Arizona" ; -- status=guess src=geonames
+lin armadale_PN = mkPN "Armadale" ; -- status=guess src=geonames
+lin armagh_PN = mkPN "Armagh" ; -- status=guess src=geonames
+lin arnhem_PN = mkPN "Arnhem" ; -- status=guess src=geonames
+lin arnold_PN = mkPN "Arnold" ; -- status=guess src=geonames
+lin arthur_PN = mkPN "Arthur" ; -- status=guess src=geonames
+lin ascot_PN = mkPN "Ascot" ; -- status=guess src=geonames
+lin ashbourne_PN = mkPN "Ashbourne" ; -- status=guess src=geonames
+lin ashby_PN = mkPN "Ashby" ; -- status=guess src=geonames
+lin ashby_de_la_zouch_PN = mkPN "Ashby de la Zouch" ; -- status=guess src=geonames
+lin ashford_PN = mkPN "Ashford" ; -- status=guess src=geonames
+lin ashington_PN = mkPN "Ashington" ; -- status=guess src=geonames
+lin askern_PN = mkPN "Askern" ; -- status=guess src=geonames
+lin athens_1_PN = mkPN "Athènes" ; -- status=guess src=geonames
+lin athens_2_PN = mkPN "Athènes" ; -- status=guess src=geonames
+lin atherstone_PN = mkPN "Atherstone" ; -- status=guess src=geonames
+lin athlone_PN = mkPN "Athlone" ; -- status=guess src=geonames
+lin atlanta_PN = mkPN "Atlanta" ; -- status=guess src=geonames
+lin atlantic_PN = mkPN "Atlantic" ; -- status=guess src=geonames
+lin auckland_PN = mkPN "Auckland" ; -- status=guess src=geonames
+lin audley_PN = mkPN "Audley" ; -- status=guess src=geonames
+lin augsburg_PN = mkPN "Augsbourg" ; -- status=guess src=geonames
+lin august_PN = mkPN "August" ; -- status=guess src=geonames
+lin australia_PN = mkPN "Australie" ; -- status=guess src=geonames
+lin austria_PN = mkPN "Autriche" ; -- status=guess src=geonames
+lin aveley_PN = mkPN "Aveley" ; -- status=guess src=geonames
+lin avignon_PN = mkPN "Avignon" ; -- status=guess src=geonames
+lin avon_PN = mkPN "Avon" ; -- status=guess src=geonames
+lin aylesbury_PN = mkPN "Aylesbury" ; -- status=guess src=geonames
+lin aylesford_PN = mkPN "Aylesford" ; -- status=guess src=geonames
+lin ayr_PN = mkPN "Ayr" ; -- status=guess src=geonames
+lin backworth_PN = mkPN "Backworth" ; -- status=guess src=geonames
+lin bacup_PN = mkPN "Bacup" ; -- status=guess src=geonames
+lin badajoz_PN = mkPN "Badajoz" ; -- status=guess src=geonames
+lin badalona_PN = mkPN "Badalona" ; -- status=guess src=geonames
+lin baghdad_PN = mkPN "Bagdad" ; -- status=guess src=geonames
+lin bahamas_PN = mkPN "Bahamas" ; -- status=guess src=geonames
+lin bahrain_PN = mkPN "Bahreïn" ; -- status=guess src=geonames
+lin baku_PN = mkPN "Bakou" ; -- status=guess src=geonames
+lin baldock_PN = mkPN "Baldock" ; -- status=guess src=geonames
+lin baltimore_PN = mkPN "Baltimore" ; -- status=guess src=geonames
+lin banbury_PN = mkPN "Banbury" ; -- status=guess src=geonames
+lin bandung_PN = mkPN "Bandung" ; -- status=guess src=geonames
+lin bangalore_PN = mkPN "Bangalore" ; -- status=guess src=geonames
+lin bangkok_PN = mkPN "Bangkok" ; -- status=guess src=geonames
+lin bangladesh_PN = mkPN "Pakistan oriental" ; -- status=guess src=geonames
+lin bangor_PN = mkPN "Bangor" ; -- status=guess src=geonames
+lin bannockburn_PN = mkPN "Bannockburn" ; -- status=guess src=geonames
+lin bantry_PN = mkPN "Bantry" ; -- status=guess src=geonames
+lin barbados_PN = mkPN "Barbade" ; -- status=guess src=geonames
+lin barbara_PN = mkPN "Barbara" ; -- status=guess src=geonames
 lin barcelona_PN = mkPN ("Barcelona" | "Barcelone");
-lin bargoed_PN = mkPN "Bargoed" ;
-lin bari_PN = mkPN "Bari" ;
-lin barking_PN = mkPN "Barking" ;
-lin barnet_PN = mkPN "Barnet" ;
-lin barnoldswick_PN = mkPN "Barnoldswick" ;
-lin barnsley_PN = mkPN "Barnsley" ;
-lin barnstaple_PN = mkPN "Barnstaple" ;
-lin barranquilla_PN = mkPN "Barranquilla" ;
-lin barrhead_PN = mkPN "Barrhead" ;
-lin barry_PN = mkPN "Barry" ;
-lin bart_PN = mkPN "Bart" ;
-lin basel_PN = mkPN "Bâle" ;
-lin basildon_PN = mkPN "Basildon" ;
-lin basingstoke_PN = mkPN "Basingstoke" ;
-lin bath_PN = mkPN "Bath" ;
-lin bathgate_PN = mkPN "Bathgate" ;
-lin batley_PN = mkPN "Batley" ;
-lin beaconsfield_PN = mkPN "Beaconsfield" ;
-lin bearsden_PN = mkPN "Bearsden" ;
-lin beatrice_PN = mkPN "Beatrice" ;
-lin beaumaris_PN = mkPN "Beaumaris" ;
-lin bebington_PN = mkPN "Bebington" ;
-lin beccles_PN = mkPN "Beccles" ;
-lin beddau_PN = mkPN "Beddau" ;
-lin bedford_PN = mkPN "Bedford" ;
-lin bedlington_PN = mkPN "Bedlington" ;
-lin bedwas_PN = mkPN "Bedwas" ;
-lin beirut_PN = mkPN "Beyrouth" ;
-lin beith_PN = mkPN "Beith" ;
-lin belfast_PN = mkPN "Belfast" ;
-lin belgium_PN = mkPN "Belgique" ;
-lin belgrade_PN = mkPN "Belgrade" ;
-lin bella_PN = mkPN "Bella" ;
-lin belle_PN = mkPN "Belle" ;
-lin bellshill_PN = mkPN "Bellshill" ;
-lin belo_horizonte_PN = mkPN "Belo Horizonte" ;
-lin belper_PN = mkPN "Belper" ;
-lin benin_PN = mkPN "Bénin" ;
-lin benjamin_PN = mkPN "Benjamin" ;
-lin bergamo_PN = mkPN "Bergame" ;
-lin bergen_PN = mkPN "Bergen" ;
-lin berkhamsted_PN = mkPN "Berkhamsted" ;
-lin berlin_PN = mkPN "Berlin" ;
-lin bermuda_PN = mkPN "Bermudes" ;
-lin bern_PN = mkPN "Berne" ;
-lin bernie_PN = mkPN "Bernie" ;
-lin beverley_PN = mkPN "Beverley" ;
-lin bewdley_PN = mkPN "Bewdley" ;
-lin bexley_PN = mkPN "Bexley" ;
-lin bhutan_PN = mkPN "Bhutan" ;
-lin bicester_PN = mkPN "Bicester" ;
-lin biddulph_PN = mkPN "Biddulph" ;
-lin bideford_PN = mkPN "Bideford" ;
-lin bielefeld_PN = mkPN "Bielefeld" ;
-lin biggleswade_PN = mkPN "Biggleswade" ;
-lin bilbao_PN = mkPN "Bilbao" ;
-lin billericay_PN = mkPN "Billericay" ;
-lin billington_PN = mkPN "Billington" ;
-lin bingley_PN = mkPN "Bingley" ;
-lin birkenhead_PN = mkPN "Birkenhead" ;
-lin birtley_PN = mkPN "Birtley" ;
-lin bishopbriggs_PN = mkPN "Bishopbriggs" ;
-lin blackburn_PN = mkPN "Blackburn" ;
-lin blackpool_PN = mkPN "Blackpool" ;
-lin blackwood_PN = mkPN "Blackwood" ;
-lin blaenavon_PN = mkPN "Blaenavon" ;
-lin blairgowrie_PN = mkPN "Blairgowrie" ;
-lin blantyre_PN = mkPN "Blantyre" ;
-lin bletchley_PN = mkPN "Bletchley" ;
-lin blidworth_PN = mkPN "Blidworth" ;
-lin blyth_PN = mkPN "Blyth" ;
-lin bochum_PN = mkPN "Bochum" ;
-lin bodmin_PN = mkPN "Bodmin" ;
-lin bogota_PN = mkPN "Bogota" ;
-lin bolivia_PN = mkPN "Bolivie" ;
-lin bollington_PN = mkPN "Bollington" ;
-lin bologna_PN = mkPN "Bologne" ;
-lin bolsover_PN = mkPN "Bolsover" ;
-lin bolton_PN = mkPN "Bolton" ;
-lin bolzano_PN = mkPN "Bolzano" ;
-lin bonn_PN = mkPN "Bonn" ;
-lin bonnybridge_PN = mkPN "Bonnybridge" ;
-lin bonnyrigg_PN = mkPN "Bonnyrigg" ;
-lin bootle_PN = mkPN "Bootle" ;
-lin bordeaux_PN = mkPN "Bordeaux" ;
-lin bordon_PN = mkPN "Bordon" ;
-lin boston_PN = mkPN "Boston" ;
-lin botswana_PN = mkPN "Botswana" ;
-lin bottrop_PN = mkPN "Bottrop" ;
-lin bourne_PN = mkPN "Bourne" ;
-lin bournemouth_PN = mkPN "Bornemouth" ;
-lin bracknell_PN = mkPN "Bracknell" ;
-lin bradford_PN = mkPN "Bradford" ;
-lin braintree_PN = mkPN "Braintree" ;
-lin bratislava_PN = mkPN "Bratislava" ;
-lin braunschweig_PN = mkPN "Brunswick" ;
-lin braunton_PN = mkPN "Braunton" ;
-lin brazil_PN = mkPN "Brésil" ;
+lin bargoed_PN = mkPN "Bargoed" ; -- status=guess src=geonames
+lin bari_PN = mkPN "Bari" ; -- status=guess src=geonames
+lin barking_PN = mkPN "Barking" ; -- status=guess src=geonames
+lin barnet_PN = mkPN "Barnet" ; -- status=guess src=geonames
+lin barnoldswick_PN = mkPN "Barnoldswick" ; -- status=guess src=geonames
+lin barnsley_PN = mkPN "Barnsley" ; -- status=guess src=geonames
+lin barnstaple_PN = mkPN "Barnstaple" ; -- status=guess src=geonames
+lin barranquilla_PN = mkPN "Barranquilla" ; -- status=guess src=geonames
+lin barrhead_PN = mkPN "Barrhead" ; -- status=guess src=geonames
+lin barry_PN = mkPN "Barry" ; -- status=guess src=geonames
+lin bart_PN = mkPN "Bart" ; -- status=guess src=geonames
+lin basel_PN = mkPN "Bâle" ; -- status=guess src=geonames
+lin basildon_PN = mkPN "Basildon" ; -- status=guess src=geonames
+lin basingstoke_PN = mkPN "Basingstoke" ; -- status=guess src=geonames
+lin bath_PN = mkPN "Bath" ; -- status=guess src=geonames
+lin bathgate_PN = mkPN "Bathgate" ; -- status=guess src=geonames
+lin batley_PN = mkPN "Batley" ; -- status=guess src=geonames
+lin beaconsfield_PN = mkPN "Beaconsfield" ; -- status=guess src=geonames
+lin bearsden_PN = mkPN "Bearsden" ; -- status=guess src=geonames
+lin beatrice_PN = mkPN "Beatrice" ; -- status=guess src=geonames
+lin beaumaris_PN = mkPN "Beaumaris" ; -- status=guess src=geonames
+lin bebington_PN = mkPN "Bebington" ; -- status=guess src=geonames
+lin beccles_PN = mkPN "Beccles" ; -- status=guess src=geonames
+lin beddau_PN = mkPN "Beddau" ; -- status=guess src=geonames
+lin bedford_PN = mkPN "Bedford" ; -- status=guess src=geonames
+lin bedlington_PN = mkPN "Bedlington" ; -- status=guess src=geonames
+lin bedwas_PN = mkPN "Bedwas" ; -- status=guess src=geonames
+lin beirut_PN = mkPN "Beyrouth" ; -- status=guess src=geonames
+lin beith_PN = mkPN "Beith" ; -- status=guess src=geonames
+lin belfast_PN = mkPN "Belfast" ; -- status=guess src=geonames
+lin belgium_PN = mkPN "Belgique" ; -- status=guess src=geonames
+lin belgrade_PN = mkPN "Belgrade" ; -- status=guess src=geonames
+lin bella_PN = mkPN "Bella" ; -- status=guess src=geonames
+lin belle_PN = mkPN "Belle" ; -- status=guess src=geonames
+lin bellshill_PN = mkPN "Bellshill" ; -- status=guess src=geonames
+lin belo_horizonte_PN = mkPN "Belo Horizonte" ; -- status=guess src=geonames
+lin belper_PN = mkPN "Belper" ; -- status=guess src=geonames
+lin benin_PN = mkPN "Bénin" ; -- status=guess src=geonames
+lin benjamin_PN = mkPN "Benjamin" ; -- status=guess src=geonames
+lin bergamo_PN = mkPN "Bergame" ; -- status=guess src=geonames
+lin bergen_PN = mkPN "Bergen" ; -- status=guess src=geonames
+lin berkhamsted_PN = mkPN "Berkhamsted" ; -- status=guess src=geonames
+lin berlin_PN = mkPN "Berlin" ; -- status=guess src=geonames
+lin bermuda_PN = mkPN "Bermudes" ; -- status=guess src=geonames
+lin bern_PN = mkPN "Berne" ; -- status=guess src=geonames
+lin bernie_PN = mkPN "Bernie" ; -- status=guess src=geonames
+lin beverley_PN = mkPN "Beverley" ; -- status=guess src=geonames
+lin bewdley_PN = mkPN "Bewdley" ; -- status=guess src=geonames
+lin bexley_PN = mkPN "Bexley" ; -- status=guess src=geonames
+lin bhutan_PN = mkPN "Bhutan" ; -- status=guess src=geonames
+lin bicester_PN = mkPN "Bicester" ; -- status=guess src=geonames
+lin biddulph_PN = mkPN "Biddulph" ; -- status=guess src=geonames
+lin bideford_PN = mkPN "Bideford" ; -- status=guess src=geonames
+lin bielefeld_PN = mkPN "Bielefeld" ; -- status=guess src=geonames
+lin biggleswade_PN = mkPN "Biggleswade" ; -- status=guess src=geonames
+lin bilbao_PN = mkPN "Bilbao" ; -- status=guess src=geonames
+lin billericay_PN = mkPN "Billericay" ; -- status=guess src=geonames
+lin billington_PN = mkPN "Billington" ; -- status=guess src=geonames
+lin bingley_PN = mkPN "Bingley" ; -- status=guess src=geonames
+lin birkenhead_PN = mkPN "Birkenhead" ; -- status=guess src=geonames
+lin birtley_PN = mkPN "Birtley" ; -- status=guess src=geonames
+lin bishopbriggs_PN = mkPN "Bishopbriggs" ; -- status=guess src=geonames
+lin blackburn_PN = mkPN "Blackburn" ; -- status=guess src=geonames
+lin blackpool_PN = mkPN "Blackpool" ; -- status=guess src=geonames
+lin blackwood_PN = mkPN "Blackwood" ; -- status=guess src=geonames
+lin blaenavon_PN = mkPN "Blaenavon" ; -- status=guess src=geonames
+lin blairgowrie_PN = mkPN "Blairgowrie" ; -- status=guess src=geonames
+lin blantyre_PN = mkPN "Blantyre" ; -- status=guess src=geonames
+lin bletchley_PN = mkPN "Bletchley" ; -- status=guess src=geonames
+lin blidworth_PN = mkPN "Blidworth" ; -- status=guess src=geonames
+lin blyth_PN = mkPN "Blyth" ; -- status=guess src=geonames
+lin bochum_PN = mkPN "Bochum" ; -- status=guess src=geonames
+lin bodmin_PN = mkPN "Bodmin" ; -- status=guess src=geonames
+lin bogota_PN = mkPN "Bogota" ; -- status=guess src=geonames
+lin bolivia_PN = mkPN "Bolivie" ; -- status=guess src=geonames
+lin bollington_PN = mkPN "Bollington" ; -- status=guess src=geonames
+lin bologna_PN = mkPN "Bologne" ; -- status=guess src=geonames
+lin bolsover_PN = mkPN "Bolsover" ; -- status=guess src=geonames
+lin bolton_PN = mkPN "Bolton" ; -- status=guess src=geonames
+lin bolzano_PN = mkPN "Bolzano" ; -- status=guess src=geonames
+lin bonn_PN = mkPN "Bonn" ; -- status=guess src=geonames
+lin bonnybridge_PN = mkPN "Bonnybridge" ; -- status=guess src=geonames
+lin bonnyrigg_PN = mkPN "Bonnyrigg" ; -- status=guess src=geonames
+lin bootle_PN = mkPN "Bootle" ; -- status=guess src=geonames
+lin bordeaux_PN = mkPN "Bordeaux" ; -- status=guess src=geonames
+lin bordon_PN = mkPN "Bordon" ; -- status=guess src=geonames
+lin boston_PN = mkPN "Boston" ; -- status=guess src=geonames
+lin botswana_PN = mkPN "Botswana" ; -- status=guess src=geonames
+lin bottrop_PN = mkPN "Bottrop" ; -- status=guess src=geonames
+lin bourne_PN = mkPN "Bourne" ; -- status=guess src=geonames
+lin bournemouth_PN = mkPN "Bornemouth" ; -- status=guess src=geonames
+lin bracknell_PN = mkPN "Bracknell" ; -- status=guess src=geonames
+lin bradford_PN = mkPN "Bradford" ; -- status=guess src=geonames
+lin braintree_PN = mkPN "Braintree" ; -- status=guess src=geonames
+lin bratislava_PN = mkPN "Bratislava" ; -- status=guess src=geonames
+lin braunschweig_PN = mkPN "Brunswick" ; -- status=guess src=geonames
+lin braunton_PN = mkPN "Braunton" ; -- status=guess src=geonames
+lin brazil_PN = mkPN "Brésil" ; -- status=guess src=geonames
 lin breda_PN = mkPN ("Bréda" | "Breda di Piave");
-lin bremen_PN = mkPN "Brême" ;
-lin bremerhaven_PN = mkPN "Bremerhaven" ;
-lin brent_PN = mkPN "Brent" ;
-lin brentwood_PN = mkPN "Brentwood" ;
-lin brescia_PN = mkPN "Brescia" ;
-lin brest_PN = mkPN "Brest" ;
-lin bridgend_PN = mkPN "Bridgend" ;
-lin bridgnorth_PN = mkPN "Bridgnorth" ;
-lin bridgwater_PN = mkPN "Bridgwater" ;
-lin bridlington_PN = mkPN "Bridlington" ;
-lin bridport_PN = mkPN "Bridport" ;
-lin brig_PN = mkPN "Brigue-Glis" ;
-lin brighouse_PN = mkPN "Brighouse" ;
-lin brightlingsea_PN = mkPN "Brightlingsea" ;
-lin brighton_PN = mkPN "Brighton" ;
-lin brisbane_PN = mkPN "Brisbane" ;
-lin bristol_PN = mkPN "Bristol" ;
-lin brixham_PN = mkPN "Brixham" ;
-lin brno_PN = mkPN "Brno" ;
-lin bromley_PN = mkPN "Bromley" ;
-lin bromsgrove_PN = mkPN "Bromsgrove" ;
-lin broughton_PN = mkPN "Broughton" ;
-lin broxburn_PN = mkPN "Broxburn" ;
-lin bruce_PN = mkPN "Bruce" ;
-lin bruges_PN = mkPN "Bruges" ;
-lin brunei_PN = mkPN "Brunéi Darussalam" ;
-lin brunswick_PN = mkPN "Brunswick" ;
-lin brussels_PN = mkPN "Bruxelles" ;
-lin bryan_PN = mkPN "Bryan" ;
-lin buckhaven_PN = mkPN "Buckhaven" ;
-lin buckie_PN = mkPN "Buckie" ;
-lin buckingham_PN = mkPN "Buckingham" ;
-lin buckley_PN = mkPN "Buckley" ;
-lin budapest_PN = mkPN "Budapest" ;
-lin buffalo_PN = mkPN "Buffalo" ;
-lin bulgaria_PN = mkPN "Bulgarie" ;
-lin bulkington_PN = mkPN "Bulkington" ;
-lin burgos_PN = mkPN "Burgos" ;
-lin burley_PN = mkPN "Burley" ;
-lin burnley_PN = mkPN "Burnley" ;
-lin burntisland_PN = mkPN "Burntisland" ;
-lin burntwood_PN = mkPN "Burntwood" ;
-lin burundi_PN = mkPN "Burundi" ;
-lin bury_PN = mkPN "Bury" ;
-lin buxton_PN = mkPN "Buxton" ;
-lin cadiz_PN = mkPN "Cadix" ;
-lin caen_PN = mkPN "Caen" ;
-lin caerleon_PN = mkPN "Caerleon" ;
-lin caernarfon_PN = mkPN "Caernarfon" ;
-lin caerphilly_PN = mkPN "Caerphilly" ;
-lin cagliari_PN = mkPN "Cagliari" ;
-lin cairo_PN = mkPN "Le Caire" ;
-lin calcutta_PN = mkPN "Calcutta" ;
-lin caldicot_PN = mkPN "Caldicot" ;
-lin cali_PN = mkPN "Cali" ;
-lin california_PN = mkPN "California" ;
-lin calne_PN = mkPN "Calne" ;
-lin calverton_PN = mkPN "Calverton" ;
-lin cambodia_PN = mkPN "Cambodge" ;
-lin cambridge_PN = mkPN "Cambridge" ;
-lin camden_PN = mkPN "Camden" ;
-lin cameroon_PN = mkPN "Cameroun" ;
-lin campbeltown_PN = mkPN "Campbeltown" ;
-lin canada_PN = mkPN "Canada" ;
-lin canberra_PN = mkPN "Canberra" ;
-lin cannes_PN = mkPN "Cannes" ;
-lin cannock_PN = mkPN "Cannock" ;
-lin canterbury_PN = mkPN "Cantorbéry" ;
-lin canton_PN = mkPN "Canton" ;
-lin caracas_PN = mkPN "Caracas" ;
-lin cardenden_PN = mkPN "Cardenden" ;
-lin cardiff_PN = mkPN "Cardiff" ;
-lin cardigan_PN = mkPN "Aberteifi" ;
-lin carlisle_PN = mkPN "Carlisle" ;
-lin carlow_PN = mkPN "Carlow" ;
-lin carluke_PN = mkPN "Carluke" ;
-lin carmarthen_PN = mkPN "Carmarthen" ;
-lin carnforth_PN = mkPN "Carnforth" ;
-lin carnoustie_PN = mkPN "Carnoustie" ;
-lin carolina_PN = mkPN "Carolina" ;
+lin bremen_PN = mkPN "Brême" ; -- status=guess src=geonames
+lin bremerhaven_PN = mkPN "Bremerhaven" ; -- status=guess src=geonames
+lin brent_PN = mkPN "Brent" ; -- status=guess src=geonames
+lin brentwood_PN = mkPN "Brentwood" ; -- status=guess src=geonames
+lin brescia_PN = mkPN "Brescia" ; -- status=guess src=geonames
+lin brest_PN = mkPN "Brest" ; -- status=guess src=geonames
+lin bridgend_PN = mkPN "Bridgend" ; -- status=guess src=geonames
+lin bridgnorth_PN = mkPN "Bridgnorth" ; -- status=guess src=geonames
+lin bridgwater_PN = mkPN "Bridgwater" ; -- status=guess src=geonames
+lin bridlington_PN = mkPN "Bridlington" ; -- status=guess src=geonames
+lin bridport_PN = mkPN "Bridport" ; -- status=guess src=geonames
+lin brig_PN = mkPN "Brigue-Glis" ; -- status=guess src=geonames
+lin brighouse_PN = mkPN "Brighouse" ; -- status=guess src=geonames
+lin brightlingsea_PN = mkPN "Brightlingsea" ; -- status=guess src=geonames
+lin brighton_PN = mkPN "Brighton" ; -- status=guess src=geonames
+lin brisbane_PN = mkPN "Brisbane" ; -- status=guess src=geonames
+lin bristol_PN = mkPN "Bristol" ; -- status=guess src=geonames
+lin brixham_PN = mkPN "Brixham" ; -- status=guess src=geonames
+lin brno_PN = mkPN "Brno" ; -- status=guess src=geonames
+lin bromley_PN = mkPN "Bromley" ; -- status=guess src=geonames
+lin bromsgrove_PN = mkPN "Bromsgrove" ; -- status=guess src=geonames
+lin broughton_PN = mkPN "Broughton" ; -- status=guess src=geonames
+lin broxburn_PN = mkPN "Broxburn" ; -- status=guess src=geonames
+lin bruce_PN = mkPN "Bruce" ; -- status=guess src=geonames
+lin bruges_PN = mkPN "Bruges" ; -- status=guess src=geonames
+lin brunei_PN = mkPN "Brunéi Darussalam" ; -- status=guess src=geonames
+lin brunswick_PN = mkPN "Brunswick" ; -- status=guess src=geonames
+lin brussels_PN = mkPN "Bruxelles" ; -- status=guess src=geonames
+lin bryan_PN = mkPN "Bryan" ; -- status=guess src=geonames
+lin buckhaven_PN = mkPN "Buckhaven" ; -- status=guess src=geonames
+lin buckie_PN = mkPN "Buckie" ; -- status=guess src=geonames
+lin buckingham_PN = mkPN "Buckingham" ; -- status=guess src=geonames
+lin buckley_PN = mkPN "Buckley" ; -- status=guess src=geonames
+lin budapest_PN = mkPN "Budapest" ; -- status=guess src=geonames
+lin buffalo_PN = mkPN "Buffalo" ; -- status=guess src=geonames
+lin bulgaria_PN = mkPN "Bulgarie" ; -- status=guess src=geonames
+lin bulkington_PN = mkPN "Bulkington" ; -- status=guess src=geonames
+lin burgos_PN = mkPN "Burgos" ; -- status=guess src=geonames
+lin burley_PN = mkPN "Burley" ; -- status=guess src=geonames
+lin burnley_PN = mkPN "Burnley" ; -- status=guess src=geonames
+lin burntisland_PN = mkPN "Burntisland" ; -- status=guess src=geonames
+lin burntwood_PN = mkPN "Burntwood" ; -- status=guess src=geonames
+lin burundi_PN = mkPN "Burundi" ; -- status=guess src=geonames
+lin bury_PN = mkPN "Bury" ; -- status=guess src=geonames
+lin buxton_PN = mkPN "Buxton" ; -- status=guess src=geonames
+lin cadiz_PN = mkPN "Cadix" ; -- status=guess src=geonames
+lin caen_PN = mkPN "Caen" ; -- status=guess src=geonames
+lin caerleon_PN = mkPN "Caerleon" ; -- status=guess src=geonames
+lin caernarfon_PN = mkPN "Caernarfon" ; -- status=guess src=geonames
+lin caerphilly_PN = mkPN "Caerphilly" ; -- status=guess src=geonames
+lin cagliari_PN = mkPN "Cagliari" ; -- status=guess src=geonames
+lin cairo_PN = mkPN "Le Caire" ; -- status=guess src=geonames
+lin calcutta_PN = mkPN "Calcutta" ; -- status=guess src=geonames
+lin caldicot_PN = mkPN "Caldicot" ; -- status=guess src=geonames
+lin cali_PN = mkPN "Cali" ; -- status=guess src=geonames
+lin california_PN = mkPN "California" ; -- status=guess src=geonames
+lin calne_PN = mkPN "Calne" ; -- status=guess src=geonames
+lin calverton_PN = mkPN "Calverton" ; -- status=guess src=geonames
+lin cambodia_PN = mkPN "Cambodge" ; -- status=guess src=geonames
+lin cambridge_PN = mkPN "Cambridge" ; -- status=guess src=geonames
+lin camden_PN = mkPN "Camden" ; -- status=guess src=geonames
+lin cameroon_PN = mkPN "Cameroun" ; -- status=guess src=geonames
+lin campbeltown_PN = mkPN "Campbeltown" ; -- status=guess src=geonames
+lin canada_PN = mkPN "Canada" ; -- status=guess src=geonames
+lin canberra_PN = mkPN "Canberra" ; -- status=guess src=geonames
+lin cannes_PN = mkPN "Cannes" ; -- status=guess src=geonames
+lin cannock_PN = mkPN "Cannock" ; -- status=guess src=geonames
+lin canterbury_PN = mkPN "Cantorbéry" ; -- status=guess src=geonames
+lin canton_PN = mkPN "Canton" ; -- status=guess src=geonames
+lin caracas_PN = mkPN "Caracas" ; -- status=guess src=geonames
+lin cardenden_PN = mkPN "Cardenden" ; -- status=guess src=geonames
+lin cardiff_PN = mkPN "Cardiff" ; -- status=guess src=geonames
+lin cardigan_PN = mkPN "Aberteifi" ; -- status=guess src=geonames
+lin carlisle_PN = mkPN "Carlisle" ; -- status=guess src=geonames
+lin carlow_PN = mkPN "Carlow" ; -- status=guess src=geonames
+lin carluke_PN = mkPN "Carluke" ; -- status=guess src=geonames
+lin carmarthen_PN = mkPN "Carmarthen" ; -- status=guess src=geonames
+lin carnforth_PN = mkPN "Carnforth" ; -- status=guess src=geonames
+lin carnoustie_PN = mkPN "Carnoustie" ; -- status=guess src=geonames
+lin carolina_PN = mkPN "Carolina" ; -- status=guess src=geonames
 lin cartagena_PN = mkPN ("Carthagène" | "Carthagène des Indes");
-lin casablanca_PN = mkPN "Casablanca" ;
-lin castleford_PN = mkPN "Castleford" ;
-lin catania_PN = mkPN "Catane" ;
-lin cavan_PN = mkPN "Cavan" ;
-lin cecilia_PN = mkPN "Cecilia" ;
-lin chad_PN = mkPN "Tchad" ;
-lin chalfont_PN = mkPN "Chalfont" ;
-lin changchun_PN = mkPN "Changchun" ;
-lin changsha_PN = mkPN "Changsha" ;
-lin chard_PN = mkPN "Chard" ;
-lin charlotte_PN = mkPN "Charlotte" ;
-lin chatham_PN = mkPN "Chatham" ;
-lin cheadle_PN = mkPN "Cheadle" ;
-lin chelmsford_PN = mkPN "Chelmsford" ;
-lin chelsea_PN = mkPN "Chelsea" ;
-lin cheltenham_PN = mkPN "Cheltenham" ;
-lin chelyabinsk_PN = mkPN "Tcheliabinsk" ;
-lin chepstow_PN = mkPN "Chepstow" ;
-lin chesham_PN = mkPN "Chesham" ;
-lin cheshire_PN = mkPN "Cheshire" ;
-lin chester_PN = mkPN "Chester" ;
-lin chesterfield_PN = mkPN "Chesterfield" ;
-lin chicago_PN = mkPN "Chicago" ;
-lin chichester_PN = mkPN "Chichester" ;
-lin chile_PN = mkPN "Chili" ;
-lin china_PN = mkPN "République populaire de Chine" ;
-lin chippenham_PN = mkPN "Chippenham" ;
-lin chorley_PN = mkPN "Chorley" ;
-lin christchurch_PN = mkPN "Christchurch" ;
-lin christmas_PN = mkPN "Christmas" ;
-lin christopher_PN = mkPN "Christopher" ;
-lin cincinnati_PN = mkPN "Cincinnati" ;
-lin cinderford_PN = mkPN "Cinderford" ;
-lin cirencester_PN = mkPN "Cirencester" ;
-lin clare_PN = mkPN "Clare" ;
-lin clarkston_PN = mkPN "Clarkston" ;
-lin claude_PN = mkPN "Claude" ;
-lin cleethorpes_PN = mkPN "Cleethorpes" ;
-lin clevedon_PN = mkPN "Clevedon" ;
-lin cleveland_PN = mkPN "Cleveland" ;
-lin clifford_PN = mkPN "Clifford" ;
-lin clitheroe_PN = mkPN "Clitheroe" ;
-lin clive_PN = mkPN "Clive" ;
-lin clowne_PN = mkPN "Clowne" ;
-lin clydach_PN = mkPN "Clydach" ;
-lin clydebank_PN = mkPN "Clydebank" ;
-lin coalville_PN = mkPN "Coalville" ;
-lin coatbridge_PN = mkPN "Coatbridge" ;
-lin cobham_PN = mkPN "Cobham" ;
-lin cockermouth_PN = mkPN "Cockermouth" ;
-lin codsall_PN = mkPN "Codsall" ;
-lin coimbatore_PN = mkPN "Coimbatore" ;
-lin colchester_PN = mkPN "Colchester" ;
-lin colne_PN = mkPN "Colne" ;
-lin cologne_PN = mkPN "Cologne" ;
-lin colombia_PN = mkPN "Colombie" ;
-lin colombo_PN = mkPN "Colombo" ;
-lin colorado_PN = mkPN "Colorado" ;
-lin columbia_PN = mkPN "Columbia" ;
-lin columbus_PN = mkPN "Columbus" ;
-lin congleton_PN = mkPN "Congleton" ;
-lin consett_PN = mkPN "Consett" ;
-lin conwy_PN = mkPN "Conwy" ;
-lin cookham_PN = mkPN "Cookham" ;
-lin copenhagen_PN = mkPN "Copenhague" ;
-lin coppull_PN = mkPN "Coppull" ;
-lin corby_PN = mkPN "Corby" ;
-lin cork_PN = mkPN "Cork" ;
-lin cornwall_PN = mkPN "Cornwall" ;
-lin corsham_PN = mkPN "Corsham" ;
-lin corunna_PN = mkPN "Corunna" ;
-lin cosenza_PN = mkPN "Cosenza" ;
-lin coventry_PN = mkPN "Coventry" ;
-lin cowdenbeath_PN = mkPN "Cowdenbeath" ;
-lin cowes_PN = mkPN "Cowes" ;
-lin cramlington_PN = mkPN "Cramlington" ;
-lin crawley_PN = mkPN "Crawley" ;
-lin cres_PN = mkPN "Cres" ;
-lin creswell_PN = mkPN "Creswell" ;
-lin crewe_PN = mkPN "Crewe" ;
-lin crieff_PN = mkPN "Crieff" ;
-lin cromer_PN = mkPN "Cromer" ;
-lin crook_PN = mkPN "Crook" ;
-lin crosby_PN = mkPN "Crosby" ;
-lin crowborough_PN = mkPN "Crowborough" ;
-lin crowthorne_PN = mkPN "Crowthorne" ;
-lin croydon_PN = mkPN "Croydon" ;
-lin cuba_PN = mkPN "Cuba" ;
-lin cudworth_PN = mkPN "Cudworth" ;
-lin cuffley_PN = mkPN "Cuffley" ;
-lin culcheth_PN = mkPN "Culcheth" ;
-lin cumberland_PN = mkPN "Cumberland" ;
-lin cumbernauld_PN = mkPN "Cumbernauld" ;
-lin cumnock_PN = mkPN "Cumnock" ;
-lin cupar_PN = mkPN "Cupar" ;
-lin curitiba_PN = mkPN "Curitiba" ;
-lin currie_PN = mkPN "Currie" ;
-lin cwmbran_PN = mkPN "Cwmbran" ;
-lin cyprus_PN = mkPN "Chypre" ;
-lin cyril_PN = mkPN "Cyril" ;
-lin dakar_PN = mkPN "Dakar" ;
-lin dalkeith_PN = mkPN "Dalkeith" ;
-lin dallas_PN = mkPN "Dallas" ;
-lin dalry_PN = mkPN "Dalry" ;
-lin dalton_PN = mkPN "Dalton" ;
-lin damascus_PN = mkPN "Damas" ;
-lin daphne_PN = mkPN "Daphne" ;
-lin darby_PN = mkPN "Darby" ;
-lin darfield_PN = mkPN "Darfield" ;
-lin darlington_PN = mkPN "Darlington" ;
-lin darmstadt_PN = mkPN "Darmstadt" ;
-lin dartford_PN = mkPN "Dartford" ;
-lin dartmouth_PN = mkPN "Dartmouth" ;
-lin darwen_PN = mkPN "Darwen" ;
-lin daventry_PN = mkPN "Daventry" ;
-lin david_PN = mkPN "David" ;
-lin dawlish_PN = mkPN "Dawlish" ;
-lin dayton_PN = mkPN "Dayton" ;
-lin deal_PN = mkPN "Deal" ;
-lin delaware_PN = mkPN "Delaware" ;
-lin delhi_PN = mkPN "Delhi" ;
-lin denain_PN = mkPN "Denain" ;
-lin denbigh_PN = mkPN "Denbigh" ;
-lin denmark_PN = mkPN "Danemark" ;
-lin dennis_PN = mkPN "Dennis" ;
-lin denny_PN = mkPN "Denny" ;
-lin denver_PN = mkPN "Denver" ;
-lin derby_PN = mkPN "Derby" ;
-lin dessau_PN = mkPN "Dessau" ;
-lin detroit_PN = mkPN "Détroit" ;
-lin devizes_PN = mkPN "Devizes" ;
-lin devon_PN = mkPN "Devon" ;
-lin dewsbury_PN = mkPN "Dewsbury" ;
-lin didcot_PN = mkPN "Didcot" ;
-lin dijon_PN = mkPN "Dijon" ;
-lin dingle_PN = mkPN "Dingle" ;
-lin dinnington_PN = mkPN "Dinnington" ;
-lin djibouti_PN = mkPN "Djibouti" ;
-lin dominica_PN = mkPN "Dominique" ;
-lin don_PN = mkPN "Don" ;
-lin doncaster_PN = mkPN "Doncaster" ;
-lin donegal_PN = mkPN "Donegal" ;
-lin donetsk_PN = mkPN "Donetsk" ;
-lin dora_PN = mkPN "Dora" ;
-lin dorchester_PN = mkPN "Dorchester" ;
-lin dordrecht_PN = mkPN "Dordrecht" ;
-lin dorking_PN = mkPN "Dorking" ;
-lin dortmund_PN = mkPN "Dortmund" ;
-lin douai_PN = mkPN "Douai" ;
-lin douglas_PN = mkPN "Douglas" ;
+lin casablanca_PN = mkPN "Casablanca" ; -- status=guess src=geonames
+lin castleford_PN = mkPN "Castleford" ; -- status=guess src=geonames
+lin catania_PN = mkPN "Catane" ; -- status=guess src=geonames
+lin cavan_PN = mkPN "Cavan" ; -- status=guess src=geonames
+lin cecilia_PN = mkPN "Cecilia" ; -- status=guess src=geonames
+lin chad_PN = mkPN "Tchad" ; -- status=guess src=geonames
+lin chalfont_PN = mkPN "Chalfont" ; -- status=guess src=geonames
+lin changchun_PN = mkPN "Changchun" ; -- status=guess src=geonames
+lin changsha_PN = mkPN "Changsha" ; -- status=guess src=geonames
+lin chard_PN = mkPN "Chard" ; -- status=guess src=geonames
+lin charlotte_PN = mkPN "Charlotte" ; -- status=guess src=geonames
+lin chatham_PN = mkPN "Chatham" ; -- status=guess src=geonames
+lin cheadle_PN = mkPN "Cheadle" ; -- status=guess src=geonames
+lin chelmsford_PN = mkPN "Chelmsford" ; -- status=guess src=geonames
+lin chelsea_PN = mkPN "Chelsea" ; -- status=guess src=geonames
+lin cheltenham_PN = mkPN "Cheltenham" ; -- status=guess src=geonames
+lin chelyabinsk_PN = mkPN "Tcheliabinsk" ; -- status=guess src=geonames
+lin chepstow_PN = mkPN "Chepstow" ; -- status=guess src=geonames
+lin chesham_PN = mkPN "Chesham" ; -- status=guess src=geonames
+lin cheshire_PN = mkPN "Cheshire" ; -- status=guess src=geonames
+lin chester_PN = mkPN "Chester" ; -- status=guess src=geonames
+lin chesterfield_PN = mkPN "Chesterfield" ; -- status=guess src=geonames
+lin chicago_PN = mkPN "Chicago" ; -- status=guess src=geonames
+lin chichester_PN = mkPN "Chichester" ; -- status=guess src=geonames
+lin chile_PN = mkPN "Chili" ; -- status=guess src=geonames
+lin china_PN = mkPN "République populaire de Chine" ; -- status=guess src=geonames
+lin chippenham_PN = mkPN "Chippenham" ; -- status=guess src=geonames
+lin chorley_PN = mkPN "Chorley" ; -- status=guess src=geonames
+lin christchurch_PN = mkPN "Christchurch" ; -- status=guess src=geonames
+lin christmas_PN = mkPN "Christmas" ; -- status=guess src=geonames
+lin christopher_PN = mkPN "Christopher" ; -- status=guess src=geonames
+lin cincinnati_PN = mkPN "Cincinnati" ; -- status=guess src=geonames
+lin cinderford_PN = mkPN "Cinderford" ; -- status=guess src=geonames
+lin cirencester_PN = mkPN "Cirencester" ; -- status=guess src=geonames
+lin clare_PN = mkPN "Clare" ; -- status=guess src=geonames
+lin clarkston_PN = mkPN "Clarkston" ; -- status=guess src=geonames
+lin claude_PN = mkPN "Claude" ; -- status=guess src=geonames
+lin cleethorpes_PN = mkPN "Cleethorpes" ; -- status=guess src=geonames
+lin clevedon_PN = mkPN "Clevedon" ; -- status=guess src=geonames
+lin cleveland_PN = mkPN "Cleveland" ; -- status=guess src=geonames
+lin clifford_PN = mkPN "Clifford" ; -- status=guess src=geonames
+lin clitheroe_PN = mkPN "Clitheroe" ; -- status=guess src=geonames
+lin clive_PN = mkPN "Clive" ; -- status=guess src=geonames
+lin clowne_PN = mkPN "Clowne" ; -- status=guess src=geonames
+lin clydach_PN = mkPN "Clydach" ; -- status=guess src=geonames
+lin clydebank_PN = mkPN "Clydebank" ; -- status=guess src=geonames
+lin coalville_PN = mkPN "Coalville" ; -- status=guess src=geonames
+lin coatbridge_PN = mkPN "Coatbridge" ; -- status=guess src=geonames
+lin cobham_PN = mkPN "Cobham" ; -- status=guess src=geonames
+lin cockermouth_PN = mkPN "Cockermouth" ; -- status=guess src=geonames
+lin codsall_PN = mkPN "Codsall" ; -- status=guess src=geonames
+lin coimbatore_PN = mkPN "Coimbatore" ; -- status=guess src=geonames
+lin colchester_PN = mkPN "Colchester" ; -- status=guess src=geonames
+lin colne_PN = mkPN "Colne" ; -- status=guess src=geonames
+lin cologne_PN = mkPN "Cologne" ; -- status=guess src=geonames
+lin colombia_PN = mkPN "Colombie" ; -- status=guess src=geonames
+lin colombo_PN = mkPN "Colombo" ; -- status=guess src=geonames
+lin colorado_PN = mkPN "Colorado" ; -- status=guess src=geonames
+lin columbia_PN = mkPN "Columbia" ; -- status=guess src=geonames
+lin columbus_PN = mkPN "Columbus" ; -- status=guess src=geonames
+lin congleton_PN = mkPN "Congleton" ; -- status=guess src=geonames
+lin consett_PN = mkPN "Consett" ; -- status=guess src=geonames
+lin conwy_PN = mkPN "Conwy" ; -- status=guess src=geonames
+lin cookham_PN = mkPN "Cookham" ; -- status=guess src=geonames
+lin copenhagen_PN = mkPN "Copenhague" ; -- status=guess src=geonames
+lin coppull_PN = mkPN "Coppull" ; -- status=guess src=geonames
+lin corby_PN = mkPN "Corby" ; -- status=guess src=geonames
+lin cork_PN = mkPN "Cork" ; -- status=guess src=geonames
+lin cornwall_PN = mkPN "Cornwall" ; -- status=guess src=geonames
+lin corsham_PN = mkPN "Corsham" ; -- status=guess src=geonames
+lin corunna_PN = mkPN "Corunna" ; -- status=guess src=geonames
+lin cosenza_PN = mkPN "Cosenza" ; -- status=guess src=geonames
+lin coventry_PN = mkPN "Coventry" ; -- status=guess src=geonames
+lin cowdenbeath_PN = mkPN "Cowdenbeath" ; -- status=guess src=geonames
+lin cowes_PN = mkPN "Cowes" ; -- status=guess src=geonames
+lin cramlington_PN = mkPN "Cramlington" ; -- status=guess src=geonames
+lin crawley_PN = mkPN "Crawley" ; -- status=guess src=geonames
+lin cres_PN = mkPN "Cres" ; -- status=guess src=geonames
+lin creswell_PN = mkPN "Creswell" ; -- status=guess src=geonames
+lin crewe_PN = mkPN "Crewe" ; -- status=guess src=geonames
+lin crieff_PN = mkPN "Crieff" ; -- status=guess src=geonames
+lin cromer_PN = mkPN "Cromer" ; -- status=guess src=geonames
+lin crook_PN = mkPN "Crook" ; -- status=guess src=geonames
+lin crosby_PN = mkPN "Crosby" ; -- status=guess src=geonames
+lin crowborough_PN = mkPN "Crowborough" ; -- status=guess src=geonames
+lin crowthorne_PN = mkPN "Crowthorne" ; -- status=guess src=geonames
+lin croydon_PN = mkPN "Croydon" ; -- status=guess src=geonames
+lin cuba_PN = mkPN "Cuba" ; -- status=guess src=geonames
+lin cudworth_PN = mkPN "Cudworth" ; -- status=guess src=geonames
+lin cuffley_PN = mkPN "Cuffley" ; -- status=guess src=geonames
+lin culcheth_PN = mkPN "Culcheth" ; -- status=guess src=geonames
+lin cumberland_PN = mkPN "Cumberland" ; -- status=guess src=geonames
+lin cumbernauld_PN = mkPN "Cumbernauld" ; -- status=guess src=geonames
+lin cumnock_PN = mkPN "Cumnock" ; -- status=guess src=geonames
+lin cupar_PN = mkPN "Cupar" ; -- status=guess src=geonames
+lin curitiba_PN = mkPN "Curitiba" ; -- status=guess src=geonames
+lin currie_PN = mkPN "Currie" ; -- status=guess src=geonames
+lin cwmbran_PN = mkPN "Cwmbran" ; -- status=guess src=geonames
+lin cyprus_PN = mkPN "Chypre" ; -- status=guess src=geonames
+lin cyril_PN = mkPN "Cyril" ; -- status=guess src=geonames
+lin dakar_PN = mkPN "Dakar" ; -- status=guess src=geonames
+lin dalkeith_PN = mkPN "Dalkeith" ; -- status=guess src=geonames
+lin dallas_PN = mkPN "Dallas" ; -- status=guess src=geonames
+lin dalry_PN = mkPN "Dalry" ; -- status=guess src=geonames
+lin dalton_PN = mkPN "Dalton" ; -- status=guess src=geonames
+lin damascus_PN = mkPN "Damas" ; -- status=guess src=geonames
+lin daphne_PN = mkPN "Daphne" ; -- status=guess src=geonames
+lin darby_PN = mkPN "Darby" ; -- status=guess src=geonames
+lin darfield_PN = mkPN "Darfield" ; -- status=guess src=geonames
+lin darlington_PN = mkPN "Darlington" ; -- status=guess src=geonames
+lin darmstadt_PN = mkPN "Darmstadt" ; -- status=guess src=geonames
+lin dartford_PN = mkPN "Dartford" ; -- status=guess src=geonames
+lin dartmouth_PN = mkPN "Dartmouth" ; -- status=guess src=geonames
+lin darwen_PN = mkPN "Darwen" ; -- status=guess src=geonames
+lin daventry_PN = mkPN "Daventry" ; -- status=guess src=geonames
+lin david_PN = mkPN "David" ; -- status=guess src=geonames
+lin dawlish_PN = mkPN "Dawlish" ; -- status=guess src=geonames
+lin dayton_PN = mkPN "Dayton" ; -- status=guess src=geonames
+lin deal_PN = mkPN "Deal" ; -- status=guess src=geonames
+lin delaware_PN = mkPN "Delaware" ; -- status=guess src=geonames
+lin delhi_PN = mkPN "Delhi" ; -- status=guess src=geonames
+lin denain_PN = mkPN "Denain" ; -- status=guess src=geonames
+lin denbigh_PN = mkPN "Denbigh" ; -- status=guess src=geonames
+lin denmark_PN = mkPN "Danemark" ; -- status=guess src=geonames
+lin dennis_PN = mkPN "Dennis" ; -- status=guess src=geonames
+lin denny_PN = mkPN "Denny" ; -- status=guess src=geonames
+lin denver_PN = mkPN "Denver" ; -- status=guess src=geonames
+lin derby_PN = mkPN "Derby" ; -- status=guess src=geonames
+lin dessau_PN = mkPN "Dessau" ; -- status=guess src=geonames
+lin detroit_PN = mkPN "Détroit" ; -- status=guess src=geonames
+lin devizes_PN = mkPN "Devizes" ; -- status=guess src=geonames
+lin devon_PN = mkPN "Devon" ; -- status=guess src=geonames
+lin dewsbury_PN = mkPN "Dewsbury" ; -- status=guess src=geonames
+lin didcot_PN = mkPN "Didcot" ; -- status=guess src=geonames
+lin dijon_PN = mkPN "Dijon" ; -- status=guess src=geonames
+lin dingle_PN = mkPN "Dingle" ; -- status=guess src=geonames
+lin dinnington_PN = mkPN "Dinnington" ; -- status=guess src=geonames
+lin djibouti_PN = mkPN "Djibouti" ; -- status=guess src=geonames
+lin dominica_PN = mkPN "Dominique" ; -- status=guess src=geonames
+lin don_PN = mkPN "Don" ; -- status=guess src=geonames
+lin doncaster_PN = mkPN "Doncaster" ; -- status=guess src=geonames
+lin donegal_PN = mkPN "Donegal" ; -- status=guess src=geonames
+lin donetsk_PN = mkPN "Donetsk" ; -- status=guess src=geonames
+lin dora_PN = mkPN "Dora" ; -- status=guess src=geonames
+lin dorchester_PN = mkPN "Dorchester" ; -- status=guess src=geonames
+lin dordrecht_PN = mkPN "Dordrecht" ; -- status=guess src=geonames
+lin dorking_PN = mkPN "Dorking" ; -- status=guess src=geonames
+lin dortmund_PN = mkPN "Dortmund" ; -- status=guess src=geonames
+lin douai_PN = mkPN "Douai" ; -- status=guess src=geonames
+lin douglas_PN = mkPN "Douglas" ; -- status=guess src=geonames
 lin dover_PN = mkPN ("Dover" | "Douvres");
-lin dresden_PN = mkPN "Dresde" ;
-lin driffield_PN = mkPN "Driffield" ;
-lin drogheda_PN = mkPN "Drogheda" ;
-lin droitwich_PN = mkPN "Droitwich" ;
-lin dronfield_PN = mkPN "Dronfield" ;
-lin dublin_PN = mkPN "Dublin" ;
-lin dudley_PN = mkPN "Dudley" ;
-lin duisburg_PN = mkPN "Duisbourg" ;
-lin dukinfield_PN = mkPN "Dukinfield" ;
-lin dumbarton_PN = mkPN "Dumbarton" ;
-lin dumfries_PN = mkPN "Dumfries" ;
-lin duncan_PN = mkPN "Duncan" ;
-lin dundalk_PN = mkPN "Dundalk" ;
-lin dundee_PN = mkPN "Dundee" ;
-lin dunfermline_PN = mkPN "Dunfermline" ;
-lin dunkirk_PN = mkPN "Dunkirk" ;
-lin dunoon_PN = mkPN "Dunoon" ;
-lin dunstable_PN = mkPN "Dunstable" ;
-lin durban_PN = mkPN "Durban" ;
-lin durham_PN = mkPN "Durham" ;
-lin durrington_PN = mkPN "Durrington" ;
-lin dursley_PN = mkPN "Dursley" ;
-lin eaglescliffe_PN = mkPN "Eaglescliffe" ;
-lin ealing_PN = mkPN "Ealing" ;
-lin easington_PN = mkPN "Easington" ;
-lin eastbourne_PN = mkPN "Eastbourne" ;
-lin eastleigh_PN = mkPN "Eastleigh" ;
-lin eccles_PN = mkPN "Eccles" ;
-lin ecuador_PN = mkPN "Équateur" ;
-lin ed_PN = mkPN "Ed" ;
-lin eden_PN = mkPN "Eden" ;
-lin edenbridge_PN = mkPN "Edenbridge" ;
-lin edgar_PN = mkPN "Edgar" ;
-lin edinburgh_PN = mkPN "Édimbourg" ;
-lin eg_PN = mkPN "Eg" ;
-lin egremont_PN = mkPN "Egremont" ;
-lin egypt_PN = mkPN "Égypte" ;
-lin eindhoven_PN = mkPN "Eindhoven" ;
-lin el_salvador_PN = mkPN "Salvador" ;
-lin elderslie_PN = mkPN "Elderslie" ;
-lin eleanor_PN = mkPN "Eleanor" ;
-lin elgin_PN = mkPN "Elgin" ;
-lin elizabeth_PN = mkPN "Elizabeth" ;
-lin elland_PN = mkPN "Elland" ;
-lin ellesmere_PN = mkPN "Ellesmere" ;
-lin elstree_PN = mkPN "Elstree" ;
-lin ely_PN = mkPN "Ely" ;
-lin emsworth_PN = mkPN "Emsworth" ;
-lin enfield_PN = mkPN "Enfield" ;
-lin england_PN = mkPN "England" ;
-lin enoch_PN = mkPN "Enoch" ;
-lin enschede_PN = mkPN "Enschede" ;
-lin epping_PN = mkPN "Epping" ;
-lin epsom_PN = mkPN "Epsom" ;
-lin erfurt_PN = mkPN "Erfurt" ;
-lin erin_PN = mkPN "Erin" ;
-lin eritrea_PN = mkPN "Érythrée" ;
-lin erlangen_PN = mkPN "Erlangen" ;
-lin essen_PN = mkPN "Essen" ;
-lin essex_PN = mkPN "Essex" ;
-lin esther_PN = mkPN "Esther" ;
-lin ethiopia_PN = mkPN "Éthiopie" ;
-lin eugene_PN = mkPN "Eugene" ;
-lin eunice_PN = mkPN "Eunice" ;
-lin evesham_PN = mkPN "Evesham" ;
-lin ewell_PN = mkPN "Ewell" ;
-lin exeter_PN = mkPN "Exeter" ;
-lin exmouth_PN = mkPN "Exmouth" ;
-lin falkirk_PN = mkPN "Falkirk" ;
-lin falmouth_PN = mkPN "Falmouth" ;
-lin farnham_PN = mkPN "Farnham" ;
-lin farnworth_PN = mkPN "Farnworth" ;
-lin fauldhouse_PN = mkPN "Fauldhouse" ;
-lin faversham_PN = mkPN "Faversham" ;
-lin featherstone_PN = mkPN "Featherstone" ;
-lin felixstowe_PN = mkPN "Felixstowe" ;
-lin ferrara_PN = mkPN "Ferrare" ;
-lin ferryhill_PN = mkPN "Ferryhill" ;
-lin fife_PN = mkPN "Fife" ;
-lin fiji_PN = mkPN "Fidji" ;
-lin finland_PN = mkPN "Finlande" ;
-lin fleet_PN = mkPN "Fleet" ;
-lin fleetwood_PN = mkPN "Fleetwood" ;
-lin flint_PN = mkPN "Flint" ;
-lin flora_PN = mkPN "Flora" ;
-lin florence_1_PN = mkPN "Florence" ;
-lin florence_2_PN = mkPN "Florence" ;
-lin florida_PN = mkPN "Florida" ;
-lin foggia_PN = mkPN "Foggia" ;
-lin folkestone_PN = mkPN "Folkestone" ;
-lin forfar_PN = mkPN "Forfar" ;
-lin formby_PN = mkPN "Formby" ;
-lin formosa_PN = mkPN "Formosa" ;
-lin fortaleza_PN = mkPN "Fortaleza" ;
-lin fowey_PN = mkPN "Fowey" ;
-lin france_PN = mkPN "France" ;
-lin francis_PN = mkPN "Francis" ;
-lin fraserburgh_PN = mkPN "Fraserburgh" ;
-lin freckleton_PN = mkPN "Freckleton" ;
-lin frederick_PN = mkPN "Frederick" ;
-lin frederiksberg_PN = mkPN "Frederiksberg" ;
-lin freiburg_PN = mkPN "Fribourg-en-Brisgau" ;
-lin freshwater_PN = mkPN "Freshwater" ;
-lin frodsham_PN = mkPN "Frodsham" ;
-lin frome_PN = mkPN "Frome" ;
-lin furth_PN = mkPN "Furth" ;
-lin fushun_PN = mkPN "Fushun" ;
-lin gabon_PN = mkPN "Gabon" ;
-lin gainsborough_PN = mkPN "Gainsborough" ;
-lin galashiels_PN = mkPN "Galashiels" ;
-lin gallup_PN = mkPN "Gallup" ;
-lin gambia_PN = mkPN "Gambie" ;
-lin garforth_PN = mkPN "Garforth" ;
-lin gary_PN = mkPN "Gary" ;
-lin gateshead_PN = mkPN "Gateshead" ;
-lin gelligaer_PN = mkPN "Gelligaer" ;
-lin gelsenkirchen_PN = mkPN "Gelsenkirchen" ;
-lin gemini_PN = mkPN "Gemini" ;
-lin geneva_PN = mkPN "Geneva" ;
-lin genoa_PN = mkPN "Gênes" ;
-lin george_PN = mkPN "George" ;
-lin georgia_PN = mkPN "Géorgie" ;
-lin gerald_PN = mkPN "Gerald" ;
-lin germany_PN = mkPN "Allemagne" ;
-lin ghana_PN = mkPN "Ghana" ;
-lin gibraltar_PN = mkPN "Gibraltar" ;
-lin giffnock_PN = mkPN "Giffnock" ;
-lin gilbert_PN = mkPN "Gilbert" ;
-lin gill_PN = mkPN "Gill" ;
-lin gillingham_PN = mkPN "Gillingham" ;
-lin girvan_PN = mkPN "Girvan" ;
-lin glasgow_PN = mkPN "Glasgow" ;
-lin glastonbury_PN = mkPN "Glastonbury" ;
-lin glenrothes_PN = mkPN "Glenrothes" ;
-lin gloria_PN = mkPN "Gloria" ;
-lin glossop_PN = mkPN "Glossop" ;
-lin gloucester_PN = mkPN "Gloucester" ;
-lin glusburn_PN = mkPN "Glusburn" ;
-lin godalming_PN = mkPN "Godalming" ;
-lin godfrey_PN = mkPN "Godfrey" ;
-lin godmanchester_PN = mkPN "Godmanchester" ;
-lin goole_PN = mkPN "Goole" ;
-lin gordon_PN = mkPN "Gordon" ;
-lin gorseinon_PN = mkPN "Gorseinon" ;
-lin gosport_PN = mkPN "Gosport" ;
-lin gothenburg_PN = mkPN "Gothenburg" ;
-lin gourock_PN = mkPN "Gourock" ;
+lin dresden_PN = mkPN "Dresde" ; -- status=guess src=geonames
+lin driffield_PN = mkPN "Driffield" ; -- status=guess src=geonames
+lin drogheda_PN = mkPN "Drogheda" ; -- status=guess src=geonames
+lin droitwich_PN = mkPN "Droitwich" ; -- status=guess src=geonames
+lin dronfield_PN = mkPN "Dronfield" ; -- status=guess src=geonames
+lin dublin_PN = mkPN "Dublin" ; -- status=guess src=geonames
+lin dudley_PN = mkPN "Dudley" ; -- status=guess src=geonames
+lin duisburg_PN = mkPN "Duisbourg" ; -- status=guess src=geonames
+lin dukinfield_PN = mkPN "Dukinfield" ; -- status=guess src=geonames
+lin dumbarton_PN = mkPN "Dumbarton" ; -- status=guess src=geonames
+lin dumfries_PN = mkPN "Dumfries" ; -- status=guess src=geonames
+lin duncan_PN = mkPN "Duncan" ; -- status=guess src=geonames
+lin dundalk_PN = mkPN "Dundalk" ; -- status=guess src=geonames
+lin dundee_PN = mkPN "Dundee" ; -- status=guess src=geonames
+lin dunfermline_PN = mkPN "Dunfermline" ; -- status=guess src=geonames
+lin dunkirk_PN = mkPN "Dunkirk" ; -- status=guess src=geonames
+lin dunoon_PN = mkPN "Dunoon" ; -- status=guess src=geonames
+lin dunstable_PN = mkPN "Dunstable" ; -- status=guess src=geonames
+lin durban_PN = mkPN "Durban" ; -- status=guess src=geonames
+lin durham_PN = mkPN "Durham" ; -- status=guess src=geonames
+lin durrington_PN = mkPN "Durrington" ; -- status=guess src=geonames
+lin dursley_PN = mkPN "Dursley" ; -- status=guess src=geonames
+lin eaglescliffe_PN = mkPN "Eaglescliffe" ; -- status=guess src=geonames
+lin ealing_PN = mkPN "Ealing" ; -- status=guess src=geonames
+lin easington_PN = mkPN "Easington" ; -- status=guess src=geonames
+lin eastbourne_PN = mkPN "Eastbourne" ; -- status=guess src=geonames
+lin eastleigh_PN = mkPN "Eastleigh" ; -- status=guess src=geonames
+lin eccles_PN = mkPN "Eccles" ; -- status=guess src=geonames
+lin ecuador_PN = mkPN "Équateur" ; -- status=guess src=geonames
+lin ed_PN = mkPN "Ed" ; -- status=guess src=geonames
+lin eden_PN = mkPN "Eden" ; -- status=guess src=geonames
+lin edenbridge_PN = mkPN "Edenbridge" ; -- status=guess src=geonames
+lin edgar_PN = mkPN "Edgar" ; -- status=guess src=geonames
+lin edinburgh_PN = mkPN "Édimbourg" ; -- status=guess src=geonames
+lin eg_PN = mkPN "Eg" ; -- status=guess src=geonames
+lin egremont_PN = mkPN "Egremont" ; -- status=guess src=geonames
+lin egypt_PN = mkPN "Égypte" ; -- status=guess src=geonames
+lin eindhoven_PN = mkPN "Eindhoven" ; -- status=guess src=geonames
+lin el_salvador_PN = mkPN "Salvador" ; -- status=guess src=geonames
+lin elderslie_PN = mkPN "Elderslie" ; -- status=guess src=geonames
+lin eleanor_PN = mkPN "Eleanor" ; -- status=guess src=geonames
+lin elgin_PN = mkPN "Elgin" ; -- status=guess src=geonames
+lin elizabeth_PN = mkPN "Elizabeth" ; -- status=guess src=geonames
+lin elland_PN = mkPN "Elland" ; -- status=guess src=geonames
+lin ellesmere_PN = mkPN "Ellesmere" ; -- status=guess src=geonames
+lin elstree_PN = mkPN "Elstree" ; -- status=guess src=geonames
+lin ely_PN = mkPN "Ely" ; -- status=guess src=geonames
+lin emsworth_PN = mkPN "Emsworth" ; -- status=guess src=geonames
+lin enfield_PN = mkPN "Enfield" ; -- status=guess src=geonames
+lin england_PN = mkPN "England" ; -- status=guess src=geonames
+lin enoch_PN = mkPN "Enoch" ; -- status=guess src=geonames
+lin enschede_PN = mkPN "Enschede" ; -- status=guess src=geonames
+lin epping_PN = mkPN "Epping" ; -- status=guess src=geonames
+lin epsom_PN = mkPN "Epsom" ; -- status=guess src=geonames
+lin erfurt_PN = mkPN "Erfurt" ; -- status=guess src=geonames
+lin erin_PN = mkPN "Erin" ; -- status=guess src=geonames
+lin eritrea_PN = mkPN "Érythrée" ; -- status=guess src=geonames
+lin erlangen_PN = mkPN "Erlangen" ; -- status=guess src=geonames
+lin essen_PN = mkPN "Essen" ; -- status=guess src=geonames
+lin essex_PN = mkPN "Essex" ; -- status=guess src=geonames
+lin esther_PN = mkPN "Esther" ; -- status=guess src=geonames
+lin ethiopia_PN = mkPN "Éthiopie" ; -- status=guess src=geonames
+lin eugene_PN = mkPN "Eugene" ; -- status=guess src=geonames
+lin eunice_PN = mkPN "Eunice" ; -- status=guess src=geonames
+lin evesham_PN = mkPN "Evesham" ; -- status=guess src=geonames
+lin ewell_PN = mkPN "Ewell" ; -- status=guess src=geonames
+lin exeter_PN = mkPN "Exeter" ; -- status=guess src=geonames
+lin exmouth_PN = mkPN "Exmouth" ; -- status=guess src=geonames
+lin falkirk_PN = mkPN "Falkirk" ; -- status=guess src=geonames
+lin falmouth_PN = mkPN "Falmouth" ; -- status=guess src=geonames
+lin farnham_PN = mkPN "Farnham" ; -- status=guess src=geonames
+lin farnworth_PN = mkPN "Farnworth" ; -- status=guess src=geonames
+lin fauldhouse_PN = mkPN "Fauldhouse" ; -- status=guess src=geonames
+lin faversham_PN = mkPN "Faversham" ; -- status=guess src=geonames
+lin featherstone_PN = mkPN "Featherstone" ; -- status=guess src=geonames
+lin felixstowe_PN = mkPN "Felixstowe" ; -- status=guess src=geonames
+lin ferrara_PN = mkPN "Ferrare" ; -- status=guess src=geonames
+lin ferryhill_PN = mkPN "Ferryhill" ; -- status=guess src=geonames
+lin fife_PN = mkPN "Fife" ; -- status=guess src=geonames
+lin fiji_PN = mkPN "Fidji" ; -- status=guess src=geonames
+lin finland_PN = mkPN "Finlande" ; -- status=guess src=geonames
+lin fleet_PN = mkPN "Fleet" ; -- status=guess src=geonames
+lin fleetwood_PN = mkPN "Fleetwood" ; -- status=guess src=geonames
+lin flint_PN = mkPN "Flint" ; -- status=guess src=geonames
+lin flora_PN = mkPN "Flora" ; -- status=guess src=geonames
+lin florence_1_PN = mkPN "Florence" ; -- status=guess src=geonames
+lin florence_2_PN = mkPN "Florence" ; -- status=guess src=geonames
+lin florida_PN = mkPN "Florida" ; -- status=guess src=geonames
+lin foggia_PN = mkPN "Foggia" ; -- status=guess src=geonames
+lin folkestone_PN = mkPN "Folkestone" ; -- status=guess src=geonames
+lin forfar_PN = mkPN "Forfar" ; -- status=guess src=geonames
+lin formby_PN = mkPN "Formby" ; -- status=guess src=geonames
+lin formosa_PN = mkPN "Formosa" ; -- status=guess src=geonames
+lin fortaleza_PN = mkPN "Fortaleza" ; -- status=guess src=geonames
+lin fowey_PN = mkPN "Fowey" ; -- status=guess src=geonames
+lin france_PN = mkPN "France" ; -- status=guess src=geonames
+lin francis_PN = mkPN "Francis" ; -- status=guess src=geonames
+lin fraserburgh_PN = mkPN "Fraserburgh" ; -- status=guess src=geonames
+lin freckleton_PN = mkPN "Freckleton" ; -- status=guess src=geonames
+lin frederick_PN = mkPN "Frederick" ; -- status=guess src=geonames
+lin frederiksberg_PN = mkPN "Frederiksberg" ; -- status=guess src=geonames
+lin freiburg_PN = mkPN "Fribourg-en-Brisgau" ; -- status=guess src=geonames
+lin freshwater_PN = mkPN "Freshwater" ; -- status=guess src=geonames
+lin frodsham_PN = mkPN "Frodsham" ; -- status=guess src=geonames
+lin frome_PN = mkPN "Frome" ; -- status=guess src=geonames
+lin furth_PN = mkPN "Furth" ; -- status=guess src=geonames
+lin fushun_PN = mkPN "Fushun" ; -- status=guess src=geonames
+lin gabon_PN = mkPN "Gabon" ; -- status=guess src=geonames
+lin gainsborough_PN = mkPN "Gainsborough" ; -- status=guess src=geonames
+lin galashiels_PN = mkPN "Galashiels" ; -- status=guess src=geonames
+lin gallup_PN = mkPN "Gallup" ; -- status=guess src=geonames
+lin gambia_PN = mkPN "Gambie" ; -- status=guess src=geonames
+lin garforth_PN = mkPN "Garforth" ; -- status=guess src=geonames
+lin gary_PN = mkPN "Gary" ; -- status=guess src=geonames
+lin gateshead_PN = mkPN "Gateshead" ; -- status=guess src=geonames
+lin gelligaer_PN = mkPN "Gelligaer" ; -- status=guess src=geonames
+lin gelsenkirchen_PN = mkPN "Gelsenkirchen" ; -- status=guess src=geonames
+lin gemini_PN = mkPN "Gemini" ; -- status=guess src=geonames
+lin geneva_PN = mkPN "Geneva" ; -- status=guess src=geonames
+lin genoa_PN = mkPN "Gênes" ; -- status=guess src=geonames
+lin george_PN = mkPN "George" ; -- status=guess src=geonames
+lin georgia_PN = mkPN "Géorgie" ; -- status=guess src=geonames
+lin gerald_PN = mkPN "Gerald" ; -- status=guess src=geonames
+lin germany_PN = mkPN "Allemagne" ; -- status=guess src=geonames
+lin ghana_PN = mkPN "Ghana" ; -- status=guess src=geonames
+lin gibraltar_PN = mkPN "Gibraltar" ; -- status=guess src=geonames
+lin giffnock_PN = mkPN "Giffnock" ; -- status=guess src=geonames
+lin gilbert_PN = mkPN "Gilbert" ; -- status=guess src=geonames
+lin gill_PN = mkPN "Gill" ; -- status=guess src=geonames
+lin gillingham_PN = mkPN "Gillingham" ; -- status=guess src=geonames
+lin girvan_PN = mkPN "Girvan" ; -- status=guess src=geonames
+lin glasgow_PN = mkPN "Glasgow" ; -- status=guess src=geonames
+lin glastonbury_PN = mkPN "Glastonbury" ; -- status=guess src=geonames
+lin glenrothes_PN = mkPN "Glenrothes" ; -- status=guess src=geonames
+lin gloria_PN = mkPN "Gloria" ; -- status=guess src=geonames
+lin glossop_PN = mkPN "Glossop" ; -- status=guess src=geonames
+lin gloucester_PN = mkPN "Gloucester" ; -- status=guess src=geonames
+lin glusburn_PN = mkPN "Glusburn" ; -- status=guess src=geonames
+lin godalming_PN = mkPN "Godalming" ; -- status=guess src=geonames
+lin godfrey_PN = mkPN "Godfrey" ; -- status=guess src=geonames
+lin godmanchester_PN = mkPN "Godmanchester" ; -- status=guess src=geonames
+lin goole_PN = mkPN "Goole" ; -- status=guess src=geonames
+lin gordon_PN = mkPN "Gordon" ; -- status=guess src=geonames
+lin gorseinon_PN = mkPN "Gorseinon" ; -- status=guess src=geonames
+lin gosport_PN = mkPN "Gosport" ; -- status=guess src=geonames
+lin gothenburg_PN = mkPN "Gothenburg" ; -- status=guess src=geonames
+lin gourock_PN = mkPN "Gourock" ; -- status=guess src=geonames
 lin granada_PN = mkPN ("Granada" | "Grenade");
-lin grangemouth_PN = mkPN "Grangemouth" ;
-lin grantham_PN = mkPN "Grantham" ;
-lin gravesend_PN = mkPN "Gravesend" ;
-lin graz_PN = mkPN "Graz" ;
-lin greece_PN = mkPN "Grèce" ;
-lin greenock_PN = mkPN "Greenock" ;
-lin greenwich_PN = mkPN "Greenwich" ;
-lin gregory_PN = mkPN "Gregory" ;
-lin grenada_PN = mkPN "Grenade" ;
-lin grimethorpe_PN = mkPN "Grimethorpe" ;
-lin grimsby_PN = mkPN "Grimsby" ;
-lin groningen_PN = mkPN "Groningue" ;
-lin guadalajara_PN = mkPN "Guadalajara" ;
-lin guatemala_PN = mkPN "Guatemala" ;
-lin guayaquil_PN = mkPN "Guayaquil" ;
-lin guildford_PN = mkPN "Guildford" ;
-lin guinea_PN = mkPN "Guinée-Conakry" ;
-lin guisborough_PN = mkPN "Guisborough" ;
-lin guyana_PN = mkPN "Guyane britannique" ;
-lin haarlem_PN = mkPN "Haarlem" ;
-lin hackney_PN = mkPN "Hackney" ;
-lin haddington_PN = mkPN "Haddington" ;
-lin hagen_PN = mkPN "Hagen" ;
-lin hagley_PN = mkPN "Hagley" ;
-lin hailsham_PN = mkPN "Hailsham" ;
-lin haiphong_PN = mkPN "Hải Phòng" ;
-lin haiti_PN = mkPN "Haïti" ;
-lin halesowen_PN = mkPN "Halesowen" ;
-lin halifax_PN = mkPN "Halifax" ;
-lin halle_PN = mkPN "Halle" ;
-lin halstead_PN = mkPN "Halstead" ;
-lin hamburg_PN = mkPN "Hambourg" ;
-lin hamilton_PN = mkPN "Hamilton" ;
-lin hammersmith_PN = mkPN "Hammersmith" ;
-lin hampshire_PN = mkPN "Hampshire" ;
-lin hanoi_PN = mkPN "Hanoï" ;
-lin hanover_PN = mkPN "Hanover" ;
-lin harbin_PN = mkPN "Harbin" ;
-lin harlow_PN = mkPN "Harlow" ;
-lin harpenden_PN = mkPN "Harpenden" ;
-lin harrogate_PN = mkPN "Harrogate" ;
-lin harrow_PN = mkPN "Harrow" ;
-lin hartlepool_PN = mkPN "Hartlepool" ;
-lin hartley_PN = mkPN "Hartley" ;
-lin harvey_PN = mkPN "Harvey" ;
-lin harwich_PN = mkPN "Harwich" ;
-lin haslemere_PN = mkPN "Haslemere" ;
-lin haslingden_PN = mkPN "Haslingden" ;
-lin hastings_PN = mkPN "Hastings" ;
-lin hatfield_PN = mkPN "Hatfield" ;
-lin havana_PN = mkPN "La Havane" ;
-lin haverfordwest_PN = mkPN "Haverfordwest" ;
-lin haverhill_PN = mkPN "Haverhill" ;
-lin hawick_PN = mkPN "Hawick" ;
-lin heanor_PN = mkPN "Heanor" ;
-lin helensburgh_PN = mkPN "Helensburgh" ;
-lin helsinki_PN = mkPN "Helsinki" ;
-lin helston_PN = mkPN "Helston" ;
-lin hemsworth_PN = mkPN "Hemsworth" ;
-lin henry_PN = mkPN "Henry" ;
-lin hereford_PN = mkPN "Hereford" ;
-lin herne_PN = mkPN "Herne" ;
-lin hertford_PN = mkPN "Hertford" ;
-lin hexham_PN = mkPN "Hexham" ;
-lin heywood_PN = mkPN "Heywood" ;
-lin highland_PN = mkPN "Highland" ;
-lin hinckley_PN = mkPN "Hinckley" ;
-lin hitchin_PN = mkPN "Hitchin" ;
-lin hockley_PN = mkPN "Hockley" ;
-lin hoddesdon_PN = mkPN "Hoddesdon" ;
-lin holland_PN = mkPN "Holland" ;
-lin hollywood_PN = mkPN "Hollywood" ;
-lin holmfirth_PN = mkPN "Holmfirth" ;
-lin holyhead_PN = mkPN "Holyhead" ;
-lin honduras_PN = mkPN "Honduras" ;
-lin hong_kong_PN = mkPN "Hong Kong" ;
-lin honiton_PN = mkPN "Honiton" ;
-lin hoo_PN = mkPN "Hoo" ;
-lin hope_PN = mkPN "Hope" ;
-lin horace_PN = mkPN "Horace" ;
-lin horley_PN = mkPN "Horley" ;
-lin hornsea_PN = mkPN "Hornsea" ;
-lin horsham_PN = mkPN "Horsham" ;
-lin horsley_PN = mkPN "Horsley" ;
-lin horwich_PN = mkPN "Horwich" ;
-lin houghton_PN = mkPN "Houghton" ;
-lin hounslow_PN = mkPN "Hounslow" ;
-lin houston_PN = mkPN "Houston" ;
-lin hove_PN = mkPN "Hove" ;
-lin howard_PN = mkPN "Howard" ;
-lin hoylake_PN = mkPN "Hoylake" ;
-lin hucknall_PN = mkPN "Hucknall" ;
-lin huddersfield_PN = mkPN "Huddersfield" ;
-lin humberston_PN = mkPN "Humberston" ;
-lin hungary_PN = mkPN "Hongrie" ;
-lin huntingdon_PN = mkPN "Huntingdon" ;
-lin hurstpierpoint_PN = mkPN "Hurstpierpoint" ;
-lin hyde_PN = mkPN "Hyde" ;
-lin hyderabad_PN = mkPN "Hyderabad" ;
-lin hythe_PN = mkPN "Hythe" ;
-lin ibadan_PN = mkPN "Ibadan" ;
-lin iceland_PN = mkPN "Islande" ;
-lin ilfracombe_PN = mkPN "Ilfracombe" ;
-lin ilkeston_PN = mkPN "Ilkeston" ;
-lin ilkley_PN = mkPN "Ilkley" ;
-lin immingham_PN = mkPN "Immingham" ;
-lin india_PN = mkPN "Inde" ;
-lin indiana_PN = mkPN "Indiana" ;
-lin indianapolis_PN = mkPN "Indianapolis" ;
-lin indonesia_PN = mkPN "Indes orientales néerlandaises" ;
-lin indore_PN = mkPN "Indore" ;
-lin ingatestone_PN = mkPN "Ingatestone" ;
-lin innsbruck_PN = mkPN "Innsbruck" ;
-lin inverkeithing_PN = mkPN "Inverkeithing" ;
-lin inverness_PN = mkPN "Inverness" ;
-lin inverurie_PN = mkPN "Inverurie" ;
-lin iowa_PN = mkPN "Iowa" ;
-lin ipswich_PN = mkPN "Ipswich" ;
-lin iran_PN = mkPN "Iran (République islamique de)" ;
-lin iraq_PN = mkPN "Iraq" ;
-lin ireland_PN = mkPN "Irlande" ;
-lin irthlingborough_PN = mkPN "Irthlingborough" ;
-lin irvine_PN = mkPN "Irvine" ;
-lin isabel_PN = mkPN "Isabel" ;
-lin islington_PN = mkPN "District londonien d'Islington" ;
-lin israel_PN = mkPN "Israël" ;
-lin italy_PN = mkPN "Italie" ;
-lin iver_PN = mkPN "Iver" ;
-lin jabalpur_PN = mkPN "Jabalpur" ;
-lin jacksonville_PN = mkPN "Jacksonville" ;
-lin jaipur_PN = mkPN "Jaipur" ;
-lin jakarta_PN = mkPN "Jakarta" ;
-lin jamaica_PN = mkPN "Jamaïque" ;
-lin japan_PN = mkPN "Japon" ;
-lin jarrow_PN = mkPN "Jarrow" ;
-lin java_PN = mkPN "Java" ;
-lin jedburgh_PN = mkPN "Jedburgh" ;
-lin jerome_PN = mkPN "Jerome" ;
-lin jersey_PN = mkPN "Bailliage de Jersey" ;
-lin joanna_PN = mkPN "Joanna" ;
-lin job_PN = mkPN "Job" ;
-lin johannesburg_PN = mkPN "Johannesbourg" ;
-lin johnstone_PN = mkPN "Johnstone" ;
-lin jordan_PN = mkPN "Jordanie" ;
-lin joseph_PN = mkPN "Joseph" ;
-lin joshua_PN = mkPN "Joshua" ;
-lin julian_PN = mkPN "Julian" ;
-lin jun_PN = mkPN "Jun" ;
-lin jupiter_PN = mkPN "Jupiter" ;
-lin justin_PN = mkPN "Justin" ;
-lin kaohsiung_PN = mkPN "Kaohsiung" ;
-lin karachi_PN = mkPN "Karâchi" ;
-lin karlsruhe_PN = mkPN "Karlsruhe" ;
-lin kassel_PN = mkPN "Cassel" ;
-lin katherine_PN = mkPN "Katherine" ;
-lin katowice_PN = mkPN "Katowice" ;
-lin kazan_PN = mkPN "Kazan" ;
-lin keighley_PN = mkPN "Keighley" ;
-lin keith_PN = mkPN "Keith" ;
-lin kelso_PN = mkPN "Kelso" ;
-lin kelty_PN = mkPN "Kelty" ;
-lin kemsing_PN = mkPN "Kemsing" ;
-lin kendal_PN = mkPN "Kendal" ;
-lin kenilworth_PN = mkPN "Kenilworth" ;
-lin kensington_PN = mkPN "Kensington" ;
-lin kent_PN = mkPN "Kent" ;
-lin kenya_PN = mkPN "Kenya" ;
-lin kettering_PN = mkPN "Kettering" ;
-lin keynsham_PN = mkPN "Keynsham" ;
-lin khartoum_PN = mkPN "Khartoum" ;
-lin kidderminster_PN = mkPN "Kidderminster" ;
-lin kidlington_PN = mkPN "Kidlington" ;
-lin kidsgrove_PN = mkPN "Kidsgrove" ;
-lin kiev_PN = mkPN "Kiev" ;
-lin kilbirnie_PN = mkPN "Kilbirnie" ;
-lin kildare_PN = mkPN "Kildare" ;
-lin kilkenny_PN = mkPN "Kilkenny" ;
-lin killarney_PN = mkPN "Killarney" ;
-lin kilmarnock_PN = mkPN "Kilmarnock" ;
-lin kilsyth_PN = mkPN "Kilsyth" ;
-lin kilwinning_PN = mkPN "Kilwinning" ;
-lin kimberley_PN = mkPN "Kimberley" ;
-lin kingsbury_PN = mkPN "Kingsbury" ;
-lin kingsteignton_PN = mkPN "Kingsteignton" ;
-lin kingston_PN = mkPN "Kingston" ;
-lin kinshasa_PN = mkPN "Kinshasa" ;
-lin kirkby_PN = mkPN "Kirkby" ;
-lin kirkcaldy_PN = mkPN "Kirkcaldy" ;
-lin kirkham_PN = mkPN "Kirkham" ;
-lin kirkintilloch_PN = mkPN "Kirkintilloch" ;
-lin kirkwall_PN = mkPN "Kirkwall" ;
-lin knaresborough_PN = mkPN "Knaresborough" ;
-lin knottingley_PN = mkPN "Knottingley" ;
-lin knutsford_PN = mkPN "Knutsford" ;
-lin kobe_PN = mkPN "Kōbe" ;
-lin koblenz_PN = mkPN "Coblence" ;
-lin krasnoyarsk_PN = mkPN "Krasnoïarsk" ;
-lin krefeld_PN = mkPN "Krefeld" ;
-lin kunming_PN = mkPN "Kunming" ;
-lin kuwait_PN = mkPN "Koweït" ;
-lin kuybyshev_PN = mkPN "Kouïbychev" ;
-lin kyoto_PN = mkPN "Kyōto" ;
-lin lab_PN = mkPN "Lab" ;
-lin labrador_PN = mkPN "Labrador" ;
-lin lagos_PN = mkPN "Lagos" ;
-lin lahore_PN = mkPN "Lahore" ;
-lin lakenheath_PN = mkPN "Lakenheath" ;
-lin lambeth_PN = mkPN "Lambeth" ;
-lin lanark_PN = mkPN "Lanark" ;
-lin lancaster_PN = mkPN "Lancaster" ;
-lin lancing_PN = mkPN "Lancing" ;
-lin laos_PN = mkPN "Laos" ;
-lin largs_PN = mkPN "Largs" ;
-lin larkhall_PN = mkPN "Larkhall" ;
-lin larne_PN = mkPN "Larne" ;
-lin laura_PN = mkPN "Laura" ;
-lin lausanne_PN = mkPN "Lausanne" ;
-lin lawrence_PN = mkPN "Lawrence" ;
-lin leatherhead_PN = mkPN "Leatherhead" ;
-lin lebanon_PN = mkPN "Liban" ;
-lin leeds_PN = mkPN "Leeds" ;
-lin leek_PN = mkPN "Leek" ;
-lin leicester_PN = mkPN "Leicester" ;
-lin leiden_PN = mkPN "Leyde" ;
-lin leigh_PN = mkPN "Leigh" ;
-lin leipzig_PN = mkPN "Leipzig" ;
-lin lens_PN = mkPN "Lens" ;
-lin lent_PN = mkPN "Lent" ;
-lin leominster_PN = mkPN "Leominster" ;
-lin leon_PN = mkPN "Leon" ;
-lin leonard_PN = mkPN "Leonard" ;
-lin lerwick_PN = mkPN "Lerwick" ;
-lin les_PN = mkPN "Les" ;
-lin leslie_PN = mkPN "Leslie" ;
-lin lesotho_PN = mkPN "Lesotho" ;
-lin letchworth_PN = mkPN "Letchworth" ;
-lin levant_PN = mkPN "Levant" ;
-lin leven_PN = mkPN "Leven" ;
-lin leverkusen_PN = mkPN "Leverkusen" ;
-lin lewes_PN = mkPN "Lewes" ;
-lin leyland_PN = mkPN "Leyland" ;
-lin lib_PN = mkPN "Lib" ;
-lin liberia_PN = mkPN "Liberia" ;
-lin libya_PN = mkPN "Jamahiriya arabe libyenne" ;
-lin lichfield_PN = mkPN "Lichfield" ;
-lin liechtenstein_PN = mkPN "Liechtenstein" ;
-lin lilian_PN = mkPN "Lilian" ;
-lin lille_PN = mkPN "Lille" ;
-lin lima_PN = mkPN "Lima" ;
-lin limerick_PN = mkPN "Limerick" ;
-lin limoges_PN = mkPN "Limoges" ;
-lin lincoln_PN = mkPN "Lincoln" ;
-lin lincolnshire_PN = mkPN "Lincolnshire" ;
-lin linda_PN = mkPN "Linda" ;
-lin linlithgow_PN = mkPN "Linlithgow" ;
-lin linwood_PN = mkPN "Linwood" ;
-lin linz_PN = mkPN "Linz" ;
-lin lisa_PN = mkPN "Lisa" ;
-lin lisbon_PN = mkPN "Lisbonne" ;
-lin liskeard_PN = mkPN "Liskeard" ;
-lin littlehampton_PN = mkPN "Littlehampton" ;
-lin liverpool_PN = mkPN "Liverpool" ;
-lin livingston_PN = mkPN "Livingston" ;
-lin livorno_PN = mkPN "Livourne" ;
-lin ljubljana_PN = mkPN "Ljubljana" ;
-lin llandudno_PN = mkPN "Llandudno" ;
-lin llanelli_PN = mkPN "Llanelli" ;
-lin llangollen_PN = mkPN "Llangollen" ;
-lin llantrisant_PN = mkPN "Llantrisant" ;
-lin loanhead_PN = mkPN "Loanhead" ;
-lin lochgelly_PN = mkPN "Lochgelly" ;
-lin loftus_PN = mkPN "Loftus" ;
+lin grangemouth_PN = mkPN "Grangemouth" ; -- status=guess src=geonames
+lin grantham_PN = mkPN "Grantham" ; -- status=guess src=geonames
+lin gravesend_PN = mkPN "Gravesend" ; -- status=guess src=geonames
+lin graz_PN = mkPN "Graz" ; -- status=guess src=geonames
+lin greece_PN = mkPN "Grèce" ; -- status=guess src=geonames
+lin greenock_PN = mkPN "Greenock" ; -- status=guess src=geonames
+lin greenwich_PN = mkPN "Greenwich" ; -- status=guess src=geonames
+lin gregory_PN = mkPN "Gregory" ; -- status=guess src=geonames
+lin grenada_PN = mkPN "Grenade" ; -- status=guess src=geonames
+lin grimethorpe_PN = mkPN "Grimethorpe" ; -- status=guess src=geonames
+lin grimsby_PN = mkPN "Grimsby" ; -- status=guess src=geonames
+lin groningen_PN = mkPN "Groningue" ; -- status=guess src=geonames
+lin guadalajara_PN = mkPN "Guadalajara" ; -- status=guess src=geonames
+lin guatemala_PN = mkPN "Guatemala" ; -- status=guess src=geonames
+lin guayaquil_PN = mkPN "Guayaquil" ; -- status=guess src=geonames
+lin guildford_PN = mkPN "Guildford" ; -- status=guess src=geonames
+lin guinea_PN = mkPN "Guinée-Conakry" ; -- status=guess src=geonames
+lin guisborough_PN = mkPN "Guisborough" ; -- status=guess src=geonames
+lin guyana_PN = mkPN "Guyane britannique" ; -- status=guess src=geonames
+lin haarlem_PN = mkPN "Haarlem" ; -- status=guess src=geonames
+lin hackney_PN = mkPN "Hackney" ; -- status=guess src=geonames
+lin haddington_PN = mkPN "Haddington" ; -- status=guess src=geonames
+lin hagen_PN = mkPN "Hagen" ; -- status=guess src=geonames
+lin hagley_PN = mkPN "Hagley" ; -- status=guess src=geonames
+lin hailsham_PN = mkPN "Hailsham" ; -- status=guess src=geonames
+lin haiphong_PN = mkPN "Hải Phòng" ; -- status=guess src=geonames
+lin haiti_PN = mkPN "Haïti" ; -- status=guess src=geonames
+lin halesowen_PN = mkPN "Halesowen" ; -- status=guess src=geonames
+lin halifax_PN = mkPN "Halifax" ; -- status=guess src=geonames
+lin halle_PN = mkPN "Halle" ; -- status=guess src=geonames
+lin halstead_PN = mkPN "Halstead" ; -- status=guess src=geonames
+lin hamburg_PN = mkPN "Hambourg" ; -- status=guess src=geonames
+lin hamilton_PN = mkPN "Hamilton" ; -- status=guess src=geonames
+lin hammersmith_PN = mkPN "Hammersmith" ; -- status=guess src=geonames
+lin hampshire_PN = mkPN "Hampshire" ; -- status=guess src=geonames
+lin hanoi_PN = mkPN "Hanoï" ; -- status=guess src=geonames
+lin hanover_PN = mkPN "Hanover" ; -- status=guess src=geonames
+lin harbin_PN = mkPN "Harbin" ; -- status=guess src=geonames
+lin harlow_PN = mkPN "Harlow" ; -- status=guess src=geonames
+lin harpenden_PN = mkPN "Harpenden" ; -- status=guess src=geonames
+lin harrogate_PN = mkPN "Harrogate" ; -- status=guess src=geonames
+lin harrow_PN = mkPN "Harrow" ; -- status=guess src=geonames
+lin hartlepool_PN = mkPN "Hartlepool" ; -- status=guess src=geonames
+lin hartley_PN = mkPN "Hartley" ; -- status=guess src=geonames
+lin harvey_PN = mkPN "Harvey" ; -- status=guess src=geonames
+lin harwich_PN = mkPN "Harwich" ; -- status=guess src=geonames
+lin haslemere_PN = mkPN "Haslemere" ; -- status=guess src=geonames
+lin haslingden_PN = mkPN "Haslingden" ; -- status=guess src=geonames
+lin hastings_PN = mkPN "Hastings" ; -- status=guess src=geonames
+lin hatfield_PN = mkPN "Hatfield" ; -- status=guess src=geonames
+lin havana_PN = mkPN "La Havane" ; -- status=guess src=geonames
+lin haverfordwest_PN = mkPN "Haverfordwest" ; -- status=guess src=geonames
+lin haverhill_PN = mkPN "Haverhill" ; -- status=guess src=geonames
+lin hawick_PN = mkPN "Hawick" ; -- status=guess src=geonames
+lin heanor_PN = mkPN "Heanor" ; -- status=guess src=geonames
+lin helensburgh_PN = mkPN "Helensburgh" ; -- status=guess src=geonames
+lin helsinki_PN = mkPN "Helsinki" ; -- status=guess src=geonames
+lin helston_PN = mkPN "Helston" ; -- status=guess src=geonames
+lin hemsworth_PN = mkPN "Hemsworth" ; -- status=guess src=geonames
+lin henry_PN = mkPN "Henry" ; -- status=guess src=geonames
+lin hereford_PN = mkPN "Hereford" ; -- status=guess src=geonames
+lin herne_PN = mkPN "Herne" ; -- status=guess src=geonames
+lin hertford_PN = mkPN "Hertford" ; -- status=guess src=geonames
+lin hexham_PN = mkPN "Hexham" ; -- status=guess src=geonames
+lin heywood_PN = mkPN "Heywood" ; -- status=guess src=geonames
+lin highland_PN = mkPN "Highland" ; -- status=guess src=geonames
+lin hinckley_PN = mkPN "Hinckley" ; -- status=guess src=geonames
+lin hitchin_PN = mkPN "Hitchin" ; -- status=guess src=geonames
+lin hockley_PN = mkPN "Hockley" ; -- status=guess src=geonames
+lin hoddesdon_PN = mkPN "Hoddesdon" ; -- status=guess src=geonames
+lin holland_PN = mkPN "Holland" ; -- status=guess src=geonames
+lin hollywood_PN = mkPN "Hollywood" ; -- status=guess src=geonames
+lin holmfirth_PN = mkPN "Holmfirth" ; -- status=guess src=geonames
+lin holyhead_PN = mkPN "Holyhead" ; -- status=guess src=geonames
+lin honduras_PN = mkPN "Honduras" ; -- status=guess src=geonames
+lin hong_kong_PN = mkPN "Hong Kong" ; -- status=guess src=geonames
+lin honiton_PN = mkPN "Honiton" ; -- status=guess src=geonames
+lin hoo_PN = mkPN "Hoo" ; -- status=guess src=geonames
+lin hope_PN = mkPN "Hope" ; -- status=guess src=geonames
+lin horace_PN = mkPN "Horace" ; -- status=guess src=geonames
+lin horley_PN = mkPN "Horley" ; -- status=guess src=geonames
+lin hornsea_PN = mkPN "Hornsea" ; -- status=guess src=geonames
+lin horsham_PN = mkPN "Horsham" ; -- status=guess src=geonames
+lin horsley_PN = mkPN "Horsley" ; -- status=guess src=geonames
+lin horwich_PN = mkPN "Horwich" ; -- status=guess src=geonames
+lin houghton_PN = mkPN "Houghton" ; -- status=guess src=geonames
+lin hounslow_PN = mkPN "Hounslow" ; -- status=guess src=geonames
+lin houston_PN = mkPN "Houston" ; -- status=guess src=geonames
+lin hove_PN = mkPN "Hove" ; -- status=guess src=geonames
+lin howard_PN = mkPN "Howard" ; -- status=guess src=geonames
+lin hoylake_PN = mkPN "Hoylake" ; -- status=guess src=geonames
+lin hucknall_PN = mkPN "Hucknall" ; -- status=guess src=geonames
+lin huddersfield_PN = mkPN "Huddersfield" ; -- status=guess src=geonames
+lin humberston_PN = mkPN "Humberston" ; -- status=guess src=geonames
+lin hungary_PN = mkPN "Hongrie" ; -- status=guess src=geonames
+lin huntingdon_PN = mkPN "Huntingdon" ; -- status=guess src=geonames
+lin hurstpierpoint_PN = mkPN "Hurstpierpoint" ; -- status=guess src=geonames
+lin hyde_PN = mkPN "Hyde" ; -- status=guess src=geonames
+lin hyderabad_PN = mkPN "Hyderabad" ; -- status=guess src=geonames
+lin hythe_PN = mkPN "Hythe" ; -- status=guess src=geonames
+lin ibadan_PN = mkPN "Ibadan" ; -- status=guess src=geonames
+lin iceland_PN = mkPN "Islande" ; -- status=guess src=geonames
+lin ilfracombe_PN = mkPN "Ilfracombe" ; -- status=guess src=geonames
+lin ilkeston_PN = mkPN "Ilkeston" ; -- status=guess src=geonames
+lin ilkley_PN = mkPN "Ilkley" ; -- status=guess src=geonames
+lin immingham_PN = mkPN "Immingham" ; -- status=guess src=geonames
+lin india_PN = mkPN "Inde" ; -- status=guess src=geonames
+lin indiana_PN = mkPN "Indiana" ; -- status=guess src=geonames
+lin indianapolis_PN = mkPN "Indianapolis" ; -- status=guess src=geonames
+lin indonesia_PN = mkPN "Indes orientales néerlandaises" ; -- status=guess src=geonames
+lin indore_PN = mkPN "Indore" ; -- status=guess src=geonames
+lin ingatestone_PN = mkPN "Ingatestone" ; -- status=guess src=geonames
+lin innsbruck_PN = mkPN "Innsbruck" ; -- status=guess src=geonames
+lin inverkeithing_PN = mkPN "Inverkeithing" ; -- status=guess src=geonames
+lin inverness_PN = mkPN "Inverness" ; -- status=guess src=geonames
+lin inverurie_PN = mkPN "Inverurie" ; -- status=guess src=geonames
+lin iowa_PN = mkPN "Iowa" ; -- status=guess src=geonames
+lin ipswich_PN = mkPN "Ipswich" ; -- status=guess src=geonames
+lin iran_PN = mkPN "Iran (République islamique de)" ; -- status=guess src=geonames
+lin iraq_PN = mkPN "Iraq" ; -- status=guess src=geonames
+lin ireland_PN = mkPN "Irlande" ; -- status=guess src=geonames
+lin irthlingborough_PN = mkPN "Irthlingborough" ; -- status=guess src=geonames
+lin irvine_PN = mkPN "Irvine" ; -- status=guess src=geonames
+lin isabel_PN = mkPN "Isabel" ; -- status=guess src=geonames
+lin islington_PN = mkPN "District londonien d'Islington" ; -- status=guess src=geonames
+lin israel_PN = mkPN "Israël" ; -- status=guess src=geonames
+lin italy_PN = mkPN "Italie" ; -- status=guess src=geonames
+lin iver_PN = mkPN "Iver" ; -- status=guess src=geonames
+lin jabalpur_PN = mkPN "Jabalpur" ; -- status=guess src=geonames
+lin jacksonville_PN = mkPN "Jacksonville" ; -- status=guess src=geonames
+lin jaipur_PN = mkPN "Jaipur" ; -- status=guess src=geonames
+lin jakarta_PN = mkPN "Jakarta" ; -- status=guess src=geonames
+lin jamaica_PN = mkPN "Jamaïque" ; -- status=guess src=geonames
+lin japan_PN = mkPN "Japon" ; -- status=guess src=geonames
+lin jarrow_PN = mkPN "Jarrow" ; -- status=guess src=geonames
+lin java_PN = mkPN "Java" ; -- status=guess src=geonames
+lin jedburgh_PN = mkPN "Jedburgh" ; -- status=guess src=geonames
+lin jerome_PN = mkPN "Jerome" ; -- status=guess src=geonames
+lin jersey_PN = mkPN "Bailliage de Jersey" ; -- status=guess src=geonames
+lin joanna_PN = mkPN "Joanna" ; -- status=guess src=geonames
+lin job_PN = mkPN "Job" ; -- status=guess src=geonames
+lin johannesburg_PN = mkPN "Johannesbourg" ; -- status=guess src=geonames
+lin johnstone_PN = mkPN "Johnstone" ; -- status=guess src=geonames
+lin jordan_PN = mkPN "Jordanie" ; -- status=guess src=geonames
+lin joseph_PN = mkPN "Joseph" ; -- status=guess src=geonames
+lin joshua_PN = mkPN "Joshua" ; -- status=guess src=geonames
+lin julian_PN = mkPN "Julian" ; -- status=guess src=geonames
+lin jun_PN = mkPN "Jun" ; -- status=guess src=geonames
+lin jupiter_PN = mkPN "Jupiter" ; -- status=guess src=geonames
+lin justin_PN = mkPN "Justin" ; -- status=guess src=geonames
+lin kaohsiung_PN = mkPN "Kaohsiung" ; -- status=guess src=geonames
+lin karachi_PN = mkPN "Karâchi" ; -- status=guess src=geonames
+lin karlsruhe_PN = mkPN "Karlsruhe" ; -- status=guess src=geonames
+lin kassel_PN = mkPN "Cassel" ; -- status=guess src=geonames
+lin katherine_PN = mkPN "Katherine" ; -- status=guess src=geonames
+lin katowice_PN = mkPN "Katowice" ; -- status=guess src=geonames
+lin kazan_PN = mkPN "Kazan" ; -- status=guess src=geonames
+lin keighley_PN = mkPN "Keighley" ; -- status=guess src=geonames
+lin keith_PN = mkPN "Keith" ; -- status=guess src=geonames
+lin kelso_PN = mkPN "Kelso" ; -- status=guess src=geonames
+lin kelty_PN = mkPN "Kelty" ; -- status=guess src=geonames
+lin kemsing_PN = mkPN "Kemsing" ; -- status=guess src=geonames
+lin kendal_PN = mkPN "Kendal" ; -- status=guess src=geonames
+lin kenilworth_PN = mkPN "Kenilworth" ; -- status=guess src=geonames
+lin kensington_PN = mkPN "Kensington" ; -- status=guess src=geonames
+lin kent_PN = mkPN "Kent" ; -- status=guess src=geonames
+lin kenya_PN = mkPN "Kenya" ; -- status=guess src=geonames
+lin kettering_PN = mkPN "Kettering" ; -- status=guess src=geonames
+lin keynsham_PN = mkPN "Keynsham" ; -- status=guess src=geonames
+lin khartoum_PN = mkPN "Khartoum" ; -- status=guess src=geonames
+lin kidderminster_PN = mkPN "Kidderminster" ; -- status=guess src=geonames
+lin kidlington_PN = mkPN "Kidlington" ; -- status=guess src=geonames
+lin kidsgrove_PN = mkPN "Kidsgrove" ; -- status=guess src=geonames
+lin kiev_PN = mkPN "Kiev" ; -- status=guess src=geonames
+lin kilbirnie_PN = mkPN "Kilbirnie" ; -- status=guess src=geonames
+lin kildare_PN = mkPN "Kildare" ; -- status=guess src=geonames
+lin kilkenny_PN = mkPN "Kilkenny" ; -- status=guess src=geonames
+lin killarney_PN = mkPN "Killarney" ; -- status=guess src=geonames
+lin kilmarnock_PN = mkPN "Kilmarnock" ; -- status=guess src=geonames
+lin kilsyth_PN = mkPN "Kilsyth" ; -- status=guess src=geonames
+lin kilwinning_PN = mkPN "Kilwinning" ; -- status=guess src=geonames
+lin kimberley_PN = mkPN "Kimberley" ; -- status=guess src=geonames
+lin kingsbury_PN = mkPN "Kingsbury" ; -- status=guess src=geonames
+lin kingsteignton_PN = mkPN "Kingsteignton" ; -- status=guess src=geonames
+lin kingston_PN = mkPN "Kingston" ; -- status=guess src=geonames
+lin kinshasa_PN = mkPN "Kinshasa" ; -- status=guess src=geonames
+lin kirkby_PN = mkPN "Kirkby" ; -- status=guess src=geonames
+lin kirkcaldy_PN = mkPN "Kirkcaldy" ; -- status=guess src=geonames
+lin kirkham_PN = mkPN "Kirkham" ; -- status=guess src=geonames
+lin kirkintilloch_PN = mkPN "Kirkintilloch" ; -- status=guess src=geonames
+lin kirkwall_PN = mkPN "Kirkwall" ; -- status=guess src=geonames
+lin knaresborough_PN = mkPN "Knaresborough" ; -- status=guess src=geonames
+lin knottingley_PN = mkPN "Knottingley" ; -- status=guess src=geonames
+lin knutsford_PN = mkPN "Knutsford" ; -- status=guess src=geonames
+lin kobe_PN = mkPN "Kōbe" ; -- status=guess src=geonames
+lin koblenz_PN = mkPN "Coblence" ; -- status=guess src=geonames
+lin krasnoyarsk_PN = mkPN "Krasnoïarsk" ; -- status=guess src=geonames
+lin krefeld_PN = mkPN "Krefeld" ; -- status=guess src=geonames
+lin kunming_PN = mkPN "Kunming" ; -- status=guess src=geonames
+lin kuwait_PN = mkPN "Koweït" ; -- status=guess src=geonames
+lin kuybyshev_PN = mkPN "Kouïbychev" ; -- status=guess src=geonames
+lin kyoto_PN = mkPN "Kyōto" ; -- status=guess src=geonames
+lin lab_PN = mkPN "Lab" ; -- status=guess src=geonames
+lin labrador_PN = mkPN "Labrador" ; -- status=guess src=geonames
+lin lagos_PN = mkPN "Lagos" ; -- status=guess src=geonames
+lin lahore_PN = mkPN "Lahore" ; -- status=guess src=geonames
+lin lakenheath_PN = mkPN "Lakenheath" ; -- status=guess src=geonames
+lin lambeth_PN = mkPN "Lambeth" ; -- status=guess src=geonames
+lin lanark_PN = mkPN "Lanark" ; -- status=guess src=geonames
+lin lancaster_PN = mkPN "Lancaster" ; -- status=guess src=geonames
+lin lancing_PN = mkPN "Lancing" ; -- status=guess src=geonames
+lin laos_PN = mkPN "Laos" ; -- status=guess src=geonames
+lin largs_PN = mkPN "Largs" ; -- status=guess src=geonames
+lin larkhall_PN = mkPN "Larkhall" ; -- status=guess src=geonames
+lin larne_PN = mkPN "Larne" ; -- status=guess src=geonames
+lin laura_PN = mkPN "Laura" ; -- status=guess src=geonames
+lin lausanne_PN = mkPN "Lausanne" ; -- status=guess src=geonames
+lin lawrence_PN = mkPN "Lawrence" ; -- status=guess src=geonames
+lin leatherhead_PN = mkPN "Leatherhead" ; -- status=guess src=geonames
+lin lebanon_PN = mkPN "Liban" ; -- status=guess src=geonames
+lin leeds_PN = mkPN "Leeds" ; -- status=guess src=geonames
+lin leek_PN = mkPN "Leek" ; -- status=guess src=geonames
+lin leicester_PN = mkPN "Leicester" ; -- status=guess src=geonames
+lin leiden_PN = mkPN "Leyde" ; -- status=guess src=geonames
+lin leigh_PN = mkPN "Leigh" ; -- status=guess src=geonames
+lin leipzig_PN = mkPN "Leipzig" ; -- status=guess src=geonames
+lin lens_PN = mkPN "Lens" ; -- status=guess src=geonames
+lin lent_PN = mkPN "Lent" ; -- status=guess src=geonames
+lin leominster_PN = mkPN "Leominster" ; -- status=guess src=geonames
+lin leon_PN = mkPN "Leon" ; -- status=guess src=geonames
+lin leonard_PN = mkPN "Leonard" ; -- status=guess src=geonames
+lin lerwick_PN = mkPN "Lerwick" ; -- status=guess src=geonames
+lin les_PN = mkPN "Les" ; -- status=guess src=geonames
+lin leslie_PN = mkPN "Leslie" ; -- status=guess src=geonames
+lin lesotho_PN = mkPN "Lesotho" ; -- status=guess src=geonames
+lin letchworth_PN = mkPN "Letchworth" ; -- status=guess src=geonames
+lin levant_PN = mkPN "Levant" ; -- status=guess src=geonames
+lin leven_PN = mkPN "Leven" ; -- status=guess src=geonames
+lin leverkusen_PN = mkPN "Leverkusen" ; -- status=guess src=geonames
+lin lewes_PN = mkPN "Lewes" ; -- status=guess src=geonames
+lin leyland_PN = mkPN "Leyland" ; -- status=guess src=geonames
+lin lib_PN = mkPN "Lib" ; -- status=guess src=geonames
+lin liberia_PN = mkPN "Liberia" ; -- status=guess src=geonames
+lin libya_PN = mkPN "Jamahiriya arabe libyenne" ; -- status=guess src=geonames
+lin lichfield_PN = mkPN "Lichfield" ; -- status=guess src=geonames
+lin liechtenstein_PN = mkPN "Liechtenstein" ; -- status=guess src=geonames
+lin lilian_PN = mkPN "Lilian" ; -- status=guess src=geonames
+lin lille_PN = mkPN "Lille" ; -- status=guess src=geonames
+lin lima_PN = mkPN "Lima" ; -- status=guess src=geonames
+lin limerick_PN = mkPN "Limerick" ; -- status=guess src=geonames
+lin limoges_PN = mkPN "Limoges" ; -- status=guess src=geonames
+lin lincoln_PN = mkPN "Lincoln" ; -- status=guess src=geonames
+lin lincolnshire_PN = mkPN "Lincolnshire" ; -- status=guess src=geonames
+lin linda_PN = mkPN "Linda" ; -- status=guess src=geonames
+lin linlithgow_PN = mkPN "Linlithgow" ; -- status=guess src=geonames
+lin linwood_PN = mkPN "Linwood" ; -- status=guess src=geonames
+lin linz_PN = mkPN "Linz" ; -- status=guess src=geonames
+lin lisa_PN = mkPN "Lisa" ; -- status=guess src=geonames
+lin lisbon_PN = mkPN "Lisbonne" ; -- status=guess src=geonames
+lin liskeard_PN = mkPN "Liskeard" ; -- status=guess src=geonames
+lin littlehampton_PN = mkPN "Littlehampton" ; -- status=guess src=geonames
+lin liverpool_PN = mkPN "Liverpool" ; -- status=guess src=geonames
+lin livingston_PN = mkPN "Livingston" ; -- status=guess src=geonames
+lin livorno_PN = mkPN "Livourne" ; -- status=guess src=geonames
+lin ljubljana_PN = mkPN "Ljubljana" ; -- status=guess src=geonames
+lin llandudno_PN = mkPN "Llandudno" ; -- status=guess src=geonames
+lin llanelli_PN = mkPN "Llanelli" ; -- status=guess src=geonames
+lin llangollen_PN = mkPN "Llangollen" ; -- status=guess src=geonames
+lin llantrisant_PN = mkPN "Llantrisant" ; -- status=guess src=geonames
+lin loanhead_PN = mkPN "Loanhead" ; -- status=guess src=geonames
+lin lochgelly_PN = mkPN "Lochgelly" ; -- status=guess src=geonames
+lin loftus_PN = mkPN "Loftus" ; -- status=guess src=geonames
 lin london_PN = mkPN ("Londres" | "London");
-lin londonderry_PN = mkPN "Londonderry" ;
-lin longridge_PN = mkPN "Longridge" ;
-lin longton_PN = mkPN "Longton" ;
-lin los_angeles_PN = mkPN "Los Angeles" ;
-lin lossiemouth_PN = mkPN "Lossiemouth" ;
-lin loughborough_PN = mkPN "Loughborough" ;
-lin louisiana_PN = mkPN "Louisiana" ;
-lin louisville_PN = mkPN "Louisville" ;
-lin louth_PN = mkPN "Louth" ;
-lin lowestoft_PN = mkPN "Lowestoft" ;
-lin lubeck_PN = mkPN "Lubeck" ;
-lin lucknow_PN = mkPN "Lucknow" ;
-lin ludlow_PN = mkPN "Ludlow" ;
-lin luton_PN = mkPN "Luton" ;
+lin londonderry_PN = mkPN "Londonderry" ; -- status=guess src=geonames
+lin longridge_PN = mkPN "Longridge" ; -- status=guess src=geonames
+lin longton_PN = mkPN "Longton" ; -- status=guess src=geonames
+lin los_angeles_PN = mkPN "Los Angeles" ; -- status=guess src=geonames
+lin lossiemouth_PN = mkPN "Lossiemouth" ; -- status=guess src=geonames
+lin loughborough_PN = mkPN "Loughborough" ; -- status=guess src=geonames
+lin louisiana_PN = mkPN "Louisiana" ; -- status=guess src=geonames
+lin louisville_PN = mkPN "Louisville" ; -- status=guess src=geonames
+lin louth_PN = mkPN "Louth" ; -- status=guess src=geonames
+lin lowestoft_PN = mkPN "Lowestoft" ; -- status=guess src=geonames
+lin lubeck_PN = mkPN "Lubeck" ; -- status=guess src=geonames
+lin lucknow_PN = mkPN "Lucknow" ; -- status=guess src=geonames
+lin ludlow_PN = mkPN "Ludlow" ; -- status=guess src=geonames
+lin luton_PN = mkPN "Luton" ; -- status=guess src=geonames
 lin luxembourg_PN = mkPN ("Ville de Luxembourg" | "Luxembourg");
-lin lydney_PN = mkPN "Lydney" ;
-lin lymington_PN = mkPN "Lymington" ;
-lin lymm_PN = mkPN "Lymm" ;
-lin lynn_PN = mkPN "Lynn" ;
-lin lyons_PN = mkPN "Lyons" ;
-lin maastricht_PN = mkPN "Maastricht" ;
-lin macclesfield_PN = mkPN "Macclesfield" ;
-lin mach_PN = mkPN "Mach" ;
-lin madagascar_PN = mkPN "Madagascar" ;
-lin madras_PN = mkPN "Madras" ;
-lin madrid_PN = mkPN "Madrid" ;
-lin madurai_PN = mkPN "Madurai" ;
-lin maesteg_PN = mkPN "Maesteg" ;
-lin magdeburg_PN = mkPN "Magdebourg" ;
-lin maghull_PN = mkPN "Maghull" ;
-lin maidenhead_PN = mkPN "Maidenhead" ;
-lin maidstone_PN = mkPN "Maidstone" ;
-lin mainz_PN = mkPN "Mayence" ;
-lin malaga_PN = mkPN "Malaga" ;
-lin malawi_PN = mkPN "Malawi" ;
-lin malaya_PN = mkPN "Malaya" ;
-lin malaysia_PN = mkPN "Malaisie" ;
-lin maldon_PN = mkPN "Maldon" ;
-lin mali_PN = mkPN "Mali" ;
-lin mallow_PN = mkPN "Mallow" ;
-lin malta_PN = mkPN "Malte" ;
-lin maltby_PN = mkPN "Maltby" ;
-lin malvern_PN = mkPN "Malvern" ;
-lin manchester_PN = mkPN "Manchester" ;
-lin manhattan_PN = mkPN "Manhattan" ;
-lin manila_PN = mkPN "Manille" ;
-lin mannheim_PN = mkPN "Mannheim" ;
-lin mansfield_PN = mkPN "Mansfield" ;
-lin maracaibo_PN = mkPN "Maracaibo" ;
-lin march_PN = mkPN "March" ;
-lin margaret_PN = mkPN "Margaret" ;
-lin margate_PN = mkPN "Margate" ;
-lin maria_PN = mkPN "Maria" ;
-lin marion_PN = mkPN "Marion" ;
-lin marlborough_PN = mkPN "Marlborough" ;
-lin marlow_PN = mkPN "Marlow" ;
-lin marple_PN = mkPN "Marple" ;
-lin mars_PN = mkPN "Mars" ;
-lin marseilles_PN = mkPN "Marseilles" ;
-lin martin_PN = mkPN "Martin" ;
-lin mary_PN = mkPN "Mary" ;
-lin maryport_PN = mkPN "Maryport" ;
-lin matlock_PN = mkPN "Matlock" ;
-lin maud_PN = mkPN "Maud" ;
-lin mauritania_PN = mkPN "Mauritanie" ;
-lin mauritius_PN = mkPN "Île Maurice" ;
-lin mayfield_PN = mkPN "Mayfield" ;
-lin mayo_PN = mkPN "Mayo" ;
-lin mecca_PN = mkPN "La Mecque" ;
-lin medan_PN = mkPN "Medan" ;
-lin medellin_PN = mkPN "Medellin" ;
-lin melbourne_PN = mkPN "Melbourne" ;
-lin melksham_PN = mkPN "Melksham" ;
-lin meltham_PN = mkPN "Meltham" ;
-lin memphis_PN = mkPN "Memphis" ;
-lin meopham_PN = mkPN "Meopham" ;
-lin mercury_PN = mkPN "Mercury" ;
-lin merton_PN = mkPN "Merton" ;
-lin messina_PN = mkPN "Messine" ;
-lin metz_PN = mkPN "Metz" ;
-lin mexico_PN = mkPN "Mexique" ;
-lin miami_PN = mkPN "Miami" ;
-lin middlesex_PN = mkPN "Middlesex" ;
-lin middleton_PN = mkPN "Middleton" ;
-lin middlewich_PN = mkPN "Middlewich" ;
-lin midlands_PN = mkPN "Midlands" ;
-lin milan_PN = mkPN "Milan" ;
-lin milano_PN = mkPN "Milan" ;
-lin mildenhall_PN = mkPN "Mildenhall" ;
-lin milford_PN = mkPN "Milford" ;
-lin millicent_PN = mkPN "Millicent" ;
-lin millom_PN = mkPN "Millom" ;
-lin milngavie_PN = mkPN "Milngavie" ;
-lin milnrow_PN = mkPN "Milnrow" ;
-lin milwaukee_PN = mkPN "Milwaukee" ;
-lin minehead_PN = mkPN "Minehead" ;
-lin minneapolis_PN = mkPN "Minneapolis" ;
-lin minsk_PN = mkPN "Minsk" ;
-lin miranda_PN = mkPN "Miranda" ;
-lin mo_PN = mkPN "Mo" ;
-lin modena_PN = mkPN "Modène" ;
-lin moira_PN = mkPN "Moira" ;
-lin mold_PN = mkPN "Mold" ;
-lin mon_PN = mkPN "Mon" ;
-lin monaco_PN = mkPN "Monaco" ;
-lin monaghan_PN = mkPN "Monaghan" ;
-lin mongolia_PN = mkPN "Mongolie" ;
-lin monmouth_PN = mkPN "Monmouth" ;
-lin montana_PN = mkPN "Montana" ;
-lin monterrey_PN = mkPN "Monterrey" ;
-lin montevideo_PN = mkPN "Montevideo" ;
-lin montrose_PN = mkPN "Montrose" ;
-lin montserrat_PN = mkPN "Montserrat" ;
-lin monza_PN = mkPN "Monza" ;
-lin morecambe_PN = mkPN "Morecambe" ;
-lin morley_PN = mkPN "Morley" ;
-lin morocco_PN = mkPN "Maroc" ;
-lin morpeth_PN = mkPN "Morpeth" ;
-lin moscow_1_PN = mkPN "Moscou" ;
-lin moscow_2_PN = mkPN "Moscou" ;
-lin mossley_PN = mkPN "Mossley" ;
-lin motherwell_PN = mkPN "Motherwell" ;
-lin mozambique_PN = mkPN "Mozambique" ;
-lin mulhouse_PN = mkPN "Mulhouse" ;
-lin munich_PN = mkPN "Munich" ;
-lin munster_PN = mkPN "Munster" ;
-lin murton_PN = mkPN "Murton" ;
-lin musselburgh_PN = mkPN "Musselburgh" ;
-lin myra_PN = mkPN "Myra" ;
-lin nagpur_PN = mkPN "Nagpur" ;
-lin nailsea_PN = mkPN "Nailsea" ;
-lin nairn_PN = mkPN "Nairn" ;
-lin nairobi_PN = mkPN "Nairobi" ;
-lin namibia_PN = mkPN "Namibie" ;
-lin nanchang_PN = mkPN "Nanchang" ;
-lin nancy_PN = mkPN "Nancy" ;
-lin nanning_PN = mkPN "Nanning" ;
-lin nantwich_PN = mkPN "Nantwich" ;
-lin naples_PN = mkPN "Naples" ;
-lin napoli_PN = mkPN "Naples" ;
-lin narborough_PN = mkPN "Narborough" ;
-lin nato_PN = mkPN "Nato" ;
-lin nauru_PN = mkPN "Nauru" ;
-lin neath_PN = mkPN "Neath" ;
-lin nelson_PN = mkPN "Nelson" ;
-lin nepal_PN = mkPN "Népal" ;
-lin neston_PN = mkPN "Neston" ;
-lin netherlands_PN = mkPN "Pays-Bas" ;
-lin netley_PN = mkPN "Netley" ;
-lin neuss_PN = mkPN "Neuss" ;
-lin nevada_PN = mkPN "Nevada" ;
-lin new_cumnock_PN = mkPN "New Cumnock" ;
-lin new_mills_PN = mkPN "New Mills" ;
-lin new_orleans_PN = mkPN "La Nouvelle-Orléans" ;
-lin new_tredegar_PN = mkPN "New Tredegar" ;
-lin new_windsor_PN = mkPN "New Windsor" ;
-lin newark_PN = mkPN "Newark" ;
-lin newarthill_PN = mkPN "Newarthill" ;
-lin newbiggin_PN = mkPN "Newbiggin" ;
-lin newbury_PN = mkPN "Newbury" ;
-lin newcastle_PN = mkPN "Newcastle" ;
-lin newhaven_PN = mkPN "Newhaven" ;
-lin newmains_PN = mkPN "Newmains" ;
-lin newmarket_PN = mkPN "Newmarket" ;
-lin newport_PN = mkPN "Newport" ;
-lin newport_pagnell_PN = mkPN "Newport Pagnell" ;
-lin newquay_PN = mkPN "Newquay" ;
-lin newry_PN = mkPN "Newry" ;
-lin newtown_PN = mkPN "Newtown" ;
-lin nicaragua_PN = mkPN "Nicaragua" ;
-lin nice_PN = mkPN "Nice" ;
-lin nigel_PN = mkPN "Nigel" ;
-lin niger_PN = mkPN "Niger" ;
-lin nigeria_PN = mkPN "Nigeria" ;
-lin nijmegen_PN = mkPN "Nimègue" ;
-lin noel_PN = mkPN "Noel" ;
-lin nora_PN = mkPN "Nora" ;
-lin norfolk_PN = mkPN "Norfolk" ;
-lin norman_PN = mkPN "Norman" ;
-lin normanton_PN = mkPN "Normanton" ;
-lin northallerton_PN = mkPN "Northallerton" ;
-lin northam_PN = mkPN "Northam" ;
-lin northampton_PN = mkPN "Northampton" ;
-lin northumberland_PN = mkPN "Northumberland" ;
-lin northwich_PN = mkPN "Northwich" ;
-lin norton_PN = mkPN "Norton" ;
-lin norway_PN = mkPN "Norvège" ;
-lin norwich_PN = mkPN "Norwich" ;
-lin nottingham_PN = mkPN "Nottingham" ;
-lin nov_PN = mkPN "Nov" ;
-lin novara_PN = mkPN "Novare" ;
-lin novokuznetsk_PN = mkPN "Novokouznetsk" ;
-lin novosibirsk_PN = mkPN "Novossibirsk" ;
-lin nuneaton_PN = mkPN "Nuneaton" ;
-lin oakengates_PN = mkPN "Oakengates" ;
-lin oban_PN = mkPN "Oban" ;
-lin oberhausen_PN = mkPN "Oberhausen" ;
-lin odessa_PN = mkPN "Odessa" ;
-lin offenbach_PN = mkPN "Offenbach" ;
-lin oldenburg_PN = mkPN "Oldenbourg" ;
-lin oldham_PN = mkPN "Oldham" ;
-lin oliver_PN = mkPN "Oliver" ;
-lin olivia_PN = mkPN "Olivia" ;
-lin oman_PN = mkPN "Oman" ;
-lin omsk_PN = mkPN "Omsk" ;
-lin ontario_PN = mkPN "Ontario" ;
-lin op_PN = mkPN "Op" ;
-lin opp_PN = mkPN "Opp" ;
-lin oregon_PN = mkPN "Oregon" ;
-lin orkney_PN = mkPN "Orcades" ;
-lin orleans_PN = mkPN "Orleans" ;
-lin ormskirk_PN = mkPN "Ormskirk" ;
-lin oslo_PN = mkPN "Oslo" ;
-lin ossett_PN = mkPN "Ossett" ;
-lin oswestry_PN = mkPN "Oswestry" ;
-lin otley_PN = mkPN "Otley" ;
-lin ottawa_PN = mkPN "Ottawa" ;
-lin oviedo_PN = mkPN "Oviedo" ;
-lin oxford_PN = mkPN "Oxford" ;
-lin oxted_PN = mkPN "Oxted" ;
-lin pacific_PN = mkPN "Pacific" ;
-lin padova_PN = mkPN "Padoue" ;
-lin paisley_PN = mkPN "Paisley" ;
-lin pakistan_PN = mkPN "Pakistan" ;
-lin palembang_PN = mkPN "Palembang" ;
-lin palermo_PN = mkPN "Palerme" ;
-lin palestine_PN = mkPN "Palestine" ;
-lin pamplona_PN = mkPN "Pampelune" ;
-lin panama_PN = mkPN "Panamá" ;
-lin paraguay_PN = mkPN "Paraguay" ;
-lin paris_1_PN = mkPN "Paris" ;
-lin paris_2_PN = mkPN "Paris" ;
-lin parma_PN = mkPN "Parme" ;
-lin paul_PN = mkPN "Paul" ;
-lin peacehaven_PN = mkPN "Peacehaven" ;
-lin pearl_PN = mkPN "Pearl" ;
-lin peebles_PN = mkPN "Peebles" ;
-lin pelton_PN = mkPN "Pelton" ;
-lin pembroke_PN = mkPN "Pembroke" ;
-lin penarth_PN = mkPN "Penarth" ;
-lin penicuik_PN = mkPN "Penicuik" ;
-lin penrith_PN = mkPN "Penrith" ;
-lin penryn_PN = mkPN "Penryn" ;
-lin penzance_PN = mkPN "Penzance" ;
-lin percy_PN = mkPN "Percy" ;
-lin perm_PN = mkPN "Perm" ;
-lin pershore_PN = mkPN "Pershore" ;
-lin perth_PN = mkPN "Perth" ;
-lin peru_PN = mkPN "Pérou" ;
-lin perugia_PN = mkPN "Pérouse" ;
-lin pescara_PN = mkPN "Pescara" ;
-lin peterborough_PN = mkPN "Peterborough" ;
-lin peterhead_PN = mkPN "Peterhead" ;
-lin peterlee_PN = mkPN "Peterlee" ;
-lin petersfield_PN = mkPN "Petersfield" ;
-lin philadelphia_PN = mkPN "Philadelphie" ;
-lin philip_PN = mkPN "Philip" ;
-lin philippines_PN = mkPN "Philippines" ;
-lin phoenix_PN = mkPN "Phoenix" ;
-lin piacenza_PN = mkPN "Plaisance" ;
-lin pill_PN = mkPN "Pill" ;
-lin piraeus_PN = mkPN "Le Pirée" ;
-lin pisa_PN = mkPN "Pise" ;
-lin pittsburgh_PN = mkPN "Pittsburgh" ;
-lin plymouth_PN = mkPN "Plymouth" ;
-lin poland_PN = mkPN "Pologne" ;
-lin pontardulais_PN = mkPN "Pontardulais" ;
-lin pontefract_PN = mkPN "Pontefract" ;
-lin pontypool_PN = mkPN "Pontypool" ;
-lin poole_PN = mkPN "Poole" ;
-lin port_glasgow_PN = mkPN "Port Glasgow" ;
-lin port_talbot_PN = mkPN "Port Talbot" ;
-lin porthcawl_PN = mkPN "Porthcawl" ;
-lin porthmadog_PN = mkPN "Porthmadog" ;
-lin portishead_PN = mkPN "Portishead" ;
-lin portland_PN = mkPN "Portland" ;
-lin portsmouth_PN = mkPN "Portsmouth" ;
-lin portugal_PN = mkPN "Portugal" ;
-lin potsdam_PN = mkPN "Potsdam" ;
-lin poynton_PN = mkPN "Poynton" ;
-lin prague_PN = mkPN "Prague" ;
-lin prato_PN = mkPN "Prato" ;
-lin prescot_PN = mkPN "Prescot" ;
-lin prestatyn_PN = mkPN "Prestatyn" ;
-lin preston_PN = mkPN "Preston" ;
-lin prestonpans_PN = mkPN "Prestonpans" ;
-lin prestwich_PN = mkPN "Prestwich" ;
-lin prestwick_PN = mkPN "Prestwick" ;
-lin pretoria_PN = mkPN "Pretoria" ;
-lin providence_PN = mkPN "Providence" ;
-lin prudhoe_PN = mkPN "Prudhoe" ;
-lin pudsey_PN = mkPN "Pudsey" ;
-lin pwllheli_PN = mkPN "Pwllheli" ;
-lin pyle_PN = mkPN "Pyle" ;
-lin pyongyang_PN = mkPN "Pyongyang" ;
-lin qatar_PN = mkPN "Qatar" ;
-lin queensbury_PN = mkPN "Queensbury" ;
-lin queensferry_PN = mkPN "Queensferry" ;
-lin quito_PN = mkPN "Quito" ;
-lin radcliffe_PN = mkPN "Radcliffe" ;
-lin radlett_PN = mkPN "Radlett" ;
-lin radstock_PN = mkPN "Radstock" ;
-lin rainford_PN = mkPN "Rainford" ;
-lin ramsbottom_PN = mkPN "Ramsbottom" ;
-lin ramsgate_PN = mkPN "Ramsgate" ;
-lin randolph_PN = mkPN "Randolph" ;
-lin ravenna_PN = mkPN "Ravenne" ;
-lin rawtenstall_PN = mkPN "Rawtenstall" ;
-lin raymond_PN = mkPN "Raymond" ;
-lin reading_PN = mkPN "Reading" ;
-lin recife_PN = mkPN "Recife" ;
-lin recklinghausen_PN = mkPN "Recklinghausen" ;
-lin redditch_PN = mkPN "Redditch" ;
-lin redruth_PN = mkPN "Redruth" ;
-lin regensburg_PN = mkPN "Ratisbonne" ;
-lin regina_PN = mkPN "Régina" ;
-lin reigate_PN = mkPN "Reigate" ;
-lin remscheid_PN = mkPN "Remscheid" ;
-lin renfrew_PN = mkPN "Renfrew" ;
-lin rennes_PN = mkPN "Rennes" ;
-lin retford_PN = mkPN "Retford" ;
-lin rhondda_PN = mkPN "Rhondda" ;
-lin rhosllanerchrugog_PN = mkPN "Rhosllanerchrugog" ;
-lin rhyl_PN = mkPN "Rhyl" ;
-lin rhymney_PN = mkPN "Rhymney" ;
-lin richmond_PN = mkPN "Richmond" ;
-lin rickmansworth_PN = mkPN "Rickmansworth" ;
-lin riga_PN = mkPN "Rīga" ;
-lin rijeka_PN = mkPN "Rijeka" ;
-lin rimini_PN = mkPN "Rimini" ;
-lin ringwood_PN = mkPN "Ringwood" ;
-lin ripley_PN = mkPN "Ripley" ;
-lin ripon_PN = mkPN "Ripon" ;
-lin risca_PN = mkPN "Risca" ;
-lin rishton_PN = mkPN "Rishton" ;
-lin rochdale_PN = mkPN "Rochdale" ;
-lin rochester_PN = mkPN "Rochester" ;
-lin romania_PN = mkPN "Roumanie" ;
-lin rome_PN = mkPN "Rome" ;
-lin romsey_PN = mkPN "Romsey" ;
-lin ron_PN = mkPN "Ron" ;
-lin rosalie_PN = mkPN "Rosalie" ;
-lin rosario_PN = mkPN "Rosario" ;
-lin roscommon_PN = mkPN "Roscommon" ;
-lin rose_PN = mkPN "Rose" ;
-lin roslyn_PN = mkPN "Roslyn" ;
-lin rossington_PN = mkPN "Rossington" ;
-lin rosslare_PN = mkPN "Rosslare" ;
-lin rostock_PN = mkPN "Rostock" ;
-lin rotherham_PN = mkPN "Rotherham" ;
-lin rothesay_PN = mkPN "Rothesay" ;
-lin rothwell_PN = mkPN "Rothwell" ;
-lin rotterdam_PN = mkPN "Rotterdam" ;
-lin roubaix_PN = mkPN "Roubaix" ;
-lin rouen_PN = mkPN "Rouen" ;
-lin roy_PN = mkPN "Roy" ;
-lin royston_PN = mkPN "Royston" ;
-lin ruddington_PN = mkPN "Ruddington" ;
-lin rudy_PN = mkPN "Rudy" ;
-lin rugby_PN = mkPN "Rugby" ;
-lin rugeley_PN = mkPN "Rugeley" ;
-lin runcorn_PN = mkPN "Runcorn" ;
-lin rupert_PN = mkPN "Rupert" ;
-lin russia_PN = mkPN "Russie" ;
-lin rutherglen_PN = mkPN "Rutherglen" ;
-lin rutland_PN = mkPN "Rutland" ;
-lin rwanda_PN = mkPN "Rwanda" ;
-lin ryde_PN = mkPN "Ryde" ;
-lin sacramento_PN = mkPN "Sacramento" ;
-lin salamanca_PN = mkPN "Salamanque" ;
+lin lydney_PN = mkPN "Lydney" ; -- status=guess src=geonames
+lin lymington_PN = mkPN "Lymington" ; -- status=guess src=geonames
+lin lymm_PN = mkPN "Lymm" ; -- status=guess src=geonames
+lin lynn_PN = mkPN "Lynn" ; -- status=guess src=geonames
+lin lyons_PN = mkPN "Lyons" ; -- status=guess src=geonames
+lin maastricht_PN = mkPN "Maastricht" ; -- status=guess src=geonames
+lin macclesfield_PN = mkPN "Macclesfield" ; -- status=guess src=geonames
+lin mach_PN = mkPN "Mach" ; -- status=guess src=geonames
+lin madagascar_PN = mkPN "Madagascar" ; -- status=guess src=geonames
+lin madras_PN = mkPN "Madras" ; -- status=guess src=geonames
+lin madrid_PN = mkPN "Madrid" ; -- status=guess src=geonames
+lin madurai_PN = mkPN "Madurai" ; -- status=guess src=geonames
+lin maesteg_PN = mkPN "Maesteg" ; -- status=guess src=geonames
+lin magdeburg_PN = mkPN "Magdebourg" ; -- status=guess src=geonames
+lin maghull_PN = mkPN "Maghull" ; -- status=guess src=geonames
+lin maidenhead_PN = mkPN "Maidenhead" ; -- status=guess src=geonames
+lin maidstone_PN = mkPN "Maidstone" ; -- status=guess src=geonames
+lin mainz_PN = mkPN "Mayence" ; -- status=guess src=geonames
+lin malaga_PN = mkPN "Malaga" ; -- status=guess src=geonames
+lin malawi_PN = mkPN "Malawi" ; -- status=guess src=geonames
+lin malaya_PN = mkPN "Malaya" ; -- status=guess src=geonames
+lin malaysia_PN = mkPN "Malaisie" ; -- status=guess src=geonames
+lin maldon_PN = mkPN "Maldon" ; -- status=guess src=geonames
+lin mali_PN = mkPN "Mali" ; -- status=guess src=geonames
+lin mallow_PN = mkPN "Mallow" ; -- status=guess src=geonames
+lin malta_PN = mkPN "Malte" ; -- status=guess src=geonames
+lin maltby_PN = mkPN "Maltby" ; -- status=guess src=geonames
+lin malvern_PN = mkPN "Malvern" ; -- status=guess src=geonames
+lin manchester_PN = mkPN "Manchester" ; -- status=guess src=geonames
+lin manhattan_PN = mkPN "Manhattan" ; -- status=guess src=geonames
+lin manila_PN = mkPN "Manille" ; -- status=guess src=geonames
+lin mannheim_PN = mkPN "Mannheim" ; -- status=guess src=geonames
+lin mansfield_PN = mkPN "Mansfield" ; -- status=guess src=geonames
+lin maracaibo_PN = mkPN "Maracaibo" ; -- status=guess src=geonames
+lin march_PN = mkPN "March" ; -- status=guess src=geonames
+lin margaret_PN = mkPN "Margaret" ; -- status=guess src=geonames
+lin margate_PN = mkPN "Margate" ; -- status=guess src=geonames
+lin maria_PN = mkPN "Maria" ; -- status=guess src=geonames
+lin marion_PN = mkPN "Marion" ; -- status=guess src=geonames
+lin marlborough_PN = mkPN "Marlborough" ; -- status=guess src=geonames
+lin marlow_PN = mkPN "Marlow" ; -- status=guess src=geonames
+lin marple_PN = mkPN "Marple" ; -- status=guess src=geonames
+lin mars_PN = mkPN "Mars" ; -- status=guess src=geonames
+lin marseilles_PN = mkPN "Marseilles" ; -- status=guess src=geonames
+lin martin_PN = mkPN "Martin" ; -- status=guess src=geonames
+lin mary_PN = mkPN "Mary" ; -- status=guess src=geonames
+lin maryport_PN = mkPN "Maryport" ; -- status=guess src=geonames
+lin matlock_PN = mkPN "Matlock" ; -- status=guess src=geonames
+lin maud_PN = mkPN "Maud" ; -- status=guess src=geonames
+lin mauritania_PN = mkPN "Mauritanie" ; -- status=guess src=geonames
+lin mauritius_PN = mkPN "Île Maurice" ; -- status=guess src=geonames
+lin mayfield_PN = mkPN "Mayfield" ; -- status=guess src=geonames
+lin mayo_PN = mkPN "Mayo" ; -- status=guess src=geonames
+lin mecca_PN = mkPN "La Mecque" ; -- status=guess src=geonames
+lin medan_PN = mkPN "Medan" ; -- status=guess src=geonames
+lin medellin_PN = mkPN "Medellin" ; -- status=guess src=geonames
+lin melbourne_PN = mkPN "Melbourne" ; -- status=guess src=geonames
+lin melksham_PN = mkPN "Melksham" ; -- status=guess src=geonames
+lin meltham_PN = mkPN "Meltham" ; -- status=guess src=geonames
+lin memphis_PN = mkPN "Memphis" ; -- status=guess src=geonames
+lin meopham_PN = mkPN "Meopham" ; -- status=guess src=geonames
+lin mercury_PN = mkPN "Mercury" ; -- status=guess src=geonames
+lin merton_PN = mkPN "Merton" ; -- status=guess src=geonames
+lin messina_PN = mkPN "Messine" ; -- status=guess src=geonames
+lin metz_PN = mkPN "Metz" ; -- status=guess src=geonames
+lin mexico_PN = mkPN "Mexique" ; -- status=guess src=geonames
+lin miami_PN = mkPN "Miami" ; -- status=guess src=geonames
+lin middlesex_PN = mkPN "Middlesex" ; -- status=guess src=geonames
+lin middleton_PN = mkPN "Middleton" ; -- status=guess src=geonames
+lin middlewich_PN = mkPN "Middlewich" ; -- status=guess src=geonames
+lin midlands_PN = mkPN "Midlands" ; -- status=guess src=geonames
+lin milan_PN = mkPN "Milan" ; -- status=guess src=geonames
+lin milano_PN = mkPN "Milan" ; -- status=guess src=geonames
+lin mildenhall_PN = mkPN "Mildenhall" ; -- status=guess src=geonames
+lin milford_PN = mkPN "Milford" ; -- status=guess src=geonames
+lin millicent_PN = mkPN "Millicent" ; -- status=guess src=geonames
+lin millom_PN = mkPN "Millom" ; -- status=guess src=geonames
+lin milngavie_PN = mkPN "Milngavie" ; -- status=guess src=geonames
+lin milnrow_PN = mkPN "Milnrow" ; -- status=guess src=geonames
+lin milwaukee_PN = mkPN "Milwaukee" ; -- status=guess src=geonames
+lin minehead_PN = mkPN "Minehead" ; -- status=guess src=geonames
+lin minneapolis_PN = mkPN "Minneapolis" ; -- status=guess src=geonames
+lin minsk_PN = mkPN "Minsk" ; -- status=guess src=geonames
+lin miranda_PN = mkPN "Miranda" ; -- status=guess src=geonames
+lin mo_PN = mkPN "Mo" ; -- status=guess src=geonames
+lin modena_PN = mkPN "Modène" ; -- status=guess src=geonames
+lin moira_PN = mkPN "Moira" ; -- status=guess src=geonames
+lin mold_PN = mkPN "Mold" ; -- status=guess src=geonames
+lin mon_PN = mkPN "Mon" ; -- status=guess src=geonames
+lin monaco_PN = mkPN "Monaco" ; -- status=guess src=geonames
+lin monaghan_PN = mkPN "Monaghan" ; -- status=guess src=geonames
+lin mongolia_PN = mkPN "Mongolie" ; -- status=guess src=geonames
+lin monmouth_PN = mkPN "Monmouth" ; -- status=guess src=geonames
+lin montana_PN = mkPN "Montana" ; -- status=guess src=geonames
+lin monterrey_PN = mkPN "Monterrey" ; -- status=guess src=geonames
+lin montevideo_PN = mkPN "Montevideo" ; -- status=guess src=geonames
+lin montrose_PN = mkPN "Montrose" ; -- status=guess src=geonames
+lin montserrat_PN = mkPN "Montserrat" ; -- status=guess src=geonames
+lin monza_PN = mkPN "Monza" ; -- status=guess src=geonames
+lin morecambe_PN = mkPN "Morecambe" ; -- status=guess src=geonames
+lin morley_PN = mkPN "Morley" ; -- status=guess src=geonames
+lin morocco_PN = mkPN "Maroc" ; -- status=guess src=geonames
+lin morpeth_PN = mkPN "Morpeth" ; -- status=guess src=geonames
+lin moscow_1_PN = mkPN "Moscou" ; -- status=guess src=geonames
+lin moscow_2_PN = mkPN "Moscou" ; -- status=guess src=geonames
+lin mossley_PN = mkPN "Mossley" ; -- status=guess src=geonames
+lin motherwell_PN = mkPN "Motherwell" ; -- status=guess src=geonames
+lin mozambique_PN = mkPN "Mozambique" ; -- status=guess src=geonames
+lin mulhouse_PN = mkPN "Mulhouse" ; -- status=guess src=geonames
+lin munich_PN = mkPN "Munich" ; -- status=guess src=geonames
+lin munster_PN = mkPN "Munster" ; -- status=guess src=geonames
+lin murton_PN = mkPN "Murton" ; -- status=guess src=geonames
+lin musselburgh_PN = mkPN "Musselburgh" ; -- status=guess src=geonames
+lin myra_PN = mkPN "Myra" ; -- status=guess src=geonames
+lin nagpur_PN = mkPN "Nagpur" ; -- status=guess src=geonames
+lin nailsea_PN = mkPN "Nailsea" ; -- status=guess src=geonames
+lin nairn_PN = mkPN "Nairn" ; -- status=guess src=geonames
+lin nairobi_PN = mkPN "Nairobi" ; -- status=guess src=geonames
+lin namibia_PN = mkPN "Namibie" ; -- status=guess src=geonames
+lin nanchang_PN = mkPN "Nanchang" ; -- status=guess src=geonames
+lin nancy_PN = mkPN "Nancy" ; -- status=guess src=geonames
+lin nanning_PN = mkPN "Nanning" ; -- status=guess src=geonames
+lin nantwich_PN = mkPN "Nantwich" ; -- status=guess src=geonames
+lin naples_PN = mkPN "Naples" ; -- status=guess src=geonames
+lin napoli_PN = mkPN "Naples" ; -- status=guess src=geonames
+lin narborough_PN = mkPN "Narborough" ; -- status=guess src=geonames
+lin nato_PN = mkPN "Nato" ; -- status=guess src=geonames
+lin nauru_PN = mkPN "Nauru" ; -- status=guess src=geonames
+lin neath_PN = mkPN "Neath" ; -- status=guess src=geonames
+lin nelson_PN = mkPN "Nelson" ; -- status=guess src=geonames
+lin nepal_PN = mkPN "Népal" ; -- status=guess src=geonames
+lin neston_PN = mkPN "Neston" ; -- status=guess src=geonames
+lin netherlands_PN = mkPN "Pays-Bas" ; -- status=guess src=geonames
+lin netley_PN = mkPN "Netley" ; -- status=guess src=geonames
+lin neuss_PN = mkPN "Neuss" ; -- status=guess src=geonames
+lin nevada_PN = mkPN "Nevada" ; -- status=guess src=geonames
+lin new_cumnock_PN = mkPN "New Cumnock" ; -- status=guess src=geonames
+lin new_mills_PN = mkPN "New Mills" ; -- status=guess src=geonames
+lin new_orleans_PN = mkPN "La Nouvelle-Orléans" ; -- status=guess src=geonames
+lin new_tredegar_PN = mkPN "New Tredegar" ; -- status=guess src=geonames
+lin new_windsor_PN = mkPN "New Windsor" ; -- status=guess src=geonames
+lin newark_PN = mkPN "Newark" ; -- status=guess src=geonames
+lin newarthill_PN = mkPN "Newarthill" ; -- status=guess src=geonames
+lin newbiggin_PN = mkPN "Newbiggin" ; -- status=guess src=geonames
+lin newbury_PN = mkPN "Newbury" ; -- status=guess src=geonames
+lin newcastle_PN = mkPN "Newcastle" ; -- status=guess src=geonames
+lin newhaven_PN = mkPN "Newhaven" ; -- status=guess src=geonames
+lin newmains_PN = mkPN "Newmains" ; -- status=guess src=geonames
+lin newmarket_PN = mkPN "Newmarket" ; -- status=guess src=geonames
+lin newport_PN = mkPN "Newport" ; -- status=guess src=geonames
+lin newport_pagnell_PN = mkPN "Newport Pagnell" ; -- status=guess src=geonames
+lin newquay_PN = mkPN "Newquay" ; -- status=guess src=geonames
+lin newry_PN = mkPN "Newry" ; -- status=guess src=geonames
+lin newtown_PN = mkPN "Newtown" ; -- status=guess src=geonames
+lin nicaragua_PN = mkPN "Nicaragua" ; -- status=guess src=geonames
+lin nice_PN = mkPN "Nice" ; -- status=guess src=geonames
+lin nigel_PN = mkPN "Nigel" ; -- status=guess src=geonames
+lin niger_PN = mkPN "Niger" ; -- status=guess src=geonames
+lin nigeria_PN = mkPN "Nigeria" ; -- status=guess src=geonames
+lin nijmegen_PN = mkPN "Nimègue" ; -- status=guess src=geonames
+lin noel_PN = mkPN "Noel" ; -- status=guess src=geonames
+lin nora_PN = mkPN "Nora" ; -- status=guess src=geonames
+lin norfolk_PN = mkPN "Norfolk" ; -- status=guess src=geonames
+lin norman_PN = mkPN "Norman" ; -- status=guess src=geonames
+lin normanton_PN = mkPN "Normanton" ; -- status=guess src=geonames
+lin northallerton_PN = mkPN "Northallerton" ; -- status=guess src=geonames
+lin northam_PN = mkPN "Northam" ; -- status=guess src=geonames
+lin northampton_PN = mkPN "Northampton" ; -- status=guess src=geonames
+lin northumberland_PN = mkPN "Northumberland" ; -- status=guess src=geonames
+lin northwich_PN = mkPN "Northwich" ; -- status=guess src=geonames
+lin norton_PN = mkPN "Norton" ; -- status=guess src=geonames
+lin norway_PN = mkPN "Norvège" ; -- status=guess src=geonames
+lin norwich_PN = mkPN "Norwich" ; -- status=guess src=geonames
+lin nottingham_PN = mkPN "Nottingham" ; -- status=guess src=geonames
+lin nov_PN = mkPN "Nov" ; -- status=guess src=geonames
+lin novara_PN = mkPN "Novare" ; -- status=guess src=geonames
+lin novokuznetsk_PN = mkPN "Novokouznetsk" ; -- status=guess src=geonames
+lin novosibirsk_PN = mkPN "Novossibirsk" ; -- status=guess src=geonames
+lin nuneaton_PN = mkPN "Nuneaton" ; -- status=guess src=geonames
+lin oakengates_PN = mkPN "Oakengates" ; -- status=guess src=geonames
+lin oban_PN = mkPN "Oban" ; -- status=guess src=geonames
+lin oberhausen_PN = mkPN "Oberhausen" ; -- status=guess src=geonames
+lin odessa_PN = mkPN "Odessa" ; -- status=guess src=geonames
+lin offenbach_PN = mkPN "Offenbach" ; -- status=guess src=geonames
+lin oldenburg_PN = mkPN "Oldenbourg" ; -- status=guess src=geonames
+lin oldham_PN = mkPN "Oldham" ; -- status=guess src=geonames
+lin oliver_PN = mkPN "Oliver" ; -- status=guess src=geonames
+lin olivia_PN = mkPN "Olivia" ; -- status=guess src=geonames
+lin oman_PN = mkPN "Oman" ; -- status=guess src=geonames
+lin omsk_PN = mkPN "Omsk" ; -- status=guess src=geonames
+lin ontario_PN = mkPN "Ontario" ; -- status=guess src=geonames
+lin op_PN = mkPN "Op" ; -- status=guess src=geonames
+lin opp_PN = mkPN "Opp" ; -- status=guess src=geonames
+lin oregon_PN = mkPN "Oregon" ; -- status=guess src=geonames
+lin orkney_PN = mkPN "Orcades" ; -- status=guess src=geonames
+lin orleans_PN = mkPN "Orleans" ; -- status=guess src=geonames
+lin ormskirk_PN = mkPN "Ormskirk" ; -- status=guess src=geonames
+lin oslo_PN = mkPN "Oslo" ; -- status=guess src=geonames
+lin ossett_PN = mkPN "Ossett" ; -- status=guess src=geonames
+lin oswestry_PN = mkPN "Oswestry" ; -- status=guess src=geonames
+lin otley_PN = mkPN "Otley" ; -- status=guess src=geonames
+lin ottawa_PN = mkPN "Ottawa" ; -- status=guess src=geonames
+lin oviedo_PN = mkPN "Oviedo" ; -- status=guess src=geonames
+lin oxford_PN = mkPN "Oxford" ; -- status=guess src=geonames
+lin oxted_PN = mkPN "Oxted" ; -- status=guess src=geonames
+lin pacific_PN = mkPN "Pacific" ; -- status=guess src=geonames
+lin padova_PN = mkPN "Padoue" ; -- status=guess src=geonames
+lin paisley_PN = mkPN "Paisley" ; -- status=guess src=geonames
+lin pakistan_PN = mkPN "Pakistan" ; -- status=guess src=geonames
+lin palembang_PN = mkPN "Palembang" ; -- status=guess src=geonames
+lin palermo_PN = mkPN "Palerme" ; -- status=guess src=geonames
+lin palestine_PN = mkPN "Palestine" ; -- status=guess src=geonames
+lin pamplona_PN = mkPN "Pampelune" ; -- status=guess src=geonames
+lin panama_PN = mkPN "Panamá" ; -- status=guess src=geonames
+lin paraguay_PN = mkPN "Paraguay" ; -- status=guess src=geonames
+lin paris_1_PN = mkPN "Paris" ; -- status=guess src=geonames
+lin paris_2_PN = mkPN "Paris" ; -- status=guess src=geonames
+lin parma_PN = mkPN "Parme" ; -- status=guess src=geonames
+lin paul_PN = mkPN "Paul" ; -- status=guess src=geonames
+lin peacehaven_PN = mkPN "Peacehaven" ; -- status=guess src=geonames
+lin pearl_PN = mkPN "Pearl" ; -- status=guess src=geonames
+lin peebles_PN = mkPN "Peebles" ; -- status=guess src=geonames
+lin pelton_PN = mkPN "Pelton" ; -- status=guess src=geonames
+lin pembroke_PN = mkPN "Pembroke" ; -- status=guess src=geonames
+lin penarth_PN = mkPN "Penarth" ; -- status=guess src=geonames
+lin penicuik_PN = mkPN "Penicuik" ; -- status=guess src=geonames
+lin penrith_PN = mkPN "Penrith" ; -- status=guess src=geonames
+lin penryn_PN = mkPN "Penryn" ; -- status=guess src=geonames
+lin penzance_PN = mkPN "Penzance" ; -- status=guess src=geonames
+lin percy_PN = mkPN "Percy" ; -- status=guess src=geonames
+lin perm_PN = mkPN "Perm" ; -- status=guess src=geonames
+lin pershore_PN = mkPN "Pershore" ; -- status=guess src=geonames
+lin perth_PN = mkPN "Perth" ; -- status=guess src=geonames
+lin peru_PN = mkPN "Pérou" ; -- status=guess src=geonames
+lin perugia_PN = mkPN "Pérouse" ; -- status=guess src=geonames
+lin pescara_PN = mkPN "Pescara" ; -- status=guess src=geonames
+lin peterborough_PN = mkPN "Peterborough" ; -- status=guess src=geonames
+lin peterhead_PN = mkPN "Peterhead" ; -- status=guess src=geonames
+lin peterlee_PN = mkPN "Peterlee" ; -- status=guess src=geonames
+lin petersfield_PN = mkPN "Petersfield" ; -- status=guess src=geonames
+lin philadelphia_PN = mkPN "Philadelphie" ; -- status=guess src=geonames
+lin philip_PN = mkPN "Philip" ; -- status=guess src=geonames
+lin philippines_PN = mkPN "Philippines" ; -- status=guess src=geonames
+lin phoenix_PN = mkPN "Phoenix" ; -- status=guess src=geonames
+lin piacenza_PN = mkPN "Plaisance" ; -- status=guess src=geonames
+lin pill_PN = mkPN "Pill" ; -- status=guess src=geonames
+lin piraeus_PN = mkPN "Le Pirée" ; -- status=guess src=geonames
+lin pisa_PN = mkPN "Pise" ; -- status=guess src=geonames
+lin pittsburgh_PN = mkPN "Pittsburgh" ; -- status=guess src=geonames
+lin plymouth_PN = mkPN "Plymouth" ; -- status=guess src=geonames
+lin poland_PN = mkPN "Pologne" ; -- status=guess src=geonames
+lin pontardulais_PN = mkPN "Pontardulais" ; -- status=guess src=geonames
+lin pontefract_PN = mkPN "Pontefract" ; -- status=guess src=geonames
+lin pontypool_PN = mkPN "Pontypool" ; -- status=guess src=geonames
+lin poole_PN = mkPN "Poole" ; -- status=guess src=geonames
+lin port_glasgow_PN = mkPN "Port Glasgow" ; -- status=guess src=geonames
+lin port_talbot_PN = mkPN "Port Talbot" ; -- status=guess src=geonames
+lin porthcawl_PN = mkPN "Porthcawl" ; -- status=guess src=geonames
+lin porthmadog_PN = mkPN "Porthmadog" ; -- status=guess src=geonames
+lin portishead_PN = mkPN "Portishead" ; -- status=guess src=geonames
+lin portland_PN = mkPN "Portland" ; -- status=guess src=geonames
+lin portsmouth_PN = mkPN "Portsmouth" ; -- status=guess src=geonames
+lin portugal_PN = mkPN "Portugal" ; -- status=guess src=geonames
+lin potsdam_PN = mkPN "Potsdam" ; -- status=guess src=geonames
+lin poynton_PN = mkPN "Poynton" ; -- status=guess src=geonames
+lin prague_PN = mkPN "Prague" ; -- status=guess src=geonames
+lin prato_PN = mkPN "Prato" ; -- status=guess src=geonames
+lin prescot_PN = mkPN "Prescot" ; -- status=guess src=geonames
+lin prestatyn_PN = mkPN "Prestatyn" ; -- status=guess src=geonames
+lin preston_PN = mkPN "Preston" ; -- status=guess src=geonames
+lin prestonpans_PN = mkPN "Prestonpans" ; -- status=guess src=geonames
+lin prestwich_PN = mkPN "Prestwich" ; -- status=guess src=geonames
+lin prestwick_PN = mkPN "Prestwick" ; -- status=guess src=geonames
+lin pretoria_PN = mkPN "Pretoria" ; -- status=guess src=geonames
+lin providence_PN = mkPN "Providence" ; -- status=guess src=geonames
+lin prudhoe_PN = mkPN "Prudhoe" ; -- status=guess src=geonames
+lin pudsey_PN = mkPN "Pudsey" ; -- status=guess src=geonames
+lin pwllheli_PN = mkPN "Pwllheli" ; -- status=guess src=geonames
+lin pyle_PN = mkPN "Pyle" ; -- status=guess src=geonames
+lin pyongyang_PN = mkPN "Pyongyang" ; -- status=guess src=geonames
+lin qatar_PN = mkPN "Qatar" ; -- status=guess src=geonames
+lin queensbury_PN = mkPN "Queensbury" ; -- status=guess src=geonames
+lin queensferry_PN = mkPN "Queensferry" ; -- status=guess src=geonames
+lin quito_PN = mkPN "Quito" ; -- status=guess src=geonames
+lin radcliffe_PN = mkPN "Radcliffe" ; -- status=guess src=geonames
+lin radlett_PN = mkPN "Radlett" ; -- status=guess src=geonames
+lin radstock_PN = mkPN "Radstock" ; -- status=guess src=geonames
+lin rainford_PN = mkPN "Rainford" ; -- status=guess src=geonames
+lin ramsbottom_PN = mkPN "Ramsbottom" ; -- status=guess src=geonames
+lin ramsgate_PN = mkPN "Ramsgate" ; -- status=guess src=geonames
+lin randolph_PN = mkPN "Randolph" ; -- status=guess src=geonames
+lin ravenna_PN = mkPN "Ravenne" ; -- status=guess src=geonames
+lin rawtenstall_PN = mkPN "Rawtenstall" ; -- status=guess src=geonames
+lin raymond_PN = mkPN "Raymond" ; -- status=guess src=geonames
+lin reading_PN = mkPN "Reading" ; -- status=guess src=geonames
+lin recife_PN = mkPN "Recife" ; -- status=guess src=geonames
+lin recklinghausen_PN = mkPN "Recklinghausen" ; -- status=guess src=geonames
+lin redditch_PN = mkPN "Redditch" ; -- status=guess src=geonames
+lin redruth_PN = mkPN "Redruth" ; -- status=guess src=geonames
+lin regensburg_PN = mkPN "Ratisbonne" ; -- status=guess src=geonames
+lin regina_PN = mkPN "Régina" ; -- status=guess src=geonames
+lin reigate_PN = mkPN "Reigate" ; -- status=guess src=geonames
+lin remscheid_PN = mkPN "Remscheid" ; -- status=guess src=geonames
+lin renfrew_PN = mkPN "Renfrew" ; -- status=guess src=geonames
+lin rennes_PN = mkPN "Rennes" ; -- status=guess src=geonames
+lin retford_PN = mkPN "Retford" ; -- status=guess src=geonames
+lin rhondda_PN = mkPN "Rhondda" ; -- status=guess src=geonames
+lin rhosllanerchrugog_PN = mkPN "Rhosllanerchrugog" ; -- status=guess src=geonames
+lin rhyl_PN = mkPN "Rhyl" ; -- status=guess src=geonames
+lin rhymney_PN = mkPN "Rhymney" ; -- status=guess src=geonames
+lin richmond_PN = mkPN "Richmond" ; -- status=guess src=geonames
+lin rickmansworth_PN = mkPN "Rickmansworth" ; -- status=guess src=geonames
+lin riga_PN = mkPN "Rīga" ; -- status=guess src=geonames
+lin rijeka_PN = mkPN "Rijeka" ; -- status=guess src=geonames
+lin rimini_PN = mkPN "Rimini" ; -- status=guess src=geonames
+lin ringwood_PN = mkPN "Ringwood" ; -- status=guess src=geonames
+lin ripley_PN = mkPN "Ripley" ; -- status=guess src=geonames
+lin ripon_PN = mkPN "Ripon" ; -- status=guess src=geonames
+lin risca_PN = mkPN "Risca" ; -- status=guess src=geonames
+lin rishton_PN = mkPN "Rishton" ; -- status=guess src=geonames
+lin rochdale_PN = mkPN "Rochdale" ; -- status=guess src=geonames
+lin rochester_PN = mkPN "Rochester" ; -- status=guess src=geonames
+lin romania_PN = mkPN "Roumanie" ; -- status=guess src=geonames
+lin rome_PN = mkPN "Rome" ; -- status=guess src=geonames
+lin romsey_PN = mkPN "Romsey" ; -- status=guess src=geonames
+lin ron_PN = mkPN "Ron" ; -- status=guess src=geonames
+lin rosalie_PN = mkPN "Rosalie" ; -- status=guess src=geonames
+lin rosario_PN = mkPN "Rosario" ; -- status=guess src=geonames
+lin roscommon_PN = mkPN "Roscommon" ; -- status=guess src=geonames
+lin rose_PN = mkPN "Rose" ; -- status=guess src=geonames
+lin roslyn_PN = mkPN "Roslyn" ; -- status=guess src=geonames
+lin rossington_PN = mkPN "Rossington" ; -- status=guess src=geonames
+lin rosslare_PN = mkPN "Rosslare" ; -- status=guess src=geonames
+lin rostock_PN = mkPN "Rostock" ; -- status=guess src=geonames
+lin rotherham_PN = mkPN "Rotherham" ; -- status=guess src=geonames
+lin rothesay_PN = mkPN "Rothesay" ; -- status=guess src=geonames
+lin rothwell_PN = mkPN "Rothwell" ; -- status=guess src=geonames
+lin rotterdam_PN = mkPN "Rotterdam" ; -- status=guess src=geonames
+lin roubaix_PN = mkPN "Roubaix" ; -- status=guess src=geonames
+lin rouen_PN = mkPN "Rouen" ; -- status=guess src=geonames
+lin roy_PN = mkPN "Roy" ; -- status=guess src=geonames
+lin royston_PN = mkPN "Royston" ; -- status=guess src=geonames
+lin ruddington_PN = mkPN "Ruddington" ; -- status=guess src=geonames
+lin rudy_PN = mkPN "Rudy" ; -- status=guess src=geonames
+lin rugby_PN = mkPN "Rugby" ; -- status=guess src=geonames
+lin rugeley_PN = mkPN "Rugeley" ; -- status=guess src=geonames
+lin runcorn_PN = mkPN "Runcorn" ; -- status=guess src=geonames
+lin rupert_PN = mkPN "Rupert" ; -- status=guess src=geonames
+lin russia_PN = mkPN "Russie" ; -- status=guess src=geonames
+lin rutherglen_PN = mkPN "Rutherglen" ; -- status=guess src=geonames
+lin rutland_PN = mkPN "Rutland" ; -- status=guess src=geonames
+lin rwanda_PN = mkPN "Rwanda" ; -- status=guess src=geonames
+lin ryde_PN = mkPN "Ryde" ; -- status=guess src=geonames
+lin sacramento_PN = mkPN "Sacramento" ; -- status=guess src=geonames
+lin salamanca_PN = mkPN "Salamanque" ; -- status=guess src=geonames
 lin sale_PN = mkPN ("Salé" | "Sale");
-lin salerno_PN = mkPN "Salerne" ;
-lin salford_PN = mkPN "Salford" ;
-lin salisbury_PN = mkPN "Salisbury" ;
-lin salt_PN = mkPN "Salt" ;
-lin saltash_PN = mkPN "Saltash" ;
-lin saltcoats_PN = mkPN "Saltcoats" ;
-lin salvador_PN = mkPN "Salvador" ;
-lin salzburg_PN = mkPN "Salzbourg" ;
-lin samoa_PN = mkPN "Samoa" ;
-lin san_antonio_PN = mkPN "San Antonio" ;
-lin san_bernardino_PN = mkPN "San Bernardino" ;
-lin san_diego_PN = mkPN "San Diego" ;
-lin san_francisco_PN = mkPN "San Francisco" ;
-lin san_jose_PN = mkPN "San José" ;
-lin san_juan_PN = mkPN "San Juan" ;
+lin salerno_PN = mkPN "Salerne" ; -- status=guess src=geonames
+lin salford_PN = mkPN "Salford" ; -- status=guess src=geonames
+lin salisbury_PN = mkPN "Salisbury" ; -- status=guess src=geonames
+lin salt_PN = mkPN "Salt" ; -- status=guess src=geonames
+lin saltash_PN = mkPN "Saltash" ; -- status=guess src=geonames
+lin saltcoats_PN = mkPN "Saltcoats" ; -- status=guess src=geonames
+lin salvador_PN = mkPN "Salvador" ; -- status=guess src=geonames
+lin salzburg_PN = mkPN "Salzbourg" ; -- status=guess src=geonames
+lin samoa_PN = mkPN "Samoa" ; -- status=guess src=geonames
+lin san_antonio_PN = mkPN "San Antonio" ; -- status=guess src=geonames
+lin san_bernardino_PN = mkPN "San Bernardino" ; -- status=guess src=geonames
+lin san_diego_PN = mkPN "San Diego" ; -- status=guess src=geonames
+lin san_francisco_PN = mkPN "San Francisco" ; -- status=guess src=geonames
+lin san_jose_PN = mkPN "San José" ; -- status=guess src=geonames
+lin san_juan_PN = mkPN "San Juan" ; -- status=guess src=geonames
 lin san_marino_PN = mkPN ("Ville de Saint-Marin" | "Saint-Marin");
-lin san_sebastian_PN = mkPN "San Sebastian" ;
-lin sandbach_PN = mkPN "Sandbach" ;
-lin sandown_PN = mkPN "Sandown" ;
-lin sandy_PN = mkPN "Sandy" ;
-lin santander_PN = mkPN "Santander" ;
-lin santiago_PN = mkPN "Santiago du Chili" ;
-lin santos_PN = mkPN "Santos" ;
-lin sapporo_PN = mkPN "Sapporo" ;
-lin sara_PN = mkPN "Sara" ;
-lin sarajevo_PN = mkPN "Sarajevo" ;
-lin saratov_PN = mkPN "Saratov" ;
-lin sassari_PN = mkPN "Sassari" ;
-lin sawbridgeworth_PN = mkPN "Sawbridgeworth" ;
-lin scarborough_PN = mkPN "Scarborough" ;
-lin schwerin_PN = mkPN "Schwerin" ;
-lin scotland_PN = mkPN "Scotland" ;
-lin scunthorpe_PN = mkPN "Scunthorpe" ;
-lin seaford_PN = mkPN "Seaford" ;
-lin seaham_PN = mkPN "Seaham" ;
-lin seattle_PN = mkPN "Seattle" ;
-lin selby_PN = mkPN "Selby" ;
-lin selkirk_PN = mkPN "Selkirk" ;
-lin selsey_PN = mkPN "Selsey" ;
-lin semarang_PN = mkPN "Semarang" ;
-lin senegal_PN = mkPN "Sénégal" ;
-lin seoul_PN = mkPN "Séoul" ;
-lin sevenoaks_PN = mkPN "Sevenoaks" ;
-lin sevilla_PN = mkPN "Séville" ;
-lin seville_PN = mkPN "Seville" ;
-lin seychelles_PN = mkPN "Seychelles" ;
-lin shanghai_PN = mkPN "Shanghai" ;
-lin shanklin_PN = mkPN "Shanklin" ;
-lin sharon_PN = mkPN "Sharon" ;
-lin sheerness_PN = mkPN "Sheerness" ;
-lin sheffield_PN = mkPN "Sheffield" ;
-lin shepshed_PN = mkPN "Shepshed" ;
-lin sheringham_PN = mkPN "Sheringham" ;
-lin shetland_PN = mkPN "Shetland" ;
-lin shevington_PN = mkPN "Shevington" ;
-lin shildon_PN = mkPN "Shildon" ;
-lin shirebrook_PN = mkPN "Shirebrook" ;
-lin shiremoor_PN = mkPN "Shiremoor" ;
-lin shirley_PN = mkPN "Shirley" ;
-lin shotton_PN = mkPN "Shotton" ;
-lin shotts_PN = mkPN "Shotts" ;
-lin shrewsbury_PN = mkPN "Shrewsbury" ;
-lin sidmouth_PN = mkPN "Sidmouth" ;
-lin sidney_PN = mkPN "Sidney" ;
-lin sileby_PN = mkPN "Sileby" ;
-lin silsden_PN = mkPN "Silsden" ;
-lin silvia_PN = mkPN "Silvia" ;
-lin singapore_PN = mkPN "Singapour" ;
-lin siracusa_PN = mkPN "Syracuse" ;
-lin sittingbourne_PN = mkPN "Sittingbourne" ;
-lin skegness_PN = mkPN "Skegness" ;
-lin skelmersdale_PN = mkPN "Skelmersdale" ;
-lin skipton_PN = mkPN "Skipton" ;
-lin skopje_PN = mkPN "Skopje" ;
-lin sleaford_PN = mkPN "Sleaford" ;
-lin sligo_PN = mkPN "Sligo" ;
-lin slough_PN = mkPN "Slough" ;
-lin sofia_PN = mkPN "Sofia" ;
-lin soho_PN = mkPN "Soho" ;
-lin solihull_PN = mkPN "Solihull" ;
-lin solingen_PN = mkPN "Solingen" ;
-lin solon_PN = mkPN "Solon" ;
-lin somalia_PN = mkPN "Somalie" ;
-lin somerset_PN = mkPN "Somerset" ;
-lin sophia_PN = mkPN "Sophia" ;
-lin south_ockendon_PN = mkPN "South Ockendon" ;
-lin south_shields_PN = mkPN "South Shields" ;
-lin southampton_PN = mkPN "Southampton" ;
-lin southport_PN = mkPN "Southport" ;
-lin spain_PN = mkPN "Espagne" ;
-lin spalding_PN = mkPN "Spalding" ;
-lin spennymoor_PN = mkPN "Spennymoor" ;
-lin split_PN = mkPN "Split" ;
-lin springfield_PN = mkPN "Springfield" ;
-lin stafford_PN = mkPN "Stafford" ;
-lin stalybridge_PN = mkPN "Stalybridge" ;
-lin stamford_PN = mkPN "Stamford" ;
-lin stanford_PN = mkPN "Stanford" ;
-lin stanley_PN = mkPN "Port Stanley" ;
-lin stella_PN = mkPN "Stella" ;
-lin stevenage_PN = mkPN "Stevenage" ;
-lin stevenston_PN = mkPN "Stevenston" ;
-lin steyning_PN = mkPN "Steyning" ;
-lin stirling_PN = mkPN "Stirling" ;
-lin stockholm_PN = mkPN "Stockholm" ;
-lin stockport_PN = mkPN "Stockport" ;
-lin stocksbridge_PN = mkPN "Stocksbridge" ;
-lin stone_PN = mkPN "Stone" ;
-lin stonehouse_PN = mkPN "Stonehouse" ;
-lin stornoway_PN = mkPN "Stornoway" ;
-lin stotfold_PN = mkPN "Stotfold" ;
-lin stourbridge_PN = mkPN "Stourbridge" ;
-lin stowmarket_PN = mkPN "Stowmarket" ;
-lin stranraer_PN = mkPN "Stranraer" ;
-lin strasbourg_PN = mkPN "Strasbourg" ;
-lin strathaven_PN = mkPN "Strathaven" ;
-lin street_PN = mkPN "Street" ;
-lin stretford_PN = mkPN "Stretford" ;
-lin stroud_PN = mkPN "Stroud" ;
-lin stuart_PN = mkPN "Stuart" ;
-lin studley_PN = mkPN "Studley" ;
-lin stuttgart_PN = mkPN "Stuttgart" ;
-lin sudan_PN = mkPN "Soudan" ;
-lin sudbury_PN = mkPN "Sudbury" ;
-lin suffolk_PN = mkPN "Suffolk" ;
-lin sunderland_PN = mkPN "Sunderland" ;
-lin surrey_PN = mkPN "Surrey" ;
-lin sussex_PN = mkPN "Sussex" ;
-lin sutton_PN = mkPN "Sutton" ;
-lin swadlincote_PN = mkPN "Swadlincote" ;
-lin swanage_PN = mkPN "Swanage" ;
-lin swanley_PN = mkPN "Swanley" ;
-lin swansea_PN = mkPN "Swansea" ;
-lin swaziland_PN = mkPN "Swaziland" ;
-lin sweden_PN = mkPN "Suède" ;
-lin swindon_PN = mkPN "Swindon" ;
-lin swinton_PN = mkPN "Swinton" ;
-lin switzerland_PN = mkPN "Suisse" ;
-lin sydney_PN = mkPN "Sydney" ;
-lin syracuse_PN = mkPN "Syracuse" ;
-lin syria_PN = mkPN "République arabe syrienne" ;
-lin syston_PN = mkPN "Syston" ;
-lin tadley_PN = mkPN "Tadley" ;
-lin taipei_PN = mkPN "Taipei" ;
-lin taiwan_PN = mkPN "Taïwan" ;
-lin taiyuan_PN = mkPN "Taiyuan" ;
-lin tampere_PN = mkPN "Tampere" ;
-lin tamworth_PN = mkPN "Tamworth" ;
-lin tangshan_PN = mkPN "Tangshan" ;
-lin tanzania_PN = mkPN "Tanzanie" ;
-lin taranto_PN = mkPN "Tarente" ;
-lin tashkent_PN = mkPN "Tachkent" ;
-lin taunton_PN = mkPN "Taunton" ;
-lin tavistock_PN = mkPN "Tavistock" ;
-lin tbilisi_PN = mkPN "Tbilissi" ;
-lin teignmouth_PN = mkPN "Teignmouth" ;
-lin telford_PN = mkPN "Telford" ;
-lin tenby_PN = mkPN "Tenby" ;
-lin tenterden_PN = mkPN "Tenterden" ;
-lin teresa_PN = mkPN "Teresa" ;
-lin terry_PN = mkPN "Terry" ;
-lin tewkesbury_PN = mkPN "Tewkesbury" ;
-lin thailand_PN = mkPN "Thaïlande" ;
-lin thame_PN = mkPN "Thame" ;
-lin thatcham_PN = mkPN "Thatcham" ;
-lin theodore_PN = mkPN "Theodore" ;
-lin theresa_PN = mkPN "Theresa" ;
-lin thetford_PN = mkPN "Thetford" ;
-lin thionville_PN = mkPN "Thionville" ;
-lin thirsk_PN = mkPN "Thirsk" ;
-lin thomas_PN = mkPN "Thomas" ;
-lin thornbury_PN = mkPN "Thornbury" ;
-lin thurso_PN = mkPN "Thurso" ;
-lin tidworth_PN = mkPN "Tidworth" ;
-lin tilburg_PN = mkPN "Tilburg" ;
-lin tilbury_PN = mkPN "Tilbury" ;
-lin tim_PN = mkPN "Tim" ;
-lin tipperary_PN = mkPN "Tipperary" ;
-lin tiverton_PN = mkPN "Tiverton" ;
-lin todmorden_PN = mkPN "Todmorden" ;
-lin togo_PN = mkPN "République Togolaise" ;
-lin tokyo_PN = mkPN "Tokyo" ;
-lin tonbridge_PN = mkPN "Tonbridge" ;
-lin tonga_PN = mkPN "Tonga" ;
-lin tonyrefail_PN = mkPN "Tonyrefail" ;
-lin torbay_PN = mkPN "Torbay" ;
-lin toronto_PN = mkPN "Toronto" ;
-lin totnes_PN = mkPN "Totnes" ;
-lin toulon_PN = mkPN "Toulon" ;
-lin toulouse_PN = mkPN "Toulouse" ;
-lin tours_PN = mkPN "Tours" ;
-lin tracy_PN = mkPN "Tracy" ;
-lin tralee_PN = mkPN "Tralee" ;
-lin tranent_PN = mkPN "Tranent" ;
-lin tredegar_PN = mkPN "Tredegar" ;
-lin trieste_PN = mkPN "Trieste" ;
-lin tring_PN = mkPN "Tring" ;
-lin trinidad_PN = mkPN "Trinidad" ;
-lin troon_PN = mkPN "Troon" ;
-lin trowbridge_PN = mkPN "Trowbridge" ;
-lin truro_PN = mkPN "Truro" ;
-lin tunis_PN = mkPN "Tunis" ;
-lin tunisia_PN = mkPN "Tunisie" ;
-lin turin_PN = mkPN "Turin" ;
-lin turkey_PN = mkPN "estroict de Sibyle" ;
-lin turku_PN = mkPN "Turku" ;
-lin tynemouth_PN = mkPN "Tynemouth" ;
-lin tyrone_PN = mkPN "Tyrone" ;
-lin uddingston_PN = mkPN "Uddingston" ;
-lin udi_PN = mkPN "Udi" ;
-lin udine_PN = mkPN "Udine" ;
-lin ufa_PN = mkPN "Oufa" ;
-lin uganda_PN = mkPN "Ouganda" ;
-lin ulverston_PN = mkPN "Ulverston" ;
-lin upton_PN = mkPN "Upton" ;
-lin uruguay_PN = mkPN "Uruguay" ;
-lin utrecht_PN = mkPN "Utrecht" ;
-lin uttoxeter_PN = mkPN "Uttoxeter" ;
+lin san_sebastian_PN = mkPN "San Sebastian" ; -- status=guess src=geonames
+lin sandbach_PN = mkPN "Sandbach" ; -- status=guess src=geonames
+lin sandown_PN = mkPN "Sandown" ; -- status=guess src=geonames
+lin sandy_PN = mkPN "Sandy" ; -- status=guess src=geonames
+lin santander_PN = mkPN "Santander" ; -- status=guess src=geonames
+lin santiago_PN = mkPN "Santiago du Chili" ; -- status=guess src=geonames
+lin santos_PN = mkPN "Santos" ; -- status=guess src=geonames
+lin sapporo_PN = mkPN "Sapporo" ; -- status=guess src=geonames
+lin sara_PN = mkPN "Sara" ; -- status=guess src=geonames
+lin sarajevo_PN = mkPN "Sarajevo" ; -- status=guess src=geonames
+lin saratov_PN = mkPN "Saratov" ; -- status=guess src=geonames
+lin sassari_PN = mkPN "Sassari" ; -- status=guess src=geonames
+lin sawbridgeworth_PN = mkPN "Sawbridgeworth" ; -- status=guess src=geonames
+lin scarborough_PN = mkPN "Scarborough" ; -- status=guess src=geonames
+lin schwerin_PN = mkPN "Schwerin" ; -- status=guess src=geonames
+lin scotland_PN = mkPN "Scotland" ; -- status=guess src=geonames
+lin scunthorpe_PN = mkPN "Scunthorpe" ; -- status=guess src=geonames
+lin seaford_PN = mkPN "Seaford" ; -- status=guess src=geonames
+lin seaham_PN = mkPN "Seaham" ; -- status=guess src=geonames
+lin seattle_PN = mkPN "Seattle" ; -- status=guess src=geonames
+lin selby_PN = mkPN "Selby" ; -- status=guess src=geonames
+lin selkirk_PN = mkPN "Selkirk" ; -- status=guess src=geonames
+lin selsey_PN = mkPN "Selsey" ; -- status=guess src=geonames
+lin semarang_PN = mkPN "Semarang" ; -- status=guess src=geonames
+lin senegal_PN = mkPN "Sénégal" ; -- status=guess src=geonames
+lin seoul_PN = mkPN "Séoul" ; -- status=guess src=geonames
+lin sevenoaks_PN = mkPN "Sevenoaks" ; -- status=guess src=geonames
+lin sevilla_PN = mkPN "Séville" ; -- status=guess src=geonames
+lin seville_PN = mkPN "Seville" ; -- status=guess src=geonames
+lin seychelles_PN = mkPN "Seychelles" ; -- status=guess src=geonames
+lin shanghai_PN = mkPN "Shanghai" ; -- status=guess src=geonames
+lin shanklin_PN = mkPN "Shanklin" ; -- status=guess src=geonames
+lin sharon_PN = mkPN "Sharon" ; -- status=guess src=geonames
+lin sheerness_PN = mkPN "Sheerness" ; -- status=guess src=geonames
+lin sheffield_PN = mkPN "Sheffield" ; -- status=guess src=geonames
+lin shepshed_PN = mkPN "Shepshed" ; -- status=guess src=geonames
+lin sheringham_PN = mkPN "Sheringham" ; -- status=guess src=geonames
+lin shetland_PN = mkPN "Shetland" ; -- status=guess src=geonames
+lin shevington_PN = mkPN "Shevington" ; -- status=guess src=geonames
+lin shildon_PN = mkPN "Shildon" ; -- status=guess src=geonames
+lin shirebrook_PN = mkPN "Shirebrook" ; -- status=guess src=geonames
+lin shiremoor_PN = mkPN "Shiremoor" ; -- status=guess src=geonames
+lin shirley_PN = mkPN "Shirley" ; -- status=guess src=geonames
+lin shotton_PN = mkPN "Shotton" ; -- status=guess src=geonames
+lin shotts_PN = mkPN "Shotts" ; -- status=guess src=geonames
+lin shrewsbury_PN = mkPN "Shrewsbury" ; -- status=guess src=geonames
+lin sidmouth_PN = mkPN "Sidmouth" ; -- status=guess src=geonames
+lin sidney_PN = mkPN "Sidney" ; -- status=guess src=geonames
+lin sileby_PN = mkPN "Sileby" ; -- status=guess src=geonames
+lin silsden_PN = mkPN "Silsden" ; -- status=guess src=geonames
+lin silvia_PN = mkPN "Silvia" ; -- status=guess src=geonames
+lin singapore_PN = mkPN "Singapour" ; -- status=guess src=geonames
+lin siracusa_PN = mkPN "Syracuse" ; -- status=guess src=geonames
+lin sittingbourne_PN = mkPN "Sittingbourne" ; -- status=guess src=geonames
+lin skegness_PN = mkPN "Skegness" ; -- status=guess src=geonames
+lin skelmersdale_PN = mkPN "Skelmersdale" ; -- status=guess src=geonames
+lin skipton_PN = mkPN "Skipton" ; -- status=guess src=geonames
+lin skopje_PN = mkPN "Skopje" ; -- status=guess src=geonames
+lin sleaford_PN = mkPN "Sleaford" ; -- status=guess src=geonames
+lin sligo_PN = mkPN "Sligo" ; -- status=guess src=geonames
+lin slough_PN = mkPN "Slough" ; -- status=guess src=geonames
+lin sofia_PN = mkPN "Sofia" ; -- status=guess src=geonames
+lin soho_PN = mkPN "Soho" ; -- status=guess src=geonames
+lin solihull_PN = mkPN "Solihull" ; -- status=guess src=geonames
+lin solingen_PN = mkPN "Solingen" ; -- status=guess src=geonames
+lin solon_PN = mkPN "Solon" ; -- status=guess src=geonames
+lin somalia_PN = mkPN "Somalie" ; -- status=guess src=geonames
+lin somerset_PN = mkPN "Somerset" ; -- status=guess src=geonames
+lin sophia_PN = mkPN "Sophia" ; -- status=guess src=geonames
+lin south_ockendon_PN = mkPN "South Ockendon" ; -- status=guess src=geonames
+lin south_shields_PN = mkPN "South Shields" ; -- status=guess src=geonames
+lin southampton_PN = mkPN "Southampton" ; -- status=guess src=geonames
+lin southport_PN = mkPN "Southport" ; -- status=guess src=geonames
+lin spain_PN = mkPN "Espagne" ; -- status=guess src=geonames
+lin spalding_PN = mkPN "Spalding" ; -- status=guess src=geonames
+lin spennymoor_PN = mkPN "Spennymoor" ; -- status=guess src=geonames
+lin split_PN = mkPN "Split" ; -- status=guess src=geonames
+lin springfield_PN = mkPN "Springfield" ; -- status=guess src=geonames
+lin stafford_PN = mkPN "Stafford" ; -- status=guess src=geonames
+lin stalybridge_PN = mkPN "Stalybridge" ; -- status=guess src=geonames
+lin stamford_PN = mkPN "Stamford" ; -- status=guess src=geonames
+lin stanford_PN = mkPN "Stanford" ; -- status=guess src=geonames
+lin stanley_PN = mkPN "Port Stanley" ; -- status=guess src=geonames
+lin stella_PN = mkPN "Stella" ; -- status=guess src=geonames
+lin stevenage_PN = mkPN "Stevenage" ; -- status=guess src=geonames
+lin stevenston_PN = mkPN "Stevenston" ; -- status=guess src=geonames
+lin steyning_PN = mkPN "Steyning" ; -- status=guess src=geonames
+lin stirling_PN = mkPN "Stirling" ; -- status=guess src=geonames
+lin stockholm_PN = mkPN "Stockholm" ; -- status=guess src=geonames
+lin stockport_PN = mkPN "Stockport" ; -- status=guess src=geonames
+lin stocksbridge_PN = mkPN "Stocksbridge" ; -- status=guess src=geonames
+lin stone_PN = mkPN "Stone" ; -- status=guess src=geonames
+lin stonehouse_PN = mkPN "Stonehouse" ; -- status=guess src=geonames
+lin stornoway_PN = mkPN "Stornoway" ; -- status=guess src=geonames
+lin stotfold_PN = mkPN "Stotfold" ; -- status=guess src=geonames
+lin stourbridge_PN = mkPN "Stourbridge" ; -- status=guess src=geonames
+lin stowmarket_PN = mkPN "Stowmarket" ; -- status=guess src=geonames
+lin stranraer_PN = mkPN "Stranraer" ; -- status=guess src=geonames
+lin strasbourg_PN = mkPN "Strasbourg" ; -- status=guess src=geonames
+lin strathaven_PN = mkPN "Strathaven" ; -- status=guess src=geonames
+lin street_PN = mkPN "Street" ; -- status=guess src=geonames
+lin stretford_PN = mkPN "Stretford" ; -- status=guess src=geonames
+lin stroud_PN = mkPN "Stroud" ; -- status=guess src=geonames
+lin stuart_PN = mkPN "Stuart" ; -- status=guess src=geonames
+lin studley_PN = mkPN "Studley" ; -- status=guess src=geonames
+lin stuttgart_PN = mkPN "Stuttgart" ; -- status=guess src=geonames
+lin sudan_PN = mkPN "Soudan" ; -- status=guess src=geonames
+lin sudbury_PN = mkPN "Sudbury" ; -- status=guess src=geonames
+lin suffolk_PN = mkPN "Suffolk" ; -- status=guess src=geonames
+lin sunderland_PN = mkPN "Sunderland" ; -- status=guess src=geonames
+lin surrey_PN = mkPN "Surrey" ; -- status=guess src=geonames
+lin sussex_PN = mkPN "Sussex" ; -- status=guess src=geonames
+lin sutton_PN = mkPN "Sutton" ; -- status=guess src=geonames
+lin swadlincote_PN = mkPN "Swadlincote" ; -- status=guess src=geonames
+lin swanage_PN = mkPN "Swanage" ; -- status=guess src=geonames
+lin swanley_PN = mkPN "Swanley" ; -- status=guess src=geonames
+lin swansea_PN = mkPN "Swansea" ; -- status=guess src=geonames
+lin swaziland_PN = mkPN "Swaziland" ; -- status=guess src=geonames
+lin sweden_PN = mkPN "Suède" ; -- status=guess src=geonames
+lin swindon_PN = mkPN "Swindon" ; -- status=guess src=geonames
+lin swinton_PN = mkPN "Swinton" ; -- status=guess src=geonames
+lin switzerland_PN = mkPN "Suisse" ; -- status=guess src=geonames
+lin sydney_PN = mkPN "Sydney" ; -- status=guess src=geonames
+lin syracuse_PN = mkPN "Syracuse" ; -- status=guess src=geonames
+lin syria_PN = mkPN "République arabe syrienne" ; -- status=guess src=geonames
+lin syston_PN = mkPN "Syston" ; -- status=guess src=geonames
+lin tadley_PN = mkPN "Tadley" ; -- status=guess src=geonames
+lin taipei_PN = mkPN "Taipei" ; -- status=guess src=geonames
+lin taiwan_PN = mkPN "Taïwan" ; -- status=guess src=geonames
+lin taiyuan_PN = mkPN "Taiyuan" ; -- status=guess src=geonames
+lin tampere_PN = mkPN "Tampere" ; -- status=guess src=geonames
+lin tamworth_PN = mkPN "Tamworth" ; -- status=guess src=geonames
+lin tangshan_PN = mkPN "Tangshan" ; -- status=guess src=geonames
+lin tanzania_PN = mkPN "Tanzanie" ; -- status=guess src=geonames
+lin taranto_PN = mkPN "Tarente" ; -- status=guess src=geonames
+lin tashkent_PN = mkPN "Tachkent" ; -- status=guess src=geonames
+lin taunton_PN = mkPN "Taunton" ; -- status=guess src=geonames
+lin tavistock_PN = mkPN "Tavistock" ; -- status=guess src=geonames
+lin tbilisi_PN = mkPN "Tbilissi" ; -- status=guess src=geonames
+lin teignmouth_PN = mkPN "Teignmouth" ; -- status=guess src=geonames
+lin telford_PN = mkPN "Telford" ; -- status=guess src=geonames
+lin tenby_PN = mkPN "Tenby" ; -- status=guess src=geonames
+lin tenterden_PN = mkPN "Tenterden" ; -- status=guess src=geonames
+lin teresa_PN = mkPN "Teresa" ; -- status=guess src=geonames
+lin terry_PN = mkPN "Terry" ; -- status=guess src=geonames
+lin tewkesbury_PN = mkPN "Tewkesbury" ; -- status=guess src=geonames
+lin thailand_PN = mkPN "Thaïlande" ; -- status=guess src=geonames
+lin thame_PN = mkPN "Thame" ; -- status=guess src=geonames
+lin thatcham_PN = mkPN "Thatcham" ; -- status=guess src=geonames
+lin theodore_PN = mkPN "Theodore" ; -- status=guess src=geonames
+lin theresa_PN = mkPN "Theresa" ; -- status=guess src=geonames
+lin thetford_PN = mkPN "Thetford" ; -- status=guess src=geonames
+lin thionville_PN = mkPN "Thionville" ; -- status=guess src=geonames
+lin thirsk_PN = mkPN "Thirsk" ; -- status=guess src=geonames
+lin thomas_PN = mkPN "Thomas" ; -- status=guess src=geonames
+lin thornbury_PN = mkPN "Thornbury" ; -- status=guess src=geonames
+lin thurso_PN = mkPN "Thurso" ; -- status=guess src=geonames
+lin tidworth_PN = mkPN "Tidworth" ; -- status=guess src=geonames
+lin tilburg_PN = mkPN "Tilburg" ; -- status=guess src=geonames
+lin tilbury_PN = mkPN "Tilbury" ; -- status=guess src=geonames
+lin tim_PN = mkPN "Tim" ; -- status=guess src=geonames
+lin tipperary_PN = mkPN "Tipperary" ; -- status=guess src=geonames
+lin tiverton_PN = mkPN "Tiverton" ; -- status=guess src=geonames
+lin todmorden_PN = mkPN "Todmorden" ; -- status=guess src=geonames
+lin togo_PN = mkPN "République Togolaise" ; -- status=guess src=geonames
+lin tokyo_PN = mkPN "Tokyo" ; -- status=guess src=geonames
+lin tonbridge_PN = mkPN "Tonbridge" ; -- status=guess src=geonames
+lin tonga_PN = mkPN "Tonga" ; -- status=guess src=geonames
+lin tonyrefail_PN = mkPN "Tonyrefail" ; -- status=guess src=geonames
+lin torbay_PN = mkPN "Torbay" ; -- status=guess src=geonames
+lin toronto_PN = mkPN "Toronto" ; -- status=guess src=geonames
+lin totnes_PN = mkPN "Totnes" ; -- status=guess src=geonames
+lin toulon_PN = mkPN "Toulon" ; -- status=guess src=geonames
+lin toulouse_PN = mkPN "Toulouse" ; -- status=guess src=geonames
+lin tours_PN = mkPN "Tours" ; -- status=guess src=geonames
+lin tracy_PN = mkPN "Tracy" ; -- status=guess src=geonames
+lin tralee_PN = mkPN "Tralee" ; -- status=guess src=geonames
+lin tranent_PN = mkPN "Tranent" ; -- status=guess src=geonames
+lin tredegar_PN = mkPN "Tredegar" ; -- status=guess src=geonames
+lin trieste_PN = mkPN "Trieste" ; -- status=guess src=geonames
+lin tring_PN = mkPN "Tring" ; -- status=guess src=geonames
+lin trinidad_PN = mkPN "Trinidad" ; -- status=guess src=geonames
+lin troon_PN = mkPN "Troon" ; -- status=guess src=geonames
+lin trowbridge_PN = mkPN "Trowbridge" ; -- status=guess src=geonames
+lin truro_PN = mkPN "Truro" ; -- status=guess src=geonames
+lin tunis_PN = mkPN "Tunis" ; -- status=guess src=geonames
+lin tunisia_PN = mkPN "Tunisie" ; -- status=guess src=geonames
+lin turin_PN = mkPN "Turin" ; -- status=guess src=geonames
+lin turkey_PN = mkPN "estroict de Sibyle" ; -- status=guess src=geonames
+lin turku_PN = mkPN "Turku" ; -- status=guess src=geonames
+lin tynemouth_PN = mkPN "Tynemouth" ; -- status=guess src=geonames
+lin tyrone_PN = mkPN "Tyrone" ; -- status=guess src=geonames
+lin uddingston_PN = mkPN "Uddingston" ; -- status=guess src=geonames
+lin udi_PN = mkPN "Udi" ; -- status=guess src=geonames
+lin udine_PN = mkPN "Udine" ; -- status=guess src=geonames
+lin ufa_PN = mkPN "Oufa" ; -- status=guess src=geonames
+lin uganda_PN = mkPN "Ouganda" ; -- status=guess src=geonames
+lin ulverston_PN = mkPN "Ulverston" ; -- status=guess src=geonames
+lin upton_PN = mkPN "Upton" ; -- status=guess src=geonames
+lin uruguay_PN = mkPN "Uruguay" ; -- status=guess src=geonames
+lin utrecht_PN = mkPN "Utrecht" ; -- status=guess src=geonames
+lin uttoxeter_PN = mkPN "Uttoxeter" ; -- status=guess src=geonames
 lin valencia_PN = mkPN ("Valencia" | "Valence");
-lin valenciennes_PN = mkPN "Valenciennes" ;
-lin valladolid_PN = mkPN "Valladolid" ;
-lin vancouver_PN = mkPN "Vancouver" ;
-lin varanasi_PN = mkPN "Vârânasî" ;
-lin venezuela_PN = mkPN "Venezuela" ;
-lin venice_PN = mkPN "Venise" ;
-lin ventnor_PN = mkPN "Ventnor" ;
-lin venus_PN = mkPN "Venus" ;
-lin vera_PN = mkPN "Vera" ;
-lin vernon_PN = mkPN "Vernon" ;
-lin verona_PN = mkPN "Vérone" ;
-lin vic_PN = mkPN "Vic" ;
-lin vicenza_PN = mkPN "Vicence" ;
-lin victor_PN = mkPN "Victor" ;
-lin victoria_PN = mkPN "Victoria" ;
-lin vienna_PN = mkPN "Vienne" ;
-lin vietnam_PN = mkPN "Vietnam" ;
-lin vigo_PN = mkPN "Vigo" ;
-lin vincent_PN = mkPN "Vincent" ;
-lin viola_PN = mkPN "Viola" ;
-lin violet_PN = mkPN "Violet" ;
-lin virginia_PN = mkPN "Virginia" ;
-lin vivian_PN = mkPN "Vivian" ;
-lin volgograd_PN = mkPN "Volgograd" ;
-lin voronezh_PN = mkPN "Voronej" ;
-lin wakefield_PN = mkPN "Wakefield" ;
-lin wales_PN = mkPN "Wales" ;
-lin wallace_PN = mkPN "Wallace" ;
-lin wallasey_PN = mkPN "Wallasey" ;
-lin wallingford_PN = mkPN "Wallingford" ;
-lin wallsend_PN = mkPN "Wallsend" ;
-lin walsall_PN = mkPN "Walsall" ;
-lin walton_PN = mkPN "Walton" ;
-lin wandsworth_PN = mkPN "District londonien de Wandsworth" ;
-lin wantage_PN = mkPN "Wantage" ;
-lin ware_PN = mkPN "Ware" ;
-lin warminster_PN = mkPN "Warminster" ;
-lin warrington_PN = mkPN "Warrington" ;
-lin warsaw_PN = mkPN "Varsovie" ;
-lin warsop_PN = mkPN "Warsop" ;
-lin warwick_PN = mkPN "Warwick" ;
-lin washington_PN = mkPN "Washington" ;
-lin waterford_PN = mkPN "Waterford" ;
-lin waterloo_PN = mkPN "Waterloo" ;
-lin watford_PN = mkPN "Watford" ;
-lin wayne_PN = mkPN "Wayne" ;
-lin wellingborough_PN = mkPN "Wellingborough" ;
-lin wellington_PN = mkPN "Wellington" ;
-lin wells_PN = mkPN "Wells" ;
-lin welshpool_PN = mkPN "Welshpool" ;
-lin welwyn_PN = mkPN "Welwyn" ;
-lin wendover_PN = mkPN "Wendover" ;
-lin westbury_PN = mkPN "Westbury" ;
-lin westhoughton_PN = mkPN "Westhoughton" ;
-lin westminster_PN = mkPN "Westminster" ;
-lin westmoreland_PN = mkPN "Westmoreland" ;
-lin wetherby_PN = mkPN "Wetherby" ;
-lin weymouth_PN = mkPN "Weymouth" ;
-lin whitburn_PN = mkPN "Whitburn" ;
-lin whitby_PN = mkPN "Whitby" ;
-lin whitchurch_PN = mkPN "Whitchurch" ;
-lin whitehall_PN = mkPN "Whitehall" ;
-lin whitehaven_PN = mkPN "Whitehaven" ;
-lin whitstable_PN = mkPN "Whitstable" ;
-lin whittlesey_PN = mkPN "Whittlesey" ;
-lin whitworth_PN = mkPN "Whitworth" ;
-lin wick_PN = mkPN "Wick" ;
-lin wickford_PN = mkPN "Wickford" ;
-lin wicklow_PN = mkPN "Wicklow" ;
-lin widnes_PN = mkPN "Widnes" ;
-lin wiesbaden_PN = mkPN "Wiesbaden" ;
-lin wigan_PN = mkPN "Wigan" ;
-lin wilhelmshaven_PN = mkPN "Wilhelmshaven" ;
-lin willington_PN = mkPN "Willington" ;
-lin wilmslow_PN = mkPN "Wilmslow" ;
-lin winchester_PN = mkPN "Winchester" ;
-lin windermere_PN = mkPN "Windermere" ;
-lin windsor_PN = mkPN "Windsor" ;
-lin wingate_PN = mkPN "Wingate" ;
-lin winnie_PN = mkPN "Winnie" ;
-lin winnipeg_PN = mkPN "Winnipeg" ;
-lin winsford_PN = mkPN "Winsford" ;
-lin wisbech_PN = mkPN "Wisbech" ;
-lin witham_PN = mkPN "Witham" ;
-lin withernsea_PN = mkPN "Withernsea" ;
-lin witney_PN = mkPN "Witney" ;
-lin woburn_PN = mkPN "Woburn" ;
-lin wokingham_PN = mkPN "Wokingham" ;
-lin wolverhampton_PN = mkPN "Wolverhampton" ;
-lin woodbridge_PN = mkPN "Woodbridge" ;
-lin worcester_PN = mkPN "Worcester" ;
-lin workington_PN = mkPN "Workington" ;
-lin worksop_PN = mkPN "Worksop" ;
-lin worthing_PN = mkPN "Worthing" ;
-lin wrexham_PN = mkPN "Wrexham" ;
-lin writtle_PN = mkPN "Writtle" ;
-lin wroughton_PN = mkPN "Wroughton" ;
-lin wuhan_PN = mkPN "Wuhan" ;
-lin wuppertal_PN = mkPN "Wuppertal" ;
-lin wymondham_PN = mkPN "Wymondham" ;
-lin wyoming_PN = mkPN "Wyoming" ;
-lin yarmouth_PN = mkPN "Yarmouth" ;
-lin yate_PN = mkPN "Yate" ;
-lin yateley_PN = mkPN "Yateley" ;
-lin yemen_PN = mkPN "Yémen" ;
-lin yeovil_PN = mkPN "Yeovil" ;
-lin yerevan_PN = mkPN "Erevan" ;
-lin yokohama_PN = mkPN "Yokohama" ;
-lin york_PN = mkPN "York" ;
-lin yorkshire_PN = mkPN "Yorkshire" ;
-lin ystradgynlais_PN = mkPN "Ystradgynlais" ;
-lin yukon_PN = mkPN "Yukon" ;
-lin zagreb_PN = mkPN "Zagreb" ;
-lin zambia_PN = mkPN "Zambie" ;
-lin zaragoza_PN = mkPN "Saragosse" ;
-lin zimbabwe_PN = mkPN "Zimbabwe" ;
+lin valenciennes_PN = mkPN "Valenciennes" ; -- status=guess src=geonames
+lin valladolid_PN = mkPN "Valladolid" ; -- status=guess src=geonames
+lin vancouver_PN = mkPN "Vancouver" ; -- status=guess src=geonames
+lin varanasi_PN = mkPN "Vârânasî" ; -- status=guess src=geonames
+lin venezuela_PN = mkPN "Venezuela" ; -- status=guess src=geonames
+lin venice_PN = mkPN "Venise" ; -- status=guess src=geonames
+lin ventnor_PN = mkPN "Ventnor" ; -- status=guess src=geonames
+lin venus_PN = mkPN "Venus" ; -- status=guess src=geonames
+lin vera_PN = mkPN "Vera" ; -- status=guess src=geonames
+lin vernon_PN = mkPN "Vernon" ; -- status=guess src=geonames
+lin verona_PN = mkPN "Vérone" ; -- status=guess src=geonames
+lin vic_PN = mkPN "Vic" ; -- status=guess src=geonames
+lin vicenza_PN = mkPN "Vicence" ; -- status=guess src=geonames
+lin victor_PN = mkPN "Victor" ; -- status=guess src=geonames
+lin victoria_PN = mkPN "Victoria" ; -- status=guess src=geonames
+lin vienna_PN = mkPN "Vienne" ; -- status=guess src=geonames
+lin vietnam_PN = mkPN "Vietnam" ; -- status=guess src=geonames
+lin vigo_PN = mkPN "Vigo" ; -- status=guess src=geonames
+lin vincent_PN = mkPN "Vincent" ; -- status=guess src=geonames
+lin viola_PN = mkPN "Viola" ; -- status=guess src=geonames
+lin violet_PN = mkPN "Violet" ; -- status=guess src=geonames
+lin virginia_PN = mkPN "Virginia" ; -- status=guess src=geonames
+lin vivian_PN = mkPN "Vivian" ; -- status=guess src=geonames
+lin volgograd_PN = mkPN "Volgograd" ; -- status=guess src=geonames
+lin voronezh_PN = mkPN "Voronej" ; -- status=guess src=geonames
+lin wakefield_PN = mkPN "Wakefield" ; -- status=guess src=geonames
+lin wales_PN = mkPN "Wales" ; -- status=guess src=geonames
+lin wallace_PN = mkPN "Wallace" ; -- status=guess src=geonames
+lin wallasey_PN = mkPN "Wallasey" ; -- status=guess src=geonames
+lin wallingford_PN = mkPN "Wallingford" ; -- status=guess src=geonames
+lin wallsend_PN = mkPN "Wallsend" ; -- status=guess src=geonames
+lin walsall_PN = mkPN "Walsall" ; -- status=guess src=geonames
+lin walton_PN = mkPN "Walton" ; -- status=guess src=geonames
+lin wandsworth_PN = mkPN "District londonien de Wandsworth" ; -- status=guess src=geonames
+lin wantage_PN = mkPN "Wantage" ; -- status=guess src=geonames
+lin ware_PN = mkPN "Ware" ; -- status=guess src=geonames
+lin warminster_PN = mkPN "Warminster" ; -- status=guess src=geonames
+lin warrington_PN = mkPN "Warrington" ; -- status=guess src=geonames
+lin warsaw_PN = mkPN "Varsovie" ; -- status=guess src=geonames
+lin warsop_PN = mkPN "Warsop" ; -- status=guess src=geonames
+lin warwick_PN = mkPN "Warwick" ; -- status=guess src=geonames
+lin washington_PN = mkPN "Washington" ; -- status=guess src=geonames
+lin waterford_PN = mkPN "Waterford" ; -- status=guess src=geonames
+lin waterloo_PN = mkPN "Waterloo" ; -- status=guess src=geonames
+lin watford_PN = mkPN "Watford" ; -- status=guess src=geonames
+lin wayne_PN = mkPN "Wayne" ; -- status=guess src=geonames
+lin wellingborough_PN = mkPN "Wellingborough" ; -- status=guess src=geonames
+lin wellington_PN = mkPN "Wellington" ; -- status=guess src=geonames
+lin wells_PN = mkPN "Wells" ; -- status=guess src=geonames
+lin welshpool_PN = mkPN "Welshpool" ; -- status=guess src=geonames
+lin welwyn_PN = mkPN "Welwyn" ; -- status=guess src=geonames
+lin wendover_PN = mkPN "Wendover" ; -- status=guess src=geonames
+lin westbury_PN = mkPN "Westbury" ; -- status=guess src=geonames
+lin westhoughton_PN = mkPN "Westhoughton" ; -- status=guess src=geonames
+lin westminster_PN = mkPN "Westminster" ; -- status=guess src=geonames
+lin westmoreland_PN = mkPN "Westmoreland" ; -- status=guess src=geonames
+lin wetherby_PN = mkPN "Wetherby" ; -- status=guess src=geonames
+lin weymouth_PN = mkPN "Weymouth" ; -- status=guess src=geonames
+lin whitburn_PN = mkPN "Whitburn" ; -- status=guess src=geonames
+lin whitby_PN = mkPN "Whitby" ; -- status=guess src=geonames
+lin whitchurch_PN = mkPN "Whitchurch" ; -- status=guess src=geonames
+lin whitehall_PN = mkPN "Whitehall" ; -- status=guess src=geonames
+lin whitehaven_PN = mkPN "Whitehaven" ; -- status=guess src=geonames
+lin whitstable_PN = mkPN "Whitstable" ; -- status=guess src=geonames
+lin whittlesey_PN = mkPN "Whittlesey" ; -- status=guess src=geonames
+lin whitworth_PN = mkPN "Whitworth" ; -- status=guess src=geonames
+lin wick_PN = mkPN "Wick" ; -- status=guess src=geonames
+lin wickford_PN = mkPN "Wickford" ; -- status=guess src=geonames
+lin wicklow_PN = mkPN "Wicklow" ; -- status=guess src=geonames
+lin widnes_PN = mkPN "Widnes" ; -- status=guess src=geonames
+lin wiesbaden_PN = mkPN "Wiesbaden" ; -- status=guess src=geonames
+lin wigan_PN = mkPN "Wigan" ; -- status=guess src=geonames
+lin wilhelmshaven_PN = mkPN "Wilhelmshaven" ; -- status=guess src=geonames
+lin willington_PN = mkPN "Willington" ; -- status=guess src=geonames
+lin wilmslow_PN = mkPN "Wilmslow" ; -- status=guess src=geonames
+lin winchester_PN = mkPN "Winchester" ; -- status=guess src=geonames
+lin windermere_PN = mkPN "Windermere" ; -- status=guess src=geonames
+lin windsor_PN = mkPN "Windsor" ; -- status=guess src=geonames
+lin wingate_PN = mkPN "Wingate" ; -- status=guess src=geonames
+lin winnie_PN = mkPN "Winnie" ; -- status=guess src=geonames
+lin winnipeg_PN = mkPN "Winnipeg" ; -- status=guess src=geonames
+lin winsford_PN = mkPN "Winsford" ; -- status=guess src=geonames
+lin wisbech_PN = mkPN "Wisbech" ; -- status=guess src=geonames
+lin witham_PN = mkPN "Witham" ; -- status=guess src=geonames
+lin withernsea_PN = mkPN "Withernsea" ; -- status=guess src=geonames
+lin witney_PN = mkPN "Witney" ; -- status=guess src=geonames
+lin woburn_PN = mkPN "Woburn" ; -- status=guess src=geonames
+lin wokingham_PN = mkPN "Wokingham" ; -- status=guess src=geonames
+lin wolverhampton_PN = mkPN "Wolverhampton" ; -- status=guess src=geonames
+lin woodbridge_PN = mkPN "Woodbridge" ; -- status=guess src=geonames
+lin worcester_PN = mkPN "Worcester" ; -- status=guess src=geonames
+lin workington_PN = mkPN "Workington" ; -- status=guess src=geonames
+lin worksop_PN = mkPN "Worksop" ; -- status=guess src=geonames
+lin worthing_PN = mkPN "Worthing" ; -- status=guess src=geonames
+lin wrexham_PN = mkPN "Wrexham" ; -- status=guess src=geonames
+lin writtle_PN = mkPN "Writtle" ; -- status=guess src=geonames
+lin wroughton_PN = mkPN "Wroughton" ; -- status=guess src=geonames
+lin wuhan_PN = mkPN "Wuhan" ; -- status=guess src=geonames
+lin wuppertal_PN = mkPN "Wuppertal" ; -- status=guess src=geonames
+lin wymondham_PN = mkPN "Wymondham" ; -- status=guess src=geonames
+lin wyoming_PN = mkPN "Wyoming" ; -- status=guess src=geonames
+lin yarmouth_PN = mkPN "Yarmouth" ; -- status=guess src=geonames
+lin yate_PN = mkPN "Yate" ; -- status=guess src=geonames
+lin yateley_PN = mkPN "Yateley" ; -- status=guess src=geonames
+lin yemen_PN = mkPN "Yémen" ; -- status=guess src=geonames
+lin yeovil_PN = mkPN "Yeovil" ; -- status=guess src=geonames
+lin yerevan_PN = mkPN "Erevan" ; -- status=guess src=geonames
+lin yokohama_PN = mkPN "Yokohama" ; -- status=guess src=geonames
+lin york_PN = mkPN "York" ; -- status=guess src=geonames
+lin yorkshire_PN = mkPN "Yorkshire" ; -- status=guess src=geonames
+lin ystradgynlais_PN = mkPN "Ystradgynlais" ; -- status=guess src=geonames
+lin yukon_PN = mkPN "Yukon" ; -- status=guess src=geonames
+lin zagreb_PN = mkPN "Zagreb" ; -- status=guess src=geonames
+lin zambia_PN = mkPN "Zambie" ; -- status=guess src=geonames
+lin zaragoza_PN = mkPN "Saragosse" ; -- status=guess src=geonames
+lin zimbabwe_PN = mkPN "Zimbabwe" ; -- status=guess src=geonames
 
 
 }
