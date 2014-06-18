@@ -21,7 +21,7 @@ concrete TranslateSpa of Translate =
   QuestionSpa,
   RelativeSpa,
   IdiomSpa,
---  ConstructionSpa,
+  ConstructionSpa,
   DocumentationSpa,
 
   ChunkSpa,

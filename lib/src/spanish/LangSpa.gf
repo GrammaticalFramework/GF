@@ -1,9 +1,10 @@
---# -path=.:../romance:../abstract:../common:../prelude
+--# -path=.:../romance:../abstract:../common:../api
 
 concrete LangSpa of Lang = 
   GrammarSpa,
-  LexiconSpa,
-  DocumentationSpa
+  LexiconSpa
+  ,DocumentationSpa
+  ,ConstructionSpa
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
