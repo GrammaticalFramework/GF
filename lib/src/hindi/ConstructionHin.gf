@@ -7,7 +7,7 @@ concrete ConstructionHin of Construction = CatHin **
 lin
   hungry_VP = mkVP  (mkA "भूखा") ;
   thirsty_VP = mkVP (mkA "प्यासा") ;
-  has_age_VP card = mkVP (mkNP <card : Card> (mkCN (modN L.year_N))) ;
+  has_age_VP card = mkVP (mkNP <card : Card> (mkCN (mmodN L.year_N))) ;
 
   have_name_Cl x y = mkCl (mkNP (E.GenNP x) L.name_N) (lin NP y) ;
   married_Cl x y = mkCl (lin NP x) L.married_A2 (lin NP y) ;
@@ -17,7 +17,7 @@ lin
   how_far_QCl x = mkQCl (E.IAdvAdv (ParadigmsHin.mkAdv "दूर")) (lin NP x) ;
 
 oper
-  modN : N -> N = \noun -> lin N {s = \\n,c =>noun.s!n!c++"का" ; g =noun.g} ;
+  mmodN : N -> N = \noun -> lin N {s = \\n,c =>noun.s!n!c++"का" ; g =noun.g} ;
 
 -- some more things
 ----  weather_adjCl ap = mkCl (mkVP (lin AP ap)) ;
