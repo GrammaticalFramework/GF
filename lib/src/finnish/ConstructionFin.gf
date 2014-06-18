@@ -70,7 +70,7 @@ lincat Language = PN ;
 lin InLanguage l = SyntaxFin.mkAdv (mkPrep translative) (mkNP l) ;
 
 lin
-  weekdayN w = w ;
+  weekdayN w = w.noun ;
   monthN m = m ;
   languagePN l = l ;
 
