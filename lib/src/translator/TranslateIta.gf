@@ -21,7 +21,7 @@ concrete TranslateIta of Translate =
   QuestionIta,
   RelativeIta,
   IdiomIta,
---  ConstructionIta,
+  ConstructionIta,
   DocumentationIta,
 
   ChunkIta,
