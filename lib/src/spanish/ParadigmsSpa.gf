@@ -129,7 +129,8 @@ oper
 
   mkPN : overload {
     mkPN : (Anna : Str) -> PN ; -- feminine for "-a"
-    mkPN : (Pilar : Str) -> Gender -> PN -- force gender
+    mkPN : (Pilar : Str) -> Gender -> PN ; -- force gender
+    mkPN : N -> PN ;   -- gender from noun
     } ;
 
 
@@ -476,7 +477,8 @@ oper
 
   mkPN = overload {
     mkPN : (Anna : Str) -> PN = regPN ;
-    mkPN : (Pilar : Str) -> Gender -> PN = mk2PN
+    mkPN : (Pilar : Str) -> Gender -> PN = mk2PN ;
+    mkPN : N -> PN = \n -> lin PN {s = n.s ! Sg ; g = n.g} ;
     } ;
   mk2PN  : Str -> Gender -> PN ; -- Juan
   regPN : Str -> PN ;           -- feminine for "-a", otherwise masculine
