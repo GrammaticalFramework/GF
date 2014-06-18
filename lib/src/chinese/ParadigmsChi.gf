@@ -23,7 +23,10 @@ oper
 
       
   mkPN : (john : Str) -> PN
-     = \s -> lin PN {s = word s} ; 
+     = \s -> lin PN {s = word s} ; -- normal name, in Chinese characters
+
+  foreignPN : (john : Str) -> PN
+     = \s -> lin PN {s = s} ;    -- foreign name, in Latin or other non-Chinese characters
 
   mkA = overload {
     mkA : (small : Str) -> A 
