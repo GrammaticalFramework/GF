@@ -20,7 +20,6 @@ concrete TranslateSwe of Translate =
   RelativeSwe,
   IdiomSwe,
   ConstructionSwe,
-  NamesSwe,
   DocumentationSwe,
 
   ChunkSwe,

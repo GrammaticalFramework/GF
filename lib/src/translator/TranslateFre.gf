@@ -22,7 +22,6 @@ concrete TranslateFre of Translate =
   RelativeFre,
   IdiomFre,
   ConstructionFre,
-  NamesFre,
   DocumentationFre,
 
   ChunkFre,

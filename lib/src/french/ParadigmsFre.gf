@@ -134,7 +134,8 @@ oper
 
   mkPN  : overload {
     mkPN : Str -> PN ; -- feminine if ends with "e", otherwise masculine
-    mkPN : Str -> Gender -> PN -- gender deviant from the simple rule
+    mkPN : Str -> Gender -> PN ; -- gender deviant from the simple rule
+    mkPN : N -> PN ; -- gender inherited from noun
     } ;
 
 
@@ -382,7 +383,8 @@ oper
 
   mkPN = overload {
     mkPN : Str -> PN = regPN ;
-    mkPN : Str -> Gender -> PN = \x,g -> {s = x ; g = g} ** {lock_PN = <>} ;
+    mkPN : Str -> Gender -> PN = \x,g -> lin PN {s = x ; g = g} ;
+    mkPN : N -> PN = \x -> lin PN {s = x.s ! Sg ; g = x.g} ;
     } ;
 
   mk4A a b c d = compADeg {s = \\_ => (mkAdj a c b d).s ; isPre = False ; lock_A = <>} ;

@@ -142,6 +142,7 @@ oper
   mkPN : overload {
     mkPN : Str -> PN ;   -- default gender utrum
     mkPN : Str -> Gender -> PN ; -- set other gender
+    mkPN : N -> PN ;     -- get inflection and gender from a noun
 
 -- In the worst case, the genitive form is irregular.
 
@@ -505,6 +506,8 @@ oper
   mkPN = overload {
     mkPN : Str -> PN = regPN ;
     mkPN : Str -> Gender -> PN = regGenPN ;
+    mkPN : N -> PN = \n -> 
+      {s = n.s ! Sg ! Indef ; g = n.g ; lock_PN = <>} ;      
     mkPN : (jesus,jesu : Str) -> Gender -> PN = \jesus,jesu,g -> 
       {s = table {Nom => jesus ; Gen => jesu} ; g = g ; lock_PN = <>} ;
     } ;
