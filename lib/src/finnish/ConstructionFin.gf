@@ -27,6 +27,7 @@ lin
   cup_of_CN    np = mkCN (lin N2 (mkN2 (mkN "kuppi") (mkPrep partitive)))  (lin NP np) | mkCN (lin N2 (mkN2 (mkN "kupillinen") (mkPrep partitive)))  (lin NP np) ;
   glass_of_CN  np =  mkCN (lin N2 (mkN2 (mkN "lasi") (mkPrep partitive))) (lin NP np) | mkCN (lin N2 (mkN2 (mkN "lasillinen") (mkPrep partitive))) (lin NP np) ;
 
+{-
   where_go_QCl np = mkQCl (lin IAdv (ss "minne")) (mkCl np (mkVP L.go_V)) ;
   where_come_from_QCl np =  mkQCl (lin IAdv (ss "mistä")) (mkCl np (mkVP L.come_V)) ;
   
@@ -37,6 +38,7 @@ lin
   go_there_VP = mkVP (mkVP L.go_V) (mkAdv "sinne") ;
   come_there_VP = mkVP (mkVP L.come_V) (mkAdv "sinne") ;
   come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "sieltä") ;
+-}
 
 lincat
   Weekday = {noun : N ; habitual : SyntaxFin.Adv} ;
@@ -67,6 +69,10 @@ lincat Language = PN ;
 
 lin InLanguage l = SyntaxFin.mkAdv (mkPrep translative) (mkNP l) ;
 
+lin
+  weekdayN w = w ;
+  monthN m = m ;
+  languagePN l = l ;
 
 
 }

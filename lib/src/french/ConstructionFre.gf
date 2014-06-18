@@ -30,7 +30,7 @@ lin
   cup_of_CN    np = mkCN (lin N2 (mkN2 (mkN "tasse") part_Prep)) np ;
   glass_of_CN  np = mkCN (lin N2 (mkN2 (mkN "verre") part_Prep)) np ;
 
-
+{-
 -- spatial deixis and motion verbs
 
   where_go_QCl np = mkQCl where_IAdv (mkCl np (mkVP L.go_V)) ;
@@ -43,7 +43,8 @@ lin
   go_there_VP = mkVP (mkVP L.go_V)  there_Adv ;
   come_there_VP = mkVP (mkVP L.come_V) there_Adv ;
   come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "de là") ;
-  
+-}  
+
 lincat
   Weekday = N ;
   Monthday = NP ;
@@ -71,6 +72,11 @@ lin
 lincat Language = PN ;
 
 lin InLanguage l = SyntaxFre.mkAdv (mkPrep "en") (mkNP l) ;
+
+lin
+  weekdayN w = w ;
+  monthN m = m ;
+  languagePN l = l ;
 
 
 }

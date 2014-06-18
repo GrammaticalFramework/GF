@@ -24,10 +24,12 @@ lin
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
 
+
   bottle_of_CN np = mkCN (lin N2 (mkN2 "bottle")) (lin NP np) ;
   cup_of_CN    np = mkCN (lin N2 (mkN2 "cup"))    (lin NP np) ;
   glass_of_CN  np = mkCN (lin N2 (mkN2 "glass"))  (lin NP np) ;
 
+{-
 -- spatial deixis and motion verbs
 
   where_go_QCl np = mkQCl where_IAdv (mkCl np (mkVP L.go_V)) ;
@@ -43,6 +45,9 @@ lin
 
 --TODO "where did X come from" instead of "from where did X come"
 oper from_where_IAdv : IAdv = lin IAdv (ss "from where") ;
+
+-}
+
 
 lincat
   Weekday = N ;
@@ -68,5 +73,9 @@ lincat Language = PN ;
 
 lin InLanguage l = SyntaxEng.mkAdv in_Prep (mkNP l) ;
 
+lin
+  weekdayN w = w ;
+  monthN m = m ;
+  languagePN l = l ;
 
 }

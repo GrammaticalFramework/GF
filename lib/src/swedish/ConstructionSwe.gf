@@ -28,6 +28,7 @@ lin
   cup_of_CN np    = mkCN (lin N2 (mkN2 (mkN "kopp") noPrep))        (lin NP np) ;
   glass_of_CN np  = mkCN (lin N2 (mkN2 (mkN "glas" "glas") noPrep)) (lin NP np) ;
 
+{-
 -- spatial deixis and motion verbs
 
   where_go_QCl np = mkQCl (lin IAdv (ss "vart")) (mkCl np (mkVP L.go_V)) ;
@@ -40,7 +41,7 @@ lin
   go_there_VP = mkVP (mkVP L.go_V) (mkAdv "dit") ;
   come_there_VP = mkVP (mkVP L.come_V) (mkAdv "dit") ;
   come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "därifrån") ;
-
+-}
 
 lincat
   Weekday = N ;
@@ -67,5 +68,9 @@ lincat Language = PN ;
 
 lin InLanguage l = SyntaxSwe.mkAdv on_Prep (mkNP l) ;
 
+lin
+  weekdayN w = w ;
+  monthN m = m ;
+  languagePN l = l ;
 
 }
