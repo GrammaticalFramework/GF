@@ -1,7 +1,9 @@
 package org.grammaticalframework.ui.android;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -286,25 +288,6 @@ public class MainActivity extends Activity {
     private void handleSpeechInput(final String input) {
     	final List<MorphoAnalysis> list = mTranslator.lookupMorpho(input);
 
-    	// filter out duplicates
-    	int i = 0;
-    	while (i < list.size()) {
-    		MorphoAnalysis an = list.get(i);
-    		boolean found = false;
-    		for (int j = 0; j < i; j++) {
-    			if (list.get(j).getLemma().equals(an.getLemma())) {
-    				found = true;
-    				break;
-    			}
-    		}
-    		
-    		if (found)
-    			list.remove(i);
-    		else {
- 				i++;
- 			}
-    	}
-
         mConversationView.updateLastUtterance(input);
         new AsyncTask<Void,Void,Pair<String,List<ExprProb>>>() {
         	@Override
@@ -320,7 +303,49 @@ public class MainActivity extends Activity {
             @Override
             protected void onPostExecute(Pair<String,List<ExprProb>> res) {
             	String text = res.first;
-            	Object alts = (list.size() == 0) ? res.second : list;
+            	List<ExprProb> transl = res.second;
+            	Object alts = null;
+
+            	// filter out duplicates
+            	int i = 0;
+            	if (list.size() > 0) {
+	            	while (i < list.size()) {
+	            		MorphoAnalysis an = list.get(i);
+	            		boolean found = false;
+	            		for (int j = 0; j < i; j++) {
+	            			if (list.get(j).getLemma().equals(an.getLemma())) {
+	            				found = true;
+	            				break;
+	            			}
+	            		}
+	            		
+	            		if (found)
+	            			list.remove(i);
+	            		else {
+	         				i++;
+	         			}
+	            	}
+	            	alts = list;
+            	} else {
+            		Set<String> strings = new HashSet<String>();
+            		while (i < transl.size()) {
+            			String s = mTranslator.linearize(transl.get(i).getExpr());
+            		   	if (s.length() > 0 && 
+            		   	    (s.charAt(0) == '%' || s.charAt(0) == '*' || s.charAt(0) == '+')) {
+    			    		s = s.substring(2);
+    			    	}
+
+	            		if (strings.contains(s))
+	            			transl.remove(i);
+	            		else {
+	            			strings.add(s);
+	         				i++;
+	         			}
+	            	}
+
+            		alts = transl;
+            	}
+
                 if (DBG) Log.d(TAG, "Speaking: " + res.first);
             	CharSequence text2 = 
             		mConversationView.addSecondPersonUtterance(input, text, alts);
