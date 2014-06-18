@@ -46,7 +46,13 @@ oper
  
 
 -- Proper names     
-  mkPN : Str -> PN = \s -> let n = regNoun s in {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
+  mkPN = overload {
+    mkPN : Str -> PN 
+     = \s -> let n = regNoun s in {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
+    mkPN : N -> PN 
+     = \n -> {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
+    } ;
+
   personalPN : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Number -> Gender -> UPerson -> Pron =
     \s1,s2,s3,smp,sfp,pmp,pfp,nn,g,p -> let n = mkPron s1 s2 s3 in
       {s = n.s ;
