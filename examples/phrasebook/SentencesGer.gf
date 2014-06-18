@@ -2,7 +2,7 @@ concrete SentencesGer of Sentences = NumeralGer ** SentencesI -
   [PYesToNo,SHaveNo,SHaveNoMass,
    Proposition, Action, Is, IsMass, SProp, SPropNot, QProp,
    AHaveCurr, ACitizen, ABePlace, AKnowSentence, AKnowPerson, AKnowQuestion,
-   Nationality, Language,
+   Nationality, LAnguage,
    ADoVerbPhrase, AModVerbPhrase, ADoVerbPhrasePlace, AModVerbPhrasePlace,
    YouPlurPolMale, YouPlurPolFemale
   ] with 
@@ -38,7 +38,7 @@ concrete SentencesGer of Sentences = NumeralGer ** SentencesI -
 
   lincat
     Nationality = {lang : CN ; country : NP ; prop : A} ;
-    Language = CN ; -- kein Deutsch
+    LAnguage = CN ; -- kein Deutsch
 
 -- the new things
   lin

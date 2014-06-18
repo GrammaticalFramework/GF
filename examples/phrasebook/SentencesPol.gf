@@ -1,6 +1,6 @@
 concrete SentencesPol of Sentences = 
   NumeralPol ** SentencesI - [
-    Day,PDay,OnDay,Language,PLanguage,Citizenship,
+    Day,PDay,OnDay,LAnguage,PLanguage,Citizenship,
     PCitizenship,CitiNat,PropCit,ACitizen,
     Nationality,Transport,PTransport,ByTransp,
     IFemale,YouFamFemale, YouPolFemale,YouPolMale,
