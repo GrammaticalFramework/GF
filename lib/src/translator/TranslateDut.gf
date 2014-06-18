@@ -19,7 +19,7 @@ concrete TranslateDut of Translate =
   QuestionDut,
   RelativeDut,
   IdiomDut,
-----  ConstructionDut,
+  ConstructionDut,
   DocumentationDut,
 
   ChunkDut,

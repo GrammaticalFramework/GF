@@ -73,6 +73,7 @@ oper
 
   mkPN : overload {
     mkPN : Str -> PN ; -- proper name
+    mkPN : N -> PN ; -- proper name from noun
     } ;
 
 
@@ -232,6 +233,7 @@ oper
 
   mkPN = overload {
     mkPN : Str -> PN = \s -> lin PN {s = \\_ => s} ;
+    mkPN : N -> PN = \n -> lin PN {s = \\_ => n.s ! NF Sg Nom} ;
     } ;
 
   masculine = Utr ;
