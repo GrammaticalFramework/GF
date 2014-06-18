@@ -32570,7 +32570,7 @@ lin like_A = mkA "typisk" ; -- comment=7
 lin like_Adv = mkAdv "som" ; -- comment=2
 lin like_N = mkN "liknande" ; -- comment=2
 lin like_Prep = mkPrep "likt" ;
-lin like_Subj = mkSubj "såsom" ;
+lin like_Subj = M.mkSubj "såsom" ;
 lin like_V2 = L.like_V2;
 lin like_VS = mkVS (mkV (mkV "tycker") "om") | mkVS (mkV "gillar") ;
 lin like_VV = mkVV (mkV (mkV "tycker") "om") | mkVV (mkV "gillar") ;
