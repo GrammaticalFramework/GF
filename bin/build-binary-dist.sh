@@ -14,22 +14,36 @@ destdir=/tmp/gf-binary-dist-$$     # assemble binary dist here
 prefix=/usr/local                  # where to install
 targz=gf-$ver-bin-$hw-$os.tar.gz   # the final tar file
 
+extralib="$destdir$prefix/lib"
+extrainclude="$destdir$prefix/include"
+extra="--extra-lib-dirs=$extralib --extra-include-dirs=$extrainclude"
+
 set -e                             # Stop if an error occurs
 set -x                             # print commands before exuting them
 
 ## First configure & build the C run-time system
-(
-cd src/runtime/c
+pushd src/runtime/c
 bash setup.sh configure --prefix=$prefix
 bash setup.sh build
 bash setup.sh install prefix=$destdir$prefix
-)
+popd
 
-## Now build GF, with C run-time support enabled
+## Build the python binding to the C run-time system
+pushd src/runtime/python
+EXTRA_INCLUDE_DIRS="$extrainclude" EXTRA_LIB_DIRS="$extralib" python setup.py build
+python setup.py install --prefix=$destdir$prefix
+popd
+
+## Build the Java binding to the C run-time system
+pushd src/runtime/java
+# not implemented yet
+popd
+
+## Build GF, with C run-time support enabled
 cabal install --only-dependencies
-cabal configure --prefix=$prefix -fserver -fc-runtime --extra-lib-dirs=$destdir$prefix/lib --extra-include-dirs=$destdir$prefix/include
-cabal build
-cabal copy --destdir=$destdir
+cabal configure --prefix=$prefix -fserver -fc-runtime $extra
+DYLD_LIBRARY_PATH="$extralib" LD_LIBRARY_PATH="$extralib" cabal build
+DYLD_LIBRARY_PATH="$extralib" LD_LIBRARY_PATH="$extralib" cabal copy --destdir=$destdir
 
 tar -C $destdir/$prefix -zcf $targz .
 echo "Created $targz, consider renaming it to something more user friendly"
