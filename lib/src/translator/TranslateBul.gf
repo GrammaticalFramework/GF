@@ -20,7 +20,7 @@ concrete TranslateBul of Translate =
   QuestionBul,
   RelativeBul,
   IdiomBul,
---  ConstructionBul,
+  ConstructionBul,
   DocumentationBul,
 
   ChunkBul,
