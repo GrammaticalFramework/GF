@@ -78,8 +78,10 @@ concrete WordsSwe of Words = SentencesSwe **
     NorwegianCrown = mkCN (mkA "norsk") (mkN "krona") | mkCN (mkN "krona") ;
     Pound = mkCN (mkN "pund" "pund") ; ---- ett pund ?
     Rouble = mkCN (mkN "rubel" "rubeln" "rubel" "rubeln") ; ---- ?
+    Rupee = mkCN (mkN "rupee" "rupee") ; ---- 
     SwedishCrown = mkCN (mkA "svensk") (mkN "krona") | mkCN (mkN "krona") ;
     Zloty = mkCN (mkN "zloty" "zloty") ;
+    Yuan = mkCN (mkN "yuan" "yuan") ;
 
 -- nationalities
 
@@ -87,13 +89,17 @@ concrete WordsSwe of Words = SentencesSwe **
     Belgium = mkNP (mkPN "Belgien") ;
     Bulgarian = mkNat "bulgarisk" "Bulgarien" ;
     Catalan = mkNat "katalansk" "Katalonien" ;
+    China = mkNat "kinesisk" "Kina" ;
     Danish = mkNat "dansk" "Danmark" ;
     Dutch = mkNat "nederländsk" "Nederländerna" ;
     English = mkNat "engelsk" "England" ;
     Finnish = mkNat "finsk" "Finland" ;
     Flemish = mkNP (mkPN "flamländska") ;
     French = mkNat "fransk" "Frankrike" ;
-    German = mkNat "tysk" "Tyskland" ; 
+    German = mkNat "tysk" "Tyskland" ;
+    Hindi = mkNP (mkPN "hindi") ;
+    Indian = mkA "indisk" ; 
+    India = mkNP (mkPN "Indien") ;
     Italian = mkNat "italiensk" "Italien" ;
     Norwegian = mkNat "norsk" "Norge" ;
     Polish = mkNat "polsk" "Polen" ;

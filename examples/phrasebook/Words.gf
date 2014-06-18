@@ -78,8 +78,10 @@ abstract Words = Sentences ** {
     NorwegianCrown : Currency ;
     Pound : Currency ; -- UK
     Rouble : Currency ; -- Russia
+    Rupee : Currency ; -- India
     SwedishCrown : Currency ;
     Zloty : Currency ; -- Poland
+    Yuan : Currency ; -- China
 
   
 -- nationalities, countries, languages, citizenships
@@ -88,13 +90,17 @@ abstract Words = Sentences ** {
     Belgium : Country ;
     Bulgarian : Nationality ;
     Catalan : Nationality ;
+    Chinese : Nationality ;
     Danish : Nationality ;
     Dutch : Nationality ;
     English : Nationality ;
     Finnish : Nationality ;
-    Flemish : Language ;
+    Flemish : LAnguage ;
     French : Nationality ;
     German : Nationality ;
+    Hindi : LAnguage ;
+    India : Country ;
+    Indian : Citizenship ;
     Italian : Nationality ;
     Norwegian : Nationality ;
     Polish : Nationality ;
@@ -135,7 +141,7 @@ abstract Words = Sentences ** {
     AMarried    : Person -> Action ;              -- I am married
     AReady      : Person -> Action ;              -- I am ready
     AScared     : Person -> Action ;              -- I am scared
-    ASpeak      : Person -> Language -> Action ;  -- I speak Finnish
+    ASpeak      : Person -> LAnguage -> Action ;  -- I speak Finnish
     AThirsty    : Person -> Action ;              -- I am thirsty
     ATired      : Person -> Action ;              -- I am tired
     AUnderstand : Person -> Action ;              -- I (don't) understand

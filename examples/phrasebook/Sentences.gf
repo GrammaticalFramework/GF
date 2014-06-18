@@ -36,7 +36,7 @@ abstract Sentences = Numeral ** {
     Person ;      -- agent wanting or doing something          e.g. "you" 
     Action ;      -- proposition about a Person                e.g. "you are here"
     Nationality ; -- complex of language, property, country    e.g. "Swedish, Sweden"
-    Language ;    -- language (can be without nationality)     e.g. "Flemish"
+    LAnguage ;    -- language (can be without nationality)     e.g. "Flemish"
     Citizenship ; -- property (can be without language)        e.g. "Belgian"
     Country ;     -- country (can be without language)         e.g. "Belgium"
     Day ;         -- weekday type                              e.g. "Friday"
@@ -75,7 +75,7 @@ abstract Sentences = Numeral ** {
     PPlace       : Place       -> Word ;
     PPlaceKind   : PlaceKind   -> Word ;
     PCurrency    : Currency    -> Word ;
-    PLanguage    : Language    -> Word ;
+    PLanguage    : LAnguage    -> Word ;
     PCitizenship : Citizenship -> Word ;
     PCountry     : Country     -> Word ;
     PDay         : Day         -> Word ;
@@ -142,7 +142,7 @@ abstract Sentences = Numeral ** {
     YouFamMale, YouFamFemale,           -- familiar you, said to man/woman (affects agreement)
     YouPolMale, YouPolFemale : Person ; -- polite you, said to man/woman (affects agreement)
 
-    LangNat    : Nationality -> Language ;    -- Swedish
+    LangNat    : Nationality -> LAnguage ;    -- Swedish
     CitiNat    : Nationality -> Citizenship ; -- Swedish
     CountryNat : Nationality -> Country ;     -- Sweden
     PropCit    : Citizenship -> Property ;    -- Swedish

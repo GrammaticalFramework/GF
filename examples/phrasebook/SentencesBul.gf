@@ -2,7 +2,7 @@ concrete SentencesBul of Sentences =
   NumeralBul ** SentencesI - [IMale, IFemale, YouFamMale, YouFamFemale, YouPolMale, 
                               YouPolFemale, ACitizen, Citizenship, PCitizenship, 
                               LangNat, CitiNat, CountryNat, PropCit,
-                              Nationality, Country, Language, PLanguage, PCountry
+                              Nationality, Country, LAnguage, PLanguage, PCountry
                               ] with 
   (Syntax = SyntaxBul),
   (Symbolic = SymbolicBul),
@@ -16,7 +16,7 @@ lincat
                    s2 : A;                                          -- furthermore, adjective for Property
                    s3 : PN                                          -- country name
                   } ;
-    Language = A ;
+    LAnguage = A ;
     Country = PN ;
 
 lin IMale = mkPerson i_Pron ;
