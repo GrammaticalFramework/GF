@@ -171,10 +171,10 @@ public class AlternativesActivity extends ListActivity {
 
 			if (item instanceof MorphoAnalysis) {
 				final String lemma = ((MorphoAnalysis) item).getLemma();
-		
+
 		    	String phrase = mTranslator.generateLexiconEntry(lemma);
 		        descView.setText(phrase);
-	
+
 		        convertView.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View view) {
