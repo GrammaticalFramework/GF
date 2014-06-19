@@ -23,7 +23,7 @@ override_dh_auto_configure:
 override_dh_auto_install:
 	LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(CURDIR)/src/runtime/c/.libs cabal copy --destdir=$(CURDIR)/debian/gf
 	cd src/runtime/c && ./setup.sh copy prefix=$(CURDIR)/debian/gf/usr
-	cd src/runtime/python && python setup.py install --prefix=$destdir$prefix
+	cd src/runtime/python && python setup.py install --prefix=$(CURDIR)/debian/gf/usr
 
 override_dh_auto_test:
 ifneq (nocheck,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
