@@ -1,7 +1,7 @@
 Translation with GF
 Powered by multilingual grammars
 
-%!style:../css/style.css
+%!style:../css/style0.css
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.svg" alt=""></a>
 %!postproc(html): #GFWCT <iframe style="border: 0; width: 100%; height: 50ex;" src="http://cloud.grammaticalframework.org/wc.html#embed"></iframe>
 
@@ -52,11 +52,34 @@ Here are some hints to use it in a satisfactory way:
 
 
 
+The following table gives a rough idea of what to expect for each
+language (the speech column refers to the Android app):
+'''
+<center>
+<table rules=all border=yes>
+<tr> <th></th>          <th>coverage</th> <th>quality</th> <th>speed</th> <th>speech</th> </tr>
+<tr> <th>Bulgarian</th> <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=palegreen></td> <td bgcolor=yellow>in only</td></tr>
+<tr> <th>Chinese</th>   <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=palegreen></td> <td bgcolor=yellow>diff in/out</td> </tr>
+<tr> <th>Dutch</th>     <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> </tr>
+<tr> <th>English</th>   <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> </tr>
+<tr> <th>Finnish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>French</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>German</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>Hindi</th>     <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=yellow></td> <td bgcolor=yellow>out only</td> </tr>
+<tr> <th>Italian</th>    <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>Spanish</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>Swedish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> </tr>
+</table>
+</center>
+'''
+
+
 ==How it works==
 
 Powered by [Grammatical Framework ../]
 
-Publications explaining the translation method:
+[Slides https://docs.google.com/presentation/d/1545yYmTlWgzyV1uwUwuvAsOCzdD1AIUdV_NZbZ1qMEo/edit?usp=sharing]
+explaining the translation method:
 
 
 ==Get the sources==
