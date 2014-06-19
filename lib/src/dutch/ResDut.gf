@@ -407,7 +407,7 @@ param
 ---- clause, inverted, or subordinate.
 
   oper 
-    Preposition = Str ; --* Bool;
+    Preposition = Str ; 
     appPrep : Preposition -> (NPCase => Str) -> Str = \p,np -> p ++ np ! NPAcc ; ----
 
   param  
@@ -537,7 +537,6 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ++ adv ;
     isAux = vp.isAux ;
---    hasPrep = vp.hasPrep ; 
     negBeforeObj = vp.negBeforeObj ;
     inf = vp.inf ;
     ext = vp.ext
@@ -550,7 +549,6 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
---    hasPrep = vp.hasPrep ; 
     negBeforeObj = vp.negBeforeObj ;
     inf = vp.inf ;
     ext = vp.ext ++ ext
@@ -564,7 +562,6 @@ param
     a2 = vp.a2 ;
     isAux = vp.isAux ; ----
     negBeforeObj = vp.negBeforeObj ;
---    hasPrep = vp.hasPrep ; 
     inf = <inf ++ vp.inf.p1, True> ;
     ext = vp.ext
     } ;
