@@ -11,7 +11,7 @@ case "$command" in
     ./configure "$@"
     ;;
   build)
-    make "$@"
+    make -j "$@"
     ;;
   copy|install)
     make install "$@"
