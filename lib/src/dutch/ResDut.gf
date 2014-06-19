@@ -597,29 +597,29 @@ param
 	    True => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ vp.s.prefix ;
 	    _    => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ vp.s.prefix 
 	  } ;
-          inf   = 
-            case <vp.isAux, vp.inf.p2, a> of {                  --# notpresent
+          inf : Str  =                                               
+            case <vp.isAux, vp.inf.p2, a> of {                  
               <True,True,Anter> => vp.s.s ! VInf ++ vp.inf.p1 ; --# notpresent
-              _ =>                                              --# notpresent
-                 vp.inf.p1 ++ verb.p2
-              }                                                 --# notpresent
-              ;
+              _ =>                                              
+                 vp.inf.p1 ++ verb.p2                           
+              }                                                 
+              ;                                                 
           extra = vp.ext ;
 
           --for the Sub word order
-          inffin = 
-            case <t,a,vp.isAux> of {                          --# notpresent
+          inffin : Str =                                           
+            case <t,a,vp.isAux> of {                          
                                  -- gezien  zou/zal hebben  
               <Cond,Anter,False> => vperf ++ fin ++ auxv ! VInf ; --# notpresent
 	      <Fut,Anter,False>  => vperf ++ fin ++ auxv ! VInf ; --# notpresent
 	                         -- zou/zal zien
-	      <Cond,Simul,False> => fin ++ verb.p2 ;           --# notpresent
-	      <Fut,Simul,False>  => fin ++ verb.p2 ;          --# notpresent
+	      <Cond,Simul,False> => fin ++ verb.p2 ;          
+	      <Fut,Simul,False>  => fin ++ verb.p2 ;          
 	                     -- wil    kunnen zien (first line in inf)
 	      <_,Anter,True> => fin ++ inf ; -- double inf    --# notpresent
-              _   =>  fin ++ inf                              --# notpresent
+              _   =>  fin ++ inf                              
               -- no inf ++ fin, this is not German :-P
-            }                                                   --# notpresent
+            }                                                  
         in
         case o of {
           Main => subj ++ fin ++ compl ++ inf ++ extra ;
