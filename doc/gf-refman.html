@@ -5,7 +5,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1>GF Language Reference Manual</H1>
 <FONT SIZE="4">
-<I>Aarne Ranta</I>, <I>Krasimir Angelov</I><BR>November 2013
+<I>Aarne Ranta</I>, <I>Krasimir Angelov</I><BR>June 2014, GF 3.6
 </FONT></CENTER>
 
 <P></P>
@@ -2490,8 +2490,20 @@ The result is a record type or a record with a union of the fields of <I>R</I> a
 </P>
 <UL>
 <LI>both <I>R</I> and <I>S</I> are either records or record types
-<LI>the labels in <I>R</I> and <I>S</I> are distinct
+<LI>the labels in <I>R</I> and <I>S</I> are disjoint, if <I>R</I> and <I>S</I> are record types
 </UL>
+(Since GF version 3.6) If <I>R</I> and <I>S</I> are record objects,
+then the labels in them need not be disjoint. Labels defined in
+<I>S</I> are then given priority, so that record extensions in fact
+works as <B>record update</B>. A common pattern of using this feature
+is
+<pre>
+  lin F x ... = x ** {r = ... x.r ...}
+</pre>
+where <tt>x</tt> is a record with many fields, just one of which is
+updated. Following the normal binding conditions, <tt>x.r</tt> on the
+right hand side still refers to the old value of the <tt>r</tt> field.
+
 
 <A NAME="toc41"></A>
 <H3>Subtyping</H3>
