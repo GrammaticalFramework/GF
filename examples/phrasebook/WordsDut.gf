@@ -3,7 +3,7 @@
 
 
 concrete WordsDut of Words = SentencesDut ** 
-    open SyntaxDut, (P = ParadigmsDut), (I = IrregDut), (L = LexiconDut), ExtraDut, Prelude in {
+    open SyntaxDut, (P = ParadigmsDut), (I = IrregDut), (L = LexiconDut), (R=ResDut), ExtraDut, Prelude in {
 
   lin
 
@@ -133,45 +133,50 @@ ik ga te voet/ ik ga lopend
 
 
 -- actions
-    AHasAge p num = mkCl p.name (mkNP num L.year_N) ; -- ik ben ... jaar
-    AHasName p name = mkCl p.name (P.mkV2 I.heten_V) name ;  -- ik heet ...
-    AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ; -- ik heb ... kinderen
-    AHasRoom p num = mkCl p.name have_V2 
+    AHasAge p num = prop (mkCl p.name (mkNP num L.year_N)) ; -- ik ben ... jaar
+    AHasName p name = prop (mkCl p.name (P.mkV2 I.heten_V) name) ;  -- ik heet ...
+    AHasChildren p num = prop (mkCl p.name have_V2 (mkNP num L.child_N)) ; -- ik heb ... kinderen
+    AHasRoom p num = prop (mkCl p.name have_V2 
       (mkNP (mkNP a_Det (P.mkN "kamer")) 
-        (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon")))) ; -- ik heb een ... persoons kamer/ ik heb een kamer voor ... personen
-    AHasTable p num = mkCl p.name have_V2 
+        (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon"))))) ; -- ik heb een ... persoons kamer/ ik heb een kamer voor ... personen
+    AHasTable p num = prop (mkCl p.name have_V2 
       (mkNP (mkNP a_Det (P.mkN "tafel")) 
-        (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon")))) ;
-    AHungry p = mkCl p.name have_V2 (mkNP (P.mkN "honger")) ; -- to have   
-    AIll p = mkCl p.name (P.mkA "ziek") ; -- to be ?
-    AKnow p = mkCl p.name I.weten_V ; -- ik weet het.
-    ALike p item = mkCl p.name (P.mkV2 I.houden_V P.van_Prep) item ; -- lekker
-    ALive p co = mkCl p.name (mkVP (mkVP (P.mkV "wonen")) (SyntaxDut.mkAdv in_Prep co)) ; -- woon
-    ALove p q = mkCl p.name (P.mkV2 (P.mkV "lief" P.hebben_V)) q.name ; -- houden van
-    AMarried p = mkCl p.name (P.mkA "getrouwd") ; -- ik ben getrouwd
-    AReady p = mkCl p.name (P.mkA "klaar") ; -- ik ben klaar
-    AScared p = mkCl p.name (P.mkA "bang") ; -- ik ben bang
-    ASpeak p lang = mkCl p.name (P.mkV2 I.spreken_V) lang ; -- ik spreek .../ ik versta ...
-    AThirsty p = mkCl p.name have_V2 (mkNP (P.mkN "dorst")) ; -- ik heb dorst
-    ATired p = mkCl p.name (P.mkA "moe") ; -- ik ben moe
-    AUnderstand p = mkCl p.name (P.mkV "verstaan" "verstond" "verstonden" "verstaan") ; 
-    AWant p obj = mkCl p.name want_VV (mkVP have_V2 obj) ; -- ik wil
-    AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ; -- ik wil naar ...
+        (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon"))))) ;
+    AHungry p = mkProp (mkCl p.name have_V2 (mkNP (P.mkN "honger"))) 
+                       (mkS (mkCl p.name have_V2 (mkNP no_Quant (P.mkN "honger")))) ; -- to have   
+    AIll p = prop (mkCl p.name (P.mkA "ziek")) ; -- to be ?
+    AKnow p = prop (mkCl p.name I.weten_V) ; -- ik weet het.
+    ALike p item = prop (mkCl p.name (P.mkV2 I.houden_V P.van_Prep) item) ; -- lekker
+    ALive p co = prop (mkCl p.name (mkVP (mkVP (P.mkV "wonen")) (SyntaxDut.mkAdv in_Prep co))) ; -- woon
+    ALove p q = prop (mkCl p.name L.love_V2 q.name) ; -- houden van
+    AMarried p = prop (mkCl p.name (P.mkA "getrouwd")) ; -- ik ben getrouwd
+    AReady p = prop (mkCl p.name (P.mkA "klaar")) ; -- ik ben klaar
+    AScared p = prop (mkCl p.name (P.mkA "bang")) ; -- ik ben bang
+    ASpeak p lang = 
+      let no_Predet = R.mkPredet "geen" "geen" ; --using Predet instead of Quant, because lang is NP
+      in  mkProp (mkCl p.name (P.mkV2 I.spreken_V) lang)
+                 (mkS (mkCl p.name (P.mkV2 I.spreken_V) (mkNP no_Predet lang))); -- ik spreek .../ ik spreek geen ...
+    AThirsty p =  mkProp (mkCl p.name have_V2 (mkNP (P.mkN "dorst"))) 
+                       (mkS (mkCl p.name have_V2 (mkNP no_Quant (P.mkN "dorst")))) ; --ik heb dorst / ik heb geen dorst
+    ATired p = prop (mkCl p.name (P.mkA "moe")) ; -- ik ben moe
+    AUnderstand p = prop (mkCl p.name (P.mkV "verstaan" "verstond" "verstonden" "verstaan")) ; 
+    AWant p obj = prop (mkCl p.name want_VV (mkVP have_V2 obj)) ; -- ik wil
+    AWantGo p place = prop (mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to)) ; -- ik wil naar ...
 
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name  I.heten_V)) ; --hoe heet je
     QWhatAge p =  mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (P.mkV "kosten"))) ; --hoeveel kost...
-    ItCost item price = mkCl item (P.mkV2 (P.mkV "kosten")) price ; --..item.. kost ..price..
+    ItCost item price = prop (mkCl item (P.mkV2 (P.mkV "kosten")) price) ; --..item.. kost ..price..
 
-    PropOpen p = mkCl p.name open_A ; 
-    PropClosed p = mkCl p.name closed_A ; 
-    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_A) d) ; --de winkel is geopend op vrijdag(s)
+    PropOpen p = prop (mkCl p.name open_A) ; 
+    PropClosed p = prop (mkCl p.name closed_A) ; 
+    PropOpenDate p d = prop (mkCl p.name (mkVP (mkVP open_A) d)) ; --de winkel is geopend op vrijdag(s)
            --normaal gesproken ga ik op vrijdag ..action../vrijdags ga ik ..action..
-    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_A) d) ; -- gesloten
-    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_A) d.habitual) ; 
-    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_A) d.habitual) ; 
+    PropClosedDate p d = prop (mkCl p.name (mkVP (mkVP closed_A) d)) ; -- gesloten
+    PropOpenDay p d = prop (mkCl p.name (mkVP (mkVP open_A) d.habitual)) ; 
+    PropClosedDay p d = prop (mkCl p.name (mkVP (mkVP closed_A) d.habitual)) ; 
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
