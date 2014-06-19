@@ -605,11 +605,20 @@ param
               }                                                 --# notpresent
               ;
           extra = vp.ext ;
+
+          --for the Sub word order
           inffin = 
-            case <a,vp.isAux> of {                              --# notpresent
-              <Anter,True> => fin ++ inf ; -- double inf   --# notpresent
-              _ =>                                              --# notpresent
-              inf ++ fin              --- or just auxiliary vp
+            case <t,a,vp.isAux> of {                          --# notpresent
+                                 -- gezien  zou/zal hebben  
+              <Cond,Anter,False> => vperf ++ fin ++ auxv ! VInf ; --# notpresent
+	      <Fut,Anter,False>  => vperf ++ fin ++ auxv ! VInf ; --# notpresent
+	                         -- zou/zal zien
+	      <Cond,Simul,False> => fin ++ verb.p2 ;           --# notpresent
+	      <Fut,Simul,False>  => fin ++ verb.p2 ;          --# notpresent
+	                     -- wil    kunnen zien (first line in inf)
+	      <_,Anter,True> => fin ++ inf ; -- double inf    --# notpresent
+              _   =>  fin ++ inf                              --# notpresent
+              -- no inf ++ fin, this is not German :-P
             }                                                   --# notpresent
         in
         case o of {
