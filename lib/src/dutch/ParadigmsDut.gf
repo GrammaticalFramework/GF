@@ -269,8 +269,12 @@ oper
   zijnV v = lin V (v2vvAux v VZijn) ;
   reflV v = lin V {s = v.s ; aux = v.aux ; particle = v.particle ; prefix = v.prefix ; vtype = VRefl} ;
 
-  partV : V -> Str -> V = \vinden,leuk ->
-    vinden ** {particle = leuk} ;
+  partV = overload {
+    partV : Str -> V -> V = \leuk,vinden ->
+      vinden ** {particle = leuk} ;
+    partV : V -> Str -> V = \vinden,leuk ->
+      vinden ** {particle = leuk} ;
+  } ;
 
   no_geV v = let vs = v.s in {
     s = table {
