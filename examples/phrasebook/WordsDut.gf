@@ -167,8 +167,7 @@ ik ga te voet/ ik ga lopend
                         (mkS (mkCl p.name have_V2 (mkNP no_Quant (P.mkN "dorst")))) ; --ik heb geen dorst
     ATired p = prop (mkCl p.name (P.mkA "moe")) ; -- ik ben moe
     AUnderstand p = prop (mkCl p.name (P.mkV "verstaan" "verstond" "verstonden" "verstaan")) ; 
-    AWant p obj =  mkProp (mkCl p.name want_V2 obj)
-                          (mkS (mkCl p.name want_V2 (mkNP no_Predet obj))) ;
+    AWant p obj = prop (mkCl p.name wants_V2 obj) ;
     AWantGo p place = prop (mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to)) ; -- ik wil naar ...
 
 -- miscellaneous
