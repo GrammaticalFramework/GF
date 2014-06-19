@@ -2,7 +2,6 @@ concrete SentencesDut of Sentences = NumeralDut ** SentencesI -
   [SHaveNo,SHaveNoMass,
    Proposition,Action, Is, IsMass, SProp, SPropNot, QProp,
    AHaveCurr, ACitizen, ABePlace, AKnowSentence, AKnowPerson, AKnowQuestion,
---   Nationality, Language,
    QDoHave, QWhereDoVerbPhrase, QModVerbPhrase, QWhereModVerbPhrase, SHave, SHaveNo,
    ADoVerbPhrase, AModVerbPhrase, ADoVerbPhrasePlace, AModVerbPhrasePlace]
   with 
