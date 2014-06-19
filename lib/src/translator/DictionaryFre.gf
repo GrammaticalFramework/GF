@@ -5134,7 +5134,8 @@ lin danger_N = mkN "danger" masculine ; -- tocheck
 lin dangerous_A = mkA "dangereux" ; -- tocheck
 lin dangerousness_N = mkN "dangerosité" feminine ; -- tocheck
 lin dangle_V2 = mkV2 (mkV I.pendre_V2) ; -- tocheck
-lin danish_N = mkN "feuilleté" masculine ; -- tocheck
+lin danishMasc_N = mkN "feuilleté" masculine ; -- tocheck
+lin danishFem_N = mkN "feuilletée" feminine ; -- tocheck
 lin dank_A = mkA "fort" ; -- tocheck
 lin dare_N = mkN "défi" masculine ; -- tocheck
 lin dare_V2 = mkV2 (mkV "oser") | mkV2 (mkV "affronter") | mkV2 (mkV "défier") ; -- tocheck
@@ -6826,7 +6827,8 @@ lin engender_V2 = mkV2 (mkV "engendrer") ; -- tocheck
 lin engine_N = mkN "moteur" masculine | mkN "locomotive" feminine ; -- tocheck
 lin engineer_N = mkN "ingénieur" | mkN "machiniste" masculine ; -- tocheck
 lin engineering_N = mkN "ingénierie" feminine ; -- tocheck
-lin english_N = mkN "anglais" ; -- tocheck
+lin englishMasc_N = mkN "anglais" ; -- tocheck
+lin englishFem_N = mkN "anglais" ; -- tocheck
 lin engrave_V2 = mkV2 (mkV "graver") ; -- tocheck
 lin engraving_N = mkN "gravure" feminine ; -- tocheck
 lin engross_V2 = mkV2 (mkV "accaparer") | mkV2 (mkV "captiver") | mkV2 (mkV "engraisser") ; -- tocheck
@@ -12018,7 +12020,6 @@ lin maraud_V = mkV (mkV "marauder") | mkV (mkV "piller") ; -- tocheck
 lin marauder_N = mkN "maraudeur" masculine ; -- tocheck
 lin marble_N = mkN "marbre" masculine | mkN "bille" feminine ; -- tocheck
 lin marbles_N = mkN "billes" ; -- tocheck
-lin march_N = mkN "marche" feminine | mkN "défilé" masculine ; -- tocheck
 lin march_V = variants{}; -- mkV2 (mkV "marcher") ; -- tocheck
 lin march_V2 = mkV2 (mkV "marcher") ; -- tocheck
 lin marchioness_N = mkN "marquise" ; -- tocheck
@@ -12165,7 +12166,6 @@ lin maximum_A = mkA "maximum" ; -- tocheck
 lin maximum_N = mkN "maximum" masculine ; -- tocheck
 lin may_1_VV = S.can_VV ;
 lin may_2_VV = S.can_VV ;
-lin may_N = mkN "aubépine" feminine ; -- tocheck
 lin maybe_Adv = mkAdv "peut-être" ; -- tocheck
 lin mayday_N = mkN "mayday" ; -- tocheck
 lin mayhem_N = mkN "grabuge" masculine | mkN "mutilation" feminine ; -- tocheck
@@ -22220,7 +22220,6 @@ lin atlantic_PN = mkPN "Atlantic" ; -- status=guess src=geonames
 lin auckland_PN = mkPN "Auckland" ; -- status=guess src=geonames
 lin audley_PN = mkPN "Audley" ; -- status=guess src=geonames
 lin augsburg_PN = mkPN "Augsbourg" ; -- status=guess src=geonames
-lin august_PN = mkPN "August" ; -- status=guess src=geonames
 lin australia_PN = mkPN "Australie" ; -- status=guess src=geonames
 lin austria_PN = mkPN "Autriche" ; -- status=guess src=geonames
 lin aveley_PN = mkPN "Aveley" ; -- status=guess src=geonames
@@ -23051,7 +23050,6 @@ lin manila_PN = mkPN "Manille" ; -- status=guess src=geonames
 lin mannheim_PN = mkPN "Mannheim" ; -- status=guess src=geonames
 lin mansfield_PN = mkPN "Mansfield" ; -- status=guess src=geonames
 lin maracaibo_PN = mkPN "Maracaibo" ; -- status=guess src=geonames
-lin march_PN = mkPN "March" ; -- status=guess src=geonames
 lin margaret_PN = mkPN "Margaret" ; -- status=guess src=geonames
 lin margate_PN = mkPN "Margate" ; -- status=guess src=geonames
 lin maria_PN = mkPN "Maria" ; -- status=guess src=geonames

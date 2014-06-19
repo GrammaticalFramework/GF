@@ -1527,7 +1527,6 @@ lin approximate_V2 = mkV2 (compoundV "लगभग अनुमान" (mkV "ल
 lin approximation_N = mkN "सादृश्य" ; -- tocheck              
 lin appurtenance_N = mkN "साज-सामान" ; -- tocheck              
 lin apricot_N = mkN "खुबानी" ; -- tocheck              
-lin april_PN = mkPN "अप्रैल" ; -- tocheck              
 lin apron_N = mkN "पेटबन्द" ; -- tocheck              
 lin apropos_A = mkA "प्रसंगानुकूल" ; -- tocheck              
 lin apropos_Adv = mkAdv "सही समय पर" ; -- tocheck              
@@ -1549,7 +1548,6 @@ lin arab_N = mkN "अरबी" ; -- tocheck
 lin arabesque_N = mkN "अरबस्क" ; -- tocheck              
 lin arabian_A = mkA "अरबी" ; -- tocheck              
 lin arabic_A = mkA "अरबी" ; -- tocheck              
-lin arabic_N = mkN "अरबी" ; -- tocheck              
 lin arable_A = mkA "कृष्य" ; -- tocheck              
 lin arachnoid_A = mkA "मकड़ी जैसा" ; -- tocheck       
 lin arbiter_N = mkN "विवाचक" ; -- tocheck              
@@ -1987,7 +1985,6 @@ lin augur_V = compoundV "पूर्वसूचना" (mkV "देना") ; 
 lin augur_V2 = mkV2 (compoundV "पूर्वसूचना" (mkV "देना")) ; -- tocheck
 lin augury_N = mkN "शकुन" ; -- tocheck              
 lin august_A = mkA "गरिमापूर्ण" ; -- tocheck              
-lin august_PN = mkPN "अगस्त" ; -- tocheck              
 lin auk_N = mkN "ऑक पक्षी" ; -- tocheck              
 lin auld_lang_syne_N = mkN "आउल्ड लैण्ग सायन" ; -- tocheck       
 lin aunt_N = mkN "चाची" ; -- tocheck              
@@ -4737,7 +4734,8 @@ lin china_PN = mkPN "चीन" ; -- tocheck
 lin chinaware_N = mkN "चीनी मिट्टी के बर्तन" ; -- tocheck              
 lin chincherinchee_N = mkN "चिंचरिंची" ; -- tocheck       
 lin chinese_A = mkA "चीनी" ; -- tocheck              
-lin chinese_N = mkN "चीनी" ; -- tocheck              
+lin chineseMasc_N = mkN "चीनी" ; -- tocheck
+lin chineseFem_N = mkN "चीनी" ; -- tocheck
 lin chink_N = mkN "खनक" ; -- tocheck              
 lin chink_V = mkV "खनकना" ; -- tocheck              
 lin chink_V2 = mkV2 (mkV "खनकना") ; -- tocheck
@@ -6685,7 +6683,8 @@ lin dangerous_A = mkA "खतरनाक" ; -- tocheck
 lin dangle_V = mkV "झुलाना" ; -- tocheck              
 lin dangle_V2 = mkV2 (mkV "झुलाना") ; -- tocheck
 lin danish_A = mkA "डेन्मार्क क्" ; -- tocheck              
-lin danish_N = mkN "डेनिश पेस्ट्री" ; -- tocheck              
+lin danishMasc_N = mkN "डेनिश पेस्ट्री" ; -- tocheck
+lin danishFem_N = mkN "डेनिश पेस्ट्री" ; -- tocheck
 lin dapper_A = mkA "साफ़-सुथरा" ; -- tocheck              
 lin dare_N = mkN "ललकार" ; -- tocheck              
 --subcat lin dare_V = compoundV "हिम्मत" (mkV "करना") ; -- tocheck              
@@ -6822,7 +6821,6 @@ lin deceiver_N = mkN "धोखेबाज़" ; -- tocheck
 lin decelerate_V = compoundV "धीमा" (mkV "होना") ; -- tocheck              
 lin decelerate_V2 = mkV2 (compoundV "धीमा" (mkV "होना")) ; -- tocheck
 lin deceleration_N = mkN "गति में कमी" ; -- tocheck       
-lin december_PN = mkPN "दिसम्बर" ; -- tocheck              
 lin decency_N = mkN "शालीनता" ; -- tocheck              
 lin decent_A = mkA "आच्छा" ; -- tocheck              
 lin decentralization_N = mkN "विकेंद्रीकरण" ; -- tocheck              
@@ -8325,7 +8323,8 @@ lin dustman_N = mkN "सफ़ाई कर्मी" ; -- tocheck
 lin dustpan_N = mkN "कूड़े का तसला" ; -- tocheck              
 lin dusty_A = mkA "गंदा" ; -- tocheck              
 lin dutch_A = mkA "हालैंड का" ; -- tocheck              
-lin dutch_N = mkN "डच भाषा" ; -- tocheck              
+lin dutchMasc_N = mkN "डच भाषा" ; -- tocheck
+lin dutchFem_N = mkN "डच भाषा" ; -- tocheck
 lin dutiful_A = mkA "कर्त्तव्यनिष्ठ" ; -- tocheck              
 lin duty_N = mkN "कर" ; -- tocheck              
 lin dwarf_N = mkN "बौना" ; -- tocheck              
@@ -8839,7 +8838,8 @@ lin engineer_V2 = mkV2 (compoundV "योजना" (mkV "बनाना")) ; -
 lin engineering_N = mkN "अभियान्त्रिकी" ; -- tocheck              
 lin england_PN = mkPN "इंग्लैंड" ; -- tocheck              
 lin english_A = mkA "अंग्रेज का" ; -- tocheck              
-lin english_N = mkN "अंग्रेजीअ" ; -- tocheck              
+lin englishMasc_N = mkN "अंग्रेजीअ" ; -- tocheck
+lin englishFem_N = mkN "अंग्रेजीअ" ; -- tocheck
 lin englishman_N = mkN "अंगरेज़" ; -- tocheck              
 lin englishwoman_N = mkN "अंगरेज़ महिला" ; -- tocheck              
 lin engrave_V2 = mkV2 (compoundV "उत्कीर्ण" (mkV "करना")) ; -- tocheck
@@ -9809,7 +9809,6 @@ lin feature_N = mkN "वैशिष्ट्य" ; -- tocheck
 lin feature_V2 = mkV2 (compoundV "प्रधानता" (mkV "देना")) ; -- tocheck
 lin featureless_A = mkA "साधारण" ; -- tocheck              
 lin febrile_A = mkA "ज्वरजन्य" ; -- tocheck              
-lin february_PN = mkPN "फ़रवरी" ; -- tocheck              
 lin feckless_A = mkA "लापरवाह" ; -- tocheck              
 lin fecklessness_N = mkN "लापरवाही" ; -- tocheck              
 lin fecund_A = mkA "बहुप्रज" ; -- tocheck              
@@ -10723,7 +10722,8 @@ lin freight_train_N = mkN "माल गाड़ी" ; -- tocheck
 lin freighter_N = mkN "फ्रेटर" ; -- tocheck              
 lin freightliner_N = mkN "जलद माल गाड़ी" ; -- tocheck              
 lin french_A = mkA "फ़्रांसीसी" ; -- tocheck              
-lin french_N = mkN "फ़्रांसीसी भाषा" ; -- tocheck              
+lin frenchMasc_N = mkN "फ़्रांसीसी भाषा" ; -- tocheck
+lin frenchFem_N = mkN "फ़्रांसीसी भाषा" ; -- tocheck
 lin frenchman_N = mkN "फ्रांसीसी व्यक्ति" ; -- tocheck              
 lin frenetic_A = mkA "अत्यधिक उत्तेजित" ; -- tocheck              
 lin frenzied_A = mkA "उन्मत्त" ; -- tocheck              
@@ -10757,8 +10757,6 @@ lin friary_N = mkN "मठ" ; -- tocheck
 lin fricative_A = mkA "संघर्षी" ; -- tocheck              
 lin fricative_N = mkN "संघर्षी" ; -- tocheck              
 lin friction_N = mkN "वैमनस्य" ; -- tocheck              
-lin friday_N = mkN "शुक्रवार" ; -- tocheck              
-lin friday_PN = mkPN "शुक्रवार" ; -- tocheck              
 lin fridge_N = mkN "फ्रिज" ; -- tocheck              
 lin friend_N = mkN "सोसाइटी ऑफ़ फ़्रेन्ड्ज़ का सदस्य" ; -- tocheck              
 lin friendless_A = mkA "मित्रहीन" ; -- tocheck              
@@ -11701,7 +11699,8 @@ lin greece_PN = mkPN "यूनान" ; -- tocheck
 lin greed_N = mkN "लालच" ; -- tocheck              
 lin greedy_A = mkA "लोभी" ; -- tocheck              
 lin greek_A = mkA "यूनान संबंधी" ; -- tocheck              
-lin greek_N = mkN "यूनानी भाषा" ; -- tocheck              
+lin greekMasc_N = mkN "यूनानी भाषा" ; -- tocheck
+lin greekFem_N = mkN "यूनानी भाषा" ; -- tocheck
 lin green_A = mkA "हराभरा" ; -- tocheck              
 lin green_N = mkN "हरियाली" ; -- tocheck              
 lin greenback_N = mkN "संयुक्त राज्य अमरीका का नोट" ; -- tocheck              
@@ -14354,7 +14353,8 @@ lin issue_V2 = mkV2 (compoundV "वितरण" (mkV "करना")) ; -- toch
 lin isthmus_N = mkN "स्थलडमरूमध्य" ; -- tocheck              
 lin it_Pronlin = personalPN "यह" "इस" "यह" "इस का" "इस की" "उस के" "उस की" Sg Masc Pers3_Near;
 lin italian_A = mkA "इटली संबंधी" ; -- tocheck              
-lin italian_N = mkN "इतालवी भाषा" ; -- tocheck              
+lin italianMasc_N = mkN "इतालवी भाषा" ; -- tocheck
+lin italianFem_N = mkN "इतालवी भाषा" ; -- tocheck
 lin italic_A = mkA "इटली शैली" ; -- tocheck              
 lin itch_V = compoundV "के लिये बेचैन" (mkV "होना") ; -- tocheck              
 lin itchy_A = mkA "खुजलाहटदार" ; -- tocheck              
@@ -14405,8 +14405,6 @@ lin jam_VS = mkVS (compoundV "ठसाठस" (mkV "भरना")) ; -- tochec
 lin jam_on_V2 = mkV2 (mkV "दबाना") ; -- tocheck
 lin jampack_V2 = mkV2 (compoundV "ठसाठस" (mkV "भरना")) ; -- tocheck
 lin jane_PN = mkPN "जेन" ; -- tocheck              
-lin january_N = mkN "जनवरी" ; -- tocheck              
-lin january_PN = mkPN "जनवरी" ; -- tocheck              
 lin japan_PN = mkPN "जापान" ; -- tocheck              
 lin japaneseMasc_N= mkN "जापानी";
 lin japanese_A = mkA "जापानी" ; -- tocheck              
@@ -14600,8 +14598,6 @@ lin jumpiness_N = mkN "तनाव" ; -- tocheck
 lin jumpy_A = mkA "आशंकित" ; -- tocheck              
 lin junction_N = mkN "जंक्शन" ; -- tocheck              
 lin juncture_N = mkN "मोड़" ; -- tocheck              
-lin june_N = mkN "जून" ; -- tocheck              
-lin june_PN = mkPN "जून" ; -- tocheck              
 lin jungle_N = mkN "जंगल" ; -- tocheck              
 lin junior_A = mkA "क्निष्ठ" ; -- tocheck              
 lin juniper_N = mkN "जूनिपर" ; -- tocheck              
@@ -15043,7 +15039,6 @@ lin lather_N = mkN "झाग" ; -- tocheck
 lin lather_V = compoundV "कोड़ा" (mkV "मारना") ; -- tocheck              
 lin lather_V2 = mkV2 (compoundV "का झाग" (mkV "उठना")) ; -- tocheck
 lin latin_A = mkA "लैटिन संबंधी" ; -- tocheck              
-lin latin_N = mkN "लैटिनअ" ; -- tocheck              
 lin latitude_N = mkN "अक्षांश" ; -- tocheck              
 lin latrine_N = mkN "शौचालय" ; -- tocheck              
 lin latter_A = mkA "दूसरा" ; -- tocheck              
@@ -16148,8 +16143,6 @@ lin marble_N = mkN "संगमरमर" ; -- tocheck
 lin marbled_A = mkA "संगमरमर की तरह" ; -- tocheck              
 lin marbles_N = mkN "विवेक" ; -- tocheck       
 lin marbling_N = mkN "संगमरमर जैसा रेखांकन" ; -- tocheck              
-lin march_N = mkN "प्रगति" ; -- tocheck              
-lin march_PN = mkPN "मार्च" ; -- tocheck              
 lin march_V = mkV "चलना" ; -- tocheck              
 lin march_V2 = mkV2 (mkV "चलना") ; -- tocheck
 lin marchioness_N = mkN "मार्शनेस" ; -- tocheck              
@@ -16347,8 +16340,6 @@ lin maximize_V2 = mkV2 (compoundV "उच्चतम सीमा तक" (mkV 
 lin maximum_A = mkA "अधिकतम" ; -- tocheck              
 lin may_1_VV= mkV "लेना" ** { isAux = True} ; ---- check these AR
 lin may_2_VV= mkV "लेना" ** { isAux = True} ;
-lin may_N = mkN "मईई" ; -- tocheck              
-lin may_PN = mkPN "मई" ; -- tocheck              
 lin mayapple_N = mkN "जंगली विषाखमूल" ; -- tocheck       
 lin maybe_Adv = mkAdv "शायद" ; -- tocheck              
 lin mayday_N = mkN "विपत्ति-संकेत" ; -- tocheck              
@@ -17056,7 +17047,6 @@ lin monarchy_N = mkN "राजटंट्र" ; -- tocheck
 lin monastery_N = mkN "मठ" ; -- tocheck              
 lin monastic_A = mkA "तपस्वी के समान" ; -- tocheck              
 lin monasticism_N = mkN "मठवाद" ; -- tocheck              
-lin monday_N = mkN "सोमवारअ" ; -- tocheck              
 lin monetarism_N = mkN "अर्थवाद" ; -- tocheck       
 lin monetarist_N = mkN "अर्थवादी" ; -- tocheck       
 lin monetary_A = mkA "आर्थिक" ; -- tocheck              
@@ -18000,8 +17990,6 @@ lin novel_N = mkN "उपन्यास" ; -- tocheck
 lin novelette_N = mkN "लघु उपन्यास" ; -- tocheck              
 lin novelist_N = mkN "उपन्यासकार" ; -- tocheck              
 lin novelty_N = mkN "विलक्षणता" ; -- tocheck              
-lin november_N = mkN "नवंबरअ" ; -- tocheck              
-lin november_PN = mkPN "नवम्बर" ; -- tocheck              
 lin novice_N = mkN "नया घोड़ा" ; -- tocheck              
 lin noviciate_N = mkN "नवदीक्षा काल" ; -- tocheck              
 lin novitiate_N = mkN "नवदीक्षा काल" ; -- tocheck              
@@ -18218,7 +18206,6 @@ lin octagonal_A = mkA "अष्टभुजाकार" ; -- tocheck
 lin octane_N = mkN "ऑक्टेन" ; -- tocheck              
 lin octangular_A = mkA "अष्टभुजाकार" ; -- tocheck       
 lin octave_N = mkN "अष्टाह" ; -- tocheck              
-lin october_N = mkN "अक्तुबर" ; -- tocheck              
 lin octogenarian_N = mkN "अस्सीतिवर्षीय व्यक्ति" ; -- tocheck              
 lin octopus_N = mkN "ऑक्टोपस" ; -- tocheck              
 lin ocular_A = mkA "दृष्टि संबंधी" ; -- tocheck              
@@ -23543,7 +23530,8 @@ lin russet_A = mkA "गेरुआ" ; -- tocheck
 lin russet_N = mkN "गेरुआ कपड़ा" ; -- tocheck              
 lin russia_PN = mkPN "रूस" ; -- tocheck              
 lin russian_A = mkA "रूस संबंधी" ; -- tocheck              
-lin russian_N = mkN "रूसी" ; -- tocheck              
+lin russianMasc_N = mkN "रूसी" ; -- tocheck
+lin russianFem_N = mkN "रूसी" ; -- tocheck
 lin rust_N = mkN "ज़ंग" ; -- tocheck              
 lin rust_V = compoundV "ज़ंग" (mkV "लगना") ; -- tocheck              
 lin rust_V2 = mkV2 (compoundV "ज़ंग" (mkV "लगना")) ; -- tocheck
@@ -23806,7 +23794,6 @@ lin satisfactory_A = mkA "संतोषप्रद" ; -- tocheck
 --subcat lin satisfy_V = compoundV "आपूर्ति" (mkV "करना") ; -- tocheck              
 lin satisfy_V2 = mkV2 (compoundV "आपूर्ति" (mkV "करना")) ; -- tocheck
 lin saturation_N = mkN "संतृप्तीकरण" ; -- tocheck              
-lin saturday_N = mkN "शनिवार" ; -- tocheck              
 lin saturn_PN = mkPN "शनि देव" ; -- tocheck              
 lin saturnine_A = mkA "शनि के प्रभाव से ग्रस्त" ; -- tocheck              
 lin satyr_N = mkN "सैटर" ; -- tocheck              
@@ -24480,7 +24467,6 @@ lin separatism_N = mkN "पृथकतावाद" ; -- tocheck
 lin separatist_N = mkN "पृथकतावादी" ; -- tocheck              
 lin separative_A = mkA "विभाजक" ; -- tocheck       
 lin sepia_N = mkN "लाल-भूरा रंग" ; -- tocheck              
-lin september_PN = mkPN "सितम्बर" ; -- tocheck              
 lin septet_N = mkN "सप्त" ; -- tocheck              
 lin septic_A = mkA "सड़नदार" ; -- tocheck              
 lin septicaemia_N = mkN "रक्तविषण्णता" ; -- tocheck              
@@ -27495,7 +27481,6 @@ lin sunburn_N = mkN "धूप-दाह" ; -- tocheck
 lin sunburned_A = mkA "धूप-ताम्र" ; -- tocheck              
 lin sunburnt_A = mkA "धूप से झुलसा" ; -- tocheck              
 lin sundae_N = mkN "फलमिश्रित आइसक्रीम" ; -- tocheck              
-lin sunday_N = mkN "रविवार" ; -- tocheck              
 lin sundial_N = mkN "धूप-घड़ी" ; -- tocheck              
 lin sundown_N = mkN "सूर्यास्त" ; -- tocheck              
 lin sundowner_N = mkN "संध्याकालीन मदिरापान" ; -- tocheck              
@@ -27743,7 +27728,8 @@ lin sweatshop_N = mkN "शोषण करने वाली श्रमिक
 lin sweaty_A = mkA "पसीने से तर" ; -- tocheck              
 lin sweden_PN = mkPN "स्वीडन" ; -- tocheck              
 lin swedish_A = mkA "स्वीडन का" ; -- tocheck              
-lin swedish_N = mkN "स्वीडनवास्" ; -- tocheck              
+lin swedishMasc_N = mkN "स्वीडनवास्" ; -- tocheck
+lin swedishFem_N = mkN "स्वीडनवास्" ; -- tocheck
 lin sweep_N = mkN "चक्कर" ; -- tocheck              
 lin sweep_V = mkV "फैलना" ; -- tocheck              
 lin sweep_V2 = mkV2 (mkV "फैलना") ; -- tocheck
@@ -28499,7 +28485,8 @@ lin textile_N = mkN "कपड़ा-उद्योग" ; -- tocheck
 lin texture_N = mkN "प्रकृति" ; -- tocheck              
 lin textured_A = mkA "बुनावटदार" ; -- tocheck              
 lin thai_A = mkA "थाई" ; -- tocheck              
-lin thai_N = mkN "थाई" ; -- tocheck              
+lin thaiMasc_N = mkN "थाई" ; -- tocheck
+lin thaiFem_N = mkN "थाई" ; -- tocheck
 lin thalidomide_N = mkN "थैलिडोमाइड" ; -- tocheck              
 lin thank_V2 = mkV2 (compoundV "आभार प्रदर्शित" (mkV "करना")) ; -- tocheck
 lin thankful_A = mkA "आभारी" ; -- tocheck              
@@ -28740,7 +28727,6 @@ lin thunderclap_N = mkN "मेघ गर्जन" ; -- tocheck
 lin thunderous_A = mkA "कानफोड़ू" ; -- tocheck              
 lin thunderstorm_N = mkN "तड़ित् झंझा" ; -- tocheck              
 lin thunderstruck_A = mkA "भौंचक्का" ; -- tocheck              
-lin thursday_N = mkN "बृहस्पतिवार" ; -- tocheck              
 lin thus_Adv = mkAdv "इस प्रकार" ; -- tocheck              
 lin thwack_V2 = mkV2 (compoundV "थप्पड़" (mkV "मारना")) ; -- tocheck
 lin thwart_N = mkN "आड़ा तख्ता" ; -- tocheck              
@@ -29629,7 +29615,6 @@ lin tuck_in_V = compoundV "डट" (mkV "कर खाना") ; -- tocheck
 lin tuck_in_V2 = mkV2 (compoundV "डट कर" (mkV "खाना")) ; -- tocheck
 lin tuck_shop_N = mkN "मिठाई की दुकान" ; -- tocheck       
 lin tucker_N = mkN "टांका लगाने वाला" ; -- tocheck              
-lin tuesday_N = mkN "मंगलवार" ; -- tocheck              
 lin tuft_N = mkN "कलगी" ; -- tocheck              
 lin tufted_A = mkA "कलगीदार" ; -- tocheck              
 lin tug_N = mkN "खींचाव" ; -- tocheck              
@@ -29696,7 +29681,8 @@ lin turgid_A = mkA "फूला हुआ" ; -- tocheck
 lin turkey_N = mkN "फ्लप" ; -- tocheck              
 lin turkey_PN = mkPN "टर्की" ; -- tocheck              
 lin turkish_A = mkA "तुर्की" ; -- tocheck              
-lin turkish_N = mkN "तुर्की भाषा" ; -- tocheck              
+lin turkishMasc_N = mkN "तुर्की भाषा" ; -- tocheck
+lin turkishFem_N = mkN "तुर्की भाषा" ; -- tocheck
 lin turmeric_N = mkN "हल्दी" ; -- tocheck              
 lin turmoil_N = mkN "खलबली" ; -- tocheck              
 lin turn_N = mkN "पंक्ति" ; -- tocheck              
@@ -31441,7 +31427,6 @@ lin urbanization_N = mkN "शहरीकरण" ; -- tocheck
 lin urbanize_V2 = mkV2 (compoundV "शहरीकरण" (mkV "करना")) ; -- tocheck
 lin urchin_N = mkN "लावारिस शरारती बच्चा" ; -- tocheck              
 lin urdu_A = mkA "उर्दू का" ; -- tocheck              
-lin urdu_N = mkN "उर्दू" ; -- tocheck              
 lin urea_N = mkN "यूरिया" ; -- tocheck       
 lin uremia_N = mkN "यूरीमिया" ; -- tocheck       
 lin urethra_N = mkN "मूत्रमार्ग" ; -- tocheck       
@@ -32696,7 +32681,6 @@ lin wedge_N = mkN "वैज" ; -- tocheck
 lin wedge_V = compoundV "अटका" (mkV "देना") ; -- tocheck              
 lin wedge_V2 = mkV2 (compoundV "अटका" (mkV "देना")) ; -- tocheck
 lin wedlock_N = mkN "विवाह" ; -- tocheck              
-lin wednesday_N = mkN "बुधवार" ; -- tocheck              
 lin wee_A = mkA "बहुत छोटा" ; -- tocheck              
 lin wee_N = mkN "अल्पकाल" ; -- tocheck              
 lin wee_V = compoundV "पेशाब" (mkV "करना") ; -- tocheck              
@@ -35003,7 +34987,6 @@ lin julia_PN = mkPN "Julia" ; -- src=eng status=guess
 lin julian_PN = mkPN "Julian" ; -- src=geonames status=guess
 lin julie_PN = mkPN "Julie" ; -- src=eng status=guess
 lin juliet_PN = mkPN "Juliet" ; -- src=eng status=guess
-lin july_PN = mkPN "July" ; -- src=eng status=guess
 lin jun_PN = mkPN "Jun" ; -- src=geonames status=guess
 lin justin_PN = mkPN "Justin" ; -- src=geonames status=guess
 lin kalgan_PN = mkPN "Kalgan" ; -- src=eng status=guess
@@ -35383,7 +35366,6 @@ lin mon_PN = mkPN "Mon" ; -- src=geonames status=guess
 lin monaco_PN = mkPN "मोनैको" ; -- src=geonames status=guess
 lin monaghan_PN = mkPN "Monaghan" ; -- src=geonames status=guess
 lin monchengladbach_PN = mkPN "Monchengladbach" ; -- src=eng status=guess
-lin monday_PN = mkPN "Monday" ; -- src=eng status=guess
 lin mongolia_PN = mkPN "मंगोलिया" ; -- src=geonames status=guess
 lin monica_PN = mkPN "Monica" ; -- src=eng status=guess
 lin monifieth_PN = mkPN "Monifieth" ; -- src=eng status=guess
@@ -35526,7 +35508,6 @@ lin occident_PN = mkPN "Occident" ; -- src=eng status=guess
 lin ockbrook_PN = mkPN "Ockbrook" ; -- src=eng status=guess
 lin ockendon_PN = mkPN "Ockendon" ; -- src=eng status=guess
 lin oct_PN = mkPN "Oct" ; -- src=eng status=guess
-lin october_PN = mkPN "October" ; -- src=eng status=guess
 lin odessa_PN = mkPN "Odessa" ; -- src=geonames status=guess
 lin oedipus_PN = mkPN "Oedipus" ; -- src=eng status=guess
 lin offaly_PN = mkPN "Offaly" ; -- src=eng status=guess
@@ -35873,7 +35854,6 @@ lin sarisbury_PN = mkPN "Sarisbury" ; -- src=eng status=guess
 lin saskatchewan_PN = mkPN "Saskatchewan" ; -- src=eng status=guess
 lin sassari_PN = mkPN "Sassari" ; -- src=geonames status=guess
 lin sat_PN = mkPN "Sat" ; -- src=eng status=guess
-lin saturday_PN = mkPN "Saturday" ; -- src=eng status=guess
 lin sauchie_PN = mkPN "Sauchie" ; -- src=eng status=guess
 lin saudi_arabia_PN = mkPN "Saudi arabia" ; -- src=eng status=guess
 lin sawbridgeworth_PN = mkPN "Sawbridgeworth" ; -- src=geonames status=guess
@@ -36040,7 +36020,6 @@ lin sudbury_PN = mkPN "Sudbury" ; -- src=geonames status=guess
 lin sue_PN = mkPN "Sue" ; -- src=eng status=guess
 lin suffolk_PN = mkPN "Suffolk" ; -- src=geonames status=guess
 lin sumatra_PN = mkPN "Sumatra" ; -- src=eng status=guess
-lin sunday_PN = mkPN "Sunday" ; -- src=eng status=guess
 lin sunderland_PN = mkPN "Sunderland" ; -- src=geonames status=guess
 lin supt_PN = mkPN "Supt" ; -- src=eng status=guess
 lin surabaja_PN = mkPN "Surabaja" ; -- src=eng status=guess
@@ -36120,7 +36099,6 @@ lin thurcroft_PN = mkPN "Thurcroft" ; -- src=eng status=guess
 lin thurmaston_PN = mkPN "Thurmaston" ; -- src=eng status=guess
 lin thurrock_PN = mkPN "Thurrock" ; -- src=eng status=guess
 lin thurs_PN = mkPN "Thurs" ; -- src=eng status=guess
-lin thursday_PN = mkPN "Thursday" ; -- src=eng status=guess
 lin thurso_PN = mkPN "Thurso" ; -- src=geonames status=guess
 lin tibet_PN = mkPN "Tibet" ; -- src=eng status=guess
 lin tidworth_PN = mkPN "Tidworth" ; -- src=geonames status=guess
@@ -36167,7 +36145,6 @@ lin tsinan_PN = mkPN "Tsinan" ; -- src=eng status=guess
 lin tsingtao_PN = mkPN "Tsingtao" ; -- src=eng status=guess
 lin tsitsihar_PN = mkPN "Tsitsihar" ; -- src=eng status=guess
 lin tues_PN = mkPN "Tues" ; -- src=eng status=guess
-lin tuesday_PN = mkPN "Tuesday" ; -- src=eng status=guess
 lin tullibody_PN = mkPN "Tullibody" ; -- src=eng status=guess
 lin tunbridge_wells_PN = mkPN "Tunbridge wells" ; -- src=eng status=guess
 lin tunis_PN = mkPN "ट्यूनिस" ; -- src=geonames status=guess
@@ -36258,7 +36235,6 @@ lin watford_PN = mkPN "Watford" ; -- src=geonames status=guess
 lin wayne_PN = mkPN "Wayne" ; -- src=geonames status=guess
 lin wear_PN = mkPN "Wear" ; -- src=eng status=guess
 lin wed_PN = mkPN "Wed" ; -- src=eng status=guess
-lin wednesday_PN = mkPN "Wednesday" ; -- src=eng status=guess
 lin wellingborough_PN = mkPN "Wellingborough" ; -- src=geonames status=guess
 lin wellington_PN = mkPN "वेलिंग्टन" ; -- src=geonames status=guess
 lin welshpool_PN = mkPN "Welshpool" ; -- src=geonames status=guess
