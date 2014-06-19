@@ -5271,6 +5271,9 @@ lin dust_N = L.dust_N ;
 lin dust_V2 = mkV2 (mkV "afstoffen") ; -- status=guess, src=wikt
 lin dustbin_N = mkN "vuilnisbak" masculine ; -- status=guess
 lin dusty_A = mkA "stoffig" ; -- status=guess
+lin dutch_A = mkA "Nederlands" ;
+lin dutchMasc_N = mkN "Nederlander" ;
+lin dutchFem_N = mkN "Nederlander" ;
 lin duty_N = mkN "dienst";
 lin duvet_N = mkN "dekbed" neuter ; -- status=guess
 lin dwarf_N = mkN "dwergster" masculine feminine ; -- status=guess
@@ -6806,8 +6809,9 @@ lin freeze_V = L.freeze_V ;
 lin freeze_V2 = mkV2 (mkV "verstijven") ; -- status=guess, src=wikt
 lin freezer_N = mkN "vriezer" masculine | mkN "diepvriezer" masculine | mkN "diepvries" masculine ; -- status=guess status=guess status=guess
 lin freight_N = mkN "vracht" masculine | mkN "cargo" masculine ; -- status=guess status=guess
-lin frenchMasc_N = mkN "frieten" | mkN "patat" ; -- status=guess status=guess
-lin frenchFem_N = mkN "frieten" | mkN "patat" ; -- status=guess status=guess
+lin french_A = mkA "Frans" ;
+lin frenchMasc_N = mkN "Fransman" "Fransen" masculine ;
+lin frenchFem_N = mkN "Française" "Françaisen" feminine ;
 lin frenetic_A = mkA "frenetiek" | mkA "bezeten" ; -- status=guess status=guess
 lin frenzy_N = mkN "razernij" feminine ; -- status=guess
 lin frequency_N = mkN "frequentiemodulatie" ; -- status=guess

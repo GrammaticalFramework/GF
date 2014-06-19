@@ -2948,7 +2948,7 @@ lin bronze_V2 = mkV2 (mkV "pavonar") ; -- status=guess, src=wikt
 lin brooch_N = mkN "broche" masculine ; -- status=guess
 lin brood_N = mkN "nidada" masculine ; -- status=guess
 lin brook_N = mkN "arroyo" ; -- status=guess
-lin broom_N = mkN "escoba" | "escobillón" ; -- status=guess status=guess status=guess
+lin broom_N = mkN "escoba" | mkN "escobillón" ; -- status=guess status=guess status=guess
 lin broth_N = mkN "caldo" ; -- status=guess
 lin brothel_N = mkN "casa de citas" | mkN "bulín" | mkN "burdel" | mkN "lupanar" | mkN "prostíbulo" | mkN "mancebía" | mkN "casa de putas" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
 lin brother_N = mkN "hermano" ;
@@ -8494,8 +8494,8 @@ lin freeze_V = L.freeze_V ;
 lin freeze_V2 = mkV2 (helar_V) ; -- status=guess
 lin freezer_N = mkN "congelador" masculine ; -- status=guess
 lin freight_N = mkN "flete" masculine ; -- status=guess
-lin frenchMasc_N = mkN "patatas fritas" | mkN "papas fritas" | mkN "papitas fritas" ; -- status=guess status=guess status=guess
-lin frenchFem_N = mkN "patatas fritas" | mkN "papas fritas" | mkN "papitas fritas" ; -- status=guess status=guess status=guess
+lin frenchMasc_N = variants {} ;
+lin frenchFem_N = variants {} ;
 lin frenetic_A = mkA "frenético" ; -- status=guess
 lin frenzy_N = mkN "frenesí" masculine | mkN "manía" ; -- status=guess status=guess
 lin frequency_N = mkN "modulación de la frecuencia" ; -- status=guess
@@ -18878,6 +18878,8 @@ lin spam_N = mkN "correo basura" ; -- status=guess
 lin span_N = mkN "cuarta" | mkN "palmo" ; -- status=guess status=guess
 lin span_V2 = mkV2 (mkV "abarcar") ; -- status=guess, src=wikt
 lin spaniel_N = mkN "perro de aguas" ; -- status=guess
+lin spanish_A = mkA "español" ;
+lin spanishMasc_N = mkN "español" ; ---- 
 lin spank_N = mkN "golpe" masculine ; -- status=guess
 lin spank_V = mkV "nalguear" ; -- status=guess, src=wikt
 lin spank_V2 = mkV2 (mkV "nalguear") ; -- status=guess, src=wikt

@@ -3837,7 +3837,7 @@ lin coastline_N = mkN "rive" feminine ; -- tocheck
 lin coat_N = L.coat_N ;
 lin coat_V2 = mkV2 (mkV I.couvrir_V2) ; -- tocheck
 lin coating_N = mkN "couche" feminine ; -- tocheck
-lin coauthorFem_N = mkN "coauteure" feminine ; -- tocheck
+lin coauthorFem_N = mkN "coauteur" feminine ; -- tocheck
 lin coauthorMasc_N = mkN "coauteur" masculine ; -- tocheck
 lin coax_V2 = mkV2 (mkV "cajoler") ; -- tocheck
 lin coaxial_A = mkA "coaxial" ; -- tocheck
@@ -6827,8 +6827,6 @@ lin engender_V2 = mkV2 (mkV "engendrer") ; -- tocheck
 lin engine_N = mkN "moteur" masculine | mkN "locomotive" feminine ; -- tocheck
 lin engineer_N = mkN "ingénieur" | mkN "machiniste" masculine ; -- tocheck
 lin engineering_N = mkN "ingénierie" feminine ; -- tocheck
-lin englishMasc_N = mkN "anglais" ; -- tocheck
-lin englishFem_N = mkN "anglais" ; -- tocheck
 lin engrave_V2 = mkV2 (mkV "graver") ; -- tocheck
 lin engraving_N = mkN "gravure" feminine ; -- tocheck
 lin engross_V2 = mkV2 (mkV "accaparer") | mkV2 (mkV "captiver") | mkV2 (mkV "engraisser") ; -- tocheck
@@ -8581,9 +8579,9 @@ lin geothermal_A = mkA "géothermique" ; -- tocheck
 lin geranium_N = mkN "géranium" masculine ; -- tocheck
 lin gerbil_N = mkN "gerbille" feminine ; -- tocheck
 lin geriatrics_N = mkN "gériatrie" feminine ; -- tocheck
-lin germanFem_N = mkN "germaine" feminine ; -- tocheck
-lin germanMasc_N = mkN "germain" masculine ; -- tocheck
-lin german_A = mkA "germain" ; -- tocheck
+--lin germanFem_N = mkN "germaine" feminine ; -- tocheck
+--lin germanMasc_N = mkN "germain" masculine ; -- tocheck
+--lin german_A = mkA "germain" ; -- tocheck
 lin germanium_N = mkN "germanium" masculine ; -- tocheck
 lin gerontocracy_N = mkN "gérontocratie" feminine ; -- tocheck
 lin gerontology_N = mkN "gérontologie" feminine ; -- tocheck
@@ -12571,7 +12569,7 @@ lin mistake_V2 = mkV2 (reflV (mkV "tromper")) | mkV2 (mkV I.méprendre_V2) ; -- 
 lin mister_N = mkN "monsieur" masculine ; -- tocheck
 lin mistletoe_N = mkN "gui" masculine ; -- tocheck
 lin mistreat_V2 = mkV2 (mkV "maltraiter") ; -- tocheck
-lin mistress_N = mkN "maîtresse" feminine ; -- tocheck
+lin mistress_N = mkN "maîtresse" feminine ; 
 lin mistrust_N = mkN "défiance" ; -- tocheck
 lin misty_A = mkA "brumeux" ; -- tocheck
 lin misunderstanding_N = mkN "malentendu" masculine ; -- tocheck
@@ -19764,7 +19762,7 @@ lin tea_N = mkN "thé" masculine | mkN "tisane" feminine | mkN "goûter" masculi
 lin teach_V = variants{}; -- L.teach_V2 ;
 lin teach_V2 = L.teach_V2 ;
 lin teach_V2V = mkV2V (mkV "guider") | mkV2V (mkV "enseigner") ; -- tocheck
-lin teacherFem_N = mkN "professeure" feminine ;
+lin teacherFem_N = mkN "professeur" feminine | mkN "maîtresse" feminine ;
 lin teacherMasc_N = L.teacher_N | mkN "enseignant" ;
 lin teaching_N = mkN "enseignement" masculine | mkN "doctrine" feminine ; -- tocheck
 lin teak_N = mkN "teck" masculine ; -- tocheck
@@ -22384,6 +22382,9 @@ lin buckley_PN = mkPN "Buckley" ; -- status=guess src=geonames
 lin budapest_PN = mkPN "Budapest" ; -- status=guess src=geonames
 lin buffalo_PN = mkPN "Buffalo" ; -- status=guess src=geonames
 lin bulgaria_PN = mkPN "Bulgarie" ; -- status=guess src=geonames
+lin bulgarian_A = mkA "bulgarien" ;
+lin bulgarianMasc_N = mkN "bulgare" masculine ;
+lin bulgarianFem_N = mkN "bulgare" feminine ;
 lin bulkington_PN = mkPN "Bulkington" ; -- status=guess src=geonames
 lin burgos_PN = mkPN "Burgos" ; -- status=guess src=geonames
 lin burley_PN = mkPN "Burley" ; -- status=guess src=geonames
@@ -22454,7 +22455,10 @@ lin chesterfield_PN = mkPN "Chesterfield" ; -- status=guess src=geonames
 lin chicago_PN = mkPN "Chicago" ; -- status=guess src=geonames
 lin chichester_PN = mkPN "Chichester" ; -- status=guess src=geonames
 lin chile_PN = mkPN "Chili" ; -- status=guess src=geonames
-lin china_PN = mkPN "République populaire de Chine" ; -- status=guess src=geonames
+lin china_PN = mkPN "Chine" ; 
+lin chinese_A = mkA "chinois" ;
+lin chineseMasc_N = mkN "chinois" ;
+lin chineseFem_N = mkN "chinoise" ;
 lin chippenham_PN = mkPN "Chippenham" ; -- status=guess src=geonames
 lin chorley_PN = mkPN "Chorley" ; -- status=guess src=geonames
 lin christchurch_PN = mkPN "Christchurch" ; -- status=guess src=geonames
@@ -22602,6 +22606,9 @@ lin durban_PN = mkPN "Durban" ; -- status=guess src=geonames
 lin durham_PN = mkPN "Durham" ; -- status=guess src=geonames
 lin durrington_PN = mkPN "Durrington" ; -- status=guess src=geonames
 lin dursley_PN = mkPN "Dursley" ; -- status=guess src=geonames
+lin dutch_A = mkA "hollandais" ;
+lin dutchMasc_N = mkN "hollandais" ;
+lin dutchFem_N = mkN "hollandaise" ;
 lin eaglescliffe_PN = mkPN "Eaglescliffe" ; -- status=guess src=geonames
 lin ealing_PN = mkPN "Ealing" ; -- status=guess src=geonames
 lin easington_PN = mkPN "Easington" ; -- status=guess src=geonames
@@ -22630,6 +22637,9 @@ lin ely_PN = mkPN "Ely" ; -- status=guess src=geonames
 lin emsworth_PN = mkPN "Emsworth" ; -- status=guess src=geonames
 lin enfield_PN = mkPN "Enfield" ; -- status=guess src=geonames
 lin england_PN = mkPN "England" ; -- status=guess src=geonames
+lin english_A = mkA "anglais" ;
+lin englishMasc_N = mkN "anglais" ;
+lin englishFem_N = mkN "anglaise" ;
 lin enoch_PN = mkPN "Enoch" ; -- status=guess src=geonames
 lin enschede_PN = mkPN "Enschede" ; -- status=guess src=geonames
 lin epping_PN = mkPN "Epping" ; -- status=guess src=geonames
@@ -22661,6 +22671,9 @@ lin ferryhill_PN = mkPN "Ferryhill" ; -- status=guess src=geonames
 lin fife_PN = mkPN "Fife" ; -- status=guess src=geonames
 lin fiji_PN = mkPN "Fidji" ; -- status=guess src=geonames
 lin finland_PN = mkPN "Finlande" ; -- status=guess src=geonames
+lin finnish_A = mkA "finlandais" ;
+lin finnishMasc_N = mkN "finlandais" ;
+lin finnishFem_N = mkN "finlandaise" ;
 lin fleet_PN = mkPN "Fleet" ; -- status=guess src=geonames
 lin fleetwood_PN = mkPN "Fleetwood" ; -- status=guess src=geonames
 lin flint_PN = mkPN "Flint" ; -- status=guess src=geonames
@@ -22682,6 +22695,9 @@ lin freckleton_PN = mkPN "Freckleton" ; -- status=guess src=geonames
 lin frederick_PN = mkPN "Frederick" ; -- status=guess src=geonames
 lin frederiksberg_PN = mkPN "Frederiksberg" ; -- status=guess src=geonames
 lin freiburg_PN = mkPN "Fribourg-en-Brisgau" ; -- status=guess src=geonames
+lin french_A = mkA "français" ;
+Lin frenchMasc_N = mkN "français" ;
+lin frenchFem_N = mkN "française" ;
 lin freshwater_PN = mkPN "Freshwater" ; -- status=guess src=geonames
 lin frodsham_PN = mkPN "Frodsham" ; -- status=guess src=geonames
 lin frome_PN = mkPN "Frome" ; -- status=guess src=geonames
@@ -22703,7 +22719,10 @@ lin genoa_PN = mkPN "Gênes" ; -- status=guess src=geonames
 lin george_PN = mkPN "George" ; -- status=guess src=geonames
 lin georgia_PN = mkPN "Géorgie" ; -- status=guess src=geonames
 lin gerald_PN = mkPN "Gerald" ; -- status=guess src=geonames
-lin germany_PN = mkPN "Allemagne" ; -- status=guess src=geonames
+lin germany_PN = mkPN "Allemagne" ; 
+lin german_A = mkA "allemand" ;
+lin germanMasc_N = mkN "allemand" ;
+lin germanFem_N = mkN "allemande" ;
 lin ghana_PN = mkPN "Ghana" ; -- status=guess src=geonames
 lin gibraltar_PN = mkPN "Gibraltar" ; -- status=guess src=geonames
 lin giffnock_PN = mkPN "Giffnock" ; -- status=guess src=geonames
@@ -22835,6 +22854,10 @@ lin ilkeston_PN = mkPN "Ilkeston" ; -- status=guess src=geonames
 lin ilkley_PN = mkPN "Ilkley" ; -- status=guess src=geonames
 lin immingham_PN = mkPN "Immingham" ; -- status=guess src=geonames
 lin india_PN = mkPN "Inde" ; -- status=guess src=geonames
+lin indian_A = mkA "indien" ;
+lin indian_N = mkN "indien" ;
+lin indianMasc_N = mkN "indien" ;
+lin indianFem_N = mkN "indienne" ;
 lin indiana_PN = mkPN "Indiana" ; -- status=guess src=geonames
 lin indianapolis_PN = mkPN "Indianapolis" ; -- status=guess src=geonames
 lin indonesia_PN = mkPN "Indes orientales néerlandaises" ; -- status=guess src=geonames
@@ -22855,6 +22878,9 @@ lin isabel_PN = mkPN "Isabel" ; -- status=guess src=geonames
 lin islington_PN = mkPN "District londonien d'Islington" ; -- status=guess src=geonames
 lin israel_PN = mkPN "Israël" ; -- status=guess src=geonames
 lin italy_PN = mkPN "Italie" ; -- status=guess src=geonames
+lin italian_A = mkA "italien" ;
+lin italianMasc_N = mkN "italien" ;
+lin italianFem_N = mkN "italienne" ;
 lin iver_PN = mkPN "Iver" ; -- status=guess src=geonames
 lin jabalpur_PN = mkPN "Jabalpur" ; -- status=guess src=geonames
 lin jacksonville_PN = mkPN "Jacksonville" ; -- status=guess src=geonames
@@ -23461,6 +23487,9 @@ lin south_shields_PN = mkPN "South Shields" ; -- status=guess src=geonames
 lin southampton_PN = mkPN "Southampton" ; -- status=guess src=geonames
 lin southport_PN = mkPN "Southport" ; -- status=guess src=geonames
 lin spain_PN = mkPN "Espagne" ; -- status=guess src=geonames
+lin spanish_A = mkA "espagnol" ;
+lin spanishMasc_N = mkN "espagnol" ;
+lin spanishFem_N = mkN "espagnole" ;
 lin spalding_PN = mkPN "Spalding" ; -- status=guess src=geonames
 lin spennymoor_PN = mkPN "Spennymoor" ; -- status=guess src=geonames
 lin split_PN = mkPN "Split" ; -- status=guess src=geonames
@@ -23506,6 +23535,9 @@ lin swanley_PN = mkPN "Swanley" ; -- status=guess src=geonames
 lin swansea_PN = mkPN "Swansea" ; -- status=guess src=geonames
 lin swaziland_PN = mkPN "Swaziland" ; -- status=guess src=geonames
 lin sweden_PN = mkPN "Suède" ; -- status=guess src=geonames
+lin swedish_A = mkA "suédois" ;
+lin swedishMasc_N = mkN "suédois" ;
+lin swedishFem_N = mkN "suédoise" ;
 lin swindon_PN = mkPN "Swindon" ; -- status=guess src=geonames
 lin swinton_PN = mkPN "Swinton" ; -- status=guess src=geonames
 lin switzerland_PN = mkPN "Suisse" ; -- status=guess src=geonames

@@ -2991,6 +2991,9 @@ lin chimney_N = mkN "fumaiolo" ; -- status=guess
 lin chimpanzee_N = mkN "scimpanzé" masculine ; -- status=guess
 lin chin_N = mkN "mento" ; -- status=guess
 lin china_N = mkN "porcellana" ; -- status=guess
+lin chinese_A = mkA "cinese" ;
+lin chineseMasc_N = mkN "cinese" ;
+lin chineseFem_N = mkN "cinese" feminine ;
 lin chinchilla_N = mkN "cincillà" masculine ; -- status=guess
 lin chinoiserie_N = mkN "cineseria" ; -- status=guess
 lin chip_N = mkN "chip" ; -- status=guess
@@ -4332,7 +4335,7 @@ lin cumulus_N = mkN "cumulo" ; -- status=guess
 lin cunnilingus_N = mkN "cunnilinguo" | mkN "cunnilingus" masculine ; -- status=guess status=guess
 lin cunning_A = mkA "ingegnoso" ; -- status=guess
 lin cunning_N = mkN "furberia" | mkN "furbizia" ; -- status=guess status=guess
-lin cunt_N = mkN "fica" | mkN "figa" | mkN "fregna" ; -- status=guess status=guess status=guess
+lin cunt_N = mkN "fregna" | mkN "figa" | mkN "fica" ; 
 lin cup_N = mkN "coppiere" masculine ; -- status=guess
 lin cupboard_N = mkN "armadio" | mkN "credenza" ; -- status=guess status=guess
 lin cupidity_N = mkN "cupidigia" | mkN "cupidità" feminine ; -- status=guess status=guess
@@ -4982,7 +4985,7 @@ lin dice_N = mkN "biscia tassellata" ; -- status=guess
 lin dice_V = mkV (I.fare_V) "a dadini" | mkV (mkV "tagliare") "a dadini" ; -- status=guess, src=wikt status=guess, src=wikt
 lin dice_V2 = mkV2 (mkV (I.fare_V) "a dadini") | mkV2 (mkV (mkV "tagliare") "a dadini") ; -- status=guess, src=wikt status=guess, src=wikt
 lin dichotomy_N = mkN "dicotomia" ; -- status=guess
-lin dick_N = mkN "pisello" | mkN "cazzo" feminine | mkN "uccello" | mkN "minchia" ; -- status=guess status=guess status=guess status=guess
+lin dick_N = mkN "cazzo" | mkN "pisello" ;
 lin dictate_V = variants{} ; --
 lin dictate_V2 = variants{} ; --
 lin dictate_VS = variants{} ; --
@@ -5531,6 +5534,9 @@ lin dust_N = L.dust_N ;
 lin dust_V2 = mkV2 (mkV "spolverare") ; -- status=guess, src=wikt
 lin dustpan_N = mkN "paletta" | mkN "paletta della spazzatura" ; -- status=guess status=guess
 lin dusty_A = mkA "polveroso" | mkA "impolverato" ; -- status=guess status=guess
+lin dutch_A = mkA "olandese" ;
+lin dutchMasc_N = mkN "olandese" ;
+lin dutchFem_N = mkN "olandese" feminine ;
 lin duty_N = mkN "tassa" | mkN "dazio" ; -- status=guess status=guess
 lin duvet_N = mkN "piumone" masculine ; -- status=guess
 lin dwarf_N = mkN "nana" ; -- status=guess
@@ -19470,6 +19476,9 @@ lin ely_PN = mkPN "Ely" ; -- status=guess src=geonames
 lin emsworth_PN = mkPN "Emsworth" ; -- status=guess src=geonames
 lin enfield_PN = mkPN "Enfield" ; -- status=guess src=geonames
 lin england_PN = mkPN "England" ; -- status=guess src=geonames
+lin english_A = mkA "inglese" ;
+lin englishMasc_N = mkN "inglese" ;
+lin englishFem_N = mkN "inglese" feminine ;
 lin enoch_PN = mkPN "Enoch" ; -- status=guess src=geonames
 lin enschede_PN = mkPN "Enschede" ; -- status=guess src=geonames
 lin epping_PN = mkPN "Epping" ; -- status=guess src=geonames
@@ -19501,6 +19510,9 @@ lin ferryhill_PN = mkPN "Ferryhill" ; -- status=guess src=geonames
 lin fife_PN = mkPN "Fife" ; -- status=guess src=geonames
 lin fiji_PN = mkPN "Figi" ; -- status=guess src=geonames
 lin finland_PN = mkPN "Finlandia" ; -- status=guess src=geonames
+lin finnish_A = mkA "finlandese" ;
+lin finnishMasc_N = mkN "finlandese" ;
+lin finnishFem_N = mkN "finlandese" feminine ;
 lin fleet_PN = mkPN "Fleet" ; -- status=guess src=geonames
 lin fleetwood_PN = mkPN "Fleetwood" ; -- status=guess src=geonames
 lin flint_PN = mkPN "Flint" ; -- status=guess src=geonames
@@ -19544,6 +19556,9 @@ lin george_PN = mkPN "George" ; -- status=guess src=geonames
 lin georgia_PN = mkPN "Georgia" ; -- status=guess src=geonames
 lin gerald_PN = mkPN "Gerald" ; -- status=guess src=geonames
 lin germany_PN = mkPN "Germania" ; -- status=guess src=geonames
+lin german_A = mkA "tedesco" ;
+lin germanMasc_N = mkN "tedesco" ;
+lin germanFem_N = mkN "tedesca" ;
 lin ghana_PN = mkPN "Ghana" ; -- status=guess src=geonames
 lin gibraltar_PN = mkPN "Gibilterra" ; -- status=guess src=geonames
 lin giffnock_PN = mkPN "Giffnock" ; -- status=guess src=geonames
@@ -19695,6 +19710,9 @@ lin isabel_PN = mkPN "Isabel" ; -- status=guess src=geonames
 lin islington_PN = mkPN "Islington" ; -- status=guess src=geonames
 lin israel_PN = mkPN "Israele" ; -- status=guess src=geonames
 lin italy_PN = mkPN "il Bel Paese" ; -- status=guess src=geonames
+lin italian_A = mkA "italiano" ;
+lin italianMasc_N = mkN "italiano" ;
+lin italianFem_N = mkN "italiana" ;
 lin iver_PN = mkPN "Iver" ; -- status=guess src=geonames
 lin jabalpur_PN = mkPN "Jabalpur" ; -- status=guess src=geonames
 lin jacksonville_PN = mkPN "Jacksonville" ; -- status=guess src=geonames
@@ -20302,6 +20320,9 @@ lin southampton_PN = mkPN "Southampton" ; -- status=guess src=geonames
 lin southport_PN = mkPN "Southport" ; -- status=guess src=geonames
 lin spain_PN = mkPN "Spagna" ; -- status=guess src=geonames
 lin spalding_PN = mkPN "Spalding" ; -- status=guess src=geonames
+lin spanish_A = mkA "spagnolo" ;
+lin spanishMasc_N = mkN "spagnolo" ;
+lin spanishFem_N = mkN "spagnola" ;
 lin spennymoor_PN = mkPN "Spennymoor" ; -- status=guess src=geonames
 lin split_PN = mkPN "Spalato" ; -- status=guess src=geonames
 lin springfield_PN = mkPN "Springfield" ; -- status=guess src=geonames
@@ -20346,6 +20367,9 @@ lin swanley_PN = mkPN "Swanley" ; -- status=guess src=geonames
 lin swansea_PN = mkPN "Swansea" ; -- status=guess src=geonames
 lin swaziland_PN = mkPN "Swaziland" ; -- status=guess src=geonames
 lin sweden_PN = mkPN "Svezia" ; -- status=guess src=geonames
+lin swedish_A = mkA "svedese" ;
+lin swedishMasc_N = mkN "svedese" ;
+lin swedishFem_N = mkN "svedese" feminine ;
 lin swindon_PN = mkPN "Swindon" ; -- status=guess src=geonames
 lin swinton_PN = mkPN "Swinton" ; -- status=guess src=geonames
 lin switzerland_PN = mkPN "Svizzera" ; -- status=guess src=geonames
