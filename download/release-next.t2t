@@ -29,6 +29,10 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
   See the separate document
   [GF character encoding changes encoding-change.html] for more details.
 - Unicode characters in identifiers [...]
+- Record update: in record objects (but not types) of form ``r ** s``, the values assigned 
+  in ``s`` now overwrite those in ``r``. In previous versions, record extensions with
+  overlapping assignments in ``r`` and ``s`` were not supported, and their behaviour was
+  unpredictable.
 - The PGF file format has changed in minor but backward incompatible ways.
   GF can still read the old format, thanks to a backward compatibility
   module. The C run-time system supports only the new format. Old PGF files
@@ -70,7 +74,8 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
 
 - New languages in the Resource Grammar Library: Estonian
   (see the [updated synopsis ../lib/doc/synopsis.html]).
-- Grammars and dictionaries for wide coverage translation [...]
+- Grammars and dictionaries for wide coverage translation [source ../lib/src/translate/]
+- bug fixes and some new inflection paradigms in many languages
 - [...]
 
 
