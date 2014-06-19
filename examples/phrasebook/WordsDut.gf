@@ -136,31 +136,39 @@ ik ga te voet/ ik ga lopend
     AHasAge p num = prop (mkCl p.name (mkNP num L.year_N)) ; -- ik ben ... jaar
     AHasName p name = prop (mkCl p.name (P.mkV2 I.heten_V) name) ;  -- ik heet ...
     AHasChildren p num = prop (mkCl p.name have_V2 (mkNP num L.child_N)) ; -- ik heb ... kinderen
-    AHasRoom p num = prop (mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (P.mkN "kamer")) 
-        (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon"))))) ; -- ik heb een ... persoons kamer/ ik heb een kamer voor ... personen
-    AHasTable p num = prop (mkCl p.name have_V2 
-      (mkNP (mkNP a_Det (P.mkN "tafel")) 
-        (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon"))))) ;
+   --todo geen
+    AHasRoom p num = 
+      mkProp (mkCl p.name have_V2    -- ik heb een kamer voor ... personen
+                   (mkNP (mkNP a_Det (P.mkN "kamer")) 
+                   (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon")))))
+             (mkS (mkCl p.name have_V2 -- ik heb geen kamer voor ... personen
+                   (mkNP (mkNP no_Quant (P.mkN "kamer")) 
+                   (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon")))))); 
+    AHasTable p num = 
+      mkProp (mkCl p.name have_V2 
+		   (mkNP (mkNP a_Det (P.mkN "tafel")) 
+		   (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon")))))
+             (mkS (mkCl p.name have_V2 
+		   (mkNP (mkNP no_Quant (P.mkN "tafel")) 
+		   (SyntaxDut.mkAdv for_Prep (mkNP num (P.mkN "persoon")))))) ;
     AHungry p = mkProp (mkCl p.name have_V2 (mkNP (P.mkN "honger"))) 
                        (mkS (mkCl p.name have_V2 (mkNP no_Quant (P.mkN "honger")))) ; -- to have   
     AIll p = prop (mkCl p.name (P.mkA "ziek")) ; -- to be ?
     AKnow p = prop (mkCl p.name I.weten_V) ; -- ik weet het.
-    ALike p item = prop (mkCl p.name (P.mkV2 I.houden_V P.van_Prep) item) ; -- lekker
+    ALike p item = prop (mkCl p.name L.like_V2 item) ; -- ik vind X leuk
     ALive p co = prop (mkCl p.name (mkVP (mkVP (P.mkV "wonen")) (SyntaxDut.mkAdv in_Prep co))) ; -- woon
     ALove p q = prop (mkCl p.name L.love_V2 q.name) ; -- houden van
     AMarried p = prop (mkCl p.name (P.mkA "getrouwd")) ; -- ik ben getrouwd
     AReady p = prop (mkCl p.name (P.mkA "klaar")) ; -- ik ben klaar
     AScared p = prop (mkCl p.name (P.mkA "bang")) ; -- ik ben bang
-    ASpeak p lang = 
-      let no_Predet = R.mkPredet "geen" "geen" ; --using Predet instead of Quant, because lang is NP
-      in  mkProp (mkCl p.name (P.mkV2 I.spreken_V) lang)
-                 (mkS (mkCl p.name (P.mkV2 I.spreken_V) (mkNP no_Predet lang))); -- ik spreek .../ ik spreek geen ...
-    AThirsty p =  mkProp (mkCl p.name have_V2 (mkNP (P.mkN "dorst"))) 
-                       (mkS (mkCl p.name have_V2 (mkNP no_Quant (P.mkN "dorst")))) ; --ik heb dorst / ik heb geen dorst
+    ASpeak p lang = mkProp (mkCl p.name (P.mkV2 I.spreken_V) lang) -- ik spreek ...
+                           (mkS (mkCl p.name (P.mkV2 I.spreken_V) (mkNP no_Predet lang)));  -- ik spreek geen ...
+    AThirsty p = mkProp (mkCl p.name have_V2 (mkNP (P.mkN "dorst")))  --ik heb dorst 
+                        (mkS (mkCl p.name have_V2 (mkNP no_Quant (P.mkN "dorst")))) ; --ik heb geen dorst
     ATired p = prop (mkCl p.name (P.mkA "moe")) ; -- ik ben moe
     AUnderstand p = prop (mkCl p.name (P.mkV "verstaan" "verstond" "verstonden" "verstaan")) ; 
-    AWant p obj = prop (mkCl p.name want_VV (mkVP have_V2 obj)) ; -- ik wil
+    AWant p obj =  mkProp (mkCl p.name want_V2 obj)
+                          (mkS (mkCl p.name want_V2 (mkNP no_Predet obj))) ;
     AWantGo p place = prop (mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to)) ; -- ik wil naar ...
 
 -- miscellaneous
@@ -271,8 +279,10 @@ ik ga te voet/ ik ga lopend
 
   mkSuperl : A -> Det = \a -> SyntaxDut.mkDet the_Art (SyntaxDut.mkOrd a) ;
 
-  van_Prep = P.mkPrep "van" ;
+  van_Prep : Prep = P.mkPrep "van" ;
+  want_V2  : V2   = P.mkV2 (P.mkV "wil" "wil" "willen" "wou" "wouden" "gewild") ;
 
+  no_Predet = R.mkPredet "geen" "geen" ;
 {- 
     HowFarFrom : how far is the center from the hotel ? hoe ver is het centrum van het hotel
     HowFarFromBy : how far is the airport from the hotel by taxi ? hoe lang duurt het om van het vliegveld naar het hotel te gaan per taxi
