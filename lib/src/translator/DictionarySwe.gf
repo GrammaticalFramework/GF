@@ -10359,7 +10359,7 @@ lin chinchilla_N = mkN "chinchilla" ; -- status=guess
 lin chinchow_PN = mkPN "Chinchow"; -- src=eng status=guess
 lin chine_N = mkN "ryggrad" "ryggrader" ; -- comment=5
 lin chinese_A = mkA "kinesisk" ; -- status=guess
-lin chineseMasc_N = mkN "kinesiska" ; -- comment=3
+lin chineseMasc_N = mkN "kines" "kineser" ;
 lin chineseFem_N = mkN "kinesiska" ; -- comment=3
 lin chink_N = mkN "springa" ; -- comment=5
 lin chink_V = mkV "springa" "sprang" "sprungit" ; -- comment=4
@@ -18044,9 +18044,9 @@ lin dustman_N = mkN "sophämtare" utrum; -- status=guess
 lin dustmop_N = variants {} ; -- status=guess
 lin dustpan_N = mkN "sopskyffel" ; -- status=guess
 lin dusty_A = mkA "dammig" ; -- comment=4
-lin dutch_A = mkA "nederländsk" ; -- status=guess
-lin dutchMasc_N = mkN "holländska" ; -- comment=5
-lin dutchFem_N = mkN "holländska" ; -- comment=5
+lin dutch_A = mkA "nederländsk" | mkA "holländsk" ;
+lin dutchMasc_N = mkN "nederlänning" | mkN "hollänning" ;
+lin dutchFem_N = mkN "nederländska" | mkN "holländska" ;
 lin dutchman_N = mkN "nederländare" utrum; -- status=guess
 lin duteous_A = mkA "underdånig" | (mkA "plikttrogen" "plikttroget"); -- status=guess status=guess
 lin dutiable_A = variants {} ; -- status=guess
@@ -19120,7 +19120,7 @@ lin engineering_N = mkN "teknik" "tekniker" ; -- status=guess
 lin enginery_N = variants {} ; -- status=guess
 lin england_PN = mkPN "England" neutrum; -- src=geonames status=guess
 lin english_A = mkA "engelsk" ; -- status=guess
-lin englishMasc_N = mkN "engelska" ; -- comment=2
+lin englishMasc_N = mkN "engelman" "engelsmannen" "engelsmän" "engelsmännen" ;
 lin englishFem_N = mkN "engelska" ; -- comment=2
 lin englishman_N = variants {} ; -- status=guess
 lin englishwoman_N = variants {} ; -- status=guess
@@ -21463,8 +21463,9 @@ lin finn_N = variants {} ; -- status=guess
 lin finnan_N = variants {} ; -- status=guess
 lin finnan_haddie_N = variants {} ; -- status=guess
 lin finnan_haddock_N = variants {} ; -- status=guess
-lin finnish_A = mkA "finsk" ; -- comment=2
-lin finnish_N = mkN "finska" ; -- comment=2
+lin finnish_A = mkA "finsk" | mkA "finländsk" ; 
+lin finnishMasc_N = mkN "finne" "finnar" | mkN "finländare" "finländare" ; 
+lin finnishFem_N = mkN "finska" ; 
 lin fiona_PN = mkPN "Fiona"; -- src=eng status=guess
 lin fiord_N = variants {} ; -- status=guess
 lin fipple_N = variants {} ; -- status=guess
@@ -22724,8 +22725,8 @@ lin freight_train_N = variants {} ; -- status=guess
 lin freighter_N = variants {} ; -- status=guess
 lin freightliner_N = variants {} ; -- status=guess
 lin french_A = mkA "fransk" ; -- status=guess
-lin frenchMasc_N = mkN "franska" ; -- status=guess status=guess
-lin frenchFem_N = mkN "franska" ; -- status=guess status=guess
+lin frenchMasc_N = mkN "fransman" "fransmannen" "fransmän" "fransmännen" ;
+lin frenchFem_N = mkN "fransyska" ; 
 lin frenchman_N = mkN "fransman" "fransmän" ; -- status=guess
 lin frenchwoman_N = mkN "fransyska" ; -- status=guess
 lin frenetic_A = mkA "frenetisk" ; -- status=guess
@@ -23727,7 +23728,7 @@ lin geriatrician_N = variants {} ; -- status=guess
 lin geriatrics_N = mkN "geriatrik" ; -- comment=2
 lin germ_N = mkN "embryo" "embryot" "embryon" "embryona" ; -- comment=8
 lin germanFem_N = mkN "tyska" ; -- comment=3
-lin germanMasc_N = mkN "tyska" ; -- comment=3
+lin germanMasc_N = mkN "tysk" ; -- comment=3
 lin german_A = mkA "tysk" ; -- status=guess
 lin germander_N = variants {} ; -- status=guess
 lin germane_A = mkA "relevant" "relevant" ; -- status=guess
@@ -28782,8 +28783,10 @@ lin indexless_A = variants {} ; -- status=guess
 lin india_PN = mkPN "Indien" neutrum; -- src=geonames status=guess
 lin india_rubber_N = variants {} ; -- status=guess
 lin indiaman_N = variants {} ; -- status=guess
-lin indian_A = variants {} ; -- status=guess
-lin indian_N = variants {} ; -- status=guess
+lin indian_A = mkA "indisk" ;
+lin indian_N = mkN "indian" "indianer" ;
+lin indianMasc_N = mkN "indier" "indiern" "indier" "indierna" ;
+lin indianFem_N = mkN "indiska" ;
 lin indiana_PN = mkPN "Indiana" neutrum; -- src=geonames status=guess
 lin indianapolis_PN = mkPN "Indianapolis" neutrum; -- src=geonames status=guess
 lin indicate_V2 = mkV2 (mkV "indikera") | mkV2 (mkV "visa") | mkV2 (mkV "uppge" "uppgav" "uppgivit") | mkV2 (mkV "ange" "angav" "angivit") ;
@@ -30107,9 +30110,9 @@ lin istanbul_PN = mkPN "Istanbul"; -- src=eng status=guess
 lin isthmian_A = variants {} ; -- status=guess
 lin isthmus_N = mkN "näs" neutrum; -- comment=2
 lin it_Pron = S.it_Pron;
-lin italian_A = mkA "italiensk" ; -- status=guess
-lin italianMasc_N = mkN "italienska" ; -- comment=3
-lin italianFem_N = mkN "italienska" ; -- comment=3
+lin italian_A = mkA "italiensk" ; 
+lin italianMasc_N = mkN "italienare" "italienare" ;
+lin italianFem_N = mkN "italienska" ; 
 lin italic_A = mkA "kursiv" ; -- status=guess
 lin italic_N = mkN "kursiv" "kursiver" ; -- status=guess
 lin italicize_V2 = variants {} ; -- status=guess
@@ -53668,9 +53671,9 @@ lin spangle_N = variants {} ; -- status=guess
 lin spangle_V2 = variants {} ; -- status=guess
 lin spaniard_N = mkN "spanjor" "spanjoren" "spanjorer" "spanjorerna" ; -- status=guess
 lin spaniel_N = variants {} ; -- status=guess
-lin spanishFem_N = mkN "spanska" ; -- status=guess
-lin spanishMasc_N = mkN "spanska" ; -- status=guess
-lin spanish_A = mkA "spansk" ; -- status=guess
+lin spanishFem_N = mkN "spanjorska" ; 
+lin spanishMasc_N = mkN "spanjor" "spanjorer" ; 
+lin spanish_A = mkA "spansk" ; 
 lin spank_N = variants {} ; -- status=guess
 lin spank_V = mkV "daskar" ; -- comment=2
 lin spank_V2 = mkV2 (mkV "smiskar") | mkV2 (mkV "daskar"); -- status=guess, src=wikt status=guess, src=wikt
@@ -56488,7 +56491,7 @@ lin swedeFem_N = mkN "svenska" ; -- status=guess
 lin swedeMasc_N = mkN "svensk" ; -- status=guess
 lin swede_A = mkA "svensk" ; -- status=guess
 lin sweden_PN = mkPN "Sverige" neutrum;
-lin swedish_A = mkA "svensk" ; -- status=guess
+lin swedish_A = mkA "svensk" ; 
 lin swedishMasc_N = mkN "svenska" ; -- comment=3
 lin swedishFem_N = mkN "svenska" ; -- comment=3
 lin sweep_N = mkN "sopa" | mkN "fara" ; -- SaldoWN -- comment=11

@@ -8026,7 +8026,7 @@ lin bulbul_N = variants {};
 lin bulgaria_PN = mkPN "Bulgarien"; -- src=geonames status=guess
 lin bulgarianFem_N = variants {};
 lin bulgarianMasc_N = variants {};
-lin bulgarian_A = variants {};
+lin bulgarian_A = mkA "bulgarisch" ;
 lin bulge_N = mkN "Ausbuchtung" | mkN "Beule" "Beulen" feminine | mkN "Delle" feminine | mkN "Wölbung" feminine ; -- status=guess status=guess status=guess status=guess
 lin bulge_V = mkV "hervorstechen" | mkV "hervortreten" ; -- status=guess, src=wikt status=guess, src=wikt
 lin bulge_V2 = mkV2 (mkV "hervorstechen") | mkV2 (mkV "hervortreten") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -10428,8 +10428,7 @@ lin chincherinchee_N = variants {};
 lin chinchilla_N = mkN "Chinchilla" "Chinchilla" neuter ; -- status=guess
 lin chinchow_PN = mkPN "Chinchow"; -- src=eng status=guess
 lin chine_N = mkN "Kimm" feminine ; -- status=guess
-lin chinese_A = variants {};
-lin chinese_A = variants {};
+lin chinese_A = mkA "chinesisch" ;
 lin chineseMasc_N = variants {};
 lin chineseFem_N = variants {};
 lin chink_N = variants {};
@@ -18162,10 +18161,9 @@ lin dustman_N = variants {};
 lin dustmop_N = variants {};
 lin dustpan_N = mkN "Kehrblech" neuter | mkN "Kehrschaufel" feminine | mkN "Kutterschaufel" "Kutterschaufeln" feminine ; -- status=guess status=guess status=guess
 lin dusty_A = mk3A "staubig" "staubiger" "staubigste" ; -- status=guess
-lin dutch_A = variants {};
-lin dutch_A = variants {};
-lin dutchMasc_N = variants {};
-lin dutchFem_N = variants {};
+lin dutch_A = mkA "holländisch" ;
+lin dutchMasc_N = mkN "Holländer" "Holländer" masculine ;
+lin dutchFem_N = mkN "Holländerin" "Holländerinnen" feminine ;
 lin dutchman_N = variants {};
 lin duteous_A = variants {};
 lin dutiable_A = variants {};
@@ -19248,8 +19246,8 @@ lin engineer_V2 = variants {};
 lin engineering_N = mkN "Ingenieurwissenschaft" "Ingenieurwissenschaften" feminine | mkN "Ingenieurwesen" neuter ; -- status=guess status=guess
 lin enginery_N = variants {};
 lin england_PN = mkPN "England"; -- src=geonames status=guess
-lin english_A = variants {};
-lin englishMasc_N = variants {};
+lin english_A = mkA "englisch" ;
+lin englishMasc_N = mkN "Engländer" "Engländer" masculine ;
 lin englishFem_N = variants {};
 lin englishman_N = variants {};
 lin englishwoman_N = variants {};
@@ -21618,9 +21616,8 @@ lin finn_N = variants {};
 lin finnan_N = variants {};
 lin finnan_haddie_N = variants {};
 lin finnan_haddock_N = variants {};
-lin finnish_A = variants {};
-lin finnish_A = variants {};
-lin finnish_N = variants {};
+lin finnish_A = mkA "finnisch" ;
+lin finnishMasc_N = mkN "Finne" "Finnen" masculine ;
 lin fiona_PN = mkPN "Fiona"; -- src=eng status=guess
 lin fiord_N = variants {};
 lin fipple_N = variants {};
@@ -22884,8 +22881,8 @@ lin freight_V2 = variants {};
 lin freight_train_N = variants {};
 lin freighter_N = variants {};
 lin freightliner_N = variants {};
-lin french_A = variants {};
-lin frenchMasc_N = mkN "Französe" masculine ;
+lin french_A = mkA "französisch" ;
+lin frenchMasc_N = mkN "Französe" "Französen" masculine ;
 lin frenchFem_N = mkN "Französe" masculine ;
 lin frenchman_N = variants {};
 lin frenchwoman_N = variants {};
@@ -23894,9 +23891,9 @@ lin geriatric_A = variants {};
 lin geriatrician_N = variants {};
 lin geriatrics_N = mkN "Geriatrie" feminine ; -- status=guess
 lin germ_N = variants {};
-lin germanFem_N = reg2N "Germanin" "Germaninnen" feminine;
-lin germanMasc_N = reg2N "Germane" "Germanen" masculine;
-lin german_A = variants {};
+lin germanFem_N = reg2N "Germanin" "Germaninnen" feminine; ----
+lin german_A = mkA "deutsch" ;
+lin germanMasc_N = mkN "Deutscher" "Deutscher" masculine | reg2N "Germane" "Germanen" masculine ; ---- split
 lin germander_N = variants {};
 lin germane_A = mk3A "relevant" "relevanter" "relevanteste" ; -- status=guess
 lin germaneness_N = variants {};
@@ -28991,8 +28988,10 @@ lin indexless_A = variants {};
 lin india_PN = mkPN "Indien"; -- src=geonames status=guess
 lin india_rubber_N = variants {};
 lin indiaman_N = variants {};
-lin indian_A = variants {};
+lin indian_A = mkA "indisch" ;
 lin indian_N = variants {};
+lin indianMasc_N = variants {};
+lin indianFem_N = variants {};
 lin indiana_PN = mkPN "Indiana"; -- src=geonames status=guess
 lin indianapolis_PN = mkPN "Indianapolis"; -- src=geonames status=guess
 lin indicate_V2 = mkV2 (prefixV "an" (mkV "zeigen")) | mkV2 (mkV "zeigen") ;
@@ -30332,9 +30331,9 @@ lin istanbul_PN = mkPN "Istanbul"; -- src=eng status=guess
 lin isthmian_A = variants {};
 lin isthmus_N = mkN "Isthmus" "Isthmen" masculine | mkN "Landenge" feminine | mkN "Landbrücke" feminine ; -- status=guess status=guess status=guess
 lin it_Pron = S.it_Pron | let s = Predef.BIND ++ "'s" in M.mkPronPers s s "ihm" "seiner" "sein" R.Neutr R.Sg R.P3 ;
-lin italian_A = variants {};
-lin italianMasc_N = variants {};
-lin italianFem_N = variants {};
+lin italian_A = mkA "italienisch" ;
+lin italianMasc_N = mkN "Italiener" "Italiener" masculine ;
+lin italianFem_N = variants {} ;
 lin italic_A = regA "kursiv" ; -- status=guess
 lin italic_N = mkN "Kursivdruck" masculine ; -- status=guess
 lin italicize_V2 = variants {};
@@ -54033,8 +54032,8 @@ lin spangle_V2 = variants {};
 lin spaniard_N = variants {};
 lin spaniel_N = mkN "Spaniel" masculine ; -- status=guess
 lin spanishFem_N = variants {};
-lin spanishMasc_N = variants {};
-lin spanish_A = variants {};
+lin spanishMasc_N = mkN "Spanier" "Spanier" masculine ;
+lin spanish_A = mkA "spanisch" ;
 lin spank_N = mkN "Klaps" "Klapse" masculine ; -- status=guess
 lin spank_V = junkV (mkV "auf") "das Gesäß schlagen" ; -- status=guess, src=wikt
 lin spank_V2 = mkV2 (junkV (mkV "auf") "das Gesäß schlagen") ; -- status=guess, src=wikt
@@ -56866,8 +56865,8 @@ lin sweatshirt_N = mkN "Sweatshirt" neuter ; -- status=guess
 lin sweatshop_N = variants {};
 lin sweaty_A = variants {};
 lin swedeFem_N = variants {};
-lin swedeMasc_N = variants {};
-lin swede_A = variants {};
+lin swedeMasc_N = mkN "Schwede" "Schweden" masculine ;
+lin swede_A = mkA "schwedisch" ;
 lin sweden_PN = mkPN "Schweden"; -- src=geonames status=guess
 lin swedish_A = variants {};
 lin swedishMasc_N = variants {};
