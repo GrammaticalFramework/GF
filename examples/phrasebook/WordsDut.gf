@@ -167,8 +167,8 @@ ik ga te voet/ ik ga lopend
                         (mkS (mkCl p.name have_V2 (mkNP no_Quant (P.mkN "dorst")))) ; --ik heb geen dorst
     ATired p = prop (mkCl p.name (P.mkA "moe")) ; -- ik ben moe
     AUnderstand p = prop (mkCl p.name (P.mkV "verstaan" "verstond" "verstonden" "verstaan")) ; 
-    AWant p obj =  mkProp (mkCl p.name want_V2 obj)
-                          (mkS (mkCl p.name want_V2 (mkNP no_Predet obj))) ;
+    AWant p obj =  mkProp (mkCl p.name wants_V2 obj)
+                          (mkS (mkCl p.name wants_V2 (mkNP no_Predet obj))) ;
     AWantGo p place = prop (mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to)) ; -- ik wil naar ...
 
 -- miscellaneous
@@ -280,7 +280,7 @@ ik ga te voet/ ik ga lopend
   mkSuperl : A -> Det = \a -> SyntaxDut.mkDet the_Art (SyntaxDut.mkOrd a) ;
 
   van_Prep : Prep = P.mkPrep "van" ;
-  want_V2  : V2   = P.mkV2 (P.mkV "wil" "wil" "willen" "wou" "wouden" "gewild") ;
+  wants_V2  : V2   = P.mkV2 (P.mkV "wil" "wil" "willen" "wou" "wouden" "gewild") ;
 
   no_Predet = R.mkPredet "geen" "geen" ;
 {- 
