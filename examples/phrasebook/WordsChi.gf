@@ -208,7 +208,7 @@ SuperlPlace sup p = placeNP sup p ;
 
 HowFar place = lin QS {s = place.name.s ++ R.word "有多远"} ;
 
-HowFarFrom x y = lin QS {s = y.name.s ++ "从" ++ x.name.s ++ R.word "有多远"} ; ----
+HowFarFrom x y = lin QS {s = "从" ++ x.name.s ++ "到" ++ y.name.s ++ R.word "有多远"} ; ----
 
 -- HowFarFromBy x y t =
 -- mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far)

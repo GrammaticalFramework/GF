@@ -1,5 +1,5 @@
 concrete SentencesLav of Sentences = NumeralLav ** SentencesI - [
-	Language,
+	LAnguage,
 	PLanguage,
 	NPNationality,
 	mkNPNationality,
@@ -24,7 +24,7 @@ open
 in {
 	
 	lincat
-		Language = NPLanguage ;
+		LAnguage = NPLanguage ;
 
 	lin
 		PLanguage x = mkPhrase (mkUtt x.lang) ;
