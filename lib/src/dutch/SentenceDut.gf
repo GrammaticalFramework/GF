@@ -20,15 +20,19 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
           verb = vp.s.s ! ps.p1 ;
           inf  = vp.inf.p1 ;
         in
-        verb ++ ps.p2 ++ 
-        vp.a1 ! pol ++ vp.n0 ! agr ++ vp.n2 ! agr ++ vp.a2 ++ inf ++ vp.ext
+          case vp.negBeforeObj of {
+             True => verb ++ ps.p2 ++ vp.a1 ! pol ++ vp.n0 ! agr ++ 
+                     vp.n2 ! agr ++ vp.a2 ++ inf ++ vp.ext ;
+	     _    => verb ++ ps.p2 ++ vp.n0 ! agr ++ vp.n2 ! agr ++ 
+                     vp.a1 ! pol ++ vp.a2 ++ inf ++ vp.ext
+	  } ;
     } ;
 
     SlashVP np vp = 
       mkClause 
         (np.s ! NPNom) np.a 
         vp **
-      {c2 = vp.c2} ;
+      {c2 = vp.c2.p1} ; --ClSlash has just Preposition, not Prep * Bool
 
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;

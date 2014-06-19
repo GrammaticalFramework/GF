@@ -23,9 +23,9 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
     SlashV2a v = predV (v2v v) ** {c2 = v.c2} ; 
       
     Slash2V3 v np =
-      insertObj (\\_ => appPrep v.c2 np.s) (predVv v) ** {c2 = v.c3} ;
+      insertObj (\\_ => appPrep v.c2.p1 np.s) (predVv v) ** {c2 = v.c3} ;
     Slash3V3 v np =
-      insertObj (\\_ => appPrep v.c3 np.s) (predVv v) ** {c2 = v.c2} ;
+      insertObj (\\_ => appPrep v.c3.p1 np.s) (predVv v) ** {c2 = v.c2} ;
 
     SlashV2S v s = 
       insertExtrapos (conjThat ++ s.s ! Sub) (predVv v) ** {c2 = v.c2} ;
@@ -42,7 +42,8 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
     SlashV2A v ap = 
       insertObj (\\_ => ap.s ! APred) (predVv v) ** {c2 = v.c2} ;
 
-    ComplSlash vp np = insertObjNP np.isPron (\\_ => appPrep vp.c2 np.s) vp ;
+    --vp.c2.p2: if the verb has a preposition or not
+    ComplSlash vp np = insertObjNP np.isPron vp.c2.p2 (\\_ => appPrep vp.c2.p1 np.s) vp ;
 
     SlashVV v vp = 
       let 
@@ -60,10 +61,12 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
-            insertObj (\\_ => appPrep v.c2 np.s) (
+            insertObj (\\_ => appPrep v.c2.p1 np.s) (
               predVv v)))) ** {c2 = v.c2} ;
 
-    UseComp comp = insertObj comp.s (predV zijn_V) ; -- agr not used
+    -- True, because negation comes before copula complement 
+    -- "ik ben niet groot" but "ik begrijp hem niet"
+    UseComp comp = insertObjNP False True comp.s (predV zijn_V) ; -- agr not used
 
     UseCopula = predV zijn_V ;
 
@@ -75,16 +78,16 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
 
-    ReflVP vp = insertObj (\\a => appPrep vp.c2 (\\_ => reflPron ! a)) vp ;
+    ReflVP vp = insertObj (\\a => appPrep vp.c2.p1 (\\_ => reflPron ! a)) vp ;
 
     PassV2 v = insertInf (v.s ! VPerf) (predV worden_V) ;
 
-    VPSlashPrep vp prep = vp ** {c2 = prep.s} ;
+    VPSlashPrep vp prep = vp ** {c2 = <prep.s,True>} ;
 
 ---- workaround for a subtyping bug
   oper
     v2v : VVerb -> VVerb = \v -> 
-      {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = v.vtype} ;
+      {s = v.s ; aux = v.aux ; prefix = v.prefix ; particle = v.particle ; vtype = v.vtype} ;
     predVv : VVerb -> ResDut.VP = \v -> predV (v2v v) ;
 
 }
