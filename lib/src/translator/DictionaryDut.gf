@@ -6806,7 +6806,8 @@ lin freeze_V = L.freeze_V ;
 lin freeze_V2 = mkV2 (mkV "verstijven") ; -- status=guess, src=wikt
 lin freezer_N = mkN "vriezer" masculine | mkN "diepvriezer" masculine | mkN "diepvries" masculine ; -- status=guess status=guess status=guess
 lin freight_N = mkN "vracht" masculine | mkN "cargo" masculine ; -- status=guess status=guess
-lin french_N = mkN "frieten" | mkN "patat" ; -- status=guess status=guess
+lin frenchMasc_N = mkN "frieten" | mkN "patat" ; -- status=guess status=guess
+lin frenchFem_N = mkN "frieten" | mkN "patat" ; -- status=guess status=guess
 lin frenetic_A = mkA "frenetiek" | mkA "bezeten" ; -- status=guess status=guess
 lin frenzy_N = mkN "razernij" feminine ; -- status=guess
 lin frequency_N = mkN "frequentiemodulatie" ; -- status=guess
@@ -10032,7 +10033,6 @@ lin marathon_N = mkN "marathon" masculine ; -- status=guess
 lin maraud_V = mkV "roven" ; -- status=guess, src=wikt
 lin marauder_N = mkN "stroper" masculine ; -- status=guess
 lin marble_N = mkN "marmer" neuter ; -- status=guess
-lin march_N = mkN "mars" ; -- status=guess
 lin march_V = mkV "marcheren" ; -- status=guess, src=wikt
 lin march_V2 = mkV2 (mkV "marcheren") ; -- status=guess, src=wikt
 lin mare_N = mkN "merrie" feminine ; -- status=guess
@@ -18628,7 +18628,6 @@ lin antwerp_PN = mkPN "Antwerp" ; -- src=geonames status=guess
 lin apeldoorn_PN = mkPN "Apeldoorn" ; -- src=geonames status=guess
 lin approx_PN = mkPN "Approx" ; -- src=eng status=guess
 lin apr_PN = mkPN "Apr" ; -- src=eng status=guess
-lin april_PN = mkPN "April" ; -- src=eng status=guess
 lin aquarius_PN = mkPN "Aquarius" ; -- src=eng status=guess
 lin arbroath_PN = mkPN "Arbroath" ; -- src=geonames status=guess
 lin ardrossan_PN = mkPN "Ardrossan" ; -- src=geonames status=guess
@@ -18670,7 +18669,6 @@ lin audley_PN = mkPN "Audley" ; -- src=geonames status=guess
 lin audrey_PN = mkPN "Audrey" ; -- src=eng status=guess
 lin aug_PN = mkPN "Aug" ; -- src=eng status=guess
 lin augsburg_PN = mkPN "Augsburg" ; -- src=geonames status=guess
-lin august_PN = mkPN "August" ; -- src=geonames status=guess
 lin australia_PN = mkPN "Australië" ; -- src=geonames status=guess
 lin austria_PN = mkPN "Oostenrijk" ; -- src=geonames status=guess
 lin ave_PN = mkPN "Ave" ; -- src=eng status=guess
@@ -19185,7 +19183,6 @@ lin debbie_PN = mkPN "Debbie" ; -- src=eng status=guess
 lin debby_PN = mkPN "Debby" ; -- src=eng status=guess
 lin deborah_PN = mkPN "Deborah" ; -- src=eng status=guess
 lin dec_PN = mkPN "Dec" ; -- src=eng status=guess
-lin december_PN = mkPN "December" ; -- src=eng status=guess
 lin deirdre_PN = mkPN "Deirdre" ; -- src=eng status=guess
 lin delaware_PN = mkPN "Delaware" ; -- src=geonames status=guess
 lin delhi_PN = mkPN "Delhi" ; -- src=geonames status=guess
@@ -19375,7 +19372,6 @@ lin fawley_PN = mkPN "Fawley" ; -- src=eng status=guess
 lin fbi_PN = mkPN "FBI" ; -- src=eng status=guess
 lin featherstone_PN = mkPN "Featherstone" ; -- src=geonames status=guess
 lin feb_PN = mkPN "Feb" ; -- src=eng status=guess
-lin february_PN = mkPN "February" ; -- src=eng status=guess
 lin felicity_PN = mkPN "Felicity" ; -- src=eng status=guess
 lin felix_PN = mkPN "Felix" ; -- src=eng status=guess
 lin felixstowe_PN = mkPN "Felixstowe" ; -- src=geonames status=guess
@@ -19429,7 +19425,6 @@ lin frederiksberg_PN = mkPN "Frederiksberg" ; -- src=geonames status=guess
 lin freiburg_PN = mkPN "Freiburg im Breisgau" ; -- src=geonames status=guess
 lin freshwater_PN = mkPN "Freshwater" ; -- src=geonames status=guess
 lin fri_PN = mkPN "Fri" ; -- src=eng status=guess
-lin friday_PN = mkPN "Friday" ; -- src=eng status=guess
 lin frinton_PN = mkPN "Frinton" ; -- src=eng status=guess
 lin frodsham_PN = mkPN "Frodsham" ; -- src=geonames status=guess
 lin frome_PN = mkPN "Frome" ; -- src=geonames status=guess
@@ -19755,7 +19750,6 @@ lin jane_PN = mkPN "Jane" ; -- src=eng status=guess
 lin janet_PN = mkPN "Janet" ; -- src=eng status=guess
 lin janice_PN = mkPN "Janice" ; -- src=eng status=guess
 lin janie_PN = mkPN "Janie" ; -- src=eng status=guess
-lin january_PN = mkPN "January" ; -- src=eng status=guess
 lin janus_PN = mkPN "Janus" ; -- src=eng status=guess
 lin japan_PN = mkPN "Japan" ; -- src=geonames status=guess
 lin jarrow_PN = mkPN "Jarrow" ; -- src=geonames status=guess
@@ -19814,9 +19808,7 @@ lin julia_PN = mkPN "Julia" ; -- src=eng status=guess
 lin julian_PN = mkPN "Julian" ; -- src=geonames status=guess
 lin julie_PN = mkPN "Julie" ; -- src=eng status=guess
 lin juliet_PN = mkPN "Juliet" ; -- src=eng status=guess
-lin july_PN = mkPN "July" ; -- src=eng status=guess
 lin jun_PN = mkPN "Jun" ; -- src=geonames status=guess
-lin june_PN = mkPN "June" ; -- src=eng status=guess
 lin jupiter_PN = mkPN "Jupiter" ; -- src=geonames status=guess
 lin justin_PN = mkPN "Justin" ; -- src=geonames status=guess
 lin kalgan_PN = mkPN "Kalgan" ; -- src=eng status=guess
@@ -20099,7 +20091,6 @@ lin mannheim_PN = mkPN "Mannheim" ; -- src=geonames status=guess
 lin mansfield_PN = mkPN "Mansfield" ; -- src=geonames status=guess
 lin mar_PN = mkPN "Mar" ; -- src=eng status=guess
 lin maracaibo_PN = mkPN "Maracaibo" ; -- src=geonames status=guess
-lin march_PN = mkPN "March" ; -- src=geonames status=guess
 lin margaret_PN = mkPN "Margaret" ; -- src=geonames status=guess
 lin margate_PN = mkPN "Margate" ; -- src=geonames status=guess
 lin marge_PN = mkPN "Marge" ; -- src=eng status=guess
@@ -20142,7 +20133,6 @@ lin mauritius_PN = mkPN "Mauritius" ; -- src=geonames status=guess
 lin mavis_PN = mkPN "Mavis" ; -- src=eng status=guess
 lin max_PN = mkPN "Max" ; -- src=eng status=guess
 lin maxine_PN = mkPN "Maxine" ; -- src=eng status=guess
-lin may_PN = mkPN "May" ; -- src=eng status=guess
 lin mayfair_PN = mkPN "Mayfair" ; -- src=eng status=guess
 lin mayfield_PN = mkPN "Mayfield" ; -- src=geonames status=guess
 lin mayo_PN = mkPN "Mayo" ; -- src=geonames status=guess
@@ -20222,7 +20212,6 @@ lin mon_PN = mkPN "Mon" ; -- src=geonames status=guess
 lin monaco_PN = mkPN "Monaco" ; -- src=geonames status=guess
 lin monaghan_PN = mkPN "Monaghan" ; -- src=geonames status=guess
 lin monchengladbach_PN = mkPN "Monchengladbach" ; -- src=eng status=guess
-lin monday_PN = mkPN "Monday" ; -- src=eng status=guess
 lin mongolia_PN = mkPN "Mongolië" ; -- src=geonames status=guess
 lin monica_PN = mkPN "Monica" ; -- src=eng status=guess
 lin monifieth_PN = mkPN "Monifieth" ; -- src=eng status=guess
@@ -20362,7 +20351,6 @@ lin nottinghamshire_PN = mkPN "Nottinghamshire" ; -- src=eng status=guess
 lin nov_PN = mkPN "Nov" ; -- src=geonames status=guess
 lin nova_scotia_PN = mkPN "Nova scotia" ; -- src=eng status=guess
 lin novara_PN = mkPN "Novara" ; -- src=geonames status=guess
-lin november_PN = mkPN "November" ; -- src=eng status=guess
 lin novokuznetsk_PN = mkPN "Novokoeznetsk" ; -- src=geonames status=guess
 lin novosibirsk_PN = mkPN "Novosibirsk" ; -- src=geonames status=guess
 lin nr_PN = mkPN "Nr" ; -- src=eng status=guess
@@ -20376,7 +20364,6 @@ lin occident_PN = mkPN "Occident" ; -- src=eng status=guess
 lin ockbrook_PN = mkPN "Ockbrook" ; -- src=eng status=guess
 lin ockendon_PN = mkPN "Ockendon" ; -- src=eng status=guess
 lin oct_PN = mkPN "Oct" ; -- src=eng status=guess
-lin october_PN = mkPN "October" ; -- src=eng status=guess
 lin odessa_PN = mkPN "Odessa" ; -- src=geonames status=guess
 lin oedipus_PN = mkPN "Oedipus" ; -- src=eng status=guess
 lin offaly_PN = mkPN "Offaly" ; -- src=eng status=guess
@@ -20739,7 +20726,6 @@ lin sarisbury_PN = mkPN "Sarisbury" ; -- src=eng status=guess
 lin saskatchewan_PN = mkPN "Saskatchewan" ; -- src=eng status=guess
 lin sassari_PN = mkPN "Sassari" ; -- src=geonames status=guess
 lin sat_PN = mkPN "Sat" ; -- src=eng status=guess
-lin saturday_PN = mkPN "Saturday" ; -- src=eng status=guess
 lin saturn_PN = mkPN "Saturn" ; -- src=eng status=guess
 lin sauchie_PN = mkPN "Sauchie" ; -- src=eng status=guess
 lin saudi_arabia_PN = mkPN "Saudi arabia" ; -- src=eng status=guess
@@ -20766,7 +20752,6 @@ lin semarang_PN = mkPN "Semarang" ; -- src=geonames status=guess
 lin senegal_PN = mkPN "Senegal" ; -- src=geonames status=guess
 lin seoul_PN = mkPN "Seoel" ; -- src=geonames status=guess
 lin sept_PN = mkPN "Sept" ; -- src=eng status=guess
-lin september_PN = mkPN "September" ; -- src=eng status=guess
 lin seven_sisters_PN = mkPN "Seven sisters" ; -- src=eng status=guess
 lin sevenoaks_PN = mkPN "Sevenoaks" ; -- src=geonames status=guess
 lin sevilla_PN = mkPN "Sevilla" ; -- src=geonames status=guess
@@ -20915,7 +20900,6 @@ lin sudbury_PN = mkPN "Sudbury" ; -- src=geonames status=guess
 lin sue_PN = mkPN "Sue" ; -- src=eng status=guess
 lin suffolk_PN = mkPN "Suffolk" ; -- src=geonames status=guess
 lin sumatra_PN = mkPN "Sumatra" ; -- src=eng status=guess
-lin sunday_PN = mkPN "Sunday" ; -- src=eng status=guess
 lin sunderland_PN = mkPN "Sunderland" ; -- src=geonames status=guess
 lin supt_PN = mkPN "Supt" ; -- src=eng status=guess
 lin surabaja_PN = mkPN "Surabaja" ; -- src=eng status=guess
@@ -21003,7 +20987,6 @@ lin thurcroft_PN = mkPN "Thurcroft" ; -- src=eng status=guess
 lin thurmaston_PN = mkPN "Thurmaston" ; -- src=eng status=guess
 lin thurrock_PN = mkPN "Thurrock" ; -- src=eng status=guess
 lin thurs_PN = mkPN "Thurs" ; -- src=eng status=guess
-lin thursday_PN = mkPN "Thursday" ; -- src=eng status=guess
 lin thurso_PN = mkPN "Thurso" ; -- src=geonames status=guess
 lin tibet_PN = mkPN "Tibet" ; -- src=eng status=guess
 lin tidworth_PN = mkPN "Tidworth" ; -- src=geonames status=guess
@@ -21051,7 +21034,6 @@ lin tsinan_PN = mkPN "Tsinan" ; -- src=eng status=guess
 lin tsingtao_PN = mkPN "Tsingtao" ; -- src=eng status=guess
 lin tsitsihar_PN = mkPN "Tsitsihar" ; -- src=eng status=guess
 lin tues_PN = mkPN "Tues" ; -- src=eng status=guess
-lin tuesday_PN = mkPN "Tuesday" ; -- src=eng status=guess
 lin tullibody_PN = mkPN "Tullibody" ; -- src=eng status=guess
 lin tunbridge_wells_PN = mkPN "Tunbridge wells" ; -- src=eng status=guess
 lin tunis_PN = mkPN "Tunis" ; -- src=geonames status=guess
@@ -21162,7 +21144,6 @@ lin watford_PN = mkPN "Watford" ; -- src=geonames status=guess
 lin wayne_PN = mkPN "Wayne" ; -- src=geonames status=guess
 lin wear_PN = mkPN "Wear" ; -- src=eng status=guess
 lin wed_PN = mkPN "Wed" ; -- src=eng status=guess
-lin wednesday_PN = mkPN "Wednesday" ; -- src=eng status=guess
 lin wellingborough_PN = mkPN "Wellingborough" ; -- src=geonames status=guess
 lin wellington_PN = mkPN "Wellington" ; -- src=geonames status=guess
 lin wells_PN = mkPN "Wells" ; -- src=geonames status=guess

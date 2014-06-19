@@ -7097,7 +7097,8 @@ lin freeze_V = L.freeze_V ;
 lin freeze_V2 = mkV2 (mkV "congelare") ; -- status=guess, src=wikt
 lin freezer_N = mkN "congelatore" masculine ; -- status=guess
 lin freight_N = variants{} ; --
-lin french_N = mkN "patate fritte" | mkN "patatine fritte" ; -- status=guess status=guess
+lin frenchMasc_N = mkN "patate fritte" | mkN "patatine fritte" ; -- status=guess status=guess
+lin frenchFem_N = mkN "patate fritte" | mkN "patatine fritte" ; -- status=guess status=guess
 lin frenetic_A = mkA "frenetico" ; -- status=guess
 lin frenzy_N = mkN "frenesia" ; -- status=guess
 lin frequency_N = mkN "modulazione di frequenza" ; -- status=guess
@@ -10380,7 +10381,6 @@ lin marathon_N = mkN "maratona" ; -- status=guess
 lin marathoner_N = mkN "maratoneta" masculine ; -- status=guess
 lin marauder_N = mkN "predone" masculine ; -- status=guess
 lin marble_N = mkN "marmo" ; -- status=guess
-lin march_N = mkN "marcia" ; -- status=guess
 lin march_V = mkV "marciare" ; -- status=guess, src=wikt
 lin march_V2 = mkV2 (mkV "marciare") ; -- status=guess, src=wikt
 lin mare_N = mkN "cavalla" ; -- status=guess
@@ -10510,7 +10510,6 @@ lin maximum_A = mkA "massimo" ; -- status=guess
 lin maximum_N = mkN "massimo" ; -- status=guess
 lin may_1_VV = mkVV potere_V ;
 lin may_2_VV = mkVV potere_V ;
-lin may_N = mkN "biancospino" ; -- status=guess
 lin maybe_Adv = mkAdv "forse" ;
 lin mayhem_N = mkN "caos" masculine ; -- status=guess
 lin mayonnaise_N = mkN "maionese" feminine ; -- status=guess
@@ -19061,7 +19060,6 @@ lin atlantic_PN = mkPN "Atlantic" ; -- status=guess src=geonames
 lin auckland_PN = mkPN "Auckland" ; -- status=guess src=geonames
 lin audley_PN = mkPN "Audley" ; -- status=guess src=geonames
 lin augsburg_PN = mkPN "Augusta" ; -- status=guess src=geonames
-lin august_PN = mkPN "August" ; -- status=guess src=geonames
 lin australia_PN = mkPN "Australia" ; -- status=guess src=geonames
 lin austria_PN = mkPN "Austria" ; -- status=guess src=geonames
 lin aveley_PN = mkPN "Aveley" ; -- status=guess src=geonames
@@ -19892,7 +19890,6 @@ lin manila_PN = mkPN "Manila" ; -- status=guess src=geonames
 lin mannheim_PN = mkPN "Mannheim" ; -- status=guess src=geonames
 lin mansfield_PN = mkPN "Mansfield" ; -- status=guess src=geonames
 lin maracaibo_PN = mkPN "Maracaibo" ; -- status=guess src=geonames
-lin march_PN = mkPN "March" ; -- status=guess src=geonames
 lin margaret_PN = mkPN "Margaret" ; -- status=guess src=geonames
 lin margate_PN = mkPN "Margate" ; -- status=guess src=geonames
 lin maria_PN = mkPN "Maria" ; -- status=guess src=geonames

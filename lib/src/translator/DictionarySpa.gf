@@ -8494,7 +8494,8 @@ lin freeze_V = L.freeze_V ;
 lin freeze_V2 = mkV2 (helar_V) ; -- status=guess
 lin freezer_N = mkN "congelador" masculine ; -- status=guess
 lin freight_N = mkN "flete" masculine ; -- status=guess
-lin french_N = mkN "patatas fritas" | mkN " papas fritas" | mkN "[Nicaragua] papitas fritas" ; -- status=guess status=guess status=guess
+lin frenchMasc_N = mkN "patatas fritas" | mkN " papas fritas" | mkN "[Nicaragua] papitas fritas" ; -- status=guess status=guess status=guess
+lin frenchFem_N = mkN "patatas fritas" | mkN " papas fritas" | mkN "[Nicaragua] papitas fritas" ; -- status=guess status=guess status=guess
 lin frenetic_A = mkA "frenético" ; -- status=guess
 lin frenzy_N = mkN "frenesí" masculine | mkN "manía" ; -- status=guess status=guess
 lin frequency_N = mkN "modulación de la frecuencia" ; -- status=guess
@@ -12429,7 +12430,6 @@ lin marasmus_N = mkN "marasmo" ; -- status=guess
 lin marathon_N = mkN "m-f" ; -- status=guess
 lin maraud_V = mkV "merodear" ; -- status=guess, src=wikt
 lin marble_N = mkN "mármol" masculine ; -- status=guess
-lin march_N = mkN "marcha" ; -- status=guess
 lin march_V = mkV "marchar" ; -- status=guess
 lin march_V2 = mkV2 (mkV "marchar") ; -- status=guess
 lin marchioness_N = mkN "marquesa" ; -- status=guess
@@ -12585,7 +12585,6 @@ lin maximum_A = mkA "máximo" ; -- status=guess
 lin maximum_N = mkN "máximo" ; -- status=guess
 lin may_1_VV = mkVV (mkV "poder" "puedo") ;
 lin may_2_VV = mkVV (mkV "poder" "puedo") ;
-lin may_N = mkN "espino" | mkN "marzoleto" ; -- status=guess status=guess
 lin maybe_Adv = mkAdv "quizás" | mkAdv "quizá" ;
 lin mayfly_N = mkN "efímera" ; -- status=guess
 lin mayhem_N = mkN "alboroto" ; -- status=guess
@@ -22688,7 +22687,6 @@ lin atlantic_PN = mkPN "Atlantic" ; -- status=guess src=geonames
 lin auckland_PN = mkPN "Auckland" ; -- status=guess src=geonames
 lin audley_PN = mkPN "Audley" ; -- status=guess src=geonames
 lin augsburg_PN = mkPN "Augsburgo" ; -- status=guess src=geonames
-lin august_PN = mkPN "August" ; -- status=guess src=geonames
 lin australia_PN = mkPN "Australia" ; -- status=guess src=geonames
 lin austria_PN = mkPN "Austria" ; -- status=guess src=geonames
 lin aveley_PN = mkPN "Aveley" ; -- status=guess src=geonames
@@ -23519,7 +23517,6 @@ lin manila_PN = mkPN "Manila" ; -- status=guess src=geonames
 lin mannheim_PN = mkPN "Mannheim" ; -- status=guess src=geonames
 lin mansfield_PN = mkPN "Mansfield" ; -- status=guess src=geonames
 lin maracaibo_PN = mkPN "Maracaibo" ; -- status=guess src=geonames
-lin march_PN = mkPN "March" ; -- status=guess src=geonames
 lin margaret_PN = mkPN "Margaret" ; -- status=guess src=geonames
 lin margate_PN = mkPN "Margate" ; -- status=guess src=geonames
 lin maria_PN = mkPN "Maria" ; -- status=guess src=geonames
