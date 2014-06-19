@@ -34,7 +34,7 @@ concrete CatDut of Cat =
 -- Verb
 
     VP = ResDut.VP ;
-    VPSlash = ResDut.VP ** {c2 : Preposition} ;
+    VPSlash = ResDut.VP ** {c2 : Preposition * Bool} ;
     Comp = {s : Agr => Str} ; 
 
 -- Adjective
@@ -73,9 +73,10 @@ concrete CatDut of Cat =
 
     V, VS, VQ, VA = ResDut.VVerb ;
     VV = VVerb ** {isAux : Bool} ;
-    V2, V2A, V2S, V2Q = VVerb ** {c2 : Preposition} ;
-    V2V = VVerb ** {c2 : Preposition ; isAux : Bool} ;
-    V3 = VVerb ** {c2, c3 : Preposition} ;
+    V2, V2A, V2S, V2Q = VVerb ** {c2 : Preposition * Bool} ;
+    V2V = VVerb ** {c2 : Preposition * Bool ; isAux : Bool} ;
+    V3 = VVerb ** {c2, c3 : Preposition * Bool} ;
+    -- Preposition * Bool: True if there is a preposition (info needed for word order)
 
     A  = Adjective ;
     A2 = Adjective ** {c2 : Preposition} ;

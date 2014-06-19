@@ -267,14 +267,17 @@ oper
     mkV : V -> Str -> V = \s,v ->lin V (prefixV v s) ; ---- the same, in order matching Wiktionary-generated lexicon
     } ;
   zijnV v = lin V (v2vvAux v VZijn) ;
-  reflV v = lin V {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = VRefl} ;
+  reflV v = lin V {s = v.s ; aux = v.aux ; particle = v.particle ; prefix = v.prefix ; vtype = VRefl} ;
+
+  partV : V -> Str -> V = \vinden,leuk ->
+    vinden ** {particle = leuk} ;
 
   no_geV v = let vs = v.s in {
     s = table {
       VPerf => Predef.drop 2 (vs ! VPerf) ;
       p => vs ! p
       } ;
-    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype
+    prefix = v.prefix ; lock_V = v.lock_V ; particle = v.particle ; aux = v.aux ; vtype = v.vtype
     } ;
 
   fixprefixV s v = let vs = v.s in {
@@ -282,16 +285,16 @@ oper
       VPerf => s + Predef.drop 2 (vs ! VPerf) ;
       p => s + vs ! p
       } ;
-    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype
+    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; particle = v.particle ; vtype = v.vtype
     } ;
 
   zijn_V : V = lin V ResDut.zijn_V ;
   hebben_V : V = lin V ResDut.hebben_V ;
 
   mkV2 = overload {
-    mkV2 : Str -> V2 = \s -> lin V2 (v2vv (regVerb s) ** {c2 = []}) ;
-    mkV2 : V -> V2 = \s -> lin V2 (s ** {c2 = []}) ;
-    mkV2 : V -> Prep -> V2  = \s,p -> lin V2 (s ** {c2 = p.s}) ;
+    mkV2 : Str -> V2 = \s -> lin V2 (v2vv (regVerb s) ** {c2 = <[],False>}) ;
+    mkV2 : V -> V2 = \s -> lin V2 (s ** {c2 = <[],False>}) ;
+    mkV2 : V -> Prep -> V2  = \s,p -> lin V2 (s ** {c2 = <p.s,True>}) ;
     } ;
 
 
@@ -307,7 +310,7 @@ oper
     mkV3 : V -> Prep -> V3 = \v,p -> mkmaxV3 v (mkPrep []) p ; 
     mkV3 : V -> V3 = \v -> mkmaxV3 v (mkPrep []) (mkPrep []) ; 
     } ;
-  mkmaxV3 : V -> Prep -> Prep -> V3 = \v,c,d -> lin V3 (v ** {c2 = c.s ; c3 = d.s}) ;
+  mkmaxV3 : V -> Prep -> Prep -> V3 = \v,c,d -> lin V3 (v ** {c2 = <c.s,True> ; c3 = <d.s,True>}) ;
 
 
 
@@ -473,7 +476,7 @@ oper
 --  werden_V = MorphoDut.werden_V ** {lock_V = <>} ;
 --
   prepV2  : V -> Prep -> V2 ;
-  prepV2 v c = lin V2 (v ** {c2 = c.s}) ;
+  prepV2 v c = lin V2 (v ** {c2 = <c.s,True>}) ; --if it has prep, needed for word order (place of negation)
 --  dirV2 v = prepV2 v (mkPrep [] accusative) ;
 --  datV2 v = prepV2 v (mkPrep [] dative) ;
 --
