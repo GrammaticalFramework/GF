@@ -27,14 +27,14 @@ example_grammars =  -- :: [(pgf, subdir, src)]
 
   --phrasebookSrc = "Phrasebook???.gf" -- doesn't work on Win32
     phrasebookSrc = ["Phrasebook"++lang++".gf"|lang<-phrasebookLangs]
-    phrasebookLangs = words "Bul Cat Dan Dut Eng Lav Hin Nor Spa Swe Tha" -- only fastish languages
+    phrasebookLangs = words $ "Bul Cat Dan Dut Eng "{-Lav -}++"Hin Nor Spa Swe Tha" -- only fastish languages
 
   --letterSrc = "Letter???.gf"
     letterSrc = ["Letter"++lang++".gf"|lang<-letterLangs]
     letterLangs = words "Eng Fin Fre Heb Rus Swe"
 
 buildWeb gf args flags pkg lbi =
-    do putStrLn "buildWeb"
+    do --putStrLn "buildWeb"
        mapM_ build_pgf example_grammars
   where
     gfo_dir = buildDir lbi </> "examples"
