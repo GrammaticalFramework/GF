@@ -324,8 +324,8 @@ given in a file in the -probs flag.
 
 #TINY
 
-Generates all trees of a given category, with increasing depth.
-By default, the depth is 4, but this can be changed by a flag.
+Generates all trees of a given category. By default, 
+the depth is limited to 4, but this can be changed by a flag.
 If a Tree argument is given, the command completes the Tree with values
 to all metavariables in the tree.
 
@@ -488,6 +488,76 @@ sequences; see example.
  | ``l -lang=LangSwe,LangNor no_Utt`` | linearize tree to LangSwe and LangNor
  | ``gr -lang=LangHin -cat=Cl | l -table -to_devanagari`` | hindi table
  | ``l -unlexer="LangAra=to_arabic LangHin=to_devanagari"`` | different unlexers
+
+
+#NORMAL
+
+
+#VSPACE
+
+====lc = linearize_chunks====
+#NOINDENT
+``lc`` = ``linearize_chunks``: //linearize a tree that has metavariables in maximal chunks without them.//
+
+#TINY
+
+A hopefully temporary command, intended to work around the type checker that fails
+trees where a function node is a metavariable.
+
+
+- Options:
+
+ | ``-treebank`` | show the tree and tag linearizations with language names
+ | ``-bind`` | bind tokens separated by Prelude.BIND, i.e. &+
+ | ``-chars`` | lexer that makes every non-space character a token
+ | ``-from_amharic`` | from unicode to GF Amharic transliteration
+ | ``-from_ancientgreek`` | from unicode to GF ancient Greek transliteration
+ | ``-from_arabic`` | from unicode to GF Arabic transliteration
+ | ``-from_cp1251`` | decode from cp1251 (Cyrillic used in Bulgarian resource)
+ | ``-from_devanagari`` | from unicode to GF Devanagari transliteration
+ | ``-from_greek`` | from unicode to GF modern Greek transliteration
+ | ``-from_hebrew`` | from unicode to GF unvocalized Hebrew transliteration
+ | ``-from_nepali`` | from unicode to GF Nepali transliteration
+ | ``-from_persian`` | from unicode to GF Persian/Farsi transliteration
+ | ``-from_sanskrit`` | from unicode to GF Sanskrit transliteration
+ | ``-from_sindhi`` | from unicode to GF Sindhi transliteration
+ | ``-from_telugu`` | from unicode to GF Telugu transliteration
+ | ``-from_thai`` | from unicode to GF Thai transliteration
+ | ``-from_urdu`` | from unicode to GF Urdu transliteration
+ | ``-from_utf8`` | decode from utf8 (default)
+ | ``-lexcode`` | code-like lexer
+ | ``-lexmixed`` | mixture of text and code (code between $...$)
+ | ``-lextext`` | text-like lexer
+ | ``-to_amharic`` | from GF Amharic transliteration to unicode
+ | ``-to_ancientgreek`` | from GF ancient Greek transliteration to unicode
+ | ``-to_arabic`` | from GF Arabic transliteration to unicode
+ | ``-to_cp1251`` | encode to cp1251 (Cyrillic used in Bulgarian resource)
+ | ``-to_devanagari`` | from GF Devanagari transliteration to unicode
+ | ``-to_greek`` | from GF modern Greek transliteration to unicode
+ | ``-to_hebrew`` | from GF unvocalized Hebrew transliteration to unicode
+ | ``-to_html`` | wrap in a html file with linebreaks
+ | ``-to_nepali`` | from GF Nepali transliteration to unicode
+ | ``-to_persian`` | from GF Persian/Farsi transliteration to unicode
+ | ``-to_sanskrit`` | from GF Sanskrit transliteration to unicode
+ | ``-to_sindhi`` | from GF Sindhi transliteration to unicode
+ | ``-to_telugu`` | from GF Telugu transliteration to unicode
+ | ``-to_thai`` | from GF Thai transliteration to unicode
+ | ``-to_urdu`` | from GF Urdu transliteration to unicode
+ | ``-to_utf8`` | encode to utf8 (default)
+ | ``-unchars`` | unlexer that puts no spaces between tokens
+ | ``-unlexcode`` | code-like unlexer
+ | ``-unlexmixed`` | mixture of text and code (code between $...$)
+ | ``-unlextext`` | text-like unlexer
+ | ``-unwords`` | unlexer that puts a single space between tokens (default)
+ | ``-words`` | lexer that assumes tokens separated by spaces (default)
+
+- Flags:
+
+ | ``-lang`` | the languages of linearization (comma-separated, no spaces)
+
+- Examples:
+
+ | ``l -lang=LangSwe,LangNor -chunks ? a b (? c d)`` | 
 
 
 #NORMAL
@@ -753,7 +823,7 @@ tree processing functions in the order given in the command line
 option list. Thus 'pt -f -g s' returns g (f s). Typical tree processors
 are type checking and semantic computation.
 
-- Syntax: ``ps OPT? TREE``
+- Syntax: ``pt OPT? TREE``
 - Options:
 
  | ``-compute`` | compute by using semantic definitions (def)
@@ -1028,6 +1098,19 @@ This command must be a line of its own, and thus cannot be a part of a pipe.
  | ``tq -from=Eng -to=Swe`` | any trees in startcat
  | ``tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))`` | only trees of this form
 
+
+#NORMAL
+
+
+#VSPACE
+
+====tt = to_trie====
+#NOINDENT
+``tt`` = ``to_trie``: //combine a list of trees into a trie.//
+
+#TINY
+
+- Syntax: ``to_trie``
 
 #NORMAL
 
