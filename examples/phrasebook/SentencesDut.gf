@@ -2,7 +2,9 @@ concrete SentencesDut of Sentences = NumeralDut ** SentencesI -
   [SHaveNo,SHaveNoMass,
    Proposition,Action, Is, IsMass, SProp, SPropNot, QProp,
    AHaveCurr, ACitizen, ABePlace, AKnowSentence, AKnowPerson, AKnowQuestion,
-   QDoHave, QWhereDoVerbPhrase, QModVerbPhrase, QWhereModVerbPhrase, SHave, SHaveNo,
+----   QDoHave, QWhereDoVerbPhrase, QWhereModVerbPhrase, SHave, 
+   SHaveNo,
+   QModVerbPhrase, 
    ADoVerbPhrase, AModVerbPhrase, ADoVerbPhrasePlace, AModVerbPhrasePlace]
   with 
   (Syntax = SyntaxDut),
@@ -43,9 +45,9 @@ concrete SentencesDut of Sentences = NumeralDut ** SentencesI -
     AModVerbPhrasePlace m p vp x = prop (mkCl p.name (mkVP m (mkVP vp x.at))) ;
 
 -- the old things
---  lin 
---    SHaveNo p k = mkS (mkCl p.name have_V2 (mkNP no_Quant plNum k)) ;
---    SHaveNoMass p k = mkS (mkCl p.name have_V2 (mkNP no_Quant k)) ;
+  lin 
+    SHaveNo p k = mkS (mkCl p.name have_V2 (mkNP no_Quant plNum k)) ;
+    SHaveNoMass p k = mkS (mkCl p.name have_V2 (mkNP no_Quant k)) ;
 
 }
 
