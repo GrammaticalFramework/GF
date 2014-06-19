@@ -17,7 +17,7 @@ concrete SentencesPol of Sentences =
 
   lincat
     Day = { name,hab,adv:Str } ;
-    Language = A ;
+    LAnguage = A ;
     Citizenship = { prop:A; citizenMSg:Str; citizenMPl:Str; citizenF:Str} ;
     Nationality = { lang: A; prop: A; country: NP; citizenMSg:Str; citizenMPl:Str; citizenF:Str } ;
     Transport = { cn:CN; verb:Str} ;
