@@ -6,10 +6,7 @@ var gftranslate = {}
 gftranslate.jsonurl="/robust/Translate11.pgf"
 gftranslate.grammar="Translate" // the name of the grammar
 
-gftranslate.call=function(querystring,cont) {
-    function errcont(text,code) {
-	cont([{translations:[{error:code+" "+text}]}])
-    }
+gftranslate.call=function(querystring,cont,errcont) {
     http_get_json(gftranslate.jsonurl+querystring,cont,errcont)
 }
 
@@ -25,11 +22,12 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     var lexer="&lexer=text"
     if(from=="Chi") lexer="",source=source.split("").join(" ")
     var encsrc=encodeURIComponent(source)
+    function errcont(text,code) { cont([{error:code+" "+text}]) }
     function extract(result) { cont(result[0].translations) }
     if(encsrc.length<500)
 	gftranslate.call("?command=c-translate&input="+encsrc
 		      +lexer+"&unlexer=text&from="+g+from+"&to="+enc_langs(g,to)
-		      +"&start="+start+"&limit="+limit,extract)
+		      +"&start="+start+"&limit="+limit,extract,errcont)
     else cont([{error:"sentence too long"}])
 }
 
@@ -39,17 +37,19 @@ gftranslate.wordforword=function(source,from,to,cont) {
     var lexer="&lexer=text"
     if(from=="Chi") lexer="",source=source.split("").join(" ")
     var encsrc=encodeURIComponent(source)
+    function errcont(text,code) { cont([{error:code+" "+text}]) }
     function extract(result) { cont(result[0].translations) }
     var enc_to = enc_langs(g,to)
     if(encsrc.length<500)
 	gftranslate.call("?command=c-wordforword&input="+encsrc
 			 +lexer+"&unlexer=text&from="+g+from+"&to="+enc_to
-			 ,extract)
+			 ,extract,errcont)
     else cont([{error:"sentence too long"}])
 }
 
 // Get list of supported languages
-gftranslate.get_languages=function(cont) {
+gftranslate.waiting=[]
+gftranslate.get_languages=function(cont,errcont) {
     function init2(grammar_info) {
 	var ls=grammar_info.languages
 	gftranslate.grammar=grammar_info.name
@@ -57,21 +57,35 @@ gftranslate.get_languages=function(cont) {
 	for(var i=0;i<ls.length;i++)
 	    if(ls[i].name.substr(0,n)==pre) langs.push(ls[i].name.substr(n))
 	gftranslate.targetlist=langs
-	cont(langs)
+	var w=gftranslate.waiting
+	for (var i=0;i<w.length;i++) w[i].cont(langs)
+	gftranslate.waiting=[]
+    }
+    function init2error(text,status,ct) {
+	var w=gftranslate.waiting
+	for (var i=0;i<w.length;i++) {
+	    var e=w[i].errcont
+	    if(e) e(text,status,ct)
+	}
+	gftranslate.waiting=[]
     }
     if(gftranslate.targetlist) cont(gftranslate.targetlist)
-    else gftranslate.call("?command=c-grammar",init2)
+    else {
+	gftranslate.waiting.push({cont:cont,errcont:errcont})
+	if(gftranslate.waiting.length<2) 
+	    gftranslate.call("?command=c-grammar",init2,init2error)
+    }
 }
 
 // Get functions to test which source and target langauges are supported
-gftranslate.get_support=function(cont) {
+gftranslate.get_support=function(cont,errcont) {
     function support(code) { return gftranslate.targets[code] }
     function init2(langs) {
 	gftranslate.targets=toSet(langs)
 	cont(support,support)
     }
     if(gftranslate.targets) cont(support,support)
-    else gftranslate.get_languages(init2)
+    else gftranslate.get_languages(init2,errcont)
 }
 
 // trans_text_quality : String -> {quality:String, text:String}

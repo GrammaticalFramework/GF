@@ -274,7 +274,10 @@ Translator.prototype.update_translation=function(i) {
 		    upd3s("["+msg+"]")
 		}
 	    }
-	    gftranslate.get_support(check_support)
+	    function no_support(text,status,ct) {
+		upd3s("[GF Robust translation service error: "+status+"]")
+	    }
+	    gftranslate.get_support(check_support,no_support)
 	}
     }
 

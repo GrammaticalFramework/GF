@@ -3,10 +3,12 @@ wc.cnl="Phrasebook" // try this controlled natural language first
 wc.f=document.forms[0]
 wc.o=element("output")
 wc.e=element("extra")
+wc.i=element("grammarinfo")
 wc.p=element("pick")
 wc.os=[] // output segment list
 wc.cache={} // output segment cache, indexed by source text
 wc.local=appLocalStorage("gf.wc.")
+wc.translating=""
 
 wc.delayed_translate=function() {
     function restart(){ if(wc.f.input.value!=wc.translating) wc.translate() }
@@ -298,6 +300,7 @@ wc.try_google=function() {
 // Update language selection menus with the languages supported by the grammar
 function init_languages() {
     function init2(langs) {
+	replaceInnerHTML(wc.i,"Enter text to translate above")
 	wc.languages=langs
 	var langset=toSet(langs)
 	function update_menu(m) {
@@ -310,7 +313,13 @@ function init_languages() {
 	update_menu(wc.f.from)
 	update_menu(wc.f.to)
     }
-    gftranslate.get_languages(init2)
+    function initerror(errortext,status,ct) {
+	var msg = status==404 ? "The wide cover translation grammar was not found on the server" : "Server problem "+status
+	replaceChildren(wc.i,text(msg))
+	if(wc.i) wc.i.className="error"
+    }
+    replaceInnerHTML(wc.i,"Loading the wide coverage translation grammar, please wait...")
+    gftranslate.get_languages(init2,initerror)
 }
 
 function init_speech() {
