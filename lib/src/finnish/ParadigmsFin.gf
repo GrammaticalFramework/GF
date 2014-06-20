@@ -183,7 +183,7 @@ oper
 
   mkA2 = overload {
     mkA2 : Str -> A2  -- e.g. "vihainen" (jollekin)
-    = \s -> mkA s ** {c2 = mkPrep "allative" ; lock_A2 = <>} ;
+    = \s -> mkA s ** {c2 = mkPrep allative ; lock_A2 = <>} ;
     mkA2 : Str -> Prep -> A2  -- e.g. "jaollinen" (mkPrep adessive)
     = \a,p -> mkA a ** {c2 = p ; lock_A2 = <>} ;
     mkA2 : A -> Prep -> A2  -- e.g. "jaollinen" (mkPrep adessive)

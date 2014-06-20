@@ -10072,7 +10072,7 @@ lin chastise_V2 = mkV2 (mkV (mkV "skäller") "ut") | mkV2 (mkV "tuktar"); -- sta
 lin chastisement_N = variants {} ; -- status=guess
 lin chastity_N = mkN "kyskhet" "kyskheter" ; -- comment=3
 lin chasuble_N = mkN "mässhake" ; -- status=guess
-lin chat_N = mkN "prata" ; -- comment=8
+lin chat_N = mkN "prat" "prat" | mkN "snack" "snacket" ;
 lin chat_V = mkV "pratar" ; -- comment=4
 lin chat_up_V2 = variants {} ; -- status=guess
 lin chateau_N = variants {} ; -- status=guess
@@ -53747,7 +53747,7 @@ lin spawner_N = variants {} ; -- status=guess
 lin spay_V2 = mkV2 (mkV "kastrerar"); -- status=guess, src=wikt
 lin spaying_N = variants {} ; -- status=guess
 lin speak_V = mkV "tala" ;
-lin speak_V2 = L.speak_V2 ;
+lin speak_V2 = mkV2 "tala" | mkV2 "prata" ;
 lin speak_out_V = mkV "uttrycker" ; -- comment=3
 lin speak_up_V = mkV "uttrycker" ; -- comment=3
 lin speakable_A = variants {} ; -- status=guess

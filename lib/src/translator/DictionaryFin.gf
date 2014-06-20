@@ -11,6 +11,7 @@ flags coding=utf8 ;
 oper tehda_V = mkV (lin VK {s = c71 "tehdä"}) ; 
 oper nahda_V = mkV (lin VK {s = c71 "nähdä"}) ; 
 oper optProDrop : Pron -> Pron = \p -> p | E.ProDrop p ;
+oper luokse_Prep : Prep = mkPrep "luokse" ; -- to enable (luo|luokse)-luokseni
 
   mika_NForms : R.NForm => Str = 
     let {
@@ -20008,7 +20009,7 @@ lin fortunetelling_N = mkWN "ennustaminen" ; --UNCHK
 lin forty_A = mkWA "xl-" ; --UNCHK
 lin forum_N = mkWN (k39 "kokous") ; --UNCHK
 lin forward_A = mkWA (compoundA "suu" (k1 "nnattu")) "eteenpäin" ; --UNCHK
-lin forward_Adv = mkAdv "edelleen" ;
+lin forward_Adv = mkAdv "eteenpäin" | mkAdv "edelleen" ;
 lin forward_N = mkN "termiini" ; ---ARB --mkWN (k10 "hyökkääjä") ;
 lin forward_V2 = mkWV2 (k53A "lähettää") "eteenpäin" ; --UNCHK
 lin forwarding_N = mkWN "eteenpäin" "lähettäminen" ; --UNCHK
@@ -25838,7 +25839,7 @@ lin inshore_Adv = mkWAdv "rantaan" ; --UNCHK
 lin inside_A = mkWA "sisä-" ; --UNCHK
 lin inside_Adv = mkWAdv (k99 "sisimmältään") ;
 lin inside_N = mkWN (k13 "sisusta") ; --UNCHK
-lin inside_Prep = mkPrep "sisällä" ;
+lin inside_Prep = mkPrep "sisällä" | mkPrep "sisälle" ; ---- split
 lin insider_N = mkWN (k32 "jäsen") "sisäpiirin" ;
 lin insidious_A = mkWA (k38 "haitallinen") ; --UNCHK
 lin insidiousness_N = mkWN (compoundN "sala" (k40 "kavaluus")) ; --UNCHK
@@ -26218,7 +26219,7 @@ lin intimate_V2 = mkWV2 (k67 "vihjailla") ; --UNCHK
 lin intimation_N = mkWN (k39 "pilkahdus") ; --UNCHK
 lin intimidate_V2 = mkV2 (mkV "pelotella") partitive ;
 lin intimidation_N = mkWN (k2 "uhkailu") ;
-lin into_Prep = casePrep illative ;
+lin into_Prep = casePrep illative | mkPrep "sisään" | mkPrep "sisälle" ;
 lin intolerable_A = mkWA (k34A "kestämätön") ;
 lin intolerance_N = mkWN (compoundN "yli" (k40 "herkkyys")) ; --UNCHK
 lin intolerant_A = mkWA (k34A "suvaitsematon") ; --UNCHK
@@ -34347,8 +34348,8 @@ lin omniscient_A = mkWA (compoundA "kaikki" (k10 "tietävä")) ; --UNCHK
 lin omnivore_N = mkWN (k33 "eläin") "kaikkiruokainen" ; --UNCHK
 lin omnivorous_A = mkWA (compoundA "kaikkiru" (k38 "okainen")) ; --UNCHK
 lin omophagia_N = mkWN "omofagia" ; --UNCHK
-lin on_Adv = mkAdv "päällä" ; -- mkAdv "eteenpäin" ;
-lin on_Prep = S.on_Prep ;
+lin on_Adv = mkAdv "päällä" ;
+lin on_Prep = mkPrep adessive | mkPrep "päällä" | mkPrep "päälle" ;
 lin on_behalf_of_Prep = mkPrep "puolesta" ;
 lin on_top_of_Prep = mkPrep "päälle" ;
 lin once_AdV = lin AdV (ss "kerran") ;
@@ -51570,7 +51571,7 @@ lin tiyin_N = mkWN "tenge" ; --UNCHK
 lin tizzy_N = mkWN (k39 "kiihtymys") ; --UNCHK
 lin tnt_N = mkWN (k6 "trotyyli") ; --UNCHK
 lin to_Adv = mkAdv "luo" ; ---- what is this?
-lin to_Prep = S.to_Prep | mkPrep "luo" | mkPrep "luokse" | mkPrep "tykö" ; ---- split
+lin to_Prep = mkPrep illative | mkPrep allative | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; 
 lin toad_N = mkWN (k10 "konna") ; --UNCHK
 lin toadfish_N = mkWN (k18 "tau") "Opsanus" ; --UNCHK
 lin toadflax_N = mkWN (compoundN "kannus" (k1 "ruoho")) ; --UNCHK
