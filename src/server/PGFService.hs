@@ -37,6 +37,7 @@ import System.Random
 import System.Process
 import System.Exit
 import System.IO
+import System.IO.Error(isDoesNotExistError)
 import System.Directory(removeFile)
 import System.Mem(performGC)
 import Fold(fold) -- transfer function for OpenMath LaTeX
@@ -82,14 +83,21 @@ cgiMain' cache path =
     do command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString))
                         (getInput "command")
        case command of
-         "download" -> outputBinary    =<< liftIO (BS.readFile path)
+         "download" -> outputBinary    =<< getFile BS.readFile path
          'c':'-':_  ->
 #ifdef C_RUNTIME
-                   cpgfMain command =<< liftIO (readCache' (snd cache) path)
+                   cpgfMain command =<< getFile (readCache' (snd cache)) path
 #else
                    serverError "Server configured without C run-time support" ""
 #endif
-         _          -> pgfMain command =<< liftIO (readCache' (fst cache) path)
+         _          -> pgfMain command =<< getFile (readCache' (fst cache)) path
+
+getFile get path =
+   either failed return =<< liftIO (E.try (get path))
+  where
+    failed e = if isDoesNotExistError e
+               then notFound path
+               else liftIO $ ioError e
 
 --------------------------------------------------------------------------------
 -- * C run-time functionality
@@ -435,6 +443,7 @@ toBool s = s `elem` ["","yes","true","True"]
 missing = badRequest "Missing parameter"
 errorMissingId = badRequest "Missing identifier" ""
 
+notFound = throw 404 "Not found"
 badRequest = throw 400
 serverError = throw 500
 
