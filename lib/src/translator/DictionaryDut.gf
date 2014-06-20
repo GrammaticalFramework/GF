@@ -1,6 +1,6 @@
 ---- checked by EdG till spread_V in the BNC order
 concrete DictionaryDut of Dictionary = CatDut
-** open ParadigmsDut, (L = LexiconDut), (S = SyntaxDut), IrregDut, (I = IrregDut), (R = ResDut) in {
+** open ParadigmsDut, (L = LexiconDut), (S = SyntaxDut), IrregDut, (I = IrregDut), (R = ResDut), Prelude in {
 
 ---- these should be somewhere else, in a library module
 oper mkInterj : Str -> Interj = \s -> lin Interj {s = s} ;
@@ -10974,6 +10974,7 @@ lin neutral_A = mkA "neutraal" ; -- status=guess
 lin neutrality_N = mkN "neutraliteit" ; -- status=guess
 lin neutrino_N = mkN "neutrino" masculine ; -- status=guess
 lin neutron_N = mkN "neutron" neuter ; -- status=guess
+lin never_AdV = lin AdV (ss "nooit") ;
 lin never_Adv = mkAdv "nooit" ;
 lin nevertheless_Adv = mkAdv "desondanks" | mkAdv "desalniettemin" | mkAdv "niettemin" | mkAdv "niettegenstaande" | mkAdv "toch" ;
 lin new_A = L.new_A ;
@@ -19027,7 +19028,7 @@ lin chesterfield_PN = mkPN "Chesterfield" ; -- src=geonames status=guess
 lin chicago_PN = mkPN "Chicago" ; -- src=geonames status=guess
 lin chichester_PN = mkPN "Chichester" ; -- src=geonames status=guess
 lin chile_PN = mkPN "Chili" ; -- src=geonames status=guess
-lin china_PN = mkPN "Volksrepubliek China" ; -- src=geonames status=guess
+lin china_PN = mkPN "China" ; -- src=geonames status=guess
 lin chinchow_PN = mkPN "Chinchow" ; -- src=eng status=guess
 lin chippenham_PN = mkPN "Chippenham" ; -- src=geonames status=guess
 lin chloe_PN = mkPN "Chloe" ; -- src=eng status=guess
@@ -19718,7 +19719,7 @@ lin inverness_PN = mkPN "Inverness" ; -- src=geonames status=guess
 lin inverurie_PN = mkPN "Inverurie" ; -- src=geonames status=guess
 lin iowa_PN = mkPN "Iowa" ; -- src=geonames status=guess
 lin ipswich_PN = mkPN "Ipswich" ; -- src=geonames status=guess
-lin iran_PN = mkPN "Iran (Islamitische Republiek)" ; -- src=geonames status=guess
+lin iran_PN = mkPN "Iran" ; -- src=geonames status=guess
 lin iraq_PN = mkPN "Irak" ; -- src=geonames status=guess
 lin ireland_PN = mkPN "Ierland" ; -- src=geonames status=guess
 lin irene_PN = mkPN "Irene" ; -- src=eng status=guess
@@ -19973,7 +19974,7 @@ lin leyland_PN = mkPN "Leyland" ; -- src=geonames status=guess
 lin lib_PN = mkPN "Lib" ; -- src=geonames status=guess
 lin liberia_PN = mkPN "Liberia" ; -- src=geonames status=guess
 lin libra_PN = mkPN "Libra" ; -- src=eng status=guess
-lin libya_PN = mkPN "Libische Arabische Republiek" ; -- src=geonames status=guess
+lin libya_PN = mkPN "Libia" ; -- src=geonames status=guess
 lin lichfield_PN = mkPN "Lichfield" ; -- src=geonames status=guess
 lin liechtenstein_PN = mkPN "Liechtenstein" ; -- src=geonames status=guess
 lin liege_PN = mkPN "Liege" ; -- src=eng status=guess
@@ -20936,7 +20937,7 @@ lin tadley_PN = mkPN "Tadley" ; -- src=geonames status=guess
 lin taegu_PN = mkPN "Taegu" ; -- src=eng status=guess
 lin tahiti_PN = mkPN "Tahiti" ; -- src=eng status=guess
 lin taipei_PN = mkPN "Taipei" ; -- src=geonames status=guess
-lin taiwan_PN = mkPN "Republiek China" ; -- src=geonames status=guess
+lin taiwan_PN = mkPN "China" ; -- src=geonames status=guess
 lin taiyuan_PN = mkPN "Taiyuan" ; -- src=geonames status=guess
 lin tampere_PN = mkPN "Tampere" ; -- src=geonames status=guess
 lin tamworth_PN = mkPN "Tamworth" ; -- src=geonames status=guess

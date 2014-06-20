@@ -30119,7 +30119,7 @@ lin ipso_facto_Adv = variants {};
 lin ipswich_PN = mkPN "Ipswich"; -- src=geonames status=guess
 lin iq_N = variants {};
 lin ira_N = variants {};
-lin iran_PN = mkPN "Iran (Islamische Republik)"; -- src=geonames status=guess
+lin iran_PN = mkPN "Iran"; -- src=geonames status=guess
 lin iranianFem_N = variants {};
 lin iranianMasc_N = variants {};
 lin iranian_A = variants {};
@@ -38025,7 +38025,7 @@ lin neutropenia_N = variants {};
 lin neutrophil_N = variants {};
 lin nevada_PN = mkPN "Nevada"; -- src=geonames status=guess
 lin neve_N = variants {};
-lin never_AdV = variants {};
+lin never_AdV = lin AdV (ss "nie") ;
 lin never_Adv = mkAdv "nie" ;
 lin nevermore_Adv = variants {};
 lin nevertheless_Adv = mkAdv "nichtsdestoweniger" | mkAdv "trotzdem" ; -- status=guess status=guess
@@ -57324,7 +57324,7 @@ lin taint_V2 = mkV2 (irregV "verderben" "verderbt" "verdarb" "verdürbe" "verdor
 lin taintless_A = variants {};
 lin taipan_N = mkN "Taipane" ; -- status=guess
 lin taipei_PN = mkPN "Taipeh"; -- src=geonames status=guess
-lin taiwan_PN = mkPN "Republik China"; -- src=geonames status=guess
+lin taiwan_PN = mkPN "China"; -- src=geonames status=guess
 lin taiwaneseFem_N = variants {};
 lin taiwaneseMasc_N = variants {};
 lin taiwanese_A = variants {};
