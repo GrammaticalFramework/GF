@@ -1,6 +1,6 @@
 ---- checked by EdG till spread_V in the BNC order
 concrete TopDictionaryDut of TopDictionary = CatDut
-** open ParadigmsDut, (L = LexiconDut), (S = SyntaxDut), IrregDut, (I = IrregDut), (R = ResDut) in {
+** open ParadigmsDut, (L = LexiconDut), (S = SyntaxDut), IrregDut, (I = IrregDut), (R = ResDut), Prelude in {
 
 ---- these should be somewhere else, in a library module
 oper mkInterj : Str -> Interj = \s -> lin Interj {s = s} ;
@@ -3631,7 +3631,7 @@ lin mystery_N = mkN "mysterie" neuter ; -- status=guess
 lin pose_V2 = mkV2 (mkV "poseren") ; -- status=guess, src=wikt
 lin pose_V = mkV "poseren" ; -- status=guess, src=wikt
 lin violent_A = mkA "gewelddadig" ; -- status=guess
-lin march_N = mkN "mars" ; -- status=guess
+lin march_N = variants{} ; -- 
 lin found_V2 = mkV2 (mkV "stichten") ; -- status=guess, src=wikt
 lin dig_V2 = mkV2 (graven_V) | mkV2 (mkV "delven") ; -- status=guess, src=wikt status=guess, src=wikt
 lin dig_V = L.dig_V ;
