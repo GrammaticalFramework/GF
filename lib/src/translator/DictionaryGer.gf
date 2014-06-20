@@ -10418,8 +10418,8 @@ lin chimpanzee_N = mkN "Schimpanse" "Schimpansen" masculine ; -- status=guess
 lin chin_N = mkN "Kinn" "Kinne" neuter ; -- status=guess
 lin chin_strap_N = variants {};
 lin chin_wagging_N = variants {};
-lin china_N = mkN "chinesisches Porzellan" neuter ; -- status=guess
-lin china_PN = mkPN "Volksrepublik China"; -- src=geonames status=guess
+lin china_N = mkN "Porzellan" neuter ; -- status=guess
+lin china_PN = mkPN "China"; -- src=geonames status=guess
 lin china_closet_N = variants {};
 lin chinaberry_N = variants {};
 lin chinaware_N = variants {};
