@@ -29,6 +29,12 @@ Powered by multilingual grammars
                  Builds the translation word by word and returns unknown words verbatim.
 
 
+The green translations currently come from a tourist phrasebook, which allows
+you to translate things like "hello" and "how far is the airport from
+the hotel". But this part can be easily adapted to other uses, such as
+technical language.
+
+
 ==What you can expect==
 
 The program is designed to translate anything, just like Google translate and Bing. It has some advantages over them:
