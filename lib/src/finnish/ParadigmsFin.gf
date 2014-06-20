@@ -383,7 +383,7 @@ mkVS = overload {
        let 
          h = guessHarmony p ;
          a2p : Agr => Str = case c of {
-           Gen => \\a => p ++ Predef.BIND ++ possSuffixGen h a ;
+           Gen => \\a => p ++ possSuffixGen h a ;
            _ => \\a => p 
            } ;
        in case p of {
