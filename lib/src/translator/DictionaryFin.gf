@@ -3584,7 +3584,7 @@ lin asynergic_A = mkWA "asynerginen" ; --UNCHK
 lin asynergy_N = mkWN "asynergia" ; --UNCHK
 lin asystole_N = mkWN (compoundN "sydän" (k39 "pysähdys")) ; --UNCHK
 lin at_N = mkWN "kip" ; --UNCHK
-lin at_Prep = casePrep adessive | casePrep inessive | mkPrep "luona" | mkPrep "tykönä" ; ---- split
+lin at_Prep = casePrep adessive | casePrep inessive ; ---- | mkPrep "luona" | mkPrep "tykönä" ; ---- split
 lin at_home_Adv = mkAdv "kotona" ;
 lin at_home_N = mkWN (compoundN "vastaan" (k1A "otto")) ; --UNCHK
 lin at_least_AdN = S.at_least_AdN ;
@@ -51571,7 +51571,7 @@ lin tiyin_N = mkWN "tenge" ; --UNCHK
 lin tizzy_N = mkWN (k39 "kiihtymys") ; --UNCHK
 lin tnt_N = mkWN (k6 "trotyyli") ; --UNCHK
 lin to_Adv = mkAdv "luo" ; ---- what is this?
-lin to_Prep = mkPrep illative | mkPrep allative | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; 
+lin to_Prep = mkPrep illative | mkPrep allative ; ---- | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; 
 lin toad_N = mkWN (k10 "konna") ; --UNCHK
 lin toadfish_N = mkWN (k18 "tau") "Opsanus" ; --UNCHK
 lin toadflax_N = mkWN (compoundN "kannus" (k1 "ruoho")) ; --UNCHK
@@ -54528,7 +54528,7 @@ lin untipped_A = mkWA "filtteritön" ; --UNCHK
 lin untired_A = mkWA (k34A "väsymätön") ; --UNCHK
 lin untiring_A = mkWA (k34A "uupumaton") ; --UNCHK
 lin untitled_A = mkWA (k38 "alhainen") ; --UNCHK
-lin unto_Prep = mkPrep allative ;
+lin unto_Prep = mkPrep allative | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; 
 lin untoasted_A = mkWA "paahtamaton" ; --UNCHK
 lin untold_A = mkWA (compoundA "sanoin" (k34A "kuvaamaton")) ; --UNCHK
 lin untouchable_A = mkWA (k99 "saatavilla") "ei" ; --UNCHK
@@ -56726,7 +56726,7 @@ lin witchgrass_N = mkWN (compoundN "juola" (k10 "vehnä")) ; --UNCHK
 lin witching_A = mkWA (k10 "lumoava") ; --UNCHK
 lin witching_N = mkWN "noituminen" ; --UNCHK
 lin witchlike_A = mkWA (compoundA "noita" (k38 "mainen")) ; --UNCHK
-lin with_Prep = S.with_Prep ;
+lin with_Prep = mkPrep "kanssa" | mkPrep "luona" | mkPrep "tykönä" ; ---- split
 lin with_regard_to_Prep = mkPrep "kohtaan" partitive ;
 lin with_respect_to_Prep = mkPrep "suhteessa" illative ;
 lin withdraw_V = mkV "luopua" ;
