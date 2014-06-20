@@ -13559,6 +13559,7 @@ lin neutrality_N = mkN "neutralidad" feminine ; -- status=guess
 lin neutralization_N = mkN "neutralización" feminine ; -- status=guess
 lin neutrino_N = mkN "neutrino" ; -- status=guess
 lin neutron_N = mkN "neutrón" ; -- status=guess
+lin never_AdV = lin AdV (ss "nunca") | lin AdV (ss "jamás") ;
 lin never_Adv = mkAdv "nunca" | mkAdv "jamás" ;
 lin nevertheless_Adv = mkAdv "no obstante" | mkAdv "sin embargo" ;
 lin new_A = L.new_A ;
@@ -22922,8 +22923,8 @@ lin chester_PN = mkPN "Chester" ; -- status=guess src=geonames
 lin chesterfield_PN = mkPN "Chesterfield" ; -- status=guess src=geonames
 lin chicago_PN = mkPN "Chicago" ; -- status=guess src=geonames
 lin chichester_PN = mkPN "Chichester" ; -- status=guess src=geonames
-lin chile_PN = mkPN "República de Chile" ; -- status=guess src=geonames
-lin china_PN = mkPN ("China" | "República Popular China") ; -- status=guess src=geonames
+lin chile_PN = mkPN "Chile" ; -- status=guess src=geonames
+lin china_PN = mkPN "China" ; -- status=guess src=geonames
 lin chippenham_PN = mkPN "Chippenham" ; -- status=guess src=geonames
 lin chorley_PN = mkPN "Chorley" ; -- status=guess src=geonames
 lin christchurch_PN = mkPN "Christchurch" ; -- status=guess src=geonames
@@ -22953,7 +22954,7 @@ lin coimbatore_PN = mkPN "Coimbatore" ; -- status=guess src=geonames
 lin colchester_PN = mkPN "Colchester" ; -- status=guess src=geonames
 lin colne_PN = mkPN "Colne" ; -- status=guess src=geonames
 lin cologne_PN = mkPN "Cologne" ; -- status=guess src=geonames
-lin colombia_PN = mkPN "República de Colombia" ; -- status=guess src=geonames
+lin colombia_PN = mkPN "Colombia" ; -- status=guess src=geonames
 lin colombo_PN = mkPN "Colombo" ; -- status=guess src=geonames
 lin colorado_PN = mkPN "Colorado" ; -- status=guess src=geonames
 lin columbia_PN = mkPN "Columbia" ; -- status=guess src=geonames
@@ -23315,15 +23316,15 @@ lin inverness_PN = mkPN "Inverness" ; -- status=guess src=geonames
 lin inverurie_PN = mkPN "Inverurie" ; -- status=guess src=geonames
 lin iowa_PN = mkPN "Iowa" ; -- status=guess src=geonames
 lin ipswich_PN = mkPN "Ipswich" ; -- status=guess src=geonames
-lin iran_PN = mkPN "Irán (República Islámica)" ; -- status=guess src=geonames
+lin iran_PN = mkPN "Irán" ; -- status=guess src=geonames
 lin iraq_PN = mkPN "Irak" ; -- status=guess src=geonames
-lin ireland_PN = mkPN "República de Irlanda" ; -- status=guess src=geonames
+lin ireland_PN = mkPN "Irlanda" ; -- status=guess src=geonames
 lin irthlingborough_PN = mkPN "Irthlingborough" ; -- status=guess src=geonames
 lin irvine_PN = mkPN "Irvine" ; -- status=guess src=geonames
 lin isabel_PN = mkPN "Isabel" ; -- status=guess src=geonames
 lin islington_PN = mkPN "Islington" ; -- status=guess src=geonames
 lin israel_PN = mkPN "Israel" ; -- status=guess src=geonames
-lin italy_PN = mkPN "República Italiana" ; -- status=guess src=geonames
+lin italy_PN = mkPN "Italia" ; -- status=guess src=geonames
 lin iver_PN = mkPN "Iver" ; -- status=guess src=geonames
 lin jabalpur_PN = mkPN "Jabalpur" ; -- status=guess src=geonames
 lin jacksonville_PN = mkPN "Jacksonville" ; -- status=guess src=geonames
@@ -23440,7 +23441,7 @@ lin lewes_PN = mkPN "Lewes" ; -- status=guess src=geonames
 lin leyland_PN = mkPN "Leyland" ; -- status=guess src=geonames
 lin lib_PN = mkPN "Lib" ; -- status=guess src=geonames
 lin liberia_PN = mkPN "Liberia" ; -- status=guess src=geonames
-lin libya_PN = mkPN "Libia, República Árabe" ; -- status=guess src=geonames
+lin libya_PN = mkPN "Libia" ; -- status=guess src=geonames
 lin lichfield_PN = mkPN "Lichfield" ; -- status=guess src=geonames
 lin liechtenstein_PN = mkPN "Liechtenstein" ; -- status=guess src=geonames
 lin lilian_PN = mkPN "Lilian" ; -- status=guess src=geonames
@@ -23484,7 +23485,7 @@ lin lubeck_PN = mkPN "Lubeck" ; -- status=guess src=geonames
 lin lucknow_PN = mkPN "Lucknow" ; -- status=guess src=geonames
 lin ludlow_PN = mkPN "Ludlow" ; -- status=guess src=geonames
 lin luton_PN = mkPN "Luton" ; -- status=guess src=geonames
-lin luxembourg_PN = mkPN ("Ciudad de Luxemburgo" | "Luxemburgo") ; -- status=guess src=geonames
+lin luxembourg_PN = mkPN "Luxemburgo" ; -- status=guess src=geonames
 lin lydney_PN = mkPN "Lydney" ; -- status=guess src=geonames
 lin lymington_PN = mkPN "Lymington" ; -- status=guess src=geonames
 lin lymm_PN = mkPN "Lymm" ; -- status=guess src=geonames
@@ -23495,7 +23496,7 @@ lin macclesfield_PN = mkPN "Macclesfield" ; -- status=guess src=geonames
 lin mach_PN = mkPN "Mach" ; -- status=guess src=geonames
 lin madagascar_PN = mkPN "Madagascar" ; -- status=guess src=geonames
 lin madras_PN = mkPN "Madras" ; -- status=guess src=geonames
-lin madrid_PN = mkPN "La Villa y Corte de Madrid" ; -- status=guess src=geonames
+lin madrid_PN = mkPN "Madrid" ; -- status=guess src=geonames
 lin madurai_PN = mkPN "Madurai" ; -- status=guess src=geonames
 lin maesteg_PN = mkPN "Maesteg" ; -- status=guess src=geonames
 lin magdeburg_PN = mkPN "Magdeburgo" ; -- status=guess src=geonames
@@ -23534,7 +23535,7 @@ lin maryport_PN = mkPN "Maryport" ; -- status=guess src=geonames
 lin matlock_PN = mkPN "Matlock" ; -- status=guess src=geonames
 lin maud_PN = mkPN "Maud" ; -- status=guess src=geonames
 lin mauritania_PN = mkPN "Mauritania" ; -- status=guess src=geonames
-lin mauritius_PN = mkPN "República de Mauricio" ; -- status=guess src=geonames
+lin mauritius_PN = mkPN "Mauricio" ; -- status=guess src=geonames
 lin mayfield_PN = mkPN "Mayfield" ; -- status=guess src=geonames
 lin mayo_PN = mkPN "Mayo" ; -- status=guess src=geonames
 lin mecca_PN = mkPN "La Meca" ; -- status=guess src=geonames
@@ -23717,7 +23718,7 @@ lin percy_PN = mkPN "Percy" ; -- status=guess src=geonames
 lin perm_PN = mkPN "Perm" ; -- status=guess src=geonames
 lin pershore_PN = mkPN "Pershore" ; -- status=guess src=geonames
 lin perth_PN = mkPN "Perth" ; -- status=guess src=geonames
-lin peru_PN = mkPN "República del Perú" ; -- status=guess src=geonames
+lin peru_PN = mkPN "Perú" ; -- status=guess src=geonames
 lin perugia_PN = mkPN "Perugia" ; -- status=guess src=geonames
 lin pescara_PN = mkPN "Pescara" ; -- status=guess src=geonames
 lin peterborough_PN = mkPN "Peterborough" ; -- status=guess src=geonames

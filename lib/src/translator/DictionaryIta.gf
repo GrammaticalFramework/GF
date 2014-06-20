@@ -11312,6 +11312,7 @@ lin neutralization_N = mkN "neutralizzazione" feminine ; -- status=guess
 lin neutrino_N = mkN "neutrino" ; -- status=guess
 lin neutron_N = mkN "neutrone" masculine ; -- status=guess
 lin never_Adv = mkAdv "mai" ;
+lin never_AdV = lin AdV (ss "mai") ;
 lin nevertheless_Adv = mkAdv "nondimeno" | mkAdv "tuttavia" | mkAdv "eppure" ; -- status=guess status=guess status=guess
 lin new_A = L.new_A ;
 lin newcomer_N = variants{} ; --
@@ -19300,7 +19301,7 @@ lin chesterfield_PN = mkPN "Chesterfield" ; -- status=guess src=geonames
 lin chicago_PN = mkPN "Chicago" ; -- status=guess src=geonames
 lin chichester_PN = mkPN "Chichester" ; -- status=guess src=geonames
 lin chile_PN = mkPN "Cile" ; -- status=guess src=geonames
-lin china_PN = mkPN "Repubblica Popolare Cinese" ; -- status=guess src=geonames
+lin china_PN = mkPN "Cina" ; -- status=guess src=geonames
 lin chippenham_PN = mkPN "Chippenham" ; -- status=guess src=geonames
 lin chorley_PN = mkPN "Chorley" ; -- status=guess src=geonames
 lin christchurch_PN = mkPN "Christchurch" ; -- status=guess src=geonames
@@ -19701,9 +19702,9 @@ lin inverness_PN = mkPN "Inverness" ; -- status=guess src=geonames
 lin inverurie_PN = mkPN "Inverurie" ; -- status=guess src=geonames
 lin iowa_PN = mkPN "Iowa" ; -- status=guess src=geonames
 lin ipswich_PN = mkPN "Ipswich" ; -- status=guess src=geonames
-lin iran_PN = mkPN "Iran (Repubblica Islamica)" ; -- status=guess src=geonames
+lin iran_PN = mkPN "Iran" ; -- status=guess src=geonames
 lin iraq_PN = mkPN "Iraq" ; -- status=guess src=geonames
-lin ireland_PN = mkPN "Repubblica d'Irlanda" ; -- status=guess src=geonames
+lin ireland_PN = mkPN "Irlanda" ; -- status=guess src=geonames
 lin irthlingborough_PN = mkPN "Irthlingborough" ; -- status=guess src=geonames
 lin irvine_PN = mkPN "Irvine" ; -- status=guess src=geonames
 lin isabel_PN = mkPN "Isabel" ; -- status=guess src=geonames
@@ -19829,7 +19830,7 @@ lin lewes_PN = mkPN "Lewes" ; -- status=guess src=geonames
 lin leyland_PN = mkPN "Leyland" ; -- status=guess src=geonames
 lin lib_PN = mkPN "Lib" ; -- status=guess src=geonames
 lin liberia_PN = mkPN "Liberia" ; -- status=guess src=geonames
-lin libya_PN = mkPN "Libia, Repubblica Araba" ; -- status=guess src=geonames
+lin libya_PN = mkPN "Libia" ; -- status=guess src=geonames
 lin lichfield_PN = mkPN "Lichfield" ; -- status=guess src=geonames
 lin liechtenstein_PN = mkPN "Principato del Liechtenstein" ; -- status=guess src=geonames
 lin lilian_PN = mkPN "Lilian" ; -- status=guess src=geonames

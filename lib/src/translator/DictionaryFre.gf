@@ -13164,6 +13164,7 @@ lin neutralization_N = mkN "neutralisation" feminine ; -- tocheck
 lin neutrino_N = mkN "neutrino" masculine ; -- tocheck
 lin neutron_N = mkN "neutron" masculine ; -- tocheck
 lin never_Adv = mkAdv "jamais" ;
+lin never_AdV = lin AdV (ss "jamais") ;
 lin nevertheless_Adv = mkAdv "néanmoins" ; -- tocheck
 lin new_A = L.new_A ;
 lin newborn_A = mkA "nouveau-né" ; -- tocheck
@@ -22869,7 +22870,7 @@ lin inverness_PN = mkPN "Inverness" ; -- status=guess src=geonames
 lin inverurie_PN = mkPN "Inverurie" ; -- status=guess src=geonames
 lin iowa_PN = mkPN "Iowa" ; -- status=guess src=geonames
 lin ipswich_PN = mkPN "Ipswich" ; -- status=guess src=geonames
-lin iran_PN = mkPN "Iran (République islamique de)" ; -- status=guess src=geonames
+lin iran_PN = mkPN "Iran" ; -- status=guess src=geonames
 lin iraq_PN = mkPN "Iraq" ; -- status=guess src=geonames
 lin ireland_PN = mkPN "Irlande" ; -- status=guess src=geonames
 lin irthlingborough_PN = mkPN "Irthlingborough" ; -- status=guess src=geonames
@@ -23543,7 +23544,7 @@ lin swinton_PN = mkPN "Swinton" ; -- status=guess src=geonames
 lin switzerland_PN = mkPN "Suisse" ; -- status=guess src=geonames
 lin sydney_PN = mkPN "Sydney" ; -- status=guess src=geonames
 lin syracuse_PN = mkPN "Syracuse" ; -- status=guess src=geonames
-lin syria_PN = mkPN "République arabe syrienne" ; -- status=guess src=geonames
+lin syria_PN = mkPN "Syrie" ; -- status=guess src=geonames
 lin syston_PN = mkPN "Syston" ; -- status=guess src=geonames
 lin tadley_PN = mkPN "Tadley" ; -- status=guess src=geonames
 lin taipei_PN = mkPN "Taipei" ; -- status=guess src=geonames
@@ -23583,7 +23584,7 @@ lin tim_PN = mkPN "Tim" ; -- status=guess src=geonames
 lin tipperary_PN = mkPN "Tipperary" ; -- status=guess src=geonames
 lin tiverton_PN = mkPN "Tiverton" ; -- status=guess src=geonames
 lin todmorden_PN = mkPN "Todmorden" ; -- status=guess src=geonames
-lin togo_PN = mkPN "République Togolaise" ; -- status=guess src=geonames
+lin togo_PN = mkPN "Togo" ; -- status=guess src=geonames
 lin tokyo_PN = mkPN "Tokyo" ; -- status=guess src=geonames
 lin tonbridge_PN = mkPN "Tonbridge" ; -- status=guess src=geonames
 lin tonga_PN = mkPN "Tonga" ; -- status=guess src=geonames
