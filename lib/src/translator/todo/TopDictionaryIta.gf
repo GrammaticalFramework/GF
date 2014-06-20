@@ -3638,7 +3638,7 @@ lin mystery_N = mkN "mistero" ; -- status=guess
 lin pose_V2 = mkV2 (porre_V) ; -- status=guess, src=wikt
 lin pose_V = porre_V ; -- status=guess, src=wikt
 lin violent_A = mkA "violento" ; -- status=guess
-lin march_N = mkN "marcia" ; -- status=guess
+lin march_N = variants{} ; -- 
 lin found_V2 = mkV2 (mkV "fondare") ; -- status=guess, src=wikt
 lin dig_V2 = mkV2 (mkV "scavare") ; -- status=guess, src=wikt
 lin dig_V = L.dig_V ;

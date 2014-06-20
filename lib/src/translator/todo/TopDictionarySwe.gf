@@ -553,7 +553,7 @@ lin research_N = mkN "forskning" ;
 lin actually_Adv = mkAdv "faktiskt" ;
 lin education_N = mkN "utbildning" | mkN "bildning" ;
 lin fall_V = mkV "falla" "föll" "fallit" ;
-lin speak_V2 = L.speak_V2 ;
+lin speak_V2 = mkV2 "tala" | mkV2 "prata" ;
 lin speak_V = mkV "tala" ;
 lin few_N = mkN "fåtal" neutrum ;
 lin today_Adv = L.today_Adv ;
@@ -3626,7 +3626,7 @@ lin mystery_N = mkN "mysterium" "mysteriet" "mysterier" "mysterierna" ; -- comme
 lin pose_V2 = mkV2 (mkV "poserar"); -- status=guess, src=wikt
 lin pose_V = mkV "ställer" ; -- comment=4
 lin violent_A = mkA "våldsam" "våldsamt" "våldsamma" "våldsamma" "våldsammare" "våldsammast" "våldsammaste" ; -- SaldoWN
-lin march_N = mkN "marsch" "marscher" | mkN "mars" ; -- SaldoWN
+lin march_N = variants{} ; -- 
 lin found_V2 = mkV2 "grunda" | mkV2 (mkV "grundlägga" "grundlade" "grundlagt") ; -- status=guess
 lin dig_V2 = mkV2 (mkV "diggar"); -- status=guess, src=wikt
 lin dig_V = L.dig_V;
@@ -4691,7 +4691,7 @@ lin lung_N = mkN "lunga" ; -- SaldoWN
 lin delegation_N = mkN "delegering" ; -- comment=7
 lin outside_N = mkN "utsida" | mkN "yttre" ; -- SaldoWN -- comment=4
 lin heating_N = mkN "upphettning" ; -- comment=5
-lin like_Subj = variants{} ; -- 
+lin like_Subj = M.mkSubj "såsom" ;
 lin instinct_N = mkN "instinkt" "instinkter" ; -- SaldoWN
 lin teenager_N = mkN "tonåring" ; -- SaldoWN
 lin lonely_A = mkA "ensam" "ensamt" "ensamma" "ensamma" "ensammare" "ensammast" "ensammaste" | mkA "övergiven" "övergivet" ; -- SaldoWN -- comment=6
@@ -6878,7 +6878,7 @@ lin program_V2V = mkV2V (mkV "programmerar") | mkV2V (mkV "mjukvaruutveckla") | 
 lin program_V2 = dirV2 (partV (mkV "programmerar")"in"); -- status=guess
 lin lunchtime_N = mkN "lunchtid" "lunchtider" ; -- status=guess
 lin cult_N = mkN "sekt" ; -- comment=4
-lin chat_N = mkN "prata" ; -- comment=8
+lin chat_N = mkN "prat" "prat" | mkN "snack" "snacket" ;
 lin accord_N = mkN "överensstämmelse" "överensstämmelser" ; -- comment=5
 lin supposedly_Adv = variants{} ; -- 
 lin offering_N = mkN "utbud" neutrum; -- comment=3
