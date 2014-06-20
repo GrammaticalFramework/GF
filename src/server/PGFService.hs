@@ -12,9 +12,10 @@ import URLEncoding
 
 #if C_RUNTIME
 import qualified PGF2 as C
---import Data.Time.Clock(UTCTime,getCurrentTime,diffUTCTime)
+--import Data.Time.Clock(getCurrentTime,diffUTCTime)
 #endif
 
+import Data.Time.Clock(UTCTime)
 import Data.Time.Format(formatTime)
 import System.Locale(defaultTimeLocale,rfc822DateFormat)
 import Network.CGI
@@ -115,6 +116,7 @@ cpgfMain command (t,(pgf,pc)) =
 
     grammar = showJSON $ makeObj
                  ["name".=C.abstractName pgf,
+                  "lastmodified".=show t,
                   "startcat".=C.startCat pgf,
                   "languages".=languages]
       where
@@ -311,7 +313,7 @@ pgfMain command (t,pgf) =
       "translate"      -> o =<< doTranslate pgf # input % cat % to % limit %trie
       "translategroup" -> o =<< doTranslateGroup pgf # input % cat % to % limit
       "lookupmorpho"   -> o =<< doLookupMorpho pgf # from1 % textInput
-      "grammar"        -> o =<< doGrammar pgf # requestAcceptLanguage
+      "grammar"        -> o =<< doGrammar t pgf # requestAcceptLanguage
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
       "parsetree"      -> outputGraphviz =<< parseTree pgf # from1 % graphvizOptions % tree
@@ -620,9 +622,10 @@ doGenerate pgf mcat mdepth mlimit (tos,unlex) =
     limit = take (fromMaybe 1 mlimit)
     depth = fromMaybe 4 mdepth
 
-doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
-doGrammar pgf macc = showJSON $ makeObj
+doGrammar :: UTCTime -> PGF -> Maybe (Accept Language) -> JSValue
+doGrammar t pgf macc = showJSON $ makeObj
              ["name".=PGF.abstractName pgf,
+              "lastmodified".=show t,
               "userLanguage".=selectLanguage pgf macc,
               "startcat".=PGF.showType [] (PGF.startCat pgf),
               "categories".=categories,
