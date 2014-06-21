@@ -43,7 +43,9 @@ popd
 cabal install --only-dependencies
 cabal configure --prefix=$prefix -fserver -fc-runtime $extra
 DYLD_LIBRARY_PATH="$extralib" LD_LIBRARY_PATH="$extralib" cabal build
-DYLD_LIBRARY_PATH="$extralib" LD_LIBRARY_PATH="$extralib" cabal copy --destdir=$destdir
+cabal copy --destdir=$destdir
+libdir=`echo $destdir/$prefix/lib/gf-*/*/`
+cabal register --gen-pkg-config=$libdir/gf-$ver.conf
 
 tar -C $destdir/$prefix -zcf $targz .
 echo "Created $targz, consider renaming it to something more user friendly"
