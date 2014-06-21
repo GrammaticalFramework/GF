@@ -11,7 +11,7 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
-Over 1200 changes have been pushed to the source repository since the release
+Over 1300 changes have been pushed to the source repository since the release
 of GF 3.5 in August 2013.
 
 Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
@@ -21,14 +21,11 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
 
 ====New features and notable changes====
 
-- Token gluing, BIND, SOFT_BIND [...]
-- ``nonExist`` now exists. [...]
 - The default character encoding in grammar files has been changed from
   Latin-1 to UTF-8. Also, alternate character encodings should now be specified
   as ``--# -coding=``//enc//, instead of ``flags coding=``//enc//.
   See the separate document
   [GF character encoding changes encoding-change.html] for more details.
-- Unicode characters in identifiers [...]
 - Record update: in record objects (but not types) of form ``r ** s``, the values assigned 
   in ``s`` now overwrite those in ``r``. In previous versions, record extensions with
   overlapping assignments in ``r`` and ``s`` were not supported, and their behaviour was
@@ -45,6 +42,11 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
   since the C run-time system still has to be compiled and installed
   separately before installing GF. The binary packages for GF 3.6 available
   from the download page will include C run-time support.
+- ``nonExist`` now exists. It can be used in concrete syntax to mark
+  non-existing morphological forms.
+- Token gluing: ``BIND`` and ``SOFT_BIND`` can be used in concrete syntax to
+  mark that the surrounding tokens should not be separated by space.
+% - Unicode characters in identifiers [...] (not documented, not tested)
 
 
 ====Bug fixes and minor changes====
@@ -56,8 +58,8 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
 - A pattern matching bug which prevented variables in patterns to be bound to
   table values has been fixed.
 - A bug with local variable name shadowing has been fixed.
-- Type checking fixes: record extension change, correction of
-  subtyping check for ``Ints n<=Ints m``, contravariance in table types [...]
+- Type checking fixes: correction of
+  subtyping check for ``Ints n<=Ints m`` and contravariance in table types.
 - The refresh pass
 % (and thus the command line option --dump-refresh)
   had become obsolete and has been removed.
@@ -68,7 +70,7 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
   can significantly reduce the compilation time for certain grammars.
 - Some additional datestamp checks have been added to ``gf -make`` to avoid
   recreating a PGF file when an uptodate PGF file already exists.
-
+- The ``--output-dir`` option now applies also to PGF files.
 
 ===Resource Grammar Library===
 
@@ -76,16 +78,17 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
   (see the [updated synopsis ../lib/doc/synopsis.html]).
 - Grammars and dictionaries for wide coverage translation [source ../lib/src/translate/]
 - bug fixes and some new inflection paradigms in many languages
-- [...]
+% - [...]
 
 
 ===GF Cloud services===
 
-- There is a preliminary new [Wide Coverage Translation Demo http://cloud.grammaticalframework.org/wc.html] web app. [...] The same wide coverage translation
+- There is a preliminary new [Wide Coverage Translation Demo http://cloud.grammaticalframework.org/wc.html] web app. The same wide coverage translation
   method has also been added to the
   [Simple Translation Tool http://cloud.grammaticalframework.org/translator/].
 - PGF web service API:
-  - the ``lookupmorpho`` request has been added. [...]
+  - the ``lookupmorpho`` request has been added to lookup the morphological
+    analysis of a word.
   - Requests like ``parse`` and ``translate`` that parse text input now
     accept a ``lexer`` parameter to apply a lexer to the input text before
     parsing. The lexer can be ``text``, ``code`` or ``mixed``.
