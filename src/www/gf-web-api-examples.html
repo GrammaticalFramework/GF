@@ -171,9 +171,13 @@ full API.
               "children":[{"fun":"Pizza","fid":0}]},
              {"fun":"Very","fid":3,
               "children":[{"fun":"Boring","fid":2}]}]}
+  <dt class=js><em>// Lookup the morphological analysis of a word</em>
+    <br>server.pgf_call("lookupmorpho",{input:"fish",from:"FoodsEng"},callback)
+  <dt>http://localhost:41296/grammars/Foods.pgf?command=lookupmorpho&amp;input=fish&amp;from=FoodsEng
+  <dd>[{"lemma":"Fish","analysis":"s Pl"},{"lemma":"Fish","analysis":"s Sg"}]
 </dl>
 <hr>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Fri Aug 16 16:48:28 CEST 2013 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Sat Jun 21 14:57:43 CEST 2014 <!-- hhmts end -->
   </small></div>
 <address><a href="http://www.cse.chalmers.se/~hallgren/">TH</a></address>
