@@ -2,7 +2,7 @@ module GFC (mainGFC, writePGF) where
 -- module Main where
 
 import PGF
-import PGF.Internal(PGF(..),code,funs,cats,optimizePGF,unionPGF)
+import PGF.Internal(PGF,abstract,concretes,code,funs,cats,optimizePGF,unionPGF)
 import PGF.Internal(putSplitAbs)
 import GF.Compile
 import GF.Compile.Export
@@ -24,7 +24,6 @@ import qualified Data.ByteString as BSS
 import qualified Data.ByteString.Lazy as BSL
 import System.FilePath
 import System.IO
-import Control.Exception(bracket)
 import Control.Monad(unless,forM_)
 
 mainGFC :: Options -> [FilePath] -> IO ()
@@ -48,7 +47,7 @@ compileSourceFiles opts fs =
     do cnc_gr@(cnc,t_src,gr) <- batchCompile opts fs
        unless (flag optStopAfterPhase opts == Compile) $
               do let abs = showIdent (srcAbsName gr cnc)
-                     pgfFile = grammarName' opts abs<.>"pgf"
+                     pgfFile = outputPath opts (grammarName' opts abs<.>"pgf")
                  t_pgf <- if outputJustPGF opts
                           then maybeIO $ getModificationTime pgfFile
                           else return Nothing
@@ -80,7 +79,7 @@ unionPGFFiles opts fs =
     else doIt
   where
     checkFirst name =
-      do let pgfFile = name <.> "pgf"
+      do let pgfFile = outputPath opts (name <.> "pgf")
          sourceTime <- liftIO $ maximum `fmap` mapM getModificationTime fs
          targetTime <- maybeIO $ getModificationTime pgfFile
          if targetTime >= Just sourceTime
@@ -91,7 +90,7 @@ unionPGFFiles opts fs =
       do pgfs <- mapM readPGFVerbose fs
          let pgf0 = foldl1 unionPGF pgfs
              pgf  = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
-             pgfFile = grammarName opts pgf <.> "pgf"
+             pgfFile = outputPath opts (grammarName opts pgf <.> "pgf")
          if pgfFile `elem` fs
            then putStrLnE $ "Refusing to overwrite " ++ pgfFile
            else writePGF opts pgf
@@ -106,51 +105,51 @@ writeOutputs opts pgf = do
                  | fmt <- outputFormats opts,
                    (name,str) <- exportPGF opts fmt pgf]
 
-outputFormats opts = [fmt | fmt <- flag optOutputFormats opts, fmt/=FmtByteCode]
-outputJustPGF opts = null (flag optOutputFormats opts) && not (flag optSplitPGF opts)
-
 writeByteCode :: Options -> PGF -> IOE ()
 writeByteCode opts pgf
   | elem FmtByteCode (flag optOutputFormats opts) =
-             let name = fromMaybe (showCId (abstractName pgf)) (flag optName opts)
-                 file = name <.> "bc"
-                 path = case flag optOutputDir opts of
-                          Nothing  -> file
-                          Just dir -> dir </> file
-             in putPointE Normal opts ("Writing " ++ path ++ "...") $ liftIO $
-                   bracket
-                      (openFile path WriteMode)
-                      (hClose)
-                      (\h -> do hSetBinaryMode h True
-                                BSL.hPut h (encode addrs)
+             let path = outputPath opts (grammarName opts pgf <.> "bc")
+             in writing opts path $
+                  withBinaryFile path WriteMode
+                      (\h -> do BSL.hPut h (encode addrs)
                                 BSS.hPut h (code (abstract pgf)))
   | otherwise = return ()
   where
     addrs = 
       [(id,addr) | (id,(_,_,_,_,addr)) <- Map.toList (funs (abstract pgf))] ++
-      [(id,addr) | (id,(_,_,_,addr))     <- Map.toList (cats (abstract pgf))]
+      [(id,addr) | (id,(_,_,_,addr))   <- Map.toList (cats (abstract pgf))]
 
 writePGF :: Options -> PGF -> IOE ()
-writePGF opts pgf
-  | flag optSplitPGF opts = do let outfile = grammarName opts pgf <.> "pgf"
-                               putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ do
-                               --encodeFile_ outfile (putSplitAbs pgf)
-                                 BSL.writeFile outfile (runPut (putSplitAbs pgf))
-                               forM_ (Map.toList (concretes pgf)) $ \cnc -> do
-                                 let outfile = showCId (fst cnc) <.> "pgf_c"
-                                 putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ encodeFile outfile cnc
-                               return ()
-  | otherwise             = do let outfile = grammarName opts pgf <.> "pgf"
-                               putPointE Normal opts ("Writing " ++ outfile ++ "...") $ liftIO $ encodeFile outfile pgf
+writePGF opts pgf =
+    if flag optSplitPGF opts then writeSplitPGF else writeNormalPGF
+  where
+    writeNormalPGF =
+       do let outfile = outputPath opts (grammarName opts pgf <.> "pgf")
+          writing opts outfile $ encodeFile outfile pgf
 
-grammarName :: Options -> PGF -> String
-grammarName opts pgf = --fromMaybe (showCId (absname pgf)) (flag optName opts)
-                       grammarName' opts (showCId (absname pgf))
-grammarName' opts abs = fromMaybe abs (flag optName opts)
+    writeSplitPGF =
+      do let outfile = outputPath opts (grammarName opts pgf <.> "pgf")
+         writing opts outfile $ BSL.writeFile outfile (runPut (putSplitAbs pgf))
+                                --encodeFile_ outfile (putSplitAbs pgf)
+         forM_ (Map.toList (concretes pgf)) $ \cnc -> do
+           let outfile = outputPath opts (showCId (fst cnc) <.> "pgf_c")
+           writing opts outfile $ encodeFile outfile cnc
+
 
 writeOutput :: Options -> FilePath-> String -> IOE ()
-writeOutput opts file str =
-    putPointE Normal opts ("Writing " ++ path ++ "...") $ liftIO $
-      writeUTF8File path str
-  where
-    path = maybe id (</>) (flag optOutputDir opts) file
+writeOutput opts file str = writing opts path $ writeUTF8File path str
+  where path = outputPath opts file
+
+-- * Useful helper functions
+
+grammarName :: Options -> PGF -> String
+grammarName opts pgf = grammarName' opts (showCId (abstractName pgf))
+grammarName' opts abs = fromMaybe abs (flag optName opts)
+
+outputFormats opts = [fmt | fmt <- flag optOutputFormats opts, fmt/=FmtByteCode]
+outputJustPGF opts = null (flag optOutputFormats opts) && not (flag optSplitPGF opts)
+
+outputPath opts file = maybe id (</>) (flag optOutputDir opts) file
+
+writing opts path io =
+    putPointE Normal opts ("Writing " ++ path ++ "...") $ liftIO io
