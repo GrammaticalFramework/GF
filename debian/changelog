@@ -1,3 +1,9 @@
+gf (3.6-1) precise saucy trusty; urgency=low
+
+  * GF 3.6
+
+ -- Thomas Hallgren <hallgren@chalmers.se>  Tue,  21 Jun 2014 20:00:00 +0200
+
 gf (3.5-1) precise quantal; urgency=low
 
   * GF 3.5
