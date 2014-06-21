@@ -3,7 +3,7 @@
 <HEAD>
 <TITLE>GF - Grammatical Framework</TITLE>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="css/newstyle.css" title="GF">
+<link rel="stylesheet" href="css/style.css" title="GF">
 <link rel="alterante stylesheet" href="css/oldstyle.css" title="Old">
 <meta name = "viewport" content = "width = device-width">
 <script type="text/javascript">
@@ -18,88 +18,58 @@ function sitesearch() {
 <meta name="keywords" content="machine translation">
 </HEAD>
 
-<body class=new>
-
-<div class="header sky blue">
-<img class="gflogo" src="doc/Logos/gf1.svg" alt="">
-<H1>Grammatical Framework</H1>
-  <small class=tagline>A programming language for multilingual grammar applications</small>
-<!--<p>Version 3.5<br>August 2013-->
-</div>
-
-<div class=menu>
-
-<div class=links>
-  <h4>Use GF</h4>
-  <ul>
-    <li><a href="http://cloud.grammaticalframework.org/">GF Cloud<img class=right src="src/www/P/gf-cloud.png" alt="GF Cloud Service" title="GF Cloud Service"></a>
-    <li><A HREF="demos/index.html">Demos</A>
-  </ul>
-  <ul>
-    <li><A HREF="http://www.grammaticalframework.org/download/index.html">Download GF</A>
-    <li><a href="eclipse/index.html">GF Eclipse Plugin</a>
-    <li><a href="doc/gf-editor-modes.html">GF Editor Modes</a>
-  </ul>
-
-  <ul>
-    <li><A HREF="http://groups.google.com/group/gf-dev">User Group</A>
-    <li><a href="http://code.google.com/p/grammatical-framework/issues/list">Bug Reports</a>
-  </ul>
-</div>
-
-<div class=links>
-  <h4>Learn GF</h4>
-  <ul>
-    <li><A HREF="doc/gf-quickstart.html">QuickStart</A>
-    <li><A HREF="doc/gf-reference.html">QuickRefCard</A>
-    <li><A HREF="doc/gf-shell-reference.html">GF Shell Reference</A>
-  </ul>
-  <ul>
-    <li><A HREF="gf-book">The GF Book</A>
-    <li><A HREF="doc/tutorial/gf-tutorial.html">GF Tutorial</A>
-    <li><A HREF="doc/gf-refman.html">Reference Manual</A>
-  </ul>
-  <ul>
-    <li><A HREF="lib/doc/synopsis.html">Library Synopsis</A>
-    <li><A HREF="doc/gf-lrec-2010.pdf">Library Tutorial</A> <small>[PDF]</small>
-    <li><A HREF="http://www.postcrashgames.com/gf_world/">Coverage Map</A>
-  </ul>
-
-</div>
-<div class=links>
-  <h4>Develop GF</h4>
-  <ul>
-    <li><a href="http://ci.zjyto.net/job/gf-build/"><img src="http://ci.zjyto.net/buildStatus/icon?job=gf-build" alt="GF build status"></a>
-    <li><a href="doc/gf-developers.html">GF Developers Guide</a>
-    <li><A HREF="https://github.com/GrammaticalFramework/GF/">GitHub mirror</A>
-    <li><A HREF="http://code.google.com/p/grammatical-framework/wiki/SideBar?tm=6">Wiki</A>
-    <li><a href="/~hallgren/gf-experiment/browse/">Browse Source Code</a>
-    <li><A HREF="doc/gf-people.html">Authors</A>
-  </ul>
-  <h4>Develop Applications</h4>
-  <ul>
-    <li><a href="http://hackage.haskell.org/package/gf-3.5/docs/PGF.html">PGF library API</a>
-    <li><A HREF="/android/">GF on Android</A>
-  </ul>
-</div>
-<div class=links>
-  <h4>Related to GF</h4>
-  <ul>
-    <li><A HREF="doc/gf-bibliography.html">Publications</A>
-    <li><A HREF="http://school.grammaticalframework.org">GF Summer Schools</A>
-    <li><A HREF="http://www.molto-project.eu">The MOLTO Project</A>
-    <li><a href="http://en.wikipedia.org/wiki/Grammatical_Framework">GF on Wikipedia</a>
-    <li><p><a href="Http://www.digitalgrammars.com/">Digital Grammars AB</a>
-  </ul>
-</div>
-</div>
-
-
+<BODY>
 <script type="text/javascript">
-document.write('<div style="float: right; margin-top: 3ex;">  <form onsubmit="return sitesearch()" method=get action="http://www.google.com/search">  <input type=search name="q" placeholder="site search">  <input type=submit value="Search">  </form></div>')
+document.write('<div style="text-align: right">  <form onsubmit="return sitesearch()" method=get action="http://www.google.com/search">  <input type=search name="q" placeholder="site search">  <input type=submit value="Search">  </form></div>')
 </script>
+<div class=center>
+<img id=gflogo class=grow src="doc/Logos/gf0.png" alt="">
+  <script>
+  if(document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1"))
+    document.getElementById("gflogo").src="doc/Logos/gf1.svg"
+  </script>
+<H1>Grammatical Framework</H1>
+<P>
+Version 3.5
+<br>
+August 2013
 
-<H2 class=noclear>News</H2>
+<P>
+<div class=mainlinks>
+[ <A HREF="demos/index.html">Demos</A>
+| <A HREF="http://www.grammaticalframework.org/download/index.html">Download</A>
+| <A HREF="lib/doc/synopsis.html">Libraries</A>
+| <A HREF="doc/gf-refman.html">Reference</A>
+| <A HREF="doc/tutorial/gf-tutorial.html">Tutorial</A>
+| <A HREF="doc/gf-quickstart.html">QuickStart</A>
+| <A HREF="http://groups.google.com/group/gf-dev">UserGroup</A>
+| <A HREF="gf-book">Book</A>
+| <A HREF="https://github.com/GrammaticalFramework/GF/">GitHub</A>
+| <A HREF="http://www.postcrashgames.com/gf_world/">Interactive Map</A>
+| <a href="http://cloud.grammaticalframework.org/"><img src="src/www/P/gf-cloud.png" alt="GF Cloud Service" title="GF Cloud Service"></a>
+]
+</div>
+<div class=extralinks>
+<p>
+[ <a href="http://code.google.com/p/grammatical-framework/issues/list">Issues</a>
+| <A HREF="http://code.google.com/p/grammatical-framework/wiki/SideBar?tm=6">Wiki</A>
+| <A HREF="doc/gf-people.html">People</A>
+| <A HREF="doc/gf-bibliography.html">Publications</A>
+| <A HREF="doc/gf-reference.html">QuickRefCard</A>
+| <A HREF="doc/gf-shell-reference.html">GF Shell Reference</A>
+| <a href="doc/gf-editor-modes.html">GF Editor Modes</a>
+| <a href="eclipse/index.html">GF Eclipse Plugin</a>
+| <A HREF="doc/gf-lrec-2010.pdf">LibTutorial</A>
+| <a href="http://hackage.haskell.org/package/gf-3.5/docs/PGF.html">PGF library API</a>
+| <A HREF="http://www.molto-project.eu">MOLTO</A>
+| <A HREF="http://school.grammaticalframework.org">SummerSchool</A>
+| <A HREF="/android/">Android</A>
+| <a href="/~hallgren/gf-experiment/browse/">Browse GF Source Code</a>
+| <a href="http://ci.zjyto.net/job/gf-build/"><img src="http://ci.zjyto.net/buildStatus/icon?job=gf-build" alt="GF build status"></a><small style="color: red"><em>New!</em></small>
+]
+</div>
+</div>
+<H2>News</H2>
 
 <div class=news2>
 
