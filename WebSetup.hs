@@ -48,7 +48,7 @@ buildWeb gf args flags pkg lbi =
         dir = "examples"</>subdir
         cmd = gf++" -make -s -optimize-pgf --gfo-dir="++tmp_dir++
               " --gf-lib-path="++buildDir lbi </> "rgl"++
-           -- " --output-dir="++tmp_dir++  -- has no effect?!
+              " --output-dir="++gfo_dir++
               " "++unwords [dir</>file|file<-src]
 
 installWeb gf args flags pki lbi = setupWeb gf args dest pki lbi
@@ -70,11 +70,12 @@ setupWeb gf args dest pkg lbi =
     cloud_dir = www_dir </> "tmp" -- hmm
     logo_dir = www_dir </> "Logos"
     www_dir = datadir (absoluteInstallDirs pkg lbi dest) </> "www"
+    gfo_dir = buildDir lbi </> "examples"
 
     copy_pgf (pgf,subdir,_) =
       do let dst = grammars_dir</>pgf
          putStrLn $ "Installing "++dst
-         copyFile pgf dst
+         copyFile (gfo_dir</>pgf) dst
 
     gf_logo = "gf0.png"
 
