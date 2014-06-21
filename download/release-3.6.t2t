@@ -77,7 +77,7 @@ Closed [issues http://code.google.com/p/grammatical-framework/issues/list]:
 
 - New languages in the Resource Grammar Library: Estonian
   (see the [updated synopsis ../lib/doc/synopsis.html]).
-- Grammars and dictionaries for wide coverage translation [source ../lib/src/translate/]
+- Grammars and dictionaries for wide coverage translation [source ../lib/src/translator/]
 - bug fixes and some new inflection paradigms in many languages
 % - [...]
 
