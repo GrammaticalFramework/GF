@@ -403,23 +403,39 @@ $ make clean
 
 == Compiling GF with C run-time system support ==
 
-The C run-time system is separate implementation of the PGF run-time services
+The C run-time system is a separate implementation of the PGF run-time services
 that makes it possible to work with very large, ambiguous grammars, using
-probabilistic models to obtain probable parses.
+probabilistic models to obtain probable parses. The C run-time system might
+also be easier to use than the Haskell run-time system on certain platforms,
+e.g. Android and iOS.
 
-Support for calling the C run-time library is available in the web API
-provided by ``gf -server``, if C run-time support is enabled.
+To install the C run-time system, go to the ``src/runtime/c`` directory
+and follow the instructions in the ``INSTALL`` file. This will install
+the C header files and libraries need to write C programs that use PGF grammars.
+Some example C programs are included in the ``utils`` subdirectory, e.g.
+``pgf-translate.c``.
 
-To enable the C run-time system, first go to the ``src/runtime/c`` directory
-and follow the instructions in the ``INSTALL`` file to install the C run-time
-system. Once this is done, you can install GF with C run-time support by
-doing
+When the C run-time system is installed, you can install GF with C run-time
+support by doing
 
 ```
 cabal install -fserver -fc-runtime
 ```
-from the top directory.
+from the top directory. This give you two new things:
 
+- ``PGF2``: a module to import in Haskell programs, providing a binding to
+   the C run-time system.
+
+- ``gf -server`` mode is extended with new requests to call the C run-time
+   system, e.g. ``c-parse``, ``c-linearize`` and ``c-translate``.
+
+
+=== Python and Java bindings ===
+
+The C run-time system can also be used from Python and Java. Python and Java
+bindings are found in the ``src/runtime/python`` and ``src/runtime/java``
+directories, respecively. Compile them by following the instructions in
+the ``INSTALL`` files in those directories.
 
 == Creating .deb packages for Ubuntu ==
 
