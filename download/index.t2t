@@ -4,24 +4,28 @@ Grammatical Framework Download and Installation
 %!style:../css/style.css
 %!postproc(html): </HEAD> <STYLE>body { color: #333; } li>code,p>code,pre { color: #730; }</STYLE></HEAD>
 %!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
-%!postproc(html): <TD><B> <TH>
-%!postproc(html): </B></TD> </TH>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+%!postproc(html): <TD><I> <TD><small>
+%!postproc(html): </I></TD> </small></TD>
 
-**GF 3.6** was released on 22 June 2014.
+**GF 3.6** was released on 23 June 2014.
 
 What's new? See the [Release notes release-3.6.html].
 
 
 == Binary packages ==
 
-| **Platform** | **Download** | **How to install**
-| Mac OS X | [gf-3.6-bin-intel-mac.tar.gz gf-3.6-bin-intel-mac.tar.gz] | ``sudo tar -C /usr/local -zxf gf-3.6-bin-intel-mac.tar.gz``
-%| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | ``sudo rpm -i ...``
-| Ubuntu (32-bit) | [gf_3.6-1_i386.deb gf_3.6-1_i386.deb] | ``sudo dpkg -i gf_3.6-1_i386.deb``
-| Ubuntu (64-bit) | [gf_3.6-1_amd64.deb gf_3.6-1_amd64.deb] | ``sudo dpkg -i gf_3.6-1_amd64.deb``
-| Windows | [gf-3.6-bin-windows.zip gf-3.6-bin-windows.zip] | ``unzip gf-3.6-bin-windows.zip``
-%| ... | ... | ...
+|| Platform | Download | Features | How to install
+| Mac OS X | [gf-3.6-bin-intel-mac.tar.gz gf-3.6-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.6-bin-intel-mac.tar.gz``
+%| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+P// | ``sudo rpm -i ...``
+| Ubuntu (32-bit) | [gf_3.6-1_i386.deb gf_3.6-1_i386.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.6-1_i386.deb``
+| Ubuntu (64-bit) | [gf_3.6-1_amd64.deb gf_3.6-1_amd64.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.6-1_amd64.deb``
+| Windows | [gf-3.6-bin-windows.zip gf-3.6-bin-windows.zip] | //GF+S// | ``unzip gf-3.6-bin-windows.zip``
+| MINGW | [gf-3.6-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.6-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.6-bin-i686-MINGW32_NT-6.1.tar.gz``
+%| ... | ... | | ...
+
+Features: GF = GF shell and grammar compiler and the Resource Grammar Library,
+S = ``gf -server`` mode, C = C run-time system, P = Python binding to the C run-time system
 
 %More binary packages might be added later.
 
@@ -32,6 +36,11 @@ The Windows package is installed by just unpacking it anywhere.
 You will probably need to set the ``PATH`` and ``GF_LIB_PATH`` environment
 variables, see Inari's notes on
 [Installing GF on Windows http://www.grammaticalframework.org/~inari/gf-windows.html#toc3].
+
+The new experimental MINGW package is for use in the
+[MINGW http://www.mingw.org] environment in Windows. Unpack it in the MSYS shell
+(which is started with ``C:\MinGW\msys\1.0\msys.bat``).
+It should work out of the box without any additional settings.
 
 The ``.deb`` packages work on Ubuntu 12.04, 13.10 and 14.04.
 
