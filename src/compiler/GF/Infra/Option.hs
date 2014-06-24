@@ -1,4 +1,3 @@
--- LANGUAGE CPP
 module GF.Infra.Option
     (
      -- * Option types
@@ -285,14 +284,7 @@ defaultFlags = Flags {
       optTagsOnly        = False,
       optHeuristicFactor = Nothing,
       optMetaProb        = Nothing,
-      optMetaToknProb    = Nothing{-,
-      optNewComp         =
-#ifdef NEW_COMP
-                           True
-#else
-                           False
-#endif
--}
+      optMetaToknProb    = Nothing
     }
 
 -- | Option descriptions
