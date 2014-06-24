@@ -244,8 +244,13 @@ Minibar.prototype.show_grammarinfo=function() {
     var btn=button("More info",more)
 
     clear(t.translations.main)
+    var hdr=[text(g.name)]
+    if(g.lastmodified) {
+	hdr.push(text(" "))
+	hdr.push(wrap("small",text("("+g.lastmodified+")")))
+    }
     appendChildren(this.translations.main,
-		   [wrap("h3",text(g.name)),
+		   [wrap("h3",hdr),
 		    btn,
 		    wrap("h4",text("Start category")), text(g.startcat || ""),
 		    wrap("h4",text("Categories")), cats,
