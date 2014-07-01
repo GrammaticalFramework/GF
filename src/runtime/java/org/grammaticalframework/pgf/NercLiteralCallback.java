@@ -38,23 +38,27 @@ public class NercLiteralCallback implements LiteralCallback {
 
 		if (i > 0) {
 			String name = sbuilder.toString();
-			String lemma = null;
+			Expr expr = null;
 			double prob = 0;
 			for (MorphoAnalysis an : concr.lookupMorpho(name)) {
-				if ("PN".equals(pgf.getFunctionType(an.getLemma()).getCategory()) &&
-					prob < an.getProb()) {
-					lemma = an.getLemma();
-					prob  = an.getProb();
+				String cat = pgf.getFunctionType(an.getLemma()).getCategory();
+				if (prob < an.getProb()) {
+					if ("PN".equals(cat)) {
+						expr = new Expr(an.getLemma(), new Expr[0]);
+						prob  = an.getProb();
+					} else if ("Language".equals(cat)) {
+						expr = new Expr(an.getLemma(), new Expr[0]);
+						expr = new Expr("languagePN", expr);
+					} else if ("Pron".equals(cat)) { // to capture I in English
+						return null;
+					}
 				}
 			}
 
-			Expr expr;
-			if (lemma == null) {
+			if (expr == null) {
 				expr = new Expr(name);
 				expr = new Expr("MkSymb", expr);
 				expr = new Expr("SymbPN", expr);
-			} else {
-				expr = new Expr(lemma, new Expr[0]);
 			}
 
 			return new CallbackResult(new ExprProb(expr, 0), end_offset);
