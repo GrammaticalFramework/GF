@@ -487,14 +487,16 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 	
 	pgf_linearize(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), out, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfLinNonExist))
+		if (gu_exn_caught(err) == gu_type(PgfLinNonExist)) {
+			gu_pool_free(tmp_pool);
 			return NULL;
-		else if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		} else if (gu_exn_caught(err) == gu_type(PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be linearized");
 		}
+		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
@@ -540,6 +542,7 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 		} else {
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be concretized");
 		}
+		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
@@ -755,7 +758,7 @@ jpgf_literal_callback_match(PgfLiteralCallback* self,
 	JPgfLiteralCallback* callback = gu_container(self, JPgfLiteralCallback, callback);
 
 	JNIEnv *env;
-    (*cachedJVM)->AttachCurrentThread(cachedJVM, (void **) &env, NULL);
+    (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
 
 	jstring jsentence = gu2j_string(env, sentence);
 	size_t  joffset   = gu2j_string_offset(sentence, *poffset);
@@ -819,7 +822,7 @@ jpgf_token_prob_enum_fin(GuFinalizer* self)
 	JPgfTokenProbEnum* en = gu_container(self, JPgfTokenProbEnum, fin);
 	
 	JNIEnv *env;
-    (*cachedJVM)->AttachCurrentThread(cachedJVM, (void **) &env, NULL);
+    (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
 
 	(*env)->DeleteGlobalRef(env, en->jiterator);
 }
@@ -833,7 +836,7 @@ jpgf_literal_callback_predict(PgfLiteralCallback* self,
 	JPgfLiteralCallback* callback = gu_container(self, JPgfLiteralCallback, callback);
 
 	JNIEnv *env;
-    (*cachedJVM)->AttachCurrentThread(cachedJVM, (void **) &env, NULL);
+    (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
 
 	jstring jprefix = gu2j_string(env, prefix);
 	jobject jiterator = (*env)->CallObjectMethod(env, callback->jcallback, callback->predict_methodId, lin_idx, jprefix);
@@ -856,7 +859,7 @@ jpgf_literal_callback_fin(GuFinalizer* self)
 	JPgfLiteralCallback* callback = gu_container(self, JPgfLiteralCallback, fin);
 	
 	JNIEnv *env;
-    (*cachedJVM)->AttachCurrentThread(cachedJVM, (void **) &env, NULL);
+    (*cachedJVM)->AttachCurrentThread(cachedJVM, &env, NULL);
 
 	(*env)->DeleteGlobalRef(env, callback->jcallback);
 }
