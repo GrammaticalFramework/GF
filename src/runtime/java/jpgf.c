@@ -569,7 +569,7 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 		} else {
 			gu_exn_clear(err);
 		}
-		
+
 		jstring jname = gu2j_string(env, labels[lin_idx]);
 
 		(*env)->CallObjectMethod(env, table, put_method, jname, jstr);
@@ -583,6 +583,148 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 	gu_pool_free(tmp_pool);
 
 	return table;
+}
+
+typedef struct {
+	PgfLinFuncs* funcs;
+	JNIEnv* env;
+	GuPool* tmp_pool;
+	GuBuf* stack;
+	GuBuf* list;
+	jclass object_class;
+	jclass bracket_class;
+	jmethodID bracket_constrId;
+} PgfBracketLznState;
+
+static void
+pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+	JNIEnv* env = state->env;
+
+	jstring jname = gu2j_string(env, tok);
+	gu_buf_push(state->list, jobject, jname);
+}
+
+static void
+pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+	
+	gu_buf_push(state->stack, GuBuf*, state->list);
+	state->list = gu_new_buf(jobject, state->tmp_pool);
+}
+
+static void
+pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+	JNIEnv* env = state->env;
+
+	GuBuf* parent = gu_buf_pop(state->stack, GuBuf*);
+
+	if (gu_buf_length(state->list) > 0) {
+		jstring jcat = gu2j_string(env, cat);
+		jstring jfun = gu2j_string(env, fun);
+
+		size_t len = gu_buf_length(state->list);
+		jobjectArray jchildren = (*env)->NewObjectArray(env, len, state->object_class, NULL);
+		for (int i = 0; i < len; i++) {
+			jobject obj = gu_buf_get(state->list, jobject, i);
+			(*env)->SetObjectArrayElement(env, jchildren, i, obj);
+			(*env)->DeleteLocalRef(env, obj);
+		}
+
+		jobject jbracket = (*env)->NewObject(env, 
+		                                     state->bracket_class,
+		                                     state->bracket_constrId, 
+		                                     jcat,
+		                                     jfun,
+		                                     fid,
+		                                     lindex,
+		                                     jchildren);
+
+		(*env)->DeleteLocalRef(env, jchildren);
+		(*env)->DeleteLocalRef(env, jfun);
+		(*env)->DeleteLocalRef(env, jcat);
+
+		gu_buf_push(parent, jobject, jbracket);
+	}
+
+	state->list = parent;
+}
+
+static PgfLinFuncs pgf_bracket_lin_funcs = {
+	.symbol_token  = pgf_bracket_lzn_symbol_token,
+	.begin_phrase  = pgf_bracket_lzn_begin_phrase,
+	.end_phrase    = pgf_bracket_lzn_end_phrase,
+	.symbol_ne     = NULL,
+	.symbol_bind   = NULL
+};
+
+JNIEXPORT jobjectArray JNICALL 
+Java_org_grammaticalframework_pgf_Concr_bracketedLinearize(JNIEnv* env, jobject self, jobject jexpr)
+{
+	jclass object_class = (*env)->FindClass(env, "java/lang/Object");
+	if (!object_class)
+		return NULL;
+
+	jclass bracket_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Bracket");
+	if (!bracket_class)
+		return NULL;
+	jmethodID bracket_constrId = (*env)->GetMethodID(env, bracket_class, "<init>", "(Ljava/lang/String;Ljava/lang/String;II[Ljava/lang/Object;)V");
+	if (!bracket_constrId)
+		return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	PgfConcr* concr = get_ref(env, self);
+
+	GuEnum* cts = 
+		pgf_lzr_concretize(concr, gu_variant_from_ptr((void*) get_ref(env, jexpr)), err, tmp_pool);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+		} else {
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be concretized");
+		}
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
+	if (gu_variant_is_null(ctree)) {
+		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be concretized");
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	ctree = pgf_lzr_wrap_linref(ctree, tmp_pool);
+
+	PgfBracketLznState state;
+	state.funcs = &pgf_bracket_lin_funcs;
+	state.env   = env;
+	state.tmp_pool = tmp_pool;
+	state.stack = gu_new_buf(GuBuf*, tmp_pool);
+	state.list  = gu_new_buf(jobject, tmp_pool);
+	state.object_class = object_class;
+	state.bracket_class = bracket_class;
+	state.bracket_constrId = bracket_constrId;
+	pgf_lzr_linearize(concr, ctree, 0, &state.funcs, tmp_pool);
+
+	size_t len = gu_buf_length(state.list);
+	jobjectArray array = (*env)->NewObjectArray(env, len, object_class, NULL);
+	for (int i = 0; i < len; i++) {
+		jobject obj = gu_buf_get(state.list, jobject, i);
+		(*env)->SetObjectArrayElement(env, array, i, obj);
+		(*env)->DeleteLocalRef(env, obj);
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return array;
 }
 
 typedef struct {

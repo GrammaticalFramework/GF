@@ -28,6 +28,8 @@ public class Concr {
 
 	public native Map<String, String> tabularLinearize(Expr expr);
 
+	public native Object[] bracketedLinearize(Expr expr);
+
 	public native List<MorphoAnalysis> lookupMorpho(String sentence);
 
 	public Iterable<FullFormEntry> lookupWordPrefix(String prefix) {
