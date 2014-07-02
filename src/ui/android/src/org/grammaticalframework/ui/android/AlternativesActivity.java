@@ -103,8 +103,8 @@ public class AlternativesActivity extends ListActivity {
 		ImageView arrow = (ImageView) expandedView.findViewById(R.id.arrow);
 		arrow.setImageResource(R.drawable.open_arrow);
 
-		WebView inflectionView = (WebView) expandedView.findViewById(R.id.lexical_inflection);
-		((RelativeLayout) expandedView).removeView(inflectionView);
+		View view = (View) expandedView.findViewById(R.id.desc_details);
+		((RelativeLayout) expandedView).removeView(view);
 
 		expandedView = null;
 	}
@@ -117,10 +117,10 @@ public class AlternativesActivity extends ListActivity {
 		ImageView arrow = (ImageView) view.findViewById(R.id.arrow);
 		arrow.setImageResource(R.drawable.close_arrow);
 		
-		WebView inflectionView = (WebView) view.findViewById(R.id.lexical_inflection);
+		WebView inflectionView = (WebView) view.findViewById(R.id.desc_details);
 		if (inflectionView == null) {
 			inflectionView = new WebView(this);
-			inflectionView.setId(R.id.lexical_inflection);
+			inflectionView.setId(R.id.desc_details);
 			RelativeLayout.LayoutParams params = 
 					new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.BELOW, R.id.lexical_desc);
@@ -136,18 +136,18 @@ public class AlternativesActivity extends ListActivity {
 		ImageView arrow = (ImageView) view.findViewById(R.id.arrow);
 		arrow.setImageResource(R.drawable.close_arrow);
 		
-		WebView inflectionView = (WebView) view.findViewById(R.id.lexical_inflection);
-		if (inflectionView == null) {
-			inflectionView = new WebView(this);
-			inflectionView.setId(R.id.lexical_inflection);
+		ParseTreeView parseView = (ParseTreeView) view.findViewById(R.id.desc_details);
+		if (parseView == null) {
+			parseView = new ParseTreeView(this);
+			parseView.setId(R.id.desc_details);
 			RelativeLayout.LayoutParams params = 
 					new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.addRule(RelativeLayout.BELOW, R.id.lexical_desc);
-			((RelativeLayout) view).addView(inflectionView, params);
+			params.addRule(RelativeLayout.BELOW, R.id.alternative_desc);
+			((RelativeLayout) view).addView(parseView, params);
 		}
 
-		String content = String.format("[%.4f] %s", ep.getProb(), ep.getExpr());
-		inflectionView.loadData(content, "text/plain; charset=UTF-8", null);
+		Object[] brackets = mTranslator.bracketedLinearize(ep.getExpr());
+		parseView.setBrackets(brackets);
 
 		expandedView = view;
 	}
@@ -160,16 +160,16 @@ public class AlternativesActivity extends ListActivity {
     	public View getView(int position, View convertView, ViewGroup parent) {
 			Object item = getItem(position);
 
-			if (convertView == null) {
-				LayoutInflater inflater = (LayoutInflater) 
-						getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-	            convertView = inflater.inflate(R.layout.alternative_item, null);
-	        }
-
-	        TextView descView = (TextView)
-	        	convertView.findViewById(R.id.lexical_desc);
-
 			if (item instanceof MorphoAnalysis) {
+				if (convertView == null) {
+					LayoutInflater inflater = (LayoutInflater) 
+							getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		            convertView = inflater.inflate(R.layout.lexical_item, null);
+		        }
+
+		        TextView descView = (TextView)
+		        	convertView.findViewById(R.id.lexical_desc);
+
 				final String lemma = ((MorphoAnalysis) item).getLemma();
 
 		    	String phrase = mTranslator.generateLexiconEntry(lemma);
@@ -188,55 +188,62 @@ public class AlternativesActivity extends ListActivity {
 						}
 					}
 				});
-			} else {
-				if (item instanceof ExprProb) {
-					final ExprProb ep = (ExprProb) item;
-		
-			    	String phrase = mTranslator.linearize(ep.getExpr());
+			} else if (item instanceof ExprProb) {
+				final ExprProb ep = (ExprProb) item;
+	
+				if (convertView == null) {
+					LayoutInflater inflater = (LayoutInflater) 
+							getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		            convertView = inflater.inflate(R.layout.alternative_item, null);
+		        }
 
-			    	// parse by words, marked by %, darkest red color
-			    	if (phrase.charAt(0) == '%') {
-			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
-			    		phrase = phrase.substring(2);
-			    	}
+		        TextView descView = (TextView)
+		        	convertView.findViewById(R.id.alternative_desc);
 
-			    	// parse by chunks, marked by *, red color
-			    	else if (phrase.charAt(0) == '*') {
-			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_chunk_utterance_bg));
-			    		phrase = phrase.substring(2);
-			    	}
+		    	String phrase = mTranslator.linearize(ep.getExpr());
 
-			    	// parse error or unknown translations (in []) present, darkest red color
-			    	else if (phrase.contains("parse error:") || phrase.contains("[")) {
-			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
-			    	}
+		    	// parse by words, marked by %, darkest red color
+		    	if (phrase.charAt(0) == '%') {
+		    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
+		    		phrase = phrase.substring(2);
+		    	}
 
-			    	// parse by domain grammar, marked by +, green color
-			    	else if (phrase.charAt(0) == '+') {
-			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_best_utterance_bg));
-			    		phrase = phrase.substring(2);
-			    	}
-			    	
-			    	else {
-			    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_utterance_bg));
-			    	}
+		    	// parse by chunks, marked by *, red color
+		    	else if (phrase.charAt(0) == '*') {
+		    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_chunk_utterance_bg));
+		    		phrase = phrase.substring(2);
+		    	}
 
-			        descView.setText(phrase);
+		    	// parse error or unknown translations (in []) present, darkest red color
+		    	else if (phrase.contains("parse error:") || phrase.contains("[")) {
+		    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
+		    	}
 
-			        convertView.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							if (expandedView == view)
-								collapse();
-							else if (expandedView == null)
-								expandExpr(view, ep);
-							else {
-								collapse();
-								expandExpr(view, ep);
-							}
+		    	// parse by domain grammar, marked by +, green color
+		    	else if (phrase.charAt(0) == '+') {
+		    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_best_utterance_bg));
+		    		phrase = phrase.substring(2);
+		    	}
+		    	
+		    	else {
+		    		descView.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_utterance_bg));
+		    	}
+
+		        descView.setText(phrase);
+
+		        convertView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						if (expandedView == view)
+							collapse();
+						else if (expandedView == null)
+							expandExpr(view, ep);
+						else {
+							collapse();
+							expandExpr(view, ep);
 						}
-					});
-				}
+					}
+				});
 			}
 
 			return convertView;
