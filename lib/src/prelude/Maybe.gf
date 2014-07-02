@@ -9,20 +9,26 @@ resource Maybe = open Prelude, Predef in {
     -- Constructors
     Maybe   : (t : Type) -> Type = \t -> {
       inner : t ;
-      exists : Bool
+      exists : Bool ;
       } ;
     Just    : (T : Type) -> T -> Maybe T = \_,t -> {
       inner = t ;
-      exists = True
+      exists = True ;
       } ;
-    -- Nothing : (T : Type) -> Maybe T = \_ -> {
-    --   inner = variants {} ;
-    --   exists = False
-    --   } ;
     Nothing : (T : Type) -> T -> Maybe T = \_,t -> {
       inner = t ;
-      exists = False
+      exists = False ;
       } ;
+
+    -- IMPORTANT
+    -- This version of Nothing would be preferred, but it may not work as expected.
+    -- This happens when using Nothing within a record. For discussion of this see:
+    -- https://groups.google.com/d/msg/gf-dev/KAQEttN-0Cs/EjGHjOXEKO0J
+    Nothing' : (T : Type) -> Maybe T = \_ -> {
+      inner = variants {} ;
+      exists = False ;
+      } ;
+    -- You have been warned!
 
     -- Functions
     exists   : (T : Type) -> Maybe T -> Bool = \_,m -> m.exists ;
