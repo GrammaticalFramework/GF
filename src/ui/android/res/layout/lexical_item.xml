@@ -12,18 +12,16 @@
         android:paddingRight="5dp" />
   
     <TextView
-        android:id="@+id/alternative_desc"
+        android:id="@+id/lexical_desc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/arrow"
         android:paddingLeft="10dp"
         android:textSize="25sp"/>
     
-	<org.grammaticalframework.ui.android.ParseTreeView
-    	android:id="@+id/desc_details"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:layout_below="@id/alternative_desc"
-        android:textSize="25sp"
-    	/>
+    <WebView
+        android:id="@+id/desc_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lexical_desc"/>
 </RelativeLayout>

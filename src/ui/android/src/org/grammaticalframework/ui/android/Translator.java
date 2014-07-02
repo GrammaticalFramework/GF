@@ -340,6 +340,11 @@ public class Translator {
     	return targetLang.linearize(expr);
     }
 
+    public Object[] bracketedLinearize(Expr expr) {
+    	Concr targetLang = getTargetConcr();
+    	return targetLang.bracketedLinearize(expr);
+    }
+
     public String generateLexiconEntry(String lemma) {
         Concr sourceLang = getSourceConcr();
         Concr targetLang = getTargetConcr();
