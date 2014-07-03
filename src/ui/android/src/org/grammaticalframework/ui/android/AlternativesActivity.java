@@ -147,7 +147,18 @@ public class AlternativesActivity extends ListActivity {
 		}
 
 		Object[] brackets = mTranslator.bracketedLinearize(ep.getExpr());
-		parseView.setBrackets(brackets);
+		if (brackets[0] instanceof Bracket) {
+			Bracket b = (Bracket) brackets[0];
+			if (b.children[0].equals("*") ||
+				b.children[0].equals("+")) {
+				Object[] children = new Object[b.children.length-1];
+				for (int i = 1; i < b.children.length; i++)
+					children[i-1] = b.children[i];
+				b = new Bracket(b.cat, b.fun, b.fid, b.lindex, children);
+				brackets[0] = b;
+			}
+		}
+		parseView.setBrackets(brackets); 
 
 		expandedView = view;
 	}
