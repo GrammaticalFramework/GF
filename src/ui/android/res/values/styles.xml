@@ -15,6 +15,10 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="parseTreeViewStyle">@style/ParseTreeViewStyle</item>
     </style>
-
+    
+    <style name="ParseTreeViewStyle">
+        <item name="android:scrollbars">horizontal</item>
+    </style>
 </resources>

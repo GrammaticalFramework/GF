@@ -141,7 +141,7 @@ public class AlternativesActivity extends ListActivity {
 			parseView = new ParseTreeView(this);
 			parseView.setId(R.id.desc_details);
 			RelativeLayout.LayoutParams params = 
-					new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+					new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.BELOW, R.id.alternative_desc);
 			((RelativeLayout) view).addView(parseView, params);
 		}
