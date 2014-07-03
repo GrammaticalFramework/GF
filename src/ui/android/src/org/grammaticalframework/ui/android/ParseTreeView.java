@@ -59,8 +59,9 @@ public class ParseTreeView extends View {
 
 	private MeasureResult mr = new MeasureResult();
 	private SparseArray<PointF> coords = new SparseArray<PointF>();
+	private PointF zeroPoint = new PointF();
 
-	private void measureTree(Object o, PointF zeroPoint) {
+	private void measureTree(Object o) {
 		if (o instanceof Bracket) {
 			Bracket bracket = (Bracket) o;
 
@@ -72,8 +73,7 @@ public class ParseTreeView extends View {
 
 			PointF local = coords.get(bracket.fid);
 			if (local == null) {
-				if (zeroPoint != null)
-					coords.put(bracket.fid, zeroPoint);
+				coords.put(bracket.fid, zeroPoint);
 			} else {
 				localWidth = 0; 
 			}
@@ -82,7 +82,7 @@ public class ParseTreeView extends View {
 			float subHeight = 0.0f;
 			float nodeCenter = 0.0f;
 			for (int i = 0; i < bracket.children.length; i++) {
-				measureTree(bracket.children[i], zeroPoint);
+				measureTree(bracket.children[i]);
 				
 				if (i == 0) {
 					nodeCenter += (subWidth + mr.nodeCenter) / 2.0;
@@ -134,11 +134,12 @@ public class ParseTreeView extends View {
 			return;
 		}
 
+		coords.clear();
+
 		float width = 0.0f;
 		float height = 0.0f;
-		PointF zeroPoint = new PointF();
 		for (int i = 0; i < brackets.length; i++) {
-			measureTree(brackets[i], zeroPoint);
+			measureTree(brackets[i]);
 
 			width += mr.width;
 			if (i < brackets.length - 1) {
@@ -154,7 +155,7 @@ public class ParseTreeView extends View {
 		int w = getPaddingLeft() + (int) width  + getPaddingRight();
 		int h = getPaddingTop()  + (int) height + getPaddingBottom();
 
-		scrollRange = w+80;
+		scrollRange = w;
 
 		int widthReq = MeasureSpec.getSize(widthMeasureSpec);
 		if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY ||
@@ -196,7 +197,9 @@ public class ParseTreeView extends View {
 			float childStartY = y + layerHeight;
 			for (int i = 0; i < bracket.children.length; i++) {
 				Object child = bracket.children[i];
-				measureTree(child, null);
+				SparseArray<PointF> copy = coords.clone();
+				measureTree(child);
+				coords = copy;
 				float w = mr.width;
 				drawTree(canvas, childStartX, childStartY, bottom, lineStart, child);
 				childStartX += w + SISTER_SKIP;
@@ -223,7 +226,9 @@ public class ParseTreeView extends View {
 		for (int i = 0; i < brackets.length; i++) {
 			Object child = brackets[i];
 
-			measureTree(child, null);
+			SparseArray<PointF> copy = coords.clone();
+			measureTree(child);
+			coords = copy;
 			float w = mr.width;
 			drawTree(canvas, startX, getPaddingTop(), getPaddingTop()+mr.height, null, child);
 			startX += w + SISTER_SKIP;
@@ -242,10 +247,15 @@ public class ParseTreeView extends View {
             	 float x = ev.getX();
                  final int deltaX = (int) (lastMotionX - x);
                  lastMotionX = x;
-                 final int offset = computeHorizontalScrollOffset() + deltaX;
-                 final int range = computeHorizontalScrollRange() - computeHorizontalScrollExtent();
-                 if (range > 0 && offset > 0 && offset < range)
+                 int offset = computeHorizontalScrollOffset() + deltaX;
+                 int range = computeHorizontalScrollRange() - computeHorizontalScrollExtent();
+                 if (range > 0) {
+                	 if (offset < 0)
+                		 offset = 0;
+                	 if (offset > range)
+                		 offset = range;
                 	 scrollTo(offset, 0);
+                 }
                  break;
              case MotionEvent.ACTION_UP:
             	 break;
