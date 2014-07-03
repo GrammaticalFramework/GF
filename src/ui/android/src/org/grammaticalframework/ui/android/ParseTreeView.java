@@ -1,17 +1,15 @@
 package org.grammaticalframework.ui.android;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Pair;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
+
 import org.grammaticalframework.pgf.Bracket;
 
 
@@ -24,20 +22,20 @@ public class ParseTreeView extends View {
 	private Paint paint;
 	private Object[] brackets;
 
+	private float lastMotionX;
+	private float scrollRange;
+	
 	public ParseTreeView(Context context) {
-		super(context);
-		initialize();
+		this(context, null);
 	}
-	
+
 	public ParseTreeView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		initialize();
-	}
-	
-	private void initialize() {
+		super(context, attrs, R.attr.parseTreeViewStyle);
+
 		paint = new Paint();
 		paint.setTextSize(60);
 		brackets = null;
+		scrollRange = 0;
 	}
 	
 	public Object[] getBrackets() {
@@ -45,7 +43,8 @@ public class ParseTreeView extends View {
 	}
 
 	public void setBrackets(Object[] brackets) {
-		this.brackets = brackets; 
+		this.brackets = brackets;
+		awakenScrollBars();
 	}
 
 	static class MeasureResult {
@@ -150,11 +149,23 @@ public class ParseTreeView extends View {
 				height = mr.height;
 		}
 
-		width  += 10;
-		height += 10;
+		height += paint.getFontMetrics().descent;
 
 		int w = getPaddingLeft() + (int) width  + getPaddingRight();
 		int h = getPaddingTop()  + (int) height + getPaddingBottom();
+
+		scrollRange = w+80;
+
+		int widthReq = MeasureSpec.getSize(widthMeasureSpec);
+		if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY ||
+			(MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.AT_MOST && w > widthReq)) {
+			w = widthReq;
+		}
+		int heightReq = MeasureSpec.getSize(heightMeasureSpec);
+		if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY ||
+			(MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST && h > heightReq)) {
+			h = heightReq;
+		}
 
 		setMeasuredDimension(w, h);
 	}
@@ -218,4 +229,32 @@ public class ParseTreeView extends View {
 			startX += w + SISTER_SKIP;
 		}
 	}
+	
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) { 
+         switch (ev.getAction()) {
+             case MotionEvent.ACTION_DOWN: 
+                 // Remember where the motion event started
+                 lastMotionX = ev.getX();
+                 break;
+             case MotionEvent.ACTION_MOVE:
+                 // Scroll to follow the motion event
+            	 float x = ev.getX();
+                 final int deltaX = (int) (lastMotionX - x);
+                 lastMotionX = x;
+                 final int offset = computeHorizontalScrollOffset() + deltaX;
+                 final int range = computeHorizontalScrollRange() - computeHorizontalScrollExtent();
+                 if (range > 0 && offset > 0 && offset < range)
+                	 scrollTo(offset, 0);
+                 break;
+             case MotionEvent.ACTION_UP:
+            	 break;
+         }
+         return true;
+     }
+    
+     @Override
+     protected int computeHorizontalScrollRange() {
+    	 return (int) scrollRange;
+     }     
 }

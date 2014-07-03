@@ -21,7 +21,7 @@
     
 	<org.grammaticalframework.ui.android.ParseTreeView
     	android:id="@+id/desc_details"
-    	android:layout_width="wrap_content"
+    	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:layout_below="@id/alternative_desc"
         android:textSize="25sp"
