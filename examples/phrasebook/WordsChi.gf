@@ -150,9 +150,9 @@ AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
 
 -- miscellaneous
 
-QWhatName p = lin QS {s = p.name.s ++ R.word "贵姓"} ; ---
-QWhatAge p = lin QS {s = p.name.s ++ (R.word "几岁" | R.word "多大")} ; ---
-HowMuchCost item = lin QS {s = item.s ++ R.word "是多少呢"} ;
+QWhatName p = lin QS {s = \\_ => p.name.s ++ R.word "贵姓"} ; ---
+QWhatAge p = lin QS {s = \\_ => p.name.s ++ (R.word "几岁" | R.word "多大")} ; ---
+HowMuchCost item = lin QS {s = \\_ => item.s ++ R.word "是多少呢"} ;
 ItCost item price = mkCl item (mkV2 "成本") price ;
 
 PropOpen p = mkCl p.name (mkA "开放" ) ;
@@ -206,9 +206,9 @@ SuperlPlace sup p = placeNP sup p ;
 
 -- transports
 
-HowFar place = lin QS {s = place.name.s ++ R.word "有多远"} ;
+HowFar place = lin QS {s = \\_ => place.name.s ++ R.word "有多远"} ;
 
-HowFarFrom x y = lin QS {s = "从" ++ x.name.s ++ "到" ++ y.name.s ++ R.word "有多远"} ; ----
+HowFarFrom x y = lin QS {s = \\_ => "从" ++ x.name.s ++ "到" ++ y.name.s ++ R.word "有多远"} ; ----
 
 -- HowFarFromBy x y t =
 -- mkQS (mkQCl howFar.how (mkCl (mkNP y.name howFar.far)
