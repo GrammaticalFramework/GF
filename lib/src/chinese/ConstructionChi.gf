@@ -13,7 +13,7 @@ lin
   married_Cl x y = mkCl (lin NP x) L.married_A2 (lin NP y) ;
 
   what_name_QCl x = mkQCl whatSg_IP (mkClSlash (lin NP x) (mkV2 (mkV "叫"))) ;
-  how_old_QCl x = {s = \\p,a => x.s ++ (R.word "几岁" | R.word "多大")} ; ----
+  how_old_QCl x = {s = \\_,p,a => x.s ++ (R.word "几岁" | R.word "多大")} ; ----
 ----  how_far_QCl x = mkQCl (E.IAdvAdv (ss "far")) (lin NP x) ;
 
 -- some more things
