@@ -5,7 +5,7 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Ant, Adv] ** open ResChi, Prelu
 -- Tensed/Untensed
 
     S  = {s : Str} ;
-    QS = {s : Str} ;
+    QS = {s : Bool => Str} ; -- True = direct question (with ma for sentential questions)
     RS = {s : Str} ;
     SSlash = {s : Str ; c2 : Preposition} ; 
 
@@ -19,7 +19,7 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Ant, Adv] ** open ResChi, Prelu
 
 -- Question
 
-    QCl = {s : Polarity => Aspect => Str} ; 
+    QCl = {s : Bool => Polarity => Aspect => Str} ; -- True = direct question
     IP = {s : Str} ;
     IComp = {s : Str} ;    
     IDet = {s : Str ; detType : DetType} ;

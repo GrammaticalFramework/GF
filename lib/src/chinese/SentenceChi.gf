@@ -32,11 +32,11 @@ concrete SentenceChi of Sentence = CatChi **
     SlashPrep cl prep = cl ** {c2 = prep} ;
   
     EmbedS  s  = ss (conjThat ++ s.s) ;
-    EmbedQS qs = qs ;
+    EmbedQS qs = ss (qs.s ! False) ;
     EmbedVP vp = ss (infVP vp) ;
 
     UseCl  t p cl = {s = t.s ++ p.s ++ cl.s ! p.p ! t.t} ; 
-    UseQCl t p cl = {s = t.s ++ p.s ++ cl.s ! p.p ! t.t} ; 
+    UseQCl t p cl = {s = \\isDir => t.s ++ p.s ++ cl.s ! isDir ! p.p ! t.t} ; 
     UseRCl t p cl = {s = t.s ++ p.s ++ cl.s ! p.p ! t.t} ; 
     UseSlash t p cl = {s = t.s ++ p.s ++ cl.s ! p.p ! t.t ; c2 = cl.c2} ;
 

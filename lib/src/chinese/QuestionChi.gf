@@ -5,17 +5,17 @@ concrete QuestionChi of Question = CatChi **
 
   lin
 
-    QuestCl cl = {s = \\p,a => cl.s ! p ! a ++ question_s} ; --- plus redup questions
+    QuestCl cl = {s = \\isDir,p,a => cl.s ! p ! a ++ if_then_Str isDir question_s []} ; --- plus redup questions
 
     QuestVP ip vp = {
-      s = \\p,a => ip.s ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl
+      s = \\_,p,a => ip.s ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl
       } ;
  
-    QuestSlash ip cls = mkClauseCompl cls.np (insertObj (ss (appPrep cls.c2 ip.s)) cls.vp) [] ; 
+    QuestSlash ip cls = {s = \\_ => (mkClauseCompl cls.np (insertObj (ss (appPrep cls.c2 ip.s)) cls.vp) []).s} ; 
       
-    QuestIAdv iadv cl = mkClauseCompl cl.np (insertAdv iadv cl.vp) [] ;
+    QuestIAdv iadv cl = {s = \\_ => (mkClauseCompl cl.np (insertAdv iadv cl.vp) []).s} ;
 
-    QuestIComp icomp np = {s = \\p,a => np.s ++ icomp.s} ; ---- order
+    QuestIComp icomp np = {s = \\_,p,a => np.s ++ icomp.s} ; ---- order
 
     PrepIP p ip = ss (appPrep p ip.s) ;
 

@@ -41,7 +41,7 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
       False => insertObj (mkNP ap.s) (predV hen_copula [])
       } ; 
     QuestRepV cl = {
-      s = \\p,a => 
+      s = \\_,p,a =>  ---- also for indirect questions?
           let
           v = cl.vp.verb ; 
           verb = case a of {
