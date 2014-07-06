@@ -198,3 +198,10 @@ pgf_concr_add_literal(PgfConcr *concr, PgfCId cat,
 	gu_map_put(concr->callbacks, cnccat,
 	           PgfLiteralCallback*, callback);
 }
+
+PgfExprProb*
+pgf_fun_get_ep(void* value)
+{
+	PgfAbsFun* absfun = *((PgfAbsFun**) value);
+	return &absfun->ep;
+}
