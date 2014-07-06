@@ -189,4 +189,8 @@ void
 pgf_check_type(PgfPGF* gr, PgfType** ty,
                GuExn* exn, GuPool* pool);
 
+// internal
+PgfExprProb*
+pgf_fun_get_ep(void* value);
+
 #endif // PGF_H_

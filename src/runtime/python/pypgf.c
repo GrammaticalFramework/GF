@@ -65,6 +65,9 @@ Expr_initLiteral(ExprObject *self, PyObject *lit);
 static int
 Expr_initApp(ExprObject *self, const char* fname, PyObject *args);
 
+static ExprObject*
+Expr_call(ExprObject* e, PyObject* args, PyObject* kw);
+
 static PyObject*
 Expr_unpack(ExprObject* self, PyObject *args);
 
@@ -184,7 +187,7 @@ static PyTypeObject pgf_ExprType = {
     0,                         /*tp_as_sequence*/
     0,                         /*tp_as_mapping*/
     (hashfunc) Expr_hash,      /*tp_hash */
-    0,                         /*tp_call*/
+    (ternaryfunc) Expr_call,   /*tp_call*/
     (reprfunc) Expr_repr,      /*tp_str*/
     (getattrofunc) Expr_getattro,/*tp_getattro*/
     0,                         /*tp_setattro*/
@@ -300,6 +303,51 @@ Expr_initApp(ExprObject *self, const char* fname, PyObject *args)
 	}
 	
 	return 0;
+}
+
+static ExprObject*
+Expr_call(ExprObject* self, PyObject* args, PyObject* kw)
+{
+	ExprObject* pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+	if (pyexpr == NULL)
+		return NULL;
+
+	size_t n_args = PyTuple_Size(args);
+
+	pyexpr->master = PyTuple_New(n_args+1);
+	if (pyexpr->master == NULL) {
+		Py_DECREF(pyexpr);
+		return NULL;
+	}
+
+	PyTuple_SetItem(pyexpr->master, 0, (PyObject*) self);
+	Py_INCREF(self);
+
+	pyexpr->pool = gu_new_pool();
+	pyexpr->expr = self->expr;
+
+	for (Py_ssize_t i = 0; i < n_args; i++) {
+		PyObject* obj = PyTuple_GetItem(args, i);
+		if (obj->ob_type != &pgf_ExprType) {
+			PyErr_SetString(PyExc_TypeError, "the arguments must be expressions");
+			return NULL;
+		}
+
+		PyTuple_SetItem(pyexpr->master, i+1, obj);
+		Py_INCREF(obj);
+
+		PgfExpr fun = pyexpr->expr;
+		PgfExpr arg = ((ExprObject*) obj)->expr;
+
+		PgfExprApp* e =
+			gu_new_variant(PGF_EXPR_APP,
+						   PgfExprApp,
+						   &pyexpr->expr, pyexpr->pool);
+		e->fun = fun;
+		e->arg = arg;
+	}
+
+	return pyexpr;
 }
 
 static PyObject*
@@ -2343,6 +2391,56 @@ PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
 	return pystr;
 }
 
+static void
+pgf_embed_funs(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	PyPGFClosure* clo = (PyPGFClosure*) fn;
+	
+	PgfCId name = (PgfCId) key;
+
+	ExprObject* pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+	if (pyexpr == NULL) {
+		gu_raise(err, PgfExn);
+		return;
+	}
+
+	pyexpr->expr = pgf_fun_get_ep(value)->expr;
+
+    if (PyModule_AddObject(clo->object, name, (PyObject*) pyexpr) != 0) {
+		gu_raise(err, PgfExn);
+	}
+}
+
+static PyObject*
+PGF_embed(PGFObject* self, PyObject *args)
+{
+	PgfCId modname;
+    if (!PyArg_ParseTuple(args, "s", &modname))
+        return NULL;
+
+    PyObject *m = PyImport_AddModule(modname);
+    if (m == NULL)
+        return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	PyPGFClosure clo = { { pgf_embed_funs }, self, m };
+	pgf_iter_functions(self->pgf, &clo.fn, err);
+	if (!gu_ok(err)) {
+		Py_DECREF(m);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+	
+	Py_INCREF(m);
+    return m;
+}
+
 static PyGetSetDef PGF_getseters[] = {
     {"abstractName", 
      (getter)PGF_getAbstractName, NULL,
@@ -2395,6 +2493,12 @@ static PyMethodDef PGF_methods[] = {
     },
     {"graphvizAbstractTree", (PyCFunction)PGF_graphvizAbstractTree, METH_VARARGS,
      "Renders an abstract syntax tree in a Graphviz format"
+    },
+    {"embed", (PyCFunction)PGF_embed, METH_VARARGS,
+     "embed(mod_name) creates a Python module with name mod_name, which "
+     "contains one Python object for every abstract function in the grammar. "
+     "The module can be imported to make it easier to construct abstract "
+     "syntax trees."
     },
     {NULL}  /* Sentinel */
 };
