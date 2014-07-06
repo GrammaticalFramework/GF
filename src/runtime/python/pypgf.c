@@ -71,6 +71,9 @@ Expr_call(ExprObject* e, PyObject* args, PyObject* kw);
 static PyObject*
 Expr_unpack(ExprObject* self, PyObject *args);
 
+static PyObject*
+Expr_visit(ExprObject* self, PyObject *args);
+
 static int
 Expr_init(ExprObject *self, PyObject *args, PyObject *kwds)
 {
@@ -139,6 +142,13 @@ Expr_hash(ExprObject *e)
 static PyMethodDef Expr_methods[] = {
     {"unpack", (PyCFunction)Expr_unpack, METH_VARARGS,
      "Decomposes an expression into its components"
+    },
+    {"visit", (PyCFunction)Expr_visit, METH_VARARGS,
+     "Implementation of the visitor pattern for abstract syntax trees. "
+     "If e is an expression equal to f a1 .. an then "
+     "e.visit(self) calls method self.on_f(a1,..an). "
+     "If the method doesn't exist then the method self.default(e) "
+     "is called."
     },
     {NULL}  /* Sentinel */
 };
@@ -363,8 +373,10 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 			PgfExprAbs* eabs = i.data;
 
 			ExprObject* py_body = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
-			if (py_body == NULL)
+			if (py_body == NULL) {
+				Py_DECREF(args);
 				return NULL;
+			}
 			py_body->pool   = NULL;
 			py_body->master = (self->master) ? self->master : (PyObject*) self;
 			py_body->expr   = eabs->body;
@@ -385,8 +397,10 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 			PgfExprApp* eapp = i.data;
 			
 			ExprObject* pyexpr = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
-			if (pyexpr == NULL)
+			if (pyexpr == NULL) {
+				Py_DECREF(args);
 				return NULL;
+			}
 			pyexpr->pool   = NULL;
 			pyexpr->master = (self->master) ? self->master : (PyObject*) self;
 			pyexpr->expr   = eapp->arg;
@@ -461,6 +475,67 @@ Expr_unpack(ExprObject* self, PyObject *fargs)
 		}
 	}
 	return NULL;
+}
+
+static PyObject*
+Expr_visit(ExprObject* self, PyObject *args)
+{
+	PyObject* py_visitor = NULL;
+	PgfExpr expr = self->expr;
+	if (!PyArg_ParseTuple(args, "O", &py_visitor))
+		return NULL;
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	PgfApplication* app = pgf_expr_unapply(expr, tmp_pool);
+	if (app != NULL) {
+		char* method_name = gu_malloc(tmp_pool, strlen(app->fun)+4);
+		strcpy(method_name, "on_");
+		strcat(method_name, app->fun);
+
+		if (PyObject_HasAttrString(py_visitor, method_name)) {
+			PyObject* method_args = PyTuple_New(app->n_args);
+			if (method_args == NULL) {
+				gu_pool_free(tmp_pool);
+				return NULL;
+			}
+
+			for (size_t i = 0; i < app->n_args; i++) {
+				ExprObject* pyarg = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+				if (pyarg == NULL) {
+					Py_DECREF(args);
+					gu_pool_free(tmp_pool);
+					return NULL;
+				}
+				pyarg->pool   = NULL;
+				pyarg->master = (self->master) ? self->master : (PyObject*) self;
+				pyarg->expr   = app->args[i];
+				Py_INCREF(pyarg->master);
+
+				if (PyTuple_SetItem(method_args, i, (PyObject*) pyarg) == -1) {
+					Py_DECREF(args);
+					gu_pool_free(tmp_pool);
+					return NULL;
+				}
+			}
+			
+			PyObject* method =
+				PyObject_GetAttrString(py_visitor, method_name);
+			if (method == NULL) {
+				Py_DECREF(args);
+				gu_pool_free(tmp_pool);
+				return NULL;
+			}
+
+			gu_pool_free(tmp_pool);
+
+			return PyObject_CallObject(method, method_args);
+		}
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return PyObject_CallMethod(py_visitor, "default", "O", self);
 }
 
 static PyObject*
