@@ -796,12 +796,12 @@ resource ResMlt = ParamX ** open Prelude, Predef, Maybe in {
       } ;
 
     VerbPhrase : Type = {
-      v : Verb ;
-      -- v : {
-      --   s : VForm => VerbStems ;
-      --   presPart : Maybe Participle ;
-      --   pastPart : Maybe Participle ;
-      --   } ;
+      -- v : Verb ;
+      v : {
+        s : VForm => VerbStems ;
+        presPart : Maybe Participle ;
+        pastPart : Maybe Participle ;
+        } ;
       s2  : Agr => Str ; -- complement
       dir : Maybe Agr ; -- direct object clitic
       ind : Maybe Agr ; -- indirect object clitic

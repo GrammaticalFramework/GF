@@ -783,12 +783,12 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     balla'_BLGH_2_7436_V      = mkV_II "balla'" (mkRoot "b-l-għ") ;
     tballa'_BLGH_5_7437_V     = mkV_V "tballa'" (mkRoot "b-l-għ") ;
     nbela'_BLGH_7_7438_V      = mkV_VII "bela'" "nbela'" (mkRoot "b-l-għ") ;
-    blehhen_BLHN_1_7439_V     = mkV strong form1 (mkRoot "bl-ħ-n") (mkVowels "e" "e")
+    blehhen_BLHN_2_7439_V     = mkV strong form1 (mkRoot "bl-ħ-n") (mkVowels "e" "e")
       "bleħħint" "bleħħint" "bleħħen" "bleħħnet" "bleħħinna" "bleħħintu" "bleħħnu"
       "nbleħħen" "tbleħħen" "jibleħħen" "tbleħħen" "nbleħħnu" "tbleħħnu" "jibleħħnu"
       "bleħħen" "bleħħnu"
       ;
-    tblehhen_BLHN_2_7440_V    = mkV strong form2 (mkRoot "bl-ħ-n") (mkVowels "e" "e")
+    tblehhen_BLHN_5_7440_V    = mkV strong form2 (mkRoot "bl-ħ-n") (mkVowels "e" "e")
       "tbleħħint" "tbleħħint" "tbleħħen" "tbleħħnet" "tbleħħinna" "tbleħħintu" "tbleħħnu"
       "nitbleħħen" "titbleħħen" "jitbleħħen" "titbleħħen" "nitbleħħnu" "titbleħħnu" "jitbleħħnu"
       "tbleħħen" "tbleħħnu"
@@ -4293,6 +4293,7 @@ concrete DictMlt of DictMltAbs = CatMlt ** open ParadigmsMlt in {
     itteka_TKW_1_10825_V      = mkV "itteka" (mkRoot "t-k-w") ;
     ntemm_TMM_7_10826_V       = mkV_VII "temm" "ntemm" (mkRoot "t-m-m") ;
     nghadda_GHDJ_7_10828_V    = mkV_VII "għadda" "ngħadda" (mkRoot "għ-d-j") ;
+    nqies_QJS_7_10829_V       = mkV_VII "qies" "nqies" (mkRoot "q-j-s") ;
 
   -- Loan verbs
   lin

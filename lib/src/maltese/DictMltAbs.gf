@@ -759,8 +759,8 @@ abstract DictMltAbs = Cat ** {
     balla'_BLGH_2_7436_V : V ;
     tballa'_BLGH_5_7437_V : V ;
     nbela'_BLGH_7_7438_V : V ;
-    blehhen_BLHN_1_7439_V : V ;
-    tblehhen_BLHN_2_7440_V : V ;
+    blehhen_BLHN_2_7439_V : V ;
+    tblehhen_BLHN_5_7440_V : V ;
     bell_BLL_1_7441_V : V ;
     bellel_BLL_2_7442_V : V ;
     tbell_BLL_5_7443_V : V ;
@@ -4145,6 +4145,7 @@ abstract DictMltAbs = Cat ** {
     itteka_TKW_1_10825_V : V ;
     ntemm_TMM_7_10826_V : V ;
     nghadda_GHDJ_7_10828_V : V ;
+    nqies_QJS_7_10829_V : V ;
 
   -- Loan verbs
   fun
