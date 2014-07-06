@@ -2404,9 +2404,13 @@ pgf_embed_funs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 		return;
 	}
 
-	pyexpr->expr = pgf_fun_get_ep(value)->expr;
+	pyexpr->master = (PyObject*) clo->grammar;
+	pyexpr->expr   = pgf_fun_get_ep(value)->expr;
+
+	Py_INCREF(pyexpr->master);
 
     if (PyModule_AddObject(clo->object, name, (PyObject*) pyexpr) != 0) {
+		Py_DECREF(pyexpr);
 		gu_raise(err, PgfExn);
 	}
 }
