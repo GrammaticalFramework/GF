@@ -80,6 +80,7 @@ libpgf_la_SOURCES = \
 	pgf/linearizer.c \
 	pgf/typechecker.c \
 	pgf/reasoner.c \
+	pgf/evaluator.c \
 	pgf/printer.c \
 	pgf/graphviz.c \
 	pgf/pgf.c \

@@ -99,7 +99,11 @@ pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err);
 bool
 pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
              double *precision, double *recall, double *exact);
-                    
+
+PgfExpr
+pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err, 
+            GuPool* pool, GuPool* out_pool);
+
 PgfExprEnum*
 pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool);
 

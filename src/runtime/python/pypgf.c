@@ -2301,8 +2301,30 @@ PGF_compute(PGFObject* self, PyObject *args)
     if (!PyArg_ParseTuple(args, "O!", &pgf_ExprType, &py_expr))
 		return NULL;
 
-	Py_INCREF(py_expr);
-	return py_expr;
+	ExprObject* py_expr_res = (ExprObject*) pgf_ExprType.tp_alloc(&pgf_ExprType, 0);
+	if (py_expr_res == NULL)
+		return NULL;
+
+	GuPool* tmp_pool = gu_new_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+
+	py_expr_res->pool = gu_new_pool();
+	py_expr_res->expr = pgf_compute(self->pgf, py_expr->expr, err, 
+	                                tmp_pool, py_expr_res->pool);
+	py_expr_res->master = (PyObject*) self;
+	Py_INCREF(py_expr_res->master);
+
+	if (!gu_ok(err)) {
+		GuString msg = (GuString) gu_exn_caught_data(err);
+		PyErr_SetString(PGFError, msg);
+
+		Py_DECREF(py_expr_res);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+	return py_expr_res;
 }
 
 static ExprObject*
