@@ -261,6 +261,13 @@ pgf_tc_expr(PgfTypeChecker* checker,
 		break;
 	}
 	case PGF_EXPR_META: {
+		PgfExprMeta* emeta = i.data;
+		
+		PgfExprMeta* new_emeta =
+			gu_new_variant(PGF_EXPR_META,
+			               PgfExprMeta,
+			               pe, checker->pool);
+		new_emeta->id = emeta->id;
 		break;
 	}
 	case PGF_EXPR_IMPL_ARG: {
