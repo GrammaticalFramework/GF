@@ -312,7 +312,7 @@ unlexer = maybe (return id) unlexerfun =<< getInput "unlexer"
 pgfMain command (t,pgf) =
     case command of
       "parse"          -> o =<< doParse pgf # input % cat % limit % trie
-      "complete"       -> o =<< doComplete pgf # input % cat % limit
+      "complete"       -> o =<< doComplete pgf # input % cat % limit % full
       "linearize"      -> o =<< doLinearize pgf # tree % to
       "linearizeAll"   -> o =<< doLinearizes pgf # tree % to
       "linearizeTable" -> o =<< doLinearizeTabular pgf # tree % to
@@ -404,6 +404,9 @@ pgfMain command (t,pgf) =
         Nothing -> badRequest "Bad language" l
         Just lang | lang `elem` PGF.languages pgf -> return lang
                   | otherwise -> badRequest "Unknown language" l
+
+    full :: CGI Bool
+    full = maybe False toBool # getInput "full"
 
 -- * Request parameter access and related auxiliary functions
 
@@ -574,13 +577,35 @@ doParse pgf (mfrom,input) mcat mlimit trie = showJSON $ map makeObj
 addTrie trie trees =
     ["trie".=map head (PGF.toTrie (map PGF.toATree trees))|trie]
 
-doComplete :: PGF -> From -> Maybe PGF.Type -> Maybe Int -> JSValue
-doComplete pgf (mfrom,input) mcat mlimit = showJSON
-    [makeObj ["from".=from, "brackets".=bs, "completions".=cs, "text".=s]
-       | from <- froms, let (bs,s,cs) = complete' pgf from cat mlimit input]
+doComplete :: PGF -> From -> Maybe PGF.Type -> Maybe Int -> Bool -> JSValue
+doComplete pgf (mfrom,input) mcat mlimit full = showJSON
+    [makeObj (
+        ["from".=from, "brackets".=bs, "text".=s] ++
+        if full
+          then [ "completions" .= Map.elems (Map.mapWithKey (completionInfo pgf) cs) ]
+          else [ "completions" .= Map.keys cs ]
+        )
+    | from <- froms, let (bs,s,cs) = complete' pgf from cat mlimit input]
   where
     froms = maybe (PGF.languages pgf) (:[]) mfrom
     cat = fromMaybe (PGF.startCat pgf) mcat
+
+completionInfo :: PGF -> PGF.Token -> PGF.ParseState -> JSValue
+completionInfo pgf token pstate =
+  makeObj
+  ["token".= token
+  ,"funs" .= (nub (map mkFun funs))
+  ]
+  where
+    contInfo = PGF.getContinuationInfo pstate
+    funs = snd . head $ Map.toList contInfo -- always get [([],_)] ; funs :: [(fid,cid)]
+    mkFun (funid,cid) = case PGF.functionType pgf cid of
+      Just typ ->
+        makeObj [ "fid".=funid, "fun".=cid, "hyps".=hyps', "cat".=cat ]
+        where
+          (hyps,cat,es) = PGF.unType typ
+          hyps' = [ PGF.showType [] typ | (_,_,typ) <- hyps ]
+      Nothing -> makeObj [] -- shouldn't happen
 
 doLinearize :: PGF -> PGF.Tree -> To -> JSValue
 doLinearize pgf tree (tos,unlex) = showJSON
@@ -853,15 +878,15 @@ parse' pgf input mcat mfrom =
         cat = fromMaybe (PGF.startCat pgf) mcat
 
 complete' :: PGF -> PGF.Language -> PGF.Type -> Maybe Int -> String
-         -> (PGF.BracketedString, String, [String])
+         -> (PGF.BracketedString, String, Map.Map PGF.Token PGF.ParseState)
 complete' pgf from typ mlimit input =
   let (ws,prefix) = tokensAndPrefix input
       ps0 = PGF.initState pgf from typ
       (ps,ws') = loop ps0 ws
       bs       = snd (PGF.getParseOutput ps typ Nothing)
   in if not (null ws')
-       then (bs, unwords (if null prefix then ws' else ws'++[prefix]), [])
-       else (bs, prefix, maybe id take mlimit $ order $ Map.keys (PGF.getCompletions ps prefix))
+       then (bs, unwords (if null prefix then ws' else ws'++[prefix]), Map.empty)
+       else (bs, prefix, PGF.getCompletions ps prefix)
   where
     order = sortBy (compare `on` map toLower)
 
