@@ -88,6 +88,7 @@ module PGF(
            Parse.initState, Parse.nextState, Parse.getCompletions, Parse.recoveryStates, 
            Parse.ParseInput(..),  Parse.simpleParseInput, Parse.mkParseInput,
            Parse.ParseOutput(..), Parse.getParseOutput,
+           Parse.getContinuationInfo,
 
            -- ** Generation
            -- | The PGF interpreter allows automatic generation of
