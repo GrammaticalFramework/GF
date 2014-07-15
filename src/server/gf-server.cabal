@@ -26,12 +26,12 @@ Library
   hs-source-dirs: . transfer
 
   build-depends:   base >=4.2 && <5,
-                   time, time-compat,
+                   time, time-compat, old-locale,
                    directory,
                    filepath,
                    containers,
                    process,
-                   gf >= 3.5.12,
+                   gf >= 3.6,
                    cgi >= 3001.1.7.3,
                    httpd-shed,
                    mtl,
