@@ -5,7 +5,23 @@ concrete QuestionChi of Question = CatChi **
 
   lin
 
-    QuestCl cl = {s = \\isDir,p,a => cl.s ! p ! a ++ if_then_Str isDir question_s []} ; --- plus redup questions
+    QuestCl cl = {
+      s = table {
+        True => \\p,a => cl.s ! p ! a ++ question_s ; -- redup question as variant in ExtraChi
+        False => \\p,a =>                             --- code copied from ExtraChi
+          let
+          v = cl.vp.verb ; 
+          verb = case a of {
+            APlain   => v.s  ++ v.neg ++ v.sn ; 
+            APerf    => v.s  ++ "不"  ++ v.sn ++ v.pp ;
+            ADurStat => v.s  ++ "不"  ++ v.sn ;
+            ADurProg => v.dp ++ v.neg ++ v.dp ++ v.sn ;  -- mei or bu
+            AExper   => v.s  ++ v.neg ++ v.sn ++ v.ep
+            }
+          in
+          cl.np ++ cl.vp.prePart ++ verb ++ cl.vp.compl
+        }
+     } ;
 
     QuestVP ip vp = {
       s = \\_,p,a => ip.s ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl
