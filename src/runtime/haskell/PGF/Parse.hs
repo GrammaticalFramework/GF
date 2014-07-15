@@ -15,7 +15,7 @@ module PGF.Parse
 
 import Data.Array.IArray
 import Data.Array.Base (unsafeAt)
-import Data.List (isPrefixOf, foldl')
+import Data.List (isPrefixOf, foldl', intercalate)
 import Data.Maybe (fromMaybe, maybeToList)
 import qualified Data.Map as Map
 import qualified PGF.TrieMap as TrieMap
@@ -506,14 +506,26 @@ type Continuation = TrieMap.TrieMap Token ActiveSet
 
 -- | Return the Continuation of a Parsestate with exportable types
 --   Used by PGFService
-getContinuationInfo :: ParseState -> Map.Map [Token] [(FunId, CId)]
+getContinuationInfo :: ParseState -> Map.Map [Token] [(FunId, CId, String)]
 getContinuationInfo pstate = Map.map (map f . Set.toList) contMap
   where
     PState abstr concr chart cont = pstate
     contMap = Map.fromList (TrieMap.toList cont) -- always get [([], _::ActiveSet)]
-    f :: Active -> (FunId,CId)
-    f (Active int dotpos funid seqid pargs ak) = (funid, cid)
-      where CncFun cid _ = cncfuns concr ! funid
+    f :: Active -> (FunId,CId,String)
+    f (Active int dotpos funid seqid pargs ak) = (funid, cid, seq)
+      where
+        CncFun cid _ = cncfuns concr ! funid
+        seq = showSeq dotpos (sequences concr ! seqid)
+        
+    showSeq :: DotPos -> Sequence -> String
+    showSeq pos seq = intercalate " " $ scan (drop (pos-1) (elems seq))
+      where
+        -- Scan left-to-right, stop at first non-token
+        scan :: [Symbol] -> [String]
+        scan [] = []
+        scan (sym:syms) = case sym of
+          SymKS token -> token : scan syms
+          _           -> []
 
 ----------------------------------------------------------------
 -- Error State

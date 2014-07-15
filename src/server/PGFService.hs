@@ -30,7 +30,7 @@ import Control.Monad
 import Control.Monad.State(State,evalState,get,put)
 import Data.Char
 import Data.Function (on)
-import Data.List (sortBy,intersperse,mapAccumL,nub,isSuffixOf)
+import Data.List (sortBy,intersperse,mapAccumL,nub,isSuffixOf,nubBy)
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Random
@@ -594,18 +594,19 @@ completionInfo :: PGF -> PGF.Token -> PGF.ParseState -> JSValue
 completionInfo pgf token pstate =
   makeObj
   ["token".= token
-  ,"funs" .= (nub (map mkFun funs))
+  ,"funs" .= (map mkFun (nubBy ignoreFunIds funs))
   ]
   where
     contInfo = PGF.getContinuationInfo pstate
-    funs = snd . head $ Map.toList contInfo -- always get [([],_)] ; funs :: [(fid,cid)]
-    mkFun (funid,cid) = case PGF.functionType pgf cid of
+    funs = snd . head $ Map.toList contInfo -- always get [([],_)] ; funs :: [(fid,cid,seq)]
+    ignoreFunIds (_,cid1,seq1) (_,cid2,seq2) = (cid1,seq1) == (cid2,seq2)
+    mkFun (funid,cid,seq) = case PGF.functionType pgf cid of
       Just typ ->
-        makeObj [ "fid".=funid, "fun".=cid, "hyps".=hyps', "cat".=cat ]
+        makeObj [ {-"fid".=funid,-} "fun".=cid, "hyps".=hyps', "cat".=cat, "seq".=seq ]
         where
           (hyps,cat,es) = PGF.unType typ
           hyps' = [ PGF.showType [] typ | (_,_,typ) <- hyps ]
-      Nothing -> makeObj [] -- shouldn't happen
+      Nothing -> makeObj [ "error".=("Function "++show cid++" not found") ] -- shouldn't happen
 
 doLinearize :: PGF -> PGF.Tree -> To -> JSValue
 doLinearize pgf tree (tos,unlex) = showJSON
