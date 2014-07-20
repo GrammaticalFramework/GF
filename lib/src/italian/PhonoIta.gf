@@ -17,7 +17,8 @@ oper
     } ;
 
   elision : (_,_,_ : Str) -> Str = \il, l', lo -> 
-    pre {il ; (l' ++ Predef.BIND) / vocale ; lo / sImpuro} ;
+    let ll = case last l' of {"'" => l' ++ Predef.BIND ; _ => l'} in
+    pre {il ; ll / vocale ; lo / sImpuro} ;
 ---    pre {vocale => l' ;  sImpuro => lo ; _ => il} ;  --- doesn't work properly 15/4/2014
 
 }
