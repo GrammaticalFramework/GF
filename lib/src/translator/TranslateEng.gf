@@ -24,7 +24,9 @@ concrete TranslateEng of Translate =
   SentenceEng - [
     UseCl     -- replaced by UseCl | ContractedUseCl
     ],        
-  QuestionEng,
+  QuestionEng - [
+    QuestVP   -- replaced by QuestVP | contracted QuestVP
+    ],       
   RelativeEng - [IdRP],
   IdiomEng,
   ConstructionEng,
@@ -47,6 +49,13 @@ lin
   UseCl t p cl = 
      G.UseCl t p cl              -- I am here
    | E.ContractedUseCl t p cl    -- I'm here
+   ;
+
+  QuestVP qp vp = 
+     G.QuestVP qp vp             -- who is there
+   | 
+      let cl = mkClause (qp.s ! npNom) (agrP3 qp.n) vp   -- who's there
+      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir True}
    ;
 
   ComplVS vs s = G.ComplVS vs s | E.ComplBareVS vs s ;
