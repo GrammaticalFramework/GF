@@ -81,7 +81,7 @@ lin
     mkPronoun
       "lei" "la" "le" "glie" "lei" "suo" "sua" "suoi" "sue"
       Fem Sg P3 ;
-  so_AdA = ss "cosÃ¬" ;
+  so_AdA = ss "così" ;
   somebody_NP = pn2np (mkPN ["qualcuno"] Masc) ;
   somePl_Det = {s,sp = \\_,c => prepCase c ++ "qualche" ; n = Pl ; s2 = [] ; isNeg = False} ;
   someSg_Det = {s,sp = \\_,c => prepCase c ++ "qualche" ; n = Sg ; s2 = [] ; isNeg = False} ;

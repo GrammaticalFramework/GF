@@ -52,7 +52,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
     artIndef = \g,n,c -> case <n,c> of {
       <Sg,_>   => prepCase c ++ 
-                  genForms (elision "un" "un" "uno") (elision "una" "un'" "una") ! g ;
+                  genForms (pre {"un" ; "uno" / sImpuro}) (elision "una" "un'" "una") ! g ;
       _        => prepCase c 
       } ;
 
