@@ -27,7 +27,7 @@ example_grammars =  -- :: [(pgf, subdir, src)]
 
   --phrasebookSrc = "Phrasebook???.gf" -- doesn't work on Win32
     phrasebookSrc = ["Phrasebook"++lang++".gf"|lang<-phrasebookLangs]
-    phrasebookLangs = words "Bul Cat Dan Dut Eng Lav Hin Nor Spa Swe Tha" -- only fastish languages
+    phrasebookLangs = words "Bul Cat Chi Dan Dut Eng Lav Hin Nor Spa Swe Tha" -- only fastish languages
 
   --letterSrc = "Letter???.gf"
     letterSrc = ["Letter"++lang++".gf"|lang<-letterLangs]
