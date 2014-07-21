@@ -21,8 +21,8 @@ flag c-runtime
   Default:     False
 
 Library
-  exposed-modules: PGFService FastCGIUtils ServeStaticFile RunHTTP
-  other-modules: Cache URLEncoding Fold
+  exposed-modules: PGFService FastCGIUtils ServeStaticFile RunHTTP Cache
+  other-modules: URLEncoding Fold
   hs-source-dirs: . transfer
 
   build-depends:   base >=4.2 && <5,
