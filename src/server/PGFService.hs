@@ -53,20 +53,27 @@ type Caches = (Cache PGF,Cache (C.PGF,({-MVar ParseCache-})))
 --type ParseCache = Map.Map (String,String) (ParseResult,UTCTime)
 --type ParseResult = Either String [(C.Expr,Float)]
 
-newPGFCache = do pgfCache <- newCache PGF.readPGF
-                 cCache <- newCache $ \ path -> do pgf <- C.readPGF path
-                                                 --pc <- newMVar Map.empty
-                                                   return (pgf,({-pc-}))
+newPGFCache = do pgfCache <- newCache' PGF.readPGF
+                 cCache <- newCache' $ \ path -> do pgf <- C.readPGF path
+                                                  --pc <- newMVar Map.empty
+                                                    return (pgf,({-pc-}))
                  return (pgfCache,cCache)
 flushPGFCache (c1,c2) = flushCache c1 >> flushCache c2
 listPGFCache (c1,c2) = (,) # listCache c1 % listCache c2
 #else
 type Caches = (Cache PGF,())
-newPGFCache = do pgfCache <- newCache PGF.readPGF
+newPGFCache = do pgfCache <- newCache' PGF.readPGF
                  return (pgfCache,())
 flushPGFCache (c1,_) = flushCache c1
 listPGFCache (c1,_) = (,) # listCache c1 % return []
 #endif
+
+newCache' rd = do c <- newCache rd
+                  forkIO $ forever $ clean c
+                  return c
+  where
+    clean c = do threadDelay 2000000000 -- 2000 seconds, i.e. ~33 minutes
+                 expireCache (24*60*60) c -- 24 hours
 
 getPath =
     do path <- getVarWithDefault "PATH_TRANSLATED" "" -- apache mod_fastcgi
