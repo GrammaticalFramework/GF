@@ -86,7 +86,7 @@ Library
       Data.Binary.Builder
       Data.Binary.IEEE754
   else
-    build-depends: binary
+    build-depends: binary, data-binary-ieee754
 
   ghc-options: -fwarn-unused-imports
   if impl(ghc>=7.8)
