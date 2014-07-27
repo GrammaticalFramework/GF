@@ -47,7 +47,7 @@ import Data.Maybe
 import qualified Data.Map as Map
 --import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
 import GF.System.Process
-import Text.PrettyPrint
+import GF.Text.Pretty
 import Data.List (sort)
 --import Debug.Trace
 --import System.Random (newStdGen) ----
@@ -762,19 +762,19 @@ allCommands = Map.fromList [
                                 Just e  -> let (es,err) = exprs ls
                                            in case inferExpr pgf e of
                                                 Right (e,t) -> (e:es,err)
-                                                Left tcerr  -> (es,text "on line" <+> int n <> colon $$ nest 2 (ppTcError tcerr) $$ err)
+                                                Left tcerr  -> (es,"on line" <+> n <> ':' $$ nest 2 (ppTcError tcerr) $$ err)
                                 Nothing -> let (es,err) = exprs ls
-                                           in (es,text "on line" <+> int n <> colon <+> text "parse error" $$ err)
+                                           in (es,"on line" <+> n <> ':' <+> "parse error" $$ err)
            returnFromLines ls = case exprs ls of
-                                  (es, err) | null es   -> return $ pipeMessage $ render (err $$ text "no trees found")
+                                  (es, err) | null es   -> return $ pipeMessage $ render (err $$ "no trees found")
                                             | otherwise -> return $ pipeWithMessage es (render err)
 
        s <- restricted $ readFile file
        case opts of
          _ | isOpt "lines" opts && isOpt "tree" opts ->
-               returnFromLines (zip [1..] (lines s))
+               returnFromLines (zip [1::Int ..] (lines s))
          _ | isOpt "tree" opts ->
-               returnFromLines [(1,s)]
+               returnFromLines [(1::Int,s)]
          _ | isOpt "lines" opts -> return (fromStrings $ lines s)
          _ -> return (fromString s),
      flags = [("file","the input file name")]
@@ -1145,9 +1145,9 @@ allCommands = Map.fromList [
                                                         render (ppCat id cd $$
                                                                 if null (functionsToCat pgf id)
                                                                   then empty
-                                                                  else space $$
+                                                                  else ' ' $$
                                                                        vcat [ppFun fid (ty,0,Just [],0,0) | (fid,ty) <- functionsToCat pgf id] $$
-                                                                       space)
+                                                                       ' ')
                                                      let (_,_,prob,_) = cd
                                                      putStrLn ("Probability: "++show prob)
                                                      return void
@@ -1290,7 +1290,7 @@ allCommands = Map.fromList [
      | otherwise            = case po of
                                 ParseOk ts     -> let Piped (es',msg') = fromExprs ts
                                                   in (es'++es,msg'++msg)
-                                TypeError errs -> ([], render (text "The parsing is successful but the type checking failed with error(s):" $$
+                                TypeError errs -> ([], render ("The parsing is successful but the type checking failed with error(s):" $$
                                                                nest 2 (vcat (map (ppTcError . snd) errs)))
                                                        ++ "\n" ++ msg)
                                 ParseFailed i  -> ([], "The parser failed at token " ++ show (words s !! max 0 (i-1))
@@ -1448,13 +1448,13 @@ execToktok (pgf, _) opts exprs = do
 
 trie = render . pptss . toTrie . map toATree
   where
-    pptss [ts] = text "*"<+>nest 2 (ppts ts)
-    pptss tss  = vcat [int i<+>nest 2 (ppts ts)|(i,ts)<-zip [1..] tss]
+    pptss [ts] = "*"<+>nest 2 (ppts ts)
+    pptss tss  = vcat [i<+>nest 2 (ppts ts)|(i,ts)<-zip [(1::Int)..] tss]
 
     ppts = vcat . map ppt
 
     ppt t =
       case t of
-        Oth e     -> text (showExpr [] e)
-        Ap f [[]] -> text (showCId f)
-        Ap f tss  -> text (showCId f) $$ nest 2 (pptss tss)
+        Oth e     -> pp (showExpr [] e)
+        Ap f [[]] -> pp (showCId f)
+        Ap f tss  -> showCId f $$ nest 2 (pptss tss)

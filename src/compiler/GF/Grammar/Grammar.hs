@@ -36,7 +36,7 @@ module GF.Grammar.Grammar (
         PMCFG(..), Production(..), FId, FunId, SeqId, LIndex, Sequence,
         
         Info(..),
-        Location(..), L(..), unLoc, noLoc,
+        Location(..), L(..), unLoc, noLoc, ppLocation, ppL,
         Type,
         Cat,
         Fun,
@@ -63,6 +63,7 @@ module GF.Grammar.Grammar (
 
 import GF.Infra.Ident
 import GF.Infra.Option ---
+import GF.Infra.Location
 
 import GF.Data.Operations
 
@@ -74,7 +75,7 @@ import Data.Array.Unboxed
 import qualified Data.Map as Map
 --import qualified Data.Set as Set
 --import qualified Data.IntMap as IntMap
-import Text.PrettyPrint
+import GF.Text.Pretty
 --import System.FilePath
 --import Control.Monad.Identity
 
@@ -97,6 +98,8 @@ data SourceModInfo = ModInfo {
     mseqs   :: Maybe (Array SeqId Sequence),
     jments  :: Map.Map Ident Info
   }
+
+instance HasSourcePath SourceModInfo where sourcePath = msrc
 
 type SourceModule = (Ident, SourceModInfo)
 
@@ -200,12 +203,12 @@ abstractOfConcrete gr c = do
   n <- lookupModule gr c
   case mtype n of
     MTConcrete a -> return a
-    _ -> raise $ render (text "expected concrete" <+> ppIdent c)
+    _ -> raise $ render ("expected concrete" <+> c)
 
 lookupModule :: ErrorMonad m => SourceGrammar -> Ident -> m SourceModInfo
 lookupModule gr m = case Map.lookup m (moduleMap gr) of
   Just i  -> return i
-  Nothing -> raise $ render (text "unknown module" <+> ppIdent m <+> text "among" <+> hsep (map (ppIdent . fst) (modules gr)))
+  Nothing -> raise $ render ("unknown module" <+> m <+> "among" <+> hsep (map fst (modules gr)))
 
 isModAbs :: SourceModInfo -> Bool
 isModAbs m =
@@ -263,7 +266,7 @@ allAbstracts :: SourceGrammar -> [Ident]
 allAbstracts gr = 
  case topoTest [(i,extends m) | (i,m) <- modules gr, mtype m == MTAbstract] of
    Left  is     -> is
-   Right cycles -> error $ render (text "Cyclic abstract modules:" <+> vcat (map (hsep . map ppIdent) cycles))
+   Right cycles -> error $ render ("Cyclic abstract modules:" <+> vcat (map hsep cycles))
 
 -- | the last abstract in dependency order (head of list)
 greatestAbstract :: SourceGrammar -> Maybe Ident
@@ -331,23 +334,6 @@ data Info =
 -- indirection to module Ident
  | AnyInd Bool Ident                         -- ^ (/INDIR/) the 'Bool' says if canonical
   deriving Show
-
-data Location 
-  = NoLoc
-  | Local Int Int
-  | External FilePath Location
-  deriving (Show,Eq,Ord)
-
-data L a = L Location a  -- location information
-  deriving Show
-
-instance Functor L where
-  fmap f (L loc x) = L loc (f x)
-
-unLoc :: L a -> a
-unLoc (L _ x) = x
-
-noLoc = L NoLoc
 
 type Type = Term
 type Cat  = QIdent

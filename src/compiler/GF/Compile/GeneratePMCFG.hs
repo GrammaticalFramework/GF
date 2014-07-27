@@ -25,13 +25,13 @@ import GF.Data.BacktrackM
 import GF.Data.Operations
 import GF.Infra.UseIO (IOE,ePutStr,ePutStrLn)
 import GF.Data.Utilities (updateNthM) --updateNth
-import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues,ppL)
+import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.List as List
 --import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
-import Text.PrettyPrint hiding (Str)
+import GF.Text.Pretty
 import Data.Array.IArray
 import Data.Array.Unboxed
 --import Data.Maybe
@@ -148,13 +148,13 @@ floc opath loc id = maybe (L loc id) (\path->L (External path loc) id) opath
 
 convert opts gr cenv loc term ty@(_,val) pargs =
     case term' of
-      Error s -> fail $ render $ ppL loc (text $ "Predef.error: "++s)
+      Error s -> fail $ render $ ppL loc ("Predef.error: "++s)
       _ -> do {-when (verbAtLeast opts Verbose) $
                 ePutStrLn $
                   "\n"++take 10000 (renderStyle style{mode=OneLineMode}
-                    (text "term:"<+>ppU 0 term $$
-                     text "eta expanded:"<+>ppU 0 eterm $$
-                     text "normalized:"<+>ppU 0 term'))--}
+                    (text "term:"<+>term $$
+                     text "eta expanded:"<+>eterm $$
+                     text "normalized:"<+>term'))--}
               return $ runCnvMonad gr (conv term') (pargs,[])
   where
     conv t = convertTerm opts CNil val =<< unfactor t
@@ -189,16 +189,16 @@ unfactor t = CM (\gr c -> c (unfac gr t))
       case t of
         T (TTyped ty) [(PV x,u)] -> let u' = unfac gr u
                                         vs = allparams ty
-                                    in --trace ("expand single variable table into "++show (length vs)++" branches.\n"++render (ppU 0 t)) $
+                                    in --trace ("expand single variable table into "++show (length vs)++" branches.\n"++render t) $
                                        V ty [restore x v u' | v <- vs]
         T (TTyped ty) [(PW  ,u)] -> let u' = unfac gr u
                                         vs = allparams ty
-                                    in --trace ("expand wildcard table into "++show (length vs)++ "branches.\n"++render (ppU 0 t)) $
+                                    in --trace ("expand wildcard table into "++show (length vs)++ "branches.\n"++render t) $
                                        V ty [u' | _ <- vs]
         T (TTyped ty) _ -> -- convertTerm doesn't handle these tables
                            ppbug $
-                           sep [text "unfactor"<+>ppU 10 t,
-                                text (show t){-,
+                           sep ["unfactor"<+>ppU 10 t,
+                                pp (show t){-,
                                 fsep (map (ppU 10) (allparams ty))-}]
         _ -> composSafeOp (unfac gr) t
       where
@@ -376,7 +376,7 @@ computeCatRange gr lincat = compute (0,1) lincat
                                      (index,m) = st
                                  in ((index,m*length vs),CPar (m,zip vs [0..]))
 
-ppPath (CProj lbl path) = ppLabel lbl <+> ppPath path
+ppPath (CProj lbl path) = lbl <+> ppPath path
 ppPath (CSel  trm path) = ppU 5 trm   <+> ppPath path
 ppPath CNil             = empty
 
@@ -417,7 +417,7 @@ convertTerm opts sel ctype (Alts s alts)= do CStr s <- convertTerm opts CNil cty
   where
     unSym (CStr [])        = ""
     unSym (CStr [SymKS t]) = t
-    unSym _                = ppbug $ hang (text "invalid prefix in pre expression:") 4 (ppU 0 (Alts s alts))
+    unSym _                = ppbug $ hang ("invalid prefix in pre expression:") 4 (Alts s alts)
 
     unPatt (EPatt p) = fmap Strs (getPatts p)
     unPatt u         = return u
@@ -429,7 +429,7 @@ convertTerm opts sel ctype (Alts s alts)= do CStr s <- convertTerm opts CNil cty
         as <- getPatts a
         bs <- getPatts b
         return [K (s ++ t) | K s <- as, K t <- bs]
-      _ -> fail (render (text "not valid pattern in pre expression" <+> ppPatt Unqualified 0 p))
+      _ -> fail (render ("not valid pattern in pre expression" <+> ppPatt Unqualified 0 p))
 
 convertTerm opts sel ctype (Q (m,f))
   | m == cPredef &&
@@ -449,7 +449,7 @@ convertTerm opts sel@(CProj l _) ctype (ExtR t1@(R rs1) t2)
 
 convertTerm opts CNil ctype t           = do v <- evalTerm CNil t
                                              return (CPar v)
-convertTerm _    sel  _     t           = ppbug (text "convertTerm" <+> sep [parens (text (show sel)),ppU 10 t])
+convertTerm _    sel  _     t           = ppbug ("convertTerm" <+> sep [parens (show sel),ppU 10 t])
 
 convertArg :: Options -> Term -> Int -> Path -> CnvMonad (Value [Symbol])
 convertArg opts (RecType rs)  nr path =
@@ -489,8 +489,8 @@ convertTbl opts (CSel v sub_sel) ctype pt ts = do
   vs <- getAllParamValues pt
   case lookup v (zip vs ts) of
     Just t  -> convertTerm opts sub_sel ctype t
-    Nothing -> ppbug (text "convertTbl:" <+> (text "missing value" <+> ppU 0 v $$
-                                              text "among" <+> vcat (map (ppU 0) vs)))
+    Nothing -> ppbug ( "convertTbl:" <+> ("missing value" <+> v $$
+                                          "among" <+> vcat vs))
 convertTbl opts _ ctype _ _ = bug ("convertTbl: "++show ctype)
 
 
@@ -571,13 +571,13 @@ evalTerm path (V pt ts)    =
          do vs <- getAllParamValues pt
             case lookup trm (zip vs ts) of
               Just t  -> evalTerm path t
-              Nothing -> ppbug $ text "evalTerm: missing value:"<+>ppU 0 trm
-                                 $$ text "among:" <+>fsep (map (ppU 10) vs)
+              Nothing -> ppbug $ "evalTerm: missing value:"<+>trm
+                                 $$ "among:" <+>fsep (map (ppU 10) vs)
 evalTerm path (S term sel) = do v <- evalTerm CNil sel
                                 evalTerm (CSel v path) term
 evalTerm path (FV terms)   = variants terms >>= evalTerm path
 evalTerm path (EInt n)     = return (EInt n)
-evalTerm path t            = ppbug (text "evalTerm" <+> parens (ppU 0 t))
+evalTerm path t            = ppbug ("evalTerm" <+> parens t)
 --evalTerm path t            = ppbug (text "evalTerm" <+> sep [parens (text (show path)),parens (text (show t))])
 
 getVarIndex x = maybe err id $ getArgIndex x
@@ -654,7 +654,7 @@ restrictProtoFCat path v (PFCat cat f schema) = do
 mkArray    lst = listArray (0,length lst-1) lst
 mkSetArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
 
-bug msg = ppbug (text msg)
-ppbug = error . render . hang (text "Internal error in GeneratePMCFG:") 4
+bug msg = ppbug msg
+ppbug msg = error . render $ hang "Internal error in GeneratePMCFG:" 4 msg
 
 ppU = ppTerm Unqualified

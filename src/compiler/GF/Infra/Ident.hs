@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.Ident (-- * Identifiers
-	      Ident, ident2utf8, showIdent, ppIdent, prefixIdent,
+	      Ident, ident2utf8, showIdent, prefixIdent,
 	      identS, identC, identV, identA, identAV, identW,
 	      argIdent, isArgIdent, getArgIndex,
               varStr, varX, isWildIdent, varIndex,
@@ -31,7 +31,7 @@ import qualified Data.ByteString.Char8 as BS(append,isPrefixOf)
                  -- UTF-8-encoded bytestrings!
 import Data.Char(isDigit)
 import PGF.Internal(Binary(..))
-import Text.PrettyPrint(Doc,text)
+import GF.Text.Pretty
 
 
 -- | the constructors labelled /INTERNAL/ are
@@ -81,8 +81,7 @@ ident2raw = Id . ident2utf8
 showIdent :: Ident -> String
 showIdent i = unpack $! ident2utf8 i
 
-ppIdent :: Ident -> Doc
-ppIdent = text . showIdent
+instance Pretty Ident where pp = pp . showIdent
 
 identS :: String -> Ident
 identS = identC . rawIdentS

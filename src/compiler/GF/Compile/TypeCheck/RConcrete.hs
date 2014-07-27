@@ -13,7 +13,7 @@ import GF.Compile.TypeCheck.Primitives
 
 import Data.List
 import Control.Monad
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 computeLType :: SourceGrammar -> Context -> Type -> Check Type
 computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
@@ -22,7 +22,7 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
     _ | Just _ <- isTypeInts ty -> return ty ---- shouldn't be needed
       | isPredefConstant ty     -> return ty ---- shouldn't be needed
 
-    Q (m,ident) -> checkIn (text "module" <+> ppIdent m) $ do
+    Q (m,ident) -> checkIn ("module" <+> m) $ do
       ty' <- lookupResDef gr (m,ident)
       if ty' == ty then return ty else comp g ty' --- is this necessary to test?
 
@@ -30,7 +30,7 @@ computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t
      over <- getOverload gr g (Just typeType) t
      case over of
        Just (tr,_) -> return tr
-       _ -> checkError (text "unresolved overloading of constants" <+> ppTerm Qualified 0 t) 
+       _ -> checkError ("unresolved overloading of constants" <+> ppTerm Qualified 0 t) 
 
     Vr ident  -> checkLookup ident g -- never needed to compute!
 
@@ -79,26 +79,26 @@ inferLType gr g trm = case trm of
 
    Q (m,ident) | isPredef m -> termWith trm $ case typPredefined ident of
                                                 Just ty -> return ty
-                                                Nothing -> checkError (text "unknown in Predef:" <+> ppIdent ident)
+                                                Nothing -> checkError ("unknown in Predef:" <+> ident)
 
    Q ident -> checks [
      termWith trm $ lookupResType gr ident >>= computeLType gr g
      ,
      lookupResDef gr ident >>= inferLType gr g
      ,
-     checkError (text "cannot infer type of constant" <+> ppTerm Unqualified 0 trm)
+     checkError ("cannot infer type of constant" <+> ppTerm Unqualified 0 trm)
      ]
 
    QC (m,ident) | isPredef m -> termWith trm $ case typPredefined ident of
                                                  Just ty -> return ty
-                                                 Nothing -> checkError (text "unknown in Predef:" <+> ppIdent ident)
+                                                 Nothing -> checkError ("unknown in Predef:" <+> ident)
 
    QC ident -> checks [
        termWith trm $ lookupResType gr ident >>= computeLType gr g
        ,
        lookupResDef gr ident >>= inferLType gr g
        ,
-       checkError (text "cannot infer type of canonical constant" <+> ppTerm Unqualified 0 trm)
+       checkError ("cannot infer type of canonical constant" <+> ppTerm Unqualified 0 trm)
        ]
 
    Vr ident -> termWith trm $ checkLookup ident g
@@ -111,7 +111,7 @@ inferLType gr g trm = case trm of
      over <- getOverload gr g Nothing trm
      case over of
        Just trty -> return trty
-       _ -> checkError (text "unresolved overloading of constants" <+> ppTerm Qualified 0 trm) 
+       _ -> checkError ("unresolved overloading of constants" <+> ppTerm Qualified 0 trm) 
 
    App f a -> do
      over <- getOverload gr g Nothing trm
@@ -127,7 +127,7 @@ inferLType gr g trm = case trm of
                       then return val
                       else substituteLType [(bt,z,a')] val
              return (App f' a',ty) 
-           _ -> checkError (text "A function type is expected for" <+> ppTerm Unqualified 0 f <+> text "instead of type" <+> ppType fty)
+           _ -> checkError ("A function type is expected for" <+> ppTerm Unqualified 0 f <+> "instead of type" <+> ppType fty)
 
    S f x -> do
      (f', fty) <- inferLType gr g f
@@ -135,7 +135,7 @@ inferLType gr g trm = case trm of
        Table arg val -> do
          x'<- justCheck g x arg
          return (S f' x', val)
-       _ -> checkError (text "table lintype expected for the table in" $$ nest 2 (ppTerm Unqualified 0 trm))
+       _ -> checkError ("table lintype expected for the table in" $$ nest 2 (ppTerm Unqualified 0 trm))
 
    P t i -> do
      (t',ty) <- inferLType gr g t   --- ??
@@ -143,16 +143,16 @@ inferLType gr g trm = case trm of
      let tr2 = P t' i
      termWith tr2 $ case ty' of
        RecType ts -> case lookup i ts of
-                       Nothing -> checkError (text "unknown label" <+> ppLabel i <+> text "in" $$ nest 2 (ppTerm Unqualified 0 ty'))
+                       Nothing -> checkError ("unknown label" <+> i <+> "in" $$ nest 2 (ppTerm Unqualified 0 ty'))
                        Just x  -> return x
-       _          -> checkError (text "record type expected for:" <+> ppTerm Unqualified 0 t $$
-                                 text " instead of the inferred:" <+> ppTerm Unqualified 0 ty')
+       _          -> checkError ("record type expected for:" <+> ppTerm Unqualified 0 t $$
+                                 " instead of the inferred:" <+> ppTerm Unqualified 0 ty')
 
    R r -> do
      let (ls,fs) = unzip r
      fsts <- mapM inferM fs
      let ts = [ty | (Just ty,_) <- fsts]
-     checkCond (text "cannot infer type of record" $$ nest 2 (ppTerm Unqualified 0 trm)) (length ts == length fsts)
+     checkCond ("cannot infer type of record" $$ nest 2 (ppTerm Unqualified 0 trm)) (length ts == length fsts)
      return $ (R (zip ls fsts), RecType (zip ls ts))
 
    T (TTyped arg) pts -> do
@@ -164,7 +164,7 @@ inferLType gr g trm = case trm of
    T ti pts -> do  -- tries to guess: good in oper type inference
      let pts' = [pt | pt@(p,_) <- pts, isConstPatt p]
      case pts' of 
-       [] -> checkError (text "cannot infer table type of" <+> ppTerm Unqualified 0 trm)
+       [] -> checkError ("cannot infer table type of" <+> ppTerm Unqualified 0 trm)
 ----       PInt k : _ -> return $ Ints $ max [i | PInt i <- pts'] 
        _  -> do 
          (arg,val) <- checks $ map (inferCase Nothing) pts'
@@ -198,7 +198,7 @@ inferLType gr g trm = case trm of
 
 ---- hack from Rename.identRenameTerm, to live with files with naming conflicts 18/6/2007
    Strs (Cn c : ts) | c == cConflict -> do
-     checkWarn (text "unresolved constant, could be any of" <+> hcat (map (ppTerm Unqualified 0) ts))
+     checkWarn ("unresolved constant, could be any of" <+> hcat (map (ppTerm Unqualified 0) ts))
      inferLType gr g (head ts)
 
    Strs ts -> do
@@ -231,7 +231,7 @@ inferLType gr g trm = case trm of
          checkLType gr g trm' rt ---- return (trm', rt)
        _ | rT' == typeType && sT' == typeType -> do
          return (trm', typeType)
-       _ -> checkError (text "records or record types expected in" <+> ppTerm Unqualified 0 trm)
+       _ -> checkError ("records or record types expected in" <+> ppTerm Unqualified 0 trm)
 
    Sort _     -> 
      termWith trm $ return typeType
@@ -263,7 +263,7 @@ inferLType gr g trm = case trm of
      ty' <- lockRecType c ty ---- lookup c; remove lock AR 20/6/2009
      return $ (ELin c trm', ty') 
 
-   _ -> checkError (text "cannot infer lintype of" <+> ppTerm Unqualified 0 trm)
+   _ -> checkError ("cannot infer lintype of" <+> ppTerm Unqualified 0 trm)
 
  where
    isPredef m = elem m [cPredef,cPredefAbs]
@@ -352,25 +352,25 @@ getOverload gr g mt ot = case appForm ot of
      case ([vf | (vf,True) <- matches],[vf | (vf,False) <- matches]) of
        ([(_,val,fun)],_) -> return (mkApp fun tts, val)
        ([],[(pre,val,fun)]) -> do
-         checkWarn $  text "ignoring lock fields in resolving" <+> ppTerm Unqualified 0 ot $$
-                      text "for" $$
+         checkWarn $  "ignoring lock fields in resolving" <+> ppTerm Unqualified 0 ot $$
+                      "for" $$
                       nest 2 (showTypes tys) $$
-                      text "using" $$
+                      "using" $$
                       nest 2 (showTypes pre)
          return (mkApp fun tts, val)
        ([],[]) -> do
-         checkError $ text "no overload instance of" <+> ppTerm Unqualified 0 f $$
-                      text "for" $$
+         checkError $ "no overload instance of" <+> ppTerm Unqualified 0 f $$
+                      "for" $$
                       nest 2 stysError $$
-                      text "among" $$
+                      "among" $$
                       nest 2 (vcat stypsError) $$
-                      maybe empty (\x -> text "with value type" <+> ppType x) mt
+                      maybe empty (\x -> "with value type" <+> ppType x) mt
 
        (vfs1,vfs2) -> case (noProds vfs1,noProds vfs2) of
          ([(val,fun)],_) -> do
            return (mkApp fun tts, val)
          ([],[(val,fun)]) -> do
-           checkWarn (text "ignoring lock fields in resolving" <+> ppTerm Unqualified 0 ot) 
+           checkWarn ("ignoring lock fields in resolving" <+> ppTerm Unqualified 0 ot) 
            return (mkApp fun tts, val)
 
 ----- unsafely exclude irritating warning AR 24/5/2008
@@ -382,9 +382,9 @@ getOverload gr g mt ot = case appForm ot of
 --  This gives ad hoc overloading the same behaviour as the choice of the first match in renaming did before. 
 --  But it also gives a chance to ambiguous overloadings that were banned before. 
          (nps1,nps2) -> do 
-              checkWarn $  text "ambiguous overloading of" <+> ppTerm Unqualified 0 f <+>
-                  ----     text "with argument types" <+> hsep (map (ppTerm Qualified 0) tys) $$ 
-                           text "resolved by selecting the first of the alternatives" $$
+              checkWarn $  "ambiguous overloading of" <+> ppTerm Unqualified 0 f <+>
+                  ----     "with argument types" <+> hsep (map (ppTerm Qualified 0) tys) $$ 
+                           "resolved by selecting the first of the alternatives" $$
                            nest 2 (vcat [ppTerm Qualified 0 fun | (_,ty,fun) <- vfs1 ++ if null vfs1 then vfs2 else []])
               return $ head [(mkApp fun tts,val) | (val,fun) <- nps1 ++ nps2]
 
@@ -421,10 +421,10 @@ checkLType gr g trm typ0 = do
         Prod bt' z a b -> do 
           (c',b') <- if isWildIdent z
                        then checkLType gr ((bt,x,a):g) c b
-                       else do b' <- checkIn (text "abs") $ substituteLType [(bt',z,Vr x)] b
+                       else do b' <- checkIn (pp "abs") $ substituteLType [(bt',z,Vr x)] b
                                checkLType gr ((bt,x,a):g) c b'
           return $ (Abs bt x c', Prod bt' x a b')
-        _ -> checkError $ text "function type expected instead of" <+> ppType typ
+        _ -> checkError $ "function type expected instead of" <+> ppType typ
 
     App f a -> do
        over <- getOverload gr g (Just typ) trm
@@ -438,7 +438,7 @@ checkLType gr g trm typ0 = do
       over <- getOverload gr g Nothing trm
       case over of
         Just trty -> return trty
-        _ -> checkError (text "unresolved overloading of constants" <+> ppTerm Qualified 0 trm) 
+        _ -> checkError ("unresolved overloading of constants" <+> ppTerm Qualified 0 trm) 
 
     Q _ -> do
        over <- getOverload gr g (Just typ) trm
@@ -449,7 +449,7 @@ checkLType gr g trm typ0 = do
           termWith trm' $ checkEqLType gr g typ ty' trm'
 
     T _ [] ->
-      checkError (text "found empty table in type" <+> ppTerm Unqualified 0 typ)
+      checkError ("found empty table in type" <+> ppTerm Unqualified 0 typ)
     T _ cs -> case typ of 
       Table arg val -> do 
         case allParamValues gr arg of
@@ -458,12 +458,12 @@ checkLType gr g trm typ0 = do
             ps <- testOvershadow ps0 vs
             if null ps 
               then return () 
-              else checkWarn (text "patterns never reached:" $$
+              else checkWarn ("patterns never reached:" $$
                               nest 2 (vcat (map (ppPatt Unqualified 0) ps)))
           _ -> return () -- happens with variable types
         cs' <- mapM (checkCase arg val) cs
         return (T (TTyped arg) cs', typ)
-      _ -> checkError $ text "table type expected for table instead of" $$ nest 2 (ppType typ)
+      _ -> checkError $ "table type expected for table instead of" $$ nest 2 (ppType typ)
     V arg0 vs ->
       case typ of
         Table arg1 val ->
@@ -477,7 +477,7 @@ checkLType gr g trm typ0 = do
          fsts <- mapM (checkM r) rr   -- check that they are found in the record
          return $ (R fsts, typ)       -- normalize record
 
-       _ -> checkError (text "record type expected in type checking instead of" $$ nest 2 (ppTerm Unqualified 0 typ))
+       _ -> checkError ("record type expected in type checking instead of" $$ nest 2 (ppTerm Unqualified 0 typ))
 
     ExtR r s -> case typ of
        _ | typ == typeType -> do
@@ -486,7 +486,7 @@ checkLType gr g trm typ0 = do
            RecType _ -> termWith trm' $ return typeType
            ExtR (Vr _) (RecType _) -> termWith trm' $ return typeType 
                                       -- ext t = t ** ...
-           _ -> checkError (text "invalid record type extension" <+> nest 2 (ppTerm Unqualified 0 trm))
+           _ -> checkError ("invalid record type extension" <+> nest 2 (ppTerm Unqualified 0 trm))
 
        RecType rr -> do
 
@@ -496,7 +496,7 @@ checkLType gr g trm typ0 = do
              (s',typ2) <- inferLType gr g s
              case typ2 of
                RecType ss -> return $ map fst ss
-               _ ->  checkError (text "cannot get labels from" $$ nest 2 (ppTerm Unqualified 0 typ2))
+               _ ->  checkError ("cannot get labels from" $$ nest 2 (ppTerm Unqualified 0 typ2))
          let ll1 = [l | (l,_) <- rr, notElem l ll2]
          (r',_) <- checkLType gr g r (RecType [field | field@(l,_) <- rr, elem l ll1])
          (s',_) <- checkLType gr g s (RecType [field | field@(l,_) <- rr, elem l ll2])
@@ -509,7 +509,7 @@ checkLType gr g trm typ0 = do
          s' <- justCheck g s ex
          return $ (ExtR r' s', typ) --- is this all? it assumes the same division in trm and typ
 
-       _ -> checkError (text "record extension not meaningful for" <+> ppTerm Unqualified 0 typ)
+       _ -> checkError ("record extension not meaningful for" <+> ppTerm Unqualified 0 typ)
 
     FV vs -> do
       ttys <- mapM (flip (checkLType gr g) typ) vs
@@ -524,7 +524,7 @@ checkLType gr g trm typ0 = do
           (arg',val) <- checkLType gr g arg p
           checkEqLType gr g typ t trm
           return (S tab' arg', t)
-        _ -> checkError (text "table type expected for applied table instead of" <+> ppType ty')
+        _ -> checkError ("table type expected for applied table instead of" <+> ppType ty')
      , do
       (arg',ty) <- inferLType gr g arg
       ty'       <- computeLType gr g ty
@@ -565,9 +565,9 @@ checkLType gr g trm typ0 = do
      _ -> checkError $ 
             if isLockLabel l 
               then let cat = drop 5 (showIdent (label2ident l))
-                   in ppTerm Unqualified 0 (R rms) <+> text "is not in the lincat of" <+> text cat <> 
-                      text "; try wrapping it with lin" <+> text cat
-              else text "cannot find value for label" <+> ppLabel l <+> text "in" <+> ppTerm Unqualified 0 (R rms)
+                   in ppTerm Unqualified 0 (R rms) <+> "is not in the lincat of" <+> cat <> 
+                      "; try wrapping it with lin" <+> cat
+              else "cannot find value for label" <+> l <+> "in" <+> ppTerm Unqualified 0 (R rms)
 
    checkCase arg val (p,t) = do
      cont <- pattContext gr g arg p
@@ -580,7 +580,7 @@ pattContext env g typ p = case p of
   PP (q,c) ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
     t <- lookupResType env (q,c)
     let (cont,v) = typeFormCnc t
-    checkCond (text "wrong number of arguments for constructor in" <+> ppPatt Unqualified 0 p) 
+    checkCond ("wrong number of arguments for constructor in" <+> ppPatt Unqualified 0 p) 
               (length cont == length ps)
     checkEqLType env g typ v (patt2term p)
     mapM (\((_,_,ty),p) -> pattContext env g ty p) (zip cont ps) >>= return . concat
@@ -591,7 +591,7 @@ pattContext env g typ p = case p of
         let pts = [(ty,tr) | (l,tr) <- r, Just ty <- [lookup l t]]
         ----- checkWarn $ prt p ++++ show pts ----- debug
         mapM (uncurry (pattContext env g)) pts >>= return . concat
-      _ -> checkError (text "record type expected for pattern instead of" <+> ppTerm Unqualified 0 typ')
+      _ -> checkError ("record type expected for pattern instead of" <+> ppTerm Unqualified 0 typ')
   PT t p' -> do
     checkEqLType env g typ t (patt2term p')
     pattContext env g typ p'
@@ -605,9 +605,9 @@ pattContext env g typ p = case p of
     g2 <- pattContext env g typ q
     let pts = nub ([x | pt@(_,x,_) <- g1, notElem pt g2] ++ [x | pt@(_,x,_) <- g2, notElem pt g1])
     checkCond 
-      (text "incompatible bindings of" <+>
-       fsep (map ppIdent pts) <+> 
-       text "in pattern alterantives" <+> ppPatt Unqualified 0 p) (null pts) 
+      ("incompatible bindings of" <+>
+       fsep pts <+> 
+       "in pattern alterantives" <+> ppPatt Unqualified 0 p) (null pts) 
     return g1 -- must be g1 == g2
   PSeq p q -> do
     g1 <- pattContext env g typ p
@@ -621,7 +621,7 @@ pattContext env g typ p = case p of
    noBind typ p' = do
     co <- pattContext env g typ p'
     if not (null co)
-      then checkWarn (text "no variable bound inside pattern" <+> ppPatt Unqualified 0 p) 
+      then checkWarn ("no variable bound inside pattern" <+> ppPatt Unqualified 0 p) 
            >> return []
       else return []
 
@@ -630,9 +630,9 @@ checkEqLType gr g t u trm = do
   (b,t',u',s) <- checkIfEqLType gr g t u trm
   case b of
     True  -> return t'
-    False -> checkError $ text s <+> text "type of" <+> ppTerm Unqualified 0 trm $$
-                          text "expected:" <+> ppTerm Qualified 0 t $$ -- ppqType t u $$
-                          text "inferred:" <+> ppTerm Qualified 0 u -- ppqType u t
+    False -> checkError $ s <+> "type of" <+> ppTerm Unqualified 0 trm $$
+                          "expected:" <+> ppTerm Qualified 0 t $$ -- ppqType t u $$
+                          "inferred:" <+> ppTerm Qualified 0 u -- ppqType u t
 
 checkIfEqLType :: SourceGrammar -> Context -> Type -> Type -> Term -> Check (Bool,Type,Type,String)
 checkIfEqLType gr g t u trm = do
@@ -644,7 +644,7 @@ checkIfEqLType gr g t u trm = do
     --- better: use a flag to forgive? (AR 31/1/2006)
     _ -> case missingLock [] t' u' of
       Ok lo -> do
-        checkWarn $ text "missing lock field" <+> fsep (map ppLabel lo)
+        checkWarn $ "missing lock field" <+> fsep lo
         return (True,t',u',[])
       Bad s -> return (False,t',u',s)
 
@@ -699,7 +699,7 @@ checkIfEqLType gr g t u trm = do
                    not (any (\ (k,b) -> alpha g a b && l == k) ts)]
          (locks,others) = partition isLockLabel ls
        in case others of
-         _:_ -> Bad $ render (text "missing record fields:" <+> fsep (punctuate comma (map ppLabel others)))
+         _:_ -> Bad $ render ("missing record fields:" <+> fsep (punctuate ',' (others)))
          _ -> return locks
      -- contravariance
      (Prod _ x a b, Prod _ y c d) -> do
@@ -737,9 +737,9 @@ ppType :: Type -> Doc
 ppType ty =
   case ty of
     RecType fs   -> case filter isLockLabel $ map fst fs of
-                      [lock] -> text (drop 5 (showIdent (label2ident lock)))
+                      [lock] -> pp (drop 5 (showIdent (label2ident lock)))
                       _      -> ppTerm Unqualified 0 ty
-    Prod _ x a b -> ppType a <+> text "->" <+> ppType b
+    Prod _ x a b -> ppType a <+> "->" <+> ppType b
     _            -> ppTerm Unqualified 0 ty
 
 ppqType :: Type -> Type -> Doc
@@ -750,5 +750,5 @@ ppqType t u = case (ppType t, ppType u) of
 checkLookup :: Ident -> Context -> Check Type
 checkLookup x g =
   case [ty | (b,y,ty) <- g, x == y] of
-    []     -> checkError (text "unknown variable" <+> ppIdent x)
+    []     -> checkError ("unknown variable" <+> x)
     (ty:_) -> return ty

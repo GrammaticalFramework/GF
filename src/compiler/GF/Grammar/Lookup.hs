@@ -42,7 +42,7 @@ import GF.Grammar.Lockfield
 import Data.List (sortBy)
 --import Data.Maybe (maybe)
 --import Control.Monad
-import Text.PrettyPrint
+import GF.Text.Pretty
 import qualified Data.Map as Map
 
 -- whether lock fields are added in reuse
@@ -83,7 +83,7 @@ lookupResDefLoc gr (m,c)
         AnyInd _ n        -> look n c
         ResParam _ _      -> return (noLoc (QC (m,c)))
         ResValue _        -> return (noLoc (QC (m,c)))
-        _   -> raise $ render (ppIdent c <+> text "is not defined in resource" <+> ppIdent m)
+        _   -> raise $ render (c <+> "is not defined in resource" <+> m)
 
 lookupResType :: ErrorMonad m => SourceGrammar -> QIdent -> m Type
 lookupResType gr (m,c) = do
@@ -99,7 +99,7 @@ lookupResType gr (m,c) = do
     AnyInd _ n        -> lookupResType gr (n,c)
     ResParam _ _      -> return typePType
     ResValue (L _ t)  -> return t
-    _   -> raise $ render (ppIdent c <+> text "has no type defined in resource" <+> ppIdent m)
+    _   -> raise $ render (c <+> "has no type defined in resource" <+> m)
 
 lookupOverload :: ErrorMonad m => SourceGrammar -> QIdent -> m [([Type],(Type,Term))]
 lookupOverload gr (m,c) = do
@@ -112,7 +112,7 @@ lookupOverload gr (m,c) = do
                      concat tss
 
       AnyInd _ n  -> lookupOverload gr (n,c)
-      _   -> raise $ render (ppIdent c <+> text "is not an overloaded operation")
+      _   -> raise $ render (c <+> "is not an overloaded operation")
 
 -- | returns the original 'Info' and the module where it was found
 lookupOrigInfo :: ErrorMonad m => SourceGrammar -> QIdent -> m (Ident,Info)
@@ -132,7 +132,7 @@ lookupParamValues gr c = do
   (_,info) <- lookupOrigInfo gr c
   case info of
     ResParam _ (Just pvs) -> return pvs
-    _                     -> raise $ render (ppQIdent Qualified c <+> text "has no parameter values defined")
+    _                     -> raise $ render (ppQIdent Qualified c <+> "has no parameter values defined")
 
 allParamValues :: ErrorMonad m => SourceGrammar -> Type -> m [Term]
 allParamValues cnc ptyp =
@@ -148,13 +148,13 @@ allParamValues cnc ptyp =
        pvs <- allParamValues cnc pt
        vvs <- allParamValues cnc vt
        return [V pt ts | ts <- combinations (replicate (length pvs) vvs)]
-    _ -> raise (render (text "cannot find parameter values for" <+> ppTerm Unqualified 0 ptyp))
+    _ -> raise (render ("cannot find parameter values for" <+> ptyp))
   where
     -- to normalize records and record types
     sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
 
 lookupAbsDef :: ErrorMonad m => SourceGrammar -> Ident -> Ident -> m (Maybe Int,Maybe [Equation])
-lookupAbsDef gr m c = errIn (render (text "looking up absdef of" <+> ppIdent c)) $ do
+lookupAbsDef gr m c = errIn (render ("looking up absdef of" <+> c)) $ do
   info <- lookupQIdentInfo gr (m,c)
   case info of
     AbsFun _ a d _ -> return (a,fmap (map unLoc) d)
@@ -168,7 +168,7 @@ lookupLincat gr m c = do
   case info of
     CncCat (Just (L _ t)) _ _ _ _ -> return t
     AnyInd _ n                    -> lookupLincat gr n c
-    _                             -> raise (render (ppIdent c <+> text "has no linearization type in" <+> ppIdent m))
+    _                             -> raise (render (c <+> "has no linearization type in" <+> m))
 
 -- | this is needed at compile time
 lookupFunType :: ErrorMonad m => SourceGrammar -> Ident -> Ident -> m Type
@@ -177,7 +177,7 @@ lookupFunType gr m c = do
   case info of
     AbsFun (Just (L _ t)) _ _ _ -> return t
     AnyInd _ n                  -> lookupFunType gr n c
-    _                           -> raise (render (text "cannot find type of" <+> ppIdent c))
+    _                           -> raise (render ("cannot find type of" <+> c))
 
 -- | this is needed at compile time
 lookupCatContext :: ErrorMonad m => SourceGrammar -> Ident -> Ident -> m Context
@@ -186,7 +186,7 @@ lookupCatContext gr m c = do
   case info of
     AbsCat (Just (L _ co)) -> return co
     AnyInd _ n             -> lookupCatContext gr n c
-    _                      -> raise (render (text "unknown category" <+> ppIdent c))
+    _                      -> raise (render ("unknown category" <+> c))
 
 
 -- this gives all opers and param constructors, also overloaded opers and funs, and the types, and locations

@@ -42,7 +42,7 @@ import GF.Infra.CheckM
 import Data.List
 import qualified Data.Set as Set
 import Control.Monad
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 -- | checking is performed in the dependency order of modules
 checkModule :: Options -> FilePath -> SourceGrammar -> SourceModule -> Check SourceModule
@@ -78,8 +78,8 @@ checkRestrictedInheritance cwd sgr (name,mo) = checkInModule cwd mo NoLoc empty 
            (f,cs) <- allDeps, incld f, let is = filter illegal cs, not (null is)]
      case illegals of 
        [] -> return ()
-       cs -> checkWarn (text "In inherited module" <+> ppIdent i <> text ", dependence of excluded constants:" $$
-                         nest 2 (vcat [ppIdent f <+> text "on" <+> fsep (map ppIdent is) | (f,is) <- cs]))
+       cs -> checkWarn ("In inherited module" <+> i <> ", dependence of excluded constants:" $$
+                         nest 2 (vcat [f <+> "on" <+> fsep is | (f,is) <- cs]))
    allDeps = concatMap (allDependencies (const True) . jments . snd) mos
 
 checkCompleteGrammar :: Options -> FilePath -> SourceGrammar -> SourceModule -> SourceModule -> Check SourceModule
@@ -126,15 +126,15 @@ checkCompleteGrammar opts cwd gr (am,abs) (cm,cnc) = checkInModule cwd cnc NoLoc
                        Bad _  -> do noLinOf c
                                     return js
          where noLinOf c = when (verbAtLeast opts Normal) $
-                           checkWarn (text "no linearization of" <+> ppIdent c)
+                           checkWarn ("no linearization of" <+> c)
        AbsCat (Just _) -> case lookupIdent c js of
          Ok (AnyInd _ _) -> return js
          Ok (CncCat (Just _) _ _ _ _) -> return js
          Ok (CncCat Nothing md mr mp mpmcfg) -> do
-           checkWarn (text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}")
+           checkWarn ("no linearization type for" <+> c <> ", inserting default {s : Str}")
            return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) md mr mp mpmcfg) js
          _ -> do
-           checkWarn (text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}")
+           checkWarn ("no linearization type for" <+> c <> ", inserting default {s : Str}")
            return $ updateTree (c,CncCat (Just (L NoLoc defLinType)) Nothing Nothing Nothing Nothing) js
        _ -> return js
      
@@ -145,11 +145,11 @@ checkCompleteGrammar opts cwd gr (am,abs) (cm,cnc) = checkInModule cwd cnc NoLoc
                                         do (cont,val) <- linTypeOfType gr cm ty
                                            let linty = (snd (valCat ty),cont,val)
                                            return $ updateTree (c,CncFun (Just linty) d mn mf) js
-                             _       -> do checkWarn (text "function" <+> ppIdent c <+> text "is not in abstract")
+                             _       -> do checkWarn ("function" <+> c <+> "is not in abstract")
                                            return js
        CncCat _ _ _ _ _ -> case lookupOrigInfo gr (am,c) of
                              Ok _ -> return $ updateTree i js
-                             _    -> do checkWarn (text "category" <+> ppIdent c <+> text "is not in abstract")
+                             _    -> do checkWarn ("category" <+> c <+> "is not in abstract")
                                         return js
        _                -> return $ updateTree i js
 
@@ -241,7 +241,7 @@ checkInfo opts cwd sgr (m,mo) c info = do
            return (Just (L locd ty'), Just (L locd de'))
          (Just (L loct ty), Nothing) -> do
            chIn loct "operation" $
-             checkError (text "No definition given to the operation")
+             checkError (pp "No definition given to the operation")
       return (ResOper pty' pde')
 
     ResOverload os tysts -> chIn NoLoc "overloading" $ do
@@ -263,8 +263,7 @@ checkInfo opts cwd sgr (m,mo) c info = do
     _ ->  return info
  where
    gr = prependModule sgr (m,mo)
-   chIn loc cat = checkInModule cwd mo loc
-                             (text "Happened in" <+> text cat <+> ppIdent c)
+   chIn loc cat = checkInModule cwd mo loc ("Happened in" <+> cat <+> c)
 
    mkPar (f,co) = do
        vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
@@ -272,7 +271,7 @@ checkInfo opts cwd sgr (m,mo) c info = do
 
    checkUniq xss = case xss of
      x:y:xs 
-      | x == y    -> checkError $ text "ambiguous for type" <+>
+      | x == y    -> checkError $ "ambiguous for type" <+>
                                   ppType (mkFunType (tail x) (head x))  
       | otherwise -> checkUniq $ y:xs
      _ -> return ()
@@ -282,7 +281,7 @@ checkInfo opts cwd sgr (m,mo) c info = do
      _ -> chIn loc cat $ checkError (vcat ss)
 
    compAbsTyp g t = case t of
-     Vr x -> maybe (checkError (text "no value given to variable" <+> ppIdent x)) return $ lookup x g
+     Vr x -> maybe (checkError ("no value given to variable" <+> x)) return $ lookup x g
      Let (x,(_,a)) b -> do
        a' <- compAbsTyp g a
        compAbsTyp ((x, a'):g) b
@@ -298,7 +297,7 @@ checkInfo opts cwd sgr (m,mo) c info = do
 checkReservedId :: Ident -> Check ()
 checkReservedId x =
   when (isReservedWord x) $
-       checkWarn (text "reserved word used as identifier:" <+> ppIdent x)
+       checkWarn ("reserved word used as identifier:" <+> x)
 
 -- auxiliaries
 
@@ -315,10 +314,10 @@ linTypeOfType cnc m typ = do
      let vars = mkRecType varLabel $ replicate n typeStr
 	 symb = argIdent n cat i
      rec <- if n==0 then return val else
-                       errIn (render (text "extending" $$
-                                      nest 2 (ppTerm Unqualified 0 vars) $$
-                                      text "with" $$
-                                      nest 2 (ppTerm Unqualified 0 val))) $
+                       errIn (render ("extending" $$
+                                      nest 2 vars $$
+                                      "with" $$
+                                      nest 2 val)) $
                              plusRecType vars val
      return (Explicit,symb,rec)
    lookLin (_,c) = checks [ --- rather: update with defLinType ?

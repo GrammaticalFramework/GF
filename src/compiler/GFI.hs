@@ -42,7 +42,7 @@ import qualified Text.ParserCombinators.ReadP as RP
 import System.Directory({-getCurrentDirectory,-}getAppUserDataDirectory)
 import Control.Exception(SomeException,fromException,evaluate,try)
 import Control.Monad
-import Text.PrettyPrint (render)
+import GF.Text.Pretty (render)
 import qualified GF.System.Signal as IO(runInterruptibly)
 #ifdef SERVER_MODE
 import GFServer(server)
@@ -247,7 +247,7 @@ execute1 opts gfenv0 s0 =
                  (\ m@(i,_) -> let file = (showIdent i ++ ".gfh") in 
                     restricted $ writeFile file (render (ppModule Qualified m)) >> P.putStrLn ("wrote " ++ file))
                  (modules mygr)  
-        _ -> putStrLn $ render $ ppGrammar mygr
+        _ -> putStrLn $ render mygr
       continue gfenv
 
     dependency_graph ws =
