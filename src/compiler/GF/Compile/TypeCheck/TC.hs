@@ -28,7 +28,7 @@ import GF.Grammar.Predef
 import Control.Monad
 --import Data.List (sortBy)
 import Data.Maybe
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 data AExp =
      AVr   Ident Val 
@@ -57,7 +57,7 @@ lookupConst :: Theory -> QIdent -> Err Val
 lookupConst th f = th f
 
 lookupVar :: Env -> Ident -> Err Val
-lookupVar g x = maybe (Bad (render (text "unknown variable" <+> ppIdent x))) return $ lookup x ((identW,uVal):g)
+lookupVar g x = maybe (Bad (render ("unknown variable" <+> x))) return $ lookup x ((identW,uVal):g)
 -- wild card IW: no error produced, ?0 instead.
 
 type TCEnv = (Int,Env,Env)
@@ -129,7 +129,7 @@ checkExp th tenv@(k,rho,gamma) e ty = do
 	(t',cs) <- checkExp th 
                            (k+1,(x,v x):rho, (x,a'):gamma) t (VClos ((y,v x):env) b)
 	return (AAbs x a' t', cs)
-      _ -> Bad (render (text "function type expected for" <+> ppTerm Unqualified 0 e <+> text "instead of" <+> ppValue Unqualified 0 typ))
+      _ -> Bad (render ("function type expected for" <+> ppTerm Unqualified 0 e <+> "instead of" <+> ppValue Unqualified 0 typ))
 
     Prod _ x a b -> do
       testErr (typ == vType) "expected Type"
@@ -141,11 +141,11 @@ checkExp th tenv@(k,rho,gamma) e ty = do
       case typ of
         VRecType ys -> do case [l | (l,_) <- ys, isNothing (lookup l xs)] of
                             [] -> return ()
-                            ls -> fail (render (text "no value given for label:" <+> fsep (punctuate comma (map ppLabel ls))))
+                            ls -> fail (render ("no value given for label:" <+> fsep (punctuate ',' ls)))
                           r <- mapM (checkAssign th tenv ys) xs
                           let (xs,css) = unzip r
                           return (AR xs, concat css)
-        _           -> Bad (render (text "record type expected for" <+> ppTerm Unqualified 0 e <+> text "instead of" <+> ppValue Unqualified 0 typ))
+        _           -> Bad (render ("record type expected for" <+> ppTerm Unqualified 0 e <+> "instead of" <+> ppValue Unqualified 0 typ))
 
     P r l -> do (r',cs) <- checkExp th tenv r (VRecType [(l,typ)])
                 return (AP r' l typ,cs)
@@ -180,8 +180,8 @@ inferExp th tenv@(k,rho,gamma) e = case e of
         (a',csa) <- checkExp th tenv t (VClos env a)
 	b' <- whnf $ VClos ((x,VClos rho t):env) b
 	return $ (AApp f' a' b', b', csf ++ csa)
-      _ -> Bad (render (text "Prod expected for function" <+> ppTerm Unqualified 0 f <+> text "instead of" <+> ppValue Unqualified 0 typ))
-   _ -> Bad (render (text "cannot infer type of expression" <+> ppTerm Unqualified 0 e))
+      _ -> Bad (render ("Prod expected for function" <+> ppTerm Unqualified 0 f <+> "instead of" <+> ppValue Unqualified 0 typ))
+   _ -> Bad (render ("cannot infer type of expression" <+> ppTerm Unqualified 0 e))
 
 checkLabelling :: Theory -> TCEnv -> Labelling -> Err (ALabelling, [(Val,Val)])
 checkLabelling th tenv (lbl,typ) = do
@@ -223,7 +223,7 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
           let tenv' = (length binds, sigma ++ rho, binds ++ gamma)
           ((ps',exp),cs2) <- chB tenv' ps2 (VClos ((y,p'):env) b)
 	  return ((p:ps',exp), cs1 ++ cs2) -- don't change the patt
-        _ -> Bad (render (text "Product expected for definiens" <+> ppTerm Unqualified 0 t <+> text "instead of" <+> ppValue Unqualified 0 typ))
+        _ -> Bad (render ("Product expected for definiens" <+> ppTerm Unqualified 0 t <+> "instead of" <+> ppValue Unqualified 0 typ))
     [] -> do
       (e,cs) <- checkExp th tenv t ty
       return (([],e),cs)
@@ -244,7 +244,7 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
                     where (xss,j,g',k') = foldr p2t ([],i,g,k) xs
      PImplArg p -> p2t p (ps,i,g,k)
      PTilde t -> (t : ps, i, g, k)
-     _ -> error $ render (text "undefined p2t case" <+> ppPatt Unqualified 0 p <+> text "in checkBranch")
+     _ -> error $ render ("undefined p2t case" <+> ppPatt Unqualified 0 p <+> "in checkBranch")
 
   upd x k g = (x, VGen k x) : g --- hack to recognize pattern variables
 
@@ -282,8 +282,8 @@ checkPatt th tenv exp val = do
            (a',_,csa) <- checkExpP tenv t (VClos env a)
 	   b' <- whnf $ VClos ((x,VClos rho t):env) b
 	   return $ (AApp f' a' b', b', csf ++ csa)
-         _ -> Bad (render (text "Prod expected for function" <+> ppTerm Unqualified 0 f <+> text "instead of" <+> ppValue Unqualified 0 typ))
-     _ -> Bad (render (text "cannot typecheck pattern" <+> ppTerm Unqualified 0 exp))
+         _ -> Bad (render ("Prod expected for function" <+> ppTerm Unqualified 0 f <+> "instead of" <+> ppValue Unqualified 0 typ))
+     _ -> Bad (render ("cannot typecheck pattern" <+> ppTerm Unqualified 0 exp))
 
 -- auxiliaries
 

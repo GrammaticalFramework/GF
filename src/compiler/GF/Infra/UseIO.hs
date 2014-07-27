@@ -54,7 +54,7 @@ errOptIO os e m = case m of
     return e
 -}
 type FileName = String
-type InitPath = String
+type InitPath = String -- ^ the directory portion of a pathname
 type FullPath = String
 
 gfLibraryPath    = "GF_LIB_PATH"

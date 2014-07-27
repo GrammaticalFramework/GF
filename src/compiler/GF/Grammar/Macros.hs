@@ -31,7 +31,7 @@ import qualified Data.Traversable as T(mapM)
 import Control.Monad (liftM, liftM2, liftM3)
 --import Data.Char (isDigit)
 import Data.List (sortBy,nub)
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 typeForm :: Type -> (Context, Cat, [Term])
 typeForm t =
@@ -45,7 +45,7 @@ typeForm t =
     Q  c -> ([],c,[])
     QC c -> ([],c,[])
     Sort c -> ([],(identW, c),[])
-    _      -> error (render (text "no normal form of type" <+> ppTerm Unqualified 0 t))
+    _      -> error (render ("no normal form of type" <+> ppTerm Unqualified 0 t))
 
 typeFormCnc :: Type -> (Context, Type)
 typeFormCnc t = 
@@ -170,7 +170,7 @@ projectRec :: Label -> [Assign] -> Term
 projectRec l rs =
   case lookup l rs of
     Just (_,t) -> t
-    Nothing    -> error (render (text "no value for label" <+> ppLabel l))
+    Nothing    -> error (render ("no value for label" <+> l))
 
 zipAssign :: [Label] -> [Term] -> [Assign]
 zipAssign ls ts = [assign l t | (l,t) <- zip ls ts]
@@ -194,7 +194,7 @@ mkRecType = mkRecTypeN 0
 record2subst :: Term -> Err Substitution
 record2subst t = case t of
   R fs -> return [(identC x, t) | (LIdent x,(_,t)) <- fs]
-  _    -> Bad (render (text "record expected, found" <+> ppTerm Unqualified 0 t))
+  _    -> Bad (render ("record expected, found" <+> ppTerm Unqualified 0 t))
 
 typeType, typePType, typeStr, typeTok, typeStrs :: Term
 
@@ -273,8 +273,8 @@ plusRecType t1 t2 = case (t1, t2) of
   (RecType r1, RecType r2) -> case
     filter (`elem` (map fst r1)) (map fst r2) of
       [] -> return (RecType (r1 ++ r2))
-      ls -> raise $ render (text "clashing labels" <+> hsep (map ppLabel ls))
-  _ -> raise $ render (text "cannot add record types" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2) 
+      ls -> raise $ render ("clashing labels" <+> hsep ls)
+  _ -> raise $ render ("cannot add record types" <+> ppTerm Unqualified 0 t1 <+> "and" <+> ppTerm Unqualified 0 t2) 
 
 --plusRecord :: Term -> Term -> Err Term
 plusRecord t1 t2 =
@@ -283,7 +283,7 @@ plusRecord t1 t2 =
                               (l,v) <- r1, not (elem l (map fst r2)) ] ++ r2))
    (_,    FV rs) -> mapM (plusRecord t1) rs >>= return . FV
    (FV rs,_    ) -> mapM (`plusRecord` t2) rs >>= return . FV
-   _ -> raise $ render (text "cannot add records" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2)
+   _ -> raise $ render ("cannot add records" <+> ppTerm Unqualified 0 t1 <+> "and" <+> ppTerm Unqualified 0 t2)
 
 -- | default linearization type
 defLinType :: Type
@@ -386,7 +386,7 @@ term2patt trm = case termForm trm of
   Ok ([], Cn c, []) -> do
     return (PMacro c)
 
-  _ -> Bad $ render (text "no pattern corresponds to term" <+> ppTerm Unqualified 0 trm)
+  _ -> Bad $ render ("no pattern corresponds to term" <+> ppTerm Unqualified 0 trm)
 
 patt2term :: Patt -> Term
 patt2term pt = case pt of
@@ -450,7 +450,7 @@ strsFromTerm t = case t of
            ]
   FV ts -> mapM strsFromTerm ts >>= return . concat
   Strs ts -> mapM strsFromTerm ts >>= return . concat  
-  _ -> raise (render (text "cannot get Str from term" <+> ppTerm Unqualified 0 t))
+  _ -> raise (render ("cannot get Str from term" <+> ppTerm Unqualified 0 t))
 
 -- | to print an Str-denoting term as a string; if the term is of wrong type, the error msg
 stringFromTerm :: Term -> String
@@ -609,7 +609,7 @@ topoSortJments :: ErrorMonad m => SourceModule -> m [(Ident,Info)]
 topoSortJments (m,mi) = do
   is <- either
           return
-          (\cyc -> raise (render (text "circular definitions:" <+> fsep (map ppIdent (head cyc)))))
+          (\cyc -> raise (render ("circular definitions:" <+> fsep (head cyc))))
           (topoTest (allDependencies (==m) (jments mi)))
   return (reverse [(i,info) | i <- is, Ok info <- [lookupTree showIdent i (jments mi)]])
 
@@ -617,8 +617,8 @@ topoSortJments2 :: ErrorMonad m => SourceModule -> m [[(Ident,Info)]]
 topoSortJments2 (m,mi) = do
   iss <- either
            return
-           (\cyc -> raise (render (text "circular definitions:"
-                                   <+> fsep (map ppIdent (head cyc)))))
+           (\cyc -> raise (render ("circular definitions:"
+                                   <+> fsep (head cyc))))
            (topoTest2 (allDependencies (==m) (jments mi)))
   return
     [[(i,info) | i<-is,Ok info<-[lookupTree showIdent i (jments mi)]] | is<-iss]

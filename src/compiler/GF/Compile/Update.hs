@@ -26,7 +26,7 @@ import GF.Data.Operations
 import Data.List
 import qualified Data.Map as Map
 import Control.Monad
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 -- | combine a list of definitions into a balanced binary search tree
 buildAnyTree :: Monad m => Ident -> [(Ident,Info)] -> m (BinTree Ident Info)
@@ -37,9 +37,9 @@ buildAnyTree m = go Map.empty
       case Map.lookup c map of
         Just i  -> case unifyAnyInfo m i j of
 		     Ok k  -> go (Map.insert c k map) is
-		     Bad _ -> fail $ render (text "conflicting information in module"<+>ppIdent m $$
+		     Bad _ -> fail $ render ("conflicting information in module"<+>m $$
 		                             nest 4 (ppJudgement Qualified (c,i)) $$
-		                             text "and" $+$
+		                             "and" $+$
 		                             nest 4 (ppJudgement Qualified (c,j)))
         Nothing -> go (Map.insert c j map) is
 
@@ -58,7 +58,7 @@ extendModule cwd gr (name,m)
 
      -- test that the module types match, and find out if the old is complete
      unless (sameMType (mtype m) (mtype mo)) 
-            (checkError (text "illegal extension type to module" <+> ppIdent name))
+            (checkError ("illegal extension type to module" <+> name))
 
      let isCompl = isCompleteModule m0
 
@@ -88,13 +88,13 @@ rebuildModule cwd gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js
     -- add the information given in interface into an instance module
     Nothing -> do
       unless (null is || mstatus mi == MSIncomplete) 
-             (checkError (text "module" <+> ppIdent i <+> 
-                          text "has open interfaces and must therefore be declared incomplete"))
+             (checkError ("module" <+> i <+> 
+                          "has open interfaces and must therefore be declared incomplete"))
       case mt of
         MTInstance (i0,mincl) -> do
           m1 <- lookupModule gr i0
           unless (isModRes m1)
-                 (checkError (text "interface expected instead of" <+> ppIdent i0))
+                 (checkError ("interface expected instead of" <+> i0))
           js' <- extendMod gr False ((i0,m1), isInherited mincl) i (jments mi)
           --- to avoid double inclusions, in instance I of I0 = J0 ** ...
           case extends mi of
@@ -112,7 +112,7 @@ rebuildModule cwd gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js
       let stat' = ifNull MSComplete (const MSIncomplete)
                     [i | i <- is, notElem i infs]
       unless (stat' == MSComplete || stat == MSIncomplete) 
-             (checkError (text "module" <+> ppIdent i <+> text "remains incomplete"))
+             (checkError ("module" <+> i <+> "remains incomplete"))
       ModInfo mt0 _ fs me' _ ops0 _ fpath _ js <- lookupModule gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already
@@ -149,11 +149,11 @@ extendMod gr isCompl ((name,mi),cond) base new = foldM try new $ Map.toList (jme
 		                                 (name,i) <- case i of 
                                                                AnyInd _ m -> lookupOrigInfo gr (m,c)
                                                                _          -> return (name,i)
-		                                 checkError (text "cannot unify the information" $$ 
+		                                 checkError ("cannot unify the information" $$ 
 		                                             nest 4 (ppJudgement Qualified (c,i)) $$
-		                                             text "in module" <+> ppIdent name <+> text "with" $$
+		                                             "in module" <+> name <+> "with" $$
 		                                             nest 4 (ppJudgement Qualified (c,j)) $$
-		                                             text "in module" <+> ppIdent base)
+		                                             "in module" <+> base)
                          Nothing-> if isCompl
                                      then return $ updateTree (c,indirInfo name i) new
                                      else return $ updateTree (c,i) new

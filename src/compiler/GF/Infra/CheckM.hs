@@ -21,11 +21,11 @@ module GF.Infra.CheckM
 
 import GF.Data.Operations
 --import GF.Infra.Ident
-import GF.Grammar.Grammar(msrc) -- ,Context
-import GF.Grammar.Printer(ppLocation)
+--import GF.Grammar.Grammar(msrc) -- ,Context
+import GF.Infra.Location(ppLocation,sourcePath)
 
 import qualified Data.Map as Map
-import Text.PrettyPrint
+import GF.Text.Pretty
 import System.FilePath(makeRelative)
 import Control.Parallel.Strategies(parList,rseq,using)
 import Control.Monad(liftM)
@@ -51,7 +51,7 @@ instance Monad Check where
                  (ws,Fail msg)  -> (ws,Fail msg)
 
 instance ErrorMonad Check where
-  raise s = checkError (text s)
+  raise s = checkError (pp s)
   handle f h = handle' f (h . render)
 
 handle' f h = Check (\{-ctxt-} msgs -> case unCheck f {-ctxt-} msgs of
@@ -67,7 +67,7 @@ checkCond s b = if b then return () else checkError s
 
 -- | warnings should be reversed in the end
 checkWarn :: Message -> Check ()
-checkWarn msg = Check $ \{-ctxt-} (es,ws) -> ((es,(text "Warning:" <+> msg) : ws),Success ())
+checkWarn msg = Check $ \{-ctxt-} (es,ws) -> ((es,("Warning:" <+> msg) : ws),Success ())
 
 checkWarnings = mapM_ checkWarn
 
@@ -151,6 +151,6 @@ checkIn msg c = Check $ \{-ctxt-} msgs0 ->
 -- | Augment error messages with a relative path to the source module and
 -- an contextual hint (which can be left 'empty')
 checkInModule cwd mi loc context =
-    checkIn (ppLocation relpath loc <> colon $$ nest 2 context)
+    checkIn (ppLocation relpath loc <> ':' $$ nest 2 context)
   where
-    relpath = makeRelative cwd (msrc mi)
+    relpath = makeRelative cwd (sourcePath mi)

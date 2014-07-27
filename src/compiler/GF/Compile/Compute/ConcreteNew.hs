@@ -1,7 +1,7 @@
 -- | Functions for computing the values of terms in the concrete syntax, in
 -- | preparation for PMCFG generation.
 module GF.Compile.Compute.ConcreteNew
-           (GlobalEnv, resourceValues, normalForm, ppL
+           (GlobalEnv, resourceValues, normalForm,
            --, Value(..), Env, value2term, eval, apply
            ) where
 
@@ -18,7 +18,7 @@ import GF.Data.Utilities(mapFst,mapSnd,mapBoth)
 import Control.Monad(ap,liftM,liftM2,mplus,unless)
 import Data.List (findIndex,intersect,nub,elemIndex,(\\)) --,isInfixOf
 --import Data.Char (isUpper,toUpper,toLower)
-import Text.PrettyPrint
+import GF.Text.Pretty
 import qualified Data.Map as Map
 --import Debug.Trace(trace)
 
@@ -109,7 +109,7 @@ value env t0 =
                                       brackets (fsep (map ppIdent (local env))),
                                       ppT 10 t0]) $
 --}
-  errIn (render $ ppT 0 t0) $
+  errIn (render t0) $
   case t0 of
     Vr x   -> var env x
     Q x@(m,f)
@@ -158,7 +158,7 @@ value env t0 =
     Glue t1 t2 -> ((ok2p (glue env).) # both id) # both (value env) (t1,t2)
     ELin c r -> (unlockVRec c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
-    t -> fail.render $ text "value"<+>ppT 10 t $$ text (show t)
+    t -> fail.render $ "value"<+>ppT 10 t $$ show t
 
 paramValues env ty = do let ge = global env
                         ats <- allParamValues (srcgr env) =<< nfx ge ty
@@ -216,15 +216,15 @@ extR t vv =
       (VRecType rs1, VRecType rs2) ->
           case intersect (map fst rs1) (map fst rs2) of
             [] -> VRecType (rs1 ++ rs2)
-            ls -> error $ text "clash"<+>text (show ls)
+            ls -> error $ "clash"<+>show ls
       (VRec     rs1, VRec     rs2) -> plusVRec rs1 rs2
       (v1          , VRec [(l,_)]) | isLockLabel l -> v1 -- hmm
       (VS (VV t pvs vs) s,v2) -> VS (VV t pvs [extR t (v1,v2)|v1<-vs]) s
       (v1,v2) -> ok2 VExtR v1 v2 -- hmm
 --    (v1,v2) -> error $ text "not records" $$ text (show v1) $$ text (show v2)
   where
-    error explain = ppbug $ text "The term" <+> ppT 0 t
-                            <+> text "is not reducible" $$ explain
+    error explain = ppbug $ "The term" <+> t
+                            <+> "is not reducible" $$ explain
 
 glue env (v1,v2) = glu v1 v2
   where
@@ -249,8 +249,8 @@ glue env (v1,v2) = glu v1 v2
           (_,v2@(VApp NonExist _)) -> v2
 --        (v1,v2) -> ok2 VGlue v1 v2
           (v1,v2) -> error . render $
-                     ppL loc (hang (text "unsupported token gluing:") 4
-                                   (ppT 0 (Glue (vt v1) (vt v2))))
+                     ppL loc (hang "unsupported token gluing:" 4
+                                   (Glue (vt v1) (vt v2)))
 
     vt = value2term loc (local env)
     loc = gloc env
@@ -331,7 +331,7 @@ valueTable env i cs =
                              pvs = nub allpvs
                              dups = allpvs \\ pvs
                          unless (null dups) $
-                           fail.render $ hang (text "Pattern is not linear:") 4
+                           fail.render $ hang "Pattern is not linear:" 4
                                               (ppPatt Unqualified 0 p')
                          vt <- value (extend pvs env) t
                          return (p', \ vs -> Bind $ \ bs -> vt (push' p' bs pvs vs))
@@ -350,8 +350,8 @@ valueTable env i cs =
           PM qc -> do r <- resource env qc
                       case r of
                         VPatt p' -> inlinePattMacro p'
-                        _ -> ppbug $ hang (text "Expected pattern macro:") 4
-                                          (text (show r))
+                        _ -> ppbug $ hang "Expected pattern macro:" 4
+                                          (show r)
           _ -> composPattOp inlinePattMacro p
 --}
 
@@ -498,11 +498,7 @@ both f (x,y) = (,) # f x <# f y
 
 ppT = ppTerm Unqualified
 
-ppL (L loc x) msg = hang (ppLocation "" loc<>colon) 4
-                         (text "In"<+>ppIdent x<>colon<+>msg)
+bugloc loc s = ppbug $ ppL loc s
 
-bugloc loc s = ppbug $ ppL loc (text s)
-
-bug msg = ppbug (text msg)
-ppbug doc = error $ render $
-                    hang (text "Internal error in Compute.ConcreteNew:") 4 doc
+bug msg = ppbug msg
+ppbug doc = error $ render $ hang "Internal error in Compute.ConcreteNew:" 4 doc

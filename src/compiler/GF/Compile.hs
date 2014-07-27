@@ -1,4 +1,4 @@
-module GF.Compile (batchCompile, link, srcAbsName, compileToPGF, compileSourceGrammar) where
+module GF.Compile (batchCompile, link, srcAbsName, compileToPGF) where
 import Prelude hiding (catch)
 import GF.System.Catch
 
@@ -32,7 +32,7 @@ import qualified Data.Map as Map
 --import qualified Data.Set as Set
 import Data.List(nub)
 import Data.Time(UTCTime)
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 import PGF.Internal(optimizePGF)
 import PGF
@@ -59,7 +59,7 @@ batchCompile opts files = do
   let cnc = identS (justModuleName (last files))
       t = maximum . map fst $ Map.elems menv
   return (cnc,t,gr)
-
+{-
 -- to compile a set of modules, e.g. an old GF or a .cf file
 compileSourceGrammar :: Options -> SourceGrammar -> IOE SourceGrammar
 compileSourceGrammar opts gr = do
@@ -68,12 +68,12 @@ compileSourceGrammar opts gr = do
                      emptyCompileEnv
                      (modules gr)
   return gr'
-
+-}
 
 -- to output an intermediate stage
 intermOut :: Options -> Dump -> Doc -> IOE ()
 intermOut opts d doc
-  | dump opts d = ePutStrLn (render (text "\n\n--#" <+> text (show d) $$ doc))
+  | dump opts d = ePutStrLn (render ("\n\n--#" <+> show d $$ doc))
   | otherwise   = return ()
 
 warnOut opts warnings
@@ -118,8 +118,8 @@ compileModule opts1 env file = do
                        exists <- liftIO $ doesFileExist file1
                        if exists
                          then return file1
-                         else raise (render (text "None of these files exists:" $$ nest 2 (text file $$ text file1)))
-               else raise (render (text "File" <+> text file <+> text "does not exist."))
+                         else raise (render ("None of these files exists:" $$ nest 2 (file $$ file1)))
+               else raise (render ("File" <+> file <+> "does not exist."))
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env@(_,srcgr,_) file = do
@@ -171,32 +171,28 @@ compileOne opts env@(_,srcgr,_) file = do
    isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete
 
 compileSourceModule :: Options -> FilePath -> CompileEnv -> Maybe FilePath -> SourceModule -> IOE CompileEnv
-compileSourceModule opts cwd env@(k,gr,_) mb_gfFile mo@(i,mi) = do
+compileSourceModule opts cwd env@(k,gr,_) mb_gfFile mo0@(i,mi) = do
 
-  mo1  <- runPass Rebuild "" (rebuildModule cwd gr mo)
-  mo1b <- runPass Extend "" (extendModule cwd gr mo1)
+  mo1a <- runPass Rebuild "" (rebuildModule cwd gr mo0)
+  mo1b <- runPass Extend "" (extendModule cwd gr mo1a)
 
   case mo1b of
-    (_,n) | not (isCompleteModule n) ->
-      if tagsFlag then generateTags k mo1b else generateGFO k mo1b
+    (_,n) | not (isCompleteModule n) -> generateTagsOr generateGFO k mo1b
     _ -> do
       mo2 <- runPass Rename "renaming" $ renameModule cwd gr mo1b
       mo3 <- runPass TypeCheck "type checking" $ checkModule opts cwd gr mo2
-      if tagsFlag then generateTags k mo3 else compileCompleteModule k mo3
+      generateTagsOr compileCompleteModule k mo3
   where
     compileCompleteModule k mo3 = do
---    (k',mo3r:_) <- runPass2 (head.snd) Refresh "refreshing" $
---                   refreshModule (k,gr) mo3
-      let k' = k
-          mo3r = mo3
-      mo4 <- runPass2 id Optimize "optimizing" $ optimizeModule opts gr mo3r
+      mo4 <- runPass2 id Optimize "optimizing" $ optimizeModule opts gr mo3
       mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
              then runPass2' "generating PMCFG" $ generatePMCFG opts gr mb_gfFile mo4
              else runPass2' "" $ return mo4
-      generateGFO k' mo5
+      generateGFO k mo5
 
   ------------------------------
-    tagsFlag = flag optTagsOnly opts
+    generateTagsOr compile =
+       if flag optTagsOnly opts then generateTags else compile
 
     generateGFO k mo =
       do let mb_gfo = fmap (gf2gfo opts) mb_gfFile

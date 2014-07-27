@@ -10,7 +10,7 @@ import GF.Infra.CheckM
 --import GF.Infra.UseIO
 import GF.Data.Operations
 
-import Text.PrettyPrint
+import GF.Text.Pretty
 import Data.List (nub, (\\), tails)
 import qualified Data.IntMap as IntMap
 
@@ -48,7 +48,7 @@ checkSigma gr scope t sigma = do                                -- GEN2
   let bad_tvs = filter (`elem` esc_tvs) skol_tvs
   if null bad_tvs
     then return (abs t)
-    else tcError (text "Type not polymorphic enough")
+    else tcError (pp "Type not polymorphic enough")
 
 tcRho :: SourceGrammar -> Scope -> Term -> Maybe Rho -> TcM (Term, Rho)
 tcRho gr scope t@(EInt _)   mb_ty = instSigma gr scope t (eval gr [] typeInt)   mb_ty
@@ -58,20 +58,20 @@ tcRho gr scope t@(Empty)    mb_ty = instSigma gr scope t (eval gr [] typeStr)   
 tcRho gr scope t@(Vr v)     mb_ty = do                          -- VAR
   case lookup v scope of
     Just v_sigma -> instSigma gr scope t v_sigma mb_ty
-    Nothing      -> tcError (text "Unknown variable" <+> ppIdent v)
+    Nothing      -> tcError ("Unknown variable" <+> v)
 tcRho gr scope t@(Q id)     mb_ty
   | elem (fst id) [cPredef,cPredefAbs] = 
       case typPredefined (snd id) of
         Just ty -> instSigma gr scope t (eval gr [] ty) mb_ty
-        Nothing -> tcError (text "unknown in Predef:" <+> ppQIdent Qualified id)
+        Nothing -> tcError (pp "unknown in Predef:" <+> ppQIdent Qualified id)
   | otherwise = do
       case lookupResType gr id of
         Ok ty   -> instSigma gr scope t (eval gr [] ty) mb_ty
-        Bad err -> tcError (text err)
+        Bad err -> tcError (pp err)
 tcRho gr scope t@(QC id)     mb_ty = do
   case lookupResType gr id of
     Ok ty   -> instSigma gr scope t (eval gr [] ty) mb_ty
-    Bad err -> tcError (text err)
+    Bad err -> tcError (pp err)
 tcRho gr scope (App fun arg) mb_ty = do                         -- APP
   (fun,fun_ty) <- tcRho gr scope fun Nothing
   (arg_ty, res_ty) <- unifyFun gr scope (eval gr (scopeEnv scope) arg) fun_ty
@@ -148,9 +148,9 @@ tcRho gr scope t@(R rs) mb_ty = do
              Just ty -> case ty of
                           VRecType ltys -> checkRecFields gr scope rs ltys
                           VMeta _ _ _   -> inferRecFields gr scope rs
-                          _             -> tcError (text "Record type is inferred but:" $$
+                          _             -> tcError ("Record type is inferred but:" $$
                                                     nest 2 (ppTerm Unqualified 0 (value2term gr (scopeVars scope) ty)) $$
-                                                    text "is expected in the expresion:" $$
+                                                    "is expected in the expresion:" $$
                                                     nest 2 (ppTerm Unqualified 0 t))
   return (R        [(l, (Just (value2term gr (scopeVars scope) ty), t)) | (l,t,ty) <- lttys], 
           VRecType [(l, ty)                                             | (l,t,ty) <- lttys]
@@ -177,9 +177,9 @@ tcRho gr scope t@(ExtR t1 t2) mb_ty = do
     (VSort s1,VSort s2)
        | s1 == cType && s2 == cType -> instSigma gr scope (ExtR t1 t2) (VSort cType) mb_ty
     (VRecType rs1, VRecType rs2) 
-       | otherwise                  -> do tcWarn (text "bbbb")
+       | otherwise                  -> do tcWarn (pp "bbbb")
                                           instSigma gr scope (ExtR t1 t2) (VRecType (rs1 ++ rs2)) mb_ty
-    _                               -> tcError (text "Cannot type check" <+> ppTerm Unqualified 0 t)
+    _                               -> tcError ("Cannot type check" <+> ppTerm Unqualified 0 t)
 tcRho gr scope (ELin cat t) mb_ty = do  -- this could be done earlier, i.e. in the parser
   tcRho gr scope (ExtR t (R [(lockLabel cat,(Just (RecType []),R []))])) mb_ty
 tcRho gr scope (ELincat cat t) mb_ty = do  -- this could be done earlier, i.e. in the parser
@@ -216,7 +216,7 @@ tcPatt gr scope (PP c ps) ty0 =
                  (scope,ty) <- go scope (eval gr [] ty) ps
                  unify gr scope ty0 ty
                  return scope
-    Bad err -> tcError (text err)
+    Bad err -> tcError (pp err)
 tcPatt gr scope (PString s) ty0 = do
   unify gr scope ty0 (eval gr [] typeStr)
   return scope
@@ -252,13 +252,13 @@ inferRecFields gr scope rs =
 
 checkRecFields gr scope []          ltys
   | null ltys                            = return []
-  | otherwise                            = tcError (text "Missing fields:" <+> hsep (map (ppLabel . fst) ltys))
+  | otherwise                            = tcError ("Missing fields:" <+> hsep (map fst ltys))
 checkRecFields gr scope ((l,t):lts) ltys =
   case takeIt l ltys of
     (Just ty,ltys) -> do ltty  <- tcRecField gr scope l t (Just ty)
                          lttys <- checkRecFields gr scope lts ltys
                          return (ltty : lttys)
-    (Nothing,ltys) -> do tcWarn (text "Discarded field:" <+> ppLabel l)
+    (Nothing,ltys) -> do tcWarn ("Discarded field:" <+> l)
                          ltty  <- tcRecField gr scope l t Nothing
                          lttys <- checkRecFields gr scope lts ltys
                          return lttys     -- ignore the field
@@ -298,9 +298,9 @@ subsCheck gr scope t sigma1 sigma2 = do                        -- DEEP-SKOL
   let bad_tvs = filter (`elem` esc_tvs) skol_tvs
   if null bad_tvs
     then return (abs t)
-    else tcError (vcat [text "Subsumption check failed:",
+    else tcError (vcat [pp "Subsumption check failed:",
                         nest 2 (ppTerm Unqualified 0 (value2term gr (scopeVars scope) sigma1)),
-                        text "is not as polymorphic as",
+                        pp "is not as polymorphic as",
                         nest 2 (ppTerm Unqualified 0 (value2term gr (scopeVars scope) sigma2))])
 
 
@@ -365,8 +365,8 @@ unify gr scope (VRecType rs1) (VRecType rs2) = do
 unify gr scope v1 v2 = do
   t1 <- zonkTerm (value2term gr (scopeVars scope) v1)
   t2 <- zonkTerm (value2term gr (scopeVars scope) v2)
-  tcError (text "Cannot unify types:" <+> (ppTerm Unqualified 0 t1 $$ 
-                                           ppTerm Unqualified 0 t2))
+  tcError ("Cannot unify types:" <+> (ppTerm Unqualified 0 t1 $$ 
+                                      ppTerm Unqualified 0 t2))
 
 -- | Invariant: tv1 is a flexible type variable
 unifyVar :: SourceGrammar -> Scope -> MetaId -> Env -> [Value] -> Tau -> TcM ()
@@ -377,7 +377,7 @@ unifyVar gr scope i env vs ty2 = do            -- Check whether i is bound
     Unbound _ -> do let ty2' = value2term gr (scopeVars scope) ty2
                     ms2 <- getMetaVars gr [(scope,ty2)]
                     if i `elem` ms2
-                      then tcError (text "Occurs check for" <+> ppMeta i <+> text "in:" $$
+                      then tcError ("Occurs check for" <+> ppMeta i <+> "in:" $$
                                     nest 2 (ppTerm Unqualified 0 ty2'))
                       else setMeta i (Bound ty2')
 
@@ -465,7 +465,7 @@ instance Monad TcM where
   f >>= g  = TcM (\ms msgs -> case unTcM f ms msgs of
                                 TcOk x ms msgs -> unTcM (g x) ms msgs
                                 TcFail    msgs -> TcFail msgs)
-  fail     = tcError . text
+  fail     = tcError . pp
 
 instance Functor TcM where
   fmap f g = TcM (\ms msgs -> case unTcM g ms msgs of
@@ -476,7 +476,7 @@ tcError :: Message -> TcM a
 tcError msg = TcM (\ms msgs -> TcFail (msg : msgs))
 
 tcWarn :: Message -> TcM ()
-tcWarn msg = TcM (\ms msgs -> TcOk () ms ((text "Warning:" <+> msg) : msgs))
+tcWarn msg = TcM (\ms msgs -> TcOk () ms (("Warning:" <+> msg) : msgs))
 
 unimplemented str = fail ("Unimplemented: "++str)
 
@@ -494,7 +494,7 @@ getMeta :: MetaId -> TcM MetaValue
 getMeta i = TcM (\ms msgs -> 
   case IntMap.lookup i ms of
     Just mv -> TcOk mv ms msgs
-    Nothing -> TcFail ((text "Unknown metavariable" <+> ppMeta i) : msgs))
+    Nothing -> TcFail (("Unknown metavariable" <+> ppMeta i) : msgs))
 
 setMeta :: MetaId -> MetaValue -> TcM ()
 setMeta i mv = TcM (\ms msgs -> TcOk () (IntMap.insert i mv ms) msgs)

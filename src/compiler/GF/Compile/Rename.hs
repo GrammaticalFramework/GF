@@ -40,7 +40,7 @@ import GF.Data.Operations
 
 import Control.Monad
 import Data.List (nub,(\\))
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 -- | this gives top-level access to renaming term input in the cc command
 renameSourceTerm :: SourceGrammar -> Ident -> Term -> Check Term
@@ -97,8 +97,8 @@ renameIdentTerm' env@(act,imps) t0 =
         Ok f -> return (f c)
         _    -> case lookupTreeManyAll showIdent opens c of
                   [f]  -> return (f c)
-                  []   -> alt c (text "constant not found:" <+> ppIdent c $$
-                                 text "given" <+> fsep (punctuate comma (map (ppIdent . fst) qualifs)))
+                  []   -> alt c ("constant not found:" <+> c $$
+                                 "given" <+> fsep (punctuate ',' (map fst qualifs)))
                   fs   -> case nub [f c | f <- fs]  of
                             [tr]     -> return tr
 {-
@@ -106,9 +106,9 @@ renameIdentTerm' env@(act,imps) t0 =
                                         -- name conflicts resolved as overloading in TypeCheck.RConcrete AR 31/1/2014
                                         -- the old definition is below and still presupposed in TypeCheck.Concrete
 -}
-                            ts@(t:_) -> do checkWarn (text "atomic term" <+> ppTerm Qualified 0 t0 $$
-                                                      text "conflict" <+> hsep (punctuate comma (map (ppTerm Qualified 0) ts)) $$
-                                                      text "given" <+> fsep (punctuate comma (map (ppIdent . fst) qualifs)))
+                            ts@(t:_) -> do checkWarn ("atomic term" <+> ppTerm Qualified 0 t0 $$
+                                                      "conflict" <+> hsep (punctuate ',' (map (ppTerm Qualified 0) ts)) $$
+                                                      "given" <+> fsep (punctuate ',' (map fst qualifs)))
                                            return t
 
             -- a warning will be generated in CheckGrammar, and the head returned
@@ -171,7 +171,7 @@ renameInfo cwd status (m,mi) i info =
     renMaybe ren Nothing  = return Nothing
 
     renLoc ren (L loc x) =
-      checkInModule cwd mi loc (text "Happened in the renaming of" <+> ppIdent i) $ do
+      checkInModule cwd mi loc ("Happened in the renaming of" <+> i) $ do
         x <- ren x
         return (L loc x)
 
@@ -222,7 +222,7 @@ renameTerm env vars = ren vars where
       | elem r vs -> return trm                                -- try var proj first ..
       | otherwise -> checks [ renid' (Q (r,label2ident l))      -- .. and qualified expression second.
                             , renid' t >>= \t -> return (P t l) -- try as a constant at the end
-                            , checkError (text "unknown qualified constant" <+> ppTerm Unqualified 0 trm)
+                            , checkError ("unknown qualified constant" <+> trm)
                             ]
 
     EPatt p -> do
@@ -244,8 +244,8 @@ renamePattern :: Status -> Patt -> Check (Patt,[Ident])
 renamePattern env patt =
     do r@(p',vs) <- renp patt
        let dupl = vs \\ nub vs
-       unless (null dupl) $ checkError (hang (text "[C.4.13] Pattern is not linear:") 4
-                                             (ppPatt Unqualified 0 patt))
+       unless (null dupl) $ checkError (hang ("[C.4.13] Pattern is not linear:") 4
+                                             patt)
        return r
   where
     renp patt = case patt of
@@ -253,7 +253,7 @@ renamePattern env patt =
         c' <- renid $ Vr c
         case c' of
           Q d -> renp $ PM d
-          _ -> checkError (text "unresolved pattern" <+> ppPatt Unqualified 0 patt)
+          _ -> checkError ("unresolved pattern" <+> patt)
 
       PC c ps -> do
         c' <- renid $ Cn c
@@ -261,8 +261,8 @@ renamePattern env patt =
           QC c -> do psvss <- mapM renp ps
                      let (ps,vs) = unzip psvss
                      return (PP c ps, concat vs)
-          Q  _ -> checkError (text "data constructor expected but" <+> ppTerm Qualified 0 c' <+> text "is found instead")
-          _    -> checkError (text "unresolved data constructor" <+> ppTerm Qualified 0 c')
+          Q  _ -> checkError ("data constructor expected but" <+> ppTerm Qualified 0 c' <+> "is found instead")
+          _    -> checkError ("unresolved data constructor" <+> ppTerm Qualified 0 c')
 
       PP c ps -> do
         (QC c') <- renid (QC c)
@@ -274,12 +274,12 @@ renamePattern env patt =
         x <- renid (Q c)
         c' <- case x of
                 (Q c') -> return c'
-                _      -> checkError (text "not a pattern macro" <+> ppPatt Qualified 0 patt)
+                _      -> checkError ("not a pattern macro" <+> ppPatt Qualified 0 patt)
         return (PM c', [])
 
       PV x -> checks [ renid' (Vr x) >>= \t' -> case t' of
                                                  QC c -> return (PP c [],[])
-                                                 _    -> checkError (text "not a constructor")
+                                                 _    -> checkError (pp "not a constructor")
                      , return (patt, [x])
                      ]
 

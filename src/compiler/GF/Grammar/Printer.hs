@@ -9,8 +9,6 @@
 
 module GF.Grammar.Printer
            ( TermPrintQual(..)
-           , ppLabel
-           , ppGrammar
            , ppModule
            , ppJudgement
            , ppParams
@@ -18,7 +16,6 @@ module GF.Grammar.Printer
            , ppPatt
            , ppValue
            , ppConstrs
-           , ppLocation
            , ppQIdent
            , ppMeta
            , getAbs
@@ -31,7 +28,7 @@ import GF.Grammar.Grammar
 
 import PGF.Internal (ppMeta, ppLit, ppFId, ppFunId, ppSeqId, ppSeq)
 
-import Text.PrettyPrint
+import GF.Text.Pretty
 import Data.Maybe (isNothing)
 import Data.List  (intersperse)
 import qualified Data.Map as Map
@@ -43,8 +40,8 @@ data TermPrintQual
   = Unqualified | Qualified | Internal
   deriving Eq                 
 
-ppGrammar :: SourceGrammar -> Doc
-ppGrammar sgr = vcat $ map (ppModule Qualified) $ modules sgr
+instance Pretty SourceGrammar where
+  pp = vcat . map (ppModule Qualified) . modules
 
 ppModule :: TermPrintQual -> SourceModule -> Doc
 ppModule q (mn, ModInfo mtype mstat opts exts with opens _ _ mseqs jments) =
@@ -54,288 +51,286 @@ ppModule q (mn, ModInfo mtype mstat opts exts with opens _ _ mseqs jments) =
             maybe empty (ppSequences q) mseqs) $$
     ftr
     where
-      hdr = complModDoc <+> modTypeDoc <+> equals <+> 
-            hsep (intersperse (text "**") $
+      hdr = complModDoc <+> modTypeDoc <+> '=' <+> 
+            hsep (intersperse (pp "**") $
                   filter (not . isEmpty)  $ [ commaPunct ppExtends exts
                                             , maybe empty ppWith with
                                             , if null opens
-                                                then lbrace
-                                                else text "open" <+> commaPunct ppOpenSpec opens <+> text "in" <+> lbrace
+                                                then pp '{'
+                                                else "open" <+> commaPunct ppOpenSpec opens <+> "in" <+> '{'
                                             ])
 
-      ftr = rbrace
+      ftr = '}'
 
       complModDoc =
         case mstat of
           MSComplete   -> empty
-          MSIncomplete -> text "incomplete"
+          MSIncomplete -> pp "incomplete"
 
       modTypeDoc =
         case mtype of
-          MTAbstract         -> text "abstract"  <+> ppIdent mn
-          MTResource         -> text "resource"  <+> ppIdent mn
-          MTConcrete abs     -> text "concrete"  <+> ppIdent mn <+> text "of" <+> ppIdent abs
-          MTInterface        -> text "interface" <+> ppIdent mn
-          MTInstance ie      -> text "instance"  <+> ppIdent mn <+> text "of" <+> ppExtends ie
+          MTAbstract         -> "abstract"  <+> mn
+          MTResource         -> "resource"  <+> mn
+          MTConcrete abs     -> "concrete"  <+> mn <+> "of" <+> abs
+          MTInterface        -> "interface" <+> mn
+          MTInstance ie      -> "instance"  <+> mn <+> "of" <+> ppExtends ie
 
-      ppExtends (id,MIAll        ) = ppIdent id
-      ppExtends (id,MIOnly   incs) = ppIdent id              <+> brackets (commaPunct ppIdent incs)
-      ppExtends (id,MIExcept incs) = ppIdent id <+> char '-' <+> brackets (commaPunct ppIdent incs)
+      ppExtends (id,MIAll        ) = pp id
+      ppExtends (id,MIOnly   incs) = id         <+> brackets (commaPunct pp incs)
+      ppExtends (id,MIExcept incs) = id <+> '-' <+> brackets (commaPunct pp incs)
       
-      ppWith (id,ext,opens) = ppExtends (id,ext) <+> text "with" <+> commaPunct ppInstSpec opens
+      ppWith (id,ext,opens) = ppExtends (id,ext) <+> "with" <+> commaPunct ppInstSpec opens
 
 ppOptions opts = 
-  text "flags" $$
-  nest 2 (vcat [text option <+> equals <+> ppLit value <+> semi | (option,value) <- optionsGFO opts])
+  "flags" $$
+  nest 2 (vcat [option <+> '=' <+> ppLit value <+> ';' | (option,value) <- optionsGFO opts])
 
 ppJudgement q (id, AbsCat pcont ) =
-  text "cat" <+> ppIdent id <+>
+  "cat" <+> id <+>
   (case pcont of
      Just (L _ cont) -> hsep (map (ppDecl q) cont)
-     Nothing         -> empty) <+> semi
+     Nothing         -> empty) <+> ';'
 ppJudgement q (id, AbsFun ptype _ pexp poper) =
   let kind | isNothing pexp      = "data"
            | poper == Just False = "oper"
            | otherwise           = "fun"
   in
   (case ptype of
-     Just (L _ typ) -> text kind <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
+     Just (L _ typ) -> kind <+> id <+> ':' <+> ppTerm q 0 typ <+> ';'
      Nothing        -> empty) $$
   (case pexp of
      Just []  -> empty
-     Just eqs -> text "def" <+> vcat [ppIdent id <+> hsep (map (ppPatt q 2) ps) <+> equals <+> ppTerm q 0 e <+> semi | L _ (ps,e) <- eqs]
+     Just eqs -> "def" <+> vcat [id <+> hsep (map (ppPatt q 2) ps) <+> '=' <+> ppTerm q 0 e <+> ';' | L _ (ps,e) <- eqs]
      Nothing  -> empty)
 ppJudgement q (id, ResParam pparams _) = 
-  text "param" <+> ppIdent id <+>
+  "param" <+> id <+>
   (case pparams of
-     Just (L _ ps) -> equals <+> ppParams q ps
-     _             -> empty) <+> semi
+     Just (L _ ps) -> '=' <+> ppParams q ps
+     _             -> empty) <+> ';'
 ppJudgement q (id, ResValue pvalue) = 
-  text "-- param constructor" <+> ppIdent id <+> colon <+> 
+  "-- param constructor" <+> id <+> ':' <+> 
   (case pvalue of
-     (L _ ty) -> ppTerm q 0 ty) <+> semi
+     (L _ ty) -> ppTerm q 0 ty) <+> ';'
 ppJudgement q (id, ResOper  ptype pexp) =
-  text "oper" <+> ppIdent id <+>
-  (case ptype of {Just (L _ t) -> colon  <+> ppTerm q 0 t; Nothing -> empty} $$
-   case pexp  of {Just (L _ e) -> equals <+> ppTerm q 0 e; Nothing -> empty}) <+> semi
+  "oper" <+> id <+>
+  (case ptype of {Just (L _ t) -> ':'  <+> ppTerm q 0 t; Nothing -> empty} $$
+   case pexp  of {Just (L _ e) -> '=' <+> ppTerm q 0 e; Nothing -> empty}) <+> ';'
 ppJudgement q (id, ResOverload ids defs) =
-  text "oper" <+> ppIdent id <+> equals <+> 
-  (text "overload" <+> lbrace $$
-   nest 2 (vcat [ppIdent id <+> (colon <+> ppTerm q 0 ty $$ equals <+> ppTerm q 0 e <+> semi) | (L _ ty,L _ e) <- defs]) $$
-   rbrace) <+> semi
+  "oper" <+> id <+> '=' <+> 
+  ("overload" <+> '{' $$
+   nest 2 (vcat [id <+> (':' <+> ppTerm q 0 ty $$ '=' <+> ppTerm q 0 e <+> ';') | (L _ ty,L _ e) <- defs]) $$
+   '}') <+> ';'
 ppJudgement q (id, CncCat pcat pdef pref pprn mpmcfg) =
   (case pcat of
-     Just (L _ typ) -> text "lincat" <+> ppIdent id <+> equals <+> ppTerm q 0 typ <+> semi
+     Just (L _ typ) -> "lincat" <+> id <+> '=' <+> ppTerm q 0 typ <+> ';'
      Nothing        -> empty) $$
   (case pdef of
-     Just (L _ exp) -> text "lindef" <+> ppIdent id <+> equals <+> ppTerm q 0 exp <+> semi
+     Just (L _ exp) -> "lindef" <+> id <+> '=' <+> ppTerm q 0 exp <+> ';'
      Nothing        -> empty) $$
   (case pref of
-     Just (L _ exp) -> text "linref" <+> ppIdent id <+> equals <+> ppTerm q 0 exp <+> semi
+     Just (L _ exp) -> "linref" <+> id <+> '=' <+> ppTerm q 0 exp <+> ';'
      Nothing        -> empty) $$
   (case pprn of
-     Just (L _ prn) -> text "printname" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
+     Just (L _ prn) -> "printname" <+> id <+> '=' <+> ppTerm q 0 prn <+> ';'
      Nothing        -> empty) $$
   (case (mpmcfg,q) of
      (Just (PMCFG prods funs),Internal)
-                    -> text "pmcfg" <+> ppIdent id <+> equals <+> char '{' $$
+                    -> "pmcfg" <+> id <+> '=' <+> '{' $$
                        nest 2 (vcat (map ppProduction prods) $$
-                               space $$
-                               vcat (map (\(funid,arr) -> ppFunId funid <+> text ":=" <+> 
-                                                          parens (hcat (punctuate comma (map ppSeqId (Array.elems arr)))))
+                               ' ' $$
+                               vcat (map (\(funid,arr) -> ppFunId funid <+> ":=" <+> 
+                                                          parens (hcat (punctuate ',' (map ppSeqId (Array.elems arr)))))
                                          (Array.assocs funs))) $$
-                       char '}'
+                       '}'
      _              -> empty)
 ppJudgement q (id, CncFun  ptype pdef pprn mpmcfg) =
   (case pdef of
      Just (L _ e) -> let (xs,e') = getAbs e
-                     in text "lin" <+> ppIdent id <+> hsep (map ppBind xs) <+> equals <+> ppTerm q 0 e' <+> semi
+                     in "lin" <+> id <+> hsep (map ppBind xs) <+> '=' <+> ppTerm q 0 e' <+> ';'
      Nothing      -> empty) $$
   (case pprn of
-     Just (L _ prn) -> text "printname" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
+     Just (L _ prn) -> "printname" <+> id <+> '=' <+> ppTerm q 0 prn <+> ';'
      Nothing        -> empty) $$
   (case (mpmcfg,q) of
      (Just (PMCFG prods funs),Internal)
-                    -> text "pmcfg" <+> ppIdent id <+> equals <+> char '{' $$
+                    -> "pmcfg" <+> id <+> '=' <+> '{' $$
                        nest 2 (vcat (map ppProduction prods) $$
-                               space $$
-                               vcat (map (\(funid,arr) -> ppFunId funid <+> text ":=" <+> 
-                                                          parens (hcat (punctuate comma (map ppSeqId (Array.elems arr)))))
+                               ' ' $$
+                               vcat (map (\(funid,arr) -> ppFunId funid <+> ":=" <+> 
+                                                          parens (hcat (punctuate ',' (map ppSeqId (Array.elems arr)))))
                                          (Array.assocs funs))) $$
-                       char '}'
+                       '}'
      _              -> empty)
 ppJudgement q (id, AnyInd cann mid) =
   case q of
-    Internal -> text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
+    Internal -> "ind" <+> id <+> '=' <+> (if cann then pp "canonical" else empty) <+> mid <+> ';'
     _        -> empty
 
+instance Pretty Term where pp = ppTerm Unqualified 0
+
 ppTerm q d (Abs b v e)   = let (xs,e') = getAbs (Abs b v e)
-                           in prec d 0 (char '\\' <> commaPunct ppBind xs <+> text "->" <+> ppTerm q 0 e')
+                           in prec d 0 ('\\' <> commaPunct ppBind xs <+> "->" <+> ppTerm q 0 e')
 ppTerm q d (T TRaw xs) = case getCTable (T TRaw xs) of
-                           ([],_) -> text "table" <+> lbrace $$
-	  		             nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
-			             rbrace
-                           (vs,e) -> prec d 0 (text "\\\\" <> commaPunct ppIdent vs <+> text "=>" <+> ppTerm q 0 e)
-ppTerm q d (T (TTyped t) xs) = text "table" <+> ppTerm q 0 t <+> lbrace $$
-			       nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
-			       rbrace
-ppTerm q d (T (TComp  t) xs) = text "table" <+> ppTerm q 0 t <+> lbrace $$
-		 	       nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
-			       rbrace
-ppTerm q d (T (TWild  t) xs) = text "table" <+> ppTerm q 0 t <+> lbrace $$
-			       nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
-			       rbrace
+                           ([],_) -> "table" <+> '{' $$
+	  		             nest 2 (vcat (punctuate ';' (map (ppCase q) xs))) $$
+			             '}'
+                           (vs,e) -> prec d 0 ("\\\\" <> commaPunct pp vs <+> "=>" <+> ppTerm q 0 e)
+ppTerm q d (T (TTyped t) xs) = "table" <+> ppTerm q 0 t <+> '{' $$
+			       nest 2 (vcat (punctuate ';' (map (ppCase q) xs))) $$
+			       '}'
+ppTerm q d (T (TComp  t) xs) = "table" <+> ppTerm q 0 t <+> '{' $$
+		 	       nest 2 (vcat (punctuate ';' (map (ppCase q) xs))) $$
+			       '}'
+ppTerm q d (T (TWild  t) xs) = "table" <+> ppTerm q 0 t <+> '{' $$
+			       nest 2 (vcat (punctuate ';' (map (ppCase q) xs))) $$
+			       '}'
 ppTerm q d (Prod bt x a b)= if x == identW && bt == Explicit
-                              then prec d 0 (ppTerm q 4 a <+> text "->" <+> ppTerm q 0 b)
-                              else prec d 0 (parens (ppBind (bt,x) <+> colon <+> ppTerm q 0 a) <+> text "->" <+> ppTerm q 0 b)
-ppTerm q d (Table kt vt)=prec d 0 (ppTerm q 3 kt <+> text "=>" <+> ppTerm q 0 vt)
+                              then prec d 0 (ppTerm q 4 a <+> "->" <+> ppTerm q 0 b)
+                              else prec d 0 (parens (ppBind (bt,x) <+> ':' <+> ppTerm q 0 a) <+> "->" <+> ppTerm q 0 b)
+ppTerm q d (Table kt vt)=prec d 0 (ppTerm q 3 kt <+> "=>" <+> ppTerm q 0 vt)
 ppTerm q d (Let l e)    = let (ls,e') = getLet e
-                          in prec d 0 (text "let" <+> vcat (map (ppLocDef q) (l:ls)) $$ text "in" <+> ppTerm q 0 e')
-ppTerm q d (Example e s)=prec d 0 (text "in" <+> ppTerm q 5 e <+> str s)
-ppTerm q d (C e1 e2)    =prec d 1 (hang (ppTerm q 2 e1) 2 (text "++" <+> ppTerm q 1 e2))
-ppTerm q d (Glue e1 e2) =prec d 2 (ppTerm q 3 e1 <+> char '+'  <+> ppTerm q 2 e2)
+                          in prec d 0 ("let" <+> vcat (map (ppLocDef q) (l:ls)) $$ "in" <+> ppTerm q 0 e')
+ppTerm q d (Example e s)=prec d 0 ("in" <+> ppTerm q 5 e <+> str s)
+ppTerm q d (C e1 e2)    =prec d 1 (hang (ppTerm q 2 e1) 2 ("++" <+> ppTerm q 1 e2))
+ppTerm q d (Glue e1 e2) =prec d 2 (ppTerm q 3 e1 <+> '+'  <+> ppTerm q 2 e2)
 ppTerm q d (S x y)     = case x of
                            T annot xs -> let e = case annot of
 			                           TRaw     -> y
 			                           TTyped t -> Typed y t
 			                           TComp  t -> Typed y t
 			                           TWild  t -> Typed y t
-			                 in text "case" <+> ppTerm q 0 e <+> text "of" <+> lbrace $$
-			                    nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
-			                   rbrace
-			   _          -> prec d 3 (hang (ppTerm q 3 x) 2 (text "!" <+> ppTerm q 4 y))
-ppTerm q d (ExtR x y)  = prec d 3 (ppTerm q 3 x <+> text "**" <+> ppTerm q 4 y)
+			                 in "case" <+> ppTerm q 0 e <+>"of" <+> '{' $$
+			                    nest 2 (vcat (punctuate ';' (map (ppCase q) xs))) $$
+			                   '}'
+			   _          -> prec d 3 (hang (ppTerm q 3 x) 2 ("!" <+> ppTerm q 4 y))
+ppTerm q d (ExtR x y)  = prec d 3 (ppTerm q 3 x <+> "**" <+> ppTerm q 4 y)
 ppTerm q d (App x y)   = prec d 4 (ppTerm q 4 x <+> ppTerm q 5 y)
-ppTerm q d (V e es)    = hang (text "table") 2 (sep [ppTerm q 6 e,brackets (fsep (punctuate semi (map (ppTerm q 0) es)))])
-ppTerm q d (FV es)     = text "variants" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
-ppTerm q d (AdHocOverload es)     = text "overload" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
-ppTerm q d (Alts e xs) = prec d 4 (text "pre" <+> braces (ppTerm q 0 e <> semi <+> fsep (punctuate semi (map (ppAltern q) xs))))
-ppTerm q d (Strs es)   = text "strs" <+> braces (fsep (punctuate semi (map (ppTerm q 0) es)))
-ppTerm q d (EPatt p)   = prec d 4 (char '#' <+> ppPatt q 2 p)
-ppTerm q d (EPattType t)=prec d 4 (text "pattern" <+> ppTerm q 0 t)
-ppTerm q d (P t l)     = prec d 5 (ppTerm q 5 t <> char '.' <> ppLabel l)
-ppTerm q d (Cn id)     = ppIdent id
-ppTerm q d (Vr id)     = ppIdent id
+ppTerm q d (V e es)    = hang "table" 2 (sep [ppTerm q 6 e,brackets (fsep (punctuate ';' (map (ppTerm q 0) es)))])
+ppTerm q d (FV es)     = "variants" <+> braces (fsep (punctuate ';' (map (ppTerm q 0) es)))
+ppTerm q d (AdHocOverload es)     = "overload" <+> braces (fsep (punctuate ';' (map (ppTerm q 0) es)))
+ppTerm q d (Alts e xs) = prec d 4 ("pre" <+> braces (ppTerm q 0 e <> ';' <+> fsep (punctuate ';' (map (ppAltern q) xs))))
+ppTerm q d (Strs es)   = "strs" <+> braces (fsep (punctuate ';' (map (ppTerm q 0) es)))
+ppTerm q d (EPatt p)   = prec d 4 ('#' <+> ppPatt q 2 p)
+ppTerm q d (EPattType t)=prec d 4 ("pattern" <+> ppTerm q 0 t)
+ppTerm q d (P t l)     = prec d 5 (ppTerm q 5 t <> '.' <> l)
+ppTerm q d (Cn id)     = pp id
+ppTerm q d (Vr id)     = pp id
 ppTerm q d (Q  id)     = ppQIdent q id
 ppTerm q d (QC id)     = ppQIdent q id
-ppTerm q d (Sort id)   = ppIdent id
+ppTerm q d (Sort id)   = pp id
 ppTerm q d (K s)       = str s
-ppTerm q d (EInt n)    = int n
-ppTerm q d (EFloat f)  = double f
+ppTerm q d (EInt n)    = pp n
+ppTerm q d (EFloat f)  = pp f
 ppTerm q d (Meta i)    = ppMeta i
-ppTerm q d (Empty)     = text "[]"
-ppTerm q d (R [])      = text "<>" -- to distinguish from {} empty RecType
-ppTerm q d (R xs)      = braces (fsep (punctuate semi [ppLabel l <+> 
-                                                       fsep [case mb_t of {Just t -> colon <+> ppTerm q 0 t; Nothing -> empty},
-                                                             equals <+> ppTerm q 0 e] | (l,(mb_t,e)) <- xs]))
-ppTerm q d (RecType xs)= braces (fsep (punctuate semi [ppLabel l <+> colon <+> ppTerm q 0 t | (l,t) <- xs]))
-ppTerm q d (Typed e t) = char '<' <> ppTerm q 0 e <+> colon <+> ppTerm q 0 t <> char '>'
+ppTerm q d (Empty)     = pp "[]"
+ppTerm q d (R [])      = pp "<>" -- to distinguish from {} empty RecType
+ppTerm q d (R xs)      = braces (fsep (punctuate ';' [l <+> 
+                                                       fsep [case mb_t of {Just t -> ':' <+> ppTerm q 0 t; Nothing -> empty},
+                                                             '=' <+> ppTerm q 0 e] | (l,(mb_t,e)) <- xs]))
+ppTerm q d (RecType xs)= braces (fsep (punctuate ';' [l <+> ':' <+> ppTerm q 0 t | (l,t) <- xs]))
+ppTerm q d (Typed e t) = '<' <> ppTerm q 0 e <+> ':' <+> ppTerm q 0 t <> '>'
 ppTerm q d (ImplArg e) = braces (ppTerm q 0 e)
-ppTerm q d (ELincat cat t) = prec d 4 (text "lincat" <+> ppIdent cat <+> ppTerm q 5 t)
-ppTerm q d (ELin cat t) = prec d 4 (text "lin" <+> ppIdent cat <+> ppTerm q 5 t)
-ppTerm q d (Error s)   = prec d 4 (text "Predef.error" <+> str s)
+ppTerm q d (ELincat cat t) = prec d 4 ("lincat" <+> cat <+> ppTerm q 5 t)
+ppTerm q d (ELin cat t) = prec d 4 ("lin" <+> cat <+> ppTerm q 5 t)
+ppTerm q d (Error s)   = prec d 4 ("Predef.error" <+> str s)
 
-ppEquation q (ps,e) = hcat (map (ppPatt q 2) ps) <+> text "->" <+> ppTerm q 0 e
+ppEquation q (ps,e) = hcat (map (ppPatt q 2) ps) <+> "->" <+> ppTerm q 0 e
 
-ppCase q (p,e) = ppPatt q 0 p <+> text "=>" <+> ppTerm q 0 e
+ppCase q (p,e) = ppPatt q 0 p <+> "=>" <+> ppTerm q 0 e
 
-ppPatt q d (PAlt p1 p2) = prec d 0 (ppPatt q 0 p1 <+> char '|' <+> ppPatt q 1 p2)
-ppPatt q d (PSeq p1 p2) = prec d 0 (ppPatt q 0 p1 <+> char '+' <+> ppPatt q 1 p2)
-ppPatt q d (PMSeq (_,p1) (_,p2)) = prec d 0 (ppPatt q 0 p1 <+> char '+' <+> ppPatt q 1 p2)
+instance Pretty Patt where pp = ppPatt Unqualified 0
+
+ppPatt q d (PAlt p1 p2) = prec d 0 (ppPatt q 0 p1 <+> '|' <+> ppPatt q 1 p2)
+ppPatt q d (PSeq p1 p2) = prec d 0 (ppPatt q 0 p1 <+> '+' <+> ppPatt q 1 p2)
+ppPatt q d (PMSeq (_,p1) (_,p2)) = prec d 0 (ppPatt q 0 p1 <+> '+' <+> ppPatt q 1 p2)
 ppPatt q d (PC f ps)    = if null ps
-                            then ppIdent f
-                            else prec d 1 (ppIdent f <+> hsep (map (ppPatt q 3) ps))
+                            then pp f
+                            else prec d 1 (f <+> hsep (map (ppPatt q 3) ps))
 ppPatt q d (PP f ps)    = if null ps
                             then ppQIdent q f
                             else prec d 1 (ppQIdent q f <+> hsep (map (ppPatt q 3) ps))
-ppPatt q d (PRep p)     = prec d 1 (ppPatt q 3 p <> char '*')
-ppPatt q d (PAs f p)    = prec d 2 (ppIdent f <> char '@' <> ppPatt q 3 p)
-ppPatt q d (PNeg p)     = prec d 2 (char '-' <> ppPatt q 3 p)
-ppPatt q d (PChar)      = char '?'
+ppPatt q d (PRep p)     = prec d 1 (ppPatt q 3 p <> '*')
+ppPatt q d (PAs f p)    = prec d 2 (f <> '@' <> ppPatt q 3 p)
+ppPatt q d (PNeg p)     = prec d 2 ('-' <> ppPatt q 3 p)
+ppPatt q d (PChar)      = pp '?'
 ppPatt q d (PChars s)   = brackets (str s)
-ppPatt q d (PMacro id)  = char '#' <> ppIdent id
-ppPatt q d (PM id)      = char '#' <> ppQIdent q id
-ppPatt q d PW           = char '_'
-ppPatt q d (PV id)      = ppIdent id
-ppPatt q d (PInt n)     = int n
-ppPatt q d (PFloat f)   = double f
+ppPatt q d (PMacro id)  = '#' <> id
+ppPatt q d (PM id)      = '#' <> ppQIdent q id
+ppPatt q d PW           = pp '_'
+ppPatt q d (PV id)      = pp id
+ppPatt q d (PInt n)     = pp n
+ppPatt q d (PFloat f)   = pp f
 ppPatt q d (PString s)  = str s
-ppPatt q d (PR xs)      = braces (hsep (punctuate semi [ppLabel l <+> equals <+> ppPatt q 0 e | (l,e) <- xs]))
+ppPatt q d (PR xs)      = braces (hsep (punctuate ';' [l <+> '=' <+> ppPatt q 0 e | (l,e) <- xs]))
 ppPatt q d (PImplArg p) = braces (ppPatt q 0 p)
-ppPatt q d (PTilde t)   = prec d 2 (char '~' <> ppTerm q 6 t)
+ppPatt q d (PTilde t)   = prec d 2 ('~' <> ppTerm q 6 t)
 
 ppValue :: TermPrintQual -> Int -> Val -> Doc
-ppValue q d (VGen i x)    = ppIdent x <> text "{-" <> int i <> text "-}" ---- latter part for debugging
+ppValue q d (VGen i x)    = x <> "{-" <> i <> "-}" ---- latter part for debugging
 ppValue q d (VApp u v)    = prec d 4 (ppValue q 4 u <+> ppValue q 5 v)
-ppValue q d (VCn (_,c))   = ppIdent c
+ppValue q d (VCn (_,c))   = pp c
 ppValue q d (VClos env e) = case e of
                               Meta _ -> ppTerm q d e <> ppEnv env
                               _      -> ppTerm q d e ---- ++ prEnv env ---- for debugging
-ppValue q d (VRecType xs) = braces (hsep (punctuate comma [ppLabel l <> char '=' <> ppValue q 0 v | (l,v) <- xs]))
-ppValue q d VType         = text "Type"
+ppValue q d (VRecType xs) = braces (hsep (punctuate ',' [l <> '=' <> ppValue q 0 v | (l,v) <- xs]))
+ppValue q d VType         = pp "Type"
 
 ppConstrs :: Constraints -> [Doc]
-ppConstrs = map (\(v,w) -> braces (ppValue Unqualified 0 v <+> text "<>" <+> ppValue Unqualified 0 w))
+ppConstrs = map (\(v,w) -> braces (ppValue Unqualified 0 v <+> "<>" <+> ppValue Unqualified 0 w))
 
 ppEnv :: Env -> Doc
-ppEnv e = hcat (map (\(x,t) -> braces (ppIdent x <> text ":=" <> ppValue Unqualified 0 t)) e)
+ppEnv e = hcat (map (\(x,t) -> braces (x <> ":=" <> ppValue Unqualified 0 t)) e)
 
-str s = doubleQuotes (text s)
+str s = doubleQuotes s
 
 ppDecl q (_,id,typ)
   | id == identW = ppTerm q 3 typ
-  | otherwise    = parens (ppIdent id <+> colon <+> ppTerm q 0 typ)
+  | otherwise    = parens (id <+> ':' <+> ppTerm q 0 typ)
 
 ppDDecl q (_,id,typ)
   | id == identW = ppTerm q 6 typ
-  | otherwise    = parens (ppIdent id <+> colon <+> ppTerm q 0 typ)
+  | otherwise    = parens (id <+> ':' <+> ppTerm q 0 typ)
 
+ppQIdent :: TermPrintQual -> QIdent -> Doc
 ppQIdent q (m,id) =
   case q of
-    Unqualified ->                          ppIdent id
-    Qualified   -> ppIdent m <> char '.' <> ppIdent id
-    Internal    -> ppIdent m <> char '.' <> ppIdent id
+    Unqualified ->          pp id
+    Qualified   -> m <> '.' <> id
+    Internal    -> m <> '.' <> id
     
 
-ppLabel = ppIdent . label2ident
+instance Pretty Label where pp = pp . label2ident
 
-ppOpenSpec (OSimple id)   = ppIdent id
-ppOpenSpec (OQualif id n) = parens (ppIdent id <+> equals <+> ppIdent n)
+ppOpenSpec (OSimple id)   = pp id
+ppOpenSpec (OQualif id n) = parens (id <+> '=' <+> n)
 
-ppInstSpec (id,n) = parens (ppIdent id <+> equals <+> ppIdent n)
+ppInstSpec (id,n) = parens (id <+> '=' <+> n)
 
 ppLocDef q (id, (mbt, e)) =
-  ppIdent id <+>
-  (case mbt of {Just t -> colon  <+> ppTerm q 0 t; Nothing -> empty} <+> equals <+> ppTerm q 0 e) <+> semi
+  id <+>
+  (case mbt of {Just t -> ':' <+> ppTerm q 0 t; Nothing -> empty} <+> '=' <+> ppTerm q 0 e) <+> ';'
 
-ppBind (Explicit,v) = ppIdent v
-ppBind (Implicit,v) = braces (ppIdent v)
+ppBind (Explicit,v) = pp v
+ppBind (Implicit,v) = braces v
 
-ppAltern q (x,y) = ppTerm q 0 x <+> char '/' <+> ppTerm q 0 y
+ppAltern q (x,y) = ppTerm q 0 x <+> '/' <+> ppTerm q 0 y
 
-ppParams q ps = fsep (intersperse (char '|') (map (ppParam q) ps))
-ppParam q (id,cxt) = ppIdent id <+> hsep (map (ppDDecl q) cxt)
-
-ppLocation :: FilePath -> Location -> Doc
-ppLocation fpath NoLoc          = text fpath
-ppLocation fpath (External p l) = ppLocation p l
-ppLocation fpath (Local b e)
-  | b == e    = text fpath <> colon <> int b
-  | otherwise = text fpath <> colon <> int b <> text "-" <> int e
+ppParams q ps = fsep (intersperse (pp '|') (map (ppParam q) ps))
+ppParam q (id,cxt) = id <+> hsep (map (ppDDecl q) cxt)
 
 ppProduction (Production fid funid args) =
-  ppFId fid <+> text "->" <+> ppFunId funid <> 
-  brackets (hcat (punctuate comma (map (hsep . intersperse (char '|') . map ppFId) args)))
+  ppFId fid <+> "->" <+> ppFunId funid <> 
+  brackets (hcat (punctuate "," (map (hsep . intersperse (pp '|') . map ppFId) args)))
 
 ppSequences q seqsArr
   | null seqs || q /= Internal = empty
-  | otherwise                  = text "sequences" <+> char '{' $$
+  | otherwise                  = "sequences" <+> '{' $$
                                  nest 2 (vcat (map ppSeq seqs)) $$
-                                 char '}'
+                                 '}'
   where
     seqs = Array.assocs seqsArr
 
-commaPunct f ds = (hcat (punctuate comma (map f ds)))
+commaPunct f ds = (hcat (punctuate "," (map f ds)))
 
 prec d1 d2 doc
   | d1 > d2   = parens doc

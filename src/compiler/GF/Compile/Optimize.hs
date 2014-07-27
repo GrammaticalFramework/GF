@@ -34,7 +34,7 @@ import GF.Infra.Option
 import Control.Monad
 --import Data.List
 import qualified Data.Set as Set
-import Text.PrettyPrint
+import GF.Text.Pretty
 import Debug.Trace
 
 
@@ -89,7 +89,7 @@ evalInfo opts resenv sgr m c info = do
     return (CncCat ptyp pde' pre' ppr' mpmcfg)
 
   CncFun (mt@(Just (_,cont,val))) pde ppr mpmcfg -> --trace (prt c) $
-       eIn (text "linearization in type" <+> ppTerm Unqualified 0 (mkProd cont val []) $$ text "of function") $ do
+       eIn ("linearization in type" <+> mkProd cont val [] $$ "of function") $ do
     pde' <- case pde of
       Just (L loc de) -> do de <- partEval opts gr (cont,val) de
                             return (Just (L loc (factor param c 0 de)))
@@ -112,7 +112,7 @@ evalInfo opts resenv sgr m c info = do
    gr = prependModule sgr m
    optim = flag optOptimizations opts
    param = OptParametrize `Set.member` optim
-   eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))
+   eIn cat = errIn (render ("Error optimizing" <+> cat <+> c <+> ':'))
 
 -- | the main function for compiling linearizations
 partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term
@@ -121,7 +121,7 @@ partEval opts = {-if flag optNewComp opts
                 {-else partEvalOld opts-}
 
 partEvalNew opts gr (context, val) trm =
-    errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $
+    errIn (render ("partial evaluation" <+> ppTerm Qualified 0 trm)) $
     checkPredefError trm
 {-
 partEvalOld opts gr (context, val) trm = errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $ do
@@ -169,13 +169,13 @@ mkLinDefault gr typ = liftM (Abs Explicit varStr) $ mkDefField typ
      QC p           -> do vs <- lookupParamValues gr p
                           case vs of
                             v:_ -> return v
-                            _   -> Bad (render (text "no parameter values given to type" <+> ppQIdent Qualified p))
+                            _   -> Bad (render ("no parameter values given to type" <+> ppQIdent Qualified p))
      RecType r  -> do
        let (ls,ts) = unzip r
        ts <- mapM mkDefField ts
        return $ R (zipWith assign ls ts)
      _ | Just _ <- isTypeInts typ -> return $ EInt 0 -- exists in all as first val
-     _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
+     _ -> Bad (render ("linearization type field cannot be" <+> typ))
 
 mkLinReference :: SourceGrammar -> Type -> Err Term
 mkLinReference gr typ = 
@@ -196,7 +196,7 @@ mkLinReference gr typ =
        RecType rs -> do
          msum (map (\(l,ty) -> mkDefField ty (P trm l)) (sortRec rs))
        _ | Just _ <- isTypeInts typ -> Bad "no string"
-       _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
+       _ -> Bad (render ("linearization type field cannot be" <+> typ))
 
 evalPrintname :: GlobalEnv -> Ident -> L Term -> L Term
 evalPrintname resenv c (L loc pr) = L loc (normalForm resenv (L loc c) pr)
