@@ -8,7 +8,7 @@ import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Data.Operations
 import Data.List (intersect)
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 normalForm :: SourceGrammar -> Term -> Term
 normalForm gr t = value2term gr [] (eval gr [] t)
@@ -65,7 +65,7 @@ eval gr env (ImplArg t) = VImplArg (eval gr env t)
 eval gr env (Table p res) = VTblType (eval gr env p) (eval gr env res)
 eval gr env (RecType rs) = VRecType [(l,eval gr env ty) | (l,ty) <- rs]
 eval gr env t@(ExtR t1 t2) =
-  let error = VError (show (text "The term" <+> ppTerm Unqualified 0 t <+> text "is not reducible"))
+  let error = VError (show ("The term" <+> ppTerm Unqualified 0 t <+> "is not reducible"))
   in case (eval gr env t1, eval gr env t2) of
        (VRecType rs1, VRecType rs2) -> case intersect (map fst rs1) (map fst rs2) of
                                          [] -> VRecType (rs1 ++ rs2)

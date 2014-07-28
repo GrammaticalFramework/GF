@@ -33,7 +33,7 @@ import GF.Compile.Compute.AppPredefined
 import Data.List (nub) --intersperse
 --import Control.Monad (liftM2, liftM)
 import Control.Monad.Identity
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 ----import Debug.Trace
 

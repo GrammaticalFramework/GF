@@ -29,7 +29,7 @@ import GF.Grammar.Unify
 --import GF.Compile.Compute.Abstract
 import GF.Compile.TypeCheck.TC
 
-import Text.PrettyPrint
+import GF.Text.Pretty
 --import Control.Monad (foldM, liftM, liftM2)
 
 -- | invariant way of creating TCEnv from context
@@ -70,10 +70,10 @@ checkContext :: SourceGrammar -> Context -> [Message]
 checkContext st = checkTyp st . cont2exp
 
 checkTyp :: SourceGrammar -> Type -> [Message]
-checkTyp gr typ = err (\x -> [text x]) ppConstrs $ justTypeCheck gr typ vType
+checkTyp gr typ = err (\x -> [pp x]) ppConstrs $ justTypeCheck gr typ vType
 
 checkDef :: SourceGrammar -> Fun -> Type -> Equation -> [Message]
-checkDef gr (m,fun) typ eq = err (\x -> [text x]) ppConstrs $ do
+checkDef gr (m,fun) typ eq = err (\x -> [pp x]) ppConstrs $ do
   (b,cs) <- checkBranch (grammar2theory gr) (initTCEnv []) eq (type2val typ)
   (constrs,_) <- unifyVal cs
   return $ filter notJustMeta constrs

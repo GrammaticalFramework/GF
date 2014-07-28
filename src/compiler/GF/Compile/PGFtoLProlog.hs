@@ -5,46 +5,46 @@ import PGF.Internal hiding (ppExpr,ppType,ppHypo,ppCat,ppFun)
 --import PGF.Macros
 import Data.List
 import Data.Maybe
-import Text.PrettyPrint
+import GF.Text.Pretty
 import qualified Data.Map as Map
 --import Debug.Trace
 
 grammar2lambdaprolog_mod pgf = render $
-  text "module" <+> ppCId (absname pgf) <> char '.' $$
-  space $$
+  "module" <+> ppCId (absname pgf) <> '.' $$
+  ' ' $$
   vcat [ppClauses cat fns | (cat,(_,fs,_,_)) <- Map.toList (cats (abstract pgf)),
                             let fns = [(f,fromJust (Map.lookup f (funs (abstract pgf)))) | (_,f) <- fs]]
   where
     ppClauses cat fns =
-      text "/*" <+> ppCId cat <+> text "*/" $$
+      "/*" <+> ppCId cat <+> "*/" $$
       vcat [snd (ppClause (abstract pgf) 0 1 [] f ty) <> dot | (f,(ty,_,Nothing,_,_)) <- fns] $$
-      space $$
+      ' ' $$
       vcat [vcat (map (\eq -> equation2clause (abstract pgf) f eq <> dot) eqs) | (f,(_,_,Just eqs,_,_)) <- fns] $$
-      space
+      ' '
 
 grammar2lambdaprolog_sig pgf = render $
-  text "sig" <+> ppCId (absname pgf) <> char '.' $$
-  space $$
+  "sig" <+> ppCId (absname pgf) <> '.' $$
+  ' ' $$
   vcat [ppCat c hyps <> dot | (c,(hyps,_,_,_)) <- Map.toList (cats (abstract pgf))] $$
-  space $$
+  ' ' $$
   vcat [ppFun f ty <> dot | (f,(ty,_,Nothing,_,_)) <- Map.toList (funs (abstract pgf))] $$
-  space $$
+  ' ' $$
   vcat [ppExport c hyps <> dot | (c,(hyps,_,_,_)) <- Map.toList (cats (abstract pgf))] $$
   vcat [ppFunPred f (hyps ++ [(Explicit,wildCId,DTyp [] c es)]) <> dot | (f,(DTyp hyps c es,_,Just _,_,_)) <- Map.toList (funs (abstract pgf))]
 
 ppCat :: CId -> [Hypo] -> Doc
-ppCat c hyps = text "kind" <+> ppKind c <+> text "type"
+ppCat c hyps = "kind" <+> ppKind c <+> "type"
 
 ppFun :: CId -> Type -> Doc
-ppFun f ty = text "type" <+> ppCId f <+> ppType 0 ty
+ppFun f ty = "type" <+> ppCId f <+> ppType 0 ty
 
 ppExport :: CId -> [Hypo] -> Doc
-ppExport c hyps = text "exportdef" <+> ppPred c <+> foldr (\hyp doc -> ppHypo 1 hyp <+> text "->" <+> doc) (text "o") (hyp:hyps)
+ppExport c hyps = "exportdef" <+> ppPred c <+> foldr (\hyp doc -> ppHypo 1 hyp <+> "->" <+> doc) (pp "o") (hyp:hyps)
   where
     hyp = (Explicit,wildCId,DTyp [] c [])
 
 ppFunPred :: CId -> [Hypo] -> Doc
-ppFunPred c hyps = text "exportdef" <+> ppCId c <+> foldr (\hyp doc -> ppHypo 1 hyp <+> text "->" <+> doc) (text "o") hyps
+ppFunPred c hyps = "exportdef" <+> ppCId c <+> foldr (\hyp doc -> ppHypo 1 hyp <+> "->" <+> doc) (pp "o") hyps
 
 ppClause :: Abstr -> Int -> Int -> [CId] -> CId -> Type -> (Int,Doc)
 ppClause abstr d i scope f ty@(DTyp hyps cat args)
@@ -52,20 +52,20 @@ ppClause abstr d i scope f ty@(DTyp hyps cat args)
                     (goals,i',head) = ppRes i scope cat (res : args)
                 in (i',(if null goals
                           then empty
-                          else hsep (punctuate comma (map (ppExpr 0 i' scope) goals)) <> comma)
+                          else hsep (punctuate ',' (map (ppExpr 0 i' scope) goals)) <> ',')
                        <+>
                        head)
   | otherwise = let (i',vars,scope',hdocs) = ppHypos i [] scope hyps (depType [] ty)
                     res  = foldl EApp (EFun f) (map EFun (reverse vars))
                     quants = if d > 0
-                               then hsep (map (\v -> text "pi" <+> ppCId v <+> char '\\') vars)
+                               then hsep (map (\v -> "pi" <+> ppCId v <+> '\\') vars)
                                else empty
                     (goals,i'',head) = ppRes i' scope' cat (res : args)
                     docs = map (ppExpr 0 i'' scope') goals ++ hdocs
                 in (i'',ppParens (d > 0) (quants <+> head <+> 
                                           (if null docs
                                              then empty
-                                             else text ":-" <+> hsep (punctuate comma docs))))
+                                             else ":-" <+> hsep (punctuate ',' docs))))
   where
     ppRes i scope cat es = 
        let ((goals,i'),es') = mapAccumL (\(goals,i) e -> let (goals',i',e') = expr2goal abstr scope goals i e []
@@ -89,20 +89,20 @@ ppClause abstr d i scope f ty@(DTyp hyps cat args)
 mkVar i = mkCId ("X_"++show i)
 
 ppPred :: CId -> Doc
-ppPred cat = text "p_" <> ppCId cat
+ppPred cat = "p_" <> ppCId cat
 
 ppKind :: CId -> Doc
-ppKind cat = text "k_" <> ppCId cat
+ppKind cat = "k_" <> ppCId cat
 
 ppType :: Int -> Type -> Doc
 ppType d (DTyp hyps cat args)
   | null hyps = ppKind cat
-  | otherwise = ppParens (d > 0) (foldr (\hyp doc -> ppHypo 1 hyp <+> text "->" <+> doc) (ppKind cat) hyps)
+  | otherwise = ppParens (d > 0) (foldr (\hyp doc -> ppHypo 1 hyp <+> "->" <+> doc) (ppKind cat) hyps)
 
 ppHypo d (_,_,typ) = ppType d typ
 
 ppExpr d i scope (EAbs b x e) = let v = mkVar i
-                                in ppParens (d > 1) (ppCId v <+> char '\\' <+> ppExpr 1 (i+1) (v:scope) e)
+                                in ppParens (d > 1) (ppCId v <+> '\\' <+> ppExpr 1 (i+1) (v:scope) e)
 ppExpr d i scope (EApp e1 e2) = ppParens (d > 3) ((ppExpr 3 i scope e1) <+> (ppExpr 4 i scope e2))
 ppExpr d i scope (ELit l)     = ppLit l
 ppExpr d i scope (EMeta n)    = ppMeta n
@@ -111,7 +111,7 @@ ppExpr d i scope (EVar j)     = ppCId (scope !! j)
 ppExpr d i scope (ETyped e ty)= ppExpr d i scope e
 ppExpr d i scope (EImplArg e) = ppExpr 0 i scope e
 
-dot = char '.'
+dot = '.'
 
 depType counts (DTyp hyps cat es) =
   foldl' depExpr (foldl' depHypo counts hyps) es
@@ -142,7 +142,7 @@ equation2clause abstr f (Equ ps e) =
   in ppCId f <+> hsep (map (ppExpr 4 n scope) (es++[goal])) <+> 
      if null goals
        then empty
-       else text ":-" <+> hsep (punctuate comma (map (ppExpr 0 n scope) (reverse goals)))
+       else ":-" <+> hsep (punctuate ',' (map (ppExpr 0 n scope) (reverse goals)))
 
 
 patt2expr scope (PApp f ps) = foldl EApp (EFun f) (map (patt2expr scope) ps)

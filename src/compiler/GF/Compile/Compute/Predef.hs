@@ -2,7 +2,7 @@
 {-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 module GF.Compile.Compute.Predef(predef,predefName,delta) where
 
-import Text.PrettyPrint(render,hang,text)
+import GF.Text.Pretty(render,hang)
 import qualified Data.Map as Map
 import Data.Array(array,(!))
 import Data.List (isInfixOf)
@@ -154,6 +154,6 @@ string s = case words s of
 
 swap (x,y) = (y,x)
 
-bug msg = ppbug (text msg)
+bug msg = ppbug msg
 ppbug doc = error $ render $
-                    hang (text "Internal error in Compute.Predef:") 4 doc
+                    hang "Internal error in Compute.Predef:" 4 doc

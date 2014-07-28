@@ -23,7 +23,7 @@ import GF.Grammar
 import GF.Grammar.Predef
 
 import qualified Data.Map as Map
-import Text.PrettyPrint
+import GF.Text.Pretty
 import Data.Char (isUpper,toUpper,toLower)
 
 -- predefined function type signatures and definitions. AR 12/3/2003.

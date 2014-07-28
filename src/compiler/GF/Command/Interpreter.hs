@@ -16,7 +16,7 @@ import PGF.Internal
 --import PGF.Morphology
 import GF.Infra.SIO
 
-import Text.PrettyPrint
+import GF.Text.Pretty
 import Control.Monad(when)
 --import Control.Monad.Error()
 import qualified Data.Map as Map
