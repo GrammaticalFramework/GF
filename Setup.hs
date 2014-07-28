@@ -23,14 +23,13 @@ tryIOE :: IO a -> IO (Either E.IOException a)
 tryIOE = E.try
 
 main :: IO ()
-main = defaultMainWithHooks simpleUserHooks{ preBuild =gfPreBuild
-                                           , postBuild=gfPostBuild
-                                           , preInst  =gfPreInst
-                                           , postInst =gfPostInst
-                                           , preCopy  =const . checkRGLArgs
-                                           , postCopy =gfPostCopy
-                                           , sDistHook=sdistRGL
---                                         , runTests =testRGL
+main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
+                                           , postBuild = gfPostBuild
+                                           , preInst   = gfPreInst
+                                           , postInst  = gfPostInst
+                                           , preCopy   = const . checkRGLArgs
+                                           , postCopy  = gfPostCopy
+                                           , sDistHook = sdistRGL
                                            }
   where
     gfPreBuild args  = gfPre args . buildDistPref
@@ -42,18 +41,19 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild =gfPreBuild
          return h
 
     gfPostBuild args flags pkg lbi =
-      do buildRGL args flags pkg lbi
-         let gf = default_gf pkg lbi
+      do writeFile "running" ""
+         buildRGL args flags (pkg,lbi)
+         let gf = default_gf (pkg,lbi)
          buildWeb gf args flags pkg lbi
 
     gfPostInst args flags pkg lbi =
-      do installRGL args flags pkg lbi
-         let gf = default_gf pkg lbi
+      do installRGL args flags (pkg,lbi)
+         let gf = default_gf (pkg,lbi)
          installWeb gf args flags pkg lbi
 
     gfPostCopy args flags pkg lbi =
-      do copyRGL args flags pkg lbi
-         let gf = default_gf pkg lbi
+      do copyRGL args flags (pkg,lbi)
+         let gf = default_gf (pkg,lbi)
          copyWeb gf args flags pkg lbi
 
 --------------------------------------------------------
@@ -68,49 +68,53 @@ data RGLCommand
   = RGLCommand
       { cmdName   :: String
       , cmdIsDef  :: Bool
-      , cmdAction :: [Mode] -> [String] -> PackageDescription -> LocalBuildInfo -> IO ()
+      , cmdAction :: [Mode] -> [String] -> Info -> IO ()
       }
 
+type Info = (PackageDescription,LocalBuildInfo)
+
 rglCommands =
-  [ RGLCommand "prelude" True  $ \mode args pkg lbi -> do
+  [ RGLCommand "prelude" True  $ \mode args bi -> do
        putStrLn $ "Compiling [prelude]"
-       let prelude_src_dir = rgl_src_dir     </> "prelude"
-           prelude_dst_dir = rgl_dst_dir lbi </> "prelude"
+       let prelude_src_dir = rgl_src_dir    </> "prelude"
+           prelude_dst_dir = rgl_dst_dir bi </> "prelude"
        createDirectoryIfMissing True prelude_dst_dir
        files <- ls prelude_src_dir
-       run_gfc pkg lbi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files])
-  , RGLCommand "lang"    True  $ \modes args pkg lbi -> do
-       parallel_
-         [do mapM_ (gfc1 mode pkg lbi . lang) (optml mode langsLang args)
-             mapM_ (gfc1 mode pkg lbi . symbol) (optml mode langsAPI args)
-          | mode <- modes]
-  , RGLCommand "compat"  True  $ \modes args pkg lbi -> do
-         mapM_ (gfc modes pkg lbi . compat) (optl langsCompat args)
-  , RGLCommand "api"     True  $ \modes args pkg lbi -> do
-       parallel_
-         [do mapM_ (gfc1 mode pkg lbi . try) (optml mode langsAPI args)
-             mapM_ (gfc1 mode pkg lbi . symbolic) (optml mode langsSymbolic args)
-          | mode <- modes]
-  , RGLCommand "pgf"     False $ \modes args pkg lbi ->
+       run_gfc bi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files])
+  , RGLCommand "lang"    True  $ \modes args bi ->
+       parallel_ [gfcn bi mode (summary lang++" "++summary symbol) files
+                   | mode <- modes,
+                     let files = map lang (optml mode langsLang args)++
+                                 map symbol (optml mode langsAPI args)]
+  , RGLCommand "compat"  True  $ \modes args bi ->
+       gfc bi modes (summary compat) (map compat (optl langsCompat args))
+  , RGLCommand "api"     True  $ \modes args bi ->
+       parallel_ [gfcn bi mode (summary try++" "++summary symbolic) files
+                   | mode <- modes,
+                     let files = map try (optml mode langsAPI args) ++
+                                 map symbolic (optml mode langsSymbolic args)]
+  , RGLCommand "pgf"     False $ \modes args bi ->
      parallel_ [
-       do let dir = getRGLBuildDir lbi mode
+       do let dir = getRGLBuildDir bi mode
           createDirectoryIfMissing True dir
-          sequence_ [run_gfc pkg lbi ["-s","-make","-name=Lang"++la,
+          sequence_ [run_gfc bi ["-s","-make","-name=Lang"++la,
                                        dir ++ "/Lang" ++ la ++ ".gfo"]
                       | (_,la) <- optl langsPGF args]
-          run_gfc pkg lbi (["-s","-make","-name=Lang"]++
+          run_gfc bi (["-s","-make","-name=Lang"]++
                            ["Lang" ++ la ++ ".pgf"|(_,la)<-optl langsPGF args])
        | mode <- modes]
-  , RGLCommand "demo"    False $ \modes args pkg lbi -> do
+  , RGLCommand "demo"    False $ \modes args bi -> do
        let ls = optl langsDemo args
-       gf (demos "Demo" ls) ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls] pkg lbi
+       gf bi (demos "Demo" ls) ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
        return ()
-  , RGLCommand "parse"   False $ \mode args pkg lbi -> do
-       mapM_ (gfc mode pkg lbi . parse) (optl langsParse args)
-  , RGLCommand "none"    False $ \mode args pkg lbi -> do
+  , RGLCommand "parse"   False $ \mode args bi ->
+       gfc bi mode (summary parse) (map parse (optl langsParse args))
+  , RGLCommand "none"    False $ \mode args bi ->
        return ()
   ]
   where
+    summary f = f ("*","*")
+
     optl = optml AllTenses
     optml mode ls args = getOptLangs (shrink ls) args
       where
@@ -128,25 +132,25 @@ checkRGLArgs args = do
     putStrLn $ "Unrecognised flags: " ++ intercalate ", " args'
   return emptyHookedBuildInfo
 
-buildRGL args flags pkg lbi = do
+buildRGL args flags bi = do
   let cmds = getRGLCommands args
   let modes = getOptMode args
-  mapM_ (\cmd -> cmdAction cmd modes args pkg lbi) cmds
+  mapM_ (\cmd -> cmdAction cmd modes args bi) cmds
 
-installRGL args flags pkg lbi = do
+installRGL args flags bi = do
   let modes = getOptMode args
-  let inst_gf_lib_dir = datadir (absoluteInstallDirs pkg lbi NoCopyDest) </> "lib"
-  copyAll "prelude"   (rgl_dst_dir lbi </> "prelude") (inst_gf_lib_dir </> "prelude")
-  sequence_ [copyAll (show mode) (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)|mode<-modes]
+  let inst_gf_lib_dir = datadir (uncurry absoluteInstallDirs bi NoCopyDest) </> "lib"
+  copyAll "prelude"   (rgl_dst_dir bi </> "prelude") (inst_gf_lib_dir </> "prelude")
+  sequence_ [copyAll (show mode) (getRGLBuildDir bi mode) (inst_gf_lib_dir </> getRGLBuildSubDir bi mode)|mode<-modes]
 
-copyRGL args flags pkg lbi = do
+copyRGL args flags bi = do
   let modes = getOptMode args
       dest = case copyDest flags of
                NoFlag -> NoCopyDest
                Flag d -> d
-  let inst_gf_lib_dir = datadir (absoluteInstallDirs pkg lbi dest) </> "lib"
-  copyAll "prelude"   (rgl_dst_dir lbi </> "prelude") (inst_gf_lib_dir </> "prelude")
-  sequence_ [copyAll (show mode) (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)|mode<-modes]
+  let inst_gf_lib_dir = datadir (uncurry absoluteInstallDirs bi dest) </> "lib"
+  copyAll "prelude"   (rgl_dst_dir bi </> "prelude") (inst_gf_lib_dir </> "prelude")
+  sequence_ [copyAll (show mode) (getRGLBuildDir bi mode) (inst_gf_lib_dir </> getRGLBuildSubDir bi mode)|mode<-modes]
 
 copyAll s from to = do
   putStrLn $ "Installing [" ++ s ++ "] " ++ to
@@ -170,8 +174,8 @@ sdistRGL pkg mb_lbi hooks flags = do
                else return paths
         else getRGLFiles path paths
 
-rgl_src_dir     = "lib" </> "src"
-rgl_dst_dir lbi = buildDir lbi </> "rgl"
+rgl_src_dir         = "lib" </> "src"
+rgl_dst_dir (_,lbi) = buildDir lbi </> "rgl"
 
 -- the languages have long directory names and short ISO codes (3 letters)
 -- we also give the decodings for postprocessing linearizations, as long as grammars
@@ -245,19 +249,20 @@ langsPGF = langsLang `except` ["Ara","Hin","Ron","Tha"]
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Lav","Spa","Swe"]
 
-gfc modes pkg lbi file = parallel_ [gfc1 mode pkg lbi file | mode<-modes]
-gfc1 mode pkg lbi file = do
-  let dir = getRGLBuildDir lbi mode
+gfc bi modes summary files = 
+    parallel_ [gfcn bi mode summary files | mode<-modes]
+gfcn bi mode summary files = do
+  let dir = getRGLBuildDir bi mode
       preproc = case mode of
                   AllTenses -> ""
                   Present   -> "-preproc="++({-rgl_src_dir </>-} "mkPresent")
   createDirectoryIfMissing True dir
-  putStrLn $ "Compiling [" ++ show mode ++ "] " ++ file
-  run_gfc pkg lbi ["-s", "-no-pmcfg", preproc, "--gfo-dir="++dir, file]
+  putStrLn $ "Compiling [" ++ show mode ++ "] " ++ summary
+  run_gfc bi (["-s", "-no-pmcfg", preproc, "--gfo-dir="++dir] ++ files)
 
-gf comm files pkg lbi = do
+gf bi comm files = do
   putStrLn $ "Reading " ++ unwords files
-  let gf = default_gf pkg lbi
+  let gf = default_gf bi
   putStrLn ("executing: " ++ comm ++ "\n" ++
             "in " ++ gf)
   out <- readProcess gf ("-s":files) comm
@@ -307,13 +312,13 @@ getOptLangs defaultLangs args =
                    then findLangs langs [l]++ls
                    else ls
 
-getRGLBuildSubDir lbi mode =
+getRGLBuildSubDir (_,lbi) mode =
   case mode of
     AllTenses -> "alltenses"
     Present   -> "present"
 
 
-getRGLBuildDir lbi mode = rgl_dst_dir lbi </> getRGLBuildSubDir lbi mode
+getRGLBuildDir bi mode = rgl_dst_dir bi </> getRGLBuildSubDir bi mode
 
 getRGLCommands args =
   let cmds0 = [cmd | arg <- args,
@@ -337,14 +342,15 @@ unlexer abstr ls =
       unlex lla = maybe "" id $ lookup lla langsCoding
 
 -- | Runs the gf executable in compile mode with the given arguments.
-run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
-run_gfc pkg lbi args =
+run_gfc :: Info -> [String] -> IO ()
+run_gfc bi args =
     do let args' = ["-batch","-gf-lib-path="++rgl_src_dir]
-                   ++ ["+RTS","-K32M","-RTS"] -- not needed with new-comp
+                   ++ ["+RTS","-A20M","-RTS"]
                    ++ filter (not . null) args
-           gf = default_gf pkg lbi
+           gf = default_gf bi
            gf_cmdline = gf ++ " " ++ unwords (map showArg args')
 --     putStrLn $ "Running: " ++ gf_cmdline
+       appendFile "running" (gf_cmdline++"\n")
        e <- rawSystem gf args'
        case e of
          ExitSuccess   -> return ()
@@ -353,7 +359,7 @@ run_gfc pkg lbi args =
   where
     showArg arg = if ' ' `elem` arg then "'" ++ arg ++ "'" else arg
 
-default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
+default_gf (_,lbi) = buildDir lbi </> exeName' </> exeNameReal
   where
     exeName' = "gf"
     exeNameReal = exeName' <.> exeExtension
