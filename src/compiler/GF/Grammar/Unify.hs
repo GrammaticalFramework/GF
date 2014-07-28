@@ -20,7 +20,7 @@ module GF.Grammar.Unify (unifyVal) where
 import GF.Grammar
 import GF.Data.Operations
 
-import Text.PrettyPrint
+import GF.Text.Pretty
 import Data.List (partition)
 
 unifyVal :: Constraints -> Err (Constraints,MetaSubst)
@@ -64,13 +64,13 @@ unify e1 e2 g =
                                        unify b c' g
   (App c a, App d b)            -> case unify c d g of 
                                      Ok g1 -> unify a b g1 
-                                     _     -> Bad (render (text "fail unify" <+> ppTerm Unqualified 0 e1))
+                                     _     -> Bad (render ("fail unify" <+> ppTerm Unqualified 0 e1))
   (RecType xs,RecType ys) | xs == ys -> return g
-  _                             -> Bad (render (text "fail unify" <+> ppTerm Unqualified 0 e1))
+  _                             -> Bad (render ("fail unify" <+> ppTerm Unqualified 0 e1))
 
 extend :: Unifier -> MetaId -> Term -> Err Unifier
 extend g s t | (t == Meta s) = return g  
-             | occCheck s t  = Bad (render (text "occurs check" <+> ppTerm Unqualified 0 t))
+             | occCheck s t  = Bad (render ("occurs check" <+> ppTerm Unqualified 0 t))
              | True          = return ((s, t) : g) 
 
 subst_all :: Unifier -> Term -> Err Term

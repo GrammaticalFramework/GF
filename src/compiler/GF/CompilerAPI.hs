@@ -41,7 +41,7 @@ import Data.List(nub)
 import Data.Maybe (isNothing)
 import Data.Binary
 import qualified Data.ByteString.Char8 as BS
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 import PGF.CId
 import PGF.Data

@@ -46,7 +46,7 @@ import qualified Data.Map as Map
 import Data.Time(UTCTime)
 import GF.System.Directory
 import System.FilePath
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 type ModName = String
 type ModEnv  = Map.Map ModName (UTCTime,[ModName])
@@ -105,8 +105,8 @@ getAllFiles opts ps env file = do
                               case mb_gfoFile of
                                 Just gfoFile -> do gfoTime <- modtime gfoFile
                                                    return (gfoFile, Nothing, Just gfoTime)
-                                Nothing      -> raise (render (text "File" <+> text (gfFile name) <+> text "does not exist." $$
-                                                                      text "searched in:" <+> vcat (map text ps)))
+                                Nothing      -> raise (render ("File" <+> gfFile name <+> "does not exist." $$
+                                                                      "searched in:" <+> vcat ps))
 
 
       let mb_envmod = Map.lookup name env

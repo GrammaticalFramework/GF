@@ -12,7 +12,7 @@ import GF.Grammar
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 --import Control.Monad
-import Text.PrettyPrint
+import GF.Text.Pretty
 import System.FilePath
 
 writeTags opts gr file mo = do

@@ -29,7 +29,7 @@ import GF.Grammar.Lookup
 import Debug.Trace
 import Data.List(intersperse)
 import Control.Monad (liftM, liftM2)
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 -- for debugging
 tracd m t = t 

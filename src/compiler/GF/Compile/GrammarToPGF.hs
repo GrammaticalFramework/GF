@@ -30,7 +30,7 @@ import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
---import Text.PrettyPrint
+--import GF.Text.Pretty
 --import Control.Monad.Identity
 
 mkCanon2pgf :: Options -> SourceGrammar -> Ident -> IOE D.PGF

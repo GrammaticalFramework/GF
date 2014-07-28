@@ -26,7 +26,7 @@ import GF.Grammar.Values
 import GF.Grammar.Macros
 
 import Control.Monad
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 {-
 nodeTree :: Tree -> TrNode
@@ -178,13 +178,13 @@ val2expP :: Bool -> Val -> Err Exp
 val2expP safe v = case v of
 
   VClos g@(_:_) e@(Meta _) -> if safe 
-                              then Bad (render (text "unsafe value substitution" <+> ppValue Unqualified 0 v))
+                              then Bad (render ("unsafe value substitution" <+> ppValue Unqualified 0 v))
                               else substVal g e
   VClos g e -> substVal g e
   VApp f c  -> liftM2 App (val2expP safe f) (val2expP safe c)
   VCn c     -> return $ Q c
   VGen i x  -> if safe 
-               then Bad (render (text "unsafe val2exp" <+> ppValue Unqualified 0 v))
+               then Bad (render ("unsafe val2exp" <+> ppValue Unqualified 0 v))
                else return $ Vr $ x  --- in editing, no alpha conversions presentv
   VRecType xs->do xs <- mapM (\(l,v) -> val2expP safe v >>= \e -> return (l,e)) xs
                   return (RecType xs)

@@ -13,7 +13,7 @@ import GF.Compile.TypeCheck.Primitives
 
 import Data.List
 import Control.Monad
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 computeLType :: SourceGrammar -> Context -> Type -> Check Type
 computeLType gr g0 t = comp (reverse [(b,x, Vr x) | (b,x,_) <- g0] ++ g0) t

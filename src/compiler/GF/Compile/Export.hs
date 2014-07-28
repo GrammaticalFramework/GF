@@ -21,7 +21,7 @@ import GF.Speech.PrRegExp
 
 import Data.Maybe
 import System.FilePath
-import Text.PrettyPrint
+import GF.Text.Pretty
 
 -- top-level access to code generation
 
