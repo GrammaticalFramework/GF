@@ -41,7 +41,7 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
          return h
 
     gfPostBuild args flags pkg lbi =
-      do writeFile "running" ""
+      do --writeFile "running" ""
          buildRGL args flags (pkg,lbi)
          let gf = default_gf (pkg,lbi)
          buildWeb gf args flags pkg lbi
@@ -350,7 +350,7 @@ run_gfc bi args =
            gf = default_gf bi
            gf_cmdline = gf ++ " " ++ unwords (map showArg args')
 --     putStrLn $ "Running: " ++ gf_cmdline
-       appendFile "running" (gf_cmdline++"\n")
+--     appendFile "running" (gf_cmdline++"\n")
        e <- rawSystem gf args'
        case e of
          ExitSuccess   -> return ()
