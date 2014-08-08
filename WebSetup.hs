@@ -33,7 +33,7 @@ example_grammars =  -- :: [(pgf, subdir, src)]
     letterSrc = ["Letter"++lang++".gf"|lang<-letterLangs]
     letterLangs = words "Eng Fin Fre Heb Rus Swe"
 
-buildWeb gf args flags pkg lbi =
+buildWeb gf (pkg,lbi) =
     do --putStrLn "buildWeb"
        mapM_ build_pgf example_grammars
   where
@@ -51,17 +51,17 @@ buildWeb gf args flags pkg lbi =
               " --output-dir="++gfo_dir++
               " "++unwords [dir</>file|file<-src]
 
-installWeb gf args flags pki lbi = setupWeb gf args dest pki lbi
+installWeb gf args flags = setupWeb gf args dest
   where
     dest = NoCopyDest
 
-copyWeb gf args flags pki lbi = setupWeb gf args dest pki lbi
+copyWeb gf args flags = setupWeb gf args dest
   where
     dest = case copyDest flags of
              NoFlag -> NoCopyDest
              Flag d -> d
 
-setupWeb gf args dest pkg lbi =
+setupWeb gf args dest (pkg,lbi) =
     do mapM_ (createDirectoryIfMissing True) [grammars_dir,cloud_dir]
        mapM_ copy_pgf example_grammars
        copyGFLogo

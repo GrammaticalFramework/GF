@@ -43,18 +43,18 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
     gfPostBuild args flags pkg lbi =
       do --writeFile "running" ""
          buildRGL args flags (pkg,lbi)
-         let gf = default_gf (pkg,lbi)
-         buildWeb gf args flags pkg lbi
+--       let gf = default_gf (pkg,lbi)
+--       buildWeb gf (pkg,lbi)
 
     gfPostInst args flags pkg lbi =
       do installRGL args flags (pkg,lbi)
          let gf = default_gf (pkg,lbi)
-         installWeb gf args flags pkg lbi
+         installWeb gf args flags (pkg,lbi)
 
-    gfPostCopy args flags pkg lbi =
+    gfPostCopy args flags  pkg lbi =
       do copyRGL args flags (pkg,lbi)
          let gf = default_gf (pkg,lbi)
-         copyWeb gf args flags pkg lbi
+         copyWeb gf args flags (pkg,lbi)
 
 --------------------------------------------------------
 -- Commands for building the Resource Grammar Library
@@ -93,6 +93,8 @@ rglCommands =
                    | mode <- modes,
                      let files = map try (optml mode langsAPI args) ++
                                  map symbolic (optml mode langsSymbolic args)]
+  , RGLCommand "web"     True  $ \modes args bi ->
+       buildWeb (default_gf bi) bi
   , RGLCommand "pgf"     False $ \modes args bi ->
      parallel_ [
        do let dir = getRGLBuildDir bi mode
@@ -107,9 +109,9 @@ rglCommands =
        let ls = optl langsDemo args
        gf bi (demos "Demo" ls) ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
        return ()
-  , RGLCommand "parse"   False $ \mode args bi ->
-       gfc bi mode (summary parse) (map parse (optl langsParse args))
-  , RGLCommand "none"    False $ \mode args bi ->
+  , RGLCommand "parse"   False $ \modes args bi ->
+       gfc bi modes (summary parse) (map parse (optl langsParse args))
+  , RGLCommand "none"    False $ \modes args bi ->
        return ()
   ]
   where
