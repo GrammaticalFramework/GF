@@ -50,7 +50,7 @@ mkCanon2pgf opts gr am = do
 
         funs = Map.fromList [(i2i f, (mkType [] ty, arity, mkDef arity mdef, 0)) | 
                                    ((m,f),AbsFun (Just (L _ ty)) ma mdef _) <- adefs,
-                                   let arity = mkArrity ma]
+                                   let arity = mkArrity ma ty]
                                    
         cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c, 0)) |
                                    ((m,c),AbsCat (Just (L _ cont))) <- adefs]
@@ -150,9 +150,9 @@ mkDef arity (Just eqs) = Just ([C.Equ ps' (mkExp scope' e) | L _ (ps,e) <- eqs, 
                               )
 mkDef arity Nothing    = Nothing
 
-mkArrity (Just a) = a
-mkArrity Nothing  = 0
-
+mkArrity (Just a) ty = a
+mkArrity Nothing  ty = let (ctxt, _, _) = GM.typeForm ty 
+                       in length ctxt
 
 genCncCats gr am cm cdefs =
   let (index,cats) = mkCncCats 0 cdefs

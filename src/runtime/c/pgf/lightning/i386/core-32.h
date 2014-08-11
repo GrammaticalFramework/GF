@@ -106,7 +106,7 @@ struct jit_local_state {
 
 #define jit_pusharg_i(rs)	PUSHLr(rs)
 #define jit_finish(sub)  (_jitl.finish_ref = jit_calli((sub)), ADDLir(sizeof(long) * _jitl.argssize, JIT_SP), _jitl.argssize = 0, _jitl.finish_ref)
-#define jit_finishr(reg) (jit_callr((reg)),       )
+#define jit_finishr(reg) (jit_callr((reg)), ADDLir(sizeof(long) * _jitl.argssize, JIT_SP), _jitl.argssize = 0)
 
 #define	jit_arg_c()		((_jitl.framesize += sizeof(int)) - sizeof(int))
 #define	jit_arg_uc()		((_jitl.framesize += sizeof(int)) - sizeof(int))

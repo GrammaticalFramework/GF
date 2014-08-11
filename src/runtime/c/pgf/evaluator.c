@@ -9,12 +9,6 @@ struct PgfEnv {
 	PgfClosure* closure;
 };
 
-typedef PgfClosure* (*PgfFunction)(PgfEvalState* state, PgfClosure* val);
-
-struct PgfClosure {
-	PgfFunction code;
-};
-
 typedef struct {
 	PgfClosure header;
 	PgfEnv*  env;
@@ -25,12 +19,6 @@ typedef struct {
 	PgfClosure header;
 	PgfClosure* val;
 } PgfIndirection;
-
-typedef struct {
-	PgfClosure header;
-	PgfAbsFun* absfun;
-	PgfClosure* args[];
-} PgfValue;
 
 typedef struct {
 	PgfClosure header;
@@ -62,26 +50,7 @@ pgf_evaluate_indirection(PgfEvalState* state, PgfClosure* closure)
 PgfClosure*
 pgf_evaluate_value(PgfEvalState* state, PgfClosure* closure)
 {
-	PgfValue* val = (PgfValue*) closure;
-
-	size_t n_args = gu_seq_length(val->absfun->type->hypos) +
-	                gu_buf_length(state->stack);
-	PgfValue* new_val =
-		gu_new_flex(state->pool, PgfValue, args, n_args);
-	new_val->header.code = pgf_evaluate_value;
-	new_val->absfun = val->absfun;
-	
-	size_t i = 0;
-	while (i < gu_seq_length(val->absfun->type->hypos)) {
-		new_val->args[i] = val->args[i];
-		i++;
-	}
-	while (i < n_args) {
-		val->args[i] = gu_buf_pop(state->stack, PgfClosure*);
-		i++;
-	}
-
-	return &new_val->header;
+	return closure;
 }
 
 static PgfClosure*
@@ -233,7 +202,7 @@ pgf_evaluate_expr_thunk(PgfEvalState* state, PgfClosure* closure)
 			if (absfun->function != NULL) {
 				val = (PgfValue*) ((PgfFunction) absfun->function)(state, closure);
 			} else {
-				size_t n_args = gu_buf_length(state->stack);
+				size_t n_args = absfun->arity;
 
 				val = gu_new_flex(state->pool, PgfValue, args, n_args);
 				val->header.code = pgf_evaluate_value;
@@ -287,6 +256,15 @@ pgf_evaluate_expr_thunk(PgfEvalState* state, PgfClosure* closure)
 		default:
 			gu_impossible();
 		}
+	}
+}
+
+void
+pgf_evaluate_save_variables(PgfEvalState* state, PgfValue* val)
+{
+	size_t n_args = val->absfun->arity;
+	for (size_t i = 0; i < n_args; i++) {
+		gu_buf_push(state->stack, PgfClosure*, val->args[i]);
 	}
 }
 
