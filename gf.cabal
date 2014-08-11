@@ -121,6 +121,7 @@ Library
     PGF.Forest
     PGF.TrieMap
     PGF.VisualizeTree
+    PGF.ByteCode
     PGF.OldBinary
 
   if flag(c-runtime)

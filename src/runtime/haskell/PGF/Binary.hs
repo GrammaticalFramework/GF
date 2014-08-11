@@ -3,12 +3,12 @@ module PGF.Binary(putSplitAbs) where
 import PGF.CId
 import PGF.Data
 import PGF.Optimize
+import PGF.ByteCode
 import qualified PGF.OldBinary as Old
 import Data.Binary
 import Data.Binary.Put
 import Data.Binary.Get
 import Data.Array.IArray
-import qualified Data.ByteString as BS
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 --import qualified Data.Set as Set
@@ -43,16 +43,15 @@ instance Binary CId where
   get    = liftM CId get
 
 instance Binary Abstr where
-  put abs = put (aflags abs, 
-                 fmap (\(w,x,y,z,_) -> (w,x,y,z)) (funs abs),
-                 fmap (\(x,y,z,_) -> (x,y,z)) (cats abs))
+  put abs = do put (aflags abs)
+               put (Map.map (\(ty,arity,mb_eq,prob) -> (ty,arity,fmap fst mb_eq,prob)) (funs abs))
+               put (cats abs)
   get = do aflags <- get
            funs <- get
            cats <- get
            return (Abstr{ aflags=aflags
-                        , funs=fmap (\(w,x,y,z) -> (w,x,y,z,0)) funs
-                        , cats=fmap (\(x,y,z) -> (x,y,z,0)) cats
-                        , code=BS.empty                        
+                        , funs=Map.map (\(ty,arity,mb_eq,prob) -> (ty,arity,fmap (\eq -> (eq,[])) mb_eq,prob)) funs
+                        , cats=cats
                         })
 
 putSplitAbs :: PGF -> Put
@@ -135,6 +134,25 @@ instance Binary Patt where
 instance Binary Equation where
   put (Equ ps e) = put (ps,e)
   get = liftM2 Equ get get
+
+instance Binary Instr where
+  put (EVAL         n) = putWord8 0  >> put n
+  put (CASE id l     ) = putWord8 1  >> put (id,l)
+  put (CASE_INT n l  ) = putWord8 2  >> put (n,l)
+  put (CASE_STR s l  ) = putWord8 3  >> put (s,l)
+  put (CASE_FLT d l  ) = putWord8 4  >> put (d,l)
+  put (ALLOC        n) = putWord8 5  >> put n
+  put (PUT_CONSTR  id) = putWord8 6  >> put id
+  put (PUT_CLOSURE  l) = putWord8 7  >> put l
+  put (PUT_INT      n) = putWord8 8  >> put n
+  put (PUT_STR      s) = putWord8 9  >> put s
+  put (PUT_FLT      d) = putWord8 10 >> put d
+  put (SET_VALUE    n) = putWord8 11 >> put n
+  put (SET_VARIABLE n) = putWord8 12 >> put n
+  put (TAIL_CALL   id) = putWord8 13 >> put id
+  put (FAIL          ) = putWord8 14
+  put (RET          n) = putWord8 15 >> put n
+
 
 instance Binary Type where
   put (DTyp hypos cat exps) = put (hypos,cat,exps)

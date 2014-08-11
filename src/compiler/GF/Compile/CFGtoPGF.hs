@@ -9,7 +9,6 @@ import PGF.Internal
 import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
-import qualified Data.ByteString as BS
 import Data.Array.IArray
 import Data.List
 
@@ -27,13 +26,13 @@ cf2pgf fpath cf =
    cname = mkCId name
 
 cf2abstr :: CFG -> Abstr
-cf2abstr cfg = Abstr aflags afuns acats BS.empty
+cf2abstr cfg = Abstr aflags afuns acats
   where
     aflags = Map.singleton (mkCId "startcat") (LStr (cfgStartCat cfg))
     acats = Map.fromList [(mkCId cat, ([], [(0,mkRuleName rule) 
-                                              | rule <- Set.toList rules], 0, 0)) 
+                                              | rule <- Set.toList rules], 0))
                             | (cat,rules) <- Map.toList (cfgRules cfg)]
-    afuns = Map.fromList [(mkRuleName rule, (cftype [mkCId c | NonTerminal c <- ruleRhs rule] (mkCId cat), 0, Nothing, 0, 0))
+    afuns = Map.fromList [(mkRuleName rule, (cftype [mkCId c | NonTerminal c <- ruleRhs rule] (mkCId cat), 0, Nothing, 0))
                             | (cat,rules) <- Map.toList (cfgRules cfg)
                             , rule <- Set.toList rules]
 

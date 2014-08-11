@@ -21,18 +21,13 @@ mapConcretes f pgf = pgf { concretes = Map.map f (concretes pgf) }
 lookType :: Abstr -> CId -> Type
 lookType abs f = 
   case lookMap (error $ "lookType " ++ show f) f (funs abs) of
-    (ty,_,_,_,_) -> ty
-
-lookDef :: Abstr -> CId -> Maybe [Equation]
-lookDef abs f = 
-  case lookMap (error $ "lookDef " ++ show f) f (funs abs) of
-    (_,a,eqs,_,_) -> eqs
+    (ty,_,_,_) -> ty
 
 isData :: Abstr -> CId -> Bool
 isData abs f =
   case Map.lookup f (funs abs) of
-    Just (_,_,Nothing,_,_) -> True       -- the encoding of data constrs
-    _                      -> False
+    Just (_,_,Nothing,_) -> True       -- the encoding of data constrs
+    _                    -> False
 
 lookValCat :: Abstr -> CId -> CId
 lookValCat abs = valCat . lookType abs
@@ -65,9 +60,9 @@ lookConcrFlag pgf lang f = Map.lookup f $ cflags $ lookConcr pgf lang
 
 functionsToCat :: PGF -> CId -> [(CId,Type)]
 functionsToCat pgf cat =
-  [(f,ty) | (_,f) <- fs, Just (ty,_,_,_,_) <- [Map.lookup f $ funs $ abstract pgf]]
+  [(f,ty) | (_,f) <- fs, Just (ty,_,_,_) <- [Map.lookup f $ funs $ abstract pgf]]
  where 
-   (_,fs,_,_) = lookMap ([],[],0,0) cat $ cats $ abstract pgf
+   (_,fs,_) = lookMap ([],[],0) cat $ cats $ abstract pgf
 
 -- | List of functions that lack linearizations in the given language.
 missingLins :: PGF -> Language -> [CId]
@@ -82,7 +77,7 @@ restrictPGF :: (CId -> Bool) -> PGF -> PGF
 restrictPGF cond pgf = pgf {
   abstract = abstr {
     funs = Map.filterWithKey (\c _ -> cond c) (funs abstr),
-    cats = Map.map (\(hyps,fs,p,addr) -> (hyps,filter (cond . snd) fs,p,addr)) (cats abstr)
+    cats = Map.map (\(hyps,fs,p) -> (hyps,filter (cond . snd) fs,p)) (cats abstr)
     }
   }  ---- restrict concrs also, might be needed
  where

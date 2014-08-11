@@ -1,17 +1,18 @@
 #include "pgf/pgf.h"
 #include "pgf/data.h"
+#include "pgf/evaluator.h"
 
 typedef struct PgfEnv PgfEnv;
-typedef struct PgfClosure PgfClosure;
-typedef struct PgfEvalState PgfEvalState;
 
 struct PgfEnv {
 	PgfEnv* next;
 	PgfClosure* closure;
 };
 
+typedef PgfClosure* (*PgfFunction)(PgfEvalState* state, PgfClosure* val);
+
 struct PgfClosure {
-	PgfClosure* (*code)(PgfEvalState* state, PgfClosure* val);
+	PgfFunction code;
 };
 
 typedef struct {
@@ -28,7 +29,6 @@ typedef struct {
 typedef struct {
 	PgfClosure header;
 	PgfAbsFun* absfun;
-	size_t n_args;
 	PgfClosure* args[];
 } PgfValue;
 
@@ -52,13 +52,6 @@ typedef struct {
 	PgfLiteral lit;
 } PgfValueLit;
 
-struct PgfEvalState {
-	PgfPGF* pgf;
-	GuPool* pool;
-	GuExn* err;
-	GuBuf* stack;
-};
-
 static PgfClosure*
 pgf_evaluate_indirection(PgfEvalState* state, PgfClosure* closure)
 {
@@ -66,20 +59,20 @@ pgf_evaluate_indirection(PgfEvalState* state, PgfClosure* closure)
 	return indir->val;
 }
 
-static PgfClosure*
+PgfClosure*
 pgf_evaluate_value(PgfEvalState* state, PgfClosure* closure)
 {
 	PgfValue* val = (PgfValue*) closure;
 
-	size_t n_args = val->n_args + gu_buf_length(state->stack);
+	size_t n_args = gu_seq_length(val->absfun->type->hypos) +
+	                gu_buf_length(state->stack);
 	PgfValue* new_val =
 		gu_new_flex(state->pool, PgfValue, args, n_args);
 	new_val->header.code = pgf_evaluate_value;
 	new_val->absfun = val->absfun;
-	new_val->n_args = n_args;
 	
 	size_t i = 0;
-	while (i < val->n_args) {
+	while (i < gu_seq_length(val->absfun->type->hypos)) {
 		new_val->args[i] = val->args[i];
 		i++;
 	}
@@ -236,15 +229,18 @@ pgf_evaluate_expr_thunk(PgfEvalState* state, PgfClosure* closure)
 				return NULL;
 			}
 
-			size_t n_args = gu_buf_length(state->stack);
+			PgfValue* val;
+			if (absfun->function != NULL) {
+				val = (PgfValue*) ((PgfFunction) absfun->function)(state, closure);
+			} else {
+				size_t n_args = gu_buf_length(state->stack);
 
-			PgfValue* val =
-				gu_new_flex(state->pool, PgfValue, args, n_args);
-			val->header.code = pgf_evaluate_value;
-			val->absfun = absfun;
-			val->n_args = n_args;
-			for (size_t i = 0; i < n_args; i++) {
-				val->args[i] = gu_buf_pop(state->stack, PgfClosure*);
+				val = gu_new_flex(state->pool, PgfValue, args, n_args);
+				val->header.code = pgf_evaluate_value;
+				val->absfun = absfun;
+				for (size_t i = 0; i < n_args; i++) {
+					val->args[i] = gu_buf_pop(state->stack, PgfClosure*);
+				}
 			}
 
 			PgfIndirection* indir = (PgfIndirection*) closure;
@@ -309,7 +305,7 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 		PgfValue* val = (PgfValue*) clos;
 
 		expr   = val->absfun->ep.expr;
-		n_args = val->n_args;
+		n_args = gu_seq_length(val->absfun->type->hypos);
 		args   = val->args;
 	} else if (clos->code == pgf_evaluate_value_gen) {
 		PgfValueGen* val = (PgfValueGen*) clos;

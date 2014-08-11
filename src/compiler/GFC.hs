@@ -2,8 +2,8 @@ module GFC (mainGFC, writePGF) where
 -- module Main where
 
 import PGF
-import PGF.Internal(PGF,abstract,concretes,code,funs,cats,optimizePGF,unionPGF)
-import PGF.Internal(putSplitAbs)
+import PGF.Internal(PGF,concretes,optimizePGF,unionPGF)
+import PGF.Internal(putSplitAbs,encodeFile,runPut)
 import GF.Compile
 import GF.Compile.Export
 import GF.Compile.CFGtoPGF
@@ -17,13 +17,10 @@ import GF.Data.ErrM
 import GF.System.Directory
 
 import Data.Maybe
-import PGF.Internal(encode,encodeFile,runPut)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
-import qualified Data.ByteString as BSS
 import qualified Data.ByteString.Lazy as BSL
 import System.FilePath
-import System.IO
 import Control.Monad(unless,forM_)
 
 mainGFC :: Options -> [FilePath] -> IO ()
@@ -55,7 +52,6 @@ compileSourceFiles opts fs =
                    then putIfVerb opts $ pgfFile ++ " is up-to-date."
                    else do pgf <- link opts cnc_gr
                            writePGF opts pgf
-                           writeByteCode opts pgf
                            writeOutputs opts pgf
 
 compileCFFiles :: Options -> [FilePath] -> IOE ()
@@ -104,20 +100,6 @@ writeOutputs opts pgf = do
   sequence_ [writeOutput opts name str 
                  | fmt <- outputFormats opts,
                    (name,str) <- exportPGF opts fmt pgf]
-
-writeByteCode :: Options -> PGF -> IOE ()
-writeByteCode opts pgf
-  | elem FmtByteCode (flag optOutputFormats opts) =
-             let path = outputPath opts (grammarName opts pgf <.> "bc")
-             in writing opts path $
-                  withBinaryFile path WriteMode
-                      (\h -> do BSL.hPut h (encode addrs)
-                                BSS.hPut h (code (abstract pgf)))
-  | otherwise = return ()
-  where
-    addrs = 
-      [(id,addr) | (id,(_,_,_,_,addr)) <- Map.toList (funs (abstract pgf))] ++
-      [(id,addr) | (id,(_,_,_,addr))   <- Map.toList (cats (abstract pgf))]
 
 writePGF :: Options -> PGF -> IOE ()
 writePGF opts pgf =

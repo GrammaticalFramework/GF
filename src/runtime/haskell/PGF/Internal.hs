@@ -11,6 +11,7 @@ import PGF.Macros as Internal
 import PGF.Optimize as Internal
 import PGF.Printer as Internal
 import PGF.Utilities as Internal
+import PGF.ByteCode as Internal
 
 import Data.Binary as Internal
 import Data.Binary.Get as Internal

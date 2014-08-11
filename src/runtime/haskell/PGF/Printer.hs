@@ -2,7 +2,7 @@ module PGF.Printer (ppPGF,ppCat,ppFId,ppFunId,ppSeqId,ppSeq,ppFun) where
 
 import PGF.CId
 import PGF.Data
---import PGF.Macros
+import PGF.ByteCode
 
 import qualified Data.Map as Map
 import qualified Data.Set as Set
@@ -26,17 +26,18 @@ ppAbs name a = text "abstract" <+> ppCId name <+> char '{' $$
 ppFlag :: CId -> Literal -> Doc
 ppFlag flag value = text "flag" <+> ppCId flag <+> char '=' <+> ppLit value <+> char ';'
 
-ppCat :: CId -> ([Hypo],[(Double,CId)],Double,BCAddr) -> Doc
-ppCat c (hyps,_,_,_) = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)) <+> char ';'
+ppCat :: CId -> ([Hypo],[(Double,CId)],Double) -> Doc
+ppCat c (hyps,_,_) = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)) <+> char ';'
 
-ppFun :: CId -> (Type,Int,Maybe [Equation],Double,BCAddr) -> Doc
-ppFun f (t,_,Just eqs,_,_) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t <+> char ';' $$
-                             if null eqs
-                               then empty
-                               else text "def" <+> vcat [let scope = foldl pattScope [] patts
-                                                             ds    = map (ppPatt 9 scope) patts
-                                                         in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res <+> char ';' | Equ patts res <- eqs]
-ppFun f (t,_,Nothing,_,_)  = text "data" <+> ppCId f <+> colon <+> ppType 0 [] t <+> char ';'
+ppFun :: CId -> (Type,Int,Maybe ([Equation],[Instr]),Double) -> Doc
+ppFun f (t,_,Just (eqs,code),_) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t <+> char ';' $$
+                                  if null eqs
+                                    then empty
+                                    else text "def" <+> vcat [let scope = foldl pattScope [] patts
+                                                                  ds    = map (ppPatt 9 scope) patts
+                                                              in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res <+> char ';' | Equ patts res <- eqs] $$
+                                  ppCode 0 code
+ppFun f (t,_,Nothing,_)         = text "data" <+> ppCId f <+> colon <+> ppType 0 [] t <+> char ';'
 
 ppCnc :: Language -> Concr -> Doc
 ppCnc name cnc =
