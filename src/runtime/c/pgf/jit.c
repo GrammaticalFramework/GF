@@ -13,7 +13,8 @@ struct PgfJitState {
 	jit_state jit;
 	jit_insn *buf;
 	char *save_ip_ptr;
-	GuBuf* patches;
+	GuBuf* call_patches;
+	GuBuf* label_patches;
 };
 
 #define _jit (rdr->jit_state->jit)
@@ -22,6 +23,11 @@ typedef struct {
 	PgfCId cid;
 	jit_insn *ref;
 } PgfCallPatch;
+
+typedef struct {
+	size_t label;
+	jit_insn *ref;
+} PgfLabelPatch;
 
 // Between two calls to pgf_jit_make_space we are not allowed
 // to emit more that JIT_CODE_WINDOW bytes. This is not quite
@@ -71,7 +77,8 @@ PgfJitState*
 pgf_new_jit(PgfReader* rdr)
 {
 	PgfJitState* state = gu_new(PgfJitState, rdr->tmp_pool);
-	state->patches = gu_new_buf(PgfCallPatch, rdr->tmp_pool);
+	state->call_patches  = gu_new_buf(PgfCallPatch,  rdr->tmp_pool);
+	state->label_patches = gu_new_buf(PgfLabelPatch, rdr->tmp_pool);
 	state->buf = NULL;
 	state->save_ip_ptr = NULL;
 	return state;
@@ -233,7 +240,7 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 				PgfCallPatch patch;
 				patch.cid = hypo->type->cid;
 				patch.ref = jit_finish(jit_forward());
-				gu_buf_push(rdr->jit_state->patches, PgfCallPatch, patch);
+				gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
 
 #ifdef PGF_JIT_DEBUG
 				gu_puts("    RET\n", out, err);
@@ -336,8 +343,20 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 	
 	size_t curr_offset = 0;
 	size_t curr_label  = 0;
-	
+
+	gu_buf_flush(rdr->jit_state->label_patches);
+
 	for (size_t i = 0; i < n_instrs; i++) {
+		size_t labels_count = gu_buf_length(rdr->jit_state->label_patches);
+		if (labels_count > 0) {
+			PgfLabelPatch* patch = 
+				gu_buf_index(rdr->jit_state->label_patches, PgfLabelPatch, labels_count-1);
+			if (patch->label == curr_label) {
+				jit_patch(patch->ref);
+				gu_buf_trim_n(rdr->jit_state->label_patches, 1);
+			}
+		}
+
 #ifdef PGF_JIT_DEBUG
    	    gu_printf(out, err, "%04d ", curr_label++);
 #endif
@@ -354,19 +373,16 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			jit_ldxi_p(JIT_V0, JIT_V0, offsetof(PgfEvalState,stack));
 			jit_prepare(1);
 			jit_pusharg_p(JIT_V0);
-			jit_finish(gu_buf_length);
-			jit_subi_i(JIT_V2, JIT_RET, index+1);
-			jit_lshi_i(JIT_V2, JIT_V2, 2);
-			jit_prepare(1);
-			jit_pusharg_p(JIT_V0);
-			jit_finish(gu_buf_data);
-			jit_ldxr_p(JIT_V0, JIT_RET, JIT_V2);
+			jit_finish(gu_buf_last);
+			jit_ldxr_p(JIT_V0, JIT_RET, -index*sizeof(PgfClosure*));
 			jit_prepare(2);
 			jit_pusharg_p(JIT_V0);
 			jit_getarg_p(JIT_V2, es_arg);
 			jit_pusharg_p(JIT_V2);
 			jit_ldr_p(JIT_V0, JIT_V0);
-			jit_callr(JIT_V0);
+			jit_finishr(JIT_V0);
+			jit_retval_p(JIT_V1);
+			jit_ldxi_p(JIT_V0, JIT_V1, offsetof(PgfValue, absfun));
 			break;
 		}
 		case PGF_INSTR_CASE: {
@@ -375,6 +391,24 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #ifdef PGF_JIT_DEBUG
 			gu_printf(out, err, "CASE         %s %04d\n", id, curr_label+offset);
 #endif
+			jit_insn *jump= 
+				jit_bnei_i(jit_forward(), JIT_V0, (int) jit_forward());
+
+			PgfLabelPatch label_patch;
+			label_patch.label = curr_label+offset;
+			label_patch.ref   = jump;
+			gu_buf_push(rdr->jit_state->label_patches, PgfLabelPatch, label_patch);
+
+			PgfCallPatch call_patch;
+			call_patch.cid = id;
+			call_patch.ref = jump-6;
+			gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, call_patch);
+
+			jit_prepare(2);
+			jit_pusharg_p(JIT_V1);
+			jit_getarg_p(JIT_V2, es_arg);
+			jit_pusharg_p(JIT_V2);
+			jit_finish(pgf_evaluate_save_variables);
 			break;
 		}
 		case PGF_INSTR_CASE_INT: {
@@ -434,7 +468,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			jit_stxi_p(curr_offset*sizeof(void*), JIT_V1, JIT_V0);
 			curr_offset++;
 
-			gu_buf_push(rdr->jit_state->patches, PgfCallPatch, patch);
+			gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
 			break;
 		}
 		case PGF_INSTR_PUT_CLOSURE: {
@@ -486,13 +520,8 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			jit_ldxi_p(JIT_V0, JIT_V0, offsetof(PgfEvalState,stack));
 			jit_prepare(1);
 			jit_pusharg_p(JIT_V0);
-			jit_finish(gu_buf_length);
-			jit_subi_i(JIT_V2, JIT_RET, index+1);
-			jit_lshi_i(JIT_V2, JIT_V2, 2);
-			jit_prepare(1);
-			jit_pusharg_p(JIT_V0);
-			jit_finish(gu_buf_data);
-			jit_ldxr_p(JIT_V0, JIT_RET, JIT_V2);
+			jit_finish(gu_buf_last);
+			jit_ldxi_p(JIT_V0, JIT_RET, -index*sizeof(PgfClosure*));
 			jit_stxi_p(curr_offset*sizeof(void*), JIT_V1, JIT_V0);
 			break;
 		}
@@ -536,10 +565,10 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 void
 pgf_jit_done(PgfReader* rdr, PgfAbstr* abstr)
 {
-	size_t n_patches = gu_buf_length(rdr->jit_state->patches);
+	size_t n_patches = gu_buf_length(rdr->jit_state->call_patches);
 	for (size_t i = 0; i < n_patches; i++) {
 		PgfCallPatch* patch =
-			gu_buf_index(rdr->jit_state->patches, PgfCallPatch, i);
+			gu_buf_index(rdr->jit_state->call_patches, PgfCallPatch, i);
 
 		PgfAbsCat* arg =
 			gu_map_get(abstr->cats, patch->cid, PgfAbsCat*);

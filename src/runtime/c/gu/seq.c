@@ -136,6 +136,12 @@ gu_buf_data(GuBuf* buf)
 	return &buf->seq->data;
 }
 
+void*
+gu_buf_last(GuBuf* buf)
+{
+	return buf->seq->data + buf->elem_size*(buf->seq->len-1);
+}
+
 GuSeq*
 gu_buf_data_seq(GuBuf* buf)
 {
