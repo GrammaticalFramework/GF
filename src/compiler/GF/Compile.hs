@@ -55,7 +55,7 @@ srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc
 
 batchCompile :: Options -> [FilePath] -> IOE (Ident,UTCTime,SourceGrammar)
 batchCompile opts files = do
-  (_,gr,menv) <- foldM (compileModule opts) emptyCompileEnv files
+  (gr,menv) <- foldM (compileModule opts) emptyCompileEnv files
   let cnc = identS (justModuleName (last files))
       t = maximum . map fst $ Map.elems menv
   return (cnc,t,gr)
@@ -101,12 +101,12 @@ compileModule opts1 env file = do
   ps0 <- extendPathEnv opts
   let ps = nub (curr_dir : ps0)
   putIfVerb opts $ "module search path:" +++ show ps ----
-  let (_,sgr,rfs) = env
+  let (sgr,rfs) = env
   files <- getAllFiles opts ps rfs file
   putIfVerb opts $ "files to read:" +++ show files ----
   let names = map justModuleName files
   putIfVerb opts $ "modules to include:" +++ show names ----
-  foldM (compileOne opts) (0,sgr,rfs) files
+  foldM (compileOne opts) (sgr,rfs) files
   where
     getRealFile file = do
       exists <- liftIO $ doesFileExist file
@@ -122,7 +122,7 @@ compileModule opts1 env file = do
                else raise (render ("File" <+> file <+> "does not exist."))
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
-compileOne opts env@(_,srcgr,_) file = do
+compileOne opts env@(srcgr,_) file = do
 
   let putpOpt v m act
        | verbAtLeast opts Verbose = putPointE Normal opts v act
@@ -152,7 +152,7 @@ compileOne opts env@(_,srcgr,_) file = do
          then writeTags opts srcgr (gf2gftags opts file) sm1
          else return ()
 
-       extendCompileEnv env file sm
+       extendCompileEnv env (Just file) sm
 
     -- for gf source, do full compilation and generate code
     _ -> do
@@ -171,37 +171,37 @@ compileOne opts env@(_,srcgr,_) file = do
    isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete
 
 compileSourceModule :: Options -> FilePath -> CompileEnv -> Maybe FilePath -> SourceModule -> IOE CompileEnv
-compileSourceModule opts cwd env@(k,gr,_) mb_gfFile mo0@(i,mi) = do
+compileSourceModule opts cwd env@(gr,_) mb_gfFile mo0 = do
 
-  mo1a <- runPass Rebuild "" (rebuildModule cwd gr mo0)
-  mo1b <- runPass Extend "" (extendModule cwd gr mo1a)
+  mo1 <- runPass Extend "" . extendModule cwd gr
+            =<< runPass Rebuild "" (rebuildModule cwd gr mo0)
 
-  case mo1b of
-    (_,n) | not (isCompleteModule n) -> generateTagsOr generateGFO k mo1b
+  case mo1 of
+    (_,n) | not (isCompleteModule n) -> generateTagsOr generateGFO mo1
     _ -> do
-      mo2 <- runPass Rename "renaming" $ renameModule cwd gr mo1b
+      mo2 <- runPass Rename "renaming" $ renameModule cwd gr mo1
       mo3 <- runPass TypeCheck "type checking" $ checkModule opts cwd gr mo2
-      generateTagsOr compileCompleteModule k mo3
+      generateTagsOr compileCompleteModule mo3
   where
-    compileCompleteModule k mo3 = do
+    compileCompleteModule mo3 = do
       mo4 <- runPass2 id Optimize "optimizing" $ optimizeModule opts gr mo3
       mo5 <- if isModCnc (snd mo4) && flag optPMCFG opts
              then runPass2' "generating PMCFG" $ generatePMCFG opts gr mb_gfFile mo4
              else runPass2' "" $ return mo4
-      generateGFO k mo5
+      generateGFO mo5
 
   ------------------------------
     generateTagsOr compile =
        if flag optTagsOnly opts then generateTags else compile
 
-    generateGFO k mo =
+    generateGFO mo =
       do let mb_gfo = fmap (gf2gfo opts) mb_gfFile
          maybeM (flip (writeGFO opts) mo) mb_gfo
-         extendCompileEnvInt env k mb_gfo mo
+         extendCompileEnv env mb_gfo mo
 
-    generateTags k mo =
+    generateTags mo =
       do maybeM (flip (writeTags opts gr) mo . gf2gftags opts) mb_gfFile
-         extendCompileEnvInt env k Nothing mo
+         extendCompileEnv env Nothing mo
 
     putpp s = if null s then id else putPointE Verbose opts ("  "++s++" ")
     idump pass = intermOut opts (Dump pass) . ppModule Internal
@@ -233,18 +233,16 @@ writeGFO opts file mo = do
 --reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
 -- | The environment
-type CompileEnv = (Int,SourceGrammar,ModEnv)
+type CompileEnv = (SourceGrammar,ModEnv)
 
 emptyCompileEnv :: CompileEnv
-emptyCompileEnv = (0,emptySourceGrammar,Map.empty)
+emptyCompileEnv = (emptySourceGrammar,Map.empty)
 
-extendCompileEnvInt (_,gr,menv) k mfile mo = do
+extendCompileEnv (gr,menv) mfile mo = do
   menv2 <- case mfile of
     Just file -> do
       let (mod,imps) = importsOfModule mo
       t <- liftIO $ getModificationTime file
       return $ Map.insert mod (t,imps) menv
     _ -> return menv
-  return (k,prependModule gr mo,menv2) --- reverse later
-
-extendCompileEnv e@(k,_,_) file mo = extendCompileEnvInt e k (Just file) mo
+  return (prependModule gr mo,menv2) --- reverse later
