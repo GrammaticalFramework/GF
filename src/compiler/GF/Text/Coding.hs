@@ -23,7 +23,7 @@ encodeUnicode enc s =
   where
     translate cod cbuf
       | i < w     = do bbuf <- newByteBuffer 128 WriteBuffer
-                       (cbuf,bbuf) <- cod cbuf bbuf
+                       (_,cbuf,bbuf) <- cod cbuf bbuf
                        if isEmptyBuffer bbuf
                          then ioe_invalidCharacter1
                          else do let bs = PS (bufRaw bbuf) (bufL bbuf) (bufR bbuf-bufL bbuf)
@@ -48,7 +48,7 @@ decodeUnicodeIO enc (PS fptr l len) = do
   where
     translate cod bbuf cbuf
       | i < w     = do
-                       (bbuf,cbuf) <- cod bbuf cbuf
+                       (_,bbuf,cbuf) <- cod bbuf cbuf
                        if isEmptyBuffer cbuf
                          then ioe_invalidCharacter2
                          else unpack cod bbuf cbuf
