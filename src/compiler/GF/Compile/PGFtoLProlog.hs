@@ -12,25 +12,25 @@ import qualified Data.Map as Map
 grammar2lambdaprolog_mod pgf = render $
   "module" <+> ppCId (absname pgf) <> '.' $$
   ' ' $$
-  vcat [ppClauses cat fns | (cat,(_,fs,_,_)) <- Map.toList (cats (abstract pgf)),
+  vcat [ppClauses cat fns | (cat,(_,fs,_)) <- Map.toList (cats (abstract pgf)),
                             let fns = [(f,fromJust (Map.lookup f (funs (abstract pgf)))) | (_,f) <- fs]]
   where
     ppClauses cat fns =
       "/*" <+> ppCId cat <+> "*/" $$
-      vcat [snd (ppClause (abstract pgf) 0 1 [] f ty) <> dot | (f,(ty,_,Nothing,_,_)) <- fns] $$
+      vcat [snd (ppClause (abstract pgf) 0 1 [] f ty) <> dot | (f,(ty,_,Nothing,_)) <- fns] $$
       ' ' $$
-      vcat [vcat (map (\eq -> equation2clause (abstract pgf) f eq <> dot) eqs) | (f,(_,_,Just eqs,_,_)) <- fns] $$
+      vcat [vcat (map (\eq -> equation2clause (abstract pgf) f eq <> dot) eqs) | (f,(_,_,Just (eqs,_),_)) <- fns] $$
       ' '
 
 grammar2lambdaprolog_sig pgf = render $
   "sig" <+> ppCId (absname pgf) <> '.' $$
   ' ' $$
-  vcat [ppCat c hyps <> dot | (c,(hyps,_,_,_)) <- Map.toList (cats (abstract pgf))] $$
+  vcat [ppCat c hyps <> dot | (c,(hyps,_,_)) <- Map.toList (cats (abstract pgf))] $$
   ' ' $$
-  vcat [ppFun f ty <> dot | (f,(ty,_,Nothing,_,_)) <- Map.toList (funs (abstract pgf))] $$
+  vcat [ppFun f ty <> dot | (f,(ty,_,Nothing,_)) <- Map.toList (funs (abstract pgf))] $$
   ' ' $$
-  vcat [ppExport c hyps <> dot | (c,(hyps,_,_,_)) <- Map.toList (cats (abstract pgf))] $$
-  vcat [ppFunPred f (hyps ++ [(Explicit,wildCId,DTyp [] c es)]) <> dot | (f,(DTyp hyps c es,_,Just _,_,_)) <- Map.toList (funs (abstract pgf))]
+  vcat [ppExport c hyps <> dot | (c,(hyps,_,_)) <- Map.toList (cats (abstract pgf))] $$
+  vcat [ppFunPred f (hyps ++ [(Explicit,wildCId,DTyp [] c es)]) <> dot | (f,(DTyp hyps c es,_,Just _,_)) <- Map.toList (funs (abstract pgf))]
 
 ppCat :: CId -> [Hypo] -> Doc
 ppCat c hyps = "kind" <+> ppKind c <+> "type"
@@ -157,8 +157,8 @@ expr2goal abstr scope goals i (EApp e1 e2) args =
   in expr2goal abstr scope goals' i' e1 (e2':args)
 expr2goal abstr scope goals i (EFun f)     args =
   case Map.lookup f (funs abstr) of
-    Just (_,_,Just _,_,_) -> let e = EFun (mkVar i)
-                             in (foldl EApp (EFun f) (args++[e]) : goals, i+1, e)
-    _                     -> (goals,i,foldl EApp (EFun f) args)
+    Just (_,_,Just _,_) -> let e = EFun (mkVar i)
+                           in (foldl EApp (EFun f) (args++[e]) : goals, i+1, e)
+    _                   -> (goals,i,foldl EApp (EFun f) args)
 expr2goal abstr scope goals i (EVar j)     args =
   (goals,i,foldl EApp (EVar j) args)

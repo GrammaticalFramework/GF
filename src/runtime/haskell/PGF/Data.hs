@@ -2,6 +2,7 @@ module PGF.Data (module PGF.Data, module PGF.Expr, module PGF.Type) where
 
 import PGF.CId
 import PGF.Expr hiding (Value, Sig, Env, Tree, eval, apply, applyValue, value2expr)
+import PGF.ByteCode
 import PGF.Type
 
 import qualified Data.Map as Map
@@ -9,7 +10,6 @@ import qualified Data.Set as Set
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import qualified PGF.TrieMap as TMap
-import qualified Data.ByteString as BS
 import Data.Array.IArray
 import Data.Array.Unboxed
 --import Data.List
@@ -28,12 +28,11 @@ data PGF = PGF {
 
 data Abstr = Abstr {
   aflags  :: Map.Map CId Literal,                            -- ^ value of a flag
-  funs    :: Map.Map CId (Type,Int,Maybe [Equation],Double,BCAddr), -- ^ type, arrity and definition of function + probability
-  cats    :: Map.Map CId ([Hypo],[(Double, CId)],Double,BCAddr),    -- ^ 1. context of a category
-                                                                    --   2. functions of a category. The functions are stored
-                                                                    --      in decreasing probability order.
-                                                                    --   3. probability
-  code    :: BS.ByteString
+  funs    :: Map.Map CId (Type,Int,Maybe ([Equation],[Instr]),Double),-- ^ type, arrity and definition of function + probability
+  cats    :: Map.Map CId ([Hypo],[(Double, CId)],Double)              -- ^ 1. context of a category
+                                                                      --   2. functions of a category. The functions are stored
+                                                                      --      in decreasing probability order.
+                                                                      --   3. probability
   }
 
 data Concr = Concr {
@@ -76,8 +75,6 @@ data CncFun = CncFun CId {-# UNPACK #-} !(UArray LIndex SeqId) deriving (Eq,Ord,
 type Sequence = Array DotPos Symbol
 type FunId = Int
 type SeqId = Int
-type BCAddr = Int
-
 
 -- merge two PGFs; fails is differens absnames; priority to second arg
 
@@ -105,8 +102,8 @@ emptyPGF = PGF {
 haveSameFunsPGF :: PGF -> PGF -> Bool
 haveSameFunsPGF one two = 
   let 
-    fsone = [(f,t) | (f,(t,_,_,_,_)) <- Map.toList (funs (abstract one))]
-    fstwo = [(f,t) | (f,(t,_,_,_,_)) <- Map.toList (funs (abstract two))]
+    fsone = [(f,t) | (f,(t,_,_,_)) <- Map.toList (funs (abstract one))]
+    fstwo = [(f,t) | (f,(t,_,_,_)) <- Map.toList (funs (abstract two))]
   in fsone == fstwo
 
 -- | This is just a 'CId' with the language name.

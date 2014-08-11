@@ -38,7 +38,7 @@ showInOrder abs fset remset avset =
 isArg :: Abstr -> Map.Map CId CId -> Set.Set CId -> CId -> Maybe [CId]
 isArg abs mtypes scid cid = 
    let p = Map.lookup cid $ funs abs
-       (ty,_,_,_,_) = fromJust p 
+       (ty,_,_,_) = fromJust p 
        args  = arguments ty  
        setargs = Set.fromList args
        cond = Set.null $ Set.difference setargs scid
@@ -51,7 +51,7 @@ typesInterm :: Abstr -> Set.Set CId -> Map.Map CId CId
 typesInterm abs fset = 
           let fs = funs abs
               fsetTypes = Set.map (\x -> 
-                                    let (DTyp _ c _,_,_,_,_)=fromJust $ Map.lookup x fs
+                                    let (DTyp _ c _,_,_,_)=fromJust $ Map.lookup x fs
                                      in (x,c)) fset
               in Map.fromList $ Set.toList fsetTypes             
 
@@ -67,7 +67,7 @@ doesReturnCat (DTyp _ c _) cat = c == cat
 returnCat :: Abstr -> CId -> CId 
 returnCat abs cid = 
       let p = Map.lookup cid $ funs abs           
-          (DTyp _ c _,_,_,_,_) = fromJust p  
+          (DTyp _ c _,_,_,_) = fromJust p  
         in if isNothing p then error $ "not found "++ show cid ++ " in abstract "
                    else c
 

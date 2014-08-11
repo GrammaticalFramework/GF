@@ -25,13 +25,10 @@ import GF.Infra.UseIO (IOE)
 import GF.Data.Operations
 
 import Data.List
---import Data.Char (isDigit,isSpace)
 import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
---import GF.Text.Pretty
---import Control.Monad.Identity
 
 mkCanon2pgf :: Options -> SourceGrammar -> Ident -> IOE D.PGF
 mkCanon2pgf opts gr am = do
@@ -41,25 +38,25 @@ mkCanon2pgf opts gr am = do
   where
     cenv = resourceValues gr
 
-    mkAbstr am = return (i2i am, D.Abstr flags funs cats bcode)
+    mkAbstr am = return (i2i am, D.Abstr flags funs cats)
       where
         aflags = err (const noOptions) mflags (lookupModule gr am)
 
-        (adefs,bcode) =
-          generateByteCode $
+        adefs =
             [((cPredefAbs,c), AbsCat (Just (L NoLoc []))) | c <- [cFloat,cInt,cString]] ++ 
             Look.allOrigInfos gr am
 
         flags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF aflags]
 
-        funs = Map.fromList [(i2i f, (mkType [] ty, mkArrity ma, mkDef pty, 0, addr)) | 
-                                   ((m,f),AbsFun (Just (L _ ty)) ma pty _,addr) <- adefs]
+        funs = Map.fromList [(i2i f, (mkType [] ty, arity, mkDef arity mdef, 0)) | 
+                                   ((m,f),AbsFun (Just (L _ ty)) ma mdef _) <- adefs,
+                                   let arity = mkArrity ma]
                                    
-        cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c, 0, addr)) |
-                                   ((m,c),AbsCat (Just (L _ cont)),addr) <- adefs]
+        cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c, 0)) |
+                                   ((m,c),AbsCat (Just (L _ cont))) <- adefs]
 
         catfuns cat =
-              [(0,i2i f) | ((m,f),AbsFun (Just (L _ ty)) _ _ (Just True),_) <- adefs, snd (GM.valCat ty) == cat]
+              [(0,i2i f) | ((m,f),AbsFun (Just (L _ ty)) _ _ (Just True)) <- adefs, snd (GM.valCat ty) == cat]
 
     mkConcr cm = do
       let cflags  = err (const noOptions) mflags (lookupModule gr cm)
@@ -148,29 +145,13 @@ mkContext scope hyps = mapAccumL (\scope (bt,x,ty) -> let ty' = mkType scope ty
                                                            then (  scope,(bt,i2i x,ty'))
                                                            else (x:scope,(bt,i2i x,ty'))) scope hyps 
 
-mkDef (Just eqs) = Just [C.Equ ps' (mkExp scope' e) | L _ (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
-mkDef Nothing    = Nothing
+mkDef arity (Just eqs) = Just ([C.Equ ps' (mkExp scope' e) | L _ (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
+                              ,generateByteCode arity eqs
+                              )
+mkDef arity Nothing    = Nothing
 
 mkArrity (Just a) = a
 mkArrity Nothing  = 0
-
-data PattTree
-  = Ret  C.Expr
-  | Case (Map.Map QIdent [PattTree]) [PattTree]
-
-compilePatt :: [Equation] -> [PattTree]
-compilePatt (([],t):_) = [Ret (mkExp [] t)]
-compilePatt eqs        = whilePP eqs Map.empty
-  where
-    whilePP []                         cns     = [mkCase cns []]
-    whilePP (((PP c ps' : ps), t):eqs) cns     = whilePP eqs (Map.insertWith (++) c [(ps'++ps,t)] cns)
-    whilePP eqs                        cns     = whilePV eqs cns []
-
-    whilePV []                         cns vrs = [mkCase cns (reverse vrs)]
-    whilePV (((PV x     : ps), t):eqs) cns vrs = whilePV eqs cns ((ps,t) : vrs)
-    whilePV eqs                        cns vrs = mkCase cns (reverse vrs) : compilePatt eqs
-
-    mkCase cns vrs = Case (fmap compilePatt cns) (compilePatt vrs)
 
 
 genCncCats gr am cm cdefs =

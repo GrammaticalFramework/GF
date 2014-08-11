@@ -17,44 +17,24 @@ extern GU_DECLARE_TYPE(PgfExn, abstract);
 extern GU_DECLARE_TYPE(PgfParseError, abstract);
 extern GU_DECLARE_TYPE(PgfTypeError, abstract);
 
-/// @name PGF Grammar objects
-/// @{
-
 typedef struct PgfPGF PgfPGF;
 
 typedef struct PgfConcr PgfConcr;
 
-
-/**< A representation of a PGF grammar. 
- */
-
 #include <pgf/expr.h>
 #include <pgf/graphviz.h>
 
-/// An enumeration of #PgfExpr elements.
 typedef GuEnum PgfExprEnum;
 
 PgfPGF*
 pgf_read(const char* fpath,
          GuPool* pool, GuExn* err);
 
-/**< Read a grammar from a PGF file.
- *
- * @param from  PGF input stream.
- * The stream must be positioned in the beginning of a binary
- * PGF representation. After a succesful invocation, the stream is
- * still open and positioned at the end of the representation.
- *
- * @param[out] err_out  Raised error.
- * If non-\c NULL, \c *err_out should be \c NULL. Then, upon
- * failure, \c *err_out is set to point to a newly allocated
- * error object, which the caller must free with #g_exn_free
- * or #g_exn_propagate.
- *
- * @return A new PGF object, or \c NULL upon failure. The returned
- * object must later be freed with #pgf_free.
- *
- */
+void
+pgf_concrete_load(PgfConcr* concr, GuIn* in, GuExn* err);
+
+void
+pgf_concrete_unload(PgfConcr* concr);
 
 GuString
 pgf_abstract_name(PgfPGF*);
@@ -175,8 +155,6 @@ void
 pgf_concr_add_literal(PgfConcr *concr, PgfCId cat,
                       PgfLiteralCallback* callback,
                       GuExn* err);
-
-/// @}
 
 void
 pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err); 

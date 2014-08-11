@@ -2,7 +2,6 @@
 #include "expr.h"
 #include "literals.h"
 #include "reader.h"
-#include "jit.h"
 
 #include <gu/defs.h>
 #include <gu/map.h>
@@ -22,14 +21,6 @@
 // PgfReader
 // 
 
-struct PgfReader {
-	GuIn* in;
-	GuExn* err;
-	GuPool* opool;
-	GuPool* tmp_pool;
-	PgfJitState* jit_state;
-};
-
 typedef struct PgfReadTagExn PgfReadTagExn;
 
 struct PgfReadTagExn {
@@ -41,13 +32,13 @@ static GU_DEFINE_TYPE(PgfReadTagExn, abstract, _);
 
 static GU_DEFINE_TYPE(PgfReadExn, abstract, _);
 
-static uint8_t
+uint8_t
 pgf_read_tag(PgfReader* rdr)
 {
 	return gu_in_u8(rdr->in, rdr->err);
 }
 
-static uint32_t
+uint32_t
 pgf_read_uint(PgfReader* rdr)
 {
 	uint32_t u = 0;
@@ -62,14 +53,14 @@ pgf_read_uint(PgfReader* rdr)
 	return u;
 }
 
-static int32_t
+int32_t
 pgf_read_int(PgfReader* rdr)
 {
 	uint32_t u = pgf_read_uint(rdr);
 	return gu_decode_2c32(u, rdr->err);
 }
 
-static GuLength
+size_t
 pgf_read_len(PgfReader* rdr)
 {
 	int32_t len = pgf_read_int(rdr);
@@ -88,21 +79,27 @@ pgf_read_len(PgfReader* rdr)
 
 		return 0;
 	}
-	return (GuLength) len;
+	return len;
 }
 
-static PgfCId
+PgfCId
 pgf_read_cid(PgfReader* rdr, GuPool* pool)
 {
 	size_t len = pgf_read_len(rdr);
 	return gu_string_read_latin1(len, pool, rdr->in, rdr->err);
 }
 
-static GuString
+GuString
 pgf_read_string(PgfReader* rdr)
 {	
 	GuLength len = pgf_read_len(rdr);
 	return gu_string_read(len, rdr->opool, rdr->in, rdr->err);
+}
+
+double
+pgf_read_double(PgfReader* rdr)
+{
+	return gu_in_f64be(rdr->in, rdr->err);
 }
 
 static void
@@ -149,7 +146,7 @@ pgf_read_literal(PgfReader* rdr)
 			gu_new_variant(PGF_LITERAL_FLT,
 						   PgfLiteralFlt,
 						   &lit, rdr->opool);
-		lit_flt->val = gu_in_f64be(rdr->in, rdr->err);
+		lit_flt->val = pgf_read_double(rdr);
 		break;
 	}
 	default:
@@ -417,7 +414,7 @@ pgf_read_patt(PgfReader* rdr)
 }
 
 static PgfAbsFun*
-pgf_read_absfun(PgfReader* rdr)
+pgf_read_absfun(PgfReader* rdr, PgfAbstr* abstr)
 {
 	PgfAbsFun* absfun = gu_new(PgfAbsFun, rdr->opool);
 
@@ -444,6 +441,7 @@ pgf_read_absfun(PgfReader* rdr)
 	switch (tag) {
 	case 0:
 		absfun->defns = NULL;
+		absfun->function = NULL;
 		break;
 	case 1: {
         GuLength length = pgf_read_len(rdr);
@@ -468,6 +466,8 @@ pgf_read_absfun(PgfReader* rdr)
 
             data[i] = equ;
         }
+        
+      // 	pgf_jit_function(rdr, abstr, absfun);
 		break;
     }
 	default:
@@ -475,13 +475,13 @@ pgf_read_absfun(PgfReader* rdr)
 		break;
 	}
 
-	absfun->ep.prob = - log(gu_in_f64be(rdr->in, rdr->err));
+	absfun->ep.prob = - log(pgf_read_double(rdr));
 
 	return absfun;
 }
 					    
 static PgfCIdMap*
-pgf_read_absfuns(PgfReader* rdr)
+pgf_read_absfuns(PgfReader* rdr, PgfAbstr* abstr)
 {
 	GuMapType* map_type = (GuMapType*)
 		GU_TYPE_LIT(GuStringMap, _,
@@ -493,7 +493,7 @@ pgf_read_absfuns(PgfReader* rdr)
 	gu_return_on_exn(rdr->err, NULL);
 
 	for (size_t i = 0; i < len; i++) {
-		PgfAbsFun* absfun = pgf_read_absfun(rdr);
+		PgfAbsFun* absfun = pgf_read_absfun(rdr, abstr);
 		gu_return_on_exn(rdr->err, NULL);
 		
 		gu_map_put(absfuns, absfun->name, PgfAbsFun*, absfun);
@@ -519,27 +519,9 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 		gu_return_on_exn(rdr->err, NULL);
 	}
 
-    GuBuf* functions = gu_new_buf(PgfAbsFun*, rdr->tmp_pool);
+	pgf_jit_predicate(rdr, abstr, abscat);
 
-	size_t n_functions = pgf_read_len(rdr);
-	gu_return_on_exn(rdr->err, NULL);
-
-	for (size_t i = 0; i < n_functions; i++) {
-		gu_in_f64be(rdr->in, rdr->err);  // ignore
-		gu_return_on_exn(rdr->err, NULL);
-
-		PgfCId name = pgf_read_cid(rdr, rdr->tmp_pool);
-		gu_return_on_exn(rdr->err, NULL);
-		
-		PgfAbsFun* absfun =
-			gu_map_get(abstr->funs, name, PgfAbsFun*);
-		assert(absfun != NULL);
-		gu_buf_push(functions, PgfAbsFun*, absfun);
-	}
-
-	abscat->prob = - log(gu_in_f64be(rdr->in, rdr->err));
-
-	pgf_jit_predicate(rdr->jit_state, abscats, abscat, functions);
+	abscat->prob = - log(pgf_read_double(rdr));
 
 	return abscat;
 }
@@ -552,7 +534,7 @@ pgf_read_abscats(PgfReader* rdr, PgfAbstr* abstr)
 			 		gu_ptr_type(PgfAbsCat),
 					&gu_null_struct);
 	PgfCIdMap* abscats = gu_map_type_make(map_type, rdr->opool);
-	
+
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
@@ -575,7 +557,7 @@ pgf_read_abstract(PgfReader* rdr, PgfAbstr* abstract)
 	abstract->aflags = pgf_read_flags(rdr);
 	gu_return_on_exn(rdr->err, );
 	
-	abstract->funs = pgf_read_absfuns(rdr);
+	abstract->funs = pgf_read_absfuns(rdr, abstract);
 	gu_return_on_exn(rdr->err, );
 	
 	abstract->cats = pgf_read_abscats(rdr, abstract);
@@ -1350,7 +1332,7 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	rdr->tmp_pool = tmp_pool;
 	rdr->err = err;
 	rdr->in = in;
-	rdr->jit_state = pgf_jit_init(tmp_pool, rdr->opool);
+	rdr->jit_state = pgf_new_jit(rdr);
 	return rdr;
 }
 
@@ -1360,5 +1342,5 @@ pgf_reader_done(PgfReader* rdr, PgfPGF* pgf)
 	if (pgf == NULL)
 		return;
 
-	pgf_jit_done(rdr->jit_state, &pgf->abstract);
+	pgf_jit_done(rdr, &pgf->abstract);
 }

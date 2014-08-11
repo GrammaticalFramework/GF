@@ -293,8 +293,8 @@ categories pgf = [c | (c,hs) <- Map.toList (cats (abstract pgf))]
 
 categoryContext pgf cat =
   case Map.lookup cat (cats (abstract pgf)) of
-    Just (hypos,_,_,_) -> Just hypos
-    Nothing            -> Nothing
+    Just (hypos,_,_) -> Just hypos
+    Nothing          -> Nothing
 
 startCat pgf = DTyp [] (lookStartCat pgf) []
 
@@ -302,13 +302,13 @@ functions pgf = Map.keys (funs (abstract pgf))
 
 functionsByCat pgf cat =
   case Map.lookup cat (cats (abstract pgf)) of
-    Just (_,fns,_,_) -> map snd fns
-    Nothing          -> []
+    Just (_,fns,_) -> map snd fns
+    Nothing        -> []
 
 functionType pgf fun =
   case Map.lookup fun (funs (abstract pgf)) of
-    Just (ty,_,_,_,_) -> Just ty
-    Nothing           -> Nothing
+    Just (ty,_,_,_) -> Just ty
+    Nothing         -> Nothing
 
 -- | Converts an expression to normal form
 compute :: PGF -> Expr -> Expr
@@ -318,20 +318,20 @@ browse :: PGF -> CId -> Maybe (String,[CId],[CId])
 browse pgf id = fmap (\def -> (def,producers,consumers)) definition
   where
     definition = case Map.lookup id (funs (abstract pgf)) of
-                   Just (ty,_,Just eqs,_,_) -> Just $ render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
-                                                              if null eqs
-                                                                then empty
-                                                                else text "def" <+> vcat [let scope = foldl pattScope [] patts
-                                                                                              ds    = map (ppPatt 9 scope) patts
-                                                                                          in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
-                   Just (ty,_,Nothing, _,_) -> Just $ render (text "data" <+> ppCId id <+> colon <+> ppType 0 [] ty)
+                   Just (ty,_,Just (eqs,_),_) -> Just $ render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
+                                                                if null eqs
+                                                                  then empty
+                                                                  else text "def" <+> vcat [let scope = foldl pattScope [] patts
+                                                                                                ds    = map (ppPatt 9 scope) patts
+                                                                                            in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
+                   Just (ty,_,Nothing,_)      -> Just $ render (text "data" <+> ppCId id <+> colon <+> ppType 0 [] ty)
                    Nothing   -> case Map.lookup id (cats (abstract pgf)) of
-                                  Just (hyps,_,_,_) -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)))
-                                  Nothing           -> Nothing
+                                  Just (hyps,_,_) -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)))
+                                  Nothing         -> Nothing
 
     (producers,consumers) = Map.foldWithKey accum ([],[]) (funs (abstract pgf))
       where
-        accum f (ty,_,_,_,_) (plist,clist) = 
+        accum f (ty,_,_,_) (plist,clist) = 
           let !plist' = if id `elem` ps then f : plist else plist
               !clist' = if id `elem` cs then f : clist else clist
           in (plist',clist')

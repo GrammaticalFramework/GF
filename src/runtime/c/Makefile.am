@@ -33,7 +33,6 @@ guinclude_HEADERS = \
 pgfincludedir=$(includedir)/pgf
 pgfinclude_HEADERS = \
 	pgf/expr.h \
-	pgf/reader.h \
 	pgf/linearizer.h \
 	pgf/parser.h \
 	pgf/literals.h \

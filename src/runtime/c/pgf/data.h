@@ -76,6 +76,7 @@ typedef struct {
 	PgfEquations* defns; // maybe null
 	PgfExprProb ep;
 	void* predicate;
+	void* function;
 } PgfAbsFun;
 
 extern GU_DECLARE_TYPE(PgfAbsFun, abstract);
@@ -101,6 +102,25 @@ typedef struct {
 	PgfCIdMap* cats; // |-> PgfAbsCat*
 	PgfAbsFun* abs_lin_fun;
 } PgfAbstr;
+
+typedef enum {
+  PGF_INSTR_EVAL,
+  PGF_INSTR_CASE,
+  PGF_INSTR_CASE_INT,
+  PGF_INSTR_CASE_STR,
+  PGF_INSTR_CASE_FLT,
+  PGF_INSTR_ALLOC,
+  PGF_INSTR_PUT_CONSTR,
+  PGF_INSTR_PUT_CLOSURE,
+  PGF_INSTR_PUT_INT,
+  PGF_INSTR_PUT_STR,
+  PGF_INSTR_PUT_FLT,
+  PGF_INSTR_SET_VALUE,
+  PGF_INSTR_SET_VARIABLE,
+  PGF_INSTR_TAIL_CALL,
+  PGF_INSTR_FAIL,
+  PGF_INSTR_RET
+} PgfInstruction;
 
 struct PgfPGF {
 	uint16_t major_version;

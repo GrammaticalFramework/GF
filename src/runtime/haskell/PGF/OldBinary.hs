@@ -7,7 +7,6 @@ import PGF.Optimize
 import Data.Binary
 import Data.Binary.Get
 import Data.Array.IArray
-import qualified Data.ByteString as BS
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
@@ -40,9 +39,8 @@ getAbstract =
            funs <- getMap getCId getFun
            cats <- getMap getCId getCat
            return (Abstr{ aflags=aflags
-                        , funs=fmap (\(w,x,y,z) -> (w,x,y,z,0)) funs
-                        , cats=fmap (\(x,y) -> (x,y,0,0)) cats
-                        , code=BS.empty                        
+                        , funs=fmap (\(w,x,y,z) -> (w,x,fmap (flip (,) []) y,z)) funs
+                        , cats=fmap (\(x,y) -> (x,y,0)) cats
                         })
 getFun :: Get (Type,Int,Maybe [Equation],Double)
 getFun = (,,,) `fmap` getType `ap` get `ap` getMaybe (getList getEquation) `ap` get

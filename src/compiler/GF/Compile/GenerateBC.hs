@@ -1,78 +1,79 @@
 module GF.Compile.GenerateBC(generateByteCode) where
 
 import GF.Grammar
-import GF.Compile.Instructions
-import PGF.Internal(Binary(..),encode,BCAddr)
+import PGF(CId,utf8CId)
+import PGF.Internal(Instr(..))
+import qualified Data.Map as Map
 
-import Data.Maybe
-import qualified Data.IntMap as IntMap
-import qualified Data.ByteString as BSS
-import qualified Data.ByteString.Lazy as BS
-import PGF.Internal()
+generateByteCode :: Int -> [L Equation] -> [Instr]
+generateByteCode arity eqs =
+  compileEquations arity is (map (\(L _ (ps,t)) -> ([],ps,t)) eqs)
+  where
+    is = push_is (arity-1) arity []
 
-generateByteCode :: [(QIdent,Info)] -> ([(QIdent,Info,BCAddr)], BSS.ByteString)
-generateByteCode = runGenM . mapM genFun
+compileEquations :: Int -> [Int] -> [([(Ident,Int)],[Patt],Term)] -> [Instr]
+compileEquations st _  []            = [FAIL]
+compileEquations st [] ((vs,[],t):_) =
+  let (heap,instrs) = compileBody st vs t 0 []
+  in (if heap > 0 then (ALLOC heap :) else id)
+     (instrs ++ [RET st])
+compileEquations st (i:is) eqs       = whilePP eqs Map.empty
+  where
+    whilePP []                           cns     = mkCase cns []
+    whilePP ((vs, PP c ps' : ps, t):eqs) cns     = whilePP eqs (Map.insertWith (++) (Q c,length ps') [(vs,ps'++ps,t)] cns)
+    whilePP ((vs, PInt n   : ps, t):eqs) cns     = whilePP eqs (Map.insertWith (++) (EInt n,0) [(vs,ps,t)] cns)
+    whilePP ((vs, PString s: ps, t):eqs) cns     = whilePP eqs (Map.insertWith (++) (K s,0) [(vs,ps,t)] cns)
+    whilePP ((vs, PFloat d : ps, t):eqs) cns     = whilePP eqs (Map.insertWith (++) (EFloat d,0) [(vs,ps,t)] cns)
+    whilePP eqs                          cns     = whilePV eqs cns []
 
-type BCLabel = (Int, BCAddr)
+    whilePV []                           cns vrs = mkCase cns (reverse vrs)
+    whilePV ((vs, PV x     : ps, t):eqs) cns vrs = whilePV eqs cns (((x,i):vs,ps,t) : vrs)
+    whilePV ((vs, PW       : ps, t):eqs) cns vrs = whilePV eqs cns ((      vs,ps,t) : vrs)
+    whilePV eqs                          cns vrs = mkCase cns (reverse vrs) ++ compileEquations st (i:is) eqs
 
-genFun (id,info@(AbsFun (Just (L _ ty)) ma pty _)) = do
-  l1 <- newLabel
-{-  emitLabel l1
-  emit Ins_fail
-  l2 <- newLabel
-  l3 <- newLabel
-  emit (Ins_switch_on_reg (1,addr l2,addr l3))
-  emitLabel l2
-  emit (Ins_try (1,addr l3))
-  emit (Ins_trust_ext (1,1))
-  emit (Ins_try_me_else (0,addr l1))
-  emitLabel l3
-  l4 <- newLabel
-  l5 <- newLabel
-  emit (Ins_switch_on_term (addr l4,addr l5,addr l1,addr l4))
-  emitLabel l4
-  emitLabel l5-}
-  return (id,info,addr l1)
-genFun (id,info@(AbsCat (Just (L _ cont)))) = do
-  l1 <- newLabel
-  return (id,info,addr l1)
-genFun (id,info) = do
-  l1 <- newLabel
-  return (id,info,addr l1)
+    mkCase cns vrs
+      | Map.null cns = compileEquations st is vrs
+      | otherwise    = EVAL (st-i-1) :
+                       concat [compileBranch t n eqs | ((t,n),eqs) <- Map.toList cns] ++
+                       compileEquations st is vrs
 
-newtype GenM a = GenM {unGenM :: IntMap.IntMap BCAddr ->
-                                 IntMap.IntMap BCAddr ->
-                                 [Instruction] -> 
-                                 (a,IntMap.IntMap BCAddr,[Instruction])}
+    compileBranch t n eqs =
+      let case_instr = 
+            case t of
+              (Q (_,id)) -> CASE (i2i id)
+              (EInt n)   -> CASE_INT n
+              (K s)      -> CASE_STR s
+              (EFloat d) -> CASE_FLT d
+          instrs = compileEquations (st+n) (push_is st n is) eqs
+      in case_instr (length instrs) : instrs
+        
 
-instance Monad GenM where
-  return x = GenM (\fm cm is -> (x,cm,is))
-  f >>= g  = GenM (\fm cm is -> case unGenM f fm cm is of
-                                  (x,cm,is) -> unGenM (g x) fm cm is)
+compileBody st vs (App e1 e2) h0 os =
+  case e2 of
+    Vr x -> case lookup x vs of
+              Just i  -> compileBody st vs e1 h0 (SET_VARIABLE (st-i-1):os)
+              Nothing -> error "compileBody: unknown variable"
+    e2   -> let (h1,is1) = compileBody st vs e1 h0 (SET_VALUE h1:os)
+                (h2,is2) = compileBody st vs e2 h1 []
+            in (h2,is1 ++ is2)
+compileBody st vs (QC (_,id)) h0 os = let h1 = h0 + 2 + length os
+                                      in (h1,PUT_CONSTR (i2i id) : os)
+compileBody st vs (Q  (_,id)) h0 os = let h1 = h0 + 2 + length os
+                                      in (h1,PUT_CONSTR (i2i id) : os)
+compileBody st vs (Vr x)      h0 os = case lookup x vs of
+                                        Just i  -> (h0,EVAL (st-i-1) : os)
+                                        Nothing -> error "compileBody: unknown variable"
+compileBody st vs (EInt n)    h0 os = let h1 = h0 + 2
+                                      in (h1,PUT_INT n : os)
+compileBody st vs (K s)       h0 os = let h1 = h0 + 1 + (length s + 4) `div` 4
+                                      in (h1,PUT_STR s : os)
+compileBody st vs (EFloat d)  h0 os = let h1 = h0 + 3
+                                      in (h1,PUT_FLT d : os)
+compileBody st vs t           _  _  = error (show t)
 
-runGenM :: GenM a -> (a, BSS.ByteString)
-runGenM f = 
-  let (x, cm, is) = unGenM f cm IntMap.empty []
-  in (x, BSS.concat (BS.toChunks (encode (BC (reverse is)))))
+i2i :: Ident -> CId
+i2i = utf8CId . ident2utf8
 
-emit :: Instruction -> GenM ()
-emit i = GenM (\fm cm is -> ((), cm, i:is))
-
-newLabel :: GenM BCLabel
-newLabel = GenM (\fm cm is -> 
-  let lbl  = IntMap.size cm
-      addr = fromMaybe (error "newLabel") (IntMap.lookup lbl fm)
-  in ((lbl,addr), IntMap.insert lbl 0 cm, is))
-
-emitLabel :: BCLabel -> GenM ()
-emitLabel (lbl,addr) = GenM (\fm cm is ->
-  ((), IntMap.insert lbl (length is) cm, is))
-
-addr :: BCLabel -> BCAddr
-addr (lbl,addr) = addr
-
-data ByteCode = BC [Instruction]
-
-instance Binary ByteCode where
-  put (BC is) = mapM_ putInstruction is
-  get = error "get ByteCode"
+push_is :: Int -> Int -> [Int] -> [Int]
+push_is i 0 is = is
+push_is i n is = i : push_is (i-1) (n-1) is
