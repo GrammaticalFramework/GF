@@ -18,9 +18,8 @@
 -- and @file.gfo@ otherwise.
 -----------------------------------------------------------------------------
 
-module GF.Compile.ReadFiles 
+module GF.Compile.ReadFiles
            ( getAllFiles,ModName,ModEnv,importsOfModule,
-             gfoFile,gfFile,isGFO,gf2gfo,
              parseSource,lift,
              getOptionsFromFile,getPragmas) where
 
@@ -44,7 +43,7 @@ import Data.Maybe(isJust)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map
 import Data.Time(UTCTime)
-import GF.System.Directory
+import GF.System.Directory(getModificationTime,doesFileExist,canonicalizePath)
 import System.FilePath
 import GF.Text.Pretty
 
@@ -91,58 +90,62 @@ getAllFiles opts ps env file = do
                       | otherwise = (st0,t0)
            return ((name,st,t,has_src,imps,p):ds)
 
+    gfoDir = flag optGFODir opts
+
     -- searches for module in the search path and if it is found
     -- returns 'ModuleInfo'. It fails if there is no such module
   --findModule :: ModName -> IOE ModuleInfo
     findModule name = do
-      (file,gfTime,gfoTime) <- do
-          mb_gfFile <- getFilePath ps (gfFile name)
-          case mb_gfFile of
-            Just gfFile -> do gfTime  <- modtime gfFile
-                              mb_gfoTime <- maybeIO $ modtime (gf2gfo opts gfFile)
-                              return (gfFile, Just gfTime, mb_gfoTime)
-            Nothing     -> do mb_gfoFile <- getFilePath (maybe id (:) (flag optGFODir opts) ps) (gfoFile name)
-                              case mb_gfoFile of
-                                Just gfoFile -> do gfoTime <- modtime gfoFile
-                                                   return (gfoFile, Nothing, Just gfoTime)
-                                Nothing      -> raise (render ("File" <+> gfFile name <+> "does not exist." $$
-                                                                      "searched in:" <+> vcat ps))
-
+      (file,gfTime,gfoTime) <- findFile gfoDir ps name
 
       let mb_envmod = Map.lookup name env
           (st,t) = selectFormat opts (fmap fst mb_envmod) gfTime gfoTime
 
       (st,(mname,imps)) <-
-                      case st of
-                        CSEnv  -> return (st, (name, maybe [] snd mb_envmod))
-                        CSRead -> do mb_mo <- liftIO $ decodeModuleHeader ((if isGFO file then id else gf2gfo opts) file)
-                                     case mb_mo of
-                                       Just mo -> return (st,importsOfModule mo)
-                                       Nothing
-                                         | isGFO file -> raise (file ++ " is compiled with different GF version and I can't find the source file")
-                                         | otherwise  -> do mo <- parseModHeader opts file
-                                                            return (CSComp,importsOfModule mo)
-                        CSComp -> do mo <- parseModHeader opts file
-                                     return (st,importsOfModule mo)
+          case st of
+            CSEnv  -> return (st, (name, maybe [] snd mb_envmod))
+            CSRead -> do let gfo = if isGFO file then file else gf2gfo opts file
+                         mb_imps <- gfoImports gfo
+                         case mb_imps of
+                           Just imps -> return (st,imps)
+                           Nothing
+                             | isGFO file -> raise (file ++ " is compiled with different GF version and I can't find the source file")
+                             | otherwise  -> do imps <- gfImports opts file
+                                                return (CSComp,imps)
+            CSComp -> do imps <- gfImports opts file
+                         return (st,imps)
       testErr (mname == name)
               ("module name" +++ mname +++ "differs from file name" +++ name)
       return (name,st,t,isJust gfTime,imps,dropFileName file)
+--------------------------------------------------------------------------------
+
+findFile gfoDir ps name =
+    maybe noSource haveSource =<< getFilePath ps (gfFile name)
+  where
+    haveSource gfFile =
+      do gfTime  <- modtime gfFile
+         mb_gfoTime <- maybeIO $ modtime (gf2gfo' gfoDir gfFile)
+         return (gfFile, Just gfTime, mb_gfoTime)
+
+    noSource =
+        maybe noGFO haveGFO =<< getFilePath gfoPath (gfoFile name)
+      where
+        gfoPath = maybe id (:) gfoDir ps
+
+        haveGFO gfoFile =
+          do gfoTime <- modtime gfoFile
+             return (gfoFile, Nothing, Just gfoTime)
+
+        noGFO = raise (render ("File" <+> gfFile name <+> "does not exist." $$
+                               "searched in:" <+> vcat ps))
 
 modtime path = liftIO $ getModificationTime path
 
-isGFO :: FilePath -> Bool
-isGFO = (== ".gfo") . takeExtensions
+gfImports opts file = importsOfModule `fmap` parseModHeader opts file
 
-gfoFile :: FilePath -> FilePath
-gfoFile f = addExtension f "gfo"
+gfoImports gfo = fmap importsOfModule `fmap` liftIO (decodeModuleHeader gfo)
 
-gfFile :: FilePath -> FilePath
-gfFile f = addExtension f "gf"
-
-gf2gfo :: Options -> FilePath -> FilePath
-gf2gfo opts file = maybe (gfoFile (dropExtension file))
-                         (\dir -> dir </> gfoFile (dropExtension (takeFileName file)))
-                         (flag optGFODir opts)
+--------------------------------------------------------------------------------
 
 -- From the given Options and the time stamps computes
 -- whether the module have to be computed, read from .gfo or
@@ -255,7 +258,7 @@ getPragmas = parseModuleOptions .
              map (BS.unpack . BS.unwords . BS.words . BS.drop 3) .
              filter (BS.isPrefixOf (BS.pack "--#")) . BS.lines
 
---getFilePath :: MonadIO m => [FilePath] -> String -> m (Maybe FilePath)
+getFilePath :: MonadIO m => [FilePath] -> String -> m (Maybe FilePath)
 getFilePath paths file =
    liftIO $ do --ePutStrLn $ "getFilePath "++show paths++" "++show file
                get paths

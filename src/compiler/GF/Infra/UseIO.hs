@@ -105,9 +105,26 @@ getSubdirs dir = do
                        then return (fpath:fs)
                        else return        fs ) [] fs
 
+--------------------------------------------------------------------------------
 justModuleName :: FilePath -> String
 justModuleName = dropExtension . takeFileName
 
+isGFO :: FilePath -> Bool
+isGFO = (== ".gfo") . takeExtensions
+
+gfoFile :: FilePath -> FilePath
+gfoFile f = addExtension f "gfo"
+
+gfFile :: FilePath -> FilePath
+gfFile f = addExtension f "gf"
+
+gf2gfo :: Options -> FilePath -> FilePath
+gf2gfo = gf2gfo' . flag optGFODir
+
+gf2gfo' gfoDir file = maybe (gfoFile (dropExtension file))
+                            (\dir -> dir </> gfoFile (takeBaseName file))
+                            gfoDir
+--------------------------------------------------------------------------------
 splitInModuleSearchPath :: String -> [FilePath]
 splitInModuleSearchPath s = case break isPathSep s of
   (f,_:cs) -> f : splitInModuleSearchPath cs
