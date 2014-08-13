@@ -37,6 +37,7 @@ import Data.Map as Map
 import Data.IntMap as IntMap
 import Data.Maybe as Maybe
 import Data.List as List
+import Control.Applicative
 import Control.Monad
 --import Control.Monad.Identity
 import Control.Monad.State
@@ -92,9 +93,17 @@ class Selector s where
   splitSelector :: s -> (s,s)
   select        :: CId -> Scope -> Maybe Int -> TcM s (Expr,TType)
 
+instance Applicative (TcM s) where
+  pure = return
+  (<*>) = ap
+
 instance Monad (TcM s) where
   return x = TcM (\abstr k h -> k x)
   f >>= g  = TcM (\abstr k h -> unTcM f abstr (\x -> unTcM (g x) abstr k h) h)
+
+instance Selector s => Alternative (TcM s) where
+  empty = mzero
+  (<|>) = mplus
 
 instance Selector s => MonadPlus (TcM s) where
   mzero = TcM (\abstr k h ms s -> id)

@@ -28,7 +28,8 @@ import qualified Data.Map as Map
 import GF.Text.Pretty
 import System.FilePath(makeRelative)
 import Control.Parallel.Strategies(parList,rseq,using)
-import Control.Monad(liftM)
+import Control.Monad(liftM,ap)
+import Control.Applicative(Applicative(..))
 
 type Message = Doc
 type Error   = Message
@@ -49,6 +50,10 @@ instance Monad Check where
                case unCheck f {-ctxt-} ws of
                  (ws,Success x) -> unCheck (g x) {-ctxt-} ws
                  (ws,Fail msg)  -> (ws,Fail msg)
+
+instance Applicative Check where
+  pure = return
+  (<*>) = ap
 
 instance ErrorMonad Check where
   raise s = checkError (pp s)

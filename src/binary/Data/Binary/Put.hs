@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      : Data.Binary.Put
@@ -56,10 +55,7 @@ import qualified Data.Binary.Builder as B
 import Data.Word
 import qualified Data.ByteString      as S
 import qualified Data.ByteString.Lazy as L
-
-#ifdef APPLICATIVE_IN_BASE
 import Control.Applicative
-#endif
 
 
 ------------------------------------------------------------------------
@@ -80,14 +76,12 @@ instance Functor PutM where
         fmap f m = Put $ let PairS a w = unPut m in PairS (f a) w
         {-# INLINE fmap #-}
 
-#ifdef APPLICATIVE_IN_BASE
 instance Applicative PutM where
         pure    = return
         m <*> k = Put $
             let PairS f w  = unPut m
                 PairS x w' = unPut k
             in PairS (f x) (w `mappend` w')
-#endif
 
 -- Standard Writer monad, with aggressive inlining
 instance Monad PutM where

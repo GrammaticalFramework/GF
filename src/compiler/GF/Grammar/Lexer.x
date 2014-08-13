@@ -6,6 +6,8 @@ module GF.Grammar.Lexer
          , isReservedWord
          ) where
 
+import Control.Applicative
+import Control.Monad(ap)
 import GF.Infra.Ident
 --import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
@@ -257,6 +259,13 @@ data ParseResult a
             String      -- The error message
 
 newtype P a = P { unP :: AlexInput -> ParseResult a }
+
+instance Functor P where
+  fmap = (<$>)
+
+instance Applicative P where
+  pure = return
+  (<*>) = ap
 
 instance Monad P where
   return a    = a `seq` (P $ \s -> POk a)

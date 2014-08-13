@@ -68,7 +68,7 @@ module Data.Binary.Get (
 
   ) where
 
-import Control.Monad (when,liftM) -- ap
+import Control.Monad (when,liftM, ap)
 import Control.Monad.Fix
 import Data.Maybe (isNothing)
 
@@ -82,9 +82,7 @@ import qualified Data.ByteString.Internal as B
 import qualified Data.ByteString.Lazy.Internal as L
 #endif
 
-#ifdef APPLICATIVE_IN_BASE
 import Control.Applicative (Applicative(..))
-#endif
 
 import Foreign
 
@@ -116,11 +114,9 @@ instance Functor Get where
                             (a, s') -> (f a, s'))
     {-# INLINE fmap #-}
 
-#ifdef APPLICATIVE_IN_BASE
 instance Applicative Get where
     pure  = return
     (<*>) = ap
-#endif
 
 instance Monad Get where
     return a  = Get (\s -> (a, s))
@@ -187,7 +183,7 @@ runGet m str = case unGet m (initState str) of (a, _) -> a
 runGetState :: Get a -> L.ByteString -> Int64 -> (a, L.ByteString, Int64)
 runGetState m str off =
     case unGet m (mkState str off) of
-      (a, ~(S s ss newOff)) -> (a, s `join` ss, newOff)
+      (a, ~(S s ss newOff)) -> (a, s `joinBS` ss, newOff)
 
 ------------------------------------------------------------------------
 
@@ -246,7 +242,7 @@ uncheckedLookAhead n = do
     S s ss _ <- get
     if n <= fromIntegral (B.length s)
         then return (L.fromChunks [B.take (fromIntegral n) s])
-        else return $ L.take n (s `join` ss)
+        else return $ L.take n (s `joinBS` ss)
 
 ------------------------------------------------------------------------
 -- Utility
@@ -286,7 +282,7 @@ getByteString n = readN n id
 getLazyByteString :: Int64 -> Get L.ByteString
 getLazyByteString n = do
     S s ss bytes <- get
-    let big = s `join` ss
+    let big = s `joinBS` ss
     case splitAtST n big of
       (consume, rest) -> do put $ mkState rest (bytes + n)
                             return consume
@@ -297,7 +293,7 @@ getLazyByteString n = do
 getLazyByteStringNul :: Get L.ByteString
 getLazyByteStringNul = do
     S s ss bytes <- get
-    let big = s `join` ss
+    let big = s `joinBS` ss
         (consume, t) = L.break (== 0) big
         (h, rest) = L.splitAt 1 t
     if L.null h
@@ -311,7 +307,7 @@ getLazyByteStringNul = do
 getRemainingLazyByteString :: Get L.ByteString
 getRemainingLazyByteString = do
     S s ss _ <- get
-    return (s `join` ss)
+    return (s `joinBS` ss)
 
 ------------------------------------------------------------------------
 -- Helpers
@@ -325,7 +321,7 @@ getBytes n = do
                 put $! S rest ss (bytes + fromIntegral n)
                 return $! consume
         else
-              case L.splitAt (fromIntegral n) (s `join` ss) of
+              case L.splitAt (fromIntegral n) (s `joinBS` ss) of
                 (consuming, rest) ->
                     do let now = B.concat . L.toChunks $ consuming
                        put $! mkState rest (bytes + fromIntegral n)
@@ -339,19 +335,19 @@ getBytes n = do
 -- ^ important
 
 #ifndef BYTESTRING_IN_BASE
-join :: B.ByteString -> L.ByteString -> L.ByteString
-join bb lb
+joinBS :: B.ByteString -> L.ByteString -> L.ByteString
+joinBS bb lb
     | B.null bb = lb
     | otherwise = L.Chunk bb lb
 
 #else
-join :: B.ByteString -> L.ByteString -> L.ByteString
-join bb (B.LPS lb)
+joinBS :: B.ByteString -> L.ByteString -> L.ByteString
+joinBS bb (B.LPS lb)
     | B.null bb = B.LPS lb
     | otherwise = B.LPS (bb:lb)
 #endif
     -- don't use L.append, it's strict in it's second argument :/
-{- INLINE join -}
+{- INLINE joinBS -}
 
 -- | Split a ByteString. If the first result is consumed before the --
 -- second, this runs in constant heap space.

@@ -67,7 +67,8 @@ import Data.Char (isSpace, toUpper, isSpace, isDigit)
 import Data.List (nub, partition, (\\))
 import qualified Data.Map as Map
 import Data.Map (Map)
-import Control.Monad (liftM,liftM2)
+import Control.Applicative(Applicative(..))
+import Control.Monad (liftM,liftM2,ap)
 
 import GF.Data.ErrM
 import GF.Data.Relation
@@ -329,6 +330,10 @@ stmr :: (s -> (a,s)) -> STM s a
 stmr f = stm (\s -> return (f s))
 
 instance Functor (STM s) where fmap = liftM
+
+instance Applicative (STM s) where
+  pure = return
+  (<*>) = ap
 
 instance  Monad (STM s) where
   return a    = STM (\s -> return (a,s))

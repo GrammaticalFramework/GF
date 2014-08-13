@@ -29,6 +29,7 @@ module GF.Data.BacktrackM (
 		  ) where
 
 import Data.List
+import Control.Applicative
 import Control.Monad
 import Control.Monad.State.Class
 
@@ -60,6 +61,10 @@ foldFinalStates f b (BM m) s = m (\x s b -> f s b) s b
 finalStates :: BacktrackM s () -> s -> [s]
 finalStates bm = map fst . runBM bm
 
+instance Applicative (BacktrackM s) where
+    pure = return
+    (<*>) = ap
+
 instance Monad (BacktrackM s) where
     return a   = BM (\c s b -> c a s b)
     BM m >>= k = BM (\c s b -> m (\a s b -> unBM (k a) c s b) s b)
@@ -68,6 +73,10 @@ instance Monad (BacktrackM s) where
 
 instance Functor (BacktrackM s) where
     fmap f (BM m) = BM (\c s b -> m (\a s b -> c (f a) s b) s b)
+
+instance Alternative (BacktrackM s) where
+   empty = mzero
+   (<|>) = mplus
 
 instance MonadPlus (BacktrackM s) where
     mzero                 = BM (\c s b -> b)

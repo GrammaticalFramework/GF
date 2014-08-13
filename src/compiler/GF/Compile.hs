@@ -5,10 +5,10 @@ import GF.Compile.ReadFiles(ModEnv,getOptionsFromFile,getAllFiles,
                             importsOfModule)
 import GF.CompileOne(compileOne)
 
-import GF.Grammar.Grammar(SourceGrammar,msrc,modules,emptySourceGrammar,
-                          abstractOfConcrete,prependModule)
+import GF.Grammar.Grammar(SourceGrammar,emptySourceGrammar,
+                          abstractOfConcrete,prependModule)--,msrc,modules
 
-import GF.Infra.Ident(Ident,identS,showIdent)
+import GF.Infra.Ident(Ident,identS)--,showIdent
 import GF.Infra.Option
 import GF.Infra.UseIO(IOE,FullPath,liftIO,getLibraryDirectory,putIfVerb,
                       justModuleName,extendPathEnv,putStrE,putPointE)
@@ -17,7 +17,7 @@ import GF.Data.Operations(raise,(+++),err)
 import Control.Monad(foldM,when)
 import GF.System.Directory(doesFileExist,getModificationTime)
 import System.FilePath((</>),isRelative,dropFileName)
-import qualified Data.Map as Map(empty,insert,lookup,elems)
+import qualified Data.Map as Map(empty,insert,elems) --lookup
 import Data.List(nub)
 import Data.Time(UTCTime)
 import GF.Text.Pretty(render,($$),(<+>),nest)
