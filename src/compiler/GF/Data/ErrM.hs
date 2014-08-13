@@ -14,7 +14,8 @@
 
 module GF.Data.ErrM (Err(..)) where
 
-import Control.Monad (MonadPlus(..))
+import Control.Monad (MonadPlus(..),ap)
+import Control.Applicative
 
 -- | like @Maybe@ type with error msgs
 data Err a = Ok a | Bad String
@@ -31,8 +32,16 @@ instance Functor Err where
   fmap f (Ok a) = Ok (f a)
   fmap f (Bad s) = Bad s
 
+instance Applicative Err where
+  pure = return
+  (<*>) = ap
+
 -- | added by KJ
 instance MonadPlus Err where
     mzero = Bad "error (no reason given)"
     mplus (Ok a)  _ = Ok a
     mplus (Bad s) b = b
+
+instance Alternative Err where
+    empty = mzero
+    (<|>) = mplus

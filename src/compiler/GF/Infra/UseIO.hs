@@ -31,6 +31,7 @@ import System.Exit
 import System.CPUTime
 --import System.Cmd
 import Text.Printf
+import Control.Applicative(Applicative(..))
 import Control.Monad
 import Control.Monad.Trans(MonadIO(..))
 import Control.Exception(evaluate)
@@ -149,6 +150,10 @@ instance ErrorMonad IOE where
   handle m h = ioe $ err (appIOE . h) (return . Ok) =<< appIOE m
 
 instance Functor IOE where fmap = liftM
+
+instance Applicative IOE where
+  pure = return
+  (<*>) = ap
 
 instance  Monad IOE where
   return a    = ioe (return (return a))

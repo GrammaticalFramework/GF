@@ -9,6 +9,8 @@ import GF.Compile.TypeCheck.Primitives
 import GF.Infra.CheckM
 --import GF.Infra.UseIO
 import GF.Data.Operations
+import Control.Applicative(Applicative(..))
+import Control.Monad(ap)
 
 import GF.Text.Pretty
 import Data.List (nub, (\\), tails)
@@ -466,6 +468,10 @@ instance Monad TcM where
                                 TcOk x ms msgs -> unTcM (g x) ms msgs
                                 TcFail    msgs -> TcFail msgs)
   fail     = tcError . pp
+
+instance Applicative TcM where
+  pure = return
+  (<*>) = ap
 
 instance Functor TcM where
   fmap f g = TcM (\ms msgs -> case unTcM g ms msgs of

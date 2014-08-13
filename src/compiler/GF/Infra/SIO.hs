@@ -19,10 +19,11 @@ module GF.Infra.SIO(
        restricted,restrictedSystem
   ) where
 import Prelude hiding (putStrLn,print)
-import Control.Monad(liftM)
+import Control.Applicative(Applicative(..))
+import Control.Monad(liftM,ap)
 import System.IO(hPutStrLn,hFlush,stdout)
 import GF.System.Catch(try)
-import System.Cmd(system)
+import System.Process(system)
 import System.Environment(getEnv)
 import Control.Concurrent.Chan(newChan,writeChan,getChanContents)
 import qualified System.CPUTime as IO(getCPUTime)
@@ -38,6 +39,10 @@ type PutStrLn = String -> IO ()
 newtype SIO a = SIO {unS::PutStrLn->IO a}
 
 instance Functor SIO where fmap = liftM
+
+instance Applicative SIO where
+  pure = return
+  (<*>) = ap
 
 instance Monad SIO where
   return x = SIO (const (return x))

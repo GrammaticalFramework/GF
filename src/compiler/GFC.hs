@@ -2,7 +2,7 @@ module GFC (mainGFC, writePGF) where
 -- module Main where
 
 import PGF
-import PGF.Internal(PGF,concretes,optimizePGF,unionPGF)
+import PGF.Internal(concretes,optimizePGF,unionPGF)
 import PGF.Internal(putSplitAbs,encodeFile,runPut)
 import GF.Compile
 import GF.Compile.Export

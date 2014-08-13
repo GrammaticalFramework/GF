@@ -36,6 +36,7 @@ import Data.Array.IArray
 import Data.Array.Unboxed
 --import Data.Maybe
 --import Data.Char (isDigit)
+import Control.Applicative(Applicative(..))
 import Control.Monad
 import Control.Monad.Identity
 --import Control.Exception
@@ -246,6 +247,10 @@ newtype CnvMonad a = CM {unCM :: SourceGrammar
                               -> forall b . (a -> ([ProtoFCat],[Symbol]) -> Branch b)
                               -> ([ProtoFCat],[Symbol])
                               -> Branch b}
+
+instance Applicative CnvMonad where
+  pure = return
+  (<*>) = ap
 
 instance Monad CnvMonad where
     return a   = CM (\gr c s -> c a s)

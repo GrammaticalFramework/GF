@@ -30,7 +30,7 @@ import GF.Compile.ReadFiles(parseSource,lift)
 import qualified Data.ByteString.Char8 as BS
 import Data.Char(isAscii)
 import Control.Monad (foldM,when,unless)
-import System.Cmd (system)
+import System.Process (system)
 import System.Directory(removeFile,getCurrentDirectory)
 import System.FilePath(makeRelative)
 
