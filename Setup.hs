@@ -81,20 +81,13 @@ rglCommands =
        createDirectoryIfMissing True prelude_dst_dir
        files <- ls prelude_src_dir
        run_gfc bi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files])
-  , RGLCommand "lang"    True  $ \modes args bi ->
-       parallel_ [gfcn bi mode (summary lang++" "++summary symbol) files
-                   | mode <- modes,
-                     let files = map lang (optml mode langsLang args)++
-                                 map symbol (optml mode langsAPI args)]
-  , RGLCommand "compat"  True  $ \modes args bi ->
-       gfc bi modes (summary compat) (map compat (optl langsCompat args))
-  , RGLCommand "api"     True  $ \modes args bi ->
-       parallel_ [gfcn bi mode (summary try++" "++summary symbolic) files
-                   | mode <- modes,
-                     let files = map try (optml mode langsAPI args) ++
-                                 map symbolic (optml mode langsSymbolic args)]
-  , RGLCommand "web"     True  $ \modes args bi ->
-       buildWeb (default_gf bi) bi
+
+  , RGLCommand "all"     True  $ gfcp [l,s,c,t,sc]
+  , RGLCommand "lang"    False $ gfcp [l,s]
+  , RGLCommand "api"     False $ gfcp [t,sc]
+  , RGLCommand "compat"  False $ gfcp [c]
+  , RGLCommand "web"     True  $ \ _ _ bi -> buildWeb (default_gf bi) bi
+
   , RGLCommand "pgf"     False $ \modes args bi ->
      parallel_ [
        do let dir = getRGLBuildDir bi mode
@@ -115,7 +108,18 @@ rglCommands =
        return ()
   ]
   where
+    gfcp cs modes args bi = parallel_ [gfcp' bi mode args cs|mode<-modes]
+
+    gfcp' bi mode args cs = gfcn bi mode (unwords ss) (concat fss)
+      where (ss,fss) = unzip [(summary f,map f as)|c<-cs,let (f,as)=c mode args]
+
     summary f = f ("*","*")
+
+    l mode args = (lang,optml mode langsLang args)
+    s mode args = (symbol,optml mode langsAPI args)
+    c mode args = (compat,optl langsCompat args)
+    t mode args = (try,optml mode langsAPI args)
+    sc mode args = (symbolic,optml mode langsSymbolic args)
 
     optl = optml AllTenses
     optml mode ls args = getOptLangs (shrink ls) args
