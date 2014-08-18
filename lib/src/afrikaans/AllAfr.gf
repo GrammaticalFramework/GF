@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete AllAfr of AllAfrAbs = 
   LangAfr,

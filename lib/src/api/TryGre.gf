@@ -1,4 +1,4 @@
---# -path=.:alltenses
+--# -path=.:../greek:../common:../abstract:../prelude
 
 resource TryGre = SyntaxGre, LexiconGre, ParadigmsGre ;
 

@@ -1,4 +1,4 @@
---# -path=.:../scandinavian:../abstract:../common
+--# -path=.:../scandinavian:../abstract:../common:../prelude
 
 concrete CompatibilitySwe of Compatibility = CatSwe ** open Prelude, CommonScand in {
 

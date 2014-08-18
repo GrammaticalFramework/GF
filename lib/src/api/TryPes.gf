@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude:/users/shafqat/www.grammaticalframework.org_0/lib/src/persian
+--# -path=.:../persian:../common:../abstract:../prelude
 
 resource TryPes = SyntaxPes, LexiconPes, ParadigmsPes -[mkDet,mkQuant,mkAdv]** 
   open (P = ParadigmsPes) in {

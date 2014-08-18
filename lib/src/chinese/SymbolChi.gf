@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolChi of Symbol = CatChi ** open Prelude, ResChi in {
 

@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../catalan:../romance:../common:../abstract:../prelude
 
 resource TryCat = SyntaxCat, LexiconCat, ParadigmsCat - [mkAdv] ** 
   open (P = ParadigmsCat) in {

@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../german:../common:../abstract:../prelude
 
 resource SymbolicGer = Symbolic with 
   (Symbol = SymbolGer),

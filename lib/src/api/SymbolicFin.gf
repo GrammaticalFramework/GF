@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../finnish:../common:../abstract:../prelude
 
 resource SymbolicFin = Symbolic with 
   (Symbol = SymbolFin),

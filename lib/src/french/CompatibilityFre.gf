@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common
+--# -path=.:../romance:../abstract:../common:../prelude
 
 concrete CompatibilityFre of Compatibility = CatFre ** open Prelude, CommonRomance in {
 

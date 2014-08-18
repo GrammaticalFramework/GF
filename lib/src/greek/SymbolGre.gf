@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../common:../prelude
+
 concrete SymbolGre of Symbol = 
   CatGre ** open Prelude, CommonGre, ResGre in {
 

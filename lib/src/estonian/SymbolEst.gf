@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../common:../prelude
+
 concrete SymbolEst of Symbol = CatEst ** open Prelude, NounEst, ResEst in {
 
 lin

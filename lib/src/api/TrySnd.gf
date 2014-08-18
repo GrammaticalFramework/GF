@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude:/users/shafqat/www.grammaticalframework.org_4/lib/src/sindhi
+--# -path=.:../sindhi:../common:../abstract:../prelude
 
 resource TrySnd = SyntaxSnd - [mkAdN] , LexiconSnd, ParadigmsSnd - [mkAdv,mkDet,mkIP,mkAdN] ** 
   open (P = ParadigmsSnd) in {

@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../api
+--# -path=.:../abstract:../common:../api:../prelude
 
 concrete AllDut of AllDutAbs = 
   LangDut,

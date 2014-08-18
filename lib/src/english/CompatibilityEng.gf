@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete CompatibilityEng of Compatibility = CatEng ** open Prelude, ResEng in {
 

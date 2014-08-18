@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../urdu:../hindustani:../common:../abstract:../prelude
 
 resource SymbolicUrd = Symbolic with 
   (Symbol = SymbolUrd),

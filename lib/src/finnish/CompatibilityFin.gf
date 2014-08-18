@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete CompatibilityFin of Compatibility = CatFin ** open Prelude, ResFin in {
 

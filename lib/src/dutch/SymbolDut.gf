@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolDut of Symbol = CatDut ** open Prelude, ResDut in 
 {

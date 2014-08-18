@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 --# -coding=cp1251
 
 concrete SymbolBul of Symbol = CatBul ** open Prelude, ResBul in {

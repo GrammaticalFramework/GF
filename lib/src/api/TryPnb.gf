@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../punjabi:../common:../abstract:../prelude
 
 resource TryPnb = SyntaxPnb - [mkAdN] , LexiconPnb, ParadigmsPnb - [mkAdv,mkDet,mkIP,mkAdN] ** 
   open (P = ParadigmsPnb) in {

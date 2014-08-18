@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../japanese:../abstract:../prelude
 resource TryJpn = 
   SyntaxJpn - [mkAdN] , 
   LexiconJpn, 

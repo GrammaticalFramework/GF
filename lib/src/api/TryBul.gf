@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../bulgarian:../common:../abstract:../prelude
 
 resource TryBul = SyntaxBul, LexiconBul, ParadigmsBul - [mkAdv,mkIAdv] ** 
   open (P = ParadigmsBul) in {

@@ -1,4 +1,4 @@
---# -path=.:alltenses
+--# -path=.:../thai:../common:../abstract:../prelude
 
 resource SymbolicTha = Symbolic with 
   (Symbol = SymbolTha),

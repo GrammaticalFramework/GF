@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolGer of Symbol = CatGer ** open Prelude, ResGer in {
 

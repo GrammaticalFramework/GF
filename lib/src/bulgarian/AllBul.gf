@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:prelude:../api
+--# -path=.:../abstract:../common:../prelude:../api
 --# -coding=cp1251
 
 concrete AllBul of AllBulAbs = 

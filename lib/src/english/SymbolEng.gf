@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolEng of Symbol = CatEng ** open Prelude, ResEng in {
 

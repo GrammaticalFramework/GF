@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolRus of Symbol = CatRus ** open Prelude, ResRus in {
 flags coding=utf8;

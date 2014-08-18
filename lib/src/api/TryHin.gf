@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude:/users/shafqat/www.grammaticalframework.org_4/lib/src/hindi:/users/shafqat/www.grammaticalframework.org_4/lib/src/hindustani
+--# -path=.:../hindi:../hindustani:../common:../abstract:../prelude
 
 resource TryHin = SyntaxHin - [mkAdN] , LexiconHin, ParadigmsHin - [mkAdv,mkDet,mkIP,mkAdN,mkQuant] ** 
   open (P = ParadigmsHin) in {

@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../danish:../scandinavian:../common:../abstract:../prelude
 
 resource SymbolicDan = Symbolic with 
   (Symbol = SymbolDan),

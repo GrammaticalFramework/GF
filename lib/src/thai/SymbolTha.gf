@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolTha of Symbol = CatTha ** open Prelude, ResTha in {
 

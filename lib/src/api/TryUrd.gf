@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../urdu:../hindustani:../common:../abstract:../prelude
 
 resource TryUrd = SyntaxUrd - [mkAdN] , LexiconUrd, ParadigmsUrd - [mkAdv,mkDet,mkIP,mkAdN] ** 
   open (P = ParadigmsUrd) in {

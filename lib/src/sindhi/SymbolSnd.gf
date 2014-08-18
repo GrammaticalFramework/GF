@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolSnd of Symbol = CatSnd ** open Prelude, ResSnd in {
 
