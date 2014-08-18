@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude:../latvian
+--# -path=.:../latvian:../common:../abstract:../prelude
 
 resource SymbolicLav = Symbolic with
   (Symbol = SymbolLav),

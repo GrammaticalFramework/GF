@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../estonian:../common:../abstract:../prelude
 
 resource SymbolicEst = Symbolic with 
   (Symbol = SymbolEst),

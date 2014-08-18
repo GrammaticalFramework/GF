@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../api
+--# -path=.:../abstract:../common:../api:../prelude
 
 concrete AllFin of AllFinAbs = 
   LangFin - [SlashV2VNP,SlashVV, TFut], ---- to speed up linking; to remove spurious parses

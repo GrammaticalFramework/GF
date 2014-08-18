@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common:../api
+--# -path=.:../romance:../abstract:../common:../api:../prelude
 
 concrete AllSpa of AllSpaAbs = 
   LangSpa,

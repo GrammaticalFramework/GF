@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../russian:../common:../abstract:../prelude
 
 resource SymbolicRus = Symbolic with 
   (Symbol = SymbolRus),

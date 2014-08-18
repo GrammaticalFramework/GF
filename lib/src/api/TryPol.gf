@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../polish:../common:../abstract:../prelude
 
 resource TryPol = SyntaxPol, LexiconPol, ParadigmsPol - [mkAdv] ** 
   open (P = ParadigmsPol) in {

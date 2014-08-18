@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../prelude
 
 concrete SymbolJpn of Symbol = CatJpn ** open Prelude, ResJpn in {
 

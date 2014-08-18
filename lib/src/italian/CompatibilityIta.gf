@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common
+--# -path=.:../romance:../abstract:../common:../prelude
 
 concrete CompatibilityIta of Compatibility = CatIta ** open Prelude, CommonRomance in {
 

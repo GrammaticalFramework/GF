@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../sindhi:../common:../abstract:../prelude
 
 resource SymbolicSnd = Symbolic with 
   (Symbol = SymbolSnd),

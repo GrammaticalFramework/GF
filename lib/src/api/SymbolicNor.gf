@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../norwegian:../scandinavian:../common:../abstract:../prelude
 
 resource SymbolicNor = Symbolic with 
   (Symbol = SymbolNor),

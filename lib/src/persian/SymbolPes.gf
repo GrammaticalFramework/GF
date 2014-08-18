@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolPes of Symbol = CatPes ** open Prelude, ResPes in {
 

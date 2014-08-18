@@ -1,3 +1,3 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete AllAra of AllAraAbs = LangAra ;

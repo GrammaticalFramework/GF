@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolPnb of Symbol = CatPnb ** open Prelude, ResPnb in {
 

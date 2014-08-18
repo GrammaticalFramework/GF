@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../swedish:../scandinavian:../common:../abstract:../prelude
 
 resource TrySwe = SyntaxSwe, LexiconSwe, ParadigmsSwe - [mkAdv] ** 
   open (P = ParadigmsSwe) in {

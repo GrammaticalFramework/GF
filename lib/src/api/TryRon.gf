@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../romanian:../common:../abstract:../prelude
 
 resource TryRon = SyntaxRon-[mkAdN], LexiconRon, ParadigmsRon - [mkAdv,mkAdN,mkOrd,mkDet,mkNP] ** 
   open (P = ParadigmsRon) in {

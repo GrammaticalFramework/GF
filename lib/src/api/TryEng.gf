@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:../english:../common:../abstract:../prelude
 
 resource TryEng = SyntaxEng-[mkAdN], LexiconEng, ParadigmsEng - [mkAdv,mkAdN,mkOrd,mkQuant] ** 
   open (P = ParadigmsEng) in {

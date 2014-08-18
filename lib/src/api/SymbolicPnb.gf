@@ -1,4 +1,4 @@
---# -path=.:present:mathematical:prelude
+--# -path=.:../punjabi:../common:../abstract:../prelude
 
 resource SymbolicPnb = Symbolic with 
   (Symbol = SymbolPnb),

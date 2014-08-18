@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common
+--# -path=.:../romance:../abstract:../common:../prelude
 
 concrete CompatibilitySpa of Compatibility = CatSpa ** open Prelude, CommonRomance in {
 

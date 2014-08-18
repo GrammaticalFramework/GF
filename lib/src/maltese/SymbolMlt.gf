@@ -4,7 +4,7 @@
 -- John J. Camilleri 2011 -- 2013
 -- Licensed under LGPL
 
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolMlt of Symbol = CatMlt ** open Prelude, ResMlt in {
 
