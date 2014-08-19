@@ -2,6 +2,7 @@
 concrete DocumentationBul of Documentation = CatBul ** open 
   ResBul,
   HTML in {
+flags coding=utf8 ;
 
 lincat
   Inflection = {t : Str; s1,s2,s3 : Str} ;

@@ -1,7 +1,7 @@
---# -coding=latin1
 concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in {
 
   flags optimize=all_subs ; -- gfc size from 2864336 to 6786 - i.e. factor 422
+    coding=utf8 ;
 
   lin
 
@@ -12,7 +12,7 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in 
       let acomp = (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s in {
       s = \\isMod,af => case isMod of {
         True => np.s ! NPCase Part ++ acomp ! af ;        -- minua isompi
-        _    => acomp ! af ++ "kuin" ++ np.s ! NPCase Nom -- isompi kuin minä
+        _    => acomp ! af ++ "kuin" ++ np.s ! NPCase Nom -- isompi kuin minÃ¤
         } 
       } ;
     CAdvAP ad ap np = {

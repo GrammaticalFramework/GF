@@ -1,7 +1,7 @@
---# -coding=latin1
 concrete NumeralCat of Numeral = CatCat [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoCat, Prelude in {
 
+  flags coding=utf8 ;
 --
 -- gcc M3.5.1, M3.5.2
 --
@@ -38,7 +38,7 @@ oper
 	
 	cardOrdReg : CardOrd -> Str -> Str -> Str = \co,sis,si -> case co of {
 		NCard _ => sis ;
-		NOrd Masc Sg => si + "è" ;
+		NOrd Masc Sg => si + "Ã¨" ;
 		NOrd Fem Sg => si + "ena" ;
 		NOrd Masc Pl => si + "ens" ;
 		NOrd Fem Pl => si + "enes"
@@ -55,7 +55,7 @@ oper
 	cardOrd3 : CardOrd -> (m,f:Str) -> Str = \co,dos,dues -> case co of {
 		NCard Masc => dos ;
 		NCard Fem => dues ;
-		NOrd Masc Sg => dos + "è" ;
+		NOrd Masc Sg => dos + "Ã¨" ;
 		NOrd Fem Sg => dos + "ena" ;
 		NOrd Masc Pl => dos + "ens" ;
 		NOrd Fem Pl => dos + "enes"

@@ -1,5 +1,5 @@
---# -coding=latin1
 concrete NumeralSwe of Numeral = CatSwe [Numeral,Digits] ** open ResSwe, MorphoSwe, Prelude in {
+  flags coding=utf8 ;
 
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;
@@ -10,19 +10,19 @@ lincat
 lin 
   num x = x ;
 
-  n2 = mkTal  "två"  "tolv"    "tjugo"   "andra"   "tolfte" ;
+  n2 = mkTal  "tvÃ¥"  "tolv"    "tjugo"   "andra"   "tolfte" ;
   n3 = mkTal  "tre"  "tretton" "trettio" "tredje"  "trettonde" ;
-  n4 = mkTal  "fyra" "fjorton" "fyrtio"  "fjärde"  "fjortonde" ;
+  n4 = mkTal  "fyra" "fjorton" "fyrtio"  "fjÃ¤rde"  "fjortonde" ;
   n5 = mkTal  "fem"  "femton"  "femtio"  "femte"   "femtonde" ;
-  n6 = mkTal  "sex"  "sexton"  "sextio"  "sjätte"  "sextonde" ;
+  n6 = mkTal  "sex"  "sexton"  "sextio"  "sjÃ¤tte"  "sextonde" ;
   n7 = mkTal  "sju"  "sjutton" "sjuttio" "sjunde"  "sjuttonde" ;
-  n8 = mkTal  "åtta" "arton"   "åttio"   "åttonde" "artonde" ;
+  n8 = mkTal  "Ã¥tta" "arton"   "Ã¥ttio"   "Ã¥ttonde" "artonde" ;
   n9 = mkTal  "nio"  "nitton"  "nittio"  "nionde"  "nittonde" ;
 
   pot01 = {
     s = \\f => table {
           NCard g => case g of {Neutr => "ett" ; _ => "en"} ;
-          _ => "första"
+          _ => "fÃ¶rsta"
           } ; 
     n = Sg
     } ;

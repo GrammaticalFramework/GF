@@ -1,8 +1,8 @@
---# -coding=latin1
  concrete SentenceRon of Sentence = 
   CatRon ** open Prelude, ResRon in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
     PredVP np vp = mkClause (np.s ! No).comp np.isPol np.a vp ;
@@ -24,8 +24,8 @@
                                     _  => vpr.s ! Imper PlP2  ++ vpr.comp ! agPl ++ vpr.ext ! Pos 
                                     };
                    <Pos, ImpF n True> => case n of 
-                                    {Sg => "sã"  ++ clNegSg ++ conjVP vpr agSg ++ vpr.comp ! agSg ++ vpr.ext ! Pos;
-                                     Pl => "sã"  ++  clNegPl ++ conjVP vpr agPl ++ vpr.comp ! agPl ++ vpr.ext ! Pos
+                                    {Sg => "sÃ£"  ++ clNegSg ++ conjVP vpr agSg ++ vpr.comp ! agSg ++ vpr.ext ! Pos;
+                                     Pl => "sÃ£"  ++  clNegPl ++ conjVP vpr agPl ++ vpr.comp ! agPl ++ vpr.ext ! Pos
                                      };
                     <Neg, ImpF n b> => case n of 
                                     {Sg => "nu" ++ clNegSg ++ vpr.s ! Inf ++ vpr.comp ! agSg ++ vpr.ext ! Pos;
@@ -72,7 +72,7 @@
 
     EmbedQS qs = {s = qs.s ! QIndir} ;
    EmbedVP vp = let a = agrP3 Masc Sg in 
-      { s= "sã" ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++vp.comp ! a ++ vp.ext ! Pos };
+      { s= "sÃ£" ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++vp.comp ! a ++ vp.ext ! Pos };
 
     UseCl  t p cl = {
       s = \\o => t.s ++ p.s ++ cl.s ! DDir ! t.t ! t.a ! p.p ! o

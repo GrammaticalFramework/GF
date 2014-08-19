@@ -3,10 +3,10 @@
 -- This module contains operations that are shared by the Scandinavian
 -- languages, without dependence on parameters.
 
---# -coding=latin1
 resource CommonScand = ParamX ** open Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 param
   Species = Indef | Def ;
@@ -38,7 +38,7 @@ param
    | ACompar  
    | ASuperl AFormSup ;
 
--- The $Number$ in $Weak$ only matters in "lilla"/"små".
+-- The $Number$ in $Weak$ only matters in "lilla"/"smÃ¥".
 
   AFormPos = Strong GenNum | Weak Number ;
   AFormSup = SupStrong | SupWeak ;
@@ -274,10 +274,10 @@ oper
         fin : Str ;          -- V1 har  ---s1
         inf : Str            -- V2 sagt ---s4
         } ;
-      a1 : Polarity => Agr => Str ; -- A1 inte ---s3 själv/själva/självt
+      a1 : Polarity => Agr => Str ; -- A1 inte ---s3 sjÃ¤lv/sjÃ¤lva/sjÃ¤lvt
       n2 : Agr => Str ;      -- N2 dig  ---s5  
       a2 : Str ;             -- A2 idag ---s6
-      ext : Str ;            -- S-Ext att hon går   ---s7
+      ext : Str ;            -- S-Ext att hon gÃ¥r   ---s7
       --- ea1,ev2,           --- these depend on params of v and a1
       en2,ea2,eext : Bool    -- indicate if the field exists
       } ;

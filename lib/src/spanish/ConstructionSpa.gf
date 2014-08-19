@@ -4,6 +4,7 @@ concrete ConstructionSpa of Construction = CatSpa **
   open SyntaxSpa, SymbolicSpa, ParadigmsSpa, 
        (L = LexiconSpa), (E = ExtraSpa), (I = IrregSpa), (R = ResSpa), (C = CommonRomance),
        Prelude in {
+flags coding=utf8 ;
 
 
 lin

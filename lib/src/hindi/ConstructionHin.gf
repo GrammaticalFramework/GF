@@ -2,6 +2,7 @@
 
 concrete ConstructionHin of Construction = CatHin ** 
   open SyntaxHin, SymbolicHin, ParadigmsHin, (L = LexiconHin), (E = ExtraHin), (G = GrammarHin), (R = ResHin), (S = StructuralHin), Prelude in {
+flags coding=utf8 ;
 
 
 lin

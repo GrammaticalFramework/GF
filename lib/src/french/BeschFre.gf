@@ -1,7 +1,7 @@
---# -coding=latin1
 resource BeschFre = open Prelude, MorphoFre in {
 
 flags optimize=noexpand ; -- faster and smaller than =all
+    coding=utf8 ;
 
 oper VerbeN = {s : VF => Str} ;
 oper mkNV : Verbe -> VerbeN = \ve -> {s = vvf ve} ;
@@ -16,29 +16,29 @@ oper v_nancy100inf : Str -> VerbeN = \ve -> {s = table {
 
 
 oper v_besch1 : Str -> VerbeN = \s -> mkNV (conjAvoir s) ;
-oper v_besch2 : Str -> VerbeN = \s -> mkNV (conjÊtre s) ;
+oper v_besch2 : Str -> VerbeN = \s -> mkNV (conjÃŠtre s) ;
 -- 3-5 not used
 oper v_besch6 : Str -> VerbeN = \s -> mkNV (conj1aimer s) ;
 oper v_besch7 : Str -> VerbeN = \s -> mkNV (conj1placer s) ;
 oper v_besch8 : Str -> VerbeN = \s -> mkNV (conj1manger s) ;
 oper v_besch9 : Str -> VerbeN = \s -> mkNV (conj1peser s) ;
-oper v_besch10 : Str -> VerbeN = \s -> mkNV (conj1céder s) ;
+oper v_besch10 : Str -> VerbeN = \s -> mkNV (conj1cÃ©der s) ;
 oper v_besch11 : Str -> VerbeN = \s -> mkNV (conj1jeter s) ;
 oper v_besch12 : Str -> VerbeN = \s -> mkNV (conj1jeter s) ;
 oper v_besch13 : Str -> VerbeN = \s -> mkNV (conj1aimer s) ;
-oper v_besch14 : Str -> VerbeN = \s -> mkNV (conj1assiéger s) ;
+oper v_besch14 : Str -> VerbeN = \s -> mkNV (conj1assiÃ©ger s) ;
 oper v_besch15 : Str -> VerbeN = \s -> mkNV (conj1aimer s) ; --- ?
 oper v_besch16 : Str -> VerbeN = \s -> mkNV (conj1payer s) ;
 oper v_besch17 : Str -> VerbeN = \s -> mkNV (conj1payer s) ;
 oper v_besch18 : Str -> VerbeN = \s -> mkNV (conj1envoyer s) ;
 oper v_besch19 : Str -> VerbeN = \s -> mkNV (conj2finir s) ;
-oper v_besch20 : Str -> VerbeN = \s -> mkNV (conj2haïr s) ;
+oper v_besch20 : Str -> VerbeN = \s -> mkNV (conj2haÃ¯r s) ;
 -- oper v_besch21 : Str -> VerbeN = \s -> mkNV (conj s) ; -- not used
 oper v_besch22 : Str -> VerbeN = \s -> mkNV (conj3aller s) ;
 oper v_besch23 : Str -> VerbeN = \s -> mkNV (conj3tenir s) ;
-oper v_besch24 : Str -> VerbeN = \s -> mkNV (conj3quérir s) ;
+oper v_besch24 : Str -> VerbeN = \s -> mkNV (conj3quÃ©rir s) ;
 oper v_besch25 : Str -> VerbeN = \s -> mkNV (conj3sentir s) ;
-oper v_besch26 : Str -> VerbeN = \s -> mkNV (conj3vêtir s) ;
+oper v_besch26 : Str -> VerbeN = \s -> mkNV (conj3vÃªtir s) ;
 oper v_besch27 : Str -> VerbeN = \s -> mkNV (conj3couvrir s) ;
 oper v_besch28 : Str -> VerbeN = \s -> mkNV (conj3cueillir s) ;
 oper v_besch29 : Str -> VerbeN = \s -> mkNV (conj3assaillir s) ;
@@ -49,7 +49,7 @@ oper v_besch33 : Str -> VerbeN = \s -> mkNV (conj3courir s) ;
 oper v_besch34 : Str -> VerbeN = \s -> mkNV (conj3mourir s) ;
 oper v_besch35 : Str -> VerbeN = \s -> mkNV (conj3sentir s) ;
 oper v_besch36 : Str -> VerbeN = \s -> mkNV (conj3fuir s) ;
-oper v_besch37 : Str -> VerbeN = \s -> mkNV (conj3ouïr s) ;
+oper v_besch37 : Str -> VerbeN = \s -> mkNV (conj3ouÃ¯r s) ;
 oper v_besch38 : Str -> VerbeN = \s -> mkNV (conj3cevoir s) ;
 oper v_besch39 : Str -> VerbeN = \s -> mkNV (conj3voir s) ;
 oper v_besch40 : Str -> VerbeN = \s -> mkNV (conj3pourvoir s) ;
@@ -76,10 +76,10 @@ oper v_besch60 : Str -> VerbeN = \s -> mkNV (conj3vaincre s) ;
 oper v_besch61 : Str -> VerbeN = \s -> mkNV (conj3traire s) ;
 oper v_besch62 : Str -> VerbeN = \s -> mkNV (conj3faire s) ;
 oper v_besch63 : Str -> VerbeN = \s -> mkNV (conj3plaire s) ;
-oper v_besch64 : Str -> VerbeN = \s -> mkNV (conj3connaître s) ;
-oper v_besch65 : Str -> VerbeN = \s -> mkNV (conj3naître s) ;
-oper v_besch66 : Str -> VerbeN = \s -> mkNV (conj3paître s) ;
-oper v_besch67 : Str -> VerbeN = \s -> mkNV (conj3croître s) ;
+oper v_besch64 : Str -> VerbeN = \s -> mkNV (conj3connaÃ®tre s) ;
+oper v_besch65 : Str -> VerbeN = \s -> mkNV (conj3naÃ®tre s) ;
+oper v_besch66 : Str -> VerbeN = \s -> mkNV (conj3paÃ®tre s) ;
+oper v_besch67 : Str -> VerbeN = \s -> mkNV (conj3croÃ®tre s) ;
 oper v_besch68 : Str -> VerbeN = \s -> mkNV (conj3croire s) ;
 oper v_besch69 : Str -> VerbeN = \s -> mkNV (conj3boire s) ;
 oper v_besch70 : Str -> VerbeN = \s -> mkNV (conj3clore s) ;
@@ -92,7 +92,7 @@ oper v_besch76 : Str -> VerbeN = \s -> mkNV (conj3vivre s) ;
 oper v_besch77 : Str -> VerbeN = \s -> mkNV (conj3lire s) ;
 oper v_besch78 : Str -> VerbeN = \s -> mkNV (conj3dire s) ;
 oper v_besch79 : Str -> VerbeN = \s -> mkNV (conj3rire s) ;
-oper v_besch80 : Str -> VerbeN = \s -> mkNV (conj3écrire s) ;
+oper v_besch80 : Str -> VerbeN = \s -> mkNV (conj3Ã©crire s) ;
 oper v_besch81 : Str -> VerbeN = \s -> mkNV (conj3confire s) ;
 oper v_besch82 : Str -> VerbeN = \s -> mkNV (conj3cuire s) ;
 
@@ -158,31 +158,31 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
 -- The worst case has three different stems.
 
   auxConj1 : Str -> Str -> Str -> Verbe = \jet, jett, jeter ->
-    verbHabituel jett jet jett jet jeter (jet+"é") (jet+"er") affixSgE affixPasseA ;
+    verbHabituel jett jet jett jet jeter (jet+"Ã©") (jet+"er") affixSgE affixPasseA ;
 
   conj1aimer : Str -> Verbe = \aimer -> 
     let {aim = troncVerb aimer} in
     auxConj1 aim aim aimer ;
 
-  conj1céder : Str -> Verbe = \céder -> 
+  conj1cÃ©der : Str -> Verbe = \cÃ©der -> 
     let {
-      ced = troncVerb céder ; 
+      ced = troncVerb cÃ©der ; 
       d   = Predef.dp 1 ced ;
       c   = Predef.tk 2 ced ; 
-      cèd = c + "è" + d ; 
-      céd = c + "é" + d
+      cÃ¨d = c + "Ã¨" + d ; 
+      cÃ©d = c + "Ã©" + d
       } 
-      in auxConj1 céd cèd céder ;
+      in auxConj1 cÃ©d cÃ¨d cÃ©der ;
 
-  conj1peser : Str -> Verbe = \céder -> ---- ? a verifier
+  conj1peser : Str -> Verbe = \cÃ©der -> ---- ? a verifier
     let {
-      ced = troncVerb céder ; 
+      ced = troncVerb cÃ©der ; 
       d   = Predef.dp 1 ced ;
       c   = Predef.tk 2 ced ; 
-      cèd = c + "è" + d ; 
-      céd = c + "e" + d
+      cÃ¨d = c + "Ã¨" + d ; 
+      cÃ©d = c + "e" + d
       } 
-      in auxConj1 céd cèd céder ;
+      in auxConj1 cÃ©d cÃ¨d cÃ©der ;
 
   conj1jeter : Str -> Verbe = \jeter ->
     let {
@@ -194,7 +194,7 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
   conj1placer : Str -> Verbe = \placer -> 
     let {
       pla = Predef.tk 3 placer ;
-      plac = preVoyelleFront (pla+"ç") (pla+"c")
+      plac = preVoyelleFront (pla+"Ã§") (pla+"c")
     } in
     auxConj1 plac plac placer ;
 
@@ -205,9 +205,9 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
     } in
     auxConj1 mange mange manger ;
 
-  conj1assiéger : Str -> Verbe = \assiéger ->
-    let {assi = Predef.tk 4 assiéger} in
-    auxConj1 (preVoyelleFront (assi+"ége") (assi+"ég")) (assi+"èg") assiéger ;
+  conj1assiÃ©ger : Str -> Verbe = \assiÃ©ger ->
+    let {assi = Predef.tk 4 assiÃ©ger} in
+    auxConj1 (preVoyelleFront (assi+"Ã©ge") (assi+"Ã©g")) (assi+"Ã¨g") assiÃ©ger ;
 
   conj1payer : Str -> Verbe = \payer -> 
     let {pa = Predef.tk 3 payer} in
@@ -223,9 +223,9 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
     case parler of {
       _ + "ir"              => conj2finir parler ;
       _ + "re"              => conj3rendre parler ;
-      _ + "éger"            => conj1assiéger parler ;
+      _ + "Ã©ger"            => conj1assiÃ©ger parler ;
       _ + ("eler" | "eter") => conj1jeter parler ;
-      _ + "éder"            => conj1céder parler ;
+      _ + "Ã©der"            => conj1cÃ©der parler ;
       _ + "cer"             => conj1placer parler ;
       _ + "ger"             => conj1manger parler ;
       _ + "yer"             => conj1payer parler ;
@@ -261,13 +261,13 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       } in
     verbHabituel fini finiss finiss fin finir fini finir affixSgS affixPasseI ;
 
-  conj2haïr : Str -> Verbe = \haïr ->
-    let {ha    = troncVerb haïr ;
+  conj2haÃ¯r : Str -> Verbe = \haÃ¯r ->
+    let {ha    = troncVerb haÃ¯r ;
          hai   = ha + "i" ; 
-         haï   = ha + "ï" ; 
-         haiss = ha + "ïss"
+         haÃ¯   = ha + "Ã¯" ; 
+         haiss = ha + "Ã¯ss"
         } in
-    verbHabituel hai haiss haiss ha haïr haï haïr affixSgS (affixPasse "ï" "ï") ;
+    verbHabituel hai haiss haiss ha haÃ¯r haÃ¯ haÃ¯r affixSgS (affixPasse "Ã¯" "Ã¯") ;
 
 
 --3 The third conjugation
@@ -279,23 +279,23 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
     let {t = Predef.tk 4 tenir} in
     verbHabituel 
       (t+"ien") (t+"en") (t+"ienn") t (t+"iendr") (t+"enu") tenir
-      affixSgS (affixPasse "in" "în") ;
+      affixSgS (affixPasse "in" "Ã®n") ;
 
 -- Many verbs have "is" in the past participle. But there is so much variation
 -- that the worst-case macro needs seven forms.
 
   auxConj3is : (_,_,_,_,_,_,_ : Str) -> Verbe =
-    \quier, quér, quièr, qu, querr, quis, quiss ->
+    \quier, quÃ©r, quiÃ¨r, qu, querr, quis, quiss ->
     verbAffixes 
-      quier quér quièr qu querr quièr quér
-      (quier + "s") quis quiss (quér + "ir") affixSgS affixPasseI ;
+      quier quÃ©r quiÃ¨r qu querr quiÃ¨r quÃ©r
+      (quier + "s") quis quiss (quÃ©r + "ir") affixSgS affixPasseI ;
 
   auxConj3ir : (_,_,_ : Str) -> Verbe = \sen, sent, i -> 
     auxConj3is sen sent sent sent (sent+"ir") (sent+i) (sent+i+"s") ;
 
-  conj3quérir : Str -> Verbe = \quérir ->
-    let {qu = Predef.tk 4 quérir} in
-    auxConj3is (qu+"ier") (qu+"ér") (qu+"ièr") qu (qu+"err") (qu+"is") (qu+"is") ;
+  conj3quÃ©rir : Str -> Verbe = \quÃ©rir ->
+    let {qu = Predef.tk 4 quÃ©rir} in
+    auxConj3is (qu+"ier") (qu+"Ã©r") (qu+"iÃ¨r") qu (qu+"err") (qu+"is") (qu+"is") ;
 
   conj3sentir : Str -> Verbe = \sentir ->
     let {
@@ -304,13 +304,13 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
     } in
     auxConj3ir sen sent "i" ;
 
-  conj3vêtir : Str -> Verbe = \vêtir -> 
+  conj3vÃªtir : Str -> Verbe = \vÃªtir -> 
     let {
-      s = Predef.tk 5 vêtir ;
-      vet = auxConj3ir "vêt" "vêt" "u"
+      s = Predef.tk 5 vÃªtir ;
+      vet = auxConj3ir "vÃªt" "vÃªt" "u"
     } in
     table {
-      Indi Presn Sg P3 => s + "vêt" ;
+      Indi Presn Sg P3 => s + "vÃªt" ;
       p              => s + vet ! p
       };
   
@@ -384,28 +384,28 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
     let {m = Predef.tk 5 mourir} in
     auxConj3ourir (m + "eur") (m + "our") (m + "ort") ;
 
--- A little auxiliary to cover "fuir" and "ouïr". 
--- *N.B.* some alternative forms for "ouïr" are still missing.
+-- A little auxiliary to cover "fuir" and "ouÃ¯r". 
+-- *N.B.* some alternative forms for "ouÃ¯r" are still missing.
 
-  auxConj3ui : AffixPasse -> (_,_,_ : Str) -> Verbe = \affpasse, o, ou, ouï ->
-    let {oi : Str = o + "i" ; oy : Str = o + "y" ; ouïr : Str = ouï + "r"} in
-    verbHabituel oi oy oi ou ouïr ouï ouïr affixSgS affpasse ;
+  auxConj3ui : AffixPasse -> (_,_,_ : Str) -> Verbe = \affpasse, o, ou, ouÃ¯ ->
+    let {oi : Str = o + "i" ; oy : Str = o + "y" ; ouÃ¯r : Str = ouÃ¯ + "r"} in
+    verbHabituel oi oy oi ou ouÃ¯r ouÃ¯ ouÃ¯r affixSgS affpasse ;
 
   conj3fuir : Str -> Verbe = \fuir ->
     let {fu = troncVerb fuir} in 
     auxConj3ui affixPasseI fu fu (fu + "i") ;
 
-  conj3ouïr : Str -> Verbe = \ouir ->
+  conj3ouÃ¯r : Str -> Verbe = \ouir ->
     let {o = Predef.tk 3 ouir} in
-    auxConj3ui (affixPasse "ï" "ï") o (o + "u") (o + "uï") ;
+    auxConj3ui (affixPasse "Ã¯" "Ã¯") o (o + "u") (o + "uÃ¯") ;
 
--- The verb "gésir" lacks many forms.
+-- The verb "gÃ©sir" lacks many forms.
 
-  conj3gésir : Str -> Verbe = \gésir -> 
-    let {g = Predef.tk 4 gésir} in
+  conj3gÃ©sir : Str -> Verbe = \gÃ©sir -> 
+    let {g = Predef.tk 4 gÃ©sir} in
     table {
-      Inf              => g + "ésir" ;
-      Indi  Presn   Sg p => g + lesAffixes "is" "is" "ît" ! p ; 
+      Inf              => g + "Ã©sir" ;
+      Indi  Presn   Sg p => g + lesAffixes "is" "is" "Ã®t" ! p ; 
       Indi  Presn   Pl p => g + "is" + affixPlOns ! p ;
       Indi  Imparf n  p => g + "is" + affixImparf ! n ! p ;
       Part PPres       => g + "isant" ;
@@ -431,8 +431,8 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
 
   conj3cevoir : Str -> Verbe = \cevoir ->
     let {re = Predef.tk 6 cevoir} in
-    auxConj3usS (re+"çoi") (re+"cev") (re+"çoiv") (re+"ç") 
-                (re+"cevr") (re+"çoiv") (re+"cev") (re+"cev") ;
+    auxConj3usS (re+"Ã§oi") (re+"cev") (re+"Ã§oiv") (re+"Ã§") 
+                (re+"cevr") (re+"Ã§oiv") (re+"cev") (re+"cev") ;
 
   conj3voir : Str -> Verbe = \voir -> 
     let {
@@ -467,7 +467,7 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       tdevoir = auxConj3usS "doi" "dev" "doiv" "d" "devr" "doiv" "dev" "dev"
       } in
     table {
-      Part (PPasse Masc Sg) => s + "dû" ;
+      Part (PPasse Masc Sg) => s + "dÃ»" ;
       p => s + tdevoir ! p
      } ;
 
@@ -485,7 +485,7 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
   conj3mouvoir : Str -> Verbe = \mouvoir -> 
     let {
       s = Predef.tk 7 mouvoir ;
-      mu = adjReg "mû" ;
+      mu = adjReg "mÃ»" ;
       tmouvoir = auxConj3usS "meu" "mouv" "meuv" "m" "mouvr" "meuv" "mouv" "mouv"
       } in
     table {
@@ -502,7 +502,7 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       Indi  Futur    Sg P3 => faudr + "a" ;
       Condi          Sg P3 => faudr + "ait" ;
       Subjo SPres   Sg P3 => faill + "e" ;
-      Subjo SImparf Sg P3 => pl + "ût" ;
+      Subjo SImparf Sg P3 => pl + "Ã»t" ;
       Part PPres          => fall + "ant" ;
       Part (PPasse g n)   => adjReg (pl + "u") ! g ! n ;
       _                   => nonExist
@@ -546,7 +546,7 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
   conj3asseoir : Str -> Verbe = \asseoir -> 
     let {
       ass = Predef.tk 4 asseoir ;
-      tasseoir = auxConj3is "ied" "ey" "ey" "" "iér" "is" "is"
+      tasseoir = auxConj3is "ied" "ey" "ey" "" "iÃ©r" "is" "is"
     } in 
     table {
       Inf => ass + "eoir" ;
@@ -571,17 +571,17 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       tseoir = conj3asseoir seoir
     } in
     table {
-      Indi Presn   Pl P3 => s + "iéent" ;
+      Indi Presn   Pl P3 => s + "iÃ©ent" ;
       Indi _      _  P1 => nonExist ;
       Indi _      _  P2 => nonExist ;
       Indi Passe  _  _  => nonExist ;
       Condi       _  P1 => nonExist ;
       Condi       _  P2 => nonExist ;
-      Subjo SPres Sg P3 => s + "iée" ;
-      Subjo SPres Pl P3 => s + "iéent" ;
+      Subjo SPres Sg P3 => s + "iÃ©e" ;
+      Subjo SPres Pl P3 => s + "iÃ©ent" ;
       Subjo _     _  _  => nonExist ;
       Imper _           => nonExist ;
-      Part PPres        => s + "éant" ;      
+      Part PPres        => s + "Ã©ant" ;      
       t => tseoir ! t
       } ;
 
@@ -617,19 +617,19 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
     } in
     \\p => e + tchoir ! p ;
 
-  conj3échoir : Str -> Verbe = \échoir -> 
-    let {techoir = conj3choir échoir} in
+  conj3Ã©choir : Str -> Verbe = \Ã©choir -> 
+    let {techoir = conj3choir Ã©choir} in
     table {
       Indi _      _  P1 => nonExist ;
       Indi _      _  P2 => nonExist ;
-      Indi Presn Pl P3   => Predef.tk 3 échoir + "éent" ;
----v  Indi Presn Pl P3   => Predef.tk 3 échoir + variants {"oient" ; "éent"} ;
+      Indi Presn Pl P3   => Predef.tk 3 Ã©choir + "Ã©ent" ;
+---v  Indi Presn Pl P3   => Predef.tk 3 Ã©choir + variants {"oient" ; "Ã©ent"} ;
       Subjo _    _  P1 => nonExist ;
       Subjo _    _  P2 => nonExist ;
       Condi       _  P1 => nonExist ;
       Condi       _  P2 => nonExist ;
       Imper _          => nonExist ;
-      Part PPres       => Predef.tk 3 échoir + "éant" ;      
+      Part PPres       => Predef.tk 3 Ã©choir + "Ã©ant" ;      
       t => techoir ! t 
       } ;
  
@@ -722,9 +722,9 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
      auxConj3re 
        affixSgS affixPasseU boi buv boiv b (boi + "r") (b + "u") (b + "us") ;
 
-  auxConj3ît : Verbe -> Str -> Verbe = \conj,plaît ->
+  auxConj3Ã®t : Verbe -> Str -> Verbe = \conj,plaÃ®t ->
     table {
-      Indi Presn Sg P3 => plaît ;
+      Indi Presn Sg P3 => plaÃ®t ;
       t => conj ! t
       } ;
 
@@ -733,50 +733,50 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       pl = Predef.tk 4 plaire ;
       tplaire = auxConj3oire (pl + "ai") (pl + "ais") (pl + "ais") pl  
     } in
-    auxConj3ît tplaire (pl + "aît") ;
+    auxConj3Ã®t tplaire (pl + "aÃ®t") ;
 
-  conj3connaître : Str -> Verbe = \connaître -> 
+  conj3connaÃ®tre : Str -> Verbe = \connaÃ®tre -> 
     let {
-      conn = Predef.tk 5 connaître ;
+      conn = Predef.tk 5 connaÃ®tre ;
       connaiss = conn + "aiss" ;
       tconnaitre = 
         auxConj3re 
           affixSgS affixPasseU (conn + "ai") connaiss connaiss 
-          conn (conn + "aîtr") (conn + "u") (conn + "us")
+          conn (conn + "aÃ®tr") (conn + "u") (conn + "us")
     } in 
-    auxConj3ît tconnaitre (conn + "aît") ;
+    auxConj3Ã®t tconnaitre (conn + "aÃ®t") ;
 
-  conj3naître : Str -> Verbe = \naître -> 
+  conj3naÃ®tre : Str -> Verbe = \naÃ®tre -> 
     let {
-      n = Predef.tk 5 naître ;
+      n = Predef.tk 5 naÃ®tre ;
       tnaitre = auxConj3re 
                    affixSgS affixPasseI
                    (n + "ai") (n + "aiss") (n + "aiss") (n + "aqu") 
-                   (n + "aîtr") (n + "é") (n + "és")
+                   (n + "aÃ®tr") (n + "Ã©") (n + "Ã©s")
     } in
-    auxConj3ît tnaitre (n + "aît") ;
+    auxConj3Ã®t tnaitre (n + "aÃ®t") ;
 
--- The conjugation of "paître" is defective in a curious way, especially
--- if compared with "repaître". According to Bescherelle, the invariable 
+-- The conjugation of "paÃ®tre" is defective in a curious way, especially
+-- if compared with "repaÃ®tre". According to Bescherelle, the invariable 
 -- past participle is only used as a term of "fauconnerie" (one would expect it
 -- to be defective rather than invariable).
 
-  conj3paître : Str -> Verbe = \paître ->
-    let {tpaitre = conj3connaître paître} in
+  conj3paÃ®tre : Str -> Verbe = \paÃ®tre ->
+    let {tpaitre = conj3connaÃ®tre paÃ®tre} in
     table {
       Indi Passe _ _     => nonExist ;
       Subjo SImparf _ _ => nonExist ;
-      Part (PPasse _ _) => Predef.tk 5 paître + "u" ;
+      Part (PPasse _ _) => Predef.tk 5 paÃ®tre + "u" ;
       p => tpaitre ! p
     } ;
 
-  conj3repaître = conj3connaître ;
+  conj3repaÃ®tre = conj3connaÃ®tre ;
 
-  conj3croître : Str -> Verbe = \croître ->
-    let {cr = Predef.tk 5 croître} in
+  conj3croÃ®tre : Str -> Verbe = \croÃ®tre ->
+    let {cr = Predef.tk 5 croÃ®tre} in
     auxConj3re 
-      affixSgS (affixPasse "û" "û") (cr + "oî") (cr + "oiss") 
-      (cr + "oiss") cr (cr + "oîtr") (cr + "û") (cr + "ûs") ;
+      affixSgS (affixPasse "Ã»" "Ã»") (cr + "oÃ®") (cr + "oiss") 
+      (cr + "oiss") cr (cr + "oÃ®tr") (cr + "Ã»") (cr + "Ã»s") ;
 
   conj3croire : Str -> Verbe = \croire -> 
     let {cr = Predef.tk 4 croire} in
@@ -800,7 +800,7 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
                  nonExist (clo + "r") clos clos
     } in
     table {
-      Indi Presn Sg P3 => Predef.tk 1 clo + "ôt" ;
+      Indi Presn Sg P3 => Predef.tk 1 clo + "Ã´t" ;
       Indi Presn Pl P1 => nonExist ;
       Indi Presn Pl P2 => nonExist ;
       Indi Imparf _ _ => nonExist ;
@@ -821,7 +821,7 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
   conj3absoudre : Str -> Verbe = \absoudre ->
     let {
       abso = Predef.tk 4 absoudre ;
-      tabsoudre = conj3résoudre absoudre
+      tabsoudre = conj3rÃ©soudre absoudre
     } in
     table {
       Indi Passe _ _ => nonExist ;
@@ -831,8 +831,8 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       p => tabsoudre ! p
       } ;
 
-  conj3résoudre : Str -> Verbe = \résoudre ->
-    let {reso = Predef.tk 4 résoudre} in
+  conj3rÃ©soudre : Str -> Verbe = \rÃ©soudre ->
+    let {reso = Predef.tk 4 rÃ©soudre} in
     auxConj3re 
       affixSgS affixPasseU (reso + "u") (reso + "lv") (reso + "lv") 
       (reso + "l") (reso + "udr") (reso + "lu") (reso + "lus") ;
@@ -868,10 +868,10 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
     let {
       viv = troncVerb vivre ;
       vi  = Predef.tk 1 viv ;
-      véc = Predef.tk 1 vi + "éc"
+      vÃ©c = Predef.tk 1 vi + "Ã©c"
     } in 
     auxConj3re 
-      affixSgS affixPasseU vi viv viv véc (viv + "r") (véc + "u") (véc + "us") ;
+      affixSgS affixPasseU vi viv viv vÃ©c (viv + "r") (vÃ©c + "u") (vÃ©c + "us") ;
 
   conj3lire : Str -> Verbe = \lire -> 
     let {
@@ -907,9 +907,9 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
     auxConj3re 
       affixSgS affixPasseI ecri ecriv ecriv ecrivi (ecri + "r") ecrit (ecrit+"s") ;
 
-  conj3écrire : Str -> Verbe = \écrire ->
-    let {écri = troncVerb écrire} in
-    auxConj3scrire écri (écri + "v") (écri + "v") (écri + "t") ;
+  conj3Ã©crire : Str -> Verbe = \Ã©crire ->
+    let {Ã©cri = troncVerb Ã©crire} in
+    auxConj3scrire Ã©cri (Ã©cri + "v") (Ã©cri + "v") (Ã©cri + "t") ;
 
   conj3confire : Str -> Verbe = \confire -> 
     let {confi = troncVerb confire} in
@@ -929,7 +929,7 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       s = Predef.tk 5 aller ;
       pres = formesPresAi "v" "all" ;
       taller = verbHabituel 
-                            "all" "all" "aill" "all" "ir" "allé" "aller"
+                            "all" "all" "aill" "all" "ir" "allÃ©" "aller"
                             affixSgS affixPasseA
     } in
     table {
@@ -940,22 +940,22 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       t                  => s + taller ! t
       } ;
 
-  conjÊtre : Str -> Verbe = \etre -> 
+  conjÃŠtre : Str -> Verbe = \etre -> 
     let {
       s = Predef.tk 4 etre ;
       sg = lesAffixes "suis" "es" "est" ;
-      pl = lesAffixes "sommes" "êtes" "sont" ;
+      pl = lesAffixes "sommes" "Ãªtes" "sont" ;
       tetre = verbHabituel 
-                "soi" "soy" "soi" "f" "ser" "été" "être" affixSgS affixPasseU
+                "soi" "soy" "soi" "f" "ser" "Ã©tÃ©" "Ãªtre" affixSgS affixPasseU
     } in
     table {
       Indi  Presn    Sg p  => s + sg ! p ;
       Indi  Presn    Pl p  => s + pl ! p ;
-      Indi  Imparf  n  p  => s + "ét"   + affixImparf ! n ! p ;
+      Indi  Imparf  n  p  => s + "Ã©t"   + affixImparf ! n ! p ;
       Subjo SPres  Sg p  => s + "soi"  + affixSgS ! p ;
       Subjo SPres  Pl P3 => s + "soient" ;
       Subjo SPres  Pl p  => s + "soy"  + affixPlOns ! p ;
-      Part PPres         => s + "étant" ;
+      Part PPres         => s + "Ã©tant" ;
       t                  => s + tetre ! t
       } ;
 

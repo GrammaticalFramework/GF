@@ -1,7 +1,7 @@
---# -coding=latin1
 concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre ** 
   open CommonRomance, PhonoFre, MorphoFre, ParadigmsFre, ParamX, ResFre, Prelude in {
 
+  flags coding=utf8 ;
   lin
     EstcequeS qs          = {s = "est-ce" ++ elisQue ++ qs.s ! Indic} ;
     EstcequeIAdvS idet qs = {s = idet.s ++ "est-ce" ++ elisQue ++ qs.s ! Indic} ;
@@ -28,7 +28,7 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
       "elles" "les" "leur" "eux" "leur" "leur" "leurs"
       Fem Pl P3 ;
     this8fem_NP = pn2np (mkPN ["celle-ci"] Fem) ;
-    those8fem_NP = makeNP ["celles-là"] Fem Pl ;
+    those8fem_NP = makeNP ["celles-lÃ "] Fem Pl ;
     we8fem_Pron = mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
       Fem Pl P1 ;
     whoPl8fem_IP = 
@@ -53,7 +53,7 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
     ce_Pron = 
       let ce = elision "c" 
       in 
-      mkPronoun ce ce ce ("cela" | "ça") "son" (elisPoss "s") "ses" Masc Sg P3 ; ---- variants?
+      mkPronoun ce ce ce ("cela" | "Ã§a") "son" (elisPoss "s") "ses" Masc Sg P3 ; ---- variants?
 
     AdvDatVP = insertClit3 datClit ;
     AdvGenVP = insertClit3 genClit ;

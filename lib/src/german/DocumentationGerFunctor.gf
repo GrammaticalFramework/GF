@@ -10,6 +10,7 @@ incomplete concrete DocumentationGerFunctor of Documentation = CatGer ** open
   Prelude,
   HTML
 in {
+flags coding=utf8 ;
 
 
 lincat

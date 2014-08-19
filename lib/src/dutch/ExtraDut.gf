@@ -1,8 +1,8 @@
---# -coding=latin1
 concrete ExtraDut of ExtraDutAbs = CatDut ** 
   open ResDut, MorphoDut, Coordination, Prelude, IrregDut, (P = ParadigmsDut) in 
 {
 
+  flags coding=utf8 ;
 
   lincat
     VPI   = {s : Bool => Str} ;
@@ -32,7 +32,7 @@ concrete ExtraDut of ExtraDutAbs = CatDut **
 --
 --    TImpfSubj  = {s = [] ; t = Past ; m = MConjunct} ;   --# notpresent
 --
---    moegen_VV = auxVV mögen_V ;
+--    moegen_VV = auxVV mÃ¶gen_V ;
 --
 --} 
 
@@ -59,7 +59,7 @@ lin
           let verb = vpi.s ! o ! agr 
           in case o of {
             Main => subj ++ verb ;
-            Inv  => verb ++ subj ;   ---- älskar henne och sover jag
+            Inv  => verb ++ subj ;   ---- Ã¤lskar henne och sover jag
             Sub  => subj ++ verb 
             }
         } ;

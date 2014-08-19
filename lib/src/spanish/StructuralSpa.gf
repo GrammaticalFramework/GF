@@ -1,9 +1,9 @@
---# -coding=latin1
 concrete StructuralSpa of Structural = CatSpa ** 
   open PhonoSpa, MorphoSpa, ParadigmsSpa, BeschSpa, 
        MakeStructuralSpa, (X = ConstructX), Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 lin
   -- have_V3
@@ -21,10 +21,10 @@ lin
   although_Subj = ss "aunque" ** {m = Conjunct} ;
   and_Conj = {s1 = [] ; s2 = etConj.s ; n = Pl} ;
   at_least_AdN = ss "al menos" ;
-  at_most_AdN = ss "a lo más" ;
+  at_most_AdN = ss "a lo mÃ¡s" ;
   because_Subj = ss "porque" ** {m = Indic} ;
   before_Prep = {s = "antes" ; c = MorphoSpa.genitive ; isDir = False} ;
-  behind_Prep = {s = "detrás" ; c = MorphoSpa.genitive ; isDir = False} ;
+  behind_Prep = {s = "detrÃ¡s" ; c = MorphoSpa.genitive ; isDir = False} ;
   between_Prep = mkPrep "entre" ;
   both7and_DConj = {s1,s2 = etConj.s ; n = Pl} ;
   but_PConj = ss "pero" ;
@@ -45,32 +45,32 @@ lin
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun 
-     "él" "lo" "le" "él"
+     "Ã©l" "lo" "le" "Ã©l"
      "su" "su" "sus" "sus"
       Masc Sg P3 ;
-  here_Adv = mkAdv "aquí" ;
-  here7to_Adv = mkAdv ["para aquí"] ;
-  here7from_Adv = mkAdv ["de aquí"] ;
+  here_Adv = mkAdv "aquÃ­" ;
+  here7to_Adv = mkAdv ["para aquÃ­"] ;
+  here7from_Adv = mkAdv ["de aquÃ­"] ;
   how_IAdv = ss "como" ;
-  how8many_IDet = mkIDet "cuántos" "cuántas" Pl ;
-  how8much_IAdv = ss "cuánto" ;
+  how8many_IDet = mkIDet "cuÃ¡ntos" "cuÃ¡ntas" Pl ;
+  how8much_IAdv = ss "cuÃ¡nto" ;
   if_Subj = ss "si" ** {m = Indic} ;
   if_then_Conj = {s1 = "si" ; s2 = "entonces" ; n = Sg ; lock_Conj = <>} ;
   in8front_Prep = {s = "delante" ; c = MorphoSpa.genitive ; isDir = False} ;
   i_Pron = 
     mkPronoun
-      "yo" "me" "me" "mí"
+      "yo" "me" "me" "mÃ­"
       "mi" "mi" "mis" "mis"
       Masc Sg P1 ;
   in_Prep = mkPrep "en" ;
   it_Pron = 
     mkPronoun
-      "él" "lo" "le" "él"
+      "Ã©l" "lo" "le" "Ã©l"
       "su" "su" "sus" "sus"
       Masc Sg P3 ;
   less_CAdv = X.mkCAdv "menos" conjThan ; ----
   many_Det = mkDeterminer "muchos" "muchas" Pl False ;
-  more_CAdv = X.mkCAdv "más" conjThan ;
+  more_CAdv = X.mkCAdv "mÃ¡s" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la mayor parte"] ; c = CPrep P_de ;
     a = PNoAg} ;
   much_Det = mkDeterminer "mucho" "mucha" Sg False ;
@@ -78,7 +78,7 @@ lin
   no_Quant =
     let
       ningun : ParadigmsSpa.Number => ParadigmsSpa.Gender => Case => Str = table {
-        Sg => \\g,c => prepCase c ++ genForms "ningún" "ninguna" ! g ;
+        Sg => \\g,c => prepCase c ++ genForms "ningÃºn" "ninguna" ! g ;
         Pl => \\g,c => prepCase c ++ genForms "ningunos" "ningunas" ! g
         }
     in {
@@ -109,13 +109,13 @@ lin
   so_AdA = ss "tanto" ;
   somebody_NP = pn2np (mkPN "alguien" Masc) ;
   somePl_Det = mkDeterminer "algunos" "algunas" Pl False ;
-  someSg_Det = mkDeterminer "algún" "alguna" Sg False ; 
+  someSg_Det = mkDeterminer "algÃºn" "alguna" Sg False ; 
   something_NP = pn2np (mkPN ["algo"] Masc) ;
   somewhere_Adv = ss ["en alguna parte"] ;
   that_Quant = mkQuantifier "ese" "esa" "esos" "esas" ;
-  there_Adv = mkAdv "allí" ; -- allá
-  there7to_Adv = mkAdv ["para allí"] ;
-  there7from_Adv = mkAdv ["de allí"] ;
+  there_Adv = mkAdv "allÃ­" ; -- allÃ¡
+  there7to_Adv = mkAdv ["para allÃ­"] ;
+  there7from_Adv = mkAdv ["de allÃ­"] ;
   therefore_PConj = ss ["por eso"] ;
   they_Pron = mkPronoun
     "ellos" "los" "les" "ellos"
@@ -133,24 +133,24 @@ lin
       "nosotros" "nos" "nos" "nosotros"
       "nuestro" "nuestra" "nuestros" "nuestras"
       Masc Pl P1 ;
-  whatSg_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Sg} ;
-  whatPl_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Pl} ; ---
-  when_IAdv = ss "cuándo" ;
+  whatSg_IP = {s = \\c => prepCase c ++ ["quÃ©"] ; a = aagr Masc Sg} ;
+  whatPl_IP = {s = \\c => prepCase c ++ ["quÃ©"] ; a = aagr Masc Pl} ; ---
+  when_IAdv = ss "cuÃ¡ndo" ;
   when_Subj = ss "cuando" ** {m = Indic} ;
-  where_IAdv = ss "dónde" ;
+  where_IAdv = ss "dÃ³nde" ;
   which_IQuant = {s = table {
-    Sg => \\g,c => prepCase c ++ "qué" ; --- cual
-    Pl => \\g,c => prepCase c ++ "qué" 
+    Sg => \\g,c => prepCase c ++ "quÃ©" ; --- cual
+    Pl => \\g,c => prepCase c ++ "quÃ©" 
     }
    } ;
-  whoPl_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Pl} ;
-  whoSg_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Sg} ;
-  why_IAdv = ss ["por qué"] ;
+  whoPl_IP = {s = \\c => prepCase c ++ "quiÃ©n" ; a = aagr Masc Pl} ;
+  whoSg_IP = {s = \\c => prepCase c ++ "quiÃ©n" ; a = aagr Masc Sg} ;
+  why_IAdv = ss ["por quÃ©"] ;
   without_Prep = mkPrep "sin" ;
   with_Prep = mkPrep "con" ;
-  yes_Utt = ss "sí" ;
+  yes_Utt = ss "sÃ­" ;
   youSg_Pron = mkPronoun 
-    "tú" "te" "te" "ti"
+    "tÃº" "te" "te" "ti"
     "tu" "tu" "tus" "tus"
     Masc Sg P2 ;
   youPl_Pron =
@@ -176,6 +176,6 @@ lin
 
   that_Subj = {s = "que" ; m = Conjunct} ;
 
-  lin language_title_Utt = ss "español" ;
+  lin language_title_Utt = ss "espaÃ±ol" ;
 }
 

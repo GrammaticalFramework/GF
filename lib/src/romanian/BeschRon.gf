@@ -1,7 +1,7 @@
---# -coding=latin1
 resource BeschRon = open Prelude, MorphoRon,CatRon in {
 
 flags optimize=noexpand ; 
+    coding=utf8 ;
 
 oper mkNV : Verbe -> V = \ve -> {s = ve.s ; isRefl = \\_ => RNoAg ; nrClit = VNone; pReflClit = Composite ;lock_V = <> } ;
 oper mkRVAcc : Verbe -> V = \ve -> {s = ve.s ; isRefl = \\a => aRefl a; nrClit = VRefl; pReflClit = Short ;lock_V = <>} ;
@@ -14,7 +14,7 @@ oper mkRVDat : Verbe -> V = \ve -> {s = ve.s ; isRefl = \\a => dRefl a; nrClit =
 -- for Group 3 - verbs ending in e - most verbs have phonetical mutations in the stem, for different 
 --        tenses, difficult to find a pattern that describes this behavior
 --        default conjugation - covers almost 20%
--- for Group 4 - verbs ending in i/î - the default behaviour is the conjugation with "sc", which 
+-- for Group 4 - verbs ending in i/Ã® - the default behaviour is the conjugation with "sc", which 
 --        characterizes almost 75 % of the verbs
 -- in general : Group 1 + Group 4 are the most frequent for verbs
 -- the smart paradigm covers (60-70% cases for a reasonably big database)

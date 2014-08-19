@@ -1,5 +1,5 @@
---# -coding=latin1
 instance DiffDan of DiffScand = open CommonScand, Prelude in {
+  flags coding=utf8 ;
 
 -- Parameters.
 
@@ -40,7 +40,7 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
       mkVerb9 "have" "har" "hav" "havde" "haft" "haven" "havet" "havne" "havende" **
       {part = [] ; isVaere = False} ;
     verbBe = 
-      mkVerb9 "være" "er" "var" "var" "været" "væren" "været" "værne" "værende" **
+      mkVerb9 "vÃ¦re" "er" "var" "var" "vÃ¦ret" "vÃ¦ren" "vÃ¦ret" "vÃ¦rne" "vÃ¦rende" **
       {part = [] ; isVaere = False} ;
     verbBecome = 
       mkVerb9 "blive" "bliver" "bliv" "blev" "blevet" 
@@ -69,7 +69,7 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
       RPrep _ => gennumForms "hvilken" "hvilket" "hvilke" ! gennum g n
       } ;
 
-    pronSuch = gennumForms "sådan" "sådant" "sådanne" ;
+    pronSuch = gennumForms "sÃ¥dan" "sÃ¥dant" "sÃ¥danne" ;
 
     reflPron : Agr -> Str = \a -> case <a.n,a.p> of {
       <Pl,P1> => "os" ;

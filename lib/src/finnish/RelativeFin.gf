@@ -1,12 +1,12 @@
---# -coding=latin1
 concrete RelativeFin of Relative = CatFin ** open Prelude, ResFin, MorphoFin, StemFin in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
 
     RelCl cl = {
-      s = \\t,a,p,_ => "siten" ++ "että" ++ cl.s ! t ! a ! p ! SDecl ;
+      s = \\t,a,p,_ => "siten" ++ "ettÃ¤" ++ cl.s ! t ! a ! p ! SDecl ;
       ---- sellainen
       c = NPCase Nom
       } ;

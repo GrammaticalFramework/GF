@@ -2,6 +2,7 @@
 
 concrete ConstructionSwe of Construction = CatSwe ** 
   open SyntaxSwe, SymbolicSwe, ParadigmsSwe, (L = LexiconSwe), (E = ExtraSwe), (G = GrammarSwe), (R = ResSwe), (C = CommonScand), Prelude in {
+flags coding=utf8 ;
 
 
 lin

@@ -11,6 +11,7 @@ incomplete concrete DocumentationSpaFunctor of Documentation = CatSpa ** open
   Prelude,
   HTML
 in {
+flags coding=utf8 ;
 
 
 lincat

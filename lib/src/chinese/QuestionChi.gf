@@ -2,6 +2,7 @@ concrete QuestionChi of Question = CatChi **
   open ResChi, Prelude in {
 
   flags optimize=all_subs ;
+  flags coding=utf8 ;
 
   lin
 

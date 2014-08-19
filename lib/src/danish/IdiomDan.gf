@@ -1,8 +1,8 @@
---# -coding=latin1
 concrete IdiomDan of Idiom = CatDan ** 
   open MorphoDan, ParadigmsDan, IrregDan, Prelude in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
     ImpersCl vp = mkClause "det" (agrP3 MorphoDan.neutrum Sg) vp ;
@@ -31,7 +31,7 @@ concrete IdiomDan of Idiom = CatDan **
       } ;
 
     ProgrVP vp = 
-      insertObj (\\a => ["ved å"] ++ infVP vp a) (predV verbBe) ;
+      insertObj (\\a => ["ved Ã¥"] ++ infVP vp a) (predV verbBe) ;
 
     ImpPl1 vp = {s = ["lad os"] ++ infVP vp {g = Utr ; n = Pl ; p = P1}} ;
 

@@ -10,6 +10,7 @@ concrete TerminologySpa of Terminology = CatSpa ** open
   Prelude
 
 in {
+flags coding=utf8 ;
 
 
 lincat

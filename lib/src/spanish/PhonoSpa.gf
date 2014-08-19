@@ -1,4 +1,5 @@
 resource PhonoSpa = open Prelude in {
+flags coding=utf8 ;
 
 --3 Elision
 --

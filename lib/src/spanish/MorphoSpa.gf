@@ -1,5 +1,4 @@
 --# -path=.:../romance:../common:../../prelude
---# -coding=latin1
 
 --1 A Simple Spanish Resource Morphology
 --
@@ -14,6 +13,7 @@ resource MorphoSpa = CommonRomance, ResSpa **
   CatSpa in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 
 --2 Nouns
@@ -46,16 +46,16 @@ oper
 
   mkNomReg : Str -> Noun = \mec ->
     case mec of {
-      _ + ("o" | "e" | "é" | "á") => mkNoun (nomVino mec) Masc ;  --bebé, papá; how about other accented vocal endings? champú champúes
+      _ + ("o" | "e" | "Ã©" | "Ã¡") => mkNoun (nomVino mec) Masc ;  --bebÃ©, papÃ¡; how about other accented vocal endings? champÃº champÃºes
       _ + "a" => mkNoun (nomVino mec) Fem ;
       _ + "z" => mkNounIrreg mec (init mec + "ces") Fem ;
-      _ + "ión" => mkNounIrreg mec (tk 2 mec + "ones") Fem ;
+      _ + "iÃ³n" => mkNounIrreg mec (tk 2 mec + "ones") Fem ;
       _ + "tud" => mkNounIrreg mec (mec + "es") Fem ;
-      _ + "án" => mkNounIrreg mec (tk 2 mec + "anes") Masc ;
-      _ + "én" => mkNounIrreg mec (tk 2 mec + "enes") Masc ;
-      _ + "ín" => mkNounIrreg mec (tk 2 mec + "ines") Masc ;
-      _ + "ón" => mkNounIrreg mec (tk 2 mec + "ones") Masc ;
-      _ + "ún" => mkNounIrreg mec (tk 2 mec + "unes") Masc ;
+      _ + "Ã¡n" => mkNounIrreg mec (tk 2 mec + "anes") Masc ;
+      _ + "Ã©n" => mkNounIrreg mec (tk 2 mec + "enes") Masc ;
+      _ + "Ã­n" => mkNounIrreg mec (tk 2 mec + "ines") Masc ;
+      _ + "Ã³n" => mkNounIrreg mec (tk 2 mec + "ones") Masc ;
+      _ + "Ãºn" => mkNounIrreg mec (tk 2 mec + "unes") Masc ;
       _   => mkNoun (nomPilar mec) Masc
       } ;
 
@@ -87,31 +87,31 @@ oper
     mkAdj util util utiles utiles (util + "mente") ;
 
   -- adjectives that end in consonant but have different masc and fem forms
-  -- español, hablador ...
+  -- espaÃ±ol, hablador ...
   adjEspanol : Str -> Str -> Adj = \espanol,espanola ->
     mkAdj espanol espanola (espanol + "es") (espanol + "as") (espanola + "mente") ;
 
   adjBlu : Str -> Adj = \blu -> 
     mkAdj blu blu blu blu blu ; --- 
 
- -- francés francesa franceses francesas
+ -- francÃ©s francesa franceses francesas
   adjEs : Str -> Adj = \francEs ->
     let franc  : Str = Predef.tk 2 francEs ;
         frances : Str = franc + "es" ;
     in mkAdj francEs (frances + "a") (frances + "es") (frances + "as") (frances + "amente") ;
  
 
-   -- alemán alemana alemanes alemanas
+   -- alemÃ¡n alemana alemanes alemanas
   adjVn : Str -> Adj = \alemAn ->
     let alemA : Str = init alemAn ;
         alem  : Str = init alemA ;
         A : Str = last alemA ;
         V : Str = case A of {
-          "á" => "a" ;
-          "é" => "e" ;
-          "í" => "i" ;
-          "ó" => "o" ;
-          "ú" => "u"
+          "Ã¡" => "a" ;
+          "Ã©" => "e" ;
+          "Ã­" => "i" ;
+          "Ã³" => "o" ;
+          "Ãº" => "u"
         } ;
         alemVn : Str = alem + V + "n" ;
     in mkAdj alemAn (alemVn + "a") (alemVn + "es")
@@ -121,8 +121,8 @@ oper
     case solo of {
       _ + "o" => adjSolo solo ;
       _ + ("e" | "a") => adjUtil solo (solo + "s") ;
-      _ + "és" => adjEs solo ;
-      _ + ("á" | "é" | "í" | "ó" | "ú")  + "n" => adjVn solo ;
+      _ + "Ã©s" => adjEs solo ;
+      _ + ("Ã¡" | "Ã©" | "Ã­" | "Ã³" | "Ãº")  + "n" => adjVn solo ;
       _   => adjUtil solo (solo + "es")
       } ;
 
@@ -174,7 +174,7 @@ oper
       sa  : Str = Predef.drop 1 esa ;
       sos : Str = Predef.drop 1 esos ;
       sas : Str = Predef.drop 1 esas ;
-      E   : Str = "é" ;
+      E   : Str = "Ã©" ;
       attrforms : Number => Gender => Case => Str = table {
         Sg => \\g,c => prepCase c ++ genForms ese esa ! g ;
         Pl => \\g,c => prepCase c ++ genForms esos esas ! g ---- 

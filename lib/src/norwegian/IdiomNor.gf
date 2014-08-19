@@ -1,8 +1,8 @@
---# -coding=latin1
 concrete IdiomNor of Idiom = CatNor ** 
   open MorphoNor, ParadigmsNor, IrregNor, Prelude in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
 
@@ -32,7 +32,7 @@ concrete IdiomNor of Idiom = CatNor **
       } ;
 
     ProgrVP vp = 
-      insertObj (\\a => ["ved å"] ++ infVP vp a) (predV verbBe) ;
+      insertObj (\\a => ["ved Ã¥"] ++ infVP vp a) (predV verbBe) ;
 
     ImpPl1 vp = {s = ["lat oss"] ++ infVP vp {g = Utr ; n = Pl ; p = P1}} ;
 

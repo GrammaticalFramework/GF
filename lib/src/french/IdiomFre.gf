@@ -2,6 +2,7 @@ concrete IdiomFre of Idiom = CatFre **
   open (P = ParamX), PhonoFre, MorphoFre, ParadigmsFre, Prelude in {
 
   flags optimize=all_subs ;
+  flags coding=utf8 ;
 
   lin
     ImpersCl vp = mkClause "il" True False (agrP3 Masc Sg) vp ;

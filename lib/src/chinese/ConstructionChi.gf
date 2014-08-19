@@ -2,6 +2,7 @@
 
 concrete ConstructionChi of Construction = CatChi ** 
   open SyntaxChi, ParadigmsChi, (L = LexiconChi), (E = ExtraChi), (G = GrammarChi), (R = ResChi), Prelude in {
+flags coding=utf8 ;
 
 
 lin

@@ -1,5 +1,4 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
---# -coding=latin1
 
 --1 Norwegian Lexical Paradigms
 --
@@ -8,7 +7,7 @@
 -- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
 -- expressions of open categories: nouns, adjectives, verbs.
--- It covers the "bokmÂl" variant of Norwegian.
+-- It covers the "bokm√•l" variant of Norwegian.
 --
 -- Closed categories (determiners, pronouns, conjunctions) are
 -- accessed through the resource syntax API, $Structural$. 
@@ -35,6 +34,7 @@ resource ParadigmsNor =
     MorphoNor, 
     CatNor in {
 
+  flags coding=utf8 ;
 --2 Parameters 
 --
 -- To abstract over gender names, we define the following identifiers.
@@ -203,11 +203,11 @@ oper
 
 
 
---3 Verbs with 'vÊre' as auxiliary
+--3 Verbs with 'v√¶re' as auxiliary
 --
--- By default, the auxiliary is "have". This function changes it to "vÊre".
+-- By default, the auxiliary is "have". This function changes it to "v√¶re".
 
-  vaereV : V -> V ; -- force "vÊre" as auxiliary (default "have")
+  vaereV : V -> V ; -- force "v√¶re" as auxiliary (default "have")
 
 
 
@@ -415,7 +415,7 @@ oper
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
-  mkVV  v = v ** {c2 = mkComplement  "Â" ; lock_VV = <>} ;
+  mkVV  v = v ** {c2 = mkComplement  "√•" ; lock_VV = <>} ;
   mkV2V v p t = mk2V2 v p ** {c3 = mkComplement t.s ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mk2V2 v p ** {lock_V2A = <>} ;

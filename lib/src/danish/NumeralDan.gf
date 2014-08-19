@@ -1,5 +1,5 @@
---# -coding=latin1
 concrete NumeralDan of Numeral = CatDan ** open MorphoDan in {
+  flags coding=utf8 ;
 
 
 -- AR 12/10/2002 following www.geocities.com/tsca.geo/dansk/dknummer.html
@@ -24,7 +24,7 @@ lin n9 = mkTal "ni"   "nitten"  "halvfems"   "niende" "halvfemsindstyvende" ;
   pot01 = {
     s = \\f => table {
           NCard g => case g of {Neutr => "et" ; _ => "en"} ;
-          _ => "første"
+          _ => "fÃ¸rste"
           } ; 
     n = Sg
     } ;

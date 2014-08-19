@@ -10,6 +10,7 @@ concrete TerminologyIta of Terminology = CatIta ** open
   Prelude
 
 in {
+flags coding=utf8 ;
 
 
 lincat

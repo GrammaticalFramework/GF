@@ -1,5 +1,4 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
---# -coding=latin1
 
 --1 Catalan Lexical Paradigms
 --
@@ -35,7 +34,7 @@ resource ParadigmsCat =
 
 flags
 	optimize=all ;
-	-- coding = utf8 ;
+	coding = utf8 ;
 
 --2 Parameters 
 --
@@ -93,11 +92,11 @@ oper
 --3 Compound nouns 
 --
 -- Some nouns are ones where the first part is inflected as a noun but
--- the second part is not inflected. e.g. "n˙mero de telËfon". 
+-- the second part is not inflected. e.g. "n√∫mero de tel√®fon". 
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
-  compN : N -> Str -> N ; -- compound, e.g. "n˙mero" +  "de telËfon"
+  compN : N -> Str -> N ; -- compound, e.g. "n√∫mero" +  "de tel√®fon"
 
 
 --3 Relational nouns 
@@ -112,9 +111,9 @@ oper
   deN2 : N -> N2 ; -- relation with genitive
   aN2  : N -> N2 ; -- relation with dative
 
--- Three-place relational nouns ("la connexiÛ de x a y") need two prepositions.
+-- Three-place relational nouns ("la connexi√≥ de x a y") need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. connexiÛ + genitive + dative
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. connexi√≥ + genitive + dative
 
 
 --3 Relational common noun phrases
@@ -194,7 +193,7 @@ oper
 
   mkV : overload {
 
--- Regular verbs are ones inflected like "cantar", "perdre", "t»mer", "perdre", "servir", "dormir"
+-- Regular verbs are ones inflected like "cantar", "perdre", "t√àmer", "perdre", "servir", "dormir"
 -- The regular verb function works for models I, IIa, IIb and IIa
 -- The module $BeschCat$ gives the complete set of "Bescherelle" conjugations.
 
@@ -332,7 +331,7 @@ oper
    {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; 
     isPre = a.isPre ; lock_A = <>} ;
   compADeg a = 
-    {s = table {Posit => a.s ! Posit ; _ => \\f => "mÈs" ++ a.s ! Posit ! f} ; 
+    {s = table {Posit => a.s ! Posit ; _ => \\f => "m√©s" ++ a.s ! Posit ! f} ; 
      isPre = a.isPre ;
      lock_A = <>} ;
   regADeg a = compADeg (regA a) ;
@@ -341,18 +340,18 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = -- cantar, perdre, tÈmer, dormir
+  regV x = -- cantar, perdre, t√©mer, dormir
     case (Predef.dp 3 x) of {
         --regular changes in stem
         "iar"    => canviar_16 x ; --esglaiar with non-smart paradigm
         "jar"    => envejar_48 x ;
-	"Áar"    => comenÁar_22 x ;
+	"√ßar"    => comen√ßar_22 x ;
 	"gir"    => fugir_58 x ;
 	"ure"    => beure_11 x ;
-	"xer"    => crÈixer_33 x ; --conËixer,aparËixer with regAltV
+	"xer"    => cr√©ixer_33 x ; --con√®ixer,apar√®ixer with regAltV
 
         _ + "re" => perdre_83 x ;
-        _ + "er" => verbEr x ; --handles accents in infinitives and c/Á, g/j
+        _ + "er" => verbEr x ; --handles accents in infinitives and c/√ß, g/j
 	_ + "ir" => dormir_44 x ; --inchoative verbs with regAltV 
 	_ + "ur" => dur_45 x ;
 	_        => cantar_15 x } ;
@@ -372,7 +371,7 @@ oper
 	   <_+"re",_+"ig">  => veure_118 x ;
 	   <_+"ar",_+"ig">  => anar_4 x ;
 
-	   <"xer" ,_+ "c">  => conËixer_27 x ; --crÈixer, merËixer with regV
+	   <"xer" ,_+ "c">  => con√®ixer_27 x ; --cr√©ixer, mer√®ixer with regV
            <_+"er",_+ "c">  => valer_114 x ;
 	   <_+"re",_+ "c">  => doldre_42 x ; --participles of type dolgut
 	                                     --for absolt, pres, ... use mk3V
@@ -398,19 +397,19 @@ oper
 	   <"rir", _+"ixo",_+"rt"> => cobrir_20 x ;  --cob|rir cob|ert
 	   <_+"ir",_+"ixo",_+"rt"> => complir_25 x ; --compl|ir compl|ert
 
-	   <_+"ir",_+"ixo",_+"Ôt"> => lluir_64 x ; --lluir lluÔm lluÔt
+	   <_+"ir",_+"ixo",_+"√Øt"> => lluir_64 x ; --lluir llu√Øm llu√Øt
 
 	   <"dre",_,"nut"> => vendre_116 x ;
 
 	   <_+"re",_+"c",_+"t"> => absoldre_1 x ; --c in sgP1 and subj, not in part
 
 	   <_+"re",_,_+"es"> => prendre_87 x ;
-	   <_+"re",_,_+"Ës"> => atendre_8 x ;
+	   <_+"re",_,_+"√®s"> => atendre_8 x ;
 	   <_+"re",_,_+"as"> => raure_91 x ;
-	   <_+"re",_,_+"‡s"> => romandre_97 x ;
+	   <_+"re",_,_+"√†s"> => romandre_97 x ;
 	   <_+"re",_,_+"os"> => cloure_19 x ;
-	   <_+"re",_,_+"Ûs"> => confondre_28 x ;
-	   <_+"re",_,_+"Ús"> => recloure_93 x ;
+	   <_+"re",_,_+"√≥s"> => confondre_28 x ;
+	   <_+"re",_,_+"√≤s"> => recloure_93 x ;
 
 	   <_,_,_>        => regAltV x y } ;
 

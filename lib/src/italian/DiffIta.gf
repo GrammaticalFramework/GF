@@ -1,9 +1,9 @@
 --# -path=.:../romance:../abstract:../common:prelude
---# -coding=latin1
 
 instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
   param 
     Prepos = P_di | P_a | P_da | P_in | P_su | P_con ;
@@ -154,7 +154,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
     quelPron : AAgr => Str = aagrForms "quale" "quale" "quali" "quali" ;
 
-    partQIndir = "ciò" ;
+    partQIndir = "ciÃ²" ;
 
     reflPron : Number -> Person -> Case -> Str = 
       let 

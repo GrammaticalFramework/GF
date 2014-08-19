@@ -4,6 +4,7 @@ concrete ConstructionFre of Construction = CatFre **
   open SyntaxFre, SymbolicFre, ParadigmsFre, 
        (L = LexiconFre), (E = ExtraFre), (I = IrregFre), (R = ResFre), (C = CommonRomance),
        Prelude in {
+flags coding=utf8 ;
 
 
 lin

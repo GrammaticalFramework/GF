@@ -1,5 +1,4 @@
 --# -path=.:../abstract:../common
---# -coding=latin1
 
 --1 Dutch auxiliary operations.
 --
@@ -8,6 +7,7 @@
 resource ResDut = ParamX ** open Prelude, Predef in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 --2 For $Noun$
 
@@ -33,7 +33,7 @@ resource ResDut = ParamX ** open Prelude, Predef in {
      } ;
 
     regNoun : Str -> Noun = \s -> case s of {
-      _ + ("a" | "o" | "y" | "u" | "oe" | "é") => mkNoun s (s + "'s") Utr ;
+      _ + ("a" | "o" | "y" | "u" | "oe" | "Ã©") => mkNoun s (s + "'s") Utr ;
       _ + ("oir" | "ion" | "je") => mkNoun s (s + "s") Neutr ;
       ? + ? + ? + _ + 
         ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard" | "ie") => -- unstressed
@@ -41,7 +41,7 @@ resource ResDut = ParamX ** open Prelude, Predef in {
       _ +                     ("i"|"u")  => mkNoun s (endCons s + "en") Utr ;
       b + v@("aa"|"ee"|"oo"|"uu") + c@?  => mkNoun s (b + shortVoc v c + "en") Utr ; 
       b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ? => mkNoun s (endCons s + "en") Utr ;
-      _ + "ie" => mkNoun s (s + "ën") Utr ;
+      _ + "ie" => mkNoun s (s + "Ã«n") Utr ;
       b + v@("a"|"e"|"i"|"o"|"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
       _ => mkNoun s (endCons s + "en") Utr
       } ;

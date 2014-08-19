@@ -1,5 +1,5 @@
---# -coding=latin1
 abstract IrregDutAbs = Cat ** {
+  flags coding=utf8 ;
 
 fun bakken_V : V ; -- to fry
 fun bannen_V : V ; -- to ban
@@ -158,7 +158,7 @@ fun vouwen_V : V ; -- to fold
 fun vragen_V : V ; -- to ask
 fun vreten_V : V ; -- to eat, to devour
 fun vriezen_V : V ; -- to freeze ("it's freezing")
-fun vrijen_V : V ; -- vreeën / vrijden gevreeën / gevrijd to make love
+fun vrijen_V : V ; -- vreeÃ«n / vrijden gevreeÃ«n / gevrijd to make love
 fun wassen_V : V ; -- to wash
 fun wegen_V : V ; -- to weigh
 fun werpen_V : V ; -- to throw

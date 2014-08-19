@@ -1,7 +1,7 @@
---# -coding=latin1
 concrete QuestionFin of Question = CatFin ** open ResFin, StemFin, Prelude in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
 
@@ -55,9 +55,9 @@ concrete QuestionFin of Question = CatFin ** open ResFin, StemFin, Prelude in {
         let 
           k = npform2case n c ;
           ncase = case <k,idet.isNum> of {
-            <Nom,  True> => NCase Sg Part ; -- mitkä kolme kytkintä
+            <Nom,  True> => NCase Sg Part ; -- mitkÃ¤ kolme kytkintÃ¤
             <_,    True> => NCase Sg k ;    -- miksi kolmeksi kytkimeksi
-            _            => NCase n  k      -- mitkä kytkimet
+            _            => NCase n  k      -- mitkÃ¤ kytkimet
             }
         in
         idet.s ! k ++ cn.s ! ncase ; 
@@ -81,9 +81,9 @@ concrete QuestionFin of Question = CatFin ** open ResFin, StemFin, Prelude in {
         s = \\k => 
         let 
           ncase = case <k,isn> of {
-            <Nom,  True> => NCase Sg Part ; -- mitkä kolme kytkintä
+            <Nom,  True> => NCase Sg Part ; -- mitkÃ¤ kolme kytkintÃ¤
             <_,    True> => NCase Sg k ;    -- miksi kolmeksi kytkimeksi
-            _            => NCase n  k      -- mitkä kytkimet
+            _            => NCase n  k      -- mitkÃ¤ kytkimet
             }
         in
         idet.s ! n ! k ++ num.s ! Sg ! k ; 

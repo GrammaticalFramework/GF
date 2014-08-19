@@ -1,8 +1,8 @@
---# -coding=latin1
 concrete IdiomGer of Idiom = CatGer ** 
   open MorphoGer, ParadigmsGer, Prelude in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
     ImpersCl vp = mkClause "es" (agrP3 Sg) vp ;
@@ -72,6 +72,6 @@ concrete IdiomGer of Idiom = CatGer **
       } ;
 
   oper
-    geben = dirV2 (mk6V "geben" "gibt" "gib" "gab" "gäbe" "gegeben") ;
+    geben = dirV2 (mk6V "geben" "gibt" "gib" "gab" "gÃ¤be" "gegeben") ;
 }
 

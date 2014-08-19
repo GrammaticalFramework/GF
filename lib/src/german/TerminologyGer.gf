@@ -8,6 +8,7 @@ concrete TerminologyGer of Terminology = CatGer ** open
   (L = LexiconGer),
   Prelude
 in {
+flags coding=utf8 ;
 
 
 lincat

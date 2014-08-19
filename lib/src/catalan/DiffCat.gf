@@ -1,8 +1,8 @@
 --# -path=.:../romance:../abstract:../common:prelude
---# -coding=latin1
 instance DiffCat of DiffRomance = open CommonRomance, PhonoCat, BeschCat, Prelude in {
 
   flags optimize=noexpand ;
+  coding=utf8 ;
 
   param 
     Prepos = P_de | P_a ;
@@ -162,8 +162,8 @@ oper
           } ;
       in 
       \g,n,p -> case <g,n,p> of { 
-        <_,Sg,P1> => cases "em" "mí" ;
-        <_,Sg,P2> => cases "et" "tú" ;
+        <_,Sg,P1> => cases "em" "mÃ­" ;
+        <_,Sg,P2> => cases "et" "tÃº" ;
         <_,Pl,P1> => cases "ens" "nosaltres" ; --- nosotros
         <_,Pl,P2> => cases "us" "vosaltres" ; --- vosotros
         <Fem,Sg,P3> => cases3 "la" "li" "ella" ;

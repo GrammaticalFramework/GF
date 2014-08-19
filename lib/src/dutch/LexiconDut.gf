@@ -1,5 +1,4 @@
 --# -path=.:../common:../abstract:../../prelude
---# -coding=latin1
 
 -- work by Aarne Ranta
 
@@ -7,6 +6,7 @@ concrete LexiconDut of Lexicon = CatDut **
   open Prelude, ParadigmsDut, IrregDut in {
 
 flags 
+    coding=utf8 ;
   optimize=all_subs ;
 
 lin
@@ -183,7 +183,7 @@ hunt_V2 = mkV2 "jagen" ;
 husband_N = mkN "man" utrum ;
 ice_N = mkN "ijs" neuter ;
 important_A = mkA "belangrijk" ;
-industry_N = mkN "industrie" "industrieën" utrum ;
+industry_N = mkN "industrie" "industrieÃ«n" utrum ;
 iron_N = mkN "ijzer" neuter ;
 jump_V = springen_V ;
 kill_V2 = mkV2 "dooden" ;

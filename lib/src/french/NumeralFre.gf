@@ -1,6 +1,6 @@
---# -coding=latin1
 concrete NumeralFre of Numeral = CatFre [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoFre, Prelude in {
+  flags coding=utf8 ;
 
 -- originally written in 1998, automatically translated to current notation...
 -- last modified 24/1/2006, adding ordinals
@@ -14,9 +14,9 @@ oper
      case co of {
        NCard _ => ds ;
        NOrd _ _  => case last ds of {
-         "q" => ds + "uième" ;
-         "e" => init ds + "ième" ;
-         _ => ds + "ième"
+         "q" => ds + "uiÃ¨me" ;
+         "e" => init ds + "iÃ¨me" ;
+         _ => ds + "iÃ¨me"
          }
        } ;
        inh = d.inh ; n = d.n
@@ -67,13 +67,13 @@ lin n9  =
    digitPl {inh = teen ; n = Pl ; s = table {unit => "neuf" ; teen => "dix-neuf" ; jten => "quatre-vingt-dix" ; ten => "quatre-vingt-dix" ; tenplus => "quatre-vingt"}} ;
 
 lin pot01  =
-  {inh = Sg ; s = \\g => let dix = cardOrd g "dix" "dixième" in table {
+  {inh = Sg ; s = \\g => let dix = cardOrd g "dix" "dixiÃ¨me" in table {
   {p1 = unit ; p2 = indep} => 
-     cardOrdG g "un" "une" "premier" "première" "premiers" "premières" ; 
+     cardOrdG g "un" "une" "premier" "premiÃ¨re" "premiers" "premiÃ¨res" ; 
   {p1 = unit ; p2 = postpo} => 
-     cardOrdG g "un" "une" "unième"  "unième"  "unième"  "unième" ;
+     cardOrdG g "un" "une" "uniÃ¨me"  "uniÃ¨me"  "uniÃ¨me"  "uniÃ¨me" ;
   {p1 = unit ; p2 = attr} => [] ; 
-  {p1 = teen ; p2 = indep | postpo} => cardOrd g "onze" "onzième" ; 
+  {p1 = teen ; p2 = indep | postpo} => cardOrd g "onze" "onziÃ¨me" ; 
   {p1 = teen ; p2 = attr} => [] ; 
   {p1 = jten ; p2 = indep | postpo} => dix ; 
   {p1 = jten ; p2 = attr} => [] ; 
@@ -96,9 +96,9 @@ lin pot0 d =
     {p1 = tenplus ; p2 = attr} => d.s ! g ! tenplus} ; n = Pl} ;
 
 lin pot110  =
-  {s = \\g => table {_ => cardOrd g "dix" "dixième"} ; n = Pl} ;
+  {s = \\g => table {_ => cardOrd g "dix" "dixiÃ¨me"} ; n = Pl} ;
 lin pot111  =
-  {s = \\g => table {_ => cardOrd g "onze" "onzième"} ; n = Pl} ;
+  {s = \\g => table {_ => cardOrd g "onze" "onziÃ¨me"} ; n = Pl} ;
 lin pot1to19 d =
   {s = \\g => table {indep | postpo => d.s ! g ! teen ; attr => d.s ! g ! teen} ; n = Pl} ;
 lin pot0as1 n =
@@ -122,8 +122,8 @@ lin pot1plus d e =
 lin pot1as2 n = n ;
 lin pot2 d =
   {s = \\g => table {indep | postpo => (d.s ! NCard Masc ! {p1 = unit ; p2 = attr})
-  ++ table {Sg => cardOrd g "cent" "centième" ; Pl => cardOrd g "cents" "centième"} ! (d.inh) ; attr => (d.s !
-  NCard Masc ! {p1 = unit ; p2 = attr}) ++ cardOrd g "cent" "centième"} ; n = Pl} ;
+  ++ table {Sg => cardOrd g "cent" "centiÃ¨me" ; Pl => cardOrd g "cents" "centiÃ¨me"} ! (d.inh) ; attr => (d.s !
+  NCard Masc ! {p1 = unit ; p2 = attr}) ++ cardOrd g "cent" "centiÃ¨me"} ; n = Pl} ;
 lin pot2plus d e =
   {s = \\g => table {
     attr => (d.s ! NCard Masc ! {p1 = unit ; p2 = attr}) ++ "cent" ++ e.s ! g ! indep ;
@@ -134,7 +134,7 @@ lin pot2plus d e =
 lin pot2as3 n =
   {s = \\g => n.s ! g ! indep ; n = n.n} ;
 lin pot3 n =
-  {s = \\g => (n.s ! NCard Masc ! attr) ++ cardOrd g "mille" "millième" ; n = Pl} ;
+  {s = \\g => (n.s ! NCard Masc ! attr) ++ cardOrd g "mille" "milliÃ¨me" ; n = Pl} ;
 lin pot3plus n m =
   {s = \\g => (n.s ! NCard Masc !  attr) ++  "mille" ++ m.s ! g ! postpo ; n =
   Pl} ;
@@ -155,8 +155,8 @@ lin pot3plus n m =
 
     D_0 = mkDig "0" ;
     D_1 = mk3Dig "1" "1er" Sg ; ---- gender
-    D_2 = mk2Dig "2" "2ème" ;
-    D_3 = mk2Dig "3" "3ème" ;
+    D_2 = mk2Dig "2" "2Ã¨me" ;
+    D_3 = mk2Dig "3" "3Ã¨me" ;
     D_4 = mkDig "4" ;
     D_5 = mkDig "5" ;
     D_6 = mkDig "6" ;
@@ -166,7 +166,7 @@ lin pot3plus n m =
 
   oper
     mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
-    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "ème") ;
+    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "Ã¨me") ;
 
     mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
       s = table {NCard _ => c ; NOrd _ _ => o} ; ---- gender

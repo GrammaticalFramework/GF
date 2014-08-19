@@ -1,5 +1,4 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
---# -coding=latin1
 
 --1 Italian Lexical Paradigms
 --
@@ -34,6 +33,7 @@ resource ParadigmsIta = BeschIta **
     CatIta in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 --2 Parameters 
 --
@@ -149,13 +149,13 @@ oper
   mkA : overload {
 
 -- For regular adjectives, all forms are derived from the
--- masculine singular. Comparison is formed by "pi˘".
+-- masculine singular. Comparison is formed by "pi√π".
 
     mkA : (bianco : Str) -> A ; -- predictable adjective
 
 -- Five forms are needed in the worst
 -- case (masc and fem singular, masc plural, adverbial), given that
--- comparison is formed by "pi˘".
+-- comparison is formed by "pi√π".
 
     mkA : (solo,sola,soli,sole,solamente : Str) -> A ; -- irregular adjective
 
@@ -367,7 +367,7 @@ oper
    {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; 
     isPre = a.isPre ; lock_A = <>} ;
   compADeg a = 
-    {s = table {Posit => a.s ! Posit ; _ => \\f => "pi˘" ++ a.s ! Posit ! f} ; 
+    {s = table {Posit => a.s ! Posit ; _ => \\f => "pi√π" ++ a.s ! Posit ! f} ; 
      isPre = a.isPre ;
      lock_A = <>} ;
   regADeg a = compADeg (regA a) ;
@@ -426,7 +426,7 @@ oper
   mkVQ  v = v ** {lock_VQ = <>} ;
   mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;
 
-  mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, ‡, de
+  mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, √†, de
   mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mmkV3 v accusative p ;
   dirdirV3 v = dirV3 v dative ;
@@ -437,7 +437,7 @@ oper
   mkV3 = overload {
     mkV3 : V -> V3 = dirdirV3 ;               -- donner,_,_
     mkV3 : V -> Prep -> V3 = dirV3 ;          -- placer,_,sur
-    mkV3 : V -> Prep -> Prep -> V3 = mmkV3    -- parler, ‡, de
+    mkV3 : V -> Prep -> Prep -> V3 = mmkV3    -- parler, √†, de
     } ;
 
   mkV2S = overload {

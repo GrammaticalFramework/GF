@@ -4,6 +4,7 @@ concrete ConstructionIta of Construction = CatIta **
   open SyntaxIta, SymbolicIta, ParadigmsIta, 
        (L = LexiconIta), (E = ExtraIta), (I = IrregIta), (R = ResIta), (C = CommonRomance),
        Prelude in {
+flags coding=utf8 ;
 
 
 lin

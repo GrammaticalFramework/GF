@@ -1,5 +1,4 @@
 --# -path=.:../abstract:../common:../../prelude
---# -coding=latin1
 
 --1 Finnish Lexical Paradigms
 --
@@ -30,6 +29,7 @@ resource ParadigmsFin = open
   in {
 
   flags optimize=noexpand ;
+    coding=utf8 ;
 
 --2 Parameters 
 --
@@ -57,12 +57,12 @@ oper
   ablative    : Case ;  -- e.g. "talolta"
   allative    : Case ; -- e.g. "talolle"
 
-  infFirst : InfForm ; -- e.g. "tehdä"
-  infIness : InfForm ; -- e.g. "tekemässä"
-  infElat  : InfForm ; -- e.g. "tekemästä"
-  infIllat : InfForm ; -- e.g. "tekemään"
-  infPresPart : InfForm ; -- e.g. "tekevän"
-  infPresPartAgr : InfForm ; -- e.g. "tekevänsä"
+  infFirst : InfForm ; -- e.g. "tehdÃ¤"
+  infIness : InfForm ; -- e.g. "tekemÃ¤ssÃ¤"
+  infElat  : InfForm ; -- e.g. "tekemÃ¤stÃ¤"
+  infIllat : InfForm ; -- e.g. "tekemÃ¤Ã¤n"
+  infPresPart : InfForm ; -- e.g. "tekevÃ¤n"
+  infPresPartAgr : InfForm ; -- e.g. "tekevÃ¤nsÃ¤"
 
 -- The following type is used for defining *rection*, i.e. complements
 -- of many-place verbs and adjective. A complement can be defined by
@@ -107,16 +107,16 @@ oper
 --
 -- If the one-argument paradigm does not give the correct result, one can try and give 
 -- two or three forms. Most notably, the two-argument variant is used
--- for nouns like "kivi - kiviä", which would otherwise become like
--- "rivi - rivejä". Three arguments are used e.g. for 
+-- for nouns like "kivi - kiviÃ¤", which would otherwise become like
+-- "rivi - rivejÃ¤". Three arguments are used e.g. for 
 -- "auto - auton - autoja", which would otherwise become
 -- "auto - audon".
 
   mkN : overload {
     mkN : (kukko : Str) -> N ;  -- predictable nouns, covers 82%
     mkN : (savi,savia : Str) -> N ; -- different pl.part
-    mkN : (vesi,veden,vesiä : Str) -> N ; -- also different sg.gen
-    mkN : (vesi,veden,vesiä,vettä : Str) -> N ; -- also different sg.part
+    mkN : (vesi,veden,vesiÃ¤ : Str) -> N ; -- also different sg.gen
+    mkN : (vesi,veden,vesiÃ¤,vettÃ¤ : Str) -> N ; -- also different sg.part
     mkN : (olo,n,a,na,oon,jen,ja,ina,issa,ihin : Str) -> N ; -- worst case, 10 forms
     mkN : (pika : Str) -> (juna  : N) -> N ; -- compound with invariable prefix
     mkN : (oma : N)    -> (tunto : N) -> N ; -- compound with inflecting prefix
@@ -166,7 +166,7 @@ oper
 -- Comparison adjectives have three forms. 
 -- The comparative and the superlative
 -- are always inflected in the same way, so the nominative of them is actually
--- enough (except for the superlative "paras" of "hyvä").
+-- enough (except for the superlative "paras" of "hyvÃ¤").
 
   mkA : overload {
     mkA : Str -> A ;  -- regular noun made into adjective
@@ -204,14 +204,14 @@ oper
     mkV : (huutaa,huudan,huusi : Str) -> V ; -- also deviating pres. 1sg
     mkV : (huutaa,dan,taa,tavat,takaa,detaan,sin,si,sisi,tanut,dettu,tanee : Str) -> V ; -- worst-case verb
     mkV : VK -> V ;  -- verb from DictFin (Kotus)
-    mkV : V -> Str -> V ; -- hakata päälle (particle verb)
-    mkV : Str -> V -> V ; -- laimin+lyödä (prefixed verb)
+    mkV : V -> Str -> V ; -- hakata pÃ¤Ã¤lle (particle verb)
+    mkV : Str -> V -> V ; -- laimin+lyÃ¶dÃ¤ (prefixed verb)
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
 -- If another case is wanted, use the following.
 
-  caseV : Case -> V -> V ;  -- deviating subj. case, e.g. genitive "täytyä"
+  caseV : Case -> V -> V ;  -- deviating subj. case, e.g. genitive "tÃ¤ytyÃ¤"
 
 -- The verbs "be" is special.
 
@@ -251,7 +251,7 @@ oper
      = \v,p,q -> v ** {c2 = p ; c3 = q ; lock_V3 = <>} ; 
    } ;
 
-  dirV3    : V -> Case -> V3 ;          -- siirtää, (accusative), illative
+  dirV3    : V -> Case -> V3 ;          -- siirtÃ¤Ã¤, (accusative), illative
   dirdirV3 : V         -> V3 ;          -- antaa, (accusative), (allative)
 
 
@@ -261,7 +261,7 @@ oper
 -- questions, verb phrases, and adjectives.
 
 mkVV = overload {
-  mkVV : Str -> VV   -- e.g. "yrittää" (puhua)
+  mkVV : Str -> VV   -- e.g. "yrittÃ¤Ã¤" (puhua)
    = \s -> mkVVf (mkV s) infFirst ; 
   mkVV : V -> VV     -- e.g. "alkaa" (puhua)
    = \v -> mkVVf v infFirst ; 
@@ -272,7 +272,7 @@ mkVV = overload {
   } ;
 
 mkVS = overload {
-  mkVS : Str -> VS   -- e.g. "väittää"
+  mkVS : Str -> VS   -- e.g. "vÃ¤ittÃ¤Ã¤"
    = \s -> lin VS (mk1V s) ;
   mkVS : V -> VS     -- e.g. "sanoa"
    = \v -> lin VS v ;
@@ -283,9 +283,9 @@ mkVS = overload {
      = \s -> mkV2Vf (mkV s) (casePrep partitive) infIllat ; ----
     mkV2V : V -> V2V    -- partitive + infillat
      = \v -> mkV2Vf v (casePrep partitive) infIllat ; ----
-    mkV2V : V -> Prep -> V2V  -- e.g. "käskeä" genitive + infFiilat
+    mkV2V : V -> Prep -> V2V  -- e.g. "kÃ¤skeÃ¤" genitive + infFiilat
      = \v,p -> mkV2Vf v p infIllat ;
-    mkV2V  : V -> Prep -> InfForm -> V2V -- e.g. "kieltää" partitive infElat 
+    mkV2V  : V -> Prep -> InfForm -> V2V -- e.g. "kieltÃ¤Ã¤" partitive infElat 
      = \v,p,f -> mk2V2 v p ** {vi = infform2vvtype f ; lock_V2V = <>} ;
     mkV2V  : V -> Case -> InfForm -> V2V 
      = \v,c,f -> mk2V2 v (casePrep c) ** {vi = infform2vvtype f ; lock_V2V = <>} ;
@@ -295,11 +295,11 @@ mkVS = overload {
 
   mkV2S : V -> Prep -> V2S ; -- e.g. "sanoa" allative
   mkVVf : V -> InfForm -> VV ; -- e.g. "ruveta" infIllat
-  mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "kieltää" partitive infElat  
+  mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "kieltÃ¤Ã¤" partitive infElat  
   mkVA  : V -> Prep -> VA ; -- e.g. "maistua" ablative
   mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "maalata" accusative translative
   mkVQ  : V -> VQ ; 
-  mkV2Q : V -> Prep -> V2Q ; -- e.g. "kysyä" ablative 
+  mkV2Q : V -> Prep -> V2Q ; -- e.g. "kysyÃ¤" ablative 
 
   mkAS  : A -> AS ; --%
 ---  mkA2S : A -> Prep -> A2S ; --%
@@ -344,7 +344,7 @@ mkVS = overload {
     = \nu,noun -> lin Det (MorphoFin.mkDet nu (snoun2nounBind noun)) ;
     mkDet : (isNeg : Bool) -> Number -> N -> Det  -- use this with True to create a negative determiner 
     = \isNeg,nu,noun -> lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ;
-    mkDet : (isNeg : Bool) -> Number -> N -> Case -> Det  -- paljon + False + partitive, ei yhtään + True + partitive
+    mkDet : (isNeg : Bool) -> Number -> N -> Case -> Det  -- paljon + False + partitive, ei yhtÃ¤Ã¤n + True + partitive
     = \isNeg,nu,noun,_ -> lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ;
     } ;
 
@@ -459,51 +459,51 @@ mkVS = overload {
       ukk = init ukko ;
       uko = weakGrade ukko ;
       ukon = uko + "n" ;
-      o = case last ukko of {"ä" => "ö" ; "a" => "o"} ; -- only used then 
+      o = case last ukko of {"Ã¤" => "Ã¶" ; "a" => "o"} ; -- only used then 
       renka = strongGrade (init ukko) ;
       rake = strongGrade ukko ;
     in
     case ukko of {
       _ + "nen" => dNainen ukko ;
-      _ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" |"ää"|"öö") => dPuu ukko ;
-      _ + ("ai" | "ei" | "oi" | "ui" | "yi" | "äi" | "öi") => dPuu ukko ;
-      _ + ("ie" | "uo" | "yö") => dSuo ukko ;
-      _ + ("ea" | "eä") => dKorkea ukko ;
+      _ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" |"Ã¤Ã¤"|"Ã¶Ã¶") => dPuu ukko ;
+      _ + ("ai" | "ei" | "oi" | "ui" | "yi" | "Ã¤i" | "Ã¶i") => dPuu ukko ;
+      _ + ("ie" | "uo" | "yÃ¶") => dSuo ukko ;
+      _ + ("ea" | "eÃ¤") => dKorkea ukko ;
       _ + "is" => dKaunis ukko ;
       _ + ("i" | "u") + "n" => dLiitin ukko (renka + "men") ;
-      _ + ("ton" | "tön") => dOnneton ukko ;
+      _ + ("ton" | "tÃ¶n") => dOnneton ukko ;
       _ + "e" => dRae ukko (rake + "en") ;
       _ + ("ut" | "yt") => dOttanut ukko ;
-      _ + ("as" | "äs") => dRae ukko (renka + last renka + "n") ;
+      _ + ("as" | "Ã¤s") => dRae ukko (renka + last renka + "n") ;
       _ + ("uus" | "yys" | "eus" | "eys") => dLujuus ukko ;
       _ + "s" => dJalas ukko ; 
 
--- {- heuristics for 3-syllable nouns ending a/ä
-      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + 
-          _ + "i" + ? + a@("a" | "ä") =>  
-          dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;  -- pesijä
-      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
-          ("a" | "e" | "o" | "u" | "y" | "ä" | "ö") + 
-          ("l" | "r" | "n") + a@("a" | "ä") =>  
+-- {- heuristics for 3-syllable nouns ending a/Ã¤
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "Ã¤" | "Ã¶") + ? + 
+          _ + "i" + ? + a@("a" | "Ã¤") =>  
+          dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;  -- pesijÃ¤
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "Ã¤" | "Ã¶") + ? + _ + 
+          ("a" | "e" | "o" | "u" | "y" | "Ã¤" | "Ã¶") + 
+          ("l" | "r" | "n") + a@("a" | "Ã¤") =>  
           dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;  -- sarana, omena
-      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
-          ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + 
-          ("n" | "k" | "s") + "k" + a@("a" | "ä") =>  
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "Ã¤" | "Ã¶") + ? + _ + 
+          ("a" | "e" | "i" | "o" | "u" | "y" | "Ã¤" | "Ã¶") + 
+          ("n" | "k" | "s") + "k" + a@("a" | "Ã¤") =>  
           dSilakka ukko (uko + "n") (init uko + o + "it" + a) ;  -- silakka 
-      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
-          ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + 
-          ("n" | "t" | "s") + "t" + a@("a" | "ä") =>   
-          dSilakka ukko (uko + "n") (ukk + o + "j" + a) ;  -- yhdyntä (but not isäntä)
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "Ã¤" | "Ã¶") + ? + _ + 
+          ("a" | "e" | "i" | "o" | "u" | "y" | "Ã¤" | "Ã¶") + 
+          ("n" | "t" | "s") + "t" + a@("a" | "Ã¤") =>   
+          dSilakka ukko (uko + "n") (ukk + o + "j" + a) ;  -- yhdyntÃ¤ (but not isÃ¤ntÃ¤)
       _ + ("a" | "e" | "i" | "o" | "u") + ? + _ + 
           ("a" | "e" | "o" | "u") + ? + "a" =>  
           dSilakka ukko (ukko + "n") (ukk + "ia") ;  -- asema, johtaja
 -- -}
-      _ + "i" +o@("o"|"ö") => dSilakka ukko (ukko+"n") (ukko+"it"+getHarmony o);
+      _ + "i" +o@("o"|"Ã¶") => dSilakka ukko (ukko+"n") (ukko+"it"+getHarmony o);
       _ + "i" + "a" => dSilakka ukko (ukko + "n") (ukk + "oita") ;
-      _ + "i" + "ä" => dSilakka ukko (ukko + "n") (ukk + "öitä") ;
-      _ + ("a" | "o" | "u" | "y" | "ä" | "ö") => dUkko ukko ukon ;
+      _ + "i" + "Ã¤" => dSilakka ukko (ukko + "n") (ukk + "Ã¶itÃ¤") ;
+      _ + ("a" | "o" | "u" | "y" | "Ã¤" | "Ã¶") => dUkko ukko ukon ;
       _ + "i" => dPaatti ukko ukon ;
-      _ + ("ar" | "är") => dPiennar ukko (renka + "ren") ;
+      _ + ("ar" | "Ã¤r") => dPiennar ukko (renka + "ren") ;
       _ + "e" + ("l" | "n") => dPiennar ukko (ukko + "en") ;
       _ => dUnix ukko
     } ;   
@@ -515,28 +515,28 @@ mkVS = overload {
         ukon = weakGrade ukko + "n" ;
       in
       case <ukko,ukkoja> of {
-        <_, _ + ":" + ? + ("a" | "ä")> => dSDP ukko ;
+        <_, _ + ":" + ? + ("a" | "Ã¤")> => dSDP ukko ;
         <_ + "ea", _ + "oita"> => 
           dSilakka ukko ukon ukkoja ;  -- idea, but not korkea
-        <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
-              "ie" | "uo" | "yö" | "ea" | "eä" | 
-              "ia" | "iä" | "io" | "iö"), _ + ("a" | "ä")> => 
+        <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "Ã¤Ã¤" | "Ã¶Ã¶" | 
+              "ie" | "uo" | "yÃ¶" | "ea" | "eÃ¤" | 
+              "ia" | "iÃ¤" | "io" | "iÃ¶"), _ + ("a" | "Ã¤")> => 
           nForms1 ukko ; --- to protect --- how to get "dioja"?
-        <_ + ("a" | "ä" | "o" | "ö"), _ + ("a" | "ä")> => 
+        <_ + ("a" | "Ã¤" | "o" | "Ã¶"), _ + ("a" | "Ã¤")> => 
           dSilakka ukko ukon ukkoja ;
-        <arp + "i", _ + "i" + ("a" | "ä")> =>
+        <arp + "i", _ + "i" + ("a" | "Ã¤")> =>
           dArpi ukko (init (weakGrade ukko) + "en") ;
-        <_ + "i", _ + ("eita" | "eitä")> => 
+        <_ + "i", _ + ("eita" | "eitÃ¤")> => 
           dTohtori ukko ;
-        <_ + ("ut" | "yt"),_ + ("uita" | "yitä")>  => dRae ukko (init ukko + "en") ;
-        <_ + "e", nuk + ("eja" | "ejä")> => 
+        <_ + ("ut" | "yt"),_ + ("uita" | "yitÃ¤")>  => dRae ukko (init ukko + "en") ;
+        <_ + "e", nuk + ("eja" | "ejÃ¤")> => 
           dNukke ukko ukon ;
         <_ + "s", _ + "ksi" + ?> => dJalas ukko ;
-        <_ + ("l" | "n" | "r" | "s"), _ + ("eja" | "ejä")> => dUnix ukko ;
-        <_, _ + ("a" | "ä")> => ukot ;
+        <_ + ("l" | "n" | "r" | "s"), _ + ("eja" | "ejÃ¤")> => dUnix ukko ;
+        <_, _ + ("a" | "Ã¤")> => ukot ;
         _ => 
           Predef.error 
-           (["last argument should end in a/ä, not"] ++ ukkoja)
+           (["last argument should end in a/Ã¤, not"] ++ ukkoja)
       } ;
 
     nForms3 : (_,_,_ : Str) -> NForms = \ukko,ukon,ukkoja -> 
@@ -546,17 +546,17 @@ mkVS = overload {
       in
       case <ukko,ukon> of {
         <_, _ + ":n"> => dSDP ukko ;
-        <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
-              "ie" | "uo" | "yö" | "ea" | "eä" | 
-              "ia" | "iä" | "io" | "iö" | "ja" | "jä"), _ + "n"> => 
+        <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "Ã¤Ã¤" | "Ã¶Ã¶" | 
+              "ie" | "uo" | "yÃ¶" | "ea" | "eÃ¤" | 
+              "ia" | "iÃ¤" | "io" | "iÃ¶" | "ja" | "jÃ¤"), _ + "n"> => 
            ukot ; --- to protect
-        <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n"> => 
+        <_ + ("a" | "o" | "u" | "y" | "Ã¤" | "Ã¶"), _ + "n"> => 
           dSilakka ukko ukon ukkoja ;  -- auto,auton
-        <_ + "mpi", _ + ("emman" | "emmän")> => dSuurempi ukko ;
-        <_ + "in", _ + ("imman" | "immän")> => dSuurin ukko ;
+        <_ + "mpi", _ + ("emman" | "emmÃ¤n")> => dSuurempi ukko ;
+        <_ + "in", _ + ("imman" | "immÃ¤n")> => dSuurin ukko ;
         <terv + "e", terv2 + "een"> => -- was nonlinear
           dRae ukko ukon ;
-        <taiv + ("as" | "äs"), taiv2 + ("aan" | "ään")> =>  -- was nonlinear
+        <taiv + ("as" | "Ã¤s"), taiv2 + ("aan" | "Ã¤Ã¤n")> =>  -- was nonlinear
           dRae ukko ukon ;
         <nukk + "e", nuk + "een"> => dRae ukko ukon ;
         <arp + "i", arv + "en"> => dArpi ukko ukon ;
@@ -571,14 +571,14 @@ mkVS = overload {
         ukot = nForms3 ukko ukon ukkoja ;
       in
       case <ukko,ukon,ukkoja,ukkoa> of {
-        <_,_ + "n", _ + ("a" | "ä"), _ + ("a" | "ä")> => 
+        <_,_ + "n", _ + ("a" | "Ã¤"), _ + ("a" | "Ã¤")> => 
           table {
             2 => ukkoa ;
             n => ukot ! n
           } ;
         _ => 
           Predef.error 
-            (["last arguments should end in n, a/ä, and a/ä, not"] ++ 
+            (["last arguments should end in n, a/Ã¤, and a/Ã¤, not"] ++ 
             ukon ++ ukkoja ++ ukkoa)
       } ;
 
@@ -613,7 +613,7 @@ mkVS = overload {
     noun : Str -> NForms = \s -> case s of {
       _ + "i" => dPaatti s (s + "n") ;
       _ + "e" => dNukke s (s + "n") ;
-      _ + ("a" | "o" | "u" | "y" | "ä" | "ö" | "ü") => dUkko s (s + "n") ;
+      _ + ("a" | "o" | "u" | "y" | "Ã¤" | "Ã¶" | "Ã¼") => dUkko s (s + "n") ;
       _ => dUnix s
       }
     } ;
@@ -693,28 +693,28 @@ mkVS = overload {
       ot   = init ota ;
     in
     case ottaa of {
-      _ + ("e" | "i" | "o" | "u" | "y" | "ö") + ("a" | "ä") =>
+      _ + ("e" | "i" | "o" | "u" | "y" | "Ã¶") + ("a" | "Ã¤") =>
         cHukkua ottaa (ota + "n") ;
-      _ + ("l" | "n" | "r") + ("taa" | "tää") => 
+      _ + ("l" | "n" | "r") + ("taa" | "tÃ¤Ã¤") => 
         cOttaa ottaa (ota + "n") (ots + "in") (ots + "i") ;
       ("" | ?) + ("a" | "e" | "i" | "o" | "u") + ? + _ + 
         ("a" | "e" | "i" | "o" | "u") + _ + "aa" => 
         cOttaa ottaa (ota + "n") (ot + "in") (ott + "i") ;
       ("" | ?) + ("a" | "e" | "i") + _ + "aa" => 
         cOttaa ottaa (ota + "n") (ot + "oin") (ott + "oi") ;
-      _ + ("aa" | "ää") => 
+      _ + ("aa" | "Ã¤Ã¤") => 
         cOttaa ottaa (ota + "n") (ot + "in") (ott + "i") ;
-      _ + ("ella" | "ellä") => 
+      _ + ("ella" | "ellÃ¤") => 
         cKuunnella ottaa otin ;
-      _ + ("osta" | "östä") => 
+      _ + ("osta" | "Ã¶stÃ¤") => 
         cJuosta ottaa (init ott + "ksen") ;
-      _ + ("st" | "nn" | "ll" | "rr") + ("a" | "ä") => 
+      _ + ("st" | "nn" | "ll" | "rr") + ("a" | "Ã¤") => 
         cJuosta ottaa (ott + "en") ;
-      _ + ("ita" | "itä") => 
+      _ + ("ita" | "itÃ¤") => 
         cHarkita ottaa ;
-      _ + ("eta" | "etä" | "ota" | "ata" | "uta" | "ytä" | "ätä" | "ötä") => 
+      _ + ("eta" | "etÃ¤" | "ota" | "ata" | "uta" | "ytÃ¤" | "Ã¤tÃ¤" | "Ã¶tÃ¤") => 
         cPudota ottaa (strongGrade ott + "si") ;
-      _ + ("da" | "dä") => 
+      _ + ("da" | "dÃ¤") => 
         cJuoda ottaa ;
       _ => Predef.error (["expected infinitive, found"] ++ ottaa) 
     } ;   
@@ -726,17 +726,17 @@ mkVS = overload {
       autoin = weakGrade (init huusi) + "in" ;
     in 
     case <huutaa,huusi> of {
-      <_ + ("taa" | "tää"), _ + ("oi" | "öi")> =>
+      <_ + ("taa" | "tÃ¤Ã¤"), _ + ("oi" | "Ã¶i")> =>
         cOttaa huutaa (huuda + "n") autoin huusi ;
-      <_ + ("aa" | "ää"), _ + "i"> =>
+      <_ + ("aa" | "Ã¤Ã¤"), _ + "i"> =>
         cOttaa huutaa (huuda + "n") huusin huusi ;
-      <_ + ("eta" | "etä"), _ + "eni"> =>
+      <_ + ("eta" | "etÃ¤"), _ + "eni"> =>
         cValjeta huutaa huusi ;
-      <_ + ("sta" | "stä"), _ + "si"> =>
-        vForms1 huutaa ; -- pestä, halkaista
-      <_ + ("ta" | "tä"), _ + "si"> =>
+      <_ + ("sta" | "stÃ¤"), _ + "si"> =>
+        vForms1 huutaa ; -- pestÃ¤, halkaista
+      <_ + ("ta" | "tÃ¤"), _ + "si"> =>
         cPudota huutaa huusi ;
-      <_ + ("lla" | "llä"), _ + "li"> =>
+      <_ + ("lla" | "llÃ¤"), _ + "li"> =>
         cKuunnella huutaa huusin ;
       _ => vForms1 huutaa
       } ;
@@ -747,7 +747,7 @@ mkVS = overload {
 
   vOlla = {
     s = ollaSVerbForms ;
-    sc = SCNom ; h = Back ; lock_V = <> ; p = []} ; ---- lieneekö
+    sc = SCNom ; h = Back ; lock_V = <> ; p = []} ; ---- lieneekÃ¶
 
   mk2V2 : V -> Prep -> V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 

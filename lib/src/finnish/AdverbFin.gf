@@ -1,5 +1,5 @@
---# -coding=latin1
 concrete AdverbFin of Adverb = CatFin ** open ResFin, Prelude, StemFin in {
+  flags coding=utf8 ;
 
   lin
     PositAdvAdj a = {s = a.s ! Posit ! sAAdv} ;
@@ -14,7 +14,7 @@ concrete AdverbFin of Adverb = CatFin ** open ResFin, Prelude, StemFin in {
 
     AdAdv = cc2 ;
 
-    PositAdAAdj a = {s = sANGen (a.s ! Posit)} ; -- älyttömän
+    PositAdAAdj a = {s = sANGen (a.s ! Posit)} ; -- Ã¤lyttÃ¶mÃ¤n
 
     SubjS = cc2 ;
 ----b    AdvSC s = s ;

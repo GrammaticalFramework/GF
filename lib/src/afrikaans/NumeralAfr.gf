@@ -1,8 +1,8 @@
---# -coding=latin1
 
 concrete NumeralAfr of Numeral = CatAfr ** open ResAfr, Prelude in {
 
 flags optimize = all_subs ;
+  coding=utf8 ;
 
 lincat 
   Digit = {s : DForm => CardOrd => Str ; en : Str} ;
@@ -24,7 +24,7 @@ lin
 
   pot01 = {
     s = \\f => table {
-          NCard g _ => "een" ; ---- "één" ;
+          NCard g _ => "een" ; ---- "Ã©Ã©n" ;
           NOrd af => (regAdjective "eerste").s ! Posit ! af
           } ; 
     n = Sg ;
@@ -103,7 +103,7 @@ lin
            DTeen => cardOrd dreizehn (dreizehn + "de") ;
            DTen  => cardOrd dreissig (dreissig + "ste")
            } ;
-     en = case drei of {_ + "e" => "ën" ; _ => "en"}
+     en = case drei of {_ + "e" => "Ã«n" ; _ => "en"}
      } ;
   invNum : CardOrd = NCard Neutr Nom ;
 

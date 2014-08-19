@@ -2,6 +2,7 @@
 
 concrete ConstructionFin of Construction = CatFin ** 
   open SyntaxFin, SymbolicFin, ParadigmsFin, (L = LexiconFin), (E = ExtraFin), (R = ResFin), Prelude  in {
+flags coding=utf8 ;
 
 lin
   hungry_VP = mkVP have_V2 (lin NP (mkNP (ParadigmsFin.mkN "nälkä"))) ;

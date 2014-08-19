@@ -1,11 +1,11 @@
---# -coding=latin1
 concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa ** 
   open CommonRomance, PhonoSpa, MorphoSpa, ParadigmsSpa, ParamX, ResSpa, BeschSpa,
   Prelude in {
+  flags coding=utf8 ;
   
   lin
     i8fem_Pron =  mkPronoun
-      "yo" "me" "me" "mí"
+      "yo" "me" "me" "mÃ­"
       "mi" "mi" "mis" "mis"
       Fem Sg P1 ;
     these8fem_NP = makeNP ["estas"] Fem Pl ;
@@ -20,11 +20,11 @@ concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa **
       "nosotras" "nos" "nos" "nosotras"
       "nuestro" "nuestra" "nuestros" "nuestras"
       Fem Pl P1 ;
-    whoPl8fem_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Pl} ;
-    whoSg8fem_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Sg} ;
+    whoPl8fem_IP = {s = \\c => prepCase c ++ "quiÃ©n" ; a = aagr Fem Pl} ;
+    whoSg8fem_IP = {s = \\c => prepCase c ++ "quiÃ©n" ; a = aagr Fem Sg} ;
 
     youSg8fem_Pron = mkPronoun 
-      "tú" "te" "te" "ti"
+      "tÃº" "te" "te" "ti"
       "tu" "tu" "tus" "tus"
       Fem Sg P2 ;
     youPl8fem_Pron = mkPronoun

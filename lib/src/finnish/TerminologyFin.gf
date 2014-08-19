@@ -10,6 +10,7 @@ concrete TerminologyFin of Terminology = CatFin ** open
   Prelude,
   HTML
 in {
+flags coding=utf8 ;
 
 
 lincat

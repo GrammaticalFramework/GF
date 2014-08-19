@@ -1,13 +1,13 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
---# -coding=latin1
 concrete ExtraSwe of ExtraSweAbs = ExtraScandSwe - [FocAdv] ,
                                    ParadigmsSwe - [nominative] **
  open CommonScand, ResSwe, ParamX, VerbSwe, Prelude, DiffSwe, StructuralSwe, MorphoSwe,
       NounSwe, Coordination, AdjectiveSwe, SentenceSwe, AdverbSwe, RelativeSwe in {
 
+  flags coding=utf8 ;
 lincat
  ReflNP  = NP ;
- PronAQ = A ; -- 'en sådan' 
+ PronAQ = A ; -- 'en sÃ¥dan' 
  PronAD = A ; -- 'fler' 
  AdvFoc = Adv ;
  RelVSCl = {s : Agr => RCase => Str};
@@ -96,7 +96,7 @@ lin
         vf ++ comp ++ (verb.s ! t ! a ! p ! Inv) ++ vp.a1 ! Pos ! agr 
       } ;
 
-  oper do_V : V = mkV "göra" "gör" "gör" "gjorde" "gjort" "gjord" ;
+  oper do_V : V = mkV "gÃ¶ra" "gÃ¶r" "gÃ¶r" "gjorde" "gjort" "gjord" ;
 
 lin
   FocAP ap np    = 
@@ -227,13 +227,13 @@ lin
   lin
     bara_AdvFoc = mkAdv "bara" ;
 
-    sadana_PronAQ = mkA "sådan" ;
+    sadana_PronAQ = mkA "sÃ¥dan" ;
     fler_PronAD   = mkA "flera" "flera" "flera" "fler" "flest" ;
 
     hela_Predet    = {s  = \\_,_ => "hela" ; p = [] ; a = PNoAg} ;
     samma_Predet   = {s  = \\_,_ => "samma" ; p = [] ; a = PNoAg} ;
 
-    sjaelva_Quant = {s  = \\_,_,_,_ => "själva" ;
+    sjaelva_Quant = {s  = \\_,_,_,_ => "sjÃ¤lva" ;
                      sp = \\_,_,_,_ => variants {};
                      det = DDef Def } ;
 
@@ -241,14 +241,14 @@ lin
     ena_Det      = {s  = \\_,_ => "ena" ; 
                     sp = \\_ => genderForms ["den ena"] ["det ena"] ; 
                     n = Sg ; det = DDef Def};
-    baegge_Det   = {s,sp = \\_,_ => "bägge" ; n = Pl ; det = DDef Def} ;
-    baada_Det    = {s,sp = \\_,_ => "båda" ; n = Pl ; det = DDef Def} ;
+    baegge_Det   = {s,sp = \\_,_ => "bÃ¤gge" ; n = Pl ; det = DDef Def} ;
+    baada_Det    = {s,sp = \\_,_ => "bÃ¥da" ; n = Pl ; det = DDef Def} ;
     varannan_Det = {s,sp = \\_,_ => "varannan" ; n = Sg ; det = DDef Indef} ;
     somliga_Det  = {s,sp = \\_,_ => "somliga" ; n = Pl ; det = DDef Indef} ;
     dylika_Det   = {s,sp = \\_,_ => "dylika" ; n = Pl ; det = DDef Indef} ;
-    oovriga_Det  = {s,sp = \\_,_ => "övriga" ; n = Pl ; det = DDef Indef} ;
+    oovriga_Det  = {s,sp = \\_,_ => "Ã¶vriga" ; n = Pl ; det = DDef Indef} ;
     samtliga_Det = {s,sp = \\_,_ => "samtliga" ; n = Pl ; det = DDef Indef} ;
-    aatskilliga_Det = {s,sp = \\_,_ => "åtskilliga" ; n = Pl ; det = DDef Indef} ;
+    aatskilliga_Det = {s,sp = \\_,_ => "Ã¥tskilliga" ; n = Pl ; det = DDef Indef} ;
     varenda_Det     = {s  = \\_ => genderForms ["varenda"] ["vartenda"] ; 
                        sp = \\_ => genderForms ["varenda en"] ["vartenda ett"] ; 
                        n = Sg ; det = DDef Indef};

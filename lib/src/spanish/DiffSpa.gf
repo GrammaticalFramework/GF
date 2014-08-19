@@ -1,9 +1,9 @@
 --# -path=.:../romance:../abstract:../common:prelude
---# -coding=latin1
 
 instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelude in {
 
   flags optimize=noexpand ;
+    coding=utf8 ;
 
   param 
     Prepos = P_de | P_a ;
@@ -135,9 +135,9 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
         _ => prepCase c ++ "cuyo"
         } ;
 
-    pronSuch : AAgr => Str = aagrForms "tál" "tál" "tales" "tales" ;
+    pronSuch : AAgr => Str = aagrForms "tÃ¡l" "tÃ¡l" "tales" "tales" ;
 
-    quelPron : AAgr => Str = aagrForms "cuál" "cuál" "cuales" "cuales" ;
+    quelPron : AAgr => Str = aagrForms "cuÃ¡l" "cuÃ¡l" "cuales" "cuales" ;
 
     partQIndir = [] ; ---- ?
 
@@ -147,7 +147,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
         case p of { 
         P3 => case c of {
           Acc | CPrep P_a => "se" ;
-          _ => "sí"
+          _ => "sÃ­"
           } ;
         _ => pro
         } ; 
@@ -165,12 +165,12 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
           } ;
       in 
       \g,n,p -> case <<g,n,p> : Gender * Number * Person> of { 
-        <_,Sg,P1> => cases "me" "mí" ;
-        <_,Sg,P2> => cases "te" "tí" ;
+        <_,Sg,P1> => cases "me" "mÃ­" ;
+        <_,Sg,P2> => cases "te" "tÃ­" ;
         <_,Pl,P1> => cases "nos" "nosotras" ; --- nosotros
         <_,Pl,P2> => cases "vos" "vosotras" ; --- vosotros
         <Fem,Sg,P3> => cases3 "la" "le" "ella" ;
-        <_,  Sg,P3> => cases3 "lo" "le" "èl" ;
+        <_,  Sg,P3> => cases3 "lo" "le" "Ã¨l" ;
         <Fem,Pl,P3> => cases3 "las" "les" "ellas" ;
         <_,  Pl,P3> => cases3 "los" "les" "ellos"
         } ;

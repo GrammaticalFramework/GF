@@ -1,13 +1,13 @@
 --# -path=.:abstract:common:prelude
---# -coding=latin1
 
 concrete ExtraFin of ExtraFinAbs = CatFin ** 
   open ResFin, MorphoFin, Coordination, Prelude, NounFin, VerbFin, StructuralFin, StemFin, (R = ParamX) in {
 
+  flags coding=utf8 ;
   lin
     GenNP np = {
       s1,sp = \\_,_ => np.s ! NPCase Gen ;
-      s2 = case np.isPron of { -- "is‰n auto", "h‰nen autonsa"  
+      s2 = case np.isPron of { -- "is√§n auto", "h√§nen autonsa"  
              True => table {Front => BIND ++ possSuffixFront np.a ; 
                             Back  => BIND ++ possSuffix np.a } ;
              False => \\_ => []
@@ -50,8 +50,8 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     [VPS] = {
       s1,s2 : Agr  => Str ; 
-      sc    : SubjCase ;   --- take the first: min‰ osaan kutoa ja t‰ytyy virkata
-      h     : Harmony    --- take the first: osaanko min‰ kutoa ja k‰yn koulua
+      sc    : SubjCase ;   --- take the first: min√§ osaan kutoa ja t√§ytyy virkata
+      h     : Harmony    --- take the first: osaanko min√§ kutoa ja k√§yn koulua
       } ;
 
   lin
@@ -120,7 +120,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 --    i_implicPron = mkPronoun [] "minun" "minua" "minuna" "minuun" Sg P1 ;
     whatPart_IP = {
       s = table {
-        NPCase Nom | NPAcc => "mit‰" ;
+        NPCase Nom | NPAcc => "mit√§" ;
         c => whatSg_IP.s ! c
         } ;
       n = Sg
@@ -150,7 +150,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
           let
             n = complNumAgr agr ;
             c = case n of {
-              Sg => Nom ;  -- min‰ olen iso ; te olette iso
+              Sg => Nom ;  -- min√§ olen iso ; te olette iso
               Pl => ResFin.Part   -- me olemme isoja ; te olette isoja
               }            --- definiteness of NP ?
           in "kuinka" ++ ap.s ! False ! (NCase n c)
@@ -161,13 +161,13 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     ProDrop p = {
       s = table {NPCase (Nom) => [] ; c => p.s ! c} ;
       poss = [] ; 
-          -- drop Gen only works in adjectival position: "autoni", but not in "¯ t‰ytyy menn‰"
+          -- drop Gen only works in adjectival position: "autoni", but not in "√∏ t√§ytyy menn√§"
       a = p.a ;
       hasPoss = p.hasPoss ;
       } ;
 
     ProDropPoss p = {
-      s1 = \\_,_ => case p.a of {Ag _ P3 => p.s ! NPCase Gen ; _ => []} ;  -- h‰nen nimens‰ ; minun nimeni
+      s1 = \\_,_ => case p.a of {Ag _ P3 => p.s ! NPCase Gen ; _ => []} ;  -- h√§nen nimens√§ ; minun nimeni
       sp = \\_,_ => p.s ! NPCase Gen ;
       s2 = case p.hasPoss of {
              True => table {Front => BIND ++ possSuffixFront p.a ; 
@@ -233,13 +233,13 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     ClPlusWithAdv c = c ;
 
   noPart     = {s = \\_ => []} ;
-  han_Part   = mkPart "han" "h‰n" ;
-  pa_Part    = mkPart "pa" "p‰" ;
-  pas_Part   = mkPart "pas" "p‰s" ;
-  ko_Part    = mkPart "ko" "kˆ" ;
-  kos_Part   = mkPart "kos" "kˆs" ;
-  kohan_Part = mkPart "kohan" "kˆh‰n" ;
-  pahan_Part = mkPart "pahan" "p‰h‰n" ;
+  han_Part   = mkPart "han" "h√§n" ;
+  pa_Part    = mkPart "pa" "p√§" ;
+  pas_Part   = mkPart "pas" "p√§s" ;
+  ko_Part    = mkPart "ko" "k√∂" ;
+  kos_Part   = mkPart "kos" "k√∂s" ;
+  kohan_Part = mkPart "kohan" "k√∂h√§n" ;
+  pahan_Part = mkPart "pahan" "p√§h√§n" ;
 
   PassVPSlash vp = passVP vp vp.c2 ;
 
@@ -252,7 +252,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
 ---- uses inversion of active: Guernican maalasi Picasso. TODO: use the agent participle
 ---- TODO maybe squeeze s2 between the fin and inf (but this is subtle)
-----   sinua olen rakastanut min‰ -> sinua olen min‰ rakastanus
+----   sinua olen rakastanut min√§ -> sinua olen min√§ rakastanus
 -- advantage though: works for all V2 verbs, need not be transitive
 ---- TODO: agr should be to the agent
 

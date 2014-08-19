@@ -1,7 +1,7 @@
---# -coding=latin1
 concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
 
@@ -38,7 +38,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
     SlashVS np vs slash = { 
       s = \\t,a,p => 
         (mkClause (subjForm np vs.sc) np.a 
-          (insertExtrapos ("että" ++ slash.s) 
+          (insertExtrapos ("ettÃ¤" ++ slash.s) 
              (predSV vs))
         ).s ! t ! a ! p ! SDecl ;
       c2 = slash.c2
@@ -63,7 +63,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin, StemFin in {
     AdvS a s = {s = a.s ++ s.s} ;
     ExtAdvS a s = {s = a.s ++ "," ++ s.s} ;
 
-    RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ; ---- mikä
+    RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ; ---- mikÃ¤
 
     SSubjS a subj b = {s = a.s ++ "," ++ subj.s ++ b.s} ;
 

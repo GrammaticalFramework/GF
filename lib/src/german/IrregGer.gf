@@ -1,5 +1,4 @@
 --# -path=.:prelude:../abstract:../common
---# -coding=latin1
 
 -- adapted from verb list in
 -- http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html
@@ -10,170 +9,171 @@ concrete IrregGer of IrregGerAbs = CatGer ** open
 in {
 
   flags optimize=values ;
+    coding=utf8 ;
 
-  lin backen_V =  irregV "backen" "bäckt" "backt" "backt" "gebacken" ;
-  lin backen_u_V =  irregV "backen" "bäckt" "buk" "buke" "gebacken" ;
-  lin befehlen_V =  irregV "befehlen" "befiehlt" "befahl" "beföhle" "befähle)" ;
-  lin beginnen_V =  irregV "beginnen" "beginnt" "begann" "begönne" "begänne)" ;
-  lin beißen_V =  irregV "beißen" "beißt" "biß" "biße" "gebissen" ;
-  lin bergen_V =  irregV "bergen" "birgt" "barg" "bärge" "geborgen" ;
-  lin bersten_V =  irregV "bersten" "birst" "barst" "bärste" "geborsten" ;
-  lin bewegen_V =  irregV "bewegen" "bewegt" "bewog" "bewöge" "bewogen" ;
-  lin biegen_V =  irregV "biegen" "biegt" "bog" "böge" "gebogen" ;
-  lin bieten_V =  irregV "bieten" "bietet" "bot" "böte" "geboten" ;
-  lin binden_V =  irregV "binden" "bindt" "band" "bände" "gebunden" ;
-  lin bitten_V =  irregV "bitten" "bittet" "bat" "bäte" "gebeten" ;
-  lin blasen_V =  irregV "blasen" "bläst" "blies" "bliese" "geblasen" ;
+  lin backen_V =  irregV "backen" "bÃ¤ckt" "backt" "backt" "gebacken" ;
+  lin backen_u_V =  irregV "backen" "bÃ¤ckt" "buk" "buke" "gebacken" ;
+  lin befehlen_V =  irregV "befehlen" "befiehlt" "befahl" "befÃ¶hle" "befÃ¤hle)" ;
+  lin beginnen_V =  irregV "beginnen" "beginnt" "begann" "begÃ¶nne" "begÃ¤nne)" ;
+  lin beiÃŸen_V =  irregV "beiÃŸen" "beiÃŸt" "biÃŸ" "biÃŸe" "gebissen" ;
+  lin bergen_V =  irregV "bergen" "birgt" "barg" "bÃ¤rge" "geborgen" ;
+  lin bersten_V =  irregV "bersten" "birst" "barst" "bÃ¤rste" "geborsten" ;
+  lin bewegen_V =  irregV "bewegen" "bewegt" "bewog" "bewÃ¶ge" "bewogen" ;
+  lin biegen_V =  irregV "biegen" "biegt" "bog" "bÃ¶ge" "gebogen" ;
+  lin bieten_V =  irregV "bieten" "bietet" "bot" "bÃ¶te" "geboten" ;
+  lin binden_V =  irregV "binden" "bindt" "band" "bÃ¤nde" "gebunden" ;
+  lin bitten_V =  irregV "bitten" "bittet" "bat" "bÃ¤te" "gebeten" ;
+  lin blasen_V =  irregV "blasen" "blÃ¤st" "blies" "bliese" "geblasen" ;
   lin bleiben_V =  irregV "bleiben" "bleibt" "blieb" "bliebe" "geblieben" ;
-  lin braten_V =  irregV "braten" "brät" "briet" "briete" "gebraten" ;
-  lin brechen_V =  irregV "brechen" "bricht" "brach" "bräche" "gebrochen" ;
+  lin braten_V =  irregV "braten" "brÃ¤t" "briet" "briete" "gebraten" ;
+  lin brechen_V =  irregV "brechen" "bricht" "brach" "brÃ¤che" "gebrochen" ;
   lin brennen_V =  irregV "brennen" "brennt" "brannte" "brennte" "gebrannt" ;
   lin bringen_V =  irregV "bringen" "bringt" "brachte" "brachte" "gebracht" ;
   lin denken_V =  irregV "denken" "denkt" "dachte" "dachte" "gedacht" ;
   lin dingen_V =  irregV "dingen" "dingt" "dingte" "dang" "gedungen" ;
-  lin dreschen_V =  irregV "dreschen" "drischt" "drosch" "drösche" "gedroschen" ;
-  lin dringen_V =  irregV "dringen" "dringt" "drang" "dränge" "gedrungen" ;
-  lin dürfen_V = M.mkV 
-        "dürfen" "darf" "darfst" "darf" "dürft" "dürf" 
+  lin dreschen_V =  irregV "dreschen" "drischt" "drosch" "drÃ¶sche" "gedroschen" ;
+  lin dringen_V =  irregV "dringen" "dringt" "drang" "drÃ¤nge" "gedrungen" ;
+  lin dÃ¼rfen_V = M.mkV 
+        "dÃ¼rfen" "darf" "darfst" "darf" "dÃ¼rft" "dÃ¼rf" 
         "durfte" "durftest" "durften" "durftet"
-        "dürfte" "gedurft" [] 
+        "dÃ¼rfte" "gedurft" [] 
         M.VHaben ** {lock_V = <>} ;
   lin empfehlen_V =  irregV "empfehlen" "empfiehlt" "empfahl" 
-    "empfähle" "empfohlen" ;
+    "empfÃ¤hle" "empfohlen" ;
   lin empfehlen_o_V =  irregV "empfehlen" "empfiehlt" "empfahl" 
-    "empföhle" "empfohlen" ;
-  lin erlöschen_V =  irregV "erlöschen" "erlischt" "erlosch" "erlösche" "erloschen" ;
+    "empfÃ¶hle" "empfohlen" ;
+  lin erlÃ¶schen_V =  irregV "erlÃ¶schen" "erlischt" "erlosch" "erlÃ¶sche" "erloschen" ;
   lin erkennen_V =  irregV "erkennen" "erkennt" "erkannte" "erkannte" "erkannt" ;
-  lin erschrecken_V =  irregV "erschrecken" "erschrickt" "erschrak" "erschräke" "erschrocken" ;
-  lin essen_V =  irregV "essen" "ißt" "aß" "äße" "gegessen" ;
-  lin fahren_V =  irregV "fahren" "fährt" "fuhr" "führe" "gefahren" ;
-  lin fallen_V =  irregV "fallen" "fällt" "fiel" "fiele" "gefallen" ;
-  lin fangen_V =  irregV "fangen" "fängt" "fing" "finge" "gefangen" ;
-  lin fechten_V =  irregV "fechten" "fechtet" "focht" "föchte" "gefochten" ;
-  lin finden_V =  irregV "finden" "findt" "fand" "fände" "gefunden" ;
-  lin flechten_V =  irregV "flechten" "flicht" "flocht" "flöchte" "geflochten" ;
-  lin fliegen_V =  irregV "fliegen" "fliegt" "flog" "flöge" "geflogen" ;
-  lin fliehen_V =  irregV "fliehen" "flieht" "floh" "flöhe" "geflohen" ;
-  lin fließen_V =  irregV "fließen" "fließt" "floß" "flösse" "geflossen" ;
-  lin fressen_V =  irregV "fressen" "frißt" "fraß" "fräße" "gefressen" ;
-  lin frieren_V =  irregV "frieren" "friert" "fror" "fröre" "gefroren" ;
-  lin gären_V =  irregV "gären" "gärt" "gärte" "göre" "gegoren" ;
-  lin gären_o_V =  irregV "gären" "gärt" "gor" "göre" "gegoren" ;
-  lin gebären_V =  irregV "gebären" "gebiert" "gebar" "gebäre" "geboren" ;
-  lin geben_V =  irregV "geben" "gibt" "gab" "gäbe" "gegeben" ;
+  lin erschrecken_V =  irregV "erschrecken" "erschrickt" "erschrak" "erschrÃ¤ke" "erschrocken" ;
+  lin essen_V =  irregV "essen" "iÃŸt" "aÃŸ" "Ã¤ÃŸe" "gegessen" ;
+  lin fahren_V =  irregV "fahren" "fÃ¤hrt" "fuhr" "fÃ¼hre" "gefahren" ;
+  lin fallen_V =  irregV "fallen" "fÃ¤llt" "fiel" "fiele" "gefallen" ;
+  lin fangen_V =  irregV "fangen" "fÃ¤ngt" "fing" "finge" "gefangen" ;
+  lin fechten_V =  irregV "fechten" "fechtet" "focht" "fÃ¶chte" "gefochten" ;
+  lin finden_V =  irregV "finden" "findt" "fand" "fÃ¤nde" "gefunden" ;
+  lin flechten_V =  irregV "flechten" "flicht" "flocht" "flÃ¶chte" "geflochten" ;
+  lin fliegen_V =  irregV "fliegen" "fliegt" "flog" "flÃ¶ge" "geflogen" ;
+  lin fliehen_V =  irregV "fliehen" "flieht" "floh" "flÃ¶he" "geflohen" ;
+  lin flieÃŸen_V =  irregV "flieÃŸen" "flieÃŸt" "floÃŸ" "flÃ¶sse" "geflossen" ;
+  lin fressen_V =  irregV "fressen" "friÃŸt" "fraÃŸ" "frÃ¤ÃŸe" "gefressen" ;
+  lin frieren_V =  irregV "frieren" "friert" "fror" "frÃ¶re" "gefroren" ;
+  lin gÃ¤ren_V =  irregV "gÃ¤ren" "gÃ¤rt" "gÃ¤rte" "gÃ¶re" "gegoren" ;
+  lin gÃ¤ren_o_V =  irregV "gÃ¤ren" "gÃ¤rt" "gor" "gÃ¶re" "gegoren" ;
+  lin gebÃ¤ren_V =  irregV "gebÃ¤ren" "gebiert" "gebar" "gebÃ¤re" "geboren" ;
+  lin geben_V =  irregV "geben" "gibt" "gab" "gÃ¤be" "gegeben" ;
   lin gedeihen_V =  irregV "gedeihen" "gedeiht" "gedieh" "gediehe" "gediehen" ;
   lin gehen_V =  irregV "gehen" "geht" "ging" "ginge" "gegangen" ;
   lin gelingen_V =  irregV "gelingen" "gelingt" "gelang" "gelange" "gelungen" ;
   lin gelten_V =  irregV "gelten" "gilt" "galt" "galte" "gegolten" ;
   lin gelten_o_V =  irregV "gelten" "gilt" "galt" "golte" "gegolten" ;
-  lin genesen_V =  irregV "genesen" "genest" "genas" "genäse" "genesen" ;
-  lin genießen_V =  irregV "genießen" "genießt" "genoß" "genösse" "genossen" ;
-  lin geschehen_V =  irregV "geschehen" "geschieht" "geschah" "geschehen" "geschähe" ;
-  lin gewinnen_V =  irregV "gewinnen" "gewinnt" "gewann" "gewänne" "gewonnen" ;
-  lin gewinnen_o_V =  irregV "gewinnen" "gewinnt" "gewann" "gewönne" "gewonnen" ;
-  lin gießen_V =  irregV "gießen" "gießt" "goß" "gösse" "gegossen" ;
+  lin genesen_V =  irregV "genesen" "genest" "genas" "genÃ¤se" "genesen" ;
+  lin genieÃŸen_V =  irregV "genieÃŸen" "genieÃŸt" "genoÃŸ" "genÃ¶sse" "genossen" ;
+  lin geschehen_V =  irregV "geschehen" "geschieht" "geschah" "geschehen" "geschÃ¤he" ;
+  lin gewinnen_V =  irregV "gewinnen" "gewinnt" "gewann" "gewÃ¤nne" "gewonnen" ;
+  lin gewinnen_o_V =  irregV "gewinnen" "gewinnt" "gewann" "gewÃ¶nne" "gewonnen" ;
+  lin gieÃŸen_V =  irregV "gieÃŸen" "gieÃŸt" "goÃŸ" "gÃ¶sse" "gegossen" ;
   lin gleichen_V =  irregV "gleichen" "gleicht" "glich" "gliche" "geglichen" ;
   lin gleiten_V =  irregV "gleiten" "gleitet" "glitt" "glitte" "geglitten" ;
-  lin glimmen_V =  irregV "glimmen" "glimmt" "glomm" "glimmte" "glömme" ;
-  lin graben_V =  irregV "graben" "gräbt" "grub" "grübe" "gegraben" ;
+  lin glimmen_V =  irregV "glimmen" "glimmt" "glomm" "glimmte" "glÃ¶mme" ;
+  lin graben_V =  irregV "graben" "grÃ¤bt" "grub" "grÃ¼be" "gegraben" ;
   lin greifen_V =  irregV "greifen" "greift" "griff" "griffe" "gegriffen" ;
-  lin haben_V =  irregV "haben" "hat" "hatte" "hätte" "gehabt" ;
-  lin halten_V =  irregV "halten" "hält" "hielt" "hielte" "gehalten" ;
-  lin hängen_V =  irregV "hängen" "hängt" "hing" "hinge" "gehangen" ;
+  lin haben_V =  irregV "haben" "hat" "hatte" "hÃ¤tte" "gehabt" ;
+  lin halten_V =  irregV "halten" "hÃ¤lt" "hielt" "hielte" "gehalten" ;
+  lin hÃ¤ngen_V =  irregV "hÃ¤ngen" "hÃ¤ngt" "hing" "hinge" "gehangen" ;
   lin hauen_V =  irregV "hauen" "haut" "hieb" "hiebe" "gehauen" ;
   lin hauen_te_V =  irregV "hauen" "haut" "haute" "haute" "gehauen" ;
-  lin heben_V =  irregV "heben" "hebt" "hob" "höbe" "gehoben" ;
-  lin heißen_V =  irregV "heißen" "heißt" "hieß" "hieße" "geheißen" ;
-  lin helfen_V =  irregV "helfen" "hilft" "half" "hülfe" "geholfen" ;
+  lin heben_V =  irregV "heben" "hebt" "hob" "hÃ¶be" "gehoben" ;
+  lin heiÃŸen_V =  irregV "heiÃŸen" "heiÃŸt" "hieÃŸ" "hieÃŸe" "geheiÃŸen" ;
+  lin helfen_V =  irregV "helfen" "hilft" "half" "hÃ¼lfe" "geholfen" ;
   lin kennen_V =  irregV "kennen" "kennt" "kannte" "kennte" "gekannt" ;
-  lin klimmen_V =  irregV "klimmen" "klimmt" "klomm" "klömme" "geklommen" ;
-  lin klingen_V =  irregV "klingen" "klingt" "klang" "klänge" "geklungen" ;
+  lin klimmen_V =  irregV "klimmen" "klimmt" "klomm" "klÃ¶mme" "geklommen" ;
+  lin klingen_V =  irregV "klingen" "klingt" "klang" "klÃ¤nge" "geklungen" ;
   lin kneifen_V =  irregV "kneifen" "kneift" "kniff" "kniffe" "gekniffen" ;
-  lin kommen_V =  irregV "kommen" "kommt" "kam" "käme" "gekommen" ;
-  lin können_V =  M.mkV 
-        "können" "kann" "kannst" "kann" "könnt" "könn" 
+  lin kommen_V =  irregV "kommen" "kommt" "kam" "kÃ¤me" "gekommen" ;
+  lin kÃ¶nnen_V =  M.mkV 
+        "kÃ¶nnen" "kann" "kannst" "kann" "kÃ¶nnt" "kÃ¶nn" 
         "konnte" "konntest" "konnten" "konntet"
-        "könnte" "gekonnt" [] 
+        "kÃ¶nnte" "gekonnt" [] 
         M.VHaben  ** {lock_V = <>} ;
-  lin kriechen_V =  irregV "kriechen" "kriecht" "kroch" "kröche" "gekrochen" ;
-  lin küren_V =  irregV "küren" "kürt" "kürte" "kor" "gekürt" ;
-  lin laden_V =  irregV "laden" "lädt" "lud" "lüde" "geladen" ;
-  lin lassen_V =  irregV "lassen" "läßt" "ließ" "ließe" "gelassen" ;
-  lin laufen_V =  irregV "laufen" "läuft" "lief" "liefe" "gelaufen" ;
+  lin kriechen_V =  irregV "kriechen" "kriecht" "kroch" "krÃ¶che" "gekrochen" ;
+  lin kÃ¼ren_V =  irregV "kÃ¼ren" "kÃ¼rt" "kÃ¼rte" "kor" "gekÃ¼rt" ;
+  lin laden_V =  irregV "laden" "lÃ¤dt" "lud" "lÃ¼de" "geladen" ;
+  lin lassen_V =  irregV "lassen" "lÃ¤ÃŸt" "lieÃŸ" "lieÃŸe" "gelassen" ;
+  lin laufen_V =  irregV "laufen" "lÃ¤uft" "lief" "liefe" "gelaufen" ;
   lin leiden_V =  irregV "leiden" "leidt" "litt" "litte" "gelitten" ;
   lin leihen_V =  irregV "leihen" "leiht" "lieh" "liehe" "geliehen" ;
-  lin lesen_V =  irregV "lesen" "liest" "las" "läse" "gelesen" ;
-  lin liegen_V =  irregV "liegen" "liegt" "lag" "läge" "gelegen" ;
-  lin lügen_V =  irregV "lügen" "lügt" "log" "löge" "gelogen" ;
+  lin lesen_V =  irregV "lesen" "liest" "las" "lÃ¤se" "gelesen" ;
+  lin liegen_V =  irregV "liegen" "liegt" "lag" "lÃ¤ge" "gelegen" ;
+  lin lÃ¼gen_V =  irregV "lÃ¼gen" "lÃ¼gt" "log" "lÃ¶ge" "gelogen" ;
   lin mahlen_V =  irregV "mahlen" "mahlt" "mahlte" "mahlte" "gemahlen" ;
   lin meiden_V =  irregV "meiden" "meidt" "mied" "miede" "gemieden" ;
-  lin melken_V =  irregV "melken" "milkt" "molk" "mölke" "gemolken" ;
-  lin messen_V =  irregV "messen" "mißt" "maß" "mäße" "gemessen" ;
-  lin mißlingen_V =  irregV "mißlingen" "mißlingt" "mißlang" "mißlungen" "mißlänge" ;
-  lin mögen_V =  M.mkV 
-        "mögen" "mag" "magst" "mag" "mögt" "mög" 
+  lin melken_V =  irregV "melken" "milkt" "molk" "mÃ¶lke" "gemolken" ;
+  lin messen_V =  irregV "messen" "miÃŸt" "maÃŸ" "mÃ¤ÃŸe" "gemessen" ;
+  lin miÃŸlingen_V =  irregV "miÃŸlingen" "miÃŸlingt" "miÃŸlang" "miÃŸlungen" "miÃŸlÃ¤nge" ;
+  lin mÃ¶gen_V =  M.mkV 
+        "mÃ¶gen" "mag" "magst" "mag" "mÃ¶gt" "mÃ¶g" 
         "mochte" "mochtest" "mochten" "mochtet"
-        "möchte" "gemocht" [] 
+        "mÃ¶chte" "gemocht" [] 
         M.VHaben ** {lock_V = <>} ;
-  lin müssen_V = M.mkV 
-        "müssen" "muß" "mußt" "muß" "müßt" "müß" 
-        "mußte" "mußtest" "mußten" "mußtet"
-        "müßte" "gemußt" [] 
+  lin mÃ¼ssen_V = M.mkV 
+        "mÃ¼ssen" "muÃŸ" "muÃŸt" "muÃŸ" "mÃ¼ÃŸt" "mÃ¼ÃŸ" 
+        "muÃŸte" "muÃŸtest" "muÃŸten" "muÃŸtet"
+        "mÃ¼ÃŸte" "gemuÃŸt" [] 
         M.VHaben ** {lock_V = <>} ;
-  lin nehmen_V = mk6V "nehmen" "nimmt" "nimm" "nahm" "nähme" "genommen" ;
+  lin nehmen_V = mk6V "nehmen" "nimmt" "nimm" "nahm" "nÃ¤hme" "genommen" ;
   lin nennen_V =  irregV "nennen" "nennt" "nannte" "nennte" "genannt" ;
   lin pfeifen_V =  irregV "pfeifen" "pfeift" "pfiff" "pfiffe" "gepfiffen" ;
   lin preisen_V =  irregV "preisen" "preist" "pries" "priese" "gepriesen" ;
-  lin quellen_V =  irregV "quellen" "quillt" "quoll" "quölle" "gequollen" ;
-  lin raten_V =  irregV "raten" "rät" "riet" "riete" "geraten" ;
+  lin quellen_V =  irregV "quellen" "quillt" "quoll" "quÃ¶lle" "gequollen" ;
+  lin raten_V =  irregV "raten" "rÃ¤t" "riet" "riete" "geraten" ;
   lin reiben_V =  irregV "reiben" "reibt" "rieb" "riebe" "gerieben" ;
-  lin reißen_V =  irregV "reißen" "reißt" "riß" "riße" "gerissen" ;
+  lin reiÃŸen_V =  irregV "reiÃŸen" "reiÃŸt" "riÃŸ" "riÃŸe" "gerissen" ;
   lin reiten_V =  irregV "reiten" "reitet" "ritt" "ritte" "geritten" ;
   lin rennen_V =  irregV "rennen" "rennt" "rannte" "rennte" "gerannt" ;
-  lin riechen_V =  irregV "riechen" "riecht" "roch" "röche" "gerochen" ;
-  lin ringen_V =  irregV "ringen" "ringt" "rang" "ränge" "gerungen" ;
-  lin rinnen_V =  irregV "rinnen" "rinnt" "rann" "ränne" "geronnen" ;
+  lin riechen_V =  irregV "riechen" "riecht" "roch" "rÃ¶che" "gerochen" ;
+  lin ringen_V =  irregV "ringen" "ringt" "rang" "rÃ¤nge" "gerungen" ;
+  lin rinnen_V =  irregV "rinnen" "rinnt" "rann" "rÃ¤nne" "geronnen" ;
   lin rufen_V =  irregV "rufen" "ruft" "rief" "riefe" "gerufen" ;
   lin salzen_V =  irregV "salzen" "salzt" "salzte" "salzte" "gesalzen" ;
-  lin saufen_V =  irregV "saufen" "säuft" "soff" "söffe" "gesoffen" ;
+  lin saufen_V =  irregV "saufen" "sÃ¤uft" "soff" "sÃ¶ffe" "gesoffen" ;
   lin saugen_V =  irregV "saugen" "saugt" "sog" "soge" "gesogen" ;
-  lin schaffen_V =  irregV "schaffen" "schafft" "schuf" "schüfe" "geschaffen" ;
+  lin schaffen_V =  irregV "schaffen" "schafft" "schuf" "schÃ¼fe" "geschaffen" ;
   lin scheiden_V =  irregV "scheiden" "scheidt" "schied" "schiede" "geschieden" ;
   lin scheinen_V =  irregV "scheinen" "scheint" "schien" "schiene" "geschienen" ;
-  lin scheißen_V =  irregV "scheißen" "scheißt" "schiß" "schiße" "geschissen" ;
-  lin schelten_V =  irregV "schelten" "schilt" "schalt" "schölte" "gescholten" ;
-  lin scheren_V =  irregV "scheren" "schert" "schor" "schöre" "geschoren" ;
-  lin schieben_V =  irregV "schieben" "schiebt" "schob" "schöbe" "geschoben" ;
-  lin schießen_V =  irregV "schießen" "schießt" "schoß" "schösse" "geschossen" ;
+  lin scheiÃŸen_V =  irregV "scheiÃŸen" "scheiÃŸt" "schiÃŸ" "schiÃŸe" "geschissen" ;
+  lin schelten_V =  irregV "schelten" "schilt" "schalt" "schÃ¶lte" "gescholten" ;
+  lin scheren_V =  irregV "scheren" "schert" "schor" "schÃ¶re" "geschoren" ;
+  lin schieben_V =  irregV "schieben" "schiebt" "schob" "schÃ¶be" "geschoben" ;
+  lin schieÃŸen_V =  irregV "schieÃŸen" "schieÃŸt" "schoÃŸ" "schÃ¶sse" "geschossen" ;
   lin schinden_V =  irregV "schinden" "schindt" "schund" "schunde" "geschunden" ;
-  lin schlafen_V =  irregV "schlafen" "schläft" "schlief" "schliefe" "geschlafen" ;
-  lin schlagen_V =  irregV "schlagen" "schlägt" "schlug" "schlüge" "geschlagen" ;
+  lin schlafen_V =  irregV "schlafen" "schlÃ¤ft" "schlief" "schliefe" "geschlafen" ;
+  lin schlagen_V =  irregV "schlagen" "schlÃ¤gt" "schlug" "schlÃ¼ge" "geschlagen" ;
   lin schleichen_V =  irregV "schleichen" "schleicht" "schlich" "schliche" "geschlichen" ;
   lin schleifen_V =  irregV "schleifen" "schleift" "schliff" "schliffe" "geschliffen" ;
-  lin schleißen_V =  irregV "schleißen" "schleißt" "schliß" "schliß" "geschlissen" ;
-  lin schließen_V =  irregV "schließen" "schließt" "schloß" "schlösse" "geschlossen" ;
-  lin schlingen_V =  irregV "schlingen" "schlingt" "schlang" "schlünge" "geschlungen" ;
-  lin schmeißen_V =  irregV "schmeißen" "schmeißt" "schmiß" "schmiße" "geschmissen" ;
-  lin schmelzen_V =  irregV "schmelzen" "schmilzt" "schmolz" "schmölze" "geschmolzen" ;
+  lin schleiÃŸen_V =  irregV "schleiÃŸen" "schleiÃŸt" "schliÃŸ" "schliÃŸ" "geschlissen" ;
+  lin schlieÃŸen_V =  irregV "schlieÃŸen" "schlieÃŸt" "schloÃŸ" "schlÃ¶sse" "geschlossen" ;
+  lin schlingen_V =  irregV "schlingen" "schlingt" "schlang" "schlÃ¼nge" "geschlungen" ;
+  lin schmeiÃŸen_V =  irregV "schmeiÃŸen" "schmeiÃŸt" "schmiÃŸ" "schmiÃŸe" "geschmissen" ;
+  lin schmelzen_V =  irregV "schmelzen" "schmilzt" "schmolz" "schmÃ¶lze" "geschmolzen" ;
   lin schneiden_V =  irregV "schneiden" "schneidt" "schnitt" "schnitte" "geschnitten" ;
   lin schreiben_V =  irregV "schreiben" "schreibt" "schrieb" "schriebe" "geschrieben" ;
   lin schreien_V =  irregV "schreien" "schreit" "schrie" "schrie" "geschrien" ;
   lin schreiten_V =  irregV "schreiten" "schreitet" "schritt" "schritte" "geschritten" ;
   lin schweigen_V =  irregV "schweigen" "schweigt" "schwieg" "schwiege" "geschwiegen" ;
-  lin schwellen_V =  irregV "schwellen" "schwillt" "schwoll" "schwölle" "geschwollen" ;
-  lin schwimmen_V =  irregV "schwimmen" "schwimmt" "schwamm" "schwämme" "geschwommen" ;
-  lin schwimmen_o_V =  irregV "schwimmen" "schwimmt" "schwamm" "schwömme" "geschwommen" ;
-  lin schwinden_V =  irregV "schwinden" "schwindt" "schwand" "schwände" "geschwunden" ;
-  lin schwingen_V =  irregV "schwingen" "schwingt" "schwang" "schwänge" "geschwungen" ;
-  lin schwören_V =  irregV "schwören" "schwört" "schwor" "schwüre" "geschworen" ;
-  lin sehen_V =  irregV "sehen" "sieht" "sah" "sähe" "gesehen" ;
-  lin sein_V =  irregV "sein" "ist" "war" "wäre" "gewesen" ;
+  lin schwellen_V =  irregV "schwellen" "schwillt" "schwoll" "schwÃ¶lle" "geschwollen" ;
+  lin schwimmen_V =  irregV "schwimmen" "schwimmt" "schwamm" "schwÃ¤mme" "geschwommen" ;
+  lin schwimmen_o_V =  irregV "schwimmen" "schwimmt" "schwamm" "schwÃ¶mme" "geschwommen" ;
+  lin schwinden_V =  irregV "schwinden" "schwindt" "schwand" "schwÃ¤nde" "geschwunden" ;
+  lin schwingen_V =  irregV "schwingen" "schwingt" "schwang" "schwÃ¤nge" "geschwungen" ;
+  lin schwÃ¶ren_V =  irregV "schwÃ¶ren" "schwÃ¶rt" "schwor" "schwÃ¼re" "geschworen" ;
+  lin sehen_V =  irregV "sehen" "sieht" "sah" "sÃ¤he" "gesehen" ;
+  lin sein_V =  irregV "sein" "ist" "war" "wÃ¤re" "gewesen" ;
   lin senden_V =  irregV "senden" "sendt" "sandte" "sandte" "gesandt" ;
   lin sieden_V =  irregV "sieden" "siedt" "sott" "sotte" "gesotten" ;
-  lin singen_V =  irregV "singen" "singt" "sang" "sänge" "gesungen" ;
-  lin sinken_V =  irregV "sinken" "sinkt" "sank" "sänke" "gesunken" ;
-  lin sinnen_V =  irregV "sinnen" "sinnt" "sann" "sänne" "gesonnen" ;
-  lin sitzen_V =  irregV "sitzen" "sitzt" "saß" "säße" "gesessen" ;
+  lin singen_V =  irregV "singen" "singt" "sang" "sÃ¤nge" "gesungen" ;
+  lin sinken_V =  irregV "sinken" "sinkt" "sank" "sÃ¤nke" "gesunken" ;
+  lin sinnen_V =  irregV "sinnen" "sinnt" "sann" "sÃ¤nne" "gesonnen" ;
+  lin sitzen_V =  irregV "sitzen" "sitzt" "saÃŸ" "sÃ¤ÃŸe" "gesessen" ;
   lin sollen_V =  M.mkV 
         "sollen" "soll" "sollst" "soll" "sollt" "soll" 
         "sollte" "solltest" "sollten" "solltet"
@@ -181,52 +181,52 @@ in {
         M.VHaben ** {lock_V = <>} ;
 
   lin speien_V =  irregV "speien" "speit" "spie" "spie" "gespien" ;
-  lin spinnen_V =  irregV "spinnen" "spinnt" "spann" "spänne" "gesponnen" ;
-  lin spinnen_o_V =  irregV "spinnen" "spinnt" "spann" "spönne" "gesponnen" ;
-  lin spleißen_V =  irregV "spleißen" "spleißt" "spliß" "spliße" "gesplissen" ;
-  lin sprechen_V =  irregV "sprechen" "spricht" "sprach" "spräche" "gesprochen" ;
-  lin sprießen_V =  irregV "sprießen" "sprießt" "sproß" "sprösse" "gesprossen" ;
-  lin springen_V =  irregV "springen" "springt" "sprang" "spränge" "gesprungen" ;
-  lin stechen_V =  irregV "stechen" "sticht" "stach" "stäche" "gestochen" ;
-  lin stehen_V =  irregV "stehen" "steht" "stand" "stände" "gestanden" ;
-  lin stehen_u_V =  irregV "stehen" "steht" "stand" "stünde" "gestanden" ;
-  lin stehlen_V =  irregV "stehlen" "stiehlt" "stahl" "stähle" "gestohlen" ;
+  lin spinnen_V =  irregV "spinnen" "spinnt" "spann" "spÃ¤nne" "gesponnen" ;
+  lin spinnen_o_V =  irregV "spinnen" "spinnt" "spann" "spÃ¶nne" "gesponnen" ;
+  lin spleiÃŸen_V =  irregV "spleiÃŸen" "spleiÃŸt" "spliÃŸ" "spliÃŸe" "gesplissen" ;
+  lin sprechen_V =  irregV "sprechen" "spricht" "sprach" "sprÃ¤che" "gesprochen" ;
+  lin sprieÃŸen_V =  irregV "sprieÃŸen" "sprieÃŸt" "sproÃŸ" "sprÃ¶sse" "gesprossen" ;
+  lin springen_V =  irregV "springen" "springt" "sprang" "sprÃ¤nge" "gesprungen" ;
+  lin stechen_V =  irregV "stechen" "sticht" "stach" "stÃ¤che" "gestochen" ;
+  lin stehen_V =  irregV "stehen" "steht" "stand" "stÃ¤nde" "gestanden" ;
+  lin stehen_u_V =  irregV "stehen" "steht" "stand" "stÃ¼nde" "gestanden" ;
+  lin stehlen_V =  irregV "stehlen" "stiehlt" "stahl" "stÃ¤hle" "gestohlen" ;
   lin steigen_V =  irregV "steigen" "steigt" "stieg" "stiege" "gestiegen" ;
-  lin sterben_V =  irregV "sterben" "stirbt" "starb" "stürbe" "gestorben" ;
-  lin stieben_V =  irregV "stieben" "stiebt" "stob" "stöbe" "gestoben" ;
-  lin stinken_V =  irregV "stinken" "stinkt" "stank" "stänke" "gestunken" ;
-  lin stoßen_V =  irregV "stoßen" "stößt" "stieß" "stieße" "gestoßen" ;
+  lin sterben_V =  irregV "sterben" "stirbt" "starb" "stÃ¼rbe" "gestorben" ;
+  lin stieben_V =  irregV "stieben" "stiebt" "stob" "stÃ¶be" "gestoben" ;
+  lin stinken_V =  irregV "stinken" "stinkt" "stank" "stÃ¤nke" "gestunken" ;
+  lin stoÃŸen_V =  irregV "stoÃŸen" "stÃ¶ÃŸt" "stieÃŸ" "stieÃŸe" "gestoÃŸen" ;
   lin streichen_V =  irregV "streichen" "streicht" "strich" "striche" "gestrichen" ;
   lin streiten_V =  irregV "streiten" "streitet" "stritt" "stritte" "gestritten" ;
-  lin tragen_V =  irregV "tragen" "trägt" "trug" "trüge" "getragen" ;
-  lin treffen_V =  irregV "treffen" "trifft" "traf" "träfe" "getroffen" ;
+  lin tragen_V =  irregV "tragen" "trÃ¤gt" "trug" "trÃ¼ge" "getragen" ;
+  lin treffen_V =  irregV "treffen" "trifft" "traf" "trÃ¤fe" "getroffen" ;
   lin treiben_V =  irregV "treiben" "treibt" "trieb" "triebe" "getrieben" ;
-  lin treten_V =  irregV "treten" "tritt" "trat" "träte" "getreten" ;
-  lin trinken_V =  irregV "trinken" "trinkt" "trank" "tränke" "getrunken" ;
-  lin trügen_V =  irregV "trügen" "trügt" "trog" "tröge" "getrogen" ;
-  lin tun_V =  irregV "tun" "tut" "tat" "täte" "getan" ;
+  lin treten_V =  irregV "treten" "tritt" "trat" "trÃ¤te" "getreten" ;
+  lin trinken_V =  irregV "trinken" "trinkt" "trank" "trÃ¤nke" "getrunken" ;
+  lin trÃ¼gen_V =  irregV "trÃ¼gen" "trÃ¼gt" "trog" "trÃ¶ge" "getrogen" ;
+  lin tun_V =  irregV "tun" "tut" "tat" "tÃ¤te" "getan" ;
   lin verderben_V =  irregV "verderben" "verdirbt" "verdarb" "verdarbe" "verdorben" ;
-  lin verlieren_V =  irregV "verlieren" "verliert" "verlor" "verlöre" "verloren" ;
-  lin wachsen_V =  irregV "wachsen" "wächst" "wuchs" "wüchse" "gewachsen" ;
-  lin wägen_V =  irregV "wägen" "wägt" "wog" "woge" "gewogen" ;
-  lin waschen_V =  irregV "waschen" "wäscht" "wusch" "wüsche" "gewaschen" ;
-  lin weben_V =  irregV "weben" "webt" "wob" "wöbe" "gewoben" ;
+  lin verlieren_V =  irregV "verlieren" "verliert" "verlor" "verlÃ¶re" "verloren" ;
+  lin wachsen_V =  irregV "wachsen" "wÃ¤chst" "wuchs" "wÃ¼chse" "gewachsen" ;
+  lin wÃ¤gen_V =  irregV "wÃ¤gen" "wÃ¤gt" "wog" "woge" "gewogen" ;
+  lin waschen_V =  irregV "waschen" "wÃ¤scht" "wusch" "wÃ¼sche" "gewaschen" ;
+  lin weben_V =  irregV "weben" "webt" "wob" "wÃ¶be" "gewoben" ;
   lin weichen_V =  irregV "weichen" "weicht" "wich" "wiche" "gewichen" ;
   lin weisen_V =  irregV "weisen" "weist" "wies" "wiese" "gewiesen" ;
   lin wenden_V =  irregV "wenden" "wendt" "wandte" "wandte" "gewandt" ;
-  lin werben_V =  irregV "werben" "wirbt" "warb" "würbe" "geworben" ;
+  lin werben_V =  irregV "werben" "wirbt" "warb" "wÃ¼rbe" "geworben" ;
   lin werden_V = M.mkV 
         "werden" "werde" "wirst" "wird" "werdet" "werd" 
         "wurde" "wurdest" "wurden" "wurdet"
-        "würde" "geworden" [] 
+        "wÃ¼rde" "geworden" [] 
         M.VHaben ** {lock_V = <>} ;
-  lin werfen_V =  irregV "werfen" "wirft" "warf" "würfe" "geworfen" ;
-  lin wiegen_V =  irregV "wiegen" "wiegt" "wog" "wöge" "gewogen" ;
-  lin winden_V =  irregV "winden" "windt" "wand" "wände" "gewunden" ;
+  lin werfen_V =  irregV "werfen" "wirft" "warf" "wÃ¼rfe" "geworfen" ;
+  lin wiegen_V =  irregV "wiegen" "wiegt" "wog" "wÃ¶ge" "gewogen" ;
+  lin winden_V =  irregV "winden" "windt" "wand" "wÃ¤nde" "gewunden" ;
   lin wissen_V =  M.mkV 
-        "wissen" "weiß" "weißt" "weiß" "wisst" "wisse" 
+        "wissen" "weiÃŸ" "weiÃŸt" "weiÃŸ" "wisst" "wisse" 
         "wusste" "wusstest" "wussten" "wusstet"
-        "wüsste" "gewusst" [] 
+        "wÃ¼sste" "gewusst" [] 
         M.VHaben ** {lock_V = <>} ;
   lin wollen_V =  M.mkV 
         "wollen" "will" "willst" "will" "wollt" "woll" 
@@ -235,9 +235,9 @@ in {
         M.VHaben ** {lock_V = <>} ;
 
 
-  lin wringen_V =  irregV "wringen" "wringt" "wrang" "wränge" "gewrungen" ;
+  lin wringen_V =  irregV "wringen" "wringt" "wrang" "wrÃ¤nge" "gewrungen" ;
   lin zeihen_V =  irregV "zeihen" "zeiht" "zieh" "ziehe" "geziehen" ;
-  lin ziehen_V =  irregV "ziehen" "zieht" "zog" "zöge" "gezogen" ;
-  lin zwingen_V =  irregV "zwingen" "zwingt" "zwang" "zwänge" "gezwungen" ;
+  lin ziehen_V =  irregV "ziehen" "zieht" "zog" "zÃ¶ge" "gezogen" ;
+  lin zwingen_V =  irregV "zwingen" "zwingt" "zwang" "zwÃ¤nge" "gezwungen" ;
 
 }
