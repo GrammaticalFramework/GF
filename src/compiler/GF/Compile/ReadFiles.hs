@@ -232,12 +232,15 @@ toUTF8 opts0 raw =
          coding = getEncoding $ opts0 `addOptions` opts
      utf8 <- if coding=="UTF-8"
              then return raw
-             else lift $ do --ePutStrLn $ "toUTF8 from "++coding
-                            enc <- mkTextEncoding coding
-                            -- decodeUnicodeIO uses a lot of stack space,
-                            -- so we need to split the file into smaller pieces
-                            ls <- mapM (decodeUnicodeIO enc) (BS.lines raw)
-                            return $ UTF8.fromString (unlines ls)
+             else if coding=="CP1252" -- Latin1
+                  then return . UTF8.fromString $ BS.unpack raw -- faster
+                  else lift $
+                       do --ePutStrLn $ "toUTF8 from "++coding
+                          enc <- mkTextEncoding coding
+                          -- decodeUnicodeIO uses a lot of stack space,
+                          -- so we need to split the file into smaller pieces
+                          ls <- mapM (decodeUnicodeIO enc) (BS.lines raw)
+                          return $ UTF8.fromString (unlines ls)
      return (given,utf8)
 
 --lift io = ioe (fmap Ok io `catch` (return . Bad . show))
