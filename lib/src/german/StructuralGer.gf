@@ -1,14 +1,14 @@
---# -coding=latin1
 concrete StructuralGer of Structural = CatGer ** 
 
   open MorphoGer, MakeStructuralGer, (X = ConstructX), 
        (P = ParadigmsGer), IrregGer, Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
   lin
 
-  above_Prep = mkPrep "über" P.dative ;
+  above_Prep = mkPrep "Ã¼ber" P.dative ;
   after_Prep = mkPrep "nach" P.dative ;
   all_Predet = {s = appAdj (regA "all") ; c = noCase ; a = PAgNone} ;
   almost_AdA, almost_AdN = ss "fast" ;
@@ -25,19 +25,19 @@ concrete StructuralGer of Structural = CatGer **
   by8means_Prep = mkPrep "mit" P.dative ;
   can8know_VV, can_VV = auxVV 
       (mkV 
-        "können" "kann" "kannst" "kann" "könnt" "könn" 
+        "kÃ¶nnen" "kann" "kannst" "kann" "kÃ¶nnt" "kÃ¶nn" 
         "konnte" "konntest" "konnten" "konntet"
-        "könnte" "gekonnt" [] 
+        "kÃ¶nnte" "gekonnt" [] 
         VHaben) ;
-  during_Prep = mkPrep "während" P.genitive ;
+  during_Prep = mkPrep "wÃ¤hrend" P.genitive ;
   either7or_DConj = sd2 "entweder" "oder" ** {n = Sg} ;
   everybody_NP = nameNounPhrase {s = caselist "jeder" "jeden" "jedem" "jedes"} ;
   every_Det = detLikeAdj False Sg "jed" ;
   everything_NP = nameNounPhrase {s = caselist "alles" "alles" "allem" "alles"} ;
-  everywhere_Adv = ss "überall" ;
+  everywhere_Adv = ss "Ã¼berall" ;
   few_Det = detLikeAdj False Pl "wenig" ;
 ----  first_Ord = {s = (regA "erst").s ! Posit} ;
-  for_Prep = mkPrep "für" P.accusative ;
+  for_Prep = mkPrep "fÃ¼r" P.accusative ;
   from_Prep = mkPrep "aus" P.dative ;
   he_Pron = mkPronPers "er" "ihn" "ihm" "seiner" "sein"  Masc Sg P3 ;
   here7to_Adv = ss ["hierher"] ;
@@ -58,9 +58,9 @@ concrete StructuralGer of Structural = CatGer **
   much_Det = detLikeAdj False Sg "viel" ;
   must_VV = auxVV 
       (mkV 
-        "müssen" "muß" "mußt" "muß" "müßt" "müß" 
-        "mußte" "mußtest" "mußten" "mußtet"
-        "müßte" "gemußt" [] 
+        "mÃ¼ssen" "muÃŸ" "muÃŸt" "muÃŸ" "mÃ¼ÃŸt" "mÃ¼ÃŸ" 
+        "muÃŸte" "muÃŸtest" "muÃŸten" "muÃŸtet"
+        "mÃ¼ÃŸte" "gemuÃŸt" [] 
         VHaben) ;
 ---  one_Quant = DEPREC
   only_Predet = {s = \\_,_,_ => "nur" ; c = noCase ; a = PAgNone} ;
@@ -147,12 +147,12 @@ concrete StructuralGer of Structural = CatGer **
   nothing_NP = 
     nameNounPhrase {s = \\_ => "nichts"} ;
   at_least_AdN = ss "wenigstens" ;
-  at_most_AdN = ss "höchstens" ;
-  except_Prep = mkPrep "außer" P.dative ;
+  at_most_AdN = ss "hÃ¶chstens" ;
+  except_Prep = mkPrep "auÃŸer" P.dative ;
 
   as_CAdv = X.mkCAdv "ebenso" "wie" ;
   have_V2 = P.dirV2 IrregGer.haben_V ;
-  that_Subj = ss "daß" ;
+  that_Subj = ss "daÃŸ" ;
 
   lin language_title_Utt = ss "Deutsch" ;
 

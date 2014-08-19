@@ -1,6 +1,6 @@
---# -coding=latin1
 concrete NumeralSpa of Numeral = CatSpa [Numeral,Digits] ** 
   open CommonRomance, ResRomance, MorphoSpa, Prelude in {
+  flags coding=utf8 ;
 
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;
@@ -13,32 +13,32 @@ lin num x = x ;
 
 lin n2 = 
   mkTal "dos"    "doce"       "veinte"    "doscientos"    
-        "segundo" "duodécimo" "vigésimo" "ducentésimo" ;
+        "segundo" "duodÃ©cimo" "vigÃ©simo" "ducentÃ©simo" ;
 lin n3 = 
   mkTal "tres"   "trece"      "treinta"   "trescientos"   
-        "tercero" "decimotercero" "trigésimo" "tricentesimo" ;
+        "tercero" "decimotercero" "trigÃ©simo" "tricentesimo" ;
 lin n4 = 
   mkTal "cuatro" "catorce"    "cuarenta"  "cuatrocientos" 
-        "cuarto" "decimocuarto" "cuadragésimo" "cuadringentesimo" ;
+        "cuarto" "decimocuarto" "cuadragÃ©simo" "cuadringentesimo" ;
 lin n5 = 
   mkTal "cinco"  "quince"     "cinquenta" "quinientos"
-        "quinto" "decimoquinto" "quincuagésimo" "guingentésimo" ;
+        "quinto" "decimoquinto" "quincuagÃ©simo" "guingentÃ©simo" ;
 lin n6 = 
-  mkTal "seis"   "dieciséis"  "sesenta"   "seiscientos"
-        "sexto" "decimosexto" "sexagésimo" "sexcentesimo" ;
+  mkTal "seis"   "diecisÃ©is"  "sesenta"   "seiscientos"
+        "sexto" "decimosexto" "sexagÃ©simo" "sexcentesimo" ;
 lin n7 = 
-  mkTal "siete"  "diecisiéte" "setenta"   "setecientos"
-        "séptimo" "decimoséptimo" "septuagésimo" "septingentesimo" ;
+  mkTal "siete"  "diecisiÃ©te" "setenta"   "setecientos"
+        "sÃ©ptimo" "decimosÃ©ptimo" "septuagÃ©simo" "septingentesimo" ;
 lin n8 = 
   mkTal "ocho"   "dieciocho"  "ochenta"   "ochocientos"
-        "octavo" "decimoctavo" "octogésimo" "octingentésimo" ;
+        "octavo" "decimoctavo" "octogÃ©simo" "octingentÃ©simo" ;
 lin n9 = 
   mkTal "nueve"  "diecinueve" "noventa"   "novecientos"
-        "noveno" "decimonoveno" "nonagésimo" "noningentésimo"  ;
+        "noveno" "decimonoveno" "nonagÃ©simo" "noningentÃ©simo"  ;
 
 lin pot01 = 
-  let uno = (mkTal "uno" "once" "diez" "ciento" "primero" "undécimo"
-  "décimo" "centésimo").s in
+  let uno = (mkTal "uno" "once" "diez" "ciento" "primero" "undÃ©cimo"
+  "dÃ©cimo" "centÃ©simo").s in
   {s =\\f,g => case <f,g> of {
      <ental pred,_> => [] ;
      <ental _, NCard Fem> => "una" ;
@@ -51,7 +51,7 @@ lin pot01 =
 
 lin pot0 d = {s = d.s ; n = Pl} ;
 lin pot110 = spl ((mkTal "diez" [] [] [] "decimo" [] [] []).s ! ental indip) ;
-lin pot111 = spl ((mkTal "once" [] [] [] "undécimo" [] [] []).s ! ental indip) ;
+lin pot111 = spl ((mkTal "once" [] [] [] "undÃ©cimo" [] [] []).s ! ental indip) ;
 lin pot1to19 d = spl (d.s ! ton) ;
 lin pot0as1 n = {s = n.s ! ental indip ; n = n.n} ;
 lin pot1 d = spl (d.s ! tiotal) ;
@@ -90,7 +90,7 @@ oper
     } ;
 
   mil : CardOrd -> Str = \g ->
-    (mkTal "mil" [] [] [] "milésimo" [] [] []).s ! ental indip ! g ;
+    (mkTal "mil" [] [] [] "milÃ©simo" [] [] []).s ! ental indip ! g ;
 
   y_CardOrd : CardOrd -> Str = \co -> case co of {
     NCard _ => "y" ;

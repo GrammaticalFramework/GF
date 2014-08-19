@@ -1,5 +1,4 @@
 --# -path=.:../scandinavian:../common:../../prelude
---# -coding=latin1
 
 --1 A Simple Swedish Resource Morphology
 --
@@ -10,6 +9,7 @@
 -- gives a higher-level access to this module.
 
 resource MorphoSwe = CommonScand, ResSwe ** open Prelude, (Predef=Predef) in {
+  flags coding=utf8 ;
 
 
 -- Verbs
@@ -56,9 +56,9 @@ oper
     cardOrd tio (tio + "nde") ;
 
   mkTal : (x1,_,_,_,x5 : Str) -> LinDigit = 
-    \två, tolv, tjugo, andra, tolfte -> 
+    \tvÃ¥, tolv, tjugo, andra, tolfte -> 
     {s = table {
-           ental  => cardOrd två andra ; 
+           ental  => cardOrd tvÃ¥ andra ; 
            ton    => cardOrd tolv tolfte ;
            tiotal => cardReg tjugo
            }

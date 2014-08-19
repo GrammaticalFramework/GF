@@ -1,5 +1,4 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
---# -coding=latin1
 
 --1 Swedish Lexical Paradigms
 --
@@ -34,6 +33,7 @@ resource ParadigmsSwe =
     ResSwe, 
     MorphoSwe, 
     CatSwe in {
+  flags coding=utf8 ;
 
 --2 Parameters 
 --
@@ -120,16 +120,16 @@ oper
     mkN2 : N -> Prep -> N2 -- e.g. syster - till
   } ;
 
--- Three-place relational nouns ("förbindelse från x till y") 
+-- Three-place relational nouns ("fÃ¶rbindelse frÃ¥n x till y") 
 -- need two prepositions.
 
-  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. flyg - från - till
+  mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. flyg - frÃ¥n - till
 
 
 --3 Relational common noun phrases
 --
 -- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "den före detta maken till"). However, $N2$ and
+-- relational noun (e.g. "den fÃ¶re detta maken till"). However, $N2$ and
 -- $N3$ are purely lexical categories. But you can use the $AdvCN$
 -- and $PrepNP$ constructions to build phrases like this.
 
@@ -185,7 +185,7 @@ oper
 
 -- Adjective with all positive forms the same.
  
-  invarA : Str -> A ;  -- e.g. äkta
+  invarA : Str -> A ;  -- e.g. Ã¤kta
 
 ---- Adjective with deviant adverb.
 
@@ -205,12 +205,12 @@ oper
 -- after the verb. Some can be preverbal in subordinate position
 -- (e.g. "alltid").
 
-  mkAdv : Str -> Adv ;  -- postverbal, e.g. här
+  mkAdv : Str -> Adv ;  -- postverbal, e.g. hÃ¤r
   mkAdV : Str -> AdV ;  -- preverbal, e.g. alltid
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
-  mkAdA : Str -> AdA ; -- modify adjective, e.g. tämligen
+  mkAdA : Str -> AdA ; -- modify adjective, e.g. tÃ¤mligen
 
 --2 Verbs
 --
@@ -222,38 +222,38 @@ oper
 -- present tense indicative form. The value is the first conjugation if the
 -- argument ends with "ar" ("tala" - "talar" - "talade" - "talat"),
 -- the second with "er" ("leka" - "leker" - "lekte" - "lekt", with the
--- variations like in "gräva", "vända", "tyda", "hyra"), and 
+-- variations like in "grÃ¤va", "vÃ¤nda", "tyda", "hyra"), and 
 -- the third in other cases ("bo" - "bor" - "bodde" - "bott").
 -- It is also possible to give the infinite form to it; they are treated
 -- as if they were implicitly suffixed by "r". Moreover, deponent verbs
 -- are recognized from the final "s" ("hoppas").
 
-    mkV : (stämmer : Str) -> V ; -- predictable verb: use present indicative
+    mkV : (stÃ¤mmer : Str) -> V ; -- predictable verb: use present indicative
 
 -- Most irregular verbs need just the conventional three forms.
 
-    mkV : (slita, slet : Str) -> V ; -- i/e/i, u/ö/u, u/a/u
+    mkV : (slita, slet : Str) -> V ; -- i/e/i, u/Ã¶/u, u/a/u
 
     mkV : (dricka,drack,druckit : Str) -> V ; -- the theme of an irregular verb
 
 -- In the worst case, six forms are given.
 
-    mkV : (gå,går,gå,gick,gått,gången : Str) -> V ; -- worst case
+    mkV : (gÃ¥,gÃ¥r,gÃ¥,gick,gÃ¥tt,gÃ¥ngen : Str) -> V ; -- worst case
 
--- Particle verbs, such as "passa på", are formed by adding a string to a verb.
+-- Particle verbs, such as "passa pÃ¥", are formed by adding a string to a verb.
 
-    mkV : V -> Str -> V -- particle verb, e.g. passa - på
+    mkV : V -> Str -> V -- particle verb, e.g. passa - pÃ¥
     } ;
 
 
 --3 Deponent verbs.
 --
 -- Some words are used in passive forms only, e.g. "hoppas", some as
--- reflexive e.g. "ångra sig". Regular deponent verbs are also
+-- reflexive e.g. "Ã¥ngra sig". Regular deponent verbs are also
 -- handled by $mkV$ and recognized from the ending "s".
 
   depV  : V -> V ; -- deponent verb, e.g. andas
-  reflV : V -> V ; -- reflexive verb, e.g. ångra sig
+  reflV : V -> V ; -- reflexive verb, e.g. Ã¥ngra sig
 
 
 --3 Two-place verbs
@@ -438,7 +438,7 @@ oper
        "ar" => decl2Noun bil ;
        "er" => case bil of {
          _ + "or" => mk4N bil (bil + "n") bilar (bilar + "na") ; -- motor,motorn
-         _   => decl3gNoun bil bilar                      -- fot, fötter
+         _   => decl3gNoun bil bilar                      -- fot, fÃ¶tter
          } ;
        "en" => decl4Noun bil ;                             -- rike, riken
        _    => mk4N bil (bil + "et") bilar (bilar + "n") -- centrum, centra 
@@ -453,10 +453,10 @@ oper
   decl2Noun : Str -> N = \bil ->
     let 
       bb : Str * Str = case bil of {
-        br   + ("o" | "u" | "ö" | "å") => <bil + "ar",    bil  + "n"> ;
+        br   + ("o" | "u" | "Ã¶" | "Ã¥") => <bil + "ar",    bil  + "n"> ;
         pojk + "e"                     => <pojk + "ar",    bil  + "n"> ;
         hi + "mme" + l@("l" | "r")     => <hi + "m" + l + "ar",hi + "m" + l + "en"> ;
-        nyck@(_ + ("a"|"e"|"i"|"o"|"u"|"y"|"å"|"ä"|"ö") + _) + "e" + l@("l" | "r")     => <nyck + l + "ar",bil  + "n"> ;
+        nyck@(_ + ("a"|"e"|"i"|"o"|"u"|"y"|"Ã¥"|"Ã¤"|"Ã¶") + _) + "e" + l@("l" | "r")     => <nyck + l + "ar",bil  + "n"> ;
         sock + "e" + "n"               => <sock + "nar",   sock + "nen"> ;
         _                              => <bil + "ar",     bil  + "en">
         } ;
@@ -465,13 +465,13 @@ oper
   decl3Noun : Str -> N = \sak ->
     case last sak of {
       "e" => mk4N sak (sak + "n") (sak +"r") (sak + "rna") ;
-      "y" | "å" | "é" | "y" => mk4N sak (sak + "n") (sak +"er") (sak + "erna") ;
+      "y" | "Ã¥" | "Ã©" | "y" => mk4N sak (sak + "n") (sak +"er") (sak + "erna") ;
       _ => mk4N sak (sak + "en") (sak + "er") (sak + "erna")
       } ;
   decl3gNoun : Str -> Str -> N = \sak,saker ->
     case last sak of {
       "e" => mk4N sak (sak + "n") saker (saker + "na") ;
-      "y" | "å" | "é" | "y" => mk4N sak (sak + "n") saker (saker + "na") ;
+      "y" | "Ã¥" | "Ã©" | "y" => mk4N sak (sak + "n") saker (saker + "na") ;
       _ => mk4N sak (sak + "en") saker (saker + "na")
       } ;
 
@@ -579,18 +579,18 @@ oper
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
   mkV = overload {
-    mkV : (stämmer : Str) -> V = regV ;
+    mkV : (stÃ¤mmer : Str) -> V = regV ;
     mkV : (slita, slet : Str) -> V = reg2V ;
     mkV : (dricka,drack,druckit : Str) -> V = irregV ;
-    mkV : (supa,super,sup,söp,supit,supen : Str) -> V = mk6V ;
-    mkV : (supa,super,sup,söp,supit,supen,supande : Str) -> V = mk7V ;
+    mkV : (supa,super,sup,sÃ¶p,supit,supen : Str) -> V = mk6V ;
+    mkV : (supa,super,sup,sÃ¶p,supit,supen,supande : Str) -> V = mk7V ;
     mkV : V -> Str -> V = partV
     } ;
 
   mk6V = \finna,finner,finn,fann,funnit,funnen ->
     let finnande : Str = case finna of {
        _ + "a" => finna + "nde" ;
-       _       => finna + "ende"   -- gående; but bli - blivande must be given separately
+       _       => finna + "ende"   -- gÃ¥ende; but bli - blivande must be given separately
        }
     in
     mk7V finna finner finn fann funnit funnen finnande ;
@@ -610,7 +610,7 @@ oper
     lek + "er" => conj2 (lek + "a") ;
     bo  + "r"  => conj3 bo ;
     ret + "as" => depV (conj1 (ret + "a")) ; 
-    n + ("os" | "ys" | "ås" | "ös") => depV (conj3 (init leker)) ;
+    n + ("os" | "ys" | "Ã¥s" | "Ã¶s") => depV (conj3 (init leker)) ;
     ret + "s"  => depV (conj2 (ret + "a")) ;
     _          => conj3 leker
     } ;
@@ -650,8 +650,8 @@ oper
 
   reg2V : Str -> Str -> V = \sliter,slet -> (case <slita,slet> of {
     <_ + "i" + ?  + "a", sl + "e" + ?>   => irregV slita slet (init slita + "it") ;
-    <_ + "u" + ?  + "a", sl + "ö" + ?>   => irregV slita slet (init slita + "it") ;
-    <_ + "u" + ? + ? + "a", sl + "ö" + ? + ?>  => irregV slita slet (init slita + "it") ;
+    <_ + "u" + ?  + "a", sl + "Ã¶" + ?>   => irregV slita slet (init slita + "it") ;
+    <_ + "u" + ? + ? + "a", sl + "Ã¶" + ? + ?>  => irregV slita slet (init slita + "it") ;
     <_ + "i" + ? + ? + "a", sl + "a" + pp@(? + ?)>  => irregV slita slet (sl  + "u" + pp ++ "it") ;
     _ => regV sliter
     } where {
@@ -661,19 +661,19 @@ oper
        }
      }) ;
 
-  irregV = \sälja, sålde, sålt -> 
+  irregV = \sÃ¤lja, sÃ¥lde, sÃ¥lt -> 
     let
-      säljer = case last sälja of {
-        "a" => conj2 sälja ;
-        _   => conj3 sälja
+      sÃ¤ljer = case last sÃ¤lja of {
+        "a" => conj2 sÃ¤lja ;
+        _   => conj3 sÃ¤lja
         } ;
-      såld = case Predef.dp 2 sålt of {
-        "it" => Predef.tk 2 sålt + "en" ;
-        "tt" => Predef.tk 2 sålt + "dd" ;
-        _ => init sålt + "d"
+      sÃ¥ld = case Predef.dp 2 sÃ¥lt of {
+        "it" => Predef.tk 2 sÃ¥lt + "en" ;
+        "tt" => Predef.tk 2 sÃ¥lt + "dd" ;
+        _ => init sÃ¥lt + "d"
         }
     in 
-    mk6V sälja (säljer.s ! VF (VPres Act)) (säljer.s ! (VF (VImper Act))) sålde sålt såld
+    mk6V sÃ¤lja (sÃ¤ljer.s ! VF (VPres Act)) (sÃ¤ljer.s ! (VF (VImper Act))) sÃ¥lde sÃ¥lt sÃ¥ld
      ** {s1 = [] ; lock_V = <>} ;
 
   partV v p = case p of {
@@ -685,14 +685,14 @@ oper
   reflV v = {s = v.s ; part = v.part ; vtype = VRefl ; lock_V = <>} ;
 
   mkV2 = overload {
-    mkV2 : (läser : Str) -> V2 = \v -> dirV2 (regV v) ;
+    mkV2 : (lÃ¤ser : Str) -> V2 = \v -> dirV2 (regV v) ;
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : Str -> Prep -> V2 = \v -> mmkV2 (regV v) ;
     mkV2 : V -> Prep -> V2 = mmkV2 ;
     mkV2 : (slita, slet : Str) -> V2 = \x,y -> dirV2 (reg2V x y) ;
     mkV2 : (dricka,drack,druckit : Str) -> V2 = \x,y,z -> dirV2 (irregV x y z) ;
-    mkV2 : (supa,super,sup,söp,supit,supen : Str) -> V2 = \x,y,z,u,v,w -> dirV2 (mk6V x y z u v w) ;
-    mkV2 : (supa,super,sup,söp,supit,supen,supande : Str) -> V2 = \x,y,z,u,v,w,s -> dirV2 (mk7V x y z u v w s) ;
+    mkV2 : (supa,super,sup,sÃ¶p,supit,supen : Str) -> V2 = \x,y,z,u,v,w -> dirV2 (mk6V x y z u v w) ;
+    mkV2 : (supa,super,sup,sÃ¶p,supit,supen,supande : Str) -> V2 = \x,y,z,u,v,w,s -> dirV2 (mk7V x y z u v w s) ;
     } ;
 
 
@@ -781,8 +781,8 @@ oper
   mk3cA : (galen,galet,galna : Str) -> Bool -> A = 
     \x,y,z,b -> lin A {s = (mk3A x y z).s ; isComp = b} ;
 
-  mk7V : (supa,super,sup,söp,supit,supen,supande : Str) -> V ;
-  mk6V : (supa,super,sup,söp,supit,supen : Str) -> V ;
+  mk7V : (supa,super,sup,sÃ¶p,supit,supen,supande : Str) -> V ;
+  mk6V : (supa,super,sup,sÃ¶p,supit,supen : Str) -> V ;
   regV : (talar : Str) -> V ;
   mk2V : (leka,lekte : Str) -> V ;
   irregV : (dricka, drack, druckit : Str) -> V ;

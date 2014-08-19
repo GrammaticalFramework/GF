@@ -1,5 +1,4 @@
 --# -path=.:../abstract:../common:../../prelude
---# -coding=latin1
 
 --1 Finnish auxiliary operations.
 
@@ -11,6 +10,7 @@
 resource ResFin = ParamX ** open Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 
 --2 Parameters for $Noun$
@@ -220,11 +220,11 @@ param
     let
       c = case co.c of {
         NPAcc => case b of {
-          Neg => NPCase Part ; -- en näe taloa/sinua
+          Neg => NPCase Part ; -- en nÃ¤e taloa/sinua
           Pos => case isFin of {
-               True => NPAcc ; -- näen/täytyy nähdä sinut
+               True => NPAcc ; -- nÃ¤en/tÃ¤ytyy nÃ¤hdÃ¤ sinut
                _ => case np.isPron of {
-                  False => NPCase Nom ;  -- täytyy nähdä talo
+                  False => NPCase Nom ;  -- tÃ¤ytyy nÃ¤hdÃ¤ talo
                   _ => NPAcc
                   }
                }
@@ -298,7 +298,7 @@ oper
      } ;
 
   kin : Polarity -> Harmony -> Str  = 
-    \p,b -> case p of {Pos => (mkPart "kin" "kin").s ! b ; Neg => (mkPart "kaan" "kään").s ! b} ;
+    \p,b -> case p of {Pos => (mkPart "kin" "kin").s ! b ; Neg => (mkPart "kaan" "kÃ¤Ã¤n").s ! b} ;
 
   mkPart : Str -> Str -> {s : Harmony => Str} = \ko,koe ->
     {s = table {Back => glueTok ko ; Front => glueTok koe}} ;
@@ -311,7 +311,7 @@ oper
   subjForm : NP -> SubjCase -> Polarity -> Str = \np,sc,b -> 
     appCompl False b {s = <[],[],\\_ => []> ; c = subjcase2npform sc} np ;
 
-  questPart : Harmony -> Str = \b -> case b of {Back => "ko" ; _ => "kö"} ;
+  questPart : Harmony -> Str = \b -> case b of {Back => "ko" ; _ => "kÃ¶"} ;
 
 -- The definitions below were moved here from $MorphoFin$ so that the
 -- auxiliary of predication can be defined.
@@ -365,7 +365,7 @@ oper
       Potent Sg P3 => "lienee" ;  --# notpresent
       Potent Pl P1 => "lienemme" ;  --# notpresent
       Potent Pl P2 => "lienette" ;  --# notpresent
-      Potent Pl P3 => "lienevät" ;  --# notpresent
+      Potent Pl P3 => "lienevÃ¤t" ;  --# notpresent
       PotentNeg    => "liene" ;  --# notpresent
       Imper Sg   => "ole" ;
       Imper Pl   => "olkaa" ;
@@ -398,8 +398,8 @@ oper
 -- Unfortunately not enough (without complicated processes).
 -- We moreover give grade alternation forms as arguments, since it does not
 -- happen automatically.
---- A problem remains with the verb "seistä", where the infinitive
---- stem has vowel harmony "ä" but the others "a", thus "seisoivat" but "seiskää".
+--- A problem remains with the verb "seistÃ¤", where the infinitive
+--- stem has vowel harmony "Ã¤" but the others "a", thus "seisoivat" but "seiskÃ¤Ã¤".
 
 
   noun2adj : CommonNoun -> Adj = noun2adjComp True ;
@@ -521,9 +521,9 @@ oper
             (rakei + "den") 
             (rakei + ("t" + a))
             (rakei + "siin") ;
--- Nouns with partitive "a"/"ä" ; 
+-- Nouns with partitive "a"/"Ã¤" ; 
 -- to account for grade and vowel alternation, three forms are usually enough
--- Examples: "talo", "kukko", "huippu", "koira", "kukka", "syylä",...
+-- Examples: "talo", "kukko", "huippu", "koira", "kukka", "syylÃ¤",...
 
   sKukko : (_,_,_ : Str) -> NounH = \kukko,kukon,kukkoja ->
     let {
@@ -555,7 +555,7 @@ oper
 oper
   reflPron : Agr -> NP = \agr -> 
     let 
-      itse = (nhn (sKukko "itse" "itsen" "itsejä")).s ;
+      itse = (nhn (sKukko "itse" "itsen" "itsejÃ¤")).s ;
       nsa  = possSuffixFront agr
     in {
       s = table {
@@ -575,7 +575,7 @@ oper
     } ;
 
   possSuffixFront : Agr -> Str = \agr -> 
-    table Agr ["ni" ; "si" ; "nsä" ; "mme" ; "nne" ; "nsä" ; "nne"] ! agr ;
+    table Agr ["ni" ; "si" ; "nsÃ¤" ; "mme" ; "nne" ; "nsÃ¤" ; "nne"] ! agr ;
   possSuffix : Agr -> Str = \agr -> 
     table Agr ["ni" ; "si" ; "nsa" ; "mme" ; "nne" ; "nsa" ; "nne"] ! agr ;
 
@@ -586,7 +586,7 @@ oper
     isPron = False  -- has no special accusative
     } ;
 
-  etta_Conj : Str = "että" ;
+  etta_Conj : Str = "ettÃ¤" ;
 
     heavyDet : PDet -> PDet ** {sp : Case => Str} = \d -> d ** {sp = d.s1} ;
     PDet : Type = {

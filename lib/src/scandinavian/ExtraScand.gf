@@ -1,6 +1,6 @@
---# -coding=latin1
 incomplete concrete ExtraScand of ExtraScandAbs = CatScand ** 
    open CommonScand,Coordination,ResScand, ParamX in {
+  flags coding=utf8 ;
   lin
     GenNP np = {
       s,sp = \\n,_,_,g  => np.s ! NPPoss (gennum (ngen2gen g) n) Nom ; 
@@ -68,7 +68,7 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
           let verb = vpi.s ! o ! agr 
           in case o of {
             Main => subj ++ verb ;
-            Inv  => verb ++ subj ;   ---- älskar henne och sover jag
+            Inv  => verb ++ subj ;   ---- Ã¤lskar henne och sover jag
             Sub  => subj ++ verb 
             }
         } ;
@@ -111,5 +111,5 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     
     UseFoc t p foc = {s = t.s ++ p.s ++ foc.s ! t.t ! t.a ! p.p} ;
 
-  oper NONEXIST : Str = "#¿@§X?X&%/" ;
+  oper NONEXIST : Str = "#Â¿@Â§X?X&%/" ;
 } 

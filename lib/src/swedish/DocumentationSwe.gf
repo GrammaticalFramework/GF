@@ -3,7 +3,7 @@ concrete DocumentationSwe of Documentation = CatSwe ** open
   CommonScand,
   HTML
 in {
-
+flags coding=utf8 ;
 lincat
   Inflection = {t : Str; s1,s2 : Str} ;
   Document = {s : Str} ;

@@ -1,4 +1,3 @@
---# -coding=latin1
 --# -path=.:../common:../abstract:../../prelude
 
 -- work by Aarne Ranta
@@ -7,6 +6,7 @@ concrete LexiconAfr of Lexicon = CatAfr **
   open Prelude, ParadigmsAfr, IrregAfr in {
 
 flags 
+  coding=utf8 ;
   optimize=all_subs ;
 
 lin
@@ -50,7 +50,7 @@ lin
   paint_V2A = mkV2A (mkV "skilder") noPrep ;
   paris_PN = mkPN "Parys" ;
   red_A = mkA "rooi" ;
-  say_VS = mkVS (mkV "sê") ;
+  say_VS = mkVS (mkV "sÃª") ;
   see_V2 = mkV2 (mkV "sien") ;
   sell_V3 = mkV3 (mkV "verkoop") ;
   send_V3 = mkV3 (mkV "stuur") (mkPrep "na") ;
@@ -77,7 +77,7 @@ back_N = mkN "agterkant" neuter ;
 bank_N = mkN "bank" neuter ;
 bark_N = mkN "blaf" neuter ;
 belly_N = mkN "maag" neuter ;
-bird_N = mkN "voël" "voëls" neuter ;
+bird_N = mkN "voÃ«l" "voÃ«ls" neuter ;
 bite_V2 = mkV2 (mkV "byt") ;
 black_A = mkA "swart" ;
 blood_N = mkN "bloed" neuter ;
@@ -188,7 +188,7 @@ hunt_V2 = mkV2 "jag" ;
 husband_N = mkN "man" "mans" neuter ;
 ice_N = mkN "ys" neuter ;
 important_A = mkA "belangrik" ;
-industry_N = mkN "industrie" "industrieë" neuter ;
+industry_N = mkN "industrie" "industrieÃ«" neuter ;
 iron_N = mkN "yster" neuter ;
 jump_V = mkV "spring" ;
 kill_V2 = mkV2 "dood" ;
@@ -205,7 +205,7 @@ learn_V2 = mkV2 "leer" ;
 leather_N = mkN "leer" neuter ;
 leave_V2 = mkV2 (mkV "verlaat") ;
 leg_N = mkN "been" neuter ;
-lie_V = mkV "lê" ;
+lie_V = mkV "lÃª" ;
 like_V2 = mkV2 (mkV "hou") van_Prep ;
 listen_V2 = mkV2 "luister" ;
 live_V = mkV "leef" ;
@@ -251,8 +251,8 @@ put_V2 = mkV2 "sit" ;
 queen_N = mkN "koningin" neuter ;
 question_N = mkN "vraag" neuter ;
 radio_N = mkN "radio" neuter ;
-rain_N = mkN "reën" "reëns" neuter ;
-rain_V0 = mkV "reën" ;
+rain_N = mkN "reÃ«n" "reÃ«ns" neuter ;
+rain_V0 = mkV "reÃ«n" ;
 read_V2 = mkV2 (mkV "lees") ;
 ready_A = mkA "reg" ;
 reason_N = mkN "rede" neuter ;
@@ -269,7 +269,7 @@ rotten_A = mkA "vrot" ;
 round_A = mkA "rond" ;
 rub_V2 = mkV2 (mkV "vryf") ;
 rubber_N = mkN "rubber" neuter ;
-rule_N = mkN "reël" "reël" neuter ;
+rule_N = mkN "reÃ«l" "reÃ«l" neuter ;
 run_V = zijnV (mkV "hardloop") ;
 salt_N = mkN "sout" neuter ;
 sand_N = mkN "sand" neuter ;

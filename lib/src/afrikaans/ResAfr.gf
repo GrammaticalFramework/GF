@@ -1,4 +1,3 @@
---# -coding=latin1
 --# -path=.:../abstract:../common
 
 --1 Afrch auxiliary operations.
@@ -8,6 +7,7 @@
 resource ResAfr = ParamX ** open Prelude in {
 
   flags optimize=all ;
+  coding=utf8 ;
 
 --2 For $Noun$
 
@@ -33,36 +33,36 @@ resource ResAfr = ParamX ** open Prelude in {
      g = g
      } ;
 
---Volgens Afrikaanse Woordelys & Spelreëls, 2009
+--Volgens Afrikaanse Woordelys & SpelreÃ«ls, 2009
 --
 -- Uitsonderings wat in die leksikon hanteer moet word:
 -- 
 -- * enige uitsonderings wat in die AWS vermeld word
 -- * enige woord wat in die mv. "te" kry, soos lig, ligte
--- * enige meerlettergrepige woord wat met "ie","ël","el","em","en","ng","ior","er","êr","erd","aar","aard","ier"
+-- * enige meerlettergrepige woord wat met "ie","Ã«l","el","em","en","ng","ior","er","Ãªr","erd","aar","aard","ier"
 --    eindig wat nie 'n "s" in die mv. kry nie
--- * eiename wat nie reëlmatig verbuig
+-- * eiename wat nie reÃ«lmatig verbuig
 -- * woorde met wisselvorme in die mv. moet as sinonieme in die leksikon hanteer word
 --
     regNoun : Str -> Noun = \s -> case s of {
       _ + #cons + ("i" | "o" | "u" ) => mkNoun s (s + "'s") Neutr ; --ski, ski's --R13.7
-      #cons* + ("ie" | "oe") =>mkNoun s (s + "ë") Neutr ; --knie, knieë --R13.10
-      #cons* + ("ee") =>mkNoun s (init s + "ë") Neutr ; --fee, feë --R13.10
+      #cons* + ("ie" | "oe") =>mkNoun s (s + "Ã«") Neutr ; --knie, knieÃ« --R13.10
+      #cons* + ("ee") =>mkNoun s (init s + "Ã«") Neutr ; --fee, feÃ« --R13.10
       #cons* + "a" => mkNoun s (s + "'s") Neutr ; --ma, ma's R13.7
-      _ + ("a" | "e" | "ie" | "ee" | "é" | "ê" | "ô") => mkNoun s (s + "s") Neutr ; --gogga, goggas --R13.5
+      _ + ("a" | "e" | "ie" | "ee" | "Ã©" | "Ãª" | "Ã´") => mkNoun s (s + "s") Neutr ; --gogga, goggas --R13.5
       
-      b + v@("oo") + "g" => mkNoun s (b + init v + "ë") Neutr ; --boog, boë --R13.11
-      b + v@("e"|"ie"|"o"|"oe") + "g" => mkNoun s (b + v + "ë") Neutr ; --kroeg, kroeë --R13.11
+      b + v@("oo") + "g" => mkNoun s (b + init v + "Ã«") Neutr ; --boog, boÃ« --R13.11
+      b + v@("e"|"ie"|"o"|"oe") + "g" => mkNoun s (b + v + "Ã«") Neutr ; --kroeg, kroeÃ« --R13.11
       b + v@("aa") + "g" => mkNoun s (b + init v + "e") Neutr ; --kraag, krae --R13.11
       b + v@("a") + "g" => mkNoun s (b + v + "e") Neutr ; --dag, dae --R13.11
       b + v@("ei"|"eu"|"oe"|"ou"|"ie"|"y"|"ui") + "g" => mkNoun s (b + v + "e") Neutr ; --tuig, tuie --R13.1
       
-      _ + ("oir" | "ion" | "je") => mkNoun s (s + "s") Neutr ; --uit Nederlandse reël
+      _ + ("oir" | "ion" | "je") => mkNoun s (s + "s") Neutr ; --uit Nederlandse reÃ«l
       
       _ + ("rm" | "lm") => mkNoun s (s + "s") Neutr ; --R13.3
       
       ? + ? + ? + _ + 
-        ("ël" |"el" | "em" | "um" | "ing" | "or" | "ior" | "er" | "êr" | "erd" | "aar" | "aard" | "ier") => -- unstressed
+        ("Ã«l" |"el" | "em" | "um" | "ing" | "or" | "ior" | "er" | "Ãªr" | "erd" | "aar" | "aard" | "ier") => -- unstressed
                                             mkNoun s (s + "s") Neutr ; --R13.3
       
       ? + ? + _ + (#cons + "en") => mkNoun s (s + "s") Neutr ; --R13.3
@@ -118,15 +118,15 @@ resource ResAfr = ParamX ** open Prelude in {
       let 
         se : Str = case s of {
           b + v@("aal"|"baar"|"eel"|"loos") => b + init (init v) + last v + "e" ; --p288
-          _ + ("agtig"|"ant"|"ent"|"êr"|"ies"|"ig"|"lik"|"matig"|"s") => s + "e" ; --p288
+          _ + ("agtig"|"ant"|"ent"|"Ãªr"|"ies"|"ig"|"lik"|"matig"|"s") => s + "e" ; --p288
           b + "ief" => b + "iewe" ; --p288
           
           --b + ("ei"|"eu"|"oe"|"ou"|"ie"|"y"|"ui") + ?  => endCons s + "e" ;
           b + v@("ou"|"y") + "d"  => b + v + "e" ; --koud, koue / wyd, wye
           
-          --b + v@("oo"|"ee") + "d" => b + init v + "ë" ; --leeg, leë
-          b + v@("oo"|"ee") + ("g"|"d") => b + init v + "ë" ; --leeg, leë
-          b + v@("e"|"ie"|"o"|"oe") + "g" => b + v + "ë" ; --moeg, moeë
+          --b + v@("oo"|"ee") + "d" => b + init v + "Ã«" ; --leeg, leÃ«
+          b + v@("oo"|"ee") + ("g"|"d") => b + init v + "Ã«" ; --leeg, leÃ«
+          b + v@("e"|"ie"|"o"|"oe") + "g" => b + v + "Ã«" ; --moeg, moeÃ«
           b + v@("aa") + "g" => b + init v + "e" ; --vaag, vae
           b + v@("a") + "g" => b + v + "e" ; --kan nog nie aan 'n voorbeeld dink nie
           
@@ -141,7 +141,7 @@ resource ResAfr = ParamX ** open Prelude in {
           b + v@("aa"|"ee"|"oo"|"uu") + "r" => se + "der" ;
           b + v@("a"|"i"|"o"|"u" ) + c@#cons => b + v + c + c + "er" ; --dom, dommer
           _ + "r" => se + "der" ;
-          _ + "ë" => se + "r" ;
+          _ + "Ã«" => se + "r" ;
           _ + "e" => se + "r" ;
           _ => se + "er"
           } ;

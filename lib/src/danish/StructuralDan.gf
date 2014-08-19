@@ -1,23 +1,23 @@
---# -coding=latin1
 concrete StructuralDan of Structural = CatDan ** 
   open MorphoDan, ParadigmsDan, (X = ConstructX), IrregDan, Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
   lin
   above_Prep = ss "ovenfor" ;
   after_Prep = ss "efter" ;
   by8agent_Prep = ss "af" ;
   all_Predet = {s = detForms "all" "alt" "alle" ; p = [] ; a = PNoAg} ;
-  almost_AdA, almost_AdN = ss "næsten" ;
+  almost_AdA, almost_AdN = ss "nÃ¦sten" ;
   although_Subj = ss ["selv om"] ;
   always_AdV = ss "altid" ;
   and_Conj = {s1 = [] ; s2 = "og" ; n = Pl} ;
   because_Subj = ss "fordi" ;
-  before_Prep = ss "før" ;
+  before_Prep = ss "fÃ¸r" ;
   behind_Prep = ss "bag" ;
   between_Prep = ss "mellem" ;
-  both7and_DConj = sd2 "både" "og" ** {n = Pl} ;
+  both7and_DConj = sd2 "bÃ¥de" "og" ** {n = Pl} ;
   but_PConj = ss "men" ;
   by8means_Prep = ss "med" ;
   can8know_VV, can_VV = 
@@ -29,8 +29,8 @@ concrete StructuralDan of Structural = CatDan **
   every_Det = {s = \\_,_ => "hver" ; sp = \\_,_ => "enhver" ; n = Sg ; det = DDef Indef} ;
   everything_NP = regNP "alt" "alts" Neutr Sg ;
   everywhere_Adv = ss "overalt" ;
-  few_Det  = {s,sp = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
----  first_Ord = {s = "første" ; isDet = True} ;
+  few_Det  = {s,sp = \\_,_ => "fÃ¥" ; n = Pl ; det = DDef Indef} ;
+---  first_Ord = {s = "fÃ¸rste" ; isDet = True} ;
   for_Prep = ss "for" ;
   from_Prep = ss "fra" ;
   he_Pron = MorphoDan.mkNP "han"  "ham"  "hans" "hans" "hans"  Utr Sg P3 ;
@@ -51,10 +51,10 @@ concrete StructuralDan of Structural = CatDan **
   most_Predet = {s = detForms ["den meste"] ["det meste"] ["de fleste"] ; p = [] ; a = PNoAg} ;
   much_Det = {s,sp = \\_,_ => "meget" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
-    mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** 
+    mkV "mÃ¥tte" "mÃ¥" "mÃ¥" "mÃ¥tte" "mÃ¥ttet" "mÃ¥tt" ** 
     {c2 = mkComplement [] ; lock_VV = <>} ;
   no_Utt = ss ["nej"] ;
-  on_Prep = ss "på" ;
+  on_Prep = ss "pÃ¥" ;
   only_Predet = {s = \\_,_ => "kun" ; p = [] ; a = PNoAg} ;
   or_Conj = {s1 = [] ; s2 = "eller" ; n = Pl} ;
   otherwise_PConj = ss "anderledes" ;
@@ -63,7 +63,7 @@ concrete StructuralDan of Structural = CatDan **
   possess_Prep = ss "af" ;
   quite_Adv = ss "temmelig" ;
   she_Pron = MorphoDan.mkNP "hun" "hende" "hendes" "hendes" "hendes"  Utr Sg P3 ;
-  so_AdA = ss "så" ;
+  so_AdA = ss "sÃ¥" ;
   someSg_Det = {s,sp = \\_ => genderForms "nogen" "noget" ; n = Sg ; det = DIndef} ;
   somePl_Det = {s,sp = \\_,_ => "nogle" ; n = Pl ; det = DIndef} ;
   somebody_NP = regNP "nogen" "nogens" Utr Sg ;
@@ -99,8 +99,8 @@ concrete StructuralDan of Structural = CatDan **
   we_Pron = MorphoDan.mkNP "vi"  "os"  "vores" "vores" "vores"  Utr Pl P1 ;
   whatSg_IP = {s = \\_ => "hvad" ; g = Utr ; n = Sg} ; ---- infl
   whatPl_IP = {s = \\_ => "hvilke" ; g = Utr ; n = Pl} ; ---- infl
-  when_IAdv = ss "hvornår" ;
-  when_Subj = ss "når" ;
+  when_IAdv = ss "hvornÃ¥r" ;
+  when_Subj = ss "nÃ¥r" ;
   where_IAdv = ss "hvor" ;
   which_IQuant = {
     s = table {

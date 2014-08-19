@@ -1,9 +1,9 @@
 --1 Verb Phrases in Finnish
 
---# -coding=latin1
 concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
     UseV = predSV ;
@@ -22,8 +22,8 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
         (\\_,b,a => infVP v.sc b a vp (vvtype2infform v.vi)) 
         (predSV {s = v.s ; 
                 sc = case vp.s.sc of {
-                  SCNom => v.sc ;   -- minun t‰ytyy pest‰ auto
-                  c => c                 -- minulla t‰ytyy olla auto
+                  SCNom => v.sc ;   -- minun t√§ytyy pest√§ auto
+                  c => c                 -- minulla t√§ytyy olla auto
                   } ;
                 h = v.h ; p = v.p
                }
@@ -71,8 +71,8 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
         (\\_,b,a => infVP v.sc b a vp v.vi) 
         (predSV {s = v.s ; 
                 sc = case vp.s.sc of {
-                  NPCase Nom => v.sc ;   -- minun t‰ytyy pest‰ auto
-                  c => c                 -- minulla t‰ytyy olla auto
+                  NPCase Nom => v.sc ;   -- minun t√§ytyy pest√§ auto
+                  c => c                 -- minulla t√§ytyy olla auto
                   } ;
                 h = v.h ; p = v.p
                }
@@ -108,7 +108,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
           let
             n = complNumAgr agr ;
             c = case n of {
-              Sg => Nom ;  -- min‰ olen iso ; te olette iso
+              Sg => Nom ;  -- min√§ olen iso ; te olette iso
               Pl => Part   -- me olemme isoja ; te olette isoja
               }            --- definiteness of NP ?
           in ap.s ! False ! (NCase n c)
@@ -118,7 +118,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
           let
             n = complNumAgr agr ;
             c = case n of {
-              Sg => Nom ;  -- min‰ olen iso ; te olette iso
+              Sg => Nom ;  -- min√§ olen iso ; te olette iso
               Pl => Part   -- me olemme isoja ; te olette isoja
               }            --- definiteness of NP ?
           in cn.s ! (NCase n c)
@@ -136,13 +136,13 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin, StemFin in {
 -- The work is done jointly in ResFin.infVP and appCompl. 
 -- Cases to test: l -table (to see negated forms)
 --```
---   minun t‰ytyy ostaa auto
+--   minun t√§ytyy ostaa auto
 --   PredVP (UsePron i_Pron) (ComplVV must_VV 
 --     (ComplV2 buy_V2 (DetCN (DetSg (SgQuant DefArt) NoOrd) (UseN car_N))))
---   min‰ tahdon ostaa auton
+--   min√§ tahdon ostaa auton
 --   PredVP (UsePron i_Pron) (ComplVV want_VV 
 --     (ComplV2 buy_V2 (DetCN (DetSg (SgQuant DefArt) NoOrd) (UseN car_N))))
---   minulla t‰ytyy olla auto
+--   minulla t√§ytyy olla auto
 --   PredVP (UsePron i_Pron) (ComplVV must_VV 
 --     (ComplV2 have_V2 (DetCN (DetSg (SgQuant DefArt) NoOrd) (UseN car_N))))
 --```

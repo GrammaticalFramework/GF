@@ -1,5 +1,4 @@
 --# -path=.:../common:prelude
---# -coding=latin1
 
 --1 A Simple Finnish Resource Morphology
 --
@@ -12,6 +11,7 @@
 resource MorphoFin = ResFin ** open Prelude in {
 
   flags optimize=noexpand ;
+    coding=utf8 ;
 
   oper
 
@@ -109,7 +109,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       (onnettom + "in" + a) (onnettom + "iss" + a) 
       (onnettom + "iin") ;
 
-  -- 2-syllable a/‰, o/ˆ, u/y
+  -- 2-syllable a/√§, o/√∂, u/y
   dUkko : (_,_ : Str) -> NForms = \ukko,ukon ->
       let
         o   = last ukko ;
@@ -118,8 +118,8 @@ resource MorphoFin = ResFin ** open Prelude in {
         uko = init ukon ;
         uk  = init uko ;
         ukkoja = case <ukko : Str> of {
-          _ + "‰" =>                        -- kyl‰,kyli‰,kylien,kyliss‰,kyliin 
-             <ukk + "i‰", ukk + "ien", ukk, uk, ukk + "iin"> ;
+          _ + "√§" =>                        -- kyl√§,kyli√§,kylien,kyliss√§,kyliin 
+             <ukk + "i√§", ukk + "ien", ukk, uk, ukk + "iin"> ;
           _ + ("au" | "eu") + _ + "a" =>    -- kauhojen,seurojen
              <ukk + "oja",ukk + "ojen",ukk + "o", uk + "o", ukk + "oihin"> ;
           _ + ("o" | "u") + _ + "a" =>      -- pula,pulia,pulien,pulissa,puliin
@@ -136,7 +136,7 @@ resource MorphoFin = ResFin ** open Prelude in {
         ukkoja.p2 ukkoja.p1
         ukkoina ukoissa ukkoja.p5 ; 
 
-  -- 3-syllable a/‰/o/ˆ
+  -- 3-syllable a/√§/o/√∂
   dSilakka : (_,_,_ : Str) -> NForms = \silakka,silakan,silakoita ->
     let
       o = last silakka ;
@@ -145,15 +145,15 @@ resource MorphoFin = ResFin ** open Prelude in {
       silaka = init silakan ;
       silak  = init silaka ;
       silakkaa = silakka + case o of {
-        "o" | "ˆ" => "t" + a ;  -- radiota
+        "o" | "√∂" => "t" + a ;  -- radiota
         _ => a                  -- sammakkoa
         } ;
       silakoiden = case <silakoita : Str> of {
-        _ + "i" + ("a" | "‰") =>                    -- asemia
+        _ + "i" + ("a" | "√§") =>                    -- asemia
           <silakka+a, silakk + "ien", silakk, silak, silakk + "iin"> ;
-        _ + O@("o" | "ˆ" | "u" | "y" | "e") + ("ja" | "j‰") =>        -- pasuunoja
+        _ + O@("o" | "√∂" | "u" | "y" | "e") + ("ja" | "j√§") =>        -- pasuunoja
           <silakka+a,silakk+O+"jen",silakk+O, silak+O, silakk +O+ "ihin"> ;
-        _ + O@("o" | "ˆ" | "u" | "y" | "e") + ("ita" | "it‰") =>      -- silakoita
+        _ + O@("o" | "√∂" | "u" | "y" | "e") + ("ita" | "it√§") =>      -- silakoita
           <silakkaa, silak+O+"iden",silakk+O, silak+O, silakk +O+ "ihin"> ;
         _   => Predef.error silakoita                    
         } ;
@@ -172,7 +172,7 @@ resource MorphoFin = ResFin ** open Prelude in {
         ar  = init arp ;
         arpe = case last arp of {
          "s" => case last arv of {
-            "d" | "l" | "n" | "r" =>   -- suden,sutta ; j‰lsi ; kansi ; hirsi
+            "d" | "l" | "n" | "r" =>   -- suden,sutta ; j√§lsi ; kansi ; hirsi
                <ar + "tt" + a, arpi + "en",arpi,ar + "t"> ;
             _ =>                                     -- kuusta,kuusien
                <arp + "t" + a,arp + "ien",arpi, arp>
@@ -183,7 +183,7 @@ resource MorphoFin = ResFin ** open Prelude in {
                <arp + "t" + a,arp + "ien",arpi, arp>; 
           _   =>                                -- arpea,arpien,arvissa
                <arp + "e" + a,arp + "ien",arv+"i",arp>   
-          } ;                                   ---- pieni,pient‰; uni,unta
+          } ;                                   ---- pieni,pient√§; uni,unta
         in nForms10
             arpi arven arpe.p1 (arpe.p4 + "en" + a) (arpe.p4 + "een")
             arpe.p2 (arpi + a)
@@ -282,23 +282,23 @@ resource MorphoFin = ResFin ** open Prelude in {
         "A" => 
            <"n","ta","na","han","iden","ita","ina","issa","ihin"> ;
         "B" | "C" | "D" | "E" | "G" | "P" | "T" | "V" | "W" => 
-           <"n","t‰","n‰","hen","iden","it‰","in‰","iss‰","ihin"> ;
+           <"n","t√§","n√§","hen","iden","it√§","in√§","iss√§","ihin"> ;
         "F" | "L" | "M" | "N" | "R" | "S" | "X" => 
-           <"n","‰‰","n‰","‰‰n","ien","i‰","in‰","iss‰","iin"> ;
-        "H" | "K" | "O" | "≈" => 
+           <"n","√§√§","n√§","√§√§n","ien","i√§","in√§","iss√§","iin"> ;
+        "H" | "K" | "O" | "√Ö" => 
            <"n","ta","na","hon","iden","ita","ina","issa","ihin"> ;
         "I" | "J" => 
-           <"n","t‰","n‰","hin","iden","it‰","in‰","iss‰","ihin"> ;
+           <"n","t√§","n√§","hin","iden","it√§","in√§","iss√§","ihin"> ;
         "Q" | "U" => 
            <"n","ta","na","hun","iden","ita","ina","issa","ihin"> ;
         "Z" => 
            <"n","aa","na","aan","ojen","oja","oina","oissa","oihin"> ;
-        "ƒ" => 
-           <"n","t‰","n‰","h‰n","iden","it‰","in‰","iss‰","ihin"> ;
-        "÷" => 
-           <"n","t‰","n‰","hˆn","iden","it‰","in‰","iss‰","ihin"> ;
+        "√Ñ" => 
+           <"n","t√§","n√§","h√§n","iden","it√§","in√§","iss√§","ihin"> ;
+        "√ñ" => 
+           <"n","t√§","n√§","h√∂n","iden","it√§","in√§","iss√§","ihin"> ;
         "Y" => 
-           <"n","t‰","n‰","hyn","iden","it‰","in‰","iss‰","ihin"> ;
+           <"n","t√§","n√§","hyn","iden","it√§","in√§","iss√§","ihin"> ;
         _ => Predef.error (["illegal abbreviation"] ++ SDP)
         } ;
     in nForms10
@@ -609,7 +609,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       pudot  = init pudota ;
       pudo   = init pudot ;
       ai = case last pudo of {
-        "a" | "‰" => <[], "i"> ;
+        "a" | "√§" => <[], "i"> ;
         _         => <a, a + "i">
         } ;
       puto   = Predef.tk 2 putosi ;
@@ -735,7 +735,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       tule_ = init tulen ;
       tuli_ = init tulin ;
       a = last tulkaa ;
-      tulko = Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ˆ") ;
+      tulko = Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "√∂") ;
       o = last tulko ;
       tulkoo = tulko + o ;
       tullee = Predef.tk 2 tullut + "ee" ;
@@ -853,13 +853,13 @@ resource MorphoFin = ResFin ** open Prelude in {
         "rk" + ("i" | "e") => ku + "rj" + o ;
         "lk" + _ => ku + "l" + o  ;
         "rk" + _ => ku + "r" + o  ;
-        ("hk" | "tk") + _ => kukko ;           -- *tahko-tahon, *pitk‰-pitk‰n
+        ("hk" | "tk") + _ => kukko ;           -- *tahko-tahon, *pitk√§-pitk√§n
         ("f"|"s") + ("k" | "p" | "t") + _ => kukko ; -- *lasku-lasvun, *raspi-rasvin, *lastu-lasdun, *afta-aftan
         ("k"|"p") + "t" + _ => kukko ; -- *projekti-projekdin
         x + "ku" => ku + x + "vu" ;
-        x + "k" + ("a" | "e" | "i" | "o" | "u" | "y" | "‰" | "ˆ") => ku + x      + o ; 
-        x + "p" + ("a" | "e" | "i" | "o" | "u" | "y" | "‰" | "ˆ") => ku + x + "v" + o ; 
-        x + "t" + ("a" | "e" | "i" | "o" | "u" | "y" | "‰" | "ˆ") => ku + x + "d" + o ; 
+        x + "k" + ("a" | "e" | "i" | "o" | "u" | "y" | "√§" | "√∂") => ku + x      + o ; 
+        x + "p" + ("a" | "e" | "i" | "o" | "u" | "y" | "√§" | "√∂") => ku + x + "v" + o ; 
+        x + "t" + ("a" | "e" | "i" | "o" | "u" | "y" | "√§" | "√∂") => ku + x + "d" + o ; 
         _ => kukko
         } ;
 
@@ -878,13 +878,13 @@ resource MorphoFin = ResFin ** open Prelude in {
       "ll" + a => "lt" + a ;
       h@("h" | "l") + "je" + e => h + "ke" ; -- pohje/lahje impossible
       ("tk" | "hk" | "sk" | "sp" | "st") + _ => nke ;       -- viuhke,kuiske 
-      a + k@("k"|"p"|"t") + e@("e"|"a"|"‰"|"u"|"y"|"i"|"o"|"ˆ")  => a + k + k + e ;
-      a + "d" + e@("e"|"a"|"‰"|"u"|"i"|"o"|"ˆ")  => a + "t" + e ; 
-      s + a@("a" | "‰") + "e" => s + a + "ke" ;       -- s‰e, tae
+      a + k@("k"|"p"|"t") + e@("e"|"a"|"√§"|"u"|"y"|"i"|"o"|"√∂")  => a + k + k + e ;
+      a + "d" + e@("e"|"a"|"√§"|"u"|"i"|"o"|"√∂")  => a + "t" + e ; 
+      s + a@("a" | "√§") + "e" => s + a + "ke" ;       -- s√§e, tae
       s + "ui"                      => s + "uki" ;     -- ruis
       s + "aa"                      => s + "aka" ;       -- taata
-      s + "i" + a@("a" | "e" | "i") => s + "ik" + a ;       -- liata, siit‰, piet‰
-      a + "v" + e@("e"|"a"|"‰"|"u"|"i") => a + "p" + e ;  -- taive/toive imposs
+      s + "i" + a@("a" | "e" | "i") => s + "ik" + a ;       -- liata, siit√§, piet√§
+      a + "v" + e@("e"|"a"|"√§"|"u"|"i") => a + "p" + e ;  -- taive/toive imposs
       ase => ase
       } ;
 
@@ -895,12 +895,12 @@ resource MorphoFin = ResFin ** open Prelude in {
 
   vowHarmony : Str -> Str = \s -> case s of {
     _ + ("a" | "o" | "u" | "A" | "O" | "U") + _ => "a" ;
-    _ => "‰"
+    _ => "√§"
     } ;
 
   getHarmony : Str -> Str = \u -> case u of {
     "a"|"o"|"u" => "a" ;
-    _   => "‰"
+    _   => "√§"
     } ;
 
 -----------------------
@@ -914,7 +914,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 
   mkDetPol : Bool -> Number -> CommonNoun -> {
       s1,sp : Case => Str ;       -- minun kolme
-      s2 : Harmony => Str ;    -- -ni ; nsa/ns‰
+      s2 : Harmony => Str ;    -- -ni ; nsa/ns√§
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
       isPoss : Bool ;          -- True (a possessive suffix is present)
@@ -930,7 +930,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
     } ;
 
 -- Here we define personal and relative pronouns.
--- Personal pronouns have possessive suffix (h‰nen talonsa) but "se" doesn't (sen talo)
+-- Personal pronouns have possessive suffix (h√§nen talonsa) but "se" doesn't (sen talo)
 
   mkPronoun : (_,_,_,_,_ : Str) ->  Number -> Person -> 
     {s : NPForm => Str ; a : Agr ; hasPoss : Bool ; poss : Str} = mkPronounGen True ;
@@ -999,16 +999,16 @@ oper
     s = table {
       Nom    => "se" ;
       Gen    => "sen" ;
-      Part   => "sit‰" ;
+      Part   => "sit√§" ;
       Transl => "siksi" ;
-      Ess    => "sin‰" ;
-      Iness  => "siin‰" ;
-      Elat   => "siit‰" ;
+      Ess    => "sin√§" ;
+      Iness  => "siin√§" ;
+      Elat   => "siit√§" ;
       Illat  => "siihen" ;
-      Adess  => "sill‰" ;
-      Ablat  => "silt‰" ;
+      Adess  => "sill√§" ;
+      Ablat  => "silt√§" ;
       Allat  => "sille" ;
-      Abess  => "sitt‰"
+      Abess  => "sitt√§"
       } ;
     } ;
 
@@ -1016,16 +1016,16 @@ oper
     s = table {
       Nom    => "ne" ;
       Gen    => "niiden" ;
-      Part   => "niit‰" ;
+      Part   => "niit√§" ;
       Transl => "niiksi" ;
-      Ess    => "niin‰" ;
-      Iness  => "niiss‰" ;
-      Elat   => "niit‰" ;
+      Ess    => "niin√§" ;
+      Iness  => "niiss√§" ;
+      Elat   => "niit√§" ;
       Illat  => "niihin" ;
-      Adess  => "niill‰" ;
-      Ablat  => "niilt‰" ;
+      Adess  => "niill√§" ;
+      Ablat  => "niilt√§" ;
       Allat  => "niille" ;
-      Abess  => "niitt‰"
+      Abess  => "niitt√§"
       } ;
     } ;
 

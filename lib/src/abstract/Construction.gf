@@ -1,4 +1,5 @@
 abstract Construction = Cat ** {
+flags coding=utf8 ;
 
 -- started by AR 6/12/2013. (c) Aarne Ranta under LGPL and BSD
 

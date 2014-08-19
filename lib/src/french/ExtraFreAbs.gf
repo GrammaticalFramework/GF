@@ -1,14 +1,14 @@
---# -coding=latin1
 -- Structures special for French. These are not implemented in other
 -- Romance languages.
 
 abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
+  flags coding=utf8 ;
 
 -- Notice: only direct (main-clause) questions are generated, and needed.
 
   fun
     EstcequeS     : S -> Utt ;          -- est-ce qu'il pleut
-    EstcequeIAdvS : IAdv -> S -> Utt ;  -- où est-ce qu'il pleut
+    EstcequeIAdvS : IAdv -> S -> Utt ;  -- oÃ¹ est-ce qu'il pleut
 
 -- These also generate indirect (subordinate) questions.
 

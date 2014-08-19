@@ -1,4 +1,3 @@
---# -coding=latin1
 --1 A Simple Norwegian Resource Morphology
 --
 -- Aarne Ranta 2002
@@ -10,6 +9,7 @@
 -- We use the parameter types and word classes defined for morphology.
 
 resource MorphoNor = CommonScand, ResNor ** open Prelude, Predef in {
+  flags coding=utf8 ;
 
 -- genders
 
@@ -160,9 +160,9 @@ oper
       
 
   mkTal : (x1,_,_,_,x5 : Str) -> LinDigit = 
-    \två, tolv, tjugo, andra, tolfte -> 
+    \tvÃ¥, tolv, tjugo, andra, tolfte -> 
     {s = table {
-           ental  => cardOrd två andra ; 
+           ental  => cardOrd tvÃ¥ andra ; 
            ton    => cardOrd tolv tolfte ;
            tiotal => cardReg tjugo
            }

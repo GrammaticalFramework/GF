@@ -1,5 +1,4 @@
 --# -path=.:../romance:../common:../../prelude
---# -coding=latin1
 
 --1 A Simple French Resource Morphology
 --
@@ -13,13 +12,14 @@ resource MorphoFre = CommonRomance, ResFre **
   open PhonoFre, Prelude, Predef in {
 
 flags optimize=noexpand ;
+    coding=utf8 ;
 
 --2 Front vowels
 --
 -- In verb conjugation, we will need the concept of frontal vowel.
 
 oper
-  voyelleFront : Strs = strs {"e" ; "i" ; "y" ; "é" ; "è"} ;
+  voyelleFront : Strs = strs {"e" ; "i" ; "y" ; "Ã©" ; "Ã¨"} ;
   preVoyelleFront : (_,_ : Str) -> Str = \t,u -> pre {t ; u / voyelleFront} ;
 
 
@@ -110,7 +110,7 @@ oper
     in
     mkAdj grand (grand + "s") grande (grande + "ment") ;
 
--- Masculine form used for adverbial; also covers "carré".
+-- Masculine form used for adverbial; also covers "carrÃ©".
 
   adjJoli : Str -> Adj = \joli -> 
     mkAdj joli (joli + "s") (joli + "e") (joli + "ment") ;
@@ -134,7 +134,7 @@ oper
 
   adjCher : Str -> Adj = \cher ->
     let {ch = Predef.tk 2 cher} in
-    mkAdj cher (cher + "s") (ch + "ère") (ch + "èrement") ; 
+    mkAdj cher (cher + "s") (ch + "Ã¨re") (ch + "Ã¨rement") ; 
 
   mkAdjReg : Str -> Adj = \creux ->
     case Predef.dp 3 creux of {
@@ -148,7 +148,7 @@ oper
           "s" => adjFrancais creux ;
           "x" => adjFrancais creux ;
           "e" => adjJeune creux ;
-          "é" => adjJoli creux ;
+          "Ã©" => adjJoli creux ;
           "i" => adjJoli creux ;
           _ => adjGrand creux
           }
@@ -265,7 +265,7 @@ oper
         _ + "a"  => <affixPasseA,1> ;
         _ + "it" => <affixPasseI,2> ;
         _ + "ut" => <affixPasseU,2> ;
-        _ + "nt" => <affixPasse "in" "în",3> ;
+        _ + "nt" => <affixPasse "in" "Ã®n",3> ;
         _        => Predef.error ("cannot form past tense from" ++ tint)
         } ;
       tin = Predef.tk affpasse.p2 tint ;
@@ -372,21 +372,21 @@ oper
       } ;
 
   affixPlMes : (_,_ : Str) -> Affixe = 
-     \è, â -> lesAffixes (â + "mes") (â + "tes") (è + "rent") ;
+     \Ã¨, Ã¢ -> lesAffixes (Ã¢ + "mes") (Ã¢ + "tes") (Ã¨ + "rent") ;
 
   affixPasseAi : Number => Affixe = table {
       Sg => affixSgAi ;
-      Pl => affixPlMes "è" "â" 
+      Pl => affixPlMes "Ã¨" "Ã¢" 
       } ;
 
-  affixPasseS : (i,î : Str) -> Number => Affixe = \i,î -> table {
+  affixPasseS : (i,Ã® : Str) -> Number => Affixe = \i,Ã® -> table {
       Sg => table {p => i + affixSgS ! p} ;
-      Pl => affixPlMes i î
+      Pl => affixPlMes i Ã®
       } ;
 
-  affixSImparfSse : (i,î : Str) -> Number => Affixe =  \i,î -> table {
+  affixSImparfSse : (i,Ã® : Str) -> Number => Affixe =  \i,Ã® -> table {
       Sg => table {
-        P3 => î + "t" ;
+        P3 => Ã® + "t" ;
         p  => i + "ss" + affixSgE ! p
         } ;
       Pl => table {p  => i + "ss" + affixSPres ! Pl ! p}
@@ -394,14 +394,14 @@ oper
 
   AffixPasse : Type = {ps : Number => Affixe ; si : Number => Affixe} ;
 
-  affixPasse : (_,_ : Str) -> AffixPasse = \i, î ->
-    {ps = affixPasseS i î ; si = affixSImparfSse i î} ;
+  affixPasse : (_,_ : Str) -> AffixPasse = \i, Ã® ->
+    {ps = affixPasseS i Ã® ; si = affixSImparfSse i Ã®} ;
 
-  affixPasseA : AffixPasse = {ps = affixPasseAi ; si = affixSImparfSse "a" "â"} ;
+  affixPasseA : AffixPasse = {ps = affixPasseAi ; si = affixSImparfSse "a" "Ã¢"} ;
 
-  affixPasseI : AffixPasse = affixPasse "i" "î" ;
+  affixPasseI : AffixPasse = affixPasse "i" "Ã®" ;
 
-  affixPasseU : AffixPasse = affixPasse "u" "û" ;
+  affixPasseU : AffixPasse = affixPasse "u" "Ã»" ;
 
   affixPasseNonExist : AffixPasse = 
     let {aff : Number => Affixe = 

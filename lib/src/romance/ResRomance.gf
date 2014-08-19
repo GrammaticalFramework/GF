@@ -1,10 +1,10 @@
 --1 Romance auxiliary operations.
 --
 
---# -coding=latin1
 interface ResRomance = DiffRomance ** open CommonRomance, Prelude in {
 
 flags optimize=all ;
+    coding=utf8 ;
 
 --2 Constants uniformly defined in terms of language-dependent constants
 
@@ -124,7 +124,7 @@ oper
 
 
 -- Agreement with preceding relative or interrogative: 
--- "les femmes que j'ai aimées"
+-- "les femmes que j'ai aimÃ©es"
 
   insertAgr : AAgr -> VP -> VP = \ag,vp -> { 
     s     = vp.s ;
@@ -292,9 +292,9 @@ oper
 -- p -cat=Cl -tr "la femme te l' envoie"
 -- PredVP (DetCN (DetSg DefSg NoOrd) (UseN woman_N)) 
 --  (ComplV3 send_V3 (UsePron he_Pron) (UsePron thou_Pron))
--- la femme te l' a envoyé
+-- la femme te l' a envoyÃ©
 --
 -- p -cat=Cl -tr "la femme te lui envoie"
 -- PredVP (DetCN (DetSg DefSg NoOrd) (UseN woman_N)) 
 --   (ComplV3 send_V3 (UsePron thou_Pron) (UsePron he_Pron))
--- la femme te lui a envoyée
+-- la femme te lui a envoyÃ©e

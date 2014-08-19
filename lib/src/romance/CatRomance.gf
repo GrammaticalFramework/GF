@@ -1,8 +1,8 @@
---# -coding=latin1
 incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
   ** open Prelude, CommonRomance, ResRomance, (R = ParamX) in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lincat
 
@@ -20,7 +20,7 @@ incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
       c2 : Compl
       } ;
 
-    SC = {s : Case => Str} ;  -- de dormir / à dormir
+    SC = {s : Case => Str} ;  -- de dormir / Ã  dormir
 
 -- Sentence
 
@@ -112,7 +112,7 @@ incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
     N3 = Noun  ** {c2,c3 : Compl} ;
     PN = {s : Str ; g : Gender} ;
 
--- tense augmented with passé simple
+-- tense augmented with passÃ© simple
   lincat
     Temp  = {s : Str ; t : RTense ; a : Anteriority} ;
     Tense = {s : Str ; t : RTense} ;

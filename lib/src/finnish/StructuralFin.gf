@@ -1,12 +1,12 @@
---# -coding=latin1
 concrete StructuralFin of Structural = CatFin ** 
   open MorphoFin, ParadigmsFin, (X = ConstructX), StemFin, Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
   lin
-  above_Prep = postGenPrep "yläpuolella" ;
-  after_Prep = postGenPrep "jälkeen" ;
+  above_Prep = postGenPrep "ylÃ¤puolella" ;
+  after_Prep = postGenPrep "jÃ¤lkeen" ;
 
   all_Predet = {s = \\n,c => 
     let
@@ -24,8 +24,8 @@ concrete StructuralFin of Structural = CatFin **
   because_Subj = ss "koska" ;
   before_Prep = prePrep partitive "ennen" ;
   behind_Prep = postGenPrep "takana" ;
-  between_Prep = postGenPrep "välissä" ;
-  both7and_DConj = sd2 "sekä" "että" ** {n = Pl} ;
+  between_Prep = postGenPrep "vÃ¤lissÃ¤" ;
+  both7and_DConj = sd2 "sekÃ¤" "ettÃ¤" ** {n = Pl} ;
   but_PConj = ss "mutta" ;
   by8agent_Prep = postGenPrep "toimesta" ;
   by8means_Prep = casePrep adessive ;
@@ -38,20 +38,20 @@ concrete StructuralFin of Structural = CatFin **
   everything_NP = makeNP ((((mkN "kaikki" "kaiken" "kaikkena")))) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
   few_Det  = MorphoFin.mkDet Sg (snoun2nounBind (mkN "harva")) ;
----  first_Ord = {s = \\n,c => (mkN "ensimmäinen").s ! NCase n c} ;
+---  first_Ord = {s = \\n,c => (mkN "ensimmÃ¤inen").s ! NCase n c} ;
   for_Prep = casePrep allative ;
   from_Prep = casePrep elative ;
-  he_Pron = mkPronoun "hän" "hänen" "häntä"  "hänenä" "häneen" Sg P3 ;
-  here_Adv = ss "täällä" ;
-  here7to_Adv = ss "tänne" ;
-  here7from_Adv = ss "täältä" ;
+  he_Pron = mkPronoun "hÃ¤n" "hÃ¤nen" "hÃ¤ntÃ¤"  "hÃ¤nenÃ¤" "hÃ¤neen" Sg P3 ;
+  here_Adv = ss "tÃ¤Ã¤llÃ¤" ;
+  here7to_Adv = ss "tÃ¤nne" ;
+  here7from_Adv = ss "tÃ¤Ã¤ltÃ¤" ;
   how_IAdv = ss "miten" ;
   how8much_IAdv = ss "kuinka paljon" ;
   how8many_IDet = 
     {s = \\c => "kuinka" ++ (snoun2nounBind (mkN "moni" "monia")).s ! NCase Sg c ; n = Sg ; isNum = False} ;
   if_Subj = ss "jos" ;
-  in8front_Prep = postGenPrep "edessä" ;
-  i_Pron  = mkPronoun "minä" "minun" "minua" "minuna" "minuun" Sg P1 ;
+  in8front_Prep = postGenPrep "edessÃ¤" ;
+  i_Pron  = mkPronoun "minÃ¤" "minun" "minua" "minuna" "minuun" Sg P1 ;
   in_Prep = casePrep inessive ;
   it_Pron = {
     s = \\c => pronSe.s ! npform2case Sg c ; 
@@ -59,12 +59,12 @@ concrete StructuralFin of Structural = CatFin **
     hasPoss = False ;
     poss = "sen" ;
     } ;
-  less_CAdv = X.mkCAdv "vähemmän" "kuin" ;
+  less_CAdv = X.mkCAdv "vÃ¤hemmÃ¤n" "kuin" ;
   many_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "moni" "monia")) ;
-  more_CAdv = X.mkCAdv "enemmän" "kuin" ;
+  more_CAdv = X.mkCAdv "enemmÃ¤n" "kuin" ;
   most_Predet = {s = \\n,c => (nForms2N (dSuurin "useinta")).s ! NCase n (npform2case n c)} ;
   much_Det = MorphoFin.mkDet Sg {s = \\_ => "paljon" ; h = Back} ; --Harmony not relevant, it's just a CommonNoun
-  must_VV = mkVV (caseV genitive (mkV "täytyä")) ;
+  must_VV = mkVV (caseV genitive (mkV "tÃ¤ytyÃ¤")) ;
   no_Utt = ss "ei" ;
   on_Prep = casePrep adessive ;
 ---  one_Quant = MorphoFin.mkDet Sg  DEPREC
@@ -72,10 +72,10 @@ concrete StructuralFin of Structural = CatFin **
   or_Conj = {s1 = [] ; s2 = "tai" ; n = Sg} ;
   otherwise_PConj = ss "muuten" ;
   part_Prep = casePrep partitive ;
-  please_Voc = ss ["ole hyvä"] ; --- number
+  please_Voc = ss ["ole hyvÃ¤"] ; --- number
   possess_Prep = casePrep genitive ;
   quite_Adv = ss "melko" ;
-  she_Pron = mkPronoun "hän" "hänen" "häntä"  "hänenä" "häneen" Sg P3 ;
+  she_Pron = mkPronoun "hÃ¤n" "hÃ¤nen" "hÃ¤ntÃ¤"  "hÃ¤nenÃ¤" "hÃ¤neen" Sg P3 ;
   so_AdA = ss "niin" ;
   somebody_NP = {
     s = \\c => jokuPron ! Sg ! npform2case Sg c ;
@@ -109,19 +109,19 @@ concrete StructuralFin of Structural = CatFin **
           } ;
     s2 = \\_ => [] ; isNum,isPoss = False ; isDef = True  ; isNeg = False 
     } ;
-  that_Subj = ss "että" ;
-  there_Adv = ss "siellä" ; --- tuolla
+  that_Subj = ss "ettÃ¤" ;
+  there_Adv = ss "siellÃ¤" ; --- tuolla
   there7to_Adv = ss "sinne" ;
-  there7from_Adv = ss "sieltä" ;
+  there7from_Adv = ss "sieltÃ¤" ;
   therefore_PConj = ss "siksi" ;
-  they_Pron = mkPronoun "he" "heidän" "heitä" "heinä" "heihin"  Pl P3 ; --- ne
+  they_Pron = mkPronoun "he" "heidÃ¤n" "heitÃ¤" "heinÃ¤" "heihin"  Pl P3 ; --- ne
   this_Quant = heavyQuant {
     s1 = table (MorphoFin.Number) {
           Sg => table (MorphoFin.Case) {
-            c => (mkPronoun "tämä" "tämän" "tätä" "tänä" "tähän" Sg P3).s ! NPCase c
+            c => (mkPronoun "tÃ¤mÃ¤" "tÃ¤mÃ¤n" "tÃ¤tÃ¤" "tÃ¤nÃ¤" "tÃ¤hÃ¤n" Sg P3).s ! NPCase c
             } ;
           Pl => table (MorphoFin.Case) {
-            c => (mkPronoun "nämä" "näiden" "näitä" "näinä" "näihin" Sg P3).s ! NPCase c
+            c => (mkPronoun "nÃ¤mÃ¤" "nÃ¤iden" "nÃ¤itÃ¤" "nÃ¤inÃ¤" "nÃ¤ihin" Sg P3).s ! NPCase c
             }
           } ;
     s2 = \\_ => [] ; isNum,isPoss = False ; isDef = True  ; isNeg = False
@@ -130,11 +130,11 @@ concrete StructuralFin of Structural = CatFin **
   too_AdA = ss "liian" ;
   to_Prep = casePrep illative ; --- allative
   under_Prep = postGenPrep "alla" ;
-  very_AdA = ss "erittäin" ;
+  very_AdA = ss "erittÃ¤in" ;
   want_VV = mkVV (mkV "tahtoa") ;
-  we_Pron = mkPronoun "me" "meidän" "meitä" "meinä" "meihin" Pl P1 ;
+  we_Pron = mkPronoun "me" "meidÃ¤n" "meitÃ¤" "meinÃ¤" "meihin" Pl P1 ;
   whatPl_IP = {
-    s = table {NPAcc => "mitkä" ; c => mikaInt ! Pl ! npform2case Pl c} ;
+    s = table {NPAcc => "mitkÃ¤" ; c => mikaInt ! Pl ! npform2case Pl c} ;
     n = Pl
     } ;
   whatSg_IP = {
@@ -143,7 +143,7 @@ concrete StructuralFin of Structural = CatFin **
     } ;
   when_IAdv = ss "milloin" ;
   when_Subj = ss "kun" ;
-  where_IAdv = ss "missä" ;
+  where_IAdv = ss "missÃ¤" ;
   which_IQuant = {
     s = mikaInt
     } ;
@@ -152,17 +152,17 @@ concrete StructuralFin of Structural = CatFin **
     n = Sg
     } ;
   whoPl_IP = {
-    s = table {NPAcc => "ketkä" ; c => kukaInt ! Pl ! npform2case Pl c} ;
+    s = table {NPAcc => "ketkÃ¤" ; c => kukaInt ! Pl ! npform2case Pl c} ;
     n = Pl
     } ;
   why_IAdv = ss "miksi" ;
   without_Prep = prePrep partitive "ilman" ;
   with_Prep = postGenPrep "kanssa" ;
-  yes_Utt = ss "kyllä" ;
-  youSg_Pron = mkPronoun "sinä" "sinun" "sinua" "sinuna" "sinuun"  Sg P2 ;
-  youPl_Pron = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 ;
+  yes_Utt = ss "kyllÃ¤" ;
+  youSg_Pron = mkPronoun "sinÃ¤" "sinun" "sinua" "sinuna" "sinuun"  Sg P2 ;
+  youPl_Pron = mkPronoun "te" "teidÃ¤n" "teitÃ¤" "teinÃ¤" "teihin"  Pl P2 ;
   youPol_Pron = 
-    let p = mkPronoun "te" "teidän" "teitä" "teinä" "teihin"  Pl P2 in
+    let p = mkPronoun "te" "teidÃ¤n" "teitÃ¤" "teinÃ¤" "teihin"  Pl P2 in
     {s = p.s ; a = AgPol ; hasPoss = True ; poss = p.poss} ;
 
 oper
@@ -201,16 +201,16 @@ oper
     } in
     table {
       Sg => table {
-        Nom => "mikä" ;
-        Gen => "minkä" ;
-        Part => "mitä" ;
+        Nom => "mikÃ¤" ;
+        Gen => "minkÃ¤" ;
+        Part => "mitÃ¤" ;
         Illat => "mihin" ;
         c   => mi.s ! NCase Sg c
        } ; 
       Pl => table {
-        Nom => "mitkä" ;
-        Gen => "minkä" ;
-        Part => "mitä" ;
+        Nom => "mitkÃ¤" ;
+        Gen => "minkÃ¤" ;
+        Part => "mitÃ¤" ;
         Illat => "mihin" ;
         c   => mi.s ! NCase Sg c
         }
@@ -218,55 +218,55 @@ oper
 
   kukaInt : MorphoFin.Number => (MorphoFin.Case) => Str = 
     let 
-      kuka = snoun2nounBind (mkN "kuka" "kenen" "ketä" "kenä" "keneen" 
-                 "keiden" "keitä" "keinä" "keissä" "keihin") ;
+      kuka = snoun2nounBind (mkN "kuka" "kenen" "ketÃ¤" "kenÃ¤" "keneen" 
+                 "keiden" "keitÃ¤" "keinÃ¤" "keissÃ¤" "keihin") ;
     in
     table {
       Sg => table {
         c   => kuka.s ! NCase Sg c
        } ; 
       Pl => table {
-        Nom => "ketkä" ;
+        Nom => "ketkÃ¤" ;
         c   => kuka.s ! NCase Pl c
         }
       } ;
   mikaanPron : MorphoFin.Number => (MorphoFin.Case) => Str = \\n,c =>
     case <n,c> of {
-        <Sg,Nom> => "mikään" ;
-        <_,Part> => "mitään" ;
-        <Sg,Gen> => "minkään" ;
-        <Pl,Nom> => "mitkään" ;
-        <Pl,Gen> => "mittenkään" ;
-        <_,Ess>  => "minään" ;
-        <_,Iness> => "missään" ;
-        <_,Elat> => "mistään" ;
-        <_,Adess> => "millään" ;
-        <_,Ablat> => "miltään" ;
-        _   => mikaInt ! n ! c + "kään"
+        <Sg,Nom> => "mikÃ¤Ã¤n" ;
+        <_,Part> => "mitÃ¤Ã¤n" ;
+        <Sg,Gen> => "minkÃ¤Ã¤n" ;
+        <Pl,Nom> => "mitkÃ¤Ã¤n" ;
+        <Pl,Gen> => "mittenkÃ¤Ã¤n" ;
+        <_,Ess>  => "minÃ¤Ã¤n" ;
+        <_,Iness> => "missÃ¤Ã¤n" ;
+        <_,Elat> => "mistÃ¤Ã¤n" ;
+        <_,Adess> => "millÃ¤Ã¤n" ;
+        <_,Ablat> => "miltÃ¤Ã¤n" ;
+        _   => mikaInt ! n ! c + "kÃ¤Ã¤n"
        } ; 
 
   kukaanPron : MorphoFin.Number => (MorphoFin.Case) => Str =
     table {
       Sg => table {
         Nom => "kukaan" ;
-        Part => "ketään" ;
-        Ess => "kenään" ;
-        Iness => "kessään" ;
-        Elat  => "kestään" ;
-        Illat => "kehenkään" ;
-        Adess => "kellään" ;
-        Ablat => "keltään" ;
-        c   => kukaInt ! Sg ! c + "kään"
+        Part => "ketÃ¤Ã¤n" ;
+        Ess => "kenÃ¤Ã¤n" ;
+        Iness => "kessÃ¤Ã¤n" ;
+        Elat  => "kestÃ¤Ã¤n" ;
+        Illat => "kehenkÃ¤Ã¤n" ;
+        Adess => "kellÃ¤Ã¤n" ;
+        Ablat => "keltÃ¤Ã¤n" ;
+        c   => kukaInt ! Sg ! c + "kÃ¤Ã¤n"
        } ; 
       Pl => table {
-        Nom => "ketkään" ;
-        Part => "keitään" ;
-        Ess => "keinään" ;
-        Iness => "keissään" ;
-        Elat => "keistään" ;
-        Adess => "keillään" ;
-        Ablat => "keiltään" ;
-        c   => kukaInt ! Pl ! c + "kään"
+        Nom => "ketkÃ¤Ã¤n" ;
+        Part => "keitÃ¤Ã¤n" ;
+        Ess => "keinÃ¤Ã¤n" ;
+        Iness => "keissÃ¤Ã¤n" ;
+        Elat => "keistÃ¤Ã¤n" ;
+        Adess => "keillÃ¤Ã¤n" ;
+        Ablat => "keiltÃ¤Ã¤n" ;
+        c   => kukaInt ! Pl ! c + "kÃ¤Ã¤n"
         }
       } ;
 
@@ -300,10 +300,10 @@ lin
     isPron = False ; isNeg = True
     } ;
 
-  at_least_AdN = ss "vähintään" ;
-  at_most_AdN = ss "enintään" ;
+  at_least_AdN = ss "vÃ¤hintÃ¤Ã¤n" ;
+  at_most_AdN = ss "enintÃ¤Ã¤n" ;
 
-  as_CAdv = X.mkCAdv "yhtä" "kuin" ;
+  as_CAdv = X.mkCAdv "yhtÃ¤" "kuin" ;
 
   except_Prep = postPrep partitive "lukuunottamatta" ;
 

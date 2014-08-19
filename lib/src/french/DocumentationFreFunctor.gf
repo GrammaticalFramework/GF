@@ -11,6 +11,7 @@ incomplete concrete DocumentationFreFunctor of Documentation = CatFre ** open
   Prelude,
   HTML
 in {
+flags coding=utf8 ;
 
 
 lincat

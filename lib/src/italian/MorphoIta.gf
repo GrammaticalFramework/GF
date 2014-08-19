@@ -1,5 +1,4 @@
 --# -path=.:../romance:../common:../../prelude
---# -coding=latin1
 
 --1 A Simple Italian Resource Morphology
 --
@@ -13,6 +12,7 @@ resource MorphoIta = CommonRomance, ResIta **
   open PhonoIta, Prelude, Predef in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 
 
@@ -67,7 +67,7 @@ oper
        ; g = Fem} ;
      _ + "e" => {s = numForms vino (vin + "i")
        ; g = Masc} ;
-     _ + "à" | "ù" => {s = numForms vino vino
+     _ + "Ã " | "Ã¹" => {s = numForms vino vino
        ; g = Fem} ;
      _ => {s = numForms vino vino
        ; g = Masc}

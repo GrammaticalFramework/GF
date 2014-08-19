@@ -1,7 +1,7 @@
---# -coding=latin1
 concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lincat
 
@@ -40,7 +40,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
 -- Adjective
 
 -- The $Bool$ tells whether usage is modifying (as opposed to
--- predicative), e.g. "x on suurempi kuin y" vs. "y:tä suurempi luku".
+-- predicative), e.g. "x on suurempi kuin y" vs. "y:tÃ¤ suurempi luku".
 
     AP = {s : Bool => NForm => Str} ; 
 
@@ -53,13 +53,13 @@ concrete CatFin of Cat = CommonX ** open ResFin, StemFin, Prelude in {
     NP   = {s : NPForm => Str ; a : Agr ; isPron : Bool ; isNeg : Bool} ;
     Det  = {
       s1 : Case => Str ;       -- minun kolme
-      s2 : Harmony => Str ;    -- -ni (Front for -nsä, Back for -nsa)
+      s2 : Harmony => Str ;    -- -ni (Front for -nsÃ¤, Back for -nsa)
       sp : Case => Str ;       -- se   (substantival form)
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
       isPoss : Bool ;          -- True (a possessive suffix is present)
       isDef : Bool ;           -- True (verb agrees in Pl, Nom is not Part)
-      isNeg : Bool             -- False (only True for "mikään", "kukaan")
+      isNeg : Bool             -- False (only True for "mikÃ¤Ã¤n", "kukaan")
       } ;
 ----    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Ord    = {s : NForm => Str} ;

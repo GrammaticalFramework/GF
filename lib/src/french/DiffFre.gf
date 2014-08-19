@@ -1,5 +1,4 @@
 --# -path=.:../romance:../abstract:../common:prelude
---# -coding=latin1
 
 instance DiffFre of DiffRomance - [
   imperClit,
@@ -7,7 +6,7 @@ instance DiffFre of DiffRomance - [
   ] 
   = open CommonRomance, PhonoFre, Prelude in {
 
-  flags optimize=noexpand ; -- coding=utf8 ;
+  flags optimize=noexpand ; coding=utf8 ;
 --  flags optimize=all ;
 
   param 
@@ -22,7 +21,7 @@ instance DiffFre of DiffRomance - [
     prepCase : Case -> Str = \c -> case c of {
       Nom => [] ;
       Acc => [] ; 
-      CPrep P_a => "à" ;
+      CPrep P_a => "Ã " ;
       CPrep P_de => elisDe ;
       CPrep PNul => []
       } ;
@@ -30,7 +29,7 @@ instance DiffFre of DiffRomance - [
     artDef : Gender -> Number -> Case -> Str = \g,n,c ->
       case <g,n,c> of {
         <Masc,Sg, CPrep P_de> => pre {"du" ; ("de l'" ++ Predef.BIND) / voyelle} ;
-        <Masc,Sg, CPrep P_a>  => pre {"au" ; ("à l'"  ++ Predef.BIND)  / voyelle} ;
+        <Masc,Sg, CPrep P_a>  => pre {"au" ; ("Ã  l'"  ++ Predef.BIND)  / voyelle} ;
         <Masc,Sg, _>    => elisLe ;
         <Fem, Sg, _>    => prepCase c ++ elisLa ;
         <_,   Pl, CPrep P_de> => "des" ;
@@ -239,20 +238,20 @@ instance DiffFre of DiffRomance - [
 
     auxPassive : Verb = copula ;
 
-    copula : Verb = {s = table VF ["être";"être";"suis";"es";"est";"sommes";"êtes";"sont";"sois";"sois"
+    copula : Verb = {s = table VF ["Ãªtre";"Ãªtre";"suis";"es";"est";"sommes";"Ãªtes";"sont";"sois";"sois"
 ;"soit";"soyons";"soyez";"soient";
-"étais";"étais";"était";"étions";"étiez";"étaient";--# notpresent
-"fusse";"fusses";"fût";"fussions";"fussiez";"fussent";--# notpresent
-"fus";"fus";"fut";"fûmes";"fûtes";"furent";--# notpresent
+"Ã©tais";"Ã©tais";"Ã©tait";"Ã©tions";"Ã©tiez";"Ã©taient";--# notpresent
+"fusse";"fusses";"fÃ»t";"fussions";"fussiez";"fussent";--# notpresent
+"fus";"fus";"fut";"fÃ»mes";"fÃ»tes";"furent";--# notpresent
 "serai";"seras";"sera";"serons";"serez";"seront";--# notpresent
 "serais";"serais";"serait";"serions";"seriez";"seraient";--# notpresent
-"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VTyp VHabere False} ;
+"sois";"soyons";"soyez";"Ã©tÃ©";"Ã©tÃ©s";"Ã©tÃ©e";"Ã©tÃ©es";"Ã©tant"]; vtyp=VTyp VHabere False} ;
 
     avoir_V : Verb = {s=table VF ["avoir";"avoir";"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait"
 ;"ayons";"ayez";"aient";
 "avais";"avais";"avait";"avions";"aviez";"avaient"; --# notpresent
-"eusse";"eusses";"eût";"eussions";"eussiez";"eussent";--# notpresent
-"eus";"eus";"eut";"eûmes";"eûtes";"eurent";--# notpresent
+"eusse";"eusses";"eÃ»t";"eussions";"eussiez";"eussent";--# notpresent
+"eus";"eus";"eut";"eÃ»mes";"eÃ»tes";"eurent";--# notpresent
 "aurai";"auras";"aura";"aurons";"aurez";"auront";--# notpresent
 "aurais";"aurais";"aurait";"aurions";"auriez";"auraient";--# notpresent
 "aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VTyp VHabere True}; ---- a-t-il eut-il

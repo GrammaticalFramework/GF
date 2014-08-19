@@ -1,8 +1,8 @@
---# -coding=latin1
 concrete QuestionRon of Question = 
   CatRon ** open ResRon, Prelude in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
 
@@ -11,7 +11,7 @@ concrete QuestionRon of Question =
             let cls = cl.s ! DDir ! t ! a ! p  
             in table {
               QDir   => cls ! Indic ;
-              QIndir => "dacã" ++ cls ! Indic
+              QIndir => "dacÃ£" ++ cls ! Indic
               }
       } ;
  -- doesn't have clitics since it's subject of the phrase

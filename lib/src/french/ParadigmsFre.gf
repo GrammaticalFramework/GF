@@ -1,5 +1,4 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
---# -coding=latin1
 
 --1 French Lexical Paradigms
 --
@@ -34,6 +33,7 @@ resource ParadigmsFre =
     CatFre in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 --2 Parameters 
 --
@@ -55,15 +55,15 @@ oper
 -- Prepositions used in many-argument functions are either strings
 -- (including the 'accusative' empty string) or strings that
 -- amalgamate with the following word (the 'genitive' "de" and the
--- 'dative' "à").
+-- 'dative' "Ã ").
 
   accusative : Prep ; -- direct object case
   genitive   : Prep ; -- genitive, constructed with "de"
-  dative     : Prep ; -- dative, usually constructed with "à"
+  dative     : Prep ; -- dative, usually constructed with "Ã "
 
   mkPrep : overload {
-    mkPrep : Str -> Prep  ;         -- simple preposition (other than "de" and "à")
-    mkPrep : Str -> Prep -> Prep ;  -- complex preposition e.g. "à côté de"
+    mkPrep : Str -> Prep  ;         -- simple preposition (other than "de" and "Ã ")
+    mkPrep : Str -> Prep -> Prep ;  -- complex preposition e.g. "Ã  cÃ´tÃ© de"
     } ;
 
 
@@ -92,11 +92,11 @@ oper
 --3 Compound nouns 
 --
 -- Some nouns are ones where the first part is inflected as a noun but
--- the second part is not inflected. e.g. "numéro de téléphone". 
+-- the second part is not inflected. e.g. "numÃ©ro de tÃ©lÃ©phone". 
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
-    mkN : N -> Str -> N -- compound noun, e.g. numéro + de téléphone
+    mkN : N -> Str -> N -- compound noun, e.g. numÃ©ro + de tÃ©lÃ©phone
   } ; 
 
 
@@ -108,13 +108,13 @@ oper
 
   mkN2 : N -> Prep -> N2 ; -- e.g. fille + genitive
 
--- The most common cases are the genitive "de" and the dative "à", 
+-- The most common cases are the genitive "de" and the dative "Ã ", 
 -- with the empty preposition.
 
   deN2 : N -> N2 ; --%
   aN2  : N -> N2 ; --%
 
--- Three-place relational nouns ("la connection de x à y") need two prepositions.
+-- Three-place relational nouns ("la connection de x Ã  y") need two prepositions.
 
   mkN3 : N -> Prep -> Prep -> N3 ; -- e.g. connection + genitive + dative
 
@@ -122,7 +122,7 @@ oper
 --3 Relational common noun phrases
 --
 -- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "la vieille église de"). However, $N2$ and
+-- relational noun (e.g. "la vieille Ã©glise de"). However, $N2$ and
 -- $N3$ are purely lexical categories. But you can use the $AdvCN$
 -- and $PrepNP$ constructions to build phrases like this.
 
@@ -148,9 +148,9 @@ oper
 -- masculine singular. The heuristic takes into account certain
 -- deviant endings: "banal-banale-banaux", "chinois-chinoise-chinois", 
 -- "heureux-heureuse-heureux", "italien-italienne", "jeune-jeune",
--- "amer-amère", "carré- - -carrément", "joli- - -joliment".
+-- "amer-amÃ¨re", "carrÃ©- - -carrÃ©ment", "joli- - -joliment".
 
-    mkA : (cher : Str) -> A ; -- predictable, e.g. cher-chère
+    mkA : (cher : Str) -> A ; -- predictable, e.g. cher-chÃ¨re
 
 -- Often just the feminine singular is deviant.
 
@@ -183,7 +183,7 @@ oper
 --
 -- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Prep -> A2 ; -- e.g. supérieur + dative
+  mkA2 : A -> Prep -> A2 ; -- e.g. supÃ©rieur + dative
 
 
 --2 Adverbs
@@ -199,7 +199,7 @@ oper
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
-  mkAdA : Str -> AdA ; -- modify adjective, e.g. très
+  mkAdA : Str -> AdA ; -- modify adjective, e.g. trÃ¨s
 
 
 --2 Verbs
@@ -212,7 +212,7 @@ oper
 -- latter with plural present indicative forms as "finissons".
 -- The regular verb function in the first conjugation recognizes
 -- these endings, as well as the variations among
--- "aimer, céder, placer, peser, jeter, placer, manger, assiéger, payer".
+-- "aimer, cÃ©der, placer, peser, jeter, placer, manger, assiÃ©ger, payer".
 --
 -- Sometimes, however, it is not predictable which variant of the "er"
 -- conjugation is to be selected. Then it is better to use the function
@@ -243,13 +243,13 @@ oper
   } ;
 
 -- The function $mkV$ gives the default compound auxiliary "avoir".
--- To change it to "être", use the following function. 
+-- To change it to "Ãªtre", use the following function. 
 
-  etreV : V -> V ; -- force auxiliary to be être (default avoir)
+  etreV : V -> V ; -- force auxiliary to be Ãªtre (default avoir)
 
--- This function turns a verb into reflexive, which implies the auxiliary "être".
+-- This function turns a verb into reflexive, which implies the auxiliary "Ãªtre".
 
-  reflV : V -> V ; -- reflexive, implies auxiliary être, e.g. se demander
+  reflV : V -> V ; -- reflexive, implies auxiliary Ãªtre, e.g. se demander
 
 
 --3 Two-place verbs
@@ -288,7 +288,7 @@ oper
   subjVS  : V -> VS ;
   mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
   deVV  : V -> VV ;  -- "j'essaie de parler"
-  aVV   : V -> VV ;  -- "j'arrive à parler"
+  aVV   : V -> VV ;  -- "j'arrive Ã  parler"
   mkV2S  : overload {
     mkV2S : V -> V2S ;
     mkV2S : V -> Prep -> V2S ;
@@ -419,7 +419,7 @@ oper
   mkV3 = overload {
     mkV3 : V -> V3 = dirdirV3 ;               -- donner,_,_
     mkV3 : V -> Prep -> V3 = dirV3 ;          -- placer,_,sur
-    mkV3 : V -> Prep -> Prep -> V3 = mmkV3    -- parler, à, de
+    mkV3 : V -> Prep -> Prep -> V3 = mmkV3    -- parler, Ã , de
     } ;
 
   V0 : Type = V ;
@@ -511,8 +511,8 @@ oper
   v2V : V2 -> V ;
   v2V v = v ** {lock_V = <>} ;
 
-  mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, à, de
-  dirV3    : V -> Prep -> V3 ;          -- donner,_,à
+  mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, Ã , de
+  dirV3    : V -> Prep -> V3 ;          -- donner,_,Ã 
   dirdirV3 : V -> V3 ;                  -- donner,_,_
 
   getVerbT : (VF => Str) -> Bool = \v -> case last (v ! (VFin (VPres Indic) Sg P3)) of {

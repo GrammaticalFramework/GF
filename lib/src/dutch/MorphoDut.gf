@@ -1,9 +1,8 @@
 --# -path=.:../common:../../prelude
---# -coding=latin1
 --
 ----1 A Simple Dutman Resource Morphology
 ----
----- Aarne Ranta & Harald Hammarström 2002 -- 2006
+---- Aarne Ranta & Harald HammarstrÃ¶m 2002 -- 2006
 ----
 ---- This resource morphology contains definitions needed in the resource
 ---- syntax. To build a lexicon, it is better to use $ParadigmsDut$, which
@@ -11,6 +10,7 @@
 --
 resource MorphoDut = ResDut ** open Prelude, (Predef=Predef) in 
 {
+flags coding=utf8 ;
 --{
 --
 --  flags optimize=all ;
@@ -36,7 +36,7 @@ resource MorphoDut = ResDut ** open Prelude, (Predef=Predef) in
 --
 --  genitS : Str -> Str = \hund -> case hund of {
 --    _ + ("el" | "en" | "er") => hund + "s" ;
---    _ + ("s" | "ß" | "sch" | "st" | "x" | "z") => hund + "es" ;
+--    _ + ("s" | "ÃŸ" | "sch" | "st" | "x" | "z") => hund + "es" ;
 --    _ => hund + variants {"s" ; "es"}
 --    } ;
 --  pluralN : Str -> Str = \hund -> case hund of {
@@ -52,14 +52,14 @@ resource MorphoDut = ResDut ** open Prelude, (Predef=Predef) in
 ---- Duden, p. 119
 --
 --  verbT : Str -> Str = \v -> case v of {
---    _ + ("t" | "d") => v + "et" ; -- gründen, reden, betten
+--    _ + ("t" | "d") => v + "et" ; -- grÃ¼nden, reden, betten
 --    _ + ("ch" | "k" | "p" | "t" | "g" | "b" | "d" | "f" | "s") + 
---        ("m" | "n") => v + "et" ; -- atmen, widmen, öffnen, rechnen
---    _ => v + "t"                  -- lernen, lärmen, qualmen etc
+--        ("m" | "n") => v + "et" ; -- atmen, widmen, Ã¶ffnen, rechnen
+--    _ => v + "t"                  -- lernen, lÃ¤rmen, qualmen etc
 --    } ;
 --
 --  verbST : Str -> Str = \v -> case v of {
---    _ + ("s" | "ss" | "ß" | "sch" | "x" | "z") => v + "t" ;
+--    _ + ("s" | "ss" | "ÃŸ" | "sch" | "x" | "z") => v + "t" ;
 --    _ => v + "st"
 --    } ;
 --

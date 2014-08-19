@@ -1,6 +1,6 @@
---# -coding=latin1
 concrete ExtraGer of ExtraGerAbs = CatGer ** 
   open ResGer, Coordination, Prelude, IrregGer, (P = ParadigmsGer) in {
+  flags coding=utf8 ;
 
   lincat
     VPI   = {s : Bool => Str} ;
@@ -30,7 +30,7 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
 
     TImpfSubj  = {s = [] ; t = Past ; m = MConjunct} ;   --# notpresent
 
-    moegen_VV = auxVV mögen_V ;
+    moegen_VV = auxVV mÃ¶gen_V ;
 
     ICompAP ap = {s = \\_ => "wie" ++ ap.s ! APred} ; 
 
@@ -79,7 +79,7 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
           let verb = vpi.s ! o ! agr 
           in case o of {
             Main => subj ++ verb ;
-            Inv  => verb ++ subj ;   ---- älskar henne och sover jag
+            Inv  => verb ++ subj ;   ---- Ã¤lskar henne och sover jag
             Sub  => subj ++ verb 
             }
         } ;

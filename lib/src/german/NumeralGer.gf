@@ -1,7 +1,7 @@
---# -coding=latin1
 concrete NumeralGer of Numeral = CatGer [Numeral,Digits] ** open MorphoGer, Prelude in {
 
 flags optimize = all_subs ;
+    coding=utf8 ;
 
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;
@@ -12,10 +12,10 @@ lincat
 lin 
   num x = x ;
 
-  n2 = mkDigit  "zwei"  "zwölf"   "zwanzig"   "zweite" ;
+  n2 = mkDigit  "zwei"  "zwÃ¶lf"   "zwanzig"   "zweite" ;
   n3 = mkDigit  "drei"  "dreizehn" "dreissig" "dritte" ;
   n4 = regDigit  "vier" ;
-  n5 = regDigit  "fünf" ;
+  n5 = regDigit  "fÃ¼nf" ;
   n6 = regDigit  "sechs" ;
   n7 = mkDigit  "sieben"  "siebzehn" "siebzig" "siebte" ;
   n8 = mkDigit  "acht" "achzehn"   "achzig"   "achte" ;

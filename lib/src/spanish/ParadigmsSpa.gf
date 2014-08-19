@@ -1,5 +1,4 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
---# -coding=latin1
 
 --1 Spanish Lexical Paradigms
 --
@@ -33,6 +32,7 @@ resource ParadigmsSpa =
     CatSpa in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 --2 Parameters 
 --
@@ -90,11 +90,11 @@ oper
 --3 Compound nouns 
 --
 -- Some nouns are ones where the first part is inflected as a noun but
--- the second part is not inflected. e.g. "n˙mero de telÈfono". 
+-- the second part is not inflected. e.g. "n√∫mero de tel√©fono". 
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
-  compN : N -> Str -> N ; -- compound, e.g. "n˙mero" + "de telÈfono"
+  compN : N -> Str -> N ; -- compound, e.g. "n√∫mero" + "de tel√©fono"
 
 
 --3 Relational nouns 
@@ -355,7 +355,7 @@ oper
    {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; 
     isPre = a.isPre ; lock_A = <>} ;
   compADeg a = 
-    {s = table {Posit => a.s ! Posit ; _ => \\f => "m·s" ++ a.s ! Posit ! f} ; 
+    {s = table {Posit => a.s ! Posit ; _ => \\f => "m√°s" ++ a.s ! Posit ! f} ; 
      isPre = a.isPre ;
      lock_A = <>} ;
   regADeg a = compADeg (regA a) ;
@@ -412,7 +412,7 @@ oper
 
 
 
-  mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, ‡, de
+  mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, √†, de
   mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mmkV3 v accusative p ;
   dirdirV3 v = dirV3 v dative ;
@@ -423,7 +423,7 @@ oper
   mkV3 = overload {
     mkV3 : V -> V3 = dirdirV3 ;               -- donner,_,_
     mkV3 : V -> Prep -> V3 = dirV3 ;          -- placer,_,sur
-    mkV3 : V -> Prep -> Prep -> V3 = mmkV3    -- parler, ‡, de
+    mkV3 : V -> Prep -> Prep -> V3 = mmkV3    -- parler, √†, de
     } ;
 
   mkV2S = overload {

@@ -6,10 +6,10 @@
 -- which depends on [DiffRomance DiffRomance.html].
 --
 
---# -coding=latin1
 resource CommonRomance = ParamX ** open Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 --2 Enumerated parameter types for morphology
 --
@@ -145,7 +145,7 @@ param
   oper
     complAgr : Agr -> {g : Gender ; n : Number} = \a -> case a of {
       Ag g n _ => {g = g ; n = n} ;
-      AgPol g  => {g = g ; n = Sg}  -- vous êtes fatiguée
+      AgPol g  => {g = g ; n = Sg}  -- vous Ãªtes fatiguÃ©e
       } ;
     verbAgr : Agr -> {g : Gender ; n : Number ; p : Person} = \a -> case a of {
       Ag g n p => {g = g ; n = n  ; p = p} ;

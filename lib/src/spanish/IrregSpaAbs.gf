@@ -1,5 +1,5 @@
---# -coding=latin1
 abstract IrregSpaAbs = Cat ** {
+  flags coding=utf8 ;
   fun abarse_V  : V ; 
   fun abastecer_V  : V ; 
   fun abeldar_V  : V ; 
@@ -15,7 +15,7 @@ abstract IrregSpaAbs = Cat ** {
   fun absterger_V  : V ; 
   fun absterger2_V  : V ; 
   fun abstraer_V  : V ; 
-  fun abuñolar_V  : V ; 
+  fun abuÃ±olar_V  : V ; 
   fun acaecer2_V  : V ; 
   fun acaecer_V  : V ; 
   fun acertar_V  : V ; 
@@ -94,7 +94,7 @@ abstract IrregSpaAbs = Cat ** {
   fun arbolecer_V  : V ; 
   fun arborecer_V  : V ; 
   fun arcaizar_V  : V ; 
-  fun argüir_V  : V ; 
+  fun argÃ¼ir_V  : V ; 
   fun aridecer_V  : V ; 
   fun arrecir_V  : V ; 
   fun arrendar_V  : V ; 
@@ -112,8 +112,8 @@ abstract IrregSpaAbs = Cat ** {
   fun aspaventar_V  : V ; 
   fun asperger_V  : V ; 
   fun asperger2_V  : V ; 
-  fun astreñir_V  : V ; 
-  fun astriñir_V  : V ; 
+  fun astreÃ±ir_V  : V ; 
+  fun astriÃ±ir_V  : V ; 
   fun astringir_V  : V ; 
   fun atardecer_V  : V ; 
   fun atender_V  : V ; 
@@ -135,7 +135,7 @@ abstract IrregSpaAbs = Cat ** {
   fun bienquerer_V  : V ; 
   fun blandir_V  : V ; 
   fun blanquecer_V  : V ; 
-  fun bruñir_V  : V ; 
+  fun bruÃ±ir_V  : V ; 
   fun bullir_V  : V ; 
   fun caber_V  : V ; 
   fun caer_V  : V ; 
@@ -144,7 +144,7 @@ abstract IrregSpaAbs = Cat ** {
   fun canecerse_V  : V ; 
   fun carecer_V  : V ; 
   fun cegar_V  : V ; 
-  fun ceñir_V  : V ; 
+  fun ceÃ±ir_V  : V ; 
   fun cerner_V  : V ; 
   fun cernir_V  : V ; 
   fun cerrar_V  : V ; 
@@ -198,7 +198,7 @@ abstract IrregSpaAbs = Cat ** {
   fun consolar_V  : V ; 
   fun consonar_V  : V ; 
   fun constituir_V  : V ; 
-  fun constreñir_V  : V ; 
+  fun constreÃ±ir_V  : V ; 
   fun construir_V  : V ; 
   fun contar_V  : V ; 
   fun contender_V  : V ; 
@@ -274,7 +274,7 @@ abstract IrregSpaAbs = Cat ** {
   fun descabullirse_V  : V ; 
   fun descaecer_V  : V ; 
   fun descaer_V  : V ; 
-  fun desceñir_V  : V ; 
+  fun desceÃ±ir_V  : V ; 
   fun descender_V  : V ; 
   fun descerrar_V  : V ; 
   fun descimentar_V  : V ; 
@@ -334,7 +334,7 @@ abstract IrregSpaAbs = Cat ** {
   fun desimponer_V  : V ; 
   fun desinvernar_V  : V ; 
   fun deslendrar_V  : V ; 
-  fun desleír_V  : V ; 
+  fun desleÃ­r_V  : V ; 
   fun deslucir_V  : V ; 
   fun desmajolar_V  : V ; 
   fun desmedirse_V  : V ; 
@@ -348,7 +348,7 @@ abstract IrregSpaAbs = Cat ** {
   fun desolar_V  : V ; 
   fun desoldar_V  : V ; 
   fun desollar_V  : V ; 
-  fun desoír_V  : V ; 
+  fun desoÃ­r_V  : V ; 
   fun desosar_V  : V ; 
   fun desosegar_V  : V ; 
   fun desparecer_V  : V ; 
@@ -365,7 +365,7 @@ abstract IrregSpaAbs = Cat ** {
   fun desproveer_V  : V ; 
   fun desquerer_V  : V ; 
   fun desraizar_V  : V ; 
-  fun desteñir_V  : V ; 
+  fun desteÃ±ir_V  : V ; 
   fun destentar_V  : V ; 
   fun desterrar_V  : V ; 
   fun destituir_V  : V ; 
@@ -484,7 +484,7 @@ abstract IrregSpaAbs = Cat ** {
   fun engorar_V  : V ; 
   fun engrandecer_V  : V ; 
   fun engravecer_V  : V ; 
-  fun engreír_V  : V ; 
+  fun engreÃ­r_V  : V ; 
   fun engrosar_V  : V ; 
   fun engrumecerse_V  : V ; 
   fun engullir_V  : V ; 
@@ -523,7 +523,7 @@ abstract IrregSpaAbs = Cat ** {
   fun ensarmentar_V  : V ; 
   fun ensarnecer_V  : V ; 
   fun ensilvecerse_V  : V ; 
-  fun ensoñar_V  : V ; 
+  fun ensoÃ±ar_V  : V ; 
   fun ensoberbecer_V  : V ; 
   fun ensolver_V  : V ; 
   fun ensombrecer_V  : V ; 
@@ -545,7 +545,7 @@ abstract IrregSpaAbs = Cat ** {
   fun entrecoger2_V  : V ; 
   fun entredecir_V  : V ; 
   fun entrelucir_V  : V ; 
-  fun entreoír_V  : V ; 
+  fun entreoÃ­r_V  : V ; 
   fun entreparecerse_V  : V ; 
   fun entrepernar_V  : V ; 
   fun entretener_V  : V ; 
@@ -583,7 +583,7 @@ abstract IrregSpaAbs = Cat ** {
   fun estar_V  : V ; 
   fun estatuir_V  : V ; 
   fun estregar_V  : V ; 
-  fun estreñir_V  : V ; 
+  fun estreÃ±ir_V  : V ; 
   fun estremecer_V  : V ; 
   fun europeizar_V  : V ; 
   fun evanecer_V  : V ; 
@@ -612,21 +612,21 @@ abstract IrregSpaAbs = Cat ** {
   fun fotocomponer_V  : V ; 
   fun frangir_V  : V ; 
   fun fregar_V  : V ; 
-  fun freír_V  : V ; 
+  fun freÃ­r_V  : V ; 
   fun fruir_V  : V ; 
   fun fruncir_V  : V ; 
   fun frutecer_V  : V ; 
   fun fulgir_V  : V ; 
   fun fungir_V  : V ; 
-  fun gañir_V  : V ; 
+  fun gaÃ±ir_V  : V ; 
   fun garantir_V  : V ; 
   fun gemir_V  : V ; 
   fun gernir_V  : V ; 
   fun gobernar_V  : V ; 
   fun grandisonar_V  : V ; 
-  fun gruñir_V  : V ; 
+  fun gruÃ±ir_V  : V ; 
   fun gruir_V  : V ; 
-  fun guañir_V  : V ; 
+  fun guaÃ±ir_V  : V ; 
   fun guarecer_V  : V ; 
   fun guarnecer_V  : V ; 
   fun haber_V  : V ; 
@@ -634,7 +634,7 @@ abstract IrregSpaAbs = Cat ** {
   fun hacer_V  : V ; 
   fun hebraizar_V  : V ; 
   fun heder_V  : V ; 
-  fun heñir_V  : V ; 
+  fun heÃ±ir_V  : V ; 
   fun helar_V  : V ; 
   fun henchir_V  : V ; 
   fun hender_V  : V ; 
@@ -687,7 +687,7 @@ abstract IrregSpaAbs = Cat ** {
   fun jimenzar_V  : V ; 
   fun judaizar_V  : V ; 
   fun jugar_V  : V ; 
-  fun juñir_V  : V ; 
+  fun juÃ±ir_V  : V ; 
   fun languidecer_V  : V ; 
   fun leer_V  : V ; 
   fun licuefacer_V  : V ; 
@@ -721,7 +721,7 @@ abstract IrregSpaAbs = Cat ** {
   fun mostrar_V  : V ; 
   fun mover_V  : V ; 
   fun mugir_V  : V ; 
-  fun muñir_V  : V ; 
+  fun muÃ±ir_V  : V ; 
   fun mullir_V  : V ; 
   fun nacer_V  : V ; 
   fun negar_V  : V ; 
@@ -735,7 +735,7 @@ abstract IrregSpaAbs = Cat ** {
   fun ofrecer_V  : V ; 
   fun oler_V  : V ; 
   fun oponer_V  : V ; 
-  fun oír_V  : V ; 
+  fun oÃ­r_V  : V ; 
   fun oscurecer_V  : V ; 
   fun pacer_V  : V ; 
   fun padecer_V  : V ; 
@@ -755,7 +755,7 @@ abstract IrregSpaAbs = Cat ** {
   fun pervertir_V  : V ; 
   fun pimpollecer_V  : V ; 
   fun placer_V  : V ; 
-  fun plañir_V  : V ; 
+  fun plaÃ±ir_V  : V ; 
   fun plastecer_V  : V ; 
   fun plegar_V  : V ; 
   fun poblar_V  : V ; 
@@ -806,13 +806,13 @@ abstract IrregSpaAbs = Cat ** {
   fun reabrir_V  : V ; 
   fun reaparecer_V  : V ; 
   fun reapretar_V  : V ; 
-  fun reargüir_V  : V ; 
+  fun reargÃ¼ir_V  : V ; 
   fun reaventar_V  : V ; 
   fun reblandecer_V  : V ; 
   fun rebullir_V  : V ; 
   fun recaer_V  : V ; 
   fun recalentar_V  : V ; 
-  fun receñir_V  : V ; 
+  fun receÃ±ir_V  : V ; 
   fun recentar_V  : V ; 
   fun recluir_V  : V ; 
   fun recocer_V  : V ; 
@@ -835,7 +835,7 @@ abstract IrregSpaAbs = Cat ** {
   fun recostar_V  : V ; 
   fun recrecer_V  : V ; 
   fun recrudecer_V  : V ; 
-  fun redargüir_V  : V ; 
+  fun redargÃ¼ir_V  : V ; 
   fun redecir_V  : V ; 
   fun redescontar_V  : V ; 
   fun redistribuir_V  : V ; 
@@ -848,15 +848,15 @@ abstract IrregSpaAbs = Cat ** {
   fun refluir_V  : V ; 
   fun reforzar_V  : V ; 
   fun refregar_V  : V ; 
-  fun refreír_V  : V ; 
+  fun refreÃ­r_V  : V ; 
   fun refringir_V  : V ; 
   fun refulgir_V  : V ; 
-  fun regañir_V  : V ; 
+  fun regaÃ±ir_V  : V ; 
   fun regar_V  : V ; 
   fun regimentar_V  : V ; 
   fun regir_V  : V ; 
   fun regoldar_V  : V ; 
-  fun regruñir_V  : V ; 
+  fun regruÃ±ir_V  : V ; 
   fun reguarnecer_V  : V ; 
   fun rehacer_V  : V ; 
   fun rehenchir_V  : V ; 
@@ -867,7 +867,7 @@ abstract IrregSpaAbs = Cat ** {
   fun rehuir_V  : V ; 
   fun rehumedecer_V  : V ; 
   fun reinscribir_V  : V ; 
-  fun reñir_V  : V ; 
+  fun reÃ±ir_V  : V ; 
   fun rejuvenecer_V  : V ; 
   fun releer_V  : V ; 
   fun relentecer_V  : V ; 
@@ -898,7 +898,7 @@ abstract IrregSpaAbs = Cat ** {
   fun requebrar_V  : V ; 
   fun requerir_V  : V ; 
   fun rernorder_V  : V ; 
-  fun reír_V  : V ; 
+  fun reÃ­r_V  : V ; 
   fun resaber_V  : V ; 
   fun resalir_V  : V ; 
   fun resarcir_V  : V ; 
@@ -915,16 +915,16 @@ abstract IrregSpaAbs = Cat ** {
   fun restablecer_V  : V ; 
   fun restituir_V  : V ; 
   fun restregar_V  : V ; 
-  fun restriñir_V  : V ; 
+  fun restriÃ±ir_V  : V ; 
   fun restringir_V  : V ; 
   fun resurgir_V  : V ; 
   fun retallecer_V  : V ; 
-  fun reteñir_V  : V ; 
+  fun reteÃ±ir_V  : V ; 
   fun retemblar_V  : V ; 
   fun retener_V  : V ; 
   fun retentar_V  : V ; 
-  fun retiñir_V  : V ; 
-  fun retoñecer_V  : V ; 
+  fun retiÃ±ir_V  : V ; 
+  fun retoÃ±ecer_V  : V ; 
   fun retorcer_V  : V ; 
   fun retostar_V  : V ; 
   fun retraducir_V  : V ; 
@@ -969,7 +969,7 @@ abstract IrregSpaAbs = Cat ** {
   fun serrar_V  : V ; 
   fun servir_V  : V ; 
   fun ser_V  : V ; 
-  fun soñar_V  : V ; 
+  fun soÃ±ar_V  : V ; 
   fun sobrecalentar_V  : V ; 
   fun sobrecoger_V  : V ; 
   fun sobrecoger2_V  : V ; 
@@ -988,13 +988,13 @@ abstract IrregSpaAbs = Cat ** {
   fun sobrevestir_V  : V ; 
   fun sobrevolar_V  : V ; 
   fun socolar_V  : V ; 
-  fun sofreír_V  : V ; 
+  fun sofreÃ­r_V  : V ; 
   fun solar_V  : V ; 
   fun soldar_V  : V ; 
   fun soler_V  : V ; 
   fun soltar_V  : V ; 
   fun sonar_V  : V ; 
-  fun sonreír_V  : V ; 
+  fun sonreÃ­r_V  : V ; 
   fun sorregar_V  : V ; 
   fun sosegar_V  : V ; 
   fun sostener_V  : V ; 
@@ -1022,10 +1022,10 @@ abstract IrregSpaAbs = Cat ** {
   fun suscribir_V  : V ; 
   fun sustituir_V  : V ; 
   fun sustraer_V  : V ; 
-  fun tañer_V  : V ; 
+  fun taÃ±er_V  : V ; 
   fun tallecer_V  : V ; 
   fun tardecer_V  : V ; 
-  fun teñir_V  : V ; 
+  fun teÃ±ir_V  : V ; 
   fun telecomponer_V  : V ; 
   fun teledirigir_V  : V ; 
   fun temblar_V  : V ; 
@@ -1052,8 +1052,8 @@ abstract IrregSpaAbs = Cat ** {
   fun trasfregar_V  : V ; 
   fun trasgredir_V  : V ; 
   fun traslucir_V  : V ; 
-  fun trasoñar_V  : V ; 
-  fun trasoír_V  : V ; 
+  fun trasoÃ±ar_V  : V ; 
+  fun trasoÃ­r_V  : V ; 
   fun trasparecer_V  : V ; 
   fun trasponer_V  : V ; 
   fun trastrocar_V  : V ; 

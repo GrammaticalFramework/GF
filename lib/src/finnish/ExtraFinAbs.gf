@@ -1,4 +1,3 @@
---# -coding=latin1
 abstract ExtraFinAbs = Extra [
   IP, IQuant,Num,CN,VPSlash,
   GenNP,GenIP,GenRP,
@@ -6,6 +5,7 @@ abstract ExtraFinAbs = Extra [
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,ConjVPS,Tense,Temp,Pol,S,
   VV,VP,Conj,NP,Quant,IAdv,IComp,ICompAP,IAdvAdv,Adv,AP, Pron, RP, ProDrop] ** {
+  flags coding=utf8 ;
 
   fun
     GenCN : NP -> CN -> CN ;              -- auton merkki
@@ -13,17 +13,17 @@ abstract ExtraFinAbs = Extra [
     AdvExistNP : Adv -> NP -> Cl ;        -- kuvassa olemme me --- now obsolete because of Idiom.ExistNPAdv
     AdvPredNP  : Adv -> V  -> NP -> Cl ;  -- kuvassa hymyilee Veikko
 
-    ICompExistNP : IComp -> NP -> QCl ;     -- missä/kuka on Veikko
-    IAdvPredNP : IAdv -> V -> NP -> QCl ;   -- mistä alkaa Ruotsi
+    ICompExistNP : IComp -> NP -> QCl ;     -- missÃ¤/kuka on Veikko
+    IAdvPredNP : IAdv -> V -> NP -> QCl ;   -- mistÃ¤ alkaa Ruotsi
 
     RelExistNP : Prep -> RP -> NP -> RCl ; -- jossa on jazzia
 
---    i_implicPron : Pron ;                 -- (minä), minut, ...
+--    i_implicPron : Pron ;                 -- (minÃ¤), minut, ...
     whatPart_IP : IP ;
 
     PartCN : CN -> NP ;                   -- olutta
 
-    vai_Conj : Conj ;                     -- minä vai sinä? ("or" in question)
+    vai_Conj : Conj ;                     -- minÃ¤ vai sinÃ¤? ("or" in question)
 
     CompPartAP : AP -> Comp ;             -- kahvi on valmista
 
@@ -36,12 +36,12 @@ abstract ExtraFinAbs = Extra [
     Part ;        -- discourse particle
 
   fun
-    S_SVO  : Part -> Temp -> Pol -> ClPlus     -> S ;  -- mepäs juomme maitoa nyt
+    S_SVO  : Part -> Temp -> Pol -> ClPlus     -> S ;  -- mepÃ¤s juomme maitoa nyt
     S_OSV  : Part -> Temp -> Pol -> ClPlusObj  -> S ;  -- maitoapas me juomme nyt
     S_VSO  : Part -> Temp -> Pol -> ClPlus     -> S ;  -- juommepas me maitoa nyt
-    S_ASV  : Part -> Temp -> Pol -> ClPlusAdv  -> S ;  -- nytpäs me juomme maitoa
+    S_ASV  : Part -> Temp -> Pol -> ClPlusAdv  -> S ;  -- nytpÃ¤s me juomme maitoa
 
---    S_SOV  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- mepäs maitoa juomme
+--    S_SOV  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- mepÃ¤s maitoa juomme
     S_OVS  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- maitoapas juomme me
 --    S_VOS  : Part -> Temp -> Pol -> ClPlus  -> S ;  -- juommepas maitoa me
 

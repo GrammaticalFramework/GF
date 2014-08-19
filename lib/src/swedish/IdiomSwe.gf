@@ -1,8 +1,8 @@
---# -coding=latin1
 concrete IdiomSwe of Idiom = CatSwe ** 
   open MorphoSwe, ParadigmsSwe, IrregSwe, Prelude in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   oper
     utr = ParadigmsSwe.utrum ;
@@ -51,9 +51,9 @@ concrete IdiomSwe of Idiom = CatSwe **
       } ;
 
     ProgrVP vp = 
-      insertObj (\\a => "att" ++ infVP vp a) (predV (partV hålla_V "på")) ;
+      insertObj (\\a => "att" ++ infVP vp a) (predV (partV hÃ¥lla_V "pÃ¥")) ;
 
-    ImpPl1 vp = {s = ["låt oss"] ++ infVP vp {g = Utr ; n = Pl ; p = P1}} ;
+    ImpPl1 vp = {s = ["lÃ¥t oss"] ++ infVP vp {g = Utr ; n = Pl ; p = P1}} ;
 
     SelfAdvVP vp = insertObj (\\a => sjalv a.g a.n) vp ;
     SelfAdVVP vp = insertAdVAgr (\\a => sjalv a.g a.n) vp ;
@@ -64,9 +64,9 @@ concrete IdiomSwe of Idiom = CatSwe **
 
   oper
     sjalv : Gender -> Number -> Str = \g,n -> case <g,n> of {
-      <Utr,Sg> => "själv" ;
-      <Neutr,Sg> => "självt" ;
-      _ => "själva"
+      <Utr,Sg> => "sjÃ¤lv" ;
+      <Neutr,Sg> => "sjÃ¤lvt" ;
+      _ => "sjÃ¤lva"
       } ;
 
 

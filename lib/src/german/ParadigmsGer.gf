@@ -1,9 +1,8 @@
 --# -path=.:../common:../abstract:../../prelude
---# -coding=latin1
 
 --1 German Lexical Paradigms
 --
--- Aarne Ranta, Harald Hammarström and Björn Bringert2003--2007
+-- Aarne Ranta, Harald HammarstrÃ¶m and BjÃ¶rn Bringert2003--2007
 --
 -- This is an API for the user of the resource grammar 
 -- for adding lexical items. It gives functions for forming
@@ -27,6 +26,7 @@ resource ParadigmsGer = open
   MorphoGer,
   CatGer
   in {
+  flags coding=utf8 ;
 
 --2 Parameters 
 
@@ -84,7 +84,7 @@ mkN : overload {
 -- Worst case: give all four singular forms, two plural forms (others + dative),
 -- and the gender.
 
-  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N ; -- worst case: mann, mann, manne, mannes, männer, männern
+  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N ; -- worst case: mann, mann, manne, mannes, mÃ¤nner, mÃ¤nnern
 
 -- compound nouns
 
@@ -150,7 +150,7 @@ mkN : overload {
   mkA : overload {
 
 -- The regular adjective formation works for most cases, and includes
--- variations such as "teuer - teurer", "böse - böser".
+-- variations such as "teuer - teurer", "bÃ¶se - bÃ¶ser".
 
     mkA : Str -> A ; -- regular adjective, works for most cases
 
@@ -209,11 +209,11 @@ mkV : overload {
 
 -- Regular verbs ("weak verbs") need just the infinitive form.
 
-  mkV : (führen : Str) -> V ; -- regular verb
+  mkV : (fÃ¼hren : Str) -> V ; -- regular verb
 
 -- Irregular verbs use Ablaut and, in the worst cases, also Umlaut.
 
-  mkV : (sehen,sieht,sah,sähe,gesehen : Str) -> V ; -- irregular verb theme
+  mkV : (sehen,sieht,sah,sÃ¤he,gesehen : Str) -> V ; -- irregular verb theme
 
 -- The worst-case constructor needs six forms:
 -- - Infinitive, 
@@ -225,7 +225,7 @@ mkV : overload {
 --
 --
 
-  mkV : (geben, gibt, gib, gab, gäbe, gegeben : Str) -> V ;  -- worst-case verb
+  mkV : (geben, gibt, gib, gab, gÃ¤be, gegeben : Str) -> V ;  -- worst-case verb
 
 -- To add a movable prefix e.g. "auf(fassen)".
 
@@ -289,7 +289,7 @@ mkV2 : overload {
 
   mkV3 : overload {
     mkV3     : V ->                 V3 ;  -- geben + acc + dat
-    mkV3     : V -> Prep -> Prep -> V3 ;  -- sprechen + mit + über
+    mkV3     : V -> Prep -> Prep -> V3 ;  -- sprechen + mit + Ã¼ber
     } ;
 
 --3 Other complement patterns

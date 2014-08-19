@@ -1,8 +1,8 @@
---# -coding=latin1
 incomplete concrete SentenceRomance of Sentence = 
   CatRomance ** open Prelude, CommonRomance, ResRomance in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lin
     PredVP np vp = mkClausePol np.isNeg (np.s ! Nom).comp np.hasClit np.isPol np.a vp ;
@@ -17,14 +17,14 @@ incomplete concrete SentenceRomance of Sentence =
 
 {-
     SlashVP np vps = 
-      -- agreement decided afterwards: la fille qu'il a trouvée
+      -- agreement decided afterwards: la fille qu'il a trouvÃ©e
       {s = \\agr => 
           let 
             vp = case <vps.c2.c, vps.c2.isDir> of {
-              <Acc,True> => insertAgr agr vps ;                         -- la fille qu'il a trouvée decided here
+              <Acc,True> => insertAgr agr vps ;                         -- la fille qu'il a trouvÃ©e decided here
               _ => vps
               }
-          in (mkClausePol np.isNeg (np.s ! Nom).comp np.hasClit np.isPol np.a vp).s ;  -- à qui montre-t-il sa maison 
+          in (mkClausePol np.isNeg (np.s ! Nom).comp np.hasClit np.isPol np.a vp).s ;  -- Ã  qui montre-t-il sa maison 
        c2 = vps.c2                                                                      -- np.hasClit decides inversion
       } ;
 -}
@@ -49,7 +49,7 @@ incomplete concrete SentenceRomance of Sentence =
         let
 
           vp : ResRomance.VP = case <vps.c2.c, vps.c2.isDir> of {
-              <Acc,True> => insertAgr agr0 vps ;    -- la fille qu'il a trouvée is decided here
+              <Acc,True> => insertAgr agr0 vps ;    -- la fille qu'il a trouvÃ©e is decided here
               _ => vps
               } ;
 

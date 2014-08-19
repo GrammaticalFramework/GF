@@ -1,7 +1,7 @@
---# -coding=latin1
 --1 Differences between Romance languages
 
 interface DiffRomance = open CommonRomance, Prelude in {
+  flags coding=utf8 ;
 
 -- The first eight constants show the essential differences
 -- between French, Italian, and Romance syntaxes (as regards the
@@ -18,12 +18,12 @@ interface DiffRomance = open CommonRomance, Prelude in {
   param Prepos ;
 
 -- Which types of verbs exist, in terms of auxiliaries.
--- (Fre, Ita "avoir", "être", and refl; Spa only "haber" and refl).
+-- (Fre, Ita "avoir", "Ãªtre", and refl; Spa only "haber" and refl).
 
   param VType ;
 
 -- Derivatively, if/when the participle agrees to the subject.
--- (Fre "elle est partie", Ita "lei è partita", Spa not)
+-- (Fre "elle est partie", Ita "lei Ã¨ partita", Spa not)
 
   oper partAgr   : VType -> VPAgr ;
 
@@ -89,7 +89,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
   relPron   : Bool => AAgr => Case => Str ;
   pronSuch  : AAgr => Str ;
 
-  partQIndir : Str ; -- ce, ciò
+  partQIndir : Str ; -- ce, ciÃ²
 
   reflPron : Number -> Person -> Case -> Str ;
 --  argPron  : Gender -> Number -> Person -> Case -> Str ;
@@ -113,7 +113,7 @@ oper
     clit2  : Str ;                      -- lui
     clit3  : Clit3 ;                    -- y en
     isNeg  : Bool ;                     -- includes a negative element, such as "rien"
-    comp   : Agr => Str ;               -- content(e) ; à ma mère ; hier
+    comp   : Agr => Str ;               -- content(e) ; Ã  ma mÃ¨re ; hier
     ext    : RPolarity => Str ;         -- que je dors / que je dorme
     } ;
 

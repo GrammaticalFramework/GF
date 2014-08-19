@@ -10,6 +10,7 @@ concrete TerminologyFre of Terminology = CatFre ** open
   Prelude
 
 in {
+flags coding=utf8 ;
 
 
 lincat

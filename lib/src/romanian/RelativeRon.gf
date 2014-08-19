@@ -1,13 +1,13 @@
---# -coding=latin1
 concrete RelativeRon of Relative = 
   CatRon ** open Prelude, ResRon in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
    lin
 
     RelCl cl = {                          
-      s = \\ag,t,a,p,m => "astfel" ++ "cã" ++ 
+      s = \\ag,t,a,p,m => "astfel" ++ "cÃ£" ++ 
                           cl.s ! DDir ! t ! a ! p ! m ;
       c = No
       } ;
@@ -52,8 +52,8 @@ concrete RelativeRon of Relative =
 -- Ac => if_then_Str p.isDir (ss ++ p.s ++ rp.s ! a ! p.c) (ss ++ p.s ++ rp.s ! a ! No)
     IdRP = {
       s = \\ag,c => case c of { Da | Ge => case <ag.g, ag.n > of
-                                                    {<Fem,Sg> => "cãreia" ; <Masc,Sg> => "cãruia" ;
-                                                     <_Pl> => "cãrora"
+                                                    {<Fem,Sg> => "cÃ£reia" ; <Masc,Sg> => "cÃ£ruia" ;
+                                                     <_Pl> => "cÃ£rora"
                                                       };
                                     _   => "care" 
                                    }

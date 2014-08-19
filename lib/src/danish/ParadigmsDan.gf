@@ -1,5 +1,4 @@
 --# -path=.:../scandinavian:../common:../abstract:../../prelude
---# -coding=latin1
 
 --1 Danish Lexical Paradigms
 --
@@ -33,6 +32,7 @@ resource ParadigmsDan =
     ResDan, 
     MorphoDan, 
     CatDan in {
+  flags coding=utf8 ;
 
 --2 Parameters 
 --
@@ -213,11 +213,11 @@ oper
 
 
 
---3 Verbs with 'vÊre' as auxiliary
+--3 Verbs with 'v√¶re' as auxiliary
 --
--- By default, the auxiliary is "have". This function changes it to "vÊre".
+-- By default, the auxiliary is "have". This function changes it to "v√¶re".
 
-  vaereV : V -> V ; -- force auxiliary "vÊre"
+  vaereV : V -> V ; -- force auxiliary "v√¶re"
 
 
 

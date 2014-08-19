@@ -1,6 +1,6 @@
---# -coding=latin1
 concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in {
 
+  flags coding=utf8 ;
   lin
 
 -- The $Number$ is subtle: "nuo autot", "nuo kolme autoa" are both plural
@@ -16,10 +16,10 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
           let k = npform2case n c 
           in 
           case <n, c, det.isNum, det.isPoss, det.isDef> of {
-            <_, NPAcc,       True,_,_>  => <Nom,NCase Sg Part> ; -- myin kolme kytkintä(ni)
-            <_, NPCase Nom,  True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintä(ni) on
+            <_, NPAcc,       True,_,_>  => <Nom,NCase Sg Part> ; -- myin kolme kytkintÃ¤(ni)
+            <_, NPCase Nom,  True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintÃ¤(ni) on
             <_, _, True,False,_>        => <k,  NCase Sg k> ;    -- kolmeksi kytkimeksi
-            <Pl,NPAcc,     _, _, False> => <k,  NCase Pl Part> ; -- myin kytkimiä
+            <Pl,NPAcc,     _, _, False> => <k,  NCase Pl Part> ; -- myin kytkimiÃ¤
             <_, NPAcc,     _,True,_>    => <k,  NPossNom n> ;    -- myin kytkime+ni
             <_, NPCase Nom,_,True,_>    => <k,  NPossNom n> ;    -- kytkime+ni on/ovat...
             <_, NPCase Gen,_,True,_>    => <k,  NPossGen n> ;    -- kytkime+ni vika
@@ -34,7 +34,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
                  in
                  det.s1 ! k.p1 ++ cn.s ! k.p2 ++ det.s2 ! cn.h ;
       a = agrP3 (case <det.isDef, det.isNum> of {
-            <False,True> => Sg ;  -- kolme kytkintä on
+            <False,True> => Sg ;  -- kolme kytkintÃ¤ on
             _ => det.n
             }) ;
       isPron = False ; isNeg = det.isNeg
@@ -73,21 +73,21 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
     PPartNP np v2 = {
       s = \\c => np.s ! c ++ (sverb2verbSep v2).s ! PastPartPass (AN (NCase (complNumAgr np.a) Ess)) ;
       a = np.a ;
-      isPron = np.isPron ;  -- minun täällä - ni
+      isPron = np.isPron ;  -- minun tÃ¤Ã¤llÃ¤ - ni
       isNeg = np.isNeg
       } ;
 
     AdvNP np adv = {
       s = \\c => np.s ! c ++ adv.s ;
       a = np.a ;
-      isPron = np.isPron ;  -- minun täällä - ni
+      isPron = np.isPron ;  -- minun tÃ¤Ã¤llÃ¤ - ni
       isNeg = np.isNeg
       } ;
 
     ExtAdvNP np adv = {
       s = \\c => np.s ! c ++ embedInCommas adv.s ;
       a = np.a ;
-      isPron = np.isPron ;  -- minun täällä - ni
+      isPron = np.isPron ;  -- minun tÃ¤Ã¤llÃ¤ - ni
       isNeg = np.isNeg
       } ;
 
@@ -164,8 +164,8 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
     IndefArt = {
       s1 = \\_,_ => [] ; -- Nom is Part in Pl: use isDef in DetCN
       sp = \\n,c => 
-         (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
-         "yksien" "yksiä" "yksiin")).s ! NCase n c ;
+         (nhn (mkSubst "Ã¤" "yksi" "yhde" "yhte" "yhtÃ¤" "yhteen" "yksi" "yksi" 
+         "yksien" "yksiÃ¤" "yksiin")).s ! NCase n c ;
       s2 = \\_ => [] ; 
       isNum,isPoss,isDef,isNeg = False -- autoja on
       } ;
@@ -239,7 +239,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
                    } ;
 
     PartNP cn np = {s = \\nf => cn.s ! nf ++ np.s ! NPCase Part ; 
-                    h = cn.h ---- gives "lasin viiniänsa" ; should be "lasinsa viiniä"
+                    h = cn.h ---- gives "lasin viiniÃ¤nsa" ; should be "lasinsa viiniÃ¤"
                    } ;
 
 

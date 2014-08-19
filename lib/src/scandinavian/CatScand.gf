@@ -1,8 +1,8 @@
---# -coding=latin1
 incomplete concrete CatScand of Cat = 
   CommonX -[Tense,Temp] ** open (RS = ResScand), Prelude, CommonScand, (R = ParamX) in {
 
   flags optimize=all_subs ;
+    coding=utf8 ;
 
   lincat
 
@@ -46,7 +46,7 @@ incomplete concrete CatScand of Cat =
       a1 : Polarity => Agr => Str ; -- A1 inte ---s3
       n2 : Agr => Str ;      -- N2 dig  ---s5  
       a2 : Str ;             -- A2 idag ---s6
-      ext : Str ;            -- S-Ext att hon går   ---s7
+      ext : Str ;            -- S-Ext att hon gÃ¥r   ---s7
       en2,ea2,eext : Bool    -- indicate if the field exists
       } ;
     VPSlash = CommonScand.VP ** {

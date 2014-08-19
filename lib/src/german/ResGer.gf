@@ -1,9 +1,8 @@
 --# -path=.:../abstract:../common:prelude
---# -coding=latin1
 
 --1 German auxiliary operations.
 --
--- (c) 2002-2006 Aarne Ranta and Harald Hammarström
+-- (c) 2002-2006 Aarne Ranta and Harald HammarstrÃ¶m
 --
 -- This module contains operations that are needed to make the
 -- resource syntax work. To define everything that is needed to
@@ -13,6 +12,7 @@
 resource ResGer = ParamX ** open Prelude in {
 
   flags optimize=all ;
+    coding=utf8 ;
 
 --2 For $Noun$
 
@@ -114,7 +114,7 @@ resource ResGer = ParamX ** open Prelude in {
   param  
     Order = Main | Inv | Sub ;
 
--- Main clause mood: "es sei, es wäre, es werde sein".
+-- Main clause mood: "es sei, es wÃ¤re, es werde sein".
 -- Not relevant for $Fut$. ---
 
     Mood = MIndic | MConjunct ;
@@ -574,21 +574,21 @@ resource ResGer = ParamX ** open Prelude in {
     mkV 
       "haben" "habe" "hast" "hat" "habt" "hab" 
       "hatte" "hattest" "hatten" "hattet" 
-      "hätte" "gehabt" 
+      "hÃ¤tte" "gehabt" 
       [] VHaben ;
 
   werden_V : Verb = 
     mkV 
       "werden" "werde" "wirst" "wird" "werdet" "werd" 
       "wurde" "wurdest" "wurden" "wurdet" 
-      "würde" "geworden" 
+      "wÃ¼rde" "geworden" 
       [] VSein ;
 
   werdenPass : Verb = 
     mkV 
       "werden" "werde" "wirst" "wird" "werdet" "werd" 
       "wurde" "wurdest" "wurden" "wurdet" 
-      "würde" "worden" 
+      "wÃ¼rde" "worden" 
       [] VSein ;
 
   sein_V : Verb = 
@@ -596,7 +596,7 @@ resource ResGer = ParamX ** open Prelude in {
       sein = mkV 
       "sein" "bin" "bist" "ist" "seid" "sei" 
       "war"  "warst" "waren" "wart" 
-      "wäre" "gewesen" 
+      "wÃ¤re" "gewesen" 
       [] VSein
     in
     {s = table {

@@ -1,5 +1,5 @@
---# -coding=latin1
 interface DiffScand = open CommonScand, Prelude in {
+  flags coding=utf8 ;
 
 --1 Differences between Scandinavian languages
 
@@ -19,7 +19,7 @@ interface DiffScand = open CommonScand, Prelude in {
     detDef : Species ;
 
 -- Danish and Norwegian verbs, but not Swedish verbs, 
--- have two possible compound-tense auxiliaries ("have" or "være").
+-- have two possible compound-tense auxiliaries ("have" or "vÃ¦re").
 
     Verb : Type ;
 
@@ -58,7 +58,7 @@ interface DiffScand = open CommonScand, Prelude in {
 
     relPron : Gender => Number => RCase => Str ;
 
--- Pronoun "sådan" used in $Relative.RelCl$.
+-- Pronoun "sÃ¥dan" used in $Relative.RelCl$.
 
     pronSuch : GenNum => Str ;
 

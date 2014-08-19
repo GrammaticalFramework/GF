@@ -1,5 +1,5 @@
---# -coding=latin1
 resource PhonoIta = open Prelude in {
+  flags coding=utf8 ;
 
 --3 Elision
 --
@@ -8,7 +8,7 @@ resource PhonoIta = open Prelude in {
 
 oper 
   vocale : Strs = strs {
-    "a" ; "e" ; "h" ; "i" ; "o" ; "u" ; "è" ; "y" ; "A" ; "E" ; "I" ; "O" ; "U" ; "H"
+    "a" ; "e" ; "h" ; "i" ; "o" ; "u" ; "Ã¨" ; "y" ; "A" ; "E" ; "I" ; "O" ; "U" ; "H"
     } ;
 
   sImpuro : Strs = strs {
