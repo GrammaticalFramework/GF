@@ -51,7 +51,7 @@ batchCompile opts files = do
 -- to compile a set of modules, e.g. an old GF or a .cf file
 compileSourceGrammar :: Options -> SourceGrammar -> IOE SourceGrammar
 compileSourceGrammar opts gr = do
-  cwd <- liftIO getCurrentDirectory
+  cwd <- getCurrentDirectory
   (_,gr',_) <- foldM (\env -> compileSourceModule opts cwd env Nothing)
                      emptyCompileEnv
                      (modules gr)
@@ -81,13 +81,13 @@ compileModule opts1 env@(_,rfs) file =
      foldM (compileOne' opts) env files
   where
     getRealFile file = do
-      exists <- liftIO $ doesFileExist file
+      exists <- doesFileExist file
       if exists
         then return file
         else if isRelative file
                then do lib_dir <- getLibraryDirectory opts1
                        let file1 = lib_dir </> file
-                       exists <- liftIO $ doesFileExist file1
+                       exists <- doesFileExist file1
                        if exists
                          then return file1
                          else raise (render ("None of these files exists:" $$ nest 2 (file $$ file1)))
@@ -108,7 +108,7 @@ extendCompileEnv (gr,menv) (mfile,mo) =
   do menv2 <- case mfile of
                 Just file ->
                   do let (mod,imps) = importsOfModule mo
-                     t <- liftIO $ getModificationTime file
+                     t <- getModificationTime file
                      return $ Map.insert mod (t,imps) menv
                 _ -> return menv
      return (prependModule gr mo,menv2)

@@ -37,7 +37,7 @@ compileOne :: Options -> SourceGrammar -> FullPath -> IOE OneOutput
 compileOne opts srcgr file =
     if isGFO file
     then reuseGFO opts srcgr file
-    else do b1 <- liftIO $ doesFileExist file
+    else do b1 <- doesFileExist file
             if b1 then useTheSource
                   else reuseGFO opts srcgr (gf2gfo opts file)
   where
@@ -47,7 +47,7 @@ compileOne opts srcgr file =
                        ("- compiling" +++ file ++ "... ")
                        (getSourceModule opts file)
          idump opts Source sm
-         cwd <- liftIO getCurrentDirectory
+         cwd <- getCurrentDirectory
          compileSourceModule opts cwd (Just file) srcgr sm
 
     putpOpt v m act
@@ -65,7 +65,7 @@ reuseGFO opts srcgr file =
      idump opts Source sm0
 
      let sm1 = unsubexpModule sm0
-     cwd <- liftIO getCurrentDirectory
+     cwd <- getCurrentDirectory
      (sm,warnings) <- -- putPointE Normal opts "creating indirections" $ 
                       runCheck $ extendModule cwd srcgr sm1
      warnOut opts warnings
