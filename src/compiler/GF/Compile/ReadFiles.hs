@@ -139,7 +139,7 @@ findFile gfoDir ps name =
         noGFO = raise (render ("File" <+> gfFile name <+> "does not exist." $$
                                "searched in:" <+> vcat ps))
 
-modtime path = liftIO $ getModificationTime path
+modtime path = getModificationTime path
 
 gfImports opts file = importsOfModule `fmap` parseModHeader opts file
 

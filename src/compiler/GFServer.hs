@@ -190,8 +190,8 @@ handle logLn documentroot state0 cache execute1 stateVar
     inDir ok = cd =<< look "dir"
       where
         cd ('/':dir@('t':'m':'p':_)) =
-          do cwd <- liftIO $ getCurrentDirectory
-             b <- liftIO $ doesDirectoryExist dir
+          do cwd <- getCurrentDirectory
+             b <- doesDirectoryExist dir
              case b of
                False  -> do b <- liftIO $ try $ readFile dir -- poor man's symbolic links
                             case b of
@@ -247,7 +247,7 @@ handle logLn documentroot state0 cache execute1 stateVar
          logPutStrLn cmd
          out@(ecode,_,_) <- liftIO $ readProcessWithExitCode "gf" args ""
          logPutStrLn $ show ecode
-         cwd <- liftIO $ getCurrentDirectory
+         cwd <- getCurrentDirectory
          return $ json200 (jsonresult cwd ('/':dir++"/") cmd out files)
 
     upload skip files =
@@ -265,15 +265,15 @@ handle logLn documentroot state0 cache execute1 stateVar
     jsonList' details ext = fmap (json200) (details =<< ls_ext "." ext)
 
     addTime path =
-        do t <- liftIO $ getModificationTime path
+        do t <- getModificationTime path
            return $ makeObj ["path".=path,"time".=format t]
       where
         format = formatTime defaultTimeLocale rfc822DateFormat
 
     rm path | takeExtension path `elem` ok_to_delete =
-      do b <- liftIO $ doesFileExist path
+      do b <- doesFileExist path
          if b
-           then do liftIO $ removeFile path
+           then do removeFile path
                    return $ ok200 ""
            else err $ resp404 path
     rm path = err $ resp400 $ "unacceptable extension "++path
@@ -306,7 +306,7 @@ handle logLn documentroot state0 cache execute1 stateVar
            return $ jsonp qs pgfs
 
     ls_ext dir ext =
-        do paths <- liftIO $ getDirectoryContents dir
+        do paths <- getDirectoryContents dir
            return [path | path<-paths, takeExtension path==ext]
 
 -- * Dynamic content
