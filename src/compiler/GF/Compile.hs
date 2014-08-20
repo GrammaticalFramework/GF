@@ -14,7 +14,7 @@ import GF.Infra.UseIO(IOE,FullPath,liftIO,getLibraryDirectory,putIfVerb,
                       justModuleName,extendPathEnv,putStrE,putPointE)
 import GF.Data.Operations(raise,(+++),err)
 
-import Control.Monad(foldM,when)
+import Control.Monad(foldM,when,(<=<))
 import GF.System.Directory(doesFileExist,getModificationTime)
 import System.FilePath((</>),isRelative,dropFileName)
 import qualified Data.Map as Map(empty,insert,elems) --lookup
@@ -69,7 +69,7 @@ compileModule opts1 env@(_,rfs) file =
   do file <- getRealFile file
      opts0 <- getOptionsFromFile file
      let curr_dir = dropFileName file
-     lib_dir  <- liftIO $ getLibraryDirectory (addOptions opts0 opts1)
+     lib_dir  <- getLibraryDirectory (addOptions opts0 opts1)
      let opts = addOptions (fixRelativeLibPaths curr_dir lib_dir opts0) opts1
      ps0 <- extendPathEnv opts
      let ps = nub (curr_dir : ps0)
@@ -85,7 +85,7 @@ compileModule opts1 env@(_,rfs) file =
       if exists
         then return file
         else if isRelative file
-               then do lib_dir <- liftIO $ getLibraryDirectory opts1
+               then do lib_dir <- getLibraryDirectory opts1
                        let file1 = lib_dir </> file
                        exists <- liftIO $ doesFileExist file1
                        if exists
@@ -94,12 +94,9 @@ compileModule opts1 env@(_,rfs) file =
                else raise (render ("File" <+> file <+> "does not exist."))
 
 compileOne' :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
-compileOne' opts env@(srcgr,_) file =
-    extendCompileEnv env =<< compileOne opts srcgr file
+compileOne' opts env@(gr,_) = extendCompileEnv env <=< compileOne opts gr
 
 -- auxiliaries
-
---reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
 -- | The environment
 type CompileEnv = (SourceGrammar,ModEnv)
@@ -107,11 +104,11 @@ type CompileEnv = (SourceGrammar,ModEnv)
 emptyCompileEnv :: CompileEnv
 emptyCompileEnv = (emptySourceGrammar,Map.empty)
 
-extendCompileEnv (gr,menv) (mfile,mo) = do
-  menv2 <- case mfile of
-    Just file -> do
-      let (mod,imps) = importsOfModule mo
-      t <- liftIO $ getModificationTime file
-      return $ Map.insert mod (t,imps) menv
-    _ -> return menv
-  return (prependModule gr mo,menv2) --- reverse later
+extendCompileEnv (gr,menv) (mfile,mo) =
+  do menv2 <- case mfile of
+                Just file ->
+                  do let (mod,imps) = importsOfModule mo
+                     t <- liftIO $ getModificationTime file
+                     return $ Map.insert mod (t,imps) menv
+                _ -> return menv
+     return (prependModule gr mo,menv2)
