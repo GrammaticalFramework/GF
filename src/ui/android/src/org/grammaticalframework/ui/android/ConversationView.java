@@ -131,13 +131,13 @@ public class ConversationView extends ScrollView {
     	// parse by words, marked by %, darkest red color
     	if (target.charAt(0) == '%') {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
-    		target = target.subSequence(2, target.length()) ;
+    		target = target.subSequence(1, target.length()).toString().trim();
     	}
 
     	// parse by chunks, marked by *, red color
     	else if (target.charAt(0) == '*') {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_chunk_utterance_bg));
-    		target = target.subSequence(2, target.length()) ;
+    		target = target.subSequence(1, target.length()).toString().trim();
     	}
 
     	// parse error or unknown translations (in []) present, darkest red color
@@ -148,7 +148,7 @@ public class ConversationView extends ScrollView {
     	// parse by domain grammar, marked by +, green color
     	else if (target.charAt(0) == '+') {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_best_utterance_bg));
-    		target = target.subSequence(2, target.length()) ;
+    		target = target.subSequence(1, target.length()).toString().trim();
     	}
     	
     	else {
