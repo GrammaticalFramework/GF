@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /grammars
+Disallow: /robust
+Disallow: /*.pgf
