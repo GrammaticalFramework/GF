@@ -125,8 +125,7 @@ checkCompleteGrammar opts cwd gr (am,abs) (cm,cnc) = checkInModule cwd cnc NoLoc
                                     return $ updateTree (c,CncFun (Just linty) (Just (L NoLoc def)) Nothing Nothing) js
                        Bad _  -> do noLinOf c
                                     return js
-         where noLinOf c = when (verbAtLeast opts Normal) $
-                           checkWarn ("no linearization of" <+> c)
+         where noLinOf c = checkWarn ("no linearization of" <+> c)
        AbsCat (Just _) -> case lookupIdent c js of
          Ok (AnyInd _ _) -> return js
          Ok (CncCat (Just _) _ _ _ _) -> return js
@@ -157,9 +156,8 @@ checkCompleteGrammar opts cwd gr (am,abs) (cm,cnc) = checkInModule cwd cnc NoLoc
 -- | General Principle: only Just-values are checked. 
 -- A May-value has always been checked in its origin module.
 checkInfo :: Options -> FilePath -> SourceGrammar -> SourceModule -> Ident -> Info -> Check Info
-checkInfo opts cwd sgr (m,mo) c info = do
-  checkInModule cwd mo NoLoc empty $
-    checkReservedId c
+checkInfo opts cwd sgr (m,mo) c info = checkInModule cwd mo NoLoc empty $ do
+  checkReservedId c
   case info of
     AbsCat (Just (L loc cont)) -> 
       mkCheck loc "the category" $ 
