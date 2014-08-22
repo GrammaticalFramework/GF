@@ -20,7 +20,7 @@ import GF.Grammar.Binary(decodeModule,encodeModule)
 
 import GF.Infra.Option
 import GF.Infra.UseIO(FullPath,IOE,isGFO,gf2gfo,liftIO,ePutStrLn,putPointE,putStrE)
-import GF.Infra.CheckM(runCheck)
+import GF.Infra.CheckM(runCheck')
 import GF.Data.Operations(liftErr,(+++))
 
 import GF.System.Directory(doesFileExist,getCurrentDirectory)
@@ -67,7 +67,7 @@ reuseGFO opts srcgr file =
      let sm1 = unsubexpModule sm0
      cwd <- getCurrentDirectory
      (sm,warnings) <- -- putPointE Normal opts "creating indirections" $ 
-                      runCheck $ extendModule cwd srcgr sm1
+                      runCheck' opts $ extendModule cwd srcgr sm1
      warnOut opts warnings
 
      if flag optTagsOnly opts
@@ -114,7 +114,7 @@ compileSourceModule opts cwd mb_gfFile gr =
     putpp s = if null s then id else putPointE Verbose opts ("  "++s++" ")
 
     -- * Running a compiler pass, with impedance matching
-    runPass = runPass' fst fst snd (liftErr . runCheck)
+    runPass = runPass' fst fst snd (liftErr . runCheck' opts)
     runPassE = runPass2e liftErr
     runPassI = runPass2e id id Canon
     runPass2e lift f = runPass' id f (const "") lift
