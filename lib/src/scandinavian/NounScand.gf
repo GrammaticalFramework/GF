@@ -108,6 +108,14 @@ incomplete concrete NounScand of Noun =
       isDet = True
       } ;
 
+    OrdNumeralSuperl n a = {
+      s = n.s ! NOrd SupWeak ++ case a.isComp of {
+        True => "mest" ++ a.s ! AF (APosit (Weak Sg)) Nom ;
+        _    => a.s ! AF (ASuperl SupWeak) Nom
+        }  ; 
+      isDet = True
+      } ;
+
     DefArt = {
       s  = \\n,bm,bn,g => if_then_Str (orB bm bn) (artDef (gennum (ngen2gen g) n)) [] ; 
       sp = \\n,bm,bn,g => artDef (gennum (ngen2gen g) n) ;

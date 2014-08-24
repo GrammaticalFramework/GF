@@ -74,6 +74,10 @@ abstract Noun = Cat ** {
     OrdNumeral : Numeral -> Ord ;  -- fifty-first
     OrdSuperl  : A       -> Ord ;  -- warmest
 
+-- One can combine a numeral and a superlative.
+
+    OrdNumeralSuperl : Numeral -> A -> Ord ; -- third largest
+
 -- Definite and indefinite noun phrases are sometimes realized as
 -- neatly distinct words (Spanish "un, unos ; el, los") but also without
 -- any particular word (Finnish; Swedish definites).

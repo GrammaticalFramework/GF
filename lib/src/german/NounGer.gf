@@ -97,6 +97,8 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
 
     OrdSuperl a = {s = a.s ! Superl} ;
 
+    OrdNumeralSuperl n a = {s = \\af => n.s ! NOrd APred ++ Predef.BIND ++ a.s ! Superl ! af} ; -- drittbeste
+
     DefArt = {
       s = \\_,n,g,c => artDefContr (gennum g n) c ; 
       sp = \\_,n,g,c  => artDefContr (gennum g n) c ;  ---- deren, denem...
