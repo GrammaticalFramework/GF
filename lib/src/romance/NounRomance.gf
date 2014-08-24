@@ -97,6 +97,9 @@ incomplete concrete NounRomance of Noun =
 
     OrdSuperl adj = {s = \\a => adj.s ! Superl ! AF a.g a.n} ;
 
+    OrdNumeralSuperl num adj = {s = \\a => num.s ! NOrd a.g a.n ++ adj.s ! Superl ! AF a.g a.n} ; -- la terza più grande 
+    ---- could be discontinuous: la terza città più grande
+
     DefArt = {
       s = \\_,n,g,c => artDef g n c ;  
       sp = \\n,g,c => artDef g n c ; ---- not for Fre 

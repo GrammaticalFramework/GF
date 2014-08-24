@@ -153,6 +153,9 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
 
     OrdSuperl a = snoun2nounSep {s = \\nc => a.s ! Superl ! sAN nc ; h = a.h} ; 
 
+    OrdNumeralSuperl n a = -- kolmanneksi suurin
+      {s = \\f => n.s ! NOrd (NCase Sg Transl) ++ (snoun2nounSep {s = \\nc => a.s ! Superl ! sAN nc ; h = a.h}).s ! f} ;
+
     DefArt = {
       s1 = \\_,_ => [] ; 
       sp = table {Sg => pronSe.s ; Pl => pronNe.s} ;

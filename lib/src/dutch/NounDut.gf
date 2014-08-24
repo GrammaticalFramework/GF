@@ -84,6 +84,8 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 
     OrdSuperl a = {s = a.s ! Superl} ;
 
+    OrdNumeralSuperl n a = {s = \\af => n.s ! NOrd af ++ a.s ! Superl ! af} ;
+
     DefArt = {
       s = \\_,n,g  => case <n,g> of {<Sg,Neutr> => "het" ; _ => "de"} ;
       sp = \\n,g => "die" ;
