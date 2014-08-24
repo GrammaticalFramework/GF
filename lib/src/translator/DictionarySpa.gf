@@ -14297,7 +14297,7 @@ lin owe_V = mkV (mkV "estar") "en deuda" | mkV "deber" | mkV "adeudar" ; -- stat
 lin owe_V2 = mkV2 (mkV (mkV "estar") "en deuda") | mkV2 (mkV "deber") | mkV2 (mkV "adeudar") ; -- status=guess
 lin owl_N = mkN "búho" | mkN "lechuza" ; -- status=guess
 lin own_A = mkA "propio" ; -- status=guess
-lin own_V2 = mkV2 (reconocer_V) | mkV2 (mkV "admitir") ;
+lin own_V2 = mkV2 poseer_V ;
 lin owner_N = mkN "propietario" | mkN "dueño" | mkN "poseedor" masculine ;
 lin ownership_N = mkN "posesión" feminine | mkN "propiedad" masculine ; -- status=guess
 lin ox_N = mkN "buey" masculine | mkN "toro" feminine | mkN "novillo" ; -- status=guess status=guess status=guess

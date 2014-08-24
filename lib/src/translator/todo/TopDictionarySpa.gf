@@ -2081,7 +2081,7 @@ lin twice_Adv = mkAdv "dos veces" ;
 lin sing_V2 = mkV2 (mkV "cantar") ;
 lin sing_V = L.sing_V ;
 lin whereas_Subj = ss "mientras" ** {m = Indic ; lock_Subj = <>} ;
-lin own_V2 = mkV2 (reconocer_V) | mkV2 (mkV "admitir") ;
+lin own_V2 = mkV2 poseer_V ;
 lin head_V2 = mkV2 dirigir_V ;
 lin head_V = dirigir_V ;
 lin examination_N = mkN "examen" masculine ;
