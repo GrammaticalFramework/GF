@@ -158,7 +158,7 @@ AWantGo p place = mkCl p.name want_VV  (mkVP  L.go_V place.name) ;
 -- miscellaneous
 
  QWhatName p = lin QS {s = \\_ => p.name.s ++ R.word "贵姓"} ; ---
- QWhatAge p = lin QS {s = \\_ => p.name.s ++ (R.word "几岁" | R.word "多大")} ; ---
+ QWhatAge p = lin QS {s = \\_ => p.name.s ++ R.word "几岁"} | lin QS {s = \\_ => p.name.s ++ R.word "多大"} ; ---
  HowMuchCost item = lin QS {s = \\_ => item.s ++ R.word "是多少钱"} ;
 ItCost item price = mkCl item (mkV2 "是") price ;
 
