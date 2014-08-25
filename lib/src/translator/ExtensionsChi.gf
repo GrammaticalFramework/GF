@@ -95,7 +95,7 @@ lin
   CompS s = insertObj s (predV copula []) ; ----
 
 
-  CompQS qs = insertObj qs (predV copula []) ; ----
+  CompQS qs = insertObj (ss (qs.s ! False)) (predV copula []) ; ----
   CompVP ant p vp = insertObj (ss (infVP vp)) (predV copula []) ; ----
 
 {-
