@@ -6,6 +6,7 @@ concrete TranslateEng of Translate =
   NounEng - [
     PPartNP
     ,DetNP  -- Eng exception
+    ,OrdNumeralSuperl  -- variants third largest | third-largest
     ],
   AdjectiveEng,
   NumeralEng,
@@ -75,5 +76,8 @@ lin
       } ;
 
   DetNP d = G.DetNP d | G.DetCN d (UseN (mkN "one")) ; -- I like this / I like this one ; it / the one
+
+  OrdNumeralSuperl n a = G.OrdNumeralSuperl n a | {s = \\c => n.s ! NOrd ! Nom ++ Predef.BIND ++ "-" ++ Predef.BIND ++ a.s ! AAdj Superl c} ;
+
 
 }
