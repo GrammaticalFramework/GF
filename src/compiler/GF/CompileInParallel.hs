@@ -1,4 +1,5 @@
 module GF.CompileInParallel where
+import Prelude hiding (catch)
 import Control.Monad(join,ap,when,unless)
 import Control.Applicative
 import Control.Concurrent
