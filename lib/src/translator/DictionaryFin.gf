@@ -46931,10 +46931,8 @@ lin somber_A = mkWA (k10 "vakava") ; --UNCHK
 lin sombre_A = mkWA (k10 "vakava") ; --UNCHK
 lin sombreness_N = mkWN (k40 "synkkyys") ; --UNCHK
 lin sombrero_N = mkWN (k1 "sombrero") ; --UNCHK
-lin somePl_Det = S.somePl_Det ;
-lin someSg_Det = S.someSg_Det ;
-lin some_A = mkWA (k101 "joku") ; --UNCHK
-lin some_Quant = heavyQuant {s1 = S.jokinPron ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ;
+lin some_Det = mkDet False Sg (exceptNomN (mkN "vähä") "vähän") partitive | mkDet False Sg (exceptNomN (mkN "hiukka") "hiukan") partitive ; 
+lin some_Quant = heavyQuant {s1 = S.jokinPron ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ; ---- vähän, hiukan
 lin somebody_NP = S.somebody_NP ;
 lin someday_Adv = mkWAdv (k99 "joskus") ;
 lin somehow_AdV = mkAdV "jotenkin" ;

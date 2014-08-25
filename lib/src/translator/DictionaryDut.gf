@@ -15352,8 +15352,8 @@ lin solution_N = mkN "oplossing" feminine ;
 lin solve_V2 = mkV2 (mkV "oplossen") ; -- status=guess, src=wikt
 lin solvent_N = mkN "oplosmiddel" ; -- status=guess
 lin somber_A = mkA "somber" ; -- status=guess
-lin somePl_Det = S.somePl_Det ;
-lin someSg_Det = S.someSg_Det ;
+lin some_Det = mkDet "een weinig" ; ----
+lin some_Quant = R.mkQuant "sommige" "sommige" ;
 lin somebody_NP = S.somebody_NP ;
 lin somehow_Adv = mkAdv "op een of andere manier" | mkAdv "eenderhoe" ; -- status=guess status=guess
 lin someone_NP = S.mkNP (mkN "iemand") ;

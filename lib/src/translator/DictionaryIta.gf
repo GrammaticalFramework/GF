@@ -1,6 +1,6 @@
 concrete DictionaryIta of Dictionary = CatIta
 ** open ParadigmsIta, (P = ParadigmsIta), 
-        IrregIta, (I=IrregIta), MorphoIta, (L=LexiconIta), (S=StructuralIta), (E=ExtraIta),Prelude in {
+        IrregIta, (I=IrregIta), MorphoIta, (L=LexiconIta), (S=StructuralIta), (E=ExtraIta), (R = ResIta), Prelude in {
 
 oper mkInterj : Str -> Interj
 = \s -> lin Interj (ss s) ;
@@ -15789,8 +15789,8 @@ lin solvent_A = mkA "solvibile" ; -- status=guess
 lin solvent_N = mkN "solvente" masculine ; -- status=guess
 lin soma_N = mkN "soma" masculine ; -- status=guess
 lin somatic_A = mkA "somatico" ; -- status=guess
-lin somePl_Det = S.somePl_Det ; -- comment=CHECKED
-lin someSg_Det = S.someSg_Det ; -- comment=CHECKED
+lin some_Det = mkDet "un poco di" | mkDet "un pò di" ;
+lin some_Quant = {s = \\_,_,_,c => R.prepCase c ++ "qualche" ; sp = \\_,_,c => R.prepCase c ++ "qualche" ; s2 = [] ; isNeg = False} ; ---- alcuni
 lin somebody_NP = S.somebody_NP ;
 lin somehow_Adv = variants{} ; --
 lin someone_NP = variants{} ; --

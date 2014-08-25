@@ -4,7 +4,7 @@
 concrete DictionaryGer of Dictionary = CatGer ** 
   open 
     ParadigmsGer, (S = SyntaxGer), (L = LexiconGer),
-    (R = ResGer), (M = MorphoGer), (MS = MakeStructuralGer), (I = IrregGer), Prelude in {
+    (R = ResGer), (M = MorphoGer), (MS = MakeStructuralGer), (I = IrregGer), (N = NounGer), Prelude in {
 
 flags
   coding=utf8 ;
@@ -53730,8 +53730,9 @@ lin somber_A = mk3A "finster" "finsterer" "finsterste" | mk3A "dunkel" "dunkler"
 lin sombre_A = variants {};
 lin sombreness_N = variants {};
 lin sombrero_N = mkN "Sombrero" ; -- status=guess
-lin some_A = variants {};
-lin some_Quant = variants {};
+--lin some_A = variants {};
+lin some_Det = {s,sp = \\_,_ => "ein wenig" ; c = R.noCase ; a = R.Strong ; isDef = False ; n = R.Sg} ;
+lin some_Quant = N.IndefArt ** {s = N.IndefArt.sp} ;
 lin somebody_NP = S.somebody_NP ;
 lin someday_Adv = mkAdv "eines Tages" | mkAdv "irgendwann" ; -- status=guess status=guess
 lin somehow_AdV = variants {};
