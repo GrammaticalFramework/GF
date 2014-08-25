@@ -9,6 +9,7 @@ concrete DictionaryFre of Dictionary = CatFre ** open
   (E = ExtraFre),
   (E = ExtraFre),
   (Ph = PhonoFre),
+  (R = ResFre),
   (M = MakeStructuralFre),
   MorphoFre, 
   Prelude in {
@@ -18420,8 +18421,8 @@ lin solvent_A = mkA "solvable" ; -- tocheck
 lin solvent_N = mkN "solvant" masculine ; -- tocheck
 lin somber_A = mkA "sombre" ; -- tocheck
 lin sombrero_N = mkN "sombréro" masculine ; -- tocheck
-lin somePl_Det = S.somePl_Det ;
-lin someSg_Det = S.someSg_Det ;
+lin some_Det = {s,sp = \\g,c => R.prepCase c ++ "un peu" ++ Ph.elisDe ; n = plural ; s2 = [] ; isNeg = False} ;
+lin some_Quant = M.mkQuant "quelque" "quelque" "quelques" "quelques" ;
 lin somebody_NP = S.somebody_NP ;
 lin somehow_Adv = variants{} ; --
 lin someone_NP = S.somebody_NP ;

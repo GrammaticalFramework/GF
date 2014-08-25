@@ -18783,6 +18783,8 @@ lin somatic_A = mkA "somático" ; -- status=guess
 lin sombrero_N = mkN "sombrero mexicano" | mkN " sombrero de charro" ; -- status=guess status=guess
 lin somePl_Det = S.somePl_Det ;
 lin someSg_Det = S.someSg_Det ;
+lin some_Det = mkDet "un poco de" ;
+lin some_Quant = mkQuantifier "algún" "alguna" "algunos" "algunas" ;
 lin somebody_NP = S.somebody_NP ;
 lin someday_Adv = mkAdv "algún día" ; -- status=guess
 lin somehow_Adv = mkAdv "de algún modo" | mkAdv "de alguna manera" ; -- status=guess

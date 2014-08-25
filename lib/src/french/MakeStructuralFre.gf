@@ -10,6 +10,18 @@ oper
   mkSubjSubj : Str -> Subj = \x -> 
     {s = x ; m = Conjunct ; lock_Subj = <>} ;
 
+  mkQuant : (_,_,_,_ : Str) -> Quant = \sm,sf,pm,pf -> 
+    let aucun : ParadigmsFre.Number => ParadigmsFre.Gender => Case => Str = table {
+      Sg => \\g,c => prepCase c ++ genForms sm sf ! g ;
+      Pl => \\g,c => prepCase c ++ genForms pm pf ! g 
+      }
+    in lin Quant {
+    s = \\_ => aucun ;
+    sp = aucun ;
+    s2 = [] ;
+    isNeg = False
+    } ;
+
   mkIQuant : Str -> IQuant = \s ->
     {s = \\_,_,c => prepCase c ++ s ; lock_IQuant = <>} ;
 

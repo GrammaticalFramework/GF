@@ -53994,8 +53994,8 @@ fun somber_A : A ;
 fun sombre_A : A ;
 fun sombreness_N : N ;
 fun sombrero_N : N ;
-fun some_A : A ;
-fun some_Quant : Quant ;
+fun some_Det : Det ;  -- mass: have some tea
+fun some_Quant : Quant ; -- existential
 fun somebody_NP : NP ;
 fun someday_Adv : Adv ;
 fun somehow_AdV : AdV ;
