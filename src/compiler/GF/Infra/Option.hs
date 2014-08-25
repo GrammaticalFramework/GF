@@ -172,8 +172,8 @@ data Flags = Flags {
       optTagsOnly        :: Bool,
       optHeuristicFactor :: Maybe Double,
       optMetaProb        :: Maybe Double,
-      optMetaToknProb    :: Maybe Double{-,
-      optNewComp         :: Bool-}
+      optMetaToknProb    :: Maybe Double,
+      optJobs            :: Maybe (Maybe String)
     }
   deriving (Show)
 
@@ -284,7 +284,8 @@ defaultFlags = Flags {
       optTagsOnly        = False,
       optHeuristicFactor = Nothing,
       optMetaProb        = Nothing,
-      optMetaToknProb    = Nothing
+      optMetaToknProb    = Nothing,
+      optJobs            = Nothing
     }
 
 -- | Option descriptions
@@ -297,6 +298,7 @@ optDescr =
      Option ['v'] ["verbose"] (OptArg verbosity "N") "Set verbosity (default 1). -v alone is the same as -v 2.",
      Option ['q','s'] ["quiet"] (NoArg (verbosity (Just "0"))) "Quiet, same as -v 0.",
      Option [] ["batch"] (NoArg (mode ModeCompiler)) "Run in batch compiler mode.",
+     Option ['j'] ["jobs"] (OptArg jobs "N") "Compile N modules in parallel with -batch (default 1).",
      Option [] ["interactive"] (NoArg (mode ModeInteractive)) "Run in interactive mode (default).",
      Option [] ["run"] (NoArg (mode ModeRun)) "Run in interactive mode, showing output only (no other messages).",
      Option [] ["server"] (OptArg modeServer "port") $
@@ -387,6 +389,7 @@ optDescr =
            ms = mode . ModeServer
            readPort p = maybe err ms (readMaybe p)
                  where err = fail $ "Bad server port: "++p
+       jobs mv       = set $ \ o -> o { optJobs = Just mv }
        verbosity mv  = case mv of
                            Nothing -> set $ \o -> o { optVerbosity = Verbose }
                            Just v  -> case readMaybe v >>= toEnumBounded of

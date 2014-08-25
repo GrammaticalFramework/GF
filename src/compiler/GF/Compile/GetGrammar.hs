@@ -25,29 +25,29 @@ import GF.Grammar.Parser
 import GF.Grammar.Grammar
 import GF.Grammar.CFG
 import GF.Grammar.EBNF
-import GF.Compile.ReadFiles(parseSource,lift)
+import GF.Compile.ReadFiles(parseSource)
 
 import qualified Data.ByteString.Char8 as BS
 import Data.Char(isAscii)
 import Control.Monad (foldM,when,unless)
 import System.Process (system)
-import System.Directory(removeFile,getCurrentDirectory)
+import GF.System.Directory(removeFile,getCurrentDirectory)
 import System.FilePath(makeRelative)
 
-getSourceModule :: Options -> FilePath -> IOE SourceModule
+--getSourceModule :: Options -> FilePath -> IOE SourceModule
 getSourceModule opts file0 = 
 --errIn file0 $
-  do tmp <- lift $ foldM runPreprocessor (Source file0) (flag optPreprocessors opts)
-     raw <- lift $ keepTemp tmp
+  do tmp <- liftIO $ foldM runPreprocessor (Source file0) (flag optPreprocessors opts)
+     raw <- liftIO $ keepTemp tmp
    --ePutStrLn $ "1 "++file0
      (optCoding,parsed) <- parseSource opts pModDef raw
      case parsed of
-       Left (Pn l c,msg) -> do file <- lift $ writeTemp tmp
-                               cwd <- lift $ getCurrentDirectory
+       Left (Pn l c,msg) -> do file <- liftIO $ writeTemp tmp
+                               cwd <- getCurrentDirectory
                                let location = makeRelative cwd file++":"++show l++":"++show c
                                raise (location++":\n   "++msg)
        Right (i,mi0) ->
-         do lift $ removeTemp tmp
+         do liftIO $ removeTemp tmp
             let mi =mi0 {mflags=mflags mi0 `addOptions` opts, msrc=file0}
                 optCoding' = renameEncoding `fmap` flag optEncoding (mflags mi0)
             case (optCoding,optCoding') of
@@ -59,7 +59,7 @@ getSourceModule opts file0 =
                   raise $ "Encoding mismatch: "++coding++" /= "++coding'
                 where coding = maybe defaultEncoding renameEncoding optCoding
               _ -> return ()
-          --lift $ transcodeModule' (i,mi) -- old lexer
+          --liftIO $ transcodeModule' (i,mi) -- old lexer
             return (i,mi) -- new lexer
 
 getCFRules :: Options -> FilePath -> IOE [CFRule]
@@ -67,7 +67,7 @@ getCFRules opts fpath = do
   raw <- liftIO (BS.readFile fpath)
   (optCoding,parsed) <- parseSource opts pCFRules raw
   case parsed of
-    Left (Pn l c,msg) -> do cwd <- lift $ getCurrentDirectory
+    Left (Pn l c,msg) -> do cwd <- getCurrentDirectory
                             let location = makeRelative cwd fpath++":"++show l++":"++show c
                             raise (location++":\n   "++msg)
     Right rules       -> return rules
@@ -77,7 +77,7 @@ getEBNFRules opts fpath = do
   raw <- liftIO (BS.readFile fpath)
   (optCoding,parsed) <- parseSource opts pEBNFRules raw
   case parsed of
-    Left (Pn l c,msg) -> do cwd <- lift $ getCurrentDirectory
+    Left (Pn l c,msg) -> do cwd <- getCurrentDirectory
                             let location = makeRelative cwd fpath++":"++show l++":"++show c
                             raise (location++":\n   "++msg)
     Right rules       -> return rules

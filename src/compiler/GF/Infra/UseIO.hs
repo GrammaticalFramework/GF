@@ -1,4 +1,3 @@
-{-# OPTIONS -cpp #-}
 ----------------------------------------------------------------------
 -- |
 -- Module      : UseIO
@@ -22,7 +21,7 @@ import GF.Infra.Option
 import GF.System.Catch
 import Paths_gf(getDataDir)
 
-import System.Directory
+import GF.System.Directory
 import System.FilePath
 import System.IO
 import System.IO.Error(isUserError,ioeGetErrorString)
@@ -36,24 +35,9 @@ import Control.Monad
 import Control.Monad.Trans(MonadIO(..))
 import Control.Exception(evaluate)
 
---putShow' :: Show a => (c -> a) -> c -> IO ()
---putShow' f = putStrLn . show . length . show . f
+--putIfVerb :: MonadIO io => Options -> String -> io ()
+putIfVerb opts msg = when (verbAtLeast opts Verbose) $ putStrLnE msg
 
-putIfVerb :: MonadIO io => Options -> String -> io ()
-putIfVerb opts msg =
-      when (verbAtLeast opts Verbose) $ liftIO $ putStrLn msg
-
-putIfVerbW :: MonadIO io => Options -> String -> io ()
-putIfVerbW opts msg =
-      when (verbAtLeast opts Verbose) $ liftIO $ putStr (' ' : msg)
-{-
-errOptIO :: Options -> a -> Err a -> IO a
-errOptIO os e m = case m of
-  Ok x  -> return x
-  Bad k -> do  
-    putIfVerb os k
-    return e
--}
 type FileName = String
 type InitPath = String -- ^ the directory portion of a pathname
 type FullPath = String
@@ -68,8 +52,8 @@ getLibraryDirectory opts =
     Nothing   -> liftIO $ catch (getEnv gfLibraryPath)
                                 (\ex -> fmap (</> "lib") getDataDir)
 
-getGrammarPath :: FilePath -> IO [FilePath]
-getGrammarPath lib_dir = do
+getGrammarPath :: MonadIO io => FilePath -> io [FilePath]
+getGrammarPath lib_dir = liftIO $ do
   catch (fmap splitSearchPath $ getEnv gfGrammarPathVar) 
         (\_ -> return [lib_dir </> "alltenses",lib_dir </> "prelude"])     -- e.g. GF_GRAMMAR_PATH
 
@@ -110,14 +94,13 @@ getSubdirs dir = do
 justModuleName :: FilePath -> String
 justModuleName = dropExtension . takeFileName
 
-isGFO :: FilePath -> Bool
+isGF,isGFO :: FilePath -> Bool
+isGF  = (== ".gf")  . takeExtensions
 isGFO = (== ".gfo") . takeExtensions
 
-gfoFile :: FilePath -> FilePath
+gfFile,gfoFile :: FilePath -> FilePath
+gfFile  f = addExtension f "gf"
 gfoFile f = addExtension f "gfo"
-
-gfFile :: FilePath -> FilePath
-gfFile f = addExtension f "gf"
 
 gf2gfo :: Options -> FilePath -> FilePath
 gf2gfo = gf2gfo' . flag optGFODir
@@ -143,6 +126,8 @@ newtype IOE a = IOE { appIOE :: IO (Err a) }
 ioe :: IO (Err a) -> IOE a
 ioe = IOE
 
+runIOE m = err fail return =<< appIOE m
+
 instance MonadIO IOE where liftIO io = ioe (io >>= return . return)
 
 instance ErrorMonad IOE where
@@ -162,10 +147,10 @@ instance  Monad IOE where
                   appIOE $ err raise f x         -- f :: a -> IOE a
   fail = raise
 
-maybeIO io = either (const Nothing) Just `fmap` liftIO (try io)
-
 useIOE :: a -> IOE a -> IO a
 useIOE a ioe = appIOE ioe >>= err (\s -> putStrLn s >> return a) return 
+
+maybeIO io = either (const Nothing) Just `fmap` liftIO (try io)
 
 --foldIOE :: (a -> b -> IOE a) -> a -> [b] -> IOE (a, Maybe String)
 foldIOE f s xs = case xs of
@@ -180,26 +165,41 @@ die :: String -> IO a
 die s = do hPutStrLn stderr s
            exitFailure
 
-ePutStr, ePutStrLn, putStrE, putStrLnE :: MonadIO m => String -> m ()
-ePutStr s = liftIO $ hPutStr stderr s
-ePutStrLn s = liftIO $ hPutStrLn stderr s
-putStrLnE s = liftIO $ putStrLn s >> hFlush stdout
-putStrE s = liftIO $ putStr s >> hFlush stdout
+class Monad m => Output m where
+  ePutStr, ePutStrLn, putStrE, putStrLnE :: String -> m ()
 
-putPointE :: MonadIO m => Verbosity -> Options -> String -> m a -> m a
+instance Output IO where
+  ePutStr   s = hPutStr stderr s `catch` oops
+    where oops _ = return () -- prevent crash on character encoding problem
+  ePutStrLn s = hPutStrLn stderr s `catch` oops
+    where oops _ = ePutStrLn "" -- prevent crash on character encoding problem
+  putStrLnE s = putStrLn s >> hFlush stdout
+  putStrE   s = putStr s >> hFlush stdout
+
+instance Output IOE where
+  ePutStr   = liftIO . ePutStr
+  ePutStrLn = liftIO . ePutStrLn
+  putStrLnE = liftIO . putStrLnE
+  putStrE   = liftIO . putStrE
+
+--putPointE :: Verbosity -> Options -> String -> IO a -> IO a
 putPointE v opts msg act = do
   when (verbAtLeast opts v) $ putStrE msg
 
-  t1 <- liftIO $ getCPUTime
-  a <- act >>= liftIO . evaluate
-  t2 <- liftIO $ getCPUTime
+  (t,a) <- timeIt act
 
   if flag optShowCPUTime opts
-      then do let msec = (t2 - t1) `div` 1000000000
+      then do let msec = t `div` 1000000000
               putStrLnE (printf " %5d msec" msec)
       else when (verbAtLeast opts v) $ putStrLnE ""
 
   return a
+
+timeIt act =
+  do t1 <- liftIO $ getCPUTime
+     a <- liftIO . evaluate =<< act
+     t2 <- liftIO $ getCPUTime
+     return (t2-t1,a)
 
 -- * File IO
 

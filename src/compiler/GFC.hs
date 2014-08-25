@@ -4,7 +4,8 @@ module GFC (mainGFC, writePGF) where
 import PGF
 import PGF.Internal(concretes,optimizePGF,unionPGF)
 import PGF.Internal(putSplitAbs,encodeFile,runPut)
-import GF.Compile
+import GF.Compile as S(batchCompile,link,srcAbsName)
+import qualified GF.CompileInParallel as P(batchCompile)
 import GF.Compile.Export
 import GF.Compile.CFGtoPGF
 import GF.Compile.GetGrammar
@@ -41,7 +42,7 @@ mainGFC opts fs = do
 
 compileSourceFiles :: Options -> [FilePath] -> IOE ()
 compileSourceFiles opts fs = 
-    do cnc_gr@(cnc,t_src,gr) <- batchCompile opts fs
+    do (t_src,~cnc_grs@(~(cnc,gr):_)) <- batchCompile opts fs
        unless (flag optStopAfterPhase opts == Compile) $
               do let abs = showIdent (srcAbsName gr cnc)
                      pgfFile = outputPath opts (grammarName' opts abs<.>"pgf")
@@ -50,9 +51,15 @@ compileSourceFiles opts fs =
                           else return Nothing
                  if t_pgf >= Just t_src
                    then putIfVerb opts $ pgfFile ++ " is up-to-date."
-                   else do pgf <- link opts cnc_gr
+                   else do pgfs <- mapM (link opts)
+                                        [(cnc,t_src,gr)|(cnc,gr)<-cnc_grs]
+                           let pgf = foldl1 unionPGF pgfs
                            writePGF opts pgf
                            writeOutputs opts pgf
+  where
+    batchCompile = maybe batchCompile' P.batchCompile (flag optJobs opts)
+    batchCompile' opts fs = do (cnc,t,gr) <- S.batchCompile opts fs
+                               return (t,[(cnc,gr)])
 
 compileCFFiles :: Options -> [FilePath] -> IOE ()
 compileCFFiles opts fs = do

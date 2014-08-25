@@ -20,8 +20,8 @@
 
 module GF.Compile.ReadFiles
            ( getAllFiles,ModName,ModEnv,importsOfModule,
-             parseSource,lift,
-             getOptionsFromFile,getPragmas) where
+             findFile,gfImports,gfoImports,
+             parseSource,getOptionsFromFile,getPragmas) where
 
 import Prelude hiding (catch)
 import GF.System.Catch
@@ -32,15 +32,17 @@ import GF.Data.Operations
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar
-import GF.Grammar.Binary
+import GF.Grammar.Binary(decodeModuleHeader)
 
 import System.IO(mkTextEncoding)
-import qualified Data.ByteString.UTF8 as UTF8
 import GF.Text.Coding(decodeUnicodeIO)
+
+import qualified Data.ByteString.UTF8 as UTF8
+import qualified Data.ByteString.Char8 as BS
 
 import Control.Monad
 import Data.Maybe(isJust)
-import qualified Data.ByteString.Char8 as BS
+import Data.Char(isSpace)
 import qualified Data.Map as Map
 import Data.Time(UTCTime)
 import GF.System.Directory(getModificationTime,doesFileExist,canonicalizePath)
@@ -123,8 +125,8 @@ findFile gfoDir ps name =
     maybe noSource haveSource =<< getFilePath ps (gfFile name)
   where
     haveSource gfFile =
-      do gfTime  <- modtime gfFile
-         mb_gfoTime <- maybeIO $ modtime (gf2gfo' gfoDir gfFile)
+      do gfTime  <- getModificationTime gfFile
+         mb_gfoTime <- maybeIO $ getModificationTime (gf2gfo' gfoDir gfFile)
          return (gfFile, Just gfTime, mb_gfoTime)
 
     noSource =
@@ -133,13 +135,11 @@ findFile gfoDir ps name =
         gfoPath = maybe id (:) gfoDir ps
 
         haveGFO gfoFile =
-          do gfoTime <- modtime gfoFile
+          do gfoTime <- getModificationTime gfoFile
              return (gfoFile, Nothing, Just gfoTime)
 
         noGFO = raise (render ("File" <+> gfFile name <+> "does not exist." $$
                                "searched in:" <+> vcat ps))
-
-modtime path = getModificationTime path
 
 gfImports opts file = importsOfModule `fmap` parseModHeader opts file
 
@@ -216,7 +216,7 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
 
 parseModHeader opts file =
   do --ePutStrLn file
-     (_,parsed) <- parseSource opts pModHeader =<< lift (BS.readFile file)
+     (_,parsed) <- parseSource opts pModHeader =<< liftIO (BS.readFile file)
      case parsed of
        Right mo          -> return mo
        Left (Pn l c,msg) ->
@@ -234,43 +234,44 @@ toUTF8 opts0 raw =
              then return raw
              else if coding=="CP1252" -- Latin1
                   then return . UTF8.fromString $ BS.unpack raw -- faster
-                  else lift $
-                       do --ePutStrLn $ "toUTF8 from "++coding
-                          enc <- mkTextEncoding coding
-                          -- decodeUnicodeIO uses a lot of stack space,
-                          -- so we need to split the file into smaller pieces
-                          ls <- mapM (decodeUnicodeIO enc) (BS.lines raw)
-                          return $ UTF8.fromString (unlines ls)
+                  else do --ePutStrLn $ "toUTF8 from "++coding
+                          recodeToUTF8 coding raw
      return (given,utf8)
 
---lift io = ioe (fmap Ok io `catch` (return . Bad . show))
-lift io = liftIO io
+recodeToUTF8 coding raw =
+  liftIO $
+  do enc <- mkTextEncoding coding
+     -- decodeUnicodeIO uses a lot of stack space,
+     -- so we need to split the file into smaller pieces
+     ls <- mapM (decodeUnicodeIO enc) (BS.lines raw)
+     return $ UTF8.fromString (unlines ls)
 
 -- | options can be passed to the compiler by comments in @--#@, in the main file
-getOptionsFromFile :: (MonadIO m,ErrorMonad m) => FilePath -> m Options
+--getOptionsFromFile :: (MonadIO m,ErrorMonad m) => FilePath -> m Options
 getOptionsFromFile file = do
-  s <- either (\_ -> raise $ "File " ++ file ++ " does not exist") return =<<
-       liftIO (try $ BS.readFile file)
-  opts <- getPragmas s
+  opts <- either failed getPragmas =<< (liftIO $ try $ BS.readFile file)
   -- The coding flag should not be inherited by other files
   return (addOptions opts (modifyFlags $ \ f -> f{optEncoding=Nothing}))
+  where
+    failed _ = raise $ "File " ++ file ++ " does not exist"
 
 
 getPragmas :: (ErrorMonad m) => BS.ByteString -> m Options
 getPragmas = parseModuleOptions . 
              map (BS.unpack . BS.unwords . BS.words . BS.drop 3) .
-             filter (BS.isPrefixOf (BS.pack "--#")) . BS.lines
+             filter (BS.isPrefixOf (BS.pack "--#")) .
+--           takeWhile (BS.isPrefixOf (BS.pack "--")) .
+--           filter (not . BS.null) .
+             map (BS.dropWhile isSpace) .
+             BS.lines
 
 getFilePath :: MonadIO m => [FilePath] -> String -> m (Maybe FilePath)
-getFilePath paths file =
-   liftIO $ do --ePutStrLn $ "getFilePath "++show paths++" "++show file
-               get paths
+getFilePath paths file = get paths
   where
     get []     = return Nothing
-    get (p:ps) = do
-      let pfile = p </> file
-      exist <- doesFileExist pfile
-      if not exist
-        then get ps
-        else do pfile <- canonicalizePath pfile
-                return (Just pfile)
+    get (p:ps) = do let pfile = p </> file
+                    exist <- doesFileExist pfile
+                    if not exist
+                      then get ps
+                      else do pfile <- canonicalizePath pfile
+                              return (Just pfile)
