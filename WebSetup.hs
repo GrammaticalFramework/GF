@@ -1,11 +1,12 @@
-module WebSetup(buildWeb,installWeb,copyWeb) where
+module WebSetup(buildWeb,installWeb,copyWeb,numJobs,execute) where
 
-import System.Directory(createDirectoryIfMissing,copyFile,removeFile)
-import System.FilePath((</>))
-import System.Cmd(system)
+import System.Directory(createDirectoryIfMissing,copyFile)
+import System.FilePath((</>),dropExtension)
+import System.Process(rawSystem)
 import System.Exit(ExitCode(..))
-import Distribution.Simple.Setup(Flag(..),CopyDest(..),copyDest)
+import Distribution.Simple.Setup(BuildFlags(..),Flag(..),CopyDest(..),copyDest)
 import Distribution.Simple.LocalBuildInfo(datadir,buildDir,absoluteInstallDirs)
+import Distribution.Simple.Utils(die)
 
 {-
    To test the GF web services, the minibar and the grammar editor, use
@@ -33,7 +34,8 @@ example_grammars =  -- :: [(pgf, subdir, src)]
     letterSrc = ["Letter"++lang++".gf"|lang<-letterLangs]
     letterLangs = words "Eng Fin Fre Heb Rus Swe"
 
-buildWeb gf (pkg,lbi) =
+
+buildWeb gf (flags,pkg,lbi) =
     do --putStrLn "buildWeb"
        mapM_ build_pgf example_grammars
   where
@@ -42,26 +44,26 @@ buildWeb gf (pkg,lbi) =
     build_pgf (pgf,subdir,src) =
       do createDirectoryIfMissing True tmp_dir
          putStrLn $ "Building "++pgf
-         execute cmd
+         execute gf args
       where
         tmp_dir = gfo_dir</>subdir
         dir = "examples"</>subdir
-        cmd = gf++" -make -s -optimize-pgf --gfo-dir="++tmp_dir++
-              " --gf-lib-path="++buildDir lbi </> "rgl"++
-              " --output-dir="++gfo_dir++
-              " "++unwords [dir</>file|file<-src]
+        args = numJobs flags++["-make","-s","-optimize-pgf"]
+               ++["--gfo-dir="++tmp_dir,
+                  "--gf-lib-path="++buildDir lbi </> "rgl",
+                  "--name="++dropExtension pgf,
+                  "--output-dir="++gfo_dir]
+               ++[dir</>file|file<-src]
 
-installWeb gf args flags = setupWeb gf args dest
-  where
-    dest = NoCopyDest
+installWeb = setupWeb NoCopyDest
 
-copyWeb gf args flags = setupWeb gf args dest
+copyWeb flags = setupWeb dest
   where
     dest = case copyDest flags of
              NoFlag -> NoCopyDest
              Flag d -> d
 
-setupWeb gf args dest (pkg,lbi) =
+setupWeb dest (pkg,lbi) =
     do mapM_ (createDirectoryIfMissing True) [grammars_dir,cloud_dir]
        mapM_ copy_pgf example_grammars
        copyGFLogo
@@ -83,10 +85,23 @@ setupWeb gf args dest (pkg,lbi) =
       do createDirectoryIfMissing True logo_dir
          copyFile ("doc"</>"Logos"</>gf_logo) (logo_dir</>gf_logo)
 
-execute command =
-  do --putStrLn command
-     e <- system command
+execute command args =
+  do let cmdline = command ++ " " ++ unwords (map showArg args)
+--   putStrLn $ "Running: " ++ cmdline
+--   appendFile "running" (cmdline++"\n")
+     e <- rawSystem command args
      case e of
-       ExitSuccess -> return ()
-       _ -> fail "Command failed"
-     return ()
+       ExitSuccess   -> return ()
+       ExitFailure i -> do putStrLn $ "Ran: " ++ cmdline
+                           die $ command++" exited with exit code: " ++ show i
+  where
+    showArg arg = if ' ' `elem` arg then "'" ++ arg ++ "'" else arg
+
+numJobs flags =
+    if null n
+    then []
+    else ["-j=8"++n,"+RTS","-A20M","-N"++n,"-RTS"]
+  where
+    n = case buildNumJobs flags of
+          Flag mn | mn/=Just 1-> maybe "" show mn
+          _ -> ""

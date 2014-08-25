@@ -45,7 +45,7 @@ import Control.Monad.Identity
 ----------------------------------------------------------------------
 -- main conversion function
 
-generatePMCFG :: Options -> SourceGrammar -> Maybe FilePath -> SourceModule -> IOE SourceModule
+--generatePMCFG :: Options -> SourceGrammar -> Maybe FilePath -> SourceModule -> IOE SourceModule
 generatePMCFG opts sgr opath cmo@(cm,cmi) = do
   (seqs,js) <- mapAccumWithKeyM (addPMCFG opts gr cenv opath am cm) Map.empty (jments cmi)
   when (verbAtLeast opts Verbose) $ ePutStrLn ""
@@ -67,7 +67,7 @@ mapAccumWithKeyM f a m = do let xs = Map.toAscList m
                                    return (a,(k,y):kys)
 
 
-addPMCFG :: Options -> SourceGrammar -> GlobalEnv -> Maybe FilePath -> Ident -> Ident -> SeqSet -> Ident -> Info -> IOE (SeqSet, Info)
+--addPMCFG :: Options -> SourceGrammar -> GlobalEnv -> Maybe FilePath -> Ident -> Ident -> SeqSet -> Ident -> Info -> IOE (SeqSet, Info)
 addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncFun mty@(Just (cat,cont,val)) mlin@(Just (L loc term)) mprn Nothing) = do
 --when (verbAtLeast opts Verbose) $ ePutStr ("\n+ "++showIdent id++" ...")
   let pres  = protoFCat gr res val
