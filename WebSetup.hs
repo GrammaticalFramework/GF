@@ -100,8 +100,8 @@ execute command args =
 numJobs flags =
     if null n
     then []
-    else ["-j=8"++n,"+RTS","-A20M","-N"++n,"-RTS"]
+    else ["-j="++n,"+RTS","-A20M","-N"++n,"-RTS"]
   where
-    n = case buildNumJobs flags of
+    n = {-case buildNumJobs flags of
           Flag mn | mn/=Just 1-> maybe "" show mn
-          _ -> ""
+          _ ->-} ""
