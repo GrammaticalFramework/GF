@@ -90,8 +90,8 @@ Library
 
   ghc-options: -fwarn-unused-imports
   if impl(ghc>=7.8)
-    ghc-options: -j +RTS -A20M -RTS
-  ghc-prof-options: -auto-all
+    ghc-options: +RTS -A20M -RTS
+  ghc-prof-options: -fprof-auto
   extensions: 
 
   exposed-modules: 
@@ -170,7 +170,7 @@ Executable gf
 
   if impl(ghc>=7.8)
     build-tools: happy>=1.19, alex>=3.1
-    ghc-options: -j +RTS -A20M -RTS
+    ghc-options: +RTS -A20M -RTS
   else
     build-tools: happy, alex>=3
 
