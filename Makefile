@@ -33,3 +33,11 @@ html::
 # (Tested on Ubuntu 14.04. You need to install dpkg-dev & debhelper.)
 deb:
 	dpkg-buildpackage -b
+
+# Make an OS X Installer package
+pkg:
+	PREFIX=/usr FMT=pkg bash bin/build-binary-dist.sh
+
+# Make a binary tar distribution
+bintar:
+	bash bin/build-binary-dist.sh

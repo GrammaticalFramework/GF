@@ -1,8 +1,10 @@
 #! /bin/bash
 
-### This script builds a binary distribution tarball of GF from the source
+### This script builds a binary distribution of GF from the source
 ### package that this script is a part of. It assumes that you have installed
 ### the Haskell Platform, version 2013.2.0.0 or 2012.4.0.0.
+### Two binary package formats are supported: plain tar files (.tar.gz) and
+### OS X Installer packages (.pkg).
 
 os=$(uname)     # Operating system name (e.g. Darwin or Linux)
 hw=$(uname -m)  # Hardware name (e.g. i686 or x86_64)
@@ -10,9 +12,10 @@ hw=$(uname -m)  # Hardware name (e.g. i686 or x86_64)
 # GF version number:
 ver=$(grep -i ^version: gf.cabal | sed -e 's/version://' -e 's/ //g')
 
-destdir=/tmp/gf-binary-dist-$$     # assemble binary dist here
-prefix=/usr/local                  # where to install
-targz=gf-$ver-bin-$hw-$os.tar.gz   # the final tar file
+name=gf-$ver
+destdir=dist/$name                 # assemble binary dist here
+prefix=${PREFIX:-/usr/local}       # where to install
+fmt=${FMT:-tar.gz}                 # binary package format (tar.gz or pkg)
 
 extralib="$destdir$prefix/lib"
 extrainclude="$destdir$prefix/include"
@@ -44,9 +47,19 @@ cabal install --only-dependencies
 cabal configure --prefix=$prefix -fserver -fc-runtime $extra
 DYLD_LIBRARY_PATH="$extralib" LD_LIBRARY_PATH="$extralib" cabal build
 cabal copy --destdir=$destdir
-libdir=`echo $destdir/$prefix/lib/gf-*/*/`
+libdir=$(dirname $(find $destdir -name PGF.hi))
 cabal register --gen-pkg-config=$libdir/gf-$ver.conf
 
-tar -C $destdir/$prefix -zcf $targz .
-echo "Created $targz, consider renaming it to something more user friendly"
+case $fmt in
+    tar.gz)
+	targz=$name-bin-$hw-$os.tar.gz     # the final tar file
+	tar -C $destdir/$prefix -zcf dist/$targz .
+	echo "Created $targz, consider renaming it to something more user friendly"
+	;;
+    pkg)
+	pkg=$name.pkg
+	pkgbuild --identifier org.grammaticalframework.gf.pkg --version 3.6 --root $destdir/usr --install-location /usr dist/$pkg
+	echo "Created $pkg"
+esac
+
 rm -r $destdir
