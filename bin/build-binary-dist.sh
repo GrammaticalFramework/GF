@@ -13,7 +13,7 @@ hw=$(uname -m)  # Hardware name (e.g. i686 or x86_64)
 ver=$(grep -i ^version: gf.cabal | sed -e 's/version://' -e 's/ //g')
 
 name=gf-$ver
-destdir=dist/$name                 # assemble binary dist here
+destdir=$PWD/dist/$name            # assemble binary dist here
 prefix=${PREFIX:-/usr/local}       # where to install
 fmt=${FMT:-tar.gz}                 # binary package format (tar.gz or pkg)
 
