@@ -16,6 +16,7 @@ What's new? See the [Release notes release-3.6.html].
 == Binary packages ==
 
 || Platform | Download | Features | How to install
+| Mac OS X | [gf-3.6.pkg gf-3.6.pkg] | //GF+S+C// | Double-click on the package icon
 | Mac OS X | [gf-3.6-bin-intel-mac.tar.gz gf-3.6-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.6-bin-intel-mac.tar.gz``
 %| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+P// | ``sudo rpm -i ...``
 | Ubuntu (32-bit) | [gf_3.6-1_i386.deb gf_3.6-1_i386.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.6-1_i386.deb``
@@ -44,8 +45,7 @@ It should work out of the box without any additional settings.
 
 The ``.deb`` packages work on Ubuntu 12.04, 13.10 and 14.04.
 
-%The ``.pkg`` package works on MacOS X 10.6 (Snow Leopard).
-The Mac OS tar package works on 10.8 (Mountain Lion) and 10.9 (Mavericks).
+The packages for Mac OS work on 10.8 (Mountain Lion) and on 10.9 (Mavericks).
 
 The Mac OS and Linux ``.tar.gz`` packages are designed to be installed in
 ``/usr/local``.
