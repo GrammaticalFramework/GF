@@ -26,7 +26,7 @@ concrete AppChi of App =
   -- Extensions
   ]
 
-  ,PhrasebookChi - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep]
+  ,PhrasebookChi - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
 
     ** open ParadigmsChi, SyntaxChi, Prelude in {
 
