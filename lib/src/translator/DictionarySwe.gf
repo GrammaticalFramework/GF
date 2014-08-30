@@ -7638,7 +7638,7 @@ lin brinkmanship_N = variants {} ; -- status=guess
 lin briny_A = variants {} ; -- status=guess
 lin brioche_N = mkN "brioche" ; -- status=guess
 lin briquet_N = variants {} ; -- status=guess
-lin briquette_N = variants {} ; -- status=guess
+lin briquette_N = mkN "brikett" utrum;
 lin brisance_N = variants {} ; -- status=guess
 lin brisant_A = variants {} ; -- status=guess
 lin brisbane_PN = mkPN "Brisbane" neutrum; -- src=geonames status=guess
