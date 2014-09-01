@@ -358,8 +358,9 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 		}
 
 #ifdef PGF_JIT_DEBUG
-   	    gu_printf(out, err, "%04d ", curr_label++);
+   	    gu_printf(out, err, "%04d ", curr_label);
 #endif
+		curr_label++;
 
 		uint8_t opcode = pgf_read_tag(rdr);
 		switch (opcode) {
@@ -374,7 +375,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			jit_prepare(1);
 			jit_pusharg_p(JIT_V0);
 			jit_finish(gu_buf_last);
-			jit_ldxr_p(JIT_V0, JIT_RET, -index*sizeof(PgfClosure*));
+			jit_ldxi_p(JIT_V0, JIT_RET, -index*sizeof(PgfClosure*));
 			jit_prepare(2);
 			jit_pusharg_p(JIT_V0);
 			jit_getarg_p(JIT_V2, es_arg);
@@ -523,6 +524,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			jit_finish(gu_buf_last);
 			jit_ldxi_p(JIT_V0, JIT_RET, -index*sizeof(PgfClosure*));
 			jit_stxi_p(curr_offset*sizeof(void*), JIT_V1, JIT_V0);
+			curr_offset++;
 			break;
 		}
 		case PGF_INSTR_TAIL_CALL: {
