@@ -527,11 +527,60 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			curr_offset++;
 			break;
 		}
+		case PGF_INSTR_PUSH_VALUE: {
+			size_t offset = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+			gu_printf(out, err, "PUSH_VALUE    %d\n", offset);
+#endif
+
+			jit_getarg_p(JIT_V0, es_arg);
+			jit_ldxi_p(JIT_V0, JIT_V0, offsetof(PgfEvalState,stack));
+			jit_prepare(1);
+			jit_pusharg_p(JIT_V0);
+			jit_finish(gu_buf_extend);
+			if (offset == 0) {
+				jit_str_p(JIT_RET, JIT_V1);
+			} else {
+				jit_addi_p(JIT_V0, JIT_V1, offset*sizeof(void*));
+				jit_str_p(JIT_RET, JIT_V0);
+			}
+			break;
+		}
+		case PGF_INSTR_PUSH_VARIABLE: {
+			size_t index = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+			gu_printf(out, err, "PUSH_VARIABLE %d\n", index);
+#endif
+
+			jit_getarg_p(JIT_V0, es_arg);
+			jit_ldxi_p(JIT_V0, JIT_V0, offsetof(PgfEvalState,stack));
+			jit_prepare(1);
+			jit_pusharg_p(JIT_V0);
+			jit_finish(gu_buf_extend);
+			jit_ldxi_p(JIT_V0, JIT_RET, -(index+1)*sizeof(PgfClosure*));
+			jit_str_p(JIT_RET, JIT_V0);
+			break;
+		}
 		case PGF_INSTR_TAIL_CALL: {
 			PgfCId id = pgf_read_cid(rdr, rdr->tmp_pool);
 #ifdef PGF_JIT_DEBUG
 			gu_printf(out, err, "TAIL_CALL    %s\n", id);
 #endif
+			
+			jit_getarg_p(JIT_V0, es_arg);
+			jit_getarg_p(JIT_V1, closure_arg);
+			jit_prepare(2);
+			jit_pusharg_p(JIT_V1);
+			jit_pusharg_p(JIT_V0);
+
+			PgfCallPatch patch;
+			patch.cid = id;
+			patch.ref = jit_movi_p(JIT_V0, jit_forward());
+			gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);			
+			jit_ldxi_p(JIT_V0, JIT_V0, offsetof(PgfAbsFun,function));
+
+			jit_finishr(JIT_V0);
+			jit_retval_p(JIT_V1);
 			break;
 		}
 		case PGF_INSTR_FAIL:

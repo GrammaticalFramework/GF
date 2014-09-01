@@ -149,9 +149,11 @@ instance Binary Instr where
   put (PUT_FLT      d) = putWord8 10 >> put d
   put (SET_VALUE    n) = putWord8 11 >> put n
   put (SET_VARIABLE n) = putWord8 12 >> put n
-  put (TAIL_CALL   id) = putWord8 13 >> put id
-  put (FAIL          ) = putWord8 14
-  put (RET          n) = putWord8 15 >> put n
+  put (PUSH_VALUE    n)= putWord8 13 >> put n
+  put (PUSH_VARIABLE n)= putWord8 14 >> put n
+  put (TAIL_CALL   id) = putWord8 15 >> put id
+  put (FAIL          ) = putWord8 16
+  put (RET          n) = putWord8 17 >> put n
 
 
 instance Binary Type where
