@@ -19,6 +19,8 @@ data Instr
   | PUT_FLT {-# UNPACK #-} !Double
   | SET_VALUE {-# UNPACK #-} !Int
   | SET_VARIABLE    {-# UNPACK #-} !Int
+  | PUSH_VALUE {-# UNPACK #-} !Int
+  | PUSH_VARIABLE    {-# UNPACK #-} !Int
   | TAIL_CALL    CId
   | FAIL
   | RET {-# UNPACK #-} !Int
@@ -33,13 +35,15 @@ ppInstr l (CASE_INT n o  ) = text "CASE_INT    " <+> int n <+> ppLabel (l+o+1)
 ppInstr l (CASE_STR s o  ) = text "CASE_STR    " <+> text (show s) <+> ppLabel (l+o+1)
 ppInstr l (CASE_FLT d o  ) = text "CASE_FLT    " <+> double d <+> ppLabel (l+o+1)
 ppInstr l (ALLOC        n) = text "ALLOC       " <+> int n
-ppInstr l (SET_VALUE    n) = text "SET_VALUE   " <+> int n
 ppInstr l (PUT_CONSTR  id) = text "PUT_CONSTR  " <+> ppCId id
 ppInstr l (PUT_CLOSURE  c) = text "PUT_CLOSURE " <+> ppLabel c
 ppInstr l (PUT_INT n     ) = text "PUT_INT     " <+> int n
 ppInstr l (PUT_STR s     ) = text "PUT_STR     " <+> text (show s)
 ppInstr l (PUT_FLT d     ) = text "PUT_FLT     " <+> double d
+ppInstr l (SET_VALUE    n) = text "SET_VALUE   " <+> int n
 ppInstr l (SET_VARIABLE n) = text "SET_VARIABLE" <+> int n
+ppInstr l (PUSH_VALUE   n) = text "PUSH_VALUE  " <+> int n
+ppInstr l (PUSH_VARIABLE n)= text "PUSH_VARIABLE"<+> int n
 ppInstr l (TAIL_CALL   id) = text "TAIL_CALL   " <+> ppCId id
 ppInstr l (FAIL          ) = text "FAIL"
 ppInstr l (RET          n) = text "RET         " <+> int n

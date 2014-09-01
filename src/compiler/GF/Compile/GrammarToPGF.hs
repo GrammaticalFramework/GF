@@ -48,7 +48,7 @@ mkCanon2pgf opts gr am = do
 
         flags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF aflags]
 
-        funs = Map.fromList [(i2i f, (mkType [] ty, arity, mkDef arity mdef, 0)) | 
+        funs = Map.fromList [(i2i f, (mkType [] ty, arity, mkDef gr arity mdef, 0)) | 
                                    ((m,f),AbsFun (Just (L _ ty)) ma mdef _) <- adefs,
                                    let arity = mkArrity ma ty]
                                    
@@ -145,10 +145,10 @@ mkContext scope hyps = mapAccumL (\scope (bt,x,ty) -> let ty' = mkType scope ty
                                                            then (  scope,(bt,i2i x,ty'))
                                                            else (x:scope,(bt,i2i x,ty'))) scope hyps 
 
-mkDef arity (Just eqs) = Just ([C.Equ ps' (mkExp scope' e) | L _ (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
-                              ,generateByteCode arity eqs
+mkDef gr arity (Just eqs) = Just ([C.Equ ps' (mkExp scope' e) | L _ (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
+                              ,generateByteCode gr arity eqs
                               )
-mkDef arity Nothing    = Nothing
+mkDef gr arity Nothing    = Nothing
 
 mkArrity (Just a) ty = a
 mkArrity Nothing  ty = let (ctxt, _, _) = GM.typeForm ty 
