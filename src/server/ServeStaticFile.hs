@@ -1,7 +1,7 @@
 module ServeStaticFile where
 import System.FilePath
 import System.Directory(doesDirectoryExist)
-import Network.CGI(setHeader,outputFPS,liftIO)
+import CGI(setHeader,outputFPS,liftIO)
 import qualified Data.ByteString.Lazy.Char8 as BS
 
 serveStaticFile path =

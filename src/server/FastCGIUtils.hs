@@ -1,35 +1,24 @@
-{-# LANGUAGE DeriveDataTypeable, CPP #-}
-module FastCGIUtils (--initFastCGI, loopFastCGI,
-                     throwCGIError, handleCGIErrors,
-                     stderrToFile,logError,
-                     outputJSONP,outputEncodedJSONP,
-                     outputPNG,outputBinary,
-                     outputHTML,outputPlain,
-                     splitBy) where
+{-# LANGUAGE CPP #-}
+module FastCGIUtils(initFastCGI,loopFastCGI) where
 
-import Control.Concurrent
-import Control.Exception
-import Control.Monad
-import Data.Dynamic
-import Data.IORef
+import Control.Concurrent(ThreadId,myThreadId)
+import Control.Exception(ErrorCall(..),throw,throwTo,catch)
+import Control.Monad(when,liftM,liftM2)
+import Data.IORef(IORef,newIORef,readIORef,writeIORef)
 import Prelude hiding (catch)
-import System.Environment
-import System.Exit
-import System.IO
-import System.IO.Unsafe
+import System.Environment(getArgs,getProgName)
+import System.Exit(ExitCode(..),exitWith)
+import System.IO(hPutStrLn,stderr)
+import System.IO.Unsafe(unsafePerformIO)
 #ifndef mingw32_HOST_OS
 import System.Posix
 #endif
 
---import Network.FastCGI
-import Network.CGI(CGI,CGIResult,setHeader,output,outputFPS,outputError,
-                   getInput,catchCGI,throwCGI)
+import Network.FastCGI
 
-import Text.JSON
-import qualified Codec.Binary.UTF8.String as UTF8 (encodeString)
-import qualified Data.ByteString.Lazy as BS
+import CGIUtils(logError)
 
-{- -- There are used in MorphoService.hs, but not in PGFService.hs
+ -- There are used in MorphoService.hs, but not in PGFService.hs
 initFastCGI :: IO ()
 initFastCGI = installSignalHandlers
 
@@ -40,10 +29,8 @@ loopFastCGI f =
            restartIfModified) 
          `catchAborted` logError "Request aborted"
        loopFastCGI f
--}
 
 -- Signal handling for FastCGI programs.
-
 
 #ifndef mingw32_HOST_OS
 installSignalHandlers :: IO ()
@@ -121,89 +108,3 @@ restartIfModified :: IO ()
 restartIfModified = return ()
 #endif
 
--- Logging
-
-#ifndef mingw32_HOST_OS
-logError :: String -> IO ()
-logError s = hPutStrLn stderr s
-
-stderrToFile :: FilePath -> IO ()
-stderrToFile file =
-    do let mode = ownerReadMode `unionFileModes` ownerWriteMode `unionFileModes` groupReadMode `unionFileModes` otherReadMode
-       fileFd <- openFd file WriteOnly (Just mode) (defaultFileFlags { append = True })
-       dupTo fileFd stdError
-       return ()
-#else
-logError :: String -> IO ()
-logError s = return ()
-
-stderrToFile :: FilePath -> IO ()
-stderrToFile s = return ()
-#endif
-
--- * General CGI Error exception mechanism
-
-data CGIError = CGIError { cgiErrorCode :: Int, cgiErrorMessage :: String, cgiErrorText :: [String] }
-                deriving (Show,Typeable)
-
-instance Exception CGIError where
-  toException e = SomeException e
-  fromException (SomeException e) = cast e
-
-throwCGIError :: Int -> String -> [String] -> CGI a
-throwCGIError c m t = throwCGI $ toException $ CGIError c m t
-
-handleCGIErrors :: CGI CGIResult -> CGI CGIResult
-handleCGIErrors x =
-    x `catchCGI` \e -> case fromException e of
-                         Nothing -> throw e
-                         Just (CGIError c m t) -> do setXO; outputError c m t
-
--- * General CGI and JSON stuff
-
-outputJSONP :: JSON a => a -> CGI CGIResult
-outputJSONP = outputEncodedJSONP . encode
-
-outputEncodedJSONP :: String -> CGI CGIResult
-outputEncodedJSONP json = 
-    do mc <- getInput "jsonp"
-       let (ty,str) = case mc of
-                        Nothing -> ("json",json)
-                        Just c  -> ("javascript",c ++ "(" ++ json ++ ")")
-           ct = "application/"++ty++"; charset=utf-8"
-       outputStrict ct $ UTF8.encodeString str
-
-outputPNG :: BS.ByteString -> CGI CGIResult
-outputPNG x = do
-       setHeader "Content-Type" "image/png"
-       setXO
-       outputFPS x
-
-outputBinary :: BS.ByteString -> CGI CGIResult
-outputBinary x = do
-       setHeader "Content-Type" "application/binary"
-       setXO
-       outputFPS x
-
-outputHTML :: String -> CGI CGIResult
-outputHTML = outputStrict "text/html; charset=utf-8" . UTF8.encodeString
-
-outputPlain :: String -> CGI CGIResult
-outputPlain = outputStrict "text/plain; charset=utf-8" . UTF8.encodeString 
-
-outputStrict :: String -> String -> CGI CGIResult
-outputStrict ct x | x == x = do setHeader "Content-Type" ct
-                                setXO
-                                output x
-                  | otherwise = fail "I am the pope."
-
-setXO = setHeader "Access-Control-Allow-Origin" "*"
-     -- https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
-
--- * General utilities
-
-splitBy :: (a -> Bool) -> [a] -> [[a]]
-splitBy _ [] = [[]]
-splitBy f list = case break f list of
-                   (first,[]) -> [first]
-                   (first,_:rest) -> first : splitBy f rest

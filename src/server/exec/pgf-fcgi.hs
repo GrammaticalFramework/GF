@@ -3,7 +3,7 @@ import Control.Concurrent(forkIO)
 import Network.FastCGI(runFastCGI,runFastCGIConcurrent')
 
 import PGFService(cgiMain,newPGFCache,stderrToFile,logFile)
-import System.IO
+
 main = do stderrToFile logFile
           fcgiMain =<< newPGFCache
 

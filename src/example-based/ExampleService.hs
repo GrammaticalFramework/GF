@@ -9,7 +9,7 @@ import PGF
 import GF.Compile.ToAPI
 import Network.CGI
 import Text.JSON
-import FastCGIUtils
+import CGIUtils
 import Cache
 import qualified ExampleDemo as E
 

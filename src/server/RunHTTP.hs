@@ -1,9 +1,9 @@
 module RunHTTP(runHTTP,Options(..),cgiHandler) where
 import Network.URI(uriPath,uriQuery)
-import Network.CGI(ContentType(..))
-import Network.CGI.Protocol(CGIResult(..),CGIRequest(..),Input(..),
+import CGI(ContentType(..))
+import CGI(CGIResult(..),CGIRequest(..),Input(..),
                             Headers,HeaderName(..))
-import Network.CGI.Monad(runCGIT)
+import CGI(runCGIT)
 import Network.Shed.Httpd(initServer,Request(..),Response(..))
 import qualified Data.ByteString.Lazy.Char8 as BS(pack,unpack)
 import qualified Data.Map as M(fromList)

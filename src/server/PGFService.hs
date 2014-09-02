@@ -7,7 +7,11 @@ import PGF (PGF)
 import qualified PGF
 import PGF.Lexing
 import Cache
-import FastCGIUtils
+import CGIUtils(outputJSONP,outputPlain,outputHTML,logError,outputBinary,
+                outputBinary',handleCGIErrors,throwCGIError,stderrToFile)
+import CGI(CGI,readInput,getInput,getVarWithDefault,
+           CGIResult,requestAcceptLanguage,handleErrors,setHeader,
+           Accept(..),Language(..),negotiate,liftIO)
 import URLEncoding
 
 #if C_RUNTIME
@@ -18,7 +22,6 @@ import qualified PGF2 as C
 import Data.Time.Clock(UTCTime)
 import Data.Time.Format(formatTime)
 import System.Locale(defaultTimeLocale,rfc822DateFormat)
-import Network.CGI
 import Text.JSON
 import Text.PrettyPrint as PP(render, text, (<+>))
 import qualified Codec.Binary.UTF8.String as UTF8 (decodeString)
@@ -687,9 +690,7 @@ outputGraphviz code =
        "gv" -> outputPlain code
        _ -> outputFPS' fmt =<< liftIO (pipeIt2graphviz fmt code)
   where
-    outputFPS' fmt bs =
-      do setHeader "Content-Type" (mimeType fmt)
-         outputFPS bs
+    outputFPS' = outputBinary' . mimeType
 
     mimeType fmt =
       case fmt of
