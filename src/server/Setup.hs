@@ -4,7 +4,7 @@ import Control.Monad(when)
 import System.Directory(createDirectoryIfMissing,doesFileExist,
                         getDirectoryContents,copyFile,removeFile)
 import System.FilePath((</>))
-import System.Cmd(system)
+import System.Process(system)
 import System.Exit(ExitCode(..))
 
 import Distribution.Simple

@@ -28,7 +28,7 @@ import Network.URI(URI(..))
 import Network.Shed.Httpd(initServer,Request(..),Response(..),noCache)
 --import qualified Network.FastCGI as FCGI -- from hackage direct-fastcgi
 import Network.CGI(handleErrors,liftIO)
-import FastCGIUtils(handleCGIErrors)--,outputJSONP,stderrToFile
+import CGIUtils(handleCGIErrors)--,outputJSONP,stderrToFile
 import Text.JSON(encode,showJSON,makeObj)
 --import System.IO.Silently(hCapture)
 import System.Process(readProcessWithExitCode)

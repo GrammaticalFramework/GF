@@ -21,9 +21,12 @@ flag c-runtime
   Default:     False
 
 Library
-  exposed-modules: PGFService FastCGIUtils ServeStaticFile RunHTTP Cache
-  other-modules: URLEncoding Fold
+  exposed-modules: PGFService FastCGIUtils CGIUtils ServeStaticFile RunHTTP Cache
+  other-modules: URLEncoding CGI Fold
   hs-source-dirs: . transfer
+
+  build-depends: fastcgi >= 3001.0.2.2
+       -- Install it in Ubuntu with: apt-get install libghc-fastcgi-dev
 
   build-depends:   base >=4.2 && <5,
                    time, time-compat, old-locale,
@@ -41,6 +44,8 @@ Library
                    bytestring,
                    pretty,
                    random
+
+  ghc-options: -fwarn-unused-imports
   if os(windows)
     ghc-options: -optl-mwindows
   else
@@ -65,7 +70,7 @@ executable pgf-http
 executable pgf-service
   main-is: pgf-fcgi.hs
   Hs-source-dirs: exec
-  ghc-options: -threaded
+  ghc-options: -threaded -fwarn-unused-imports
   if impl(ghc>=7.0)
     ghc-options: -rtsopts
 
