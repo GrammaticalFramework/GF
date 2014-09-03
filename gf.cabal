@@ -154,7 +154,7 @@ Executable gf
                  utf8-string
   ghc-options: -threaded -fwarn-unused-imports
   if flag(server)
-    build-depends: httpd-shed, network, json, cgi
+    build-depends: httpd-shed>=0.4.0.2, network>=2.3 && <2.6, json, cgi
                    -- ,silently
     cpp-options: -DSERVER_MODE
     other-modules: GFServer
