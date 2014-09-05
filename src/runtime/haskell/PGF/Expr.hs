@@ -325,8 +325,8 @@ data Value
   | VClosure Env Expr
   | VImplArg Value
 
-type Sig = ( Map.Map CId (Type,Int,Maybe ([Equation],[Instr]),Double) -- type and def of a fun
-           , Int -> Maybe Expr                                      -- lookup for metavariables
+type Sig = ( Map.Map CId (Type,Int,Maybe ([Equation],[[Instr]]),Double) -- type and def of a fun
+           , Int -> Maybe Expr                                          -- lookup for metavariables
            )
 type Env = [Value]
 

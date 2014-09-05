@@ -146,8 +146,8 @@ mkContext scope hyps = mapAccumL (\scope (bt,x,ty) -> let ty' = mkType scope ty
                                                            else (x:scope,(bt,i2i x,ty'))) scope hyps 
 
 mkDef gr arity (Just eqs) = Just ([C.Equ ps' (mkExp scope' e) | L _ (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
-                              ,generateByteCode gr arity eqs
-                              )
+                                 ,generateByteCode gr arity eqs
+                                 )
 mkDef gr arity Nothing    = Nothing
 
 mkArrity (Just a) ty = a

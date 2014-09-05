@@ -29,13 +29,13 @@ ppFlag flag value = text "flag" <+> ppCId flag <+> char '=' <+> ppLit value <+> 
 ppCat :: CId -> ([Hypo],[(Double,CId)],Double) -> Doc
 ppCat c (hyps,_,_) = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)) <+> char ';'
 
-ppFun :: CId -> (Type,Int,Maybe ([Equation],[Instr]),Double) -> Doc
+ppFun :: CId -> (Type,Int,Maybe ([Equation],[[Instr]]),Double) -> Doc
 ppFun f (t,_,Just (eqs,code),_) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t <+> char ';' $$
-                                  if null eqs
-                                    then empty
-                                    else text "def" <+> vcat [let scope = foldl pattScope [] patts
-                                                                  ds    = map (ppPatt 9 scope) patts
-                                                              in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res <+> char ';' | Equ patts res <- eqs] $$
+                                  (if null eqs
+                                     then empty
+                                     else text "def" <+> vcat [let scope = foldl pattScope [] patts
+                                                                   ds    = map (ppPatt 9 scope) patts
+                                                               in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res <+> char ';' | Equ patts res <- eqs]) $$
                                   ppCode 0 code
 ppFun f (t,_,Nothing,_)         = text "data" <+> ppCId f <+> colon <+> ppType 0 [] t <+> char ';'
 
