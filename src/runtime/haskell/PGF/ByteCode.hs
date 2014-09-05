@@ -23,12 +23,13 @@ data Instr
   | SET_VALUE      {-# UNPACK #-} !Int
   | SET_ARG_VAR    {-# UNPACK #-} !Int
   | SET_FREE_VAR   {-# UNPACK #-} !Int
+  | SET_PAD
   | PUSH_VALUE     {-# UNPACK #-} !Int
   | PUSH_ARG_VAR   {-# UNPACK #-} !Int
   | PUSH_FREE_VAR  {-# UNPACK #-} !Int
   | TAIL_CALL    CId
-  | UPDATE
   | FAIL
+  | UPDATE
   | RET {-# UNPACK #-} !Int
 
 ppCode :: Int -> [[Instr]] -> Doc
@@ -52,11 +53,13 @@ ppInstr (PUT_FLT d      ) = text "PUT_FLT      " <+> double d
 ppInstr (SET_VALUE     n) = text "SET_VALUE    " <+> int n
 ppInstr (SET_ARG_VAR   n) = text "SET_ARG_VAR  " <+> int n
 ppInstr (SET_FREE_VAR  n) = text "SET_FREE_VAR " <+> int n
+ppInstr (SET_PAD        ) = text "SET_PAD"
 ppInstr (PUSH_VALUE    n) = text "PUSH_VALUE   " <+> int n
 ppInstr (PUSH_ARG_VAR  n) = text "PUSH_ARG_VAR " <+> int n
 ppInstr (PUSH_FREE_VAR n) = text "PUSH_FREE_VAR" <+> int n
 ppInstr (TAIL_CALL    id) = text "TAIL_CALL    " <+> ppCId id
 ppInstr (FAIL           ) = text "FAIL"
+ppInstr (UPDATE         ) = text "UPDATE"
 ppInstr (RET           n) = text "RET          " <+> int n
 
 ppLabel l = text (let s = show l in replicate (3-length s) '0' ++ s)

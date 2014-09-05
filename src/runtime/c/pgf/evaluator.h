@@ -24,6 +24,9 @@ typedef struct {
 } PgfValue;
 
 PgfClosure*
+pgf_evaluate_indirection(PgfEvalState* state, PgfClosure* closure);
+
+PgfClosure*
 pgf_evaluate_value(PgfEvalState* state, PgfClosure* closure);
 
 void

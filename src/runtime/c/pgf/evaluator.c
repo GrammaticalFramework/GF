@@ -40,7 +40,7 @@ typedef struct {
 	PgfLiteral lit;
 } PgfValueLit;
 
-static PgfClosure*
+PgfClosure*
 pgf_evaluate_indirection(PgfEvalState* state, PgfClosure* closure)
 {
 	PgfIndirection* indir = (PgfIndirection*) closure;

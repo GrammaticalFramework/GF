@@ -405,6 +405,13 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				jit_ldxi_p(JIT_V0, JIT_V1, offsetof(PgfValue, absfun));
 				break;
 			}
+			case PGF_INSTR_EVAL_FREE_VAR: {
+				size_t index = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "EVAL_FREE_VAR %d\n", index);
+#endif
+				break;
+			}
 			case PGF_INSTR_CASE: {
 				PgfCId id  = pgf_read_cid(rdr, rdr->opool);
 				int target = pgf_read_int(rdr);
@@ -572,6 +579,27 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				curr_offset++;
 				break;
 			}
+			case PGF_INSTR_SET_FREE_VAR: {
+				size_t index = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "SET_FREE_VAR  %d\n", index);
+#endif
+
+				jit_getarg_p(JIT_V0, closure_arg);
+				jit_ldxi_p(JIT_V0, JIT_V0, sizeof(PgfClosure)+index*sizeof(PgfClosure*));
+				jit_stxi_p(curr_offset*sizeof(void*), JIT_V1, JIT_V0);
+				curr_offset++;
+				break;
+			}
+			case PGF_INSTR_SET_PAD: {
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "SET_PAD\n");
+#endif
+                jit_movi_p(JIT_V0, NULL);
+				jit_stxi_p(curr_offset*sizeof(void*), JIT_V1, JIT_V0);
+				curr_offset++;
+				break;
+			}
 			case PGF_INSTR_PUSH_VALUE: {
 				size_t offset = pgf_read_int(rdr);
 #ifdef PGF_JIT_DEBUG
@@ -649,6 +677,17 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				gu_printf(out, err, "FAIL\n");
 #endif
 				break;
+			case PGF_INSTR_UPDATE: {
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "UPDATE\n");
+#endif
+
+				jit_getarg_p(JIT_V0, closure_arg);
+				jit_movi_p(JIT_V2, pgf_evaluate_indirection);
+				jit_stxi_p(0, JIT_V0, JIT_V2);
+				jit_stxi_p(sizeof(PgfClosure), JIT_V0, JIT_V1);
+				break;
+			}
 			case PGF_INSTR_RET: {
 				size_t count = pgf_read_int(rdr);
 

@@ -64,7 +64,10 @@ compileEquations gr st (i:is) eqs       bs = whilePP eqs Map.empty
 
 compileBody gr st avs fvs e bs es =
   let (heap,bs1,instrs) = compileFun gr st avs fvs e 0 bs es
-  in (bs1,(if heap > 0 then (ALLOC heap :) else id) (instrs ++ [RET st]))
+  in (bs1,((if heap > 0 then (ALLOC heap :) else id) .
+           (instrs ++) .
+           (if st == 0 then (UPDATE :) else id))
+          [RET st])
 
 compileFun gr st avs fvs (App e1 e2) h0 bs es =
   compileFun gr st avs fvs e1 h0 bs (e2:es)
@@ -110,11 +113,14 @@ compileArg gr st st0 avs fvs e@(Q(m,id)) h0 bs es =
     Ok (_,Just _)
        -> if null es
             then let h1 = h0 + 2
-                 in (h1,bs,SET_VALUE h0,PUSH_VALUE h0,[PUT_FUN (i2i id)])
+                 in (h1,bs,SET_VALUE h0,PUSH_VALUE h0,[PUT_FUN (i2i id),SET_PAD])
             else let es_fvs = nub (foldr freeVars [] es)
-                     h1 = h0 + 1 + length es_fvs
+                     h1 = h0 + 1 + length is
                      (bs1,b) = compileBody gr 0 [] (zip es_fvs [0..]) e bs es
-                 in (h1,(ENTER:b):bs1,SET_VALUE h0,PUSH_VALUE h0,PUT_CLOSURE (length bs) : map (fst . compileVar st st0 avs fvs) es_fvs)
+                     is = if null es_fvs
+                            then [SET_PAD]
+                            else map (fst . compileVar st st0 avs fvs) es_fvs
+                 in (h1,(ENTER:b):bs1,SET_VALUE h0,PUSH_VALUE h0,PUT_CLOSURE (length bs) : is)
     _  -> let h1 = h0 + 2 + length es
               (h2,bs2,is1,is2,is3) = compileArgs gr st st avs fvs h1 bs es
           in (h2,bs2,SET_VALUE h0,PUSH_VALUE h0,PUT_CONSTR (i2i id) : is1 ++ is3)
