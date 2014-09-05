@@ -28,11 +28,11 @@ data PGF = PGF {
 
 data Abstr = Abstr {
   aflags  :: Map.Map CId Literal,                            -- ^ value of a flag
-  funs    :: Map.Map CId (Type,Int,Maybe ([Equation],[Instr]),Double),-- ^ type, arrity and definition of function + probability
-  cats    :: Map.Map CId ([Hypo],[(Double, CId)],Double)              -- ^ 1. context of a category
-                                                                      --   2. functions of a category. The functions are stored
-                                                                      --      in decreasing probability order.
-                                                                      --   3. probability
+  funs    :: Map.Map CId (Type,Int,Maybe ([Equation],[[Instr]]),Double),-- ^ type, arrity and definition of function + probability
+  cats    :: Map.Map CId ([Hypo],[(Double, CId)],Double)                -- ^ 1. context of a category
+                                                                        --   2. functions of a category. The functions are stored
+                                                                        --      in decreasing probability order.
+                                                                        --   3. probability
   }
 
 data Concr = Concr {

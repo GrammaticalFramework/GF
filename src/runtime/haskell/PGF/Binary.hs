@@ -136,24 +136,29 @@ instance Binary Equation where
   get = liftM2 Equ get get
 
 instance Binary Instr where
-  put (EVAL         n) = putWord8 0  >> put n
-  put (CASE id l     ) = putWord8 1  >> put (id,l)
-  put (CASE_INT n l  ) = putWord8 2  >> put (n,l)
-  put (CASE_STR s l  ) = putWord8 3  >> put (s,l)
-  put (CASE_FLT d l  ) = putWord8 4  >> put (d,l)
-  put (ALLOC        n) = putWord8 5  >> put n
-  put (PUT_CONSTR  id) = putWord8 6  >> put id
-  put (PUT_CLOSURE  l) = putWord8 7  >> put l
-  put (PUT_INT      n) = putWord8 8  >> put n
-  put (PUT_STR      s) = putWord8 9  >> put s
-  put (PUT_FLT      d) = putWord8 10 >> put d
-  put (SET_VALUE    n) = putWord8 11 >> put n
-  put (SET_VARIABLE n) = putWord8 12 >> put n
-  put (PUSH_VALUE    n)= putWord8 13 >> put n
-  put (PUSH_VARIABLE n)= putWord8 14 >> put n
-  put (TAIL_CALL   id) = putWord8 15 >> put id
-  put (FAIL          ) = putWord8 16
-  put (RET          n) = putWord8 17 >> put n
+  put (ENTER         ) = putWord8 0
+  put (EVAL_ARG_VAR n) = putWord8 1  >> put n
+  put (EVAL_FREE_VAR n)= putWord8 2  >> put n
+  put (CASE id l     ) = putWord8 3  >> put (id,l)
+  put (CASE_INT n l  ) = putWord8 4  >> put (n,l)
+  put (CASE_STR s l  ) = putWord8 5  >> put (s,l)
+  put (CASE_FLT d l  ) = putWord8 6  >> put (d,l)
+  put (ALLOC        n) = putWord8 7  >> put n
+  put (PUT_CONSTR  id) = putWord8 8  >> put id
+  put (PUT_FUN     id) = putWord8 9  >> put id
+  put (PUT_CLOSURE  l) = putWord8 10  >> put l
+  put (PUT_INT      n) = putWord8 11  >> put n
+  put (PUT_STR      s) = putWord8 12  >> put s
+  put (PUT_FLT      d) = putWord8 13 >> put d
+  put (SET_VALUE    n) = putWord8 14 >> put n
+  put (SET_ARG_VAR  n) = putWord8 15 >> put n
+  put (SET_FREE_VAR n) = putWord8 16 >> put n
+  put (PUSH_VALUE   n) = putWord8 17 >> put n
+  put (PUSH_ARG_VAR n) = putWord8 18 >> put n
+  put (PUSH_FREE_VAR n)= putWord8 19 >> put n
+  put (TAIL_CALL   id) = putWord8 20 >> put id
+  put (FAIL          ) = putWord8 21
+  put (RET          n) = putWord8 22 >> put n
 
 
 instance Binary Type where
