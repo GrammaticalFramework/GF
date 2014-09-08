@@ -83,7 +83,7 @@ unionPGFFiles opts fs =
   where
     checkFirst name =
       do let pgfFile = outputPath opts (name <.> "pgf")
-         sourceTime <- liftIO $ maximum `fmap` mapM getModificationTime fs
+         sourceTime <- maximum `fmap` mapM getModificationTime fs
          targetTime <- maybeIO $ getModificationTime pgfFile
          if targetTime >= Just sourceTime
            then putIfVerb opts $ pgfFile ++ " is up-to-date."

@@ -2,9 +2,8 @@ module GF.CompileInParallel where
 import Prelude hiding (catch)
 import Control.Monad(join,ap,when,unless)
 import Control.Applicative
-import Control.Concurrent
+import GF.Infra.Concurrency
 import System.FilePath
-import System.IO.Unsafe(unsafeInterleaveIO)
 import qualified GF.System.Directory as D
 import GF.System.Catch(catch)
 import Data.List(nub,isPrefixOf,intercalate,partition)
@@ -14,7 +13,7 @@ import GF.CompileOne(reuseGFO,useTheSource)
 import GF.Infra.Option
 import GF.Infra.UseIO
 import GF.Data.Operations
-import GF.Grammar.Grammar(emptySourceGrammar,prependModule,modules)
+import GF.Grammar.Grammar(emptySourceGrammar,prependModule)
 import GF.Infra.Ident(identS)
 import GF.Text.Pretty
 import qualified Data.ByteString.Lazy as BS
@@ -60,19 +59,23 @@ batchCompile1 lib_dir (opts,filepaths) =
          prelude_dir = lib_dir</>"prelude"
          gfoDir = flag optGFODir opts
      maybe (return ()) (D.createDirectoryIfMissing True) gfoDir
+{-
+     liftIO $ writeFile (maybe "" id gfoDir</>"paths")
+                        (unlines . map (unwords . map rel) . nub $ map snd filepaths)
+-}
      prelude_files <- maybe [] id <$> 
                       maybeIO (D.getDirectoryContents prelude_dir)
      let fromPrelude f = lib_dir `isPrefixOf` f &&
                          takeFileName f `elem` prelude_files
          ppPath ps = "-path="<>intercalate ":" (map rel ps)
-     logchan <- liftIO newChan
-     liftIO $ forkIO (mapM_ runIOE =<< getChanContents logchan)
-     let logStrLn = writeChan logchan . ePutStrLn
+     deps <- newMVar M.empty
+     toLog <- newLog runIOE
+     let --logStrLn = toLog . ePutStrLn
          ok :: CollectOutput IOE a -> IO a
          ok (CO m) = err bad good =<< appIOE m
            where
-              good (o,r) = do writeChan logchan o; return r
-              bad e = do writeChan logchan (redPutStrLn e); fail "failed"
+              good (o,r) = do toLog o; return r
+              bad e = do toLog (redPutStrLn e); fail "failed"
               redPutStrLn s = do ePutStr "\ESC[31m";ePutStr s;ePutStrLn "\ESC[m"
      sgr <- liftIO $ newMVar emptySourceGrammar
      let extendSgr sgr m =
@@ -101,7 +104,9 @@ batchCompile1 lib_dir (opts,filepaths) =
            do let compileImport f = compile cache (f,ps)
                   findImports (f,ps) = mapM (find f ps) . nub . snd
                                          =<< getImports opts f
-              tis <- parMapM compileImport =<< ok (findImports (f,ps))
+              imps <- ok (findImports (f,ps))
+              modifyMVar_ deps (return . M.insert f imps)
+              tis <- parMapM compileImport imps
               let reuse gfo = do t <- D.getModificationTime gfo
                                  gr <- readMVar sgr
                                  r <- lazyIO $ ok (reuseGFO opts gr gfo)
@@ -123,16 +128,18 @@ batchCompile1 lib_dir (opts,filepaths) =
               return (maximum (t:tis))
      cache <- liftIO $ newIOCache compile'
      ts <- liftIO $ parMapM (compile cache) filepaths
-     gr <- liftIO $ readMVar sgr
+     gr <- readMVar sgr
      let cnc = identS (justModuleName (fst (last filepaths)))
+     ds <- M.toList <$> readMVar deps
+{-
+     liftIO $ writeFile (maybe "" id gfoDir</>"dependencies")
+                        (unlines [rel f++": "++unwords (map rel imps)
+                                  | (f,imps)<-ds])
+-}
+     putStrLnE $ render $
+                   length ds<+>"modules in"
+                   <+>length (nub (map (dropFileName.fst) ds))<+>"directories."
      return (maximum ts,(cnc,gr))
-
-parMapM f xs = 
-  do vs <- mapM (const newEmptyMVar) xs
-     sequence_ [ forkIO (putMVar v =<< f x) | (v,x) <- zip vs xs]
-     mapM takeMVar vs
-
-lazyIO = unsafeInterleaveIO
 
 canonical path = liftIO $ D.canonicalizePath path `catch` const (return path)
 
@@ -184,7 +191,6 @@ instance Eq (Hide a) where _ == _ = True
 instance Ord (Hide a) where compare _ _ = EQ
 
 --------------------------------------------------------------------------------
-
 newtype CollectOutput m a = CO {unCO::m (m (),a)}
 {-
 runCO (CO m) = do (o,x) <- m

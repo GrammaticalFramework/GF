@@ -23,7 +23,7 @@ import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
 import System.Posix.Files(getSymbolicLinkStatus,isSymbolicLink,removeLink,
                           createSymbolicLink)
 #endif
-import Control.Concurrent(forkIO,newMVar,modifyMVar,newChan,writeChan,getChanContents)
+import GF.Infra.Concurrency(newMVar,modifyMVar,newLog)
 import Network.URI(URI(..))
 import Network.Shed.Httpd(initServer,Request(..),Response(..),noCache)
 --import qualified Network.FastCGI as FCGI -- from hackage direct-fastcgi
@@ -65,9 +65,7 @@ server port optroot execute1 state0 =
   where
     -- | HTTP server
     http_server execute1 state0 state cache root =
-      do log <- newChan -- to avoid intertwined log messages
-         forkIO $ mapM_ ePutStrLn =<< getChanContents log
-         let logLn = writeChan log
+      do logLn <- newLog ePutStrLn -- to avoid intertwined log messages
          logLn gf_version
          logLn $ "Document root = "++root
          logLn $ "Starting HTTP server, open http://localhost:"

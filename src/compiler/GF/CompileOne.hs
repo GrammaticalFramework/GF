@@ -18,13 +18,13 @@ import GF.Grammar.Printer(ppModule,TermPrintQual(..))
 import GF.Grammar.Binary(decodeModule,encodeModule)
 
 import GF.Infra.Option
-import GF.Infra.UseIO(FullPath,IOE,isGFO,gf2gfo,liftIO,Output(..),putPointE)
+import GF.Infra.UseIO(FullPath,IOE,isGFO,gf2gfo,Output(..),putPointE)
 import GF.Infra.CheckM(runCheck')
 import GF.Data.Operations(liftErr,(+++))
 
-import GF.System.Directory(doesFileExist,getCurrentDirectory)
+import GF.System.Directory(doesFileExist,getCurrentDirectory,renameFile)
 import qualified Data.Map as Map
-import GF.Text.Pretty(Doc,render,(<+>),($$))
+import GF.Text.Pretty(render,(<+>),($$)) --Doc,
 import Control.Monad((<=<))
 
 type OneOutput = (Maybe FullPath,CompiledModule)
@@ -44,7 +44,7 @@ compileOne opts srcgr file =
 -- also undo common subexp optimization, to enable normal computations
 reuseGFO opts srcgr file =
   do sm00 <- putPointE Verbose opts ("+ reading" +++ file) $
-             liftIO (decodeModule file)
+             decodeModule file
      let sm0 = (fst sm00,(snd sm00){mflags=mflags (snd sm00) `addOptions` opts})
 
      idump opts Source sm0
@@ -131,8 +131,10 @@ compileSourceModule opts cwd mb_gfFile gr =
 --writeGFO :: Options -> FilePath -> SourceModule -> IOE ()
 writeGFO opts file mo =
     putPointE Normal opts ("  write file" +++ file) $
-      liftIO $ encodeModule file mo2
+      do encodeModule tmp mo2
+         renameFile tmp file
   where
+    tmp = file++".tmp"
     mo2 = (m,mi{jments=Map.filter notAnyInd (jments mi)})
     (m,mi) = subexpModule mo
 
