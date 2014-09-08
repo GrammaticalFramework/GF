@@ -21,6 +21,7 @@ import qualified Data.ByteString.Char8 as BS
 import GF.Data.Operations
 import GF.Infra.Ident
 import GF.Infra.Option
+import GF.Infra.UseIO(MonadIO(..))
 import GF.Grammar.Grammar
 
 import PGF() -- Binary instances
@@ -314,8 +315,8 @@ gfoBinVersion = (b1,b2,b3,b4)
   where [b1,b2,b3,b4] = map (toEnum.fromEnum) gfoVersion :: [Word8]
 
 
-decodeModule :: FilePath -> IO SourceModule
-decodeModule fpath = check =<< decodeFile' fpath
+decodeModule :: MonadIO io => FilePath -> io SourceModule
+decodeModule fpath = liftIO $ check =<< decodeFile' fpath
   where
     check (Tagged m) = return m
     check _ = fail ".gfo file version mismatch"
@@ -336,8 +337,8 @@ decodeModuleHeader fpath = fmap check $ decodeFile' fpath
         (Just (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty))
     check _ = Nothing
 --}
-encodeModule :: FilePath -> SourceModule -> IO ()
-encodeModule fpath mo = encodeFile fpath (Tagged mo)
+encodeModule :: MonadIO io => FilePath -> SourceModule -> io ()
+encodeModule fpath mo = liftIO $ encodeFile fpath (Tagged mo)
 
 -- | like 'decodeFile' but adds file name to error message if there was an error
 decodeFile' fpath = addFPath fpath (decodeFile fpath)

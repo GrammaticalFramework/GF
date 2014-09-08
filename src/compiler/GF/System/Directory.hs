@@ -7,7 +7,7 @@ import System.Directory as D
        hiding (canonicalizePath,createDirectoryIfMissing,
                doesDirectoryExist,doesFileExist,getModificationTime,
                getCurrentDirectory,getDirectoryContents,getPermissions,
-               removeFile)
+               removeFile,renameFile)
 import Data.Time.Compat
 
 canonicalizePath path = liftIO $ D.canonicalizePath path
@@ -22,3 +22,4 @@ getCurrentDirectory = liftIO D.getCurrentDirectory
 getPermissions path = liftIO $ D.getPermissions path
 
 removeFile path = liftIO $ D.removeFile path
+renameFile path = liftIO . D.renameFile path
