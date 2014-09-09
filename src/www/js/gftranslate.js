@@ -3,8 +3,8 @@
 
 var gftranslate = {}
 
-gftranslate.jsonurl="/robust/Translate11.pgf"
-gftranslate.grammar="Translate" // the name of the grammar
+gftranslate.jsonurl="/robust/App11.pgf"
+gftranslate.grammar="App" // the name of the grammar
 
 gftranslate.call=function(querystring,cont,errcont) {
     http_get_json(gftranslate.jsonurl+querystring,cont,errcont)
