@@ -14,6 +14,7 @@
 
 module PGF2 (-- * PGF
              PGF,readPGF,abstractName,startCat,
+             loadConcr,unloadConcr,
              -- * Concrete syntax
              Concr,languages,parse,linearize,
              -- * Trees
@@ -102,7 +103,28 @@ abstractName p = unsafePerformIO (peekCString =<< pgf_abstract_name (pgf p))
 
 startCat :: PGF -> String
 startCat p = unsafePerformIO (peekCString =<< pgf_start_cat (pgf p))
- 
+
+loadConcr :: Concr -> FilePath -> IO ()
+loadConcr c fpath =
+  withCString fpath $ \c_fpath ->
+  withCString "rb" $ \c_mode ->
+  withGuPool $ \tmpPl -> do
+    file <- fopen c_fpath c_mode
+    inp <- gu_file_in file tmpPl
+    exn <- gu_new_exn nullPtr gu_type__type tmpPl
+    pgf_concrete_load (concr c) inp exn
+    failed <- gu_exn_is_raised exn
+    if failed
+      then do ty <- gu_exn_caught exn
+              if ty == gu_type__GuErrno
+                then do perrno <- (#peek GuExn, data.data) exn
+                        errno  <- peek perrno
+                        ioError (errnoToIOError "loadConcr" (Errno errno) Nothing (Just fpath))
+                else do throwIO (PGFError "The language cannot be loaded")
+      else return ()
+
+unloadConcr :: Concr -> IO ()
+unloadConcr c = pgf_concrete_unload (concr c)
 
 -----------------------------------------------------------------------------
 -- Expressions
