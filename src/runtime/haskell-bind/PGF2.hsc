@@ -267,8 +267,7 @@ addLiteral :: Concr -> String -> (Int -> String -> Int -> Maybe (Expr,Float,Int)
 addLiteral lang cat match =
   withCString cat $ \ccat ->
   withGuPool  $ \tmp_pool -> do
-    pool     <- pgf_concr_get_pool (concr lang)
-    callback <- gu_malloc pool (#size PgfLiteralCallback)
+    callback <- hspgf_new_literal_callback (concr lang)
     match    <- wrapLiteralMatchCallback match_callback
     predict  <- wrapLiteralPredictCallback predict_callback
     (#poke PgfLiteralCallback, match)   callback match
@@ -283,7 +282,7 @@ addLiteral lang cat match =
                         msg <- peekCString c_msg
                         throwIO (PGFError msg)
                 else throwIO (PGFError "The literal cannot be added")
-      else do return ()
+      else return ()
   where
     match_callback _ clin_idx csentence poffset out_pool = do
       sentence <- peekCString csentence
