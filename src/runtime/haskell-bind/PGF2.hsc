@@ -16,7 +16,7 @@ module PGF2 (-- * PGF
              PGF,readPGF,abstractName,startCat,
              loadConcr,unloadConcr,
              -- * Concrete syntax
-             Concr,languages,parse,linearize,
+             Concr,languages,parse,linearize,addLiteral,
              -- * Trees
              Expr,readExpr,showExpr,unApp,
              -- * Morphology
@@ -262,6 +262,64 @@ parse lang cat sent =
                  exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
                  exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
                  return (Right exprs)
+
+addLiteral :: Concr -> String -> (Int -> String -> Int -> Maybe (Expr,Float,Int)) -> IO ()
+addLiteral lang cat match =
+  withCString cat $ \ccat ->
+  withGuPool  $ \tmp_pool -> do
+    pool     <- pgf_concr_get_pool (concr lang)
+    callback <- gu_malloc pool (#size PgfLiteralCallback)
+    match    <- wrapLiteralMatchCallback match_callback
+    predict  <- wrapLiteralPredictCallback predict_callback
+    (#poke PgfLiteralCallback, match)   callback match
+    (#poke PgfLiteralCallback, predict) callback predict
+    exn      <- gu_new_exn nullPtr gu_type__type tmp_pool
+    pgf_concr_add_literal (concr lang) ccat callback exn
+    failed <- gu_exn_is_raised exn
+    if failed
+      then do ty <- gu_exn_caught exn
+              if ty == gu_type__PgfExn
+                then do c_msg <- (#peek GuExn, data.data) exn
+                        msg <- peekCString c_msg
+                        throwIO (PGFError msg)
+                else throwIO (PGFError "The literal cannot be added")
+      else do return ()
+  where
+    match_callback _ clin_idx csentence poffset out_pool = do
+      sentence <- peekCString csentence
+      coffset  <- peek poffset
+      offset <- alloca $ \pcsentence -> do
+                   poke pcsentence csentence
+                   gu2hs_string_offset pcsentence (plusPtr csentence (fromIntegral coffset)) 0
+      case match (fromIntegral clin_idx) sentence offset of
+        Nothing               -> return nullPtr
+        Just (e,prob,offset') -> do poke poffset (fromIntegral offset')
+
+                                    -- here we copy the expression to out_pool
+                                    c_e <- withGuPool $ \tmpPl -> do
+                                             exn <- gu_new_exn nullPtr gu_type__type tmpPl
+        
+                                             (sb,out) <- newOut tmpPl
+                                             let printCtxt = nullPtr
+                                             pgf_print_expr (expr e) printCtxt 1 out exn
+                                             c_str <- gu_string_buf_freeze sb tmpPl
+
+                                             guin <- gu_string_in c_str tmpPl
+                                             pgf_read_expr guin out_pool exn
+
+                                    ep <- gu_malloc out_pool (#size PgfExprProb)
+                                    (#poke PgfExprProb, expr) ep c_e
+                                    (#poke PgfExprProb, prob) ep prob
+                                    return ep
+
+    predict_callback _ _ _ _ = return nullPtr
+
+    gu2hs_string_offset pcstart cend offset = do
+      cstart <- peek pcstart
+      if cstart < cend
+        then do gu_utf8_decode pcstart
+                gu2hs_string_offset pcstart cend (offset+1)
+        else return offset
 
 linearize :: Concr -> Expr -> String
 linearize lang e = unsafePerformIO $

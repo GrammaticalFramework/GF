@@ -78,6 +78,9 @@ foreign import ccall "gu/enum.h gu_enum_next"
 foreign import ccall "gu/string.h gu_string_buf_freeze"
   gu_string_buf_freeze :: Ptr GuStringBuf -> Ptr GuPool -> IO CString
 
+foreign import ccall "gu/utf8.h gu_utf8_decode" 
+  gu_utf8_decode :: Ptr (Ptr CChar) -> IO ()
+
 withGuPool :: (Ptr GuPool -> IO a) -> IO a
 withGuPool f = bracket gu_new_pool gu_pool_free f
 
@@ -142,6 +145,22 @@ foreign import ccall "pgf/pgf.h pgf_linearize"
 
 foreign import ccall "pgf/pgf.h pgf_parse"
   pgf_parse :: Ptr PgfConcr -> CString -> CString -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
+
+foreign import ccall "pgf/pgf.h pgf_concr_get_pool"
+  pgf_concr_get_pool :: Ptr PgfConcr -> IO (Ptr GuPool)
+
+type LiteralMatchCallback = Ptr () -> CInt -> CString -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
+
+foreign import ccall "wrapper"
+  wrapLiteralMatchCallback :: LiteralMatchCallback -> IO (FunPtr LiteralMatchCallback)
+
+type LiteralPredictCallback = Ptr () -> CInt -> CString -> Ptr GuPool -> IO (Ptr PgfExprProb)
+
+foreign import ccall "wrapper"
+  wrapLiteralPredictCallback :: LiteralPredictCallback -> IO (FunPtr LiteralPredictCallback)
+
+foreign import ccall "pgf/pgf.h pgf_concr_add_literal"
+  pgf_concr_add_literal :: Ptr PgfConcr -> CString -> Ptr () -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_lookup_morpho"
   pgf_lookup_morpho :: Ptr PgfConcr -> CString -> Ptr PgfMorphoCallback -> Ptr GuExn -> IO ()
