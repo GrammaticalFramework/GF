@@ -383,7 +383,8 @@ extractDarcsVersion distFlag =
     modname = "DarcsVersion_gf"
 
     askDarcs =
-      do tags <- lines `fmap` readProcess "darcs" ["show","tags"] ""
+      do flip unless (fail "no _darcs") =<< doesDirectoryExist "_darcs"
+         tags <- lines `fmap` readProcess "darcs" ["show","tags"] ""
          let from = case tags of
                       [] -> []
                       tag:_ -> ["--from-tag="++tag]
