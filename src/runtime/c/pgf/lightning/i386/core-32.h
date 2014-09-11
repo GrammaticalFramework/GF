@@ -108,6 +108,16 @@ struct jit_local_state {
 #define jit_finish(sub)  (_jitl.finish_ref = jit_calli((sub)), ADDLir(sizeof(long) * _jitl.argssize, JIT_SP), _jitl.argssize = 0, _jitl.finish_ref)
 #define jit_finishr(reg) (jit_callr((reg)), ADDLir(sizeof(long) * _jitl.argssize, JIT_SP), _jitl.argssize = 0)
 
+#ifdef __APPLE__
+#define jit_tail_finishr(reg)	jit_base_tail_finishr(-12, reg)
+#else
+#define jit_tail_finishr(reg)	jit_base_tail_finishr(_jitl.alloca_offset, reg)
+#endif
+
+#define jit_base_tail_finishr(ofs, reg)						  \
+  (((ofs) < 0 ? LEAVE_() : POPLr(_EBP)),				  \
+   POPLr(_EDI), POPLr(_ESI), POPLr(_EBX), jit_jmpr(reg))
+
 #define	jit_arg_c()		((_jitl.framesize += sizeof(int)) - sizeof(int))
 #define	jit_arg_uc()		((_jitl.framesize += sizeof(int)) - sizeof(int))
 #define	jit_arg_s()		((_jitl.framesize += sizeof(int)) - sizeof(int))

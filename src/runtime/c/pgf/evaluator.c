@@ -268,6 +268,17 @@ pgf_evaluate_save_variables(PgfEvalState* state, PgfValue* val)
 	}
 }
 
+void
+pgf_evaluate_slide(PgfEvalState* state, size_t a, size_t b)
+{
+	size_t len = gu_buf_length(state->stack);
+	for (size_t i = 0; i < b-a; i++) {
+		PgfClosure* c = gu_buf_get(state->stack, PgfClosure*, len-(b-a)+i);
+		gu_buf_set(state->stack, PgfClosure*, len-b+i, c);
+	}
+	gu_buf_trim_n(state->stack, a);
+}
+
 static PgfExpr
 pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 {
