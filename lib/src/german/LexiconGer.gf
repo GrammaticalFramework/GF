@@ -11,7 +11,7 @@ flags
 
 lin
   add_V3 = dirV3 (prefixV "hinzu" (regV "fügen")) zu_Prep ;
-  airplane_N = mkN "Flugzeug"  ;
+  airplane_N = mkN "Flugzeug" "Flugzeuge" neuter ;
   already_Adv = mkAdv "schon" ;
   answer_V2S = mkV2S (regV "antworten") datPrep ;
   apartment_N = mkN "Wohnung" ;
@@ -116,7 +116,7 @@ lin
   learn_V2 = dirV2 (regV "lernen") ;
   leather_N = reg2N "Leder" "Leder" neuter ;
   leave_V2 = dirV2 (irregV "verlassen" "verläßt" "verließ" "verließe" "verlassen") ;
-  like_V2 = dirV2 (irregV "mögen" "mag" "mochte" "möchte" "gemocht") ;
+  like_V2 = dirV2 IrregGer.mögen_V ;
   listen_V2 = prepV2 (prefixV "zu" (regV "hören")) datPrep ; ---- dat
   live_V = regV "leben" ;
   long_A = mk3A "lang" "länger" "längste" ;
