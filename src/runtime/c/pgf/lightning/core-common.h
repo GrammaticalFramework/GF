@@ -474,6 +474,12 @@ typedef union jit_code {
 #endif
 #endif
 
+#ifndef jit_setarg_p
+#ifdef JIT_FP
+#define jit_setarg_p(reg, ofs)		jit_stxi_p((ofs), JIT_FP, (reg));
+#endif
+#endif
+
 
 /* Common definitions when sizeof(long) = sizeof(int) */
 #ifndef jit_addi_l
