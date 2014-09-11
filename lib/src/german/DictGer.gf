@@ -25434,7 +25434,7 @@ lin
   moebelstueck_N = mkN  "Möbelstück" "Möbelstücke" neuter ;
   moebelwagen_N = mkN  "Möbelwagen" "Möbelwagen" masculine ;
   moeblieren_V = regV "möblieren" ;
-  moegen_V = irregV "mögen" "mögt" "mochte" "möchte" "gemocht" ; 
+  moegen_V = IrregGer.mögen_V ;
   moeglich_A = mk3A "möglich" "möglicher" "möglichste" ;
   moegliche_wort_N = mkN  "mögliche Wort" "möglichen Wörter" neuter ;
   moeglicherweise_Adv = mkAdv "möglicherweise" ;
