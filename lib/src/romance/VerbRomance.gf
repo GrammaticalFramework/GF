@@ -94,7 +94,7 @@ incomplete concrete VerbRomance of Verb =
     CompAP ap = {s = \\ag => let agr = complAgr ag in ap.s ! AF agr.g agr.n} ;
     CompCN cn = { s = \\ag => 
       let agr = complAgr ag in 
-      artIndef cn.g agr.n Nom ++ cn.s ! agr.n
+      artIndef False cn.g agr.n Nom ++ cn.s ! agr.n
       }; --- RE 7/12/2010 -- AR added indef 2/8/2011
     CompNP np = {s = \\_  => (np.s ! Nom).ton} ;
     CompAdv a = {s = \\_  => a.s} ;

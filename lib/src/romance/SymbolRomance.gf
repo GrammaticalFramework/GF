@@ -18,7 +18,7 @@ lin
     hasClit = False
     } ;
   CNNumNP cn i = heavyNP {
-    s = \\c => artDef cn.g Sg c ++ cn.s ! Sg ++ i.s ! Masc ;
+    s = \\c => artDef False cn.g Sg c ++ cn.s ! Sg ++ i.s ! Masc ;
     a = agrP3 cn.g Sg ;
     hasClit = False
     } ;

@@ -70,8 +70,8 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
   partitive : Gender -> Case -> Str ;
 
-  artDef    : Gender -> Number -> Case -> Str ;
-  artIndef  : Gender -> Number -> Case -> Str ;
+  artDef    : Bool -> Gender -> Number -> Case -> Str ;
+  artIndef  : Bool -> Gender -> Number -> Case -> Str ; -- True = used as NP, False = used as Det
 
 -- This is the definite article in Italian, $prepCase c$ in French and Spanish.
 

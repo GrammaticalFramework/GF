@@ -26,7 +26,7 @@ instance DiffFre of DiffRomance - [
       CPrep PNul => []
       } ;
 
-    artDef : Gender -> Number -> Case -> Str = \g,n,c ->
+    artDef : Bool -> Gender -> Number -> Case -> Str = \isNP,g,n,c ->
       case <g,n,c> of {
         <Masc,Sg, CPrep P_de> => pre {"du" ; ("de l'" ++ Predef.BIND) / voyelle} ;
         <Masc,Sg, CPrep P_a>  => pre {"au" ; ("à l'"  ++ Predef.BIND)  / voyelle} ;
@@ -39,17 +39,17 @@ instance DiffFre of DiffRomance - [
 
 -- In these two, "de de/du/des" becomes "de".
 
-    artIndef = \g,n,c -> case <n,c> of {
+    artIndef = \isNP,g,n,c -> case <n,c> of {
       <Sg,_>   => prepCase c ++ genForms "un" "une" ! g ;
-      <Pl,CPrep P_de> => elisDe ;
-      _        => prepCase c ++ "des"
+      <Pl,CPrep P_de> => if_then_else Str isNP (prepCase c ++ genForms "quelques-uns" "quelques-unes" ! g) elisDe ;
+      _        => if_then_else Str isNP (prepCase c ++ genForms "quelques-uns" "quelques-unes" ! g) (prepCase c ++ "des")
       } ;
 
     possCase = \_,_,c -> prepCase c ;
 
     partitive = \g,c -> case c of {
       CPrep P_de => elisDe ;
-      _ => prepCase c ++ artDef g Sg (CPrep P_de)
+      _ => prepCase c ++ artDef False g Sg (CPrep P_de)
       } ;
 
     conjunctCase : Case -> Case = \c -> c ;

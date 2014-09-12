@@ -21,8 +21,15 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
       } ;
 
 
-    artDef : Gender -> Number -> Case -> Str = \g,n,c ->
-      case <g,n,c> of {
+    artDef : Bool -> Gender -> Number -> Case -> Str = \isNP,g,n,c ->
+      case isNP of {
+       True => case <g,n,c> of {
+        <Masc,Sg, _>          => prepCase c ++ "el" ;
+	<Fem, Sg, _> => prepCase c ++ "la" ; ----- ??
+        <Masc,Pl, _> => prepCase c ++ "los" ;
+        <Fem ,Pl, _> => prepCase c ++ "las"
+        } ;
+      _ => case <g,n,c> of {
         <Masc,Sg, CPrep P_de> => "del" ;
         <Masc,Sg, CPrep P_a>  => "al" ;
         <Masc,Sg, _>          => prepCase c ++ "el" ;
@@ -31,13 +38,20 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 	<Fem, Sg, _> => prepCase c ++ chooseLa ;
         <Masc,Pl, _> => prepCase c ++ "los" ;
         <Fem ,Pl, _> => prepCase c ++ "las"
-        } ;
+        }
+      } ;
 
 -- In these two, "de de/du/des" becomes "de".
 
-    artIndef = \g,n,c -> case n of {
-      Sg  => prepCase c ++ genForms "un"   "una" ! g ;
-      _   => prepCase c -- ++ genForms "unos" "unas" ! g   --- take this as a determiner
+    artIndef = \isNP,g,n,c -> case isNP of {
+      True => case n of {
+        Sg  => prepCase c ++ genForms "uno"  "una" ! g ;
+        _   => prepCase c ++ genForms "unos" "unas" ! g  
+        } ;
+      _ => case n of {
+        Sg  => prepCase c ++ genForms "un"   "una" ! g ;
+        _   => prepCase c 
+        }
       } ;
 
     possCase = \_,_,c -> prepCase c ;
