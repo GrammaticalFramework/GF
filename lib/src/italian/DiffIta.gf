@@ -25,8 +25,14 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
         }
       } ;
 
-    artDef : Gender -> Number -> Case -> Str = \g,n,c ->
-      case <g,n,c> of {
+    artDef : Bool -> Gender -> Number -> Case -> Str = \isNP,g,n,c ->
+     case isNP of {
+       True => prepCase c ++ case <g,n> of {
+        <Masc,Sg> => "lui" ;
+        <Fem ,Sg> => "lei" ;
+        <_,Pl>    => "loro" 
+        } ;
+       _ => case <g,n,c> of {
         <_, _, CPrep P_di>  => prepArt "de" ;
         <_, _, CPrep P_da>  => prepArt "da" ;
         <_, _, CPrep P_a>   => prepArt "a" ;
@@ -37,7 +43,8 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
         <Fem ,Sg, _>        => elision "la" "l'" "la" ;
         <Masc,Pl, _>        => elision "i" "gli" "gli" ;
         <Fem ,Pl, _>        => "le"
-        } 
+        }
+      } 
        where {
          prepArt : Tok -> Tok = \de -> case <g,n> of {
            <Masc,Sg> => elision (de + "l")   (de + "ll'") (de + "llo") ;
@@ -50,17 +57,21 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
 -- In these two, "de de/du/des" becomes "de".
 
-    artIndef = \g,n,c -> case <n,c> of {
-      <Sg,_>   => prepCase c ++ 
-                  genForms (pre {"un" ; "uno" / sImpuro}) (elision "una" "un'" "una") ! g ;
-      _        => prepCase c 
+    artIndef = \isNP, g,n,c -> case <n,isNP> of {
+      <Sg,True> => prepCase c ++ 
+                   genForms "uno" "una" ! g ;
+      <Sg,_>    => prepCase c ++ 
+                   genForms (pre {"un" ; "uno" / sImpuro}) (elision "una" "un'" "una") ! g ;
+      <Pl,True> => prepCase c ++ 
+                   genForms "alcuni" "alcune" ! g ;
+      _         => prepCase c 
       } ;
 
-    possCase = artDef ;
+    possCase = artDef False ;
 
     partitive = \g,c -> case c of {
       CPrep P_di => "di" ;
-      _ => prepCase c ++ artDef g Sg (CPrep P_di)
+      _ => prepCase c ++ artDef False g Sg (CPrep P_di)
       } ;
 
     conjunctCase : Case -> Case = \c -> case c of {

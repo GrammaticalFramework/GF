@@ -101,15 +101,15 @@ incomplete concrete NounRomance of Noun =
     ---- could be discontinuous: la terza città più grande
 
     DefArt = {
-      s = \\_,n,g,c => artDef g n c ;  
-      sp = \\n,g,c => artDef g n c ; ---- not for Fre 
+      s = \\_,n,g,c => artDef False g n c ;  
+      sp = \\n,g,c => artDef True g n c ; 
       s2 = [] ;
       isNeg = False
       } ;
 
     IndefArt = {
-      s = \\b,n,g,c => if_then_Str b (prepCase c) (artIndef g n c) ;
-      sp = \\n,g,c => artIndef g n c ; ---- not for Fre
+      s = \\b,n,g,c => if_then_Str b (prepCase c) (artIndef False g n c) ;
+      sp = \\n,g,c => artIndef True g n c ; 
       s2 = [] ;
       isNeg = False
       } ;
@@ -118,7 +118,7 @@ incomplete concrete NounRomance of Noun =
         g = cn.g ;
         n = Sg
       in heavyNP {
-        s = table {Nom => artDef g n Nom ++ cn.s ! n ; c => partitive g c ++ cn.s ! n} ; -- le vin est bon ; je bois du vin
+        s = table {Nom => artDef False g n Nom ++ cn.s ! n ; c => partitive g c ++ cn.s ! n} ; -- le vin est bon ; je bois du vin
         a = agrP3 g n ;
         hasClit = False ;
         isNeg = False
