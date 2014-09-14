@@ -407,10 +407,10 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = let v = vvf (mkVerbReg x) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
-  reg3V x y z = let v = vvf (mkVerb3Reg x y z) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
-  etreV v = {s = v.s ; vtyp = VTyp VEsse (getVTypT v.vtyp) ; lock_V = <>} ;
-  reflV v = {s = v.s ; vtyp = vRefl v.vtyp ; lock_V = <>} ;
+  regV x = let v = vvf (mkVerbReg x) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <> ; p = []} ;
+  reg3V x y z = let v = vvf (mkVerb3Reg x y z) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <> ; p = []} ;
+  etreV v = v ** {vtyp = VTyp VEsse (getVTypT v.vtyp)} ;
+  reflV v = v ** {vtyp = vRefl v.vtyp} ;
 
   mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mmkV3 v accusative p ;
@@ -485,21 +485,21 @@ oper
   mkV = overload {
     mkV : Str -> V = regV ;
     mkV : (jeter,jette : Str) -> V = 
-      \x,y -> let v = vvf (mkVerb2Reg x y) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
+      \x,y -> let v = vvf (mkVerb2Reg x y) in {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <> ; p = []} ;
     mkV : (jeter,jette,jettera : Str) -> V = reg3V ;
     mkV : V2 -> V = v2V ;
     mkV : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> V
     = \tenir,tiens,tenons,tiennent,tint,tiendra,tenu -> 
       let v = vvf (mkVerb7 tenir tiens tenons tiennent tint tiendra tenu) in
-      {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
+      {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <> ; p = []} ;
     mkV : (tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu : Str) -> V
     = \tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu -> 
       let v = vvf (mkVerb12 tenir tiens tient tenons tenez tiennent tienne tenions tiensI tint tiendra tenu) in
-      {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <>} ;
+      {s = v ; vtyp = VTyp VHabere (getVerbT v) ; lock_V = <> ; p = []} ;
    mkV : V -> V
     = \v -> v ;
     mkV : V -> Str -> V 
-    = \v,_ -> v ;  ---- to recognize particles in dict, not yet in lincat V
+    = \v,p -> v ** {p = p} ;  ---- to recognize particles in dict, not yet in lincat V
   } ;
 
   regV : Str -> V ;

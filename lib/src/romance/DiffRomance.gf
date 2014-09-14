@@ -103,7 +103,7 @@ param
   Case = Nom | Acc | CPrep Prepos ; 
 
 oper
-  Verb = {s : VF => Str ; vtyp : VType} ;
+  Verb = {s : VF => Str ; vtyp : VType ; p : Str} ;
 
   VP : Type = {
     s      : Verb ;

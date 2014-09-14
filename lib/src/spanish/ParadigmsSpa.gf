@@ -213,7 +213,9 @@ oper
 -- the module $BeschSpa$ gives all the patterns of the "Bescherelle"
 -- book. To use them in the category $V$, wrap them with the function
 
-    mkV : Verbum -> V -- import verb constructed with BeschSpa
+    mkV : Verbum -> V ; -- import verb constructed with BeschSpa
+
+    mkV : V -> Str -> V ; -- particle verb
     } ;
 
 -- To form reflexive verbs:
@@ -382,11 +384,11 @@ oper
            _   => cortar_5 x
             }
           }
-    in verbBesch verb ** {vtyp = VHabere ; lock_V = <>} ;
+    in verbBesch verb ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
-  reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
+  reflV v = v ** {vtyp = VRefl} ;
 
-  verboV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
+  verboV ve = verbBesch ve ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
   reflVerboV : Verbum -> V = \ve -> reflV (verboV ve) ;
 
@@ -396,6 +398,7 @@ oper
       p => ve.s ! p
       } ;
     lock_V = <> ;
+    p = ve.p ;
     vtyp = VHabere
     } ;
 
@@ -406,11 +409,9 @@ oper
 
     
 
-  mk2V2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
+  mk2V2 v p = lin V2 (v ** {c2 = p}) ;
   dirV2 v = mk2V2 v accusative ;
-  v2V v = v ** {lock_V = <>} ;
-
-
+  v2V v = lin V v ;
 
   mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, à, de
   mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
@@ -512,7 +513,7 @@ oper
     mkV : (mostrar,muestro : Str) -> V = regAltV ;
     mkV : Verbum -> V = verboV ;
 
-    mkV : V -> Str -> V = \v,_ -> v ;  ---- to recognize particles in dict, not yet in lincat V
+    mkV : V -> Str -> V = \v,p -> v ** {p = p} ;  ---- to recognize particles in dict, not yet in lincat V
     } ;
   regV : Str -> V ;
   regAltV : (mostrar,muestro : Str) -> V ;

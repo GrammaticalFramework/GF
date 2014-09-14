@@ -209,7 +209,9 @@ oper
 -- the module $BeschCat$ gives all the patterns of the "Bescherelle"
 -- book. To use them in the category $V$, wrap them with the function
 
-    mkV : Verbum -> V  -- use verb constructed in BeschCat
+    mkV : Verbum -> V ;  -- use verb constructed in BeschCat
+
+    mkV : V -> Str -> V ; -- particle verb
     } ;
 
 -- To form reflexive verbs:
@@ -413,9 +415,9 @@ oper
 
 	   <_,_,_>        => regAltV x y } ;
 
-  reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
+  reflV v = v ** {vtyp = VRefl} ;
 
-  verbV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
+  verbV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <> ; p = []} ;
 
   reflVerbV : Verbum -> V = \ve -> reflV (verbV ve) ;
 
@@ -425,17 +427,17 @@ oper
       p => ve.s ! p
       } ;
     lock_V = <> ;
+    p = ve.p ;
     vtyp = VHabere
     } ;
 
 
 
-  mk2V2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
+  mk2V2 v p = lin V2 (v ** {c2 = p}) ;
   dirV2 v = mk2V2 v accusative ;
   v2V v = v ** {lock_V = <>} ;
 
-  mkV3 v p q = {s = v.s ; vtyp = v.vtyp ; 
-    c2 = p ; c3 = q ; lock_V3 = <>} ;
+  mkV3 v p q = lin V3 (v ** {c2 = p ; c3 = q}) ;
   dirV3 v p = mkV3 v accusative p ;
   dirdirV3 v = dirV3 v dative ;
 
@@ -505,7 +507,8 @@ oper
     mkV : (cantar : Str) -> V            = \x -> verbV (regV x) ;
     mkV : (servir,serveixo : Str) -> V   = \x,y -> verbV (regAltV x y) ;
     mkV : (vendre,venc,venut : Str) -> V = \x,y,z -> verbV (mk3V x y z) ;
-    mkV : Verbum -> V = verbV
+    mkV : Verbum -> V = verbV ;
+    mkV : V -> Str -> V = \v,p -> v ** {p = p} ;  ---- to recognize particles in dict, not yet in lincat V
     } ;
   regV : Str -> Verbum ;
   regAltV : (servir,serveixo : Str) -> Verbum ;
