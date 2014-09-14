@@ -21,9 +21,7 @@ concrete TranslateEng of Translate =
     ComplVS, SlashV2S, ComplSlash -- Eng exceptions
     ],
   AdverbEng,
-  PhraseEng - [
-    PhrUtt    -- (but come here John) replaced by (but come here ,? John | but John ,? come here)
-    ],
+  PhraseEng,
   SentenceEng - [
     UseCl     -- replaced by UseCl | ContractedUseCl
     ],        
@@ -49,12 +47,6 @@ flags
 
 -- exceptional linearizations
 lin
-  PhrUtt pconj utt voc = 
-      G.PhrUtt pconj utt voc                                   -- but come here John 
-----    | {s = pconj.s ++ utt.s ++ Predef.BIND ++ "," ++ voc.s}    -- but come here, John  ---- comma with empty voc is bad
-    | {s = pconj.s ++ voc.s ++ utt.s}                          -- but John come here
-----    | {s = pconj.s ++ voc.s ++ Predef.BIND ++ utt.s}           -- but come here, John
-    ;
 
   UseCl t p cl = 
      G.UseCl t p cl              -- I am here
