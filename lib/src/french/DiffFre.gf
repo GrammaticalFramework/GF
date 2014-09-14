@@ -245,7 +245,7 @@ instance DiffFre of DiffRomance - [
 "fus";"fus";"fut";"fûmes";"fûtes";"furent";--# notpresent
 "serai";"seras";"sera";"serons";"serez";"seront";--# notpresent
 "serais";"serais";"serait";"serions";"seriez";"seraient";--# notpresent
-"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VTyp VHabere False} ;
+"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant"]; vtyp=VTyp VHabere False ; p = []} ;
 
     avoir_V : Verb = {s=table VF ["avoir";"avoir";"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait"
 ;"ayons";"ayez";"aient";
@@ -254,7 +254,7 @@ instance DiffFre of DiffRomance - [
 "eus";"eus";"eut";"eûmes";"eûtes";"eurent";--# notpresent
 "aurai";"auras";"aura";"aurons";"aurez";"auront";--# notpresent
 "aurais";"aurais";"aurait";"aurions";"auriez";"auraient";--# notpresent
-"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VTyp VHabere True}; ---- a-t-il eut-il
+"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant"];vtyp=VTyp VHabere True ; p = []} ; ---- a-t-il eut-il
 
   datClit = "y" ;
   genClit = "en" ;

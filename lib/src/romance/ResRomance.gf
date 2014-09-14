@@ -81,7 +81,7 @@ oper
     let
       typ = verb.vtyp ;
     in {
-      s = {s = verb.s ; vtyp = typ} ;
+      s      = verb ;
       agr    = partAgr typ ;
       neg    = negation ;
       clit1  = [] ;
@@ -139,7 +139,7 @@ oper
     } ;
 
   insertRefl : VP -> VP = \vp -> { 
-    s     = {s = vp.s.s ; vtyp = vRefl vp.s.vtyp} ;
+    s     = vp.s ** {vtyp = vRefl vp.s.vtyp} ;
     agr   = VPAgrSubj ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
@@ -224,7 +224,9 @@ oper
           num = agr.n ;
           per = agr.p ;
 
-          compl = case isPol of {
+          particle = vp.s.p ;
+
+          compl = particle ++ case isPol of {
             True => vp.comp ! {g = gen ; n = Sg ; p = per} ;
             _ => vp.comp ! agr
             } ;
@@ -260,6 +262,7 @@ oper
 
           fin = vps.p1 ;
           inf = vps.p2 ;
+
         in
         case d of {
           DDir => 

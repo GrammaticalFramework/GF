@@ -201,7 +201,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
     haber_V : Verb = verbBeschH (haber_3 "haber") ;
 
-    verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere} ;
+    verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere ; p = []} ;
 
     subjPron = \_ -> [] ;
 

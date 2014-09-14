@@ -191,7 +191,7 @@ oper
 
     haver_V : Verb = verbBeschH (haver_59 "haver" True) ;
 
-    verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere} ;
+    verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere ; p = []} ;
 
     subjPron = \_ -> [] ;
 

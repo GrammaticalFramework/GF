@@ -1,7 +1,7 @@
 incomplete concrete NounRomance of Noun =
    CatRomance ** open CommonRomance, ResRomance, Prelude in {
 
-  flags optimize=all_subs ;
+  flags optimize=all_subs ; coding = utf8 ;
 
   lin
     DetCN det cn = 

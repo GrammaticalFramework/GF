@@ -214,9 +214,9 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
     auxPassive : Verb = venire_V ;
 
-    copula = verbBesch (essere_1 "essere") ** {vtyp = VEsse} ;
-    avere_V = verbBesch (avere_2 "avere") ** {vtyp = VHabere} ;
-    venire_V = verbBesch (venire_110 "venire") ** {vtyp = VEsse} ;
+    copula = verbBesch (essere_1 "essere") ** {vtyp = VEsse ; p = []} ;
+    avere_V = verbBesch (avere_2 "avere") ** {vtyp = VHabere ; p = []} ;
+    venire_V = verbBesch (venire_110 "venire") ** {vtyp = VEsse ; p = []} ;
 
   datClit = "ci" ;
   genClit = "ne" ;

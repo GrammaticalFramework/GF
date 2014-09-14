@@ -220,7 +220,9 @@ oper
 -- to consult, here is a worst-case function for "-ire" and "-ere" verbs,
 -- taking 11 arguments.
 
-    mkV : (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V -- worst case
+    mkV : (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V ; -- worst case
+
+    mkV : V -> Str -> V ; -- particle verb
     } ;
 
 -- The function $regV$ gives all verbs the compound auxiliary "avere".
@@ -394,9 +396,9 @@ oper
             }
           }
         }
-    in verbBesch verb ** {vtyp = VHabere ; lock_V = <>} ;
+    in verbBesch verb ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
-  verboV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
+  verboV ve = verbBesch ve ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
   mk11V 
     dovere devo deve dobbiamo dovro 
@@ -405,10 +407,10 @@ oper
       dovetti dovesti dovette dovettero dovi dovuto
       ) ;
 
-  essereV v = {s = v.s ; vtyp = VEsse ; lock_V = <>} ;
-  reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
+  essereV v = v ** {vtyp = VEsse} ;
+  reflV v = v ** {vtyp = VRefl} ;
 
-  mk2V2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
+  mk2V2 v p = lin V2 (v ** {c2 = p}) ;
   dirV2 v = mk2V2 v accusative ;
   v2V v = v ** {lock_V = <>} ;
 
@@ -516,7 +518,7 @@ oper
     mkV : 
      (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V = mk11V ; 
 
-    mkV : V -> Str -> V = \v,_ -> v ;  ---- to recognize particles in dict, not yet in lincat V
+    mkV : V -> Str -> V = \v,p -> v ** {p = p} ;  ---- to recognize particles in dict, not yet in lincat V
     } ;
 
   regV : Str -> V ;

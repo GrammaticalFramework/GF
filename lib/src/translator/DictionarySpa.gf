@@ -11338,8 +11338,8 @@ lin khan_N = mkN "kan" masculine ; -- status=guess
 lin khanate_N = mkN "kanato" ; -- status=guess
 lin kibbutz_N = mkN "kibutz" masculine ; -- status=guess
 lin kick_N = mkN "patada" | mkN "puntapié" | mkN "coz" feminine ; -- status=guess
-lin kick_V = mkV (mkV "dar") "una patada a" | mkV (mkV "dar") "un puntapié a" | mkV "patear" ; -- status=guess
-lin kick_V2 = mkV2 (mkV (mkV "dar") "una patada a") | mkV2 (mkV (mkV "dar") "un puntapié a") | mkV2 (mkV "patear") ; -- status=guess
+lin kick_V = mkV "patear" | mkV (mkV "dar") "una patada a" | mkV (mkV "dar") "un puntapié a" ;
+lin kick_V2 = mkV2 (mkV "patear") | mkV2 (mkV (mkV "dar") "una patada a") | mkV2 (mkV (mkV "dar") "un puntapié a") ;
 lin kickstand_N = mkN "soporte" masculine | mkN "caballete" masculine ; -- status=guess status=guess
 lin kid_N = mkN "niño" ; -- status=guess
 lin kid_V = mkV (mkV "tomar") "el pelo" ; -- status=guess, src=wikt
