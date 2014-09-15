@@ -943,7 +943,7 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
       a    = Predef.dp 1 minuna
     } in 
     {s = table {
-      NPCase Nom    => mina ;  ----- NPSep
+      NPCase Nom | NPSep => mina ;
       NPCase Gen    => minun ;
       NPCase Part   => minua ;
       NPCase Transl => minu + "ksi" ;
