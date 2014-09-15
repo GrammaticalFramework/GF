@@ -1,4 +1,5 @@
 -- update the import list of every language
+-- although possibly some extra definitions at the end
 -- the new files are produced in ./tmp/
 -- usage: runghc MkApp.hs
 
@@ -17,5 +18,18 @@ putImports i s =
   let
     (s1,_:s2) = span (/='[') s
     (_,   s3) = span (/=']') s2
-  in s1 ++ "[" ++ i ++ s3
+  in s1 ++ "[" ++ i ++ extra s3
 
+extra s = unlines (init (lines s) ++ extraLines ++ ["}"])
+
+extraLines = -- [] -- default: no extra
+
+  [
+  "",
+  "ComplV2V v np vp = mkVP v np vp ;",
+  "ComplV2A v np vp = mkVP v np vp ;",
+  "ComplV2Q v np vp = mkVP v np vp ;",
+  "ComplV2S v np vp = mkVP v np vp ;",
+  "ComplV3  v np vp = mkVP v np vp ;",
+  ""
+  ]
