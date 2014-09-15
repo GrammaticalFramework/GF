@@ -281,7 +281,7 @@ oper
         iform = orB vp.clit3.hasClit (isVRefl vp.s.vtyp) ;
         inf   = vp.s.s ! VInfin iform ;    
         neg   = vp.neg ! RPos ;             --- Neg not in API
-        obj   = neg.p2 ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
+        obj   = neg.p2 ++ vp.s.p ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
         refl  = case isVRefl vp.s.vtyp of {
             True => reflPron agr.n agr.p Acc ; ---- case ?
             _ => [] 
