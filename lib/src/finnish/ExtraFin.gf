@@ -159,7 +159,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     IAdvAdv adv = {s = "kuinka" ++ adv.s} ;
 
     ProDrop p = {
-      s = table {NPCase (Nom) => [] ; c => p.s ! c} ;
+      s = table {NPCase Nom => [] ; c => p.s ! c} ;
       poss = [] ; 
           -- drop Gen only works in adjectival position: "autoni", but not in "ø täytyy mennä"
       a = p.a ;
@@ -167,7 +167,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       } ;
 
     ProDropPoss p = {
-      s1 = \\_,_ => case p.a of {Ag _ P3 => p.s ! NPCase Gen ; _ => []} ;  -- hänen nimensä ; minun nimeni
+      s1 = \\_,_ => case p.a of {Ag _ P3 => p.s ! NPCase Gen ; _ => []} ;  -- hänen nimensä ; (minun) nimeni
       sp = \\_,_ => p.s ! NPCase Gen ;
       s2 = case p.hasPoss of {
              True => table {Front => BIND ++ possSuffixFront p.a ; 

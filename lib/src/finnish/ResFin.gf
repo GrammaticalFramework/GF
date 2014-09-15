@@ -97,7 +97,7 @@ oper
 -- have a uniform, special accusative form ("minut", etc).
 
 param 
-  NPForm = NPCase Case | NPAcc ; -- | NPSep ;  -- NPSep is NP used alone, e.g. in an Utt. Equals NPCase Nom except for pro-drop
+  NPForm = NPCase Case | NPAcc | NPSep ;  -- NPSep is NP used alone, e.g. in an Utt and as complement to copula. Equals NPCase Nom except for pro-drop
 
 oper
   npform2case : Number -> NPForm -> Case = \n,f ->
@@ -105,9 +105,9 @@ oper
 --  type signature: workaround for gfc bug 9/11/2007
     case <<f,n> : NPForm * Number> of {
       <NPCase c,_> => c ;
-      <NPAcc,Sg>   => Gen ;-- appCompl does the job
-      <NPAcc,Pl>   => Nom 
-----      <NPSep,_>    => Nom
+      <NPAcc,Sg>   => Gen ; -- appCompl does the job
+      <NPAcc,Pl>   => Nom ;
+      <NPSep,_>    => Nom
     } ;
 
   n2nform : NForm -> NForm = \nf -> case nf of {
@@ -559,7 +559,7 @@ oper
       nsa  = possSuffixFront agr
     in {
       s = table {
-        NPCase Nom         => itse ! NPossNom Sg ;
+        NPCase Nom | NPSep => itse ! NPossNom Sg ;
         NPCase Gen | NPAcc => itse ! NPossNom Sg + nsa ;
         NPCase Transl      => itse ! NPossTransl Sg + nsa ;
         NPCase Illat       => itse ! NPossIllat Sg + nsa ;
