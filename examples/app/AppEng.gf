@@ -4,7 +4,7 @@ concrete AppEng of App =
 
   TranslateEng - [
   -- Verb
-    SlashV2V, 
+    SlashV2V,             -- replaced by more efficient inlined versions
     Slash2V3, Slash3V3, SlashV2S, SlashV2Q, SlashV2A, 
     SlashVV, SlashV2VNP,
     AdvVPSlash, AdVVPSlash, VPSlashPrep,
@@ -35,5 +35,18 @@ lin
   GObjectPlease o = lin Text (mkUtt o) ;
   PhrasePhr p = {s = "+" ++ p.s} | p ;
   Phrase_Chunk p = p ;
+
+  ComplV2V v np vp = mkVP v np vp ;
+  ComplV2A v np vp = mkVP v np vp ;
+  ComplV2Q v np vp = mkVP v np vp ;
+  ComplV2S v np vp = mkVP v np vp ;
+  ComplV3  v np vp = mkVP v np vp ;
+
+
+ComplV2V v np vp = mkVP v np vp ;
+ComplV2A v np vp = mkVP v np vp ;
+ComplV2Q v np vp = mkVP v np vp ;
+ComplV2S v np vp = mkVP v np vp ;
+ComplV3  v np vp = mkVP v np vp ;
 
 }
