@@ -50220,7 +50220,7 @@ lin screech_V = variants {} ; -- status=guess
 lin screech_V2 = variants {} ; -- status=guess
 lin screech_owl_N = variants {} ; -- status=guess
 lin screed_N = variants {} ; -- status=guess
-lin screen_N = mkN "såll" neutrum | mkN "visa" ; -- SaldoWN -- comment=20
+lin screen_N = mkN "skärm" utrum ;
 lin screen_V = mkV "visar" ; -- comment=21
 lin screen_V2 = dirV2 (partV (mkV "visar")"in"); -- comment=3
 lin screen_off_V2 = dirV2 (partV (mkV "visar")"in"); -- comment=3
