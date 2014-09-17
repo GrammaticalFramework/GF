@@ -116,8 +116,9 @@ termFormCnc t = case t of
 
 appForm :: Term -> (Term, [Term])
 appForm t = case t of
-  App c a -> (fun, args ++ [a]) where (fun, args) = appForm c
-  _       -> (t,[])
+  App c a   -> (fun, args ++ [a]) where (fun, args) = appForm c
+  Typed t _ -> appForm t
+  _         -> (t,[])
 
 mkProdSimple :: Context -> Term -> Term
 mkProdSimple c t = mkProd c t []
