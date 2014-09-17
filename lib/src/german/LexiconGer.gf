@@ -215,7 +215,7 @@ lin
   walk_V = seinV (irregV "gehen" "geht" "ging" "ginge" "gegangen") ;
   warm_A = mk3A "warm" "wärmer" "wärmste" ;
   war_N = mkN "Krieg" ;
-  watch_V2 = prepV2 (regV "schauen") (mkPrep "an" accusative) ;
+  watch_V2 = dirV2 (prefixV "an" (regV "schauen")) ;
   water_N = reg2N "Wasser" "Wasser" neuter ;
   white_A = regA "weiß" ;
   window_N = reg2N "Fenster" "Fenster" neuter ;
