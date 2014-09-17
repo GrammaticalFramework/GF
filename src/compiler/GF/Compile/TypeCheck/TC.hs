@@ -134,9 +134,10 @@ checkExp th tenv@(k,rho,gamma) e ty = do
 
     Let (x, (mb_typ, e1)) e2 -> do
       (val,e1,cs1) <- case mb_typ of
-                        Just typ -> do val <- eval rho typ
-                                       (e1,cs) <- checkExp th tenv e1 val
-                                       return (val,e1,cs)
+                        Just typ -> do (_,cs1) <- checkType th tenv typ
+                                       val <- eval rho typ
+                                       (e1,cs2) <- checkExp th tenv e1 val
+                                       return (val,e1,cs1++cs2)
                         Nothing  -> do (e1,val,cs) <- inferExp th tenv e1
                                        return (val,e1,cs)
       (e2,cs2) <- checkExp th (k,rho,(x,val):gamma) e2 typ
@@ -185,9 +186,10 @@ inferExp th tenv@(k,rho,gamma) e = case e of
                     return (ARecType xs, vType, concat css)
    Let (x, (mb_typ, e1)) e2 -> do
     (val1,e1,cs1) <- case mb_typ of
-                       Just typ -> do val <- eval rho typ
-                                      (e1,cs) <- checkExp th tenv e1 val
-                                      return (val,e1,cs)
+                       Just typ -> do (_,cs1) <- checkType th tenv typ
+                                      val <- eval rho typ
+                                      (e1,cs2) <- checkExp th tenv e1 val
+                                      return (val,e1,cs1++cs2)
                        Nothing  -> do (e1,val,cs) <- inferExp th tenv e1
                                       return (val,e1,cs)
     (e2,val2,cs2) <- inferExp th (k,rho,(x,val1):gamma) e2
