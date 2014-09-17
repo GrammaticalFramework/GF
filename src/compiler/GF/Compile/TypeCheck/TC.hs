@@ -38,6 +38,7 @@ data AExp =
    | AFloat Double
    | AStr  String
    | AMeta MetaId Val
+   | ALet  (Ident,(Val,AExp)) AExp
    | AApp  AExp AExp Val 
    | AAbs  Ident Val AExp 
    | AProd Ident AExp AExp 
@@ -131,6 +132,16 @@ checkExp th tenv@(k,rho,gamma) e ty = do
 	return (AAbs x a' t', cs)
       _ -> Bad (render ("function type expected for" <+> ppTerm Unqualified 0 e <+> "instead of" <+> ppValue Unqualified 0 typ))
 
+    Let (x, (mb_typ, e1)) e2 -> do
+      (val,e1,cs1) <- case mb_typ of
+                        Just typ -> do val <- eval rho typ
+                                       (e1,cs) <- checkExp th tenv e1 val
+                                       return (val,e1,cs)
+                        Nothing  -> do (e1,val,cs) <- inferExp th tenv e1
+                                       return (val,e1,cs)
+      (e2,cs2) <- checkExp th (k,rho,(x,val):gamma) e2 typ
+      return (ALet (x,(val,e1)) e2, cs1++cs2)
+
     Prod _ x a b -> do
       testErr (typ == vType) "expected Type"
       (a',csa) <- checkType th tenv a
@@ -172,6 +183,15 @@ inferExp th tenv@(k,rho,gamma) e = case e of
    RecType xs -> do r <- mapM (checkLabelling th tenv) xs
                     let (xs,css) = unzip r
                     return (ARecType xs, vType, concat css)
+   Let (x, (mb_typ, e1)) e2 -> do
+    (val1,e1,cs1) <- case mb_typ of
+                       Just typ -> do val <- eval rho typ
+                                      (e1,cs) <- checkExp th tenv e1 val
+                                      return (val,e1,cs)
+                       Nothing  -> do (e1,val,cs) <- inferExp th tenv e1
+                                      return (val,e1,cs)
+    (e2,val2,cs2) <- inferExp th (k,rho,(x,val1):gamma) e2
+    return (ALet (x,(val1,e1)) e2, val2, cs1++cs2)
    App f t -> do
     (f',w,csf) <- inferExp th tenv f 
     typ <- whnf w
