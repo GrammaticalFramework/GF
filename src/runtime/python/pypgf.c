@@ -1,3 +1,4 @@
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include "structmember.h"
 
@@ -6,7 +7,6 @@
 #include <gu/file.h>
 #include <pgf/pgf.h>
 #include <pgf/linearizer.h>
-#include <pgf/reader.h>
 
 static PyObject* PGFError;
 
@@ -2681,7 +2681,7 @@ pgf_readPGF(PyObject *self, PyObject *args)
 
 static ExprObject*
 pgf_readExpr(PyObject *self, PyObject *args) {
-	size_t len;
+	Py_ssize_t len;
     const uint8_t *buf;
     if (!PyArg_ParseTuple(args, "s#", &buf, &len))
         return NULL;
@@ -2711,7 +2711,7 @@ pgf_readExpr(PyObject *self, PyObject *args) {
 
 static TypeObject*
 pgf_readType(PyObject *self, PyObject *args) {
-	size_t len;
+	Py_ssize_t len;
     const uint8_t *buf;
     if (!PyArg_ParseTuple(args, "s#", &buf, &len))
         return NULL;
