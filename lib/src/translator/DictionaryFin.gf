@@ -25,6 +25,8 @@ oper luokse_Prep : Prep = mkPrep "luokse" ; -- to enable (luo|luokse)-luokseni
        NCase _ Illat => "mihin" ;
        c => mi.s ! c
        } ;
+ 
+  year_alt_N = mkN "vuosi" "vuoden" "vuotta" "vuonna" "vuoteen" "vuosien" "vuosia" "vuosina" "vuosissa" "vuosiin" ; --alternative form of essive
 
 
 lin a_fortiori_Adv = mkWAdv "suuremmalla" "syyllä" ; --UNCHK
@@ -33160,7 +33162,7 @@ lin newsy_A = mkWA (k41 "suulas") ; --UNCHK
 lin newt_N = mkWN (k1 "vesilisko") ; --UNCHK
 lin newtonian_A = mkWA (compoundA "newtoni" (k38 "lainen")) ; --UNCHK
 lin newtonian_N = mkWN (compoundN "newtoni" (k38 "lainen")) ; --UNCHK
-lin next_A = mkA "seuraava" ;
+lin next_A = mkA "seuraava" | invarA "ensi" ;
 lin next_Adv = mkAdv "seuraavaksi" ;
 lin next_Prep = mkPrep elative "seuraava" ;
 lin nexus_N = mkWN (k10 "ryhmä") ; --UNCHK
@@ -57144,7 +57146,7 @@ lin yea_Adv = mkWAdv (k99 "joo") ; --UNCHK
 lin yea_N = mkWN (k99 "jaa") ; --UNCHK
 lin yeah_Adv = mkWAdv (k99 "joo") ; --UNCHK
 lin yeah_Interj = mkInterj "joo" ; --mkInterj "yess" ;
-lin year_N = L.year_N ;
+lin year_N = L.year_N | year_alt_N ;
 lin yearbook_N = mkWN (compoundN "vuosi" (k9 "kirja")) ;
 lin yearling_N = mkN "vuosikas" ;
 lin yearlong_A = mkWA (k38 "mittainen") "vuoden" ; --UNCHK
@@ -57352,7 +57354,9 @@ lin zoologist_N = mkWN (k5 "zoologi") ; --UNCHK
 lin zoology_N = mkWN (k12 "zoologia") ; --UNCHK
 lin zoom_N = mkWN (k1 "nousu") ; --UNCHK
 lin zoom_V = mkWV (k66 "nousta") ; --UNCHK
-lin zoom_in_V = mkWV (k54A "lähentää") "kuvaa" ; --UNCHK
+lin zoom_in_V = mkWV (k54A "lähentää") "kuvaa" ;
+lin zoom_in_on_V2 = mkV2 (mkWV (k54A "lähentää") "kuvaa") (mkPrep illative) ;
+lin zoom_out_V = mkWV (k54A "loitontaa") "kuvaa" ;
 lin zoomastigote_N = mkWN (compoundN "siima" (k3 "eliö")) ; --UNCHK
 lin zoomorphism_N = mkWN (compoundN "zoomorf" (k5 "ismi")) ; --UNCHK
 lin zoonosis_N = mkWN (k5A "tauti") "zoonoottinen" ; --UNCHK
@@ -58953,11 +58957,13 @@ lin yokohama_PN = foreignPN "Jokohama" ;
 lin york_PN = foreignPN "York" ;
 lin yorkshire_PN = foreignPN "Yorkshire" ;
 lin ystradgynlais_PN = foreignPN "Ystradgynlais" ;
+lin yugoslavia_PN = foreignPN "Jugoslavia" ;
 lin yukon_PN = foreignPN "Yukon" ;
 lin zagreb_PN = foreignPN "Zagreb" ;
 lin zambia_PN = foreignPN "Sambia" ;
 lin zaragoza_PN = foreignPN "Zaragoza" ;
 lin zimbabwe_PN = foreignPN "Zimbabwe" ;
+lin zoe_PN = foreignPN "Zoe" ;
 
 
 
