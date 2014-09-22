@@ -14,9 +14,8 @@
 
 module PGF2 (-- * PGF
              PGF,readPGF,abstractName,startCat,
-             loadConcr,unloadConcr,
              -- * Concrete syntax
-             Concr,languages,parse,linearize,addLiteral,
+             Concr,languages,parse,linearize,
              -- * Trees
              Expr,readExpr,showExpr,unApp,
              -- * Morphology
