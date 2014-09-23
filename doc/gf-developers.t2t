@@ -437,6 +437,7 @@ bindings are found in the ``src/runtime/python`` and ``src/runtime/java``
 directories, respecively. Compile them by following the instructions in
 the ``INSTALL`` files in those directories.
 
+
 == Creating .deb packages for Ubuntu ==
 
 This was tested on Ubuntu 14.04 for the release of GF 3.6, and the
@@ -458,6 +459,14 @@ version you are building. Then run
 
 ```
 make deb
+```
+
+== Creating OS X Installer packages ==
+
+Run
+
+```
+make pkg
 ```
 
 == Creating .rpm packages for Fedora ==
