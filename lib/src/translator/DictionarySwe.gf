@@ -2,6 +2,9 @@
 
 concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe), Prelude in {
 
+
+oper adjAdv : A -> Adv = \a -> S.mkAdv a ;
+
 flags
   coding = utf8;
 
@@ -61167,6 +61170,7 @@ lin unification_N = mkN "enande" ; -- status=guess
 lin unifilar_A = variants {} ; -- status=guess
 lin unifoliate_A = variants {} ; -- status=guess
 lin uniform_A = mkA "uniform" ; -- SaldoWN
+lin uniformly_Adv = adjAdv uniform_A ;
 lin uniform_N = mkN "uniform" "uniformer" ; -- SaldoWN
 lin uniformed_A = compoundA (regA "uniformerad"); -- status=guess
 lin uniformity_N = mkN "uniformitet" "uniformiteter" ; -- comment=4

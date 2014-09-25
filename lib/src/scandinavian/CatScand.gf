@@ -43,6 +43,7 @@ incomplete concrete CatScand of Cat =
         fin : Str ;          -- V1 har  ---s1
         inf : Str            -- V2 sagt ---s4
         } ;
+      sp : PartForm => Str ;
       a1 : Polarity => Agr => Str ; -- A1 inte ---s3
       n2 : Agr => Str ;      -- N2 dig  ---s5  
       a2 : Str ;             -- A2 idag ---s6
