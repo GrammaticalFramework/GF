@@ -79,7 +79,7 @@ lin
       } ;
    PastPartAgentAP vp np = { 
       s = \\a => vp.ad ! a ++ vp.ptp ++ vp.c2 ++ vp.s2 ! a ++ "by" ++ np.s ! NPAcc ++ vp.ext ;
-      isPre = vp.isSimple                 -- depends on whether there are complements
+      isPre = False
       } ;
 
   PositAdVAdj a = {s = a.s ! AAdv} ;

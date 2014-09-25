@@ -69,9 +69,27 @@ lin
       isPron = np1.isPron ; isNeg = np1.isNeg
       } ;
 
-  GerundN v = mkN (lin V v) ;
+  GerundNP vp = {         
+    s = \\c => vp.s2 ! True ! Pos ! agrP3 Sg ++ (mkNP the_Det (lin N (sverb2snoun vp.s))).s ! c ++ vp.adv ! Pos ++ vp.ext ; 
+    a = agrP3 Sg ;
+    isPron = False ; isNeg = False
+    } ;
+-- sen sanominen suoraan että... 
+---- se --> sen
+---- lost agreement, lost genitive, lost possessive
+---- minun saamiseni mukaan
   
-  GerundAP v = {s = \\_ => (snoun2nounSep (sverb2nounPresPartAct v)).s} ;
+  GerundAP vp = {s = \\f => vp.s2 ! True ! Pos ! agrP3 Sg ++ (snoun2nounSep (sverb2nounPresPartAct vp.s)).s ! f ++ vp.adv ! Pos ++ vp.ext} ;
+
+  GerundAdv vp = {s = (sverb2verbSep vp.s).s ! Inf Inf2Instr ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext} ; -- nukkuen
+
+-- tänään löydetty
+  PastPartAP vp = {s = \\_,f => vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ (sverb2verbSep vp.s).s ! PastPartPass (AN f) ++ vp.ext} ;
+
+-- miehen tänään löytämä
+  PastPartAgentAP vp np = 
+    {s = \\_,f => np.s ! NPCase Gen ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ (sverb2verbSep vp.s).s ! AgentPart (AN f) ++ vp.ext} ;
+
 
   OrdCompar a = snoun2nounSep {s = \\nc => a.s ! Compar ! SAN nc ; h = a.h} ; 
 

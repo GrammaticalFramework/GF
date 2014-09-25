@@ -13,7 +13,8 @@ concrete TranslateFin of Translate =
     ],
   ConjunctionFin,
   VerbFin -  [
-    UseCopula,  
+    UseCopula,  -- not used  
+    CompAP,  -- variant Nom/Part
     PassV2  -- generalized in Extensions
     ],
   AdverbFin,
@@ -26,8 +27,11 @@ concrete TranslateFin of Translate =
   DocumentationFin,
 
   ChunkFin,
-  ExtensionsFin [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
-                 DirectComplVS, DirectComplVQ, FocusObjS],
+  ExtensionsFin [
+     CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
+     DirectComplVS, DirectComplVQ, FocusObjS
+    ,PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+  ],
 
   DictionaryFin ** 
 
@@ -35,5 +39,15 @@ open MorphoFin, ResFin, ParadigmsFin, SyntaxFin, StemFin, (E = ExtraFin), (G = G
 
 flags literal=Symb ; coding = utf8 ;
 
+
+lin
+  CompAP ap = G.CompAP ap 
+    | 
+   {s = \\agr => 
+          let
+            n = complNumAgr agr ;
+            c = Part ;
+          in ap.s ! False ! (NCase n c)
+      } ;
 }
 
