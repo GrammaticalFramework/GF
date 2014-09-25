@@ -1333,23 +1333,117 @@ Concr_parseval(ConcrObject* self, PyObject *args) {
     return Py_BuildValue("ddd", precision, recall, exact);
 }
 
+typedef struct {
+	PgfLiteralCallback callback;
+	PyObject* pycallback;
+	GuFinalizer fin;
+} PyPgfLiteralCallback;
+
+static PgfExprProb*
+pypgf_literal_callback_match(PgfLiteralCallback* self,
+                             size_t lin_idx,
+                             GuString sentence, size_t* poffset,
+                             GuPool *out_pool)
+{
+	PyPgfLiteralCallback* callback = 
+		gu_container(self, PyPgfLiteralCallback, callback);
+
+	PyObject* result =
+		PyObject_CallFunction(callback->pycallback, "isi", 
+		                      lin_idx, sentence, *poffset);
+	if (result == NULL || result == Py_None)
+		return NULL;
+
+	PgfExprProb* ep = gu_new(PgfExprProb, out_pool);
+
+	ExprObject* pyexpr;
+	if (!PyArg_ParseTuple(result, "Ofi", &pyexpr, &ep->prob, poffset))
+        return NULL;
+	ep->expr = pyexpr->expr;
+	
+	{
+		// This is an uggly hack. We first show the expression ep->expr
+		// and then we read it back but in out_pool. The whole purpose
+		// of this is to copy the expression from the temporary pool
+		// that was created in the Java binding to the parser pool.
+		// There should be a real copying function or even better
+		// there must be a way to avoid copying at all.
+
+		GuPool* tmp_pool = gu_local_pool();
+
+		GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+
+		pgf_print_expr(ep->expr, NULL, 0, out, err);
+
+		GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+		GuIn* in = gu_data_in((uint8_t*) str, strlen(str), tmp_pool);
+
+		ep->expr = pgf_read_expr(in, out_pool, err);
+		if (!gu_ok(err) || gu_variant_is_null(ep->expr)) {
+			PyErr_SetString(PGFError, "The expression cannot be parsed");
+			gu_pool_free(tmp_pool);
+			return NULL;
+		}
+
+		gu_pool_free(tmp_pool);
+	}
+
+	Py_DECREF(pyexpr);
+
+	return ep;
+}
+
+static GuEnum*
+pypgf_literal_callback_predict(PgfLiteralCallback* self,
+	                           size_t lin_idx,
+	                           GuString prefix,
+	                           GuPool *out_pool)
+{
+	return NULL;
+}
+
+static void 
+pypgf_literal_callback_fin(GuFinalizer* self)
+{
+	PyPgfLiteralCallback* callback = 
+		gu_container(self, PyPgfLiteralCallback, fin);
+
+	Py_XDECREF(callback->pycallback);
+}
+
 static PyObject*
 Concr_addLiteral(ConcrObject* self, PyObject *args) {
-	ExprObject* pyexpr = NULL;
-	const char* s_cat = NULL;
-	if (!PyArg_ParseTuple(args, "sO!", &s_cat, &pgf_ExprType, &pyexpr))
+	PyObject* pycallback = NULL;
+	const char* cat = NULL;
+	if (!PyArg_ParseTuple(args, "sO", &cat, &pycallback))
         return NULL;
-/*
-	PgfLiteralCallback* callback = NULL;
 
-    GuPool* tmp_pool = gu_local_pool();
+	GuPool* pool = pgf_concr_get_pool(self->concr);
 
-    PgfCId cat = gu_str_string(s_cat, tmp_pool);
-    
-	pgf_parser_add_literal(self->concr, cat, callback);
+	PyPgfLiteralCallback* callback = gu_new(PyPgfLiteralCallback, pool);
+	callback->callback.match   = pypgf_literal_callback_match;
+	callback->callback.predict = pypgf_literal_callback_predict;
+	callback->pycallback = pycallback;
+	callback->fin.fn = pypgf_literal_callback_fin;
+
+	gu_pool_finally(pool, &callback->fin);
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	pgf_concr_add_literal(self->concr, cat, &callback->callback, err);
+
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+		} else {
+			PyErr_SetString(PGFError, "The literal cannot be added");
+		}
+	}
 
 	gu_pool_free(tmp_pool);
-*/
 	Py_RETURN_NONE;
 }
 
