@@ -7,7 +7,7 @@ concrete IdiomFin of Idiom = CatFin **
     ExistNP np = 
       let 
         cas : Polarity -> NPForm = \p -> case p of {
-          Pos => NPCase Nom ; -- on olemassa luku
+          Pos => NPSep ; -- on olemassa luku
           Neg => NPCase Part  -- ei ole olemassa lukua
           }
       in
@@ -27,7 +27,7 @@ concrete IdiomFin of Idiom = CatFin **
 
     CleftNP np rs = mkClause (\_ -> "se") (agrP3 Sg) 
       (insertExtrapos (rs.s ! np.a)
-        (insertObj (\\_,_,_ => np.s ! NPCase Nom) (predV olla))) ;
+        (insertObj (\\_,_,_ => np.s ! NPSep) (predV olla))) ;
 
 -- This gives the almost forbidden "se on Porissa kun Matti asuu".
 
@@ -76,7 +76,7 @@ concrete IdiomFin of Idiom = CatFin **
 
   ExistNPAdv np adv =
       mkClause (\_ -> adv.s) np.a (insertObj 
-        (\\_,b,_ => np.s ! NPCase Nom) (predV vpVerbOlla)) ;
+        (\\_,b,_ => np.s ! NPSep) (predV vpVerbOlla)) ;
 
   ExistIPAdv ip adv =
       let 

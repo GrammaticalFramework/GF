@@ -12,11 +12,11 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in 
       let acomp = (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s in {
       s = \\isMod,af => case isMod of {
         True => np.s ! NPCase Part ++ acomp ! af ;        -- minua isompi
-        _    => acomp ! af ++ "kuin" ++ np.s ! NPCase Nom -- isompi kuin minä
+        _    => acomp ! af ++ "kuin" ++ np.s ! NPSep -- isompi kuin minä
         } 
       } ;
     CAdvAP ad ap np = {
-      s = \\m,af => ad.s ++ ap.s ! m ! af ++ ad.p ++ np.s ! NPCase Nom 
+      s = \\m,af => ad.s ++ ap.s ! m ! af ++ ad.p ++ np.s ! NPSep 
       } ;
     UseComparA a = {
       s = \\_ => (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s

@@ -82,7 +82,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     AdvExistNP adv np = 
       mkClause (\_ -> adv.s) np.a (insertObj 
-        (\\_,b,_ => np.s ! NPCase Nom) (predV vpVerbOlla)) ;
+        (\\_,b,_ => np.s ! NPSep) (predV vpVerbOlla)) ;
 
     RelExistNP prep rp np = {
       s = \\t,ant,bo,ag => 
@@ -92,7 +92,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
           (\_ -> appCompl True Pos prep (rp2np n rp))
           np.a 
           (insertObj 
-            (\\_,b,_ => np.s ! NPCase Nom) 
+            (\\_,b,_ => np.s ! NPSep) 
             (predV vpVerbOlla)) ;
       in 
       cl.s ! t ! ant ! bo ! SDecl ;
@@ -105,7 +105,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     ICompExistNP adv np = 
       let cl = mkClause (\_ -> adv.s ! np.a) np.a (insertObj 
-        (\\_,b,_ => np.s ! NPCase Nom) (predV vpVerbOlla)) ;
+        (\\_,b,_ => np.s ! NPSep) (predV vpVerbOlla)) ;
       in  {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
       } ;
@@ -258,7 +258,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
   PassAgentVPSlash vp np = {
       s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = npform2subjcase vp.c2.c} ; 
-      s2 = \\b,p,a => np.s ! NPCase Nom ++ vp.s2 ! b ! p ! a ;
+      s2 = \\b,p,a => np.s ! NPSep ++ vp.s2 ! b ! p ! a ;
       adv = vp.adv ;
       ext = vp.ext ;
       vptyp = vp.vptyp ;

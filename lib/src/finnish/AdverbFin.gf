@@ -4,7 +4,7 @@ concrete AdverbFin of Adverb = CatFin ** open ResFin, Prelude, StemFin in {
   lin
     PositAdvAdj a = {s = a.s ! Posit ! sAAdv} ;
     ComparAdvAdj cadv a np = {
-      s = cadv.s ++ a.s ! Posit ! sAAdv ++ cadv.p ++ np.s ! NPCase Nom
+      s = cadv.s ++ a.s ! Posit ! sAAdv ++ cadv.p ++ np.s ! NPSep
       } ;
     ComparAdvAdjS cadv a s = {
       s = cadv.s ++ a.s ! Posit ! sAAdv ++ cadv.p ++ s.s
