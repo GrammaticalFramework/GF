@@ -190,14 +190,6 @@ struct jit_local_state {
 				  ? (ADDQir(sizeof(long) * _jitl.argssize, JIT_SP), _jitl.argssize = 0) \
 				  : 0))
 
-#ifdef __APPLE__
-#define jit_tail_finishr(reg)	jit_base_tail_finishr(-12, reg)
-#else
-#define jit_tail_finishr(reg)	jit_base_tail_finishr(_jitl.alloca_offset, reg)
-#endif
-
-#define jit_base_tail_finishr(ofs, reg)
-
 #define jit_retval_l(rd)	((void)jit_movr_l ((rd), _EAX))
 #define jit_arg_i()		(_jitl.nextarg_geti < JIT_ARG_MAX \
 				 ? _jitl.nextarg_geti++ \
@@ -273,6 +265,7 @@ static int jit_arg_reg_order[] = { _EDI, _ESI, _EDX, _ECX, _R8D, _R9D };
 #define jit_patch_at(jump_pc,v) (_jitl.long_jumps ? jit_patch_long_at((jump_pc)-3, v) : jit_patch_short_at(jump_pc, v))
 #define jit_patch_calli(pa,pv) (*_PSL((pa) - sizeof(long)) = _jit_SL((pv)))
 #define jit_ret()			(LEAVE_(), POPQr(_R14), POPQr(_R13), POPQr(_R12), POPQr(_EBX), RET_())
+#define jit_bare_ret(IM) ((IM == 0) ? RET_() : RETi(IM))
 
 /* Memory */
 

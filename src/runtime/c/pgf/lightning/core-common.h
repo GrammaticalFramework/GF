@@ -52,6 +52,12 @@ typedef struct {
 #define JIT_V0				JIT_V(0)
 #define JIT_V1				JIT_V(1)
 #define JIT_V2				JIT_V(2)
+#define JIT_FPR0			JIT_FPR(0)
+#define JIT_FPR1			JIT_FPR(1)
+#define JIT_FPR2			JIT_FPR(2)
+#define JIT_FPR3			JIT_FPR(3)
+#define JIT_FPR4			JIT_FPR(4)
+#define JIT_FPR5			JIT_FPR(5)
 
 #define _jitl				_jit.jitl
 
@@ -149,7 +155,7 @@ typedef union jit_code {
 #define jit_xorr_ul(d, s1, s2)		jit_xorr_l((d), (s1), (s2))
 
 #define jit_addr_p(d, s1, s2)		jit_addr_ul((d), (s1), 	      (s2))
-#define jit_addi_p(d, rs, is)		jit_addi_ul((d), (rs), (long) (is))
+#define jit_addi_p(d, rs, is)		(jit_addi_ul((d), (rs), (long) (is)), _jit.x.pc)
 #define jit_movr_p(d, rs)		jit_movr_ul((d),              (rs))
 #define jit_subr_p(d, s1, s2)		jit_subr_ul((d), (s1),        (s2))
 #define jit_subi_p(d, rs, is)		jit_subi_ul((d), (rs), (long) (is))

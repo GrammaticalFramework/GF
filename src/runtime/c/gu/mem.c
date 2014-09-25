@@ -311,9 +311,8 @@ gu_pool_free(GuPool* pool)
 {
 	GuFinalizerNode* node = pool->finalizers;
 	while (node) {
-		GuFinalizerNode* next = node->next;
 		node->fin->fn(node->fin);
-		node = next;
+		node = node->next;
 	}
 	GuMemChunk* chunk = pool->chunks;
 	while (chunk) {

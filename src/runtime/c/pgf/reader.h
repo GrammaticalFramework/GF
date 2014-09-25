@@ -53,6 +53,9 @@ typedef struct PgfJitState PgfJitState;
 PgfJitState*
 pgf_new_jit(PgfReader* rdr);
 
+PgfEvalGates*
+pgf_jit_gates(PgfReader* rdr);
+
 void
 pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
                   PgfAbsCat* abscat);
