@@ -63,7 +63,13 @@ param
   VPForm = 
      VPFinite STense Anteriority
    | VPImperat
-   | VPInfinit Anteriority ;
+   | VPInfinit Anteriority
+   ;
+
+  PartForm =
+     PartPret AFormPos Case
+   | PartPres Number Species Case
+   ;
 
   VType = VAct | VPass | VRefl ;
 
@@ -274,6 +280,7 @@ oper
         fin : Str ;          -- V1 har  ---s1
         inf : Str            -- V2 sagt ---s4
         } ;
+      sp : PartForm => Str ;  -- present or past participle
       a1 : Polarity => Agr => Str ; -- A1 inte ---s3 själv/själva/självt
       n2 : Agr => Str ;      -- N2 dig  ---s5  
       a2 : Str ;             -- A2 idag ---s6
@@ -283,65 +290,35 @@ oper
       } ;
 
 
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
+  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
     n2 = \\a => obj ! a ++ vp.n2 ! a ;
-    a2 = vp.a2 ;
-    ext = vp.ext ;
     en2 = True ;
-    ea2 = vp.ea2 ;
-    eext = vp.eext
     } ;
 
-  insertObjPost : (Agr => Str) -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
+  insertObjPost : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
     n2 = \\a => vp.n2 ! a ++ obj ! a ;
-    a2 = vp.a2 ;
-    ext = vp.ext ;
     en2 = True ;
-    ea2 = vp.ea2 ;
-    eext = vp.eext
     } ;
 
-  insertAdv : Str -> VP -> VP = \adv,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
-    n2 = vp.n2 ;
+  insertAdv : Str -> VP -> VP = \adv,vp -> vp ** {
     a2 = vp.a2 ++ adv ;
-    ext = vp.ext ;
-    en2 = vp.en2 ;
     ea2 = True ;
-    eext = vp.eext
     } ;
 
-  insertExt : Str -> VP -> VP = \ext,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
-    n2 = vp.n2 ;
-    a2 = vp.a2 ;
+  insertExt : Str -> VP -> VP = \ext,vp -> vp ** {
     ext = vp.ext ++ ext ;
-    en2 = vp.en2 ;
-    ea2 = vp.ea2 ;
     eext = True ;
     } ;
 
   insertAdV : Str -> VP -> VP = \adv -> insertAdVAgr (\\_ => adv) ;
 
-  insertAdVAgr : (Agr => Str) -> VP -> VP = \adv,vp -> {
-    s = vp.s ;
+  insertAdVAgr : (Agr => Str) -> VP -> VP = \adv,vp ->vp ** {
     a1 = \\b,a => vp.a1 ! b ! a ++ adv ! a ;
-    n2 = vp.n2 ;
-    a2 = vp.a2 ;
-    ext = vp.ext ;
-    en2 = vp.en2 ;
-    ea2 = vp.ea2 ;
-    eext = vp.eext
     } ;
 
   passiveVP : VP -> VP = \vp -> {
     s = \\_ => vp.s ! Pass ; -- forms the s-passive
+    sp = vp.sp ;
     a1 = vp.a1 ;
     n2 = vp.n2 ;
     a2 = vp.a2 ;

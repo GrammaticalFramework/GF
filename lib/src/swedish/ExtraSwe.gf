@@ -44,10 +44,10 @@ lin
     {s = \\ag,rc => t.s ++ p.s ++ vilket ++ cl.s ! t.t ! t.a ! p.p ! Sub } ;
 
  
-  AdvFocVP adv vp = {s = \\v,vpf => {fin = adv.s ++ (vp.s ! v ! vpf).fin ;
-                                     inf = (vp.s ! v ! vpf).inf};
-                   a1 = vp.a1 ; n2 = vp.n2 ; a2 = vp.a2 ; ext = vp.ext ;
-                   en2 = vp.en2 ; ea2 = vp.ea2; eext = vp.eext } ;
+  AdvFocVP adv vp = vp ** {
+    s = \\v,vpf => {fin = adv.s ++ (vp.s ! v ! vpf).fin ;
+                    inf = (vp.s ! v ! vpf).inf}
+    } ;
   PredetAdvF adv = {s = \\_,_ => adv.s ; p = [] ; a = PNoAg} ;
   
   QuantPronAQ x =  

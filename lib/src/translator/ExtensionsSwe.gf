@@ -53,7 +53,7 @@ lin
     co = v.s ! VI (VPtPres Sg Indef Nom) ;
   } ;
   
-  GerundAP v = {
+  PresPartAP vp = {
     s = \\_ => v.s ! VI (VPtPres Sg Indef Nom) ;
     isPre = True
   } ;

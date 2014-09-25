@@ -96,26 +96,26 @@ fun
 {-
 -- changes from ParseEngAbs
 
-ComplBareVS        -> ComplVS     -- as variant
-SlashBareV2S       -> SlashV2S    -- as variant
-ComplSlashPartLast -> ComplSlash  -- as variant
+ComplBareVS        --> ComplVS     -- as variant
+SlashBareV2S       --> SlashV2S    -- as variant
+ComplSlashPartLast --> ComplSlash  -- as variant
 
-CompoundCN Sg/Pl   -> CompoundCN  -- as variants
-DashCN             -> CompoundCN  -- as variant
+CompoundCN Sg/Pl   --> CompoundCN  -- as variants
+DashCN             --> CompoundCN  -- as variant
 
-GerundN            -> GerundCN    -- special case: now CN
-                   -> GerundNP    -- an NP version without determiner
-                   -> GerundAdv   -- an Adv version without determiner or preposition
+GerundN            --> GerundCN    -- special case: now CN
+                   --> GerundNP    -- an NP version without determiner
+                   --> GerundAdv   -- an Adv version without determiner or preposition
 
-GerundAP           -> PresPartAP  -- special case: now with a VP argument
+GerundAP           --> PresPartAP  -- special case: now with a VP argument
 
-PastPartAP         -> PastPartAP  -- now with VPSlash argument
-                   -> PastPartAgentAP -- VPSlash + by NP
+PastPartAP         --> PastPartAP  -- now with VPSlash argument
+                   --> PastPartAgentAP -- VPSlash + by NP
 
-OrdCompar          -> UseComparA  -- the only use in PTB reduces to this standard RGL function
+OrdCompar          --> UseComparA  -- the only use in PTB reduces to this standard RGL function
 
-PredVPosv          -> PredFrontVS, PredFrontVQ  -- restricted to the special case actually occurring in PTB
-PredVPovs          ->                           -- inversion treated as variant: I am here, said she
+PredVPosv          --> PredFrontVS, PredFrontVQ  -- restricted to the special case actually occurring in PTB
+PredVPovs          -->                           -- inversion treated as variant: I am here, said she
 
 
 -}
