@@ -47,16 +47,30 @@ lin
       isPre = True
       } ;
 
-  GerundN v = {
-    s = \\n,d,c => v.s ! VI (VPtPres n d c) ;
-    g = Neutr ;
-    co = v.s ! VI (VPtPres Sg Indef Nom) ;
-  } ;
-  
+  GerundNP vp = {  -- infinitive: att dricka öl, att vara glad
+    s = \\_ => "att" ++ infVP vp {g = Utr ; n = Sg ; p = P3} ; 
+    a = {g = Neutr ; n = Sg ; p = P3}
+    } ;
+
+  GerundAdv vp = {
+    s = partVPPlusPost vp (PartPres Sg Indef (Nom|Gen)) {g = Utr ; n = Sg ; p = P3} Pos -- sovande(s) i sängen
+    } ;
+
   PresPartAP vp = {
-    s = \\_ => v.s ! VI (VPtPres Sg Indef Nom) ;
+    s = \\af => partVPPlus vp (PartPres Sg Indef Nom) (aformpos2agr af) Pos ;
     isPre = True
-  } ;
+    } ;
+
+  PastPartAP vp = {
+    s = \\af => partVPPlus vp (PartPret af Nom) (aformpos2agr af) Pos ;
+    isPre = True
+    } ;
+
+  PastPartAgentAP vp np = {
+    s = \\af => "av" ++ np.s ! accusative ++ partVPPlus vp (PartPret af Nom) (aformpos2agr af) Pos ; ---- agent and other advs before; 
+    isPre = True               ---- the right choice in attributive but not predicative position
+    } ;
+
 
 ----  PastPartAP vp
 
