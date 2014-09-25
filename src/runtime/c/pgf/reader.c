@@ -441,7 +441,7 @@ pgf_read_absfun(PgfReader* rdr, PgfAbstr* abstr)
 	switch (tag) {
 	case 0:
 		absfun->defns = NULL;
-		absfun->function = NULL;
+		absfun->closure_id = 0;
 		break;
 	case 1: {
         GuLength length = pgf_read_len(rdr);
@@ -556,6 +556,8 @@ pgf_read_abstract(PgfReader* rdr, PgfAbstr* abstract)
 
 	abstract->aflags = pgf_read_flags(rdr);
 	gu_return_on_exn(rdr->err, );
+	
+	abstract->eval_gates = pgf_jit_gates(rdr);
 	
 	abstract->funs = pgf_read_absfuns(rdr, abstract);
 	gu_return_on_exn(rdr->err, );

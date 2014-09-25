@@ -65,9 +65,6 @@ gu_buf_avail(GuBuf* buf);
 void*
 gu_buf_data(GuBuf* buf);
 
-void*
-gu_buf_last(GuBuf* buf);
-
 GuSeq*
 gu_buf_data_seq(GuBuf* buf);
 

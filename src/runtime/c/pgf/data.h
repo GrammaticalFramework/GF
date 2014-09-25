@@ -76,7 +76,7 @@ typedef struct {
 	PgfEquations* defns; // maybe null
 	PgfExprProb ep;
 	void* predicate;
-	void* function;
+	size_t closure_id;
 } PgfAbsFun;
 
 extern GU_DECLARE_TYPE(PgfAbsFun, abstract);
@@ -95,31 +95,31 @@ typedef struct {
 
 extern GU_DECLARE_TYPE(PgfAbsCat, abstract);
 
+typedef struct PgfEvalGates PgfEvalGates;
+
 typedef struct {
 	PgfCId name;
 	PgfFlags* aflags;
 	PgfCIdMap* funs; // |-> PgfAbsFun*
 	PgfCIdMap* cats; // |-> PgfAbsCat*
 	PgfAbsFun* abs_lin_fun;
+	PgfEvalGates* eval_gates;
 } PgfAbstr;
 
 typedef enum {
-  PGF_INSTR_ENTER,
-  PGF_INSTR_CASE,
-  PGF_INSTR_CASE_LIT,
-  PGF_INSTR_ALLOC,
-  PGF_INSTR_PUT_CONSTR,
-  PGF_INSTR_PUT_FUN,
-  PGF_INSTR_PUT_CLOSURE,
-  PGF_INSTR_PUT_LIT,
-  PGF_INSTR_SET,
-  PGF_INSTR_SET_PAD,
-  PGF_INSTR_PUSH,
-  PGF_INSTR_EVAL,
-  PGF_INSTR_CALL,
-  PGF_INSTR_FAIL,
-  PGF_INSTR_UPDATE,
-  PGF_INSTR_RET
+  PGF_INSTR_CHECK_ARGS  =  0,
+  PGF_INSTR_CASE        =  1,
+  PGF_INSTR_CASE_LIT    =  2,
+  PGF_INSTR_ALLOC       =  3,
+  PGF_INSTR_PUT_CONSTR  =  4,
+  PGF_INSTR_PUT_CLOSURE =  5,
+  PGF_INSTR_PUT_LIT     =  6,
+  PGF_INSTR_SET         =  7,
+  PGF_INSTR_SET_PAD     =  8,
+  PGF_INSTR_PUSH        =  9,
+  PGF_INSTR_EVAL        = 10,
+  PGF_INSTR_RET         = 13,
+  PGF_INSTR_FAIL        = 15
 } PgfInstruction;
 
 struct PgfPGF {
