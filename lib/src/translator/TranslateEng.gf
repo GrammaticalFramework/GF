@@ -36,8 +36,7 @@ concrete TranslateEng of Translate =
   ChunkEng,
   ExtensionsEng [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
   DirectComplVS, DirectComplVQ, FocusObjS
-
-----    , PastPartAP, PastPartAgentAP, PresPartAP
+    , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
     ],
   DictionaryEng ** 
 open MorphoEng, ResEng, ParadigmsEng, (G = GrammarEng), (E = ExtraEng), Prelude in {

@@ -26,7 +26,7 @@ abstract Translate =
   Extensions [
     CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
     DirectComplVS, DirectComplVQ, FocusObjS
-----    , PastPartAP, PastPartAgentAP, PresPartAP ---- not yet available for all languages
+    , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv ---- not yet available for all languages
     ],
   Dictionary,
   Documentation

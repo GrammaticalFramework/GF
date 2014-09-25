@@ -138,6 +138,13 @@ oper
 
   gennumAgr : Agr -> GenNum = \a -> gennum a.g a.n ;
 
+  aformpos2agr : AFormPos -> Agr = \af -> case af of {
+    Strong (GSg g) => {p = P3 ; n = Sg ; g = g} ;
+    Strong GPl => {p = P3 ; n = Pl ; g = Utr} ; -- loss of gender does not matter in Pl
+    Weak n => {p = P3 ; n = n ; g = Utr} ---- loss of gender: *det stor blivande huset
+    } ;
+
+
 -- Used in $DiffScand.predV$.
 
   vFin : STense -> Voice -> VForm = \t,v -> case t of {
@@ -332,6 +339,11 @@ oper
  
   infVPPlus : VP -> Agr -> Anteriority -> Polarity -> Str = \vp,a,ant,pol -> 
     vp.a1 ! pol ! a ++ (vp.s ! Act ! VPInfinit ant).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
+
+  partVPPlus : VP -> PartForm -> Agr -> Polarity -> Str = \vp,pf,a,pol -> 
+    vp.a1 ! pol ! a ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ++ vp.sp ! pf ; -- verb final: i sängen liggande
+  partVPPlusPost : VP -> PartForm -> Agr -> Polarity -> Str = \vp,pf,a,pol -> 
+    vp.a1 ! pol ! a ++ vp.sp ! pf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; -- verb first: liggande i sängen
 
 
 -- For $Sentence$.
