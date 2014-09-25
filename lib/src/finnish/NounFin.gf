@@ -234,7 +234,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
     SentCN cn sc = {s = \\nf=> cn.s ! nf ++ sc.s;
                     h = cn.h } ;
 
-    ApposCN cn np = {s = \\nf=> cn.s ! nf ++ np.s ! NPCase Nom ; 
+    ApposCN cn np = {s = \\nf=> cn.s ! nf ++ np.s ! NPSep ; 
                     h = cn.h } ; --- luvun x
 
     PossNP cn np = {s = \\nf => np.s ! NPCase Gen ++ cn.s ! nf ;  
@@ -242,7 +242,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
                    } ;
 
     PartNP cn np = {s = \\nf => cn.s ! nf ++ np.s ! NPCase Part ; 
-                    h = cn.h ---- gives "lasin viiniänsa" ; should be "lasinsa viiniä"
+                    h = cn.h ---- gives "lasin viiniänsa" ; should be "lasinsa viiniä" 
                    } ;
 
 
