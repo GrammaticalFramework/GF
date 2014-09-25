@@ -7,7 +7,7 @@
 #include <pgf/reader.h>
 #include "lightning.h"
 
-#define PGF_JIT_DEBUG
+//#define PGF_JIT_DEBUG
 
 
 struct PgfJitState {
@@ -703,8 +703,8 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				break;
 			}
 			case PGF_INSTR_CASE_LIT: {
-				int target;
-				jit_insn *jump;
+				int target = 0;
+				jit_insn *jump = 0;
 
 				switch (mod) {
 				case 0: {
