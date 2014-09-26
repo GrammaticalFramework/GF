@@ -23,8 +23,11 @@ concrete TranslateDut of Translate =
   DocumentationDut,
 
   ChunkDut,
-  ExtensionsDut [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
-
+  ExtensionsDut [
+    CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
+    , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+    , WithoutVP, InOrderToVP, ByVP
+  ],
   DictionaryDut ** 
 open MorphoDut, ResDut, ParadigmsDut, SyntaxDut, (E = ExtraDut), Prelude in {
 
