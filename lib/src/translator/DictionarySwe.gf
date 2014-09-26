@@ -21361,7 +21361,7 @@ lin film_1_N = mkN "film" "filmer" ;
 lin film_2_N = mkN "hinna" ;
 lin film_N = mkN "film" ; ---- has been split
 lin film_V = mkV "hinna" "hann" "hunnit" ; -- SaldoWN
-lin film_V2 = mkV2 "hinna" "hann" "hunnit" | mkV2 (mkV "filmar") ; -- SaldoWN -- status=guess, src=wikt
+lin film_V2 = mkV2 (mkV "filmar") ; -- SaldoWN -- status=guess, src=wikt
 lin film_star_N = variants {} ; -- status=guess
 lin filmable_A = variants {} ; -- status=guess
 lin filmdom_N = variants {} ; -- status=guess
