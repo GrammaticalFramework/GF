@@ -65,7 +65,7 @@ lin
     } ;
 
   ByVP vp = {  -- genom att dricka öl, genom att vara glad
-    s = "för att" ++ infVP vp {g = Utr ; n = Sg ; p = P3}
+    s = "genom att" ++ infVP vp {g = Utr ; n = Sg ; p = P3}
     } ;
 
   PresPartAP vp = {
