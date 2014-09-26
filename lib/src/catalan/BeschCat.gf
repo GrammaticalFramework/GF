@@ -6041,7 +6041,7 @@ VP (Imp Sg P1) => variants {}
     VImper PlP1            => amar.s ! VP (Imp  Pl P1) ;
     VImper PlP2            => amar.s ! VP (Imp  Pl P2) ;
     VPart g n              => amar.s ! VP (Pass n g) ;
-    VGer                   => amar.s ! VI Ger
+    VGer | VPresPart       => amar.s ! VI Ger
     }
   } ;
 

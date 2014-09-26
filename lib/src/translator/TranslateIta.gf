@@ -28,7 +28,7 @@ concrete TranslateIta of Translate =
   ExtensionsIta [
     CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
     , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
-----    , WithoutVP, InOrderToVP, ByVP
+    , WithoutVP, InOrderToVP, ByVP
     ],
 
   DictionaryIta ** 

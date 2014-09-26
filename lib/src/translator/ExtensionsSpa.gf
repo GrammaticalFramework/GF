@@ -58,29 +58,44 @@ lin
       isPre = False
       } ;
 
-{-  
-  GerundN v = {
-    s = \\n,c => v.s ! VPresPart ;
-    g = Neutr
-  } ;
-  
-  GerundAP v = {
-    s = \\agr => v.s ! VPresPart ;
-    isPre = True
-  } ;
--- }
 
-  PastPartAP v = {
+   GerundNP vp =
+     let a = agrP3 Masc Sg ---- agr
+     in 
+     heavyNP {s = \\c => prepCase c ++ infVP vp a ; a = a} ;  -- parlare tedesco non è facile
+
+   GerundAdv vp = 
+     let a = agrP3 Masc Sg
+     in 
+     {s = gerVP vp a} ;  -- dormendo
+
+   WithoutVP vp = SyntaxSpa.mkAdv without_Prep (lin NP (GerundNP (lin VP vp))) ;  -- senza dormire
+
+   InOrderToVP vp = SyntaxSpa.mkAdv for_Prep (lin NP (GerundNP (lin VP vp))) ; -- per dormire
+
+   ByVP vp = GerundAdv (lin VP vp) ; 
+
+   PresPartAP vp = {
     s = table {
-      AF g n => v.s ! VPart g n ;
-      _ => v.s ! VPart Masc Sg  ---- the adverb form
+      AF g n => nominalVP VPresPart True vp (agrP3 g n) ;
+      _ => nominalVP VPresPart True vp (agrP3 Masc Sg)  ---- the adverb form
       } ;
-    isPre = True
-  } ;
+    isPre = False
+    } ;
 
- --{-
-  OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;
--}
+  PastPartAP vp = {
+    s = table {
+      AF g n => nominalVP (VPart g n) True vp (agrP3 g n) ;
+      _ => nominalVP (VPart Masc Sg) True vp (agrP3 Masc Sg)  ---- the adverb form
+      } ;
+    isPre = False
+    } ;
+
+  PastPartAgentAP vp np = 
+    let part = PastPartAP (lin VP vp)
+    in part ** {
+      s = \\a => part.s ! a ++ (SyntaxSpa.mkAdv (mkPrep "por") (lin NP np)).s
+    } ;
 
   PositAdVAdj a = {s = a.s ! Posit ! AA} ;
 

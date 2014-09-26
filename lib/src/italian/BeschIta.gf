@@ -6502,7 +6502,8 @@ oper venire_110 : Str -> Verbo = \venire ->
     VFin VCondit n p       => amare.s ! Cond n p ; --# notpresent
     VImper np              => amare.s ! Imper np ;
     VPart g n              => amare.s ! Part PassP g n ;
-    VGer                   => amare.s ! Ger
+    VGer                   => amare.s ! Ger ;
+    VPresPart              => Predef.tk 2 (amare.s ! Ger) + "te"
     }
   } ;
 

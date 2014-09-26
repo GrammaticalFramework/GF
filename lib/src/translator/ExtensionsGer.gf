@@ -78,22 +78,46 @@ lin
       isPre = True
       } ;
 
-  GerundN v = { -- parsing
-    s = \\n,c => v.s ! VInf False ; --- formalisieren, not formalisierung
-    g = Neutr
-  } ;
+  GerundNP vp = {  -- infinitive: Bier zu trinken
+    s = \\c => (prepC c).s ++ useInfVP False vp  ; 
+    a = Ag Neutr Sg P3 ;
+    isPron = False
+    } ;
+
+  GerundAdv vp = {  -- Bier trinkend
+    s = (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ vp.inf ++ vp.ext ++ vp.infExt ++ vp.s.s ! VPresPart APred
+    } ;
+
+  WithoutVP vp = {  -- ohne Bier zu trinken
+    s = "ohne" ++ useInfVP False vp 
+    } ;
+
+  InOrderToVP vp = {  -- um Bier zu trinken
+    s = "um" ++ useInfVP False vp 
+    } ;
+
+  ByVP vp = {  ---- durch Bier zu drinken
+    s = "durch" ++ useInfVP False vp ----
+    } ;
+
+  PresPartAP vp = {
+    s = \\af => (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ vp.inf ++ vp.ext ++ vp.infExt ++ vp.s.s ! VPresPart af ;
+    isPre = True
+    } ;
+
+  PastPartAP vp = {
+    s = \\af => (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ vp.inf ++ vp.ext ++ vp.infExt ++ vp.s.s ! VPastPart af ;
+    isPre = True
+    } ;
+
+  PastPartAgentAP vp np = 
+    let agent = (SyntaxGer.mkAdv von_Prep (lin NP np)).s
+    in {
+      s = \\af => (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ agent ++ vp.inf ++ vp.ext ++ vp.infExt ++ vp.s.s ! VPastPart af ;
+      isPre = True
+      } ;
 
 {-  
-  GerundAP v = {  -- beckoning
-    s = \\agr => v.s ! VPresPart ;
-    isPre = True
-  } ;
-
-  PastPartAP v = {   -- broken
-    s = \\agr => v.s ! VPPart ;
-    isPre = True
-  } ;
-
   OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;  -- higher
 
   PositAdVAdj a = {s = a.s ! AAdv} ;  -- really

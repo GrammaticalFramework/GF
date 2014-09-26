@@ -87,6 +87,7 @@ param
    | VImper NumPersI 
    | VPart  Gender Number 
    | VGer
+   | VPresPart  --- = VGer except in Italian
    ;
 
   TMood = 

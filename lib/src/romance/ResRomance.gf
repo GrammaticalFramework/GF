@@ -276,18 +276,26 @@ oper
 --- have a "-" with possibly a special verb form with "t":
 --- "comment fera-t-il" vs. "comment fera Pierre"
 
-  infVP : VP -> Agr -> Str = \vp,agr ->
+  infVP : VP -> Agr -> Str = \vp ->
       let
         iform = orB vp.clit3.hasClit (isVRefl vp.s.vtyp) ;
-        inf   = vp.s.s ! VInfin iform ;    
+        vf    = VInfin iform ;    
+      in
+      nominalVP vf iform vp ;
+
+  gerVP : VP -> Agr -> Str = nominalVP VGer True ;
+
+  nominalVP : VF -> Bool -> VP -> Agr -> Str = \vf,iform,vp,agr ->
+      let
+        inf   = vp.s.s ! vf ;
         neg   = vp.neg ! RPos ;             --- Neg not in API
-        obj   = neg.p2 ++ vp.s.p ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
+        obj   = vp.s.p ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
         refl  = case isVRefl vp.s.vtyp of {
             True => reflPron agr.n agr.p Acc ; ---- case ?
             _ => [] 
             } ;
       in
-      neg.p1 ++ clitInf iform (refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s) inf ++ obj ;
+      neg.p1 ++ neg.p2 ++ clitInf iform (refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s) inf ++ obj ; -- ne pas dormant
       
 }
 
