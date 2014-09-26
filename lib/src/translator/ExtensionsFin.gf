@@ -83,6 +83,12 @@ lin
 
   GerundAdv vp = {s = (sverb2verbSep vp.s).s ! Inf Inf2Instr ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext} ; -- nukkuen
 
+  WithoutVP vp = {s = (sverb2verbSep vp.s).s ! Inf Inf3Abess ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext} ; -- nukkumatta
+  InOrderToVP vp = {
+    s = (sverb2verbSep vp.s).s ! Inf Inf1Long ++ Predef.BIND ++ "en" ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext
+    } ; -- nukkuakseen --- agr
+  ByVP vp = {s = (sverb2verbSep vp.s).s ! Inf Inf3Adess ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext} ; -- nukkumalla
+
 -- tänään löydetty
   PastPartAP vp = {s = \\_,f => vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ (sverb2verbSep vp.s).s ! PastPartPass (AN f) ++ vp.ext} ;
 
