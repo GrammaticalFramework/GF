@@ -62,7 +62,7 @@ lin
      } ;
 
    GerundNP vp = 
-     let a = AgP3Sg Neutr
+     let a = AgP3Sg Neutr ---- agr
      in 
      {s = \\_ => vp.ad ! a ++ vp.prp ++ vp.s2 ! a ++ vp.ext ; a = a} ;
 
@@ -70,6 +70,12 @@ lin
      let a = AgP3Sg Neutr
      in 
      {s = vp.ad ! a ++ vp.prp ++ vp.s2 ! a ++ vp.ext} ;
+
+   WithoutVP vp = {s = "without" ++ (GerundAdv (lin VP vp)).s} ; 
+
+   InOrderToVP vp = {s = ("in order" | []) ++ infVP VVInf vp Simul CPos (AgP3Sg Neutr)} ;
+
+   ByVP vp = {s = "by" ++ (GerundAdv (lin VP vp)).s} ; 
 
    PresPartAP = E.PartVP ;
 

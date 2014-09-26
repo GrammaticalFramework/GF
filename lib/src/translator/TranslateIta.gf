@@ -25,7 +25,11 @@ concrete TranslateIta of Translate =
   DocumentationIta,
 
   ChunkIta,
-  ExtensionsIta [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
+  ExtensionsIta [
+    CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
+    , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+----    , WithoutVP, InOrderToVP, ByVP
+    ],
 
   DictionaryIta ** 
 open MorphoIta, ResIta, ParadigmsIta, SyntaxIta, (E = ExtraIta), (G = GrammarIta), Prelude in {

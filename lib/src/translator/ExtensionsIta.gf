@@ -58,6 +58,7 @@ lin
       isPre = False
       } ;
 
+--  infVP : VP -> Agr -> Str = \vp,agr ->
 
 {-  
   GerundN v = {

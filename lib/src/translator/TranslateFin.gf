@@ -28,9 +28,10 @@ concrete TranslateFin of Translate =
 
   ChunkFin,
   ExtensionsFin [
-     CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
-     DirectComplVS, DirectComplVQ, FocusObjS
-    ,PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+      CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
+      DirectComplVS, DirectComplVQ, FocusObjS
+    , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+    , WithoutVP, InOrderToVP, ByVP
   ],
 
   DictionaryFin ** 

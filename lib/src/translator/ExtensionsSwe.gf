@@ -56,6 +56,18 @@ lin
     s = partVPPlusPost vp (PartPres Sg Indef (Nom|Gen)) {g = Utr ; n = Sg ; p = P3} Pos -- sovande(s) i sängen
     } ;
 
+  WithoutVP vp = {  -- utan att dricka öl, utan att vara glad
+    s = "utan att" ++ infVP vp {g = Utr ; n = Sg ; p = P3}
+    } ;
+
+  InOrderToVP vp = {  -- för att dricka öl, för att vara glad
+    s = "för att" ++ infVP vp {g = Utr ; n = Sg ; p = P3}
+    } ;
+
+  ByVP vp = {  -- genom att dricka öl, genom att vara glad
+    s = "för att" ++ infVP vp {g = Utr ; n = Sg ; p = P3}
+    } ;
+
   PresPartAP vp = {
     s = \\af => partVPPlus vp (PartPres Sg Indef Nom) (aformpos2agr af) Pos ;
     isPre = True

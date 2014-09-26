@@ -54,6 +54,10 @@ fun
   GerundNP    : VP -> NP ;          -- publishing the document (by nature definite)
   GerundAdv   : VP -> Adv ;         -- publishing the document (prepositionless adverb)
 
+  WithoutVP   : VP -> Adv ;         -- without publishing the document  
+  ByVP        : VP -> Adv ;         -- by publishing the document  
+  InOrderToVP : VP -> Adv ;         -- (in order) to publish the document
+
   PresPartAP  : VP -> AP ;          -- sleeping (man), (man) sleeping in the car
 
   PastPartAP      : VPSlash -> AP ;         -- lost (opportunity) ; (opportunity) lost in space

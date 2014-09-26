@@ -34,9 +34,11 @@ concrete TranslateEng of Translate =
   DocumentationEng,
 
   ChunkEng,
-  ExtensionsEng [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
-  DirectComplVS, DirectComplVQ, FocusObjS
+  ExtensionsEng [
+    CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
+    , DirectComplVS, DirectComplVQ, FocusObjS
     , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+    , WithoutVP, InOrderToVP, ByVP
     ],
   DictionaryEng ** 
 open MorphoEng, ResEng, ParadigmsEng, (G = GrammarEng), (E = ExtraEng), Prelude in {
