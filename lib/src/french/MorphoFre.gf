@@ -244,7 +244,7 @@ oper
     VFin VCondit n p => aller ! Condi n p ;  --# notpresent
     VImper np    => aller ! Imper np ;
     VPart g n    => aller ! Part (PPasse g n) ;
-    VGer         => aller ! Part PPres -- *en* allant
+    VGer | VPresPart => aller ! Part PPres -- *en* allant
     } ;
 
   Verbe : Type = VForm => Str ;

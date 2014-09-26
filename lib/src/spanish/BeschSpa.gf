@@ -6471,7 +6471,7 @@ oper llover_89 : Str -> Verbum = \llover ->
     VImper PlP1            => amar.s ! VPB (Imper  Pl P1) ;
     VImper PlP2            => amar.s ! VPB (Imper  Pl P2) ;
     VPart g n              => amar.s ! VPB (Pass n g) ;
-    VGer                   => amar.s ! VI Ger
+    VGer | VPresPart       => amar.s ! VI Ger
     }
   } ;
 

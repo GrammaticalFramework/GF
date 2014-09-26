@@ -25,7 +25,11 @@ concrete TranslateFre of Translate =
   DocumentationFre,
 
   ChunkFre,
-  ExtensionsFre [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
+  ExtensionsFre [
+    CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
+    , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+    , WithoutVP, InOrderToVP, ByVP
+    ],
 
   DictionaryFre ** 
 open PhonoFre, MorphoFre, ResFre, CommonRomance, ParadigmsFre, SyntaxFre, Prelude, (G = GrammarFre) in {

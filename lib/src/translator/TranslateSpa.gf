@@ -25,7 +25,11 @@ concrete TranslateSpa of Translate =
   DocumentationSpa,
 
   ChunkSpa,
-  ExtensionsSpa [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
+  ExtensionsSpa [
+    CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
+    , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+    , WithoutVP, InOrderToVP, ByVP
+    ],
 
   DictionarySpa ** 
 open MorphoSpa, ResSpa, ParadigmsSpa, SyntaxSpa, (E = ExtraSpa), (G = GrammarSpa), Prelude in {
