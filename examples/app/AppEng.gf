@@ -42,11 +42,4 @@ lin
   ComplV2S v np vp = mkVP v np vp ;
   ComplV3  v np vp = mkVP v np vp ;
 
-
-ComplV2V v np vp = mkVP v np vp ;
-ComplV2A v np vp = mkVP v np vp ;
-ComplV2Q v np vp = mkVP v np vp ;
-ComplV2S v np vp = mkVP v np vp ;
-ComplV3  v np vp = mkVP v np vp ;
-
 }
