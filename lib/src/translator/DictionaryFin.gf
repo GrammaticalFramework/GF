@@ -33321,7 +33321,7 @@ lin noble_A = mkA "jalo" ;
 lin nobleman_N = mkWN (k38 "aatelinen") ; --UNCHK
 lin noblesse_N = mkWN (k2 "ylhäisö") ; --UNCHK
 lin noblesse_oblige_N = mkWN (k48A "velvoite") "aateluuden" ; --UNCHK
-lin nobody_NP = S.nobody_NP ** {s = \\c => "ei" ++ S.nobody_NP.s ! c} ;
+lin nobody_NP = S.nobody_NP ** {s = \\c => "ei" ++ S.nobody_NP.s ! c} | S.nobody_NP ** {s = \\c => S.nobody_NP.s ! c} ;
 lin nocent_A = mkWA "harmeja" "aiheuttava" ; --UNCHK
 lin nociceptive_A = mkWA (compoundA "nosi" (k38 "septinen")) ; --UNCHK
 lin noctambulist_N = mkWN (compoundN "unissa" (k12 "kävelijä")) ; --UNCHK
@@ -33745,7 +33745,7 @@ lin notepaper_N = mkWN (compoundN "kirje" (k6 "paperi")) ; --UNCHK
 lin noteworthy_A = mkWA (k10 "huomattava") ; --UNCHK
 lin nothing_Adv = mkWAdv (k99 "ensinkään") "ei" ; --UNCHK
 lin nothing_N = mkWN (k101 "mikään") "ei" ; --UNCHK
-lin nothing_NP = S.nothing_NP ** {s = \\c => "ei" ++ S.nothing_NP.s ! c} ;
+lin nothing_NP = S.nothing_NP ** {s = \\c => "ei" ++ S.nothing_NP.s ! c} | S.nothing_NP ** {s = \\c => S.nothing_NP.s ! c} ;
 lin nothingness_N = mkWN (k48 "puhe") "turha" ; --UNCHK
 lin nothosaur_N = mkWN "nothosaurus" ; --UNCHK
 lin notice_N = mkWN (k1A "havainto") ; --UNCHK
@@ -33789,7 +33789,7 @@ lin novobiocin_N = mkWN "novobiosiini" ; --UNCHK
 lin now_AdV = lin AdV (ss "nyt") ;
 lin now_Adv = L.now_Adv ;
 lin nowadays_Adv = mkWAdv (k99 "nykyään") ; --UNCHK
-lin nowhere_Adv = mkWAdv (k99 "minnekään") "ei" ;
+lin nowhere_Adv = mkAdv "ei missään" | mkAdv "ei minnekään" | mkAdv "missään" | mkAdv "minnekään" ; ---- split: be nowhere ; go nowhere
 lin nowhere_N = mkWN (k101 "missään") "ei" ; --UNCHK
 lin nowise_Adv = mkWAdv (k99 "lailla") "ei" "millään" ; --UNCHK
 lin noxious_A = mkWA (k38 "vahingollinen") ; --UNCHK
@@ -51573,7 +51573,7 @@ lin tiyin_N = mkWN "tenge" ; --UNCHK
 lin tizzy_N = mkWN (k39 "kiihtymys") ; --UNCHK
 lin tnt_N = mkWN (k6 "trotyyli") ; --UNCHK
 lin to_Adv = mkAdv "luo" ; ---- what is this?
-lin to_Prep = mkPrep illative | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" | mkPrep translative | mkPrep allative ; 
+lin to_Prep = mkPrep illative | mkPrep allative | mkPrep translative ; ---- | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; ---- adding these makes the first variants, which is not good
 lin toad_N = mkWN (k10 "konna") ; --UNCHK
 lin toadfish_N = mkWN (k18 "tau") "Opsanus" ; --UNCHK
 lin toadflax_N = mkWN (compoundN "kannus" (k1 "ruoho")) ; --UNCHK
