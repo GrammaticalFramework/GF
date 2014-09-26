@@ -36,4 +36,5 @@ AppSwe.pgf:: ; $(GFMKT) -name=AppSwe AppSwe.gf
 
 # language pairs to test
 AppEngSwe: ; $(GFMKT) -name=AppEngSwe AppEng.pgf AppSwe.pgf
+AppEngFin: ; $(GFMKT) -name=AppEngFin AppEng.pgf AppFin.pgf
 
