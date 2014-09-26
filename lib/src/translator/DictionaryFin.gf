@@ -32330,7 +32330,7 @@ lin multiversity_N = mkWN (compoundN "yli" (k2 "opisto")) "laaja" ; --UNCHK
 lin multivitamin_N = mkWN "monivitamiinipilleri" ; --UNCHK
 lin multum_in_parvo_N = mkN "tiivistelmä" ; ---ARB separateN "multum in" (mkN "parvo") ; ----sanaliitto ; meaning: much in little; summary
 lin mum_A = mkWA (k38 "hiljainen") ; --UNCHK
-lin mum_N = mkWN (k99 "vaiti") ; --UNCHK
+lin mum_N = mkN "äiti" ;
 lin mumble_N = mkWN (k12 "mumina") ; --UNCHK
 lin mumble_V = mkWV (k54A "mongertaa") ; --UNCHK
 lin mumble_V2 = mkWV2 (k54A "mongertaa") ; --UNCHK
@@ -49949,7 +49949,7 @@ lin synthesizer_N = mkWN (k6 "syntetisaattori") ; --UNCHK
 lin synthetic_A = mkWA (k38 "synteettinen") ;
 lin synthetic_N = mkWN (k48 "yhdiste") "synteettinen" ; --UNCHK
 lin synthetically_Adv = mkWAdv (k99 "synteettisesti") ; --UNCHK
-lin syphilis_N = mkWN (k39 "lues") ; --UNCHK
+lin syphilis_N = mkN "kuppa" | mkN "syfilis" ;
 lin syphilitic_A = mkWA (k38 "kuppainen") ; --UNCHK
 lin syphilitic_N = mkWN (compoundN "kuppatauti" (k41 "potilas")) ; --UNCHK
 lin syphon_N = mkWN (compoundN "ilma" (k7 "putki")) ; --UNCHK
@@ -51573,7 +51573,7 @@ lin tiyin_N = mkWN "tenge" ; --UNCHK
 lin tizzy_N = mkWN (k39 "kiihtymys") ; --UNCHK
 lin tnt_N = mkWN (k6 "trotyyli") ; --UNCHK
 lin to_Adv = mkAdv "luo" ; ---- what is this?
-lin to_Prep = mkPrep illative | mkPrep allative ; ---- | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; 
+lin to_Prep = mkPrep illative | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" | mkPrep translative | mkPrep allative ; 
 lin toad_N = mkWN (k10 "konna") ; --UNCHK
 lin toadfish_N = mkWN (k18 "tau") "Opsanus" ; --UNCHK
 lin toadflax_N = mkWN (compoundN "kannus" (k1 "ruoho")) ; --UNCHK
