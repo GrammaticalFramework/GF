@@ -436,6 +436,10 @@ checkLType gr g trm typ0 = do
       case typ of
         Table arg1 val ->
            do arg' <- checkEqLType gr g arg0 arg1 trm
+              vs1 <- allParamValues gr arg1
+              if length vs1 == length vs
+                 then return ()
+                 else checkError $ text "wrong number of values in table" <+> ppTerm Unqualified 0 trm
               vs' <- map fst `fmap` sequence [checkLType gr g v val|v<-vs]
               return (V arg' vs',typ)
 
