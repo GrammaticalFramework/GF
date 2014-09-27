@@ -17,7 +17,7 @@ lin
   bank_N = mkN "pank" "panga" "panka";
   beautiful_A = mkA (mkN "kaunis" "kauni" "kaunist" "kaunisse" "kaunite" "kauneid") ;
   become_VA = mkVA (mkV "saama") ctranslative ; -- tema saab vanaks
-  beer_N = mkN "õlu" ;
+  beer_N = mkN "õlu" "õlle" "õlut" "õllesse" "õllede" "õllesid" ;
   beg_V2V = mkV2V (mkV "paluma") cpartitive ;
   big_A = mkA (mkN "suur" "suure" "suurt" "suurde" "suurte" "suuri");
   bike_N = mkN "ratas" "ratta" "ratast" ;
