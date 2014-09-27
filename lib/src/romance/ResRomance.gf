@@ -276,18 +276,14 @@ oper
 --- have a "-" with possibly a special verb form with "t":
 --- "comment fera-t-il" vs. "comment fera Pierre"
 
-  infVP : VP -> Agr -> Str = \vp ->
+  infVP : VP -> Agr -> Str = nominalVP VInfin ;
+
+  gerVP : VP -> Agr -> Str = nominalVP (\_ -> VGer) ;
+
+  nominalVP : (Bool -> VF) -> VP -> Agr -> Str = \vf,vp,agr ->
       let
         iform = orB vp.clit3.hasClit (isVRefl vp.s.vtyp) ;
-        vf    = VInfin iform ;    
-      in
-      nominalVP vf iform vp ;
-
-  gerVP : VP -> Agr -> Str = nominalVP VGer True ;
-
-  nominalVP : VF -> Bool -> VP -> Agr -> Str = \vf,iform,vp,agr ->
-      let
-        inf   = vp.s.s ! vf ;
+        inf   = vp.s.s ! vf iform ;
         neg   = vp.neg ! RPos ;             --- Neg not in API
         obj   = vp.s.p ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
         refl  = case isVRefl vp.s.vtyp of {
