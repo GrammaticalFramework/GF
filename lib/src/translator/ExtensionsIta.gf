@@ -76,16 +76,16 @@ lin
 
    PresPartAP vp = {
     s = table {
-      AF g n => nominalVP VPresPart True vp (agrP3 g n) ;
-      _ => nominalVP VPresPart True vp (agrP3 Masc Sg)  ---- the adverb form
+      AF g n => nominalVP (\_ -> VPresPart) vp (agrP3 g n) ;
+      _ => nominalVP (\_ -> VPresPart) vp (agrP3 Masc Sg)  ---- the adverb form
       } ;
     isPre = False
     } ;
 
   PastPartAP vp = {
     s = table {
-      AF g n => nominalVP (VPart g n) True vp (agrP3 g n) ;
-      _ => nominalVP (VPart Masc Sg) True vp (agrP3 Masc Sg)  ---- the adverb form
+      AF g n => nominalVP (\_ -> VPart g n) vp (agrP3 g n) ;
+      _ => nominalVP (\_ -> VPart Masc Sg) vp (agrP3 Masc Sg)  ---- the adverb form
       } ;
     isPre = False
     } ;
