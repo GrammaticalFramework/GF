@@ -53,7 +53,8 @@ compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
     whilePV ((vs, PTilde _ : ps, t):eqs) vrs = whilePV eqs ((      vs,ps,t) : vrs)
     whilePV ((vs, PImplArg p:ps, t):eqs) vrs = whilePV ((vs,p:ps,t):eqs) vrs
     whilePV ((vs, PT _ p   : ps, t):eqs) vrs = whilePV ((vs,p:ps,t):eqs) vrs
-    whilePV eqs                          vrs = let (bs1,instrs1) = compileEquations gr arity st is vrs (Just (st,length bs1)) bs
+    whilePV eqs                          vrs = let fl1 = Just (st,length bs1)
+                                                   (bs1,instrs1) = compileEquations gr arity st is vrs fl1 bs
                                                    (bs2,instrs2) = compileEquations gr arity st (i:is) eqs fl (instrs2:bs1)
                                                in (bs2,instrs1)
 
