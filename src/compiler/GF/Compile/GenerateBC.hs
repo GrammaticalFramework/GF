@@ -1,177 +1,235 @@
 module GF.Compile.GenerateBC(generateByteCode) where
 
 import GF.Grammar
-import GF.Grammar.Lookup(lookupAbsDef)
+import GF.Grammar.Lookup(lookupAbsDef,lookupFunType)
 import GF.Data.Operations
 import PGF(CId,utf8CId)
-import PGF.Internal(Instr(..),IVal(..),TailInfo(..),Literal(..))
+import PGF.Internal(CodeLabel,Instr(..),IVal(..),TailInfo(..),Literal(..))
 import qualified Data.Map as Map
-import Data.List(nub)
+import Data.List(nub,mapAccumL)
 
 generateByteCode :: SourceGrammar -> Int -> [L Equation] -> [[Instr]]
 generateByteCode gr arity eqs =
-  let (bs,instrs) = compileEquations gr arity is (map (\(L _ (ps,t)) -> ([],ps,t)) eqs) [ENTER:instrs]
+  let (bs,instrs) = compileEquations gr arity (arity+1) is 
+                                     (map (\(L _ (ps,t)) -> ([],ps,t)) eqs) 
+                                     Nothing
+                                     [b]
+      b = if arity == 0 || null eqs
+            then instrs
+            else CHECK_ARGS arity:instrs
   in reverse bs
   where
     is = push_is (arity-1) arity []
 
-compileEquations :: SourceGrammar -> Int -> [Int] -> [([(Ident,Int)],[Patt],Term)] -> [[Instr]] -> ([[Instr]],[Instr])
-compileEquations gr st _  []            bs = (bs,[FAIL])
-compileEquations gr st [] ((vs,[],t):_) bs = compileBody gr st vs [] t bs []
-compileEquations gr st (i:is) eqs       bs = whilePP eqs Map.empty
+compileEquations :: SourceGrammar -> Int -> Int -> [IVal] -> [([(Ident,IVal)],[Patt],Term)] -> Maybe (Int,CodeLabel) -> [[Instr]] -> ([[Instr]],[Instr])
+compileEquations gr arity st _      []        fl bs = (bs,[mkFail st fl])
+compileEquations gr arity st [] ((vs,[],t):_) fl bs = compileBody gr arity st vs t bs
+compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
   where
-    whilePP []                           cns     = mkCase cns []
-    whilePP ((vs, PP c ps' : ps, t):eqs) cns     = whilePP eqs (Map.insertWith (++) (Q c,length ps') [(vs,ps'++ps,t)] cns)
-    whilePP ((vs, PInt n   : ps, t):eqs) cns     = whilePP eqs (Map.insertWith (++) (EInt n,0) [(vs,ps,t)] cns)
-    whilePP ((vs, PString s: ps, t):eqs) cns     = whilePP eqs (Map.insertWith (++) (K s,0) [(vs,ps,t)] cns)
-    whilePP ((vs, PFloat d : ps, t):eqs) cns     = whilePP eqs (Map.insertWith (++) (EFloat d,0) [(vs,ps,t)] cns)
-    whilePP eqs                          cns     = whilePV eqs cns []
+    whilePP []                           cns = case Map.toList cns of
+                                                 []       -> (bs,[FAIL])
+                                                 (cn:cns) -> let (bs1,instrs1) = compileBranch0 fl bs cn
+                                                                 bs2 = foldl (compileBranch fl) bs1 cns
+                                                                 bs3 = [mkFail st fl]:bs2
+                                                             in (bs3,EVAL (shiftIVal st i) RecCall : instrs1)
+    whilePP ((vs, PP c ps' : ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (Q c,length ps') [(vs,ps'++ps,t)] cns)
+    whilePP ((vs, PInt n   : ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (EInt n,0) [(vs,ps,t)] cns)
+    whilePP ((vs, PString s: ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (K s,0) [(vs,ps,t)] cns)
+    whilePP ((vs, PFloat d : ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (EFloat d,0) [(vs,ps,t)] cns)
+    whilePP ((vs, PImplArg p:ps, t):eqs) cns = whilePP ((vs,p:ps,t):eqs) cns
+    whilePP ((vs, PT _ p   : ps, t):eqs) cns = whilePP ((vs,p:ps,t):eqs) cns
+    whilePP ((vs, PAs x p  : ps, t):eqs) cns = whilePP (((x,i):vs,p:ps,t):eqs) cns
+    whilePP eqs                          cns = case Map.toList cns of
+                                                 []       -> whilePV eqs []
+                                                 (cn:cns) -> let fl1 = Just (st,length bs2)
+                                                                 (bs1,instrs1) = compileBranch0 fl1 bs cn
+                                                                 bs2 = foldl (compileBranch fl1) bs1 cns
+                                                                 (bs3,instrs3) = compileEquations gr arity st (i:is) eqs fl (instrs3:bs2)
+                                                             in (bs3,EVAL (shiftIVal st i) RecCall : instrs1)
 
-    whilePV []                           cns vrs = mkCase cns (reverse vrs)
-    whilePV ((vs, PV x     : ps, t):eqs) cns vrs = whilePV eqs cns (((x,i):vs,ps,t) : vrs)
-    whilePV ((vs, PW       : ps, t):eqs) cns vrs = whilePV eqs cns ((      vs,ps,t) : vrs)
-    whilePV eqs                          cns vrs = let (bs1,instrs1) = mkCase cns (reverse vrs)
-                                                       (bs2,instrs2) = compileEquations gr st (i:is) eqs (instrs2:bs1)
-                                                   in (bs2,instrs1)
+    whilePV []                           vrs = compileEquations gr arity st is vrs fl bs
+    whilePV ((vs, PV x     : ps, t):eqs) vrs = whilePV eqs (((x,i):vs,ps,t) : vrs)
+    whilePV ((vs, PW       : ps, t):eqs) vrs = whilePV eqs ((      vs,ps,t) : vrs)
+    whilePV ((vs, PTilde _ : ps, t):eqs) vrs = whilePV eqs ((      vs,ps,t) : vrs)
+    whilePV ((vs, PImplArg p:ps, t):eqs) vrs = whilePV ((vs,p:ps,t):eqs) vrs
+    whilePV ((vs, PT _ p   : ps, t):eqs) vrs = whilePV ((vs,p:ps,t):eqs) vrs
+    whilePV eqs                          vrs = let (bs1,instrs1) = compileEquations gr arity st is vrs (Just (st,length bs1)) bs
+                                                   (bs2,instrs2) = compileEquations gr arity st (i:is) eqs fl (instrs2:bs1)
+                                               in (bs2,instrs1)
 
-    mkCase cns vrs =
-      case Map.toList cns of
-        []       -> compileEquations gr st is vrs bs
-        (cn:cns) -> let (bs1,instrs1) = compileBranch0 cn bs
-                        bs2 = foldr compileBranch bs1 cns
-                        (bs3,instrs3) = compileEquations gr st is vrs (instrs3:bs2)
-                    in (bs3,instrs1)
+    case_instr t n =
+      case t of
+        (Q (_,id)) -> CASE (i2i id) n
+        (EInt n)   -> CASE_LIT (LInt n)
+        (K s)      -> CASE_LIT (LStr s)
+        (EFloat d) -> CASE_LIT (LFlt d)
 
-    compileBranch0 ((t,n),eqs) bs =
-      let case_instr = 
-            case t of
-              (Q (_,id)) -> CASE (i2i id)
-              (EInt n)   -> CASE_LIT (LInt n)
-              (K s)      -> CASE_LIT (LStr s)
-              (EFloat d) -> CASE_LIT (LFlt d)
-          (bs1,instrs) = compileEquations gr (st+n) (push_is st n is) eqs bs
-      in (bs1, EVAL (ARG_VAR (st-i-1)) RecCall : case_instr (length bs1) : instrs)
+    compileBranch0 fl bs ((t,n),eqs) =
+      let (bs1,instrs) = compileEquations gr arity (st+n) (push_is st n is) eqs fl bs
+      in (bs1, case_instr t n (length bs1) : instrs)
 
-    compileBranch ((t,n),eqs) bs =
-      let case_instr =
-            case t of
-              (Q (_,id)) -> CASE (i2i id)
-              (EInt n)   -> CASE_LIT (LInt n)
-              (K s)      -> CASE_LIT (LStr s)
-              (EFloat d) -> CASE_LIT (LFlt d)
-          (bs1,instrs) = compileEquations gr (st+n) (push_is st n is) eqs ((case_instr (length bs1) : instrs) : bs)
+    compileBranch l bs ((t,n),eqs) =
+      let (bs1,instrs) = compileEquations gr arity (st+n) (push_is st n is) eqs fl ((case_instr t n (length bs1) : instrs) : bs)
       in bs1
 
-compileBody gr st avs fvs e bs es =
-  let (heap,bs1,instrs) = compileFun gr st avs fvs e 0 bs es
-  in (bs1,if heap > 0 then (ALLOC heap : instrs) else instrs)
+mkFail st1 Nothing        = FAIL
+mkFail st1 (Just (st0,l)) = DROP (st1-st0) l
 
-compileFun gr st avs fvs (Abs _ x e) h0 bs es =
-  let (h1,bs1,_,_,is) = compileLambda gr st st avs fvs [x] e h0 bs
-      (st1,h2,bs2,is1,is2,is3) = compileArgs gr st st avs fvs h1 bs1 (reverse es)
-  in (h2,bs2,is++is3++is2++(if st == 0 then [EVAL (HEAP h0) RecCall,UPDATE,RET st] else [EVAL (HEAP h0) (TailCall st st1)]))
-compileFun gr st avs fvs (App e1 e2) h0 bs es =
-  compileFun gr st avs fvs e1 h0 bs (e2:es)
-compileFun gr st avs fvs (Q (m,id))  h0 bs es =
+compileBody gr arity st vs e bs =
+  let (heap,bs1,is) = compileFun gr arity st vs e 0 bs []
+  in (bs1,if heap > 0 then (ALLOC heap : is) else is)
+
+compileFun gr arity st vs (Abs _ x e) h0 bs args =
+  let (h1,bs1,arg,is1) = compileLambda gr st vs [x] e h0 bs
+      (st1,is3)        = pushArgs st (reverse args)
+  in (h1,bs1,is1++is3++[EVAL arg (if arity == 0 then (UpdateCall st st1) else (TailCall arity st st1))])
+compileFun gr arity st vs (App e1 e2) h0 bs args =
+  let (h1,bs1,arg,is1) = compileArg gr st vs e2 h0 bs
+      (h2,bs2,is2) = compileFun gr arity st vs e1 h1 bs1 (arg:args)
+  in (h2,bs2,is1++is2)
+compileFun gr arity st vs (Q (m,id))  h0 bs args =
   case lookupAbsDef gr m id of
     Ok (_,Just _)
-       -> let (st1,h1,bs1,is1,is2,is3) = compileArgs gr st st avs fvs h0 bs (reverse es)
-          in (h1,bs1,is3 ++ is2 ++ []++(if st == 0 then [CALL (i2i id) RecCall,UPDATE,RET st] else [CALL (i2i id) (TailCall st st1)]))
-    _  -> let h1 = h0 + 2 + length es
-              (_,h2,bs2,is1,is2,is3) = compileArgs gr st st avs fvs h1 bs es
-          in (h2,bs2,PUT_CONSTR (i2i id) : is1 ++ is3 ++ (if st == 0 then [UPDATE] else []) ++ [RET st])
-compileFun gr st avs fvs (QC qid)    h0 bs es =
-  compileFun gr st avs fvs (Q qid) h0 bs es
-compileFun gr st avs fvs (Vr x)      h0 bs es =
-  let (st1,h1,bs1,is1,is2,is3)  = compileArgs gr st st avs fvs h0 bs (reverse es)
-      mki = case lookup x avs of
-              Just i  -> EVAL (ARG_VAR (st1-i-1))
-              Nothing -> case lookup x fvs of
-                           Just i  -> EVAL (FREE_VAR i)
-                           Nothing -> error "compileFun: unknown variable"
-  in (h1,bs1,is3 ++ is2 ++ (if st == 0 then [mki RecCall,UPDATE,RET st] else [mki (TailCall st st1)]))
-compileFun gr st avs fvs (EInt n)    h0 bs _  =
+       -> let (st1,is1) = pushArgs st (reverse args)
+          in (h0,bs,is1++[EVAL (GLOBAL (i2i id)) (if arity == 0 then (UpdateCall st st1) else (TailCall arity st st1))])
+    _  -> let Ok ty = lookupFunType gr m id
+              (ctxt,_,_) = typeForm ty
+              c_arity    = length ctxt
+              n_args = length args
+              is1    = setArgs st args
+              diff   = c_arity-n_args
+          in if diff <= 0
+               then let h1  = h0 + 2 + n_args
+                    in (h1,bs,PUT_CONSTR (i2i id):is1++[RET h0 (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+               else let h1  = h0 + 1 + n_args
+                        is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
+                        b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [RET h0 (TailCall diff (diff+1) (diff+1))]
+                    in (h1,b:bs,PUT_CLOSURE (length bs):is1++[EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+compileFun gr arity st vs (QC qid)    h0 bs args =
+  compileFun gr arity st vs (Q qid) h0 bs args
+compileFun gr arity st vs (Vr x)      h0 bs args =
+  let (st1,is1) = pushArgs st (reverse args)
+      arg       = (shiftIVal st1 . getVar vs) x
+  in (h0,bs,is1++[EVAL arg (if arity == 0 then (UpdateCall st st1) else (TailCall arity st st1))])
+compileFun gr arity st vs (EInt n)    h0 bs _  =
   let h1 = h0 + 2
-  in (h1,bs,[PUT_LIT (LInt n)]++(if st == 0 then [UPDATE] else [])++[RET st])
-compileFun gr st avs fvs (K s)       h0 bs _  =
-  let h1 = h0 + 1 + (length s + 4) `div` 4
-  in (h1,bs,[PUT_LIT (LStr s)]++(if st == 0 then [UPDATE] else [])++[RET st])
-compileFun gr st avs fvs (EFloat d)  h0 bs _  =
-  let h1 = h0 + 3
-  in (h1,bs,[PUT_LIT (LFlt d)]++(if st == 0 then [UPDATE] else [])++[RET st])
-compileFun gr st avs fvs e _ _ _ = error (show e)
-
-compileArgs gr st st0 avs fvs h0 bs []     =
-  (st0,h0,bs,[],[],[])
-compileArgs gr st st0 avs fvs h0 bs (e:es) =
-  (st1,h2,bs2,i1:is1,i2:is2,is++is3)
-  where 
-    (h1,bs1,i1,i2,is)    = compileArg gr st st0 avs fvs e h0 bs []
-    (st1,h2,bs2,is1,is2,is3) = compileArgs gr st (st0+1) avs fvs h1 bs1 es
-
-compileArg gr st st0 avs fvs (Abs _ x e) h0 bs es =
-  compileLambda gr st st0 avs fvs [x] e h0 bs
-compileArg gr st st0 avs fvs (App e1 e2) h0 bs es = compileArg gr st st0 avs fvs e1 h0 bs (e2:es)
-compileArg gr st st0 avs fvs e@(Q(m,id)) h0 bs es =
-  case lookupAbsDef gr m id of
-    Ok (_,Just _)
-       -> if null es
-            then let h1 = h0 + 2
-                 in (h1,bs,SET (HEAP h0),PUSH (HEAP h0),[PUT_FUN (i2i id),SET_PAD])
-            else let es_fvs = nub (foldr (\e fvs -> freeVars [] fvs e) [] es)
-                     h1 = h0 + 1 + length is
-                     (bs1,b) = compileBody gr 0 [] (zip es_fvs [0..]) e bs es
-                     is = if null es_fvs
-                            then [SET_PAD]
-                            else map (fst . compileVar st st0 avs fvs) es_fvs
-                 in (h1,(ENTER:b):bs1,SET (HEAP h0),PUSH (HEAP h0),PUT_CLOSURE (length bs) : is)
-    _  -> let h1 = h0 + 2 + length es
-              (_,h2,bs2,is1,is2,is3) = compileArgs gr st st avs fvs h1 bs es
-          in (h2,bs2,SET (HEAP h0),PUSH (HEAP h0),PUT_CONSTR (i2i id) : is1 ++ is3)
-compileArg gr st st0 avs fvs (QC qid)    h0 bs es = compileArg gr st st0 avs fvs (Q qid) h0 bs es
-compileArg gr st st0 avs fvs (Vr x)      h0 bs es =
-  let (i1,i2) = compileVar st st0 avs fvs x
-  in (h0,bs,i1,i2,[])
-compileArg gr st st0 avs fvs (EInt n)    h0 bs _  = 
+  in (h1,bs,[PUT_LIT (LInt n), RET h0 (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+compileFun gr arity st vs (K s)       h0 bs _  =
   let h1 = h0 + 2
-  in (h1,bs,SET (HEAP h0),PUSH (HEAP h0),[PUT_LIT (LInt n)])
-compileArg gr st st0 avs fvs (K s)       h0 bs _  =
+  in (h1,bs,[PUT_LIT (LStr s), RET h0 (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+compileFun gr arity st vs (EFloat d)  h0 bs _  =
+  let h1 = h0 + 2
+  in (h1,bs,[PUT_LIT (LFlt d), RET h0 (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+compileFun gr arity st vs (Typed e _) h0 bs args =
+  compileFun gr arity st vs e h0 bs args
+compileFun gr arity st vs (Let (x, (_, e1)) e2) h0 bs args =
+  let (h1,bs1,arg,is1) = compileLambda gr st vs [] e1 h0 bs
+      (h2,bs2,is2) = compileFun gr arity st ((x,arg):vs) e2 h1 bs1 args
+  in (h2,bs2,is1++is2)
+compileFun gr arity st vs e _ _ _ = error (show e)
+
+compileArg gr st vs (Q(m,id)) h0 bs =
+  let h1 = h0 + 2
+  in case lookupAbsDef gr m id of
+       Ok (_,Just _) -> (h1,bs,GLOBAL (i2i id),[])
+       _             -> let Ok ty = lookupFunType gr m id
+                            (ctxt,_,_) = typeForm ty
+                            c_arity    = length ctxt
+                        in if c_arity == 0
+                             then (h1,bs,HEAP h0,[PUT_CONSTR (i2i id)])
+                             else let is2 = [SET (ARG_VAR (i+1)) | i <- [0..c_arity-1]]
+                                      b   = CHECK_ARGS c_arity : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [RET h0 (TailCall c_arity (c_arity+1) (c_arity+1))]
+                                  in (h1,b:bs,HEAP h0,[PUT_CLOSURE (length bs),SET_PAD])
+compileArg gr st vs (QC qid)    h0 bs =
+  compileArg gr st vs (Q qid) h0 bs
+compileArg gr st vs (Vr x)      h0 bs =
+  (h0,bs,getVar vs x,[])
+compileArg gr st vs (EInt n)    h0 bs =
+  let h1 = h0 + 2
+  in (h1,bs,HEAP h0,[PUT_LIT (LInt n)])
+compileArg gr st vs (K s)       h0 bs =
   let h1 = h0 + 1 + (length s + 4) `div` 4
-  in (h1,bs,SET (HEAP h0),PUSH (HEAP h0),[PUT_LIT (LStr s)])
-compileArg gr st st0 avs fvs (EFloat d)  h0 bs _  =
+  in (h1,bs,HEAP h0,[PUT_LIT (LStr s)])
+compileArg gr st vs (EFloat d)  h0 bs =
   let h1 = h0 + 3
-  in (h1,bs,SET (HEAP h0),PUSH (HEAP h0),[PUT_LIT (LFlt d)])
+  in (h1,bs,HEAP h0,[PUT_LIT (LFlt d)])
+compileArg gr st vs (Typed e _) h0 bs =
+  compileArg gr st vs e h0 bs
+compileArg gr st vs (ImplArg e) h0 bs =
+  compileArg gr st vs e h0 bs
+compileArg gr st vs e           h0 bs =
+  let (f,es)   = appForm e
+      isConstr = case f of
+                   Q c@(m,id) -> case lookupAbsDef gr m id of
+                                   Ok (_,Just _) -> Nothing
+                                   _             -> Just c
+                   QC c@(m,id) -> case lookupAbsDef gr m id of
+                                    Ok (_,Just _) -> Nothing
+                                    _             -> Just c
+                   _        -> Nothing
+  in case isConstr of
+       Just (m,id) ->
+            let Ok ty = lookupFunType gr m id
+                (ctxt,_,_) = typeForm ty
+                c_arity    = length ctxt
+                ((h1,bs1,is1),args) = mapAccumL (\(h,bs,is) e -> let (h1,bs1,arg,is1) = compileArg gr st vs e h bs
+                                                                 in ((h1,bs1,is++is1),arg)) 
+                                                (h0,bs,[])
+                                                es
+                n_args = length args
+                is2 = setArgs st args
+                diff   = c_arity-n_args
+            in if diff <= 0
+                 then let h2  = h1 + 2 + n_args
+                      in (h2,bs1,HEAP h1,is1 ++ (PUT_CONSTR (i2i id) : is2))
+                 else let h2  = h1 + 1 + n_args
+                          is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
+                          b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [RET h0 (TailCall diff (diff+1) (diff+1))]
+                      in (h2,b:bs1,HEAP h1,is1 ++ (PUT_CLOSURE (length bs):is2))
+       Nothing -> compileLambda gr st vs [] e h0 bs
 
-compileVar st st0 avs fvs x =
-  case lookup x avs of
-    Just i  -> (SET (ARG_VAR (st-i-1)),PUSH (ARG_VAR (st0-i-1)))
-    Nothing -> case lookup x fvs of
-                 Just i  -> (SET (FREE_VAR i),PUSH (FREE_VAR i))
-                 Nothing -> error "compileVar: unknown variable"
-
-compileLambda gr st st0 avs fvs e_avs (Abs _ x e) h0 bs =
-  compileLambda gr st st0 avs fvs (x:e_avs) e h0 bs
-compileLambda gr st st0 avs fvs e_avs e           h0 bs =
-  let e_fvs   = freeVars e_avs [] e
-      (bs1,b) = compileBody gr (length e_avs)
-                               (zip e_avs [0..])
-                               (zip e_fvs [0..])
-                               e bs []
-      is = if null e_fvs
+compileLambda gr st vs xs (Abs _ x e) h0 bs =
+  compileLambda gr st vs (x:xs) e h0 bs
+compileLambda gr st vs xs e           h0 bs =
+  let ys      = nub (freeVars xs e)
+      arity   = length xs
+      (bs1,b) = compileBody gr arity
+                               (arity+1)
+                               (zip xs (map ARG_VAR  [0..]) ++
+                                zip ys (map FREE_VAR [0..]))
+                               e bs
+      b1 = if arity == 0
+             then b
+             else CHECK_ARGS arity:b
+      is = if null ys
              then [SET_PAD]
-             else map (fst . compileVar st st0 avs fvs) e_fvs
+             else map (SET . shiftIVal st . getVar vs) ys
       h1 = h0 + 1 + length is
-  in (h1,(ENTER:b):bs1,SET (HEAP h0),PUSH (HEAP h0),PUT_CLOSURE (length bs) : is)
+  in (h1,b1:bs1,HEAP h0,PUT_CLOSURE (length bs1) : is)
 
-freeVars avs fvs (Abs _ x e) = freeVars (x:avs) fvs e
-freeVars avs fvs (App e1 e2) = freeVars avs (freeVars avs fvs e2) e1
-freeVars avs fvs (Vr x)     
-  | not (elem x avs)         = x:fvs
-freeVars avs fvs _           = fvs
+getVar vs x =
+  case lookup x vs of
+    Just arg         -> arg
+    Nothing          -> error "compileVar: unknown variable"
+
+shiftIVal st (ARG_VAR i) = ARG_VAR (st-i-1)
+shiftIVal st arg         = arg
+
+pushArgs st []         = (st,[])
+pushArgs st (arg:args) = let (st1,is) = pushArgs (st+1) args
+                         in (st1, PUSH (shiftIVal st arg) : is)
+
+setArgs st []         = []
+setArgs st (arg:args) = SET (shiftIVal st arg) : setArgs st args
+
+freeVars xs (Abs _ x e) = freeVars (x:xs) e
+freeVars xs (Vr x)     
+  | not (elem x xs)     = [x]
+freeVars xs e           = collectOp (freeVars xs) e
 
 i2i :: Ident -> CId
 i2i = utf8CId . ident2utf8
 
-push_is :: Int -> Int -> [Int] -> [Int]
+push_is :: Int -> Int -> [IVal] -> [IVal]
 push_is i 0 is = is
-push_is i n is = i : push_is (i-1) (n-1) is
+push_is i n is = ARG_VAR i : push_is (i-1) (n-1) is
