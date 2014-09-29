@@ -346,7 +346,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_ldxi_p(JIT_RET, JIT_VHEAP, offsetof(PgfValue, absfun));
 	jit_bare_ret(0);
 
-	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
 
 	gates->evaluate_value_gen = jit_get_ip().ptr;
 	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
@@ -394,7 +394,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_patch(ref);
 	jit_jmpr(JIT_VCLOS);
 
-	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
 
 	gates->evaluate_value_meta = jit_get_ip().ptr;
 	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
