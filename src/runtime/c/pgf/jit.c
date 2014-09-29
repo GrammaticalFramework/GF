@@ -1089,7 +1089,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				}
 
 				if (b-(a+1) > 0)
-					jit_subi_p(JIT_SP, JIT_SP, (b-(a+1))*sizeof(PgfClosure*));
+					jit_addi_p(JIT_SP, JIT_SP, (b-(a+1))*sizeof(PgfClosure*));
 				jit_bare_ret(a*sizeof(PgfClosure*));
 				break;
 			}
