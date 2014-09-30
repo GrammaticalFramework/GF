@@ -1,6 +1,7 @@
 #include "data.h"
 #include "expr.h"
 #include "literals.h"
+#include "evaluator.h"
 #include "reader.h"
 
 #include <gu/defs.h>

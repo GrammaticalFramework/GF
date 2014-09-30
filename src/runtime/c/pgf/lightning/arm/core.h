@@ -61,6 +61,7 @@ struct jit_local_state {
     jit_thumb_t	thumb;
     jit_insn* thumb_pc;
     jit_insn* thumb_tmp;
+    int tmp;
     /* hackish mostly to make test cases work; use arm instruction
      * set in jmpi if did not yet see a prolog */
     int		 after_prolog;
@@ -132,20 +133,14 @@ jit_v_order[JIT_V_NUM] = {
 #endif
 
 #define jit_movi_i(r0, i0) \
-{ \
-    int		i; \
-	if (!jit_no_set_flags() && r0 < 8 && !(i0 & 0xffffff80)) \
-	    T1_MOVI(r0, i0); \
-	else if ((i = encode_thumb_immediate(i0)) != -1) \
-	    T2_MOVI(r0, i); \
-	else if ((i = encode_thumb_immediate(~i0)) != -1) \
-	    T2_MVNI(r0, i); \
-	else { \
-	    T2_MOVWI(r0, _jit_US(i0)); \
-	    if (i0 & 0xffff0000) \
-			T2_MOVTI(r0, _jit_US((unsigned)i0 >> 16)); \
-	} \
-}
+	((!jit_no_set_flags() && r0 < 8 && !(i0 & 0xffffff80)) ? \
+	     T1_MOVI(r0, i0) : \
+	 ((_jitl.tmp = encode_thumb_immediate(i0)) != -1) ? \
+	     T2_MOVI(r0, _jitl.tmp) : \
+	 ((_jitl.tmp = encode_thumb_immediate(~i0)) != -1) ? \
+	     T2_MVNI(r0, _jitl.tmp) : \
+	 ( T2_MOVWI(r0, _jit_US(i0)), \
+	     ((i0 & 0xffff0000) ? T2_MOVTI(r0, _jit_US((unsigned)i0 >> 16)) : 0) ))
 
 #ifdef USE_THUMB_CODE
 #define jit_movi_p(r0, i0) \
@@ -361,19 +356,7 @@ jit_v_order[JIT_V_NUM] = {
 	} \
 }
 #else
-#define jit_addi_i(r0, r1, i0) \
-{ \
-	int i; \
-	if ((i = encode_arm_immediate(i0)) != -1) \
-		_ADDI(r0, r1, i); \
-	else if ((i = encode_arm_immediate(-i0)) != -1) \
-		_SUBI(r0, r1, i); \
-	else { \
-		jit_gpr_t reg = r0 != r1 ? r0 : JIT_TMP; \
-		jit_movi_i(reg, i0); \
-		_ADD(r0, r1, reg); \
-	} \
-}
+#define jit_addi_i(r0, r1, i0) 0
 #endif
 
 #ifdef USE_THUMB_CODE
@@ -1172,18 +1155,18 @@ next: \
 #define jit_jmpi(i0) \
 	(_jitl.thumb_tmp = _jit.x.pc, \
 	 (_jitl.after_prolog) ? \
-	     ((_s20P((((long)i0 - (long)l) >> 1) - 2)) ? \
-	          T2_B(encode_thumb_jump((((long)i0 - (long)l) >> 1) - 2)) : \
+	     ((_s20P((((long)i0 - (long)_jitl.thumb_tmp) >> 1) - 2)) ? \
+	          T2_B(encode_thumb_jump((((long)i0 - (long)_jitl.thumb_tmp) >> 1) - 2)) : \
 	          (jit_movi_p(JIT_TMP, i0), jit_jmpr(JIT_TMP))) : \
-         (assert(_s24P((((long)i0 - (long)l) >> 2) - 2)), \
-	      _CC_B(ARM_CC_AL, ((((long)i0 - (long)l) >> 2) - 2) & 0x00ffffff)) \
+         (assert(_s24P((((long)i0 - (long)_jitl.thumb_tmp) >> 2) - 2)), \
+	      _CC_B(ARM_CC_AL, ((((long)i0 - (long)_jitl.thumb_tmp) >> 2) - 2) & 0x00ffffff)) \
      _jitl.thumb_tmp)
 #else
 #define jit_jmpi(i0) \
-    (_jit.thumb_tmp = _jit.x.pc, \
-	 assert(_s24P((((long)i0 - (long)l) >> 2) - 2)), \
-	 _CC_B(ARM_CC_AL, ((((long)i0 - (long)l) >> 2) - 2) & 0x00ffffff), \
-	 _jit.thumb_tmp)
+    (_jitl.thumb_tmp = _jit.x.pc, \
+	 assert(_s24P((((long)i0 - (long)_jitl.thumb_tmp) >> 2) - 2)), \
+	 _CC_B(ARM_CC_AL, ((((long)i0 - (long)_jitl.thumb_tmp) >> 2) - 2) & 0x00ffffff), \
+	 _jitl.thumb_tmp)
 #endif
 
 #ifdef USE_THUMB_CODE
@@ -1214,7 +1197,7 @@ next: \
 	                (jit_movi_i(JIT_TMP, i1), T2_CMP(r0, JIT_TMP))))), \
 	 /* use only thumb2 conditional as does not know if will be patched */ \
 	 _jitl.thumb_tmp = _jit.x.pc, \
-	 assert(_s20P((((long)i0 - (long)l) >> 1) - 2)), \
+	 assert(_s20P((((long)i0 - (long)_jitl.thumb_tmp) >> 1) - 2)), \
 	 T2_CC_B(cc, encode_thumb_cc_jump((((long)i0 - (long)l) >> 1) - 2)), \
      _jitl.thumb_tmp)
 #else
@@ -1225,8 +1208,8 @@ next: \
 	           _CMNI(r0, encode_arm_immediate(-i1)) : \
 	           (jit_movi_i(JIT_TMP, i1), _CMP(r0, JIT_TMP)))), \
 	 _jitl.thumb_tmp = _jit.x.pc, \
-	 assert(_s24P((((long)i0 - (long)l) >> 2) - 2)), \
-	 _CC_B(cc, ((((long)i0 - (long)l) >> 2) - 2) & 0x00ffffff), \
+	 assert(_s24P((((long)i0 - (long)_jitl.thumb_tmp) >> 2) - 2)), \
+	 _CC_B(cc, ((((long)i0 - (long)_jitl.thumb_tmp) >> 2) - 2) & 0x00ffffff), \
      _jitl.thumb_tmp)
 #endif
 
@@ -2190,6 +2173,12 @@ next: \
 }
 #endif
 
+#ifdef USE_THUMB_CODE
+#define jit_bare_ret(IM) T2_POP(1<<JIT_PC)
+#else
+#define jit_bare_ret(IM) _POP(1<<JIT_PC)
+#endif
+
 /* just to pass make check... */
 #ifdef JIT_NEED_PUSH_POP
 # define jit_pushr_i(r0) \
@@ -2201,5 +2190,8 @@ next: \
 	(assert(_jitl.pop > 0), \
 	 _jitl.pop--, \
 	 jit_ldxi_i(r0, JIT_FP, _jitl.push[_jitl.pop]))
+#else
+# define jit_pushr_i(r0) 0
+# define jit_popr_i(r0) 0
 #endif
 #endif /* __lightning_core_arm_h */
