@@ -1104,5 +1104,9 @@ arm_retval_d(jit_state_t _jit, jit_fpr_t r0)
     }
     /* else assume chaining call to jit_retval_d as done in tests/funcfp.c */
 }
+#else
+#define jit_ldxi_d(r0, r1, i0) 0
+#define jit_movi_d(r0, i0) 0
+#define jit_bner_d(i0, r0, r1) 0
 #endif
 #endif /* __lightning_fp_arm_h */

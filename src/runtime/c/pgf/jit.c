@@ -636,10 +636,11 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			PgfSegmentPatch* patch = 
 				gu_buf_index(rdr->jit_state->segment_patches, PgfSegmentPatch, i);
 			if (patch->segment == segment) {
-				if (patch->is_abs)
+				if (patch->is_abs) {
 					jit_patch_movi(patch->ref,jit_get_ip().ptr);
-				else
+				} else {
 					jit_patch(patch->ref);
+				}
 			}
 		}
 
@@ -1128,9 +1129,9 @@ pgf_jit_done(PgfReader* rdr, PgfAbstr* abstr)
 
 		PgfAbsCat* arg =
 			gu_map_get(abstr->cats, patch->cid, PgfAbsCat*);
-		if (arg != NULL)
+		if (arg != NULL) {
 			jit_patch_calli(patch->ref,(jit_insn*) arg->predicate);
-		else {
+		} else {
 			PgfAbsFun* con =
 				gu_map_get(abstr->funs, patch->cid, PgfAbsFun*);
 			if (con == NULL)
