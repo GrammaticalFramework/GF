@@ -26039,7 +26039,7 @@ fun harbour_V2 : V2 ;
 fun harbourage_N : N ;
 fun hard_1_A : A  ; -- | hard surface
 fun hard_2_A : A  ; -- | hard problem
-fun hard_Adv : Adv ;
+fun hardly_AdV : AdV ;
 fun hard_baked_A : A ;
 fun hard_bitten_A : A ;
 fun hard_boiled_A : A ;
@@ -26063,7 +26063,6 @@ fun hardihood_N : N ;
 fun hardiness_N : N ;
 fun hardinggrass_N : N ;
 fun hardliner_N : N ;
-fun hardly_Adv : Adv  ;
 fun hardness_N : N ;
 fun hardscrabble_A : A ;
 fun hardship_N : N ;

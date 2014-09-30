@@ -10214,15 +10214,13 @@ lin harbour_V = mkV "cobijar" ; -- status=guess, src=wikt
 lin harbour_V2 = mkV2 (mkV "cobijar") ; -- status=guess, src=wikt
 lin hard_1_A = mkA "duro" ;
 lin hard_2_A = mkA "difícil" | mkA "arduo" ;
-lin hard_A = mkA "duro" | mkA "fuerte" ;
-lin hard_Adv = mkAdv "arduamente" ;
 lin hardback_N = mkN "tapa dura" ; -- status=guess
 lin hardcover_N = mkN "tapa dura" ; -- status=guess
 lin harden_V = endurecer_V ; -- status=guess, src=wikt
 lin harden_V2 = mkV2 (endurecer_V) ; -- status=guess, src=wikt
 lin hardening_N = mkN "endurecimiento" ; -- status=guess
 lin hardheaded_A = mkA "pragmático" ; -- status=guess
-lin hardly_Adv = mkAdv "apenas" | adjAdv hard_2_A ; -- derived
+lin hardly_AdV = mkAdV "apenas" | adjAdv hard_2_A ; -- derived
 lin hardness_N = mkN "dureza" ; -- status=guess
 lin hardship_N = mkN "sufrimientos" | mkN "apuro" ; -- status=guess
 lin hardware_N = mkN "hardware" masculine ; -- status=guess

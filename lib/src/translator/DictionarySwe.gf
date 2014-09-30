@@ -25811,10 +25811,9 @@ lin harbour_N = L.harbour_N ;
 lin harbour_V = mkV "nära" "närde" "närt" ; -- comment=3
 lin harbour_V2 = variants {} ; -- status=guess
 lin harbourage_N = variants {} ; -- status=guess
-lin hard_1_A = mkA "hård" "hårt" ;
+lin hard_1_A = mkA "hård" "hårt" | mkA "häftig" ;
 lin hard_2_A = mkA "svår" ;
-lin hard_A = mkA "hård" "hårt" | mkA "häftig" ;
-lin hard_Adv = mkAdv "hårt" ;
+lin hardly_AdV = mkAdV "knappast" | adjAdv hard_2_A ; -- derived
 lin hard_baked_A = variants {} ; -- status=guess
 lin hard_bitten_A = variants {} ; -- status=guess
 lin hard_boiled_A = variants {} ; -- status=guess
@@ -25837,7 +25836,6 @@ lin hardihood_N = variants {} ; -- status=guess
 lin hardiness_N = variants {} ; -- status=guess
 lin hardinggrass_N = variants {} ; -- status=guess
 lin hardliner_N = variants {} ; -- status=guess
-lin hardly_Adv = mkAdv "knappast" | adjAdv hard_2_A ; -- derived
 lin hardness_N = mkN "hårdhet" "hårdheter" ; -- comment=2
 lin hardscrabble_A = variants {} ; -- status=guess
 lin hardship_N = mkN "vedermöda" ; -- SaldoWN
