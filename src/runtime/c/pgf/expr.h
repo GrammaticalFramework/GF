@@ -87,7 +87,7 @@ typedef struct {
 	PgfCId id;
 	PgfExpr body;
 } PgfExprAbs;
-		
+
 typedef struct {
 	PgfExpr fun;
 	PgfExpr arg;
