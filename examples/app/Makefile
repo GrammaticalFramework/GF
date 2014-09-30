@@ -24,7 +24,7 @@ App11:
 # App grammars for individual languages
 AppEng.pgf:: ; $(GFMKT) -name=AppEng AppEng.gf
 AppBul.pgf:: ; $(GFMKT) -name=AppBul AppBul.gf
-AppChi.pgf:: ; $(GFMKT) -name=AppChi AppChi.gf +RTS -K64M
+AppChi.pgf:: ; $(GFMKT) -name=AppChi AppChi.gf +RTS -K100M
 AppDut.pgf:: ; $(GFMKT) -name=AppDut AppDut.gf +RTS -K64M
 AppFin.pgf:: ; $(GFMKT) -name=AppFin AppFin.gf +RTS -K64M
 AppGer.pgf:: ; $(GFMKT) -name=AppGer AppGer.gf +RTS -K64M
