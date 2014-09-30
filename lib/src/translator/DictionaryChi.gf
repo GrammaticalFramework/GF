@@ -2,12 +2,13 @@ concrete DictionaryChi of Dictionary = CatChi ** open ParadigmsChi,
   (S = SyntaxChi),
   (L = LexiconChi),
   (R = ResChi),
-  ParadigmsChi, Prelude in {
+  Prelude in {
 
 flags coding=utf8 ;
 
-oper
-  mkNPword : Str -> NP = \s -> lin NP (ss (R.word s)) ;  -- to be used in lexicon building only
+oper mkNPword : Str -> NP = \s -> lin NP (ss (R.word s)) ;  -- to be used in lexicon building only
+
+oper adjAdv : A -> CatChi.Adv = \a -> lin Adv {s = a.s ; advType = R.ATManner} ;
 
 lin a_priori_A = mkA "先验" ;
 lin aachen_PN = mkPN "亚琛" ; -- comment=src=geonames status=guess
@@ -91,7 +92,7 @@ lin abreast_Adv = mkAdv "並排" | mkAdv "并排" ; -- status=guess -- status=gu
 lin abridge_V2 = mkV2 "删节" | {-HSK-} mkV2 "节" ;
 lin abroad_Adv = mkAdv "国外" ;
 lin abrupt_A = mkA "突兀" | {-HSK-} mkA "突然" ;
-lin abruptly_Adv = variants {} ;
+lin abruptly_Adv = adjAdv abrupt_A ; -- derived
 lin abscess_N = mkN "膿腫" | mkN "脓肿" ; -- status=guess -- status=guess
 lin absence_N = mkN "缺席" "次" ;
 lin absent_A = mkA "缺席" ;
@@ -100,7 +101,7 @@ lin absenteeism_N = mkN "旷课" "次" ;
 lin absinthe_N = mkN "苦艾" ; -- status=guess
 lin absolute_A = mkA "绝对" ;
 lin absolute_N = mkN "君主專制" | mkN "君主专制" | mkN "絕對君主制" | mkN "绝对君主制" | {-HSK-} mkN "绝对" ; -- status=guess -- status=guess -- status=guess -- status=guess
-lin absolutely_Adv = variants {} | {-HSK-} mkAdv "十分" | mkAdv "根本" ;
+lin absolutely_Adv = {-HSK-} mkAdv "十分" | mkAdv "根本" | adjAdv absolute_A ; -- derived
 lin absolutism_N = mkN "专制主义" ;
 lin absolve_V2 = mkV2 "免除" ;
 lin absorb_V2 = mkV2 "吃" | mkV2 "吸收" ;
@@ -141,7 +142,7 @@ lin accessible_A = mkA "易接近" ;
 lin accessory_N = mkN "附件" ;
 lin accident_N = mkN "事故" | {-HSK-} mkN "意外" "個" ;
 lin accidental_A = mkA "意外" ;
-lin accidentally_Adv = mkAdv "偶然" ; -- status=guess
+lin accidentally_Adv = mkAdv "偶然" | adjAdv accidental_A ; -- status=guess -- derived -- derived
 lin acclaim_N = mkN "欢呼" [] ;
 lin acclaim_V2 = mkV2 "称赞" ;
 lin accolade_N = mkN "荣誉" ;
@@ -169,7 +170,7 @@ lin accountability_N = mkN "问责" "项" ;
 lin accountable_A = mkA "有责任" ;
 lin accountancy_N = mkN "会计" ;
 lin accountant_N = mkN "会计" ;
-lin accounting_A = variants {} | {-HSK-} mkA "会计" ;
+lin accounting_A = {-HSK-} mkA "会计" ;
 lin accounting_N = mkN "会计" ;
 lin accra_PN = mkPN "阿克拉" ; -- comment=src=geonames status=guess
 lin accrington_PN = mkPN "阿克寧頓" ; -- comment=src=geonames status=guess
@@ -180,7 +181,7 @@ lin accumulate_V2 = mkV2 "积累" ;
 lin accumulation_N = mkN "积累" | {-HSK-} mkN "积聚" ; -- comment="累积" ;
 lin accuracy_N = mkN "精度" "" ;
 lin accurate_A = mkA "准确" ;
-lin accurately_Adv = variants {} ;
+lin accurately_Adv = adjAdv accurate_A ; -- derived
 lin accusation_N = mkN "指控" ;
 lin accusative_N = mkN "賓格" | mkN "宾格" ; -- status=guess -- status=guess
 lin accuse_V2 = mkV2 "指控" ;
@@ -245,7 +246,7 @@ lin actionable_A = mkA "可控告" ;
 lin activate_V2 = mkV2 "激活" ;
 lin active_A = mkA "主动" | mkA "活动" | mkA "活泼" | mkA "活跃" | mkA "积极" ;
 lin active_N = mkN "主动" | mkN "活动" "項" | mkN "活泼" | mkN "活跃" | mkN "积极" | {-HSK-} mkN "活動星系核" | mkN "活动星系核" ; -- status=guess -- status=guess
-lin actively_Adv = variants {} ;
+lin actively_Adv = adjAdv active_A ; -- derived
 lin activistFem_N = mkN "活动家" ;
 lin activistMasc_N = mkN "活动家" ;
 lin activity_N = mkN "作为" | mkN "作用" | mkN "活动" "項" | mkN "生活" | mkN "行为" | {-HSK-} mkN "活动" ;
@@ -255,7 +256,7 @@ lin actor_N = mkN "演员" ;
 lin actress_N = mkN "女演员" "位" ;
 lin actual_A = mkA "实际" | {-HSK-} mkA "现实" ;
 lin actuality_N = mkN "现实" | {-HSK-} mkN "现实" "個" ;
-lin actually_Adv = mkAdv "其实" | mkAdv "原来" | mkAdv "所" | mkAdv "究竟" | mkAdv "竟然" | {-HSK-} mkAdv "实际" mannerAdvType ;
+lin actually_Adv = mkAdv "其实" | mkAdv "原来" | mkAdv "所" | mkAdv "究竟" | mkAdv "竟然" | {-HSK-} mkAdv "实际" mannerAdvType | adjAdv actual_A ; -- derived
 lin actuarial_A = mkA "保险精算" ;
 lin actuary_N = mkN "保险精算师" ;
 lin actuate_V2 = mkV2 "促使" ;
@@ -290,7 +291,7 @@ lin addictive_A = mkA "上瘾" ;
 lin addis_ababa_PN = foreignPN "Addis Ababa" ; -- comment=src=geonames status=guess
 lin addition_N = mkN "增加" ;
 lin additional_A = mkA "另外" | mkA "补充" | {-HSK-} mkA "额外" ;
-lin additionally_Adv = mkAdv "並且" | mkAdv "并且" | mkAdv "而且" | mkAdv "還有" | mkAdv "还有" | mkAdv "況且" | mkAdv "况且" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
+lin additionally_Adv = mkAdv "並且" | mkAdv "并且" | mkAdv "而且" | mkAdv "還有" | mkAdv "还有" | mkAdv "況且" | mkAdv "况且" | adjAdv additional_A ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- derived -- derived
 lin additive_N = mkN "附加剂" ;
 lin address_N = mkN "地址" | {-HSK-} mkN "地址" "個" ;
 lin address_V2 = mkV2 "地址" ;
@@ -302,7 +303,7 @@ lin adept_A = mkA "娴熟" ;
 lin adept_N = mkN "内行" ;
 lin adequacy_N = mkN "足够" ;
 lin adequate_A = mkA "充足" ;
-lin adequately_Adv = variants {} ;
+lin adequately_Adv = adjAdv adequate_A ; -- derived
 lin adhere_V = mkV "粘贴" | {-HSK-} mkV "遵守" ;
 lin adhesive_A = mkA "胶粘剂" ;
 lin adhesive_N = mkN "胶粘剂" ;
@@ -323,6 +324,7 @@ lin administer_V = mkV "管理" | {-HSK-} mkV "给予帮助" ;
 lin administer_V2 = mkV2 "管理" ;
 lin administration_N = mkN "管理" | {-HSK-} mkN "管理" "個" ;
 lin administrative_A = mkA "行政" ;
+lin administratively_Adv = adjAdv administrative_A ; -- derived -- derived
 lin administratorFem_N = mkN "管理员" ;
 lin administratorMasc_N = mkN "管理员" ;
 lin admirable_A = mkA "令人钦佩" ;
@@ -360,7 +362,7 @@ lin adulthood_N = mkN "成年" ; -- status=guess
 lin advance_N = mkN "推进" ;
 lin advance_V = mkV "促进" | mkV "提前" | mkV "进" | mkV "进行" | {-HSK-} mkV "推进" ;
 lin advance_V2 = mkV2 "促进" | mkV2 "提前" | mkV2 "进" | mkV2 "进行" | {-HSK-} mkV2 "推进" ;
-lin advanced_A = variants {} | {-HSK-} mkA "高级" ;
+lin advanced_A = {-HSK-} mkA "高级" ;
 lin advancement_N = mkN "进步" ;
 lin advancer_N = mkN "前进者" "个" ;
 lin advantage_N = mkN "优势" | mkN "优点" "個" | mkN "好处" "個" | {-HSK-} mkN "优点" ;
@@ -411,8 +413,11 @@ lin affair_N = mkN "事件" | {-HSK-} mkN "事情" "件" ;
 lin affect_N = mkN "情感""" ;
 lin affect_V2 = mkV2 "作用" | mkV2 "关系" | mkV2 "影响" ;
 lin affectation_N = mkN "假裝" | mkN "假装" ; -- status=guess -- status=guess
+lin affected_A = variants {} ;
+lin affectedly_Adv = adjAdv affected_A ; -- derived
 lin affection_N = mkN "喜爱" "种" | {-HSK-} mkN "爱" ;
 lin affectionate_A = mkA "充满深情" ;
+lin affectionately_Adv = adjAdv affectionate_A ; -- derived -- derived
 lin affiant_N = mkN "宣誓者" "个" ;
 lin affidavit_N = mkN "宣誓书" ;
 lin affiliate_N = mkN "联号" [] ;
@@ -477,6 +482,7 @@ lin aggregate_A = mkA "合计" ;
 lin aggregate_N = mkN "合计" ;
 lin aggression_N = mkN "侵略" "次" ;
 lin aggressive_A = mkA "侵略性" ;
+lin aggressively_Adv = adjAdv aggressive_A ; -- derived -- derived
 lin aggressiveness_N = mkN "侵犯" ;
 lin aghast_A = mkA "吓呆" ;
 lin agile_A = mkA "敏捷" | {-HSK-} mkA "灵活" ; -- status=guess
@@ -687,7 +693,8 @@ lin aloud_Adv = mkAdv "大声地" ;
 lin alpaca_N = mkN "羊駝" | mkN "羊驼" | mkN "美洲駝" | mkN "美洲驼" | mkN "無峰駝" | mkN "无峰驼" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin alpha_N = mkN "开端" ;
 lin alphabet_N = mkN "字母表" ;
-lin alphabetically_Adv = mkAdv "按字母順序" | mkAdv "按字母顺序" | mkAdv "按字母排序" ; -- status=guess -- status=guess -- status=guess
+lin alphabetical_A = variants {} ;
+lin alphabetically_Adv = mkAdv "按字母順序" | mkAdv "按字母顺序" | mkAdv "按字母排序" | adjAdv alphabetical_A ; -- status=guess -- status=guess -- status=guess -- derived -- derived
 lin already_AdV = mkAdV "已经" ;
 lin already_Adv = L.already_Adv | {-HSK-} mkAdv "尝" | mkAdv "就" | mkAdv "已经" | mkAdv "曾经" ;
 lin alright_A = variants {} ;
@@ -701,9 +708,10 @@ lin alteration_N = mkN "改造" "次" ;
 lin alternate_A = mkA "轮流" ;
 lin alternate_V = mkV "交流" | mkV "轮流" ;
 lin alternate_V2 = mkV2 "交流" | mkV2 "轮流" | {-HSK-} mkV2 "使+交替" ;
+lin alternately_Adv = adjAdv alternate_A ; -- derived -- derived
 lin alternative_A = mkA "替代" | {-HSK-} mkA "选择" ;
 lin alternative_N = mkN "替代" | {-HSK-} mkN "选择" ;
-lin alternatively_Adv = variants {} ;
+lin alternatively_Adv = adjAdv alternative_A ; -- derived
 lin alternator_N = mkN "交流發電機" ; -- status=guess
 lin although_Subj = S.although_Subj ;
 lin altimeter_N = mkN "测高仪" ; -- status=guess
@@ -887,7 +895,7 @@ lin angling_N = mkN "钓鱼" ;
 lin angola_PN = mkPN "安哥拉" ; -- comment=src=geonames status=guess
 lin angolan_A = mkA "安哥拉" ;
 lin angora_N = mkN "安哥拉" ;
-lin angrily_Adv = variants {} ;
+lin angrily_Adv = adjAdv angry_A ; -- derived
 lin angry_A = mkA "愤怒" | {-HSK-} mkA "生气" ;
 lin angst_N = mkN "焦虑" [] ;
 lin angstrom_N = mkN "埃格斯特朗" | mkN "埃" ; -- status=guess -- status=guess
@@ -900,6 +908,8 @@ lin animal_A = mkA "动物" ;
 lin animal_N = L.animal_N | {-HSK-} mkN "动物" "隻" ;
 lin animate_A = mkA "有活力的" ; -- status=guess
 lin animate_V2 = mkV2 "使+有生气" ;
+lin animatedly_A = variants {} ;
+lin animatedly_Adv = adjAdv animatedly_A ; -- derived
 lin animation_N = mkN "动画" | {-HSK-} mkN "动画片" | mkN "生气" ;
 lin animator_N = mkN "動畫製作者" | mkN "动画制作者" ; -- status=guess -- status=guess
 lin anime_N = mkN "日本動畫" | mkN "日本动画" | mkN "動畫" | mkN "动画" | mkN "日本卡通" | mkN "日式動畫" | mkN "日式动画" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -934,7 +944,7 @@ lin annoyance_N = mkN "烦恼" ;
 lin annoying_A = mkA "恼人" ;
 lin annual_A = mkA "周年" ;
 lin annual_N = mkN "年度報告" | mkN "年度报告" | mkN "年報" | mkN "年报" ; -- status=guess -- status=guess -- status=guess -- status=guess
-lin annually_Adv = variants {} ;
+lin annually_Adv = adjAdv annual_A ; -- derived
 lin annuity_N = mkN "年金" ;
 lin annul_V2 = mkV2 (mkV "廢除") | mkV2 (mkV "废除") | mkV2 (mkV "取消") ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
 lin anoa_N = mkN "倭水牛" ; -- status=guess
@@ -945,6 +955,7 @@ lin anomaly_N = mkN "异常" ;
 lin anon_PN = foreignPN "Anon" ; -- comment=src=eng status=guess
 lin anonymity_N = mkN "匿名" ;
 lin anonymous_A = mkA "匿名" ;
+lin anonymously_Adv = adjAdv anonymous_A ; -- derived -- derived
 lin anopheles_N = mkN "按蚊" | mkN "瘧蚊" | mkN "疟蚊" ; -- status=guess -- status=guess -- status=guess
 lin anorak_N = mkN "皮猴兒" | mkN "皮猴儿" ; -- status=guess -- status=guess
 lin anorexia_N = mkN "厭食症" | mkN "厌食症" ; -- status=guess -- status=guess
@@ -1072,11 +1083,13 @@ lin apparatchik_N = mkN "官僚" ; -- status=guess
 lin apparatus_N = mkN "设备" "台" ;
 lin apparel_N = mkN "服饰" ;
 lin apparent_A = mkA "明显" ;
-lin apparently_Adv = variants {} | {-HSK-} mkAdv "似乎" | mkAdv "看来" ;
+lin apparently_Adv = {-HSK-} mkAdv "似乎" | mkAdv "看来" | adjAdv apparent_A ; -- derived
 lin apparition_N = mkN "幻影" ;
 lin appeal_N = mkN "上诉" ;
 lin appeal_V = mkV "上诉" ;
 lin appeal_V2 = mkV2 "上诉" ;
+lin appealing_A = variants {} ;
+lin appealingly_Adv = adjAdv appealing_A ; -- derived
 lin appear_V = mkV "产生" | mkV "似乎" | mkV "像" | mkV "出现" | mkV "显得" ;
 lin appear_VA = mkVA "产生" | mkVA "似乎" | mkVA "像" | mkVA "出现" | mkVA "显得" ;
 lin appear_VS = mkVS "产生" | mkVS "似乎" | mkVS "像" | mkVS "出现" | mkVS "显得" ;
@@ -1103,7 +1116,7 @@ lin applicability_N = mkN "适用性" ;
 lin applicable_A = mkA "应用" | {-HSK-} mkA "适用" ;
 lin applicant_N = mkN "申请人" ;
 lin application_N = mkN "应用" | mkN "用途" | mkN "申请" "份" | {-HSK-} mkN "申请" ;
-lin applied_A = variants {} | {-HSK-} mkA "实用" ;
+lin applied_A = {-HSK-} mkA "实用" ;
 lin apply_1_V2 = mkV2 "申请" ;
 lin apply_2_V2 = mkV2 "申请" ;
 lin apply_V = mkV "使用" | mkV "应用" | mkV "报名" | {-HSK-} mkV "申请" ;
@@ -1133,7 +1146,7 @@ lin approach_V2 = mkV2 "就" | {-HSK-} mkV2 "接近" ;
 lin approachable_A = mkA "容易接近的" ; -- status=guess
 lin appropriate_A = mkA "相当" | {-HSK-} mkA "适当" ;
 lin appropriate_V2 = mkV2 "占用" ;
-lin appropriately_Adv = variants {} ;
+lin appropriately_Adv = adjAdv appropriate_A ; -- derived
 lin appropriation_N = mkN "拨款" ;
 lin approval_N = mkN "赞同" ;
 lin approve_V = mkV "同意" | mkV "批准" ;
@@ -1143,7 +1156,7 @@ lin approx_PN = foreignPN "Approx" ; -- comment=src=eng status=guess
 lin approximate_A = mkA "大概" ;
 lin approximate_V2 = mkV2 "近似" ;
 lin approximately_A = mkA "大约" | mkA "近" ;
-lin approximately_Adv = variants {} | {-HSK-} mkAdv "大约" | mkAdv "近" ;
+lin approximately_Adv = {-HSK-} mkAdv "大约" | mkAdv "近" | adjAdv approximately_A ; -- derived
 lin approximation_N = mkN "近似算法" ; -- status=guess
 lin apr_PN = foreignPN "Apr" ; -- comment=src=eng status=guess
 lin apricot_N = mkN "杏色" ; -- status=guess
@@ -1161,7 +1174,7 @@ lin arable_A = mkA "耕地" ;
 lin arachnid_N = mkN "蛛性動物" | mkN "蛛性动物" | mkN "蜘蛛類" | mkN "蜘蛛类" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin arachnophobia_N = mkN "蜘蛛恐懼症" | mkN "蜘蛛恐惧症" ; -- status=guess -- status=guess
 lin arbitrageur_N = mkN "套利" "次" ;
-lin arbitrarily_Adv = mkAdv "任意地" ; -- status=guess
+lin arbitrarily_Adv = mkAdv "任意地" | adjAdv arbitrary_A ; -- status=guess -- derived -- derived
 lin arbitrary_A = mkA "乱" | {-HSK-} mkA "武断" ;
 lin arbitrate_V2 = mkV2 "仲裁" ;
 lin arbitration_N = mkN "仲裁" ;
@@ -1214,6 +1227,7 @@ lin argentinian_A = mkA "阿根廷" ;
 lin argon_N = mkN "氬" | mkN "氩" ; -- status=guess -- status=guess
 lin argot_N = mkN "行话" ; -- status=guess
 lin arguable_A = mkA "值得商榷" ;
+lin arguably_Adv = adjAdv arguable_A ; -- derived -- derived
 lin argue_V = mkV "争论" ;
 lin argue_V2 = mkV2 "争论" ;
 lin argue_VS = mkVS "争论" ;
@@ -1294,6 +1308,7 @@ lin articulate_V2 = mkV2 "说出" ;
 lin artie_PN = foreignPN "Artie" ; -- comment=src=eng status=guess
 lin artifact_N = mkN "神器" ;
 lin artificial_A = mkA "人造" | {-HSK-} mkA "假" ;
+lin artificially_Adv = adjAdv artificial_A ; -- derived -- derived
 lin artillery_N = mkN "火炮" "门" ;
 lin artilleryman_N = mkN "砲兵" | mkN "炮兵" ; -- status=guess -- status=guess
 lin artisan_N = mkN "工匠" | mkN "匠人" ; -- status=guess -- status=guess
@@ -1319,7 +1334,7 @@ lin ascendancy_N = mkN "優勢" | mkN "优势" ; -- status=guess -- status=guess
 lin ascendant_N = mkN "优势" "项" ;
 lin ascendency_N = mkN "优势" ;
 lin ascent_N = mkN "上升" ;
-lin ascertain_V2 = variants {} | {-HSK-} mkV2 "批" | mkV2 "确定" ;
+lin ascertain_V2 = {-HSK-} mkV2 "批" | mkV2 "确定" ;
 lin asceticism_N = mkN "禁慾主義" | mkN "禁欲主义" | mkN "苦行主義" | mkN "苦行主义" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin ascot_PN = foreignPN "Ascot" ; -- comment=src=geonames status=guess
 lin ascribe_V2 = mkV2 "归因于" ;
@@ -1683,7 +1698,7 @@ lin babysitter_N = mkN "保姆" ; -- status=guess
 lin baccalaureate_N = mkN "学士学位" ;
 lin bachelor_N = mkN "学士" ;
 lin bacillus_N = mkN "芽孢杆菌" ;
-lin back_A = variants {} | {-HSK-} mkA "后面" | mkA "背" ;
+lin back_A = {-HSK-} mkA "后面" | mkA "背" ;
 lin back_Adv = mkAdv "后面" | {-HSK-} mkAdv "背" ;
 lin back_N = L.back_N | {-HSK-} mkN "后面" | mkN "背" ;
 lin back_V = mkV "支持" ;
@@ -1731,7 +1746,7 @@ lin badajoz_PN = foreignPN "Badajoz" ; -- comment=src=geonames status=guess
 lin badalona_PN = mkPN "巴达洛纳" ; -- comment=src=geonames status=guess
 lin badge_N = mkN "徽章" | {-HSK-} mkN "象征" ;
 lin badger_N = mkN "獾" ; -- status=guess
-lin badly_Adv = variants {} ;
+lin badly_Adv = adjAdv bad_A ; -- derived
 lin badminton_N = mkN "羽毛球" | {-HSK-} mkN "羽毛球" "個" ; -- status=guess
 lin baffle_V2 = mkV2 (mkV "迷惑") | mkV2 (mkV "使困惑") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin bag_N = mkN "包" "個" | {-HSK-} mkN "袋" ;
@@ -1787,6 +1802,8 @@ lin ballot_V = mkV "投票" ;
 lin ballplayer_N = mkN "棒球手" "名" ;
 lin ballpoint_N = mkN "原子笔" | mkN "原子筆" | mkN "圓珠筆" | mkN "圆珠笔" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin ballroom_N = mkN "舞厅" ;
+lin bally_A = variants {} ;
+lin bally_Adv = adjAdv bally_A ; -- derived
 lin balm_N = mkN "香脂" [] ;
 lin balmy_A = mkA "芳香" ;
 lin baloney_N = mkN "胡扯" ;
@@ -1866,7 +1883,7 @@ lin barefoot_A = mkA "赤腳" | mkA "赤脚" | mkA "光腳" | mkA "光脚" ; -- 
 lin barefoot_Adv = mkAdv "赤腳" | mkAdv "赤脚" ; -- status=guess -- status=guess
 lin barefooted_A = mkA "赤腳" | mkA "赤脚" ; -- status=guess -- status=guess
 lin barefooted_Adv = mkAdv "赤腳" | mkAdv "赤脚" ; -- status=guess -- status=guess
-lin barely_Adv = variants {} ;
+lin barely_Adv = adjAdv bare_A ; -- derived
 lin bargain_N = mkN "议价" ;
 lin bargain_V = mkV "讨价还价" "次" ;
 lin bargain_V2 = variants {} ; -- comment=mkV "讨价还价" "次" ;
@@ -2000,13 +2017,15 @@ lin bear_N = mkN "熊" "只" ;
 lin bear_V = mkV "承受" | {-HSK-} mkV "承担" ;
 lin bear_V2 = mkV2 "承受" | {-HSK-} mkV2 "承担" ;
 lin bearable_A = mkA "可以忍受" ; -- comment=1
-lin beard_N = variants {} | {-HSK-} mkN "胡须" "根" ;
+lin beard_N = {-HSK-} mkN "胡须" "根" ;
 lin beard_V2 = mkV2 "公然反对" ;
 lin bearer_N = mkN "持票者" ;
 lin bearing_N = mkN "态度" "個" | {-HSK-} mkN "轴承" ;
 lin bearish_A = mkA "无礼" ;
 lin bearsden_PN = foreignPN "Bearsden" ; -- comment=src=geonames status=guess
 lin beast_N = mkN "兽" ;
+lin beastly_A = variants {} ;
+lin beastly_Adv = adjAdv beastly_A ; -- derived -- derived
 lin beat_N = mkN "节拍" ;
 lin beat_V = mkV "击败" | {-HSK-} mkV "赢" ;
 lin beat_V2 = mkV2 "击败" | {-HSK-} mkV2 "赢" ;
@@ -2019,7 +2038,7 @@ lin beau_N = mkN "男朋友" | mkN "對象" | mkN "对象" ; -- status=guess -- 
 lin beaumaris_PN = foreignPN "Beaumaris" ; -- comment=src=geonames status=guess
 lin beautician_N = mkN "美容師" | mkN "美容师" ; -- status=guess -- status=guess
 lin beautiful_A = L.beautiful_A | {-HSK-} mkA "漂亮" | mkA "美丽" ;
-lin beautifully_Adv = variants {} ;
+lin beautifully_Adv = adjAdv beautiful_A ; -- derived
 lin beauty_N = mkN "美好" [] ;
 lin beaver_N = mkN "海狸" | mkN "河狸" ; -- status=guess -- status=guess
 lin bebington_PN = foreignPN "Bebington" ; -- comment=src=geonames status=guess
@@ -2142,7 +2161,7 @@ lin bemoan_V2 = mkV2 "哀叹" ;
 lin bemused_A = mkA "困惑" ;
 lin ben_PN = foreignPN "Ben" ; -- comment=src=eng status=guess
 lin bench_N = mkN "台阶" | {-HSK-} mkN "长椅" ;
-lin bend_N = variants {} | {-HSK-} mkN "弯" "道" ;
+lin bend_N = {-HSK-} mkN "弯" "道" ;
 lin bend_V = mkV "掰弯" ;
 lin bend_V2 = mkV2 "弯曲" ;
 lin beneath_Adv = mkAdv "低" ;
@@ -2304,7 +2323,7 @@ lin bind_N = mkN "绑定" "种" ;
 lin bind_V = mkV "系" | {-HSK-} mkV "结合" ;
 lin bind_V2 = mkV2 "系" | {-HSK-} mkV2 "绑定" ;
 lin binder_N = mkN "粘合剂" ;
-lin binding_A = variants {} | {-HSK-} mkA "结合" ;
+lin binding_A = {-HSK-} mkA "结合" ;
 lin binding_N = mkN "结合" "次" | {-HSK-} mkN "裝訂" | mkN "装订" ; -- status=guess -- status=guess
 lin binge_N = mkN "狂欢" ;
 lin bingley_PN = mkPN "彬格莱" ;
@@ -2359,7 +2378,7 @@ lin bite_V2 = L.bite_V2 | {-HSK-} mkV2 "咬" ;
 lin biting_A = mkA "刺骨" ;
 lin bitter_A = mkA "苦" | {-HSK-} mkA "辛酸" ;
 lin bitter_N = mkN "苦" | {-HSK-} mkN "苦味""" ;
-lin bitterly_Adv = variants {} ;
+lin bitterly_Adv = adjAdv bitter_A ; -- derived
 lin bitterness_N = mkN "苦" "种" ;
 lin bitumen_N = mkN "瀝青" | mkN "沥青" ; -- status=guess -- status=guess
 lin biz_N = mkN "商业" ;
@@ -2543,6 +2562,7 @@ lin bochum_PN = mkPN "波鸿" ; -- comment=src=geonames status=guess
 lin bode_V = mkV "预示" ;
 lin bode_V2 = mkV2 "预兆" ;
 lin bodily_A = variants {} ;
+lin bodily_Adv = adjAdv bodily_A ; -- derived
 lin bodmin_PN = mkPN "博德明" ; -- comment=src=geonames status=guess
 lin body_N = mkN "身体" | {-HSK-} mkN "身体" "個" ;
 lin bodybuilder_N = mkN "健美運動人員" | mkN "健美运动人员" ; -- status=guess -- status=guess
@@ -2652,7 +2672,7 @@ lin bordon_PN = foreignPN "Bordon" ; -- comment=src=geonames status=guess
 lin bore_N = mkN "孔" ;
 lin bore_V = mkV "烦扰" ;
 lin bore_V2 = mkV2 "钻孔" ;
-lin bored_A = variants {} | {-HSK-} mkA "无聊" ;
+lin bored_A = {-HSK-} mkA "无聊" ;
 lin boredom_N = mkN "无聊" [] ;
 lin borer_N = mkN "钻孔器" "件" ;
 lin boring_A = mkA "无聊" ;
@@ -2884,7 +2904,7 @@ lin brief_N = mkN "简要" [] ;
 lin brief_V2 = mkV2 "介绍" | {-HSK-} mkV2 "简报" ;
 lin briefcase_N = mkN "公文包" "个" ;
 lin briefing_N = mkN "简报" ;
-lin briefly_Adv = variants {} | {-HSK-} mkAdv "概括" ;
+lin briefly_Adv = {-HSK-} mkAdv "概括" | adjAdv brief_A ; -- derived
 lin brig_PN = foreignPN "Brig" ; -- comment=src=geonames status=guess
 lin brigade_N = mkN "旅" ;
 lin brigand_N = mkN "強盜" | mkN "强盗" | mkN "土匪" ; -- status=guess -- status=guess -- status=guess
@@ -2893,6 +2913,7 @@ lin bright_A = mkA "亮" | {-HSK-} mkA "光" | mkA "白" | mkA "聪明" ;
 lin bright_Adv = mkAdv "亮" | mkAdv "光" | mkAdv "白" | mkAdv "聪明" | {-HSK-} mkAdv "明亮" ;
 lin brighten_V2 = mkV2 "闪亮" ;
 lin brightlingsea_PN = foreignPN "Brightlingsea" ; -- comment=src=geonames status=guess
+lin brightly_Adv = adjAdv bright_A ; -- derived -- derived
 lin brightness_N = mkN "明亮" ; -- status=guess
 lin brighton_PN = mkPN ("布莱顿" | "布赖顿") ; -- comment=src=geonames status=guess
 lin brilliance_N = mkN "辉" ; -- status=guess
@@ -2929,7 +2950,7 @@ lin broadcast_V2 = mkV2 "播放" ;
 lin broadcasting_N = mkN "广播" ;
 lin broaden_V = mkV "扩大" ;
 lin broaden_V2 = mkV2 "扩大" ;
-lin broadly_Adv = variants {} ;
+lin broadly_Adv = adjAdv broad_A ; -- derived
 lin broadside_N = mkN "宽边" "条" ;
 lin brocade_N = mkN "錦緞" | mkN "锦缎" | mkN "錦" | mkN "锦" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin brocade_V2 = mkV2 (mkV "織錦") | mkV2 (mkV "织锦") ; -- status=guess, src=wikt -- status=guess, src=wikt
@@ -2937,7 +2958,7 @@ lin broccoli_N = mkN "西蘭花" | mkN "西兰花" ; -- status=guess -- status=g
 lin brochure_N = mkN "小册子" ;
 lin broiler_N = mkN "烤焙用具" ;
 lin broke_A = mkA "破产" ;
-lin broken_A = variants {} | {-HSK-} mkA "坏" | mkA "破" ;
+lin broken_A = {-HSK-} mkA "坏" | mkA "破" ;
 lin broker_N = mkN "经纪人" ;
 lin brokerage_N = mkN "佣金" ;
 lin bromine_N = mkN "溴" ;
@@ -2958,7 +2979,7 @@ lin brothel_N = mkN "妓院" ; -- status=guess
 lin brother_N = mkN "兄弟" | {-HSK-} mkN "舅舅" "個" ;
 lin brother_N2 = L.brother_N2 ;
 lin brotherly_A = mkA "兄弟" | {-HSK-} mkA "兄弟般" ;
-lin brotherly_Adv = mkAdv "兄弟" ;
+lin brotherly_Adv = mkAdv "兄弟" | adjAdv brotherly_A ; -- derived -- derived
 lin broughton_PN = foreignPN "Broughton" ; -- comment=src=geonames status=guess
 lin brouhaha_N = mkN "骚动" ;
 lin brow_N = mkN "眉毛" ;
@@ -2982,6 +3003,7 @@ lin brusque_A = mkA "唐突" | mkA "粗暴" | mkA "無禮" | mkA "无礼" ; -- s
 lin brussels_PN = mkPN "布鲁塞尔" ;
 lin brutal_A = mkA "残忍" ;
 lin brutality_N = mkN "暴行" ;
+lin brutally_Adv = adjAdv brutal_A ; -- derived -- derived
 lin brutish_A = mkA "粗野" ;
 lin bryan_PN = mkPN "布賴恩" ; -- comment=src=geonames status=guess
 lin bst_PN = foreignPN "BST" ; -- comment=src=eng status=guess
@@ -3458,7 +3480,7 @@ lin careen_V = mkV "倾斜" ;
 lin career_N = mkN "事业" ;
 lin carefree_A = mkA "无忧无虑" ;
 lin careful_A = mkA "仔细" | {-HSK-} mkA "小心" ;
-lin carefully_Adv = variants {} ;
+lin carefully_Adv = adjAdv careful_A ; -- derived
 lin careless_A = mkA "粗心" | {-HSK-} mkA "草" | mkA "马虎" ;
 lin carelessness_N = mkN "粗心" | mkN "大意" | mkN "草率" ; -- status=guess -- status=guess -- status=guess
 lin carer_N = variants {} ;
@@ -3690,6 +3712,7 @@ lin central_A = mkA "中央" ;
 lin central_N = mkN "中央" ;
 lin centralize_V = mkV "集中" ;
 lin centralize_V2 = mkV2 "使+集中" | {-HSK-} mkV2 "集中" ;
+lin centrally_Adv = adjAdv central_A ; -- derived -- derived
 lin centre_N = mkN "中心" ;
 lin centre_V = mkV "中心" ;
 lin centre_V2 = mkV2 "中心" ;
@@ -3710,7 +3733,7 @@ lin cerium_N = mkN "鈰" ; -- status=guess
 lin certain_1_A = mkA "一定" ; -- comment=NOT SURE "一定" or "某些"
 lin certain_2_A = mkA "一定" ; -- comment=NOT SURE "一定" or "某些"
 lin certain_A = mkA "一定" ; -- comment=NOT SURE "一定" or "某些"
-lin certainly_Adv = mkAdv "一定" | mkAdv "当然" | {-HSK-} mkAdv certain_1_A.s mannerAdvType ;
+lin certainly_Adv = mkAdv "一定" | mkAdv "当然" | {-HSK-} mkAdv certain_1_A.s mannerAdvType | adjAdv certain_2_A ; -- derived
 lin certainty_N = mkN "把握" | {-HSK-} mkN "确定性" "" ;
 lin certificate_N = mkN "签证" "個" | mkN "证明" "個" | {-HSK-} mkN "证书" ;
 lin certification_N = mkN "证明" ;
@@ -3810,6 +3833,7 @@ lin charlotte_PN = mkPN "夏洛特" ; -- comment=src=geonames status=guess
 lin charm_N = mkN "魅力" | {-HSK-} mkN "魅力" [] ;
 lin charm_V = mkV "吸引" ;
 lin charming_A = variants {} ;
+lin charmingly_Adv = adjAdv charming_A ; -- derived -- derived
 lin chart_N = mkN "图表" ;
 lin chart_V2 = mkV2 "图表" ;
 lin charter_N = mkN "宪章" ;
@@ -3873,6 +3897,7 @@ lin cheltenham_PN = mkPN "切爾滕納姆" ; -- comment=src=geonames status=gues
 lin chelyabinsk_PN = mkPN "車里雅賓斯克" ; -- comment=src=geonames status=guess
 lin chemical_A = mkA "化学" | {-HSK-} mkA "化学药品" ;
 lin chemical_N = mkN "化学" ;
+lin chemically_Adv = adjAdv chemical_A ; -- derived -- derived
 lin chemistFem_N = mkN "化学家" ;
 lin chemistMasc_N = mkN "化学家" ;
 lin chemistry_N = mkN "化学" ;
@@ -3915,7 +3940,7 @@ lin chide_V = mkV "斥责" ;
 lin chide_V2 = mkV2 "责骂" ;
 lin chief_A = mkA "长" | {-HSK-} mkA "首席" ;
 lin chief_N = mkN "长" | {-HSK-} mkN "首席" ;
-lin chiefly_Adv = mkAdv "主要" ; -- status=guess
+lin chiefly_Adv = mkAdv "主要" | adjAdv chief_A ; -- status=guess -- derived -- derived
 lin chignon_N = mkN "髮髻" | mkN "发髻" ; -- status=guess -- status=guess
 lin chilblain_N = mkN "凍瘡" | mkN "冻疮" | mkN "凍傷" | mkN "冻伤" | mkN "瘃" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin child_N = L.child_N | {-HSK-} mkN "儿童" "個" | mkN "孩子" ;
@@ -4013,6 +4038,8 @@ lin chronically_Adv = mkAdv "慢性" ;
 lin chronicle_N = mkN "编年史" "本" ;
 lin chronicle_V2 = mkV2 "载入史册" ;
 lin chronograph_N = mkN "記時器" | mkN "记时器" | mkN "計時碼表" | mkN "计时码表" | mkN "記時儀" | mkN "记时仪" | mkN "錄時器" | mkN "录时器" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
+lin chronological_A = variants {} ;
+lin chronologically_Adv = adjAdv chronological_A ; -- derived -- derived
 lin chronometer_N = mkN "時計" | mkN "时计" ; -- status=guess -- status=guess
 lin chrysanthemum_N = mkN "菊" | mkN "菊花" ; -- status=guess -- status=guess
 lin chrysotile_N = mkN "温石棉" "张" ;
@@ -4170,7 +4197,7 @@ lin clear_V = mkV "清除" ;
 lin clear_V2 = mkV2 "清除" ;
 lin clearance_N = mkN "净空" [] ;
 lin clearing_N = mkN "清除" ;
-lin clearly_Adv = mkAdv "清晰" mannerAdvType ;
+lin clearly_Adv = mkAdv "清晰" mannerAdvType | adjAdv clear_A ; -- derived
 lin cleator_moor_PN = foreignPN "Cleator moor" ; -- comment=src=eng status=guess
 lin cleavage_N = mkN "卵裂" ; -- status=guess
 lin cleaver_N = mkN "菜刀" | mkN "砍肉刀" ; -- status=guess -- status=guess
@@ -4241,7 +4268,7 @@ lin close_N = mkN "关闭" | {-HSK-} mkN "密切" | mkN "深" ;
 lin close_V = mkV "关" | {-HSK-} mkV "关闭" | mkV "结束" ;
 lin close_V2 = L.close_V2 | {-HSK-} mkV2 "关" | mkV2 "关闭" | mkV2 "结束" ;
 lin closed_A = variants {} ;
-lin closely_Adv = variants {} | {-HSK-} mkAdv "密切" ;
+lin closely_Adv = {-HSK-} mkAdv "密切" | adjAdv close_A ; -- derived
 lin closeness_N = mkN "亲密" ;
 lin closet_N = mkN "壁橱" ;
 lin closing_N = mkN "關閉時間" | mkN "关闭时间" ; -- status=guess -- status=guess
@@ -4251,7 +4278,7 @@ lin clot_V = mkV "結塊" | mkV "结块" ; -- status=guess, src=wikt -- status=g
 lin clot_V2 = mkV2 (mkV "結塊") | mkV2 (mkV "结块") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin cloth_N = mkN "布" ;
 lin clothe_V2 = mkV2 "穿暖" ;
-lin clothes_N = variants {} | {-HSK-} mkN "服装" "身" | mkN "衣服" "件" ;
+lin clothes_N = {-HSK-} mkN "服装" "身" | mkN "衣服" "件" ;
 lin clotheshorse_N = mkN "晾衣架" ; -- status=guess
 lin clothesline_N = mkN "曬衣繩" | mkN "晒衣绳" ; -- status=guess -- status=guess
 lin clothier_N = mkN "呢绒商" ;
@@ -4384,6 +4411,7 @@ lin coincide_V = mkV "一致" ;
 lin coincidence_N = mkN "巧合" ;
 lin coincident_A = mkA "一致" ;
 lin coincidental_A = mkA "巧合" ;
+lin coincidentally_Adv = adjAdv coincidental_A ; -- derived -- derived
 lin coitus_N = mkN "性交" ; -- status=guess
 lin coke_N = mkN "焦炭" "吨" ;
 lin col_PN = foreignPN "Col" ; -- comment=src=eng status=guess
@@ -4420,6 +4448,7 @@ lin collect_V2 = mkV2 "捡" | mkV2 "收" | {-HSK-} mkV2 "收集" ;
 lin collection_N = mkN "汇编" ; -- comment=NOT SURE "集子" or "汇编" or "丛书"
 lin collective_A = mkA "集体" ;
 lin collective_N = mkN "集体" "個" | {-HSK-} mkN "集合名詞" | mkN "集合名词" ; -- status=guess -- status=guess
+lin collectively_Adv = adjAdv collective_A ; -- derived -- derived
 lin collectivism_N = mkN "集體主義" | mkN "集体主义" ; -- status=guess -- status=guess
 lin collector_N = mkN "采集者" ;
 lin college_N = mkN "学院" ;
@@ -4429,6 +4458,7 @@ lin collision_N = mkN "碰撞" ;
 lin collocation_N = mkN "搭配詞" | mkN "搭配词" ; -- status=guess -- status=guess
 lin colloquial_A = mkA "口語" | mkA "口语" ; -- status=guess -- status=guess
 lin colloquialism_N = mkN "口語" | mkN "口语" | mkN "俗語" | mkN "俗语" | mkN "白話" | mkN "白话" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
+lin colloquially_Adv = adjAdv colloquial_A ; -- derived -- derived
 lin colloquium_N = mkN "座談會" | mkN "座谈会" | mkN "討論會" | mkN "讨论会" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin colloquy_N = mkN "座谈会" ;
 lin colne_PN = foreignPN "Colne" ; -- comment=src=geonames status=guess
@@ -4506,12 +4536,12 @@ lin comet_N = mkN "彗星" ;
 lin comfort_N = mkN "安慰" ;
 lin comfort_V2 = mkV2 "安慰" ;
 lin comfortable_A = mkA "舒服" | {-HSK-} mkA "舒适" ;
-lin comfortably_Adv = variants {} ;
+lin comfortably_Adv = adjAdv comfortable_A ; -- derived
 lin comforter_N = mkN "棉被" | mkN "棉被" ; -- status=guess -- status=guess
 lin comic_A = mkA "滑稽" ;
 lin comic_N = mkN "连环漫画" ;
 lin comical_A = mkA "滑稽" ;
-lin coming_A = variants {} | {-HSK-} mkA "未来" ;
+lin coming_A = {-HSK-} mkA "未来" ;
 lin coming_N = mkN "來臨" | mkN "来临" | {-HSK-} mkN "未来" "個" ; -- status=guess -- status=guess
 lin comity_N = mkN "礼让" ; -- comment="友谊" ;
 lin comma_N = mkN "逗號" | mkN "逗号" | mkN "逗點" | mkN "逗点" | mkN "頓號" | mkN "顿号" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -4542,6 +4572,7 @@ lin commerce_N = mkN "商业" | {-HSK-} mkN "商务" ;
 lin commercial_A = mkA "商业" ;
 lin commercial_N = mkN "广告" ;
 lin commercialize_V2 = mkV2 "使+商业化" ;
+lin commercially_Adv = adjAdv commercial_A ; -- derived -- derived
 lin commission_N = mkN "佣金" ;
 lin commission_V2 = mkV2 "佣金" | {-HSK-} mkV2 "委托" ;
 lin commission_V2V = mkV2V "佣金" | {-HSK-} mkV2V "委托" ;
@@ -4555,7 +4586,7 @@ lin common_2_A = mkA "共同" ;
 lin common_A = mkA "共同" ;
 lin common_N = mkN "一般" | mkN "共同" | mkN "平常" | mkN "普遍" | {-HSK-} mkN "常见" [] ;
 lin commoner_N = mkN "庶民" | mkN "平民" ; -- status=guess -- status=guess
-lin commonly_Adv = variants {} ;
+lin commonly_Adv = adjAdv common_2_A ; -- derived
 lin commonplace_A = mkA "平凡" ;
 lin commonplace_N = mkN "普通事物" ;
 lin commons_N = variants {} ;
@@ -4585,7 +4616,7 @@ lin comparability_N = mkN "可比性" "" ;
 lin comparable_A = mkA "可比" ;
 lin comparative_A = mkA "相当" ;
 lin comparative_N = mkN "比较" | mkN "比較" ; -- status=guess -- status=guess
-lin comparatively_Adv = variants {} | {-HSK-} mkAdv "比较" ;
+lin comparatively_Adv = {-HSK-} mkAdv "比较" | adjAdv comparative_A ; -- derived
 lin compare_N = mkN "比较" | {-HSK-} mkN "比较""次" ;
 lin compare_V = mkV "比" | {-HSK-} mkV "比较" ;
 lin comparison_N = mkN "对照" ;
@@ -4625,7 +4656,7 @@ lin complementary_A = mkA "补充" ;
 lin complete_A = mkA "全部" | mkA "完" | mkA "完全" | mkA "完成" | mkA "完整" | mkA "彻底" ;
 lin complete_V = mkV "完成" ;
 lin complete_V2 = mkV2 "完成" ;
-lin completely_Adv = variants {} | {-HSK-} mkAdv "十分" | mkAdv "满" ;
+lin completely_Adv = {-HSK-} mkAdv "十分" | mkAdv "满" | adjAdv complete_A ; -- derived
 lin completeness_N = mkN "完全" ;
 lin completion_N = mkN "完成" [] ;
 lin complex_A = mkA "复杂" ;
@@ -4634,7 +4665,7 @@ lin complexion_N = mkN "臉色" | mkN "脸色" | mkN "面色" ; -- status=guess 
 lin complexity_N = mkN "复杂" ;
 lin compliance_N = mkN "符合" [] ;
 lin complicate_V2 = mkV2 "使+复杂" ;
-lin complicated_A = variants {} | {-HSK-} mkA "复杂" ;
+lin complicated_A = {-HSK-} mkA "复杂" ;
 lin complication_N = mkN "并发症" ;
 lin complicity_N = mkN "同谋" ;
 lin compliment_N = mkN "恭维" ;
@@ -4680,6 +4711,8 @@ lin computerization_N = mkN "電腦化" | mkN "电脑化" | mkN "計算機化" |
 lin computerize_V2 = mkV2 " 将+电脑化" ;
 lin computing_N = variants {} ;
 lin comrade_N = mkN "伙伴" | {-HSK-} mkN "同志" "位" ;
+lin comradely_A = variants {} ;
+lin comradely_Adv = adjAdv comradely_A ; -- derived
 lin con_N = mkN "騙子" | mkN "骗子" ; -- status=guess -- status=guess
 lin con_V2 = mkV2 "精读" ;
 lin concatenation_N = mkN "連鎖" | mkN "连锁" | mkN "連結" | mkN "连结" | mkN "相連" | mkN "相连" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -4703,7 +4736,8 @@ lin conception_N = mkN "概念" ;
 lin conceptual_A = mkA "概念上" ;
 lin concern_N = mkN "关照" ;
 lin concern_V2 = mkV2 "关" | mkV2 "关系" | {-HSK-} mkV2 "关心" ;
-lin concerned_A = variants {} | {-HSK-} mkA "关心" ;
+lin concerned_A = {-HSK-} mkA "关心" ;
+lin concernedly_Adv = adjAdv concerned_A ; -- derived -- derived
 lin concerning_Prep = variants {} ;
 lin concert_N = mkN "演出" "場" | {-HSK-} mkN "音乐会" ;
 lin concert_V2 = mkV2 "协调" ;
@@ -4729,6 +4763,7 @@ lin concubine_N = mkN "妾" | mkN "姨太太" ; -- status=guess -- status=guess
 lin concur_V = mkV "同意" ;
 lin concurrence_N = mkN "同时发生" ;
 lin concurrent_A = mkA "并发" ;
+lin concurrently_Adv = adjAdv concurrent_A ; -- derived -- derived
 lin concussion_N = mkN "震盪" | mkN "震荡" ; -- status=guess -- status=guess
 lin condemn_V2 = mkV2 "谴责" ;
 lin condemnation_N = mkN "非难" ;
@@ -4793,6 +4828,7 @@ lin confront_V2 = mkV2 "面对" ;
 lin confrontation_N = mkN "对抗" ;
 lin confuse_V2 = mkV2 "绕" | {-HSK-} mkV2 "迷惑" ;
 lin confused_A = mkA "慌张" | mkA "晕" | mkA "糊涂" ;
+lin confusedly_Adv = adjAdv confused_A ; -- derived
 lin confusing_A = mkA "撲朔迷離" | mkA "扑朔迷离" | mkA "含糊不清的" ; -- status=guess -- status=guess -- status=guess
 lin confusion_N = mkN "混乱" [] ;
 lin congee_N = mkN "米粥" | mkN "粥" | mkN "稀飯" | mkN "稀饭" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -4841,6 +4877,7 @@ lin consanguinity_N = mkN "同族" ; -- status=guess
 lin conscience_N = mkN "良心" ;
 lin conscientious_A = mkA "有良心" | {-HSK-} mkA "自觉" | mkA "认真" | mkA "负责" ;
 lin conscious_A = mkA "意识到" | {-HSK-} mkA "自觉" ;
+lin consciously_Adv = adjAdv conscious_A ; -- derived -- derived
 lin consciousness_N = mkN "意识" | {-HSK-} mkN "精神" "個" ;
 lin conscript_N = mkN "应征士兵" ;
 lin conscription_N = mkN "徵兵" | mkN "征兵" ; -- status=guess -- status=guess
@@ -4851,7 +4888,7 @@ lin consent_V = mkV "同意" ;
 lin consent_V2V = mkV2V "同意" ;
 lin consequence_N = mkN "后果" ;
 lin consequent_A = mkA "连续" ;
-lin consequently_Adv = variants {} | {-HSK-} mkAdv "于是" | mkAdv "因此" ;
+lin consequently_Adv = {-HSK-} mkAdv "于是" | mkAdv "因此" | adjAdv consequent_A ; -- derived
 lin conservation_N = mkN "保护" [] ;
 lin conservatism_N = mkN "保守主义" ;
 lin conservative_A = mkA "保守" ;
@@ -4868,7 +4905,7 @@ lin consider_V3 = mkV3 "以为" | mkV3 "看" | mkV3 "考虑" | mkV3 "认为" ;
 lin consider_VS = mkVS "以为" | mkVS "看" | mkVS "考虑" | mkVS "认为" ;
 lin consider_VV = mkVV "以为" | mkVV "看" | mkVV "考虑" | mkVV "认为" ;
 lin considerable_A = mkA "可观" ;
-lin considerably_Adv = variants {} | {-HSK-} mkAdv "相当" ;
+lin considerably_Adv = {-HSK-} mkAdv "相当" | adjAdv considerable_A ; -- derived
 lin considerate_A = mkA "周到" | {-HSK-} mkA "體貼" | mkA "体贴" ; -- status=guess -- status=guess
 lin consideration_N = mkN "考虑" ;
 lin considering_Prep = variants {} ;
@@ -4879,7 +4916,7 @@ lin consignor_N = mkN "托運人" | mkN "托运人" | mkN "發貨人" | mkN "发
 lin consist_V = mkV "包括" ;
 lin consistency_N = mkN "一致性" ;
 lin consistent_A = mkA "一贯" ;
-lin consistently_Adv = variants {} ;
+lin consistently_Adv = adjAdv consistent_A ; -- derived
 lin consolation_N = mkN "安慰" ;
 lin console_V2 = mkV2 "安慰" | {-HSK-} mkV2 "控制" ;
 lin consolidate_V = mkV "巩固" ;
@@ -4901,7 +4938,7 @@ lin constable_N = mkN "警官" "名" ;
 lin constance_PN = foreignPN "Constance" ; -- comment=src=eng status=guess
 lin constant_A = mkA "不断" ;
 lin constant_N = mkN "不断" | {-HSK-} mkN "常量" | mkN "常數" | mkN "常数" ; -- status=guess -- status=guess -- status=guess
-lin constantly_Adv = variants {} | {-HSK-} mkAdv "时刻" | mkAdv "经常" | mkAdv "长" ;
+lin constantly_Adv = {-HSK-} mkAdv "时刻" | mkAdv "经常" | mkAdv "长" | adjAdv constant_A ; -- derived
 lin constellation_N = mkN "星座" ; -- status=guess
 lin consternation_N = mkN "惊愕" "" ;
 lin constipation_N = mkN "便秘" ; -- status=guess
@@ -4972,7 +5009,7 @@ lin contingency_N = mkN "万一" | {-HSK-} mkN "偶发事件" "个" ;
 lin contingent_A = mkA "不一定" ;
 lin contingent_N = mkN "分遣队" ;
 lin continual_A = mkA "持续" ;
-lin continually_Adv = variants {} ;
+lin continually_Adv = adjAdv continual_A ; -- derived
 lin continuation_N = mkN "继续" ;
 lin continue_V = mkV "持续" | mkV "接着" | mkV "继续" ;
 lin continue_V2 = mkV2 "持续" | mkV2 "接着" | mkV2 "继续" ;
@@ -4981,7 +5018,7 @@ lin continued_A = variants {} ;
 lin continuing_A = variants {} ;
 lin continuity_N = mkN "连续性" ;
 lin continuous_A = mkA "不断" | {-HSK-} mkA "连续" ;
-lin continuously_Adv = variants {} | {-HSK-} mkAdv "一直" | mkAdv "纷纷" | mkAdv "连" ;
+lin continuously_Adv = {-HSK-} mkAdv "一直" | mkAdv "纷纷" | mkAdv "连" | adjAdv continuous_A ; -- derived
 lin contortion_N = mkN "柔身術" | mkN "柔身术" | mkN "軟功" | mkN "软功" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin contortionist_N = mkN "柔術演員" | mkN "柔术演员" ; -- status=guess -- status=guess
 lin contour_N = mkN "輪廓" | mkN "轮廓" ; -- status=guess -- status=guess
@@ -5018,6 +5055,7 @@ lin control_V2 = mkV2 "掌握" | {-HSK-} mkV2 "控制" ;
 lin controlled_A = variants {} ;
 lin controller_N = mkN "调节器" ;
 lin controversial_A = mkA "争论" ;
+lin controversially_Adv = adjAdv controversial_A ; -- derived -- derived
 lin controversy_N = mkN "争议" | {-HSK-} mkN "争论" "次" ;
 lin contumely_N = mkN "侮辱" | mkN "无礼" | mkN "傲慢" ; -- status=guess -- status=guess -- status=guess
 lin contusion_N = mkN "挫傷" | mkN "挫伤" ; -- status=guess -- status=guess
@@ -5028,16 +5066,17 @@ lin convene_V = mkV "召集" ;
 lin convene_V2 = mkV2 "召集" ;
 lin convenience_N = mkN "方便" ;
 lin convenient_A = mkA "便" | mkA "方便" ;
-lin conveniently_Adv = mkAdv "顺便" ;
+lin conveniently_Adv = mkAdv "顺便" | adjAdv convenient_A ; -- derived -- derived
 lin convent_N = mkN "修道院" ;
 lin convention_N = mkN "传统" "個" | {-HSK-} mkN "惯例" ;
 lin conventional_A = mkA "传统" | {-HSK-} mkA "常规" ;
+lin conventionally_Adv = adjAdv conventional_A ; -- derived -- derived
 lin converge_V = mkV "聚合" ;
 lin conversation_N = mkN "谈话" ;
 lin converse_A = mkA "倒" | {-HSK-} mkA "相反" ;
 lin converse_N = mkN "倒" ;
 lin converse_V = mkV "谈" | {-HSK-} mkV "通話" | mkV "通话" ; -- status=guess, src=wikt -- status=guess, src=wikt
-lin conversely_Adv = variants {} ;
+lin conversely_Adv = adjAdv converse_A ; -- derived
 lin conversion_N = mkN "转变" ;
 lin convert_N = mkN "皈依者" ;
 lin convert_V = mkV "兑换" ;
@@ -5158,13 +5197,14 @@ lin correct_V2 = mkV2 "改正" | {-HSK-} mkV2 "纠正" ;
 lin correct_VS = mkVS "改正" | {-HSK-} mkVS "纠正" ;
 lin correction_N = mkN "改正" "個" | {-HSK-} mkN "更正" ;
 lin corrective_A = mkA "矫正" ;
-lin correctly_Adv = variants {} ;
+lin correctly_Adv = adjAdv correct_A ; -- derived
 lin correlation_N = mkN "相关" ;
 lin correspond_V = mkV "对应" | {-HSK-} mkV "配合" ;
-lin correspond_V2 = variants {} | {-HSK-} mkV2 "配合" ; -- comment=mkV "对应" ;
+lin correspond_V2 = {-HSK-} mkV2 "配合" ; -- comment=mkV "对应" ;
 lin correspondence_N = mkN "对应" ;
 lin correspondent_N = mkN "记者" ;
 lin corresponding_A = variants {} ;
+lin correspondingly_Adv = adjAdv corresponding_A ; -- derived -- derived
 lin corridor_N = mkN "走廊" ;
 lin corrigendum_N = mkN "勘誤" | mkN "勘误" | mkN "刊誤" | mkN "刊误" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin corroborate_V2 = mkV2 "证实" ;
@@ -5408,6 +5448,7 @@ lin critic_N = mkN "评论家" ;
 lin critical_1_A = variants {} ;
 lin critical_2_A = variants {} ;
 lin critical_A = mkA "关键" ;
+lin critically_Adv = adjAdv critical_2_A ; -- derived -- derived
 lin criticism_N = mkN "批评" | {-HSK-} mkN "批评" "個" ;
 lin criticize_V = mkV "批" | mkV "批评" ;
 lin criticize_V2 = mkV2 "批" | mkV2 "批评" ;
@@ -5537,6 +5578,7 @@ lin cult_N = mkN "祭仪" ;
 lin cultivate_V2 = mkV2 "修" | mkV2 "养成" | {-HSK-} mkV2 "培养" ;
 lin cultivation_N = mkN "养殖" ;
 lin cultural_A = mkA "文化" ;
+lin culturally_Adv = adjAdv cultural_A ; -- derived -- derived
 lin culture_N = mkN "培养" | mkN "文化" "個" | mkN "文明" "個" | {-HSK-} mkN "文化" ;
 lin cum_N = mkN "潮吹" | mkN "淫水" | mkN "出水" ; -- status=guess -- status=guess -- status=guess
 lin cumberland_PN = mkPN "坎伯蘭" ; -- comment=src=geonames status=guess
@@ -5570,7 +5612,7 @@ lin cure_V2 = mkV2 "治疗" ;
 lin curfew_N = mkN "宵禁" | mkN "門禁" | mkN "门禁" ; -- status=guess -- status=guess -- status=guess
 lin curiosity_N = mkN "好奇心" "" ;
 lin curious_A = mkA "好奇" ;
-lin curiously_Adv = variants {} ;
+lin curiously_Adv = adjAdv curious_A ; -- derived
 lin curitiba_PN = mkPN "庫里奇巴" ; -- comment=src=geonames status=guess
 lin curium_N = mkN "鋦" | mkN "锔" ; -- status=guess -- status=guess
 lin curl_N = variants {} ;
@@ -5580,7 +5622,7 @@ lin curly_A = mkA "卷曲" ;
 lin currency_N = mkN "货币" ;
 lin current_A = mkA "当前" | {-HSK-} mkA "现在" | mkA "行" ;
 lin current_N = mkN "当前" | {-HSK-} mkN "现在" | mkN "行" ;
-lin currently_Adv = variants {} | {-HSK-} mkAdv "目前" ;
+lin currently_Adv = {-HSK-} mkAdv "目前" | adjAdv current_A ; -- derived
 lin curriculum_N = mkN "课程" "节" ;
 lin curriculum_vitae_N = mkN "履历" "份" ;
 lin currie_PN = foreignPN "Currie" ; -- comment=src=geonames status=guess
@@ -5720,7 +5762,7 @@ lin dandruff_N = mkN "頭皮屑" | mkN "头皮屑" ; -- status=guess -- status=g
 lin dandy_A = mkA "花心" ;
 lin danger_N = mkN "危险" ;
 lin dangerous_A = mkA "危险" ;
-lin dangerously_Adv = mkAdv "危險地" | mkAdv "危险地" ; -- status=guess -- status=guess
+lin dangerously_Adv = mkAdv "危險地" | mkAdv "危险地" | adjAdv dangerous_A ; -- status=guess -- status=guess -- derived -- derived
 lin dangle_V = mkV "吊着" ;
 lin dangle_V2 = mkV2 "摇晃地悬挂着" ;
 lin daniel_PN = foreignPN "Daniel" ; -- comment=src=eng status=guess
@@ -5818,6 +5860,8 @@ lin dear_N = mkN "亲爱" "个" ;
 lin dearth_N = mkN "缺乏" ;
 lin death_N = mkN "死亡" ;
 lin deathbed_N = mkN "臨終床" | mkN "临终床" ; -- status=guess -- status=guess
+lin deathly_A = variants {} ;
+lin deathly_Adv = adjAdv deathly_A ; -- derived
 lin debasement_N = mkN "堕落" ;
 lin debatable_A = mkA "值得商榷" ;
 lin debate_N = mkN "争论" "次" | mkN "辩论" "場" | {-HSK-} mkN "辩论" ;
@@ -5865,6 +5909,7 @@ lin decide_V2 = mkV2 "决定" | {-HSK-} mkV2 "判断" ;
 lin decide_VS = mkVS "决定" | {-HSK-} mkVS "判断" ;
 lin decide_VV = mkVV "决定" | {-HSK-} mkVV "判断" ;
 lin decided_A = mkA "决定" ;
+lin decidedly_Adv = adjAdv decided_A ; -- derived -- derived
 lin deciduous_A = mkA "落葉喬木" | mkA "落叶乔木" ; -- status=guess -- status=guess
 lin decimal_A = mkA "十进制" ;
 lin decimal_N = mkN "小數" | mkN "小数" ; -- status=guess -- status=guess
@@ -5873,6 +5918,7 @@ lin decipher_V2 = mkV2 (mkV "解碼") | mkV2 (mkV "解码") | mkV2 (mkV "解讀"
 lin decision_N = mkN "主意" "個" | mkN "决定" "個" | {-HSK-} mkN "决定" ;
 lin decision_making_N = variants {} ;
 lin decisive_A = mkA "坚定" ;
+lin decisively_Adv = adjAdv decisive_A ; -- derived -- derived
 lin decisiveness_N = mkN "果斷" | mkN "果断" ; -- status=guess -- status=guess
 lin deck_N = mkN "甲板" ;
 lin deck_V2 = mkV2 "装饰" ;
@@ -5922,7 +5968,7 @@ lin deep_N = mkN "大" | mkN "深" | mkN "深刻" | {-HSK-} mkN "深处""" ;
 lin deep_seated_A = mkA "根深蒂固" ;
 lin deepen_V = mkV "深化" ;
 lin deepen_V2 = mkV2 (mkV "深化") ; -- status=guess, src=wikt
-lin deeply_Adv = variants {} ;
+lin deeply_Adv = adjAdv deep_A ; -- derived
 lin deer_N = mkN "鹿" ;
 lin deerstalker_N = mkN "猎鹿帽" ; -- status=guess
 lin defamation_N = mkN "诽谤" ;
@@ -5960,7 +6006,7 @@ lin deficit_N = mkN "赤字" ;
 lin define_V = mkV "定义" ;
 lin define_V2 = mkV2 "规定" ;
 lin definite_A = mkA "具体" | mkA "明确" | mkA "确定" | mkA "肯定" ;
-lin definitely_Adv = variants {} ;
+lin definitely_Adv = adjAdv definite_A ; -- derived
 lin definition_N = mkN "定义" ;
 lin definitive_A = mkA "最终" ;
 lin deflate_V2 = mkV2 "放气" ;
@@ -6007,7 +6053,7 @@ lin delhi_PN = mkPN "德里" ; -- comment=src=geonames status=guess
 lin deliberate_A = mkA "故意" ;
 lin deliberate_V = mkV "商议" ;
 lin deliberate_V2 = mkV2 "仔细考虑" ;
-lin deliberately_Adv = variants {} | {-HSK-} mkAdv "故意" ;
+lin deliberately_Adv = {-HSK-} mkAdv "故意" | adjAdv deliberate_A ; -- derived
 lin deliberation_N = mkN "审议" "次" ;
 lin deliberative_A = mkA "慎重" ;
 lin delicacy_N = mkN "美味" ;
@@ -6017,7 +6063,8 @@ lin delicious_A = mkA "好吃" | {-HSK-} mkA "美味" ;
 lin delight_N = mkN "高兴" ;
 lin delight_V = mkV "高兴" ;
 lin delight_V2 = mkV2 "高兴" ;
-lin delighted_A = variants {} | {-HSK-} mkA "愉快" | mkA "痛快" ;
+lin delighted_A = {-HSK-} mkA "愉快" | mkA "痛快" ;
+lin delightedly_Adv = adjAdv delighted_A ; -- derived -- derived
 lin delightful_A = mkA "令人愉快" | {-HSK-} mkA "愉快" ;
 lin delinquency_N = mkN "行为不良" ;
 lin delinquent_A = mkA "有过失" ;
@@ -6090,6 +6137,7 @@ lin denomination_N = mkN "面值" [] ;
 lin denominator_N = mkN "分母" ;
 lin denounce_V2 = mkV2 "声讨" ;
 lin dense_A = mkA "浓" | {-HSK-} mkA "稠密" ;
+lin densely_Adv = adjAdv dense_A ; -- derived -- derived
 lin density_N = mkN "密度" ;
 lin dent_N = mkN "凹痕" ;
 lin dental_A = mkA "牙科" ;
@@ -6208,7 +6256,7 @@ lin desolate_A = mkA "荒凉" ;
 lin despair_N = mkN "绝望" "次" ;
 lin despair_V = mkV "失望" | {-HSK-} mkV "绝望" ;
 lin desperate_A = mkA "绝望" ;
-lin desperately_Adv = variants {} ;
+lin desperately_Adv = adjAdv desperate_A ; -- derived
 lin despicable_A = mkA "卑劣" ;
 lin despise_V2 = mkV2 "看不起" | mkV2 "轻视" | {-HSK-} mkV2 "鄙视" ;
 lin despite_N = mkN "尽管" ;
@@ -6228,7 +6276,7 @@ lin desultory_A = mkA "散漫" ;
 lin detach_V2 = mkV2 "分离" ;
 lin detail_N = mkN "环境" ;
 lin detail_V2 = mkV2 "细节" ;
-lin detailed_A = variants {} | {-HSK-} mkA "详细" ;
+lin detailed_A = {-HSK-} mkA "详细" ;
 lin detain_V2 = mkV2 "扣留" ;
 lin detect_V2 = mkV2 "检测" ;
 lin detectable_A = mkA "检出" ;
@@ -6247,7 +6295,8 @@ lin determine_V2 = mkV2 "决定" | {-HSK-} mkV2 "判断" | mkV2 "确定" ;
 lin determine_V2V = mkV2V "判断" | mkV2V "确定" ;
 lin determine_VS = mkVS "判断" | mkVS "确定" ;
 lin determine_VV = mkVV "判断" | mkVV "确定" ;
-lin determined_A = variants {} | {-HSK-} mkA "决心" | mkA "坚决" ;
+lin determined_A = {-HSK-} mkA "决心" | mkA "坚决" ;
+lin determinedly_Adv = adjAdv determined_A ; -- derived -- derived
 lin determiner_N = mkN "限定詞" | mkN "限定词" ; -- status=guess -- status=guess
 lin deterrent_N = mkN "震慑" [] ;
 lin detest_V2 = mkV2 "厌恶" ;
@@ -6268,7 +6317,7 @@ lin devastate_V2 = mkV2 "毁灭" ;
 lin devastation_N = mkN "毁坏" [] ;
 lin develop_V = mkV "冲" | mkV "发" | mkV "发展" | mkV "发挥" | mkV "发达" | mkV "开发" | mkV "长" ;
 lin develop_V2 = mkV2 "冲" | mkV2 "发" | mkV2 "发展" | mkV2 "发挥" | mkV2 "发达" | mkV2 "开发" | mkV2 "长" ;
-lin developed_A = variants {} | {-HSK-} mkA "发达" ;
+lin developed_A = {-HSK-} mkA "发达" ;
 lin developer_N = mkN "开发人员" ;
 lin developing_A = variants {} ;
 lin development_N = mkN "发展" ;
@@ -6285,6 +6334,7 @@ lin devoid_A = mkA "缺乏" ;
 lin devon_PN = foreignPN "Devon" ; -- comment=src=geonames status=guess
 lin devote_V2 = mkV2 "奉献" | {-HSK-} mkV2 "贡献" ;
 lin devoted_A = variants {} ;
+lin devotedly_Adv = adjAdv devoted_A ; -- derived -- derived
 lin devotee_N = mkN "信徒" ;
 lin devotion_N = mkN "奉献" ;
 lin devour_V2 = mkV2 "挥霍" ;
@@ -6304,6 +6354,7 @@ lin diagnose_V2 = mkV2 "诊断" ;
 lin diagnosis_N = mkN "诊断" | {-HSK-} mkN "诊断" "次" ;
 lin diagnostic_A = mkA "诊断" ;
 lin diagonal_A = mkA "對角" | mkA "对角" ; -- status=guess -- status=guess
+lin diagonally_Adv = adjAdv diagonal_A ; -- derived -- derived
 lin diagram_N = mkN "图表" "张" ;
 lin dial_N = mkN "转盘" ;
 lin dial_V2 = mkV2 "拨号" ;
@@ -6356,7 +6407,7 @@ lin differential_N = mkN "微分" ;
 lin differentiate_V = mkV "区分" ;
 lin differentiate_V2 = mkV2 "区分" ;
 lin differentiation_N = variants {} ;
-lin differently_Adv = variants {} | {-HSK-} mkAdv "分别" ;
+lin differently_Adv = {-HSK-} mkAdv "分别" | adjAdv different_A ; -- derived
 lin difficult_A = mkA "困难" | {-HSK-} mkA "艰苦" | mkA "难" ;
 lin difficulty_N = mkN "困难" | {-HSK-} mkN "困难" "個" | mkN "难" ;
 lin diffusion_N = mkN "擴散" | mkN "扩散" ; -- status=guess -- status=guess
@@ -6373,6 +6424,7 @@ lin digger_N = mkN "怪手" ; -- status=guess
 lin digging_N = mkN "挖掘" ;
 lin digit_N = mkN "数字" | {-HSK-} mkN "数字" "個" ;
 lin digital_A = mkA "数字" | {-HSK-} mkA "数据" | mkA "数码" ;
+lin digitally_Adv = adjAdv digital_A ; -- derived -- derived
 lin dignify_V2 = mkV2 "增威严" ;
 lin dignitary_N = mkN "权贵" "位" ;
 lin dignity_N = mkN "尊严" | {-HSK-} mkN "身份" ;
@@ -6434,7 +6486,7 @@ lin direct_V = mkV "对" | mkV "指导" | mkV "指挥" | {-HSK-} mkV "直接" ;
 lin direct_V2 = mkV2 "对" | mkV2 "指导" | mkV2 "指挥" | {-HSK-} mkV2 "直接" ;
 lin direction_N = mkN "向" | mkN "方" | mkN "方向" "個" | {-HSK-} mkN "方向" ;
 lin directive_N = mkN "指示" ;
-lin directly_Adv = variants {} | {-HSK-} mkAdv "直接" ;
+lin directly_Adv = {-HSK-} mkAdv "直接" | adjAdv direct_A ; -- derived
 lin director_N = mkN "导演" | mkN "经理" "個" | {-HSK-} mkN "理事" ;
 lin directorate_N = mkN "董事会" ;
 lin directorship_N = mkN "董事职务" ;
@@ -6447,7 +6499,7 @@ lin dirty_V = mkV "变脏" ;
 lin dirty_V2 = mkV2 "使+变脏" ;
 lin disability_N = mkN "残疾" ;
 lin disable_V2 = mkV2 "使+失去能力" ;
-lin disabled_A = variants {} | {-HSK-} mkA "残疾" ;
+lin disabled_A = {-HSK-} mkA "残疾" ;
 lin disabled_N = mkN "残疾" ;
 lin disadvantage_N = mkN "坏处" ;
 lin disaffected_A = mkA "不满" ;
@@ -6670,7 +6722,7 @@ lin distinct_A = mkA "不同" | {-HSK-} mkA "明显" | mkA "清楚" | mkA "独�
 lin distinction_N = mkN "区别" | {-HSK-} mkN "差别" ;
 lin distinctive_A = mkA "独特" ;
 lin distinctiveness_N = mkN "特殊性" ;
-lin distinctly_Adv = variants {} ;
+lin distinctly_Adv = adjAdv distinct_A ; -- derived
 lin distinguish_V = mkV "分别" | mkV "别" | mkV "区别" | {-HSK-} mkV "区分" ;
 lin distinguish_V2 = mkV2 "分别" | mkV2 "别" | mkV2 "区别" | {-HSK-} mkV2 "区分" ;
 lin distinguished_A = variants {} ;
@@ -6685,7 +6737,7 @@ lin distress_V2 = mkV2 "折磨" ;
 lin distressful_A = mkA "痛苦" ;
 lin distressing_A = mkA "痛苦" ;
 lin distribute_V2 = mkV2 "分布" | mkV2 "分配" ;
-lin distributed_A = variants {} | {-HSK-} mkA "分布" ;
+lin distributed_A = {-HSK-} mkA "分布" ;
 lin distribution_N = mkN "分发" ;
 lin distributor_N = mkN "总代理" ;
 lin district_N = mkN "区域" ;
@@ -6693,6 +6745,8 @@ lin distrust_N = mkN "不信任" ;
 lin distrustful_A = mkA "多疑" ; -- status=guess
 lin disturb_V2 = mkV2 "影响" | mkV2 "打扰" ;
 lin disturbance_N = mkN "骚乱" "场" ;
+lin disturbing_A = variants {} ;
+lin disturbingly_Adv = adjAdv disturbing_A ; -- derived
 lin ditch_N = mkN "沟壕" ;
 lin dither_V = mkV "抖动" ;
 lin ditto_N = mkN "同上" ;
@@ -7150,6 +7204,7 @@ lin dystrophy_N = mkN "萎縮症" | mkN "萎缩症" ; -- status=guess -- status=
 lin each_Adv = mkAdv "各" | mkAdv "各自" | mkAdv "每" | {-HSK-} mkAdv "每个" ;
 lin each_Det = mkpDet "各" | mkpDet "各自" | mkpDet "每" ;
 lin eager_A = mkA "急于" ;
+lin eagerly_Adv = adjAdv eager_A ; -- derived -- derived
 lin eagerness_N = mkN "渴望" [] ;
 lin eagle_N = mkN "鹰" "只" ;
 lin eaglescliffe_PN = foreignPN "Eaglescliffe" ; -- comment=src=geonames status=guess
@@ -7189,7 +7244,7 @@ lin ease_V = mkV "减轻" | {-HSK-} mkV "缓解" ;
 lin ease_V2 = mkV2 "缓解" ;
 lin easel_N = mkN "黑板架" | mkN "畫架" | mkN "画架" ; -- status=guess -- status=guess -- status=guess
 lin easement_N = mkN "地役权" ; -- status=guess
-lin easily_Adv = variants {} ;
+lin easily_Adv = adjAdv easy_A ; -- derived
 lin easington_PN = foreignPN "Easington" ; -- comment=src=geonames status=guess
 lin east_A = mkA "东" | {-HSK-} mkA "东方" ;
 lin east_Adv = mkAdv "东" ;
@@ -7200,6 +7255,8 @@ lin east_kilbride_PN = foreignPN "East kilbride" ; -- comment=src=eng status=gue
 lin east_retford_PN = foreignPN "East retford" ; -- comment=src=eng status=guess
 lin eastbourne_PN = mkPN "伊斯特本" ; -- comment=src=geonames status=guess
 lin easter_PN = foreignPN "Easter" ; -- comment=src=eng status=guess
+lin easterly_A = variants {} ;
+lin easterly_Adv = adjAdv easterly_A ; -- derived
 lin eastern_A = mkA "东" ;
 lin easterner_N = mkN "東方人" | mkN "东方人" ; -- status=guess -- status=guess
 lin eastleigh_PN = mkPN "伊斯特利" ; -- comment=src=geonames status=guess
@@ -7238,7 +7295,7 @@ lin ecology_N = mkN "生態" | mkN "生态" | mkN "生態學" | mkN "生态学" 
 lin econometrics_N = mkN "计量经济学" ; -- status=guess
 lin economic_A = mkA "实用" | {-HSK-} mkA "经济" ;
 lin economical_A = mkA "经济" ;
-lin economically_Adv = variants {} ;
+lin economically_Adv = adjAdv economical_A ; -- derived
 lin economics_N = mkN "经济学" [] ;
 lin economist_N = mkN "经济学家" ;
 lin economize_V = mkV "省" | mkV "节" | mkV "节约" ;
@@ -7285,7 +7342,7 @@ lin eery_A = mkA "怪诞" ;
 lin effect_N = mkN "作用" | mkN "效果" "個" | {-HSK-} mkN "效果" ;
 lin effect_V2 = mkV2 "产生" ;
 lin effective_A = mkA "有效" | {-HSK-} mkA "行" ;
-lin effectively_Adv = variants {} ;
+lin effectively_Adv = adjAdv effective_A ; -- derived
 lin effectiveness_N = mkN "效益" "个" ;
 lin effeminate_A = mkA "柔弱的" | mkA "娘娘腔的" | mkA "女人氣的" | mkA "女人气的" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin effendi_N = mkN "阿凡提" ; -- status=guess
@@ -7293,7 +7350,7 @@ lin effete_A = mkA "疲惫" ;
 lin efficacy_N = mkN "功效" | mkN "效力" ; -- status=guess -- status=guess
 lin efficiency_N = mkN "效率" ;
 lin efficient_A = mkA "高效" ;
-lin efficiently_Adv = variants {} ;
+lin efficiently_Adv = adjAdv efficient_A ; -- derived
 lin effigy_N = mkN "假人" | mkN "雕像" | mkN "肖像" ; -- status=guess -- status=guess -- status=guess
 lin effluent_N = mkN "廢水" | mkN "废水" | mkN "污水" | mkN "髒水" | mkN "脏水" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin effort_N = mkN "功夫" | {-HSK-} mkN "工夫" ;
@@ -7359,6 +7416,7 @@ lin electorate_N = mkN "选民" ;
 lin electric_A = mkA "电动" ;
 lin electric_N = mkN "電動車" | mkN "电动车" ; -- status=guess -- status=guess
 lin electrical_A = mkA "电动" ;
+lin electrically_Adv = adjAdv electrical_A ; -- derived -- derived
 lin electrician_N = mkN "电工" ;
 lin electricity_N = mkN "电力" ;
 lin electrification_N = mkN "電氣化" | mkN "电气化" | mkN "電化" | mkN "电化" | mkN "帶電" | mkN "带电" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -7477,6 +7535,7 @@ lin emma_PN = foreignPN "Emma" ; -- comment=src=eng status=guess
 lin emoticon_N = mkN "表情符號" | mkN "表情符号" ; -- status=guess -- status=guess
 lin emotion_N = mkN "情感" [] | {-HSK-} mkN "感情" "個" ;
 lin emotional_A = mkA "情绪" ;
+lin emotionally_Adv = adjAdv emotional_A ; -- derived -- derived
 lin empathize_V = mkV "移情" ;
 lin empathy_N = mkN "移情" | mkN "同感" ; -- status=guess -- status=guess
 lin emperor_N = mkN "皇帝" | {-HSK-} mkN "皇帝" "個" ;
@@ -7559,6 +7618,8 @@ lin endow_V2 = mkV2 "赋予" ;
 lin endowment_N = mkN "才" | {-HSK-} mkN "捐赠" "" ;
 lin endure_V = mkV "克服" | {-HSK-} mkV "忍受" ;
 lin endure_V2 = mkV2 "克服" | {-HSK-} mkV2 "忍受" ;
+lin enduring_A = variants {} ;
+lin enduringly_Adv = adjAdv enduring_A ; -- derived
 lin enema_N = mkN "灌腸劑" | mkN "灌肠剂" | mkN "灌腸" | mkN "灌肠" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin enemy_N = L.enemy_N | {-HSK-} mkN "敌人" "個" ;
 lin energetic_A = mkA "积极" | {-HSK-} mkA "精力充沛" ;
@@ -7605,7 +7666,7 @@ lin ennumerate_V2 = mkV2 "列举" ;
 lin enoch_PN = foreignPN "Enoch" ; -- comment=src=geonames status=guess
 lin enol_N = mkN "烯醇" ; -- status=guess
 lin enormous_A = mkA "巨大" ;
-lin enormously_Adv = variants {} ;
+lin enormously_Adv = adjAdv enormous_A ; -- derived
 lin enough_A = mkA "足够" ;
 lin enough_Adv = mkAdv "足够" ;
 lin enough_N = mkN "足够" [] ;
@@ -7642,7 +7703,7 @@ lin enthusiast_N = mkN "爱好者" ;
 lin enthusiastic_A = mkA "热心" | {-HSK-} mkA "热情 " ;
 lin entice_V2 = mkV2 "诱惑" ;
 lin entire_A = mkA "一" | mkA "全部" | mkA "完" | mkA "整个" ;
-lin entirely_Adv = variants {} | {-HSK-} mkAdv "完全" ;
+lin entirely_Adv = {-HSK-} mkAdv "完全" | adjAdv entire_A ; -- derived
 lin entirety_N = mkN "全部" ;
 lin entitle_V2V = mkV2V "赋予" ;
 lin entitle_VS = mkVS "称为" ;
@@ -7674,6 +7735,7 @@ lin environment_N = mkN "周围" | mkN "环境" "個" | {-HSK-} mkN "环境" ;
 lin environmental_A = mkA "环境" ;
 lin environmentalism_N = mkN "環境保護主義" | mkN "环境保护主义" ; -- status=guess -- status=guess
 lin environmentalist_N = mkN "環保人士" | mkN "环保人士" | mkN "環境論者" | mkN "环境论者" | mkN "環境保護論者" | mkN "环境保护论者" | mkN "環境保護主義者" | mkN "环境保护主义者" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
+lin environmentally_Adv = adjAdv environmental_A ; -- derived -- derived
 lin envisage_V2 = mkV2 "设想" ;
 lin envision_V2 = mkV2 "设想" ;
 lin envision_VS = mkVS "想象" ;
@@ -7767,7 +7829,7 @@ lin erratic_A = mkA "不稳定" ;
 lin erratically_Adv = mkAdv "不稳定" ;
 lin erratum_N = mkN "勘误表" ;
 lin erroneous_A = mkA "错误" ;
-lin erroneously_Adv = mkAdv "錯誤地" | mkAdv "错误地" ; -- status=guess -- status=guess
+lin erroneously_Adv = mkAdv "錯誤地" | mkAdv "错误地" | adjAdv erroneous_A ; -- status=guess -- status=guess -- derived -- derived
 lin error_N = mkN "错" "個" | mkN "错误" "個" | {-HSK-} mkN "错误" ;
 lin ersatz_N = mkN "代用品" ; -- status=guess
 lin erudite_A = mkA "博学" ;
@@ -7789,7 +7851,7 @@ lin esfahan_PN = foreignPN "Esfahan" ; -- comment=src=eng status=guess
 lin esoteric_A = mkA "秘传" ;
 lin esp_N = mkN "电子稳定系统" ;
 lin especial_A = mkA "特别是" ;
-lin especially_Adv = mkAdv "尤其" | mkAdv "格外" | mkAdv "特别" | {-HSK-} mkAdv "特别" mannerAdvType ;
+lin especially_Adv = mkAdv "尤其" | mkAdv "格外" | mkAdv "特别" | {-HSK-} mkAdv "特别" mannerAdvType | adjAdv especial_A ; -- derived
 lin espionage_N = mkN "间谍" ;
 lin espousal_N = mkN "拥护" ;
 lin espouse_V2 = mkV2 "拥护" ;
@@ -7804,10 +7866,10 @@ lin essen_PN = mkPN "埃森" ; -- comment=src=geonames status=guess
 lin essence_N = mkN "本质" | mkN "精神" "個" | {-HSK-} mkN "本质" "种" ;
 lin essential_A = mkA "必要" | mkA "必需" | {-HSK-} mkA "本质" ;
 lin essential_N = mkN "必要" | mkN "必需" | {-HSK-} mkN "必要" [] ;
-lin essentially_Adv = variants {} ;
+lin essentially_Adv = adjAdv essential_A ; -- derived
 lin essex_PN = foreignPN "Essex" ; -- comment=src=geonames status=guess
 lin establish_V2 = mkV2 "建立" | {-HSK-} mkV2 "成立" ;
-lin established_A = variants {} | {-HSK-} mkA "悠久" ;
+lin established_A = {-HSK-} mkA "悠久" ;
 lin establishment_N = mkN "编制" ;
 lin estate_N = mkN "房地产" ;
 lin esteem_N = mkN "尊敬" | {-HSK-} mkN "尊重" ;
@@ -7836,7 +7898,7 @@ lin ether_N = mkN "醚" ; -- status=guess
 lin ethereal_A = mkA "空靈" | mkA "空灵" ; -- status=guess -- status=guess
 lin ethic_N = mkN "伦理" [] ;
 lin ethical_A = mkA "合乎道德" ;
-lin ethics_N = variants {} | {-HSK-} mkN "道德" "種" ;
+lin ethics_N = {-HSK-} mkN "道德" "種" ;
 lin ethiopia_PN = mkPN "埃塞俄比亚" ; -- comment=src=geonames status=guess
 lin ethiopian_A = mkA "埃塞俄比亚" ;
 lin ethnic_A = mkA "民族" ;
@@ -7895,11 +7957,12 @@ lin even_N = mkN "偶数" | {-HSK-} mkN "哪怕" | mkN "均匀" | mkN "整齐" |
 lin even_V2 = mkV2 "平坦" ;
 lin even_though_Subj = mkSubj "即使" ;
 lin evening_N = mkN "晚间" ;
+lin evenly_Adv = adjAdv even_A ; -- derived -- derived
 lin evensong_N = mkN "晚祷" ;
 lin event_N = mkN "事件" ;
 lin eventful_A = mkA "多事" | mkA "多變故" | mkA "多变故" ; -- status=guess -- status=guess -- status=guess
 lin eventual_A = mkA "最终" ;
-lin eventually_Adv = variants {} | {-HSK-} mkAdv "终于" ;
+lin eventually_Adv = {-HSK-} mkAdv "终于" | adjAdv eventual_A ; -- derived
 lin ever_AdV = mkAdV "曾经" ;
 lin ever_Adv = mkAdv "尝" | mkAdv "曾经" ;
 lin evergreen_A = mkA "常青" ; -- status=guess
@@ -7919,7 +7982,7 @@ lin evidence_2_N = mkN "证据" ;
 lin evidence_N = mkN "证据" ;
 lin evidence_V2 = mkV2 "证明" ;
 lin evident_A = mkA "明显" | {-HSK-} mkA "显然" ;
-lin evidently_Adv = variants {} ;
+lin evidently_Adv = adjAdv evident_A ; -- derived
 lin evil_A = mkA "邪恶" ;
 lin evil_N = mkN "罪恶" ;
 lin evince_V2 = mkV2 "表示出" ;
@@ -7935,7 +7998,7 @@ lin ewell_PN = foreignPN "Ewell" ; -- comment=src=geonames status=guess
 lin ex_officio_A = mkA "按照职务" ;
 lin exacerbate_V2 = mkV2 "加剧" ;
 lin exact_A = mkA "准确" | {-HSK-} mkA "确切" ;
-lin exactly_Adv = variants {} ;
+lin exactly_Adv = adjAdv exact_A ; -- derived
 lin exactness_N = mkN "精確" | mkN "精确" | mkN "準確度" | mkN "准确度" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin exaggerate_V = mkV "夸" | {-HSK-} mkV "夸大" ;
 lin exaggerate_V2 = mkV2 "夸" | {-HSK-} mkV2 "夸大" ;
@@ -7952,7 +8015,7 @@ lin excavation_N = variants {} ;
 lin excavator_N = mkN "挖掘机" ;
 lin exceed_V2 = mkV2 "超过" | {-HSK-} mkV2 "越" ;
 lin exceeding_A = mkA "超额" ;
-lin exceedingly_Adv = mkAdv "不得了" ;
+lin exceedingly_Adv = mkAdv "不得了" | adjAdv exceeding_A ; -- derived
 lin excel_V = mkV "擅长" ;
 lin excel_V2 = mkV2 (mkV "擅長") | mkV2 (mkV "擅长") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin excellence_N = mkN "卓越" ;
@@ -7963,12 +8026,12 @@ lin except_V2 = mkV2 "除" ;
 lin except_for_Prep = mkPrep "除了" ;
 lin exception_N = mkN "例外" ;
 lin exceptional_A = mkA "优秀" | {-HSK-} mkA "非常" ;
-lin exceptionally_Adv = variants {} ;
+lin exceptionally_Adv = adjAdv exceptional_A ; -- derived
 lin excerpt_N = mkN "摘录" ;
 lin excess_A = mkA "多余" ;
 lin excess_N = mkN "多余" ;
 lin excessive_A = mkA "过分" | {-HSK-} mkA "过多" ;
-lin excessively_Adv = mkAdv "过" | {-HSK-} mkAdv "過分地" | mkAdv "过分地" | mkAdv "過度地" | mkAdv "过度地" ; -- status=guess -- status=guess -- status=guess -- status=guess
+lin excessively_Adv = mkAdv "过" | {-HSK-} mkAdv "過分地" | mkAdv "过分地" | mkAdv "過度地" | mkAdv "过度地" | adjAdv excessive_A ; -- status=guess -- status=guess -- status=guess -- status=guess -- derived -- derived
 lin exchange_N = mkN "交流" | mkN "换" | {-HSK-} mkN "兑换" ;
 lin exchange_V2 = mkV2 "交换" | {-HSK-} mkV2 "交流" ;
 lin exchangeable_A = mkA "可兑换" ;
@@ -7977,7 +8040,8 @@ lin excise_N = mkN "消费税" ;
 lin excise_V2 = mkV2 "消费税" ;
 lin excision_N = mkN "切除" "" ;
 lin excite_V2 = mkV2 "刺激" | mkV2 "激动" | {-HSK-} mkV2 "激发" ;
-lin excited_A = variants {} | {-HSK-} mkA "兴奋" ;
+lin excited_A = {-HSK-} mkA "兴奋" ;
+lin excitedly_Adv = adjAdv excited_A ; -- derived -- derived
 lin excitement_N = mkN "兴奋" | {-HSK-} mkN "激动" [] ;
 lin exciting_A = mkA "扣人心弦" | {-HSK-} mkA "激动" ;
 lin excl_PN = foreignPN "Excl" ; -- comment=src=eng status=guess
@@ -7987,7 +8051,7 @@ lin exclude_V2 = mkV2 "排除" | {-HSK-} mkV2 "除" ;
 lin exclusion_N = mkN "排除" [] ;
 lin exclusive_A = mkA "独家" ;
 lin exclusive_N = mkN "專有權" | mkN "专有权" ; -- status=guess -- status=guess
-lin exclusively_Adv = variants {} ;
+lin exclusively_Adv = adjAdv exclusive_A ; -- derived
 lin excommunication_N = mkN "逐出教會" | mkN "逐出教会" ; -- status=guess -- status=guess
 lin excoriate_V2 = mkV2 "批判" ;
 lin excrement_N = mkN "大便" | mkN "屎" | mkN "糞" | mkN "粪" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -8097,7 +8161,7 @@ lin explanatory_A = mkA "解释" ;
 lin expletive_N = mkN "脏话" ;
 lin explicate_V2 = mkV2 (mkV "阐明") ; -- status=guess, src=wikt
 lin explicit_A = mkA "明确" ;
-lin explicitly_Adv = variants {} ;
+lin explicitly_Adv = adjAdv explicit_A ; -- derived
 lin explode_V = mkV "爆炸" ;
 lin exploit_N = mkN "利用" | mkN "开发" | {-HSK-} mkN "利用" "" ;
 lin exploit_V2 = mkV2 "利用" ;
@@ -8131,6 +8195,7 @@ lin expression_N = mkN "表情" | mkN "表现" | mkN "词语" | {-HSK-} mkN "表
 lin expressionism_N = mkN "表現主義" | mkN "表现主义" ; -- status=guess -- status=guess
 lin expressionless_A = mkA "呆" ;
 lin expressive_A = mkA "表现" ;
+lin expressly_Adv = adjAdv express_A ; -- derived -- derived
 lin expressway_N = mkN "高速公路" ; -- status=guess -- status=guess
 lin expulsion_N = mkN "開除" | mkN "开除" | mkN "驅逐" | mkN "驱逐" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin expunge_V2 = mkV2 "删掉" ;
@@ -8140,13 +8205,14 @@ lin extend_V2 = mkV2 "伸" | mkV2 "延长" | mkV2 "接" | mkV2 "推广" | {-HSK-
 lin extended_A = variants {} ;
 lin extension_N = mkN "延期" ;
 lin extensive_A = mkA "广泛" ;
-lin extensively_Adv = variants {} ;
+lin extensively_Adv = adjAdv extensive_A ; -- derived
 lin extent_N = mkN "程度" | {-HSK-} mkN "范围" "個" | mkN "规模" "個" ;
 lin exterior_A = mkA "外部" ;
 lin exterior_N = mkN "外部" ;
 lin extermination_N = mkN "灭绝" ;
 lin external_A = mkA "外" | {-HSK-} mkA "外部" ;
 lin external_N = mkN "外" | {-HSK-} mkN "外部""" ;
+lin externally_Adv = adjAdv external_A ; -- derived -- derived
 lin extinct_A = mkA "灭绝" ;
 lin extinction_N = mkN "灭绝" ;
 lin extinguish_V2 = mkV2 "熄灭" ;
@@ -8166,13 +8232,14 @@ lin extradition_N = mkN "引渡" "次" ;
 lin extramarital_A = mkA "婚外" ;
 lin extramural_A = mkA "市外" ;
 lin extraneous_A = mkA "无关" ;
+lin extraordinarily_Adv = adjAdv extraordinary_A ; -- derived -- derived
 lin extraordinary_A = mkA "了不起" | mkA "挺" | mkA "特殊" | mkA "非常" | {-HSK-} mkA "非凡" ;
 lin extraterrestrial_A = mkA "地球外的" ; -- status=guess
 lin extravagance_N = mkN "奢侈" [] ;
 lin extravagant_A = mkA "奢靡" ;
 lin extreme_A = mkA "极端" | {-HSK-} mkA "非常" ;
 lin extreme_N = mkN "极端" | {-HSK-} mkN "非常" ;
-lin extremely_Adv = variants {} | {-HSK-} mkAdv "不得了" | mkAdv "十分" | mkAdv "太" | mkAdv "极" | mkAdv "极其" | mkAdv "死" ;
+lin extremely_Adv = {-HSK-} mkAdv "不得了" | mkAdv "十分" | mkAdv "太" | mkAdv "极" | mkAdv "极其" | mkAdv "死" | adjAdv extreme_A ; -- derived
 lin extremism_N = mkN "極端主義" | mkN "极端主义" | mkN "過激主義" | mkN "过激主义" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin extremist_N = mkN "极端主义者" ;
 lin extremity_N = mkN "末端" ; -- status=guess
@@ -8238,9 +8305,9 @@ lin faint_A = mkA "晕" | {-HSK-} mkA "虚弱" ;
 lin faint_N = mkN "昏厥" | {-HSK-} mkN "晕" ; -- status=guess
 lin faint_V = mkV "模糊" ;
 lin fair_A = mkA "公平" | {-HSK-} mkA "合理" ;
-lin fair_Adv = variants {} | {-HSK-} mkAdv "公平" | mkAdv "合理" ;
+lin fair_Adv = {-HSK-} mkAdv "公平" | mkAdv "合理" ;
 lin fair_N = mkN "公平" | mkN "合理" | {-HSK-} mkN "市集" | mkN "展览会" ;
-lin fairly_Adv = variants {} | {-HSK-} mkAdv "比较" | mkAdv "相当" | mkAdv "还" ;
+lin fairly_Adv = {-HSK-} mkAdv "比较" | mkAdv "相当" | mkAdv "还" | adjAdv fair_A ; -- derived
 lin fairness_N = mkN "公平" [] ;
 lin fairway_N = mkN "航路" "条" ;
 lin fairy_N = mkN "仙女" ;
@@ -8248,6 +8315,7 @@ lin fairyland_N = mkN "仙境" | mkN "洞天" ; -- status=guess -- status=guess
 lin fait_accompli_N = mkN "既成事实" ;
 lin faith_N = mkN "信仰" ;
 lin faithful_A = mkA "忠实" ;
+lin faithfully_Adv = adjAdv faithful_A ; -- derived -- derived
 lin fake_A = mkA "假" | {-HSK-} mkA "僞" | mkA "伪" | mkA "贗" | mkA "赝" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin fake_N = mkN "假" ;
 lin fake_V2 = mkV2 "冒充" ;
@@ -8268,7 +8336,7 @@ lin fallow_N = mkN "黇鹿" ; -- status=guess
 lin falmouth_PN = mkPN "法尔茅斯" ; -- comment=src=geonames status=guess
 lin false_A = mkA "假" | {-HSK-} mkA "错误" ;
 lin false_Adv = mkAdv "假" ;
-lin falsely_Adv = mkAdv "不正確的" | mkAdv "不正确的" ; -- status=guess -- status=guess
+lin falsely_Adv = mkAdv "不正確的" | mkAdv "不正确的" | adjAdv false_A ; -- status=guess -- status=guess -- derived -- derived
 lin falseness_N = mkN "虚伪性" "" ;
 lin falsetto_N = mkN "假聲" | mkN "假声" ; -- status=guess -- status=guess
 lin falsify_V2 = mkV2 "伪造" ;
@@ -8285,6 +8353,7 @@ lin familiarize_V2 = mkV2 "熟悉" ;
 lin family_N = mkN "家" | mkN "家庭" "戶" | mkN "门" | {-HSK-} mkN "家庭" ;
 lin famine_N = mkN "饥荒" ;
 lin famous_A = mkA "有名" | mkA "著名" | mkA "闻" ;
+lin famously_Adv = adjAdv famous_A ; -- derived -- derived
 lin fan_1_N = mkN "爱好者" ;
 lin fan_2_N = mkN "爱好者" ;
 lin fan_3_N = mkN "爱好者" ;
@@ -8354,6 +8423,7 @@ lin fat_A = mkA "肥" | {-HSK-} mkA "胖" ;
 lin fat_N = L.fat_N | {-HSK-} mkN "胖" ;
 lin fatal_A = mkA "致命" ;
 lin fatality_N = mkN "病死率" ;
+lin fatally_Adv = adjAdv fatal_A ; -- derived -- derived
 lin fate_N = mkN "命运" | {-HSK-} mkN "命运" "個" ;
 lin father_N = mkN "父亲" | {-HSK-} mkN "父亲" "個" | mkN "爷爷" "個" | mkN "爸爸" "個" ;
 lin father_N2 = L.father_N2 ;
@@ -8392,7 +8462,7 @@ lin favourite_A = mkA "特别喜爱" ;
 lin fawley_PN = foreignPN "Fawley" ; -- comment=src=eng status=guess
 lin fawn_N = mkN "淡黃褐色" | mkN "淡黄褐色" ; -- status=guess -- status=guess
 lin fawn_V = mkV "奉承" ;
-lin fax_N = variants {} | {-HSK-} mkN "传真" ;
+lin fax_N = {-HSK-} mkN "传真" ;
 lin fbi_PN = foreignPN "FBI" ; -- comment=src=eng status=guess
 lin fear_N = mkN "恐怕" | {-HSK-} mkN "恐惧" ;
 lin fear_V = mkV "恐惧" ;
@@ -8417,6 +8487,7 @@ lin feckless_A = mkA "软弱" ;
 lin fecundity_N = mkN "繁殖力" | mkN "生殖力" | mkN "生育力" ; -- status=guess -- status=guess -- status=guess
 lin fed_N = mkN "喂" ;
 lin federal_A = mkA "联邦" ;
+lin federally_Adv = adjAdv federal_A ; -- derived -- derived
 lin federation_N = mkN "联盟" ;
 lin fee_N = mkN "费用" ;
 lin feeble_A = mkA "弱" | {-HSK-} mkA "微弱" ; -- comment="无力的" ;
@@ -8527,7 +8598,7 @@ lin field_V2 = mkV2 "使+上场" ;
 lin fiend_N = mkN "迷" | mkN "迷" ; -- status=guess -- status=guess
 lin fiendish_A = mkA "惡魔似" | mkA "恶魔似" ; -- status=guess -- status=guess
 lin fierce_A = mkA "激烈" ;
-lin fiercely_Adv = variants {} ;
+lin fiercely_Adv = adjAdv fierce_A ; -- derived
 lin fiery_A = mkA "火热" ;
 lin fife_N = mkN "橫笛" | mkN "横笛" | mkN "龠" ; -- status=guess -- status=guess -- status=guess
 lin fife_PN = foreignPN "Fife" ; -- comment=src=geonames status=guess
@@ -8581,11 +8652,11 @@ lin final_N = mkN "决赛" | {-HSK-} mkN "最后" ;
 lin finale_N = mkN "结尾" ; -- status=guess
 lin finalist_N = mkN "入围" "" ;
 lin finalize_V2 = mkV2 "敲定" ;
-lin finally_Adv = variants {} | {-HSK-} mkAdv "到底" | mkAdv "总算" | mkAdv "最后" | mkAdv "终于" ;
+lin finally_Adv = {-HSK-} mkAdv "到底" | mkAdv "总算" | mkAdv "最后" | mkAdv "终于" | adjAdv final_A ; -- derived
 lin finance_N = mkN "金融" ;
 lin finance_V2 = mkV2 "资助" ;
 lin financial_A = mkA "金融" ;
-lin financially_Adv = variants {} ;
+lin financially_Adv = adjAdv financial_A ; -- derived
 lin financier_N = mkN "金融家" ;
 lin finch_N = mkN "燕雀" | mkN "雀" ; -- status=guess -- status=guess
 lin find_N = mkN "发现" ;
@@ -8601,6 +8672,7 @@ lin fine_A = mkA "优美" | mkA "晴" | mkA "罚款" | mkA "良好" | {-HSK-} mk
 lin fine_Adv = mkAdv "优美" | mkAdv "晴" | mkAdv "罚款" | mkAdv "良好" | {-HSK-} mkAdv "好地 " ;
 lin fine_N = mkN "优美" | mkN "晴" | mkN "罚款" | mkN "良好" ;
 lin fine_V2 = mkV2 "罚款" ;
+lin finely_Adv = adjAdv fine_A ; -- derived -- derived
 lin finery_N = mkN "服饰" ;
 lin finesse_V2 = mkV2 "用计谋处理" ;
 lin finger_N = mkN "手指" | {-HSK-} mkN "手指" "個" | mkN "指" ;
@@ -8641,7 +8713,7 @@ lin firm_Adv = mkAdv "企业" | mkAdv "公司" | mkAdv "公里" | mkAdv "坚决"
 lin firm_N = mkN "企业" "家" | mkN "公司" "家" | mkN "公里" "家" | mkN "坚决" | mkN "硬" | {-HSK-} mkN "公司" ;
 lin firm_V = mkV "公司" ;
 lin firm_V2 = mkV2 "使+牢固" ;
-lin firmly_Adv = variants {} ;
+lin firmly_Adv = adjAdv firm_A ; -- derived
 lin firmness_N = mkN "坚定" [] ;
 lin firmware_N = mkN "固件" | mkN "韌體" | mkN "韧体" | mkN "塑體" | mkN "塑体" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin first_Adv = mkAdv "元" | mkAdv "先" | mkAdv "最初" | mkAdv "第一" | mkAdv "首先" | {-HSK-} mkAdv "最先" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -8676,7 +8748,8 @@ lin fix_N = mkN "安装" | {-HSK-} mkN "方位" | mkN "困境" ;
 lin fix_V = mkV "固定" | {-HSK-} mkV "弄" | mkV "确定" | mkV "装" | mkV "规定" ;
 lin fix_V2 = mkV2 "修理" | {-HSK-} mkV2 "弄" | mkV2 "确定" | mkV2 "装" | mkV2 "规定" ;
 lin fixation_N = mkN "固定术" ;
-lin fixed_A = variants {} | {-HSK-} mkA "一定" | mkA "固定" | mkA "确定" ;
+lin fixed_A = {-HSK-} mkA "一定" | mkA "固定" | mkA "确定" ;
+lin fixedly_Adv = adjAdv fixed_A ; -- derived
 lin fixer_N = mkN "定影劑" | mkN "定影剂" | mkN "固定劑" | mkN "固定剂" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin fixture_N = mkN "夹具" ;
 lin fizzle_V = mkV "失败" ;
@@ -8917,7 +8990,7 @@ lin footprint_N = mkN "腳印" | mkN "脚印" | mkN "足印" ; -- status=guess -
 lin footstep_N = mkN "脚步" ;
 lin footstool_N = mkN "腳台" | mkN "脚台" | mkN "腳凳" | mkN "脚凳" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin footwear_N = mkN "鞋类" ;
-lin for_Adv = variants {} | {-HSK-} mkAdv "为" | mkAdv "对" | mkAdv "无奈" | mkAdv "种" | mkAdv "给" ; -- comment=S.for_Prep ;
+lin for_Adv = {-HSK-} mkAdv "为" | mkAdv "对" | mkAdv "无奈" | mkAdv "种" | mkAdv "给" ; -- comment=S.for_Prep ;
 lin for_PConj = variants {} ;
 lin for_Prep = S.for_Prep ;
 lin for_example_Adv = mkAdv "举例" | {-HSK-} mkAdv "例如" | mkAdv "比如" ;
@@ -8936,6 +9009,8 @@ lin force_VS = mkVS "强制" ;
 lin forceful_A = mkA "有力" ;
 lin forcefulness_N = mkN "力量" ;
 lin forceps_N = mkN "鑷子" | mkN "镊子" | mkN "鉗子" | mkN "钳子" | mkN "產鉗" | mkN "产钳" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
+lin forcible_A = variants {} ;
+lin forcibly_Adv = adjAdv forcible_A ; -- derived
 lin ford_N = mkN "淺灘" | mkN "浅滩" | mkN "津" ; -- status=guess -- status=guess -- status=guess
 lin ford_V2 = mkV2 (mkV "涉過") | mkV2 (mkV "涉过") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin fore_N = mkN "前面" [] ;
@@ -9011,13 +9086,13 @@ lin formalin_N = mkN "福爾馬林" | mkN "福尔马林" ; -- status=guess -- st
 lin formalism_N = mkN "形式主義" | mkN "形式主义" ; -- status=guess -- status=guess
 lin formality_N = mkN "礼节" ;
 lin formalize_V2 = mkV2 "正规化" ;
-lin formally_Adv = variants {} ;
+lin formally_Adv = adjAdv formal_A ; -- derived
 lin format_N = mkN "格式" ;
 lin formation_N = mkN "编队" ;
 lin formby_PN = foreignPN "Formby" ; -- comment=src=geonames status=guess
 lin former_A = mkA "以前" | {-HSK-} mkA "先" | mkA "原来" | mkA "旧" | mkA "曾经" | mkA "过去" ;
 lin former_N = mkN "先" | mkN "原来" | mkN "旧" | mkN "曾经" | mkN "过去" | {-HSK-} mkN "模型""座" ;
-lin formerly_Adv = variants {} | {-HSK-} mkAdv "从前" | mkAdv "以前" | mkAdv "原来" | mkAdv "向" | mkAdv "尝" ;
+lin formerly_Adv = {-HSK-} mkAdv "从前" | mkAdv "以前" | mkAdv "原来" | mkAdv "向" | mkAdv "尝" | adjAdv former_A ; -- derived
 lin formidable_A = mkA "可怕" | mkA "艰巨" | {-HSK-} mkA "强大" ;
 lin formosa_PN = mkPN "福莫萨" ; -- comment=src=geonames status=guess
 lin formula_N = mkN "公式" ;
@@ -9038,10 +9113,12 @@ lin forthright_A = mkA "快" | {-HSK-} mkA "直率" ;
 lin forthwith_Adv = mkAdv "立刻" ;
 lin fortification_N = mkN "防禦工事" | mkN "防御工事" | mkN "工事" | mkN "堡壘" | mkN "堡垒" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin fortnight_N = mkN "两星期" "个" ;
+lin fortnightly_A = variants {} ;
+lin fortnightly_Adv = adjAdv fortnightly_A ; -- derived
 lin fortress_N = mkN "要塞" | mkN "城堡" | mkN "堡壘" | mkN "堡垒" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin fortuitous_A = mkA "偶然" ;
 lin fortunate_A = mkA "幸运" ;
-lin fortunately_Adv = variants {} | {-HSK-} mkAdv "幸亏" ;
+lin fortunately_Adv = {-HSK-} mkAdv "幸亏" | adjAdv fortunate_A ; -- derived
 lin fortune_N = mkN "幸运" | {-HSK-} mkN "运气" "次" ;
 lin fortuneteller_N = mkN "算命家" ; -- status=guess
 lin forum_N = mkN "论坛" ;
@@ -9108,7 +9185,7 @@ lin frank_PN = foreignPN "Frank" ; -- comment=src=eng status=guess
 lin frankfurt_PN = mkPN "法兰克福" ;
 lin frankie_PN = foreignPN "Frankie" ; -- comment=src=eng status=guess
 lin frankincense_N = mkN "乳香" ; -- status=guess
-lin frankly_Adv = variants {} ;
+lin frankly_Adv = adjAdv frank_A ; -- derived
 lin frantic_A = mkA "狂乱" ;
 lin frantically_Adv = mkAdv "狂暴地" ;
 lin fraserburgh_PN = foreignPN "Fraserburgh" ; -- comment=src=geonames status=guess
@@ -9167,7 +9244,7 @@ lin frenzy_N = mkN "狂妄" ;
 lin frequency_N = mkN "频率" | {-HSK-} mkN "频道" ;
 lin frequent_A = mkA "频繁" ;
 lin frequent_V2 = mkV2 "常去" ;
-lin frequently_Adv = variants {} | {-HSK-} mkAdv "往往" | mkAdv "经常" ;
+lin frequently_Adv = {-HSK-} mkAdv "往往" | mkAdv "经常" | adjAdv frequent_A ; -- derived
 lin fresco_N = mkN "壁画" "幅" ;
 lin fresh_A = mkA "新鲜" | {-HSK-} mkA "淡" ;
 lin fresh_Adv = mkAdv "刚才" | {-HSK-} mkAdv "新鲜" | mkAdv "淡" ;
@@ -9265,14 +9342,14 @@ lin full_page_A = mkA "整版" ;
 lin full_scale_A = mkA "全面" ;
 lin full_time_A = mkA "全职" ;
 lin full_time_Adv = mkAdv "全日" ;
-lin fully_Adv = variants {} | {-HSK-} mkAdv "满" ;
+lin fully_Adv = {-HSK-} mkAdv "满" | adjAdv full_A ; -- derived
 lin fulmination_N = mkN "轰鸣" "" ;
 lin fumble_V = mkV "摸索" ; -- status=guess, src=wikt
 lin fumble_V2 = mkV2 (mkV "摸索") ; -- status=guess, src=wikt
 lin fume_N = mkN "烟" ;
 lin fume_V = mkV "熏" | mkV "冒烟" ;
 lin fume_VS = mkVS "发怒" ;
-lin fun_A = variants {} | {-HSK-} mkA "娱乐" ;
+lin fun_A = {-HSK-} mkA "娱乐" ;
 lin fun_AV = L.fun_AV ;
 lin fun_N = mkN "乐趣" | {-HSK-} mkN "娱乐" ;
 lin function_N = mkN "作用" | mkN "功能" ;
@@ -9287,8 +9364,8 @@ lin fundamental_A = mkA "基本" | mkA "根本" ;
 lin fundamental_N = mkN "基本" | mkN "根本" "個" | {-HSK-} mkN "根本" ;
 lin fundamentalism_N = mkN "原教旨主义" ;
 lin fundamentalist_N = mkN "信奉正统派基督教的人" ;
-lin fundamentally_Adv = variants {} ;
-lin funding_N = variants {} | {-HSK-} mkN "资金" ;
+lin fundamentally_Adv = adjAdv fundamental_A ; -- derived
+lin funding_N = {-HSK-} mkN "资金" ;
 lin fundraising_N = mkN "籌款" | mkN "筹款" ; -- status=guess -- status=guess
 lin funds_N = mkN "資金" | mkN "资金" | {-HSK-} mkN "项" ; -- status=guess -- status=guess
 lin funeral_N = mkN "白" | {-HSK-} mkN "葬礼" "场" ;
@@ -9501,7 +9578,7 @@ lin generalissimo_N = mkN "大元帥" | mkN "大元帅" ; -- status=guess -- sta
 lin generalization_N = mkN "泛化" ;
 lin generalize_V = mkV "概括" ;
 lin generalize_V2 = mkV2 "概括" | {-HSK-} mkV2 (mkV "普遍化") ; -- status=guess, src=wikt
-lin generally_Adv = variants {} | {-HSK-} mkAdv "一般" ;
+lin generally_Adv = {-HSK-} mkAdv "一般" | adjAdv general_A ; -- derived
 lin generate_V2 = mkV2 "产生" ;
 lin generation_N = mkN "一代" | {-HSK-} mkN "产生" ;
 lin generator_N = mkN "发电机" ;
@@ -9541,7 +9618,7 @@ lin gentleness_N = mkN "温柔" ;
 lin gently_Adv = mkAdv "轻轻" ;
 lin gentry_N = mkN "人们" ;
 lin genuine_A = mkA "地道" | mkA "真" | mkA "真正" ;
-lin genuinely_Adv = variants {} | {-HSK-} mkAdv "真正" ;
+lin genuinely_Adv = {-HSK-} mkAdv "真正" | adjAdv genuine_A ; -- derived
 lin genus_N = mkN "屬" | mkN "属" ; -- status=guess -- status=guess
 lin geochemistry_N = mkN "地球化學" | mkN "地球化学" ; -- status=guess -- status=guess
 lin geode_N = mkN "晶洞" ;
@@ -9551,6 +9628,7 @@ lin geoff_PN = foreignPN "Geoff" ; -- comment=src=eng status=guess
 lin geoffrey_PN = foreignPN "Geoffrey" ; -- comment=src=eng status=guess
 lin geographer_N = mkN "地理學家" | mkN "地理学家" ; -- status=guess -- status=guess
 lin geographical_A = mkA "地理" ;
+lin geographically_Adv = adjAdv geographical_A ; -- derived -- derived
 lin geography_N = mkN "地理" ;
 lin geological_A = mkA "地质" ;
 lin geology_N = mkN "地质学" ;
@@ -9655,7 +9733,7 @@ lin give_V3 = L.give_V3 | {-HSK-} mkV3 "与" | mkV3 "给" ;
 lin give_up_V = mkV "放弃" ;
 lin give_up_V2 = mkV2 "放弃" ;
 lin giveaway_N = mkN "赠品" ;
-lin given_A = variants {} | {-HSK-} mkA "一定" | mkA "受到" ;
+lin given_A = {-HSK-} mkA "一定" | mkA "受到" ;
 lin given_N = mkN "一定" | mkN "受到" | {-HSK-} mkN "基本事实" ;
 lin giver_N = mkN "給予者" | mkN "给予者" | mkN "捐贈者" | mkN "捐赠者" | mkN "送禮者" | mkN "送礼者" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin glacial_A = mkA "冰" ;
@@ -9709,6 +9787,7 @@ lin gloaming_N = mkN "黃昏" | mkN "黄昏" ; -- status=guess -- status=guess
 lin gloat_V = mkV "幸灾乐祸" ;
 lin gloat_VS = mkVS "幸灾乐祸" ;
 lin global_A = mkA "全球" ;
+lin globally_Adv = adjAdv global_A ; -- derived -- derived
 lin globe_N = mkN "地球" [] ;
 lin gloom_N = mkN "幽暗" ;
 lin gloomy_A = mkA "暗" | {-HSK-} mkA "阴沉" ;
@@ -9798,7 +9877,7 @@ lin goffs_oak_PN = foreignPN "Goffs oak" ; -- comment=src=eng status=guess
 lin goggles_N = mkN "風鏡" | mkN "风镜" | mkN "護眼鏡" | mkN "护眼镜" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin going_N = mkN "去" ;
 lin golbourne_PN = foreignPN "Golbourne" ; -- comment=src=eng status=guess
-lin gold_A = variants {} | {-HSK-} mkA "黄金" ;
+lin gold_A = {-HSK-} mkA "黄金" ;
 lin gold_N = L.gold_N | {-HSK-} mkN "黄金" ;
 lin golden_A = mkA "金色" ;
 lin goldfinch_N = mkN "金翅雀" ; -- status=guess -- status=guess
@@ -9875,7 +9954,7 @@ lin gracious_A = mkA "亲切" ;
 lin grade_N = mkN "年级" "個" | mkN "等" | {-HSK-} mkN "等级" ;
 lin grade_V2 = mkV2 "使+分等级" ;
 lin gradual_A = mkA "逐步" ;
-lin gradually_Adv = variants {} | {-HSK-} mkAdv "逐渐" ;
+lin gradually_Adv = {-HSK-} mkAdv "逐渐" | adjAdv gradual_A ; -- derived
 lin graduate_N = mkN "毕业生" ;
 lin graduate_V = mkV "毕业" ;
 lin graduate_V2 = mkV2 "授予学位" | {-HSK-} mkV2 "毕业" ;
@@ -9959,7 +10038,7 @@ lin great_malvern_PN = foreignPN "Great malvern" ; -- comment=src=eng status=gue
 lin great_shelford_PN = foreignPN "Great shelford" ; -- comment=src=eng status=guess
 lin great_yarmouth_PN = foreignPN "Great yarmouth" ; -- comment=src=eng status=guess
 lin greatest_A = mkA "太" ;
-lin greatly_Adv = variants {} ;
+lin greatly_Adv = adjAdv great_A ; -- derived
 lin greatness_N = mkN "伟大" ;
 lin greece_PN = mkPN "希腊" ;
 lin greed_N = mkN "贪心" ;
@@ -10272,7 +10351,7 @@ lin handful_N = mkN "少数" ;
 lin handgun_N = mkN "短槍" | mkN "短枪" | mkN "手槍" | mkN "手枪" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin handicap_N = mkN "妨碍" ;
 lin handicap_V2 = mkV2 "阻碍" ;
-lin handicapped_A = variants {} | {-HSK-} mkA "残疾" ;
+lin handicapped_A = {-HSK-} mkA "残疾" ;
 lin handicraft_N = mkN "手工業" | mkN "手工业" | mkN "手藝" | mkN "手艺" | mkN "手工藝" | mkN "手工艺" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin handiwork_N = mkN "手工" ; -- status=guess
 lin handkerchief_N = mkN "手帕" | mkN "手絹" | mkN "手绢" ; -- status=guess -- status=guess -- status=guess
@@ -10309,7 +10388,7 @@ lin hapless_A = mkA "倒霉" ;
 lin happen_V = mkV "出" | mkV "发生" ;
 lin happen_VV = mkVV "出" | mkVV "发生" ;
 lin happening_N = mkN "事件" ;
-lin happily_Adv = variants {} | {-HSK-} mkAdv "痛快" ;
+lin happily_Adv = {-HSK-} mkAdv "痛快" | adjAdv happy_A ; -- derived
 lin happiness_N = mkN "幸福" | {-HSK-} mkN "幸福" "" ;
 lin happy_A = mkA "幸福" | mkA "快乐" | mkA "愉快" | mkA "高兴" ;
 lin harangue_N = mkN "高谈阔论" ;
@@ -10328,7 +10407,7 @@ lin hardbound_A = mkA "精装" ;
 lin hardcover_N = mkN "精装" ;
 lin harden_V2 = mkV2 "变硬" ;
 lin hardliner_N = mkN "强硬路线" ;
-lin hardly_Adv = variants {} ;
+lin hardly_Adv = adjAdv hard_2_A ; -- derived
 lin hardship_N = mkN "困苦" "" | {-HSK-} mkN "苦" ;
 lin hardware_N = mkN "硬件" ;
 lin hardwood_N = mkN "硬木" ;
@@ -10367,6 +10446,7 @@ lin harrow_PN = foreignPN "Harrow" ; -- comment=src=geonames status=guess
 lin harry_PN = foreignPN "Harry" ; -- comment=src=eng status=guess
 lin harry_V2 = mkV2 "打" ;
 lin harsh_A = mkA "苛刻" ;
+lin harshly_Adv = adjAdv harsh_A ; -- derived -- derived
 lin harshness_N = mkN "刺耳" ;
 lin hartebeest_N = mkN "狷羚" | mkN "麋羚" ; -- status=guess -- status=guess
 lin hartlepool_PN = mkPN "哈特爾浦" ; -- comment=src=geonames status=guess
@@ -10389,7 +10469,7 @@ lin hassle_V = mkV "騷攪" | mkV "骚搅" ; -- status=guess, src=wikt -- status
 lin hassle_V2 = mkV2 (mkV "騷攪") | mkV2 (mkV "骚搅") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin haste_N = mkN "赶快" ;
 lin hasten_V2 = mkV2 "赶快" ;
-lin hastily_Adv = variants {} | {-HSK-} mkAdv "急忙" ;
+lin hastily_Adv = {-HSK-} mkAdv "急忙" | adjAdv hasty_A ; -- derived
 lin hastings_PN = mkPN ("黑斯廷斯" | "海斯廷斯") ; -- comment=src=geonames status=guess
 lin hasty_A = mkA "匆" | {-HSK-} mkA "匆忙" ;
 lin hat_N = L.hat_N | {-HSK-} mkN "帽子" "頂" ;
@@ -10441,7 +10521,7 @@ lin hazardous_A = mkA "危险" ;
 lin hazel_PN = foreignPN "Hazel" ; -- comment=src=eng status=guess
 lin hazelnut_N = mkN "榛子" ; -- status=guess
 lin he_Pron = S.he_Pron ;
-lin head_A = variants {} | {-HSK-} mkA "脑袋" | mkA "长" ;
+lin head_A = {-HSK-} mkA "脑袋" | mkA "长" ;
 lin head_N = L.head_N | {-HSK-} mkN "脑袋" "顆" | mkN "长" ;
 lin head_V = mkV "率领" ;
 lin head_V2 = mkV2 "率领" ;
@@ -10509,7 +10589,7 @@ lin heave_V = mkV "举起" ;
 lin heave_V2 = mkV2 "举起" ;
 lin heaven_N = mkN "天空" ;
 lin heavenly_A = mkA "天的" ; -- status=guess
-lin heavily_Adv = variants {} ;
+lin heavily_Adv = adjAdv heavy_A ; -- derived
 lin heaviside_PN = foreignPN "Heaviside" ; -- comment=src=eng status=guess
 lin heavy_A = L.heavy_A | {-HSK-} mkA "重" ;
 lin heavy_Adv = mkAdv "大量" | {-HSK-} mkAdv "重" ;
@@ -10659,7 +10739,7 @@ lin hiccup_N = mkN "打嗝" | mkN "呃逆" ; -- status=guess -- status=guess -- 
 lin hiccup_V = mkV "打嗝" | mkV "呃逆" ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin hick_N = mkN "乡巴佬" ;
 lin hickey_N = mkN "吻痕" | mkN "草莓" ; -- status=guess -- status=guess -- status=guess -- status=guess
-lin hidden_A = variants {} | {-HSK-} mkA "暗" | mkA "阴" ;
+lin hidden_A = {-HSK-} mkA "暗" | mkA "阴" ;
 lin hide_N = mkN "隐藏" "" ;
 lin hide_V = mkV "隐藏" ;
 lin hide_V2 = mkV2 "隐藏" ;
@@ -10694,7 +10774,7 @@ lin highland_PN = foreignPN "Highland" ; -- comment=src=geonames status=guess
 lin highlight_N = mkN "重头戏" ;
 lin highlight_V2 = mkV2 "突出" ;
 lin highlighter_N = mkN "熒光筆" | mkN "荧光笔" ; -- status=guess -- status=guess
-lin highly_Adv = variants {} ;
+lin highly_Adv = adjAdv high_A ; -- derived
 lin highway_N = mkN "公路" | {-HSK-} mkN "高速公路" ;
 lin hijab_N = mkN "頭巾" | mkN "头巾" ; -- status=guess -- status=guess
 lin hijack_N = mkN "劫持" | mkN "劫機" | mkN "劫机" ; -- status=guess -- status=guess -- status=guess
@@ -10739,7 +10819,7 @@ lin histidine_N = mkN "组氨酸" ; -- status=guess
 lin historian_N = mkN "历史学家" ;
 lin historic_A = mkA "历史性" ;
 lin historical_A = mkA "历史" ;
-lin historically_Adv = variants {} ;
+lin historically_Adv = adjAdv historical_A ; -- derived
 lin historicize_V2 = mkV2 "使+历史化" ;
 lin history_N = mkN "历史" | {-HSK-} mkN "历史" "門" ;
 lin hit_N = mkN "击中" ;
@@ -10845,7 +10925,7 @@ lin honduras_PN = mkPN "洪都拉斯" ; -- comment=src=geonames status=guess
 lin hone_N = mkN "磨刀石" ; -- status=guess
 lin hone_V2 = mkV2 "用磨刀石磨" ;
 lin honest_A = mkA "方" | mkA "老实" | mkA "诚实" | mkA "诚恳" ;
-lin honestly_Adv = variants {} | {-HSK-} mkAdv "实在" ;
+lin honestly_Adv = {-HSK-} mkAdv "实在" | adjAdv honest_A ; -- derived
 lin honesty_N = mkN "诚实" ;
 lin honey_N = mkN "亲爱" ;
 lin honeybee_N = mkN "蜜蜂" "隻" ;
@@ -10886,7 +10966,7 @@ lin hope_V = mkV "希望" ;
 lin hope_VS = L.hope_VS ;
 lin hope_VV = mkVV "希望" ;
 lin hopeful_A = mkA "乐观" | {-HSK-} mkA "怀抱希望" ;
-lin hopefully_Adv = variants {} ;
+lin hopefully_Adv = adjAdv hopeful_A ; -- derived
 lin hopeless_A = mkA "绝望" ;
 lin hopelessness_N = mkN "絕望" | mkN "绝望" ; -- status=guess -- status=guess
 lin hopscotch_N = mkN "跳房子" | mkN "跳格子" ; -- status=guess -- status=guess
@@ -10896,6 +10976,7 @@ lin horde_N = mkN "部落" ;
 lin horizon_N = mkN "地平线" [] ;
 lin horizontal_A = mkA "横" | {-HSK-} mkA "水平" ;
 lin horizontal_N = mkN "横" | mkN "水平" | {-HSK-} mkN "水平线""" ;
+lin horizontally_Adv = adjAdv horizontal_A ; -- derived -- derived
 lin horley_PN = foreignPN "Horley" ; -- comment=src=geonames status=guess
 lin hormone_N = mkN "激素" ;
 lin horn_N = L.horn_N | {-HSK-} mkN "角" "個" ;
@@ -10955,6 +11036,7 @@ lin hour_N = mkN "小时" | {-HSK-} mkN "小时" "個" ;
 lin hourglass_N = mkN "沙漏" | mkN "沙鐘" | mkN "沙钟" | mkN "沙壺" | mkN "沙壶" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin houri_N = mkN "天女" | mkN "天仙" ; -- status=guess -- status=guess
 lin hourly_A = mkA "每小时" ;
+lin hourly_Adv = adjAdv hourly_A ; -- derived
 lin house_N = L.house_N | {-HSK-} mkN "屋子" "間" | mkN "门" ;
 lin house_V2 = mkV2 "驻扎" ;
 lin household_N = mkN "家庭" | {-HSK-} mkN "家庭" "戶" ;
@@ -10994,7 +11076,7 @@ lin hue_N = mkN "色調" | mkN "色调" | mkN "色彩" ; -- status=guess -- stat
 lin hug_N = mkN "拥抱" ;
 lin hug_V2 = mkV2 "拥抱" ;
 lin huge_A = mkA "大" | mkA "巨大" ;
-lin hugely_Adv = mkAdv "大大" ; -- status=guess
+lin hugely_Adv = mkAdv "大大" | adjAdv huge_A ; -- status=guess -- derived -- derived
 lin hugh_PN = foreignPN "Hugh" ; -- comment=src=eng status=guess
 lin hughie_PN = foreignPN "Hughie" ; -- comment=src=eng status=guess
 lin huhehot_PN = foreignPN "Huhehot" ; -- comment=src=eng status=guess
@@ -11160,7 +11242,7 @@ lin idealism_N = mkN "唯心论" ;
 lin idealist_N = mkN "理想主义者" ;
 lin idealistic_A = mkA "理想化" ;
 lin idealize_V2 = mkV2 "理想化" ;
-lin ideally_Adv = variants {} ;
+lin ideally_Adv = adjAdv ideal_A ; -- derived
 lin idem_PN = foreignPN "Idem" ; -- comment=src=eng status=guess
 lin identical_A = mkA "同一的" | {-HSK-} mkA "相同" ;
 lin identifiable_A = mkA "可辨认" ;
@@ -11215,7 +11297,7 @@ lin ill_mannered_A = mkA "粗野" ;
 lin illegal_A = mkA "非法" ;
 lin illegal_N = mkN "非法移民" ; -- status=guess
 lin illegality_N = mkN "违法" ;
-lin illegally_Adv = mkAdv "不法地" ; -- status=guess
+lin illegally_Adv = mkAdv "不法地" | adjAdv illegal_A ; -- status=guess -- derived -- derived
 lin illegible_A = mkA "難以辨認的" | mkA "难以辨认的" | mkA "很難看懂的" | mkA "很难看懂的" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin illegitimate_A = mkA "私生" ;
 lin illicit_A = mkA "非法" ;
@@ -11254,8 +11336,9 @@ lin immature_A = mkA "嫩" | mkA "未成熟" | mkA "幼小" ; -- status=guess --
 lin immaturity_N = mkN "未成年" "种" ;
 lin immediacy_N = mkN "直接" [] ;
 lin immediate_A = mkA "即时" | {-HSK-} mkA "直接" | mkA "立刻" ;
-lin immediately_Adv = variants {} | {-HSK-} mkAdv "立即" | mkAdv "赶快" ;
+lin immediately_Adv = {-HSK-} mkAdv "立即" | mkAdv "赶快" | adjAdv immediate_A ; -- derived
 lin immense_A = mkA "巨大" ;
+lin immensely_Adv = adjAdv immense_A ; -- derived -- derived
 lin immerse_V2 = mkV2 "沉浸" ;
 lin immersion_N = mkN "浸入" ; -- status=guess
 lin immigrant_N = mkN "移民" ;
@@ -11324,6 +11407,7 @@ lin implementation_N = mkN "实现" ;
 lin implicate_V2 = mkV2 "牵涉" ;
 lin implication_N = mkN "含义" ;
 lin implicit_A = mkA "含蓄" | {-HSK-} mkA "阴" ;
+lin implicitly_Adv = adjAdv implicit_A ; -- derived -- derived
 lin implore_V2 = mkV2 "恳求" ;
 lin implore_VS = mkVS "恳求" ;
 lin implosion_N = mkN "內爆" | mkN "内爆" | mkN "爆縮" | mkN "爆缩" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -11336,7 +11420,7 @@ lin import_N = mkN "进口" ;
 lin import_V2 = mkV2 "输入" | mkV2 "进口" ;
 lin importance_N = mkN "重要性" ;
 lin important_A = L.important_A | {-HSK-} mkA "要" | mkA "重要" ;
-lin importantly_Adv = variants {} ;
+lin importantly_Adv = adjAdv important_A ; -- derived
 lin importerFem_N = mkN "进口商" ;
 lin importerMasc_N = mkN "进口商" ;
 lin impose_V = mkV "强加" ;
@@ -11399,7 +11483,7 @@ lin inadequacy_N = mkN "不足" ;
 lin inadequate_A = mkA "不足" ;
 lin inadvertence_N = mkN "漫不经心" ;
 lin inadvertent_A = mkA "疏忽" ;
-lin inadvertently_Adv = mkAdv "無意地" | mkAdv "无意地" | mkAdv "不經意間" | mkAdv "不经意间" ; -- status=guess -- status=guess -- status=guess -- status=guess
+lin inadvertently_Adv = mkAdv "無意地" | mkAdv "无意地" | mkAdv "不經意間" | mkAdv "不经意间" | adjAdv inadvertent_A ; -- status=guess -- status=guess -- status=guess -- status=guess -- derived -- derived
 lin inappropriate_A = mkA "不当" ;
 lin inasmuch_as_Adv = mkAdv "因为" ;
 lin inattention_N = mkN "不留心" ;
@@ -11427,7 +11511,7 @@ lin inchon_PN = foreignPN "Inchon" ; -- comment=src=eng status=guess
 lin incidence_N = mkN "发生率" ;
 lin incident_N = mkN "事件" ;
 lin incidental_A = mkA "附带" ;
-lin incidentally_Adv = variants {} | {-HSK-} mkAdv "偶然" ;
+lin incidentally_Adv = {-HSK-} mkAdv "偶然" | adjAdv incidental_A ; -- derived
 lin incineration_N = mkN "焚化" "场" ;
 lin incinerator_N = mkN "焚烧炉" ;
 lin incision_N = mkN "切口" "道" ;
@@ -11438,7 +11522,7 @@ lin inclination_N = mkN "倾角" ;
 lin incline_V = mkV "低" | {-HSK-} mkV "倾斜" ;
 lin incline_V2 = mkV2 "低" | {-HSK-} mkV2 "倾斜" ;
 lin incline_V2V = mkV2V "低" | {-HSK-} mkV2V "倾斜" ;
-lin inclined_A = variants {} | {-HSK-} mkA "斜" ;
+lin inclined_A = {-HSK-} mkA "斜" ;
 lin include_V = mkV "包" | mkV "包含" | mkV "包括" ;
 lin include_V2 = mkV2 "包" | mkV2 "包含" | mkV2 "包括" ;
 lin including_N = mkN "连" ;
@@ -11467,7 +11551,7 @@ lin inconvenient_A = mkA "不便" | {-HSK-} mkA "麻烦" ;
 lin incorporate_V2 = mkV2 "包括" | {-HSK-} mkV2 "合并" ;
 lin incorporated_A = mkA "公司" | mkA "公里" ;
 lin incorrect_A = mkA "不正确" ;
-lin incorrectly_Adv = mkAdv "不正確" | mkAdv "不正确" ; -- status=guess -- status=guess
+lin incorrectly_Adv = mkAdv "不正確" | mkAdv "不正确" | adjAdv incorrect_A ; -- status=guess -- status=guess -- derived -- derived
 lin increase_N = mkN "增加" ;
 lin increase_V = mkV "增加" | mkV "增长" | mkV "提高" ;
 lin increase_V2 = mkV2 "增加" | mkV2 "增长" | mkV2 "提高" ;
@@ -11475,7 +11559,7 @@ lin increased_A = variants {} ;
 lin increasing_A = variants {} ;
 lin increasingly_Adv = mkAdv "日益" ;
 lin incredible_A = mkA "难以置信" ;
-lin incredibly_Adv = variants {} ;
+lin incredibly_Adv = adjAdv incredible_A ; -- derived
 lin increment_N = mkN "增量" ;
 lin incremental_A = mkA "增加" ; -- comment="增值的" ;
 lin incriminate_V2 = mkV2 "控告" ;
@@ -11498,6 +11582,7 @@ lin indeed_AdV = mkAdV "的确" ;
 lin indeed_Adv = mkAdv "的确" | {-HSK-} mkAdv "真" | mkAdv "确实" ;
 lin indefatigable_A = mkA "不倦" ; -- status=guess
 lin indefinite_A = mkA "不定" ;
+lin indefinitely_Adv = adjAdv indefinite_A ; -- derived -- derived
 lin indehiscent_A = mkA "不開裂的" ; -- status=guess
 lin indelible_A = mkA "不可磨灭" ;
 lin indemnification_N = mkN "赔偿" ;
@@ -11508,7 +11593,7 @@ lin independent_1_A = variants {} ;
 lin independent_2_A = variants {} ;
 lin independent_A = mkA "独立" ;
 lin independent_N = mkN "无党派人士" | {-HSK-} mkN "独立" ;
-lin independently_Adv = variants {} ;
+lin independently_Adv = adjAdv independent_2_A ; -- derived
 lin indescribable_A = mkA "無法形容" | mkA "无法形容" | mkA "不可名狀" | mkA "不可名状" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin indestructibility_N = mkN "不灭性" ;
 lin indeterminable_A = mkA "不能确定" ;
@@ -11539,7 +11624,7 @@ lin indignity_N = mkN "侮辱" "次" ;
 lin indigo_A = mkA "靛藍" | mkA "靛蓝" | mkA "靛青" ; -- status=guess -- status=guess -- status=guess
 lin indigo_N = mkN "靛青" | mkN "靛藍" | mkN "靛蓝" ; -- status=guess -- status=guess -- status=guess
 lin indirect_A = mkA "直接" | {-HSK-} mkA "间接" ;
-lin indirectly_Adv = variants {} ;
+lin indirectly_Adv = adjAdv indirect_A ; -- derived
 lin indirectness_N = mkN "间接" "次" ;
 lin indiscreet_A = mkA "不謹慎的" | mkA "不谨慎的" ; -- status=guess -- status=guess
 lin indiscriminate_A = mkA "乱" | {-HSK-} mkA "任意" ;
@@ -11554,7 +11639,7 @@ lin individual_A = mkA "个" | mkA "个人" | mkA "个别" | {-HSK-} mkA "单个
 lin individual_N = mkN "个" | mkN "个人" | mkN "个别" ;
 lin individualism_N = mkN "個人主義" | mkN "个人主义" ; -- status=guess -- status=guess
 lin individuality_N = mkN "个性" ;
-lin individually_Adv = variants {} ;
+lin individually_Adv = adjAdv individual_A ; -- derived
 lin indoctrinate_V2 = mkV2 "灌输" ;
 lin indomitable_A = mkA "不屈不挠" ;
 lin indonesia_PN = mkPN "印度尼西亚" ;
@@ -11591,7 +11676,7 @@ lin inescapable_A = mkA "不可避免" ;
 lin inevitability_N = mkN "必然性" "" ;
 lin inevitable_A = mkA "必然" ;
 lin inevitable_N = mkN "必然" ;
-lin inevitably_Adv = variants {} ;
+lin inevitably_Adv = adjAdv inevitable_A ; -- derived
 lin inexcusable_A = mkA "不可原谅" ; -- comment=1
 lin inexhaustible_A = mkA "用不完" ;
 lin inexorable_A = mkA "必然" ;
@@ -11629,6 +11714,7 @@ lin infidel_N = mkN "不信神的" ; -- status=guess
 lin infidelity_N = mkN "不忠" ;
 lin infiltrate_V2 = mkV2 "使+潜入" ;
 lin infinite_A = mkA "无限" ;
+lin infinitely_Adv = adjAdv infinite_A ; -- derived -- derived
 lin infinitive_N = mkN "不定詞" | mkN "不定词" ; -- status=guess -- status=guess
 lin infinity_N = mkN "無限" | mkN "无限" ; -- status=guess -- status=guess
 lin infix_N = mkN "中綴" | mkN "中缀" ; -- status=guess -- status=guess
@@ -11654,6 +11740,7 @@ lin influx_N = mkN "汇集" ;
 lin inform_V = mkV "告诉" | mkV "报告" | mkV "通知" ;
 lin inform_V2 = mkV2 "告诉" | mkV2 "报告" | mkV2 "通知" ;
 lin informal_A = mkA "便" | {-HSK-} mkA "非正式" ;
+lin informally_Adv = adjAdv informal_A ; -- derived -- derived
 lin informant_N = mkN "提供消息的人" | mkN "告密者" | mkN "線人" | mkN "线人" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin information_N = mkN "信息" | mkN "消息" "條" | mkN "资料" "份" | {-HSK-} mkN "消息" ;
 lin informative_A = mkA "信息量大" ;
@@ -11684,6 +11771,7 @@ lin inhale_V = mkV "吸气" ;
 lin inhale_V2 = mkV2 "使+吸入" ;
 lin inhaler_N = mkN "吸入器" ; -- status=guess
 lin inherent_A = mkA "固有" ;
+lin inherently_Adv = adjAdv inherent_A ; -- derived -- derived
 lin inherit_V = mkV "承受" | {-HSK-} mkV "继承" ;
 lin inherit_V2 = mkV2 "承受" | {-HSK-} mkV2 "继承" ;
 lin inheritance_N = mkN "遗产" ;
@@ -11696,7 +11784,7 @@ lin inhumane_A = mkA "不人道" ;
 lin initial_A = mkA "初始" | {-HSK-} mkA "开始" | mkA "最初" ;
 lin initial_N = mkN "初始" "" | {-HSK-} mkN "开始" "個" | mkN "最初" ;
 lin initial_V2 = mkV2 "使+用姓名的首字母签名" ;
-lin initially_Adv = variants {} ;
+lin initially_Adv = adjAdv initial_A ; -- derived
 lin initiate_N = mkN "入会" [] ;
 lin initiate_V2 = mkV2 "开始" ;
 lin initiation_N = mkN "启蒙" "次" ;
@@ -11793,7 +11881,7 @@ lin installation_N = mkN "安装" | mkN "设施" | {-HSK-} mkN "安装" [] ;
 lin instance_N = mkN "例子" ;
 lin instant_A = mkA "瞬间" ;
 lin instant_N = mkN "瞬间" ;
-lin instantly_Adv = variants {} ;
+lin instantly_Adv = adjAdv instant_A ; -- derived
 lin instar_N = mkN "齡" | mkN "龄" | mkN "蛻變期" | mkN "蜕变期" | mkN "蛻期" | mkN "蜕期" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin instead_Adv = mkAdv "代替" | mkAdv "反而" | {-HSK-} mkAdv "反之" ;
 lin instead_of_Prep = mkPrep "而不是" ;
@@ -11804,7 +11892,7 @@ lin institute_N = mkN "研究所" ;
 lin institute_V2 = mkV2 "研究所" ;
 lin institution_N = mkN "机构" ;
 lin institutional_A = mkA "机构" ;
-lin instruct_V2 = variants {} | {-HSK-} mkV2 "教授" ;
+lin instruct_V2 = {-HSK-} mkV2 "教授" ;
 lin instruction_N = mkN "指令" ;
 lin instructional_A = mkA "教学" ;
 lin instructive_A = mkA "教育性" ;
@@ -11851,6 +11939,7 @@ lin intelligentsia_N = mkN "知識分子" | mkN "知识分子" | mkN "知識界"
 lin intelligible_A = mkA "可理解的" ; -- status=guess
 lin intend_VV = mkVV "打算" ;
 lin intense_A = mkA "尖锐" | mkA "强烈" | mkA "激烈" | mkA "紧张" ;
+lin intensely_Adv = adjAdv intense_A ; -- derived -- derived
 lin intensify_V = mkV "强化" ;
 lin intensify_V2 = mkV2 "强化" ;
 lin intensity_N = mkN "强度" [] ;
@@ -11859,7 +11948,7 @@ lin intent_A = mkA "作用" | {-HSK-} mkA "决心" ;
 lin intent_N = mkN "作用" | {-HSK-} mkN "意图" ;
 lin intention_N = mkN "意向" | {-HSK-} mkN "打算" "個" ;
 lin intentional_A = mkA "故意" ;
-lin intentionally_Adv = mkAdv "特意" ;
+lin intentionally_Adv = mkAdv "特意" | adjAdv intentional_A ; -- derived -- derived
 lin inter_V2 = mkV2 (mkV "埋葬") | mkV2 (mkV "下葬") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin interaction_N = mkN "相互作用" ;
 lin interactive_A = mkA "互动" ;
@@ -11868,6 +11957,7 @@ lin intercept_N = mkN "迎擊" | mkN "迎击" ; -- status=guess -- status=guess
 lin intercept_V2 = mkV2 "拦截" ;
 lin interchange_N = mkN "轉車，倒車" ; -- status=guess
 lin interchangeable_A = mkA "可互换的" ;
+lin interchangeably_Adv = adjAdv interchangeable_A ; -- derived
 lin intercollegiate_A = mkA "校际" ;
 lin intercom_N = mkN "对讲机" "台" ;
 lin interconnect_V = mkV "互连" ;
@@ -11883,6 +11973,7 @@ lin interest_V = mkV "关心" ;
 lin interest_V2 = mkV2 "使+有兴趣" ;
 lin interested_A = mkA "有兴趣" ;
 lin interesting_A = mkA "有趣" ;
+lin interestingly_Adv = adjAdv interesting_A ; -- derived -- derived
 lin interface_N = mkN "接口" "个" ;
 lin interfere_V = mkV "干扰" | {-HSK-} mkV "插" ;
 lin interference_N = mkN "干扰" "种" ;
@@ -11907,11 +11998,13 @@ lin intern_N = mkN "實習生" | mkN "实习生" ; -- status=guess -- status=gue
 lin internal_A = mkA "内" | mkA "里" | {-HSK-} mkA "内部" ;
 lin internal_N = mkN "內燃機" | mkN "内燃机" | {-HSK-} mkN "内" | mkN "里" ; -- status=guess -- status=guess
 lin internalize_V2 = mkV2 (mkV "使內在化") | mkV2 (mkV "使内在化") ; -- status=guess, src=wikt -- status=guess, src=wikt
+lin internally_Adv = adjAdv internal_A ; -- derived -- derived
 lin international_A = mkA "国际" ;
 lin international_N = mkN "国际" | {-HSK-} mkN "国际组织" ;
 lin internationalism_N = mkN "國際主義" | mkN "国际主义" ; -- status=guess -- status=guess
 lin internationalist_N = mkN "国际主义者" ;
 lin internationalization_N = mkN "国际化" [] ;
+lin internationally_Adv = adjAdv international_A ; -- derived -- derived
 lin internee_N = mkN "被拘留者" ; -- status=guess
 lin internment_N = mkN "拘留" ;
 lin internship_N = mkN "實習" | mkN "实习" ; -- status=guess -- status=guess
@@ -11994,7 +12087,7 @@ lin invalid_A = mkA "无效" ;
 lin invalidate_V2 = mkV2 "使+无效化" ;
 lin invaluable_A = variants {} ;
 lin invariable_A = mkA "不变" ;
-lin invariably_Adv = variants {} ;
+lin invariably_Adv = adjAdv invariable_A ; -- derived
 lin invasion_N = mkN "侵略" | {-HSK-} mkN "入侵" ;
 lin invective_N = mkN "谩骂" ;
 lin invent_V = mkV "发明" ;
@@ -12067,7 +12160,7 @@ lin iron_V2 = mkV2 "烫" | {-HSK-} mkV2 (mkV "熨") | mkV2 (mkV "熨烫") | mkV2
 lin ironclad_A = mkA "铁定" ;
 lin ironic_A = mkA "讽刺" ;
 lin ironical_A = mkA "挖苦" ;
-lin ironically_Adv = variants {} ;
+lin ironically_Adv = adjAdv ironical_A ; -- derived
 lin ironing_N = mkN "燙衣板" | mkN "烫衣板" ; -- status=guess -- status=guess
 lin ironworks_N = mkN "鐵廠" | mkN "铁厂" | mkN "鐵工廠" | mkN "铁工厂" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin irony_N = mkN "反话" | {-HSK-} mkN "讽刺" ;
@@ -12212,7 +12305,7 @@ lin jealousy_N = mkN "妒忌" ;
 lin jean_N = mkN "牛仔裤" "条" ;
 lin jean_PN = foreignPN "Jean" ; -- comment=src=eng status=guess
 lin jeanie_PN = foreignPN "Jeanie" ; -- comment=src=eng status=guess
-lin jeans_N = variants {} | {-HSK-} mkN "牛仔裤" "條" ;
+lin jeans_N = {-HSK-} mkN "牛仔裤" "條" ;
 lin jedburgh_PN = foreignPN "Jedburgh" ; -- comment=src=geonames status=guess
 lin jeep_N = mkN "吉普" ;
 lin jeer_V = mkV "嘲笑" | mkV "嘲弄" ; -- status=guess, src=wikt -- status=guess, src=wikt
@@ -12299,7 +12392,7 @@ lin join_V = mkV "加入" | {-HSK-} mkV "参加" | mkV "接" | mkV "联合" | mk
 lin join_V2 = mkV2 "加入" | {-HSK-} mkV2 "参加" | mkV2 "接" | mkV2 "联合" | mkV2 "连" ;
 lin joint_A = mkA "共同" | mkA "节" | {-HSK-} mkA "联合" ;
 lin joint_N = mkN "共同" | mkN "节" | {-HSK-} mkN "联合" [] ;
-lin jointly_Adv = variants {} | {-HSK-} mkAdv "共同" ;
+lin jointly_Adv = {-HSK-} mkAdv "共同" | adjAdv joint_A ; -- derived
 lin joke_N = mkN "笑话" | {-HSK-} mkN "笑话" "個" ;
 lin joke_V = mkV "开玩笑" ;
 lin joker_N = mkN "皇牌" ; -- status=guess
@@ -12551,7 +12644,8 @@ lin kindergarten_N = mkN "幼儿园" ;
 lin kindhearted_A = mkA "善良" | mkA "親切" | mkA "亲切" | mkA "好心腸" | mkA "好心肠" | mkA "仁慈" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin kindle_V = mkV "喚起" | mkV "唤起" | mkV "激起" | {-HSK-} mkV "点" ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
 lin kindle_V2 = mkV2 "点" | {-HSK-} mkV2 "点燃" ;
-lin kindly_Adv = variants {} ;
+lin kindly_A = variants {} ;
+lin kindly_Adv = adjAdv kindly_A ; -- derived
 lin kindness_N = mkN "仁慈" ;
 lin kindred_A = mkA "同族" ;
 lin kinesthesia_N = mkN "肌肉運動知覺" | mkN "肌肉运动知觉" | mkN "運動覺" | mkN "运动觉" | mkN "動覺" | mkN "动觉" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -12626,7 +12720,7 @@ lin know_VQ = L.know_VQ ;
 lin know_VS = L.know_VS | {-HSK-} mkVS "懂" | mkVS "知道" | mkVS "认识" ;
 lin knowledge_N = mkN "学问" "個" | mkN "智慧" | mkN "知识" "門" | mkN "认识" | {-HSK-} mkN "知识" [] ;
 lin knowledgeable_A = mkA "懂行" ;
-lin known_A = variants {} | {-HSK-} mkA "表明" ;
+lin known_A = {-HSK-} mkA "表明" ;
 lin knuckle_N = mkN "关节" ;
 lin knutsford_PN = foreignPN "Knutsford" ; -- comment=src=geonames status=guess
 lin koala_N = mkN "考拉" | mkN "樹袋熊" | mkN "树袋熊" | mkN "無尾熊" | mkN "无尾熊" | mkN "樹熊" | mkN "树熊" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -12692,7 +12786,7 @@ lin lack_N = mkN "少" | mkN "缺少" | {-HSK-} mkN "缺乏" ;
 lin lack_V = mkV "差" | mkV "无" | mkV "欠" | mkV "短" | mkV "缺乏" | mkV "缺少" ;
 lin lack_V2 = mkV2 "差" | mkV2 "无" | mkV2 "欠" | mkV2 "短" | mkV2 "缺乏" | mkV2 "缺少" ;
 lin lackey_N = mkN "男仆" "位" ;
-lin lacking_A = variants {} | {-HSK-} mkA "不足" ;
+lin lacking_A = {-HSK-} mkA "不足" ;
 lin laconic_A = mkA "簡潔" | mkA "简洁" ; -- status=guess -- status=guess
 lin lacrosse_N = mkN "长曲棍球" | mkN "長曲棍球" ; -- status=guess -- status=guess
 lin lactation_N = mkN "哺乳期" ; -- status=guess
@@ -12779,7 +12873,7 @@ lin large_A = mkA "伟大" | mkA "大" ;
 lin large_Adv = mkAdv "伟大" | mkAdv "大" ;
 lin large_N = mkN "伟大" | mkN "大" | {-HSK-} mkN "大" [] ;
 lin large_scale_A = mkA "大型" | {-HSK-} mkA "大规模" ;
-lin largely_Adv = variants {} ;
+lin largely_Adv = adjAdv writ_large_A ; -- derived
 lin largish_A = mkA "稍大" ;
 lin largs_PN = foreignPN "Largs" ; -- comment=src=geonames status=guess
 lin lark_N = mkN "雲雀" | mkN "云雀" ; -- status=guess -- status=guess
@@ -12809,7 +12903,7 @@ lin latch_N = mkN "門閂" | mkN "门闩" | mkN "門釦" | mkN "门扣" ; -- sta
 lin latch_V = mkV "闩上" ;
 lin late_A = mkA "深" | {-HSK-} mkA "迟到" ;
 lin late_Adv = mkAdv "晚" | {-HSK-} mkAdv "深" ;
-lin lately_Adv = variants {} ;
+lin lately_Adv = adjAdv late_A ; -- derived
 lin latent_A = mkA "潛在" | mkA "潜在" ; -- status=guess -- status=guess
 lin later_A = mkA "下" | mkA "以后" | mkA "后来" | mkA "后面" ;
 lin later_Adv = mkAdv "下" | mkAdv "以后" | mkAdv "后来" | mkAdv "后面" ;
@@ -12895,7 +12989,7 @@ lin lead_to_V2 = mkV2 "导致" | mkV2 "引起" ;
 lin leaded_A = mkA "加铅" ;
 lin leader_N = mkN "领导" "位" | {-HSK-} mkN "领导者" ;
 lin leadership_N = mkN "领导" | {-HSK-} mkN "领导" "位" ;
-lin leading_A = variants {} | {-HSK-} mkA "领导" ;
+lin leading_A = {-HSK-} mkA "领导" ;
 lin leading_N = mkN "领导" "位" | {-HSK-} mkN "领导""位" ;
 lin leaf_N = L.leaf_N | {-HSK-} mkN "叶子" "片" | mkN "页" ;
 lin leaflet_N = mkN "小传单" "张" ;
@@ -12966,7 +13060,7 @@ lin legalistic_A = mkA "墨守成规" ;
 lin legality_N = mkN "合法" ;
 lin legalization_N = mkN "合法化" ;
 lin legalize_V2 = mkV2 "使+合法化" ;
-lin legally_Adv = variants {} ;
+lin legally_Adv = adjAdv legal_A ; -- derived
 lin legend_N = mkN "传奇" "个" | {-HSK-} mkN "传说" ;
 lin legendary_A = mkA "传说" ;
 lin legerdemain_N = mkN "戏法" ;
@@ -12993,7 +13087,7 @@ lin leipzig_PN = mkPN "莱比锡" ; -- comment=src=geonames status=guess
 lin leishmaniasis_N = mkN "利什曼病" ; -- status=guess
 lin leisure_N = mkN "休闲" | mkN "空闲" | {-HSK-} mkN "闲暇" ;
 lin leisurely_A = mkA "悠闲" ;
-lin leisurely_Adv = mkAdv "悠然得" ;
+lin leisurely_Adv = mkAdv "悠然得" | adjAdv leisurely_A ; -- derived -- derived
 lin leitrim_PN = foreignPN "Leitrim" ; -- comment=src=eng status=guess
 lin leix_PN = foreignPN "Leix" ; -- comment=src=eng status=guess
 lin lemma_N = mkN "詞目" | mkN "词目" ; -- status=guess -- status=guess
@@ -13161,7 +13255,7 @@ lin lighten_V2 = mkV2 "减轻" ;
 lin lighter_N = mkN "打火機" | mkN "打火机" ; -- status=guess -- status=guess
 lin lighthouse_N = mkN "燈塔" | mkN "灯塔" ; -- status=guess -- status=guess
 lin lighting_N = mkN "采光" "次" ;
-lin lightly_Adv = variants {} ;
+lin lightly_Adv = adjAdv light_A ; -- derived
 lin lightning_N = mkN "闪电" | {-HSK-} mkN "闪电" "道" ;
 lin lightsaber_N = mkN "光劍" | mkN "光剑" ; -- status=guess -- status=guess
 lin lightweight_A = mkA "轻巧" ;
@@ -13200,6 +13294,7 @@ lin limit_V2 = mkV2 "限制" ;
 lin limit_V2V = mkV2V "限制" ;
 lin limitation_N = mkN "局限性" ;
 lin limited_A = variants {} ;
+lin limitedly_Adv = adjAdv limited_A ; -- derived -- derived
 lin limoges_PN = mkPN "利摩日" ; -- comment=src=geonames status=guess
 lin limousine_N = mkN "豪华轿车" ;
 lin limp_A = mkA "瘫软" ;
@@ -13275,7 +13370,7 @@ lin litany_N = mkN "一连串" "" ;
 lin litas_N = mkN "立特" ; -- status=guess
 lin literacy_N = mkN "读写能力" ;
 lin literal_A = mkA "文字" ;
-lin literally_Adv = variants {} ;
+lin literally_Adv = adjAdv literal_A ; -- derived
 lin literary_A = mkA "文" ;
 lin literate_A = mkA "識字的" | mkA "识字的" ; -- status=guess -- status=guess
 lin literati_N = mkN "文學家" | mkN "文学家" | mkN "文人" ; -- status=guess -- status=guess -- status=guess
@@ -13292,7 +13387,7 @@ lin litter_N = mkN "垃圾" ;
 lin litter_V = mkV "亂丟垃圾" | mkV "乱丢垃圾" ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin litter_V2 = mkV2 "乱丢" ;
 lin little_A = mkA "小" | {-HSK-} mkA "少" ;
-lin little_Adv = variants {} | {-HSK-} mkAdv "少" ;
+lin little_Adv = {-HSK-} mkAdv "少" ;
 lin little_Det = mkpDet "小" | {-HSK-} mkpDet "少" ;
 lin little_N = mkN "少" | {-HSK-} mkN "少许" ;
 lin littlehampton_PN = mkPN "利特爾漢普頓" ; -- comment=src=geonames status=guess
@@ -13353,7 +13448,7 @@ lin locale_N = mkN "现场" ;
 lin locality_N = mkN "地点" ;
 lin localization_N = mkN "本地化" | mkN "地方化" ; -- status=guess -- status=guess
 lin localize_V2 = mkV2 "局部化" ;
-lin locally_Adv = variants {} ;
+lin locally_Adv = adjAdv local_A ; -- derived
 lin locate_V = mkV "定位" ;
 lin locate_V2 = mkV2 "定位" ;
 lin location_N = mkN "位" | {-HSK-} mkN "位置" ;
@@ -13389,6 +13484,7 @@ lin logarithm_N = mkN "對數" | mkN "对数" ; -- status=guess -- status=guess
 lin logbook_N = mkN "航海日志" | mkN "航空日志" ; -- status=guess -- status=guess
 lin logic_N = mkN "逻辑" | {-HSK-} mkN "逻辑" [] ;
 lin logical_A = mkA "合理" ;
+lin logically_Adv = adjAdv logical_A ; -- derived -- derived
 lin logician_N = mkN "论理学者" ; -- status=guess
 lin logistics_N = mkN "物流" ;
 lin logo_N = mkN "標誌" | mkN "标志" | mkN "商標" | mkN "商标" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -13443,6 +13539,7 @@ lin loophole_N = mkN "漏洞" ;
 lin loose_A = mkA "松弛" | {-HSK-} mkA "活动" ;
 lin loose_Adv = mkAdv "活动" ;
 lin loose_V2 = mkV2 "放松" ;
+lin loosely_Adv = adjAdv loose_A ; -- derived -- derived
 lin loosen_V = mkV "放松" | {-HSK-} mkV "解开" ;
 lin loosen_V2 = mkV2 "放松" | {-HSK-} mkV2 "松开" ;
 lin loot_N = mkN "战利品" ;
@@ -13464,7 +13561,7 @@ lin lose_out_V = mkV "吃亏" | {-HSK-} mkV "输掉" ;
 lin loser_N = mkN "失败者" ;
 lin loss_N = mkN "损失" | {-HSK-} mkN "损失" "個" ;
 lin lossiemouth_PN = foreignPN "Lossiemouth" ; -- comment=src=geonames status=guess
-lin lost_A = variants {} | {-HSK-} mkA "迷路" ;
+lin lost_A = {-HSK-} mkA "迷路" ;
 lin lot_N = mkN "许多" ;
 lin lothian_PN = foreignPN "Lothian" ; -- comment=src=eng status=guess
 lin lotion_N = mkN "洗剂" ;
@@ -13473,7 +13570,7 @@ lin lotto_N = mkN "樂透" | mkN "乐透" ; -- status=guess -- status=guess
 lin lotus_N = mkN "蓮" | mkN "莲" | mkN "蓮花" | mkN "莲花" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin loud_A = mkA "响" | mkA "高" | {-HSK-} mkA "高声" ;
 lin loud_Adv = mkAdv "响" | mkAdv "高" | {-HSK-} mkAdv "大声地" ;
-lin loudly_Adv = variants {} ;
+lin loudly_Adv = adjAdv loud_A ; -- derived
 lin loudness_N = mkN "音量競賽" | mkN "音量竞赛" ; -- status=guess -- status=guess
 lin loudspeaker_N = mkN "喇叭" "只" ;
 lin loughborough_PN = mkPN "拉夫堡" ; -- comment=src=geonames status=guess
@@ -13519,7 +13616,7 @@ lin lubricant_N = mkN "润滑剂" ;
 lin lubricate_V2 = mkV2 (mkV "潤滑") | mkV2 (mkV "润滑") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin lucid_A = mkA "清醒" ;
 lin luck_N = mkN "幸运" | {-HSK-} mkN "运气" ;
-lin luckily_Adv = mkAdv "多亏" | mkAdv "幸亏" ;
+lin luckily_Adv = mkAdv "多亏" | mkAdv "幸亏" | adjAdv lucky_A ; -- derived
 lin lucknow_PN = mkPN "勒克瑙" ; -- comment=src=geonames status=guess
 lin lucky_A = mkA "幸运" ;
 lin lucrative_A = mkA "利润丰厚" ;
@@ -13686,7 +13783,7 @@ lin main_N = mkN "主要" | mkN "基本" | {-HSK-} mkN "主要" "" ;
 lin maine_PN = foreignPN "Maine" ; -- comment=src=eng status=guess
 lin mainframe_N = mkN "主机" "个" ;
 lin mainland_N = mkN "大陆" ;
-lin mainly_Adv = variants {} ;
+lin mainly_Adv = adjAdv main_A ; -- derived
 lin mainmast_N = mkN "主桅" ; -- status=guess
 lin mains_N = variants {} ;
 lin mainstay_N = mkN "支柱" "个" ;
@@ -13712,7 +13809,7 @@ lin make_V2A = mkV2A "使" ;
 lin make_V2V = mkV2V "使" | {-HSK-} mkV2V "做" | mkV2V "制造" | mkV2V "搞" ;
 lin make_it_V = mkV "成功" ;
 lin make_of_V3 = mkV3 "用...做" ;
-lin make_up_N = variants {} | {-HSK-} mkN "组成" ;
+lin make_up_N = {-HSK-} mkN "组成" ;
 lin make_up_V = mkV "打扮" | mkV "构成" ;
 lin make_up_V2 = mkV2 "打扮" | mkV2 "构成" ;
 lin maker_N = mkN "制造者" ;
@@ -13832,6 +13929,7 @@ lin mantle_N = mkN "斗篷" ; -- status=guess
 lin mantra_N = mkN "口頭禪" | mkN "口头禅" ; -- status=guess -- status=guess
 lin manual_A = mkA "手工" ;
 lin manual_N = mkN "手册" | {-HSK-} mkN "手工" ;
+lin manually_Adv = adjAdv manual_A ; -- derived -- derived
 lin manufacture_N = mkN "制作" | mkN "生产" | {-HSK-} mkN "制造" ;
 lin manufacture_V2 = mkV2 "制造" ;
 lin manufacturer_N = mkN "生产厂家" ;
@@ -13888,6 +13986,7 @@ lin mark_V2 = mkV2 "标志" | {-HSK-} mkV2 "标记" ;
 lin mark_V3 = mkV3 "标志" | {-HSK-} mkV3 "标记" ;
 lin marke_VS = mkVS "做标记" ;
 lin marked_A = mkA "有标记" ;
+lin markedly_Adv = adjAdv marked_A ; -- derived -- derived
 lin marker_N = mkN "标记" "个" ;
 lin market_1_N = mkN "市场" ;
 lin market_2_N = mkN "市场" ;
@@ -13957,7 +14056,7 @@ lin mason_N = mkN "梅森" "" ;
 lin mason_dixon_PN = foreignPN "Mason-dixon" ; -- comment=src=eng status=guess
 lin masonry_N = mkN "砖石" ;
 lin masquerade_V = mkV "伪装" ;
-lin mass_A = variants {} | {-HSK-} mkA "质量" ;
+lin mass_A = {-HSK-} mkA "质量" ;
 lin mass_N = mkN "块" [] | {-HSK-} mkN "质量" "個" ;
 lin mass_V = mkV "聚集" ;
 lin mass_produce_V2 = mkV2 "批量生产" ;
@@ -13968,6 +14067,7 @@ lin massage_V2 = mkV2 "按摩" ;
 lin masseur_N = mkN "男按摩师" ;
 lin masseuse_N = mkN "女按摩师" ;
 lin massive_A = mkA "大规模" ;
+lin massively_Adv = adjAdv massive_A ; -- derived -- derived
 lin mast_N = mkN "桅" | mkN "桅桿" | mkN "桅杆" ; -- status=guess -- status=guess -- status=guess
 lin master_1_N = variants {} ;
 lin master_2_N = variants {} ;
@@ -14003,6 +14103,7 @@ lin materiel_N = mkN "軍需品" | mkN "军需品" ; -- status=guess -- status=g
 lin maternal_A = mkA "母親的" | mkA "母亲的" ; -- status=guess -- status=guess
 lin maternity_N = mkN "產假" | mkN "产假" | mkN "育嬰假" | mkN "育婴假" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin mathematical_A = mkA "数学" ;
+lin mathematically_Adv = adjAdv mathematical_A ; -- derived -- derived
 lin mathematics_N = mkN "数学" ;
 lin matlock_PN = foreignPN "Matlock" ; -- comment=src=geonames status=guess
 lin matriarch_N = mkN "女家長" | mkN "女家长" ; -- status=guess -- status=guess
@@ -14086,6 +14187,7 @@ lin meath_PN = foreignPN "Meath" ; -- comment=src=eng status=guess
 lin mecca_PN = foreignPN "Mecca" ; -- comment=src=geonames status=guess
 lin mechanic_N = mkN "机械师" "个" ;
 lin mechanical_A = mkA "机械" ;
+lin mechanically_Adv = adjAdv mechanical_A ; -- derived -- derived
 lin mechanics_N = mkN "机械学" [] ;
 lin mechanism_N = mkN "机制" ;
 lin mechanization_N = mkN "機械化" | mkN "机械化" ; -- status=guess -- status=guess
@@ -14183,7 +14285,7 @@ lin menstrual_A = mkA "月经" ;
 lin menstruation_N = mkN "月經" | mkN "月经" | mkN "經血" | mkN "经血" | mkN "經期" | mkN "经期" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin mental_A = mkA "心理" | {-HSK-} mkA "精神" ;
 lin mentality_N = mkN "心理" ;
-lin mentally_Adv = variants {} ;
+lin mentally_Adv = adjAdv mental_A ; -- derived
 lin mention_N = mkN "提到" ;
 lin mention_V = mkV "提到" | {-HSK-} mkV "题" ;
 lin mention_V2 = mkV2 "提到" | {-HSK-} mkV2 "题" ;
@@ -14204,7 +14306,7 @@ lin mercury_N = mkN "汞" ;
 lin mercury_PN = foreignPN "Mercury" ; -- comment=src=geonames status=guess
 lin mercy_N = mkN "怜悯" "" ;
 lin mere_A = mkA "只" ;
-lin merely_Adv = variants {} | {-HSK-} mkAdv "不过" | mkAdv "光" | mkAdv "单纯" | mkAdv "只" ;
+lin merely_Adv = {-HSK-} mkAdv "不过" | mkAdv "光" | mkAdv "单纯" | mkAdv "只" | adjAdv mere_A ; -- derived
 lin merge_V = mkV "合并" ;
 lin merge_V2 = mkV2 "合并" ;
 lin merger_N = mkN "合并" ;
@@ -14352,6 +14454,7 @@ lin milano_PN = foreignPN "Milano" ; -- comment=src=geonames status=guess
 lin mild_A = mkA "淡" | {-HSK-} mkA "温和" ;
 lin mildenhall_PN = foreignPN "Mildenhall" ; -- comment=src=geonames status=guess
 lin mildew_N = mkN "霉" ;
+lin mildly_Adv = adjAdv mild_A ; -- derived -- derived
 lin mildred_PN = foreignPN "Mildred" ; -- comment=src=eng status=guess
 lin mile_N = mkN "英里" ;
 lin mileage_N = mkN "英里数" ;
@@ -14534,7 +14637,7 @@ lin mistake_N = mkN "错" "個" | mkN "错误" "個" | {-HSK-} mkN "错误" ;
 lin mistake_V = mkV "出错" | {-HSK-} mkV "误会" ;
 lin mistake_V2 = mkV2 "弄错" | {-HSK-} mkV2 "误会" ;
 lin mistaken_A = mkA "错误" ;
-lin mistakenly_Adv = mkAdv "錯誤地" | mkAdv "错误地" ; -- status=guess -- status=guess
+lin mistakenly_Adv = mkAdv "錯誤地" | mkAdv "错误地" | adjAdv mistaken_A ; -- status=guess -- status=guess -- derived -- derived
 lin mister_N = mkN "先生" "位" ;
 lin mistletoe_N = mkN "槲寄生" ; -- status=guess
 lin mistreat_V2 = mkV2 "虐待" ;
@@ -14596,6 +14699,7 @@ lin moderate_A = mkA "适度" ;
 lin moderate_N = mkN "稳健的人" "个" ;
 lin moderate_V = mkV "减轻" ;
 lin moderate_V2 = mkV2 "变缓" ;
+lin moderately_Adv = adjAdv moderate_A ; -- derived -- derived
 lin moderation_N = mkN "缓和" ;
 lin modern_A = mkA "现代" | {-HSK-} mkA "现在" ;
 lin modern_N = mkN "现代人" "位" | {-HSK-} mkN "现在" ;
@@ -14718,6 +14822,7 @@ lin moral_N = mkN "道德" | {-HSK-} mkN "道德" "種" ;
 lin morale_N = mkN "斗志" "" ;
 lin moralistic_A = mkA "说教" ;
 lin morality_N = mkN "道德" "種" | {-HSK-} mkN "道德品质" "种" ;
+lin morally_Adv = adjAdv moral_A ; -- derived -- derived
 lin morass_N = mkN "泥淖" [] ;
 lin moratorium_N = mkN "暂停" "" ;
 lin morbidity_N = mkN "发病率" ;
@@ -14750,6 +14855,7 @@ lin morsel_N = mkN "一口" ;
 lin mortal_A = mkA "致命" ; -- status=guess
 lin mortal_N = mkN "凡人" ; -- status=guess
 lin mortality_N = mkN "死亡" [] ;
+lin mortally_Adv = adjAdv mortal_A ; -- derived -- derived
 lin mortar_N = mkN "灰泥" | mkN "砂漿" | mkN "砂浆" ; -- status=guess -- status=guess -- status=guess
 lin mortgage_N = mkN "抵押" ;
 lin mortgage_V2 = mkV2 "抵押" ;
@@ -14824,7 +14930,8 @@ lin move_towards_V2 = mkV2 "就" ;
 lin movement_N = mkN "动作" "個" | mkN "移动" | mkN "运动" " " | {-HSK-} mkN "运动" ;
 lin mover_N = mkN "有權勢的人" | mkN "有权势的人" | mkN "風雲人物" | mkN "风云人物" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin movie_N = mkN "电影" | {-HSK-} mkN "电影" "部" ;
-lin moving_A = variants {} | {-HSK-} mkA "感动" ;
+lin moving_A = {-HSK-} mkA "感动" ;
+lin movingly_Adv = adjAdv moving_A ; -- derived -- derived
 lin mow_V2 = mkV2 "割草" ;
 lin mozambique_PN = mkPN "莫桑比克" ; -- comment=src=geonames status=guess
 lin mph_N = mkN "英里" "" ;
@@ -14920,6 +15027,7 @@ lin mushy_A = mkA "烂" | {-HSK-} mkA "糊状" ;
 lin music_N = L.music_N | {-HSK-} mkN "音乐" "張" ;
 lin musical_A = mkA "音乐" ;
 lin musical_N = mkN "歌舞片" ; -- status=guess
+lin musically_Adv = adjAdv musical_A ; -- derived -- derived
 lin musicianFem_N = mkN "音乐家" ;
 lin musicianMasc_N = mkN "音乐家" ;
 lin musicianship_N = mkN "音乐修养" ;
@@ -14953,7 +15061,7 @@ lin mutter_V2 = mkV2 "咕哝" ;
 lin mutton_N = mkN "羊肉" ; -- status=guess
 lin mutual_A = mkA "互相" | {-HSK-} mkA "相互" ;
 lin mutuality_N = mkN "相关" ;
-lin mutually_Adv = mkAdv "互相" ;
+lin mutually_Adv = mkAdv "互相" | adjAdv mutual_A ; -- derived -- derived
 lin muzzle_N = mkN "口絡" | mkN "口络" ; -- status=guess -- status=guess
 lin muzzle_V2 = mkV2 "使+缄默" ;
 lin mycelium_N = mkN "菌絲" | mkN "菌丝" ; -- status=guess -- status=guess
@@ -14965,6 +15073,7 @@ lin myriad_N = mkN "万" | mkN "萬" ; -- status=guess -- status=guess
 lin myrrh_N = mkN "沒藥" | mkN "没药" ; -- status=guess -- status=guess
 lin myself_NP = mkNPword "我自己" ;
 lin mysterious_A = mkA "神秘" ;
+lin mysteriously_Adv = adjAdv mysterious_A ; -- derived -- derived
 lin mystery_N = mkN "神秘" | {-HSK-} mkN "秘密" ;
 lin mysticism_N = mkN "神秘主義" | mkN "神秘主义" ; -- status=guess -- status=guess
 lin mystique_N = mkN "奥秘" ;
@@ -15027,6 +15136,7 @@ lin narrow_A = L.narrow_A | {-HSK-} mkA "窄" ;
 lin narrow_N = mkN "窄" ;
 lin narrow_V = mkV "窄" ;
 lin narrow_V2 = mkV2 "缩小" ;
+lin narrowly_Adv = adjAdv narrow_A ; -- derived -- derived
 lin narrowness_N = mkN "狭隘" ;
 lin narwhal_N = mkN "一角鯨" | mkN "一角鲸" ; -- status=guess -- status=guess
 lin nary_Predet = mkPredet "多" ;
@@ -15046,7 +15156,7 @@ lin nationalistic_A = mkA "民族主义" ;
 lin nationality_N = mkN "国籍" | mkN "民族" "個" | {-HSK-} mkN "国籍" "重" ;
 lin nationalization_N = mkN "国有化" "" ;
 lin nationalize_V2 = mkV2 "收归国有" ;
-lin nationally_Adv = variants {} ;
+lin nationally_Adv = adjAdv national_A ; -- derived
 lin nationwide_A = mkA "全国" ;
 lin nationwide_Adv = mkAdv "全国范围内" ;
 lin native_A = mkA "本地人" ;
@@ -15056,7 +15166,7 @@ lin natural_A = mkA "自然" ;
 lin natural_N = mkN "自然" ;
 lin naturalist_N = mkN "博物学家" "位" ;
 lin naturalistic_A = mkA "自然" ;
-lin naturally_Adv = variants {} | {-HSK-} mkAdv "自然" ;
+lin naturally_Adv = {-HSK-} mkAdv "自然" | adjAdv natural_A ; -- derived
 lin nature_N = mkN "性格" "個" | mkN "性质" "個" | mkN "本质" | mkN "自然" ;
 lin naturist_N = mkN "裸体主义者""位" ;
 lin naturopathy_N = mkN "自然醫學" | mkN "自然医学" ; -- status=guess -- status=guess
@@ -15086,14 +15196,14 @@ lin nearby_Adv = mkAdv "附近" ;
 lin nearer_Prep = mkPrep "靠近" ;
 lin nearest_Adv = mkAdv "最近" ;
 lin nearest_Prep = mkPrep "最近" ;
-lin nearly_Adv = variants {} | {-HSK-} mkAdv "几乎" | mkAdv "差不多" ;
+lin nearly_Adv = {-HSK-} mkAdv "几乎" | mkAdv "差不多" | adjAdv near_A ; -- derived
 lin neat_A = mkA "干净" | mkA "整齐" ;
 lin neath_PN = foreignPN "Neath" ; -- comment=src=geonames status=guess
-lin neatly_Adv = variants {} ;
+lin neatly_Adv = adjAdv neat_A ; -- derived
 lin neatness_N = mkN "整洁" ;
 lin nebraska_PN = foreignPN "Nebraska" ; -- comment=src=eng status=guess
 lin nebula_N = mkN "星雲" | mkN "星云" ; -- status=guess -- status=guess
-lin necessarily_Adv = variants {} | {-HSK-} mkAdv "一定" | mkAdv "必须" ;
+lin necessarily_Adv = {-HSK-} mkAdv "一定" | mkAdv "必须" | adjAdv necessary_A ; -- derived
 lin necessary_A = mkA "必要" ;
 lin necessary_N = mkN "必要" ;
 lin necessitate_V2 = mkV2 "成为必需" ;
@@ -15121,6 +15231,7 @@ lin negate_V2 = mkV2 "否定" ;
 lin negation_N = mkN "否定" ; -- status=guess
 lin negative_A = mkA "否定" | {-HSK-} mkA "阴" ;
 lin negative_N = mkN "否定" | {-HSK-} mkN "否定" "個" | mkN "阴" ;
+lin negatively_Adv = adjAdv negative_A ; -- derived -- derived
 lin neglect_N = mkN "疏忽" ;
 lin neglect_V2 = mkV2 "忽视" ;
 lin negligence_N = mkN "疏忽" ;
@@ -15222,7 +15333,7 @@ lin newfangled_A = mkA "新奇的" | mkA "流行的" | mkA "新式的" ; -- stat
 lin newfoundland_PN = foreignPN "Newfoundland" ; -- comment=src=eng status=guess
 lin newham_PN = foreignPN "Newham" ; -- comment=src=eng status=guess
 lin newhaven_PN = foreignPN "Newhaven" ; -- comment=src=geonames status=guess
-lin newly_Adv = variants {} | {-HSK-} mkAdv "新" ;
+lin newly_Adv = {-HSK-} mkAdv "新" | adjAdv new_A ; -- derived
 lin newlywed_N = mkN "新婚" ; -- status=guess
 lin newmains_PN = foreignPN "Newmains" ; -- comment=src=geonames status=guess
 lin newmarket_PN = mkPN "纽马克特" ; -- comment=src=geonames status=guess
@@ -15258,7 +15369,7 @@ lin nicaragua_PN = mkPN "尼加拉瓜" ;
 lin nicaraguan_A = mkA "尼加拉瓜" ;
 lin nice_A = mkA "好看" ;
 lin nice_PN = mkPN "尼斯" ; -- comment=src=geonames status=guess
-lin nicely_Adv = variants {} ;
+lin nicely_Adv = adjAdv nice_A ; -- derived
 lin niche_N = mkN "壁龛" ;
 lin nicholas_PN = foreignPN "Nicholas" ; -- comment=src=eng status=guess
 lin nick_PN = foreignPN "Nick" ; -- comment=src=eng status=guess
@@ -15283,7 +15394,7 @@ lin nightfall_N = mkN "黃昏" | mkN "黄昏" | mkN "薄暮" ; -- status=guess -
 lin nightgown_N = mkN "睡衣" | mkN "女睡衣" | mkN "睡袍" | mkN "女睡袍" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin nightlife_N = mkN "夜生活" ; -- status=guess
 lin nightly_A = mkA "每夜" ;
-lin nightly_Adv = mkAdv "每夜" ;
+lin nightly_Adv = mkAdv "每夜" | adjAdv nightly_A ; -- derived
 lin nightmare_N = mkN "梦魇" ;
 lin nighttime_N = mkN "夜裡" | mkN "夜里" | mkN "夜間" | mkN "夜间" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin nihilism_N = mkN "虛無主義" | mkN "虚无主义" ; -- status=guess -- status=guess
@@ -15331,6 +15442,7 @@ lin noise_N = mkN "噪音" ;
 lin noisome_A = mkA "有毒的" ; -- status=guess
 lin noisy_A = mkA "吵" | {-HSK-} mkA "嘈杂" ;
 lin nominal_A = mkA "名义上" ;
+lin nominally_Adv = adjAdv nominal_A ; -- derived -- derived
 lin nominate_V2 = mkV2 "推" | {-HSK-} mkV2 "推荐" ;
 lin nomination_N = mkN "提名" "次" ;
 lin nominative_N = mkN "主格" ; -- status=guess
@@ -15370,7 +15482,7 @@ lin normal_N = mkN "正常" | mkN "通常" ;
 lin normalcy_N = mkN "正常性" "" ;
 lin normalization_N = mkN "正常化" | mkN "正規化" | mkN "正规化" ; -- status=guess -- status=guess -- status=guess
 lin normalize_V2 = mkV2 "使正常化" ;
-lin normally_Adv = variants {} ;
+lin normally_Adv = adjAdv normal_A ; -- derived
 lin norman_PN = mkPN "諾曼" ; -- comment=src=geonames status=guess
 lin normanton_PN = foreignPN "Normanton" ; -- comment=src=geonames status=guess
 lin normantown_PN = foreignPN "Normantown" ; -- comment=src=eng status=guess
@@ -15385,6 +15497,8 @@ lin northamptonshire_PN = foreignPN "Northamptonshire" ; -- comment=src=eng stat
 lin northeast_Adv = mkAdv "向东北" ;
 lin northeast_N = mkN "东北" "" ;
 lin northeastern_A = mkA "东北方" ;
+lin northerly_A = variants {} ;
+lin northerly_Adv = adjAdv northerly_A ; -- derived
 lin northern_A = mkA "北方" ;
 lin northerner_N = mkN "北方人" ; -- status=guess
 lin northumberland_PN = foreignPN "Northumberland" ; -- comment=src=geonames status=guess
@@ -15407,7 +15521,7 @@ lin nosy_A = mkA "多管閒事" | mkA "多管闲事" ; -- status=guess -- status
 lin not_Adv = mkAdv "不" ;
 lin not_Predet = S.not_Predet ;
 lin notable_A = mkA "显著" ;
-lin notably_Adv = variants {} ;
+lin notably_Adv = adjAdv notable_A ; -- derived
 lin notation_N = mkN "記號" | mkN "记号" | mkN "注釋" | mkN "注释" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin notch_N = mkN "刻痕" ;
 lin notch_V2 = mkV2 "赢得" ;
@@ -15427,11 +15541,13 @@ lin notice_N = mkN "通知" | {-HSK-} mkN "通知" "個" ;
 lin notice_V2 = mkV2 "通知" ;
 lin notice_VS = mkVS "注意" ;
 lin noticeable_A = mkA "引人注目" ;
+lin noticeably_Adv = adjAdv noticeable_A ; -- derived -- derived
 lin notification_N = mkN "通知" | {-HSK-} mkN "通知" "個" ;
 lin notify_V2 = mkV2 "通知" ;
 lin notion_N = mkN "概念" | {-HSK-} mkN "观念" ;
 lin notoriety_N = mkN "臭名" ;
 lin notorious_A = mkA "臭名昭著" ;
+lin notoriously_Adv = adjAdv notorious_A ; -- derived -- derived
 lin nottingham_PN = mkPN "諾定咸" ; -- comment=src=geonames status=guess
 lin nottinghamshire_PN = foreignPN "Nottinghamshire" ; -- comment=src=eng status=guess
 lin notwithstanding_Adv = mkAdv "尽管" ; -- comment="仍然" ;
@@ -15489,6 +15605,7 @@ lin numeral_N = mkN "数字" | {-HSK-} mkN "数字" "個" ;
 lin numerator_N = mkN "分子" ;
 lin numeric_A = mkA "數值的" | mkA "数值的" ; -- status=guess -- status=guess
 lin numerical_A = mkA "数值" ;
+lin numerically_Adv = adjAdv numerical_A ; -- derived -- derived
 lin numerous_A = mkA "众多" | {-HSK-} mkA "多" | mkA "广大" | mkA "百" ;
 lin nun_N = mkN "尼姑" ;
 lin nuneaton_PN = mkPN "納尼頓" ; -- comment=src=geonames status=guess
@@ -15590,11 +15707,11 @@ lin obtainable_A = mkA "可获得" ;
 lin obtrusiveness_N = mkN "强迫""" ;
 lin obviate_V2 = mkV2 "避免" ;
 lin obvious_A = mkA "明显" | {-HSK-} mkA "明白" ;
-lin obviously_Adv = variants {} ;
+lin obviously_Adv = adjAdv obvious_A ; -- derived
 lin occasion_N = mkN "场合" | {-HSK-} mkN "机会" "個" ;
 lin occasion_V2 = mkV2 "引起" ;
 lin occasional_A = mkA "偶然" ;
-lin occasionally_Adv = variants {} | {-HSK-} mkAdv "偶尔" | mkAdv "偶然" ;
+lin occasionally_Adv = {-HSK-} mkAdv "偶尔" | mkAdv "偶然" | adjAdv occasional_A ; -- derived
 lin occident_PN = foreignPN "Occident" ; -- comment=src=eng status=guess
 lin occult_N = mkN "神秘學" | mkN "神秘学" ; -- status=guess -- status=guess
 lin occultism_N = mkN "神秘主義" | mkN "神秘主义" | mkN "神秘學" | mkN "神秘学" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -15619,8 +15736,9 @@ lin octave_N = mkN "八度" ;
 lin octogenarian_N = mkN "八旬老人" ;
 lin octopus_N = mkN "章魚" | mkN "章鱼" ; -- status=guess -- status=guess
 lin odd_A = mkA "奇怪" | {-HSK-} mkA "零" ;
-lin odd_N = variants {} | {-HSK-} mkN "奇怪" | mkN "零" ;
+lin odd_N = {-HSK-} mkN "奇怪" | mkN "零" ;
 lin oddity_N = mkN "怪癖" ;
+lin oddly_Adv = adjAdv odd_A ; -- derived -- derived
 lin odds_N = mkN "可能性" "个" ;
 lin odds_on_A = mkA "不平等" ;
 lin ode_N = mkN "頌詞" | mkN "颂词" | mkN "頌詩" | mkN "颂诗" | mkN "頌" | mkN "颂" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -15661,7 +15779,7 @@ lin officer_N = mkN "官员" ;
 lin officialMasc_N = mkN "职员" ;
 lin official_A = mkA "官" | mkA "正式" | {-HSK-} mkA "官方" ;
 lin officialdom_N = mkN "官场" ;
-lin officially_Adv = variants {} ;
+lin officially_Adv = adjAdv official_A ; -- derived
 lin officious_A = mkA "非官方" ;
 lin offing_N = mkN "即将发生" ;
 lin offline_A = mkA "脫機" | mkA "脱机" | mkA "離線" | mkA "离线" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -15767,7 +15885,7 @@ lin opal_N = mkN "蛋白石" ; -- status=guess
 lin opaque_A = mkA "不透明" ; -- status=guess
 lin opec_PN = foreignPN "Opec" ; -- comment=src=eng status=guess
 lin open_A = mkA "坦率" | mkA "透明" | {-HSK-} mkA "开放" ;
-lin open_Adv = variants {} | {-HSK-} mkAdv "坦率" | mkAdv "透明" ;
+lin open_Adv = {-HSK-} mkAdv "坦率" | mkAdv "透明" ;
 lin open_N = mkN "坦率" | mkN "透明" | {-HSK-} mkN "空旷" | mkN "户外" ;
 lin open_V = mkV "开" | mkV "披" | mkV "拆" | mkV "睁" | {-HSK-} mkV "打开" ;
 lin open_V2 = L.open_V2 | {-HSK-} mkV2 "开" | mkV2 "披" | mkV2 "拆" | mkV2 "睁" ;
@@ -15778,7 +15896,7 @@ lin opener_N = mkN "开启工具" ;
 lin openhearted_A = mkA "光明" ;
 lin opening_A = mkA "门" ;
 lin opening_N = mkN "开盘" | {-HSK-} mkN "门" ;
-lin openly_Adv = variants {} ;
+lin openly_Adv = adjAdv open_A ; -- derived
 lin openness_N = mkN "率直" ;
 lin opera_N = mkN "歌剧""部" ;
 lin operable_A = mkA "可操作性" ;
@@ -15812,7 +15930,7 @@ lin oppose_V = mkV "反对" | {-HSK-} mkV "对" | mkV "相对" ;
 lin oppose_V2 = mkV2 "反对" | {-HSK-} mkV2 "对" | mkV2 "相对" ;
 lin opposed_A = variants {} ;
 lin opposite_A = mkA "对面" | mkA "相反" | mkA "相对" ;
-lin opposite_Adv = variants {} | {-HSK-} mkAdv "对面" | mkAdv "相反" | mkAdv "相对" ; -- comment=mkPrep "的对面" "在" ;
+lin opposite_Adv = {-HSK-} mkAdv "对面" | mkAdv "相反" | mkAdv "相对" ; -- comment=mkPrep "的对面" "在" ;
 lin opposite_N = mkN "对面" | mkN "相反" | mkN "相对" | {-HSK-} mkN "相反" [] ;
 lin opposite_Prep = mkPrep "的对面" "在" ;
 lin opposition_N = mkN "反对" ;
@@ -15866,7 +15984,7 @@ lin orderly_A = mkA "整齐" | {-HSK-} mkA "有秩序" ;
 lin orderly_N = mkN "整齐" ;
 lin ordinal_N = mkN "序數" | mkN "序数" ; -- status=guess -- status=guess
 lin ordinance_N = mkN "条例" "条" ;
-lin ordinarily_Adv = mkAdv "平常" ;
+lin ordinarily_Adv = mkAdv "平常" | adjAdv ordinary_A ; -- derived -- derived
 lin ordinary_A = mkA "一般" | mkA "便" | mkA "平常" | mkA "正常" | mkA "通常" | {-HSK-} mkA "普通" ;
 lin ordinary_N = mkN "一般" | mkN "便" | mkN "平常" | mkN "正常" | mkN "通常" | {-HSK-} mkN "普通""" ;
 lin ordnance_N = mkN "大炮" ;
@@ -15893,7 +16011,7 @@ lin origami_N = mkN "折紙" | mkN "折纸" | mkN "折紙藝術" | mkN "折纸�
 lin origin_N = mkN "原因" "個" | mkN "本" | {-HSK-} mkN "起源" ;
 lin original_A = mkA "初始" | {-HSK-} mkA "原来" | mkA "本来" ;
 lin original_N = mkN "原始" | {-HSK-} mkN "原来" | mkN "本来" ;
-lin originally_Adv = variants {} | {-HSK-} mkAdv "原来" | mkAdv "本来" ;
+lin originally_Adv = {-HSK-} mkAdv "原来" | mkAdv "本来" | adjAdv original_A ; -- derived
 lin originate_V = mkV "创始" ;
 lin originate_V2 = mkV2 "起源于" ;
 lin originatorFem_N = mkN "鼻祖" ;
@@ -15931,6 +16049,7 @@ lin ossett_PN = foreignPN "Ossett" ; -- comment=src=geonames status=guess
 lin ossicular_A = mkA "小骨" ;
 lin ossuary_N = mkN "骨穴" | mkN "藏古堂" | mkN "骨罐" ; -- status=guess -- status=guess -- status=guess
 lin ostensible_A = mkA "表面" ;
+lin ostensibly_Adv = adjAdv ostensible_A ; -- derived -- derived
 lin ostentation_N = mkN "卖弄" ;
 lin ostentatious_A = mkA "财大气粗" ;
 lin osteoporosis_N = mkN "骨質疏鬆" | mkN "骨质疏松" ; -- status=guess -- status=guess
@@ -16035,7 +16154,7 @@ lin over_Prep = mkPrep "在" "以上" ;
 lin over_magazine_V2 = mkV2 "FOO" ;
 lin overachievement_N = mkN "超過預期的成就" | mkN "超过预期的成就" ; -- status=guess -- status=guess
 lin overall_A = mkA "全部" | {-HSK-} mkA "全面" ;
-lin overall_Adv = variants {} | {-HSK-} mkAdv "全面" ;
+lin overall_Adv = {-HSK-} mkAdv "全面" ;
 lin overall_N = mkN "全面" | {-HSK-} mkN "整体" [] ;
 lin overarch_V = mkV "在+上做拱" ;
 lin overbid_V = mkV "报高价" ;
@@ -16118,7 +16237,7 @@ lin overtax_V2 = mkV2 "负担过重" ;
 lin overthrow_V2 = mkV2 "推翻" ;
 lin overtime_Adv = mkAdv "加班" ;
 lin overtime_N = mkN "加班时间" ;
-lin overtly_Adv = mkAdv "公开地" | mkAdv "公然地" ; -- status=guess -- status=guess
+lin overtly_Adv = mkAdv "公开地" | mkAdv "公然地" | adjAdv overt_A ; -- status=guess -- status=guess -- derived -- derived
 lin overtone_N = mkN "泛音" | mkN "汎音" ; -- status=guess -- status=guess
 lin overture_N = mkN "前奏" ;
 lin overturn_V = mkV "翻" | {-HSK-} mkV "颠覆" ;
@@ -16129,7 +16248,7 @@ lin overweight_A = mkA "超重" ;
 lin overweight_N = mkN "超重" ;
 lin overwhelm_V2 = mkV2 "淹没" ;
 lin overwhelming_A = variants {} ;
-lin overwhelmingly_Adv = mkAdv "压制性" ;
+lin overwhelmingly_Adv = mkAdv "压制性" | adjAdv overwhelming_A ; -- derived -- derived
 lin overwork_V2 = mkV2 "过度工作" ;
 lin overwrought_A = mkA "过度紧张" ;
 lin overzealous_A = mkA "过分热心" ;
@@ -16396,7 +16515,7 @@ lin part_time_Adv = mkAdv "部分" ;
 lin partake_V = mkV "参与" ;
 lin partial_A = mkA "片" | {-HSK-} mkA "部分" ;
 lin partial_N = mkN "片" ;
-lin partially_Adv = variants {} ;
+lin partially_Adv = adjAdv partial_A ; -- derived
 lin participant_N = mkN "参加者" ;
 lin participate_V = mkV "出席" | mkV "参与" | mkV "参加" ;
 lin participate_V2 = mkV2 "出席" | mkV2 "参与" | mkV2 "参加" ;
@@ -16405,7 +16524,7 @@ lin participle_N = mkN "分詞" | mkN "分词" ; -- status=guess -- status=guess
 lin particle_N = mkN "之" | {-HSK-} mkN "颗粒" ;
 lin particular_A = mkA "一定" | mkA "特别" | mkA "特殊" ;
 lin particular_N = mkN "一定" | mkN "特别" | mkN "特殊" | {-HSK-} mkN "特别" [] ;
-lin particularly_Adv = mkAdv "尤其" | mkAdv "格外" | {-HSK-} mkAdv "特别" mannerAdvType ;
+lin particularly_Adv = mkAdv "尤其" | mkAdv "格外" | {-HSK-} mkAdv "特别" mannerAdvType | adjAdv particular_A ; -- derived
 lin parting_N = mkN "分别" ;
 lin partisan_A = mkA "效忠" ;
 lin partisan_N = mkN "党派" ;
@@ -16541,6 +16660,7 @@ lin pc_PN = foreignPN "Pc" ; -- comment=src=eng status=guess
 lin pea_N = mkN "豌豆" ;
 lin peace_N = L.peace_N | {-HSK-} mkN "和" | mkN "和平" ;
 lin peaceful_A = mkA "和平" | {-HSK-} mkA "安静" | mkA "平" ;
+lin peacefully_Adv = adjAdv peaceful_A ; -- derived -- derived
 lin peacehaven_PN = foreignPN "Peacehaven" ; -- comment=src=geonames status=guess
 lin peacekeeper_N = mkN "維和人員" | mkN "维和人员" | mkN "和平隊" | mkN "和平队" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin peacemaker_N = mkN "和事佬" ;
@@ -16695,7 +16815,7 @@ lin perfect_A = mkA "完善" | mkA "完美" | mkA "理想" ;
 lin perfect_V2 = mkV2 "使完美" ;
 lin perfection_N = mkN "完美" | {-HSK-} mkN "理想" "個" ;
 lin perfective_N = mkN "完成體" | mkN "完成体" ; -- status=guess -- status=guess
-lin perfectly_Adv = variants {} | {-HSK-} mkAdv "完美" ;
+lin perfectly_Adv = {-HSK-} mkAdv "完美" | adjAdv perfect_A ; -- derived
 lin perfidious_A = mkA "背信弃义" ;
 lin perforate_V2 = mkV2 "穿孔于" ;
 lin perform_V = mkV "实施" | {-HSK-} mkV "演出" | mkV "行" | mkV "表演" ;
@@ -16722,7 +16842,7 @@ lin period_N = mkN "期间" ;
 lin periodic_A = mkA "定期" ;
 lin periodical_A = mkA "期刊" ;
 lin periodical_N = mkN "期刊" ;
-lin periodically_Adv = mkAdv "定期地" | mkAdv "周期性地" ; -- status=guess -- status=guess
+lin periodically_Adv = mkAdv "定期地" | mkAdv "周期性地" | adjAdv periodical_A ; -- status=guess -- status=guess -- derived -- derived
 lin peripheral_A = mkA "不重要" ;
 lin peripheral_N = mkN "外部設備" | mkN "外部设备" | mkN "外設" | mkN "外设" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin periphery_N = mkN "外围" ;
@@ -16738,7 +16858,7 @@ lin perm_PN = mkPN "彼尔姆" ; -- comment=src=geonames status=guess
 lin permafrost_N = mkN "永久凍土" | mkN "永久冻土" ; -- status=guess -- status=guess
 lin permanence_N = mkN "持久" ;
 lin permanent_A = mkA "永久" ;
-lin permanently_Adv = variants {} ;
+lin permanently_Adv = adjAdv permanent_A ; -- derived
 lin permeable_A = mkA "能透过" ;
 lin permeate_V = mkV "滲透" | mkV "渗透" ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin permeate_V2 = mkV2 "渗透" ;
@@ -16776,7 +16896,7 @@ lin personal_A = mkA "个人" ;
 lin personal_N = mkN "个人" | {-HSK-} mkN "个人" [] ;
 lin personality_N = mkN "个性" | {-HSK-} mkN "个性" [] ;
 lin personalize_V2 = mkV2 "个性化" ;
-lin personally_Adv = variants {} | {-HSK-} mkAdv "亲自" ;
+lin personally_Adv = {-HSK-} mkAdv "亲自" | adjAdv personal_A ; -- derived
 lin personification_N = mkN "拟人" "" ;
 lin personnel_N = mkN "人员" | {-HSK-} mkN "人员" "個" ;
 lin perspective_N = mkN "观察" "個" | {-HSK-} mkN "观点" ;
@@ -16919,7 +17039,7 @@ lin phycology_N = mkN "藻類學" | mkN "藻类学" ; -- status=guess -- status=
 lin phyllis_PN = foreignPN "Phyllis" ; -- comment=src=eng status=guess
 lin phylum_N = mkN "門" ; -- status=guess
 lin physical_A = mkA "物理" ;
-lin physically_Adv = variants {} ;
+lin physically_Adv = adjAdv physical_A ; -- derived
 lin physician_N = mkN "医生" ;
 lin physicist_N = mkN "物理学家" ;
 lin physics_N = mkN "物理" | {-HSK-} mkN "物理学" ;
@@ -16963,7 +17083,7 @@ lin pierce_V2 = mkV2 (mkV "刺穿") | mkV2 (mkV "穿") ; -- status=guess, src=wi
 lin piety_N = mkN "虔誠" | mkN "虔诚" ; -- status=guess -- status=guess
 lin pig_N = mkN "猪" "口" | {-HSK-} mkN "猪" "只" ;
 lin pig_V = mkV "生小猪" ;
-lin pigeon_N = variants {} | {-HSK-} mkN "鸽子" ;
+lin pigeon_N = {-HSK-} mkN "鸽子" ;
 lin pigeonhole_N = mkN "分類架" | mkN "分类架" | mkN "文件架" ; -- status=guess -- status=guess -- status=guess
 lin piggy_N = mkN "撲滿" | mkN "扑满" ; -- status=guess -- status=guess
 lin piggyback_V = mkV "背负" ;
@@ -17162,7 +17282,7 @@ lin please_V2 = mkV2 "请" ;
 lin please_V2V = mkV2V "请" ;
 lin please_VV = mkVV "使+喜欢" ;
 lin please_Voc = S.please_Voc ;
-lin pleased_A = variants {} | {-HSK-} mkA "快" | mkA "满意" ;
+lin pleased_A = {-HSK-} mkA "快" | mkA "满意" ;
 lin pleasing_N = mkN "愉快" ;
 lin pleasurable_A = mkA "愉快" ;
 lin pleasure_N = mkN "乐趣" | {-HSK-} mkN "享受" "種" ;
@@ -17301,7 +17421,7 @@ lin polite_A = mkA "有礼貌" ;
 lin politeness_N = mkN "禮貌" | mkN "礼貌" ; -- status=guess -- status=guess
 lin politic_A = mkA "有策略" ;
 lin political_A = mkA "政治" | {-HSK-} mkA "政治性" ;
-lin politically_Adv = variants {} ;
+lin politically_Adv = adjAdv political_A ; -- derived
 lin politician_N = mkN "政治家" ;
 lin politicize_V = mkV "使+政治化" ;
 lin politicize_V2 = mkV2 "使+具有政治性" ;
@@ -17373,7 +17493,8 @@ lin poor_1_A = mkA "贫困" ;
 lin poor_2_A = mkA "贫困" ;
 lin poor_3_A = mkA "贫困" ;
 lin poor_A = mkA "贫困" ;
-lin poorly_Adv = variants {} ;
+lin poorly_A = variants {} ;
+lin poorly_Adv = adjAdv poorly_A ; -- derived
 lin pop_A = mkA "流行" ;
 lin pop_N = mkN "弹出" ;
 lin pop_V2 = mkV2 "弹出" ;
@@ -17384,6 +17505,7 @@ lin populace_N = mkN "大众" ;
 lin popular_A = mkA "流行" | {-HSK-} mkA "红" ;
 lin popularity_N = mkN "声望" [] ;
 lin popularize_V2 = mkV2 "推广" | {-HSK-} mkV2 "普及" ;
+lin popularly_Adv = adjAdv popular_A ; -- derived -- derived
 lin populate_V2 = mkV2 "居住于" ;
 lin population_N = mkN "丁" | mkN "人口" ;
 lin populism_N = mkN "民粹主义" ;
@@ -17437,7 +17559,7 @@ lin position_N = mkN "主张" "個" | mkN "位" | mkN "位置" "個" | mkN "地�
 lin position_V2 = mkV2 "位置" ;
 lin positive_A = mkA "积极" ;
 lin positive_N = mkN "正数" | {-HSK-} mkN "积极" ;
-lin positively_Adv = variants {} ;
+lin positively_Adv = adjAdv positive_A ; -- derived
 lin positron_N = mkN "正電子" | mkN "正电子" ; -- status=guess -- status=guess
 lin possess_Prep = S.possess_Prep ;
 lin possess_V2 = mkV2 "具备" | mkV2 "所有" | {-HSK-} mkV2 "拥有" ;
@@ -17445,7 +17567,7 @@ lin possession_N = mkN "财产" [] ;
 lin possibility_N = mkN "可能" "個" | {-HSK-} mkN "可能性" ;
 lin possible_A = mkA "可以" | mkA "可能" ;
 lin possible_N = mkN "可以" | mkN "可能" "個" | {-HSK-} mkN "可能性""" ;
-lin possibly_Adv = variants {} | {-HSK-} mkAdv "或者" ;
+lin possibly_Adv = {-HSK-} mkAdv "或者" | adjAdv possible_A ; -- derived
 lin possum_N = mkN "負鼠" | mkN "负鼠" | mkN "波瑟姆" ; -- status=guess -- status=guess -- status=guess
 lin post_N = mkN "邮寄" ;
 lin post_Prep = mkPrep "后" ;
@@ -17458,6 +17580,8 @@ lin postcard_N = mkN "明信片" | {-HSK-} mkN "明信片" "张" ;
 lin poster_N = mkN "海报" ;
 lin posterior_A = mkA "後面的" | mkA "后面的" | mkA "尾部的" ; -- status=guess -- status=guess -- status=guess
 lin postgraduate_N = mkN "研究生" ; -- status=guess
+lin posthumous_A = variants {} ;
+lin posthumously_Adv = adjAdv posthumous_A ; -- derived -- derived
 lin postmark_N = mkN "邮戳" "个" ;
 lin postmark_V2 = mkV2 "盖邮戳" ;
 lin postmaster_N = mkN "邮政局长" ;
@@ -17482,7 +17606,7 @@ lin potentate_N = mkN "当权者" ;
 lin potential_A = mkA "潜在" ;
 lin potential_N = mkN "潜力" ;
 lin potentiality_N = mkN "潜力" "" ;
-lin potentially_Adv = variants {} ;
+lin potentially_Adv = adjAdv potential_A ; -- derived
 lin pothole_N = mkN "壶穴" ;
 lin potion_N = mkN "药剂" ; -- status=guess
 lin potpourri_N = mkN "百花香" ;
@@ -17520,7 +17644,7 @@ lin poznan_PN = foreignPN "Poznan" ; -- comment=src=eng status=guess
 lin pp_N = mkN "过去分词" ;
 lin practical_A = mkA "实用" ;
 lin practical_N = mkN "实用" | {-HSK-} mkN "惡作劇" | mkN "恶作剧" ; -- status=guess -- status=guess
-lin practically_Adv = variants {} | {-HSK-} mkAdv "几乎" | mkAdv "简直" ;
+lin practically_Adv = {-HSK-} mkAdv "几乎" | mkAdv "简直" | adjAdv practical_A ; -- derived
 lin practice_N = mkN "实践" | {-HSK-} mkN "实际" | mkN "练习" "個" ;
 lin practice_V = mkV "实习" | mkV "实践" ;
 lin practice_V2 = mkV2 "实习" | mkV2 "实践" ;
@@ -17574,7 +17698,7 @@ lin precipitate_V2 = mkV2 "猛抛" ;
 lin precipitation_N = mkN "沉澱" | mkN "沉淀" ; -- status=guess -- status=guess
 lin precipitous_A = mkA "陡峭" ;
 lin precise_A = mkA "准确" | {-HSK-} mkA "精确" ;
-lin precisely_Adv = variants {} ;
+lin precisely_Adv = adjAdv precise_A ; -- derived
 lin precision_N = mkN "精度" [] ;
 lin preclude_V2 = mkV2 "排除" ;
 lin precocious_A = mkA "早熟" ;
@@ -17600,14 +17724,14 @@ lin predilection_N = mkN "偏爱" ;
 lin predispose_V2 = mkV2 "易患" ;
 lin predisposition_N = mkN "倾向""" ;
 lin predominant_A = mkA "优越" ;
-lin predominantly_Adv = variants {} ;
+lin predominantly_Adv = adjAdv predominant_A ; -- derived
 lin preface_N = mkN "前言" ;
 lin prefectural_A = mkA "县" ;
 lin prefecture_N = mkN "县" ;
 lin prefer_V2 = mkV2 "宁可" ;
 lin prefer_VV = mkVV "宁可" ;
 lin preferable_A = mkA "更好" ;
-lin preferably_Adv = mkAdv "宁可" ;
+lin preferably_Adv = mkAdv "宁可" | adjAdv preferable_A ; -- derived
 lin preference_N = mkN "偏爱" [] ;
 lin preferential_A = mkA "优先" | {-HSK-} mkA "优惠" ;
 lin preferred_A = variants {} ;
@@ -17621,6 +17745,7 @@ lin prejudicial_A = mkA "不利" ;
 lin preliminary_A = mkA "初步" ;
 lin prelude_N = mkN "序幕" ;
 lin premature_A = mkA "过早" ;
+lin prematurely_Adv = adjAdv premature_A ; -- derived -- derived
 lin premier_A = mkA "主席" | mkA "总理" ;
 lin premier_N = mkN "主席" "個" | mkN "总理" "個" | {-HSK-} mkN "总理" ;
 lin premiere_N = mkN "首演" | mkN "初次的演出" ; -- status=guess -- status=guess
@@ -17662,7 +17787,7 @@ lin present_V2 = mkV2 "介绍" | {-HSK-} mkV2 "送" ;
 lin present_day_A = mkA "礼物" ;
 lin presentation_N = mkN "介绍" ;
 lin presentiment_N = mkN "預感" | mkN "预感" ; -- status=guess -- status=guess
-lin presently_Adv = variants {} ;
+lin presently_Adv = adjAdv present_A ; -- derived
 lin preservation_N = mkN "保存" | {-HSK-} mkN "持续" ;
 lin preservative_N = mkN "防腐劑" ; -- status=guess
 lin preserve_V2 = mkV2 "保存" | {-HSK-} mkV2 "保持" | mkV2 "保留" | mkV2 "留" ;
@@ -17689,7 +17814,7 @@ lin prestonpans_PN = foreignPN "Prestonpans" ; -- comment=src=geonames status=gu
 lin prestwich_PN = foreignPN "Prestwich" ; -- comment=src=geonames status=guess
 lin prestwick_PN = foreignPN "Prestwick" ; -- comment=src=geonames status=guess
 lin presumable_A = mkA "推测" ;
-lin presumably_Adv = variants {} ;
+lin presumably_Adv = adjAdv presumable_A ; -- derived
 lin presume_V = mkV "假定" ;
 lin presume_V2 = mkV2 "假定" ;
 lin presume_VS = mkVS "推测" ;
@@ -17704,7 +17829,7 @@ lin pretext_N = mkN "借" | {-HSK-} mkN "借口" ;
 lin pretoria_PN = mkPN "比勒陀利亚" ;
 lin pretty_A = mkA "漂亮" ;
 lin pretty_AdA = mkAdA "非常" ;
-lin pretty_Adv = variants {} | {-HSK-} mkAdv "漂亮" ;
+lin pretty_Adv = {-HSK-} mkAdv "漂亮" ;
 lin pretty_N = mkN "漂亮" | {-HSK-} mkN "漂亮的人""位" ;
 lin prevail_V = mkV "战胜" ;
 lin prevalence_N = variants {} ;
@@ -17714,7 +17839,7 @@ lin prevention_N = mkN "预防" ;
 lin preview_N = mkN "事先查看" ;
 lin preview_V2 = mkV2 "预览" ;
 lin previous_A = mkA "上" | mkA "以前" | mkA "往" | mkA "过去" ;
-lin previously_Adv = variants {} | {-HSK-} mkAdv "从前" | mkAdv "曾经" ;
+lin previously_Adv = {-HSK-} mkAdv "从前" | mkAdv "曾经" | adjAdv previous_A ; -- derived
 lin prey_N = mkN "捕食" ;
 lin prey_V = mkV "猎物" ;
 lin priapism_N = mkN "陰莖異常勃起" | mkN "阴茎异常勃起" ; -- status=guess -- status=guess
@@ -17734,7 +17859,7 @@ lin priest_N = L.priest_N ;
 lin priestess_N = mkN "女教士" ; -- status=guess
 lin priesthood_N = mkN "圣职" ; -- status=guess
 lin prim_A = mkA "拘谨" ;
-lin primarily_Adv = variants {} ;
+lin primarily_Adv = adjAdv primary_A ; -- derived
 lin primary_A = mkA "主要" | {-HSK-} mkA "元" | mkA "初级" | mkA "最初" ;
 lin primary_N = mkN "主要" | mkN "元" | mkN "初级" | mkN "最初" | {-HSK-} mkN "第一位" ;
 lin primate_N = mkN "總主教" | mkN "总主教" ; -- status=guess -- status=guess
@@ -17751,7 +17876,7 @@ lin princes_risborough_PN = foreignPN "Princes risborough" ; -- comment=src=eng 
 lin princess_N = mkN "公主" | {-HSK-} mkN "公主" "个" ;
 lin principal_A = mkA "主要" ;
 lin principal_N = mkN "主要" | {-HSK-} mkN "本金" ;
-lin principally_Adv = variants {} ;
+lin principally_Adv = adjAdv principal_A ; -- derived
 lin principle_N = mkN "则" | mkN "原则" "個" | mkN "道理" "個" | {-HSK-} mkN "原理" ;
 lin print_N = mkN "打印" "次" ;
 lin print_V = mkV "打印" ;
@@ -17772,7 +17897,7 @@ lin pristine_A = mkA "质朴" ;
 lin privacy_N = mkN "隐私" ;
 lin private_A = mkA "私人" ;
 lin private_N = mkN "二等兵" | {-HSK-} mkN "私人" ;
-lin privately_Adv = variants {} ;
+lin privately_Adv = adjAdv private_A ; -- derived
 lin privatisation_N = variants {} ;
 lin privatization_N = mkN "私有化" ;
 lin privatize_V2 = mkV2 "私有化" ;
@@ -17791,7 +17916,7 @@ lin probability_N = mkN "可能" "個" | {-HSK-} mkN "可能性" ;
 lin probable_A = mkA "可能" ;
 lin probable_AS = L.probable_AS ;
 lin probable_N = mkN "可能" "個" ;
-lin probably_Adv = mkAdv "可能" mannerAdvType | {-HSK-} mkAdv "大概" ;
+lin probably_Adv = mkAdv "可能" mannerAdvType | {-HSK-} mkAdv "大概" | adjAdv probable_A ; -- derived
 lin probate_N = mkN "缓刑" "" ;
 lin probation_N = mkN "试用" ;
 lin probe_N = mkN "探测器" ;
@@ -17845,6 +17970,7 @@ lin profession_N = mkN "业务" "個" | mkN "职业" | {-HSK-} mkN "行业" ;
 lin professional_A = mkA "专业" | {-HSK-} mkA "职业" ;
 lin professional_N = mkN "专业人才" | {-HSK-} mkN "职业" ;
 lin professionalism_N = mkN "专业主义" ;
+lin professionally_Adv = adjAdv professional_A ; -- derived -- derived
 lin professor_N = mkN "教授" | {-HSK-} mkN "教授" "個" ;
 lin proffer_V2 = mkV2 "提供" ;
 lin proficiency_N = mkN "熟练" [] ;
@@ -17853,13 +17979,14 @@ lin profile_N = mkN "资料" "份" | {-HSK-} mkN "轮廓" ;
 lin profile_V2 = mkV2 "描绘+轮廓" ;
 lin profit_N = mkN "利润" | {-HSK-} mkN "好处" "個" | mkN "成果" "個" ;
 lin profit_V = mkV "利润" | {-HSK-} mkV "赢" ;
-lin profit_V2 = variants {} | {-HSK-} mkV2 "赢" ; -- comment=mkV "利润" ;
+lin profit_V2 = {-HSK-} mkV2 "赢" ; -- comment=mkV "利润" ;
 lin profitability_N = variants {} ;
 lin profitable_A = mkA "有利可图" ;
 lin profiteer_N = mkN "奸商" ;
 lin profiteer_V = mkV "牟取暴利" ;
 lin profligate_A = mkA "肆意挥霍" ;
 lin profound_A = mkA "深" | mkA "深刻" ;
+lin profoundly_Adv = adjAdv profound_A ; -- derived -- derived
 lin progenitor_N = mkN "祖""" ;
 lin prognosis_N = mkN "预测" ;
 lin prognostication_N = mkN "预测""次" ;
@@ -17875,7 +18002,7 @@ lin progress_V = mkV "进展" | {-HSK-} mkV "进步" ;
 lin progress_V2 = mkV2 "进步" ;
 lin progression_N = mkN "前进" ;
 lin progressive_A = mkA "进步" ;
-lin progressively_Adv = mkAdv "逐步" | mkAdv "递" ;
+lin progressively_Adv = mkAdv "逐步" | mkAdv "递" | adjAdv progressive_A ; -- derived -- derived
 lin prohibit_V = mkV "禁止" ;
 lin prohibit_V2 = mkV2 "禁止" ;
 lin prohibition_N = mkN "禁令" ;
@@ -17901,6 +18028,7 @@ lin prom_N = mkN "畢業舞會" | mkN "毕业舞会" | mkN "舞會" | mkN "舞�
 lin promethium_N = mkN "鉕" | mkN "钷" ; -- status=guess -- status=guess
 lin prominence_N = mkN "卓越" ;
 lin prominent_A = mkA "突出" ;
+lin prominently_Adv = adjAdv prominent_A ; -- derived -- derived
 lin promise_N = mkN "承诺" ;
 lin promise_V = mkV "承诺" | {-HSK-} mkV "答应" ;
 lin promise_V2 = mkV2 "承诺" | {-HSK-} mkV2 "答应" ;
@@ -17916,7 +18044,7 @@ lin prompt_A = mkA "提示" | {-HSK-} mkA "立刻" ;
 lin prompt_N = mkN "立刻" ;
 lin prompt_V2 = mkV2 "促使" | {-HSK-} mkV2 "催" ;
 lin prompt_V2V = mkV2V "催" | {-HSK-} mkV2V "提示" ;
-lin promptly_Adv = variants {} | {-HSK-} mkAdv "及时" | mkAdv "立刻" | mkAdv "连忙" ;
+lin promptly_Adv = {-HSK-} mkAdv "及时" | mkAdv "立刻" | mkAdv "连忙" | adjAdv prompt_A ; -- derived
 lin promulgate_V2 = mkV2 "颁布" ;
 lin prone_A = mkA "有+倾向" ;
 lin prong_N = mkN "耙子" ;
@@ -17946,7 +18074,7 @@ lin propellant_N = mkN "推进物" [] ;
 lin propeller_N = mkN "螺旋槳" | mkN "螺旋桨" ; -- status=guess -- status=guess
 lin propensity_N = mkN "倾向" ;
 lin proper_A = mkA "好" | mkA "正确" ;
-lin properly_Adv = variants {} ;
+lin properly_Adv = adjAdv proper_A ; -- derived
 lin property_1_N = mkN "财产" ;
 lin property_2_N = mkN "财产" ;
 lin property_N = mkN "财产" ;
@@ -18017,6 +18145,7 @@ lin protract_V2 = mkV2 "延长" ;
 lin protrude_V = mkV "突出" | {-HSK-} mkV "伸出" ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin protrude_V2 = mkV2 "突出" | {-HSK-} mkV2 (mkV "突出") | mkV2 (mkV "伸出") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin proud_A = mkA "骄傲" ;
+lin proudly_Adv = adjAdv proud_A ; -- derived -- derived
 lin prove_V = mkV "证明" ;
 lin prove_V2 = mkV2 "证明" ;
 lin prove_VA = mkVA "证明" ;
@@ -18096,7 +18225,7 @@ lin publication_N = mkN "刊物" ;
 lin publicist_N = mkN "国际法学家" "位" ;
 lin publicity_N = mkN "公开" [] ;
 lin publicize_V2 = mkV2 "宣传" ;
-lin publicly_Adv = variants {} ;
+lin publicly_Adv = adjAdv public_A ; -- derived
 lin publish_V = mkV "公布" | mkV "公开" | mkV "出版" | mkV "发表" | {-HSK-} mkV "发布" ;
 lin publish_V2 = mkV2 "公布" | mkV2 "公开" | mkV2 "出版" | mkV2 "发表" | {-HSK-} mkV2 "发布" ;
 lin publishable_A = mkA "可發表的" | mkA "可发表的" | mkA "適於出版的" | mkA "适于出版的" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -18158,7 +18287,7 @@ lin purchase_N = mkN "收购" ;
 lin purchase_V2 = mkV2 "买" | {-HSK-} mkV2 "采购" ;
 lin purchaser_N = mkN "购买者" ;
 lin pure_A = mkA "单纯" | mkA "正" | mkA "白" | {-HSK-} mkA "纯粹" ;
-lin purely_Adv = variants {} ;
+lin purely_Adv = adjAdv pure_A ; -- derived
 lin purgatory_N = mkN "煉獄" | mkN "炼狱" ; -- status=guess -- status=guess
 lin purge_N = mkN "清洗" ; -- status=guess
 lin purge_V2 = mkV2 "净化" ;
@@ -18251,7 +18380,7 @@ lin quaint_A = mkA "奇趣" ;
 lin quake_N = mkN "颤栗" ;
 lin qualification_N = mkN "条件" "個" | {-HSK-} mkN "资格" ;
 lin qualifications_N = mkN "资格" ;
-lin qualified_A = variants {} | {-HSK-} mkA "合格" ;
+lin qualified_A = {-HSK-} mkA "合格" ;
 lin qualify_V = mkV "给予+资格" ;
 lin qualify_V2 = mkV2 "有资格" ;
 lin quality_A = mkA "優質" | mkA "优质" | mkA "高級" | mkA "高级" | {-HSK-} mkA "效果" | mkA "质量" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -18309,7 +18438,7 @@ lin quick_Adv = mkAdv "快" ;
 lin quick_N = mkN "快" | {-HSK-} mkN "急功近利" | mkN "撈錢" | mkN "捞钱" ; -- status=guess -- status=guess -- status=guess
 lin quicken_V2 = mkV2 "加速" ;
 lin quicklime_N = mkN "石灰" ; -- status=guess
-lin quickly_Adv = variants {} ;
+lin quickly_Adv = adjAdv quick_A ; -- derived
 lin quickness_N = mkN "迅速" ; -- status=guess
 lin quicksand_N = mkN "流沙" ; -- comment="危险状态" ;
 lin quid_N = mkN "英镑" ;
@@ -18318,7 +18447,7 @@ lin quiet_A = mkA "安静" ;
 lin quiet_N = mkN "安静" ;
 lin quiet_V = mkV "平静下来" ;
 lin quiet_V2 = mkV2 "平息" ;
-lin quietly_Adv = variants {} | {-HSK-} mkAdv "悄悄" ;
+lin quietly_Adv = {-HSK-} mkAdv "悄悄" | adjAdv quiet_A ; -- derived
 lin quill_N = mkN "鵝毛筆" | mkN "鹅毛笔" | mkN "羽毛筆" | mkN "羽毛笔" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin quilt_N = mkN "棉被" | {-HSK-} mkN "被" | mkN "被子" "床" ;
 lin quince_N = mkN "榲桲" | mkN "榅桲" ; -- status=guess -- status=guess
@@ -18370,6 +18499,7 @@ lin racetrack_N = mkN "跑馬場" | mkN "跑马场" | mkN "跑道" ; -- status=g
 lin rachel_PN = foreignPN "Rachel" ; -- comment=src=eng status=guess
 lin rachitis_N = mkN "佝僂病" | mkN "佝偻病" ; -- status=guess -- status=guess
 lin racial_A = mkA "种族" ;
+lin racially_Adv = adjAdv racial_A ; -- derived -- derived
 lin racing_N = mkN "赛车" ;
 lin racism_N = mkN "种族主义" ;
 lin racistFem_N = mkN "种族主义者" ;
@@ -18391,6 +18521,7 @@ lin radiator_N = mkN "散熱器" | mkN "散热器" ; -- status=guess -- status=g
 lin radical_A = mkA "厉害" | {-HSK-} mkA "激进" ;
 lin radical_N = mkN "厉害" | {-HSK-} mkN "激进" "" | mkN "根基" "" ;
 lin radicalism_N = mkN "激進主義" | mkN "激进主义" ; -- status=guess -- status=guess
+lin radically_Adv = adjAdv radical_A ; -- derived -- derived
 lin radio_A = mkA "無線電控制的" | mkA "无线电控制的" | mkA "無線電遙控的" | mkA "无线电遥控的" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin radio_N = L.radio_N ;
 lin radio_V2 = mkV2 "用无线电发送" ;
@@ -18478,7 +18609,7 @@ lin rand_N = mkN "边缘" ;
 lin randolph_PN = foreignPN "Randolph" ; -- comment=src=geonames status=guess
 lin random_A = mkA "乱" | {-HSK-} mkA "随机" ;
 lin random_N = mkN "乱" | {-HSK-} mkN "随意""" ;
-lin randomly_Adv = mkAdv "偶然" ;
+lin randomly_Adv = mkAdv "偶然" | adjAdv random_A ; -- derived -- derived
 lin randomness_N = mkN "随意" ;
 lin range_N = mkN "范围" | {-HSK-} mkN "范围" "個" ;
 lin range_V = mkV "范围" ;
@@ -18498,14 +18629,14 @@ lin rapeseed_N = mkN "油菜" ; -- status=guess
 lin rapid_A = mkA "快" | mkA "迅速" | {-HSK-} mkA "快速" ;
 lin rapid_N = mkN "快" | mkN "迅速" | {-HSK-} mkN "急流""条" ;
 lin rapidity_N = mkN "急速" ;
-lin rapidly_Adv = variants {} ;
+lin rapidly_Adv = adjAdv rapid_A ; -- derived
 lin rapier_N = mkN "长剑" ;
 lin rapist_N = mkN "强奸犯" "名" ;
 lin rapport_N = mkN "关系" | {-HSK-} mkN "配合" ;
 lin rapprochement_N = mkN "和解" "次" ;
 lin rare_A = mkA "罕见" ;
 lin rarefy_V2 = mkV2 "抽稀" ;
-lin rarely_Adv = variants {} ;
+lin rarely_Adv = adjAdv rare_A ; -- derived
 lin raring_A = mkA "渴望" ;
 lin rascal_N = mkN "调皮鬼" ;
 lin rash_A = mkA "轻率" ;
@@ -18583,7 +18714,7 @@ lin read_VS = mkVS "念" | mkVS "看" | mkVS "读" | mkVS "阅读" ;
 lin readable_A = mkA "可读" ; -- status=guess
 lin reader_N = mkN "读者" ;
 lin readership_N = mkN "读者人数" ;
-lin readily_Adv = variants {} ;
+lin readily_Adv = adjAdv ready_A ; -- derived
 lin readiness_N = mkN "准备就绪" ;
 lin reading_N = mkN "阅读" ;
 lin reading_PN = mkPN "雷丁" ; -- comment=src=geonames status=guess
@@ -18606,7 +18737,7 @@ lin reality_N = mkN "实际" | mkN "现实" "個" | {-HSK-} mkN "现实" ;
 lin realization_N = mkN "实现" [] ;
 lin realize_V2 = mkV2 "了解" | mkV2 "实现" | mkV2 "明白" | {-HSK-} mkV2 "意识" ;
 lin realize_VS = mkVS "了解" | mkVS "实现" | mkVS "明白" ;
-lin really_Adv = S.mkAdv (lin A real_A) | {-HSK-} mkAdv "实在" | mkAdv "果然" | mkAdv "的确" | mkAdv "真" | mkAdv "确实" ;
+lin really_Adv = S.mkAdv (lin A real_A) | {-HSK-} mkAdv "实在" | mkAdv "果然" | mkAdv "的确" | mkAdv "真" | mkAdv "确实" | adjAdv real_A ; -- derived
 lin realm_N = mkN "领域" "片" ;
 lin realpolitik_N = mkN "現實政治" | mkN "现实政治" ; -- status=guess -- status=guess
 lin realtor_N = mkN "房地產經紀人" | mkN "房地产经纪人" ; -- status=guess -- status=guess
@@ -18619,7 +18750,7 @@ lin reappoint_V = mkV "续聘" ;
 lin reappoint_V2 = mkV2 "续聘" ;
 lin reappraisal_N = mkN "重新评估" ;
 lin reappraise_V2 = mkV2 "重新评估" ;
-lin rear_A = variants {} | {-HSK-} mkA "后面" ;
+lin rear_A = {-HSK-} mkA "后面" ;
 lin rear_N = mkN "后面" | {-HSK-} mkN "尾部" ;
 lin rear_V = mkV "高耸" ;
 lin rear_V2 = mkV2 "培养" ;
@@ -18631,7 +18762,7 @@ lin reason_V = mkV "推理" ;
 lin reason_V2 = mkV2 "使+说服" ;
 lin reason_VS = mkVS "推论" ;
 lin reasonable_A = mkA "合理" ;
-lin reasonably_Adv = variants {} ;
+lin reasonably_Adv = adjAdv reasonable_A ; -- derived
 lin reasoning_N = mkN "推理" ;
 lin reassert_V2 = mkV2 "重申" ;
 lin reassess_V2 = mkV2 "再评价" ;
@@ -18679,7 +18810,7 @@ lin receive_V2 = mkV2 "受到" | mkV2 "招待" | mkV2 "接" | mkV2 "接受" | mk
 lin receiver_N = mkN "接收器" ;
 lin receivership_N = mkN "破产管理" ;
 lin recent_A = mkA "最近" ;
-lin recently_Adv = variants {} | {-HSK-} mkAdv "最近" ;
+lin recently_Adv = {-HSK-} mkAdv "最近" | adjAdv recent_A ; -- derived
 lin recentralize_V2 = mkV2 "重新集中化" ;
 lin reception_N = mkN "招待" | {-HSK-} mkN "接待" "场" ;
 lin receptionist_N = mkN "接待员" "名" ;
@@ -18904,7 +19035,7 @@ lin regroup_V2 = mkV2 "重新组合" ;
 lin regular_A = mkA "固定" | mkA "正常" | mkA "通常" | {-HSK-} mkA "定期" ;
 lin regular_N = mkN "固定" | mkN "正常" | mkN "通常" | {-HSK-} mkN "正則表達式" | mkN "正则表达式" | mkN "正規表示法" | mkN "正规表示法" | mkN "常規表示法" | mkN "常规表示法" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin regularity_N = mkN "规律性" ;
-lin regularly_Adv = variants {} | {-HSK-} mkAdv "经常" ;
+lin regularly_Adv = {-HSK-} mkAdv "经常" | adjAdv regular_A ; -- derived
 lin regulate_V2 = mkV2 "调节" ;
 lin regulation_A = mkA "规则" | mkA "规定" ;
 lin regulation_N = mkN "规则" | mkN "规定" "個" | {-HSK-} mkN "规定" ;
@@ -18965,7 +19096,7 @@ lin relation_N = mkN "关系" | {-HSK-} mkN "关系" "個" | mkN "联系" ;
 lin relationship_N = mkN "关系" | {-HSK-} mkN "关系" "個" ;
 lin relative_A = mkA "相对" ;
 lin relative_N = mkN "相对" ;
-lin relatively_Adv = variants {} | {-HSK-} mkAdv "比较" | mkAdv "相对" ;
+lin relatively_Adv = {-HSK-} mkAdv "比较" | mkAdv "相对" | adjAdv relative_A ; -- derived
 lin relativity_N = mkN "相對論" | mkN "相对论" ; -- status=guess -- status=guess
 lin relax_V = mkV "放松" ;
 lin relax_V2 = mkV2 "放松" ;
@@ -18979,7 +19110,7 @@ lin relevance_N = mkN "相关" | {-HSK-} mkN "适当" ;
 lin relevancy_N = mkN "关联" ;
 lin relevant_A = mkA "相关" ;
 lin reliable_A = mkA "可靠" | {-HSK-} mkA "确实" ;
-lin reliably_Adv = mkAdv "可靠地" ; -- status=guess
+lin reliably_Adv = mkAdv "可靠地" | adjAdv reliable_A ; -- status=guess -- derived -- derived
 lin reliance_N = mkN "信赖" ;
 lin reliant_A = mkA "可靠" ;
 lin relic_N = mkN "文物" ;
@@ -18996,7 +19127,7 @@ lin relocate_V2 = mkV2 "迁移" ;
 lin relocation_N = mkN "搬迁" "次" ;
 lin reluctance_N = mkN "不愿" ;
 lin reluctant_A = mkA "不愿" ;
-lin reluctantly_Adv = variants {} ;
+lin reluctantly_Adv = adjAdv reluctant_A ; -- derived
 lin rely_V = mkV "依靠" ;
 lin rely_V2 = variants {} ; -- comment=mkV "依靠" ;
 lin rely_on_V = mkV "凭" ;
@@ -19007,7 +19138,7 @@ lin remain_V2 = mkV2 "保持" | {-HSK-} mkV2 "剩" | mkV2 "留" ;
 lin remain_VA = mkVA "剩" | mkVA "留" | {-HSK-} mkVA "留下" ;
 lin remain_VV = mkVV "剩" | mkVV "留" | {-HSK-} mkVV "残留" ;
 lin remainder_N = mkN "其余" | {-HSK-} mkN "零" ;
-lin remaining_A = variants {} | {-HSK-} mkA "其余" ;
+lin remaining_A = {-HSK-} mkA "其余" ;
 lin remains_N = mkN "遗骸" "具" ;
 lin remake_V2 = mkV2 "重做" ;
 lin remand_V2 = mkV2 "潜回" ;
@@ -19015,7 +19146,7 @@ lin remark_N = mkN "备注" ;
 lin remark_V = mkV "备注" ;
 lin remark_VS = mkVS "发言" ;
 lin remarkable_A = mkA "出色" | {-HSK-} mkA "卓越" ;
-lin remarkably_Adv = variants {} ;
+lin remarkably_Adv = adjAdv remarkable_A ; -- derived
 lin remedy_N = mkN "补救方法" ;
 lin remedy_V2 = mkV2 "补救" ;
 lin remember_V = mkV "纪念" | mkV "记得" ;
@@ -19034,6 +19165,7 @@ lin remodel_V2 = mkV2 "改装" ;
 lin remorse_N = mkN "同情" ;
 lin remorseful_A = mkA "懊悔" ;
 lin remote_A = mkA "远" | {-HSK-} mkA "遥远" ;
+lin remotely_Adv = adjAdv remote_A ; -- derived -- derived
 lin removable_A = mkA "可拆卸" ;
 lin removal_N = mkN "切除" ;
 lin remove_N = mkN "移动""" ;
@@ -19100,8 +19232,8 @@ lin repeat_N = mkN "重复" ;
 lin repeat_V = mkV "重复" ;
 lin repeat_V2 = mkV2 "重复" ;
 lin repeat_VS = mkVS "重复" ;
-lin repeated_A = variants {} | {-HSK-} mkA "层" ;
-lin repeatedly_Adv = mkAdv "反复" ;
+lin repeated_A = {-HSK-} mkA "层" ;
+lin repeatedly_Adv = mkAdv "反复" | adjAdv repeated_A ; -- derived
 lin repeater_N = mkN "中继器" ;
 lin repel_V2 = mkV2 "击退" ;
 lin repellent_A = mkA "排斥" ;
@@ -19163,6 +19295,8 @@ lin reputation_N = mkN "声誉" | {-HSK-} mkN "荣誉" | mkN "闻" ;
 lin repute_N = mkN "聲望" | mkN "声望" ; -- status=guess -- status=guess
 lin repute_V2 = mkV2 "认为" ;
 lin repute_V2V = mkV2V "认为" ;
+lin reputed_A = variants {} ;
+lin reputedly_Adv = adjAdv reputed_A ; -- derived
 lin request_N = mkN "要" | mkN "请求" "個" | {-HSK-} mkN "要求" ;
 lin request_V2 = mkV2 "征求" | mkV2 "要求" | mkV2 "请" | {-HSK-} mkV2 "请求" ;
 lin request_VS = mkVS "征求" | mkVS "要求" | mkVS "请" ;
@@ -19170,7 +19304,7 @@ lin require_V = mkV "必需" | mkV "要求" | mkV "需要" ;
 lin require_V2 = mkV2 "必需" | mkV2 "要求" | mkV2 "需要" ;
 lin require_V2V = mkV2V "必需" | mkV2V "要求" | mkV2V "需要" ;
 lin require_VS = mkVS "必需" | mkVS "要求" | mkVS "需要" ;
-lin required_A = variants {} | {-HSK-} mkA "必要" ;
+lin required_A = {-HSK-} mkA "必要" ;
 lin requirement_N = mkN "条件" "個" | {-HSK-} mkN "需求" ;
 lin requisite_A = mkA "必备" ;
 lin requisition_N = mkN "征用" ;
@@ -19249,7 +19383,7 @@ lin respectability_N = mkN "体面" ;
 lin respectable_A = mkA "可敬" ;
 lin respectful_A = mkA "尊重" ;
 lin respective_A = mkA "个别" | mkA "各自" ;
-lin respectively_Adv = variants {} ;
+lin respectively_Adv = adjAdv respective_A ; -- derived
 lin respiration_N = mkN "呼吸" ; -- status=guess
 lin respiratory_A = mkA "呼吸" ;
 lin respite_N = mkN "暂缓" ;
@@ -19456,6 +19590,7 @@ lin ribosome_N = mkN "核糖体" | mkN "核糖體" ; -- status=guess -- status=g
 lin rice_N = mkN "大米" "碗" | {-HSK-} mkN "米" "粒" | mkN "米饭" ;
 lin rich_A = mkA "丰富" | mkA "富" ;
 lin richard_PN = foreignPN "Richard" ; -- comment=src=eng status=guess
+lin richly_Adv = adjAdv rich_A ; -- derived -- derived
 lin richmond_PN = mkPN ("列治文" | "里士满" | "里士滿") ; -- comment=src=geonames status=guess
 lin richmond_upon_thames_PN = foreignPN "Richmond upon thames" ; -- comment=src=eng status=guess
 lin richness_N = mkN "丰富" [] ;
@@ -19493,13 +19628,13 @@ lin right_2_A = mkA "正确" ; -- comment=NOT SURE "正确" or "右边"
 lin right_2_Adv = mkAdv "直接" ;
 lin right_A = mkA "正确" ; -- comment=NOT SURE "正确" or "右边"
 lin right_Adv = mkAdv "直接" ;
-lin right_Interj = variants {} | {-HSK-} mkInterj "右边" | mkInterj "对" | mkInterj "当" | mkInterj "权利" ;
+lin right_Interj = {-HSK-} mkInterj "右边" | mkInterj "对" | mkInterj "当" | mkInterj "权利" ;
 lin right_N = mkN "右" | {-HSK-} mkN "右边" | mkN "对" | mkN "当" | mkN "权利" ;
 lin right_Ord = L.right_Ord ;
 lin right_V2 = mkV2 "纠正" ;
 lin right_hand_A = mkA "右手" ;
 lin righteousness_N = mkN "正义" ;
-lin rightly_Adv = variants {} ;
+lin rightly_Adv = adjAdv right_2_A ; -- derived
 lin rigid_A = mkA "严格" | {-HSK-} mkA "死" ;
 lin rigidity_N = mkN "刚度" "" ;
 lin rigor_mortis_N = mkN "尸僵" ;
@@ -19695,7 +19830,7 @@ lin rough_N = mkN "大概" | mkN "草" "棵" ;
 lin rough_V2 = mkV2 "粗暴对待" ;
 lin rough_and_tumble_A = mkA "粗糙的东西" ;
 lin roughhewn_A = mkA "粗野" ;
-lin roughly_Adv = variants {} | {-HSK-} mkAdv "大概" ;
+lin roughly_Adv = {-HSK-} mkAdv "大概" ;
 lin roughneck_N = mkN "无赖" ;
 lin roulette_N = mkN "轮盘赌" "次" ;
 lin round_A = L.round_A | {-HSK-} mkA "团" | mkA "圆" ;
@@ -19712,6 +19847,7 @@ lin route_V2 = mkV2 "按路线发送" ;
 lin router_N = mkN "路由器" | mkN "路徑器" | mkN "路径器" ; -- status=guess -- status=guess -- status=guess
 lin routine_A = mkA "例行" ;
 lin routine_N = mkN "日常" ;
+lin routinely_Adv = adjAdv routine_A ; -- derived -- derived
 lin rover_N = mkN "探測漫遊者" | mkN "探测漫游者" ; -- status=guess -- status=guess
 lin row_N = mkN "一排" ;
 lin row_V = mkV "行" ;
@@ -19859,7 +19995,7 @@ lin saddle_V = mkV "跨上马鞍" ; -- comment="鞍状物" ;
 lin saddle_V2 = mkV2 "承受" ;
 lin sadism_N = mkN "虐待狂" ; -- status=guess
 lin sadistic_A = mkA "虐待狂" ;
-lin sadly_Adv = variants {} ;
+lin sadly_Adv = adjAdv sad_A ; -- derived
 lin sadomasochism_N = mkN "施虐與受虐" | mkN "施虐与受虐" ; -- status=guess -- status=guess
 lin safari_N = mkN "狩獵遠征" | mkN "狩猎远征" | mkN "攝影遠征" | mkN "摄影远征" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin safe_A = mkA "保险" | mkA "安全" ;
@@ -19868,7 +20004,7 @@ lin safe_deposit_A = mkA "安全" ;
 lin safeguard_N = mkN "保护" ;
 lin safeguard_V2 = mkV2 "保护" | {-HSK-} mkV2 "保证" | mkV2 "维护" ;
 lin safekeeping_N = mkN "妥善保管" ;
-lin safely_Adv = variants {} ;
+lin safely_Adv = adjAdv safe_A ; -- derived
 lin safety_N = mkN "安全" ;
 lin safflower_N = mkN "紅花" | mkN "红花" ; -- status=guess -- status=guess
 lin saffron_N = mkN "番紅花" | mkN "番红花" ; -- status=guess -- status=guess
@@ -20036,7 +20172,7 @@ lin satirical_A = mkA "讽刺" ;
 lin satirize_V2 = mkV2 "讽刺" ;
 lin satisfaction_N = mkN "满意" [] ;
 lin satisfactory_A = mkA "满意" ;
-lin satisfied_A = variants {} | {-HSK-} mkA "满" | mkA "满意" | mkA "饱" ;
+lin satisfied_A = {-HSK-} mkA "满" | mkA "满意" | mkA "饱" ;
 lin satisfy_V2 = mkV2 "满" | mkV2 "满足" ;
 lin satrap_N = mkN "總督" | mkN "总督" | mkN "太守" ; -- status=guess -- status=guess -- status=guess
 lin saturate_V2 = mkV2 "浸透" ;
@@ -20114,7 +20250,7 @@ lin scar_V2 = variants {} ; -- comment=mkV "伤害" ;
 lin scarab_N = mkN "金龜子" | mkN "金龟子" | mkN "聖甲蟲" | mkN "圣甲虫" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin scarborough_PN = foreignPN "Scarborough" ; -- comment=src=geonames status=guess
 lin scarce_A = mkA "稀缺" | {-HSK-} mkA "紧张" ;
-lin scarcely_Adv = variants {} ;
+lin scarcely_Adv = adjAdv scarce_A ; -- derived
 lin scarcity_N = mkN "不足" | {-HSK-} mkN "缺乏" ;
 lin scare_N = mkN "惊吓" ;
 lin scare_V = mkV "吓" ;
@@ -20211,7 +20347,7 @@ lin scowl_N = mkN "皺眉" | mkN "皱眉" ; -- status=guess -- status=guess
 lin scowl_V = mkV "皱眉" ;
 lin scramble_N = mkN "争夺" "" ;
 lin scramble_V = mkV "争夺" | {-HSK-} mkV "抢" ;
-lin scramble_V2 = variants {} | {-HSK-} mkV2 "抢" ; -- comment=mkV "争夺" ;
+lin scramble_V2 = {-HSK-} mkV2 "抢" ; -- comment=mkV "争夺" ;
 lin scrap_N = mkN "碎片""些" ;
 lin scrap_V = mkV "报废" ;
 lin scrap_V2 = mkV2 "报废" ;
@@ -20321,7 +20457,7 @@ lin second_rate_A = mkA "二流" ;
 lin secondary_A = mkA "次要" ;
 lin secondary_N = mkN "中學" | mkN "中学" | {-HSK-} mkN "次要" ; -- status=guess -- status=guess
 lin secondhand_A = mkA "第二手" ; -- status=guess
-lin secondly_Adv = variants {} | {-HSK-} mkAdv "其次" ;
+lin secondly_Adv = {-HSK-} mkAdv "其次" ;
 lin secrecy_N = mkN "秘密" ;
 lin secret_A = mkA "暗" | mkA "秘密" ;
 lin secret_N = mkN "暗" | mkN "秘密" "個" | {-HSK-} mkN "秘密" ;
@@ -20330,7 +20466,7 @@ lin secretary_N = mkN "秘书" ;
 lin secrete_V2 = mkV2 (mkV "分泌") ; -- status=guess, src=wikt
 lin secretion_N = variants {} ;
 lin secretive_A = mkA "秘密" ;
-lin secretly_Adv = mkAdv "偷偷" | {-HSK-} mkAdv "悄悄" ; -- status=guess
+lin secretly_Adv = mkAdv "偷偷" | {-HSK-} mkAdv "悄悄" | adjAdv secret_A ; -- status=guess -- derived -- derived
 lin sect_N = mkN "宗派" | mkN "教派" | mkN "邪教" | {-HSK-} mkN "门" ; -- status=guess -- status=guess -- status=guess
 lin sectarianism_N = mkN "宗派主義" | mkN "宗派主义" ; -- status=guess -- status=guess
 lin section_N = mkN "段" | mkN "节" | mkN "部分" "個" | mkN "部门" "個" | mkN "阶段" "個" | {-HSK-} mkN "部分" ;
@@ -20369,7 +20505,7 @@ lin seem_VA = mkVA "仿佛" | mkVA "似乎" | mkVA "像" | mkVA "显得" ;
 lin seem_VS = mkVS "仿佛" | mkVS "似乎" | mkVS "像" | mkVS "显得" ;
 lin seem_VV = mkVV "仿佛" | mkVV "似乎" | mkVV "像" | mkVV "显得" ;
 lin seeming_A = mkA "表面上" ;
-lin seemingly_Adv = variants {} | {-HSK-} mkAdv "似乎" ;
+lin seemingly_Adv = {-HSK-} mkAdv "似乎" | adjAdv seeming_A ; -- derived
 lin seep_V = mkV "渗漏出" ;
 lin seer_N = mkN "先见者" ;
 lin seesaw_N = mkN "跷跷板" ;
@@ -20483,7 +20619,7 @@ lin separate_A = mkA "另外" | {-HSK-} mkA "各自" ;
 lin separate_N = mkN "另外" ;
 lin separate_V = mkV "分" | mkV "别" | {-HSK-} mkV "分开" ;
 lin separate_V2 = mkV2 "分" | mkV2 "别" | {-HSK-} mkV2 "分开" ;
-lin separately_Adv = variants {} ;
+lin separately_Adv = adjAdv separate_A ; -- derived
 lin separation_N = mkN "分割" ;
 lin separatism_N = mkN "分離主義" | mkN "分离主义" | mkN "分裂主義" | mkN "分裂主义" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin separatist_N = mkN "獨立派" | mkN "独立派" | mkN "分離主義者" | mkN "分离主义者" | mkN "分裂" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
@@ -20507,7 +20643,7 @@ lin serial_N = mkN "电视连续剧" "集" ;
 lin series_N = mkN "系列" ;
 lin serif_N = mkN "襯線" | mkN "衬线" ; -- status=guess -- status=guess
 lin serious_A = mkA "严重" | {-HSK-} mkA "厉害" | mkA "认真" | mkA "重" ;
-lin seriously_Adv = variants {} ;
+lin seriously_Adv = adjAdv serious_A ; -- derived
 lin seriousness_N = mkN "严肃" "" ;
 lin sermon_N = mkN "講道" | mkN "讲道" | mkN "布道" | mkN "說教" | mkN "说教" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin serpent_N = mkN "蛇" | {-HSK-} mkN "蛇" "條" ;
@@ -20548,9 +20684,10 @@ lin sever_V2 = mkV2 "断开" ;
 lin several_A = mkA "些" | mkA "几" ;
 lin several_Det = mkpDet "些" | mkpDet "几" | {-HSK-} mkpDet "几个" ; -- comment=also several_Num exists
 lin several_Num = mkNum "几个" ;
+lin severally_Adv = adjAdv several_A ; -- derived
 lin severance_N = mkN "分离" ;
 lin severe_A = mkA "严重" ;
-lin severely_Adv = variants {} ;
+lin severely_Adv = adjAdv severe_A ; -- derived
 lin severity_N = mkN "严重" ;
 lin sevilla_PN = mkPN "塞维利亚" ; -- comment=src=geonames status=guess
 lin seville_PN = foreignPN "Seville" ; -- comment=src=geonames status=guess
@@ -20567,7 +20704,7 @@ lin sextant_N = mkN "六分儀" | mkN "六分仪" ; -- status=guess -- status=gu
 lin sextet_N = mkN "六重奏" ; -- status=guess
 lin sexual_A = mkA "有性" ;
 lin sexuality_N = mkN "性欲" "次" ;
-lin sexually_Adv = variants {} ;
+lin sexually_Adv = adjAdv sexual_A ; -- derived
 lin sexy_A = mkA "性感" ;
 lin seychelles_PN = mkPN "塞舌尔群岛" ; -- comment=src=geonames status=guess
 lin sgd_PN = foreignPN "Sgd" ; -- comment=src=eng status=guess
@@ -20631,7 +20768,7 @@ lin sharp_witted_A = mkA "睿智" ;
 lin sharpen_V = mkV "磨" ;
 lin sharpen_V2 = mkV2 "削尖" ;
 lin sharpener_N = mkN "磨削器" ; -- status=guess
-lin sharply_Adv = variants {} ;
+lin sharply_Adv = adjAdv sharp_A ; -- derived
 lin sharpness_N = mkN "清晰度" "" ;
 lin sharpshooter_N = mkN "神槍手" | mkN "神枪手" | mkN "狙擊兵" | mkN "狙击兵" | mkN "射手" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin shatter_V = variants {} ; -- comment=mkV2 "打碎" ;
@@ -20767,7 +20904,7 @@ lin shorten_V2 = mkV2 "缩短" ;
 lin shortening_N = mkN "缩短" ;
 lin shortfall_N = mkN "差额" | {-HSK-} mkN "缺少" ;
 lin shorthand_N = mkN "速记法" ;
-lin shortly_Adv = variants {} ;
+lin shortly_Adv = adjAdv short_A ; -- derived
 lin shot_N = mkN "镜头" ;
 lin shotgun_N = mkN "霰彈槍" | mkN "霰弹枪" | mkN "散彈槍" | mkN "散弹枪" | mkN "獵槍" | mkN "猎枪" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin shotton_PN = foreignPN "Shotton" ; -- comment=src=geonames status=guess
@@ -20894,7 +21031,7 @@ lin signature_N = mkN "签名" ;
 lin signboard_N = mkN "招牌" | mkN "牌子" ; -- status=guess -- status=guess
 lin significance_N = mkN "意义" | {-HSK-} mkN "意义" "個" ;
 lin significant_A = mkA "显著" | {-HSK-} mkA "重要" ;
-lin significantly_Adv = variants {} ;
+lin significantly_Adv = adjAdv significant_A ; -- derived
 lin signify_V = mkV "象征" ;
 lin signify_V2 = mkV2 "表示" | {-HSK-} mkV2 "象征" ;
 lin signpost_N = mkN "路標" | mkN "路标" ; -- status=guess -- status=guess
@@ -20903,7 +21040,7 @@ lin silence_N = mkN "沉默" ;
 lin silence_V2 = mkV2 "消音" ;
 lin silencer_N = mkN "消聲器" | mkN "消声器" | mkN "消音器" ; -- status=guess -- status=guess -- status=guess
 lin silent_A = mkA "沉默" ;
-lin silently_Adv = variants {} ;
+lin silently_Adv = adjAdv silent_A ; -- derived
 lin silhouette_N = mkN "輪廓" | mkN "轮廓" ; -- status=guess -- status=guess
 lin silica_N = mkN "硅膠" | mkN "硅胶" ; -- status=guess -- status=guess
 lin silicon_N = mkN "硅" ;
@@ -20918,7 +21055,7 @@ lin silo_N = mkN "筒倉" | mkN "筒仓" | mkN "糧倉" | mkN "粮仓" ; -- stat
 lin silsden_PN = foreignPN "Silsden" ; -- comment=src=geonames status=guess
 lin silt_N = mkN "泥沙" ; -- status=guess
 lin silt_V = mkV "充塞" ;
-lin silver_A = variants {} | {-HSK-} mkA "银" ;
+lin silver_A = {-HSK-} mkA "银" ;
 lin silver_N = L.silver_N | {-HSK-} mkN "银" ;
 lin silverfish_N = mkN "蠹魚" | mkN "蠹鱼" | mkN "衣魚" | mkN "衣鱼" | mkN "壁魚" | mkN "壁鱼" | mkN "書蛀蟲" | mkN "书蛀虫" | mkN "紙魚" | mkN "纸鱼" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin silversmith_N = mkN ": 银色匠" | mkN ": 銀色匠" ; -- status=guess -- status=guess
@@ -20928,7 +21065,7 @@ lin silvia_PN = foreignPN "Silvia" ; -- comment=src=geonames status=guess
 lin silviculture_N = mkN "林學" | mkN "林学" | mkN "造林學" | mkN "造林学" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin similar_A = mkA "仿佛" | mkA "像" | mkA "相似" | mkA "类" | {-HSK-} mkA "类似" ;
 lin similarity_N = mkN "相似" | {-HSK-} mkN "相似" [] ;
-lin similarly_Adv = variants {} ;
+lin similarly_Adv = adjAdv similar_A ; -- derived
 lin simile_N = mkN "直喻" | mkN "明喻" | mkN "譬喻" | mkN "比喻" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin simmer_V = mkV "炖" ;
 lin simon_PN = foreignPN "Simon" ; -- comment=src=eng status=guess
@@ -20940,19 +21077,19 @@ lin simplicity_N = mkN "简单" ;
 lin simplification_N = mkN "简单化" [] ;
 lin simplify_V = mkV "简化" ;
 lin simplify_V2 = mkV2 "简化" ;
-lin simply_Adv = mkAdv "干脆" | mkAdv "根本" | mkAdv "简直" | {-HSK-} mkAdv "简单" mannerAdvType ;
+lin simply_Adv = mkAdv "干脆" | mkAdv "根本" | mkAdv "简直" | {-HSK-} mkAdv "简单" mannerAdvType | adjAdv simple_A ; -- derived
 lin simulate_V2 = mkV2 "模仿" ;
 lin simulation_N = mkN "模拟" ;
 lin simulator_N = mkN "模拟器" ;
 lin simultaneous_A = mkA "同时" ;
-lin simultaneously_Adv = variants {} | {-HSK-} mkAdv "同时" ;
+lin simultaneously_Adv = {-HSK-} mkAdv "同时" | adjAdv simultaneous_A ; -- derived
 lin sin_N = mkN "罪恶" ;
 lin since_Adv = mkAdv "以来" | {-HSK-} mkAdv "既然" | mkAdv "由于" | mkAdv "自从" ;
 lin since_Prep = mkPrep "自从" "以来" ;
 lin since_Subj = mkSubj "自从" ;
 lin since_then_Adv = mkAdv "从此" | {-HSK-} mkAdv "从那时起" ;
 lin sincere_A = mkA "真诚" | {-HSK-} mkA "老实" | mkA "诚恳" ;
-lin sincerely_Adv = variants {} ;
+lin sincerely_Adv = adjAdv sincere_A ; -- derived
 lin sincerity_N = mkN "真诚" "" ;
 lin sine_N = mkN "正弦" ; -- status=guess
 lin sine_qua_non_N = mkN "正弦" "" ;
@@ -21044,6 +21181,7 @@ lin skill_N = mkN "功夫" | mkN "技术" "門" | mkN "本领" "項" | {-HSK-} m
 lin skill_V = variants {} ;
 lin skilled_A = mkA "熟练" ;
 lin skillful_A = mkA "熟練" | mkA "熟练" | mkA "嫻熟" | mkA "娴熟" | mkA "擅長" | mkA "擅长" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
+lin skillfully_Adv = adjAdv skillful_A ; -- derived
 lin skim_N = mkN "脫脂牛奶" | mkN "脱脂牛奶" ; -- status=guess -- status=guess
 lin skim_V = mkV "浏览" ;
 lin skim_V2 = mkV2 (mkV "瀏覽") | mkV2 (mkV "浏览") ; -- status=guess, src=wikt -- status=guess, src=wikt
@@ -21139,7 +21277,7 @@ lin slide_N = mkN "滑动" ;
 lin slide_V = mkV "滑动" ;
 lin slide_V2 = mkV2 "滑动" ;
 lin slight_A = mkA "轻微" ;
-lin slightly_Adv = variants {} ;
+lin slightly_Adv = adjAdv slight_A ; -- derived
 lin sligo_PN = foreignPN "Sligo" ; -- comment=src=geonames status=guess
 lin slim_A = mkA "苗条" ;
 lin slim_V = mkV "缩减" ;
@@ -21181,7 +21319,7 @@ lin slow_V = mkV "缓慢" ;
 lin slow_V2 = mkV2 "放慢" ;
 lin slow_down_V = mkV "放慢" ;
 lin slowdown_N = mkN "放缓" ;
-lin slowly_Adv = variants {} ;
+lin slowly_Adv = adjAdv slow_A ; -- derived
 lin sludge_N = mkN "污泥" ;
 lin slug_N = mkN "鼻涕蟲" | mkN "鼻涕虫" | mkN "蛞蝓" ; -- status=guess -- status=guess -- status=guess
 lin sluggish_A = mkA "呆滞" ;
@@ -21233,7 +21371,7 @@ lin smooth_N = mkN "光滑" ;
 lin smooth_V = mkV "变平滑" ;
 lin smooth_V2 = mkV2 "变平静" ;
 lin smoothie_N = mkN "水果奶西" ; -- status=guess
-lin smoothly_Adv = variants {} | {-HSK-} mkAdv "顺利" ;
+lin smoothly_Adv = {-HSK-} mkAdv "顺利" | adjAdv smooth_A ; -- derived
 lin smother_V2 = mkV2 "使+窒息" ;
 lin smug_A = mkA "自以为是" ;
 lin smuggle_V2 = mkV2 "走私" ;
@@ -21338,7 +21476,7 @@ lin socialism_N = mkN "社会主义" [] ;
 lin socialist_A = mkA "社会主义" ;
 lin socialist_N = mkN "社会主义者" "名" ;
 lin socialize_V2 = mkV2 "使+社会化" ;
-lin socially_Adv = variants {} ;
+lin socially_Adv = adjAdv social_A ; -- derived
 lin society_N = mkN "团" | mkN "社会" "個" | {-HSK-} mkN "社会" ;
 lin sociocultural_A = mkA "社會文化的" | mkA "社会文化的" ; -- status=guess -- status=guess
 lin sociological_A = mkA "社会" ;
@@ -21360,7 +21498,7 @@ lin soften_V = mkV "软化" ;
 lin soften_V2 = mkV2 "减轻" ;
 lin softener_N = mkN "柔软剂" ;
 lin softhearted_A = mkA "心軟" | mkA "心软" ; -- status=guess -- status=guess
-lin softly_Adv = variants {} ;
+lin softly_Adv = adjAdv soft_A ; -- derived
 lin softness_N = mkN "柔软" [] ;
 lin software_N = mkN "软件" ;
 lin softy_N = mkN "多愁善感的人" "位" ;
@@ -21379,7 +21517,7 @@ lin soldier_N = mkN "士兵" | {-HSK-} mkN "士兵" "個" ;
 lin soldier_V = mkV "當兵" | mkV "当兵" ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin sole_A = mkA "唯一" ;
 lin sole_N = mkN "唯一" | {-HSK-} mkN "鞋底" ;
-lin solely_Adv = variants {} ;
+lin solely_Adv = adjAdv sole_A ; -- derived
 lin solemn_A = mkA "严肃" | {-HSK-} mkA "庄严" ;
 lin solemnity_N = mkN "严肃" ;
 lin solicit_V = mkV "征求" | {-HSK-} mkV "恳请" ;
@@ -21501,6 +21639,8 @@ lin southampton_PN = mkPN "南安普敦" ; -- comment=src=geonames status=guess
 lin southeast_N = mkN "东南" [] ;
 lin southeastern_A = mkA "东南方" ;
 lin southend_on_sea_PN = foreignPN "Southend-on-sea" ; -- comment=src=eng status=guess
+lin southerly_A = variants {} ;
+lin southerly_Adv = adjAdv southerly_A ; -- derived -- derived
 lin southern_A = mkA "南方" ;
 lin southerner_N = mkN "南方人" ; -- status=guess
 lin southport_PN = mkPN ("紹斯波特" | "南港") ; -- comment=src=geonames status=guess
@@ -21553,6 +21693,7 @@ lin sparkle_N = mkN "火花" "次" ;
 lin sparkle_V = mkV "火花" ;
 lin sparrow_N = mkN "麻雀" ; -- status=guess
 lin sparse_A = mkA "稀缺" ;
+lin sparsely_Adv = adjAdv sparse_A ; -- derived -- derived
 lin spartan_A = mkA "斯巴达" ;
 lin spasm_N = mkN "痉挛" ;
 lin spate_N = mkN "洪水" "场" | {-HSK-} mkN "阵" ;
@@ -21573,18 +21714,18 @@ lin spearmint_N = mkN "荷蘭薄荷" | mkN "荷兰薄荷" | mkN "留蘭香" | mk
 lin spec_N = mkN "规范" ;
 lin special_A = mkA "特别" | {-HSK-} mkA "特殊" ;
 lin special_N = mkN "特刊" | {-HSK-} mkN "特别" | mkN "特殊" ;
-lin specialist_A = variants {} | {-HSK-} mkA "专家" | mkA "专门" ;
+lin specialist_A = {-HSK-} mkA "专家" | mkA "专门" ;
 lin specialist_N = mkN "专家" | {-HSK-} mkN "专家" "個" | mkN "专门" ;
 lin speciality_N = mkN "专长" ;
 lin specialization_N = mkN "专业化" ;
 lin specialize_V = mkV "专攻" ;
 lin specialize_V2 = mkV2 "专攻" ;
-lin specially_Adv = variants {} | {-HSK-} mkAdv "特意" ;
+lin specially_Adv = {-HSK-} mkAdv "特意" | adjAdv special_A ; -- derived
 lin specialty_N = mkN "专业" | {-HSK-} mkN "专业" "門" ;
 lin species_N = mkN "物种" ;
 lin specific_A = mkA "个别" | mkA "具体" ;
 lin specific_N = mkN "个别" | mkN "具体" | {-HSK-} mkN "具体" [] ;
-lin specifically_Adv = variants {} ;
+lin specifically_Adv = adjAdv specific_A ; -- derived
 lin specification_N = mkN "规范" ;
 lin specificity_N = mkN "特异性" ;
 lin specified_A = variants {} ;
@@ -21706,6 +21847,7 @@ lin sponsor_V2 = mkV2 "赞助" ;
 lin sponsorship_N = mkN "发起" ;
 lin spontaneity_N = mkN "自發性" | mkN "自发性" ; -- status=guess -- status=guess
 lin spontaneous_A = mkA "自发" ;
+lin spontaneously_Adv = adjAdv spontaneous_A ; -- derived -- derived
 lin spook_N = mkN "鬼" ;
 lin spook_V2 = mkV2 "寝食不安" ;
 lin spooky_A = mkA "幽灵一般" ;
@@ -21968,6 +22110,7 @@ lin stationery_N = mkN "文具" ;
 lin stationmaster_N = mkN "站長" | mkN "站长" ; -- status=guess -- status=guess
 lin statistic_N = mkN "统计数值" ;
 lin statistical_A = mkA "统计" ;
+lin statistically_Adv = adjAdv statistical_A ; -- derived -- derived
 lin statisticianFem_N = mkN "统计学家" "名" ;
 lin statisticianMasc_N = mkN "统计学家" "名" ;
 lin statistics_N = mkN "统计" ;
@@ -21986,7 +22129,7 @@ lin stay_V = mkV "住" | mkV "呆" | mkV "留" | mkV "逗" ;
 lin stay_VA = mkVA "住" | mkVA "呆" | mkVA "留" | mkVA "逗" ;
 lin std_PN = foreignPN "Std" ; -- comment=src=eng status=guess
 lin steadfast_A = mkA "坚定不变" ;
-lin steadily_Adv = variants {} ;
+lin steadily_Adv = adjAdv steady_A ; -- derived
 lin steadiness_N = mkN "稳健" "" ;
 lin steady_A = mkA "稳定" ;
 lin steady_Adv = mkAdv "稳定" ;
@@ -22041,6 +22184,8 @@ lin stepson_N = mkN "繼" | mkN "继" | mkN "繼子" | mkN "继子" ; -- status=
 lin stereo_A = mkA "體視" | mkA "体视" ; -- status=guess -- status=guess
 lin stereo_N = mkN "立体声" ;
 lin stereotype_N = mkN "铅板" ;
+lin stereotypical_A = variants {} ;
+lin stereotypically_Adv = adjAdv stereotypical_A ; -- derived
 lin sterile_A = mkA "不育" ;
 lin sterility_N = mkN "不育" "" ;
 lin sterilization_N = mkN "消毒" ;
@@ -22212,7 +22357,7 @@ lin strand_N = mkN "缕" ;
 lin strand_V = mkV "搁浅" ;
 lin strand_V2 = mkV2 "搁浅" ;
 lin strange_A = mkA "奇怪" | {-HSK-} mkA "陌生" ;
-lin strangely_Adv = variants {} ;
+lin strangely_Adv = adjAdv strange_A ; -- derived
 lin strangeness_N = mkN "陌生" ;
 lin stranger_N = mkN "陌生人" ;
 lin strangle_V2 = mkV2 "勒死" ;
@@ -22223,6 +22368,7 @@ lin strasbourg_PN = mkPN "斯特拉斯堡" ; -- comment=src=geonames status=gues
 lin stratagem_N = mkN "策略" ;
 lin strategic_A = mkA "战略" ;
 lin strategical_A = mkA "战略" ;
+lin strategically_Adv = adjAdv strategical_A ; -- derived
 lin strategist_N = mkN "战略家" ;
 lin strategy_N = mkN "战略" ;
 lin stratford_on_avon_PN = foreignPN "Stratford-on-avon" ; -- comment=src=eng status=guess
@@ -22263,7 +22409,7 @@ lin stretford_PN = foreignPN "Stretford" ; -- comment=src=geonames status=guess
 lin strew_V2 = mkV2 (mkV "散開") | mkV2 (mkV "散开") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin stricken_A = mkA "患病" ;
 lin strict_A = mkA "严格" | {-HSK-} mkA "紧" ;
-lin strictly_Adv = variants {} ;
+lin strictly_Adv = adjAdv strict_A ; -- derived
 lin stride_N = mkN "大步" ;
 lin stride_V = mkV "迈" ;
 lin strident_A = mkA "刺耳" ;
@@ -22297,10 +22443,11 @@ lin stroller_N = mkN "嬰兒車" | mkN "婴儿车" ; -- status=guess -- status=g
 lin strong_A = mkA "坚强" | {-HSK-} mkA "强烈" | mkA "棒" | mkA "硬" ;
 lin strong_arm_A = mkA "暴力" ;
 lin stronghold_N = mkN "据点" ;
-lin strongly_Adv = variants {} ;
+lin strongly_Adv = adjAdv strong_A ; -- derived
 lin strontium_N = mkN "鍶" | mkN "锶" ; -- status=guess -- status=guess
 lin stroud_PN = foreignPN "Stroud" ; -- comment=src=geonames status=guess
 lin structural_A = mkA "构造" ;
+lin structurally_Adv = adjAdv structural_A ; -- derived -- derived
 lin structure_N = mkN "结构" | {-HSK-} mkN "结构" "座" ;
 lin structure_V2 = mkV2 "构造" ;
 lin struggle_N = mkN "奋斗" ;
@@ -22402,7 +22549,7 @@ lin subscriber_N = mkN "订户" ;
 lin subscript_N = mkN "下標" | mkN "下标" ; -- status=guess -- status=guess
 lin subscription_N = mkN "订阅" ;
 lin subsequent_A = mkA "随后" ;
-lin subsequently_Adv = variants {} | {-HSK-} mkAdv "接着" ;
+lin subsequently_Adv = {-HSK-} mkAdv "接着" | adjAdv subsequent_A ; -- derived
 lin subset_N = mkN "子集" ; -- status=guess
 lin subside_V = mkV "平息" ;
 lin subsidence_N = mkN "沉降" ;
@@ -22416,7 +22563,7 @@ lin subspecies_N = mkN "亞種" | mkN "亚种" ; -- status=guess -- status=guess
 lin substance_N = mkN "内容" "個" | mkN "物质" "個" | {-HSK-} mkN "物质" "种" ;
 lin substandard_A = mkA "不合规格" ;
 lin substantial_A = mkA "丰富" ;
-lin substantially_Adv = variants {} ;
+lin substantially_Adv = adjAdv substantial_A ; -- derived
 lin substantiate_V2 = mkV2 "证实" ;
 lin substantive_A = mkA "实质" ;
 lin substation_N = mkN "变电站" ;
@@ -22447,10 +22594,10 @@ lin succeed_V = mkV "成功" ;
 lin succeed_V2 = mkV2 "成功" ;
 lin success_N = mkN "成功" | {-HSK-} mkN "成功" "次" | mkN "成就" "個" ;
 lin successful_A = mkA "成功" ;
-lin successfully_Adv = variants {} ;
+lin successfully_Adv = adjAdv successful_A ; -- derived
 lin succession_N = mkN "一系列" ;
 lin successive_A = mkA "连续" ;
-lin successively_Adv = mkAdv "陆续" | {-HSK-} mkAdv "陸續" | mkAdv "先後" | mkAdv "先后" ; -- status=guess -- status=guess -- status=guess -- status=guess
+lin successively_Adv = mkAdv "陆续" | {-HSK-} mkAdv "陸續" | mkAdv "先後" | mkAdv "先后" | adjAdv successive_A ; -- status=guess -- status=guess -- status=guess -- status=guess -- derived -- derived
 lin successor_N = mkN "继任者" ;
 lin succubus_N = mkN "魔女" ; -- status=guess
 lin succumb_V = mkV "屈服于" ;
@@ -22468,7 +22615,7 @@ lin sudan_PN = mkPN "苏丹共和国" ; -- comment=src=geonames status=guess
 lin sudbury_PN = foreignPN "Sudbury" ; -- comment=src=geonames status=guess
 lin sudden_A = mkA "突然" ;
 lin sudden_N = mkN "突然" | {-HSK-} mkN "突然发生的事""件" ;
-lin suddenly_Adv = variants {} | {-HSK-} mkAdv "忽然" ;
+lin suddenly_Adv = {-HSK-} mkAdv "忽然" | adjAdv sudden_A ; -- derived
 lin sudoku_N = mkN "數獨" | mkN "数独" ; -- status=guess -- status=guess
 lin suds_N = mkN "Characters: 沫" | mkN "泡" ; -- status=guess -- status=guess
 lin sue_PN = foreignPN "Sue" ; -- comment=src=eng status=guess
@@ -22485,7 +22632,7 @@ lin suffice_V2 = mkV2 (mkV "足夠") | mkV2 (mkV "足够") | mkV2 (mkV "夠") | 
 lin suffice_V2V = mkV2V (mkV "足夠") | mkV2V (mkV "足够") | mkV2V (mkV "夠") | mkV2V (mkV "够") | mkV2V (mkV "使滿足") | mkV2V (mkV "使满足") ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
 lin sufficiency_N = mkN "足量" ; -- comment="充足" ;
 lin sufficient_A = mkA "足够" ;
-lin sufficiently_Adv = variants {} ;
+lin sufficiently_Adv = adjAdv sufficient_A ; -- derived
 lin suffix_N = mkN "後綴" | mkN "后缀" | mkN "尾綴" | mkN "尾缀" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin suffocate_V = mkV "窒息" ; -- status=guess, src=wikt
 lin suffocate_V2 = mkV2 (mkV "窒息") ; -- status=guess, src=wikt
@@ -22504,7 +22651,7 @@ lin suit_N = mkN "诉讼" ;
 lin suit_V = mkV "适合" | {-HSK-} mkV "适应" ;
 lin suit_V2 = mkV2 "适合" | mkV2 "适应" ;
 lin suitable_A = mkA "合适" | mkA "方便" | {-HSK-} mkA "适宜" ;
-lin suitcase_N = variants {} | {-HSK-} mkN "行李箱" ;
+lin suitcase_N = {-HSK-} mkN "行李箱" ;
 lin suite_N = mkN "套件" ;
 lin suitor_N = mkN "起诉者" ;
 lin sukiyaki_N = mkN "壽喜燒" | mkN "寿喜烧" ; -- status=guess -- status=guess
@@ -22588,7 +22735,7 @@ lin supervisory_A = mkA "监督" ;
 lin supper_N = mkN "晚餐" ;
 lin supplement_N = mkN "补充" ; -- comment="增补" ;
 lin supplement_V2 = mkV2 "补充" ;
-lin supplementary_A = variants {} | {-HSK-} mkA "补充" ;
+lin supplementary_A = {-HSK-} mkA "补充" ;
 lin supplier_N = mkN "供应商" ;
 lin supply_N = mkN "供应" ;
 lin supply_V2 = mkV2 "供应" | {-HSK-} mkV2 "提供" ;
@@ -22599,7 +22746,7 @@ lin supporting_A = variants {} ;
 lin suppose_V2 = mkV2 "假设" | {-HSK-} mkV2 "想" ;
 lin suppose_VS = mkVS "假设" | {-HSK-} mkVS "想" ;
 lin supposed_A = mkA "假想" ;
-lin supposedly_Adv = variants {} ;
+lin supposedly_Adv = adjAdv supposed_A ; -- derived
 lin suppository_N = mkN "栓剂" ;
 lin suppress_V2 = mkV2 "抑制" ;
 lin suppression_N = mkN "抑制" ;
@@ -22614,7 +22761,7 @@ lin surabaja_PN = foreignPN "Surabaja" ; -- comment=src=eng status=guess
 lin surcharge_N = mkN "附加費" | mkN "附加费" ; -- status=guess -- status=guess
 lin sure_A = mkA "确定" | {-HSK-} mkA "肯定" ;
 lin sure_Adv = mkAdv "肯定" ;
-lin surely_Adv = variants {} | {-HSK-} mkAdv "一定" ;
+lin surely_Adv = {-HSK-} mkAdv "一定" | adjAdv sure_A ; -- derived
 lin surf_N = mkN "海浪" ;
 lin surface_A = mkA "表面" ;
 lin surface_N = mkN "表面" ;
@@ -22633,14 +22780,15 @@ lin surgical_A = mkA "外科" ;
 lin surmount_V2 = mkV2 "超越" ;
 lin surname_N = mkN "姓" | mkN "姓氏" | {-HSK-} mkN "姓" "個" ; -- status=guess -- status=guess
 lin surpass_V2 = mkV2 "超出" | {-HSK-} mkV2 "超过" | mkV2 "越" ;
-lin surplus_A = variants {} | {-HSK-} mkA "多余" ;
+lin surplus_A = {-HSK-} mkA "多余" ;
 lin surplus_N = mkN "多余" | {-HSK-} mkN "盈余" ;
 lin surprise_N = mkN "惊异" ;
 lin surprise_V2 = mkV2 "令+吃惊" | {-HSK-} mkV2 "居然" | mkV2 "竟然" ;
 lin surprise_V2V = mkV2V "居然" | mkV2V "竟然" | {-HSK-} mkV2V "惊" ;
 lin surprised_A = variants {} ;
+lin surprisedly_Adv = adjAdv surprised_A ; -- derived
 lin surprising_A = mkA "令人吃惊" ;
-lin surprisingly_Adv = variants {} ;
+lin surprisingly_Adv = adjAdv surprising_A ; -- derived
 lin surreal_A = mkA "玄妙" | mkA "超現實的" | mkA "超现实的" ; -- status=guess -- status=guess -- status=guess
 lin surrealism_N = mkN "超現實主義" | mkN "超现实主义" ; -- status=guess -- status=guess
 lin surrender_N = mkN "交出" ;
@@ -22750,7 +22898,7 @@ lin swelling_N = mkN "腫脹" | mkN "肿胀" ; -- status=guess -- status=guess
 lin swerve_V = mkV "转向" ;
 lin swift_A = mkA "迅速" ;
 lin swift_N = mkN "褐雨燕" ;
-lin swiftly_Adv = variants {} ;
+lin swiftly_Adv = adjAdv swift_A ; -- derived
 lin swig_N = mkN "痛饮" ;
 lin swim_N = mkN "游泳" | {-HSK-} mkN "游泳""" ;
 lin swim_V = L.swim_V ;
@@ -23071,12 +23219,13 @@ lin teat_N = mkN "奶頭" | mkN "奶头" | mkN "乳頭" | mkN "乳头" ; -- stat
 lin technetium_N = mkN "锝" ; -- status=guess
 lin technical_A = mkA "技术" ;
 lin technicality_N = mkN "术语" "种" ;
-lin technically_Adv = variants {} ;
+lin technically_Adv = adjAdv technical_A ; -- derived
 lin technician_N = mkN "技术员" ;
 lin technique_N = mkN "技术" | {-HSK-} mkN "技术" "門" ;
 lin techno_N = mkN "高科技舞曲" ; -- status=guess
 lin technocrat_N = mkN "技术专家" "位" ;
 lin technological_A = mkA "技术性" ;
+lin technologically_Adv = adjAdv technological_A ; -- derived -- derived
 lin technologist_N = mkN "技术专家" ;
 lin technology_N = mkN "技术" | {-HSK-} mkN "技术" "門" ;
 lin tectonic_A = mkA "地殼構造" ; -- status=guess
@@ -23141,7 +23290,7 @@ lin template_N = mkN "模板" | mkN "型板" ; -- status=guess -- status=guess
 lin temple_N = mkN "寺庙" ;
 lin tempo_N = mkN "拍子" ;
 lin temporal_A = mkA "暂时" ;
-lin temporarily_Adv = variants {} ;
+lin temporarily_Adv = adjAdv temporary_A ; -- derived
 lin temporary_A = mkA "临时" | {-HSK-} mkA "暂时" | mkA "行" ;
 lin temporary_N = mkN "临时" | mkN "暂时" | mkN "行" ;
 lin temporizer_N = mkN "姑息者""位" ;
@@ -23178,6 +23327,7 @@ lin tension_N = mkN "紧张" [] ;
 lin tent_N = mkN "帐篷" ;
 lin tentacle_N = mkN "觸手" | mkN "触手" ; -- status=guess -- status=guess
 lin tentative_A = mkA "试验" ;
+lin tentatively_Adv = adjAdv tentative_A ; -- derived -- derived
 lin tenterden_PN = foreignPN "Tenterden" ; -- comment=src=geonames status=guess
 lin tenth_N = mkN "第十" ;
 lin tenuous_A = mkA "纤细" ;
@@ -23209,7 +23359,7 @@ lin terrace_N = mkN "台" | {-HSK-} mkN "阳台" ;
 lin terrain_N = mkN "地形" | {-HSK-} mkN "形势" "個" ;
 lin terrestrial_A = mkA "地球" ;
 lin terrible_A = mkA "厉害" | mkA "可怕" | mkA "恐怖" | mkA "糟糕" | mkA "艰巨" ;
-lin terribly_Adv = variants {} | {-HSK-} mkAdv "可怕" ;
+lin terribly_Adv = {-HSK-} mkAdv "可怕" | adjAdv terrible_A ; -- derived
 lin terrific_A = mkA "了不起" | {-HSK-} mkA "雷" ;
 lin terrify_V2 = mkV2 "恐吓" ;
 lin terrine_N = mkN "陶罐" ;
@@ -23261,7 +23411,7 @@ lin thank_V2 = mkV2 "感谢" | {-HSK-} mkV2 "谢谢" ;
 lin thankful_A = mkA "感激" | {-HSK-} mkA "感谢" ;
 lin thankless_A = mkA "不表示感谢" ;
 lin thanks_Interj = mkInterj "感谢" | mkInterj "谢谢" ;
-lin thanks_N = variants {} | {-HSK-} mkN "感谢" | mkN "谢谢" ;
+lin thanks_N = {-HSK-} mkN "感谢" | mkN "谢谢" ;
 lin thanks_to_Prep = mkPrep "由于" ;
 lin that_AdA = variants {} ;
 lin that_Quant = S.that_Quant ;
@@ -23292,7 +23442,7 @@ lin theological_A = mkA "神学" ;
 lin theology_N = mkN "神学" "" ;
 lin theorem_N = mkN "定理" ; -- status=guess
 lin theoretical_A = mkA "理论" ;
-lin theoretically_Adv = mkAdv "理論上" | mkAdv "理论上" ; -- status=guess -- status=guess
+lin theoretically_Adv = mkAdv "理論上" | mkAdv "理论上" | adjAdv theoretical_A ; -- status=guess -- status=guess -- derived -- derived
 lin theorist_N = mkN "理论家" ;
 lin theorize_VS = mkVS "建立理论" ;
 lin theory_N = mkN "理论" | {-HSK-} mkN "理论" "個" ;
@@ -23330,7 +23480,7 @@ lin thetford_PN = foreignPN "Thetford" ; -- comment=src=geonames status=guess
 lin theyFem_Pron = R.pronNP "她们" ;
 lin they_Pron = S.they_Pron ;
 lin thick_A = L.thick_A | {-HSK-} mkA "厚" ;
-lin thick_Adv = variants {} | {-HSK-} mkAdv "厚" ;
+lin thick_Adv = {-HSK-} mkAdv "厚" ;
 lin thick_N = mkN "厚" | {-HSK-} mkN "厚的" | mkN "密的" ; -- status=guess -- status=guess
 lin thicket_N = mkN "灌木丛" "个" ;
 lin thickness_N = mkN "厚度" [] ;
@@ -23350,7 +23500,7 @@ lin think_VS = mkVS "以为" | mkVS "想" | mkVS "觉得" | mkVS "认为" | {-HS
 lin think_over_V2 = mkV2 "考虑" ;
 lin thinkerFem_N = mkN "思想家" ;
 lin thinkerMasc_N = mkN "思想家" ;
-lin thinking_A = variants {} | {-HSK-} mkA "思想" ;
+lin thinking_A = {-HSK-} mkA "思想" ;
 lin thinking_N = mkN "思想" "個" | {-HSK-} mkN "思维" [] ;
 lin thionville_PN = mkPN "蒂永维尔" ; -- comment=src=geonames status=guess
 lin thirsk_PN = foreignPN "Thirsk" ; -- comment=src=geonames status=guess
@@ -23370,7 +23520,7 @@ lin thoroughbred_A = mkA "纯种" ;
 lin thoroughbred_N = mkN "纯种" ;
 lin thoroughfare_N = mkN "通道" ;
 lin thoroughgoing_A = mkA "完全" ;
-lin thoroughly_Adv = variants {} | {-HSK-} mkAdv "彻底" | mkAdv "烂" ;
+lin thoroughly_Adv = {-HSK-} mkAdv "彻底" | mkAdv "烂" | adjAdv thorough_A ; -- derived
 lin those_N = mkN "那" ;
 lin though_Adv = mkAdv "尽管" ;
 lin though_Prep = mkPrep "虽然" ;
@@ -23487,7 +23637,7 @@ lin tight_Adv = mkAdv "严格" | mkAdv "瘦" | mkAdv "紧" | {-HSK-} mkAdv "紧�
 lin tight_lipped_A = mkA "守口如瓶" ;
 lin tighten_V = mkV "紧" | {-HSK-} mkV "紧缩" ;
 lin tighten_V2 = mkV2 "紧" | {-HSK-} mkV2 "紧缩" ;
-lin tightly_Adv = variants {} ;
+lin tightly_Adv = adjAdv tight_A ; -- derived
 lin tightness_N = mkN "坚固" ;
 lin tightrope_N = mkN "鋼絲" | mkN "钢丝" ; -- status=guess -- status=guess
 lin tights_N = mkN "連褲襪" | mkN "连裤袜" ; -- status=guess -- status=guess
@@ -23548,7 +23698,8 @@ lin tiramisu_N = mkN "提拉米蘇" | mkN "提拉米苏" ; -- status=guess -- st
 lin tire_N = mkN "外胎" | {-HSK-} mkN "带" "條" ;
 lin tire_V = mkV "疲劳" ;
 lin tire_V2 = mkV2 "厌倦" ;
-lin tired_A = variants {} | {-HSK-} mkA "累" ;
+lin tired_A = {-HSK-} mkA "累" ;
+lin tiredly_Adv = adjAdv tired_A ; -- derived -- derived
 lin tiredness_N = mkN "疲勞" | mkN "疲劳" ; -- status=guess -- status=guess
 lin tireless_A = mkA "不知疲倦" ;
 lin tiresome_A = mkA "烦人" ;
@@ -23689,7 +23840,7 @@ lin total_N = mkN "全面" | mkN "整个" | {-HSK-} mkN "共计" ;
 lin total_V = mkV "总计" ;
 lin total_V2 = mkV2 "合计" ;
 lin totalitarianism_N = mkN "極權主義" | mkN "极权主义" ; -- status=guess -- status=guess
-lin totally_Adv = variants {} | {-HSK-} mkAdv "完全" ;
+lin totally_Adv = {-HSK-} mkAdv "完全" | adjAdv total_A ; -- derived
 lin tote_V2 = mkV2 "手提" ;
 lin totem_N = mkN "圖騰" | mkN "图腾" ; -- status=guess -- status=guess
 lin totnes_PN = foreignPN "Totnes" ; -- comment=src=geonames status=guess
@@ -23763,7 +23914,7 @@ lin trading_N = mkN "贸易" "次" ;
 lin tradition_N = mkN "传统" | {-HSK-} mkN "传统" "個" | mkN "传说" ;
 lin traditional_A = mkA "传统" ;
 lin traditionalist_N = mkN "传统主义者" "位" ;
-lin traditionally_Adv = variants {} ;
+lin traditionally_Adv = adjAdv traditional_A ; -- derived
 lin traduce_V2 = mkV2 "中伤" ;
 lin traducer_N = mkN "诽谤者""位" ;
 lin traffic_N = mkN "交通" ;
@@ -23995,7 +24146,7 @@ lin true_A = mkA "真" | {-HSK-} mkA "真实" | mkA "真正" | mkA "确实" ;
 lin true_N = mkN "真" | mkN "真实" | mkN "真正" | mkN "确实" | {-HSK-} mkN "真实""" ;
 lin true_V2 = mkV2 "使+装准" ;
 lin truffle_N = mkN "松露" ; -- status=guess
-lin truly_Adv = mkAdv "真" | {-HSK-} mkAdv "真正" ;
+lin truly_Adv = mkAdv "真" | {-HSK-} mkAdv "真正" | adjAdv true_A ; -- derived
 lin trump_N = mkN "王牌" ; -- status=guess
 lin trump_V2 = mkV2 "胜过" ;
 lin trumpet_N = mkN "小号" ;
@@ -24149,7 +24300,7 @@ lin typical_1_A = mkA "典型" ;
 lin typical_2_A = variants {} ;
 lin typical_3_A = mkA "典型" ;
 lin typical_A = variants {} ;
-lin typically_Adv = variants {} ;
+lin typically_Adv = adjAdv typical_3_A ; -- derived
 lin typify_V2 = mkV2 "代表" ;
 lin typing_N = mkN "打字" ; -- status=guess
 lin tyranny_N = mkN "暴政" "种" ;
@@ -24175,7 +24326,7 @@ lin ulna_N = mkN "尺骨" ; -- status=guess
 lin ulster_PN = foreignPN "Ulster" ; -- comment=src=eng status=guess
 lin ultimate_A = mkA "最后" | {-HSK-} mkA "最终" ;
 lin ultimate_N = mkN "最后" | {-HSK-} mkN "终极""" ;
-lin ultimately_Adv = variants {} ;
+lin ultimately_Adv = adjAdv ultimate_A ; -- derived
 lin ultimatum_N = mkN "最后通牒" "次" ;
 lin ultramontane_A = mkA "山那边" ;
 lin ultrasonic_A = mkA "超声" ;
@@ -24201,6 +24352,7 @@ lin unambiguous_A = mkA "不含糊" ;
 lin unamended_A = mkA "未修改" ;
 lin unanimity_N = mkN "同意" ;
 lin unanimous_A = mkA "一致" ;
+lin unanimously_Adv = adjAdv unanimous_A ; -- derived -- derived
 lin unanswerable_A = mkA "无法回答" ;
 lin unanswered_A = mkA "未答复" ;
 lin unanticipated_A = mkA "意想不到" ;
@@ -24342,7 +24494,7 @@ lin undisturbed_A = mkA "平静" ;
 lin undo_V2 = mkV2 "复原" ;
 lin undoing_N = mkN "毁灭" ;
 lin undoubted_A = mkA "无疑" ;
-lin undoubtedly_Adv = variants {} ;
+lin undoubtedly_Adv = adjAdv undoubted_A ; -- derived
 lin undress_N = mkN "便服" ;
 lin undress_V = mkV "脫衣" | mkV "脱衣" | mkV "脫掉衣服" | mkV "脱掉衣服" ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
 lin undress_V2 = mkV2 (mkV "脫衣") | mkV2 (mkV "脱衣") | mkV2 (mkV "脫掉衣服") | mkV2 (mkV "脱掉衣服") ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
@@ -24368,7 +24520,7 @@ lin unethical_A = mkA "不道德" ;
 lin uneven_A = mkA "不平坦" | {-HSK-} mkA "错" ;
 lin uneventful_A = mkA "波澜不惊" ;
 lin unexpected_A = mkA "意外" | {-HSK-} mkA "突然" ;
-lin unexpectedly_Adv = variants {} | {-HSK-} mkAdv "居然" | mkAdv "竟然" ;
+lin unexpectedly_Adv = {-HSK-} mkAdv "居然" | mkAdv "竟然" | adjAdv unexpected_A ; -- derived
 lin unexplained_A = mkA "原因不明" ;
 lin unfair_A = mkA "不公平" ;
 lin unfairness_N = mkN "不平" | mkN "不公平" ; -- status=guess -- status=guess
@@ -24390,7 +24542,7 @@ lin unforeseeable_A = mkA "無法預見的" | mkA "无法预见的" | mkA "不�
 lin unforeseen_A = mkA "未预见到" ; -- comment="无法预料的" ;
 lin unforgiving_A = mkA "不原谅人" ;
 lin unfortunate_A = mkA "不幸" ;
-lin unfortunately_Adv = variants {} | {-HSK-} mkAdv "吃亏" ;
+lin unfortunately_Adv = {-HSK-} mkAdv "吃亏" | adjAdv unfortunate_A ; -- derived
 lin unfounded_A = mkA "毫无根据" | mkA "未建立" ;
 lin unfriendly_A = mkA "不友好" ;
 lin unfulfilled_A = mkA "未得到满足" ;
@@ -24420,6 +24572,7 @@ lin uniform_A = mkA "统一" ;
 lin uniform_N = mkN "制服" ;
 lin uniformed_A = mkA "穿制服" ;
 lin uniformity_N = mkN "同样" ;
+lin uniformly_Adv = adjAdv uniform_A ; -- derived
 lin unify_V2 = mkV2 "统一" ;
 lin unilateral_A = mkA "单边" | {-HSK-} mkA "片面" ;
 lin unimaginable_A = mkA "不可思议" ;
@@ -24445,6 +24598,7 @@ lin union_A = mkA "会" | mkA "和" ;
 lin union_N = mkN "会" "個" | mkN "和" | {-HSK-} mkN "联盟" ;
 lin unionist_N = mkN "工会" ;
 lin unique_A = mkA "独特" ;
+lin uniquely_Adv = adjAdv unique_A ; -- derived -- derived
 lin unisex_A = mkA "男女兩用的" | mkA "男女两用的" ; -- status=guess -- status=guess
 lin unisexual_A = mkA "單性的" | mkA "单性的" ; -- status=guess -- status=guess
 lin unit_1_N = mkN "单元" ;
@@ -24462,6 +24616,7 @@ lin unity_N = mkN "统一性" "种" ;
 lin univ_PN = foreignPN "Univ" ; -- comment=src=eng status=guess
 lin universal_A = mkA "万能" | {-HSK-} mkA "普遍" ;
 lin universal_N = mkN "全集" | {-HSK-} mkN "普遍" ; -- status=guess
+lin universally_Adv = adjAdv universal_A ; -- derived -- derived
 lin universe_N = mkN "宇宙" ;
 lin university_N = L.university_N ;
 lin unjust_A = mkA "不公平" ;
@@ -24500,6 +24655,7 @@ lin unobserved_A = mkA "未观察" ;
 lin unobtrusive_A = mkA "不唐突" ;
 lin unoccupied_A = mkA "空闲" ;
 lin unofficial_A = mkA "非官方" ;
+lin unofficially_Adv = adjAdv unofficial_A ; -- derived -- derived
 lin unorthodox_A = mkA "非正统" ;
 lin unpack_V = mkV "拆開" | mkV "拆开" | mkV "解開" | mkV "解开" ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
 lin unpack_V2 = mkV2 (mkV "拆開") | mkV2 (mkV "拆开") | mkV2 (mkV "解開") | mkV2 (mkV "解开") ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
@@ -24574,6 +24730,7 @@ lin unsteady_A = mkA "不稳定" ;
 lin unstoppable_A = mkA "不可阻挡" ;
 lin unstressed_A = mkA "轻" ;
 lin unsuccessful_A = mkA "不成功" ;
+lin unsuccessfully_Adv = adjAdv unsuccessful_A ; -- derived -- derived
 lin unsupported_A = mkA "不受支持" ;
 lin unsure_A = mkA "不确定" ;
 lin unsurpassed_A = mkA "无与伦比" ;
@@ -24602,7 +24759,7 @@ lin untrustworthy_A = mkA "靠不住" ;
 lin ununtrium_N = mkN "元素113" ; -- status=guess
 lin unused_A = mkA "不用" ;
 lin unusual_A = mkA "不同寻常" | {-HSK-} mkA "特别" | mkA "特殊" | mkA "非常" ;
-lin unusually_Adv = variants {} ;
+lin unusually_Adv = adjAdv unusual_A ; -- derived
 lin unvarying_A = mkA "不变" ;
 lin unveil_V = mkV "揭幕" ;
 lin unveil_V2 = mkV2 "揭幕" ;
@@ -24650,7 +24807,7 @@ lin upright_N = mkN "垂直""" | {-HSK-} mkN "方" | mkN "正" ;
 lin uprising_N = mkN "起义" "场" ;
 lin uproar_N = mkN "骚动" "阵" ;
 lin uproot_V2 = mkV2 "连根拔起" ;
-lin upset_A = variants {} | {-HSK-} mkA "烦恼" ;
+lin upset_A = {-HSK-} mkA "烦恼" ;
 lin upset_N = mkN "烦恼" | {-HSK-} mkN "翻倒" ;
 lin upset_V = mkV "刺激" | {-HSK-} mkV "打乱" ;
 lin upset_V2 = mkV2 "刺激" | {-HSK-} mkV2 "打乱" ;
@@ -24684,7 +24841,7 @@ lin urge_V2V = mkV2V "促使" | mkV2V "催" | mkV2V "劝" | {-HSK-} mkV2V "敦�
 lin urge_VS = mkVS "促使" | mkVS "催" | mkVS "劝" | {-HSK-} mkVS "敦促" ;
 lin urgency_N = mkN "紧急事件" "件" ;
 lin urgent_A = mkA "紧" | mkA "紧急" | mkA "迫切" ;
-lin urgently_Adv = variants {} ;
+lin urgently_Adv = adjAdv urgent_A ; -- derived
 lin urging_N = mkN "催促" ;
 lin urinal_N = mkN "便池" | mkN "便器" ; -- status=guess -- status=guess
 lin urinary_A = mkA "尿" ;
@@ -24712,7 +24869,7 @@ lin ushaw_moor_PN = foreignPN "Ushaw moor" ; -- comment=src=eng status=guess
 lin usher_N = mkN "引座员" ;
 lin usher_V2 = mkV2 "作招待员" ;
 lin usual_A = mkA "通常" ;
-lin usually_Adv = mkAdv "不同寻常" mannerAdvType | {-HSK-} mkAdv "平常" ;
+lin usually_Adv = mkAdv "不同寻常" mannerAdvType | {-HSK-} mkAdv "平常" | adjAdv usual_A ; -- derived
 lin usurer_N = mkN "高利貸" | mkN "高利贷" ; -- status=guess -- status=guess
 lin usurp_V2 = mkV2 "篡夺" ;
 lin usurpation_N = mkN "篡夺" ;
@@ -24732,7 +24889,7 @@ lin utrecht_PN = foreignPN "Utrecht" ; -- comment=src=geonames status=guess
 lin utter_A = mkA "绝对" ;
 lin utter_V2 = mkV2 "发出" ;
 lin utterance_N = mkN "发言" "個" | {-HSK-} mkN "表达" ;
-lin utterly_Adv = variants {} | {-HSK-} mkAdv "十分" | mkAdv "烂" ;
+lin utterly_Adv = {-HSK-} mkAdv "十分" | mkAdv "烂" | adjAdv utter_A ; -- derived
 lin uttoxeter_PN = foreignPN "Uttoxeter" ; -- comment=src=geonames status=guess
 lin uvula_N = mkN "懸雍垂" | mkN "悬雍垂" | mkN "小舌" | mkN "小舌兒" | mkN "小舌儿" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin vacancy_N = mkN "空缺" ;
@@ -24755,7 +24912,7 @@ lin vaginismus_N = mkN "陰道痙攣" | mkN "阴道痉挛" ; -- status=guess -- 
 lin vagrant_A = mkA "游民" ;
 lin vagrant_N = mkN "遊民" | mkN "游民" | mkN "流浪漢" | mkN "流浪汉" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin vague_A = mkA "模糊" ;
-lin vaguely_Adv = variants {} ;
+lin vaguely_Adv = adjAdv vague_A ; -- derived
 lin vain_A = mkA "徒劳" ;
 lin valencia_PN = mkPN "巴倫西亞" ; -- comment=src=geonames status=guess
 lin valenciennes_PN = mkPN "瓦朗謝訥" ; -- comment=src=geonames status=guess
@@ -24801,6 +24958,7 @@ lin variety_1_N = variants {} ;
 lin variety_2_N = variants {} ;
 lin variety_N = mkN "变种" ;
 lin various_A = mkA "各种" ;
+lin variously_Adv = adjAdv various_A ; -- derived -- derived
 lin varnish_N = mkN "清漆" ; -- status=guess
 lin varnish_V2 = mkV2 (mkV "塗漆") | mkV2 (mkV "涂漆") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin vary_V = mkV "变化" ;
@@ -24812,6 +24970,7 @@ lin vaseline_N = mkN "凡士林" ; -- status=guess
 lin vassal_N = mkN "封臣" ;
 lin vast_A = mkA "广大" ;
 lin vasteras_PN = foreignPN "Vasteras" ; -- comment=src=eng status=guess
+lin vastly_Adv = adjAdv vast_A ; -- derived -- derived
 lin vat_N = variants {} ;
 lin vaudeville_N = mkN "杂耍" ;
 lin vault_N = mkN "拱顶" ;
@@ -24879,7 +25038,7 @@ lin verge_V = mkV "接近" ;
 lin verifiable_A = mkA "可验证" ;
 lin verification_N = mkN "查证" ;
 lin verify_V2 = mkV2 "核实" | {-HSK-} mkV2 "确认" ;
-lin verily_Adv = mkAdv "实在" ;
+lin verily_Adv = mkAdv "实在" | adjAdv very_A ; -- derived -- derived
 lin veritable_A = mkA "真正" ;
 lin vermicelli_N = mkN "米粉" | mkN "掛麵" | mkN "挂面" | mkN "麵條" | mkN "面条" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin vermilion_A = mkA "朱" ; -- status=guess
@@ -24900,10 +25059,11 @@ lin vertebra_N = mkN "椎骨" | mkN "脊椎" ; -- status=guess -- status=guess
 lin vertex_N = mkN "頭頂" | mkN "头頂" ; -- status=guess -- status=guess
 lin vertical_A = mkA "垂直" | {-HSK-} mkA "直" ; -- comment="直立的" ;
 lin vertical_N = mkN "直" ;
+lin vertically_Adv = adjAdv vertical_A ; -- derived -- derived
 lin vertiginous_A = mkA "暈眩的" ; -- status=guess
 lin vertigo_N = mkN "頭暈" | mkN "头晕" | mkN "眩暈" | mkN "眩晕" | mkN "頭昏" | mkN "头昏" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin verve_N = mkN "气魄" ;
-lin very_A = variants {} | {-HSK-} mkA "十分" | mkA "太" | mkA "好" | mkA "很" | mkA "挺" | mkA "老" | mkA "非常" ;
+lin very_A = {-HSK-} mkA "十分" | mkA "太" | mkA "好" | mkA "很" | mkA "挺" | mkA "老" | mkA "非常" ;
 lin very_AdA = S.very_AdA ;
 lin vessel_N = mkN "容器" | {-HSK-} mkN "船" "條" ;
 lin vest_N = mkN "背心" ;
@@ -24971,7 +25131,7 @@ lin vigilante_N = mkN "義務警員" | mkN "义务警员" | mkN "治安會會員
 lin vignette_N = mkN "小插图" "份" ;
 lin vigo_PN = foreignPN "Vigo" ; -- comment=src=geonames status=guess
 lin vigorous_A = mkA "充满活力" | {-HSK-} mkA "活跃" | mkA "积极" ;
-lin vigorously_Adv = mkAdv "起勁" | mkAdv "起劲" ; -- status=guess -- status=guess
+lin vigorously_Adv = mkAdv "起勁" | mkAdv "起劲" | adjAdv vigorous_A ; -- status=guess -- status=guess -- derived -- derived
 lin vigour_N = mkN "精力，生命力" ; -- status=guess
 lin vile_A = mkA "卑鄙" | {-HSK-} mkA "恶劣" ; -- status=guess
 lin vilify_V2 = mkV2 (mkV "詆毀") | mkV2 (mkV "诋毁") | mkV2 (mkV "醜化") | mkV2 (mkV "丑化") ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
@@ -24994,6 +25154,7 @@ lin violate_V2 = mkV2 "违反" ;
 lin violation_N = mkN "违反" ;
 lin violence_N = mkN "暴力" "起" ;
 lin violent_A = mkA "厉害" | {-HSK-} mkA "暴力" ;
+lin violently_Adv = adjAdv violent_A ; -- derived -- derived
 lin violet_N = mkN "紫" | {-HSK-} mkN "紫色" [] ;
 lin violet_PN = foreignPN "Violet" ; -- comment=src=geonames status=guess
 lin violin_N = mkN "小提琴" "把" ;
@@ -25011,7 +25172,7 @@ lin virgo_PN = foreignPN "Virgo" ; -- comment=src=eng status=guess
 lin virility_N = mkN "男子气" ;
 lin virion_N = mkN "病毒体" ; -- status=guess
 lin virtual_A = mkA "虚拟" ;
-lin virtually_Adv = variants {} ;
+lin virtually_Adv = adjAdv virtual_A ; -- derived
 lin virtue_N = mkN "美德" | {-HSK-} mkN "道德" "種" ;
 lin virtuosity_N = mkN "精湛技艺" ;
 lin virtuoso_N = mkN "演奏家" ;
@@ -25027,6 +25188,7 @@ lin viscount_N = mkN "子爵" ; -- status=guess
 lin viscous_A = mkA "粘性" ; -- status=guess
 lin visibility_N = mkN "可见性" ;
 lin visible_A = mkA "可见" ;
+lin visibly_Adv = adjAdv visible_A ; -- derived -- derived
 lin vision_N = mkN "视力" [] ;
 lin visionary_N = mkN "梦想者" ;
 lin visit_N = mkN "访问" ;
@@ -25039,6 +25201,7 @@ lin visual_A = mkA "看" ;
 lin visual_N = mkN "视觉艺术" ; -- status=guess
 lin visualization_N = mkN "可視化" | mkN "可视化" | mkN "視覺化" | mkN "视觉化" | {-HSK-} mkN "形象" "個" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin visualize_V2 = mkV2 "显现" ;
+lin visually_Adv = adjAdv visual_A ; -- derived -- derived
 lin vital_A = mkA "至关重要" | {-HSK-} mkA "要" ;
 lin vitality_N = mkN "活力" "" ;
 lin vitamin_N = mkN "维他命" ;
@@ -25084,7 +25247,7 @@ lin voltage_N = mkN "电压" "伏" ;
 lin voltmeter_N = mkN "電壓表" | mkN "电压表" ; -- status=guess -- status=guess
 lin volume_N = mkN "体积" "個" | {-HSK-} mkN "量" ;
 lin voluminous_A = mkA "多卷" ;
-lin voluntarily_Adv = mkAdv "自动" ;
+lin voluntarily_Adv = mkAdv "自动" | adjAdv voluntary_A ; -- derived -- derived
 lin voluntary_A = mkA "义务" | mkA "自愿" ;
 lin voluntary_N = mkN "义务" "項" | mkN "自愿" ;
 lin volunteerFem_N = mkN "志愿者" ;
@@ -25154,8 +25317,8 @@ lin wait_V = mkV "等待" ;
 lin wait_V2 = L.wait_V2 ;
 lin wait_VV = mkVV "等待" ;
 lin waiter_N = mkN "服务员" "個" | {-HSK-} mkN "服务员" "名" ; -- comment="侍者" ;
-lin waiting_A = variants {} | {-HSK-} mkA "等候" ;
-lin waiting_N = variants {} | {-HSK-} mkN "等候" ;
+lin waiting_A = {-HSK-} mkA "等候" ;
+lin waiting_N = {-HSK-} mkN "等候" ;
 lin waitress_N = mkN "女服务员" "名" | {-HSK-} mkN "服务员" "個" ;
 lin waive_V2 = mkV2 "放弃" ;
 lin waiver_N = mkN "弃权" ;
@@ -25423,6 +25586,8 @@ lin west_Adv = mkAdv "西" | {-HSK-} mkAdv "西方" ;
 lin west_N = mkN "西" | {-HSK-} mkN "西" [] ;
 lin west_bromwich_PN = foreignPN "West bromwich" ; -- comment=src=eng status=guess
 lin westbury_PN = foreignPN "Westbury" ; -- comment=src=geonames status=guess
+lin westerly_A = variants {} ;
+lin westerly_Adv = adjAdv westerly_A ; -- derived -- derived
 lin western_A = mkA "西部" ;
 lin western_N = mkN "西部片" ; -- status=guess
 lin westerner_N = mkN "西方人" | mkN "歐美人" | mkN "欧美人" ; -- status=guess -- status=guess -- status=guess
@@ -25453,7 +25618,7 @@ lin whatSg_IP = S.whatSg_IP ;
 lin whatever_A = mkA "不管什么样" | {-HSK-} mkA "任何" ;
 lin whatever_Det = variants {} ;
 lin whatsoever_A = mkA "任何" | {-HSK-} mkA "什麼...也..." | mkA "什么...也..." | mkA "什麼...都..." | mkA "什么...都..." ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
-lin whatsoever_Adv = variants {} | {-HSK-} mkAdv "任何" ;
+lin whatsoever_Adv = {-HSK-} mkAdv "任何" ;
 lin wheat_N = mkN "小麦" | {-HSK-} mkN "小麦" "粒" ;
 lin wheatley_hill_PN = foreignPN "Wheatley hill" ; -- comment=src=eng status=guess
 lin wheel_N = mkN "车轮" ;
@@ -25561,7 +25726,7 @@ lin wickford_PN = foreignPN "Wickford" ; -- comment=src=geonames status=guess
 lin wicklow_PN = foreignPN "Wicklow" ; -- comment=src=geonames status=guess
 lin wide_A = L.wide_A | {-HSK-} mkA "大" | mkA "宽" ;
 lin wide_Adv = mkAdv "大" | mkAdv "宽" | {-HSK-} mkAdv "广泛" ;
-lin widely_Adv = variants {} ;
+lin widely_Adv = adjAdv wide_A ; -- derived
 lin widen_V2 = mkV2 "扩大" ;
 lin widespread_A = mkA "广大" | mkA "普遍" | {-HSK-} mkA "广泛" ;
 lin widnes_PN = mkPN "威德尼斯" ; -- comment=src=geonames status=guess
@@ -25587,7 +25752,7 @@ lin wildcat_N = mkN "斑貓" | mkN "斑猫" | mkN "野貓" | mkN "野猫" | mkN 
 lin wilderness_N = mkN "荒地" ;
 lin wildfire_N = mkN "山火" | mkN "野火" | mkN "林火" | mkN "森林大火" | mkN "森林火災" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin wildlife_N = mkN "野生动物" "只" ;
-lin wildly_Adv = variants {} ;
+lin wildly_Adv = adjAdv wild_A ; -- derived
 lin wilf_PN = foreignPN "Wilf" ; -- comment=src=eng status=guess
 lin wilfrid_PN = foreignPN "Wilfrid" ; -- comment=src=eng status=guess
 lin wilhelmshaven_PN = mkPN "威廉港" ; -- comment=src=geonames status=guess
@@ -25599,7 +25764,7 @@ lin willful_A = mkA "有意" ;
 lin william_PN = foreignPN "William" ; -- comment=src=eng status=guess
 lin willie_PN = foreignPN "Willie" ; -- comment=src=eng status=guess
 lin willing_A = mkA "乐意" ;
-lin willingly_Adv = mkAdv "樂意" | mkAdv "乐意" ; -- status=guess -- status=guess
+lin willingly_Adv = mkAdv "樂意" | mkAdv "乐意" | adjAdv willing_A ; -- status=guess -- status=guess -- derived -- derived
 lin willingness_N = mkN "愿意" ;
 lin willington_PN = foreignPN "Willington" ; -- comment=src=geonames status=guess
 lin willow_N = mkN "柳" ;
@@ -25686,7 +25851,7 @@ lin wither_V = mkV "枯萎" | {-HSK-} mkV "零" ;
 lin wither_V2 = mkV2 "零" | {-HSK-} mkV2 (mkV "枯萎") ; -- status=guess, src=wikt
 lin withernsea_PN = foreignPN "Withernsea" ; -- comment=src=geonames status=guess
 lin withhold_V2 = mkV2 "保留" ;
-lin within_Adv = variants {} | {-HSK-} mkAdv "内" ; -- comment=mkPrep "在" "内部" ;
+lin within_Adv = {-HSK-} mkAdv "内" ; -- comment=mkPrep "在" "内部" ;
 lin within_Prep = mkPrep "在" "内部" ;
 lin without_Prep = S.without_Prep ;
 lin withstand_V2 = mkV2 "经受" ;
@@ -25777,13 +25942,15 @@ lin worldwide_Adv = variants {} ;
 lin worm_N = L.worm_N ;
 lin wormhole_N = mkN "蟲洞" | mkN "虫洞" ; -- status=guess -- status=guess
 lin wormwood_N = mkN "苦艾" | mkN "中亞苦蒿" | mkN "中亚苦蒿" ; -- status=guess -- status=guess -- status=guess
-lin worried_A = variants {} | {-HSK-} mkA "不安" | mkA "担心" ;
+lin worried_A = {-HSK-} mkA "不安" | mkA "担心" ;
+lin worriedly_Adv = adjAdv worried_A ; -- derived -- derived
 lin worrisome_A = mkA "令人担忧" ;
 lin worry_N = mkN "担心" ;
 lin worry_V = mkV "发愁" | mkV "担心" | mkV "着急" ;
 lin worry_V2 = mkV2 "发愁" | mkV2 "担心" | mkV2 "着急" ;
 lin worry_VS = mkVS "发愁" | mkVS "担心" | mkVS "着急" ;
 lin worrying_A = variants {} ;
+lin worryingly_Adv = adjAdv worrying_A ; -- derived -- derived
 lin worse_A = mkA "更壞" | mkA "更坏" | mkA "更糟" | mkA "比較壞" | mkA "比较坏" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin worse_Adv = variants {} ;
 lin worsen_V = mkV "恶化" ;
@@ -25839,6 +26006,7 @@ lin wrist_N = mkN "腕" ;
 lin wristband_N = mkN "手錶帶" | mkN "手表带" ; -- status=guess -- status=guess
 lin wristwatch_N = mkN "手錶" | mkN "手表" ; -- status=guess -- status=guess
 lin writ_N = mkN "文书" ;
+lin writ_large_A = variants {} ;
 lin write_V = mkV "修" | mkV "做" | mkV "写" ;
 lin write_V2 = L.write_V2 | {-HSK-} mkV2 "修" | mkV2 "做" | mkV2 "写" ;
 lin write_VS = mkVS "修" | mkVS "做" | mkVS "写" ;
@@ -25854,6 +26022,7 @@ lin wrong_N = mkN "坏事" "件" | {-HSK-} mkN "错" "個" | mkN "非" ;
 lin wrong_V2 = mkV2 "委屈" ;
 lin wrongdoing_N = mkN "坏事" "件" ;
 lin wrongful_A = mkA "非法" ;
+lin wrongly_Adv = adjAdv wrong_A ; -- derived
 lin wroughton_PN = foreignPN "Wroughton" ; -- comment=src=geonames status=guess
 lin wuhan_PN = mkPN "武汉" ; -- comment=src=geonames status=guess
 lin wuppertal_PN = mkPN "伍珀塔尔" ; -- comment=src=geonames status=guess
@@ -25899,7 +26068,7 @@ lin yearbook_N = mkN "年鉴" ;
 lin yearling_N = mkN "一周岁" ;
 lin yearlong_A = mkA "为期一年" ;
 lin yearly_A = mkA "每年" ;
-lin yearly_Adv = mkAdv "每年" ;
+lin yearly_Adv = mkAdv "每年" | adjAdv yearly_A ; -- derived
 lin yearn_V = mkV "想念" | mkV "思念" | mkV "盼念" ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
 lin yearning_N = mkN "渴望" ;
 lin yeast_N = mkN "酵母" [] ;
