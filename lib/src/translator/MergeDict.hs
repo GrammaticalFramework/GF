@@ -35,24 +35,24 @@ mergeDict old new comm file = do
   olds1 <- readFile old >>= return . lines
   news1 <- readFile new >>= return . lines
   let (preamble,olds2) = break ((== ["lin"]) . take 1 . words) olds1
-  let olds = [mkRule (w:ws) | w:ws <- map words olds2, w == "lin"]
-  let news = [mkRule (w:ws) | w:ws <- map words news1, w == "lin"]
-  let lins = sort $ [(f,0) | f <- olds] ++ [(f,1) | f <- news]
-  let linss = groupBy (\x y -> (fun (fst x)) == (fun (fst y))) lins
+  let olds = [mkRule 0 (w:ws) | w:ws <- map words olds2, w == "lin"]
+  let news = [mkRule 1 (w:ws) | w:ws <- map words news1, w == "lin"]
+  let lins = sort $ olds ++ news
+  let linss = groupBy (\x y -> (fun x) == (fun y)) lins
   let lins2 = map (mergeRule comm) linss
   writeFile file $ unlines preamble
   appendFile file $ unlines $ map prRule lins2
   appendFile file "}"
 
-data Rule = R {fun :: String, lins :: [[String]], comment :: [String]} -- fun, variants, comment
+data Rule = R {fun :: String, priority :: Int, lins :: [[String]], comment :: [String]} -- fun, variants, comment
   deriving (Eq,Ord)
 
-mkRule :: [String] -> Rule
-mkRule ws = case ws of
-  "lin":f:"=":ww -> rule f (getLin ww)
+mkRule :: Int -> [String] -> Rule
+mkRule i ws = case ws of
+  "lin":f:"=":ww -> rule f i (getLin ww)
   _ -> error $ "not a valid rule: " ++ unwords ws
  where
-   rule f (l,c) = R f l c
+   rule f i (l,c) = R f i l c
    getLin ws = case break isComment ws of
      (ls,cc) -> (getVariants (init ls), cc)
    getVariants ws = case break (=="|") ws of
@@ -62,10 +62,10 @@ mkRule ws = case ws of
    isEmpty v = elem v [["variants{}"],["variants","{}"]]
    isComment = (=="--") . take 2
 
-mergeRule :: Maybe String -> [(Rule,Int)] -> Rule
+mergeRule :: Maybe String -> [Rule] -> Rule
 mergeRule mco rs = case rs of
-  [(r,_)] -> r
-  [(old,_),(new,_)] -> R (fun old) (mergeLin (lins old) (lins new)) (comment old ++ comment new)
+  [r] -> r
+  [old,new] -> R (fun old) 0 (mergeLin (lins old) (lins new)) (comment old ++ comment new)
  where
    mergeLin old new = olds ++ case filter (flip notElem old) new of
      l:ls -> case mco of 
@@ -74,7 +74,7 @@ mergeRule mco rs = case rs of
      _ -> []
     where
      olds = case old of
-       [[]] -> [["variants","{}"]]
+----       [[]] -> [["variants","{}"]]
        _ -> old
 
 prRule :: Rule -> String
@@ -83,5 +83,5 @@ prRule ru = unwords $ "lin" : fun ru : "=" : variants ru ++ [";"] ++ comment ru
 variants :: Rule -> [String]
 variants ru = case lins ru of
   [[]] -> ["variants","{}"] 
-  ls -> intersperse "|" (map unwords ls)
+  ls -> intersperse "|" (map unwords (filter (not . null) ls))
 
