@@ -47,6 +47,7 @@ pgf_reader_done(PgfReader* rdr, PgfPGF* pgf);
 
 
 // JIT specific interface
+#ifdef PGF_EVALUATOR_H_
 
 typedef struct PgfJitState PgfJitState;
 
@@ -67,5 +68,5 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 void
 pgf_jit_done(PgfReader* state, PgfAbstr* abstr);
 
-
+#endif
 #endif // READER_H_
