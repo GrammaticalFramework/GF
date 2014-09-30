@@ -117,15 +117,15 @@ repeat:;
 				PgfExprThunk* lambda = gu_new(PgfExprThunk, state->pool);
 				lambda->header.code = state->eval_gates->evaluate_value_lambda;
 				lambda->env = NULL;
-				res = lambda;
+				res = &lambda->header;
 
 				if (n_args > 0) {
 					PgfValuePAP* val = gu_new_flex(state->pool, PgfValuePAP, args, n_args);
 					val->header.code = state->eval_gates->evaluate_value_pap;
 					val->fun = &lambda->header;
-					size_t i = 0;
-					while (i < n_args) {
-						val->args[i++] = args[--n_args];
+					val->n_args = n_args*sizeof(PgfClosure*);
+					for (size_t i = 0; i < n_args; i++) {
+						val->args[i] = args[i];
 					}
 					res = &val->header;
 				}
