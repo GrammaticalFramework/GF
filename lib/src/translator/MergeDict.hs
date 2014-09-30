@@ -45,7 +45,7 @@ mergeDict old new comm file = do
   appendFile file "}"
 
 data Rule = R {fun :: String, priority :: Int, lins :: [[String]], comment :: [String]} -- fun, variants, comment
-  deriving (Eq,Ord)
+  deriving (Eq,Ord,Show)
 
 mkRule :: Int -> [String] -> Rule
 mkRule i ws = case ws of
@@ -66,6 +66,7 @@ mergeRule :: Maybe String -> [Rule] -> Rule
 mergeRule mco rs = case rs of
   [r] -> r
   [old,new] -> R (fun old) 0 (mergeLin (lins old) (lins new)) (comment old ++ comment new)
+  _ -> error $ show rs
  where
    mergeLin old new = olds ++ case filter (flip notElem old) new of
      l:ls -> case mco of 
