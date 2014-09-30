@@ -1114,6 +1114,7 @@ pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec,
 		PgfPrintContext* c = ctxt;
 		while (c != NULL && var > 0) {
 			c = ctxt->next;
+			var--;
 		}
 		
 		if (c == NULL) {
