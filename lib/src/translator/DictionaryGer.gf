@@ -25926,7 +25926,7 @@ lin harbour_V2 = variants {} ;
 lin harbourage_N = variants {} ;
 lin hard_1_A = mkA "hart" "härter" "härteste" ;
 lin hard_2_A = mkA "schwer" ;
-lin hard_Adv = mkAdv "schwer" ;
+lin hardly_AdV = mkAdV "kaum" | mkAdV "schwer" ;
 lin hard_baked_A = variants {} ;
 lin hard_bitten_A = variants {} ;
 lin hard_boiled_A = variants {} ;
@@ -25950,7 +25950,6 @@ lin hardihood_N = variants {} ;
 lin hardiness_N = variants {} ;
 lin hardinggrass_N = variants {} ;
 lin hardliner_N = variants {} ;
-lin hardly_Adv = mkAdv "kaum" | adjAdv hard_2_A ; -- derived
 lin hardness_N = mkN "Härte" feminine ; -- status=guess
 lin hardscrabble_A = variants {} ;
 lin hardship_N = mkN "Härte" feminine | mkN "Not" "Nöte" feminine ; -- status=guess status=guess

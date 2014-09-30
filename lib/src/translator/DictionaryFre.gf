@@ -9923,13 +9923,11 @@ lin harbin_PN = mkPN "Harbin" ; -- status=guess src=geonames
 lin harbinger_N = mkN "présage" masculine ; -- tocheck
 lin harbour_N = L.harbour_N ;
 lin harbour_V2 = mkV2 (mkV "abriter") ; -- tocheck
-lin hard_1_A = variants {} ; --
-lin hard_2_A = variants {} ; --
-lin hard_A = mkA "dur" | mkA "fort" | mkA "dure" | mkA "irréfutable" ; -- tocheck
-lin hard_Adv = variants {} ; --
+lin hard_1_A = mkA "dur" | mkA "fort" | mkA "dure" | mkA "irréfutable" ; -- tocheck
+lin hard_2_A = mkA "dur" | mkA "fort" | mkA "dure" | mkA "irréfutable" ; -- tocheck
+lin hardly_AdV = adjAdv hard_2_A; -- derived
 lin hardboard_N = mkN "aggloméré" ; -- tocheck
 lin harden_V2 = mkV2 (mkV "durcir") | mkV2 (mkV "endurcir") ; -- tocheck
-lin hardly_Adv = adjAdv hard_2_A ; -- -- derived
 lin hardness_N = mkN "dureté" feminine ; -- tocheck
 lin hardship_N = mkN "difficultés" ; -- tocheck
 lin hardware_N = mkN "matériel" masculine ; -- tocheck

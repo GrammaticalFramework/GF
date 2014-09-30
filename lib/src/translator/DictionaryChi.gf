@@ -10409,17 +10409,15 @@ lin harassment_N = mkN "骚扰" "次" ;
 lin harbin_PN = foreignPN "Ha’erbin" ; -- comment=src=geonames status=guess
 lin harbinger_N = mkN "先驱" ;
 lin harbour_N = L.harbour_N ;
-lin hard_1_A = variants {} ;
-lin hard_2_A = variants {} ;
-lin hard_A = mkA "困难" ;
-lin hard_Adv = mkAdv "硬" | {-HSK-} mkAdv "艰苦" | mkAdv "辛苦" ; -- comment=NOT SURE "硬" or "困难"
+lin hard_1_A = mkA "困难";
+lin hard_2_A = mkA "困难";
+lin hardly_AdV = mkAdV "硬" | {-HSK-} mkAdV "艰苦" | mkAdV "辛苦" ; -- comment=NOT SURE "硬" or "困难"
 lin hard_bitten_A = mkA "强硬" ;
 lin hard_boiled_A = mkA "煮过熟了" | mkA "不动感情" ;
 lin hardbound_A = mkA "精装" ;
 lin hardcover_N = mkN "精装" ;
 lin harden_V2 = mkV2 "变硬" ;
 lin hardliner_N = mkN "强硬路线" ;
-lin hardly_Adv = adjAdv hard_2_A ; -- derived
 lin hardship_N = mkN "困苦" "" | {-HSK-} mkN "苦" ;
 lin hardware_N = mkN "硬件" ;
 lin hardwood_N = mkN "硬木" ;

@@ -8756,12 +8756,10 @@ lin harbinger_N = mkN "voorbode" masculine ; -- status=guess
 lin harbour_N = L.harbour_N ;
 lin hard_1_A = mkA "hard" ;
 lin hard_2_A = mkA "lastig" ;
-lin hard_A = hard_1_A | hard_2_A ;
-lin hard_Adv = mkAdv "hard" | mkAdv "lastig" ;
+lin hardly_AdV = mkAdV "hard" | mkAdV "lastig" ;
 lin harden_V = mkV (mkV "hard") "worden" | mkV "verharden" | mkV "verstijven" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin harden_V2 = mkV2 (mkV (mkV "hard") "worden") | mkV2 (mkV "verharden") | mkV2 (mkV "verstijven") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin hardheaded_A = mkA "pragmatisch" ; -- status=guess
-lin hardly_Adv = mkAdv "nauwelijks" | adjAdv hard_2_A ; -- derived
 lin hardness_N = mkN "hardheid" feminine ; -- status=guess
 lin hardship_N = mkN "ellende" feminine ; -- status=guess
 lin hardware_N = mkN "ijzerwinkel" masculine | mkN "ijzerwarenwinkel" masculine ; -- status=guess status=guess

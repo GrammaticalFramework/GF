@@ -8565,10 +8565,8 @@ lin harass_V2 = mkV2 (mkV "molestare") | mkV2 (mkV "vessare") | mkV2 (mkV "torme
 lin harbin_PN = mkPN "Harbin" ; -- status=guess src=geonames
 lin harbinger_N = mkN "messaggero" | mkN "araldo" ;
 lin harbour_N = L.harbour_N ;
-lin hard_1_A = variants {} ; --
-lin hard_2_A = variants {} ; --
-lin hard_A = mkA "sodo" | mkA "sode" ; -- status=guess status=guess
-lin hard_Adv = variants {} ; --
+lin hard_1_A = mkA "sodo" | mkA "sode"; --
+lin hard_2_A = mkA "sodo" | mkA "sode"; --
 lin hardly_Adv = adjAdv hard_2_A ; -- -- derived
 lin hardness_N = mkN "durezza" ; -- status=guess
 lin hardship_N = mkN "avversità" feminine | mkN "difficoltà" feminine ; -- status=guess status=guess
