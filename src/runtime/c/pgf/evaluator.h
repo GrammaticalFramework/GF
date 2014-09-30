@@ -86,6 +86,10 @@ struct PgfEvalGates {
 };
 
 PgfClosure*
-pgf_evaluate_expr_thunk(PgfEvalState* state, PgfClosure* closure);
+pgf_evaluate_expr_thunk(PgfEvalState* state, PgfExprThunk* thunk);
+
+PgfClosure*
+pgf_evaluate_lambda_application(PgfEvalState* state, PgfExprThunk* lambda,
+                                                     PgfClosure* arg);
 
 #endif

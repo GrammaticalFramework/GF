@@ -6,9 +6,8 @@
 #define PGF_ARGS_DELTA 5
 
 PgfClosure*
-pgf_evaluate_expr_thunk(PgfEvalState* state, PgfClosure* closure)
+pgf_evaluate_expr_thunk(PgfEvalState* state, PgfExprThunk* thunk)
 {
-	PgfExprThunk* thunk = (PgfExprThunk*) closure;
 	PgfEnv* env  = thunk->env;
 	PgfExpr expr = thunk->expr;
 
@@ -32,8 +31,8 @@ repeat:;
 			goto repeat;
 		} else {
 			thunk->header.code = state->eval_gates->evaluate_value_lambda;
-			thunk->expr = eabs->body;
-			res = closure;
+			thunk->expr = expr;
+			res = &thunk->header;
 		}
 		break;
 	}
@@ -55,7 +54,7 @@ repeat:;
 	}
 	case PGF_EXPR_LIT: {
 		PgfExprLit* elit = ei.data;
-		PgfValueLit* val = (PgfValueLit*) closure;
+		PgfValueLit* val = (PgfValueLit*) thunk;
 		val->header.code = state->eval_gates->evaluate_value_lit;
 		val->lit = elit->lit;
 		res = &val->header;
@@ -73,7 +72,7 @@ repeat:;
 			val->args[i] = args[n_args-i-1];
 		}
 
-		PgfIndirection* indir = (PgfIndirection*) closure;
+		PgfIndirection* indir = (PgfIndirection*) thunk;
 		indir->header.code = state->eval_gates->evaluate_indirection;
 		indir->val         = &val->header;
 
@@ -120,7 +119,7 @@ repeat:;
 				res = &val->header;
 			}
 
-			PgfIndirection* indir = (PgfIndirection*) closure;
+			PgfIndirection* indir = (PgfIndirection*) thunk;
 			indir->header.code = state->eval_gates->evaluate_indirection;
 			indir->val = res;
 		}
@@ -144,7 +143,7 @@ repeat:;
 
 		res = tmp_env->closure;
 
-		PgfIndirection* indir = (PgfIndirection*) closure;
+		PgfIndirection* indir = (PgfIndirection*) thunk;
 		indir->header.code = state->eval_gates->evaluate_indirection;
 		indir->val         = res;
 
@@ -176,6 +175,21 @@ repeat:;
 
 	free(args);
 	return res;
+}
+
+PgfClosure*
+pgf_evaluate_lambda_application(PgfEvalState* state, PgfExprThunk* lambda,
+                                                     PgfClosure* arg)
+{
+	PgfEnv* new_env = gu_new(PgfEnv, state->pool);
+	new_env->next    = lambda->env;
+	new_env->closure = arg;
+
+	PgfExprThunk* thunk = gu_new(PgfExprThunk, state->pool);
+	thunk->header.code = state->eval_gates->evaluate_expr_thunk;
+	thunk->env         = new_env;
+	thunk->expr        = ((PgfExprAbs*) gu_variant_data(lambda->expr))->body;
+	return pgf_evaluate_expr_thunk(state, thunk);
 }
 
 static PgfExpr
@@ -268,7 +282,7 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 		args   = pap->args;
 	} else if (clos->code == state->eval_gates->evaluate_value_lambda) {
 		PgfExprThunk *old_thunk = (PgfExprThunk*) clos;
-		PgfExprAbs *old_eabs = gu_variant_open(old_thunk->expr).data;
+		PgfExprAbs *old_eabs = gu_variant_data(old_thunk->expr);
 
 		PgfValueGen* gen =
 			gu_new(PgfValueGen, state->pool);
