@@ -19176,7 +19176,6 @@ lin settler_N = mkN "colon" masculine ; -- tocheck
 lin settling_N = mkN "sédimentation" feminine ; -- tocheck
 lin sevenoaks_PN = mkPN "Sevenoaks" ; -- status=guess src=geonames
 lin sever_V2 = mkV2 (mkV I.rompre_V2) ; -- tocheck
-lin several_A = variants {} ;
 lin several_Det = mkDet "plusieurs" "plusieurs" plural ;
 lin severally_Adv = adjAdv several_A ; -- derived
 lin severe_A = mkA "sévère" ; -- tocheck

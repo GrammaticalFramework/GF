@@ -30946,7 +30946,6 @@ lin manure_V2 = mkWV2 (k53A "levittää") "lantaa" ; --UNCHK
 lin manuscript_N = mkWN (compoundN "käsi" (k39 "kirjoitus")) ; --UNCHK
 lin manx_A = mkWA (compoundA "man" (k38 "saarelainen")) ; --UNCHK
 lin manx_N = mkWN (compoundN "mansaaren" (k9 "kissa")) ; --UNCHK
-lin many_A = mkWA (k99 "monta") ; --UNCHK
 lin many_Det = S.many_Det ;
 lin manzanita_N = mkWN "Arbutus" "menziesii" ; --UNCHK
 lin maoism_N = mkWN (k40 "maolaisuus") ; --UNCHK
@@ -46335,7 +46334,6 @@ lin sevenfold_Adv = mkWAdv "seitsenkertaisesti" ; --UNCHK
 lin sevenoaks_PN = foreignPN "Sevenoaks" ;
 lin sever_V = mkWV (k53A "irrottaa") ; --UNCHK
 lin sever_V2 = mkWV2 (k53A "irrottaa") ; --UNCHK
-lin several_A = variants {} ;
 lin several_Det = mkDet Pl (mkN "usea") ;
 lin several_Num = {s = \\n,c => (snoun2nounBind (mkN "usea")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect
 lin severally_Adv = mkWAdv (k99 "eri") | adjAdv several_A ; --UNCHK -- derived

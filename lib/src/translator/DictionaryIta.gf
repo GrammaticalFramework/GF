@@ -16393,9 +16393,8 @@ lin settle_V2 = mkV2 (mkV "calmarsi") ; -- status=guess, src=wikt
 lin settlement_N = mkN "insediamento" ; -- status=guess
 lin settler_N = mkN "digestivo" ; -- status=guess
 lin sevenoaks_PN = mkPN "Sevenoaks" ; -- status=guess src=geonames
-lin several_A = variants {} ;
 lin several_Det = variants {} ; --
-lin severally_Adv = adjAdv several_A ; -- derived
+lin severally_Adv = variants {};
 lin severe_A = mkA "duro" | mkA "severo" | mkA "rigido" ; -- status=guess status=guess status=guess
 lin severely_Adv = adjAdv severe_A ; -- -- derived
 lin severity_N = mkN "severità" feminine ; -- status=guess

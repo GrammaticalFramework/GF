@@ -34471,7 +34471,6 @@ lin manure_V2 = mkV2 (mkV "düngen") ; -- status=guess, src=wikt
 lin manuscript_N = mkN "Manuskript" "Manuskripte" neuter | mkN "Handschrift" "Handschriften" feminine | mkN "Kodex" masculine ; -- status=guess status=guess status=guess
 lin manx_A = variants {} ;
 lin manx_N = variants {} ;
-lin many_A = variants {} ;
 lin many_Det = S.many_Det ;
 lin many_sided_A = variants {} ;
 lin manzanita_N = variants {} ;
@@ -51459,7 +51458,6 @@ lin sevenfold_Adv = mkAdv "siebenfach" ; -- status=guess
 lin sevenoaks_PN = mkPN "Sevenoaks" ; -- src=geonames status=guess
 lin sever_V = prefixV "ab" (regV "trennen") ; -- status=guess, src=wikt
 lin sever_V2 = mkV2 (prefixV "ab" (regV "trennen")) ; -- status=guess, src=wikt
-lin several_A = variants {} ;
 lin several_Det = M.detLikeAdj False M.Pl "mehrer" ;
 lin several_Num = variants {} ;
 lin severally_Adv = adjAdv several_A ; -- derived

@@ -19466,9 +19466,8 @@ lin settling_N = mkN "decantación" feminine | mkN "concho" ; -- status=guess st
 lin sevenoaks_PN = mkPN "Sevenoaks" ; -- status=guess src=geonames
 lin sever_V = mkV "cortar" | romper_V ; -- status=guess, src=wikt status=guess, src=wikt
 lin sever_V2 = mkV2 (mkV "cortar") | mkV2 (romper_V) ; -- status=guess, src=wikt status=guess, src=wikt
-lin several_A = variants {} ;
 lin several_Det = mkDeterminer "varios" "varias" Pl False ;
-lin severally_Adv = adjAdv several_A ; -- derived
+lin severally_Adv = variants {};
 lin severe_A = mkA "severo" | mkA "austero" ; -- status=guess
 lin severely_Adv = adjAdv severe_A ; -- -- derived
 lin severity_N = mkN "seriedad" | mkN "severidad" feminine ; -- status=guess status=guess

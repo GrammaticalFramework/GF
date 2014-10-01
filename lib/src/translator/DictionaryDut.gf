@@ -17089,7 +17089,6 @@ lin seven_sisters_PN = mkPN "Seven sisters" ; -- src=eng status=guess
 lin sevenoaks_PN = mkPN "Sevenoaks" ; -- src=geonames status=guess
 lin sever_V = mkV "lossnijden" ; -- status=guess, src=wikt
 lin sever_V2 = mkV2 (mkV "lossnijden") ; -- status=guess, src=wikt
-lin several_A = variants {} ;
 lin several_Det = mkDet "verscheidene" | mkDet "divers" ;
 lin severally_Adv = adjAdv several_A ; -- derived
 lin severance_N = mkN "scheiding" feminine | mkN "lossnijden" | mkN "los zijn" ; -- status=guess status=guess status=guess

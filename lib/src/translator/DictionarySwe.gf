@@ -34321,7 +34321,6 @@ lin manure_V2 = mkV2 (mkV "gödsla") ; -- status=guess, src=wikt
 lin manuscript_N = mkN "manuskript" neutrum | mkN "manuskript" neutrum ; -- SaldoWN -- comment=2
 lin manx_A = variants {} ; -- status=guess
 lin manx_N = variants {} ; -- status=guess
-lin many_A = variants {} ; -- status=guess
 lin many_Det = S.many_Det | M.mkDet "mången" "månget" singular ;
 lin many_sided_A = variants {} ; -- status=guess
 lin manzanita_N = variants {} ; -- status=guess
@@ -51255,10 +51254,9 @@ lin sevenfold_Adv = mkAdv "sjufaldig" | mkAdv "sjufaldigt" ; -- status=guess sta
 lin sevenoaks_PN = mkPN "Sevenoaks" neutrum ; -- src=geonames status=guess
 lin sever_V = mkV "skilja" "skilde" "skilt" ; -- comment=5
 lin sever_V2 = dirV2 (partV (mkV "skilja" "skilde" "skilt") "av") ; -- comment=2
-lin several_A = variants {} ;
 lin several_Det = M.mkDet "flera" plural ;
 lin several_Num = M.mkNum "flera" ; -- status=guess
-lin severally_Adv = adjAdv several_A ; -- status=guess -- derived
+lin severally_Adv = variants {}; -- status=guess -- derived
 lin severalty_N = variants {} ; -- status=guess
 lin severance_N = mkN "avskiljande" ; -- comment=3
 lin severe_A = mkA "sträng" ; -- comment=13

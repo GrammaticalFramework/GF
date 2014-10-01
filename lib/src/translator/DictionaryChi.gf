@@ -13947,7 +13947,6 @@ lin manufacturing_A = variants {} ;
 lin manufacturing_N = variants {} ;
 lin manure_N = mkN "CJKV Characters: 糞" | mkN "粪" | mkN "肥料" | mkN "糞肥" | mkN "粪肥" | mkN "糞" | mkN "粪" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin manuscript_N = mkN "手稿" "份" | {-HSK-} mkN "草" "棵" ;
-lin many_A = mkA "千万" | mkA "多" | mkA "许多" ;
 lin many_Det = S.many_Det | {-HSK-} mkpDet "千万" | mkpDet "多" | mkpDet "许多" ;
 lin map_N = mkN "地图" | {-HSK-} mkN "地图" "張" ;
 lin map_V2 = mkV2 "映射" ;
@@ -20692,7 +20691,6 @@ lin seven_sisters_PN = foreignPN "Seven sisters" ; -- comment=src=eng status=gue
 lin sevenoaks_PN = foreignPN "Sevenoaks" ; -- comment=src=geonames status=guess
 lin sever_V = mkV "断绝" ;
 lin sever_V2 = mkV2 "断开" ;
-lin several_A = mkA "些" | mkA "几" ;
 lin several_Det = mkpDet "些" | mkpDet "几" | {-HSK-} mkpDet "几个" ; -- comment=also several_Num exists
 lin several_Num = mkNum "几个" ;
 lin severally_Adv = adjAdv several_A ; -- derived
