@@ -32691,7 +32691,6 @@ lin manure_V2 = variants {};
 lin manuscript_N = mkN007 "ръкопис" ; ----
 lin manx_A = variants {};
 lin manx_N = variants {};
-lin many_A = variants {};
 lin many_Det = mkDeterminerPl "много";
 lin many_sided_A = mkA079 "многостранен";
 lin manzanita_N = variants {};

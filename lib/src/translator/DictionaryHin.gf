@@ -16127,7 +16127,6 @@ lin manure_V2 = mkV2 (compoundV "खाद" (mkV "डालना")) ; -- tochec
 lin manuscript_N = mkN "हस्तलिपि" ; -- tocheck              
 lin manx_A = mkA "आइल ऑफ़ मैन संबंधी" ; -- tocheck              
 lin manx_N = mkN "मैंक्स" ; -- tocheck              
-lin many_A = mkA "बहुत सारे" ; -- tocheck       
 lin many_Det = mkDet "बहुत" "बहुत" "बहुत" "बहुत" Pl ;
 lin maori_N = mkN "माओरी" ; -- tocheck              
 lin map_N = mkN "मान्चिट्र" ; -- tocheck              
