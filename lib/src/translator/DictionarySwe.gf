@@ -38046,7 +38046,6 @@ lin ninja_N = mkN "ninja" ; -- status=guess
 lin ninjutsu_N = variants {} ; -- status=guess
 lin ninny_N = variants {} ; -- status=guess
 lin ninon_N = variants {} ; -- status=guess
-lin ninth_A = mkA "nionde" ; -- status=guess
 lin ninth_N = mkN "niondel" "niondelen" "niondelar" "niondelarna" ; -- comment=2
 lin niobe_PN = mkPN "Niobe" ; -- src=eng status=guess
 lin niobite_N = variants {} ; -- status=guess

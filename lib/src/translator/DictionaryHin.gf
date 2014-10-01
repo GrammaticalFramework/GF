@@ -17795,7 +17795,6 @@ lin nincompoop_N = mkN "मूर्ख व्यक्ति" ; -- tocheck
 lin ninepin_N = mkN "स्किटल" ; -- tocheck       
 lin ninepins_N = mkN "नाइनपिन्स" ; -- tocheck              
 lin ninny_N = mkN "बेवकूफ़" ; -- tocheck              
-lin ninth_A = mkA "नौंवी" ; -- tocheck              
 lin ninth_N = mkN "नौवाँ भाग" ; -- tocheck              
 lin nip_N = mkN "चरपरापन" ; -- tocheck              
 lin nip_V = compoundV "काट कर निकाल" (mkV "देना") ; -- tocheck              

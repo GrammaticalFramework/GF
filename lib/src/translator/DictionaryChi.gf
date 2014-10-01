@@ -15415,7 +15415,6 @@ lin nimrod_PN = foreignPN "Nimrod" ; -- comment=src=eng status=guess
 lin ninefold_Adv = mkAdv "九倍" ;
 lin ninja_N = mkN "忍者" ; -- status=guess
 lin ninjutsu_N = mkN "忍術" | mkN "忍术" | mkN "忍法" ; -- status=guess -- status=guess -- status=guess
-lin ninth_A = mkA "第九" ; -- status=guess
 lin niobe_PN = foreignPN "Niobe" ; -- comment=src=eng status=guess
 lin niobium_N = mkN "鈮" ; -- status=guess
 lin nip_V = mkV "咬" ;

@@ -12950,7 +12950,6 @@ lin nimbus_N = mkN "nimbus" | mkN "halo" masculine ; -- status=guess status=gues
 lin nimrod_PN = mkPN "Nimrod" ; -- src=eng status=guess
 lin nincompoop_N = mkN "lomperd" | mkN "domoor" | mkN "stommeling" | mkN "oetlul" ; -- status=guess status=guess status=guess status=guess
 lin ninja_N = mkN "ninja" ; -- status=guess
-lin ninth_A = mkA "negende" | mkA "9e)" ; -- status=guess status=guess
 lin ninth_N = mkN "negende" ; -- status=guess
 lin niobe_PN = mkPN "Niobe" ; -- src=eng status=guess
 lin niobium_N = mkN "niobium" neuter ; -- status=guess

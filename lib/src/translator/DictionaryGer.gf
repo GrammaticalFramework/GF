@@ -38209,7 +38209,6 @@ lin ninja_N = mkN "Ninja" ; -- status=guess
 lin ninjutsu_N = mkN "Ninjutsu" neuter ; -- status=guess
 lin ninny_N = variants {} ;
 lin ninon_N = variants {} ;
-lin ninth_A = mkA "neunte" ; -- status=guess
 lin ninth_N = variants {} ;
 lin niobe_PN = mkPN "Niobe" ; -- src=eng status=guess
 lin niobite_N = variants {} ;

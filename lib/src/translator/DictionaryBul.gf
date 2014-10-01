@@ -36318,7 +36318,6 @@ lin ninja_N = mkN038 "нинджа";
 lin ninjutsu_N = variants {};
 lin ninny_N = variants {mkN007 "идиот"; mkN040 "свирчо"}; ----
 lin ninon_N = variants {};
-lin ninth_A = variants {};
 lin ninth_N = mkN074 "девета";
 lin niobe_PN = mkPN "Ниобе" Masc;
 lin niobite_N = variants {};
