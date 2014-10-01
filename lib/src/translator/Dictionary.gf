@@ -38386,7 +38386,6 @@ fun ninja_N : N ;
 fun ninjutsu_N : N ;
 fun ninny_N : N ;
 fun ninon_N : N ;
-fun ninth_A : A ;
 fun ninth_N : N ;
 fun niobe_PN : PN ;
 fun niobite_N : N ;

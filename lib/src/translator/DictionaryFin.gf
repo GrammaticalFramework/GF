@@ -34346,7 +34346,6 @@ lin ninja_N = mkWN "ninja" ; --UNCHK
 lin ninjutsu_N = mkWN "ninjutsu" ; --UNCHK
 lin ninny_N = mkWN (k12 "tolvana") ; --UNCHK
 lin ninon_N = mkWN "ninon" ; --UNCHK
-lin ninth_A = mkWA (k45 "yhdeksäs") ; --UNCHK
 lin ninth_N = mkWN (k39 "yhdeksännes") ; --UNCHK
 lin niobite_N = mkWN (compoundN "kolum" (k5A "biitti")) ; --UNCHK
 lin niobium_N = mkWN (k5 "niobi") ; --UNCHK

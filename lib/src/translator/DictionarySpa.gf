@@ -14793,7 +14793,6 @@ lin nijmegen_PN = mkPN "Nimega" ; -- status=guess src=geonames
 lin nil_N = mkN "nada" | mkN "cero" ; -- status=guess status=guess
 lin nimble_A = mkA "ágil" ; -- status=guess
 lin nincompoop_N = mkN "bobo" | mkN "soso" | mkN "sosaina" | mkN "tonto" | mkN "memo" | mkN "panoli" masculine | mkN "lila" | mkN "pavitonto" | mkN "pasmarote" | mkN "bendito" | mkN "majadero" | mkN "papanatas" masculine | mkN "primo" | mkN "Juan Lanas" | mkN "imbécil" masculine | mkN "gilipollas" masculine ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess
-lin ninth_A = mkA "noveno" ; -- status=guess status=guess
 lin ninth_N = mkN "noveno" ; -- status=guess
 lin niobium_N = mkN "niobio" ; -- status=guess
 lin nip_V = mkV (mkV "cortar") "de raíz" ; -- status=guess, src=wikt

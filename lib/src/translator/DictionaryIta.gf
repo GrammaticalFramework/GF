@@ -12385,7 +12385,6 @@ lin nimbleness_N = mkN "leggerezza" | mkN "agilità" | mkN "scioltezza" ; -- sta
 lin nimbus_N = mkN "nimbo" ; -- status=guess
 lin nincompoop_N = mkN "cretino" | mkN "imbecille" masculine | mkN "stupido" | mkN "idiota" masculine | mkN "coglione" masculine ; -- status=guess status=guess status=guess status=guess status=guess
 lin ninja_N = mkN "ninja" masculine ; -- status=guess
-lin ninth_A = mkA "nono" ;
 lin ninth_N = mkN "nono" ; -- status=guess
 lin niobium_N = mkN "niobio" ; -- status=guess
 lin nip_V = mkV "troncare" ; ----
