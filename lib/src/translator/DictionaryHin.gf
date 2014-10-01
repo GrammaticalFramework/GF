@@ -10596,7 +10596,6 @@ lin fortress_N = mkN "किला" ; -- tocheck
 lin fortuitous_A = mkA "भाग्यशाली" ; -- tocheck              
 lin fortunate_A = mkA "भाग्यवान्" ; -- tocheck              
 lin fortune_N = mkN "सौभाग्य" ; -- tocheck              
-lin forty_A = mkA "चालीस" ; -- tocheck              
 lin forty_N = mkN "चालीस" ; -- tocheck              
 lin forum_N = mkN "मंच" ; -- tocheck              
 lin forward_A = mkA "अग्ली पंक्ति का" ; -- tocheck              

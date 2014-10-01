@@ -20592,7 +20592,6 @@ lin fortunately_Adv = adjAdv fortunate_A ; -- -- derived
 lin fortune_N = mkWN (kH1 "säkä") ; --UNCHK
 lin fortuneteller_N = mkWN (kH1 "povari") ; --UNCHK
 lin fortunetelling_N = mkWN "ennustaminen" ; --UNCHK
-lin forty_A = mkWA "xl-" ; --UNCHK
 lin forum_N = mkWN (k39 "kokous") ; --UNCHK
 lin forward_A = mkWA (compoundA "suu" (k1 "nnattu")) "eteenpäin" ; --UNCHK
 lin forward_Adv = mkAdv "eteenpäin" | mkAdv "edelleen" ;

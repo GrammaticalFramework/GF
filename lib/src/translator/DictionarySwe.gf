@@ -22536,7 +22536,6 @@ lin fortunately_Adv = adjAdv fortunate_A ; -- -- derived
 lin fortune_N = mkN "öde" ; -- SaldoWN
 lin fortuneteller_N = variants {} ; -- status=guess
 lin fortunetelling_N = variants {} ; -- status=guess
-lin forty_A = variants {} ; -- status=guess
 lin forty_N = variants {} ; -- status=guess
 lin fortyish_A = variants {} ; -- status=guess
 lin forum_N = mkN "forum" neutrum ; -- SaldoWN

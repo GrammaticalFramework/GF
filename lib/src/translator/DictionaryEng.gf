@@ -22726,7 +22726,6 @@ lin fortunately_Adv = mkAdv "fortunately" ;
 lin fortune_N = mkN "fortune" "fortunes";
 lin fortuneteller_N = mkN "fortuneteller" ;
 lin fortunetelling_N = mkN "fortunetelling" ;
-lin forty_A = compoundA (mkA "forty");
 lin forty_N = mkN "forty" "forties";
 lin fortyish_A = compoundA (mkA "fortyish");
 lin forum_N = mkN "forum" "forums";
