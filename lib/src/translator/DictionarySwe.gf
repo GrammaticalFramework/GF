@@ -5648,7 +5648,7 @@ lin belt_up_V = mkV "skärper" ; -- comment=4
 lin belting_N = mkN "rem" "remmen" "remmar" "remmarna" ; -- comment=3
 lin beltlike_A = variants {} ; -- status=guess
 lin beltway_N = variants {} ; -- status=guess
-lin beluga_N = mkN "hus" neutrum ; -- status=guess
+lin beluga_N = mkN "beluga" utrum ;
 lin belvedere_N = variants {} ; -- status=guess
 lin bemoan_V2 = variants {} ; -- status=guess
 lin bemused_A = variants {} ; -- status=guess
