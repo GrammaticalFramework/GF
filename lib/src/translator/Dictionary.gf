@@ -22729,7 +22729,6 @@ fun fortunately_Adv : Adv  ;
 fun fortune_N : N ;
 fun fortuneteller_N : N ;
 fun fortunetelling_N : N ;
-fun forty_A : A ;
 fun forty_N : N ;
 fun fortyish_A : A ;
 fun forum_N : N ;

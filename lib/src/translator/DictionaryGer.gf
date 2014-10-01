@@ -22627,7 +22627,6 @@ lin fortunately_Adv = mkAdv "glücklicherweise" | mkAdv "zum Glück" | adjAdv fo
 lin fortune_N = mkN "Glück" neuter ; -- status=guess
 lin fortuneteller_N = mkN "Wahrsager" "Wahrsager" masculine | mkN "Wahrsagerin" feminine ; -- status=guess status=guess
 lin fortunetelling_N = variants {} ;
-lin forty_A = variants {} ;
 lin forty_N = variants {} ;
 lin fortyish_A = variants {} ;
 lin forum_N = mkN "Forum" neuter ; -- status=guess

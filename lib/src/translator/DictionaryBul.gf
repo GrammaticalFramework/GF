@@ -21558,7 +21558,6 @@ lin fortunate_A = mkA076 "щастлив";
 lin fortune_N = mkN041 "съдба";
 lin fortuneteller_N = mkN041b "гледачка";
 lin fortunetelling_N = mkN072 "предсказание";
-lin forty_A = variants {};
 lin forty_N = variants {};
 lin fortyish_A = variants {};
 lin forum_N = mkN007 "форум" ;
