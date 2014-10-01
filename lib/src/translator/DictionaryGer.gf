@@ -25926,7 +25926,7 @@ lin harbour_V2 = variants {} ;
 lin harbourage_N = variants {} ;
 lin hard_1_A = mkA "hart" "härter" "härteste" ;
 lin hard_2_A = mkA "schwer" ;
-lin hardly_AdV = mkAdV "kaum" | mkAdV "schwer" ;
+lin hardly_AdV = lin AdV {s = "kaum"} ;
 lin hard_baked_A = variants {} ;
 lin hard_bitten_A = variants {} ;
 lin hard_boiled_A = variants {} ;
