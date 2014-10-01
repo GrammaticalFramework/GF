@@ -12144,7 +12144,7 @@ lin harbour_V = compoundV "मन में" (mkV "रखना") ; -- tocheck
 lin harbour_V2 = mkV2 (compoundV "मन में" (mkV "रखना")) ; -- tocheck
 lin hard_1_A = mkA "ठोस" ; -- tocheck
 lin hard_2_A = mkA "ठोस" ; -- tocheck
-lin hardly_AdV = mkAdV "परिश्रमशीलता से" ; -- tocheck
+lin hardly_AdV = lin AdV {s =  "परिश्रमशीलता से" } ; -- tocheck
 lin hardback_N = mkN "कड़े कवर वाली पुस्तक" ; -- tocheck              
 lin hardball_N = mkN "हार्डबल" ; -- tocheck       
 lin hardboard_N = mkN "कठोर गत्ता" ; -- tocheck              

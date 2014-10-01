@@ -8756,7 +8756,7 @@ lin harbinger_N = mkN "voorbode" masculine ; -- status=guess
 lin harbour_N = L.harbour_N ;
 lin hard_1_A = mkA "hard" ;
 lin hard_2_A = mkA "lastig" ;
-lin hardly_AdV = mkAdV "hard" | mkAdV "lastig" ;
+lin hardly_AdV = lin AdV {s = "hard"} | lin AdV {s = "lastig"} ;
 lin harden_V = mkV (mkV "hard") "worden" | mkV "verharden" | mkV "verstijven" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin harden_V2 = mkV2 (mkV (mkV "hard") "worden") | mkV2 (mkV "verharden") | mkV2 (mkV "verstijven") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin hardheaded_A = mkA "pragmatisch" ; -- status=guess
