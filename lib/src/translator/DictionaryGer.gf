@@ -10171,8 +10171,6 @@ lin cheat_V2 = mkV2 (mkV "betrügen" | prefixV "fremd" (irregV "gehen" "geht" "g
 lin cheat_on_V2 = variants {} ;
 lin cheat_out_of_V3 = variants {} ;
 lin chebab_N = variants {} ;
-lin check_1_V2 = variants {} ;
-lin check_2_V2 = variants {} ;
 lin check_N = mkN "Rechnung" ; -- status=guess
 lin check_V = mkV "checken" | fixprefixV "über" (mkV "prüfen") ; -- note: I checked - ich habe ES gecheckt/überprüft
 lin check_V2 = mkV2 (fixprefixV "über" (mkV "prüfen")) | mkV2 (mkV "prüfen") | mkV2 (mkV "checken") ;
@@ -21749,8 +21747,6 @@ lin fistmele_N = variants {} ;
 lin fistula_N = mkN "Fistel" "Fisteln" feminine ; -- status=guess
 lin fistular_A = variants {} ;
 lin fistulous_A = variants {} ;
-lin fit_1_V2 = variants {} ;
-lin fit_2_V2 = variants {} ;
 lin fit_A = mk3A "sexy" "sexyer" "sexyste" | mk3A "scharf" "schärfer" "schärfste" | mkA "heiß" ; -- status=guess status=guess status=guess
 lin fit_N = mkN "Paßform" feminine ; -- status=guess
 lin fit_V = mkV "passen" ;
@@ -24503,9 +24499,6 @@ lin go_with_V2 = variants {} ;
 lin go_without_V2 = variants {} ;
 lin goad_N = mkN "Stachelstock" masculine ; -- status=guess
 lin goad_V2 = mkV2 (mkV "anstacheln") ; -- status=guess, src=wikt
-lin goal_1_N = variants {} ;
-lin goal_2_N = variants {} ;
-lin goal_3_N = variants {} ;
 lin goal_N = mkN "Tor" "Tore" neuter | mkN "Ziel" "Ziele" neuter ; -- split: football goal / goal in life
 lin goal_kick_N = variants {} ;
 lin goal_line_N = variants {} ;
@@ -36163,9 +36156,6 @@ lin misrelated_A = variants {} ;
 lin misrepresent_V2 = variants {} ;
 lin misrepresentation_N = variants {} ;
 lin misrule_N = variants {} ;
-lin miss_1_V2 = variants {} ;
-lin miss_2_V2 = variants {} ;
-lin miss_3_V2 = variants {} ;
 lin miss_N = mkN "Fräulein" neuter ; -- status=guess
 lin miss_V = prefixV "daneben" I.schießen_V | prefixV "daneben" I.schlagen_V ;
 lin miss_V2 = mkV2 (fixprefixV "ver" (mkV "passen")) | mkV2 (mkV "fehlen") ; -- miss a deadline / miss someone - NOTE: I miss you = du fehlst mir!
@@ -44552,8 +44542,6 @@ lin prescriptive_A = variants {} ;
 lin prescriptivism_N = variants {} ;
 lin preseason_N = variants {} ;
 lin presence_N = mkN "Anwesenheit" feminine ; -- status=guess
-lin present_1_N = variants {} ;
-lin present_2_N = variants {} ;
 lin present_A = mkA "gegenwärtig" | mkA "anwesend" ; -- split: current | physically present
 lin present_N = mkN "Gegenwart" feminine | mkN "Geschenk" "Geschenke" neuter ; -- split: current time / gift
 lin present_V2 = mkV2 (mkV "präsentieren") ;
