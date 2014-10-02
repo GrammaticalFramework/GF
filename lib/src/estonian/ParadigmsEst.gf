@@ -80,11 +80,24 @@ oper
   casePrep    : Case ->        Prep ;  -- just case, e.g. adessive
 
 
+--2 Conjunctions, adverbs
+
+
+  mkAdv : Str -> Adv ; 
+
+  mkConj : overload {
+    mkConj : Str -> Conj ; -- just one word, default number Sg: e.g. "ja"
+    mkConj : Str -> Number -> Conj ; --just one word + number: e.g. "ja" Pl
+    mkConj : Str -> Str -> Conj ; --two words, default number: e.g. "nii" "kui" 
+    mkConj : Str -> Str -> Number -> Conj ; --two words + number: e.g. "nii" "kui" Pl
+  } ;
+
+
 --2 Nouns
 
 oper
 
--- The regular noun heuristic takes just one form (singular
+-- The regulr noun heuristic takes just one form (singular
 -- nominative) and analyses it to pick the correct paradigm.
 -- If the 1-argument paradigm does not give the correct result,
 -- one can try and give 2, 3, 4, or 6 forms.
@@ -273,6 +286,17 @@ oper
     \c -> {c = NPCase c ; s = [] ; isPre = True ; lock_Prep = <>} ;
   accPrep =  {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
 
+
+  mkAdv : Str -> Adv = \str -> {s = str ; lock_Adv = <>} ;
+
+
+  
+  mkConj = overload {
+    mkConj : Str -> Conj = \ja -> lin Conj ((sd2 "" ja) ** {n = Sg}) ;
+    mkConj : Str -> Number -> Conj = \ja,num -> lin Conj ((sd2 "" ja) ** {n = num}) ;
+    mkConj : Str -> Str -> Conj = \nii,kui -> lin Conj ((sd2 nii kui) ** {n = Sg}) ;
+    mkConj : Str -> Str -> Number -> Conj = \nii,kui,num -> lin Conj ((sd2 nii kui) ** {n = num}) ;
+  } ;
 
   mkN = overload {
     mkN : (nisu : Str) -> N = mk1N ;
@@ -775,9 +799,6 @@ oper
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 
   dirV2 v = mk2V2 v accPrep ;
 
-  mkAdv = overload { 
-    mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
-    } ;
 
   mkV2 = overload {
     mkV2 : Str -> V2 = \s -> dirV2 (mk1V s) ;
