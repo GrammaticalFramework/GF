@@ -199,11 +199,23 @@ oper
 -- questions, verb phrases, and adjectives.
 
   mkV0  : V -> V0 ; --%
-  mkVS  : V -> VS ;
-  mkV2S : V -> Prep -> V2S ; -- e.g. "ütlema" allative
-  mkVV  : V -> VV ;  -- e.g. "hakkama"
+  mkVS  : overload {
+    mkVS : V -> VS ;
+    mkVS : Str -> VS ;
+  } ;
+  mkV2S : overload {
+     mkV2S : V -> Prep -> V2S ; -- e.g. "ütlema" allative
+     mkV2S : Str -> V2S ; --default (mkV foo) allative
+  } ;
+  mkVV  : overload {
+     mkVV : V -> VV ;  -- e.g. "hakkama"
+     mkVV : Str -> VV ;
+  } ;
   mkVVf : V -> InfForm -> VV ; -- e.g. "hakkama" infMa
-  mkV2V : V -> Prep -> V2V ;  -- e.g. "käskima" adessive
+  mkV2V : overload {
+    mkV2V : V -> Prep -> V2V ;  -- e.g. "käskima" adessive
+    mkV2V : Str -> V2V ;  -- e.g. "käskima" adessive
+  } ;
   mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "keelama" partitive infMast  
   mkVA  : V -> Prep -> VA ; -- e.g. "muutuma" translative
   mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "värvima" genitive translative
@@ -782,8 +794,14 @@ oper
   dirV3 v p = mkV3 v accPrep (casePrep p) ;
   dirdirV3 v = dirV3 v allative ;
 
-  mkVS  v = v ** {lock_VS = <>} ;
-  mkVV  v = mkVVf v infDa ;
+  mkVS = overload {
+    mkVS : V -> VS   = \v -> v ** {lock_VS = <>} ;
+    mkVS : Str -> VS = \str -> (mkV str) ** {lock_VS = <>} ;
+  } ;
+  mkVV = overload {
+    mkVV : V -> VV   = \v -> mkVVf v infDa ;
+    mkVV : Str -> VV = \str -> mkVVf (mkV str) infDa ;
+  } ; 
   mkVVf  v f = v ** {vi = f ; lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
@@ -792,8 +810,15 @@ oper
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
-  mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
-  mkV2V v p = mkV2Vf v p infMa ;
+  mkV2S = overload {
+    mkV2S : V -> Prep -> V2S   = \v,p -> (mk2V2 v p) ** {lock_V2S = <>} ;
+    mkV2S : Str -> V2S = \str -> (mk2V2 (mkV str) (casePrep allative)) ** {lock_VS = <>} ;
+  } ;
+--  mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
+  mkV2V = overload {
+    mkV2V : V -> Prep -> V2V = \v,p -> mkV2Vf v p infMa ;
+    mkV2V : Str       -> V2V = \str -> mkV2Vf (mkV str) (casePrep genitive) infMa ;
+  } ; 
   mkV2Vf v p f = mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
 
   mkVA  v p = v ** {c2 = p ; lock_VA = <>} ;
