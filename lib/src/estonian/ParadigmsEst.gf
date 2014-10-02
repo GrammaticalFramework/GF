@@ -92,6 +92,7 @@ oper
     mkConj : Str -> Str -> Number -> Conj ; --two words + number: e.g. "nii" "kui" Pl
   } ;
 
+  mkPConj : Str -> PConj ;
 
 --2 Nouns
 
@@ -201,7 +202,10 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;  -- e.g. rääkima, allative, elative
+  mkV3     : overload {
+     mkV3 : V -> Prep -> Prep -> V3 ;  -- e.g. rääkima, allative, elative
+     mkV3 : Str               -> V3 ;  -- string, default cases accusative + allative
+  } ;
   dirV3    : V -> Case -> V3 ;          -- liigutama, (accusative), illative
   dirdirV3 : V         -> V3 ;          -- andma, (accusative), (allative)
 
@@ -229,10 +233,22 @@ oper
     mkV2V : V -> Prep -> V2V ;  -- e.g. "käskima" adessive
     mkV2V : Str -> V2V ;  -- e.g. "käskima" adessive
   } ;
-  mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "keelama" partitive infMast  
-  mkVA  : V -> Prep -> VA ; -- e.g. "muutuma" translative
-  mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "värvima" genitive translative
-  mkVQ  : V -> VQ ; 
+  mkV2Vf : V -> Prep -> InfForm -> V2V ; -- e.g. "keelama" partitive infMast 
+ 
+  mkVA  : overload {
+     mkVA : V -> Prep -> VA ; -- e.g. "muutuma" translative
+     mkVA : Str       -> VA ; -- string, default case translative
+  } ;
+
+  mkV2A : overload {
+     mkV2A : V -> Prep -> Prep -> V2A ; -- e.g. "värvima" genitive translative
+     mkV2A : Str               -> V2A ; -- string, default cases genitive and translative
+  } ;
+ 
+  mkVQ  : overload {
+     mkVQ : V -> VQ ; 
+     mkVQ : Str -> VQ ; 
+  } ;
   mkV2Q : V -> Prep -> V2Q ; -- e.g. "küsima" ablative 
 
   mkAS  : A -> AS ; --%
@@ -297,6 +313,8 @@ oper
     mkConj : Str -> Str -> Conj = \nii,kui -> lin Conj ((sd2 nii kui) ** {n = Sg}) ;
     mkConj : Str -> Str -> Number -> Conj = \nii,kui,num -> lin Conj ((sd2 nii kui) ** {n = num}) ;
   } ;
+
+  mkPConj s = ss s ** {lock_PConj = <>} ;
 
   mkN = overload {
     mkN : (nisu : Str) -> N = mk1N ;
@@ -811,7 +829,12 @@ oper
   caseV2 : V -> Case -> V2 ;
   dirV2 : V -> V2 ;
 
-  mkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ; 
+  mkV3 = overload {
+    mkV3 : V -> Prep -> Prep -> V3 = \v,p,q -> v ** {c2 = p ; c3 = q ; lock_V3 = <>} ; 
+    mkV2 : Str               -> V3 = \str   -> (mkV str) ** {c2 = accPrep ; 
+							     c3 = (casePrep allative) ; 
+							     lock_V3 = <>} ; 
+   } ;
   dirV3 v p = mkV3 v accPrep (casePrep p) ;
   dirdirV3 v = dirV3 v allative ;
 
@@ -824,7 +847,10 @@ oper
     mkVV : Str -> VV = \str -> mkVVf (mkV str) infDa ;
   } ; 
   mkVVf  v f = v ** {vi = f ; lock_VV = <>} ;
-  mkVQ  v = v ** {lock_VQ = <>} ;
+  mkVQ = overload {
+    mkVQ : V   -> VQ = \v -> v ** {lock_VQ = <>} ;
+    mkVQ : Str -> VQ = \str -> (mkV str) ** {lock_VQ = <>} ;
+  } ;
 
   V0 : Type = V ;
   AS, A2S, AV : Type = A ;
@@ -842,8 +868,18 @@ oper
   } ; 
   mkV2Vf v p f = mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
 
-  mkVA  v p = v ** {c2 = p ; lock_VA = <>} ;
-  mkV2A v p q = v ** {c2 = p ; c3 = q ; lock_V2A = <>} ;
+  mkVA = overload {
+    mkVA : V -> Prep -> VA = \v,p -> v ** {c2 = p ; lock_VA = <>} ;
+    mkVA : Str       -> VA = \str -> (mkV str) ** {c2 = casePrep translative ; lock_VA = <>} ;
+  } ;
+
+  mkV2A = overload { 
+    mkV2A : V -> Prep -> Prep -> V2A = \v,p,q -> v ** {c2 = p ; c3 = q ; lock_V2A = <>} ;
+    mkV2A : Str               -> V2A = \str -> (mkV str) ** {c2 = casePrep genitive ; 
+							    c3 = casePrep translative ; 
+							    lock_V2A = <>} ;
+  } ;
+
   mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
