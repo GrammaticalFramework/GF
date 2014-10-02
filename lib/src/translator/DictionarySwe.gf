@@ -28852,10 +28852,11 @@ lin indexless_A = variants {} ; -- status=guess
 lin india_PN = mkPN "Indien" neutrum ; -- src=geonames status=guess
 lin india_rubber_N = variants {} ; -- status=guess
 lin indiaman_N = variants {} ; -- status=guess
-lin indianFem_N = mkN "indiska" ;
-lin indianMasc_N = mkN "indier" "indiern" "indier" "indierna" ;
+lin indianFem_1_N = mkN "indiska" ;
+lin indianMasc_1_N = mkN "indier" "indiern" "indier" "indierna" ;
 lin indian_A = mkA "indisk" ;
-lin indian_N = mkN "indian" "indianer" ;
+lin indianFem_2_N = mkN "indian" "indianer" ;
+lin indianMasc_2_N = mkN "indianska" ;
 lin indiana_PN = mkPN "Indiana" neutrum ; -- src=geonames status=guess
 lin indianapolis_PN = mkPN "Indianapolis" neutrum ; -- src=geonames status=guess
 lin indicate_V2 = mkV2 (mkV "indikera") | mkV2 (mkV "visa") | mkV2 (mkV "uppge" "uppgav" "uppgivit") | mkV2 (mkV "ange" "angav" "angivit") ;

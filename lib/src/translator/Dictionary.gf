@@ -28967,9 +28967,10 @@ fun india_PN : PN ;
 fun india_rubber_N : N ;
 fun indiaman_N : N ;
 fun indian_A : A ;
-fun indian_N : N ; -- indian of America
-fun indianMasc_N : N ; -- national of India
-fun indianFem_N : N ; -- national of India
+fun indianMasc_1_N : N ; -- national of India
+fun indianFem_1_N : N ; -- national of India
+fun indianMasc_2_N : N ; -- indian of America
+fun indianFem_2_N : N ; -- indian of America
 fun indiana_PN : PN ;
 fun indianapolis_PN : PN ;
 fun indicate_V2 : V2 ;

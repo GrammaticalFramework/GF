@@ -28976,7 +28976,10 @@ lin indiaman_N = variants {} ;
 lin indianFem_N = variants {} ;
 lin indianMasc_N = variants {} ;
 lin indian_A = mkA "indisch" ;
-lin indian_N = variants {} ;
+lin indianMasc_1_N = variants {} ;
+lin indianFem_1_N = variants {} ;
+lin indianMasc_2_N = variants {} ;
+lin indianFem_2_N = variants {} ;
 lin indiana_PN = mkPN "Indiana" ; -- src=geonames status=guess
 lin indianapolis_PN = mkPN "Indianapolis" ; -- src=geonames status=guess
 lin indicate_V2 = mkV2 (prefixV "an" (mkV "zeigen")) | mkV2 (mkV "zeigen") ;
