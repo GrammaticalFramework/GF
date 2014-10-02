@@ -11031,10 +11031,11 @@ lin indeterminate_A = mkA "indéterminé" ; -- tocheck
 lin index_N = mkN "index" masculine ; -- tocheck
 lin index_V2 = mkV2 (mkV "indexer") ; -- tocheck
 lin india_PN = mkPN "Inde" ; -- status=guess src=geonames
-lin indianFem_N = mkN "indienne" ;
-lin indianMasc_N = mkN "indien" ;
+lin indianFem_1_N = mkN "indienne" ;
+lin indianMasc_1_N = mkN "indien" ;
 lin indian_A = mkA "indien" ;
-lin indian_N = mkN "indien" ;
+lin indianMasc_2_N = mkN "indien" ;
+lin indianFem_2_N = mkN "indienne" ;
 lin indiana_PN = mkPN "Indiana" ; -- status=guess src=geonames
 lin indianapolis_PN = mkPN "Indianapolis" ; -- status=guess src=geonames
 lin indicate_V2 = mkV2 (mkV "indiquer") ; -- tocheck
