@@ -79,6 +79,8 @@ struct PgfEvalGates {
 	PgfFunction update_closure;
 	PgfFunction update_pap;
 
+	PgfFunction mk_const;
+
 	PgfClosure* (*enter)(PgfEvalState* state, PgfClosure* closure);
 
 	GuFinalizer fin;

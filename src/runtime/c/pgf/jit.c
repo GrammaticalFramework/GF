@@ -581,6 +581,36 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_ldr_p(JIT_R0, JIT_VCLOS);
 	jit_jmpr(JIT_R0);
 
+	gates->mk_const = jit_get_ip().ptr;
+	jit_ldxi_p(JIT_R0, JIT_VHEAP, offsetof(PgfAbsFun,arity));
+	jit_muli_i(JIT_R0, JIT_R0, sizeof(PgfClosure*));
+	jit_pushr_i(JIT_R0);
+	jit_pushr_i(JIT_R0);
+	jit_prepare(2);
+	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValue));
+	jit_pusharg_ui(JIT_R0);
+	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
+	jit_pusharg_p(JIT_R0);
+	jit_finish(gu_malloc);
+	jit_movi_p(JIT_R1, gates->evaluate_value);
+	jit_str_p(JIT_RET, JIT_R1);
+	jit_stxi_p(offsetof(PgfValue,absfun), JIT_RET, JIT_VHEAP);
+	jit_movr_p(JIT_VHEAP, JIT_RET);
+	jit_popr_i(JIT_R1);
+	next = jit_get_label();
+	ref  = jit_blei_i(jit_forward(), JIT_R1, 0);
+	jit_ldxi_p(JIT_R2, JIT_FP, -sizeof(void*));
+	jit_stxi_p(offsetof(PgfValue,args), JIT_RET, JIT_R2);
+	jit_addi_i(JIT_RET, JIT_RET, sizeof(void*));
+	jit_subi_i(JIT_FP, JIT_FP, sizeof(void*));
+	jit_subi_i(JIT_R1, JIT_R1, sizeof(void*));
+	jit_jmpi(next);
+	jit_patch(ref);
+	jit_popr_p(JIT_R1);
+	jit_popr_p(JIT_R0);
+	jit_addr_i(JIT_SP, JIT_SP, JIT_R1);
+	jit_jmpr(JIT_R0);
+
 	gates->fin.fn = pgf_jit_finalize_defrules;
 	gates->defrules = NULL;
 	gu_pool_finally(rdr->opool, &gates->fin);
@@ -1111,6 +1141,8 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #ifdef PGF_JIT_DEBUG
 				gu_printf(out, err, "FAIL\n");
 #endif
+				jit_movi_p(JIT_VHEAP, absfun);
+				jit_jmpi(abstr->eval_gates->mk_const);
 				break;
 			default:
 				gu_impossible();
