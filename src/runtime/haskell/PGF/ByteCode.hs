@@ -26,7 +26,6 @@ data Instr
   | SET_PAD
   | PUSH IVal
   | EVAL IVal TailInfo
-  | RET {-# UNPACK #-} !Int TailInfo
   | DROP {-# UNPACK #-} !Int  {-# UNPACK #-} !CodeLabel
   | FAIL
 
@@ -60,8 +59,6 @@ ppInstr (SET           v) = text "SET        " <+> ppIVal v
 ppInstr (SET_PAD        ) = text "SET_PAD"
 ppInstr (PUSH          v) = text "PUSH       " <+> ppIVal v
 ppInstr (EVAL       v ti) = text "EVAL       " <+> ppIVal v <+> ppTailInfo ti
-ppInstr (RET h (TailCall a b c)) = text "RET        " <+> ppIVal (HEAP h) <+> text "tail"   <> parens (int a <> comma <> int b)
-ppInstr (RET h (UpdateCall b c)) = text "RET        " <+> ppIVal (HEAP h) <+> text "update" <> parens (int b)
 ppInstr (DROP n l       ) = text "DROP       " <+> int n <+> ppLabel l
 ppInstr (FAIL           ) = text "FAIL"
 

@@ -1085,35 +1085,6 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				}
 				break;
 			}
-			case PGF_INSTR_RET: {
-				size_t h = pgf_read_int(rdr);
-
-				if (h > 0)
-					jit_addi_p(JIT_VHEAP, JIT_VHEAP, h*sizeof(PgfClosure*));
-
-				size_t a, b;
-				if (mod == 1) {
-					a = pgf_read_int(rdr);
-					b = pgf_read_int(rdr);
-#ifdef PGF_JIT_DEBUG
-					gu_printf(out, err, "RET         hp(%d) tail(%d,%d)\n", h, a, b);
-#endif
-				} else {
-					a = 0;
-					b = pgf_read_int(rdr); 
-#ifdef PGF_JIT_DEBUG
-					gu_printf(out, err, "RET         hp(%d) update(%d)\n", h, b);
-#endif
-					jit_movi_p(JIT_R0, abstr->eval_gates->evaluate_indirection);
-					jit_str_p(JIT_VCLOS, JIT_R0);
-					jit_stxi_p(offsetof(PgfIndirection,val), JIT_VCLOS, JIT_VHEAP);
-				}
-
-				if (b-(a+1) > 0)
-					jit_addi_p(JIT_SP, JIT_SP, (b-(a+1))*sizeof(PgfClosure*));
-				jit_bare_ret(a*sizeof(PgfClosure*));
-				break;
-			}
 			case PGF_INSTR_DROP: {
 				size_t n      = pgf_read_int(rdr);
 				size_t target = pgf_read_int(rdr);
