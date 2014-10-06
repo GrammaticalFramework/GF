@@ -118,9 +118,8 @@ typedef enum {
   PGF_INSTR_SET_PAD     =  8,
   PGF_INSTR_PUSH        =  9,
   PGF_INSTR_EVAL        = 10,
-  PGF_INSTR_RET         = 13,
-  PGF_INSTR_DROP        = 15,
-  PGF_INSTR_FAIL        = 16
+  PGF_INSTR_DROP        = 13,
+  PGF_INSTR_FAIL        = 14
 } PgfInstruction;
 
 struct PgfPGF {

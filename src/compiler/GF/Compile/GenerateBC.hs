@@ -101,10 +101,10 @@ compileFun gr arity st vs (Q (m,id))  h0 bs args =
               diff   = c_arity-n_args
           in if diff <= 0
                then let h1  = h0 + 2 + n_args
-                    in (h1,bs,PUT_CONSTR (i2i id):is1++[RET h0 (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+                    in (h1,bs,PUT_CONSTR (i2i id):is1++[EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
                else let h1  = h0 + 1 + n_args
                         is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
-                        b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [RET h0 (TailCall diff (diff+1) (diff+1))]
+                        b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall diff (diff+1) (diff+1))]
                     in (h1,b:bs,PUT_CLOSURE (length bs):is1++[EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
 compileFun gr arity st vs (QC qid)    h0 bs args =
   compileFun gr arity st vs (Q qid) h0 bs args
@@ -114,13 +114,13 @@ compileFun gr arity st vs (Vr x)      h0 bs args =
   in (h0,bs,is1++[EVAL arg (if arity == 0 then (UpdateCall st st1) else (TailCall arity st st1))])
 compileFun gr arity st vs (EInt n)    h0 bs _  =
   let h1 = h0 + 2
-  in (h1,bs,[PUT_LIT (LInt n), RET h0 (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+  in (h1,bs,[PUT_LIT (LInt n), EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
 compileFun gr arity st vs (K s)       h0 bs _  =
   let h1 = h0 + 2
-  in (h1,bs,[PUT_LIT (LStr s), RET h0 (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+  in (h1,bs,[PUT_LIT (LStr s), EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
 compileFun gr arity st vs (EFloat d)  h0 bs _  =
   let h1 = h0 + 2
-  in (h1,bs,[PUT_LIT (LFlt d), RET h0 (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+  in (h1,bs,[PUT_LIT (LFlt d), EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
 compileFun gr arity st vs (Typed e _) h0 bs args =
   compileFun gr arity st vs e h0 bs args
 compileFun gr arity st vs (Let (x, (_, e1)) e2) h0 bs args =
@@ -139,7 +139,7 @@ compileArg gr st vs (Q(m,id)) h0 bs =
                         in if c_arity == 0
                              then (h1,bs,HEAP h0,[PUT_CONSTR (i2i id)])
                              else let is2 = [SET (ARG_VAR (i+1)) | i <- [0..c_arity-1]]
-                                      b   = CHECK_ARGS c_arity : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [RET h0 (TailCall c_arity (c_arity+1) (c_arity+1))]
+                                      b   = CHECK_ARGS c_arity : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall c_arity (c_arity+1) (c_arity+1))]
                                   in (h1,b:bs,HEAP h0,[PUT_CLOSURE (length bs),SET_PAD])
 compileArg gr st vs (QC qid)    h0 bs =
   compileArg gr st vs (Q qid) h0 bs
@@ -185,7 +185,7 @@ compileArg gr st vs e           h0 bs =
                       in (h2,bs1,HEAP h1,is1 ++ (PUT_CONSTR (i2i id) : is2))
                  else let h2  = h1 + 1 + n_args
                           is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
-                          b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [RET h0 (TailCall diff (diff+1) (diff+1))]
+                          b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall diff (diff+1) (diff+1))]
                       in (h2,b:bs1,HEAP h1,is1 ++ (PUT_CLOSURE (length bs):is2))
        Nothing -> compileLambda gr st vs [] e h0 bs
 
