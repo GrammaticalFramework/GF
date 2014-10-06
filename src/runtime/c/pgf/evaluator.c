@@ -254,7 +254,7 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 		PgfValue* val = (PgfValue*) clos;
 
 		expr   = val->absfun->ep.expr;
-		n_args = gu_seq_length(val->absfun->type->hypos);
+		n_args = val->absfun->arity;
 		args   = val->args;
 	} else if (clos->code == state->eval_gates->evaluate_value_gen) {
 		PgfValueGen* val = (PgfValueGen*) clos;
