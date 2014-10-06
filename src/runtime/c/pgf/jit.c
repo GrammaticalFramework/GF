@@ -585,7 +585,6 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_ldxi_p(JIT_R0, JIT_VHEAP, offsetof(PgfAbsFun,arity));
 	jit_muli_i(JIT_R0, JIT_R0, sizeof(PgfClosure*));
 	jit_pushr_i(JIT_R0);
-	jit_pushr_i(JIT_R0);
 	jit_prepare(2);
 	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValue));
 	jit_pusharg_ui(JIT_R0);
@@ -597,19 +596,16 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_stxi_p(offsetof(PgfValue,absfun), JIT_RET, JIT_VHEAP);
 	jit_movr_p(JIT_VHEAP, JIT_RET);
 	jit_popr_i(JIT_R1);
+	jit_popr_p(JIT_VCLOS);
 	next = jit_get_label();
 	ref  = jit_blei_i(jit_forward(), JIT_R1, 0);
-	jit_ldxi_p(JIT_R2, JIT_FP, -sizeof(void*));
+	jit_popr_p(JIT_R2);
 	jit_stxi_p(offsetof(PgfValue,args), JIT_RET, JIT_R2);
 	jit_addi_i(JIT_RET, JIT_RET, sizeof(void*));
-	jit_subi_i(JIT_FP, JIT_FP, sizeof(void*));
 	jit_subi_i(JIT_R1, JIT_R1, sizeof(void*));
 	jit_jmpi(next);
 	jit_patch(ref);
-	jit_popr_p(JIT_R1);
-	jit_popr_p(JIT_R0);
-	jit_addr_i(JIT_SP, JIT_SP, JIT_R1);
-	jit_jmpr(JIT_R0);
+	jit_jmpr(JIT_VCLOS);
 
 	gates->fin.fn = pgf_jit_finalize_defrules;
 	gates->defrules = NULL;
