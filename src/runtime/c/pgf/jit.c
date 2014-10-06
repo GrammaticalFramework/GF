@@ -1027,7 +1027,10 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				    gu_printf(out, err, "\n");
 #endif
 					jit_pushr_p(JIT_R2);
+					jit_pushr_p(JIT_FP);
+					jit_movr_p(JIT_FP, JIT_SP);
 					jit_callr(JIT_R0);
+					jit_popr_p(JIT_FP);
 					jit_popr_p(JIT_VCLOS);
 					break;
 				}
