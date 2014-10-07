@@ -444,17 +444,6 @@ pgf_jit_gates(PgfReader* rdr)
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
-	gates->evaluate_expr_thunk = jit_get_ip().ptr;
-	jit_prepare(2);
-	jit_pusharg_p(JIT_VCLOS);
-	jit_pusharg_p(JIT_VSTATE);
-	jit_finish(pgf_evaluate_expr_thunk);
-	jit_retval(JIT_VCLOS);
-	jit_ldr_p(JIT_R0, JIT_VCLOS);
-	jit_jmpr(JIT_R0);
-
-	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
-
 	gates->evaluate_value_lit = jit_get_ip().ptr;
 	jit_movr_p(JIT_VHEAP, JIT_VCLOS);
 	jit_prepare(1);
@@ -562,6 +551,23 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_popr_p(JIT_R1);
 	jit_popr_p(JIT_R0);
 	jit_addr_p(JIT_SP, JIT_SP, JIT_R1);
+	jit_jmpr(JIT_R0);
+
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
+
+	gates->evaluate_expr_thunk = jit_get_ip().ptr;
+	jit_prepare(2);
+	jit_pusharg_p(JIT_VCLOS);
+	jit_pusharg_p(JIT_VSTATE);
+	jit_finish(pgf_evaluate_expr_thunk);
+	ref = jit_beqr_p(jit_forward(), JIT_VCLOS, JIT_RET);
+	jit_pushr_p(JIT_VCLOS);
+	jit_pushr_p(JIT_FP);
+	jit_movi_p(JIT_R1, gates->update_closure);
+	jit_pushr_p(JIT_R1);
+	jit_retval(JIT_VCLOS);
+	jit_patch(ref);
+	jit_ldr_p(JIT_R0, JIT_VCLOS);
 	jit_jmpr(JIT_R0);
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
