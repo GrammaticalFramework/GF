@@ -72,10 +72,6 @@ repeat:;
 			val->args[i] = args[n_args-i-1];
 		}
 
-		PgfIndirection* indir = (PgfIndirection*) thunk;
-		indir->header.code = state->eval_gates->evaluate_indirection;
-		indir->val         = &val->header;
-
 		res = &val->header;
 		break;
 	}
@@ -165,10 +161,6 @@ repeat:;
 				
 				lambda->expr = expr;
 			}
-
-			PgfIndirection* indir = (PgfIndirection*) thunk;
-			indir->header.code = state->eval_gates->evaluate_indirection;
-			indir->val = res;
 		}
 		break;
 	}
@@ -189,10 +181,6 @@ repeat:;
 		}
 
 		res = tmp_env->closure;
-
-		PgfIndirection* indir = (PgfIndirection*) thunk;
-		indir->header.code = state->eval_gates->evaluate_indirection;
-		indir->val         = res;
 
 		if (n_args > 0) {
 			PgfValuePAP* val = gu_new_flex(state->pool, PgfValuePAP, args, n_args);
