@@ -921,6 +921,17 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 					jit_ldxi_p(JIT_R0, JIT_VCLOS, sizeof(PgfClosure)+index*sizeof(PgfClosure*));
 					break;
 				}
+				case 3: {
+					PgfCId id = pgf_read_cid(rdr, rdr->tmp_pool);
+#ifdef PGF_JIT_DEBUG
+					gu_printf(out, err, "SET         %s\n", id);
+#endif
+					PgfCallPatch patch;
+					patch.cid = id;
+					patch.ref = jit_addi_p(JIT_R0, JIT_VSTATE, jit_forward());
+					gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
+					break;
+				}
 				default:
 					gu_impossible();
 				}
@@ -975,7 +986,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				case 3: {
 					PgfCId id = pgf_read_cid(rdr, rdr->tmp_pool);
 #ifdef PGF_JIT_DEBUG
-					gu_printf(out, err, "PUSH        %s", id);
+					gu_printf(out, err, "PUSH        %s\n", id);
 #endif
 					PgfCallPatch patch;
 					patch.cid = id;
