@@ -130,17 +130,17 @@ compileFun gr arity st vs (Let (x, (_, e1)) e2) h0 bs args =
 compileFun gr arity st vs e _ _ _ = error (show e)
 
 compileArg gr st vs (Q(m,id)) h0 bs =
-  let h1 = h0 + 2
-  in case lookupAbsDef gr m id of
-       Ok (_,Just _) -> (h1,bs,GLOBAL (i2i id),[])
-       _             -> let Ok ty = lookupFunType gr m id
-                            (ctxt,_,_) = typeForm ty
-                            c_arity    = length ctxt
-                        in if c_arity == 0
-                             then (h1,bs,HEAP h0,[PUT_CONSTR (i2i id)])
-                             else let is2 = [SET (ARG_VAR (i+1)) | i <- [0..c_arity-1]]
-                                      b   = CHECK_ARGS c_arity : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall c_arity (c_arity+1) (c_arity+1))]
-                                  in (h1,b:bs,HEAP h0,[PUT_CLOSURE (length bs),SET_PAD])
+  case lookupAbsDef gr m id of
+    Ok (_,Just _) -> (h0,bs,GLOBAL (i2i id),[])
+    _             -> let Ok ty = lookupFunType gr m id
+                         (ctxt,_,_) = typeForm ty
+                         c_arity    = length ctxt
+                         h1 = h0 + 2
+                     in if c_arity == 0
+                          then (h1,bs,HEAP h0,[PUT_CONSTR (i2i id)])
+                          else let is2 = [SET (ARG_VAR (i+1)) | i <- [0..c_arity-1]]
+                                   b   = CHECK_ARGS c_arity : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall c_arity (c_arity+1) (c_arity+1))]
+                               in (h1,b:bs,HEAP h0,[PUT_CLOSURE (length bs),SET_PAD])
 compileArg gr st vs (QC qid)    h0 bs =
   compileArg gr st vs (Q qid) h0 bs
 compileArg gr st vs (Vr x)      h0 bs =
