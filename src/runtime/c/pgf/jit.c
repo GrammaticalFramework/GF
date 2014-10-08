@@ -16,7 +16,7 @@ struct PgfJitState {
 	char *save_ip_ptr;
 	GuBuf* call_patches;
 	GuBuf* segment_patches;
-	size_t n_closures;
+	size_t n_cafs;
 };
 
 #define _jit (rdr->jit_state->jit)
@@ -81,7 +81,7 @@ pgf_new_jit(PgfReader* rdr)
 	state->segment_patches = gu_new_buf(PgfSegmentPatch, rdr->tmp_pool);
 	state->buf = NULL;
 	state->save_ip_ptr = NULL;
-	state->n_closures = 0;
+	state->n_cafs = 0;
 	return state;
 }
 
@@ -318,11 +318,11 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 }
 
 static void
-pgf_jit_finalize_defrules(GuFinalizer* self)
+pgf_jit_finalize_cafs(GuFinalizer* self)
 {
 	PgfEvalGates* gates = gu_container(self, PgfEvalGates, fin);
-	if (gates->defrules != NULL)
-		gu_seq_free(gates->defrules);
+	if (gates->cafs != NULL)
+		gu_seq_free(gates->cafs);
 }
 
 PgfEvalGates*
@@ -343,7 +343,7 @@ pgf_jit_gates(PgfReader* rdr)
 
 	gates->evaluate_value = jit_get_ip().ptr;
 	jit_movr_p(JIT_VHEAP, JIT_VCLOS);
-	jit_ldxi_p(JIT_RET, JIT_VHEAP, offsetof(PgfValue, absfun));
+	jit_ldxi_p(JIT_RET, JIT_VHEAP, offsetof(PgfValue, con));
 	jit_bare_ret(0);
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
@@ -451,6 +451,14 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_pusharg_p(JIT_R0);
 	jit_finish(gu_variant_data);
 	jit_bare_ret(0);
+
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
+
+	gates->evaluate_caf = jit_get_ip().ptr;
+	jit_ldxi_i(JIT_R0, JIT_VCLOS, offsetof(PgfAbsFun, closure.caf_offset) - offsetof(PgfAbsFun, closure));
+	jit_addr_p(JIT_VCLOS, JIT_VSTATE, JIT_R0);
+	jit_ldr_p(JIT_R0, JIT_VCLOS);
+	jit_jmpr(JIT_R0);
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
@@ -588,7 +596,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_jmpr(JIT_R0);
 
 	gates->mk_const = jit_get_ip().ptr;
-	jit_ldxi_p(JIT_R0, JIT_VHEAP, offsetof(PgfAbsFun,arity));
+	jit_ldxi_p(JIT_R0, JIT_VCLOS, offsetof(PgfAbsFun,arity)-offsetof(PgfAbsFun,closure));
 	jit_muli_i(JIT_R0, JIT_R0, sizeof(PgfClosure*));
 	jit_pushr_i(JIT_R0);
 	jit_prepare(2);
@@ -599,7 +607,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_finish(gu_malloc);
 	jit_movi_p(JIT_R1, gates->evaluate_value);
 	jit_str_p(JIT_RET, JIT_R1);
-	jit_stxi_p(offsetof(PgfValue,absfun), JIT_RET, JIT_VHEAP);
+	jit_stxi_p(offsetof(PgfValue,con), JIT_RET, JIT_VCLOS);
 	jit_movr_p(JIT_VHEAP, JIT_RET);
 	jit_popr_i(JIT_R1);
 	jit_popr_p(JIT_VCLOS);
@@ -613,14 +621,14 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_patch(ref);
 	jit_jmpr(JIT_VCLOS);
 
-	gates->fin.fn = pgf_jit_finalize_defrules;
-	gates->defrules = NULL;
+	gates->fin.fn = pgf_jit_finalize_cafs;
+	gates->cafs = NULL;
 	gu_pool_finally(rdr->opool, &gates->fin);
 
 	return gates;
 }
 
-#define PGF_DEFRULES_DELTA 20
+#define PGF_CAFS_DELTA 20
 
 void
 pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
@@ -635,18 +643,12 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 	gu_puts(":\n", out, err);
 #endif
 
-	if (rdr->jit_state->n_closures % PGF_DEFRULES_DELTA == 0) {
-		abstr->eval_gates->defrules =
-			gu_realloc_seq(abstr->eval_gates->defrules,
-			               PgfFunction,
-			               rdr->jit_state->n_closures + PGF_DEFRULES_DELTA);
-	}
-	absfun->closure_id = ++rdr->jit_state->n_closures;
-
 	size_t n_segments = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, );
 
 	gu_buf_flush(rdr->jit_state->segment_patches);
+
+	absfun->closure.code = abstr->eval_gates->mk_const;
 
 	for (size_t segment = 0; segment < n_segments; segment++) {
 		size_t n_instrs = pgf_read_len(rdr);
@@ -655,10 +657,26 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 		pgf_jit_make_space(rdr, (JIT_CODE_WINDOW/4)*n_instrs);
 
 		if (segment == 0) {
-			gu_seq_set(abstr->eval_gates->defrules,
-			           PgfFunction,
-			           absfun->closure_id-1,
-			           jit_get_ip().ptr);
+			if (absfun->arity == 0) {
+				// we add a new CAF
+				if (rdr->jit_state->n_cafs % PGF_CAFS_DELTA == 0) {
+					abstr->eval_gates->cafs =
+						gu_realloc_seq(abstr->eval_gates->cafs,
+						               PgfFunction,
+						               rdr->jit_state->n_cafs + PGF_CAFS_DELTA);
+				}
+				absfun->closure.code = abstr->eval_gates->evaluate_caf;
+				size_t caf_id = rdr->jit_state->n_cafs++;
+				absfun->closure.caf_offset = 
+					offsetof(PgfEvalState,cafs)+
+					caf_id*sizeof(PgfIndirection);
+				gu_seq_set(abstr->eval_gates->cafs,
+				           PgfFunction,
+				           caf_id,
+				           jit_get_ip().ptr);
+			} else {
+				absfun->closure.code = jit_get_ip().ptr;
+			}
 		}
 
 		size_t curr_offset = 0;
@@ -928,7 +946,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #endif
 					PgfCallPatch patch;
 					patch.cid = id;
-					patch.ref = jit_addi_p(JIT_R0, JIT_VSTATE, jit_forward());
+					patch.ref = jit_movi_p(JIT_R0, jit_forward());
 					gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
 					break;
 				}
@@ -990,7 +1008,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #endif
 					PgfCallPatch patch;
 					patch.cid = id;
-					patch.ref = jit_addi_p(JIT_R0, JIT_VSTATE, jit_forward());
+					patch.ref = jit_movi_p(JIT_R0, jit_forward());
 					gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
 					jit_pushr_p(JIT_R0);
 					break;
@@ -1036,7 +1054,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #endif
 					PgfCallPatch patch;
 					patch.cid = id;
-					patch.ref = jit_addi_p(JIT_VCLOS, JIT_VSTATE, jit_forward());
+					patch.ref = jit_movi_p(JIT_VCLOS, jit_forward());
 					gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
 					break;
 				}
@@ -1140,7 +1158,6 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #ifdef PGF_JIT_DEBUG
 				gu_printf(out, err, "FAIL\n");
 #endif
-				jit_movi_p(JIT_VHEAP, absfun);
 				jit_jmpi(abstr->eval_gates->mk_const);
 				break;
 			default:
@@ -1163,17 +1180,12 @@ pgf_jit_done(PgfReader* rdr, PgfAbstr* abstr)
 		if (arg != NULL) {
 			jit_patch_calli(patch->ref,(jit_insn*) arg->predicate);
 		} else {
-			PgfAbsFun* con =
+			PgfAbsFun* fun =
 				gu_map_get(abstr->funs, patch->cid, PgfAbsFun*);
-			if (con == NULL)
+			if (fun == NULL)
 				gu_impossible();
-			else if (con->closure_id == 0) {
-				jit_patch_movi(patch->ref,con);
-			} else {
-				size_t offset =
-					offsetof(PgfEvalState,globals)+
-					sizeof(PgfIndirection)*(con->closure_id-1);
-				jit_patch_movi(patch->ref,offset);
+			else  {
+				jit_patch_movi(patch->ref,&fun->closure);
 			}
 		}
 	}
