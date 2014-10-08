@@ -216,7 +216,7 @@ gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr)
 		}
 	}
 
-	void *ptr = mmap(addr, size, prot, MAP_SHARED, fd, 0);
+	void *ptr = mmap(addr, size, prot, MAP_SHARED | MAP_FIXED, fd, 0);
 	if (ptr == MAP_FAILED) {
 		close(fd);
 		return NULL;
