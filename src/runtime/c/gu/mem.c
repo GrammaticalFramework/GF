@@ -23,6 +23,10 @@
 #include <gu/assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #ifdef USE_VALGRIND
 #include <valgrind/valgrind.h>
@@ -139,18 +143,20 @@ struct GuFinalizerNode {
 	GuFinalizer* fin;
 };
 
-enum GuPoolFlags {
-	GU_POOL_LOCAL = 1 << 0
+enum GuPoolType {
+	GU_POOL_HEAP,
+	GU_POOL_LOCAL,
+	GU_POOL_MMAP
 };
 
 struct GuPool {
 	uint8_t* curr_buf; // actually GuMemChunk*
 	GuMemChunk* chunks;
 	GuFinalizerNode* finalizers;
-	uint16_t flags;
-	uint16_t left_edge;
-	uint16_t right_edge;
-	uint16_t curr_size;
+	uint16_t type;
+	size_t left_edge;
+	size_t right_edge;
+	size_t curr_size;
 	uint8_t init_buf[];
 };
 
@@ -160,7 +166,7 @@ gu_init_pool(uint8_t* buf, size_t sz)
 	gu_require(gu_aligned((uintptr_t) (void*) buf, gu_alignof(GuPool)));
 	gu_require(sz >= sizeof(GuPool));
 	GuPool* pool = (GuPool*) buf;
-	pool->flags = 0;
+	pool->type = GU_POOL_HEAP;
 	pool->curr_size = sz;
 	pool->curr_buf = (uint8_t*) pool;
 	pool->chunks = NULL;
@@ -175,7 +181,7 @@ GuPool*
 gu_local_pool_(uint8_t* buf, size_t sz)
 {
 	GuPool* pool = gu_init_pool(buf, sz);
-	pool->flags |= GU_POOL_LOCAL;
+	pool->type = GU_POOL_LOCAL;
 	return pool;
 }
 
@@ -188,9 +194,55 @@ gu_new_pool(void)
 	return pool;
 }
 
+GuPool* 
+gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr)
+{
+	int prot = PROT_READ;
+	int fd = open(fpath, O_RDONLY, S_IREAD);
+	if (fd < 0) {
+		if (errno == ENOENT) {
+			fd = open(fpath, O_RDWR | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
+			if (fd < 0)
+				return NULL;
+
+			if (ftruncate(fd, size) < 0) {
+				close(fd);
+				return NULL;
+			}
+
+			prot |= PROT_WRITE;
+		} else {
+			return NULL;
+		}
+	}
+
+	void *ptr = mmap(addr, size, prot, MAP_SHARED, fd, 0);
+	if (ptr == MAP_FAILED) {
+		close(fd);
+		return NULL;
+	}
+
+	gu_require(ptr == addr);
+
+	*pptr = (prot & PROT_WRITE) ? NULL : ptr;
+
+	size_t sz = GU_FLEX_SIZE(GuPool, init_buf, sizeof(int));
+	uint8_t* buf = gu_mem_buf_alloc(sz, &sz);
+	GuPool* pool = gu_init_pool(buf, size);
+
+	*((int*) pool->init_buf) = fd;
+
+	pool->type = GU_POOL_MMAP;
+	pool->curr_buf = ptr;
+	pool->left_edge = 0;
+
+	return pool;
+}
+
 static void
 gu_pool_expand(GuPool* pool, size_t req)
 {
+	gu_require(pool->type != GU_POOL_MMAP);
 	size_t real_req = GU_MAX(req, GU_MIN(((size_t)pool->curr_size) + 1,
 					     gu_mem_chunk_max_size));
 	gu_assert(real_req >= sizeof(GuMemChunk));
@@ -201,7 +253,6 @@ gu_pool_expand(GuPool* pool, size_t req)
 	pool->curr_buf = (uint8_t*) chunk;
 	pool->left_edge = offsetof(GuMemChunk, data);
 	pool->right_edge = pool->curr_size = size;
-	// size should always fit in uint16_t
 	gu_assert((size_t) pool->right_edge == size); 
 }
 
@@ -220,7 +271,6 @@ static void*
 gu_pool_malloc_aligned(GuPool* pool, size_t pre_align, size_t pre_size,
 		       size_t align, size_t size) 
 {
-	gu_require(size <= gu_mem_max_shared_alloc);
 	size_t pos = gu_mem_advance(pool->left_edge, pre_align, pre_size,
 				    align, size);
 	if (pos > (size_t) pool->right_edge) {
@@ -267,7 +317,8 @@ gu_malloc_prefixed(GuPool* pool, size_t pre_align, size_t pre_size,
 	}
 	size_t full_size = gu_mem_advance(offsetof(GuMemChunk, data),
 					  pre_align, pre_size, align, size);
-	if (full_size > gu_mem_max_shared_alloc) {
+	if (full_size > gu_mem_max_shared_alloc &&
+	    pool->type != GU_POOL_MMAP) {
 		GuMemChunk* chunk = gu_mem_alloc(full_size);
 		chunk->next = pool->chunks;
 		pool->chunks = chunk;
@@ -300,6 +351,7 @@ gu_malloc_aligned(GuPool* pool, size_t size, size_t align)
 void 
 gu_pool_finally(GuPool* pool, GuFinalizer* finalizer)
 {
+	gu_require(pool->type != GU_POOL_MMAP);
 	GuFinalizerNode* node = gu_new(GuFinalizerNode, pool);
 	node->next = pool->finalizers;
 	node->fin = finalizer;
@@ -321,8 +373,13 @@ gu_pool_free(GuPool* pool)
 		chunk = next;
 	}
 	VG(VALGRIND_DESTROY_MEMPOOL(pool));
-	if (!pool->flags & GU_POOL_LOCAL) {
+	if (pool->type == GU_POOL_HEAP) {
 		gu_mem_buf_free(pool);
+	} else if (pool->type == GU_POOL_MMAP) {
+		int fd = *((int*) pool->init_buf);
+
+		munmap(pool->curr_buf, pool->curr_size);
+		close(fd);
 	}
 }
 

@@ -74,6 +74,9 @@ gu_local_pool_(uint8_t* init_buf, size_t sz);
  * should not be used in the bodies of recursive functions.
  */
 
+/// Create a pool stored in a memory mapped file.
+GuPool* 
+gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr);
 
 //@}
 /// @name Destroying a pool
