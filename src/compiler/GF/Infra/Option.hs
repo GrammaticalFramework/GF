@@ -173,7 +173,7 @@ data Flags = Flags {
       optHeuristicFactor :: Maybe Double,
       optMetaProb        :: Maybe Double,
       optMetaToknProb    :: Maybe Double,
-      optJobs            :: Maybe (Maybe String)
+      optJobs            :: Maybe (Maybe Int)
     }
   deriving (Show)
 
@@ -389,7 +389,13 @@ optDescr =
            ms = mode . ModeServer
            readPort p = maybe err ms (readMaybe p)
                  where err = fail $ "Bad server port: "++p
-       jobs mv       = set $ \ o -> o { optJobs = Just mv }
+
+       jobs          = maybe (setjobs Nothing) number
+           where
+             number s = maybe err (setjobs . Just) (readMaybe s)
+               where err = fail $ "Bad number of jobs: " ++ s
+             setjobs j = set $ \ o -> o { optJobs = Just j }
+
        verbosity mv  = case mv of
                            Nothing -> set $ \o -> o { optVerbosity = Verbose }
                            Just v  -> case readMaybe v >>= toEnumBounded of
