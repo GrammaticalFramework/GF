@@ -442,7 +442,12 @@ pgf_read_absfun(PgfReader* rdr, PgfAbstr* abstr)
 	switch (tag) {
 	case 0:
 		absfun->defns = NULL;
-		absfun->closure_id = 0;
+		if (absfun->arity == 0) {
+			absfun->closure.code = abstr->eval_gates->evaluate_value;
+			absfun->closure.con  = &absfun->closure.code;
+		} else {
+			absfun->closure.code = NULL;
+		}
 		break;
 	case 1: {
         GuLength length = pgf_read_len(rdr);

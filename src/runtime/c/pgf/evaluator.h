@@ -1,8 +1,6 @@
 #ifndef PGF_EVALUATOR_H_
 #define PGF_EVALUATOR_H_
 
-typedef void *PgfFunction;
-
 typedef struct {
 	PgfFunction code;
 } PgfClosure;
@@ -17,7 +15,7 @@ typedef struct {
 	PgfEvalGates* eval_gates; // cached from pgf->abstr->eval_gates
 	GuPool* pool;
 	GuExn* err;
-	PgfIndirection globals[];  // derived from gu_seq_data(pgf->abstr->eval_gates->defrules)
+	PgfIndirection cafs[];  // derived from gu_seq_data(pgf->abstr->eval_gates->cafs)
 } PgfEvalState;
 
 typedef struct PgfEnv PgfEnv;
@@ -35,7 +33,7 @@ typedef struct {
 
 typedef struct {
 	PgfClosure header;
-	PgfAbsFun* absfun;
+	PgfClosure* con;
 	PgfClosure* args[];
 } PgfValue;
 
@@ -75,6 +73,7 @@ struct PgfEvalGates {
 	PgfFunction evaluate_value_lit;
 	PgfFunction evaluate_value_pap;
 	PgfFunction evaluate_value_lambda;
+	PgfFunction evaluate_caf;
 
 	PgfFunction update_closure;
 	PgfFunction update_pap;
@@ -84,7 +83,7 @@ struct PgfEvalGates {
 	PgfClosure* (*enter)(PgfEvalState* state, PgfClosure* closure);
 
 	GuFinalizer fin;
-	GuSeq* defrules;
+	GuSeq* cafs;
 };
 
 PgfClosure*

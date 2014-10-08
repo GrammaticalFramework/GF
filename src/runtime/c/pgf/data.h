@@ -69,6 +69,8 @@ typedef struct {
 
 typedef GuSeq PgfEquations;
 
+typedef void *PgfFunction;
+
 typedef struct {
 	PgfCId name;
 	PgfType* type;
@@ -76,7 +78,13 @@ typedef struct {
 	PgfEquations* defns; // maybe null
 	PgfExprProb ep;
 	void* predicate;
-	size_t closure_id;
+	struct {
+		PgfFunction code;
+		union {
+			size_t caf_offset;
+			PgfFunction* con;
+		};
+	} closure;
 } PgfAbsFun;
 
 extern GU_DECLARE_TYPE(PgfAbsFun, abstract);
