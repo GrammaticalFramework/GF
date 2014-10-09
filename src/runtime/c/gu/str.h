@@ -18,10 +18,6 @@ gu_str_eq(GuStr s1, GuStr s2);
 
 extern GuHasher gu_str_hasher[1];
 
-#include <gu/type.h>
-
-extern GU_DECLARE_TYPE(GuStr, repr);
-
 char* gu_vasprintf(const char* fmt, va_list args, GuPool* pool);
 
 char* gu_asprintf(GuPool* pool, const char* fmt, ...);

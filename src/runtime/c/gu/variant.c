@@ -109,6 +109,3 @@ gu_variant_intval(GuVariant variant)
 }
 
 const GuVariant gu_null_variant = { (GuWord) NULL };
-
-GU_DEFINE_KIND(GuVariant, repr);
-GU_DEFINE_KIND(GuVariantAsPtr, repr);

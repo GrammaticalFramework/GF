@@ -76,8 +76,6 @@ pgf_cfty2ty(PgfTypeChecker* checker, PgfCFType cf_ty)
 	return ty;
 }
 
-GU_DEFINE_TYPE(PgfTypeError, abstract, _);
-
 static PgfPrintContext*
 pgf_tc_mk_print_context(PgfTypeChecker* checker, PgfContext* ctxt)
 {
@@ -104,7 +102,7 @@ pgf_tc_err_cannot_infer(PgfTypeChecker* checker, PgfContext* ctxt, PgfExpr e)
 {
 	GuStringBuf* sbuf = gu_string_buf(checker->tmp_pool);
     GuOut* out = gu_string_buf_out(sbuf);
-    GuExn* err = gu_exn(NULL, type, checker->tmp_pool);
+    GuExn* err = gu_exn(checker->tmp_pool);
 
 	gu_puts("Cannot infer the type of expression ", out, err);
 	pgf_print_expr(e, pgf_tc_mk_print_context(checker, ctxt), 0, out, err);
@@ -120,7 +118,7 @@ pgf_tc_err_exp_fun_type_1(PgfTypeChecker* checker, PgfContext* ctxt,
 {
 	GuStringBuf* sbuf = gu_string_buf(checker->tmp_pool);
     GuOut* out = gu_string_buf_out(sbuf);
-    GuExn* err = gu_exn(NULL, type, checker->tmp_pool);
+    GuExn* err = gu_exn(checker->tmp_pool);
 
 	PgfPrintContext* pctxt = pgf_tc_mk_print_context(checker, ctxt);
 	gu_puts("The expression ", out, err);
@@ -140,7 +138,7 @@ pgf_tc_err_exp_fun_type_2(PgfTypeChecker* checker, PgfContext* ctxt,
 {
 	GuStringBuf* sbuf = gu_string_buf(checker->tmp_pool);
     GuOut* out = gu_string_buf_out(sbuf);
-    GuExn* err = gu_exn(NULL, type, checker->tmp_pool);
+    GuExn* err = gu_exn(checker->tmp_pool);
 
 	PgfPrintContext* pctxt = pgf_tc_mk_print_context(checker, ctxt);
 	gu_puts("A function type is expected for the expression ", out, err);
@@ -173,7 +171,7 @@ pgf_tc_err_type_mismatch(PgfTypeChecker* checker,
 {
 	GuStringBuf* sbuf = gu_string_buf(checker->tmp_pool);
     GuOut* out = gu_string_buf_out(sbuf);
-    GuExn* err = gu_exn(NULL, type, checker->tmp_pool);
+    GuExn* err = gu_exn(checker->tmp_pool);
 
 	PgfPrintContext* pctxt = pgf_tc_mk_print_context(checker, ctxt);
 	gu_puts("The expected type of the expression ", out, err);

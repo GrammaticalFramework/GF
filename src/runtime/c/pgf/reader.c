@@ -25,13 +25,8 @@
 typedef struct PgfReadTagExn PgfReadTagExn;
 
 struct PgfReadTagExn {
-	GuType* type;
 	int tag;
 };
-
-static GU_DEFINE_TYPE(PgfReadTagExn, abstract, _);
-
-static GU_DEFINE_TYPE(PgfReadExn, abstract, _);
 
 uint8_t
 pgf_read_tag(PgfReader* rdr)
@@ -73,7 +68,6 @@ pgf_read_len(PgfReader* rdr)
 		GuExnData* err_data = gu_raise(rdr->err, PgfReadTagExn);
 		if (err_data) {
 			PgfReadTagExn* rtag = gu_new(PgfReadTagExn, err_data->pool);
-			rtag->type = gu_type(GuLength);
 			rtag->tag  = len;
 			err_data->data = rtag;
 		}
@@ -93,7 +87,7 @@ pgf_read_cid(PgfReader* rdr, GuPool* pool)
 GuString
 pgf_read_string(PgfReader* rdr)
 {	
-	GuLength len = pgf_read_len(rdr);
+	size_t len = pgf_read_len(rdr);
 	return gu_string_read(len, rdr->opool, rdr->in, rdr->err);
 }
 
@@ -117,7 +111,7 @@ pgf_read_literal(PgfReader* rdr)
 	uint8_t tag = pgf_read_tag(rdr);
 	switch (tag) {
 	case PGF_LITERAL_STR: {
-		GuLength len = pgf_read_len(rdr);
+		size_t len = pgf_read_len(rdr);
 		uint8_t* buf = alloca(len*6+1);
 		uint8_t* p   = buf;
 		for (size_t i = 0; i < len; i++) {
@@ -159,7 +153,7 @@ pgf_read_literal(PgfReader* rdr)
 static PgfFlags*
 pgf_read_flags(PgfReader* rdr)
 {
-	GuLength n_flags = pgf_read_len(rdr);
+	size_t n_flags = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
 	PgfFlags* flags = gu_new_seq(PgfFlag, n_flags, rdr->opool);
@@ -447,20 +441,20 @@ pgf_read_absfun(PgfReader* rdr, PgfAbstr* abstr, PgfAbsFun* absfun)
 		}
 		break;
 	case 1: {
-        GuLength length = pgf_read_len(rdr);
+        size_t length = pgf_read_len(rdr);
         gu_return_on_exn(rdr->err, NULL);
 
         absfun->defns = gu_new_seq(PgfEquation*, length, rdr->opool);
         PgfEquation** data = gu_seq_data(absfun->defns);
         for (size_t i = 0; i < length; i++) {
-            GuLength n_patts = pgf_read_len(rdr);
+            size_t n_patts = pgf_read_len(rdr);
             gu_return_on_exn(rdr->err, NULL);
 
             PgfEquation *equ =
                 gu_malloc(rdr->opool, 
                           sizeof(PgfEquation)+sizeof(PgfPatt)*n_patts);
             equ->n_patts = n_patts;
-            for (GuLength j = 0; j < n_patts; j++) {
+            for (size_t j = 0; j < n_patts; j++) {
                 equ->patts[j] = pgf_read_patt(rdr);
                 gu_return_on_exn(rdr->err, NULL);
             }
@@ -470,7 +464,7 @@ pgf_read_absfun(PgfReader* rdr, PgfAbstr* abstr, PgfAbsFun* absfun)
             data[i] = equ;
         }
         
-      // 	pgf_jit_function(rdr, abstr, absfun);
+       	// pgf_jit_function(rdr, abstr, absfun);
 		break;
     }
 	default:
@@ -571,11 +565,7 @@ pgf_read_abstract(PgfReader* rdr, PgfAbstr* abstract)
 static PgfCIdMap*
 pgf_read_printnames(PgfReader* rdr)
 {
-	GuMapType* map_type = (GuMapType*)
-		GU_TYPE_LIT(GuStringMap, _,
-			 		gu_type(GuString),
-					&"");
-	PgfCIdMap* printnames = gu_map_type_make(map_type, rdr->opool);
+	PgfCIdMap* printnames = gu_new_string_map(GuString, &"", rdr->opool);
 
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
@@ -661,7 +651,7 @@ pgf_read_symbol(PgfReader* rdr)
 		break;
 	}
 	case PGF_SYMBOL_KS: {
-		GuLength len = pgf_read_len(rdr);
+		size_t len = pgf_read_len(rdr);
 		uint8_t* buf = alloca(len*6+1);
 		uint8_t* p   = buf;
 		for (size_t i = 0; i < len; i++) {
@@ -990,7 +980,7 @@ pgf_read_ccats(PgfReader* rdr, PgfConcr* concr)
 	for (size_t i = 0; i < len; i++) {
 		PgfCCat* ccat = pgf_read_fid(rdr, concr);
 
-		GuLength n_prods = pgf_read_len(rdr);
+		size_t n_prods = pgf_read_len(rdr);
 		gu_return_on_exn(rdr->err,);
 
 		ccat->prods = gu_new_seq(PgfProduction, n_prods, rdr->opool);
@@ -1056,11 +1046,7 @@ pgf_read_cnccat(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, PgfCId name)
 static PgfCIdMap*
 pgf_read_cnccats(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr)
 {
-	GuMapType* map_type = (GuMapType*)
-		GU_TYPE_LIT(GuStringMap, _,
-			 		gu_ptr_type(PgfCncCat),
-					&gu_null_struct);
-	PgfCIdMap* cnccats = gu_map_type_make(map_type, rdr->opool);
+	PgfCIdMap* cnccats = gu_new_string_map(PgfCncCat, &gu_null_struct, rdr->opool);
 
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
@@ -1149,8 +1135,8 @@ pgf_read_concrete_content(PgfReader* rdr, PgfConcr* concr)
 
 	concr->ccats =
 		gu_new_int_map(PgfCCat*, &gu_null_struct, rdr->opool);
-	concr->fun_indices = gu_map_type_new(PgfCncFunOverloadMap, rdr->opool);
-	concr->coerce_idx  = gu_map_type_new(PgfCncOverloadMap, rdr->opool);
+	concr->fun_indices = gu_new_string_map(PgfCncOverloadMap*, &gu_null_struct, rdr->opool);
+	concr->coerce_idx  = gu_new_addr_map(PgfCCat*, GuBuf*, &gu_null_struct, rdr->opool);
 	pgf_read_lindefs(rdr, concr);
 	pgf_read_linrefs(rdr, concr);
 	pgf_read_ccats(rdr, concr);

@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Create an exception frame that catches all errors.
-  GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
+  GuExn* err = gu_new_exn(pool);
 
 
   clock_t start = clock();
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
 
     clock_t start = clock();
 
-    GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), ppool);
+    GuExn* parse_err = gu_new_exn(ppool);
     GuEnum* result = pgf_parse_with_heuristics(concr, cat, line, heuristics, parse_err, ppool, ppool);
 
     PgfExprProb* ep = NULL;

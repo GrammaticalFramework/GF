@@ -7,8 +7,6 @@
 #include <locale.h>
 #include <stdlib.h>
 
-GU_DECLARE_TYPE(PgfAbstr, struct);
-
 int main(int argc, char* argv[]) {
 	// Set the character locale, so we can produce proper output.
 	setlocale(LC_CTYPE, "");
@@ -20,7 +18,7 @@ int main(int argc, char* argv[]) {
 	char* filename = argv[1];
 
 	GuPool* pool = gu_new_pool();
-	GuExn* err = gu_exn(NULL, type, pool);
+	GuExn* err = gu_exn(pool);
 	PgfPGF* pgf = pgf_read(filename, pool, err);
 	int status = 0;
 	if (!gu_ok(err)) {

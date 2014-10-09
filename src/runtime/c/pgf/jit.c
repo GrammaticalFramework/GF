@@ -126,7 +126,7 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 #ifdef PGF_JIT_DEBUG
 	GuPool* tmp_pool = gu_new_pool();
     GuOut* out = gu_file_out(stderr, tmp_pool);
-    GuExn* err = gu_exn(NULL, type, tmp_pool);
+    GuExn* err = gu_exn(tmp_pool);
     
 	gu_string_write(abscat->name, out, err);
 	gu_puts(":\n", out, err);
@@ -637,7 +637,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #ifdef PGF_JIT_DEBUG
 	GuPool* tmp_pool = gu_new_pool();
     GuOut* out = gu_file_out(stderr, tmp_pool);
-    GuExn* err = gu_exn(NULL, type, tmp_pool);
+    GuExn* err = gu_exn(tmp_pool);
     
 	gu_string_write(absfun->name, out, err);
 	gu_puts(":\n", out, err);
@@ -873,7 +873,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 					break;
 				}
 				case 1: {
-					GuLength len = pgf_read_len(rdr);
+					size_t len = pgf_read_len(rdr);
 					uint8_t* buf = alloca(len*6+1);
 					uint8_t* p   = buf;
 					for (size_t i = 0; i < len; i++) {

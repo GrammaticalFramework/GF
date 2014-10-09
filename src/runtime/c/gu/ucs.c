@@ -1,8 +1,6 @@
 #include <gu/ucs.h>
 #include <gu/assert.h>
 
-GU_DEFINE_TYPE(GuUCSExn, abstract, _);
-
 bool
 gu_char_is_valid(char c)
 {

@@ -49,9 +49,9 @@ gu_in_utf8_(GuIn* in, GuExn* err)
 	uint8_t buf[3];
 	// If reading the extra bytes causes EOF, it is an encoding
 	// error, not a legitimate end of character stream.
-	GuExn* tmp_err = gu_exn(err, GuEOF, NULL);
-	gu_in_bytes(in, buf, len, tmp_err);
-	if (tmp_err->caught) {
+	gu_in_bytes(in, buf, len, err);
+	if (gu_exn_caught(err, GuEOF)) {
+		gu_exn_clear(err);
 		goto fail;
 	}
 	if (!gu_ok(err)) {
@@ -151,9 +151,9 @@ gu_in_utf8_buf(uint8_t** buf, GuIn* in, GuExn* err)
 	}
 	// If reading the extra bytes causes EOF, it is an encoding
 	// error, not a legitimate end of character stream.
-	GuExn* tmp_err = gu_exn(err, GuEOF, NULL);
-	gu_in_bytes(in, p, len, tmp_err);
-	if (tmp_err->caught) {
+	gu_in_bytes(in, p, len, err);
+	if (gu_exn_caught(err, GuEOF)) {
+		gu_exn_clear(err);
 		goto fail;
 	}
 	if (!gu_ok(err)) {

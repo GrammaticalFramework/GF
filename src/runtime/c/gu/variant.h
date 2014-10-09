@@ -27,7 +27,6 @@
 
 #include <gu/defs.h>
 #include <gu/mem.h>
-#include <gu/type.h>
 
 /** @name Variants
  * @{
@@ -104,64 +103,5 @@ static inline bool
 gu_variant_is_null(GuVariant v) {
 	return ((void*)v == NULL);
 }
-
-
-// variant
-
-typedef const struct GuConstructor GuConstructor;
-
-struct GuConstructor {
-	int c_tag;
-	const char* c_name;
-	const GuType* type;
-};
-
-#define GU_CONSTRUCTOR_V(ctag, c_type) {		\
-		.c_tag = ctag,	 \
-		.c_name = #ctag, \
-		.type = c_type \
-}
-
-#define GU_CONSTRUCTOR(ctag, t_) \
-	GU_CONSTRUCTOR_V(ctag, gu_type(t_))
-
-#define GU_CONSTRUCTOR_P(ctag, t_) \
-	GU_CONSTRUCTOR_V(ctag, gu_ptr_type(t_))
-
-#define GU_CONSTRUCTOR_S(ctag, t_, ...)		\
-	GU_CONSTRUCTOR_V(ctag, GU_TYPE_LIT(struct, t_, __VA_ARGS__))
-
-#define GU_CONSTRUCTOR_S1(ctag, t_, mem1_, type1_)			\
-	GU_CONSTRUCTOR_S(ctag, t_,					\
-			 GU_MEMBER(t_, mem1_, type1_))
-
-#define GU_CONSTRUCTOR_S2(ctag, t_, mem1_, type1_, mem2_, type2_)	\
-	GU_CONSTRUCTOR_S(ctag, t_,					\
-			 GU_MEMBER(t_, mem1_, type1_),			\
-			 GU_MEMBER(t_, mem2_, type2_))
-
-
-
-typedef struct {
-	int len;
-	GuConstructor* elems;
-} GuConstructors;
-
-typedef const struct GuVariantType GuVariantType, GuType_GuVariant;
-
-struct GuVariantType {
-	GuType_repr repr_base;
-	GuConstructors ctors;
-};
-
-#define GU_TYPE_INIT_GuVariant(k_, t_, ...) {			\
-	.repr_base = GU_TYPE_INIT_repr(k_, GuVariant, _),	\
-	.ctors = {								\
-		.len = GU_ARRAY_LEN(GuConstructor,GU_ID({__VA_ARGS__})),		\
-		.elems = ((GuConstructor[]){__VA_ARGS__})			\
-	} \
-}
-
-extern GU_DECLARE_KIND(GuVariant);
 
 #endif // GU_VARIANT_H_

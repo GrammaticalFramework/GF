@@ -132,7 +132,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 {
 	GuPool* pool = gu_new_pool();
 
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
+	GuExn* err = gu_new_exn(pool);
 
 	GuEnum* en_lins1 =
 		pgf_lzr_concretize(concr, expr, err, pool);
@@ -153,7 +153,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 	PgfMetricsLznState state;
 	state.bind = true;
 	state.out  = gu_string_buf_out(sbuf);
-	state.err  = gu_new_exn(NULL, gu_kind(type), pool);
+	state.err  = gu_new_exn(pool);
 	state.funcs = &pgf_metrics_lin_funcs1;
 	state.pos = 0;
 	state.marks = gu_new_buf(int, pool);

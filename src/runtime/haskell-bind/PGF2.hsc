@@ -52,12 +52,12 @@ readPGF fpath =
   do pool <- gu_new_pool
      pgf  <- withCString fpath $ \c_fpath ->
                withGuPool $ \tmpPl -> do
-                 exn <- gu_new_exn nullPtr gu_type__type tmpPl
+                 exn <- gu_new_exn tmpPl
                  pgf <- pgf_read c_fpath pool exn
                  failed <- gu_exn_is_raised exn
                  if failed
-                   then do ty <- gu_exn_caught exn
-                           if ty == gu_type__GuErrno
+                   then do is_errno <- gu_exn_caught exn gu_exn_type_GuErrno
+                           if is_errno
                              then do perrno <- (#peek GuExn, data.data) exn
                                      errno  <- peek perrno
                                      gu_pool_free pool
@@ -110,12 +110,12 @@ loadConcr c fpath =
   withGuPool $ \tmpPl -> do
     file <- fopen c_fpath c_mode
     inp <- gu_file_in file tmpPl
-    exn <- gu_new_exn nullPtr gu_type__type tmpPl
+    exn <- gu_new_exn tmpPl
     pgf_concrete_load (concr c) inp exn
     failed <- gu_exn_is_raised exn
     if failed
-      then do ty <- gu_exn_caught exn
-              if ty == gu_type__GuErrno
+      then do is_errno <- gu_exn_caught exn gu_exn_type_GuErrno
+              if is_errno
                 then do perrno <- (#peek GuExn, data.data) exn
                         errno  <- peek perrno
                         ioError (errnoToIOError "loadConcr" (Errno errno) Nothing (Just fpath))
@@ -158,7 +158,7 @@ readExpr str =
        withGuPool $ \tmpPl ->
          withCString str $ \c_str ->
            do guin <- gu_string_in c_str tmpPl
-              exn <- gu_new_exn nullPtr gu_type__type tmpPl
+              exn <- gu_new_exn tmpPl
               c_expr <- pgf_read_expr guin exprPl exn
               status <- gu_exn_is_raised exn
               if (not status && c_expr /= nullPtr)
@@ -173,7 +173,7 @@ showExpr e =
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
          let printCtxt = nullPtr
-         exn <- gu_new_exn nullPtr gu_type__type tmpPl
+         exn <- gu_new_exn tmpPl
          pgf_print_expr (expr e) printCtxt 1 out exn
          s <- gu_string_buf_freeze sb tmpPl
          peekCString s
@@ -235,28 +235,29 @@ parse lang cat sent =
   unsafePerformIO $
     do parsePl <- gu_new_pool
        exprPl  <- gu_new_pool
-       exn     <- gu_new_exn nullPtr gu_type__type parsePl
+       exn     <- gu_new_exn parsePl
        enum    <- withCString cat $ \cat ->
                     withCString sent $ \sent ->
                       pgf_parse (concr lang) cat sent exn parsePl exprPl
        failed  <- gu_exn_is_raised exn
        if failed
-         then do ty <- gu_exn_caught exn
-                 if ty == gu_type__PgfParseError
+         then do is_parse_error <- gu_exn_caught exn gu_exn_type_PgfParseError
+                 if is_parse_error
                    then do c_tok <- (#peek GuExn, data.data) exn
                            tok <- peekCString c_tok
                            gu_pool_free parsePl
                            gu_pool_free exprPl
                            return (Left tok)
-                   else if ty == gu_type__PgfExn
-                          then do c_msg <- (#peek GuExn, data.data) exn
-                                  msg <- peekCString c_msg
-                                  gu_pool_free parsePl
-                                  gu_pool_free exprPl
-                                  throwIO (PGFError msg)
-                          else do gu_pool_free parsePl
-                                  gu_pool_free exprPl
-                                  throwIO (PGFError "Parsing failed")
+                   else do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+                           if is_exn
+                             then do c_msg <- (#peek GuExn, data.data) exn
+                                     msg <- peekCString c_msg
+                                     gu_pool_free parsePl
+                                     gu_pool_free exprPl
+                                     throwIO (PGFError msg)
+                             else do gu_pool_free parsePl
+                                     gu_pool_free exprPl
+                                     throwIO (PGFError "Parsing failed")
          else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
                  exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
                  exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
@@ -271,12 +272,12 @@ addLiteral lang cat match =
     predict  <- wrapLiteralPredictCallback predict_callback
     (#poke PgfLiteralCallback, match)   callback match
     (#poke PgfLiteralCallback, predict) callback predict
-    exn      <- gu_new_exn nullPtr gu_type__type tmp_pool
+    exn      <- gu_new_exn tmp_pool
     pgf_concr_add_literal (concr lang) ccat callback exn
     failed <- gu_exn_is_raised exn
     if failed
-      then do ty <- gu_exn_caught exn
-              if ty == gu_type__PgfExn
+      then do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+              if is_exn
                 then do c_msg <- (#peek GuExn, data.data) exn
                         msg <- peekCString c_msg
                         throwIO (PGFError msg)
@@ -295,7 +296,7 @@ addLiteral lang cat match =
 
                                     -- here we copy the expression to out_pool
                                     c_e <- withGuPool $ \tmpPl -> do
-                                             exn <- gu_new_exn nullPtr gu_type__type tmpPl
+                                             exn <- gu_new_exn tmpPl
         
                                              (sb,out) <- newOut tmpPl
                                              let printCtxt = nullPtr
@@ -323,18 +324,19 @@ linearize :: Concr -> Expr -> String
 linearize lang e = unsafePerformIO $
   withGuPool $ \pl ->
     do (sb,out) <- newOut pl
-       exn <- gu_new_exn nullPtr gu_type__type pl
+       exn <- gu_new_exn pl
        pgf_linearize (concr lang) (expr e) out exn
        failed <- gu_exn_is_raised exn
        if failed
-         then do ty <- gu_exn_caught exn
-                 if ty == gu_type__PgfLinNonExist
+         then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
+                 if is_nonexist
                    then return ""
-                   else if ty == gu_type__PgfExn
-                          then do c_msg <- (#peek GuExn, data.data) exn
-                                  msg <- peekCString c_msg
-                                  throwIO (PGFError msg)
-                          else throwIO (PGFError "The abstract tree cannot be linearized")
+                   else do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+                           if is_exn
+                             then do c_msg <- (#peek GuExn, data.data) exn
+                                     msg <- peekCString c_msg
+                                     throwIO (PGFError msg)
+                             else throwIO (PGFError "The abstract tree cannot be linearized")
          else do lin <- gu_string_buf_freeze sb pl
                  peekCString lin
 

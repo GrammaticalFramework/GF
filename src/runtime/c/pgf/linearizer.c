@@ -13,13 +13,6 @@
 
 //#define PGF_LINEARIZER_DEBUG
 
-GU_DEFINE_TYPE(PgfCncOverloadMap, GuMap,
-               gu_type(PgfCCat), NULL,
-               gu_ptr_type(GuBuf), &gu_null_struct);
-
-GU_DEFINE_TYPE(PgfCncFunOverloadMap, GuStringMap, gu_ptr_type(PgfCncOverloadMap),
-               &gu_null_struct);
-
 static void
 pgf_lzr_add_overl_entry(PgfCncOverloadMap* overl_table,
 			            PgfCCat* ccat, void* entry,
@@ -48,7 +41,7 @@ pgf_lzr_index(PgfConcr* concr,
 			gu_map_get(concr->fun_indices, papply->fun->absfun->name,
 				PgfCncOverloadMap*);
 		if (!overl_table) {
-			overl_table = gu_map_type_new(PgfCncOverloadMap, pool);
+			overl_table = gu_new_addr_map(PgfCCat*, GuBuf*, &gu_null_struct, pool);
 			gu_map_put(concr->fun_indices,
 				papply->fun->absfun->name, PgfCncOverloadMap*, overl_table);
 		}
@@ -100,7 +93,7 @@ typedef struct {
 	size_t n_vars;
 	PgfPrintContext* context;
 
-	GuLength n_args;
+	size_t n_args;
 	PgfCncTree args[];
 } PgfCncTreeChunks;
 
@@ -463,7 +456,7 @@ pgf_cnc_resolve(PgfCnc* cnc,
 				}
 
 				GuPool* tmp_pool = gu_local_pool();
-				GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+				GuExn* err = gu_new_exn(tmp_pool);
 				GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 				GuOut* out = gu_string_buf_out(sbuf);
 
@@ -600,7 +593,7 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 #ifdef PGF_LINEARIZER_DEBUG
     GuPool* tmp_pool = gu_new_pool();
     GuOut* out = gu_file_out(stderr, tmp_pool);
-    GuExn* err = gu_exn(NULL, type, tmp_pool);
+    GuExn* err = gu_exn(tmp_pool);
     if (gu_variant_is_null(*toc))
 		gu_puts("*nil*\n", out, err);
 	else {
@@ -1034,8 +1027,6 @@ struct PgfSimpleLin {
 	GuExn* err;
 };
 
-GU_DEFINE_TYPE(PgfLinNonExist, abstract, _);
-
 static void
 pgf_file_lzn_put_space(PgfSimpleLin* flin)
 {
@@ -1145,7 +1136,7 @@ GuString
 pgf_get_tokens(PgfSymbols* syms, uint16_t sym_idx, GuPool* pool)
 {
 	GuPool* tmp_pool = gu_new_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 

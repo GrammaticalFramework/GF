@@ -10,8 +10,6 @@
 #include <stdio.h>
 #include <math.h>
 
-GU_DEFINE_TYPE(PgfExn, abstract, _);
-
 PgfPGF*
 pgf_read(const char* fpath,
          GuPool* pool, GuExn* err)
@@ -47,7 +45,7 @@ pgf_iter_languages(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 	size_t n_concrs = gu_seq_length(pgf->concretes);
 	for (size_t i = 0; i < n_concrs; i++) {
 		PgfConcr* concr = gu_seq_index(pgf->concretes, PgfConcr, i);
-		itor->fn(itor, concr->name, concr, err);
+		itor->fn(itor, concr->name, &concr, err);
 		if (!gu_ok(err))
 			break;
 	}
@@ -71,7 +69,7 @@ pgf_iter_categories(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 	size_t n_cats = gu_seq_length(pgf->abstract.cats);
 	for (size_t i = 0; i < n_cats; i++) {
 		PgfAbsCat* cat = gu_seq_index(pgf->abstract.cats, PgfAbsCat, i);
-		itor->fn(itor, cat->name, cat, err);
+		itor->fn(itor, cat->name, &cat, err);
 		if (!gu_ok(err))
 			break;
 	}
@@ -123,7 +121,7 @@ pgf_iter_functions(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 	size_t n_funs = gu_seq_length(pgf->abstract.funs);
 	for (size_t i = 0; i < n_funs; i++) {
 		PgfAbsFun* fun = gu_seq_index(pgf->abstract.funs, PgfAbsFun, i);
-		itor->fn(itor, fun->name, fun, err);
+		itor->fn(itor, fun->name, &fun, err);
 		if (!gu_ok(err))
 			break;
 	}
@@ -138,7 +136,7 @@ pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
 		PgfAbsFun* fun = gu_seq_index(pgf->abstract.funs, PgfAbsFun, i);
 		
 		if (strcmp(fun->type->cid, catname) == 0) {
-			itor->fn(itor, fun->name, fun, err);
+			itor->fn(itor, fun->name, &fun, err);
 			if (!gu_ok(err))
 				break;
 		}

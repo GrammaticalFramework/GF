@@ -2,7 +2,6 @@
 #define GU_EXN_H_
 
 #include <gu/mem.h>
-#include <gu/type.h>
 
 /** @file
  *
@@ -47,9 +46,7 @@ struct GuExnData
 struct GuExn {
 	/// @privatesection
 	GuExnState state;
-	GuExn* parent;
-	GuKind* catch;
-	GuType* caught;
+	const char* caught;
 	GuExnData data;
 };
 
@@ -59,10 +56,8 @@ struct GuExn {
 
 
 /// Allocate a new local exception frame.
-#define gu_exn(parent_, catch_, pool_) &(GuExn){	\
+#define gu_exn(pool_) &(GuExn){	\
 	.state = GU_EXN_OK,	\
-	.parent = parent_,	\
-	.catch = gu_kind(catch_),	\
 	.caught = NULL,	\
 	.data = {.pool = pool_, .data = NULL} \
 }
@@ -70,8 +65,7 @@ struct GuExn {
 
 /// Allocate a new exception frame.
 GuExn*
-gu_new_exn(GuExn* parent, GuKind* catch_kind, GuPool* pool);
-
+gu_new_exn(GuPool* pool);
 
 
 bool
@@ -83,10 +77,11 @@ gu_exn_clear(GuExn* err) {
 	err->state = GU_EXN_OK;
 }
 
-
-
-GuType*
-gu_exn_caught(GuExn* err);
+#define gu_exn_caught(err, type) \
+	(err->caught && strcmp(err->caught, #type) == 0)
+	
+bool
+gu_exn_caught_(GuExn* err, const char* type);
 
 static inline const void*
 gu_exn_caught_data(GuExn* err)
@@ -104,11 +99,11 @@ gu_exn_unblock(GuExn* err);
 
 //@private
 GuExnData*
-gu_exn_raise_(GuExn* err, GuType* type);
+gu_exn_raise_(GuExn* err, const char* type);
 
 //@private
 GuExnData*
-gu_exn_raise_debug_(GuExn* err, GuType* type,
+gu_exn_raise_debug_(GuExn* err, const char* type,
 		      const char* filename, const char* func, int lineno);
 
 #ifdef NDEBUG
@@ -122,7 +117,7 @@ gu_exn_raise_debug_(GuExn* err, GuType* type,
 
 /// Raise an exception.
 #define gu_raise(exn, T)		\
-	gu_exn_raise(exn, gu_type(T))
+	gu_exn_raise(exn, #T)
 /**< 
  * @param exn The current exception frame.
  *
@@ -167,8 +162,6 @@ gu_ok(GuExn* exn) {
 #include <errno.h>
 
 typedef int GuErrno;
-
-extern GU_DECLARE_TYPE(GuErrno, signed);
 
 void
 gu_raise_errno(GuExn* err);

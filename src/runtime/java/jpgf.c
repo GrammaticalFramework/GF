@@ -111,7 +111,7 @@ Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_lang_String_2(JNIEnv *env, 
 	GuPool* tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	const char *fpath = (*env)->GetStringUTFChars(env, s, 0); 
 
@@ -121,7 +121,7 @@ Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_lang_String_2(JNIEnv *env, 
 	(*env)->ReleaseStringUTFChars(env, s, fpath);
 
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(GuErrno)) {
+		if (gu_exn_caught(err, GuErrno)) {
 			throw_jstring_exception(env, "java/io/FileNotFoundException", s);
 		} else {
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The grammar cannot be loaded");
@@ -220,7 +220,7 @@ Java_org_grammaticalframework_pgf_PGF_readPGF__Ljava_io_InputStream_2(JNIEnv *en
 	GuIn* in = gu_new_in(jstream, tmp_pool);
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	// Read the PGF grammar.
 	PgfReader* rdr = pgf_new_reader(in, pool, tmp_pool, err);
@@ -315,7 +315,7 @@ Java_org_grammaticalframework_pgf_PGF_getLanguages(JNIEnv* env, jobject self)
 	GuPool* tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	JPGFClosure clo = { { pgf_collect_langs }, env, self, languages };
 	pgf_iter_languages(pgf, &clo.fn, err);
@@ -350,11 +350,11 @@ Java_org_grammaticalframework_pgf_Concr_load__Ljava_io_InputStream_2(JNIEnv* env
 	GuIn* in = gu_new_in(jstream, tmp_pool);
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	pgf_concrete_load(get_ref(env, self), in, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
@@ -380,16 +380,16 @@ Java_org_grammaticalframework_pgf_Parser_parse
 
     GuString startCat = j2gu_string(env, jstartCat, pool);
     GuString s = j2gu_string(env, js, pool);
-    GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), pool);
+    GuExn* parse_err = gu_new_exn(pool);
 
 	GuEnum* res =
 		pgf_parse(get_ref(env, concr), startCat, s, parse_err, pool, out_pool);
 
 	if (!gu_ok(parse_err)) {
-		if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(parse_err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
-		} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
+		} else if (gu_exn_caught(parse_err, PgfParseError)) {
 			GuString tok = (GuString) gu_exn_caught_data(parse_err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/ParseError", tok);
 		}
@@ -417,16 +417,16 @@ Java_org_grammaticalframework_pgf_Completer_complete(JNIEnv* env, jclass clazz, 
     GuString startCat = j2gu_string(env, jstartCat, pool);
     GuString s = j2gu_string(env, js, pool);
     GuString prefix = j2gu_string(env, jprefix, pool);
-    GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), pool);
+    GuExn* parse_err = gu_new_exn(pool);
 
 	GuEnum* res =
 		pgf_complete(get_ref(env, jconcr), startCat, s, prefix, parse_err, pool);
 
 	if (!gu_ok(parse_err)) {
-		if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(parse_err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
-		} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
+		} else if (gu_exn_caught(parse_err, PgfParseError)) {
 			GuString tok = (GuString) gu_exn_caught_data(parse_err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/ParseError", tok);
 		}
@@ -481,16 +481,16 @@ JNIEXPORT jstring JNICALL
 Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, jobject jexpr)
 {
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
 	pgf_linearize(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), out, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfLinNonExist)) {
+		if (gu_exn_caught(err, PgfLinNonExist)) {
 			gu_pool_free(tmp_pool);
 			return NULL;
-		} else if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		} else if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
@@ -528,7 +528,7 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 	PgfConcr* concr = get_ref(env, self);
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	GuEnum* cts = 
 		pgf_lzr_concretize(concr,
@@ -536,7 +536,7 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 		                   err,
 		                   tmp_pool);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
@@ -677,14 +677,14 @@ Java_org_grammaticalframework_pgf_Concr_bracketedLinearize(JNIEnv* env, jobject 
 		return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	PgfConcr* concr = get_ref(env, self);
 
 	GuEnum* cts = 
 		pgf_lzr_concretize(concr, gu_variant_from_ptr((void*) get_ref(env, jexpr)), err, tmp_pool);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
@@ -775,13 +775,13 @@ Java_org_grammaticalframework_pgf_Concr_lookupMorpho(JNIEnv* env, jobject self, 
 
 	GuPool* tmp_pool = gu_new_pool();
 	
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, 0, env, addId, an_class, an_constrId };
 	pgf_lookup_morpho(get_ref(env, self), j2gu_string(env, sentence, tmp_pool),
 	                  &callback.fn, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
@@ -800,12 +800,12 @@ Java_org_grammaticalframework_pgf_Lexicon_lookupWordPrefix
    (JNIEnv* env, jclass clazz, jobject jconcr, jstring prefix)
 {
 	GuPool* pool = gu_new_pool();	
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
+	GuExn* err = gu_new_exn(pool);
 
 	GuEnum* en = pgf_lookup_word_prefix(get_ref(env, jconcr), j2gu_string(env, prefix, pool),
 	                                    pool, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
@@ -843,12 +843,12 @@ Java_org_grammaticalframework_pgf_FullFormIterator_fetchFullFormEntry
 	jmethodID an_constrId = (*env)->GetMethodID(env, an_class, "<init>", "(Ljava/lang/String;Ljava/lang/String;D)V");
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	JMorphoCallback callback = { { jpgf_collect_morpho }, analyses, 0, env, addId, an_class, an_constrId };
 	pgf_fullform_get_analyses(entry, &callback.fn, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
@@ -936,7 +936,7 @@ jpgf_literal_callback_match(PgfLiteralCallback* self,
 
 		GuPool* tmp_pool = gu_local_pool();
 
-		GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+		GuExn* err = gu_exn(tmp_pool);
 		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 
@@ -1025,11 +1025,11 @@ Java_org_grammaticalframework_pgf_Concr_addLiteral(JNIEnv* env, jobject self, js
 	gu_pool_finally(pool, &callback->fin);
 	
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	pgf_concr_add_literal(concr, j2gu_string(env, jcat, tmp_pool), &callback->callback, err);
 
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else {
@@ -1057,7 +1057,7 @@ Java_org_grammaticalframework_pgf_Expr_showExpr(JNIEnv* env, jclass clazz, jlong
 {
 	GuPool* tmp_pool = gu_local_pool();
 
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
@@ -1078,7 +1078,7 @@ Java_org_grammaticalframework_pgf_Expr_readExpr(JNIEnv* env, jclass clazz, jstri
 	GuPool* tmp_pool = gu_local_pool();
 	GuString buf = j2gu_string(env, s, tmp_pool);
 	GuIn* in = gu_data_in((uint8_t*) buf, strlen(buf), tmp_pool);
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	PgfExpr e = pgf_read_expr(in, pool, err);
 	if (!gu_ok(err) || gu_variant_is_null(e)) {

@@ -465,8 +465,3 @@ gu_buf_out(GuBuf* buf, GuPool* pool)
 	bout->buf = buf;
 	return gu_new_out(&bout->stream, pool);
 }
-
-#include <gu/type.h>
-
-GU_DEFINE_KIND(GuSeq, GuOpaque);
-GU_DEFINE_KIND(GuBuf, abstract);

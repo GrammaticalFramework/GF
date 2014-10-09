@@ -1,4 +1,3 @@
-#include <gu/type.h>
 #include <gu/out.h>
 #include <gu/seq.h>
 #include <gu/map.h>
@@ -230,7 +229,3 @@ GuHasher gu_string_hasher[1] = {
 		.hash = gu_string_hasher_hash
 	}
 };
-
-
-GU_DEFINE_KIND(GuString, pointer);
-GU_DEFINE_KIND(GuStringMap, GuMap);

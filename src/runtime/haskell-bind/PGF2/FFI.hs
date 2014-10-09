@@ -1,4 +1,4 @@
-{-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE ForeignFunctionInterface, MagicHash #-}
 
 module PGF2.FFI where
 
@@ -7,6 +7,7 @@ import Foreign.C.String
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Control.Exception
+import GHC.Ptr
 
 ------------------------------------------------------------------
 -- libgu API
@@ -37,28 +38,21 @@ foreign import ccall "gu/mem.h &gu_pool_free"
   gu_pool_finalizer :: FinalizerPtr GuPool
 
 foreign import ccall "gu/exn.h gu_new_exn"
-  gu_new_exn :: Ptr GuExn -> Ptr GuKind -> Ptr GuPool -> IO (Ptr GuExn)
+  gu_new_exn :: Ptr GuPool -> IO (Ptr GuExn)
 
 foreign import ccall "gu/exn.h gu_exn_is_raised"
   gu_exn_is_raised :: Ptr GuExn -> IO Bool
 
-foreign import ccall "gu/exn.h gu_exn_caught"
-  gu_exn_caught :: Ptr GuExn -> IO (Ptr GuType)
+foreign import ccall "gu/exn.h gu_exn_caught_"
+  gu_exn_caught :: Ptr GuExn -> CString -> IO Bool
 
-foreign import ccall "gu/type.h &gu_type__type"
-  gu_type__type :: Ptr GuKind
+gu_exn_type_GuErrno = Ptr "GuErrno"# :: CString
 
-foreign import ccall "gu/type.h &gu_type__GuErrno"
-  gu_type__GuErrno :: Ptr GuType
+gu_exn_type_PgfLinNonExist = Ptr "PgfLinNonExist"# :: CString
 
-foreign import ccall "gu/type.h &gu_type__PgfLinNonExist"
-  gu_type__PgfLinNonExist :: Ptr GuType
+gu_exn_type_PgfExn = Ptr "PgfExn"# :: CString
 
-foreign import ccall "gu/type.h &gu_type__PgfExn"
-  gu_type__PgfExn :: Ptr GuType
-  
-foreign import ccall "gu/type.h &gu_type__PgfParseError"
-  gu_type__PgfParseError :: Ptr GuType
+gu_exn_type_PgfParseError = Ptr "PgfParseError"# :: CString
 
 foreign import ccall "gu/string.h gu_string_in"
   gu_string_in :: CString -> Ptr GuPool -> IO (Ptr GuIn)

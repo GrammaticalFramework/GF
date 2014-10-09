@@ -2,8 +2,6 @@
 #include <gu/bits.h>
 #include <math.h>
 
-GU_DEFINE_TYPE(GuEOF, abstract, _);
-
 
 static bool
 gu_in_is_buffering(GuIn* in)
@@ -258,7 +256,7 @@ gu_in_fini(GuFinalizer* fin)
 {
 	GuIn* in = gu_container(fin, GuIn, fini);
 	GuPool* pool = gu_local_pool();
-	GuExn* err = gu_exn(NULL, type, pool);
+	GuExn* err = gu_exn(pool);
 	gu_in_end_buffering(in, err);
 	gu_pool_free(pool);
 }

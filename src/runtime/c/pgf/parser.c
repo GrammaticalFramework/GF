@@ -13,7 +13,6 @@
 //#define PGF_RESULT_DEBUG
 
 typedef GuBuf PgfItemBuf;
-static GU_DEFINE_TYPE(PgfItemBuf, abstract, _);
 
 typedef struct PgfParseState PgfParseState;
 
@@ -26,20 +25,9 @@ struct PgfItemConts {
 	int ref_count;			// how many items point to this cont?
 };
 
-static GU_DEFINE_TYPE(PgfItemConts, abstract, _);
-
 typedef GuSeq PgfItemContss;
-static GU_DEFINE_TYPE(PgfItemContss, abstract);
-
 typedef GuMap PgfContsMap;
-static GU_DEFINE_TYPE(PgfContsMap, GuMap,
-                      gu_type(PgfCCat), NULL,
-                      gu_ptr_type(PgfItemContss), &gu_null_struct);
-
 typedef GuMap PgfGenCatMap;
-static GU_DEFINE_TYPE(PgfGenCatMap, GuMap,
-		              gu_type(PgfItemConts), NULL,
-		              gu_ptr_type(PgfCCat), &gu_null_struct);
 
 typedef GuBuf PgfCCatBuf;
 
@@ -1045,7 +1033,7 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
 #ifdef PGF_PARSER_DEBUG
     GuPool* tmp_pool = gu_new_pool();
     GuOut* out = gu_file_out(stderr, tmp_pool);
-    GuExn* err = gu_exn(NULL, type, tmp_pool);
+    GuExn* err = gu_exn(tmp_pool);
     if (tmp_ccat == NULL) {
 	    gu_printf(out, err, "[");
 		pgf_print_range(item->conts->state, ps->before, out, err);
@@ -1293,8 +1281,8 @@ pgf_new_parse_state(PgfParsing* ps, size_t start_offset, BIND_TYPE bind_type)
 	state->next = *pstate;
     state->agenda = gu_new_buf(PgfItem*, ps->pool);
     state->meta_item = NULL;
-	state->generated_cats = gu_map_type_new(PgfGenCatMap, ps->pool);
-	state->conts_map = gu_map_type_new(PgfContsMap, ps->pool);
+	state->generated_cats = gu_new_addr_map(PgfItemConts*, PgfCCat*, &gu_null_struct, ps->pool);
+	state->conts_map = gu_new_addr_map(PgfCCat*, PgfItemContss*, &gu_null_struct, ps->pool);
 	state->needs_bind = (bind_type == BIND_NONE) &&
 	                    (start_offset == end_offset);
 	state->start_offset = start_offset;
@@ -1742,7 +1730,7 @@ pgf_parsing_item(PgfParsing* ps, PgfItem* item)
 #ifdef PGF_PARSER_DEBUG
     GuPool* tmp_pool = gu_new_pool();
     GuOut* out = gu_file_out(stderr, tmp_pool);
-    GuExn* err = gu_exn(NULL, type, tmp_pool);
+    GuExn* err = gu_exn(tmp_pool);
     pgf_print_item(item, ps->before, out, err, tmp_pool);
     gu_pool_free(tmp_pool);
 #endif
@@ -2230,7 +2218,7 @@ pgf_parse_result_next(PgfParsing* ps)
 		GuPool* tmp_pool = gu_new_pool();
 		GuOut* out = gu_file_out(stderr, tmp_pool);
 		GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
-		GuExn* err = gu_exn(NULL, type, tmp_pool);
+		GuExn* err = gu_exn(tmp_pool);
 		pgf_print_expr_state0(st, wtr, err, tmp_pool);
 		gu_pool_free(tmp_pool);
 #endif
@@ -2315,8 +2303,6 @@ pgf_parsing_last_token(PgfParsing* ps, GuPool* pool)
 	tok[end-start] = 0;
 	return tok;
 }
-
-GU_DEFINE_TYPE(PgfParseError, abstract, _);
 
 GuEnum*
 pgf_parse(PgfConcr* concr, PgfCId cat, GuString sentence,

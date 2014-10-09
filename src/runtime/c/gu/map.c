@@ -1,6 +1,5 @@
 #include <gu/defs.h>
 #include <gu/mem.h>
-#include <gu/type.h>
 #include <gu/map.h>
 #include <gu/assert.h>
 #include <gu/prime.h>
@@ -431,20 +430,4 @@ gu_make_map(size_t key_size, GuHasher* hasher,
 	gu_map_resize(map);
 	return map;
 }
-
-GuMap*
-gu_map_type_make(GuMapType* mtype, GuPool* pool)
-{
-	size_t key_size = 0;
-	if (mtype->hasher && mtype->hasher != gu_addr_hasher) {
-		key_size = gu_type_size(mtype->key_type);
-	}
-	size_t value_size = gu_type_size(mtype->value_type);
-	return gu_make_map(key_size, mtype->hasher,
-			   value_size, mtype->default_value, pool);
-}
-
-GU_DEFINE_KIND(GuMap, abstract);
-// GU_DEFINE_KIND(GuIntMap, GuMap);
-
 

@@ -24,8 +24,6 @@ unsigned gu_ceil2e(unsigned u)
 	return u;
 }
 
-GU_DEFINE_TYPE(GuIntDecodeExn, abstract, _);
-
 double 
 gu_decode_double(uint64_t u)
 {
