@@ -204,6 +204,7 @@ typedef enum {
 	PGF_SYMBOL_KP,
 	PGF_SYMBOL_BIND,
 	PGF_SYMBOL_SOFT_BIND,
+	PGF_SYMBOL_CAPIT,
 	PGF_SYMBOL_NE
 } PgfSymbolTag;
 
@@ -237,6 +238,9 @@ typedef struct {
 
 typedef struct {
 } PgfSymbolBIND;
+
+typedef struct {
+} PgfSymbolCAPIT;
 
 typedef GuBuf PgfProductionIdx;
 

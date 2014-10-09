@@ -276,6 +276,10 @@ pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
 		gu_puts("SOFT_BIND", out, err);
 		break;
 	}
+	case PGF_SYMBOL_CAPIT: {
+		gu_puts("CAPIT", out, err);
+		break;
+	}
 	default:
 		gu_impossible();
 	}

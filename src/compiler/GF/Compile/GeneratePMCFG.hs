@@ -443,6 +443,8 @@ convertTerm opts sel ctype (Q (m,f))
     f == cBIND                          = return (CStr [SymBIND])
   | m == cPredef &&
     f == cSOFT_BIND                     = return (CStr [SymSOFT_BIND])
+  | m == cPredef &&
+    f == cCAPIT                         = return (CStr [SymCAPIT])
 
 convertTerm opts sel@(CProj l _) ctype (ExtR t1 t2@(R rs2))
                     | l `elem` map fst rs2 = convertTerm opts sel ctype t2
