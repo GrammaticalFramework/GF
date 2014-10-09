@@ -159,19 +159,18 @@ pgf_read_literal(PgfReader* rdr)
 static PgfFlags*
 pgf_read_flags(PgfReader* rdr)
 {
-	PgfFlags* flags = gu_map_type_new(PgfFlags, rdr->opool);
-
-	GuLength len = pgf_read_len(rdr);
+	GuLength n_flags = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
-	for (size_t i = 0; i < len; i++) {
-		PgfCId name = pgf_read_cid(rdr, rdr->opool);
+	PgfFlags* flags = gu_new_seq(PgfFlag, n_flags, rdr->opool);
+	for (size_t i = 0; i < n_flags; i++) {
+		PgfFlag* flag = gu_seq_index(flags, PgfFlag, i);
+
+		flag->name = pgf_read_cid(rdr, rdr->opool);
 		gu_return_on_exn(rdr->err, NULL);
 
-		PgfLiteral value = pgf_read_literal(rdr);
+		flag->value = pgf_read_literal(rdr);
 		gu_return_on_exn(rdr->err, NULL);
-		
-		gu_map_put(flags, name, PgfLiteral, value);
 	}
 
 	return flags;
@@ -415,10 +414,8 @@ pgf_read_patt(PgfReader* rdr)
 }
 
 static PgfAbsFun*
-pgf_read_absfun(PgfReader* rdr, PgfAbstr* abstr)
+pgf_read_absfun(PgfReader* rdr, PgfAbstr* abstr, PgfAbsFun* absfun)
 {
-	PgfAbsFun* absfun = gu_new(PgfAbsFun, rdr->opool);
-
 	size_t len = pgf_read_len(rdr);
 
 	PgfExprFun *efun =
@@ -486,33 +483,26 @@ pgf_read_absfun(PgfReader* rdr, PgfAbstr* abstr)
 	return absfun;
 }
 					    
-static PgfCIdMap*
+static PgfAbsFuns*
 pgf_read_absfuns(PgfReader* rdr, PgfAbstr* abstr)
 {
-	GuMapType* map_type = (GuMapType*)
-		GU_TYPE_LIT(GuStringMap, _,
-			 		gu_ptr_type(PgfAbsFun),
-					&gu_null_struct);
-	PgfCIdMap* absfuns = gu_map_type_make(map_type, rdr->opool);
-
-	size_t len = pgf_read_len(rdr);
+	size_t n_funs = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
-	for (size_t i = 0; i < len; i++) {
-		PgfAbsFun* absfun = pgf_read_absfun(rdr, abstr);
+	PgfAbsFuns* absfuns = gu_new_seq(PgfAbsFun, n_funs, rdr->opool);
+
+	for (size_t i = 0; i < n_funs; i++) {
+		PgfAbsFun* absfun = gu_seq_index(absfuns, PgfAbsFun, i);
+		pgf_read_absfun(rdr, abstr, absfun);
 		gu_return_on_exn(rdr->err, NULL);
-		
-		gu_map_put(absfuns, absfun->name, PgfAbsFun*, absfun);
 	}
 
 	return absfuns;
 }
 
 static PgfAbsCat*
-pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
+pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfAbsCat* abscat)
 {
-	PgfAbsCat* abscat = gu_new(PgfAbsCat, rdr->opool);
-
 	abscat->name = pgf_read_cid(rdr, rdr->opool);
 	gu_return_on_exn(rdr->err, NULL);
 
@@ -532,23 +522,18 @@ pgf_read_abscat(PgfReader* rdr, PgfAbstr* abstr, PgfCIdMap* abscats)
 	return abscat;
 }
 
-static PgfCIdMap*
+static PgfAbsCats*
 pgf_read_abscats(PgfReader* rdr, PgfAbstr* abstr)
 {
-	GuMapType* map_type = (GuMapType*)
-		GU_TYPE_LIT(GuStringMap, _,
-			 		gu_ptr_type(PgfAbsCat),
-					&gu_null_struct);
-	PgfCIdMap* abscats = gu_map_type_make(map_type, rdr->opool);
-
-	size_t len = pgf_read_len(rdr);
+	size_t n_cats = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
+	
+	PgfAbsCats* abscats = gu_new_seq(PgfAbsCat, n_cats, rdr->opool);
 
-	for (size_t i = 0; i < len; i++) {
-		PgfAbsCat* abscat = pgf_read_abscat(rdr, abstr, abscats);
+	for (size_t i = 0; i < n_cats; i++) {
+		PgfAbsCat* abscat = gu_seq_index(abscats, PgfAbsCat, i);
+		pgf_read_abscat(rdr, abstr, abscat);
 		gu_return_on_exn(rdr->err, NULL);
-
-		gu_map_put(abscats, abscat->name, PgfAbsCat*, abscat);
 	}
 
 	return abscats;
@@ -562,9 +547,9 @@ pgf_read_abstract(PgfReader* rdr, PgfAbstr* abstract)
 
 	abstract->aflags = pgf_read_flags(rdr);
 	gu_return_on_exn(rdr->err, );
-	
+
 	abstract->eval_gates = pgf_jit_gates(rdr);
-	
+		
 	abstract->funs = pgf_read_absfuns(rdr, abstract);
 	gu_return_on_exn(rdr->err, );
 	
@@ -787,7 +772,7 @@ pgf_read_cncfun(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, int funid)
 	gu_return_on_exn(rdr->err, NULL);
 
 	PgfAbsFun* absfun =
-		gu_map_get(abstr->funs, name, PgfAbsFun*);
+		gu_seq_binsearch(abstr->funs, pgf_absfun_order, PgfAbsFun, name);
 
 	PgfCncFun* cncfun = gu_new_flex(rdr->opool, PgfCncFun, lins, len);
 	cncfun->absfun = absfun;
@@ -1032,7 +1017,7 @@ pgf_read_cnccat(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, PgfCId name)
 		gu_malloc(rdr->opool, sizeof(PgfCncCat)+n_lins*sizeof(GuString));
 
 	cnccat->abscat = 
-		gu_map_get(abstr->cats, name, PgfAbsCat*);
+		gu_seq_binsearch(abstr->cats, pgf_abscat_order, PgfAbsCat, name);
 	gu_assert(cnccat->abscat != NULL);
 
 	int len = last + 1 - first;
@@ -1205,10 +1190,8 @@ gu_concr_fini(GuFinalizer* fin)
 }
 
 static PgfConcr*
-pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
+pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, bool with_content)
 {
-	PgfConcr* concr = gu_new(PgfConcr, rdr->opool);
-
 	concr->name = 
 		pgf_read_cid(rdr, rdr->opool);
 	gu_return_on_exn(rdr->err, NULL);
@@ -1284,23 +1267,18 @@ pgf_concrete_unload(PgfConcr* concr)
 	gu_concr_fini(&concr->fin);
 }
 
-static PgfCIdMap*
+static PgfConcrs*
 pgf_read_concretes(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
 {
-	GuMapType* map_type = (GuMapType*)
-		GU_TYPE_LIT(GuStringMap, _,
-			 		gu_ptr_type(PgfConcr),
-					&gu_null_struct);
-	PgfCIdMap* concretes = gu_map_type_make(map_type, rdr->opool);
-
-	size_t len = pgf_read_len(rdr);
+	size_t n_concrs = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
 
-	for (size_t i = 0; i < len; i++) {
-		PgfConcr* concr = pgf_read_concrete(rdr, abstr, with_content);
-		gu_return_on_exn(rdr->err, NULL);
+	PgfConcrs* concretes = gu_new_seq(PgfConcr, n_concrs, rdr->opool);
 
-		gu_map_put(concretes, concr->name, PgfConcr*, concr);
+	for (size_t i = 0; i < n_concrs; i++) {
+		PgfConcr* concr = gu_seq_index(concretes, PgfConcr, i);
+		pgf_read_concrete(rdr, abstr, concr, with_content);
+		gu_return_on_exn(rdr->err, NULL);
 	}
 
 	return concretes;
@@ -1323,10 +1301,10 @@ pgf_read_pgf(PgfReader* rdr) {
 	gu_return_on_exn(rdr->err, NULL);
 
 	bool with_content =
-		gu_variant_is_null(gu_map_get(pgf->gflags, "split", PgfLiteral));
+		(gu_seq_binsearch(pgf->gflags, pgf_flag_order, PgfFlag, "split") == NULL);
 	pgf->concretes = pgf_read_concretes(rdr, &pgf->abstract, with_content);
 	gu_return_on_exn(rdr->err, NULL);
-	
+
 	pgf->pool = rdr->opool;
 
 	return pgf;

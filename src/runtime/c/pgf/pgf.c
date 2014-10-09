@@ -42,15 +42,21 @@ pgf_abstract_name(PgfPGF* pgf)
 }
 
 void
-pgf_iter_languages(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
+pgf_iter_languages(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 {
-	gu_map_iter(pgf->concretes, fn, err);
+	size_t n_concrs = gu_seq_length(pgf->concretes);
+	for (size_t i = 0; i < n_concrs; i++) {
+		PgfConcr* concr = gu_seq_index(pgf->concretes, PgfConcr, i);
+		itor->fn(itor, concr->name, concr, err);
+		if (!gu_ok(err))
+			break;
+	}
 }
 
 PgfConcr*
 pgf_get_language(PgfPGF* pgf, PgfCId lang)
 {
-	return gu_map_get(pgf->concretes, lang, PgfConcr*);
+	return gu_seq_binsearch(pgf->concretes, pgf_concr_order, PgfConcr, lang);
 }
 
 GuString
@@ -60,21 +66,27 @@ pgf_concrete_name(PgfConcr* concr)
 }
 
 void
-pgf_iter_categories(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
+pgf_iter_categories(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 {
-	gu_map_iter(pgf->abstract.cats, fn, err);
+	size_t n_cats = gu_seq_length(pgf->abstract.cats);
+	for (size_t i = 0; i < n_cats; i++) {
+		PgfAbsCat* cat = gu_seq_index(pgf->abstract.cats, PgfAbsCat, i);
+		itor->fn(itor, cat->name, cat, err);
+		if (!gu_ok(err))
+			break;
+	}
 }
 
 PgfCId
 pgf_start_cat(PgfPGF* pgf)
 {
-	PgfLiteral lit =
-		gu_map_get(pgf->abstract.aflags, "startcat", PgfLiteral);
+	PgfFlag* flag =
+		gu_seq_binsearch(pgf->abstract.aflags, pgf_flag_order, PgfFlag, "startcat");
 
-	if (gu_variant_is_null(lit))
+	if (flag == NULL)
 		return "S";
 
-	GuVariantInfo i = gu_variant_open(lit);
+	GuVariantInfo i = gu_variant_open(flag->value);
 	switch (i.tag) {
 	case PGF_LITERAL_STR: {
 		PgfLiteralStr *lstr = (PgfLiteralStr *) i.data;
@@ -88,13 +100,13 @@ pgf_start_cat(PgfPGF* pgf)
 GuString
 pgf_language_code(PgfConcr* concr)
 {
-	PgfLiteral lit =
-		gu_map_get(concr->cflags, "language", PgfLiteral);
+	PgfFlag* flag =
+		gu_seq_binsearch(concr->cflags, pgf_flag_order, PgfFlag, "language");
 
-	if (gu_variant_is_null(lit))
+	if (flag == NULL)
 		return "";
 
-	GuVariantInfo i = gu_variant_open(lit);
+	GuVariantInfo i = gu_variant_open(flag->value);
 	switch (i.tag) {
 	case PGF_LITERAL_STR: {
 		PgfLiteralStr *lstr = (PgfLiteralStr *) i.data;
@@ -106,43 +118,38 @@ pgf_language_code(PgfConcr* concr)
 }
 
 void
-pgf_iter_functions(PgfPGF* pgf, GuMapItor* fn, GuExn* err)
+pgf_iter_functions(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 {
-	gu_map_iter(pgf->abstract.funs, fn, err);
-}
-
-typedef struct {
-	GuMapItor fn;
-	PgfCId catname;
-	GuMapItor* client_fn;
-} PgfFunByCatIter;
-
-static void
-pgf_filter_by_cat(GuMapItor* fn, const void* key, void* value, GuExn* err)
-{
-	(void) (key && err);
-
-	PgfFunByCatIter* clo = (PgfFunByCatIter*) fn;
-	PgfAbsFun* absfun = *((PgfAbsFun**) value);
-	
-	if (strcmp(absfun->type->cid, clo->catname) == 0) {
-		clo->client_fn->fn(clo->client_fn, absfun->name, NULL, err);
+	size_t n_funs = gu_seq_length(pgf->abstract.funs);
+	for (size_t i = 0; i < n_funs; i++) {
+		PgfAbsFun* fun = gu_seq_index(pgf->abstract.funs, PgfAbsFun, i);
+		itor->fn(itor, fun->name, fun, err);
+		if (!gu_ok(err))
+			break;
 	}
 }
 
 void
 pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname, 
-                          GuMapItor* fn, GuExn* err) 
+                          GuMapItor* itor, GuExn* err) 
 {
-	PgfFunByCatIter clo = { { pgf_filter_by_cat }, catname, fn };
-	gu_map_iter(pgf->abstract.funs, &clo.fn, err);
+	size_t n_funs = gu_seq_length(pgf->abstract.funs);
+	for (size_t i = 0; i < n_funs; i++) {
+		PgfAbsFun* fun = gu_seq_index(pgf->abstract.funs, PgfAbsFun, i);
+		
+		if (strcmp(fun->type->cid, catname) == 0) {
+			itor->fn(itor, fun->name, fun, err);
+			if (!gu_ok(err))
+				break;
+		}
+	}
 }
 
 PgfType*
 pgf_function_type(PgfPGF* pgf, PgfCId funname) 
 {
 	PgfAbsFun* absfun =
-		gu_map_get(pgf->abstract.funs, funname, PgfAbsFun*);
+		gu_seq_binsearch(pgf->abstract.funs, pgf_absfun_order, PgfAbsFun, funname);
 	if (absfun == NULL)
 		return NULL;
 

@@ -111,11 +111,11 @@ pgf_jit_read_absfun(PgfReader* rdr, PgfAbstr* abstr)
 
 	PgfCId name = pgf_read_cid(rdr, rdr->tmp_pool);
 	gu_return_on_exn(rdr->err, NULL);
-	
+
 	PgfAbsFun* absfun =
-		gu_map_get(abstr->funs, name, PgfAbsFun*);
+		gu_seq_binsearch(abstr->funs, pgf_absfun_order, PgfAbsFun, name);
 	assert(absfun != NULL);
-	
+
 	return absfun;
 }
 
@@ -1176,12 +1176,12 @@ pgf_jit_done(PgfReader* rdr, PgfAbstr* abstr)
 			gu_buf_index(rdr->jit_state->call_patches, PgfCallPatch, i);
 
 		PgfAbsCat* arg =
-			gu_map_get(abstr->cats, patch->cid, PgfAbsCat*);
+			gu_seq_binsearch(abstr->cats, pgf_abscat_order, PgfAbsCat, patch->cid);
 		if (arg != NULL) {
 			jit_patch_calli(patch->ref,(jit_insn*) arg->predicate);
 		} else {
 			PgfAbsFun* fun =
-				gu_map_get(abstr->funs, patch->cid, PgfAbsFun*);
+				gu_seq_binsearch(abstr->funs, pgf_absfun_order, PgfAbsFun, patch->cid);
 			if (fun == NULL)
 				gu_impossible();
 			else  {

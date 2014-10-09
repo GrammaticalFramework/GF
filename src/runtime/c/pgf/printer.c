@@ -7,64 +7,61 @@ typedef struct {
 } PgfPrintFn;
 
 void
-pgf_print_flag(GuMapItor* fn, const void* key, void* value,
-			GuExn* err)
+pgf_print_flags(PgfFlags* flags, GuOut *out, GuExn* err)
 {
-	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId flag = (PgfCId) key;
-    PgfLiteral lit = *((PgfLiteral *) value);
-    GuOut *out = clo->out;
-    
-    gu_puts("  flag ", out, err);
-    pgf_print_cid(flag, out, err);
-    gu_puts(" = ", out, err);
-    pgf_print_literal(lit, out, err);
-    gu_puts(";\n", out, err);
+	size_t n_flags = gu_seq_length(flags);
+	for (size_t i = 0; i < n_flags; i++) {
+		PgfFlag* flag = gu_seq_index(flags, PgfFlag, i);
+		
+		gu_puts("  flag ", out, err);
+		pgf_print_cid(flag->name, out, err);
+		gu_puts(" = ", out, err);
+		pgf_print_literal(flag->value, out, err);
+		gu_puts(";\n", out, err);
+	}
 }
 
 void
-pgf_print_cat(GuMapItor* fn, const void* key, void* value,
-			GuExn* err)
+pgf_print_abscats(PgfAbsCats* abscats, GuOut *out, GuExn* err)
 {
-	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId name = (PgfCId) key;
-    PgfAbsCat *cat  = *((PgfAbsCat **) value);
-    GuOut *out = clo->out;
+	size_t n_cats = gu_seq_length(abscats);
+	for (size_t i = 0; i < n_cats; i++) {
+		PgfAbsCat *abscat = gu_seq_index(abscats, PgfAbsCat, i);
 
-    gu_puts("  cat ", out, err);
-    pgf_print_cid(name, out, err);
+		gu_puts("  cat ", out, err);
+		pgf_print_cid(abscat->name, out, err);
 
-	PgfPrintContext* ctxt = NULL;
-    size_t n_hypos = gu_seq_length(cat->context);
-    for (size_t i = 0; i < n_hypos; i++) {
-		PgfHypo* hypo = gu_seq_index(cat->context, PgfHypo, i);
-		gu_putc(' ', out, err);
-		ctxt = pgf_print_hypo(hypo, ctxt, 4, out, err);
+		PgfPrintContext* ctxt = NULL;
+		size_t n_hypos = gu_seq_length(abscat->context);
+		for (size_t i = 0; i < n_hypos; i++) {
+			PgfHypo* hypo = gu_seq_index(abscat->context, PgfHypo, i);
+			gu_putc(' ', out, err);
+			ctxt = pgf_print_hypo(hypo, ctxt, 4, out, err);
+		}
+
+		while (ctxt != NULL) {
+			PgfPrintContext* next = ctxt->next;
+			free(ctxt);
+			ctxt = next;
+		}
+
+		gu_printf(out, err, " ;   -- %f\n", abscat->prob);
 	}
-
-	while (ctxt != NULL) {
-		PgfPrintContext* next = ctxt->next;
-		free(ctxt);
-		ctxt = next;
-	}
-
-    gu_printf(out, err, " ;   -- %f\n", cat->prob);
 }
 
 void
-pgf_print_absfun(GuMapItor* fn, const void* key, void* value,
-			GuExn* err)
+pgf_print_absfuns(PgfAbsFuns* absfuns, GuOut *out, GuExn* err)
 {
-	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId name = (PgfCId) key;
-    PgfAbsFun *fun = *((PgfAbsFun **) value);
-    GuOut *out = clo->out;
+	size_t n_funs = gu_seq_length(absfuns);
+	for (size_t i = 0; i < n_funs; i++) {
+		PgfAbsFun *absfun = gu_seq_index(absfuns, PgfAbsFun, i);
     
-    gu_puts((fun->defns == NULL) ? "  data " : "  fun ", out, err);
-    pgf_print_cid(name, out, err);
-    gu_puts(" : ", out, err);
-    pgf_print_type(fun->type, NULL, 0, out, err);
-    gu_printf(out, err, " ;   -- %f\n", fun->ep.prob);
+		gu_puts((absfun->defns == NULL) ? "  data " : "  fun ", out, err);
+		pgf_print_cid(absfun->name, out, err);
+		gu_puts(" : ", out, err);
+		pgf_print_type(absfun->type, NULL, 0, out, err);
+		gu_printf(out, err, " ;   -- %f\n", absfun->ep.prob);
+	}
 }
 static void
 pgf_print_abstract(PgfAbstr* abstr, GuOut* out, GuExn* err)
@@ -72,16 +69,11 @@ pgf_print_abstract(PgfAbstr* abstr, GuOut* out, GuExn* err)
 	gu_puts("abstract ", out, err);
 	pgf_print_cid(abstr->name, out, err);
 	gu_puts(" {\n", out, err);
-	
-	PgfPrintFn clo1 = { { pgf_print_flag }, out };
-	gu_map_iter(abstr->aflags, &clo1.fn, err);
 
-	PgfPrintFn clo2 = { { pgf_print_cat }, out };
-	gu_map_iter(abstr->cats, &clo2.fn, err);
+	pgf_print_flags(abstr->aflags, out, err);
+	pgf_print_abscats(abstr->cats, out, err);
+	pgf_print_absfuns(abstr->funs, out, err);
 
-	PgfPrintFn clo3 = { { pgf_print_absfun }, out };
-	gu_map_iter(abstr->funs, &clo3.fn, err);
-	
 	gu_puts("}\n", out, err);
 }
 
@@ -331,15 +323,13 @@ pgf_print_cnccat(GuMapItor* fn, const void* key, void* value,
 }
 
 static void
-pgf_print_concrete(PgfCId cncname, PgfConcr* concr, 
-                   GuOut* out, GuExn* err)
+pgf_print_concrete(PgfConcr* concr, GuOut* out, GuExn* err)
 {
 	gu_puts("concrete ", out, err);
-	pgf_print_cid(cncname, out, err);
+	pgf_print_cid(concr->name, out, err);
 	gu_puts(" {\n", out, err);
 
-	PgfPrintFn clo1 = { { pgf_print_flag }, out };
-	gu_map_iter(concr->cflags, &clo1.fn, err);
+	pgf_print_flags(concr->cflags, out, err);
 
 	gu_puts("  productions\n", out, err);
 	PgfPrintFn clo2 = { { pgf_print_productions }, out };
@@ -376,22 +366,14 @@ pgf_print_concrete(PgfCId cncname, PgfConcr* concr,
 	gu_puts("}\n", out, err);
 }
 
-static void
-pgf_print_concr_cb(GuMapItor* fn, const void* key, void* value,
-			GuExn* err)
-{
-	PgfPrintFn* clo = (PgfPrintFn*) fn;
-    PgfCId cncname = (PgfCId) key;
-    PgfConcr *concr = *((PgfConcr **) value);
-
-	pgf_print_concrete(cncname, concr, clo->out, err);
-}
-
 void
 pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err)
 {
 	pgf_print_abstract(&pgf->abstract, out, err);
 	
-	PgfPrintFn clo = { { pgf_print_concr_cb }, out };
-	gu_map_iter(pgf->concretes, &clo.fn, err);
+	size_t n_concrs = gu_seq_length(pgf->concretes);
+	for (size_t i = 0; i < n_concrs; i++) {
+		PgfConcr* concr = gu_seq_index(pgf->concretes, PgfConcr, i);
+		pgf_print_concrete(concr, out, err);
+	}
 }
