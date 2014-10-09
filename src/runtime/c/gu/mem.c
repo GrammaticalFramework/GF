@@ -198,10 +198,10 @@ GuPool*
 gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr)
 {
 	int prot = PROT_READ;
-	int fd = open(fpath, O_RDONLY, S_IREAD);
+	int fd = open(fpath, O_RDONLY);
 	if (fd < 0) {
 		if (errno == ENOENT) {
-			fd = open(fpath, O_RDWR | O_CREAT | O_TRUNC, S_IREAD | S_IWRITE);
+			fd = open(fpath, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
 			if (fd < 0)
 				return NULL;
 
