@@ -105,7 +105,7 @@ Expr_repr(ExprObject *self)
 {
 	GuPool* tmp_pool = gu_local_pool();
 
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
@@ -771,7 +771,7 @@ Type_repr(TypeObject *self)
 {
 	GuPool* tmp_pool = gu_local_pool();
 
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
@@ -1227,7 +1227,7 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 	pyres->counter   = 0;
 	pyres->fetch     = Iter_fetch_expr;
 
-	GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), pyres->pool);
+	GuExn* parse_err = gu_exn(pyres->pool);
 
 	pyres->res =
 		pgf_parse_with_heuristics(self->concr, catname, sentence, 
@@ -1235,10 +1235,10 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 		                          pyres->pool, out_pool);
 
 	if (!gu_ok(parse_err)) {
-		if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(parse_err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
 			PyErr_SetString(PGFError, msg);
-		} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
+		} else if (gu_exn_caught(parse_err, PgfParseError)) {
 			GuString tok = (GuString) gu_exn_caught_data(parse_err);
 			PyObject* py_tok = PyString_FromString(tok);
 			PyObject_SetAttrString(ParseError, "token", py_tok);
@@ -1285,7 +1285,7 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 
 	GuPool *tmp_pool = gu_local_pool();
 
-	GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* parse_err = gu_new_exn(tmp_pool);
 	
 	pyres->res =
 		pgf_complete(self->concr, catname, sentence, prefix, parse_err, pyres->pool);
@@ -1294,10 +1294,10 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 		Py_DECREF(pyres);
 		pyres = NULL;
 
-		if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(parse_err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
 			PyErr_SetString(PGFError, msg);
-		} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
+		} else if (gu_exn_caught(parse_err, PgfParseError)) {
 			GuString tok = (GuString) gu_exn_caught_data(parse_err);
 			PyObject* py_tok = PyString_FromString(tok);
 			PyObject_SetAttrString(ParseError, "token", py_tok);
@@ -1371,7 +1371,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self,
 
 		GuPool* tmp_pool = gu_local_pool();
 
-		GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+		GuExn* err = gu_exn(tmp_pool);
 		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 
@@ -1431,11 +1431,11 @@ Concr_addLiteral(ConcrObject* self, PyObject *args) {
 	gu_pool_finally(pool, &callback->fin);
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	pgf_concr_add_literal(self->concr, cat, &callback->callback, err);
 
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
 		} else {
@@ -1455,15 +1455,15 @@ Concr_linearize(ConcrObject* self, PyObject *args)
         return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
 	pgf_linearize(self->concr, pyexpr->expr, out, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfLinNonExist))
+		if (gu_exn_caught(err, PgfLinNonExist))
 			Py_RETURN_NONE;
-		else if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		else if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
 			return NULL;
@@ -1492,7 +1492,7 @@ Concr_tabularLinearize(ConcrObject* self, PyObject *args)
 		return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	GuEnum* cts = 
 		pgf_lzr_concretize(self->concr,
@@ -1500,9 +1500,9 @@ Concr_tabularLinearize(ConcrObject* self, PyObject *args)
 		                   err,
 		                   tmp_pool);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfLinNonExist))
+		if (gu_exn_caught(err, PgfLinNonExist))
 			Py_RETURN_NONE;
-		else if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		else if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
 			return NULL;
@@ -1739,12 +1739,12 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
         return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	
 	GuEnum* cts = 
 		pgf_lzr_concretize(self->concr, pyexpr->expr, err, tmp_pool);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
 			return NULL;
@@ -1807,13 +1807,13 @@ Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
         return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
 	pgf_graphviz_parse_tree(self->concr, pyexpr->expr, out, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
 		} else {
@@ -1862,14 +1862,14 @@ Concr_lookupMorpho(ConcrObject* self, PyObject *args) {
         return NULL;
 
 	GuPool *tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
 
 	PyObject* analyses = PyList_New(0);
 
 	PyMorphoCallback callback = { { pypgf_collect_morpho }, analyses };
 	pgf_lookup_morpho(self->concr, sent, &callback.fn, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
 		} else {
@@ -1908,7 +1908,7 @@ Iter_fetch_fullform(IterObject* self)
 		goto done;
 
 	GuPool* tmp_pool = gu_local_pool();
-    GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+    GuExn* err = gu_new_exn(tmp_pool);
 
 	PyMorphoCallback callback = { { pypgf_collect_morpho }, py_analyses };
 	pgf_fullform_get_analyses(entry, &callback.fn, err);
@@ -1961,7 +1961,7 @@ Concr_load(ConcrObject* self, PyObject *args)
 	GuPool* tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	FILE* infile = fopen(fpath, "rb");
 	if (infile == NULL) {
@@ -1975,10 +1975,10 @@ Concr_load(ConcrObject* self, PyObject *args)
 	// Read the PGF grammar.
 	pgf_concrete_load(self->concr, in, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(GuErrno)) {
+		if (gu_exn_caught(err, GuErrno)) {
 			errno = *((GuErrno*) gu_exn_caught_data(err));
 			PyErr_SetFromErrnoWithFilename(PyExc_IOError, fpath);
-		} else if (gu_exn_caught(err) == gu_type(PgfExn)) {
+		} else if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
 			return NULL;
@@ -2175,7 +2175,7 @@ PGF_getLanguages(PGFObject *self, void *closure)
 	GuPool* tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	PyPGFClosure clo = { { pgf_collect_langs }, self, languages };
 	pgf_iter_languages(self->pgf, &clo.fn, err);
@@ -2226,7 +2226,7 @@ PGF_getCategories(PGFObject *self, void *closure)
 	GuPool* tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	PyPGFClosure clo = { { pgf_collect_cats }, self, categories };
 	pgf_iter_categories(self->pgf, &clo.fn, err);
@@ -2279,7 +2279,7 @@ PGF_getFunctions(PGFObject *self, void *closure)
 	GuPool* tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	PyPGFClosure clo = { { pgf_collect_funs }, self, functions };
 	pgf_iter_functions(self->pgf, &clo.fn, err);
@@ -2308,7 +2308,7 @@ PGF_functionsByCat(PGFObject* self, PyObject *args)
 	GuPool *tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	PyPGFClosure clo = { { pgf_collect_funs }, self, functions };
 	pgf_iter_functions_by_cat(self->pgf, catname, &clo.fn, err);
@@ -2400,7 +2400,7 @@ PGF_compute(PGFObject* self, PyObject *args)
 		return NULL;
 
 	GuPool* tmp_pool = gu_new_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	py_expr_res->pool = gu_new_pool();
 	py_expr_res->expr = pgf_compute(self->pgf, py_expr->expr, err, 
@@ -2438,15 +2438,15 @@ PGF_checkExpr(PGFObject* self, PyObject *args)
 	new_pyexpr->master = NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* exn = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* exn = gu_new_exn(tmp_pool);
 
 	pgf_check_expr(self->pgf, &new_pyexpr->expr, py_type->type,
 	               exn, new_pyexpr->pool);
 	if (!gu_ok(exn)) {
-		if (gu_exn_caught(exn) == gu_type(PgfExn)) {
+		if (gu_exn_caught(exn, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(exn);
 			PyErr_SetString(PGFError, msg);
-		} else if (gu_exn_caught(exn) == gu_type(PgfTypeError)) {
+		} else if (gu_exn_caught(exn, PgfTypeError)) {
 			GuString msg = (GuString) gu_exn_caught_data(exn);
 			PyErr_SetString(TypeError, msg);
 		}
@@ -2488,16 +2488,16 @@ PGF_inferExpr(PGFObject* self, PyObject *args)
 	Py_INCREF(new_pyexpr);
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* exn = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* exn = gu_new_exn(tmp_pool);
 
 	new_pytype->type =
 		pgf_infer_expr(self->pgf, &new_pyexpr->expr,
 		               exn, new_pyexpr->pool);
 	if (!gu_ok(exn)) {
-		if (gu_exn_caught(exn) == gu_type(PgfExn)) {
+		if (gu_exn_caught(exn, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(exn);
 			PyErr_SetString(PGFError, msg);
-		} else if (gu_exn_caught(exn) == gu_type(PgfTypeError)) {
+		} else if (gu_exn_caught(exn, PgfTypeError)) {
 			GuString msg = (GuString) gu_exn_caught_data(exn);
 			PyErr_SetString(TypeError, msg);
 		}
@@ -2536,15 +2536,15 @@ PGF_checkType(PGFObject* self, PyObject *args)
 	new_pytype->master = NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* exn = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* exn = gu_new_exn(tmp_pool);
 
 	pgf_check_type(self->pgf, &new_pytype->type,
 	               exn, new_pytype->pool);
 	if (!gu_ok(exn)) {
-		if (gu_exn_caught(exn) == gu_type(PgfExn)) {
+		if (gu_exn_caught(exn, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(exn);
 			PyErr_SetString(PGFError, msg);
-		} else if (gu_exn_caught(exn) == gu_type(PgfTypeError)) {
+		} else if (gu_exn_caught(exn, PgfTypeError)) {
 			GuString msg = (GuString) gu_exn_caught_data(exn);
 			PyErr_SetString(TypeError, msg);
 		}
@@ -2565,7 +2565,7 @@ PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
         return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
@@ -2620,7 +2620,7 @@ PGF_embed(PGFObject* self, PyObject *args)
 	GuPool* tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	PyPGFClosure clo = { { pgf_embed_funs }, self, m };
 	pgf_iter_functions(self->pgf, &clo.fn, err);
@@ -2753,12 +2753,12 @@ pgf_readPGF(PyObject *self, PyObject *args)
 	GuPool* tmp_pool = gu_local_pool();
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	// Read the PGF grammar.
 	py_pgf->pgf = pgf_read(fpath, py_pgf->pool, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err) == gu_type(GuErrno)) {
+		if (gu_exn_caught(err, GuErrno)) {
 			errno = *((GuErrno*) gu_exn_caught_data(err));
 			PyErr_SetFromErrnoWithFilename(PyExc_IOError, fpath);
 		} else {
@@ -2786,7 +2786,7 @@ pgf_readExpr(PyObject *self, PyObject *args) {
 
 	GuPool* tmp_pool = gu_local_pool();
 	GuIn* in = gu_data_in(buf, len, tmp_pool);
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	pyexpr->pool = gu_new_pool();
 	pyexpr->expr = pgf_read_expr(in, pyexpr->pool, err);
@@ -2816,7 +2816,7 @@ pgf_readType(PyObject *self, PyObject *args) {
 
 	GuPool* tmp_pool = gu_local_pool();
 	GuIn* in = gu_data_in(buf, len, tmp_pool);
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	pytype->pool = gu_new_pool();
 	pytype->type = pgf_read_type(in, pytype->pool, err);

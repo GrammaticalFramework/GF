@@ -1,7 +1,6 @@
 #ifndef PGF_LINEARIZER_H_
 #define PGF_LINEARIZER_H_
 
-#include <gu/type.h>
 #include <gu/enum.h>
 
 /// Linearization of abstract syntax trees.
@@ -31,8 +30,6 @@ pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuExn* err, GuPool* pool);
 
 typedef struct {
 } PgfLinNonExist;
-
-extern GU_DECLARE_TYPE(PgfLinNonExist, abstract);
 
 PgfCncTree
 pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool);

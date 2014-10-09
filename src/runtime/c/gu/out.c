@@ -59,7 +59,7 @@ gu_out_fini(GuFinalizer* self)
 	GuOut* out = gu_container(self, GuOut, fini);
 	if (gu_out_is_buffering(out)) {
 		GuPool* pool = gu_local_pool();
-		GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
+		GuExn* err = gu_new_exn(pool);
 		gu_out_end_buf(out, err);
 		gu_pool_free(pool);
 	}

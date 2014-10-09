@@ -4,12 +4,6 @@
 #include <pgf/literals.h>
 #include <wctype.h>
 
-GU_DEFINE_TYPE(PgfLiteralCallback, struct);
-
-GU_DEFINE_TYPE(PgfCallbacksMap, GuMap,
-		       gu_type(PgfCncCat), NULL,
-		       gu_ptr_type(PgfLiteralCallback), &gu_null_struct);
-
 
 static PgfExprProb*
 pgf_match_string_lit(PgfLiteralCallback* self,
@@ -185,7 +179,7 @@ pgf_match_name_lit(PgfLiteralCallback* self,
 	GuPool* tmp_pool = gu_local_pool();
 	GuStringBuf *sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), tmp_pool);
+	GuExn* err = gu_new_exn(tmp_pool);
 
 	size_t offset = *poffset;
 
@@ -258,8 +252,8 @@ pgf_new_callbacks_map(PgfConcr* concr, GuPool *pool)
 	PgfCCat* ccat;
 	
 	PgfCallbacksMap* callbacks = 
-		gu_map_type_new(PgfCallbacksMap, pool); 
-	
+		gu_new_addr_map(PgfCncCat*, PgfLiteralCallback*, &gu_null_struct, pool);
+
 	fid  = -1;
 	ccat = gu_map_get(concr->ccats, &fid, PgfCCat*);
 	if (ccat != NULL)

@@ -36,7 +36,7 @@ print_result(PgfExprProb* ep, PgfConcr* to_concr,
 		// sequence of strings.
 		pgf_lzr_linearize_simple(to_concr, ctree, 0, out, err, ppool);
 
-		if (gu_exn_caught(err) == gu_type(PgfLinNonExist)) {
+		if (gu_exn_caught(err, PgfLinNonExist)) {
 			// encountered nonExist. Unfortunately there
 			// might be some output printed already. The
 			// right solution should be to use GuStringBuf.
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
 	GuString to_lang = argv[4];
 
 	// Create an exception frame that catches all errors.
-	GuExn* err = gu_new_exn(NULL, gu_kind(type), pool);
+	GuExn* err = gu_new_exn(pool);
 
 	// Read the PGF grammar.
 	PgfPGF* pgf = pgf_read(filename, pool, err);
@@ -152,15 +152,15 @@ int main(int argc, char* argv[]) {
 
 		clock_t start = clock();
 
-		GuExn* parse_err = gu_new_exn(NULL, gu_kind(type), ppool);
+		GuExn* parse_err = gu_new_exn(ppool);
 		result =
 			pgf_parse(from_concr, cat, line, parse_err, ppool, ppool);
 		if (!gu_ok(parse_err)) {
-			if (gu_exn_caught(parse_err) == gu_type(PgfExn)) {
+			if (gu_exn_caught(parse_err, PgfExn)) {
 				GuString msg = gu_exn_caught_data(parse_err);
 				gu_string_write(msg, out, err);
 				gu_putc('\n', out, err);
-			} else if (gu_exn_caught(parse_err) == gu_type(PgfParseError)) {
+			} else if (gu_exn_caught(parse_err, PgfParseError)) {
 				gu_puts("Unexpected token: \"", out, err);
 				GuString tok = gu_exn_caught_data(parse_err);
 				gu_string_write(tok, out, err);

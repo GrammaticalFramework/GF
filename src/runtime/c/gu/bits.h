@@ -103,9 +103,6 @@ gu_tagged(void* ptr, size_t tag) {
 }
 
 #include <gu/exn.h>
-#include <gu/type.h>
-
-extern GU_DECLARE_TYPE(GuIntDecodeExn, abstract);
 
 #define GU_DECODE_2C_(u_, t_, umax_, posmax_, tmin_, err_)	\
 	(((u_) <= (posmax_))					\

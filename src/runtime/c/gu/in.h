@@ -132,8 +132,4 @@ GuIn*
 gu_data_in(const uint8_t* buf, size_t size, GuPool* pool);
 
 
-extern GU_DECLARE_TYPE(GuEOF, abstract);
-
-#include <gu/type.h>
-
 #endif // GU_IN_H_

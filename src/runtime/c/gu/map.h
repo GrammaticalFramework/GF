@@ -81,45 +81,4 @@ typedef GuMap GuIntMap;
 #define gu_new_int_map(VAL_T, DEFAULT, POOL)		\
 	gu_new_map(int, gu_int_hasher, VAL_T, DEFAULT, POOL)
 
-
-#if defined(GU_TYPE_H_) && !defined(GU_MAP_H_TYPE_)
-#define GU_MAP_H_TYPE_
-
-extern GU_DECLARE_KIND(GuMap);
-
-typedef const struct GuMapType GuMapType, GuType_GuMap;
-
-struct GuMapType {
-	GuType_abstract abstract_base;
-	GuHasher* hasher;
-	GuType* key_type;
-	GuType* value_type;
-	const void* default_value;
-};
-
-GuMap*
-gu_map_type_make(GuMapType* mtype, GuPool* pool);
-
-#define gu_map_type_new(MAP_T, POOL)			\
-	gu_map_type_make(gu_type_cast(gu_type(MAP_T), GuMap), (POOL))
-
-#define GU_TYPE_INIT_GuMap(k_, t_, kt_, h_, vt_, dv_)			\
-	{								\
-		.abstract_base = GU_TYPE_INIT_abstract(k_, t_, _),	\
-		.hasher = h_,						\
-		.key_type = kt_,					\
-		.value_type = vt_,					\
-		.default_value = dv_					\
-	}
-
-#define gu_type__GuIntMap gu_type__GuMap
-
-typedef GuType_GuMap GuType_GuIntMap;
-
-#define GU_TYPE_INIT_GuIntMap(KIND, MAP_T, VAL_T, DEFAULT)	\
-	GU_TYPE_INIT_GuMap(KIND, MAP_T, gu_type(int), gu_int_hasher,	\
-			   VAL_T, DEFAULT)
-
-#endif
-
 #endif // GU_MAP_H_

@@ -3,12 +3,10 @@
 
 
 GuExn*
-gu_new_exn(GuExn* parent, GuKind* catch, GuPool* pool)
+gu_new_exn(GuPool* pool)
 {
 	GuExn* exn = gu_new(GuExn, pool);
 	exn->state = GU_EXN_OK;
-	exn->parent = parent;
-	exn->catch = catch;
 	exn->caught = NULL;
 	exn->data.pool = pool;
 	exn->data.data = NULL;
@@ -18,6 +16,12 @@ gu_new_exn(GuExn* parent, GuKind* catch, GuPool* pool)
 bool
 gu_exn_is_raised(GuExn* err) {
 	return err && (err->state == GU_EXN_RAISED);
+}
+
+bool
+gu_exn_caught_(GuExn* err, const char* type)
+{
+	return (err->caught && strcmp(err->caught, type) == 0);
 }
 
 void
@@ -37,24 +41,11 @@ gu_exn_unblock(GuExn* err)
 }
 
 GuExnData*
-gu_exn_raise_debug_(GuExn* base, GuType* type, 
-		      const char* filename, const char* func, int lineno)
+gu_exn_raise_debug_(GuExn* err, const char* type, 
+		            const char* filename, const char* func, int lineno)
 {
 	gu_require(type);
 
-	// TODO: log the error, once there's a system for dumping
-	// error objects.
-
-	GuExn* err = base;
-	
-	while (err && !(err->catch && gu_type_has_kind(type, err->catch))) {
-		err->state = GU_EXN_RAISED;
-		err = err->parent;
-	}
-	if (!err) {
-		gu_abort_(GU_ASSERT_ASSERTION, filename, func, lineno,
-			  "Unexpected error raised");
-	}
 	GuExnState old_state = err->state;
 	err->state = GU_EXN_RAISED;
 	if (old_state == GU_EXN_OK) {
@@ -63,21 +54,16 @@ gu_exn_raise_debug_(GuExn* base, GuType* type,
 			return &err->data;
 		}
 	}
+
 	// Exceptian had already been raised, possibly blocked, or no
 	// exception value is required.
 	return NULL;
 }
 
 GuExnData*
-gu_exn_raise_(GuExn* base, GuType* type)
+gu_exn_raise_(GuExn* base, const char* type)
 {
 	return gu_exn_raise_debug_(base, type, NULL, NULL, -1);
-}
-
-GuType*
-gu_exn_caught(GuExn* err)
-{
-	return err->caught;
 }
 
 void
@@ -90,5 +76,3 @@ gu_raise_errno(GuExn* err)
 		err_data->data = gu_errno;
 	}
 }
-
-GU_DEFINE_TYPE(GuErrno, signed, _);

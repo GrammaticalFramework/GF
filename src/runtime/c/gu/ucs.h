@@ -36,6 +36,4 @@ gu_str_to_ucs(const char* cbuf, size_t len, GuUCS* ubuf, GuExn* err);
 size_t
 gu_ucs_to_str(const GuUCS* ubuf, size_t len, char* cbuf, GuExn* err);
 
-extern GU_DECLARE_TYPE(GuUCSExn, abstract);
-
 #endif // GU_ISO10646_H_

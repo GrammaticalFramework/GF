@@ -58,11 +58,7 @@ typedef struct {
 	size_t choice;
 } PgfCombine2State;
 
-static GU_DEFINE_TYPE(PgfAnswers, abstract);
-
 typedef GuStringMap PgfAbswersMap;
-static GU_DEFINE_TYPE(PgfAbswersMap, GuStringMap, gu_ptr_type(PgfAnswers),
-                      &gu_null_struct);
 
 struct PgfReasoner {
 	GuPool* pool;
@@ -355,7 +351,7 @@ pgf_reasoner_next(PgfReasoner* rs)
 			GuPool* tmp_pool = gu_new_pool();
 			GuOut* out = gu_file_out(stderr, tmp_pool);
 			GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
-			GuExn* err = gu_exn(NULL, type, tmp_pool);
+			GuExn* err = gu_exn(tmp_pool);
 			st->print(st, wtr, err, tmp_pool);
 			gu_pool_free(tmp_pool);
 		}
@@ -388,7 +384,8 @@ pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool)
 	rs->pool = pool;
 	rs->tmp_pool = gu_new_pool(),
     rs->abstract = &pgf->abstract,
-	rs->table = gu_map_type_new(PgfAbswersMap, rs->tmp_pool),
+	rs->table = gu_new_string_map(PgfAnswers*, &gu_null_struct, rs->tmp_pool),
+
 	rs->pqueue = gu_new_buf(PgfReasonerState*, rs->tmp_pool);
 	rs->exprs = gu_new_buf(PgfExprProb*, rs->tmp_pool);
 	rs->en.next = pgf_reasoner_enum_next;

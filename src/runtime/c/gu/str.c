@@ -59,8 +59,6 @@ GuHasher gu_str_hasher[1] = {
 	}
 };
 
-GU_DEFINE_TYPE(GuStr, repr, _);
-
 char* 
 gu_vasprintf(const char* fmt, va_list args, GuPool* pool)
 {

@@ -66,28 +66,6 @@ gu_string_hash(GuHash h, GuString s);
 extern GuHasher gu_string_hasher[1];
 #endif
 
-#ifdef GU_TYPE_H_
-# ifndef GU_STRING_H_TYPE_
-#  define GU_STRING_H_TYPE_
-
-extern GU_DECLARE_KIND(GuString);
-# endif
-
-# if defined(GU_MAP_H_TYPE_) && !defined(GU_STRING_H_MAP_TYPE_)
-#  define GU_STRING_H_MAP_TYPE_
-
-extern GU_DECLARE_KIND(GuStringMap);
-typedef GuType_GuMap GuType_GuStringMap;
-
-#define GU_TYPE_INIT_GuStringMap(KIND, MAP_T, VAL_T, DEFAULT)	\
-	GU_TYPE_INIT_GuMap(KIND, MAP_T,				\
-			   gu_type(GuString), gu_string_hasher,	\
-			   VAL_T, DEFAULT)
-
-# endif
-#endif
-
-
 #if defined(GU_SEQ_H_) && !defined(GU_STRING_H_SEQ_)
 #define GU_STRING_H_SEQ_
 

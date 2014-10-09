@@ -12,8 +12,6 @@
 /// An abstract syntax tree
 typedef GuVariant PgfExpr;
 
-extern GU_DECLARE_TYPE(PgfExpr, GuVariant);
-
 typedef struct PgfHypo PgfHypo;
 typedef struct PgfType PgfType;
 
@@ -127,8 +125,6 @@ typedef struct {
 	prob_t prob;
 	PgfExpr expr;
 } PgfExprProb;
-
-extern GU_DECLARE_TYPE(PgfExprProb, struct);
 
 int
 pgf_expr_arity(PgfExpr expr);
