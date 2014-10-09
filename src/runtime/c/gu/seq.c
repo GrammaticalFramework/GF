@@ -272,7 +272,7 @@ gu_buf_sort(GuBuf *buf, GuOrder *order)
 }
 
 void*
-gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, void *key)
+gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, const void *key)
 {
 	int i = 0;
 	int j = seq->len-1;
@@ -296,7 +296,7 @@ gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, void *key)
 
 bool
 gu_seq_binsearch_index_(GuSeq *seq, GuOrder *order, size_t elem_size,
-                        void *key, size_t *pindex)
+                        const void *key, size_t *pindex)
 {
 	size_t i = 0;
 	size_t j = seq->len-1;
