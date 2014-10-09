@@ -94,6 +94,7 @@ ppSymbol (SymKS t)    = doubleQuotes (text t)
 ppSymbol SymNE        = text "nonExist"
 ppSymbol SymBIND      = text "BIND"
 ppSymbol SymSOFT_BIND = text "SOFT_BIND"
+ppSymbol SymCAPIT     = text "CAPIT"
 ppSymbol (SymKP syms alts) = text "pre" <+> braces (hsep (punctuate semi (hsep (map ppSymbol syms) : map ppAlt alts)))
 
 ppAlt (syms,ps) = hsep (map ppSymbol syms) <+> char '/' <+> hsep (map (doubleQuotes . text) ps)

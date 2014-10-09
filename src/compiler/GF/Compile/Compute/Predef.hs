@@ -79,7 +79,7 @@ predefList =
      -- Canonical values:
      (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInt,Int),
      (cInts,Ints),(cNonExist,NonExist)
-     ,(cBIND,BIND),(cSOFT_BIND,SOFT_BIND)]
+     ,(cBIND,BIND),(cSOFT_BIND,SOFT_BIND),(cCAPIT,CAPIT)]
     --- add more functions!!!
 
 delta f vs =
@@ -109,6 +109,7 @@ delta f vs =
       NonExist-> canonical
       BIND    -> canonical
       SOFT_BIND->canonical
+      CAPIT   -> canonical
   where
     canonical = delay
     delay = return (VApp f vs) -- wrong number of arguments

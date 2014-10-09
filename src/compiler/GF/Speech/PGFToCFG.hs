@@ -97,6 +97,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
                                            ---- AR 3/6/2010
         symbolToCFSymbol SymBIND         = [Terminal "&+"]
         symbolToCFSymbol SymSOFT_BIND    = []
+        symbolToCFSymbol SymCAPIT        = [Terminal "&|"]
         symbolToCFSymbol SymNE           = []
 
         fixProfile :: Array DotPos Symbol -> Int -> Profile

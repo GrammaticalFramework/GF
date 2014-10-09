@@ -904,6 +904,8 @@ pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTreeApp* fapp,
 			}
 			break;
 		}
+		case PGF_SYMBOL_CAPIT:
+			break;
 		default:
 			gu_impossible(); 
 		}

@@ -53,6 +53,8 @@ primitives = Map.fromList
                                          [] typeStr []))) Nothing)
   , (cSOFT_BIND, ResOper (Just (noLoc (mkProd -- Str
                                          [] typeStr []))) Nothing)
+  , (cCAPIT    , ResOper (Just (noLoc (mkProd -- Str
+                                         [] typeStr []))) Nothing)
   ]
   where
     fun from to = oper (mkFunType from to)

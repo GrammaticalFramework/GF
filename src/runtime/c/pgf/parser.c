@@ -137,6 +137,8 @@ pgf_prev_extern_sym(PgfSymbol sym)
 	case PGF_SYMBOL_BIND:
 	case PGF_SYMBOL_SOFT_BIND:
 		return *((PgfSymbol*) (((PgfSymbolBIND*) i.data)+1));
+	case PGF_SYMBOL_CAPIT:
+		return *((PgfSymbol*) (((PgfSymbolCAPIT*) i.data)+1));
 	case PGF_SYMBOL_NE:
 		return *((PgfSymbol*) (((PgfSymbolNE*) i.data)+1));
 	default:
@@ -1147,6 +1149,9 @@ pgf_symbols_cmp(GuString* psent, size_t sent_len, BIND_TYPE* pbind, PgfSymbols* 
 			*pbind = BIND_SOFT;
 			break;
 		}
+		case PGF_SYMBOL_CAPIT: {
+			break;
+		}
 		case PGF_SYMBOL_NE: {
 			return -2;
 		}
@@ -1717,6 +1722,9 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 			pgf_item_advance(item, ps->pool);
 			gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
 		}
+		break;
+	}
+	case PGF_SYMBOL_CAPIT: {
 		break;
 	}
 	default:

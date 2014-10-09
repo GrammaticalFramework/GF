@@ -89,6 +89,7 @@ sym2js (SymKP ts alts) = new "SymKP"  [JS.EArray (map sym2js ts), JS.EArray (map
 sym2js SymNE           = new "SymNE"  []
 sym2js SymBIND         = new "SymKS"  [JS.EStr "&+"]
 sym2js SymSOFT_BIND    = new "SymKS"  [JS.EStr "&+"]
+sym2js SymCAPIT        = new "SymKS"  [JS.EStr "&|"]
 
 alt2js (ps,ts) = new "Alt" [JS.EArray (map sym2js ps), JS.EArray (map JS.EStr ts)]
 
