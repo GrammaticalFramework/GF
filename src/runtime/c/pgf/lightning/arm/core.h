@@ -636,7 +636,7 @@ jit_v_order[JIT_V_NUM] = {
 }
 #endif
 
-#define jit_mulr_i(r0, r1, r2)		jit_mulr_ui(_jit, r0, r1, r2)
+#define jit_mulr_i(r0, r1, r2)		jit_mulr_ui(r0, r1, r2)
 #ifdef USE_THUMB_CODE
 #define jit_mulr_ui(r0, r1, r2) \
 { \
