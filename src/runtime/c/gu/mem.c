@@ -230,7 +230,8 @@ gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr)
 	uint8_t* buf = gu_mem_buf_alloc(sz, &sz);
 	GuPool* pool = gu_init_pool(buf, size);
 
-	*((int*) pool->init_buf) = fd;
+	uint8_t* pfd = pool->init_buf;
+	*((int*) pfd) = fd;
 
 	pool->type = GU_POOL_MMAP;
 	pool->curr_buf = ptr;
@@ -376,7 +377,8 @@ gu_pool_free(GuPool* pool)
 	if (pool->type == GU_POOL_HEAP) {
 		gu_mem_buf_free(pool);
 	} else if (pool->type == GU_POOL_MMAP) {
-		int fd = *((int*) pool->init_buf);
+		uint8_t* pfd = pool->init_buf;
+		int fd = *(pfd);
 
 		munmap(pool->curr_buf, pool->curr_size);
 		close(fd);
