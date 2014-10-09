@@ -118,14 +118,14 @@ gu_buf_sort(GuBuf *buf, GuOrder *order);
 	((T*) gu_seq_binsearch_(S, O, sizeof(T), V))
 
 void*
-gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, void *key);
+gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, const void *key);
 
 #define gu_seq_binsearch_index(S, O, T, V, PI) \
 	gu_seq_binsearch_index_(S, O, sizeof(T), V, PI)
 
 bool
 gu_seq_binsearch_index_(GuSeq *seq, GuOrder *order, size_t elem_size, 
-                        void *key, size_t *pindex);
+                        const void *key, size_t *pindex);
 
 // Using a buffer as a heap
 void
