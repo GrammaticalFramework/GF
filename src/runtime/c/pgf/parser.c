@@ -1482,54 +1482,48 @@ pgf_parsing_meta_scan(PgfParsing* ps,
 	gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
 }
 
-typedef struct {
-	GuMapItor fn;
-	PgfParsing* ps;
-	PgfItem* meta_item;
-} PgfMetaPredictFn;
-
 static void
-pgf_parsing_meta_predict(GuMapItor* fn, const void* key, void* value, GuExn* err)
+pgf_parsing_meta_predict(PgfParsing* ps, PgfItem* meta_item)
 {
-	(void) (err);
+	PgfAbsCats* cats = ps->concr->abstr->cats;
+	size_t n_cats = gu_seq_length(cats);
 	
-	PgfAbsCat* abscat = *((PgfAbsCat**) value);
-    PgfMetaPredictFn* clo = (PgfMetaPredictFn*) fn;
-    PgfParsing* ps = clo->ps;
-    PgfItem* meta_item  = clo->meta_item;
-
-	if (abscat->prob == INFINITY)
-		return;
-
-    PgfCncCat* cnccat =
-		gu_map_get(ps->concr->cnccats, abscat->name, PgfCncCat*);
-	if (cnccat == NULL)
-		return;
-
-	size_t n_cats = gu_seq_length(cnccat->cats);
 	for (size_t i = 0; i < n_cats; i++) {
-		PgfCCat* ccat = gu_seq_get(cnccat->cats, PgfCCat*, i);
-		if (ccat->prods == NULL) {
-			// empty category
+		PgfAbsCat* abscat = gu_seq_index(cats, PgfAbsCat, i);
+
+		if (abscat->prob == INFINITY)
 			continue;
-		}
 
-		for (size_t lin_idx = 0; lin_idx < cnccat->n_lins; lin_idx++) {
-			PgfItem* item = 
-				pgf_item_copy(meta_item, ps);
-			item->inside_prob +=
-				ccat->viterbi_prob+abscat->prob;
+		PgfCncCat* cnccat =
+			gu_map_get(ps->concr->cnccats, abscat->name, PgfCncCat*);
+		if (cnccat == NULL)
+			continue;
 
-			size_t nargs = gu_seq_length(meta_item->args);
-			item->args = gu_new_seq(PgfPArg, nargs+1, ps->pool);
-			memcpy(gu_seq_data(item->args), gu_seq_data(meta_item->args),
-			       nargs * sizeof(PgfPArg));
-			gu_seq_set(item->args, PgfPArg, nargs,
-			           ((PgfPArg) { .hypos = NULL, .ccat = ccat }));
+		size_t n_cats = gu_seq_length(cnccat->cats);
+		for (size_t i = 0; i < n_cats; i++) {
+			PgfCCat* ccat = gu_seq_get(cnccat->cats, PgfCCat*, i);
+			if (ccat->prods == NULL) {
+				// empty category
+				continue;
+			}
 
-			pgf_add_extern_cat(&item->curr_sym, nargs, lin_idx, ps->pool);
+			for (size_t lin_idx = 0; lin_idx < cnccat->n_lins; lin_idx++) {
+				PgfItem* item = 
+					pgf_item_copy(meta_item, ps);
+				item->inside_prob +=
+					ccat->viterbi_prob+abscat->prob;
 
-			gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
+				size_t nargs = gu_seq_length(meta_item->args);
+				item->args = gu_new_seq(PgfPArg, nargs+1, ps->pool);
+				memcpy(gu_seq_data(item->args), gu_seq_data(meta_item->args),
+					   nargs * sizeof(PgfPArg));
+				gu_seq_set(item->args, PgfPArg, nargs,
+						   ((PgfPArg) { .hypos = NULL, .ccat = ccat }));
+
+				pgf_add_extern_cat(&item->curr_sym, nargs, lin_idx, ps->pool);
+
+				gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
+			}
 		}
 	}
 }
@@ -1833,8 +1827,7 @@ pgf_parsing_item(PgfParsing* ps, PgfItem* item)
 					pgf_parsing_meta_scan(ps, item, meta_token_prob);
 				}
 
-				PgfMetaPredictFn clo = { { pgf_parsing_meta_predict }, ps, item };
-				gu_map_iter(ps->concr->abstr->cats, &clo.fn, NULL);
+				pgf_parsing_meta_predict(ps, item);
 			}
 		} else {
 			pgf_parsing_symbol(ps, item, item->curr_sym);
@@ -1849,28 +1842,28 @@ pgf_parsing_item(PgfParsing* ps, PgfItem* item)
 static void
 pgf_parsing_set_default_factors(PgfParsing* ps, PgfAbstr* abstr)
 {
-	PgfLiteral lit;
+	PgfFlag* flag;
 	
-	lit =
-		gu_map_get(abstr->aflags, "heuristic_search_factor", PgfLiteral);
-	if (!gu_variant_is_null(lit)) {
-		GuVariantInfo pi = gu_variant_open(lit);
+	flag =
+		gu_seq_binsearch(abstr->aflags, pgf_flag_order, PgfFlag, "heuristic_search_factor");
+	if (flag != NULL) {
+		GuVariantInfo pi = gu_variant_open(flag->value);
 		gu_assert (pi.tag == PGF_LITERAL_FLT);
 		ps->heuristic_factor = ((PgfLiteralFlt*) pi.data)->val;
 	}
 
-	lit =
-		gu_map_get(abstr->aflags, "meta_prob", PgfLiteral);
-	if (!gu_variant_is_null(lit)) {
-		GuVariantInfo pi = gu_variant_open(lit);
+	flag =
+		gu_seq_binsearch(abstr->aflags, pgf_flag_order, PgfFlag, "meta_prob");
+	if (flag != NULL) {
+		GuVariantInfo pi = gu_variant_open(flag->value);
 		gu_assert (pi.tag == PGF_LITERAL_FLT);
 		ps->meta_prob = - log(((PgfLiteralFlt*) pi.data)->val);
 	}
 
-	lit =
-		gu_map_get(abstr->aflags, "meta_token_prob", PgfLiteral);
-	if (!gu_variant_is_null(lit)) {
-		GuVariantInfo pi = gu_variant_open(lit);
+	flag =
+		gu_seq_binsearch(abstr->aflags, pgf_flag_order, PgfFlag, "meta_token_prob");
+	if (flag != NULL) {
+		GuVariantInfo pi = gu_variant_open(flag->value);
 		gu_assert (pi.tag == PGF_LITERAL_FLT);
 		ps->meta_token_prob = - log(((PgfLiteralFlt*) pi.data)->val);
 	}

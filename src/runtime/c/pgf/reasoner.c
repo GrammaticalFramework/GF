@@ -399,7 +399,7 @@ pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool)
 	answers->outside_prob = 0;
 	gu_map_put(rs->table, cat, PgfAnswers*, answers);
 
-	PgfAbsCat* abscat = gu_map_get(rs->abstract->cats, cat, PgfAbsCat*);
+	PgfAbsCat* abscat = gu_seq_binsearch(rs->abstract->cats, pgf_abscat_order, PgfAbsCat, cat);
 	if (abscat != NULL) {
 		((PgfPredicate) abscat->predicate)(rs, NULL);
 	}

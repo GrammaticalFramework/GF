@@ -292,7 +292,7 @@ pgf_tc_type(PgfTypeChecker* checker, PgfType** pty)
 	PgfType* ty = *pty;
 
 	PgfAbsCat* abs_cat =
-		gu_map_get(checker->abstr->cats, ty->cid, PgfAbsCat*);
+		gu_seq_binsearch(checker->abstr->cats, pgf_abscat_order, PgfAbsCat, ty->cid);
 	if (abs_cat == NULL) {
 		GuExnData* exn = gu_raise(checker->exn, PgfExn);
 		exn->data = (void*)
@@ -459,7 +459,7 @@ pgf_inf_expr(PgfTypeChecker* checker, PgfContext* ctxt, PgfExpr* pe)
 
 		if (ty == NULL) {
 			PgfAbsFun* abs_fun =
-				gu_map_get(checker->abstr->funs, efun->fun, PgfAbsFun*);
+				gu_seq_binsearch(checker->abstr->funs, pgf_absfun_order, PgfAbsFun, efun->fun);
 			if (abs_fun == NULL) {
 				GuExnData* exn = gu_raise(checker->exn, PgfExn);
 				exn->data = (void*)

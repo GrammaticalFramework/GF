@@ -13,9 +13,16 @@ extern GU_DECLARE_TYPE(PgfCCat, abstract);
 
 typedef GuSeq PgfCCats;
 
-#define PgfCIdMap GuStringMap			 
-typedef PgfCIdMap PgfFlags; // PgfCId -> PgfLiteral
-extern GU_DECLARE_TYPE(PgfFlags, GuMap);
+#define PgfCIdMap GuStringMap
+
+typedef struct {
+	PgfCId name;
+	PgfLiteral value;
+} PgfFlag;
+
+typedef GuSeq PgfFlags;
+
+extern GuOrder pgf_flag_order[1];
 
 // PgfPatt
 
@@ -87,7 +94,9 @@ typedef struct {
 	} closure;
 } PgfAbsFun;
 
-extern GU_DECLARE_TYPE(PgfAbsFun, abstract);
+typedef GuSeq PgfAbsFuns;
+
+extern GuOrder pgf_absfun_order[1];
 
 typedef GuMap PgfMetaChildMap;
 extern GU_DECLARE_TYPE(PgfMetaChildMap, GuMap);
@@ -103,13 +112,18 @@ typedef struct {
 
 extern GU_DECLARE_TYPE(PgfAbsCat, abstract);
 
+typedef GuSeq PgfAbsCats;
+
+extern GuOrder pgf_abscat_order[1];
+
+
 typedef struct PgfEvalGates PgfEvalGates;
 
 typedef struct {
 	PgfCId name;
 	PgfFlags* aflags;
-	PgfCIdMap* funs; // |-> PgfAbsFun*
-	PgfCIdMap* cats; // |-> PgfAbsCat*
+	PgfAbsFuns* funs;
+	PgfAbsCats* cats;
 	PgfAbsFun* abs_lin_fun;
 	PgfEvalGates* eval_gates;
 } PgfAbstr;
@@ -130,12 +144,16 @@ typedef enum {
   PGF_INSTR_FAIL        = 14
 } PgfInstruction;
 
+typedef GuSeq PgfConcrs;
+
+extern GuOrder pgf_concr_order[1];
+
 struct PgfPGF {
 	uint16_t major_version;
 	uint16_t minor_version;
 	PgfFlags* gflags;
 	PgfAbstr abstract;
-	PgfCIdMap* concretes; // |-> PgfConcr*
+	PgfConcrs* concretes;
 	GuPool* pool;         // the pool in which the grammar is allocated
 };
 
@@ -269,7 +287,6 @@ struct PgfConcr {
 	GuFinalizer fin;  // and this is the finalizer in the pool of the whole grammar
 };
 
-extern GU_DECLARE_TYPE(PgfConcr, abstract);
 
 
 // PgfProduction

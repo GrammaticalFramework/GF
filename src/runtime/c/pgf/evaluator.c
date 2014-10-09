@@ -79,7 +79,7 @@ repeat:;
 		PgfExprFun* efun = ei.data;
 
 		PgfAbsFun* absfun =
-			gu_map_get(state->pgf->abstract.funs, efun->fun, PgfAbsFun*);
+			gu_seq_binsearch(state->pgf->abstract.funs, pgf_absfun_order, PgfAbsFun, efun->fun);
 		gu_assert(absfun != NULL);
 
 		if (absfun->closure.code != NULL) {
