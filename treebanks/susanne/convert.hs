@@ -90,17 +90,17 @@ pS =
      advs <- many pAdS
      np <- pSubject
      (t,p,vp) <- pVP
-     return (foldr ($) (App cidUseCl [t,p,App cidPredVP [np, vp]]) advs)
+     return (foldr ($) (cidUseCl (cidTTAnt t p) (cidPredVP np vp)) advs)
   `mplus`
   do mplus pConj (return ())
      (t,p,vp) <- pVP
-     return (App cidImpVP [vp])
+     return (cidImpVP vp)
   `mplus`
   do mplus pConj (return ())
      advs <- many pAdS
      t1 <- match "EX"
      (t,p,vp) <- pVP
-     return (foldr ($) (App cidUseCl [t,p,App cidExistNP [t1,vp]]) advs)
+     return (foldr ($) (cidUseCl (cidTTAnt t p) (cidExistNP t1 vp)) advs)
 
 pSubject =
   do insideOpt "N:s" pNP
@@ -125,10 +125,10 @@ pConj =
 pAdS =
   do adv <- pAdv
      match "YC"
-     return (\t -> App cidExtAdvS [adv,t])
+     return (\t -> cidExtAdvS adv t)
   `mplus`
   do adv <- pAdv
-     return (\t -> App cidAdvS [adv,t])
+     return (\t -> cidAdvS adv t)
 
 pVP =
   do adVs     <- many pAdV
@@ -136,9 +136,9 @@ pVP =
      advs     <- many pAdv
      s        <- insideOpt "F:o"
                    (opt (match "CST") >> pS)
-     return (t,p,foldr (\adv t -> App cidAdVVP [adv,t])
-                       (foldl (\t adv -> App cidAdvVP [t, adv])
-                              (App cidComplVS [vs, s])
+     return (t,p,foldr (\adv t -> cidAdVVP adv t)
+                       (foldl (\t adv -> cidAdvVP t adv)
+                              (cidComplVS vs s)
                               advs)
                        adVs)
   `mplus`
@@ -146,9 +146,9 @@ pVP =
      (t,p,vv) <- pV "VV"
      advs     <- many pAdv
      vp       <- match "Ti"
-     return (t,p,foldr (\adv t -> App cidAdVVP [adv,t])
-                       (foldl (\t adv -> App cidAdvVP [t, adv])
-                              (App cidComplVV [vv, vp])
+     return (t,p,foldr (\adv t -> cidAdVVP adv t)
+                       (foldl (\t adv -> cidAdvVP t adv)
+                              (cidComplVV vv vp)
                               advs)
                        adVs)
   `mplus`
@@ -157,36 +157,36 @@ pVP =
      o        <- pObject
      opt (match "YC")   -- what is this?
      advs     <- many pAdv
-     return (t,p,foldr (\adv t -> App cidAdVVP [adv,t])
-                       (foldl (\t adv -> App cidAdvVP [t, adv])
-                              (App cidComplSlash [App cidSlashV2a [v2],o])
+     return (t,p,foldr (\adv t -> cidAdVVP adv t)
+                       (foldl (\t adv -> cidAdvVP t adv)
+                              (cidComplSlash (cidSlashV2a v2) o)
                               advs)
                        adVs)
   `mplus`
   do adVs    <- many pAdV
      (t,p,v) <- pV "V"
      advs    <- many pAdv
-     return (t,p,foldr (\adv t -> App cidAdVVP [adv,t])
-                       (foldl (\t adv -> App cidAdvVP [t, adv])
-                              (App cidUseV [v])
+     return (t,p,foldr (\adv t -> cidAdVVP adv t)
+                       (foldl (\t adv -> cidAdvVP t adv)
+                              (cidUseV v)
                               advs)
                        adVs)
 
 pV cat =
   do inside "V" $
        do v <- lemma "VVDv" (mkCId cat) "s VPast"
-          return (App cidTTAnt [App cidTPast [],App cidASimul []],App cidPPos [],v)
+          return (cidTTAnt cidTPast cidASimul,cidPPos,v)
        `mplus`
        do v <- lemma "VVDt" (mkCId cat) "s VPast"
-          return (App cidTTAnt [App cidTPast [],App cidASimul []],App cidPPos [],v)
+          return (cidTTAnt cidTPast cidASimul,cidPPos,v)
        `mplus`
        do v <- lemma "VVZv" (mkCId cat) "s VPres"
-          return (App cidTTAnt [App cidTPres [],App cidASimul []],App cidPPos [],v)
+          return (cidTTAnt cidTPres cidASimul,cidPPos,v)
        `mplus`
        do match "VHD"
           match "VHD"
           v <- lemma "VVNv" (mkCId cat) "s VPPart"
-          return (App cidTTAnt [App cidTPres [],App cidAAnter []],App cidPPos [],v)
+          return (cidTTAnt cidTPres cidAAnter,cidPPos,v)
   `mplus`
   do v <- match "V"
      return (App (mkCId "XXX") [],App (mkCId "XXX") [],v)
@@ -266,13 +266,13 @@ pAdv =
 pNP = do
   q      <- pQuant
   (n,cn) <- pCN
-  return (App cidDetCN [App cidDetQuant [q,n],cn])
+  return (cidDetCN (cidDetQuant q n) cn)
 
 pQuant =
   do lemma "AT" (mkCId "Quant") "s False Sg"
   `mplus`
   do match "AT1"
-     return (App cidIndefArt [])
+     return cidIndefArt
 
 pCN =
   do np <- insideOpt "N" pNP
@@ -281,24 +281,24 @@ pCN =
   `mplus`
   do a  <- lemma "JJ" (mkCId "A") "s (AAdj Posit Nom)"
      (n,cn) <- pCN
-     return (n,App cidAdjCN [App cidPositA [a],cn])
+     return (n,cidAdjCN (cidPositA a) cn)
   `mplus`
   do (num,n) <- pN
      advs <- many pPo
      return (num,
-             foldl (\t adv -> App cidAdvCN [t, adv])
-                   (App cidUseN [n])
+             foldl (\t adv -> cidAdvCN t adv)
+                   (cidUseN n)
                    advs)
 
 pN = 
   do n <- lemma "NN1c" (mkCId "N") "s Sg Nom"
-     return (App cidNumSg [], n)
+     return (cidNumSg, n)
   `mplus`
   do n <- lemma "NN1n" (mkCId "N") "s Sg Nom"
-     return (App cidNumSg [], n)
+     return (cidNumSg, n)
 
 pPo =
   insideOpt "Po" $ do
     p  <- match "IO"
     np <- insideOpt "N" pNP
-    return (App cidPrepNP [p,np])
+    return (cidPrepNP p np)
