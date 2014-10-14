@@ -136,7 +136,8 @@ typedef enum {
   PGF_INSTR_PUSH        =  9,
   PGF_INSTR_EVAL        = 10,
   PGF_INSTR_DROP        = 13,
-  PGF_INSTR_FAIL        = 14
+  PGF_INSTR_FAIL        = 14,
+  PGF_INSTR_ADD         = 15
 } PgfInstruction;
 
 typedef GuSeq PgfConcrs;
