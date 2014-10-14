@@ -344,7 +344,7 @@ pgf_jit_gates(PgfReader* rdr)
 	gates->evaluate_value = jit_get_ip().ptr;
 	jit_movr_p(JIT_VHEAP, JIT_VCLOS);
 	jit_ldxi_p(JIT_RET, JIT_VHEAP, offsetof(PgfValue, con));
-	jit_bare_ret(0);
+	jit_bare_ret();
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
 
@@ -353,7 +353,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_subi_p(JIT_R0, JIT_R0, sizeof(void*));
 	ref = jit_bnei_i(jit_forward(), JIT_R0, 0);
 	jit_movr_p(JIT_VHEAP, JIT_VCLOS);
-	jit_bare_ret(0);
+	jit_bare_ret();
 	jit_patch(ref);
 	jit_pushr_i(JIT_R0);
 	jit_prepare(2);
@@ -401,7 +401,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_subi_p(JIT_R0, JIT_R0, sizeof(void*));
 	ref = jit_bnei_i(jit_forward(), JIT_R0, 0);
 	jit_movr_p(JIT_VHEAP, JIT_VCLOS);
-	jit_bare_ret(0);
+	jit_bare_ret();
 	jit_patch(ref);
 	jit_pushr_i(JIT_R0);
 	jit_prepare(2);
@@ -450,7 +450,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_ldxi_p(JIT_R0, JIT_VHEAP, offsetof(PgfValueLit, lit));
 	jit_pusharg_p(JIT_R0);
 	jit_finish(gu_variant_data);
-	jit_bare_ret(0);
+	jit_bare_ret();
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
@@ -500,7 +500,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_movi_p(JIT_R1, gates->evaluate_indirection);
 	jit_str_p(JIT_VCLOS, JIT_R1);
 	jit_stxi_p(offsetof(PgfIndirection, val), JIT_VCLOS, JIT_VHEAP);
-	jit_bare_ret(0);
+	jit_bare_ret();
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
 
