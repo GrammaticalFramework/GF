@@ -265,7 +265,7 @@ static int jit_arg_reg_order[] = { _EDI, _ESI, _EDX, _ECX, _R8D, _R9D };
 #define jit_patch_at(jump_pc,v) (_jitl.long_jumps ? jit_patch_long_at((jump_pc)-3, v) : jit_patch_short_at(jump_pc, v))
 #define jit_patch_calli(pa,pv) (*_PSL((pa) - sizeof(long)) = _jit_SL((pv)))
 #define jit_ret()			(LEAVE_(), POPQr(_R14), POPQr(_R13), POPQr(_R12), POPQr(_EBX), RET_())
-#define jit_bare_ret(IM) ((IM == 0) ? RET_() : RETi(IM))
+#define jit_bare_ret() RET_()
 
 /* Memory */
 

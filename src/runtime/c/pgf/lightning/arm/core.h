@@ -2174,9 +2174,9 @@ next: \
 #endif
 
 #ifdef USE_THUMB_CODE
-#define jit_bare_ret(IM) T2_POP(1<<JIT_PC)
+#define jit_bare_ret() T2_POP(1<<JIT_PC)
 #else
-#define jit_bare_ret(IM) _POP(1<<JIT_PC)
+#define jit_bare_ret() _POP(1<<JIT_PC)
 #endif
 
 /* just to pass make check... */

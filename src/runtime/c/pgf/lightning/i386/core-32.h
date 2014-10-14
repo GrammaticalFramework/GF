@@ -101,7 +101,7 @@ struct jit_local_state {
 #define jit_ret()		jit_base_ret (_jitl.alloca_offset)
 #endif
 
-#define jit_bare_ret(IM) ((IM == 0) ? RET_() : RETi(IM))
+#define jit_bare_ret() RET_()
 
 #define jit_calli(label)	(CALLm( ((unsigned long) (label))), _jit.x.pc)
 #define jit_callr(reg)		CALLsr(reg)
