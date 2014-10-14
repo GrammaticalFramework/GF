@@ -153,10 +153,10 @@ compileArg gr st vs (EInt n)    h0 bs =
   let h1 = h0 + 2
   in (h1,bs,HEAP h0,[PUT_LIT (LInt n)])
 compileArg gr st vs (K s)       h0 bs =
-  let h1 = h0 + 1 + (length s + 4) `div` 4
+  let h1 = h0 + 2
   in (h1,bs,HEAP h0,[PUT_LIT (LStr s)])
 compileArg gr st vs (EFloat d)  h0 bs =
-  let h1 = h0 + 3
+  let h1 = h0 + 2
   in (h1,bs,HEAP h0,[PUT_LIT (LFlt d)])
 compileArg gr st vs (Typed e _) h0 bs =
   compileArg gr st vs e h0 bs
