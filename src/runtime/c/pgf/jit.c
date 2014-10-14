@@ -738,8 +738,8 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				call_patch.ref = jump-6;
 				gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, call_patch);
 
-				for (int i = 0; i < n; i++) {
-					jit_ldxi_p(JIT_R0, JIT_VHEAP, sizeof(PgfValue)+sizeof(PgfClosure*)*i);
+				for (int i = n; i > 0; i--) {
+					jit_ldxi_p(JIT_R0, JIT_VHEAP, sizeof(PgfValue)+sizeof(PgfClosure*)*(i-1));
 					jit_pushr_p(JIT_R0);
 				}
 				break;

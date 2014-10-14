@@ -68,11 +68,11 @@ compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
         (EFloat d) -> CASE_LIT (LFlt d)
 
     compileBranch0 fl bs ((t,n),eqs) =
-      let (bs1,instrs) = compileEquations gr arity (st+n) (push_is st n is) eqs fl bs
+      let (bs1,instrs) = compileEquations gr arity (st+n) (push_is (st+n-1) n is) eqs fl bs
       in (bs1, case_instr t n (length bs1) : instrs)
 
     compileBranch l bs ((t,n),eqs) =
-      let (bs1,instrs) = compileEquations gr arity (st+n) (push_is st n is) eqs fl ((case_instr t n (length bs1) : instrs) : bs)
+      let (bs1,instrs) = compileEquations gr arity (st+n) (push_is (st+n-1) n is) eqs fl ((case_instr t n (length bs1) : instrs) : bs)
       in bs1
 
 mkFail st1 Nothing        = FAIL
