@@ -131,6 +131,11 @@ compileFun gr arity st vs (Let (x, (_, e1)) e2) h0 bs args =
   let (h1,bs1,arg,is1) = compileLambda gr st vs [] e1 h0 bs
       (h2,bs2,is2) = compileFun gr arity st ((x,arg):vs) e2 h1 bs1 args
   in (h2,bs2,is1++is2)
+compileFun gr arity st vs (Glue e1 e2) h0 bs args =
+  let (h1,bs1,arg1,is1) = compileArg gr st vs e1 h0 bs
+      (h2,bs2,arg2,is2) = compileArg gr st vs e2 h1 bs1
+      (st1,is3) = pushArgs st [arg2,arg1]
+  in (h2,bs2,is1++is2++is3++[ADD])
 compileFun gr arity st vs e _ _ _ = error (show e)
 
 compileArg gr st vs (Q(m,id)) h0 bs =

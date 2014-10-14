@@ -170,6 +170,7 @@ instance Binary Instr where
   put (EVAL (GLOBAL  id) (UpdateCall b c)) = putWord8 51 >> put id >> put (b,c)
   put (DROP n l           ) = putWord8 52  >> put (n,l)
   put (FAIL               ) = putWord8 56
+  put (ADD                ) = putWord8 60
 
 instance Binary Type where
   put (DTyp hypos cat exps) = put (hypos,cat,exps)

@@ -28,6 +28,7 @@ data Instr
   | EVAL IVal TailInfo
   | DROP {-# UNPACK #-} !Int  {-# UNPACK #-} !CodeLabel
   | FAIL
+  | ADD
 
 data IVal
   = HEAP     {-# UNPACK #-} !Int
@@ -61,6 +62,7 @@ ppInstr (PUSH          v) = text "PUSH       " <+> ppIVal v
 ppInstr (EVAL       v ti) = text "EVAL       " <+> ppIVal v <+> ppTailInfo ti
 ppInstr (DROP n l       ) = text "DROP       " <+> int n <+> ppLabel l
 ppInstr (FAIL           ) = text "FAIL"
+ppInstr (ADD            ) = text "ADD"
 
 ppIVal (HEAP     n) = text "hp"  <> parens (int n)
 ppIVal (ARG_VAR  n) = text "stk" <> parens (int n)

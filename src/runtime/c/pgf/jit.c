@@ -1160,6 +1160,11 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #endif
 				jit_jmpi(abstr->eval_gates->mk_const);
 				break;
+			case PGF_INSTR_ADD:
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "ADD\n");
+#endif
+				break;
 			default:
 				gu_impossible();
 			}
