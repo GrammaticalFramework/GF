@@ -202,7 +202,7 @@ compileLambda gr st vs xs e           h0 bs =
                                (arity+1)
                                (zip xs (map ARG_VAR  [0..]) ++
                                 zip ys (map FREE_VAR [0..]))
-                               e bs
+                               e (b1:bs)
       b1 = if arity == 0
              then b
              else CHECK_ARGS arity:b
@@ -210,7 +210,7 @@ compileLambda gr st vs xs e           h0 bs =
              then [SET_PAD]
              else map (SET . shiftIVal st . getVar vs) ys
       h1 = h0 + 1 + length is
-  in (h1,b1:bs1,HEAP h0,PUT_CLOSURE (length bs1) : is)
+  in (h1,bs1,HEAP h0,PUT_CLOSURE (length bs) : is)
 
 getVar vs x =
   case lookup x vs of
