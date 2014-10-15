@@ -1,7 +1,7 @@
 module Main where
 
-import GFC
-import GFI
+import GF.Compiler
+import GF.Interactive
 import GF.Data.ErrM
 import GF.Infra.Option
 import GF.Infra.UseIO
