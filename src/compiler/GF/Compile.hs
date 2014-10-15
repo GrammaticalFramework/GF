@@ -41,6 +41,7 @@ link opts (cnc,_,gr) =
 
 srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc
 
+-- | Compile the given grammar files and everything they depend on
 batchCompile :: Options -> [FilePath] -> IOE (Ident,UTCTime,SourceGrammar)
 batchCompile opts files = do
   (gr,menv) <- foldM (compileModule opts) emptyCompileEnv files

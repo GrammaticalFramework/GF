@@ -30,9 +30,9 @@ import Control.Monad((<=<))
 type OneOutput = (Maybe FullPath,CompiledModule)
 type CompiledModule = SourceModule
 
+--compileOne :: Options -> SourceGrammar -> FullPath -> IOE OneOutput
 -- | Compile a given source file (or just load a .gfo file),
 -- given a 'SourceGrammar' containing everything it depends on.
---compileOne :: Options -> SourceGrammar -> FullPath -> IOE OneOutput
 compileOne opts srcgr file =
     if isGFO file
     then reuseGFO opts srcgr file
@@ -40,8 +40,8 @@ compileOne opts srcgr file =
             if b1 then useTheSource opts srcgr file
                   else reuseGFO opts srcgr (gf2gfo opts file)
 
--- | For compiled gf, read the file and update environment
--- also undo common subexp optimization, to enable normal computations
+-- | For compiled gf, read the file and update environment.
+-- Also undo common subexp optimization, to enable normal computations.
 reuseGFO opts srcgr file =
   do sm00 <- putPointE Verbose opts ("+ reading" +++ file) $
              decodeModule file
@@ -61,8 +61,8 @@ reuseGFO opts srcgr file =
 
      return (Just file,sm)
 
--- | For gf source, do full compilation and generate code
 --useTheSource :: Options -> SourceGrammar -> FullPath -> IOE OneOutput
+-- | For gf source, do full compilation and generate code.
 useTheSource opts srcgr file =
       do sm <- putpOpt ("- parsing" +++ file)
                        ("- compiling" +++ file ++ "... ")
