@@ -17,7 +17,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
           in 
           case <n, c, det.isNum, det.isPoss, det.isDef> of {
             <_, NPAcc,       True,_,_>  => <Nom,NCase Sg Part> ; -- myin kolme kytkintä(ni)
-            <_, NPCase Nom,  True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintä(ni) on
+            <_, NPCase Nom | NPSep,  True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintä(ni) on
             <_, _, True,False,_>        => <k,  NCase Sg k> ;    -- kolmeksi kytkimeksi
             <Pl,NPAcc,     _, _, False> => <k,  NCase Pl Part> ; -- myin kytkimiä
             <_, NPAcc,     _,True,_>    => <k,  NPossNom n> ;    -- myin kytkime+ni
