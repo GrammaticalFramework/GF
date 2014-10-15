@@ -158,7 +158,7 @@ Executable gf
     build-depends: httpd-shed>=0.4.0.2, network>=2.3 && <2.6, json, cgi
                    -- ,silently
     cpp-options: -DSERVER_MODE
-    other-modules: GFServer
+    other-modules: GF.Server
     hs-source-dirs: src/server src/server/transfer src/example-based
 
   if flag(c-runtime)
@@ -251,8 +251,8 @@ Executable gf
     GF.Compile.PGFtoJS
     GF.Compile
     GF.Quiz
-    GFC
-    GFI
+    GF.Compiler
+    GF.Interactive
 
   if flag(interrupt)
     cpp-options: -DUSE_INTERRUPT

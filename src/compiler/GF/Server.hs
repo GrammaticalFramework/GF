@@ -1,6 +1,6 @@
 -- | GF server mode
 {-# LANGUAGE CPP #-}
-module GFServer(server) where
+module GF.Server(server) where
 import Data.List(partition,stripPrefix,isInfixOf)
 import qualified Data.Map as M
 import Control.Monad(when)

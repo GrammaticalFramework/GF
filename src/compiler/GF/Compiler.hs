@@ -1,5 +1,4 @@
-module GFC (mainGFC, writePGF) where
--- module Main where
+module GF.Compiler (mainGFC, writePGF) where
 
 import PGF
 import PGF.Internal(concretes,optimizePGF,unionPGF)

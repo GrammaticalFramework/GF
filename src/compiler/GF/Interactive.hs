@@ -1,6 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables, CPP #-}
 -- | GF interactive mode
-module GFI (mainGFI,mainRunGFI,mainServerGFI) where
+module GF.Interactive (mainGFI,mainRunGFI,mainServerGFI) where
 import Prelude hiding (putStrLn,print)
 import qualified Prelude as P(putStrLn)
 import GF.Command.Interpreter(CommandEnv(..),commands,mkCommandEnv,emptyCommandEnv,interpretCommandLine)
@@ -45,7 +45,7 @@ import Control.Monad
 import GF.Text.Pretty (render)
 import qualified GF.System.Signal as IO(runInterruptibly)
 #ifdef SERVER_MODE
-import GFServer(server)
+import GF.Server(server)
 #endif
 import GF.System.Console(changeConsoleEncoding)
 
