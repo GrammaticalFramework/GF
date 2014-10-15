@@ -1,4 +1,5 @@
-module GF.CompileInParallel where
+-- | Parallel grammar compilation
+module GF.CompileInParallel(batchCompile) where
 import Prelude hiding (catch)
 import Control.Monad(join,ap,when,unless)
 import Control.Applicative
@@ -18,6 +19,7 @@ import GF.Infra.Ident(identS)
 import GF.Text.Pretty
 import qualified Data.ByteString.Lazy as BS
 
+-- | Compile the given grammar files and everything they depend on
 batchCompile jobs opts rootfiles0 =
   do rootfiles <- mapM canonical rootfiles0
      lib_dir  <- canonical =<< getLibraryDirectory opts

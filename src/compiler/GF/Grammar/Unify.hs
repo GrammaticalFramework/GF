@@ -9,7 +9,7 @@
 -- > CVS $Author: bringert $
 -- > CVS $Revision: 1.4 $
 --
--- (c) Petri M‰enp‰‰ & Aarne Ranta, 1998--2001
+-- (c) Petri M√§enp√§√§ & Aarne Ranta, 1998--2001
 --
 -- brute-force adaptation of the old-GF program AR 21\/12\/2001 ---
 -- the only use is in 'TypeCheck.splitConstraints'

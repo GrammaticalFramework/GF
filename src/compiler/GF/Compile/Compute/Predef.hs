@@ -98,7 +98,7 @@ delta f vs =
       Plus    -> ap2 ((+)::Int->Int->Int)
       EqInt   -> ap2 ((==)::Int->Int->Bool)
       LessInt -> ap2 ((<)::Int->Int->Bool)
-    {- | Show | Read | ToStr | MapStr | EqVal -}
+    {- -- | Show | Read | ToStr | MapStr | EqVal -}
       Error   -> ap1 VError
       -- Canonical values:
       PBool   -> canonical

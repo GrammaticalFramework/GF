@@ -11,7 +11,7 @@ data Value
   | VCApp QIdent [Value] -- from QC, constructors
   | VGen Int [Value] -- for lambda bound variables, possibly applied
   | VMeta MetaId Env [Value]
--- | VClosure Env Term -- used in Typecheck.ConcreteNew
+-- -- | VClosure Env Term -- used in Typecheck.ConcreteNew
   | VAbs BindType Ident Binding -- used in Compute.ConcreteNew
   | VProd BindType Value Ident Binding -- used in Compute.ConcreteNew
   | VInt Int
@@ -32,7 +32,7 @@ data Value
   | VFV [Value]
   | VAlts Value [(Value, Value)]
   | VStrs [Value]
--- | VGlue Value Value -- hmm
+-- -- | VGlue Value Value -- hmm
   | VExtR Value Value -- hmm
   | VError String
   deriving (Eq,Show)

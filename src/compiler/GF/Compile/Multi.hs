@@ -17,10 +17,10 @@ import Data.Char
 > langs Eng Fin Swe
 
 -- baseline rules: semicolon-separated line-by-line entries update abs and cncs, adding to S
-cheers ; skål ; terveydeksi
+cheers ; skÃ¥l ; terveydeksi
 
 -- alternatives within a language are comma-separated
-cheers ; skål ; terveydeksi, kippis
+cheers ; skÃ¥l ; terveydeksi, kippis
 
 -- more advanced: verbatim abstract rules prefixed by "> abs"
 > abs cat Drink ;
