@@ -112,6 +112,8 @@ concrete NounEst of Noun = CatEst ** open ResEst, HjkEst, MorphoEst, Prelude in 
       isDef = True  --- "minun kolme autoani ovat" ; thus "...on" is missing
       } ;
 
+    PossNP cn np = {s = \\nf => np.s ! NPCase Gen ++ cn.s ! nf };
+
     NumSg = {s = \\_,_ => [] ; isNum = False ; n = Sg} ;
     NumPl = {s = \\_,_ => [] ; isNum = False ; n = Pl} ;
 

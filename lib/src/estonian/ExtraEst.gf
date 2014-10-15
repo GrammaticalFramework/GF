@@ -11,17 +11,27 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
 
     GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf} ;
 
-  lincat
-    VPI   = {s : Str} ;
-    [VPI] = {s1,s2 : Str} ;
-  lin
-    BaseVPI = twoSS ;
-    ConsVPI = consrSS comma ;
+    GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
 
-    MkVPI vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp InfDa} ;
-    ConjVPI = conjunctDistrSS ;
+    GenRP num cn = {
+      s = \\n,c => let k = npform2case num.n c in relPron ! n ! Gen ++ cn.s ! NCase num.n k ; 
+      a = RNoAg 
+---      a = RAg (agrP3 num.n)
+      } ;
+
+  lincat
+    VPI   = {s : InfForm => Str} ;
+    [VPI] = {s1,s2 : InfForm => Str} ;
+    -- VPI   = {s : Str} ;
+    -- [VPI] = {s1,s2 : Str} ;
+  lin
+    BaseVPI = twoTable InfForm ;
+    ConsVPI = consrTable InfForm comma ;
+
+    MkVPI vp = {s = \\i => infVP (NPCase Nom) Pos (agrP3 Sg) vp i} ;
+    ConjVPI = conjunctDistrTable InfForm ;
     ComplVPIVV vv vpi = 
-      insertObj (\\_,_,_ => vpi.s) (predV vv) ;
+      insertObj (\\_,_,_ => vpi.s ! vv.vi) (predV vv) ;
 
   lincat
     VPS = {
@@ -56,6 +66,18 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
     PredVPS np vps = { -- NP -> VPS -> S ;
       s = subjForm np vps.sc Pos ++ vps.s ! np.a
       } ;
+
+   PassVPSlash vp = vp ; --passVP vp vp.c2 ;
+
+
+   PassAgentVPSlash vp np = vp ;
+ {-
+      s = {s = vp.s.s ; h = vp.s.h ; p = vp.s.p ; sc = npform2subjcase vp.c2.c} ; 
+      s2 = \\b,p,a => np.s ! NPCase Nom ++ vp.s2 ! b ! p ! a ;
+      adv = vp.adv ;
+      ext = vp.ext ;
+      vptyp = vp.vptyp ;
+      } ; -}
 
     AdvExistNP adv np = 
       mkClause (\_ -> adv.s) np.a (insertObj 
