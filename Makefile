@@ -1,4 +1,7 @@
-.PHONY: all build install doc clean gf # sdist
+.PHONY: all build install doc clean gf sdist
+
+# This gets the numeric part of the version from the cabal file
+VERSION=$(shell sed -ne "s/^version: *\([0-9.]*\).*/\1/p" gf.cabal)
 
 all: build
 
@@ -41,3 +44,10 @@ pkg:
 # Make a binary tar distribution
 bintar:
 	bash bin/build-binary-dist.sh
+
+# Make a source tar.gz distribution using darcs to make sure that everything
+# is included. We put the distribution in dist/ so it is removed on
+# `make clean`
+sdist:
+	test -d dist || mkdir dist
+	darcs dist -d dist/gf-${VERSION}
