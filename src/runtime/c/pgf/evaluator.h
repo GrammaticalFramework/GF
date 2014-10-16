@@ -40,16 +40,12 @@ typedef struct {
 typedef struct {
 	PgfClosure header;
 	int level;
-	size_t n_args;
-	PgfClosure* args[];
 } PgfValueGen;
 
 typedef struct {
 	PgfClosure header;
 	PgfEnv*  env;
 	PgfMetaId id;
-	size_t n_args;
-	PgfClosure* args[];
 } PgfValueMeta;
 
 typedef struct {
@@ -68,11 +64,12 @@ struct PgfEvalGates {
 	PgfFunction evaluate_expr_thunk;
 	PgfFunction evaluate_indirection;
 	PgfFunction evaluate_value;
-	PgfFunction evaluate_value_gen;
-	PgfFunction evaluate_value_meta;
 	PgfFunction evaluate_value_lit;
 	PgfFunction evaluate_value_pap;
 	PgfFunction evaluate_value_lambda;
+	PgfFunction evaluate_value_const;
+	PgfFunction evaluate_meta;
+	PgfFunction evaluate_gen;
 	PgfFunction evaluate_caf;
 
 	PgfFunction update_closure;

@@ -329,8 +329,7 @@ PgfEvalGates*
 pgf_jit_gates(PgfReader* rdr)
 {
 	PgfEvalGates* gates = gu_new(PgfEvalGates, rdr->opool);
-	jit_insn* next;
-	jit_insn* ref, *ref2;
+	jit_insn *ref, *next, *ref2;
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
@@ -345,102 +344,6 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_movr_p(JIT_VHEAP, JIT_VCLOS);
 	jit_ldxi_p(JIT_RET, JIT_VHEAP, offsetof(PgfValue, con));
 	jit_bare_ret();
-
-	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
-
-	gates->evaluate_value_gen = jit_get_ip().ptr;
-	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
-	jit_subi_p(JIT_R0, JIT_R0, sizeof(void*));
-	ref = jit_bnei_i(jit_forward(), JIT_R0, 0);
-	jit_movr_p(JIT_VHEAP, JIT_VCLOS);
-	jit_bare_ret();
-	jit_patch(ref);
-	jit_pushr_i(JIT_R0);
-	jit_prepare(2);
-	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValueGen));
-	jit_pusharg_ui(JIT_R0);
-	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
-	jit_pusharg_p(JIT_R0);
-	jit_finish(gu_malloc);
-	jit_retval(JIT_VHEAP);
-	jit_popr_i(JIT_R0);
-	jit_movi_p(JIT_R1, gates->evaluate_value_gen);
-	jit_str_p(JIT_VHEAP, JIT_R1);
-	jit_ldxi_p(JIT_R1, JIT_VCLOS, offsetof(PgfValueGen,level));
-	jit_stxi_p(offsetof(PgfValueGen,level), JIT_VHEAP, JIT_R1);
-	jit_ldxi_p(JIT_R1, JIT_VCLOS, offsetof(PgfValueGen,n_args));
-	jit_addr_i(JIT_R1, JIT_R1, JIT_R0);
-	jit_stxi_p(offsetof(PgfValueGen,n_args), JIT_VHEAP, JIT_R1);
-	jit_movi_i(JIT_R1, offsetof(PgfValueGen,args));
-	jit_ldxi_i(JIT_R2, JIT_VCLOS, offsetof(PgfValueGen,n_args));
-	jit_addr_i(JIT_R2, JIT_R2, JIT_R1);
-	jit_pushr_i(JIT_R0);
-	next = jit_get_label();
-	ref  = jit_bger_i(jit_forward(), JIT_R1, JIT_R2);
-	jit_ldxr_i(JIT_R0, JIT_VCLOS, JIT_R1);
-	jit_stxr_p(JIT_R1, JIT_VHEAP, JIT_R0);	
-	jit_addi_i(JIT_R1, JIT_R1, sizeof(void*));
-	jit_jmpi(next);
-	jit_patch(ref);
-	jit_popr_i(JIT_R0);
-	jit_addr_i(JIT_R2, JIT_R2, JIT_R0);
-	jit_popr_p(JIT_VCLOS);
-	next = jit_get_label();
-	ref  = jit_bger_i(jit_forward(), JIT_R1, JIT_R2);
-	jit_popr_p(JIT_R0);
-	jit_stxr_p(JIT_R1, JIT_VHEAP, JIT_R0);	
-	jit_addi_i(JIT_R1, JIT_R1, sizeof(void*));
-	jit_jmpi(next);
-	jit_patch(ref);
-	jit_jmpr(JIT_VCLOS);
-
-	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
-
-	gates->evaluate_value_meta = jit_get_ip().ptr;
-	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
-	jit_subi_p(JIT_R0, JIT_R0, sizeof(void*));
-	ref = jit_bnei_i(jit_forward(), JIT_R0, 0);
-	jit_movr_p(JIT_VHEAP, JIT_VCLOS);
-	jit_bare_ret();
-	jit_patch(ref);
-	jit_pushr_i(JIT_R0);
-	jit_prepare(2);
-	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValueMeta));
-	jit_pusharg_ui(JIT_R0);
-	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
-	jit_pusharg_p(JIT_R0);
-	jit_finish(gu_malloc);
-	jit_retval(JIT_VHEAP);
-	jit_popr_i(JIT_R0);
-	jit_movi_p(JIT_R1, gates->evaluate_value_meta);
-	jit_str_p(JIT_VHEAP, JIT_R1);
-	jit_ldxi_p(JIT_R1, JIT_VCLOS, offsetof(PgfValueMeta,id));
-	jit_stxi_p(offsetof(PgfValueMeta,id), JIT_VHEAP, JIT_R1);
-	jit_ldxi_p(JIT_R1, JIT_VCLOS, offsetof(PgfValueMeta,n_args));
-	jit_addr_i(JIT_R1, JIT_R1, JIT_R0);
-	jit_stxi_p(offsetof(PgfValueMeta,n_args), JIT_VHEAP, JIT_R1);
-	jit_movi_i(JIT_R1, offsetof(PgfValueMeta,args));
-	jit_ldxi_i(JIT_R2, JIT_VCLOS, offsetof(PgfValueMeta,n_args));
-	jit_addr_i(JIT_R2, JIT_R2, JIT_R1);
-	jit_pushr_i(JIT_R0);
-	next = jit_get_label();
-	ref  = jit_bger_i(jit_forward(), JIT_R1, JIT_R2);
-	jit_ldxr_i(JIT_R0, JIT_VCLOS, JIT_R1);
-	jit_stxr_p(JIT_R1, JIT_VHEAP, JIT_R0);	
-	jit_addi_i(JIT_R1, JIT_R1, sizeof(PgfClosure*));
-	jit_jmpi(next);
-	jit_patch(ref);
-	jit_popr_i(JIT_R0);
-	jit_addr_i(JIT_R2, JIT_R2, JIT_R0);
-	jit_popr_p(JIT_VCLOS);
-	next = jit_get_label();
-	ref  = jit_bger_i(jit_forward(), JIT_R1, JIT_R2);
-	jit_popr_p(JIT_R0);
-	jit_stxr_p(JIT_R1, JIT_VHEAP, JIT_R0);	
-	jit_addi_i(JIT_R1, JIT_R1, sizeof(PgfClosure*));
-	jit_jmpi(next);
-	jit_patch(ref);
-	jit_jmpr(JIT_VCLOS);
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
@@ -470,6 +373,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_getarg_p(JIT_VCLOS,  closure_arg);
 	jit_ldr_p(JIT_R0, JIT_VCLOS);
 	jit_callr(JIT_R0);
+	jit_insn* enter_ret = (void*) jit_get_ip().ptr;
 	jit_movr_p(JIT_RET, JIT_VHEAP);
 	jit_ret();
 
@@ -571,6 +475,7 @@ pgf_jit_gates(PgfReader* rdr)
 	ref = jit_beqr_p(jit_forward(), JIT_VCLOS, JIT_RET);
 	jit_pushr_p(JIT_VCLOS);
 	jit_pushr_p(JIT_FP);
+	jit_movr_p(JIT_FP, JIT_SP);
 	jit_movi_p(JIT_R1, gates->update_closure);
 	jit_pushr_p(JIT_R1);
 	jit_retval(JIT_VCLOS);
@@ -595,31 +500,96 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_ldr_p(JIT_R0, JIT_VCLOS);
 	jit_jmpr(JIT_R0);
 
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
+
+	gates->evaluate_value_const = jit_get_ip().ptr;
+	jit_jmpi(gates->evaluate_value);
+
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
+
 	gates->mk_const = jit_get_ip().ptr;
-	jit_ldxi_p(JIT_R0, JIT_VCLOS, offsetof(PgfAbsFun,arity)-offsetof(PgfAbsFun,closure));
-	jit_muli_i(JIT_R0, JIT_R0, sizeof(PgfClosure*));
+	jit_popr_p(JIT_R0);
+	ref2 = jit_bnei_i(jit_forward(), JIT_R0, (int)gates->update_closure);
+	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
 	jit_pushr_i(JIT_R0);
 	jit_prepare(2);
-	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValue));
+	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValuePAP));
 	jit_pusharg_ui(JIT_R0);
 	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
 	jit_pusharg_p(JIT_R0);
 	jit_finish(gu_malloc);
-	jit_movi_p(JIT_R1, gates->evaluate_value);
-	jit_str_p(JIT_RET, JIT_R1);
-	jit_stxi_p(offsetof(PgfValue,con), JIT_RET, JIT_VCLOS);
-	jit_movr_p(JIT_VHEAP, JIT_RET);
 	jit_popr_i(JIT_R1);
-	jit_popr_p(JIT_VCLOS);
+	jit_movi_p(JIT_R2, gates->evaluate_value_const);
+	jit_str_p(JIT_RET, JIT_R2);
+	jit_stxi_p(offsetof(PgfValuePAP,fun), JIT_RET, JIT_VCLOS);
+	jit_stxi_p(offsetof(PgfValuePAP,n_args), JIT_RET, JIT_R1);
+	jit_ldxi_p(JIT_VHEAP, JIT_FP, sizeof(void*));
+	jit_movi_p(JIT_R2, gates->evaluate_indirection);
+	jit_str_p(JIT_VHEAP, JIT_R2);
+	jit_stxi_p(offsetof(PgfIndirection, val), JIT_VHEAP, JIT_RET);
+	jit_ldr_p(JIT_R2, JIT_FP);
+	jit_pushr_p(JIT_R2);
+	jit_ldxi_p(JIT_R2, JIT_FP, 2*sizeof(void*));
+	jit_pushr_p(JIT_R2);
+	jit_addi_p(JIT_RET, JIT_RET, offsetof(PgfValuePAP,args)-sizeof(PgfClosure*));
 	next = jit_get_label();
 	ref  = jit_blei_i(jit_forward(), JIT_R1, 0);
-	jit_popr_p(JIT_R2);
-	jit_stxi_p(offsetof(PgfValue,args), JIT_RET, JIT_R2);
-	jit_addi_i(JIT_RET, JIT_RET, sizeof(void*));
+	jit_ldxi_p(JIT_R2, JIT_FP, -sizeof(void*));
+	jit_stxi_p(2*sizeof(void*), JIT_FP, JIT_R2);
+	jit_stxr_p(JIT_R1, JIT_RET, JIT_R2);
+	jit_subi_i(JIT_FP, JIT_FP, sizeof(void*));
 	jit_subi_i(JIT_R1, JIT_R1, sizeof(void*));
 	jit_jmpi(next);
 	jit_patch(ref);
-	jit_jmpr(JIT_VCLOS);
+	jit_popr_p(JIT_R0);
+	jit_popr_p(JIT_FP);
+	jit_addi_p(JIT_SP, JIT_SP, 3*sizeof(void*));
+	jit_pushr_p(JIT_R0);
+	jit_jmpi(gates->mk_const);
+	jit_patch(ref2);
+	ref2 = jit_bnei_i(jit_forward(), JIT_R0, (int)enter_ret);
+	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
+	jit_pushr_i(JIT_R0);
+	jit_prepare(2);
+	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValuePAP));
+	jit_pusharg_ui(JIT_R0);
+	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
+	jit_pusharg_p(JIT_R0);
+	jit_finish(gu_malloc);
+	jit_popr_i(JIT_R1);
+	jit_movr_p(JIT_VHEAP, JIT_RET);
+	jit_movi_p(JIT_R2, gates->evaluate_value_const);
+	jit_str_p(JIT_VHEAP, JIT_R2);
+	jit_stxi_p(offsetof(PgfValuePAP,fun), JIT_VHEAP, JIT_VCLOS);
+	jit_stxi_p(offsetof(PgfValuePAP,n_args), JIT_VHEAP, JIT_R1);
+	next = jit_get_label();
+	ref  = jit_blei_i(jit_forward(), JIT_R1, 0);
+	jit_popr_p(JIT_R2);
+	jit_stxi_p(offsetof(PgfValuePAP,args), JIT_RET, JIT_R2);
+	jit_addi_p(JIT_RET, JIT_RET, sizeof(void*));
+	jit_subi_i(JIT_R1, JIT_R1, sizeof(void*));
+	jit_jmpi(next);
+	jit_patch(ref);
+	jit_jmpi(enter_ret);
+	jit_patch(ref2);
+	jit_ldxi_p(JIT_VCLOS, JIT_FP, sizeof(void*));
+	jit_ldr_p(JIT_FP, JIT_FP);
+	jit_ldxi_i(JIT_R0, JIT_VCLOS, offsetof(PgfAbsFun,arity)-offsetof(PgfAbsFun,closure));
+	jit_muli_i(JIT_R0, JIT_R0, sizeof(PgfClosure*));
+	jit_addi_i(JIT_R0, JIT_R0, sizeof(void*));
+	jit_subr_p(JIT_R0, JIT_FP, JIT_R0);  // don't use jit_subr_p(JIT_SP, JIT_FP, JIT_R0) since it is dangerous on x86
+	jit_movr_p(JIT_SP, JIT_R0);
+	jit_jmpi(gates->mk_const);
+
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
+
+	gates->evaluate_gen = jit_get_ip().ptr;
+	jit_jmpi(gates->mk_const);
+
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
+
+	gates->evaluate_meta = jit_get_ip().ptr;
+	jit_jmpi(gates->mk_const);
 
 	gates->fin.fn = pgf_jit_finalize_cafs;
 	gates->cafs = NULL;
@@ -1134,15 +1104,21 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			}
 			case PGF_INSTR_DROP: {
 				size_t n      = pgf_read_int(rdr);
+
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "DROP        %d\n", n);
+#endif
+
+				jit_addi_p(JIT_SP, JIT_SP, n*sizeof(PgfClosure*));
+				break;
+			}
+			case PGF_INSTR_JUMP: {
 				size_t target = pgf_read_int(rdr);
 
 #ifdef PGF_JIT_DEBUG
-				gu_printf(out, err, "DROP        %d %03d\n", n, target);
+				gu_printf(out, err, "JUMP        %03d\n", target);
 #endif
-				
-				if (n > 0)
-					jit_addi_p(JIT_SP, JIT_SP, n*sizeof(PgfClosure*));
-				
+
 				jit_insn *jump =
 					jit_jmpi(jit_forward());
 
@@ -1151,7 +1127,6 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				label_patch.ref     = jump;
 				label_patch.is_abs  = false;
 				gu_buf_push(rdr->jit_state->segment_patches, PgfSegmentPatch, label_patch);
-
 				break;
 			}
 			case PGF_INSTR_FAIL:

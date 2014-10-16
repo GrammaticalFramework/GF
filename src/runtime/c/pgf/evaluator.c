@@ -5,6 +5,23 @@
 
 #define PGF_ARGS_DELTA 5
 
+static inline PgfClosure*
+pgf_mk_pap(PgfEvalState* state, PgfClosure* fun,
+           size_t n_args, PgfClosure** args)
+{
+	if (n_args > 0) {
+		PgfValuePAP* val = gu_new_flex(state->pool, PgfValuePAP, args, n_args);
+		val->header.code = state->eval_gates->evaluate_value_pap;
+		val->fun         = fun;
+		val->n_args      = n_args*sizeof(PgfClosure*);
+		for (size_t i = 0; i < n_args; i++) {
+			val->args[i] = args[i];
+		}
+		return &val->header;
+	}
+	return fun;
+}
+
 PgfClosure*
 pgf_evaluate_expr_thunk(PgfEvalState* state, PgfExprThunk* thunk)
 {
@@ -64,15 +81,11 @@ repeat:;
 		PgfExprMeta* emeta = ei.data;
 
 		PgfValueMeta* val =
-			gu_new_flex(state->pool, PgfValueMeta, args, n_args);
-		val->header.code = state->eval_gates->evaluate_value_meta;
-		val->id = emeta->id;
-		val->n_args = n_args*sizeof(PgfClosure*);
-		for (size_t i = 0; i < n_args; i++) {
-			val->args[i] = args[n_args-i-1];
-		}
-
-		res = &val->header;
+			gu_new(PgfValueMeta, state->pool);
+		val->header.code = state->eval_gates->evaluate_meta;
+		val->env = env;
+		val->id  = emeta->id;
+		res = pgf_mk_pap(state, &val->header, n_args, args);
 		break;
 	}
 	case PGF_EXPR_FUN: {
@@ -83,18 +96,7 @@ repeat:;
 		gu_assert(absfun != NULL);
 
 		if (absfun->closure.code != NULL) {
-			res = (PgfClosure*) &absfun->closure;
-
-			if (n_args > 0) {
-				PgfValuePAP* val = gu_new_flex(state->pool, PgfValuePAP, args, n_args);
-				val->header.code = state->eval_gates->evaluate_value_pap;
-				val->fun         = res;
-				val->n_args      = n_args*sizeof(PgfClosure*);
-				for (size_t i = 0; i < n_args; i++) {
-					val->args[i] = args[i];
-				}
-				res = &val->header;
-			}
+			res = pgf_mk_pap(state, (PgfClosure*) &absfun->closure, n_args, args);
 		} else {
 			size_t arity = absfun->arity;
 
@@ -113,18 +115,7 @@ repeat:;
 				PgfExprThunk* lambda = gu_new(PgfExprThunk, state->pool);
 				lambda->header.code = state->eval_gates->evaluate_value_lambda;
 				lambda->env = NULL;
-				res = &lambda->header;
-
-				if (n_args > 0) {
-					PgfValuePAP* val = gu_new_flex(state->pool, PgfValuePAP, args, n_args);
-					val->header.code = state->eval_gates->evaluate_value_pap;
-					val->fun = &lambda->header;
-					val->n_args = n_args*sizeof(PgfClosure*);
-					for (size_t i = 0; i < n_args; i++) {
-						val->args[i] = args[i];
-					}
-					res = &val->header;
-				}
+				res = pgf_mk_pap(state, &lambda->header, n_args, args);
 
 				for (size_t i = 0; i < arity; i++) {
 					PgfExpr new_expr, arg;
@@ -180,18 +171,7 @@ repeat:;
 			i--;
 		}
 
-		res = tmp_env->closure;
-
-		if (n_args > 0) {
-			PgfValuePAP* val = gu_new_flex(state->pool, PgfValuePAP, args, n_args);
-			val->header.code = state->eval_gates->evaluate_value_pap;
-			val->fun         = res;
-			val->n_args      = n_args*sizeof(PgfClosure*);
-			for (size_t i = 0; i < n_args; i++) {
-				val->args[i] = args[i];
-			}
-			res = &val->header;
-		}
+		res = pgf_mk_pap(state, tmp_env->closure, n_args, args);
 		break;
 	}
 	case PGF_EXPR_TYPED: {
@@ -245,28 +225,6 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 		expr   = absfun->ep.expr;
 		n_args = absfun->arity;
 		args   = val->args;
-	} else if (clos->code == state->eval_gates->evaluate_value_gen) {
-		PgfValueGen* val = (PgfValueGen*) clos;
-
-		PgfExprVar *evar =
-			gu_new_variant(PGF_EXPR_VAR,
-						   PgfExprVar,
-						   &expr, pool);
-		evar->var = level - val->level - 1;
-
-		n_args = val->n_args/sizeof(PgfClosure*);
-		args   = val->args;
-	} else if (clos->code == state->eval_gates->evaluate_value_meta) {
-		PgfValueMeta* val = (PgfValueMeta*) clos;
-
-		PgfExprMeta *emeta =
-			gu_new_variant(PGF_EXPR_META,
-						   PgfExprMeta,
-						   &expr, pool);
-		emeta->id = val->id;
-
-		n_args = val->n_args / sizeof(PgfClosure*);
-		args   = val->args;
 	} else if (clos->code == state->eval_gates->evaluate_value_lit) {
 		PgfValueLit* val = (PgfValueLit*) clos;
 
@@ -316,18 +274,18 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 
 		PgfValueGen* gen =
 			gu_new(PgfValueGen, state->pool);
-		gen->header.code = state->eval_gates->evaluate_value_gen;
+		gen->header.code = state->eval_gates->evaluate_gen;
 		gen->level  = level;
-		gen->n_args = 0;
 
-		PgfValuePAP* new_pap = gu_new_flex(state->pool, PgfValuePAP, args, pap->n_args+1);
+		size_t n_args = pap->n_args/sizeof(PgfClosure*);
+		PgfValuePAP* new_pap = gu_new_flex(state->pool, PgfValuePAP, args, n_args+1);
 		new_pap->header.code = state->eval_gates->evaluate_value_pap;
 		new_pap->fun         = pap->fun;
 		new_pap->n_args      = pap->n_args+sizeof(PgfClosure*);
-		for (size_t i = 0; i < pap->n_args/sizeof(PgfClosure*); i++) {
-			new_pap->args[i] = pap->args[i];
+		new_pap->args[0]     = &gen->header;
+		for (size_t i = 0; i < n_args; i++) {
+			new_pap->args[i+1] = pap->args[i];
 		}
-		new_pap->args[pap->n_args] = &gen->header;
 
 		PgfExprAbs *eabs =
 			gu_new_variant(PGF_EXPR_ABS,
@@ -336,6 +294,32 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 		eabs->bind_type = PGF_BIND_TYPE_EXPLICIT;
 		eabs->id = gu_format_string(pool, "v%d", level);
 		eabs->body = pgf_value2expr(state, level+1, &new_pap->header, pool);
+	} else if (clos->code == state->eval_gates->evaluate_value_const) {
+		PgfValuePAP* val = (PgfValuePAP*) clos;
+		
+		if (val->fun->code == state->eval_gates->evaluate_meta) {
+			PgfValueMeta* fun = (PgfValueMeta*) val->fun;
+
+			PgfExprMeta *emeta =
+				gu_new_variant(PGF_EXPR_META,
+				               PgfExprMeta,
+				               &expr, pool);
+			emeta->id = fun->id;
+		} else if (val->fun->code == state->eval_gates->evaluate_gen) {
+			PgfValueGen* fun = (PgfValueGen*) val->fun;
+
+			PgfExprVar *evar =
+				gu_new_variant(PGF_EXPR_VAR,
+				               PgfExprVar,
+				               &expr, pool);
+			evar->var = level - fun->level - 1;
+		} else {
+			PgfAbsFun* absfun = gu_container(val->fun, PgfAbsFun, closure);
+			expr   = absfun->ep.expr;
+		}
+
+		n_args = val->n_args/sizeof(PgfClosure*);
+		args   = val->args;
 	} else {
 		gu_impossible();
 	}
