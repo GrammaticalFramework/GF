@@ -35,6 +35,7 @@ import GF.System.Directory(removeFile,getCurrentDirectory)
 import System.FilePath(makeRelative)
 
 --getSourceModule :: Options -> FilePath -> IOE SourceModule
+-- | Read a source file and parse it (after applying preprocessors specified in the options)
 getSourceModule opts file0 = 
 --errIn file0 $
   do tmp <- liftIO $ foldM runPreprocessor (Source file0) (flag optPreprocessors opts)

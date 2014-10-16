@@ -33,6 +33,8 @@ import Control.Monad (liftM, liftM2, liftM3)
 import Data.List (sortBy,nub)
 import GF.Text.Pretty
 
+-- ** Macros for constructing and analysing source code terms.
+
 typeForm :: Type -> (Context, Cat, [Term])
 typeForm t =
   case t of

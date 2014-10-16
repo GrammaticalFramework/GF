@@ -1,4 +1,5 @@
-module GF.CompileOne(OneOutput,CompiledModule,
+module GF.CompileOne(-- ** Compiling a single module
+                     OneOutput,CompiledModule,
                      compileOne,reuseGFO,useTheSource
                      --, CompileSource, compileSourceModule
                      ) where
@@ -18,9 +19,9 @@ import GF.Grammar.Printer(ppModule,TermPrintQual(..))
 import GF.Grammar.Binary(decodeModule,encodeModule)
 
 import GF.Infra.Option
-import GF.Infra.UseIO(FullPath,IOE,isGFO,gf2gfo,Output(..),putPointE)
+import GF.Infra.UseIO(FullPath,IOE,isGFO,gf2gfo,MonadIO(..),Output(..),putPointE)
 import GF.Infra.CheckM(runCheck')
-import GF.Data.Operations(liftErr,(+++))
+import GF.Data.Operations(ErrorMonad,liftErr,(+++))
 
 import GF.System.Directory(doesFileExist,getCurrentDirectory,renameFile)
 import qualified Data.Map as Map
@@ -30,9 +31,13 @@ import Control.Monad((<=<))
 type OneOutput = (Maybe FullPath,CompiledModule)
 type CompiledModule = SourceModule
 
---compileOne :: Options -> SourceGrammar -> FullPath -> IOE OneOutput
+compileOne, reuseGFO, useTheSource ::
+    (Output m,ErrorMonad m,MonadIO m) =>
+    Options -> SourceGrammar -> FullPath -> m OneOutput
+
 -- | Compile a given source file (or just load a .gfo file),
 -- given a 'SourceGrammar' containing everything it depends on.
+-- Calls 'reuseGFO' or 'useTheSource'.
 compileOne opts srcgr file =
     if isGFO file
     then reuseGFO opts srcgr file
@@ -40,7 +45,7 @@ compileOne opts srcgr file =
             if b1 then useTheSource opts srcgr file
                   else reuseGFO opts srcgr (gf2gfo opts file)
 
--- | For compiled gf, read the file and update environment.
+-- | Read a compiled GF module.
 -- Also undo common subexp optimization, to enable normal computations.
 reuseGFO opts srcgr file =
   do sm00 <- putPointE Verbose opts ("+ reading" +++ file) $
@@ -62,7 +67,9 @@ reuseGFO opts srcgr file =
      return (Just file,sm)
 
 --useTheSource :: Options -> SourceGrammar -> FullPath -> IOE OneOutput
--- | For gf source, do full compilation and generate code.
+-- | Compile GF module from source. It both returns the result and
+-- stores it in a @.gfo@ file
+-- (or a tags file, if running with the @-tags@ option)
 useTheSource opts srcgr file =
       do sm <- putpOpt ("- parsing" +++ file)
                        ("- compiling" +++ file ++ "... ")

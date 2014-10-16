@@ -12,12 +12,12 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Grammar.Values (-- * values used in TC type checking
+module GF.Grammar.Values (-- ** Values used in TC type checking
 	       Exp, Val(..), Env,
-	       -- * annotated tree used in editing
+	       -- ** Annotated tree used in editing
 --Z	       Tree, TrNode(..), Atom(..), 
                Binds, Constraints, MetaSubst,
-	       -- * for TC
+	       -- ** For TC
 	       valAbsInt, valAbsFloat, valAbsString, vType,
 	       isPredefCat,
 	       eType, 

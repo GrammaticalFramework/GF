@@ -53,11 +53,13 @@ import GF.Infra.BuildInfo(buildInfo)
 import Data.Version(showVersion)
 import Paths_gf(version)
 
+-- | Run the GF Shell in quiet mode
 mainRunGFI :: Options -> [FilePath] -> IO ()
 mainRunGFI opts files = shell (beQuiet opts) files
 
 beQuiet = addOptions (modifyFlags (\f -> f{optVerbosity=Quiet}))
 
+-- | Run the interactive GF Shell
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
   P.putStrLn welcome
@@ -66,6 +68,7 @@ mainGFI opts files = do
 shell opts files = loop opts =<< runSIO (importInEnv emptyGFEnv opts files)
 
 #ifdef SERVER_MODE
+-- | Start GF Server
 mainServerGFI opts0 port files =
     server port root (execute1 opts)
       =<< runSIO (importInEnv emptyGFEnv opts files)

@@ -14,19 +14,19 @@
 -- Copyright (c) Aarne Ranta 1998-2000, under GNU General Public License (see GPL)
 -----------------------------------------------------------------------------
 
-module GF.Data.Operations (-- * misc functions
+module GF.Data.Operations (-- ** Misc functions
 		   ifNull,
 
-		   -- * the Error monad
+		   -- ** The Error monad
 		   Err(..), err, maybeErr, testErr, errVal, errIn, 
 		   lookupErr,
 		   mapPairListM, mapPairsM, pairM,
 		   singleton, --mapsErr, mapsErrTree,
 		   
-		   -- ** checking
+		   -- ** Checking
 		   checkUnique, unifyMaybeBy, unifyMaybe,
 
-		   -- * binary search trees; now with FiniteMap
+		   -- ** Binary search trees; now with FiniteMap
 		   BinTree, emptyBinTree, isInBinTree, justLookupTree,
 		   lookupTree, --lookupTreeMany,
                    lookupTreeManyAll, updateTree,
@@ -36,28 +36,28 @@ module GF.Data.Operations (-- * misc functions
                    tree2list,
  
 
-		   -- * printing
+		   -- ** Printing
 		   indent, (+++), (++-), (++++), (+++++),
 		   prUpper, prReplicate, prTList, prQuotedString, prParenth, prCurly, 
 		   prBracket, prArgList, prSemicList, prCurlyList, restoreEscapes,
 		   numberedParagraphs, prConjList, prIfEmpty, wrapLines,
 
-		   -- * extra
+		   -- ** Extra
 		   combinations,
 
-		   -- * topological sorting with test of cyclicity
+		   -- ** Topological sorting with test of cyclicity
 		   topoTest, topoTest2,
 
-		   -- * the generic fix point iterator
+		   -- ** The generic fix point iterator
 		   iterFix,
 
-		   -- * chop into separator-separated parts
+		   -- ** Chop into separator-separated parts
 		   chunks, readIntArg, 
 
-		   -- * state monad with error; from Agda 6\/11\/2001
+		   -- ** State monad with error; from Agda 6\/11\/2001
 		   STM(..), appSTM, stm, stmr, readSTM, updateSTM, writeSTM, done,
 
-		   -- * error monad class
+		   -- ** Error monad class
 		   ErrorMonad(..), checkAgain, checks, allChecks, doUntil,
                    liftErr
                 

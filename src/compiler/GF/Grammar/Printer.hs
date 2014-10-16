@@ -8,7 +8,8 @@
 -----------------------------------------------------------------------------
 
 module GF.Grammar.Printer
-           ( TermPrintQual(..)
+           ( -- ** Pretty printing
+             TermPrintQual(..)
            , ppModule
            , ppJudgement
            , ppParams

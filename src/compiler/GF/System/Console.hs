@@ -1,11 +1,14 @@
 {-# LANGUAGE CPP #-}
-module GF.System.Console(setConsoleEncoding,changeConsoleEncoding) where
+module GF.System.Console(
+    -- ** Changing which character encoding to use for console IO
+    setConsoleEncoding,changeConsoleEncoding) where
 import System.IO
 #ifdef mingw32_HOST_OS
 import System.Win32.Console
 import System.Win32.NLS
 #endif
 
+-- | Set the console encoding (for Windows, has no effect on Unix-like systems)
 setConsoleEncoding =
 #ifdef mingw32_HOST_OS
     do codepage <- getACP
