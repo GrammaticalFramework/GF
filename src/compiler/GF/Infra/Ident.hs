@@ -12,15 +12,15 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Infra.Ident (-- * Identifiers
+module GF.Infra.Ident (-- ** Identifiers
 	      Ident, ident2utf8, showIdent, prefixIdent,
 	      identS, identC, identV, identA, identAV, identW,
 	      argIdent, isArgIdent, getArgIndex,
               varStr, varX, isWildIdent, varIndex,
-              -- * Raw Identifiers
+              -- ** Raw Identifiers
               RawIdent, rawIdentS, rawIdentC, ident2raw, prefixRawIdent,
               isPrefixOf, showRawIdent{-,
-	      -- * Refreshing identifiers
+	      -- ** Refreshing identifiers
 	      IdState, initIdStateN, initIdState,
 	      lookVar, refVar, refVarPlus-}
 	     ) where

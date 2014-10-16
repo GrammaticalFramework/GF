@@ -28,6 +28,8 @@ import GF.Grammar.Macros
 import Control.Monad
 import GF.Text.Pretty
 
+-- ** Some more abstractions on grammars, esp. for Edit
+
 {-
 nodeTree :: Tree -> TrNode
 argsTree :: Tree -> [Tree]
@@ -151,7 +153,7 @@ substTerm ss g c = case c of
 metaSubstExp :: MetaSubst -> [(MetaId,Exp)]
 metaSubstExp msubst = [(m, errVal (meta2exp m) (val2expSafe v)) | (m,v) <- msubst]
 
--- * belong here rather than to computation
+-- ** belong here rather than to computation
 
 substitute :: [Var] -> Substitution -> Exp -> Err Exp
 substitute v s = return . substTerm v s

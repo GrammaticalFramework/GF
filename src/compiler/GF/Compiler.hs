@@ -4,7 +4,7 @@ import PGF
 import PGF.Internal(concretes,optimizePGF,unionPGF)
 import PGF.Internal(putSplitAbs,encodeFile,runPut)
 import GF.Compile as S(batchCompile,link,srcAbsName)
-import qualified GF.CompileInParallel as P(batchCompile)
+import GF.CompileInParallel as P(parallelBatchCompile)
 import GF.Compile.Export
 import GF.Compile.CFGtoPGF
 import GF.Compile.GetGrammar
@@ -56,7 +56,7 @@ compileSourceFiles opts fs =
                            writePGF opts pgf
                            writeOutputs opts pgf
   where
-    batchCompile = maybe batchCompile' P.batchCompile (flag optJobs opts)
+    batchCompile = maybe batchCompile' parallelBatchCompile (flag optJobs opts)
     batchCompile' opts fs = do (cnc,t,gr) <- S.batchCompile opts fs
                                return (t,[(cnc,gr)])
 

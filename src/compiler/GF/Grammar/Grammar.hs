@@ -15,6 +15,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Grammar.Grammar (
+        -- ** Grammar modules
         SourceGrammar, SourceModInfo(..), SourceModule, ModuleType(..),
         emptySourceGrammar, mGrammar, modules, prependModule, moduleMap,
 
@@ -32,9 +33,8 @@ module GF.Grammar.Grammar (
         abstractOfConcrete,
 
         ModuleStatus(..),
-        
-        PMCFG(..), Production(..), FId, FunId, SeqId, LIndex, Sequence,
-        
+
+        -- ** Judgements and terms
         Info(..),
         Location(..), L(..), unLoc, noLoc, ppLocation, ppL,
         Type,
@@ -58,7 +58,10 @@ module GF.Grammar.Grammar (
         Altern,
         Substitution,
         varLabel, tupleLabel, linLabel, theLinLabel,
-        ident2label, label2ident
+        ident2label, label2ident,
+
+        -- ** PMCFG        
+        PMCFG(..), Production(..), FId, FunId, SeqId, LIndex, Sequence
         ) where
 
 import GF.Infra.Ident

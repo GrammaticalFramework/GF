@@ -1,5 +1,5 @@
 -- | Parallel grammar compilation
-module GF.CompileInParallel(batchCompile) where
+module GF.CompileInParallel(parallelBatchCompile) where
 import Prelude hiding (catch)
 import Control.Monad(join,ap,when,unless)
 import Control.Applicative
@@ -19,8 +19,14 @@ import GF.Infra.Ident(identS)
 import GF.Text.Pretty
 import qualified Data.ByteString.Lazy as BS
 
--- | Compile the given grammar files and everything they depend on
-batchCompile jobs opts rootfiles0 =
+-- | Compile the given grammar files and everything they depend on.
+-- This function compiles modules in parallel.
+-- It keeps modules compiled in /present/ and /alltenses/ mode apart,
+-- storing the @.gfo@ files in separate subdirectories to avoid creating
+-- the broken PGF files that can result from mixing different modes in the
+-- same concrete syntax.
+
+parallelBatchCompile jobs opts rootfiles0 =
   do rootfiles <- mapM canonical rootfiles0
      lib_dir  <- canonical =<< getLibraryDirectory opts
      filepaths <- mapM (getPathFromFile lib_dir opts) rootfiles
