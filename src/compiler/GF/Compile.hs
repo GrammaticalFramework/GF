@@ -26,6 +26,7 @@ import PGF.Internal(optimizePGF)
 import PGF(PGF,defaultProbabilities,setProbabilities,readProbabilitiesFromFile)
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.
+-- This is a composition of 'batchCompile' and 'link'.
 compileToPGF :: Options -> [FilePath] -> IOE PGF
 compileToPGF opts fs = link opts =<< batchCompile opts fs
 
