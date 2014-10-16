@@ -24,7 +24,7 @@ generateByteCode gr arity eqs =
     is = push_is (arity-1) arity []
 
 compileEquations :: SourceGrammar -> Int -> Int -> [IVal] -> [([(Ident,IVal)],[Patt],Term)] -> Maybe (Int,CodeLabel) -> [[Instr]] -> ([[Instr]],[Instr])
-compileEquations gr arity st _      []        fl bs = (bs,[mkFail st fl])
+compileEquations gr arity st _      []        fl bs = (bs,mkFail arity st fl)
 compileEquations gr arity st [] ((vs,[],t):_) fl bs = compileBody gr arity st vs t bs
 compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
   where
@@ -32,7 +32,7 @@ compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
                                                  []       -> (bs,[FAIL])
                                                  (cn:cns) -> let (bs1,instrs1) = compileBranch0 fl bs cn
                                                                  bs2 = foldl (compileBranch fl) bs1 cns
-                                                                 bs3 = [mkFail st fl]:bs2
+                                                                 bs3 = mkFail arity st fl : bs2
                                                              in (bs3,EVAL (shiftIVal st i) RecCall : instrs1)
     whilePP ((vs, PP c ps' : ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (Q c,length ps') [(vs,ps'++ps,t)] cns)
     whilePP ((vs, PInt n   : ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (EInt n,0) [(vs,ps,t)] cns)
@@ -75,8 +75,12 @@ compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
       let (bs1,instrs) = compileEquations gr arity (st+n) (push_is (st+n-1) n is) eqs fl ((case_instr t n (length bs1) : instrs) : bs)
       in bs1
 
-mkFail st1 Nothing        = FAIL
-mkFail st1 (Just (st0,l)) = DROP (st1-st0) l
+mkFail arity st1 Nothing
+  | arity+1 /= st1 = [DROP (st1-arity), FAIL]
+  | otherwise      = [FAIL]
+mkFail arity st1 (Just (st0,l))
+  | st1 /= st0     = [DROP (st1-st0), JUMP l]
+  | otherwise      = [JUMP l]
 
 compileBody gr arity st vs e bs =
   let (heap,bs1,is) = compileFun gr arity st vs e 0 bs []

@@ -168,9 +168,10 @@ instance Binary Instr where
   put (EVAL (ARG_VAR  n) (UpdateCall b c)) = putWord8 49 >> put n >> put (b,c)
   put (EVAL (FREE_VAR n) (UpdateCall b c)) = putWord8 50 >> put n >> put (b,c)
   put (EVAL (GLOBAL  id) (UpdateCall b c)) = putWord8 51 >> put id >> put (b,c)
-  put (DROP n l           ) = putWord8 52  >> put (n,l)
-  put (FAIL               ) = putWord8 56
-  put (ADD                ) = putWord8 60
+  put (DROP n             ) = putWord8 52  >> put n
+  put (JUMP l             ) = putWord8 56  >> put l
+  put (FAIL               ) = putWord8 60
+  put (ADD                ) = putWord8 64
 
 instance Binary Type where
   put (DTyp hypos cat exps) = put (hypos,cat,exps)
