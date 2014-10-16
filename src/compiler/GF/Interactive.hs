@@ -53,7 +53,7 @@ import GF.Infra.BuildInfo(buildInfo)
 import Data.Version(showVersion)
 import Paths_gf(version)
 
--- | Run the GF Shell in quiet mode
+-- | Run the GF Shell in quiet mode (@gf -run@).
 mainRunGFI :: Options -> [FilePath] -> IO ()
 mainRunGFI opts files = shell (beQuiet opts) files
 
@@ -68,7 +68,8 @@ mainGFI opts files = do
 shell opts files = loop opts =<< runSIO (importInEnv emptyGFEnv opts files)
 
 #ifdef SERVER_MODE
--- | Start GF Server
+-- | Run the GF Server (@gf -server@).
+-- The 'Int' argument is the port number for the HTTP service.
 mainServerGFI opts0 port files =
     server port root (execute1 opts)
       =<< runSIO (importInEnv emptyGFEnv opts files)

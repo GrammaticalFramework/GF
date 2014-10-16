@@ -7,7 +7,7 @@ module GF.Compile.Compute.ConcreteNew
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
-import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
+import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr,isPredefCat)
 import GF.Grammar.PatternMatch(matchPattern,measurePatt)
 import GF.Grammar.Lockfield(lockLabel,isLockLabel,lockRecType) --unlockRecord
 import GF.Compile.Compute.Value hiding (Error)

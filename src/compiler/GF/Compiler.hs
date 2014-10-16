@@ -1,4 +1,4 @@
-module GF.Compiler (mainGFC, writePGF) where
+module GF.Compiler (mainGFC, writePGF, linkGrammars) where
 
 import PGF
 import PGF.Internal(concretes,optimizePGF,unionPGF)
@@ -23,6 +23,8 @@ import qualified Data.ByteString.Lazy as BSL
 import System.FilePath
 import Control.Monad(unless,forM_)
 
+-- | Compile the given GF grammar files. The result is a number of @.gfo@ files
+-- and, depending on the options, a @.pgf@ file. (@gf -batch@, @gf -make@)
 mainGFC :: Options -> [FilePath] -> IO ()
 mainGFC opts fs = do
   r <- appIOE (case () of
@@ -41,24 +43,28 @@ mainGFC opts fs = do
 
 compileSourceFiles :: Options -> [FilePath] -> IOE ()
 compileSourceFiles opts fs = 
-    do (t_src,~cnc_grs@(~(cnc,gr):_)) <- batchCompile opts fs
+    do output <- batchCompile opts fs
        unless (flag optStopAfterPhase opts == Compile) $
-              do let abs = showIdent (srcAbsName gr cnc)
-                     pgfFile = outputPath opts (grammarName' opts abs<.>"pgf")
-                 t_pgf <- if outputJustPGF opts
-                          then maybeIO $ getModificationTime pgfFile
-                          else return Nothing
-                 if t_pgf >= Just t_src
-                   then putIfVerb opts $ pgfFile ++ " is up-to-date."
-                   else do pgfs <- mapM (link opts)
-                                        [(cnc,t_src,gr)|(cnc,gr)<-cnc_grs]
-                           let pgf = foldl1 unionPGF pgfs
-                           writePGF opts pgf
-                           writeOutputs opts pgf
+           linkGrammars opts output
   where
     batchCompile = maybe batchCompile' parallelBatchCompile (flag optJobs opts)
     batchCompile' opts fs = do (cnc,t,gr) <- S.batchCompile opts fs
                                return (t,[(cnc,gr)])
+
+-- | Create a @.pgf@ file from the output of 'parallelBatchCompile'.
+linkGrammars opts (t_src,~cnc_grs@(~(cnc,gr):_)) =
+    do let abs = showIdent (srcAbsName gr cnc)
+           pgfFile = outputPath opts (grammarName' opts abs<.>"pgf")
+       t_pgf <- if outputJustPGF opts
+                then maybeIO $ getModificationTime pgfFile
+                else return Nothing
+       if t_pgf >= Just t_src
+         then putIfVerb opts $ pgfFile ++ " is up-to-date."
+         else do pgfs <- mapM (link opts)
+                              [(cnc,t_src,gr)|(cnc,gr)<-cnc_grs]
+                 let pgf = foldl1 unionPGF pgfs
+                 writePGF opts pgf
+                 writeOutputs opts pgf
 
 compileCFFiles :: Options -> [FilePath] -> IOE ()
 compileCFFiles opts fs = do
@@ -107,6 +113,9 @@ writeOutputs opts pgf = do
                  | fmt <- outputFormats opts,
                    (name,str) <- exportPGF opts fmt pgf]
 
+-- | Write the result of compiling a grammar (e.g. with 'compileToPGF' or
+-- 'link') to a @.pgf@ file.
+-- A split PGF file is output if the @-split-pgf@ option is used.
 writePGF :: Options -> PGF -> IOE ()
 writePGF opts pgf =
     if flag optSplitPGF opts then writeSplitPGF else writeNormalPGF
