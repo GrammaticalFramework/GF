@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Infra.UseIO(module GF.Infra.UseIO,liftErr,
+module GF.Infra.UseIO(module GF.Infra.UseIO,
                       -- ** Reused
                       MonadIO(..),liftErr) where
 

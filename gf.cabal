@@ -1,5 +1,5 @@
 name: gf
-version: 3.6-darcs
+version: 3.6.10-darcs
 
 cabal-version: >= 1.10
 build-type: Custom
@@ -89,8 +89,8 @@ Library
     build-depends: binary, data-binary-ieee754
 
   ghc-options: -fwarn-unused-imports
-  if impl(ghc>=7.8)
-    ghc-options: +RTS -A20M -RTS
+--if impl(ghc>=7.8)
+--  ghc-options: +RTS -A20M -RTS
   ghc-prof-options: -fprof-auto
   extensions: 
 
@@ -133,45 +133,156 @@ Library
     c-sources:           src/runtime/haskell-bind/utils.c
     cc-options:          -std=c99
 
-Executable gf
-  default-language:    Haskell2010
-  build-depends: gf,
-                 base >= 4.3 && <5,
-                 array,
-                 containers,
-                 bytestring,
-                 filepath,
-                 fst,
-                 directory,
-                 random,
-                 time,
-                 time-compat,
-                 old-locale,
-                 process,
-                 pretty,
-                 mtl,
-                 haskeline,
-                 parallel>=3,
-                 utf8-string
-  ghc-options: -threaded -fwarn-unused-imports
-  if flag(server)
-    build-depends: httpd-shed>=0.4.0.2, network>=2.3 && <2.6, json, cgi
-                   -- ,silently
-    cpp-options: -DSERVER_MODE
-    other-modules: GF.Server
-    hs-source-dirs: src/server src/server/transfer src/example-based
+---- GF compiler as a library:
+
+  build-depends: filepath, directory, time, time-compat, old-locale,
+                 process, haskeline, parallel>=3
+
+  hs-source-dirs: src/compiler
+  exposed-modules:
+    GF
+
+  other-modules:
+    GF.Main GF.Compiler GF.Interactive
+
+    GF.Compile GF.CompileInParallel GF.CompileOne  GF.Compile.GetGrammar
+    GF.Grammar
+
+    GF.Data.Operations GF.Infra.Option GF.Infra.UseIO
+
+    DarcsVersion_gf
+    GF.Command.Abstract
+    GF.Command.Commands
+    GF.Command.Importing
+    GF.Command.Interpreter
+    GF.Command.Messages
+    GF.Command.Parse
+    GF.Command.TreeOperations
+    GF.Compile.CFGtoPGF
+    GF.Compile.CheckGrammar
+    GF.Compile.Compute.AppPredefined
+    GF.Compile.Compute.ConcreteNew
+    GF.Compile.Compute.ConcreteNew1
+    GF.Compile.Compute.Predef
+    GF.Compile.Compute.Value
+    GF.Compile.ExampleBased
+    GF.Compile.Export
+    GF.Compile.GenerateBC
+    GF.Compile.GeneratePMCFG
+    GF.Compile.GrammarToPGF
+    GF.Compile.Multi
+    GF.Compile.Optimize
+    GF.Compile.PGFtoHaskell
+    GF.Compile.PGFtoJS
+    GF.Compile.PGFtoLProlog
+    GF.Compile.PGFtoProlog
+    GF.Compile.PGFtoPython
+    GF.Compile.ReadFiles
+    GF.Compile.Rename
+    GF.Compile.SubExOpt
+    GF.Compile.Tags
+    GF.Compile.ToAPI
+    GF.Compile.TypeCheck.Abstract
+    GF.Compile.TypeCheck.Concrete
+    GF.Compile.TypeCheck.ConcreteNew
+    GF.Compile.TypeCheck.Primitives
+    GF.Compile.TypeCheck.RConcrete
+    GF.Compile.TypeCheck.TC
+    GF.Compile.Update
+    GF.Data.BacktrackM
+    GF.Data.ErrM
+    GF.Data.Graph
+    GF.Data.Graphviz
+    GF.Data.Relation
+    GF.Data.Str
+    GF.Data.Utilities
+    GF.Data.XML
+    GF.Grammar.Analyse
+    GF.Grammar.Binary
+    GF.Grammar.CFG
+    GF.Grammar.EBNF
+    GF.Grammar.Grammar
+    GF.Grammar.Lexer
+    GF.Grammar.Lockfield
+    GF.Grammar.Lookup
+    GF.Grammar.MMacros
+    GF.Grammar.Macros
+    GF.Grammar.Parser
+    GF.Grammar.PatternMatch
+    GF.Grammar.Predef
+    GF.Grammar.Printer
+    GF.Grammar.ShowTerm
+    GF.Grammar.Unify
+    GF.Grammar.Values
+    GF.Infra.BuildInfo
+    GF.Infra.CheckM
+    GF.Infra.Concurrency
+    GF.Infra.Dependencies
+    GF.Infra.GetOpt
+    GF.Infra.Ident
+    GF.Infra.Location
+    GF.Infra.SIO
+    GF.JavaScript.AbsJS
+    GF.JavaScript.PrintJS
+    GF.Quiz
+    GF.Speech.CFGToFA
+    GF.Speech.FiniteState
+    GF.Speech.GSL
+    GF.Speech.JSGF
+    GF.Speech.PGFToCFG
+    GF.Speech.PrRegExp
+    GF.Speech.RegExp
+    GF.Speech.SISR
+    GF.Speech.SLF
+    GF.Speech.SRG
+    GF.Speech.SRGS_ABNF
+    GF.Speech.SRGS_XML
+    GF.Speech.VoiceXML
+    GF.System.Catch
+    GF.System.Console
+    GF.System.Directory
+    GF.System.Process
+    GF.System.Signal
+    GF.System.UseSignal
+    GF.Text.Clitics
+    GF.Text.Coding
+    GF.Text.Lexing
+    GF.Text.Pretty
+    GF.Text.Transliterations
+    Paths_gf
 
   if flag(c-runtime)
     cpp-options: -DC_RUNTIME
 
-  if impl(ghc>=7.0)
-    ghc-options: -rtsopts
-    if impl(ghc<7.8)
-      ghc-options: -with-rtsopts=-K64M
+  if flag(server)
+    build-depends: httpd-shed>=0.4.0.2, network>=2.3 && <2.6, json, cgi
+                   -- ,silently
+    cpp-options: -DSERVER_MODE
+    other-modules:
+      GF.Server
+      PGFService
+      RunHTTP
+      SimpleEditor.Convert
+      SimpleEditor.JSON
+      SimpleEditor.Syntax
+      URLEncoding
+      CGI
+      CGIUtils
+      Cache
+      Fold
+      ExampleDemo
+      ExampleService
+    hs-source-dirs: src/server src/server/transfer src/example-based
+
+  if flag(interrupt)
+    cpp-options: -DUSE_INTERRUPT
+    other-modules: GF.System.UseSignal
+  else
+    other-modules: GF.System.NoSignal
 
   if impl(ghc>=7.8)
     build-tools: happy>=1.19, alex>=3.1
-    ghc-options: +RTS -A20M -RTS
+--  ghc-options: +RTS -A20M -RTS
   else
     build-tools: happy, alex>=3
 
@@ -180,85 +291,21 @@ Executable gf
   else
     build-depends: unix
 
+
+Executable gf
+  hs-source-dirs: src/programs
+  main-is: gf.hs
+  default-language:    Haskell2010
+  build-depends: gf, base
+  ghc-options: -threaded -fwarn-unused-imports
+
+  if impl(ghc>=7.0)
+    ghc-options: -rtsopts
+    if impl(ghc<7.8)
+      ghc-options: -with-rtsopts=-K64M
+
   ghc-prof-options: -auto-all
 
-  hs-source-dirs: src/compiler
-
-  if !flag(custom-binary)
-    build-depends: binary, data-binary-ieee754
-
-  extensions:
-  main-is: GF.hs
-  other-modules:
-    GF.Data.BacktrackM
-    GF.Data.Utilities
---  GF.Data.SortedList
-    GF.Data.ErrM
-    GF.Data.Operations
-    GF.Data.Str
-    GF.JavaScript.AbsJS
-    GF.JavaScript.PrintJS
-    GF.Infra.Ident
-    GF.Infra.GetOpt
-    GF.Infra.Option
-    GF.Infra.UseIO
-    GF.Infra.CheckM
-    GF.System.Catch
-    GF.System.Console
-    GF.System.Signal
-    GF.Command.Commands
-    GF.Command.Interpreter
-    GF.Command.Abstract
-    GF.Command.Parse
-    GF.Command.Importing
-    GF.Grammar
-    GF.Grammar.Lexer
-    GF.Grammar.Parser
-    GF.Grammar.Grammar
-    GF.Grammar.Values
-    GF.Grammar.Macros
-    GF.Grammar.Lockfield
-    GF.Grammar.MMacros
-    GF.Grammar.Lookup
-    GF.Grammar.Unify
-    GF.Grammar.PatternMatch
-    GF.Grammar.Printer
-    GF.Grammar.ShowTerm
-    GF.Grammar.Binary
-    GF.Compile.Update
-    GF.Compile.CheckGrammar
---  GF.Compile.Refresh
-    GF.Compile.Rename
-    GF.Compile.ReadFiles
-    GF.Compile.GrammarToPGF
-    GF.Compile.ToAPI
-    GF.Compile.TypeCheck.Abstract
-    GF.Compile.TypeCheck.Concrete
-    GF.Compile.TypeCheck.ConcreteNew
-    GF.Compile.TypeCheck.TC
-    GF.Compile.Compute.Abstract
---  GF.Compile.Compute.Concrete
-    GF.Compile.Compute.ConcreteNew1
-    GF.Compile.Compute.ConcreteNew
-    GF.Compile.Compute.AppPredefined
-    GF.Compile.Compute.Value
-    GF.Compile.Compute.Predef
-    GF.Compile.Optimize
-    GF.Compile.SubExOpt
-    GF.Compile.GetGrammar
-    GF.Compile.PGFtoHaskell
-    GF.Compile.PGFtoProlog
-    GF.Compile.PGFtoJS
-    GF.Compile
-    GF.Quiz
-    GF.Compiler
-    GF.Interactive
-
-  if flag(interrupt)
-    cpp-options: -DUSE_INTERRUPT
-    other-modules: GF.System.UseSignal
-  else
-    other-modules: GF.System.NoSignal
 
 executable pgf-shell
   if !flag(c-runtime)
