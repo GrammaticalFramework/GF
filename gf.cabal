@@ -294,7 +294,7 @@ Library
 
 Executable gf
   hs-source-dirs: src/programs
-  main-is: gf.hs
+  main-is: gf-main.hs
   default-language:    Haskell2010
   build-depends: gf, base
   ghc-options: -threaded -fwarn-unused-imports
