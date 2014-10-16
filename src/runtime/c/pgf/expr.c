@@ -320,6 +320,8 @@ pgf_expr_parser_term(PgfExprParser* parser)
 	case PGF_TOKEN_LTRIANGLE: {
 		pgf_expr_parser_token(parser);
 		PgfExpr expr = pgf_expr_parser_expr(parser);
+		if (gu_variant_is_null(expr))
+			return gu_null_variant;
 		
 		if (parser->token_tag != PGF_TOKEN_COLON) {
 			return gu_null_variant;
@@ -327,6 +329,8 @@ pgf_expr_parser_term(PgfExprParser* parser)
 		pgf_expr_parser_token(parser);
 
 		PgfType* type = pgf_expr_parser_type(parser);
+		if (type == NULL)
+			return gu_null_variant;
 
 		if (parser->token_tag != PGF_TOKEN_RTRIANGLE) {
 			return gu_null_variant;
