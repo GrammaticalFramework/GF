@@ -55,10 +55,12 @@ fun
   abessive_Parameter : Parameter ;
   comitative_Parameter : Parameter ;
   instructive_Parameter : Parameter ;
+  terminative_Parameter : Parameter ;
 
   imperative_Parameter : Parameter ;
   indicative_Parameter : Parameter ;
   conjunctive_Parameter : Parameter ;
+  quotative_Parameter : Parameter ;
   infinitive_Parameter : Parameter ;
 
   active_Parameter : Parameter ;
