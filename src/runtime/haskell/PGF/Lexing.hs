@@ -54,6 +54,16 @@ unlexCode s = case s of
   _ -> []
 
 
+-- | LaTeX lexer in the math mode: \ should not be separated from the next word
+
+lexLatexCode :: String -> [String]
+lexLatexCode = restoreBackslash . lexCode where --- quick hack: postprocess Haskell's lex
+  restoreBackslash ws = case ws of
+    "\\":"\\":ww -> "\\\\":restoreBackslash ww
+    "\\":w:ww -> ("\\" ++ w) : restoreBackslash ww
+    w:ww -> w:restoreBackslash ww
+    _ -> ws
+
 -- * Mixed lexing
 
 -- | LaTeX style lexer, with "math" environment using Code between $...$
@@ -64,7 +74,7 @@ lexMixed = concat . alternate False where
       (t,[])  -> lex env t : []
       (t,c:m) -> lex env t : [[c]] : alternate (not env) m
     _ -> []
-  lex env = if env then lexCode else lexText
+  lex env = if env then lexLatexCode else lexText
 
 unlexMixed :: [String] -> String
 unlexMixed = capitInit . concat . alternate False where
