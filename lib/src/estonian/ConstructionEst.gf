@@ -1,4 +1,4 @@
---# -path=alltenses:.:../abstract
+--# -path=alltenses:.:../abstract:../api
 
 concrete ConstructionEst of Construction = CatEst ** 
   open SyntaxEst, SymbolicEst, ParadigmsEst, (L = LexiconEst), (E = ExtraEst), (R = ResEst), Prelude  in {
@@ -7,7 +7,9 @@ flags coding=utf8 ;
 lin
   hungry_VP = mkVP have_V2 (lin NP (mkNP (mkPN "kõht tühi"))) ;
   thirsty_VP = mkVP have_V2 (lin NP (mkNP (ParadigmsEst.mkN "janu"))) ;
-  has_age_VP card = mkVP (mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> L.year_N)))) L.old_A) ;
+  has_age_VP card = 
+    let n_years_AdA : AdA = lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> L.year_N)))
+    in  mkVP (mkAP n_years_AdA L.old_A) ;
 
   have_name_Cl x y = mkCl (mkNP (E.GenNP x) L.name_N) (lin NP y) ;
   married_Cl x y = mkCl (mkNP and_Conj (lin NP x) (lin NP y)) (ParadigmsEst.mkAdv "abielus") ;
@@ -19,7 +21,7 @@ lin
 -- some more things
   weather_adjCl ap = mkCl (mkVP (lin AP ap)) ;
    
-  is_right_VP =  mkVP have_V2 (lin NP (mkNP (ParadigmsEst.mkN "õigus"))) ;
+  is_right_VP = mkVP have_V2 (lin NP (mkNP (ParadigmsEst.mkN "õigus"))) ;
   is_wrong_VP = mkVP (ParadigmsEst.mkV "eksima") ;
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> (lin CN cn))))) (lin A a) ;
