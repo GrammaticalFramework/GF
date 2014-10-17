@@ -344,10 +344,18 @@ pgf_expr_parser_term(PgfExprParser* parser)
 	}
 	case PGF_TOKEN_QUESTION: {
 		pgf_expr_parser_token(parser);
+
+		PgfMetaId id = 0;
+		if (parser->token_tag == PGF_TOKEN_INT) {
+			char* str =
+				gu_buf_data(parser->token_value);
+			id = atoi(str);
+			pgf_expr_parser_token(parser);
+		}
 		return gu_new_variant_i(parser->expr_pool,
 					            PGF_EXPR_META,
 					            PgfExprMeta,
-					            0);
+					            id);
 	}
 	case PGF_TOKEN_IDENT: {
 		PgfCId id = gu_buf_data(parser->token_value);
@@ -1052,9 +1060,13 @@ pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec,
         pgf_print_literal(lit->lit, out, err);
 		break;
 	}
-	case PGF_EXPR_META:
+	case PGF_EXPR_META: {
+		PgfExprMeta* meta = ei.data;
 		gu_putc('?', out, err);
+		if (meta->id > 0)
+			gu_printf(out, err, "%d", meta->id);
 		break;
+	}
 	case PGF_EXPR_FUN: {
 		PgfExprFun* fun = ei.data;
 		pgf_print_cid(fun->fun, out, err);
