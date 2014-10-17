@@ -1,4 +1,4 @@
---# -path=alltenses:.:../abstract:../api
+--# -path=alltenses:.:../abstract:../api:../common
 
 concrete ConstructionEst of Construction = CatEst ** 
   open SyntaxEst, SymbolicEst, ParadigmsEst, (L = LexiconEst), (E = ExtraEst), (R = ResEst), Prelude  in {
@@ -106,7 +106,7 @@ lin august_Month = mkN "august" ;
 lin september_Month = mkN "september" ;
 lin october_Month = mkN "oktoober" ;
 lin november_Month = mkN "november" ;
-lin december_Month = mkN "december" ;
+lin december_Month = mkN "detsember" ;
 
 
 
@@ -140,9 +140,9 @@ lin romanian_Language = mkLanguage "rumeenia" ;
 lin russian_Language = mkLanguage "vene" ;
 lin sindhi_Language = mkLanguage "sindhi" ;
 lin spanish_Language = mkLanguage "hispaania" ;
-lin swahili_Language = mkLanguage "swahili" ;
+lin swahili_Language = mkLanguage "suahiili" ;
 lin swedish_Language = mkLanguage "rootsi" ;
-lin thai_Language = mkLanguage "thai" ;
+lin thai_Language = mkLanguage "tai" ;
 lin turkish_Language = mkLanguage "türgi" ;
 lin urdu_Language = mkLanguage "urdu" ;
 
