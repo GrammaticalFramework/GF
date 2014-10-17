@@ -3,6 +3,8 @@
 concrete LangEst of Lang =
   GrammarEst - [Slash2V3,SlashV2A,Slash3V3,SlashV2VNP,SlashVV], ---- to speed up compilation
   LexiconEst
+  ,ConstructionEst
+  ,DocumentationEst
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = finnish ;
