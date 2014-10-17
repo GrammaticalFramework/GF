@@ -59,7 +59,6 @@ unlexCode s = case s of
 lexLatexCode :: String -> [String]
 lexLatexCode = restoreBackslash . lexCode where --- quick hack: postprocess Haskell's lex
   restoreBackslash ws = case ws of
-    "\\":"\\":ww -> "\\\\":restoreBackslash ww
     "\\":w:ww -> ("\\" ++ w) : restoreBackslash ww
     w:ww -> w:restoreBackslash ww
     _ -> ws
