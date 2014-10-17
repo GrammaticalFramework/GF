@@ -85,10 +85,11 @@ param
    | Presn Number Person
    | Impf Number Person
    | Condit Number Person
+   | ConditPass --loetagu
    | Imper Number
    | ImperP3 
    | ImperP1Pl
-   | ImpNegPl
+   | ImperPass
    | PassPresn Bool
    | PassImpf Bool
    | Quotative Voice
@@ -173,15 +174,15 @@ param
   VIForm =
      VIFin  Tense  
    | VIInf  InfForm
-   | VIPass 
+   | VIPass Tense
    | VIImper 
    ;  
 
 oper
-  VP = {
+  VP : Type = {
     s   : VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ; 
     s2  : Bool => Polarity => Agr => Str ; -- raamat/raamatu/raamatut
-    adv : Polarity => Str ; -- ainakin/ainakaan --TODO relevant for Est?
+    adv : Str ;
     p : Str ; --uninflecting component in multi-word verbs
     ext : Str ;
     sc  : NPForm ;
@@ -193,23 +194,21 @@ oper
         agr = verbAgr agr0 ;
         verbs = verb.s ;
         part  : Str = case vi of {
-          VIPass => verbs ! (PastPart Pass) ; 
+          VIPass _ => verbs ! (PastPart Pass) ; 
           _      => verbs ! (PastPart Act)
         } ; 
-
-        eiv : Str = case agr of {
-          _ => "ei"
-        } ;
         
         einegole : Str * Str * Str = case <vi,agr.n> of {
-          <VIFin Pres,   _>  => <eiv, verbs ! Imper Sg,     "ole"> ;
-          <VIFin Fut,    _>  => <eiv, verbs ! Imper Sg,     "ole"> ;
-          <VIFin Cond,   _>  => <eiv, verbs ! Condit Sg P3, "oleks"> ;
-          <VIFin Past,   Sg> => <eiv, part,                 "olnud"> ;
-          <VIFin Past,   Pl> => <eiv, part,                 "olnud"> ;
+          <VIFin Pres,   _>  => <"ei", verbs ! Imper Sg,     "ole"> ;
+          <VIFin Fut,    _>  => <"ei", verbs ! Imper Sg,     "ole"> ;
+          <VIFin Cond,   _>  => <"ei", verbs ! Condit Sg P3, "oleks"> ;
+          <VIFin Past,   _>  => <"ei", part,                 "olnud"> ;
           <VIImper,      Sg> => <"ära", verbs ! Imper Sg,   "ole"> ;
-          <VIImper,      Pl> => <"ärge", verbs ! ImpNegPl,  "olge"> ;
-          <VIPass,       _>  => <"ei", verbs ! PassPresn False,  "ole"> ;
+          <VIImper,      Pl> => <"ärge", verbs ! Imper Pl,  "olge"> ;
+          <VIPass Pres,   _>  => <"ei", verbs ! PassPresn False,  "ole"> ;
+          <VIPass Fut,    _>  => <"ei", verbs ! PassPresn False,  "ole"> ; --# notpresent
+          <VIPass Cond,   _>  => <"ei", verbs ! ConditPass,  "oleks"> ; --# notpresent
+          <VIPass Past,   _>  => <"ei", verbs ! PassImpf False,  "olnud"> ; --# notpresent
           <VIInf i,      _>  => <"ei", verbs ! Inf i, "olla">
         } ;
         
@@ -224,23 +223,27 @@ oper
         mkvf : VForm -> {fin, inf : Str} = \p -> case <ant,b> of {
           <Simul,Pos> => vf (verbs ! p) [] ;
           <Anter,Pos> => vf (olema ! p) part ; 
---          <Anter,Neg> => vf ei          (ole ++ part) ;
---          <Simul,Neg> => vf ei          neg
-          <Simul,Neg> => vf (ei ++ neg) [] ; --changed grouping from Fin
+          <Simul,Neg> => vf (ei ++ neg) [] ;
           <Anter,Neg> => vf (ei ++ ole) part 
-        }
+        } ;
+
+        passPol = case b of {Pos => True ; Neg => False} ;
+
    in case vi of {
-        VIFin Past => mkvf (Impf agr.n agr.p) ;
-        VIFin Cond => mkvf (Condit agr.n agr.p) ;
-        VIFin Fut  => mkvf (Presn agr.n agr.p) ;
-        VIFin Pres => mkvf (Presn agr.n agr.p) ;
-        VIImper    => mkvf (Imper agr.n) ;
-        VIPass     => mkvf (PassPresn True) ;
+        VIFin Past  => mkvf (Impf agr.n agr.p) ; --# notpresent
+        VIFin Cond  => mkvf (Condit agr.n agr.p) ; --# notpresent
+        VIFin Fut   => mkvf (Presn agr.n agr.p) ; --# notpresent
+        VIFin Pres  => mkvf (Presn agr.n agr.p) ;
+        VIImper     => mkvf (Imper agr.n) ;
+        VIPass Pres => mkvf (PassPresn passPol) ;
+        VIPass Past => mkvf (PassImpf passPol) ;  --# notpresent
+        VIPass Cond => mkvf (ConditPass) ; --# notpresent
+        VIPass Fut  => mkvf (PassPresn passPol) ;  --# notpresent
         VIInf i    => mkvf (Inf i)
         } ;
 
     s2 = \\_,_,_ => [] ;
-    adv = \\_ => [] ;
+    adv = [] ;
     ext = [] ; --relative clause
     p = verb.p ; --particle verbs
     sc = verb.sc 
@@ -264,12 +267,12 @@ oper
     sc = vp.sc ; 
     } ;
 
-  insertAdv : (Polarity => Str) -> VP -> VP = \adv,vp -> {
+  insertAdv : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
     s2 = vp.s2 ;
     p = vp.p ;
     ext = vp.ext ;
-    adv = \\b => vp.adv ! b ++ adv ! b ;
+    adv = vp.adv ++ adv ;
     sc = vp.sc ; 
     } ;
 
@@ -334,7 +337,7 @@ oper
             inf  = verb.inf ; 
             compl = vp.s2 ! agrfin.p2 ! b ! agr ;
             p = vp.p ;
-            adv  = vp.adv ! b ; 
+            adv  = vp.adv ; 
             ext  = vp.ext ; 
             }
      } ;
@@ -390,7 +393,7 @@ oper
             } ;
           verb  = vp.s ! VIInf vi ! Simul ! Pos ! agr ; -- no "ei"
           compl = vp.s2 ! fin ! pol ! agr ; -- but compl. case propagated
-          adv = vp.adv ! pol
+          adv = vp.adv
         in
         -- inverted word order; e.g.
       --sinust   kunagi aru     saada       tahtnud     rel. clause
@@ -506,11 +509,12 @@ oper
       Condit Pl P1 => tule_ + "ksime" ;  --# notpresent
       Condit Pl P2 => tule_ + "ksite" ;  --# notpresent
       Condit Pl P3 => tule_ + "ksid" ;  --# notpresent
-      Imper Sg  => tule_ ; -- tule
-      Imper Pl  => tulge ; -- tulge
+      ConditPass   => tuld_ + "aks" ; --# notpresent
+      Imper Sg  => tule_ ; -- tule / ära tule
+      Imper Pl  => tulge ; -- tulge / ärge tulge
       ImperP3   => tulgu ; -- tulgu (ta/nad) 
       ImperP1Pl => tulge + "m" ; -- tulgem
-      ImpNegPl  => tulge ; -- ärge tulge
+      ImperPass => tuld_ + "agu" ; --tuldagu
       PassPresn True  => tullakse ;
       PassPresn False => tuld_ + "a" ; --da or ta
       PassImpf  True  => tuld_ + "i" ; --di or ti

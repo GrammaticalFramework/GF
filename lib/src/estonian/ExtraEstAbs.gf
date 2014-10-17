@@ -63,7 +63,5 @@ abstract ExtraEstAbs = Extra [
     ClPlusWithObj : ClPlusObj -> ClPlus ;   -- to make non-fronted obj focusable
     ClPlusWithAdv : ClPlusAdv -> ClPlus ;   -- to make non-fronted adv focusable
 
-    noPart, han_Part, pa_Part, pas_Part, ko_Part, kos_Part, 
-      kohan_Part, pahan_Part : Part ; 
-
+    gi_Part : Part ;
 }

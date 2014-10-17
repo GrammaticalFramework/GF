@@ -58,7 +58,7 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
                  t.s ++ p.s ++
                  vps.fin ++ vps.inf ++
                  vp.s2 ! True ! p.p ! a ++
-                 vp.adv ! p.p ++
+                 vp.adv ++
                  vp.ext ;
       sc = vp.sc ;
       } ;
@@ -248,14 +248,6 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
     ClPlusWithObj c = c ;
     ClPlusWithAdv c = c ;
 
-  noPart     = {s = []} ;
-{-han_Part   = mkPart "han" "hän" ;
-  pa_Part    = mkPart "pa" "pä" ;
-  pas_Part   = mkPart "pas" "päs" ;
-  ko_Part    = mkPart "ko" "kö" ;
-  kos_Part   = mkPart "kos" "kös" ;
-  kohan_Part = mkPart "kohan" "köhän" ;
-  pahan_Part = mkPart "pahan" "pähän" ;
--}
+    gi_Part = ss "gi" | ss "ki" ;
 
 } 
