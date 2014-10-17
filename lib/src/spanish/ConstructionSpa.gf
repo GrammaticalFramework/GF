@@ -29,21 +29,21 @@ lin
 
   bottle_of_CN np = mkCN (lin N2 (mkN2 (mkN "botella" feminine) part_Prep)) np ;
   cup_of_CN    np = mkCN (lin N2 (mkN2 (mkN "taza") part_Prep)) np ;
-  glass_of_CN  np = mkCN (lin N2 (mkN2 (mkN "copa") part_Prep)) np ;
+  glass_of_CN  np = mkCN (lin N2 (mkN2 (mkN "vaso") part_Prep)) np ; -- copa
 
 {-
 -- spatial deixis and motion verbs
 
   where_go_QCl np = mkQCl where_IAdv (mkCl np (mkVP L.go_V)) ;
-  where_come_from_QCl np =  mkQCl (lin IAdv (ss "d'où")) (mkCl np (mkVP L.go_V)) ;
+  where_come_from_QCl np =  mkQCl (lin IAdv (ss "de dónde")) (mkCl np (mkVP L.go_V)) ;
   
   go_here_VP = mkVP (mkVP L.go_V) here_Adv ;
   come_here_VP = mkVP (mkVP L.come_V) here_Adv ;
-  come_from_here_VP = mkVP (mkVP L.come_V) (mkAdv "d'ici") ;
+  come_from_here_VP = mkVP (mkVP L.come_V) (mkAdv "de aquí") ;
 
   go_there_VP = mkVP (mkVP L.go_V)  there_Adv ;
   come_there_VP = mkVP (mkVP L.come_V) there_Adv ;
-  come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "de là") ;
+  come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "de allí") ; -- "de allá"
 -}  
 
 lincat
@@ -117,7 +117,7 @@ lin chinese_Language = mkLanguage "chino" ;
 lin danish_Language = mkLanguage "danés" ; 
 lin dutch_Language = mkLanguage "neerlandés" ;
 lin english_Language = mkLanguage "inglés" ;
-lin estonian_Language = mkLanguage "estone" ;
+lin estonian_Language = mkLanguage "estonio" ;
 lin finnish_Language = mkLanguage "finés" ;
 lin french_Language = mkLanguage "francés" ;
 lin german_Language = mkLanguage "alemán" ;
@@ -137,7 +137,7 @@ lin punjabi_Language = mkLanguage "punjabi" ;
 lin romanian_Language = mkLanguage "rumano" ;
 lin russian_Language = mkLanguage "ruso" ;
 lin sindhi_Language = mkLanguage "sindhi" ;
-lin spanish_Language = mkLanguage "español" ;
+lin spanish_Language = mkLanguage "español" | mkLanguage "castellano" ;
 lin swahili_Language = mkLanguage "swahili" ;
 lin swedish_Language = mkLanguage "sueco" ;
 lin thai_Language = mkLanguage "tailandés" ;
