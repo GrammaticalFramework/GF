@@ -26,6 +26,7 @@ typedef struct {
 	GuExn* exn;
 	GuPool* pool;
 	GuPool* tmp_pool;
+	PgfMetaId meta_id;
 } PgfTypeChecker;
 
 static PgfCFType null_cf_type = { .hypos = NULL, .cat = NULL };
@@ -259,13 +260,11 @@ pgf_tc_expr(PgfTypeChecker* checker,
 		break;
 	}
 	case PGF_EXPR_META: {
-		PgfExprMeta* emeta = i.data;
-		
 		PgfExprMeta* new_emeta =
 			gu_new_variant(PGF_EXPR_META,
 			               PgfExprMeta,
 			               pe, checker->pool);
-		new_emeta->id = emeta->id;
+		new_emeta->id = checker->meta_id++;
 		break;
 	}
 	case PGF_EXPR_IMPL_ARG: {
@@ -538,6 +537,7 @@ pgf_check_expr(PgfPGF* gr, PgfExpr* pe, PgfType* ty,
 	checker->exn      = exn;
 	checker->pool     = pool;
 	checker->tmp_pool = tmp_pool;
+	checker->meta_id  = 1;
 	
 	pgf_tc_expr(checker, NULL, pe, pgf_ty2cfty(checker, ty));
 	
@@ -555,6 +555,7 @@ pgf_infer_expr(PgfPGF* gr, PgfExpr* pe,
 	checker->exn      = exn;
 	checker->pool     = pool;
 	checker->tmp_pool = tmp_pool;
+	checker->meta_id  = 1;
 
 	PgfCFType cf_ty = pgf_inf_expr(checker, NULL, pe);
 	
@@ -579,6 +580,7 @@ pgf_check_type(PgfPGF* gr, PgfType** pty,
 	checker->exn      = exn;
 	checker->pool     = pool;
 	checker->tmp_pool = tmp_pool;
+	checker->meta_id  = 1;
 
 	pgf_tc_type(checker, pty);
 
