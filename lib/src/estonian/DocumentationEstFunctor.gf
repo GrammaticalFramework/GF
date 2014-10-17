@@ -209,12 +209,9 @@ oper
              ++ th (heading passive_Parameter) --# notpresent
             ) ++ 
          tr (th "1.p"  ++ td "" ++ td (vfin ImperP1Pl) ++
-             intagAttr "td" "rowspan=3" "TODO passive imperative") ++
+             intagAttr "td" "rowspan=3" (vfin ImperPass)) ++
          tr (th "2.p"  ++ td (vfin (Imper Sg)) ++ td (vfin (Imper Pl))) ++
-         tr (th "3.p"  ++ td (vfin (ImperP3))) ++
-         tr (th (heading negative_Parameter) ++
-             td (vfin (Imper Sg)) ++ 
-             td (vfin ImpNegPl)) 
+         tr (th "3.p"  ++ td (vfin (ImperP3))  ++ td (vfin ImperP3)) 
          ) ++
        heading2 (nounPluralHeading nominal_form_ParameterType).s ++
        heading3 (heading infinitive_Parameter) ++
@@ -223,16 +220,12 @@ oper
              th (heading nominative_Parameter) ++ td (vfin (Inf InfDa))) ++
          tr (th (heading inessive_Parameter) ++ td (vfin (Inf InfDes)))  ++
 
-         tr (intagAttr "th" "rowspan=6" "ma" ++         
-             th (heading inessive_Parameter) ++ td (vfin (Inf InfMas))) ++
+         tr (intagAttr "th" "rowspan=5" "ma" ++         
+             th (heading illative_Parameter) ++ td (vfin (Inf InfMa))) ++
+         tr (th (heading inessive_Parameter) ++ td (vfin (Inf InfMas))) ++
          tr (th (heading elative_Parameter)  ++ td (vfin (Inf InfMast))) ++
-         tr (th (heading illative_Parameter) ++ td (vfin (Inf InfMa))) ++
          tr (th (heading abessive_Parameter) ++ td (vfin (Inf InfMata))) ++ 
-         tr (th (heading adessive_Parameter) ++ td "TODO InfMa adessive") ++
-         tr (th (heading translative_Parameter) ++ td (vfin (Inf InfMaks))) ++
-         tr (intagAttr "th" "rowspan=2" "mine" ++         
-              th (heading nominative_Parameter) ++ td "TODO mine") ++
-          tr (th (heading partitive_Parameter) ++ td "TODO mist")
+         tr (th (heading translative_Parameter) ++ td (vfin (Inf InfMaks)))
 
        ) ++ 
        heading3 (heading participle_Parameter) ++
