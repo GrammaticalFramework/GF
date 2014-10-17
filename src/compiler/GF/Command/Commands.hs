@@ -698,8 +698,14 @@ allCommands = Map.fromList [
      exec = \_ opts x -> do
                let (os,fs) = optsAndFlags opts
                trans <- optTranslit opts
-               return ((fromString . trans . stringOps (envFlag fs) (map prOpt os) . toString) x),
-     options = stringOpOptions,
+
+               if isOpt "lines" opts 
+                  then return $ fromStrings $ map (trans . stringOps (envFlag fs) (map prOpt os)) $ toStrings x
+                  else return ((fromString . trans . stringOps (envFlag fs) (map prOpt os) . toString) x),
+     options = [
+       ("lines","apply the operation separately to each input line, returning a list of lines")
+       ] ++
+       stringOpOptions,
      flags = [
        ("env","apply in this environment only"),
        ("from","backward-apply transliteration defined in this file (format 'unicode translit' per line)"),
