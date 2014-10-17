@@ -81,10 +81,13 @@ unlexMixed = capitInit . concat . alternate False where
   alternate env s = case s of
     _:_ -> case break (=="$") s of
       (t,[])  -> unlex env t : []
-      (t,c:m) -> unlex env t : sep env c : alternate (not env) m
+      (t,c:m) -> unlex env t : sep env c m : alternate (not env) m
     _ -> []
-  unlex env = if env then unlexCode else unlexText
-  sep env c = if env then c ++ " " else " " ++ c
+  unlex env = if env then unlexCode else (uncapitInit . unlexText)
+  sep env c m = case (m,env) of
+    ([p]:_,True) | isPunct p -> c   -- closing $ glued to next punct 
+    (_,  True) -> c ++ " "   -- closing $ otherwise separated by space from what follows
+    _ -> " " ++ c   -- put space before opening $
 
 -- * Additional lexing uitilties
 
