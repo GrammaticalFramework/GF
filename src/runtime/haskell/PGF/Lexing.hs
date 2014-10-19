@@ -67,18 +67,18 @@ lexLatexCode = restoreBackslash . lexCode where --- quick hack: postprocess Hask
 
 -- | LaTeX style lexer, with "math" environment using Code between $...$
 lexMixed :: String -> [String]
-lexMixed = concat . alternate False where
-  alternate env s = case s of
-    _:_ -> case break (=='$') s of
-      (t,[])  -> lex env t : []
-      (t,c:m) -> lex env t : [[c]] : alternate (not env) m
-    _ -> []
+lexMixed = concat . alternate False [] where
+  alternate env t s = case s of
+    '$':cs -> lex env (reverse t) : ["$"] : alternate (not env) [] cs
+    '\\':c:cs | elem c "()[]" -> lex env (reverse t) : [['\\',c]] : alternate (not env) [] cs
+    c:cs -> alternate env (c:t) cs
+    _ -> [lex env (reverse t)]
   lex env = if env then lexLatexCode else lexText
 
 unlexMixed :: [String] -> String
 unlexMixed = capitInit . concat . alternate False where
   alternate env s = case s of
-    _:_ -> case break (=="$") s of
+    _:_ -> case break (flip elem ["$","\\[","\\]","\\(","\\)"]) s of
       (t,[])  -> unlex env t : []
       (t,c:m) -> unlex env t : sep env c m : alternate (not env) m
     _ -> []
