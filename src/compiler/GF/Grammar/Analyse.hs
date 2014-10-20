@@ -46,7 +46,7 @@ constantDeps :: SourceGrammar -> QIdent -> Err [QIdent]
 constantDeps sgr f = return $ nub $ iterFix more start where
   start = constants f
   more  = concatMap constants
-  constants c = (c :) $ errVal [] $ do
+  constants c = (c :) $ fromErr [] $ do
     ts  <- termsOfConstant sgr c
     return $ concatMap constantsInTerm ts
 

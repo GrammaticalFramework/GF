@@ -21,7 +21,7 @@ import GF.Grammar.Binary(decodeModule,encodeModule)
 import GF.Infra.Option
 import GF.Infra.UseIO(FullPath,IOE,isGFO,gf2gfo,MonadIO(..),Output(..),putPointE)
 import GF.Infra.CheckM(runCheck')
-import GF.Data.Operations(ErrorMonad,liftErr,(+++))
+import GF.Data.Operations(ErrorMonad,liftErr,(+++),done)
 
 import GF.System.Directory(doesFileExist,getCurrentDirectory,renameFile)
 import qualified Data.Map as Map
@@ -62,7 +62,7 @@ reuseGFO opts srcgr file =
 
      if flag optTagsOnly opts
        then writeTags opts srcgr (gf2gftags opts file) sm1
-       else return ()
+       else done
 
      return (Just file,sm)
 
@@ -132,7 +132,7 @@ compileSourceModule opts cwd mb_gfFile gr =
            idump opts pass (dump out)
            return (ret out)
 
-    maybeM f = maybe (return ()) f
+    maybeM f = maybe done f
 
 
 --writeGFO :: Options -> FilePath -> SourceModule -> IOE ()
@@ -151,12 +151,12 @@ writeGFO opts file mo =
 --intermOut :: Options -> Dump -> Doc -> IOE ()
 intermOut opts d doc
   | dump opts d = ePutStrLn (render ("\n\n--#" <+> show d $$ doc))
-  | otherwise   = return ()
+  | otherwise   = done
 
 idump opts pass = intermOut opts (Dump pass) . ppModule Internal
 
 warnOut opts warnings
-  | null warnings = return ()
+  | null warnings = done
   | otherwise     = do ePutStr "\ESC[34m";ePutStr ws;ePutStrLn "\ESC[m"
   where
     ws = if flag optVerbosity opts == Normal

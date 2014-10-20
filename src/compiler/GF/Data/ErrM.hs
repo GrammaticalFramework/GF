@@ -12,14 +12,24 @@
 -- hack for BNFC generated files. AR 21/9/2003
 -----------------------------------------------------------------------------
 
-module GF.Data.ErrM (Err(..)) where
+module GF.Data.ErrM where
 
 import Control.Monad (MonadPlus(..),ap)
 import Control.Applicative
 
--- | like @Maybe@ type with error msgs
+-- | Like 'Maybe' type with error msgs
 data Err a = Ok a | Bad String
   deriving (Read, Show, Eq)
+
+-- | Analogue of 'maybe'
+err :: (String -> b) -> (a -> b) -> Err a -> b 
+err d f e = case e of
+  Ok a -> f a
+  Bad s -> d s
+
+-- | Analogue of 'fromMaybe'
+fromErr :: a -> Err a -> a
+fromErr a = err (const a) id
 
 instance Monad Err where
   return      = Ok

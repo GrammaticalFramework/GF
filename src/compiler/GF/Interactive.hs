@@ -8,7 +8,7 @@ import GF.Command.Interpreter(CommandEnv(..),commands,mkCommandEnv,emptyCommandE
 import GF.Command.Commands(flags,options)
 import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
-import GF.Data.Operations (Err(..),chunks,err,raise)
+import GF.Data.Operations (Err(..),chunks,err,raise,done)
 import GF.Grammar hiding (Ident,isPrefixOf)
 import GF.Grammar.Analyse
 import GF.Grammar.Parser (runP, pExp)
@@ -83,7 +83,7 @@ mainServerGFI opts files =
 
 -- | Read end execute commands until it is time to quit
 loop :: Options -> GFEnv -> IO ()
-loop opts gfenv = maybe (return ()) (loop opts) =<< readAndExecute1 opts gfenv
+loop opts gfenv = maybe done (loop opts) =<< readAndExecute1 opts gfenv
 
 -- | Read and execute one command, returning Just an updated environment for
 -- | the next command, or Nothing when it is time to quit
@@ -363,7 +363,7 @@ importInEnv gfenv opts files
            pgf1 <- importGrammar pgf0 opts' files
            if (verbAtLeast opts Normal)
              then putStrLnFlush $ unwords $ "\nLanguages:" : map showCId (languages pgf1)
-             else return ()
+             else done
            return $ gfenv { commandenv = mkCommandEnv pgf1 }
 
 tryGetLine = do

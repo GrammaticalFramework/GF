@@ -91,7 +91,7 @@ isRecursiveType t =
   in any (== c) cc
 
 isHigherOrderType :: Type -> Bool
-isHigherOrderType t = errVal True $ do  -- pessimistic choice
+isHigherOrderType t = fromErr True $ do  -- pessimistic choice
   co <- contextOfType t
   return $ not $ null [x | (_,x,Prod _ _ _ _) <- co]
 
