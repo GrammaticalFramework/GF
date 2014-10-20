@@ -1,7 +1,7 @@
 #include <gu/seq.h>
 #include <gu/out.h>
 #include <gu/utf8.h>
-#include <gu/str.h>
+#include <stdio.h>
 
 static bool
 gu_out_is_buffering(GuOut* out)
@@ -261,7 +261,15 @@ void
 gu_vprintf(const char* fmt, va_list args, GuOut* out, GuExn* err)
 {
 	GuPool* tmp_pool = gu_local_pool();
-	char* str = gu_vasprintf(fmt, args, tmp_pool);
+
+	va_list args2;
+	va_copy(args2, args);
+	int len = vsnprintf(NULL, 0, fmt, args2);
+	gu_assert_msg(len >= 0, "Invalid format string: \"%s\"", fmt);
+	va_end(args2);
+	char* str = gu_new_n(char, len + 1, tmp_pool);
+	vsnprintf(str, len + 1, fmt, args);
+
 	gu_out_bytes(out, (const uint8_t*) str, strlen(str), err);
 	gu_pool_free(tmp_pool);
 }

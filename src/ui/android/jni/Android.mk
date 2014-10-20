@@ -5,7 +5,7 @@ include $(CLEAR_VARS)
 jni_c_files := jpgf.c
 pgf_c_files := data.c expr.c graphviz.c linearizer.c literals.c parser.c parseval.c pgf.c printer.c reader.c \
 reasoner.c evaluator.c jit.c typechecker.c
-gu_c_files := assert.c  choice.c  exn.c   fun.c   in.c      map.c  out.c    str.c     utf8.c \
+gu_c_files := assert.c  choice.c  exn.c   fun.c   in.c      map.c  out.c     utf8.c \
 bits.c    defs.c    enum.c  file.c  hash.c  mem.c  prime.c  seq.c   string.c  ucs.c   variant.c
 
 LOCAL_MODULE    := jpgf
