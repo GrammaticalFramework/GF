@@ -79,7 +79,7 @@ batchCompile1 lib_dir (opts,filepaths) =
      deps <- newMVar M.empty
      toLog <- newLog runIOE
      let --logStrLn = toLog . ePutStrLn
-         ok :: CollectOutput IOE a -> IO a
+       --ok :: CollectOutput IO a -> IO a
          ok (CO m) = err bad good =<< appIOE m
            where
               good (o,r) = do toLog o; return r
