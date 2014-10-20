@@ -386,7 +386,9 @@ getOverload gr g mt ot = case appForm ot of
                   ----     "with argument types" <+> hsep (map (ppTerm Qualified 0) tys) $$ 
                            "resolved by selecting the first of the alternatives" $$
                            nest 2 (vcat [ppTerm Qualified 0 fun | (_,ty,fun) <- vfs1 ++ if null vfs1 then vfs2 else []])
-              return $ head [(mkApp fun tts,val) | (val,fun) <- nps1 ++ nps2]
+              case [(mkApp fun tts,val) | (val,fun) <- nps1 ++ nps2] of
+                 [] -> checkError $ "no alternatives left when resolving" <+> ppTerm Unqualified 0 f
+                 h:_ -> return h
 
    matchVal mt v = elem mt [Nothing,Just v,Just (unlocked v)]
 
