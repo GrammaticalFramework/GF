@@ -30,6 +30,8 @@ import PGF(PGF,defaultProbabilities,setProbabilities,readProbabilitiesFromFile)
 compileToPGF :: Options -> [FilePath] -> IOE PGF
 compileToPGF opts fs = link opts =<< batchCompile opts fs
 
+-- | Link a grammar into a 'PGF' that can be used to 'PGF.linearize' and
+-- 'PGF.parse' with the "PGF" run-time system.
 link :: Options -> (Ident,t,SourceGrammar) -> IOE PGF
 link opts (cnc,_,gr) =
   putPointE Normal opts "linking ... " $ do
@@ -40,6 +42,7 @@ link opts (cnc,_,gr) =
     return $ setProbabilities probs 
            $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
 
+-- | Returns the name of the abstract syntax corresponding to the named concrete syntax
 srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc
 
 -- | Compile the given grammar files and everything they depend on

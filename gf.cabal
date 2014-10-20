@@ -141,6 +141,7 @@ Library
   hs-source-dirs: src/compiler
   exposed-modules:
     GF
+    GF.Text.Pretty
 
   other-modules:
     GF.Main GF.Compiler GF.Interactive
@@ -247,7 +248,6 @@ Library
     GF.Text.Clitics
     GF.Text.Coding
     GF.Text.Lexing
-    GF.Text.Pretty
     GF.Text.Transliterations
     Paths_gf
 

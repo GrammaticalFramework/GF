@@ -23,6 +23,7 @@ main = do
   uncurry mainOpts =<< getOptions
 
 -- | Get and parse GF command line arguments. Fix relative paths.
+-- Calls 'getArgs' and 'parseOptions'.
 getOptions = do
   args <- getArgs
   case parseOptions args of
