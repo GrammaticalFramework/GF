@@ -151,7 +151,7 @@ substTerm ss g c = case c of
   _           -> c
 
 metaSubstExp :: MetaSubst -> [(MetaId,Exp)]
-metaSubstExp msubst = [(m, errVal (meta2exp m) (val2expSafe v)) | (m,v) <- msubst]
+metaSubstExp msubst = [(m, fromErr (meta2exp m) (val2expSafe v)) | (m,v) <- msubst]
 
 -- ** belong here rather than to computation
 

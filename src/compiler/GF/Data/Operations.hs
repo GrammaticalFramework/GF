@@ -18,20 +18,20 @@ module GF.Data.Operations (-- ** Misc functions
 		   ifNull,
 
 		   -- ** The Error monad
-		   Err(..), err, maybeErr, testErr, errVal, errIn, 
+		   Err(..), err, maybeErr, testErr, fromErr, errIn, 
 		   lookupErr,
+
+                   --- ** Monadic operations on lists and pairs
 		   mapPairListM, mapPairsM, pairM,
-		   singleton, --mapsErr, mapsErrTree,
 		   
 		   -- ** Checking
 		   checkUnique, unifyMaybeBy, unifyMaybe,
 
 		   -- ** Binary search trees; now with FiniteMap
-		   BinTree, emptyBinTree, isInBinTree, justLookupTree,
+		   BinTree, emptyBinTree, isInBinTree, --justLookupTree,
 		   lookupTree, --lookupTreeMany,
                    lookupTreeManyAll, updateTree,
 		   buildTree, filterBinTree,
-		   --sorted2tree,
                    mapTree, --mapMTree,
                    tree2list,
  
@@ -43,7 +43,7 @@ module GF.Data.Operations (-- ** Misc functions
 		   numberedParagraphs, prConjList, prIfEmpty, wrapLines,
 
 		   -- ** Extra
-		   combinations,
+		   combinations, done, readIntArg, --singleton,
 
 		   -- ** Topological sorting with test of cyclicity
 		   topoTest, topoTest2,
@@ -52,13 +52,13 @@ module GF.Data.Operations (-- ** Misc functions
 		   iterFix,
 
 		   -- ** Chop into separator-separated parts
-		   chunks, readIntArg, 
-
+		   chunks,
+{-
 		   -- ** State monad with error; from Agda 6\/11\/2001
-		   STM(..), appSTM, stm, stmr, readSTM, updateSTM, writeSTM, done,
-
+		   STM(..), appSTM, stm, stmr, readSTM, updateSTM, writeSTM,
+-}
 		   -- ** Error monad class
-		   ErrorMonad(..), checkAgain, checks, allChecks, doUntil,
+		   ErrorMonad(..), checks, allChecks, doUntil, --checkAgain,
                    liftErr
                 
 		  ) where
@@ -67,8 +67,8 @@ import Data.Char (isSpace, toUpper, isSpace, isDigit)
 import Data.List (nub, partition, (\\))
 import qualified Data.Map as Map
 import Data.Map (Map)
-import Control.Applicative(Applicative(..))
-import Control.Monad (liftM,liftM2,ap)
+--import Control.Applicative(Applicative(..))
+import Control.Monad (liftM,liftM2) --,ap
 
 import GF.Data.ErrM
 import GF.Data.Relation
@@ -83,21 +83,12 @@ ifNull b f xs = if null xs then b else f xs
 
 -- the Error monad
 
--- | analogue of @maybe@
-err :: (String -> b) -> (a -> b) -> Err a -> b 
-err d f e = case e of
-  Ok a -> f a
-  Bad s -> d s
-
--- | add msg s to @Maybe@ failures
+-- | Add msg s to 'Maybe' failures
 maybeErr :: ErrorMonad m => String -> Maybe a -> m a
 maybeErr s = maybe (raise s) return
 
 testErr :: ErrorMonad m => Bool -> String -> m ()
-testErr cond msg = if cond then return () else raise msg
-
-errVal :: a -> Err a -> a
-errVal a = err (const a) id
+testErr cond msg = if cond then done else raise msg
 
 errIn :: ErrorMonad m => String -> m a -> m a
 errIn msg m = handle m (\s -> raise (s ++++ "OCCURRED IN" ++++ msg))
@@ -111,11 +102,8 @@ mapPairListM f xys = mapM (\ p@(x,_) -> liftM ((,) x) (f p)) xys
 mapPairsM :: Monad m => (b -> m c) -> [(a,b)] -> m [(a,c)]
 mapPairsM f xys = mapM (\ (x,y) -> liftM ((,) x) (f y)) xys
 
-pairM :: Monad a => (b -> a c) -> (b,b) -> a (c,c)
+pairM :: Monad m => (b -> m c) -> (b,b) -> m (c,c)
 pairM op (t1,t2) = liftM2 (,) (op t1) (op t2)
-
-singleton :: a -> [a]
-singleton = (:[])
 
 -- checking
 
@@ -144,21 +132,14 @@ emptyBinTree = Map.empty
 
 isInBinTree :: (Ord a) => a -> BinTree a b -> Bool
 isInBinTree = Map.member
-
-justLookupTree :: (Monad m,Ord a) => a -> BinTree a b -> m b
-justLookupTree = lookupTree (const [])
-
-lookupTree :: (Monad m,Ord a) => (a -> String) -> a -> BinTree a b -> m b
-lookupTree pr x tree = case Map.lookup x tree of
-  Just y -> return y
-  _ -> fail ("no occurrence of element" +++ pr x)
 {-
-lookupTreeMany :: Ord a => (a -> String) -> [BinTree a b] -> a -> Err b
-lookupTreeMany pr (t:ts) x = case lookupTree pr x t of
-  Ok v -> return v
-  _ -> lookupTreeMany pr ts x
-lookupTreeMany pr [] x = Bad $ "failed to find" +++ pr x
+justLookupTree :: (ErrorMonad m,Ord a) => a -> BinTree a b -> m b
+justLookupTree = lookupTree (const [])
 -}
+lookupTree :: (ErrorMonad m,Ord a) => (a -> String) -> a -> BinTree a b -> m b
+lookupTree pr x = maybeErr no . Map.lookup x
+  where no = "no occurrence of element" +++ pr x
+
 lookupTreeManyAll :: Ord a => (a -> String) -> [BinTree a b] -> a -> [b]
 lookupTreeManyAll pr (t:ts) x = case lookupTree pr x t of
   Ok v -> v : lookupTreeManyAll pr ts x
@@ -170,16 +151,10 @@ updateTree (a,b) = Map.insert a b
 
 buildTree :: (Ord a) => [(a,b)] -> BinTree a b
 buildTree = Map.fromList
-{-
-sorted2tree :: Ord a => [(a,b)] -> BinTree a b
-sorted2tree = Map.fromAscList
--}
+
 mapTree :: ((a,b) -> c) -> BinTree a b -> BinTree a c
 mapTree f = Map.mapWithKey (\k v -> f (k,v))
-{-
-mapMTree :: (Ord a,Monad m) => ((a,b) -> m c) -> BinTree a b -> m (BinTree a c)
-mapMTree f t = liftM Map.fromList $ sequence [liftM ((,) k) (f (k,x)) | (k,x) <- Map.toList t]
--}
+
 filterBinTree :: Ord a => (a -> b -> Bool) -> BinTree a b -> BinTree a b
 filterBinTree = Map.filterWithKey
 
@@ -269,12 +244,18 @@ wrapLines n s@(c:cs) =
 
 --- optWrapLines = if argFlag "wraplines" True then wrapLines 0 else id
 
--- | 'combinations' is the same as @sequence@!!!
+-- | 'combinations' is the same as 'sequence'!!!
 -- peb 30\/5-04
 combinations :: [[a]] -> [[a]]
 combinations t = case t of 
   []    -> [[]]
   aa:uu -> [a:u | a <- aa, u <- combinations uu]
+
+{-
+-- | 'singleton' is the same as 'return'!!!
+singleton :: a -> [a]
+singleton = (:[])
+-}
 
 -- | topological sorting with test of cyclicity
 topoTest :: Ord a => [(a,[a])] -> Either [a] [[a]]
@@ -315,7 +296,7 @@ chunks sep ws = case span (/= sep) ws of
 readIntArg :: String -> Int
 readIntArg n = if (not (null n) && all isDigit n) then read n else 0
 
-
+{-
 -- state monad with error; from Agda 6/11/2001
 
 newtype STM s a = STM (s -> Err (a,s)) 
@@ -350,7 +331,7 @@ updateSTM f = stmr (\s -> ((),f s))
 
 writeSTM :: s -> STM s ()
 writeSTM s = stmr (const ((),s))
-
+-}
 done :: Monad m => m ()
 done = return ()
 
@@ -366,28 +347,13 @@ instance ErrorMonad Err where
   handle (Bad i) f  = f i
 
 liftErr e = err raise return e
-
+{-
 instance ErrorMonad (STM s) where
   raise msg = STM (\s -> raise msg)
   handle (STM f) g = STM (\s -> (f s) 
                                 `handle` (\e -> let STM g' = (g e) in
                                                     g' s))
-{-
--- error recovery with multiple reporting AR 30/5/2008
-mapsErr :: (a -> Err b) -> [a] -> Err [b]
 
-mapsErr f = seqs . map f where
-  seqs es = case es of
-    Ok v : ms -> case seqs ms of
-      Ok vs -> return (v : vs)
-      b     -> b
-    Bad s : ms -> case seqs ms of
-      Ok vs  -> Bad s
-      Bad ss -> Bad (s +++++ ss)
-    [] -> return []
-
-mapsErrTree :: (Ord a) => ((a,b) -> Err (a,c)) -> BinTree a b -> Err (BinTree a c)
-mapsErrTree f t =  mapsErr f (tree2list t) >>= return . sorted2tree
 -}
 
 -- | if the first check fails try another one

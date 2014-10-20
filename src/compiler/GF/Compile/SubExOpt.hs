@@ -24,29 +24,29 @@
 module GF.Compile.SubExOpt (subexpModule,unsubexpModule) where 
 
 import GF.Grammar.Grammar
-import GF.Grammar.Lookup
+import GF.Grammar.Lookup(lookupResDef)
 import GF.Infra.Ident
 import qualified GF.Grammar.Macros as C
-import GF.Data.Operations
+import GF.Data.ErrM(fromErr)
 
-import Control.Monad
+import Control.Monad.State.Strict(State,evalState,get,put)
 import Data.Map (Map)
 import qualified Data.Map as Map
 
 
-subexpModule :: SourceModule -> SourceModule
-subexpModule (n,mo) = errVal (n,mo) $ do
-  let ljs = tree2list (jments mo)
-  (tree,_) <- appSTM (getSubtermsMod n ljs) (Map.empty,0)
-  js2 <- liftM buildTree $ addSubexpConsts n tree $ ljs
-  return (n,mo{jments=js2})
+--subexpModule :: SourceModule -> SourceModule
+subexpModule (n,mo) =
+  let ljs = Map.toList (jments mo)
+      tree = evalState (getSubtermsMod n ljs) (Map.empty,0)
+      js2 = Map.fromList $ addSubexpConsts n tree $ ljs
+  in (n,mo{jments=js2})
 
-unsubexpModule :: SourceModule -> SourceModule
+--unsubexpModule :: SourceModule -> SourceModule
 unsubexpModule sm@(i,mo)
   | hasSub ljs = (i,mo{jments=rebuild (map unparInfo ljs)})
   | otherwise  = sm
   where
-    ljs = tree2list (jments mo) 
+    ljs = Map.toList (jments mo) 
 
     -- perform this iff the module has opers
     hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
@@ -57,33 +57,33 @@ unsubexpModule sm@(i,mo)
       _ -> [(c,info)]
     unparTerm t = case t of
       Q (m,c) | isOperIdent c -> --- name convention of subexp opers
-        errVal t $ liftM unparTerm $ lookupResDef gr (m,c)
+        fromErr t $ fmap unparTerm $ lookupResDef gr (m,c)
       _ -> C.composSafeOp unparTerm t
     gr = mGrammar [sm]
-    rebuild = buildTree . concat
+    rebuild = Map.fromList . concat
 
 -- implementation
 
 type TermList = Map Term (Int,Int) -- number of occs, id
-type TermM a = STM (TermList,Int) a
+type TermM a = State (TermList,Int) a
 
 addSubexpConsts :: 
-  Ident -> Map Term (Int,Int) -> [(Ident,Info)] -> Err [(Ident,Info)]
+  Ident -> Map Term (Int,Int) -> [(Ident,Info)] -> [(Ident,Info)]
 addSubexpConsts mo tree lins = do
   let opers = [oper id trm | (trm,(_,id)) <- list]
-  mapM mkOne $ opers ++ lins
+  map mkOne $ opers ++ lins
  where
    mkOne (f,def) = case def of
-     CncFun xs (Just (L loc trm)) pn pf -> do
-       trm' <- recomp f trm
-       return (f,CncFun xs (Just (L loc trm')) pn pf)
-     ResOper ty (Just (L loc trm)) -> do
-       trm' <- recomp f trm
-       return (f,ResOper ty (Just (L loc trm')))
-     _ -> return (f,def)
+     CncFun xs (Just (L loc trm)) pn pf ->
+       let trm' = recomp f trm
+       in (f,CncFun xs (Just (L loc trm')) pn pf)
+     ResOper ty (Just (L loc trm)) ->
+       let trm' = recomp f trm
+       in (f,ResOper ty (Just (L loc trm')))
+     _ -> (f,def)
    recomp f t = case Map.lookup t tree of
-     Just (_,id) | operIdent id /= f -> return $ Q (mo, operIdent id)
-     _ -> C.composOp (recomp f) t
+     Just (_,id) | operIdent id /= f -> Q (mo, operIdent id)
+     _ -> C.composSafeOp (recomp f) t
 
    list = Map.toList tree
 
@@ -93,7 +93,7 @@ addSubexpConsts mo tree lins = do
 getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
 getSubtermsMod mo js = do
   mapM (getInfo (collectSubterms mo)) js
-  (tree0,_) <- readSTM
+  (tree0,_) <- get
   return $ Map.filter (\ (nu,_) -> nu > 1) tree0
  where
    getInfo get fi@(f,i) = case i of
@@ -123,12 +123,12 @@ collectSubterms mo t = case t of
  where
    collect = collectSubterms mo
    add t = do
-     (ts,i) <- readSTM
+     (ts,i) <- get
      let 
        ((count,id),next) = case Map.lookup t ts of
          Just (nu,id) -> ((nu+1,id), i)
          _ ->            ((1,   i ), i+1)
-     writeSTM (Map.insert t (count,id) ts, next)
+     put (Map.insert t (count,id) ts, next)
      return t --- only because of composOp
 
 operIdent :: Int -> Ident

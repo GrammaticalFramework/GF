@@ -123,7 +123,7 @@ lookupOrigInfo gr (m,c) = do
     i           -> return (m,i)
 
 allOrigInfos :: SourceGrammar -> Ident -> [(QIdent,Info)]
-allOrigInfos gr m = errVal [] $ do
+allOrigInfos gr m = fromErr [] $ do
   mo <- lookupModule gr m
   return [((m,c),i) | (c,_) <- tree2list (jments mo), Ok (m,i) <- [lookupOrigInfo gr (m,c)]]
 

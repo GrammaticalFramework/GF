@@ -66,7 +66,7 @@ batchCompile1 lib_dir (opts,filepaths) =
      let rel = relativeTo lib_dir cwd
          prelude_dir = lib_dir</>"prelude"
          gfoDir = flag optGFODir opts
-     maybe (return ()) (D.createDirectoryIfMissing True) gfoDir
+     maybe done (D.createDirectoryIfMissing True) gfoDir
 {-
      liftIO $ writeFile (maybe "" id gfoDir</>"paths")
                         (unlines . map (unwords . map rel) . nub $ map snd filepaths)
@@ -213,14 +213,14 @@ instance (Functor m,Monad m) => Applicative (CollectOutput m) where
   (<*>) = ap
 
 instance Monad m => Monad (CollectOutput m) where
-  return x = CO (return (return (),x))
+  return x = CO (return (done,x))
   CO m >>= f = CO $ do (o1,x) <- m
                        let CO m2 = f x
                        (o2,y) <- m2
                        return (o1>>o2,y)
 instance MonadIO m => MonadIO (CollectOutput m) where
   liftIO io = CO $ do x <- liftIO io
-                      return (return (),x)
+                      return (done,x)
 
 instance Output m => Output (CollectOutput m) where
   ePutStr   s = CO (return (ePutStr s,()))
