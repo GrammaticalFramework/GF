@@ -32,7 +32,7 @@ import System.Exit
 import System.CPUTime
 --import System.Cmd
 import Text.Printf
-import Control.Applicative(Applicative(..))
+--import Control.Applicative(Applicative(..))
 import Control.Monad
 import Control.Monad.Trans(MonadIO(..))
 import Control.Exception(evaluate)
@@ -125,19 +125,27 @@ splitInModuleSearchPath s = case break isPathSep s of
 
 -- ** IO monad with error; adapted from state monad
 
-newtype IOE a = IOE { appIOE :: IO (Err a) }
+-- | Was: @newtype IOE a = IOE { appIOE :: IO (Err a) }@
+type IOE a = IO a
 
 ioe :: IO (Err a) -> IOE a
-ioe = IOE
+ioe io = err fail return =<< io
 
-runIOE m = err fail return =<< appIOE m
+appIOE :: IOE a -> IO (Err a)
+appIOE ioe = handle (fmap Ok ioe) (return . Bad)
 
-instance MonadIO IOE where liftIO io = ioe (io >>= return . return)
+runIOE :: IOE a -> IO a
+runIOE = id
 
-instance ErrorMonad IOE where
-  raise = ioe . return . Bad
-  handle m h = ioe $ err (appIOE . h) (return . Ok) =<< appIOE m
+-- instance MonadIO IOE where liftIO io = ioe (io >>= return . return)
 
+-- | Make raise and handle mimic behaviour of the old IOE monad
+instance ErrorMonad IO where
+  raise = fail
+  handle m h = catch m $ \ e -> if isUserError e
+                                then h (ioeGetErrorString e)
+                                else ioError e
+{-
 instance Functor IOE where fmap = liftM
 
 instance Applicative IOE where
@@ -150,12 +158,12 @@ instance  Monad IOE where
                   x <- c          -- Err a
                   appIOE $ err raise f x         -- f :: a -> IOE a
   fail = raise
-
+-}
 useIOE :: a -> IOE a -> IO a
-useIOE a ioe = appIOE ioe >>= err (\s -> putStrLn s >> return a) return 
+useIOE a ioe = handle ioe (\s -> putStrLn s >> return a)
 
 maybeIO io = either (const Nothing) Just `fmap` liftIO (try io)
-
+{-
 --foldIOE :: (a -> b -> IOE a) -> a -> [b] -> IOE (a, Maybe String)
 foldIOE f s xs = case xs of
   [] -> return (s,Nothing)
@@ -164,7 +172,7 @@ foldIOE f s xs = case xs of
     case ev of 
       Ok v  -> foldIOE f v xx
       Bad m -> return $ (s, Just m)
-
+-}
 die :: String -> IO a
 die s = do hPutStrLn stderr s
            exitFailure
@@ -181,13 +189,13 @@ instance Output IO where
     where oops _ = ePutStrLn "" -- prevent crash on character encoding problem
   putStrLnE s = putStrLn s >> hFlush stdout
   putStrE   s = putStr s >> hFlush stdout
-
+{-
 instance Output IOE where
   ePutStr   = liftIO . ePutStr
   ePutStrLn = liftIO . ePutStrLn
   putStrLnE = liftIO . putStrLnE
   putStrE   = liftIO . putStrE
-
+-}
 --putPointE :: Verbosity -> Options -> String -> IO a -> IO a
 putPointE v opts msg act = do
   when (verbAtLeast opts v) $ putStrE msg
