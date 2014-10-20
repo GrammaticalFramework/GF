@@ -1,7 +1,6 @@
 #include <gu/out.h>
 #include <gu/seq.h>
 #include <gu/fun.h>
-#include <gu/str.h>
 #include <gu/assert.h>
 #include <stdlib.h>
 #ifdef __MINGW32__

@@ -22,7 +22,6 @@ guinclude_HEADERS = \
 	gu/out.h \
 	gu/prime.h \
 	gu/seq.h \
-	gu/str.h \
 	gu/string.h \
 	gu/sysdeps.h \
 	gu/ucs.h \
@@ -54,7 +53,6 @@ libgu_la_SOURCES = \
 	gu/mem.c \
 	gu/out.c \
 	gu/prime.c \
-	gu/str.c \
 	gu/string.c \
 	gu/utf8.c \
 	gu/ucs.c \
