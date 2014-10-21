@@ -37,11 +37,11 @@ instance Binary Ident where
                 then return identW
                 else return (identC (rawIdentC bs))
 
-instance Binary SourceGrammar where
+instance Binary Grammar where
   put = put . modules
   get = fmap mGrammar get
 
-instance Binary SourceModInfo where
+instance Binary ModuleInfo where
   put mi = do put (mtype mi,mstatus mi,mflags mi,mextend mi,mwith mi,mopens mi,mexdeps mi,msrc mi,mseqs mi,jments mi)
   get    = do (mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc,mseqs,jments) <- get
               return (ModInfo mtype mstatus mflags mextend mwith mopens med msrc mseqs jments)

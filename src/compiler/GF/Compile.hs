@@ -5,7 +5,7 @@ import GF.Compile.ReadFiles(ModEnv,getOptionsFromFile,getAllFiles,
                             importsOfModule)
 import GF.CompileOne(compileOne)
 
-import GF.Grammar.Grammar(SourceGrammar,emptySourceGrammar,
+import GF.Grammar.Grammar(Grammar,emptyGrammar,
                           abstractOfConcrete,prependModule)--,msrc,modules
 
 import GF.Infra.Ident(Ident,identS)--,showIdent
@@ -32,7 +32,7 @@ compileToPGF opts fs = link opts =<< batchCompile opts fs
 
 -- | Link a grammar into a 'PGF' that can be used to 'PGF.linearize' and
 -- 'PGF.parse' with the "PGF" run-time system.
-link :: Options -> (Ident,t,SourceGrammar) -> IOE PGF
+link :: Options -> (Ident,t,Grammar) -> IOE PGF
 link opts (cnc,_,gr) =
   putPointE Normal opts "linking ... " $ do
     let abs = srcAbsName gr cnc
@@ -46,7 +46,7 @@ link opts (cnc,_,gr) =
 srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc
 
 -- | Compile the given grammar files and everything they depend on
-batchCompile :: Options -> [FilePath] -> IOE (Ident,UTCTime,SourceGrammar)
+batchCompile :: Options -> [FilePath] -> IOE (Ident,UTCTime,Grammar)
 batchCompile opts files = do
   (gr,menv) <- foldM (compileModule opts) emptyCompileEnv files
   let cnc = identS (justModuleName (last files))
@@ -54,7 +54,7 @@ batchCompile opts files = do
   return (cnc,t,gr)
 {-
 -- to compile a set of modules, e.g. an old GF or a .cf file
-compileSourceGrammar :: Options -> SourceGrammar -> IOE SourceGrammar
+compileSourceGrammar :: Options -> Grammar -> IOE Grammar
 compileSourceGrammar opts gr = do
   cwd <- getCurrentDirectory
   (_,gr',_) <- foldM (\env -> compileSourceModule opts cwd env Nothing)
@@ -104,10 +104,10 @@ compileOne' opts env@(gr,_) = extendCompileEnv env <=< compileOne opts gr
 -- auxiliaries
 
 -- | The environment
-type CompileEnv = (SourceGrammar,ModEnv)
+type CompileEnv = (Grammar,ModEnv)
 
 emptyCompileEnv :: CompileEnv
-emptyCompileEnv = (emptySourceGrammar,Map.empty)
+emptyCompileEnv = (emptyGrammar,Map.empty)
 
 extendCompileEnv (gr,menv) (mfile,mo) =
   do menv2 <- case mfile of

@@ -41,7 +41,7 @@ data TermPrintQual
   = Unqualified | Qualified | Internal
   deriving Eq                 
 
-instance Pretty SourceGrammar where
+instance Pretty Grammar where
   pp = vcat . map (ppModule Qualified) . modules
 
 ppModule :: TermPrintQual -> SourceModule -> Doc
