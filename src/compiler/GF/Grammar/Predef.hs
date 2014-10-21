@@ -10,16 +10,16 @@
 
 module GF.Grammar.Predef where
 
-import GF.Infra.Ident(Ident,identS)
+import GF.Infra.Ident(Ident,identS,moduleNameS)
 
 cType = identS "Type"
 cPType = identS "PType"
 cTok = identS "Tok"
 cStr = identS "Str"
 cStrs = identS "Strs"
-cPredefAbs = identS "PredefAbs"
-cPredefCnc = identS "PredefCnc"
-cPredef = identS "Predef"
+cPredefAbs = moduleNameS "PredefAbs"
+cPredefCnc = moduleNameS "PredefCnc"
+cPredef = moduleNameS "Predef"
 cInt = identS "Int"
 cFloat = identS "Float"
 cString = identS "String"

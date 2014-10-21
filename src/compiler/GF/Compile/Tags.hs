@@ -63,11 +63,11 @@ getImports opts gr mo@(m,mi) = concatMap toDep allOpens
 
     toDep (OSimple m,incl)     =
       let Ok mi = lookupModule gr m
-      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ showIdent m ++ "\t\t" ++ gf2gftags opts (orig mi info)
+      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ render m ++ "\t\t" ++ gf2gftags opts (orig mi info)
             | (id,info) <- Map.toList (jments mi), filter incl id]
     toDep (OQualif m1 m2,incl) =
       let Ok mi = lookupModule gr m2
-      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ showIdent m2 ++ "\t" ++ showIdent m1 ++ "\t" ++ gf2gftags opts (orig mi info) 
+      in [showIdent id ++ "\t" ++ "indir" ++ "\t" ++ render m2 ++ "\t" ++ render m1 ++ "\t" ++ gf2gftags opts (orig mi info)
             | (id,info) <- Map.toList (jments mi), filter incl id]
 
     filter MIAll          id = True

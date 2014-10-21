@@ -30,7 +30,7 @@ import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
 
-mkCanon2pgf :: Options -> SourceGrammar -> Ident -> IOE D.PGF
+mkCanon2pgf :: Options -> SourceGrammar -> ModuleName -> IOE D.PGF
 mkCanon2pgf opts gr am = do
   (an,abs) <- mkAbstr am
   cncs     <- mapM mkConcr (allConcretes gr am)
@@ -38,7 +38,7 @@ mkCanon2pgf opts gr am = do
   where
     cenv = resourceValues gr
 
-    mkAbstr am = return (i2i am, D.Abstr flags funs cats)
+    mkAbstr am = return (mi2i am, D.Abstr flags funs cats)
       where
         aflags = err (const noOptions) mflags (lookupModule gr am)
 
@@ -78,7 +78,7 @@ mkCanon2pgf opts gr am = do
                                 = genCncFuns gr am cm ex_seqs_arr seqs cdefs fid_cnt1 cnccats
         
           printnames = genPrintNames cdefs
-      return (i2i cm, D.Concr flags 
+      return (mi2i cm, D.Concr flags
                               printnames
                               cncfuns
                               lindefs
@@ -101,6 +101,9 @@ mkCanon2pgf opts gr am = do
 
 i2i :: Ident -> CId
 i2i = utf8CId . ident2utf8
+
+mi2i :: ModuleName -> CId
+mi2i (MN i) = i2i i
 
 mkType :: [Ident] -> A.Type -> C.Type
 mkType scope t =
@@ -179,9 +182,9 @@ genCncCats gr am cm cdefs =
             in (index', (i2i id,cc) : cats)
     mkCncCats index (_                      :cdefs) = mkCncCats index cdefs
 
-genCncFuns :: SourceGrammar
-           -> Ident
-           -> Ident
+genCncFuns :: Grammar
+           -> ModuleName
+           -> ModuleName
            -> Array SeqId Sequence
            -> Array SeqId Sequence
            -> [(QIdent, Info)]

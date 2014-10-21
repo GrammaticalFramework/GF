@@ -140,16 +140,16 @@ ComplMod
   : {- empty -}  { MSComplete   } 
   | 'incomplete' { MSIncomplete }
 
-ModType :: { (ModuleType,Ident) }
+ModType :: { (ModuleType,ModuleName) }
 ModType
-  : 'abstract'  Ident                     { (MTAbstract,      $2) } 
-  | 'resource'  Ident                     { (MTResource,      $2) }
-  | 'interface' Ident                     { (MTInterface,     $2) }
-  | 'concrete'  Ident 'of' Ident          { (MTConcrete $4,   $2) }
-  | 'instance'  Ident 'of' Included       { (MTInstance $4,   $2) }
+  : 'abstract'  ModuleName                     { (MTAbstract,      $2) }
+  | 'resource'  ModuleName                     { (MTResource,      $2) }
+  | 'interface' ModuleName                     { (MTInterface,     $2) }
+  | 'concrete'  ModuleName 'of' ModuleName     { (MTConcrete $4,   $2) }
+  | 'instance'  ModuleName 'of' Included       { (MTInstance $4,   $2) }
 
-ModHeaderBody :: { ( [(Ident,MInclude)]
-                   , Maybe (Ident,MInclude,[(Ident,Ident)])
+ModHeaderBody :: { ( [(ModuleName,MInclude)]
+                   , Maybe (ModuleName,MInclude,[(ModuleName,ModuleName)])
                    , [OpenSpec]
                    ) }
 ModHeaderBody
@@ -166,8 +166,8 @@ ModOpen
   :                 { [] }
   | 'open' ListOpen { $2 }
 
-ModBody :: { ( [(Ident,MInclude)]
-             , Maybe (Ident,MInclude,[(Ident,Ident)])
+ModBody :: { ( [(ModuleName,MInclude)]
+             , Maybe (ModuleName,MInclude,[(ModuleName,ModuleName)])
              , Maybe ([OpenSpec],[(Ident,Info)],Options)
              ) }
 ModBody
@@ -197,28 +197,28 @@ ListOpen
 
 Open :: { OpenSpec }
 Open
-  : Ident                   { OSimple $1    }
-  | '(' Ident '=' Ident ')' { OQualif $2 $4 }
+  : ModuleName                   { OSimple $1    }
+  | '(' ModuleName '=' ModuleName ')' { OQualif $2 $4 }
 
-ListInst :: { [(Ident,Ident)] }
+ListInst :: { [(ModuleName,ModuleName)] }
 ListInst
   : Inst              { [$1]    }
   | Inst ',' ListInst { $1 : $3 }
 
-Inst :: { (Ident,Ident) }
+Inst :: { (ModuleName,ModuleName) }
 Inst
-  : '(' Ident '=' Ident ')' { ($2,$4) }
+  : '(' ModuleName '=' ModuleName ')' { ($2,$4) }
 
-ListIncluded :: { [(Ident,MInclude)] }
+ListIncluded :: { [(ModuleName,MInclude)] }
 ListIncluded
   : Included                  { [$1]    }
   | Included ',' ListIncluded { $1 : $3 }
 
-Included :: { (Ident,MInclude) }
+Included :: { (ModuleName,MInclude) }
 Included 
-  : Ident                       { ($1,MIAll      ) } 
-  | Ident     '[' ListIdent ']' { ($1,MIOnly   $3) }
-  | Ident '-' '[' ListIdent ']' { ($1,MIExcept $4) }
+  : ModuleName                       { ($1,MIAll      ) }
+  | ModuleName     '[' ListIdent ']' { ($1,MIOnly   $3) }
+  | ModuleName '-' '[' ListIdent ']' { ($1,MIExcept $4) }
 
 TopDef :: { Either [(Ident,Info)] Options }
 TopDef
@@ -485,7 +485,7 @@ Patt
 Patt1 :: { Patt }
 Patt1
   : Ident ListPatt            { PC $1 $2 } 
-  | Ident '.' Ident ListPatt  { PP ($1,$3) $4 }
+  | ModuleName '.' Ident ListPatt  { PP ($1,$3) $4 }
   | Patt3 '*'                 { PRep $1 }
   | Patt2                     { $1 }
 
@@ -501,10 +501,10 @@ Patt3
   : '?'                       { PChar } 
   | '[' String ']'            { PChars $2 }
   | '#' Ident                 { PMacro $2 }
-  | '#' Ident '.' Ident       { PM ($2,$4) }
+  | '#' ModuleName '.' Ident  { PM ($2,$4) }
   | '_'                       { PW }
   | Ident                     { PV $1 }
-  | Ident '.' Ident           { PP ($1,$3) [] }
+  | ModuleName '.' Ident      { PP ($1,$3) [] }
   | Integer                   { PInt $1 }
   | Double                    { PFloat  $1 }
   | String                    { PString $1 }
@@ -675,6 +675,9 @@ ERHS3 :: { ERHS }
   | Ident                 { ENonTerm (showIdent $1,[]) }
   | '(' ERHS0 ')'         { $2         }
 
+ModuleName :: { ModuleName }
+  : Ident           { MN $1 }
+
 Posn :: { Posn }
 Posn
   : {- empty -}     {% getPosn } 
@@ -730,7 +733,7 @@ mkOverload pdt pdf@(Just (L loc df)) =
   case appForm df of
     (keyw, ts@(_:_)) | isOverloading keyw -> 
        case last ts of
-         R fs -> [ResOverload [m | Vr m <- ts] [(L loc ty,L loc fu) | (_,(Just ty,fu)) <- fs]]
+         R fs -> [ResOverload [MN m | Vr m <- ts] [(L loc ty,L loc fu) | (_,(Just ty,fu)) <- fs]]
          _    -> [ResOper pdt pdf]
     _         -> [ResOper pdt pdf]
 

@@ -68,7 +68,7 @@ type TermList = Map Term (Int,Int) -- number of occs, id
 type TermM a = State (TermList,Int) a
 
 addSubexpConsts :: 
-  Ident -> Map Term (Int,Int) -> [(Ident,Info)] -> [(Ident,Info)]
+  ModuleName -> Map Term (Int,Int) -> [(Ident,Info)] -> [(Ident,Info)]
 addSubexpConsts mo tree lins = do
   let opers = [oper id trm | (trm,(_,id)) <- list]
   map mkOne $ opers ++ lins
@@ -90,7 +90,7 @@ addSubexpConsts mo tree lins = do
    oper id trm = (operIdent id, ResOper (Just (L NoLoc (EInt 8))) (Just (L NoLoc trm))) 
    --- impossible type encoding generated opers
 
-getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
+getSubtermsMod :: ModuleName -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
 getSubtermsMod mo js = do
   mapM (getInfo (collectSubterms mo)) js
   (tree0,_) <- get
@@ -105,7 +105,7 @@ getSubtermsMod mo js = do
        return $ fi
      _ -> return fi
 
-collectSubterms :: Ident -> Term -> TermM Term
+collectSubterms :: ModuleName -> Term -> TermM Term
 collectSubterms mo t = case t of
   App f a -> do
     collect f

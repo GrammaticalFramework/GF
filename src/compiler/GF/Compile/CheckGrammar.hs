@@ -82,7 +82,7 @@ checkRestrictedInheritance cwd sgr (name,mo) = checkInModule cwd mo NoLoc empty 
                          nest 2 (vcat [f <+> "on" <+> fsep is | (f,is) <- cs]))
    allDeps = concatMap (allDependencies (const True) . jments . snd) mos
 
-checkCompleteGrammar :: Options -> FilePath -> SourceGrammar -> SourceModule -> SourceModule -> Check SourceModule
+checkCompleteGrammar :: Options -> FilePath -> Grammar -> Module -> Module -> Check Module
 checkCompleteGrammar opts cwd gr (am,abs) (cm,cnc) = checkInModule cwd cnc NoLoc empty $ do
   let jsa = jments abs
   let jsc = jments cnc
@@ -300,7 +300,7 @@ checkReservedId x =
 -- auxiliaries
 
 -- | linearization types and defaults
-linTypeOfType :: SourceGrammar -> Ident -> Type -> Check (Context,Type)
+linTypeOfType :: Grammar -> ModuleName -> Type -> Check (Context,Type)
 linTypeOfType cnc m typ = do
   let (cont,cat) = typeSkeleton typ
   val  <- lookLin cat

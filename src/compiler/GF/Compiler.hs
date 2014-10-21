@@ -10,11 +10,12 @@ import GF.Compile.CFGtoPGF
 import GF.Compile.GetGrammar
 import GF.Grammar.CFG
 
-import GF.Infra.Ident(showIdent)
+--import GF.Infra.Ident(showIdent)
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
 import GF.System.Directory
+import GF.Text.Pretty(render)
 
 import Data.Maybe
 import qualified Data.Map as Map
@@ -53,7 +54,7 @@ compileSourceFiles opts fs =
 
 -- | Create a @.pgf@ file from the output of 'parallelBatchCompile'.
 linkGrammars opts (t_src,~cnc_grs@(~(cnc,gr):_)) =
-    do let abs = showIdent (srcAbsName gr cnc)
+    do let abs = render (srcAbsName gr cnc)
            pgfFile = outputPath opts (grammarName' opts abs<.>"pgf")
        t_pgf <- if outputJustPGF opts
                 then maybeIO $ getModificationTime pgfFile

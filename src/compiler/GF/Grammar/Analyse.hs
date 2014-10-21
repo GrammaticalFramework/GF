@@ -10,6 +10,7 @@ module GF.Grammar.Analyse (
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
+import GF.Text.Pretty(render)
 --import GF.Infra.Option ---
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
@@ -20,7 +21,7 @@ import qualified Data.Map as Map
 import Data.List (nub)
 --import Debug.Trace
 
-stripSourceGrammar :: SourceGrammar -> SourceGrammar
+stripSourceGrammar :: Grammar -> Grammar
 stripSourceGrammar sgr = mGrammar [(i, m{jments = Map.map stripInfo (jments m)}) | (i,m) <- modules sgr]
 
 stripInfo :: Info -> Info
@@ -42,7 +43,7 @@ constantsInTerm = nub . consts where
     QC c -> [c]
     _ -> collectOp consts t
 
-constantDeps :: SourceGrammar -> QIdent -> Err [QIdent]
+constantDeps :: Grammar -> QIdent -> Err [QIdent]
 constantDeps sgr f = return $ nub $ iterFix more start where
   start = constants f
   more  = concatMap constants
@@ -54,23 +55,23 @@ getIdTerm :: Term -> Err QIdent
 getIdTerm t = case t of
   Q i  -> return i
   QC i -> return i
-  P (Vr r) l -> return (r,label2ident l) --- needed if term is received from parser
+  P (Vr r) l -> return (MN r,label2ident l) --- needed if term is received from parser
   _ -> Bad ("expected qualified constant, not " ++ show t)
 
-constantDepsTerm :: SourceGrammar -> Term -> Err [Term]
+constantDepsTerm :: Grammar -> Term -> Err [Term]
 constantDepsTerm sgr t = do
   i <- getIdTerm t
   cs <- constantDeps sgr i
   return $ map Q cs  --- losing distinction Q/QC
 
-termsOfConstant :: SourceGrammar -> QIdent -> Err [Term]
+termsOfConstant :: Grammar -> QIdent -> Err [Term]
 termsOfConstant sgr c = case lookupOverload sgr c of
   Ok tts -> return $ concat [[ty,tr] | (_,(ty,tr)) <- tts]
   _ -> return $
          [ty | Ok ty <- [lookupResType sgr c]] ++  -- type sig may be missing
          [ty | Ok ty <- [lookupResDef sgr c]]
 
-sizeConstant :: SourceGrammar -> Term -> Int
+sizeConstant :: Grammar -> Term -> Int
 sizeConstant sgr t = err (const 0) id $ do
   c  <- getIdTerm t
   fmap (sum . map sizeTerm) $ termsOfConstant sgr c
@@ -131,20 +132,20 @@ sizesModule (_,m) =
   in (length tb + sum (map snd tb),tb)
 
 -- the size of a grammar
-sizeGrammar :: SourceGrammar -> Int
+sizeGrammar :: Grammar -> Int
 sizeGrammar = fst . sizesGrammar
 
-sizesGrammar :: SourceGrammar -> (Int,[(Ident,(Int,[(Ident,Int)]))])
+sizesGrammar :: Grammar -> (Int,[(ModuleName,(Int,[(Ident,Int)]))])
 sizesGrammar g = 
   let 
     ms = modules g 
     mz = [(i,sizesModule m) | m@(i,j) <- ms]
   in (length mz + sum (map (fst . snd) mz), mz)
 
-printSizesGrammar :: SourceGrammar -> String
+printSizesGrammar :: Grammar -> String
 printSizesGrammar g = unlines $ 
   ("total" +++ show s):
-  [showIdent m +++ "total" +++ show i ++++ 
+  [render m +++ "total" +++ show i ++++ 
    unlines [indent 2 (showIdent j +++ show k) | (j,k) <- js]
      | (m,(i,js)) <- sg
   ]

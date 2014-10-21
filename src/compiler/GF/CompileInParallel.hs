@@ -15,7 +15,7 @@ import GF.Infra.Option
 import GF.Infra.UseIO
 import GF.Data.Operations
 import GF.Grammar.Grammar(emptyGrammar,prependModule)
-import GF.Infra.Ident(identS)
+import GF.Infra.Ident(moduleNameS)
 import GF.Text.Pretty
 import qualified Data.ByteString.Lazy as BS
 
@@ -137,7 +137,7 @@ batchCompile1 lib_dir (opts,filepaths) =
      cache <- liftIO $ newIOCache compile'
      ts <- liftIO $ parMapM (compile cache) filepaths
      gr <- readMVar sgr
-     let cnc = identS (justModuleName (fst (last filepaths)))
+     let cnc = moduleNameS (justModuleName (fst (last filepaths)))
      ds <- M.toList <$> readMVar deps
 {-
      liftIO $ writeFile (maybe "" id gfoDir</>"dependencies")

@@ -13,6 +13,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.Ident (-- ** Identifiers
+              ModuleName(..), moduleNameS,
 	      Ident, ident2utf8, showIdent, prefixIdent,
 	      identS, identC, identV, identA, identAV, identW,
 	      argIdent, isArgIdent, getArgIndex,
@@ -32,6 +33,15 @@ import qualified Data.ByteString.Char8 as BS(append,isPrefixOf)
 import Data.Char(isDigit)
 import PGF.Internal(Binary(..))
 import GF.Text.Pretty
+
+
+-- | Module names
+newtype ModuleName = MN Ident deriving (Eq,Ord)
+
+moduleNameS = MN . identS
+
+instance Show ModuleName where showsPrec d (MN m) = showsPrec d m
+instance Pretty ModuleName where pp (MN m) = pp m
 
 
 -- | the constructors labelled /INTERNAL/ are

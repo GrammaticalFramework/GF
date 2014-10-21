@@ -230,7 +230,7 @@ identVar _ = Bad "not a variable"
 
 
 -- | light-weight rename for user interaction; also change names of internal vars
-qualifTerm :: Ident -> Term -> Term
+qualifTerm :: ModuleName -> Term -> Term
 qualifTerm m  = qualif [] where
   qualif xs t = case t of
     Abs b x t -> let x' = chV x in Abs b x' $ qualif (x':xs) t
