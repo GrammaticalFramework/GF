@@ -7,7 +7,7 @@ module GF.Compile.Compute.ConcreteNew
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
-import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr,isPredefCat)
+import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
 import GF.Grammar.PatternMatch(matchPattern,measurePatt)
 import GF.Grammar.Lockfield(lockLabel,isLockLabel,lockRecType) --unlockRecord
 import GF.Compile.Compute.Value hiding (Error)
@@ -38,10 +38,10 @@ apply env = apply' env
 
 -- * Environments
 
-type ResourceValues = Map.Map Ident (Map.Map Ident (Err Value))
+type ResourceValues = Map.Map ModuleName (Map.Map Ident (Err Value))
 
-data GlobalEnv = GE SourceGrammar ResourceValues (L Ident)
-data CompleteEnv = CE {srcgr::SourceGrammar,rvs::ResourceValues,
+data GlobalEnv = GE Grammar ResourceValues (L Ident)
+data CompleteEnv = CE {srcgr::Grammar,rvs::ResourceValues,
                        gloc::L Ident,local::LocalScope}
 type LocalScope = [Ident]
 type Stack = [Value]
@@ -73,7 +73,7 @@ resource env (m,c) =
     if isPredefCat c
     then value0 env =<< lockRecType c defLinType -- hmm
     else maybe e id $ Map.lookup c =<< Map.lookup m (rvs env)
-  where e = fail $ "Not found: "++showIdent m++"."++showIdent c
+  where e = fail $ "Not found: "++render m++"."++showIdent c
 
 -- | Convert operators once, not every time they are looked up
 resourceValues :: SourceGrammar -> GlobalEnv

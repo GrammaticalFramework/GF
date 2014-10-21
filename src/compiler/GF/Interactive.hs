@@ -238,7 +238,7 @@ execute1 opts gfenv0 s0 =
       let (os,ts) = partition (isPrefixOf "-") ws
       let strip = if elem "-strip" os then stripSourceGrammar else id
       let mygr = strip $ case ts of
-            _:_ -> mGrammar [(i,m) | (i,m) <- modules sgr, elem (showIdent i) ts] 
+            _:_ -> mGrammar [(i,m) | (i,m) <- modules sgr, elem (render i) ts]
             [] -> sgr
       case 0 of
         _ | elem "-detailedsize" os -> putStrLn (printSizesGrammar mygr)
@@ -246,9 +246,9 @@ execute1 opts gfenv0 s0 =
                let sz = sizesGrammar mygr
                putStrLn $ unlines $
                  ("total\t" ++ show (fst sz)): 
-                 [showIdent j ++ "\t" ++ show (fst k) | (j,k) <- snd sz]
+                 [render j ++ "\t" ++ show (fst k) | (j,k) <- snd sz]
         _ | elem "-save" os -> mapM_ 
-                 (\ m@(i,_) -> let file = (showIdent i ++ ".gfh") in 
+                 (\ m@(i,_) -> let file = (render i ++ ".gfh") in
                     restricted $ writeFile file (render (ppModule Qualified m)) >> P.putStrLn ("wrote " ++ file))
                  (modules mygr)  
         _ -> putStrLn $ render mygr

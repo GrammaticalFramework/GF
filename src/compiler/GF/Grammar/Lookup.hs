@@ -59,10 +59,10 @@ lookupIdent c t =
 lookupIdentInfo :: ErrorMonad m => SourceModInfo -> Ident -> m Info
 lookupIdentInfo mo i = lookupIdent i (jments mo)
 
-lookupQIdentInfo :: ErrorMonad m => SourceGrammar -> QIdent -> m Info
+lookupQIdentInfo :: ErrorMonad m => Grammar -> QIdent -> m Info
 lookupQIdentInfo gr (m,c) = flip lookupIdentInfo c =<< lookupModule gr m
 
-lookupResDef :: ErrorMonad m => SourceGrammar -> QIdent -> m Term
+lookupResDef :: ErrorMonad m => Grammar -> QIdent -> m Term
 lookupResDef gr x = fmap unLoc (lookupResDefLoc gr x)
 
 lookupResDefLoc gr (m,c)
@@ -85,7 +85,7 @@ lookupResDefLoc gr (m,c)
         ResValue _        -> return (noLoc (QC (m,c)))
         _   -> raise $ render (c <+> "is not defined in resource" <+> m)
 
-lookupResType :: ErrorMonad m => SourceGrammar -> QIdent -> m Type
+lookupResType :: ErrorMonad m => Grammar -> QIdent -> m Type
 lookupResType gr (m,c) = do
   info <- lookupQIdentInfo gr (m,c)
   case info of
@@ -101,7 +101,7 @@ lookupResType gr (m,c) = do
     ResValue (L _ t)  -> return t
     _   -> raise $ render (c <+> "has no type defined in resource" <+> m)
 
-lookupOverload :: ErrorMonad m => SourceGrammar -> QIdent -> m [([Type],(Type,Term))]
+lookupOverload :: ErrorMonad m => Grammar -> QIdent -> m [([Type],(Type,Term))]
 lookupOverload gr (m,c) = do
     info <- lookupQIdentInfo gr (m,c)
     case info of
@@ -115,26 +115,26 @@ lookupOverload gr (m,c) = do
       _   -> raise $ render (c <+> "is not an overloaded operation")
 
 -- | returns the original 'Info' and the module where it was found
-lookupOrigInfo :: ErrorMonad m => SourceGrammar -> QIdent -> m (Ident,Info)
+lookupOrigInfo :: ErrorMonad m => Grammar -> QIdent -> m (ModuleName,Info)
 lookupOrigInfo gr (m,c) = do
   info <- lookupQIdentInfo gr (m,c)
   case info of
     AnyInd _ n  -> lookupOrigInfo gr (n,c)
     i           -> return (m,i)
 
-allOrigInfos :: SourceGrammar -> Ident -> [(QIdent,Info)]
+allOrigInfos :: Grammar -> ModuleName -> [(QIdent,Info)]
 allOrigInfos gr m = fromErr [] $ do
   mo <- lookupModule gr m
   return [((m,c),i) | (c,_) <- tree2list (jments mo), Ok (m,i) <- [lookupOrigInfo gr (m,c)]]
 
-lookupParamValues :: ErrorMonad m => SourceGrammar -> QIdent -> m [Term]
+lookupParamValues :: ErrorMonad m => Grammar -> QIdent -> m [Term]
 lookupParamValues gr c = do
   (_,info) <- lookupOrigInfo gr c
   case info of
     ResParam _ (Just pvs) -> return pvs
     _                     -> raise $ render (ppQIdent Qualified c <+> "has no parameter values defined")
 
-allParamValues :: ErrorMonad m => SourceGrammar -> Type -> m [Term]
+allParamValues :: ErrorMonad m => Grammar -> Type -> m [Term]
 allParamValues cnc ptyp =
   case ptyp of
     _ | Just n <- isTypeInts ptyp -> return [EInt i | i <- [0..n]]
@@ -153,7 +153,7 @@ allParamValues cnc ptyp =
     -- to normalize records and record types
     sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
 
-lookupAbsDef :: ErrorMonad m => SourceGrammar -> Ident -> Ident -> m (Maybe Int,Maybe [Equation])
+lookupAbsDef :: ErrorMonad m => Grammar -> ModuleName -> Ident -> m (Maybe Int,Maybe [Equation])
 lookupAbsDef gr m c = errIn (render ("looking up absdef of" <+> c)) $ do
   info <- lookupQIdentInfo gr (m,c)
   case info of
@@ -161,7 +161,7 @@ lookupAbsDef gr m c = errIn (render ("looking up absdef of" <+> c)) $ do
     AnyInd _ n     -> lookupAbsDef gr n c
     _              -> return (Nothing,Nothing)
 
-lookupLincat :: ErrorMonad m => SourceGrammar -> Ident -> Ident -> m Type
+lookupLincat :: ErrorMonad m => Grammar -> ModuleName -> Ident -> m Type
 lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
 lookupLincat gr m c = do
   info <- lookupQIdentInfo gr (m,c)
@@ -171,7 +171,7 @@ lookupLincat gr m c = do
     _                             -> raise (render (c <+> "has no linearization type in" <+> m))
 
 -- | this is needed at compile time
-lookupFunType :: ErrorMonad m => SourceGrammar -> Ident -> Ident -> m Type
+lookupFunType :: ErrorMonad m => Grammar -> ModuleName -> Ident -> m Type
 lookupFunType gr m c = do
   info <- lookupQIdentInfo gr (m,c)
   case info of
@@ -180,7 +180,7 @@ lookupFunType gr m c = do
     _                           -> raise (render ("cannot find type of" <+> c))
 
 -- | this is needed at compile time
-lookupCatContext :: ErrorMonad m => SourceGrammar -> Ident -> Ident -> m Context
+lookupCatContext :: ErrorMonad m => Grammar -> ModuleName -> Ident -> m Context
 lookupCatContext gr m c = do
   info <- lookupQIdentInfo gr (m,c)
   case info of
@@ -192,7 +192,7 @@ lookupCatContext gr m c = do
 -- this gives all opers and param constructors, also overloaded opers and funs, and the types, and locations
 -- notice that it only gives the modules that are reachable and the opers that are included
 
-allOpers :: SourceGrammar -> [((Ident,Ident),Type,Location)]
+allOpers :: Grammar -> [(QIdent,Type,Location)]
 allOpers gr = 
   [((m,op),typ,loc) |
       (m,mi)  <- maybe [] (allExtends gr) (greatestResource gr),
@@ -214,7 +214,7 @@ allOpers gr =
                     _ -> typ
 
 --- not for dependent types
-allOpersTo :: SourceGrammar -> Type -> [((Ident,Ident),Type,Location)]
+allOpersTo :: Grammar -> Type -> [(QIdent,Type,Location)]
 allOpersTo gr ty = [op | op@(_,typ,_) <- allOpers gr, isProdTo ty typ] where
   isProdTo t typ = eqProd typ t || case typ of
     Prod _ _ a b -> isProdTo t b

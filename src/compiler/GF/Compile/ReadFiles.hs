@@ -211,7 +211,7 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
 
     depInst (m,n) xs = modName m:modName n:xs
 
-    modName = showIdent
+    modName (MN m) = showIdent m
 
 
 parseModHeader opts file =

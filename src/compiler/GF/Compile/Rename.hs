@@ -43,13 +43,13 @@ import Data.List (nub,(\\))
 import GF.Text.Pretty
 
 -- | this gives top-level access to renaming term input in the cc command
-renameSourceTerm :: SourceGrammar -> Ident -> Term -> Check Term
+renameSourceTerm :: Grammar -> ModuleName -> Term -> Check Term
 renameSourceTerm g m t = do
   mi     <- lookupModule g m
   status <- buildStatus "" g (m,mi)
   renameTerm status [] t
 
-renameModule :: FilePath -> SourceGrammar -> SourceModule -> Check SourceModule
+renameModule :: FilePath -> Grammar -> Module -> Check Module
 renameModule cwd gr mo@(m,mi) = do
   status <- buildStatus cwd gr mo
   js     <- checkMapRecover (renameInfo cwd status mo) (jments mi)
@@ -115,7 +115,7 @@ renameIdentTerm' env@(act,imps) t0 =
             -- in next V: 
             -- Bad $ "conflicting imports:" +++ unwords (map prt ts) 
 
-info2status :: Maybe Ident -> (Ident,Info) -> StatusInfo
+info2status :: Maybe ModuleName -> (Ident,Info) -> StatusInfo
 info2status mq (c,i) = case i of
   AbsFun _ _ Nothing _ -> maybe Con (curry QC) mq
   ResValue _  -> maybe Con (curry QC) mq
@@ -129,7 +129,7 @@ tree2status o = case o of
   OSimple i   -> mapTree (info2status (Just i))
   OQualif i j -> mapTree (info2status (Just j))
 
-buildStatus :: FilePath -> SourceGrammar -> SourceModule -> Check Status
+buildStatus :: FilePath -> Grammar -> Module -> Check Status
 buildStatus cwd gr mo@(m,mi) = checkInModule cwd mi NoLoc empty $ do
   let gr1  = prependModule gr mo
       exts = [(OSimple m,mi) | (m,mi) <- allExtends gr1 m]
@@ -139,14 +139,14 @@ buildStatus cwd gr mo@(m,mi) = checkInModule cwd mi NoLoc empty $ do
             then (emptyBinTree,    reverse sts)  -- the module itself does not define any names
             else (self2status m mi,reverse sts)) -- so the empty ident is not needed
 
-modInfo2status :: (OpenSpec,SourceModInfo) -> (OpenSpec, StatusTree)
+modInfo2status :: (OpenSpec,ModuleInfo) -> (OpenSpec, StatusTree)
 modInfo2status (o,mo) = (o,tree2status o (jments mo))
 
-self2status :: Ident -> SourceModInfo -> StatusTree
+self2status :: ModuleName -> ModuleInfo -> StatusTree
 self2status c m = mapTree (info2status (Just c)) (jments m)
 
   
-renameInfo :: FilePath -> Status -> SourceModule -> Ident -> Info -> Check Info
+renameInfo :: FilePath -> Status -> Module -> Ident -> Info -> Check Info
 renameInfo cwd status (m,mi) i info =
   case info of
     AbsCat pco -> liftM AbsCat (renPerh (renameContext status) pco)
@@ -220,7 +220,7 @@ renameTerm env vars = ren vars where
     P t@(Vr r) l                                               -- Here we have $r.l$ and this is ambiguous it could be either 
                                                                -- record projection from variable or constant $r$ or qualified expression with module $r$
       | elem r vs -> return trm                                -- try var proj first ..
-      | otherwise -> checks [ renid' (Q (r,label2ident l))      -- .. and qualified expression second.
+      | otherwise -> checks [ renid' (Q (MN r,label2ident l))      -- .. and qualified expression second.
                             , renid' t >>= \t -> return (P t l) -- try as a constant at the end
                             , checkError ("unknown qualified constant" <+> trm)
                             ]

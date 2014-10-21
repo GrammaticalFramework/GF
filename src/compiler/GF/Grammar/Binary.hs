@@ -37,6 +37,10 @@ instance Binary Ident where
                 then return identW
                 else return (identC (rawIdentC bs))
 
+instance Binary ModuleName where
+  put (MN id) = put id
+  get = fmap MN get
+
 instance Binary Grammar where
   put = put . modules
   get = fmap mGrammar get

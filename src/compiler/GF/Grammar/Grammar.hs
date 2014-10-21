@@ -80,13 +80,13 @@ import qualified Data.Map as Map
 import GF.Text.Pretty
 
 
--- ^ A grammar is a self-contained collection of grammar modules
+-- | A grammar is a self-contained collection of grammar modules
 data Grammar = MGrammar { 
     moduleMap :: Map.Map ModuleName ModuleInfo,
     modules :: [Module]
   }
 
-type ModuleName = Ident
+-- | Modules
 type Module = (ModuleName, ModuleInfo)
 
 data ModuleInfo = ModInfo {
@@ -96,7 +96,7 @@ data ModuleInfo = ModInfo {
     mextend :: [(ModuleName,MInclude)],
     mwith   :: Maybe (ModuleName,MInclude,[(ModuleName,ModuleName)]),
     mopens  :: [OpenSpec],
-    mexdeps :: [Ident],
+    mexdeps :: [ModuleName],
     msrc    :: FilePath,
     mseqs   :: Maybe (Array SeqId Sequence),
     jments  :: Map.Map Ident Info
@@ -112,9 +112,9 @@ instance HasSourcePath ModuleInfo where sourcePath = msrc
 data ModuleType = 
     MTAbstract 
   | MTResource
-  | MTConcrete Ident
+  | MTConcrete ModuleName
   | MTInterface
-  | MTInstance (Ident,MInclude)
+  | MTInstance (ModuleName,MInclude)
   deriving (Eq,Show)
 
 data MInclude = MIAll | MIOnly [Ident] | MIExcept [Ident]
@@ -142,7 +142,7 @@ data ModuleStatus =
  | MSIncomplete 
   deriving (Eq,Ord,Show)
 
-openedModule :: OpenSpec -> Ident
+openedModule :: OpenSpec -> ModuleName
 openedModule o = case o of
   OSimple m -> m
   OQualif _ m -> m
@@ -167,14 +167,14 @@ allDepsModule gr m = iterFix add os0 where
   mods = modules gr
 
 -- | select just those modules that a given one depends on, including itself
-partOfGrammar :: Grammar -> (Ident,ModuleInfo) -> Grammar
+partOfGrammar :: Grammar -> Module -> Grammar
 partOfGrammar gr (i,m) = mGrammar [mo | mo@(j,_) <- mods, elem j modsFor]
   where
     mods = modules gr
     modsFor = (i:) $ map openedModule $ allDepsModule gr m
 
 -- | all modules that a module extends, directly or indirectly, with restricts
-allExtends :: Grammar -> Ident -> [Module]
+allExtends :: Grammar -> ModuleName -> [Module]
 allExtends gr m =
   case lookupModule gr m of
     Ok mi -> (m,mi) : concatMap (allExtends gr . fst) (mextend mi)
@@ -331,14 +331,14 @@ data Info =
  | ResValue (L Type)                             -- ^ (/RES/) to mark parameter constructors for lookup
  | ResOper  (Maybe (L Type)) (Maybe (L Term))    -- ^ (/RES/)
 
- | ResOverload [Ident] [(L Type,L Term)]         -- ^ (/RES/) idents: modules inherited
+ | ResOverload [ModuleName] [(L Type,L Term)]         -- ^ (/RES/) idents: modules inherited
 
 -- judgements in concrete syntax
  | CncCat  (Maybe (L Type))             (Maybe (L Term)) (Maybe (L Term)) (Maybe (L Term)) (Maybe PMCFG) -- ^ (/CNC/) lindef ini'zed, 
  | CncFun  (Maybe (Ident,Context,Type)) (Maybe (L Term))                  (Maybe (L Term)) (Maybe PMCFG) -- ^ (/CNC/) type info added at 'TC'
 
 -- indirection to module Ident
- | AnyInd Bool Ident                         -- ^ (/INDIR/) the 'Bool' says if canonical
+ | AnyInd Bool ModuleName                        -- ^ (/INDIR/) the 'Bool' says if canonical
   deriving Show
 
 type Type = Term

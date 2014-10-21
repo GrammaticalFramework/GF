@@ -8,7 +8,7 @@ import GF.CompileOne(compileOne)
 import GF.Grammar.Grammar(Grammar,emptyGrammar,
                           abstractOfConcrete,prependModule)--,msrc,modules
 
-import GF.Infra.Ident(Ident,identS)--,showIdent
+import GF.Infra.Ident(ModuleName,moduleNameS)--,showIdent
 import GF.Infra.Option
 import GF.Infra.UseIO(IOE,FullPath,liftIO,getLibraryDirectory,putIfVerb,
                       justModuleName,extendPathEnv,putStrE,putPointE)
@@ -32,7 +32,7 @@ compileToPGF opts fs = link opts =<< batchCompile opts fs
 
 -- | Link a grammar into a 'PGF' that can be used to 'PGF.linearize' and
 -- 'PGF.parse' with the "PGF" run-time system.
-link :: Options -> (Ident,t,Grammar) -> IOE PGF
+link :: Options -> (ModuleName,t,Grammar) -> IOE PGF
 link opts (cnc,_,gr) =
   putPointE Normal opts "linking ... " $ do
     let abs = srcAbsName gr cnc
@@ -46,10 +46,10 @@ link opts (cnc,_,gr) =
 srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc
 
 -- | Compile the given grammar files and everything they depend on
-batchCompile :: Options -> [FilePath] -> IOE (Ident,UTCTime,Grammar)
+batchCompile :: Options -> [FilePath] -> IOE (ModuleName,UTCTime,Grammar)
 batchCompile opts files = do
   (gr,menv) <- foldM (compileModule opts) emptyCompileEnv files
-  let cnc = identS (justModuleName (last files))
+  let cnc = moduleNameS (justModuleName (last files))
       t = maximum . map fst $ Map.elems menv
   return (cnc,t,gr)
 {-

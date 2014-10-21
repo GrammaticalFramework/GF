@@ -29,7 +29,7 @@ import Control.Monad
 import GF.Text.Pretty
 
 -- | combine a list of definitions into a balanced binary search tree
-buildAnyTree :: Monad m => Ident -> [(Ident,Info)] -> m (BinTree Ident Info)
+buildAnyTree :: Monad m => ModuleName -> [(Ident,Info)] -> m (BinTree Ident Info)
 buildAnyTree m = go Map.empty
   where
     go map []         = return map
@@ -133,8 +133,8 @@ rebuildModule cwd gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ msrc_ env_ js
 -- | When extending a complete module: new information is inserted,
 -- and the process is interrupted if unification fails.
 -- If the extended module is incomplete, its judgements are just copied.
-extendMod :: SourceGrammar ->
-             Bool -> (SourceModule,Ident -> Bool) -> Ident -> 
+extendMod :: Grammar ->
+             Bool -> (Module,Ident -> Bool) -> ModuleName ->
              BinTree Ident Info -> Check (BinTree Ident Info)
 extendMod gr isCompl ((name,mi),cond) base new = foldM try new $ Map.toList (jments mi) 
   where
@@ -160,7 +160,7 @@ extendMod gr isCompl ((name,mi),cond) base new = foldM try new $ Map.toList (jme
       where
         i = globalizeLoc (msrc mi) i0
 
-    indirInfo :: Ident -> Info -> Info
+    indirInfo :: ModuleName -> Info -> Info
     indirInfo n info = AnyInd b n' where 
       (b,n') = case info of
         ResValue _ -> (True,n)
@@ -187,7 +187,7 @@ globalizeLoc fpath i =
                 External _ loc -> loc
                 loc            -> loc
 
-unifyAnyInfo :: Ident -> Info -> Info -> Err Info
+unifyAnyInfo :: ModuleName -> Info -> Info -> Err Info
 unifyAnyInfo m i j = case (i,j) of
   (AbsCat mc1, AbsCat mc2) -> 
     liftM AbsCat (unifyMaybeL mc1 mc2)

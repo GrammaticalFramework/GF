@@ -11,7 +11,7 @@ import GF.Text.Pretty(render,(<+>))
 import qualified Data.ByteString.UTF8 as UTF8(fromString)
 
 import GF.Infra.Option(optionsGFO)
-import GF.Infra.Ident(showIdent)
+import GF.Infra.Ident(showIdent,ModuleName(..))
 import GF.Grammar.Grammar
 import GF.Grammar.Printer(ppParams,ppTerm,getAbs,TermPrintQual(..))
 import GF.Grammar.Parser(runP,pModDef)
@@ -56,10 +56,10 @@ convAbstract (modid,src) =
            case lookup "startcat" flags of
              Just (LStr cat) -> cat
              _               -> "-"
-     return $ Grammar (convId modid) extends (Abstract startcat cats funs) []
+     return $ Grammar (convModId modid) extends (Abstract startcat cats funs) []
 
 convExtends = mapM convExtend
-convExtend (modid,MIAll) = return (convId modid)
+convExtend (modid,MIAll) = return (convModId modid)
 convExtend _ = fail "unsupported module extension"
 
 convAbsJments jments = foldM convAbsJment ([],[]) (jmentList jments)
@@ -86,6 +86,7 @@ convSimpleType (Vr id) = return (convId id)
 convSimpleType t = fail "unsupported type"
 
 convId = showIdent
+convModId (MN m) = convId m
 
 convConcrete (modid,src) =
   do unless (isModCnc src) $ fail "Concrete syntax expected"
@@ -100,13 +101,13 @@ convConcrete (modid,src) =
          langcode = "" -- !!!
          conc = Concrete langcode opens ps lcs os ls
          abs = Abstract "-" [] [] -- dummy
-     return $ Grammar (convId modid) extends abs [conc]
+     return $ Grammar (convModId modid) extends abs [conc]
 
 convOpens = mapM convOpen
 
 convOpen o =
   case o of
-    OSimple id -> return (convId id)
+    OSimple id -> return (convModId id)
     _ -> fail "unsupported module open"
 
 

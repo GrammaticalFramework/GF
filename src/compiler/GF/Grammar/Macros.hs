@@ -46,7 +46,7 @@ typeForm t =
       in ([],cat,args ++ [a])
     Q  c -> ([],c,[])
     QC c -> ([],c,[])
-    Sort c -> ([],(identW, c),[])
+    Sort c -> ([],(MN identW, c),[])
     _      -> error (render ("no normal form of type" <+> ppTerm Unqualified 0 t))
 
 typeFormCnc :: Type -> (Context, Type)
@@ -416,7 +416,7 @@ patt2term pt = case pt of
   PNeg a    -> appCons cNeg   [(patt2term a)]                --- an encoding
 
 
-redirectTerm :: Ident -> Term -> Term
+redirectTerm :: ModuleName -> Term -> Term
 redirectTerm n t = case t of
   QC (_,f) -> QC (n,f)
   Q  (_,f) -> Q  (n,f)
@@ -588,7 +588,7 @@ sortRec = sortBy ordLabel where
 
 -- | dependency check, detecting circularities and returning topo-sorted list
 
-allDependencies :: (Ident -> Bool) -> BinTree Ident Info -> [(Ident,[Ident])]
+allDependencies :: (ModuleName -> Bool) -> BinTree Ident Info -> [(Ident,[Ident])]
 allDependencies ism b = 
   [(f, nub (concatMap opty (pts i))) | (f,i) <- tree2list b]
   where

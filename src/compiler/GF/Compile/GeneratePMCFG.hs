@@ -108,7 +108,7 @@ addPMCFG opts gr cenv opath am cm seqs id (GF.Grammar.CncCat mty@(Just (L _ linc
                                                              mprn
                                                              Nothing) = do
   let pcat = protoFCat gr (am,id) lincat
-      pvar = protoFCat gr (identW,cVar) typeStr
+      pvar = protoFCat gr (MN identW,cVar) typeStr
 
       pmcfgEnv0  = emptyPMCFGEnv
 
