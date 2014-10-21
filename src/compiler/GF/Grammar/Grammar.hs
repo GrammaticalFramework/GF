@@ -16,8 +16,10 @@
 
 module GF.Grammar.Grammar (
         -- ** Grammar modules
-        SourceGrammar, SourceModInfo(..), SourceModule, ModuleType(..),
-        emptySourceGrammar, mGrammar, modules, prependModule, moduleMap,
+        Grammar, ModuleName, Module, ModuleInfo(..),
+        SourceGrammar, SourceModInfo, SourceModule,
+        ModuleType(..),
+        emptyGrammar, mGrammar, modules, prependModule, moduleMap,
 
         MInclude (..), OpenSpec(..),
         extends, isInherited, inheritAll,
@@ -72,29 +74,27 @@ import GF.Data.Operations
 
 import PGF.Internal (FId, FunId, SeqId, LIndex, Sequence, BindType(..))
 
---import Data.List
-import Data.Array.IArray
-import Data.Array.Unboxed
+import Data.Array.IArray(Array)
+import Data.Array.Unboxed(UArray)
 import qualified Data.Map as Map
---import qualified Data.Set as Set
---import qualified Data.IntMap as IntMap
 import GF.Text.Pretty
---import System.FilePath
---import Control.Monad.Identity
 
 
-
-data SourceGrammar = MGrammar { 
-    moduleMap :: Map.Map Ident SourceModInfo,
-    modules :: [SourceModule]
+-- ^ A grammar is a self-contained collection of grammar modules
+data Grammar = MGrammar { 
+    moduleMap :: Map.Map ModuleName ModuleInfo,
+    modules :: [Module]
   }
 
-data SourceModInfo = ModInfo {
+type ModuleName = Ident
+type Module = (ModuleName, ModuleInfo)
+
+data ModuleInfo = ModInfo {
     mtype   :: ModuleType,
     mstatus :: ModuleStatus,
     mflags  :: Options,
-    mextend :: [(Ident,MInclude)],
-    mwith   :: Maybe (Ident,MInclude,[(Ident,Ident)]),
+    mextend :: [(ModuleName,MInclude)],
+    mwith   :: Maybe (ModuleName,MInclude,[(ModuleName,ModuleName)]),
     mopens  :: [OpenSpec],
     mexdeps :: [Ident],
     msrc    :: FilePath,
@@ -102,9 +102,11 @@ data SourceModInfo = ModInfo {
     jments  :: Map.Map Ident Info
   }
 
-instance HasSourcePath SourceModInfo where sourcePath = msrc
+type SourceGrammar = Grammar
+type SourceModule = Module
+type SourceModInfo = ModuleInfo
 
-type SourceModule = (Ident, SourceModInfo)
+instance HasSourcePath ModuleInfo where sourcePath = msrc
 
 -- | encoding the type of the module
 data ModuleType = 
@@ -118,7 +120,7 @@ data ModuleType =
 data MInclude = MIAll | MIOnly [Ident] | MIExcept [Ident]
   deriving (Eq,Show)
 
-extends :: SourceModInfo -> [Ident]
+extends :: ModuleInfo -> [ModuleName]
 extends = map fst . mextend
 
 isInherited :: MInclude -> Ident -> Bool
@@ -127,12 +129,12 @@ isInherited c i = case c of
   MIOnly is -> elem i is
   MIExcept is -> notElem i is
 
-inheritAll :: Ident -> (Ident,MInclude)
+inheritAll :: ModuleName -> (ModuleName,MInclude)
 inheritAll i = (i,MIAll)
 
 data OpenSpec = 
-   OSimple Ident
- | OQualif Ident Ident
+   OSimple ModuleName
+ | OQualif ModuleName ModuleName
   deriving (Eq,Show)
 
 data ModuleStatus = 
@@ -146,7 +148,7 @@ openedModule o = case o of
   OQualif _ m -> m
 
 -- | initial dependency list
-depPathModule :: SourceModInfo -> [OpenSpec]
+depPathModule :: ModuleInfo -> [OpenSpec]
 depPathModule m = fors m ++ exts m ++ mopens m
   where
     fors m = 
@@ -157,7 +159,7 @@ depPathModule m = fors m ++ exts m ++ mopens m
     exts m = map OSimple (extends m)
 
 -- | all dependencies
-allDepsModule :: SourceGrammar -> SourceModInfo -> [OpenSpec]
+allDepsModule :: Grammar -> ModuleInfo -> [OpenSpec]
 allDepsModule gr m = iterFix add os0 where
   os0 = depPathModule m
   add os = [m | o <- os, Just n <- [lookup (openedModule o) mods], 
@@ -165,21 +167,21 @@ allDepsModule gr m = iterFix add os0 where
   mods = modules gr
 
 -- | select just those modules that a given one depends on, including itself
-partOfGrammar :: SourceGrammar -> (Ident,SourceModInfo) -> SourceGrammar
+partOfGrammar :: Grammar -> (Ident,ModuleInfo) -> Grammar
 partOfGrammar gr (i,m) = mGrammar [mo | mo@(j,_) <- mods, elem j modsFor]
   where
     mods = modules gr
     modsFor = (i:) $ map openedModule $ allDepsModule gr m
 
 -- | all modules that a module extends, directly or indirectly, with restricts
-allExtends :: SourceGrammar -> Ident -> [SourceModule]
+allExtends :: Grammar -> Ident -> [Module]
 allExtends gr m =
   case lookupModule gr m of
     Ok mi -> (m,mi) : concatMap (allExtends gr . fst) (mextend mi)
     _     -> []
 
 -- | the same as 'allExtends' plus that an instance extends its interface
-allExtendsPlus :: SourceGrammar -> Ident -> [Ident]
+allExtendsPlus :: Grammar -> ModuleName -> [ModuleName]
 allExtendsPlus gr i =
   case lookupModule gr i of
     Ok m -> i : concatMap (allExtendsPlus gr) (exts m)
@@ -188,38 +190,39 @@ allExtendsPlus gr i =
     exts m = extends m ++ [j | MTInstance (j,_) <- [mtype m]]
 
 -- | initial search path: the nonqualified dependencies
-searchPathModule :: SourceModInfo -> [Ident]
+searchPathModule :: ModuleInfo -> [ModuleName]
 searchPathModule m = [i | OSimple i <- depPathModule m]
 
+prependModule :: Grammar -> Module -> Grammar
 prependModule (MGrammar mm ms) im@(i,m) = MGrammar (Map.insert i m mm) (im:ms)
 
-emptySourceGrammar :: SourceGrammar
-emptySourceGrammar = mGrammar []
+emptyGrammar = mGrammar []
 
+mGrammar :: [Module] -> Grammar
 mGrammar ms = MGrammar (Map.fromList ms) ms
 
 
 -- | we store the module type with the identifier
 
-abstractOfConcrete :: ErrorMonad m => SourceGrammar -> Ident -> m Ident
+abstractOfConcrete :: ErrorMonad m => Grammar -> ModuleName -> m ModuleName
 abstractOfConcrete gr c = do
   n <- lookupModule gr c
   case mtype n of
     MTConcrete a -> return a
     _ -> raise $ render ("expected concrete" <+> c)
 
-lookupModule :: ErrorMonad m => SourceGrammar -> Ident -> m SourceModInfo
+lookupModule :: ErrorMonad m => Grammar -> ModuleName -> m ModuleInfo
 lookupModule gr m = case Map.lookup m (moduleMap gr) of
   Just i  -> return i
   Nothing -> raise $ render ("unknown module" <+> m <+> "among" <+> hsep (map fst (modules gr)))
 
-isModAbs :: SourceModInfo -> Bool
+isModAbs :: ModuleInfo -> Bool
 isModAbs m =
   case mtype m of
     MTAbstract -> True
     _          -> False
 
-isModRes :: SourceModInfo -> Bool
+isModRes :: ModuleInfo -> Bool
 isModRes m =
   case mtype m of
     MTResource   -> True
@@ -227,7 +230,7 @@ isModRes m =
     MTInstance _ -> True
     _            -> False
 
-isModCnc :: SourceModInfo -> Bool
+isModCnc :: ModuleInfo -> Bool
 isModCnc m =
   case mtype m of
     MTConcrete _ -> True
@@ -253,49 +256,49 @@ sameMType m n =
     _                            -> m == n
 
 -- | don't generate code for interfaces and for incomplete modules
-isCompilableModule :: SourceModInfo -> Bool
+isCompilableModule :: ModuleInfo -> Bool
 isCompilableModule m =
   case mtype m of
     MTInterface -> False
     _           -> mstatus m == MSComplete
 
 -- | interface and "incomplete M" are not complete
-isCompleteModule :: SourceModInfo -> Bool
+isCompleteModule :: ModuleInfo -> Bool
 isCompleteModule m = mstatus m == MSComplete && mtype m /= MTInterface
 
 
 -- | all abstract modules sorted from least to most dependent
-allAbstracts :: SourceGrammar -> [Ident]
+allAbstracts :: Grammar -> [ModuleName]
 allAbstracts gr = 
  case topoTest [(i,extends m) | (i,m) <- modules gr, mtype m == MTAbstract] of
    Left  is     -> is
    Right cycles -> error $ render ("Cyclic abstract modules:" <+> vcat (map hsep cycles))
 
 -- | the last abstract in dependency order (head of list)
-greatestAbstract :: SourceGrammar -> Maybe Ident
+greatestAbstract :: Grammar -> Maybe ModuleName
 greatestAbstract gr =
   case allAbstracts gr of
     [] -> Nothing
     as -> return $ last as
 
 -- | all resource modules
-allResources :: SourceGrammar -> [Ident]
+allResources :: Grammar -> [ModuleName]
 allResources gr = [i | (i,m) <- modules gr, isModRes m || isModCnc m]
 
 -- | the greatest resource in dependency order
-greatestResource :: SourceGrammar -> Maybe Ident
+greatestResource :: Grammar -> Maybe ModuleName
 greatestResource gr =
   case allResources gr of
     [] -> Nothing
     a  -> return $ head a ---- why not last as in Abstract? works though AR 24/5/2008
 
 -- | all concretes for a given abstract
-allConcretes :: SourceGrammar -> Ident -> [Ident]
+allConcretes :: Grammar -> ModuleName -> [ModuleName]
 allConcretes gr a =
   [i | (i, m) <- modules gr, mtype m == MTConcrete a, isCompleteModule m]
 
 -- | all concrete modules for any abstract
-allConcreteModules :: SourceGrammar -> [Ident]
+allConcreteModules :: Grammar -> [ModuleName]
 allConcreteModules gr =
   [i | (i, m) <- modules gr, MTConcrete _ <- [mtype m], isCompleteModule m]
 
@@ -342,7 +345,7 @@ type Type = Term
 type Cat  = QIdent
 type Fun  = QIdent
 
-type QIdent = (Ident,Ident)
+type QIdent = (ModuleName,Ident)
 
 data Term =
    Vr Ident                      -- ^ variable

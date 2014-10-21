@@ -1,5 +1,8 @@
+-- | Source locations
 module GF.Infra.Location where
 import GF.Text.Pretty
+
+-- ** Source locations
 
 class HasSourcePath a where sourcePath :: a -> FilePath
 

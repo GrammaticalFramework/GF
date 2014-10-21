@@ -19,6 +19,7 @@ module GF(
            module GF.Grammar.Binary,
 
            -- * Supporting infrastructure and system utilities
+           module GF.Infra.Location,
            module GF.Data.Operations,
            module GF.Infra.UseIO,
            module GF.Infra.Option,
@@ -41,6 +42,7 @@ import GF.Grammar.Printer
 import GF.Infra.Ident
 import GF.Grammar.Binary
 
+import GF.Infra.Location
 import GF.Data.Operations
 import GF.Infra.Option
 import GF.Infra.UseIO

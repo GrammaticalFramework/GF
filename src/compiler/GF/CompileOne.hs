@@ -29,14 +29,14 @@ import GF.Text.Pretty(render,(<+>),($$)) --Doc,
 import Control.Monad((<=<))
 
 type OneOutput = (Maybe FullPath,CompiledModule)
-type CompiledModule = SourceModule
+type CompiledModule = Module
 
 compileOne, reuseGFO, useTheSource ::
     (Output m,ErrorMonad m,MonadIO m) =>
-    Options -> SourceGrammar -> FullPath -> m OneOutput
+    Options -> Grammar -> FullPath -> m OneOutput
 
 -- | Compile a given source file (or just load a .gfo file),
--- given a 'SourceGrammar' containing everything it depends on.
+-- given a 'Grammar' containing everything it depends on.
 -- Calls 'reuseGFO' or 'useTheSource'.
 compileOne opts srcgr file =
     if isGFO file
@@ -66,7 +66,7 @@ reuseGFO opts srcgr file =
 
      return (Just file,sm)
 
---useTheSource :: Options -> SourceGrammar -> FullPath -> IOE OneOutput
+--useTheSource :: Options -> Grammar -> FullPath -> IOE OneOutput
 -- | Compile GF module from source. It both returns the result and
 -- stores it in a @.gfo@ file
 -- (or a tags file, if running with the @-tags@ option)
@@ -83,7 +83,7 @@ useTheSource opts srcgr file =
        | verbAtLeast opts Normal  = putStrE m >> act
        | otherwise                = putPointE Verbose opts v act
 
-type CompileSource = SourceGrammar -> SourceModule -> IOE OneOutput
+type CompileSource = Grammar -> Module -> IOE OneOutput
 
 --compileSourceModule :: Options -> FilePath -> Maybe FilePath -> CompileSource
 compileSourceModule opts cwd mb_gfFile gr =
