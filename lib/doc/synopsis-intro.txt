@@ -51,13 +51,13 @@ The main contents are:
 constructing trees in them.
 - [Chapter 2 #toc5]: syntactic construction functions, with cross-links and
 examples. 
-- [Chapter 3 #toc83]: morphological paradigms.
-- [Chapter 4 #toc112]: additional libraries.
-- [Chapter 5 #toc118]: how to "browse" the library by 
+- [Chapter 3 #toc84]: morphological paradigms.
+- [Chapter 4 #toc113]: additional libraries.
+- [Chapter 5 #toc119]: how to "browse" the library by 
 loading the grammars into the ``gf`` command editor.
-- [Chapter 6 #toc119]: a brief example of how application grammars can
+- [Chapter 6 #toc120]: a brief example of how application grammars can
 use the resource modules. 
-- [Detailed table of contents #toc118].
+- [Detailed table of contents #toc121].
 
 
 Other relevant documents:
