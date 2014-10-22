@@ -3,8 +3,13 @@
 resource MakeStructuralFre = open CatFre, (P = ParadigmsFre), MorphoFre, Prelude in {
 
 oper 
-  mkConj : Str -> Str -> Number -> Conj = \x,y,n -> 
-    {s1 = x ; s2 = y ; n = n ; lock_Conj = <>} ;
+
+  mkConj = overload {
+    mkConj : Str -> Conj = \s -> lin Conj {s1 = [] ; s2 = s ; n = Pl} ;
+
+    mkConj : Str -> Str -> Number -> Conj = \x,y,n -> 
+      {s1 = x ; s2 = y ; n = n ; lock_Conj = <>} ;
+    } ;
   mkSubj : Str -> Subj = \x -> 
     {s = x ; m = Indic ; lock_Subj = <>} ;
   mkSubjSubj : Str -> Subj = \x -> 
@@ -31,5 +36,12 @@ oper
     a = if_then_else PAgr p (PAg Sg) PNoAg ---- e,g, "chacun de"; other possibilities?
     } ;
 
+  mkInterj : Str -> Interj = \s -> lin Interj (ss s) ;
+  mkDet = overload {
+    mkDet : Str -> Det = \s -> lin Det {s,sp = \\_,c => prepCase c ++ s ; n = Sg ; s2 = [] ; isNeg = False} ;
+    mkDet : Str -> Str -> Number -> Det = \m,f,n -> lin Det {
+      s,sp = \\g,c => prepCase c ++ case g of {Masc => m ; Fem => f} ; n = n ; s2 = [] ; isNeg = False
+      } ;
+    } ;
 
 }
