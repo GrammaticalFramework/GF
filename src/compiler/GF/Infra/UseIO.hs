@@ -210,7 +210,7 @@ putPointE v opts msg act = do
   return a
 
 -- | Because GHC adds the confusing text "user error" for failures caused by
--- calls to fail.
+-- calls to 'fail'.
 ioErrorText e = if isUserError e
                 then ioeGetErrorString e
                 else show e

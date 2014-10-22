@@ -14,18 +14,20 @@
 -- Copyright (c) Aarne Ranta 1998-2000, under GNU General Public License (see GPL)
 -----------------------------------------------------------------------------
 
-module GF.Data.Operations (-- ** Misc functions
-		   ifNull,
-
+module GF.Data.Operations (
 		   -- ** The Error monad
 		   Err(..), err, maybeErr, testErr, fromErr, errIn, 
 		   lookupErr,
 
-                   --- ** Monadic operations on lists and pairs
-		   mapPairListM, mapPairsM, pairM,
+		   -- ** Error monad class
+		   ErrorMonad(..), checks, doUntil, --allChecks, checkAgain,
+                   liftErr,
 		   
 		   -- ** Checking
 		   checkUnique, unifyMaybeBy, unifyMaybe,
+
+                   -- ** Monadic operations on lists and pairs
+		   mapPairListM, mapPairsM, pairM,
 
 		   -- ** Binary search trees; now with FiniteMap
 		   BinTree, emptyBinTree, isInBinTree, --justLookupTree,
@@ -35,31 +37,23 @@ module GF.Data.Operations (-- ** Misc functions
                    mapTree, --mapMTree,
                    tree2list,
  
-
 		   -- ** Printing
 		   indent, (+++), (++-), (++++), (+++++),
 		   prUpper, prReplicate, prTList, prQuotedString, prParenth, prCurly, 
 		   prBracket, prArgList, prSemicList, prCurlyList, restoreEscapes,
 		   numberedParagraphs, prConjList, prIfEmpty, wrapLines,
 
-		   -- ** Extra
-		   combinations, done, readIntArg, --singleton,
-
-		   -- ** Topological sorting with test of cyclicity
+		   -- ** Topological sorting
 		   topoTest, topoTest2,
 
-		   -- ** The generic fix point iterator
-		   iterFix,
-
-		   -- ** Chop into separator-separated parts
-		   chunks,
+		   -- ** Misc
+		   ifNull,
+		   combinations, done, readIntArg, --singleton,
+		   iterFix,  chunks,
 {-
 		   -- ** State monad with error; from Agda 6\/11\/2001
 		   STM(..), appSTM, stm, stmr, readSTM, updateSTM, writeSTM,
 -}
-		   -- ** Error monad class
-		   ErrorMonad(..), checks, allChecks, doUntil, --checkAgain,
-                   liftErr
                 
 		  ) where
 
@@ -257,11 +251,11 @@ singleton :: a -> [a]
 singleton = (:[])
 -}
 
--- | topological sorting with test of cyclicity
+-- | Topological sorting with test of cyclicity
 topoTest :: Ord a => [(a,[a])] -> Either [a] [[a]]
 topoTest = topologicalSort . mkRel'
 
--- | topological sorting with test of cyclicity, new version /TH 2012-06-26
+-- | Topological sorting with test of cyclicity, new version /TH 2012-06-26
 topoTest2 :: Ord a => [(a,[a])] -> Either [[a]] [[a]]
 topoTest2 g0 = maybe (Right cycles) Left (tsort g)
   where
@@ -277,7 +271,7 @@ topoTest2 g0 = maybe (Right cycles) Left (tsort g)
 	  where leaves = map fst ns
 
 
--- | the generic fix point iterator
+-- | Fix point iterator (for computing e.g. transitive closures or reachability)
 iterFix :: Eq a => ([a] -> [a]) -> [a] -> [a]
 iterFix more start = iter start start 
   where
@@ -332,6 +326,7 @@ updateSTM f = stmr (\s -> ((),f s))
 writeSTM :: s -> STM s ()
 writeSTM s = stmr (const ((),s))
 -}
+-- | @return ()@
 done :: Monad m => m ()
 done = return ()
 
@@ -363,12 +358,12 @@ checkAgain c1 c2 = handle_ c1 c2
 checks :: ErrorMonad m => [m a] -> m a
 checks [] = raise "no chance to pass"
 checks cs = foldr1 checkAgain cs
-
+{-
 allChecks :: ErrorMonad m => [m a] -> m [a]
 allChecks ms = case ms of
   (m: ms) -> let rs = allChecks ms in handle_ (liftM2 (:) m rs) rs
   _ -> return []
-
+-}
 doUntil :: ErrorMonad m => (a -> Bool) -> [m a] -> m a
 doUntil cond ms = case ms of
   a:as -> do

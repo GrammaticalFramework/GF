@@ -1,4 +1,4 @@
-module GF.Compile (batchCompile, link, srcAbsName, compileToPGF) where
+module GF.Compile (compileToPGF, link, batchCompile, srcAbsName) where
 
 import GF.Compile.GrammarToPGF(mkCanon2pgf)
 import GF.Compile.ReadFiles(ModEnv,getOptionsFromFile,getAllFiles,
@@ -26,14 +26,14 @@ import PGF.Internal(optimizePGF)
 import PGF(PGF,defaultProbabilities,setProbabilities,readProbabilitiesFromFile)
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.
--- This is a composition of 'batchCompile' and 'link'.
+-- This is a composition of 'link' and 'batchCompile'.
 compileToPGF :: Options -> [FilePath] -> IOE PGF
-compileToPGF opts fs = link opts =<< batchCompile opts fs
+compileToPGF opts fs = link opts . snd =<< batchCompile opts fs
 
 -- | Link a grammar into a 'PGF' that can be used to 'PGF.linearize' and
 -- 'PGF.parse' with the "PGF" run-time system.
-link :: Options -> (ModuleName,t,Grammar) -> IOE PGF
-link opts (cnc,_,gr) =
+link :: Options -> (ModuleName,Grammar) -> IOE PGF
+link opts (cnc,gr) =
   putPointE Normal opts "linking ... " $ do
     let abs = srcAbsName gr cnc
     pgf <- mkCanon2pgf opts gr abs
@@ -45,13 +45,13 @@ link opts (cnc,_,gr) =
 -- | Returns the name of the abstract syntax corresponding to the named concrete syntax
 srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc
 
--- | Compile the given grammar files and everything they depend on
-batchCompile :: Options -> [FilePath] -> IOE (ModuleName,UTCTime,Grammar)
+-- | Compile the given grammar files and everything they depend on.
+batchCompile :: Options -> [FilePath] -> IOE (UTCTime,(ModuleName,Grammar))
 batchCompile opts files = do
   (gr,menv) <- foldM (compileModule opts) emptyCompileEnv files
   let cnc = moduleNameS (justModuleName (last files))
       t = maximum . map fst $ Map.elems menv
-  return (cnc,t,gr)
+  return (t,(cnc,gr))
 {-
 -- to compile a set of modules, e.g. an old GF or a .cf file
 compileSourceGrammar :: Options -> Grammar -> IOE Grammar
