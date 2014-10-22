@@ -48,7 +48,7 @@ importSource :: SourceGrammar -> Options -> [FilePath] -> IO SourceGrammar
 importSource src0 opts files = do
   src <- appIOE $ batchCompile opts files
   case src of
-    Ok (_,_,gr) -> return gr
+    Ok (_,(_,gr)) -> return gr
     Bad msg -> do 
       putStrLn msg
       return src0

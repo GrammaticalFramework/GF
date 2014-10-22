@@ -49,10 +49,14 @@ compileSourceFiles opts fs =
            linkGrammars opts output
   where
     batchCompile = maybe batchCompile' parallelBatchCompile (flag optJobs opts)
-    batchCompile' opts fs = do (cnc,t,gr) <- S.batchCompile opts fs
-                               return (t,[(cnc,gr)])
+    batchCompile' opts fs = do (t,cnc_gr) <- S.batchCompile opts fs
+                               return (t,[cnc_gr])
 
--- | Create a @.pgf@ file from the output of 'parallelBatchCompile'.
+-- | Create a @.pgf@ file (and possibly files in other formats, if specified
+-- in the 'Options') from the output of 'parallelBatchCompile'.
+-- If a @.pgf@ file by the same name already exists and it is newer than the
+-- source grammar files (as indicated by the 'UTCTime' argument), it is not
+-- recreated.
 linkGrammars opts (t_src,~cnc_grs@(~(cnc,gr):_)) =
     do let abs = render (srcAbsName gr cnc)
            pgfFile = outputPath opts (grammarName' opts abs<.>"pgf")
@@ -61,8 +65,7 @@ linkGrammars opts (t_src,~cnc_grs@(~(cnc,gr):_)) =
                 else return Nothing
        if t_pgf >= Just t_src
          then putIfVerb opts $ pgfFile ++ " is up-to-date."
-         else do pgfs <- mapM (link opts)
-                              [(cnc,t_src,gr)|(cnc,gr)<-cnc_grs]
+         else do pgfs <- mapM (link opts) cnc_grs
                  let pgf = foldl1 unionPGF pgfs
                  writePGF opts pgf
                  writeOutputs opts pgf

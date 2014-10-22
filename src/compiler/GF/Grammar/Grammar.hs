@@ -23,9 +23,8 @@ module GF.Grammar.Grammar (
 
         MInclude (..), OpenSpec(..),
         extends, isInherited, inheritAll,
-        openedModule, depPathModule, allDepsModule, partOfGrammar,
-        allExtends, allExtendsPlus,
-        searchPathModule,
+        openedModule, allDepsModule, partOfGrammar, depPathModule,
+        allExtends, allExtendsPlus, --searchPathModule,
         
         lookupModule,
         isModAbs, isModRes, isModCnc,
@@ -36,15 +35,15 @@ module GF.Grammar.Grammar (
 
         ModuleStatus(..),
 
-        -- ** Judgements and terms
+        -- ** Judgements
         Info(..),
-        Location(..), L(..), unLoc, noLoc, ppLocation, ppL,
+        -- ** Terms
+        Term(..),
         Type,
         Cat,
         Fun,
         QIdent,
         BindType(..),
-        Term(..),
         Patt(..),
         TInfo(..),
         Label(..),
@@ -61,6 +60,8 @@ module GF.Grammar.Grammar (
         Substitution,
         varLabel, tupleLabel, linLabel, theLinLabel,
         ident2label, label2ident,
+        -- ** Source locations
+        Location(..), L(..), unLoc, noLoc, ppLocation, ppL,
 
         -- ** PMCFG        
         PMCFG(..), Production(..), FId, FunId, SeqId, LIndex, Sequence

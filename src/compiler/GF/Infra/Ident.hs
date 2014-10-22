@@ -15,15 +15,15 @@
 module GF.Infra.Ident (-- ** Identifiers
               ModuleName(..), moduleNameS,
 	      Ident, ident2utf8, showIdent, prefixIdent,
-	      identS, identC, identV, identA, identAV, identW,
+              -- *** Normal identifiers (returned by the parser)
+	      identS, identC, identW,
+              -- *** Special identifiers for internal use
+              identV, identA, identAV,
 	      argIdent, isArgIdent, getArgIndex,
               varStr, varX, isWildIdent, varIndex,
-              -- ** Raw Identifiers
+              -- *** Raw identifiers
               RawIdent, rawIdentS, rawIdentC, ident2raw, prefixRawIdent,
-              isPrefixOf, showRawIdent{-,
-	      -- ** Refreshing identifiers
-	      IdState, initIdStateN, initIdState,
-	      lookVar, refVar, refVarPlus-}
+              isPrefixOf, showRawIdent
 	     ) where
 
 import qualified Data.ByteString.UTF8 as UTF8
@@ -58,6 +58,8 @@ data Ident =
   deriving (Eq, Ord, Show, Read)
 
 -- | Identifiers are stored as UTF-8-encoded bytestrings.
+-- (It is also possible to use regular Haskell 'String's, with somewhat
+-- reduced performance and increased memory use.)
 newtype RawIdent = Id { rawId2utf8 :: UTF8.ByteString }
   deriving (Eq, Ord, Show, Read)
 
@@ -97,12 +99,7 @@ identS :: String -> Ident
 identS = identC . rawIdentS
 
 identC :: RawIdent -> Ident
-identV :: RawIdent -> Int -> Ident
-identA :: RawIdent -> Int -> Ident
-identAV:: RawIdent -> Int -> Int -> Ident
 identW :: Ident
-(identC, identV, identA, identAV, identW) = 
-    (IC,     IV,     IA,     IAV,     IW)
 
 
 prefixIdent :: String -> Ident -> Ident
@@ -110,6 +107,13 @@ prefixIdent pref = identC . Id . BS.append (pack pref) . ident2utf8
 
 -- normal identifier
 -- ident s = IC s
+
+identV :: RawIdent -> Int -> Ident
+identA :: RawIdent -> Int -> Ident
+identAV:: RawIdent -> Int -> Int -> Ident
+
+(identC, identV, identA, identAV, identW) = 
+    (IC,     IV,     IA,     IAV,     IW)
 
 -- | to mark argument variables
 argIdent :: Int -> Ident -> Int -> Ident

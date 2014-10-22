@@ -33,7 +33,7 @@ import Control.Monad (liftM, liftM2, liftM3)
 import Data.List (sortBy,nub)
 import GF.Text.Pretty
 
--- ** Macros for constructing and analysing source code terms.
+-- ** Functions for constructing and analysing source code terms.
 
 typeForm :: Type -> (Context, Cat, [Term])
 typeForm t =
@@ -151,11 +151,13 @@ isVariable :: Term -> Bool
 isVariable (Vr _ ) = True
 isVariable _ = False
 
-eqIdent :: Ident -> Ident -> Bool
-eqIdent = (==)
+--eqIdent :: Ident -> Ident -> Bool
+--eqIdent = (==)
 
 uType :: Type
 uType = Cn cUndefinedType
+
+-- *** Assignment
 
 assign :: Label -> Term -> Assign
 assign l t = (l,(Nothing,t))
@@ -182,6 +184,8 @@ mapAssignM :: Monad m => (Term -> m c) -> [Assign] -> m [(Label,(Maybe c,c))]
 mapAssignM f = mapM (\ (ls,tv) -> liftM ((,) ls) (g tv))
   where g (t,v) = liftM2 (,) (maybe (return Nothing) (liftM Just . f) t) (f v)
 
+-- *** Records
+
 mkRecordN :: Int -> (Int -> Label) -> [Term] -> Term
 mkRecordN int lab typs = R [ assign (lab i) t | (i,t) <- zip [int..] typs]
 
@@ -199,7 +203,10 @@ record2subst t = case t of
   R fs -> return [(identC x, t) | (LIdent x,(_,t)) <- fs]
   _    -> Bad (render ("record expected, found" <+> ppTerm Unqualified 0 t))
 
-typeType, typePType, typeStr, typeTok, typeStrs :: Term
+
+-- *** Types
+
+typeType, typePType, typeStr, typeTok, typeStrs :: Type
 
 typeType  = Sort cType
 typePType = Sort cPType
@@ -207,10 +214,10 @@ typeStr   = Sort cStr
 typeTok   = Sort cTok
 typeStrs  = Sort cStrs
 
-typeString, typeFloat, typeInt :: Term
-typeInts :: Int -> Term
-typePBool :: Term
-typeError :: Term
+typeString, typeFloat, typeInt :: Type
+typeInts :: Int -> Type
+typePBool :: Type
+typeError :: Type
 
 typeString = cnPredef cString
 typeInt = cnPredef cInt
@@ -219,9 +226,11 @@ typeInts i = App (cnPredef cInts) (EInt i)
 typePBool = cnPredef cPBool
 typeError = cnPredef cErrorType
 
-isTypeInts :: Term -> Maybe Int
+isTypeInts :: Type -> Maybe Int
 isTypeInts (App c (EInt i)) | c == cnPredef cInts = Just i
 isTypeInts _                                      = Nothing
+
+-- *** Terms
 
 isPredefConstant :: Term -> Bool
 isPredefConstant t = case t of
@@ -341,6 +350,8 @@ linTypeStr = mkRecType linLabel [typeStr] -- default lintype {s :: Str}
 linAsStr :: String -> Term
 linAsStr s = mkRecord linLabel [K s] -- default linearization {s = s}
 
+-- *** Term and pattern conversion
+
 term2patt :: Term -> Err Patt
 term2patt trm = case termForm trm of
   Ok ([], Vr x, []) | x == identW -> return PW
@@ -416,49 +427,7 @@ patt2term pt = case pt of
   PNeg a    -> appCons cNeg   [(patt2term a)]                --- an encoding
 
 
-redirectTerm :: ModuleName -> Term -> Term
-redirectTerm n t = case t of
-  QC (_,f) -> QC (n,f)
-  Q  (_,f) -> Q  (n,f)
-  _ -> composSafeOp (redirectTerm n) t
-
--- | to gather ultimate cases in a table; preserves pattern list
-allCaseValues :: Term -> [([Patt],Term)]
-allCaseValues trm = case trm of
-  T _ cs -> [(p:ps, t) | (p,t0) <- cs, (ps,t) <- allCaseValues t0]
-  _      -> [([],trm)]
-
--- | to get a string from a term that represents a sequence of terminals
-strsFromTerm :: Term -> Err [Str]
-strsFromTerm t = case t of
-  K s   -> return [str s]
-  Empty -> return [str []]
-  C s t -> do
-    s' <- strsFromTerm s
-    t' <- strsFromTerm t
-    return [plusStr x y | x <- s', y <- t']
-  Glue s t -> do
-    s' <- strsFromTerm s
-    t' <- strsFromTerm t
-    return [glueStr x y | x <- s', y <- t']
-  Alts d vs -> do
-    d0 <- strsFromTerm d
-    v0 <- mapM (strsFromTerm . fst) vs
-    c0 <- mapM (strsFromTerm . snd) vs
-    let vs' = zip v0 c0
-    return [strTok (str2strings def) vars | 
-              def  <- d0,
-              vars <- [[(str2strings v, map sstr c) | (v,c) <- zip vv c0] | 
-                                                          vv <- combinations v0]
-           ]
-  FV ts -> mapM strsFromTerm ts >>= return . concat
-  Strs ts -> mapM strsFromTerm ts >>= return . concat  
-  _ -> raise (render ("cannot get Str from term" <+> ppTerm Unqualified 0 t))
-
--- | to print an Str-denoting term as a string; if the term is of wrong type, the error msg
-stringFromTerm :: Term -> String
-stringFromTerm = err id (ifNull "" (sstr . head)) . strsFromTerm
-
+-- *** Almost compositional
 
 -- | to define compositional term functions
 composSafeOp :: (Term -> Term) -> Term -> Term
@@ -510,20 +479,6 @@ composPattOp op patt =
     PRep p          -> liftM  PRep (op p)
     _               -> return patt -- covers cases without subpatterns
 
-getTableType :: TInfo -> Err Type
-getTableType i = case i of
-  TTyped ty -> return ty
-  TComp ty  -> return ty
-  TWild ty  -> return ty
-  _ -> Bad "the table is untyped"
-
-changeTableType :: Monad m => (Type -> m Type) -> TInfo -> m TInfo
-changeTableType co i = case i of
-    TTyped ty -> co ty >>= return . TTyped
-    TComp ty  -> co ty >>= return . TComp
-    TWild ty  -> co ty >>= return . TWild
-    _ -> return i
-
 collectOp :: (Term -> [a]) -> Term -> [a]
 collectOp co trm = case trm of
   App c a      -> co c ++ co a 
@@ -561,6 +516,67 @@ collectPattOp op patt =
     PRep p          -> op p
     _               -> []     -- covers cases without subpatterns
 
+
+-- *** Misc
+
+redirectTerm :: ModuleName -> Term -> Term
+redirectTerm n t = case t of
+  QC (_,f) -> QC (n,f)
+  Q  (_,f) -> Q  (n,f)
+  _ -> composSafeOp (redirectTerm n) t
+
+-- | to gather ultimate cases in a table; preserves pattern list
+allCaseValues :: Term -> [([Patt],Term)]
+allCaseValues trm = case trm of
+  T _ cs -> [(p:ps, t) | (p,t0) <- cs, (ps,t) <- allCaseValues t0]
+  _      -> [([],trm)]
+
+-- | to get a string from a term that represents a sequence of terminals
+strsFromTerm :: Term -> Err [Str]
+strsFromTerm t = case t of
+  K s   -> return [str s]
+  Empty -> return [str []]
+  C s t -> do
+    s' <- strsFromTerm s
+    t' <- strsFromTerm t
+    return [plusStr x y | x <- s', y <- t']
+  Glue s t -> do
+    s' <- strsFromTerm s
+    t' <- strsFromTerm t
+    return [glueStr x y | x <- s', y <- t']
+  Alts d vs -> do
+    d0 <- strsFromTerm d
+    v0 <- mapM (strsFromTerm . fst) vs
+    c0 <- mapM (strsFromTerm . snd) vs
+    let vs' = zip v0 c0
+    return [strTok (str2strings def) vars | 
+              def  <- d0,
+              vars <- [[(str2strings v, map sstr c) | (v,c) <- zip vv c0] | 
+                                                          vv <- combinations v0]
+           ]
+  FV ts -> mapM strsFromTerm ts >>= return . concat
+  Strs ts -> mapM strsFromTerm ts >>= return . concat  
+  _ -> raise (render ("cannot get Str from term" <+> ppTerm Unqualified 0 t))
+
+-- | to print an Str-denoting term as a string; if the term is of wrong type, the error msg
+stringFromTerm :: Term -> String
+stringFromTerm = err id (ifNull "" (sstr . head)) . strsFromTerm
+
+
+getTableType :: TInfo -> Err Type
+getTableType i = case i of
+  TTyped ty -> return ty
+  TComp ty  -> return ty
+  TWild ty  -> return ty
+  _ -> Bad "the table is untyped"
+
+changeTableType :: Monad m => (Type -> m Type) -> TInfo -> m TInfo
+changeTableType co i = case i of
+    TTyped ty -> co ty >>= return . TTyped
+    TComp ty  -> co ty >>= return . TComp
+    TWild ty  -> co ty >>= return . TWild
+    _ -> return i
+
 -- | to find the word items in a term
 wordsInTerm :: Term -> [String]
 wordsInTerm trm = filter (not . null) $ case trm of
@@ -585,6 +601,8 @@ sortRec = sortBy ordLabel where
       ("s",_) -> LT
       (_,"s") -> GT
       (s1,s2) -> compare s1 s2
+
+-- *** Dependencies
 
 -- | dependency check, detecting circularities and returning topo-sorted list
 
