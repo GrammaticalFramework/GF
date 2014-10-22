@@ -1617,15 +1617,15 @@ Bracket_repr(BracketObject *self)
 }
 
 static PyMemberDef Bracket_members[] = {
-    {"cat", T_OBJECT_EX, offsetof(BracketObject, cat), READONLY,
+    {"cat", T_OBJECT_EX, offsetof(BracketObject, cat), 0,
      "the syntactic category for this bracket"},
-    {"fun", T_OBJECT_EX, offsetof(BracketObject, fun), READONLY,
+    {"fun", T_OBJECT_EX, offsetof(BracketObject, fun), 0,
      "the abstract function for this bracket"},
-    {"fid", T_INT, offsetof(BracketObject, fid), READONLY,
+    {"fid", T_INT, offsetof(BracketObject, fid), 0,
      "an unique id which identifies this bracket in the whole bracketed string"},
-    {"lindex", T_INT, offsetof(BracketObject, lindex), READONLY,
+    {"lindex", T_INT, offsetof(BracketObject, lindex), 0,
      "the constituent index"},
-    {"children", T_OBJECT_EX, offsetof(BracketObject, children), READONLY,
+    {"children", T_OBJECT_EX, offsetof(BracketObject, children), 0,
      "a list with the children of this bracket"},
     {NULL}  /* Sentinel */
 };
