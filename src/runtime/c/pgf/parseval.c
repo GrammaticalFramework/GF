@@ -115,7 +115,8 @@ static PgfLinFuncs pgf_metrics_lin_funcs1 = {
 	.begin_phrase = pgf_metrics_lzn_begin_phrase,
 	.end_phrase   = pgf_metrics_lzn_end_phrase1,
 	.symbol_ne    = pgf_metrics_symbol_ne,
-	.symbol_bind  = pgf_metrics_symbol_bind
+	.symbol_bind  = pgf_metrics_symbol_bind,
+	.symbol_capit = NULL
 };
 
 static PgfLinFuncs pgf_metrics_lin_funcs2 = {
@@ -123,7 +124,8 @@ static PgfLinFuncs pgf_metrics_lin_funcs2 = {
 	.begin_phrase = pgf_metrics_lzn_begin_phrase,
 	.end_phrase   = pgf_metrics_lzn_end_phrase2,
 	.symbol_ne    = pgf_metrics_symbol_ne,
-	.symbol_bind  = pgf_metrics_symbol_bind
+	.symbol_bind  = pgf_metrics_symbol_bind,
+	.symbol_capit = NULL
 };
 
 bool
