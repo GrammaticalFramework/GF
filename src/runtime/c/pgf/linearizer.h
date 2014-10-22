@@ -54,6 +54,9 @@ struct PgfLinFuncs
 
 	/// token binding
 	void (*symbol_bind)(PgfLinFuncs** self);
+
+	/// capitalization
+	void (*symbol_capit)(PgfLinFuncs** self);
 };
 
 /// Linearize a concrete syntax tree.

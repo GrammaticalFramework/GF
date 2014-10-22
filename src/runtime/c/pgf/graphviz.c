@@ -179,7 +179,8 @@ static PgfLinFuncs pgf_bracket_lin_funcs = {
 	.begin_phrase  = pgf_bracket_lzn_begin_phrase,
 	.end_phrase    = pgf_bracket_lzn_end_phrase,
 	.symbol_ne     = NULL,
-	.symbol_bind   = NULL
+	.symbol_bind   = NULL,
+	.symbol_capit  = NULL
 };
 
 static void

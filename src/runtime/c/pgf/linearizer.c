@@ -7,6 +7,8 @@
 #include <gu/file.h>
 #include <gu/string.h>
 #include <gu/assert.h>
+#include <gu/utf8.h>
+#include <gu/ucs.h>
 #include <pgf/expr.h>
 #include <pgf/literals.h>
 #include <stdio.h>
@@ -649,6 +651,7 @@ typedef enum {
 	PGF_CACHED_BEGIN,
 	PGF_CACHED_END,
 	PGF_CACHED_BIND,
+	PGF_CACHED_CAPIT,
 	PGF_CACHED_NE
 } PgfLzrCachedTag;
 
@@ -711,6 +714,11 @@ pgf_lzr_cache_flush(PgfLzrCache* cache, PgfSymbols* form)
 		case PGF_CACHED_BIND:
 			if ((*cache->lzr->funcs)->symbol_bind) {
 				(*cache->lzr->funcs)->symbol_bind(cache->lzr->funcs);
+			}
+			break;
+		case PGF_CACHED_CAPIT:
+			if ((*cache->lzr->funcs)->symbol_capit) {
+				(*cache->lzr->funcs)->symbol_capit(cache->lzr->funcs);
 			}
 			break;
 		case PGF_CACHED_NE:
@@ -788,12 +796,21 @@ pgf_lzr_cache_symbol_bind(PgfLinFuncs** funcs)
 	event->tag     = PGF_CACHED_BIND;
 }
 
+static void
+pgf_lzr_cache_symbol_capit(PgfLinFuncs** funcs)
+{
+	PgfLzrCache*  cache = gu_container(funcs, PgfLzrCache, funcs);
+	PgfLzrCached* event = gu_buf_extend(cache->events);
+	event->tag     = PGF_CACHED_CAPIT;
+}
+
 static PgfLinFuncs pgf_lzr_cache_funcs = {
 	.symbol_token = pgf_lzr_cache_symbol_token,
 	.begin_phrase = pgf_lzr_cache_begin_phrase,
 	.end_phrase   = pgf_lzr_cache_end_phrase,
 	.symbol_ne    = pgf_lzr_cache_symbol_ne,
-	.symbol_bind  = pgf_lzr_cache_symbol_bind
+	.symbol_bind  = pgf_lzr_cache_symbol_bind,
+	.symbol_capit = pgf_lzr_cache_symbol_capit
 };
 
 static void
@@ -905,6 +922,9 @@ pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTreeApp* fapp,
 			break;
 		}
 		case PGF_SYMBOL_CAPIT:
+			if ((*lzr->funcs)->symbol_capit) {
+				(*lzr->funcs)->symbol_capit(lzr->funcs);
+			}
 			break;
 		default:
 			gu_impossible(); 
@@ -1025,6 +1045,7 @@ typedef struct PgfSimpleLin PgfSimpleLin;
 struct PgfSimpleLin {
 	PgfLinFuncs* funcs;
 	bool bind;
+	bool capit;
 	GuOut* out;
 	GuExn* err;
 };
@@ -1047,6 +1068,14 @@ pgf_file_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 	}
 
 	pgf_file_lzn_put_space(flin);
+
+	if (flin->capit) {
+		GuUCS c = gu_utf8_decode((const uint8_t**) &tok);
+		c = gu_ucs_to_upper(c);
+		gu_out_utf8(c, flin->out, flin->err);
+		flin->capit = false;
+	}
+
 	gu_string_write(tok, flin->out, flin->err);
 }
 
@@ -1064,12 +1093,20 @@ pgf_file_lzn_symbol_bind(PgfLinFuncs** funcs)
 	flin->bind = true;
 }
 
+static void
+pgf_file_lzn_symbol_capit(PgfLinFuncs** funcs)
+{
+	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
+	flin->capit = true;
+}
+
 static PgfLinFuncs pgf_file_lin_funcs = {
 	.symbol_token = pgf_file_lzn_symbol_token,
 	.begin_phrase = NULL,
 	.end_phrase   = NULL,
 	.symbol_ne    = pgf_file_lzn_symbol_ne,
-	.symbol_bind  = pgf_file_lzn_symbol_bind
+	.symbol_bind  = pgf_file_lzn_symbol_bind,
+	.symbol_capit = pgf_file_lzn_symbol_capit
 };
 
 void
@@ -1080,6 +1117,7 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
 	PgfSimpleLin flin = {
 		.funcs = &pgf_file_lin_funcs,
 		.bind = true,
+		.capit = false,
 		.out = out,
 		.err = err
 	};
@@ -1145,6 +1183,7 @@ pgf_get_tokens(PgfSymbols* syms, uint16_t sym_idx, GuPool* pool)
 	PgfSimpleLin flin = {
 		.funcs = &pgf_file_lin_funcs,
 		.bind = true,
+		.capit = false,
 		.out = out,
 		.err = err
 	};
