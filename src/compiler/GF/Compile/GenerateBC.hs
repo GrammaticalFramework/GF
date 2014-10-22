@@ -33,7 +33,7 @@ compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
                                                  (cn:cns) -> let (bs1,instrs1) = compileBranch0 fl bs cn
                                                                  bs2 = foldl (compileBranch fl) bs1 cns
                                                                  bs3 = mkFail arity st fl : bs2
-                                                             in (bs3,EVAL (shiftIVal st i) RecCall : instrs1)
+                                                             in (bs3,[PUSH_FRAME, EVAL (shiftIVal (st+2) i) RecCall] ++ instrs1)
     whilePP ((vs, PP c ps' : ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (Q c,length ps') [(vs,ps'++ps,t)] cns)
     whilePP ((vs, PInt n   : ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (EInt n,0) [(vs,ps,t)] cns)
     whilePP ((vs, PString s: ps, t):eqs) cns = whilePP eqs (Map.insertWith (++) (K s,0) [(vs,ps,t)] cns)
@@ -47,7 +47,7 @@ compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
                                                                  (bs1,instrs1) = compileBranch0 fl1 bs cn
                                                                  bs2 = foldl (compileBranch fl1) bs1 cns
                                                                  (bs3,instrs3) = compileEquations gr arity st (i:is) eqs fl (instrs3:bs2)
-                                                             in (bs3,EVAL (shiftIVal st i) RecCall : instrs1)
+                                                             in (bs3,[PUSH_FRAME, EVAL (shiftIVal (st+2) i) RecCall] ++ instrs1)
 
     whilePV []                           vrs = compileEquations gr arity st is vrs fl bs
     whilePV ((vs, PV x     : ps, t):eqs) vrs = whilePV eqs (((x,i):vs,ps,t) : vrs)
@@ -83,22 +83,27 @@ mkFail arity st1 (Just (st0,l))
   | otherwise      = [JUMP l]
 
 compileBody gr arity st vs e bs =
-  let (heap,bs1,is) = compileFun gr arity st vs e 0 bs []
+  let eval fun args 
+        | arity == 0 = let (st1,is) = pushArgs (st+2) (reverse args)
+                           fun'     = shiftIVal st1 fun
+                       in [PUSH_FRAME]++is++[EVAL fun' (UpdateCall st st1)]
+        | otherwise  = let (st1,is) = pushArgs st (reverse args)
+                           fun'     = shiftIVal st1 fun
+                       in is++[EVAL fun' (TailCall arity st st1)]
+      (heap,bs1,is) = compileFun gr eval st vs e 0 bs []
   in (bs1,if heap > 0 then (ALLOC heap : is) else is)
 
-compileFun gr arity st vs (Abs _ x e) h0 bs args =
+compileFun gr eval st vs (Abs _ x e) h0 bs args =
   let (h1,bs1,arg,is1) = compileLambda gr st vs [x] e h0 bs
-      (st1,is3)        = pushArgs st (reverse args)
-  in (h1,bs1,is1++is3++[EVAL arg (if arity == 0 then (UpdateCall st st1) else (TailCall arity st st1))])
-compileFun gr arity st vs (App e1 e2) h0 bs args =
+  in (h1,bs1,is1++eval arg args)
+compileFun gr eval st vs (App e1 e2) h0 bs args =
   let (h1,bs1,arg,is1) = compileArg gr st vs e2 h0 bs
-      (h2,bs2,is2) = compileFun gr arity st vs e1 h1 bs1 (arg:args)
+      (h2,bs2,is2) = compileFun gr eval st vs e1 h1 bs1 (arg:args)
   in (h2,bs2,is1++is2)
-compileFun gr arity st vs (Q (m,id))  h0 bs args =
+compileFun gr eval st vs (Q (m,id))  h0 bs args =
   case lookupAbsDef gr m id of
     Ok (_,Just _)
-       -> let (st1,is1) = pushArgs st (reverse args)
-          in (h0,bs,is1++[EVAL (GLOBAL (i2i id)) (if arity == 0 then (UpdateCall st st1) else (TailCall arity st st1))])
+       -> (h0,bs,eval (GLOBAL (i2i id)) args)
     _  -> let Ok ty = lookupFunType gr m id
               (ctxt,_,_) = typeForm ty
               c_arity    = length ctxt
@@ -107,40 +112,41 @@ compileFun gr arity st vs (Q (m,id))  h0 bs args =
               diff   = c_arity-n_args
           in if diff <= 0
                then if n_args == 0
-                      then (h0,bs,[EVAL (GLOBAL (i2i id)) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+                      then (h0,bs,eval (GLOBAL (i2i id)) [])
                       else let h1  = h0 + 2 + n_args
-                           in (h1,bs,PUT_CONSTR (i2i id):is1++[EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
+                           in (h1,bs,PUT_CONSTR (i2i id):is1++eval (HEAP h0) [])
                else let h1  = h0 + 1 + n_args
                         is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
                         b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall diff (diff+1) (diff+1))]
-                    in (h1,b:bs,PUT_CLOSURE (length bs):is1++[EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
-compileFun gr arity st vs (QC qid)    h0 bs args =
-  compileFun gr arity st vs (Q qid) h0 bs args
-compileFun gr arity st vs (Vr x)      h0 bs args =
-  let (st1,is1) = pushArgs st (reverse args)
-      arg       = (shiftIVal st1 . getVar vs) x
-  in (h0,bs,is1++[EVAL arg (if arity == 0 then (UpdateCall st st1) else (TailCall arity st st1))])
-compileFun gr arity st vs (EInt n)    h0 bs _  =
+                    in (h1,b:bs,PUT_CLOSURE (length bs):is1++eval (HEAP h0) [])
+compileFun gr eval st vs (QC qid)    h0 bs args =
+  compileFun gr eval st vs (Q qid) h0 bs args
+compileFun gr eval st vs (Vr x)      h0 bs args =
+  (h0,bs,eval (getVar vs x) args)
+compileFun gr eval st vs (EInt n)    h0 bs _  =
   let h1 = h0 + 2
-  in (h1,bs,[PUT_LIT (LInt n), EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
-compileFun gr arity st vs (K s)       h0 bs _  =
+  in (h1,bs,PUT_LIT (LInt n) : eval (HEAP h0) [])
+compileFun gr eval st vs (K s)       h0 bs _  =
   let h1 = h0 + 2
-  in (h1,bs,[PUT_LIT (LStr s), EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
-compileFun gr arity st vs (EFloat d)  h0 bs _  =
+  in (h1,bs,PUT_LIT (LStr s) : eval (HEAP h0) [])
+compileFun gr eval st vs (EFloat d)  h0 bs _  =
   let h1 = h0 + 2
-  in (h1,bs,[PUT_LIT (LFlt d), EVAL (HEAP h0) (if arity == 0 then (UpdateCall st st) else (TailCall arity st st))])
-compileFun gr arity st vs (Typed e _) h0 bs args =
-  compileFun gr arity st vs e h0 bs args
-compileFun gr arity st vs (Let (x, (_, e1)) e2) h0 bs args =
+  in (h1,bs,PUT_LIT (LFlt d) : eval (HEAP h0) [])
+compileFun gr eval st vs (Typed e _) h0 bs args =
+  compileFun gr eval st vs e h0 bs args
+compileFun gr eval st vs (Let (x, (_, e1)) e2) h0 bs args =
   let (h1,bs1,arg,is1) = compileLambda gr st vs [] e1 h0 bs
-      (h2,bs2,is2) = compileFun gr arity st ((x,arg):vs) e2 h1 bs1 args
+      (h2,bs2,is2) = compileFun gr eval st ((x,arg):vs) e2 h1 bs1 args
   in (h2,bs2,is1++is2)
-compileFun gr arity st vs (Glue e1 e2) h0 bs args =
-  let (h1,bs1,arg1,is1) = compileArg gr st vs e1 h0 bs
-      (h2,bs2,arg2,is2) = compileArg gr st vs e2 h1 bs1
-      (st1,is3) = pushArgs st [arg2,arg1]
-  in (h2,bs2,is1++is2++is3++[ADD])
-compileFun gr arity st vs e _ _ _ = error (show e)
+compileFun gr eval st vs (Glue e1 e2) h0 bs args =
+  let eval' fun args = [PUSH_FRAME]++is++[EVAL fun' RecCall]
+                       where
+                         (st1,is) = pushArgs (st+2) (reverse args)
+                         fun'     = shiftIVal st fun
+      (h1,bs1,is1) = compileFun gr eval' st vs e1 h0 bs  args
+      (h2,bs2,is2) = compileFun gr eval' st vs e2 h1 bs1 args
+  in (h2,bs2,is1++is2++[ADD])
+compileFun gr eval st vs e _ _ _ = error (show e)
 
 compileArg gr st vs (Q(m,id)) h0 bs =
   case lookupAbsDef gr m id of

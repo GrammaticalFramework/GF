@@ -24,6 +24,7 @@ data Instr
   | PUT_LIT Literal
   | SET IVal
   | SET_PAD
+  | PUSH_FRAME
   | PUSH IVal
   | EVAL IVal TailInfo
   | DROP {-# UNPACK #-} !Int
@@ -59,6 +60,7 @@ ppInstr (PUT_CLOSURE   l) = text "PUT_CLOSURE" <+> ppLabel l
 ppInstr (PUT_LIT lit    ) = text "PUT_LIT    " <+> ppLit lit
 ppInstr (SET           v) = text "SET        " <+> ppIVal v
 ppInstr (SET_PAD        ) = text "SET_PAD"
+ppInstr (PUSH_FRAME     ) = text "PUSH_FRAME"
 ppInstr (PUSH          v) = text "PUSH       " <+> ppIVal v
 ppInstr (EVAL       v ti) = text "EVAL       " <+> ppIVal v <+> ppTailInfo ti
 ppInstr (DROP n         ) = text "DROP       " <+> int n

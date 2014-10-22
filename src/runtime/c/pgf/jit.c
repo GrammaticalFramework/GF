@@ -937,6 +937,15 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				curr_offset++;
 				break;
 			}
+			case PGF_INSTR_PUSH_FRAME: {
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "PUSH_FRAME\n");
+#endif
+				jit_pushr_p(JIT_VCLOS);
+				jit_pushr_p(JIT_FP);
+				jit_movr_p(JIT_FP, JIT_SP);
+				break;
+			}
 			case PGF_INSTR_PUSH: {
 				switch (mod) {
 				case 0: {
@@ -990,7 +999,6 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			}
 			case PGF_INSTR_EVAL+0:
 			case PGF_INSTR_EVAL+2:
-				jit_movr_p(JIT_R2, JIT_VCLOS);
 			case PGF_INSTR_EVAL+1: {
 				switch (mod) {
 				case 0: {
@@ -1039,9 +1047,6 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #ifdef PGF_JIT_DEBUG
 				    gu_printf(out, err, "\n");
 #endif
-					jit_pushr_p(JIT_R2);
-					jit_pushr_p(JIT_FP);
-					jit_movr_p(JIT_FP, JIT_SP);
 					jit_callr(JIT_R0);
 					jit_popr_p(JIT_FP);
 					jit_popr_p(JIT_VCLOS);
@@ -1072,28 +1077,15 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				    gu_printf(out, err, " update(%d,%d)\n", b, c);
 #endif
 
-					if (b >= 3) {
-						jit_stxi_p(sizeof(PgfClosure*)*(c-3), JIT_SP, JIT_FP);
-						jit_stxi_p(sizeof(PgfClosure*)*(c-2), JIT_SP, JIT_R2);
+					if (b > 1) {
 						for (size_t i = 0; i < c-b; i++) {
-							jit_ldxi_p(JIT_R1, JIT_SP, sizeof(PgfClosure*)*((c-b-1)-i));
-							jit_stxi_p(sizeof(PgfClosure*)*((c-4)-i), JIT_SP, JIT_R1);
+							jit_ldxi_p(JIT_R1, JIT_SP, sizeof(PgfClosure*)*(c-b-1-i));
+							jit_stxi_p(sizeof(PgfClosure*)*(c-2-i), JIT_SP, JIT_R1);
 						}
-						jit_addi_p(JIT_SP, JIT_SP, (b-3)*sizeof(PgfClosure*));
-					} else {
-						jit_subi_p(JIT_SP, JIT_SP, (3-b)*sizeof(PgfClosure*));
-						for (size_t i = 0; i < c-b; i++) {
-							jit_ldxi_p(JIT_R1, JIT_SP, sizeof(PgfClosure*)*(i+(3-b)));
-							jit_stxi_p(sizeof(PgfClosure*)*i, JIT_SP, JIT_R1);
-						}
-						jit_stxi_p(sizeof(PgfClosure*)*(c-b),   JIT_SP, JIT_FP);
-						jit_stxi_p(sizeof(PgfClosure*)*(c-b+1), JIT_SP, JIT_R2);
+						jit_addi_p(JIT_SP, JIT_SP, (b-1)*sizeof(PgfClosure*));
 					}
-
-					jit_addi_p(JIT_FP, JIT_SP, sizeof(PgfClosure*)*(c-b));
 					jit_movi_p(JIT_R1, abstr->eval_gates->update_closure);
 					jit_pushr_p(JIT_R1);
-
 					jit_jmpr(JIT_R0);
 					break;
 				}
