@@ -28,6 +28,6 @@ oper
 -- only approximatively correct, for "si" is not really elided before
 -- the string "il" in general, but before the pronouns "il" and "ils".
 
-  elisSi = pre {"si" ; "s'" / strs {"il"}} ;
+  elisSi = pre {"si" ; ("s'" ++ Predef.BIND) / strs {"il"}} ;
 
 }

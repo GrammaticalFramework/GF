@@ -21,7 +21,7 @@ incomplete concrete VerbRomance of Verb =
     SlashV2V v vp = 
       mkVPSlash v.c2
        (insertComplement 
-         (\\a => prepCase v.c3.c ++ infVP vp a) 
+         (\\a => v.c3.s ++ prepCase v.c3.c ++ infVP vp a) 
          (predV v)) ; 
 
     SlashV2S v s = 
