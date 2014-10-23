@@ -46173,7 +46173,6 @@ lin separate_V2 = mkV2 "erottaa" ; --mkWV2 (k52A "erkaantua") ;
 lin separately_Adv = adjAdv separate_A | mkAdv "yksittäin" | mkAdv "yksitellen" ; -- derived
 lin separateness_N = mkWN (k40 "erillisyys") ; --UNCHK
 lin separation_N = mkWN (compoundN "ero" (k38 "ttaminen")) ; --UNCHK
-lin separationism_N = mkWN (k1 "ero") ; --UNCHK
 lin separatism_N = mkWN (k1 "ero") ; --UNCHK
 lin separatist_N = mkWN (k5 "separatisti") ; --UNCHK
 lin separative_A = mkWA "erotteleva" ; --UNCHK
