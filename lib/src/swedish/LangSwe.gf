@@ -4,7 +4,7 @@ concrete LangSwe of Lang =
   GrammarSwe,
   LexiconSwe
   ,ConstructionSwe
-  ,DocumentationSwe
+  ,DocumentationSwe --# notpresent
   ,MarkupSwe - [stringMark]
   ** {
 

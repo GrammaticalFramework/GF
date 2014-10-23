@@ -3,7 +3,7 @@
 concrete LangIta of Lang = 
   GrammarIta,
   LexiconIta
-  ,DocumentationIta
+  ,DocumentationIta --# notpresent
   ,ConstructionIta
   ** {
 

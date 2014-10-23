@@ -5,7 +5,7 @@ concrete LangChi of Lang =
   GrammarChi,
   LexiconChi
   ,ConstructionChi
-  ,DocumentationChi
+  ,DocumentationChi --# notpresent
   ** {
 
 flags startcat = Phr ; unlexer = concat ; lexer = text ;

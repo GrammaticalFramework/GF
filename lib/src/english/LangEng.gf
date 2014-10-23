@@ -1,10 +1,10 @@
---# -path=.:../abstract:../common:../api
+--# -path=.:../abstract:../common:../api:../prelude
 
 concrete LangEng of Lang = 
   GrammarEng,
   LexiconEng
   ,ConstructionEng
-  ,DocumentationEng
+  ,DocumentationEng --# notpresent
   ,MarkupEng - [stringMark]
   ** {
 
