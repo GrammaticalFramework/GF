@@ -1,5 +1,6 @@
 #include <gu/ucs.h>
 #include <gu/assert.h>
+#include <stdlib.h>
 
 bool
 gu_char_is_valid(char c)
