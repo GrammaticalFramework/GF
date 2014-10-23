@@ -20389,8 +20389,8 @@ lin spacious_A = mkA "espacioso" ; -- status=guess
 lin spade_N = mkN "negro" | mkN "mulato" ; -- status=guess status=guess
 lin spadix_N = mkN "espádice" masculine ; -- status=guess
 lin spaghetti_N = mkN "espagueti" masculine ; -- status=guess
-lin spain_PN = mkPN "la Madre Patria" ; -- status=guess src=geonames
-lin spalding_PN = mkPN "Spalding" ; -- status=guess src=geonames
+lin spain_PN = mkPN "España" ;
+lin spalding_PN = mkPN "Spalding" ;
 lin spallation_N = mkN "estallido" | mkN "fragmentación" feminine | mkN "astillado" | mkN "explosión" feminine | mkN "reventón" masculine ; -- status=guess status=guess status=guess status=guess status=guess
 lin spam_N = mkN "correo basura" ; -- status=guess
 lin span_N = mkN "cuarta" | mkN "palmo" ; -- status=guess status=guess
