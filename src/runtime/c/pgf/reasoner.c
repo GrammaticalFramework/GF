@@ -13,7 +13,7 @@ typedef struct {
 
 #ifdef PGF_REASONER_DEBUG
 typedef void (*PgfStatePrinter)(PgfReasonerState* st,
-                                GuWriter* wtr, GuExn* err, 
+                                GuOut* out, GuExn* err,
                                 GuPool* tmp_pool);
 #endif
 
@@ -90,23 +90,23 @@ pgf_expr_state_order = { cmp_expr_state };
 #ifdef PGF_REASONER_DEBUG
 static void
 pgf_print_parent_state(PgfExprState* st,
-                       GuWriter* wtr, GuExn* err, GuBuf* stack)
+                       GuOut* out, GuExn* err, GuBuf* stack)
 {
 	gu_buf_push(stack, int, (st->n_args - st->arg_idx - 1));
 
 	PgfExprState* parent = gu_buf_get(st->answers->parents, PgfExprState*, 0);
 	if (parent != NULL)
-		pgf_print_parent_state(parent, wtr, err, stack);
+		pgf_print_parent_state(parent, out, err, stack);
 
-	gu_puts(" (", wtr, err);
-	pgf_print_expr(st->expr, NULL, 0, wtr, err);
+	gu_puts(" (", out, err);
+	pgf_print_expr(st->expr, NULL, 0, out, err);
 }
 
 static void
 pgf_print_expr_state(PgfExprState* st,
-                     GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
+                     GuOut* out, GuExn* err, GuPool* tmp_pool)
 {	
-	gu_printf(wtr, err, "[%f] ", st->base.prob);
+	gu_printf(out, err, "[%f] ", st->base.prob);
 
 	GuBuf* stack = gu_new_buf(int, tmp_pool);
 	if (st->n_args > 0)
@@ -115,23 +115,23 @@ pgf_print_expr_state(PgfExprState* st,
 	PgfExprState* cont =
 		gu_buf_get(st->answers->parents, PgfExprState*, 0);
 	if (cont != NULL)
-		pgf_print_parent_state(cont, wtr, err, stack);
+		pgf_print_parent_state(cont, out, err, stack);
 
 	if (st->n_args > 0)
-		gu_puts(" (", wtr, err);
+		gu_puts(" (", out, err);
 	else
-		gu_puts(" ", wtr, err);
-	pgf_print_expr(st->expr, NULL, 0, wtr, err);
+		gu_puts(" ", out, err);
+	pgf_print_expr(st->expr, NULL, 0, out, err);
 
 	size_t n_counts = gu_buf_length(stack);
 	for (size_t i = 0; i < n_counts; i++) {
 		int count = gu_buf_get(stack, int, i);
 		while (count-- > 0)
-			gu_puts(" ?", wtr, err);
+			gu_puts(" ?", out, err);
 		
-		gu_puts(")", wtr, err);
+		gu_puts(")", out, err);
 	}
-	gu_puts("\n", wtr, err);
+	gu_puts("\n", out, err);
 }
 #endif
 
@@ -188,19 +188,19 @@ pgf_combine2_to_expr(PgfCombine2State* st, GuPool* tmp_pool)
 #ifdef PGF_REASONER_DEBUG
 static void
 pgf_print_combine1_state(PgfCombine1State* st,
-                         GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
+                         GuOut* out, GuExn* err, GuPool* tmp_pool)
 {
 	PgfExprState* nst = pgf_combine1_to_expr(st, tmp_pool);
-	pgf_print_expr_state(nst, wtr, err, tmp_pool);
+	pgf_print_expr_state(nst, out, err, tmp_pool);
 }
 
 static void
 pgf_print_combine2_state(PgfCombine2State* st,
-                         GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
+                         GuOut* out, GuExn* err, GuPool* tmp_pool)
 {
 	PgfExprState* nst = pgf_combine2_to_expr(st, tmp_pool);
 	if (nst != NULL)
-		pgf_print_expr_state(nst, wtr, err, tmp_pool);
+		pgf_print_expr_state(nst, out, err, tmp_pool);
 }
 #endif
 
@@ -350,9 +350,8 @@ pgf_reasoner_next(PgfReasoner* rs)
 		{
 			GuPool* tmp_pool = gu_new_pool();
 			GuOut* out = gu_file_out(stderr, tmp_pool);
-			GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
 			GuExn* err = gu_exn(tmp_pool);
-			st->print(st, wtr, err, tmp_pool);
+			st->print(st, out, err, tmp_pool);
 			gu_pool_free(tmp_pool);
 		}
 #endif
