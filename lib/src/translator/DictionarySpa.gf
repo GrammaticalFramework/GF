@@ -9019,6 +9019,7 @@ lin form_V = mkV "formar" ;
 lin form_V2 = mkV2 (mkV "formar") ;
 lin formal_A = mkA "formal" ;
 lin formaldehyde_N = mkN "formaldehído" ; -- status=guess
+lin formalism_N = mkN "formalismo" ;
 lin formalize_V2 = mkV2 (mkV "formalizar") ; -- status=guess, src=wikt
 lin formally_Adv = adjAdv formal_A ; -- -- derived
 lin format_N = mkN "formato" ; -- status=guess
@@ -12142,7 +12143,8 @@ lin jurist_N = mkN "jurista" masculine ; -- status=guess
 lin juror_N = mkN "jurado" ; -- status=guess
 lin jury_N = mkN "jurado" ; -- status=guess
 lin just_A = mkA "casi" | mkA "por poco" ; -- status=guess
-lin just_Adv = mkAdv "por si acaso" | mkAdv "por si las moscas" ;
+lin just_Adv = mkAdv "solamente" | mkAdv "por si acaso" ;
+lin just_AdV = mkAdV "solamente" ;
 lin justice_N = mkN "justicia" | mkN "justedad" | mkN "justeza" ; -- status=guess
 lin justification_N = mkN "justificación" feminine ; -- status=guess
 lin justified_A = variants {} ; --
