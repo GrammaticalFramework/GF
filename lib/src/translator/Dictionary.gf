@@ -51265,7 +51265,6 @@ fun separate_V2 : V2 ;
 fun separately_Adv : Adv  ;
 fun separateness_N : N ;
 fun separation_N : N ;
-fun separationism_N : N ;
 fun separatism_N : N ;
 fun separatist_N : N ;
 fun separative_A : A ;

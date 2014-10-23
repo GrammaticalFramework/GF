@@ -51267,7 +51267,6 @@ lin separate_V2 = mkV2 (regV "separieren" | irregV "unterscheiden" "unterscheide
 lin separately_Adv = mkAdv "getrennt" | adjAdv separate_A ; -- status=guess -- derived
 lin separateness_N = variants {} ;
 lin separation_N = mkN "Trennung" ; -- status=guess
-lin separationism_N = variants {} ;
 lin separatism_N = mkN "Separatismus" masculine ; -- status=guess
 lin separatist_N = mkN "Separatist" masculine ; -- status=guess
 lin separative_A = variants {} ;

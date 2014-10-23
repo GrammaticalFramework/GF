@@ -51073,7 +51073,6 @@ lin separate_V2 = mkV2 "skilja" "skilde" "skilt" | dirV2 (partV (mkV "skilja")"a
 lin separately_Adv = adjAdv separate_A ; -- -- derived
 lin separateness_N = mkN "avskildhet" "avskildheter" ; -- status=guess
 lin separation_N = mkN "separation" "separationer" | mkN "skilsmässa" ; -- SaldoWN -- comment=2
-lin separationism_N = variants {} ; -- status=guess
 lin separatism_N = mkN "separatism" "separatismer" ; -- status=guess
 lin separatist_N = mkN "separatist" "separatister" ; -- status=guess
 lin separative_A = variants {} ; -- status=guess
