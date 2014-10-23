@@ -7,30 +7,6 @@
 #include <malloc.h>
 #endif
 
-struct GuSeq {
-	size_t len;
-	uint8_t data[0];
-};
-
-struct GuBuf {
-	GuSeq* seq;
-	size_t elem_size;
-	size_t avail_len;
-	GuFinalizer fin;
-};
-
-size_t
-gu_buf_length(GuBuf* buf)
-{
-	return buf->seq->len;
-}
-
-size_t
-gu_buf_avail(GuBuf* buf)
-{
-	return buf->avail_len;
-}
-
 static void
 gu_buf_fini(GuFinalizer* fin)
 {
@@ -49,18 +25,6 @@ gu_make_buf(size_t elem_size, GuPool* pool)
 	buf->fin.fn = gu_buf_fini;
 	gu_pool_finally(pool, &buf->fin);
 	return buf;
-}
-
-size_t
-gu_seq_length(GuSeq* seq)
-{
-	return seq->len;
-}
-
-void*
-gu_seq_data(GuSeq* seq)
-{
-	return seq->data;
 }
 
 static GuSeq gu_empty_seq_ = {0};
@@ -130,18 +94,6 @@ gu_buf_require(GuBuf* buf, size_t req_len)
 }
 
 void*
-gu_buf_data(GuBuf* buf)
-{
-	return &buf->seq->data;
-}
-
-GuSeq*
-gu_buf_data_seq(GuBuf* buf)
-{
-	return buf->seq;
-}
-
-void*
 gu_buf_extend_n(GuBuf* buf, size_t n_elems)
 {
 	size_t len = gu_buf_length(buf);
@@ -149,12 +101,6 @@ gu_buf_extend_n(GuBuf* buf, size_t n_elems)
 	gu_buf_require(buf, new_len);
 	buf->seq->len = new_len;
 	return &buf->seq->data[buf->elem_size * len];
-}
-
-void*
-gu_buf_extend(GuBuf* buf)
-{
-	return gu_buf_extend_n(buf, 1);
 }
 
 void
@@ -171,18 +117,6 @@ gu_buf_trim_n(GuBuf* buf, size_t n_elems)
 	size_t new_len = gu_buf_length(buf) - n_elems;
 	buf->seq->len = new_len;
 	return &buf->seq->data[buf->elem_size * new_len];
-}
-
-const void*
-gu_buf_trim(GuBuf* buf)
-{
-	return gu_buf_trim_n(buf, 1);
-}
-
-void
-gu_buf_flush(GuBuf* buf)
-{
-	buf->seq->len = 0;
 }
 
 void
