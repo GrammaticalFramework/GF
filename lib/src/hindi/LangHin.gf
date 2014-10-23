@@ -3,7 +3,7 @@
 concrete LangHin of Lang = 
   GrammarHin,
   LexiconHin
- ,DocumentationHin
+ ,DocumentationHin --# notpresent
  ,ConstructionHin
   ** {
 

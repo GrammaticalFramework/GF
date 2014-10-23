@@ -3,7 +3,7 @@
 concrete LangSpa of Lang = 
   GrammarSpa,
   LexiconSpa
-  ,DocumentationSpa
+  ,DocumentationSpa --# notpresent
   ,ConstructionSpa
   ** {
 

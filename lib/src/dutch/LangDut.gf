@@ -3,6 +3,6 @@
 concrete LangDut of Lang = 
   GrammarDut,
   LexiconDut 
-  ,DocumentationDut
+  ,DocumentationDut --# notpresent
   ,ConstructionDut
 ;

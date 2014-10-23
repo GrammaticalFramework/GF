@@ -3,8 +3,8 @@
 concrete LangBul of Lang = 
   GrammarBul,
   LexiconBul,
-  ConstructionBul,
-  DocumentationBul
+  ConstructionBul
+  ,DocumentationBul --# notpresent
   ** {
 
 flags startcat = Phr ;
