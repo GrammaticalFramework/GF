@@ -79,6 +79,12 @@ int main(int argc, char* argv[]) {
   // XXX: This currently reads stdin directly, so it doesn't support
   // encodings properly. TODO: use a locale reader for input
   for (int ctr = 0; true; ctr++) {
+    // We release the last results
+    if (ppool != NULL) {
+      gu_pool_free(ppool);
+      ppool  = NULL;
+    }
+
     /* fprintf(stdout, "> "); */
     /* fflush(stdout); */
     char buf[4096];
@@ -95,12 +101,6 @@ int main(int argc, char* argv[]) {
     } else if (strcmp(line, "\n") == 0) {
       // Empty line -> skip
       continue;
-    }
-
-    // We release the last results
-    if (ppool != NULL) {
-      gu_pool_free(ppool);
-      ppool  = NULL;
     }
 
     // We create a temporary pool for translating a single
