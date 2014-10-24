@@ -27,6 +27,27 @@ gu_make_buf(size_t elem_size, GuPool* pool)
 	return buf;
 }
 
+extern size_t
+gu_buf_length(GuBuf* buf);
+
+extern size_t
+gu_buf_avail(GuBuf* buf);
+
+extern void*
+gu_buf_data(GuBuf* buf);
+
+extern GuSeq*
+gu_buf_data_seq(GuBuf* buf);
+
+extern void*
+gu_buf_extend(GuBuf* buf);
+
+extern const void*
+gu_buf_trim(GuBuf* buf);
+
+extern void
+gu_buf_flush(GuBuf* buf);
+
 static GuSeq gu_empty_seq_ = {0};
 
 GuSeq*
@@ -41,6 +62,12 @@ gu_make_seq(size_t elem_size, size_t length, GuPool* pool)
 	seq->len = length;
 	return seq;
 }
+
+extern size_t
+gu_seq_length(GuSeq* seq);
+
+extern void*
+gu_seq_data(GuSeq* seq);
 
 GuSeq*
 gu_alloc_seq_(size_t elem_size, size_t length)
