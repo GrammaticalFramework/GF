@@ -18,16 +18,19 @@ typedef struct GuMap GuMap;
 GuMap*
 gu_make_map(size_t key_size, GuHasher* hasher,
 	    size_t value_size, const void* default_value,
+	    size_t init_size,
 	    GuPool* pool);
 
+#define GU_MAP_DEFAULT_INIT_SIZE 11
+
 #define gu_new_map(K, HASHER, V, DV, POOL)			\
-	(gu_make_map(sizeof(K), (HASHER), sizeof(V), (DV), (POOL)))
+	(gu_make_map(sizeof(K), (HASHER), sizeof(V), (DV), GU_MAP_DEFAULT_INIT_SIZE, (POOL)))
 
 #define gu_new_set(K, HASHER, POOL)			\
-	(gu_make_map(sizeof(K), (HASHER), 0, NULL, (POOL)))
+	(gu_make_map(sizeof(K), (HASHER), 0, NULL, GU_MAP_DEFAULT_INIT_SIZE, (POOL)))
 
 #define gu_new_addr_map(K, V, DV, POOL)				\
-	(gu_make_map(sizeof(K), gu_addr_hasher, sizeof(V), (DV), (POOL)))
+	(gu_make_map(sizeof(K), gu_addr_hasher, sizeof(V), (DV), GU_MAP_DEFAULT_INIT_SIZE, (POOL)))
 
 size_t
 gu_map_count(GuMap* map);

@@ -148,12 +148,10 @@ gu_map_lookup(GuMap* map, const void* key, size_t* idx_out)
 	
 
 static void
-gu_map_resize(GuMap* map)
+gu_map_resize(GuMap* map, size_t req_entries)
 {
 	GuMapData* data = &map->data;
 	GuMapData old_data = *data;
-	size_t req_entries =
-		gu_twin_prime_sup(GU_MAX(11, map->data.n_occupied * 4 / 3 + 1));
 
 	size_t key_size = map->key_size;
 	size_t key_alloc = 0;
@@ -216,7 +214,9 @@ gu_map_maybe_resize(GuMap* map)
 {
 	if (map->data.n_entries <=
 	    map->data.n_occupied + (map->data.n_occupied / 4)) {
-		gu_map_resize(map);
+		size_t req_entries =
+			gu_twin_prime_sup(GU_MAX(11, map->data.n_occupied * 4 / 3 + 1));
+		gu_map_resize(map, req_entries);
 		return true;
 	}
 	return false;
@@ -368,6 +368,7 @@ static const uint8_t gu_map_no_values[1] = { 0 };
 GuMap*
 gu_make_map(size_t key_size, GuHasher* hasher,
 	    size_t value_size, const void* default_value,
+	    size_t init_size,
 	    GuPool* pool)
 {
 	GuMapData data = {
@@ -385,7 +386,8 @@ gu_make_map(size_t key_size, GuHasher* hasher,
 	map->value_size = value_size;
 	map->fin.fn = gu_map_finalize;
 	gu_pool_finally(pool, &map->fin);
-	gu_map_resize(map);
+
+	init_size = gu_twin_prime_sup(init_size);
+	gu_map_resize(map, init_size);
 	return map;
 }
-
