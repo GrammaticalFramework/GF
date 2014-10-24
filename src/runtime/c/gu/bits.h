@@ -29,20 +29,20 @@ gu_ceildiv(size_t size, size_t div)
 static inline bool
 gu_aligned(uintptr_t addr, size_t alignment)
 {
-	gu_require(alignment == gu_ceil2e(alignment));
+	//gu_require(alignment == gu_ceil2e(alignment));
 	return (addr & (alignment - 1)) == 0;
 }
 
 static inline uintptr_t
 gu_align_forward(uintptr_t addr, size_t alignment) {
-	gu_require(alignment == gu_ceil2e(alignment));
+	//gu_require(alignment == gu_ceil2e(alignment));
 	uintptr_t mask = alignment - 1;
 	return (addr + mask) & ~mask;
 }
 
 static inline uintptr_t
 gu_align_backward(uintptr_t addr, size_t alignment) {
-	gu_require(alignment == gu_ceil2e(alignment));
+	//gu_require(alignment == gu_ceil2e(alignment));
 	return addr & ~(alignment - 1);
 }
 
