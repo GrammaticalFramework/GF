@@ -27,7 +27,7 @@ gu_make_map(size_t key_size, GuHasher* hasher,
 	(gu_make_map(sizeof(K), (HASHER), 0, NULL, (POOL)))
 
 #define gu_new_addr_map(K, V, DV, POOL)				\
-	(gu_make_map(0, NULL, sizeof(V), (DV), (POOL)))
+	(gu_make_map(sizeof(K), gu_addr_hasher, sizeof(V), (DV), (POOL)))
 
 size_t
 gu_map_count(GuMap* map);
