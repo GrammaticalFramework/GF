@@ -5,13 +5,6 @@
 #include <gu/prime.h>
 #include <gu/string.h>
 
-typedef enum {
-	GU_MAP_GENERIC,
-	GU_MAP_ADDR,
-	GU_MAP_WORD,
-	GU_MAP_STRING
-} GuMapKind;
-
 typedef struct GuMapData GuMapData;
 
 struct GuMapData {
@@ -23,7 +16,6 @@ struct GuMapData {
 };
 
 struct GuMap {
-	GuMapKind kind;
 	GuHasher* hasher;
 	size_t key_size;
 	size_t value_size;
@@ -61,17 +53,16 @@ gu_map_entry_is_free(GuMap* map, GuMapData* data, size_t idx)
 {
 	if (idx == data->zero_idx) {
 		return false;
-	} else if (map->kind == GU_MAP_ADDR) {
+	} else if (map->hasher == gu_addr_hasher) {
 		const void* key = ((const void**)data->keys)[idx];
 		return key == NULL;
-	} else if (map->kind == GU_MAP_WORD) {
+	} else if (map->hasher == gu_word_hasher) {
 		GuWord key = ((GuWord*)data->keys)[idx];
 		return key == 0;
-	} else if (map->kind == GU_MAP_STRING) {
+	} else if (map->hasher == gu_string_hasher) {
 		GuString key = ((GuString*)data->keys)[idx];
 		return key == NULL;
 	}
-	gu_assert(map->kind == GU_MAP_GENERIC);
 	const void* key = &data->keys[idx * map->key_size];
 	return gu_map_buf_is_zero(key, map->key_size);
 }
@@ -80,8 +71,57 @@ static bool
 gu_map_lookup(GuMap* map, const void* key, size_t* idx_out)
 {
 	size_t n = map->data.n_entries;
-	switch (map->kind) {
-	case GU_MAP_GENERIC: {
+	if (map->hasher == gu_addr_hasher) {
+		GuHash hash = (GuHash) key;
+		size_t idx = hash % n;
+		size_t offset = (hash % (n - 2)) + 1;
+		while (true) {
+			const void* entry_key =
+				((const void**)map->data.keys)[idx];
+			if (entry_key == NULL && map->data.zero_idx != idx) {
+				*idx_out = idx;
+				return false;
+			} else if (entry_key == key) {
+				*idx_out = idx;
+				return true;
+			}
+			idx = (idx + offset) % n;
+		}
+	} else if (map->hasher == gu_word_hasher) {
+		GuWord w = *(const GuWord*)key;
+		GuHash hash = (GuHash) w;
+		size_t idx = hash % n;
+		size_t offset = (hash % (n - 2)) + 1;
+		while (true) {
+			GuWord entry_key = ((GuWord*)map->data.keys)[idx];
+			if (entry_key == 0 && map->data.zero_idx != idx) {
+				*idx_out = idx;
+				return false;
+			} else if (entry_key == w) {
+				*idx_out = idx;
+				return true;
+			}
+			idx = (idx + offset) % n;
+		}
+	} else if (map->hasher == gu_string_hasher) {
+		GuHasher* hasher = map->hasher;
+		GuEquality* eq = (GuEquality*) hasher;
+		GuHash hash = hasher->hash(hasher, key);
+		size_t idx = hash % n;
+		size_t offset = (hash % (n - 2)) + 1;
+		while (true) {
+			GuString entry_key =
+				((GuString*)map->data.keys)[idx];
+			if (entry_key == NULL && map->data.zero_idx != idx) {
+				*idx_out = idx;
+				return false;
+			} else if (eq->is_equal(eq, key, entry_key)) {
+				*idx_out = idx;
+				return true;
+			}
+			idx = (idx + offset) % n;
+		}
+	} else {
 		GuHasher* hasher = map->hasher;
 		GuEquality* eq = (GuEquality*) hasher;
 		GuHash hash = hasher->hash(hasher, key);
@@ -100,71 +140,8 @@ gu_map_lookup(GuMap* map, const void* key, size_t* idx_out)
 			}
 			idx = (idx + offset) % n;
 		}
-		gu_impossible();
-		break;
 	}
-	case GU_MAP_ADDR: {
-		GuHash hash = (GuHash) key;
-		size_t idx = hash % n;
-		size_t offset = (hash % (n - 2)) + 1;
-		while (true) {
-			const void* entry_key =
-				((const void**)map->data.keys)[idx];
-			if (entry_key == NULL && map->data.zero_idx != idx) {
-				*idx_out = idx;
-				return false;
-			} else if (entry_key == key) {
-				*idx_out = idx;
-				return true;
-			}
-			idx = (idx + offset) % n;
-		}
-		gu_impossible();
-		break;
-	}
-	case GU_MAP_WORD: {
-		GuWord w = *(const GuWord*)key;
-		GuHash hash = (GuHash) w;
-		size_t idx = hash % n;
-		size_t offset = (hash % (n - 2)) + 1;
-		while (true) {
-			GuWord entry_key = ((GuWord*)map->data.keys)[idx];
-			if (entry_key == 0 && map->data.zero_idx != idx) {
-				*idx_out = idx;
-				return false;
-			} else if (entry_key == w) {
-				*idx_out = idx;
-				return true;
-			}
-			idx = (idx + offset) % n;
-		}
-		gu_impossible();
-		break;
-	}
-	case GU_MAP_STRING: {
-		GuHasher* hasher = map->hasher;
-		GuEquality* eq = (GuEquality*) hasher;
-		GuHash hash = hasher->hash(hasher, key);
-		size_t idx = hash % n;
-		size_t offset = (hash % (n - 2)) + 1;
-		while (true) {
-			GuString entry_key =
-				((GuString*)map->data.keys)[idx];
-			if (entry_key == NULL && map->data.zero_idx != idx) {
-				*idx_out = idx;
-				return false;
-			} else if (eq->is_equal(eq, key, entry_key)) {
-				*idx_out = idx;
-				return true;
-			}
-			idx = (idx + offset) % n;
-		}
-		gu_impossible();
-		break;
-	}
-	default:
-		gu_impossible();
-	}
+
 	gu_impossible();
 	return false;
 }
@@ -194,23 +171,16 @@ gu_map_resize(GuMap* map)
 					    GU_MIN(key_alloc / key_size,
 						   value_alloc / value_size)
 					    : key_alloc / key_size);
-	switch (map->kind) {
-	case GU_MAP_GENERIC:
-	case GU_MAP_WORD:
-		memset(data->keys, 0, key_alloc);
-		break;
-	case GU_MAP_ADDR:
+	if (map->hasher == gu_addr_hasher) {
 		for (size_t i = 0; i < data->n_entries; i++) {
 			((const void**)data->keys)[i] = NULL;
 		}
-		break;
-	case GU_MAP_STRING:
+	} else if (map->hasher == gu_string_hasher) {
 		for (size_t i = 0; i < data->n_entries; i++) {
 			((GuString*)data->keys)[i] = NULL;
 		}
-		break;
-	default:
-		gu_impossible();
+	} else {
+		memset(data->keys, 0, key_alloc);
 	}
 
 	gu_assert(data->n_entries > data->n_occupied);
@@ -223,9 +193,9 @@ gu_map_resize(GuMap* map)
 			continue;
 		}
 		void* old_key = &old_data.keys[i * key_size];
-		if (map->kind == GU_MAP_ADDR) {
+		if (map->hasher == gu_addr_hasher) {
 			old_key = *(void**)old_key;
-		} else if (map->kind == GU_MAP_STRING) {
+		} else if (map->hasher == gu_string_hasher) {
 			old_key = (void*) *(GuString*)old_key;
 		}
 		void* old_value = &old_data.values[i * value_size];
@@ -298,9 +268,9 @@ gu_map_insert(GuMap* map, const void* key)
 			found = gu_map_lookup(map, key, &idx);
 			gu_assert(!found);
 		}
-		if (map->kind == GU_MAP_ADDR) {
+		if (map->hasher == gu_addr_hasher) {
 			((const void**)map->data.keys)[idx] = key;
-		} else if (map->kind == GU_MAP_STRING) {
+		} else if (map->hasher == gu_string_hasher) {
 			((GuString*)map->data.keys)[idx] = key;
 		} else {
 			memcpy(&map->data.keys[idx * map->key_size],
@@ -328,9 +298,9 @@ gu_map_iter(GuMap* map, GuMapItor* itor, GuExn* err)
 		}
 		const void* key = &map->data.keys[i * map->key_size];
 		void* value = &map->data.values[i * map->value_size];
-		if (map->kind == GU_MAP_ADDR) {
+		if (map->hasher == gu_addr_hasher) {
 			key = *(const void* const*) key;
-		} else if (map->kind == GU_MAP_STRING) {
+		} else if (map->hasher == gu_string_hasher) {
 			key = *(GuString*) key;
 		}
 		itor->fn(itor, key, value, err);
@@ -357,9 +327,9 @@ gu_map_enum_next(GuEnum* self, void* to, GuPool* pool)
 		}
 		en->x.key   = &en->ht->data.keys[i * en->ht->key_size];
 		en->x.value = &en->ht->data.values[i * en->ht->value_size];
-		if (en->ht->kind == GU_MAP_ADDR) {
+		if (en->ht->hasher == gu_addr_hasher) {
 			en->x.key = *(const void* const*) en->x.key;
-		} else if (en->ht->kind == GU_MAP_STRING) {
+		} else if (en->ht->hasher == gu_string_hasher) {
 			en->x.key = *(GuString*) en->x.key;
 		}
 
@@ -400,17 +370,6 @@ gu_make_map(size_t key_size, GuHasher* hasher,
 	    size_t value_size, const void* default_value,
 	    GuPool* pool)
 {
-	GuMapKind kind =
-		((!hasher || hasher == gu_addr_hasher)
-		 ? GU_MAP_ADDR
-		 : (hasher == gu_string_hasher)
-		 ? GU_MAP_STRING
-		 : (key_size == sizeof(GuWord) && hasher == gu_word_hasher)
-		 ? GU_MAP_WORD
-		 : GU_MAP_GENERIC);
-	if (kind == GU_MAP_ADDR || kind == GU_MAP_STRING) {
-		key_size = sizeof(GuWord);
-	}
 	GuMapData data = {
 		.n_occupied = 0,
 		.n_entries = 0,
@@ -425,7 +384,6 @@ gu_make_map(size_t key_size, GuHasher* hasher,
 	map->key_size = key_size;
 	map->value_size = value_size;
 	map->fin.fn = gu_map_finalize;
-	map->kind = kind;
 	gu_pool_finally(pool, &map->fin);
 	gu_map_resize(map);
 	return map;
