@@ -16,8 +16,9 @@ type CodeLabel = Int
 
 data Instr
   = CHECK_ARGS {-# UNPACK #-} !Int
-  | CASE CId {-# UNPACK #-} !Int  {-# UNPACK #-} !CodeLabel
+  | CASE CId  {-# UNPACK #-} !CodeLabel
   | CASE_LIT Literal  {-# UNPACK #-} !CodeLabel
+  | SAVE {-# UNPACK #-} !Int
   | ALLOC  {-# UNPACK #-} !Int
   | PUT_CONSTR CId
   | PUT_CLOSURE   {-# UNPACK #-} !CodeLabel
@@ -52,8 +53,9 @@ ppCode l []       = empty
 ppCode l (is:iss) = ppLabel l <+> vcat (map ppInstr is) $$ ppCode (l+1) iss
 
 ppInstr (CHECK_ARGS    n) = text "CHECK_ARGS " <+> int n
-ppInstr (CASE id n l    ) = text "CASE       " <+> ppCId id <+> int n <+> ppLabel l
+ppInstr (CASE id l      ) = text "CASE       " <+> ppCId id <+> ppLabel l
 ppInstr (CASE_LIT lit l ) = text "CASE_LIT   " <+> ppLit lit <+> ppLabel l
+ppInstr (SAVE          n) = text "SAVE       " <+> int n
 ppInstr (ALLOC         n) = text "ALLOC      " <+> int n
 ppInstr (PUT_CONSTR   id) = text "PUT_CONSTR " <+> ppCId id
 ppInstr (PUT_CLOSURE   l) = text "PUT_CLOSURE" <+> ppLabel l

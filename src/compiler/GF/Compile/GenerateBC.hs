@@ -60,19 +60,21 @@ compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
                                                    (bs2,instrs2) = compileEquations gr arity st (i:is) eqs fl (instrs2:bs1)
                                                in (bs2,instrs1)
 
-    case_instr t n =
+    case_instr t =
       case t of
-        (Q (_,id)) -> CASE (i2i id) n
+        (Q (_,id)) -> CASE (i2i id)
         (EInt n)   -> CASE_LIT (LInt n)
         (K s)      -> CASE_LIT (LStr s)
         (EFloat d) -> CASE_LIT (LFlt d)
 
+    saves n = reverse [SAVE i | i <- [0..n-1]]
+
     compileBranch0 fl bs ((t,n),eqs) =
       let (bs1,instrs) = compileEquations gr arity (st+n) (push_is (st+n-1) n is) eqs fl bs
-      in (bs1, case_instr t n (length bs1) : instrs)
+      in (bs1, case_instr t (length bs1) : saves n ++ instrs)
 
     compileBranch l bs ((t,n),eqs) =
-      let (bs1,instrs) = compileEquations gr arity (st+n) (push_is (st+n-1) n is) eqs fl ((case_instr t n (length bs1) : instrs) : bs)
+      let (bs1,instrs) = compileEquations gr arity (st+n) (push_is (st+n-1) n is) eqs fl ((case_instr t (length bs1) : saves n ++ instrs) : bs)
       in bs1
 
 mkFail arity st1 Nothing

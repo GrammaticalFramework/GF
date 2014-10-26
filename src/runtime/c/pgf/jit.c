@@ -689,10 +689,9 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 			}
 			case PGF_INSTR_CASE: {
 				PgfCId id  = pgf_read_cid(rdr, rdr->tmp_pool);
-				int n      = pgf_read_int(rdr);
 				int target = pgf_read_int(rdr);
 #ifdef PGF_JIT_DEBUG
-				gu_printf(out, err, "CASE        %s %d %03d\n", id, n, target);
+				gu_printf(out, err, "CASE        %s %03d\n", id, target);
 #endif
 				jit_insn *jump =
 					jit_bnei_i(jit_forward(), JIT_RET, (int) jit_forward());
@@ -707,11 +706,6 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				call_patch.cid = id;
 				call_patch.ref = jump-6;
 				gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, call_patch);
-
-				for (int i = n; i > 0; i--) {
-					jit_ldxi_p(JIT_R0, JIT_VHEAP, sizeof(PgfValue)+sizeof(PgfClosure*)*(i-1));
-					jit_pushr_p(JIT_R0);
-				}
 				break;
 			}
 			case PGF_INSTR_CASE_LIT: {
@@ -770,6 +764,15 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				label_patch.is_abs  = false;
 				gu_buf_push(rdr->jit_state->segment_patches, PgfSegmentPatch, label_patch);
 
+				break;
+			}
+			case PGF_INSTR_SAVE: {
+				int i = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "SAVE        %d\n", i);
+#endif
+				jit_ldxi_p(JIT_R0, JIT_VHEAP, sizeof(PgfValue)+sizeof(PgfClosure*)*i);
+				jit_pushr_p(JIT_R0);
 				break;
 			}
 			case PGF_INSTR_ALLOC: {
