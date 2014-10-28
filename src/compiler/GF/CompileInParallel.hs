@@ -19,13 +19,16 @@ import GF.Infra.Ident(moduleNameS)
 import GF.Text.Pretty
 import qualified Data.ByteString.Lazy as BS
 
--- | Compile the given grammar files and everything they depend on.
--- This function compiles modules in parallel.
+-- | Compile the given grammar files and everything they depend on,
+-- like 'batchCompile'. This function compiles modules in parallel.
 -- It keeps modules compiled in /present/ and /alltenses/ mode apart,
 -- storing the @.gfo@ files in separate subdirectories to avoid creating
 -- the broken PGF files that can result from mixing different modes in the
 -- same concrete syntax.
-
+--
+-- The first argument is supposed to be the number of jobs to run in
+-- parallel, but this has not been implemented yet. Instead you have to
+-- use the GHC run-time flag @+RTS -N -RTS@ to enable parallelism.
 parallelBatchCompile jobs opts rootfiles0 =
   do rootfiles <- mapM canonical rootfiles0
      lib_dir  <- canonical =<< getLibraryDirectory opts
