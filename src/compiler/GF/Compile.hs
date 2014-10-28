@@ -46,6 +46,10 @@ link opts (cnc,gr) =
 srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc
 
 -- | Compile the given grammar files and everything they depend on.
+-- Compiled modules are stored in @.gfo@ files (unless the @-tags@ option is
+-- used, in which case tags files are produced instead).
+-- Existing @.gfo@ files are reused if they are up-to-date
+-- (unless the option @-src@ aka @-force-recomp@ is used).
 batchCompile :: Options -> [FilePath] -> IOE (UTCTime,(ModuleName,Grammar))
 batchCompile opts files = do
   (gr,menv) <- foldM (compileModule opts) emptyCompileEnv files
