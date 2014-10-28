@@ -289,7 +289,7 @@ Library
   if os(windows)
     build-depends: Win32
   else
-    build-depends: unix
+    build-depends: unix, terminfo>=0.4
 
 
 Executable gf

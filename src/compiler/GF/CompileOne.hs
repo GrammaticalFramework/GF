@@ -27,6 +27,7 @@ import GF.System.Directory(doesFileExist,getCurrentDirectory,renameFile)
 import System.FilePath(makeRelative)
 import qualified Data.Map as Map
 import GF.Text.Pretty(render,(<+>),($$)) --Doc,
+import GF.System.Console(TermColors(..),getTermColors)
 import Control.Monad((<=<))
 
 type OneOutput = (Maybe FullPath,CompiledModule)
@@ -161,7 +162,8 @@ idump opts pass = intermOut opts (Dump pass) . ppModule Internal
 
 warnOut opts warnings
   | null warnings = done
-  | otherwise     = do ePutStr "\ESC[34m";ePutStr ws;ePutStrLn "\ESC[m"
+  | otherwise     = do t <- getTermColors
+                       ePutStr (blueFg t);ePutStr ws;ePutStrLn (restore t)
   where
     ws = if flag optVerbosity opts == Normal
          then '\n':warnings
