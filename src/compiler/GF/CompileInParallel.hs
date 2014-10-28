@@ -17,6 +17,7 @@ import GF.Data.Operations
 import GF.Grammar.Grammar(emptyGrammar,prependModule)
 import GF.Infra.Ident(moduleNameS)
 import GF.Text.Pretty
+import GF.System.Console(TermColors(..),getTermColors)
 import qualified Data.ByteString.Lazy as BS
 
 -- | Compile the given grammar files and everything they depend on,
@@ -81,13 +82,15 @@ batchCompile1 lib_dir (opts,filepaths) =
          ppPath ps = "-path="<>intercalate ":" (map rel ps)
      deps <- newMVar M.empty
      toLog <- newLog runIOE
+     term <- getTermColors
      let --logStrLn = toLog . ePutStrLn
        --ok :: CollectOutput IO a -> IO a
          ok (CO m) = err bad good =<< appIOE m
            where
               good (o,r) = do toLog o; return r
               bad e = do toLog (redPutStrLn e); fail "failed"
-              redPutStrLn s = do ePutStr "\ESC[31m";ePutStr s;ePutStrLn "\ESC[m"
+              redPutStrLn s = do ePutStr (redFg term);ePutStr s
+                                 ePutStrLn (restore term)
      sgr <- liftIO $ newMVar emptyGrammar
      let extendSgr sgr m =
            modifyMVar_ sgr $ \ gr ->
