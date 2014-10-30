@@ -27,6 +27,7 @@ data Instr
   | SET_PAD
   | PUSH_FRAME
   | PUSH IVal
+  | TUCK IVal {-# UNPACK #-} !Int
   | EVAL IVal TailInfo
   | DROP {-# UNPACK #-} !Int
   | JUMP {-# UNPACK #-} !CodeLabel
@@ -38,11 +39,12 @@ data IVal
   | ARG_VAR  {-# UNPACK #-} !Int
   | FREE_VAR {-# UNPACK #-} !Int
   | GLOBAL   CId
+  deriving Eq
 
 data TailInfo
   = RecCall
-  | TailCall   {-# UNPACK #-} !Int {-# UNPACK #-} !Int {-# UNPACK #-} !Int
-  | UpdateCall                     {-# UNPACK #-} !Int {-# UNPACK #-} !Int
+  | TailCall {-# UNPACK #-} !Int
+  | UpdateCall
 
 ppLit (LStr s) = text (show s)
 ppLit (LInt n) = int n
@@ -65,6 +67,7 @@ ppInstr (SET_PAD        ) = text "SET_PAD"
 ppInstr (PUSH_FRAME     ) = text "PUSH_FRAME"
 ppInstr (PUSH          v) = text "PUSH       " <+> ppIVal v
 ppInstr (EVAL       v ti) = text "EVAL       " <+> ppIVal v <+> ppTailInfo ti
+ppInstr (TUCK v n       ) = text "TUCK       " <+> ppIVal v <+> int n
 ppInstr (DROP n         ) = text "DROP       " <+> int n
 ppInstr (JUMP l         ) = text "JUMP       " <+> ppLabel l
 ppInstr (FAIL           ) = text "FAIL"
@@ -75,8 +78,8 @@ ppIVal (ARG_VAR  n) = text "stk" <> parens (int n)
 ppIVal (FREE_VAR n) = text "env" <> parens (int n)
 ppIVal (GLOBAL  id) = ppCId id
 
-ppTailInfo RecCall            = empty
-ppTailInfo (TailCall   a b c) = text "tail"   <> parens (int a <> comma <> int b <> comma <> int c)
-ppTailInfo (UpdateCall   b c) = text "update" <> parens (int b <> comma <> int c)
+ppTailInfo RecCall      = empty
+ppTailInfo (TailCall n) = text "tail" <> parens (int n)
+ppTailInfo UpdateCall   = text "update"
 
 ppLabel l = text (let s = show l in replicate (3-length s) '0' ++ s)

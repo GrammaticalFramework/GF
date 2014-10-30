@@ -1000,6 +1000,61 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				}
 				break;
 			}
+			case PGF_INSTR_TUCK: {
+				switch (mod) {
+				case 0: {
+					size_t offset = pgf_read_int(rdr);
+					size_t sindex = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+					gu_printf(out, err, "TUCK        hp(%d) %d\n", offset, sindex);
+#endif
+
+					if (offset == 0) {
+						jit_stxi_p(sizeof(PgfClosure*)*sindex, JIT_SP, JIT_VHEAP);
+					} else {
+						jit_addi_p(JIT_R0, JIT_VHEAP, offset*sizeof(void*));
+						jit_stxi_p(sizeof(PgfClosure*)*sindex, JIT_SP, JIT_R0);
+					}
+					break;
+				}
+				case 1: {
+					size_t index  = pgf_read_int(rdr);
+					size_t sindex = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+					gu_printf(out, err, "TUCK        stk(%d) %d\n", index, sindex);
+#endif
+					jit_ldxi_p(JIT_R0, JIT_SP, index*sizeof(PgfClosure*));
+					jit_stxi_p(sizeof(PgfClosure*)*sindex, JIT_SP, JIT_R0);
+					break;
+				}
+				case 2: {
+					size_t index  = pgf_read_int(rdr);
+					size_t sindex = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+					gu_printf(out, err, "TUCK        env(%d) %d\n", index, sindex);
+#endif
+					jit_ldxi_p(JIT_R0, JIT_VCLOS, sizeof(PgfClosure)+index*sizeof(PgfClosure*));
+					jit_stxi_p(sizeof(PgfClosure*)*sindex, JIT_SP, JIT_R0);
+					break;
+				}
+				case 3: {
+					PgfCId id     = pgf_read_cid(rdr, rdr->tmp_pool);
+					size_t sindex = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+					gu_printf(out, err, "TUCK        %s %d\n", id, sindex);
+#endif
+					PgfCallPatch patch;
+					patch.cid = id;
+					patch.ref = jit_movi_p(JIT_R0, jit_forward());
+					gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
+					jit_stxi_p(sizeof(PgfClosure*)*sindex, JIT_SP, JIT_R0);
+					break;
+				}
+				default:
+					gu_impossible();
+				}
+				break;
+			}
 			case PGF_INSTR_EVAL+0:
 			case PGF_INSTR_EVAL+2:
 			case PGF_INSTR_EVAL+1: {
@@ -1057,36 +1112,18 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				}
 				case 1: {
 					size_t a = pgf_read_int(rdr);
-				    size_t b = pgf_read_int(rdr);
-				    size_t c = pgf_read_int(rdr);
 #ifdef PGF_JIT_DEBUG
-				    gu_printf(out, err, " tail(%d,%d,%d)\n", a, b, c);
+				    gu_printf(out, err, " tail(%d)\n", a);
 #endif
-
-					jit_ldxi_p(JIT_R2, JIT_SP, sizeof(PgfClosure*)*(c-a-1));
-					for (size_t i = 0; i < c-b; i++) {
-						jit_ldxi_p(JIT_R1, JIT_SP, sizeof(PgfClosure*)*((c-b-1)-i));
-						jit_stxi_p(sizeof(PgfClosure*)*((c-1)-i), JIT_SP, JIT_R1);
-					}
-					jit_addi_p(JIT_SP, JIT_SP, b*sizeof(PgfClosure*));
-					jit_pushr_p(JIT_R2);
+					jit_addi_p(JIT_SP, JIT_SP, a*sizeof(PgfClosure*));
 					jit_jmpr(JIT_R0);
 					break;
 				}
 				case 2: {
-				    size_t b = pgf_read_int(rdr);
-				    size_t c = pgf_read_int(rdr);
 #ifdef PGF_JIT_DEBUG
-				    gu_printf(out, err, " update(%d,%d)\n", b, c);
+				    gu_printf(out, err, " update\n");
 #endif
 
-					if (b > 1) {
-						for (size_t i = 0; i < c-b; i++) {
-							jit_ldxi_p(JIT_R1, JIT_SP, sizeof(PgfClosure*)*(c-b-1-i));
-							jit_stxi_p(sizeof(PgfClosure*)*(c-2-i), JIT_SP, JIT_R1);
-						}
-						jit_addi_p(JIT_SP, JIT_SP, (b-1)*sizeof(PgfClosure*));
-					}
 					jit_movi_p(JIT_R1, abstr->eval_gates->update_closure);
 					jit_pushr_p(JIT_R1);
 					jit_jmpr(JIT_R0);

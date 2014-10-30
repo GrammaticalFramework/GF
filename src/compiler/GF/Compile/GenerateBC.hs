@@ -7,6 +7,7 @@ import PGF(CId,utf8CId)
 import PGF.Internal(CodeLabel,Instr(..),IVal(..),TailInfo(..),Literal(..))
 import qualified Data.Map as Map
 import Data.List(nub,mapAccumL)
+import Data.Maybe(fromMaybe)
 
 generateByteCode :: SourceGrammar -> Int -> [L Equation] -> [[Instr]]
 generateByteCode gr arity eqs =
@@ -88,10 +89,9 @@ compileBody gr arity st vs e bs =
   let eval fun args 
         | arity == 0 = let (st1,is) = pushArgs (st+2) (reverse args)
                            fun'     = shiftIVal st1 fun
-                       in [PUSH_FRAME]++is++[EVAL fun' (UpdateCall st st1)]
-        | otherwise  = let (st1,is) = pushArgs st (reverse args)
-                           fun'     = shiftIVal st1 fun
-                       in is++[EVAL fun' (TailCall arity st st1)]
+                       in [PUSH_FRAME]++is++[EVAL fun' UpdateCall]
+        | otherwise  = let (st1,fun',is) = tuckArgs arity st fun args
+                       in is++[EVAL fun' (TailCall (st1-length args-1))]
       (heap,bs1,is) = compileFun gr eval st vs e 0 bs []
   in (bs1,if heap > 0 then (ALLOC heap : is) else is)
 
@@ -119,7 +119,13 @@ compileFun gr eval st vs (Q (m,id))  h0 bs args =
                            in (h1,bs,PUT_CONSTR (i2i id):is1++eval (HEAP h0) [])
                else let h1  = h0 + 1 + n_args
                         is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
-                        b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall diff (diff+1) (diff+1))]
+                        b   = CHECK_ARGS diff :
+                              ALLOC (c_arity+2) : 
+                              PUT_CONSTR (i2i id) : 
+                              is2 ++
+                              TUCK (ARG_VAR 0) diff :
+                              EVAL (HEAP h0) (TailCall diff) :
+                              []
                     in (h1,b:bs,PUT_CLOSURE (length bs):is1++eval (HEAP h0) [])
 compileFun gr eval st vs (QC qid)    h0 bs args =
   compileFun gr eval st vs (Q qid) h0 bs args
@@ -159,7 +165,13 @@ compileArg gr st vs (Q(m,id)) h0 bs =
                      in if c_arity == 0
                           then (h0,bs,GLOBAL (i2i id),[])
                           else let is2 = [SET (ARG_VAR (i+1)) | i <- [0..c_arity-1]]
-                                   b   = CHECK_ARGS c_arity : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall c_arity (c_arity+1) (c_arity+1))]
+                                   b   = CHECK_ARGS c_arity :
+                                         ALLOC (c_arity+2) :
+                                         PUT_CONSTR (i2i id) :
+                                         is2 ++
+                                         TUCK (ARG_VAR 0) c_arity :
+                                         EVAL (HEAP h0) (TailCall c_arity) :
+                                         []
                                    h1  = h0 + 2
                                in (h1,b:bs,HEAP h0,[PUT_CLOSURE (length bs),SET_PAD])
 compileArg gr st vs (QC qid)    h0 bs =
@@ -206,7 +218,13 @@ compileArg gr st vs e           h0 bs =
                       in (h2,bs1,HEAP h1,is1 ++ (PUT_CONSTR (i2i id) : is2))
                  else let h2  = h1 + 1 + n_args
                           is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
-                          b   = CHECK_ARGS diff : ALLOC (c_arity+2) : PUT_CONSTR (i2i id) : is2 ++ [EVAL (HEAP h0) (TailCall diff (diff+1) (diff+1))]
+                          b   = CHECK_ARGS diff :
+                                ALLOC (c_arity+2) :
+                                PUT_CONSTR (i2i id) :
+                                is2 ++
+                                TUCK (ARG_VAR 0) diff :
+                                EVAL (HEAP h0) (TailCall diff) :
+                                []
                       in (h2,b:bs1,HEAP h1,is1 ++ (PUT_CLOSURE (length bs):is2))
        Nothing -> compileLambda gr st vs [] e h0 bs
 
@@ -240,6 +258,28 @@ shiftIVal st arg         = arg
 pushArgs st []         = (st,[])
 pushArgs st (arg:args) = let (st1,is) = pushArgs (st+1) args
                          in (st1, PUSH (shiftIVal st arg) : is)
+
+tuckArgs arity st fun args = (st2,shiftIVal st2 fun',is1++is2)
+  where
+    (st2,fun',is2) = tucks st1 0 fun tas
+    (st1,is1) = pushArgs st pas
+    (tas,pas) = splitAt st args'
+    args' = reverse (ARG_VAR arity : args)
+
+    tucks st i fun []             = (st,fun,[])
+    tucks st i fun (arg:args)
+      | arg == ARG_VAR i      = tucks st (i+1) fun args
+      | otherwise             = case save st (ARG_VAR i) (fun:args) of
+                                  Just (fun:args) -> let (st1,fun',is) = tucks (st+1) (i+1) fun args
+                                                     in (st1, fun', PUSH (ARG_VAR (st-i-1)) :
+                                                                    TUCK (shiftIVal (st+1) arg) (st-i) : is)
+                                  Nothing         -> let (st1,fun',is) = tucks st (i+1) fun args
+                                                     in (st1, fun', TUCK (shiftIVal st arg) (st-i-1) : is)
+
+    save st arg0 []         = Nothing
+    save st arg0 (arg:args)
+      | arg0 == arg         = Just (ARG_VAR st1 : fromMaybe args (save st arg0 args))
+      | otherwise           = fmap (arg :) (save st arg0 args)
 
 setArgs st []         = []
 setArgs st (arg:args) = SET (shiftIVal st arg) : setArgs st args
