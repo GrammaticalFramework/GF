@@ -39,5 +39,6 @@ resource Predef = {
   oper nonExist : Str = variants {} ;  -- a placeholder for non-existant morphological forms
   oper BIND : Str = variants {} ;  -- a token for gluing
   oper SOFT_BIND : Str = variants {} ;  -- a token for soft gluing
+  oper CAPIT : Str = variants {} ;  -- a token for capitalization
 
 } ;
