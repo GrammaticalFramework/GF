@@ -76,10 +76,11 @@ libpgf_la_SOURCES = \
 	pgf/typechecker.c \
 	pgf/reasoner.c \
 	pgf/evaluator.c \
+	pgf/hopu.c \
 	pgf/printer.c \
 	pgf/graphviz.c \
 	pgf/pgf.c \
-	pgf/pgf.h
+	pgf/pgf.h \
 libpgf_la_LDFLAGS = "-no-undefined"
 libpgf_la_LIBADD = libgu.la
 
