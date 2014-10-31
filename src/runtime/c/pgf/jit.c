@@ -371,9 +371,9 @@ pgf_jit_gates(PgfReader* rdr)
 	int closure_arg = jit_arg_p();
 	jit_getarg_p(JIT_VSTATE, es_arg);
 	jit_getarg_p(JIT_VCLOS,  closure_arg);
+	jit_stxi_p(offsetof(PgfEvalState, enter_stack_ptr), JIT_VSTATE, JIT_SP);
 	jit_ldr_p(JIT_R0, JIT_VCLOS);
 	jit_callr(JIT_R0);
-	jit_insn* enter_ret = (void*) jit_get_ip().ptr;
 	jit_movr_p(JIT_RET, JIT_VHEAP);
 	jit_ret();
 
@@ -547,7 +547,9 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_pushr_p(JIT_R0);
 	jit_jmpi(gates->mk_const);
 	jit_patch(ref2);
-	ref2 = jit_bnei_i(jit_forward(), JIT_R0, (int)enter_ret);
+	jit_ldxi_p(JIT_R1, JIT_VSTATE, offsetof(PgfEvalState,enter_stack_ptr));
+	ref2 = jit_bner_p(jit_forward(), JIT_FP, JIT_R1);
+	jit_stxi_p(offsetof(PgfEvalState,tmp), JIT_VSTATE, JIT_R0);
 	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
 	jit_pushr_i(JIT_R0);
 	jit_prepare(2);
@@ -556,8 +558,8 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
 	jit_pusharg_p(JIT_R0);
 	jit_finish(gu_malloc);
-	jit_popr_i(JIT_R1);
 	jit_movr_p(JIT_VHEAP, JIT_RET);
+	jit_popr_i(JIT_R1);
 	jit_movi_p(JIT_R2, gates->evaluate_value_const);
 	jit_str_p(JIT_VHEAP, JIT_R2);
 	jit_stxi_p(offsetof(PgfValuePAP,fun), JIT_VHEAP, JIT_VCLOS);
@@ -570,7 +572,8 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_subi_i(JIT_R1, JIT_R1, sizeof(void*));
 	jit_jmpi(next);
 	jit_patch(ref);
-	jit_jmpi(enter_ret);
+	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,tmp));
+	jit_jmpr(JIT_R0);
 	jit_patch(ref2);
 	jit_ldxi_p(JIT_VCLOS, JIT_FP, sizeof(void*));
 	jit_ldr_p(JIT_FP, JIT_FP);
@@ -581,14 +584,19 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_movr_p(JIT_SP, JIT_R0);
 	jit_jmpi(gates->mk_const);
 
-	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
 	gates->evaluate_gen = jit_get_ip().ptr;
 	jit_jmpi(gates->mk_const);
 
-	pgf_jit_make_space(rdr, JIT_CODE_WINDOW*2);
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
 	gates->evaluate_meta = jit_get_ip().ptr;
+	jit_jmpi(gates->mk_const);
+
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
+
+	gates->evaluate_sum = jit_get_ip().ptr;
 	jit_jmpi(gates->mk_const);
 
 	gates->fin.fn = pgf_jit_finalize_cafs;
@@ -1167,10 +1175,88 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #endif
 				jit_jmpi(abstr->eval_gates->mk_const);
 				break;
+			case PGF_INSTR_PUSH_ACCUM:
+				jit_subi_p(JIT_SP, JIT_SP, sizeof(PgfEvalAccum));
+
+				switch (mod) {
+				case 0: {
+					int val = pgf_read_int(rdr);
+#ifdef PGF_JIT_DEBUG
+					gu_printf(out, err, "PUSH_ACCUM  %d\n", val);
+#endif
+					jit_prepare(3);
+					jit_movi_i(JIT_R0, val);
+					jit_movr_p(JIT_R1, JIT_SP);
+					jit_pusharg_p(JIT_R0);
+					jit_pusharg_p(JIT_R1);
+					jit_pusharg_p(JIT_VSTATE);
+					jit_finish(pgf_evaluate_accum_init_int);
+					break;
+				}
+				case 1: {
+					size_t len = pgf_read_len(rdr);
+					uint8_t* buf = alloca(len*6+1);
+					uint8_t* p   = buf;
+					for (size_t i = 0; i < len; i++) {
+						gu_in_utf8_buf(&p, rdr->in, rdr->err);
+					}
+					*p++ = 0;
+
+					GuString val = 
+						*buf ? gu_string_copy((GuString) buf, rdr->opool)
+						     : NULL;
+#ifdef PGF_JIT_DEBUG
+					gu_printf(out, err, "PUSH_ACCUM  \"%s\"\n", buf);
+#endif
+					jit_prepare(3);
+					jit_movi_p(JIT_R0, val);
+					jit_movr_p(JIT_R1, JIT_SP);
+					jit_pusharg_p(JIT_R0);
+					jit_pusharg_p(JIT_R1);
+					jit_pusharg_p(JIT_VSTATE);
+					jit_finish(pgf_evaluate_accum_init_str);
+					break;
+				}
+				case 2: {
+					double val = pgf_read_double(rdr);
+#ifdef PGF_JIT_DEBUG
+					gu_printf(out, err, "PUSH_ACCUM  %f\n", val);
+#endif
+					jit_prepare_d(1);
+					jit_prepare_i(2);
+					jit_movi_d(JIT_FPR0, val);
+					jit_movr_p(JIT_R1, JIT_SP);
+					jit_pusharg_d(JIT_FPR0);
+					jit_pusharg_p(JIT_R1);
+					jit_pusharg_p(JIT_VSTATE);
+					jit_finish(pgf_evaluate_accum_init_flt);
+					break;
+				}
+				default:
+					gu_impossible();
+				}
+				break;
+			case PGF_INSTR_POP_ACCUM:
+#ifdef PGF_JIT_DEBUG
+				gu_printf(out, err, "POP_ACCUM\n");
+#endif
+				jit_prepare(2);
+				jit_pusharg_p(JIT_SP);
+				jit_pusharg_p(JIT_VSTATE);
+				jit_finish(pgf_evaluate_accum_done);
+				jit_addi_p(JIT_SP, JIT_SP, sizeof(PgfEvalAccum));
+				jit_pushr_p(JIT_RET);
+				break;
 			case PGF_INSTR_ADD:
 #ifdef PGF_JIT_DEBUG
 				gu_printf(out, err, "ADD\n");
 #endif
+				jit_prepare(3);
+				jit_movr_p(JIT_R1, JIT_SP);
+				jit_pusharg_p(JIT_VHEAP);
+				jit_pusharg_p(JIT_R1);
+				jit_pusharg_p(JIT_VSTATE);
+				jit_finish(pgf_evaluate_accum_add);
 				break;
 			default:
 				gu_impossible();

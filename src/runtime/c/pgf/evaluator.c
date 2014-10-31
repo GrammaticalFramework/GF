@@ -313,6 +313,48 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 				               PgfExprVar,
 				               &expr, pool);
 			evar->var = level - fun->level - 1;
+		} else if (val->fun->code == state->eval_gates->evaluate_sum) {
+			PgfValueSum* sum = (PgfValueSum*) val->fun;
+
+			PgfExpr e1,e2;
+			PgfExprFun *efun =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+				                    PgfExprFun,
+				                    fun, 2,
+				                    &e1, pool);
+			strcpy(efun->fun, "+");
+
+			PgfExprLit *elit =
+				gu_new_variant(PGF_EXPR_LIT,
+				               PgfExprLit,
+				               &e2, pool);
+			elit->lit = sum->lit;
+			
+			PgfExprApp* eapp =
+				gu_new_variant(PGF_EXPR_APP,
+				               PgfExprApp,
+				               &expr, pool);
+			eapp->fun = e1;
+			eapp->arg = e2;
+	
+			size_t n_consts = gu_buf_length(sum->consts);
+			for (size_t i = 0; i < n_consts; i++) {
+				PgfClosure* con =
+					gu_buf_get(sum->consts, PgfClosure*, i);
+
+				PgfExpr fun = expr;
+				PgfExpr arg = 
+					pgf_value2expr(state, level, con, pool);
+				if (gu_variant_is_null(arg))
+					return gu_null_variant;
+
+				PgfExprApp* e =
+					gu_new_variant(PGF_EXPR_APP,
+					               PgfExprApp,
+					               &expr, pool);
+				e->fun = fun;
+				e->arg = arg;
+			}
 		} else {
 			PgfAbsFun* absfun = gu_container(val->fun, PgfAbsFun, closure);
 			expr   = absfun->ep.expr;
@@ -369,4 +411,119 @@ pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err, GuPool* pool, GuPool* out_poo
 	thunk->expr = expr;
 
 	return pgf_value2expr(state, 0, &thunk->header, out_pool);
+}
+
+void
+pgf_evaluate_accum_init_int(PgfEvalState* state, 
+                            PgfEvalAccum* accum, int val)
+{
+	PgfLiteralInt *lit_int =
+		gu_new_variant(PGF_LITERAL_INT,
+	                   PgfLiteralInt,
+	                   &accum->lit,
+					   state->pool);
+	lit_int->val = val;
+	accum->consts = NULL;
+}
+
+void
+pgf_evaluate_accum_init_str(PgfEvalState* state, 
+                            PgfEvalAccum* accum, GuString val)
+{
+	if (val == NULL)
+		val = "";
+
+	PgfLiteralStr *lit_str =
+		gu_new_flex_variant(PGF_LITERAL_STR,
+							PgfLiteralStr,
+							val, strlen(val)+1,
+							&accum->lit, state->pool);
+	strcpy((char*) lit_str->val, (char*) val);
+	accum->consts = NULL;
+}
+
+void
+pgf_evaluate_accum_init_flt(PgfEvalState* state, 
+                            PgfEvalAccum* accum, float val)
+{
+	PgfLiteralFlt *lit_flt =
+		gu_new_variant(PGF_LITERAL_FLT,
+					   PgfLiteralFlt,
+					   &accum->lit,
+					   state->pool);
+	lit_flt->val = val;
+	accum->enter_stack_ptr = state->enter_stack_ptr;
+	state->enter_stack_ptr = ((void*)accum)-sizeof(void*)*2;
+	accum->consts = NULL;
+}
+
+static void
+pgf_evaluate_accum_add_helper(PgfEvalAccum* accum, PgfLiteral lit)
+{
+	GuVariantInfo ei = gu_variant_open(lit);
+	switch (ei.tag) {
+	case PGF_LITERAL_INT: {
+		PgfLiteralInt* lint = ei.data;
+		((PgfLiteralInt*)gu_variant_data(accum->lit))->val += lint->val;
+		break;
+	}
+	case PGF_LITERAL_STR: {
+		PgfLiteralStr* lstr = ei.data;
+		break;
+	}
+	case PGF_LITERAL_FLT: {
+		PgfLiteralFlt* lflt = ei.data;
+		((PgfLiteralFlt*)gu_variant_data(accum->lit))->val += lflt->val;
+		break;
+	}
+	}
+}
+
+void
+pgf_evaluate_accum_add(PgfEvalState* state,
+                       PgfEvalAccum* accum, PgfClosure* closure)
+{
+	if (closure->code == state->eval_gates->evaluate_value_lit) {
+		PgfValueLit* val = (PgfValueLit*) closure;
+		pgf_evaluate_accum_add_helper(accum, val->lit);
+	} else if (closure->code == state->eval_gates->evaluate_value_const) {
+		if (accum->consts == NULL)
+			accum->consts = gu_new_buf(PgfClosure*, state->pool);
+
+		PgfValuePAP* pap = (PgfValuePAP*) closure;
+		
+		if (pap->fun->code == state->eval_gates->evaluate_sum) {
+			PgfValueSum* val = (PgfValueSum*) ((PgfValuePAP*) closure)->fun;
+			pgf_evaluate_accum_add_helper(accum, val->lit);
+
+			size_t n_consts = gu_buf_length(val->consts);
+			for (size_t i = 0; i < n_consts; i++) {
+				PgfClosure* clos = gu_buf_get(val->consts, PgfClosure*, i);
+				gu_buf_push(accum->consts, PgfClosure*, clos);
+			}
+		} else {
+			gu_buf_push(accum->consts, PgfClosure*, closure);
+		}
+	} else {
+		gu_impossible();
+	}
+}
+
+PgfClosure*
+pgf_evaluate_accum_done(PgfEvalState* state, PgfEvalAccum* accum)
+{
+	state->enter_stack_ptr = accum->enter_stack_ptr;
+
+	if (accum->consts == NULL) {
+		PgfValueLit* val = gu_new(PgfValueLit, state->pool);
+		val->header.code = state->eval_gates->evaluate_value_lit;
+		val->lit = accum->lit;
+		return &val->header;
+	} else {
+		PgfValueSum* val = gu_new(PgfValueSum, state->pool);
+		val->header.code = state->eval_gates->evaluate_sum;
+		val->lit = accum->lit;
+		val->consts = accum->consts;
+		return &val->header;
+	}
 }
