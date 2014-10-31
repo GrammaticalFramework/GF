@@ -32,6 +32,8 @@ data Instr
   | DROP {-# UNPACK #-} !Int
   | JUMP {-# UNPACK #-} !CodeLabel
   | FAIL
+  | PUSH_ACCUM Literal
+  | POP_ACCUM
   | ADD
 
 data IVal
@@ -71,6 +73,8 @@ ppInstr (TUCK v n       ) = text "TUCK       " <+> ppIVal v <+> int n
 ppInstr (DROP n         ) = text "DROP       " <+> int n
 ppInstr (JUMP l         ) = text "JUMP       " <+> ppLabel l
 ppInstr (FAIL           ) = text "FAIL"
+ppInstr (PUSH_ACCUM  lit) = text "PUSH_ACCUM " <+> ppLit lit
+ppInstr (POP_ACCUM      ) = text "POP_ACCUM"
 ppInstr (ADD            ) = text "ADD"
 
 ppIVal (HEAP     n) = text "hp"  <> parens (int n)

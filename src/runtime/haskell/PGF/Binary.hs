@@ -177,7 +177,11 @@ instance Binary Instr where
   put (DROP n             ) = putWord8 64  >> put n
   put (JUMP l             ) = putWord8 68  >> put l
   put (FAIL               ) = putWord8 72
-  put (ADD                ) = putWord8 76
+  put (PUSH_ACCUM (LInt n)) = putWord8 76 >> put n
+  put (PUSH_ACCUM (LStr s)) = putWord8 77 >> put s
+  put (PUSH_ACCUM (LFlt d)) = putWord8 78 >> put d
+  put (POP_ACCUM          ) = putWord8 80
+  put (ADD                ) = putWord8 84
 
 instance Binary Type where
   put (DTyp hypos cat exps) = put (hypos,cat,exps)

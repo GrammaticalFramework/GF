@@ -15,8 +15,16 @@ typedef struct {
 	PgfEvalGates* eval_gates; // cached from pgf->abstr->eval_gates
 	GuPool* pool;
 	GuExn* err;
+	void* enter_stack_ptr;
+	void* tmp;              // for temporary register spills
 	PgfIndirection cafs[];  // derived from gu_seq_data(pgf->abstr->eval_gates->cafs)
 } PgfEvalState;
+
+typedef struct {
+	PgfLiteral lit;
+	GuBuf* consts;
+	void* enter_stack_ptr;
+} PgfEvalAccum;
 
 typedef struct PgfEnv PgfEnv;
 
@@ -55,6 +63,12 @@ typedef struct {
 
 typedef struct {
 	PgfClosure header;
+	PgfLiteral lit;
+	GuBuf* consts;
+} PgfValueSum;
+
+typedef struct {
+	PgfClosure header;
 	PgfClosure* fun;
 	size_t      n_args;
 	PgfClosure* args[];
@@ -70,6 +84,7 @@ struct PgfEvalGates {
 	PgfFunction evaluate_value_const;
 	PgfFunction evaluate_meta;
 	PgfFunction evaluate_gen;
+	PgfFunction evaluate_sum;
 	PgfFunction evaluate_caf;
 
 	PgfFunction update_closure;
@@ -89,5 +104,24 @@ pgf_evaluate_expr_thunk(PgfEvalState* state, PgfExprThunk* thunk);
 PgfClosure*
 pgf_evaluate_lambda_application(PgfEvalState* state, PgfExprThunk* lambda,
                                                      PgfClosure* arg);
+
+void
+pgf_evaluate_accum_init_int(PgfEvalState* state, 
+                            PgfEvalAccum* accum, int val);
+
+void
+pgf_evaluate_accum_init_str(PgfEvalState* state, 
+                            PgfEvalAccum* accum, GuString val);
+                            
+void
+pgf_evaluate_accum_init_flt(PgfEvalState* state, 
+                            PgfEvalAccum* accum, float val);
+
+void
+pgf_evaluate_accum_add(PgfEvalState* state, 
+                       PgfEvalAccum* accum, PgfClosure* closure);
+
+PgfClosure*
+pgf_evaluate_accum_done(PgfEvalState* state, PgfEvalAccum* accum);
 
 #endif
