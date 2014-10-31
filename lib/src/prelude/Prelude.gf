@@ -2,7 +2,7 @@
 
 -- This file defines some prelude facilities usable in all grammars.
 
-resource Prelude = Predef[nonExist, BIND, SOFT_BIND] ** open (Predef=Predef) in {
+resource Prelude = Predef[nonExist, BIND, SOFT_BIND, CAPIT] ** open (Predef=Predef) in {
 
 oper
 
@@ -111,7 +111,6 @@ oper
 -- These should be hidden, and never changed since they are hardcoded in (un)lexers
 
     PARA : Str = "&-" ;
-    CAPIT : Str = "&|" ;
 
 -- Embed between commas, where the latter one disappears in front of other punctuation
 
