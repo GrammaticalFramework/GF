@@ -85,7 +85,7 @@ oper
       _ + ("ca"|"ga")  => mkNoun (nomVaca noi) Fem ;
       _ + "gua"        => mkNoun (nomLlengua noi) Fem ;
       _ + "a"          => mkNoun (nomCasa "es" noi) Fem ;
-      _ + "s"|"x"|"ç"  => mkNounMas nomCas ;
+      _ + ("s"|"x"|"ç")  => mkNounMas nomCas ;
       _ + "i"          => mkNounMas nomFre ;
       _ + "í"          => mkNounMas (nomCasa "ins") ;
       _ + "à"          => mkNounMas (nomCasa "ans") ;
