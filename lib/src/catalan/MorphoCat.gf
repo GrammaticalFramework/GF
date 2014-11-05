@@ -48,6 +48,12 @@ oper
   nomTest : Str -> Number => Str = \test ->
           numForms test (variants {test + "s"; test + "os"}) ; 
 
+  nomLlengua: Str -> Number => Str = \llengua ->
+        let
+                lleng = Predef.tk 2 llengua
+        in
+        numForms llengua (lleng + "ües") ;
+
   nomFaig : Str -> Number => Str = \faig ->
         let
                 fa = Predef.tk 2 faig
@@ -77,6 +83,7 @@ oper
     in
     case noi of {
       _ + ("ca"|"ga")  => mkNoun (nomVaca noi) Fem ;
+      _ + "gua"        => mkNoun (nomLlengua noi) Fem ;
       _ + "a"          => mkNoun (nomCasa "es" noi) Fem ;
       _ + "s"|"x"|"ç"  => mkNounMas nomCas ;
       _ + "i"          => mkNounMas nomFre ;

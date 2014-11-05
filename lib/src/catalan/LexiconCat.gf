@@ -63,14 +63,14 @@ lin
    cold_A = regADeg "fred" ;
    come_V = verbV (venir_117 "venir") ;
    computer_N = regMN "ordinador" ;    
-   country_N = regMN "país" ;       -- masc
+   country_N = regMN "país" ;  -- països     -- masc
    cousin_N = regMN "cosí" ;
    cow_N = mkN "vaca" ;
    die_V = verbV (morir_71 "morir") ;
    dirty_A = regADeg "brut" ;
    distance_N3 = mkN3 (regFN "distància") genitive dative ;
    doctor_N = regMN "metge" ;   -- metgessa
-   dog_N = regMN "gos" ;        -- gossa
+   dog_N = mkN "gos" ;        -- gossa
    door_N = regFN "porta" ;
    drink_V2 = dirV2 (verbV (beure_11 "beure")) ;
    easy_A2V = mkA2V (regA "fácil") dative genitive ;
@@ -81,7 +81,7 @@ lin
    father_N2 = deN2 (regMN "pare") ;
    fear_VS = mkVS (verbV (témer_107 "témer")) ;
    find_V2 = dirV2 (mkV "trobar") ;
-   fish_N = regMN "peix" ;
+   fish_N = mkN "peix" ; -- peixos
    floor_N = regMN "terra" ;        -- sòl
    forget_V2 = dirV2 (mkV "oblidar") ;
    fridge_N = regFN "nevera" ;
@@ -107,7 +107,7 @@ lin
    important_A = regADeg "important" ;
    industry_N = regFN "indústria" ;
    iron_N = regMN "ferro" ;
-   king_N = regMN "rei" ;
+   king_N = regMN "rei" ; 
    know_V2 = dirV2 saberV ;
    know_VQ = mkVQ saberV;
    know_VS = mkVS saberV;
@@ -210,7 +210,7 @@ lin
    warm_A = compADeg (mkA "tebi" "tèbia" "tebis" "tèbies" "tèbiament") ;
    war_N = regFN "guerra" ;
    watch_V2 = dirV2 (mkV "mirar") ;
-   water_N = regFN "aigua" ;
+   water_N = mkN "aigua" ; -- aigües
    white_A = compADeg (mkA "blanc" "blanca" "blancs" "blanques" "blancament") ;
    window_N = regFN "finestra" ;
    wine_N = regMN "vi" ;
@@ -252,7 +252,7 @@ lin
    bark_N = regFN "escorça" ;
    belly_N = regFN "panxa" ;
    blood_N = regFN "sang" ;
-   bone_N = regMN "os" ;
+   bone_N = regMN "os" ; -- ossos
    breast_N = regFN "sina" ;             -- pit
    cloud_N = regMN "núvol" ;
    day_N = regMN "dia" ;
@@ -289,7 +289,7 @@ lin
    night_N = regFN "nit" ;
    nose_N = regMN "nas" ;
    person_N = regFN "persona" ;
-   rain_N = regFN "pluja" ;
+   rain_N = regFN "pluja" ; -- pluges
    road_N = regMN "carrer" ;               
    root_N = regFN "arrel" ;
    rope_N = regN "corda" ;
@@ -302,7 +302,7 @@ lin
    snow_N = regFN "neu" ;       -- fem
    stick_N = regMN "bastó"  ;               
    tail_N = regFN "cua" ;
-   tongue_N = regFN "llengua" ;
+   tongue_N = mkN "llengua" ; -- llengües
    tooth_N = regFN "dent" ;
    wife_N = regFN "esposa" ;
    wind_N = regMN "vent" ;
@@ -358,7 +358,7 @@ lin
    today_Adv = mkAdv "avui" ;
 
   grammar_N = regFN "gramàtica" ;
-  language_N = regFN "llengua" ;
+  language_N = mkN "llengua" ; -- llengües
   rule_N = regFN "regla" ;
   question_N = regFN "pregunta" ;
   ready_A = regA "preparat" ;
