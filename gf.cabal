@@ -255,8 +255,12 @@ Library
     cpp-options: -DC_RUNTIME
 
   if flag(server)
-    build-depends: httpd-shed>=0.4.0.2, network>=2.3 && <2.6, json, cgi
-                   -- ,silently
+    build-depends: httpd-shed>=0.4.0.2, network>=2.3 && <2.6, json
+    if impl(ghc>=7.8)
+      build-depends: cgi>=3001.2.2.0
+    else
+      build-depends: cgi
+
     cpp-options: -DSERVER_MODE
     other-modules:
       GF.Server
