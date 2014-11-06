@@ -8186,10 +8186,9 @@ lin faun_N = mkN "faune" masculine ; -- tocheck
 lin fauna_N = mkN "faune" feminine ; -- tocheck
 lin fauvism_N = mkN "fauvisme" masculine ; -- tocheck
 lin faversham_PN = mkPN "Faversham" ; -- status=guess src=geonames
-lin favor_V2 = mkV2 (mkV "favoriser") ; -- tocheck
 lin favour_N = variants {} ; --
 lin favour_V = variants {} ; --
-lin favour_V2 = variants {} ; --
+lin favour_V2 = mkV2 (mkV "favoriser"); --
 lin favour_VS = variants {} ; --
 lin favourable_A = mkA "favorable" ; -- tocheck
 lin favouriteFem_N = mkN "favorite" feminine ; -- tocheck

@@ -21032,21 +21032,16 @@ lin fauvism_N = mkN "Fauvismus" masculine ; -- status=guess
 lin faux_pas_N = variants {} ;
 lin faversham_PN = mkPN "Faversham" ; -- src=geonames status=guess
 lin favism_N = variants {} ;
-lin favor_N = mkN "Gefallen" "Gefallen" masculine | mkN "Gefälligkeit" feminine ; -- status=guess status=guess
-lin favorable_A = variants {} ;
-lin favorableness_N = variants {} ;
-lin favored_A = variants {} ;
-lin favorite_A = mkA "Lieblings-" | mkA "liebster" ; -- status=guess status=guess
-lin favorite_N = mkN "Favorit" "Favoriten" masculine ; -- status=guess
-lin favoritism_N = variants {} ;
-lin favour_N = variants {} ; --
+lin favour_N = mkN "Gefallen" "Gefallen" masculine | mkN "Gefälligkeit" feminine ; -- status=guess status=guess
 lin favour_V = variants {} ; --
 lin favour_V2 = variants {} ; --
 lin favour_VS = variants {} ; --
 lin favourable_A = mkA "günstig" ; -- status=guess
-lin favouriteFem_N = variants {} ;
-lin favouriteMasc_N = mkN "Liebling" "Lieblinge" masculine ; -- status=guess
-lin favourite_A = variants {} ; --
+lin favourableness_N = variants {} ;
+lin favoured_A = variants {} ;
+lin favouriteFem_N = mkN "Favoritin" "Favoritinen" feminine;
+lin favouriteMasc_N = mkN "Favorit" "Favoriten" masculine;
+lin favourite_A = mkA "Lieblings-" | mkA "liebster" ; -- status=guess status=guess
 lin favouritism_N = mkN "Günstlingswirtschaft" feminine | mkN "Vetternwirtschaft" feminine ; -- status=guess status=guess
 lin favus_N = variants {} ;
 lin fawley_PN = mkPN "Fawley" ; -- src=eng status=guess

@@ -20952,15 +20952,14 @@ lin fauvism_N = variants {} ; -- status=guess
 lin faux_pas_N = mkN "fadäs" "fadäser" ; -- status=guess
 lin faversham_PN = mkPN "Faversham" neutrum ; -- src=geonames status=guess
 lin favism_N = variants {} ; -- status=guess
-lin favorableness_N = variants {} ; -- status=guess
-lin favoritism_N = variants {} ; -- status=guess
 lin favour_N = mkN "tjänst" "tjänster" | mkN "ynnest" ; -- SaldoWN = mkN "tjänst" "tjänster" ; -- comment=15
 lin favour_V = variants {} ; -- mkV2 "gynna" ;
 lin favour_V2 = mkV2 "gynna" ;
 lin favour_VS = variants {} ; -- mkV2 "gynna" ;
 lin favourable_A = mkA "välvillig" ; -- comment=4
+lin favourableness_N = variants {} ; -- status=guess
 lin favouriteFem_N = mkN "favorit" "favoriter" ; -- comment=3
-lin favouriteMasc_N = variants {} ; --
+lin favouriteMasc_N = mkN "favorit" "favoriter" ; --
 lin favourite_A = variants {} ; --
 lin favouritism_N = variants {} ; -- status=guess
 lin favus_N = variants {} ; -- status=guess
