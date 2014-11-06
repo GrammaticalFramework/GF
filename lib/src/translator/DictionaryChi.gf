@@ -1879,7 +1879,6 @@ lin anorthite_N = mkN "钙长石" ; -- open-multilingual-wordnet
 lin anorthitic_A = mkA "钙长石" ; -- open-multilingual-wordnet
 lin anorthopia_N = mkN "不正视" ; -- open-multilingual-wordnet
 lin anosmia_N = mkN "嗅觉丧失症" | mkN "嗅觉缺失" ; -- open-multilingual-wordnet
-lin another_A = mkA "他" | mkA "再" | mkA "别" ;
 lin another_Det = mkpDet "他" | mkpDet "再" | mkpDet "别" | {-HSK-} mkpDet "其他" ;
 lin another_Quant = mkQuant "另一" ;
 lin anovulation_N = mkN "停止排卵" | mkN "排卵停止" | mkN "排卵抑制" ; -- open-multilingual-wordnet

@@ -2597,7 +2597,6 @@ lin anorthitic_A = mkA "anorthitic" ;
 lin anorthopia_N = mkN "anorthopia" ;
 lin anosmia_N = mkN "anosmia" ;
 lin anosmic_A = mkA "anosmic" ;
-lin another_A = mkA "another" ;
 lin another_Det = mkDeterminer singular "another" ;
 lin another_Quant = mkQuant "another" "other";
 lin anovulation_N = mkN "anovulation" ;

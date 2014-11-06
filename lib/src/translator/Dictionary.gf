@@ -2584,7 +2584,6 @@ fun anorthitic_A : A ;
 fun anorthopia_N : N ;
 fun anosmia_N : N ;
 fun anosmic_A : A ;
-fun another_A : A  ;
 fun another_Det : Det ;
 fun another_Quant : Quant ;
 fun anovulation_N : N ;
