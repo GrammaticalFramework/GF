@@ -7150,15 +7150,13 @@ lin faulty_A = mkA "kapot" | mkA "gebrekkig" ; -- status=guess status=guess
 lin faun_N = mkN "faun" ; -- status=guess
 lin fauna_N = mkN "fauna" masculine feminine ; -- status=guess
 lin faversham_PN = mkPN "Faversham" ; -- src=geonames status=guess
-lin favor_N = mkN "dienst" | mkN "gunst" ; -- status=guess status=guess
-lin favorite_A = mkA "favoriet" | mkA "lievelings-" | mkA "geliefkoost" ; -- status=guess status=guess status=guess
-lin favour_N = mkN "gunst" ;
+lin favour_N = mkN "dienst" | mkN "gunst" ; -- status=guess status=guess
 lin favour_V = variants {} ; --
 lin favour_V2 = variants {} ; --
 lin favour_VS = variants {} ; --
 lin favourable_A = variants {} ; --
 lin favouriteMasc_N = variants {} ; --
-lin favourite_A = variants {} ; --
+lin favourite_A = mkA "favoriet" | mkA "lievelings-" | mkA "geliefkoost" ; -- status=guess status=guess status=guess
 lin fawley_PN = mkPN "Fawley" ; -- src=eng status=guess
 lin fawn_N = mkN "reebruin" neuter ; -- status=guess
 lin fawn_V = mkV "vleien" ; -- status=guess, src=wikt

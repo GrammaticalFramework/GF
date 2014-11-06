@@ -12472,21 +12472,14 @@ lin fauvism_N = mkN "野獸派" | mkN "野兽派" ; -- status=guess -- status=gu
 lin faux_pas_N = mkN "出丑" | mkN "失态" | mkN "失礼" ; -- open-multilingual-wordnet
 lin faversham_PN = foreignPN "Faversham" ; -- comment=src=geonames status=guess
 lin favism_N = mkN "蚕豆病" | mkN "豆类中毒" ; -- open-multilingual-wordnet
-lin favor_N = mkN "恩惠" | mkN "好意" | mkN "幫忙" | mkN "帮忙" ; -- status=guess -- status=guess -- status=guess -- status=guess
-lin favor_V = mkV "支持" ;
-lin favor_V2 = mkV2 "促成" ;
-lin favor_VS = mkVS "赞成" ;
-lin favorable_A = mkA "优惠" | mkA "有利" | mkA "良好" ;
-lin favorite_A = mkA "最喜愛" | mkA "最喜爱" ; -- status=guess -- status=guess
-lin favoritism_N = mkN "偏爱" | mkN "偏袒" | mkN "徇私" | mkN "歧视" ; -- open-multilingual-wordnet
-lin favour_N = mkN "赞成" ;
-lin favour_V = variants {} ; -- comment=mkV2 "青睐" ;
-lin favour_V2 = mkV2 "青睐" ;
-lin favour_VS = variants {} ; -- comment=mkV2 "青睐" ;
-lin favourable_A = mkA "有利" ;
+lin favour_N = mkN "赞成" | mkN "恩惠" | mkN "好意" | mkN "幫忙" | mkN "帮忙" ; -- status=guess -- status=guess -- status=guess -- status=guess
+lin favour_V = mkV "支持"; -- comment=mkV2 "青睐" ;
+lin favour_V2 = mkV2 "青睐" | mkV2 "促成";
+lin favour_VS = mkVS "赞成" ;
+lin favourable_A = mkA "有利" | mkA "优惠" | mkA "良好" ;
 lin favouriteFem_N = mkN "最爱" [] ;
 lin favouriteMasc_N = mkN "最爱" [] ;
-lin favourite_A = mkA "特别喜爱" ;
+lin favourite_A = mkA "特别喜爱" | mkA "最喜愛" | mkA "最喜爱" ; -- status=guess -- status=guess
 lin favouritism_N = mkN "偏爱" | mkN "偏袒" | mkN "徇私" | mkN "歧视" ; -- open-multilingual-wordnet
 lin favus_N = mkN "头部鳞癣" | mkN "毛囊癣" | mkN "瘌痢" | mkN "黄癣" ; -- open-multilingual-wordnet
 lin fawley_PN = foreignPN "Fawley" ; -- comment=src=eng status=guess
