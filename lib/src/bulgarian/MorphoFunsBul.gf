@@ -177,7 +177,7 @@ oper
     compoundN : Str -> N -> N 
       = \s,n -> {s = \\nform => s ++ n.s ! nform ; rel = \\aform => s ++ n.rel ! aform; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> Str -> N 
-      = \n,s -> {s = \\nform => s ++ n.s ! nform ; rel = \\aform => s ++ n.rel ! aform; g=n.g ; anim=n.anim ; lock_N = <>} ;
+      = \n,s -> {s = \\nform => n.s ! nform ++ s; rel = \\aform => n.rel ! aform ++ s; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> N -> N 
       = \n1,n2 -> lin N
                 {s = table {
