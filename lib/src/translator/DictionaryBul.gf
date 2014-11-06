@@ -2587,7 +2587,6 @@ lin anorthitic_A = variants {};
 lin anorthopia_N = variants {};
 lin anosmia_N = mkN039 "аносмия";
 lin anosmic_A = variants {};
-lin another_A = variants {};
 lin another_Det = variants {};
 lin another_Quant = mkQuant "друг" "друга" "друго" "други";
 lin anovulation_N = mkN039 "ановулация";

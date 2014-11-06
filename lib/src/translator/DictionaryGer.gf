@@ -2597,7 +2597,6 @@ lin anorthitic_A = variants {} ;
 lin anorthopia_N = variants {} ;
 lin anosmia_N = variants {} ;
 lin anosmic_A = variants {} ;
-lin another_A = variants {} ;
 lin another_Det = M.detLikeAdj False M.Sg "ander" ;
 lin another_Quant = variants {} ;
 lin anovulation_N = variants {} ;
