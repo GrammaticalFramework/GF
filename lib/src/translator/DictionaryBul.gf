@@ -12005,7 +12005,6 @@ lin commissar_N = dualN (mkN031a "комисар") (mkA078 "комисарски
 lin commissariat_N = dualN (mkN007 "комисариат") (mkA078 "комисарски");
 lin commissary_N = dualN (mkN031a "комисар") (mkA078 "комисарски");
 lin commission_N = mkN047 "комисия" ;
-lin commission_N = mkN047 "комисия" ;
 lin commission_V2 = dirV2 (dualV (mkV186 "възлагам") (mkV176 "възложа")); ----
 lin commission_V2V = variants {};
 lin commissionaire_N = substantiveN (mkA079 "разсилен") (AMasc Human);
