@@ -341,7 +341,7 @@ lin
   stand_V = vaereV stå_V ;
   suck_V2 = dirV2 (suge_V) ;
   swell_V = partV (regV "hovne") "opp" ;
-  swim_V = regV "simme" ;
+  swim_V = regV "svømme" ;
   think_V = mk2V "tenke" "tenkte" ;
   throw_V2 = dirV2 (regV "kaste") ;
   tie_V2 = dirV2 (regV "knytte") ;
