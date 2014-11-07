@@ -51444,7 +51444,7 @@ lin sever_V = prefixV "ab" (regV "trennen") ; -- status=guess, src=wikt
 lin sever_V2 = mkV2 (prefixV "ab" (regV "trennen")) ; -- status=guess, src=wikt
 lin several_Det = M.detLikeAdj False M.Pl "mehrer" ;
 lin several_Num = variants {} ;
-lin severally_Adv = adjAdv several_A ; -- derived
+lin severally_Adv = variants {} ;
 lin severalty_N = variants {} ;
 lin severance_N = variants {} ;
 lin severe_A = mk3A "streng" "strenger" "strengste" ; -- status=guess
