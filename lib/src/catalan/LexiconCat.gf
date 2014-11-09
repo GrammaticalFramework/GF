@@ -63,7 +63,7 @@ lin
    cold_A = regADeg "fred" ;
    come_V = verbV (venir_117 "venir") ;
    computer_N = regMN "ordinador" ;    
-   country_N = regMN "país" ;  -- països     -- masc
+   country_N = mkN "país" "països" masculine ; 
    cousin_N = regMN "cosí" ;
    cow_N = mkN "vaca" ;
    die_V = verbV (morir_71 "morir") ;
