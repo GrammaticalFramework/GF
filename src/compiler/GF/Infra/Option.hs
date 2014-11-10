@@ -1,6 +1,7 @@
 module GF.Infra.Option
     (
-     -- ** Option types
+     -- ** Command line options
+     -- *** Option types
      Options, 
      Flags(..), 
      Mode(..), Phase(..), Verbosity(..), 
@@ -8,21 +9,21 @@ module GF.Infra.Option
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
      Dump(..), Pass(..), Recomp(..),
      outputFormatsExpl, 
-     -- ** Option parsing
+     -- *** Option parsing
      parseOptions, parseModuleOptions, fixRelativeLibPaths,
-     -- ** Option pretty-printing
+     -- *** Option pretty-printing
      optionsGFO,
      optionsPGF,
-     -- ** Option manipulation
+     -- *** Option manipulation
      addOptions, concatOptions, noOptions,
      modifyFlags,
      helpMessage,
-     -- ** Checking specific options
+     -- *** Checking specific options
      flag, cfgTransform, haskellOption, readOutputFormat,
      isLexicalCat, isLiteralCat, renameEncoding, getEncoding, defaultEncoding,
-     -- ** Setting specific options
+     -- *** Setting specific options
      setOptimization, setCFGTransform,
-     -- ** Convenience methods for checking options
+     -- *** Convenience methods for checking options
      verbAtLeast, dump
     ) where
 

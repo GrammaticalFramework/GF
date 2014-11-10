@@ -141,6 +141,7 @@ Library
   hs-source-dirs: src/compiler
   exposed-modules:
     GF
+    GF.Support
     GF.Text.Pretty
 
   other-modules:

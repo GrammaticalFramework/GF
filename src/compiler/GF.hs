@@ -16,16 +16,7 @@ module GF(
            module GF.Grammar.Printer,
            module GF.Infra.Ident,
            -- ** Binary serialisation
-           module GF.Grammar.Binary,
-
-           -- * Supporting infrastructure and system utilities
-           module GF.Infra.Location,
-           module GF.Data.Operations,
-           module GF.Infra.UseIO,
-           module GF.Infra.Option,
-           module GF.System.Console,
-           -- ** Binary serialisation
-           Binary,encode,decode,encodeFile,decodeFile
+           module GF.Grammar.Binary
   ) where
 import GF.Main
 import GF.Compiler
@@ -41,10 +32,3 @@ import GF.Grammar.Macros
 import GF.Grammar.Printer
 import GF.Infra.Ident
 import GF.Grammar.Binary
-
-import GF.Infra.Location
-import GF.Data.Operations
-import GF.Infra.Option
-import GF.Infra.UseIO
-import GF.System.Console
-import Data.Binary
