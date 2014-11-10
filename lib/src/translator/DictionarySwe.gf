@@ -54785,7 +54785,7 @@ lin start_out_V = mkV "startar" ; -- comment=19
 lin start_out_as_V2 = dirV2 (partV (mkV "startar")"om") ; -- comment=19
 lin start_out_to_V2 = dirV2 (partV (mkV "startar")"om") ; -- comment=19
 lin start_over_V = mkV "startar" ; -- comment=19
-lin start_to_VV = variants {} ; -- status=guess
+lin start_to_VV = mkVV begin_V ;
 lin start_up_V = mkV "startar" ; -- comment=19
 lin start_up_V2 = dirV2 (partV (mkV "startar")"om") ; -- comment=19
 lin starter_1_N = mkN "startmotor" "startmotorer" ; -- comment=5
