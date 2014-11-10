@@ -81,11 +81,11 @@ batchCompile1 lib_dir (opts,filepaths) =
                          takeFileName f `elem` prelude_files
          ppPath ps = "-path="<>intercalate ":" (map rel ps)
      deps <- newMVar M.empty
-     toLog <- newLog runIOE
+     toLog <- newLog id
      term <- getTermColors
      let --logStrLn = toLog . ePutStrLn
        --ok :: CollectOutput IO a -> IO a
-         ok (CO m) = err bad good =<< appIOE m
+         ok (CO m) = err bad good =<< tryIOE m
            where
               good (o,r) = do toLog o; return r
               bad e = do toLog (redPutStrLn e); fail "failed"
@@ -98,7 +98,7 @@ batchCompile1 lib_dir (opts,filepaths) =
 --            logStrLn $ "Finished "++show (length (modules gr'))++" modules."
               return gr'
      fcache <- liftIO $ newIOCache $ \ _ (imp,Hide (f,ps)) ->
-                 do (file,_,_) <- runIOE $ findFile gfoDir ps imp
+                 do (file,_,_) <- findFile gfoDir ps imp
                     return (file,(f,ps))
      let find f ps imp =
            do (file',(f',ps')) <- liftIO $ readIOCache fcache (imp,Hide (f,ps))

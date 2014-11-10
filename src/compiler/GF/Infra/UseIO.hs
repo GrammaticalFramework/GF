@@ -129,14 +129,16 @@ splitInModuleSearchPath s = case break isPathSep s of
 -- | Was: @newtype IOE a = IOE { appIOE :: IO (Err a) }@
 type IOE a = IO a
 
-ioe :: IO (Err a) -> IOE a
-ioe io = err fail return =<< io
+--ioe :: IO (Err a) -> IOE a
+--ioe io = err fail return =<< io
 
-appIOE :: IOE a -> IO (Err a)
-appIOE ioe = handle (fmap Ok ioe) (return . Bad)
+-- | Catch exceptions caused by calls to 'raise' or 'fail' in the 'IO' monad.
+-- To catch all 'IO' exceptions, use 'try' instead.
+tryIOE :: IOE a -> IO (Err a)
+tryIOE ioe = handle (fmap Ok ioe) (return . Bad)
 
-runIOE :: IOE a -> IO a
-runIOE = id
+--runIOE :: IOE a -> IO a
+--runIOE = id
 
 -- instance MonadIO IOE where liftIO io = ioe (io >>= return . return)
 
@@ -160,6 +162,8 @@ instance  Monad IOE where
                   appIOE $ err raise f x         -- f :: a -> IOE a
   fail = raise
 -}
+
+-- | Print the error message and return a default value if the IO operation 'fail's
 useIOE :: a -> IOE a -> IO a
 useIOE a ioe = handle ioe (\s -> putStrLn s >> return a)
 

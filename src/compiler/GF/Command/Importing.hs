@@ -10,7 +10,7 @@ import GF.Grammar (SourceGrammar) -- for cc command
 import GF.Grammar.CFG
 import GF.Grammar.EBNF
 import GF.Compile.CFGtoPGF
-import GF.Infra.UseIO
+import GF.Infra.UseIO(die,tryIOE,useIOE)
 import GF.Infra.Option
 import GF.Data.ErrM
 
@@ -29,7 +29,7 @@ importGrammar pgf0 opts files =
       let cs = concatMap snd ascss
       importGrammar pgf0 opts cs
     s | elem s [".gf",".gfo"] -> do
-      res <- appIOE $ compileToPGF opts files
+      res <- tryIOE $ compileToPGF opts files
       case res of
         Ok pgf2 -> ioUnionPGF pgf0 pgf2
         Bad msg -> do putStrLn ('\n':'\n':msg)
@@ -46,19 +46,10 @@ ioUnionPGF one two = case msgUnionPGF one two of
 
 importSource :: SourceGrammar -> Options -> [FilePath] -> IO SourceGrammar
 importSource src0 opts files = do
-  src <- appIOE $ batchCompile opts files
-  case src of
-    Ok (_,(_,gr)) -> return gr
-    Bad msg -> do 
-      putStrLn msg
-      return src0
+  useIOE src0 (fmap (snd.snd) (batchCompile opts files))
 
 -- for different cf formats
-importCF opts files get convert = do
-  res <- appIOE impCF
-  case res of
-    Ok pgf -> return pgf
-    Bad s  -> error s
+importCF opts files get convert = impCF
   where
     impCF = do
       rules <- fmap (convert . concat) $ mapM (get opts) files
@@ -66,6 +57,6 @@ importCF opts files get convert = do
                     (CFRule cat _ _ : _) -> return cat
                     _                    -> fail "empty CFG"
       let pgf = cf2pgf (last files) (uniqueFuns (mkCFG startCat Set.empty rules))
-      probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
+      probs <- maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf
       return $ setProbabilities probs 
              $ if flag optOptimizePGF opts then optimizePGF pgf else pgf

@@ -28,7 +28,7 @@ import Control.Monad(unless,forM_)
 -- and, depending on the options, a @.pgf@ file. (@gf -batch@, @gf -make@)
 mainGFC :: Options -> [FilePath] -> IO ()
 mainGFC opts fs = do
-  r <- appIOE (case () of
+  r <- tryIOE (case () of
                  _ | null fs -> fail $ "No input files."
                  _ | all (extensionIs ".cf")  fs -> compileCFFiles opts fs
                  _ | all (\f -> extensionIs ".gf" f || extensionIs ".gfo" f)  fs -> compileSourceFiles opts fs
