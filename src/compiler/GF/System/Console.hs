@@ -1,8 +1,9 @@
 {-# LANGUAGE CPP #-}
 module GF.System.Console(
-    -- ** Changing which character encoding to use for console IO
+    -- ** Console IO
+    -- *** Changing which character encoding to use for console IO
     setConsoleEncoding,changeConsoleEncoding,
-    -- ** Console colors
+    -- *** Console colors
     TermColors(..),getTermColors
 ) where
 import System.IO

@@ -12,8 +12,9 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Infra.UseIO(module GF.Infra.UseIO,
-                      -- ** Reused
+module GF.Infra.UseIO(-- ** Files and IO
+                      module GF.Infra.UseIO,
+                      -- *** Reused
                       MonadIO(..),liftErr) where
 
 import Prelude hiding (catch)
@@ -40,7 +41,7 @@ import Control.Exception(evaluate)
 --putIfVerb :: MonadIO io => Options -> String -> io ()
 putIfVerb opts msg = when (verbAtLeast opts Verbose) $ putStrLnE msg
 
--- ** GF files path and library path manipulation
+-- *** GF files path and library path manipulation
 
 type FileName = String
 type InitPath = String -- ^ the directory portion of a pathname
@@ -123,7 +124,7 @@ splitInModuleSearchPath s = case break isPathSep s of
 
 --
 
--- ** IO monad with error; adapted from state monad
+-- *** Error handling in the IO monad
 
 -- | Was: @newtype IOE a = IOE { appIOE :: IO (Err a) }@
 type IOE a = IO a
@@ -177,7 +178,7 @@ die :: String -> IO a
 die s = do hPutStrLn stderr s
            exitFailure
 
--- ** Diagnostic output
+-- *** Diagnostic output
 
 class Monad m => Output m where
   ePutStr, ePutStrLn, putStrE, putStrLnE :: String -> m ()
@@ -215,7 +216,7 @@ ioErrorText e = if isUserError e
                 then ioeGetErrorString e
                 else show e
 
--- ** Timing
+-- *** Timing
 
 timeIt act =
   do t1 <- liftIO $ getCPUTime
@@ -223,7 +224,7 @@ timeIt act =
      t2 <- liftIO $ getCPUTime
      return (t2-t1,a)
 
--- ** File IO
+-- *** File IO
 
 writeUTF8File :: FilePath -> String -> IO ()
 writeUTF8File fpath content =
