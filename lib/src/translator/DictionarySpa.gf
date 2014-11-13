@@ -6905,7 +6905,7 @@ lin dodo_N = mkN "dodo" | mkN "dronte" masculine ; -- status=guess status=guess
 lin doe_N = mkN "cierva" | mkN "cabra" ; -- status=guess status=guess
 lin dog_N = L.dog_N ;
 lin doge_N = mkN "dux" masculine ; -- status=guess
-lin doggy_N = mkN "de perrito" ; -- status=guess
+lin doggy_N = mkN "perrito" ; -- missing: "posición de perrito", ambig: perrito=hotdog
 lin dogma_N = mkN "dogma" masculine ; -- status=guess
 lin dogmatic_A = mkA "dogmático" ; -- status=guess
 lin dogwood_N = mkN "cornejo" ; -- status=guess
