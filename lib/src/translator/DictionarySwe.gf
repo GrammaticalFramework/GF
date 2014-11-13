@@ -25636,7 +25636,7 @@ lin hamelia_N = variants {} ; -- status=guess
 lin hamhung_PN = mkPN "Hamhung" ; -- src=eng status=guess
 lin hamilton_PN = mkPN "Hamilton" neutrum ; -- src=geonames status=guess
 lin hamlet_N = mkN "by" "byn" "byar" "byarna" ; -- status=guess
-lin hammer_N = mkN "hammare" "hammaren" "hamrar" "hamrarna" | mkN "hane" utrum ; -- SaldoWN -- comment=3
+lin hammer_N = mkN "hammare" "hammaren" "hamrar" "hamrarna" ;
 lin hammer_V = mkV "hamrar" ; -- comment=6
 lin hammer_V2 = mkV2 (mkV "hamrar") ; -- status=guess, src=wikt
 lin hammer_away_at_V2 = variants {} ; -- status=guess
