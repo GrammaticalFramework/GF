@@ -28,6 +28,15 @@ lin
   cup_of_CN    np = mkCN (lin N2 (mkN2 (mkN "kuppi") (mkPrep partitive)))  (lin NP np) | mkCN (lin N2 (mkN2 (mkN "kupillinen") (mkPrep partitive)))  (lin NP np) ;
   glass_of_CN  np =  mkCN (lin N2 (mkN2 (mkN "lasi") (mkPrep partitive))) (lin NP np) | mkCN (lin N2 (mkN2 (mkN "lasillinen") (mkPrep partitive))) (lin NP np) ;
 
+
+  few_X_short_of_Y np x y =
+    let kaikki_xt : Str =  (mkNP all_Predet ( mkNP aPl_Det x)).s ! R.NPCase R.Nom ;
+  	yssa : Str = y.s ! R.NCase R.Sg R.Iness ; 
+	kaikki_xt_yssa : Adv = ParadigmsFin.mkAdv (kaikki_xt ++ yssa) ;
+	olla_V : V = lin V have_V2 ;
+    in mkS negativePol 
+         (mkCl np (mkVP (mkVP olla_V) kaikki_xt_yssa)) ;
+
 {-
   where_go_QCl np = mkQCl (lin IAdv (ss "minne")) (mkCl np (mkVP L.go_V)) ;
   where_come_from_QCl np =  mkQCl (lin IAdv (ss "mistä")) (mkCl np (mkVP L.come_V)) ;
@@ -42,11 +51,13 @@ lin
 -}
 
 lincat
+  Timeunit = N ;
   Weekday = {noun : N ; habitual : SyntaxFin.Adv} ;
   Monthday = NP ;
   Month = N ;
   Year = NP ;
 lin
+  timeunitAdv n time = mkAdv ((mkNP <lin Card n : Card> time).s ! R.NPCase R.Nom) ;
 
   weekdayPunctualAdv w = lin Adv {s = pointWeekday w} ;
   weekdayHabitualAdv w = w.habitual ;
@@ -88,6 +99,13 @@ oper mkWeekday : Str -> Weekday = \d ->
          }
       } ; 
 
+lin second_Timeunit = mkN "sekuntti" ;
+lin minute_Timeunit = mkN "minuutti" ;
+lin hour_Timeunit = mkN "tunti" ;
+lin day_Timeunit = mkN "päivä" ;
+lin week_Timeunit = mkN "viikko" ;
+lin month_Timeunit = mkN "kuukausi" "kuukauden" "kuukausia" "kuukautta" ;
+lin year_Timeunit = mkN "vuosi" "vuoden" "vuosia" "vuotta" ;
 
 lin monday_Weekday = mkWeekday "maanantai" ;
 lin tuesday_Weekday = mkWeekday "tiistai" ;

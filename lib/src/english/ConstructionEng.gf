@@ -29,6 +29,12 @@ lin
   cup_of_CN    np = mkCN (lin N2 (mkN2 "cup"))    (lin NP np) ;
   glass_of_CN  np = mkCN (lin N2 (mkN2 "glass"))  (lin NP np) ;
 
+  few_X_short_of_Y np x y = 
+    let 
+      xs : Str = x.s ! R.Pl ! R.Nom ;
+      a_y : Str = (mkNP a_Det y).s ! R.NCase R.Nom ;
+    in
+      mkS (mkCl np (mkAdv ("a few" ++ xs ++ "short of" ++ a_y))) ; 
 {-
 -- spatial deixis and motion verbs
 
@@ -50,11 +56,17 @@ oper from_where_IAdv : IAdv = lin IAdv (ss "from where") ;
 
 
 lincat
+  Timeunit = N ;
   Weekday = N ;
   Monthday = NP ;
   Month = N ;
   Year = NP ;
 lin
+  timeunitAdv n time = 
+  let n_card : Card   = n ;
+      n_hours_NP : NP = mkNP n_card time ;
+  in  SyntaxEng.mkAdv for_Prep n_hours_NP | mkAdv (n_hours_NP.s ! R.npNom) ;
+
   weekdayPunctualAdv w = SyntaxEng.mkAdv on_Prep (mkNP w) ;         -- on Sunday
   weekdayHabitualAdv w = SyntaxEng.mkAdv on_Prep (mkNP aPl_Det w) ; -- on Sundays
   weekdayNextAdv w = SyntaxEng.mkAdv (mkPrep "next") (mkNP w) ;     -- next Sunday
@@ -86,6 +98,14 @@ oper mkLanguage : Str -> PN = \s -> mkPN s ;
 
 ----------------------------------------------
 ---- lexicon of special names
+
+lin second_Timeunit = mkN "second" ;
+lin minute_Timeunit = mkN "minute" ;
+lin hour_Timeunit = mkN "hour" ;
+lin day_Timeunit = mkN "day" ;
+lin week_Timeunit = mkN "week" ;
+lin month_Timeunit = mkN "month" ;
+lin year_Timeunit = mkN "year" ;
 
 lin monday_Weekday = mkN "Monday" ;
 lin tuesday_Weekday = mkN "Tuesday" ;

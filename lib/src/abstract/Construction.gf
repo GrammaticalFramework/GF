@@ -42,6 +42,9 @@ fun
   cup_of_CN    : NP -> CN ;       -- cup of tea / kupillinen teetä (Fin)
   glass_of_CN  : NP -> CN ;
 
+-- idiomatic expressions
+  few_X_short_of_Y : NP -> CN -> CN -> S ; -- NP is a few X's short of a Y / NP:llä ei ole kaikki X:t Y:ssä (Fin)
+
 {- 
 ---- postponed  
 -- spatial deixis and motion verbs
@@ -63,12 +66,15 @@ fun
 -- time expressions
 
 cat 
+  Timeunit ;
   Weekday ;
   Month ;
   Monthday ;
   Year ;
 
 fun
+  timeunitAdv     : Card -> Timeunit -> Adv ; -- (for) three hours
+
   weekdayPunctualAdv : Weekday -> Adv ;  -- on Monday
   weekdayHabitualAdv : Weekday -> Adv ;  -- on Mondays
   weekdayLastAdv : Weekday -> Adv ;      -- last Monday
@@ -103,6 +109,14 @@ fun
 
 ----------------------------------------------
 ---- lexicon of special names
+
+fun second_Timeunit : Timeunit ;
+fun minute_Timeunit : Timeunit ;
+fun hour_Timeunit : Timeunit ;
+fun day_Timeunit : Timeunit ;
+fun week_Timeunit : Timeunit ;
+fun month_Timeunit : Timeunit ;
+fun year_Timeunit : Timeunit ;
 
 fun monday_Weekday : Weekday ;
 fun tuesday_Weekday : Weekday ;
