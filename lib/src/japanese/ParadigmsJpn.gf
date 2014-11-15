@@ -6,6 +6,8 @@ flags coding = utf8 ;
 oper
 
   mkN = overload {
+    mkN : (man : Str) -> N  ---- AR 15/11/2014
+      = \n -> lin N (regNoun n Inanim "つ" False True) ;
     mkN : (man : Str) -> (anim : Animateness) -> N 
       = \n,a -> lin N (regNoun n a "つ" False True) ;
     mkN : (kane,okane : Str) -> (anim : Animateness) -> N 
@@ -51,15 +53,28 @@ oper
            \pred,attr,pr -> lin A2 (VerbalA pred attr) ** {prep = pr}
     } ;
 
-  mkV : (yomu : Str) -> (group : VerbGroup) -> V 
+  mkV = overload {
+    mkV : (yomu : Str) -> V 
+      = \yomu -> lin V (mkVerb yomu Gr1) ; ---- AR 15/11/2014
+    mkV : (yomu : Str) -> (group : VerbGroup) -> V 
       = \yomu,gr -> lin V (mkVerb yomu gr) ;
+    } ;
 
-  mkV2 : (yomu, prep : Str) -> (group : VerbGroup) -> V2 
-       = \yomu,p,gr -> 
-       lin V2 (mkVerb2 yomu p gr) ;
-   
+  mkV2 = overload {
+    mkV2 : (yomu : Str) -> V2  ---- AR 15/11/2014
+        = \yomu -> lin V2 (mkVerb2 yomu "を" Gr1) ;
+    mkV2 : (yomu, prep : Str) -> (group : VerbGroup) -> V2 
+        = \yomu,p,gr -> lin V2 (mkVerb2 yomu p gr) ;
+    } ;
+       
   mkV3 : (uru, p1, p2 : Str) -> (group : VerbGroup) -> V3 = \uru,p1,p2,gr -> 
        lin V3 (mkVerb3 uru p1 p2 gr) ;
+
+  mkAdv : Str -> Adv  ---- AR 15/11/2014
+    = \s -> lin Adv (ResJpn.mkAdv s) ;
+
+  mkPrep : Str -> Prep  ---- AR 15/11/2014
+    = \s -> lin Prep (ResJpn.mkPrep s) ;
 }
 
 
