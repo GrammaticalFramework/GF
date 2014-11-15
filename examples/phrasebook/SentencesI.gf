@@ -210,8 +210,8 @@ oper
   placeNP : Det -> CNPlace -> NPPlace = \det,kind ->
     let name : NP = mkNP det kind.name in {
       name = name ;
-      at = mkAdv kind.at name ;
-      to = mkAdv kind.to name
+      at = Syntax.mkAdv kind.at name ;
+      to = Syntax.mkAdv kind.to name
     } ;
 
   NPPerson : Type = {name : NP ; isPron : Bool ; poss : Quant} ;
