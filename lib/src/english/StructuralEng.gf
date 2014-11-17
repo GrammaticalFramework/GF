@@ -21,7 +21,24 @@ concrete StructuralEng of Structural = CatEng **
   but_PConj = ss "but" ;
   by8agent_Prep = mkPrep "by" ;
   by8means_Prep = mkPrep "by" ;
+
+  -- The record below has been duplicated to avoid a PMCFG generation problem
+  -- caused by having the variant "can't" | "cannot" inside the table in the
+  -- record. / TH 2014-11-17
   can8know_VV, can_VV = {
+    s = table {
+      VVF VInf => ["be able to"] ;
+      VVF VPres => "can" ;
+      VVF VPPart => ["been able to"] ;
+      VVF VPresPart => ["being able to"] ;
+      VVF VPast => "could" ;      --# notpresent
+      VVPastNeg => "couldn't" ;   --# notpresent
+      VVPresNeg => "can't" -- | "cannot"     ---- shouldn't be a variant, but replace "can not"
+      } ;
+    p = [] ;
+    typ = VVAux
+    } |
+ {
     s = table { 
       VVF VInf => ["be able to"] ;
       VVF VPres => "can" ;
@@ -29,7 +46,7 @@ concrete StructuralEng of Structural = CatEng **
       VVF VPresPart => ["being able to"] ;
       VVF VPast => "could" ;      --# notpresent
       VVPastNeg => "couldn't" ;   --# notpresent
-      VVPresNeg => "can't" | "cannot"     ---- shouldn't be a variant, but replace "can not"
+      VVPresNeg => "cannot"     ---- shouldn't be a variant, but replace "can not"
       } ;
     p = [] ;
     typ = VVAux
