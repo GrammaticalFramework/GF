@@ -51,7 +51,7 @@ lin
   intYear = symb ;
   intMonthday = symb ;
 
-lincat Language = PN ;
+lincat Language = N ;
 
 lin InLanguage l = SyntaxDut.mkAdv on_Prep (mkNP l) ;
 
@@ -62,9 +62,10 @@ lin
   weekdayPN w = mkPN w ;
   monthPN m = mkPN m ;
 
-  languagePN l = l ;
+  languageCN l = mkCN l ;
+  languageNP l = mkNP l ;
 
-oper mkLanguage : Str -> PN = \s -> mkPN s ;
+oper mkLanguage : Str -> N = \s -> mkN s ;
 
 ----------------------------------------------
 ---- lexicon of special names

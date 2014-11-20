@@ -67,18 +67,19 @@ lin
 oper
   pointWeekday : Weekday -> Str = \w -> (SyntaxEst.mkAdv (casePrep essive) (mkNP w.noun)).s ; 
 
-lincat Language = PN ;
+lincat Language = N ;
 
 --lin InLanguage l = SyntaxEst.mkAdv (mkPrep translative) (mkNP l) ;
 
 lin
   weekdayN w = w.noun ;
   monthN m = m ;
-  languagePN l = l ;
+  languageNP l = mkNP l ;
+  languageCN l = mkCN l ;
 
 --------------- lexicon of special names
 
-oper mkLanguage : Str -> PN = \s -> mkPN (s ++ "keel") ;
+oper mkLanguage : Str -> N = \s -> mkN (s ++ "keel") ;
 
 oper mkWeekday : Str -> Weekday = \d -> 
       lin Weekday {

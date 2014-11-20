@@ -45,11 +45,11 @@ lin
   intYear i = lin NP i ;
   intMonthday i = lin NP i ;
 
-lincat Language = PN ;
+lincat Language = N ;
 
 lin InLanguage l = SyntaxChi.mkAdv (mkPrep "在") (mkNP l) ;
 
-oper mkLanguage : Str -> PN = \s -> mkPN s ;
+oper mkLanguage : Str -> N = \s -> mkN s ; ---- classifier?
 
 lin
   weekdayN w = w ;
@@ -58,7 +58,8 @@ lin
   weekdayPN w = ss w.s ;
   monthPN m = ss m.s ;
 
-  languagePN l = l ;
+  languageNP l = mkNP l ;
+  languageCN l = mkCN l ;
 
 lin monday_Weekday = mkN "星期一" ;
 lin tuesday_Weekday = mkN "星期二" ;

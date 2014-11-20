@@ -105,7 +105,8 @@ fun
   weekdayPN  : Weekday -> PN ; 
   monthPN    : Month -> PN ;
 
-  languagePN : Language -> PN ;
+  languageNP : Language -> NP ;
+  languageCN : Language -> CN ;
 
 ----------------------------------------------
 ---- lexicon of special names
