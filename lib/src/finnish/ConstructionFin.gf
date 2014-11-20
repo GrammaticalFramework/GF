@@ -77,18 +77,19 @@ lin
 oper
   pointWeekday : Weekday -> Str = \w -> (SyntaxFin.mkAdv (casePrep essive) (mkNP w.noun)).s ; 
 
-lincat Language = PN ;
+lincat Language = N ;
 
 lin InLanguage l = SyntaxFin.mkAdv (mkPrep translative) (mkNP l) ;
 
 lin
   weekdayN w = w.noun ;
   monthN m = m ;
-  languagePN l = l ;
+  languageNP l = mkNP l ;
+  languageCN l = mkCN l ;
 
 --------------- lexicon of special names
 
-oper mkLanguage : Str -> PN = \s -> mkPN s ;
+oper mkLanguage : Str -> N = \s -> mkN s ;
 
 oper mkWeekday : Str -> Weekday = \d -> 
       lin Weekday {
@@ -138,7 +139,7 @@ lin danish_Language = mkLanguage "tanska" ;
 lin dutch_Language = mkLanguage "hollanti" ;
 lin english_Language = mkLanguage "englanti" ;
 lin estonian_Language = mkLanguage "viro" ;
-lin finnish_Language = mkPN (mkN "suomi" "suomia") ;
+lin finnish_Language = mkN "suomi" "suomia" ;
 lin french_Language = mkLanguage "ranska" ;
 lin german_Language = mkLanguage "saksa" ;
 lin greek_Language = mkLanguage "kreikka" ;
