@@ -179,4 +179,9 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       isMod = cn.isMod
       } ;
 
+    PossNP cn np = {
+      s = \\a,nc => cn.s ! a ! nc ++ "van" ++ np.s ! NPNom ;
+      g = cn.g
+      } ;
+
 }
