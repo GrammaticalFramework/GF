@@ -74,10 +74,9 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
 void
 pgf_lzr_get_table(PgfConcr* concr, PgfCncTree ctree, 
                   size_t* n_lins, GuString** labels);
-#endif
 
-#ifdef PGF_PARSER_H_
 // Used internally in the parser
 GuString
 pgf_get_tokens(PgfSymbols* sym, uint16_t sym_idx, GuPool* pool);
+
 #endif
