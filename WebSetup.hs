@@ -99,7 +99,7 @@ execute command args =
 
 numJobs flags =
     if null n
-    then []
+    then ["-j=1"]
     else ["-j="++n,"+RTS","-A20M","-N"++n,"-RTS"]
   where
     n = {-case buildNumJobs flags of
