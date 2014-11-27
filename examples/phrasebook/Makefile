@@ -1,6 +1,6 @@
 compile = runghc Compile 
 
-forApp: compdemo fin Chi gfos
+forApp: compdemo fin gfos
 
 .PHONY: gfos
 
