@@ -32,7 +32,6 @@ pgfincludedir=$(includedir)/pgf
 pgfinclude_HEADERS = \
 	pgf/expr.h \
 	pgf/linearizer.h \
-	pgf/parser.h \
 	pgf/literals.h \
 	pgf/graphviz.h \
 	pgf/pgf.h
@@ -65,7 +64,6 @@ libpgf_la_SOURCES = \
 	pgf/expr.c \
 	pgf/expr.h \
 	pgf/parser.c \
-	pgf/parser.h \
 	pgf/jit.c \
 	pgf/parseval.c \
 	pgf/literals.c \

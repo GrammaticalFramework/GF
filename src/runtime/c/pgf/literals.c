@@ -1,6 +1,5 @@
 #include <gu/in.h>
 #include <gu/utf8.h>
-#include <pgf/parser.h>
 #include <pgf/literals.h>
 #include <wctype.h>
 

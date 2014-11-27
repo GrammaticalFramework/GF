@@ -4,7 +4,6 @@
 #include <gu/file.h>
 #include <gu/exn.h>
 #include <pgf/pgf.h>
-#include <pgf/parser.h>
 #include <pgf/literals.h>
 #include <pgf/linearizer.h>
 #include <stdio.h>

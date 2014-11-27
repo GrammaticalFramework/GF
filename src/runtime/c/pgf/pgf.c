@@ -3,7 +3,6 @@
 #include <pgf/expr.h>
 #include <pgf/reader.h>
 #include <pgf/linearizer.h>
-#include <pgf/parser.h>
 #include <gu/file.h>
 #include <gu/string.h>
 #include <gu/enum.h>
