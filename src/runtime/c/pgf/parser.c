@@ -1,5 +1,7 @@
-#include <pgf/parser.h>
+#include <pgf/data.h>
+#include <pgf/expr.h>
 #include <pgf/linearizer.h>
+#include <gu/enum.h>
 #include <gu/seq.h>
 #include <gu/assert.h>
 #include <gu/choice.h>

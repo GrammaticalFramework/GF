@@ -1,7 +1,7 @@
 #include <pgf/pgf.h>
 #include <pgf/data.h>
 #include <pgf/linearizer.h>
-#include <pgf/parser.h>
+#include <gu/enum.h>
 
 typedef struct {
 	int start, end;
