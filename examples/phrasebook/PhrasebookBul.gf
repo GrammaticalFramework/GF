@@ -1,4 +1,4 @@
---# -path=.:alltenses
+--# -path=.:present
 
 concrete PhrasebookBul of Phrasebook = 
   GreetingsBul,
