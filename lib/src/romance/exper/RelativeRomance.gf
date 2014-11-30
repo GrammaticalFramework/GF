@@ -5,7 +5,7 @@ incomplete concrete RelativeRomance of Relative =
 
   lin
 
-    RelCl cl = cl ** {c2 = complNom ; rp = \\aag => pronSuch ! aag ++ conjThat} ; 
+    RelCl cl = cl ** {c = Nom ; rp = \\aag => pronSuch ! aag ++ conjThat} ; 
 {-
 let cl = oldClause ncl in {
       s = \\ag,t,a,p,m => pronSuch ! complAgr ag ++ conjThat ++ 
@@ -18,7 +18,7 @@ let cl = oldClause ncl in {
       np = heavyNP {s = rp.s ! False ! {g = Masc ; n = Sg} ; a = Ag rp.a.g rp.a.n P3} ;  ---- agr,agr
       vp = vp ; 
       rp = \\_ => [] ;
-      c2 = complNom
+      c  = Nom
       } ;
 {-
     --- more efficient to compile than case inside mkClause; see log.txt
@@ -37,7 +37,7 @@ case rp.hasAgr of {
       } ;
 -}
 
-    RelSlash rp slash = slash ** {rp = \\aag => rp.s ! False ! aag ! slash.c2.c ; c2 = complAcc} ;
+    RelSlash rp slash = slash ** {rp = \\aag => rp.s ! False ! aag ! slash.c2.c ; c = Acc} ;
 
 {-
       s = \\ag,t,a,p,m => 

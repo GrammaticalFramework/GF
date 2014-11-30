@@ -515,9 +515,9 @@ oper
   dirV3    : V -> Prep -> V3 ;          -- donner,_,à
   dirdirV3 : V -> V3 ;                  -- donner,_,_
 
-  getVerbT : (VF => Str) -> Bool = \v -> case last (v ! (VFin (VPres Indic) Sg P3)) of {
-    "a" | "e" => True ; -- parle-t-il, va-t-il
-    _ => False  -- prend-il
+  getVerbT : (VF => Str) -> VBool = \v -> case last (v ! (VFin (VPres Indic) Sg P3)) of {
+    "a" | "e" => VTrue ; -- parle-t-il, va-t-il
+    _ => VFalse  -- prend-il
     } ;
 
 

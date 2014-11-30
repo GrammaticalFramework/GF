@@ -108,7 +108,7 @@ incomplete concrete SentenceRomance of Sentence =
             VPAgrClit g n => verb ! VPart g n  
             } ;
 
-          vps : Str * Str = case <te,a> of {
+          vpss : Str * Str = case <te,a> of {
 
             <RPast,Simul> => <verb ! VFin (VImperf m) num per, []> ; --# notpresent
             <RPast,Anter> => <vaux ! VFin (VImperf m) num per, part> ; --# notpresent
@@ -121,15 +121,16 @@ incomplete concrete SentenceRomance of Sentence =
             <RPres,Anter> => <vaux ! VFin (VPres m) num per, part> ; --# notpresent
             <RPres,Simul> => <verb ! VFin (VPres m) num per, []> 
             } ;
-          fin = vps.p1 ;
-          inf = vps.p2 ;
+          fin = vpss.p1 ;
+          inf = vpss.p2 ;
+          hypt = verbHyphen vp.s ; -- in French, -t- in some cases, otherwise - ; empty in other langs
         in
 
         case d of {
           DDir => 
             subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ ext ;
           DInv => 
-            invertedClause vp.s.vtyp <te, a, num, per> hasClit neg clit fin inf compl subj ext
+            invertedClause vp.s.vtyp <te, a, num, per> hasClit neg hypt clit fin inf compl subj ext
           }
     } ;
 

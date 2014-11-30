@@ -263,18 +263,20 @@ oper
           fin = vps.p1 ;
           inf = vps.p2 ;
 
+          hypt = verbHyphen vp.s ; -- in French, -t- in some cases, otherwise - ; empty in other langs
+
         in
         case d of {
           DDir => 
             subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ ext ;
           DInv => 
-            invertedClause vp.s.vtyp <te, a, num, per> hasClit neg clit fin inf compl subj ext
+            invertedClause vp.s.vtyp <te, a, num, per> hasClit neg hypt clit fin inf compl subj ext
           }
     } ;
 
---- in French, pronouns should 
---- have a "-" with possibly a special verb form with "t":
---- "comment fera-t-il" vs. "comment fera Pierre"
+-- in French, pronouns 
+-- have a "-" with possibly a special verb form with "t":
+-- "comment fera-t-il" vs. "comment fera Pierre"
 
   infVP : VP -> Agr -> Str = nominalVP VInfin ;
 
@@ -282,7 +284,8 @@ oper
 
   nominalVP : (Bool -> VF) -> VP -> Agr -> Str = \vf,vp,agr ->
       let
-        iform = orB vp.clit3.hasClit (isVRefl vp.s.vtyp) ;
+        ----iform = orB vp.clit3.hasClit (isVRefl vp.s.vtyp) ;
+        iform = contractInf vp.clit3.hasClit (isVRefl vp.s.vtyp) ;
         inf   = vp.s.s ! vf iform ;
         neg   = vp.neg ! RPos ;             --- Neg not in API
         obj   = vp.s.p ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol

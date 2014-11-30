@@ -201,51 +201,6 @@ oper
 
   mkVPSlash : Compl -> VP -> VP ** {c2 : Compl} = \c,vp -> vp ** {c2 = c} ;
 
------ new stuff 28/11/2014 -------------
-  Clause      : Type = {np : NounPhrase ; vp : VP} ;
-  SlashClause : Type = Clause ** {c2 : Compl} ;
-  QuestClause : Type = Clause ** {ip : Str ; isSent : Bool} ; -- if IP is subject then it is np, and ip is empty
-  RelClause   : Type = SlashClause ** {rp : AAgr => Str} ;    -- if RP is subject then it is np, and rp is empty 
-
-  mknClause : NounPhrase -> VP -> Clause = \np, vp -> {np = np ; vp = vp} ;
-  mknpClause : Str -> VP -> Clause = \s, vp -> mknClause (heavyNP {s = \\_ => s ; a = agrP3 Masc Sg}) vp ;
-
-  RelPron : Type = {s : Bool => AAgr => Case => Str ; a : AAgr ; hasAgr : Bool} ;
-
-  OldClause      : Type = {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} ;
-  OldQuestClause : Type = {s : QForm  => RTense => Anteriority => RPolarity => Mood => Str} ;
-  OldRelClause   : Type = {s : Agr    => RTense => Anteriority => RPolarity => Mood => Str ; c : Case} ;
-
-  oldClause : Clause -> OldClause = \cl -> 
-    let np = cl.np in
-    mkClausePol np.isNeg (np.s ! Nom).comp np.hasClit np.isPol np.a cl.vp ; 
-
-  oldQuestClause : QuestClause -> OldQuestClause = \qcl -> 
-    let 
-      np = qcl.np ;
-      cl = mkClause (np.s ! Nom).comp False False np.a qcl.vp ; 
-    in {
-      s = table {
-        QDir   => \\t,a,r,m =>                                                  qcl.ip ++ cl.s ! DInv ! t ! a ! r ! m ;
-        QIndir => \\t,a,r,m => case qcl.isSent of {True => subjIf ; _ => []} ++ qcl.ip ++ cl.s ! DDir ! t ! a ! r ! m 
-        }
-      } ;
-
-  oldRelClause : RelClause -> OldRelClause = \rcl -> 
-    let 
-      np = rcl.np ;
-      cl = mkClause (np.s ! Nom).comp False False np.a rcl.vp ; ---- Ag rp.a.g rp.a.n P3
-    in {
-      s = \\agr => cl.s ! DDir ;
-      c = rcl.c2.c
-      } ;
-
-
-
-
----------------------------------------
-
-
   mkClause : Str -> Bool -> Bool -> Agr -> VP -> 
       {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} =
     mkClausePol False ;
@@ -338,6 +293,191 @@ oper
             } ;
       in
       neg.p1 ++ neg.p2 ++ clitInf iform (refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s) inf ++ obj ; -- ne pas dormant
+
+----- new stuff 28/11/2014 -------------
+----- discontinuous clauses ------------
+
+  Clause      : Type = {np : NounPhrase ; vp : VP} ;
+  SlashClause : Type = Clause ** {c2 : Compl} ;
+  QuestClause : Type = Clause ** {ip : Str ; isSent : Bool} ;        -- if IP is subject then it is np, and ip is empty
+  RelClause   : Type = Clause ** {rp : AAgr => Str  ; c : Case} ;    -- if RP is subject then it is np, and rp is empty 
+
+  mknClause : NounPhrase -> VP -> Clause = \np, vp -> {np = np ; vp = vp} ;
+  mknpClause : Str -> VP -> Clause = \s, vp -> mknClause (heavyNP {s = \\_ => s ; a = agrP3 Masc Sg}) vp ;
+
+  RelPron : Type = {s : Bool => AAgr => Case => Str ; a : AAgr ; hasAgr : Bool} ;
+
+  OldClause      : Type = {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} ;
+  OldQuestClause : Type = {s : QForm  => RTense => Anteriority => RPolarity => Mood => Str} ;
+  OldRelClause   : Type = {s : Agr    => RTense => Anteriority => RPolarity => Mood => Str ; c : Case} ;
+
+  mkSentence : Direct -> RTense -> Anteriority -> RPolarity -> Mood -> Clause -> Str = \d,te,a,b,m,cl -> 
+        let
+          np = cl.np ;
+          isNeg = np.isNeg ;
+          subj = (cl.np.s ! Nom).comp ;
+          hasClit = np.hasClit ;
+          isPol = np.isPol ;
+          agr = np.a ;
+          vp = cl.vp ;
+
+          pol : RPolarity = case <isNeg, vp.isNeg, b, d> of {
+            <_,True,RPos,_>    => RNeg True ; 
+            <True,_,RPos,DInv> => RNeg True ; 
+            <True,_,RPos,_>    => polNegDirSubj ;
+            _ => b
+            } ;
+
+          neg = vp.neg ! pol ;
+
+          gen = agr.g ;
+          num = agr.n ;
+          per = agr.p ;
+
+          particle = vp.s.p ;
+
+          compl = particle ++ case isPol of {
+            True => vp.comp ! {g = gen ; n = Sg ; p = per} ;
+            _ => vp.comp ! agr
+            } ;
+          ext = vp.ext ! b ;
+
+          vtyp  = vp.s.vtyp ;
+          refl  = case isVRefl vtyp of {
+            True => reflPron num per Acc ; ---- case ?
+            _ => [] 
+            } ;
+          clit = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s ; ---- refl first?
+
+          verb = vp.s.s ;
+          vaux = auxVerb vp.s.vtyp ;
+
+          part = case vp.agr of {
+            VPAgrSubj     => verb ! VPart agr.g agr.n ;
+            VPAgrClit g n => verb ! VPart g n  
+            } ;
+
+          vps : Str * Str = case <te,a> of {
+            <RPast,Simul> => <verb ! VFin (VImperf m) num per, []> ; --# notpresent
+            <RPast,Anter> => <vaux ! VFin (VImperf m) num per, part> ; --# notpresent
+            <RFut,Simul>  => <verb ! VFin (VFut) num per, []> ; --# notpresent
+            <RFut,Anter>  => <vaux ! VFin (VFut) num per, part> ; --# notpresent
+            <RCond,Simul> => <verb ! VFin (VCondit) num per, []> ; --# notpresent
+            <RCond,Anter> => <vaux ! VFin (VCondit) num per, part> ; --# notpresent
+            <RPasse,Simul> => <verb ! VFin (VPasse) num per, []> ; --# notpresent
+            <RPasse,Anter> => <vaux ! VFin (VPasse) num per, part> ; --# notpresent
+            <RPres,Anter> => <vaux ! VFin (VPres m) num per, part> ; --# notpresent
+            <RPres,Simul> => <verb ! VFin (VPres m) num per, []> 
+            } ;
+
+          fin = vps.p1 ;
+          inf = vps.p2 ;
+
+        in
+        case d of {
+          DDir => 
+            subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ ext ;
+          DInv => 
+            invertedClause vp.s.vtyp <te, a, num, per> hasClit neg clit fin inf compl subj ext
+          }
+     ;
+
+
+
+
+
+  oldClause : Clause -> OldClause = \cl -> 
+    let np = cl.np in
+    mkClausePol np.isNeg (np.s ! Nom).comp np.hasClit np.isPol np.a cl.vp ; 
+
+  oldQuestClause : QuestClause -> OldQuestClause = \qcl -> 
+    let 
+      np = qcl.np ;
+      cl = mkClause (np.s ! Nom).comp False False np.a qcl.vp ; 
+    in {
+      s = table {
+        QDir   => \\t,a,r,m =>                                                  qcl.ip ++ cl.s ! DInv ! t ! a ! r ! m ;
+        QIndir => \\t,a,r,m => case qcl.isSent of {True => subjIf ; _ => []} ++ qcl.ip ++ cl.s ! DDir ! t ! a ! r ! m 
+        }
+      } ;
+
+  oldRelClause : RelClause -> OldRelClause = \rcl -> 
+    let 
+      np = rcl.np ;
+      cl = mkClause (np.s ! Nom).comp False False np.a rcl.vp ; ---- Ag rp.a.g rp.a.n P3
+    in {
+      s = \\agr => cl.s ! DDir ;
+      c = rcl.c
+      } ; --3456000 (16800,3360)
+
+---------------------------------------
+-- compiling LangFre
+-- v0:  646666 msec (old LangFre) 
+-- v02: 317625 msec (old with VBool)
+-- v1:  258153 msec 
+-- v2:  175677 msec  UseCl 345600 (5040,5040)  UseQCl 691200 (6720,6720)  UseRCl 1728000 (16800,3360)  
+-- v3:  169949 msec   
+-- v4:   85209 msec  (with VBool)               
+
+{-
+v0
+  7167263 french/SentenceFre.gfo
+   208919 french/QuestionFre.gfo
+   876960 french/RelativeFre.gfo
+  8253142 total
+
+v0.2
+ 7032583 french/SentenceFre.gfo
+  205086 french/QuestionFre.gfo
+  876660 french/RelativeFre.gfo
+ 8114329 total
+
+v2
+ 23476139 french/SentenceFre.gfo
+  1150969 french/QuestionFre.gfo
+  1282029 french/RelativeFre.gfo
+ 25909137 total
+v3
+ 23475961 french/SentenceFre.gfo
+  1150969 french/QuestionFre.gfo
+  1282029 french/RelativeFre.gfo
+ 25908959 total
+v4
+ 12652021 french/SentenceFre.gfo
+   567152 french/QuestionFre.gfo
+   628749 french/RelativeFre.gfo
+ 13847922 total
+
+Ita
+324019 msec
+ 2671533 italian/SentenceIta.gfo
+  130526 italian/QuestionIta.gfo
+  606895 italian/RelativeIta.gfo
+ 3408954 total
+
+Spa
+112362 msec
+ 1541743 spanish/SentenceSpa.gfo
+   89561 spanish/QuestionSpa.gfo
+  430675 spanish/RelativeSpa.gfo
+ 2061979 total
+
+
+    VType = VTyp VAux Bool
+
+    VPAgr = 
+       VPAgrSubj                    -- elle est partie, elle s'est vue
+     | VPAgrClit Gender Number ;    -- elle a dormi; elle les a vues
+
+    partAgr : VType -> VPAgr
+    vpAgrClit : Agr -> VPAgr
+    pronArg : Number -> Person -> CAgr -> CAgr -> Str * Str * Bool
+    vRefl   : VType -> VType
+    isVRefl : VType -> Bool
+    getVTypT : VType -> Bool = \t -> case t of {VTyp _ b => b} ; -- only in Fre
+
+-}
+
       
 }
 
