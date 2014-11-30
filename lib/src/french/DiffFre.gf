@@ -61,14 +61,14 @@ instance DiffFre of DiffRomance - [
       _ => copula.s
       } ;
 
-    partAgr : VType -> VPAgr = \vtyp -> case vtyp of {
-      VTyp VHabere _ => vpAgrNone ;
-      _ => VPAgrSubj
-      } ;
-
     vpAgrClit : Agr -> VPAgr = \a0 ->
       let a = complAgr a0 in
       VPAgrClit a.g a.n ;
+
+    partAgr   : VType -> Bool = \vtyp -> case vtyp of { -- works for all except Spa
+      VTyp VHabere _ => False ;
+      _ => True
+      } ;
 
 ----    pronArg = pronArgGen Neg ; --- takes more space and time
 

@@ -432,6 +432,17 @@ v0.2
   876660 french/RelativeFre.gfo
  8114329 total
 
+v03 195227 msec (old with VPAgr changed to Str; not yet correct)
+ 5084845 french/SentenceFre.gfo
+  131929 french/QuestionFre.gfo
+  333884 french/RelativeFre.gfo
+ 5550658 total
+v04 242696 msec (this correct, Str * Bool)
+ 6091544 french/SentenceFre.gfo
+  156000 french/QuestionFre.gfo
+  511900 french/RelativeFre.gfo
+ 6759444 total
+
 v2
  23476139 french/SentenceFre.gfo
   1150969 french/QuestionFre.gfo
@@ -455,12 +466,34 @@ Ita
   606895 italian/RelativeIta.gfo
  3408954 total
 
+Ita v03:
+253879 msec
+ 2169173 italian/SentenceIta.gfo
+   95021 italian/QuestionIta.gfo
+  347063 italian/RelativeIta.gfo
+ 2611257 total
+
 Spa
 112362 msec
  1541743 spanish/SentenceSpa.gfo
    89561 spanish/QuestionSpa.gfo
   430675 spanish/RelativeSpa.gfo
  2061979 total
+
+Spa v03:
+91598 msec
+ 1086758 spanish/SentenceSpa.gfo
+   66345 spanish/QuestionSpa.gfo
+  250267 spanish/RelativeSpa.gfo
+ 1403370 total
+
+Cat v03
+83132 msec
+ 1078970 catalan/SentenceCat.gfo
+   66225 catalan/QuestionCat.gfo
+  249211 catalan/RelativeCat.gfo
+ 1394406 total
+
 
 
     VType = VTyp VAux Bool

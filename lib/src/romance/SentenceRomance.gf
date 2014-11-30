@@ -103,10 +103,15 @@ incomplete concrete SentenceRomance of Sentence =
 
           ext = vp.ext ! b ;
 
-          part = case vp.agr of {
-            VPAgrSubj     => verb ! VPart agr.g agr.n ;
-            VPAgrClit g n => verb ! VPart g n  
+---- VPAgr : this is where it really matters
+          part = case vp.agr.p2 of {
+            False => vp.agr.p1 ;
+            True => verb ! VPart agr.g agr.n
             } ;
+----          part = case vp.agr of {
+----            VPAgrSubj     => verb ! VPart agr.g agr.n ;
+----            VPAgrClit g n => verb ! VPart g n  
+----            } ;
 
           vpss : Str * Str = case <te,a> of {
 

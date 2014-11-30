@@ -1,9 +1,17 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelude in {
+instance DiffSpa of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRomance, PhonoSpa, BeschSpa, Prelude in {
 
   flags optimize=noexpand ;
     coding=utf8 ;
+
+---- exceptions ----------------
+  oper
+    partAgr : VType -> Bool = \vtyp -> False ;
+    vpAgrSubj : Verb -> VPAgrType = \v -> <verbDefaultPart v, False> ;
+    vpAgrClits : Verb -> AAgr -> VPAgrType = \v,a -> <verbDefaultPart v, False> ;
+
+--------------------------------
 
   param 
     Prepos = P_de | P_a ;
@@ -71,8 +79,6 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
       } ;
 
     auxVerb : VType -> (VF => Str) = \_ -> haber_V.s ;
-
-    partAgr : VType -> VPAgr = \vtyp -> vpAgrNone ;
 
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;

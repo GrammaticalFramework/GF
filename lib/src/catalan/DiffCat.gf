@@ -1,8 +1,16 @@
 --# -path=.:../romance:../abstract:../common:prelude
-instance DiffCat of DiffRomance = open CommonRomance, PhonoCat, BeschCat, Prelude in {
+instance DiffCat of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRomance, PhonoCat, BeschCat, Prelude in {
 
   flags optimize=noexpand ;
   coding=utf8 ;
+
+---- exceptions ----------------
+  oper
+    partAgr : VType -> Bool = \vtyp -> False ;
+    vpAgrSubj : Verb -> VPAgrType = \v -> <verbDefaultPart v, False> ;
+    vpAgrClits : Verb -> AAgr -> VPAgrType = \v,a -> <verbDefaultPart v, False> ;
+
+--------------------------------
 
   param 
     Prepos = P_de | P_a ;
@@ -65,8 +73,6 @@ oper
       } ;
 
     auxVerb : VType -> (VF => Str) = \_ -> haver_V.s ;
-
-    partAgr : VType -> VPAgr = \vtyp -> vpAgrNone ;
 
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;
