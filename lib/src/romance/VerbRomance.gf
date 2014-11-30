@@ -67,7 +67,7 @@ incomplete concrete VerbRomance of Verb =
 
     SlashV2VNP v np vps = let obj = np.s ! v.c2.c in { 
       s     = v ;
-      agr   = partAgr v.vtyp ;
+      agr   = getVPAgr v ;
       clit1 = obj.c1 ; 
       clit2 = obj.c2 ; 
       clit3 = {s,imp = [] ; hasClit = False} ; ---- shortcut from insertObject, to check AR 20/11/2013 
