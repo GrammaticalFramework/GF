@@ -11823,8 +11823,8 @@ lin mock_V2 = mkV2 (mkV "deludere") ; -- status=guess, src=wikt
 lin mockery_N = mkN "derisione" feminine | mkN "scherno" ; -- status=guess status=guess
 lin mode_N = mkN "moda" ; -- status=guess
 lin model_N = mkN "modello" | mkN "modellino" ; -- status=guess status=guess
-lin model_V = mkV (I.fare_V) "il modello" | mkV (mkV "la") "modella" ; -- status=guess, src=wikt status=guess, src=wikt
-lin model_V2 = mkV2 (mkV (I.fare_V) "il modello") | mkV2 (mkV (mkV "la") "modella") ; -- status=guess, src=wikt status=guess, src=wikt
+lin model_V = mkV (I.fare_V) "il modello" ; -- status=gues
+lin model_V2 = mkV2 (mkV (I.fare_V) "il modello") ; -- status=gues
 lin modena_PN = mkPN "Modena" ; -- status=guess src=geonames
 lin moderate_A = variants {} ; --
 lin moderate_V = mkV "moderare" ; -- status=guess, src=wikt
@@ -16889,8 +16889,8 @@ lin smear_V = mkV "macchiare" | mkV "diffamare" | mkV "denigrare" ; -- status=gu
 lin smear_V2 = mkV2 (mkV "macchiare") | mkV2 (mkV "diffamare") | mkV2 (mkV "denigrare") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin smell_N = mkN "odore" masculine ; -- status=guess
 lin smell_V = L.smell_V ;
-lin smell_V2 = mkV2 (mkV (mkV "la") "gatta ci cova") ; -- status=guess, src=wikt
-lin smell_VA = mkVA (mkV (mkV "la") "gatta ci cova") ; -- status=guess, src=wikt
+lin smell_V2 = mkV2 L.smell_V ;
+lin smell_VA = mkVA L.smell_V ;
 lin smelly_A = mkA "puzzolente" ; -- status=guess
 lin smile_N = mkN "sorriso" ; -- status=guess
 lin smile_V = sorridere_V ; -- status=guess, src=wikt
