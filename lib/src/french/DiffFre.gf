@@ -2,7 +2,8 @@
 
 instance DiffFre of DiffRomance - [
   imperClit,
-  invertedClause
+  invertedClause,
+  verbHyphen
   ] 
   = open CommonRomance, PhonoFre, Prelude in {
 
@@ -11,9 +12,10 @@ instance DiffFre of DiffRomance - [
 
   param 
     Prepos = P_de | P_a | PNul ;
-    VType = VTyp VAux Bool ;  -- True means that -t- is required as in va-t-il, alla-t-il
+    VType = VTyp VAux VBool ;  -- True means that -t- is required as in va-t-il, alla-t-il
     VAux  = VHabere | VEsse | VRefl ;
-
+    VBool = VFalse ;
+    oper VTrue = VFalse ;
   oper
     dative   : Case = CPrep P_a ;
     genitive : Case = CPrep P_de ;
@@ -228,33 +230,33 @@ instance DiffFre of DiffRomance - [
         <_,Pl,P3> => cases3 "les" "leur" "eux"
         } ;
 
-    vRefl   : VType -> VType = \t -> VTyp VRefl (getVTypT t) ;
+    vRefl   : VType -> VType = \t -> VTyp VRefl VFalse ; ---- (getVTypT t) ;
     isVRefl : VType -> Bool = \ty -> case ty of {
       VTyp VRefl _ => True ;
       _ => False
       } ;
 
-    getVTypT : VType -> Bool = \t -> case t of {VTyp _ b => b} ; -- only in Fre
+    getVTypT : VType -> VBool = \t -> case t of {VTyp _ b => b} ; -- only in Fre
 
     auxPassive : Verb = copula ;
 
-    copula : Verb = {s = table VF ["être";"être";"suis";"es";"est";"sommes";"êtes";"sont";"sois";"sois"
+    copula : Verb = {s = table VF ["être";bindHyphen;"suis";"es";"est";"sommes";"êtes";"sont";"sois";"sois"
 ;"soit";"soyons";"soyez";"soient";
 "étais";"étais";"était";"étions";"étiez";"étaient";--# notpresent
 "fusse";"fusses";"fût";"fussions";"fussiez";"fussent";--# notpresent
 "fus";"fus";"fut";"fûmes";"fûtes";"furent";--# notpresent
 "serai";"seras";"sera";"serons";"serez";"seront";--# notpresent
 "serais";"serais";"serait";"serions";"seriez";"seraient";--# notpresent
-"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant";"étant"]; vtyp=VTyp VHabere False ; p = []} ;
+"sois";"soyons";"soyez";"été";"étés";"étée";"étées";"étant";"étant"]; vtyp=VTyp VHabere VFalse ; p = []} ;
 
-    avoir_V : Verb = {s=table VF ["avoir";"avoir";"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait"
+    avoir_V : Verb = {s=table VF ["avoir";bindHyphensT;"ai";"as";"a";"avons";"avez";"ont";"aie";"aies";"ait"
 ;"ayons";"ayez";"aient";
 "avais";"avais";"avait";"avions";"aviez";"avaient"; --# notpresent
 "eusse";"eusses";"eût";"eussions";"eussiez";"eussent";--# notpresent
 "eus";"eus";"eut";"eûmes";"eûtes";"eurent";--# notpresent
 "aurai";"auras";"aura";"aurons";"aurez";"auront";--# notpresent
 "aurais";"aurais";"aurait";"aurions";"auriez";"auraient";--# notpresent
-"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant";"ayant"];vtyp=VTyp VHabere True ; p = []} ; ---- a-t-il eut-il
+"aie";"ayons";"ayez";"eu";"eus";"eue";"eues";"ayant";"ayant"];vtyp=VTyp VHabere VTrue ; p = []} ; ---- a-t-il eut-il
 
   datClit = "y" ;
   genClit = "en" ;
@@ -273,22 +275,22 @@ instance DiffFre of DiffRomance - [
   polNegDirSubj = RNeg True ;
 
   invertedClause : 
-    VType -> (RTense * Anteriority * Number * Person) -> Bool -> (Str * Str) -> (clit,fin,inf,compl,subj,ext : Str) -> Str =
-    \vtyp,vform,hasClit,neg,clit,fin,inf,compl,subj,ext -> case <vtyp,vform,hasClit> of {
+    VType -> (RTense * Anteriority * Number * Person) -> Bool -> (Str * Str) -> Str -> (clit,fin,inf,compl,subj,ext : Str) -> Str =
+    \vtyp,vform,hasClit,neg,bindHyph,clit,fin,inf,compl,subj,ext -> case <vtyp,vform,hasClit> of {
 
-      -- parle-t-il
-      <VTyp _ True, <RPres,Simul,Sg,P3>, True> =>
-           neg.p1 ++ clit ++ fin ++ bindHyphensT ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;
+      -- parle-t-il - some verbs
+      <VTyp _ VTrue, <RPres,Simul,Sg,P3>, True> =>
+           neg.p1 ++ clit ++ fin ++ bindHyph ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;
 
-      -- parla-t-il
-      <VTyp _ True, <RPasse,Simul,Sg,P3>, True> =>                                             --# notpresent
-           neg.p1 ++ clit ++ fin ++ bindHyphensT ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;    --# notpresent
+      -- parla-t-il - some verbs
+      <VTyp _ VTrue, <RPasse,Simul,Sg,P3>, True> =>                                             --# notpresent
+           neg.p1 ++ clit ++ fin ++ bindHyph ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;    --# notpresent
 
-      -- fera-t-il, sera-t-il venu
+      -- fera-t-il, sera-t-il venu - all verbss
       <_,           <RFut,_,Sg,P3>, True> =>                                                   --# notpresent
            neg.p1 ++ clit ++ fin ++ bindHyphensT ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;    --# notpresent
 
-      -- a-t-il fait
+      -- a-t-il fait - all "avoir" verbs
       <VTyp VHabere _,<RPres,Anter,Sg,P3>, True> =>                                            --# notpresent
            neg.p1 ++ clit ++ fin ++ bindHyphensT ++ subj ++ neg.p2 ++ inf ++ compl ++ ext ;    --# notpresent
 
@@ -301,5 +303,7 @@ instance DiffFre of DiffRomance - [
       } ;
 
   bindHyphensT : Str = bindHyphen ++ "t" ++ bindHyphen ;
+
+  verbHyphen : Verb -> Str = \v -> v.s ! (VInfin True) ; --- kluge: use this field to store - or -t-
 
 }

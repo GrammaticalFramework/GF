@@ -234,7 +234,11 @@ param
 
 oper
   vvf : (VForm => Str) -> (VF => Str) = \aller -> table { 
-    VInfin _       => aller ! Inf ;
+    VInfin True => case last (aller ! Indi Presn Sg P3) of {  --- terrible hack to store the binding here... 30/11/2014
+      "a" | "e" => bindHyphensT ; -- parle-t-il, va-t-il
+      _ => bindHyphen  -- prend-il
+      } ;
+    VInfin False => aller ! Inf ;
     VFin (VPres   Indic) n p => aller ! Indi Presn n p ; 
     VFin (VPres   Subjunct) n p => aller ! Subjo SPres n p ;
     VFin (VImperf Indic) n p => aller ! Indi Imparf n p ;     --# notpresent

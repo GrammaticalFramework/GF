@@ -145,8 +145,12 @@ oper
 -- inverted clause order, only deviant in Fre where also the intervening -t- has to be taken to account
 
   invertedClause : 
-    VType -> (RTense * Anteriority * Number * Person) -> Bool -> (Str * Str) -> (clit,fin,inf,compl,subj,ext : Str) -> Str =
-    \_,_,_,neg,clit,fin,inf,compl,subj,ext -> neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ subj ++ ext ;
+    VType -> (RTense * Anteriority * Number * Person) -> Bool -> (Str * Str) -> Str -> (clit,fin,inf,compl,subj,ext : Str) -> Str =
+    \_,_,_,neg,_,clit,fin,inf,compl,subj,ext -> neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ subj ++ ext ;
+
+  verbHyphen : Verb -> Str = \v -> [] ; -- in Fre, - or -t-
+
+  contractInf : Bool -> Bool -> Bool = \_,_ -> False ; -- only True in Ita, by orB
 
 }
 

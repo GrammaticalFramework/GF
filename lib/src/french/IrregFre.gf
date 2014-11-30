@@ -24,8 +24,8 @@ lin
   adjoindre_V2 = v_besch58 "adjoindre" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
   admettre_V2 = v_besch56 "admettre" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
   advenir_V = v_besch23 "advenir" ** {vtyp = vEsse ; p = [] ; lock_V = <>} ;
-  aller_V = v_besch22 "aller" ** {vtyp = VTyp VEsse True ; p = [] ; lock_V = <>} ;
-  apercevoir_V2 = v_besch38 "apercevoir" ** {vtyp = VTyp VRefl False ; p = [] ; lock_V2 = <> ; c2 = complGen} ;
+  aller_V = v_besch22 "aller" ** {vtyp = VTyp VEsse VTrue ; p = [] ; lock_V = <>} ;
+  apercevoir_V2 = v_besch38 "apercevoir" ** {vtyp = VTyp VRefl VFalse ; p = [] ; lock_V2 = <> ; c2 = complGen} ;
   apparaître_V = v_besch64 "apparaître" ** {vtyp = vHabere ; p = [] ; lock_V = <>} ;
   appartenir_V2 = v_besch23 "appartenir" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complDat} ;
   appendre_V2 = v_besch53 "appendre" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
@@ -35,7 +35,7 @@ lin
   astreindre_V2 = v_besch57 "astreindre" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
   atteindre_V2 = v_besch57 "atteindre" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
   attendre_V2 = v_besch53 "attendre" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ; --- Dat?
-  avoir_V2 = v_besch1 "avoir" ** {vtyp = VTyp VHabere True ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
+  avoir_V2 = v_besch1 "avoir" ** {vtyp = VTyp VHabere VTrue ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
   battre_V2 = v_besch55 "battre" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
   boire_V2 = v_besch69 "boire" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
   bouillir_V2 = v_besch31 "bouillir" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
@@ -394,6 +394,6 @@ lin
   vouloir_V2 = v_besch48 "vouloir" ** {vtyp = vHabere ; p = [] ; lock_V2 = <> ; c2 = complAcc} ;
 
 oper
-  vHabere = VTyp VHabere False ;
-  vEsse = VTyp VEsse False ;
+  vHabere = VTyp VHabere VFalse ;
+  vEsse = VTyp VEsse VFalse ;
 }

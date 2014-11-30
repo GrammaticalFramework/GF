@@ -16,7 +16,7 @@ incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
     QS = {s : QForm => Str} ;
     RS = {s : Mood => Agr => Str ; c : Case} ;
     SSlash = {
-      s  : AAgr => Mood => Str ; 
+      s  : Mood => Str ; ---- AAgr => Mood => Str ; 
       c2 : Compl
       } ;
 
@@ -112,7 +112,7 @@ incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
     Tense = {s : Str ; t : RTense} ;
 
   linref
-    SSlash = \ss -> ss.s ! aagr Masc Sg ! Indic ++ ss.c2.s ;
+    SSlash = \ss -> ss.s ! Indic ++ ss.c2.s ;
 ----    ClSlash = \cls -> cls.s ! aagr Masc Sg ! DDir ! RPres ! Simul ! RPos ! Indic ++ cls.c2.s ;
 
     VP = \vp -> infVP vp (agrP3 Masc Sg) ;
