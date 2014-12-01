@@ -319,19 +319,18 @@ public class Translator {
             Concr sourceLang = getSourceConcr();
             Concr targetLang = getTargetConcr();
 
-            Expr expr = sourceLang.parseBest(getGrammar().getStartCat(), input);
-
             int count = NUM_ALT_TRANSLATIONS;
             for (ExprProb ep : sourceLang.parse(getGrammar().getStartCat(), input)) {
             	if (count-- <= 0)
             		break;
             	exprs.add(ep);
-            	output = targetLang.linearize(expr);
+            	if (output == null)
+					output = targetLang.linearize(ep.getExpr());
             }
         } catch (ParseError e) {
         	output = translateByLookup(input);
         }
-        
+
         return new Pair<String,List<ExprProb>>(output, exprs);
     }
 
