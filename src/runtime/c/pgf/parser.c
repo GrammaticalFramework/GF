@@ -608,12 +608,12 @@ pgf_parsing_get_conts(PgfParseState* state,
 	PgfItemContss* contss = 
 		pgf_parsing_get_contss(state, ccat, pool);
 	if (contss == NULL) {
-		size_t n_lins = cat->cnccat->n_lins;
+		size_t n_lins = ccat->cnccat->n_lins;
 		contss = gu_new_seq(PgfItemConts*, n_lins, pool);
 		for (size_t i = 0; i < n_lins; i++) {
 			gu_seq_set(contss, PgfItemConts*, i, NULL);
 		}
-		gu_map_put(state->conts_map, cat, PgfItemContss*, contss);
+		gu_map_put(state->conts_map, ccat, PgfItemContss*, contss);
 	}
 
 	PgfItemConts* conts = gu_seq_get(contss, PgfItemConts*, lin_idx);
