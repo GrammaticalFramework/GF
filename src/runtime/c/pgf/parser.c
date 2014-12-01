@@ -593,19 +593,10 @@ cmp_item_production_idx_entry(GuOrder* self, const void* a, const void* b)
 static GuOrder
 pgf_production_idx_entry_order[1] = { { cmp_item_production_idx_entry } };
 
-static PgfItemContss*
+static inline PgfItemContss*
 pgf_parsing_get_contss(PgfParseState* state, PgfCCat* cat, GuPool *pool)
 {
-	PgfItemContss* contss = gu_map_get(state->conts_map, cat, PgfItemContss*);
-	if (contss == NULL) {
-		size_t n_lins = cat->cnccat->n_lins;
-		contss = gu_new_seq(PgfItemConts*, n_lins, pool);
-		for (size_t i = 0; i < n_lins; i++) {
-			gu_seq_set(contss, PgfItemConts*, i, NULL);
-		}
-		gu_map_put(state->conts_map, cat, PgfItemContss*, contss);
-	}
-	return contss;
+	return gu_map_get(state->conts_map, cat, PgfItemContss*);
 }
 
 static PgfItemConts*
@@ -616,6 +607,15 @@ pgf_parsing_get_conts(PgfParseState* state,
 	gu_require(lin_idx < ccat->cnccat->n_lins);
 	PgfItemContss* contss = 
 		pgf_parsing_get_contss(state, ccat, pool);
+	if (contss == NULL) {
+		size_t n_lins = cat->cnccat->n_lins;
+		contss = gu_new_seq(PgfItemConts*, n_lins, pool);
+		for (size_t i = 0; i < n_lins; i++) {
+			gu_seq_set(contss, PgfItemConts*, i, NULL);
+		}
+		gu_map_put(state->conts_map, cat, PgfItemContss*, contss);
+	}
+
 	PgfItemConts* conts = gu_seq_get(contss, PgfItemConts*, lin_idx);
 	if (!conts) {
 		conts = gu_new(PgfItemConts, pool);
@@ -1048,25 +1048,7 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
 	if (tmp_ccat != NULL) {
 		PgfItemContss* contss =
 			pgf_parsing_get_contss(ps->before, ccat, ps->pool);
-		size_t n_contss = gu_seq_length(contss);
-		for (size_t i = 0; i < n_contss; i++) {
-			PgfItemConts* conts2 = gu_seq_get(contss, PgfItemConts*, i);
-			/* If there are continuations for
-			 * linearization index i, then (cat, i) has
-			 * already been predicted. Add the new
-			 * production immediately to the agenda,
-			 * i.e. process it. */
-			if (conts2) {
-				pgf_parsing_production(ps, ps->before, conts2, prod);
-			}
-		}
-
-		// The category has already been created. If it has also been
-		// predicted already, then process a new item for this production.
-		PgfParseState* state = ps->after;
-		while (state != NULL) {
-			PgfItemContss* contss =
-				pgf_parsing_get_contss(state, ccat, ps->pool);
+		if (contss != NULL) {
 			size_t n_contss = gu_seq_length(contss);
 			for (size_t i = 0; i < n_contss; i++) {
 				PgfItemConts* conts2 = gu_seq_get(contss, PgfItemConts*, i);
@@ -1076,7 +1058,29 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
 				 * production immediately to the agenda,
 				 * i.e. process it. */
 				if (conts2) {
-					pgf_parsing_production(ps, state, conts2, prod);
+					pgf_parsing_production(ps, ps->before, conts2, prod);
+				}
+			}
+		}
+
+		// The category has already been created. If it has also been
+		// predicted already, then process a new item for this production.
+		PgfParseState* state = ps->after;
+		while (state != NULL) {
+			PgfItemContss* contss =
+				pgf_parsing_get_contss(state, ccat, ps->pool);
+			if (contss != NULL) {
+				size_t n_contss = gu_seq_length(contss);
+				for (size_t i = 0; i < n_contss; i++) {
+					PgfItemConts* conts2 = gu_seq_get(contss, PgfItemConts*, i);
+					/* If there are continuations for
+					 * linearization index i, then (cat, i) has
+					 * already been predicted. Add the new
+					 * production immediately to the agenda,
+					 * i.e. process it. */
+					if (conts2) {
+						pgf_parsing_production(ps, state, conts2, prod);
+					}
 				}
 			}
 
