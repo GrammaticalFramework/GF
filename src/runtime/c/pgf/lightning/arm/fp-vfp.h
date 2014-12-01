@@ -1050,18 +1050,18 @@ vfp_pusharg_f(jit_state_t _jit, jit_fpr_t r0)
     _jitl.types[ofs >> 5] &= ~(1 << (ofs & 31));
     _VSTR_F32(r0, JIT_SP, 0);
 }
-
+#endif
 __jit_inline void
-vfp_pusharg_d(jit_state_t _jit, jit_fpr_t r0)
+vfp_pusharg_d(jit_state _jit, jit_fpr_t r0)
 {
     int		ofs = _jitl.nextarg_put++;
     assert(ofs < 256);
     _jitl.stack_offset -= sizeof(double);
-    _jitl.arguments[ofs] = (int *)_jit->x.pc;
+    _jitl.arguments[ofs] = (int *)_jit.x.pc;
     _jitl.types[ofs >> 5] |= 1 << (ofs & 31);
     _VSTR_F64(r0, JIT_SP, 0);
 }
-
+#if 0
 __jit_inline void
 vfp_retval_f(jit_state_t _jit, jit_fpr_t r0)
 {

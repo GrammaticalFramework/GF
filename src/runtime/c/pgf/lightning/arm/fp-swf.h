@@ -34,7 +34,6 @@
 #ifndef __lightning_fp_swf_h
 #define __lightning_fp_swf_h
 
-#if 0
 #include <math.h>
 
 #define swf_off(rn)				((rn) << 2)
@@ -119,7 +118,7 @@ extern int	__aeabi_dcmpun(double, double);
 	else								\
 	    _BICI(rt, rn, encode_arm_immediate(im));			\
     } while (0)
-
+#if 0
 __jit_inline void
 swf_movr_f(jit_state_t _jit, jit_fpr_t r0, jit_fpr_t r1)
 {
@@ -1213,9 +1212,9 @@ swf_pusharg_f(jit_state_t _jit, jit_fpr_t r0)
     else
 	_STRI(JIT_FTMP, JIT_SP, 0);
 }
-
+#endif
 __jit_inline void
-swf_pusharg_d(jit_state_t _jit, jit_fpr_t r0)
+swf_pusharg_d(jit_state _jit, jit_fpr_t r0)
 {
     int		ofs = _jitl.nextarg_put++;
     assert(ofs < 256);
@@ -1226,7 +1225,7 @@ swf_pusharg_d(jit_state_t _jit, jit_fpr_t r0)
 	swf_ldrin(JIT_TMP, JIT_FP, swf_off(r0) + 8);
 	swf_ldrin(JIT_FTMP, JIT_FP, swf_off(r0) + 4);
     }
-    _jitl.arguments[ofs] = (int *)_jit->x.pc;
+    _jitl.arguments[ofs] = (int *)_jit.x.pc;
     _jitl.types[ofs >> 5] |= 1 << (ofs & 31);
     /* large offsets (handled by patch_arguments) cannot be encoded in STRDI */
     if (jit_thumb_p()) {
@@ -1238,7 +1237,7 @@ swf_pusharg_d(jit_state_t _jit, jit_fpr_t r0)
 	_STRI(JIT_FTMP, JIT_SP, 0);
     }
 }
-
+#if 0
 #define swf_retval_f(_jit, r0)		swf_strin(_R0, JIT_FP, swf_off(r0) + 8)
 __jit_inline void
 swf_retval_d(jit_state_t _jit, jit_fpr_t r0)
