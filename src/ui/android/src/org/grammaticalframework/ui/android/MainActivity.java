@@ -348,7 +348,7 @@ public class MainActivity extends Activity {
 				//clear the overlay
 	            mStartStopButton.getDrawable().clearColorFilter();
             } else {
-	            mStartStopButton.getDrawable().setColorFilter(0xff000000,android.graphics.PorterDuff.Mode.MULTIPLY);
+	            mStartStopButton.getDrawable().setColorFilter(0xffff0000,android.graphics.PorterDuff.Mode.SRC_ATOP);
             }
             mStartStopButton.invalidate();
         }
