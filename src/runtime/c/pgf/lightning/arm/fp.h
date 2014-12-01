@@ -990,15 +990,11 @@ arm_prepare_f(jit_state_t _jit, int i0)
     assert(i0 >= 0);
     _jitl.stack_offset += i0 << 2;
 }
-
-#define jit_prepare_d(i0)		arm_prepare_d(_jit, i0)
-__jit_inline void
-arm_prepare_d(jit_state_t _jit, int i0)
-{
-    assert(i0 >= 0);
-    _jitl.stack_offset += i0 << 3;
-}
-
+#endif
+#define jit_prepare_d(i0) \
+    (assert(i0 >= 0),  \
+    _jitl.stack_offset += i0 << 3)
+#if 0
 #define jit_arg_f()			arm_arg_f(_jit)
 __jit_inline int
 arm_arg_f(jit_state_t _jit)
@@ -1073,16 +1069,12 @@ arm_pusharg_f(jit_state_t _jit, jit_fpr_t r0)
     if (jit_swf_p())	swf_pusharg_f(_jit, r0);
     else		vfp_pusharg_f(_jit, r0);
 }
-
-#define jit_pusharg_d(r0)		arm_pusharg_d(_jit, r0)
-__jit_inline void
-arm_pusharg_d(jit_state_t _jit, jit_fpr_t r0)
-{
-    assert(r0 != JIT_FPRET);
-    if (jit_swf_p())	swf_pusharg_d(_jit, r0);
-    else		vfp_pusharg_d(_jit, r0);
-}
-
+#endif
+#define jit_pusharg_d(r0) \
+    (assert(r0 != JIT_FPRET), \
+     jit_swf_p() ? swf_pusharg_d(_jit, r0) \
+                 : vfp_pusharg_d(_jit, r0))
+#if 0
 #define jit_retval_f(r0)		arm_retval_f(_jit, r0)
 __jit_inline void
 arm_retval_f(jit_state_t _jit, jit_fpr_t r0)
