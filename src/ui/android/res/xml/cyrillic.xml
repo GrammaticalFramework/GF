@@ -8,7 +8,7 @@
     >
 
     <Row>
-        <Key android:codes="1103" android:keyLabel="я" android:keyEdgeFlags="left"/>
+        <Key android:codes="1103" android:keyLabel="я" android:horizontalGap="0.5%p" android:keyEdgeFlags="left"/>
         <Key android:codes="1074" android:keyLabel="в"/>
         <Key android:codes="1077" android:keyLabel="е" android:popupKeyboard="@xml/popup_keyboard" android:popupCharacters="ёєэ"/>
         <Key android:codes="1088" android:keyLabel="р"/>
@@ -22,7 +22,7 @@
     </Row>
     
     <Row>
-        <Key android:codes="1072" android:keyLabel="а" android:keyEdgeFlags="left"/>
+        <Key android:codes="1072" android:keyLabel="а" android:horizontalGap="0.5%p" android:keyEdgeFlags="left"/>
         <Key android:codes="1089" android:keyLabel="с"/>
         <Key android:codes="1076" android:keyLabel="д" android:popupKeyboard="@xml/popup_keyboard" android:popupCharacters="ђ"/>
         <Key android:codes="1092" android:keyLabel="ф"/>
