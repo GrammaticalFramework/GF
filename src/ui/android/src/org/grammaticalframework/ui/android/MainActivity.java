@@ -66,30 +66,6 @@ public class MainActivity extends Activity {
         mTargetLanguageView = (LanguageSelector) findViewById(R.id.target_language);
         mSwitchLanguagesButton = (ImageView) findViewById(R.id.switch_languages);
         mProgressBarView = findViewById(R.id.progressBarView);
-        
-        OnTouchListener touchFeedbackListener = new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction()) {
-	                case MotionEvent.ACTION_DOWN: {
-	                    ImageView view = (ImageView) v;
-	                    view.getDrawable().setColorFilter(0x40808080,android.graphics.PorterDuff.Mode.DARKEN);
-	                    view.invalidate();
-	                    break;
-	                }
-	                case MotionEvent.ACTION_UP:
-	                case MotionEvent.ACTION_CANCEL: {
-	                    ImageView view = (ImageView) v;
-	                    //clear the overlay
-	                    view.getDrawable().clearColorFilter();
-	                    view.invalidate();
-	                    break;
-	                }
-	            }
-	
-	            return false;
-			}
-		};
 
         mStartStopButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -101,7 +77,6 @@ public class MainActivity extends Activity {
                 }
             }
         });
-        mStartStopButton.setOnTouchListener(touchFeedbackListener);
 
         SharedPreferences pref = getPreferences(MODE_PRIVATE);
         input_mode = pref.getBoolean("input_mode", true);
@@ -151,7 +126,6 @@ public class MainActivity extends Activity {
                 onSwitchLanguages();
             }
         });
-        mSwitchLanguagesButton.setOnTouchListener(touchFeedbackListener);
         
 		if (savedInstanceState != null) {
 			mConversationView.restoreConversation(savedInstanceState);
@@ -370,11 +344,13 @@ public class MainActivity extends Activity {
 
         @Override
         public void onStateChanged(State newState) {
-//            if (newState == ASR.State.IDLE) {
-//                mStartStopButton.setImageResource(R.drawable.mic_idle);
-//            } else {
-//                mStartStopButton.setImageResource(R.drawable.mic_open);
-//            }
+            if (newState == ASR.State.IDLE) {
+				//clear the overlay
+	            mStartStopButton.getDrawable().clearColorFilter();
+            } else {
+	            mStartStopButton.getDrawable().setColorFilter(0xff000000,android.graphics.PorterDuff.Mode.MULTIPLY);
+            }
+            mStartStopButton.invalidate();
         }
     }
 }
