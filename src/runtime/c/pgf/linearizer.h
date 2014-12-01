@@ -75,8 +75,10 @@ void
 pgf_lzr_get_table(PgfConcr* concr, PgfCncTree ctree, 
                   size_t* n_lins, GuString** labels);
 
+#ifdef PGF_DATA_H_
 // Used internally in the parser
 GuString
 pgf_get_tokens(PgfSymbols* sym, uint16_t sym_idx, GuPool* pool);
+#endif
 
 #endif
