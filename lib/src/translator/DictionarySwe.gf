@@ -12550,8 +12550,8 @@ lin conservancy_N = mkN "naturvård" ; -- comment=3
 lin conservation_N = mkN "bevarande" ; -- SaldoWN
 lin conservatism_N = mkN "konservatism" "konservatismer" ; -- SaldoWN
 lin conservative_A = mkA "konservativ" ; -- SaldoWN
-lin conservative_1_N = mkN "moderat" utrum;
-lin conservative_2_N = mkN "konserveringsmedel" neutrum;
+lin conservative_1_N = mkN "konservativ" "konservativer" ;
+lin conservative_2_N = mkN "konserveringsmedel" neutrum ;
 lin conservatoire_N = mkN "konservatorium" "konservatoriet" "konservatorier" "konservatorierna" ; -- comment=2
 lin conservator_N = variants {} ; -- status=guess
 lin conservatory_N = mkN "drivhus" neutrum ; -- comment=5
