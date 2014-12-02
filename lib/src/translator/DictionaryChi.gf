@@ -7735,7 +7735,8 @@ lin consequently_Adv = {-HSK-} mkAdv "于是" | mkAdv "因此" | adjAdv conseque
 lin conservation_N = mkN "保护" [] ;
 lin conservatism_N = mkN "保守主义" ;
 lin conservative_A = mkA "保守" ;
-lin conservative_N = mkN "保守派" ;
+lin conservative_1_N = mkN "保守派" ; -- status=guess
+lin conservative_2_N = mkN "保守派" ; -- status=guess
 lin conservatoire_N = mkN "音樂學校" | mkN "音乐学校" | {-mwn-} mkN "艺术学校" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin conservatory_N = mkN "温室" ;
 lin conserve_V2 = mkV2 "保存" | {-HSK-} mkV2 "节约" ;

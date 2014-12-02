@@ -4670,7 +4670,8 @@ lin consequence_N = mkN "järelm" | mkN "tagajärg" | mkN "tähendusrikas" ;
 lin conservancy_N = mkN "kohalik laevanduskomisjon" | mkN "loodushoid" ;
 lin conservation_N = mkN "hoidmine" | mkN "kaitse" | mkN "loodushoid" | mkN "säilitamine" ;
 lin conservatism_N = mkN "konservatism" ;
-lin conservative_N = mkN "konservatiiv" | mkN "konservatiivne" ;
+lin conservative_1_N = mkN "konservatiiv" | mkN "konservatiivne" ; -- status=guess
+lin conservative_2_N = mkN "konservatiiv" | mkN "konservatiivne" ; -- status=guess
 lin conservatoire_N = mkN "konservatoorium" | mkN "kunstikool" ;
 lin conservator_N = mkN "hooldaja" | mkN "kollektsiooni hooldaja" ;
 lin conservatory_N = mkN "konservatoorium" | mkN "kunstikool" | mkN "talveaed" ;
