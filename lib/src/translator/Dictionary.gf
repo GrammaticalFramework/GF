@@ -12595,7 +12595,8 @@ fun conservancy_N : N ;
 fun conservation_N : N ;
 fun conservatism_N : N ;
 fun conservative_A : A ;
-fun conservative_N : N ;
+fun conservative_1_N : N ; -- | a person who is conservative
+fun conservative_2_N : N ; -- | a preservative
 fun conservatoire_N : N ;
 fun conservator_N : N ;
 fun conservatory_N : N ;

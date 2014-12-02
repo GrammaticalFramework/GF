@@ -12605,7 +12605,8 @@ lin conservancy_N = variants {} ;
 lin conservation_N = mkN "Schutz" "Schutze" masculine ; -- status=guess
 lin conservatism_N = mkN "Konservatismus" masculine ; -- status=guess
 lin conservative_A = mk3A "konservativ" "konservativer" "konservativste" ; -- status=guess
-lin conservative_N = mkN "Konservativer" masculine ; -- status=guess
+lin conservative_1_N = mkN "Konservativer" masculine ; -- status=guess
+lin conservative_2_N = mkN "Konservativer" masculine ; -- status=guess
 lin conservatoire_N = mkN "Konservatorium" "Konservatorien" neuter | mkN "Musikkonservatorium" neuter | mkN "Musikakademie" feminine | mkN "Hochschule" "Hochschulen" feminine | mkN "Musikschule" "Musikschulen" feminine | mkN "höhere Musikschule" feminine ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin conservator_N = variants {} ;
 lin conservatory_N = mkN "Wintergarten" "Wintergärten" masculine | mkN "Gewächshaus" neuter ; -- status=guess status=guess

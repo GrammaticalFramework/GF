@@ -4177,7 +4177,8 @@ lin consequent_A = mkA "met als gevolg" ; -- status=guess
 lin consequently_Adv = mkAdv "bijgevolg" | adjAdv consequent_A ; -- status=guess -- derived
 lin conservation_N = mkN "natuurbescherming" ; -- status=guess
 lin conservative_A = variants {} ; --
-lin conservative_N = variants {} ; --
+lin conservative_1_N = variants {} ; --
+lin conservative_2_N = variants {} ; --
 lin conservatoire_N = mkN "conservatorium" neuter ; -- status=guess
 lin conservator_N = mkN "conservator" masculine | mkN "bewaarder" masculine ; -- status=guess status=guess
 lin conservatory_N = mkN "conservatorium" neuter ; -- status=guess

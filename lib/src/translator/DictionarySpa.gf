@@ -5045,7 +5045,8 @@ lin consequently_Adv = adjAdv consequent_A ; -- -- derived
 lin conservation_N = variants {} ; --
 lin conservatism_N = mkN "conservadurismo" | mkN "conservatismo" ; -- status=guess status=guess
 lin conservative_A = mkA "conservador" ; -- status=guess
-lin conservative_N = mkN "conservador" masculine ; -- status=guess
+lin conservative_1_N = mkN "conservador" masculine ; -- status=guess
+lin conservative_2_N = mkN "conservador" masculine ; -- status=guess
 lin conservator_N = mkN "apoderado" ; -- status=guess
 lin conserve_N = mkN "parque nacional" ; -- status=guess
 lin conserve_V2 = mkV2 (mkV "conservar") ; -- status=guess, src=wikt

@@ -4112,7 +4112,8 @@ lin consequent_A = variants {} ;
 lin consequently_Adv = adjAdv consequent_A ; -- -- derived
 lin conservation_N = variants {} ; --
 lin conservative_A = variants {} ; --
-lin conservative_N = variants {} ; --
+lin conservative_1_N = variants {} ; --
+lin conservative_2_N = variants {} ; --
 lin conservatoire_N = mkN "conservatorio" ; -- status=guess
 lin conservatory_N = mkN "conservatorio" ; -- status=guess
 lin conserve_V2 = mkV2 (mkV "conservare") ; -- status=guess, src=wikt
