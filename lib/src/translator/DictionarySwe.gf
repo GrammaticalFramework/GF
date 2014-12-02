@@ -31129,7 +31129,7 @@ lin kind_A = mkA "snäll" | mkA "vänlig" ; -- SaldoWN -- comment=7
 lin kind_N = mkN "slag" neutrum ;
 lin kind_hearted_A = variants {} ; -- status=guess
 lin kinda_Adv = variants {} ; -- status=guess
-lin kindergarten_N = mkN "lekskola" | mkN "dagis" neutrum ; -- SaldoWN
+lin kindergarten_N = mkN "dagis" neutrum | mkN "lekis" neutrum | mkN "lekskola";
 lin kindhearted_A = variants {} ; -- status=guess
 lin kindheartedness_N = variants {} ; -- status=guess
 lin kindle_V = mkV "tänder" ; -- comment=3
