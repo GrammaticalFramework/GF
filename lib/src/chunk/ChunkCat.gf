@@ -20,25 +20,25 @@ oper
 lin
   copula_inf_Chunk = ss "ser" ;
 
-  refl_SgP1_Chunk = ss "yo mismo" ;
-  refl_SgP2_Chunk = ss "tu mismo" ;
-  refl_SgP3_Chunk = ss "ello mismo" ;
-  refl_PlP1_Chunk = ss "nosotros mismos" ;
-  refl_PlP2_Chunk = ss "vosotros mismos" ;
-  refl_PlP3_Chunk = ss "ellos mismos" ;
+  refl_SgP1_Chunk = ss "jo mateix" ;
+  refl_SgP2_Chunk = ss "tu mateix" ; 
+  refl_SgP3_Chunk = ss "aquell mateix" ;
+  refl_PlP1_Chunk = ss "nosaltres mateixos" ;
+  refl_PlP2_Chunk = ss "vosaltres mateixos" ;
+  refl_PlP3_Chunk = ss "ells mateixos" ;
   neg_Chunk = ss "no" ;
-  copula_Chunk = ss "es" ;
-  copula_neg_Chunk = ss "no es" ;
-  past_copula_Chunk = ss "era" ;
-  past_copula_neg_Chunk = ss "no era" ;
+  copula_Chunk = ss "és" ;
+  copula_neg_Chunk = ss "no és" ;
+  past_copula_Chunk = ss "va ser" ;
+  past_copula_neg_Chunk = ss "no va ser" ;
   future_Chunk = ss "va"  ; ----
   future_neg_Chunk = ss "no va" ; ----
-  cond_Chunk = ss "iría" ; ----
-  cond_neg_Chunk = ss "no iría" ; ----
+  cond_Chunk = ss "aniria" ; ----
+  cond_neg_Chunk = ss "no aniria" ; ----
   perfect_Chunk = ss "ha" ;
   perfect_neg_Chunk = ss "no ha" ;
-  past_perfect_Chunk = ss "había" ;
-  past_perfect_neg_Chunk = ss "no había" ;
+  past_perfect_Chunk = ss "havia" ;
+  past_perfect_neg_Chunk = ss "no havia" ;
   
   fullstop_Chunk = ss "." ;
   exclmark_Chunk = ss "!" ;
