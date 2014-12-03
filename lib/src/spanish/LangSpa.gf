@@ -7,6 +7,6 @@ concrete LangSpa of Lang =
   ,ConstructionSpa
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags startcat = Phr ;
 
 } ;
