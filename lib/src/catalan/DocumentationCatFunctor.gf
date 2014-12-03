@@ -51,13 +51,13 @@ lin
 
   InflectionAdv adv = {
     t  = "adv" ;
-    s1 = heading1 "Adverbe" ;
+    s1 = heading1 "Adverbi" ;
     s2 = paragraph adv.s
     } ;
 
   InflectionPrep p = {
     t  = "prep" ;
-    s1 = heading1 "Préposition" ;
+    s1 = heading1 "Preposició" ;
     s2 = paragraph p.s
     } ;
 
