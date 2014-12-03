@@ -43,7 +43,7 @@ lin
 
   that_RP = which_RP ;
 
-  but_Subj = {s = "pero" ; m = Indic} ; ---- strange to have this as Subj
+  but_Subj = {s = "però" ; m = Indic} ; ---- strange to have this as Subj
 
 
 
@@ -104,7 +104,7 @@ lin
   PredVPovs np vp = mkCl (lin NP np) (lin VP vp) ;
 
 
-  CompS s = {s = \\_ => "de" ++ "que" ++ s.s ! Indic} ; ---- de ?
+  CompS s = {s = \\_ => "de" ++ "què" ++ s.s ! Indic} ; ---- de ?
 
 {-
   CompQS qs = {s = \\_ => qs.s ! QIndir} ;
