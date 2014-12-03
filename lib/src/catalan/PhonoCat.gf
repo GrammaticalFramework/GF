@@ -32,15 +32,15 @@ oper
 	} ;
 	
 	
-elisDe = pre { "de" ; "d'" / vocal };
-elisEl = pre { "el" ; "l'" / vocal } ;
-elisLa = pre { "la" ; "l'" / vocalForta } ;
-elisEm = pre { "em" ; "m'" / vocal } ;
-elisEt = pre { "et" ; "t'" / vocal } ;
+elisDe = pre { "de" ; ("d'" ++ Predef.BIND) / vocal };
+elisEl = pre { "el" ; ("l'" ++ Predef.BIND) / vocal } ;
+elisLa = pre { "la" ; ("l'" ++ Predef.BIND) / vocalForta } ;
+elisEm = pre { "em" ; ("m'" ++ Predef.BIND) / vocal } ;
+elisEt = pre { "et" ; ("t'" ++ Predef.BIND) / vocal } ;
 
 -- AR after pre syntax change 25/5/2009
 elisEs = pre {
-  vocal => "s'" ;
+  vocal => "s'" ++ Predef.BIND ;
   "s"   => "se" ;
   _     => "es"
   } ;
