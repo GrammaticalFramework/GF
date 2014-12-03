@@ -3,7 +3,7 @@
 
 var gftranslate = {}
 
-gftranslate.jsonurl="/robust/App11.pgf"
+gftranslate.jsonurl="/robust/App12.pgf"
 gftranslate.grammar="App" // the name of the grammar
 
 gftranslate.call=function(querystring,cont,errcont) {
