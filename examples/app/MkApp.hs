@@ -3,7 +3,7 @@
 -- the new files are produced in ./tmp/
 -- usage: runghc MkApp.hs
 
-langs = words "Bul Chi Dut Eng Fin Fre Ger Hin Ita Spa Swe"
+langs = words "Bul Cat Chi Dut Eng Fin Fre Ger Hin Ita Spa Swe"
 appCnc lang = "App" ++ lang ++ ".gf"
 
 appAbs = "App.gf"
