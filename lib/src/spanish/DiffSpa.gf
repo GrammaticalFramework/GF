@@ -49,8 +49,6 @@ instance DiffSpa of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
         }
       } ;
 
--- In these two, "de de/du/des" becomes "de".
-
     artIndef = \isNP,g,n,c -> case isNP of {
       True => case n of {
         Sg  => prepCase c ++ genForms "uno"  "una" ! g ;

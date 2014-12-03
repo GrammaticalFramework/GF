@@ -45,15 +45,15 @@ oper
         
 
     artIndef = \isNP,g,n,c -> case isNP of {
-     _ => case <n,c> of {
-      <Sg,CPrep P_de>   => genForms ["d' un"] ["d' una"] ! g ;
+     True => case <n,c> of {
+      <Sg,CPrep P_de>   => genForms ["d' ++ Predef.BIND ++ un"] ["d' ++ Predef.BIND ++ una"] ! g ;
       <Sg,_> => prepCase c ++ genForms "un" "una" ! g ;
+      <Pl,CPrep P_de>   => genForms ["d' ++ Predef.BIND ++ uns"] ["d' ++ Predef.BIND ++ unes"] ! g ; -- AR 3/12/2014
       <Pl,_> => prepCase c ++ genForms "uns" "unes" ! g 
       } ;
      _ => case <n,c> of {
-      <Sg,CPrep P_de>   => genForms ["d' un"] ["d' una"] ! g ;
+      <Sg,CPrep P_de>   => genForms ["d' ++ Predef.BIND ++ un"] ["d' ++ Predef.BIND ++ una"] ! g ;
       <Sg,_> => prepCase c ++ genForms "un" "una" ! g ;
-                           ---      <Pl,CPrep P_de> => genForms ["d' uns"] ["d' unes"] ! g ;
       <Pl,_> => prepCase c --- ++ genForms "uns" "unes" ! g --- take this as a determiner
       }
      } ;
