@@ -21,6 +21,8 @@ concrete TranslateCat of Translate =
   QuestionCat,
   RelativeCat,
   IdiomCat,
+  ConstructionCat,
+  DocumentationCat,
 
   ChunkCat,
   ExtensionsCat [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
