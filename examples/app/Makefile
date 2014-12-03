@@ -1,4 +1,4 @@
-all: Phrasebook App11.pgf
+all: Phrasebook App12.pgf
 
 PROBSFILE=./app.probs
 GFODIR=./gfos
@@ -22,9 +22,9 @@ App12.pgf: $(APP12)
 
 # Without dependencies:
 App11:
-	$(GFMKT) -name=App11 $(APP11) +RTS -K200M
+	$(GFMKT) -name=App12 $(APP11) +RTS -K200M
 App12:
-	$(GFMKT) -name=App11 $(APP12) +RTS -K200M
+	$(GFMKT) -name=App12 $(APP12) +RTS -K200M
 
 # App grammars for individual languages
 AppEng.pgf:: ; $(GFMKT) -name=AppEng AppEng.gf
