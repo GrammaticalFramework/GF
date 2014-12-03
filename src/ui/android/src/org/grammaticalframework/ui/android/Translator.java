@@ -28,27 +28,6 @@ public class Translator {
 
     private static final String TAG = "Translator";
 
-    /*
-
-    // old
-
-    // TODO: allow changing
-    private String mGrammar = "ParseEngAbs.pgf";
-
-    // TODO: build dynamically?
-    private Language[] mLanguages = {
-	    new Language("en-US", "English", "ParseEng", R.xml.qwerty),
-        new Language("bg-BG", "Bulgarian", "ParseBul", R.xml.cyrillic),
-        new Language("cmn-Hans-CN", "Chinese", "ParseChi", R.xml.qwerty),   
-        new Language("fr-FR", "French", "ParseFre", R.xml.qwerty),  
-        new Language("de-DE", "German", "ParseGer", R.xml.qwerty), 
-        new Language("hi-IN", "Hindi", "ParseHin", R.xml.devanagari_page1, R.xml.devanagari_page2), 
-        new Language("sv-SE", "Swedish", "ParseSwe", R.xml.qwerty), 
-        new Language("fi-FI", "Finnish", "ParseFin", R.xml.qwerty),
-    };
-     */
-
-    // /*
     // new
 
     // TODO: allow changing
@@ -56,10 +35,13 @@ public class Translator {
 
     // TODO: build dynamically?
     private Language[] mLanguages = {
-    	new Language("en-US", "English", "AppEng", R.xml.qwerty),
     	new Language("bg-BG", "Bulgarian", "AppBul", R.xml.cyrillic),
+        new Language("ca-ES", "Catalan", "AppCat", R.xml.qwerty),
     	new Language("cmn-Hans-CN", "Chinese", "AppChi", R.xml.qwerty),
+	//    	new Language("yue", "Chinese (Cantonese)", "AppChi", R.xml.qwerty),
+	//    	new Language("cmn-Hans-CN", "Chinese (Mandarin)", "AppChi", R.xml.qwerty),
         new Language("nl-NL", "Dutch", "AppDut", R.xml.qwerty),
+    	new Language("en-US", "English", "AppEng", R.xml.qwerty),
         new Language("fi-FI", "Finnish", "AppFin", R.xml.nordic),
         new Language("fr-FR", "French",  "AppFre", R.xml.qwerty),
         new Language("de-DE", "German",  "AppGer", R.xml.qwerty),
@@ -68,7 +50,6 @@ public class Translator {
         new Language("es-ES", "Spanish", "AppSpa", R.xml.qwerty),
         new Language("sv-SE", "Swedish", "AppSwe", R.xml.nordic),
     };
-    // */
 
     private Context mContext;
 
@@ -267,7 +248,7 @@ public class Translator {
 
     private String translateWord(String input) {
 
-    	String output = "[" + input + "]" ;  // if all else fails, return the word itself in brackets
+    	String output = input.toUpperCase() ;  // if all else fails, return the word itself in upper case ///in brackets
     	Concr sourceLang = getSourceConcr() ;
     	Concr targetLang = getTargetConcr() ;
 
