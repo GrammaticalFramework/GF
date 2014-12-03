@@ -1,10 +1,12 @@
---# -path=.:../romance:../abstract:../common:../prelude
+--# -path=.:../romance:../abstract:../common:../api
 
 concrete LangCat of Lang = 
   GrammarCat,
   LexiconCat
+  ,DocumentationCat --# notpresent
+  ,ConstructionCat
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags startcat = Phr ;
 
 } ;
