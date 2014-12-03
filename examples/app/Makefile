@@ -15,10 +15,10 @@ APP11=AppEng.pgf AppBul.pgf AppChi.pgf AppGer.pgf AppSwe.pgf AppHin.pgf AppFin.p
 APP12=$(APP11) AppCat.pgf
 
 # With dependencies:
-App11.pgf: $(APP)
+App11.pgf: $(APP11)
 	$(GFMKT) -name=App11 $(APP11) +RTS -K200M
-App12.pgf: $(APP)
-	$(GFMKT) -name=App11 $(APP12) +RTS -K200M
+App12.pgf: $(APP12)
+	$(GFMKT) -name=App12 $(APP12) +RTS -K200M
 
 # Without dependencies:
 App11:
