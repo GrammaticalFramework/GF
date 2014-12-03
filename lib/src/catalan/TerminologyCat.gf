@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common
 
-concrete TerminologyCat of Terminology = CatCat ** open 
+concrete TerminologyCat of Terminology = CatCat ** open
   ResCat,
   CommonRomance,
   ParadigmsCat,
@@ -17,16 +17,16 @@ lincat
   Category = G.N ;
   ParameterType = G.N ;
   Parameter = G.N ;
-  
+
   Heading = {s : Str} ;
-  
+
 
 lin
   noun_Category = mkN "substantiu" ;
   adjective_Category = mkN "adjectiu" ;
   verb_Category = mkN "verb" masculine ;
 
-  gender_ParameterType = mkN "género" masculine ;
+  gender_ParameterType = mkN "gènere" masculine ;
 
   singular_Parameter = mkN "singular" ;
   plural_Parameter = mkN "plural" ;
@@ -35,31 +35,31 @@ lin
   feminine_Parameter = mkN "femení" ;
   neuter_Parameter = mkN "neutre" ;
 
-  nominative_Parameter = mkN "nominatiu" ;
-  genitive_Parameter = mkN "genitiu" ;
-  dative_Parameter = mkN "datiu" ;
-  accusative_Parameter = mkN "accusatiu" ;
+  nominative_Parameter = mkN "nominativo" ;
+  genitive_Parameter = mkN "genitivo" ;
+  dative_Parameter = mkN "dativo" ;
+  accusative_Parameter = mkN "accusativo" ;
   
-  imperative_Parameter = mkN "imperatiu" ;
-  indicative_Parameter = mkN "indicatiu" ;
-  conjunctive_Parameter = mkN "subjuntiu" ;
-  infinitive_Parameter = mkN "infinitiu" ;
+  imperative_Parameter = mkN "imperativo" ;
+  indicative_Parameter = mkN "indicativo" ;
+  conjunctive_Parameter = mkN "subjuntivo" ;
+  infinitive_Parameter = mkN "infinitivo" ;
 
-  present_Parameter = mkN "present" ;
-  past_Parameter = mkN "pretèrit" ;
-  future_Parameter = mkN "futur" ;
+  present_Parameter = mkN "presente" ;
+  past_Parameter = mkN "pretérito" ;
+  future_Parameter = mkN "futuro" ;
   conditional_Parameter = mkN "condicional" ;
-  perfect_Parameter = mkN "perfecte compost" ; ----
-  imperfect_Parameter = mkN "imperfect" ;
-  simple_past_Parameter = mkN "perfecte simple" ; ----
+  perfect_Parameter = mkN "perfecto compuesto" ; ----
+  imperfect_Parameter = mkN "imperfecto" ;
+  simple_past_Parameter = mkN "perfecto simple" ; ----
 
   participle_Parameter = mkN "participi" ;
   aux_verb_Parameter = mkN "auxiliar" ; ----
 
-  positive_Parameter = mkN "positiu" ;
-  comparative_Parameter = mkN "comparatiu" ;
-  superlative_Parameter = mkN "superlatiu" ;
-  predicative_Parameter = mkN "predicatiu" ;
+  positive_Parameter = mkN "positivo" ;
+  comparative_Parameter = mkN "comparativo" ;
+  superlative_Parameter = mkN "superlativo" ;
+  predicative_Parameter = mkN "predicativo" ;
 
   nounHeading n = ss (n.s ! Sg) ;
 
