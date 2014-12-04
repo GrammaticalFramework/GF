@@ -50064,7 +50064,6 @@ lin savior_N = mkN "Retter" "Retter" masculine ; -- status=guess
 lin saviour_N = variants {} ;
 lin savoir_faire_N = variants {} ;
 lin savore_V2 = variants {} ;
-lin savory_A = variants {} ;
 lin savour_N = variants {} ;
 lin savour_V = variants {} ;
 lin savour_V2 = variants {} ;
@@ -62022,7 +62021,6 @@ lin unsatisfiable_A = variants {} ;
 lin unsatisfied_A = variants {} ;
 lin unsatisfying_A = mkA "unbefriedigend" ; -- status=guess
 lin unsaturated_A = mkA "ungesättigt" ; -- status=guess
-lin unsavory_A = variants {} ;
 lin unsavoury_A = variants {} ;
 lin unsay_V2 = variants {} ;
 lin unscalable_A = variants {} ;

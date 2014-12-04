@@ -19019,7 +19019,7 @@ lin saving_N = variants {} ; --
 lin savings_N = mkN "ahorros" feminine ; -- status=guess
 lin savior_N = mkN "salvador" masculine ; -- status=guess
 lin saviour_N = mkN "bebé medicamento" ; -- status=guess
-lin savory_A = mkA "sabroso" | mkA "apetitoso" ; -- status=guess status=guess
+lin savoury_A = mkA "sabroso" | mkA "apetitoso" ; -- status=guess status=guess
 lin savoury_N = mkN "ajedrea" ; -- status=guess
 lin saw_N = mkN "proverbio" ; -- status=guess
 lin saw_V = serrar_V ; -- status=guess, src=wikt

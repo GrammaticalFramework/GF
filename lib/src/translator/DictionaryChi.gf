@@ -27944,8 +27944,8 @@ lin saver_N = mkN "救助者" "名" ;
 lin saving_N = mkN "节省" | {-HSK-} mkN "节约" ;
 lin savings_N = mkN "儲蓄" | mkN "储蓄" | {-mwn-} mkN "储备金" | mkN "储金" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin savore_V2 = mkV2 "FOO" ;
-lin savory_A = mkA "可口" ;
 lin savour_N = mkN "味道" | mkN "气味" | mkN "滋味" ; -- open-multilingual-wordnet
+lin savoury_A = mkA "可口" ;
 lin savoury_N = mkN "开胃菜" ;
 lin savvy_N = mkN "悟性" "种" ;
 lin saw_N = mkN "锯子" "把" ;
@@ -33658,7 +33658,7 @@ lin unsated_A = mkA "不满意" ; -- open-multilingual-wordnet
 lin unsatisfactory_A = mkA "不能令人满意" | mkA "令人不满意" ; -- open-multilingual-wordnet
 lin unsatisfiable_A = mkA "不可以满足" ; -- open-multilingual-wordnet
 lin unsaturated_A = mkA "不飽和" | mkA "不饱和" | {-mwn-} mkA "不饱和" | mkA "未饱和" | mkA "没有饱和" ; -- status=guess -- status=guess -- open-multilingual-wordnet
-lin unsavory_A = mkA "难吃" ;
+lin unsavoury_A = mkA "难吃" ;
 lin unscalable_A = mkA "不可攀登" | mkA "不能攀登" ; -- open-multilingual-wordnet
 lin unscathed_A = mkA "没有受伤" ;
 lin unscheduled_A = mkA "非预定" | mkA "预定" ; -- open-multilingual-wordnet
