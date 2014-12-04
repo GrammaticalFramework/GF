@@ -50062,7 +50062,6 @@ fun saviour_N : N ;
 fun savoir_faire_N : N ;
 fun savore_V2 : V2 ;
 fun savory_A : A ;
-fun savory_N : N ;
 fun savour_N : N ;
 fun savour_V : V ;
 fun savour_V2 : V2 ;

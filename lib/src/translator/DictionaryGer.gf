@@ -50065,12 +50065,11 @@ lin saviour_N = variants {} ;
 lin savoir_faire_N = variants {} ;
 lin savore_V2 = variants {} ;
 lin savory_A = variants {} ;
-lin savory_N = mkN "Bohnenkraut" "Bohnenkräuter" neuter ; -- status=guess
 lin savour_N = variants {} ;
 lin savour_V = variants {} ;
 lin savour_V2 = variants {} ;
 lin savoury_A = variants {} ;
-lin savoury_N = variants {} ;
+lin savoury_N = mkN "Bohnenkraut" "Bohnenkräuter" neuter ; -- status=guess
 lin savoy_N = variants {} ;
 lin savvy_N = variants {} ;
 lin savvy_V = irregV "kapieren" "kapiert" "kapierte" "kapierte" "kapiert" | mkV "schnallen" | irregV "verstehen" "versteht" "verstand" "verstände" "verstanden" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt

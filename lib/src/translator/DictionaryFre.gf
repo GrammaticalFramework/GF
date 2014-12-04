@@ -18714,7 +18714,7 @@ lin saving_N = variants {} ; --
 lin savings_N = mkN "économies" ; -- tocheck
 lin savior_N = mkN "sauveur" masculine ; -- tocheck
 lin savory_A = mkA "salé" | mkA "savoureux" ; -- tocheck
-lin savory_N = mkN "sarriette" feminine ; -- tocheck
+lin savoury_N = mkN "sarriette" feminine ; -- tocheck
 lin saw_N = mkN "proverbe" masculine | mkN "scie" feminine ; -- tocheck
 lin saw_V2 = mkV2 (mkV "scier") ; -- tocheck
 lin sawbridgeworth_PN = mkPN "Sawbridgeworth" ; -- status=guess src=geonames

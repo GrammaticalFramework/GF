@@ -45117,7 +45117,6 @@ lin savior_N = mkWN (k10 "pelastaja") ; --UNCHK
 lin saviour_N = mkWN (k10 "pelastaja") ; --UNCHK
 lin savore_V2 = mkV2 (mkV "nauttia") (casePrep elative) ; ---ARB
 lin savory_A = mkWA (k34A "turmeltumaton") ; --UNCHK
-lin savory_N = mkWN (compoundN "suola" (k9 "pala")) ; --UNCHK
 lin savour_N = mkWN (k1A "maku") "vahva" ; --UNCHK
 lin savour_V = mkWV (k61A "nauttia") ; --UNCHK
 lin savour_V2 = mkWV2 (k61A "nauttia") ; --UNCHK
