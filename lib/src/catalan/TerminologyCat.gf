@@ -35,31 +35,35 @@ lin
   feminine_Parameter = mkN "femení" ;
   neuter_Parameter = mkN "neutre" ;
 
-  nominative_Parameter = mkN "nominativo" ;
-  genitive_Parameter = mkN "genitivo" ;
-  dative_Parameter = mkN "dativo" ;
-  accusative_Parameter = mkN "accusativo" ;
+  nominative_Parameter = mkN "nominatiu" ;
+  genitive_Parameter = mkN "genitiu" ;
+  dative_Parameter = mkN "datiu" ;
+  accusative_Parameter = mkN "accusatiu" ;
   
-  imperative_Parameter = mkN "imperativo" ;
-  indicative_Parameter = mkN "indicativo" ;
-  conjunctive_Parameter = mkN "subjuntivo" ;
-  infinitive_Parameter = mkN "infinitivo" ;
+  imperative_Parameter = mkN "imperatiu" ;
+  indicative_Parameter = mkN "indicatiu" ;
+  conjunctive_Parameter = mkN "subjuntiu" ;
+  infinitive_Parameter = mkN "infinitiu" ;
 
-  present_Parameter = mkN "presente" ;
-  past_Parameter = mkN "pretérito" ;
-  future_Parameter = mkN "futuro" ;
+  present_Parameter = mkN "present" ;
+  past_Parameter = mkN "passat" ;
+----  past_Parameter = mkN "pretèrit" ;
+  future_Parameter = mkN "futur" ;
+  future_Parameter = mkN "futur" ;
+
   conditional_Parameter = mkN "condicional" ;
-  perfect_Parameter = mkN "perfecto compuesto" ; ----
-  imperfect_Parameter = mkN "imperfecto" ;
-  simple_past_Parameter = mkN "perfecto simple" ; ----
+
+  perfect_Parameter = mkN "perfecte compost" ; ----
+  imperfect_Parameter = mkN "imperfecte" ;
+  simple_past_Parameter = mkN "perfecte simple" ; ----
 
   participle_Parameter = mkN "participi" ;
   aux_verb_Parameter = mkN "auxiliar" ; ----
 
-  positive_Parameter = mkN "positivo" ;
-  comparative_Parameter = mkN "comparativo" ;
-  superlative_Parameter = mkN "superlativo" ;
-  predicative_Parameter = mkN "predicativo" ;
+  positive_Parameter = mkN "positiu" ;
+  comparative_Parameter = mkN "comparatiu" ;
+  superlative_Parameter = mkN "superlatiu" ;
+  predicative_Parameter = mkN "predicatiu" ;
 
   nounHeading n = ss (n.s ! Sg) ;
 
