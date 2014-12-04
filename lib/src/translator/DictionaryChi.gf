@@ -27945,8 +27945,8 @@ lin saving_N = mkN "节省" | {-HSK-} mkN "节约" ;
 lin savings_N = mkN "儲蓄" | mkN "储蓄" | {-mwn-} mkN "储备金" | mkN "储金" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin savore_V2 = mkV2 "FOO" ;
 lin savory_A = mkA "可口" ;
-lin savory_N = mkN "开胃菜" ;
 lin savour_N = mkN "味道" | mkN "气味" | mkN "滋味" ; -- open-multilingual-wordnet
+lin savoury_N = mkN "开胃菜" ;
 lin savvy_N = mkN "悟性" "种" ;
 lin saw_N = mkN "锯子" "把" ;
 lin saw_V = mkV "鋸" | mkV "锯" ; -- status=guess, src=wikt -- status=guess, src=wikt

@@ -50106,7 +50106,6 @@ lin saviour_N = mkN031a "избавител"; ----
 lin savoir_faire_N = mkN007 "такт";
 lin savore_V2 = variants {};
 lin savory_A = mkA079 "вкусен" ;
-lin savory_N = mkN041 "чубрица"; ----
 lin savour_N = variants {mkN007 "аромат"; mkN001 "вкус"; mkN001 "дъх"; mkN001 "лъх"; mkN049 "пикантност"}; ----
 lin savour_V = singleV (mkV186 "лъхам"); ----
 lin savour_V2 = variants {};

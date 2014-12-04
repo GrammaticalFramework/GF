@@ -49878,12 +49878,11 @@ lin saviour_N = mkN "frälsare" utrum ; -- status=guess
 lin savoir_faire_N = variants {} ; -- status=guess
 lin savore_V2 = variants {} ; -- status=guess
 lin savory_A = mkA "salt" "salt" ; -- status=guess
-lin savory_N = mkN "kyndel" ; -- status=guess
 lin savour_N = mkN "smak" "smaker" ; -- comment=5
 lin savour_V = variants {} ; -- status=guess
 lin savour_V2 = variants {} ; -- status=guess
 lin savoury_A = variants {} ; -- status=guess
-lin savoury_N = variants {} ; -- status=guess
+lin savoury_N = mkN "kyndel"; -- status=guess
 lin savoy_N = variants {} ; -- status=guess
 lin savvy_N = mkN "förstånd" neutrum ; -- comment=2
 lin savvy_V = mkV "vetta" "vette" "vettat" ; -- status=guess
