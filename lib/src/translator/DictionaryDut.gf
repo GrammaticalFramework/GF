@@ -20180,7 +20180,7 @@ lin unrest_N = mkN "onrust" utrum ; -- status=guess
 lin unrestrained_A = mkA "ongebreideld" | mkA "ongebreidelde" ; -- status=guess status=guess
 lin unsafe_A = mkA "onveilig" ; -- status=guess
 lin unsaturated_A = mkA "onverzadigd" ; -- status=guess
-lin unsavory_A = mkA "twijfelachtig" | mkA "onsmakelijk" ; -- status=guess status=guess
+lin unsavoury_A = mkA "twijfelachtig" | mkA "onsmakelijk" ; -- status=guess status=guess
 lin unscientific_A = mkA "onwetenschappelijk" ; -- status=guess
 lin unseen_A = mkA "ongezien" ; -- status=guess
 lin unselfish_A = mkA "onbaatzuchtig" | mkA "onzelfzuchtig" ; -- status=guess status=guess

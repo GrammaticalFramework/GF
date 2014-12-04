@@ -16009,7 +16009,7 @@ lin save_V2 = mkV2 (mkV "risparmiare") ; -- status=guess, src=wikt
 lin saving_N = variants {} ; --
 lin savings_N = mkN "conto di risparmio" ; -- status=guess
 lin savior_N = mkN "redentore" masculine | mkN "salvatore" masculine ; -- status=guess status=guess
-lin savory_A = mkA "salato" ; -- status=guess
+lin savoury_A = mkA "salato" ; -- status=guess
 lin savoury_N = mkN "santoreggia" ; -- status=guess
 lin saw_N = mkN "adagio" ; -- status=guess
 lin saw_V = mkV "segare" ; -- status=guess, src=wikt
