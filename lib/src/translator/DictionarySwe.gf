@@ -19953,7 +19953,7 @@ lin eventration_N = variants {} ; -- status=guess
 lin eventual_A = mkA "slutgiltig" ; -- status=guess
 lin eventuality_N = mkN "eventualitet" "eventualiteter" ; -- comment=2
 lin eventually_Adv = mkAdv "till slut" | adjAdv eventual_A ; -- derived
-lin ever_AdV = variants {} ; -- status=guess
+lin ever_AdV = mkAdV "någonsin" ;
 lin ever_Adv = mkAdv "någonsin" ;
 lin evergreen_A = mkA "vintergrön" ; -- status=guess
 lin evergreen_N = mkN "evergreen" "evergreenen" "evergreens" "evergreensen" ; -- SaldoWN
@@ -21247,7 +21247,7 @@ lin few_Det = M.mkDet "få" plural ;
 lin few_N = mkN "fåtal" neutrum ;
 lin few_Num = variants {} ; -- status=guess
 lin fewer_A = mkA "få" "få" "få" "färre" "färst" ; -- status=guess
-lin fewer_Det = variants {} ; --
+lin fewer_Det = M.mkDet "färre" plural ;
 lin fewer_than_AdN = variants {} ; -- status=guess
 lin fewness_N = variants {} ; -- status=guess
 lin fey_A = variants {} ; -- status=guess
@@ -23151,7 +23151,7 @@ lin furrow_V2 = variants {} ; -- status=guess
 lin furry_A = variants {} ; -- status=guess
 lin furth_PN = mkPN "Furth" neutrum ; -- src=geonames status=guess
 lin further_A = mkA "ytterligare" ; -- comment=7
-lin further_AdV = variants {} ; -- status=guess
+lin further_AdV = mkAdV "vidare" ;
 lin further_Adv = mkAdv "vidare" ;
 lin further_V2 = variants {} ; -- status=guess
 lin furtherance_N = variants {} ; -- status=guess
@@ -28806,7 +28806,7 @@ lin indecisive_A = mkA "oavgjord" "oavgjort" ; -- comment=7
 lin indecisiveness_N = mkN "obeslutsamhet" "obeslutsamheter" ; -- status=guess
 lin indecorous_A = (mkA "opassande") | mkA "otillbörlig" | mkA "otillständig" ; -- status=guess status=guess status=guess
 lin indecorum_N = variants {} ; -- status=guess
-lin indeed_AdV = variants {} ; -- status=guess
+lin indeed_AdV = mkAdV "sannerligen" ;
 lin indeed_Adv = mkAdv "verkligen" ;
 lin indefatigability_N = variants {} ; -- status=guess
 lin indefatigable_A = mkA "outtröttlig" ; -- status=guess
@@ -36539,9 +36539,8 @@ lin mordacious_A = variants {} ; -- status=guess
 lin mordacity_N = variants {} ; -- status=guess
 lin mordant_A = variants {} ; -- status=guess
 lin mordant_N = variants {} ; -- status=guess
-lin morePl_Det = variants {} ; -- status=guess
-lin moreSg_Det = M.mkDet "mera" ; -- status=guess
-lin more_Adv = mkAdv "mer" ;
+lin more_Quant = M.mkQuant "mera" "mera" "fler" ; 
+lin more_Adv = mkAdv "mer" | mkAdv "mera" ;
 lin more_N = variants {} ; -- status=guess
 lin more_than_AdN = variants {} ; -- status=guess
 lin more_than_Predet = variants {} ; -- status=guess
@@ -39145,8 +39144,8 @@ lin offstage_A = variants {} ; -- status=guess
 lin offstage_Adv = variants {} ; -- status=guess
 lin oft_Adv = variants {} ; -- status=guess
 lin oft_times_Adv = variants {} ; -- status=guess
-lin often_AdA = variants {} ; -- status=guess
-lin often_AdV = variants {} ; -- status=guess
+lin often_AdA = mkAdA "ofta" ;
+lin often_AdV = mkAdV "ofta" ;
 lin often_Adv = mkAdv "ofta" ;
 lin oftener_Adv = variants {} ; -- status=guess
 lin ogee_N = variants {} ; -- status=guess
@@ -39302,7 +39301,7 @@ lin on_behalf_of_Prep = variants {} ; -- status=guess
 lin on_licence_N = variants {} ; -- status=guess
 lin on_top_of_Prep = variants {} ; -- status=guess
 lin onager_N = variants {} ; -- status=guess
-lin once_AdV = variants {} ; -- status=guess
+lin once_AdV = mkAdV "en gång" ;
 lin once_Adv = mkAdv "en gång" ;
 lin once_Prep = mkPrep "en gång" ; --- ??
 lin once_Subj = M.mkSubj "en gång" ;
@@ -46560,9 +46559,9 @@ lin rateable_A = variants {} ; -- status=guess
 lin ratel_N = variants {} ; -- status=guess
 lin ratepayer_N = variants {} ; -- status=guess
 lin rates_N = variants {} ; -- status=guess
-lin rather_Adv = mkAdv "snarare" ;
-lin rather_than_Conj = variants {} ; -- status=guess
-lin rather_than_Prep = variants {} ; -- status=guess
+lin rather_Adv = mkAdv "snarare" | mkAdv "hellre" ;
+lin rather_than_Conj = M.mkConj "snarare än" ;
+lin rather_than_Prep = mkPrep "snarare än" ;
 lin rathole_N = variants {} ; -- status=guess
 lin rathskeller_N = variants {} ; -- status=guess
 lin ratification_N = variants {} ; -- status=guess
@@ -49408,7 +49407,7 @@ lin sagittate_A = variants {} ; -- status=guess
 lin sago_N = variants {} ; -- status=guess
 lin saguaro_N = variants {} ; -- status=guess
 lin sahib_N = variants {} ; -- status=guess
-lin said_Quant = variants {} ; -- status=guess
+lin said_Quant = M.mkQuant "den nämnda" "det nämnda" "de nämnda" ;
 lin saiga_N = mkN "saigaantilop" ; -- status=guess
 lin saigon_PN = mkPN "Saigon" ; -- src=eng status=guess
 lin sail_N = mkN "kryssning" | mkN "segel" neutrum ; -- SaldoWN
@@ -53495,13 +53494,14 @@ lin sombre_A = mkA "mörk" ; -- comment=2
 lin sombreness_N = variants {} ; -- status=guess
 lin sombrero_N = variants {} ; -- status=guess
 lin some_A = mkA "viss" ; -- status=guess
-lin some_Quant = M.mkQuant "någon" "något" "några" ; -- status=guess
+lin some_Det = M.mkDet "lite" "Lite" singular ;
+lin some_Quant = M.mkQuant "någon" "något" "några" ; 
 lin somebody_NP = S.somebody_NP ;
 lin someday_Adv = mkAdv "någon gång" ; -- status=guess
-lin somehow_AdV = variants {} ; -- status=guess
-lin somehow_Adv = mkAdv "på något sätt" | mkAdv "på ett eller annat sätt" ; -- status=guess status=guess
+lin somehow_AdV = mkAdV "på något sätt" ;
+lin somehow_Adv = mkAdv "på något sätt" | mkAdv "på ett eller annat sätt" ; 
 lin someone_NP = S.mkNP (mkPN "någon" utrum) | S.mkNP (mkPN "nån" utrum) ;
-lin someplace_Adv = variants {} ; -- status=guess
+lin someplace_Adv = mkAdv "någonstans" ;
 lin somercotes_PN = mkPN "Somercotes" ; -- src=eng status=guess
 lin somersault_N = mkN "kullerbytta" ; -- comment=6
 lin somersault_V = mkV "vurpar" ; -- status=guess
@@ -64085,7 +64085,6 @@ lin whatSg_IP = S.whatSg_IP ;
 lin what_for_N = variants {} ; -- status=guess
 lin whate'er_A = variants {} ; -- status=guess
 lin whatever_A = variants {} ; -- status=guess
-lin whatever_Det = M.mkDet "vilken som helst" "vilket som helst" singular ;
 lin whatever_Quant = M.mkQuant "vilken som helst" "vilket som helst" "vilka som helst" ;
 lin whatnot_N = variants {} ; -- status=guess
 lin whatsoe'er_A = variants {} ; -- status=guess
@@ -64159,8 +64158,7 @@ lin whether_Subj = M.mkSubj "huruvida" ;
 lin whetstone_N = mkN "bryne" ; -- SaldoWN
 lin whey_N = (mkN "vassle" utrum) | (mkN "vassla") ; -- status=guess status=guess
 lin which_IQuant = S.which_IQuant ;
-lin whichever_A = variants {} ; -- status=guess
-lin whichever_Quant = variants {} ; --
+lin whichever_Quant = M.mkQuant "vilken som helst" "vilket som helst" "vilka som helst" ;
 lin whichsoever_A = variants {} ; -- status=guess
 lin whiff_N = variants {} ; -- status=guess
 lin whiffer_N = variants {} ; -- status=guess
@@ -65161,7 +65159,7 @@ lin yesterday_Adv = mkAdv "igår" | mkAdv "i går" ;
 lin yesterday_N = mkN "gårdag" ; -- status=guess
 lin yet_1_Adv = mkAdv "ännu" ;
 lin yet_2_Adv = mkAdv "dock" ;
-lin yet_AdV = variants {} ; -- status=guess
+lin yet_AdV = mkAdV "ännu" ;
 lin yet_Adv = mkAdv "dock" ;
 lin yeti_N = mkN "yeti" | mkN "jeti" | mkN "snöman" ; -- status=guess status=guess status=guess
 lin yew_N = mkN "idegran" ; -- status=guess
