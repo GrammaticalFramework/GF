@@ -9,13 +9,13 @@ import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
 import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
 import GF.Grammar.PatternMatch(matchPattern,measurePatt)
-import GF.Grammar.Lockfield(lockLabel,isLockLabel,lockRecType) --unlockRecord
+import GF.Grammar.Lockfield(isLockLabel,lockRecType) --unlockRecord,lockLabel
 import GF.Compile.Compute.Value hiding (Error)
 import GF.Compile.Compute.Predef(predef,predefName,delta)
 import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
 import GF.Data.Operations(Err,err,errIn,maybeErr,combinations,mapPairsM)
 import GF.Data.Utilities(mapFst,mapSnd,mapBoth)
-import Control.Monad(ap,liftM,liftM2,mplus,unless)
+import Control.Monad(ap,liftM,liftM2,unless) --,mplus
 import Data.List (findIndex,intersect,nub,elemIndex,(\\)) --,isInfixOf
 --import Data.Char (isUpper,toUpper,toLower)
 import GF.Text.Pretty
@@ -156,7 +156,7 @@ value env t0 =
     Alts t tts -> (\v vts -> VAlts # v <# mapM (both id) vts) # value env t <# mapM (both (value env)) tts
     Strs ts    -> ((VStrs.) # sequence) # mapM (value env) ts
     Glue t1 t2 -> ((ok2p (glue env).) # both id) # both (value env) (t1,t2)
-    ELin c r -> (unlockVRec c.) # value env r
+    ELin c r -> (unlockVRec (gloc env) c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
     t -> fail.render $ "value"<+>ppT 10 t $$ show t
 
@@ -179,7 +179,7 @@ proj l v =
     case v of
       VFV vs -> liftM vfv (mapM (proj l) vs)
       VRec rs -> lookup l rs
-      VExtR v1 v2 -> proj l v2 `mplus` proj l v1 -- hmm
+--    VExtR v1 v2 -> proj l v2 `mplus` proj l v1 -- hmm
       VS (VV pty pvs rs) v2 -> flip VS v2 . VV pty pvs # mapM (proj l) rs
       _ -> return (ok1 VP v l)
 
@@ -194,16 +194,22 @@ ok2p f (v1@VError {},_) = v1
 ok2p f (_,v2@VError {}) = v2
 ok2p f vv = f vv
 
-unlockVRec ::Ident -> Value -> Value
-unlockVRec c v =
-    case v of
---    VClosure env t -> err bug (VClosure env) (unlockRecord c t)
-      VAbs bt x (Bind f) -> VAbs bt x (Bind $ \ v -> unlockVRec c (f v))
-      VRec rs        -> plusVRec rs lock
-      _              -> VExtR v (VRec lock) -- hmm
---    _              -> bug $ "unlock non-record "++show v
+unlockVRec loc c0 v0 = v0
+{-
+unlockVRec loc c0 v0 = unlockVRec' c0 v0
   where
-    lock = [(lockLabel c,VRec [])]
+    unlockVRec' ::Ident -> Value -> Value
+    unlockVRec' c v =
+        case v of
+    --    VClosure env t -> err bug (VClosure env) (unlockRecord c t)
+          VAbs bt x (Bind f) -> VAbs bt x (Bind $ \ v -> unlockVRec' c (f v))
+          VRec rs        -> plusVRec rs lock
+    --    _              -> VExtR v (VRec lock) -- hmm
+          _              -> {-trace (render $ ppL loc $ "unlock non-record "++show v0)-} v -- hmm
+    --    _              -> bugloc loc $ "unlock non-record "++show v0
+      where
+        lock = [(lockLabel c,VRec [])]
+-}
 
 -- suspicious, but backwards compatible
 plusVRec rs1 rs2 = VRec ([(l,v)|(l,v)<-rs1,l `notElem` ls2] ++ rs2)
@@ -220,8 +226,8 @@ extR t vv =
       (VRec     rs1, VRec     rs2) -> plusVRec rs1 rs2
       (v1          , VRec [(l,_)]) | isLockLabel l -> v1 -- hmm
       (VS (VV t pvs vs) s,v2) -> VS (VV t pvs [extR t (v1,v2)|v1<-vs]) s
-      (v1,v2) -> ok2 VExtR v1 v2 -- hmm
---    (v1,v2) -> error $ text "not records" $$ text (show v1) $$ text (show v2)
+--    (v1,v2) -> ok2 VExtR v1 v2 -- hmm
+      (v1,v2) -> error $ "not records" $$ show v1 $$ show v2
   where
     error explain = ppbug $ "The term" <+> t
                             <+> "is not reducible" $$ explain
@@ -453,7 +459,7 @@ value2term loc xs v0 =
     VAlts v vvs    -> Alts (v2t v) (mapBoth v2t vvs)
     VStrs vs       -> Strs (map v2t vs)
 --  VGlue v1 v2    -> Glue (v2t v1) (v2t v2)
-    VExtR v1 v2    -> ExtR (v2t v1) (v2t v2)
+--  VExtR v1 v2    -> ExtR (v2t v1) (v2t v2)
     VError err     -> Error err
     _              -> bug ("value2term "++show loc++" : "++show v0)
   where
