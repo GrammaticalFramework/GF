@@ -140,9 +140,15 @@ public class ConversationView extends ScrollView {
     		target = target.subSequence(1, target.length()).toString().trim();
     	}
 
-    	// parse error or unknown translations (in []) present, darkest red color
-    	else if (target.toString().contains("parse error:") || target.toString().contains("[")) {
+    	// parse error: darkest red color
+    	else if (target.toString().contains("parse error:")) {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
+    	}
+
+    	// unknown linearizations in output: darkest red color. But replace [ ] by spaces and remove _ for better speech synthesis
+    	else if (target.toString().contains("[")) {
+    		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
+    		target = target.toString().replace('[',' ').replace(']',' ').replaceAll("_","").trim();
     	}
 
     	// parse by domain grammar, marked by +, green color
