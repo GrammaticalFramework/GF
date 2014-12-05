@@ -1,7 +1,7 @@
 -- Modified by Daniel Vidal Hussey (DVH)
 
 concrete DictionaryCat of Dictionary = CatCat
-    ** open ParadigmsCat, MorphoCat, IrregCat, (L=LexiconCat), (S=StructuralCat), Prelude, BeschCat in {
+    ** open ParadigmsCat, MorphoCat, IrregCat, (L=LexiconCat), (S=StructuralCat), (E = ExtraCat), Prelude, BeschCat in {
 
 flags
   coding=utf8 ;
@@ -13,6 +13,7 @@ oper  mkDet : Str -> Det = \s -> lin Det {s,sp
 oper mkSubj : Str -> Mood -> Subj = \s,md -> ss s ** {m = md ; lock_Subj = <>} ;
 oper mkConj : Str -> Conj
     = \s -> lin Conj {s1 = [] ; s2 = s ; n = Pl} ;
+oper optProDrop : Pron -> Pron = \p -> p | E.ProDrop p ;
 
 lin abaca_N = mkN "abacà" masculine ; --auto
 lin abacus_N = mkN "àbac" masculine ; --auto
@@ -6408,7 +6409,7 @@ lin heparin_N = mkN "heparina" feminine ; --auto
 lin hepatic_A = mkA "hepàtic" ; --auto
 lin hepatitis_N = mkN "hepatitis" feminine  | mkN "hepatitis" feminine ; --auto
 lin hepatomegaly_N = mkN "hepatomegàlia" feminine ; --auto
-lin he_Pron = S.he_Pron ;
+lin he_Pron = optProDrop S.he_Pron ;
 lin heptagon_N = mkN "heptàgon" masculine ; --auto
 lin herald_N = mkN "herald" masculine ; --auto
 lin heraldry_N = mkN "heràldica" feminine ; --auto
@@ -7442,7 +7443,8 @@ lin iodine_N = mkN "iode" masculine ; --auto
 lin ionic_A = mkA "iònic" ; --auto
 lin ion_N = mkN "ió" masculine ; --auto
 lin ionosphere_N = mkN "ionosfera" feminine ; --auto
-lin i_Pron = S.i_Pron ;
+lin i_Pron = optProDrop S.i_Pron ;
+lin iFem_Pron = optProDrop E.i8fem_Pron ;
 lin iranian_A = mkA "iranià" ; --auto
 lin iraqi_A = mkA "iraquià" ; --auto
 lin irascible_A = mkA "iracund" ; --auto
@@ -7523,7 +7525,7 @@ lin itch_N = mkN "coïssor" feminine ; --auto
 lin item_N = mkN "article" masculine ;
 lin iterative_A = mkA "iteratiu" ; --auto
 lin itinerant_A = mkA "itinerant" ; --auto
-lin it_Pron = S.it_Pron ;
+lin it_Pron = optProDrop S.it_Pron ;
 lin ivory_N = mkN "vori" masculine ; --auto
 lin jackal_N = mkN "xacal" masculine ; --auto
 lin jacket_N = mkN "funda" feminine  | mkN "jaqueta" feminine ; --auto
@@ -12471,7 +12473,7 @@ lin shell_V = mkV "pelar" ; --auto
 lin shelter_N = mkN "refugi" masculine ; --auto
 lin shepherdess_N = mkN "pastor" feminine ; --auto
 lin shepherd_N = mkN "pastor" masculine ; --auto
-lin she_Pron = S.she_Pron ;
+lin she_Pron = optProDrop S.she_Pron ;
 lin sherbet_N = mkN "sorbet" masculine ; --auto
 lin sheriff_N = mkN "xèrif" feminine  | mkN "xèrif" masculine ; --auto
 lin sherry_N = mkN "xerès" masculine ; --auto
@@ -13868,7 +13870,8 @@ lin thermosphere_N = mkN "termosfera" feminine ; --auto
 lin thermostat_N = mkN "termòstat" masculine ; --auto
 lin thesaurus_N = mkN "tesaurus" masculine  | mkN "tesaurus" masculine ; --auto
 lin thesis_N = mkN "tesi" feminine ; --auto
-lin they_Pron = S.they_Pron ;
+lin they_Pron = optProDrop S.they_Pron ;
+lin theyFem_Pron = optProDrop E.they8fem_Pron ;
 lin thick_A = L.thick_A ;
 lin thicken_V = mkV "espessir" ; --auto
 lin thicket_N = mkN "matoll" masculine ; --auto
@@ -14916,7 +14919,7 @@ lin weekly_Adv =  mkAdv "setmanalment" ; --auto
 lin week_N = mkN "setmana" feminine ;
 lin weep_V = mkV "plorar" ; --auto
 lin weevil_N = mkN "corc" masculine ; --auto
-lin weFem_Pron = S.we_Pron ;
+lin weFem_Pron = optProDrop E.we8fem_Pron ;
 lin weightlifting_N = mkN "halterofília" feminine ; --auto
 lin weight_N = mkN "pes" masculine ;
 lin weigh_V = mkV "pesar" ; --auto
@@ -14927,7 +14930,7 @@ lin welding_N = mkN "soldadura" feminine ; --auto
 lin welfare_N = mkN "benestar" masculine ; --auto
 lin well_Interj = mkInterj "bé" ;
 lin welsh_A = mkA "gal·lès" ; --auto
-lin we_Pron = S.we_Pron ;
+lin we_Pron = optProDrop S.we_Pron ;
 lin werewolf_N = mkN "home llop" masculine ; --auto
 lin west_A = mkA "de l'oest"  | mkA "oest" ; --auto
 lin west_Adv =  mkAdv "cap a l'oest" ; --auto
@@ -15121,6 +15124,12 @@ lin yield_N = mkN "collita" feminine ; --auto
 lin yoga_N = mkN "ioga" feminine ; --auto
 lin yoghourt_N = mkN "iogurt" masculine ; --auto
 lin yoke_N = mkN "jou" masculine ; --auto
+lin youPlFem_Pron = optProDrop E.youPl8fem_Pron ;
+lin youPl_Pron = optProDrop S.youPl_Pron ;
+lin youPol_Pron = optProDrop S.youPol_Pron ; 
+lin youPolFem_Pron = optProDrop E.youPol8fem_Pron ; 
+lin youSgFem_Pron = optProDrop E.youSg8fem_Pron ; 
+lin youSg_Pron = optProDrop S.youSg_Pron ; 
 lin young_A = L.young_A ;
 lin youngster_N = mkN "jove"  | mkN "xaval" ; --auto
 lin youth_N = mkN "joventut" feminine ; --auto
