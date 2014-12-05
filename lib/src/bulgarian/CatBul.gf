@@ -51,7 +51,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
 
     CN = {s : NForm => Str; g : AGender} ;
     NP = {s : Role => Str; a : Agr; p : Polarity} ;
-    Pron = {s : Role => Str; gen : AForm => Str; a : Agr} ;
+    Pron = {s : Role => Str; clit : Case => Str; gen : AForm => Str; a : Agr} ;
     Det = {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} ;
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str} ;

@@ -34,7 +34,7 @@ concrete StructuralBul of Structural = CatBul **
 ---  first_Ord = ss "first" ; DEPRECATED
   for_Prep = mkPrep "за" Acc ;
   from_Prep = mkPrep "от" Acc ;
-  he_Pron = mkPron "той" "него" "му" "негов" "неговия" "неговият" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Masc) P3 ;
+  he_Pron = mkPron "той" "него" "го" "му" "негов" "неговия" "неговият" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Masc) P3 ;
   here_Adv = ss "тук" ;
   here7to_Adv = ss ["до тук"] ;
   here7from_Adv = ss ["от тук"] ;
@@ -43,11 +43,11 @@ concrete StructuralBul of Structural = CatBul **
   how8many_IDet = {s = \\_ => table QForm ["колко";"колкото"]; n = Pl; nonEmpty = False} ;
   if_Subj = ss "ако" ;
   in8front_Prep = mkPrep "пред" Acc ;
-  i_Pron  = mkPron "аз" "мен" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Masc) P1 ;
+  i_Pron  = mkPron "аз" "мен" "ме" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Masc) P1 ;
   in_Prep = mkPrep (pre { "в" ; 
                           "във" / strs {"в" ; "ф" ; "В" ; "Ф"}
                         }) Acc ;
-  it_Pron  = mkPron "то" "него" "му" "негов" "неговия" "неговият" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Neut) P3 ;
+  it_Pron  = mkPron "то" "него" "го" "му" "негов" "неговия" "неговият" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Neut) P3 ;
   less_CAdv = {s="не"; sn="по-малко"} ;
   many_Det = mkDeterminerPl "много" ;
   more_CAdv = {s=[]; sn="повече"} ;
@@ -81,7 +81,7 @@ concrete StructuralBul of Structural = CatBul **
   please_Voc = ss "моля" ;
   possess_Prep = mkPrep [] Dat ;
   quite_Adv = ss "доста" ;
-  she_Pron = mkPron "тя" "нея" "и" "неин" "нейния" "нейният" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
+  she_Pron = mkPron "тя" "нея" "я" "и" "неин" "нейния" "нейният" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
   so_AdA = ss "толкова" ;
   somebody_NP = mkNP "някой" (GSg Masc) P3 Pos;
   someSg_Det = mkDeterminerSg "някой" "някоя" "някое" ;
@@ -94,7 +94,7 @@ concrete StructuralBul of Structural = CatBul **
   there7to_Adv = ss ["до там"] ;
   there7from_Adv = ss ["от там"] ;
   therefore_PConj = ss ["така че"] ;
-  they_Pron = mkPron "те" "тях" "им" "техен" "техния" "техният" "тяхна" "тяхната" "тяхно" "тяхното" "техни" "техните" GPl P3 ; 
+  they_Pron = mkPron "те" "тях" "ги" "им" "техен" "техния" "техният" "тяхна" "тяхната" "тяхно" "тяхното" "техни" "техните" GPl P3 ; 
   this_Quant = mkQuant "този" "тази" "това" "тези" ;
   through_Prep = mkPrep "през" Acc ;
   too_AdA = ss "прекалено" ;
@@ -102,7 +102,7 @@ concrete StructuralBul of Structural = CatBul **
   under_Prep = mkPrep "под" Acc ;
   very_AdA = ss "много" ;
   want_VV = mkVV (stateV (mkV186 "искам")) ;
-  we_Pron = mkPron "ние" "нас" "ни" "наш" "нашия" "нашият" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
+  we_Pron = mkPron "ние" "нас" "ни" "ни" "наш" "нашия" "нашият" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
   whatPl_IP = mkIP "какви" "какви" GPl ;
   whatSg_IP = mkIP "какъв" "какъв" (GSg Masc) ;
   when_IAdv = mkIAdv "кога" ;
@@ -120,9 +120,9 @@ concrete StructuralBul of Structural = CatBul **
                             "със" / strs {"с" ; "з" ; "С" ; "З"}
                           }) Acc ;
   yes_Utt = ss "да" ;
-  youSg_Pron = mkPron "ти" "теб" "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Masc) P2 ;
-  youPl_Pron = mkPron "вие" "вас" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;
-  youPol_Pron = mkPron "вие" "вас" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;
+  youSg_Pron = mkPron "ти" "теб" "те" "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Masc) P2 ;
+  youPl_Pron = mkPron "вие" "вас" "ви" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;
+  youPol_Pron = mkPron "вие" "вас" "ви" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;
 
   have_V2 = dirV2 (stateV (mkV186 "имам")) ;
 

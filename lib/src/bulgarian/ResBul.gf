@@ -641,14 +641,23 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       gn = gn
       } ;
 
-    mkPron : (az,men,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite : Str) -> GenNum -> Person -> {s : Role => Str; gen : AForm => Str; a : Agr} =
-      \az,men,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite,gn,p -> {
+    mkPron : (az,men,me,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite : Str) -> 
+             GenNum -> Person -> {s    : Role => Str; 
+                                  clit : Case => Str;
+                                  gen  : AForm => Str; 
+                                  a : Agr
+                                 } =
+      \az,men,me,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite,gn,p -> {
       s = table {
             RSubj    => az ;
             RObj Acc => men ;
-            RObj Dat => mi ;
+            RObj Dat => "на" ++ men ;
             RVoc     => az
           } ;
+      clit = table {
+               Acc => me;
+               Dat => mi
+             } ;
       gen = table {
               ASg Masc Indef => moj ;
               ASg Masc Def   => moia ;
