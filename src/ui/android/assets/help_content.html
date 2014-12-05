@@ -2,22 +2,22 @@
 <body>
 
 <p>
-<b>Speech input</b>: Press microphone icon and talk.
+<b>Speech input</b>: Tap microphone icon and talk while it is red.
 <br>
-<b>Text input</b>: Select "keyboard" from menu, press keyboard icon.
+<b>Text input</b>: Select "keyboard" from menu, tap keyboard icon.
 <br>
-<b>Correction</b>: Press input text.
+<b>Correction</b>: Tap input text.
 <br>
-<b>Alternatives</b>: Press output text
+<b>Alternatives</b>: Tap output text
 <br>
-<b>Grammar info</b>: Press any of alternatives.
+<b>Grammar info</b>: Tap any of the alternatives.
 <br>
 <b>Confidence</b>: colour of output text
 <ul>
-<li><span style="background-color:palegreen">Green</span>: Probably correct (but not the only one)</li>
-<li><span style="background-color:yellow">Yellow</span>: May be correct</li>
-<li><span style="background-color:pink">Light red</span>: Rough, probably incorrect</li>
-<li><span style="background-color:red">Dark red</span>: If all else fails, usually incorrect</li>
+<li><span style="background-color:palegreen">Green</span>: Fully analysed, probably correct (but has alternatives)</li>
+<li><span style="background-color:yellow">Yellow</span>: A good guess, may be correct</li>
+<li><span style="background-color:pink">Light red</span>: A rough guess, probably incorrect</li>
+<li><span style="background-color:red">Dark red</span>: Word by word, usually incorrect</li>
 </ul>
 </p>
 
@@ -27,15 +27,18 @@
 <p>
 The Human Language Compiler is a translator for human language based on
 programming language technology: grammars and semantics. Therefore it is compact in size
-and gives control on quality.
+and gives control on quality. Most other translator are based on
+statistics and have less controll of quality and either require
+an internet connection or have a much bigger size.
 <p>
-The app is small (under 30 MB for all languages off-line translation). We do not show ads.
+The app is small (under 30 MB for all languages in off-line translation). We do not show ads.
 </p>
 The app indicates translation confidence with colours:
 <ul>
 		<li><b>Green</b>:
                  semantic translation, should be correct.
-                 But not necessarily the only correct one. 
+                 But not necessarily the only correct one.
+                 You can tap the output to see alternatives.
                 </li>
 		<li><b>Yellow</b>:
                  syntactic translation, should be grammatically correct.
@@ -52,13 +55,18 @@ The app indicates translation confidence with colours:
 </ul>
 The green translations come from a tourist phrasebook, which allows
 you to translate things like "hello" and "how far is the airport from
-the hotel". But this part can be easily adapted to other uses, such as
-technical language.
+the hotel". 
 </p>
 
 <p>
-You can translate both speech and text, as selected in the menu in the upper right corner.
-Translation works between any pair of the supported languages, which means 110
+You can translate both speech and text, as selected in the menu in the
+upper right corner. Both kinds of input can be edited with the
+keyboard by first tapping at the input field. This is often needed 
+because of <b>speech recognition errors</b>. Changing words
+from <b>upper to lower case</b> may also be needed.
+</p>
+<p>
+Translation works between any pair of the supported languages, which means 132
 language pairs at the moment. But different languages are on different levels of development.
 The following table gives a rough idea of what to expect:
 </p>
@@ -69,21 +77,25 @@ The following table gives a rough idea of what to expect:
 <tr> <th></th>          <th>coverage</th> <th>quality</th> <th>speed</th> <th>speech</th> </tr>
 <tr> <th>Bulgarian</th> <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=palegreen></td> <td bgcolor=yellow>in only</td></tr>
 <tr> <th>Catalan</th>   <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=yellow>in only</td></tr>
-<tr> <th>Chinese</th>   <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=palegreen></td> <td bgcolor=yellow>diff in/out</td> </tr>
+<tr> <th>Chinese</th>   <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=palegreen></td> <td bgcolor=yellow>diff in/out*</td> </tr>
 <tr> <th>Dutch</th>     <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> </tr>
 <tr> <th>English</th>   <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> </tr>
-<tr> <th>Finnish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>Finnish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=yellow>in only</td></tr>
 <tr> <th>French</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=red></td> <td bgcolor=palegreen></td></tr>
 <tr> <th>German</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
-<tr> <th>Hindi</th>     <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=yellow></td> <td bgcolor=yellow>out only</td> </tr>
+<tr> <th>Hindi</th>     <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=yellow></td> <td bgcolor=yellow>in only</td> </tr>
 <tr> <th>Italian</th>   <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
 <tr> <th>Spanish</th>   <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
-<tr> <th>Swedish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> </tr>
+<tr> <th>Swedish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> <td bgcolor=yellow>in only</td></tr>
 </table>
 </center>
-<b>Bulgarian</b> uses Russian voice for output,
-<b>Catalan</b> uses a Spanish voice.
-<b>Chinese</b> uses Mandarin for input and Cantonese for output.
+*<b>Chinese</b> uses Mandarin for input and Cantonese for output.
+</p>
+<p>
+The speech input and output use Google's voice services. Their status
+can hence change without notice. You can make it more stable by
+installing third-party speech tools, such as SVOX, which also provides
+output in Finnish and Swedish.
 </p>
 
 <p>
@@ -112,11 +124,13 @@ You can also install third-party off-line speech engines, such as SVOX.
 
 <p>
 Powered by <a href="http://www.grammaticalframework.org/">GF</a>,
+based on open-source software,
 built by support from the GF community and from <a href="http://www.digitalgrammars.com/">Digital Grammars</a>.
 </p>
 
 <p>
-<i>Digital Grammars can tailor this app to you needs - tell us what you want to see
+<i>Digital Grammars can tailor this app to you needs and provide good
+translation for the kind of vocabulary you need. Just tell us what you want to see
 	in the green area!</i>
 </p>
 

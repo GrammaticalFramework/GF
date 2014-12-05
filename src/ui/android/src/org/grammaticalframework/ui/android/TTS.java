@@ -26,13 +26,15 @@ public class TTS {
 
    	if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
 
-	    /* hack for missing TTS */
+	    /* hack for missing TTS -- don't use for official release!
     		if (language.equals("bg-BG")) {
     			language = "ru-RU";  
     		}
     		if (language.equals("ca-ES")) {
 		    language = "es-ES"; // hardly politically correct...
     		}
+            */
+
 	    /* OR use separate entries for Cantonese and Mandarin  */ 
     		if (language.equals("cmn-Hans-CN")) {
     			language = "yue";
