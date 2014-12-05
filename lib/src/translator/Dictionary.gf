@@ -36677,11 +36677,11 @@ fun mordacious_A : A ;
 fun mordacity_N : N ;
 fun mordant_A : A ;
 fun mordant_N : N ;
-fun morePl_Det : Det ;
-fun moreSg_Det : Det ;
+---fun morePl_Det : Det ;  -- overshadowed by more_Quant
+---fun moreSg_Det : Det ;  -- 
+fun more_Quant : Quant ;
 fun more_Adv : Adv ;
 fun more_N : N ;
-fun more_Quant : Quant ;
 fun more_than_AdN : AdN ;
 fun more_than_Predet : Predet ;
 fun morecambe_PN : PN ;
