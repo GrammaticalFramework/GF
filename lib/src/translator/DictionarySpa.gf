@@ -24331,6 +24331,7 @@ lin york_PN = mkPN "York" ; -- status=guess src=geonames
 lin yorkshire_PN = mkPN "Yorkshire" ; -- status=guess src=geonames
 lin youPlFem_Pron = optProDrop E.youPl8fem_Pron | optProDrop E.youPolPl8fem_Pron ; ---- split
 lin youPl_Pron = optProDrop S.youPl_Pron | optProDrop E.youPolPl_Pron ; ---- split
+lin youPol_Pron = optProDrop S.youPol_Pron ; 
 lin youPolFem_Pron = optProDrop E.youPol8fem_Pron ; -- status=guess
 lin youSgFem_Pron = optProDrop E.youSg8fem_Pron ; -- status=guess
 lin youSg_Pron = optProDrop S.youSg_Pron ; -- status=guess
