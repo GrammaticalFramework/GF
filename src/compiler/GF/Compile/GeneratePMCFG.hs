@@ -23,7 +23,7 @@ import GF.Grammar.Predef
 import GF.Grammar.Lockfield (isLockLabel)
 import GF.Data.BacktrackM
 import GF.Data.Operations
-import GF.Infra.UseIO (IOE,ePutStr,ePutStrLn)
+import GF.Infra.UseIO (ePutStr,ePutStrLn) -- IOE,
 import GF.Data.Utilities (updateNthM) --updateNth
 import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues)
 import qualified Data.Map as Map
@@ -445,7 +445,7 @@ convertTerm opts sel ctype (Q (m,f))
     f == cSOFT_BIND                     = return (CStr [SymSOFT_BIND])
   | m == cPredef &&
     f == cCAPIT                         = return (CStr [SymCAPIT])
-
+{-
 convertTerm opts sel@(CProj l _) ctype (ExtR t1 t2@(R rs2))
                     | l `elem` map fst rs2 = convertTerm opts sel ctype t2
                     | otherwise            = convertTerm opts sel ctype t1
@@ -453,7 +453,7 @@ convertTerm opts sel@(CProj l _) ctype (ExtR t1 t2@(R rs2))
 convertTerm opts sel@(CProj l _) ctype (ExtR t1@(R rs1) t2)
                     | l `elem` map fst rs1 = convertTerm opts sel ctype t1
                     | otherwise            = convertTerm opts sel ctype t2
-
+-}
 convertTerm opts CNil ctype t           = do v <- evalTerm CNil t
                                              return (CPar v)
 convertTerm _    sel  _     t           = ppbug ("convertTerm" <+> sep [parens (show sel),ppU 10 t])

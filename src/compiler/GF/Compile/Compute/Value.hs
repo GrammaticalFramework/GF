@@ -33,7 +33,7 @@ data Value
   | VAlts Value [(Value, Value)]
   | VStrs [Value]
 -- -- | VGlue Value Value -- hmm
-  | VExtR Value Value -- hmm
+-- --  | VExtR Value Value -- hmm
   | VError String
   deriving (Eq,Show)
 
