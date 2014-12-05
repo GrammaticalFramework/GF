@@ -64393,7 +64393,7 @@ fun whetstone_N : N ;
 fun whey_N : N ;
 fun which_IQuant : IQuant  ;
 --fun which_N : N  ; ---- what is this? creates spurious parses. AR 25/9/2014
-fun whichever_A : A ;
+--fun whichever_A : A ; --- the same here
 fun whichever_Quant : Quant ;
 fun whichsoever_A : A ;
 fun whiff_N : N ;
