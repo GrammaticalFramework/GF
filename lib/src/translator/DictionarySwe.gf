@@ -150,7 +150,7 @@ lin abnormal_A = mkA "abnorm" ; -- SaldoWN
 lin abnormality_N = variants {} ; -- status=guess
 lin abo_N = variants {} ; -- status=guess
 lin aboard_Adv = mkAdv "ombord" ; -- status=guess
-lin aboard_Prep = variants {} ; -- status=guess
+lin aboard_Prep = mkPrep "ombord" ;
 lin abocclusion_N = variants {} ; -- status=guess
 lin abode_N = mkN "boning" ; -- status=guess
 lin abohm_N = variants {} ; -- status=guess
@@ -233,7 +233,7 @@ lin abscondment_N = variants {} ; -- status=guess
 lin abseiler_N = variants {} ; -- status=guess
 lin absence_N = mkN "frånvaro" ; -- SaldoWN
 lin absent_A = mkA "frånvarande" | mkA "tankspridd" ; -- SaldoWN -- comment=3
-lin absent_Prep = variants {} ; -- status=guess
+lin absent_Prep = mkPrep "frånvarande" ; ---- what is this?
 lin absent_V2 = variants {} ; -- status=guess
 lin absent_minded_A = variants {} ; -- status=guess
 lin absentee_N = variants {} ; -- status=guess
@@ -1346,7 +1346,7 @@ lin agueweed_N = variants {} ; -- status=guess
 lin aguish_A = variants {} ; -- status=guess
 lin ah_Interj = mkInterj "ah" ; -- status=guess
 lin ahead_Adv = mkAdv "före" ;
-lin ahead_of_Prep = variants {} ; -- status=guess
+lin ahead_of_Prep = mkPrep "framför" ;
 lin ahimsa_N = variants {} ; -- status=guess
 lin ahistorical_A = variants {} ; -- status=guess
 lin ahmedabad_PN = mkPN "Ahmedabad" neutrum ; -- src=geonames status=guess
@@ -2011,7 +2011,7 @@ lin amide_N = variants {} ; -- status=guess
 lin amidship_A = variants {} ; -- status=guess
 lin amidship_Adv = variants {} ; -- status=guess
 lin amidships_Adv = variants {} ; -- status=guess
-lin amidst_Prep = variants {} ; -- status=guess
+lin amidst_Prep = mkPrep "bland" ;
 lin amiens_PN = mkPN "Amiens" neutrum ; -- src=geonames status=guess
 lin amigo_N = variants {} ; -- status=guess
 lin amine_N = variants {} ; -- status=guess
@@ -2675,7 +2675,7 @@ lin anthroposophy_N = variants {} ; -- status=guess
 lin anthurium_N = variants {} ; -- status=guess
 lin anti_A = mkA "antisemitisk" ; -- status=guess
 lin anti_N = mkN "antisemit" "antisemiter" ; -- status=guess
-lin anti_Prep = variants {} ; -- status=guess
+lin anti_Prep = mkPrep "anti" ; ----
 lin anti_aircraft_A = variants {} ; -- status=guess
 lin anti_hero_N = variants {} ; -- status=guess
 lin anti_personnel_A = variants {} ; -- status=guess
@@ -2881,7 +2881,7 @@ lin apadana_N = variants {} ; -- status=guess
 lin apanage_N = variants {} ; -- status=guess
 lin apar_N = variants {} ; -- status=guess
 lin apart_Adv = mkAdv "avsides" | mkAdv "separat" ;
-lin apart_from_Prep = variants {} ; -- status=guess
+lin apart_from_Prep = mkPrep "bortsett från" ;
 lin apartheid_N = mkN "apartheid" ; -- SaldoWN
 lin apartment_N = L.apartment_N ;
 lin apathetic_A = mkA "apatisk" ; -- comment=5
@@ -3160,7 +3160,7 @@ lin apricot_N = mkN "aprikos" "aprikoser" ; -- status=guess
 lin apron_N = mkN "förkläde" ; -- status=guess
 lin apropos_A = mkA "passande" ; -- comment=4
 lin apropos_Adv = mkAdv "apropå" ; -- status=guess
-lin apropos_Prep = variants {} ; -- status=guess
+lin apropos_Prep = mkPrep "apropå" | mkPrep "apråpå" ;
 lin apse_N = variants {} ; -- status=guess
 lin apsidal_A = variants {} ; -- status=guess
 lin apt_A = mkA "lämplig" ; -- comment=9
@@ -3169,7 +3169,7 @@ lin apterous_A = variants {} ; -- status=guess
 lin aptitude_N = mkN "lämplighet" "lämpligheter" ; -- comment=4
 lin aptitudinal_A = variants {} ; -- status=guess
 lin aptness_N = variants {} ; -- status=guess
-lin apud_Prep = variants {} ; -- status=guess
+lin apud_Prep = mkPrep "hos" ;
 lin aquaculture_N = variants {} ; -- status=guess
 lin aqualung_N = variants {} ; -- status=guess
 lin aquamarine_N = mkN "akvamarin" "akvamariner" ; -- status=guess
@@ -3674,7 +3674,7 @@ lin asiatic_A = variants {} ; -- status=guess
 lin asiatic_N = variants {} ; -- status=guess
 lin aside_Adv = mkAdv "avsides" ; -- comment=3
 lin aside_N = mkN "avvikelse" "avvikelser" ; -- status=guess
-lin aside_from_Prep = variants {} ; -- status=guess
+lin aside_from_Prep = mkPrep "vid sidan av" ; ---- sense
 lin asinine_A = mkA "enfaldig" ; -- status=guess
 lin asininity_N = variants {} ; -- status=guess
 lin ask_V = mkV "fråga" ;
@@ -3998,7 +3998,7 @@ lin atonement_N = mkN "gottgörelse" "gottgörelser" ; -- comment=2
 lin atonic_A = variants {} ; -- status=guess
 lin atonicity_N = variants {} ; -- status=guess
 lin atop_Adv = variants {} ; -- status=guess
-lin atop_Prep = variants {} ; -- status=guess
+lin atop_Prep = mkPrep "på toppen av" ;
 lin atopognosia_N = variants {} ; -- status=guess
 lin atorvastatin_N = variants {} ; -- status=guess
 lin atrabilious_A = variants {} ; -- status=guess
@@ -4531,7 +4531,7 @@ lin back_off_V = mkV "backar" ; -- comment=10
 lin back_out_V = mkV "backar" ; -- comment=10
 lin back_out_of_V2 = dirV2 (partV (mkV "backar")"ur") ; -- comment=15
 lin back_out_of_V3 = variants {} ; -- status=guess
-lin back_to_Prep = variants {} ; -- status=guess
+lin back_to_Prep = mkPrep "tillbaka till" ;
 lin back_up_N = variants {} ; -- status=guess
 lin back_up_V = mkV "backar" ; -- comment=10
 lin back_up_V2 = dirV2 (partV (mkV "backar")"ur") ; -- comment=15
@@ -5400,7 +5400,7 @@ lin beaver_away_at_V2 = variants {} ; -- status=guess
 lin bebington_PN = mkPN "Bebington" neutrum ; -- src=geonames status=guess
 lin becalmed_A = variants {} ; -- status=guess
 lin because_Subj = S.because_Subj ;
-lin because_of_Prep = variants {} ; -- status=guess
+lin because_of_Prep = mkPrep "på grund av" ;
 lin beccles_PN = mkPN "Beccles" neutrum ; -- src=geonames status=guess
 lin beck_N = variants {} ; -- status=guess
 lin becket_N = variants {} ; -- status=guess
@@ -8281,7 +8281,7 @@ lin busywork_N = variants {} ; -- status=guess
 lin but_Adv = mkAdv "bara" ; -- comment=5
 lin but_Conj = M.mkConj "men" ;
 lin but_PConj = S.but_PConj ;
-lin but_Prep = variants {} ; -- status=guess
+lin but_Prep = mkPrep "utan" ; ---- cat??
 lin but_Subj = variants {} ; -- status=guess
 lin butacaine_N = variants {} ; -- status=guess
 lin butadiene_N = variants {} ; -- status=guess
@@ -8369,8 +8369,8 @@ lin bvm_N = variants {} ; -- status=guess
 lin by_Adv = mkAdv "av" ; -- comment=16
 lin by_Prep = mkPrep "genom" ;
 lin by_election_N = variants {} ; -- status=guess
-lin by_means_of_Prep = variants {} ; -- status=guess
-lin by_virtue_of_Prep = variants {} ; -- status=guess
+lin by_means_of_Prep = mkPrep "med hjälp av" ;
+lin by_virtue_of_Prep = mkPrep "tack vare" ;
 lin bye_Interj = mkInterj "hej då" | mkInterj "adjö" | mkInterj "farväl" ; -- status=guess
 lin bye_bye_Interj = mkInterj "hej då" ; -- status=guess
 lin bye_law_N = variants {} ; -- status=guess
@@ -10276,7 +10276,7 @@ lin chewer_N = variants {} ; -- status=guess
 lin chewing_gum_N = mkN "tuggummi" "tuggummit" "tuggummin" "tuggummina" ; -- status=guess
 lin chewink_N = variants {} ; -- status=guess
 lin chewy_A = mkA "seg" ; -- comment=2
-lin chez_Prep = variants {} ; -- status=guess
+lin chez_Prep = mkPrep "hos" ;
 lin chi_N = mkN "chitvåfördelning" ; -- status=guess
 lin chianti_N = variants {} ; -- status=guess
 lin chiaroscuro_N = variants {} ; -- status=guess
@@ -10768,7 +10768,7 @@ lin cipher_N = mkN "nolla" ; -- comment=3
 lin cipher_V = mkV "nollar" ; -- comment=3
 lin cipher_V2 = dirV2 (partV (mkV "kodar")"av") ; -- status=guess
 lin ciprofloxacin_N = variants {} ; -- status=guess
-lin circa_Prep = variants {} ; -- status=guess
+lin circa_Prep = mkPrep "circa" ;
 lin circadian_A = variants {} ; -- status=guess
 lin circle_N = mkN "cirkel" | mkN "kretsgång" ; -- SaldoWN -- comment=10
 lin circle_V = mkV "omge" "omger" "omge" "omgav" "omgett" "omgiven" ; -- comment=6
@@ -11221,7 +11221,7 @@ lin close_off_V2 = variants {} ; -- status=guess
 lin close_on_V2 = variants {} ; -- status=guess
 lin close_out_V2 = variants {} ; -- status=guess
 lin close_set_A = variants {} ; -- status=guess
-lin close_to_Prep = variants {} ; -- status=guess
+lin close_to_Prep = mkPrep "nära" ;
 lin close_up_N = variants {} ; -- status=guess
 lin close_up_V = mkV "sluta" "slöt" "slutit" ; -- comment=11
 lin close_up_V2 = variants {} ; -- status=guess
@@ -12760,7 +12760,7 @@ lin contortion_N = variants {} ; -- status=guess
 lin contortionist_N = mkN "ormmänniska" ; -- status=guess
 lin contour_N = mkN "kontur" "konturer" ; -- status=guess
 lin contour_V2 = variants {} ; -- status=guess
-lin contra_Prep = variants {} ; -- status=guess
+lin contra_Prep = mkPrep "contra" ;
 lin contraband_N = mkN "kontraband" neutrum ; -- status=guess
 lin contrabass_A = variants {} ; -- status=guess
 lin contrabass_N = mkN "kontrabas" ; -- SaldoWN
@@ -14273,7 +14273,7 @@ lin culture_N = mkN "kultur" "kulturer" ;
 lin cultured_A = compoundA (regA "kultiverad") ; -- status=guess
 lin culverin_N = variants {} ; -- status=guess
 lin culvert_N = mkN "kulvert" ; -- SaldoWN
-lin cum_Prep = variants {} ; -- status=guess
+lin cum_Prep = mkPrep "cum" ;
 lin cumber_V2 = variants {} ; -- status=guess
 lin cumberland_PN = mkPN "Cumberland" neutrum ; -- src=geonames status=guess
 lin cumbernauld_PN = mkPN "Cumbernauld" neutrum ; -- src=geonames status=guess
@@ -20055,7 +20055,7 @@ lin excelsior_N = variants {} ; -- status=guess
 lin except_Conj = M.mkConj "förutom" ;
 lin except_Prep = S.except_Prep ;
 lin except_V2 = variants {} ; -- status=guess
-lin except_for_Prep = variants {} ; -- status=guess
+lin except_for_Prep = mkPrep "med undantag av" ;
 lin exception_N = mkN "undantag" neutrum ; -- SaldoWN -- comment=2
 lin exceptionable_A = variants {} ; -- status=guess
 lin exceptional_A = mkA "exceptionell" ; -- comment=5
@@ -20795,7 +20795,7 @@ lin far_V2 = variants {} ; -- status=guess
 lin far_famed_A = variants {} ; -- status=guess
 lin far_fetched_A = variants {} ; -- status=guess
 lin far_flung_A = variants {} ; -- status=guess
-lin far_from_Prep = variants {} ; -- status=guess
+lin far_from_Prep = mkPrep "långtifrån" ;
 lin far_off_A = variants {} ; -- status=guess
 lin far_reaching_A = variants {} ; -- status=guess
 lin far_seeing_A = variants {} ; -- status=guess
@@ -22295,7 +22295,7 @@ lin for_example_Adv = mkAdv "exempelvis" ; -- status=guess
 lin for_instance_Adv = variants {} ; -- status=guess
 lin for_starters_Adv = mkAdv "för att börja med" ; -- status=guess
 lin for_sure_Adv = variants {} ; -- status=guess
-lin for_the_sake_of_Prep = variants {} ; -- status=guess
+lin for_the_sake_of_Prep = mkPrep "på grund av" ;
 lin forage_N = mkN "foder" neutrum ; -- status=guess
 lin forage_V = variants {} ; -- status=guess
 lin forager_N = variants {} ; -- status=guess
@@ -28534,11 +28534,11 @@ lin in_loco_parentis_Adv = variants {} ; -- status=guess
 lin in_order_to_Prep = mkPrep "i syftet av att" ; -- status=guess
 lin in_particular_Adv = mkPrep "i synnerhet" ; -- status=guess
 lin in_patient_N = variants {} ; -- status=guess
-lin in_place_of_Prep = variants {} ; -- status=guess
+lin in_place_of_Prep = mkPrep "i stället för" ;
 lin in_point_of_Prep = variants {} ; -- status=guess
 lin in_service_A = variants {} ; -- status=guess
 lin in_situ_Adv = variants {} ; -- status=guess
-lin in_spite_of_Prep = variants {} ; -- status=guess
+lin in_spite_of_Prep = mkPrep "trots" ;
 lin in_toto_Adv = variants {} ; -- status=guess
 lin in_tray_N = variants {} ; -- status=guess
 lin inability_N = mkN "oförmåga" ; -- status=guess
@@ -29364,7 +29364,7 @@ lin inside_A = mkA "intern" ; -- comment=3
 lin inside_Adv = mkAdv "inuti" ; -- comment=5
 lin inside_N = mkN "insida" ; -- SaldoWN
 lin inside_Prep = mkPrep "innanför" | mkPrep "inne" ;
-lin inside_of_Prep = variants {} ; -- status=guess
+lin inside_of_Prep = mkPrep "innanför" ;
 lin insider_N = mkN "insider" ; -- SaldoWN
 lin insidious_A = mkA "försåtlig" ; -- comment=3
 lin insidiousness_N = variants {} ; -- status=guess
@@ -32166,7 +32166,7 @@ lin left_A = compoundA (regA "vänster") ;
 lin left_N = mkN "vänster" ; -- SaldoWN = mkN "vänster" ;
 lin left_hand_A = variants {} ; -- status=guess
 lin left_handed_A = variants {} ; -- status=guess
-lin left_of_Prep = variants {} ; -- status=guess
+lin left_of_Prep = mkPrep "till vänster om" ;
 lin left_wing_N = variants {} ; -- status=guess
 lin left_winger_N = variants {} ; -- status=guess
 lin leftish_A = variants {} ; -- status=guess
@@ -36194,7 +36194,7 @@ lin modulate_V = mkV "reglerar" ; -- comment=4
 lin modulate_V2 = variants {} ; -- status=guess
 lin modulation_N = mkN "modulation" "modulationer" ; -- status=guess
 lin module_N = mkN "modul" "moduler" ; -- SaldoWN
-lin modulo_Prep = variants {} ; -- status=guess
+lin modulo_Prep = mkPrep "modulo" ;
 lin modulus_N = variants {} ; -- status=guess
 lin modus_operandi_N = variants {} ; -- status=guess
 lin modus_vivendi_N = variants {} ; -- status=guess
@@ -37510,13 +37510,13 @@ lin near_Prep = mkPrep "nära" ;
 lin near_V = mkV "nära" "närde" "närt" ; -- status=guess
 lin near_V2 = variants {} ; -- status=guess
 lin near_sighted_A = variants {} ; -- status=guess
-lin near_to_Prep = variants {} ; -- status=guess
+lin near_to_Prep = mkPrep "nära" ;
 lin nearby_A = mkA "närbelägen" "närbeläget" ; -- status=guess
 lin nearby_Adv = mkAdv "i närheten" ; -- status=guess
 lin nearer_Adv = variants {} ; -- status=guess
-lin nearer_Prep = variants {} ; -- status=guess
+lin nearer_Prep = mkPrep "närmare" ;
 lin nearest_Adv = variants {} ; -- status=guess
-lin nearest_Prep = variants {} ; -- status=guess
+lin nearest_Prep = mkPrep "närmast" ;
 lin nearly_Adv = mkAdv "nästan" | adjAdv near_A ; -- derived
 lin nearness_N = variants {} ; -- status=guess
 lin nearside_N = variants {} ; -- status=guess
@@ -37642,7 +37642,7 @@ lin neither7nor_DConj = variants {} ; -- status=guess
 lin neither_A = variants {} ; -- status=guess
 lin neither_Adv = mkAdv "varken" ; -- comment=2
 lin neither_Det = M.mkDet "ingendera" | M.mkDet "ingen av" ; -- status=guess status=guess
-lin neither_Prep = variants {} ; -- status=guess
+lin neither_Prep = mkPrep "varken" ; ---- Prep ??
 lin nekton_N = variants {} ; -- status=guess
 lin nelfinavir_N = variants {} ; -- status=guess
 lin nell_PN = mkPN "Nell" ; -- src=eng status=guess
@@ -37926,8 +37926,8 @@ lin newtown_PN = mkPN "Newtown" neutrum ; -- src=geonames status=guess
 lin next_A = mkA "nästa" ; -- status=guess
 lin next_Adv = mkAdv "näst" ;
 lin next_N = mkN "nästa" ; -- comment=3
-lin next_Prep = variants {} ; -- status=guess
-lin next_to_Prep = variants {} ; -- status=guess
+lin next_Prep = mkPrep "nästintill" ; ---- Prep ?
+lin next_to_Prep = mkPrep "bredvid" | mkPrep "intill" ;
 lin nexus_N = variants {} ; -- status=guess
 lin ngultrum_N = variants {} ; -- status=guess
 lin ngwee_N = variants {} ; -- status=guess
@@ -38619,7 +38619,7 @@ lin notornis_N = variants {} ; -- status=guess
 lin nottingham_PN = mkPN "Nottingham" neutrum ; -- src=geonames status=guess
 lin nottinghamshire_PN = mkPN "Nottinghamshire" ; -- src=eng status=guess
 lin notwithstanding_Adv = mkAdv "likväl" | mkAdv "ändå" ; -- status=guess status=guess
-lin notwithstanding_Prep = variants {} ; -- status=guess
+lin notwithstanding_Prep = mkPrep "trots" ; ---- sense
 lin nougat_N = mkN "nougat" "nougater" ; -- SaldoWN
 lin nought_N = mkN "nolla" ; -- comment=2
 lin noumenon_N = variants {} ; -- status=guess
@@ -39296,10 +39296,10 @@ lin omphaloskepsis_N = variants {} ; -- status=guess
 lin omsk_PN = mkPN "Omsk" neutrum ; -- src=geonames status=guess
 lin on_Adv = mkAdv "på" ;
 lin on_Prep = S.on_Prep ;
-lin on_account_of_Prep = variants {} ; -- status=guess
-lin on_behalf_of_Prep = variants {} ; -- status=guess
+lin on_account_of_Prep = mkPrep "på grund av" ; ---- sense 
+lin on_behalf_of_Prep = mkPrep "för" | mkPrep "vägnar" ; ---- å .. vägnar  
 lin on_licence_N = variants {} ; -- status=guess
-lin on_top_of_Prep = variants {} ; -- status=guess
+lin on_top_of_Prep = mkPrep "ovanpå" ;
 lin onager_N = variants {} ; -- status=guess
 lin once_AdV = mkAdV "en gång" ;
 lin once_Adv = mkAdv "en gång" ;
@@ -39483,7 +39483,7 @@ lin opposed_A = variants {} ; --
 lin opposite_A = mkA "motsatt" ; -- SaldoWN
 lin opposite_Adv = variants {} ; --
 lin opposite_N = mkN "motsats" "motsatser" | mkN "motstående" ; -- SaldoWN -- comment=3
-lin opposite_Prep = variants {} ; -- status=guess
+lin opposite_Prep = mkPrep "mittemot" ;
 lin opposition_N = mkN "opposition" "oppositioner" ;
 lin oppress_V2 = mkV2 (mkV "nedtrycka") ; -- status=guess, src=wikt
 lin oppression_N = mkN "förtryck" neutrum ; -- comment=3
@@ -39847,7 +39847,7 @@ lin out_Adv = mkAdv "ute" ;
 lin out_N = mkN "fel" neutrum ; -- comment=10
 lin out_Prep = mkPrep "ute" | mkPrep "ut" ; ---- split
 lin out_V2 = dirV2 (partV (mkV "voterar")"ut") ; -- comment=120
-lin out_from_Prep = variants {} ; -- status=guess
+lin out_from_Prep = mkPrep "utifrån" ;
 lin out_herod_V2 = variants {} ; -- status=guess
 lin out_of_Prep = mkPrep "ut ur" ; -- status=guess
 lin out_of_date_A = variants {} ; -- status=guess
@@ -39995,7 +39995,7 @@ lin outwards_Adv = mkAdv "ut" ; -- comment=2
 lin outwear_V2 = variants {} ; -- status=guess
 lin outweigh_V2 = mkV2 (mkV "överväga") ; -- status=guess, src=wikt
 lin outwit_V2 = variants {} ; -- status=guess
-lin outwith_Prep = variants {} ; -- status=guess
+lin outwith_Prep = mkPrep "utmed" ; ---- sense
 lin outwork_N = variants {} ; -- status=guess
 lin ouzel_N = variants {} ; -- status=guess
 lin ouzo_N = mkN "ouzo" ; -- status=guess
@@ -40375,7 +40375,7 @@ lin paanga_N = variants {} ; -- status=guess
 lin pabulum_N = variants {} ; -- status=guess
 lin paca_N = variants {} ; -- status=guess
 lin pace_N = mkN "tempo" "tempot" "tempon" "tempona" ; -- SaldoWN
-lin pace_Prep = variants {} ; -- status=guess
+lin pace_Prep = mkPrep "pace" ;
 lin pace_V = mkV "stiga" "steg" "stigit" ; -- status=guess
 lin pace_V2 = variants {} ; -- status=guess
 lin pacemaker_N = mkN "pulsgenerator" "pulsgeneratorer" | mkN "pacemaker" "pacemakern" "pacemaker" "pacemakerna" ; -- status=guess
@@ -41602,7 +41602,7 @@ lin pend_V = variants {} ; -- status=guess
 lin pend_V2 = variants {} ; -- status=guess
 lin pendant_N = mkN "hänge" ; -- status=guess
 lin pendent_A = variants {} ; -- status=guess
-lin pending_Prep = variants {} ; -- status=guess
+lin pending_Prep = mkPrep "i väntan på" ; -----
 lin pendlebury_PN = mkPN "Pendlebury" ; -- src=eng status=guess
 lin pendragon_N = variants {} ; -- status=guess
 lin pendulous_A = variants {} ; -- status=guess
@@ -43828,7 +43828,7 @@ lin possible_N = mkN "möjlighet" "möjligheter" ; -- status=guess
 lin possibly_Adv = mkAdv "möjligen" | mkAdv "möjligtvis" | adjAdv possible_A ; -- derived
 lin possum_N = mkN "pungråtta" ; -- status=guess
 lin post_N = mkN "post" "poster" ;
-lin post_Prep = variants {} ; -- status=guess
+lin post_Prep = mkPrep "post" ;
 lin post_V = mkV "anslå" "anslog" "anslagit" | mkV "postar" ; -- SaldoWN -- comment=13
 lin post_V2 = mkV2 "anslå" "anslog" "anslagit" | dirV2 (partV (mkV "skickar")"ut") ; -- SaldoWN -- comment=5
 lin post_chaise_N = variants {} ; -- status=guess
@@ -44668,7 +44668,7 @@ lin prizefighter_N = variants {} ; -- status=guess
 lin pro_A = variants {} ; -- status=guess
 lin pro_Adv = variants {} ; -- status=guess
 lin pro_N = mkN "proffs" neutrum ; -- status=guess
-lin pro_Prep = variants {} ; -- status=guess
+lin pro_Prep = mkPrep "pro" ;
 lin pro_forma_A = variants {} ; -- status=guess
 lin pro_forma_Adv = variants {} ; -- status=guess
 lin pro_rata_Adv = variants {} ; -- status=guess
@@ -45847,7 +45847,7 @@ lin qibla_N = variants {} ; -- status=guess
 lin qindarka_N = variants {} ; -- status=guess
 lin qoph_N = variants {} ; -- status=guess
 lin qt_N = variants {} ; -- status=guess
-lin qua_Prep = variants {} ; -- status=guess
+lin qua_Prep = mkPrep "såsom" | mkPrep "qua" ;
 lin quack_Interj = variants {} ; -- status=guess
 lin quack_N = mkN "snatter" neutrum ; -- comment=3
 lin quack_V = mkV "kvackar" ; -- comment=3
@@ -46658,7 +46658,7 @@ lin razzle_dazzle_N = variants {} ; -- status=guess
 lin rc_PN = mkPN "Rc" ; -- src=eng status=guess
 lin rd_PN = mkPN "Rd" ; -- src=eng status=guess
 lin re_N = variants {} ; -- status=guess
-lin re_Prep = variants {} ; -- status=guess
+lin re_Prep = mkPrep "igen" ;
 lin re_address_V2 = variants {} ; -- status=guess
 lin re_afforest_V2 = variants {} ; -- status=guess
 lin re_afforestation_N = variants {} ; -- status=guess
@@ -47269,7 +47269,7 @@ lin regardful_A = mkA "uppmärksam" "uppmärksamt" "uppmärksamma" "uppmärksamm
 lin regarding_Prep = mkPrep "med hänsyn till" ; -- status=guess
 lin regardless_A = mkA "oavsedd" ; -- status=guess
 lin regardless_Adv = variants {} ; --
-lin regardless_of_Prep = variants {} ; -- status=guess
+lin regardless_of_Prep = mkPrep "utan hänsyn till" ;
 lin regatta_N = mkN "regatta" ; -- SaldoWN
 lin regency_N = variants {} ; -- status=guess
 lin regenerate_A = variants {} ; -- status=guess
@@ -48418,7 +48418,7 @@ lin right_hand_A = variants {} ; -- status=guess
 lin right_handed_A = variants {} ; -- status=guess
 lin right_hander_N = variants {} ; -- status=guess
 lin right_minded_A = variants {} ; -- status=guess
-lin right_of_Prep = variants {} ; -- status=guess
+lin right_of_Prep = mkPrep "till höger om" ;
 lin right_turn_N = variants {} ; -- status=guess
 lin right_wing_N = variants {} ; -- status=guess
 lin right_winger_N = variants {} ; -- status=guess
@@ -49678,7 +49678,7 @@ lin sanitize_V2 = variants {} ; -- status=guess
 lin sanity_N = variants {} ; -- status=guess
 lin sannup_N = variants {} ; -- status=guess
 lin sannyasi_N = variants {} ; -- status=guess
-lin sans_Prep = variants {} ; -- status=guess
+lin sans_Prep = mkPrep "utan" ;
 lin sansevieria_N = variants {} ; -- status=guess
 lin sanskrit_N = variants {} ; -- status=guess
 lin santa_claus_N = variants {} ; -- status=guess
@@ -55995,7 +55995,7 @@ lin succussion_N = variants {} ; -- status=guess
 lin such_A = mkA "sådan" ; -- status=guess
 lin such_Adv = mkAdv "verkligen" ; -- status=guess
 lin such_Predet = M.mkPredet "sådan" "sådant" "sådana" ; -- status=guess
-lin such_as_Prep = variants {} ; -- status=guess
+lin such_as_Prep = mkPrep "såsom" ; 
 lin suchlike_A = variants {} ; -- status=guess
 lin suchow_PN = mkPN "Suchow" ; -- src=eng status=guess
 lin suck_N = mkN "dia" ; -- status=guess
@@ -58022,7 +58022,7 @@ lin thanksgiving_N = mkN "tacksägelse" "tacksägelser" ; -- status=guess
 lin that_AdA = lin AdA (ss "så") ; -- status=guess
 lin that_Quant = S.that_Quant ;
 lin that_Subj = S.that_Subj ;
-lin that_of_Prep = variants {} ; -- status=guess
+lin that_of_Prep = variants {} ; ---- what is this ??
 lin thatch_N = mkN "halm" ; -- status=guess
 lin thatch_V2 = variants {} ; -- status=guess
 lin thatcham_PN = mkPN "Thatcham" neutrum ; -- src=geonames status=guess
@@ -58051,7 +58051,7 @@ lin thematically_Adv = variants {} ; -- status=guess
 lin theme_N = mkN "tema" "temat" "teman" "temana" ; -- status=guess
 lin then_Adv = mkAdv "då" ;
 lin then_N = mkN "sedan" "sedaner" ; -- comment=2
-lin then_Prep = variants {} ; -- status=guess
+lin then_Prep = mkPrep "då" ; ---- cat ??
 lin thenal_A = variants {} ; -- status=guess
 lin thenar_N = variants {} ; -- status=guess
 lin thence_Adv = mkAdv "därifrån" ; -- status=guess
@@ -58271,7 +58271,7 @@ lin thoroughly_Adv = adjAdv thorough_A ; -- -- derived
 lin thoroughness_N = mkN "grundlighet" "grundligheter" ; -- status=guess
 lin thortveitite_N = variants {} ; -- status=guess
 lin though_Adv = mkAdv "ändå" ;
-lin though_Prep = variants {} ; -- status=guess
+lin though_Prep = mkPrep "även om" ;
 lin though_Subj = lin Subj {s = "fast"} ;
 lin thought_N = mkN "tanke" utrum | mkN "tänkande" ; ---
 lin thought_reader_N = variants {} ; -- status=guess
@@ -58621,7 +58621,7 @@ lin timely_A = mkA "läglig" ; -- status=guess
 lin timepiece_N = mkN "ur" ; -- comment=3
 lin timer_N = mkN "timer" ; -- status=guess
 lin times_N = variants {} ; -- status=guess
-lin times_Prep = variants {} ; -- status=guess
+lin times_Prep = mkPrep "gånger" ;
 lin timesaving_A = variants {} ; -- status=guess
 lin timeserver_N = variants {} ; -- status=guess
 lin timeserving_A = variants {} ; -- status=guess
@@ -62000,7 +62000,7 @@ lin untipped_A = compoundA (regA "otippad") ; -- status=guess
 lin untired_A = variants {} ; -- status=guess
 lin untiring_A = mkA "outtröttlig" ; -- comment=2
 lin untitled_A = compoundA (regA "obetitlad") ; -- status=guess
-lin unto_Prep = variants {} ; -- status=guess
+lin unto_Prep = mkPrep "till" ;
 lin untoasted_A = variants {} ; -- status=guess
 lin untold_A = mkA "osagd" "osagt" ; -- status=guess
 lin untouchable_A = variants {} ; -- status=guess
@@ -62116,8 +62116,8 @@ lin up_and_coming_A = variants {} ; -- status=guess
 lin up_beat_N = variants {} ; -- status=guess
 lin up_holland_PN = mkPN "Up holland" ; -- src=eng status=guess
 lin up_market_A = variants {} ; -- status=guess
-lin up_to_Prep = variants {} ; -- status=guess
-lin up_to_date_A = variants {} ; --
+lin up_to_Prep = mkPrep "upp till" ;
+lin up_to_date_A = mkA "aktuell" ;
 lin up_to_the_minute_A = variants {} ; -- status=guess
 lin upbeat_N = mkN "upptakt" "upptakter" ; -- status=guess
 lin upbound_A = variants {} ; -- status=guess
@@ -63042,7 +63042,7 @@ lin virulence_N = variants {} ; -- status=guess
 lin virulent_A = variants {} ; -- status=guess
 lin virus_N = mkN "virus" neutrum | mkN "virus" neutrum ; -- SaldoWN
 lin vis_a_vis_Adv = variants {} ; -- status=guess
-lin vis_a_vis_Prep = variants {} ; -- status=guess
+lin vis_a_vis_Prep = mkPrep "gentemot" ;
 lin visa_N = mkN "visum" neutrum | mkN "visum" neutrum ; -- SaldoWN
 lin visa_V2 = variants {} ; -- status=guess
 lin visage_N = mkN "anlete" ; -- comment=2
@@ -63258,7 +63258,7 @@ lin voyeuristically_Adv = variants {} ; -- status=guess
 lin vp_N = variants {} ; -- status=guess
 lin vroom_N = variants {} ; -- status=guess
 lin vs_PN = mkPN "Vs" ; -- src=eng status=guess
-lin vs_Prep = variants {} ; -- status=guess
+lin vs_Prep = mkPrep "mot" | mkPrep "vs" | mkPrep "versus" ;
 lin vso_PN = mkPN "Vso" ; -- src=eng status=guess
 lin vulcanite_N = variants {} ; -- status=guess
 lin vulcanization_N = mkN "vulkanisering" ; -- status=guess
@@ -64134,7 +64134,7 @@ lin where_Subj = lin Subj {s = "där"} ;
 lin where_as_Prep = variants {} ; -- status=guess
 lin whereabouts_Adv = variants {} ; -- status=guess
 lin whereabouts_N = mkN "vistelseort" "vistelseorter" ; -- status=guess
-lin whereas_Prep = variants {} ; -- status=guess
+lin whereas_Prep = mkPrep "medan" ; ---- cat ??
 lin whereas_Subj = M.mkSubj "medan" ; -- status=guess
 lin whereat_Adv = variants {} ; -- status=guess
 lin whereby_Adv = mkAdv "varmed" ; -- status=guess
@@ -64618,9 +64618,9 @@ lin witching_A = variants {} ; -- status=guess
 lin witching_N = mkN "spöktimmen" ; -- status=guess
 lin witchlike_A = variants {} ; -- status=guess
 lin with_Prep = S.with_Prep ;
-lin with_a_view_to_Prep = variants {} ; -- status=guess
-lin with_regard_to_Prep = mkPrep "med hänsyn till" ; -- status=guess
-lin with_respect_to_Prep = variants {} ; -- status=guess
+lin with_a_view_to_Prep = mkPrep "med hänsyn till" ;
+lin with_regard_to_Prep = mkPrep "med hänsyn till" ;
+lin with_respect_to_Prep = mkPrep "med hänsyn till" ;
 lin withal_Adv = variants {} ; -- status=guess
 lin witham_PN = mkPN "Witham" neutrum ; -- src=geonames status=guess
 lin withdraw_V = mkV "utträda" "utträdde" "utträtt" ; -- comment=8
