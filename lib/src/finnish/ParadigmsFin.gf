@@ -348,6 +348,14 @@ mkVS = overload {
     = \isNeg,nu,noun,_ -> lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ;
     } ;
 
+  mkQuant = overload {
+    mkQuant : N -> Quant = 
+      \noun -> heavyQuant {s1 = \\n,c => (snoun2nounBind noun).s ! NCase n c ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ;
+    mkQuant : N -> N -> Quant = 
+      \sg,pl -> heavyQuant {s1 = table {Sg => \\c => (snoun2nounBind pl).s ! NCase Sg c ; Pl => \\c => (snoun2nounBind pl).s ! NCase Pl c} ; 
+                            s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ;
+    } ;
+
   mkInterj : Str -> Interj
     = \s -> lin Interj {s = s} ;
 

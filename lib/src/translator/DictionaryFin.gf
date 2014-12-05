@@ -15,10 +15,10 @@ oper optProDrop : Pron -> Pron = \p -> p | E.ProDrop p ;
 oper luokse_Prep : Prep = mkPrep "luokse" ; -- to enable (luo|luokse)-luokseni
 oper adjAdv : A -> Adv = \a -> Syntax.mkAdv a ;
 
-  mika_NForms : R.NForm => Str = 
-    let {
+  mika_NForms : R.NForm => Str =
+    let
       mi  = snoun2nounBind (mkN "mi")
-    } in
+    in
     table {
        NCase Sg Nom  => "mikä" ;
        NCase Pl Nom  => "mitkä" ;
@@ -19426,7 +19426,7 @@ lin few_Det = S.few_Det ;
 lin few_N = mkN "harva" ;
 lin few_Num = {s = \\n,c => (snoun2nounBind (mkN "harva")).s ! NCase n c ; n = Sg ; isNum = True} ; --suspect
 lin fewer_A = mkWA "harvemmat" ; --UNCHK
-lin fewer_Det = variants {} ; --
+lin fewer_Det = mkDet Pl (mkN "harvempi" "harvemman" "harvempia") ;
 lin fewer_than_AdN = mkAdN "vähemmän kuin" ;
 lin fewness_N = mkWN (k40 "vähyys") ; --UNCHK
 lin fey_A = mkWA (compoundA "sala" (k38 "peräinen")) ; --UNCHK
@@ -32963,8 +32963,9 @@ lin mordacious_A = mkWA (k10 "pureva") ; --UNCHK
 lin mordacity_N = mkWN (k40 "purevuus") ; --UNCHK
 lin mordant_A = mkWA "erittäin" "syövyttävä" ; --UNCHK
 lin mordant_N = mkWN (compoundN "peittaus" (k48 "aine")) ; --UNCHK
-lin morePl_Det = mkDet Pl (mkN "useampi" "useamman" "useampia") ;
-lin moreSg_Det = mkDet Sg (exceptNomN (mkN "enempä") "enemmän") ;
+lin more_Quant = mkQuant (mkN "useampi" "useamman" "useampia") (exceptNomN (mkN "enempä") "enemmän") ;
+---lin morePl_Det = mkDet Pl (mkN "useampi" "useamman" "useampia") ;
+---lin moreSg_Det = mkDet Sg (exceptNomN (mkN "enempä") "enemmän") ;
 lin more_Adv = mkWAdv (k99 "enemmän") ;
 lin more_CAdv = S.more_CAdv ;
 lin more_N = mkN "lisä" ; ---- ?
@@ -44689,6 +44690,7 @@ lin sagittate_A = mkWA (k38 "nuolimainen") ; --UNCHK
 lin sago_N = mkWN (k1 "saago") ; --UNCHK
 lin saguaro_N = mkWN "Carnegiea" "gigantea" ; --UNCHK
 lin sahib_N = mkWN "sahib" ; --UNCHK
+lin said_Quant = mkQuant (mkN "mainittu") ;
 lin saiga_N = mkWN (compoundN "Saiga-" (k5A "antilooppi")) ; --UNCHK
 lin sail_N = mkWN (k39 "purjehdus") ; --UNCHK
 lin sail_V = mkWV (k73 "seilata") ; --UNCHK
@@ -57868,7 +57870,7 @@ lin whatPl_IP = S.whatPl_IP ;
 lin whatSg_IP = S.whatSg_IP ;
 lin what_for_N = mkWN (k99 "tähden") "minkä" ; --UNCHK
 lin whatever_A = mkWA (k38 "minkäänlainen") ; --UNCHK
-lin whatever_Det = mkDet Sg {s = table NForm {nf => mika_NForms ! nf ++ "tahansa"} ; h = Back} ;
+lin whatever_Quant = heavyQuant {s1 = \\n,c => mika_NForms ! NCase n c ++ "tahansa" ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ;
 lin whatnot_N = mkWN (k10 "rihkama") ; --UNCHK
 lin whatsoever_A = mkWA (k38 "minkäänlainen") ; --UNCHK
 lin whatsoever_Adv = variants {} ; --
@@ -57919,7 +57921,7 @@ lin whether_Subj = mkSubj "josko" ;
 lin whetstone_N = mkWN (compoundN "hioma" (k7 "kivi")) ; --UNCHK
 lin whey_N = mkWN (k9 "hera") ; --UNCHK
 lin which_IQuant = S.which_IQuant ;
-lin whichever_Quant = variants {} ; --
+lin whichever_Quant = heavyQuant {s1 = \\n,c => mika_NForms ! NCase n c ++ "tahansa" ; s2 = \\_ => [] ; isNum,isPoss,isNeg,isDef = False} ;
 lin whiff_N = mkWN (k1A "poltto") ; --UNCHK
 lin whiffer_N = mkWN (k10 "lyöjä") ; --UNCHK
 lin whiffletree_N = mkWN (compoundN "kääntö" (k5A "palkki")) ; --UNCHK
