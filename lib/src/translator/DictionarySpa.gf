@@ -3922,8 +3922,6 @@ lin cent_N = mkN "centavo" | mkN "céntimo" ; -- status=guess status=guess
 lin centaur_N = mkN "centauro" ; -- status=guess
 lin centenarian_A = mkA "centenario" ; -- status=guess
 lin centenarian_N = mkN "centenario" ; -- status=guess
-lin center_V = mkV "mediar" | mkV "promediar" ; -- status=guess, src=wikt status=guess, src=wikt
-lin center_V2 = mkV2 (mkV "mediar") | mkV2 (mkV "promediar") ; -- status=guess, src=wikt status=guess, src=wikt
 lin centering_N = mkN "cimbra" ; -- status=guess
 lin centimetre_N = mkN "centímetro" ; -- status=guess
 lin centipede_N = mkN "ciempiés" masculine ; -- status=guess
@@ -3933,8 +3931,8 @@ lin centralize_V = mkV "centralizar" ; -- status=guess, src=wikt
 lin centralize_V2 = mkV2 (mkV "centralizar") ; -- status=guess, src=wikt
 lin centrally_Adv = adjAdv central_A ; -- derived -- derived
 lin centre_N = mkN "centro" ;
-lin centre_V = variants {} ; --
-lin centre_V2 = variants {} ; --
+lin centre_V = mkV "mediar" | mkV "promediar" ; -- status=guess, src=wikt status=guess, src=wikt
+lin centre_V2 = mkV2 (mkV "mediar") | mkV2 (mkV "promediar") ; -- status=guess, src=wikt status=guess, src=wikt
 lin centrifuge_N = mkN "centrífuga" ; -- status=guess
 lin centriole_N = mkN "centríolo" ; -- status=guess
 lin centripetal_A = mkA "centrípeto" ; -- status=guess

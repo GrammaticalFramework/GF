@@ -3205,9 +3205,6 @@ lin cent_N = mkN "cent" masculine ; -- status=guess
 lin centaur_N = mkN "paardmens" masculine | mkN "kentaur" masculine | mkN "centaur" masculine ; -- status=guess status=guess status=guess
 lin centenarian_N = mkN "honderdjarige" masculine feminine ; -- status=guess
 lin center_A = mkA "centraal" ; -- status=guess
-lin center_N = mkN "centrum" ; -- status=guess
-lin center_V = mkV "centreren" ; -- status=guess, src=wikt
-lin center_V2 = mkV2 (mkV "centreren") ; -- status=guess, src=wikt
 lin centerfold_N = mkN "pin-up" masculine feminine ; -- status=guess
 lin centimetre_N = mkN "centimeter" ; -- status=guess
 lin centipede_N = mkN "duizendpoot" masculine ; -- status=guess
@@ -3218,8 +3215,8 @@ lin centralize_V = mkV "centraliseren" ; -- status=guess, src=wikt
 lin centralize_V2 = mkV2 (mkV "centraliseren") ; -- status=guess, src=wikt
 lin centrally_Adv = adjAdv central_A ; -- derived
 lin centre_N = mkN "midden" neuter | mkN "centrum" neuter ; --- possible split, centrum is for locations
-lin centre_V = variants {} ; --
-lin centre_V2 = variants {} ; --
+lin centre_V = mkV "centreren" ; -- status=guess, src=wikt
+lin centre_V2 = mkV2 (mkV "centreren") ; -- status=guess, src=wikt
 lin century_N = mkN "eeuw" ;
 lin ceramic_N = mkN "keramiek" feminine ; -- status=guess
 lin cereal_N = variants {} ; --

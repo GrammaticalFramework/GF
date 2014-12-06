@@ -9702,15 +9702,10 @@ lin centenary_N = variants {} ; -- status=guess
 lin centennial_A = variants {} ; -- status=guess
 lin centennial_N = mkN "hundraårsjubileum" "hundraårsjubileet" "hundraårsjubileer" "hundraårsjubileerna" ; -- status=guess
 lin center_A = mkA "central" ; -- status=guess
-lin center_N = mkN "centrum" "centret" "centra" "centran" ; -- status=guess
-lin center_V = mkV "centrerar" ; -- status=guess
-lin center_V2 = mkV2 (mkV "centrerar") ; -- status=guess, src=wikt
-lin centerboard_N = variants {} ; -- status=guess
 lin centered_A = variants {} ; -- status=guess
 lin centerfold_N = mkN "mittuppslag" ; -- status=guess
 lin centering_N = variants {} ; -- status=guess
 lin centerline_N = variants {} ; -- status=guess
-lin centerpiece_N = mkN "mittpunkt" "mittpunkter" ; -- comment=3
 lin centesimal_A = variants {} ; -- status=guess
 lin centesimo_N = variants {} ; -- status=guess
 lin centesis_N = variants {} ; -- status=guess
@@ -9730,9 +9725,9 @@ lin centralization_N = mkN "centralisering" ; -- status=guess
 lin centralize_V = mkV "centraliserar" ; -- comment=4
 lin centralize_V2 = variants {} ; -- status=guess
 lin centrally_Adv = adjAdv central_A ; -- derived -- derived
-lin centre_N = mkN "centrum" "centrumet" "centra" "centran" ;
+lin centre_N = mkN "centrum" (variants {"centrumet"; "centret"}) "centra" "centran" ;
 lin centre_V = mkV "centrerar" ; -- status=guess
-lin centre_V2 = variants {} ; -- mkV "centrerar" ;
+lin centre_V2 = mkV2 (mkV "centrerar") ; -- status=guess, src=wikt
 lin centre_bit_N = variants {} ; -- status=guess
 lin centre_board_N = variants {} ; -- status=guess
 lin centrepiece_N = mkN "mittpunkt" "mittpunkter" ; -- comment=3
