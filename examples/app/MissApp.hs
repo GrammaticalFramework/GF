@@ -48,3 +48,7 @@ parts f = words (map (\c -> if c =='_' then ' ' else c) f)
 
 catOf :: Fun -> String
 catOf = last . parts
+
+prepareMissing :: MissMap -> Lang -> String -> IO ()
+prepareMissing mm lang cat = putStrLn $ unlines 
+  [ "lin " ++ p ++ " = mk" ++ cat ++ " \"\" ;"| (l,ps) <- allMissingSuchFuns mm (\f -> catOf f == cat), l == lang, p <- ps]
