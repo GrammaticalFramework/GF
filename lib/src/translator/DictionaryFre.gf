@@ -9275,6 +9275,7 @@ lin gerund_N = mkN "gérondif" masculine ; -- tocheck
 lin gestalt_N = mkN "profil" feminine ; -- tocheck
 lin gesticulate_V = mkV (mkV "gesticuler") ; -- tocheck
 lin gesture_N = mkN "geste" masculine ; -- tocheck
+lin get_V2 = I.recevoir_V2 ;
 lin get_V2V = mkV2V (mkV I.obtenir_V2) ;
 lin get_VV = mkVV (mkV "arriver") ;
 lin geyser_N = mkN "geyser" masculine ; -- tocheck

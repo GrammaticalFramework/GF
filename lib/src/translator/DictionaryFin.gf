@@ -21737,6 +21737,7 @@ lin gesticulation_N = mkWN (k9A "elehdintä") ; --UNCHK
 lin gestural_A = mkWA (k34A "sanaton") ; --UNCHK
 lin gesture_N = mkWN (k48 "ele") ;
 lin gesture_V = mkWV (k52A "viittoa") ; --UNCHK
+lin get_V2 = mkV2 (mkV "saada") ;
 lin get_V2V = mkV2V (mkV "saada") accusative infIllat ;
 lin get_VV = mkVV "päätyä" infIllat ;
 lin get_across_V = mkWV (k52 "paljastua") ; --UNCHK

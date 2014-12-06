@@ -9527,6 +9527,7 @@ lin gerontology_N = mkN "gerontología" ; -- status=guess
 lin gerund_N = mkN "gerundio" ; -- status=guess
 lin gesture_N = mkN "gesto" ; -- status=guess
 lin get_N = mkN "quedada" ; -- status=guess
+lin get_V2 = mkV2 obtener_V ; -- status=guess
 lin get_V2V = mkV2V obtener_V ;
 lin get_VV = mkVV obtener_V ;
 lin geyser_N = mkN "géiser" masculine ; -- status=guess

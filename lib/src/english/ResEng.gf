@@ -369,28 +369,14 @@ param
       False => {aux = x ; adv = "not" ; fin = [] ; inf = z}
       } ;
 
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    p = vp.p ;
-    prp = vp.prp ;
-    ptp = vp.ptp ;
-    inf = vp.inf ;
-    ad = vp.ad ;
+  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
     s2 = \\a => vp.s2 ! a ++ obj ! a ;
     isSimple = False ;
-    ext = vp.ext
     } ;
 
-  insertObjPre : (Agr => Str) -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    p = vp.p ;
-    prp = vp.prp ;
-    ptp = vp.ptp ;
-    inf = vp.inf ;
-    ad = vp.ad ;
+  insertObjPre : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
     s2 = \\a => obj ! a ++ vp.s2 ! a ;
     isSimple = False ;
-    ext = vp.ext 
     } ;
 
   insertObjc : (Agr => Str) -> SlashVP -> SlashVP = \obj,vp -> 
