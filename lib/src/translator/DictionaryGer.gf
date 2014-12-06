@@ -9745,15 +9745,10 @@ lin centenary_N = variants {} ;
 lin centennial_A = variants {} ;
 lin centennial_N = mkN "Hundertjahrfeier" feminine | mkN "hundertster Jahrestag" masculine ; -- status=guess status=guess
 lin center_A = variants {} ;
-lin center_N = mkN "Zenterspieler" masculine | mkN "Stürmer" masculine ; -- status=guess status=guess
-lin center_V = mkV "zenterieren" | mkV "ausmitteln" ; -- status=guess, src=wikt status=guess, src=wikt
-lin center_V2 = mkV2 (mkV "zenterieren") | mkV2 (mkV "ausmitteln") ; -- status=guess, src=wikt status=guess, src=wikt
-lin centerboard_N = variants {} ;
 lin centered_A = variants {} ;
 lin centerfold_N = variants {} ;
 lin centering_N = variants {} ;
 lin centerline_N = variants {} ;
-lin centerpiece_N = variants {} ;
 lin centesimal_A = variants {} ;
 lin centesimo_N = variants {} ;
 lin centesis_N = variants {} ;
@@ -9774,8 +9769,8 @@ lin centralize_V = variants {} ;
 lin centralize_V2 = variants {} ;
 lin centrally_Adv = adjAdv central_A ; -- derived
 lin centre_N = mkN "Zentrum" "Zentrum" "Zentrum" "Zentrums" "Zentren" "Zentren" neuter ;
-lin centre_V = variants {} ; --
-lin centre_V2 = variants {} ; --
+lin centre_V = mkV "zenterieren" | mkV "ausmitteln" ; -- status=guess, src=wikt status=guess, src=wikt
+lin centre_V2 = mkV2 (mkV "zenterieren") | mkV2 (mkV "ausmitteln") ; -- status=guess, src=wikt status=guess, src=wikt
 lin centre_bit_N = variants {} ;
 lin centre_board_N = variants {} ;
 lin centrepiece_N = variants {} ;
