@@ -18,6 +18,7 @@ concrete TranslateEng of Translate =
   VerbEng - [
     UseCopula,                    -- just removed: not needed
     PassV2,                       -- generalized in Extensions
+    AdvVP,                        -- more liberal placement of adv
     ComplVS, SlashV2S, ComplSlash -- Eng exceptions
     ],
   AdverbEng,
@@ -64,6 +65,8 @@ lin
   ComplVS vs s = G.ComplVS vs s | E.ComplBareVS vs s ;
   SlashV2S vs s = G.SlashV2S vs s | E.SlashBareV2S vs s ;
   ComplSlash vps np = G.ComplSlash vps np | E.ComplSlashPartLast vps np ;
+
+  AdvVP vp adv = G.AdvVP vp adv | insertObjPre (\\_ => adv.s) vp ; -- I bought a car today | I bought today a car
 
   PPos = {s = [] ; p = CPos} ;
   PNeg = {s = [] ; p = CNeg True} | {s = [] ; p = CNeg False} ;
