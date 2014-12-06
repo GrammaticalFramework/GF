@@ -23916,6 +23916,7 @@ lin gestural_A = variants {} ;
 lin gesture_N = mkN "Geste" "Gesten" feminine ; -- status=guess
 lin gesture_V = mkV "gestikulieren" ; -- status=guess, src=wikt
 lin get_N = variants {} ;
+lin get_V2 = mkV2 (fixprefixV "be" I.kommen_V) | mkV2 (mkV "kriegen") ;
 lin get_V2V = mkV2V (mkV "machen") accPrep ; -- comment=?
 lin get_VV = mkVV I.dürfen_V ;
 lin get_about_V = variants {} ;

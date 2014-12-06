@@ -7988,6 +7988,7 @@ lin gerund_N = mkN "gerundio" ; -- status=guess
 lin gesso_N = mkN "gesso" ; -- status=guess
 lin gesticulation_N = mkN "gesticolio" ; -- status=guess
 lin gesture_N = mkN "gesto" ; -- status=guess
+lin get_V2 = mkV2 (mkV "ricevere") ;
 lin get_V2V = mkV2V (mkV "ricevere") ;
 lin get_VV = mkVV (mkV "ricevere") ;
 lin geyser_N = mkN "geyser" masculine ; -- status=guess

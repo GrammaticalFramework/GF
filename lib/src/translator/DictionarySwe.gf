@@ -23828,6 +23828,7 @@ lin gestural_A = variants {} ; -- status=guess
 lin gesture_N = mkN "gest" "gester" ; -- SaldoWN
 lin gesture_V = mkV "gestikulerar" ; -- status=guess, src=wikt
 lin get_N = mkN "skada" ; -- comment=2
+lin get_V2 = mkV2 I.få_V ;
 lin get_V2V = mkV2V I.få_V ;
 lin get_VV = mkVV I.få_V ;
 lin get_about_V = mkV "anländer" ; -- comment=17

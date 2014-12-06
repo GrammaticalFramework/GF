@@ -5909,6 +5909,7 @@ lin gerund_N = mkN "gerundi" masculine ; --auto
 lin gestation_N = mkN "gestació" feminine ; --auto
 lin gesticulation_N = mkN "gesticulació" feminine ; --auto
 lin gesture_N = mkN "gest" masculine ; --auto
+lin get_V2 = mkV2 (mkV (tenir_108 "obtenir")) ; 
 lin get_V2V = mkV2V (verbV (servir_101 "aconseguir")) ParadigmsCat.accusative ParadigmsCat.dative ; --subcat mkVS (verbV (servir_101 "aconseguir"))
 lin get_VV = deVV IrregCat.haver_V ;
 lin geyser_N = mkN "guèiser" masculine ; --auto

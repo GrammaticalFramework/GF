@@ -8130,6 +8130,7 @@ lin gertrude_PN = mkPN "Gertrude" ; -- src=eng status=guess
 lin gerund_N = mkN "gerundium" neuter ; -- status=guess
 lin gesture_N = mkN "gebaar" neuter ; -- status=guess
 lin gesture_V = mkV "gebaren" ; -- status=guess, src=wikt
+lin get_V2 = mkV2 krijgen_V ;
 lin get_V2V = mkV2V (mkV "op" schieten_V) | mkV2V (mkV "overeen" LexiconDut.come_V) ;
 lin get_VV = mkVV (mkV "hebben") ; ---- subcat, tocheck all of get_
 lin geyser_N = mkN "geiser" masculine | mkN "geizer" masculine ; -- status=guess status=guess

@@ -33,6 +33,7 @@ fun if_Subj : Subj ;
 fun go_VV : VV ;
 fun go_VA : VA ;
 fun go_V : V ;
+fun get_V2 : V2 ;
 fun get_VV : VV ;
 fun get_V2V : V2V ;
 fun make_V2V : V2V ;

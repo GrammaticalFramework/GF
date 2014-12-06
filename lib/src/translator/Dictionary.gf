@@ -23909,6 +23909,7 @@ fun gestural_A : A ;
 fun gesture_N : N ;
 fun gesture_V : V ;
 fun get_N : N ;
+fun get_V2 : V2 ;
 fun get_V2V : V2V ;
 fun get_VV : VV ;
 fun get_about_V : V ;
