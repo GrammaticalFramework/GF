@@ -341,8 +341,8 @@ lin
   bite_V2 = dirV2 (stateV (mkV154 "хапя")) ;
   count_V2 = dirV2 (stateV (mkV175 "броя")) ;
   cut_V2 = dirV2 (stateV (mkV157 "режа"))  ;
-  fear_V2 = dirV2 (medialV (stateV (mkV186 "страхувам")) Acc) ;
-  fight_V2 = dirV2 (medialV (stateV (mkV173 "боря")) Acc) ;
+  fear_V2 = prepV2 (medialV (stateV (mkV186 "страхувам")) Acc) otP;
+  fight_V2 = prepV2 (medialV (stateV (mkV173 "боря")) Acc) sP;
   hit_V2 = dirV2 (actionV (mkV187 "удрям") (mkV173 "ударя")) ;
   hold_V2 = dirV2 (stateV (mkV179 "държа")) ;
   hunt_V2 = dirV2 (stateV (mkV174 "ловя")) ;
