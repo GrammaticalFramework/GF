@@ -31919,8 +31919,7 @@ lin thaw_N = mkN "解冻" ;
 lin thaw_V = mkV "融化" | {-HSK-} mkV "解凍" | mkV "解冻" | {-mwn-} mkV "使溶解" | mkV "液化" | mkV "溶解" ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- open-multilingual-wordnet
 lin thaw_V2 = mkV2 "融化" | {-HSK-} mkV2 (mkV "解凍") | mkV2 (mkV "解冻") | mkV2 (mkV "融化") ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt
 lin theanthropism_N = mkN "拟人" | mkN "拟人论" ; -- open-multilingual-wordnet
-lin theater_N = mkN "劇場" | mkN "剧场" | {-HSK-} mkN "戏剧" ; -- status=guess -- status=guess
-lin theatre_N = mkN "剧院" ;
+lin theatre_N = mkN "剧院" | mkN "劇場" | mkN "剧场" | {-HSK-} mkN "戏剧" ; -- status=guess -- status=guess
 lin theatrical_A = mkA "戏剧" ;
 lin theatrical_N = mkN "戏剧演出" ;
 lin thebe_N = mkN "西比" ; -- open-multilingual-wordnet

@@ -58247,7 +58247,6 @@ fun thaw_N : N ;
 fun thaw_V : V ;
 fun thaw_V2 : V2 ;
 fun theanthropism_N : N ;
-fun theater_N : N  ;
 fun theatre_N : N ;
 fun theatregoer_N : N ;
 fun theatrical_A : A ;

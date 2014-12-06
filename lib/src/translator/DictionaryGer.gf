@@ -48623,7 +48623,7 @@ lin rightmost_A = variants {} ;
 lin rightness_N = variants {} ;
 lin rigid_A = mk3A "steif" "steifer" "steifste" ; -- status=guess
 lin rigidity_N = variants {} ;
-lin rigmarole_N = theater_N | mkN "Zirkus" "Zirkusse" masculine ; -- status=guess status=guess
+lin rigmarole_N = theatre_N | mkN "Zirkus" "Zirkusse" masculine ; -- status=guess status=guess
 lin rigor_mortis_N = variants {} ;
 lin rigorous_A = mk3A "streng" "strenger" "strengste" ; -- status=guess
 lin rigour_N = variants {} ;
@@ -58253,8 +58253,7 @@ lin thaw_N = mkN "Tauwetter" neuter ; -- status=guess
 lin thaw_V = mkV "auftauen" ; -- status=guess, src=wikt
 lin thaw_V2 = mkV2 (mkV "auftauen") ; -- status=guess, src=wikt
 lin theanthropism_N = variants {} ;
-lin theater_N = kino_N | mkN "Filmtheater" neuter | mkN "Lichtspielhaus" neuter ; -- status=guess status=guess status=guess
-lin theatre_N = variants {} ; --
+lin theatre_N = kino_N | mkN "Filmtheater" neuter | mkN "Lichtspielhaus" neuter ; -- status=guess status=guess status=guess
 lin theatregoer_N = variants {} ;
 lin theatrical_A = mk3A "theatralisch" "theatralischer" "theatralischste" | mk3A "dramatisch" "dramatischer" "dramatischste" ; -- status=guess status=guess
 lin theatrical_N = variants {} ;

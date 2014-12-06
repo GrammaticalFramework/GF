@@ -19254,8 +19254,7 @@ lin thatcher_N = mkN "dakdekker" masculine ; -- status=guess
 lin thaw_N = mkN "dooi" ; -- status=guess
 lin thaw_V = mkV "ontdooien" ; -- status=guess, src=wikt
 lin thaw_V2 = mkV2 (mkV "ontdooien") ; -- status=guess, src=wikt
-lin theater_N = mkN "theater" neuter ; -- status=guess
-lin theatre_N = variants {} ; --
+lin theatre_N = mkN "theater" neuter ; -- status=guess
 lin theatrical_A = mkA "dramatisch" ; -- status=guess
 lin theft_N = mkN "diefstal" feminine ; -- status=guess
 lin theism_N = mkN "theïsme" neuter ; -- status=guess
