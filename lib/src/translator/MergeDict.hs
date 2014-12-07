@@ -20,9 +20,22 @@ Comments can be added at the merging phase.
 
 Other lines than 'lin' rules are taken from "old". The rules in the resulting grammar are sorted alphabetically.
 
+The boolean argument is set False if you do not want to add new rules to already existing old ones:
+
+  lin f = t1 | ... | tm ; -- comment1
+  lin f = u1 | ... | un ; -- comment2
+
+where m > 0, results in
+
+  lin f = t1 | ... | tm ; -- comment1
+
 Usage:
 
-  mergeDict "DictionaryChi.gf" "../chinese/hsk/csv/hsku.gf" (Just "HSK") "tmp/DictionaryChi.gf"
+  mergeDict <OldFile> <NewFile> Bool (Maybe separator) <TargetFile>
+
+Example:
+
+  mergeDict "DictionaryChi.gf" "../chinese/hsk/csv/hsku.gf" True (Just "HSK") "tmp/DictionaryChi.gf"
 -}
 
 
@@ -30,8 +43,8 @@ Usage:
 import Data.List
 
 
-mergeDict :: FilePath -> FilePath -> Maybe String -> FilePath -> IO ()
-mergeDict old new comm file = do
+mergeDict :: FilePath -> FilePath -> Bool -> Maybe String -> FilePath -> IO ()
+mergeDict old new ifAdd comm file = do
   olds1 <- readFile old >>= return . lines
   news1 <- readFile new >>= return . lines
   let (preamble,olds2) = break ((== ["lin"]) . take 1 . words) olds1
@@ -39,7 +52,7 @@ mergeDict old new comm file = do
   let news = [mkRule 1 (w:ws) | w:ws <- map words news1, w == "lin"]
   let lins = sort $ olds ++ news
   let linss = groupBy (\x y -> (fun x) == (fun y)) lins
-  let lins2 = map (mergeRule comm) linss
+  let lins2 = map (mergeRule ifAdd comm) linss
   writeFile file $ unlines preamble
   appendFile file $ unlines $ map prRule lins2
   appendFile file "}"
@@ -58,31 +71,31 @@ mkRule i ws = case ws of
    getVariants ws = case break (=="|") ws of
       (e,vs) | isEmpty e -> getVariants vs
       (v,_:vs) -> v : getVariants vs
+      ([],_)   -> []
       (v,_)    -> [v]
-   isEmpty v = elem v [["variants{}"],["variants","{}"]]
+   isEmpty v = elem v [["variants{}"],["variants","{}"],["variants{};"],["variants","{};"]]
    isComment = (=="--") . take 2
 
-mergeRule :: Maybe String -> [Rule] -> Rule
-mergeRule mco rs = case rs of
+mergeRule :: Bool -> Maybe String -> [Rule] -> Rule
+mergeRule ifAdd mco rs = case rs of
   [r] -> r
-  [old,new] -> R (fun old) 0 (mergeLin (lins old) (lins new)) (comment old ++ comment new)
-  _ -> error $ show rs
- where
-   mergeLin old new = olds ++ case filter (flip notElem old) new of
-     l:ls -> case mco of 
-       Just co -> (("{-"++co++"-}"):l):ls
-       _ -> l:ls
-     _ -> []
-    where
-     olds = case old of
-----       [[]] -> [["variants","{}"]]
+  [old,new] 
+    | ifAdd == False && not (null (lins old)) -> old    -- old has something: just keep it
+    | null (lins old) && null (lins new) -> old         -- both are empty: just keep old
+    | null (lins old) -> new                            -- old is empty: just keep new
+    | otherwise -> case filter (flip notElem (lins old)) (lins new) of
+       l:ls -> case mco of 
+         Just co -> R (fun old) 0 (lins old ++ (("{-"++co++"-}"):l):ls) (comment new ++ comment old)
+         _       -> R (fun old) 0 (lins old ++ l:ls) (comment new ++ comment old)
        _ -> old
+        
+  _ -> error $ "cannot handle more than two rule sources: " ++ show rs
 
 prRule :: Rule -> String
 prRule ru = unwords $ "lin" : fun ru : "=" : variants ru ++ [";"] ++ comment ru
 
 variants :: Rule -> [String]
 variants ru = case lins ru of
-  [[]] -> ["variants","{}"] 
+  [] -> ["variants","{}"] 
   ls -> intersperse "|" (map unwords (filter (not . null) ls))
 
