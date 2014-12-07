@@ -375,15 +375,16 @@ oper
       verb = case ar of {
         "ir" =>  vivir_7 x ;
         "er" =>  deber_6 x ;
-        _ => case z of {
+        "ar" => case z of {
            "u" => actuar_9 x ;
            "z" => cazar_21 x ;
            "i" => guiar_43 x ;
            "g" => pagar_53 x ;
            "c" => sacar_72 x ;
            _   => cortar_5 x
-            }
-          }
+            } ;
+         _ => Predef.error ("regular verb infinitive must end ar/ir/er, not satisfied by" ++ x)
+         }
     in verbBesch verb ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
   reflV v = v ** {vtyp = VRefl} ;

@@ -229,7 +229,8 @@ oper v_besch101 : Str -> VerbeN = \s -> mkNV (conj s) ; --- to do
       _ + "cer"             => conj1placer parler ;
       _ + "ger"             => conj1manger parler ;
       _ + "yer"             => conj1payer parler ;
-      _                     => conj1aimer parler
+      _ + "er"              => conj1aimer parler ;
+      _                     => Predef.error ("verb infinitive must end er/ir/re, not satisfied by" ++ parler)
     } ;
 
 -- The following can be more reliable.
