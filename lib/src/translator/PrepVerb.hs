@@ -31,7 +31,7 @@ advV s = "advV " ++ s
 v2V v = "(lin V " ++ v ++ "_V2) "
 
 
-getPrepsAdvs lang = do
+mkPrepVerbDict lang = do
   rs <- readFile ("Dictionary" ++ lang ++ ".gf") >>= return . lines
   let dict = M.fromList [(f,unwords r) | "lin":f:"=":r <- map words rs]
   let look x = maybe ("","variants {} ;") (\r -> ("--DD ",r)) (M.lookup x dict)
