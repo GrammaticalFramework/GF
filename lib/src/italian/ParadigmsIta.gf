@@ -386,7 +386,7 @@ oper
       verb = case are of {
         "ire" =>  finire_100 x ;
         "ere" =>  temere_20 x ;
-        _ => case i of {
+        "are" => case i of {
           "c" => cercare_7 x ;
           "g" => legare_8 x ;
           _ => case ci of {
@@ -394,7 +394,8 @@ oper
             "gi" => mangiare_10 x ;
            _    => amare_6 x
             }
-          }
+          } ;
+         _ => Predef.error ("regular verb infinitive must end are/ire/ere, not satisfied by" ++ x)
         }
     in verbBesch verb ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
