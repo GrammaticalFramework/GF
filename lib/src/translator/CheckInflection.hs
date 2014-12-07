@@ -22,6 +22,10 @@ isError lang u v = case lang of
      "mkV"  | head v == '"' -> notElem (dp 3 (stringOf v)) ["are","ere","ire","rsi"] 
      "mkV2" | head v == '"' -> notElem (dp 3 (stringOf v)) ["are","ere","ire","rsi"] 
      _ -> False
+  "Fre" -> case bareOp u of
+     "mkV"  | head v == '"' -> notElem (dp 2 (stringOf v)) ["er","ir","re"]
+     "mkV2" | head v == '"' -> notElem (dp 2 (stringOf v)) ["er","ir","re"]
+     _ -> False
 
 dp :: Int -> String -> String
 dp i s = drop (length s - i) s
