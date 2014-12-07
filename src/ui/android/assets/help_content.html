@@ -14,10 +14,10 @@
 <br>
 <b>Confidence</b>: colour of output text
 <ul>
-<li><span style="background-color:palegreen">Green</span>: Fully analysed, probably correct (but has alternatives)</li>
-<li><span style="background-color:yellow">Yellow</span>: A good guess, may be correct</li>
-<li><span style="background-color:pink">Light red</span>: A rough guess, probably incorrect</li>
-<li><span style="background-color:red">Dark red</span>: Word by word, usually incorrect</li>
+<li><span style="background-color:palegreen">Green</span>: semantic, probably correct (but has alternatives)</li>
+<li><span style="background-color:yellow">Yellow</span>: syntactic, often incorrect (has alternatives)</li>
+<li><span style="background-color:pink">Light red</span>: chunk-based, probably incorrect (has alternatives)</li>
+<li><span style="background-color:red">Dark red</span>: word-based, usually very bad</li>
 </ul>
 </p>
 
@@ -83,7 +83,7 @@ The following table gives a rough idea of what to expect:
 <tr> <th>Finnish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=yellow>in only</td></tr>
 <tr> <th>French</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=red></td> <td bgcolor=palegreen></td></tr>
 <tr> <th>German</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
-<tr> <th>Hindi</th>     <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=yellow></td> <td bgcolor=yellow>in only</td> </tr>
+<tr> <th>Hindi</th>     <td bgcolor=pink></td> <td bgcolor=red></td> <td bgcolor=yellow></td> <td bgcolor=yellow>in only</td> </tr>
 <tr> <th>Italian</th>   <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
 <tr> <th>Spanish</th>   <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
 <tr> <th>Swedish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> <td bgcolor=yellow>in only</td></tr>
