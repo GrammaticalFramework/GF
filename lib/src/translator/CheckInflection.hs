@@ -18,10 +18,14 @@ isError lang u v = case lang of
      "mkV"  | head v == '"' -> notElem (dp 2 (stringOf v)) ["ar","er","ir","se"] 
      "mkV2" | head v == '"' -> notElem (dp 2 (stringOf v)) ["ar","er","ir","se"] 
      _ -> False
+  "Ita" -> case bareOp u of
+     "mkV"  | head v == '"' -> notElem (dp 3 (stringOf v)) ["are","ere","ire","rsi"] 
+     "mkV2" | head v == '"' -> notElem (dp 3 (stringOf v)) ["are","ere","ire","rsi"] 
+     _ -> False
 
 dp :: Int -> String -> String
 dp i s = drop (length s - i) s
 
 stringOf s = takeWhile (/='"') (tail s)
 
-bareOp = filter (notElem "()")
+bareOp = filter (flip notElem "()")
