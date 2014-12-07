@@ -15,20 +15,21 @@ hasError lang ws = case ws of
 
 isError lang u v = case lang of
   "Spa" -> case bareOp u of
-     "mkV"  | head v == '"' -> notElem (dp 2 (stringOf v)) ["ar","er","ir","se"] 
-     "mkV2" | head v == '"' -> notElem (dp 2 (stringOf v)) ["ar","er","ir","se"] 
+     "mkV"  | head v == '"' -> notElem (dp 2 (stringOf v)) ["ar","er","ir","se"] || elem '_' v
+     "mkV2" | head v == '"' -> notElem (dp 2 (stringOf v)) ["ar","er","ir","se"] || elem '_' v 
+     "mkA" -> elem '_' (stringOf v)
      _ -> False
-  "Ita" -> case bareOp u of
-     "mkV"  | head v == '"' -> notElem (dp 3 (stringOf v)) ["are","ere","ire","rsi"] 
-     "mkV2" | head v == '"' -> notElem (dp 3 (stringOf v)) ["are","ere","ire","rsi"] 
+  "Ita" -> case take 3 (bareOp u) of
+     "mkV"  | head v == '"' -> notElem (dp 3 (stringOf v)) ["are","ere","ire","rsi"] || elem '_' v 
+     "mkA" -> elem '_' (stringOf v)
      _ -> False
-  "Fre" -> case bareOp u of
-     "mkV"  | head v == '"' -> notElem (dp 2 (stringOf v)) ["er","ir","re"]
-     "mkV2" | head v == '"' -> notElem (dp 2 (stringOf v)) ["er","ir","re"]
+  "Fre" -> case take 3 (bareOp u) of
+     "mkV"  | head v == '"' -> notElem (dp 2 (stringOf v)) ["er","ir","re"] || elem '_' v
+     "mkv"  | head v == '"' -> notElem (dp 2 (stringOf v)) ["er","ir","re"] || elem '_' v
+     _ | bareOp u == "mkA" -> elem '_' (stringOf v)
      _ -> False
   "Ger" -> case bareOp u of
      "mkV"  | head v == '"' -> notElem (dp 2 (stringOf v)) ["en","rn","ln"]
-     "mkV2" | head v == '"' -> notElem (dp 2 (stringOf v)) ["en","rn","ln"]
      _ -> False
 
 dp :: Int -> String -> String
