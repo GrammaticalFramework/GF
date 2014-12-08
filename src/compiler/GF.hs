@@ -1,3 +1,4 @@
+-- | GF, the Grammatical Framework, as a library
 module GF(
            -- * Command line interface
            module GF.Main,
@@ -7,6 +8,8 @@ module GF(
            -- * Compiling GF grammars
            module GF.Compile,
            module GF.CompileInParallel,
+--         module PF.Compile.Export, -- haddock does the wrong thing with this
+           exportPGF,
            module GF.CompileOne,
 
            -- * Abstract syntax, parsing, pretty printing and serialisation
@@ -25,6 +28,7 @@ import GF.Interactive
 import GF.Compile
 import GF.CompileInParallel
 import GF.CompileOne
+import GF.Compile.Export(exportPGF)
 
 import GF.Compile.GetGrammar
 import GF.Grammar.Grammar
