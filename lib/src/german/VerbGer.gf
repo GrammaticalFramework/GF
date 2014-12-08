@@ -79,6 +79,8 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
       } ;
 
     AdvVP vp adv = insertAdv adv.s vp ;
+    ExtAdvVP vp adv = insertAdv (embedInCommas adv.s) vp ;
+
     AdVVP adv vp = insertAdv adv.s vp ; -- not AdV 27/5/2012: nicht immer
 
     AdvVPSlash vp adv = insertAdv adv.s vp ** {c2 = vp.c2} ;

@@ -76,6 +76,8 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
     CompAdv a = {s = \\_ => a.s} ;
 
     AdvVP vp adv = insertAdv adv.s vp ;
+    ExtAdvVP vp adv = insertAdv (embedInCommas adv.s) vp ;
+
     AdVVP adv vp = insertAdV adv.s vp ;
 
     ReflVP vp = insertObj (\\a => appPrep vp.c2.p1 (\\_ => reflPron ! a)) vp ;
