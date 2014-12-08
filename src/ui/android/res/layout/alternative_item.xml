@@ -18,7 +18,7 @@
         android:layout_toRightOf="@id/arrow"
         android:paddingLeft="10dp"
         android:textSize="25sp"/>
-    
+
 	<org.grammaticalframework.ui.android.ParseTreeView
     	android:id="@+id/desc_details"
     	android:layout_width="match_parent"
@@ -26,4 +26,11 @@
     	android:layout_below="@id/alternative_desc"
         android:textSize="25sp"
     	/>
+
+	<TextView
+        android:id="@+id/abstract_tree"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/desc_details"
+        android:textSize="15sp"/>
 </RelativeLayout>
