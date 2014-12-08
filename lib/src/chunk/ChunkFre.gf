@@ -1,11 +1,13 @@
 concrete ChunkFre of Chunk = CatFre, ExtensionsFre [VPS,VPI] ** 
-  ChunkFunctor - [SSlash_Chunk]
+  ChunkFunctor - [AP_Chunk, SSlash_Chunk]
     with (Syntax = SyntaxFre), (Extensions = ExtensionsFre) **
   open 
     SyntaxFre, (E = ExtensionsFre), Prelude, 
     ResFre, PhonoFre, CommonRomance, (P = ParadigmsFre) in {
 
 lin
+  AP_Chunk ap = {s = ap.s ! AF (Masc | Fem) (Sg | Pl)} ;
+
   SSlash_Chunk s = mkUtt <lin S {s = s.s ! {g = Masc ; n = Sg}} : S> ;
 
 lin

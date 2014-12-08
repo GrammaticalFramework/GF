@@ -1,11 +1,12 @@
 concrete ChunkSpa of Chunk = CatSpa, ExtensionsSpa [VPS,VPI] ** 
-  ChunkFunctor - [SSlash_Chunk]
+  ChunkFunctor - [AP_Chunk, SSlash_Chunk]
     with (Syntax = SyntaxSpa), (Extensions = ExtensionsSpa) **
   open 
     SyntaxSpa, (E = ExtensionsSpa), Prelude, 
     ResSpa, CommonRomance, (P = ParadigmsSpa) in {
 
 lin
+  AP_Chunk ap = {s = ap.s ! AF (Masc | Fem) (Sg | Pl)} ;
   SSlash_Chunk s = mkUtt <lin S {s = s.s ! {g = Masc ; n = Sg}} : S> ;
 
 lin

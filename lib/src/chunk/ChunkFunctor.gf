@@ -1,4 +1,4 @@
-incomplete concrete ChunkFunctor of Chunk = Cat, Extensions [VPS,VPI] ** 
+incomplete concrete ChunkFunctor of Chunk = Cat, Symbol [Symb], Extensions [VPS,VPI] ** 
   open 
     Syntax, Extensions, 
     Prelude in {
@@ -29,6 +29,7 @@ lin
 ----  CN_Pl_Gen_Chunk cn = ss (cn.s ! Pl ! Gen) ;
 ----  CN_Sg_Gen_Chunk cn = ss (cn.s ! Sg ! Gen) ;
   Conj_Chunk conj = ss conj.s2 ; ----
+  Det_Chunk det = mkUtt (Syntax.mkNP det) ;
   IAdv_Chunk iadv = iadv ; 
   IP_Chunk ip = mkUtt ip ;
   NP_Nom_Chunk np = mkUtt np ;
@@ -64,6 +65,7 @@ lin
 
   UseVC t p vc = E.MkVPS t p (mkVP vc) ;
 
+  Symb_Chunk s = lin Utt s ;
 
   fullstop_Chunk = ss "." ;
   exclmark_Chunk = ss "!" ;
