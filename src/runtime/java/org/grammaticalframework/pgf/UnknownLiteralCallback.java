@@ -6,7 +6,7 @@ import java.util.Iterator;
 public class UnknownLiteralCallback implements LiteralCallback {
 	private Concr concr;
 
-	public UnknownLiteralCallback(PGF pgf, Concr concr) {
+	public UnknownLiteralCallback(Concr concr) {
 		this.concr = concr;
 	}
 
