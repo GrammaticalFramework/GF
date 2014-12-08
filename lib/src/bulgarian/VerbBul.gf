@@ -79,6 +79,8 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     UseCopula = predV verbBe ;
 
     AdvVP vp adv = insertObj (\\_ => adv.s) Pos vp ;
+    ExtAdvVP vp adv = insertObj (\\_ => embedInCommas adv.s) Pos vp ;
+
     AdvVPSlash vp adv = insertSlashObj1 (\\_ => adv.s) Pos vp ;
 
     AdVVP adv vp = {
