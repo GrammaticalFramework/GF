@@ -25,6 +25,8 @@ import GF.Text.Pretty
 
 -- top-level access to code generation
 
+-- | Export a PGF to the given 'OutputFormat'. For many output formats,
+-- additional 'Options' can be used to control the output.
 exportPGF :: Options
           -> OutputFormat 
           -> PGF 

@@ -1,4 +1,4 @@
-module GF.Compiler (mainGFC, writePGF, linkGrammars) where
+module GF.Compiler (mainGFC, linkGrammars, writePGF, writeOutputs) where
 
 import PGF
 import PGF.Internal(concretes,optimizePGF,unionPGF)
@@ -56,7 +56,7 @@ compileSourceFiles opts fs =
 -- in the 'Options') from the output of 'parallelBatchCompile'.
 -- If a @.pgf@ file by the same name already exists and it is newer than the
 -- source grammar files (as indicated by the 'UTCTime' argument), it is not
--- recreated.
+-- recreated. Calls 'writePGF' and 'writeOutputs'.
 linkGrammars opts (t_src,~cnc_grs@(~(cnc,gr):_)) =
     do let abs = render (srcAbsName gr cnc)
            pgfFile = outputPath opts (grammarName' opts abs<.>"pgf")
@@ -111,6 +111,8 @@ unionPGFFiles opts fs =
     readPGFVerbose f =
         putPointE Normal opts ("Reading " ++ f ++ "...") $ liftIO $ readPGF f
 
+-- | Export the PGF to the 'OutputFormat's specified in the 'Options'.
+-- Calls 'exportPGF'.
 writeOutputs :: Options -> PGF -> IOE ()
 writeOutputs opts pgf = do
   sequence_ [writeOutput opts name str 
