@@ -12,6 +12,7 @@ import org.grammaticalframework.pgf.ExprProb;
 import org.grammaticalframework.pgf.FullFormEntry;
 import org.grammaticalframework.pgf.MorphoAnalysis;
 import org.grammaticalframework.pgf.NercLiteralCallback;
+import org.grammaticalframework.pgf.UnknownLiteralCallback;
 import org.grammaticalframework.pgf.PGF;
 import org.grammaticalframework.pgf.ParseError;
 
