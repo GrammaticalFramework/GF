@@ -51,6 +51,15 @@ lin
     s = v.s ;
     c = ge_s ---- ge
   } ;
+
+  GerundNP vp = {
+    s = infVP vp ; ---- ?
+  } ;
+
+  GerundAdv vp = {
+    s = infVP vp ++ "地" ; ---- ?
+    advType = ATManner ;
+  } ;
   
   GerundAP v = {
     s = v.s ++ de_s ; ----

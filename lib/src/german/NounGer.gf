@@ -46,6 +46,11 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
       a = np.a
       } ;
 
+    ExtAdvNP np adv = heavyNP {
+      s = \\c => np.s ! c ++ embedInCommas adv.s ;
+      a = np.a
+      } ;
+
     DetQuantOrd quant num ord = 
       let 
         n = num.n ;

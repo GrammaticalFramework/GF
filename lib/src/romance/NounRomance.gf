@@ -46,6 +46,12 @@ incomplete concrete NounRomance of Noun =
       hasClit = False
       } ;
 
+    ExtAdvNP np adv = heavyNPpol np.isNeg {
+      s = \\c => (np.s ! c).ton ++ embedInCommas adv.s ;
+      a = np.a ;
+      hasClit = False
+      } ;
+
     DetQuantOrd quant num ord = {
       s,sp = \\g,c => quant.s ! num.isNum ! num.n ! g ! c ++ num.s ! g ++ 
                    ord.s ! aagr g num.n ;

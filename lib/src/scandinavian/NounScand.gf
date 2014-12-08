@@ -45,6 +45,11 @@ incomplete concrete NounScand of Noun =
       a = np.a
       } ;
 
+    ExtAdvNP np adv = {
+      s = \\c => np.s ! c ++ embedInCommas adv.s ;
+      a = np.a
+      } ;
+
     DetQuantOrd quant num ord = {
       s = \\b,g => quant.s ! num.n ! b ! True ! g ++ 
                    num.s ! g ++ ord.s ;
