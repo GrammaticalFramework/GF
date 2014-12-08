@@ -106,6 +106,10 @@ public class AlternativesActivity extends ListActivity {
 		View view = (View) expandedView.findViewById(R.id.desc_details);
 		((RelativeLayout) expandedView).removeView(view);
 
+		TextView textView = (TextView) expandedView.findViewById(R.id.abstract_tree);
+		if (textView != null)
+			((RelativeLayout) expandedView).removeView(textView);
+
 		expandedView = null;
 	}
 
@@ -141,7 +145,7 @@ public class AlternativesActivity extends ListActivity {
 			parseView = new ParseTreeView(this);
 			parseView.setId(R.id.desc_details);
 			RelativeLayout.LayoutParams params = 
-					new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.BELOW, R.id.alternative_desc);
 			((RelativeLayout) view).addView(parseView, params);
 		}
@@ -158,7 +162,19 @@ public class AlternativesActivity extends ListActivity {
 				brackets[0] = b;
 			}
 		}
-		parseView.setBrackets(brackets); 
+		parseView.setBrackets(brackets);
+		
+		TextView textView = (TextView) view.findViewById(R.id.abstract_tree);
+		if (textView == null) {
+			textView = new TextView(this);
+			textView.setId(R.id.abstract_tree);
+			textView.setTextSize(15);
+			RelativeLayout.LayoutParams params = 
+				new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+			params.addRule(RelativeLayout.BELOW, R.id.desc_details);
+			((RelativeLayout) view).addView(textView, params);
+		}
+		textView.setText(ep.getExpr().toString());
 
 		expandedView = view;
 	}
@@ -206,6 +222,12 @@ public class AlternativesActivity extends ListActivity {
 					LayoutInflater inflater = (LayoutInflater) 
 							getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 		            convertView = inflater.inflate(R.layout.alternative_item, null);
+
+		            View treeView = (View) convertView.findViewById(R.id.desc_details);
+		    		((RelativeLayout) convertView).removeView(treeView);
+
+		    		TextView textView = (TextView) convertView.findViewById(R.id.abstract_tree);
+		    		((RelativeLayout) convertView).removeView(textView);
 		        }
 
 		        TextView descView = (TextView)
