@@ -61,12 +61,6 @@ lin
     advType = ATManner ;
   } ;
   
-  GerundAP v = {
-    s = v.s ++ de_s ; ----
-    monoSyl = False ;
-    hasAdA = True ; --- 
-  } ;
-
   PastPartAP v = {
     s = v.verb.s ++ de_s ; ----
     monoSyl = False ;

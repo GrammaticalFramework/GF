@@ -13,7 +13,7 @@ concrete TranslateChi of Translate =
   VerbChi - [
     UseCopula,  -- just removed
     PassV2, -- generalized
-    CompAP, AdvVP  -- Chi exceptions
+    CompAP, ExtAdvVP  -- Chi exceptions
     ],
   AdverbChi,
   PhraseChi,
@@ -27,7 +27,12 @@ concrete TranslateChi of Translate =
   DocumentationChi,
 
   ChunkChi,
-  ExtensionsChi [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
+  ExtensionsChi [
+    CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
+    , DirectComplVS, DirectComplVQ, FocusObjS
+    , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
+    , WithoutVP, InOrderToVP, ByVP
+    ],
 
   DictionaryChi ** 
  
@@ -43,7 +48,8 @@ flags
 lin
   CompAP = E.CompBareAP | G.CompAP ;                      -- he good | he is good
 
-  AdvVP vp adv = G.AdvVP vp adv | E.TopicAdvVP vp adv  ;  -- he *today* here sleeps | *today* he here sleeps
+  ExtAdvVP vp adv = G.ExtAdvVP vp adv ;
+         ---- | E.TopicAdvVP vp adv  ;  -- he *today* here sleeps | *today* he here sleeps
 
   QuestCl cl = G.QuestCl cl | E.QuestRepV cl ;            -- he comes 'ma' | he come not come
 
