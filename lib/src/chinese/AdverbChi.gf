@@ -2,7 +2,7 @@ concrete AdverbChi of Adverb = CatChi **
   open ResChi, Prelude in {
 
   lin
-    PositAdvAdj a = {s = a.s ; advType = ATManner} ;
+    PositAdvAdj a = {s = a.s ++ "地" ; advType = ATManner} ; ---- for all adjs?
 
     PrepNP prep np = ss (appPrep prep np.s) ** {advType = prep.advType} ; --- should depend on np too ? 
 

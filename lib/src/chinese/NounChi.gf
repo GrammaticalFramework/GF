@@ -17,6 +17,7 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
     PPartNP np v2 = mkNP ((predV v2 v2.part).verb.s ++ possessive_s ++ np.s) ; ---- ??
 
     AdvNP np adv = mkNP (adv.s ++ possessiveIf adv.advType ++ np.s) ;
+    ExtAdvNP np adv = mkNP (adv.s ++ possessiveIf adv.advType ++ embedInCommas np.s) ; ---- commas?
 
     DetQuant quant num = {
       s = case num.numType of {
