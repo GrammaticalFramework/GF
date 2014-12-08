@@ -1,11 +1,13 @@
 concrete ChunkIta of Chunk = CatIta, ExtensionsIta [VPS,VPI] ** 
-  ChunkFunctor - [SSlash_Chunk]
+  ChunkFunctor - [AP_Chunk, SSlash_Chunk]
     with (Syntax = SyntaxIta), (Extensions = ExtensionsIta) **
   open 
     SyntaxIta, (E = ExtensionsIta), Prelude, 
     ResIta, CommonRomance, (P = ParadigmsIta) in {
 
 lin
+  AP_Chunk ap = {s = ap.s ! AF (Masc | Fem) (Sg | Pl)} ;
+
   SSlash_Chunk s = mkUtt <lin S {s = s.s ! {g = Masc ; n = Sg}} : S> ;
 
 lin

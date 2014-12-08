@@ -1,11 +1,13 @@
 concrete ChunkCat of Chunk = CatCat, ExtensionsCat [VPS,VPI] ** 
-  ChunkFunctor - [SSlash_Chunk]
+  ChunkFunctor - [AP_Chunk, SSlash_Chunk]
     with (Syntax = SyntaxCat), (Extensions = ExtensionsCat) **
   open 
     SyntaxCat, (E = ExtensionsCat), Prelude, 
     ResCat, CommonRomance, (P = ParadigmsCat) in {
 
 lin
+  AP_Chunk ap = {s = ap.s ! AF (Masc | Fem) (Sg | Pl)} ;
+
   SSlash_Chunk s = mkUtt <lin S {s = s.s ! {g = Masc ; n = Sg}} : S> ;
 
 lin

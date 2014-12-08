@@ -1,4 +1,4 @@
-abstract Chunk = Cat, Extensions [VPS,VPI] ** {
+abstract Chunk = Cat, Symbol [Symb], Extensions [VPS,VPI] ** {
 
 cat
   Chunks ;
@@ -27,6 +27,7 @@ fun
   CN_Pl_Gen_Chunk : CN -> Chunk ;
   CN_Sg_Gen_Chunk : CN -> Chunk ;
   Conj_Chunk : Conj -> Chunk ;
+  Det_Chunk : Det -> Chunk ; -- needed if article form is different from NP form, e.g. English a/an
   IAdv_Chunk : IAdv -> Chunk ;
   IP_Chunk : IP -> Chunk ;
   NP_Nom_Chunk : NP -> Chunk ;
@@ -63,6 +64,9 @@ fun
 
   UseVC  : Temp -> Pol -> VC -> VPS ;
 
+-- for unknown words that are not names
+
+  Symb_Chunk : Symb -> Chunk ;
 
 -- syncategorematic chunks
   refl_SgP1_Chunk,
