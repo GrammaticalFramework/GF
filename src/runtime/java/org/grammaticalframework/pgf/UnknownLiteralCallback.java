@@ -11,7 +11,8 @@ public class UnknownLiteralCallback implements LiteralCallback {
 	}
 
 	public CallbackResult match(int lin_idx, String sentence, int offset) {
-		if (!Character.isUpperCase(sentence.charAt(offset))) {
+		if (offset < sentence.length() &&
+		    !Character.isUpperCase(sentence.charAt(offset))) {
 			int start_offset = offset;
 			while (offset < sentence.length() &&
 			       !Character.isWhitespace(sentence.charAt(offset))) {
@@ -19,7 +20,7 @@ public class UnknownLiteralCallback implements LiteralCallback {
 			}
 			int end_offset = offset;
 			String word = sentence.substring(start_offset,end_offset);
-			
+
 			if (concr.lookupMorpho(word).size() == 0) {
 				Expr expr = new Expr("MkSymb", new Expr(word));
 				return new CallbackResult(new ExprProb(expr, 0), end_offset);
