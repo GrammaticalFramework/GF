@@ -312,13 +312,19 @@ public class Translator {
         } catch (ParseError e) {
         	output = translateByLookup(input);
         }
+        
+        if (output == null)
+        	output = "% ";     // make sure that we return something
 
         return new Pair<String,List<ExprProb>>(output, exprs);
     }
 
     public String linearize(Expr expr) {
     	Concr targetLang = getTargetConcr();
-    	return targetLang.linearize(expr);
+    	String s = targetLang.linearize(expr);
+    	if (s == null)
+    		s = "% ";     // make sure that we return something
+    	return s;
     }
 
     public Object[] bracketedLinearize(Expr expr) {
