@@ -38,6 +38,12 @@ public class NercLiteralCallback implements LiteralCallback {
 
 		if (i > 0) {
 			String name = sbuilder.toString();
+
+			if (concr.getName().contains("Eng") &&
+			    ("I".equals(name) || "I'm".equals(name))) {
+				return null;
+			}
+
 			Expr expr = null;
 			double prob = 0;
 			for (MorphoAnalysis an : concr.lookupMorpho(name)) {
@@ -49,8 +55,6 @@ public class NercLiteralCallback implements LiteralCallback {
 					} else if ("Language".equals(cat)) {
 						expr = new Expr(an.getLemma(), new Expr[0]);
 						expr = new Expr("languagePN", expr);
-					} else if ("Pron".equals(cat)) { // to capture I in English
-						return null;
 					}
 				}
 			}
