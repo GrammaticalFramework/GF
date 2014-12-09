@@ -52339,7 +52339,6 @@ lin sign_out_V2 = variants {};
 lin sign_out_of_V2 = variants {};
 lin sign_painter_N = variants {};
 lin sign_up_V = variants {};
-lin sign_up_V = variants {};
 lin sign_with_V2 = variants {};
 lin signage_N = mkN039 "сигнализация";
 lin signal_A = mkA079 "сигнален";

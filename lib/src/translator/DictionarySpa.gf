@@ -288,6 +288,7 @@ lin accouchement_N = mkN "parto" ; --UWN
 lin account_N = mkN "cuenta" ;
 lin account_V = mkV dar_V "cuentas" ;
 lin account_V2 = mkV2 "considerar" ;
+lin account_for_V2 = prepV2 OP_account_V OP_for_Prep ; -- guess-p-verb
 lin accountability_N = mkN "responsabilidad" feminine ; -- status=guess
 lin accountable_A = mkA "responsable" ; -- status=guess
 lin accountancy_N = mkN "contabilidad" feminine ; -- status=guess
@@ -407,6 +408,10 @@ lin acrylic_N = mkN "acrílico" ; -- status=guess
 lin act_N = mkN "acto" ;
 lin act_V = mkV "actuar" | mkV "comportarse" ;
 lin act_V2 = mkV2 (mkV "actuar") ;
+lin act_on_V2 = prepV2 OP_act_V OP_on_Prep ; -- guess-p-verb
+lin act_out_V2 = prepV2 OP_act_V OP_out_Prep ; -- guess-p-verb
+lin act_up_V = advV OP_act_V OP_up_Adv ; -- guess-p-verb
+lin act_upon_V2 = prepV2 OP_act_V OP_upon_Prep ; -- guess-p-verb
 lin actin_N = mkN "actina" ; --UWN
 lin actinism_N = mkN "actinismo" ; --UWN
 lin actinium_N = mkN "actinio" ; -- status=guess
@@ -463,6 +468,11 @@ lin add_V = mkV "añadir" ;
 lin add_V2 = mkV2 (mkV "añadir") | mkV2 (mkV "agregar") ;
 lin add_V3 = L.add_V3 ;
 lin add_VS = mkVS (mkV "añadir") | mkVS incluir_V ;
+lin add_in_V = advV OP_add_V OP_in_Adv ; -- guess-p-verb
+lin add_on_V2 = prepV2 OP_add_V OP_on_Prep ; -- guess-p-verb
+lin add_up_V = advV OP_add_V OP_up_Adv ; -- guess-p-verb
+lin add_up_V2 = prepV2 OP_add_V OP_up_Prep ; -- guess-p-verb
+lin add_up_to_V2 = prepV2 (advV OP_add_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin added_A = variants {} ; --
 lin addendum_N = mkN "apéndice" ; --UWN
 lin adder_N = mkN "serpiente" | mkN "culebra" masculine ; -- status=guess status=guess
@@ -807,6 +817,8 @@ lin agrarian_A = mkA "agrario" ; -- status=guess
 lin agree_V = concordar_V ;
 lin agree_VS = mkVS (concordar_V) ;
 lin agree_VV = mkVV (concordar_V) ;
+lin agree_on_V = advV OP_agree_V OP_on_Adv ; -- guess-p-verb
+lin agree_with_V2 = prepV2 OP_agree_V OP_with_Prep ; -- guess-p-verb
 lin agreeable_A = mkA "conforme" ; -- status=guess
 lin agreed_A = variants {} ; --
 lin agreement_N = mkN "acuerdo" | mkN "convenio" ;
@@ -838,6 +850,7 @@ lin aim_N = mkN "objetivo" | mkN "intención" feminine ;
 lin aim_V = mkV "apuntar" | mkV "pretender" | mkV "dirigir" ;
 lin aim_V2 = mkV2 (mkV "apuntar") | mkV2 (mkV "pretender") | mkV2 (mkV "dirigir") ;
 lin aim_VV = mkVV (mkV "aspirar") ;
+lin aim_at_V2 = prepV2 OP_aim_V OP_at_Prep ; -- guess-p-verb
 lin aimless_A = mkA "sin rumbo" | mkA "sin objeto" ; -- status=guess status=guess
 lin aioli_N = mkN "ajiaceite alioli" ; -- status=guess
 lin air_N = mkN "aire" ;
@@ -1031,6 +1044,8 @@ lin allotropic_A = mkA "alotrópico" ; -- status=guess
 lin allotropy_N = mkN "alotropía" ; --UWN
 lin allow_V2 = mkV2 (mkV "permitir") | mkV2 (mkV "conceder") ;
 lin allow_V2V = mkV2V (mkV "permitir") | mkV2V (mkV "conceder") ;
+lin allow_for_V2 = prepV2 (lin V OP_allow_V2) OP_for_Prep ; -- guess-p-verb
+lin allow_of_V2 = prepV2 (lin V OP_allow_V2) OP_of_Prep ; -- guess-p-verb
 lin allowance_N = variants {} ; --
 lin alloy_N = mkN "aleación" feminine ; -- status=guess
 lin allspice_N = mkN "pimienta de Jamaica" ; -- status=guess
@@ -1493,6 +1508,8 @@ lin answer_N = mkN "respuesta" ;
 lin answer_V = mkV "responder" | mkV "contestar" ;
 lin answer_V2 = mkV2 (mkV "responder") | mkV2 (mkV "contestar") ;
 lin answer_V2S = L.answer_V2S ;
+lin answer_back_V2 = mkV2 (advV OP_answer_V OP_back_Adv ) ; -- guess-p-verb
+lin answer_for_V2 = prepV2 OP_answer_V OP_for_Prep ; -- guess-p-verb
 lin answerable_A = mkA "responsable" ; -- status=guess
 lin ant_N = mkN "hormiga" ; -- status=guess
 lin antacid_N = mkN "antiácido" ; -- status=guess
@@ -1772,6 +1789,7 @@ lin apply_V = mkV "aplicar" ;
 lin apply_V2 = mkV2 (mkV "aplicar") ;
 lin apply_V2V = mkV2V (mkV "aplicar") ;
 lin apply_VV = mkVV (mkV "aplicar") ;
+lin apply_for_V2 = prepV2 OP_apply_V OP_for_Prep ; -- guess-p-verb
 lin appoint_V2 = mkV2 (mkV "designar") | mkV2 (mkV "nombrar") ;
 lin appoint_V2V = mkV2V (mkV "designar") | mkV2V (mkV "nombrar") ;
 lin appoint_V3 = mkV3 (mkV "designar") | mkV3 (mkV "nombrar") ;
@@ -1942,6 +1960,8 @@ lin arguably_Adv = adjAdv arguable_A ; -- derived -- derived
 lin argue_V = mkV "argumentar" | mkV "debatir" ;
 lin argue_V2 = mkV2 (mkV "argumentar") | mkV2 (mkV "debatir") ;
 lin argue_VS = mkVS (mkV "argumentar") | mkVS (mkV "debatir") ; --- split
+lin argue_down_V2 = prepV2 OP_argue_V OP_down_Prep ; -- guess-p-verb
+lin argue_out_V2 = prepV2 OP_argue_V OP_out_Prep ; -- guess-p-verb
 lin argument_N = mkN "argumento" ;
 lin argumentation_N = mkN "argumentación" | mkN "argumento" ; --UWN
 lin argumentative_A = mkA "discutidor" ; -- status=guess
@@ -2121,6 +2141,16 @@ lin ask_V2 = mkV2 (mkV "preguntar") | mkV2 (pedir_V) ;
 lin ask_V2Q = L.ask_V2Q ;
 lin ask_V2V = mkV2V (pedir_V) ;
 lin ask_VQ = mkVQ (mkV "preguntar") | mkVQ (pedir_V) ;
+lin ask_about_V2 = prepV2 OP_ask_V OP_about_Prep ; -- guess-p-verb
+lin ask_after_V2 = prepV2 OP_ask_V OP_after_Prep ; -- guess-p-verb
+lin ask_around_V = advV OP_ask_V OP_around_Adv ; -- guess-p-verb
+lin ask_around_V2 = prepV2 OP_ask_V OP_around_Prep ; -- guess-p-verb
+lin ask_for_V2 = prepV2 OP_ask_V OP_for_Prep ; -- guess-p-verb
+lin ask_for_V3 = variants {} ; -- guess-p-verb
+lin ask_in_V2 = prepV2 OP_ask_V OP_in_Prep ; -- guess-p-verb
+lin ask_out_V2 = prepV2 OP_ask_V OP_out_Prep ; -- guess-p-verb
+lin ask_over_V2 = prepV2 OP_ask_V OP_over_Prep ; -- guess-p-verb
+lin ask_round_V2 = prepV2 OP_ask_V OP_round_Prep ; -- guess-p-verb
 lin askance_Adv = mkAdv "con recelo" ; -- status=guess
 lin askern_PN = mkPN "Askern" ; -- status=guess src=geonames
 lin askew_A = mkA "torcido" | mkA "oblicuo" ; -- status=guess status=guess
@@ -2604,6 +2634,15 @@ lin back_A = variants {} ; --
 lin back_Adv = mkAdv "atrás" ;
 lin back_N = L.back_N ;
 lin back_V = variants {} ; --
+lin back_away_V = advV OP_back_V OP_away_Adv ; -- guess-p-verb
+lin back_down_V = advV OP_back_V OP_down_Adv ; -- guess-p-verb
+lin back_into_V3 = variants {} ; -- guess-p-verb
+lin back_off_V = advV OP_back_V OP_off_Adv ; -- guess-p-verb
+lin back_out_V = advV OP_back_V OP_out_Adv ; -- guess-p-verb
+lin back_out_of_V2 = prepV2 (advV OP_back_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin back_out_of_V3 = variants {} ; -- guess-p-verb
+lin back_up_V = advV OP_back_V OP_up_Adv ; -- guess-p-verb
+lin back_up_V2 = prepV2 OP_back_V OP_up_Prep ; -- guess-p-verb
 lin backache_N = mkN "dolor de espalda" ; -- status=guess
 lin backbench_N = mkN "escaño_trasero" ; --UWN
 lin backbencher_N = mkN "diputado" ; --UWN
@@ -3011,7 +3050,12 @@ lin beano_N = mkN "keno" ; --UWN
 lin bear_N = mkN "osezno" ; -- status=guess
 lin bear_V = mkV "llevar" | mkV "portar" ;
 lin bear_V2 = mkV2 (mkV "llevar") | mkV2 (mkV "portar") ;
+lin bear_down_on_V2 = prepV2 (advV OP_bear_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin bear_on_V2 = prepV2 OP_bear_V OP_on_Prep ; -- guess-p-verb
+lin bear_out_V2 = prepV2 OP_bear_V OP_out_Prep ; -- guess-p-verb
 lin bear_up_V = mkV "sobrellevar" ; --UWN
+lin bear_up_under_V2 = prepV2 (advV OP_bear_V OP_up_Adv ) OP_under_Prep ; -- guess-p-verb
+lin bear_with_V2 = prepV2 OP_bear_V OP_with_Prep ; -- guess-p-verb
 lin bearable_A = mkA "soportable" ; -- status=guess
 lin beard_N = mkN "barba" ; -- status=guess
 lin beard_V2 = mkV2 (mkV "provocar") | mkV2 (mkV "mortificar") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -3024,6 +3068,11 @@ lin beastly_Adv = adjAdv beastly_A | {-UWN-} mkAdv "bestial" | mkAdv "brutal" ; 
 lin beat_N = mkN "toque" ; --UWN
 lin beat_V = mkV "latir" ;
 lin beat_V2 = mkV2 (mkV "golpear") | mkV2 (mkV "pegar") | mkV2 (mkV "batir") | mkV2 (mkV "sacudir") | mkV2 (mkV "vencer") | mkV2 (mkV "derrotar") ; --- split: beat the horse / beat in football
+lin beat_back_V = advV OP_beat_V OP_back_Adv ; -- guess-p-verb
+lin beat_down_V = advV OP_beat_V OP_down_Adv ; -- guess-p-verb
+lin beat_down_V2 = prepV2 OP_beat_V OP_down_Prep ; -- guess-p-verb
+lin beat_out_V2 = prepV2 OP_beat_V OP_out_Prep ; -- guess-p-verb
+lin beat_up_V2 = prepV2 OP_beat_V OP_up_Prep ; -- guess-p-verb
 lin beater_N = mkN "batidor" masculine ; -- status=guess
 lin beatific_A = mkA "santo" ; --UWN
 lin beatify_V2 = mkV2 (mkV "beatificar") ; -- status=guess, src=wikt
@@ -3168,6 +3217,9 @@ lin bench_N = mkN "banco" ; -- status=guess
 lin bend_N = mkN "codo" | mkN "curva" | mkN "pliegue" | mkN "ángulo" ; --UWN
 lin bend_V = mkV "inclinarse" ; -- status=guess
 lin bend_V2 = mkV2 (mkV "inclinarse") ; -- status=guess
+lin bend_down_V = advV OP_bend_V OP_down_Adv ; -- guess-p-verb
+lin bend_over_V = advV OP_bend_V OP_over_Adv ; -- guess-p-verb
+lin bend_over_backwards_V = variants {} ; -- guess-p-verb
 lin bendable_A = mkA "articulable" ; -- status=guess
 lin beneath_Prep = variants {} ; --
 lin benefice_N = mkN "beneficio" ; --UWN
@@ -3570,6 +3622,10 @@ lin blob_N = mkN "bodoque" | mkN "mazacote" masculine ; -- status=guess status=g
 lin bloc_N = mkN "bloque" ; --UWN
 lin block_N = mkN "manzana" | mkN "cuadra" ; -- status=guess
 lin block_V2 = mkV2 (mkV "bloquear") | mkV2 (impedir_V) | mkV2 (obstruir_V) | mkV2 (atorar_V) ; -- status=guess
+lin block_in_V2 = prepV2 (lin V OP_block_V2) OP_in_Prep ; -- guess-p-verb
+lin block_off_V2 = prepV2 (lin V OP_block_V2) OP_off_Prep ; -- guess-p-verb
+lin block_out_V2 = prepV2 (lin V OP_block_V2) OP_out_Prep ; -- guess-p-verb
+lin block_up_V2 = prepV2 (lin V OP_block_V2) OP_up_Prep ; -- guess-p-verb
 lin blockade_N = mkN "bloqueo" ; -- status=guess
 lin blockage_N = mkN "estancamiento" ; -- status=guess
 lin blockbuster_N = mkN "taquillazo" | mkN "taquillera" ; -- status=guess status=guess
@@ -3605,7 +3661,17 @@ lin blouse_N = mkN "blusa" ; -- status=guess
 lin blow_N = mkN "golpe" masculine ; -- status=guess
 lin blow_V = L.blow_V ;
 lin blow_V2 = mkV2 (mkV "sonarse") ; -- status=guess
+lin blow_away_V = advV OP_blow_V OP_away_Adv ; -- guess-p-verb
+lin blow_away_V2 = mkV2 (advV OP_blow_V OP_away_Adv ) ; -- guess-p-verb
+lin blow_down_V2 = prepV2 OP_blow_V OP_down_Prep ; -- guess-p-verb
+lin blow_dry_V2 = variants {} ; -- guess-p-verb
+lin blow_in_V = advV OP_blow_V OP_in_Adv ; -- guess-p-verb
+lin blow_off_V = advV OP_blow_V OP_off_Adv ; -- guess-p-verb
+lin blow_off_V2 = prepV2 OP_blow_V OP_off_Prep ; -- guess-p-verb
+lin blow_out_V2 = prepV2 OP_blow_V OP_out_Prep ; -- guess-p-verb
+lin blow_over_V = advV OP_blow_V OP_over_Adv ; -- guess-p-verb
 lin blow_up_V = mkV "ampliar" ; --UWN
+lin blow_up_V2 = prepV2 OP_blow_V OP_up_Prep ; -- guess-p-verb
 lin blower_N = mkN "ventilador" ; -- status=guess
 lin blowfish_N = mkN "pez globo" ; -- status=guess
 lin blowfly_N = mkN "moscardón" | mkN "moscarda" ; -- status=guess status=guess
@@ -3990,6 +4056,22 @@ lin breadwinner_N = mkN "cabeza de familia" ; -- status=guess
 lin break_N = mkN "quebrar" ; -- status=guess
 lin break_V = mkV "romper" ;
 lin break_V2 = L.break_V2 ;
+lin break_apart_V = advV OP_break_V OP_apart_Adv ; -- guess-p-verb
+lin break_away_V = advV OP_break_V OP_away_Adv ; -- guess-p-verb
+lin break_down_V = advV OP_break_V OP_down_Adv ; -- guess-p-verb
+lin break_down_V2 = prepV2 OP_break_V OP_down_Prep ; -- guess-p-verb
+lin break_in_V = advV OP_break_V OP_in_Adv ; -- guess-p-verb
+lin break_in_V2 = prepV2 OP_break_V OP_in_Prep ; -- guess-p-verb
+lin break_in_on_V2 = prepV2 (advV OP_break_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin break_into_V2 = prepV2 OP_break_V OP_into_Prep ; -- guess-p-verb
+lin break_off_V2 = prepV2 OP_break_V OP_off_Prep ; -- guess-p-verb
+lin break_out_V = advV OP_break_V OP_out_Adv ; -- guess-p-verb
+lin break_out_V2 = prepV2 OP_break_V OP_out_Prep ; -- guess-p-verb
+lin break_out_in_V2 = prepV2 (advV OP_break_V OP_out_Adv ) OP_in_Prep ; -- guess-p-verb
+lin break_out_of_V2 = prepV2 (advV OP_break_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin break_through_V2 = prepV2 OP_break_V OP_through_Prep ; -- guess-p-verb
+lin break_up_V = advV OP_break_V OP_up_Adv ; -- guess-p-verb
+lin break_up_V2 = prepV2 OP_break_V OP_up_Prep ; -- guess-p-verb
 lin breakage_N = mkN "ruptura" ; --UWN
 lin breakaway_A = mkA "separado" | mkA "separatista" ; -- status=guess status=guess
 lin breakaway_N = mkN "escapado" ; -- status=guess
@@ -4084,7 +4166,24 @@ lin brindled_A = mkA "aleonado" ; -- status=guess
 lin brine_N = mkN "salmuera" ; -- status=guess
 lin bring_V2 = mkV2 traer_V ;
 lin bring_V3 = mkV3 traer_V ;
+lin bring_about_V2 = prepV2 (lin V OP_bring_V2) OP_about_Prep ; -- guess-p-verb
+lin bring_along_V2 = prepV2 (lin V OP_bring_V2) OP_along_Prep ; -- guess-p-verb
+lin bring_around_V2 = prepV2 (lin V OP_bring_V2) OP_around_Prep ; -- guess-p-verb
+lin bring_away_V2 = mkV2 (advV (lin V OP_bring_V2) OP_away_Adv ) ; -- guess-p-verb
+lin bring_back_V2 = mkV2 (advV (lin V OP_bring_V2) OP_back_Adv ) ; -- guess-p-verb
+lin bring_down_V2 = prepV2 (lin V OP_bring_V2) OP_down_Prep ; -- guess-p-verb
 lin bring_forth_V = mkV "engendrar" ; --UWN
+lin bring_forth_V2 = mkV2 (advV (lin V OP_bring_V2) OP_forth_Adv ) ; -- guess-p-verb
+lin bring_forward_V2 = mkV2 (advV (lin V OP_bring_V2) OP_forward_Adv ) ; -- guess-p-verb
+lin bring_in_V2 = prepV2 (lin V OP_bring_V2) OP_in_Prep ; -- guess-p-verb
+lin bring_off_V2 = prepV2 (lin V OP_bring_V2) OP_off_Prep ; -- guess-p-verb
+lin bring_on_V2 = prepV2 (lin V OP_bring_V2) OP_on_Prep ; -- guess-p-verb
+lin bring_out_V2 = prepV2 (lin V OP_bring_V2) OP_out_Prep ; -- guess-p-verb
+lin bring_out_in_V3 = variants {} ; -- guess-p-verb
+lin bring_over_V2 = prepV2 (lin V OP_bring_V2) OP_over_Prep ; -- guess-p-verb
+lin bring_round_V2 = prepV2 (lin V OP_bring_V2) OP_round_Prep ; -- guess-p-verb
+lin bring_to_V2 = prepV2 (lin V OP_bring_V2) OP_to_Prep ; -- guess-p-verb
+lin bring_up_V2 = prepV2 (lin V OP_bring_V2) OP_up_Prep ; -- guess-p-verb
 lin brininess_N = mkN "cualidad_de_salino" | mkN "salinidad" ; --UWN
 lin brink_N = mkN "borde" masculine ; -- status=guess
 lin brinkmanship_N = mkN "política_arriesgada" ; --UWN
@@ -4228,6 +4327,7 @@ lin bugger_N = mkN "majadero" | mkN "jodón" | mkN "fregón" | mkN "fastidio" ; 
 lin bugle_N = mkN "clarín" masculine ; -- status=guess
 lin build_V = construir_V | mkV "edificar" ;
 lin build_V2 = mkV2 (construir_V) | mkV2 (mkV "edificar") ;
+lin build_up_V2 = prepV2 OP_build_V OP_up_Prep ; -- guess-p-verb
 lin builder_N = mkN "constructor" ; -- status=guess
 lin building_N = mkN "edificio" | mkN "construcción" feminine ;
 lin buildup_N = mkN "concentración" ; --UWN
@@ -4328,6 +4428,12 @@ lin burly_A = mkA "corpulento" | mkA "musculoso" ; -- status=guess status=guess
 lin burn_N = mkN "quemadura" ; -- status=guess
 lin burn_V = L.burn_V ;
 lin burn_V2 = mkV2 (mkV "arder") | mkV2 (mkV "quemar") ; -- status=guess
+lin burn_down_V = advV OP_burn_V OP_down_Adv ; -- guess-p-verb
+lin burn_down_V2 = prepV2 OP_burn_V OP_down_Prep ; -- guess-p-verb
+lin burn_off_V2 = prepV2 OP_burn_V OP_off_Prep ; -- guess-p-verb
+lin burn_out_V = advV OP_burn_V OP_out_Adv ; -- guess-p-verb
+lin burn_up_V = advV OP_burn_V OP_up_Adv ; -- guess-p-verb
+lin burn_up_V2 = prepV2 OP_burn_V OP_up_Prep ; -- guess-p-verb
 lin burner_N = mkN "grabador de CD" ; -- status=guess
 lin burning_A = variants {} ; --
 lin burnish_V = bruñir_V ; -- status=guess, src=wikt
@@ -4351,6 +4457,7 @@ lin bursitis_N = mkN "bursitis" feminine ; -- status=guess
 lin burst_N = mkN "ráfaga" | mkN "estallo" | mkN "reventón" masculine ; -- status=guess
 lin burst_V = mkV (mkV "reirse") "a carcajadas" ; -- status=guess
 lin burst_V2 = mkV2 (mkV (mkV "reirse") "a carcajadas") ; -- status=guess
+lin burst_into_V2 = prepV2 OP_burst_V OP_into_Prep ; -- guess-p-verb
 lin burthen_N = mkN "carga" | mkN "cargo" ; --UWN
 lin burundi_PN = mkPN "Burundi" ; -- status=guess src=geonames
 lin bury_PN = mkPN "Bury" ; -- status=guess src=geonames
@@ -4412,6 +4519,12 @@ lin buxton_PN = mkPN "Buxton" ; -- status=guess src=geonames
 lin buy_N = mkN "soporte" masculine ; -- status=guess
 lin buy_V = mkV "comprar" ;
 lin buy_V2 = L.buy_V2 ;
+lin buy_back_V2 = mkV2 (advV OP_buy_V OP_back_Adv ) ; -- guess-p-verb
+lin buy_in_V2 = prepV2 OP_buy_V OP_in_Prep ; -- guess-p-verb
+lin buy_into_V2 = prepV2 OP_buy_V OP_into_Prep ; -- guess-p-verb
+lin buy_off_V2 = prepV2 OP_buy_V OP_off_Prep ; -- guess-p-verb
+lin buy_out_V2 = prepV2 OP_buy_V OP_out_Prep ; -- guess-p-verb
+lin buy_up_V2 = prepV2 OP_buy_V OP_up_Prep ; -- guess-p-verb
 lin buyerFem_N = mkN "comprador" ; --UWN
 lin buyerMasc_N = variants {} ; --
 lin buying_N = mkN "compra" ; --UWN
@@ -4526,8 +4639,20 @@ lin calisthenics_N = mkN "calistenia" ; -- status=guess
 lin call_N = mkN "llamada" | mkN "convocatoria" ; --- split: call for papers ; phone call
 lin call_V = mkV "llamar" ;
 lin call_V2 = mkV2 (mkV "llamar") ;
+lin call_after_V2 = prepV2 OP_call_V OP_after_Prep ; -- guess-p-verb
+lin call_around_V = advV OP_call_V OP_around_Adv ; -- guess-p-verb
+lin call_back_V2 = mkV2 (advV OP_call_V OP_back_Adv ) ; -- guess-p-verb
+lin call_for_V2V = variants {} ; -- guess-p-verb
+lin call_forth_V2 = mkV2 (advV OP_call_V OP_forth_Adv ) ; -- guess-p-verb
 lin call_in_V = mkV "llamar" | mkV "telefonear" ; --UWN
+lin call_in_V2 = prepV2 OP_call_V OP_in_Prep ; -- guess-p-verb
+lin call_off_V2 = prepV2 OP_call_V OP_off_Prep ; -- guess-p-verb
 lin call_on_V = mkV "suplicar" ; --UWN
+lin call_on_V2 = prepV2 OP_call_V OP_on_Prep ; -- guess-p-verb
+lin call_out_V2 = prepV2 OP_call_V OP_out_Prep ; -- guess-p-verb
+lin call_over_V = advV OP_call_V OP_over_Adv ; -- guess-p-verb
+lin call_round_V = advV OP_call_V OP_round_Adv ; -- guess-p-verb
+lin call_up_V2 = prepV2 OP_call_V OP_up_Prep ; -- guess-p-verb
 lin calliandra_N = mkN "calliandra" ; --UWN
 lin calligrapher_N = mkN "calígrafo" ; -- status=guess
 lin calligraphic_A = mkA "caligráfico" ; -- status=guess
@@ -4765,6 +4890,7 @@ lin cardroom_N = mkN "salón_de_juegos" ; --UWN
 lin cardsharp_N = mkN "tahúr" masculine ; -- status=guess
 lin care_N = mkN "atención" | mkN "cuidado" | mkN "esmero" ;
 lin care_V = mkV "cuidar" | mkV "atender" ;
+lin care_for_V2 = prepV2 OP_care_V OP_for_Prep ; -- guess-p-verb
 lin careen_V = mkV "carenar" ; -- status=guess, src=wikt
 lin careen_V2 = mkV2 (mkV "carenar") ; -- status=guess, src=wikt
 lin career_N = mkN "carrera" ;
@@ -4832,7 +4958,16 @@ lin carroty_A = mkA "rojizo" ; --UWN
 lin carry_N = mkN "equipaje de mano" ; -- status=guess
 lin carry_V = mkV "llevar" | mkV "cargar" ;
 lin carry_V2 = mkV2 (mkV "llevar") | mkV2 (mkV "cargar") ;
+lin carry_forward_V2 = mkV2 (advV OP_carry_V OP_forward_Adv ) ; -- guess-p-verb
+lin carry_off_V2 = prepV2 OP_carry_V OP_off_Prep ; -- guess-p-verb
+lin carry_on_V = advV OP_carry_V OP_on_Adv ; -- guess-p-verb
+lin carry_on_V2 = prepV2 OP_carry_V OP_on_Prep ; -- guess-p-verb
+lin carry_on_about_V2 = prepV2 (advV OP_carry_V OP_on_Adv ) OP_about_Prep ; -- guess-p-verb
+lin carry_on_with_V2 = prepV2 (advV OP_carry_V OP_on_Adv ) OP_with_Prep ; -- guess-p-verb
 lin carry_out_V = mkV "ejecutar" | mkV "realizar" ; --UWN
+lin carry_out_V2 = prepV2 OP_carry_V OP_out_Prep ; -- guess-p-verb
+lin carry_over_V2 = prepV2 OP_carry_V OP_over_Prep ; -- guess-p-verb
+lin carry_through_V2 = prepV2 OP_carry_V OP_through_Prep ; -- guess-p-verb
 lin carryall_N = mkN "bolsa_de_viaje" | mkN "bolso" ; --UWN
 lin carrycot_N = mkN "capazo" ; --UWN
 lin cart_N = mkN "carro" feminine | mkN "carreta" ; -- status=guess
@@ -4885,7 +5020,15 @@ lin cassowary_N = mkN "casuario" ; -- status=guess
 lin cast_N = mkN "reparto" | mkN "elenco" ; -- status=guess
 lin cast_V = mkV (mkV "poner") "en duda" ; -- status=guess
 lin cast_V2 = mkV2 (mkV (mkV "poner") "en duda") ; -- status=guess
+lin cast_about_for_V2 = prepV2 (advV OP_cast_V OP_about_Adv ) OP_for_Prep ; -- guess-p-verb
 lin cast_around_V = mkV "buscar" | mkV "conseguir" | mkV "investigar" | mkV "rebuscar" ; --UWN
+lin cast_around_for_V2 = prepV2 (advV OP_cast_V OP_around_Adv ) OP_for_Prep ; -- guess-p-verb
+lin cast_aside_V2 = mkV2 (advV OP_cast_V OP_aside_Adv ) ; -- guess-p-verb
+lin cast_off_V = advV OP_cast_V OP_off_Adv ; -- guess-p-verb
+lin cast_off_V2 = prepV2 OP_cast_V OP_off_Prep ; -- guess-p-verb
+lin cast_out_V2 = prepV2 OP_cast_V OP_out_Prep ; -- guess-p-verb
+lin cast_round_for_V2 = prepV2 (advV OP_cast_V OP_round_Adv ) OP_for_Prep ; -- guess-p-verb
+lin cast_up_V2 = prepV2 OP_cast_V OP_up_Prep ; -- guess-p-verb
 lin castaway_N = mkN "náufrago" ; -- status=guess
 lin caste_N = mkN "casta" ; -- status=guess
 lin castigate_V2 = mkV2 (mkV "castigar") ; -- status=guess, src=wikt
@@ -4931,6 +5074,14 @@ lin catcall_N = mkN "rechifla" | mkN "abucheo" ; -- status=guess status=guess
 lin catcall_V = mkV "rechiflar" | mkV "abuchear" ; -- status=guess, src=wikt status=guess, src=wikt
 lin catch_N = mkN "pega" | mkN "traba" | mkN "truco" | mkN "cuestión" feminine | mkN "trampa" ; -- status=guess
 lin catch_V2 = mkV2 (mkV "atrapar") ;
+lin catch_at_V2 = prepV2 (lin V OP_catch_V2) OP_at_Prep ; -- guess-p-verb
+lin catch_on_V = advV (lin V OP_catch_V2) OP_on_Adv ; -- guess-p-verb
+lin catch_out_V2 = prepV2 (lin V OP_catch_V2) OP_out_Prep ; -- guess-p-verb
+lin catch_up_V = advV (lin V OP_catch_V2) OP_up_Adv ; -- guess-p-verb
+lin catch_up_V2 = prepV2 (lin V OP_catch_V2) OP_up_Prep ; -- guess-p-verb
+lin catch_up_in_V2 = prepV2 (advV (lin V OP_catch_V2) OP_up_Adv ) OP_in_Prep ; -- guess-p-verb
+lin catch_up_on_V2 = prepV2 (advV (lin V OP_catch_V2) OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin catch_up_with_V2 = prepV2 (advV (lin V OP_catch_V2) OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
 lin catchall_N = mkN "trastero" ; --UWN
 lin catcher_N = mkN "receptor" masculine ; -- status=guess
 lin catchy_A = mkA "pegadizo" | mkA "fácil de recordar" | mkA "expresivo" ; -- status=guess status=guess status=guess
@@ -5178,6 +5329,7 @@ lin changchun_PN = mkPN "Changchun" ; -- status=guess src=geonames
 lin change_N = mkN "cambio" ;
 lin change_V = mkV "cambiar" ;
 lin change_V2 = mkV2 (mkV "cambiar") ;
+lin change_over_V2 = prepV2 OP_change_V OP_over_Prep ; -- guess-p-verb
 lin changeable_A = mkA "cambiable" | mkA "cambiante" ; -- status=guess status=guess
 lin changeableness_N = mkN "inestabilidad" ; --UWN
 lin changeful_A = mkA "variable" ; --UWN
@@ -5220,6 +5372,9 @@ lin charge_2_N = mkN "acusación" ;
 lin charge_N = mkN "carga" ;
 lin charge_V = mkV "cargar" ;
 lin charge_V2 = mkV2 (mkV "cargar") | mkV2 (mkV "atacar") ; --- split: charge a phone / accuse of crime
+lin charge_off_V = advV OP_charge_V OP_off_Adv ; -- guess-p-verb
+lin charge_up_V2 = prepV2 OP_charge_V OP_up_Prep ; -- guess-p-verb
+lin charge_with_V3 = variants {} ; -- guess-p-verb
 lin chariot_N = mkN "carro" feminine | mkN "carreta" ; -- status=guess status=guess
 lin charioteer_N = mkN "cochero" | mkN "auriga" masculine ; -- status=guess status=guess
 lin charisma_N = mkN "pegue" masculine ; -- status=guess
@@ -5272,6 +5427,21 @@ lin check_2_V2 = mkV2 (mkV "cotejar") ;
 lin check_N = mkN "cuenta" ; -- status=guess
 lin check_V = mkV "concordar" ; --their stories don't check
 lin check_V2 = mkV2 (mkV "comprobar") | mkV2 (mkV "examinar") | mkV2 (mkV "inspeccionar") ;
+lin check_back_V = advV OP_check_V OP_back_Adv ; -- guess-p-verb
+lin check_by_V2 = prepV2 OP_check_V OP_by_Prep ; -- guess-p-verb
+lin check_for_V2 = prepV2 OP_check_V OP_for_Prep ; -- guess-p-verb
+lin check_in_V = advV OP_check_V OP_in_Adv ; -- guess-p-verb
+lin check_in_V2 = prepV2 OP_check_V OP_in_Prep ; -- guess-p-verb
+lin check_into_V2 = prepV2 OP_check_V OP_into_Prep ; -- guess-p-verb
+lin check_off_V2 = prepV2 OP_check_V OP_off_Prep ; -- guess-p-verb
+lin check_on_V2 = prepV2 OP_check_V OP_on_Prep ; -- guess-p-verb
+lin check_out_V = advV OP_check_V OP_out_Adv ; -- guess-p-verb
+lin check_out_V2 = prepV2 OP_check_V OP_out_Prep ; -- guess-p-verb
+lin check_out_of_V2 = prepV2 (advV OP_check_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin check_over_V2 = prepV2 OP_check_V OP_over_Prep ; -- guess-p-verb
+lin check_through_V2 = prepV2 OP_check_V OP_through_Prep ; -- guess-p-verb
+lin check_up_on_V2 = prepV2 (advV OP_check_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin check_with_V2 = prepV2 OP_check_V OP_with_Prep ; -- guess-p-verb
 lin checkerboard_N = mkN "tablero" | mkN "tablero de damas" | mkN "damero" ; -- status=guess status=guess status=guess
 lin checkmate_N = mkN "jaque mate" | mkN "mate" masculine ; -- status=guess status=guess
 lin checkmate_V2 = mkV2 (mkV (mkV "dar") "jaque mate") | mkV2 (mkV (mkV "dar") "mate") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -5450,6 +5620,8 @@ lin chondrite_N = mkN "condrita" ; --UWN
 lin chondrule_N = mkN "cóndrulo" ; --UWN
 lin choose_V2 = mkV2 (escoger_V) | mkV2 (elegir_V) ;
 lin choose_VV = mkVV (escoger_V) | mkVV (elegir_V) ;
+lin choose_up_V = advV (lin V OP_choose_V2) OP_up_Adv ; -- guess-p-verb
+lin choose_up_V2 = prepV2 (lin V OP_choose_V2) OP_up_Prep ; -- guess-p-verb
 lin choosy_A = mkA "difícil de complacer" | mkA "exigente" | mkA "selectivo" ; -- status=guess status=guess status=guess
 lin chop_N = mkN "tajada" ; -- status=guess
 lin chop_V = mkV "cortar" | mkV "picar" | mkV "tajar" ; -- status=guess
@@ -5660,7 +5832,10 @@ lin clean_A = L.clean_A ;
 lin clean_N = mkN "dos tiempos" ; -- status=guess
 lin clean_V = mkV "limpiar" ; -- status=guess
 lin clean_V2 = mkV2 (mkV "limpiar") ; -- status=guess
+lin clean_out_V = advV OP_clean_V OP_out_Adv ; -- guess-p-verb
+lin clean_out_V2 = prepV2 OP_clean_V OP_out_Prep ; -- guess-p-verb
 lin clean_up_V = mkV "asearse" ; --UWN
+lin clean_up_V2 = prepV2 OP_clean_V OP_up_Prep ; -- guess-p-verb
 lin cleaner_N = variants {} ; --
 lin cleaning_N = mkN "limpieza" ; --UWN
 lin cleanliness_N = mkN "limpieza" ; -- status=guess
@@ -5670,8 +5845,13 @@ lin cleanup_N = mkN "limpieza" ; -- status=guess
 lin clear_A = mkA "claro" ;
 lin clear_V = mkV "aclararse" | mkV "despejarse" ;
 lin clear_V2 = mkV2 (mkV "clarificar") | mkV2 (mkV "aclarar") | mkV2 (mkV "despejar") | mkV2 (mkV "desobstruir") ; --- split
+lin clear_away_V = advV OP_clear_V OP_away_Adv ; -- guess-p-verb
+lin clear_away_V2 = mkV2 (advV OP_clear_V OP_away_Adv ) ; -- guess-p-verb
+lin clear_off_V = advV OP_clear_V OP_off_Adv ; -- guess-p-verb
 lin clear_out_V = mkV "limpiar" ; --UWN
+lin clear_out_V2 = prepV2 OP_clear_V OP_out_Prep ; -- guess-p-verb
 lin clear_up_V = mkV "aclarar" | mkV "despejar" | mkV "retirar" | mkV "solucionar" ; --UWN
+lin clear_up_V2 = prepV2 OP_clear_V OP_up_Prep ; -- guess-p-verb
 lin clearance_N = mkN "despeje" masculine ; -- status=guess
 lin clearing_N = mkN "desmonte" | mkN "claro" ; -- status=guess
 lin clearly_Adv = mkAdv "claramente" | adjAdv clear_A ; -- derived
@@ -5714,6 +5894,7 @@ lin climax_N = mkN "clímax" masculine ; -- status=guess
 lin climb_N = mkN "subida" | mkN "ascenso" feminine ; -- status=guess
 lin climb_V = mkV "escalar" ; -- status=guess
 lin climb_V2 = mkV2 (mkV "escalar") ; -- status=guess
+lin climb_down_V = advV OP_climb_V OP_down_Adv ; -- guess-p-verb
 lin climber_N = mkN "trepador" masculine ; -- status=guess
 lin clime_N = mkN "clima" ; --UWN
 lin clinch_N = mkN "abrazo" ; --UWN
@@ -5754,7 +5935,16 @@ lin close_Adv = mkAdv "cerca" ;
 lin close_N = mkN "fin" masculine | mkN "conclusión" feminine | mkN "cierre" feminine ; -- status=guess status=guess status=guess
 lin close_V = cerrar_V ;
 lin close_V2 = L.close_V2 ;
+lin close_down_V = advV OP_close_V OP_down_Adv ; -- guess-p-verb
+lin close_down_V2 = prepV2 OP_close_V OP_down_Prep ; -- guess-p-verb
 lin close_in_V = mkV "encerrar" | mkV "rodear" ; --UWN
+lin close_in_on_V2 = prepV2 (advV OP_close_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin close_in_upon_V2 = prepV2 (advV OP_close_V OP_in_Adv ) OP_upon_Prep ; -- guess-p-verb
+lin close_off_V2 = prepV2 OP_close_V OP_off_Prep ; -- guess-p-verb
+lin close_on_V2 = prepV2 OP_close_V OP_on_Prep ; -- guess-p-verb
+lin close_out_V2 = prepV2 OP_close_V OP_out_Prep ; -- guess-p-verb
+lin close_up_V = advV OP_close_V OP_up_Adv ; -- guess-p-verb
+lin close_up_V2 = prepV2 OP_close_V OP_up_Prep ; -- guess-p-verb
 lin closed_A = variants {} ; --
 lin closefisted_A = mkA "rancio" ; --UWN
 lin closely_Adv = adjAdv close_A ; -- -- derived
@@ -6068,12 +6258,53 @@ lin combustible_A = mkA "combustible" ; -- status=guess
 lin combustible_N = mkN "combustible" masculine ; -- status=guess
 lin combustion_N = mkN "combustión" | mkN "oxidación" feminine ; -- status=guess status=guess
 lin come_V = L.come_V ;
+lin come_about_V = advV OP_come_V OP_about_Adv ; -- guess-p-verb
+lin come_across_V = advV OP_come_V OP_across_Adv ; -- guess-p-verb
+lin come_across_V2 = prepV2 OP_come_V OP_across_Prep ; -- guess-p-verb
+lin come_along_V = advV OP_come_V OP_along_Adv ; -- guess-p-verb
+lin come_along_with_V2 = prepV2 (advV OP_come_V OP_along_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_apart_V = advV OP_come_V OP_apart_Adv ; -- guess-p-verb
+lin come_around_V = advV OP_come_V OP_around_Adv ; -- guess-p-verb
+lin come_around_to_V2 = prepV2 (advV OP_come_V OP_around_Adv ) OP_to_Prep ; -- guess-p-verb
 lin come_away_V = mkV "apartar" | mkV "desatar" ; --UWN
+lin come_back_V = advV OP_come_V OP_back_Adv ; -- guess-p-verb
+lin come_before_V2 = prepV2 OP_come_V OP_before_Prep ; -- guess-p-verb
 lin come_by_V = mkV "conseguir" ; --UWN
+lin come_by_V2 = prepV2 OP_come_V OP_by_Prep ; -- guess-p-verb
+lin come_down_V = advV OP_come_V OP_down_Adv ; -- guess-p-verb
+lin come_down_on_V2 = prepV2 (advV OP_come_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin come_down_upon_V2 = prepV2 (advV OP_come_V OP_down_Adv ) OP_upon_Prep ; -- guess-p-verb
+lin come_down_with_V2 = prepV2 (advV OP_come_V OP_down_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_forth_V = advV OP_come_V OP_forth_Adv ; -- guess-p-verb
+lin come_forth_with_V2 = prepV2 (advV OP_come_V OP_forth_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_forward_V = advV OP_come_V OP_forward_Adv ; -- guess-p-verb
+lin come_from_V2 = prepV2 OP_come_V OP_from_Prep ; -- guess-p-verb
+lin come_in_V = advV OP_come_V OP_in_Adv ; -- guess-p-verb
+lin come_in_V2 = prepV2 OP_come_V OP_in_Prep ; -- guess-p-verb
+lin come_in_for_V2 = prepV2 (advV OP_come_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin come_into_V2 = prepV2 OP_come_V OP_into_Prep ; -- guess-p-verb
+lin come_into_use_V = variants {} ; -- guess-p-verb
 lin come_off_V = mkV "resultar" | mkV "salir" ; --UWN
+lin come_off_V2 = prepV2 OP_come_V OP_off_Prep ; -- guess-p-verb
+lin come_off_it_V = variants {} ; -- guess-p-verb
+lin come_on_V = advV OP_come_V OP_on_Adv ; -- guess-p-verb
 lin come_out_V = mkV "salir" | mkV "surgir" ; --UWN
+lin come_out_in_V2 = prepV2 (advV OP_come_V OP_out_Adv ) OP_in_Prep ; -- guess-p-verb
+lin come_out_of_V2 = prepV2 (advV OP_come_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin come_out_with_V2 = prepV2 (advV OP_come_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
 lin come_over_V = mkV "llegar" ; --UWN
+lin come_over_V2 = prepV2 OP_come_V OP_over_Prep ; -- guess-p-verb
+lin come_round_V = advV OP_come_V OP_round_Adv ; -- guess-p-verb
+lin come_through_V = advV OP_come_V OP_through_Adv ; -- guess-p-verb
+lin come_through_with_V2 = prepV2 (advV OP_come_V OP_through_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_to_V = advV OP_come_V OP_to_Adv ; -- guess-p-verb
+lin come_to_V2 = prepV2 OP_come_V OP_to_Prep ; -- guess-p-verb
 lin come_up_V = mkV "aparecer" | mkV "despertar" | mkV "emerger" | mkV "surgir" ; --UWN
+lin come_up_against_V2 = prepV2 (advV OP_come_V OP_up_Adv ) OP_against_Prep ; -- guess-p-verb
+lin come_up_to_V2 = prepV2 (advV OP_come_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin come_up_with_V2 = prepV2 (advV OP_come_V OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_upon_V2 = prepV2 OP_come_V OP_upon_Prep ; -- guess-p-verb
+lin come_with_V2 = prepV2 OP_come_V OP_with_Prep ; -- guess-p-verb
 lin comedian_N = mkN "humorista" masculine ; -- status=guess
 lin comedown_N = mkN "degradación" ; --UWN
 lin comedy_N = mkN "comedia" ; -- status=guess
@@ -6639,6 +6870,7 @@ lin continuation_N = mkN "continuación" feminine ; -- status=guess
 lin continue_V = mkV "continuar" ;
 lin continue_V2 = mkV2 (mkV "continuar") ;
 lin continue_VV = mkVV (mkV "continuar") ;
+lin continue_on_V = advV OP_continue_V OP_on_Adv ; -- guess-p-verb
 lin continued_A = variants {} ; --
 lin continuing_A = variants {} ; --
 lin continuity_N = mkN "continuidad" feminine ; -- status=guess
@@ -6920,6 +7152,7 @@ lin cosmos_N = mkN "cosmos" masculine ; -- status=guess
 lin cost_N = mkN "costo" ;
 lin cost_V = costar_V ;
 lin cost_V2 = mkV2 (costar_V) ;
+lin cost_up_V2 = prepV2 OP_cost_V OP_up_Prep ; -- guess-p-verb
 lin costal_A = mkA "costal" ; --UWN
 lin costing_N = mkN "evaluación_de_costes" ; --UWN
 lin costive_A = mkA "estreñido" ; --UWN
@@ -6952,6 +7185,17 @@ lin counsellor_N = mkN "abogado_defensor" ; --UWN
 lin count_N = mkN "punto" | mkN "cargo" ; -- status=guess
 lin count_V = contar_V ; -- status=guess
 lin count_V2 = L.count_V2 ;
+lin count_against_V2 = prepV2 OP_count_V OP_against_Prep ; -- guess-p-verb
+lin count_among_V2 = prepV2 OP_count_V OP_among_Prep ; -- guess-p-verb
+lin count_down_V2 = prepV2 OP_count_V OP_down_Prep ; -- guess-p-verb
+lin count_for_V2 = prepV2 OP_count_V OP_for_Prep ; -- guess-p-verb
+lin count_in_V2 = prepV2 OP_count_V OP_in_Prep ; -- guess-p-verb
+lin count_off_V2 = prepV2 OP_count_V OP_off_Prep ; -- guess-p-verb
+lin count_on_V2 = prepV2 OP_count_V OP_on_Prep ; -- guess-p-verb
+lin count_out_V2 = prepV2 OP_count_V OP_out_Prep ; -- guess-p-verb
+lin count_towards_V2 = prepV2 OP_count_V OP_towards_Prep ; -- guess-p-verb
+lin count_up_V2 = prepV2 OP_count_V OP_up_Prep ; -- guess-p-verb
+lin count_upon_V2 = prepV2 OP_count_V OP_upon_Prep ; -- guess-p-verb
 lin countable_A = mkA "contable" ; -- status=guess
 lin countdown_N = mkN "cuenta atrás" | mkN "cuenta regresiva" ; -- status=guess status=guess
 lin countenance_N = mkN "apariencia" | mkN "semblante" | mkN "expresión" feminine | mkN "rostro" ; -- status=guess status=guess status=guess status=guess
@@ -7041,6 +7285,8 @@ lin covenant_N = mkN "convenio" | mkN "contrato" | mkN "alianza" | mkN "pacto" ;
 lin coventry_PN = mkPN "Coventry" ; -- status=guess src=geonames
 lin cover_N = mkN "tapa" | mkN "cubierta" | mkN "portada" ; -- status=guess
 lin cover_V2 = mkV2 (cubrir_V) ;
+lin cover_for_V2 = prepV2 (lin V OP_cover_V2) OP_for_Prep ; -- guess-p-verb
+lin cover_up_V2 = prepV2 (lin V OP_cover_V2) OP_up_Prep ; -- guess-p-verb
 lin coverage_N = mkN "cobertura" masculine ; -- status=guess
 lin coverall_N = mkN "braga" | mkN "mono" | mkN "overol" ; -- status=guess status=guess status=guess status=guess
 lin coverlet_N = mkN "cobertor" ; --UWN
@@ -7119,6 +7365,10 @@ lin crape_N = mkN "crepe" ; --UWN
 lin craps_N = mkN "craps" ; --UWN
 lin crash_N = mkN "choque" masculine ; -- status=guess
 lin crash_V = mkV "chocar" ; -- status=guess
+lin crash_dive_V = variants {} ; -- guess-p-verb
+lin crash_land_V = variants {} ; -- guess-p-verb
+lin crash_land_V2 = variants {} ; -- guess-p-verb
+lin crash_out_V = advV OP_crash_V OP_out_Adv ; -- guess-p-verb
 lin crass_A = mkA "craso" ; -- status=guess
 lin crater_N = mkN "cráter" masculine ; -- status=guess
 lin craton_N = mkN "cratón" ; --UWN
@@ -7244,6 +7494,13 @@ lin cross_A = mkA "enfadado" ; -- status=guess
 lin cross_N = mkN "cruce" masculine ; -- status=guess
 lin cross_V = atravesar_V ;
 lin cross_V2 = mkV2 (atravesar_V) ;
+lin cross_examine_V2 = variants {} ; -- guess-p-verb
+lin cross_fertilize_V2 = variants {} ; -- guess-p-verb
+lin cross_index_V2 = variants {} ; -- guess-p-verb
+lin cross_off_V2 = prepV2 OP_cross_V OP_off_Prep ; -- guess-p-verb
+lin cross_out_V2 = prepV2 OP_cross_V OP_out_Prep ; -- guess-p-verb
+lin cross_question_V2 = variants {} ; -- guess-p-verb
+lin cross_up_V2 = prepV2 OP_cross_V OP_up_Prep ; -- guess-p-verb
 lin crossbill_N = mkN "piquituerto" ; -- status=guess
 lin crossbow_N = mkN "ballesta" ; -- status=guess
 lin crossbreed_N = mkN "cruce" ; --UWN
@@ -7318,6 +7575,8 @@ lin crutch_N = mkN "muleta" ; -- status=guess
 lin cry_N = mkN "llanto" ; -- status=guess
 lin cry_V = mkV "llorar" ;
 lin cry_V2 = mkV2 (mkV "llorar") ;
+lin cry_off_V2 = prepV2 OP_cry_V OP_off_Prep ; -- guess-p-verb
+lin cry_out_V = advV OP_cry_V OP_out_Adv ; -- guess-p-verb
 lin crybaby_N = mkN "llorón" | mkN "llorona" ; -- status=guess status=guess
 lin cryesthesia_N = mkN "criestesia" ; --UWN
 lin crying_N = mkN "llanto" | mkN "lloro" ; --UWN
@@ -7479,9 +7738,23 @@ lin customs_N = mkN "aduana" masculine ; -- status=guess
 lin cut_N = mkN "corte" masculine ; -- status=guess
 lin cut_V = mkV "cortar" ;
 lin cut_V2 = L.cut_V2 ;
+lin cut_across_V2 = prepV2 OP_cut_V OP_across_Prep ; -- guess-p-verb
+lin cut_back_V2 = mkV2 (advV OP_cut_V OP_back_Adv ) ; -- guess-p-verb
+lin cut_back_on_V2 = prepV2 (advV OP_cut_V OP_back_Adv ) OP_on_Prep ; -- guess-p-verb
 lin cut_down_V = mkV "derribar" | mkV "tumbar" ; --UWN
+lin cut_down_V2 = prepV2 OP_cut_V OP_down_Prep ; -- guess-p-verb
+lin cut_down_on_V2 = prepV2 (advV OP_cut_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
 lin cut_in_V = mkV "interrumpir" ; --UWN
+lin cut_in_V2 = prepV2 OP_cut_V OP_in_Prep ; -- guess-p-verb
+lin cut_in_on_V2 = prepV2 (advV OP_cut_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin cut_it_out_V2 = variants {} ; -- guess-p-verb
 lin cut_off_V = mkV "cortar" ; --UWN
+lin cut_off_V2 = prepV2 OP_cut_V OP_off_Prep ; -- guess-p-verb
+lin cut_out_V = advV OP_cut_V OP_out_Adv ; -- guess-p-verb
+lin cut_out_V2 = prepV2 OP_cut_V OP_out_Prep ; -- guess-p-verb
+lin cut_out_on_V2 = prepV2 (advV OP_cut_V OP_out_Adv ) OP_on_Prep ; -- guess-p-verb
+lin cut_up_V = advV OP_cut_V OP_up_Adv ; -- guess-p-verb
+lin cut_up_V2 = prepV2 OP_cut_V OP_up_Prep ; -- guess-p-verb
 lin cutaneous_A = mkA "cutáneo" | mkA "dermatológico" | mkA "epidérmico" ; -- status=guess status=guess status=guess
 lin cute_A = mkA "lindo" | mkA "precioso" | mkA "gracioso" | mkA "chulo" | mkA "pituso" ; -- status=guess status=guess status=guess status=guess status=guess
 lin cuticle_N = mkN "cutícula" ; -- status=guess
@@ -7802,6 +8075,8 @@ lin decide_V = mkV "decidir" ;
 lin decide_V2 = mkV2 (mkV "decidir") ;
 lin decide_VS = mkVS (mkV "decidir") ;
 lin decide_VV = mkVV (mkV "decidir") ;
+lin decide_on_V2 = prepV2 OP_decide_V OP_on_Prep ; -- guess-p-verb
+lin decide_upon_V2 = prepV2 OP_decide_V OP_upon_Prep ; -- guess-p-verb
 lin decided_A = mkA "claro" | mkA "evidente" | mkA "indiscutible" | mkA "indudable" | mkA "innegable" | mkA "notable" | mkA "obvio" | mkA "patente" ; --UWN
 lin decidedly_Adv = adjAdv decided_A ; -- derived -- derived
 lin decidua_N = mkN "decidua" ; --UWN
@@ -8408,6 +8683,12 @@ lin didactically_Adv = mkAdv "didácticamente" ; -- status=guess
 lin didcot_PN = mkPN "Didcot" ; -- status=guess src=geonames
 lin die_N = mkN "cuña" ; -- status=guess
 lin die_V = L.die_V ;
+lin die_away_V = advV OP_die_V OP_away_Adv ; -- guess-p-verb
+lin die_back_V = advV OP_die_V OP_back_Adv ; -- guess-p-verb
+lin die_down_V = advV OP_die_V OP_down_Adv ; -- guess-p-verb
+lin die_for_V2 = prepV2 OP_die_V OP_for_Prep ; -- guess-p-verb
+lin die_off_V = advV OP_die_V OP_off_Adv ; -- guess-p-verb
+lin die_out_V = advV OP_die_V OP_out_Adv ; -- guess-p-verb
 lin diemaker_N = mkN "fresador" ; --UWN
 lin diencephalon_N = mkN "diencéfalo" ; -- status=guess
 lin dieresis_N = mkN "dialefa" ; --UWN
@@ -8440,6 +8721,10 @@ lin diffuse_V = mkV "difundir" ; --UWN
 lin diffusion_N = mkN "difusión" feminine ; -- status=guess
 lin dig_V = L.dig_V ;
 lin dig_V2 = mkV2 (mkV "adentrarse") ; -- status=guess
+lin dig_in_V = advV OP_dig_V OP_in_Adv ; -- guess-p-verb
+lin dig_into_V2 = prepV2 OP_dig_V OP_into_Prep ; -- guess-p-verb
+lin dig_out_V2 = prepV2 OP_dig_V OP_out_Prep ; -- guess-p-verb
+lin dig_up_V2 = prepV2 OP_dig_V OP_up_Prep ; -- guess-p-verb
 lin digest_N = mkN "resumen" masculine ; -- status=guess
 lin digest_V = digerir_V ; -- status=guess, src=wikt
 lin digest_V2 = mkV2 (digerir_V) ; -- status=guess, src=wikt
@@ -8845,6 +9130,7 @@ lin diverticulosis_N = mkN "enfermedad_diverticular" ; --UWN
 lin divest_V2 = mkV2 (mkV "privar") ; -- status=guess, src=wikt
 lin divide_V = mkV "dividir" ;
 lin divide_V2 = mkV2 (mkV "dividir") ;
+lin divide_up_V2 = prepV2 OP_divide_V OP_up_Prep ; -- guess-p-verb
 lin dividend_N = mkN "dividendo" ; -- status=guess
 lin divination_N = mkN "adivinación" feminine ; -- status=guess
 lin divine_A = mkA "divino" ; -- status=guess
@@ -8992,6 +9278,15 @@ lin double_A = mkA "doble" ; -- status=guess
 lin double_N = mkN "doble" feminine ; -- status=guess
 lin double_V = mkV "doblar" ; -- status=guess
 lin double_V2 = mkV2 (mkV "doblar") ; -- status=guess
+lin double_as_V2 = prepV2 OP_double_V OP_as_Prep ; -- guess-p-verb
+lin double_back_V = advV OP_double_V OP_back_Adv ; -- guess-p-verb
+lin double_check_V2 = variants {} ; -- guess-p-verb
+lin double_cross_V2 = variants {} ; -- guess-p-verb
+lin double_over_V = advV OP_double_V OP_over_Adv ; -- guess-p-verb
+lin double_park_V = variants {} ; -- guess-p-verb
+lin double_park_V2 = variants {} ; -- guess-p-verb
+lin double_up_V = advV OP_double_V OP_up_Adv ; -- guess-p-verb
+lin double_up_as_V2 = prepV2 (advV OP_double_V OP_up_Adv ) OP_as_Prep ; -- guess-p-verb
 lin doubler_N = mkN "duplicador" ; --UWN
 lin doublet_N = mkN "jubón" masculine ; -- status=guess
 lin doublethink_N = mkN "contradicción" | mkN "doblepensar" ; --UWN
@@ -9047,6 +9342,9 @@ lin drafting_N = mkN "dibujo técnico" ; -- status=guess
 lin drag_N = mkN "bocanada" ; -- status=guess
 lin drag_V = mkV "arrastrar" ; -- status=guess
 lin drag_V2 = mkV2 (mkV "arrastrar") ; -- status=guess
+lin drag_down_V = advV OP_drag_V OP_down_Adv ; -- guess-p-verb
+lin drag_in_V = advV OP_drag_V OP_in_Adv ; -- guess-p-verb
+lin drag_on_V = advV OP_drag_V OP_on_Adv ; -- guess-p-verb
 lin dragnet_N = mkN "red barredera" | mkN "red de arrastre" ; -- status=guess status=guess
 lin dragon_N = mkN "dragón" feminine | mkN "guiverno" ; -- status=guess
 lin dragonet_N = mkN "callionymidae" ; --UWN
@@ -9072,7 +9370,17 @@ lin draw_2_V2 = mkV2 (mkV "dibujar") ;
 lin draw_N = mkN "proyecto" ; -- status=guess
 lin draw_V = mkV "dibujar" ;
 lin draw_V2 = mkV2 (mkV "dibujar") ;
+lin draw_back_V2 = mkV2 (advV OP_draw_V OP_back_Adv ) ; -- guess-p-verb
+lin draw_down_V2 = prepV2 OP_draw_V OP_down_Prep ; -- guess-p-verb
+lin draw_even_V = advV OP_draw_V OP_even_Adv ; -- guess-p-verb
+lin draw_in_V = advV OP_draw_V OP_in_Adv ; -- guess-p-verb
+lin draw_into_V2 = prepV2 OP_draw_V OP_into_Prep ; -- guess-p-verb
+lin draw_off_V = advV OP_draw_V OP_off_Adv ; -- guess-p-verb
+lin draw_on_V = advV OP_draw_V OP_on_Adv ; -- guess-p-verb
+lin draw_on_V2 = prepV2 OP_draw_V OP_on_Prep ; -- guess-p-verb
+lin draw_out_V2 = prepV2 OP_draw_V OP_out_Prep ; -- guess-p-verb
 lin draw_up_V = mkV "componer" ; --UWN
+lin draw_up_V2 = prepV2 OP_draw_V OP_up_Prep ; -- guess-p-verb
 lin drawback_N = mkN "desventaja" ; -- status=guess
 lin drawbridge_N = mkN "puente levadizo" ; -- status=guess
 lin drawer_N = mkN "cajón" masculine ; -- status=guess
@@ -9088,6 +9396,8 @@ lin dreadnought_N = mkN "dreadnought" ; --UWN
 lin dream_N = mkN "sueño" ;
 lin dream_V = soñar_V ; -- status=guess
 lin dream_V2 = mkV2 (soñar_V) ; -- status=guess
+lin dream_of_V2 = prepV2 OP_dream_V OP_of_Prep ; -- guess-p-verb
+lin dream_up_V2 = prepV2 OP_dream_V OP_up_Prep ; -- guess-p-verb
 lin dreamer_N = mkN "soñador" | mkN "soñadora" ; -- status=guess status=guess
 lin dreamworld_N = mkN "mundo de los sueños" ; -- status=guess
 lin dredge_N = mkN "draga" ; -- status=guess
@@ -9099,6 +9409,10 @@ lin dresden_PN = mkPN "Dresde" ; -- status=guess src=geonames
 lin dress_N = mkN "vestido" | mkN "traje" masculine ; -- status=guess
 lin dress_V = vestir_V ; -- status=guess
 lin dress_V2 = mkV2 (vestir_V) ; -- status=guess
+lin dress_down_V = advV OP_dress_V OP_down_Adv ; -- guess-p-verb
+lin dress_down_V2 = prepV2 OP_dress_V OP_down_Prep ; -- guess-p-verb
+lin dress_up_V = advV OP_dress_V OP_up_Adv ; -- guess-p-verb
+lin dress_up_V2 = prepV2 OP_dress_V OP_up_Prep ; -- guess-p-verb
 lin dressage_N = mkN "adiestramiento" | mkN "doma clásica" ; -- status=guess status=guess
 lin dresser_N = mkN "cómoda" ; -- status=guess
 lin dressing_N = mkN "vendaje" masculine ; -- status=guess
@@ -9119,6 +9433,7 @@ lin drill_V2 = mkV2 (mkV "averiguar") ; -- status=guess
 lin drink_N = mkN "bebida" ;
 lin drink_V = mkV "beber" | mkV "tomar" ;
 lin drink_V2 = L.drink_V2 ;
+lin drink_up_V2 = prepV2 OP_drink_V OP_up_Prep ; -- guess-p-verb
 lin drinkable_A = mkA "potable" ; -- status=guess
 lin drinker_N = mkN "bebedor" ; --UWN
 lin drinking_N = mkN "absorbente" | mkN "bombilla" | mkN "calimete" | mkN "caña" | mkN "cañita" | mkN "carrizo" | mkN "pajilla" | mkN "pajita" | mkN "pitillo" | mkN "popote" | mkN "sorbete" | mkN "sorbeto" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess
@@ -9131,7 +9446,14 @@ lin drive_N = variants {} ; --
 lin drive_V = mkV "conducir" ;
 lin drive_V2 = mkV2 (mkV "conducir") ;
 lin drive_V2V = mkV2V (mkV "conducir") ;
+lin drive_away_V2 = mkV2 (advV OP_drive_V OP_away_Adv ) ; -- guess-p-verb
+lin drive_back_V2 = mkV2 (advV OP_drive_V OP_back_Adv ) ; -- guess-p-verb
+lin drive_by_V = advV OP_drive_V OP_by_Adv ; -- guess-p-verb
+lin drive_down_V = advV OP_drive_V OP_down_Adv ; -- guess-p-verb
+lin drive_off_V = advV OP_drive_V OP_off_Adv ; -- guess-p-verb
+lin drive_out_V2 = prepV2 OP_drive_V OP_out_Prep ; -- guess-p-verb
 lin drive_up_V = mkV "rodar" ; --UWN
+lin drive_up_V2 = prepV2 OP_drive_V OP_up_Prep ; -- guess-p-verb
 lin drivel_N = mkN "tonterías" feminine | mkN "chorradas" feminine | mkN "babosadas" feminine | mkN "leseras" feminine | mkN "macanas" feminine | mkN "monserga" ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin drivel_V = mkV "babear" ; -- status=guess, src=wikt
 lin driverMasc_N = mkN "conductor" ;
@@ -9152,7 +9474,22 @@ lin droop_N = mkN "comba" ; --UWN
 lin drop_N = mkN "gota" ; -- status=guess
 lin drop_V = caer_V | (mkV "descender") ;
 lin drop_V2 = mkV2 caer_V | mkV2 (mkV "descender") ;
+lin drop_around_V = advV OP_drop_V OP_around_Adv ; -- guess-p-verb
+lin drop_around_V2 = prepV2 OP_drop_V OP_around_Prep ; -- guess-p-verb
 lin drop_away_V = mkV "agravarse" | mkV "bajar" | mkV "deteriorar" | mkV "empeorar" ; --UWN
+lin drop_back_V = advV OP_drop_V OP_back_Adv ; -- guess-p-verb
+lin drop_by_V = advV OP_drop_V OP_by_Adv ; -- guess-p-verb
+lin drop_in_V = advV OP_drop_V OP_in_Adv ; -- guess-p-verb
+lin drop_in_on_V2 = prepV2 (advV OP_drop_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin drop_off_V = advV OP_drop_V OP_off_Adv ; -- guess-p-verb
+lin drop_off_V2 = prepV2 OP_drop_V OP_off_Prep ; -- guess-p-verb
+lin drop_out_V = advV OP_drop_V OP_out_Adv ; -- guess-p-verb
+lin drop_out_of_V2 = prepV2 (advV OP_drop_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin drop_over_V = advV OP_drop_V OP_over_Adv ; -- guess-p-verb
+lin drop_round_V = advV OP_drop_V OP_round_Adv ; -- guess-p-verb
+lin drop_round_V2 = prepV2 OP_drop_V OP_round_Prep ; -- guess-p-verb
+lin drop_someone_in_it_V2 = variants {} ; -- guess-p-verb
+lin drop_through_V = advV OP_drop_V OP_through_Adv ; -- guess-p-verb
 lin droplet_N = mkN "gotita" ; -- status=guess
 lin dropout_N = mkN "estudiante de carrera trunca" ; -- status=guess
 lin droppings_N = mkN "estiércol" ; --UWN
@@ -9186,7 +9523,12 @@ lin dry_A = L.dry_A ;
 lin dry_N = mkN "tintorería" ; -- status=guess
 lin dry_V = mkV "secarse" ; -- status=guess
 lin dry_V2 = mkV2 (mkV "secarse") ; -- status=guess
+lin dry_clean_V2 = mkV2 (advV OP_dry_V OP_clean_Adv ) ; -- guess-p-verb
+lin dry_off_V2 = prepV2 OP_dry_V OP_off_Prep ; -- guess-p-verb
 lin dry_out_V = mkV "secar" ; --UWN
+lin dry_out_V2 = prepV2 OP_dry_V OP_out_Prep ; -- guess-p-verb
+lin dry_up_V = advV OP_dry_V OP_up_Adv ; -- guess-p-verb
+lin dry_up_V2 = prepV2 OP_dry_V OP_up_Prep ; -- guess-p-verb
 lin dryad_N = mkN "driade" ; --UWN
 lin dryer_N = mkN "secadora" ; -- status=guess
 lin dryness_N = mkN "aridez" feminine ; -- status=guess
@@ -9382,6 +9724,8 @@ lin earwig_N = mkN "tijereta" ; -- status=guess
 lin ease_N = variants {} ; --
 lin ease_V = variants {} ; --
 lin ease_V2 = variants {} ; --
+lin ease_off_V2 = prepV2 OP_ease_V OP_off_Prep ; -- guess-p-verb
+lin ease_up_V = advV OP_ease_V OP_up_Adv ; -- guess-p-verb
 lin easel_N = mkN "caballete" masculine | mkN "atril" masculine ; -- status=guess status=guess
 lin easement_N = mkN "servidumbre" feminine ; -- status=guess
 lin easily_Adv = mkAdv "fácilmente" | adjAdv easy_A ; -- derived
@@ -9399,6 +9743,12 @@ lin easy_Adv = mkAdv "fácil" | mkAdv "fácilmente" ; --UWN
 lin easygoing_A = mkA "calmado" | mkA "relajado" ; -- status=guess status=guess
 lin eat_V = mkV "comer" ;
 lin eat_V2 = L.eat_V2 ;
+lin eat_away_V = advV OP_eat_V OP_away_Adv ; -- guess-p-verb
+lin eat_away_V2 = mkV2 (advV OP_eat_V OP_away_Adv ) ; -- guess-p-verb
+lin eat_in_V = advV OP_eat_V OP_in_Adv ; -- guess-p-verb
+lin eat_into_V2 = prepV2 OP_eat_V OP_into_Prep ; -- guess-p-verb
+lin eat_out_V = advV OP_eat_V OP_out_Adv ; -- guess-p-verb
+lin eat_up_V2 = prepV2 OP_eat_V OP_up_Prep ; -- guess-p-verb
 lin eater_N = mkN "comedor" masculine ; -- status=guess
 lin eau_de_cologne_N = mkN "agua_de_colonia" | mkN "colonia" ; --UWN
 lin eaves_N = mkN "alero" ; -- status=guess
@@ -9821,6 +10171,10 @@ lin end_1_N = mkN "fin" | mkN "final" ;
 lin end_2_N = mkN "extremo" ;
 lin end_V = mkV "acabarse" ;
 lin end_V2 = mkV2 (mkV "acabar") ;
+lin end_in_V2 = prepV2 OP_end_V OP_in_Prep ; -- guess-p-verb
+lin end_tail_V2 = variants {} ; -- guess-p-verb
+lin end_up_V2 = prepV2 OP_end_V OP_up_Prep ; -- guess-p-verb
+lin end_up_with_V2 = prepV2 (advV OP_end_V OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
 lin endameba_N = mkN "Entameba" ; --UWN
 lin endearment_N = mkN "cariño" | mkN "ternura" | mkN "afecto" ; -- status=guess status=guess status=guess
 lin endeavour_N = mkN "esfuerza" ; -- status=guess
@@ -9943,6 +10297,8 @@ lin entasis_N = mkN "éntasis" feminine ; -- status=guess
 lin entelechy_N = mkN "entelequia" ; -- status=guess
 lin enter_V = mkV "entrar" ;
 lin enter_V2 = mkV2 (mkV "entrar") ;
+lin enter_for_V2 = prepV2 OP_enter_V OP_for_Prep ; -- guess-p-verb
+lin enter_into_V2 = prepV2 OP_enter_V OP_into_Prep ; -- guess-p-verb
 lin enteritis_N = mkN "enteritis" feminine ; -- status=guess
 lin enterobiasis_N = mkN "enterobiasis" ; --UWN
 lin enterolithiasis_N = mkN "enterolitiasis" ; --UWN
@@ -10531,6 +10887,7 @@ lin expire_VS = mkVS (vencer_V) | mkVS (mkV "caducar") ; -- status=guess, src=wi
 lin expiry_N = mkN "desaparición" | mkN "muerte" | mkN "tránsito" ; --UWN
 lin explain_V2 = mkV2 (mkV "explicar") ;
 lin explain_VS = mkVS (mkV "explicar") ;
+lin explain_away_V = advV (lin V OP_explain_V2) OP_away_Adv ; -- guess-p-verb
 lin explanans_N = mkN "explanans" ; --UWN
 lin explanation_N = mkN "explicación" feminine ;
 lin explanatory_A = mkA "explicativo" ; --UWN
@@ -10671,6 +11028,8 @@ lin facade_N = variants {} ; --
 lin face_N = mkN "cara" | mkN "rostro" | mkN "mueca" ;
 lin face_V = mkV "enfrentar" | mkV "encarar" ;
 lin face_V2 = mkV2 (mkV "enfrentar") | mkV2 (mkV "encarar") ;
+lin face_off_V2 = prepV2 OP_face_V OP_off_Prep ; -- guess-p-verb
+lin face_up_to_V2 = prepV2 (advV OP_face_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin faceless_A = mkA "anónimo" ; --UWN
 lin facet_N = mkN "faceta" ; -- status=guess
 lin facetious_A = mkA "agudo" | mkA "gracioso" | mkA "ingenioso" | mkA "salado" ; --UWN
@@ -10733,7 +11092,22 @@ lin fall_1_N = variants {} ; --
 lin fall_2_N = variants {} ; --
 lin fall_N = mkN "caída" ; -- status=guess
 lin fall_V = caer_V | morir_V ;
+lin fall_about_V = advV OP_fall_V OP_about_Adv ; -- guess-p-verb
+lin fall_apart_V = advV OP_fall_V OP_apart_Adv ; -- guess-p-verb
+lin fall_back_V = advV OP_fall_V OP_back_Adv ; -- guess-p-verb
+lin fall_back_on_V2 = prepV2 (advV OP_fall_V OP_back_Adv ) OP_on_Prep ; -- guess-p-verb
 lin fall_behind_V = mkV "abandonar" | mkV "perder" | mkV "replegarse" | mkV "retirarse" | mkV "retroceder" ; --UWN
+lin fall_behind_in_V2 = prepV2 (advV OP_fall_V OP_behind_Adv ) OP_in_Prep ; -- guess-p-verb
+lin fall_down_V = advV OP_fall_V OP_down_Adv ; -- guess-p-verb
+lin fall_for_V2 = prepV2 OP_fall_V OP_for_Prep ; -- guess-p-verb
+lin fall_in_V = advV OP_fall_V OP_in_Adv ; -- guess-p-verb
+lin fall_into_V2 = prepV2 OP_fall_V OP_into_Prep ; -- guess-p-verb
+lin fall_off_V = advV OP_fall_V OP_off_Adv ; -- guess-p-verb
+lin fall_out_V = advV OP_fall_V OP_out_Adv ; -- guess-p-verb
+lin fall_out_with_V2 = prepV2 (advV OP_fall_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
+lin fall_over_V = advV OP_fall_V OP_over_Adv ; -- guess-p-verb
+lin fall_through_V = advV OP_fall_V OP_through_Adv ; -- guess-p-verb
+lin fall_under_V2 = prepV2 OP_fall_V OP_under_Prep ; -- guess-p-verb
 lin fallacious_A = mkA "erróneo" ; -- status=guess
 lin fallacy_N = mkN "falacia" ; -- status=guess
 lin fallibility_N = mkN "falibilidad" feminine ; -- status=guess
@@ -10894,6 +11268,9 @@ lin feeblemindedness_N = mkN "debilidad_mental" ; --UWN
 lin feed_N = mkN "alimentar" ; -- status=guess
 lin feed_V = mkV "alimentar" | mkV (mkV "dar") "de comer" ; -- status=guess
 lin feed_V2 = mkV2 (mkV "alimentar") | mkV2 (mkV (mkV "dar") "de comer") ; -- status=guess
+lin feed_off_V2 = prepV2 OP_feed_V OP_off_Prep ; -- guess-p-verb
+lin feed_on_V2 = prepV2 OP_feed_V OP_on_Prep ; -- guess-p-verb
+lin feed_up_V2 = prepV2 OP_feed_V OP_up_Prep ; -- guess-p-verb
 lin feedback_N = mkN "retroacción" | mkN "realimentación" | mkN "retroalimentación" ; -- status=guess
 lin feeding_N = mkN "biberón" | mkN "mamadera" ; -- status=guess status=guess
 lin feel_N = mkN "caricia" ; -- status=guess
@@ -10901,6 +11278,9 @@ lin feel_V = mkV "sentir" | parecer_V ;
 lin feel_V2 = mkV2 (mkV "sentir") | mkV2 (parecer_V) ;
 lin feel_VA = mkVA (parecer_V) ;
 lin feel_VS = mkVS (parecer_V) ;
+lin feel_out_V = advV OP_feel_V OP_out_Adv ; -- guess-p-verb
+lin feel_up_V2 = prepV2 OP_feel_V OP_up_Prep ; -- guess-p-verb
+lin feel_up_to_V2 = prepV2 (advV OP_feel_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin feeler_N = mkN "antena" ; -- status=guess
 lin feeling_N = mkN "sentimiento" | mkN "emoción" feminine ;
 lin feign_V2 = mkV2 (mkV "inventar") | mkV2 (mkV "imaginar") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -11049,6 +11429,10 @@ lin fig_N = mkN "higo" | mkN "breva" ; -- status=guess
 lin fight_N = mkN "lucha" | mkN "lucha" ; -- status=guess
 lin fight_V = mkV "pelear" | mkV "luchar" ;
 lin fight_V2 = L.fight_V2 ;
+lin fight_back_V = advV OP_fight_V OP_back_Adv ; -- guess-p-verb
+lin fight_back_V2 = mkV2 (advV OP_fight_V OP_back_Adv ) ; -- guess-p-verb
+lin fight_it_out_V2 = variants {} ; -- guess-p-verb
+lin fight_off_V2 = prepV2 OP_fight_V OP_off_Prep ; -- guess-p-verb
 lin fighter_N = mkN "caza" ; -- status=guess
 lin fighting_N = mkN "luchador de Siam" ; -- status=guess
 lin figment_N = mkN "quimera" | mkN "espejismo" | mkN "ensueño" | mkN "ficción" feminine ; -- status=guess status=guess status=guess status=guess
@@ -11058,6 +11442,9 @@ lin figure_2_N = mkN "cifra" ;
 lin figure_N = mkN "figura" ;
 lin figure_V = mkV "ocurrirse" ; -- status=guess
 lin figure_VS = mkVS (mkV "ocurrirse") ; -- status=guess
+lin figure_on_V2 = prepV2 OP_figure_V OP_on_Prep ; -- guess-p-verb
+lin figure_out_V2 = prepV2 OP_figure_V OP_out_Prep ; -- guess-p-verb
+lin figure_up_V2 = prepV2 OP_figure_V OP_up_Prep ; -- guess-p-verb
 lin figurehead_N = mkN "mascarón de proa" ; -- status=guess
 lin fiji_PN = mkPN "Fiyi" ; -- status=guess src=geonames
 lin filaggrin_N = mkN "filagrina" ; --UWN
@@ -11069,6 +11456,8 @@ lin filch_V2 = mkV2 (mkV "hurtar") ; -- status=guess, src=wikt
 lin file_N = mkN "archivo" | mkN "fichero" ;
 lin file_V = mkV "limar" ; -- status=guess
 lin file_V2 = mkV2 (mkV "limar") ; -- status=guess
+lin file_away_V2 = mkV2 (advV OP_file_V OP_away_Adv ) ; -- guess-p-verb
+lin file_for_V2 = prepV2 OP_file_V OP_for_Prep ; -- guess-p-verb
 lin filefish_N = mkN "monacanthidae" ; --UWN
 lin filename_N = mkN "nombre_del_archivo" ; --UWN
 lin filial_A = mkA "filial" ; -- status=guess
@@ -11079,6 +11468,13 @@ lin filing_N = mkN "archivero" ; -- status=guess
 lin fill_N = mkN "relleno" ; -- status=guess
 lin fill_V = mkV "llenar" | mkV "llenarse" ;
 lin fill_V2 = mkV2 (mkV "llenar") ;
+lin fill_in_V = advV OP_fill_V OP_in_Adv ; -- guess-p-verb
+lin fill_in_V2 = prepV2 OP_fill_V OP_in_Prep ; -- guess-p-verb
+lin fill_in_for_V2 = prepV2 (advV OP_fill_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin fill_in_on_V3 = variants {} ; -- guess-p-verb
+lin fill_out_V = advV OP_fill_V OP_out_Adv ; -- guess-p-verb
+lin fill_out_V2 = prepV2 OP_fill_V OP_out_Prep ; -- guess-p-verb
+lin fill_up_V2 = prepV2 OP_fill_V OP_up_Prep ; -- guess-p-verb
 lin fillet_N = mkN "filete" masculine ; -- status=guess
 lin fillip_N = mkN "papirote" ; -- status=guess
 lin filly_N = mkN "potra" ; -- status=guess
@@ -11114,6 +11510,8 @@ lin find_V = encontrar_V | creer_V ; --- split
 lin find_V2 = L.find_V2 ;
 lin find_V2A = mkV2A (creer_V) | mkV2A (encontrar_V) ;
 lin find_VS = mkVS (creer_V) | mkVS (encontrar_V) ;
+lin find_out_V = advV OP_find_V OP_out_Adv ; -- guess-p-verb
+lin find_out_V2 = prepV2 OP_find_V OP_out_Prep ; -- guess-p-verb
 lin finding_N = variants {} ; --
 lin fine_A = mkA "fino" ;
 lin fine_N = mkN "multa" ; -- status=guess
@@ -11131,7 +11529,10 @@ lin fingertip_N = mkN "yema del dedo" ; -- status=guess
 lin finish_N = mkN "meta" | mkN "fin" masculine ; -- status=guess
 lin finish_V = mkV "terminar" | mkV "acabar" ;
 lin finish_V2 = mkV2 (mkV "terminar") | mkV2 (mkV "acabar") ;
+lin finish_off_V2 = prepV2 OP_finish_V OP_off_Prep ; -- guess-p-verb
 lin finish_up_V = mkV "acabar" | mkV "terminar" ; --UWN
+lin finish_up_with_V2 = prepV2 (advV OP_finish_V OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
+lin finish_with_V2 = prepV2 OP_finish_V OP_with_Prep ; -- guess-p-verb
 lin finished_A = variants {} ; --
 lin finite_A = mkA "limitado" | mkA "finito" ; -- status=guess status=guess
 lin finiteness_N = mkN "finitud" ; --UWN
@@ -11146,6 +11547,11 @@ lin fire_2_N = L.fire_N ; --- info missing in senses-in-Dictionary
 lin fire_N = L.fire_N ;
 lin fire_V = mkV "disparar" | mkV "descargar" ; -- status=guess
 lin fire_V2 = mkV2 (mkV "disparar") | mkV2 (mkV "descargar") ; -- status=guess
+lin fire_away_V = advV OP_fire_V OP_away_Adv ; -- guess-p-verb
+lin fire_back_V = advV OP_fire_V OP_back_Adv ; -- guess-p-verb
+lin fire_off_V2 = prepV2 OP_fire_V OP_off_Prep ; -- guess-p-verb
+lin fire_up_V = advV OP_fire_V OP_up_Adv ; -- guess-p-verb
+lin fire_up_V2 = prepV2 OP_fire_V OP_up_Prep ; -- guess-p-verb
 lin firearm_N = mkN "arma de fuego" ; -- status=guess
 lin firebrand_N = mkN "tea" | mkN "tizón" masculine ; -- status=guess status=guess
 lin firebreak_N = mkN "cortafuegos" ; --UWN
@@ -11195,6 +11601,12 @@ lin fit_N = mkN "convulción" feminine ; -- status=guess
 lin fit_V = mkV "caber" ;
 lin fit_V2 = mkV2 (mkV "ajustar") ;
 lin fit_in_V = mkV "encajar" ; --UWN
+lin fit_in_V2 = prepV2 OP_fit_V OP_in_Prep ; -- guess-p-verb
+lin fit_in_with_V2 = prepV2 (advV OP_fit_V OP_in_Adv ) OP_with_Prep ; -- guess-p-verb
+lin fit_into_V2 = prepV2 OP_fit_V OP_into_Prep ; -- guess-p-verb
+lin fit_out_V2 = prepV2 OP_fit_V OP_out_Prep ; -- guess-p-verb
+lin fit_out_with_V2 = prepV2 (advV OP_fit_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
+lin fit_up_V2 = prepV2 OP_fit_V OP_up_Prep ; -- guess-p-verb
 lin fitful_A = mkA "irregular" | mkA "inestable" ; -- status=guess status=guess
 lin fitness_N = mkN "capacidad" feminine | mkN "nivel físico" ; -- status=guess
 lin fitting_N = mkN "prueba" ; --UWN
@@ -11204,6 +11616,7 @@ lin fiver_N = mkN "billete_de_cinco" ; --UWN
 lin fix_N = mkN "aprieto" ; -- status=guess
 lin fix_V = mkV "fijar" ; -- status=guess
 lin fix_V2 = mkV2 (mkV "fijar") ; -- status=guess
+lin fix_up_V2 = prepV2 OP_fix_V OP_up_Prep ; -- guess-p-verb
 lin fixation_N = mkN "obsesión" feminine ; -- status=guess
 lin fixed_A = variants {} ; --
 lin fixedly_Adv = adjAdv fixed_A ; -- derived
@@ -11420,6 +11833,13 @@ lin fly_A = mkA "listo" | mkA "vivo" | mkA "pillo" | mkA "astuto" ; -- status=gu
 lin fly_N = mkN "vuelo" ; -- status=guess
 lin fly_V = L.fly_V ;
 lin fly_V2 = mkV2 L.fly_V | mkV2 (mkV hacer_V "volar") ;
+lin fly_about_V = advV OP_fly_V OP_about_Adv ; -- guess-p-verb
+lin fly_around_V = advV OP_fly_V OP_around_Adv ; -- guess-p-verb
+lin fly_at_V2 = prepV2 OP_fly_V OP_at_Prep ; -- guess-p-verb
+lin fly_by_V = advV OP_fly_V OP_by_Adv ; -- guess-p-verb
+lin fly_fish_V = variants {} ; -- guess-p-verb
+lin fly_into_V2 = prepV2 OP_fly_V OP_into_Prep ; -- guess-p-verb
+lin fly_out_V = advV OP_fly_V OP_out_Adv ; -- guess-p-verb
 lin flyblown_A = mkA "pútrido" ; -- status=guess
 lin flyer_N = mkN "volante" masculine ; -- status=guess
 lin flytrap_N = mkN "atrapamoscas" ; --UWN
@@ -11431,6 +11851,7 @@ lin focal_A = mkA "focal" ; -- status=guess
 lin focus_N = mkN "foco de atención" ; -- status=guess
 lin focus_V = mkV "enfocar" ; -- status=guess
 lin focus_V2 = mkV2 (mkV "enfocar") ; -- status=guess
+lin focus_on_V2 = prepV2 OP_focus_V OP_on_Prep ; -- guess-p-verb
 lin fodder_N = mkN "forraje" | mkN "pienso" ; -- status=guess status=guess
 lin foetal_A = mkA "fetal" ; --UWN
 lin fog_N = L.fog_N ;
@@ -11459,7 +11880,10 @@ lin follies_N = mkN "teatro_de_revista" ; --UWN
 lin follow_V = seguir_V ;
 lin follow_V2 = mkV2 (seguir_V) ;
 lin follow_VS = mkVS (seguir_V) ;
+lin follow_on_V = advV OP_follow_V OP_on_Adv ; -- guess-p-verb
+lin follow_on_from_V2 = prepV2 (advV OP_follow_V OP_on_Adv ) OP_from_Prep ; -- guess-p-verb
 lin follow_through_V = mkV "ejecutar" | mkV "realizar" ; --UWN
+lin follow_up_V2 = prepV2 OP_follow_V OP_up_Prep ; -- guess-p-verb
 lin follower_N = mkN "imitador" ; -- status=guess
 lin following_A = mkA "siguiente" ;
 lin following_Prep = variants {} ; --
@@ -11510,6 +11934,10 @@ lin force_V = forzar_V ;
 lin force_V2 = mkV2 (forzar_V) ;
 lin force_V2V = mkV2V (forzar_V) ;
 lin force_VS = mkVS forzar_V ;
+lin force_feed_V2 = variants {} ; -- guess-p-verb
+lin force_land_V = variants {} ; -- guess-p-verb
+lin force_land_V2 = variants {} ; -- guess-p-verb
+lin force_out_V = advV OP_force_V OP_out_Adv ; -- guess-p-verb
 lin forceful_A = mkA "enérgico" ; --UWN
 lin forcemeat_N = mkN "farsa" ; --UWN
 lin forceps_N = mkN "fórceps" masculine ; -- status=guess
@@ -11718,6 +12146,7 @@ lin free_A = mkA "libre" ;
 lin free_N = mkN "carta blanca" | mkN "manos libres" ; -- status=guess status=guess
 lin free_V2 = mkV2 (mkV "librar") ; -- status=guess
 lin free_V2V = mkV2V (mkV "librar") ; -- status=guess
+lin free_up_V2 = prepV2 (lin V OP_free_V2) OP_up_Prep ; -- guess-p-verb
 lin freedom_N = mkN "libertad" feminine ;
 lin freelance_N = mkN "trabajador autónomo" | mkN "freelance" ; -- status=guess status=guess
 lin freelancer_N = mkN "trabajador independiente" | mkN "trabajadora independiente" ; -- status=guess status=guess
@@ -11768,6 +12197,8 @@ lin frieze_N = mkN "friso" ; -- status=guess
 lin frigate_N = mkN "fragata" ; -- status=guess
 lin fright_N = mkN "susto" ; -- status=guess
 lin frighten_V2 = mkV2 (mkV "atemorizar") ; -- status=guess
+lin frighten_away_V2 = mkV2 (advV (lin V OP_frighten_V2) OP_away_Adv ) ; -- guess-p-verb
+lin frighten_off_V2 = prepV2 (lin V OP_frighten_V2) OP_off_Prep ; -- guess-p-verb
 lin frightened_A = variants {} ; --
 lin frightening_A = mkA "terrible" ; -- status=guess
 lin frightful_A = mkA "temible" ; -- status=guess
@@ -11957,6 +12388,7 @@ lin gaillardia_N = mkN "gaillardia" ; --UWN
 lin gain_N = mkN "ganancia" ; -- status=guess
 lin gain_V = mkV "ganar" ;
 lin gain_V2 = mkV2 (mkV "ganar") ;
+lin gain_back_V = advV OP_gain_V OP_back_Adv ; -- guess-p-verb
 lin gainsay_V2 = mkV2 (mkV "impugnar") ; -- status=guess, src=wikt
 lin gainsborough_PN = mkPN "Gainsborough" ; -- status=guess src=geonames
 lin gait_N = mkN "zancada" ; -- status=guess
@@ -12245,7 +12677,84 @@ lin get_N = mkN "quedada" ; -- status=guess
 lin get_V2 = mkV2 obtener_V ; -- status=guess
 lin get_V2V = mkV2V obtener_V ;
 lin get_VV = mkVV obtener_V ;
+lin get_about_V = advV (lin V OP_get_V2) OP_about_Adv ; -- guess-p-verb
+lin get_above_V2 = prepV2 (lin V OP_get_V2) OP_above_Prep ; -- guess-p-verb
+lin get_across_V = advV (lin V OP_get_V2) OP_across_Adv ; -- guess-p-verb
+lin get_across_V2 = prepV2 (lin V OP_get_V2) OP_across_Prep ; -- guess-p-verb
+lin get_across_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_across_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_after_V2 = prepV2 (lin V OP_get_V2) OP_after_Prep ; -- guess-p-verb
 lin get_ahead_V = mkV "adelantarse" | mkV "avanzarse" ; --UWN
+lin get_ahead_of_V2 = prepV2 (advV (lin V OP_get_V2) OP_ahead_Adv ) OP_of_Prep ; -- guess-p-verb
+lin get_along_V = advV (lin V OP_get_V2) OP_along_Adv ; -- guess-p-verb
+lin get_along_in_V2 = prepV2 (advV (lin V OP_get_V2) OP_along_Adv ) OP_in_Prep ; -- guess-p-verb
+lin get_along_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_along_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_around_V = advV (lin V OP_get_V2) OP_around_Adv ; -- guess-p-verb
+lin get_around_V2 = prepV2 (lin V OP_get_V2) OP_around_Prep ; -- guess-p-verb
+lin get_around_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_around_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_at_V2 = prepV2 (lin V OP_get_V2) OP_at_Prep ; -- guess-p-verb
+lin get_away_V = advV (lin V OP_get_V2) OP_away_Adv ; -- guess-p-verb
+lin get_away_from_V2 = prepV2 (advV (lin V OP_get_V2) OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
+lin get_away_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_away_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_back_V = advV (lin V OP_get_V2) OP_back_Adv ; -- guess-p-verb
+lin get_back_V2 = mkV2 (advV (lin V OP_get_V2) OP_back_Adv ) ; -- guess-p-verb
+lin get_back_at_V2 = prepV2 (advV (lin V OP_get_V2) OP_back_Adv ) OP_at_Prep ; -- guess-p-verb
+lin get_back_into_V2 = prepV2 (advV (lin V OP_get_V2) OP_back_Adv ) OP_into_Prep ; -- guess-p-verb
+lin get_back_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_back_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_back_together_V = variants {} ; -- guess-p-verb
+lin get_behind_V2 = prepV2 (lin V OP_get_V2) OP_behind_Prep ; -- guess-p-verb
+lin get_behind_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_behind_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_by_V = advV (lin V OP_get_V2) OP_by_Adv ; -- guess-p-verb
+lin get_by_V2 = prepV2 (lin V OP_get_V2) OP_by_Prep ; -- guess-p-verb
+lin get_by_on_V2 = prepV2 (advV (lin V OP_get_V2) OP_by_Adv ) OP_on_Prep ; -- guess-p-verb
+lin get_by_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_by_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_down_V = advV (lin V OP_get_V2) OP_down_Adv ; -- guess-p-verb
+lin get_down_V2 = prepV2 (lin V OP_get_V2) OP_down_Prep ; -- guess-p-verb
+lin get_down_on_V2 = prepV2 (advV (lin V OP_get_V2) OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin get_down_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_down_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_even_V = advV (lin V OP_get_V2) OP_even_Adv ; -- guess-p-verb
+lin get_in_V = advV (lin V OP_get_V2) OP_in_Adv ; -- guess-p-verb
+lin get_in_V2 = prepV2 (lin V OP_get_V2) OP_in_Prep ; -- guess-p-verb
+lin get_in_on_V2 = prepV2 (advV (lin V OP_get_V2) OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin get_in_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_in_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_into_V2 = prepV2 (lin V OP_get_V2) OP_into_Prep ; -- guess-p-verb
+lin get_it_V = variants {} ; -- guess-p-verb
+lin get_it_off_V = variants {} ; -- guess-p-verb
+lin get_it_off_with_V2 = variants {} ; -- guess-p-verb
+lin get_it_on_V = variants {} ; -- guess-p-verb
+lin get_it_on_with_V2 = variants {} ; -- guess-p-verb
+lin get_it_together_V = variants {} ; -- guess-p-verb
+lin get_it_up_V = variants {} ; -- guess-p-verb
+lin get_off_V = advV (lin V OP_get_V2) OP_off_Adv ; -- guess-p-verb
+lin get_off_V2 = prepV2 (lin V OP_get_V2) OP_off_Prep ; -- guess-p-verb
+lin get_off_it_V2 = variants {} ; -- guess-p-verb
+lin get_off_on_V2 = prepV2 (advV (lin V OP_get_V2) OP_off_Adv ) OP_on_Prep ; -- guess-p-verb
+lin get_off_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_off_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_on_1_V2 = variants {} ; -- guess-p-verb
+lin get_on_2_V2 = variants {} ; -- guess-p-verb
+lin get_on_V = advV (lin V OP_get_V2) OP_on_Adv ; -- guess-p-verb
+lin get_on_at_V2 = prepV2 (advV (lin V OP_get_V2) OP_on_Adv ) OP_at_Prep ; -- guess-p-verb
+lin get_on_for_V2 = prepV2 (advV (lin V OP_get_V2) OP_on_Adv ) OP_for_Prep ; -- guess-p-verb
+lin get_on_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_on_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_on_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_on_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_onto_V2 = prepV2 (lin V OP_get_V2) OP_onto_Prep ; -- guess-p-verb
+lin get_out_V = advV (lin V OP_get_V2) OP_out_Adv ; -- guess-p-verb
+lin get_out_V2 = prepV2 (lin V OP_get_V2) OP_out_Prep ; -- guess-p-verb
+lin get_out_of_V2 = prepV2 (advV (lin V OP_get_V2) OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin get_over_V = advV (lin V OP_get_V2) OP_over_Adv ; -- guess-p-verb
+lin get_over_V2 = prepV2 (lin V OP_get_V2) OP_over_Prep ; -- guess-p-verb
+lin get_over_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_over_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_round_V = advV (lin V OP_get_V2) OP_round_Adv ; -- guess-p-verb
+lin get_round_V2 = prepV2 (lin V OP_get_V2) OP_round_Prep ; -- guess-p-verb
+lin get_round_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_round_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_through_V = advV (lin V OP_get_V2) OP_through_Adv ; -- guess-p-verb
+lin get_through_V2 = prepV2 (lin V OP_get_V2) OP_through_Prep ; -- guess-p-verb
+lin get_through_V3 = variants {} ; -- guess-p-verb
+lin get_through_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_through_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_to_V2 = prepV2 (lin V OP_get_V2) OP_to_Prep ; -- guess-p-verb
+lin get_together_V = advV (lin V OP_get_V2) OP_together_Adv ; -- guess-p-verb
+lin get_up_V = advV (lin V OP_get_V2) OP_up_Adv ; -- guess-p-verb
+lin get_up_V2 = prepV2 (lin V OP_get_V2) OP_up_Prep ; -- guess-p-verb
+lin get_up_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin getaway_N = mkN "escape" | mkN "fuga" | mkN "huida" | mkN "polvorosa" ; --UWN
 lin geyser_N = mkN "géiser" masculine ; -- status=guess
 lin ghana_PN = mkPN "Ghana" ; -- status=guess src=geonames
@@ -12308,7 +12817,31 @@ lin give_V = dar_V | mkV "entregar" ;
 lin give_V2 = mkV2 dar_V | mkV2 (mkV "entregar") ;
 lin give_V3 = L.give_V3 ;
 lin give_away_V = mkV "delatar" | mkV "traicionar" ; --UWN
+lin give_away_V2 = mkV2 (advV OP_give_V OP_away_Adv ) ; -- guess-p-verb
+lin give_back_V2 = mkV2 (advV OP_give_V OP_back_Adv ) ; -- guess-p-verb
+lin give_in_V = advV OP_give_V OP_in_Adv ; -- guess-p-verb
+lin give_in_V2 = prepV2 OP_give_V OP_in_Prep ; -- guess-p-verb
+lin give_in_to_V2 = prepV2 (advV OP_give_V OP_in_Adv ) OP_to_Prep ; -- guess-p-verb
+lin give_it_to_V2 = variants {} ; -- guess-p-verb
+lin give_it_up_for_V2 = variants {} ; -- guess-p-verb
+lin give_it_up_to_V2 = variants {} ; -- guess-p-verb
+lin give_of_V2 = prepV2 OP_give_V OP_of_Prep ; -- guess-p-verb
+lin give_off_V = advV OP_give_V OP_off_Adv ; -- guess-p-verb
+lin give_off_V2 = prepV2 OP_give_V OP_off_Prep ; -- guess-p-verb
+lin give_onto_V2 = prepV2 OP_give_V OP_onto_Prep ; -- guess-p-verb
+lin give_out_V = advV OP_give_V OP_out_Adv ; -- guess-p-verb
+lin give_out_V2 = prepV2 OP_give_V OP_out_Prep ; -- guess-p-verb
+lin give_over_V = advV OP_give_V OP_over_Adv ; -- guess-p-verb
+lin give_over_V2 = prepV2 OP_give_V OP_over_Prep ; -- guess-p-verb
+lin give_over_to_V3 = variants {} ; -- guess-p-verb
 lin give_up_V = mkV "perder" | mkV "prescindir" | mkV "renunciar" ; --UWN
+lin give_up_V2 = prepV2 OP_give_V OP_up_Prep ; -- guess-p-verb
+lin give_up_on_V2 = prepV2 (advV OP_give_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin give_up_to_V2 = prepV2 (advV OP_give_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin give_way_V = advV OP_give_V OP_way_Adv ; -- guess-p-verb
+lin give_way_to_V2 = prepV2 (advV OP_give_V OP_way_Adv ) OP_to_Prep ; -- guess-p-verb
+lin give_yourself_up_V = variants {} ; -- guess-p-verb
+lin give_yourself_up_to_V2 = variants {} ; -- guess-p-verb
 lin given_A = variants {} ; --
 lin given_N = mkN "postulado" ; -- status=guess
 lin gizzard_N = mkN "molleja" ; -- status=guess
@@ -12435,11 +12968,69 @@ lin go_V = L.go_V ;
 lin go_VA = mkVA L.go_V ;
 lin go_VV = mkVV L.go_V ;
 lin go_about_V = mkV "emprender" ; --UWN
+lin go_about_V2 = prepV2 OP_go_V OP_about_Prep ; -- guess-p-verb
 lin go_across_V = mkV "pasar" ; --UWN
+lin go_after_V2 = prepV2 OP_go_V OP_after_Prep ; -- guess-p-verb
+lin go_against_V2 = prepV2 OP_go_V OP_against_Prep ; -- guess-p-verb
+lin go_ahead_V = advV OP_go_V OP_ahead_Adv ; -- guess-p-verb
+lin go_ahead_with_V2 = prepV2 (advV OP_go_V OP_ahead_Adv ) OP_with_Prep ; -- guess-p-verb
 lin go_along_V = mkV "deslizarse" | mkV "esfumarse" | mkV "pasar" | mkV "seguir" | mkV "transcurrir" | mkV "trascurrir" ; --UWN
+lin go_along_with_V2 = prepV2 (advV OP_go_V OP_along_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_around_V = advV OP_go_V OP_around_Adv ; -- guess-p-verb
+lin go_at_V2 = prepV2 OP_go_V OP_at_Prep ; -- guess-p-verb
+lin go_away_V = advV OP_go_V OP_away_Adv ; -- guess-p-verb
 lin go_back_V = mkV "recuperar" ; --UWN
+lin go_back_V2 = mkV2 (advV OP_go_V OP_back_Adv ) ; -- guess-p-verb
+lin go_back_on_V2 = prepV2 (advV OP_go_V OP_back_Adv ) OP_on_Prep ; -- guess-p-verb
+lin go_before_V = advV OP_go_V OP_before_Adv ; -- guess-p-verb
+lin go_below_V = advV OP_go_V OP_below_Adv ; -- guess-p-verb
+lin go_by_V = advV OP_go_V OP_by_Adv ; -- guess-p-verb
+lin go_by_V2 = prepV2 OP_go_V OP_by_Prep ; -- guess-p-verb
+lin go_down_V = advV OP_go_V OP_down_Adv ; -- guess-p-verb
+lin go_down_on_V2 = prepV2 (advV OP_go_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin go_down_to_V2 = prepV2 (advV OP_go_V OP_down_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_down_with_V2 = prepV2 (advV OP_go_V OP_down_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_for_V = advV OP_go_V OP_for_Adv ; -- guess-p-verb
+lin go_for_V2 = prepV2 OP_go_V OP_for_Prep ; -- guess-p-verb
+lin go_for_it_V = variants {} ; -- guess-p-verb
+lin go_forth_V = advV OP_go_V OP_forth_Adv ; -- guess-p-verb
 lin go_forward_V = mkV "avanzar" | mkV "continuar" | mkV "proceder" | mkV "seguir" ; --UWN
+lin go_in_V = advV OP_go_V OP_in_Adv ; -- guess-p-verb
+lin go_in_for_V2 = prepV2 (advV OP_go_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin go_in_with_V2 = prepV2 (advV OP_go_V OP_in_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_into_V2 = prepV2 OP_go_V OP_into_Prep ; -- guess-p-verb
+lin go_it_V = variants {} ; -- guess-p-verb
+lin go_it_alone_V = variants {} ; -- guess-p-verb
+lin go_off_V = advV OP_go_V OP_off_Adv ; -- guess-p-verb
+lin go_off_V2 = prepV2 OP_go_V OP_off_Prep ; -- guess-p-verb
+lin go_off_with_V2 = prepV2 (advV OP_go_V OP_off_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_on_V = advV OP_go_V OP_on_Adv ; -- guess-p-verb
+lin go_on_V2 = prepV2 OP_go_V OP_on_Prep ; -- guess-p-verb
+lin go_on_about_V2 = prepV2 (advV OP_go_V OP_on_Adv ) OP_about_Prep ; -- guess-p-verb
+lin go_on_at_V2 = prepV2 (advV OP_go_V OP_on_Adv ) OP_at_Prep ; -- guess-p-verb
+lin go_on_to_V2 = prepV2 (advV OP_go_V OP_on_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_on_with_V2 = prepV2 (advV OP_go_V OP_on_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_one_V = variants {} ; -- guess-p-verb
+lin go_out_V = advV OP_go_V OP_out_Adv ; -- guess-p-verb
+lin go_out_for_V2 = prepV2 (advV OP_go_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin go_out_to_V2 = prepV2 (advV OP_go_V OP_out_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_out_with_V2 = prepV2 (advV OP_go_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_over_V = advV OP_go_V OP_over_Adv ; -- guess-p-verb
+lin go_over_V2 = prepV2 OP_go_V OP_over_Prep ; -- guess-p-verb
+lin go_over_to_V2 = prepV2 (advV OP_go_V OP_over_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_past_V2 = prepV2 OP_go_V OP_past_Prep ; -- guess-p-verb
+lin go_round_V = advV OP_go_V OP_round_Adv ; -- guess-p-verb
+lin go_through_V = advV OP_go_V OP_through_Adv ; -- guess-p-verb
+lin go_through_V2 = prepV2 OP_go_V OP_through_Prep ; -- guess-p-verb
+lin go_through_with_V2 = prepV2 (advV OP_go_V OP_through_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_to_V2 = prepV2 OP_go_V OP_to_Prep ; -- guess-p-verb
+lin go_together_V = advV OP_go_V OP_together_Adv ; -- guess-p-verb
+lin go_towards_V2 = prepV2 OP_go_V OP_towards_Prep ; -- guess-p-verb
 lin go_under_V = mkV "llamarse" ; --UWN
+lin go_up_V = advV OP_go_V OP_up_Adv ; -- guess-p-verb
+lin go_up_to_V2 = prepV2 (advV OP_go_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_with_V2 = prepV2 OP_go_V OP_with_Prep ; -- guess-p-verb
+lin go_without_V2 = prepV2 OP_go_V OP_without_Prep ; -- guess-p-verb
 lin goad_N = mkN "acuciar" | mkN "aguijonear" | mkN "aguijón" ; --UWN
 lin goal_1_N = mkN "meta" ;
 lin goal_2_N = mkN "portería" ;
@@ -12809,7 +13400,20 @@ lin grove_N = mkN "arboleda" ; -- status=guess
 lin grow_V = crecer_V ;
 lin grow_V2 = mkV2 (crecer_V) ;
 lin grow_VA = mkVA (crecer_V) ;
+lin grow_apart_V = advV OP_grow_V OP_apart_Adv ; -- guess-p-verb
+lin grow_away_from_V2 = prepV2 (advV OP_grow_V OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
+lin grow_back_V = advV OP_grow_V OP_back_Adv ; -- guess-p-verb
+lin grow_from_V2 = prepV2 OP_grow_V OP_from_Prep ; -- guess-p-verb
+lin grow_into_V2 = prepV2 OP_grow_V OP_into_Prep ; -- guess-p-verb
+lin grow_on_V2 = prepV2 OP_grow_V OP_on_Prep ; -- guess-p-verb
+lin grow_out_V = advV OP_grow_V OP_out_Adv ; -- guess-p-verb
+lin grow_out_of_V2 = prepV2 (advV OP_grow_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin grow_to_V = advV OP_grow_V OP_to_Adv ; -- guess-p-verb
+lin grow_together_V = advV OP_grow_V OP_together_Adv ; -- guess-p-verb
+lin grow_under_V = advV OP_grow_V OP_under_Adv ; -- guess-p-verb
 lin grow_up_V = mkV "crecer" ; --UWN
+lin grow_up_on_V2 = prepV2 (advV OP_grow_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin grow_upon_V2 = prepV2 OP_grow_V OP_upon_Prep ; -- guess-p-verb
 lin grower_N = mkN "agricultor" | mkN "labrador" ; --UWN
 lin growing_A = mkA "creciente" ;
 lin growing_N = mkN "crecimiento" ; -- status=guess
@@ -13089,6 +13693,13 @@ lin hampshire_PN = mkPN "Hampshire" ; -- status=guess src=geonames
 lin hamster_N = mkN "hámster" masculine ; -- status=guess
 lin hand_N = L.hand_N ;
 lin hand_V2 = mkV2 (mkV "entregar") ; -- status=guess
+lin hand_back_V2 = mkV2 (advV (lin V OP_hand_V2) OP_back_Adv ) ; -- guess-p-verb
+lin hand_carry_V2 = variants {} ; -- guess-p-verb
+lin hand_down_V2 = prepV2 (lin V OP_hand_V2) OP_down_Prep ; -- guess-p-verb
+lin hand_in_V2 = prepV2 (lin V OP_hand_V2) OP_in_Prep ; -- guess-p-verb
+lin hand_on_V2 = prepV2 (lin V OP_hand_V2) OP_on_Prep ; -- guess-p-verb
+lin hand_out_V2 = prepV2 (lin V OP_hand_V2) OP_out_Prep ; -- guess-p-verb
+lin hand_over_V2 = prepV2 (lin V OP_hand_V2) OP_over_Prep ; -- guess-p-verb
 lin handbag_N = mkN "bolsa" | mkN "bolso" | mkN "bulto" | mkN "cartera" ; -- status=guess status=guess status=guess status=guess
 lin handball_N = mkN "balonmano" | mkN "handball" ; -- status=guess status=guess
 lin handbook_N = mkN "manual" masculine ; -- status=guess
@@ -13120,6 +13731,24 @@ lin handy_A = mkA "hábil" | mkA "diestro" ; -- status=guess
 lin hang_N = mkN "ala delta" ; -- status=guess
 lin hang_V = mkV "colgar" ;
 lin hang_V2 = mkV2 (mkV "ahorcar") ; --- split: hang a lamp / hang a criminal
+lin hang_about_V = advV OP_hang_V OP_about_Adv ; -- guess-p-verb
+lin hang_around_V = advV OP_hang_V OP_around_Adv ; -- guess-p-verb
+lin hang_around_V2 = prepV2 OP_hang_V OP_around_Prep ; -- guess-p-verb
+lin hang_back_V = advV OP_hang_V OP_back_Adv ; -- guess-p-verb
+lin hang_back_from_V2 = prepV2 (advV OP_hang_V OP_back_Adv ) OP_from_Prep ; -- guess-p-verb
+lin hang_in_there_V = variants {} ; -- guess-p-verb
+lin hang_it_up_V = variants {} ; -- guess-p-verb
+lin hang_on_V = advV OP_hang_V OP_on_Adv ; -- guess-p-verb
+lin hang_onto_V2 = prepV2 OP_hang_V OP_onto_Prep ; -- guess-p-verb
+lin hang_out_V = advV OP_hang_V OP_out_Adv ; -- guess-p-verb
+lin hang_out_V2 = prepV2 OP_hang_V OP_out_Prep ; -- guess-p-verb
+lin hang_out_for_V2 = prepV2 (advV OP_hang_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin hang_over_V2 = prepV2 OP_hang_V OP_over_Prep ; -- guess-p-verb
+lin hang_together_V = advV OP_hang_V OP_together_Adv ; -- guess-p-verb
+lin hang_up_V = advV OP_hang_V OP_up_Adv ; -- guess-p-verb
+lin hang_up_V2 = prepV2 OP_hang_V OP_up_Prep ; -- guess-p-verb
+lin hang_up_on_V2 = prepV2 (advV OP_hang_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin hang_with_V2 = prepV2 OP_hang_V OP_with_Prep ; -- guess-p-verb
 lin hangar_N = mkN "hangar" ; -- status=guess
 lin hanger_N = mkN "percha" ; -- status=guess
 lin hanging_N = mkN "suspensión" ; --UWN
@@ -13243,6 +13872,7 @@ lin hatch_V = mkV "aclocarse" | mkV "cubrir" | mkV "empollar" | mkV "incubar" ; 
 lin hate_N = mkN "delito de odio" ; -- status=guess
 lin hate_V2 = L.hate_V2 ;
 lin hate_VV = mkVV (mkV "odiar") ; -- status=guess
+lin hate_on_V2 = prepV2 (lin V OP_hate_V2) OP_on_Prep ; -- guess-p-verb
 lin hateful_A = mkA "despreciable" | mkA "odioso" ; --UWN
 lin hatemonger_N = mkN "instigador_de_odio" ; --UWN
 lin hatfield_PN = mkPN "Hatfield" ; -- status=guess src=geonames
@@ -13263,6 +13893,20 @@ lin havana_PN = mkPN "La Habana" ; -- status=guess src=geonames
 lin have_V = tener_V ;
 lin have_V2 = S.have_V2 ;
 lin have_VV = mkVV tener_V ; ---- subcat
+lin have_against_V2 = prepV2 OP_have_V OP_against_Prep ; -- guess-p-verb
+lin have_around_V2 = prepV2 OP_have_V OP_around_Prep ; -- guess-p-verb
+lin have_down_as_V3 = variants {} ; -- guess-p-verb
+lin have_in_V2 = prepV2 OP_have_V OP_in_Prep ; -- guess-p-verb
+lin have_it_away_V = variants {} ; -- guess-p-verb
+lin have_it_in_for_V2 = variants {} ; -- guess-p-verb
+lin have_it_off_V = variants {} ; -- guess-p-verb
+lin have_it_out_with_V2 = variants {} ; -- guess-p-verb
+lin have_off_V2 = prepV2 OP_have_V OP_off_Prep ; -- guess-p-verb
+lin have_on_V = advV OP_have_V OP_on_Adv ; -- guess-p-verb
+lin have_on_V2 = prepV2 OP_have_V OP_on_Prep ; -- guess-p-verb
+lin have_over_V2 = prepV2 OP_have_V OP_over_Prep ; -- guess-p-verb
+lin have_round_V2 = prepV2 OP_have_V OP_round_Prep ; -- guess-p-verb
+lin have_up_V2 = prepV2 OP_have_V OP_up_Prep ; -- guess-p-verb
 lin haven_N = mkN "puerto" ; -- status=guess
 lin haverfordwest_PN = mkPN "Haverfordwest" ; -- status=guess src=geonames
 lin haverhill_PN = mkPN "Haverhill" ; -- status=guess src=geonames
@@ -13293,6 +13937,11 @@ lin head_A = variants {} ; --
 lin head_N = L.head_N ;
 lin head_V = dirigir_V ;
 lin head_V2 = mkV2 dirigir_V ;
+lin head_for_V2 = prepV2 OP_head_V OP_for_Prep ; -- guess-p-verb
+lin head_off_V = advV OP_head_V OP_off_Adv ; -- guess-p-verb
+lin head_off_V2 = prepV2 OP_head_V OP_off_Prep ; -- guess-p-verb
+lin head_out_V = advV OP_head_V OP_out_Adv ; -- guess-p-verb
+lin head_up_V2 = prepV2 OP_head_V OP_up_Prep ; -- guess-p-verb
 lin headache_N = mkN "dolor de cabeza" ; -- status=guess
 lin headband_N = mkN "cintillo" ; -- status=guess
 lin headboard_N = mkN "cabecera" ; --UWN
@@ -13330,6 +13979,11 @@ lin hear_V = oír_V ;
 lin hear_V2 = L.hear_V2 ;
 lin hear_V2V = mkV2V (oír_V) ;
 lin hear_VS = mkVS (oír_V) ;
+lin hear_about_V2 = prepV2 OP_hear_V OP_about_Prep ; -- guess-p-verb
+lin hear_from_V2 = prepV2 OP_hear_V OP_from_Prep ; -- guess-p-verb
+lin hear_of_V2 = prepV2 OP_hear_V OP_of_Prep ; -- guess-p-verb
+lin hear_of_V3 = variants {} ; -- guess-p-verb
+lin hear_out_V2 = prepV2 OP_hear_V OP_out_Prep ; -- guess-p-verb
 lin hearer_N = mkN "auditor" | mkN "oyente" ; --UWN
 lin hearing_N = mkN "audición" feminine ; -- status=guess
 lin hearsay_N = mkN "pruebas de oídas" ; -- status=guess
@@ -13423,6 +14077,8 @@ lin help_N = mkN "ayuda" | mkN "socorro" | mkN "auxilio" ;
 lin help_V = mkV "ayudar" ;
 lin help_V2 = mkV2 (mkV "ayudar") ;
 lin help_V2V = mkV2V (mkV "ayudar") ;
+lin help_out_V2 = prepV2 OP_help_V OP_out_Prep ; -- guess-p-verb
+lin help_to_VV = variants {} ; -- guess-p-verb
 lin helpful_A = mkA "servicial" | mkA "útil" ; -- status=guess
 lin helping_N = mkN "ración" ; --UWN
 lin helpless_A = mkA "indefenso" ; -- status=guess
@@ -13584,6 +14240,9 @@ lin hidden_A = variants {} ; --
 lin hide_N = mkN "piel" feminine | mkN "cuero" ; -- status=guess status=guess
 lin hide_V = mkV "esconderse" ; -- status=guess
 lin hide_V2 = mkV2 (mkV "esconderse") ; -- status=guess
+lin hide_away_V = advV OP_hide_V OP_away_Adv ; -- guess-p-verb
+lin hide_away_V2 = mkV2 (advV OP_hide_V OP_away_Adv ) ; -- guess-p-verb
+lin hide_out_V = advV OP_hide_V OP_out_Adv ; -- guess-p-verb
 lin hideous_A = mkA "discordante" | mkA "ruidoso" | mkA "estridente" ; -- status=guess status=guess status=guess
 lin hideousness_N = mkN "horridez" ; --UWN
 lin hideout_N = mkN "guarida" | mkN "escondrijo" | mkN "escondite" masculine ; -- status=guess status=guess status=guess
@@ -13674,6 +14333,17 @@ lin histrionics_N = mkN "histrionismo" | mkN "teatralismo" ; -- status=guess sta
 lin hit_N = mkN "delito de fuga" ; -- status=guess
 lin hit_V = mkV "golpear" | mkV "pegar" ;
 lin hit_V2 = L.hit_V2 ;
+lin hit_back_V2 = mkV2 (advV OP_hit_V OP_back_Adv ) ; -- guess-p-verb
+lin hit_for_V3 = variants {} ; -- guess-p-verb
+lin hit_it_off_V = variants {} ; -- guess-p-verb
+lin hit_it_off_with_V2 = variants {} ; -- guess-p-verb
+lin hit_on_V2 = prepV2 OP_hit_V OP_on_Prep ; -- guess-p-verb
+lin hit_out_at_V2 = prepV2 (advV OP_hit_V OP_out_Adv ) OP_at_Prep ; -- guess-p-verb
+lin hit_up_V = advV OP_hit_V OP_up_Adv ; -- guess-p-verb
+lin hit_up_V2 = prepV2 OP_hit_V OP_up_Prep ; -- guess-p-verb
+lin hit_up_on_V2 = prepV2 (advV OP_hit_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin hit_upon_V2 = prepV2 OP_hit_V OP_upon_Prep ; -- guess-p-verb
+lin hit_with_V3 = variants {} ; -- guess-p-verb
 lin hitch_V = mkV "amarrar" | mkV "enganchar" | mkV "engancharse" | mkV "liarse" ; --UWN
 lin hitchhike_V = variants {} ;
 lin hitchhiker_N = mkN "autoestopista" masculine ; -- status=guess
@@ -13715,9 +14385,28 @@ lin hold_N = variants {} ; --
 lin hold_V = mkV "guardar" | mkV "conservar" | reflV mantener_V ;
 lin hold_V2 = L.hold_V2 ;
 lin hold_VS = mkVS (mkV "guardar") | mkVS (mkV "conservar") | mkVS mantener_V ;
+lin hold_against_V3 = variants {} ; -- guess-p-verb
+lin hold_back_V = advV OP_hold_V OP_back_Adv ; -- guess-p-verb
+lin hold_back_V2 = mkV2 (advV OP_hold_V OP_back_Adv ) ; -- guess-p-verb
+lin hold_back_from_V2 = prepV2 (advV OP_hold_V OP_back_Adv ) OP_from_Prep ; -- guess-p-verb
+lin hold_down_V2 = prepV2 OP_hold_V OP_down_Prep ; -- guess-p-verb
 lin hold_forth_V = mkV "disertar" ; --UWN
 lin hold_off_V = mkV "resistir" ; --UWN
+lin hold_off_V2 = prepV2 OP_hold_V OP_off_Prep ; -- guess-p-verb
+lin hold_off_on_V2 = prepV2 (advV OP_hold_V OP_off_Adv ) OP_on_Prep ; -- guess-p-verb
+lin hold_on_V = advV OP_hold_V OP_on_Adv ; -- guess-p-verb
+lin hold_on_to_V2 = prepV2 (advV OP_hold_V OP_on_Adv ) OP_to_Prep ; -- guess-p-verb
+lin hold_onto_V = variants {} ; -- guess-p-verb
+lin hold_onto_V2 = prepV2 OP_hold_V OP_onto_Prep ; -- guess-p-verb
 lin hold_out_V = mkV "extender" ; --UWN
+lin hold_out_V2 = prepV2 OP_hold_V OP_out_Prep ; -- guess-p-verb
+lin hold_out_against_V2 = prepV2 (advV OP_hold_V OP_out_Adv ) OP_against_Prep ; -- guess-p-verb
+lin hold_out_for_V2 = prepV2 (advV OP_hold_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin hold_out_on_V2 = prepV2 (advV OP_hold_V OP_out_Adv ) OP_on_Prep ; -- guess-p-verb
+lin hold_over_V2 = prepV2 OP_hold_V OP_over_Prep ; -- guess-p-verb
+lin hold_together_V = advV OP_hold_V OP_together_Adv ; -- guess-p-verb
+lin hold_up_V2 = prepV2 OP_hold_V OP_up_Prep ; -- guess-p-verb
+lin hold_with_V2 = prepV2 OP_hold_V OP_with_Prep ; -- guess-p-verb
 lin holdall_N = mkN "bolsa_de_viaje" | mkN "bolso" ; --UWN
 lin holder_N = variants {} ; --
 lin holding_N = variants {} ; --
@@ -15280,6 +15969,7 @@ lin invitational_A = mkA "incitador" ; --UWN
 lin invite_N = mkN "invitación" feminine ; -- status=guess
 lin invite_V2 = mkV2 (mkV "invitar") | mkV2 (mkV "convidar") ;
 lin invite_V2V = mkV2V (mkV "invitar") | mkV2V (mkV "convidar") ;
+lin invite_in_V = advV (lin V OP_invite_V2) OP_in_Adv ; -- guess-p-verb
 lin invoice_N = mkN "alvarán" | mkN "factura" ; -- status=guess status=guess
 lin invoice_V2 = mkV2 (mkV "facturar") ; -- status=guess, src=wikt
 lin invoke_V2 = mkV2 (mkV "invocar") ; -- status=guess
@@ -15560,6 +16250,7 @@ lin john_PN = L.john_PN ;
 lin johnstone_PN = mkPN "Johnstone" ; -- status=guess src=geonames
 lin join_V = mkV "unirse" | reflV reunir_V ;
 lin join_V2 = mkV2 (mkV "unir") | mkV2 (mkV "unirse") | mkV2 (mkV "unirse") to_Prep | mkV2 (reflV reunir_V) with_Prep ;
+lin join_up_V = advV OP_join_V OP_up_Adv ; -- guess-p-verb
 lin joiner_N = mkN "carpintero" | mkN "ebanista" masculine ; -- status=guess status=guess
 lin joinery_N = mkN "carpintería" | mkN "carpintería_de_obra" ; --UWN
 lin joining_N = mkN "conexión" | mkN "enlace" | mkN "unión" ; --UWN
@@ -15639,6 +16330,10 @@ lin jumentous_A = mkA "jumentoso" ; --UWN
 lin jump_N = mkN "salto" ; -- status=guess
 lin jump_V = L.jump_V ;
 lin jump_V2 = mkV2 (mkV "apresurarse") | mkV2 (mkV "aprovechar") ; -- status=guess
+lin jump_at_V2 = prepV2 OP_jump_V OP_at_Prep ; -- guess-p-verb
+lin jump_in_V = advV OP_jump_V OP_in_Adv ; -- guess-p-verb
+lin jump_on_V2 = prepV2 OP_jump_V OP_on_Prep ; -- guess-p-verb
+lin jump_to_V2 = prepV2 OP_jump_V OP_to_Prep ; -- guess-p-verb
 lin jumper_N = mkN "chaleco" feminine ; -- status=guess
 lin jumping_N = mkN "saltos" ; -- status=guess
 lin jumpy_A = mkA "nervioso" ; -- status=guess
@@ -15716,8 +16411,27 @@ lin keep_V = mantener_V ;
 lin keep_V2 = mkV2 mantener_V ;
 lin keep_V2A = mkV2A mantener_V ;
 lin keep_VV = mkVV (mkV "continuar") ;
+lin keep_around_V2 = prepV2 OP_keep_V OP_around_Prep ; -- guess-p-verb
+lin keep_at_V2 = prepV2 OP_keep_V OP_at_Prep ; -- guess-p-verb
+lin keep_away_V2 = mkV2 (advV OP_keep_V OP_away_Adv ) ; -- guess-p-verb
 lin keep_back_V = mkV "retener" ; --UWN
+lin keep_back_V2 = mkV2 (advV OP_keep_V OP_back_Adv ) ; -- guess-p-verb
+lin keep_down_V2 = prepV2 OP_keep_V OP_down_Prep ; -- guess-p-verb
+lin keep_from_V2 = prepV2 OP_keep_V OP_from_Prep ; -- guess-p-verb
+lin keep_in_V2 = prepV2 OP_keep_V OP_in_Prep ; -- guess-p-verb
+lin keep_ing_V2V = variants {} ; -- guess-p-verb
+lin keep_off_V2 = prepV2 OP_keep_V OP_off_Prep ; -- guess-p-verb
 lin keep_on_V = mkV "continuar" | mkV "seguir" ; --UWN
+lin keep_on_V2 = prepV2 OP_keep_V OP_on_Prep ; -- guess-p-verb
+lin keep_out_V = advV OP_keep_V OP_out_Adv ; -- guess-p-verb
+lin keep_out_V2 = prepV2 OP_keep_V OP_out_Prep ; -- guess-p-verb
+lin keep_over_V2 = prepV2 OP_keep_V OP_over_Prep ; -- guess-p-verb
+lin keep_to_V2 = prepV2 OP_keep_V OP_to_Prep ; -- guess-p-verb
+lin keep_to_V2V = variants {} ; -- guess-p-verb
+lin keep_up_V = advV OP_keep_V OP_up_Adv ; -- guess-p-verb
+lin keep_up_V2 = prepV2 OP_keep_V OP_up_Prep ; -- guess-p-verb
+lin keep_up_at_V2 = prepV2 (advV OP_keep_V OP_up_Adv ) OP_at_Prep ; -- guess-p-verb
+lin keep_up_with_V2 = prepV2 (advV OP_keep_V OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
 lin keeper_N = mkN "guardián" masculine | mkN "custodio" ; -- status=guess
 lin keepsake_N = mkN "recuerdo" ; -- status=guess
 lin keg_N = mkN "barril" masculine ; -- status=guess
@@ -15785,8 +16499,19 @@ lin kibitzer_N = mkN "metemuertos" ; --UWN
 lin kick_N = mkN "patada" | mkN "puntapié" | mkN "coz" feminine ; -- status=guess
 lin kick_V = mkV "patear" | mkV (mkV "dar") "una patada a" | mkV (mkV "dar") "un puntapié a" ;
 lin kick_V2 = mkV2 (mkV "patear") | mkV2 (mkV (mkV "dar") "una patada a") | mkV2 (mkV (mkV "dar") "un puntapié a") ;
+lin kick_about_V2 = prepV2 OP_kick_V OP_about_Prep ; -- guess-p-verb
+lin kick_around_V2 = prepV2 OP_kick_V OP_around_Prep ; -- guess-p-verb
+lin kick_around_with_V2 = prepV2 (advV OP_kick_V OP_around_Adv ) OP_with_Prep ; -- guess-p-verb
 lin kick_back_V = mkV "retroceder" ; --UWN
+lin kick_back_V2 = mkV2 (advV OP_kick_V OP_back_Adv ) ; -- guess-p-verb
+lin kick_down_V2 = prepV2 OP_kick_V OP_down_Prep ; -- guess-p-verb
+lin kick_in_V = advV OP_kick_V OP_in_Adv ; -- guess-p-verb
+lin kick_in_V2 = prepV2 OP_kick_V OP_in_Prep ; -- guess-p-verb
 lin kick_off_V = mkV "empezar" | mkV "inaugurar" ; --UWN
+lin kick_off_V2 = prepV2 OP_kick_V OP_off_Prep ; -- guess-p-verb
+lin kick_out_V2 = prepV2 OP_kick_V OP_out_Prep ; -- guess-p-verb
+lin kick_through_V = advV OP_kick_V OP_through_Adv ; -- guess-p-verb
+lin kick_up_V = advV OP_kick_V OP_up_Adv ; -- guess-p-verb
 lin kickstand_N = mkN "soporte" masculine | mkN "caballete" masculine ; -- status=guess status=guess
 lin kid_N = mkN "niño" ; -- status=guess
 lin kid_V = mkV (mkV "tomar") "el pelo" ; -- status=guess, src=wikt
@@ -15806,6 +16531,7 @@ lin kilkenny_PN = mkPN "Kilkenny" ; -- status=guess src=geonames
 lin kill_N = mkN "matanza" | mkN "muerte" ; --UWN
 lin kill_V = mkV "matar" ;
 lin kill_V2 = L.kill_V2 ;
+lin kill_off_V2 = prepV2 OP_kill_V OP_off_Prep ; -- guess-p-verb
 lin killarney_PN = mkPN "Killarney" ; -- status=guess src=geonames
 lin killdeer_N = mkN "chorlo" ; -- status=guess
 lin killer_N = mkN "asesino" | mkN "asesina" ; -- status=guess
@@ -15876,6 +16602,9 @@ lin kirkwall_PN = mkPN "Kirkwall" ; -- status=guess src=geonames
 lin kirsch_N = mkN "kirsch" masculine ; -- status=guess
 lin kiss_N = mkN "beso" ; -- status=guess
 lin kiss_V2 = mkV2 (mkV "besarse") ; -- status=guess
+lin kiss_off_V = advV (lin V OP_kiss_V2) OP_off_Adv ; -- guess-p-verb
+lin kiss_off_V2 = prepV2 (lin V OP_kiss_V2) OP_off_Prep ; -- guess-p-verb
+lin kiss_up_to_V2 = prepV2 (advV (lin V OP_kiss_V2) OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin kisser_N = mkN "faz" | mkN "rostro" ; --UWN
 lin kit_N = mkN "juego" | mkN "kit" | mkN "ensello" | mkN "equipo" ; -- status=guess
 lin kitbag_N = mkN "macuto" | mkN "mochila" | mkN "morral" ; --UWN
@@ -15918,7 +16647,19 @@ lin knobbly_A = mkA "nudoso" ; -- status=guess
 lin knock_N = mkN "golpe" masculine ; -- status=guess
 lin knock_V = mkV (mkV "tocar") "madera" ; -- status=guess
 lin knock_V2 = mkV2 (mkV (mkV "tocar") "madera") ; -- status=guess
+lin knock_about_V2 = prepV2 OP_knock_V OP_about_Prep ; -- guess-p-verb
+lin knock_around_V2 = prepV2 OP_knock_V OP_around_Prep ; -- guess-p-verb
+lin knock_back_V2 = mkV2 (advV OP_knock_V OP_back_Adv ) ; -- guess-p-verb
+lin knock_down_V2 = prepV2 OP_knock_V OP_down_Prep ; -- guess-p-verb
+lin knock_it_off_V2 = variants {} ; -- guess-p-verb
 lin knock_off_V = mkV "abandonar" | mkV "dejar" ; --UWN
+lin knock_off_V2 = prepV2 OP_knock_V OP_off_Prep ; -- guess-p-verb
+lin knock_out_V = advV OP_knock_V OP_out_Adv ; -- guess-p-verb
+lin knock_out_V2 = prepV2 OP_knock_V OP_out_Prep ; -- guess-p-verb
+lin knock_over_V = advV OP_knock_V OP_over_Adv ; -- guess-p-verb
+lin knock_together_V2 = mkV2 (advV OP_knock_V OP_together_Adv ) ; -- guess-p-verb
+lin knock_up_V = advV OP_knock_V OP_up_Adv ; -- guess-p-verb
+lin knock_up_V2 = prepV2 OP_knock_V OP_up_Prep ; -- guess-p-verb
 lin knocker_N = mkN "llamador" ; --UWN
 lin knot_N = mkN "nudo" ; -- status=guess
 lin knot_V = mkV "anudar" ; -- status=guess, src=wikt
@@ -16077,6 +16818,9 @@ lin lancing_PN = mkPN "Lancing" ; -- status=guess src=geonames
 lin land_N = mkN "tierra" | mkN "país" ; --- split
 lin land_V = mkV "aterrizar" ; -- status=guess
 lin land_V2 = mkV2 (mkV "aterrizar") ; -- status=guess
+lin land_in_V2 = prepV2 OP_land_V OP_in_Prep ; -- guess-p-verb
+lin land_up_in_V2 = prepV2 (advV OP_land_V OP_up_Adv ) OP_in_Prep ; -- guess-p-verb
+lin land_with_V3 = variants {} ; -- guess-p-verb
 lin landfall_N = mkN "recalada" | mkN "aterrada" ; -- status=guess status=guess
 lin landfill_N = mkN "vertedero" ; -- status=guess
 lin landgrave_N = mkN "landgrave" masculine ; -- status=guess
@@ -16186,6 +16930,8 @@ lin laugh_N = mkN "risa" ; -- status=guess
 lin laugh_V = L.laugh_V ;
 lin laugh_V2 = mkV2 (reflV reír_V) complGen ;
 lin laugh_VS = mkVS (reflV reír_V) ;
+lin laugh_at_V2 = prepV2 OP_laugh_V OP_at_Prep ; -- guess-p-verb
+lin laugh_off_V2 = prepV2 OP_laugh_V OP_off_Prep ; -- guess-p-verb
 lin laughable_A = mkA "risible" | mkA "ridículo" ; -- status=guess status=guess
 lin laughing_A = mkA "ojialegre" ; -- status=guess
 lin laughter_N = mkN "risa" ; -- status=guess
@@ -16229,6 +16975,14 @@ lin lay_A = mkA "laico" ; -- status=guess
 lin lay_N = mkN "área de aparcamiento" | mkN "área de estacionamiento" ; -- status=guess status=guess
 lin lay_V = mkV "yacer" ;
 lin lay_V2 = mkV2 (mkV "acostar") | mkV2 (mkV "colocar") | mkV2 (mkV "poner") ;
+lin lay_away_V2 = mkV2 (advV OP_lay_V OP_away_Adv ) ; -- guess-p-verb
+lin lay_down_V = advV OP_lay_V OP_down_Adv ; -- guess-p-verb
+lin lay_down_V2 = prepV2 OP_lay_V OP_down_Prep ; -- guess-p-verb
+lin lay_in_on_V2 = prepV2 (advV OP_lay_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin lay_into_V2 = prepV2 OP_lay_V OP_into_Prep ; -- guess-p-verb
+lin lay_off_V2 = prepV2 OP_lay_V OP_off_Prep ; -- guess-p-verb
+lin lay_on_V2 = prepV2 OP_lay_V OP_on_Prep ; -- guess-p-verb
+lin lay_out_V2 = prepV2 OP_lay_V OP_out_Prep ; -- guess-p-verb
 lin layabout_N = mkN "holgazán" masculine ; -- status=guess
 lin layer_N = mkN "gallina ponedora" | mkN "onedora" ; -- status=guess
 lin layman_N = mkN "laico" | mkN "lego" ; -- status=guess status=guess
@@ -16247,6 +17001,9 @@ lin lead_N = mkN "plomo" | mkN "iniciativa" ; --- split: metal / take the lead
 lin lead_V = mkV "dirigir" | conducir_V ;
 lin lead_V2 = mkV2 (mkV "dirigir") | mkV2 conducir_V ;
 lin lead_V2V = mkV2V (mkV "llevar") ;
+lin lead_on_V2 = prepV2 OP_lead_V OP_on_Prep ; -- guess-p-verb
+lin lead_to_V2 = prepV2 OP_lead_V OP_to_Prep ; -- guess-p-verb
+lin lead_up_V = advV OP_lead_V OP_up_Adv ; -- guess-p-verb
 lin leaden_A = mkA "plúmbeo" | mkA "plomizo" ; -- status=guess status=guess
 lin leader_N = mkN "líder" masculine | mkN "dirigente" masculine ;
 lin leadership_N = mkN "jefatura" ; -- status=guess
@@ -16270,6 +17027,7 @@ lin lean_A = mkA "delgado" | mkA "esbelto" ; -- status=guess status=guess
 lin lean_N = mkN "inclinación" ; --UWN
 lin lean_V = mkV "declinarse" ; -- status=guess
 lin lean_V2 = mkV2 (mkV "declinarse") ; -- status=guess
+lin lean_on_V2 = prepV2 OP_lean_V OP_on_Prep ; -- guess-p-verb
 lin leaner_N = mkN "herradura_inclinada" ; --UWN
 lin leap_N = mkN "salto" ; -- status=guess
 lin leap_V = mkV "saltar" ; -- status=guess
@@ -16291,6 +17049,11 @@ lin leave_V = mkV "dejar" ;
 lin leave_V2 = L.leave_V2 ;
 lin leave_V2V = mkV2V (mkV "dejar") ;
 lin leave_behind_V = mkV "dejar" ; --UWN
+lin leave_off_V = advV OP_leave_V OP_off_Adv ; -- guess-p-verb
+lin leave_on_V2 = prepV2 OP_leave_V OP_on_Prep ; -- guess-p-verb
+lin leave_open_V = advV OP_leave_V OP_open_Adv ; -- guess-p-verb
+lin leave_out_V2 = prepV2 OP_leave_V OP_out_Prep ; -- guess-p-verb
+lin leave_over_V = advV OP_leave_V OP_over_Adv ; -- guess-p-verb
 lin leaven_N = mkN "levadura" | mkN "polvos de hornear" ; -- status=guess status=guess
 lin leaven_V2 = mkV2 (mkV "leudar") ; -- status=guess, src=wikt
 lin lebanon_PN = mkPN "el país del cedro" ; -- status=guess src=geonames
@@ -16513,6 +17276,11 @@ lin lie_2_V = mentir_V ;
 lin lie_N = mkN "mentira" ; -- status=guess
 lin lie_V = L.lie_V ;
 lin lie_VS = mkVS mentir_V ;
+lin lie_around_V = advV OP_lie_V OP_around_Adv ; -- guess-p-verb
+lin lie_back_V = advV OP_lie_V OP_back_Adv ; -- guess-p-verb
+lin lie_down_V = advV OP_lie_V OP_down_Adv ; -- guess-p-verb
+lin lie_down_on_V2 = prepV2 (advV OP_lie_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin lie_with_V2 = prepV2 OP_lie_V OP_with_Prep ; -- guess-p-verb
 lin liebfraumilch_N = mkN "liebfraumilch" ; --UWN
 lin liechtenstein_PN = mkPN "Liechtenstein" ; -- status=guess src=geonames
 lin liege_N = mkN "señor feudal" ; -- status=guess
@@ -16531,6 +17299,7 @@ lin lifework_N = mkN "actividad_principal" ; --UWN
 lin lift_N = mkN "ascensor" ; -- status=guess
 lin lift_V = mkV "levantar" | mkV "subir" ;
 lin lift_V2 = mkV2 (mkV "levantar") | mkV2 (mkV "subir") ;
+lin lift_off_V = advV OP_lift_V OP_off_Adv ; -- guess-p-verb
 lin ligament_N = mkN "ligamento" ; -- status=guess
 lin ligand_N = mkN "ligando" ; --UWN
 lin ligature_N = mkN "ligadura" ; -- status=guess
@@ -16540,7 +17309,9 @@ lin light_Adv = mkAdv "ligeramente" | mkAdv "ligeros" ; --UWN
 lin light_N = mkN "luz" ; --- split? mkN "bombilla" ;
 lin light_V = mkV "iluminar" ; -- status=guess
 lin light_V2 = mkV2 (mkV "iluminar") ; -- status=guess
+lin light_out_V = advV OP_light_V OP_out_Adv ; -- guess-p-verb
 lin light_up_V = mkV "alumbrar" | mkV "iluminar" ; --UWN
+lin light_up_V2 = prepV2 OP_light_V OP_up_Prep ; -- guess-p-verb
 lin lighten_V = mkV "aliviar" ; -- status=guess, src=wikt
 lin lighten_V2 = mkV2 (mkV "aliviar") ; -- status=guess, src=wikt
 lin lighter_N = mkN "encendedor" masculine | mkN "briquet" | mkN "fosforera" | mkN "lighter" | mkN "mechero" | mkN "yesquero" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess
@@ -16627,6 +17398,8 @@ lin lining_N = mkN "forro" ; -- status=guess
 lin link_N = mkN "enlace" masculine | mkN "vínculo" | mkN "hiperenlace" | mkN "hipervínculo" ;
 lin link_V = mkV "enlazar" | mkV "relacionar" ;
 lin link_V2 = mkV2 (mkV "enlazar") | mkV2 (mkV "relacionar") ; ---split: connect things / hyperlink
+lin link_up_V2 = prepV2 OP_link_V OP_up_Prep ; -- guess-p-verb
+lin link_up_with_V2 = prepV2 (advV OP_link_V OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
 lin linlithgow_PN = mkPN "Linlithgow" ; -- status=guess src=geonames
 lin linnet_N = mkN "pardillo" ; -- status=guess
 lin lino_N = mkN "linóleo" | mkN "linóleum" ; --UWN
@@ -16677,6 +17450,9 @@ lin list_V2 = mkV2 (mkV (mkV "hacer") "una lista") | mkV2 (mkV (mkV "leer") "una
 lin list_V2V = mkV2V (mkV (mkV "hacer") "una lista") | mkV2V (mkV (mkV "leer") "una lista") ; -- status=guess
 lin listen_V = mkV "escuchar" ;
 lin listen_V2 = L.listen_V2 ;
+lin listen_in_V = advV OP_listen_V OP_in_Adv ; -- guess-p-verb
+lin listen_out_for_V2 = prepV2 (advV OP_listen_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin listen_up_V = advV OP_listen_V OP_up_Adv ; -- guess-p-verb
 lin listenerFem_N = mkN "auditor" | mkN "oyente" ; --UWN
 lin listenerMasc_N = variants {} ; --
 lin listeria_N = mkN "listeria" ; --UWN
@@ -16727,7 +17503,21 @@ lin liturgy_N = mkN "liturgia" ; -- status=guess
 lin live_A = mkA "vivo" ; -- status=guess
 lin live_Adv = mkAdv "en vivo" ; -- status=guess
 lin live_V = L.live_V ;
+lin live_by_V2 = prepV2 OP_live_V OP_by_Prep ; -- guess-p-verb
+lin live_down_V2 = prepV2 OP_live_V OP_down_Prep ; -- guess-p-verb
+lin live_for_V2 = prepV2 OP_live_V OP_for_Prep ; -- guess-p-verb
+lin live_in_V = advV OP_live_V OP_in_Adv ; -- guess-p-verb
+lin live_it_up_V2 = variants {} ; -- guess-p-verb
+lin live_off_V2 = prepV2 OP_live_V OP_off_Prep ; -- guess-p-verb
 lin live_on_V = mkV "durar" | mkV "perdurar" | mkV "persistir" | mkV "sobrevivir" ; --UWN
+lin live_on_V2 = prepV2 OP_live_V OP_on_Prep ; -- guess-p-verb
+lin live_out_V = advV OP_live_V OP_out_Adv ; -- guess-p-verb
+lin live_out_V2 = prepV2 OP_live_V OP_out_Prep ; -- guess-p-verb
+lin live_through_V2 = prepV2 OP_live_V OP_through_Prep ; -- guess-p-verb
+lin live_together_V = advV OP_live_V OP_together_Adv ; -- guess-p-verb
+lin live_up_V = advV OP_live_V OP_up_Adv ; -- guess-p-verb
+lin live_up_to_V2 = prepV2 (advV OP_live_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin live_with_V2 = prepV2 OP_live_V OP_with_Prep ; -- guess-p-verb
 lin livelihood_N = mkN "sustento" ; -- status=guess
 lin liveliness_N = mkN "vivacidad" feminine ; -- status=guess
 lin lively_A = mkA "burbujeante" | mkA "espumosa" ; -- status=guess
@@ -16798,6 +17588,13 @@ lin lochia_N = mkN "loquios" ; -- status=guess
 lin lock_N = mkN "llave" feminine ; -- status=guess
 lin lock_V = mkV (mkV "cerrar") "con llave" | mkV "acerrojar" | mkV "candar" ; -- status=guess
 lin lock_V2 = mkV2 (mkV (mkV "cerrar") "con llave") | mkV2 (mkV "acerrojar") | mkV2 (mkV "candar") ; -- status=guess
+lin lock_away_V2 = mkV2 (advV OP_lock_V OP_away_Adv ) ; -- guess-p-verb
+lin lock_down_V2 = prepV2 OP_lock_V OP_down_Prep ; -- guess-p-verb
+lin lock_in_V2 = prepV2 OP_lock_V OP_in_Prep ; -- guess-p-verb
+lin lock_onto_V2 = prepV2 OP_lock_V OP_onto_Prep ; -- guess-p-verb
+lin lock_out_V2 = prepV2 OP_lock_V OP_out_Prep ; -- guess-p-verb
+lin lock_up_V2 = prepV2 OP_lock_V OP_up_Prep ; -- guess-p-verb
+lin lock_yourself_away_V = variants {} ; -- guess-p-verb
 lin locker_N = mkN "armario" | mkN "casillero" ; -- status=guess status=guess
 lin locket_N = mkN "medallón" masculine ; -- status=guess
 lin locking_N = mkN "cierre" | mkN "encierro" ; --UWN
@@ -16880,9 +17677,34 @@ lin look_N = mkN "vistazo" | mkN "ojeada" | mkN "mirada" ;
 lin look_V = mkV "mirar" ;
 lin look_V2 = mkV2 "mirar" ;
 lin look_VA = mkVA (mkV "parecer") ;
+lin look_after_V2 = prepV2 OP_look_V OP_after_Prep ; -- guess-p-verb
+lin look_ahead_to_V2 = prepV2 (advV OP_look_V OP_ahead_Adv ) OP_to_Prep ; -- guess-p-verb
+lin look_around_V = advV OP_look_V OP_around_Adv ; -- guess-p-verb
+lin look_around_at_V2 = prepV2 (advV OP_look_V OP_around_Adv ) OP_at_Prep ; -- guess-p-verb
+lin look_at_V2 = prepV2 OP_look_V OP_at_Prep ; -- guess-p-verb
+lin look_back_V = advV OP_look_V OP_back_Adv ; -- guess-p-verb
+lin look_back_on_V2 = prepV2 (advV OP_look_V OP_back_Adv ) OP_on_Prep ; -- guess-p-verb
+lin look_down_V = advV OP_look_V OP_down_Adv ; -- guess-p-verb
+lin look_down_on_V2 = prepV2 (advV OP_look_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin look_for_V2 = prepV2 OP_look_V OP_for_Prep ; -- guess-p-verb
+lin look_forward_V = advV OP_look_V OP_forward_Adv ; -- guess-p-verb
+lin look_forward_to_V2 = prepV2 (advV OP_look_V OP_forward_Adv ) OP_to_Prep ; -- guess-p-verb
+lin look_in_V2 = prepV2 OP_look_V OP_in_Prep ; -- guess-p-verb
+lin look_in_on_V2 = prepV2 (advV OP_look_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin look_into_V2 = prepV2 OP_look_V OP_into_Prep ; -- guess-p-verb
 lin look_on_V = mkV "considerar" | mkV "estimar" ; --UWN
+lin look_on_as_V3 = variants {} ; -- guess-p-verb
 lin look_out_V = mkV "proteger" | mkV "vigilar" ; --UWN
+lin look_out_for_V2 = prepV2 (advV OP_look_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin look_over_V2 = prepV2 OP_look_V OP_over_Prep ; -- guess-p-verb
+lin look_round_V2 = prepV2 OP_look_V OP_round_Prep ; -- guess-p-verb
+lin look_through_V2 = prepV2 OP_look_V OP_through_Prep ; -- guess-p-verb
+lin look_to_V2 = prepV2 OP_look_V OP_to_Prep ; -- guess-p-verb
+lin look_toward_V2 = prepV2 OP_look_V OP_toward_Prep ; -- guess-p-verb
 lin look_up_V = mkV "consultar" ; --UWN
+lin look_up_V2 = prepV2 OP_look_V OP_up_Prep ; -- guess-p-verb
+lin look_up_to_V2 = prepV2 (advV OP_look_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin look_upon_as_V3 = variants {} ; -- guess-p-verb
 lin looking_N = mkN "mirada" | mkN "vistazo" ; --UWN
 lin loom_N = mkN "telar" ; -- status=guess
 lin loom_V = mkV "cerner" ; -- status=guess, src=wikt
@@ -16915,6 +17737,10 @@ lin lorry_N = mkN "camión" ; --UWN
 lin los_angeles_PN = mkPN "El Pueblo de Nuestra Señora de los Ángeles de Porciúncula" ; -- status=guess src=geonames
 lin lose_V = perder_V ;
 lin lose_V2 = L.lose_V2 ;
+lin lose_out_V = advV OP_lose_V OP_out_Adv ; -- guess-p-verb
+lin lose_out_on_V2 = prepV2 (advV OP_lose_V OP_out_Adv ) OP_on_Prep ; -- guess-p-verb
+lin lose_out_to_V2 = prepV2 (advV OP_lose_V OP_out_Adv ) OP_to_Prep ; -- guess-p-verb
+lin lose_up_V = advV OP_lose_V OP_up_Adv ; -- guess-p-verb
 lin loser_N = mkN "perdedor" masculine ; -- status=guess
 lin loss_N = mkN "pérdida" ;
 lin lossiemouth_PN = mkPN "Lossiemouth" ; -- status=guess src=geonames
@@ -17211,7 +18037,27 @@ lin make_V = hacer_V ;
 lin make_V2 = mkV2 hacer_V ;
 lin make_V2A = mkV2A hacer_V ;
 lin make_V2V = mkV2V hacer_V ;
+lin make_after_V = advV OP_make_V OP_after_Adv ; -- guess-p-verb
+lin make_away_with_V2 = prepV2 (advV OP_make_V OP_away_Adv ) OP_with_Prep ; -- guess-p-verb
+lin make_do_with_V2 = variants {} ; -- guess-p-verb
+lin make_for_V2 = prepV2 OP_make_V OP_for_Prep ; -- guess-p-verb
+lin make_into_V2 = prepV2 OP_make_V OP_into_Prep ; -- guess-p-verb
+lin make_it_V = variants {} ; -- guess-p-verb
+lin make_it_up_to_V2 = variants {} ; -- guess-p-verb
+lin make_of_V3 = variants {} ; -- guess-p-verb
+lin make_off_V = advV OP_make_V OP_off_Adv ; -- guess-p-verb
+lin make_off_with_V2 = prepV2 (advV OP_make_V OP_off_Adv ) OP_with_Prep ; -- guess-p-verb
+lin make_out_V = advV OP_make_V OP_out_Adv ; -- guess-p-verb
+lin make_out_V2 = prepV2 OP_make_V OP_out_Prep ; -- guess-p-verb
+lin make_out_with_V2 = prepV2 (advV OP_make_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
+lin make_over_V2 = prepV2 OP_make_V OP_over_Prep ; -- guess-p-verb
+lin make_towards_V2 = prepV2 OP_make_V OP_towards_Prep ; -- guess-p-verb
 lin make_up_N = variants {} ; --
+lin make_up_V = advV OP_make_V OP_up_Adv ; -- guess-p-verb
+lin make_up_V2 = prepV2 OP_make_V OP_up_Prep ; -- guess-p-verb
+lin make_up_for_V2 = prepV2 (advV OP_make_V OP_up_Adv ) OP_for_Prep ; -- guess-p-verb
+lin make_up_to_V2 = prepV2 (advV OP_make_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin make_with_V2 = prepV2 OP_make_V OP_with_Prep ; -- guess-p-verb
 lin maker_N = variants {} ; --
 lin makeready_N = mkN "etapa_final" ; --UWN
 lin makeshift_N = mkN "apaño" | mkN "improvisación" feminine ; -- status=guess status=guess
@@ -17429,6 +18275,13 @@ lin marjoram_N = mkN "mejorana" | mkN "mayorana" | mkN "orégano" ; -- status=gu
 lin mark_N = mkN "marca" | mkN "nota" | mkN "calificación" feminine ; ---split: mark of zorro / mark in exam
 lin mark_V2 = mkV2 (mkV "marcar") ;
 lin mark_V3 = mkV3 (mkV "marcar") ;
+lin mark_down_V2 = prepV2 (lin V OP_mark_V2) OP_down_Prep ; -- guess-p-verb
+lin mark_down_as_V3 = variants {} ; -- guess-p-verb
+lin mark_off_V2 = prepV2 (lin V OP_mark_V2) OP_off_Prep ; -- guess-p-verb
+lin mark_out_V2 = prepV2 (lin V OP_mark_V2) OP_out_Prep ; -- guess-p-verb
+lin mark_out_for_V3 = variants {} ; -- guess-p-verb
+lin mark_out_from_V3 = variants {} ; -- guess-p-verb
+lin mark_up_V2 = prepV2 (lin V OP_mark_V2) OP_up_Prep ; -- guess-p-verb
 lin marked_A = variants {} ; --
 lin markedly_Adv = adjAdv marked_A ; -- derived -- derived
 lin marker_N = mkN "rotulador" ; -- status=guess
@@ -17461,6 +18314,8 @@ lin married_A2 = L.married_A2 ;
 lin marrow_N = mkN "calabaza" ; -- status=guess
 lin marry_V = mkV "casar" | mkV "casarse" ;
 lin marry_V2 = mkV2 (mkV "casarse") with_Prep | mkV2 (mkV "casar") ;
+lin marry_in_V = advV OP_marry_V OP_in_Adv ; -- guess-p-verb
+lin marry_out_V = advV OP_marry_V OP_out_Adv ; -- guess-p-verb
 lin mars_PN = mkPN "Mars" ; -- status=guess src=geonames
 lin marseilles_PN = mkPN "Marseilles" ; -- status=guess src=geonames
 lin marsh_N = mkN "ciénaga" | mkN "marisma" | mkN "pantano" ; -- status=guess
@@ -17546,6 +18401,7 @@ lin match_2_N = mkN "cerilla" | mkN "fósforo" ;
 lin match_3_N = mkN "igual" ;
 lin match_N = mkN "igual" ;
 lin match_V2 = mkV2 (mkV "emparejar") ; -- status=guess
+lin match_up_V = advV (lin V OP_match_V2) OP_up_Adv ; -- guess-p-verb
 lin matchbook_N = mkN "fosforera" ; --UWN
 lin matchbox_N = mkN "fosforera" | mkN "cerillero" | mkN "caja de fósforos" | mkN "caja de cerillas" ; -- status=guess status=guess status=guess status=guess
 lin matchet_N = mkN "pterogymnus_laniarius" ; --UWN
@@ -17657,6 +18513,12 @@ lin measurable_A = mkA "moderado" ; --UWN
 lin measure_N = mkN "medida" feminine ;
 lin measure_V = medir_V ;
 lin measure_V2 = mkV2 (medir_V) ;
+lin measure_against_V3 = variants {} ; -- guess-p-verb
+lin measure_off_V2 = prepV2 OP_measure_V OP_off_Prep ; -- guess-p-verb
+lin measure_out_V2 = prepV2 OP_measure_V OP_out_Prep ; -- guess-p-verb
+lin measure_up_V = advV OP_measure_V OP_up_Adv ; -- guess-p-verb
+lin measure_up_V2 = prepV2 OP_measure_V OP_up_Prep ; -- guess-p-verb
+lin measure_up_to_V2 = prepV2 (advV OP_measure_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin measurement_N = mkN "medida" | mkN "medición" feminine | mkN "medidas" feminine | mkN "mediciones" masculine ; -- status=guess
 lin meat_N = L.meat_N ;
 lin meatball_N = mkN "albóndiga" ; -- status=guess
@@ -17717,6 +18579,8 @@ lin meekness_N = mkN "sumisión" ; --UWN
 lin meerkat_N = mkN "suricata" | mkN "suricato" ; -- status=guess status=guess
 lin meet_V = conocer_V ;
 lin meet_V2 = mkV2 (conocer_V) ;
+lin meet_up_V = advV OP_meet_V OP_up_Adv ; -- guess-p-verb
+lin meet_with_V2 = prepV2 OP_meet_V OP_with_Prep ; -- guess-p-verb
 lin meeting_N = mkN "reunión" feminine ;
 lin megadeath_N = mkN "megamuerte" ; --UWN
 lin megakaryocyte_N = mkN "megacariocito" ; -- status=guess
@@ -18224,6 +19088,9 @@ lin miss_3_V2 = mkV2 (mkV "faltar") of_Prep ;
 lin miss_N = mkN "señorita" ; -- status=guess
 lin miss_V = perder_V | mkV "faltar" ;
 lin miss_V2 = mkV2 (perder_V) ;
+lin miss_out_V = advV OP_miss_V OP_out_Adv ; -- guess-p-verb
+lin miss_out_V2 = prepV2 OP_miss_V OP_out_Prep ; -- guess-p-verb
+lin miss_out_on_V2 = prepV2 (advV OP_miss_V OP_out_Adv ) OP_on_Prep ; -- guess-p-verb
 lin missile_N = mkN "proyectil" masculine ; -- status=guess
 lin missing_A = variants {} ; --
 lin mission_N = mkN "misión" feminine ; -- status=guess
@@ -18259,6 +19126,7 @@ lin mitten_N = mkN "manopla" ; -- status=guess
 lin mix_N = mkN "mezcla" ; -- status=guess
 lin mix_V = mkV "mezclar" ; -- status=guess
 lin mix_V2 = mkV2 (mkV "mezclar") ; -- status=guess
+lin mix_up_V2 = prepV2 OP_mix_V OP_up_Prep ; -- guess-p-verb
 lin mixed_A = variants {} ; --
 lin mixer_N = mkN "batidora" ; -- status=guess
 lin mixture_N = mkN "mezcla" ; -- status=guess
@@ -18590,7 +19458,21 @@ lin move_2_V = mkV "mudarse" ;
 lin move_N = mkN "movimiento" | mkN "paso" | mkN "mudanza" ;
 lin move_V = mkV "mover" "muevo" ;
 lin move_V2 = mkV2 (mkV "mover" "muevo") ;
+lin move_ahead_V = advV OP_move_V OP_ahead_Adv ; -- guess-p-verb
+lin move_along_V = advV OP_move_V OP_along_Adv ; -- guess-p-verb
+lin move_away_V = advV OP_move_V OP_away_Adv ; -- guess-p-verb
+lin move_away_from_V2 = prepV2 (advV OP_move_V OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
+lin move_down_V2 = prepV2 OP_move_V OP_down_Prep ; -- guess-p-verb
+lin move_in_V = advV OP_move_V OP_in_Adv ; -- guess-p-verb
+lin move_in_on_V2 = prepV2 (advV OP_move_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin move_into_V2 = prepV2 OP_move_V OP_into_Prep ; -- guess-p-verb
+lin move_on_V = advV OP_move_V OP_on_Adv ; -- guess-p-verb
+lin move_on_V2 = prepV2 OP_move_V OP_on_Prep ; -- guess-p-verb
+lin move_out_V = advV OP_move_V OP_out_Adv ; -- guess-p-verb
+lin move_out_V2 = prepV2 OP_move_V OP_out_Prep ; -- guess-p-verb
+lin move_towards_V2 = prepV2 OP_move_V OP_towards_Prep ; -- guess-p-verb
 lin move_up_V = mkV "ascender" | mkV "subir" ; --UWN
+lin move_up_V2 = prepV2 OP_move_V OP_up_Prep ; -- guess-p-verb
 lin movement_N = mkN "movimiento" ;
 lin movie_N = mkN "película" | mkN "cine" masculine ; -- status=guess
 lin moving_A = variants {} ; --
@@ -19204,6 +20086,8 @@ lin noctambulist_N = mkN "noctámbulo" | mkN "sonámbulo" ; --UWN
 lin nocturia_N = mkN "nicturia" ; --UWN
 lin nocturnal_A = mkA "nocturno" ; -- status=guess
 lin nod_V = mkV "cabecear" ;
+lin nod_off_V = advV OP_nod_V OP_off_Adv ; -- guess-p-verb
+lin nod_through_V2 = prepV2 OP_nod_V OP_through_Prep ; -- guess-p-verb
 lin node_N = mkN "nodo" ; -- status=guess
 lin nodular_A = mkA "nodular" ; -- status=guess
 lin noel_PN = mkPN "Noel" ; -- status=guess src=geonames
@@ -19323,6 +20207,7 @@ lin note_N = mkN "nota" ;
 lin note_V = mkV "anotar" | mkV "observar" ;
 lin note_V2 = mkV2 (mkV "anotar") | mkV2 "observar" ;
 lin note_VS = mkVS (mkV "anotar") | mkVS (mkV "observar") ;
+lin note_down_V2 = prepV2 OP_note_V OP_down_Prep ; -- guess-p-verb
 lin notebook_N = mkN "cuaderno" ; -- status=guess
 lin notecase_N = mkN "cartera" ; --UWN
 lin notepad_N = mkN "bloc de notas" ; -- status=guess
@@ -19560,6 +20445,7 @@ lin occupational_A = variants {} ; --
 lin occupy_V = mkV "ocupar" ; -- status=guess
 lin occupy_V2 = mkV2 (mkV "ocupar") ; -- status=guess
 lin occur_V = mkV "ocurrir" ;
+lin occur_to_V2 = prepV2 OP_occur_V OP_to_Prep ; -- guess-p-verb
 lin occurrence_N = mkN "acontecimiento" ; -- status=guess
 lin ocean_N = mkN "océano" ; -- status=guess
 lin oceanic_A = mkA "oceánico" ; -- status=guess
@@ -19614,6 +20500,7 @@ lin offensive_N = mkN "ataque" ; --UWN
 lin offer_N = mkN "oferta" ;
 lin offer_V2 = mkV2 (ofrecer_V) ;
 lin offer_VV = mkVV (ofrecer_V) ;
+lin offer_up_V = advV (lin V OP_offer_V2) OP_up_Adv ; -- guess-p-verb
 lin offerer_N = mkN "oferente" | mkN "ofertante" ; --UWN
 lin offering_N = mkN "ofrecimiento" ; -- status=guess
 lin offhand_A = mkA "descuidado" ; -- status=guess
@@ -19747,12 +20634,15 @@ lin open_N = mkN "open" masculine ; -- status=guess
 lin open_V = abrir_V ;
 lin open_V2 = L.open_V2 ;
 lin open_ended_A = mkA "abierto" ; --UWN
+lin open_up_V = advV OP_open_V OP_up_Adv ; -- guess-p-verb
+lin open_up_V2 = prepV2 OP_open_V OP_up_Prep ; -- guess-p-verb
 lin opener_N = mkN "abridor" masculine ; -- status=guess
 lin opening_N = mkN "apertura" masculine ; -- status=guess
 lin openly_Adv = adjAdv open_A ; -- -- derived
 lin opera_N = mkN "ópera" ; -- status=guess
 lin operate_V = mkV "operar" ;
 lin operate_V2 = mkV2 (mkV "operar") ;
+lin operate_on_V2 = prepV2 OP_operate_V OP_on_Prep ; -- guess-p-verb
 lin operating_N = variants {} ; --
 lin operation_N = mkN "operación" feminine ;
 lin operational_A = variants {} ; --
@@ -20145,6 +21035,7 @@ lin owe_V2 = mkV2 (mkV (mkV "estar") "en deuda") | mkV2 (mkV "deber") | mkV2 (mk
 lin owl_N = mkN "búho" | mkN "lechuza" ; -- status=guess
 lin own_A = mkA "propio" ; -- status=guess
 lin own_V2 = mkV2 poseer_V ;
+lin own_up_V = advV (lin V OP_own_V2) OP_up_Adv ; -- guess-p-verb
 lin owner_N = mkN "propietario" | mkN "dueño" | mkN "poseedor" masculine ;
 lin ownership_N = mkN "posesión" feminine | mkN "propiedad" masculine ; -- status=guess
 lin ox_N = mkN "buey" masculine | mkN "toro" feminine | mkN "novillo" ; -- status=guess status=guess status=guess
@@ -20190,6 +21081,14 @@ lin pacify_V2 = mkV2 (mkV "pacificar") ; -- status=guess, src=wikt
 lin pack_N = mkN "jauría" ; -- status=guess
 lin pack_V = variants {} ; --
 lin pack_V2 = variants {} ; --
+lin pack_away_V2 = mkV2 (advV OP_pack_V OP_away_Adv ) ; -- guess-p-verb
+lin pack_in_V = advV OP_pack_V OP_in_Adv ; -- guess-p-verb
+lin pack_in_V2 = prepV2 OP_pack_V OP_in_Prep ; -- guess-p-verb
+lin pack_it_in_V = variants {} ; -- guess-p-verb
+lin pack_off_V2 = prepV2 OP_pack_V OP_off_Prep ; -- guess-p-verb
+lin pack_out_V2 = prepV2 OP_pack_V OP_out_Prep ; -- guess-p-verb
+lin pack_up_V = advV OP_pack_V OP_up_Adv ; -- guess-p-verb
+lin pack_up_V2 = prepV2 OP_pack_V OP_up_Prep ; -- guess-p-verb
 lin package_N = mkN "paquete" ;
 lin package_V2 = mkV2 (mkV "empaquetar") ; -- status=guess
 lin packet_N = mkN "paquete" masculine ; -- status=guess
@@ -20513,8 +21412,27 @@ lin paschal_A = mkA "pascual" ; --UWN
 lin pasha_N = mkN "pachá" | mkN "bajá" masculine ; -- status=guess status=guess
 lin pass_N = mkN "pasaporte" ; --UWN
 lin pass_V = mkV "pasar" ;
+lin pass_around_V2 = prepV2 OP_pass_V OP_around_Prep ; -- guess-p-verb
+lin pass_as_V2 = prepV2 OP_pass_V OP_as_Prep ; -- guess-p-verb
+lin pass_away_V = advV OP_pass_V OP_away_Adv ; -- guess-p-verb
+lin pass_back_V2 = mkV2 (advV OP_pass_V OP_back_Adv ) ; -- guess-p-verb
+lin pass_by_V = advV OP_pass_V OP_by_Adv ; -- guess-p-verb
+lin pass_by_V2 = prepV2 OP_pass_V OP_by_Prep ; -- guess-p-verb
+lin pass_down_V2 = prepV2 OP_pass_V OP_down_Prep ; -- guess-p-verb
+lin pass_for_V2 = prepV2 OP_pass_V OP_for_Prep ; -- guess-p-verb
+lin pass_off_V = advV OP_pass_V OP_off_Adv ; -- guess-p-verb
+lin pass_off_V2 = prepV2 OP_pass_V OP_off_Prep ; -- guess-p-verb
 lin pass_on_V = mkV "comunicar" ; --UWN
+lin pass_on_V2 = prepV2 OP_pass_V OP_on_Prep ; -- guess-p-verb
+lin pass_on_to_V2 = prepV2 (advV OP_pass_V OP_on_Adv ) OP_to_Prep ; -- guess-p-verb
+lin pass_out_V = advV OP_pass_V OP_out_Adv ; -- guess-p-verb
+lin pass_out_V2 = prepV2 OP_pass_V OP_out_Prep ; -- guess-p-verb
 lin pass_over_V = mkV "circunvalar" | mkV "saltar" | mkV "saltarse" ; --UWN
+lin pass_over_V2 = prepV2 OP_pass_V OP_over_Prep ; -- guess-p-verb
+lin pass_round_V2 = prepV2 OP_pass_V OP_round_Prep ; -- guess-p-verb
+lin pass_through_V2 = prepV2 OP_pass_V OP_through_Prep ; -- guess-p-verb
+lin pass_to_V2 = prepV2 OP_pass_V OP_to_Prep ; -- guess-p-verb
+lin pass_up_V2 = prepV2 OP_pass_V OP_up_Prep ; -- guess-p-verb
 lin passage_N = mkN "pasaje" masculine ; -- status=guess
 lin passageway_N = mkN "pasillo" ; -- status=guess
 lin passenger_N = mkN "pasajero" ; -- status=guess
@@ -20632,7 +21550,14 @@ lin pay_V = mkV "pagar" ;
 lin pay_V2 = mkV2 (mkV "pagar") ;
 lin pay_V2V = mkV2V (mkV "pagar") ;
 lin pay_V3 = mkV3 (mkV "pagar") ;
+lin pay_back_V = advV OP_pay_V OP_back_Adv ; -- guess-p-verb
+lin pay_back_V2 = mkV2 (advV OP_pay_V OP_back_Adv ) ; -- guess-p-verb
+lin pay_down_V2 = prepV2 OP_pay_V OP_down_Prep ; -- guess-p-verb
+lin pay_for_V3 = variants {} ; -- guess-p-verb
+lin pay_into_V3 = variants {} ; -- guess-p-verb
 lin pay_off_V = mkV "compensar" ; --UWN
+lin pay_off_V2 = prepV2 OP_pay_V OP_off_Prep ; -- guess-p-verb
+lin pay_out_V = advV OP_pay_V OP_out_Adv ; -- guess-p-verb
 lin pay_up_V = mkV "pagar" ; --UWN
 lin payable_A = variants {} ; --
 lin payback_N = mkN "recompensa" ; -- status=guess
@@ -21191,6 +22116,17 @@ lin piccolo_N = mkN "flautín" masculine | mkN "píccolo" ; -- status=guess stat
 lin pick_N = mkN "pico" feminine ; -- status=guess
 lin pick_V = coger_V | recoger_V ;
 lin pick_V2 = mkV2 (coger_V) | mkV2 recoger_V ;
+lin pick_at_V2 = prepV2 OP_pick_V OP_at_Prep ; -- guess-p-verb
+lin pick_away_V = advV OP_pick_V OP_away_Adv ; -- guess-p-verb
+lin pick_off_V2 = prepV2 OP_pick_V OP_off_Prep ; -- guess-p-verb
+lin pick_on_V2 = prepV2 OP_pick_V OP_on_Prep ; -- guess-p-verb
+lin pick_out_V2 = prepV2 OP_pick_V OP_out_Prep ; -- guess-p-verb
+lin pick_through_V2 = prepV2 OP_pick_V OP_through_Prep ; -- guess-p-verb
+lin pick_up_V = advV OP_pick_V OP_up_Adv ; -- guess-p-verb
+lin pick_up_V2 = prepV2 OP_pick_V OP_up_Prep ; -- guess-p-verb
+lin pick_up_after_V2 = prepV2 (advV OP_pick_V OP_up_Adv ) OP_after_Prep ; -- guess-p-verb
+lin pick_up_on_V2 = prepV2 (advV OP_pick_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin pick_yourself_up_V = variants {} ; -- guess-p-verb
 lin pickaxe_N = mkN "pico" feminine ; -- status=guess
 lin pickelhaube_N = mkN "pickelhaube" ; --UWN
 lin picket_N = mkN "piquete" masculine ; -- status=guess
@@ -21391,6 +22327,7 @@ lin planner_N = variants {} ; --
 lin planning_N = mkN "plan" ;
 lin plant_N = mkN "planta" ; --- split mkN "fábrica"
 lin plant_V2 = mkV2 (mkV "plantar") | mkV2 (sembrar_V) ; -- status=guess
+lin plant_out_V2 = prepV2 (lin V OP_plant_V2) OP_out_Prep ; -- guess-p-verb
 lin plantain_N = mkN " plátano macho" | mkN "plátano" ; -- status=guess status=guess
 lin plantation_N = mkN "plantación" feminine ; -- status=guess
 lin plantigrade_A = mkA "plantígrado" ; -- status=guess
@@ -21436,6 +22373,22 @@ lin play_N = mkN "juego" ; --- split play in theatre ; "press play" ;
 lin play_V = L.play_V ;
 lin play_V2 = L.play_V2 ;
 lin play_along_V = mkV "acompañar" ; --UWN
+lin play_around_V = advV OP_play_V OP_around_Adv ; -- guess-p-verb
+lin play_at_V2 = prepV2 OP_play_V OP_at_Prep ; -- guess-p-verb
+lin play_away_V = advV OP_play_V OP_away_Adv ; -- guess-p-verb
+lin play_back_V2 = mkV2 (advV OP_play_V OP_back_Adv ) ; -- guess-p-verb
+lin play_down_V2 = prepV2 OP_play_V OP_down_Prep ; -- guess-p-verb
+lin play_off_V = advV OP_play_V OP_off_Adv ; -- guess-p-verb
+lin play_off_V2 = prepV2 OP_play_V OP_off_Prep ; -- guess-p-verb
+lin play_on_V = advV OP_play_V OP_on_Adv ; -- guess-p-verb
+lin play_on_V2 = prepV2 OP_play_V OP_on_Prep ; -- guess-p-verb
+lin play_out_V = advV OP_play_V OP_out_Adv ; -- guess-p-verb
+lin play_out_V2 = prepV2 OP_play_V OP_out_Prep ; -- guess-p-verb
+lin play_up_V = advV OP_play_V OP_up_Adv ; -- guess-p-verb
+lin play_up_V2 = prepV2 OP_play_V OP_up_Prep ; -- guess-p-verb
+lin play_up_to_V2 = prepV2 (advV OP_play_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin play_upon_V2 = prepV2 OP_play_V OP_upon_Prep ; -- guess-p-verb
+lin play_with_V2 = prepV2 OP_play_V OP_with_Prep ; -- guess-p-verb
 lin playboy_N = mkN "golfo" | mkN "mujeriego" ; -- status=guess status=guess
 lin player_N = mkN "jugador" | mkN "jugadora" ;
 lin playful_A = mkA "divertido" ; -- status=guess
@@ -21582,6 +22535,7 @@ lin point_2_N = mkN "punto" ;
 lin point_N = mkN "punto" ;
 lin point_V = mkV "indicar" | mkV "apuntar" ;
 lin point_V2 = mkV2 (mkV "indicar") | mkV2 (mkV "apuntar") | mkV2 (mkV "señalar") ;
+lin point_out_V2 = prepV2 OP_point_V OP_out_Prep ; -- guess-p-verb
 lin point_out_VS = mkVS (mkV "distinguir") | mkVS (mkV "señalar") ; --UWN
 lin point_up_V = mkV "acentuar" | mkV "apuntar" | mkV "enfatizar" | mkV "incidir" ; --UWN
 lin pointer_N = mkN "apuntador" | mkN "puntero" ; -- status=guess status=guess
@@ -21883,6 +22837,10 @@ lin pound_V = mkV "pulverizar" ; -- status=guess, src=wikt
 lin pound_V2 = mkV2 (mkV "pulverizar") ; -- status=guess, src=wikt
 lin pour_V = verter_V ; -- status=guess
 lin pour_V2 = mkV2 (verter_V) ; -- status=guess
+lin pour_down_V = advV OP_pour_V OP_down_Adv ; -- guess-p-verb
+lin pour_forth_V = advV OP_pour_V OP_forth_Adv ; -- guess-p-verb
+lin pour_in_V2 = prepV2 OP_pour_V OP_in_Prep ; -- guess-p-verb
+lin pour_out_V = advV OP_pour_V OP_out_Adv ; -- guess-p-verb
 lin pout_N = mkN "mohín" masculine ; -- status=guess
 lin pout_V = mkV (mkV "hacer") "un mohín" | mkV (mkV "ponerse") "de morros" ; -- status=guess, src=wikt status=guess, src=wikt
 lin pout_V2 = mkV2 (mkV (mkV "hacer") "un mohín") | mkV2 (mkV (mkV "ponerse") "de morros") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -22079,6 +23037,12 @@ lin press_N = mkN "prensa" ;
 lin press_V = mkV "pulsar" | mkV "presionar" ;
 lin press_V2 = mkV2 (mkV "pulsar") | mkV2 (mkV "presionar") ;
 lin press_V2V = mkV2V (mkV "presionar") ;
+lin press_ahead_V = advV OP_press_V OP_ahead_Adv ; -- guess-p-verb
+lin press_for_V2 = prepV2 OP_press_V OP_for_Prep ; -- guess-p-verb
+lin press_forward_with_V2 = prepV2 (advV OP_press_V OP_forward_Adv ) OP_with_Prep ; -- guess-p-verb
+lin press_into_V2 = prepV2 OP_press_V OP_into_Prep ; -- guess-p-verb
+lin press_on_V = advV OP_press_V OP_on_Adv ; -- guess-p-verb
+lin press_upon_V2 = prepV2 OP_press_V OP_upon_Prep ; -- guess-p-verb
 lin pressing_A = mkA "acuciante" ; -- status=guess
 lin pressing_N = mkN "prensa" | mkN "presión" ; --UWN
 lin pressman_N = mkN "corresponsal" | mkN "periodista" | mkN "redactor_de_noticias" ; --UWN
@@ -22180,6 +23144,7 @@ lin principled_A = mkA "de principios" ; -- status=guess
 lin print_N = variants {} ; --
 lin print_V = imprimir_V ; -- status=guess
 lin print_V2 = mkV2 (imprimir_V) ; -- status=guess
+lin print_out_V2 = prepV2 OP_print_V OP_out_Prep ; -- guess-p-verb
 lin printed_A = variants {} ; --
 lin printer_N = mkN "impresora" ; -- status=guess
 lin printing_N = mkN "impresora" ; -- status=guess
@@ -22656,9 +23621,27 @@ lin pull_N = mkN "barbilla" | mkN "ejercicio de tracción" ; -- status=guess sta
 lin pull_V = mkV "tirar" ;
 lin pull_V2 = L.pull_V2 ;
 lin pull_ahead_V = mkV "adelantarse" | mkV "avanzarse" ; --UWN
+lin pull_apart_V2 = mkV2 (advV OP_pull_V OP_apart_Adv ) ; -- guess-p-verb
+lin pull_away_V = advV OP_pull_V OP_away_Adv ; -- guess-p-verb
+lin pull_back_V = advV OP_pull_V OP_back_Adv ; -- guess-p-verb
+lin pull_back_V2 = mkV2 (advV OP_pull_V OP_back_Adv ) ; -- guess-p-verb
 lin pull_down_V = mkV "derribar" | mkV "tumbar" ; --UWN
+lin pull_down_V2 = prepV2 OP_pull_V OP_down_Prep ; -- guess-p-verb
+lin pull_for_V2 = prepV2 OP_pull_V OP_for_Prep ; -- guess-p-verb
 lin pull_in_V = mkV "coleccionar" | mkV "meter" ; --UWN
+lin pull_in_V2 = prepV2 OP_pull_V OP_in_Prep ; -- guess-p-verb
+lin pull_off_V = advV OP_pull_V OP_off_Adv ; -- guess-p-verb
+lin pull_off_V2 = prepV2 OP_pull_V OP_off_Prep ; -- guess-p-verb
+lin pull_on_V2 = prepV2 OP_pull_V OP_on_Prep ; -- guess-p-verb
+lin pull_out_V = advV OP_pull_V OP_out_Adv ; -- guess-p-verb
+lin pull_out_V2 = prepV2 OP_pull_V OP_out_Prep ; -- guess-p-verb
+lin pull_over_V2 = prepV2 OP_pull_V OP_over_Prep ; -- guess-p-verb
+lin pull_through_V = advV OP_pull_V OP_through_Adv ; -- guess-p-verb
+lin pull_to_V2 = prepV2 OP_pull_V OP_to_Prep ; -- guess-p-verb
 lin pull_together_V = mkV "ensamblar" | mkV "juntar" | mkV "ordenar" | mkV "recoger" | mkV "recolectar" | mkV "reunir" ; --UWN
+lin pull_up_V = advV OP_pull_V OP_up_Adv ; -- guess-p-verb
+lin pull_up_V2 = prepV2 OP_pull_V OP_up_Prep ; -- guess-p-verb
+lin pull_yourself_together_V = variants {} ; -- guess-p-verb
 lin pullet_N = mkN "polla" ; -- status=guess
 lin pulley_N = mkN "polea" | mkN "roldana" ; -- status=guess status=guess
 lin pulmonary_A = mkA "pulmonar" ; -- status=guess
@@ -22742,6 +23725,12 @@ lin push_V = mkV "pulsar" ;
 lin push_V2 = L.push_V2 ;
 lin push_V2V = mkV2V (mkV "presionar") ;
 lin push_VS = mkVS (mkV "presionar") ;
+lin push_ahead_V = advV OP_push_V OP_ahead_Adv ; -- guess-p-verb
+lin push_around_V = advV OP_push_V OP_around_Adv ; -- guess-p-verb
+lin push_back_V = advV OP_push_V OP_back_Adv ; -- guess-p-verb
+lin push_in_V2 = prepV2 OP_push_V OP_in_Prep ; -- guess-p-verb
+lin push_through_V = advV OP_push_V OP_through_Adv ; -- guess-p-verb
+lin push_up_V2 = prepV2 OP_push_V OP_up_Prep ; -- guess-p-verb
 lin pusher_N = mkN "impulsor" | mkN "propulsor" ; --UWN
 lin pushful_A = mkA "agresivo" ; --UWN
 lin pushup_N = mkN "flexión_de_codos" | mkN "plancha" ; --UWN
@@ -22751,8 +23740,35 @@ lin pussy_N = mkN "gatita" | mkN "nenita" | mkN "lolita" | mkN "chiquita" ; -- s
 lin pustule_N = mkN "pústula" ; -- status=guess
 lin put_V2 = L.put_V2 ;
 lin put_across_V = mkV "comunicar" ; --UWN
+lin put_across_V2 = prepV2 (lin V OP_put_V2) OP_across_Prep ; -- guess-p-verb
+lin put_aside_V = advV (lin V OP_put_V2) OP_aside_Adv ; -- guess-p-verb
+lin put_away_V = advV (lin V OP_put_V2) OP_away_Adv ; -- guess-p-verb
+lin put_away_V2 = mkV2 (advV (lin V OP_put_V2) OP_away_Adv ) ; -- guess-p-verb
+lin put_back_V2 = mkV2 (advV (lin V OP_put_V2) OP_back_Adv ) ; -- guess-p-verb
+lin put_by_V2 = prepV2 (lin V OP_put_V2) OP_by_Prep ; -- guess-p-verb
 lin put_down_V = mkV "consignar" | mkV "registrar" ; --UWN
+lin put_down_V2 = prepV2 (lin V OP_put_V2) OP_down_Prep ; -- guess-p-verb
+lin put_down_for_V3 = variants {} ; -- guess-p-verb
+lin put_down_to_V3 = variants {} ; -- guess-p-verb
+lin put_forth_V = advV (lin V OP_put_V2) OP_forth_Adv ; -- guess-p-verb
 lin put_in_V = mkV "instalar" ; --UWN
+lin put_in_V2 = prepV2 (lin V OP_put_V2) OP_in_Prep ; -- guess-p-verb
+lin put_in_for_V2 = prepV2 (advV (lin V OP_put_V2) OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin put_off_V = advV (lin V OP_put_V2) OP_off_Adv ; -- guess-p-verb
+lin put_off_V2 = prepV2 (lin V OP_put_V2) OP_off_Prep ; -- guess-p-verb
+lin put_on_V = advV (lin V OP_put_V2) OP_on_Adv ; -- guess-p-verb
+lin put_on_V2 = prepV2 (lin V OP_put_V2) OP_on_Prep ; -- guess-p-verb
+lin put_out_V = advV (lin V OP_put_V2) OP_out_Adv ; -- guess-p-verb
+lin put_out_V2 = prepV2 (lin V OP_put_V2) OP_out_Prep ; -- guess-p-verb
+lin put_over_V2 = prepV2 (lin V OP_put_V2) OP_over_Prep ; -- guess-p-verb
+lin put_through_V2 = prepV2 (lin V OP_put_V2) OP_through_Prep ; -- guess-p-verb
+lin put_together_V2 = mkV2 (advV (lin V OP_put_V2) OP_together_Adv ) ; -- guess-p-verb
+lin put_towards_V2 = prepV2 (lin V OP_put_V2) OP_towards_Prep ; -- guess-p-verb
+lin put_up_V = advV (lin V OP_put_V2) OP_up_Adv ; -- guess-p-verb
+lin put_up_V2 = prepV2 (lin V OP_put_V2) OP_up_Prep ; -- guess-p-verb
+lin put_up_V2V = variants {} ; -- guess-p-verb
+lin put_up_with_V2 = prepV2 (advV (lin V OP_put_V2) OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
+lin put_upon_V = variants {} ; -- guess-p-verb
 lin putamen_N = mkN "putamen" ; --UWN
 lin putative_A = mkA "putativo" ; -- status=guess
 lin putoff_N = mkN "posposición" ; --UWN
@@ -22960,6 +23976,7 @@ lin race_V = mkV "correr" ; -- status=guess
 lin race_V2 = mkV2 (mkV "correr") ; -- status=guess
 lin race_V2V = mkV2V (mkV "correr") ; -- status=guess
 lin race_VV = mkVV (mkV "correr") ; -- status=guess
+lin race_off_V = advV OP_race_V OP_off_Adv ; -- guess-p-verb
 lin raceme_N = mkN "racimo" ; -- status=guess
 lin racer_N = mkN "corredor" masculine ; -- status=guess
 lin rachis_N = mkN "raquis" masculine ; -- status=guess
@@ -23177,6 +24194,9 @@ lin razorbill_N = mkN "alca" ; -- status=guess
 lin reach_N = mkN "alcance" masculine | mkN "influencia" ; -- status=guess
 lin reach_V = mkV "alcanzar" ;
 lin reach_V2 = mkV2 (mkV "alcanzar") | mkV2 (mkV "llegar") to_Prep ;
+lin reach_out_V = advV OP_reach_V OP_out_Adv ; -- guess-p-verb
+lin reach_out_for_V2 = prepV2 (advV OP_reach_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin reach_out_to_V2 = prepV2 (advV OP_reach_V OP_out_Adv ) OP_to_Prep ; -- guess-p-verb
 lin react_V = mkV "reaccionar" ; -- status=guess
 lin reaction_N = mkN "reacción" feminine ;
 lin reactionary_A = mkA "reaccionario" ; -- status=guess
@@ -23189,6 +24209,9 @@ lin read_N = mkN "lectura" ; -- status=guess
 lin read_V = leer_V ;
 lin read_V2 = L.read_V2 ;
 lin read_VS = mkVS (leer_V) ;
+lin read_off_V2 = prepV2 OP_read_V OP_off_Prep ; -- guess-p-verb
+lin read_out_V2 = prepV2 OP_read_V OP_out_Prep ; -- guess-p-verb
+lin read_up_on_V2 = prepV2 (advV OP_read_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
 lin readability_N = mkN "legibilidad" feminine ; -- status=guess
 lin readable_A = mkA "claro" ; --UWN
 lin reader_N = mkN "lector" | mkN "lectora" ; --- split masc fem
@@ -23602,6 +24625,7 @@ lin reluctantly_Adv = adjAdv reluctant_A ; -- -- derived
 lin rely_V = mkV (mkV "contar") "con" | mkV "atenerse" ; -- status=guess
 lin rely_V2 = variants {} ; -- mkV (mkV "contar") "con" | mkV "atenerse" ;
 lin rely_on_V = mkV "depender" ; --UWN
+lin rely_on_V2V = variants {} ; -- guess-p-verb
 lin remain_N = variants {} ; --
 lin remain_V = permanecer_V | reflV (mkV "quedar") ;
 lin remain_V2 = mkV2 (permanecer_V) ;
@@ -23718,6 +24742,7 @@ lin report_N = mkN "informe" masculine ;
 lin report_V = mkV "presentarse" | mkV "informar" ;
 lin report_V2 = mkV2 (mkV "informar") | mkV2 (mkV "presentar") ;
 lin report_VS = mkVS (mkV "informar") | mkVS (mkV "presentarse") ;
+lin report_in_V = advV OP_report_V OP_in_Adv ; -- guess-p-verb
 lin reportage_N = mkN "reportaje" masculine ; -- status=guess
 lin reportedly_Adv = variants {} ; --
 lin reporterFem_N = mkN "periodista" ; --UWN
@@ -24057,6 +25082,10 @@ lin riddle_N = mkN "enigma" masculine | mkN "acertijo" | mkN "adivinanza" ; -- s
 lin ride_N = mkN "rait" | mkN "autoestop" masculine ; -- status=guess
 lin ride_V = mkV (mkV "pasear") "en coche" | conducir_V ; -- status=guess
 lin ride_V2 = mkV2 (mkV (mkV "pasear") "en coche") | mkV2 (conducir_V) ; -- status=guess
+lin ride_off_V = advV OP_ride_V OP_off_Adv ; -- guess-p-verb
+lin ride_on_V2 = prepV2 OP_ride_V OP_on_Prep ; -- guess-p-verb
+lin ride_out_V2 = prepV2 OP_ride_V OP_out_Prep ; -- guess-p-verb
+lin ride_up_V = advV OP_ride_V OP_up_Adv ; -- guess-p-verb
 lin riderMasc_N = variants {} ; --
 lin ridge_N = mkN "cordillera" | mkN "sierra" ; -- status=guess
 lin ridiculous_A = mkA "ridículo" ; -- status=guess
@@ -24101,6 +25130,14 @@ lin ring_4_V2 = mkV2 (mkV "llamar") to_Prep ;
 lin ring_6_V2 = mkV2 (mkV "anillar") ;
 lin ring_N = mkN "anillo" ; -- status=guess
 lin ring_V = mkV "sonar" ;
+lin ring_back_V2 = mkV2 (advV OP_ring_V OP_back_Adv ) ; -- guess-p-verb
+lin ring_in_V = advV OP_ring_V OP_in_Adv ; -- guess-p-verb
+lin ring_off_V = advV OP_ring_V OP_off_Adv ; -- guess-p-verb
+lin ring_out_V = advV OP_ring_V OP_out_Adv ; -- guess-p-verb
+lin ring_round_V = advV OP_ring_V OP_round_Adv ; -- guess-p-verb
+lin ring_up_V = advV OP_ring_V OP_up_Adv ; -- guess-p-verb
+lin ring_up_V2 = prepV2 OP_ring_V OP_up_Prep ; -- guess-p-verb
+lin ring_with_V2 = prepV2 OP_ring_V OP_with_Prep ; -- guess-p-verb
 lin ringwood_PN = mkPN "Ringwood" ; -- status=guess src=geonames
 lin ringworm_N = mkN "tiña" | mkN "tinea" ; -- status=guess status=guess
 lin rinse_V2 = mkV2 (mkV "enjuagar") ; -- status=guess, src=wikt
@@ -24197,6 +25234,16 @@ lin roleplaying_N = mkN "juego de rol" ; -- status=guess
 lin roll_N = mkN "rollo" ; -- status=guess
 lin roll_V = rodar_V ; -- status=guess
 lin roll_V2 = mkV2 (rodar_V) ; -- status=guess
+lin roll_back_V = advV OP_roll_V OP_back_Adv ; -- guess-p-verb
+lin roll_back_V2 = mkV2 (advV OP_roll_V OP_back_Adv ) ; -- guess-p-verb
+lin roll_by_V = advV OP_roll_V OP_by_Adv ; -- guess-p-verb
+lin roll_down_V = advV OP_roll_V OP_down_Adv ; -- guess-p-verb
+lin roll_in_V = advV OP_roll_V OP_in_Adv ; -- guess-p-verb
+lin roll_on_V = advV OP_roll_V OP_on_Adv ; -- guess-p-verb
+lin roll_on_V2 = prepV2 OP_roll_V OP_on_Prep ; -- guess-p-verb
+lin roll_out_V2 = prepV2 OP_roll_V OP_out_Prep ; -- guess-p-verb
+lin roll_over_V = advV OP_roll_V OP_over_Adv ; -- guess-p-verb
+lin roll_up_V = advV OP_roll_V OP_up_Adv ; -- guess-p-verb
 lin roller_N = mkN "rodillo" ; -- status=guess
 lin rolling_N = mkN "hataca" | mkN "rodillo" | mkN "uslero" ; -- status=guess status=guess status=guess status=guess
 lin rollmops_N = mkN "rollmops" ; --UWN
@@ -24365,6 +25412,7 @@ lin rule_N = L.rule_N ;
 lin rule_V = mkV "mandar" | gobernar_V ; -- status=guess
 lin rule_V2 = mkV2 (mkV "mandar") | mkV2 (gobernar_V) ; -- status=guess
 lin rule_VS = mkVS (mkV "mandar") | mkVS (gobernar_V) ; -- status=guess
+lin rule_out_V2 = prepV2 OP_rule_V OP_out_Prep ; -- guess-p-verb
 lin ruler_N = mkN "regla" ; -- status=guess
 lin ruling_A = variants {} ; --
 lin ruling_N = mkN "decisión" feminine ; -- status=guess
@@ -24382,8 +25430,33 @@ lin rumpus_N = mkN "revuelo" ; -- status=guess
 lin run_N = mkN "correr" ;
 lin run_V = L.run_V ;
 lin run_V2 = mkV2 run_V ;
+lin run_across_V2 = prepV2 OP_run_V OP_across_Prep ; -- guess-p-verb
+lin run_after_V2 = prepV2 OP_run_V OP_after_Prep ; -- guess-p-verb
+lin run_against_V2 = prepV2 OP_run_V OP_against_Prep ; -- guess-p-verb
+lin run_along_V = advV OP_run_V OP_along_Adv ; -- guess-p-verb
+lin run_around_V = advV OP_run_V OP_around_Adv ; -- guess-p-verb
+lin run_away_V = advV OP_run_V OP_away_Adv ; -- guess-p-verb
+lin run_away_from_V2 = prepV2 (advV OP_run_V OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
+lin run_down_V = advV OP_run_V OP_down_Adv ; -- guess-p-verb
+lin run_down_V2 = prepV2 OP_run_V OP_down_Prep ; -- guess-p-verb
+lin run_for_V2 = prepV2 OP_run_V OP_for_Prep ; -- guess-p-verb
+lin run_in_V = advV OP_run_V OP_in_Adv ; -- guess-p-verb
+lin run_in_V2 = prepV2 OP_run_V OP_in_Prep ; -- guess-p-verb
+lin run_into_V2 = prepV2 OP_run_V OP_into_Prep ; -- guess-p-verb
 lin run_off_V = mkV "escaparse" ; --UWN
+lin run_off_V2 = prepV2 OP_run_V OP_off_Prep ; -- guess-p-verb
+lin run_on_V2 = prepV2 OP_run_V OP_on_Prep ; -- guess-p-verb
+lin run_out_V = advV OP_run_V OP_out_Adv ; -- guess-p-verb
+lin run_out_of_V2 = prepV2 (advV OP_run_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin run_over_V = advV OP_run_V OP_over_Adv ; -- guess-p-verb
+lin run_over_V2 = prepV2 OP_run_V OP_over_Prep ; -- guess-p-verb
+lin run_through_V2 = prepV2 OP_run_V OP_through_Prep ; -- guess-p-verb
+lin run_to_V2 = prepV2 OP_run_V OP_to_Prep ; -- guess-p-verb
 lin run_up_V = mkV "amontonar" | mkV "contraer" ; --UWN
+lin run_up_V2 = prepV2 OP_run_V OP_up_Prep ; -- guess-p-verb
+lin run_up_against_V2 = prepV2 (advV OP_run_V OP_up_Adv ) OP_against_Prep ; -- guess-p-verb
+lin run_up_on_V2 = prepV2 (advV OP_run_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin run_with_V2 = prepV2 OP_run_V OP_with_Prep ; -- guess-p-verb
 lin runaway_N = mkN "fugitivo" ; -- status=guess
 lin runcorn_PN = mkPN "Runcorn" ; -- status=guess src=geonames
 lin rune_N = mkN "runa" ; -- status=guess
@@ -24405,6 +25478,10 @@ lin rush_N = mkN "hora punta" ; -- status=guess
 lin rush_V = mkV "correr" | mkV "apurarse" ; -- status=guess
 lin rush_V2 = mkV2 (mkV "correr") | mkV2 (mkV "apurarse") ; -- status=guess
 lin rush_VV = mkVV (mkV "correr") | mkVV (mkV "apurarse") ; -- status=guess
+lin rush_away_V = advV OP_rush_V OP_away_Adv ; -- guess-p-verb
+lin rush_into_V2 = prepV2 OP_rush_V OP_into_Prep ; -- guess-p-verb
+lin rush_off_V = advV OP_rush_V OP_off_Adv ; -- guess-p-verb
+lin rush_out_V2 = prepV2 OP_rush_V OP_out_Prep ; -- guess-p-verb
 lin rusk_N = mkN "bizcocho" | mkN "biscote" ; -- status=guess status=guess
 lin russet_N = mkN "paño_burdo" ; --UWN
 lin russia_PN = mkPN "Rusia" ; -- status=guess src=geonames
@@ -24506,6 +25583,8 @@ lin saguaro_N = mkN "saguaro" ; -- status=guess
 lin saiga_N = mkN "saiga" masculine ; -- status=guess
 lin sail_N = mkN "vela" ; -- status=guess
 lin sail_V = mkV "navegar" ; -- status=guess
+lin sail_into_V2 = prepV2 OP_sail_V OP_into_Prep ; -- guess-p-verb
+lin sail_through_V2 = prepV2 OP_sail_V OP_through_Prep ; -- guess-p-verb
 lin sailboat_N = mkN "embarcación a vela" | mkN "velero" ; -- status=guess status=guess
 lin sailing_N = mkN "navegación" feminine ; -- status=guess
 lin sailmaker_N = mkN "fabricante_de_velas" ; --UWN
@@ -24721,6 +25800,8 @@ lin savannah_N = mkN "sabana" ; --UWN
 lin save_N = mkN "parada" ; -- status=guess
 lin save_V = mkV "ahorrar" ;
 lin save_V2 = mkV2 (mkV "ahorrar") ;
+lin save_on_V2 = prepV2 OP_save_V OP_on_Prep ; -- guess-p-verb
+lin save_up_V2 = prepV2 OP_save_V OP_up_Prep ; -- guess-p-verb
 lin saveloy_N = mkN "saveloy" ; --UWN
 lin saver_N = mkN "recuperador" | mkN "rescatador" | mkN "salvador" ; --UWN
 lin saving_N = mkN "ahorro" ; --UWN
@@ -25109,6 +26190,12 @@ lin see_V2 = L.see_V2 ;
 lin see_V2V = mkV2V (ver_V) ;
 lin see_VQ = mkVQ (ver_V) ;
 lin see_VS = mkVS (ver_V) ;
+lin see_about_V2 = prepV2 OP_see_V OP_about_Prep ; -- guess-p-verb
+lin see_into_V3 = variants {} ; -- guess-p-verb
+lin see_off_V2 = prepV2 OP_see_V OP_off_Prep ; -- guess-p-verb
+lin see_out_V2 = prepV2 OP_see_V OP_out_Prep ; -- guess-p-verb
+lin see_through_V2 = prepV2 OP_see_V OP_through_Prep ; -- guess-p-verb
+lin see_to_V2 = prepV2 OP_see_V OP_to_Prep ; -- guess-p-verb
 lin seed_N = L.seed_N ;
 lin seed_V = sembrar_V ; -- status=guess, src=wikt
 lin seed_V2 = mkV2 (sembrar_V) ; -- status=guess, src=wikt
@@ -25116,6 +26203,7 @@ lin seedling_N = mkN "pimpollo" ; -- status=guess
 lin seedy_A = mkA "desacreditado" | mkA "mala fama" | mkA "mugriento" | mkA "indecente" ; -- status=guess status=guess status=guess status=guess
 lin seek_V2 = L.seek_V2 ;
 lin seek_VV = mkVV (mkV "buscar") ;
+lin seek_out_V2 = prepV2 (lin V OP_seek_V2) OP_out_Prep ; -- guess-p-verb
 lin seeker_N = mkN "buscador" masculine ; -- status=guess
 lin seeking_N = mkN "búsqueda" ; --UWN
 lin seem_VA = mkVA (parecer_V) ;
@@ -25144,6 +26232,7 @@ lin seismologist_N = mkN "sismólogo" ; -- status=guess
 lin seismology_N = mkN "sismología" ; -- status=guess
 lin seize_V = mkV "agarrar" | mkV (mkV "apoderarse") "de" | mkV "apresar" | aferrar_V ; -- status=guess
 lin seize_V2 = mkV2 (mkV "agarrar") | mkV2 (mkV (mkV "apoderarse") "de") | mkV2 (mkV "apresar") | mkV2 (aferrar_V) ; -- status=guess
+lin seize_up_V = advV OP_seize_V OP_up_Adv ; -- guess-p-verb
 lin seizure_N = mkN "apropiación" feminine ; -- status=guess
 lin selby_PN = mkPN "Selby" ; -- status=guess src=geonames
 lin seldom_Adv = mkAdv "raramente" | mkAdv "rara vez" ; -- status=guess
@@ -25168,7 +26257,12 @@ lin selkirk_PN = mkPN "Selkirk" ; -- status=guess src=geonames
 lin sell_V = mkV "vender" ;
 lin sell_V2 = mkV2 (mkV "vender") ;
 lin sell_V3 = L.sell_V3 ;
+lin sell_back_V = advV OP_sell_V OP_back_Adv ; -- guess-p-verb
+lin sell_off_V2 = prepV2 OP_sell_V OP_off_Prep ; -- guess-p-verb
+lin sell_on_V2 = prepV2 OP_sell_V OP_on_Prep ; -- guess-p-verb
 lin sell_out_V = mkV "cantar" | mkV "vender" ; --UWN
+lin sell_out_V2 = prepV2 OP_sell_V OP_out_Prep ; -- guess-p-verb
+lin sell_up_V2 = prepV2 OP_sell_V OP_up_Prep ; -- guess-p-verb
 lin sellerFem_N = mkN "vendedor" ; --UWN
 lin sellerMasc_N = variants {} ; --
 lin selling_N = mkN "punto vendible" ; -- status=guess
@@ -25211,6 +26305,15 @@ lin send_V = mkV "enviar" | mkV "mandar" ;
 lin send_V2 = mkV2 (mkV "enviar") | mkV2 (mkV "mandar") ;
 lin send_V2V = mkV2V (mkV "enviar") | mkV2V (mkV "mandar") ;
 lin send_V3 = L.send_V3 ;
+lin send_back_V2 = mkV2 (advV OP_send_V OP_back_Adv ) ; -- guess-p-verb
+lin send_for_V2 = prepV2 OP_send_V OP_for_Prep ; -- guess-p-verb
+lin send_in_V = advV OP_send_V OP_in_Adv ; -- guess-p-verb
+lin send_in_V2 = prepV2 OP_send_V OP_in_Prep ; -- guess-p-verb
+lin send_off_V2 = prepV2 OP_send_V OP_off_Prep ; -- guess-p-verb
+lin send_off_for_V2 = prepV2 (advV OP_send_V OP_off_Adv ) OP_for_Prep ; -- guess-p-verb
+lin send_out_V2 = prepV2 OP_send_V OP_out_Prep ; -- guess-p-verb
+lin send_out_for_V2 = prepV2 (advV OP_send_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin send_up_V2 = prepV2 OP_send_V OP_up_Prep ; -- guess-p-verb
 lin sender_N = mkN "remitente" masculine ; -- status=guess
 lin sene_N = mkN "sene" ; --UWN
 lin senegal_PN = mkPN "Senegal" ; -- status=guess src=geonames
@@ -25315,8 +26418,23 @@ lin set_1_N = mkN "equipo" ;
 lin set_2_N = mkN "conjunto" ;
 lin set_N = mkN "conjunto" ;
 lin set_V2 = mkV2 poner_V ;
+lin set_about_V2 = prepV2 (lin V OP_set_V2) OP_about_Prep ; -- guess-p-verb
+lin set_apart_V2 = mkV2 (advV (lin V OP_set_V2) OP_apart_Adv ) ; -- guess-p-verb
+lin set_aside_V2 = mkV2 (advV (lin V OP_set_V2) OP_aside_Adv ) ; -- guess-p-verb
 lin set_back_V = mkV "frenar" | mkV "retrasar" ; --UWN
+lin set_back_V2 = mkV2 (advV (lin V OP_set_V2) OP_back_Adv ) ; -- guess-p-verb
+lin set_forth_V = advV (lin V OP_set_V2) OP_forth_Adv ; -- guess-p-verb
+lin set_forth_V2 = mkV2 (advV (lin V OP_set_V2) OP_forth_Adv ) ; -- guess-p-verb
+lin set_in_V = advV (lin V OP_set_V2) OP_in_Adv ; -- guess-p-verb
+lin set_off_V = advV (lin V OP_set_V2) OP_off_Adv ; -- guess-p-verb
+lin set_off_V2 = prepV2 (lin V OP_set_V2) OP_off_Prep ; -- guess-p-verb
+lin set_on_V2 = prepV2 (lin V OP_set_V2) OP_on_Prep ; -- guess-p-verb
+lin set_out_V = advV (lin V OP_set_V2) OP_out_Adv ; -- guess-p-verb
+lin set_out_V2 = prepV2 (lin V OP_set_V2) OP_out_Prep ; -- guess-p-verb
+lin set_to_V = advV (lin V OP_set_V2) OP_to_Adv ; -- guess-p-verb
 lin set_up_V = mkV "instalar" ; --UWN
+lin set_up_V2 = prepV2 (lin V OP_set_V2) OP_up_Prep ; -- guess-p-verb
+lin set_upon_V2 = prepV2 (lin V OP_set_V2) OP_upon_Prep ; -- guess-p-verb
 lin seta_N = mkN "pelillo" ; -- status=guess
 lin setback_N = mkN "revés" ; --UWN
 lin sett_N = mkN "adoquín" masculine ; -- status=guess
@@ -25325,6 +26443,12 @@ lin setting_N = variants {} ; --
 lin settle_N = mkN "escaño" ; --UWN
 lin settle_V = resolver_V ;
 lin settle_V2 = mkV2 (resolver_V) ;
+lin settle_back_V = advV OP_settle_V OP_back_Adv ; -- guess-p-verb
+lin settle_down_V = advV OP_settle_V OP_down_Adv ; -- guess-p-verb
+lin settle_for_V2 = prepV2 OP_settle_V OP_for_Prep ; -- guess-p-verb
+lin settle_in_V = advV OP_settle_V OP_in_Adv ; -- guess-p-verb
+lin settle_on_V2 = prepV2 OP_settle_V OP_on_Prep ; -- guess-p-verb
+lin settle_up_V = advV OP_settle_V OP_up_Adv ; -- guess-p-verb
 lin settlement_N = mkN "poblado" | mkN "asentamiento" feminine ; -- status=guess
 lin settling_N = mkN "decantación" feminine | mkN "concho" ; -- status=guess status=guess
 lin sevenoaks_PN = mkPN "Sevenoaks" ; -- status=guess src=geonames
@@ -25375,6 +26499,10 @@ lin shaggy_A = mkA "pelo largo" | mkA "pelo despeinado" | mkA "pelo suelto" ; --
 lin shah_N = mkN "sah" masculine ; -- status=guess
 lin shake_V = mkV "temblar" "tiemblo" ;
 lin shake_V2 = mkV2 (mkV "agitar") | mkV2 (mkV "sacudir") ; --- split
+lin shake_down_V2 = prepV2 OP_shake_V OP_down_Prep ; -- guess-p-verb
+lin shake_off_V2 = prepV2 OP_shake_V OP_off_Prep ; -- guess-p-verb
+lin shake_out_V2 = prepV2 OP_shake_V OP_out_Prep ; -- guess-p-verb
+lin shake_up_V2 = prepV2 OP_shake_V OP_up_Prep ; -- guess-p-verb
 lin shale_N = mkN "esquisto" | mkN "pizarra" ; -- status=guess status=guess
 lin shall_VV = S.must_VV ;
 lin shallot_N = mkN "chalota" ; -- status=guess
@@ -25408,6 +26536,7 @@ lin shape_N = mkN "forma" ;
 lin shape_V = variants {} ; --
 lin shape_V2 = variants {} ; --
 lin shape_VV = variants {} ; --
+lin shape_up_V = advV OP_shape_V OP_up_Adv ; -- guess-p-verb
 lin shaper_N = mkN "limadora" ; --UWN
 lin shard_N = mkN "casco" | mkN "añicos" masculine ; -- status=guess status=guess
 lin share_1_V2 = mkV2 (mkV "dividir") ;
@@ -25415,6 +26544,7 @@ lin share_2_V2 = mkV2 (mkV "compartir") ;
 lin share_N = mkN "cuota" ;
 lin share_V = mkV "dividir" ;
 lin share_V2 = mkV2 (mkV "dividir") ;
+lin share_out_V = advV OP_share_V OP_out_Adv ; -- guess-p-verb
 lin sharecropper_N = mkN "aparcero" ; --UWN
 lin shared_A = variants {} ; --
 lin shareholder_N = mkN "accionista" masculine ; -- status=guess
@@ -25553,6 +26683,13 @@ lin shoo_V2 = mkV2 (mkV "ahuyentar") ; -- status=guess, src=wikt
 lin shoot_N = mkN "retoño" | mkN "vástago" | mkN "pimpollo" ; -- status=guess status=guess status=guess
 lin shoot_V = mkV "tirar" ;
 lin shoot_V2 = mkV2 (mkV "tirar") ;
+lin shoot_away_V = advV OP_shoot_V OP_away_Adv ; -- guess-p-verb
+lin shoot_back_V = advV OP_shoot_V OP_back_Adv ; -- guess-p-verb
+lin shoot_for_V2 = prepV2 OP_shoot_V OP_for_Prep ; -- guess-p-verb
+lin shoot_off_V = advV OP_shoot_V OP_off_Adv ; -- guess-p-verb
+lin shoot_out_V = advV OP_shoot_V OP_out_Adv ; -- guess-p-verb
+lin shoot_up_V = advV OP_shoot_V OP_up_Adv ; -- guess-p-verb
+lin shoot_up_V2 = prepV2 OP_shoot_V OP_up_Prep ; -- guess-p-verb
 lin shooting_N = mkN "escolta" ; -- status=guess
 lin shop_N = L.shop_N ;
 lin shop_V = mkV (mkV "ir") "de compras" ; -- status=guess
@@ -25588,6 +26725,8 @@ lin shoulder_N = mkN "hombro" ;
 lin shout_N = mkN "grito" ; -- status=guess
 lin shout_V = mkV "gritar" ; -- status=guess
 lin shout_V2 = mkV2 (mkV "gritar") ; -- status=guess
+lin shout_down_V2 = prepV2 OP_shout_V OP_down_Prep ; -- guess-p-verb
+lin shout_out_V2 = prepV2 OP_shout_V OP_out_Prep ; -- guess-p-verb
 lin shove_N = mkN "empujón" masculine ; -- status=guess
 lin shove_V = mkV "empujar" ; -- status=guess, src=wikt
 lin shove_V2 = mkV2 (mkV "empujar") ; -- status=guess, src=wikt
@@ -25599,7 +26738,16 @@ lin show_V = mostrar_V ;
 lin show_V2 = mkV2 (mostrar_V) ;
 lin show_VQ = mkVQ (mostrar_V) ;
 lin show_VS = mkVS (mostrar_V) ;
+lin show_around_V2 = prepV2 OP_show_V OP_around_Prep ; -- guess-p-verb
+lin show_in_V2 = prepV2 OP_show_V OP_in_Prep ; -- guess-p-verb
+lin show_off_V = advV OP_show_V OP_off_Adv ; -- guess-p-verb
+lin show_off_V2 = prepV2 OP_show_V OP_off_Prep ; -- guess-p-verb
+lin show_out_V2 = prepV2 OP_show_V OP_out_Prep ; -- guess-p-verb
+lin show_over_V3 = variants {} ; -- guess-p-verb
+lin show_round_V2 = prepV2 OP_show_V OP_round_Prep ; -- guess-p-verb
+lin show_through_V = advV OP_show_V OP_through_Adv ; -- guess-p-verb
 lin show_up_V = mkV "salir" | mkV "surgir" ; --UWN
+lin show_up_V2 = prepV2 OP_show_V OP_up_Prep ; -- guess-p-verb
 lin showcase_N = mkN "escaparate" | mkN "vitrina" ; -- status=guess status=guess
 lin showdown_N = mkN "enfrentamiento" ; -- status=guess
 lin shower_N = mkN "llovizna" ; -- status=guess
@@ -25633,6 +26781,7 @@ lin shrub_N = mkN "mata" | mkN "arbusto" ; -- status=guess
 lin shrublet_N = mkN "arbusto_enano" ; --UWN
 lin shrug_N = mkN "encogimiento de hombros" ; -- status=guess
 lin shrug_V2 = mkV2 (mkV (mkV "encogerse") "de hombros") ; -- status=guess
+lin shrug_off_V2 = prepV2 (lin V OP_shrug_V2) OP_off_Prep ; -- guess-p-verb
 lin shuck_N = mkN "gluma" | mkN "paja" ; --UWN
 lin shudder_N = mkN "escalofrío" ; -- status=guess
 lin shudderingly_Adv = mkAdv "estremecedoramente" | mkAdv "estremecidamente" ; --UWN
@@ -25642,6 +26791,15 @@ lin shuffle_V2 = mkV2 (mkV "mezclar") | mkV2 (mkV "barajear") ; -- status=guess,
 lin shun_V2 = mkV2 (mkV "evitar") ; -- status=guess, src=wikt
 lin shunt_V = mkV "desviar" ; --UWN
 lin shut_V2 = mkV2 (cerrar_V) ; -- status=guess
+lin shut_away_V2 = mkV2 (advV (lin V OP_shut_V2) OP_away_Adv ) ; -- guess-p-verb
+lin shut_down_V2 = prepV2 (lin V OP_shut_V2) OP_down_Prep ; -- guess-p-verb
+lin shut_in_V2 = prepV2 (lin V OP_shut_V2) OP_in_Prep ; -- guess-p-verb
+lin shut_off_V = advV (lin V OP_shut_V2) OP_off_Adv ; -- guess-p-verb
+lin shut_off_V2 = prepV2 (lin V OP_shut_V2) OP_off_Prep ; -- guess-p-verb
+lin shut_out_V2 = prepV2 (lin V OP_shut_V2) OP_out_Prep ; -- guess-p-verb
+lin shut_out_of_V2 = prepV2 (advV (lin V OP_shut_V2) OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin shut_up_V2 = prepV2 (lin V OP_shut_V2) OP_up_Prep ; -- guess-p-verb
+lin shut_yourself_away_V = variants {} ; -- guess-p-verb
 lin shutdown_N = mkN "apagado" ; -- status=guess
 lin shutter_N = mkN "obturador" masculine ; -- status=guess
 lin shutterbug_N = mkN "fotógrafo_entusiasta" ; --UWN
@@ -25700,6 +26858,22 @@ lin sigmoid_A = mkA "sigmoidal" | mkA "sigmoide" ; --UWN
 lin sign_N = mkN "símbolo" | mkN "signo" | mkN "seña" ; --- split: visible indication ; sign in sign language
 lin sign_V = mkV (mkV "hablar") "a señas" ;
 lin sign_V2 = mkV2 (mkV "firmar") | mkV2 (mkV (mkV "hablar") "a señas") ; --- split: sign a document ; talk in sign language
+lin sign_away_V2 = mkV2 (advV OP_sign_V OP_away_Adv ) ; -- guess-p-verb
+lin sign_for_V3 = variants {} ; -- guess-p-verb
+lin sign_in_V = advV OP_sign_V OP_in_Adv ; -- guess-p-verb
+lin sign_in_V2 = prepV2 OP_sign_V OP_in_Prep ; -- guess-p-verb
+lin sign_into_V2 = prepV2 OP_sign_V OP_into_Prep ; -- guess-p-verb
+lin sign_off_V = advV OP_sign_V OP_off_Adv ; -- guess-p-verb
+lin sign_off_V2 = prepV2 OP_sign_V OP_off_Prep ; -- guess-p-verb
+lin sign_off_on_V2 = prepV2 (advV OP_sign_V OP_off_Adv ) OP_on_Prep ; -- guess-p-verb
+lin sign_on_V = advV OP_sign_V OP_on_Adv ; -- guess-p-verb
+lin sign_on_V2 = prepV2 OP_sign_V OP_on_Prep ; -- guess-p-verb
+lin sign_on_with_V2 = prepV2 (advV OP_sign_V OP_on_Adv ) OP_with_Prep ; -- guess-p-verb
+lin sign_out_V = advV OP_sign_V OP_out_Adv ; -- guess-p-verb
+lin sign_out_V2 = prepV2 OP_sign_V OP_out_Prep ; -- guess-p-verb
+lin sign_out_of_V2 = prepV2 (advV OP_sign_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin sign_up_V = advV OP_sign_V OP_up_Adv ; -- guess-p-verb
+lin sign_with_V2 = prepV2 OP_sign_V OP_with_Prep ; -- guess-p-verb
 lin signage_N = mkN "rotulación" ; -- status=guess
 lin signal_N = mkN "señal" masculine ; -- status=guess
 lin signal_V2 = mkV2 (mkV "señalar") ; -- status=guess
@@ -25795,6 +26969,9 @@ lin sinful_A = mkA "pecaminoso" ; -- status=guess
 lin sinfulness_N = mkN "maldad" | mkN "pecado" ; --UWN
 lin sing_V = L.sing_V ;
 lin sing_V2 = mkV2 (mkV "cantar") ;
+lin sing_along_V = advV OP_sing_V OP_along_Adv ; -- guess-p-verb
+lin sing_out_V = advV OP_sing_V OP_out_Adv ; -- guess-p-verb
+lin sing_up_V = advV OP_sing_V OP_up_Adv ; -- guess-p-verb
 lin singable_A = mkA "cantable" ; -- status=guess
 lin singapore_PN = mkPN "Singapur" ; -- status=guess src=geonames
 lin singe_V = mkV "chamuscar" ; -- status=guess, src=wikt
@@ -25813,6 +26990,7 @@ lin sinister_A = mkA "siniestro" ; -- status=guess
 lin sink_N = mkN "lavamanos" masculine | mkN "fregadero" ; -- status=guess
 lin sink_V = mkV "hundir" ; -- status=guess
 lin sink_V2 = mkV2 (mkV "hundir") ; -- status=guess
+lin sink_in_V = advV OP_sink_V OP_in_Adv ; -- guess-p-verb
 lin sinker_N = mkN "sinker" ; --UWN
 lin sinkhole_N = mkN "dolina" ; -- status=guess
 lin sinless_A = mkA "inocente" ; --UWN
@@ -25843,6 +27021,21 @@ lin sissy_N = mkN "calzonazos" masculine ; -- status=guess
 lin sister_N = L.sister_N ;
 lin sit_V = L.sit_V ;
 lin sit_V2 = mkV2 (reflV (mkV "sentar" "siento")) ;
+lin sit_about_V = advV OP_sit_V OP_about_Adv ; -- guess-p-verb
+lin sit_around_V = advV OP_sit_V OP_around_Adv ; -- guess-p-verb
+lin sit_back_V = advV OP_sit_V OP_back_Adv ; -- guess-p-verb
+lin sit_by_V = advV OP_sit_V OP_by_Adv ; -- guess-p-verb
+lin sit_down_V2 = prepV2 OP_sit_V OP_down_Prep ; -- guess-p-verb
+lin sit_for_V2 = prepV2 OP_sit_V OP_for_Prep ; -- guess-p-verb
+lin sit_in_V2 = prepV2 OP_sit_V OP_in_Prep ; -- guess-p-verb
+lin sit_in_for_V2 = prepV2 (advV OP_sit_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin sit_in_on_V2 = prepV2 (advV OP_sit_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin sit_on_V2 = prepV2 OP_sit_V OP_on_Prep ; -- guess-p-verb
+lin sit_out_V2 = prepV2 OP_sit_V OP_out_Prep ; -- guess-p-verb
+lin sit_over_V2 = prepV2 OP_sit_V OP_over_Prep ; -- guess-p-verb
+lin sit_through_V2 = prepV2 OP_sit_V OP_through_Prep ; -- guess-p-verb
+lin sit_up_V = advV OP_sit_V OP_up_Adv ; -- guess-p-verb
+lin sit_with_V2 = prepV2 OP_sit_V OP_with_Prep ; -- guess-p-verb
 lin site_N = mkN "sitio" ;
 lin sitting_N = mkN "sentada" ; -- status=guess
 lin sittingbourne_PN = mkPN "Sittingbourne" ; -- status=guess src=geonames
@@ -25974,6 +27167,11 @@ lin sledgehammer_N = mkN "almádena" ; -- status=guess
 lin sleek_A = mkA "liso" ; -- status=guess
 lin sleep_N = mkN "sueño" | mkN "dormir" masculine ; -- status=guess
 lin sleep_V = L.sleep_V ;
+lin sleep_in_V = advV OP_sleep_V OP_in_Adv ; -- guess-p-verb
+lin sleep_off_V2 = prepV2 OP_sleep_V OP_off_Prep ; -- guess-p-verb
+lin sleep_on_V2 = prepV2 OP_sleep_V OP_on_Prep ; -- guess-p-verb
+lin sleep_over_V = advV OP_sleep_V OP_over_Adv ; -- guess-p-verb
+lin sleep_through_V2 = prepV2 OP_sleep_V OP_through_Prep ; -- guess-p-verb
 lin sleeper_N = mkN "durmiente" masculine ; -- status=guess
 lin sleepiness_N = mkN "sueño" | mkN " tuto" ; -- status=guess status=guess
 lin sleeping_A = variants {} ; --
@@ -26018,6 +27216,15 @@ lin slip_V = tropezar_V ; -- status=guess
 lin slip_V2 = mkV2 (tropezar_V) ; -- status=guess
 lin slip_away_V = mkV "deslizarse" | mkV "esfumarse" | mkV "pasar" | mkV "seguir" | mkV "transcurrir" | mkV "trascurrir" ; --UWN
 lin slip_by_V = mkV "deslizarse" | mkV "esfumarse" | mkV "pasar" | mkV "seguir" | mkV "transcurrir" | mkV "trascurrir" ; --UWN
+lin slip_down_V = advV OP_slip_V OP_down_Adv ; -- guess-p-verb
+lin slip_in_V2 = prepV2 OP_slip_V OP_in_Prep ; -- guess-p-verb
+lin slip_into_V2 = prepV2 OP_slip_V OP_into_Prep ; -- guess-p-verb
+lin slip_off_V = advV OP_slip_V OP_off_Adv ; -- guess-p-verb
+lin slip_off_V2 = prepV2 OP_slip_V OP_off_Prep ; -- guess-p-verb
+lin slip_off_to_V2 = prepV2 (advV OP_slip_V OP_off_Adv ) OP_to_Prep ; -- guess-p-verb
+lin slip_on_V2 = prepV2 OP_slip_V OP_on_Prep ; -- guess-p-verb
+lin slip_out_V = advV OP_slip_V OP_out_Adv ; -- guess-p-verb
+lin slip_up_V = advV OP_slip_V OP_up_Adv ; -- guess-p-verb
 lin slipper_N = mkN "zapatilla" ; -- status=guess
 lin slippery_A = mkA "resbaladizo" | mkA "escurridizo" ; -- status=guess status=guess
 lin slipshod_A = mkA "torpe" ; --UWN
@@ -26097,6 +27304,7 @@ lin smog_N = mkN "esmog" ; -- status=guess
 lin smoke_N = L.smoke_N ;
 lin smoke_V = mkV (mkV "fumar") "como un carretero" ; -- status=guess
 lin smoke_V2 = mkV2 (mkV (mkV "fumar") "como un carretero") ; -- status=guess
+lin smoke_out_V2 = prepV2 OP_smoke_V OP_out_Prep ; -- guess-p-verb
 lin smoker_N = mkN "fumador" | mkN "fumadora" ; -- status=guess status=guess
 lin smokestack_N = mkN "chimenea" ; -- status=guess
 lin smoking_N = mkN "fumar" ; -- status=guess
@@ -26123,6 +27331,11 @@ lin snakebite_N = mkN "mordida_de_serpiente" ; --UWN
 lin snap_N = mkN "fotografía" ; -- status=guess
 lin snap_V = mkV "chasquear" ; -- status=guess
 lin snap_V2 = mkV2 (mkV "chasquear") ; -- status=guess
+lin snap_back_V = advV OP_snap_V OP_back_Adv ; -- guess-p-verb
+lin snap_off_V2 = prepV2 OP_snap_V OP_off_Prep ; -- guess-p-verb
+lin snap_out_of_V2 = prepV2 (advV OP_snap_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin snap_to_it_V2 = variants {} ; -- guess-p-verb
+lin snap_up_V2 = prepV2 OP_snap_V OP_up_Prep ; -- guess-p-verb
 lin snapdragon_N = mkN "boca de dragón" ; -- status=guess
 lin snappishness_N = mkN "irritabilidad" ; --UWN
 lin snapshot_N = mkN "instantánea" ; -- status=guess
@@ -26397,6 +27610,7 @@ lin sorry_Interj = mkInterj "discúlpame" | mkInterj "perdóname" | mkInterj "lo
 lin sort_N = mkN "ordenar" ;
 lin sort_V = mkV "ordenar" ; -- status=guess
 lin sort_V2 = mkV2 (mkV "ordenar") ; -- status=guess
+lin sort_out_V2 = prepV2 OP_sort_V OP_out_Prep ; -- guess-p-verb
 lin sot_N = mkN "tomador" | mkN "borracho" ; -- status=guess status=guess
 lin soteriological_A = mkA "soteriológico" ; --UWN
 lin sotto_voce_Adv = mkAdv "en_voz_baja" | mkAdv "sotto_voce" ; --UWN
@@ -26410,6 +27624,8 @@ lin sound_V = mkV "sondear" | mkV "sonar" "sueno" ;
 lin sound_V2 = mkV2 (mkV "sondear") ;
 lin sound_VA = mkVA (mkV "sonar" "sueno") ;
 lin sound_VS = mkVS (mkV "sondear") ;
+lin sound_off_V = advV OP_sound_V OP_off_Adv ; -- guess-p-verb
+lin sound_out_V2 = prepV2 OP_sound_V OP_out_Prep ; -- guess-p-verb
 lin soundless_A = mkA "silencioso" ; --UWN
 lin soundness_N = mkN "firmeza" | mkN "solidez" ; --UWN
 lin soundtrack_N = mkN "banda sonora" ; -- status=guess
@@ -26507,6 +27723,8 @@ lin spawn_V = mkV "desovar" ; --UWN
 lin spay_V2 = mkV2 (mkV "esterilizar") ; -- status=guess, src=wikt
 lin speak_V = mkV "hablar" ;
 lin speak_V2 = L.speak_V2 ;
+lin speak_out_V = advV OP_speak_V OP_out_Adv ; -- guess-p-verb
+lin speak_up_V = advV OP_speak_V OP_up_Adv ; -- guess-p-verb
 lin speakeasy_N = mkN "speakeasy" | mkN "taberna_clandestina" ; --UWN
 lin speaker_N = mkN "altavoz" masculine ;
 lin speakership_N = mkN "ponencia" | mkN "presidencia_del_senado" ; --UWN
@@ -26657,6 +27875,8 @@ lin split_N = mkN "espagat" masculine ; -- status=guess
 lin split_PN = mkPN "Split" ; -- status=guess src=geonames
 lin split_V = mkV "partir" | mkV "dividir" | mkV "escindir" ; -- status=guess
 lin split_V2 = L.split_V2 ;
+lin split_up_V = advV OP_split_V OP_up_Adv ; -- guess-p-verb
+lin split_up_V2 = prepV2 OP_split_V OP_up_Prep ; -- guess-p-verb
 lin splurge_N = mkN "ostentación" ; -- status=guess
 lin splurge_V = mkV "chorrear" ; -- status=guess, src=wikt
 lin spoil_N = mkN "botín" masculine ; -- status=guess
@@ -26721,6 +27941,7 @@ lin spray_V2 = mkV2 (mkV "atomizar") | mkV2 (mkV "difundir") | mkV2 (mkV "pulver
 lin spread_N = variants {} ; --
 lin spread_V = mkV "difundir" | mkV "propagar" | mkV "contagiar" ;
 lin spread_V2 = mkV2 "difundir" | mkV2 "propagar" | mkV2 "contagiar" ;
+lin spread_out_V2 = prepV2 OP_spread_V OP_out_Prep ; -- guess-p-verb
 lin spreadsheet_N = mkN "hoja_de_cálculo" ; --UWN
 lin sprechgesang_N = mkN "sprechgesang" ; --UWN
 lin spree_N = mkN "aventura_amorosa" | mkN "cana_al_aire" ; --UWN
@@ -26880,8 +28101,20 @@ lin stanchion_N = mkN "puntal" masculine ; -- status=guess
 lin stand_N = mkN "postura" ; -- status=guess
 lin stand_V = L.stand_V ;
 lin stand_V2 = mkV2 mantener_V | mkV2 (mkV "aguantar") | mkV2 (mkV "tolerar") ;
+lin stand_about_V = advV OP_stand_V OP_about_Adv ; -- guess-p-verb
+lin stand_around_V = advV OP_stand_V OP_around_Adv ; -- guess-p-verb
+lin stand_aside_V = advV OP_stand_V OP_aside_Adv ; -- guess-p-verb
+lin stand_back_V = advV OP_stand_V OP_back_Adv ; -- guess-p-verb
+lin stand_by_V = advV OP_stand_V OP_by_Adv ; -- guess-p-verb
+lin stand_by_V2 = prepV2 OP_stand_V OP_by_Prep ; -- guess-p-verb
+lin stand_down_V = advV OP_stand_V OP_down_Adv ; -- guess-p-verb
+lin stand_for_V2 = prepV2 OP_stand_V OP_for_Prep ; -- guess-p-verb
+lin stand_in_for_V2 = prepV2 (advV OP_stand_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
 lin stand_out_V = mkV "insistir" ; --UWN
 lin stand_up_V = mkV "convencer" ; --UWN
+lin stand_up_V2 = prepV2 OP_stand_V OP_up_Prep ; -- guess-p-verb
+lin stand_up_for_V2 = prepV2 (advV OP_stand_V OP_up_Adv ) OP_for_Prep ; -- guess-p-verb
+lin stand_up_to_V2 = prepV2 (advV OP_stand_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin standard_A = mkA "estándar" ;
 lin standard_N = mkN "estándar" masculine ;
 lin standardization_N = mkN "normalización" feminine | mkN "estandarización" feminine ; -- status=guess status=guess
@@ -26920,6 +28153,19 @@ lin starship_N = mkN "nave" ; --UWN
 lin start_N = mkN "inicio" | mkN "comienzo" ;
 lin start_V = comenzar_V ;
 lin start_V2 = mkV2 comenzar_V ;
+lin start_ing_VV = variants {} ; -- guess-p-verb
+lin start_off_V = advV OP_start_V OP_off_Adv ; -- guess-p-verb
+lin start_off_V2 = prepV2 OP_start_V OP_off_Prep ; -- guess-p-verb
+lin start_off_on_V2 = prepV2 (advV OP_start_V OP_off_Adv ) OP_on_Prep ; -- guess-p-verb
+lin start_on_V2 = prepV2 OP_start_V OP_on_Prep ; -- guess-p-verb
+lin start_on_at_V2 = prepV2 (advV OP_start_V OP_on_Adv ) OP_at_Prep ; -- guess-p-verb
+lin start_out_V = advV OP_start_V OP_out_Adv ; -- guess-p-verb
+lin start_out_as_V2 = prepV2 (advV OP_start_V OP_out_Adv ) OP_as_Prep ; -- guess-p-verb
+lin start_out_to_V2 = prepV2 (advV OP_start_V OP_out_Adv ) OP_to_Prep ; -- guess-p-verb
+lin start_over_V = advV OP_start_V OP_over_Adv ; -- guess-p-verb
+lin start_to_VV = variants {} ; -- guess-p-verb
+lin start_up_V = advV OP_start_V OP_up_Adv ; -- guess-p-verb
+lin start_up_V2 = prepV2 OP_start_V OP_up_Prep ; -- guess-p-verb
 lin startle_N = mkN "sobresalto" ; -- status=guess
 lin startle_V2 = mkV2 (mkV "evitar") | mkV2 (impedir_V) ; -- status=guess
 lin startling_A = mkA "brusco" | mkA "repentino" | mkA "súbito" ; --UWN
@@ -26962,7 +28208,13 @@ lin stave_N = mkN "estrofa" ; -- status=guess
 lin stay_N = mkN "estadía" ; -- status=guess
 lin stay_V = reflV mantener_V ;
 lin stay_VA = mkVA (reflV mantener_V) ;
+lin stay_away_V = advV OP_stay_V OP_away_Adv ; -- guess-p-verb
+lin stay_away_from_V2 = prepV2 (advV OP_stay_V OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
+lin stay_in_V = advV OP_stay_V OP_in_Adv ; -- guess-p-verb
 lin stay_on_V = mkV "permanecer" | mkV "seguir" ; --UWN
+lin stay_out_V = advV OP_stay_V OP_out_Adv ; -- guess-p-verb
+lin stay_over_V = advV OP_stay_V OP_over_Adv ; -- guess-p-verb
+lin stay_up_V = advV OP_stay_V OP_up_Adv ; -- guess-p-verb
 lin stead_N = mkN "lugar" | mkN "posición" | mkN "puesto" | mkN "sitio" ; --UWN
 lin steadfast_A = mkA "firme" ; -- status=guess
 lin steadfastness_N = mkN "constancia" | mkN "firmeza" ; --UWN
@@ -26975,6 +28227,11 @@ lin steakhouse_N = mkN "steakhouse" ; --UWN
 lin steal_N = mkN "robo" ; -- status=guess
 lin steal_V = mkV "robar" ; -- status=guess
 lin steal_V2 = mkV2 (mkV "robar") ; -- status=guess
+lin steal_away_V = advV OP_steal_V OP_away_Adv ; -- guess-p-verb
+lin steal_out_V = advV OP_steal_V OP_out_Adv ; -- guess-p-verb
+lin steal_over_V2 = prepV2 OP_steal_V OP_over_Prep ; -- guess-p-verb
+lin steal_up_V = advV OP_steal_V OP_up_Adv ; -- guess-p-verb
+lin steal_up_on_V2 = prepV2 (advV OP_steal_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
 lin stealth_N = mkN "cautela" | mkN "sigilo" ; -- status=guess status=guess
 lin stealthy_A = mkA "sigiloso" | mkA "furtivo" ; -- status=guess status=guess
 lin steam_N = mkN "máquina de vapor" ; -- status=guess
@@ -27014,7 +28271,16 @@ lin stent_N = mkN "stent" ; --UWN
 lin step_N = mkN "paso" ;
 lin step_V = mkV "caminar" ; -- status=guess
 lin step_V2 = mkV2 (mkV "caminar") ; -- status=guess
+lin step_aside_V = advV OP_step_V OP_aside_Adv ; -- guess-p-verb
+lin step_back_V = advV OP_step_V OP_back_Adv ; -- guess-p-verb
+lin step_down_V = advV OP_step_V OP_down_Adv ; -- guess-p-verb
+lin step_down_V2 = prepV2 OP_step_V OP_down_Prep ; -- guess-p-verb
+lin step_forward_V = advV OP_step_V OP_forward_Adv ; -- guess-p-verb
 lin step_in_V = mkV "delegar" | mkV "ofrecerse" | mkV "subrogar" | mkV "sustituir" ; --UWN
+lin step_on_it_V2 = variants {} ; -- guess-p-verb
+lin step_out_V = advV OP_step_V OP_out_Adv ; -- guess-p-verb
+lin step_to_V2 = prepV2 OP_step_V OP_to_Prep ; -- guess-p-verb
+lin step_up_V2 = prepV2 OP_step_V OP_up_Prep ; -- guess-p-verb
 lin stepbrother_N = mkN "hermanastro" ; -- status=guess
 lin stepchild_N = mkN "hijastro" ; -- status=guess
 lin stepdaughter_N = mkN "hijastra" ; -- status=guess
@@ -27056,8 +28322,20 @@ lin stibnite_N = mkN "estibina" ; -- status=guess
 lin stick_N = L.stick_N ;
 lin stick_V = mkV "pegarse" | mkV "adherirse" | mkV "permanecer" ; ---split: to be glued / to remain firm and loyal
 lin stick_V2 = mkV2 "pegar" | mkV2 "clavar" | mkV2 adherir_V ; ---split: glue / remain (rather VA)
+lin stick_around_V = advV OP_stick_V OP_around_Adv ; -- guess-p-verb
+lin stick_at_V2 = prepV2 OP_stick_V OP_at_Prep ; -- guess-p-verb
+lin stick_by_V2 = prepV2 OP_stick_V OP_by_Prep ; -- guess-p-verb
+lin stick_down_V2 = prepV2 OP_stick_V OP_down_Prep ; -- guess-p-verb
+lin stick_it_to_V2 = variants {} ; -- guess-p-verb
 lin stick_out_V = mkV "aguantar" | mkV "apechar" | mkV "digerir" | mkV "sobrellevar" | mkV "soportar" | mkV "sufrir" | mkV "tolerar" ; --UWN
+lin stick_out_V2 = prepV2 OP_stick_V OP_out_Prep ; -- guess-p-verb
+lin stick_out_for_V2 = prepV2 (advV OP_stick_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin stick_to_V2 = prepV2 OP_stick_V OP_to_Prep ; -- guess-p-verb
+lin stick_together_V = advV OP_stick_V OP_together_Adv ; -- guess-p-verb
 lin stick_up_V = mkV "convencer" ; --UWN
+lin stick_up_V2 = prepV2 OP_stick_V OP_up_Prep ; -- guess-p-verb
+lin stick_up_for_V2 = prepV2 (advV OP_stick_V OP_up_Adv ) OP_for_Prep ; -- guess-p-verb
+lin stick_with_V2 = prepV2 OP_stick_V OP_with_Prep ; -- guess-p-verb
 lin sticker_N = mkN "etiqueta adhesiva" | mkN "adhesivo" | mkN "calcomanía" | mkN "pegatina" | mkN "etiqueta" ; -- status=guess status=guess status=guess status=guess status=guess
 lin stickleback_N = mkN "gasterosteidae" ; --UWN
 lin stickler_N = mkN "detallista" | mkN "rigorista" ; --UWN
@@ -27109,6 +28387,7 @@ lin stipule_N = mkN "estípula" ; -- status=guess
 lin stir_N = mkN "sofrito" ; -- status=guess
 lin stir_V = sofreír_V ; -- status=guess
 lin stir_V2 = mkV2 (sofreír_V) ; -- status=guess
+lin stir_up_V2 = prepV2 OP_stir_V OP_up_Prep ; -- guess-p-verb
 lin stirk_N = mkN "añojo" ; --UWN
 lin stirling_PN = mkPN "Stirling" ; -- status=guess src=geonames
 lin stirrup_N = mkN "estribo" ; -- status=guess
@@ -27167,8 +28446,16 @@ lin stop_N = mkN "parada" | mkN "paradero" ; -- status=guess
 lin stop_V = L.stop_V ;
 lin stop_V2 = mkV2 (mkV "parar") ;
 lin stop_VV = mkVV (mkV "parar") ;
+lin stop_around_V = advV OP_stop_V OP_around_Adv ; -- guess-p-verb
+lin stop_back_V = advV OP_stop_V OP_back_Adv ; -- guess-p-verb
+lin stop_behind_V = advV OP_stop_V OP_behind_Adv ; -- guess-p-verb
+lin stop_by_V2 = prepV2 OP_stop_V OP_by_Prep ; -- guess-p-verb
+lin stop_in_V = advV OP_stop_V OP_in_Adv ; -- guess-p-verb
+lin stop_off_V = advV OP_stop_V OP_off_Adv ; -- guess-p-verb
+lin stop_out_V = advV OP_stop_V OP_out_Adv ; -- guess-p-verb
 lin stop_over_V = mkV "detenerse" | mkV "parar" ; --UWN
 lin stop_up_V = mkV "tapar" ; --UWN
+lin stop_up_V2 = prepV2 OP_stop_V OP_up_Prep ; -- guess-p-verb
 lin stopcock_N = mkN "llave de cierre" ; -- status=guess
 lin stoplight_N = mkN "semáforo" ; --UWN
 lin stopover_N = mkN "paraje" masculine | mkN "escala" ; -- status=guess status=guess
@@ -27284,8 +28571,16 @@ lin strike_2_N = variants {} ; --
 lin strike_N = variants {} ; --
 lin strike_V = mkV (mkV "hacer") "la huelga" ;
 lin strike_V2 = mkV2 (mkV "golpear") | mkV2 (mkV "pegar") | mkV2 (mkV "tachar") | mkV2 (mkV "borrar") ; --- split: hit / cross out text
+lin strike_back_V = advV OP_strike_V OP_back_Adv ; -- guess-p-verb
 lin strike_down_V = mkV "derribar" ; --UWN
+lin strike_down_V2 = prepV2 OP_strike_V OP_down_Prep ; -- guess-p-verb
+lin strike_off_V2 = prepV2 OP_strike_V OP_off_Prep ; -- guess-p-verb
+lin strike_on_V2 = prepV2 OP_strike_V OP_on_Prep ; -- guess-p-verb
 lin strike_out_V = mkV "irrumpir" | mkV "salir" ; --UWN
+lin strike_out_V2 = prepV2 OP_strike_V OP_out_Prep ; -- guess-p-verb
+lin strike_up_V = advV OP_strike_V OP_up_Adv ; -- guess-p-verb
+lin strike_up_V2 = prepV2 OP_strike_V OP_up_Prep ; -- guess-p-verb
+lin strike_upon_V2 = prepV2 OP_strike_V OP_upon_Prep ; -- guess-p-verb
 lin strikebreaker_N = mkN "esquirol" | mkN "rompehuelgas" | mkN "carnero" ; -- status=guess status=guess status=guess
 lin striker_N = mkN "huelguista" masculine ; -- status=guess
 lin striking_A = mkA "llamativo" ; -- status=guess
@@ -27327,6 +28622,7 @@ lin structure_V2 = variants {} ; --
 lin struggle_N = mkN "lucha" ; -- status=guess
 lin struggle_V = mkV "luchar" | mkV (mkV "esforzarse") "con denuedo" ; -- status=guess
 lin struggle_VV = mkVV (mkV "luchar") | mkVV (mkV (mkV "esforzarse") "con denuedo") ; -- status=guess
+lin struggle_back_V = advV OP_struggle_V OP_back_Adv ; -- guess-p-verb
 lin strum_V = mkV "rasguear" ; -- status=guess, src=wikt
 lin strum_V2 = mkV2 (mkV "rasguear") ; -- status=guess, src=wikt
 lin strumpet_N = mkN "puta" masculine | mkN "golfa" | mkN "ramera" ; -- status=guess status=guess status=guess
@@ -27555,6 +28851,7 @@ lin suicide_N = mkN "hombre bomba" | mkN "terrorista suicida" ; -- status=guess
 lin suit_N = mkN "proceso ." | mkN "pleito" | mkN "litigio" | mkN "acción" feminine ; -- status=guess
 lin suit_V = convenir_V ; -- status=guess
 lin suit_V2 = mkV2 (convenir_V) ; -- status=guess
+lin suit_up_V = advV OP_suit_V OP_up_Adv ; -- guess-p-verb
 lin suitability_N = mkN "conveniencia" | mkN "propiedad" ; --UWN
 lin suitable_A = mkA "apropiado" | mkA "indicado" ;
 lin suitableness_N = mkN "conveniencia" | mkN "propiedad" ; --UWN
@@ -27818,6 +29115,7 @@ lin sweaty_A = mkA "sudado" ; -- status=guess
 lin sweden_PN = mkPN "Suecia" ; -- status=guess src=geonames
 lin sweep_V = mkV (mkV "tratar") "de tapar algo ilícito" ; -- status=guess
 lin sweep_V2 = mkV2 (mkV (mkV "tratar") "de tapar algo ilícito") ; -- status=guess
+lin sweep_through_V2 = prepV2 OP_sweep_V OP_through_Prep ; -- guess-p-verb
 lin sweeper_N = mkN "barrendero" ; -- status=guess
 lin sweeping_A = mkA "masivo" ; --UWN
 lin sweepstakes_N = mkN "apuesta" ; --UWN
@@ -27856,6 +29154,10 @@ lin swineherd_N = mkN "porquero" ; --UWN
 lin swing_N = mkN "columpio" ; -- status=guess
 lin swing_V = mkV "columpiarse" ; -- status=guess
 lin swing_V2 = mkV2 (mkV "columpiar") ; -- status=guess
+lin swing_around_V = advV OP_swing_V OP_around_Adv ; -- guess-p-verb
+lin swing_at_V2 = prepV2 OP_swing_V OP_at_Prep ; -- guess-p-verb
+lin swing_by_V = advV OP_swing_V OP_by_Adv ; -- guess-p-verb
+lin swing_round_V = advV OP_swing_V OP_round_Adv ; -- guess-p-verb
 lin swingeing_A = mkA "abrumador" ; --UWN
 lin swinton_PN = mkPN "Swinton" ; -- status=guess src=geonames
 lin swipe_N = mkN "golpazo" ; --UWN
@@ -27865,6 +29167,8 @@ lin switch8on_V2 = L.switch8on_V2 ;
 lin switch_N = mkN "interruptor" masculine ; -- status=guess
 lin switch_V = mkV "intercambiar" | mkV "cambiar" ; -- status=guess
 lin switch_V2 = mkV2 (mkV "intercambiar") | mkV2 (mkV "cambiar") ; -- status=guess
+lin switch_off_V2 = prepV2 OP_switch_V OP_off_Prep ; -- guess-p-verb
+lin switch_on_V2 = prepV2 OP_switch_V OP_on_Prep ; -- guess-p-verb
 lin switchboard_N = mkN "cuadro de distribución" ; -- status=guess
 lin switcheroo_N = mkN "cambiazo" ; -- status=guess
 lin switzerland_PN = mkPN "Suiza" ; -- status=guess src=geonames
@@ -28045,8 +29349,31 @@ lin taiwan_PN = mkPN "Taiwán" ; -- status=guess src=geonames
 lin taiyuan_PN = mkPN "Taiyuan" ; -- status=guess src=geonames
 lin take_N = mkN "tomar" ; -- status=guess
 lin take_V2 = mkV2 (mkV "tomar") | mkV2 (mkV "coger") | mkV2 (mkV "sacar") | mkV2 prender_V ;
+lin take_after_V2 = prepV2 (lin V OP_take_V2) OP_after_Prep ; -- guess-p-verb
+lin take_apart_V2 = mkV2 (advV (lin V OP_take_V2) OP_apart_Adv ) ; -- guess-p-verb
+lin take_aside_V2 = mkV2 (advV (lin V OP_take_V2) OP_aside_Adv ) ; -- guess-p-verb
+lin take_away_V2 = mkV2 (advV (lin V OP_take_V2) OP_away_Adv ) ; -- guess-p-verb
+lin take_back_V = advV (lin V OP_take_V2) OP_back_Adv ; -- guess-p-verb
+lin take_back_V2 = mkV2 (advV (lin V OP_take_V2) OP_back_Adv ) ; -- guess-p-verb
+lin take_down_V2 = prepV2 (lin V OP_take_V2) OP_down_Prep ; -- guess-p-verb
+lin take_for_V2 = prepV2 (lin V OP_take_V2) OP_for_Prep ; -- guess-p-verb
+lin take_in_V = advV (lin V OP_take_V2) OP_in_Adv ; -- guess-p-verb
+lin take_in_V2 = prepV2 (lin V OP_take_V2) OP_in_Prep ; -- guess-p-verb
+lin take_it_V2 = variants {} ; -- guess-p-verb
+lin take_it_out_on_V2 = variants {} ; -- guess-p-verb
+lin take_it_upon_yourself_V = variants {} ; -- guess-p-verb
+lin take_off_V = advV (lin V OP_take_V2) OP_off_Adv ; -- guess-p-verb
+lin take_off_V2 = prepV2 (lin V OP_take_V2) OP_off_Prep ; -- guess-p-verb
+lin take_on_V = advV (lin V OP_take_V2) OP_on_Adv ; -- guess-p-verb
+lin take_on_V2 = prepV2 (lin V OP_take_V2) OP_on_Prep ; -- guess-p-verb
+lin take_out_V = advV (lin V OP_take_V2) OP_out_Adv ; -- guess-p-verb
+lin take_out_V2 = prepV2 (lin V OP_take_V2) OP_out_Prep ; -- guess-p-verb
 lin take_over_V = mkV "absorber" | mkV "asumir" ; --UWN
+lin take_over_V2 = prepV2 (lin V OP_take_V2) OP_over_Prep ; -- guess-p-verb
+lin take_through_V2 = prepV2 (lin V OP_take_V2) OP_through_Prep ; -- guess-p-verb
+lin take_to_V2 = prepV2 (lin V OP_take_V2) OP_to_Prep ; -- guess-p-verb
 lin take_up_V = mkV "retomar" ; --UWN
+lin take_up_V2 = prepV2 (lin V OP_take_V2) OP_up_Prep ; -- guess-p-verb
 lin takedown_N = mkN "aplastar" | mkN "derrota" | mkN "golpe_bajo" | mkN "golpe_decisivo" ; --UWN
 lin takeoff_N = mkN "parodia" ; -- status=guess
 lin takeout_N = mkN "comida para llevar" ; -- status=guess
@@ -28063,6 +29390,20 @@ lin talk_N = mkN "conversación" feminine | mkN "charla" ;
 lin talk_V = mkV "hablar" | mkV "conversar" ;
 lin talk_V2 = mkV2 (mkV "hablar") | mkV2 (mkV "conversar") ;
 lin talk_V3 = L.talk_V3 ;
+lin talk_around_V2 = prepV2 OP_talk_V OP_around_Prep ; -- guess-p-verb
+lin talk_at_V2 = prepV2 OP_talk_V OP_at_Prep ; -- guess-p-verb
+lin talk_back_V = advV OP_talk_V OP_back_Adv ; -- guess-p-verb
+lin talk_back_to_V2 = prepV2 (advV OP_talk_V OP_back_Adv ) OP_to_Prep ; -- guess-p-verb
+lin talk_down_V2 = prepV2 OP_talk_V OP_down_Prep ; -- guess-p-verb
+lin talk_down_to_V2 = prepV2 (advV OP_talk_V OP_down_Adv ) OP_to_Prep ; -- guess-p-verb
+lin talk_into_V3 = variants {} ; -- guess-p-verb
+lin talk_out_V2 = prepV2 OP_talk_V OP_out_Prep ; -- guess-p-verb
+lin talk_out_of_V3 = variants {} ; -- guess-p-verb
+lin talk_over_V2 = prepV2 OP_talk_V OP_over_Prep ; -- guess-p-verb
+lin talk_round_V2 = prepV2 OP_talk_V OP_round_Prep ; -- guess-p-verb
+lin talk_through_V3 = variants {} ; -- guess-p-verb
+lin talk_up_V2 = prepV2 OP_talk_V OP_up_Prep ; -- guess-p-verb
+lin talk_yourself_out_V = variants {} ; -- guess-p-verb
 lin talkative_A = mkA "hablador" ; -- status=guess
 lin talker_N = mkN "orador" ; --UWN
 lin talkie_N = mkN "cine_sonoro" ; --UWN
@@ -28128,6 +29469,11 @@ lin tanzania_PN = mkPN "Tanzania" ; -- status=guess src=geonames
 lin tap_N = mkN "machuelo" ; -- status=guess
 lin tap_V = intervenir_V ; -- status=guess
 lin tap_V2 = mkV2 (intervenir_V) ; -- status=guess
+lin tap_for_V3 = variants {} ; -- guess-p-verb
+lin tap_into_V2 = prepV2 OP_tap_V OP_into_Prep ; -- guess-p-verb
+lin tap_off_with_V2 = prepV2 (advV OP_tap_V OP_off_Adv ) OP_with_Prep ; -- guess-p-verb
+lin tap_out_V2 = prepV2 OP_tap_V OP_out_Prep ; -- guess-p-verb
+lin tap_up_V2 = prepV2 OP_tap_V OP_up_Prep ; -- guess-p-verb
 lin tape_N = mkN "cinta adhesiva" | mkN "celo" feminine ; -- status=guess
 lin tapenade_N = mkN "tapenade" ; --UWN
 lin taper_N = mkN "candela" | mkN "cerillo" | mkN "vela" ; --UWN
@@ -28233,6 +29579,16 @@ lin teapot_N = mkN "tetera" ; -- status=guess
 lin tear_N = mkN "lágrima" ; -- status=guess
 lin tear_V = mkV "desgarrarse" ; -- status=guess
 lin tear_V2 = mkV2 (mkV "desgarrarse") ; -- status=guess
+lin tear_apart_V2 = mkV2 (advV OP_tear_V OP_apart_Adv ) ; -- guess-p-verb
+lin tear_at_V2 = prepV2 OP_tear_V OP_at_Prep ; -- guess-p-verb
+lin tear_away_V2 = mkV2 (advV OP_tear_V OP_away_Adv ) ; -- guess-p-verb
+lin tear_down_V2 = prepV2 OP_tear_V OP_down_Prep ; -- guess-p-verb
+lin tear_into_V2 = prepV2 OP_tear_V OP_into_Prep ; -- guess-p-verb
+lin tear_off_V = advV OP_tear_V OP_off_Adv ; -- guess-p-verb
+lin tear_off_V2 = prepV2 OP_tear_V OP_off_Prep ; -- guess-p-verb
+lin tear_out_V = advV OP_tear_V OP_out_Adv ; -- guess-p-verb
+lin tear_up_V = advV OP_tear_V OP_up_Adv ; -- guess-p-verb
+lin tear_up_V2 = prepV2 OP_tear_V OP_up_Prep ; -- guess-p-verb
 lin tearaway_N = mkN "alborotador" | mkN "elemento" ; -- status=guess status=guess
 lin teardrop_N = mkN "lagrima" ; -- status=guess
 lin tearing_N = mkN "lacrimación" | mkN "lagrimeo" | mkN "llanto" ; --UWN
@@ -28315,7 +29671,10 @@ lin tell_V2S = mkV2S (mkV "contar") ;
 lin tell_V2V = mkV2V (mkV "contar") ;
 lin tell_V3 = mkV3 (mkV "contar") ;
 lin tell_VS = mkVS (mkV "contar") ;
+lin tell_apart_V2 = mkV2 (advV OP_tell_V OP_apart_Adv ) ; -- guess-p-verb
 lin tell_from_V3 = mkV3 (mkV "distinguir") ;
+lin tell_off_V2 = prepV2 OP_tell_V OP_off_Prep ; -- guess-p-verb
+lin tell_on_V2 = prepV2 OP_tell_V OP_on_Prep ; -- guess-p-verb
 lin telling_A = mkA "convincente" ; --UWN
 lin telltale_N = mkN "bocazas" | mkN "chismoso" | mkN "chivato" | mkN "correveidile" | mkN "cotilla" | mkN "fisgón" | mkN "murmurador" ; --UWN
 lin tellurium_N = mkN "teluro" ; -- status=guess
@@ -28598,6 +29957,9 @@ lin think_N = mkN "tanque de pensamiento" ; -- status=guess
 lin think_V = L.think_V ;
 lin think_V2 = mkV2 (mkV "pensar") ;
 lin think_VS = mkVS (mkV "pensar") ;
+lin think_over_V2 = prepV2 OP_think_V OP_over_Prep ; -- guess-p-verb
+lin think_through_V2 = prepV2 OP_think_V OP_through_Prep ; -- guess-p-verb
+lin think_up_V2 = prepV2 OP_think_V OP_up_Prep ; -- guess-p-verb
 lin thinkable_A = mkA "pensable" ; -- status=guess
 lin thinkerFem_N = mkN "pensador" ; --UWN
 lin thinkerMasc_N = mkN "pensador" ; --UWN
@@ -28678,7 +30040,19 @@ lin throughout_Prep = mkPrep "a lo largo de" | mkPrep "durante" ;
 lin throw_N = mkN "lanzamiento" ; -- status=guess
 lin throw_V = mkV "tirar" | mkV "echar" ;
 lin throw_V2 = L.throw_V2 ;
+lin throw_away_V2 = mkV2 (advV OP_throw_V OP_away_Adv ) ; -- guess-p-verb
+lin throw_in_V = advV OP_throw_V OP_in_Adv ; -- guess-p-verb
+lin throw_in_V2 = prepV2 OP_throw_V OP_in_Prep ; -- guess-p-verb
+lin throw_off_V = advV OP_throw_V OP_off_Adv ; -- guess-p-verb
+lin throw_off_V2 = prepV2 OP_throw_V OP_off_Prep ; -- guess-p-verb
+lin throw_on_V2 = prepV2 OP_throw_V OP_on_Prep ; -- guess-p-verb
+lin throw_out_V2 = prepV2 OP_throw_V OP_out_Prep ; -- guess-p-verb
+lin throw_over_V2 = prepV2 OP_throw_V OP_over_Prep ; -- guess-p-verb
+lin throw_together_V2 = mkV2 (advV OP_throw_V OP_together_Adv ) ; -- guess-p-verb
 lin throw_up_V = mkV "devolver" ; --UWN
+lin throw_up_V2 = prepV2 OP_throw_V OP_up_Prep ; -- guess-p-verb
+lin throw_yourself_at_V2 = variants {} ; -- guess-p-verb
+lin throw_yourself_into_V2 = variants {} ; -- guess-p-verb
 lin thrush_N = mkN "tordo" | mkN "mirlo" | mkN "zorzal" masculine ; -- status=guess status=guess status=guess
 lin thrust_N = mkN "empuje" | mkN "envión" masculine ; -- status=guess
 lin thrust_V = asestar_V | forzar_V ; -- status=guess
@@ -28734,6 +30108,12 @@ lin tidy_A = mkA "ordenado" ; -- status=guess
 lin tie_N = mkN "lazo" | mkN "vínculo" ; -- status=guess
 lin tie_V = mkV "atar" | mkV "ligar" | mkV "amarrar" ; -- status=guess
 lin tie_V2 = L.tie_V2 ;
+lin tie_back_V2 = mkV2 (advV OP_tie_V OP_back_Adv ) ; -- guess-p-verb
+lin tie_down_V2 = prepV2 OP_tie_V OP_down_Prep ; -- guess-p-verb
+lin tie_in_V = advV OP_tie_V OP_in_Adv ; -- guess-p-verb
+lin tie_in_V2 = prepV2 OP_tie_V OP_in_Prep ; -- guess-p-verb
+lin tie_in_with_V2 = prepV2 (advV OP_tie_V OP_in_Adv ) OP_with_Prep ; -- guess-p-verb
+lin tie_up_V2 = prepV2 OP_tie_V OP_up_Prep ; -- guess-p-verb
 lin tier_N = mkN "capa" | mkN "enlace" masculine ; -- status=guess status=guess
 lin tiger_N = mkN "tigre" masculine ; -- status=guess
 lin tigerish_A = mkA "salvaje" ; --UWN
@@ -28980,6 +30360,13 @@ lin toucan_N = mkN "tucán" masculine ; -- status=guess
 lin touch_N = mkN "toque" masculine ; -- status=guess
 lin touch_V = mkV "tocar" ;
 lin touch_V2 = mkV2 (mkV "tocar") ;
+lin touch_down_V = advV OP_touch_V OP_down_Adv ; -- guess-p-verb
+lin touch_for_V3 = variants {} ; -- guess-p-verb
+lin touch_off_V2 = prepV2 OP_touch_V OP_off_Prep ; -- guess-p-verb
+lin touch_on_V2 = prepV2 OP_touch_V OP_on_Prep ; -- guess-p-verb
+lin touch_type_V = variants {} ; -- guess-p-verb
+lin touch_up_V2 = prepV2 OP_touch_V OP_up_Prep ; -- guess-p-verb
+lin touch_upon_V2 = prepV2 OP_touch_V OP_upon_Prep ; -- guess-p-verb
 lin touchable_A = mkA "tocable" ; -- status=guess
 lin touchdown_N = mkN "touchdown" masculine ; -- status=guess
 lin touchline_N = mkN "banda" | mkN "línea_de_toque" ; --UWN
@@ -29046,6 +30433,13 @@ lin tracy_PN = mkPN "Tracy" ; -- status=guess src=geonames
 lin trade_N = mkN "comercio" | mkN "negocio" ;
 lin trade_V = mkV "comerciar" ; -- status=guess
 lin trade_V2 = mkV2 (mkV "comerciar") ; -- status=guess
+lin trade_away_V = advV OP_trade_V OP_away_Adv ; -- guess-p-verb
+lin trade_down_V = advV OP_trade_V OP_down_Adv ; -- guess-p-verb
+lin trade_in_V2 = prepV2 OP_trade_V OP_in_Prep ; -- guess-p-verb
+lin trade_off_V2 = prepV2 OP_trade_V OP_off_Prep ; -- guess-p-verb
+lin trade_on_V2 = prepV2 OP_trade_V OP_on_Prep ; -- guess-p-verb
+lin trade_up_V = advV OP_trade_V OP_up_Adv ; -- guess-p-verb
+lin trade_upon_V2 = prepV2 OP_trade_V OP_upon_Prep ; -- guess-p-verb
 lin trademark_N = mkN "marca registrada" | mkN "marca" masculine ; -- status=guess status=guess
 lin trader_N = mkN "comerciante" ; --UWN
 lin trading_A = variants {} ; --
@@ -29070,6 +30464,7 @@ lin train_N = L.train_N ;
 lin train_V = mkV "entrenar" ;
 lin train_V2 = mkV2 (mkV "entrenar") ;
 lin train_V2V = mkV2V (mkV "entrenar") ;
+lin train_up_V2 = prepV2 OP_train_V OP_up_Prep ; -- guess-p-verb
 lin trained_A = variants {} ; --
 lin trainee_N = variants {} ; --
 lin trainer_N = mkN "entrenador" | mkN "amaestrador" masculine ; -- status=guess
@@ -29385,7 +30780,13 @@ lin try_N = mkN "try" | mkN "ensayo" ; -- status=guess
 lin try_V = probar_V ;
 lin try_V2 = mkV2 (probar_V) ;
 lin try_VV = mkVV (probar_V) ;
+lin try_back_V = advV OP_try_V OP_back_Adv ; -- guess-p-verb
+lin try_for_V2 = prepV2 OP_try_V OP_for_Prep ; -- guess-p-verb
+lin try_it_on_V = variants {} ; -- guess-p-verb
+lin try_on_V2 = prepV2 OP_try_V OP_on_Prep ; -- guess-p-verb
 lin try_out_V = mkV "ensayar" | mkV "examinar" | mkV "probar" ; --UWN
+lin try_out_V2 = prepV2 OP_try_V OP_out_Prep ; -- guess-p-verb
+lin try_out_for_V2 = prepV2 (advV OP_try_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
 lin trypsin_N = mkN "tripsina" ; -- status=guess
 lin tryptophan_N = mkN "triptófano" ; -- status=guess
 lin tryst_N = mkN "convenio" ; -- status=guess
@@ -29463,7 +30864,25 @@ lin turn_N = mkN "turno" ;
 lin turn_V = L.turn_V ;
 lin turn_V2 = mkV2 turn_V ;
 lin turn_VA = mkVA (mkV "ponerse") ;
+lin turn_against_V2 = prepV2 OP_turn_V OP_against_Prep ; -- guess-p-verb
+lin turn_around_V2 = prepV2 OP_turn_V OP_around_Prep ; -- guess-p-verb
+lin turn_away_V = advV OP_turn_V OP_away_Adv ; -- guess-p-verb
+lin turn_away_V2 = mkV2 (advV OP_turn_V OP_away_Adv ) ; -- guess-p-verb
+lin turn_back_V = advV OP_turn_V OP_back_Adv ; -- guess-p-verb
+lin turn_down_V2 = prepV2 OP_turn_V OP_down_Prep ; -- guess-p-verb
+lin turn_in_V = advV OP_turn_V OP_in_Adv ; -- guess-p-verb
+lin turn_in_V2 = prepV2 OP_turn_V OP_in_Prep ; -- guess-p-verb
+lin turn_into_V2 = prepV2 OP_turn_V OP_into_Prep ; -- guess-p-verb
+lin turn_off_V2 = prepV2 OP_turn_V OP_off_Prep ; -- guess-p-verb
+lin turn_on_V = advV OP_turn_V OP_on_Adv ; -- guess-p-verb
+lin turn_on_V2 = prepV2 OP_turn_V OP_on_Prep ; -- guess-p-verb
+lin turn_out_V = advV OP_turn_V OP_out_Adv ; -- guess-p-verb
+lin turn_out_V2 = prepV2 OP_turn_V OP_out_Prep ; -- guess-p-verb
+lin turn_over_V = advV OP_turn_V OP_over_Adv ; -- guess-p-verb
+lin turn_over_V2 = prepV2 OP_turn_V OP_over_Prep ; -- guess-p-verb
+lin turn_to_V2 = prepV2 OP_turn_V OP_to_Prep ; -- guess-p-verb
 lin turn_up_V = mkV "salir" | mkV "surgir" ; --UWN
+lin turn_up_V2 = prepV2 OP_turn_V OP_up_Prep ; -- guess-p-verb
 lin turnaround_N = mkN "revés" ; --UWN
 lin turncoat_N = mkN "tránsfuga" | mkN "rajeta" | mkN "veleta" ; -- status=guess status=guess status=guess
 lin turnip_N = mkN "nabo" ; -- status=guess
@@ -30075,6 +31494,8 @@ lin urge_N = mkN "ansia" masculine | mkN "impulso" ; -- status=guess
 lin urge_V2 = mkV2 (mkV "impulsar") | mkV2 (urgir_V) | mkV2 (mkV "aguijonear") | mkV2 (mkV "apresurar") | mkV2 (mkV "presionar") | mkV2 (mkV "empujar") | mkV2 (mkV "aguijar") | mkV2 (mkV "jalear") ; -- status=guess
 lin urge_V2V = mkV2V (mkV "impulsar") | mkV2V (urgir_V) | mkV2V (mkV "aguijonear") | mkV2V (mkV "apresurar") | mkV2V (mkV "presionar") | mkV2V (mkV "empujar") | mkV2V (mkV "aguijar") | mkV2V (mkV "jalear") ; -- status=guess
 lin urge_VS = mkVS (mkV "impulsar") | mkVS (urgir_V) | mkVS (mkV "aguijonear") | mkVS (mkV "apresurar") | mkVS (mkV "presionar") | mkVS (mkV "empujar") | mkVS (mkV "aguijar") | mkVS (mkV "jalear") ; -- status=guess
+lin urge_on_V2 = prepV2 (lin V OP_urge_V2) OP_on_Prep ; -- guess-p-verb
+lin urge_upon_V2 = prepV2 (lin V OP_urge_V2) OP_upon_Prep ; -- guess-p-verb
 lin urgency_N = variants {} ; --
 lin urgent_A = mkA "urgente" | mkA "acuciante" ; -- status=guess
 lin urgently_Adv = adjAdv urgent_A ; -- -- derived
@@ -30103,6 +31524,7 @@ lin use_V = mkV "usar" | mkV "utilizar" ;
 lin use_V2 = mkV2 (mkV "usar") | mkV2 (mkV "utilizar") ;
 lin use_VV = mkVV (mkV "usar") | mkVV (mkV "utilizar") ;
 lin use_up_V = mkV "disminuir" | mkV "reducir" ; --UWN
+lin use_up_V2 = prepV2 OP_use_V OP_up_Prep ; -- guess-p-verb
 lin useable_A = mkA "disponible" | mkA "utilizable" ; --UWN
 lin used_A = variants {} ; --
 lin useful_A = mkA "útil" ;
@@ -30626,6 +32048,7 @@ lin vote_V = mkV "votar" ;
 lin vote_V2 = mkV2 (mkV "votar") ;
 lin vote_V3 = mkV3 (mkV "votar") ;
 lin vote_VV = mkVV (mkV "votar") ;
+lin vote_down_V = advV OP_vote_V OP_down_Adv ; -- guess-p-verb
 lin voter_N = mkN "votante" masculine ; -- status=guess
 lin voucher_N = mkN "cupón" | mkN "vale" masculine ; -- status=guess
 lin vow_N = mkN "voto" | mkN "manda" | mkN "promesa" ; -- status=guess status=guess status=guess
@@ -30685,6 +32108,15 @@ lin wait_N = mkN "espera" | mkN "retraso" ; -- status=guess status=guess
 lin wait_V = mkV "esperar" | mkV "aguardar" ;
 lin wait_V2 = L.wait_V2 ;
 lin wait_VV = mkVV (mkV "esperar") | mkVV (mkV "aguardar") ;
+lin wait_about_V = advV OP_wait_V OP_about_Adv ; -- guess-p-verb
+lin wait_around_V = advV OP_wait_V OP_around_Adv ; -- guess-p-verb
+lin wait_behind_V = advV OP_wait_V OP_behind_Adv ; -- guess-p-verb
+lin wait_in_V = advV OP_wait_V OP_in_Adv ; -- guess-p-verb
+lin wait_on_V2 = prepV2 OP_wait_V OP_on_Prep ; -- guess-p-verb
+lin wait_out_V2 = prepV2 OP_wait_V OP_out_Prep ; -- guess-p-verb
+lin wait_up_V = advV OP_wait_V OP_up_Adv ; -- guess-p-verb
+lin wait_up_for_V2 = prepV2 (advV OP_wait_V OP_up_Adv ) OP_for_Prep ; -- guess-p-verb
+lin wait_upon_V2 = prepV2 OP_wait_V OP_upon_Prep ; -- guess-p-verb
 lin waiter_N = mkN "camarero" | mkN "garzón" ; -- status=guess
 lin waiting_A = variants {} ; --
 lin waiting_N = variants {} ; --
@@ -30693,12 +32125,28 @@ lin waiver_N = mkN "abdicación" | mkN "despido" | mkN "renuncia" ; --UWN
 lin wake_N = mkN "estela" ; -- status=guess
 lin wake_V = despertar_V ; -- status=guess
 lin wake_V2 = mkV2 (despertar_V) ; -- status=guess
+lin wake_up_V = advV OP_wake_V OP_up_Adv ; -- guess-p-verb
+lin wake_up_V2 = prepV2 OP_wake_V OP_up_Prep ; -- guess-p-verb
 lin wakefield_PN = mkPN "Wakefield" ; -- status=guess src=geonames
 lin wakefulness_N = mkN "vigilia" ; -- status=guess
 lin wales_PN = mkPN "Wales" ; -- status=guess src=geonames
 lin walk_N = mkN "trecho" | mkN "trayecto" ; -- status=guess
 lin walk_V = L.walk_V ;
 lin walk_V2 = mkV2 (mkV "caminar") ;
+lin walk_away_from_V2 = prepV2 (advV OP_walk_V OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
+lin walk_away_with_V2 = prepV2 (advV OP_walk_V OP_away_Adv ) OP_with_Prep ; -- guess-p-verb
+lin walk_back_from_V2 = prepV2 (advV OP_walk_V OP_back_Adv ) OP_from_Prep ; -- guess-p-verb
+lin walk_by_V = advV OP_walk_V OP_by_Adv ; -- guess-p-verb
+lin walk_in_V = advV OP_walk_V OP_in_Adv ; -- guess-p-verb
+lin walk_in_on_V2 = prepV2 (advV OP_walk_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin walk_into_V2 = prepV2 OP_walk_V OP_into_Prep ; -- guess-p-verb
+lin walk_off_V2 = prepV2 OP_walk_V OP_off_Prep ; -- guess-p-verb
+lin walk_off_with_V2 = prepV2 (advV OP_walk_V OP_off_Adv ) OP_with_Prep ; -- guess-p-verb
+lin walk_on_V = advV OP_walk_V OP_on_Adv ; -- guess-p-verb
+lin walk_out_V = advV OP_walk_V OP_out_Adv ; -- guess-p-verb
+lin walk_out_on_V2 = prepV2 (advV OP_walk_V OP_out_Adv ) OP_on_Prep ; -- guess-p-verb
+lin walk_through_V3 = variants {} ; -- guess-p-verb
+lin walk_up_V = advV OP_walk_V OP_up_Adv ; -- guess-p-verb
 lin walkabout_N = mkN "recorrido" ; --UWN
 lin walker_N = mkN "caminante" masculine ; -- status=guess
 lin walking_A = variants {} ; --
@@ -30728,6 +32176,7 @@ lin waltzer_N = mkN "valsador" ; --UWN
 lin wampum_N = mkN "wampum" ; --UWN
 lin wand_N = mkN "varita" ; -- status=guess
 lin wander_V = mkV "divagar" | mkV "pajarear" | mkV "pajaronear" ; -- status=guess
+lin wander_off_V = advV OP_wander_V OP_off_Adv ; -- guess-p-verb
 lin wanderer_N = mkN "vagabundo" ; -- status=guess
 lin wandering_N = mkN "vagar" ; -- status=guess
 lin wandsworth_PN = mkPN "Municipio de Wandsworth" ; -- status=guess src=geonames
@@ -30741,6 +32190,8 @@ lin want_V = querer_V | mkV "desear" ;
 lin want_V2 = mkV2 (querer_V) | mkV2 (mkV "desear") ;
 lin want_V2V = mkV2V (querer_V) | mkV2V (mkV "desear") ;
 lin want_VV = S.want_VV ;
+lin want_in_V = advV OP_want_V OP_in_Adv ; -- guess-p-verb
+lin want_out_V = advV OP_want_V OP_out_Adv ; -- guess-p-verb
 lin wantage_PN = mkPN "Wantage" ; -- status=guess src=geonames
 lin wanton_A = mkA "desobediente" | mkA "malcriado" ; -- status=guess status=guess
 lin war_N = L.war_N ;
@@ -30797,6 +32248,12 @@ lin wasabi_N = mkN "wasabi" masculine ; -- status=guess
 lin wash_N = mkN "enjuague" masculine ; -- status=guess
 lin wash_V = mkV (mkV "lavarse") "las manos" ; -- status=guess
 lin wash_V2 = L.wash_V2 ;
+lin wash_away_V2 = mkV2 (advV OP_wash_V OP_away_Adv ) ; -- guess-p-verb
+lin wash_down_V2 = prepV2 OP_wash_V OP_down_Prep ; -- guess-p-verb
+lin wash_out_V2 = prepV2 OP_wash_V OP_out_Prep ; -- guess-p-verb
+lin wash_over_V2 = prepV2 OP_wash_V OP_over_Prep ; -- guess-p-verb
+lin wash_up_V = advV OP_wash_V OP_up_Adv ; -- guess-p-verb
+lin wash_up_V2 = prepV2 OP_wash_V OP_up_Prep ; -- guess-p-verb
 lin washable_A = mkA "lavable" ; -- status=guess
 lin washbasin_N = mkN "lavabo" ; -- status=guess
 lin washboard_N = mkN "lavadero" ; -- status=guess
@@ -30810,6 +32267,7 @@ lin waste_A = mkA "desierto" ; --UWN
 lin waste_N = mkN "desechos" masculine | mkN "detrito" | mkN "basura" masculine ; -- status=guess
 lin waste_V = mkV "malgastar" | mkV "desperdiciar" ; -- status=guess
 lin waste_V2 = mkV2 (mkV "malgastar") | mkV2 (mkV "desperdiciar") ; -- status=guess
+lin waste_away_V = advV OP_waste_V OP_away_Adv ; -- guess-p-verb
 lin wasteland_N = mkN "desierto" ; -- status=guess
 lin wastrel_N = mkN "derrochador" | mkN "despilfarrador" ; --UWN
 lin watch_1_V2 = mkV2 (mkV "mirar") ;
@@ -30820,6 +32278,8 @@ lin watch_V2 = L.watch_V2 ;
 lin watch_V2V = mkV2V (mkV "mirar") ;
 lin watch_VS = mkVS (mkV "mirar") ;
 lin watch_out_V = mkV "vigilar" ; --UWN
+lin watch_out_for_V2 = prepV2 (advV OP_watch_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin watch_over_V2 = prepV2 OP_watch_V OP_over_Prep ; -- guess-p-verb
 lin watchband_N = mkN "brazalete" ; --UWN
 lin watchdog_N = mkN "perro guardián" ; -- status=guess
 lin watcherFem_N = mkN "espectador" | mkN "testigo" ; --UWN
@@ -30864,6 +32324,11 @@ lin wattmeter_N = mkN "vatímetro" ; -- status=guess
 lin wave_N = mkN "onda" | mkN "ola" ; -- status=guess
 lin wave_V = mkV "abanicar" ; -- status=guess
 lin wave_V2 = mkV2 (mkV "abanicar") ; -- status=guess
+lin wave_aside_V2 = mkV2 (advV OP_wave_V OP_aside_Adv ) ; -- guess-p-verb
+lin wave_away_V = advV OP_wave_V OP_away_Adv ; -- guess-p-verb
+lin wave_down_V2 = prepV2 OP_wave_V OP_down_Prep ; -- guess-p-verb
+lin wave_off_V2 = prepV2 OP_wave_V OP_off_Prep ; -- guess-p-verb
+lin wave_on_V2 = prepV2 OP_wave_V OP_on_Prep ; -- guess-p-verb
 lin wavelength_N = mkN "longitud de onda" ; -- status=guess
 lin waver_N = mkN "parpadeo" | mkN "pestañeo" | mkN "vacilación" ; --UWN
 lin waver_V = mkV "balancearse" ; -- status=guess, src=wikt
@@ -30901,7 +32366,11 @@ lin weaponry_N = mkN "armas" feminine ; -- status=guess
 lin wear_N = mkN "ropa" ; -- status=guess
 lin wear_V = mkV "desgastarse" ; --wear out
 lin wear_V2 = mkV2 (mkV "llevar") ; --wear clothes
+lin wear_away_V2 = mkV2 (advV OP_wear_V OP_away_Adv ) ; -- guess-p-verb
+lin wear_down_V2 = prepV2 OP_wear_V OP_down_Prep ; -- guess-p-verb
+lin wear_off_V = advV OP_wear_V OP_off_Adv ; -- guess-p-verb
 lin wear_out_V = mkV "agotar" | mkV "cansar" ; --UWN
+lin wear_out_V2 = prepV2 OP_wear_V OP_out_Prep ; -- guess-p-verb
 lin weary_A = mkA "cansado" ; -- status=guess
 lin weary_V = mkV "cansar" ; -- status=guess, src=wikt
 lin weary_V2 = mkV2 (mkV "cansar") ; -- status=guess, src=wikt
@@ -31190,13 +32659,19 @@ lin win_N = variants {} ; --
 lin win_V = mkV "ganar" ;
 lin win_V2 = L.win_V2 ;
 lin win_back_V = mkV "recuperar" ; --UWN
+lin win_down_V = advV OP_win_V OP_down_Adv ; -- guess-p-verb
 lin win_over_V = mkV "convencer" ; --UWN
+lin win_up_V = advV OP_win_V OP_up_Adv ; -- guess-p-verb
 lin wince_N = mkN "estremecimiento_de_dolor" | mkN "mueca_de_dolor" ; --UWN
 lin winch_N = mkN "cabestrante" | mkN "torno" ; --UWN
 lin winchester_PN = mkPN "Winchester" ; -- status=guess src=geonames
 lin wind_N = L.wind_N ;
 lin wind_V = mkV "rebobinar" ; -- status=guess
+lin wind_down_V = advV OP_wind_V OP_down_Adv ; -- guess-p-verb
+lin wind_down_V2 = prepV2 OP_wind_V OP_down_Prep ; -- guess-p-verb
+lin wind_on_V = advV OP_wind_V OP_on_Adv ; -- guess-p-verb
 lin wind_up_V = mkV "acabar" | mkV "terminar" ; --UWN
+lin wind_up_V2 = prepV2 OP_wind_V OP_up_Prep ; -- guess-p-verb
 lin windbreak_N = mkN "cortina_rompeviento" ; --UWN
 lin windbreaker_N = mkN "anorak" ; --UWN
 lin windcheater_N = mkN "anorak" ; --UWN
@@ -31245,6 +32720,8 @@ lin wintergreen_N = mkN "siempreverde" feminine ; -- status=guess
 lin wintry_A = mkA "invernal" ; -- status=guess
 lin wipe_V = mkV "formatear" ; -- status=guess
 lin wipe_V2 = L.wipe_V2 ;
+lin wipe_out_V = advV OP_wipe_V OP_out_Adv ; -- guess-p-verb
+lin wipe_out_V2 = prepV2 OP_wipe_V OP_out_Prep ; -- guess-p-verb
 lin wipeout_N = mkN "asolamiento" | mkN "extermina" ; -- status=guess status=guess
 lin wiper_N = mkN "escobilla" | mkN "lilmpiaparabrisas" | mkN "limpiaparabrisas" ; --UWN
 lin wire_N = mkN "alambre" | mkN "hilo" ; -- status=guess
@@ -31357,6 +32834,13 @@ lin work_2_V = mkV "funcionar" ;
 lin work_N = mkN "trabajo" masculine ;
 lin work_V = mkV "trabajar" ;
 lin work_V2 = mkV2 (mkV "trabajar") ;
+lin work_off_V2 = prepV2 OP_work_V OP_off_Prep ; -- guess-p-verb
+lin work_on_V2 = prepV2 OP_work_V OP_on_Prep ; -- guess-p-verb
+lin work_out_V = advV OP_work_V OP_out_Adv ; -- guess-p-verb
+lin work_out_V2 = prepV2 OP_work_V OP_out_Prep ; -- guess-p-verb
+lin work_over_V2 = prepV2 OP_work_V OP_over_Prep ; -- guess-p-verb
+lin work_through_V2 = prepV2 OP_work_V OP_through_Prep ; -- guess-p-verb
+lin work_together_V = advV OP_work_V OP_together_Adv ; -- guess-p-verb
 lin work_up_V = mkV "aumentar" | mkV "crecer" ; --UWN
 lin workable_A = mkA "factible" | mkA "practicable" | mkA "realizable" | mkA "viable" ; --UWN
 lin workaholic_N = mkN "trabajólico" ; -- status=guess
@@ -31454,6 +32938,11 @@ lin writ_large_A = variants {} ;
 lin write_V = mkV "escribir" | mkV "apuntar" ;
 lin write_V2 = L.write_V2 ;
 lin write_VS = mkVS (mkV "escribir") ;
+lin write_down_V2 = prepV2 OP_write_V OP_down_Prep ; -- guess-p-verb
+lin write_in_V = advV OP_write_V OP_in_Adv ; -- guess-p-verb
+lin write_off_V2 = prepV2 OP_write_V OP_off_Prep ; -- guess-p-verb
+lin write_out_V2 = prepV2 OP_write_V OP_out_Prep ; -- guess-p-verb
+lin write_up_V2 = prepV2 OP_write_V OP_up_Prep ; -- guess-p-verb
 lin writer_N = mkN "escritor" | mkN "escritora" ; --- split: masc, fem
 lin writhe_V = reflV (mkV "contorsionar") ; -- status=guess
 lin writing_N = mkN "escrito" | mkN "escritura" ; -- status=guess
@@ -31670,4 +33159,317 @@ lin zygotic_A = mkA "cigótico" ; --UWN
 lin zymase_N = mkN "zimasa" ; --UWN
 lin zymoid_A = mkA "fermentante" ; --UWN
 lin zymology_N = mkN "cimología" ; --UWN
+
+------------
+oper prepV2 : V -> Prep -> V2 = \v,p -> mkV2 v p ;
+oper advV : V -> Adv -> V = \v,a -> mkV v a.s ;
+
+oper OP_by_Prep : Prep = mkPrep "por" ;
+oper OP_for_Prep : Prep = S.for_Prep ;
+oper OP_on_Prep : Prep = S.on_Prep ;
+oper OP_out_Prep : Prep = variants {} ; --
+oper OP_upon_Prep : Prep = mkPrep "sobre" ;
+oper OP_up_Prep : Prep = mkPrep "encima de" ;
+oper OP_to_Prep : Prep = S.to_Prep ;
+oper OP_with_Prep : Prep = S.with_Prep ;
+oper OP_at_Prep : Prep = ParadigmsSpa.dative ;
+oper OP_of_Prep : Prep = ParadigmsSpa.genitive ;
+oper OP_down_Prep : Prep = mkPrep "por" ;
+oper OP_about_Prep : Prep = S.on_Prep | ParadigmsSpa.genitive ;
+oper OP_after_Prep : Prep = S.after_Prep ;
+oper OP_around_Prep : Prep = mkPrep "alrededor de" ;
+oper OP_in_Prep : Prep = S.in_Prep ;
+oper OP_over_Prep : Prep = mkPrep "a través de" ; --- split mkPrep "encima de"
+oper OP_round_Prep : Prep = mkPrep "alrededor de" ;
+oper OP_off_Prep : Prep = mkPrep "de" ;
+oper OP_into_Prep : Prep = mkPrep "en" ;
+oper OP_under_Prep : Prep = S.under_Prep ;
+oper OP_through_Prep : Prep = S.through_Prep ;
+oper OP_along_Prep : Prep = mkPrep "por" | mkPrep "a lo largo de" ;
+oper OP_across_Prep : Prep = mkPrep "a través de" ;
+oper OP_before_Prep : Prep = S.before_Prep ;
+oper OP_from_Prep : Prep = S.from_Prep ;
+oper OP_against_Prep : Prep = mkPrep "contra" ;
+oper OP_among_Prep : Prep = mkPrep "entre" ;
+oper OP_towards_Prep : Prep = mkPrep "hacia" ;
+oper OP_as_Prep : Prep = mkPrep "como" ;
+oper OP_onto_Prep : Prep = mkPrep "encima de" ;
+oper OP_above_Prep : Prep = S.above_Prep ;
+oper OP_behind_Prep : Prep = S.behind_Prep ;
+oper OP_past_Prep : Prep = mkPrep "más allá de" ;
+oper OP_without_Prep : Prep = S.without_Prep ;
+oper OP_toward_Prep : Prep = variants {} ; --
+oper OP_up_Adv : Adv = mkAdv "arriba" ;
+oper OP_in_Adv : Adv = mkAdv "dentro" ;
+oper OP_on_Adv : Adv = mkAdv "sobre" ;
+oper OP_back_Adv : Adv = mkAdv "atrás" ;
+oper OP_around_Adv : Adv = mkAdv "por aquí" | mkAdv "por acá" ;
+oper OP_away_Adv : Adv = mkAdv "lejos" | mkAdv "ausente" | mkAdv "fuera" ;
+oper OP_down_Adv : Adv = mkAdv "abajo" ;
+oper OP_off_Adv : Adv = mkAdv "fuera" ;
+oper OP_out_Adv : Adv = mkAdv "lejos" ;
+oper OP_about_Adv : Adv = mkAdv "alrededor" ;
+oper OP_over_Adv : Adv = mkAdv "por encima" | mkAdv "encima" | mkAdv "arriba" ;
+oper OP_apart_Adv : Adv = mkAdv "aparte" ;
+oper OP_along_Adv : Adv = mkAdv "a lo largo de" ;
+oper OP_forth_Adv : Adv = variants {} ; --
+oper OP_forward_Adv : Adv = mkAdv "adelante" ;
+oper OP_aside_Adv : Adv = variants {} ; --
+oper OP_under_Adv : Adv = mkAdv "en voz baja" | mkAdv "entredientes" ; -- status=guess
+oper OP_round_Adv : Adv = mkAdv "alrededor" ;
+oper OP_together_Adv : Adv = mkAdv "juntos" | mkAdv "junto" ;
+oper OP_across_Adv : Adv = mkAdv "a_través" | mkAdv "transversalmente" ; --UWN
+oper OP_by_Adv : Adv = mkAdv "por" ; -- status=guess
+oper OP_through_Adv : Adv = mkAdv "a través" ;
+oper OP_to_Adv : Adv = mkAdv "a" ; ---- what is this?
+oper OP_even_Adv : Adv = mkAdv "aún" | mkAdv "incluso" | mkAdv "hasta" ;
+oper OP_clean_Adv : Adv = variants {} ;
+oper OP_behind_Adv : Adv = variants {} ; -- S.behind_Prep ;
+oper OP_ahead_Adv : Adv = mkAdv "enfrente" ;
+oper OP_way_Adv : Adv = mkAdv "muy" ; -- status=guess
+oper OP_before_Adv : Adv = mkAdv "antes" ;
+oper OP_below_Adv : Adv = mkAdv "abajo" ;
+oper OP_for_Adv : Adv = variants {} ; -- S.for_Prep ;
+oper OP_open_Adv : Adv = variants {} ; --
+oper OP_after_Adv : Adv = mkAdv "después" ; -- status=guess
+oper OP_clear_Adv : Adv = variants {} ;
+oper OP_account_V : V = mkV dar_V "cuentas" ;
+oper OP_act_V : V = mkV "actuar" | mkV "comportarse" ;
+oper OP_add_V : V = mkV "añadir" ;
+oper OP_agree_V : V = concordar_V ;
+oper OP_aim_V : V = mkV "apuntar" | mkV "pretender" | mkV "dirigir" ;
+oper OP_answer_V : V = mkV "responder" | mkV "contestar" ;
+oper OP_apply_V : V = mkV "aplicar" ;
+oper OP_argue_V : V = mkV "argumentar" | mkV "debatir" ;
+oper OP_ask_V : V = mkV "preguntar" | pedir_V ;
+oper OP_back_V : V = variants {} ; --
+oper OP_bear_V : V = mkV "llevar" | mkV "portar" ;
+oper OP_beat_V : V = mkV "latir" ;
+oper OP_bend_V : V = mkV "inclinarse" ; -- status=guess
+oper OP_blow_V : V = L.blow_V ;
+oper OP_break_V : V = mkV "romper" ;
+oper OP_build_V : V = construir_V | mkV "edificar" ;
+oper OP_burn_V : V = L.burn_V ;
+oper OP_burst_V : V = mkV (mkV "reirse") "a carcajadas" ; -- status=guess
+oper OP_buy_V : V = mkV "comprar" ;
+oper OP_call_V : V = mkV "llamar" ;
+oper OP_care_V : V = mkV "cuidar" | mkV "atender" ;
+oper OP_carry_V : V = mkV "llevar" | mkV "cargar" ;
+oper OP_cast_V : V = mkV (mkV "poner") "en duda" ; -- status=guess
+oper OP_change_V : V = mkV "cambiar" ;
+oper OP_charge_V : V = mkV "cargar" ;
+oper OP_check_V : V = mkV "concordar" ; --their stories don't check
+oper OP_clean_V : V = mkV "limpiar" ; -- status=guess
+oper OP_clear_V : V = mkV "aclararse" | mkV "despejarse" ;
+oper OP_climb_V : V = mkV "escalar" ; -- status=guess
+oper OP_close_V : V = cerrar_V ;
+oper OP_come_V : V = L.come_V ;
+oper OP_continue_V : V = mkV "continuar" ;
+oper OP_cost_V : V = costar_V ;
+oper OP_count_V : V = contar_V ; -- status=guess
+oper OP_crash_V : V = mkV "chocar" ; -- status=guess
+oper OP_cross_V : V = atravesar_V ;
+oper OP_cry_V : V = mkV "llorar" ;
+oper OP_cut_V : V = mkV "cortar" ;
+oper OP_decide_V : V = mkV "decidir" ;
+oper OP_die_V : V = L.die_V ;
+oper OP_dig_V : V = L.dig_V ;
+oper OP_divide_V : V = mkV "dividir" ;
+oper OP_double_V : V = mkV "doblar" ; -- status=guess
+oper OP_drag_V : V = mkV "arrastrar" ; -- status=guess
+oper OP_draw_V : V = mkV "dibujar" ;
+oper OP_dream_V : V = soñar_V ; -- status=guess
+oper OP_dress_V : V = vestir_V ; -- status=guess
+oper OP_drink_V : V = mkV "beber" | mkV "tomar" ;
+oper OP_drive_V : V = mkV "conducir" ;
+oper OP_drop_V : V = caer_V | (mkV "descender") ;
+oper OP_dry_V : V = mkV "secarse" ; -- status=guess
+oper OP_ease_V : V = variants {} ; --
+oper OP_eat_V : V = mkV "comer" ;
+oper OP_end_V : V = mkV "acabarse" ;
+oper OP_enter_V : V = mkV "entrar" ;
+oper OP_face_V : V = mkV "enfrentar" | mkV "encarar" ;
+oper OP_fall_V : V = caer_V | morir_V ;
+oper OP_feed_V : V = mkV "alimentar" | mkV (mkV "dar") "de comer" ; -- status=guess
+oper OP_feel_V : V = mkV "sentir" | parecer_V ;
+oper OP_fight_V : V = mkV "pelear" | mkV "luchar" ;
+oper OP_figure_V : V = mkV "ocurrirse" ; -- status=guess
+oper OP_file_V : V = mkV "limar" ; -- status=guess
+oper OP_fill_V : V = mkV "llenar" | mkV "llenarse" ;
+oper OP_find_V : V = encontrar_V | creer_V ; --- split
+oper OP_finish_V : V = mkV "terminar" | mkV "acabar" ;
+oper OP_fire_V : V = mkV "disparar" | mkV "descargar" ; -- status=guess
+oper OP_fit_V : V = mkV "caber" ;
+oper OP_fix_V : V = mkV "fijar" ; -- status=guess
+oper OP_fly_V : V = L.fly_V ;
+oper OP_focus_V : V = mkV "enfocar" ; -- status=guess
+oper OP_follow_V : V = seguir_V ;
+oper OP_force_V : V = forzar_V ;
+oper OP_gain_V : V = mkV "ganar" ;
+oper OP_give_V : V = dar_V | mkV "entregar" ;
+oper OP_go_V : V = L.go_V ;
+oper OP_grow_V : V = crecer_V ;
+oper OP_hang_V : V = mkV "colgar" ;
+oper OP_have_V : V = tener_V ;
+oper OP_head_V : V = dirigir_V ;
+oper OP_hear_V : V = oír_V ;
+oper OP_help_V : V = mkV "ayudar" ;
+oper OP_hide_V : V = mkV "esconderse" ; -- status=guess
+oper OP_hit_V : V = mkV "golpear" | mkV "pegar" ;
+oper OP_hold_V : V = mkV "guardar" | mkV "conservar" | reflV mantener_V ;
+oper OP_issue_V : V = mkV "proceder" | mkV "emitir" | mkV "extender" | crecer_V | mkV "recibir" | mkV "lucrar" | mkV "natar" ;
+oper OP_join_V : V = mkV "unirse" | reflV reunir_V ;
+oper OP_jump_V : V = L.jump_V ;
+oper OP_keep_V : V = mantener_V ;
+oper OP_kick_V : V = mkV "patear" | mkV (mkV "dar") "una patada a" | mkV (mkV "dar") "un puntapié a" ;
+oper OP_kill_V : V = mkV "matar" ;
+oper OP_knock_V : V = mkV (mkV "tocar") "madera" ; -- status=guess
+oper OP_land_V : V = mkV "aterrizar" ; -- status=guess
+oper OP_laugh_V : V = L.laugh_V ;
+oper OP_lay_V : V = mkV "yacer" ;
+oper OP_lead_V : V = mkV "dirigir" | conducir_V ;
+oper OP_lean_V : V = mkV "declinarse" ; -- status=guess
+oper OP_leave_V : V = mkV "dejar" ;
+oper OP_lie_V : V = L.lie_V ;
+oper OP_lift_V : V = mkV "levantar" | mkV "subir" ;
+oper OP_light_V : V = mkV "iluminar" ; -- status=guess
+oper OP_link_V : V = mkV "enlazar" | mkV "relacionar" ;
+oper OP_listen_V : V = mkV "escuchar" ;
+oper OP_live_V : V = L.live_V ;
+oper OP_lock_V : V = mkV (mkV "cerrar") "con llave" | mkV "acerrojar" | mkV "candar" ; -- status=guess
+oper OP_look_V : V = mkV "mirar" ;
+oper OP_lose_V : V = perder_V ;
+oper OP_make_V : V = hacer_V ;
+oper OP_marry_V : V = mkV "casar" | mkV "casarse" ;
+oper OP_measure_V : V = medir_V ;
+oper OP_meet_V : V = conocer_V ;
+oper OP_miss_V : V = perder_V | mkV "faltar" ;
+oper OP_mix_V : V = mkV "mezclar" ; -- status=guess
+oper OP_mount_V : V = mkV "montar" | mkV "configurar" | mkV "instalar" ; -- status=guess
+oper OP_move_V : V = mkV "mover" "muevo" ;
+oper OP_nod_V : V = mkV "cabecear" ;
+oper OP_note_V : V = mkV "anotar" | mkV "observar" ;
+oper OP_occur_V : V = mkV "ocurrir" ;
+oper OP_open_V : V = abrir_V ;
+oper OP_operate_V : V = mkV "operar" ;
+oper OP_pack_V : V = variants {} ; --
+oper OP_pass_V : V = mkV "pasar" ;
+oper OP_pay_V : V = mkV "pagar" ;
+oper OP_pick_V : V = coger_V | recoger_V ;
+oper OP_play_V : V = jugar_V ;
+oper OP_point_V : V = mkV "indicar" | mkV "apuntar" ;
+oper OP_pour_V : V = verter_V ; -- status=guess
+oper OP_press_V : V = mkV "pulsar" | mkV "presionar" ;
+oper OP_print_V : V = imprimir_V ; -- status=guess
+oper OP_pull_V : V = mkV "tirar" ;
+oper OP_push_V : V = mkV "pulsar" ;
+oper OP_race_V : V = mkV "correr" ; -- status=guess
+oper OP_reach_V : V = mkV "alcanzar" ;
+oper OP_read_V : V = leer_V ;
+oper OP_rely_V : V = mkV (mkV "contar") "con" | mkV "atenerse" ; -- status=guess
+oper OP_report_V : V = mkV "presentarse" | mkV "informar" ;
+oper OP_ride_V : V = mkV (mkV "pasear") "en coche" | conducir_V ; -- status=guess
+oper OP_ring_V : V = mkV "sonar" ;
+oper OP_roll_V : V = rodar_V ; -- status=guess
+oper OP_rule_V : V = mkV "mandar" | gobernar_V ; -- status=guess
+oper OP_run_V : V = L.run_V ;
+oper OP_rush_V : V = mkV "correr" | mkV "apurarse" ; -- status=guess
+oper OP_sail_V : V = mkV "navegar" ; -- status=guess
+oper OP_save_V : V = mkV "ahorrar" ;
+oper OP_see_V : V = ver_V ;
+oper OP_seize_V : V = mkV "agarrar" | mkV (mkV "apoderarse") "de" | mkV "apresar" | aferrar_V ; -- status=guess
+oper OP_sell_V : V = mkV "vender" ;
+oper OP_send_V : V = mkV "enviar" | mkV "mandar" ;
+oper OP_settle_V : V = resolver_V ;
+oper OP_shake_V : V = mkV "temblar" "tiemblo" ;
+oper OP_shape_V : V = variants {} ; --
+oper OP_share_V : V = mkV "dividir" ;
+oper OP_shoot_V : V = mkV "tirar" ;
+oper OP_shout_V : V = mkV "gritar" ; -- status=guess
+oper OP_show_V : V = mostrar_V ;
+oper OP_sign_V : V = mkV (mkV "hablar") "a señas" ;
+oper OP_sing_V : V = L.sing_V ;
+oper OP_sink_V : V = mkV "hundir" ; -- status=guess
+oper OP_sit_V : V = L.sit_V ;
+oper OP_sleep_V : V = L.sleep_V ;
+oper OP_slip_V : V = tropezar_V ; -- status=guess
+oper OP_smoke_V : V = mkV (mkV "fumar") "como un carretero" ; -- status=guess
+oper OP_snap_V : V = mkV "chasquear" ; -- status=guess
+oper OP_sort_V : V = mkV "ordenar" ; -- status=guess
+oper OP_sound_V : V = mkV "sondear" | mkV "sonar" "sueno" ;
+oper OP_speak_V : V = mkV "hablar" ;
+oper OP_split_V : V = mkV "partir" | mkV "dividir" | mkV "escindir" ; -- status=guess
+oper OP_spread_V : V = mkV "difundir" | mkV "propagar" | mkV "contagiar" ;
+oper OP_stand_V : V = L.stand_V ;
+oper OP_start_V : V = comenzar_V ;
+oper OP_stay_V : V = reflV mantener_V ;
+oper OP_steal_V : V = mkV "robar" ; -- status=guess
+oper OP_step_V : V = mkV "caminar" ; -- status=guess
+oper OP_stick_V : V = mkV "pegarse" | mkV "adherirse" | mkV "permanecer" ; ---split: to be glued / to remain firm and loyal
+oper OP_stir_V : V = sofreír_V ; -- status=guess
+oper OP_stop_V : V = L.stop_V ;
+oper OP_stretch_V : V = mkV "extenderse" ; -- status=guess
+oper OP_strike_V : V = mkV (mkV "hacer") "la huelga" ;
+oper OP_struggle_V : V = mkV "luchar" | mkV (mkV "esforzarse") "con denuedo" ; -- status=guess
+oper OP_suit_V : V = convenir_V ; -- status=guess
+oper OP_sweep_V : V = mkV (mkV "tratar") "de tapar algo ilícito" ; -- status=guess
+oper OP_swing_V : V = mkV "columpiarse" ; -- status=guess
+oper OP_switch_V : V = mkV "intercambiar" | mkV "cambiar" ; -- status=guess
+oper OP_talk_V : V = mkV "hablar" | mkV "conversar" ;
+oper OP_tap_V : V = intervenir_V ; -- status=guess
+oper OP_tear_V : V = mkV "desgarrarse" ; -- status=guess
+oper OP_tell_V : V = mkV "contar" ;
+oper OP_think_V : V = L.think_V ;
+oper OP_throw_V : V = mkV "tirar" | mkV "echar" ;
+oper OP_tie_V : V = mkV "atar" | mkV "ligar" | mkV "amarrar" ; -- status=guess
+oper OP_touch_V : V = mkV "tocar" ;
+oper OP_trade_V : V = mkV "comerciar" ; -- status=guess
+oper OP_train_V : V = mkV "entrenar" ;
+oper OP_try_V : V = probar_V ;
+oper OP_turn_V : V = L.turn_V ;
+oper OP_use_V : V = mkV "usar" | mkV "utilizar" ;
+oper OP_vote_V : V = mkV "votar" ;
+oper OP_wait_V : V = mkV "esperar" | mkV "aguardar" ;
+oper OP_wake_V : V = despertar_V ; -- status=guess
+oper OP_walk_V : V = L.walk_V ;
+oper OP_wander_V : V = mkV "divagar" | mkV "pajarear" | mkV "pajaronear" ; -- status=guess
+oper OP_want_V : V = querer_V | mkV "desear" ;
+oper OP_wash_V : V = mkV (mkV "lavarse") "las manos" ; -- status=guess
+oper OP_waste_V : V = mkV "malgastar" | mkV "desperdiciar" ; -- status=guess
+oper OP_watch_V : V = mkV "mirar" ;
+oper OP_wave_V : V = mkV "abanicar" ; -- status=guess
+oper OP_wear_V : V = mkV "desgastarse" ; --wear out
+oper OP_win_V : V = mkV "ganar" ;
+oper OP_wind_V : V = mkV "rebobinar" ; -- status=guess
+oper OP_wipe_V : V = mkV "formatear" ; -- status=guess
+oper OP_work_V : V = mkV "trabajar" ;
+oper OP_write_V : V = mkV "escribir" | mkV "apuntar" ;
+oper OP_allow_V2 : V2 = mkV2 (mkV "permitir") | mkV2 (mkV "conceder") ;
+oper OP_block_V2 : V2 = mkV2 (mkV "bloquear") | mkV2 (impedir_V) | mkV2 (obstruir_V) | mkV2 (atorar_V) ; -- status=guess
+oper OP_bring_V2 : V2 = mkV2 traer_V ;
+oper OP_catch_V2 : V2 = mkV2 (mkV "atrapar") ;
+oper OP_choose_V2 : V2 = mkV2 (escoger_V) | mkV2 (elegir_V) ;
+oper OP_cover_V2 : V2 = mkV2 (cubrir_V) ;
+oper OP_explain_V2 : V2 = mkV2 (mkV "explicar") ;
+oper OP_free_V2 : V2 = mkV2 (mkV "librar") ; -- status=guess
+oper OP_frighten_V2 : V2 = mkV2 (mkV "atemorizar") ; -- status=guess
+oper OP_get_V2 : V2 = mkV2 obtener_V ; -- status=guess
+oper OP_hand_V2 : V2 = mkV2 (mkV "entregar") ; -- status=guess
+oper OP_hate_V2 : V2 = L.hate_V2 ;
+oper OP_invite_V2 : V2 = mkV2 (mkV "invitar") | mkV2 (mkV "convidar") ;
+oper OP_kiss_V2 : V2 = mkV2 (mkV "besarse") ; -- status=guess
+oper OP_mark_V2 : V2 = mkV2 (mkV "marcar") ;
+oper OP_match_V2 : V2 = mkV2 (mkV "emparejar") ; -- status=guess
+oper OP_offer_V2 : V2 = mkV2 (ofrecer_V) ;
+oper OP_own_V2 : V2 = mkV2 poseer_V ;
+oper OP_plant_V2 : V2 = mkV2 (mkV "plantar") | mkV2 (sembrar_V) ; -- status=guess
+oper OP_put_V2 : V2 = L.put_V2 ;
+oper OP_seek_V2 : V2 = L.seek_V2 ;
+oper OP_set_V2 : V2 = mkV2 poner_V ;
+oper OP_shrug_V2 : V2 = mkV2 (mkV (mkV "encogerse") "de hombros") ; -- status=guess
+oper OP_shut_V2 : V2 = mkV2 (cerrar_V) ; -- status=guess
+oper OP_take_V2 : V2 = mkV2 (mkV "tomar") | mkV2 (mkV "coger") | mkV2 (mkV "sacar") | mkV2 prender_V ;
+oper OP_urge_V2 : V2 = mkV2 (mkV "impulsar") | mkV2 (urgir_V) | mkV2 (mkV "aguijonear") | mkV2 (mkV "apresurar") | mkV2 (mkV "presionar") | mkV2 (mkV "empujar") | mkV2 (mkV "aguijar") | mkV2 (mkV "jalear") ; -- status=guess
+
+
 }
