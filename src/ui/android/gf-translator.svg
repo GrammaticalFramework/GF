@@ -23,6 +23,6 @@
    <text x="600" y="130" font-size="35" font-family="Inconsolata">with</text>
    <text x="270" y="200" font-size="70" font-family="Inconsolata" fill="black" opacity="0.25" filter="url(#A)">Grammatical Framework</text>
    <text x="270" y="200" font-size="70" font-family="Inconsolata" fill="#06c">Grammatical Framework</text>
-   <image x="0" y="250" width="300" height="80"
+   <image x="0" y="250" width="1024" height="200"
      xlink:href="gf-translator-alignment.png" />
 </svg>
