@@ -73,6 +73,15 @@ lin
                         vp.compl2 ! {gn=aform2gennum aform; p=P3}
     in {s = ap; adv = ap ! ASg Neut Indef; isPre = True} ;
 
+  PastPartAgentAP vp np =
+    let ap : AForm => Str
+           = \\aform => vp.ad.s ++
+                        vp.s ! Perf ! VPassive aform ++
+                        vp.compl1 ! {gn=aform2gennum aform; p=P3} ++
+                        vp.compl2 ! {gn=aform2gennum aform; p=P3} ++
+                        "от" ++ np.s ! RObj Acc
+    in {s = ap; adv = ap ! ASg Neut Indef; isPre = True} ;
+
   PositAdVAdj a = {s = a.adv} ;
   
   that_RP = {
