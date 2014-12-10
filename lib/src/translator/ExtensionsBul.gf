@@ -51,22 +51,25 @@ lin
                      };
     g = ANeut
   } ;
-  
-  GerundAP v = {
-    s = \\aform => v.s ! Imperf ! VPresPart aform ++
-                   case v.vtype of {
-                     VMedial c => reflClitics ! c;
-                     _         => []
-                   };
-    adv = v.s ! Imperf ! VPresPart (ASg Neut Indef);
-    isPre = True
-  } ;
 
-  PastPartAP v = {
-    s = \\aform => v.s ! Perf ! VPassive aform ;
-    adv = v.s ! Perf ! VPassive (ASg Neut Indef);
-    isPre = True
-  } ;
+  PresPartAP vp =
+    let ap : AForm => Str
+           = \\aform => vp.ad.s ++
+                        vp.s ! Imperf ! VPresPart aform ++
+                        case vp.vtype of {
+                          VMedial c => reflClitics ! c;
+                          _         => []
+                        } ++
+                        vp.compl ! {gn=aform2gennum aform; p=P3} ;
+    in {s = ap; adv = ap ! (ASg Neut Indef); isPre = True} ;
+
+  PastPartAP vp =
+    let ap : AForm => Str
+           = \\aform => vp.ad.s ++
+                        vp.s ! Perf ! VPassive aform ++
+                        vp.compl1 ! {gn=aform2gennum aform; p=P3} ++
+                        vp.compl2 ! {gn=aform2gennum aform; p=P3}
+    in {s = ap; adv = ap ! ASg Neut Indef; isPre = True} ;
 
   PositAdVAdj a = {s = a.adv} ;
   
