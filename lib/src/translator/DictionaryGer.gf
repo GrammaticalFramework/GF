@@ -59647,9 +59647,9 @@ lin transitive_A = regA "transitiv" ; -- status=guess
 lin transitivity_N = mkN "Transitivität" feminine ; -- status=guess
 lin transitory_A = mkA "vorübergehend" | mkA "flüchtig" | mkA "vorbeigehend" ; -- status=guess status=guess status=guess
 lin translatable_A = mkA "übersetzbar" ; -- status=guess
-lin translate_V = mkV "übertragen" ; -- status=guess, src=wikt
-lin translate_V2 = mkV2 (mkV "übertragen") ; -- status=guess, src=wikt
-lin translation_N = mkN "Übersetzung" feminine | mkN "Übersetzen" neuter ; -- status=guess status=guess
+lin translate_V = fixprefixV "über" (mkV "setzen") ; -- status=guess, src=wikt
+lin translate_V2 = mkV2 (fixprefixV "über" (mkV "setzen")) ; -- status=guess, src=wikt
+lin translation_N = mkN "Übersetzung" feminine ;
 lin translational_A = variants {} ;
 lin translator_N = mkN "Übersetzer" masculine | mkN "Übersetzerin" feminine ; -- status=guess status=guess
 lin transliterate_V2 = mkV2 (mkV "transliterieren" | irregV "umschreiben" "umschreibt" "umschrieb" "umschriebe" "umschrieben") ; -- status=guess, src=wikt status=guess, src=wikt
