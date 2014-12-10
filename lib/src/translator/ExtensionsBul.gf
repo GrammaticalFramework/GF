@@ -42,6 +42,11 @@ lin
     g = cn.g
   } ;
 
+  CompoundAP n a =
+    let ap : AForm => Str
+           = \\aform => n.rel ! (ASg Neut Indef) ++ a.s ! aform
+    in {s = ap; adv = ap ! (ASg Neut Indef); isPre = True} ;
+
   GerundCN vp = {
     s   = \\nform => vp.ad.s ++
                      vp.s ! Imperf ! VNoun nform ++
