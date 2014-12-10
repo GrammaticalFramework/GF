@@ -190,6 +190,13 @@ resource ResBul = ParamX ** open Prelude, Predef in {
                    NFVocative => aform (gennum g Sg) Indef (RObj Acc)
                  } ;
 
+    aform2gennum : AForm -> GenNum 
+      = \aform -> case aform of {
+                    ASg g _       => GSg g ;
+                    ASgMascDefNom => GSg Masc ;
+                    _             => GPl
+                  } ;
+
     indefNForm : NForm -> NForm
       = \nf -> case nf of {
                  NF n spec  => NF n  Indef ;
