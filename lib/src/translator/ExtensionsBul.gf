@@ -1,7 +1,7 @@
 --# -path=.:../abstract
 
 concrete ExtensionsBul of Extensions = 
-  CatBul ** open ResBul, (E = ExtraBul), Prelude in {
+  CatBul ** open ResBul, (E = ExtraBul), Prelude, SyntaxBul in {
 
 flags 
   coding = utf8 ;
@@ -177,4 +177,13 @@ lin
   UttAdV adv = adv;
   AdAdV = cc2 ;
   
+  DirectComplVS t np vs utt = 
+    mkS (lin Adv (optCommaSS utt)) (mkS t positivePol (mkCl np (lin V vs))) ;
+
+  DirectComplVQ t np vs q = 
+    mkS (lin Adv (optCommaSS (mkUtt q))) (mkS t positivePol (mkCl np (lin V vs))) ;
+
+  FocusObjS np sslash = 
+    mkS (lin Adv (optCommaSS (ss (sslash.c2.s ++ np.s ! RObj sslash.c2.c)))) (lin S {s=sslash.s ! np.a}) ;
+
 }
