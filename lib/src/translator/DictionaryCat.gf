@@ -18,6 +18,11 @@ oper optProDrop : Pron -> Pron = \p -> p | E.ProDrop p ;
 oper prepV2 : V -> Prep -> V2 = \v,p -> mkV2 v p ;
 oper advV : V -> Adv -> V = \v,a -> mkV v a.s ;
 
+lin no_Quant = S.no_Quant ;
+lin that_Quant = S.that_Quant ;
+lin this_Quant = S.this_Quant ;
+lin which_IQuant = S.which_IQuant ;
+
 lin a_posteriori_A = mkA "a posteriori" ; --auto
 lin a_priori_Adv = mkAdv "a priori" ; --auto
 lin abaca_N = mkN "abacà" masculine ; --auto
