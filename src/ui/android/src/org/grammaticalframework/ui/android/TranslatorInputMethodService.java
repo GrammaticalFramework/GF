@@ -41,7 +41,7 @@ public class TranslatorInputMethodService extends InputMethodService
     public void onCreate() {
         super.onCreate();
         
-        mTranslator = ((HLCompiler) getApplicationContext()).getTranslator();
+        mTranslator = ((GFTranslator) getApplicationContext()).getTranslator();
         
         mSymbolsPage1Keyboard = null;
         mSymbolsPage2Keyboard = null;
