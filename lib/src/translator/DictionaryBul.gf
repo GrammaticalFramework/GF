@@ -23907,8 +23907,9 @@ lin gestural_A = mkA079 "жестономичен" ;
 lin gesture_N = mkN001 "жест" ;
 lin gesture_V = singleV (mkV186 "жестикулирам") ;
 lin get_N = variants {} ;
-lin get_V2V = mkV2V (dualV (mkV186 "получавам") (mkV176 "получа")) noPrep noPrep ; ----
-lin get_VV = mkVV (dualV (mkV186 "получавам") (mkV176 "получа")) ; ----
+lin get_V2 = dirV2 (dualV (mkV186 "получавам") (mkV176 "получа"));
+lin get_V2V = mkV2V (dualV (mkV186 "карам") (mkV186 "накарам")) noPrep noPrep;
+lin get_VV = mkVV (dualV (mkV186 "започвам") (mkV152 "започна"));
 lin get_about_V = advV (lin V OP_get_V2) OP_about_Adv ; -- guess-p-verb
 lin get_above_V2 = prepV2 (lin V OP_get_V2) OP_above_Prep ; -- guess-p-verb
 lin get_across_V = advV (lin V OP_get_V2) OP_across_Adv ; -- guess-p-verb
@@ -33570,8 +33571,8 @@ lin lovable_A = variants {mkA076 "обичлив"; mkA079 "привлекате�
 lin lovage_N = mkN007 "девисил" ;
 lin lovastatin_N = mkN018 "ловастатин" ;
 lin love_N = mkN049 "любов" ;
-lin love_V2 = dirV2 (dualV (mkV186 "обичам") (mkV152 "обикна")) ;
-lin love_VV = mkVV (dualV (mkV186 "обичам") (mkV152 "обикна")) ; ----
+lin love_V2 = dirV2 (singleV (mkV186 "обичам"));
+lin love_VV = mkVV (singleV (mkV186 "обичам"));
 lin love_affair_N = variants {} ;
 lin love_child_N = variants {} ;
 lin love_feast_N = variants {} ;
@@ -36687,11 +36688,9 @@ lin mordacious_A = variants {} ;
 lin mordacity_N = variants {mkN049 "заядливост"; mkN049 "хапливост"} ; ----
 lin mordant_A = variants {mkA079 "жлъчен"; mkA076 "заядлив"; mkA079 "саркастичен"; mkA076 "хаплив"; mkA079 "язвителен"} ; ----
 lin mordant_N = variants {mkN007 "фиксаж"; mkN007 "фиксатив"} ; ----
-lin morePl_Det = mkDeterminerPl "повече" ;
-lin moreSg_Det = mkDeterminerSg "повече" "повече" "повече" ;
 lin more_Adv = mkAdv "повече" ;
 lin more_N = variants {} ;
-lin more_Quant = let po = "по-"++Prelude.BIND in mkQuant po po po po ;
+lin more_Quant = mkQuant "повече" "повече" "повече" "повече" ;
 lin more_than_AdN = ss "повече от" ;
 lin more_than_Predet = {s = \\_ => "повече от"} ;
 lin morecambe_PN = mkPN "Морекамбе" Masc ;
@@ -64432,7 +64431,6 @@ lin which_IQuant = {s = table GenNum [table QForm ["кой";"който"];
                                       table QForm ["коя";"която"];
                                       table QForm ["кое";"което"];
                                       table QForm ["кои";"които"]]} ;
-lin whichever_A = variants {} ;
 lin whichever_Quant = variants {} ;
 lin whichsoever_A = variants {} ;
 lin whiff_N = variants {mkN001 "дъх"; mkN001 "лъх"; mkN032 "повей"; mkN007 "полъх"} ; ----
