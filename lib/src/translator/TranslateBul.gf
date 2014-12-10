@@ -24,7 +24,7 @@ concrete TranslateBul of Translate =
   DocumentationBul,
 
   ChunkBul,
-  ExtensionsBul [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, 
+  ExtensionsBul [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, CompoundAP,
                  PresPartAP, PastPartAP, PassVPSlash, PassAgentVPSlash],
 
   DictionaryBul ** 
