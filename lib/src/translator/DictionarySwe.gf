@@ -666,7 +666,7 @@ lin actively_Adv = adjAdv active_A ; -- -- derived
 lin activeness_N = variants {} ; -- status=guess
 lin activism_N = mkN "aktivism" "aktivismer" ; -- status=guess
 lin activistFem_N = mkN "aktivist" "aktivister" ; -- status=guess
-lin activistMasc_N = variants {} ; --
+lin activistMasc_N = mkN "aktivist" "aktivister" ; -- status=guess
 lin activist_A = variants {} ; -- status=guess
 lin activity_N = mkN "aktivitet" "aktiviteter" | mkN "verksamhet" "verksamheter" ;
 lin actomyosin_N = variants {} ; -- status=guess
@@ -15144,6 +15144,7 @@ lin decumary_N = variants {} ; -- status=guess
 lin decurved_A = variants {} ; -- status=guess
 lin decussate_A = variants {} ; -- status=guess
 lin dedicate_V2 = mkV2 "ägna" | mkV2 "tillägna" ;
+lin dedicated_A = mkA "hängiven" ;
 lin dedication_N = mkN "invigning" ; -- comment=7
 lin dedifferentiated_A = variants {} ; -- status=guess
 lin dedifferentiation_N = variants {} ; -- status=guess
