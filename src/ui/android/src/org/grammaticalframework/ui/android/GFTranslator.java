@@ -2,7 +2,7 @@ package org.grammaticalframework.ui.android;
 
 import android.app.Application;
 
-public class HLCompiler extends Application {
+public class GFTranslator extends Application {
 	private Translator mTranslator;
 
 	@Override
