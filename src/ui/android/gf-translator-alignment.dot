@@ -1,0 +1,15 @@
+digraph {
+  rankdir=LR ;
+  node [shape = record] ;
+  bgcolor = "#FFFFFF00" ;
+   
+  struct0[label = "<n0>аз | <n1>обичам | <n2>теб"] ;
+  struct0:n0:e -> struct1:n0:w ;
+  struct0:n1:e -> struct1:n1:w ;
+  struct0:n2:e -> struct1:n2:w ;
+  struct1[label = "<n0>I | <n1>love | <n2>you"] ;
+  struct1:n0:e -> struct2:n0:w ;
+  struct1:n1:e -> struct2:n2:w ;
+  struct1:n2:e -> struct2:n1:w ;
+  struct2[label = "<n0>je | <n1>t' | <n2>aime"] ;
+}

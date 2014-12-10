@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<?xml-stylesheet type="text/css" href="http://fonts.googleapis.com/css?family=Inconsolata"?>
+
+<svg width="1024" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+   <filter id="A"><feGaussianBlur stdDeviation="2"/></filter>
+   <defs>
+     <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+       <stop offset="0%"   style="stop-color:#a8d8ff;stop-opacity:1" />
+       <stop offset="100%" style="stop-color:#f6f6f6;stop-opacity:1" />
+     </linearGradient>
+   </defs>
+   <rect width="1024" height="500" style="fill:url(#grad1)"/>
+   <path filter="url(#A)"
+	 d="M120,227.5 v-51 h59 m-59,0 v-53 h114 a110.5,105 0 1,1 -24,-66"
+         fill="none" stroke="black" stroke-width="4" opacity="0.25"
+         stroke-linejoin="round" stroke-linecap="round"/>
+   <path d="M120,225.5 v-51 h59 m-59,0 v-53 h114 a110.5,105 0 1,1 -24,-66"
+         fill="none" stroke="red" stroke-width="4"
+         stroke-linejoin="round" stroke-linecap="round"/>
+   <text x="310" y="80" font-size="70" font-family="Inconsolata">Offline Translation</text>
+   <text x="600" y="130" font-size="35" font-family="Inconsolata">with</text>
+   <text x="270" y="200" font-size="70" font-family="Inconsolata" fill="black" opacity="0.25" filter="url(#A)">Grammatical Framework</text>
+   <text x="270" y="200" font-size="70" font-family="Inconsolata" fill="#06c">Grammatical Framework</text>
+   <image x="0" y="250" width="300" height="80"
+     xlink:href="gf-translator-alignment.png" />
+</svg>
