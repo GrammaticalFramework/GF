@@ -42,13 +42,10 @@ lin
     g = cn.g
   } ;
 
-  GerundN v = {
-    s   = \\nform => v.s ! Imperf ! VNoun nform ;
-    rel = \\aform => v.s ! Imperf ! VPresPart aform ++
-                     case v.vtype of {
-                       VMedial c => reflClitics ! c;
-                       _         => []
-                     };
+  GerundCN vp = {
+    s   = \\nform => vp.ad.s ++
+                     vp.s ! Imperf ! VNoun nform ++
+                     vp.compl ! {gn=GSg Neut; p=P3} ;
     g = ANeut
   } ;
 
