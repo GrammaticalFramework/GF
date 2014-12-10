@@ -27,7 +27,7 @@ concrete TranslateBul of Translate =
   ExtensionsBul [
     CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP,
     DirectComplVS, DirectComplVQ, FocusObjS,
-    PastPartAP, PresPartAP
+    PastPartAP, PastPartAgentAP, PresPartAP
     ],
 
   DictionaryBul ** 
