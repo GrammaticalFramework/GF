@@ -82,6 +82,11 @@ lin
                         "от" ++ np.s ! RObj Acc
     in {s = ap; adv = ap ! ASg Neut Indef; isPre = True} ;
 
+  ByVP vp =
+    {s = vp.ad.s ++
+         vp.s ! Imperf ! VGerund ++
+         vp.compl ! {gn=GSg Neut; p=P3}} ;
+
   PositAdVAdj a = {s = a.adv} ;
   
   that_RP = {
