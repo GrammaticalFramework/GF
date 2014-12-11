@@ -30,7 +30,7 @@ lin
   refl_PlP2_Chunk = ss "yourselves" ;
   refl_PlP3_Chunk = ss "themselves" ;
   neg_Chunk = ss "not" | ss "doesn't" | ss "don't" ;
-  copula_Chunk = ss "is" | ss "are" | ss "am" ;
+  copula_Chunk = ss "is" | ss "are" | ss "am" ; ---- | ss (Predef.BIND ++ "'s") | ss (Predef.BIND ++ "'re") ;
   copula_neg_Chunk = ss "isn't" | ss "aren't" ;
   past_copula_Chunk = ss "was" | ss "were" ;
   past_copula_neg_Chunk = ss "wasn't" | ss "weren't" ;
