@@ -13,16 +13,16 @@
    </defs>
    <rect width="1024" height="500" style="fill:url(#grad1)"/>
    <path filter="url(#A)"
-	 d="M120,227.5 v-51 h59 m-59,0 v-53 h114 a110.5,105 0 1,1 -24,-66"
+	 d="M120,270 v-51 h59 m-59,0 v-53 h114 a110.5,105 0 1,1 -24,-66"
          fill="none" stroke="black" stroke-width="4" opacity="0.25"
          stroke-linejoin="round" stroke-linecap="round"/>
-   <path d="M120,225.5 v-51 h59 m-59,0 v-53 h114 a110.5,105 0 1,1 -24,-66"
+   <path d="M120,270 v-51 h59 m-59,0 v-53 h114 a110.5,105 0 1,1 -24,-66"
          fill="none" stroke="red" stroke-width="4"
          stroke-linejoin="round" stroke-linecap="round"/>
-   <text x="310" y="80" font-size="70" font-family="Inconsolata">Offline Translation</text>
-   <text x="600" y="130" font-size="35" font-family="Inconsolata">with</text>
-   <text x="270" y="200" font-size="70" font-family="Inconsolata" fill="black" opacity="0.25" filter="url(#A)">Grammatical Framework</text>
-   <text x="270" y="200" font-size="70" font-family="Inconsolata" fill="#06c">Grammatical Framework</text>
-   <image x="0" y="250" width="1024" height="200"
+   <text x="310" y="120" font-size="70" font-family="Inconsolata">Offline Translation</text>
+   <text x="600" y="170" font-size="35" font-family="Inconsolata">with</text>
+   <text x="270" y="240" font-size="70" font-family="Inconsolata" fill="black" opacity="0.25" filter="url(#A)">Grammatical Framework</text>
+   <text x="270" y="240" font-size="70" font-family="Inconsolata" fill="#06c">Grammatical Framework</text>
+   <image x="0" y="270" width="1024" height="200"
      xlink:href="gf-translator-alignment.png" />
 </svg>
