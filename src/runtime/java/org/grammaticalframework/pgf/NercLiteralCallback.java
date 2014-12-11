@@ -52,9 +52,14 @@ public class NercLiteralCallback implements LiteralCallback {
 					if ("PN".equals(cat)) {
 						expr = new Expr(an.getLemma(), new Expr[0]);
 						prob  = an.getProb();
-					} else if ("Language".equals(cat)) {
+					} else if ("Weekday".equals(cat)) {
 						expr = new Expr(an.getLemma(), new Expr[0]);
-						expr = new Expr("languagePN", expr);
+						expr = new Expr("weekdayPN", expr);
+					} else if ("Month".equals(cat)) {
+						expr = new Expr(an.getLemma(), new Expr[0]);
+						expr = new Expr("monthPN", expr);
+					} else if ("Language".equals(cat)) {
+						return null;
 					}
 				}
 			}
