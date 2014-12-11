@@ -126,6 +126,7 @@ data CFGTransform = CFGNoLR
   deriving (Show,Eq,Ord)
 
 data HaskellOption = HaskellNoPrefix | HaskellGADT | HaskellLexical
+                   | HaskellConcrete
   deriving (Show,Eq,Ord)
 
 data Warning = WarnMissingLincat
@@ -519,7 +520,8 @@ haskellOptionNames :: [(String, HaskellOption)]
 haskellOptionNames =
     [("noprefix", HaskellNoPrefix),
      ("gadt",     HaskellGADT),
-     ("lexical",  HaskellLexical)]
+     ("lexical",  HaskellLexical),
+     ("concrete", HaskellConcrete)]
 
 -- | This is for bacward compatibility. Since GHC 6.12 we
 -- started using the native Unicode support in GHC but it

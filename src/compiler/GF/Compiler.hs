@@ -6,6 +6,7 @@ import PGF.Internal(putSplitAbs,encodeFile,runPut)
 import GF.Compile as S(batchCompile,link,srcAbsName)
 import GF.CompileInParallel as P(parallelBatchCompile)
 import GF.Compile.Export
+import GF.Compile.ConcreteToHaskell(concretes2haskell)
 import GF.Compile.CFGtoPGF
 import GF.Compile.GetGrammar
 import GF.Grammar.CFG
@@ -22,7 +23,7 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.ByteString.Lazy as BSL
 import System.FilePath
-import Control.Monad(unless,forM_)
+import Control.Monad(when,unless,forM_)
 
 -- | Compile the given GF grammar files. The result is a number of @.gfo@ files
 -- and, depending on the options, a @.pgf@ file. (@gf -batch@, @gf -make@)
@@ -45,12 +46,24 @@ mainGFC opts fs = do
 compileSourceFiles :: Options -> [FilePath] -> IOE ()
 compileSourceFiles opts fs = 
     do output <- batchCompile opts fs
+       cncs2haskell output
        unless (flag optStopAfterPhase opts == Compile) $
            linkGrammars opts output
   where
     batchCompile = maybe batchCompile' parallelBatchCompile (flag optJobs opts)
     batchCompile' opts fs = do (t,cnc_gr) <- S.batchCompile opts fs
                                return (t,[cnc_gr])
+
+    cncs2haskell output =
+      when (FmtHaskell `elem` outputFormats opts &&
+            haskellOption opts HaskellConcrete) $
+        mapM_ cnc2haskell (snd output)
+
+    cnc2haskell (cnc,gr) =
+        mapM_ writeHs $ concretes2haskell opts (srcAbsName gr cnc) gr
+
+    writeHs (path,s) = writing opts path $ writeUTF8File path s
+
 
 -- | Create a @.pgf@ file (and possibly files in other formats, if specified
 -- in the 'Options') from the output of 'parallelBatchCompile'.
