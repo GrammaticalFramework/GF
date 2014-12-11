@@ -45,7 +45,7 @@ lin perfect_Chunk = {s = "*"} ;
 lin perfect_neg_Chunk = {s = "не" ++ "*"} ;
 lin past_perfect_Chunk = {s = "*"} ;
 lin past_perfect_neg_Chunk = {s = "не" ++ "*"} ;
-lin SSlash_Chunk s = mkUtt <lin S s : S> ;
+lin SSlash_Chunk s = mkUtt <lin S {s = s.s ! agrP3 (GSg Masc) ++ s.c2.s} : S> ;
 
 oper
   allAForm
