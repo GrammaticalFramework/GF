@@ -175,6 +175,7 @@ Library
     GF.Compile.Multi
     GF.Compile.Optimize
     GF.Compile.PGFtoHaskell
+    GF.Compile.ConcreteToHaskell
     GF.Compile.PGFtoJS
     GF.Compile.PGFtoLProlog
     GF.Compile.PGFtoProlog
