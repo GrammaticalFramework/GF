@@ -60,8 +60,8 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
 --------------------------------------------------------
 
 data Mode = AllTenses | Present deriving Show
-all_modes = ["present","alltenses"]
-default_modes = [Present,AllTenses]
+all_modes = ["alltenses","present"]
+default_modes = [AllTenses,Present]
 
 data RGLCommand
   = RGLCommand
