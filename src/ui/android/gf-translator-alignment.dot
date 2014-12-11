@@ -41,7 +41,7 @@ digraph {
   struct7:n1:e -> struct8:n1:w ;
   struct7:n2:e -> struct8:n3:w ;
   struct7:n3:e -> struct8:n2:w ;
-  struct8[label = "<n0>आपका | <n1>फोन | <n2>अनुवाद कर | <n3>सकता | <n4>है"] ;
+  struct8[label = "<n0>तुम्हारा | <n1>फोन | <n2>अनुवाद कर | <n3>सकता | <n4>है"] ;
   struct8:n0:e -> struct9:n1:w ;
   struct8:n1:e -> struct9:n2:w ;
   struct8:n2:e -> struct9:n4:w ;
