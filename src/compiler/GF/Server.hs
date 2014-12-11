@@ -36,6 +36,7 @@ import System.Exit(ExitCode(..))
 import Codec.Binary.UTF8.String(decodeString,encodeString)
 import GF.Infra.UseIO(readBinaryFile,writeBinaryFile,ePutStrLn)
 import GF.Infra.SIO(captureSIO)
+import GF.Data.Utilities(apSnd,mapSnd)
 import qualified PGFService as PS
 import qualified ExampleService as ES
 import Data.Version(showVersion)
@@ -483,12 +484,6 @@ inputs = queryToArguments . fixplus
     decode '+' = "%20" -- httpd-shed bug workaround
     decode c   = [c]
 -}
-
-mapFst f xys = [(f x,y)|(x,y)<-xys]
-mapSnd f xys = [(x,f y)|(x,y)<-xys]
-mapBoth = map . apBoth
-apBoth f (x,y) = (f x,f y)
-apSnd f (x,y) = (x,f y)
 
 infix 1 .=
 n .= v = (n,showJSON v)
