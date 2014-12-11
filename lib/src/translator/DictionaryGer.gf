@@ -20,9 +20,7 @@ lin a_la_carte_Adv = variants {} ;
 lin a_la_mode_Adv = variants {} ;
 lin a_level_N = variants {} ;
 lin a_posteriori_A = variants {} ;
-lin a_posteriori_Adv = variants {} ;
 lin a_priori_A = variants {} ;
-lin a_priori_Adv = variants {} ;
 lin aa_N = variants {} ;
 lin aachen_PN = mkPN "Aachen" ;
 lin aalii_N = variants {} ;
@@ -11004,7 +11002,6 @@ lin clayey_A = variants {} ;
 lin claymore_N = variants {} ;
 lin claystone_N = mkN "Tonstein" ; -- status=guess
 lin clean_A = L.clean_A ;
-lin clean_Adv = variants {} ;
 lin clean_N = mkN "Stoßen" neuter ; -- status=guess
 lin clean_V = irregV "reinigen" "reinigt" "reinigte" "reinigte" "reinigt" | mkV "säubern" | regV "putzen" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin clean_V2 = mkV2 (irregV "reinigen" "reinigt" "reinigte" "reinigte" "reinigt" | mkV "säubern" | regV "putzen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
@@ -18067,7 +18064,6 @@ lin dusty_A = mk3A "staubig" "staubiger" "staubigste" ; -- status=guess
 lin dutchFem_N = mkN "Holländerin" "Holländerinnen" feminine ;
 lin dutchMasc_N = mkN "Holländer" "Holländer" masculine ;
 lin dutch_A = mkA "holländisch" ;
-lin dutchman_N = variants {} ;
 lin duteous_A = variants {} ;
 lin dutiable_A = variants {} ;
 lin dutiful_A = variants {} ;
@@ -19144,8 +19140,6 @@ lin england_PN = mkPN "England" ; -- src=geonames status=guess
 lin englishFem_N = variants {} ;
 lin englishMasc_N = mkN "Engländer" "Engländer" masculine ;
 lin english_A = mkA "englisch" ;
-lin englishman_N = variants {} ;
-lin englishwoman_N = variants {} ;
 lin engorgement_N = variants {} ;
 lin engraft_V2 = variants {} ;
 lin engram_N = mkN "Engramm" neuter ; -- status=guess
@@ -20602,7 +20596,6 @@ lin faint_hearted_A = variants {} ;
 lin faintheartedness_N = variants {} ;
 lin faintness_N = variants {} ;
 lin fair_A = mkA "den Umständen entsprechend" | regA "angebracht" | mkA "erträglich" | regA "ganz" ; -- status=guess status=guess status=guess status=guess
-lin fair_Adv = variants {} ; --
 lin fair_N = mkN "Jahrmarkt" "Jahrmärkte" masculine | mkN "Kirchtag" masculine | mkN "Kirchweih" feminine | mkN "Kirmes" "Kirmessen" feminine ; -- status=guess status=guess status=guess status=guess
 lin fair_minded_A = variants {} ;
 lin fairground_N = variants {} ;
@@ -21469,11 +21462,11 @@ lin fink_N = variants {} ;
 lin fink_on_V2 = variants {} ;
 lin fink_out_V = variants {} ;
 lin finland_PN = mkPN "Finnland" ; -- src=geonames status=guess
-lin finn_N = variants {} ;
 lin finnan_N = variants {} ;
 lin finnan_haddie_N = variants {} ;
 lin finnan_haddock_N = variants {} ;
 lin finnishMasc_N = mkN "Finne" "Finnen" masculine ;
+lin finnishFem_N = variants {} ;
 lin finnish_A = mkA "finnisch" ;
 lin fiona_PN = mkPN "Fiona" ; -- src=eng status=guess
 lin fiord_N = variants {} ;
@@ -22732,8 +22725,6 @@ lin freightliner_N = variants {} ;
 lin frenchFem_N = mkN "Französe" masculine ;
 lin frenchMasc_N = mkN "Französe" "Französen" masculine ;
 lin french_A = mkA "französisch" ;
-lin frenchman_N = variants {} ;
-lin frenchwoman_N = variants {} ;
 lin frenetic_A = mk3A "frenetisch" "frenetischer" "frenetischste" | mkA "phrenetisch" ; -- status=guess status=guess
 lin frenzied_A = variants {} ;
 lin frenzy_N = mkN "Wahn" masculine | mkN "Rausch" "Räusche" masculine | mkN "Wut" feminine ; -- status=guess status=guess status=guess
@@ -28810,10 +28801,8 @@ lin india_rubber_N = variants {} ;
 lin indiaman_N = variants {} ;
 lin indianFem_1_N = variants {} ;
 lin indianFem_2_N = variants {} ;
-lin indianFem_N = variants {} ;
 lin indianMasc_1_N = variants {} ;
 lin indianMasc_2_N = variants {} ;
-lin indianMasc_N = variants {} ;
 lin indian_A = mkA "indisch" ;
 lin indiana_PN = mkPN "Indiana" ; -- src=geonames status=guess
 lin indianapolis_PN = mkPN "Indianapolis" ; -- src=geonames status=guess
@@ -36482,8 +36471,6 @@ lin mordacious_A = variants {} ;
 lin mordacity_N = variants {} ;
 lin mordant_A = mkA "beißend" ; -- status=guess
 lin mordant_N = mkN "Beize" "Beizen" feminine ; -- status=guess
-lin morePl_Det = variants {} ;
-lin moreSg_Det = variants {} ;
 lin more_Adv = mkAdv "mehr" ;
 lin more_N = variants {} ;
 lin more_Quant = variants {} ;
@@ -37455,7 +37442,7 @@ lin nearer_Adv = variants {} ;
 lin nearer_Prep = variants {} ;
 lin nearest_Adv = variants {} ;
 lin nearest_Prep = variants {} ;
-lin nearly_Adv = mkAdv "beinahe" | fast_Adv | adjAdv near_A ; -- derived
+lin nearly_Adv = mkAdv "beinahe" | adjAdv near_A ; -- derived
 lin nearness_N = mkN "Nähe" feminine ; -- status=guess
 lin nearside_N = variants {} ;
 lin nearsighted_A = variants {} ;
@@ -51303,8 +51290,6 @@ lin shapely_A = variants {} ;
 lin shaper_N = variants {} ;
 lin shaping_N = variants {} ;
 lin shard_N = mkN "Scherbe" "Scherben" feminine ; -- status=guess
-lin share_1_V2 = variants {} ;
-lin share_2_V2 = variants {} ;
 lin share_N = mkN "Anteil" | mkN "Aktie" ; -- split: my share of the money / stock market shares
 lin share_V = mkV "teilen" ;
 lin share_V2 = mkV2 (mkV "teilen") ;
@@ -51977,8 +51962,6 @@ lin sigmoid_A = variants {} ;
 lin sigmoidectomy_N = variants {} ;
 lin sigmoidoscope_N = variants {} ;
 lin sigmoidoscopy_N = variants {} ;
-lin sign_1_N = variants {} ;
-lin sign_2_N = variants {} ;
 lin sign_N = mkN "Zeichen" neuter ;
 lin sign_V = fixprefixV "unter" I.schreiben_V ;
 lin sign_V2 = mkV2 (no_geV (mkV "gebärden")) | mkV2 (fixprefixV "unter" I.schreiben_V) ; -- split: use sign language / sign a piece of paper
@@ -56493,11 +56476,10 @@ lin sweatshop_N = variants {} ;
 lin sweaty_A = variants {} ;
 lin swedeFem_N = variants {} ;
 lin swedeMasc_N = mkN "Schwede" "Schweden" masculine ;
-lin swede_A = mkA "schwedisch" ;
 lin sweden_PN = mkPN "Schweden" ; -- src=geonames status=guess
 lin swedishFem_N = variants {} ;
-lin swedishMasc_N = variants {} ;
-lin swedish_A = variants {} ;
+lin swedishMasc_N = mkN "Schwede" "Schweden" masculine ;
+lin swedish_A = mkA "schwedisch";
 lin sweep_N = variants {} ;
 lin sweep_V = regV "fegen" | regV "kehren" ; -- status=guess, src=wikt status=guess, src=wikt
 lin sweep_V2 = mkV2 (regV "fegen" | regV "kehren") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -64020,8 +64002,6 @@ lin whether_Subj = ss "ob" ;
 lin whetstone_N = mkN "Schleifstein" "Schleifsteine" masculine | mkN "Wetzstein" "Wetzsteine" masculine ; -- status=guess status=guess
 lin whey_N = mkN "Molke" "Molken" feminine ; -- status=guess
 lin which_IQuant = S.which_IQuant ;
-lin which_N = variants {} ;
-lin whichever_A = variants {} ;
 lin whichever_Quant = variants {} ; --
 lin whichsoever_A = variants {} ;
 lin whiff_N = mkN "Hauch" "Hauche" masculine ; -- status=guess
