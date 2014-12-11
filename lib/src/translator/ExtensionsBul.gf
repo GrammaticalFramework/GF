@@ -60,6 +60,11 @@ lin
     p = Pos
   } ;
 
+  GerundAdv vp =
+    {s = vp.ad.s ++
+         vp.s ! Imperf ! VGerund ++
+         vp.compl ! {gn=GSg Neut; p=P3}} ;
+
   PresPartAP vp =
     let ap : AForm => Str
            = \\aform => vp.ad.s ++
@@ -92,9 +97,12 @@ lin
     {s = vp.ad.s ++
          vp.s ! Imperf ! VGerund ++
          vp.compl ! {gn=GSg Neut; p=P3}} ;
-         
+
   InOrderToVP vp =
-    {s = "за" ++ daComplex Simul Pos vp ! Imperf ! {gn=GSg Neut; p=P3}};
+    {s = "за" ++ daComplex Simul Pos (vp**{vtype=VMedial Acc}) ! Imperf ! {gn=GSg Neut; p=P3}};
+
+  WithoutVP vp =
+    {s = "без" ++ daComplex Simul Pos (vp**{vtype=VMedial Acc}) ! Imperf ! {gn=GSg Neut; p=P3}};
 
   PositAdVAdj a = {s = a.adv} ;
   
@@ -151,23 +159,6 @@ lin
                             VVGerund => gerund vp ! Imperf ! agr
                           }) vp.p
                 (predV vv) ;
-
-  PredVPosv np vp = {
-      s = \\t,a,p,o => 
-        let
-          subj = np.s ! (case vp.vtype of {
-                                        VNormal    => RSubj ;
-                                        VMedial  _ => RSubj ;
-                                        VPhrasal c => RObj c}) ;
-          verb  : Bool => Str
-                = \\q => vpTenses vp ! t ! a ! p ! np.a ! q ! Perf ;
-          compl = vp.compl ! np.a
-        in case o of {
-             Main  => compl ++ subj ++ verb ! False  ;
-             Inv   => verb ! False ++ compl ++ subj ;
-             Quest => compl ++ subj ++ verb ! True
-           }
-    } ;
 
   CompS s = {s = \\_ => "че" ++ s.s; p = Pos} ;
   CompQS qs = {s = \\_ => qs.s ! QIndir; p = Pos} ;
