@@ -31,7 +31,8 @@ import qualified Data.Traversable as T(mapM)
 import Control.Monad (liftM, liftM2, liftM3)
 --import Data.Char (isDigit)
 import Data.List (sortBy,nub)
-import GF.Text.Pretty
+import Data.Monoid
+import GF.Text.Pretty(render,(<+>),hsep,fsep)
 
 -- ** Functions for constructing and analysing source code terms.
 
@@ -479,26 +480,28 @@ composPattOp op patt =
     PRep p          -> liftM  PRep (op p)
     _               -> return patt -- covers cases without subpatterns
 
-collectOp :: (Term -> [a]) -> Term -> [a]
+collectOp :: Monoid m => (Term -> m) -> Term -> m
 collectOp co trm = case trm of
-  App c a      -> co c ++ co a 
+  App c a      -> co c <> co a
   Abs _ _ b    -> co b
-  Prod _ _ a b -> co a ++ co b 
-  S c a        -> co c ++ co a
-  Table a c    -> co a ++ co c
-  ExtR a c     -> co a ++ co c
-  R r          -> concatMap (\ (_,(mt,a)) -> maybe [] co mt ++ co a) r 
-  RecType r    -> concatMap (co . snd) r 
+  Prod _ _ a b -> co a <> co b
+  S c a        -> co c <> co a
+  Table a c    -> co a <> co c
+  ExtR a c     -> co a <> co c
+  R r          -> mconcatMap (\ (_,(mt,a)) -> maybe mempty co mt <> co a) r
+  RecType r    -> mconcatMap (co . snd) r
   P t i        -> co t
-  T _ cc       -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
-  V _ cc       -> concatMap co         cc --- nor from type annot
-  Let (x,(mt,a)) b -> maybe [] co mt ++ co a ++ co b
-  C s1 s2      -> co s1 ++ co s2 
-  Glue s1 s2   -> co s1 ++ co s2 
-  Alts t aa    -> let (x,y) = unzip aa in co t ++ concatMap co (x ++ y)
-  FV ts        -> concatMap co ts
-  Strs tt      -> concatMap co tt
-  _            -> [] -- covers K, Vr, Cn, Sort
+  T _ cc       -> mconcatMap (co . snd) cc -- not from patterns --- nor from type annot
+  V _ cc       -> mconcatMap co         cc --- nor from type annot
+  Let (x,(mt,a)) b -> maybe mempty co mt <> co a <> co b
+  C s1 s2      -> co s1 <> co s2
+  Glue s1 s2   -> co s1 <> co s2
+  Alts t aa    -> let (x,y) = unzip aa in co t <> mconcatMap co (x <> y)
+  FV ts        -> mconcatMap co ts
+  Strs tt      -> mconcatMap co tt
+  _            -> mempty -- covers K, Vr, Cn, Sort
+
+mconcatMap f = mconcat . map f
 
 collectPattOp :: (Patt -> [a]) -> Patt -> [a]
 collectPattOp op patt =
