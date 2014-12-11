@@ -11713,55 +11713,55 @@ lin combustible_A = mkA "brännbar" ; -- comment=2
 lin combustible_N = variants {} ; -- status=guess
 lin combustion_N = mkN "förbränning" ; -- status=guess
 lin come_V = L.come_V ;
-lin come_about_V = mkV "når" ; -- comment=4
-lin come_across_V = mkV "når" ; -- comment=4
-lin come_across_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_along_V = mkV "når" ; -- comment=4
-lin come_along_with_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_apart_V = mkV "når" ; -- comment=4
-lin come_around_V = mkV "når" ; -- comment=4
-lin come_around_to_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
+lin come_about_V = advV OP_come_V OP_about_Adv ; -- guess-p-verb
+lin come_across_V = advV OP_come_V OP_across_Adv ; -- guess-p-verb
+lin come_across_V2 = prepV2 OP_come_V OP_across_Prep ; -- guess-p-verb
+lin come_along_V = advV OP_come_V OP_along_Adv ; -- guess-p-verb
+lin come_along_with_V2 = prepV2 (advV OP_come_V OP_along_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_apart_V = advV OP_come_V OP_apart_Adv ; -- guess-p-verb
+lin come_around_V = advV OP_come_V OP_around_Adv ; -- guess-p-verb
+lin come_around_to_V2 = prepV2 (advV OP_come_V OP_around_Adv ) OP_to_Prep ; -- guess-p-verb
 lin come_at_able_A = variants {} ; -- status=guess
-lin come_away_V = mkV "når" ; -- comment=4
-lin come_back_V = mkV "återkomma" "återkom" "återkommit" ;
-lin come_before_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_by_V = mkV "når" ; -- comment=4
-lin come_by_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_down_V = mkV "når" ; -- comment=4
-lin come_down_on_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_down_upon_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_down_with_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_forth_V = mkV "når" ; -- comment=4
-lin come_forth_with_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_forward_V = mkV "når" ; -- comment=4
-lin come_from_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_in_V = mkV "når" ; -- comment=4
-lin come_in_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_in_for_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_into_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_into_use_V = mkV "når" ; -- comment=4
-lin come_off_V = mkV "når" ; -- comment=4
-lin come_off_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_off_it_V = mkV "når" ; -- comment=4
+lin come_away_V = advV OP_come_V OP_away_Adv ; -- guess-p-verb
+lin come_back_V = advV OP_come_V OP_back_Adv ; -- guess-p-verb
+lin come_before_V2 = prepV2 OP_come_V OP_before_Prep ; -- guess-p-verb
+lin come_by_V = advV OP_come_V OP_by_Adv ; -- guess-p-verb
+lin come_by_V2 = prepV2 OP_come_V OP_by_Prep ; -- guess-p-verb
+lin come_down_V = advV OP_come_V OP_down_Adv ; -- guess-p-verb
+lin come_down_on_V2 = prepV2 (advV OP_come_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin come_down_upon_V2 = prepV2 (advV OP_come_V OP_down_Adv ) OP_upon_Prep ; -- guess-p-verb
+lin come_down_with_V2 = prepV2 (advV OP_come_V OP_down_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_forth_V = advV OP_come_V OP_forth_Adv ; -- guess-p-verb
+lin come_forth_with_V2 = prepV2 (advV OP_come_V OP_forth_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_forward_V = advV OP_come_V OP_forward_Adv ; -- guess-p-verb
+lin come_from_V2 = prepV2 OP_come_V OP_from_Prep ; -- guess-p-verb
+lin come_in_V = advV OP_come_V OP_in_Adv ; -- guess-p-verb
+lin come_in_V2 = prepV2 OP_come_V OP_in_Prep ; -- guess-p-verb
+lin come_in_for_V2 = prepV2 (advV OP_come_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin come_into_V2 = prepV2 OP_come_V OP_into_Prep ; -- guess-p-verb
+lin come_into_use_V = variants {} ; -- guess-p-verb
+lin come_off_V = advV OP_come_V OP_off_Adv ; -- guess-p-verb
+lin come_off_V2 = prepV2 OP_come_V OP_off_Prep ; -- guess-p-verb
+lin come_off_it_V = variants {} ; -- guess-p-verb
 lin come_on_N = variants {} ; -- status=guess
-lin come_on_V = mkV I.komma_V "igen" ;
-lin come_out_V = mkV "framgå" "framgick" "framgått" ; ---- sense
-lin come_out_in_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_out_of_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_out_with_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_over_V = mkV "når" ; -- comment=4
-lin come_over_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_round_V = mkV "når" ; -- comment=4
-lin come_through_V = mkV "når" ; -- comment=4
-lin come_through_with_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_to_V = mkV "når" ; -- comment=4
-lin come_to_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_up_V = mkV "når" ; -- comment=4
-lin come_up_against_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_up_to_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_up_with_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_upon_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
-lin come_with_V2 = dirV2 (partV (mkV "komma" "kom" "kommit")"vid") ; -- comment=5
+lin come_on_V = advV OP_come_V OP_on_Adv ; -- guess-p-verb
+lin come_out_V = advV OP_come_V OP_out_Adv ; -- guess-p-verb
+lin come_out_in_V2 = prepV2 (advV OP_come_V OP_out_Adv ) OP_in_Prep ; -- guess-p-verb
+lin come_out_of_V2 = prepV2 (advV OP_come_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin come_out_with_V2 = prepV2 (advV OP_come_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_over_V = advV OP_come_V OP_over_Adv ; -- guess-p-verb
+lin come_over_V2 = prepV2 OP_come_V OP_over_Prep ; -- guess-p-verb
+lin come_round_V = advV OP_come_V OP_round_Adv ; -- guess-p-verb
+lin come_through_V = advV OP_come_V OP_through_Adv ; -- guess-p-verb
+lin come_through_with_V2 = prepV2 (advV OP_come_V OP_through_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_to_V = advV OP_come_V OP_to_Adv ; -- guess-p-verb
+lin come_to_V2 = prepV2 OP_come_V OP_to_Prep ; -- guess-p-verb
+lin come_up_V = advV OP_come_V OP_up_Adv ; -- guess-p-verb
+lin come_up_against_V2 = prepV2 (advV OP_come_V OP_up_Adv ) OP_against_Prep ; -- guess-p-verb
+lin come_up_to_V2 = prepV2 (advV OP_come_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin come_up_with_V2 = prepV2 (advV OP_come_V OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
+lin come_upon_V2 = prepV2 OP_come_V OP_upon_Prep ; -- guess-p-verb
+lin come_with_V2 = prepV2 OP_come_V OP_with_Prep ; -- guess-p-verb
 lin comeback_N = mkN "comeback" "comebacker" ; -- comment=4
 lin comedian_N = mkN "komiker" "komikern" "komiker" "komikerna" ; -- comment=2
 lin comedienne_N = variants {} ; -- status=guess
@@ -17582,15 +17582,15 @@ lin drive_N = mkN "åktur" "åkturer" | mkN "timmerflotte" utrum ; -- SaldoWN --
 lin drive_V = mkV "köra" "körde" "kört" ;
 lin drive_V2 = mkV2 (mkV "köra" "körde" "kört") ;
 lin drive_V2V = mkV2V (mkV "driva" "drev" "drivit") ;
-lin drive_away_V2 = mkV2 (mkV I.driva_V "bort") ; -- status=guess
-lin drive_back_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut") ; -- comment=17
-lin drive_by_V = mkV "slå" "slog" "slagit" ; -- comment=21
-lin drive_down_V = mkV "slå" "slog" "slagit" ; -- comment=21
+lin drive_away_V2 = mkV2 (advV OP_drive_V OP_away_Adv ) ; -- guess-p-verb
+lin drive_back_V2 = mkV2 (advV OP_drive_V OP_back_Adv ) ; -- guess-p-verb
+lin drive_by_V = advV OP_drive_V OP_by_Adv ; -- guess-p-verb
+lin drive_down_V = advV OP_drive_V OP_down_Adv ; -- guess-p-verb
 lin drive_in_N = variants {} ; -- status=guess
-lin drive_off_V = mkV "slå" "slog" "slagit" ; -- comment=21
-lin drive_out_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut") ; -- comment=17
-lin drive_up_V = mkV "slå" "slog" "slagit" ; -- comment=21
-lin drive_up_V2 = dirV2 (partV (mkV "slå" "slog" "slagit")"ut") ; -- comment=17
+lin drive_off_V = advV OP_drive_V OP_off_Adv ; -- guess-p-verb
+lin drive_out_V2 = prepV2 OP_drive_V OP_out_Prep ; -- guess-p-verb
+lin drive_up_V = advV OP_drive_V OP_up_Adv ; -- guess-p-verb
+lin drive_up_V2 = prepV2 OP_drive_V OP_up_Prep ; -- guess-p-verb
 lin drivel_N = mkN "dravel" neutrum ; -- comment=6
 lin drivel_V = mkV "pladdrar" ; -- comment=3
 lin driveller_N = variants {} ; -- status=guess
@@ -17627,24 +17627,24 @@ lin droopingly_Adv = variants {} ; -- status=guess
 lin drop_N = mkN "stup" neutrum | mkN "sänka" ; -- SaldoWN -- comment=16
 lin drop_V = mkV "tappa" ;
 lin drop_V2 = mkV2 "tappa" ;
-lin drop_around_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
-lin drop_around_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=5
-lin drop_away_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
-lin drop_back_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
-lin drop_by_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
+lin drop_around_V = advV OP_drop_V OP_around_Adv ; -- guess-p-verb
+lin drop_around_V2 = prepV2 OP_drop_V OP_around_Prep ; -- guess-p-verb
+lin drop_away_V = advV OP_drop_V OP_away_Adv ; -- guess-p-verb
+lin drop_back_V = advV OP_drop_V OP_back_Adv ; -- guess-p-verb
+lin drop_by_V = advV OP_drop_V OP_by_Adv ; -- guess-p-verb
 lin drop_curtain_N = variants {} ; -- status=guess
-lin drop_in_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
-lin drop_in_on_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=5
+lin drop_in_V = advV OP_drop_V OP_in_Adv ; -- guess-p-verb
+lin drop_in_on_V2 = prepV2 (advV OP_drop_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
 lin drop_kick_N = variants {} ; -- status=guess
-lin drop_off_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
-lin drop_off_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=5
-lin drop_out_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
-lin drop_out_of_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=5
-lin drop_over_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
-lin drop_round_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
-lin drop_round_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=5
-lin drop_someone_in_it_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=5
-lin drop_through_V = mkV "överge" "överger" "överge" "övergav" "övergett" "övergiven" ; -- comment=28
+lin drop_off_V = advV OP_drop_V OP_off_Adv ; -- guess-p-verb
+lin drop_off_V2 = prepV2 OP_drop_V OP_off_Prep ; -- guess-p-verb
+lin drop_out_V = advV OP_drop_V OP_out_Adv ; -- guess-p-verb
+lin drop_out_of_V2 = prepV2 (advV OP_drop_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin drop_over_V = advV OP_drop_V OP_over_Adv ; -- guess-p-verb
+lin drop_round_V = advV OP_drop_V OP_round_Adv ; -- guess-p-verb
+lin drop_round_V2 = prepV2 OP_drop_V OP_round_Prep ; -- guess-p-verb
+lin drop_someone_in_it_V2 = variants {} ; -- guess-p-verb
+lin drop_through_V = advV OP_drop_V OP_through_Adv ; -- guess-p-verb
 lin dropkick_N = variants {} ; -- status=guess
 lin dropkicker_N = variants {} ; -- status=guess
 lin droplet_N = variants {} ; -- status=guess
@@ -20468,22 +20468,22 @@ lin fall_1_N = mkN "fall" "fall" ; -- status=guess
 lin fall_2_N = mkN "höst" ; -- status=guess
 lin fall_N = mkN "skymning" | mkN "höst" ; -- SaldoWN -- comment=7
 lin fall_V = mkV "falla" "föll" "fallit" ;
-lin fall_about_V = mkV "sluttar" ; -- comment=12
-lin fall_apart_V = mkV "sluttar" ; -- comment=12
-lin fall_back_V = mkV "sluttar" ; -- comment=12
+lin fall_about_V = advV OP_fall_V OP_about_Adv ; -- guess-p-verb
+lin fall_apart_V = advV OP_fall_V OP_apart_Adv ; -- guess-p-verb
+lin fall_back_V = advV OP_fall_V OP_back_Adv ; -- guess-p-verb
 lin fall_back_on_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=6
-lin fall_behind_V = mkV "sluttar" ; -- comment=12
+lin fall_behind_V = advV OP_fall_V OP_behind_Adv ; -- guess-p-verb
 lin fall_behind_in_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=6
 lin fall_down_V = mkV "sluttar" ; -- comment=12
-lin fall_for_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=6
-lin fall_in_V = mkV "sluttar" ; -- comment=12
-lin fall_into_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=6
-lin fall_off_V = mkV "sluttar" ; -- comment=12
-lin fall_out_V = mkV "sluttar" ; -- comment=12
-lin fall_out_with_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=6
-lin fall_over_V = mkV "sluttar" ; -- comment=12
-lin fall_through_V = mkV "sluttar" ; -- comment=12
-lin fall_under_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=6
+lin fall_for_V2 = prepV2 OP_fall_V OP_for_Prep ; -- guess-p-verb
+lin fall_in_V = advV OP_fall_V OP_in_Adv ; -- guess-p-verb
+lin fall_into_V2 = prepV2 OP_fall_V OP_into_Prep ; -- guess-p-verb
+lin fall_off_V = advV OP_fall_V OP_off_Adv ; -- guess-p-verb
+lin fall_out_V = advV OP_fall_V OP_out_Adv ; -- guess-p-verb
+lin fall_out_with_V2 = prepV2 (advV OP_fall_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
+lin fall_over_V = advV OP_fall_V OP_over_Adv ; -- guess-p-verb
+lin fall_through_V = advV OP_fall_V OP_through_Adv ; -- guess-p-verb
+lin fall_under_V2 = prepV2 OP_fall_V OP_under_Prep ; -- guess-p-verb
 lin fallacious_A = mkA "felaktig" ; -- status=guess
 lin fallaciousness_N = variants {} ; -- status=guess
 lin fallacy_N = mkN "villfarelse" "villfarelser" ; -- comment=2
@@ -23558,87 +23558,87 @@ lin get_N = mkN "skada" ; -- comment=2
 lin get_V2 = mkV2 I.få_V ;
 lin get_V2V = mkV2V I.få_V ;
 lin get_VV = mkVV I.få_V ;
-lin get_about_V = mkV "anländer" ; -- comment=17
-lin get_above_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_across_V = mkV "anländer" ; -- comment=17
-lin get_across_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_across_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_after_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_ahead_V = mkV "anländer" ; -- comment=17
-lin get_ahead_of_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_along_V = mkV "anländer" ; -- comment=17
-lin get_along_in_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_along_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_around_V = mkV "anländer" ; -- comment=17
-lin get_around_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_around_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_at_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
+lin get_about_V = advV (lin V OP_get_V2) OP_about_Adv ; -- guess-p-verb
+lin get_above_V2 = prepV2 (lin V OP_get_V2) OP_above_Prep ; -- guess-p-verb
+lin get_across_V = advV (lin V OP_get_V2) OP_across_Adv ; -- guess-p-verb
+lin get_across_V2 = prepV2 (lin V OP_get_V2) OP_across_Prep ; -- guess-p-verb
+lin get_across_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_across_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_after_V2 = prepV2 (lin V OP_get_V2) OP_after_Prep ; -- guess-p-verb
+lin get_ahead_V = advV (lin V OP_get_V2) OP_ahead_Adv ; -- guess-p-verb
+lin get_ahead_of_V2 = prepV2 (advV (lin V OP_get_V2) OP_ahead_Adv ) OP_of_Prep ; -- guess-p-verb
+lin get_along_V = advV (lin V OP_get_V2) OP_along_Adv ; -- guess-p-verb
+lin get_along_in_V2 = prepV2 (advV (lin V OP_get_V2) OP_along_Adv ) OP_in_Prep ; -- guess-p-verb
+lin get_along_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_along_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_around_V = advV (lin V OP_get_V2) OP_around_Adv ; -- guess-p-verb
+lin get_around_V2 = prepV2 (lin V OP_get_V2) OP_around_Prep ; -- guess-p-verb
+lin get_around_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_around_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_at_V2 = prepV2 (lin V OP_get_V2) OP_at_Prep ; -- guess-p-verb
 lin get_at_able_A = variants {} ; -- status=guess
-lin get_away_V = mkV "anländer" ; -- comment=17
-lin get_away_from_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_away_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_back_V = mkV "anländer" ; -- comment=17
-lin get_back_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_back_at_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_back_into_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_back_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_back_together_V = mkV "anländer" ; -- comment=17
-lin get_behind_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_behind_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_by_V = mkV "anländer" ; -- comment=17
-lin get_by_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_by_on_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_by_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_down_V = mkV "anländer" ; -- comment=17
-lin get_down_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_down_on_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_down_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_even_V = mkV "anländer" ; -- comment=17
-lin get_in_V = mkV "anländer" ; -- comment=17
-lin get_in_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_in_on_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_in_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_into_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_it_V = mkV "anländer" ; -- comment=17
-lin get_it_off_V = mkV "anländer" ; -- comment=17
-lin get_it_off_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_it_on_V = mkV "anländer" ; -- comment=17
-lin get_it_on_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_it_together_V = mkV "anländer" ; -- comment=17
-lin get_it_up_V = mkV "anländer" ; -- comment=17
-lin get_off_V = mkV "anländer" ; -- comment=17
-lin get_off_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_off_it_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_off_on_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_off_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_on_1_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_on_2_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_on_V = mkV "anländer" ; -- comment=17
-lin get_on_at_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_on_for_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_on_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_on_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_onto_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_out_V = mkV "anländer" ; -- comment=17
-lin get_out_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_out_of_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_over_V = mkV "anländer" ; -- comment=17
-lin get_over_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_over_with_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_round_V = mkV "anländer" ; -- comment=17
-lin get_round_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_round_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_through_V = mkV "anländer" ; -- comment=17
-lin get_through_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_through_V3 = variants {} ; -- status=guess
-lin get_through_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_together_N = variants {} ; -- status=guess
-lin get_together_V = mkV "anländer" ; -- comment=17
+lin get_away_V = advV (lin V OP_get_V2) OP_away_Adv ; -- guess-p-verb
+lin get_away_from_V2 = prepV2 (advV (lin V OP_get_V2) OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
+lin get_away_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_away_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_back_V = advV (lin V OP_get_V2) OP_back_Adv ; -- guess-p-verb
+lin get_back_V2 = mkV2 (advV (lin V OP_get_V2) OP_back_Adv ) ; -- guess-p-verb
+lin get_back_at_V2 = prepV2 (advV (lin V OP_get_V2) OP_back_Adv ) OP_at_Prep ; -- guess-p-verb
+lin get_back_into_V2 = prepV2 (advV (lin V OP_get_V2) OP_back_Adv ) OP_into_Prep ; -- guess-p-verb
+lin get_back_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_back_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_back_together_V = variants {} ; -- guess-p-verb
+lin get_behind_V2 = prepV2 (lin V OP_get_V2) OP_behind_Prep ; -- guess-p-verb
+lin get_behind_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_behind_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_by_V = advV (lin V OP_get_V2) OP_by_Adv ; -- guess-p-verb
+lin get_by_V2 = prepV2 (lin V OP_get_V2) OP_by_Prep ; -- guess-p-verb
+lin get_by_on_V2 = prepV2 (advV (lin V OP_get_V2) OP_by_Adv ) OP_on_Prep ; -- guess-p-verb
+lin get_by_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_by_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_down_V = advV (lin V OP_get_V2) OP_down_Adv ; -- guess-p-verb
+lin get_down_V2 = prepV2 (lin V OP_get_V2) OP_down_Prep ; -- guess-p-verb
+lin get_down_on_V2 = prepV2 (advV (lin V OP_get_V2) OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin get_down_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_down_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_even_V = advV (lin V OP_get_V2) OP_even_Adv ; -- guess-p-verb
+lin get_in_V = advV (lin V OP_get_V2) OP_in_Adv ; -- guess-p-verb
+lin get_in_V2 = prepV2 (lin V OP_get_V2) OP_in_Prep ; -- guess-p-verb
+lin get_in_on_V2 = prepV2 (advV (lin V OP_get_V2) OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin get_in_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_in_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_into_V2 = prepV2 (lin V OP_get_V2) OP_into_Prep ; -- guess-p-verb
+lin get_it_V = variants {} ; -- guess-p-verb
+lin get_it_off_V = variants {} ; -- guess-p-verb
+lin get_it_off_with_V2 = variants {} ; -- guess-p-verb
+lin get_it_on_V = variants {} ; -- guess-p-verb
+lin get_it_on_with_V2 = variants {} ; -- guess-p-verb
+lin get_it_together_V = variants {} ; -- guess-p-verb
+lin get_it_up_V = variants {} ; -- guess-p-verb
+lin get_off_V = advV (lin V OP_get_V2) OP_off_Adv ; -- guess-p-verb
+lin get_off_V2 = prepV2 (lin V OP_get_V2) OP_off_Prep ; -- guess-p-verb
+lin get_off_it_V2 = variants {} ; -- guess-p-verb
+lin get_off_on_V2 = prepV2 (advV (lin V OP_get_V2) OP_off_Adv ) OP_on_Prep ; -- guess-p-verb
+lin get_off_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_off_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_on_1_V2 = variants {} ; -- guess-p-verb
+lin get_on_2_V2 = variants {} ; -- guess-p-verb
+lin get_on_V = advV (lin V OP_get_V2) OP_on_Adv ; -- guess-p-verb
+lin get_on_at_V2 = prepV2 (advV (lin V OP_get_V2) OP_on_Adv ) OP_at_Prep ; -- guess-p-verb
+lin get_on_for_V2 = prepV2 (advV (lin V OP_get_V2) OP_on_Adv ) OP_for_Prep ; -- guess-p-verb
+lin get_on_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_on_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_on_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_on_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_onto_V2 = prepV2 (lin V OP_get_V2) OP_onto_Prep ; -- guess-p-verb
+lin get_out_V = advV (lin V OP_get_V2) OP_out_Adv ; -- guess-p-verb
+lin get_out_V2 = prepV2 (lin V OP_get_V2) OP_out_Prep ; -- guess-p-verb
+lin get_out_of_V2 = prepV2 (advV (lin V OP_get_V2) OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin get_over_V = advV (lin V OP_get_V2) OP_over_Adv ; -- guess-p-verb
+lin get_over_V2 = prepV2 (lin V OP_get_V2) OP_over_Prep ; -- guess-p-verb
+lin get_over_with_V2 = prepV2 (advV (lin V OP_get_V2) OP_over_Adv ) OP_with_Prep ; -- guess-p-verb
+lin get_round_V = advV (lin V OP_get_V2) OP_round_Adv ; -- guess-p-verb
+lin get_round_V2 = prepV2 (lin V OP_get_V2) OP_round_Prep ; -- guess-p-verb
+lin get_round_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_round_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_through_V = advV (lin V OP_get_V2) OP_through_Adv ; -- guess-p-verb
+lin get_through_V2 = prepV2 (lin V OP_get_V2) OP_through_Prep ; -- guess-p-verb
+lin get_through_V3 = variants {} ; -- guess-p-verb
+lin get_through_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_through_Adv ) OP_to_Prep ; -- guess-p-verb
+lin get_to_V2 = prepV2 (lin V OP_get_V2) OP_to_Prep ; -- guess-p-verb
+lin get_together_N = mkN "möte" ;
+lin get_together_V = advV (lin V OP_get_V2) OP_together_Adv ; -- guess-p-verb
 lin get_up_N = variants {} ; -- status=guess
-lin get_up_V = mkV "anländer" ; -- comment=17
-lin get_up_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
-lin get_up_to_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=18
+lin get_up_V = advV (lin V OP_get_V2) OP_up_Adv ; -- guess-p-verb
+lin get_up_V2 = prepV2 (lin V OP_get_V2) OP_up_Prep ; -- guess-p-verb
+lin get_up_to_V2 = prepV2 (advV (lin V OP_get_V2) OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin getaway_N = mkN "flykt" ; -- comment=2
 lin gettable_A = variants {} ; -- status=guess
 lin geum_N = variants {} ; -- status=guess
@@ -23771,34 +23771,32 @@ lin gitana_N = variants {} ; -- status=guess
 lin gitano_N = variants {} ; -- status=guess
 lin give_N = mkN "räcka" | mkN "elasticitet" "elasticiteter" ; -- SaldoWN -- comment=2
 lin give_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ;
-lin give_V2 = mkV2 "ge" "ger" "ge" "gav" "gett" "given" | dirV2 (partV (mkV "lämnar")"över") ;
-lin give_V3 = L.give_V3 ;
-lin give_away_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
-lin give_away_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_back_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_in_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
-lin give_in_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_in_to_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_it_to_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_it_up_for_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_it_up_to_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_of_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_off_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
-lin give_off_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_onto_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_out_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
-lin give_out_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_over_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
-lin give_over_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_over_to_V3 = variants {} ; -- status=guess
-lin give_up_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
-lin give_up_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_up_on_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_up_to_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_way_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
-lin give_way_to_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
-lin give_yourself_up_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ; -- comment=15
-lin give_yourself_up_to_V2 = dirV2 (partV (mkV "lämnar")"över") ; -- comment=3
+lin give_away_V = advV OP_give_V OP_away_Adv ; -- guess-p-verb
+lin give_away_V2 = mkV2 (advV OP_give_V OP_away_Adv ) ; -- guess-p-verb
+lin give_back_V2 = mkV2 (advV OP_give_V OP_back_Adv ) ; -- guess-p-verb
+lin give_in_V = advV OP_give_V OP_in_Adv ; -- guess-p-verb
+lin give_in_V2 = prepV2 OP_give_V OP_in_Prep ; -- guess-p-verb
+lin give_in_to_V2 = prepV2 (advV OP_give_V OP_in_Adv ) OP_to_Prep ; -- guess-p-verb
+lin give_it_to_V2 = variants {} ; -- guess-p-verb
+lin give_it_up_for_V2 = variants {} ; -- guess-p-verb
+lin give_it_up_to_V2 = variants {} ; -- guess-p-verb
+lin give_of_V2 = prepV2 OP_give_V OP_of_Prep ; -- guess-p-verb
+lin give_off_V = advV OP_give_V OP_off_Adv ; -- guess-p-verb
+lin give_off_V2 = prepV2 OP_give_V OP_off_Prep ; -- guess-p-verb
+lin give_onto_V2 = prepV2 OP_give_V OP_onto_Prep ; -- guess-p-verb
+lin give_out_V = advV OP_give_V OP_out_Adv ; -- guess-p-verb
+lin give_out_V2 = prepV2 OP_give_V OP_out_Prep ; -- guess-p-verb
+lin give_over_V = advV OP_give_V OP_over_Adv ; -- guess-p-verb
+lin give_over_V2 = prepV2 OP_give_V OP_over_Prep ; -- guess-p-verb
+lin give_over_to_V3 = variants {} ; -- guess-p-verb
+lin give_up_V = advV OP_give_V OP_up_Adv ; -- guess-p-verb
+lin give_up_V2 = prepV2 OP_give_V OP_up_Prep ; -- guess-p-verb
+lin give_up_on_V2 = prepV2 (advV OP_give_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin give_up_to_V2 = prepV2 (advV OP_give_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin give_way_V = advV OP_give_V OP_way_Adv ; -- guess-p-verb
+lin give_way_to_V2 = prepV2 (advV OP_give_V OP_way_Adv ) OP_to_Prep ; -- guess-p-verb
+lin give_yourself_up_V = variants {} ; -- guess-p-verb
+lin give_yourself_up_to_V2 = variants {} ; -- guess-p-verb
 lin giveaway_N = variants {} ; -- status=guess
 lin given_A = variants {} ; --
 lin given_N = mkN "giv" ; -- status=guess
@@ -24052,79 +24050,79 @@ lin go_N = mkN "tur" ; -- comment=12
 lin go_V = L.go_V | mkV "åker" ;
 lin go_VA = mkVA I.bliva_V ;
 lin go_VV = mkVV L.go_V ;
-lin go_about_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_about_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_across_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_after_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_against_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
+lin go_about_V = mkV L.go_V "om" ; ----
+lin go_about_V2 = mkV2 L.go_V (mkPrep "om") ; ----
+lin go_across_V = mkV L.go_V "över" ; ----
+lin go_after_V2 = mkV2 L.go_V (mkPrep "efter") ; ----
+lin go_against_V2 = mkV2 L.go_V (mkPrep "emot") ; ----
 lin go_ahead_N = variants {} ; -- status=guess
-lin go_ahead_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_ahead_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_along_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_along_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_around_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
+lin go_ahead_V = mkV L.go_V "vidare" ; ----
+lin go_ahead_with_V2 = mkV2 (mkV L.go_V "vidare") (mkPrep "med") ;
+lin go_along_V = advV OP_go_V OP_along_Adv ; -- guess-p-verb
+lin go_along_with_V2 = prepV2 (advV OP_go_V OP_along_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_around_V = advV OP_go_V OP_around_Adv ; -- guess-p-verb
 lin go_as_you_please_A = variants {} ; -- status=guess
-lin go_at_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_away_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_back_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_back_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_back_on_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_before_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_below_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
+lin go_at_V2 = prepV2 OP_go_V OP_at_Prep ; -- guess-p-verb
+lin go_away_V = advV OP_go_V OP_away_Adv ; -- guess-p-verb
+lin go_back_V = advV OP_go_V OP_back_Adv ; -- guess-p-verb
+lin go_back_V2 = mkV2 (advV OP_go_V OP_back_Adv ) ; -- guess-p-verb
+lin go_back_on_V2 = prepV2 (advV OP_go_V OP_back_Adv ) OP_on_Prep ; -- guess-p-verb
+lin go_before_V = advV OP_go_V OP_before_Adv ; -- guess-p-verb
+lin go_below_V = advV OP_go_V OP_below_Adv ; -- guess-p-verb
 lin go_between_N = variants {} ; -- status=guess
 lin go_by_N = variants {} ; -- status=guess
-lin go_by_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_by_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
+lin go_by_V = advV OP_go_V OP_by_Adv ; -- guess-p-verb
+lin go_by_V2 = prepV2 OP_go_V OP_by_Prep ; -- guess-p-verb
 lin go_cart_N = variants {} ; -- status=guess
-lin go_down_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_down_on_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_down_to_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_down_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_for_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_for_it_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_forth_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_forward_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
+lin go_down_V = advV OP_go_V OP_down_Adv ; -- guess-p-verb
+lin go_down_on_V2 = prepV2 (advV OP_go_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin go_down_to_V2 = prepV2 (advV OP_go_V OP_down_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_down_with_V2 = prepV2 (advV OP_go_V OP_down_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_for_V = advV OP_go_V OP_for_Adv ; -- guess-p-verb
+lin go_for_V2 = prepV2 OP_go_V OP_for_Prep ; -- guess-p-verb
+lin go_for_it_V = variants {} ; -- guess-p-verb
+lin go_forth_V = advV OP_go_V OP_forth_Adv ; -- guess-p-verb
+lin go_forward_V = advV OP_go_V OP_forward_Adv ; -- guess-p-verb
 lin go_getter_N = variants {} ; -- status=guess
-lin go_in_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_in_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_in_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_into_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_it_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_it_alone_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
+lin go_in_V = advV OP_go_V OP_in_Adv ; -- guess-p-verb
+lin go_in_for_V2 = prepV2 (advV OP_go_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin go_in_with_V2 = prepV2 (advV OP_go_V OP_in_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_into_V2 = prepV2 OP_go_V OP_into_Prep ; -- guess-p-verb
+lin go_it_V = variants {} ; -- guess-p-verb
+lin go_it_alone_V = variants {} ; -- guess-p-verb
 lin go_kart_N = variants {} ; -- status=guess
-lin go_off_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_off_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_off_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_on_V = mkV "pågå" "pågick" "pågått" ;
-lin go_on_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_on_about_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_on_at_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_on_to_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_on_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_one_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_out_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_out_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_out_to_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_out_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_over_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_over_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_over_to_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_past_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_round_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
+lin go_off_V = advV OP_go_V OP_off_Adv ; -- guess-p-verb
+lin go_off_V2 = prepV2 OP_go_V OP_off_Prep ; -- guess-p-verb
+lin go_off_with_V2 = prepV2 (advV OP_go_V OP_off_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_on_V = advV OP_go_V OP_on_Adv ; -- guess-p-verb
+lin go_on_V2 = prepV2 OP_go_V OP_on_Prep ; -- guess-p-verb
+lin go_on_about_V2 = prepV2 (advV OP_go_V OP_on_Adv ) OP_about_Prep ; -- guess-p-verb
+lin go_on_at_V2 = prepV2 (advV OP_go_V OP_on_Adv ) OP_at_Prep ; -- guess-p-verb
+lin go_on_to_V2 = prepV2 (advV OP_go_V OP_on_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_on_with_V2 = prepV2 (advV OP_go_V OP_on_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_one_V = variants {} ; -- guess-p-verb
+lin go_out_V = mkV I.gå_V "ut" ;
+lin go_out_for_V2 = prepV2 (advV OP_go_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin go_out_to_V2 = prepV2 (advV OP_go_V OP_out_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_out_with_V2 = prepV2 (advV OP_go_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_over_V = advV OP_go_V OP_over_Adv ; -- guess-p-verb
+lin go_over_V2 = prepV2 OP_go_V OP_over_Prep ; -- guess-p-verb
+lin go_over_to_V2 = prepV2 (advV OP_go_V OP_over_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_past_V2 = prepV2 OP_go_V OP_past_Prep ; -- guess-p-verb
+lin go_round_V = advV OP_go_V OP_round_Adv ; -- guess-p-verb
 lin go_slow_N = variants {} ; -- status=guess
-lin go_through_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_through_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_through_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_to_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
+lin go_through_V = advV OP_go_V OP_through_Adv ; -- guess-p-verb
+lin go_through_V2 = prepV2 OP_go_V OP_through_Prep ; -- guess-p-verb
+lin go_through_with_V2 = prepV2 (advV OP_go_V OP_through_Adv ) OP_with_Prep ; -- guess-p-verb
+lin go_to_V2 = prepV2 OP_go_V OP_to_Prep ; -- guess-p-verb
 lin go_to_meeting_A = variants {} ; -- status=guess
-lin go_together_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_towards_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_under_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_up_V = mkV "sälja" "sålde" "sålt" ; -- comment=30
-lin go_up_to_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
-lin go_without_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=34
+lin go_together_V = advV OP_go_V OP_together_Adv ; -- guess-p-verb
+lin go_towards_V2 = prepV2 OP_go_V OP_towards_Prep ; -- guess-p-verb
+lin go_under_V = advV OP_go_V OP_under_Adv ; -- guess-p-verb
+lin go_up_V = advV OP_go_V OP_up_Adv ; -- guess-p-verb
+lin go_up_to_V2 = prepV2 (advV OP_go_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin go_with_V2 = prepV2 OP_go_V OP_with_Prep ; -- guess-p-verb
+lin go_without_V2 = prepV2 OP_go_V OP_without_Prep ; -- guess-p-verb
 lin goad_N = variants {} ; -- status=guess
 lin goad_V2 = variants {} ; -- status=guess
 lin goal_N = mkN "mål" neutrum ; ---- split
@@ -26643,32 +26641,32 @@ lin hoist_V2 = variants {} ; -- status=guess
 lin hoister_N = variants {} ; -- status=guess
 lin hoity_toity_A = variants {} ; -- status=guess
 lin hold_N = mkN "arrest" "arrester" | mkN "äga" ; -- SaldoWN -- comment=12
-lin hold_V = mkV "bevara" ;
+lin hold_V = I.hålla_V ;
 lin hold_V2 = L.hold_V2 ;
 lin hold_VS = mkVS I.hålla_V ;
-lin hold_against_V3 = variants {} ; -- status=guess
-lin hold_back_V = mkV "bevarar" ; -- comment=13
-lin hold_back_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_back_from_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_down_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_forth_V = mkV "bevarar" ; -- comment=13
-lin hold_off_V = mkV "bevarar" ; -- comment=13
-lin hold_off_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_off_on_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_on_V = mkV "bevarar" ; -- comment=13
-lin hold_on_to_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_onto_V = mkV "bevarar" ; -- comment=13
-lin hold_onto_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_out_V = mkV "bevarar" ; -- comment=13
-lin hold_out_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_out_against_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_out_for_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_out_on_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_over_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_together_V = mkV "bevarar" ; -- comment=13
+lin hold_against_V3 = variants {} ; -- guess-p-verb
+lin hold_back_V = advV OP_hold_V OP_back_Adv ; -- guess-p-verb
+lin hold_back_V2 = mkV2 (advV OP_hold_V OP_back_Adv ) ; -- guess-p-verb
+lin hold_back_from_V2 = prepV2 (advV OP_hold_V OP_back_Adv ) OP_from_Prep ; -- guess-p-verb
+lin hold_down_V2 = prepV2 OP_hold_V OP_down_Prep ; -- guess-p-verb
+lin hold_forth_V = advV OP_hold_V OP_forth_Adv ; -- guess-p-verb
+lin hold_off_V = advV OP_hold_V OP_off_Adv ; -- guess-p-verb
+lin hold_off_V2 = prepV2 OP_hold_V OP_off_Prep ; -- guess-p-verb
+lin hold_off_on_V2 = prepV2 (advV OP_hold_V OP_off_Adv ) OP_on_Prep ; -- guess-p-verb
+lin hold_on_V = advV OP_hold_V OP_on_Adv ; -- guess-p-verb
+lin hold_on_to_V2 = prepV2 (advV OP_hold_V OP_on_Adv ) OP_to_Prep ; -- guess-p-verb
+lin hold_onto_V = variants {} ; -- guess-p-verb
+lin hold_onto_V2 = prepV2 OP_hold_V OP_onto_Prep ; -- guess-p-verb
+lin hold_out_V = advV OP_hold_V OP_out_Adv ; -- guess-p-verb
+lin hold_out_V2 = prepV2 OP_hold_V OP_out_Prep ; -- guess-p-verb
+lin hold_out_against_V2 = prepV2 (advV OP_hold_V OP_out_Adv ) OP_against_Prep ; -- guess-p-verb
+lin hold_out_for_V2 = prepV2 (advV OP_hold_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin hold_out_on_V2 = prepV2 (advV OP_hold_V OP_out_Adv ) OP_on_Prep ; -- guess-p-verb
+lin hold_over_V2 = prepV2 OP_hold_V OP_over_Prep ; -- guess-p-verb
+lin hold_together_V = advV OP_hold_V OP_together_Adv ; -- guess-p-verb
 lin hold_up_N = variants {} ; -- status=guess
-lin hold_up_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
-lin hold_with_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
+lin hold_up_V2 = prepV2 OP_hold_V OP_up_Prep ; -- guess-p-verb
+lin hold_with_V2 = prepV2 OP_hold_V OP_with_Prep ; -- guess-p-verb
 lin holdall_N = variants {} ; -- status=guess
 lin holder_N = mkN "behållare" utrum ; -- comment=3
 lin holding_N = mkN "innehav" neutrum ; -- status=guess
@@ -30546,31 +30544,31 @@ lin keen_V = mkV "förtjuser" ; -- status=guess
 lin keen_V2 = variants {} ; -- status=guess
 lin keenness_N = mkN "skärpa" ; -- comment=2
 lin keep_N = mkN "äga" ; -- comment=4
-lin keep_V = mkV "behålla" "behöll" "behållit" ;
+lin keep_V = I.hålla_V ;
 lin keep_V2 = mkV2 (mkV "behålla" "behöll" "behållit") ;
 lin keep_V2A = mkV2A (mkV "hålla" "höll" "hållit") ;
 lin keep_VV = mkVV (partV (mkV "hålla" "höll" "hållit") "på") ;
-lin keep_around_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_at_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_away_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_back_V = mkV "behålla" "behöll" "behållit" ; -- comment=18
-lin keep_back_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_down_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_from_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_in_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_ing_V2V = variants {} ; -- status=guess
-lin keep_off_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_on_V = mkV "behålla" "behöll" "behållit" ; -- comment=18
-lin keep_on_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_out_V = mkV "behålla" "behöll" "behållit" ; -- comment=18
-lin keep_out_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_over_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_to_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_to_V2V = variants {} ; -- status=guess
-lin keep_up_V = mkV "behålla" "behöll" "behållit" ; -- comment=18
-lin keep_up_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_up_at_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
-lin keep_up_with_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=16
+lin keep_around_V2 = prepV2 OP_keep_V OP_around_Prep ; -- guess-p-verb
+lin keep_at_V2 = prepV2 OP_keep_V OP_at_Prep ; -- guess-p-verb
+lin keep_away_V2 = mkV2 (advV OP_keep_V OP_away_Adv ) ; -- guess-p-verb
+lin keep_back_V = advV OP_keep_V OP_back_Adv ; -- guess-p-verb
+lin keep_back_V2 = mkV2 (advV OP_keep_V OP_back_Adv ) ; -- guess-p-verb
+lin keep_down_V2 = prepV2 OP_keep_V OP_down_Prep ; -- guess-p-verb
+lin keep_from_V2 = prepV2 OP_keep_V OP_from_Prep ; -- guess-p-verb
+lin keep_in_V2 = prepV2 OP_keep_V OP_in_Prep ; -- guess-p-verb
+lin keep_ing_V2V = variants {} ; -- guess-p-verb
+lin keep_off_V2 = prepV2 OP_keep_V OP_off_Prep ; -- guess-p-verb
+lin keep_on_V = advV OP_keep_V OP_on_Adv ; -- guess-p-verb
+lin keep_on_V2 = prepV2 OP_keep_V OP_on_Prep ; -- guess-p-verb
+lin keep_out_V = advV OP_keep_V OP_out_Adv ; -- guess-p-verb
+lin keep_out_V2 = prepV2 OP_keep_V OP_out_Prep ; -- guess-p-verb
+lin keep_over_V2 = prepV2 OP_keep_V OP_over_Prep ; -- guess-p-verb
+lin keep_to_V2 = prepV2 OP_keep_V OP_to_Prep ; -- guess-p-verb
+lin keep_to_V2V = variants {} ; -- guess-p-verb
+lin keep_up_V = advV OP_keep_V OP_up_Adv ; -- guess-p-verb
+lin keep_up_V2 = prepV2 OP_keep_V OP_up_Prep ; -- guess-p-verb
+lin keep_up_at_V2 = prepV2 (advV OP_keep_V OP_up_Adv ) OP_at_Prep ; -- guess-p-verb
+lin keep_up_with_V2 = prepV2 (advV OP_keep_V OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
 lin keeper_N = mkN "väktare" utrum ; -- comment=6
 lin keeping_N = mkN "vård" ; -- comment=6
 lin keepsake_N = mkN "minne" ; -- comment=2
@@ -30702,23 +30700,22 @@ lin kibe_N = variants {} ; -- status=guess
 lin kibibit_N = variants {} ; -- status=guess
 lin kibitzer_N = variants {} ; -- status=guess
 lin kick_N = mkN "kick" | mkN "bråka" ; -- SaldoWN -- comment=12
-lin kick_V = mkV "protesterar" ; -- comment=10
-lin kick_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
-lin kick_about_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
-lin kick_around_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
-lin kick_around_with_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
-lin kick_back_V = mkV "protesterar" ; -- comment=10
-lin kick_back_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
-lin kick_down_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
-lin kick_in_V = mkV "protesterar" ; -- comment=10
-lin kick_in_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
-lin kick_off_V = mkV "protesterar" ; -- comment=10
-lin kick_off_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
-lin kick_out_V2 = dirV2 (partV (mkV "sparkar")"ut") ; -- comment=2
+lin kick_V = mkV "sparka" ;
+lin kick_about_V2 = prepV2 OP_kick_V OP_about_Prep ; -- guess-p-verb
+lin kick_around_V2 = prepV2 OP_kick_V OP_around_Prep ; -- guess-p-verb
+lin kick_around_with_V2 = prepV2 (advV OP_kick_V OP_around_Adv ) OP_with_Prep ; -- guess-p-verb
+lin kick_back_V = advV OP_kick_V OP_back_Adv ; -- guess-p-verb
+lin kick_back_V2 = mkV2 (advV OP_kick_V OP_back_Adv ) ; -- guess-p-verb
+lin kick_down_V2 = prepV2 OP_kick_V OP_down_Prep ; -- guess-p-verb
+lin kick_in_V = advV OP_kick_V OP_in_Adv ; -- guess-p-verb
+lin kick_in_V2 = prepV2 OP_kick_V OP_in_Prep ; -- guess-p-verb
+lin kick_off_V = advV OP_kick_V OP_off_Adv ; -- guess-p-verb
+lin kick_off_V2 = prepV2 OP_kick_V OP_off_Prep ; -- guess-p-verb
+lin kick_out_V2 = prepV2 OP_kick_V OP_out_Prep ; -- guess-p-verb
 lin kick_start_N = variants {} ; -- status=guess
 lin kick_starter_N = variants {} ; -- status=guess
-lin kick_through_V = mkV "protesterar" ; -- comment=10
-lin kick_up_V = mkV "protesterar" ; -- comment=10
+lin kick_through_V = advV OP_kick_V OP_through_Adv ; -- guess-p-verb
+lin kick_up_V = advV OP_kick_V OP_up_Adv ; -- guess-p-verb
 lin kickback_N = mkN "muta" ; -- status=guess
 lin kicker_N = variants {} ; -- status=guess
 lin kickoff_N = variants {} ; -- status=guess
@@ -32586,23 +32583,23 @@ lin liturgy_N = variants {} ; -- status=guess
 lin livable_A = mkA "dräglig" ; -- comment=3
 lin live_A = mkA "live" | mkA "levande" ; -- status=guess
 lin live_Adv = mkAdv "direkt" ; -- status=guess
-lin live_V = L.live_V ;
+lin live_V = mkV "lever" | mkV "bo" ; ---- split: live and let die ; live in Gothenburg
 lin live_birth_N = variants {} ; -- status=guess
-lin live_by_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
-lin live_down_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
-lin live_for_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
-lin live_in_V = mkV "lever" ; -- comment=5
-lin live_it_up_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
-lin live_off_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
+lin live_by_V2 = prepV2 OP_live_V OP_by_Prep ; -- guess-p-verb
+lin live_down_V2 = prepV2 OP_live_V OP_down_Prep ; -- guess-p-verb
+lin live_for_V2 = prepV2 OP_live_V OP_for_Prep ; -- guess-p-verb
+lin live_in_V = mkV "bo" ; -- comment=5
+lin live_it_up_V2 = variants {} ; -- guess-p-verb
+lin live_off_V2 = prepV2 OP_live_V OP_off_Prep ; -- guess-p-verb
 lin live_on_V = mkV "lever" ; -- comment=5
-lin live_on_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
-lin live_out_V = mkV "lever" ; -- comment=5
-lin live_out_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
-lin live_through_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
-lin live_together_V = mkV "lever" ; -- comment=5
-lin live_up_V = mkV "lever" ; -- comment=5
-lin live_up_to_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
-lin live_with_V2 = dirV2 (partV (mkV "bor")"över") ; -- comment=3
+lin live_on_V2 = prepV2 OP_live_V OP_on_Prep ; -- guess-p-verb
+lin live_out_V = advV OP_live_V OP_out_Adv ; -- guess-p-verb
+lin live_out_V2 = prepV2 OP_live_V OP_out_Prep ; -- guess-p-verb
+lin live_through_V2 = prepV2 OP_live_V OP_through_Prep ; -- guess-p-verb
+lin live_together_V = advV OP_live_V OP_together_Adv ; -- guess-p-verb
+lin live_up_V = advV OP_live_V OP_up_Adv ; -- guess-p-verb
+lin live_up_to_V2 = prepV2 (advV OP_live_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin live_with_V2 = prepV2 OP_live_V OP_with_Prep ; -- guess-p-verb
 lin liveable_A = mkA "dräglig" ; -- comment=3
 lin liveborn_A = variants {} ; -- status=guess
 lin livedo_N = variants {} ; -- status=guess
@@ -32905,30 +32902,29 @@ lin look_ahead_to_V2 = prepV2 (advV OP_look_V OP_ahead_Adv ) OP_to_Prep ; -- gue
 lin look_around_V = partV (mkV "kolla") "runt" ; -- status=guess
 lin look_around_at_V2 = prepV2 (advV OP_look_V OP_around_Adv ) OP_at_Prep ; -- guess-p-verb
 lin look_at_V2 = prepV2 OP_look_V OP_at_Prep ; -- guess-p-verb
-lin look_back_V = mkV "uttrycker" ; -- comment=13
-lin look_back_on_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
+lin look_back_V = advV OP_look_V OP_back_Adv ; -- guess-p-verb
+lin look_back_on_V2 = prepV2 (advV OP_look_V OP_back_Adv ) OP_on_Prep ; -- guess-p-verb
 lin look_down_V = advV OP_look_V OP_down_Adv ; -- guess-p-verb
-lin look_down_on_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_for_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_forward_V = mkV "uttrycker" ; -- comment=13
-lin look_forward_to_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_in_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_in_on_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_into_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_on_V = mkV "uttrycker" ; -- comment=13
-lin look_on_as_V3 = variants {} ; -- status=guess
-lin look_out_V = mkV "uttrycker" ; -- comment=13
-lin look_out_for_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_over_N = variants {} ; -- status=guess
-lin look_over_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_round_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_through_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_to_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
+lin look_down_on_V2 = prepV2 (advV OP_look_V OP_down_Adv ) OP_on_Prep ; -- guess-p-verb
+lin look_for_V2 = prepV2 OP_look_V OP_for_Prep ; -- guess-p-verb
+lin look_forward_V = advV OP_look_V OP_forward_Adv ; -- guess-p-verb
+lin look_forward_to_V2 = prepV2 (advV OP_look_V OP_forward_Adv ) OP_to_Prep ; -- guess-p-verb
+lin look_in_V2 = prepV2 OP_look_V OP_in_Prep ; -- guess-p-verb
+lin look_in_on_V2 = prepV2 (advV OP_look_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin look_into_V2 = prepV2 OP_look_V OP_into_Prep ; -- guess-p-verb
+lin look_on_V = advV OP_look_V OP_on_Adv ; -- guess-p-verb
+lin look_on_as_V3 = variants {} ; -- guess-p-verb
+lin look_out_V = advV OP_look_V OP_out_Adv ; -- guess-p-verb
+lin look_out_for_V2 = prepV2 (advV OP_look_V OP_out_Adv ) OP_for_Prep ; -- guess-p-verb
+lin look_over_V2 = prepV2 OP_look_V OP_over_Prep ; -- guess-p-verb
+lin look_round_V2 = prepV2 OP_look_V OP_round_Prep ; -- guess-p-verb
+lin look_through_V2 = prepV2 OP_look_V OP_through_Prep ; -- guess-p-verb
+lin look_to_V2 = prepV2 OP_look_V OP_to_Prep ; -- guess-p-verb
 lin look_toward_V2 = prepV2 OP_look_V OP_toward_Prep ; -- guess-p-verb
-lin look_up_V = mkV "uttrycker" ; -- comment=13
-lin look_up_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_up_to_V2 = dirV2 (partV (mkV "se" "såg" "sett")"ut") ; -- comment=9
-lin look_upon_as_V3 = mkV3 (partV (mkV "se" "såg" "sett")"ut") ; -- status=guess
+lin look_up_V = advV OP_look_V OP_up_Adv ; -- guess-p-verb
+lin look_up_V2 = prepV2 OP_look_V OP_up_Prep ; -- guess-p-verb
+lin look_up_to_V2 = prepV2 (advV OP_look_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin look_upon_as_V3 = variants {} ; -- guess-p-verb
 lin lookdown_N = variants {} ; -- status=guess
 lin looker_N = mkN "snygging" ; -- status=guess
 lin looker_on_N = variants {} ; -- status=guess
@@ -33618,25 +33614,25 @@ lin make_V2V = mkV2V I.göra_V ;
 lin make_after_V = mkV "varar" ; -- comment=29
 lin make_away_with_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
 lin make_believe_N = variants {} ; -- status=guess
-lin make_do_with_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_for_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_into_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_it_V = mkV "varar" ; -- comment=29
-lin make_it_up_to_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_of_V3 = variants {} ; -- status=guess
-lin make_off_V = mkV "varar" ; -- comment=29
-lin make_off_with_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_out_V = mkV "varar" ; -- comment=29
-lin make_out_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_out_with_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_over_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_towards_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
+lin make_do_with_V2 = variants {} ; -- guess-p-verb
+lin make_for_V2 = prepV2 OP_make_V OP_for_Prep ; -- guess-p-verb
+lin make_into_V2 = prepV2 OP_make_V OP_into_Prep ; -- guess-p-verb
+lin make_it_V = variants {} ; -- guess-p-verb
+lin make_it_up_to_V2 = variants {} ; -- guess-p-verb
+lin make_of_V3 = variants {} ; -- guess-p-verb
+lin make_off_V = advV OP_make_V OP_off_Adv ; -- guess-p-verb
+lin make_off_with_V2 = prepV2 (advV OP_make_V OP_off_Adv ) OP_with_Prep ; -- guess-p-verb
+lin make_out_V = advV OP_make_V OP_out_Adv ; -- guess-p-verb
+lin make_out_V2 = prepV2 OP_make_V OP_out_Prep ; -- guess-p-verb
+lin make_out_with_V2 = prepV2 (advV OP_make_V OP_out_Adv ) OP_with_Prep ; -- guess-p-verb
+lin make_over_V2 = prepV2 OP_make_V OP_over_Prep ; -- guess-p-verb
+lin make_towards_V2 = prepV2 OP_make_V OP_towards_Prep ; -- guess-p-verb
 lin make_up_N = variants {} ; --
 lin make_up_V = mkV "varar" ; -- comment=29
-lin make_up_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_up_for_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_up_to_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
-lin make_with_V2 = dirV2 (partV (mkV "bli" "blev" "blivit")"utan") ; -- comment=13
+lin make_up_V2 = prepV2 OP_make_V OP_up_Prep ; -- guess-p-verb
+lin make_up_for_V2 = prepV2 (advV OP_make_V OP_up_Adv ) OP_for_Prep ; -- guess-p-verb
+lin make_up_to_V2 = prepV2 (advV OP_make_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin make_with_V2 = prepV2 OP_make_V OP_with_Prep ; -- guess-p-verb
 lin makeover_N = variants {} ; -- status=guess
 lin maker_N = mkN "tillverkare" utrum ; -- comment=4
 lin makeready_N = variants {} ; -- status=guess
@@ -40642,27 +40638,27 @@ lin pashto_N = variants {} ; -- status=guess
 lin pasqueflower_N = variants {} ; -- status=guess
 lin pass_N = mkN "passersedel" | mkN "räcka" ; -- SaldoWN -- comment=14
 lin pass_V = mkV "passera" ;
-lin pass_around_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_as_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_away_V = mkV "passerar" ; -- comment=26
-lin pass_back_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_by_V = mkV "passerar" ; -- comment=26
-lin pass_by_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_down_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_for_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_off_V = mkV "passerar" ; -- comment=26
-lin pass_off_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_on_V = mkV "passerar" ; -- comment=26
-lin pass_on_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_on_to_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_out_V = mkV "passerar" ; -- comment=26
-lin pass_out_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_over_V = mkV "passerar" ; -- comment=26
-lin pass_over_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_round_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_through_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_to_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
-lin pass_up_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- comment=22
+lin pass_around_V2 = prepV2 OP_pass_V OP_around_Prep ; -- guess-p-verb
+lin pass_as_V2 = prepV2 OP_pass_V OP_as_Prep ; -- guess-p-verb
+lin pass_away_V = advV OP_pass_V OP_away_Adv ; -- guess-p-verb
+lin pass_back_V2 = mkV2 (advV OP_pass_V OP_back_Adv ) ; -- guess-p-verb
+lin pass_by_V = advV OP_pass_V OP_by_Adv ; -- guess-p-verb
+lin pass_by_V2 = prepV2 OP_pass_V OP_by_Prep ; -- guess-p-verb
+lin pass_down_V2 = prepV2 OP_pass_V OP_down_Prep ; -- guess-p-verb
+lin pass_for_V2 = prepV2 OP_pass_V OP_for_Prep ; -- guess-p-verb
+lin pass_off_V = advV OP_pass_V OP_off_Adv ; -- guess-p-verb
+lin pass_off_V2 = prepV2 OP_pass_V OP_off_Prep ; -- guess-p-verb
+lin pass_on_V = advV OP_pass_V OP_on_Adv ; -- guess-p-verb
+lin pass_on_V2 = prepV2 OP_pass_V OP_on_Prep ; -- guess-p-verb
+lin pass_on_to_V2 = prepV2 (advV OP_pass_V OP_on_Adv ) OP_to_Prep ; -- guess-p-verb
+lin pass_out_V = advV OP_pass_V OP_out_Adv ; -- guess-p-verb
+lin pass_out_V2 = prepV2 OP_pass_V OP_out_Prep ; -- guess-p-verb
+lin pass_over_V = advV OP_pass_V OP_over_Adv ; -- guess-p-verb
+lin pass_over_V2 = prepV2 OP_pass_V OP_over_Prep ; -- guess-p-verb
+lin pass_round_V2 = prepV2 OP_pass_V OP_round_Prep ; -- guess-p-verb
+lin pass_through_V2 = prepV2 OP_pass_V OP_through_Prep ; -- guess-p-verb
+lin pass_to_V2 = prepV2 OP_pass_V OP_to_Prep ; -- guess-p-verb
+lin pass_up_V2 = prepV2 OP_pass_V OP_up_Prep ; -- guess-p-verb
 lin passable_A = mkA "skaplig" ; -- comment=5
 lin passage_N = mkN "passus" | mkN "öppning" ; -- SaldoWN -- comment=10
 lin passageway_N = variants {} ; -- status=guess
@@ -42567,26 +42563,23 @@ lin play_3_V2 = mkV2 "spela" ;
 lin play_N = mkN "pjäs" "pjäser" ;
 lin play_acting_N = variants {} ; -- status=guess
 lin play_actor_N = variants {} ; -- status=guess
-lin play_along_V = mkV "spelar" ; -- comment=16
-lin play_around_V = mkV "spelar" ; -- comment=16
-lin play_at_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_away_V = mkV "spelar" ; -- comment=16
-lin play_back_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_box_N = variants {} ; -- status=guess
-lin play_down_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_off_N = variants {} ; -- status=guess
-lin play_off_V = mkV "spelar" ; -- comment=16
-lin play_off_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_on_V = mkV "spelar" ; -- comment=16
-lin play_on_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_out_V = mkV "spelar" ; -- comment=16
-lin play_out_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_reading_N = variants {} ; -- status=guess
-lin play_up_V = mkV "spelar" ; -- comment=16
-lin play_up_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_up_to_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_upon_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
-lin play_with_V2 = dirV2 (partV (mkV "spelar")"in") ; -- comment=35
+lin play_along_V = advV OP_play_V OP_along_Adv ; -- guess-p-verb
+lin play_around_V = advV OP_play_V OP_around_Adv ; -- guess-p-verb
+lin play_at_V2 = prepV2 OP_play_V OP_at_Prep ; -- guess-p-verb
+lin play_away_V = advV OP_play_V OP_away_Adv ; -- guess-p-verb
+lin play_back_V2 = mkV2 (advV OP_play_V OP_back_Adv ) ; -- guess-p-verb
+lin play_down_V2 = prepV2 OP_play_V OP_down_Prep ; -- guess-p-verb
+lin play_off_V = advV OP_play_V OP_off_Adv ; -- guess-p-verb
+lin play_off_V2 = prepV2 OP_play_V OP_off_Prep ; -- guess-p-verb
+lin play_on_V = advV OP_play_V OP_on_Adv ; -- guess-p-verb
+lin play_on_V2 = prepV2 OP_play_V OP_on_Prep ; -- guess-p-verb
+lin play_out_V = advV OP_play_V OP_out_Adv ; -- guess-p-verb
+lin play_out_V2 = prepV2 OP_play_V OP_out_Prep ; -- guess-p-verb
+lin play_up_V = advV OP_play_V OP_up_Adv ; -- guess-p-verb
+lin play_up_V2 = prepV2 OP_play_V OP_up_Prep ; -- guess-p-verb
+lin play_up_to_V2 = prepV2 (advV OP_play_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
+lin play_upon_V2 = prepV2 OP_play_V OP_upon_Prep ; -- guess-p-verb
+lin play_with_V2 = prepV2 OP_play_V OP_with_Prep ; -- guess-p-verb
 lin playable_A = variants {} ; -- status=guess
 lin playback_N = mkN "repris" "repriser" ; -- comment=4
 lin playbill_N = mkN "teateraffisch" ; -- status=guess
@@ -44933,33 +44926,28 @@ lin pule_V = variants {} ; -- status=guess
 lin pull_N = mkN "sträcka" ; -- comment=16
 lin pull_V = I.draga_V ;
 lin pull_V2 = L.pull_V2 ;
-lin pull_ahead_V = mkV "sträcker" ; -- comment=10
-lin pull_apart_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_away_V = mkV "sträcker" ; -- comment=10
-lin pull_back_V = mkV "sträcker" ; -- comment=10
-lin pull_back_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_down_V = mkV "sträcker" ; -- comment=10
-lin pull_down_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_for_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_in_N = variants {} ; -- status=guess
-lin pull_in_V = mkV "sträcker" ; -- comment=10
-lin pull_in_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_off_N = variants {} ; -- status=guess
-lin pull_off_V = mkV "sträcker" ; -- comment=10
-lin pull_off_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_on_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_out_N = variants {} ; -- status=guess
-lin pull_out_V = mkV "sträcker" ; -- comment=10
-lin pull_out_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_over_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_through_N = variants {} ; -- status=guess
-lin pull_through_V = mkV "sträcker" ; -- comment=10
-lin pull_to_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_together_V = mkV "sträcker" ; -- comment=10
-lin pull_up_N = variants {} ; -- status=guess
-lin pull_up_V = mkV "sträcker" ; -- comment=10
-lin pull_up_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=8
-lin pull_yourself_together_V = mkV "sträcker" ; -- comment=10
+lin pull_ahead_V = advV OP_pull_V OP_ahead_Adv ; -- guess-p-verb
+lin pull_apart_V2 = mkV2 (advV OP_pull_V OP_apart_Adv ) ; -- guess-p-verb
+lin pull_away_V = advV OP_pull_V OP_away_Adv ; -- guess-p-verb
+lin pull_back_V = advV OP_pull_V OP_back_Adv ; -- guess-p-verb
+lin pull_back_V2 = mkV2 (advV OP_pull_V OP_back_Adv ) ; -- guess-p-verb
+lin pull_down_V = advV OP_pull_V OP_down_Adv ; -- guess-p-verb
+lin pull_down_V2 = prepV2 OP_pull_V OP_down_Prep ; -- guess-p-verb
+lin pull_for_V2 = prepV2 OP_pull_V OP_for_Prep ; -- guess-p-verb
+lin pull_in_V = advV OP_pull_V OP_in_Adv ; -- guess-p-verb
+lin pull_in_V2 = prepV2 OP_pull_V OP_in_Prep ; -- guess-p-verb
+lin pull_off_V = advV OP_pull_V OP_off_Adv ; -- guess-p-verb
+lin pull_off_V2 = prepV2 OP_pull_V OP_off_Prep ; -- guess-p-verb
+lin pull_on_V2 = prepV2 OP_pull_V OP_on_Prep ; -- guess-p-verb
+lin pull_out_V = advV OP_pull_V OP_out_Adv ; -- guess-p-verb
+lin pull_out_V2 = prepV2 OP_pull_V OP_out_Prep ; -- guess-p-verb
+lin pull_over_V2 = prepV2 OP_pull_V OP_over_Prep ; -- guess-p-verb
+lin pull_through_V = advV OP_pull_V OP_through_Adv ; -- guess-p-verb
+lin pull_to_V2 = prepV2 OP_pull_V OP_to_Prep ; -- guess-p-verb
+lin pull_together_V = advV OP_pull_V OP_together_Adv ; -- guess-p-verb
+lin pull_up_V = advV OP_pull_V OP_up_Adv ; -- guess-p-verb
+lin pull_up_V2 = prepV2 OP_pull_V OP_up_Prep ; -- guess-p-verb
+lin pull_yourself_together_V = variants {} ; -- guess-p-verb
 lin pullback_N = variants {} ; -- status=guess
 lin puller_N = variants {} ; -- status=guess
 lin pullet_N = mkN "unghöna" ; -- status=guess
@@ -45162,39 +45150,37 @@ lin pussycat_N = mkN "kissekatt" "kissekatter" ; -- comment=2
 lin pussyfoot_V = variants {} ; -- status=guess
 lin pustule_N = variants {} ; -- status=guess
 lin put_N = mkN "sticka" ; -- status=guess
-lin put_V2 = L.put_V2 ;
-lin put_across_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_across_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_aside_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_away_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_away_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_back_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_by_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_down_N = variants {} ; -- status=guess
-lin put_down_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_down_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_down_for_V3 = variants {} ; -- status=guess
-lin put_down_to_V3 = variants {} ; -- status=guess
-lin put_forth_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_in_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_in_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_in_for_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_off_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_off_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_on_N = variants {} ; -- status=guess
-lin put_on_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_on_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_out_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_out_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_over_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_through_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_together_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_towards_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_up_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
-lin put_up_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_up_V2V = variants {} ; -- status=guess
-lin put_up_with_V2 = dirV2 (partV (mkV "stoppar")"till") ; -- comment=3
-lin put_upon_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=7
+lin put_V2 = mkV2 I.sätta_V | mkV2 (mkV "ställer") | mkV2 I.lägga_V ; ---- split
+lin put_across_V = advV (lin V OP_put_V2) OP_across_Adv ; -- guess-p-verb
+lin put_across_V2 = prepV2 (lin V OP_put_V2) OP_across_Prep ; -- guess-p-verb
+lin put_aside_V = advV (lin V OP_put_V2) OP_aside_Adv ; -- guess-p-verb
+lin put_away_V = advV (lin V OP_put_V2) OP_away_Adv ; -- guess-p-verb
+lin put_away_V2 = mkV2 (advV (lin V OP_put_V2) OP_away_Adv ) ; -- guess-p-verb
+lin put_back_V2 = mkV2 (advV (lin V OP_put_V2) OP_back_Adv ) ; -- guess-p-verb
+lin put_by_V2 = prepV2 (lin V OP_put_V2) OP_by_Prep ; -- guess-p-verb
+lin put_down_V = advV (lin V OP_put_V2) OP_down_Adv ; -- guess-p-verb
+lin put_down_V2 = prepV2 (lin V OP_put_V2) OP_down_Prep ; -- guess-p-verb
+lin put_down_for_V3 = variants {} ; -- guess-p-verb
+lin put_down_to_V3 = variants {} ; -- guess-p-verb
+lin put_forth_V = advV (lin V OP_put_V2) OP_forth_Adv ; -- guess-p-verb
+lin put_in_V = advV (lin V OP_put_V2) OP_in_Adv ; -- guess-p-verb
+lin put_in_V2 = prepV2 (lin V OP_put_V2) OP_in_Prep ; -- guess-p-verb
+lin put_in_for_V2 = prepV2 (advV (lin V OP_put_V2) OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin put_off_V = advV (lin V OP_put_V2) OP_off_Adv ; -- guess-p-verb
+lin put_off_V2 = prepV2 (lin V OP_put_V2) OP_off_Prep ; -- guess-p-verb
+lin put_on_V = advV (lin V OP_put_V2) OP_on_Adv ; -- guess-p-verb
+lin put_on_V2 = prepV2 (lin V OP_put_V2) OP_on_Prep ; -- guess-p-verb
+lin put_out_V = advV (lin V OP_put_V2) OP_out_Adv ; -- guess-p-verb
+lin put_out_V2 = prepV2 (lin V OP_put_V2) OP_out_Prep ; -- guess-p-verb
+lin put_over_V2 = prepV2 (lin V OP_put_V2) OP_over_Prep ; -- guess-p-verb
+lin put_through_V2 = prepV2 (lin V OP_put_V2) OP_through_Prep ; -- guess-p-verb
+lin put_together_V2 = mkV2 (advV (lin V OP_put_V2) OP_together_Adv ) ; -- guess-p-verb
+lin put_towards_V2 = prepV2 (lin V OP_put_V2) OP_towards_Prep ; -- guess-p-verb
+lin put_up_V = advV (lin V OP_put_V2) OP_up_Adv ; -- guess-p-verb
+lin put_up_V2 = prepV2 (lin V OP_put_V2) OP_up_Prep ; -- guess-p-verb
+lin put_up_V2V = variants {} ; -- guess-p-verb
+lin put_up_with_V2 = prepV2 (advV (lin V OP_put_V2) OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
+lin put_upon_V = variants {} ; -- guess-p-verb
 lin putamen_N = variants {} ; -- status=guess
 lin putative_A = mkA "förment" | mkA "förmodad" ; -- status=guess status=guess
 lin putdownable_A = variants {} ; -- status=guess
@@ -48566,39 +48552,35 @@ lin rumple_V2 = variants {} ; -- status=guess
 lin rumpus_N = variants {} ; -- status=guess
 lin rumrunner_N = variants {} ; -- status=guess
 lin run_N = mkN "lopp" "loppet" ;
-lin run_V = L.run_V ;
+lin run_V = I.springa_V | mkV "löper" ;
 lin run_V2 = mkV2 I.driva_V | mkV2 "bedriva" "bedrev" "bedrivit" | mkV2 "exekvera" ; ---- split : shop ; program
-lin run_across_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_after_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_against_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_along_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_around_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_away_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_away_from_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_down_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_down_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_for_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_in_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_in_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_into_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_of_the_mill_A = variants {} ; -- status=guess
-lin run_off_N = variants {} ; -- status=guess
-lin run_off_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_off_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_on_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_out_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_out_of_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_over_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_over_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_through_N = variants {} ; -- status=guess
-lin run_through_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_to_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_up_N = variants {} ; -- status=guess
-lin run_up_V = mkV "springa" "sprang" "sprungit" ; -- comment=57
-lin run_up_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_up_against_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_up_on_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
-lin run_with_V2 = dirV2 (partV (mkV "gå" "går" "gå" "gick" "gått" "gången")"ut") ; -- comment=41
+lin run_across_V2 = prepV2 OP_run_V OP_across_Prep ; -- guess-p-verb
+lin run_after_V2 = prepV2 OP_run_V OP_after_Prep ; -- guess-p-verb
+lin run_against_V2 = prepV2 OP_run_V OP_against_Prep ; -- guess-p-verb
+lin run_along_V = advV OP_run_V OP_along_Adv ; -- guess-p-verb
+lin run_around_V = advV OP_run_V OP_around_Adv ; -- guess-p-verb
+lin run_away_V = advV OP_run_V OP_away_Adv ; -- guess-p-verb
+lin run_away_from_V2 = prepV2 (advV OP_run_V OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
+lin run_down_V = advV OP_run_V OP_down_Adv ; -- guess-p-verb
+lin run_down_V2 = prepV2 OP_run_V OP_down_Prep ; -- guess-p-verb
+lin run_for_V2 = prepV2 OP_run_V OP_for_Prep ; -- guess-p-verb
+lin run_in_V = advV OP_run_V OP_in_Adv ; -- guess-p-verb
+lin run_in_V2 = prepV2 OP_run_V OP_in_Prep ; -- guess-p-verb
+lin run_into_V2 = prepV2 OP_run_V OP_into_Prep ; -- guess-p-verb
+lin run_off_V = advV OP_run_V OP_off_Adv ; -- guess-p-verb
+lin run_off_V2 = prepV2 OP_run_V OP_off_Prep ; -- guess-p-verb
+lin run_on_V2 = prepV2 OP_run_V OP_on_Prep ; -- guess-p-verb
+lin run_out_V = advV OP_run_V OP_out_Adv ; -- guess-p-verb
+lin run_out_of_V2 = prepV2 (advV OP_run_V OP_out_Adv ) OP_of_Prep ; -- guess-p-verb
+lin run_over_V = advV OP_run_V OP_over_Adv ; -- guess-p-verb
+lin run_over_V2 = prepV2 OP_run_V OP_over_Prep ; -- guess-p-verb
+lin run_through_V2 = prepV2 OP_run_V OP_through_Prep ; -- guess-p-verb
+lin run_to_V2 = prepV2 OP_run_V OP_to_Prep ; -- guess-p-verb
+lin run_up_V = advV OP_run_V OP_up_Adv ; -- guess-p-verb
+lin run_up_V2 = prepV2 OP_run_V OP_up_Prep ; -- guess-p-verb
+lin run_up_against_V2 = prepV2 (advV OP_run_V OP_up_Adv ) OP_against_Prep ; -- guess-p-verb
+lin run_up_on_V2 = prepV2 (advV OP_run_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
+lin run_with_V2 = prepV2 OP_run_V OP_with_Prep ; -- guess-p-verb
 lin runaway_A = mkA "förrymd" "förrymt" ; -- status=guess
 lin runaway_N = mkN "rymling" ; -- status=guess
 lin runcinate_A = variants {} ; -- status=guess
@@ -50613,26 +50595,23 @@ lin set_1_N = mkN "uppsättning" ;
 lin set_2_N = mkN "mängd" "mängder" ;
 lin set_N = mkN "uppsättning" ; ---- has been split
 lin set_V2 = mkV2 I.sätta_V ;
-lin set_about_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_apart_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_aside_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_back_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=19
-lin set_back_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_forth_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=19
-lin set_forth_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_in_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=19
-lin set_off_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=19
-lin set_off_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_on_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_out_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=19
-lin set_out_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_square_N = variants {} ; -- status=guess
-lin set_to_N = variants {} ; -- status=guess
-lin set_to_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=19
-lin set_up_N = variants {} ; -- status=guess
-lin set_up_V = mkV "sätta" "sätter" "sätt" "satte" "satt" "satt" ; -- comment=19
-lin set_up_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
-lin set_upon_V2 = dirV2 (partV (mkV "planterar")"om") ; -- comment=2
+lin set_about_V2 = prepV2 (lin V OP_set_V2) OP_about_Prep ; -- guess-p-verb
+lin set_apart_V2 = mkV2 (advV (lin V OP_set_V2) OP_apart_Adv ) ; -- guess-p-verb
+lin set_aside_V2 = mkV2 (advV (lin V OP_set_V2) OP_aside_Adv ) ; -- guess-p-verb
+lin set_back_V = advV (lin V OP_set_V2) OP_back_Adv ; -- guess-p-verb
+lin set_back_V2 = mkV2 (advV (lin V OP_set_V2) OP_back_Adv ) ; -- guess-p-verb
+lin set_forth_V = advV (lin V OP_set_V2) OP_forth_Adv ; -- guess-p-verb
+lin set_forth_V2 = mkV2 (advV (lin V OP_set_V2) OP_forth_Adv ) ; -- guess-p-verb
+lin set_in_V = advV (lin V OP_set_V2) OP_in_Adv ; -- guess-p-verb
+lin set_off_V = advV (lin V OP_set_V2) OP_off_Adv ; -- guess-p-verb
+lin set_off_V2 = prepV2 (lin V OP_set_V2) OP_off_Prep ; -- guess-p-verb
+lin set_on_V2 = prepV2 (lin V OP_set_V2) OP_on_Prep ; -- guess-p-verb
+lin set_out_V = advV (lin V OP_set_V2) OP_out_Adv ; -- guess-p-verb
+lin set_out_V2 = prepV2 (lin V OP_set_V2) OP_out_Prep ; -- guess-p-verb
+lin set_to_V = advV (lin V OP_set_V2) OP_to_Adv ; -- guess-p-verb
+lin set_up_V = advV (lin V OP_set_V2) OP_up_Adv ; -- guess-p-verb
+lin set_up_V2 = prepV2 (lin V OP_set_V2) OP_up_Prep ; -- guess-p-verb
+lin set_upon_V2 = prepV2 (lin V OP_set_V2) OP_upon_Prep ; -- guess-p-verb
 lin seta_N = variants {} ; -- status=guess
 lin setback_N = mkN "bakslag" neutrum ; -- comment=4
 lin setscrew_N = variants {} ; -- status=guess
@@ -51764,22 +51743,21 @@ lin sisterly_A = variants {} ; -- status=guess
 lin siswati_N = variants {} ; -- status=guess
 lin sit_V = L.sit_V ;
 lin sit_V2 = mkV2 "sitta" "satt" "suttit" ;
-lin sit_about_V = mkV "värper" ; -- comment=8
-lin sit_around_V = mkV "värper" ; -- comment=8
-lin sit_back_V = mkV "värper" ; -- comment=8
-lin sit_by_V = mkV "värper" ; -- comment=8
-lin sit_down_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_in_N = variants {} ; -- status=guess
-lin sit_in_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_in_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_in_on_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_on_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_out_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_over_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_through_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin sit_up_V = mkV "värper" ; -- comment=8
-lin sit_with_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
+lin sit_about_V = advV OP_sit_V OP_about_Adv ; -- guess-p-verb
+lin sit_around_V = advV OP_sit_V OP_around_Adv ; -- guess-p-verb
+lin sit_back_V = advV OP_sit_V OP_back_Adv ; -- guess-p-verb
+lin sit_by_V = advV OP_sit_V OP_by_Adv ; -- guess-p-verb
+lin sit_down_V2 = prepV2 OP_sit_V OP_down_Prep ; -- guess-p-verb
+lin sit_for_V2 = prepV2 OP_sit_V OP_for_Prep ; -- guess-p-verb
+lin sit_in_V2 = prepV2 OP_sit_V OP_in_Prep ; -- guess-p-verb
+lin sit_in_for_V2 = prepV2 (advV OP_sit_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin sit_in_on_V2 = prepV2 (advV OP_sit_V OP_in_Adv ) OP_on_Prep ; -- guess-p-verb
+lin sit_on_V2 = prepV2 OP_sit_V OP_on_Prep ; -- guess-p-verb
+lin sit_out_V2 = prepV2 OP_sit_V OP_out_Prep ; -- guess-p-verb
+lin sit_over_V2 = prepV2 OP_sit_V OP_over_Prep ; -- guess-p-verb
+lin sit_through_V2 = prepV2 OP_sit_V OP_through_Prep ; -- guess-p-verb
+lin sit_up_V = advV OP_sit_V OP_up_Adv ; -- guess-p-verb
+lin sit_with_V2 = prepV2 OP_sit_V OP_with_Prep ; -- guess-p-verb
 lin sitar_N = variants {} ; -- status=guess
 lin site_N = mkN "tomt" "tomter" | mkN "sajt" "sajter" ; --- split
 lin site_V = mkV "förlägga" "förlade" "förlagt" ; -- comment=2
@@ -54031,23 +54009,20 @@ lin stanchion_N = mkN "stolpe" utrum ; -- comment=2
 lin stand_N = mkN "ståndpunkt" "ståndpunkter" | mkN "stånd" neutrum ; -- SaldoWN -- comment=10
 lin stand_V = L.stand_V ;
 lin stand_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ;
-lin stand_about_V = mkV "ställer" ; -- comment=6
-lin stand_around_V = mkV "ställer" ; -- comment=6
-lin stand_aside_V = mkV "ställer" ; -- comment=6
-lin stand_back_V = mkV "ställer" ; -- comment=6
-lin stand_by_V = mkV "ställer" ; -- comment=6
-lin stand_by_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin stand_down_V = mkV "ställer" ; -- comment=6
-lin stand_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin stand_in_N = variants {} ; -- status=guess
-lin stand_in_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin stand_out_V = mkV "framstå" "framstod" "framstått" ;
-lin stand_to_N = variants {} ; -- status=guess
-lin stand_up_A = variants {} ; -- status=guess
-lin stand_up_V = mkV "ställer" ; -- comment=6
-lin stand_up_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin stand_up_for_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
-lin stand_up_to_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=5
+lin stand_about_V = advV OP_stand_V OP_about_Adv ; -- guess-p-verb
+lin stand_around_V = advV OP_stand_V OP_around_Adv ; -- guess-p-verb
+lin stand_aside_V = advV OP_stand_V OP_aside_Adv ; -- guess-p-verb
+lin stand_back_V = advV OP_stand_V OP_back_Adv ; -- guess-p-verb
+lin stand_by_V = advV OP_stand_V OP_by_Adv ; -- guess-p-verb
+lin stand_by_V2 = prepV2 OP_stand_V OP_by_Prep ; -- guess-p-verb
+lin stand_down_V = advV OP_stand_V OP_down_Adv ; -- guess-p-verb
+lin stand_for_V2 = prepV2 OP_stand_V OP_for_Prep ; -- guess-p-verb
+lin stand_in_for_V2 = prepV2 (advV OP_stand_V OP_in_Adv ) OP_for_Prep ; -- guess-p-verb
+lin stand_out_V = advV OP_stand_V OP_out_Adv ; -- guess-p-verb
+lin stand_up_V = advV OP_stand_V OP_up_Adv ; -- guess-p-verb
+lin stand_up_V2 = prepV2 OP_stand_V OP_up_Prep ; -- guess-p-verb
+lin stand_up_for_V2 = prepV2 (advV OP_stand_V OP_up_Adv ) OP_for_Prep ; -- guess-p-verb
+lin stand_up_to_V2 = prepV2 (advV OP_stand_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
 lin standard_A = mkA "standard" "standart" ;
 lin standard_N = mkN "standard" "standarder" ;
 lin standard_bearer_N = variants {} ; -- status=guess
@@ -57681,18 +57656,18 @@ lin throw_V = mkV "kasta" | mkV "slänger" ;
 lin throw_V2 = L.throw_V2 ;
 lin throw_away_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
 lin throw_in_N = variants {} ; -- status=guess
-lin throw_in_V = mkV "ställer" ; -- comment=14
-lin throw_in_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
-lin throw_off_V = mkV "ställer" ; -- comment=14
-lin throw_off_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
-lin throw_on_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
-lin throw_out_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
-lin throw_over_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
-lin throw_together_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
-lin throw_up_V = mkV "ställer" ; -- comment=14
-lin throw_up_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
-lin throw_yourself_at_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
-lin throw_yourself_into_V2 = dirV2 (partV (mkV "kastar")"ut") ; -- comment=20
+lin throw_in_V = advV OP_throw_V OP_in_Adv ; -- guess-p-verb
+lin throw_in_V2 = prepV2 OP_throw_V OP_in_Prep ; -- guess-p-verb
+lin throw_off_V = advV OP_throw_V OP_off_Adv ; -- guess-p-verb
+lin throw_off_V2 = prepV2 OP_throw_V OP_off_Prep ; -- guess-p-verb
+lin throw_on_V2 = prepV2 OP_throw_V OP_on_Prep ; -- guess-p-verb
+lin throw_out_V2 = prepV2 OP_throw_V OP_out_Prep ; -- guess-p-verb
+lin throw_over_V2 = prepV2 OP_throw_V OP_over_Prep ; -- guess-p-verb
+lin throw_together_V2 = mkV2 (advV OP_throw_V OP_together_Adv ) ; -- guess-p-verb
+lin throw_up_V = advV OP_throw_V OP_up_Adv ; -- guess-p-verb
+lin throw_up_V2 = prepV2 OP_throw_V OP_up_Prep ; -- guess-p-verb
+lin throw_yourself_at_V2 = variants {} ; -- guess-p-verb
+lin throw_yourself_into_V2 = variants {} ; -- guess-p-verb
 lin throwaway_N = variants {} ; -- status=guess
 lin throwback_N = variants {} ; -- status=guess
 lin thrower_N = variants {} ; -- status=guess
@@ -59401,33 +59376,28 @@ lin turku_PN = mkPN "Åbo" neutrum ; -- src=geonames status=guess
 lin turmeric_N = mkN "gurkmeja" ; -- status=guess
 lin turmoil_N = mkN "tumult" neutrum ; -- status=guess
 lin turn_N = mkN "vändning" | mkN "tur" "turer" ; --- split -- | make a turn -- | your turn
-lin turn_V = L.turn_V ;
+lin turn_V = mkV "vänder" ;
 lin turn_V2 = mkV2 I.vrida_V ;
 lin turn_VA = mkVA I.bliva_V ;
-lin turn_against_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_around_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_away_V = mkV "svänger" ; -- comment=30
-lin turn_away_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_back_V = mkV "svänger" ; -- comment=30
-lin turn_down_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_in_V = mkV "svänger" ; -- comment=30
-lin turn_in_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_into_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_off_N = variants {} ; -- status=guess
-lin turn_off_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_on_N = variants {} ; -- status=guess
-lin turn_on_V = mkV "svänger" ; -- comment=30
-lin turn_on_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_out_N = variants {} ; -- status=guess
-lin turn_out_V = mkV "svänger" ; -- comment=30
-lin turn_out_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_over_V = mkV "svänger" ; -- comment=30
-lin turn_over_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_round_N = variants {} ; -- status=guess
-lin turn_to_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
-lin turn_up_N = variants {} ; -- status=guess
-lin turn_up_V = mkV "svänger" ; -- comment=30
-lin turn_up_V2 = dirV2 (partV (mkV "rundar")"till") ; -- comment=10
+lin turn_against_V2 = prepV2 OP_turn_V OP_against_Prep ; -- guess-p-verb
+lin turn_around_V2 = prepV2 OP_turn_V OP_around_Prep ; -- guess-p-verb
+lin turn_away_V = advV OP_turn_V OP_away_Adv ; -- guess-p-verb
+lin turn_away_V2 = mkV2 (advV OP_turn_V OP_away_Adv ) ; -- guess-p-verb
+lin turn_back_V = advV OP_turn_V OP_back_Adv ; -- guess-p-verb
+lin turn_down_V2 = prepV2 OP_turn_V OP_down_Prep ; -- guess-p-verb
+lin turn_in_V = advV OP_turn_V OP_in_Adv ; -- guess-p-verb
+lin turn_in_V2 = prepV2 OP_turn_V OP_in_Prep ; -- guess-p-verb
+lin turn_into_V2 = prepV2 OP_turn_V OP_into_Prep ; -- guess-p-verb
+lin turn_off_V2 = prepV2 OP_turn_V OP_off_Prep ; -- guess-p-verb
+lin turn_on_V = advV OP_turn_V OP_on_Adv ; -- guess-p-verb
+lin turn_on_V2 = prepV2 OP_turn_V OP_on_Prep ; -- guess-p-verb
+lin turn_out_V = advV OP_turn_V OP_out_Adv ; -- guess-p-verb
+lin turn_out_V2 = prepV2 OP_turn_V OP_out_Prep ; -- guess-p-verb
+lin turn_over_V = advV OP_turn_V OP_over_Adv ; -- guess-p-verb
+lin turn_over_V2 = prepV2 OP_turn_V OP_over_Prep ; -- guess-p-verb
+lin turn_to_V2 = prepV2 OP_turn_V OP_to_Prep ; -- guess-p-verb
+lin turn_up_V = advV OP_turn_V OP_up_Adv ; -- guess-p-verb
+lin turn_up_V2 = prepV2 OP_turn_V OP_up_Prep ; -- guess-p-verb
 lin turnaround_N = variants {} ; -- status=guess
 lin turnbuckle_N = mkN "vantskruv" ; -- status=guess
 lin turncoat_N = mkN "kappvändare" | mkN "någon som vänder kappan efter vinden" | mkN "överlöpare" ; -- status=guess status=guess status=guess
@@ -62583,15 +62553,15 @@ lin wait_N = mkN "väntetid" "väntetider" ; -- comment=3
 lin wait_V = mkV "vänta" | mkV "dröjer" ;
 lin wait_V2 = L.wait_V2 ;
 lin wait_VV = mkVV (reflV (mkV "vänta")) ;
-lin wait_about_V = mkV "dröja" "dröjde" "dröjt" ; -- comment=7
-lin wait_around_V = mkV "dröja" "dröjde" "dröjt" ; -- comment=7
-lin wait_behind_V = mkV "dröja" "dröjde" "dröjt" ; -- comment=7
-lin wait_in_V = mkV "dröja" "dröjde" "dröjt" ; -- comment=7
-lin wait_on_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- status=guess
-lin wait_out_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- status=guess
-lin wait_up_V = mkV "dröja" "dröjde" "dröjt" ; -- comment=7
-lin wait_up_for_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- status=guess
-lin wait_upon_V2 = dirV2 (partV (mkV "väntar")"ut") ; -- status=guess
+lin wait_about_V = advV OP_wait_V OP_about_Adv ; -- guess-p-verb
+lin wait_around_V = advV OP_wait_V OP_around_Adv ; -- guess-p-verb
+lin wait_behind_V = advV OP_wait_V OP_behind_Adv ; -- guess-p-verb
+lin wait_in_V = advV OP_wait_V OP_in_Adv ; -- guess-p-verb
+lin wait_on_V2 = prepV2 OP_wait_V OP_on_Prep ; -- guess-p-verb
+lin wait_out_V2 = prepV2 OP_wait_V OP_out_Prep ; -- guess-p-verb
+lin wait_up_V = advV OP_wait_V OP_up_Adv ; -- guess-p-verb
+lin wait_up_for_V2 = prepV2 (advV OP_wait_V OP_up_Adv ) OP_for_Prep ; -- guess-p-verb
+lin wait_upon_V2 = prepV2 OP_wait_V OP_upon_Prep ; -- guess-p-verb
 lin waiter_N = mkN "kypare" utrum ; -- comment=4
 lin waiting_A = variants {} ; --
 lin waiting_N = variants {} ; --
@@ -64622,7 +64592,7 @@ oper OP_past_Prep : Prep = mkPrep "förbi" ; -- status=guess
 oper OP_without_Prep : Prep = S.without_Prep ;
 oper OP_toward_Prep : Prep = mkPrep "mot" ;
 oper OP_up_Adv : Adv = mkAdv "upp" ;
-oper OP_in_Adv : Adv = mkAdv "inne" ;
+oper OP_in_Adv : Adv = mkAdv "in" ;
 oper OP_on_Adv : Adv = mkAdv "på" ;
 oper OP_back_Adv : Adv = mkAdv "tillbaka" | mkAdv "åter" ;
 oper OP_around_Adv : Adv = mkAdv "omkring" ;
