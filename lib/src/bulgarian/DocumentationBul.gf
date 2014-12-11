@@ -92,7 +92,9 @@ lin
           tr (intagAttr "th" "colspan=\"2\" rowspan=\"2\"" "мн.ч." ++
               th "нечленувано" ++ td (a.s ! (APl Indef))) ++
           tr (th "членувано" ++ td (a.s ! (APl Def)))
-        ) ;
+        ) ++
+        heading1 ("Наречие") ++
+        paragraph (a.s ! (ASg Neut Indef)) ;
     s3= ""
     } ;
 
