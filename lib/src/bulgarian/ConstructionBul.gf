@@ -9,7 +9,7 @@ lincat
   Monthday = NP ;
   Month = N ; 
   Year = NP ;
-  Language = PN ;
+  Language = N ;
 
 lin
   hungry_VP = mkVP (mkA079 "гладен") ;
@@ -46,7 +46,8 @@ lin
 
 lin
   InLanguage l = SyntaxBul.mkAdv on_Prep (mkNP l) ;
-  languagePN l = l ;
+  languageCN l = mkCN l ;
+  languageNP l = mkNP l ;
 
 lin
   weekdayN w = w ;
@@ -88,41 +89,41 @@ lin
   december_Month = mkMonth "декември" "декемврийски" ;
 
 lin
-  afrikaans_Language = mkPN "африканс" R.Masc;
-  amharic_Language = mkPN "амхарски" R.Masc;
-  arabic_Language = mkPN "aрабски" R.Masc;
-  bulgarian_Language = mkPN "български" R.Masc;
-  catalan_Language = mkPN "каталунски" R.Masc;
-  chinese_Language = mkPN "китайски" R.Masc;
-  danish_Language = mkPN "датски" R.Masc;
-  dutch_Language = mkPN "холандски" R.Masc;
-  english_Language = mkPN "английски" R.Masc;
-  estonian_Language = mkPN "естонски" R.Masc;
-  finnish_Language = mkPN "финландски" R.Masc;
-  french_Language = mkPN "френски" R.Masc;
-  german_Language = mkPN "немски" R.Masc;
-  greek_Language = mkPN "гръцки" R.Masc;
-  hebrew_Language = mkPN "еврейски" R.Masc;
-  hindi_Language = mkPN "хинди" R.Masc;
-  japanese_Language = mkPN "японски" R.Masc;
-  italian_Language = mkPN "италиянски" R.Masc;
-  latin_Language = mkPN "латински" R.Masc;
-  latvian_Language = mkPN "латвийски" R.Masc;
-  maltese_Language = mkPN "малтийски" R.Masc;
-  nepali_Language = mkPN "непалски" R.Masc;
-  norwegian_Language = mkPN "норвежки" R.Masc;
-  persian_Language = mkPN "персийски" R.Masc;
-  polish_Language = mkPN "полски" R.Masc;
-  punjabi_Language = mkPN "пънджаби" R.Masc;
-  romanian_Language = mkPN "румънски" R.Masc;
-  russian_Language = mkPN "руски" R.Masc;
-  sindhi_Language = mkPN "синди" R.Masc;
-  spanish_Language = mkPN "испански" R.Masc;
-  swahili_Language = mkPN "суахили" R.Masc;
-  swedish_Language = mkPN "шведски" R.Masc;
-  thai_Language = mkPN "тайландски" R.Masc;
-  turkish_Language = mkPN "турски" R.Masc;
-  urdu_Language = mkPN "урду" R.Masc;
+  afrikaans_Language = mkN007 "африканс";
+  amharic_Language = substantiveN (mkA078 "амхарски") (AMasc NonHuman);
+  arabic_Language = substantiveN (mkA078 "aрабски") (AMasc NonHuman);
+  bulgarian_Language = substantiveN (mkA078 "български") (AMasc NonHuman)
+  catalan_Language = substantiveN (mkA078 "каталунски") (AMasc NonHuman)
+  chinese_Language = substantiveN (mkA078 "китайски") (AMasc NonHuman)
+  danish_Language = substantiveN (mkA078 "датски") (AMasc NonHuman)
+  dutch_Language = substantiveN (mkA078 "холандски") (AMasc NonHuman)
+  english_Language = substantiveN (mkA078 "английски") (AMasc NonHuman)
+  estonian_Language = substantiveN (mkA078 "естонски") (AMasc NonHuman)
+  finnish_Language = substantiveN (mkA078 "финландски") (AMasc NonHuman)
+  french_Language = substantiveN (mkA078 "френски") (AMasc NonHuman)
+  german_Language = substantiveN (mkA078 "немски") (AMasc NonHuman)
+  greek_Language = substantiveN (mkA078 "гръцки") (AMasc NonHuman)
+  hebrew_Language = substantiveN (mkA078 "еврейски") (AMasc NonHuman)
+  hindi_Language = mkN065 "хинди";
+  japanese_Language = substantiveN (mkA078 "японски") (AMasc NonHuman)
+  italian_Language = substantiveN (mkA078 "италиянски") (AMasc NonHuman)
+  latin_Language = substantiveN (mkA078 "латински") (AMasc NonHuman)
+  latvian_Language = substantiveN (mkA078 "латвийски") (AMasc NonHuman)
+  maltese_Language = substantiveN (mkA078 "малтийски") (AMasc NonHuman)
+  nepali_Language = substantiveN (mkA078 "непалски") (AMasc NonHuman)
+  norwegian_Language = substantiveN (mkA078 "норвежки") (AMasc NonHuman)
+  persian_Language = substantiveN (mkA078 "персийски") (AMasc NonHuman)
+  polish_Language = substantiveN (mkA078 "полски") (AMasc NonHuman)
+  punjabi_Language = mkN065 "пънджаби";
+  romanian_Language = substantiveN (mkA078 "румънски") (AMasc NonHuman)
+  russian_Language = substantiveN (mkA078 "руски") (AMasc NonHuman)
+  sindhi_Language = mkN065 "синди";
+  spanish_Language = substantiveN (mkA078 "испански") (AMasc NonHuman)
+  swahili_Language = mkN065 "суахили";
+  swedish_Language = substantiveN (mkA078 "шведски") (AMasc NonHuman)
+  thai_Language = substantiveN (mkA078 "тайландски") (AMasc NonHuman)
+  turkish_Language = substantiveN (mkA078 "турски") (AMasc NonHuman)
+  urdu_Language = mkN065 "урду";
 
 oper 
   mkMonth : Str -> Str -> N = \n,a -> lin N {
