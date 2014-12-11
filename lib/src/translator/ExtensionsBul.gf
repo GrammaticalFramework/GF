@@ -53,6 +53,12 @@ lin
                      vp.compl ! {gn=GSg Neut; p=P3} ;
     g = ANeut
   } ;
+  
+  GerundNP vp = {
+    s = \\_ => daComplex Simul Pos vp ! Imperf ! {gn=GSg Neut; p=P1};
+    a = {gn=GSg Neut; p=P3};
+    p = Pos
+  } ;
 
   PresPartAP vp =
     let ap : AForm => Str
@@ -86,6 +92,9 @@ lin
     {s = vp.ad.s ++
          vp.s ! Imperf ! VGerund ++
          vp.compl ! {gn=GSg Neut; p=P3}} ;
+         
+  InOrderToVP vp =
+    {s = "за" ++ daComplex Simul Pos vp ! Imperf ! {gn=GSg Neut; p=P3}};
 
   PositAdVAdj a = {s = a.adv} ;
   
