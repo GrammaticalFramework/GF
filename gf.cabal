@@ -11,10 +11,14 @@ description: GF, Grammatical Framework, is a programming language for multilingu
 homepage: http://www.grammaticalframework.org/
 bug-reports: http://code.google.com/p/grammatical-framework/issues/list
 maintainer: Thomas Hallgren
-tested-with: GHC==7.4.2, GHC==7.6.3
+tested-with: GHC==7.4.2, GHC==7.6.3, GHC==7.8.3
 
 data-dir: src
-data-files: www/*.html
+data-files: tools/gf.el
+	    tools/gf.lang
+	    tools/dark-filetypes.GF.conf
+	    tools/light-filetypes.GF.conf
+	    www/*.html
 	    www/P/*.png
 	    www/gfse/*.html
 	    www/gfse/*.css
