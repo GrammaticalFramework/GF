@@ -12,8 +12,8 @@ hw=$(uname -m)  # Hardware name (e.g. i686 or x86_64)
 # GF version number:
 ver=$(grep -i ^version: gf.cabal | sed -e 's/version://' -e 's/ //g')
 
-name=gf-$ver
-destdir=$PWD/dist/$name            # assemble binary dist here
+name="gf-$ver"
+destdir="$PWD/dist/$name"          # assemble binary dist here
 prefix=${PREFIX:-/usr/local}       # where to install
 fmt=${FMT:-tar.gz}                 # binary package format (tar.gz or pkg)
 
@@ -26,15 +26,15 @@ set -x                             # print commands before exuting them
 
 ## First configure & build the C run-time system
 pushd src/runtime/c
-bash setup.sh configure --prefix=$prefix
+bash setup.sh configure --prefix="$prefix"
 bash setup.sh build
-bash setup.sh install prefix=$destdir$prefix
+bash setup.sh install prefix="$destdir$prefix"
 popd
 
 ## Build the python binding to the C run-time system
 pushd src/runtime/python
 EXTRA_INCLUDE_DIRS="$extrainclude" EXTRA_LIB_DIRS="$extralib" python setup.py build
-python setup.py install --prefix=$destdir$prefix
+python setup.py install --prefix="$destdir$prefix"
 popd
 
 ## Build the Java binding to the C run-time system
@@ -44,22 +44,22 @@ popd
 
 ## Build GF, with C run-time support enabled
 cabal install --only-dependencies
-cabal configure --prefix=$prefix -fserver -fc-runtime $extra
+cabal configure --prefix="$prefix" -fserver -fc-runtime $extra
 DYLD_LIBRARY_PATH="$extralib" LD_LIBRARY_PATH="$extralib" cabal build
-cabal copy --destdir=$destdir
-libdir=$(dirname $(find $destdir -name PGF.hi))
+cabal copy --destdir="$destdir"
+libdir=$(dirname $(find "$destdir" -name PGF.hi))
 cabal register --gen-pkg-config=$libdir/gf-$ver.conf
 
 case $fmt in
     tar.gz)
-	targz=$name-bin-$hw-$os.tar.gz     # the final tar file
-	tar -C $destdir/$prefix -zcf dist/$targz .
+	targz="$name-bin-$hw-$os.tar.gz"     # the final tar file
+	tar -C "$destdir/$prefix" -zcf "dist/$targz" .
 	echo "Created $targz, consider renaming it to something more user friendly"
 	;;
     pkg)
 	pkg=$name.pkg
-	pkgbuild --identifier org.grammaticalframework.gf.pkg --version 3.6 --root $destdir/usr --install-location /usr dist/$pkg
+	pkgbuild --identifier org.grammaticalframework.gf.pkg --version "$ver" --root "$destdir/usr" --install-location "$prefix" dist/$pkg
 	echo "Created $pkg"
 esac
 
-rm -r $destdir
+rm -r "$destdir"
