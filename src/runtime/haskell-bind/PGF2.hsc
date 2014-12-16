@@ -15,7 +15,7 @@
 module PGF2 (-- * PGF
              PGF,readPGF,abstractName,startCat,
              -- * Concrete syntax
-             Concr,languages,parse,linearize,
+             Concr,languages,parse,parseWithHeuristics,linearize,
              -- * Trees
              Expr,readExpr,showExpr,unApp,
              -- * Morphology
@@ -234,8 +234,8 @@ getAnalysis ref self c_lemma c_anal prob exn = do
 parse :: Concr -> String -> String -> Either String [(Expr,Float)]
 parse lang cat sent = parse_with_heuristics lang cat sent (-1.0) []
 
-parse_with_heuristics :: Concr -> String -> String -> Double -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))] -> Either String [(Expr,Float)]
-parse_with_heuristics lang cat sent heuristic callbacks =
+parseWithHeuristics :: Concr -> String -> String -> Double -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))] -> Either String [(Expr,Float)]
+parseWithHeuristics lang cat sent heuristic callbacks =
   unsafePerformIO $
     do parsePl <- gu_new_pool
        exprPl  <- gu_new_pool
