@@ -3,9 +3,6 @@
 
 #include <pgf/data.h>
 
-PgfCallbacksMap*
-pgf_new_callbacks_map(PgfConcr* concr, GuPool *pool);
-
 // literal for named entities recognition
 extern PgfLiteralCallback pgf_nerc_literal_callback;
 

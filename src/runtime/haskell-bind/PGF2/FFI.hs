@@ -91,7 +91,7 @@ data PgfFullFormEntry
 data PgfMorphoCallback
 data PgfPrintContext
 data PgfType
-data PgfLiteralCallback
+data PgfCallbacksMap
 
 foreign import ccall "pgf/pgf.h pgf_read"
   pgf_read :: CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfPGF)
@@ -138,8 +138,8 @@ foreign import ccall "pgf/pgf.h pgf_print_name"
 foreign import ccall "pgf/pgf.h pgf_linearize"
   pgf_linearize :: Ptr PgfConcr -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()
 
-foreign import ccall "pgf/pgf.h pgf_parse"
-  pgf_parse :: Ptr PgfConcr -> CString -> CString -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
+foreign import ccall "pgf/pgf.h pgf_parse_with_heuristics"
+  pgf_parse_with_heuristics :: Ptr PgfConcr -> CString -> CString -> Double -> Ptr PgfCallbacksMap -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
 
 type LiteralMatchCallback = Ptr () -> CInt -> CString -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
 
@@ -151,11 +151,11 @@ type LiteralPredictCallback = Ptr () -> CInt -> CString -> Ptr GuPool -> IO (Ptr
 foreign import ccall "wrapper"
   wrapLiteralPredictCallback :: LiteralPredictCallback -> IO (FunPtr LiteralPredictCallback)
 
-foreign import ccall 
-  hspgf_new_literal_callback :: Ptr PgfConcr -> IO (Ptr PgfLiteralCallback)
+foreign import ccall "pgf/pgf.h pgf_new_callbacks_map"
+  pgf_new_callbacks_map :: Ptr PgfConcr -> Ptr GuPool -> IO (Ptr PgfCallbacksMap)
 
-foreign import ccall "pgf/pgf.h pgf_concr_add_literal"
-  pgf_concr_add_literal :: Ptr PgfConcr -> CString -> Ptr PgfLiteralCallback -> Ptr GuExn -> IO ()
+foreign import ccall
+  hspgf_callbacks_map_add_literal :: Ptr PgfConcr -> Ptr PgfCallbacksMap -> CString -> FunPtr LiteralMatchCallback -> FunPtr LiteralPredictCallback -> Ptr GuPool -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_lookup_morpho"
   pgf_lookup_morpho :: Ptr PgfConcr -> CString -> Ptr PgfMorphoCallback -> Ptr GuExn -> IO ()

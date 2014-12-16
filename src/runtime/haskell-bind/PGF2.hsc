@@ -26,6 +26,7 @@ module PGF2 (-- * PGF
 
 import Prelude hiding (fromEnum)
 import Control.Exception(Exception,throwIO)
+import Control.Monad(forM_)
 import System.IO.Unsafe(unsafePerformIO,unsafeInterleaveIO)
 import PGF2.FFI
 
@@ -231,14 +232,18 @@ getAnalysis ref self c_lemma c_anal prob exn = do
   writeIORef ref ((lemma, anal, prob):ans)
 
 parse :: Concr -> String -> String -> Either String [(Expr,Float)]
-parse lang cat sent =
+parse lang cat sent = parse_with_heuristics lang cat sent (-1.0) []
+
+parse_with_heuristics :: Concr -> String -> String -> Double -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))] -> Either String [(Expr,Float)]
+parse_with_heuristics lang cat sent heuristic callbacks =
   unsafePerformIO $
     do parsePl <- gu_new_pool
        exprPl  <- gu_new_pool
        exn     <- gu_new_exn parsePl
        enum    <- withCString cat $ \cat ->
-                    withCString sent $ \sent ->
-                      pgf_parse (concr lang) cat sent exn parsePl exprPl
+                    withCString sent $ \sent -> do
+                      callbacks_map <- mkCallbacksMap (concr lang) callbacks parsePl
+                      pgf_parse_with_heuristics (concr lang) cat sent heuristic callbacks_map exn parsePl exprPl
        failed  <- gu_exn_is_raised exn
        if failed
          then do is_parse_error <- gu_exn_caught exn gu_exn_type_PgfParseError
@@ -263,28 +268,17 @@ parse lang cat sent =
                  exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
                  return (Right exprs)
 
-addLiteral :: Concr -> String -> (Int -> String -> Int -> Maybe (Expr,Float,Int)) -> IO ()
-addLiteral lang cat match =
-  withCString cat $ \ccat ->
-  withGuPool  $ \tmp_pool -> do
-    callback <- hspgf_new_literal_callback (concr lang)
-    match    <- wrapLiteralMatchCallback match_callback
-    predict  <- wrapLiteralPredictCallback predict_callback
-    (#poke PgfLiteralCallback, match)   callback match
-    (#poke PgfLiteralCallback, predict) callback predict
-    exn      <- gu_new_exn tmp_pool
-    pgf_concr_add_literal (concr lang) ccat callback exn
-    failed <- gu_exn_is_raised exn
-    if failed
-      then do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
-              if is_exn
-                then do c_msg <- (#peek GuExn, data.data) exn
-                        msg <- peekCString c_msg
-                        throwIO (PGFError msg)
-                else throwIO (PGFError "The literal cannot be added")
-      else return ()
+mkCallbacksMap :: Ptr PgfConcr -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))] -> Ptr GuPool -> IO (Ptr PgfCallbacksMap)
+mkCallbacksMap concr callbacks pool = do
+  callbacks_map <- pgf_new_callbacks_map concr pool
+  forM_ callbacks $ \(cat,match) ->
+    withCString cat $ \ccat -> do
+      match    <- wrapLiteralMatchCallback (match_callback match)
+      predict  <- wrapLiteralPredictCallback predict_callback
+      hspgf_callbacks_map_add_literal concr callbacks_map ccat match predict pool
+  return callbacks_map
   where
-    match_callback _ clin_idx csentence poffset out_pool = do
+    match_callback match _ clin_idx csentence poffset out_pool = do
       sentence <- peekCString csentence
       coffset  <- peek poffset
       offset <- alloca $ \pcsentence -> do

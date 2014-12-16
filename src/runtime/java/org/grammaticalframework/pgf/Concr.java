@@ -8,16 +8,11 @@ public class Concr {
 	public native String getName();
 
 	public Iterable<ExprProb> parse(String startCat, String s) throws ParseError {
-		return new Parser(this, startCat, s);
+		return new Parser(this, startCat, s, -1, null);
 	}
 
-	public Expr parseBest(String startCat, String s) throws ParseError {
-		Iterator<ExprProb> iter = Parser.parse(this, startCat, s);
-		if (iter.hasNext()) {
-			return iter.next().getExpr();
-		} else {
-			return null;
-		}
+	public Iterable<ExprProb> parseWithHeuristics(String startCat, String s, double heuristics, Map<String,LiteralCallback> callbacks) throws ParseError {
+		return new Parser(this, startCat, s, heuristics, callbacks);
 	}
 
 	public Iterable<TokenProb> complete(String startCat, String s, String prefix) throws ParseError {
@@ -43,8 +38,6 @@ public class Concr {
 	public native void load(InputStream stream);
 
 	public native void unload();
-
-	public native void addLiteral(String cat, LiteralCallback callback);
 
 	//////////////////////////////////////////////////////////////////
 	// private stuff

@@ -1194,17 +1194,135 @@ void pypgf_container_descructor(PyObject *capsule)
 
 #endif
 
+typedef struct {
+	PgfLiteralCallback callback;
+	PyObject* pycallback;
+	GuFinalizer fin;
+} PyPgfLiteralCallback;
+
+static PgfExprProb*
+pypgf_literal_callback_match(PgfLiteralCallback* self,
+                             size_t lin_idx,
+                             GuString sentence, size_t* poffset,
+                             GuPool *out_pool)
+{
+	PyPgfLiteralCallback* callback = 
+		gu_container(self, PyPgfLiteralCallback, callback);
+
+	PyObject* result =
+		PyObject_CallFunction(callback->pycallback, "isi", 
+		                      lin_idx, sentence, *poffset);
+	if (result == NULL || result == Py_None)
+		return NULL;
+
+	PgfExprProb* ep = gu_new(PgfExprProb, out_pool);
+
+	ExprObject* pyexpr;
+	if (!PyArg_ParseTuple(result, "Ofi", &pyexpr, &ep->prob, poffset))
+        return NULL;
+	ep->expr = pyexpr->expr;
+	
+	{
+		// This is an uggly hack. We first show the expression ep->expr
+		// and then we read it back but in out_pool. The whole purpose
+		// of this is to copy the expression from the temporary pool
+		// that was created in the Java binding to the parser pool.
+		// There should be a real copying function or even better
+		// there must be a way to avoid copying at all.
+
+		GuPool* tmp_pool = gu_local_pool();
+
+		GuExn* err = gu_exn(tmp_pool);
+		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+
+		pgf_print_expr(ep->expr, NULL, 0, out, err);
+
+		GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
+		GuIn* in = gu_data_in((uint8_t*) str, strlen(str), tmp_pool);
+
+		ep->expr = pgf_read_expr(in, out_pool, err);
+		if (!gu_ok(err) || gu_variant_is_null(ep->expr)) {
+			PyErr_SetString(PGFError, "The expression cannot be parsed");
+			gu_pool_free(tmp_pool);
+			return NULL;
+		}
+
+		gu_pool_free(tmp_pool);
+	}
+
+	Py_DECREF(pyexpr);
+
+	return ep;
+}
+
+static GuEnum*
+pypgf_literal_callback_predict(PgfLiteralCallback* self,
+	                           size_t lin_idx,
+	                           GuString prefix,
+	                           GuPool *out_pool)
+{
+	return NULL;
+}
+
+static void 
+pypgf_literal_callback_fin(GuFinalizer* self)
+{
+	PyPgfLiteralCallback* callback = 
+		gu_container(self, PyPgfLiteralCallback, fin);
+
+	Py_XDECREF(callback->pycallback);
+}
+
+static PgfCallbacksMap*
+pypgf_new_callbacks_map(PgfConcr* concr, PyObject *py_callbacks,
+                        GuPool* pool)
+{
+	PgfCallbacksMap* callbacks =
+		pgf_new_callbacks_map(concr, pool);
+
+	if (py_callbacks == NULL)
+		return callbacks;
+
+	size_t n_callbacks = PyList_Size(py_callbacks);
+	for (size_t i = 0; i < n_callbacks; i++) {
+		PyObject* item =
+			PyList_GetItem(py_callbacks, i);
+
+		PyObject* pycallback = NULL;
+		const char* cat = NULL;
+		if (!PyArg_ParseTuple(item, "sO", &cat, &pycallback))
+			return NULL;
+
+		PyPgfLiteralCallback* callback = gu_new(PyPgfLiteralCallback, pool);
+		callback->callback.match   = pypgf_literal_callback_match;
+		callback->callback.predict = pypgf_literal_callback_predict;
+		callback->pycallback = pycallback;
+		callback->fin.fn = pypgf_literal_callback_fin;
+
+		gu_pool_finally(pool, &callback->fin);
+
+		pgf_callbacks_map_add_literal(concr, callbacks,
+		                              cat, &callback->callback);
+	}
+	
+	return callbacks;
+}
+
 static IterObject*
 Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
-	static char *kwlist[] = {"sentence", "cat", "n", "heuristics", NULL};
+	static char *kwlist[] = {"sentence", "cat", "n", "heuristics", "callbacks", NULL};
 
 	const char *sentence = NULL;
 	PgfCId catname = pgf_start_cat(self->grammar->pgf);
 	int max_count = -1;
 	double heuristics = -1;
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|sid", kwlist,
-                                     &sentence, &catname, &max_count, &heuristics))
+	PyObject* py_callbacks = NULL;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|sidO!", kwlist,
+                                     &sentence, &catname, &max_count,
+                                     &heuristics,
+                                     &PyList_Type, &py_callbacks))
         return NULL;
 
 	IterObject* pyres = (IterObject*) 
@@ -1229,9 +1347,13 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 
 	GuExn* parse_err = gu_exn(pyres->pool);
 
+	PgfCallbacksMap* callbacks =
+		pypgf_new_callbacks_map(self->concr, py_callbacks, pyres->pool);
+	if (callbacks == NULL)
+		return NULL;
 	pyres->res =
 		pgf_parse_with_heuristics(self->concr, catname, sentence, 
-		                          heuristics, parse_err,
+		                          heuristics, callbacks, parse_err,
 		                          pyres->pool, out_pool);
 
 	if (!gu_ok(parse_err)) {
@@ -1331,120 +1453,6 @@ Concr_parseval(ConcrObject* self, PyObject *args) {
     gu_pool_free(tmp_pool);
     
     return Py_BuildValue("ddd", precision, recall, exact);
-}
-
-typedef struct {
-	PgfLiteralCallback callback;
-	PyObject* pycallback;
-	GuFinalizer fin;
-} PyPgfLiteralCallback;
-
-static PgfExprProb*
-pypgf_literal_callback_match(PgfLiteralCallback* self,
-                             size_t lin_idx,
-                             GuString sentence, size_t* poffset,
-                             GuPool *out_pool)
-{
-	PyPgfLiteralCallback* callback = 
-		gu_container(self, PyPgfLiteralCallback, callback);
-
-	PyObject* result =
-		PyObject_CallFunction(callback->pycallback, "isi", 
-		                      lin_idx, sentence, *poffset);
-	if (result == NULL || result == Py_None)
-		return NULL;
-
-	PgfExprProb* ep = gu_new(PgfExprProb, out_pool);
-
-	ExprObject* pyexpr;
-	if (!PyArg_ParseTuple(result, "Ofi", &pyexpr, &ep->prob, poffset))
-        return NULL;
-	ep->expr = pyexpr->expr;
-	
-	{
-		// This is an uggly hack. We first show the expression ep->expr
-		// and then we read it back but in out_pool. The whole purpose
-		// of this is to copy the expression from the temporary pool
-		// that was created in the Java binding to the parser pool.
-		// There should be a real copying function or even better
-		// there must be a way to avoid copying at all.
-
-		GuPool* tmp_pool = gu_local_pool();
-
-		GuExn* err = gu_exn(tmp_pool);
-		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
-		GuOut* out = gu_string_buf_out(sbuf);
-
-		pgf_print_expr(ep->expr, NULL, 0, out, err);
-
-		GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-		GuIn* in = gu_data_in((uint8_t*) str, strlen(str), tmp_pool);
-
-		ep->expr = pgf_read_expr(in, out_pool, err);
-		if (!gu_ok(err) || gu_variant_is_null(ep->expr)) {
-			PyErr_SetString(PGFError, "The expression cannot be parsed");
-			gu_pool_free(tmp_pool);
-			return NULL;
-		}
-
-		gu_pool_free(tmp_pool);
-	}
-
-	Py_DECREF(pyexpr);
-
-	return ep;
-}
-
-static GuEnum*
-pypgf_literal_callback_predict(PgfLiteralCallback* self,
-	                           size_t lin_idx,
-	                           GuString prefix,
-	                           GuPool *out_pool)
-{
-	return NULL;
-}
-
-static void 
-pypgf_literal_callback_fin(GuFinalizer* self)
-{
-	PyPgfLiteralCallback* callback = 
-		gu_container(self, PyPgfLiteralCallback, fin);
-
-	Py_XDECREF(callback->pycallback);
-}
-
-static PyObject*
-Concr_addLiteral(ConcrObject* self, PyObject *args) {
-	PyObject* pycallback = NULL;
-	const char* cat = NULL;
-	if (!PyArg_ParseTuple(args, "sO", &cat, &pycallback))
-        return NULL;
-
-	GuPool* pool = pgf_concr_get_pool(self->concr);
-
-	PyPgfLiteralCallback* callback = gu_new(PyPgfLiteralCallback, pool);
-	callback->callback.match   = pypgf_literal_callback_match;
-	callback->callback.predict = pypgf_literal_callback_predict;
-	callback->pycallback = pycallback;
-	callback->fin.fn = pypgf_literal_callback_fin;
-
-	gu_pool_finally(pool, &callback->fin);
-
-	GuPool* tmp_pool = gu_local_pool();
-	GuExn* err = gu_exn(tmp_pool);
-	pgf_concr_add_literal(self->concr, cat, &callback->callback, err);
-
-	if (!gu_ok(err)) {
-		if (gu_exn_caught(err, PgfExn)) {
-			GuString msg = (GuString) gu_exn_caught_data(err);
-			PyErr_SetString(PGFError, msg);
-		} else {
-			PyErr_SetString(PGFError, "The literal cannot be added");
-		}
-	}
-
-	gu_pool_free(tmp_pool);
-	Py_RETURN_NONE;
 }
 
 static PyObject*
@@ -2027,16 +2035,14 @@ static PyMethodDef Concr_methods[] = {
      "- sentence (string) or tokens (list of strings)\n"
      "- cat (string); OPTIONAL, default: the startcat of the grammar\n"
      "- n (int), max. trees; OPTIONAL, default: extract all trees\n"
-     "- heuristics (double >= 0.0); OPTIONAL, default: taken from the flags in the grammar"
+     "- heuristics (double >= 0.0); OPTIONAL, default: taken from the flags in the grammar\n"
+     "- callbacks (list of category and callback); OPTIONAL, default: built-in callbacks only for Int, String and Float"
     },
     {"complete", (PyCFunction)Concr_complete, METH_VARARGS | METH_KEYWORDS,
      "Parses a partial string and returns a list with the top n possible next tokens"
     },
     {"parseval", (PyCFunction)Concr_parseval, METH_VARARGS,
      "Computes precision, recall and exact match for the parser on a given abstract tree"
-    },
-    {"addLiteral", (PyCFunction)Concr_addLiteral, METH_VARARGS,
-     "adds callbacks for custom literals in the grammar"
     },
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a string"

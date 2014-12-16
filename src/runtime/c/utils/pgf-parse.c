@@ -58,10 +58,6 @@ int main(int argc, char* argv[]) {
     goto fail;
   }
 
-  /* // Register a callback for the literal category Symbol */
-  /* pgf_parser_add_literal(from_concr, "Symb", */
-  /*                        &pgf_nerc_literal_callback); */
-
   clock_t end = clock();
   double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
@@ -109,7 +105,8 @@ int main(int argc, char* argv[]) {
     clock_t start = clock();
 
     GuExn* parse_err = gu_new_exn(ppool);
-    GuEnum* result = pgf_parse_with_heuristics(concr, cat, line, heuristics, parse_err, ppool, ppool);
+    PgfCallbacksMap* callbacks = pgf_new_callbacks_map(concr, ppool);
+    GuEnum* result = pgf_parse_with_heuristics(concr, cat, line, heuristics, callbacks, parse_err, ppool, ppool);
 
     PgfExprProb* ep = NULL;
     if (gu_ok(parse_err))

@@ -6,24 +6,9 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.inputmethod.CompletionInfo;
 
-import org.grammaticalframework.pgf.Concr;
-import org.grammaticalframework.pgf.Expr;
-import org.grammaticalframework.pgf.ExprProb;
-import org.grammaticalframework.pgf.FullFormEntry;
-import org.grammaticalframework.pgf.MorphoAnalysis;
-import org.grammaticalframework.pgf.NercLiteralCallback;
-import org.grammaticalframework.pgf.UnknownLiteralCallback;
-import org.grammaticalframework.pgf.PGF;
-import org.grammaticalframework.pgf.ParseError;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import org.grammaticalframework.pgf.*;
+import java.io.*;
+import java.util.*;
 
 public class Translator {
 
@@ -256,7 +241,8 @@ public class Translator {
     	String lowerinput = input.toLowerCase() ;  // also consider lower-cased versions of the word
 
         try {
-        	Expr expr = sourceLang.parseBest("Chunk", input) ; // try parse as chunk
+        	Iterator<ExprProb> iter = sourceLang.parse("Chunk", input).iterator(); // try parse as chunk
+        	Expr expr = iter.next().getExpr();
             output = targetLang.linearize(expr);
             return output ;
         } catch (ParseError e) {                               	  // if this fails
@@ -301,8 +287,12 @@ public class Translator {
             Concr sourceLang = getSourceConcr();
             Concr targetLang = getTargetConcr();
 
+            Map<String,LiteralCallback> callbacks = new HashMap<String,LiteralCallback>();
+            callbacks.put("PN", new NercLiteralCallback(mGrammarLoader.getGrammar(), sourceLang));
+            callbacks.put("Symb", new UnknownLiteralCallback(sourceLang));
+
             int count = NUM_ALT_TRANSLATIONS;
-            for (ExprProb ep : sourceLang.parse(getGrammar().getStartCat(), input)) {
+            for (ExprProb ep : sourceLang.parseWithHeuristics(getGrammar().getStartCat(), input, -1, callbacks)) {
             	if (count-- <= 0)
             		break;
             	exprs.add(ep);
@@ -487,8 +477,6 @@ public class Translator {
 		        long t1 = System.currentTimeMillis();
 		        mConcr = mGrammarLoader.getGrammar().getLanguages().get(mLanguage.getConcrete());
 		        mConcr.load(in);
-		        mConcr.addLiteral("PN", new NercLiteralCallback(mGrammarLoader.getGrammar(), mConcr));
-		        mConcr.addLiteral("Symb", new UnknownLiteralCallback(mConcr));
 		        long t2 = System.currentTimeMillis();
 		        Log.d(TAG, name + " loaded ("+(t2-t1)+" ms)");
 		    } catch (FileNotFoundException e) {

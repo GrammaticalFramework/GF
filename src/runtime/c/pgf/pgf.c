@@ -32,6 +32,16 @@ pgf_read(const char* fpath,
 	return pgf;
 }
 
+PgfPGF*
+pgf_read_in(GuIn* in,
+            GuPool* pool, GuPool* tmp_pool, GuExn* err)
+{
+	PgfReader* rdr = pgf_new_reader(in, pool, tmp_pool, err);
+	PgfPGF* pgf = pgf_read_pgf(rdr);
+	pgf_reader_done(rdr, pgf);
+	return pgf;
+}
+
 GuString
 pgf_abstract_name(PgfPGF* pgf)
 {
@@ -169,38 +179,6 @@ pgf_has_linearization(PgfConcr* concr, PgfCId id)
 	PgfCncOverloadMap* overl_table =
 		gu_map_get(concr->fun_indices, id, PgfCncOverloadMap*);
 	return (overl_table != NULL);
-}
-
-GuPool*
-pgf_concr_get_pool(PgfConcr* concr)
-{
-	GuPool* pool = concr->pool;
-	if (pool == NULL)
-		pool = gu_container(concr->abstr, PgfPGF, abstract)->pool;
-	return pool;
-}
-
-void
-pgf_concr_add_literal(PgfConcr *concr, PgfCId cat,
-                      PgfLiteralCallback* callback,
-                      GuExn* err)
-{
-	if (concr->cnccats == NULL ||
-	    concr->callbacks == NULL) {
-		GuExnData* err_data = gu_raise(err, PgfExn);
-		if (err_data) {
-			err_data->data = "The concrete syntax is not loaded";
-			return;
-		}
-	}
-
-	PgfCncCat* cnccat =
-		gu_map_get(concr->cnccats, cat, PgfCncCat*);
-	if (cnccat == NULL)
-		return;
-
-	gu_map_put(concr->callbacks, cnccat,
-	           PgfLiteralCallback*, callback);
 }
 
 PgfExprProb*

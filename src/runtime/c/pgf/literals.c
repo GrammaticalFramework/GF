@@ -274,6 +274,19 @@ pgf_new_callbacks_map(PgfConcr* concr, GuPool *pool)
 	return callbacks;
 }
 
+void
+pgf_callbacks_map_add_literal(PgfConcr* concr, PgfCallbacksMap* callbacks,
+                              PgfCId cat, PgfLiteralCallback* callback)
+{
+	PgfCncCat* cnccat =
+		gu_map_get(concr->cnccats, cat, PgfCncCat*);
+	if (cnccat == NULL)
+		return;
+
+	gu_map_put(callbacks, cnccat,
+	           PgfLiteralCallback*, callback);
+}
+
 PgfCCat*
 pgf_literal_cat(PgfConcr* concr, PgfLiteral lit)
 {
