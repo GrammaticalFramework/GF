@@ -232,7 +232,7 @@ getAnalysis ref self c_lemma c_anal prob exn = do
   writeIORef ref ((lemma, anal, prob):ans)
 
 parse :: Concr -> String -> String -> Either String [(Expr,Float)]
-parse lang cat sent = parse_with_heuristics lang cat sent (-1.0) []
+parse lang cat sent = parseWithHeuristics lang cat sent (-1.0) []
 
 parseWithHeuristics :: Concr -> String -> String -> Double -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))] -> Either String [(Expr,Float)]
 parseWithHeuristics lang cat sent heuristic callbacks =
