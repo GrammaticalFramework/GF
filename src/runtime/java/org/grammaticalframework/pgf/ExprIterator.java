@@ -9,9 +9,9 @@ class ExprIterator implements Iterator<ExprProb> {
 	private ExprProb ep;
 	private boolean fetched;
 
-	public ExprIterator(PGF gr, long pool, long out_pool, long ref) {
+	public ExprIterator(PGF gr, Pool pool, long out_pool, long ref) {
 		this.gr       = gr;
-		this.pool     = new Pool(pool);
+		this.pool     = pool;
 		this.out_pool = new Pool(out_pool);
 		this.ref      = ref;
 		this.ep       = null;

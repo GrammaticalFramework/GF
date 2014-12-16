@@ -17,13 +17,15 @@ hspgf_literal_callback_fin(GuFinalizer* self)
 		hs_free_fun_ptr((HsFunPtr) callback->callback.predict);
 }
 
-PgfLiteralCallback*
-hspgf_new_literal_callback(PgfConcr* concr) {
-	GuPool* pool = pgf_concr_get_pool(concr);
+void
+hspgf_callbacks_map_add_literal(PgfConcr* concr, PgfCallbacksMap* callbacks,
+                                PgfCId cat, HsFunPtr match, HsFunPtr predict,
+                                GuPool* pool)
+{
 	HSPgfLiteralCallback* callback = gu_new(HSPgfLiteralCallback, pool);
-	callback->callback.match   = NULL;
-	callback->callback.predict = NULL;
+	callback->callback.match   = (void*) match;
+	callback->callback.predict = (void*) predict;
 	callback->fin.fn = hspgf_literal_callback_fin;
 	gu_pool_finally(pool, &callback->fin);
-	return &callback->callback;
+	pgf_callbacks_map_add_literal(concr, callbacks, cat, &callback->callback);
 }

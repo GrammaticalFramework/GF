@@ -199,8 +199,6 @@ typedef GuMap PgfCncOverloadMap;
 
 typedef struct PgfItem PgfItem;
 
-typedef GuMap PgfCallbacksMap;
-
 typedef GuVariant PgfSymbol;
 
 typedef enum {
@@ -280,7 +278,6 @@ struct PgfConcr {
     PgfSequences* sequences;
     GuBuf* pre_sequences;
 	PgfCIdMap* cnccats;
-	PgfCallbacksMap* callbacks;
 	int total_cats;
 	
 	GuPool* pool;     // if the language is loaded separately then this is the pool

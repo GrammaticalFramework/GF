@@ -20,7 +20,6 @@ public class Test {
 		System.out.println(gr.getAbstractName());
 		for (Map.Entry<String,Concr> entry : gr.getLanguages().entrySet()) {
 			System.out.println(entry.getKey()+" "+entry.getValue()+" "+entry.getValue().getName());
-			entry.getValue().addLiteral("PN", new NercLiteralCallback(gr,entry.getValue()));
 		}
 
 		Concr eng = gr.getLanguages().get("SimpleEng");

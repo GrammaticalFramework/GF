@@ -1,6 +1,5 @@
 #include "data.h"
 #include "expr.h"
-#include "literals.h"
 #include "evaluator.h"
 #include "reader.h"
 
@@ -1148,7 +1147,6 @@ pgf_read_concrete_content(PgfReader* rdr, PgfConcr* concr)
 	pgf_read_linrefs(rdr, concr);
 	pgf_read_ccats(rdr, concr);
 	concr->cnccats = pgf_read_cnccats(rdr, concr->abstr, concr);
-	concr->callbacks = pgf_new_callbacks_map(concr, rdr->opool); 
 	concr->total_cats = pgf_read_int(rdr);
 
 	GuMapItor clo1 = { pgf_read_ccat_cb };
@@ -1166,7 +1164,6 @@ pgf_read_concrete_init_header(PgfConcr* concr)
 	concr->fun_indices = NULL;
 	concr->coerce_idx = NULL;
 	concr->cnccats = NULL;
-	concr->callbacks = NULL;
 	concr->total_cats = 0;
 }
 

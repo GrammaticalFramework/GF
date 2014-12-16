@@ -57,6 +57,7 @@ typedef struct {
     PgfItem* free_item;
 
     prob_t heuristic_factor;
+    PgfCallbacksMap* callbacks;
     prob_t meta_prob;
 	prob_t meta_token_prob;
 } PgfParsing;
@@ -1616,7 +1617,7 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 				 * literal category so we must call the callback */
 
 				PgfLiteralCallback* callback =
-					gu_map_get(ps->concr->callbacks, 
+					gu_map_get(ps->callbacks,
 					           parg->ccat->cnccat, 
 							   PgfLiteralCallback*);
 
@@ -1861,7 +1862,7 @@ pgf_parsing_set_default_factors(PgfParsing* ps, PgfAbstr* abstr)
 }
 
 static PgfParsing*
-pgf_new_parsing(PgfConcr* concr, GuString sentence,
+pgf_new_parsing(PgfConcr* concr, GuString sentence, PgfCallbacksMap* callbacks,
                 GuPool* pool, GuPool* out_pool)
 {
 	PgfParsing* ps = gu_new(PgfParsing, pool);
@@ -1884,6 +1885,7 @@ pgf_new_parsing(PgfConcr* concr, GuString sentence,
 	ps->tp = NULL;
 	ps->free_item = NULL;
 	ps->heuristic_factor = 0;
+	ps->callbacks = callbacks;
 	ps->meta_prob = INFINITY;
 	ps->meta_token_prob = INFINITY;
 
@@ -2087,9 +2089,9 @@ pgf_parse_result_is_new(PgfExprState* st)
 // TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 static PgfParsing*
 pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx, 
-                 GuString sentence, double heuristic_factor,
-                 GuExn* err,
-                 GuPool* pool, GuPool* out_pool)
+                 GuString sentence,
+                 double heuristic_factor, PgfCallbacksMap* callbacks,
+                 GuExn* err, GuPool* pool, GuPool* out_pool)
 {
 	PgfCncCat* cnccat =
 		gu_map_get(concr->cnccats, cat, PgfCncCat*);
@@ -2102,7 +2104,7 @@ pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx,
 	gu_assert(lin_idx < cnccat->n_lins);
 
 	PgfParsing* ps =
-		pgf_new_parsing(concr, sentence, pool, out_pool);
+		pgf_new_parsing(concr, sentence, callbacks, pool, out_pool);
 
 	if (heuristic_factor >= 0) {
 		ps->heuristic_factor = heuristic_factor;
@@ -2312,12 +2314,14 @@ pgf_parse(PgfConcr* concr, PgfCId cat, GuString sentence,
           GuExn* err, 
           GuPool* pool, GuPool* out_pool)
 {
-    return pgf_parse_with_heuristics(concr, cat, sentence, -1.0, err, pool, out_pool);
+	PgfCallbacksMap* callbacks = pgf_new_callbacks_map(concr, out_pool); 
+    return pgf_parse_with_heuristics(concr, cat, sentence, -1.0, callbacks, err, pool, out_pool);
 }
 
 GuEnum*
 pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, GuString sentence,
                           double heuristics,
+                          PgfCallbacksMap* callbacks,
                           GuExn* err,
                           GuPool* pool, GuPool* out_pool)
 {
@@ -2333,7 +2337,7 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, GuString sentence,
 
 	// Begin parsing a sentence with the specified category
 	PgfParsing* ps =
-		pgf_parsing_init(concr, cat, 0, sentence, heuristics, err, pool, out_pool);
+		pgf_parsing_init(concr, cat, 0, sentence, heuristics, callbacks, err, pool, out_pool);
 	if (ps == NULL) {
 		return NULL;
 	}
@@ -2393,8 +2397,10 @@ pgf_complete(PgfConcr* concr, PgfCId cat, GuString sentence,
 	}
 
 	// Begin parsing a sentence with the specified category
+	PgfCallbacksMap* callbacks =
+		pgf_new_callbacks_map(concr, pool);
 	PgfParsing* ps =
-		pgf_parsing_init(concr, cat, 0, sentence, -1.0, err, pool, pool);
+		pgf_parsing_init(concr, cat, 0, sentence, -1.0, callbacks, err, pool, pool);
 	if (ps == NULL) {
 		return NULL;
 	}
