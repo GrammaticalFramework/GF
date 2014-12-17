@@ -35751,7 +35751,7 @@ lin onslaught_N = mkWN (k39 "hyökkäys") ; --UNCHK
 lin onstage_A = mkWA "lavalla" "tapahtuva" ; --UNCHK
 lin onstage_Adv = mkWAdv (compoundAdv "lav" (k99 "alla")) ; --UNCHK
 lin ontario_PN = foreignPN "Ontario" ;
-lin onto_Prep = mkPrep "päälle" ;
+lin onto_Prep = mkPrep "päälle" | mkPrep allative ;
 lin ontogenetic_A = mkWA (compoundA "onto" (k38 "geneettinen")) ; --UNCHK
 lin ontological_A = mkWA "ontologinen" ; --UNCHK
 lin ontology_N = mkWN "ontologia" ; --UNCHK
@@ -53410,7 +53410,7 @@ lin tiyin_N = mkWN "tenge" ; --UNCHK
 lin tizzy_N = mkWN (k39 "kiihtymys") ; --UNCHK
 lin tnt_N = mkWN (k6 "trotyyli") ; --UNCHK
 lin to_Adv = mkAdv "luo" ; ---- what is this?
-lin to_Prep = mkPrep illative | mkPrep allative | mkPrep translative ; ---- | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; ---- adding these makes the first variants, which is not good
+lin to_Prep = mkPrep illative | mkPrep allative ; 
 lin toad_N = mkWN (k10 "konna") ; --UNCHK
 lin toadfish_N = mkWN (k18 "tau") "Opsanus" ; --UNCHK
 lin toadflax_N = mkWN (compoundN "kannus" (k1 "ruoho")) ; --UNCHK
@@ -56408,7 +56408,7 @@ lin untipped_A = mkWA "filtteritön" ; --UNCHK
 lin untired_A = mkWA (k34A "väsymätön") ; --UNCHK
 lin untiring_A = mkWA (k34A "uupumaton") ; --UNCHK
 lin untitled_A = mkWA (k38 "alhainen") ; --UNCHK
-lin unto_Prep = mkPrep allative | luokse_Prep | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ;
+lin unto_Prep = mkPrep allative | luokse_Prep | mkPrep "translative" | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; ---- put translative here to recognize it
 lin untoasted_A = mkWA "paahtamaton" ; --UNCHK
 lin untold_A = mkWA (compoundA "sanoin" (k34A "kuvaamaton")) ; --UNCHK
 lin untouchable_A = mkWA (k99 "saatavilla") "ei" ; --UNCHK
