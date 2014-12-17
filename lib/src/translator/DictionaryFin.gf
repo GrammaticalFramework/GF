@@ -56408,7 +56408,7 @@ lin untipped_A = mkWA "filtteritön" ; --UNCHK
 lin untired_A = mkWA (k34A "väsymätön") ; --UNCHK
 lin untiring_A = mkWA (k34A "uupumaton") ; --UNCHK
 lin untitled_A = mkWA (k38 "alhainen") ; --UNCHK
-lin unto_Prep = mkPrep allative | luokse_Prep | mkPrep "translative" | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; ---- put translative here to recognize it
+lin unto_Prep = mkPrep allative | luokse_Prep | mkPrep translative | luokse_Prep ** {s = luokse_Prep.s ** {p2 = "luo"}} | mkPrep "tykö" ; ---- put translative here to recognize it
 lin untoasted_A = mkWA "paahtamaton" ; --UNCHK
 lin untold_A = mkWA (compoundA "sanoin" (k34A "kuvaamaton")) ; --UNCHK
 lin untouchable_A = mkWA (k99 "saatavilla") "ei" ; --UNCHK
