@@ -258,7 +258,21 @@ getAnalysis ref self c_lemma c_anal prob exn = do
 parse :: Concr -> String -> String -> Either String [(Expr,Float)]
 parse lang cat sent = parseWithHeuristics lang cat sent (-1.0) []
 
-parseWithHeuristics :: Concr -> String -> String -> Double -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))] -> Either String [(Expr,Float)]
+parseWithHeuristics :: Concr      -- ^ the language with which we parse
+                    -> String     -- ^ the start category
+                    -> String     -- ^ the input sentence
+                    -> Double     -- ^ the heuristic factor. 
+                                  -- A negative value tells the parser 
+                                  -- to lookup up the default from 
+                                  -- the grammar flags
+                    -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))]
+                                  -- ^ a list of callbacks for literal categories.
+                                  -- The arguments of the callback are:
+                                  -- the index of the constituent for the literal category;
+                                  -- the input sentence; the current offset in the sentence.
+                                  -- If a literal has been recognized then the output should
+                                  -- be Just (expr,probability,end_offset)
+                    -> Either String [(Expr,Float)]
 parseWithHeuristics lang cat sent heuristic callbacks =
   unsafePerformIO $
     do parsePl <- gu_new_pool
