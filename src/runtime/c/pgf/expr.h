@@ -143,6 +143,8 @@ struct PgfApplication {
 PgfApplication*
 pgf_expr_unapply(PgfExpr expr, GuPool* pool);
 
+PgfExpr
+pgf_expr_apply(PgfApplication*, GuPool* pool);
 
 PgfExpr
 pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);

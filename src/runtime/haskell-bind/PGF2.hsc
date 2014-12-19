@@ -17,7 +17,7 @@ module PGF2 (-- * PGF
              -- * Concrete syntax
              Concr,languages,parse,parseWithHeuristics,linearize,
              -- * Trees
-             Expr,readExpr,showExpr,unApp,
+             Expr,readExpr,showExpr,mkApp,unApp,
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- * Exceptions
@@ -138,6 +138,21 @@ data Expr = forall a . Expr {expr :: PgfExpr, exprMaster :: a}
 
 instance Show Expr where
   show = showExpr
+
+mkApp :: String -> [Expr] -> Expr
+mkApp fun args =
+  unsafePerformIO $
+    withCString fun $ \cfun ->
+    allocaBytes ((#size PgfApplication) + len * sizeOf (undefined :: PgfExpr)) $ \papp -> do
+      (#poke PgfApplication, fun) papp cfun
+      (#poke PgfApplication, n_args) papp len
+      pokeArray (papp `plusPtr` (#offset PgfApplication, args)) (map expr args)
+      exprPl <- gu_new_pool
+      c_expr <- pgf_expr_apply papp exprPl
+      exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+      return (Expr c_expr (exprFPl,args))
+  where
+    len = length args
 
 unApp :: Expr -> Maybe (String,[Expr])
 unApp (Expr expr master) =

@@ -178,7 +178,10 @@ foreign import ccall "pgf/pgf.h pgf_fullform_get_string"
 
 foreign import ccall "pgf/pgf.h pgf_fullform_get_analyses"
   pgf_fullform_get_analyses :: Ptr PgfFullFormEntry -> Ptr PgfMorphoCallback -> Ptr GuExn -> IO ()
-                    
+
+foreign import ccall "pgf/pgf.h pgf_expr_apply"
+  pgf_expr_apply :: Ptr PgfApplication -> Ptr GuPool -> IO PgfExpr
+
 foreign import ccall "pgf/pgf.h pgf_expr_unapply"
   pgf_expr_unapply :: PgfExpr -> Ptr GuPool -> IO (Ptr PgfApplication)
 

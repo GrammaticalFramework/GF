@@ -73,6 +73,29 @@ pgf_expr_unapply(PgfExpr expr, GuPool* pool)
 	return appl;
 }
 
+PgfExpr
+pgf_expr_apply(PgfApplication* app, GuPool* pool)
+{
+	PgfExpr expr;
+
+	size_t len = strlen(app->fun);
+	PgfExprFun *efun =
+		gu_new_flex_variant(PGF_EXPR_FUN,
+					        PgfExprFun,
+					        fun, len+1,
+					        &expr, pool);
+	strcpy(efun->fun, app->fun);
+
+	for (int i = 0; i < app->n_args; i++) {
+		expr = gu_new_variant_i(pool, 
+				                PGF_EXPR_APP, PgfExprApp,
+						        .fun = expr,
+						        .arg = app->args[i]);
+	}
+	
+	return expr;
+}
+
 typedef struct PgfExprParser PgfExprParser;
 
 typedef enum {
