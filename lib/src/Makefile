@@ -142,7 +142,7 @@ TranslateIta: TranslateIta.pgf
 TranslateSpa: TranslateSpa.pgf
 
 S=-s
-GFMKT=mkdir -p ../translator && gf $S -make -literal=PN,Chunk -probs=$(TPROBSFILE) -gfo-dir ../translator
+GFMKT=mkdir -p ../translator && gf $S -make -literal=PN,Symb -probs=$(TPROBSFILE) -gfo-dir ../translator
 
 TRANSLATE8=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf
 TRANSLATE10=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf TranslateSwe.pgf TranslateHin.pgf TranslateFin.pgf TranslateFre.pgf TranslateIta.pgf TranslateSpa.pgf
