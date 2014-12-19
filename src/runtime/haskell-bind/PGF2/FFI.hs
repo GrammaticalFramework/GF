@@ -72,9 +72,6 @@ foreign import ccall "gu/enum.h gu_enum_next"
 foreign import ccall "gu/string.h gu_string_buf_freeze"
   gu_string_buf_freeze :: Ptr GuStringBuf -> Ptr GuPool -> IO CString
 
-foreign import ccall "gu/utf8.h gu_utf8_decode" 
-  gu_utf8_decode :: Ptr (Ptr CChar) -> IO ()
-
 withGuPool :: (Ptr GuPool -> IO a) -> IO a
 withGuPool f = bracket gu_new_pool gu_pool_free f
 

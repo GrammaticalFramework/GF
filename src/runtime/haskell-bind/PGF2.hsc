@@ -318,11 +318,8 @@ mkCallbacksMap concr callbacks pool = do
   where
     match_callback match _ clin_idx csentence poffset out_pool = do
       sentence <- peekCString csentence
-      coffset  <- peek poffset
-      offset <- alloca $ \pcsentence -> do
-                   poke pcsentence csentence
-                   gu2hs_string_offset pcsentence (plusPtr csentence (fromIntegral coffset)) 0
-      case match (fromIntegral clin_idx) sentence offset of
+      coffset <- peek poffset
+      case match (fromIntegral clin_idx) sentence (fromIntegral coffset) of
         Nothing               -> return nullPtr
         Just (e,prob,offset') -> do poke poffset (fromIntegral offset')
 
@@ -344,13 +341,6 @@ mkCallbacksMap concr callbacks pool = do
                                     return ep
 
     predict_callback _ _ _ _ = return nullPtr
-
-    gu2hs_string_offset pcstart cend offset = do
-      cstart <- peek pcstart
-      if cstart < cend
-        then do gu_utf8_decode pcstart
-                gu2hs_string_offset pcstart cend (offset+1)
-        else return offset
 
 linearize :: Concr -> Expr -> String
 linearize lang e = unsafePerformIO $
