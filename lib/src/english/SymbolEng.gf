@@ -39,6 +39,6 @@ oper
     -- Note: this results in a space before 's, but there's
     -- not mauch we can do about that.
     addGenitiveS : Str -> Case => Str = \s -> 
-      table { Gen => s ++ "'s"; _ => s } ;
+      table { Gen => s ++ BIND ++ "'s"; _ => s } ;
 
 }
