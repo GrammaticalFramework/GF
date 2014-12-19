@@ -147,6 +147,9 @@ PgfExpr
 pgf_expr_apply(PgfApplication*, GuPool* pool);
 
 PgfExpr
+pgf_expr_string(GuString, GuPool* pool);
+
+PgfExpr
 pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);
 
 PgfType*
