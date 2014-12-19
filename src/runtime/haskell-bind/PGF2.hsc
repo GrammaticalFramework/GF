@@ -17,7 +17,7 @@ module PGF2 (-- * PGF
              -- * Concrete syntax
              Concr,languages,parse,parseWithHeuristics,linearize,
              -- * Trees
-             Expr,readExpr,showExpr,mkApp,unApp,
+             Expr,readExpr,showExpr,mkApp,unApp,mkStr,
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- * Exceptions
@@ -166,6 +166,15 @@ unApp (Expr expr master) =
            arity <- (#peek PgfApplication, n_args) appl :: IO CInt 
            c_args <- peekArray (fromIntegral arity) (appl `plusPtr` (#offset PgfApplication, args))
            return $ Just (fun, [Expr c_arg master | c_arg <- c_args])
+
+mkStr :: String -> Expr
+mkStr str =
+  unsafePerformIO $
+    withCString str $ \cstr -> do
+      exprPl <- gu_new_pool
+      c_expr <- pgf_expr_string cstr exprPl
+      exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+      return (Expr c_expr exprFPl)
 
 readExpr :: String -> Maybe Expr
 readExpr str =
