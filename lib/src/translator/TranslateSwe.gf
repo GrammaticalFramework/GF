@@ -2,7 +2,7 @@
 
 concrete TranslateSwe of Translate = 
   TenseSwe,
-  NounSwe - [PPartNP],
+  NounSwe - [PPartNP,PossNP],
   AdjectiveSwe,
   NumeralSwe,
   SymbolSwe [
@@ -31,9 +31,18 @@ concrete TranslateSwe of Translate =
     ],
 
   DictionarySwe ** 
-open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Prelude in {
+open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), (G = GrammarSwe), Prelude in {
 
 flags
   literal=Symb ;
+
+-- exceptions
+
+lin 
+  PossNP cn np =   -- min frus stora bil
+     G.PossNP cn np 
+   | {s = \\n,d,c => np.s ! NPPoss (gennum (ngen2gen cn.g) n) Nom ++ cn.s ! n ! DDef Indef ! c ; g = cn.g ; isMod = True} ---- overgenerating
+   ;
+
 
 }
