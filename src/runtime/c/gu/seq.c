@@ -100,7 +100,7 @@ gu_seq_free(GuSeq* seq)
 	gu_mem_buf_free(seq);
 }
 
-static void
+void
 gu_buf_require(GuBuf* buf, size_t req_len)
 {
 	if (req_len <= buf->avail_len) {
@@ -363,65 +363,4 @@ gu_buf_heapify(GuBuf *buf, GuOrder *order)
 		memcpy(value, &buf->seq->data[buf->elem_size * i], buf->elem_size);
 		gu_heap_siftup(buf, order, value, i);
 	}
-}
-
-typedef struct GuBufOut GuBufOut;
-struct GuBufOut
-{
-	GuOutStream stream;
-	GuBuf* buf;
-};
-
-static size_t
-gu_buf_out_output(GuOutStream* stream, const uint8_t* src, size_t sz,
-		  GuExn* err)
-{
-	(void) err;
-	GuBufOut* bout = gu_container(stream, GuBufOut, stream);
-	GuBuf* buf = bout->buf;
-	gu_assert(sz % buf->elem_size == 0);
-	size_t len = sz / buf->elem_size;
-	gu_buf_push_n(bout->buf, src, len);
-	return len;
-}
-
-static uint8_t*
-gu_buf_outbuf_begin(GuOutStream* stream, size_t req, size_t* sz_out, GuExn* err)
-{
-	(void) req;
-	(void) err;
-	GuBufOut* bout = gu_container(stream, GuBufOut, stream);
-	GuBuf* buf = bout->buf;
-	size_t esz = buf->elem_size;
-	size_t len = gu_buf_length(buf);
-	gu_buf_require(buf, len + (req + esz - 1) / esz);
-	size_t avail = buf->avail_len;
-	gu_assert(len < avail);
-	*sz_out = esz * (avail - len);
-	return &buf->seq->data[len * esz];
-}
-
-static void
-gu_buf_outbuf_end(GuOutStream* stream, size_t sz, GuExn* err)
-{
-	(void) err;
-	GuBufOut* bout = gu_container(stream, GuBufOut, stream);
-	GuBuf* buf = bout->buf;
-	size_t len = gu_buf_length(buf);
-	size_t elem_size = buf->elem_size;
-	gu_require(sz % elem_size == 0);
-	gu_require(sz < elem_size * (len - buf->avail_len));
-	buf->seq->len = len + (sz / elem_size);
-}
-
-GuOut*
-gu_buf_out(GuBuf* buf, GuPool* pool)
-{
-	GuBufOut* bout = gu_new(GuBufOut, pool);
-	bout->stream.output = gu_buf_out_output;
-	bout->stream.begin_buf = gu_buf_outbuf_begin;
-	bout->stream.end_buf = gu_buf_outbuf_end;
-	bout->stream.flush = NULL;
-	bout->buf = buf;
-	return gu_new_out(&bout->stream, pool);
 }
