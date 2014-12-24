@@ -178,10 +178,7 @@ GuSeq*
 gu_buf_freeze(GuBuf* buf, GuPool* pool);
 #endif // GU_SEQ_H_
 
-#if defined(GU_OUT_H_) && !defined(GU_SEQ_H_OUT_)
-#define GU_SEQ_H_OUT_
-
-GuOut*
-gu_buf_out(GuBuf* buf, GuPool* pool);
-
-#endif
+#ifdef GU_STRING_H_
+void
+gu_buf_require(GuBuf* buf, size_t req_len);
+#endif // GU_STRING_H_

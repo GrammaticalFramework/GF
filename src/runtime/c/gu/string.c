@@ -1,7 +1,7 @@
 #include <gu/out.h>
-#include <gu/seq.h>
 #include <gu/map.h>
 #include <gu/string.h>
+#include <gu/seq.h>
 #include <gu/utf8.h>
 #include <gu/assert.h>
 #include <stdlib.h>
@@ -10,16 +10,55 @@
 #endif
 
 struct GuStringBuf {
+	GuOutStream stream;
 	GuBuf* buf;
 	GuOut* out;
 };
+
+static size_t
+gu_string_buf_output(GuOutStream* stream, const uint8_t* src, size_t sz,
+                     GuExn* err)
+{
+	(void) err;
+	GuStringBuf* sbuf = gu_container(stream, GuStringBuf, stream);
+	gu_buf_push_n(sbuf->buf, src, sz);
+	return sz;
+}
+
+static uint8_t*
+gu_string_buf_begin(GuOutStream* stream, size_t req, size_t* sz_out, GuExn* err)
+{
+	(void) req;
+	(void) err;
+	GuStringBuf* sbuf = gu_container(stream, GuStringBuf, stream);
+	size_t len = gu_buf_length(sbuf->buf);
+	gu_buf_require(sbuf->buf, len + req);
+	size_t avail = sbuf->buf->avail_len;
+	gu_assert(len < avail);
+	*sz_out = (avail - len);
+	return (uint8_t*) gu_buf_index(sbuf->buf, char, len);
+}
+
+static void
+gu_string_buf_end(GuOutStream* stream, size_t sz, GuExn* err)
+{
+	(void) err;
+	GuStringBuf* sbuf = gu_container(stream, GuStringBuf, stream);
+	size_t len = gu_buf_length(sbuf->buf);
+	gu_require(sz < len - sbuf->buf->avail_len);
+	sbuf->buf->seq->len = len + sz;
+}
 
 GuStringBuf*
 gu_string_buf(GuPool* pool)
 {
 	GuStringBuf* sbuf = gu_new(GuStringBuf, pool);
+	sbuf->stream.output = gu_string_buf_output;
+	sbuf->stream.begin_buf = gu_string_buf_begin;
+	sbuf->stream.end_buf = gu_string_buf_end;
+	sbuf->stream.flush = NULL;
 	sbuf->buf = gu_new_buf(char, pool);
-	sbuf->out = gu_buf_out(sbuf->buf, pool);
+	sbuf->out = gu_new_out(&sbuf->stream, pool);
 	return sbuf;
 }
 
