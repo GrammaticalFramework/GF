@@ -39091,9 +39091,9 @@ lin oral_N = mkN "oralsex" neutrum ; -- status=guess
 lin orang_outan_N = variants {} ; -- status=guess
 lin orang_outang_N = variants {} ; -- status=guess
 lin orang_utan_N = variants {} ; -- status=guess
-lin orange_1_N = mkN "orange" "oranger" ; -- comment=3
-lin orange_2_N = mkN "orange" "oranger" ; -- comment=3
-lin orange_A = mkA "orange" "orange" ; -- status=guess
+lin orange_1_N = mkN "apelsin" ;
+lin orange_2_N = mkN "orange" "oranger" ;
+lin orange_A = mkA "orange" "orange" ;
 lin orange_N = variants {} ; --
 lin orangeade_N = variants {} ; -- status=guess
 lin orangeman_N = variants {} ; -- status=guess
