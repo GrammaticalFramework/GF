@@ -39094,7 +39094,6 @@ lin orang_utan_N = variants {} ; -- status=guess
 lin orange_1_N = mkN "apelsin" ;
 lin orange_2_N = mkN "orange" "oranger" ;
 lin orange_A = mkA "orange" "orange" ;
-lin orange_N = variants {} ; --
 lin orangeade_N = variants {} ; -- status=guess
 lin orangeman_N = variants {} ; -- status=guess
 lin orangery_N = mkN "orangeri" "orangerit" "orangerier" "orangerierna" ; -- status=guess
