@@ -55396,7 +55396,7 @@ lin suite_N = mkN "svit" "sviter" | mkN "uppsättning" ; -- SaldoWN -- comment=9
 lin suiting_N = variants {} ; -- status=guess
 lin suitor_N = mkN "friare" utrum | mkN "friare" utrum ; -- SaldoWN
 lin sukiyaki_N = variants {} ; -- status=guess
-lin suksdorfia_N = variants {} ; -- status=guess
+lin suksdorfia_N = mkN "suksdorfia";
 lin sulcate_A = variants {} ; -- status=guess
 lin sulcus_N = variants {} ; -- status=guess
 lin sulfacetamide_N = variants {} ; -- status=guess
