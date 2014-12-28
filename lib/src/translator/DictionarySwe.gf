@@ -39088,9 +39088,6 @@ lin oracular_A = variants {} ; -- status=guess
 lin orad_Adv = variants {} ; -- status=guess
 lin oral_A = mkA "muntlig" ; -- SaldoWN
 lin oral_N = mkN "oralsex" neutrum ; -- status=guess
-lin orang_outan_N = variants {} ; -- status=guess
-lin orang_outang_N = variants {} ; -- status=guess
-lin orang_utan_N = variants {} ; -- status=guess
 lin orange_1_N = mkN "apelsin" ;
 lin orange_2_N = mkN "orange" "oranger" ;
 lin orange_A = mkA "orange" "orange" ;
