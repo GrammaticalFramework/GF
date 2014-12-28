@@ -39448,9 +39448,6 @@ lin oracular_A = variants {} ;
 lin orad_Adv = variants {} ;
 lin oral_A = regA "oral" ; -- status=guess
 lin oral_N = mkN "Mundhygiene" feminine | mkN "Zahnpflege" feminine | mkN "Mundpflege" feminine ; -- status=guess status=guess status=guess
-lin orang_outan_N = variants {} ;
-lin orang_outang_N = variants {} ;
-lin orang_utan_N = variants {} ;
 lin orange_1_N = variants {} ; --
 lin orange_2_N = variants {} ; --
 lin orange_A = regA "orange" ; -- status=guess

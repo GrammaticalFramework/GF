@@ -39450,9 +39450,6 @@ fun oracular_A : A ;
 fun orad_Adv : Adv ;
 fun oral_A : A ;
 fun oral_N : N ;
-fun orang_outan_N : N ;
-fun orang_outang_N : N ;
-fun orang_utan_N : N ;
 fun orange_1_N : N ;  -- | round yellow to orange fruit of any of several citrus trees
 fun orange_2_N : N ;  -- | orange color or pigment ; any of a range of colors between red and yellow
 fun orange_A : A ;
