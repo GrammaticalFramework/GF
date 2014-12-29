@@ -56813,7 +56813,8 @@ lin technophobe_N = variants {} ; -- status=guess
 lin technophobia_N = variants {} ; -- status=guess
 lin technophobic_A = variants {} ; -- status=guess
 lin techy_A = variants {} ; -- status=guess
-lin tectonic_A = mkA "arkitektonisk" ; -- status=guess
+lin tectonic_1_A = mkA "tektonisk" ; -- status=guess
+lin tectonic_2_A = mkA "arkitektonisk" ; -- status=guess
 lin tectonics_N = (mkN "tektonik") | mkN "platt-tektonik" ; -- status=guess status=guess
 lin ted_N = variants {} ; -- status=guess
 lin ted_PN = mkPN "Ted" ; -- src=eng status=guess

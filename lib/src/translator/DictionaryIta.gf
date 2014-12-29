@@ -26598,7 +26598,8 @@ lin technocracy_N = mkN "tecnocrazia" ; -- UWN
 lin technological_A = mkA "tecnologico" ; -- status=guess
 lin technologist_N = mkN "tecnologo" | mkN "tecnologa" ; -- status=guess status=guess
 lin technology_N = mkN "tecnologia" ; -- status=guess
-lin tectonic_A = mkA "tettonico" ; -- status=guess
+lin tectonic_1_A = mkA "tettonico" ; -- status=guess
+lin tectonic_2_A = mkA "tettonico" ; -- status=guess
 lin tectonics_N = mkN "tettonica" ; -- status=guess
 lin teddy_N = mkN "orsacchiotto" ; -- status=guess
 lin tedious_A = mkA "noioso" | mkA "tedioso" | mkA "fastidioso" ; -- status=guess status=guess status=guess

@@ -29277,7 +29277,8 @@ lin technocracy_N = mkN "tecnocracia" ; -- status=guess
 lin technological_A = mkA "tecnológico" ; -- status=guess
 lin technologist_N = mkN "ingeniero" ; --UWN
 lin technology_N = mkN "tecnología" ;
-lin tectonic_A = mkA "tectónico" ; -- status=guess
+lin tectonic_1_A = mkA "tectónico" ; -- status=guess
+lin tectonic_2_A = mkA "tectónico" ; -- status=guess
 lin teddy_N = mkN "osito de peluche" ; -- status=guess
 lin tedious_A = mkA "tedioso" | mkA "prolijo" ; -- status=guess status=guess
 lin tediousness_N = mkN "prolijidad" feminine ; -- status=guess
