@@ -14959,8 +14959,8 @@ lin decentralize_V2 = variants {} ; -- status=guess
 lin deception_N = variants {} ; -- status=guess
 lin deceptive_A = mkA "vilseledande" ; -- comment=4
 lin deceptiveness_N = variants {} ; -- status=guess
-lin decibel_N = mkN "decibel" "decibelen" "decibel" "decibelen" ; -- SaldoWN
-lin decide_V = mkV "bestämmer" ;
+lin decibel_N = mkN "decibel" "decibelen" "decibel" "decibelen";
+lin decide_V = mkV "bestämmer";
 lin decide_V2 = mkV2 "avgöra" "avgjorde" "avgjort" | mkV2 (mkV "bestämmer") (mkPrep "om") ;
 lin decide_VS = mkV "avgöra" "avgjorde" "avgjort" | mkVS (mkV "bestämmer") ;
 lin decide_VV = mkVV (mkV "besluta" "beslöt" "beslutit") ;
@@ -14971,7 +14971,7 @@ lin decidua_N = variants {} ; -- status=guess
 lin deciduous_A = variants {} ; -- status=guess
 lin decigram_N = variants {} ; -- status=guess
 lin decile_N = variants {} ; -- status=guess
-lin deciliter_N = mkN "deciliter" "decilitern" "deciliter" "deciliterna" ; -- status=guess
+lin deciliter_N = mkN "deciliter" "decilitern" "deciliter" "deciliterna";
 lin decimal_A = mkA "decimal" ; -- status=guess
 lin decimal_N = mkN "decimalbråk" neutrum ; -- comment=2
 lin decimalization_N = variants {} ; -- status=guess
@@ -14979,7 +14979,7 @@ lin decimalize_V2 = variants {} ; -- status=guess
 lin decimate_V2 = mkV2 (mkV "decimerar") ; -- status=guess, src=wikt
 lin decimation_N = variants {} ; -- status=guess
 lin decimeter_N = mkN "decimeter" ; -- status=guess
-lin decipher_V2 = mkV2 (mkV "dechiffrerar") | mkV2 (mkV "avkodar") | mkV2 (mkV "dekryptera") | mkV2 (mkV "avläser") | mkV2 (mkV "tyda" "tydde" "tytt") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
+lin decipher_V2 = mkV2 (mkV "dechiffrerar") | mkV2 (mkV "dekryptera") | mkV2 (mkV "tyda" "tydde" "tytt");
 lin decipherable_A = variants {} ; -- status=guess
 lin decipherer_N = variants {} ; -- status=guess
 lin decision_N = mkN "beslut" neutrum ;
@@ -15018,7 +15018,7 @@ lin declivity_N = variants {} ; -- status=guess
 lin declutch_V = variants {} ; -- status=guess
 lin deco_N = variants {} ; -- status=guess
 lin decoction_N = variants {} ; -- status=guess
-lin decode_V2 = variants {} ; -- status=guess
+lin decode_V2 = mkV2 (mkV "avkodar");
 lin decoder_N = variants {} ; -- status=guess
 lin decoding_N = variants {} ; -- status=guess
 lin decoke_V2 = variants {} ; -- status=guess
@@ -40945,7 +40945,7 @@ lin peal_V = mkV "ringar" ; -- comment=6
 lin peal_V2 = variants {} ; -- status=guess
 lin peanut_N = mkN "jordnöt" "jordnötter" ; -- SaldoWN
 lin peanuts_N = variants {} ; -- status=guess
-lin pear_N = mkN "päron" neutrum ; -- status=guess
+lin pear_N = mkN "päron" neutrum;
 lin pearl_N = mkN "pärla" ; -- status=guess
 lin pearl_PN = mkPN "Pearl" neutrum ; -- src=geonames status=guess
 lin pearl_V = mkV "pärlar" ; -- status=guess
@@ -46145,7 +46145,7 @@ lin read_N = variants {} ; -- status=guess
 lin read_V = mkV "läser" ;
 lin read_V2 = L.read_V2 ;
 lin read_VS = mkVS (mkV "läser") ;
-lin read_off_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=9
+lin read_off_V2 = mkV2 (mkV "avläser");
 lin read_out_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=9
 lin read_up_on_V2 = dirV2 (partV (mkV "stå" "stod" "stått")"ut") ; -- comment=9
 lin readability_N = mkN "läsvärdhet" "läsvärdheter" ; -- comment=5
@@ -56240,7 +56240,7 @@ lin tablefork_N = variants {} ; -- status=guess
 lin tableland_N = mkN "högslätt" "högslätter" ; -- comment=3
 lin tablemat_N = variants {} ; -- status=guess
 lin tablemate_N = variants {} ; -- status=guess
-lin tablespoon_N = mkN "matsked" ; -- status=guess
+lin tablespoon_N = mkN "matsked";
 lin tablespoonful_N = mkN "matsked" ; -- status=guess
 lin tablet_N = mkN "tablett" "tabletter" | mkN "skrivtavla" ; -- SaldoWN -- comment=9
 lin tabletop_N = mkN "bordsskiva" ; -- status=guess
@@ -56554,8 +56554,8 @@ lin tapestried_A = variants {} ; -- status=guess
 lin tapestry_N = mkN "bonad" "bonader" ; -- comment=5
 lin tapeworm_N = mkN "binnikemask" ; -- status=guess
 lin taphephobia_N = variants {} ; -- status=guess
-lin tapioca_N = mkN "tapioka" ; -- status=guess
-lin tapir_N = mkN "tapir" "tapirer" ; -- status=guess
+lin tapioca_N = mkN "tapioka";
+lin tapir_N = mkN "tapir" "tapirer";
 lin tapotement_N = variants {} ; -- status=guess
 lin tapper_N = variants {} ; -- status=guess
 lin tappet_N = variants {} ; -- status=guess
@@ -56679,7 +56679,7 @@ lin tawdry_A = variants {} ; -- status=guess
 lin tawniness_N = variants {} ; -- status=guess
 lin tawny_A = variants {} ; -- status=guess
 lin tawse_N = variants {} ; -- status=guess
-lin tax_N = mkN "skatt" "skatter" ;
+lin tax_N = mkN "skatt" "skatter";
 lin tax_V2 = mkV2 (mkV "beskattar") ; -- status=guess, src=wikt
 lin tax_collector_N = variants {} ; -- status=guess
 lin tax_free_A = variants {} ; -- status=guess
@@ -56750,7 +56750,7 @@ lin team_V = mkV "spinna" "spann" "spunnit" ; -- status=guess
 lin team_up_V = mkV "spinna" "spann" "spunnit" ; -- status=guess
 lin teammate_N = variants {} ; -- status=guess
 lin teamster_N = variants {} ; -- status=guess
-lin teamwork_N = mkN "lagarbete" ; -- comment=2
+lin teamwork_N = mkN "lagarbete";
 lin teapot_N = mkN "tekanna" ; -- status=guess
 lin tear_N = mkN "tår" ; -- SaldoWN
 lin tear_V = mkV "splittrar" ; -- comment=9
@@ -56803,7 +56803,7 @@ lin techno_N = variants {} ; -- status=guess
 lin technobabble_N = variants {} ; -- status=guess
 lin technocracy_N = mkN "teknokrati" "teknokratier" ; -- status=guess
 lin technocrat_N = mkN "teknokrat" "teknokrater" ; -- status=guess
-lin technological_A = mkA "teknologisk" ; -- status=guess
+lin technological_A = mkA "teknologisk";
 lin technologist_N = mkN "teknolog" "teknologer" ; -- status=guess
 lin technology_N = mkN "teknologi" "teknologier" ;
 lin technophile_N = variants {} ; -- status=guess
