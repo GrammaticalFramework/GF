@@ -15,7 +15,7 @@
 module PGF2 (-- * PGF
              PGF,readPGF,abstractName,startCat,
              -- * Concrete syntax
-             Concr,languages,parse,parseWithHeuristics,linearize,
+             Concr,languages,parse,parseWithHeuristics,linearize,alignWords,
              -- * Trees
              Expr,readExpr,showExpr,mkApp,unApp,mkStr,
              -- * Morphology
@@ -362,6 +362,33 @@ linearize lang e = unsafePerformIO $
          else do lin <- gu_string_buf_freeze sb pl
                  peekCString lin
 
+alignWords :: Concr -> Expr -> [(String, [Int])]
+alignWords lang e = unsafePerformIO $
+  withGuPool $ \pl ->
+    do exn <- gu_new_exn pl
+       seq <- pgf_align_words (concr lang) (expr e) exn pl
+       failed <- gu_exn_is_raised exn
+       if failed
+         then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
+                 if is_nonexist
+                   then return []
+                   else do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+                           if is_exn
+                             then do c_msg <- (#peek GuExn, data.data) exn
+                                     msg <- peekCString c_msg
+                                     throwIO (PGFError msg)
+                             else throwIO (PGFError "The abstract tree cannot be linearized")
+         else do len <- (#peek GuSeq, len) seq
+                 arr <- peekArray (fromIntegral (len :: CInt)) (seq `plusPtr` (#offset GuSeq, data))
+                 mapM peekAlignmentPhrase arr
+  where
+    peekAlignmentPhrase :: Ptr () -> IO (String, [Int])
+    peekAlignmentPhrase ptr = do
+      c_phrase <- (#peek PgfAlignmentPhrase, phrase) ptr
+      phrase <- peekCString c_phrase
+      n_fids <- (#peek PgfAlignmentPhrase, n_fids) ptr
+      fids <- peekArray (fromIntegral (n_fids :: CInt)) (ptr `plusPtr` (#offset PgfAlignmentPhrase, fids))
+      return (phrase, fids)
 
 -----------------------------------------------------------------------------
 -- Helper functions

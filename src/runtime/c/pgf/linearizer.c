@@ -1160,8 +1160,10 @@ pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 
 	GuEnum* cts =
 		pgf_lzr_concretize(concr, expr, err, tmp_pool);
-	if (!gu_ok(err))
+	if (!gu_ok(err)) {
+		gu_pool_free(tmp_pool);
 		return;
+	}
 
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (!gu_variant_is_null(ctree)) {
