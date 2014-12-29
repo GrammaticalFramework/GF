@@ -33,6 +33,9 @@ gu_string_buf_out(GuStringBuf* sb);
 GuString
 gu_string_buf_freeze(GuStringBuf* sb, GuPool* pool);
 
+void
+gu_string_buf_flush(GuStringBuf* sb);
+
 GuString
 gu_format_string_v(const char* fmt, va_list args, GuPool* pool);
 

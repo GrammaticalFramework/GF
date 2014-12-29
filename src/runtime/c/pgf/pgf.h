@@ -75,6 +75,16 @@ pgf_has_linearization(PgfConcr* concr, PgfCId id);
 void
 pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err);
 
+typedef struct {
+	GuString phrase;
+	size_t n_fids;
+	int fids[];
+} PgfAlignmentPhrase;
+
+GuSeq*
+pgf_align_words(PgfConcr* concr, PgfExpr expr,
+                GuExn* err, GuPool* pool);
+
 bool
 pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
              double *precision, double *recall, double *exact);

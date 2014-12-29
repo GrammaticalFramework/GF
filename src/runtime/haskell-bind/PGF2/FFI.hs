@@ -21,6 +21,7 @@ data GuString
 data GuStringBuf
 data GuMapItor
 data GuOut
+data GuSeq
 data GuPool
 
 foreign import ccall fopen :: CString -> CString -> IO (Ptr ())
@@ -134,6 +135,9 @@ foreign import ccall "pgf/pgf.h pgf_print_name"
 
 foreign import ccall "pgf/pgf.h pgf_linearize"
   pgf_linearize :: Ptr PgfConcr -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()
+
+foreign import ccall "pgf/pgf.h pgf_align_words"
+  pgf_align_words :: Ptr PgfConcr -> PgfExpr -> Ptr GuExn -> Ptr GuPool -> IO (Ptr GuSeq)
 
 foreign import ccall "pgf/pgf.h pgf_parse_with_heuristics"
   pgf_parse_with_heuristics :: Ptr PgfConcr -> CString -> CString -> Double -> Ptr PgfCallbacksMap -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)

@@ -82,6 +82,12 @@ gu_string_buf_freeze(GuStringBuf* sb, GuPool* pool)
 	return p;
 }
 
+void
+gu_string_buf_flush(GuStringBuf* sb)
+{
+	gu_buf_flush(sb->buf);
+}
+
 GuIn*
 gu_string_in(GuString s, GuPool* pool)
 {

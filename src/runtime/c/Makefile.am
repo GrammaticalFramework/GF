@@ -77,6 +77,7 @@ libpgf_la_SOURCES = \
 	pgf/hopu.c \
 	pgf/printer.c \
 	pgf/graphviz.c \
+	pgf/aligner.c \
 	pgf/pgf.c \
 	pgf/pgf.h \
 libpgf_la_LDFLAGS = "-no-undefined"
