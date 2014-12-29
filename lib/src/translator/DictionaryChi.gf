@@ -32499,7 +32499,8 @@ lin technologist_N = mkN "技术专家" ;
 lin technology_N = mkN "技术" | {-HSK-} mkN "技术" "門" ;
 lin technophilic_A = mkA "技术崇拜" ; -- open-multilingual-wordnet
 lin technophobic_A = mkA "技术恐惧" ; -- open-multilingual-wordnet
-lin tectonic_A = mkA "地殼構造" ; -- status=guess
+lin tectonic_1_A = mkA "地殼構造" ; -- status=guess
+lin tectonic_2_A = mkA "地殼構造" ; -- status=guess
 lin tectonics_N = mkN "構造" | mkN "构造" | mkN "地質構造" | mkN "地质构造" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin ted_PN = foreignPN "Ted" ; -- comment=src=eng status=guess
 lin teddy_N = mkN "泰迪熊" | mkN "玩具熊" | {-mwn-} mkN "女式内衣" ; -- status=guess -- status=guess -- open-multilingual-wordnet

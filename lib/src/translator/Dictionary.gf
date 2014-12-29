@@ -57404,7 +57404,8 @@ fun technophobe_N : N ;
 fun technophobia_N : N ;
 fun technophobic_A : A ;
 fun techy_A : A ;
-fun tectonic_A : A ;
+fun tectonic_1_A : A ;   -- | tectonic plates
+fun tectonic_2_A : A ;   -- | the architectural term
 fun tectonics_N : N ;
 fun ted_N : N ;
 fun ted_PN : PN ;

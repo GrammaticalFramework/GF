@@ -57397,7 +57397,8 @@ lin technophobe_N = variants {} ;
 lin technophobia_N = variants {} ;
 lin technophobic_A = variants {} ;
 lin techy_A = variants {} ;
-lin tectonic_A = mkA "architektonisch" ; -- status=guess
+lin tectonic_1_A = mkA "tektonisch" ;
+lin tectonic_2_A = mkA "architektonisch" ;
 lin tectonics_N = mkN "Tektonik" feminine ; -- status=guess
 lin ted_N = variants {} ;
 lin ted_PN = mkPN "Ted" ; -- src=eng status=guess
