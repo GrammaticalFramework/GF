@@ -13143,9 +13143,9 @@ fun correct_V : V ;
 fun correct_V2 : V2 ;
 fun correct_VS : VS ;
 fun correctable_A : A ;
-fun correction_N : N ;
+fun correction_1_N : N;  -- | the process of correction
+fun correction_2_N : N;  -- | the effect of the correction
 fun correctional_A : A ;
-fun corrections_N : N ;
 fun correctitude_N : N ;
 fun corrective_A : A ;
 fun corrective_N : N ;

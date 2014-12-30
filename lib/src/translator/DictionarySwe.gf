@@ -13033,9 +13033,9 @@ lin correct_V = mkV "tillrättavisar" ; -- comment=8
 lin correct_V2 = dirV2 (partV (mkV "rättar")"till") ; -- status=guess
 lin correct_VS = mkVS (mkV "rätta") | mkVS (mkV "korrigerar") ; -- status=guess, src=wikt status=guess, src=wikt
 lin correctable_A = variants {} ; -- status=guess
-lin correction_N = mkN "korrigering" | mkN "tillrättavisning" ; -- SaldoWN -- comment=9
+lin correction_1_N = mkN "korrigering" | mkN "tillrättavisning" ; -- SaldoWN -- comment=9
+lin correction_2_N = variants {} ; -- status=guess
 lin correctional_A = variants {} ; -- status=guess
-lin corrections_N = variants {} ; -- status=guess
 lin correctitude_N = variants {} ; -- status=guess
 lin corrective_A = variants {} ; -- status=guess
 lin corrective_N = variants {} ; -- status=guess

@@ -13154,9 +13154,9 @@ lin correct_V = prefixV "aus" ( regV "bessern" ) | irregV "korrigieren" "korrigi
 lin correct_V2 = mkV2 (prefixV "aus" (regV "bessern") | irregV "korrigieren" "korrigiert" "korrigierte" "korrigierte" "korrigiert" | mkV "richtigstellen" | regV "berichtigen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin correct_VS = mkVS (prefixV "aus" (regV "bessern") | irregV "korrigieren" "korrigiert" "korrigierte" "korrigierte" "korrigiert" | mkV "richtigstellen" | regV "berichtigen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin correctable_A = regA "korrigierbar" ; -- status=guess
-lin correction_N = mkN "Korrektur" "Korrekturen" feminine | mkN "Berichtigung" | mkN "Verbesserung" ; -- status=guess status=guess status=guess
+lin correction_1_N = mkN "Korrektur" "Korrekturen" feminine | mkN "Berichtigung" | mkN "Verbesserung" ; -- status=guess status=guess status=guess
+lin correction_2_N = mkN "Korrektur" "Korrekturen" feminine | mkN "Berichtigung" | mkN "Verbesserung" ; -- status=guess status=guess status=guess
 lin correctional_A = variants {} ;
-lin corrections_N = variants {} ;
 lin correctitude_N = variants {} ;
 lin corrective_A = variants {} ;
 lin corrective_N = variants {} ;
