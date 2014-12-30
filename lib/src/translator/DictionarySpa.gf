@@ -29086,7 +29086,8 @@ lin tam_N = mkN "gorra_escocesa" | mkN "tam" ; --UWN
 lin tamale_N = mkN "tamal" masculine ; -- status=guess
 lin tamarin_N = mkN "saguinus" ; --UWN
 lin tamarind_N = mkN "tamarindo" ; -- status=guess
-lin tambour_N = mkN "tambor" ; --UWN
+lin tambour_1_N = mkN "tambor" ; --UWN
+lin tambour_2_N = mkN "tambor" ; --UWN
 lin tambourine_N = mkN "pandereta" | mkN "pandero" ; -- status=guess status=guess
 lin tame_A = mkA "domesticado" | mkA "manso" ; -- status=guess status=guess
 lin tame_V2 = mkV2 (mkV "amansar") | mkV2 (mkV "domar") ; -- status=guess, src=wikt status=guess, src=wikt
