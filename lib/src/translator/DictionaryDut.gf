@@ -4622,7 +4622,8 @@ lin correct_A = L.correct_A ;
 lin correct_V = mkV "corrigeren" | mkV "verbeteren" ; -- status=guess, src=wikt status=guess, src=wikt
 lin correct_V2 = mkV2 (mkV "corrigeren") | mkV2 (mkV "verbeteren") ; -- status=guess, src=wikt status=guess, src=wikt
 lin correct_VS = mkVS (mkV "corrigeren") | mkVS (mkV "verbeteren") ; -- status=guess, src=wikt status=guess, src=wikt
-lin correction_N = mkN "verbetering" feminine | mkN "correctie" feminine ; -- status=guess status=guess
+lin correction_1_N = mkN "verbetering" feminine | mkN "correctie" feminine ; -- status=guess status=guess
+lin correction_2_N = mkN "verbetering" feminine | mkN "correctie" feminine ; -- status=guess status=guess
 lin correctness_N = mkN "correctheid" feminine | mkN "juistheid" feminine ; -- status=guess status=guess
 lin correlation_N = mkN "correlatie" feminine ; -- status=guess
 lin correspond_V = mkV "corresponderen" ; -- status=guess, src=wikt

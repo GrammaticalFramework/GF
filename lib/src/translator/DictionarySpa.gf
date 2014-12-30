@@ -7031,7 +7031,8 @@ lin correct_V = corregir_V ; -- status=guess
 lin correct_V2 = mkV2 (corregir_V) ; -- status=guess
 lin correct_VS = mkVS (corregir_V) ; -- status=guess
 lin correctable_A = mkA "corregible" ; -- status=guess
-lin correction_N = mkN "corrección" feminine ; -- status=guess
+lin correction_1_N = mkN "corrección" feminine ; -- status=guess
+lin correction_2_N = mkN "corrección" feminine ; -- status=guess
 lin correctitude_N = mkN "procedencia" | mkN "propiedad" | mkN "seriedad" ; --UWN
 lin corrective_A = mkA "correctivo" ; -- status=guess
 lin corrective_N = mkN "violación correctiva" | mkN "violación curativa" ; -- status=guess status=guess
