@@ -57038,7 +57038,8 @@ lin tamarind_N = mkN "Tamarinde" "Tamarinden" feminine ; -- status=guess
 lin tamarisk_N = mkN "Tamariske" "Tamarisken" feminine ; -- status=guess
 lin tambala_N = variants {} ;
 lin tambon_N = variants {} ;
-lin tambour_N = variants {} ;
+lin tambour_1_N = variants {} ;
+lin tambour_2_N = variants {} ;
 lin tambourine_N = mkN "Tamburin" feminine ; -- status=guess
 lin tame_A = mk3A "zahm" "zahmer" "zahmste" ; -- status=guess
 lin tame_V2 = mkV2 ( junkV "zahm" I.werden_V ) ; -- status = guess , src = wikt
