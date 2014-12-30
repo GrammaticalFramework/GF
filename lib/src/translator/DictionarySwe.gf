@@ -61741,7 +61741,6 @@ lin variegation_N = variants {} ; -- status=guess
 lin varietal_N = variants {} ; -- status=guess
 lin variety_1_N = mkN "omväxling" ;
 lin variety_2_N = mkN "sort" "sorter" ;
-lin variety_N = mkN "omväxling" | mkN "sort" "sorter" ; --- already split
 lin variform_A = variants {} ; -- status=guess
 lin variolar_A = variants {} ; -- status=guess
 lin variolation_N = variants {} ; -- status=guess
