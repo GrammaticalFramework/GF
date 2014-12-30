@@ -57090,6 +57090,7 @@ lin tambon_N = variants {} ;
 lin tambour_1_N = mkN007 "барабан";
 lin tambour_2_N = mkN007 "гергеф";
 lin tambourine_N = mkN065 "дайре" ; ----
+lin tamburica_N = mkN041 "тамбура";
 lin tame_A = variants {mkA079 "безинтересен"; mkA079 "питомен"} ; ----
 lin tame_V2 = dirV2 (dualV (mkV186 "укротявам") (mkV174 "укротя")) ; ----
 lin tameness_N = variants {} ;
