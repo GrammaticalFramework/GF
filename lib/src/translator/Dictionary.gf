@@ -57048,6 +57048,7 @@ fun tambon_N : N  ;
 fun tambour_1_N : N ;
 fun tambour_2_N : N ;
 fun tambourine_N : N ;
+lin tamburica_N : N;
 fun tame_A : A ;
 fun tame_V2 : V2 ;
 fun tameness_N : N ;

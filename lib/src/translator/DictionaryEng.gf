@@ -57332,6 +57332,7 @@ lin tambon_N = mkN "tambon" ;
 lin tambour_1_N = mkN "tambour" "tambours";
 lin tambour_2_N = mkN "tambour" "tambours";
 lin tambourine_N = mkN "tambourine" "tambourines";
+lin tamburica_N = variants {mkN "tamburica"; mkN "tamboura"};
 lin tame_A = mkA "tame" "tamer";
 lin tame_V2 = mkV2 (mkV "tame" "tames" "tamed" "tamed" "taming");
 lin tameness_N = mkN "tameness" ;
