@@ -1212,8 +1212,13 @@ pypgf_literal_callback_match(PgfLiteralCallback* self,
 	PyObject* result =
 		PyObject_CallFunction(callback->pycallback, "isi", 
 		                      lin_idx, sentence, *poffset);
-	if (result == NULL || result == Py_None)
+	if (result == NULL)
 		return NULL;
+
+	if (result == Py_None) {
+		Py_DECREF(result);
+		return NULL;
+	}
 
 	PgfExprProb* ep = gu_new(PgfExprProb, out_pool);
 
@@ -1221,7 +1226,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self,
 	if (!PyArg_ParseTuple(result, "Ofi", &pyexpr, &ep->prob, poffset))
         return NULL;
 	ep->expr = pyexpr->expr;
-	
+
 	{
 		// This is an uggly hack. We first show the expression ep->expr
 		// and then we read it back but in out_pool. The whole purpose
@@ -1251,7 +1256,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self,
 		gu_pool_free(tmp_pool);
 	}
 
-	Py_DECREF(pyexpr);
+	Py_DECREF(result);
 
 	return ep;
 }
@@ -1299,6 +1304,8 @@ pypgf_new_callbacks_map(PgfConcr* concr, PyObject *py_callbacks,
 		callback->callback.predict = pypgf_literal_callback_predict;
 		callback->pycallback = pycallback;
 		callback->fin.fn = pypgf_literal_callback_fin;
+
+		Py_XINCREF(callback->pycallback);
 
 		gu_pool_finally(pool, &callback->fin);
 
