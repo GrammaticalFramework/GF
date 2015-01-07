@@ -76,6 +76,13 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
         } ;
       prepositive = adv.prepositive
       } ;
+
+    ConjAdV conj adv = {
+      s = case conj.type of {
+        (And | Both) => conj.null ++ adv.and ;
+        Or => conj.null ++ adv.or 
+        } 
+      } ;
       
     ConjNP conj np = {
       s = \\st => case conj.type of {
@@ -214,7 +221,17 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
         _              => True
         }
       } ;
-      
+    
+    BaseAdV x y = {
+      and = x.s ++ y.s ;
+      or = x.s ++ "か" ++ y.s 
+      } ;
+
+    ConsAdV x xs = {
+      and = x.s ++ xs.and ;
+      or = x.s ++ "か" ++ xs.or 
+      } ;
+  
     BaseNP x y = {
       and = \\st => x.s ! st ++ "と" ++ y.s ! st ;
       or = \\st => x.s ! st ++ "か" ++ y.s ! st ;
@@ -343,6 +360,8 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
             missingSubj : Bool} ;
     
     [Adv] = {and, or : Style => Str ; prepositive : Bool} ;
+
+    [AdV] = {and, or : Str} ;
     
     [NP] = {and, or, both : Style => Str ; prepositive : Style => Str ; 
             needPart : Bool ; changePolar : Bool ; meaning : Speaker ; anim : Animateness} ; 
