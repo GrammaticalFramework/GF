@@ -335,7 +335,7 @@ oper
       prep2 = p2
     } ;
   
-  mkCopula = {
+  mkCopula : Verb = {
     s = table {
       Resp => table {
         (TPres|TFut) => table {
@@ -365,7 +365,9 @@ oper
     ba = table {
       Pos => "であれば" ;
       Neg => "でなければ"
-      }
+      } ;
+    a_stem, i_stem = "で" ;  -- not used
+    needSubject = True  -- not used
     } ;
   
   mkExistV : VP = {
@@ -685,16 +687,16 @@ oper
     } ;
                  
   mkRain : Verb = {
-    s = \\st,t,p => "雨が" ++ (mkVerb "降る" Gr1).s ! st ! t ! p ;  -- "ame ga furu"
+    s = \\st,t,p => "雨が" ++ (mkVerb "降っている" Gr2).s ! st ! t ! p ;  -- "ame ga furu"
     te = table {
-      Pos => "雨が降って" ;
-      Neg => "雨が降らないで" 
+      Pos => "雨が降っていて" ;
+      Neg => "雨が降っていないで" 
       } ;
-    a_stem = "雨が降ら" ;
-    i_stem = "雨が降り" ;
+    a_stem = "雨が降ってい" ;
+    i_stem = "雨が降ってい" ;
     ba = table {
-      Pos => "雨が降れば" ;
-      Neg => "雨が降らなければ"
+      Pos => "雨が降っていれば" ;
+      Neg => "雨が降っていなければ"
       } ;
     needSubject = False
     } ;

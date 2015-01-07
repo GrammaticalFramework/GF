@@ -14,7 +14,7 @@ flags coding = utf8 ;
     
     SC = {s : Particle => Style => Str ; isVP : Bool} ;
     
-    Adv = Adverb ;  -- {s : Style => Str ; prepositive : Bool ; compar : ComparSense} ;
+    Adv = Adverb ;  -- {s : Style => Str ; prepositive : Bool} ;
     
     AdN = {s : Str ; postposition : Bool} ;
     

@@ -322,6 +322,8 @@ concrete VerbJpn of Verb = CatJpn ** open ResJpn, Prelude in {
       needSubject = vp.needSubject
       } ;
     
+    ExtAdvVP = AdvVP ;
+
     AdVVP adv vp = {
       verb = vp.verb ;
       te = vp.te ;

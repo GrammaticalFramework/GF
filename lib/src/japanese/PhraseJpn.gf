@@ -13,12 +13,14 @@ flags coding = utf8 ;
           } ;
         VocPres => case utt.type of {
           ImpPolite => voc.s ! Resp ++ "、" ++ pconj.s ++ utt.s ! Wa ! Resp ;
-          Imper => voc.s ! Plain ++ "、" ++ pconj.s ++ utt.s ! Wa ! Plain ;
-          NoImp => voc.s ! Plain ++ "、" ++ pconj.s ++ utt.s ! Wa ! Plain
+          (Imper|NoImp) => voc.s ! Resp ++ "、" ++ pconj.s ++ utt.s ! Wa ! Resp 
+                                                    -- 1) change default style here
           } ;
         VocAbs => case utt.type of {
-          (Imper|ImpPolite) => voc.s ! Plain ++ pconj.s ++ utt.s ! Wa ! Plain ;
-          NoImp => voc.s ! Plain ++ pconj.s ++ utt.s ! Wa ! Plain
+          (Imper|ImpPolite) => voc.s ! Resp ++ pconj.s ++ utt.s ! Wa ! Resp ;  
+                                                    -- 2) here
+          NoImp => voc.s ! Resp ++ pconj.s ++ utt.s ! Wa ! Resp
+                                                    -- 3) and here
           }
         } 
       } ;

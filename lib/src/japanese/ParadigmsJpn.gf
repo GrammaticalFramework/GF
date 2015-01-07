@@ -18,7 +18,11 @@ oper
           (men : Str) -> N = \n,a,c,b,pl -> lin N (numberNoun n a c b pl False) ;
     mkN : (kane,okane : Str) -> (anim : Animateness) -> (counter : Str) -> 
           (counterReplace : Bool) -> N 
-           = \kane,okane,a,c,b -> lin N (styleNoun kane okane a c b False) 
+           = \kane,okane,a,c,b -> lin N (styleNoun kane okane a c b False) ;
+    mkN : (tsuma,okusan : Str) -> (anim : Animateness) -> (counter : Str) -> 
+          (counterReplace : Bool) -> (tsumatachi : Str) -> N 
+           = \tsuma,okusan,a,c,b,tsumatachi -> 
+             lin N (mkNoun tsuma okusan tsumatachi tsumatachi a c b False) 
     } ;
   
   mkN2 : (man : Str) -> (anim : Animateness) -> (counter : Str) -> (counterReplace : Bool) -> 
