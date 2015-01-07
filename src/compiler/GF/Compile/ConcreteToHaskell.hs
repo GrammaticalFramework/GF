@@ -28,12 +28,18 @@ concretes2haskell opts absname gr =
 
 concrete2haskell opts gr cenv absname cnc modinfo =
     render $
-      haskPreamble absname cnc $+$ "" $+$
-      vcat (neededParamTypes S.empty (params defs)) $+$ "" $+$
-      vcat (map signature (S.toList allcats)) $+$ "" $+$
-      vcat emptydefs $+$
-      vcat (map ppDef defs) $+$ "" $+$
-      vcat (map labelClass (S.toList (S.unions (map S.fromList rs)))) $+$ "" $+$
+      haskPreamble absname cnc $$ "" $$
+      "--- Parameter types ---" $$
+      vcat (neededParamTypes S.empty (params defs)) $$ "" $$
+      "--- Type signatures for linearization functions ---" $$
+      vcat (map signature (S.toList allcats)) $$ "" $$
+      "--- Linearization functions for empty categories ---" $$
+      vcat emptydefs $$ "" $$
+      "--- Linearization types and linearization functions ---" $$
+      vcat (map ppDef defs) $$ "" $$
+      "--- Type classes for projection functions ---" $$
+      vcat (map labelClass (S.toList (S.unions (map S.fromList rs)))) $$ "" $$
+      "--- Record types ---" $$
       vcat (map recordType rs)
   where
     rs = S.toList (S.insert [ident2label (identS "s")] (records rhss))
@@ -225,8 +231,8 @@ convert' atomic gId gr = if atomic then ppA else ppT
         EInt n -> pp n
         Q (m,n) -> if m==cPredef
                    then ppPredef n
-                   else pp n
-        QC (m,n) -> gId n
+                   else pp (qual m n)
+        QC (m,n) -> gId (qual m n)
         K s -> token s
         Empty -> pp "[]"
         FV (t:ts) -> "{-variants-}"<>ppA t -- !!
@@ -309,8 +315,8 @@ convType' atomic gId = if atomic then ppA else ppT
         Sort k -> pp k
         EInt n -> parens ("{-"<>n<>"-}") -- type level numeric literal
         FV (t:ts) -> "{-variants-}"<>ppA t -- !!
-        QC (m,n) -> gId n
-        Q (m,n) -> gId n
+        QC (m,n) -> gId (qual m n)
+        Q (m,n) -> gId (qual m n)
         _ -> {-trace (show t) $-} parens (ppT' True t)
 
     fields = map (ppA.snd) . sort . filter (not.isLockLabel.fst)
@@ -354,28 +360,32 @@ paramType gId gr q@(_,n) =
       Ok (m,ResParam (Just (L _ ps)) _)
        {- - | m/=cPredef && m/=moduleNameS "Prelude"-} ->
          ((S.singleton (m,n),argTypes ps),
-          "data"<+>gId n<+>"="<+>
-               sep [fsep (punctuate " |" (map param ps)),
+          "data"<+>gId (qual m n)<+>"="<+>
+               sep [fsep (punctuate " |" (map (param m) ps)),
                     pp "deriving (Eq,Ord,Show)"] $$
-          hang ("instance EnumAll"<+>gId n<+>"where") 4
-               ("enumAll"<+>"="<+>sep (punctuate "++" (map enumParam ps)))
+          hang ("instance EnumAll"<+>gId (qual m n)<+>"where") 4
+               ("enumAll"<+>"="<+>sep (punctuate " ++" (map (enumParam m) ps)))
          )
       Ok (m,ResOper  _ (Just (L _ t)))
         | m==cPredef && n==cInts ->
-           ((S.singleton (m,n),S.empty),pp "type GInts n = Int")
+           ((S.singleton (m,n),S.empty),
+            "type"<+>gId (qual m n)<+>"n = Int")
         | otherwise ->
            ((S.singleton (m,n),paramTypes gr t),
-            "type"<+>gId n<+>"="<+>convType gId t)
+            "type"<+>gId (qual m n)<+>"="<+>convType gId t)
       _ -> ((S.empty,S.empty),empty)
   where
-    param (n,ctx) = gId n<+>[convTypeA gId t|(_,_,t)<-ctx]
+    param m (n,ctx) = gId (qual m n)<+>[convTypeA gId t|(_,_,t)<-ctx]
     argTypes = S.unions . map argTypes1
     argTypes1 (n,ctx) = S.unions [paramTypes gr t|(_,_,t)<-ctx]
 
-    enumParam (n,ctx) = enumCon (gId n) (length ctx)
+    enumParam m (n,ctx) = enumCon (gId (qual m n)) (length ctx)
 
 enumCon name arity =
     if arity==0
     then brackets name
     else parens $
-         fsep ((name<+>"<$>"):punctuate "<*>" (replicate arity (pp "enumAll")))
+         fsep ((name<+>"<$>"):punctuate " <*>" (replicate arity (pp "enumAll")))
+
+qual :: ModuleName -> Ident -> Ident
+qual m = prefixIdent (render m++"_")
