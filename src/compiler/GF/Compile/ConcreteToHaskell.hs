@@ -84,17 +84,24 @@ haskPreamble absname cncname =
   "import qualified Data.Map as M" $$
   "import Data.Map((!))" $$
   "import qualified" <+> absname <+> "as A" $$
-  "----------------------------------------------------" $$
-  "-- automatic translation from GF to Haskell" $$
-  "----------------------------------------------------" $$
-  "class EnumAll a where enumAll :: [a]" $$
-  "type Str = [String]" $$
-  "linString (A.GString s) = R_s [s]" $$
-  "linInt (A.GInt i) = R_s [show i]" $$
-  "linFloat (A.GFloat x) = R_s [show x]" $$
   "" $$
---"table is vs = let m = M.fromList (zip is vs) in (m!)"
-  "table vs = let m = M.fromList (zip enumAll vs) in (m!)"
+  "--- Standard definitions ---" $$
+  "class EnumAll a where enumAll :: [a]" $$
+  "type Str = [Tok] -- token sequence" $$
+  "type Prefix = String -- to match with prefix of following token" $$
+  "type Simple = [String] -- Simple token sequence" $$
+  hang "data Tok = TK String | TP [([Prefix],Simple)] Simple" 4
+       "deriving (Eq,Ord,Show)" $$
+  "linString (A.GString s) = R_s [TK s]" $$
+  "linInt (A.GInt i) = R_s [TK (show i)]" $$
+  "linFloat (A.GFloat x) = R_s [TK (show x)]" $$
+  "" $$
+--"table is vs = let m = M.fromList (zip is vs) in (m!)" $$
+  "table vs = let m = M.fromList (zip enumAll vs) in (m!)" $$
+  "" $$
+  "----------------------------------------------------" $$
+  "-- Automatic translation from GF to Haskell follows" $$
+  "----------------------------------------------------"
 
 toHaskell gId gr absname cenv (name,jment) =
   case jment of
@@ -230,20 +237,20 @@ convert' atomic gId gr = if atomic then ppA else ppT
         Sort k -> pp k
         EInt n -> pp n
         Q (m,n) -> if m==cPredef
-                   then ppPredef n
+                   then ppPredef token n
                    else pp (qual m n)
         QC (m,n) -> gId (qual m n)
         K s -> token s
         Empty -> pp "[]"
         FV (t:ts) -> "{-variants-}"<>ppA t -- !!
-        Alts t _ -> "{-alts-}"<>ppA t -- !!!
+        Alts t' vs -> alts t' vs
         _ -> parens (ppT' True t)
 
-    ppPredef n =
+    ppPredef tok n =
       case predef n of
-        Ok BIND -> token "&+"
-        Ok SOFT_BIND -> token "SOFT_BIND" -- hmm
-        Ok CAPIT -> token "CAPIT" -- hmm
+        Ok BIND -> tok "&+"
+        Ok SOFT_BIND -> tok "SOFT_BIND" -- hmm
+        Ok CAPIT -> tok "CAPIT" -- hmm
         _ -> pp n
 
     ppP p =
@@ -264,7 +271,27 @@ convert' atomic gId gr = if atomic then ppA else ppT
         PAs x p -> x<>"@"<>ppAP p
         _ -> parens (ppAP p)
         
-    token = brackets . doubleQuotes
+    token s = brackets ("TK"<+>doubleQuotes s)
+
+    alts t' vs = brackets ("TP" <+> list' (map alt vs) <+> simple t')
+      where
+        alt (t,p) = parens (show (pre p)<>","<>simple t)
+
+        simple (K s) = brackets (doubleQuotes s)
+        simple (C t1 t2) = parens (simple t1 <+>"++"<+>simple t2)
+        simple (Q (m,n)) = if m==cPredef
+                           then ppPredef simp n
+                           else pp (qual m n) -- hmm !!
+        simp op = brackets (doubleQuotes op)
+
+        pre (K s) = [s]
+        pre (Strs ts) = concatMap pre ts
+        pre (EPatt p) = pat p
+        pre t = error $ "pre "++show t
+
+        pat (PString s) = [s]
+        pat (PAlt p1 p2) = pat p1++pat p2
+        pat p = error $ "pat "++show p
 
     fields = map (ppA.snd.snd) . sort . filter (not.isLockLabel.fst)
 
