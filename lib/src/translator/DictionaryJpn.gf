@@ -13814,7 +13814,7 @@ lin young_A = L.young_A | {-wikt-} mkA "若い" ; -- src=wikt
 lin young_N = mkN "子供" ; -- src=wikt
 lin younger_A = mkA "年下の" ; -- src=wikt
 lin youngster_N = mkN "若者" | mkN "小僧" ; -- src=wikt -- src=wikt
-lin youth_N = mkN "ユースホステル" ; -- src=wikt
+lin youth_N = mkN "青春時代" | mkN "青春" | mkN "青少年" ; -- src=wikt
 lin youthful_A = mkA "若々しい" ; -- src=wikt
 lin ytterbium_N = mkN "イッテルビウム" | mkN "鐿" ; -- src=wikt -- src=wikt
 lin yttrium_N = mkN "イットリウム" ; -- src=wikt
