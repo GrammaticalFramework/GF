@@ -101,6 +101,8 @@ oper
 -- such as "fotboll", just given as one argument. But compound nouns can be formed from their parts as well,
 
     mkN : (regering, makt : N) -> N ;   -- regeringsmakt, using the co form of regering
+
+    mkN : Str -> N -> N ;   -- över + flöde
     } ;
 
 -- The default compound form can be changed:
@@ -363,6 +365,14 @@ oper
       co = case b.co  of {
         _ + "s" => a.co + b.co ;
         co => a.co + co + "s"
+        }
+      } ;
+    mkN : Str -> N -> N = \a,b -> lin N {
+      s = \\n,d,c => a + b.s ! n ! d ! c ;
+      g = b.g ;
+      co = case b.co  of {
+        _ + "s" => a + b.co ;
+        co => a + co + "s"
         }
       } ;
     } ;
