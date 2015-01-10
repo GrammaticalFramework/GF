@@ -20507,7 +20507,7 @@ lin falsetto_N = mkN "falsett" ; -- SaldoWN
 lin falsie_N = variants {} ; -- status=guess
 lin falsification_N = mkN "förfalskning" ; -- status=guess
 lin falsifier_N = variants {} ; -- status=guess
-lin falsify_V2 = mkV2 (mkV (mkV ":") "falsifiera") ; -- status=guess, src=wikt
+lin falsify_V2 = mkV2 (mkV "falsifiera") ; -- status=guess, src=wikt
 lin falsity_N = variants {} ; -- status=guess
 lin falter_V = mkV "vacklar" ; -- comment=3
 lin falter_V2 = variants {} ; -- status=guess
@@ -32723,7 +32723,7 @@ lin locator_N = variants {} ; -- status=guess
 lin loch_N = mkN "sjö" ; -- comment=4
 lin lochgelly_PN = mkPN "Lochgelly" neutrum ; -- src=geonames status=guess
 lin lochia_N = variants {} ; -- status=guess
-lin lock_N = mkN "lås" | mkN "spärr" ; -- SaldoWN -- comment=9
+lin lock_N = mkN "lås" "lås" | mkN "spärr" ; -- SaldoWN -- comment=9
 lin lock_V = mkV "omfamnar" ; -- comment=5
 lin lock_V2 = dirV2 (partV (mkV "låser")"in") ; -- comment=3
 lin lock_away_V2 = dirV2 (partV (mkV "låser")"in") ; -- comment=3
