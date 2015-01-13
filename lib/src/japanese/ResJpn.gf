@@ -16,7 +16,7 @@ param
   Anteriority = Simul | Anter ;
   NumeralType = EndZero | EndNotZero | SingleDigit ;
   DTail       = T1 | T2 | T3 ;
-  ConjType    = And | Or | Both ;
+  ConjType    = And | Or | Both | IfConj ;
   SubjType    = That | If | OtherSubj ;
   VocType     = VocPres | Please | VocAbs ;
   UttType     = Imper | ImpPolite | NoImp ;
@@ -85,7 +85,7 @@ oper
   
   regAdj : Str -> Adj = \a -> case a of {
     chiisa + "い"     => i_mkAdj a ;
-    ooki + ("な"|"の") => na_mkAdj a
+    _                 => na_mkAdj a --    ooki + ("な"|"の") => na_mkAdj a
     } ;
 
   i_mkAdj : Str -> Adj = \chiisai -> 
@@ -487,6 +487,15 @@ oper
     ba = \\sp,p => "ならなければ" ;
     sense = Oblig
     } ;
+
+  mkVerbV : Str -> VerbGroup -> VV = \yomu,gr -> {
+    s = \\sp,st,t,p => (mkVerb yomu gr).s ! st ! t ! p ;
+    te = \\sp => (mkVerb yomu gr).te ;
+    a_stem = \\sp => (mkVerb yomu gr).a_stem ;
+    i_stem = \\sp => (mkVerb yomu gr).i_stem ;
+    ba = \\sp => (mkVerb yomu gr).ba ;
+    sense = Abil
+    } ; 
 
   mkGive : Verb3 = {
     s = table {

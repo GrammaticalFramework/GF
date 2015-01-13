@@ -22,11 +22,20 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
         pred = s.predOr ;
         pred_te = s.pred_teOr ;
         pred_ba = s.pred_baOr
+        } ;
+      IfConj => {
+        s = \\part,st => conj.null ++ s.if ! part ! st ;
+        te = \\part,st => conj.null ++ s.teIf ! part ! st ;
+        ba = \\part,st => conj.null ++ s.baIf ! part ! st ;
+        subj = \\part,st => conj.null ++ s.subj ! part ! st ;
+        pred = s.predIf ;
+        pred_te = s.pred_teIf ;
+        pred_ba = s.pred_baIf
         }
       } ;
 
     ConjRS conj rs = case conj.type of {
-      (And | Both) => {
+      (And | Both | IfConj) => {            -- "if.. then" is hardly possible
         s = \\a,st => conj.null ++ rs.and ! a ! st ;
         te = \\a,st => conj.null ++ rs.teAnd ! a ! st ;
         pred = \\a,st => conj.null ++ rs.predAnd ! a ! st ;
@@ -47,7 +56,7 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
       } ;
       
     ConjAP conj ap = case conj.type of {
-      (And | Both) => {
+      (And | Both | IfConj) => {    -- "if.. then" is hardly possible
         pred = \\st,t,p => conj.null ++ ap.s1and ! st ! p ++ ap.s2pred ! st ! t ! p ;
         attr = \\st => conj.null ++ ap.s1and ! st ! Pos ++ ap.s2attr ! st ;
         te = \\st,p => conj.null ++ ap.s1and ! st ! p ++ ap.s2te ! st ! p ;
@@ -71,7 +80,7 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
     
     ConjAdv conj adv = {
       s = \\st => case conj.type of {
-        (And | Both) => conj.null ++ adv.and ! st ;
+        (And | Both | IfConj) => conj.null ++ adv.and ! st ;  -- "if.. then" is hardly possible
         Or => conj.null ++ adv.or ! st
         } ;
       prepositive = adv.prepositive
@@ -79,20 +88,20 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
 
     ConjAdV conj adv = {
       s = case conj.type of {
-        (And | Both) => conj.null ++ adv.and ;
+        (And | Both | IfConj) => conj.null ++ adv.and ;  -- "if.. then" is hardly possible
         Or => conj.null ++ adv.or 
         } 
       } ;
       
     ConjNP conj np = {
       s = \\st => case conj.type of {
-        And => conj.null ++ np.and ! st ;
+        And | IfConj => conj.null ++ np.and ! st ;  -- "if.. then" is hardly possible
         Or  => conj.null ++ np.or ! st ;
         Both => conj.null ++ np.both ! st
         } ;
       prepositive = np.prepositive ;
       needPart = case conj.type of {
-        (And|Or) => np.needPart ;
+        (And|Or|IfConj) => np.needPart ;
         Both     => False
         } ;
       changePolar = np.changePolar ;
@@ -108,7 +117,7 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
       
     ConjCN conj cn = {
       s = \\n,st => case conj.type of {
-        (And|Both) => conj.null ++ cn.and ! n ! st ;
+        (And|Both|IfConj) => conj.null ++ cn.and ! n ! st ;
         Or         => conj.null ++ cn.or ! n ! st 
         } ;
       anim = cn.anim ;
@@ -119,37 +128,69 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
       hasAttr = cn.hasAttr ;
       counterTsu = cn.counterTsu
       } ;
-           
+         
+    ConjDet conj dap = {
+      quant = \\st => case conj.type of {
+        (And|Both|IfConj) => conj.null ++ dap.quantAnd ! st ;
+        Or                => conj.null ++ dap.quantOr ! st 
+        } ;
+      num = case conj.type of {
+        (And|Both|IfConj) => conj.null ++ dap.numAnd ;
+        Or                => conj.null ++ dap.numOr 
+        } ;
+      postpositive = dap.postpositive ; 
+      n = dap.n ; 
+      inclCard = dap.inclCard ; 
+      sp = \\st => case conj.type of {
+        (And|Both|IfConj) => conj.null ++ dap.spAnd ! st ;
+        Or                => conj.null ++ dap.spOr ! st 
+        } ;
+      no = dap.no ; 
+      tenPlus = dap.tenPlus
+      } ;
+  
     BaseS x y = {
       and = \\part,st => x.s ! part ! st ++ "、" ++ "そして" ++ y.s ! Ga ! st ;
       or = \\part,st => x.s ! part ! st ++ "、" ++ "それとも" ++ y.s ! Ga ! st ;
+      if = \\part,st => x.subj ! part ! st ++ x.pred ! Plain ++ "と、 " ++ y.s ! Ga ! st ;
       teAnd = \\part,st => x.te ! part ! st ++ "、" ++ y.te ! Ga ! st ;
       teOr = \\part,st => x.s ! part ! st ++ "、" ++ "それとも" ++ y.te ! Ga ! st ;
+      teIf = \\part,st => x.subj ! part ! st ++ x.pred ! Plain ++ "と、 " ++ y.te ! Ga ! st ;
       baAnd = \\part,st => x.ba ! part ! st ++ "、" ++ y.ba ! Ga ! st ;
       baOr = \\part,st => x.s ! part ! st ++ "、" ++ "それとも" ++ y.ba ! Ga ! st ;
+      baIf = \\part,st => x.subj ! part ! st ++ x.pred ! Plain ++ "と、 " ++ y.ba ! Ga ! st ;
       subj = \\part,st => x.subj ! part ! st ;
       predAnd = \\st => x.pred ! st ++ "、" ++ "そして" ++ y.s ! Ga ! st ;
       predOr = \\st => x.pred ! st ++ "、" ++ "それとも" ++ y.s ! Ga ! st ;
+      predIf = \\st => x.pred ! Plain ++ "と、 " ++ y.s ! Ga ! st ;
       pred_teAnd = \\st => x.pred_te ! st ++ "、" ++ y.te ! Ga ! st ;
       pred_teOr = \\st => x.pred ! st ++ "、" ++ "それとも" ++ y.te ! Ga ! st ;
+      pred_teIf = \\st => x.pred ! Plain ++ "と、 " ++ y.te ! Ga ! st ;
       pred_baAnd = \\st => x.pred_ba ! st ++ "、" ++ y.ba ! Ga ! st ;
       pred_baOr = \\st => x.pred ! st ++ "、" ++ "それとも" ++ y.ba ! Ga ! st ;
+      pred_baIf = \\st => x.pred ! Plain ++ "と、 " ++ y.ba ! Ga ! st ;
       } ;
     
     ConsS x xs = {
       and = \\part,st => xs.and ! part ! st ++ "、" ++ "そして" ++ x.s ! Ga ! st ;
       or = \\part,st => xs.or ! part ! st ++ "、" ++ "それとも" ++ x.s ! Ga ! st ;
+      if = \\part,st => xs.if ! part ! Plain ++ "と、 " ++ x.s ! Ga ! st ;
       teAnd = \\part,st => xs.teAnd ! part ! st ++ "、" ++ x.te ! Ga ! st ;
       teOr = \\part,st => xs.or ! part ! st ++ "、" ++ "それとも" ++ x.te ! Ga ! st ;
+      teIf = \\part,st => xs.if ! part ! Plain ++ "と、 " ++ x.te ! Ga ! st ;
       baAnd = \\part,st => xs.baAnd ! part ! st ++ "、" ++ x.ba ! Ga ! st ;
       baOr = \\part,st => xs.or ! part ! st ++ "、" ++ "それとも" ++ x.ba ! Ga ! st ;
+      baIf = \\part,st => xs.if ! part ! Plain ++ "と、 " ++ x.ba ! Ga ! st ;
       subj = xs.subj ;
       predAnd = \\st => xs.predAnd ! st ++ "、" ++ "そして" ++ x.s ! Ga ! st ;
       predOr = \\st => xs.predOr ! st ++ "、" ++ "それとも" ++ x.s ! Ga ! st ;
+      predIf = \\st => xs.predIf ! Plain ++ "と、 " ++ x.s ! Ga ! st ;
       pred_teAnd = \\st => xs.pred_teAnd ! st ++ "、" ++ x.te ! Ga ! st ;
       pred_teOr = \\st => xs.predOr ! st ++ "、" ++ "それとも" ++ x.te ! Ga ! st ;
+      pred_teIf = \\st => xs.predIf ! Plain ++ "と、 " ++ x.te ! Ga ! st ;
       pred_baAnd = \\st => xs.pred_baAnd ! st ++ "、" ++ x.ba ! Ga ! st ;
       pred_baOr = \\st => xs.predOr ! st ++ "、" ++ "それとも" ++ x.ba ! Ga ! st ;
+      pred_baIf = \\st => xs.predIf ! Plain ++ "と、 " ++ x.ba ! Ga ! st ;
       } ;
 
     BaseRS x y = {
@@ -349,11 +390,65 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
       hasAttr = x.hasAttr ;
       counterTsu = xs.counterTsu
       } ;
-    
+
+    BaseDAP x y = {
+      quantAnd = \\st => x.quant ! st ++ "と" ++ y.quant ! st ;
+      quantOr = \\st => x.quant ! st ++ "か" ++ y.quant ! st ;
+      numAnd = x.num ++ "と" ++ y.num ;
+      numOr = x.num ++ "か" ++ y.num ; 
+      postpositive = x.postpositive ++ y.postpositive ; 
+      n = case <x.n, y.n> of {
+        <Sg, Sg> => Sg ;
+        _ => Pl
+        } ; 
+      inclCard = case <x.inclCard, y.inclCard> of {
+        <False, False> => False ;
+        _ => True
+        } ; 
+      spAnd = \\st => x.sp ! st ++ "と" ++ y.sp ! st ;
+      spOr = \\st => x.sp ! st ++ "か" ++ y.sp ! st ;
+      no = case <x.no, y.no> of {
+        <False, False> => False ;
+        _ => True
+        } ; 
+      tenPlus = case <x.tenPlus, y.tenPlus> of {
+        <False, False> => False ;
+        _ => True
+        } 
+      } ;
+
+    ConsDAP x xs = {
+      quantAnd = \\st => x.quant ! st ++ "と" ++ xs.quantAnd ! st ;
+      quantOr = \\st => x.quant ! st ++ "か" ++ xs.quantOr ! st ;
+      numAnd = x.num ++ "と" ++ xs.numAnd ;
+      numOr = x.num ++ "か" ++ xs.numOr ; 
+      postpositive = x.postpositive ++ xs.postpositive ; 
+      n = case <x.n, xs.n> of {
+        <Sg, Sg> => Sg ;
+        _ => Pl
+        } ; 
+      inclCard = case <x.inclCard, xs.inclCard> of {
+        <False, False> => False ;
+        _ => True
+        } ; 
+      spAnd = \\st => x.sp ! st ++ "と" ++ xs.spAnd ! st ;
+      spOr = \\st => x.sp ! st ++ "か" ++ xs.spOr ! st ;
+      no = case <x.no, xs.no> of {
+        <False, False> => False ;
+        _ => True
+        } ; 
+      tenPlus = case <x.tenPlus, xs.tenPlus> of {
+        <False, False> => False ;
+        _ => True
+        } 
+      } ;
+
   lincat
                 
-    [S] = {and, or, teAnd, teOr, baAnd, baOr, subj : Particle => Style => Str ; 
-           predAnd, predOr, pred_teAnd, pred_teOr, pred_baAnd, pred_baOr : Style => Str} ;
+    [S] = {and, or, if, teAnd, teOr, teIf, baAnd, 
+           baOr, baIf, subj : Particle => Style => Str ; 
+           predAnd, predOr, predIf, pred_teAnd, pred_teOr, 
+           pred_teIf, pred_baAnd, pred_baOr, pred_baIf : Style => Str} ;
     
     [RS] = {and, or, teAnd, teOr, predAnd, predOr, pred_teAnd, pred_teOr, pred_baAnd, 
             pred_baOr : Animateness => Style => Str ; subj : Particle => Style => Str ; 
@@ -375,4 +470,8 @@ concrete ConjunctionJpn of Conjunction = CatJpn ** open ResJpn, Prelude in {
     [CN] = {and, or : Number => Style => Str ; anim : Animateness ; counter : Str ; 
             counterReplace : Bool ; object : Style => Str ; prepositive : Style => Str ;
             hasAttr : Bool ; counterTsu : Bool} ;
+
+    [DAP] = {quantAnd, quantOr : Style => Str ; numAnd, numOr : Str ; 
+             postpositive : Str ; n : Number ; inclCard : Bool ; 
+             spAnd, spOr : Style => Str ; no : Bool ; tenPlus : Bool} ;
 }

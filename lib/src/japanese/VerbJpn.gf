@@ -366,6 +366,18 @@ concrete VerbJpn of Verb = CatJpn ** open ResJpn, Prelude in {
       v2vType = False
       } ;
       
+    VPSlashPrep vp prep = {
+      s = \\sp,st,t,p => vp.verb ! sp ! Anim ! st ! t ! p ;
+      a_stem = \\sp => vp.a_stem ! sp ! Anim ! Plain ;
+      i_stem = \\sp => vp.i_stem ! sp ! Anim ! Plain ;
+      te = \\sp,p => vp.te ! sp ! Anim ! Plain ! p ;
+      ba = \\sp,p => vp.ba ! sp ! Anim ! Plain ! p ;
+      prep = prep.s ;
+      obj = \\st => [] ;
+      prepositive = vp.prepositive ;
+      v2vType = False
+      } ;
+
     CompAP ap = {
       verb = \\a,st,t,p => ap.pred ! st ! t ! p ; 
       te = \\a => ap.te ;

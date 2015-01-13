@@ -101,6 +101,7 @@ flags coding = utf8 ;
     
     no_Quant = {s = \\st => "" ; sp = \\st => "何も" ; no = True} ;  -- "nanimo"
     not_Predet = {s = "" ; not = True} ;
+    if_then_Conj = R.mkConj "と" R.IfConj ;
     at_least_AdN = {s = "少なくとも" ; postposition = False} ;  -- "sukunakutomo"
     at_most_AdN = {s = "せいぜい" ; postposition = False} ;
     nobody_NP = R.mkNP "誰も" False True R.Anim ;  -- "daremo"
