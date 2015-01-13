@@ -51,6 +51,7 @@ flags coding = utf8 ;
     Card = {s : Str ; postpositive : Str ; n : Number ; tenPlus : Bool} ; 
     Ord = Adj ;                   -- {pred : Style => TTense => Polarity => Str ; attr, adv,
                                   --  dropNaEnging : Str ; te, ba : Polarity => Str} ;
+    DAP = Det ;
     Numeral = {s : Str ; n : Number ; tenPlus : Bool} ;
     Digits  = {s : Str ; n : Number ; tenPlus : Bool ; tail : DTail} ;
     Conj = Conjunction ;          -- {s : Str ; null : Str ; type : ConjType} ;

@@ -87,6 +87,8 @@ flags coding = utf8 ;
       meaning = np.meaning ;
       anim = np.anim
       } ;
+
+    ExtAdvNP = AdvNP ;
     
     RelNP np rs = {
       s = \\st => rs.s ! np.anim ! st ++ np.s ! st ;
@@ -193,6 +195,15 @@ flags coding = utf8 ;
       ba = \\p => "一番" ++ a.ba ! p ;
       adv = \\p => "一番" ++ a.adv ! p ;
       dropNaEnging = "一番" ++ a.dropNaEnging
+      } ;
+
+    OrdNumeralSuperl n a = {
+      pred = \\st,t,p => n.s ++ "番" ++ a.pred ! st ! t ! p ;  -- "ichiban"
+      attr = n.s ++ "番" ++ a.attr ;
+      te = \\p => n.s ++ "番" ++ a.te ! p ;
+      ba = \\p => n.s ++ "番" ++ a.ba ! p ;
+      adv = \\p => n.s ++ "番" ++ a.adv ! p ;
+      dropNaEnging = n.s ++ "番" ++ a.dropNaEnging
       } ;
     
     IndefArt = {s = \\st => "" ; sp = \\st => "何か" ; no = False} ;
@@ -340,4 +351,42 @@ flags coding = utf8 ;
       counterReplace = cn.counterReplace ;
       counterTsu = cn.counterTsu
       } ;
+
+    PossNP cn np = {     -- house of Paris, house of mine
+      s = \\n,st => np.s ! st ++ "の" ++ cn.s ! n ! st ;
+      object = cn.object ;
+      prepositive = cn.prepositive ;
+      hasAttr = cn.hasAttr ;
+      anim = cn.anim ;
+      counter = cn.counter ;
+      counterReplace = cn.counterReplace ;
+      counterTsu = cn.counterTsu
+      } ;      
+
+    PartNP = PossNP ;
+
+    CountNP det np = {
+      s = \\st => np.s ! st ++ "の" ++ det.sp ! st ;
+      prepositive = np.prepositive ;
+      needPart = True ;
+      changePolar = case det.no of {
+        True => True ;
+        False => False
+        } ;
+      meaning = SomeoneElse ;
+      anim = np.anim
+      } ;
+
+    AdjDAP dap ap = lin Det {
+      quant = \\st => dap.quant ! st ++ ap.prepositive ! st ++ ap.attr ! st ;
+      num = dap.num ;
+      postpositive = dap.postpositive ; 
+      n = dap.n ; 
+      inclCard = dap.inclCard ; 
+      sp = \\st => dap.sp ! st ++ ap.prepositive ! st ++ ap.attr ! st ;
+      no = dap.no ; 
+      tenPlus = dap.tenPlus    
+      } ;  
+
+    DetDAP det = det ;
 }
