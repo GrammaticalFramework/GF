@@ -103,6 +103,7 @@ Library
     PGF.Internal
     PGF.Lexing
     PGF.Utilities
+    PGF.Haskell
   other-modules:
     PGF.Data
     PGF.Macros
