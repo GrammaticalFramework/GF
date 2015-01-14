@@ -83,21 +83,13 @@ haskPreamble absname cncname =
   "import Control.Applicative((<$>),(<*>))" $$
   "import qualified Data.Map as M" $$
   "import Data.Map((!))" $$
+  "import PGF.Haskell" $$
   "import qualified" <+> absname <+> "as A" $$
   "" $$
   "--- Standard definitions ---" $$
-  "class EnumAll a where enumAll :: [a]" $$
-  "type Str = [Tok] -- token sequence" $$
-  "type Prefix = String -- to match with prefix of following token" $$
-  "type Simple = [String] -- Simple token sequence" $$
-  hang "data Tok = TK String | TP [([Prefix],Simple)] Simple" 4
-       "deriving (Eq,Ord,Show)" $$
   "linString (A.GString s) = R_s [TK s]" $$
   "linInt (A.GInt i) = R_s [TK (show i)]" $$
   "linFloat (A.GFloat x) = R_s [TK (show x)]" $$
-  "" $$
---"table is vs = let m = M.fromList (zip is vs) in (m!)" $$
-  "table vs = let m = M.fromList (zip enumAll vs) in (m!)" $$
   "" $$
   "----------------------------------------------------" $$
   "-- Automatic translation from GF to Haskell follows" $$
@@ -237,7 +229,7 @@ convert' atomic gId gr = if atomic then ppA else ppT
         Sort k -> pp k
         EInt n -> pp n
         Q (m,n) -> if m==cPredef
-                   then ppPredef token n
+                   then ppPredef n
                    else pp (qual m n)
         QC (m,n) -> gId (qual m n)
         K s -> token s
@@ -246,11 +238,11 @@ convert' atomic gId gr = if atomic then ppA else ppT
         Alts t' vs -> alts t' vs
         _ -> parens (ppT' True t)
 
-    ppPredef tok n =
+    ppPredef n =
       case predef n of
-        Ok BIND -> tok "&+"
-        Ok SOFT_BIND -> tok "SOFT_BIND" -- hmm
-        Ok CAPIT -> tok "CAPIT" -- hmm
+        Ok BIND      -> brackets "BIND"
+        Ok SOFT_BIND -> brackets "SOFT_BIND"
+        Ok CAPIT     -> brackets "CAPIT"
         _ -> pp n
 
     ppP p =
@@ -273,16 +265,9 @@ convert' atomic gId gr = if atomic then ppA else ppT
         
     token s = brackets ("TK"<+>doubleQuotes s)
 
-    alts t' vs = brackets ("TP" <+> list' (map alt vs) <+> simple t')
+    alts t' vs = brackets ("TP" <+> list' (map alt vs) <+> ppT t')
       where
-        alt (t,p) = parens (show (pre p)<>","<>simple t)
-
-        simple (K s) = brackets (doubleQuotes s)
-        simple (C t1 t2) = parens (simple t1 <+>"++"<+>simple t2)
-        simple (Q (m,n)) = if m==cPredef
-                           then ppPredef simp n
-                           else pp (qual m n) -- hmm !!
-        simp op = brackets (doubleQuotes op)
+        alt (t,p) = parens (show (pre p)<>","<>ppT t)
 
         pre (K s) = [s]
         pre (Strs ts) = concatMap pre ts
