@@ -13,18 +13,23 @@ GFMKT=mkdir -p $(GFODIR) && gf $S -make -literal=PN,Symb -probs=$(PROBSFILE) -gf
 
 APP11=AppEng.pgf AppBul.pgf AppChi.pgf AppGer.pgf AppSwe.pgf AppHin.pgf AppFin.pgf AppFre.pgf AppIta.pgf AppSpa.pgf AppDut.pgf
 APP12=$(APP11) AppCat.pgf
+APP13=$(APP12) AppJpn.pgf
 
 # With dependencies:
 App11.pgf: $(APP11)
 	$(GFMKT) -name=App11 $(APP11) +RTS -K200M
 App12.pgf: $(APP12)
 	$(GFMKT) -name=App12 $(APP12) +RTS -K200M
+App13.pgf: $(APP13)
+	$(GFMKT) -name=App13 $(APP13) +RTS -K200M
 
 # Without dependencies:
 App11:
 	$(GFMKT) -name=App12 $(APP11) +RTS -K200M
 App12:
 	$(GFMKT) -name=App12 $(APP12) +RTS -K200M
+App13:
+	$(GFMKT) -name=App13 $(APP13) +RTS -K200M
 
 # App grammars for individual languages
 AppEng.pgf:: ; $(GFMKT) -name=AppEng AppEng.gf
@@ -37,6 +42,7 @@ AppGer.pgf:: ; $(GFMKT) -name=AppGer AppGer.gf +RTS -K64M
 AppHin.pgf:: ; $(GFMKT) -name=AppHin AppHin.gf
 AppFre.pgf:: ; $(GFMKT) -name=AppFre AppFre.gf +RTS -K64M
 AppIta.pgf:: ; $(GFMKT) -name=AppIta AppIta.gf +RTS -K64M
+AppJpn.pgf:: ; $(GFMKT) -name=AppJpn AppJpn.gf +RTS -K64M
 AppSpa.pgf:: ; $(GFMKT) -name=AppSpa AppSpa.gf +RTS -K64M
 AppSwe.pgf:: ; $(GFMKT) -name=AppSwe AppSwe.gf
 
