@@ -36,6 +36,9 @@ oper
       = \ingen,inget,n -> lin Det {s,sp = \\_ => table NGender [ingen ; inget] ; n = n ; det = DDef Indef} ;
     } ;
 
+  mkDefDet : Str -> Str -> P.Number -> Det = ---- \s,t,n -> mkDet s t n ** {det = DDef Def} ;
+    \ingen,inget,n -> lin Det {s,sp = \\_ => table NGender [ingen ; inget] ; n = n ; det = DDef Def} ;
+    
   dDefIndef : DetSpecies = DDef Indef ;
   ---- other DetSpecies
 
