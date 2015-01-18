@@ -20,7 +20,7 @@ incomplete concrete AdjectiveScand of Adjective =
         True => compMore ++ a.s ! AF (APosit ap) Nom ;
         _    => a.s ! AF ACompar Nom
         } ;
-      isPre = False
+      isPre = True
       } ;
 
     CAdvAP ad ap np = {
