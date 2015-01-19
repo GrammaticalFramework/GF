@@ -3,34 +3,65 @@
 concrete ExtensionsJpn of Extensions = 
   CatJpn ** open ResJpn, ParadigmsJpn, SyntaxJpn, (G = GrammarJpn), (E = ExtraJpn), Prelude in {
 
-{-
----- TODO: everything. But consult TranslateJpn.gf to see what is not needed
-
 lincat
+
   VPI = E.VPI ;
   VPS = E.VPS ;
+  [VPS] = {verbAnd, verbOr, verbIf, a_stemAnd, a_stemOr, a_stemIf, 
+             i_stemAnd, i_stemOr, i_stemIf, teAnd, teOr, teIf,
+             baAnd, baOr, baIf : Speaker => Animateness => Style => Str ; 
+             prep : Str ; obj, prepositive : Style => Str} ;
+  [VPI] = {verbAnd, verbOr : Speaker => Animateness => Str ;
+           a_stemAnd, a_stemOr, i_stemAnd, i_stemOr : Speaker => Animateness => Style => Str ; 
+           teAnd, teOr, baAnd, baOr : Speaker => Animateness => Style => Polarity => Str ; 
+           prep : Str ; obj, prepositive : Style => Str} ;
+
+lin
+
+  MkVPI = E.MkVPI ;  
+  MkVPS = E.MkVPS ;
+
+  ComplVPIVV = E.ComplVPIVV ;
+
+  PredVPS = E.PredVPS ;
+  ConjVPS = E.ConjVPS ;
+  ConjVPI = E.ConjVPI ;
+  BaseVPS = E.BaseVPS ;
+  ConsVPS = E.ConsVPS ;
+  BaseVPI = E.BaseVPI ;
+  ConsVPI = E.ConsVPI ;
+
+  GenNP = E.GenNP ;
+  GenIP = E.GenIP ;
+  GenRP = E.GenRP ;
+
+  CompoundN n1 n2 = {
+    s = \\n,st => n1.s ! n ! st ++ n2.s ! n ! st ;
+    anim = n2.anim ;
+    counter = n2.counter ;
+    counterReplace = n2.counterReplace ;
+    counterTsu = n2.counterTsu
+    } ;
+
+  CompoundAP n a = {
+    pred = \\st,t,p => n.s ! Sg ! st ++ "に" ++ a.pred ! st ! t ! p ;
+    attr = \\st => n.s ! Sg ! st ++ "に" ++ a.attr ;
+    adv = \\st => n.s ! Sg ! st ++ "に" ++ a.adv ! Pos ;
+    dropNaEnging = \\st => n.s ! Sg ! st ++ "に" ++ a.dropNaEnging ;
+    prepositive = \\st => "" ;
+    te = \\st,p => n.s ! Sg ! st ++ "に" ++ a.te ! p ;
+    ba = \\st,p => n.s ! Sg ! st ++ "に" ++ a.ba ! p ;
+    needSubject = True
+    } ;
+
+{-
+---- TODO: everything. But consult TranslateJpn.gf to see what is not needed
 
 ListVPI = E.ListVPI ;
 
   ListVPS = E.ListVPS ;
   
 lin
-  MkVPI = E.MkVPI ;
-  ConjVPI = E.ConjVPI ;
-----  ComplVPIVV = E.ComplVPIVV ;
-
-  MkVPS = E.MkVPS ;
-  ConjVPS = E.ConjVPS ;
-  PredVPS = E.PredVPS ;
-
-  BaseVPI = E.BaseVPI ;
-  ConsVPI = E.ConsVPI ;
-  BaseVPS = E.BaseVPS ;
-  ConsVPS = E.ConsVPS ;
-
-  GenNP = E.GenNP ;
-----  GenIP = E.GenIP ;
-  GenRP = E.GenRP ;
 
   PassVPSlash = E.PassVPSlash ;
   PassAgentVPSlash = E.PassAgentVPSlash ;
