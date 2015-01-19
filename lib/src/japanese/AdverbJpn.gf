@@ -30,7 +30,6 @@ flags coding = utf8 ;
     
     SubjS subj s = {
       s = \\st => case subj.type of {
-      
         If => s.ba ! Wa ! st ++ subj.s ;
         _ => s.s ! Wa ! st ++ subj.s
         } ; 
