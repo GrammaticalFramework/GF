@@ -38,11 +38,16 @@ concrete2haskell opts gr cenv absname cnc modinfo =
       "--- Linearization types and linearization functions ---" $$
       vcat (map ppDef defs) $$ "" $$
       "--- Type classes for projection functions ---" $$
-      vcat (map labelClass (S.toList (S.unions (map S.fromList rs)))) $$ "" $$
+      vcat (map labelClass (S.toList labels)) $$ "" $$
       "--- Record types ---" $$
-      vcat (map recordType rs)
+      vcat (map recordType recs)
   where
-    rs = S.toList (S.insert [ident2label (identS "s")] (records rhss))
+    labels = S.difference (S.unions (map S.fromList recs)) common_labels
+    recs = S.toList (S.difference (records rhss) common_records)
+    common_records = S.fromList [[label_s]]
+    common_labels = S.fromList [label_s]
+    label_s = ident2label (identS "s")
+
     rhss = map (snd.snd) defs
     defs = sortBy (compare `on` fst) .
            concatMap (toHaskell gId gr absname cenv) . 
