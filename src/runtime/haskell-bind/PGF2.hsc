@@ -12,11 +12,12 @@
 #include <gu/enum.h>
 #include <gu/exn.h>
 
-module PGF2 (-- * PGF
+module PGF2 (-- * CId
+             CId,
+             -- * PGF
              PGF,readPGF,AbsName,abstractName,startCat,
              -- * Concrete syntax
-             ConcName,Concr,Cat,languages,parse,parseWithHeuristics,linearize,
-             alignWords,
+             Concr,languages,parse,parseWithHeuristics,linearize,alignWords,
              -- * Trees
              Expr,Fun,readExpr,showExpr,mkApp,unApp,mkStr,
              -- * Morphology
@@ -42,6 +43,7 @@ import Data.Char(isUpper,isSpace)
 import Data.List(isSuffixOf,maximumBy)
 import Data.Function(on)
 
+ 
 -----------------------------------------------------------------------
 -- Functions that take a PGF.
 -- PGF has many Concrs.
@@ -79,7 +81,7 @@ readPGF fpath =
      master <- newForeignPtr gu_pool_finalizer pool
      return PGF {pgf = pgf, pgfMaster = master}
 
-languages :: PGF -> Map.Map ConcName Concr
+languages :: PGF -> Map.Map String Concr
 languages p =
   unsafePerformIO $
     do ref <- newIORef Map.empty
@@ -108,10 +110,10 @@ generateAll p cat =
        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
        fromPgfExprEnum enum genFPl (p,exprFPl)
 
-abstractName :: PGF -> AbsName
+abstractName :: PGF -> String
 abstractName p = unsafePerformIO (peekCString =<< pgf_abstract_name (pgf p))
 
-startCat :: PGF -> Cat
+startCat :: PGF -> String
 startCat p = unsafePerformIO (peekCString =<< pgf_start_cat (pgf p))
 
 loadConcr :: Concr -> FilePath -> IO ()
@@ -137,6 +139,55 @@ unloadConcr :: Concr -> IO ()
 unloadConcr c = pgf_concrete_unload (concr c)
 
 -----------------------------------------------------------------------------
+-- Types
+
+data Type =
+   DTyp [Hypo] CId [Expr]
+
+data BindType = 
+    Explicit
+  | Implicit
+
+-- | 'Hypo' represents a hypothesis in a type i.e. in the type A -> B, A is the hypothesis
+type Hypo = (BindType,CId,Type)
+
+functionType :: PGF -> CId -> Type
+functionType p fn =
+  unsafePerformIO $
+  withCString fn $ \c_fn -> do
+    c_type <- pgf_function_type (pgf p) c_fn
+    peekType c_type
+  where
+    peekType c_type = do
+      cid <- (#peek PgfType, cid) c_type >>= peekCString
+      c_hypos <- (#peek PgfType, hypos) c_type
+      n_hypos <- (#peek GuSeq, len) c_hypos
+      hs <- peekHypos (c_hypos `plusPtr` (#offset GuSeq, data)) 0 n_hypos
+      n_exprs <- (#peek PgfType, n_exprs) c_type
+      es <- peekExprs (c_type `plusPtr` (#offset PgfType, exprs)) 0 n_exprs
+      return (DTyp hs cid es)
+
+    peekHypos :: Ptr a -> Int -> Int -> IO [Hypo]
+    peekHypos c_hypo i n
+      | i < n     = do cid <- (#peek PgfHypo, cid) c_hypo >>= peekCString
+                       ty  <- (#peek PgfHypo, type) c_hypo >>= peekType
+                       bt  <- fmap toBindType ((#peek PgfHypo, bind_type) c_hypo)
+                       hs <- peekHypos (plusPtr c_hypo (#size PgfHypo)) (i+1) n
+                       return ((bt,cid,ty) : hs)
+      | otherwise = return []
+
+    toBindType :: Int -> BindType
+    toBindType (#const PGF_BIND_TYPE_EXPLICIT) = Explicit
+    toBindType (#const PGF_BIND_TYPE_IMPLICIT) = Implicit
+
+    peekExprs ptr i n
+      | i < n     = do e  <- peekElemOff ptr i
+                       es <- peekExprs ptr (i+1) n
+                       return (Expr e p : es)
+      | otherwise = return []
+
+
+-----------------------------------------------------------------------------
 -- Expressions
 
 -- The C structure for the expression may point to other structures
@@ -149,7 +200,7 @@ data Expr = forall a . Expr {expr :: PgfExpr, exprMaster :: a}
 instance Show Expr where
   show = showExpr
 
-mkApp :: Fun -> [Expr] -> Expr
+mkApp :: String -> [Expr] -> Expr
 mkApp fun args =
   unsafePerformIO $
     withCString fun $ \cfun ->
@@ -164,7 +215,7 @@ mkApp fun args =
   where
     len = length args
 
-unApp :: Expr -> Maybe (Fun,[Expr])
+unApp :: Expr -> Maybe (String,[Expr])
 unApp (Expr expr master) =
   unsafePerformIO $
     withGuPool $ \pl -> do
@@ -218,7 +269,7 @@ showExpr e =
 -- Functions using Concr
 -- Morpho analyses, parsing & linearization
 
-type MorphoAnalysis = (Fun,String,Float)
+type MorphoAnalysis = (String,String,Float)
 
 lookupMorpho :: Concr -> String -> [MorphoAnalysis]
 lookupMorpho (Concr concr master) sent = unsafePerformIO $
@@ -265,11 +316,11 @@ getAnalysis ref self c_lemma c_anal prob exn = do
   anal  <- peekCString c_anal
   writeIORef ref ((lemma, anal, prob):ans)
 
-parse :: Concr -> Cat -> String -> Either String [(Expr,Float)]
+parse :: Concr -> String -> String -> Either String [(Expr,Float)]
 parse lang cat sent = parseWithHeuristics lang cat sent (-1.0) []
 
 parseWithHeuristics :: Concr      -- ^ the language with which we parse
-                    -> Cat        -- ^ the start category
+                    -> String     -- ^ the start category
                     -> String     -- ^ the input sentence
                     -> Double     -- ^ the heuristic factor. 
                                   -- A negative value tells the parser 
