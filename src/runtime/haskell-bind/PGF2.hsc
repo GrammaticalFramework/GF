@@ -22,7 +22,9 @@ module PGF2 (-- * PGF
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- * Exceptions
-             PGFError(..)
+             PGFError(..),
+             -- * Grammar specific callbacks
+             LiteralCallback,literalCallbacks
             ) where
 
 import Prelude hiding (fromEnum)
@@ -36,8 +38,10 @@ import Foreign.C
 import Data.Typeable
 import qualified Data.Map as Map
 import Data.IORef
+import Data.Char(isUpper,isSpace)
+import Data.List(isSuffixOf,maximumBy)
+import Data.Function(on)
 
- 
 -----------------------------------------------------------------------
 -- Functions that take a PGF.
 -- PGF has many Concrs.
@@ -426,3 +430,70 @@ newtype PGFError = PGFError String
      deriving (Show, Typeable)
 
 instance Exception PGFError
+
+-----------------------------------------------------------------------
+
+type LiteralCallback =
+       PGF -> (ConcName,Concr) -> Int -> String -> Int -> Maybe (Expr,Float,Int)
+
+-- | Callbacks for the App grammar
+literalCallbacks :: [(AbsName,[(Cat,LiteralCallback)])]
+literalCallbacks = [("App",[("PN",nerc),("Symb",chunk)])]
+
+-- | Named entity recognition for the App grammar 
+-- (based on ../java/org/grammaticalframework/pgf/NercLiteralCallback.java)
+nerc :: LiteralCallback
+nerc pgf (lang,concr) lin_idx sentence offset =
+  case consume capitalized (drop offset sentence) of
+    (capwords@(_:_),rest) |
+       not ("Eng" `isSuffixOf` lang && name `elem` ["I","I'm"]) ->
+        if null ls
+        then pn
+        else case cat of
+              "PN" -> retLit (mkApp lemma [])
+              "WeekDay" -> retLit (mkApp "weekdayPN" [mkApp lemma []])
+              "Month" -> retLit (mkApp "monthPN" [mkApp lemma []])
+              "Language" -> Nothing
+              _ -> pn
+      where
+        retLit e = Just (expr,0,end_offset)
+        pn = retLit expr
+        expr = mkApp "SymbPN" [mkApp "MkSymb" [mkStr name]]
+        end_offset = length sentence-length rest
+        name = trimRight (concat capwords)
+        ls = [((l,getFunctionType pgf l),p)|(l,_,p)<-lookupMorpho concr name]
+        ((lemma,cat),_) = maximumBy (compare `on` snd) ls
+    _ -> Nothing
+  where
+    -- | Variant of unfoldr
+    consume munch xs =
+      case munch xs of
+        Nothing -> ([],xs)
+        Just (y,xs') -> (y:ys,xs'')
+          where (ys,xs'') = consume munch xs'
+
+    getFunctionType :: PGF -> String -> Cat
+    getFunctionType = undefined
+
+-- | Callback to parse arbitrary words as chunks (from
+-- ../java/org/grammaticalframework/pgf/UnknownLiteralCallback.java)
+chunk :: LiteralCallback
+chunk _ (_,concr) lin_idx sentence offset =
+  case uncapitalized (drop offset sentence) of
+    Just (word@(_:_),rest) | null (lookupMorpho concr word) ->
+        Just (expr,0,length sentence-length rest)
+      where
+        expr = mkApp "MkSymb" [mkStr (trimRight word)]
+    _ -> Nothing
+
+trimRight = reverse . dropWhile isSpace . reverse
+
+capitalized = capitalized' isUpper
+uncapitalized = capitalized' (not.isUpper)
+
+capitalized' test s@(c:_) | test c =
+  case span (not.isSpace) s of
+    (name,rest1) ->
+      case span isSpace rest1 of
+        (space,rest2) -> Just (name++space,rest2)
+capitalized' not s = Nothing
