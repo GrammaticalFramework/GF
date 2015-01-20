@@ -54,8 +54,216 @@ lin
     needSubject = True
     } ;
 
+  GerundCN vp = {
+    s = \\n,st => vp.verb ! SomeoneElse ! Inanim ! Plain ! TPres ! Pos ++ "の" ;
+    anim = Inanim ;
+    counter = "つ" ;
+    counterReplace = False ;
+    counterTsu = True;
+    object = \\st => vp.obj ! st ++ vp.prep ;
+    prepositive = vp.prepositive ;
+    hasAttr = False
+    } ;
+
+  GerundNP vp = {
+    s = \\st => vp.obj ! st ++ vp.prep ++ 
+                vp.verb ! SomeoneElse ! Inanim ! Plain ! TPres ! Pos ++ "の" ;
+    anim = Inanim ;
+    changePolar = False ;
+    needPart = True;
+    meaning = SomeoneElse ;
+    prepositive = vp.prepositive ;
+    } ;
+
+  GerundAdv vp = {
+    s = \\st => vp.prepositive ! st ++ vp.obj ! st ++ vp.prep ++ 
+                vp.verb ! SomeoneElse ! Inanim ! Plain ! TPres ! Pos ++ "と" ;
+    prepositive = True
+    } ;
+
+  WithoutVP vp = {
+    s = \\st => vp.prepositive ! st ++ vp.obj ! st ++ vp.prep ++ 
+                vp.verb ! SomeoneElse ! Inanim ! Plain ! TPres ! Neg ++ "で" ;
+    prepositive = True
+    } ;
+  
+  ByVP vp = {
+    s = \\st => vp.prepositive ! st ++ vp.obj ! st ++ vp.prep ++ 
+                vp.verb ! SomeoneElse ! Inanim ! Plain ! TPres ! Pos ++ "ことで" ;
+    prepositive = True
+    } ;
+
+  InOrderToVP vp = {
+    s = \\st => vp.prepositive ! st ++ vp.obj ! st ++ vp.prep ++ 
+                vp.verb ! SomeoneElse ! Inanim ! Plain ! TPres ! Pos ++ "ために" ;
+    prepositive = True
+    } ;
+
+  PresPartAP vp = {
+    pred = \\st,t,p => vp.te ! SomeoneElse ! Anim ! st ! Pos ++ (mkVerb "いる" Gr2).s ! st ! t ! p ; 
+    attr = \\st => vp.te ! SomeoneElse ! Anim ! st ! Pos ++ "いる" ;
+    te = \\st,p => vp.te ! SomeoneElse ! Anim ! st ! Pos ++ mkExistV.te ! SomeoneElse ! Anim ! st ! p ;
+    ba = \\st,p => vp.te ! SomeoneElse ! Anim ! st ! Pos ++ mkExistV.ba ! SomeoneElse ! Anim ! st ! p ;
+    adv = \\st => vp.te ! SomeoneElse ! Anim ! st ! Pos ++ mkExistV.te ! SomeoneElse ! Anim ! st ! Pos ;
+    dropNaEnging = \\st => vp.te ! SomeoneElse ! Anim ! st ! Pos ++ "いる" ;
+    prepositive = vp. prepositive ;
+    needSubject = vp.needSubject
+    } ;
+
+  PastPartAP vpslash = {
+    pred = \\st,t,p => vpslash.a_stem ! SomeoneElse ++ "れた" ++ mkCopula.s ! st ! t ! p ; 
+                          -- works only for Gr1. Have to add verb group record to VPSlash
+    attr = \\st => vpslash.a_stem ! SomeoneElse ++ "れた" ;
+    te = \\st,p => vpslash.a_stem ! SomeoneElse ++ "れて" ;
+    ba = \\st,p => vpslash.a_stem ! SomeoneElse ++ "れば" ;
+    adv = \\st => vpslash.a_stem ! SomeoneElse ++ "れて" ;
+    dropNaEnging = \\st => vpslash.a_stem ! SomeoneElse ++ "れた" ;
+    prepositive = vpslash.prepositive ;
+    needSubject = True
+    } ;
+
+  PastPartAgentAP vpslash np = {
+    pred = \\st,t,p => np.s ! st ++ "に" ++ vpslash.a_stem ! SomeoneElse ++ "れた" ++ mkCopula.s ! st ! t ! p ; 
+                          -- works only for Gr1. Have to add verb group record to VPSlash
+    attr = \\st => np.s ! st ++ "に" ++ vpslash.a_stem ! SomeoneElse ++ "れた" ;
+    te = \\st,p => np.s ! st ++ "に" ++ vpslash.a_stem ! SomeoneElse ++ "れて" ;
+    ba = \\st,p => np.s ! st ++ "に" ++ vpslash.a_stem ! SomeoneElse ++ "れば" ;
+    adv = \\st => np.s ! st ++ "に" ++ vpslash.a_stem ! SomeoneElse ++ "れて" ;
+    dropNaEnging = \\st => np.s ! st ++ "に" ++ vpslash.a_stem ! SomeoneElse ++ "れた" ;
+    prepositive = \\st => np.prepositive ! st ++ vpslash.prepositive ! st ;
+    needSubject = True
+    } ;
+  ApposNP np1 np2 = {
+    s = \\st => np1.s ! st ++ "、" ++ np2.s ! st ;
+    prepositive = \\st => np1.prepositive ! st ++ np2.prepositive ! st ;
+    needPart = np1.needPart ;
+    changePolar = np1.changePolar ;
+    meaning = np1.meaning ;
+    anim = np1.anim
+    } ;
+
+  AdAdV = cc2 ;
+
+  UttAdV adv = {
+    s = \\part,st => adv.s ; 
+    type = NoImp
+    } ;
+
+  DirectComplVS t np vs utt = {
+    s = case t.a of {
+      Simul => table {
+        Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                      utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! t.t ! Pos ;
+        Ga =>  \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                      utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! t.t ! Pos 
+        } ;
+      Anter => case t.t of {
+        TPres => table {
+          Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                        utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPast ! Pos ;
+          Ga =>  \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                        utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPast ! Pos 
+          } ;      
+        TPast => table {
+          Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                        utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPast ! Pos ;
+          Ga =>  \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                        utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPast ! Pos 
+          } ;      
+        TFut => table {
+          Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                        utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPres ! Pos ;
+          Ga =>  \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                        utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPres ! Pos 
+          } 
+        } 
+      } ;      
+    te = table {
+      Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                    utt.s ! Wa ! st ++ "」と" ++ vs.te ! Pos ;
+      Ga => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                    utt.s ! Wa ! st ++ "」と" ++ vs.te ! Pos 
+      } ; 
+    ba = table {
+      Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                    utt.s ! Wa ! st ++ "」と" ++ vs.ba ! Pos ;
+      Ga => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                    utt.s ! Wa ! st ++ "」と" ++ vs.ba ! Pos 
+      } ; 
+    subj = table {
+      Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は" ;
+      Ga => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が"
+      } ;
+    pred = case t.a of {
+      Simul => \\st => "「" ++ utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! t.t ! Pos ;       
+      Anter => case t.t of {
+        TPres => \\st => "「" ++ utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPast ! Pos ;
+        TPast => \\st => "「" ++ utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPast ! Pos ;
+        TFut => \\st => "「" ++ utt.s ! Wa ! st ++ "」と" ++ vs.s ! st ! TPres ! Pos 
+        } 
+      } ;
+    pred_te = \\st => "「" ++ utt.s ! Wa ! st ++ "」と" ++ vs.te ! Pos ; 
+    pred_ba = \\st => "「" ++ utt.s ! Wa ! st ++ "」と" ++ vs.ba ! Pos 
+    } ; 
+
+  DirectComplVQ t np vq qs = {
+    s = case t.a of {
+      Simul => table {
+        Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                      qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! t.t ! Pos ;
+        Ga =>  \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                      qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! t.t ! Pos 
+        } ;
+      Anter => case t.t of {
+        TPres => table {
+          Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                        qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPast ! Pos ;
+          Ga =>  \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                        qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPast ! Pos 
+          } ;      
+        TPast => table {
+          Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                        qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPast ! Pos ;
+          Ga =>  \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                        qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPast ! Pos 
+          } ;      
+        TFut => table {
+          Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                        qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPres ! Pos ;
+          Ga =>  \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                        qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPres ! Pos 
+          } 
+        } 
+      } ;      
+    te = table {
+      Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                    qs.s ! Wa ! st ++ "」と" ++ vq.te ! Pos ;
+      Ga => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                    qs.s ! Wa ! st ++ "」と" ++ vq.te ! Pos 
+      } ; 
+    ba = table {
+      Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は「" ++ 
+                    qs.s ! Wa ! st ++ "」と" ++ vq.ba ! Pos ;
+      Ga => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が「" ++ 
+                    qs.s ! Wa ! st ++ "」と" ++ vq.ba ! Pos 
+      } ; 
+    subj = table {
+      Wa => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "は" ;
+      Ga => \\st => t.s ++ np.prepositive ! st ++ np.s ! st ++ "が"
+      } ;
+    pred = case t.a of {
+      Simul => \\st => "「" ++ qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! t.t ! Pos ;       
+      Anter => case t.t of {
+        TPres => \\st => "「" ++ qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPast ! Pos ;
+        TPast => \\st => "「" ++ qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPast ! Pos ;
+        TFut => \\st => "「" ++ qs.s ! Wa ! st ++ "」と" ++ vq.s ! st ! TPres ! Pos 
+        } 
+      } ;
+    pred_te = \\st => "「" ++ qs.s ! Wa ! st ++ "」と" ++ vq.te ! Pos ; 
+    pred_ba = \\st => "「" ++ qs.s ! Wa ! st ++ "」と" ++ vq.ba ! Pos 
+    } ;
 {-
----- TODO: everything. But consult TranslateJpn.gf to see what is not needed
+FocusObjS, PastPartAgentAP,
 
 ListVPI = E.ListVPI ;
 
@@ -82,26 +290,6 @@ lin
 
   CompoundN noun cn  = {s = noun.s ++ cn.s ; c = cn.c} ; ----
   CompoundAP noun adj = complexAP (noun.s ++ possessive_s ++ adj.s) ; ----
-
-  GerundN v = {
-    s = v.s ;
-    c = ge_s ---- ge
-  } ;
-
-  GerundNP vp = {
-    s = infVP vp ; ---- ?
-  } ;
-
-  GerundAdv vp = {
-    s = infVP vp ++ "地" ; ---- ?
-    advType = ATManner ;
-  } ;
-  
-  PastPartAP v = {
-    s = v.verb.s ++ de_s ; ----
-    monoSyl = False ;
-    hasAdA = True ; --- 
-  } ;
 
 
 ----  PastPartAP v = v ; ----
