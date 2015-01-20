@@ -13,11 +13,12 @@
 #include <gu/exn.h>
 
 module PGF2 (-- * PGF
-             PGF,readPGF,abstractName,startCat,
+             PGF,readPGF,AbsName,abstractName,startCat,
              -- * Concrete syntax
-             Concr,languages,parse,parseWithHeuristics,linearize,alignWords,
+             ConcName,Concr,Cat,languages,parse,parseWithHeuristics,linearize,
+             alignWords,
              -- * Trees
-             Expr,readExpr,showExpr,mkApp,unApp,mkStr,
+             Expr,Fun,readExpr,showExpr,mkApp,unApp,mkStr,
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- * Exceptions
@@ -48,6 +49,11 @@ import Data.IORef
 data PGF = PGF {pgf :: Ptr PgfPGF, pgfMaster :: ForeignPtr GuPool}
 data Concr = Concr {concr :: Ptr PgfConcr, concrMaster :: PGF}
 
+type AbsName = String -- ^ Name of abstract syntax
+type ConcName = String -- ^ Name of concrete syntax
+type Cat = String -- ^ Name of syntactic category
+type Fun = String -- ^ Name of function
+
 readPGF :: FilePath -> IO PGF
 readPGF fpath =
   do pool <- gu_new_pool
@@ -69,7 +75,7 @@ readPGF fpath =
      master <- newForeignPtr gu_pool_finalizer pool
      return PGF {pgf = pgf, pgfMaster = master}
 
-languages :: PGF -> Map.Map String Concr
+languages :: PGF -> Map.Map ConcName Concr
 languages p =
   unsafePerformIO $
     do ref <- newIORef Map.empty
@@ -87,7 +93,7 @@ languages p =
       concr <- fmap (\ptr -> Concr ptr p) $ peek (castPtr value)
       writeIORef ref $! Map.insert name concr langs
 
-generateAll :: PGF -> String -> [(Expr,Float)]
+generateAll :: PGF -> Cat -> [(Expr,Float)]
 generateAll p cat =
   unsafePerformIO $
     do genPl  <- gu_new_pool
@@ -98,10 +104,10 @@ generateAll p cat =
        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
        fromPgfExprEnum enum genFPl (p,exprFPl)
 
-abstractName :: PGF -> String
+abstractName :: PGF -> AbsName
 abstractName p = unsafePerformIO (peekCString =<< pgf_abstract_name (pgf p))
 
-startCat :: PGF -> String
+startCat :: PGF -> Cat
 startCat p = unsafePerformIO (peekCString =<< pgf_start_cat (pgf p))
 
 loadConcr :: Concr -> FilePath -> IO ()
@@ -139,7 +145,7 @@ data Expr = forall a . Expr {expr :: PgfExpr, exprMaster :: a}
 instance Show Expr where
   show = showExpr
 
-mkApp :: String -> [Expr] -> Expr
+mkApp :: Fun -> [Expr] -> Expr
 mkApp fun args =
   unsafePerformIO $
     withCString fun $ \cfun ->
@@ -154,7 +160,7 @@ mkApp fun args =
   where
     len = length args
 
-unApp :: Expr -> Maybe (String,[Expr])
+unApp :: Expr -> Maybe (Fun,[Expr])
 unApp (Expr expr master) =
   unsafePerformIO $
     withGuPool $ \pl -> do
@@ -208,7 +214,7 @@ showExpr e =
 -- Functions using Concr
 -- Morpho analyses, parsing & linearization
 
-type MorphoAnalysis = (String,String,Float)
+type MorphoAnalysis = (Fun,String,Float)
 
 lookupMorpho :: Concr -> String -> [MorphoAnalysis]
 lookupMorpho (Concr concr master) sent = unsafePerformIO $
@@ -255,17 +261,17 @@ getAnalysis ref self c_lemma c_anal prob exn = do
   anal  <- peekCString c_anal
   writeIORef ref ((lemma, anal, prob):ans)
 
-parse :: Concr -> String -> String -> Either String [(Expr,Float)]
+parse :: Concr -> Cat -> String -> Either String [(Expr,Float)]
 parse lang cat sent = parseWithHeuristics lang cat sent (-1.0) []
 
 parseWithHeuristics :: Concr      -- ^ the language with which we parse
-                    -> String     -- ^ the start category
+                    -> Cat        -- ^ the start category
                     -> String     -- ^ the input sentence
                     -> Double     -- ^ the heuristic factor. 
                                   -- A negative value tells the parser 
                                   -- to lookup up the default from 
                                   -- the grammar flags
-                    -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))]
+                    -> [(Cat, Int -> String -> Int -> Maybe (Expr,Float,Int))]
                                   -- ^ a list of callbacks for literal categories.
                                   -- The arguments of the callback are:
                                   -- the index of the constituent for the literal category;
