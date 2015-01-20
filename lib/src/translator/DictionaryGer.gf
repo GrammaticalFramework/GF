@@ -5789,7 +5789,6 @@ lin bespoke_A = mkA "maßgeschneidert" ; -- status=guess
 lin besprent_A = variants {} ;
 lin bess_PN = mkPN "Bess" ; -- src=eng status=guess
 lin bessie_PN = mkPN "Bessie" ; -- src=eng status=guess
-lin best_A = mkA "best" ; ----- not A
 lin best_Adv = mkAdv "am besten" ;
 lin best_N = mkN "Bestes" neuter ; -- status=guess
 lin best_V2 = mkV2 (mkV "übertreffen") ; -- status=guess, src=wikt
@@ -57860,7 +57859,6 @@ lin thallophytic_A = variants {} ;
 lin thallus_N = mkN "Thallus" masculine ; -- status=guess
 lin thalweg_N = mkN "Talweg" masculine ; -- status=guess
 lin thame_PN = mkPN "Thame" ; -- src=geonames status=guess
-lin than_A = variants {} ;
 lin than_Prep = variants {} ;
 lin than_Subj = ss "als" ;
 lin thanatology_N = variants {} ;

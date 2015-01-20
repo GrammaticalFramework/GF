@@ -3252,7 +3252,6 @@ lin besides_Prep = variants {} ; --
 lin besiege_V2 = mkV2 (mkV "asediar") ; -- status=guess, src=wikt
 lin besotted_A = mkA "borracho" | mkA "ciego" ; --UWN
 lin bespectacled_A = mkA "con gafas" | mkA "que lleva gafas" ; -- status=guess status=guess
-lin best_A = mkA "el mejor" ; -- status=guess
 lin best_Adv = mkAdv "mejor" | mkAdv "lo mejor" ;
 lin best_N = mkN "élite" feminine | mkN "flor" feminine | mkN "nata" ; -- status=guess status=guess status=guess
 lin best_V2 = mkV2 (mkV "sobrepasar") | mkV2 (mkV "superar") | mkV2 (vencer_V) | mkV2 (mkV "rebasar") | mkV2 (mkV "derrotar") | mkV2 (mkV "aventajar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt

@@ -3998,7 +3998,6 @@ lin bespoke_A = mkA "定制" ; -- status=guess
 lin besprent_A = mkA "撒满" | mkA "洒满" | mkA "被撒满" | mkA "被洒满" | mkA "被铺满" | mkA "铺满" ; -- open-multilingual-wordnet
 lin bess_PN = foreignPN "Bess" ; -- comment=src=eng status=guess
 lin bessie_PN = foreignPN "Bessie" ; -- comment=src=eng status=guess
-lin best_A = mkA "最好" ; -- status=guess
 lin best_Adv = mkAdv "最好" ;
 lin best_N = mkN "最好" | {-HSK-} mkN "最好的朋友" ; -- status=guess
 lin best_V2 = mkV2 "胜过" ;

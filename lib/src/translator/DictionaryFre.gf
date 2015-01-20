@@ -3101,7 +3101,6 @@ lin besmirch_V2 = mkV2 (mkV "salir") ; -- tocheck
 lin besom_N = mkN "genêt" ; -- UWN
 lin besotted_A = mkA "bourré" | mkA "empégué" | mkA "gris" | mkA "grise" | mkA "mouillé" | mkA "pompette" | mkA "rigide" | mkA "schlass" | mkA "trempé" | mkA "émeché" | mkA "éméché" | mkA "éméchée" ; -- UWN
 lin bespoke_A = mkA "personnalisé" ; -- UWN
-lin best_A = mkA "meilleur" ; -- UWN
 lin best_Adv = variants {} ; --
 lin best_N = mkN "mieux" masculine | mkN "élite" ; -- tocheck
 lin best_V2 = mkV2 (mkV I.battre_V2) ; -- tocheck

@@ -1273,7 +1273,6 @@ lin berth_N = mkN "バース" | mkN "寝台" ;
 lin beryl_N = mkN "緑柱石" ; 
 lin beryllium_N = mkN "ベリリウム" ; 
 lin besides_Adv = mkAdv "それに" | mkAdv "ほかに" ;  
-lin best_A = mkA "最高" | mkA "最もよい" | mkA "最良" | mkA "一番" | mkA "ベスト" ;     
 lin best_Adv = mkAdv "最高" ; 
 lin best_N = mkN "ベスト" ; 
 lin bestiality_N = mkN "獣姦" ; 

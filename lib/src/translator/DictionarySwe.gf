@@ -5754,7 +5754,6 @@ lin bespoke_A = mkA "måttbeställd" "måttbeställt" ; -- status=guess
 lin besprent_A = variants {} ; -- status=guess
 lin bess_PN = mkPN "Bess" ; -- src=eng status=guess
 lin bessie_PN = mkPN "Bessie" ; -- src=eng status=guess
-lin best_A = mkA "bäst" ; -- status=guess
 lin best_Adv = mkAdv "bäst" ;
 lin best_N = mkN "bästa" ; -- status=guess
 lin best_V2 = mkV2 (mkV "besegrar") ; -- status=guess, src=wikt

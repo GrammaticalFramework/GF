@@ -1951,7 +1951,6 @@ lin bespectacled_A = mkA "bebrild" ; -- status=guess
 lin bespoke_A = mkA "op maat gemaakt" ; -- status=guess
 lin bess_PN = mkPN "Bess" ; -- src=eng status=guess
 lin bessie_PN = mkPN "Bessie" ; -- src=eng status=guess
-lin best_A = mkA "best" ; -- status=guess
 lin best_Adv = mkAdv "best" ;
 lin best_N = mkN "getuige voor de bruidegom" ; -- status=guess
 lin best_V2 = mkV2 (slaan_V) | mkV2 (mkV "overmeesteren") | mkV2 (mkV "verslaan") | mkV2 (mkV "overwinnen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
