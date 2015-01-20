@@ -151,9 +151,14 @@ cpgfMain command (t,(pgf,pc)) =
         tp (tree,prob) = makeObj ["tree".=tree,"prob".=prob]
 
     -- Without caching parse results:
-    parse' start mlimit ((_,concr),input) =
-      return $
-      maybe id take mlimit . drop start # C.parse concr cat input
+    parse' start mlimit ((from,concr),input) =
+        return $
+        maybe id take mlimit . drop start # cparse
+      where
+        cparse = C.parse concr cat input
+      --cparse = C.parseWithHeuristics concr cat input (-1) callbacks
+        callbacks = maybe [] cb $ lookup (C.abstractName pgf) C.literalCallbacks
+        cb fs = [(cat,f pgf (from,concr))|(cat,f)<-fs]
 {-
     -- Caching parse results:
     parse' start mlimit ((from,concr),input) = 
