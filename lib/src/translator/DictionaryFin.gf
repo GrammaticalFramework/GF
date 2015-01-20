@@ -5365,7 +5365,6 @@ lin bespeak_V2 = mkWV2 (k52 "anoa") ; --UNCHK
 lin bespectacled_A = mkWA (compoundA "silmä" (k38 "lasipäinen")) ; --UNCHK
 lin bespoke_A = mkWA (compoundA "tek" (k10 "emä")) "räätälin" ; --UNCHK
 lin besprent_A = mkWA "ripoteltu" ; --UNCHK
-lin best_A = mkWA (k36 "parhain") ; --UNCHK
 lin best_Adv = mkWAdv (k99 "parhaiten") ;
 lin best_V2 = mkWV2 (k58 "kytkeä") ; --UNCHK
 lin best_seller_N = mkWN (k6 "bestseller") ; --UNCHK

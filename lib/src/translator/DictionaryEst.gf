@@ -24384,7 +24384,6 @@ lin besotted_A = mkA "joobunud" | mkA "purupurjus" | mkA "sõge" ;
 lin bespectacled_A = mkA "prille kandev" ;
 lin bespoke_A = mkA "rätsepa-" | mkA "tellimisel valmistatud" ;
 lin besprent_A = mkA "üle piserdatud" ;
-lin best_A = mkA "kõige paremini" | mkA "parim" | mkA "parimal viisil" | mkA "peale jääma" ;
 lin bestial_A = mkA "loomalik" ;
 lin bestubbled_A = mkA "habemetüükais" ;
 lin beta_A = mkA "beeta" ;

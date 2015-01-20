@@ -2733,7 +2733,6 @@ lin besiege_V2 = mkV2 (mkV "assediare") ; -- status=guess, src=wikt
 lin besieger_N = mkN "assediante" | mkN "assediatore" ; -- UWN
 lin besmirch_V2 = mkV2 (mkV "sporcare") | mkV2 (mkV "insudiciare") | mkV2 (mkV "lordare") | mkV2 (mkV "insozzare") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin besom_N = mkN "scopa di saggina" ; -- status=guess
-lin best_A = mkA "il migliore" ; -- status=guess
 lin best_Adv = variants {} ; --
 lin best_N = mkN "testimone" masculine | mkN "testimone di nozze" ; -- status=guess status=guess
 lin best_V2 = mkV2 (mkV "superare") | mkV2 (mkV "dominare") | mkV2 (vincere_V) ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt

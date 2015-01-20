@@ -2717,7 +2717,6 @@ lin besiege_V2 = mkV2 (compoundV "घेर" (mkV "लेना")) ; -- tocheck
 lin besmirch_V2 = mkV2 (compoundV "कीचड़" (mkV "उछालना")) ; -- tocheck
 lin besotted_A = mkA "दीवानाआ" ; -- tocheck              
 lin bespectacled_A = mkA "चश्माधारी" ; -- tocheck              
-lin best_A = mkA "अत्याधिक प्रभावशाली" ; -- tocheck       
 lin best_Adv = mkAdv "सब से अच्छा" ; -- tocheck              
 lin best_N = mkN "सर्वश्रेष्ठ व्यक्ति" ; -- tocheck       
 lin best_V2 = mkV2 (compoundV "परास्त" (mkV "करना")) ; -- tocheck
