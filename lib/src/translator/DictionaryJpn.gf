@@ -8355,6 +8355,7 @@ lin ode_N = mkN "頌歌" | mkN "オード" ;
 lin odometer_N = mkN "オドメーター" ; 
 lin odour_N = mkN "匂い" ; 
 lin oesophagus_N = mkN "食道" ; 
+lin of_Prep = S.possess_Prep ;
 lin off_A = mkA "校外" ; 
 lin offal_N = mkN "臓物" | mkN "もつ" ;  
 lin offend_V = mkV "怒らせる" ; 
