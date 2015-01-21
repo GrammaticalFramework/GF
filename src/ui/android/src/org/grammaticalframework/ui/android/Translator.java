@@ -33,6 +33,7 @@ public class Translator {
         new Language("de-DE", "German",  "AppGer", R.xml.qwerty),
         new Language("hi-IN", "Hindi",   "AppHin", R.xml.devanagari_page1, R.xml.devanagari_page2),
         new Language("it-IT", "Italian", "AppIta", R.xml.qwerty),
+        new Language("ja-JP", "Japanese","AppJpn", R.xml.qwerty),
         new Language("es-ES", "Spanish", "AppSpa", R.xml.qwerty),
         new Language("sv-SE", "Swedish", "AppSwe", R.xml.nordic),
     };
