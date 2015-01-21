@@ -515,7 +515,7 @@ nerc pgf (lang,concr) lin_idx sentence offset =
         expr = mkApp "SymbPN" [mkApp "MkSymb" [mkStr name]]
         end_offset = length sentence-length rest
         name = trimRight (concat capwords)
-        ls = [((l,getFunctionType pgf l),p)|(l,_,p)<-lookupMorpho concr name]
+        ls = [((l,functionCat l),p)|(l,_,p)<-lookupMorpho concr name]
         ((lemma,cat),_) = maximumBy (compare `on` snd) ls
     _ -> Nothing
   where
@@ -526,8 +526,7 @@ nerc pgf (lang,concr) lin_idx sentence offset =
         Just (y,xs') -> (y:ys,xs'')
           where (ys,xs'') = consume munch xs'
 
-    getFunctionType :: PGF -> String -> Cat
-    getFunctionType = undefined
+    functionCat f = case functionType pgf f of DTyp _ cat _ -> cat
 
 -- | Callback to parse arbitrary words as chunks (from
 -- ../java/org/grammaticalframework/pgf/UnknownLiteralCallback.java)
@@ -539,6 +538,9 @@ chunk _ (_,concr) lin_idx sentence offset =
       where
         expr = mkApp "MkSymb" [mkStr (trimRight word)]
     _ -> Nothing
+
+
+-- More helper functions
 
 trimRight = reverse . dropWhile isSpace . reverse
 
