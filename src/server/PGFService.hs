@@ -155,8 +155,8 @@ cpgfMain command (t,(pgf,pc)) =
         return $
         maybe id take mlimit . drop start # cparse
       where
-        cparse = C.parse concr cat input
-      --cparse = C.parseWithHeuristics concr cat input (-1) callbacks
+      --cparse = C.parse concr cat input
+        cparse = C.parseWithHeuristics concr cat input (-1) callbacks
         callbacks = maybe [] cb $ lookup (C.abstractName pgf) C.literalCallbacks
         cb fs = [(cat,f pgf (from,concr))|(cat,f)<-fs]
 {-
