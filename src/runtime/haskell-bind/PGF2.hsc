@@ -44,6 +44,7 @@ import Data.IORef
 import Data.Char(isUpper,isSpace)
 import Data.List(isSuffixOf,maximumBy)
 import Data.Function(on)
+--import Debug.Trace
 
 type CId = String
  
@@ -146,10 +147,12 @@ unloadConcr c = pgf_concrete_unload (concr c)
 
 data Type =
    DTyp [Hypo] CId [Expr]
+  deriving Show
 
 data BindType = 
     Explicit
   | Implicit
+  deriving Show
 
 -- | 'Hypo' represents a hypothesis in a type i.e. in the type A -> B, A is the hypothesis
 type Hypo = (BindType,CId,Type)
@@ -510,13 +513,16 @@ nerc pgf (lang,concr) lin_idx sentence offset =
               "Language" -> Nothing
               _ -> pn
       where
-        retLit e = Just (expr,0,end_offset)
-        pn = retLit expr
-        expr = mkApp "SymbPN" [mkApp "MkSymb" [mkStr name]]
-        end_offset = length sentence-length rest
+        retLit e = --traceShow (name,e,drop end_offset sentence) $
+                   Just (e,0,end_offset)
+          where end_offset = length sentence-length rest
+        pn = retLit (mkApp "SymbPN" [mkApp "MkSymb" [mkStr name]])
+        ((lemma,cat),_) = maximumBy (compare `on` snd) (reverse ls)
+        ls = [((fun,cat),p)
+              |(fun,_,p)<-lookupMorpho concr name,
+                let cat=functionCat fun,
+                cat/="Nationality"]
         name = trimRight (concat capwords)
-        ls = [((l,functionCat l),p)|(l,_,p)<-lookupMorpho concr name]
-        ((lemma,cat),_) = maximumBy (compare `on` snd) ls
     _ -> Nothing
   where
     -- | Variant of unfoldr
