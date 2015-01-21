@@ -17,7 +17,9 @@ module PGF2 (-- * CId
              -- * PGF
              PGF,readPGF,AbsName,abstractName,startCat,
              -- * Concrete syntax
-             Concr,languages,parse,parseWithHeuristics,linearize,alignWords,
+             ConcName,Concr,languages,parse,parseWithHeuristics,linearize,alignWords,
+             -- * Types
+             Type(..), Hypo, functionType,
              -- * Trees
              Expr,Fun,readExpr,showExpr,mkApp,unApp,mkStr,
              -- * Morphology
@@ -43,6 +45,7 @@ import Data.Char(isUpper,isSpace)
 import Data.List(isSuffixOf,maximumBy)
 import Data.Function(on)
 
+type CId = String
  
 -----------------------------------------------------------------------
 -- Functions that take a PGF.
@@ -81,7 +84,7 @@ readPGF fpath =
      master <- newForeignPtr gu_pool_finalizer pool
      return PGF {pgf = pgf, pgfMaster = master}
 
-languages :: PGF -> Map.Map String Concr
+languages :: PGF -> Map.Map ConcName Concr
 languages p =
   unsafePerformIO $
     do ref <- newIORef Map.empty
@@ -110,10 +113,10 @@ generateAll p cat =
        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
        fromPgfExprEnum enum genFPl (p,exprFPl)
 
-abstractName :: PGF -> String
+abstractName :: PGF -> AbsName
 abstractName p = unsafePerformIO (peekCString =<< pgf_abstract_name (pgf p))
 
-startCat :: PGF -> String
+startCat :: PGF -> Cat
 startCat p = unsafePerformIO (peekCString =<< pgf_start_cat (pgf p))
 
 loadConcr :: Concr -> FilePath -> IO ()
@@ -200,7 +203,7 @@ data Expr = forall a . Expr {expr :: PgfExpr, exprMaster :: a}
 instance Show Expr where
   show = showExpr
 
-mkApp :: String -> [Expr] -> Expr
+mkApp :: Fun -> [Expr] -> Expr
 mkApp fun args =
   unsafePerformIO $
     withCString fun $ \cfun ->
@@ -215,7 +218,7 @@ mkApp fun args =
   where
     len = length args
 
-unApp :: Expr -> Maybe (String,[Expr])
+unApp :: Expr -> Maybe (Fun,[Expr])
 unApp (Expr expr master) =
   unsafePerformIO $
     withGuPool $ \pl -> do
@@ -269,7 +272,7 @@ showExpr e =
 -- Functions using Concr
 -- Morpho analyses, parsing & linearization
 
-type MorphoAnalysis = (String,String,Float)
+type MorphoAnalysis = (Fun,String,Float)
 
 lookupMorpho :: Concr -> String -> [MorphoAnalysis]
 lookupMorpho (Concr concr master) sent = unsafePerformIO $
@@ -316,11 +319,11 @@ getAnalysis ref self c_lemma c_anal prob exn = do
   anal  <- peekCString c_anal
   writeIORef ref ((lemma, anal, prob):ans)
 
-parse :: Concr -> String -> String -> Either String [(Expr,Float)]
+parse :: Concr -> Cat -> String -> Either String [(Expr,Float)]
 parse lang cat sent = parseWithHeuristics lang cat sent (-1.0) []
 
 parseWithHeuristics :: Concr      -- ^ the language with which we parse
-                    -> String     -- ^ the start category
+                    -> Cat        -- ^ the start category
                     -> String     -- ^ the input sentence
                     -> Double     -- ^ the heuristic factor. 
                                   -- A negative value tells the parser 
