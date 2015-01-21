@@ -3,7 +3,7 @@
 
 var gftranslate = {}
 
-gftranslate.jsonurl="/robust/App12.pgf"
+gftranslate.jsonurl="/robust/App13.pgf"
 gftranslate.grammar="App" // the name of the grammar
 
 gftranslate.call=function(querystring,cont,errcont) {
@@ -20,7 +20,7 @@ function enc_langs(g,to) {
 gftranslate.translate=function(source,from,to,start,limit,cont) {
     var g=gftranslate.grammar
     var lexer="&lexer=text"
-    if(from=="Chi") lexer="",source=source.split("").join(" ")
+    if(from=="Chi" || from=="Jpn") lexer="",source=source.split("").join(" ")
     var encsrc=encodeURIComponent(source)
     function errcont(text,code) { cont([{error:code+" "+text}]) }
     function extract(result) { cont(result[0].translations) }
