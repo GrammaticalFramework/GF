@@ -27,13 +27,13 @@ thaiscript:
 demo: compdemo fin linkdemo
 
 compdemo:
-	$(compile) -opt Bul Cat Chi Dan Dut Eng Fre Ger Hin Ita Lav Nor Pes Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
+	$(compile) -opt Bul Cat Chi Dan Dut Eng Fre Ger Hin Ita Jpn Lav Nor Pes Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
 
 linkdemo:
-	$(compile) -link Eng Bul Cat Chi Dan Dut Fin Fre Ger Hin Ita Lav Nor Pes Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
+	$(compile) -link Eng Bul Cat Chi Dan Dut Fin Fre Ger Hin Ita Jpn Lav Nor Pes Pol Ron Rus Spa Swe Tha Urd DisambPhrasebookEng
 
 linkdemothb:
-	$(compile) -link Eng Bul Cat Chi Dan Dut Fin Fre Ger Ita Nor Pol Ron Rus Spa Swe Tha Thb Urd DisambPhrasebookEng 
+	$(compile) -link Eng Bul Cat Chi Dan Dut Fin Fre Ger Ita Jpn Nor Pol Ron Rus Spa Swe Tha Thb Urd DisambPhrasebookEng 
 
 #separate, because slow...
 fin:
