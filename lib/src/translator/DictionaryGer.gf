@@ -63660,7 +63660,7 @@ lin weary_A = mkA "müde" ; -- status=guess
 lin weary_V = variants {} ;
 lin weary_V2 = variants {} ;
 lin weasel_N = mkN "Wiesel" "Wiesel" neuter ; -- status=guess
-lin weather_N = wetter_N ; -- status=guess
+lin weather_N = mkN "Wetter" "Wetter" neuter ;
 lin weather_V = mkV "überstehen" ; -- status=guess, src=wikt
 lin weather_V2 = mkV2 (mkV "überstehen") ; -- status=guess, src=wikt
 lin weather_beaten_A = variants {} ;
@@ -63896,7 +63896,6 @@ lin wether_N = mkN "Mönch" masculine | mkN "kastrierter Ziegenbock" masculine ;
 lin wetherby_PN = mkPN "Wetherby" ; -- src=geonames status=guess
 lin wetland_N = mkN "Feuchtgebiet" "Feuchtgebiete" neuter ; -- status=guess
 lin wetness_N = mkN "Nässe" feminine | mkN "Feuchte" feminine ; -- status=guess status=guess
-lin wetter_N = variants {} ;
 lin wetting_N = variants {} ;
 lin wexford_PN = mkPN "Wexford" ; -- src=eng status=guess
 lin weymouth_PN = mkPN "Weymouth" ; -- src=geonames status=guess
