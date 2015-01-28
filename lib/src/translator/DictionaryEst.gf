@@ -21977,7 +21977,6 @@ lin dialog_N = mkN "dialoog" | mkN "kahekõne" ;
 lin die_hard_N = mkN "visalt vastu panema" ;
 lin differentia_N = mkN "eristavad tunnused" | mkN "tunnusjoon" ;
 lin dilemma_N = mkN "dilemma" ;
-lin dimensions_N = mkN "mõõdud" | mkN "mõõtmed" ;
 lin dimer_N = mkN "dimeer" ;
 lin dining_car_N = mkN "restoranvagun" ;
 lin dining_room_N = mkN "söögituba" ;

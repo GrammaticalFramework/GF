@@ -16330,7 +16330,6 @@ lin dimension_N = mkN "Dimension" ; -- status=guess
 lin dimensional_A = mkA "-dimensional" ; -- status=guess
 lin dimensionality_N = variants {} ;
 lin dimensioning_A = variants {} ;
-lin dimensions_N = variants {} ;
 lin dimer_N = variants {} ;
 lin dimethylglyoxime_N = variants {} ;
 lin dimetrodon_N = variants {} ;

@@ -16323,7 +16323,6 @@ lin dimension_N = mkN072 "измерение" ; ----
 lin dimensional_A = mkA079 "размерен" ;
 lin dimensionality_N = mkN049 "размерност" ;
 lin dimensioning_A = mkA076 "оразмеряващ" ;
-lin dimensions_N = variants {} ;
 lin dimer_N = mkN022 "димер" ;
 lin dimethylglyoxime_N = variants {} ;
 lin dimetrodon_N = variants {} ;
