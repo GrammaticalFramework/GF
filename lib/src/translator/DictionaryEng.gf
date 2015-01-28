@@ -16396,7 +16396,6 @@ lin dimension_N = mkN "dimension" "dimensions";
 lin dimensional_A = compoundA (mkA "dimensional");
 lin dimensionality_N = mkN "dimensionality" ;
 lin dimensioning_A = mkA "dimensioning" ;
-lin dimensions_N = mkN "dimensions" ;
 lin dimer_N = mkN "dimer" ;
 lin dimethylglyoxime_N = mkN "dimethylglyoxime" ;
 lin dimetrodon_N = mkN "dimetrodon" ;

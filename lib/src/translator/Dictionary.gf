@@ -16321,7 +16321,6 @@ fun dimension_N : N ;
 fun dimensional_A : A ;
 fun dimensionality_N : N ;
 fun dimensioning_A : A ;
-fun dimensions_N : N  ;
 fun dimer_N : N ;
 fun dimethylglyoxime_N : N ;
 fun dimetrodon_N : N ;
