@@ -215,7 +215,6 @@ lin abreast_Adv = mkAdv "jämsides" ; -- status=guess
 lin abridge_V2 = variants {} ; -- status=guess
 lin abridgement_N = variants {} ; -- status=guess
 lin abridger_N = variants {} ; -- status=guess
-lin abridgment_N = variants {} ; -- status=guess
 lin abroach_A = variants {} ; -- status=guess
 lin abroad_A = mkA "utrikes" ; -- comment=3
 lin abroad_Adv = mkAdv "utomlands" ; -- comment=5

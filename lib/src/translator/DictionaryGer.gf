@@ -215,9 +215,8 @@ lin abrasive_N = mkN "Schleifscheibe" feminine ; -- status=guess
 lin abrasiveness_N = variants {} ;
 lin abreast_Adv = mkAdv "auf" ; -- status=guess
 lin abridge_V2 = mkV2 (mkV "verkürzen") | mkV2 (mkV "kürzen") ; -- status=guess, src=wikt status=guess, src=wikt
-lin abridgement_N = variants {} ;
+lin abridgement_N = mkN "Auszug" "Auszüge" masculine | mkN "Kurzfassung" | mkN "Kurzform" "Kurzformen" feminine ; -- status=guess status=guess status=guess
 lin abridger_N = variants {} ;
-lin abridgment_N = mkN "Auszug" "Auszüge" masculine | mkN "Kurzfassung" | mkN "Kurzform" "Kurzformen" feminine ; -- status=guess status=guess status=guess
 lin abroach_A = variants {} ;
 lin abroad_A = variants {} ;
 lin abroad_Adv = mkAdv "im Ausland" ; -- status=guess

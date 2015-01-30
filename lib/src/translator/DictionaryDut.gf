@@ -98,7 +98,7 @@ lin abrade_V2 = mkV2 (mkV "schuren") ; -- status=guess, src=wikt
 lin abraham_PN = mkPN "Abraham" ; -- src=eng status=guess
 lin abreast_Adv = mkAdv "op de hoogte" | mkAdv "bekend" | mkAdv "goed ingelicht" | mkAdv "welingelicht" ; -- status=guess status=guess status=guess status=guess
 lin abridge_V2 = mkV2 (mkV "beroven") ; -- status=guess, src=wikt
-lin abridgment_N = mkN "bekorting" | mkN "verkorting" ; -- status=guess status=guess
+lin abridgement_N = mkN "bekorting" | mkN "verkorting" ; -- status=guess status=guess
 lin abroad_Adv = mkAdv "in het buitenland" | mkAdv "naar het buitenland" ; -- status=guess status=guess
 lin abrogate_V2 = mkV2 (mkV "afschaffen") ; -- status=guess, src=wikt
 lin abrupt_A = mkA "afgeknot" ; -- status=guess

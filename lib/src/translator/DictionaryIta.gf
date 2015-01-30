@@ -121,9 +121,8 @@ lin abranchiate_A = mkA "abranchiato" ; -- UWN
 lin abrasion_N = mkN "abrasione" feminine ; -- status=guess
 lin abreast_Adv = mkAdv "con i tempi" ;
 lin abridge_V2 = mkV2 (mkV "privare") | mkV2 (mkV "limitare") ; -- status=guess, src=wikt status=guess, src=wikt
-lin abridgement_N = mkN "compendio" | mkN "edizione_ridotta" | mkN "riduzione" ; -- UWN
+lin abridgement_N = mkN "compendio" | mkN "edizione_ridotta" | mkN "riduzione" | mkN "ompendio"; -- UWN
 lin abridger_N = mkN "abbreviatore" | mkN "compendiatore" | mkN "epitomatore" ; -- UWN
-lin abridgment_N = mkN "ompendio" ; -- status=guess
 lin abroad_Adv = mkAdv "all'estero" ; -- status=guess
 lin abrogation_N = mkN "abrogazione" | mkN "annullamento" | mkN "cancellazione" | mkN "cassazione" ; -- UWN
 lin abrupt_A = mkA "brusco" | mkA "brusca" ; -- status=guess status=guess
