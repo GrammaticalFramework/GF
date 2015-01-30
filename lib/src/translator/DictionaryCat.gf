@@ -417,7 +417,6 @@ lin after_Subj = mkSubj "després que" Indic ;
 lin afterbirth_N = mkN "secundina" feminine ; --auto
 lin afternoon_N = mkN "tarda" feminine ;
 lin aftertaste_N = mkN "regust" masculine ; --auto
-lin afterward_Adv = mkAdv "després" ; --auto
 lin afterwards_Adv = mkAdv "després" ; --auto
 lin again_Adv = mkAdv "un altre cop" ; -- should be "tornar a X"
 lin against_Prep = mkPrep "en contra de" ; --split mkPrep "a" ("lean against the wall")

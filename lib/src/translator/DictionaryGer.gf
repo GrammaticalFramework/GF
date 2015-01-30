@@ -1190,7 +1190,6 @@ lin aftershafted_A = variants {} ;
 lin aftershock_N = mkN "Nachbeben" "Nachbeben" neuter ; -- status=guess
 lin aftertaste_N = mkN "Nachgeschmack" masculine ; -- status=guess
 lin afterthought_N = variants {} ;
-lin afterward_Adv = variants {} ;
 lin afterwards_Adv = mkAdv "später" | mkAdv "nachher" | mkAdv "danach" | mkAdv "hinterher" ; -- status=guess status=guess status=guess status=guess
 lin afterworld_N = variants {} ;
 lin again_Adv = mkAdv "wieder" ;
