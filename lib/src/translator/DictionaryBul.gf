@@ -1183,7 +1183,6 @@ lin aftershafted_A = variants {} ;
 lin aftershock_N = variants {} ;
 lin aftertaste_N = mkN001 "привкус" ; ----
 lin afterthought_N = variants {} ;
-lin afterward_Adv = variants {} ;
 lin afterwards_Adv = variants {} ;
 lin afterworld_N = variants {} ;
 lin again_Adv = mkAdv "отново" ;

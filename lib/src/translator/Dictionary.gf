@@ -1176,7 +1176,6 @@ fun aftershafted_A : A ;
 fun aftershock_N : N ;
 fun aftertaste_N : N ;
 fun afterthought_N : N ;
-fun afterward_Adv : Adv  ;
 fun afterwards_Adv : Adv ;
 fun afterworld_N : N ;
 fun again_Adv : Adv ;

@@ -321,7 +321,6 @@ lin aftereffect_N = mkN "後遺症" | mkN "余波" ;
 lin afterlife_N = mkN "来世" | mkN "後世" ;
 lin afternoon_N = mkN "午後" ;
 lin aftershock_N = mkN "余震" ;
-lin afterward_Adv = mkAdv "それから" ;
 lin afterwards_Adv = ParadigmsJpn.mkAdv "その後" | ParadigmsJpn.mkAdv "それから" | ParadigmsJpn.mkAdv "後で" ;
 lin again_Adv = ParadigmsJpn.mkAdv "何度も" ;
 lin against_Prep = ParadigmsJpn.mkPrep "に対して" ; --
