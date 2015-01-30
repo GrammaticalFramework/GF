@@ -28203,8 +28203,7 @@ lin ruminative_A = mkA "冥想" | mkA "沉思" | mkA "爱默想" | mkA "盘算" 
 lin rummage_N = mkN "翻找""次" ;
 lin rummage_V = mkV "翻找" ;
 lin rummage_V2 = mkV2 "使+搜出" ;
-lin rumor_N = mkN "謠言" | mkN "谣言" | mkN "傳聞" | mkN "传闻" | mkN "傳言" | mkN "传言" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
-lin rumour_N = mkN "谣言" ;
+lin rumour_N = mkN "謠言" | mkN "谣言" | mkN "傳聞" | mkN "传闻" | mkN "傳言" | mkN "传言" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin rumour_V2 = mkV2 "传闻" ;
 lin rumour_V3 = mkV3 "谣传" ;
 lin rump_N = mkN "屁股" ; -- status=guess

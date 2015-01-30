@@ -49005,8 +49005,7 @@ lin rummage_V2 = mkV2 (mkV "wühlen") | mkV2 (mkV "stöbern") ; -- status=guess,
 lin rummer_N = variants {} ;
 lin rummy_A = variants {} ;
 lin rummy_N = mkN "Rommé" neuter ; -- status=guess
-lin rumor_N = mkN "Gerücht" neuter ; -- status=guess
-lin rumour_N = variants {} ; --
+lin rumour_N = mkN "Gerücht" neuter ; -- status=guess
 lin rumour_V2 = variants {} ;
 lin rumour_V3 = variants {} ;
 lin rumour_monger_N = variants {} ;

@@ -49009,7 +49009,6 @@ fun rummage_V2 : V2 ;
 fun rummer_N : N ;
 fun rummy_A : A ;
 fun rummy_N : N ;
-fun rumor_N : N  ;
 fun rumour_N : N ;
 fun rumour_V2 : V2 ;
 fun rumour_V3 : V3 ;
