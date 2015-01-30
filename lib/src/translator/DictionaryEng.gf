@@ -49241,7 +49241,6 @@ lin rummage_V2 = mkV2 (mkV "rummage" "rummages" "rummaged" "rummaged" "rummaging
 lin rummer_N = mkN "rummer" ;
 lin rummy_A = mkA "rummy" "rummyyer";
 lin rummy_N = mkN "rummy" ;
-lin rumor_N = mkN "rumor" ;
 lin rumour_N = variants {mkN "rumour" "rumours"; mkN "rumor" "rumors"};
 lin rumour_V2 = mkV2 (mkV (variants {"rumour"; "rumor"}));
 lin rumour_V3 = mkV3 (mkV (variants {"rumour"; "rumor"})) noPrep noPrep;

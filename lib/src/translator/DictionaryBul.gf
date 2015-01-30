@@ -49047,7 +49047,6 @@ lin rummage_V2 = dirV2 (dualV (mkV186 "ровичкам") (mkV173 "ровя")) ;
 lin rummer_N = variants {} ;
 lin rummy_A = variants {} ;
 lin rummy_N = mkN065 "руми" ;
-lin rumor_N = variants {} ;
 lin rumour_N = mkN001 "слух" ;
 lin rumour_V2 = variants {} ;
 lin rumour_V3 = variants {} ;
