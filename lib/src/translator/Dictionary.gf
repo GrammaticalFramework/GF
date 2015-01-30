@@ -203,7 +203,6 @@ fun abreast_Adv : Adv ;
 fun abridge_V2 : V2 ;
 fun abridgement_N : N ;
 fun abridger_N : N ;
-fun abridgment_N : N ;
 fun abroach_A : A ;
 fun abroad_A : A ;
 fun abroad_Adv : Adv ;

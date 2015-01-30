@@ -221,7 +221,6 @@ lin abreast_Adv = mkWAdv (k99 "vierekkäin") ; --UNCHK
 lin abridge_V2 = mkWV2 (k54A "vähentää") ; --UNCHK
 lin abridgement_N = mkWN (k10 "lyhennelmä") ; --UNCHK
 lin abridger_N = mkWN "lyhentäjä" ; --UNCHK
-lin abridgment_N = mkWN (k10 "lyhennelmä") ; --UNCHK
 lin abroach_A = mkWA (k10 "oleva") "avattuna" ; --UNCHK
 lin abroad_A = mkWA (k38 "ulkomainen") ; --UNCHK
 lin abroad_Adv = mkWAdv "ulkomailla" ; --f56

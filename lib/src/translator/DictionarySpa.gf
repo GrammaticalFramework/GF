@@ -140,9 +140,8 @@ lin abrasion_N = mkN "erosión" feminine ; -- status=guess
 lin abrasive_A = mkA "abrasivo" ; -- status=guess
 lin abreast_Adv = mkAdv "al corriente" ; -- status=guess
 lin abridge_V2 = mkV2 (mkV "privar") ; -- status=guess, src=wikt
-lin abridgement_N = mkN "condensación" | mkN "cápsula" | mkN "reducción" | mkN "resumen" ; --UWN
+lin abridgement_N = mkN "condensación" | mkN "cápsula" | mkN "reducción" | mkN "resumen" | mkN "abreviación" feminine | mkN "compendio" ; --UWN status=guess status=guess
 lin abridger_N = mkN "abreviador" | mkN "compendiador" ; --UWN
-lin abridgment_N = mkN "abreviación" feminine | mkN "compendio" ; -- status=guess status=guess
 lin abroad_Adv = mkAdv "por todas partes" | mkAdv "en todas direciones" ; -- status=guess
 lin abrogate_V2 = mkV2 (mkV "abrogar") | mkV2 (mkV "derogar") ; -- status=guess, src=wikt status=guess, src=wikt
 lin abrupt_A = mkA "abrupto" ; -- status=guess
