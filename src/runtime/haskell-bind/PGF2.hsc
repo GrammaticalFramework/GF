@@ -17,7 +17,8 @@ module PGF2 (-- * CId
              -- * PGF
              PGF,readPGF,AbsName,abstractName,startCat,
              -- * Concrete syntax
-             ConcName,Concr,languages,parse,parseWithHeuristics,linearize,alignWords,
+             ConcName,Concr,languages,parse,parseWithHeuristics,
+             hasLinearization,linearize,alignWords,
              -- * Types
              Type(..), Hypo, functionType,
              -- * Trees
@@ -408,6 +409,10 @@ mkCallbacksMap concr callbacks pool = do
                                     return ep
 
     predict_callback _ _ _ _ = return nullPtr
+
+hasLinearization :: Concr -> Fun -> Bool
+hasLinearization lang id = unsafePerformIO $
+  withCString id (pgf_has_linearization (concr lang))
 
 linearize :: Concr -> Expr -> String
 linearize lang e = unsafePerformIO $
