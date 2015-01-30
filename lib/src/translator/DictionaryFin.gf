@@ -245,7 +245,6 @@ lin absent_V2 = mkWV2 (k60A "lähteä") ; --UNCHK
 lin absentee_N = mkWN (compoundN "poissa" (k12 "olija")) ; --UNCHK
 lin absenteeism_N = mkWN (compoundN "poissa" (k1 "olo")) "toistuva" ; --UNCHK
 lin absentmindedness_N = mkWN (compoundN "hajamiel" (k40 "isyys")) ; --UNCHK
-lin absinth_N = mkWN (k5A "absintti") ; --UNCHK
 lin absinthe_N = mkWN (k5A "absintti") ; --UNCHK
 lin absolute_A = mkA "ehdoton" | mkA "absoluuttinen" ;
 lin absolute_N = mkWN (k5A "absoluutti") ; --UNCHK

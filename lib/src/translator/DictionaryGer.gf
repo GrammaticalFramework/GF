@@ -242,7 +242,6 @@ lin absent_minded_A = variants {} ;
 lin absentee_N = variants {} ;
 lin absenteeism_N = variants {} ;
 lin absentmindedness_N = variants {} ;
-lin absinth_N = variants {} ;
 lin absinthe_N = mkN "Wermut" "Wermuts" masculine ; -- status=guess
 lin absolute_A = regA "absolut" ; -- status=guess
 lin absolute_N = mkN "absolute Superlativ" "absoluten Superlative" masculine ; -- status=guess

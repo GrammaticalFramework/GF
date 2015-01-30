@@ -170,7 +170,6 @@ lin absent_A = mkA "缺席" ;
 lin absent_Prep = mkPrep "缺席" ;
 lin absentee_N = mkN "不在者" | mkN "缺席者" ; -- open-multilingual-wordnet
 lin absenteeism_N = mkN "旷课" "次" ;
-lin absinth_N = mkN "苦艾酒" ; -- open-multilingual-wordnet
 lin absinthe_N = mkN "苦艾" | {-mwn-} mkN "苦艾酒" ; -- status=guess -- open-multilingual-wordnet
 lin absolute_A = mkA "绝对" ;
 lin absolute_N = mkN "君主專制" | mkN "君主专制" | mkN "絕對君主制" | mkN "绝对君主制" | {-HSK-} mkN "绝对" | {-mwn-} mkN "绝对事物" ; -- status=guess -- status=guess -- status=guess -- status=guess -- open-multilingual-wordnet

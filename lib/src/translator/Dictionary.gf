@@ -228,7 +228,6 @@ fun absent_minded_A : A ;
 fun absentee_N : N ;
 fun absenteeism_N : N ;
 fun absentmindedness_N : N ;
-fun absinth_N : N ;
 fun absinthe_N : N ;
 fun absolute_A : A ;
 fun absolute_N : N ;

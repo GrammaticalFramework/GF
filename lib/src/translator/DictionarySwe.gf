@@ -240,7 +240,6 @@ lin absent_minded_A = variants {} ; -- status=guess
 lin absentee_N = variants {} ; -- status=guess
 lin absenteeism_N = mkN "frånvaro" ; -- status=guess
 lin absentmindedness_N = variants {} ; -- status=guess
-lin absinth_N = variants {} ; -- status=guess
 lin absinthe_N = mkN "malört" ; -- status=guess
 lin absolute_A = mkA "absolut" "absolut" ; -- SaldoWN
 lin absolute_N = (mkN "absolutbelopp" neutrum) | (mkN "belopp" neutrum) | mkN "modulus" ; -- status=guess status=guess status=guess
