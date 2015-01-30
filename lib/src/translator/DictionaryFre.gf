@@ -157,7 +157,6 @@ lin absent_V2 = mkV2 (reflV (mkV "absenter")) P.genitive ; -- tocheck
 lin absent_minded_A = mkA "distrait" ; -- tocheck
 lin absentee_N = mkN "absent" masculine ; -- tocheck
 lin absenteeism_N = mkN "absentéisme" ; -- UWN
-lin absinth_N = mkN "absinthe" ; -- UWN
 lin absinthe_N = mkN "absinthe" masculine ; -- tocheck
 lin absolute_A = mkA "absolu" ; -- tocheck
 lin absolute_N = mkN "absolu" masculine ; -- tocheck

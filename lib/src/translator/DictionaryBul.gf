@@ -235,7 +235,6 @@ lin absent_minded_A = mkA076 "разсеян" ;
 lin absentee_N = substantiveN (mkA076 "отсъстващ") (AMasc NonHuman) ;
 lin absenteeism_N = mkN071 "отлъчване" ; ----
 lin absentmindedness_N = mkN049 "разсеяност" ;
-lin absinth_N = mkN007 "абсент" ;
 lin absinthe_N = mkN007 "абсент" ;
 lin absolute_A = mkA079 "абсолютен" ;
 lin absolute_N = mkN007 "абсолют" ;

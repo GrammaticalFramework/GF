@@ -99,7 +99,6 @@ lin absenteeism_N = mkN "korduv põhjuseta puudumine" ;
 lin absentee_N = mkN "eemalviibija" | mkN "puuduja" ;
 lin absentmindedness_N = mkN "hajameelsus" | mkN "töössesüvenemine" ;
 lin absinthe_N = mkN "absint" ;
-lin absinth_N = mkN "absint" ;
 lin absolute_N = mkN "absoluut" | mkN "absoluutne" | mkN "täielik" | mkN "ümberlükkamatu" ;
 lin absoluteness_N = mkN "absoluutsus" | mkN "lõplikkus" ;
 lin absolution_N = mkN "pattude andeksandmine" ;

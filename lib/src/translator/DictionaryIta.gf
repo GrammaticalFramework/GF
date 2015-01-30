@@ -134,7 +134,6 @@ lin absence_N = mkN "assenza" ; -- status=guess
 lin absent_A = mkA "assente" ; -- status=guess
 lin absentee_N = mkN "assente" ; -- status=guess
 lin absenteeism_N = mkN "assenteismo" ; -- UWN
-lin absinth_N = mkN "assenzio" ; -- UWN
 lin absinthe_N = mkN "assenzio" ; -- status=guess
 lin absolute_A = mkA "assoluto" ; -- status=guess
 lin absolute_N = mkN "alcol assoluto" ; -- status=guess
