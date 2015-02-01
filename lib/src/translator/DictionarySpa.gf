@@ -27632,12 +27632,15 @@ lin sprechgesang_N = mkN "sprechgesang" ; --UWN
 lin spree_N = mkN "aventura_amorosa" | mkN "cana_al_aire" ; --UWN
 lin sprig_N = mkN "ramita" ; -- status=guess
 lin sprightliness_N = mkN "vida" ; --UWN
-lin spring_N = mkN "resorte" | mkN "muelle" masculine ; -- status=guess
+lin spring_1_N = mkN "primavera" masculine ; -- status=guess
+lin spring_2_N = mkN "resorte" ; -- status=guess
+lin spring_3_N = mkN "origen" masculine ; -- status=guess
+lin spring_4_N = mkN "subida" masculine ; -- status=guess
 lin spring_V = mkV "saltar" ; -- status=guess
 lin spring_V2 = mkV2 (mkV "saltar") ; -- status=guess
 lin springboard_N = mkN "trampolín" masculine ; -- status=guess
 lin springfield_PN = mkPN "Springfield" ; -- status=guess src=geonames
-lin springtime_N = mkN "primavera" ; --UWN
+lin springtime_N = mkN "primavera";
 lin sprinkle_V2 = mkV2 (mkV "rociar") | mkV2 (mkV "salpicar") | mkV2 (mkV "espolvorear") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin sprinkler_N = mkN "aspersor" masculine ; -- status=guess
 lin sprint_V = mkV "esprintar" ; -- status=guess, src=wikt
