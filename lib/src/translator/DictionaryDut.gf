@@ -19047,7 +19047,10 @@ lin spread_N = variants {} ; --
 lin spread_V = mkV "spreiden" | mkV "verspreiden" ; ---- END edits by EdG
 lin spread_V2 = mkV2 spread_V ;
 lin spread_out_V2 = prepV2 OP_spread_V OP_out_Prep ; -- guess-p-verb
-lin spring_N = mkN "voorjaarsschoonmaak" ; -- status=guess
+lin spring_1_N = mkN "voorjaar";
+lin spring_2_N = mkN "veer";
+lin spring_3_N = mkN "bron";
+lin spring_4_N = mkN "sprong";
 lin spring_V = springen_V ; -- status=guess, src=wikt
 lin spring_V2 = mkV2 (springen_V) ; -- status=guess, src=wikt
 lin springboard_N = mkN "springplank" ; -- status=guess

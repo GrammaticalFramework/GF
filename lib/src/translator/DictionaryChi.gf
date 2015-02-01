@@ -30766,13 +30766,16 @@ lin spreader_N = mkN "散布机" ; -- open-multilingual-wordnet
 lin spreadsheet_N = mkN "試算表" | mkN "试算表" | mkN "電子表格" | mkN "电子表格" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin spree_N = mkN "大礼包" ;
 lin sprightly_A = mkA "活泼" ;
-lin spring_N = mkN "春" | {-HSK-} mkN "春天" ;
+lin spring_1_N = mkN "春" | {-HSK-} mkN "春天" ;
+lin spring_2_N = variants {};
+lin spring_3_N = variants {};
+lin spring_4_N = mkN "跳";
 lin spring_V = mkV "春天" ;
 lin spring_V2 = mkV2 "春天" ;
 lin springboard_N = mkN "跳板" ; -- status=guess
 lin springer_N = mkN "猎獚" ; -- open-multilingual-wordnet
 lin springfield_PN = mkPN ("斯普林菲尔德" | "斯普林菲爾德") ; -- comment=src=geonames status=guess
-lin springtime_N = mkN "春季""" ;
+lin springtime_N = mkN "春季" ;
 lin sprinkle_V2 = mkV2 "洒" ;
 lin sprinkler_N = mkN "洒水车" "辆" ;
 lin sprint_N = mkN "短跑" ; -- status=guess

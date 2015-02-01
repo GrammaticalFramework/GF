@@ -53664,7 +53664,10 @@ lin sprig_N = variants {} ; -- status=guess
 lin sprigged_A = variants {} ; -- status=guess
 lin sprightliness_N = variants {} ; -- status=guess
 lin sprightly_A = mkA "pigg" ; -- comment=3
-lin spring_N = mkN "vår" ; -- SaldoWN
+lin spring_1_N = mkN "vår";
+lin spring_2_N = mkN "fjäder";
+lin spring_3_N = mkN "källa";
+lin spring_4_N = mkN "hopp" neutrum;
 lin spring_V = mkV "hoppar" ; -- comment=3
 lin spring_V2 = dirV2 (partV (mkV "hoppar")"över") ; -- comment=2
 lin spring_back_V = mkV "hoppar" ; -- comment=3
@@ -53684,7 +53687,7 @@ lin springfield_PN = mkPN "Springfield" neutrum ; -- src=geonames status=guess
 lin springless_A = variants {} ; -- status=guess
 lin springlike_A = variants {} ; -- status=guess
 lin springtide_N = variants {} ; -- status=guess
-lin springtime_N = variants {} ; -- status=guess
+lin springtime_N = mkN "vår";
 lin springy_A = variants {} ; -- status=guess
 lin sprinkle_N = mkN "stänk" neutrum ; -- comment=4
 lin sprinkle_V2 = variants {} ; -- status=guess
