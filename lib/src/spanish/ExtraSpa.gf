@@ -1,5 +1,5 @@
 concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa ** 
-  open CommonRomance, PhonoSpa, MorphoSpa, ParadigmsSpa, ParamX, ResSpa, BeschSpa,
+  open CommonRomance, PhonoSpa, MorphoSpa, ParadigmsSpa, ParamX, ResSpa, BeschSpa, (I = IrregSpa),
   Prelude in {
   flags coding=utf8 ;
   
@@ -77,5 +77,7 @@ concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa **
 
     ExistsNP np = 
       mkClause [] True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (mkV "existir"))) ;
+
+    UseComp_estar comp = insertComplement comp.s (predV I.estar_V) ;
 
 }
