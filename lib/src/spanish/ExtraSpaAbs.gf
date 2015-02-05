@@ -32,4 +32,6 @@ abstract ExtraSpaAbs = ExtraRomanceAbs ** {
 
     PassVPSlash_ser : VPSlash -> VP ;
 
+    UseComp_estar : Comp -> VP ; -- esta lleno, as opposed to es lleno
+
 }
