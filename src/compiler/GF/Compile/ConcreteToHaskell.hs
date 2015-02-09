@@ -8,7 +8,7 @@ import GF.Data.Utilities(mapSnd)
 import GF.Text.Pretty
 import GF.Grammar.Grammar
 import GF.Grammar.Lookup(lookupFunType,lookupOrigInfo,allOrigInfos)--,allParamValues
-import GF.Grammar.Macros(typeForm,collectOp,mkAbs,mkApp)
+import GF.Grammar.Macros(typeForm,collectOp,collectPattOp,mkAbs,mkApp)
 import GF.Grammar.Lockfield(isLockLabel)
 import GF.Grammar.Predef(cPredef,cInts)
 import GF.Compile.Compute.Predef(predef)
@@ -28,7 +28,7 @@ concretes2haskell opts absname gr =
 
 concrete2haskell opts gr cenv absname cnc modinfo =
     render $
-      haskPreamble absname cnc $$ "" $$
+      haskPreamble va absname cnc $$ "" $$
       "--- Parameter types ---" $$
       vcat (neededParamTypes S.empty (params defs)) $$ "" $$
       "--- Type signatures for linearization functions ---" $$
@@ -54,7 +54,9 @@ concrete2haskell opts gr cenv absname cnc modinfo =
            M.toList $
            jments modinfo
 
-    signature c = "lin"<>c<+>"::"<+>"A."<>gId c<+>"->"<+>"Lin"<>c
+--  signature c = "lin"<>c<+>"::"<+>"A."<>gId c<+>"->"<+>"Lin"<>c
+--  signature c = "--lin"<>c<+>":: (Applicative f,Monad f) =>"<+>"A."<>gId c<+>"->"<+>"f Lin"<>c
+    signature c = "lin"<>c<+>"::"<+>"A."<>gId c<+>"->"<+>pure ("Lin"<>c)
 
     emptydefs = map emptydef (S.toList emptyCats)
     emptydef c = "lin"<>c<+>"_"<+>"="<+>"undefined"
@@ -67,38 +69,44 @@ concrete2haskell opts gr cenv absname cnc modinfo =
     params1 (Nothing,(_,rhs)) = paramTypes gr rhs
     params1 (_,(_,rhs)) = tableTypes gr [rhs]
 
-    ppDef (Nothing,(lhs,rhs)) = hang (lhs<+>"=") 4 (convType gId rhs)
-    ppDef (_,(lhs,rhs)) = hang (lhs<+>"=") 4 (convert gId gr rhs)
+    ppDef (Nothing,(lhs,rhs)) = hang (lhs<+>"=") 4 (convType va gId rhs)
+    ppDef (_,(lhs,rhs)) = hang (lhs<+>"=") 4 (convert va gId gr rhs)
 
     gId :: Ident -> Doc
     gId = if haskellOption opts HaskellNoPrefix then pp else  ("G"<>).pp
+    va = haskellOption opts HaskellVariants
+    pure = if va then brackets else pp
 
     neededParamTypes have [] = []
     neededParamTypes have (q:qs) =
         if q `S.member` have
         then neededParamTypes have qs
-        else let ((got,need),def) = paramType gId gr q
+        else let ((got,need),def) = paramType va gId gr q
              in def:neededParamTypes (S.union got have) (S.toList need++qs)
 
-haskPreamble :: ModuleName -> ModuleName -> Doc
-haskPreamble absname cncname =
+haskPreamble :: Bool -> ModuleName -> ModuleName -> Doc
+haskPreamble va absname cncname =
   "{-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies, FlexibleInstances, LambdaCase #-}" $$
   "module" <+> cncname <+> "where" $$
   "import Prelude hiding (Ordering(..))" $$
-  "import Control.Applicative((<$>),(<*>))" $$
+  "import Control.Applicative(Applicative,pure,empty,(<$>),(<*>))" $$
+--"import Data.Foldable(asum)" $$
+--"import Control.Monad(join)" $$
   "import qualified Data.Map as M" $$
   "import Data.Map((!))" $$
   "import PGF.Haskell" $$
   "import qualified" <+> absname <+> "as A" $$
   "" $$
   "--- Standard definitions ---" $$
-  "linString (A.GString s) = R_s [TK s]" $$
-  "linInt (A.GInt i) = R_s [TK (show i)]" $$
-  "linFloat (A.GFloat x) = R_s [TK (show x)]" $$
+  "linString (A.GString s) ="<+>pure "R_s [TK s]" $$
+  "linInt (A.GInt i) ="<+>pure "R_s [TK (show i)]" $$
+  "linFloat (A.GFloat x) ="<+>pure "R_s [TK (show x)]" $$
   "" $$
   "----------------------------------------------------" $$
   "-- Automatic translation from GF to Haskell follows" $$
   "----------------------------------------------------"
+  where
+    pure = if va then brackets else pp
 
 toHaskell gId gr absname cenv (name,jment) =
   case jment of
@@ -195,32 +203,36 @@ coerce env ty t =
     extend env (x,(Just ty,rhs)) = (x,ty):env
     extend env _ = env
 
-convert gId = convert' False gId
-convertA gId = convert' True gId
+convert va gId = convert' False va gId []
+convertA va gId = convert' True va gId []
 
-convert' atomic gId gr = if atomic then ppA else ppT
+convert' atomic va gId vs gr = if atomic then ppA else ppT
   where
+    ppT0 = convert' False False gId vs gr
+    ppA0 = convert' True False gId vs gr
+    ppTv vs' = convert' atomic va gId vs' gr
+
     ppT = ppT' False
     ppT' loop t =
       case t of
-        Let (x,(_,xt)) t -> sep ["let"<+>x<+>"="<+>ppT xt,"in"<+>ppT t]
-        Abs b x t -> "\\"<+>x<+>"->"<+>ppT t
+        Let (x,(_,xt)) t -> sep ["let"<+>x<+>"="<+>ppT0 xt,"in"<+>ppT t]
+--      Abs b x t -> "\\"<+>x<+>"->"<+>ppT t
 --      V ty ts -> hang "table" 4 (sep [list (enumAll ty),list ts])
-        V ty ts -> hang "table" 4 (dedup ts)
-        T (TTyped ty) cs -> hang "\\case" 2 (vcat (map ppCase cs))
-        S t p -> hang (ppB t) 4 (ppA p)
-        C t1 t2 -> hang (ppA t1<+>"++") 4 (ppA t2)
+        V ty ts -> pure (hang "table" 4 (dedup ts))
+        T (TTyped ty) cs -> pure (hang "\\case" 2 (vcat (map ppCase cs)))
+        S t p -> join (ap t p)
+        C t1 t2 -> hang (ppA t1<+>concat) 4 (ppA t2)
         _ -> ppB' loop t
 
-    ppCase (p,t) = hang (ppP p <+> "->") 4 (ppT t)
+    ppCase (p,t) = hang (ppP p <+> "->") 4 (ppTv (patVars p++vs) t)
 
     ppB = ppB' False
     ppB' loop t =
       case t of
-        App f a -> ppB f<+>ppA a
-        R r -> rcon (map fst r)<+>fsep (fields r)
-        P t l -> ppB (proj l)<+>ppA t
-        FV [] -> "error"<+>doubleQuotes "empty variant"
+        App f a -> ap f a
+        R r -> aps (ppA (rcon (map fst r))) (fields r)
+        P t l -> ap (proj l) t
+        FV [] -> empty
         _ -> ppA' loop t
 
     ppA = ppA' False
@@ -228,19 +240,19 @@ convert' atomic gId gr = if atomic then ppA else ppT
     ppA' True t = error $ "Missing case in convert': "++show t
     ppA' loop t =
       case t of
-        Vr x -> pp x
-        Cn x -> pp x
-        Con c -> gId c
-        Sort k -> pp k
-        EInt n -> pp n
+        Vr x -> if x `elem` vs then pureA (pp x) else pp x
+        Cn x -> pureA (pp x)
+        Con c -> pureA (gId c)
+        Sort k -> pureA (pp k)
+        EInt n -> pureA (pp n)
         Q (m,n) -> if m==cPredef
-                   then ppPredef n
+                   then pureA (ppPredef n)
                    else pp (qual m n)
-        QC (m,n) -> gId (qual m n)
-        K s -> token s
-        Empty -> pp "[]"
-        FV (t:ts) -> "{-variants-}"<>ppA t -- !!
-        Alts t' vs -> alts t' vs
+        QC (m,n) -> pureA (gId (qual m n))
+        K s -> pureA (token s)
+        Empty -> pureA (pp "[]")
+        FV ts@(_:_) -> variants ts
+        Alts t' vs -> pureA (alts t' vs)
         _ -> parens (ppT' True t)
 
     ppPredef n =
@@ -270,9 +282,9 @@ convert' atomic gId gr = if atomic then ppA else ppT
         
     token s = brackets ("TK"<+>doubleQuotes s)
 
-    alts t' vs = brackets ("TP" <+> list' (map alt vs) <+> ppT t')
+    alts t' vs = brackets ("TP" <+> list' (map alt vs) <+> ppA0 t')
       where
-        alt (t,p) = parens (show (pre p)<>","<>ppT t)
+        alt (t,p) = parens (show (pre p)<>","<>ppT0 t)
 
         pre (K s) = [s]
         pre (Strs ts) = concatMap pre ts
@@ -284,6 +296,22 @@ convert' atomic gId gr = if atomic then ppA else ppT
         pat p = error $ "pat "++show p
 
     fields = map (ppA.snd.snd) . sort . filter (not.isLockLabel.fst)
+
+    concat = if va then "+++" else "++"
+--  pure = if va then \ x -> "pure"<+>parens x else id
+--  pureA = if va then \ x -> parens ("pure"<+>x) else id
+    pure = if va then \ x -> brackets x else id -- forcing the list monad
+    pureA = pure
+    ap = if va then \ f x -> hang (ppA f<+>"<*>") 4 (ppA x)
+               else \ f x -> hang (ppB f) 4 (ppA x)
+    join = if va then \ x -> parens ("concat"<+>parens x) else id
+--  sequence = if va then \ x -> parens ("sequence"<+>parens x) else id
+    empty = if va then pp "[]" else "error"<+>doubleQuotes "empty variant"
+    variants = if va then \ ts -> "concat"<+>list ts
+                     else \ (t:_) -> "{-variants-}"<>ppA t -- !!
+
+    aps f [] = f
+    aps f (a:as) = aps (if va then hang (f<+>"<*>") 4 a else hang f 4 a) as
 
 --  enumAll ty = case allParamValues gr ty of Ok ts -> ts
 
@@ -306,15 +334,22 @@ convert' atomic gId gr = if atomic then ppA else ppT
         m = fmap sort (M.fromListWith (++) (zip ts [[i]|i<-is]))
         is = [0..]::[Int]
 
+patVars p =
+  case p of
+    PV x -> [x]
+    PAs x p -> x:patVars p
+    _ -> collectPattOp patVars p
+
 convType = convType' False
 convTypeA = convType' True
 
-convType' atomic gId = if atomic then ppA else ppT
+convType' atomic va gId = if atomic then ppA else ppT
   where
     ppT = ppT' False
     ppT' loop t =
       case t of
-        Table ti tv -> ppB ti <+> "->" <+> ppT tv
+        Table ti tv -> ppB ti <+> "->" <+>
+                       if va then brackets (ppT tv) else ppT tv
         _ -> ppB' loop t
 
     ppB = ppB' False
@@ -372,7 +407,7 @@ labelClass l =
     hang ("class"<+>"Has_"<>l<+>"r"<+>"a"<+>"| r -> a"<+>"where") 4
          (proj l<+>"::"<+>"r -> a")
 
-paramType gId gr q@(_,n) =
+paramType va gId gr q@(_,n) =
     case lookupOrigInfo gr q of
       Ok (m,ResParam (Just (L _ ps)) _)
        {- - | m/=cPredef && m/=moduleNameS "Prelude"-} ->
@@ -389,10 +424,10 @@ paramType gId gr q@(_,n) =
             "type"<+>gId (qual m n)<+>"n = Int")
         | otherwise ->
            ((S.singleton (m,n),paramTypes gr t),
-            "type"<+>gId (qual m n)<+>"="<+>convType gId t)
+            "type"<+>gId (qual m n)<+>"="<+>convType va gId t)
       _ -> ((S.empty,S.empty),empty)
   where
-    param m (n,ctx) = gId (qual m n)<+>[convTypeA gId t|(_,_,t)<-ctx]
+    param m (n,ctx) = gId (qual m n)<+>[convTypeA va gId t|(_,_,t)<-ctx]
     argTypes = S.unions . map argTypes1
     argTypes1 (n,ctx) = S.unions [paramTypes gr t|(_,_,t)<-ctx]
 
