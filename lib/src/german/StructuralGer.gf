@@ -58,9 +58,9 @@ concrete StructuralGer of Structural = CatGer **
   much_Det = detLikeAdj False Sg "viel" ;
   must_VV = auxVV 
       (mkV 
-        "müssen" "muß" "mußt" "muß" "müßt" "müß" 
-        "mußte" "mußtest" "mußten" "mußtet"
-        "müßte" "gemußt" [] 
+        "müssen" "muss" "musst" "muss" "müsst" "müss" 
+        "musste" "musstest" "mussten" "musstet"
+        "müsste" "gemusst" [] 
         VHaben) ;
 ---  one_Quant = DEPREC
   only_Predet = {s = \\_,_,_ => "nur" ; c = noCase ; a = PAgNone} ;
@@ -152,7 +152,7 @@ concrete StructuralGer of Structural = CatGer **
 
   as_CAdv = X.mkCAdv "ebenso" "wie" ;
   have_V2 = P.dirV2 IrregGer.haben_V ;
-  that_Subj = ss "daß" ;
+  that_Subj = ss "dass" ;
 
   lin language_title_Utt = ss "Deutsch" ;
 
