@@ -41,6 +41,17 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
+#if defined(ios_HOST_OS) || defined (darwin_HOST_OS)
+extern void sys_icache_invalidate(void *start, size_t len);
+
+static void
+jit_flush_code(void *start, void *end)
+{
+    mprotect(start, (char *)end - (char *)start,
+	     PROT_READ | PROT_WRITE | PROT_EXEC);
+    sys_icache_invalidate(start, (char *)end-(char *)start);
+}
+#else
 extern void __clear_cache(void*, void*);
 
 static void
@@ -50,6 +61,7 @@ jit_flush_code(void *start, void *end)
 	     PROT_READ | PROT_WRITE | PROT_EXEC);
     __clear_cache(start, end);
 }
+#endif
 
 __attribute__((constructor)) static void
 jit_get_cpu(void)
