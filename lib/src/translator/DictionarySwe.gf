@@ -50164,7 +50164,7 @@ lin selectwoman_N = variants {} ; -- status=guess
 lin selenium_N = mkN "selen" neutrum ; -- status=guess
 lin selenology_N = mkN "selenologi" ; -- status=guess
 lin self_A = mkA "självhäftande" ; -- status=guess
-lin self_N = mkN "jag" neutrum | mkN "jag" neutrum ; -- SaldoWN -- comment=2
+lin self_N = mkN "själv" utrum ;
 lin self_abasement_N = variants {} ; -- status=guess
 lin self_abnegation_N = variants {} ; -- status=guess
 lin self_absorbed_A = variants {} ; -- status=guess
