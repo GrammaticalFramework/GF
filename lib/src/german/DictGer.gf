@@ -2307,7 +2307,7 @@ lin
   angemessen_A = mk3A "angemessen" "angemessener" "angemessenste" ;
   angenehm_A = mk3A "angenehm" "angenehmer" "angenehmste" ;
   angeordnet_A = regA "angeordnet" ;
-  angepasst_A = regA "angepaßt" ;
+  angepasst_A = regA "angepasst" ;
   anger_N = mkN  "Anger" "Anger" masculine ;
   angerdorf_N = mkN  "Angerdorf" "Angerdörfer" neuter ;
   angereichert_A = regA "angereichert" ;
@@ -3719,7 +3719,7 @@ lin
   aufschlagen_6_V = prefixV "auf" (irregV "schlagen" "schlagt" "schlug" "schlüge" "geschlagen") ; 
   aufschliessen_3_V = prefixV "auf" (irregV "schließen" "schließt" "schloss" "schloss" "geschlossen") ; 
   aufschluss_N = mkN  "Aufschluss" "Aufschlüsse" masculine ;
-  aufschlussmittel_N = mkN  "Aufschlußmittel" "Aufschlußmittel" neuter ;
+  aufschlussmittel_N = mkN  "Aufschlussmittel" "Aufschlussmittel" neuter ;
   aufschlussreich_A = mk3A "aufschlussreich" "aufschlussreicher" "aufschlussreichste" ;
   aufschneiden_9_V = prefixV "auf" (irregV "schneiden" "schneidet" "schnitt" "schnitt" "geschnitten") ; 
   aufschneider_N = mkN  "Aufschneider" "Aufschneider" masculine ;
