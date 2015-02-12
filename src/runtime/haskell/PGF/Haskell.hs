@@ -3,6 +3,7 @@
 {-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies, FlexibleInstances #-}
 module PGF.Haskell where
 import Control.Applicative((<$>),(<*>))
+import Control.Monad(join)
 import Data.Char(toUpper)
 import Data.List(isPrefixOf)
 import qualified Data.Map as M
@@ -65,4 +66,10 @@ to_R_s r = R_s (proj_s r)
 
 infixr 5 +++
 
+-- | Concatenation with variants
 xs +++ ys = (++) <$> xs <*> ys
+
+-- | Selection from tables with variants
+t ! p = join (t p)
+t !$ p = join (t <$> p)
+t !* p = join (t <*> p)
