@@ -12,7 +12,7 @@ grammar you also have to add the option '-literal=Symb' while compiling.
 For Linux users
 ---------------
 
-You will need the package: libtool
+You will need the package: autoconf, libtool
 
 The compilation steps are:
 

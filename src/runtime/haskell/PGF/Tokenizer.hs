@@ -9,6 +9,7 @@ module PGF.Tokenizer
        ( mkTokenizer
        ) where
 
+import Prelude hiding ((<*>))
 --import Data.List (intercalate)
 --import Test.QuickCheck
 import FST.TransducerInterface

@@ -21,6 +21,7 @@
 -- 
 -----------------------------------------------------------------------------
 
+{-# LANGUAGE FlexibleContexts #-}
 module GF.Compile.SubExOpt (subexpModule,unsubexpModule) where 
 
 import GF.Grammar.Grammar

@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module PGF.Printer (ppPGF,ppCat,ppFId,ppFunId,ppSeqId,ppSeq,ppFun) where
 
 import PGF.CId

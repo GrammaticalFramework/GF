@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module PGF.Linearize
             ( linearize
             , linearizeAll
