@@ -9,6 +9,7 @@
 --
 -----------------------------------------------------------------------------
 
+{-# LANGUAGE FlexibleContexts #-}
 module GF.Speech.SLF (slfPrinter,slfGraphvizPrinter,
                         slfSubPrinter,slfSubGraphvizPrinter) where
 

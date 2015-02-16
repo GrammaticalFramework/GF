@@ -93,7 +93,7 @@ delta f vs =
       Occurs  -> fromNonExist vs PFalse   (ap2 occurs)
       ToUpper -> fromNonExist vs NonExist (ap1 (map toUpper))
       ToLower -> fromNonExist vs NonExist (ap1 (map toLower))
-      IsUpper -> fromNonExist vs PFalse   (ap1 (all isUpper))
+      IsUpper -> fromNonExist vs PFalse   (ap1 (all' isUpper))
       Length  -> fromNonExist vs (0::Int) (ap1 (length::String->Int))
       Plus    -> ap2 ((+)::Int->Int->Int)
       EqInt   -> ap2 ((==)::Int->Int->Bool)
@@ -131,8 +131,9 @@ delta f vs =
 
     tk i s = take (max 0 (length s - i)) s :: String
     dp i s = drop (max 0 (length s - i)) s :: String
-    occur s t = isInfixOf (s::String) t
-    occurs s t = any (`elem` t) (s::String)
+    occur s t = isInfixOf (s::String) (t::String)
+    occurs s t = any (`elem` (t::String)) (s::String)
+    all' = all :: (a->Bool) -> [a] -> Bool
 
 boolV b = VCApp (cPredef,if b then cPTrue else cPFalse) []
 

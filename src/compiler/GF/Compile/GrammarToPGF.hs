@@ -1,4 +1,4 @@
-{-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE BangPatterns, FlexibleContexts #-}
 module GF.Compile.GrammarToPGF (mkCanon2pgf) where
 
 --import GF.Compile.Export

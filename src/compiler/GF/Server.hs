@@ -16,7 +16,11 @@ import GF.System.Directory(doesDirectoryExist,doesFileExist,createDirectory,
                            getDirectoryContents,removeFile,removeDirectory,
                            getModificationTime)
 import Data.Time (getCurrentTime,formatTime)
+#if MIN_VERSION_time(1,5,0)
+import Data.Time.Format(defaultTimeLocale,rfc822DateFormat)
+#else
 import System.Locale(defaultTimeLocale,rfc822DateFormat)
+#endif
 import System.FilePath(dropExtension,takeExtension,takeFileName,takeDirectory,
                        (</>),makeRelative)
 #ifndef mingw32_HOST_OS

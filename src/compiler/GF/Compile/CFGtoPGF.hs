@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module GF.Compile.CFGtoPGF (cf2pgf) where
 
 import GF.Grammar.CFG

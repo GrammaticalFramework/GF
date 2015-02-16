@@ -54,6 +54,7 @@ module Data.Binary.Builder (
 
   ) where
 
+import Prelude hiding (empty)
 import Foreign(Word,Word8,Ptr,Storable,ForeignPtr,withForeignPtr,poke,plusPtr,sizeOf)
 import System.IO.Unsafe(unsafePerformIO)
 import Data.Monoid
@@ -71,7 +72,7 @@ import qualified Data.ByteString.Internal as S
 #endif
 
 #if defined(__GLASGOW_HASKELL__) && !defined(__HADDOCK__)
-import GHC.Base
+import GHC.Base(Int(..),uncheckedShiftRL# )
 import GHC.Word (Word32(..),Word16(..),Word64(..))
 
 #if WORD_SIZE_IN_BITS < 64 && __GLASGOW_HASKELL__ >= 608

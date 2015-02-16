@@ -6,6 +6,7 @@
 -- exports a GF grammar into a Python module
 -----------------------------------------------------------------------------
 
+{-# LANGUAGE FlexibleContexts #-}
 module GF.Compile.PGFtoPython (pgf2python) where
 
 import PGF(showCId)

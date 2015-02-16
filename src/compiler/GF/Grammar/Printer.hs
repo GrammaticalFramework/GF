@@ -7,6 +7,7 @@
 --
 -----------------------------------------------------------------------------
 
+{-# LANGUAGE FlexibleContexts #-}
 module GF.Grammar.Printer
            ( -- ** Pretty printing
              TermPrintQual(..)

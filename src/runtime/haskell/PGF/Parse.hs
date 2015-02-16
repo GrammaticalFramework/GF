@@ -1,4 +1,4 @@
-{-# LANGUAGE BangPatterns, RankNTypes #-}
+{-# LANGUAGE BangPatterns, RankNTypes, FlexibleContexts #-}
 module PGF.Parse
           ( ParseState
           , ErrorState

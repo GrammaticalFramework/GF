@@ -75,7 +75,7 @@ checkCond s b = if b then return () else checkError s
 checkWarn :: Message -> Check ()
 checkWarn msg = Check $ \{-ctxt-} (es,ws) -> ((es,("Warning:" <+> msg) : ws),Success ())
 
-checkWarnings = mapM_ checkWarn
+checkWarnings ms = mapM_ checkWarn ms
 
 -- | Report a nonfatal (accumulated) error
 checkAccumError :: Message -> Check ()

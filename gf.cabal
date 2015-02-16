@@ -297,6 +297,9 @@ Library
   else
     build-tools: happy, alex>=3
 
+  if impl(ghc>=7.10)
+    ghc-options: -fno-warn-tabs
+
   if os(windows)
     build-depends: Win32
   else

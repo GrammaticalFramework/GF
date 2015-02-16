@@ -21,7 +21,11 @@ import qualified PGF2 as C
 
 import Data.Time.Clock(UTCTime)
 import Data.Time.Format(formatTime)
+#if MIN_VERSION_time(1,5,0)
+import Data.Time.Format(defaultTimeLocale,rfc822DateFormat)
+#else
 import System.Locale(defaultTimeLocale,rfc822DateFormat)
+#endif
 import Text.JSON
 import Text.PrettyPrint as PP(render, text, (<+>))
 import qualified Codec.Binary.UTF8.String as UTF8 (decodeString)
