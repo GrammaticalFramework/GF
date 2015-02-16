@@ -54,7 +54,9 @@ module Data.Binary.Builder (
 
   ) where
 
+#if MIN_VERSION_base(4,8,0)
 import Prelude hiding (empty)
+#endif
 import Foreign(Word,Word8,Ptr,Storable,ForeignPtr,withForeignPtr,poke,plusPtr,sizeOf)
 import System.IO.Unsafe(unsafePerformIO)
 import Data.Monoid

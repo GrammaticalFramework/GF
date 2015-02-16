@@ -5,11 +5,14 @@ In this module are implemented function that build a fst-based tokenizer
 from a Concrete grammar.
 
 -}
+{-# LANGUAGE CPP #-}
 module PGF.Tokenizer 
        ( mkTokenizer
        ) where
 
+#if MIN_VERSION_base(4,8,0)
 import Prelude hiding ((<*>))
+#endif
 --import Data.List (intercalate)
 --import Test.QuickCheck
 import FST.TransducerInterface
