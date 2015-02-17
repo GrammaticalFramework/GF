@@ -79,6 +79,6 @@ lin
   dash_Chunk = ss "-" ;
 
 oper
-  emptyNP : NP = mkNP (P.mkPN []) ;
+  emptyNP : NP = Syntax.mkNP (P.mkPN []) ;
 
 }
