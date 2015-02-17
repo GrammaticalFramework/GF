@@ -234,6 +234,10 @@ public class Translator {
     	return out;
     }
 
+    private static String implode(String s) {
+	return s.replaceAll("\\s","");
+    } 
+	
     private String translateWord(String input) {
 
     	String output = input.toUpperCase() ;  // if all else fails, return the word itself in upper case ///in brackets
@@ -308,6 +312,11 @@ public class Translator {
         if (output == null)
         	output = "% ";     // make sure that we return something
 
+	if (getTargetLanguage().getLangCode().equals("cmn-Hans-CN") ||
+	    getTargetLanguage().getLangCode().equals("ja-JP") ||
+	    getTargetLanguage().getLangCode().equals("th-TH"))
+	    output = implode(output) ;
+		
         return new Pair<String,List<ExprProb>>(output, exprs);
     }
 
@@ -316,7 +325,12 @@ public class Translator {
     	String s = targetLang.linearize(expr);
     	if (s == null)
     		s = "% ";     // make sure that we return something
-    	return s;
+	
+	if (getTargetLanguage().getLangCode().equals("cmn-Hans-CN") ||
+	    getTargetLanguage().getLangCode().equals("ja-JP") ||
+	    getTargetLanguage().getLangCode().equals("th-TH"))
+	    return implode(s) ;
+	else return s ;
     }
 
     public Object[] bracketedLinearize(Expr expr) {
