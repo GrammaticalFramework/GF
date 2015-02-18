@@ -520,7 +520,7 @@ nerc pgf (lang,concr) lin_idx sentence offset =
       where
         retLit e = --traceShow (name,e,drop end_offset sentence) $
                    Just (e,0,end_offset)
-          where end_offset = length sentence-length rest
+          where end_offset = offset+length name
         pn = retLit (mkApp "SymbPN" [mkApp "MkSymb" [mkStr name]])
         ((lemma,cat),_) = maximumBy (compare `on` snd) (reverse ls)
         ls = [((fun,cat),p)
