@@ -544,10 +544,11 @@ nerc pgf (lang,concr) lin_idx sentence offset =
 chunk :: LiteralCallback
 chunk _ (_,concr) lin_idx sentence offset =
   case uncapitalized (drop offset sentence) of
-    Just (word@(_:_),rest) | null (lookupMorpho concr word) ->
-        Just (expr,0,length sentence-length rest)
+    Just (word0@(_:_),rest) | null (lookupMorpho concr word) ->
+        Just (expr,0,offset+length word)
       where
-        expr = mkApp "MkSymb" [mkStr (trimRight word)]
+        word = trimRight word0
+        expr = mkApp "MkSymb" [mkStr word]
     _ -> Nothing
 
 
