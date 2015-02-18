@@ -1,4 +1,4 @@
-{-# LANGUAGE ExistentialQuantification, DeriveDataTypeable #-}
+{-# LANGUAGE ExistentialQuantification, DeriveDataTypeable, ScopedTypeVariables #-}
 -------------------------------------------------
 -- |
 -- Maintainer  : Krasimir Angelov
@@ -459,8 +459,8 @@ alignWords lang e = unsafePerformIO $
       c_phrase <- (#peek PgfAlignmentPhrase, phrase) ptr
       phrase <- peekCString c_phrase
       n_fids <- (#peek PgfAlignmentPhrase, n_fids) ptr
-      fids <- peekArray (fromIntegral (n_fids :: CInt)) (ptr `plusPtr` (#offset PgfAlignmentPhrase, fids))
-      return (phrase, fids)
+      (fids :: [CInt]) <- peekArray (fromIntegral (n_fids :: CInt)) (ptr `plusPtr` (#offset PgfAlignmentPhrase, fids))
+      return (phrase, map fromIntegral fids)
 
 -----------------------------------------------------------------------------
 -- Helper functions
