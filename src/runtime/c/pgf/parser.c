@@ -1607,7 +1607,7 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 		}
 		else {
 			PgfItemConts* conts = 
-				pgf_parsing_get_conts(ps->before, 
+				pgf_parsing_get_conts(ps->before,
 				                      parg->ccat, slit->r,
 									  ps->pool);
 			gu_buf_push(conts->items, PgfItem*, item);
@@ -1616,39 +1616,45 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 				/* This is the first time when we encounter this 
 				 * literal category so we must call the callback */
 
-				PgfLiteralCallback* callback =
-					gu_map_get(ps->callbacks,
-					           parg->ccat->cnccat, 
-							   PgfLiteralCallback*);
+				bool match = false;
+				if (!ps->before->needs_bind) {
+					PgfLiteralCallback* callback =
+						gu_map_get(ps->callbacks,
+								   parg->ccat->cnccat, 
+								   PgfLiteralCallback*);
 
-				if (callback != NULL) {
-					size_t start  = ps->before->end_offset;
-					size_t offset = start;
-					PgfExprProb *ep =
-						callback->match(callback,
-						                slit->r,
-				                        ps->sentence, &offset,
-				                        ps->out_pool);
+					if (callback != NULL) {
+						size_t start  = ps->before->end_offset;
+						size_t offset = start;
+						PgfExprProb *ep =
+							callback->match(callback,
+											slit->r,
+											ps->sentence, &offset,
+											ps->out_pool);
 
-					if (ep != NULL) {
-						PgfProduction prod;
-						PgfProductionExtern* pext =
-							gu_new_variant(PGF_PRODUCTION_EXTERN,
-										   PgfProductionExtern,
-										   &prod, ps->pool);
-						pext->ep = ep;
-						pext->lins = NULL;
+						if (ep != NULL) {
+							PgfProduction prod;
+							PgfProductionExtern* pext =
+								gu_new_variant(PGF_PRODUCTION_EXTERN,
+											   PgfProductionExtern,
+											   &prod, ps->pool);
+							pext->ep = ep;
+							pext->lins = NULL;
 
-						PgfItem* item =
-							pgf_new_item(ps, conts, prod);
-						item->curr_sym = pgf_collect_extern_tok(ps,start,offset);
-						item->sym_idx  = pgf_item_symbols_length(item);
-						PgfParseState* state =
-							pgf_new_parse_state(ps, offset, BIND_NONE,
-							                    item->inside_prob+item->conts->outside_prob);
-						gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
+							PgfItem* item =
+								pgf_new_item(ps, conts, prod);
+							item->curr_sym = pgf_collect_extern_tok(ps,start,offset);
+							item->sym_idx  = pgf_item_symbols_length(item);
+							PgfParseState* state =
+								pgf_new_parse_state(ps, offset, BIND_NONE,
+													item->inside_prob+item->conts->outside_prob);
+							gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
+							match = true;
+						}
 					}
-				} else {
+				}
+
+				if (!match) {
 					pgf_item_free(ps, item);
 				}
 			} else {
