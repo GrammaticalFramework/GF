@@ -293,8 +293,7 @@ typedef GuVariant PgfProduction;
 typedef enum {
 	PGF_PRODUCTION_APPLY,
 	PGF_PRODUCTION_COERCE,
-	PGF_PRODUCTION_EXTERN,
-	PGF_PRODUCTION_META
+	PGF_PRODUCTION_EXTERN
 } PgfProductionTag;
 
 typedef struct {
