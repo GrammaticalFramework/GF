@@ -905,7 +905,7 @@ enum {
 /* FIXME: no prefix is availble to encode a 32-bit operand size in 64-bit
    mode */
 #define JMPSm(M)							_O_D8		(0xeb					,(int)(M)		)
-#define JMPm(M)								_O_D32		(0xe9					,(int)(M)		)
+#define JMPm(M)								_O_D32		(0xe9					,(M)		)
 #define JMPLsr(R)			(_REXLrr(0, R),			_O_Mrm		(0xff		,_b11,_b100,_r4(R)				))
 #define JMPsm(D,B,I,S)			(_REXLrm(0, B, I),		_O_r_X		(0xff		     ,_b100		,(int)(D),B,I,S		))
 

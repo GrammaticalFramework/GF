@@ -423,7 +423,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_stxi_p(offsetof(PgfValuePAP,fun), JIT_RET, JIT_VCLOS);
 	jit_stxi_p(offsetof(PgfValuePAP,n_args), JIT_RET, JIT_R1);
 	jit_ldr_p(JIT_R2, JIT_SP);
-	ref2 = jit_bnei_i(jit_forward(), JIT_R2, (int)gates->update_closure);
+	ref2 = jit_bnei_p(jit_forward(), JIT_R2, gates->update_closure);
 	jit_ldxi_p(JIT_VHEAP, JIT_FP, sizeof(void*));
 	jit_movi_p(JIT_R2, gates->evaluate_indirection);
 	jit_str_p(JIT_VHEAP, JIT_R2);
@@ -509,7 +509,7 @@ pgf_jit_gates(PgfReader* rdr)
 
 	gates->mk_const = jit_get_ip().ptr;
 	jit_popr_p(JIT_R0);
-	ref2 = jit_bnei_i(jit_forward(), JIT_R0, (int)gates->update_closure);
+	ref2 = jit_bnei_p(jit_forward(), JIT_R0, gates->update_closure);
 	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
 	jit_pushr_i(JIT_R0);
 	jit_prepare(2);
@@ -702,7 +702,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				gu_printf(out, err, "CASE        %s %03d\n", id, target);
 #endif
 				jit_insn *jump =
-					jit_bnei_i(jit_forward(), JIT_RET, (int) jit_forward());
+					jit_bnei_p(jit_forward(), JIT_RET, jit_forward());
 
 				PgfSegmentPatch label_patch;
 				label_patch.segment = target;
