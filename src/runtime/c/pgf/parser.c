@@ -39,8 +39,6 @@ typedef struct {
 	GuPool* out_pool;  // this pool is used for the allocating the final abstract trees
 	GuString sentence; // the sentence to be parsed
 	GuBuf* expr_queue; // during the extraction of abstract trees we push them in this queue
-	PgfExpr meta_var;
-	PgfProduction meta_prod;
     int max_fid;
     PgfParseState *before;
     PgfParseState *after;
@@ -58,8 +56,6 @@ typedef struct {
 
     prob_t heuristic_factor;
     PgfCallbacksMap* callbacks;
-    prob_t meta_prob;
-	prob_t meta_token_prob;
 } PgfParsing;
 
 typedef enum { BIND_NONE, BIND_HARD, BIND_SOFT } BIND_TYPE;
@@ -164,20 +160,6 @@ pgf_add_extern_tok(PgfSymbol* psym, PgfToken tok, GuPool* pool) {
 	*psym = new_sym;
 }
 
-static void
-pgf_add_extern_cat(PgfSymbol* psym, int d, int r, GuPool* pool) {
-	PgfSymbol new_sym;
-	PgfSymbolCat* scat = (PgfSymbolCat*)
-		gu_alloc_variant(PGF_SYMBOL_CAT,
-						 sizeof(PgfSymbolCat)+sizeof(PgfSymbol),
-						 gu_alignof(PgfSymbolCat),
-						 &new_sym, pool);
-	*((PgfSymbol*) (scat+1)) = *psym;
-	scat->d = d;
-	scat->r = r;
-	*psym = new_sym;
-}
-
 PgfSymbol
 pgf_collect_extern_tok(PgfParsing* ps, size_t start, size_t end)
 {
@@ -233,16 +215,6 @@ pgf_item_symbols_length(PgfItem* item)
 			
 			return seq_len;
 		}
-    }
-    case PGF_PRODUCTION_META: {
-		int seq_len = 0;
-		PgfSymbol sym = item->curr_sym;
-		while (!gu_variant_is_null(sym)) {
-			seq_len++;
-			sym = pgf_prev_extern_sym(sym);
-		}
-		
-		return seq_len;
     }
     default:
         gu_impossible();
@@ -710,9 +682,6 @@ pgf_item_set_curr_symbol(PgfItem* item, GuPool* pool)
 	case PGF_PRODUCTION_EXTERN: {
 		break;
 	}
-	case PGF_PRODUCTION_META: {
-		break;
-	}
 	default:
 		gu_impossible();
 	}
@@ -756,18 +725,6 @@ pgf_new_item(PgfParsing* ps, PgfItemConts* conts, PgfProduction prod)
 		PgfProductionExtern* pext = pi.data;
 		item->args = gu_empty_seq();
 		item->inside_prob = pext->ep->prob;
-		break;
-	}
-	case PGF_PRODUCTION_META: {
-		PgfProductionMeta* pmeta = pi.data;
-		item->args = pmeta->args;
-		item->inside_prob = pmeta->ep ? pmeta->ep->prob : 0;
-
-		int n_args = gu_seq_length(item->args);
-		for (int i = 0; i < n_args; i++) {
-			PgfPArg *arg = gu_seq_index(item->args, PgfPArg, i);
-			item->inside_prob += arg->ccat->viterbi_prob;
-		}
 		break;
 	}
 	default:
@@ -851,12 +808,6 @@ pgf_item_advance(PgfItem* item, GuPool* pool)
 static void
 pgf_item_free(PgfParsing* ps, PgfItem* item)
 {
-	GuVariantInfo i = gu_variant_open(item->prod);
-	switch (i.tag) {
-	case PGF_PRODUCTION_META:
-		return; // for now we don't release meta items
-	}
-
 	PgfItemConts* conts = item->conts;
 	conts->ref_count--;
 	do {
@@ -992,15 +943,6 @@ pgf_parsing_new_production(PgfItem* item, PgfExprProb *ep, GuPool *pool)
 		} else {
 			prod = item->prod;
 		}
-		break;
-	}
-	case PGF_PRODUCTION_META: {
-		PgfProductionMeta* new_pmeta = 
-			gu_new_variant(PGF_PRODUCTION_META,
-						   PgfProductionMeta,
-						   &prod, pool);
-		new_pmeta->ep   = ep;
-		new_pmeta->args = item->args;
 		break;
 	}
 	default:
@@ -1456,75 +1398,6 @@ pgf_parsing_td_predict(PgfParsing* ps,
 }
 
 static void
-pgf_parsing_meta_scan(PgfParsing* ps,
-	                  PgfItem* meta_item, prob_t meta_prob)
-{
-	PgfItem* item = pgf_item_copy(meta_item, ps);
-	item->inside_prob += meta_prob;
-
-	size_t offset = ps->before->end_offset;
-	while (ps->sentence[offset] != 0 &&
-	       !gu_is_space(ps->sentence[offset])) {
-		offset++;
-	}
-	
-	size_t len = offset - ps->before->end_offset;
-	char* tok = gu_malloc(ps->pool, len+1);
-	memcpy(tok, ps->sentence+ps->before->end_offset, len);
-	tok[len] = 0;
-
-	pgf_add_extern_tok(&item->curr_sym, tok, ps->pool);
-
-	gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
-}
-
-static void
-pgf_parsing_meta_predict(PgfParsing* ps, PgfItem* meta_item)
-{
-	PgfAbsCats* cats = ps->concr->abstr->cats;
-	size_t n_cats = gu_seq_length(cats);
-	
-	for (size_t i = 0; i < n_cats; i++) {
-		PgfAbsCat* abscat = gu_seq_index(cats, PgfAbsCat, i);
-
-		if (abscat->prob == INFINITY)
-			continue;
-
-		PgfCncCat* cnccat =
-			gu_map_get(ps->concr->cnccats, abscat->name, PgfCncCat*);
-		if (cnccat == NULL)
-			continue;
-
-		size_t n_cats = gu_seq_length(cnccat->cats);
-		for (size_t i = 0; i < n_cats; i++) {
-			PgfCCat* ccat = gu_seq_get(cnccat->cats, PgfCCat*, i);
-			if (ccat->prods == NULL) {
-				// empty category
-				continue;
-			}
-
-			for (size_t lin_idx = 0; lin_idx < cnccat->n_lins; lin_idx++) {
-				PgfItem* item = 
-					pgf_item_copy(meta_item, ps);
-				item->inside_prob +=
-					ccat->viterbi_prob+abscat->prob;
-
-				size_t nargs = gu_seq_length(meta_item->args);
-				item->args = gu_new_seq(PgfPArg, nargs+1, ps->pool);
-				memcpy(gu_seq_data(item->args), gu_seq_data(meta_item->args),
-					   nargs * sizeof(PgfPArg));
-				gu_seq_set(item->args, PgfPArg, nargs,
-						   ((PgfPArg) { .hypos = NULL, .ccat = ccat }));
-
-				pgf_add_extern_cat(&item->curr_sym, nargs, lin_idx, ps->pool);
-
-				gu_buf_heap_push(ps->before->agenda, pgf_item_prob_order, &item);
-			}
-		}
-	}
-}
-
-static void
 pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym);
 
 static void
@@ -1802,36 +1675,6 @@ pgf_parsing_item(PgfParsing* ps, PgfItem* item)
 		}
 		break;
 	}
-	case PGF_PRODUCTION_META: {
-		if (item->sym_idx == pgf_item_symbols_length(item)) {
-			if (ps->before->meta_item != NULL)
-				break;
-			ps->before->meta_item = item;
-
-			if (ps->before->end_offset == strlen(ps->sentence)) {
-				PgfExprProb *ep = gu_new(PgfExprProb, ps->pool);
-				ep->expr = ps->meta_var;
-				ep->prob = item->inside_prob;
-				size_t n_args = gu_seq_length(item->args);
-				for (size_t i = 0; i < n_args; i++) {
-					PgfPArg* arg = gu_seq_index(item->args, PgfPArg, i);
-					ep->prob -= arg->ccat->viterbi_prob;
-				}
-				pgf_parsing_complete(ps, item, ep);
-			} else {
-				prob_t meta_token_prob =
-					ps->meta_token_prob;
-				if (meta_token_prob != INFINITY) {
-					pgf_parsing_meta_scan(ps, item, meta_token_prob);
-				}
-
-				pgf_parsing_meta_predict(ps, item);
-			}
-		} else {
-			pgf_parsing_symbol(ps, item, item->curr_sym);
-		}
-		break;
-	}
 	default:
 		gu_impossible();
 	}
@@ -1848,22 +1691,6 @@ pgf_parsing_set_default_factors(PgfParsing* ps, PgfAbstr* abstr)
 		GuVariantInfo pi = gu_variant_open(flag->value);
 		gu_assert (pi.tag == PGF_LITERAL_FLT);
 		ps->heuristic_factor = ((PgfLiteralFlt*) pi.data)->val;
-	}
-
-	flag =
-		gu_seq_binsearch(abstr->aflags, pgf_flag_order, PgfFlag, "meta_prob");
-	if (flag != NULL) {
-		GuVariantInfo pi = gu_variant_open(flag->value);
-		gu_assert (pi.tag == PGF_LITERAL_FLT);
-		ps->meta_prob = - log(((PgfLiteralFlt*) pi.data)->val);
-	}
-
-	flag =
-		gu_seq_binsearch(abstr->aflags, pgf_flag_order, PgfFlag, "meta_token_prob");
-	if (flag != NULL) {
-		GuVariantInfo pi = gu_variant_open(flag->value);
-		gu_assert (pi.tag == PGF_LITERAL_FLT);
-		ps->meta_token_prob = - log(((PgfLiteralFlt*) pi.data)->val);
 	}
 }
 
@@ -1892,23 +1719,8 @@ pgf_new_parsing(PgfConcr* concr, GuString sentence, PgfCallbacksMap* callbacks,
 	ps->free_item = NULL;
 	ps->heuristic_factor = 0;
 	ps->callbacks = callbacks;
-	ps->meta_prob = INFINITY;
-	ps->meta_token_prob = INFINITY;
 
 	pgf_parsing_set_default_factors(ps, concr->abstr);
-
-	PgfExprMeta *expr_meta =
-		gu_new_variant(PGF_EXPR_META,
-					   PgfExprMeta,
-					   &ps->meta_var, pool);
-	expr_meta->id = 0;
-
-	PgfProductionMeta* pmeta =
-		gu_new_variant(PGF_PRODUCTION_META,
-					   PgfProductionMeta,
-					   &ps->meta_prod, pool);
-	pmeta->ep   = NULL;
-	pmeta->args = gu_new_seq(PgfPArg, 0, pool);
 
 	return ps;
 }
@@ -1988,24 +1800,6 @@ pgf_result_production(PgfParsing* ps,
 		st->ep      = *pext->ep;
 		st->args    = gu_empty_seq();
 		st->arg_idx = 0;
-
-		gu_buf_heap_push(ps->expr_queue, &pgf_expr_state_order, &st);
-		break;
-	}
-	case PGF_PRODUCTION_META: {
-		PgfProductionMeta* pmeta = pi.data;
-
-		PgfExprState *st = gu_new(PgfExprState, ps->pool);
-		st->answers = answers;
-		st->ep      = *pmeta->ep;
-		st->args    = pmeta->args;
-		st->arg_idx = 0;
-
-		size_t n_args = gu_seq_length(st->args);
-		for (size_t k = 0; k < n_args; k++) {
-			PgfPArg* parg = gu_seq_index(st->args, PgfPArg, k);
-			st->ep.prob += parg->ccat->viterbi_prob;
-		}
 
 		gu_buf_heap_push(ps->expr_queue, &pgf_expr_state_order, &st);
 		break;
@@ -2144,14 +1938,6 @@ pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx,
                     pgf_new_item(ps, conts, prod);
                 gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
             }
-
-			if (ps->meta_prob != INFINITY) {
-				PgfItem *item =
-					pgf_new_item(ps, conts, ps->meta_prod);
-				item->inside_prob =
-					ps->meta_prob;
-				gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
-			}
 		}
 	}
 
@@ -2244,7 +2030,9 @@ pgf_parse_result_next(PgfParsing* ps)
 					gu_new_variant_i(ps->out_pool, 
 					                 PGF_EXPR_APP, PgfExprApp,
 									 .fun = st->ep.expr,
-									 .arg = ps->meta_var);
+									 .arg = gu_new_variant_i(ps->out_pool,
+					                                         PGF_EXPR_META, PgfExprMeta,
+					                                         .id = 0));
 				st->arg_idx++;
 				gu_buf_heap_push(ps->expr_queue, &pgf_expr_state_order, &st);
 			} else {
