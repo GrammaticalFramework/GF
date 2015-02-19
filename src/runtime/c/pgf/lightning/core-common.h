@@ -427,7 +427,7 @@ typedef union jit_code {
 #define jit_beqr_p(label, s1, s2)	jit_beqr_ul((label), (s1), (s2))
 #define jit_beqi_p(label, rs, is)	jit_beqi_ul((label), (rs), (is))
 #define jit_bner_p(label, s1, s2)	jit_bner_ul((label), (s1), (s2))
-#define jit_bnei_p(label, rs, is)	jit_bnei_ul((label), (rs), (is))
+#define jit_bnei_p(label, rs, is)	jit_bnei_ul((label), (rs), _jit_UL(is))
 
 #define jit_retval_ui(rd)		jit_retval_i((rd))
 #define jit_retval_uc(rd)		jit_retval_i((rd))
