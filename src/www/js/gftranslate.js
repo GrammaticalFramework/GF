@@ -20,12 +20,14 @@ function unspace_translations(g,trans) {
     var langs=[g+"Chi",g+"Jpn",g+"Tha"]
     for(var i=0;i<trans.length;i++) {
 	var lins=trans[i].linearizations
-	for(var j=0;j<lins.length;j++) {
-	    var lin=lins[j]
-	    if(elem(lin.to,langs)) {
-		console.log(i,j,"space",lin.to,lin.text)
-		lin.text=lin.text.split(" ").join("")
-		console.log(i,j,"unspace",lin.to,lin.text)
+	if(lins) {
+	    for(var j=0;j<lins.length;j++) {
+		var lin=lins[j]
+		if(elem(lin.to,langs)) {
+		    //console.log(i,j,"space",lin.to,lin.text)
+		    lin.text=lin.text.split(" ").join("")
+		    //console.log(i,j,"unspace",lin.to,lin.text)
+		}
 	    }
 	}
     }
@@ -42,7 +44,7 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     function extract(result) {
 	cont(unspace_translations(g,result[0].translations))
     }
-    if(encsrc.length<500)
+    if(encsrc.length<200)
 	gftranslate.call("?command=c-translate&input="+encsrc
 		      +lexer+"&unlexer=text&from="+g+from+"&to="+enc_langs(g,to)
 		      +"&start="+start+"&limit="+limit,extract,errcont)
@@ -60,7 +62,7 @@ gftranslate.wordforword=function(source,from,to,cont) {
 	cont(unspace_translations(g,result[0].translations))
     }
     var enc_to = enc_langs(g,to)
-    if(encsrc.length<500)
+    if(encsrc.length<200)
 	gftranslate.call("?command=c-wordforword&input="+encsrc
 			 +lexer+"&unlexer=text&from="+g+from+"&to="+enc_to
 			 ,extract,errcont)
