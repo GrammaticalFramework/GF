@@ -34,6 +34,18 @@ function unspace_translations(g,trans) {
     return trans
 }
 
+function length_limit(lang) {
+    switch(lang) {
+    case "Bul":
+    case "Chi":
+    case "Eng":
+    case "Swe":
+	return 500
+    default:
+	return 200
+    }
+}
+
 // Translate a sentence
 gftranslate.translate=function(source,from,to,start,limit,cont) {
     var g=gftranslate.grammar
@@ -44,7 +56,7 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     function extract(result) {
 	cont(unspace_translations(g,result[0].translations))
     }
-    if(encsrc.length<200)
+    if(encsrc.length<length_limit(from))
 	gftranslate.call("?command=c-translate&input="+encsrc
 		      +lexer+"&unlexer=text&from="+g+from+"&to="+enc_langs(g,to)
 		      +"&start="+start+"&limit="+limit,extract,errcont)
@@ -62,7 +74,7 @@ gftranslate.wordforword=function(source,from,to,cont) {
 	cont(unspace_translations(g,result[0].translations))
     }
     var enc_to = enc_langs(g,to)
-    if(encsrc.length<200)
+    if(encsrc.length<length_limit(from))
 	gftranslate.call("?command=c-wordforword&input="+encsrc
 			 +lexer+"&unlexer=text&from="+g+from+"&to="+enc_to
 			 ,extract,errcont)
