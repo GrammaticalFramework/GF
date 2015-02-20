@@ -20,7 +20,7 @@ import Debug.Trace
 
 concretes2haskell opts absname gr =
   [(cncname,concrete2haskell opts gr cenv absname cnc cncmod)
-     | let cenv = resourceValues gr,
+     | let cenv = resourceValues opts gr,
        cnc<-allConcretes gr absname,
        let cncname = render cnc ++ ".hs"
            Ok cncmod = lookupModule gr cnc

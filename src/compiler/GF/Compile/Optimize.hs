@@ -50,7 +50,7 @@ optimizeModule opts sgr m@(name,mi)
  where
    oopts = opts `addOptions` mflags mi
 
-   resenv = resourceValues sgr
+   resenv = resourceValues oopts sgr
 
    updateEvalInfo mi (i,info) = do
      info <- evalInfo oopts resenv sgr (name,mi) i info

@@ -36,7 +36,7 @@ mkCanon2pgf opts gr am = do
   cncs     <- mapM mkConcr (allConcretes gr am)
   return $ updateProductionIndices (D.PGF Map.empty an abs (Map.fromList cncs))
   where
-    cenv = resourceValues gr
+    cenv = resourceValues opts gr
 
     mkAbstr am = return (mi2i am, D.Abstr flags funs cats)
       where

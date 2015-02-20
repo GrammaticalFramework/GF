@@ -173,6 +173,7 @@ data Flags = Flags {
       optDump            :: [Dump],
       optTagsOnly        :: Bool,
       optHeuristicFactor :: Maybe Double,
+      optPlusAsBind      :: Bool,
       optJobs            :: Maybe (Maybe Int)
     }
   deriving (Show)
@@ -281,6 +282,7 @@ defaultFlags = Flags {
       optDump            = [],
       optTagsOnly        = False,
       optHeuristicFactor = Nothing,
+      optPlusAsBind      = False,
       optJobs            = Nothing
     }
 
@@ -363,6 +365,7 @@ optDescr =
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
      Option [] ["heuristic_search_factor"] (ReqArg (readDouble (\d o -> o { optHeuristicFactor = Just d })) "FACTOR") "Set the heuristic search factor for statistical parsing",
+     Option [] ["plus-as-bind"] (NoArg (set $ \o -> o{optPlusAsBind=True})) "Uses of (+) with runtime variables automatically generate BIND (experimental feature).",
      dumpOption "source" Source,
      dumpOption "rebuild" Rebuild,
      dumpOption "extend" Extend,
