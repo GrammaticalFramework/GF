@@ -1066,7 +1066,7 @@ lin affairs_N = mkN "affär" "affärer" ; -- comment=2
 lin affect_N = mkN "röra" ; -- comment=2
 lin affect_V2 = mkV2 "påverka" ;
 lin affectation_N = mkN "koketteri" "koketterit" "koketterier" "koketterierna" ; -- comment=3
-lin affected_A = variants {} ;
+lin affected_A = compoundA (mkA "påverkad" "påverkat");
 lin affectedness_N = variants {} ; -- status=guess
 lin affecting_A = mkA "rörande" ; -- comment=3
 lin affection_N = mkN "ömhet" ; -- comment=8
@@ -11944,7 +11944,7 @@ lin compendious_A = variants {} ; -- status=guess
 lin compendium_N = mkN "kompendium" "kompendiet" "kompendier" "kompendierna" ; -- comment=2
 lin compensable_A = variants {} ; -- status=guess
 lin compensate_V = mkV "ersätta" "ersätter" "ersätt" "ersatte" "ersatt" "ersatt" ; -- comment=3
-lin compensate_V2 = variants {} ; -- mkV "ersätta" "ersätter" "ersätt" "ersatte" "ersatt" "ersatt" ; -- comment=3
+lin compensate_V2 = mkV2 compensate_V ; -- mkV "ersätta" "ersätter" "ersätt" "ersatte" "ersatt" "ersatt" ; -- comment=3
 lin compensation_N = mkN "kompensation" "kompensationer" | mkN "utjämning" ; -- SaldoWN -- comment=5
 lin compensatory_A = variants {} ; -- status=guess
 lin compere_N = variants {} ; -- status=guess
@@ -20173,7 +20173,7 @@ lin extemporize_V = variants {} ; -- status=guess
 lin extemporize_V2 = variants {} ; -- status=guess
 lin extend_V = mkV "räcker" ;
 lin extend_V2 = mkV2 "utvidga" ;
-lin extended_A = variants {} ; --
+lin extended_A = compoundA (mkA "utvidgad" "utvidgat") ; --
 lin extendible_A = variants {} ; -- status=guess
 lin extensile_A = variants {} ; -- status=guess
 lin extension_N = mkN "utvidgning" | mkN "utbyggnad" "utbyggnader" ; -- SaldoWN
@@ -40022,7 +40022,7 @@ lin paging_N = variants {} ; -- status=guess
 lin pagoda_N = mkN "pagod" "pagoder" ; -- status=guess
 lin pahautea_N = variants {} ; -- status=guess
 lin pahoehoe_N = variants {} ; -- status=guess
-lin paid_A = variants {} ; --
+lin paid_A = compoundA (mkA "betald" "betalt"); -- status=guess
 lin pail_N = mkN "ämbar" neutrum ; -- comment=5
 lin pailful_N = mkN "hink" ; -- status=guess
 lin paillasse_N = variants {} ; -- status=guess
@@ -44188,7 +44188,7 @@ lin processing_N = mkN "bearbetning" ; -- comment=2
 lin procession_N = mkN "tåg" neutrum ; -- comment=2
 lin processional_A = variants {} ; -- status=guess
 lin processional_N = variants {} ; -- status=guess
-lin processor_N = variants {} ; --
+lin processor_N = mkN "processor" "processorer" ; --
 lin prochlorperazine_N = variants {} ; -- status=guess
 lin proclaim_V2 = dirV2 (partV (mkV "visar")"in") ; -- status=guess
 lin proclaim_VS = mkVS (mkV "förkunna") ; -- status=guess, src=wikt
@@ -51621,7 +51621,7 @@ lin sin_V = mkV "syndar" ; -- status=guess
 lin since_Adv = mkAdv "sedan" ; -- comment=5
 lin since_Prep = mkPrep "sedan" ;
 lin since_Subj = M.mkSubj "sedan" ;
-lin since_then_Adv = variants {} ; -- status=guess
+lin since_then_Adv = mkAdv "sedan dess" ; -- status=guess
 lin sincere_A = mkA "ärlig" ; -- comment=3
 lin sincerity_N = mkN "ärlighet" "ärligheter" ; -- comment=2
 lin sinciput_N = variants {} ; -- status=guess
