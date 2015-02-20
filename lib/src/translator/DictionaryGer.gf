@@ -62748,7 +62748,6 @@ lin victualer_N = variants {} ;
 lin victualler_N = variants {} ;
 lin vicuna_N = mkN "Vikunja" neuter ; -- status=guess
 lin videlicet_Adv = variants {} ;
-lin video_A = variants {} ;
 lin video_N = mkN "Video" "Videos" neuter ; -- status=guess
 lin video_taped_A = variants {} ; --
 lin videocassette_N = mkN "Videokassette" feminine ; -- status=guess

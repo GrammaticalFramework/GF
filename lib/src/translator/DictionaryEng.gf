@@ -63055,7 +63055,6 @@ lin victualer_N = mkN "victualer" ;
 lin victualler_N = mkN "victualler" "victuallers";
 lin vicuna_N = mkN "vicuña" "vicuñas";
 lin videlicet_Adv = mkAdv "videlicet";
-lin video_A = mkA "video" ;
 lin video_N = mkN "video" "videos";
 lin video_taped_A = mkA "video-taped" ;
 lin videocassette_N = mkN "videocassette" ;
