@@ -62798,7 +62798,6 @@ lin victualer_N = variants {} ;
 lin victualler_N = variants {mkN014a "доставчик"; mkN031a "снабдител"} ; ----
 lin vicuna_N = mkN047 "викуня" ;
 lin videlicet_Adv = variants {} ;
-lin video_A = variants {} ;
 lin video_N = mkN065 "видео" ;
 lin video_taped_A = variants {} ;
 lin videocassette_N = mkN041 "видеокасета" ; ----
