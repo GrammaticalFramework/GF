@@ -56,21 +56,25 @@ logFile :: FilePath
 logFile = "pgf-error.log"
 
 #ifdef C_RUNTIME
-type Caches = (Cache PGF,Cache (C.PGF,({-MVar ParseCache-})))
+type Caches = (Cache PGF,(Cache (C.PGF,({-MVar ParseCache-})),QSem))
+--type Caches = (Cache PGF,Cache (C.PGF,({-MVar ParseCache-})))
 --type ParseCache = Map.Map (String,String) (ParseResult,UTCTime)
 --type ParseResult = Either String [(C.Expr,Float)]
 
-newPGFCache = do pgfCache <- newCache' PGF.readPGF
-                 cCache <- newCache' $ \ path -> do pgf <- C.readPGF path
-                                                  --pc <- newMVar Map.empty
-                                                    return (pgf,({-pc-}))
-                 return (pgfCache,cCache)
-flushPGFCache (c1,c2) = flushCache c1 >> flushCache c2
-listPGFCache (c1,c2) = (,) # listCache c1 % listCache c2
+newPGFCache jobs = do pgfCache <- newCache' PGF.readPGF
+                      let n = maybe 4 id jobs
+                      putStrLn $ "Parallel parsing limit: "++show n
+                      qsem <- newQSem n
+                      cCache <- newCache' $ \ path -> do pgf <- C.readPGF path
+                                                       --pc <- newMVar Map.empty
+                                                         return (pgf,({-pc-}))
+                      return (pgfCache,(cCache,qsem))
+flushPGFCache (c1,(c2,_)) = flushCache c1 >> flushCache c2
+listPGFCache (c1,(c2,_)) = (,) # listCache c1 % listCache c2
 #else
 type Caches = (Cache PGF,())
-newPGFCache = do pgfCache <- newCache' PGF.readPGF
-                 return (pgfCache,())
+newPGFCache _ = do pgfCache <- newCache' PGF.readPGF
+                   return (pgfCache,())
 flushPGFCache (c1,_) = flushCache c1
 listPGFCache (c1,_) = (,) # listCache c1 % return []
 #endif
@@ -100,7 +104,8 @@ cgiMain' cache path =
          "download" -> outputBinary    =<< getFile BS.readFile path
          'c':'-':_  ->
 #ifdef C_RUNTIME
-                   cpgfMain command =<< getFile (readCache' (snd cache)) path
+                   cpgfMain (snd (snd cache)) command
+                      =<< getFile (readCache' (fst (snd cache))) path
 #else
                    serverError "Server configured without C run-time support" ""
 #endif
@@ -118,7 +123,7 @@ getFile get path =
 
 #ifdef C_RUNTIME
 --cpgfMain :: String -> (C.PGF,MVar ParseCache) -> CGI CGIResult
-cpgfMain command (t,(pgf,pc)) =
+cpgfMain qsem command (t,(pgf,pc)) =
   case command of
     "c-parse"       -> out t=<< join (parse # input % start % limit % trie)
     "c-linearize"   -> out t=<< lin # tree % to
@@ -156,8 +161,8 @@ cpgfMain command (t,(pgf,pc)) =
 
     -- Without caching parse results:
     parse' start mlimit ((from,concr),input) =
-        return $
-        maybe id take mlimit . drop start # cparse
+        liftIO $ E.bracket_ (waitQSem qsem) (signalQSem qsem)
+                    (return $! maybe id take mlimit . drop start # cparse)
       where
       --cparse = C.parse concr cat input
         cparse = C.parseWithHeuristics concr cat input (-1) callbacks

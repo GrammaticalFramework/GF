@@ -56,10 +56,10 @@ import URLEncoding(decodeQuery)
 debug s = logPutStrLn s
 
 -- | Combined FastCGI and HTTP server
-server port optroot execute1 state0 =
+server jobs port optroot execute1 state0 =
   do --stderrToFile logFile
      state <- newMVar M.empty
-     cache <- PS.newPGFCache
+     cache <- PS.newPGFCache jobs
      datadir <- getDataDir
      let root = maybe (datadir</>"www") id optroot
 --   debug $ "document root="++root
