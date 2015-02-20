@@ -62757,7 +62757,6 @@ fun victualer_N : N ;
 fun victualler_N : N ;
 fun vicuna_N : N ;
 fun videlicet_Adv : Adv ;
-fun video_A : A  ;
 fun video_N : N ;
 fun video_taped_A : A ;
 fun videocassette_N : N ;
