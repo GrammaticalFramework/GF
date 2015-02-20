@@ -15,6 +15,7 @@ import GF.Compile.Compute.Predef(predef,predefName,delta)
 import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
 import GF.Data.Operations(Err,err,errIn,maybeErr,combinations,mapPairsM)
 import GF.Data.Utilities(mapFst,mapSnd,mapBoth)
+import GF.Infra.Option
 import Control.Monad(ap,liftM,liftM2,unless) --,mplus
 import Data.List (findIndex,intersect,nub,elemIndex,(\\)) --,isInfixOf
 --import Data.Char (isUpper,toUpper,toLower)
@@ -25,9 +26,9 @@ import qualified Data.Map as Map
 -- * Main entry points
 
 normalForm :: GlobalEnv -> L Ident -> Term -> Term
-normalForm (GE gr rv _) loc = err (bugloc loc) id . nfx (GE gr rv loc)
+normalForm (GE gr rv opts _) loc = err (bugloc loc) id . nfx (GE gr rv opts loc)
 
-nfx env@(GE _ _ loc) t = value2term loc [] # eval env t
+nfx env@(GE _ _ _ loc) t = value2term loc [] # eval env t
 
 eval :: GlobalEnv -> Term -> Err Value
 eval ge t = ($[]) # value (toplevel ge) t
@@ -40,8 +41,9 @@ apply env = apply' env
 
 type ResourceValues = Map.Map ModuleName (Map.Map Ident (Err Value))
 
-data GlobalEnv = GE Grammar ResourceValues (L Ident)
+data GlobalEnv = GE Grammar ResourceValues Options (L Ident)
 data CompleteEnv = CE {srcgr::Grammar,rvs::ResourceValues,
+                       opts::Options,
                        gloc::L Ident,local::LocalScope}
 type LocalScope = [Ident]
 type Stack = [Value]
@@ -49,8 +51,8 @@ type OpenValue = Stack->Value
                             
 ext b env = env{local=b:local env}
 extend bs env = env{local=bs++local env}
-global env = GE (srcgr env) (rvs env) (gloc env)
-toplevel (GE gr rvs loc) = CE gr rvs loc []
+global env = GE (srcgr env) (rvs env) (opts env) (gloc env)
+toplevel (GE gr rvs opts loc) = CE gr rvs opts loc []
 
 var :: CompleteEnv -> Ident -> Err OpenValue
 var env x = maybe unbound pick' (elemIndex x (local env))
@@ -76,14 +78,14 @@ resource env (m,c) =
   where e = fail $ "Not found: "++render m++"."++showIdent c
 
 -- | Convert operators once, not every time they are looked up
-resourceValues :: SourceGrammar -> GlobalEnv
-resourceValues gr = env
+resourceValues :: Options -> SourceGrammar -> GlobalEnv
+resourceValues opts gr = env
   where
-    env = GE gr rvs (L NoLoc identW)
+    env = GE gr rvs opts (L NoLoc identW)
     rvs = Map.mapWithKey moduleResources (moduleMap gr)
     moduleResources m = Map.mapWithKey (moduleResource m) . jments
     moduleResource m c _info = do L l t <- lookupResDefLoc gr (m,c)
-                                  eval (GE gr rvs (L l c)) t
+                                  eval (GE gr rvs opts (L l c)) t
 
 -- * Computing values
 
@@ -254,9 +256,11 @@ glue env (v1,v2) = glu v1 v2
           (v1@(VApp NonExist _),_) -> v1
           (_,v2@(VApp NonExist _)) -> v2
 --        (v1,v2) -> ok2 VGlue v1 v2
-          (v1,v2) -> error . render $
-                     ppL loc (hang "unsupported token gluing:" 4
-                                   (Glue (vt v1) (vt v2)))
+          (v1,v2) -> if flag optPlusAsBind (opts env)
+                       then VC v1 (VC (VApp BIND []) v2)
+                       else error . render $
+                                      ppL loc (hang "unsupported token gluing:" 4
+                                                    (Glue (vt v1) (vt v2)))
 
     vt = value2term loc (local env)
     loc = gloc env

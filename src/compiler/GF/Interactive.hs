@@ -333,9 +333,7 @@ checkComputeTerm sgr t = do
                  mo <- maybe (raise "no source grammar in scope") return $ greatestResource sgr
                  ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
                                             inferLType sgr [] t
-                 t1 <- {-if new
-                       then-} return (CN.normalForm (CN.resourceValues sgr) (L NoLoc identW) t)
-                       {-else computeConcrete sgr t-}
+                 t1 <- return (CN.normalForm (CN.resourceValues noOptions sgr) (L NoLoc identW) t)
                  checkPredefError t1
 
 fetchCommand :: GFEnv -> IO String

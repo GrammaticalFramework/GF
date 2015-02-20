@@ -25,7 +25,7 @@ import GF.Data.BacktrackM
 import GF.Data.Operations
 import GF.Infra.UseIO (ePutStr,ePutStrLn) -- IOE,
 import GF.Data.Utilities (updateNthM) --updateNth
-import GF.Compile.Compute.ConcreteNew(GlobalEnv,normalForm,resourceValues)
+import GF.Compile.Compute.ConcreteNew(normalForm,resourceValues)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.List as List
@@ -51,7 +51,7 @@ generatePMCFG opts sgr opath cmo@(cm,cmi) = do
   when (verbAtLeast opts Verbose) $ ePutStrLn ""
   return (cm,cmi{mseqs = Just (mkSetArray seqs), jments = js})
   where
-    cenv = resourceValues gr
+    cenv = resourceValues opts gr
     gr = prependModule sgr cmo
     MTConcrete am = mtype cmi
 
@@ -161,9 +161,7 @@ convert opts gr cenv loc term ty@(_,val) pargs =
     conv t = convertTerm opts CNil val =<< unfactor t
 
     eterm = expand ty term
-    term' = {-if flag optNewComp opts
-            then-} normalForm cenv loc eterm -- new evaluator
-            --else term -- old evaluator is invoked from GF.Compile.Optimize
+    term' = normalForm cenv loc eterm
 
 expand (context,val) = mkAbs pars . recordExpand val . flip mkApp args
   where pars = [(Explicit,v) | v <- vars]

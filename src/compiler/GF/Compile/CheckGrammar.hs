@@ -224,7 +224,7 @@ checkInfo opts cwd sgr (m,mo) c info = checkInModule cwd mo NoLoc empty $ do
          (Just (L loct ty), Just (L locd de)) -> do
            ty'     <- chIn loct "operation" $
                          (if False --flag optNewComp opts
-                            then CN.checkLType gr ty typeType >>= return . CN.normalForm (CN.resourceValues gr) (L loct c) . fst -- !!
+                            then CN.checkLType gr ty typeType >>= return . CN.normalForm (CN.resourceValues opts gr) (L loct c) . fst -- !!
                             else checkLType gr [] ty typeType >>= computeLType gr [] . fst)
            (de',_) <- chIn locd "operation" $
                          (if False -- flag optNewComp opts
