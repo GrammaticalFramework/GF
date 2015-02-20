@@ -36,7 +36,7 @@ public class Translator {
         new Language("ja-JP", "Japanese","AppJpn", R.xml.qwerty),
         new Language("es-ES", "Spanish", "AppSpa", R.xml.qwerty),
         new Language("sv-SE", "Swedish", "AppSwe", R.xml.nordic),
-        new Language("th-TH", "Thai",    "AppTha", R.xml.nordic),
+        new Language("th-TH", "Thai",    "AppTha", R.xml.thai_page1, R.xml.thai_page2)
     };
 
     private Context mContext;
