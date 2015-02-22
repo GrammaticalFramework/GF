@@ -478,6 +478,7 @@ mkVS = overload {
       _ + ("ie" | "uo" | "yö") => dSuo ukko ;
       _ + ("ea" | "eä") => dKorkea ukko ;
       _ + "is" => dKaunis ukko ;
+      _ + ("ai" | "ui" | "äi") + "n" => dLiitin ukko (ukk + "men") ;
       _ + ("i" | "u") + "n" => dLiitin ukko (renka + "men") ;
       _ + ("ton" | "tön") => dOnneton ukko ;
       _ + "e" => dRae ukko (rake + "en") ;
