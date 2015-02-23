@@ -39192,6 +39192,7 @@ lin orientalistFem_N = variants {} ; -- status=guess
 lin orientalistMasc_N = variants {} ; -- status=guess
 lin orientate_V2 = variants {} ; -- status=guess
 lin orientation_N = mkN "riktning" | mkN "orientering" ; -- SaldoWN -- comment=2
+lin oriented_A = compoundA (mkA "orienterad") ;
 lin orienting_A = variants {} ; -- status=guess
 lin orifice_N = mkN "mynning" ; -- comment=2
 lin oriflamme_N = variants {} ; -- status=guess
@@ -51605,7 +51606,7 @@ lin simplex_A = variants {} ; -- status=guess
 lin simplicity_N = mkN "enkelhet" "enkelheter" ; -- SaldoWN
 lin simplification_N = variants {} ; -- status=guess
 lin simplify_V = mkV "förenklar" ; -- status=guess
-lin simplify_V2 = variants {} ; -- status=guess
+lin simplify_V2 = mkV2 simplify_V ; -- status=guess
 lin simplistic_A = compoundA (regA "onyanserad") ; -- status=guess
 lin simulacrum_N = variants {} ; -- status=guess
 lin simulate_V2 = mkV2 (mkV "simulerar") ; -- status=guess, src=wikt
