@@ -310,7 +310,33 @@ pgf_expr_parser_token(PgfExprParser* parser)
 			pgf_expr_parser_getc(parser);
 
 			while (parser->ch != '"' && parser->ch != EOF) {
-				gu_buf_push(chars, char, parser->ch);
+				if (parser->ch == '\\') {
+					pgf_expr_parser_getc(parser);
+					switch (parser->ch) {
+					case '\\':
+						gu_buf_push(chars, char, '\\');
+						break;
+					case '"':
+						gu_buf_push(chars, char, '\"');
+						break;
+					case 'n':
+						gu_buf_push(chars, char, '\n');
+						break;
+					case 'r':
+						gu_buf_push(chars, char, '\r');
+						break;
+					case 'b':
+						gu_buf_push(chars, char, '\b');
+						break;
+					case 't':
+						gu_buf_push(chars, char, '\t');
+						break;
+					default:
+						return;
+					}
+				} else {
+					gu_buf_push(chars, char, parser->ch);
+				}
 				pgf_expr_parser_getc(parser);
 			}
 			
@@ -999,7 +1025,32 @@ pgf_print_literal(PgfLiteral lit,
 	case PGF_LITERAL_STR: {
 		PgfLiteralStr* lit = ei.data;
         gu_putc('"', out, err);
-		gu_string_write(lit->val, out, err);
+        const uint8_t* s = (uint8_t*) lit->val;
+        while (*s) {
+			GuUCS c = gu_utf8_decode(&s);
+			switch (c) {
+			case '\\':
+				gu_puts("\\\\", out, err);
+				break;
+			case '"':
+				gu_puts("\\\"", out, err);
+				break;
+			case '\n':
+				gu_puts("\\n", out, err);
+				break;
+			case '\r':
+				gu_puts("\\r", out, err);
+				break;
+			case '\b':
+				gu_puts("\\b", out, err);
+				break;
+			case '\t':
+				gu_puts("\\t", out, err);
+				break;
+			default:
+				gu_out_utf8(c, out, err);
+			}
+		}
         gu_putc('"', out, err);
 		break;
     }
