@@ -63,7 +63,6 @@ type Caches = (Cache PGF,(Cache (C.PGF,({-MVar ParseCache-})),QSem))
 
 newPGFCache jobs = do pgfCache <- newCache' PGF.readPGF
                       let n = maybe 4 id jobs
-                      putStrLn $ "Parallel parsing limit: "++show n
                       qsem <- newQSem n
                       cCache <- newCache' $ \ path -> do pgf <- C.readPGF path
                                                        --pc <- newMVar Map.empty
@@ -296,9 +295,9 @@ instance JSON C.Expr where
 -- | Lexers with a text lexer that tries to be a more clever with the first word
 ilexer good = lexer' uncap
   where
-    uncap s = if good s
-              then s
-              else uncapitInit s
+    uncap s = case span isUpper s of
+                ([c],r) | not (good s) -> toLower c:r
+                _ -> s
 
 -- | Standard lexers
 lexer = lexer' uncapitInit
