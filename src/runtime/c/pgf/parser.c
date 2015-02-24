@@ -270,10 +270,6 @@ pgf_item_symbols(PgfItem* item,
 		}
 		break;
     }
-    case PGF_PRODUCTION_META: {
-		*syms = pgf_extern_syms_get(item, pool);
-		break;
-    }
     default:
         gu_impossible();
     }
@@ -331,13 +327,6 @@ pgf_print_production(int fid, PgfProduction prod,
         gu_printf(out,err,"<extern>(");
         pgf_print_expr(pext->ep->expr, NULL, 0, out, err);
         gu_printf(out,err,")[]\n");
-        break;
-    }
-    case PGF_PRODUCTION_META: {
-        PgfProductionMeta* pmeta = i.data;
-        gu_printf(out,err,"<meta>[");
-        pgf_print_production_args(pmeta->args,out,err);
-        gu_printf(out,err,"]\n");
         break;
     }
     default:
@@ -412,12 +401,6 @@ pgf_print_item(PgfItem* item, PgfParseState* state, GuOut* out, GuExn* err, GuPo
 			gu_printf(out, err, ")");
 		}
 		gu_printf(out, err, "[");
-		pgf_print_production_args(item->args, out, err);
-        gu_printf(out, err, "]; ");
-		break;
-	}
-	case PGF_PRODUCTION_META: {
-        gu_printf(out, err, "<meta>[");
 		pgf_print_production_args(item->args, out, err);
         gu_printf(out, err, "]; ");
 		break;
