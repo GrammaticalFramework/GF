@@ -1,3 +1,6 @@
+
+/* --- Wide Coverage Translation Demo web app ------------------------------- */
+
 var wc={}
 //wc.cnl="Phrasebook" // try this controlled natural language first
 wc.f=document.forms[0]
@@ -11,12 +14,14 @@ wc.local=appLocalStorage("gf.wc.")
 wc.translating=""
 
 wc.delayed_translate=function() {
-    function restart(){ if(wc.f.input.value!=wc.translating) wc.translate() }
+    function restart(){
+	if(wc.f.input.value!=wc.translating) wc.translate()
+	var h=wc.f.input.scrollHeight,bh=document.body.clientHeight
+	if(h>bh) h=bh
+	if(wc.f.input.clientHeight<h) wc.f.input.style.height=h+15+"px"
+    }
     if(wc.timer) clearTimeout(wc.timer);
     wc.timer=setTimeout(restart,500)
-    var h=wc.f.input.scrollHeight,bh=document.body.clientHeight
-    if(h>bh) h=bh
-    if(wc.f.input.clientHeight<h) wc.f.input.style.height=h+15+"px"
 }
 
 wc.clear=function() {
