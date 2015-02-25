@@ -35,6 +35,7 @@ import Control.Concurrent
 import qualified Control.Exception as E
 import Control.Monad
 import Control.Monad.State(State,evalState,get,put)
+import Control.Monad.Catch(bracket_)
 import Data.Char
 import Data.Function (on)
 import Data.List (sortBy,intersperse,mapAccumL,nub,isSuffixOf,nubBy)
@@ -51,6 +52,8 @@ import Fold(fold) -- transfer function for OpenMath LaTeX
 
 catchIOE :: IO a -> (E.IOException -> IO a) -> IO a
 catchIOE = E.catch
+
+withQSem qsem = bracket_ (liftIO $ waitQSem qsem) (liftIO $ signalQSem qsem)
 
 logFile :: FilePath
 logFile = "pgf-error.log"
@@ -124,9 +127,11 @@ getFile get path =
 --cpgfMain :: String -> (C.PGF,MVar ParseCache) -> CGI CGIResult
 cpgfMain qsem command (t,(pgf,pc)) =
   case command of
-    "c-parse"       -> out t=<< join (parse # input % start % limit % trie)
+    "c-parse"       -> withQSem qsem $
+                       out t=<< join (parse # input % start % limit % trie)
     "c-linearize"   -> out t=<< lin # tree % to
-    "c-translate"   -> out t=<< join (trans # input % to % start % limit % trie)
+    "c-translate"   -> withQSem qsem $
+                       out t=<< join (trans # input % to % start % limit % trie)
     "c-lookupmorpho"-> out t=<< morpho # from1 % textInput
     "c-flush"       -> out t=<< flush
     "c-grammar"     -> out t grammar
@@ -160,8 +165,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
 
     -- Without caching parse results:
     parse' start mlimit ((from,concr),input) =
-        liftIO $ E.bracket_ (waitQSem qsem) (signalQSem qsem)
-                    (return $! maybe id take mlimit . drop start # cparse)
+        return $ maybe id take mlimit . drop start # cparse
       where
       --cparse = C.parse concr cat input
         cparse = C.parseWithHeuristics concr cat input (-1) callbacks

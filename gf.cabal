@@ -76,7 +76,8 @@ Library
                  utf8-string,
                  random,
                  pretty,
-                 mtl
+                 mtl,
+                 exceptions
   hs-source-dirs: src/runtime/haskell
 
   if flag(custom-binary)

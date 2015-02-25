@@ -5,7 +5,7 @@ import Network.FastCGI(runFastCGI,runFastCGIConcurrent')
 import PGFService(cgiMain,newPGFCache,stderrToFile,logFile)
 
 main = do stderrToFile logFile
-          fcgiMain =<< newPGFCache
+          fcgiMain =<< newPGFCache Nothing
 
 
 fcgiMain cache =
