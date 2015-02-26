@@ -522,7 +522,7 @@ cmp_item_prob(GuOrder* self, const void* a, const void* b)
 	prob_t prob1 = item1->inside_prob + item1->conts->outside_prob;
 	prob_t prob2 = item2->inside_prob + item2->conts->outside_prob;
 	
-	return (int) (prob1-prob2);
+	return (prob1>prob2) - (prob1<prob2);
 }
 
 static GuOrder
