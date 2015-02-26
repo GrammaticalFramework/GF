@@ -1729,12 +1729,7 @@ cmp_expr_state(GuOrder* self, const void* a, const void* b)
 	prob_t prob1 = s1->answers->outside_prob+s1->ep.prob;
 	prob_t prob2 = s2->answers->outside_prob+s2->ep.prob;
 
-	if (prob1 < prob2)
-		return -1;
-	else if (prob1 > prob2)
-		return 1;
-	else
-		return 0;
+	return (prob1>prob2) - (prob1<prob2);
 }
 
 static GuOrder
