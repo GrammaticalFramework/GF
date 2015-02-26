@@ -419,25 +419,25 @@ pgf_print_item(PgfItem* item, PgfParseState* state, GuOut* out, GuExn* err, GuPo
 #ifdef PGF_RESULT_DEBUG
 static void
 pgf_print_expr_state(PgfExprState* st,
-                     GuWriter* wtr, GuExn* err, GuBuf* stack)
+                     GuOut* out, GuExn* err, GuBuf* stack)
 {
 	gu_buf_push(stack, int, (gu_seq_length(st->args) - st->arg_idx - 1));
 
 	if (gu_buf_length(st->answers->conts) > 0) {
 		PgfExprState* cont = gu_buf_get(st->answers->conts, PgfExprState*, 0);
 		if (cont != NULL)
-			pgf_print_expr_state(cont, wtr, err, stack);
+			pgf_print_expr_state(cont, out, err, stack);
 	}
 
-	gu_puts(" (", wtr, err);
-	pgf_print_expr(st->ep.expr, NULL, 0, wtr, err);
+	gu_puts(" (", out, err);
+	pgf_print_expr(st->ep.expr, NULL, 0, out, err);
 }
 
 static void
 pgf_print_expr_state0(PgfExprState* st,
-                      GuWriter* wtr, GuExn* err, GuPool* tmp_pool)
+                      GuOut* out, GuExn* err, GuPool* tmp_pool)
 {	
-	gu_printf(wtr, err, "[%f+%f=%f]", 
+	gu_printf(out, err, "[%f+%f=%f]",
 		st->ep.prob,
 		st->answers->outside_prob,
 		st->answers->outside_prob+st->ep.prob);
@@ -452,24 +452,24 @@ pgf_print_expr_state0(PgfExprState* st,
 		PgfExprState* cont =
 			gu_buf_get(st->answers->conts, PgfExprState*, 0);
 		if (cont != NULL)
-			pgf_print_expr_state(cont, wtr, err, stack);
+			pgf_print_expr_state(cont, out, err, stack);
 	}
 
 	if (n_args > 0)
-		gu_puts(" (", wtr, err);
+		gu_puts(" (", out, err);
 	else
-		gu_puts(" ", wtr, err);
-	pgf_print_expr(st->ep.expr, NULL, 0, wtr, err);
+		gu_puts(" ", out, err);
+	pgf_print_expr(st->ep.expr, NULL, 0, out, err);
 
 	size_t n_counts = gu_buf_length(stack);
 	for (size_t i = 0; i < n_counts; i++) {
 		int count = gu_buf_get(stack, int, i);
 		while (count-- > 0)
-			gu_puts(" ?", wtr, err);
+			gu_puts(" ?", out, err);
 		
-		gu_puts(")", wtr, err);
+		gu_puts(")", out, err);
 	}
-	gu_puts("\n", wtr, err);
+	gu_puts("\n", out, err);
 }
 #endif
 #endif
@@ -1992,9 +1992,8 @@ pgf_parse_result_next(PgfParsing* ps)
 #ifdef PGF_RESULT_DEBUG
 		GuPool* tmp_pool = gu_new_pool();
 		GuOut* out = gu_file_out(stderr, tmp_pool);
-		GuWriter* wtr = gu_new_utf8_writer(out, tmp_pool);
 		GuExn* err = gu_exn(tmp_pool);
-		pgf_print_expr_state0(st, wtr, err, tmp_pool);
+		pgf_print_expr_state0(st, out, err, tmp_pool);
 		gu_pool_free(tmp_pool);
 #endif
 #endif
