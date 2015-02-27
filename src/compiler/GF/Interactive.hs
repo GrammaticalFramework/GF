@@ -345,7 +345,7 @@ fetchCommand gfenv = do
           Haskeline.historyFile = Just path,
           Haskeline.autoAddHistory = True
         }
-  res <- IO.runInterruptibly $ Haskeline.runInputT settings (Haskeline.getInputLine (prompt (commandenv gfenv)))
+  res <- IO.runInterruptibly $ Haskeline.runInputT settings (Haskeline.getInputLine (prompt gfenv))
   case res of
     Left  _        -> return ""
     Right Nothing  -> return "q"
@@ -354,9 +354,10 @@ fetchCommand gfenv = do
 importInEnv :: GFEnv -> Options -> [FilePath] -> SIO GFEnv
 importInEnv gfenv opts files
     | flag optRetainResource opts =
-        do src <- importSource (grammar gfenv) opts files
+        do src <- importSource opts files
            pgf <- lazySIO importPGF -- duplicates some work, better to link src
-           return $ gfenv {grammar = src, commandenv = mkCommandEnv pgf}
+           return $ gfenv {grammar = src, retain=True,
+                           commandenv = mkCommandEnv pgf}
     | otherwise =
         do pgf1 <- importPGF
            return $ gfenv { commandenv = mkCommandEnv pgf1 }
@@ -396,21 +397,22 @@ welcome = unlines [
   "Bug reports: http://code.google.com/p/grammatical-framework/issues/list"
   ]
 
-prompt env 
-  | abs == wildCId = "> "
+prompt env
+  | retain env || abs == wildCId = "> "
   | otherwise      = showCId abs ++ "> "
   where
-    abs = abstractName (multigrammar env)
+    abs = abstractName (multigrammar (commandenv env))
 
 data GFEnv = GFEnv {
   grammar :: Grammar, -- gfo grammar -retain
+  retain :: Bool,  -- grammar was imported with -retain flag
   commandenv :: CommandEnv,
   history    :: [String]
   }
 
 emptyGFEnv :: GFEnv
 emptyGFEnv =
-  GFEnv emptyGrammar (mkCommandEnv emptyPGF) [] {-0-}
+  GFEnv emptyGrammar False (mkCommandEnv emptyPGF) [] {-0-}
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of

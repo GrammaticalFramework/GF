@@ -44,9 +44,8 @@ ioUnionPGF one two = case msgUnionPGF one two of
   (pgf, Just msg) -> putStrLn msg >> return pgf
   (pgf,_)         -> return pgf
 
-importSource :: SourceGrammar -> Options -> [FilePath] -> IO SourceGrammar
-importSource src0 opts files = do
-  useIOE src0 (fmap (snd.snd) (batchCompile opts files))
+importSource :: Options -> [FilePath] -> IO SourceGrammar
+importSource opts files = fmap (snd.snd) (batchCompile opts files)
 
 -- for different cf formats
 importCF opts files get convert = impCF
