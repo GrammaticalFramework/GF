@@ -355,15 +355,21 @@ importInEnv :: GFEnv -> Options -> [FilePath] -> SIO GFEnv
 importInEnv gfenv opts files
     | flag optRetainResource opts =
         do src <- importSource (grammar gfenv) opts files
-           return $ gfenv {grammar = src}
+           pgf <- lazySIO importPGF -- duplicates some work, better to link src
+           return $ gfenv {grammar = src, commandenv = mkCommandEnv pgf}
     | otherwise =
-        do let opts' = addOptions (setOptimization OptCSE False) opts
-               pgf0 = multigrammar (commandenv gfenv)
-           pgf1 <- importGrammar pgf0 opts' files
-           if (verbAtLeast opts Normal)
-             then putStrLnFlush $ unwords $ "\nLanguages:" : map showCId (languages pgf1)
-             else done
+        do pgf1 <- importPGF
            return $ gfenv { commandenv = mkCommandEnv pgf1 }
+  where
+    importPGF =
+      do let opts' = addOptions (setOptimization OptCSE False) opts
+             pgf0 = multigrammar (commandenv gfenv)
+         pgf1 <- importGrammar pgf0 opts' files
+         if (verbAtLeast opts Normal)
+           then putStrLnFlush $
+                    unwords $ "\nLanguages:" : map showCId (languages pgf1)
+           else done
+         return pgf1
 
 tryGetLine = do
   res <- try getLine

@@ -11,7 +11,7 @@ module GF.Infra.SIO(
        newStdGen,print,putStrLn,
        -- ** Specific to GF
        importGrammar,importSource,
-       putStrLnFlush,runInterruptibly,
+       putStrLnFlush,runInterruptibly,lazySIO,
        -- * Restricted accesss to arbitrary (potentially unsafe) IO operations
        -- | If the environment variable GF_RESTRICTED is defined, these
        -- operations will fail. Otherwise, they will be executed normally.
@@ -26,6 +26,7 @@ import GF.System.Catch(try)
 import System.Process(system)
 import System.Environment(getEnv)
 import Control.Concurrent.Chan(newChan,writeChan,getChanContents)
+import GF.Infra.Concurrency(lazyIO)
 import qualified System.CPUTime as IO(getCPUTime)
 import qualified System.Directory as IO(getCurrentDirectory)
 import qualified System.Random as IO(newStdGen)
@@ -91,6 +92,7 @@ getCurrentDirectory  = lift0   IO.getCurrentDirectory
 getLibraryDirectory  = lift0 . IO.getLibraryDirectory
 newStdGen            = lift0   IO.newStdGen
 runInterruptibly     = lift1   IO.runInterruptibly
+lazySIO              = lift1   lazyIO
 
 importGrammar pgf opts files = lift0 $ GF.importGrammar pgf opts files
 importSource  src opts files = lift0 $ GF.importSource src opts files
