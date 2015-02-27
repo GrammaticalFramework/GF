@@ -173,6 +173,7 @@ abstract IrregGerAbs = Cat ** {
   fun trügen_V : V ;
   fun tun_V : V ;
   fun verderben_V : V ;
+  fun vergessen_V : V ;
   fun verlieren_V : V ;
   fun wachsen_V : V ;
   fun wägen_V : V ;
