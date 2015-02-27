@@ -95,4 +95,4 @@ runInterruptibly     = lift1   IO.runInterruptibly
 lazySIO              = lift1   lazyIO
 
 importGrammar pgf opts files = lift0 $ GF.importGrammar pgf opts files
-importSource  src opts files = lift0 $ GF.importSource src opts files
+importSource      opts files = lift0 $ GF.importSource      opts files
