@@ -31793,7 +31793,6 @@ lin lately_Adv = adjAdv late_A ; -- -- derived
 lin latency_N = mkN "Latenz" feminine | mkN "Latenzzeit" feminine | mkN "Verborgenheit" feminine | mkN "Wartezeit" "Wartezeiten" feminine | mkN "Verzögerung" feminine ; -- status=guess status=guess status=guess status=guess status=guess
 lin lateness_N = mkN "Verspätung" feminine ; -- status=guess
 lin latent_A = regA "latent" ; -- status=guess
-lin later_A = variants {} ;
 lin later_Adv = mkAdv "später" ;
 lin lateral_A = variants {} ;
 lin laterality_N = variants {} ;

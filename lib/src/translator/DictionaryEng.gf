@@ -31934,7 +31934,6 @@ lin lately_Adv = mkAdv "lately" ;
 lin latency_N = mkN "latency" ;
 lin lateness_N = mkN "lateness" ;
 lin latent_A = compoundA (mkA "latent");
-lin later_A = mkA "later" ;
 lin later_Adv = mkAdv "later" ;
 lin lateral_A = compoundA (mkA "lateral");
 lin laterality_N = mkN "laterality" ;
