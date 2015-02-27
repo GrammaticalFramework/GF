@@ -31792,7 +31792,6 @@ fun lately_Adv : Adv  ;
 fun latency_N : N ;
 fun lateness_N : N ;
 fun latent_A : A ;
-fun later_A : A  ;
 fun later_Adv : Adv ;
 fun lateral_A : A ;
 fun laterality_N : N ;

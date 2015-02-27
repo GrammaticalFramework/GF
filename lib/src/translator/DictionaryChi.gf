@@ -18948,7 +18948,6 @@ lin late_Adv = mkAdv "晚" | {-HSK-} mkAdv "深" ;
 lin lateen_N = mkN "三角帆" ; -- open-multilingual-wordnet
 lin lately_Adv = adjAdv late_A ; -- derived
 lin latent_A = mkA "潛在" | mkA "潜在" ; -- status=guess -- status=guess
-lin later_A = mkA "下" | mkA "以后" | mkA "后来" | mkA "后面" ;
 lin later_Adv = mkAdv "下" | mkAdv "以后" | mkAdv "后来" | mkAdv "后面" ;
 lin lateral_A = mkA "旁边" | {-mwn-} mkA "侧面" | mkA "向侧面" | mkA "在侧面" | mkA "横斜" ; -- open-multilingual-wordnet
 lin latest_A = mkA "最近" ;
