@@ -57,10 +57,26 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
       c = (prepC slash.c2.c).c
       } ;
 
-    PassVPSlash vps = 
-      insertInf (vps.s.s ! VPastPart APred) (predV werdenPass) ;
-    PassAgentVPSlash vps np = ---- "von" here, "durch" in StructuralGer
-      insertAdv (appPrep P.von_Prep np.s) (insertInf (vps.s.s ! VPastPart APred) (predV werdenPass)) ;
+    PassVPSlash vp = insertObj (\\_ => (PastPartAP (lin VPSlash vp)).s ! APred) (predV werdenPass) ;
+
+    PassAgentVPSlash vp np = ---- "von" here, "durch" in StructuralGer
+      insertObj (\\_ => (PastPartAgentAP (lin VPSlash vp) (lin NP np)).s ! APred) (predV werdenPass) ;
+
+    PastPartAP vp = {
+      s = \\af => (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ vp.inf ++ 
+                  vp.c2.s ++  --- junk if not TV
+                  vp.ext ++ vp.infExt ++ vp.s.s ! VPastPart af ;
+      isPre = True
+      } ;
+
+    PastPartAgentAP vp np = 
+    let agent = appPrep P.von_Prep np.s
+    in {
+      s = \\af => (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ agent ++ vp.inf ++ 
+                   vp.c2.s ++ --- junk if not TV
+                   vp.ext ++ vp.infExt ++ vp.s.s ! VPastPart af ;
+      isPre = True
+      } ;
 
   lincat
     VPS   = {s : Order => Agr => Str} ;
