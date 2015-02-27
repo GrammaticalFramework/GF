@@ -78,6 +78,11 @@ abstract Extra = Cat ** {
 
     PassAgentVPSlash : VPSlash -> NP -> VP ;  -- be begged by her to go
 
+-- In many languages, the passives use past participles.
+
+    PastPartAP      : VPSlash -> AP ;         -- lost (opportunity) ; (opportunity) lost in space
+    PastPartAgentAP : VPSlash -> NP -> AP ;   -- (opportunity) lost by the company
+   
 -- publishing of the document
 
     NominalizeVPSlashNP : VPSlash -> NP -> NP ;
