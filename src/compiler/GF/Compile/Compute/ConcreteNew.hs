@@ -16,7 +16,7 @@ import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
 import GF.Data.Operations(Err,err,errIn,maybeErr,combinations,mapPairsM)
 import GF.Data.Utilities(mapFst,mapSnd,mapBoth)
 import GF.Infra.Option
-import Control.Monad(ap,liftM,liftM2,unless) --,mplus
+import Control.Monad(ap,liftM,liftM2) -- ,unless,mplus
 import Data.List (findIndex,intersect,nub,elemIndex,(\\)) --,isInfixOf
 --import Data.Char (isUpper,toUpper,toLower)
 import GF.Text.Pretty
@@ -161,10 +161,6 @@ value env t0 =
     ELin c r -> (unlockVRec (gloc env) c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
     t -> fail.render $ "value"<+>ppT 10 t $$ show t
-
-paramValues env ty = do let ge = global env
-                        ats <- allParamValues (srcgr env) =<< nfx ge ty
-                        mapM (eval ge) ats
 
 vconcat vv@(v1,v2) =
     case vv of
@@ -321,40 +317,31 @@ match loc cs = err bad return . matchPattern cs . value2term loc []
 
 valueMatch :: CompleteEnv -> (Bind Env,Substitution) -> Err Value
 valueMatch env (Bind f,env') = f # mapPairsM (value0 env) env'
---{-
+
 valueTable :: CompleteEnv -> TInfo -> [Case] -> Err OpenValue
 valueTable env i cs =
     case i of
       TComp ty -> do pvs <- paramValues env ty
                      ((VV ty pvs .) # sequence) # mapM (value env.snd) cs
-      _ -> do vty <- value env =<< getTableType i
-              err (keep vty) return convert
+      _ -> err keep return convert
   where
-    keep vty _ = cases vty # mapM valueCase cs
+    keep _ = do vty <- value env =<< getTableType i
+                cases vty # mapM valueCase cs
     cases vty cs vs = VT wild (vty vs) (mapSnd ($vs) cs)
-    wild =  case i of
-              TWild _ -> True
-              _ -> False
+    wild = case i of TWild _ -> True; _ -> False
 
-    valueCase (p,t) = do p' <- measurePatt # inlinePattMacro p
-                         let allpvs = allPattVars p'
-                             pvs = nub allpvs
-                             dups = allpvs \\ pvs
-                         unless (null dups) $
-                           fail.render $ hang "Pattern is not linear:" 4
-                                              (ppPatt Unqualified 0 p')
-                         vt <- value (extend pvs env) t
-                         return (p', \ vs -> Bind $ \ bs -> vt (push' p' bs pvs vs))
---{-
     convert :: Err OpenValue
-    convert = do ty   <- getTableType i
-                 pty  <- nfx (global env) ty
-                 vs   <- allParamValues (srcgr env) pty
-                 pvs  <- mapM (value0 env) vs
+    convert = do ((pty,vs),pvs) <- paramValues' env =<< getTableType i
                  cs'  <- mapM valueCase cs
                  sts  <- mapM (matchPattern cs') vs 
-                 return $ \ vs -> VV pty pvs $ map (err bug id . valueMatch env) (mapFst ($vs) sts)
---}
+                 return $ \ vs -> VV pty pvs $ map (err bug id . valueMatch env)
+                                                   (mapFst ($vs) sts)
+
+    valueCase (p,t) = do p' <- measurePatt # inlinePattMacro p
+                         pvs <- linPattVars p'
+                         vt <- value (extend pvs env) t
+                         return (p',\vs-> Bind $ \bs-> vt (push' p' bs pvs vs))
+
     inlinePattMacro p =
         case p of
           PM qc -> do r <- resource env qc
@@ -363,7 +350,15 @@ valueTable env i cs =
                         _ -> ppbug $ hang "Expected pattern macro:" 4
                                           (show r)
           _ -> composPattOp inlinePattMacro p
---}
+
+
+paramValues env ty = snd # paramValues' env ty
+
+paramValues' env ty = do let ge = global env
+                         pty <- nfx ge ty
+                         ats <- allParamValues (srcgr env) pty
+                         pvs <- mapM (eval ge) ats
+                         return ((pty,ats),pvs)
 
 push' p bs xs = if length bs/=length xs
                 then bug $ "push "++show (p,bs,xs)
@@ -483,6 +478,15 @@ value2term loc xs v0 =
       where (env',xs') = pushs (pattVars p) ([],xs)
 
 --  nf gr (env,xs) = value2term xs . eval gr env
+
+linPattVars p =
+    if null dups
+    then return pvs
+    else fail.render $ hang "Pattern is not linear:" 4 (ppPatt Unqualified 0 p)
+  where
+    allpvs = allPattVars p
+    pvs = nub allpvs
+    dups = allpvs \\ pvs
 
 pattVars = nub . allPattVars
 allPattVars p =
