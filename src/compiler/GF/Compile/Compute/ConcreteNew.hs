@@ -323,19 +323,28 @@ valueTable env i cs =
     case i of
       TComp ty -> do pvs <- paramValues env ty
                      ((VV ty pvs .) # sequence) # mapM (value env.snd) cs
-      _ -> err keep return convert
+      _ -> do ty <- getTableType i
+              cs' <- mapM valueCase cs
+              err (dynamic cs' ty) return (convert cs' ty)
   where
-    keep _ = do vty <- value env =<< getTableType i
-                cases vty # mapM valueCase cs
-    cases vty cs vs = VT wild (vty vs) (mapSnd ($vs) cs)
+    dynamic cs' ty _ = cases cs' # value env ty
+
+    cases cs' vty vs = err keep ($vs) (convertv cs' (vty vs))
+      where
+        keep msg = --trace (msg++"\n"++render (ppT 0 (T i cs))) $
+                   VT wild (vty vs) (mapSnd ($vs) cs')
+
     wild = case i of TWild _ -> True; _ -> False
 
-    convert :: Err OpenValue
-    convert = do ((pty,vs),pvs) <- paramValues' env =<< getTableType i
-                 cs'  <- mapM valueCase cs
-                 sts  <- mapM (matchPattern cs') vs 
-                 return $ \ vs -> VV pty pvs $ map (err bug id . valueMatch env)
-                                                   (mapFst ($vs) sts)
+    convertv cs' vty = convert' cs' =<< paramValues'' env pty
+      where pty = value2term (gloc env) [] vty
+
+    convert cs' ty = convert' cs' =<< paramValues' env ty
+
+    convert' cs' ((pty,vs),pvs) =
+      do sts  <- mapM (matchPattern cs') vs
+         return $ \ vs -> VV pty pvs $ map (err bug id . valueMatch env)
+                                           (mapFst ($vs) sts)
 
     valueCase (p,t) = do p' <- measurePatt # inlinePattMacro p
                          pvs <- linPattVars p'
@@ -354,11 +363,11 @@ valueTable env i cs =
 
 paramValues env ty = snd # paramValues' env ty
 
-paramValues' env ty = do let ge = global env
-                         pty <- nfx ge ty
-                         ats <- allParamValues (srcgr env) pty
-                         pvs <- mapM (eval ge) ats
-                         return ((pty,ats),pvs)
+paramValues' env ty = paramValues'' env =<< nfx (global env) ty
+
+paramValues'' env pty = do ats <- allParamValues (srcgr env) pty
+                           pvs <- mapM (eval (global env)) ats
+                           return ((pty,ats),pvs)
 
 push' p bs xs = if length bs/=length xs
                 then bug $ "push "++show (p,bs,xs)
