@@ -318,7 +318,7 @@ Executable gf
   ghc-options: -threaded -fwarn-unused-imports
 
   if impl(ghc>=7.0)
-    ghc-options: -rtsopts
+    ghc-options: -rtsopts -with-rtsopts=-I5
     if impl(ghc<7.8)
       ghc-options: -with-rtsopts=-K64M
 
