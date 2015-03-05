@@ -59,7 +59,7 @@ lookupConst :: Theory -> QIdent -> Err Val
 lookupConst th f = th f
 
 lookupVar :: Env -> Ident -> Err Val
-lookupVar g x = maybe (Bad (render ("unknown variable" <+> x))) return $ lookup x ((identW,uVal):g)
+lookupVar g x = maybe (Bad (render ("unknown variable" <+> x))) return $ lookup x ((identW,VClos [] (Meta 0)):g)
 -- wild card IW: no error produced, ?0 instead.
 
 type TCEnv = (Int,Env,Env)
@@ -82,7 +82,7 @@ app u v = case u of
   VClos env (Abs _ x e) -> eval ((x,v):env) e
   _ -> return $ VApp u v
   
-eval :: Env -> Exp -> Err Val
+eval :: Env -> Term -> Err Val
 eval env e = ---- errIn ("eval" +++ prt e +++ "in" +++ prEnv env) $ 
              case e of
   Vr x    -> lookupVar env x
@@ -115,10 +115,10 @@ eqVal k u1 u2 = ---- errIn (prt u1 +++ "<>" +++ prBracket (show k) +++ prt u2) $
     _ -> return [(w1,w2) | w1 /= w2]
 -- invariant: constraints are in whnf
 
-checkType :: Theory -> TCEnv -> Exp -> Err (AExp,[(Val,Val)])
+checkType :: Theory -> TCEnv -> Term -> Err (AExp,[(Val,Val)])
 checkType th tenv e = checkExp th tenv e vType
 
-checkExp :: Theory -> TCEnv -> Exp -> Val -> Err (AExp, [(Val,Val)])
+checkExp :: Theory -> TCEnv -> Term -> Val -> Err (AExp, [(Val,Val)])
 checkExp th tenv@(k,rho,gamma) e ty = do
   typ <- whnf ty
   let v = VGen k
@@ -169,13 +169,13 @@ checkExp th tenv@(k,rho,gamma) e ty = do
                    return (AGlue x y,cs1++cs2++cs3)
     _ -> checkInferExp th tenv e typ
 
-checkInferExp :: Theory -> TCEnv -> Exp -> Val -> Err (AExp, [(Val,Val)])
+checkInferExp :: Theory -> TCEnv -> Term -> Val -> Err (AExp, [(Val,Val)])
 checkInferExp th tenv@(k,_,_) e typ = do
   (e',w,cs1) <- inferExp th tenv e
   cs2 <- eqVal k w typ
   return (e',cs1 ++ cs2)
       
-inferExp :: Theory -> TCEnv -> Exp -> Err (AExp, Val, [(Val,Val)])
+inferExp :: Theory -> TCEnv -> Term -> Err (AExp, Val, [(Val,Val)])
 inferExp th tenv@(k,rho,gamma) e = case e of
    Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
    Q (m,c) | m == cPredefAbs && isPredefCat c
@@ -231,7 +231,7 @@ checkAssign th tenv@(k,rho,gamma) typs (lbl,(Nothing,exp)) = do
     Just val -> do (aexp,cs) <- checkExp th tenv exp val
                    return ((lbl,(val,aexp)),cs)
 
-checkBranch :: Theory -> TCEnv -> Equation -> Val -> Err (([Exp],AExp),[(Val,Val)])
+checkBranch :: Theory -> TCEnv -> Equation -> Val -> Err (([Term],AExp),[(Val,Val)])
 checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $ 
                                   chB tenv' ps' ty 
  where 
@@ -276,7 +276,7 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
   upd x k g = (x, VGen k x) : g --- hack to recognize pattern variables
 
 
-checkPatt :: Theory -> TCEnv -> Exp -> Val -> Err (Binds,[(Val,Val)])
+checkPatt :: Theory -> TCEnv -> Term -> Val -> Err (Binds,[(Val,Val)])
 checkPatt th tenv exp val = do
   (aexp,_,cs) <- checkExpP tenv exp val
   let binds = extrBinds aexp
