@@ -148,64 +148,14 @@ addPMCFG opts gr cenv opath am cm seqs id info = return (seqs, info)
 floc opath loc id = maybe (L loc id) (\path->L (External path loc) id) opath
 
 convert opts gr cenv loc term ty@(_,val) pargs =
-    case term' of
-      Error s -> fail $ render $ ppL loc ("Predef.error: "++s)
-      _ -> do {-when (verbAtLeast opts Verbose) $
-                ePutStrLn $
-                  "\n"++take 10000 (renderStyle style{mode=OneLineMode}
-                    (text "term:"<+>term $$
-                     text "eta expanded:"<+>eterm $$
-                     text "normalized:"<+>term'))--}
-              return $ runCnvMonad gr (conv term') (pargs,[])
+  case normalForm cenv loc (etaExpand ty term) of
+    Error s -> fail $ render $ ppL loc ("Predef.error: "++s)
+    term    -> return $ runCnvMonad gr (convertTerm opts CNil val term) (pargs,[])
   where
-    conv t = convertTerm opts CNil val =<< unfactor t
-
-    eterm = expand ty term
-    term' = normalForm cenv loc eterm
-
-expand (context,val) = mkAbs pars . recordExpand val . flip mkApp args
-  where pars = [(Explicit,v) | v <- vars]
-        args = map Vr vars
-        vars = map (\(bt,x,t) -> x) context
-
-recordExpand :: Type -> Term -> Term
-recordExpand typ trm =
-  case typ of
-     RecType tys -> expand trm
-       where
-         n = length tys
-         expand trm =
-           case trm of
-             FV ts -> FV (map expand ts)
-             R rs | length rs==n -> trm
-             _ -> R [assign lab (P trm lab) | (lab,_) <- tys]
-     _ -> trm
-
-unfactor :: Term -> CnvMonad Term
-unfactor t = CM (\gr c -> c (unfac gr t))
-  where
-    unfac gr t =
-      case t of
-        T (TTyped ty) [(PV x,u)] -> let u' = unfac gr u
-                                        vs = allparams ty
-                                    in --trace ("expand single variable table into "++show (length vs)++" branches.\n"++render t) $
-                                       V ty [restore x v u' | v <- vs]
-        T (TTyped ty) [(PW  ,u)] -> let u' = unfac gr u
-                                        vs = allparams ty
-                                    in --trace ("expand wildcard table into "++show (length vs)++ "branches.\n"++render t) $
-                                       V ty [u' | _ <- vs]
-        T (TTyped ty) _ -> -- convertTerm doesn't handle these tables
-                           ppbug $
-                           sep ["unfactor"<+>ppU 10 t,
-                                pp (show t){-,
-                                fsep (map (ppU 10) (allparams ty))-}]
-        _ -> composSafeOp (unfac gr) t
-      where
-        allparams ty = err bug id (allParamValues gr ty)
-
-        restore x u t = case t of
-                          Vr y | y == x -> u
-                          _             -> composSafeOp (restore x u) t
+    etaExpand (context,val) = mkAbs pars . flip mkApp args
+      where pars = [(Explicit,v) | v <- vars]
+            args = map Vr vars
+            vars = map (\(bt,x,t) -> x) context
 
 pgfCncCat :: SourceGrammar -> Type -> Int -> CncCat
 pgfCncCat gr lincat index =
