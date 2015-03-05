@@ -10,7 +10,7 @@ import GF.Grammar (SourceGrammar) -- for cc command
 import GF.Grammar.CFG
 import GF.Grammar.EBNF
 import GF.Compile.CFGtoPGF
-import GF.Infra.UseIO(die,tryIOE,useIOE)
+import GF.Infra.UseIO(die,tryIOE)
 import GF.Infra.Option
 import GF.Data.ErrM
 

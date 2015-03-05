@@ -41,7 +41,7 @@ initTCEnv gamma =
 type2val :: Type -> Val
 type2val = VClos []
 
-cont2exp :: Context -> Exp
+cont2exp :: Context -> Term
 cont2exp c = mkProd c eType [] -- to check a context
 
 cont2val :: Context -> Val
@@ -49,7 +49,7 @@ cont2val = type2val . cont2exp
 
 -- some top-level batch-mode checkers for the compiler
 
-justTypeCheck :: SourceGrammar -> Exp -> Val -> Err Constraints
+justTypeCheck :: SourceGrammar -> Term -> Val -> Err Constraints
 justTypeCheck gr e v = do
   (_,constrs0) <- checkExp (grammar2theory gr) (initTCEnv []) e v
   (constrs1,_) <- unifyVal constrs0

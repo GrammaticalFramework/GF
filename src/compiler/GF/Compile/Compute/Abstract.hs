@@ -35,16 +35,16 @@ import GF.Text.Pretty
 tracd m t = t 
 -- tracd = trace
 
-compute :: SourceGrammar -> Exp -> Err Exp
+compute :: SourceGrammar -> Term -> Err Term
 compute = computeAbsTerm
 
-computeAbsTerm :: SourceGrammar -> Exp -> Err Exp
+computeAbsTerm :: SourceGrammar -> Term -> Err Term
 computeAbsTerm gr = computeAbsTermIn (lookupAbsDef gr) []
 
 -- | a hack to make compute work on source grammar as well
 type LookDef = Ident -> Ident -> Err (Maybe Int,Maybe [Equation])
 
-computeAbsTermIn :: LookDef -> [Ident] -> Exp -> Err Exp
+computeAbsTermIn :: LookDef -> [Ident] -> Term -> Err Term
 computeAbsTermIn lookd xs e = errIn (render (text "computing" <+> ppTerm Unqualified 0 e)) $ compt xs e where
   compt vv t = case t of
 --    Prod x a b  -> liftM2 (Prod x) (compt vv a) (compt (x:vv) b)

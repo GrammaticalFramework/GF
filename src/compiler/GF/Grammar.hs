@@ -16,7 +16,6 @@ module GF.Grammar
            ( module GF.Grammar.Grammar,
              module GF.Grammar.Values,
              module GF.Grammar.Macros,
-             module GF.Grammar.MMacros,
              module GF.Grammar.Printer,
              module GF.Infra.Ident
            ) where
@@ -24,6 +23,5 @@ module GF.Grammar
 import GF.Grammar.Grammar
 import GF.Grammar.Values
 import GF.Grammar.Macros
-import GF.Grammar.MMacros
 import GF.Grammar.Printer
 import GF.Infra.Ident

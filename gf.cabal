@@ -217,7 +217,6 @@ Library
     GF.Grammar.Lexer
     GF.Grammar.Lockfield
     GF.Grammar.Lookup
-    GF.Grammar.MMacros
     GF.Grammar.Macros
     GF.Grammar.Parser
     GF.Grammar.PatternMatch

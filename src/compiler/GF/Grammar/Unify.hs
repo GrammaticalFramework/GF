@@ -27,8 +27,8 @@ unifyVal :: Constraints -> Err (Constraints,MetaSubst)
 unifyVal cs0 = do
   let (cs1,cs2) = partition notSolvable cs0 
   let (us,vs) = unzip cs2
-  us' <- mapM val2exp us
-  vs' <- mapM val2exp vs
+  let us' = map val2term us
+  let vs' = map val2term vs
   let (ms,cs) = unifyAll (zip us' vs') []
   return (cs1 ++ [(VClos [] t, VClos [] u) | (t,u) <- cs], 
           [(m,          VClos [] t) | (m,t) <- ms])
@@ -88,6 +88,16 @@ substMetas subst trm = case trm of
      _ -> trm
    _ -> composSafeOp (substMetas subst) trm
 
+substTerm  :: [Ident] -> Substitution -> Term -> Term
+substTerm ss g c = case c of
+  Vr x        -> maybe c id $ lookup x g
+  App f a     -> App (substTerm ss g f) (substTerm ss g a)
+  Abs b x t   -> let y = mkFreshVarX ss x in 
+                   Abs b y (substTerm (y:ss) ((x, Vr y):g) t)
+  Prod b x a t  -> let y = mkFreshVarX ss x in 
+                   Prod b y (substTerm ss g a) (substTerm (y:ss) ((x,Vr y):g) t)
+  _           -> c
+
 occCheck :: MetaId -> Term -> Bool
 occCheck s u = case u of
     Meta v  -> s == v
@@ -95,3 +105,11 @@ occCheck s u = case u of
     Abs _ x b -> occCheck s b
     _       -> False
 
+val2term :: Val -> Term
+val2term v = case v of
+  VClos g e   -> substTerm [] (map (\(x,v) -> (x,val2term v)) g) e
+  VApp f c    -> App (val2term f) (val2term c)
+  VCn c       -> Q c
+  VGen i x    -> Vr x
+  VRecType xs -> RecType (map (\(l,v) -> (l,val2term v)) xs)
+  VType       -> typeType
