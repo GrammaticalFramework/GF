@@ -72,7 +72,6 @@ struct PgfParseState {
 	PgfParseState* next;
 
     PgfItemBuf* agenda;
-    PgfItem* meta_item;
 	PgfContsMap* conts_map;
 	PgfGenCatMap* generated_cats;
 
@@ -1214,7 +1213,6 @@ pgf_new_parse_state(PgfParsing* ps, size_t start_offset,
 	PgfParseState* state = gu_new(PgfParseState, ps->pool);
 	state->next = *pstate;
     state->agenda = gu_new_buf(PgfItem*, ps->pool);
-    state->meta_item = NULL;
 	state->generated_cats = gu_new_addr_map(PgfItemConts*, PgfCCat*, &gu_null_struct, ps->pool);
 	state->conts_map = gu_new_addr_map(PgfCCat*, PgfItemContss*, &gu_null_struct, ps->pool);
 	state->needs_bind = (bind_type == BIND_NONE) &&
