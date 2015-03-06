@@ -733,6 +733,19 @@ Translator.prototype.import_globalsight=function(el) {
     setTimeout(imp,100) // leave time to hide the menu first
 }
 
+Translator.prototype.open_in_wc=function(el) {
+    var t=this
+    hide_menu(el)
+    var doc=t.document
+    var sourcetext=doc.segments.map(function(s){return s.source}).join(" ")
+    var wc=appLocalStorage("gf.wc.")
+    wc.put("from",doc.options.from)
+    wc.put("to",doc.options.to)
+    wc.put("input",sourcetext)
+    var w=window.open("../wc.html","wc")
+    w.focus()
+}
+
 Translator.prototype.remove=function(el) {
     var t=this
     if(t.document.globalsight) return
