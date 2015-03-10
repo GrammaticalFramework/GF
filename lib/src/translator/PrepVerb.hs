@@ -33,6 +33,10 @@ v2V v = "(lin V " ++ v ++ "_V2) "
 
 op v = "OP_" ++ v
 
+firstVariant s = case span (/='|') s of
+  (_,[]) -> s
+  (v,_) -> v ++ ";"
+
 mkPrepVerbDict lang = do
   rs <- readFile ("Dictionary" ++ lang ++ ".gf") >>= return . lines
   let dict = M.fromList [(f,unwords r) | "lin":f:"=":r <- map words rs]
@@ -41,7 +45,11 @@ mkPrepVerbDict lang = do
   let advs  = [(p, "Adv",  look p) | p <- allAdvs]
   let verbs = [(p, "V",    look p) | p <- allVs]
   let verb2 = [(p, "V2",   look p) | p <- allV2s]
-  let rules = [s ++ "oper " ++ op p ++ " : " ++ c ++ " = " ++ r | (p,c,(s,r)) <- preps ++ advs ++ verbs ++ verb2]
+
+-- all variants
+--  let rules = [s ++ "oper " ++ op p ++ " : " ++ c ++ " = " ++ r | (p,c,(s,r)) <- preps ++ advs ++ verbs ++ verb2]
+-- just the first variant
+  let rules = [s ++ "oper " ++ op p ++ " : " ++ c ++ " = " ++ firstVariant r | (p,c,(s,r)) <- preps ++ advs ++ verbs ++ verb2]
   
   let preamble = [
         "concrete TopPrepVerbs" ++ lang ++ " of Dictionary = Cat" ++ lang ++ " ** ",
