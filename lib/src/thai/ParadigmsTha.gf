@@ -40,9 +40,9 @@ oper
       = \n,p -> lin A2 (n ** {c2 = p}) ;
 
   mkV = overload {
-    mkV : Str -> Verb 
-      = \s -> {s1 = [] ; s2 = s ; isCompl = False} ;
-    mkV : Str -> Str -> Verb 
+    mkV : Str -> V 
+      = \s -> lin V {s1 = [] ; s2 = s ; isCompl = False} ;
+    mkV : Str -> Str -> V 
       = \s,c -> lin V {s1 = s ; s2 = c ; isCompl = True} ;
     } ;
 
