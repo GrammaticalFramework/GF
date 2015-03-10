@@ -3,7 +3,7 @@ concrete ChunkTha of Chunk = CatTha, ExtensionsTha [VPS,VPI] **
      with (Syntax = SyntaxTha), (Extensions = ExtensionsTha) **
   open 
     SyntaxTha, (E = ExtensionsTha), Prelude, 
-    ResTha, (P = ParadigmsTha) in {
+    ResTha, (P = ParadigmsTha), StringsTha in {
 
 oper
   emptyNP : NP = mkNP [] ;
@@ -20,14 +20,14 @@ lin
   Predet_Chunk predet = predet ;
 -}
 
-{- THESE ARE NEEDED
+-- THESE ARE NEEDED
 lin
   NP_Acc_Chunk np = np ;
-  NP_Gen_Chunk np = ss (np.s ++ de_s) ;
+  NP_Gen_Chunk np = ss (khoog_s ++ np.s) ;
 
   VPI_Chunk vpi = vpi ;
 
-  copula_inf_Chunk = ss copula_s ;
+  copula_inf_Chunk = ss pen_s ;
 
   refl_SgP1_Chunk = ss reflPron ;
   refl_SgP2_Chunk = ss reflPron ;
@@ -35,9 +35,10 @@ lin
   refl_PlP1_Chunk = ss reflPron ;
   refl_PlP2_Chunk = ss reflPron ;
   refl_PlP3_Chunk = ss reflPron ;
-  neg_Chunk = ss neg_s ;
-  copula_Chunk = ss copula_s ;
-  copula_neg_Chunk = ss (neg_s ++ copula_s) ;
+  neg_Chunk = ss may_s ;
+  copula_Chunk = ss pen_s ;
+  copula_neg_Chunk = ss (thbind may_s chay_s) ;
+{- ---- TODO
   past_copula_Chunk = ss "了" ;
   past_copula_neg_Chunk = ss (neg_s ++ copula_s ++ "了") ;
   future_Chunk = ss copula_s ; ----
@@ -48,7 +49,6 @@ lin
   perfect_neg_Chunk = ss (neg_s ++ copula_s ++ "了") ;
   past_perfect_Chunk = ss "了" ;
   past_perfect_neg_Chunk = ss (neg_s ++ copula_s ++ "了") ;
-
 -}
 
 }
