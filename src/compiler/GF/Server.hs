@@ -151,7 +151,7 @@ handle logLn documentroot state0 cache execute1 stateVar
          return r{resHeaders=("Date",fmt):resHeaders r}
 
     normal_request qs =
-      do logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 100.fst) qs)
+      do logPutStrLn $ method++" "++upath++" "++show (mapSnd (take 500.fst) qs)
          let stateful m = modifyMVar stateVar $ \ s -> run m (qs,s)
           -- stateful ensures mutual exclusion, so you can use/change the cwd
          case upath of
