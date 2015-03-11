@@ -30700,6 +30700,7 @@ lin kibibit_N = variants {} ; -- status=guess
 lin kibitzer_N = variants {} ; -- status=guess
 lin kick_N = mkN "kick" | mkN "bråka" ; -- SaldoWN -- comment=12
 lin kick_V = mkV "sparka" ;
+lin kick_V2 = mkV2 (mkV "sparka") on_Prep ;
 lin kick_about_V2 = prepV2 OP_kick_V OP_about_Prep ; -- guess-p-verb
 lin kick_around_V2 = prepV2 OP_kick_V OP_around_Prep ; -- guess-p-verb
 lin kick_around_with_V2 = prepV2 (advV OP_kick_V OP_around_Adv ) OP_with_Prep ; -- guess-p-verb
@@ -36340,7 +36341,7 @@ lin mournfulness_N = variants {} ; -- status=guess
 lin mourning_N = mkN "sorg" "sorger" | mkN "sorgdräkt" "sorgdräkter" ; -- SaldoWN -- comment=4
 lin mourning_band_N = variants {} ; -- status=guess
 lin mourning_ring_N = variants {} ; -- status=guess
-lin mouse_N = mkN "mus" ; -- SaldoWN = mkN "mus" "musen" "möss" "mössen" ;
+lin mouse_N = mkN "mus" "musen" "möss" "mössen" ;
 lin mouse_V = variants {} ; -- status=guess
 lin mousepad_N = variants {} ; -- status=guess
 lin mouser_N = variants {} ; -- status=guess
