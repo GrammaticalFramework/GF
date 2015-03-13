@@ -20,7 +20,7 @@ are marked in the table
 | Amh   | Amharic      | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | +      | *MK
 | Ara   | Arabic       | +     | +    | +     | +   | -    | -   | -    | -     | -    | - | -      | +      | AD
 | Bul   | Bulgarian    | +     | +    | +     | +   | +    | +   | +    | +     | +    | + | ++     | +      | *KA
-| Cat   | Catalan      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | - | ++     | -      | *JS,*IL
+| Cat   | Catalan      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | + | ++     | -      | *JS,*IL
 | Chi   | Chinese      | +     | -    | ++    | +   | +    | +   | -    | -     | +    | + | -      | +      | ZL,*AR,*CP,QH
 | Dan   | Danish       | +     | +    | ++    | +   | +    | +   | +    | +     | -    | - | +      | -      | *AR
 | Dut   | Dutch        | +     | +    | ++    | +   | +    | +   | +    | +     | -    | + | +      | -      | *AR,FJ
@@ -35,11 +35,11 @@ are marked in the table
 | Hin   | Hindi        | +     | +    | ++    | +   | +    | +   | +    | -     | -    | + | +      | +      | *SV,*KP,MH,AR,PK
 | Ina   | Interlingua  | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | -      | JB
 | Ita   | Italian      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | + | ++     | -      | *AR,*RE,GP
-| Jpn   | Japanese     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | - | -      | +      | *LZ
+| Jpn   | Japanese     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | + | +      | +      | *LZ
 | Lat   | Latin        | +     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | -      | *AR,*HLa
 | Lav   | Latvian      | +     | -    | ++    | +   | +    | +   | -    | -     | -    | - | +      | +      | *NG,*PP
 | Mlt   | Maltese      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | -      | +      | *JC
-| Mon   | Mongolian    | -     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | -      | *NE
+| Mon   | Mongolian    | +     | -    | ++    | +   | +    | +   | -    | -     | +    | - | -      | +      | *NE
 | Nep   | Nepali       | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | +      | *DS
 | Nor   | Norwegian(b) | +     | +    | ++    | +   | +    | +   | +    | +     | -    | - | +      | -      | *AR
 | Pes   | Persian      | +     | -    | +     | +   | +    | +   | -    | -     | -    | - | +      | +      | *SV,*EA,SM
@@ -51,7 +51,7 @@ are marked in the table
 | Spa   | Spanish      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | + | ++     | -      | *AR,IA,TS,*IL
 | Swa   | Swahili      | +     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | +      | *WN,JM
 | Swe   | Swedish      | +     | +    | ++    | +   | +    | +   | +    | +     | +    | + | ++     | +      | *MA,*AR,MF
-| Tha   | Thai         | +     | -    | ++    | +   | +    | +   | +    | -     | -    | - | -      | -      | *AR,CK
+| Tha   | Thai         | +     | -    | ++    | +   | +    | +   | +    | -     | -    | + | +      | -      | *AR,CK
 | Tsn   | Tswana       | -     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | -      | *LPs,AB
 | Tur   | Turkish      | +     | -    | ++    | +   | -    | -   | -    | -     | +    | - | -      | -      | *SC,KA
 | Urd   | Urdu         | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | +      | +      | *SV,MH
