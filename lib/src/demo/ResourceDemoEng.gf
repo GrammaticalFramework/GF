@@ -1,5 +1,3 @@
---# -path=.:alltenses
-
 concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
 
 -- used to be the "mini" resource of GF book, chapter 9, but now larger
