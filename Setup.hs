@@ -219,6 +219,7 @@ langsCoding = [
   (("latvian",    "Lav"),""),
   (("maltese",  "Mlt"),""),
   (("mongolian","Mon"),""),
+  (("nepali",   "Nep"),""),
   (("norwegian","Nor"),""),
   (("persian",  "Pes"),""),
   (("polish",   "Pol"),""),
@@ -251,7 +252,7 @@ langsAPI  = langsLang `except` langsIncomplete -- ["Ina","Amh","Ara"]
 langsIncomplete = ["Amh","Ara","Heb","Ina","Lat","Tur"]
 
 -- languages for which to compile Symbolic
-langsSymbolic  = langsAPI `except` ["Afr","Jpn","Mon"]
+langsSymbolic  = langsAPI `except` ["Afr","Jpn","Mon","Nep"]
 
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Lav","Tha"]
