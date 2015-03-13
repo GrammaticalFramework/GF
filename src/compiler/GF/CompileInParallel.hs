@@ -63,6 +63,7 @@ parallelBatchCompile jobs opts rootfiles0 =
         all_modes = ["alltenses","present"]
 
         dropSlash ('/':p) = p
+        dropSlash ('\\':p) = p
         dropSlash p = p
 
 batchCompile1 lib_dir (opts,filepaths) =
