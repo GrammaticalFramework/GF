@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete CatMon of Cat = CommonX - [CAdv,Temp,Tense] ** open ResMon, Prelude in {
 

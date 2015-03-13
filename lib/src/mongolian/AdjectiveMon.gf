@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete AdjectiveMon of Adjective = CatMon ** open ResMon, Prelude in {
 

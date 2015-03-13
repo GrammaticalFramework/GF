@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 
 concrete IrregMon of IrregMonAbs = CatMon ** open ParadigmsMon in {

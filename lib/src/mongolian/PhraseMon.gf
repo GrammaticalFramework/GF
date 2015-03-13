@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete PhraseMon of Phrase = CatMon ** open Prelude, ResMon in {
 

@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete ConjunctionMon of Conjunction = CatMon ** open ResMon, Coordination, Prelude in {
 
