@@ -2,9 +2,9 @@ src = "Eng"
 langs = [
   "Afr","Bul","Cat","Chi","Dan","Dut",
   "Est","Fin","Fre","Ger","Gre","Hin",
-  "Ita","Jpn","Lav","Mlt","Nep","Nor",
-  "Pes","Pol","Pnb","Ron","Rus","Snd",
-  "Spa","Swe","Tha","Urd"
+  "Ita","Jpn","Lav","Mlt","Mon","Nep",
+  "Nor","Pes","Pol","Pnb","Ron","Rus",
+  "Snd","Spa","Swe","Tha","Urd"
   ]
 
 file lng = "ResourceDemo" ++ lng ++ ".gf"
