@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete IdiomMon of Idiom = CatMon ** open Prelude, ResMon, ParadigmsMon in {
 

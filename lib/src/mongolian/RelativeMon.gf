@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete RelativeMon of Relative = CatMon ** open ResMon, MorphoMon, Prelude in {
 

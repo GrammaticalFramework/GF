@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete VerbMon of Verb = CatMon ** open ResMon, ParadigmsMon, Prelude in {
 

@@ -1,4 +1,4 @@
---# -path=.:abstract:../common:../../prelude
+--# -path=.:abstract:../common:../prelude
 
 concrete LexiconMon of Lexicon = CatMon ** open ParadigmsMon, Prelude, StructuralMon, MorphoMon in {
  

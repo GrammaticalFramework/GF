@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete NumeralTransferMon of NumeralTransfer = NumeralMon ** open ResMon, MorphoMon, CatMon in {
 

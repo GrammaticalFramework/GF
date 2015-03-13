@@ -1,4 +1,4 @@
---# -path=.:../abstract:../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete SymbolMon of Symbol = CatMon ** open Prelude, ResMon in {
 

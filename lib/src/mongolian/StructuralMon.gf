@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete StructuralMon of Structural = CatMon ** open ResMon, MorphoMon, ParadigmsMon, Prelude, NounMon in {
 
