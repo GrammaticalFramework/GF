@@ -1,4 +1,5 @@
---# -path=.:alltenses:prelude
+--# -path=.:../nepali:../common:../abstract:../prelude
+
 resource TryNep = SyntaxNep - [mkAdN] , LexiconNep, ParadigmsNep - [mkAdv,mkDet,mkIP,mkAdN,mkQuant] ** 
   open (P = ParadigmsNep) in {
 
