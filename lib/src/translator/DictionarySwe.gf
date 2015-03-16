@@ -1250,7 +1250,7 @@ lin aggregate_V2 = mkV2 (mkV (mkV "slå" "slog" "slagit") "samman") | mkV2 (mkV 
 lin aggregation_N = mkN "sammanställning" ; -- status=guess
 lin aggression_N = mkN "aggression" "aggressioner" ; -- comment=3
 lin aggressive_A = mkA "aggressiv" ;
-lin aggressiveness_N = variants {} ; -- status=guess
+lin aggressiveness_N = mkN "aggressivitet" ; -- status=guess
 lin aggressorFem_N = variants {} ; -- status=guess
 lin aggressorMasc_N = variants {} ; -- status=guess
 lin aggrieve_V2 = variants {} ; -- status=guess
@@ -19953,7 +19953,7 @@ lin exhausting_A = variants {} ; -- status=guess
 lin exhaustion_N = mkN "uttömmande" ; -- comment=6
 lin exhaustive_A = mkA "uttömmande" ; -- comment=5
 lin exhibit_N = mkN "visa" ; -- SaldoWN
-lin exhibit_V2 = variants {} ; --
+lin exhibit_V2 = mkV2 (mkV "uppvisa") ; --
 lin exhibition_N = mkN "utställning" ;
 lin exhibitioner_N = variants {} ; -- status=guess
 lin exhibitionism_N = mkN "exhibitionism" "exhibitionismer" ; -- status=guess
@@ -30631,7 +30631,7 @@ lin kerbstone_N = variants {} ; -- status=guess
 lin kerchief_N = mkN "sjalett" "sjaletter" ; -- comment=3
 lin kerion_N = variants {} ; -- status=guess
 lin kern_N = variants {} ; -- status=guess
-lin kernel_N = variants {} ; -- status=guess
+lin kernel_N = mkN "kärna" ; -- status=guess
 lin kernicterus_N = variants {} ; -- status=guess
 lin kernite_N = variants {} ; -- status=guess
 lin kerosene_N = mkN "fotogen" neutrum ; -- SaldoWN -- status=guess
@@ -50159,7 +50159,7 @@ lin select_V2 = mkV2 (mkV "välja" "valde" "valt") ; -- status=guess
 lin select_V2V = mkV2V (mkV "välja" "valde" "valt") ; -- status=guess
 lin select_VV = mkVV (mkV "välja" "valde" "valt") ; -- status=guess
 lin selected_A = mkA "utvald" "utvalt" ; -- status=guess
-lin selection_N = mkN "utdrag" neutrum | mkN "val" ; -- SaldoWN -- comment=6
+lin selection_N = mkN "utdrag" neutrum | mkN "val" neutrum ; -- SaldoWN -- comment=6
 lin selective_A = mkA "selektiv" ; -- status=guess
 lin selectivity_N = variants {} ; -- status=guess
 lin selectman_N = variants {} ; -- status=guess
