@@ -22825,7 +22825,7 @@ lin fundamentalism_N = mkN "fundamentalism" "fundamentalismer" ; -- status=guess
 lin fundamentalist_A = variants {} ; -- status=guess
 lin fundamentalist_N = mkN "fundamentalist" "fundamentalister" ; -- SaldoWN
 lin fundamentals_N = variants {} ; -- status=guess
-lin funding_N = variants {} ; --
+lin funding_N = mkN "finansiering" ; --
 lin fundraiser_N = variants {} ; -- status=guess
 lin funds_N = mkN "medel" neutrum ; -- comment=3
 lin fundus_N = variants {} ; -- status=guess
@@ -23770,6 +23770,8 @@ lin gitana_N = variants {} ; -- status=guess
 lin gitano_N = variants {} ; -- status=guess
 lin give_N = mkN "räcka" | mkN "elasticitet" "elasticiteter" ; -- SaldoWN -- comment=2
 lin give_V = mkV "ge" "ger" "ge" "gav" "gett" "given" ;
+lin give_V2 = mkV2 give_V ;
+lin give_V3 = mkV3 give_V ;
 lin give_away_V = advV OP_give_V OP_away_Adv ; -- guess-p-verb
 lin give_away_V2 = mkV2 (advV OP_give_V OP_away_Adv ) ; -- guess-p-verb
 lin give_back_V2 = mkV2 (advV OP_give_V OP_back_Adv ) ; -- guess-p-verb
@@ -47593,7 +47595,7 @@ lin revise_V = mkV "revidera" ; -- status=guess
 lin revise_V2 = mkV2 "revidera" ; -- status=guess
 lin revised_A = variants {} ; --
 lin reviser_N = variants {} ; -- status=guess
-lin revision_N = variants {} ; --
+lin revision_N = mkN "revision" ; --
 lin revisionism_N = mkN "revisionism" "revisionismer" ; -- status=guess
 lin revisionistFem_N = variants {} ; -- status=guess
 lin revisionistMasc_N = variants {} ; -- status=guess
