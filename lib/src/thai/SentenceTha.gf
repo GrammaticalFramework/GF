@@ -32,17 +32,20 @@ concrete SentenceTha of Sentence = CatTha **
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infVP vp} ;
 
-    UseCl  t p cl = {s = thbind t.s p.s (cl.s ! ClDecl ! p.p)} ;
+    UseCl  t p cl = {s = t.s ++ p.s ++ (cl.s ! ClDecl ! p.p)} ; --- no bIND here, to prevent spurious &+ tokens
     UseQCl t p cl = {
-      s = \\q => thbind t.s p.s
-                 (case q of {QIndir => waa_s ; _ => []}) (cl.s ! p.p)
+      s = \\q => t.s ++ p.s ++
+                 (case q of {QIndir => waa_s ; _ => []}) ++bIND++ (cl.s ! p.p)
       } ;
     UseRCl t p cl = {
-      s = thbind t.s p.s (cl.s ! p.p) ;
+      s = t.s ++ p.s ++ (cl.s ! p.p) ;
       } ;
-    UseSlash  t p cl = {s = thbind t.s p.s (cl.s ! p.p) ; c2 = cl.c2} ;
+    UseSlash  t p cl = {s = t.s ++ p.s ++ (cl.s ! p.p) ; c2 = cl.c2} ;
 
     AdvS a s = thbind a s ;
 
     RelS s r = thbind s r ;
+
+    ExtAdvS a s = thbind a s ;
+    SSubjS a c b = thbind a c b ;
 }

@@ -30,7 +30,7 @@ concrete QuestionTha of Question = CatTha **
     IdetIP idet = mkNP (thbind idet.s1 idet.s2) ;
 
     IdetQuant iquant num = {
-      s1 = num.s ++ iquant.s1 ; --- is num even possible ??
+      s1 = num.s ++bIND++ iquant.s1 ; --- is num even possible ??
       s2 = iquant.s2 ;
       hasC = iquant.hasC
       } ;
