@@ -11,9 +11,10 @@ resource ResTha = ParamX, StringsTha ** open Prelude in {
 
   oper
 
--- binding words together - if you want. But better do it with the unlexer -unchars.
+-- binding words together
+-- will be activated when the parser supports consecutive BINDs AR 16/3/2015
 
-  bIND = [] ;
+  bIND = [] ; ---- Predef.BIND ; 
 
   thbind = overload {
     thbind : Str -> Str = \s -> s ;
@@ -99,8 +100,8 @@ resource ResTha = ParamX, StringsTha ** open Prelude in {
 
   predV : Verb -> VP = \v -> {
      s = \\p => if_then_Str v.isCompl 
-                   (thbind v.s1 (polStr may_s p ++ v.s2))
-                   (v.s1 ++     (polStr may_s p ++ v.s2)) ; --- v.s1 = [] ;
+                   (thbind v.s1   (polStr may_s p ++bIND++ v.s2))
+                   (v.s1 ++bIND++ (polStr may_s p ++bIND++ v.s2)) ; --- v.s1 = [] ;
      e = []
      } ;
 
@@ -111,7 +112,7 @@ resource ResTha = ParamX, StringsTha ** open Prelude in {
 
    insertExtra : Str -> VP -> VP = \o,vp -> {
      s = vp.s ;
-     e = vp.e ++ o
+     e = vp.e ++bIND++ o
      } ; 
 
    adjVP : Adj -> VP = \a -> {

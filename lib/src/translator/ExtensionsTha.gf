@@ -14,9 +14,9 @@ lin
 ----  ConjVPI = E.ConjVPI ;
 ----  ComplVPIVV = E.ComplVPIVV ;
 
-  MkVPS _ p vp = {s = vp.s ! p.p} ; ----
+  MkVPS t p vp = {s = t.s ++ p.s ++ vp.s ! p.p} ; ----
 ----  ConjVPS = E.ConjVPS ;
-  PredVPS np vp = cc2 np vp ;
+  PredVPS np vp = thbind np vp ;
 {-
   BaseVPI = E.BaseVPI ;
   ConsVPI = E.ConsVPI ;
