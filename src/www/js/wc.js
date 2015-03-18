@@ -110,7 +110,17 @@ wc.translate=function() {
 	    wc.selected=so
 	    var r=so.rs[so.current_pick]
 	    var prob=r.prob<=0 ? "" : r.prob || ""
-	    if(e) e.innerHTML=prob+"<br>"+(r.tree||"")
+	    if(e) {
+		e.innerHTML=prob+"<br>"
+		if(r.tree) {
+		    var t=wrap("span",text(r.tree))
+		    var imgurl="/robust/AppEng.pgf?command=abstrtree&tree="+encodeURIComponent(r.tree)+"&format=svg"
+		    e.appendChild(t)
+		    if(!r.img) r.img=node("img",{src:imgurl},[])
+		    e.appendChild(empty("br"))
+		    e.appendChild(r.img)
+		}
+	    }
 	    if(wc.p /*&& so.rs.length>1*/) show_picks()
 	    //if(f.speak.checked) wc.speak(t.text,f.to.value)
 	    if(!so.got_more) {
