@@ -114,9 +114,22 @@ wc.translate=function() {
 		e.innerHTML=prob+"<br>"
 		if(r.tree) {
 		    var t=wrap("span",text(r.tree))
-		    var imgurl="/robust/AppEng.pgf?command=abstrtree&tree="+encodeURIComponent(r.tree)+"&format=svg"
 		    e.appendChild(t)
-		    if(!r.img) r.img=node("img",{src:imgurl},[])
+		    var g=gftranslate.jsonurl
+		    var u="format=svg&tree="+encodeURIComponent(r.tree)
+		    var from="&from="+gftranslate.grammar+f.to.value
+		    r.imgurls=[g+"?command=c-abstrtree&"+u,
+			       g+"?command=c-parsetree&"+u+from]
+		    if(!r.img) {
+			r.img=node("img",{src:r.imgurls[0]},[])
+			r.img_ix=0
+			r.img.onclick=function() {
+			    r.img_ix=1-r.img_ix
+			    r.img.src=r.imgurls[r.img_ix]
+			}
+		    }
+		    else if(r.img.src!=r.imgurls[r.img_ix]) // language change?
+			r.img.src=r.imgurls[r.img_ix]
 		    e.appendChild(empty("br"))
 		    e.appendChild(r.img)
 		}
