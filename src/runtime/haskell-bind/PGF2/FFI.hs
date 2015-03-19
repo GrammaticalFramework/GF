@@ -3,7 +3,7 @@
 module PGF2.FFI where
 
 import Foreign.C
-import Foreign.C.String
+--import Foreign.C.String
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Control.Exception
@@ -206,3 +206,10 @@ foreign import ccall "pgf/pgf.h pgf_print"
 
 foreign import ccall "pgf/expr.h pgf_read_expr"
   pgf_read_expr :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
+
+
+foreign import ccall "pgf/graphviz.h pgf_graphviz_abstract_tree"
+  pgf_graphviz_abstract_tree :: Ptr PgfPGF -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()
+
+foreign import ccall "pgf/graphviz.h pgf_graphviz_parse_tree"
+  pgf_graphviz_parse_tree :: Ptr PgfConcr -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()
