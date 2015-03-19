@@ -1,30 +1,13 @@
-/* 
- * Copyright 2010 University of Helsinki.
- *   
- * This file is part of libgu.
- * 
- * Libgu is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Libgu is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with libgu. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include <gu/mem.h>
 #include <gu/fun.h>
 #include <gu/bits.h>
 #include <gu/assert.h>
 #include <string.h>
 #include <stdlib.h>
+#if !defined(_WIN32) && !defined(_WIN64)
 #include <sys/mman.h>
 #include <sys/stat.h>
+#endif
 #include <unistd.h>
 #include <fcntl.h>
 
@@ -197,6 +180,7 @@ gu_new_pool(void)
 GuPool* 
 gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr)
 {
+#if !defined(_WIN32) && !defined(_WIN64)
 	int prot = PROT_READ;
 	int fd = open(fpath, O_RDONLY);
 	if (fd < 0) {
@@ -238,6 +222,9 @@ gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr)
 	pool->left_edge = 0;
 
 	return pool;
+#else
+	return NULL;
+#endif
 }
 
 static void
@@ -373,11 +360,13 @@ gu_pool_free(GuPool* pool)
 	if (pool->type == GU_POOL_HEAP) {
 		gu_mem_buf_free(pool);
 	} else if (pool->type == GU_POOL_MMAP) {
+#if !defined(_WIN32) && !defined(_WIN64)
 		uint8_t* pfd = pool->init_buf;
 		int fd = *(pfd);
 
 		munmap(pool->curr_buf, pool->curr_size);
 		close(fd);
+#endif
 	}
 }
 
