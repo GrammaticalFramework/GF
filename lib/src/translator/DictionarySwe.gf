@@ -9458,9 +9458,9 @@ lin cauliflower_N = mkN "blomkål" ; -- status=guess
 lin cauline_A = variants {} ; -- status=guess
 lin caulk_N = mkN "driva" ; -- status=guess
 lin caulk_V2 = variants {} ; -- status=guess
-lin causal_A = variants {} ; --
+lin causal_A = mkA "kausal";
 lin causalgia_N = variants {} ; -- status=guess
-lin causality_N = variants {} ; -- status=guess
+lin causality_N = mkN "kausalitet";
 lin causation_N = variants {} ; -- status=guess
 lin causative_A = mkA "kausativ" ; -- status=guess
 lin cause_N = mkN "orsak" "orsaker" ;
