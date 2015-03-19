@@ -23,6 +23,7 @@ module PGF2 (-- * CId
              Type(..), Hypo, functionType,
              -- * Trees
              Expr,Fun,readExpr,showExpr,mkApp,unApp,mkStr,
+             graphvizAbstractTree,graphvizParseTree,
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- * Exceptions
@@ -271,6 +272,27 @@ showExpr e =
          s <- gu_string_buf_freeze sb tmpPl
          peekCString s
 
+
+graphvizAbstractTree :: PGF -> Expr -> String
+graphvizAbstractTree p e =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+      do (sb,out) <- newOut tmpPl
+         exn <- gu_new_exn tmpPl
+         pgf_graphviz_abstract_tree (pgf p) (expr e) out exn
+         s <- gu_string_buf_freeze sb tmpPl
+         peekCString s
+
+
+graphvizParseTree :: Concr -> Expr -> String
+graphvizParseTree c e =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+      do (sb,out) <- newOut tmpPl
+         exn <- gu_new_exn tmpPl
+         pgf_graphviz_parse_tree (concr c) (expr e) out exn
+         s <- gu_string_buf_freeze sb tmpPl
+         peekCString s
 
 -----------------------------------------------------------------------------
 -- Functions using Concr
