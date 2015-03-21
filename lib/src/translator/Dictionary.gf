@@ -8854,7 +8854,6 @@ fun cant_V2 : V2 ;
 fun cantab_PN : PN ;
 fun cantabile_A : A ;
 fun cantala_N : N ;
-fun cantaloup_N : N ;
 fun cantaloupe_N : N ;
 fun cantankerous_A : A ;
 fun cantata_N : N ;

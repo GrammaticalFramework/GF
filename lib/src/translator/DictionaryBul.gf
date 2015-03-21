@@ -8858,7 +8858,6 @@ lin cant_V2 = variants {} ;
 lin cantab_PN = mkPN "Кантаб" Masc ;
 lin cantabile_A = mkA079 "напевен" ;
 lin cantala_N = variants {} ;
-lin cantaloup_N = variants {} ;
 lin cantaloupe_N = mkN007 "пъпеш" ;
 lin cantankerous_A = variants {mkA076 "заядлив"; mkA076 "свадлив"} ; ----
 lin cantata_N = mkN041 "кантата" ; ----

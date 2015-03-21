@@ -4094,8 +4094,7 @@ lin canon_N = mkN "canone" masculine ; -- status=guess
 lin canonist_N = mkN "canonista" masculine ; -- status=guess
 lin canonize_V2 = mkV2 (mkV "santificare") | mkV2 (mkV "canonizzare") ; -- status=guess, src=wikt status=guess, src=wikt
 lin canopy_N = mkN "baldacchino" ; -- status=guess
-lin cantaloup_N = mkN "cantalupo" | mkN "zatta" ; -- UWN
-lin cantaloupe_N = mkN "cantalupo" ; -- status=guess
+lin cantaloupe_N = mkN "cantalupo" | mkN "zatta" ; -- status=guess
 lin cantankerous_A = mkA "stizzoso" ; -- status=guess
 lin cantata_N = mkN "cantata" | mkN "oratorio" ; -- UWN
 lin canteen_N = mkN "mensa" ; -- status=guess
