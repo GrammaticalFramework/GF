@@ -30800,7 +30800,7 @@ lin trampoline_N = mkN "trampoline" ; -- tocheck
 lin tranche_N = mkN "tranche" ; -- tocheck
 lin tranent_PN = mkPN "Tranent" ; -- status=guess src=geonames
 lin tranquil_A = mkA "tranquille" ; -- tocheck
-lin tranquilizer_N = mkN "tranquillisant" masculine ; -- tocheck
+lin tranquillizer_N = mkN "tranquillisant" masculine ; -- tocheck
 lin tranquillity_N = mkN "tranquillité" feminine ; -- tocheck
 lin transaction_N = variants {} ; --
 lin transalpine_A = mkA "transalpin" ; -- tocheck

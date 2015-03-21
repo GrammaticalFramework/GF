@@ -58605,12 +58605,9 @@ lin tranche_N = variants {} ; -- status=guess
 lin trandolapril_N = variants {} ; -- status=guess
 lin tranent_PN = mkPN "Tranent" neutrum ; -- src=geonames status=guess
 lin tranquil_A = mkA "stillsam" "stillsamt" "stillsamma" "stillsamma" "stillsammare" "stillsammast" "stillsammaste" ; -- status=guess
-lin tranquility_N = variants {} ; -- status=guess
-lin tranquilize_V2 = variants {} ; -- status=guess
-lin tranquilizer_N = mkN "lugnande" ; -- status=guess
 lin tranquillity_N = variants {} ; -- status=guess
 lin tranquillize_V2 = variants {} ; -- status=guess
-lin tranquillizer_N = variants {} ; -- status=guess
+lin tranquillizer_N = mkN "lugnande";
 lin trans_PN = mkPN "Trans" ; -- src=eng status=guess
 lin transact_V2 = variants {} ; -- status=guess
 lin transactinide_A = variants {} ; -- status=guess

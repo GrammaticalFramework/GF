@@ -33439,8 +33439,8 @@ lin trancelike_A = mkA "像出神了一样" | mkA "像发呆一样" | mkA "恍�
 lin tranche_N = mkN "一期款项" | mkN "份" | mkN "份额" | mkN "部分" ; -- open-multilingual-wordnet
 lin tranent_PN = foreignPN "Tranent" ; -- comment=src=geonames status=guess
 lin tranquil_A = mkA "平静" ;
-lin tranquility_N = mkN "宁静" ;
-lin tranquilizer_N = mkN "鎮靜劑" | mkN "镇静剂" ; -- status=guess -- status=guess
+lin tranquillity_N = mkN "宁静" ;
+lin tranquillizer_N = mkN "鎮靜劑" | mkN "镇静剂" ; -- status=guess -- status=guess
 lin trans_PN = foreignPN "Trans" ; -- comment=src=eng status=guess
 lin transact_V2 = mkV2 "办理" ;
 lin transactinide_A = mkA "超锕" | mkA "超锕系元素" ; -- open-multilingual-wordnet

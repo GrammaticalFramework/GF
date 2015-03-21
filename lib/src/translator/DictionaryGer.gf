@@ -59203,9 +59203,6 @@ lin tranche_N = mkN "Tranche" feminine ; -- status=guess
 lin trandolapril_N = variants {} ;
 lin tranent_PN = mkPN "Tranent" ; -- src=geonames status=guess
 lin tranquil_A = mk3A "ruhig" "ruhiger" "ruhigste" ; -- status=guess
-lin tranquility_N = variants {} ;
-lin tranquilize_V2 = variants {} ;
-lin tranquilizer_N = variants {} ;
 lin tranquillity_N = variants {} ;
 lin tranquillize_V2 = variants {} ;
 lin tranquillizer_N = variants {} ;

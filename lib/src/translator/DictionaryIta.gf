@@ -27360,9 +27360,8 @@ lin trampoline_N = mkN "trampolino elastico" ; -- status=guess
 lin trance_N = mkN "trance" ; -- status=guess
 lin tranent_PN = mkPN "Tranent" ; -- status=guess src=geonames
 lin tranquil_A = mkA "calmo" | mkA "pacifico" | mkA "quieto" ; -- status=guess status=guess status=guess
-lin tranquilizer_N = mkN "ansiolitico" ; -- status=guess
 lin tranquillity_N = mkN "tranquillità" feminine ; -- status=guess
-lin tranquillizer_N = mkN "calmante" | mkN "tranquillante" ; -- UWN
+lin tranquillizer_N = mkN "ansiolitico" | mkN "calmante" | mkN "tranquillante" ; -- UWN
 lin transaction_N = mkN "transazione" feminine ; -- status=guess
 lin transalpine_A = mkA "transalpino" ; -- status=guess
 lin transaminase_N = mkN "transaminasi" ; -- UWN
