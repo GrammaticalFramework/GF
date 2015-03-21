@@ -6446,7 +6446,7 @@ lin blighter_N = variants {} ; -- status=guess
 lin blighty_N = variants {} ; -- status=guess
 lin blimp_N = mkN "blimp" ; -- status=guess
 lin blimpish_A = variants {} ; -- status=guess
-lin blind_A = mkA "blind" | mkA "dold" "dolt" ; -- SaldoWN -- comment=4
+lin blind_A = mkA "blind";
 lin blind_N = mkN "svepskäl" neutrum ; -- comment=6
 lin blind_V2 = dirV2 (partV (mkV "bländar")"av") ; -- status=guess
 lin blindfold_A = variants {} ; -- status=guess
@@ -26347,7 +26347,7 @@ lin hick_A = variants {} ; -- status=guess
 lin hick_N = mkN "bondläpp" ; -- status=guess
 lin hickey_N = mkN "sugmärke" ; -- status=guess
 lin hickory_N = variants {} ; -- status=guess
-lin hidden_A = variants {} ; --
+lin hidden_A = mkA "dold" "dolt";
 lin hiddenite_N = variants {} ; -- status=guess
 lin hiddenness_N = variants {} ; -- status=guess
 lin hide_N = mkN "gömma" | mkN "gömställe" ; -- SaldoWN -- comment=5
@@ -28403,7 +28403,7 @@ lin inconsideration_N = variants {} ; -- status=guess
 lin inconsistency_N = mkN "motsägelse" "motsägelser" ; -- comment=2
 lin inconsistent_A = mkA "inkonsekvent" "inkonsekvent" ; -- SaldoWN
 lin inconsolable_A = mkA "otröstlig" ; -- comment=3
-lin inconspicuous_A = (mkA "oansenlig") | (mkA "diskret" "diskret") | (mkA "tillbakadragen" "tillbakadraget") | mkA "undangömd" | mkA "fördold" | (mkA "dold" "dolt") | mkA "förstulen" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
+lin inconspicuous_A = (mkA "oansenlig") | (mkA "diskret" "diskret") | (mkA "tillbakadragen" "tillbakadraget") | mkA "undangömd" | mkA "fördold" | mkA "förstulen" ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin inconspicuousness_N = variants {} ; -- status=guess
 lin inconstancy_N = variants {} ; -- status=guess
 lin inconstant_A = mkA "ombytlig" ; -- comment=3
@@ -29580,8 +29580,8 @@ lin invincibility_N = variants {} ; -- status=guess
 lin invincible_A = mkA "oövervinnelig" ; -- comment=2
 lin inviolable_A = mkA "oantastlig" ; -- SaldoWN
 lin inviolate_A = variants {} ; -- status=guess
-lin invisibility_N = mkN "osynlighet" "osynligheter" ; -- status=guess
-lin invisible_A = mkA "osynlig" ; -- SaldoWN
+lin invisibility_N = mkN "osynlighet" "osynligheter";
+lin invisible_A = mkA "osynlig";
 lin invitation_N = mkN "lockelse" "lockelser" ; -- comment=7
 lin invitational_A = variants {} ; -- status=guess
 lin invitatory_A = variants {} ; -- status=guess
@@ -51447,7 +51447,7 @@ lin sigh_VS = mkVS (mkV "suckar") ; -- status=guess, src=wikt
 lin sight_N = mkN "syn" | mkN "åsyn" | mkN "sevärdhet" ;
 lin sight_V2 = mkV2 (mkV (mkV "få" "fick" "fått") "syn på") | mkV2 (mkV "siktar") ; -- status=guess, src=wikt status=guess, src=wikt
 lin sighting_N = mkN "iakttagelse" "iakttagelser" ; -- status=guess
-lin sightless_A = variants {} ; -- status=guess
+lin sightless_A = mkA "osynlig";
 lin sightreader_N = variants {} ; -- status=guess
 lin sights_N = variants {} ; -- status=guess
 lin sightseeing_N = variants {} ; -- status=guess
@@ -61082,7 +61082,7 @@ lin unshod_A = mkA "barfota" ; -- status=guess
 lin unshrinkable_A = mkA "krympfri" "krympfritt" ; -- SaldoWN
 lin unshrinking_A = variants {} ; -- status=guess
 lin unshuttered_A = variants {} ; -- status=guess
-lin unsighted_A = variants {} ; -- status=guess
+lin unsighted_A = mkA "osynlig";
 lin unsightliness_N = variants {} ; -- status=guess
 lin unsightly_A = variants {} ; -- status=guess
 lin unsigned_A = variants {} ; -- status=guess
