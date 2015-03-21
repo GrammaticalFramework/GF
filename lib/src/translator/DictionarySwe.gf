@@ -15577,12 +15577,12 @@ lin derange_V2 = variants {} ; -- status=guess
 lin derangement_N = variants {} ; -- status=guess
 lin derate_V2 = variants {} ; -- status=guess
 lin derby_N = variants {} ; -- status=guess
-lin derby_PN = mkPN "Derby" neutrum ; -- src=geonames status=guess
+lin derby_PN = mkPN "Derby" neutrum;
 lin derbyshire_PN = mkPN "Derbyshire" ; -- src=eng status=guess
 lin deregulate_V2 = variants {} ; -- status=guess
-lin deregulation_N = mkN "avreglering" ; -- status=guess
-lin dereham_PN = mkPN "Dereham" ; -- src=eng status=guess
-lin derek_PN = mkPN "Derek" ; -- src=eng status=guess
+lin deregulation_N = mkN "avreglering";
+lin dereham_PN = mkPN "Dereham";
+lin derek_PN = mkPN "Derek";
 lin derelict_A = mkA "övergiven" "övergivet" ; -- comment=3
 lin derelict_N = mkN "förfall" neutrum ; -- status=guess
 lin dereliction_N = mkN "försumlighet" "försumligheter" ; -- status=guess
@@ -15593,7 +15593,7 @@ lin derision_N = mkN "hån" neutrum ; -- comment=2
 lin derisive_A = mkA "hånfull" ; -- status=guess
 lin derisory_A = variants {} ; -- status=guess
 lin derivable_A = variants {} ; -- status=guess
-lin derivation_N = mkN "etymologi" "etymologier" ; -- comment=5
+lin derivation_N = mkN "derivering";
 lin derivational_A = variants {} ; -- status=guess
 lin derivative_A = variants {} ; -- status=guess
 lin derivative_N = mkN "avledning" ; -- status=guess
@@ -15697,7 +15697,7 @@ lin desired_A = variants {} ; --
 lin desirous_A = mkA "lysten" "lystet" ; -- SaldoWN
 lin desist_V = mkV "avstå" "avstod" "avstått" ; -- comment=2
 lin desk_N = mkN "skolbänk" ; -- SaldoWN
-lin desktop_N = mkN "PC" ; -- status=guess
+lin desktop_N = mkN "skrivbord" neutrum;
 lin desmid_N = variants {} ; -- status=guess
 lin desmond_PN = mkPN "Desmond" ; -- src=eng status=guess
 lin desolate_A = mkA "öde" ; -- comment=5
@@ -27698,14 +27698,14 @@ lin iconoclasm_N = variants {} ; -- status=guess
 lin iconoclast_N = mkN "bildstormare" utrum ; -- status=guess
 lin iconoclastic_A = variants {} ; -- status=guess
 lin iconography_N = variants {} ; -- status=guess
-lin iconolatry_N = variants {} ; -- status=guess
+lin iconolatry_N = mkN "bilddyrkan";
 lin iconology_N = variants {} ; -- status=guess
 lin iconoscope_N = variants {} ; -- status=guess
 lin icosahedral_A = variants {} ; -- status=guess
 lin icosahedron_N = mkN "ikosaeder" ; -- status=guess
 lin ictal_A = variants {} ; -- status=guess
 lin icterogenic_A = variants {} ; -- status=guess
-lin ictodosaur_N = variants {} ; -- status=guess
+lin ictodosaur_N = mkN "ictodosaur";
 lin icy_A = variants {} ; -- status=guess
 lin id_N = mkN "id-kort" neutrum ; -- status=guess
 lin ida_PN = mkPN "Ida" ; -- src=eng status=guess
@@ -27773,9 +27773,9 @@ lin idolizer_N = variants {} ; -- status=guess
 lin idyll_N = mkN "idyll" "idyller" ; -- status=guess
 lin idyllic_A = mkA "idyllisk" ; -- status=guess
 lin idyllically_Adv = variants {} ; -- status=guess
-lin ie_PN = mkPN "IE" ; -- src=eng status=guess
+lin ie_PN = mkPN "IE";
 lin if_Subj = M.mkSubj "om" | M.mkSubj "ifall" ;
-lin igloo_N = variants {} ; -- status=guess
+lin igloo_N = mkN "igloo";
 lin igneous_A = variants {} ; -- status=guess
 lin ignescent_A = variants {} ; -- status=guess
 lin ignis_fatuus_N = variants {} ; -- status=guess
@@ -34292,15 +34292,15 @@ lin maternalism_N = variants {} ; -- status=guess
 lin maternalistic_A = variants {} ; -- status=guess
 lin maternity_N = variants {} ; -- status=guess
 lin matey_A = variants {} ; -- status=guess
-lin mathematical_A = mkA "matematisk" ; -- SaldoWN
+lin mathematical_A = mkA "matematisk" ;
 lin mathematicianFem_N = variants {} ; -- status=guess
 lin mathematicianMasc_N = variants {} ; -- status=guess
-lin mathematics_N = mkN "matematik" ; -- SaldoWN
+lin mathematics_N = mkN "matematik" ;
 lin maths_N = mkN "matte" ; -- comment=3
-lin matinee_N = mkN "matiné" "matinéer" ; -- status=guess
+lin matinee_N = mkN "matiné" "matinéer" ;
 lin matins_N = variants {} ; -- status=guess
 lin matlock_PN = mkPN "Matlock" neutrum ; -- src=geonames status=guess
-lin matriarch_N = mkN "matriark" ; -- status=guess
+lin matriarch_N = mkN "matriark" ;
 lin matriarchal_A = variants {} ; -- status=guess
 lin matriarchic_A = variants {} ; -- status=guess
 lin matriarchy_N = mkN "matriarki" ; -- status=guess
@@ -34315,7 +34315,7 @@ lin matrilineage_N = variants {} ; -- status=guess
 lin matrilineal_A = variants {} ; -- status=guess
 lin matrimonial_A = variants {} ; -- status=guess
 lin matrimony_N = mkN "äktenskap" neutrum ; -- status=guess
-lin matrix_N = mkN "matris" "matriser" ; -- SaldoWN
+lin matrix_N = mkN "matris" "matriser" ;
 lin matron_N = variants {} ; -- status=guess
 lin matronly_A = variants {} ; -- status=guess
 lin matronymic_N = variants {} ; -- status=guess
@@ -34325,7 +34325,6 @@ lin matt_PN = mkPN "Matt" ; -- src=eng status=guess
 lin matte_N = variants {} ; -- status=guess
 lin matter_1_N = mkN "materia" "materian" "materier" "materierna" ;
 lin matter_2_N = mkN "ärende" ;
-lin matter_N = mkN "materia" "materian" "materier" "materierna" | mkN "ärende" ;
 lin matter_V = mkV "innehålla" "innehöll" "innehållit" ; -- comment=4
 lin matter_of_course_A = variants {} ; -- status=guess
 lin matter_of_fact_A = variants {} ; -- status=guess
@@ -40205,7 +40204,7 @@ lin panamanian_A = variants {} ; -- status=guess
 lin panamanian_N = variants {} ; -- status=guess
 lin panatela_N = variants {} ; -- status=guess
 lin panatella_N = variants {} ; -- status=guess
-lin pancake_N = mkN "pannkaka" ; -- SaldoWN
+lin pancake_N = mkN "pannkaka" ;
 lin pancarditis_N = variants {} ; -- status=guess
 lin panchayat_N = variants {} ; -- status=guess
 lin panchromatic_A = variants {} ; -- status=guess
@@ -42195,7 +42194,7 @@ lin pine_V = mkV "trånar" ; -- comment=2
 lin pine_away_V = mkV "trånar" ; -- comment=2
 lin pineal_A = variants {} ; -- status=guess
 lin pinealoma_N = variants {} ; -- status=guess
-lin pineapple_N = mkN "ananas" ; -- status=guess
+lin pineapple_N = mkN "ananas";
 lin pinecone_N = variants {} ; -- status=guess
 lin pinesap_N = mkN "tallört" ; -- status=guess
 lin pinetum_N = variants {} ; -- status=guess
@@ -47439,7 +47438,7 @@ lin retem_N = variants {} ; -- status=guess
 lin retention_N = variants {} ; --
 lin retentive_A = mkA "fast" "fast" ; -- status=guess
 lin retentiveness_N = variants {} ; -- status=guess
-lin retford_PN = mkPN "Retford" neutrum ; -- src=geonames status=guess
+lin retford_PN = mkPN "Retford" neutrum;
 lin rethink_N = mkN "omprövning" ; -- comment=2
 lin rethink_V = mkV "omprövar" ; -- status=guess
 lin rethink_V2 = variants {} ; -- status=guess
@@ -47637,8 +47636,8 @@ lin rework_V2 = variants {} ; -- status=guess
 lin rewrite_N = variants {} ; -- status=guess
 lin rewrite_V2 = variants {} ; -- status=guess
 lin rewriting_N = variants {} ; -- status=guess
-lin rex_PN = mkPN "Rex" ; -- src=eng status=guess
-lin reykjavik_PN = mkPN "Reykjavik" ; -- src=eng status=guess
+lin rex_PN = mkPN "Rex";
+lin reykjavik_PN = mkPN "Reykjavik";
 lin rhabdomyoma_N = variants {} ; -- status=guess
 lin rhabdomyosarcoma_N = variants {} ; -- status=guess
 lin rhabdovirus_N = variants {} ; -- status=guess
@@ -47646,21 +47645,21 @@ lin rhagades_N = variants {} ; -- status=guess
 lin rhapsodize_V = variants {} ; -- status=guess
 lin rhapsody_N = mkN "rapsodi" "rapsodier" ; -- comment=2
 lin rhea_N = variants {} ; -- status=guess
-lin rheims_PN = mkPN "Rheims" ; -- src=eng status=guess
+lin rheims_PN = mkPN "Rheims";
 lin rhenish_A = variants {} ; -- status=guess
-lin rhenium_N = mkN "rhenium" neutrum ; -- status=guess
+lin rhenium_N = mkN "rhenium" neutrum;
 lin rheologic_A = variants {} ; -- status=guess
-lin rheology_N = variants {} ; -- status=guess
+lin rheology_N = mkN "reologi";
 lin rheometer_N = variants {} ; -- status=guess
-lin rheostat_N = variants {} ; -- status=guess
+lin rheostat_N = mkN "reostat";
 lin rhesus_N = variants {} ; -- status=guess
 lin rhetoric_N = mkN "retorik" | mkN "vältalighet" "vältaligheter" ; -- SaldoWN -- comment=3
 lin rhetorical_A = mkA "retorisk" ; -- status=guess
 lin rhetorician_N = mkN "retoriker" "retorikern" "retoriker" "retorikerna" ; -- status=guess
 lin rheum_N = variants {} ; -- status=guess
 lin rheumatic_A = mkA "reumatisk" ; -- status=guess
-lin rheumatic_N = mkN "reumatiker" "reumatikern" "reumatiker" "reumatikerna" ; -- SaldoWN
-lin rheumatism_N = mkN "reumatism" "reumatismer" ; -- status=guess
+lin rheumatic_N = mkN "reumatiker" "reumatikern" "reumatiker" "reumatikerna";
+lin rheumatism_N = mkN "reumatism" "reumatismer";
 lin rheumatoid_A = variants {} ; -- status=guess
 lin rheumatologist_N = variants {} ; -- status=guess
 lin rheumatology_N = variants {} ; -- status=guess
@@ -47673,7 +47672,7 @@ lin rhinestone_N = variants {} ; -- status=guess
 lin rhinion_N = variants {} ; -- status=guess
 lin rhinitis_N = variants {} ; -- status=guess
 lin rhino_N = variants {} ; -- status=guess
-lin rhinoceros_N = mkN "noshörning" ; -- SaldoWN
+lin rhinoceros_N = mkN "noshörning";
 lin rhinolaryngology_N = variants {} ; -- status=guess
 lin rhinopathy_N = variants {} ; -- status=guess
 lin rhinophyma_N = variants {} ; -- status=guess
@@ -56204,15 +56203,15 @@ lin syrupy_A = mkA "simmig" ; -- status=guess
 lin system_N = mkN "system" neutrum ;
 lin systematic_A = mkA "systematisk" ; -- SaldoWN
 lin systematically_Adv = variants {} ; -- status=guess
-lin systematics_N = variants {} ; -- status=guess
+lin systematics_N = mkN "systematik";
 lin systematism_N = variants {} ; -- status=guess
-lin systematization_N = mkN "systematisering" ; -- status=guess
+lin systematization_N = mkN "systematisering";
 lin systematize_V2 = variants {} ; -- status=guess
 lin systemic_A = variants {} ; -- status=guess
 lin systole_N = variants {} ; -- status=guess
 lin systolic_A = variants {} ; -- status=guess
-lin syston_PN = mkPN "Syston" neutrum ; -- src=geonames status=guess
-lin syzygy_N = mkN "syzygie" | (mkN "konjunktion" "konjunktioner") ; -- status=guess status=guess
+lin syston_PN = mkPN "Syston" neutrum;
+lin syzygy_N = mkN "syzygie";
 lin t_junction_N = variants {} ; -- status=guess
 lin t_shirt_N = variants {} ; --
 lin t_square_N = variants {} ; -- status=guess
@@ -56705,13 +56704,13 @@ lin taxiway_N = variants {} ; -- status=guess
 lin taxonomic_A = variants {} ; -- status=guess
 lin taxonomically_Adv = variants {} ; -- status=guess
 lin taxonomist_N = variants {} ; -- status=guess
-lin taxonomy_N = (mkN "taxonomi" "taxonomier") | (mkN "systematik") ; -- status=guess status=guess
-lin taxpayer_N = mkN "skattebetalare" utrum | mkN "skattebetalare" utrum ; -- SaldoWN
+lin taxonomy_N = mkN "taxonomi" "taxonomier";
+lin taxpayer_N = mkN "skattebetalare" utrum ;
 lin taxpaying_A = variants {} ; -- status=guess
 lin tayra_N = variants {} ; -- status=guess
-lin tayside_PN = mkPN "Tayside" ; -- src=eng status=guess
+lin tayside_PN = mkPN "Tayside" ;
 lin tb_N = variants {} ; -- status=guess
-lin tbilisi_PN = mkPN "Tbilisi" neutrum ; -- src=geonames status=guess
+lin tbilisi_PN = mkPN "Tbilisi" neutrum ;
 lin te_deum_N = variants {} ; -- status=guess
 lin tea_N = mkN "te" "teet" "teer" "teerna" ;
 lin tea_bag_N = variants {} ; -- status=guess
@@ -56919,10 +56918,10 @@ lin teletypewriter_N = variants {} ; -- status=guess
 lin televangelism_N = variants {} ; -- status=guess
 lin televangelist_N = variants {} ; -- status=guess
 lin televise_V2 = variants {} ; -- status=guess
-lin television_N = mkN "television" "televisioner" | mkN "tv" "tv:n" "tv:er" "tv:erna" | mkN "TV" "TV:n" "TV:er" "TV:erna" ;
+lin television_N = mkN "television" "televisioner" ;
 lin telex_N = mkN "telex" neutrum ; -- comment=2
 lin telfer_N = variants {} ; -- status=guess
-lin telford_PN = mkPN "Telford" neutrum ; -- src=geonames status=guess
+lin telford_PN = mkPN "Telford" neutrum ;
 lin teliospore_N = variants {} ; -- status=guess
 lin tell_1_V3 = mkV3 (mkV "berätta") (mkPrep "för") ;
 lin tell_2_V3 = mkV3 (mkV "skilja") (mkPrep "från") ;
@@ -59452,7 +59451,7 @@ lin tutti_frutti_N = variants {} ; -- status=guess
 lin tutu_N = variants {} ; -- status=guess
 lin tuxedo_N = mkN "smoking" ; -- status=guess
 lin tuxedoed_A = variants {} ; -- status=guess
-lin tv_N = variants {} ; -- status=guess
+lin tv_N = mkN "tv" "tv:n" "tv:er" "tv:erna" | mkN "TV" "TV:n" "TV:er" "TV:erna";
 lin twaddle_N = (mkN "trams" neutrum) | (mkN "svammel" neutrum) | (mkN "dravel" neutrum) | (mkN "snack" neutrum) | (mkN "pladder" neutrum) | (mkN "babbel" neutrum) ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin twaddle_V = (mkV "svamlar") | (mkV "pladdrar") | (mkV "babblar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin twaddler_N = variants {} ; -- status=guess
@@ -64367,7 +64366,7 @@ lin yoke_V = mkV "spänna" "spände" "spänt" ; -- status=guess
 lin yoke_V2 = variants {} ; -- status=guess
 lin yokel_N = variants {} ; -- status=guess
 lin yokohama_PN = mkPN "Yokohama" neutrum ; -- src=geonames status=guess
-lin yolk_N = mkN "äggula" ; -- comment=2
+lin yolk_N = mkN "äggula" ;
 lin yon_A = variants {} ; -- status=guess
 lin yon_Adv = variants {} ; -- status=guess
 lin yonder_A = variants {} ; -- status=guess
@@ -64408,7 +64407,7 @@ lin yugoslavian_N = variants {} ; -- status=guess
 lin yukon_PN = mkPN "Yukon" neutrum ; -- src=geonames status=guess
 lin yule_N = variants {} ; -- status=guess
 lin yule_log_N = variants {} ; -- status=guess
-lin yuletide_N = mkN "juletid" ; -- status=guess
+lin yuletide_N = mkN "juletid" ;
 lin yuppie_N = variants {} ; -- status=guess
 lin yurt_N = variants {} ; -- status=guess
 lin yvonne_PN = mkPN "Yvonne" ; -- src=eng status=guess
@@ -64453,8 +64452,8 @@ lin zenithal_A = variants {} ; -- status=guess
 lin zeolite_N = mkN "zeolit" ; -- status=guess
 lin zephyr_N = variants {} ; -- status=guess
 lin zeppelin_N = mkN "zeppelinare" utrum ; -- status=guess
-lin zero_A = mkA "noll" | mkA "noll-" | mkA "ingen" ; -- status=guess status=guess status=guess
-lin zero_N = mkN "nolla" | mkN "noll" ; -- SaldoWN -- comment=2
+lin zero_A = mkA "noll";
+lin zero_N = mkN "nolla" | mkN "noll";
 lin zero_V = mkV "nollar" ; -- status=guess
 lin zero_in_V = mkV "nollar" ; -- status=guess
 lin zeroth_A = variants {} ; -- status=guess
@@ -64474,7 +64473,7 @@ lin zill_N = variants {} ; -- status=guess
 lin zillion_A = variants {} ; -- status=guess
 lin zimbabwe_PN = mkPN "Zimbabwe" neutrum ; -- src=geonames status=guess
 lin zimbabwean_A = variants {} ; -- status=guess
-lin zimbabwean_N = mkN "zimbabwier" "zimbabwiern" "zimbabwier" "zimbabwierna" ; -- status=guess
+lin zimbabwean_N = mkN "zimbabwier" "zimbabwiern" "zimbabwier" "zimbabwierna";
 lin zinc_N = mkN "zink" ; -- status=guess
 lin zinfandel_N = variants {} ; -- status=guess
 lin zing_N = variants {} ; -- status=guess
