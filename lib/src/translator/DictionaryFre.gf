@@ -4604,7 +4604,6 @@ lin canon_N = mkN "canon" masculine | mkN "chanoine" masculine ; -- tocheck
 lin canonization_N = mkN "canonisation" feminine ; -- tocheck
 lin canopy_N = mkN "canopée" feminine | mkN "dais" masculine | mkN "marquise" feminine ; -- tocheck
 lin cant_N = mkN "argot" masculine | mkN "lamentation" feminine ; -- tocheck
-lin cantaloup_N = mkN "cantaloup" ; -- UWN
 lin cantaloupe_N = mkN "cantaloup" ; -- tocheck
 lin cantankerous_A = mkA "irritable" ; -- tocheck
 lin cantata_N = mkN "cantate" | mkN "oratorio" ; -- UWN

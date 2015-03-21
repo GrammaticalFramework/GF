@@ -3216,7 +3216,6 @@ lin canonisation_N = mkN "kanoniseerimine" | mkN "pühaks tunnistamine" | mkN "k
 lin canon_N = mkN "kaanon" | mkN "kanoonik" ;
 lin canopy_N = mkN "baldahhiin" | mkN "kuppel" | mkN "varikatus" ;
 lin cantaloupe_N = mkN "muskusmelon" ;
-lin cantaloup_N = mkN "muskusmelon" ;
 lin cantata_N = mkN "kantaat" ;
 lin canteen_N = mkN "kantiin" | mkN "plasku" | mkN "söökla" ;
 lin canter_N = mkN "galopeerima" | mkN "galopp" | mkN "kenter" ;

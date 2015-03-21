@@ -8141,7 +8141,6 @@ lin cant_N = mkWN (k40 "vinous") ; --UNCHK
 lin cant_V = mkWV (k53A "viettää") ; --UNCHK
 lin cant_V2 = mkWV2 (k53A "viettää") ; --UNCHK
 lin cantabile_A = mkWA "laulaen" ; --UNCHK
-lin cantaloup_N = mkWN (compoundN "cantaloupe" (k6 "meloni")) ; --UNCHK
 lin cantaloupe_N = mkWN (compoundN "cantaloupe" (k6 "meloni")) ; --UNCHK
 lin cantankerous_A = mkWA (k1 "häijy") ; --UNCHK
 lin cantata_N = mkWN (k3 "oratorio") ; --UNCHK

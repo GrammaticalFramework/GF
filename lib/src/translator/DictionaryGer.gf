@@ -8865,8 +8865,7 @@ lin cant_V2 = mkV2 (mkV "kanten" | regV "kippen") ; -- status=guess, src=wikt st
 lin cantab_PN = mkPN "Cantab" ; -- src=eng status=guess
 lin cantabile_A = variants {} ;
 lin cantala_N = variants {} ;
-lin cantaloup_N = variants {} ;
-lin cantaloupe_N = mkN "Kantalupe" ; -- status=guess
+lin cantaloupe_N = mkN "Kantalupe";
 lin cantankerous_A = mk3A "launisch" "launischer" "launischste" | mkA "zänkisch" | mkA "mürrisch" | mkA "übellaunig" ; -- status=guess status=guess status=guess status=guess
 lin cantata_N = variants {} ;
 lin canteen_N = mkN "Besteckkasten" masculine ; -- status=guess

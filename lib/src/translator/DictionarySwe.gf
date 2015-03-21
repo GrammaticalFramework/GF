@@ -8791,7 +8791,6 @@ lin cant_V2 = variants {} ; -- status=guess
 lin cantab_PN = mkPN "Cantab" ; -- src=eng status=guess
 lin cantabile_A = variants {} ; -- status=guess
 lin cantala_N = variants {} ; -- status=guess
-lin cantaloup_N = variants {} ; -- status=guess
 lin cantaloupe_N = mkN "cantaloupmelon"; -- src=google
 lin cantankerous_A = variants {} ; -- status=guess
 lin cantata_N = mkN "kantat" "kantater" ;
