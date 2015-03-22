@@ -35828,7 +35828,6 @@ lin molar_A = variants {} ; -- status=guess
 lin molar_N = mkN "kindtand" "kindtänder" ; -- SaldoWN
 lin molarity_N = mkN "molaritet" "molariteter" ;
 lin molasses_N = mkN "melass" ; -- status=guess
-lin mold_N = mkN "mögel" neutrum ; -- comment=17
 lin mold_PN = mkPN "Mold" neutrum ; -- src=geonames status=guess
 lin mold_V = mkV "myllar" ; -- comment=7
 lin mold_V2 = dirV2 (partV (mkV "formar")"till") ; -- status=guess
@@ -36307,7 +36306,7 @@ lin mottling_N = mkN "marmorering" ;
 lin motto_N = mkN "mott" neutrum ; -- comment=5
 lin mouflon_N = mkN "mufflon" "muffloner" ; -- status=guess
 lin moujik_N = variants {} ; -- status=guess
-lin mould_N = mkN "mögel" neutrum | mkN "mögel" neutrum ; -- SaldoWN -- comment=17
+lin mould_N = mkN "mögel" neutrum ;
 lin mould_V = mkV "myllar" ; -- comment=7
 lin mould_V2 = dirV2 (partV (mkV "formar")"till") ; -- status=guess
 lin moulder_V = mkV "vittrar" ; -- comment=3

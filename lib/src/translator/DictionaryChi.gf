@@ -21438,7 +21438,6 @@ lin mojarra_N = mkN "银鲈" ; -- open-multilingual-wordnet
 lin moke_N = mkN "驴" ; -- open-multilingual-wordnet
 lin molar_N = mkN "臼齒" | mkN "臼齿" ; -- status=guess -- status=guess
 lin molasses_N = mkN "糖蜜" ; -- status=guess
-lin mold_N = mkN "霉菌" ; -- status=guess
 lin mold_PN = foreignPN "Mold" ; -- comment=src=geonames status=guess
 lin mold_V = mkV "塑造" | {-HSK-} mkV "浇" ;
 lin mold_V2 = mkV2 "塑造" | {-HSK-} mkV2 "浇" ;
@@ -21685,7 +21684,7 @@ lin motorist_N = mkN "驾驶员" ;
 lin motorize_V2 = mkV2 "机动化" ;
 lin motorway_N = mkN "公路" "条" ;
 lin motto_N = mkN "座右銘" | mkN "座右铭" | {-mwn-} mkN "口号" | mkN "标语" | mkN "格言" ; -- status=guess -- status=guess -- open-multilingual-wordnet
-lin mould_N = mkN "模" ;
+lin mould_N = mkN "霉菌" | mkN "模" ;
 lin mouldy_A = mkA "發霉" | mkA "发霉" ; -- status=guess -- status=guess
 lin moult_N = mkN "換毛" | mkN "换毛" | mkN "換羽" | mkN "换羽" | {-mwn-} mkN "眠起" | mkN "脱毛" | mkN "脱皮" | mkN "脱角" | mkN "蜕皮" ; -- status=guess -- status=guess -- status=guess -- status=guess -- open-multilingual-wordnet
 lin moult_V = mkV "換毛" | mkV "换毛" | mkV "換羽" | mkV "换羽" ; -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt -- status=guess, src=wikt

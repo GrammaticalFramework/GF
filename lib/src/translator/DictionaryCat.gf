@@ -10401,7 +10401,6 @@ lin molality_N = mkN "molalitat" feminine ; --auto
 lin molar_A = mkA "molar" ; --auto
 lin molarity_N = mkN "molaritat" feminine ; --auto
 lin molasses_N = mkN "melassa" feminine ; --auto
-lin mold_N = mkN "floridura" feminine ; --auto
 lin mole_N = mkN "mol" masculine | mkN "talp" masculine ; --auto
 lin molecular_A = mkA "molecular" ; --auto
 lin molecule_N = mkN "molècula" feminine ; --auto

@@ -18996,7 +18996,6 @@ lin molality_N = mkN "concentración_molal" | mkN "molalidad" ; --UWN
 lin molar_A = mkA "molar" ; -- status=guess
 lin molar_N = mkN "diente molar" | mkN "molar" | mkN "muela" ; -- status=guess status=guess status=guess
 lin molasses_N = mkN "melaza" ; -- status=guess
-lin mold_N = mkN "molde" masculine | mkN "modelo" ; -- status=guess status=guess
 lin mold_PN = mkPN "Mold" ; -- status=guess src=geonames
 lin mold_V = mkV "moldear" | mkV "modelar" | mkV "formar" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin mold_V2 = mkV2 (mkV "moldear") | mkV2 (mkV "modelar") | mkV2 (mkV "formar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
@@ -19224,7 +19223,7 @@ lin motorway_N = variants {} ; --
 lin motto_N = mkN "mote" masculine | mkN "divisa" ; -- status=guess status=guess
 lin mouflon_N = mkN "muflón" masculine ; -- status=guess
 lin moujik_N = mkN "mujik" ; --UWN
-lin mould_N = variants {} ; --
+lin mould_N = mkN "molde" masculine | mkN "modelo" ; -- status=guess status=guess
 lin mouldy_A = mkA "mohoso" ; -- status=guess
 lin moult_N = mkN "muda" ; -- status=guess
 lin moult_V = mkV "mudar" ; -- status=guess, src=wikt

@@ -19242,7 +19242,6 @@ lin mojarra_N = mkN "gerreidae" ; -- UWN
 lin molal_A = mkA "molaire" ; -- UWN
 lin molar_N = mkN "molaire" feminine ; -- tocheck
 lin molasses_N = mkN "mélasse" feminine ; -- tocheck
-lin mold_N = mkN "moule" masculine | mkN "moulage" ; -- tocheck
 lin mold_PN = mkPN "Mold" ; -- status=guess src=geonames
 lin moldboard_N = mkN "versoir" masculine ; -- tocheck
 lin moldy_A = mkA "moisi" ; -- UWN
@@ -19485,7 +19484,7 @@ lin motorway_N = mkN "autoroute" feminine ; -- tocheck
 lin motto_N = mkN "devise" feminine ; -- tocheck
 lin mouflon_N = mkN "mouflon" masculine ; -- tocheck
 lin moujik_N = mkN "Moujik" | mkN "moujik" ; -- UWN
-lin mould_N = variants {} ; --
+lin mould_N = mkN "moule" masculine | mkN "moulage" ; -- tocheck
 lin moulding_N = mkN "modélisme" ; -- UWN
 lin mouldy_A = mkA "moisi" ; -- tocheck
 lin moult_N = mkN "mue" feminine ; -- tocheck

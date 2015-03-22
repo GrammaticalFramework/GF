@@ -13062,7 +13062,6 @@ lin moisture_N = mkN "vochtigheid" feminine | mkN "vocht" neuter ; -- status=gue
 lin molality_N = mkN "molaliteit" feminine ; -- status=guess
 lin molar_N = mkN "kies" masculine | mkN "maaltand" masculine ; -- status=guess status=guess
 lin molasses_N = mkN "melasse" feminine ; -- status=guess
-lin mold_N = mkN "vorm" | mkN "gietvorm" ; -- status=guess status=guess
 lin mold_PN = mkPN "Mold" ; -- src=geonames status=guess
 lin mold_V = mkV (mkV "de") "vorm aannemen van" ; -- status=guess, src=wikt
 lin mold_V2 = mkV2 (mkV (mkV "de") "vorm aannemen van") ; -- status=guess, src=wikt
@@ -13220,7 +13219,7 @@ lin motorist_N = mkN "automobilist" masculine ; -- status=guess
 lin motorway_N = mkN "snelweg" ; -- status=guess
 lin motto_N = mkN "motto" neuter | mkN "wapenspreuk" masculine | mkN "lijfspreuk" masculine ; -- status=guess status=guess status=guess
 lin mouflon_N = mkN "moeflon" masculine ; -- status=guess
-lin mould_N = variants {} ; --
+lin mould_N = mkN "vorm" | mkN "gietvorm" ; -- status=guess status=guess
 lin moult_N = mkN "rui" masculine ; -- status=guess
 lin moult_V = mkV "ruien" | mkV "muiten" | mkV "vervellen" | mkV "verharen" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin moult_V2 = mkV2 (mkV "ruien") | mkV2 (mkV "muiten") | mkV2 (mkV "vervellen") | mkV2 (mkV "verharen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
