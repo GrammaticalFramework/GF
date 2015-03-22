@@ -106,6 +106,27 @@ wc.translate=function() {
 					  [text("Google Translate")])))
 	    */
 	}
+	function treetext(tree) {
+	    function inflect(w,wcls) {
+		function show_inflections(lins) {
+		    if(wc.e2) wc.e2.innerHTML=lins[0].text
+		}
+		function get_inflections() {
+		    var tree="MkDocument+%22%22+(Inflection"+wcls+" "+w+") %22%22"
+		    var l=gftranslate.grammar+f.to.value
+		    gftranslate.call("?command=c-linearize&to="+l+"&tree="+tree,show_inflections)
+		}
+		var wn=wrap_class("span","inflect",text(w))
+		if(wc.e2) wn.onclick=get_inflections
+		return wn
+	    }
+	    function word(w) {
+		var ps=w.split("_")
+		return ps.length==2 && elem(ps[1],gftranslate.documented_classes)
+		        ? inflect(w,ps[1]) : text(w)
+	    }
+	    return tree.split(/([ ()]+)/).map(word)
+	}
 	function show_more() {
 	    wc.selected=so
 	    var r=so.rs[so.current_pick]
@@ -113,7 +134,8 @@ wc.translate=function() {
 	    if(e) {
 		e.innerHTML=prob+"<br>"
 		if(r.tree) {
-		    var t=wrap("span",text(r.tree))
+		    wc.e2=empty_class("div","e2")
+		    var t=wrap("span",treetext(r.tree))
 		    e.appendChild(t)
 		    var g=gftranslate.jsonurl
 		    var u="format=svg&tree="+encodeURIComponent(r.tree)
@@ -130,8 +152,8 @@ wc.translate=function() {
 		    }
 		    else if(r.img.src!=r.imgurls[r.img_ix]) // language change?
 			r.img.src=r.imgurls[r.img_ix]
-		    e.appendChild(empty("br"))
-		    e.appendChild(r.img)
+		    wc.e2.appendChild(r.img)
+		    e.appendChild(wc.e2)
 		}
 	    }
 	    if(wc.p /*&& so.rs.length>1*/) show_picks()

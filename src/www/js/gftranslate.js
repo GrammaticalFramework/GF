@@ -6,6 +6,10 @@ var gftranslate = {}
 gftranslate.jsonurl="/robust/App14.pgf"
 gftranslate.grammar="App" // the name of the grammar
 
+gftranslate.documented_classes=
+    ["N", "N2", "N3", "A", "A2", "V", "V2", "VV", "VS", "VQ", "VA", "V3", "V2V",
+     "V2S", "V2Q", "V2A", "Adv", "Prep"]
+
 gftranslate.call=function(querystring,cont,errcont) {
     http_get_json(gftranslate.jsonurl+querystring,cont,errcont)
 }
