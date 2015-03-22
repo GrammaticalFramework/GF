@@ -32925,7 +32925,6 @@ lin molar_A = mkWA (k38 "molaarinen") ; --UNCHK
 lin molar_N = mkWN (compoundN "poski" (k41A "hammas")) ; --UNCHK
 lin molarity_N = mkWN (k40 "molaarisuus") ; --UNCHK
 lin molasses_N = mkWN (k5 "melassi") ; --UNCHK
-lin mold_N = mkWN (k39 "valos") ; --UNCHK
 lin mold_PN = foreignPN "Mold" ;
 lin mold_V = mkWV (k52A "homehtua") ; --UNCHK
 lin mold_V2 = mkWV2 (k52A "homehtua") ; --UNCHK

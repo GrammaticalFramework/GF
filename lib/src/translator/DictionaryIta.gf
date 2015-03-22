@@ -17169,7 +17169,6 @@ lin molar_A = mkA "molare" ; -- status=guess
 lin molar_N = mkN "dente molare" | mkN "molare" masculine ; -- status=guess status=guess
 lin molarity_N = mkN "molarità" feminine ; -- status=guess
 lin molasses_N = mkN "melassa" ; -- status=guess
-lin mold_N = mkN "stampo" | mkN "calco" ; -- status=guess status=guess
 lin mold_PN = mkPN "Mold" ; -- status=guess src=geonames
 lin molding_N = mkN "cimasa" ; -- status=guess
 lin moldy_A = mkA "ammuffito" ; -- UWN
@@ -17396,7 +17395,7 @@ lin motorway_N = mkN "autostrada" ; -- status=guess
 lin motto_N = mkN "divisa" | mkN "motto" | mkN "slogan" ; -- UWN
 lin mouflon_N = mkN "muflone" masculine ; -- status=guess
 lin moujik_N = mkN "mugic" | mkN "mugik" ; -- UWN
-lin mould_N = variants {} ; --
+lin mould_N = mkN "stampo" | mkN "calco" ; -- status=guess status=guess
 lin mouldy_A = mkA "ammuffito" ; -- status=guess
 lin moult_N = mkN "muta" | mkN "muda" ; -- status=guess status=guess
 lin moult_V = mkV "mutare" | mkV (I.fare_V) "la muta" ; -- status=guess, src=wikt status=guess, src=wikt

@@ -36146,7 +36146,6 @@ lin molar_A = variants {} ;
 lin molar_N = mkN "Backenzahn" "Backenzähne" masculine ; -- status=guess
 lin molarity_N = mkN "Molarität" feminine ; -- status=guess
 lin molasses_N = mkN "Melasse" "Melassen" feminine | sirup_N ; -- status=guess status=guess
-lin mold_N = form_N ; -- status=guess
 lin mold_PN = mkPN "Mold" ; -- src=geonames status=guess
 lin mold_V = variants {} ;
 lin mold_V2 = variants {} ;
@@ -36632,7 +36631,7 @@ lin mottling_N = variants {} ;
 lin motto_N = mkN "Motto" neuter ; -- status=guess
 lin mouflon_N = mkN "Mufflon" masculine ; -- status=guess
 lin moujik_N = variants {} ;
-lin mould_N = variants {} ; --
+lin mould_N = form_N ;
 lin mould_V = variants {} ;
 lin mould_V2 = variants {} ;
 lin moulder_V = variants {} ;
