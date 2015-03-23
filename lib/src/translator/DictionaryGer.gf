@@ -1450,7 +1450,6 @@ lin aitchbone_N = variants {} ;
 lin ajar_A = variants {} ;
 lin aka_Prep = variants {} ;
 lin akaryocyte_N = variants {} ;
-lin akee_N = variants {} ;
 lin akimbo_Adv = variants {} ;
 lin akin_A = mk3A "verwandt" "verwandter" "verwandteste" ; -- status=guess
 lin akinesis_N = variants {} ;
@@ -9582,7 +9581,6 @@ lin cavern_N = mkN "große Höhle" feminine ; -- status=guess
 lin cavernous_A = variants {} ;
 lin cavetto_N = variants {} ;
 lin caviar_N = mkN "Kaviar" "Kaviare" masculine ; -- status=guess
-lin caviare_N = variants {} ;
 lin cavil_V = mkV "nörgeln" | irregV "kritteln" "krittelt" "krittelte" "krittelte" "gekrittelt" | mkV "schikanieren" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin cavity_N = variants {} ;
 lin cavort_V = variants {} ;
@@ -9917,7 +9915,6 @@ lin chameleon_N = mkN "Chamäleon" neuter ; -- status=guess
 lin chammy_leather_N = variants {} ;
 lin chamois_N = mkN "Sämischleder" neuter ; -- status=guess
 lin chamois_leather_N = variants {} ;
-lin chamomile_N = variants {} ;
 lin chamosite_N = variants {} ;
 lin champ_N = variants {} ;
 lin champ_V = variants {} ;
@@ -10328,7 +10325,6 @@ lin childishness_N = mkN "Kinderei" feminine ; -- status=guess
 lin childless_A = regA "kinderlos" ; -- status=guess
 lin childlessness_N = mkN "Kinderlosigkeit" feminine ; -- status=guess
 lin childlike_A = mk3A "kindlich" "kindlicher" "kindlichste" ; -- status=guess
-lin chile_N = variants {} ;
 lin chile_PN = mkPN "Chile" ; -- src=geonames status=guess
 lin chileanFem_N = variants {} ;
 lin chileanMasc_N = variants {} ;
@@ -10339,7 +10335,6 @@ lin chill_N = mkN "Schauer" "Schauer" masculine | mkN "Kälteschauer" masculine 
 lin chill_V = irregV "entspannen" "entspannt" "entspannte" "entspannte" "entspannt" ; -- status=guess, src=wikt
 lin chill_V2 = mkV2 (irregV "entspannen" "entspannt" "entspannte" "entspannte" "entspannt") ; -- status=guess, src=wikt
 lin chill_out_V = variants {} ;
-lin chilli_N = variants {} ;
 lin chilliness_N = variants {} ;
 lin chilly_A = mk3A "kalt" "kälter" "kälteste" | mkA "kühl" ; -- status=guess status=guess
 lin chilly_N = variants {} ;
@@ -31342,7 +31337,6 @@ lin krypton_N = mkN "Krypton" neuter ; -- status=guess
 lin kudos_N = mkN "Ruhm" masculine | mkN "Ehre" "Ehren" feminine ; -- status=guess status=guess
 lin kudu_N = variants {} ;
 lin kudzu_N = variants {} ;
-lin kumis_N = variants {} ;
 lin kummel_N = variants {} ;
 lin kumquat_N = mkN "Kumquat" "Kumquats" feminine ; -- status=guess
 lin kung_fu_N = variants {} ;
@@ -32431,17 +32425,14 @@ lin licenser_N = variants {} ;
 lin licentiate_N = variants {} ;
 lin licentious_A = mk3A "ausschweifend" "ausschweifender" "ausschweifendste" ; -- status=guess
 lin licentiousness_N = variants {} ;
-lin lichee_N = variants {} ;
 lin lichen_N = mkN "Flechte" "Flechten" feminine ; -- status=guess
 lin lichfield_PN = mkPN "Lichfield" ; -- src=geonames status=guess
 lin lichgate_N = variants {} ;
-lin lichi_N = variants {} ;
 lin licit_A = variants {} ;
 lin licitness_N = variants {} ;
 lin lick_N = variants {} ;
 lin lick_V2 = mkV2 (mkV "auslecken") ; -- status=guess, src=wikt
 lin licking_N = mkN "Licken" neuter ; -- status=guess
-lin licorice_N = variants {} ;
 lin lid_N = mkN "Deckel" "Deckel" masculine ; -- status=guess
 lin lidar_N = variants {} ;
 lin lidded_A = variants {} ;
@@ -32820,8 +32811,6 @@ lin listlessness_N = mkN "Lustlosigkeit" feminine ; -- status=guess
 lin lit_V2 = variants {} ;
 lin litany_N = mkN "Litanei" "Litaneien" feminine ; -- status=guess
 lin litas_N = mkN "Litas" masculine ; -- status=guess
-lin litchee_N = variants {} ;
-lin litchi_N = variants {} ;
 lin literacy_N = mkN "Lese- und Schreibfähigkeit" feminine ; -- status=guess
 lin literal_A = mkA "wörtlich" ; -- status=guess
 lin literal_N = variants {} ;
@@ -45785,7 +45774,6 @@ lin quaffer_N = variants {} ;
 lin quagga_N = mkN "Quagga" neuter | mkN "Quaggahengst" masculine | mkN "Quaggastute" feminine | mkN "Quaggafohlen" neuter | mkN "Quaggafüllen" neuter | mkN "Quaggahengstfohlen" neuter | mkN "Quaggastutfohlen" neuter ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
 lin quagmire_N = mkN "Zwickmühle" feminine ; -- status=guess
 lin quahaug_N = variants {} ;
-lin quahog_N = variants {} ;
 lin quai_d'orsay_N = variants {} ;
 lin quail_N = mkN "Wachtel" "Wachteln" feminine ; -- status=guess
 lin quail_V = variants {} ;
@@ -50064,7 +50052,6 @@ lin scold_V2 = mkV2 (regV "beschimpfen" | irregV "schelten" "schiltt" "schalt" "
 lin scolding_N = variants {} ;
 lin scolion_N = variants {} ;
 lin scoliosis_N = variants {} ;
-lin scollop_N = variants {} ;
 lin scollop_V2 = variants {} ;
 lin scolopendrium_N = variants {} ;
 lin scombroid_N = variants {} ;
@@ -53604,7 +53591,6 @@ lin sowbelly_N = variants {} ;
 lin sowbread_N = variants {} ;
 lin sower_N = variants {} ;
 lin soy_N = mkN "Soja" "Sojen" feminine | mkN "Sojabohne" ; ---- {f} {p}" ; -- status=guess status=guess
-lin soya_N = variants {} ;
 lin sozzled_A = variants {} ;
 lin spa_N = bad_N | mkN "Spa" masculine neuter ; -- status=guess status=guess
 lin space_N = mkN "Weltall" neuter | mkN "Platz" "Plätze" masculine ; --- split: enough space | outer space
@@ -62810,7 +62796,6 @@ lin vinery_N = variants {} ;
 lin vineyard_N = mkN "Weinberg" "Weinberge" masculine ; -- status=guess
 lin vinifera_N = variants {} ;
 lin vinification_N = variants {} ;
-lin vino_N = variants {} ;
 lin vinous_A = variants {} ;
 lin vintage_A = mkA "Jahrgang-" | mkA "Jahrgangs-" ; -- status=guess status=guess
 lin vintage_N = mkN "Lese" feminine ; -- status=guess
@@ -64057,8 +64042,7 @@ lin whisk_V2 = variants {} ;
 lin whisk_away_V2 = variants {} ;
 lin whisker_N = mkN "Barthaar" neuter ; -- status=guess
 lin whiskered_A = variants {} ;
-lin whiskey_N = whisky_N ; -- status=guess
-lin whisky_N = variants {} ; --
+lin whiskey_N = variants {} ; --
 lin whisper_N = mkN "Geflüster" neuter | mkN "Flüstern" neuter | mkN "Wispern" neuter ; -- status=guess status=guess status=guess
 lin whisper_V = mkV "flüstern" | regV "wispern" ; -- status=guess, src=wikt status=guess, src=wikt
 lin whisper_V2 = mkV2 (mkV "flüstern" | regV "wispern") ; -- status=guess, src=wikt status=guess, src=wikt

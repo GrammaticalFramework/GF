@@ -1438,7 +1438,6 @@ lin aitchbone_N = variants {} ; -- status=guess
 lin ajar_A = mkA "på glänt" ; -- status=guess
 lin aka_Prep = variants {} ; -- status=guess
 lin akaryocyte_N = variants {} ; -- status=guess
-lin akee_N = variants {} ; -- status=guess
 lin akimbo_Adv = variants {} ; -- status=guess
 lin akin_A = mkA "liknande" ; -- status=guess
 lin akinesis_N = variants {} ; -- status=guess
@@ -9499,7 +9498,6 @@ lin cavern_N = mkN "grotta" ; -- status=guess
 lin cavernous_A = variants {} ; -- status=guess
 lin cavetto_N = mkN "hålkäl" ;
 lin caviar_N = mkN "kaviar" ; -- SaldoWN
-lin caviare_N = mkN "kaviar" ;
 lin cavil_V = variants {} ; -- status=guess
 lin cavity_N = mkN "karies" ; -- comment=3
 lin cavort_V = mkV "rasar" ; -- status=guess
@@ -9831,7 +9829,6 @@ lin chameleon_N = mkN "kameleont" "kameleonter" ; -- status=guess
 lin chammy_leather_N = mkN "chammy-läder"; -- src=google
 lin chamois_N = mkN "sämskskinn" neutrum ; -- comment=5
 lin chamois_leather_N = mkN "sämskskinn-läder"; -- src=google
-lin chamomile_N = mkN "kamomill" "kamomiller" ; -- status=guess
 lin chamosite_N = variants {} ; -- status=guess
 lin champ_N = mkN "champion" "championen" "champions" "championsen" ; -- comment=2
 lin champ_V = mkV "smaskar" ; -- status=guess
@@ -10243,13 +10240,12 @@ lin chile_PN = mkPN "Chile" neutrum ; -- src=geonames status=guess
 lin chileanFem_N = mkN "chilenare" utrum ;
 lin chileanMasc_N = mkN "chilenare" utrum ;
 lin chilean_A = variants {} ; -- status=guess
-lin chili_N = mkN "chili" ; -- status=guess
+lin chili_N = mkN "chili" ;
 lin chill_A = mkA "kylig" ; -- comment=2
 lin chill_N = mkN "kall" neutrum ; -- comment=3
 lin chill_V = mkV "kyler" ; -- comment=4
 lin chill_V2 = dirV2 (partV (mkV "härdar")"ut") ; -- status=guess
 lin chill_out_V = mkV "kyler" ; -- comment=4
-lin chilli_N = mkN "chili"; -- src=google
 lin chilliness_N = variants {} ; -- status=guess
 lin chilly_A = mkA "kulen" "kulet" ; -- comment=4
 lin chilly_N = mkN "kall" neutrum ; -- status=guess
@@ -31058,7 +31054,6 @@ lin krypton_N = mkN "krypton" ; -- status=guess
 lin kudos_N = mkN "ära" ; -- comment=2
 lin kudu_N = variants {} ; -- status=guess
 lin kudzu_N = variants {} ; -- status=guess
-lin kumis_N = variants {} ; -- status=guess
 lin kummel_N = variants {} ; -- status=guess
 lin kumquat_N = mkN "kumquat" ; -- status=guess
 lin kung_fu_N = variants {} ; -- status=guess
@@ -32135,17 +32130,14 @@ lin licenser_N = mkN "censor" "censorer" ; -- status=guess
 lin licentiate_N = mkN "licentiat" "licentiater" ; -- status=guess
 lin licentious_A = mkA "lössläppt" "lössläppt" ; -- comment=5
 lin licentiousness_N = variants {} ; -- status=guess
-lin lichee_N = variants {} ; -- status=guess
 lin lichen_N = mkN "lav" ; -- status=guess
 lin lichfield_PN = mkPN "Lichfield" neutrum ; -- src=geonames status=guess
 lin lichgate_N = variants {} ; -- status=guess
-lin lichi_N = variants {} ; -- status=guess
 lin licit_A = variants {} ; -- status=guess
 lin licitness_N = variants {} ; -- status=guess
 lin lick_N = mkN "slickning" ; -- comment=8
 lin lick_V2 = dirV2 (partV (mkV "slickar")"av") ; -- comment=15
 lin licking_N = mkN "slick" ;
-lin licorice_N = mkN "lakrits" ;
 lin lid_N = mkN "ögonlock" neutrum | mkN "lock" neutrum ; -- SaldoWN -- comment=2
 lin lidar_N = variants {} ; -- status=guess
 lin lidded_A = variants {} ; -- status=guess
@@ -32518,8 +32510,6 @@ lin listlessness_N = mkN "håglöshet" ;
 lin lit_V2 = variants {} ; -- status=guess
 lin litany_N = mkN "litany";
 lin litas_N = variants {} ; -- status=guess
-lin litchee_N = variants {} ; -- status=guess
-lin litchi_N = variants {} ; -- status=guess
 lin literacy_N = mkN "läskunnighet" "läskunnigheter" | mkN "skrivkunnighet" ; -- SaldoWN
 lin literal_A = mkA "bokstavlig" | mkA "fantasilös" ; -- SaldoWN -- comment=8
 lin literal_N = mkN "bokstavlig"; -- src=google
@@ -45359,7 +45349,6 @@ lin quaffer_N = variants {} ; -- status=guess
 lin quagga_N = variants {} ; -- status=guess
 lin quagmire_N = mkN "sumpmark" "sumpmarker" ; -- comment=4
 lin quahaug_N = variants {} ; -- status=guess
-lin quahog_N = variants {} ; -- status=guess
 lin quai_d'orsay_N = variants {} ; -- status=guess
 lin quail_N = mkN "vaktel" ; -- status=guess
 lin quail_V = mkV "bävar" ; -- status=guess
@@ -49589,7 +49578,6 @@ lin scold_V2 = mkV2 (mkV (mkV "gräla") "på") ; -- status=guess, src=wikt
 lin scolding_N = mkN "skäll" neutrum ; -- comment=4
 lin scolion_N = variants {} ; -- status=guess
 lin scoliosis_N = mkN "skolios" ;
-lin scollop_N = variants {} ; -- status=guess
 lin scollop_V2 = variants {} ; -- status=guess
 lin scolopendrium_N = variants {} ; -- status=guess
 lin scombroid_N = variants {} ; -- status=guess
@@ -53086,8 +53074,7 @@ lin sowbane_N = variants {} ; -- status=guess
 lin sowbelly_N = variants {} ; -- status=guess
 lin sowbread_N = variants {} ; -- status=guess
 lin sower_N = variants {} ; -- status=guess
-lin soy_N = mkN "sojamjölk" ; -- status=guess
-lin soya_N = mkN "soja" ; -- status=guess
+lin soy_N = mkN "soja";
 lin sozzled_A = variants {} ; -- status=guess
 lin spa_N = mkN "bubbelpool" "bubbelpooler" ; -- comment=6
 lin space_N = mkN "rymd" "rymder" ;
@@ -62181,7 +62168,6 @@ lin vinery_N = variants {} ; -- status=guess
 lin vineyard_N = mkN "vingård" ; -- status=guess
 lin vinifera_N = variants {} ; -- status=guess
 lin vinification_N = mkN "vinframställning"; -- src=google
-lin vino_N = variants {} ; -- status=guess
 lin vinous_A = variants {} ; -- status=guess
 lin vintage_N = mkN "årgång" ; -- comment=3
 lin vintager_N = mkN "vint"; -- src=google
@@ -63412,7 +63398,6 @@ lin whisk_V2 = variants {} ; -- status=guess
 lin whisker_N = mkN "morrhår" ; -- status=guess
 lin whiskered_A = variants {} ; -- status=guess
 lin whiskey_N = mkN "whisky" | mkN "visky" ; -- status=guess status=guess
-lin whisky_N = variants {} ; --
 lin whisper_N = mkN "viska" | mkN "viskning" ; -- SaldoWN -- comment=5
 lin whisper_V = mkV "viskar" ; -- comment=6
 lin whisper_V2 = mkV2 (mkV "viskar") ; -- status=guess, src=wikt

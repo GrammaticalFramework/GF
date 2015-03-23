@@ -15870,7 +15870,6 @@ lin whirlwind_N = mkN "旋風" ;
 lin whisk_N = mkN "泡立て器" ;
 lin whisker_N = mkN "洞毛" ;
 lin whiskey_N = mkN "ウィスキー" ;
-lin whisky_N = variants{} ; --
 lin whisper_N = mkN "囁き" ;
 lin whisper_V = mkV "囁く" ;
 lin whisper_V2 = mkV2 "囁く" ;
