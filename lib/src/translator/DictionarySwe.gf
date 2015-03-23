@@ -18179,8 +18179,8 @@ lin eclat_N = variants {} ; -- status=guess
 lin eclectic_A = mkA "eklektisk" | mkA "eklektiskt" ; -- status=guess status=guess
 lin eclectic_N = mkN "eklektisk"; -- src=google
 lin eclecticism_N = mkN "eklekticism" "eklekticismer" ;
-lin eclipse_N = mkN "nedgång" ; -- comment=5
-lin eclipse_V2 = variants {} ; -- status=guess
+lin eclipse_N = mkN "förmörkelse" "förmörkelser" ; -- comment=5
+lin eclipse_V2 = mkV2 (mkV "förmörka") ; -- status=guess
 lin ecliptic_N = mkN "ekliptika" ; -- status=guess
 lin eclogue_N = variants {} ; -- status=guess
 lin ecobabble_N = variants {} ; -- status=guess
