@@ -22199,7 +22199,6 @@ lin whirr_V = mkV "snorren" | mkV "gonzen" | mkV "zoemen" | mkV "brommen" ; -- s
 lin whisk_N = mkN "garde" masculine ; -- status=guess
 lin whisker_N = mkN "baardhaar" ; -- status=guess
 lin whiskey_N = mkN "whisky" masculine ; -- status=guess
-lin whisky_N = variants {} ; --
 lin whisper_N = mkN "gefluister" neuter ; -- status=guess
 lin whisper_V = mkV "fluisteren" ; -- status=guess, src=wikt
 lin whisper_V2 = mkV2 (mkV "fluisteren") ; -- status=guess, src=wikt

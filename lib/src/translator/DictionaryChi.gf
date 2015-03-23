@@ -393,7 +393,6 @@ lin acidimetry_N = mkN "酸定量法" | mkN "酸量滴定法" ; -- open-multilin
 lin acidity_N = mkN "酸性" | mkN "酸度" ; -- status=guess -- status=guess
 lin acidophil_N = mkN "嗜酸菌" ; -- open-multilingual-wordnet
 lin acidotic_A = mkA "酸中毒" ;
-lin ackee_N = mkN "西非荔枝果" | mkN "阿开木果" ; -- open-multilingual-wordnet
 lin acknowledge_V2 = mkV2 "承认" ;
 lin acknowledge_VS = mkVS "确认" ;
 lin acknowledgeable_A = mkA "有知识" ; -- open-multilingual-wordnet
@@ -1042,7 +1041,7 @@ lin airworthy_A = mkA "适宜航空" ; -- open-multilingual-wordnet
 lin airy_A = mkA "幻想" | mkA "无实体" | mkA "空气状" | mkA "象空气" ; -- open-multilingual-wordnet
 lin aisle_N = mkN "通道" "条" ;
 lin aitchbone_N = mkN "牛的臀骨肉" ; -- open-multilingual-wordnet
-lin akee_N = mkN "西非荔枝果" | mkN "阿开木果" ; -- open-multilingual-wordnet
+lin ackee_N = mkN "西非荔枝果" | mkN "阿开木果" ; -- open-multilingual-wordnet
 lin akin_A = mkA "类似" ;
 lin akinesis_N = mkN "无动力" | mkN "运动不能" ; -- open-multilingual-wordnet
 lin akron_PN = mkPN "阿克伦" ; -- comment=src=geonames status=guess
@@ -28640,7 +28639,7 @@ lin scale_N = mkN "比例" | mkN "规模" "個" | {-HSK-} mkN "规模" ;
 lin scale_V = mkV "衡量" ;
 lin scale_V2 = mkV2 "衡量" ;
 lin scalic_A = mkA "节拍器" ; -- open-multilingual-wordnet
-lin scallop_N = mkN "扇貝" | mkN "扇贝" | {-mwn-} mkN "干贝" | mkN "海扇贝" | mkN "海贝" ; -- status=guess -- status=guess -- open-multilingual-wordnet
+lin scallop_N = mkN "扇貝" | mkN "扇贝" | mkN "干贝" | mkN "海扇贝" | mkN "海贝" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin scalp_N = mkN "头皮" ;
 lin scalpel_N = mkN "解剖刀" | mkN "手術刀" | mkN "手术刀" ; -- status=guess -- status=guess -- status=guess
 lin scalper_N = mkN "黄牛" | mkN "票販子" | mkN "票贩子" ; -- status=guess -- status=guess -- status=guess
@@ -28759,7 +28758,6 @@ lin scoff_V = mkV "嘲笑" ;
 lin scold_N = mkN "责骂""" ;
 lin scold_V = mkV "责骂" | {-HSK-} mkV "骂" ;
 lin scold_V2 = mkV2 "责骂" | {-HSK-} mkV2 "骂" ;
-lin scollop_N = mkN "干贝" | mkN "扇贝" | mkN "海扇贝" | mkN "海贝" ; -- open-multilingual-wordnet
 lin scolopendrium_N = mkN "对开蕨" | mkN "荷叶蕨" | mkN "蜈蚣科" ; -- open-multilingual-wordnet
 lin scombroid_N = mkN "鲭亚目鱼" ; -- open-multilingual-wordnet
 lin scoop_N = mkN "勺" | {-HSK-} mkN "勺子" "把" ;
@@ -35157,7 +35155,6 @@ lin vine_N = mkN "葡萄树" ;
 lin vinegar_N = mkN "醋" ; -- status=guess
 lin vineyard_N = mkN "葡萄园" ;
 lin vinification_N = mkN "葡萄酒酿造法" ; -- open-multilingual-wordnet
-lin vino_N = mkN "葡萄酒" | mkN "酒" ; -- open-multilingual-wordnet
 lin vinous_A = mkA "葡萄酒" ; -- open-multilingual-wordnet
 lin vintage_N = mkN "葡萄收获期" ;
 lin vinyl_N = mkN "乙烯基" "" ;
@@ -35800,8 +35797,7 @@ lin whisk_N = mkN "打蛋器" ; -- status=guess
 lin whisk_V2 = mkV2 "扫" ;
 lin whisker_N = mkN "感覺毛" | mkN "感觉毛" ; -- status=guess -- status=guess
 lin whiskered_A = mkA "有胡子" | mkA "有须" ; -- open-multilingual-wordnet
-lin whiskey_N = mkN "威士忌酒" ;
-lin whisky_N = mkN "威士忌酒" "瓶" ;
+lin whiskey_N = mkN "威士忌酒" "瓶" ;
 lin whisper_N = mkN "耳语" "" ;
 lin whisper_V = mkV "私语" ;
 lin whisper_V2 = mkV2 "耳语" ;
