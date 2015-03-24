@@ -349,12 +349,12 @@ browse pgf id = fmap (\def -> (def,producers,consumers)) definition
     expIds _            ids = ids
 
 -- | A type for plain applicative trees
-data ATree = Other Tree | App CId  [ATree]  deriving Show
-data Trie  = Oth   Tree | Ap  CId [[Trie ]] deriving Show
+data ATree t = Other t    | App CId  [ATree t]  deriving Show
+data Trie    = Oth   Tree | Ap  CId [[Trie   ]] deriving Show
 -- ^ A type for tries of plain applicative trees
 
 -- | Convert a 'Tree' to an 'ATree'
-toATree :: Tree -> ATree
+toATree :: Tree -> ATree Tree
 toATree e = maybe (Other e) app (unApp e)
   where
     app (f,es) = App f (map toATree es)
