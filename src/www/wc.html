@@ -24,8 +24,14 @@ small { color: #666; }
 .colors .bad_quality { background-color: #f89; }
 .placeholder { color: #999; }
 .error { color: #c00; }
-div.e2 { background: white; }
+div.e2 table { background: white; }
 span.inflect { color: blue; }
+
+.node {	cursor: pointer; }
+/*.overlay { background-color: #eed; }*/
+.node rect { fill: #fff; stroke: black; stroke-width: 1.5px; }
+.node text { font-size: 10px; font-family: serif; }
+.link {	fill: none; stroke: #ccc; stroke-width: 1.5px; }
 </style>
 </head>
 
@@ -91,7 +97,7 @@ span.inflect { color: blue; }
   </div>
 <hr>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Sun Mar 22 23:30:45 CET 2015 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Tue Mar 24 16:59:23 CET 2015 <!-- hhmts end -->
 </small></div>
 <a href="http://www.grammaticalframework.org/demos/translation.html">About</a>
 <script src="js/support.js"></script>
@@ -100,6 +106,10 @@ span.inflect { color: blue; }
 <script src="js/langcode.js"></script>
 <script src="js/pgf_online.js"></script>
 <script src="js/wc.js"></script>
-</script>
+
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="js/d3Tree.js"></script>
+
 </body>
 </html>

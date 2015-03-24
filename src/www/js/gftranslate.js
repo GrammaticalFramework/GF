@@ -61,7 +61,7 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
 	cont(unspace_translations(g,result[0].translations))
     }
     if(encsrc.length<length_limit(from))
-	gftranslate.call("?command=c-translate&input="+encsrc
+	gftranslate.call("?command=c-translate&jsontree=true&input="+encsrc
 		      +lexer+"&unlexer=text&from="+g+from+"&to="+enc_langs(g,to)
 		      +"&start="+start+"&limit="+limit,extract,errcont)
     else cont([{error:"sentence too long"}])
