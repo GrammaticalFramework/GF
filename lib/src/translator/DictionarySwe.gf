@@ -22893,7 +22893,7 @@ lin fury_N = mkN "raseri" neutrum ; -- comment=2
 lin furze_N = variants {} ; -- status=guess
 lin fuschia_N = variants {} ; -- status=guess
 lin fuscous_A = variants {} ; -- status=guess
-lin fuse_N = mkN "smälta" ; -- comment=5
+lin fuse_N = mkN "propp";
 lin fuse_V = mkV "smälta" "smälter" "smält" "smälte" "smält" "smält" ; -- comment=2
 lin fuse_V2 = mkV2 (mkV "sammansmälter") ; -- status=guess, src=wikt
 lin fusee_N = variants {} ; -- status=guess
