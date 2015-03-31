@@ -38028,7 +38028,7 @@ lin nor'_west_N = variants {} ; -- status=guess
 lin nor_Conj = M.mkConj "inte heller" ; ---- not the same as in neither-nor
 lin nora_PN = mkPN "Nora" neutrum ; -- src=geonames status=guess
 lin noradrenaline_N = mkN "noradrenalin" "noradrenaliner" ;
-lin nordic_A = variants {} ; -- status=guess
+lin nordic_A = compoundA (mkA "nordisk") ;
 lin nordic_N = variants {} ; -- status=guess
 lin norethindrone_N = mkN "noretindron"; -- src=google
 lin norethynodrel_N = mkN "noretynodrel"; -- src=google
@@ -62772,7 +62772,7 @@ lin washer_N = mkN "tvättmaskin" "tvättmaskiner" ; -- comment=3
 lin washerman_N = mkN "tvättare"; -- src=google
 lin washerwoman_N = variants {} ; -- status=guess
 lin washhouse_N = mkN "tvättställe"; -- src=google
-lin washing_N = mkN "tvagning" ; -- status=guess
+lin washing_N = mkN "tvätt" | mkN "tvagning" ;
 lin washing_day_N = mkN "tvätt-dag"; -- src=google
 lin washing_machine_N = mkN "tvättmaskin" "tvättmaskiner" ;
 lin washing_up_N = mkN "disk" ;
