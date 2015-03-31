@@ -6,7 +6,7 @@ import Control.Applicative
 import GF.Infra.Concurrency
 import System.FilePath
 import qualified GF.System.Directory as D
-import GF.System.Catch(catch)
+import GF.System.Catch(catch,try)
 import Data.List(nub,isPrefixOf,intercalate,partition)
 import qualified Data.Map as M
 import GF.Compile.ReadFiles(getOptionsFromFile,findFile,gfImports,gfoImports)
@@ -116,12 +116,13 @@ batchCompile1 lib_dir (opts,filepaths) =
               return file'
          compile cache (file,paths) = readIOCache cache (file,Hide paths)
          compile' cache (f,Hide ps) =
+           try $
            do let compileImport f = compile cache (f,ps)
                   findImports (f,ps) = mapM (find f ps) . nub . snd
                                          =<< getImports opts f
               imps <- ok (findImports (f,ps))
               modifyMVar_ deps (return . M.insert f imps)
-              tis <- parMapM compileImport imps
+              ([],tis) <- splitEither <$> parMapM compileImport imps
               let reuse gfo = do t <- D.getModificationTime gfo
                                  gr <- readMVar sgr
                                  r <- lazyIO $ ok (reuseGFO opts gr gfo)
@@ -142,7 +143,7 @@ batchCompile1 lib_dir (opts,filepaths) =
               extendSgr sgr mo
               return (maximum (t:tis))
      cache <- liftIO $ newIOCache compile'
-     ts <- liftIO $ parMapM (compile cache) filepaths
+     (es,ts) <- liftIO $ splitEither <$> parMapM (compile cache) filepaths
      gr <- readMVar sgr
      let cnc = moduleNameS (justModuleName (fst (last filepaths)))
      ds <- M.toList <$> readMVar deps
@@ -154,7 +155,13 @@ batchCompile1 lib_dir (opts,filepaths) =
      putStrLnE $ render $
                    length ds<+>"modules in"
                    <+>length (nub (map (dropFileName.fst) ds))<+>"directories."
-     return (maximum ts,(cnc,gr))
+     let n = length es
+     if n>0
+       then fail $ "Errors prevented "++show n++" module"++['s'|n/=1]++
+                   " from being compiled."
+       else return (maximum ts,(cnc,gr))
+
+splitEither es = ([x|Left x<-es],[y|Right y<-es])
 
 canonical path = liftIO $ D.canonicalizePath path `catch` const (return path)
 
