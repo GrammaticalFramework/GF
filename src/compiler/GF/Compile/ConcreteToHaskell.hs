@@ -1,4 +1,5 @@
-module GF.Compile.ConcreteToHaskell where
+-- | Translate concrete syntax to Haskell
+module GF.Compile.ConcreteToHaskell(concretes2haskell,concrete2haskell) where
 import Data.List(sort,sortBy)
 import Data.Function(on)
 import qualified Data.Map as M
@@ -18,14 +19,19 @@ import GF.Infra.Option
 import GF.Compile.Compute.ConcreteNew(normalForm,resourceValues)
 import Debug.Trace
 
+-- | Generate Haskell code for the all concrete syntaxes associated with
+-- the named abstract syntax in given the grammar.
 concretes2haskell opts absname gr =
   [(cncname,concrete2haskell opts gr cenv absname cnc cncmod)
      | let cenv = resourceValues opts gr,
        cnc<-allConcretes gr absname,
-       let cncname = render cnc ++ ".hs"
+       let cncname = render cnc ++ ".hs" :: FilePath
            Ok cncmod = lookupModule gr cnc
   ]
 
+-- | Generate Haskell code for the given concrete module.
+-- The only options that make a difference are
+-- @-haskell=noprefix@ and @-haskell=variants@.
 concrete2haskell opts gr cenv absname cnc modinfo =
     renderStyle style{lineLength=80,ribbonsPerLine=1} $
       haskPreamble va absname cnc $$ "" $$
