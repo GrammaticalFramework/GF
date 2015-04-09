@@ -50,6 +50,11 @@ function length_limit(lang) {
     }
 }
 
+function check_limit(lang,encsrc) {
+    var len=encsrc.length, limit=length_limit(lang)
+    return len<=limit ? null : "sentense too long, "+len+">"+limit
+}
+
 // Translate a sentence
 gftranslate.translate=function(source,from,to,start,limit,cont) {
     var g=gftranslate.grammar
@@ -60,11 +65,12 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     function extract(result) {
 	cont(unspace_translations(g,result[0].translations))
     }
-    if(encsrc.length<length_limit(from))
+    var too_long=check_limit(from,encsrc)
+    if(too_long) cont([{error:too_long}])
+    else
 	gftranslate.call("?command=c-translate&jsontree=true&input="+encsrc
 		      +lexer+"&unlexer=text&from="+g+from+"&to="+enc_langs(g,to)
 		      +"&start="+start+"&limit="+limit,extract,errcont)
-    else cont([{error:"sentence too long"}])
 }
 
 // Translate a sentence word for word (if all else fails...)
@@ -78,11 +84,12 @@ gftranslate.wordforword=function(source,from,to,cont) {
 	cont(unspace_translations(g,result[0].translations))
     }
     var enc_to = enc_langs(g,to)
-    if(encsrc.length<length_limit(from))
+    var too_long=check_limit(from,encsrc)
+    if(too_long) cont([{error:too_long}])
+    else
 	gftranslate.call("?command=c-wordforword&input="+encsrc
 			 +lexer+"&unlexer=text&from="+g+from+"&to="+enc_to
 			 ,extract,errcont)
-    else cont([{error:"sentence too long"}])
 }
 
 // Get list of supported languages
