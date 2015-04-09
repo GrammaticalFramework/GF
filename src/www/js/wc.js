@@ -197,6 +197,8 @@ wc.translate=function() {
 		    var r=tra[0]
 		    r.prob = -1
 		    if(r.linearizations) showit(r,gftranslate.grammar)
+		    else if(r.error!=undefined)
+			show_error(r.error)
 		}
 		else if(so.rs.length==0)
 		    show_error("Unable to translate")
@@ -210,7 +212,7 @@ wc.translate=function() {
 		    var r=tra[0]
 		    if(r.error!=undefined) {
 			if(i==0 && so.rs.length==0) {
-			    //show_error(tra[0].error)
+			    //show_error(r.error)
 			    word_for_word(text)
 			}
 		    }
