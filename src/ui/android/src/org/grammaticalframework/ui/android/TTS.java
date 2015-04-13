@@ -36,9 +36,9 @@ public class TTS {
             */
 
 	    /* OR use separate entries for Cantonese and Mandarin  */ 
-    		if (language.equals("cmn-Hans-CN")) {
-    			language = "yue";
-    		}
+	    //	if (language.equals("cmn-Hans-CN")) {
+	    //		language = "yue";
+	    //	}
 
 	        Locale locale = LocaleUtils.parseJavaLocale(language.replace('-', '_'),
 	                                                    Locale.getDefault());
