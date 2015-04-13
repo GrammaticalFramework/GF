@@ -58,7 +58,7 @@
 		<Key android:codes="3630" android:keyLabel="ฮ"/>
 		<Key android:codes="3642" android:keyLabel="ฺ"/>
 		<Key android:codes="3660" android:keyLabel="์"/>
-		<Key android:codes="63" android:keyLabel="?"/>
+		<Key android:codes="63" android:keyLabel="\?"/>
 		<Key android:codes="3602" android:keyLabel="ฒ"/>
 		<Key android:codes="3628" android:keyLabel="ฬ"/>
 		<Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete" 
