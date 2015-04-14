@@ -17,6 +17,7 @@ import GF.Compile.Compute.Value(Predefined(..))
 import GF.Infra.Ident(Ident,identS,prefixIdent) --,moduleNameS
 import GF.Infra.Option
 import GF.Compile.Compute.ConcreteNew(normalForm,resourceValues)
+import GF.Haskell
 import Debug.Trace
 
 -- | Generate Haskell code for the all concrete syntaxes associated with
@@ -34,52 +35,55 @@ concretes2haskell opts absname gr =
 -- @-haskell=noprefix@ and @-haskell=variants@.
 concrete2haskell opts gr cenv absname cnc modinfo =
     renderStyle style{lineLength=80,ribbonsPerLine=1} $
-      haskPreamble va absname cnc $$ "" $$
-      "--- Parameter types ---" $$
-      vcat (neededParamTypes S.empty (params defs)) $$ "" $$
-      "--- Type signatures for linearization functions ---" $$
-      vcat (map signature (S.toList allcats)) $$ "" $$
-      "--- Linearization functions for empty categories ---" $$
-      vcat emptydefs $$ "" $$
-      "--- Linearization types and linearization functions ---" $$
-      vcat (map ppDef defs) $$ "" $$
-      "--- Type classes for projection functions ---" $$
-      vcat (map labelClass (S.toList labels)) $$ "" $$
-      "--- Record types ---" $$
-      vcat (map recordType recs)
+      haskPreamble va absname cnc $$ vcat (
+      nl:Comment "--- Parameter types ---":
+      neededParamTypes S.empty (params defs) ++
+      nl:Comment "--- Type signatures for linearization functions ---":
+      map signature (S.toList allcats)++
+      nl:Comment "--- Linearization functions for empty categories ---":
+      emptydefs ++
+      nl:Comment "--- Linearization types and linearization functions ---":
+      map ppDef defs ++
+      nl:Comment "--- Type classes for projection functions ---":
+      map labelClass (S.toList labels) ++
+      nl:Comment "--- Record types ---":
+      concatMap recordType recs)
   where
+    nl = Comment ""
     labels = S.difference (S.unions (map S.fromList recs)) common_labels
     recs = S.toList (S.difference (records rhss) common_records)
     common_records = S.fromList [[label_s]]
     common_labels = S.fromList [label_s]
     label_s = ident2label (identS "s")
 
-    rhss = map (snd.snd) defs
-    defs = sortBy (compare `on` fst) .
+    rhss = map (either snd (snd.snd)) defs
+    defs = sortBy (compare `on` either (const Nothing) (Just . fst)) .
            concatMap (toHaskell gId gr absname cenv) . 
            M.toList $
            jments modinfo
 
 --  signature c = "lin"<>c<+>"::"<+>"A."<>gId c<+>"->"<+>"Lin"<>c
 --  signature c = "--lin"<>c<+>":: (Applicative f,Monad f) =>"<+>"A."<>gId c<+>"->"<+>"f Lin"<>c
-    signature c = "lin"<>c<+>"::"<+>Fun abs (pure lin)
+    signature c = TypeSig lf (Fun abs (pure lin))
       where
         abs = tcon0 (prefixIdent "A." (gId c))
-        lin = tcon0 (prefixIdent "Lin" c)
+        lin = tcon0 lc
+        lf = prefixIdent "lin" c
+        lc = prefixIdent "Lin" c
 
     emptydefs = map emptydef (S.toList emptyCats)
-    emptydef c = "lin"<>c<+>"_"<+>"="<+>"undefined"
+    emptydef c = Eqn (prefixIdent "lin" c,[WildP]) (Const "undefined")
 
     emptyCats = allcats `S.difference` cats
-    cats = S.fromList [c|(Just c,_)<-defs]
+    cats = S.fromList [c|Right (c,_)<-defs]
     allcats = S.fromList [c|((_,c),AbsCat (Just _))<-allOrigInfos gr absname]
-            
-    params = S.toList . S.unions . map params1
-    params1 (Nothing,(_,rhs)) = paramTypes gr rhs
-    params1 (_,(_,rhs)) = tableTypes gr [rhs]
 
-    ppDef (Nothing,(lhs,rhs)) = hang (lhs<+>"=") 2 (convType va gId rhs)
-    ppDef (_,(lhs,rhs)) = hang (lhs<+>"=") 2 (convert va gId gr rhs)
+    params = S.toList . S.unions . map params1
+    params1 (Left (_,rhs)) = paramTypes gr rhs
+    params1 (Right (_,(_,rhs))) = tableTypes gr [rhs]
+
+    ppDef (Left (lhs,rhs)) = lhs (convType va gId rhs)
+    ppDef (Right (_,(lhs,rhs))) = lhs (convert va gId gr rhs)
 
     gId :: Ident -> Ident
     gId = if haskellOption opts HaskellNoPrefix then id else prefixIdent "G"
@@ -91,7 +95,7 @@ concrete2haskell opts gr cenv absname cnc modinfo =
         if q `S.member` have
         then neededParamTypes have qs
         else let ((got,need),def) = paramType va gId gr q
-             in def:neededParamTypes (S.union got have) (S.toList need++qs)
+             in def++neededParamTypes (S.union got have) (S.toList need++qs)
 
 haskPreamble :: Bool -> ModuleName -> ModuleName -> Doc
 haskPreamble va absname cncname =
@@ -116,10 +120,10 @@ haskPreamble va absname cncname =
 toHaskell gId gr absname cenv (name,jment) =
   case jment of
     CncCat (Just (L loc typ)) _ _ pprn _ ->
-        [(Nothing,("type"<+>"Lin"<>name,nf loc typ))]
+        [Left (tsyn0 (prefixIdent "Lin" name),nf loc typ)]
     CncFun (Just r@(cat,ctx,lincat)) (Just (L loc def)) pprn _ ->
 --      trace (render (name<+>hcat[parens (x<>"::"<>t)|(_,x,t)<-ctx]<+>"::"<+>cat)) $
-        [(Just cat,("lin"<>cat<+>lhs,coerce [] lincat rhs))]
+        [Right (cat,(Eqn (prefixIdent "lin" cat,lhs),coerce [] lincat rhs))]
       where
         Ok abstype = lookupFunType gr absname name
         (absctx,abscat,absargs) = typeForm abstype
@@ -128,9 +132,8 @@ toHaskell gId gr absname cenv (name,jment) =
              nf loc (mkAbs params (mkApp def (map Vr args)))
         params = [(b,prefixIdent "g" x)|(b,x,_)<-ctx]
         args = map snd params
-        abs_args = map ("abs_"<>) args
-        lhs = if null args then pp (aId name)
-                           else parens (aId name<+>hsep abs_args)
+        abs_args = map (prefixIdent "abs_") args
+        lhs = [ConP (aId name) (map VarP abs_args)]
         rhs = foldr letlin e' (zip args absctx)
         letlin (a,(_,_,at)) =
            Let (a,(Just (con ("Lin"++render at)),(App (con ("lin"++render at)) (con ("abs_"++render a)))))
@@ -349,64 +352,72 @@ convType va gId = ppT
 
     fields = map (ppT.snd) . sort . filter (not.isLockLabel.fst)
 
-proj l = con ("proj_"++render l)
+proj = con . proj'
+proj' l = "proj_"++render l
 rcon = con . rcon_name
 rcon' = identS . rcon_name
 rcon_name ls = "R"++concat (sort ['_':render l|l<-ls,not (isLockLabel l)])
-to_rcon = con . ("to_"++) . rcon_name
+to_rcon = con . to_rcon'
+to_rcon' = ("to_"++) . rcon_name
 
 recordType ls =
-    "data"<+>app<+>"="<+>app <+> "deriving (Eq,Ord,Show)" $$
-    enumAllInstance $$
-    vcat (zipWith projection vs ls) $$
-    hang (to_rcon ls<+>"r"<+>"=") 4
-         (cn<+>fsep [parens (proj l<+>"r")|l<-ls]) $$ ""
+    Data lhs [app] ["Eq","Ord","Show"]:
+    enumAllInstance:
+    zipWith projection vs ls ++
+    [Eqn (identS (to_rcon' ls),[VarP r])
+         (foldl Ap (Var cn) [Var (identS (proj' l)) `Ap` Var r|l<-ls])]
   where
-    cn = rcon ls
-    cn' = rcon' ls
+    r = identS "r"
+    cn = rcon' ls
  -- Not all record labels are syntactically correct as type variables in Haskell
  -- app = cn<+>ls
-    app = cn<+>hsep vs -- don't reuse record labels
-    vs = ["t"<>i|i<-[1..n]]
+    lhs = ConAp cn vs -- don't reuse record labels
+    app = fmap TId lhs
+    tapp = foldl TAp (TId cn) (map TId vs)
+    vs = [identS ('t':show i)|i<-[1..n]]
     n = length ls
 
-    projection v l =
-       hang ("instance"<+>"Has_"<>l<+>parens app<+>v<+>"where") 4
-            (proj l<+>parens app<+>"="<+>v)
+    projection v l = Instance [] (TId name `TAp` tapp `TAp` TId v)
+                              [((prj,[papp]),Var v)]
+     where
+       name = identS ("Has_"++render l)
+       prj = identS (proj' l)
+       papp = ConP cn (map VarP vs)
 
     enumAllInstance =
-       hang ("instance"<+>ctx<+>"EnumAll"<+>parens app<+>"where") 4
-            (hang ("enumAll"<+>"=") 4 (enumCon cn' n))
+       Instance ctx (tEnumAll `TAp` tapp)[(lhs0 "enumAll",enumCon cn n)]
       where
-        ctx = if n==0
-              then empty
-              else parens (fsep (punctuate "," ["EnumAll"<+>v|v<-vs]))<+>"=>"
+        ctx =  [tEnumAll `TAp` TId v|v<-vs]
+        tEnumAll = TId (identS "EnumAll")
 
 labelClass l =
-    hang ("class"<+>"Has_"<>l<+>"r"<+>"a"<+>"| r -> a"<+>"where") 4
-         (proj l<+>"::"<+>"r -> a")
+    Class [] (ConAp name [r,a]) [([r],[a])]
+          [(identS (proj' l),TId r `Fun` TId a)]
+  where
+    name = identS ("Has_"++render l)
+    r = identS "r"
+    a = identS "a"
 
 paramType va gId gr q@(_,n) =
     case lookupOrigInfo gr q of
       Ok (m,ResParam (Just (L _ ps)) _)
        {- - | m/=cPredef && m/=moduleNameS "Prelude"-} ->
          ((S.singleton (m,n),argTypes ps),
-          hang ("data"<+>gId (qual m n)<+>"=") 7
-               (sep [fsep (punctuate " |" (map (param m) ps)),
-                    pp "deriving (Eq,Ord,Show)"]) $$
-          hang ("instance EnumAll"<+>gId (qual m n)<+>"where") 4
-               ("enumAll"<+>"="<+>foldr1 plusplus (map (enumParam m) ps))
+          [Data (conap0 name) (map (param m) ps)["Eq","Ord","Show"],
+           Instance [] (TId (identS "EnumAll") `TAp` TId name)
+              [(lhs0 "enumAll",foldr1 plusplus (map (enumParam m) ps))]]
          )
+       where name = gId (qual m n)
       Ok (m,ResOper  _ (Just (L _ t)))
         | m==cPredef && n==cInts ->
            ((S.singleton (m,n),S.empty),
-            "type"<+>gId (qual m n)<+>"n = Int")
+            [Type (ConAp (gId (qual m n)) [identS "n"]) (TId (identS "Int"))])
         | otherwise ->
            ((S.singleton (m,n),paramTypes gr t),
-            "type"<+>gId (qual m n)<+>"="<+>convType va gId t)
-      _ -> ((S.empty,S.empty),empty)
+            [Type (conap0 (gId (qual m n))) (convType va gId t)])
+      _ -> ((S.empty,S.empty),[])
   where
-    param m (n,ctx) = tcon (gId (qual m n)) [convType va gId t|(_,_,t)<-ctx]
+    param m (n,ctx) = ConAp (gId (qual m n)) [convType va gId t|(_,_,t)<-ctx]
     argTypes = S.unions . map argTypes1
     argTypes1 (n,ctx) = S.unions [paramTypes gr t|(_,_,t)<-ctx]
 
@@ -422,82 +433,3 @@ enumCon name arity =
 
 qual :: ModuleName -> Ident -> Ident
 qual m = prefixIdent (render m++"_")
-
---------------------------------------------------------------------------------
--- ** A Haskell subset
-
-data Ty  = TId Ident | TAp Ty Ty | Fun Ty Ty | ListT Ty
-
-data Exp = Var Ident | Const String | Ap Exp Exp | Op Exp String Exp
-         | List [Exp] | Pair Exp Exp
-         | Lets [(Ident,Exp)] Exp | LambdaCase [(Pat,Exp)]
-
-data Pat = WildP | VarP Ident | Lit String | ConP Ident [Pat] | AsP Ident Pat
-
-tvar = TId
-tcon0 = TId
-tcon c = foldl TAp (TId c)
-
-let1 x xe e = Lets [(x,xe)] e
-single x = List [x]
-
-plusplus (List ts1) (List ts2) = List (ts1++ts2)
-plusplus (List [t]) t2 = Op t ":" t2
-plusplus t1 t2 = Op t1 "++" t2
-
-instance Pretty Ty where
-  pp = ppT
-    where
-      ppT t = case flatFun t of t:ts -> sep (ppB t:["->"<+>ppB t|t<-ts])
-      ppB t = case flatTAp t of t:ts -> ppA t<+>sep (map ppA ts)
-
-      ppA t =
-        case t of
-          TId c -> pp c
-          ListT t -> brackets t
-          _ -> parens t
-
-      flatFun (Fun t1 t2) = t1:flatFun t2 -- right associative
-      flatFun t = [t]
-
-      flatTAp (TAp t1 t2) = flatTAp t1++[t2] -- left associative
-      flatTAp t = [t]
-
-instance Pretty Exp where
-  pp = ppT
-    where
-      ppT e =
-        case e of
-          Op e1 op e2 -> hang (ppB e1<+>op) 2 (ppB e2)
-          Lets bs e -> sep ["let"<+>vcat [hang (x<+>"=") 2 xe|(x,xe)<-bs],
-                            "in" <+>e]
-          LambdaCase alts -> hang "\\case" 4 (vcat [p<+>"->"<+>e|(p,e)<-alts])
-          _ -> ppB e
-
-      ppB e = case flatAp e of f:as -> hang (ppA f) 2 (sep (map ppA as))
-
-      ppA e =
-        case e of
-          Var x -> pp x
-          Const n -> pp n
-          Pair e1 e2 -> parens (e1<>","<>e2)
-          List es -> brackets (fsep (punctuate "," es))
-          _ -> parens e
-
-      flatAp (Ap t1 t2) = flatAp t1++[t2] -- left associative
-      flatAp t = [t]
-
-instance Pretty Pat where
-  pp = ppP
-    where
-      ppP p =
-        case p of
-          ConP c ps -> c<+>fsep (map ppPA ps)
-          _ -> ppPA p
-      ppPA p =
-        case p of
-          WildP -> pp "_"
-          VarP x -> pp x
-          Lit s -> pp s
-          AsP x p -> x<>"@"<>parens p
-          _ -> parens p
