@@ -11392,6 +11392,7 @@ lin ferrara_PN = mkPN "Ferrare" ; -- status=guess src=geonames
 lin ferret_N = mkN "furet" masculine ; -- tocheck
 lin ferric_A = mkA "ferreux" ; -- UWN
 lin ferrimagnetism_N = mkN "ferrimagnétisme" ; -- UWN
+lin ferris_wheel_N = mkN "grande roue" "grandes roues" feminine ;
 lin ferrite_N = mkN "ferrite" ; -- UWN
 lin ferritin_N = mkN "ferritine" ; -- UWN
 lin ferroconcrete_N = mkN "béton_armé" ; -- UWN

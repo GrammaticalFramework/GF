@@ -11215,6 +11215,7 @@ lin ferrara_PN = mkPN "Ferrara" ; -- status=guess src=geonames
 lin ferret_N = mkN "hurón" masculine ; -- status=guess
 lin ferric_A = mkA "férrico" ; -- status=guess
 lin ferrimagnetism_N = mkN "ferrimagnetismo" ; -- status=guess
+lin ferris_wheel_N = mkN "noria" ;
 lin ferritin_N = mkN "ferritina" ; --UWN
 lin ferromagnetic_A = mkA "ferromagnético" ; -- status=guess
 lin ferromagnetism_N = mkN "ferromagnetismo" ; -- status=guess

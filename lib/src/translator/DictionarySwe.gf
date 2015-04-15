@@ -20927,6 +20927,7 @@ lin ferret_V2 = variants {} ; -- status=guess
 lin ferric_A = variants {} ; -- status=guess
 lin ferricyanide_N = mkN "ferricyanid"; -- src=google
 lin ferrimagnetism_N = mkN "ferrimagnetism" ; -- status=guess
+lin ferris_wheel_N = mkN "pariserhjul" "pariserhjul" ;
 lin ferrite_N = mkN "ferrit" "ferriter" ;
 lin ferritin_N = variants {} ; -- status=guess
 lin ferrocerium_N = mkN "auermetall"; -- src=google

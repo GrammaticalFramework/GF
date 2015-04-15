@@ -10084,6 +10084,7 @@ lin ferocity_N = mkN "ferocia" | mkN "ferocità" | mkN "furia" | mkN "impeto" | 
 lin ferrara_PN = mkPN "Ferrara" ; -- status=guess src=geonames
 lin ferret_N = mkN "furetto" ; -- status=guess
 lin ferric_A = mkA "ferrigno" | mkA "ferroso" ; -- UWN
+lin ferris_wheel_N = mkN "ruota panoramica" "ruote panoramiche" feminine ;
 lin ferrite_N = mkN "ferrite" ; -- UWN
 lin ferritin_N = mkN "ferritina" ; -- UWN
 lin ferroconcrete_N = mkN "cemento_armato" ; -- UWN

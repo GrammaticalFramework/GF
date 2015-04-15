@@ -21099,6 +21099,7 @@ lin ferret_out_V2 = variants {} ;
 lin ferric_A = variants {} ;
 lin ferricyanide_N = variants {} ;
 lin ferrimagnetism_N = variants {} ;
+lin ferris_wheel_N = mkN "Riesenrad" "Riesenräder" neuter ;
 lin ferrite_N = mkN "Ferrit" neuter ; -- status=guess
 lin ferritin_N = variants {} ;
 lin ferrocerium_N = variants {} ;

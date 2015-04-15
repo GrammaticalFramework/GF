@@ -21091,6 +21091,7 @@ fun ferret_out_V2 : V2 ;
 fun ferric_A : A ;
 fun ferricyanide_N : N ;
 fun ferrimagnetism_N : N ;
+fun ferris_wheel_N : N ;
 fun ferrite_N : N ;
 fun ferritin_N : N ;
 fun ferrocerium_N : N ;

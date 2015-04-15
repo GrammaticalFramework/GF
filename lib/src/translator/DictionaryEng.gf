@@ -21187,6 +21187,7 @@ lin ferret_out_V2 = mkV2 (partV (mkV "ferret") "out");
 lin ferric_A = mkA "ferric" ;
 lin ferricyanide_N = mkN "ferricyanide" ;
 lin ferrimagnetism_N = mkN "ferrimagnetism" ;
+lin ferris_wheel_N = mkN "ferris wheel" ;
 lin ferrite_N = mkN "ferrite" ;
 lin ferritin_N = mkN "ferritin" ;
 lin ferrocerium_N = mkN "ferrocerium" ;

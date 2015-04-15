@@ -19380,6 +19380,7 @@ lin ferret_out_V2 = mkWV2 (k61 "nuuskia") ; --UNCHK
 lin ferric_A = mkWA (compoundA "rautapi" (k38 "toinen")) ; --UNCHK
 lin ferricyanide_N = mkWN (compoundN "ferri" (k5 "syanidi")) ; --UNCHK
 lin ferrimagnetism_N = mkWN (compoundN "ferri" (k5 "magnetismi")) ; --UNCHK
+lin ferris_wheel_N = mkN "maailman" (mkN "pyörä") ;
 lin ferrite_N = mkWN (k5A "ferriitti") ; --UNCHK
 lin ferritin_N = mkWN "ferritiini" ; --UNCHK
 lin ferrocerium_N = mkWN "ferroserium" ; --UNCHK
