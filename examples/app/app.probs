@@ -65059,9 +65059,9 @@ V2V_V		0.01
 Phrase_Chunk	0.1
 PhrasePhr	0.8
 PhrUtt 		0.199
-ChunkPhr 	1.0e-7
-OneChunk 	0.9
-PlusChunk 	0.1
+ChunkPhr 	1.0e-9
+OneChunk 	0.999
+PlusChunk 	0.001
 refl_SgP1_Chunk	5.751177721092363e-4
 refl_SgP2_Chunk	5.751177721092363e-4
 refl_SgP3_Chunk	5.751177721092363e-4
