@@ -83,8 +83,7 @@ resource ResDut = ParamX ** open Prelude, Predef in {
     regAdjective : Str -> Adjective = \s ->  ----
       let 
         se : Str = case s of {
-          _ + "er"      => s + "e" ; ---- 
-	  _ + "ig"      => s + "e" ;
+          _ + ("er"|"en"|"ig")  => s + "e" ; --- for unstressed adjective suffixes 
           _ + ("i"|"u"|"ij") => endCons s + "e" ;
           b + v@("aa"|"ee"|"oo"|"uu") + c@?             => b + shortVoc v c + "e" ;
           b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ?  => endCons s + "e" ;
