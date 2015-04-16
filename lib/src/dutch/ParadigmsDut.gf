@@ -81,6 +81,7 @@ oper
 
   mkA : overload {
     mkA : (vers : Str) -> A ; -- regular adjective
+    mkA : (tweed,tweede : Str) -> A ; -- with deviant second form
     mkA : (goed,goede,goeds,beter,best : Str) -> A ; -- irregular adjective
     } ;
 
@@ -245,6 +246,7 @@ oper
 
   mkA = overload {
     mkA : (vers : Str) -> A = \a -> lin A (regAdjective a) ;
+    mkA : (vers,verse : Str) -> A = \a,b -> lin A (reg2Adjective a b) ;
     mkA : (goed,goede,goeds,beter,best : Str) -> A = \a,b,c,d,e -> lin A (mkAdjective a b c d e) ;
     } ;
 

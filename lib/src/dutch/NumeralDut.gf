@@ -92,7 +92,7 @@ lin
     let dritt = init dritte in
     table {
       NCard _ _ => drei ;
-      NOrd a => (regAdjective dritt).s ! Posit ! a
+      NOrd a => (reg2Adjective dritt dritte).s ! Posit ! a
       } ;
 
   mkDigit : (x1,_,_,x4 : Str) -> LinDigit = 
