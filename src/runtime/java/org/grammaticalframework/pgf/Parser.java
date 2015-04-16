@@ -41,11 +41,13 @@ class Parser implements Iterable<ExprProb> {
 	{
 		Pool pool = new Pool();
 		long callbacksRef = newCallbacksMap(concr, pool);
-		for (Map.Entry<String, LiteralCallback> entry : callbacks.entrySet()) {
-			addLiteralCallback(concr, callbacksRef, 
-					           entry.getKey(), entry.getValue(),
-					           pool);
-		} 
+		if (callbacks != null) {
+			for (Map.Entry<String, LiteralCallback> entry : callbacks.entrySet()) {
+				addLiteralCallback(concr, callbacksRef, 
+								   entry.getKey(), entry.getValue(),
+								   pool);
+			}
+		}
 		return parseWithHeuristics(concr, startCat, s, heuristics, callbacksRef, pool);
 	}
 
