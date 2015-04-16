@@ -50,8 +50,8 @@ function length_limit(lang) {
     }
 }
 
-function check_limit(lang,encsrc) {
-    var len=encsrc.length, limit=length_limit(lang)
+function check_limit(lang,source) {
+    var len=source.length, limit=length_limit(lang)
     return len<=limit ? null : "sentense too long, "+len+">"+limit
 }
 
@@ -60,15 +60,15 @@ gftranslate.translate=function(source,from,to,start,limit,cont) {
     var g=gftranslate.grammar
     var lexer="&lexer=text"
     if(from=="Chi") lexer="",source=source.split("").join(" ")
-    var encsrc=encodeURIComponent(source)
     function errcont(text,code) { cont([{error:code+" "+text}]) }
     function extract(result) {
 	cont(unspace_translations(g,result[0].translations))
     }
-    var too_long=check_limit(from,encsrc)
+    var too_long=check_limit(from,source)
     if(too_long) cont([{error:too_long}])
     else
-	gftranslate.call("?command=c-translate&jsontree=true&input="+encsrc
+	gftranslate.call("?command=c-translate&jsontree=true&input="
+		      +encodeURIComponent(source)
 		      +lexer+"&unlexer=text&from="+g+from+"&to="+enc_langs(g,to)
 		      +"&start="+start+"&limit="+limit,extract,errcont)
 }
@@ -78,16 +78,16 @@ gftranslate.wordforword=function(source,from,to,cont) {
     var g=gftranslate.grammar
     var lexer="&lexer=text"
     if(from=="Chi") lexer="",source=source.split("").join(" ")
-    var encsrc=encodeURIComponent(source)
     function errcont(text,code) { cont([{error:code+" "+text}]) }
     function extract(result) {
 	cont(unspace_translations(g,result[0].translations))
     }
     var enc_to = enc_langs(g,to)
-    var too_long=check_limit(from,encsrc)
+    var too_long=check_limit(from,source)
     if(too_long) cont([{error:too_long}])
     else
-	gftranslate.call("?command=c-wordforword&input="+encsrc
+	gftranslate.call("?command=c-wordforword&input="
+			 +encodeURIComponent(source)
 			 +lexer+"&unlexer=text&from="+g+from+"&to="+enc_to
 			 ,extract,errcont)
 }
