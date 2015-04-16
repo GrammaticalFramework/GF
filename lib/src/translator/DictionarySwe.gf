@@ -58049,7 +58049,7 @@ lin tocsin_N = variants {} ; -- status=guess
 lin tod_A = variants {} ; -- status=guess
 lin tod_N = variants {} ; -- status=guess
 lin today_Adv = L.today_Adv ;
-lin today_N = mkN "dag" ; -- status=guess
+lin today_N = mkN "idag";
 lin toddle_V = mkV "gå" "går" "gå" "gick" "gått" "gången" ; -- comment=5
 lin toddle_off_V = mkV "gå" "går" "gå" "gick" "gått" "gången" ; -- comment=5
 lin toddler_N = mkN "småbarn" ; -- status=guess
