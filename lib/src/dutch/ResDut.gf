@@ -80,16 +80,9 @@ resource ResDut = ParamX ** open Prelude, Predef in {
         Superl => table {APred => as ; AAttr => as + "e" ; AGen => as + "s"}   ----
         }
       } ;
-    regAdjective : Str -> Adjective = \s ->  ----
-      let 
-        se : Str = case s of {
-          _ + ("er"|"en"|"ig")  => s + "e" ; --- for unstressed adjective suffixes 
-          _ + ("i"|"u"|"ij") => endCons s + "e" ;
-          b + v@("aa"|"ee"|"oo"|"uu") + c@?             => b + shortVoc v c + "e" ;
-          b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ?  => endCons s + "e" ;
-          b + v@("a"|"e"|"i"|"o"|"u" )            + c@? => b + v + c + c + "e" ;
-          _ => endCons s + "e"
-          } ;
+      
+    reg2Adjective : Str -> Str -> Adjective = \s,se -> 
+      let
         ser : Str = case s of {
           _ + "r" => s + "der" ;
           _ => se + "r"
@@ -101,7 +94,19 @@ resource ResDut = ParamX ** open Prelude, Predef in {
       in
       mkAdjective s se (s + "s") ser sst ;
 
-  param 
+    regAdjective : Str -> Adjective = \s ->
+      let 
+        se : Str = case s of {
+          _ + ("er"|"en"|"ig")  => s + "e" ; --- for unstressed adjective suffixes 
+          _ + ("i"|"u"|"ij") => endCons s + "e" ;
+          b + v@("aa"|"ee"|"oo"|"uu") + c@?             => b + shortVoc v c + "e" ;
+          b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ?  => endCons s + "e" ;
+          b + v@("a"|"e"|"i"|"o"|"u" )            + c@? => b + v + c + c + "e" ;
+          _ => endCons s + "e"
+          } ;
+      in reg2Adjective s se ;
+      
+param 
     VForm = 
        VInf      -- zijn
      | VPresSg1  -- ben 
