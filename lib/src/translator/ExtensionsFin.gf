@@ -56,7 +56,11 @@ lin
     s = \\_ => (snoun2nounSep {s = \\f => noun.s ! 10 ++ BIND ++ adj.s ! Posit ! sAN f ; h = adj.h}).s
     } ;
 
-----  PastPartAP vp = {s = \\_,nf => (sverb2verbSep v).s ! PastPartPass (AN nf)} ;
+  PresPartAP vp = { ---- many things can go wrong here...
+    s = \\bool,nform => 
+         vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext ++ 
+         (sverb2verbSep vp.s).s ! PresPartAct (AN nform)
+    } ;
 
   PredVPosv np vp = mkCl np vp ; ----
 
