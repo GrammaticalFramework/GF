@@ -18,7 +18,7 @@ module PGF2 (-- * CId
              PGF,readPGF,AbsName,abstractName,startCat,
              -- * Concrete syntax
              ConcName,Concr,languages,parse,parseWithHeuristics,
-             hasLinearization,linearize,alignWords,
+             hasLinearization,linearize,linearizeAll,alignWords,
              -- * Types
              Type(..), Hypo, functionType,
              -- * Trees
@@ -455,6 +455,43 @@ linearize lang e = unsafePerformIO $
                              else throwIO (PGFError "The abstract tree cannot be linearized")
          else do lin <- gu_string_buf_freeze sb pl
                  peekCString lin
+
+linearizeAll :: Concr -> Expr -> [String]
+linearizeAll lang e = unsafePerformIO $
+  withGuPool $ \pl ->
+    do exn <- gu_new_exn pl
+       cts <- pgf_lzr_concretize (concr lang) (expr e) exn pl
+       failed <- gu_exn_is_raised exn
+       if failed
+         then throwExn exn
+         else collect cts exn pl
+  where
+    collect cts exn pl = do
+      ctree <- alloca $ \ptr -> do gu_enum_next cts ptr pl
+                                   peek ptr
+      if ctree == nullPtr
+        then return []
+        else do (sb,out) <- newOut pl
+                ctree <- pgf_lzr_wrap_linref ctree pl
+                pgf_lzr_linearize_simple (concr lang) ctree 0 out exn pl
+                failed <- gu_exn_is_raised exn
+                if failed
+                  then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
+                          if is_nonexist
+                            then collect cts exn pl
+                            else throwExn exn
+                  else do lin <- gu_string_buf_freeze sb pl
+                          s <- peekCString lin
+                          ss <- collect cts exn pl
+                          return (s:ss)
+
+    throwExn exn = do
+      is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+      if is_exn
+        then do c_msg <- (#peek GuExn, data.data) exn
+                msg <- peekCString c_msg
+                throwIO (PGFError msg)
+        else throwIO (PGFError "The abstract tree cannot be linearized")
 
 alignWords :: Concr -> Expr -> [(String, [Int])]
 alignWords lang e = unsafePerformIO $
