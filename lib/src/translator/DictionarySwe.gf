@@ -27161,7 +27161,7 @@ lin huffiness_N = variants {} ; -- status=guess
 lin huffish_A = variants {} ; -- status=guess
 lin huffy_A = mkA "irriterad" | mkA "arg" ; -- status=guess status=guess
 lin hug_N = mkN "kram" neutrum ; -- comment=3
-lin hug_V2 = dirV2 (partV (mkV "kramar")"ut") ; -- comment=2
+lin hug_V2 = mkV2 (mkV "kramar") ;
 lin huge_A = mkA "väldig" ;
 lin hugely_Adv = adjAdv huge_A ; -- derived -- derived
 lin hugger_N = variants {} ; -- status=guess
