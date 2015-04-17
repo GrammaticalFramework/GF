@@ -1,11 +1,12 @@
 -- | pgf-shell: A simple shell to illustrate the use of the Haskell binding
 --   to the C implementation of the PGF run-time system.
 --
---   The shell has 3 commands:
+--   The shell has 4 commands:
 --
 --     * parse: p <lang> <text>
 --     * linearize: l <lang> <tree>
 --     * translate: t <lang> <lang> <text> 
+--     * import: i <path to pgf>
 
 import Control.Monad(forever)
 import Control.Monad.State(evalStateT,put,get,gets,liftIO)
@@ -15,7 +16,6 @@ import qualified Data.Map as M
 import System.IO(hFlush,stdout)
 import System.Environment
 import PGF2
-import System.Mem(performGC)
 import qualified Data.Map as Map
 
 main = getPGF =<< getArgs
@@ -25,8 +25,7 @@ getPGF _ = putStrLn "Usage: pgf-shell <path to pgf>"
 
 pgfShell pgf =
   do putStrLn . unwords . M.keys $ languages pgf
-     flip evalStateT (pgf,[]) $ forever $ do liftIO performGC
-                                             puts "> "; liftIO $ hFlush stdout
+     flip evalStateT (pgf,[]) $ forever $ do puts "> "; liftIO $ hFlush stdout
                                              execute =<< liftIO readLn
 
 execute cmd =
