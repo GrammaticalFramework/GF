@@ -162,8 +162,10 @@ handle logLn documentroot state0 cache execute1 stateVar
 --         "/start"   ->
            "/parse"   -> parse (decoded qs)
            "/version" -> do (c1,c2) <- PS.listPGFCache cache
-                            let rel = map (makeRelative documentroot)
-                            return $ ok200 (unlines (gf_version:"":rel c1++"":rel c2))
+                            let rel = makeRelative documentroot
+                                sh1 (path,t) = rel path++" "++show t
+                                sh = map sh1
+                            return $ ok200 (unlines (gf_version:"":sh c1++"":sh c2))
            "/flush"   -> do PS.flushPGFCache cache; return (ok200 "flushed")
            '/':rpath ->
              -- This code runs without mutual exclusion, so it must *not*
