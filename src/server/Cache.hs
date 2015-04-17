@@ -38,11 +38,13 @@ expireCache age c =
      performGC
 
 -- | List currently cached files
-listCache :: Cache a -> IO [FilePath]
+listCache :: Cache a -> IO [(FilePath,UTCTime)]
 listCache c =
     fmap (mapMaybe id) . mapM check . Map.toList =<< readMVar (cacheObjects c)
   where
-    check (path,v) = maybe Nothing (const (Just path)) `fmap` readMVar v
+    check (path,v) = maybe Nothing (Just . (,) path . fst3) `fmap` readMVar v
+
+fst3 (x,y,z) = x
 
 -- | Lookup a cached object (or read the file if it is not in the cache or if
 -- it has been modified)
