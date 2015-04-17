@@ -90,6 +90,7 @@ data PgfMorphoCallback
 data PgfPrintContext
 data PgfType
 data PgfCallbacksMap
+data PgfCncTree
 
 foreign import ccall "pgf/pgf.h pgf_read"
   pgf_read :: CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfPGF)
@@ -138,6 +139,15 @@ foreign import ccall "pgf/pgf.h pgf_has_linearization"
 
 foreign import ccall "pgf/pgf.h pgf_linearize"
   pgf_linearize :: Ptr PgfConcr -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()
+
+foreign import ccall "pgf/pgf.h pgf_lzr_concretize"
+  pgf_lzr_concretize :: Ptr PgfConcr -> PgfExpr -> Ptr GuExn -> Ptr GuPool -> IO (Ptr GuEnum)
+
+foreign import ccall "pgf/pgf.h pgf_lzr_wrap_linref"
+  pgf_lzr_wrap_linref :: Ptr PgfCncTree -> Ptr GuPool -> IO (Ptr PgfCncTree)
+
+foreign import ccall "pgf/pgf.h pgf_lzr_linearize_simple"
+  pgf_lzr_linearize_simple :: Ptr PgfConcr -> Ptr PgfCncTree -> CInt -> Ptr GuOut -> Ptr GuExn -> Ptr GuPool -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_align_words"
   pgf_align_words :: Ptr PgfConcr -> PgfExpr -> Ptr GuExn -> Ptr GuPool -> IO (Ptr GuSeq)
