@@ -130,6 +130,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
     "c-parse"       -> withQSem qsem $
                        out t=<< join (parse # input % start % limit % treeopts)
     "c-linearize"   -> out t=<< lin # tree % to
+    "c-linearizeAll"-> out t=<< linAll # tree % to
     "c-translate"   -> withQSem qsem $
                        out t=<<join(trans # input % to % start % limit%treeopts)
     "c-lookupmorpho"-> out t=<< morpho # from1 % textInput
@@ -190,6 +191,11 @@ cpgfMain qsem command (t,(pgf,pc)) =
             purge r@(_,t') = if diffUTCTime t t'<120 then Just r else Nothing
                              -- remove unused parse results after 2 minutes
 -}
+    linAll tree to = showJSON (linAll' tree to)
+    linAll' tree (tos,unlex) =
+        [makeObj ["to".=to,
+                  "texts".=map unlex (C.linearizeAll c tree)]|(to,c)<-tos]
+
     lin tree to = showJSON (lin' tree to)
     lin' tree (tos,unlex) =
         [makeObj ["to".=to,"text".=unlex (C.linearize c tree)]|(to,c)<-tos]
