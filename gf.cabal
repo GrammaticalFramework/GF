@@ -73,7 +73,6 @@ Library
   default-language:    Haskell2010
   build-depends: base >= 4.3 && <5,
                  array,
-                 fst,
                  containers,
                  bytestring,
                  utf8-string,
@@ -125,7 +124,6 @@ Library
     PGF.SortTop
     PGF.Tree
     PGF.Type
-    PGF.Tokenizer
     PGF.TypeCheck
     PGF.Forest
     PGF.TrieMap
