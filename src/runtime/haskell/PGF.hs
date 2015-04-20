@@ -119,9 +119,6 @@ module PGF(
            -- extra:
            morphoKnown, isInMorpho,
 
-           -- ** Tokenizing
-           mkTokenizer,
-
            -- ** Visualizations
            graphvizAbstractTree,
            graphvizParseTree,
@@ -165,7 +162,6 @@ import PGF.Expr (Tree)
 import PGF.Morphology
 import PGF.Data
 import PGF.Binary()
-import PGF.Tokenizer
 import qualified PGF.Forest as Forest
 import qualified PGF.Parse as Parse
 import PGF.Utilities(replace)
