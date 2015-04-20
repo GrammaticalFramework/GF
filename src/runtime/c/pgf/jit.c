@@ -41,6 +41,19 @@ typedef struct {
 #define JIT_VSTATE JIT_V1
 #define JIT_VCLOS  JIT_V2
 
+#if defined(__MINGW32__)
+#include <windows.h>
+
+static int
+getpagesize()
+{
+  SYSTEM_INFO system_info;
+  GetSystemInfo(&system_info);
+  return system_info.dwPageSize;
+}
+#endif
+
+
 static void
 pgf_jit_finalize_page(GuFinalizer* self)
 {
