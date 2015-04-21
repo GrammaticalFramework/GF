@@ -65207,4 +65207,14 @@ fun zymology_N : N ;
 fun zymosis_N : N ;
 fun zymotic_A : A ;
 
+fun anna_PN : PN ;
+fun baltic_sea_PN : PN ;
+fun beijing_PN : PN ;
+fun european_union_NP : NP ;
+fun lapland_PN : PN ;
+fun north_korea_PN : PN ;
+fun the_hague_PN : PN ;
+fun uk_PN : PN ;
+fun ukraine_PN : PN ;
+fun vaasa_PN : PN ;
 }

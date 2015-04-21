@@ -1,4 +1,4 @@
-concrete DictionaryEng of Dictionary = CatEng ** open MorphoEng, ResEng, ParadigmsEng, IrregEng, (E = ExtraEng), (S = StructuralEng), Prelude in {
+concrete DictionaryEng of Dictionary = CatEng ** open MorphoEng, ResEng, ParadigmsEng, IrregEng, (E = ExtraEng), (S = SyntaxEng), Prelude in {
 
 flags
   coding=utf8 ;
@@ -65517,4 +65517,13 @@ lin zymology_N = mkN "zymology" ;
 lin zymosis_N = mkN "zymosis" ;
 lin zymotic_A = mkA "zymotic" ;
 
+lin anna_PN = mkPN "Anna" ;
+lin baltic_sea_PN = mkPN ("the Baltic Sea") ;
+lin beijing_PN = mkPN "Beijing" ;
+lin european_union_NP = S.mkNP (mkPN "the European Union") ;
+lin lapland_PN = mkPN "Lapland" ;
+lin north_korea_PN = mkPN "North Korea" ;
+lin the_hague_PN = mkPN "The Hague" ;
+lin ukraine_PN = mkPN "Ukraine" ;
+lin vaasa_PN = mkPN "Vaasa" ;
 }
