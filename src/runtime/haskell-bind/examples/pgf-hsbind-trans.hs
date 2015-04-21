@@ -7,6 +7,7 @@ import PGF2
 import PGF.Lexing (lexText')
 
 import Data.Char(isSpace,toLower)
+import Data.List (nub)
 import System.Environment
 import qualified Data.Map as Map
 
@@ -33,14 +34,19 @@ getConcr' pgf lang =
     maybe (fail $ "Concrete syntax not found: "++show lang) return $
     Map.lookup lang (languages pgf)
 
-linearizeAndShow gr mxv (t,p) = [show t]++take mxv (linearizeAll gr t)++[show p]
+linearizeAndShow gr mxv (t,p) = [show t]++take mxv (nub (map unstar (linearizeAll gr t)))++[show p]
+  where
+    unstar s = case s of
+      '*':' ':cs -> cs
+      _ -> s
 
 translates pgf cfrom cto cat (mxt,mxv) s0 = 
-  let s = lextext cfrom s0
+  let s1 = lextext cfrom s0
+      (s,p) = case reverse s1 of c:_ | elem c ".?!" -> (init s1,[c]) ; _ -> (s1,[]) -- separate final punctuation
   in
   case cparse pgf cfrom cat s of
     Left tok -> unlines [s,"Parse error: "++tok]
-    Right ts -> unlines $ take mxt $ map (unlines . linearizeAndShow cto mxv) ts
+    Right ts -> unlines $ (("> "++ s):) $ take mxt $ map ((++p) . unlines . linearizeAndShow cto mxv) ts -- append punctuation
 
 cparse pgf concr cat input = parseWithHeuristics concr cat input (-1) callbacks where
   callbacks = maybe [] cb $ lookup "App" literalCallbacks
