@@ -205,26 +205,6 @@ def parseTester(grammar, language):
 	return None;
     return callback;
 
-def translateWord(grammar, language, tgtlanguage, word):
-    lowerword = word.lower();
-    try:
-	partialExprList = grammar.languages[language].parse(word, cat='Chunk');
-	for expr in partialExprList:
-	    trans = grammar.languages[tgtlanguage].linearize(expr[1]);
-	    if not trans:
-		print expr[1], tgtlanguage;
-	    return gf_utils.gf_postprocessor( trans if trans else ' ' );
-    except pgf.ParseError:
-	morphAnalysis = grammar.languages[language].lookupMorpho(word) + grammar.languages[language].lookupMorpho(lowerword);
-	for morph in morphAnalysis:
-	    if grammar.languages[tgtlanguage].hasLinearization(morph[0]):
-		return gf_utils.gf_postprocessor( grammar.languages[tgtlanguage].linearize( pgf.readExpr(morph[0]) ) );
-    return word;
-
-def translationByLookup(grammar, language, tgtlanguages, sentence):
-    return [(lang, gf_utils.gf_postprocessor("% " + " ".join([translateWord(grammar, language, lang, word) for word in sentence.split()]))) \
-	    for lang in tgtlanguages];
-
 def translateWordsAsChunks(grammar, language, tgtlanguages, word):
     parser = grammar.languages[language].parse;
     linearizersList = dict((lang, grammar.languages[lang].linearize) for lang in tgtlanguages);
@@ -239,7 +219,7 @@ def translateWordsAsChunks(grammar, language, tgtlanguages, word):
 	return [];
     return translations;
 
-def translateWord_(grammar, language, tgtlanguages, word):
+def translateWord(grammar, language, tgtlanguages, word):
     possible_translations = translateWordsAsChunks(grammar, language, tgtlanguages, word);
     if len(possible_translations):
 	return possible_translations;
@@ -257,7 +237,7 @@ def translateWord_(grammar, language, tgtlanguages, word):
 		return [(lang, gf_utils.gf_postprocessor( grammar.languages[lang].linearize( pgf.readExpr(morph[0]) ) )) for lang in tgtlanguages];
     return [(lang, word) for lang in tgtlanguages];
 
-def translationByLookup_(grammar, language, tgtlanguages, sentence):
+def translationByLookup(grammar, language, tgtlanguages, sentence):
     parser = grammar.languages[language].parse;
     linearizersList = dict([(lang, grammar.languages[lang].linearize) for lang in tgtlanguages]);
     queue = [sentence.strip().split()];
@@ -267,7 +247,7 @@ def translationByLookup_(grammar, language, tgtlanguages, sentence):
 	if not len(head):
 	    pass;
 	elif len(head) == 1 and head[0].strip():
-	    for lang, wordchoice in translateWord_(grammar, language, tgtlanguages, head[0]):
+	    for lang, wordchoice in translateWord(grammar, language, tgtlanguages, head[0]):
 		transChunks.setdefault(lang, []).append( gf_utils.postprocessor(wordchoice) );
 	else:
 	    try:
@@ -370,7 +350,7 @@ def translation_pipeline(props):
 	if not len(parsesBlock):
 	    # failed to parse;
 	    # translate using lookup
-	    for tgtlang, translation in translationByLookup_(grammar, sourceLanguage, targetLanguages, absParses[idx][0]):
+	    for tgtlang, translation in translationByLookup(grammar, sourceLanguage, targetLanguages, absParses[idx][0]):
 		if bestK == 1:
 		    addItem(translationBlocks[tgtlang], postprocessor(translation));
 		else:
