@@ -99,8 +99,6 @@ def web_lexer(grammar, lang, sentences):
 	    count = 0;
 	    for analysis in grammar.languages[lang].lookupMorpho(lowertoken):
 		count += 1;
-	    if count:
-		print "replacing %s with %s" %(token, lowertoken);
 	    tokensList[idx] = lowertoken if count else token;
 	for idx, token in enumerate(tokensList):
 	    if token.find('-') == -1:
