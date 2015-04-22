@@ -1,0 +1,167 @@
+~runtime/python/examples/README
+
+(c) Prasanth Kolachina, 22 April 2015
+
+======================
+TRANSLATION PIPELINE
+======================
+
+The module translation_pipeline.py is a Python replica of the 
+translation pipeline used in Wide-coverage Translation demo. 
+The pipeline allows for 
+  1. simulataneous batch translation from one language into multiple languages
+  2. K-best translations
+  3. translate both text files and sgm files. 
+
+The module defines functions for the standard lexer used in the pipeline,
+the callbacks used in robust parsing to partially deal with unknown words
+and proper nouns etc. 
+
+Basic example usage: 
+> python translation_pipeline.py -g TranslateEngFin.pgf -s Eng -t Fin         -i <input-file>     -e <exp-directory>
+> python translation_pipeline.py -g TranslateEngFin.pgf -s Eng -t Fin -K 20   -i <input-file>     -e <exp-directory>
+> python translation_pipeline.py -g Translate11.pgf     -s Eng -t Fin Swe Ger -i <input-file>     -e <exp-directory>
+> python translation_pipeline.py -g TranslateEngFin.pgf -s Eng -t Fin -f sgm  -i <sgm-input-file> -e <exp-directory>
+
+The full list and description of options accepted by the translation_pipeline
+module can be seen using the -h option.
+
+> python translation_pipeline.py -h
+———
+usage: translation_pipeline.py [-h] -g PGFFILE [-s SRCLANG]
+                               [-t [TGTLANGS [TGTLANGS ...]]] [-i INPUT]
+                               [-e EXP_DIRECTORY] [-f {txt,sgm}]
+                               [-p PROPSFILE] [-K BESTK]
+
+Run the GF translation pipeline on standard test-sets
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -g PGFFILE, --pgf PGFFILE
+                        PGF grammar file to run the pipeline
+  -s SRCLANG, --source SRCLANG
+                        Source language of input sentences
+  -t [TGTLANGS [TGTLANGS ...]], --target [TGTLANGS [TGTLANGS ...]]
+                        Target languages to linearize (default is all other
+                        languages)
+  -i INPUT, --input INPUT
+                        input file (default will accept STDIN)
+  -e EXP_DIRECTORY, --exp EXP_DIRECTORY
+                        experiement directory to write translation files
+  -f {txt,sgm}, --format {txt,sgm}
+                        input file format (output files will be written in the
+                        same format)
+  -p PROPSFILE, --props PROPSFILE
+                        properties file for the translation pipeline (specify
+                        the above arguments in a file)
+  -K BESTK              K value for K-best translation
+
+
+======================
+PREREQUISITES
+======================
+In order to use the examples in this directory, the following components
+are required: 
+  1.  GF C runtime (~runtime/c/)
+  2.  Python bindings to the C runtime (~runtime/python/)
+  3.  The path to Python library is added to PYTHONPATH environment variable 
+      (Note: by default, the setuptools installs the bindings to a location
+      available for everyone, so this step is only required if you have
+      done a custom installation of the Python bindings and you know what 
+      you are doing)
+> export PYTHONPATH="$GF/src/runtime/python/build/lib.*:$PYTHONPATH"
+
+
+======================
+WEB GF PARSING
+======================
+NEW!!!
+In it current state, we carry out parsing of large web texts using 
+GF grammars. The same functions described in gf_utils.py are used, but 
+we make it faster using multithreading. The multiprocessing module in
+Python allows for trivial parallelization, where each batch of sentences
+are parsed by different threads in the pool. 
+
+We noticed one thing during these experiments: the GF parser can 
+take an unusually long time for long and ambiguous sentences. Therefore,
+to avoid resource starvation, we use a `timeout' setting to raise a 
+PgfParseError if it takes more than 5 minutes for a single sentence. 
+With this simple trick, we manage to parse large corpora (Europarl 
+texts) in both English and Swedish. Please contact 
+prasanth.kolachina@cse.gu.se 
+if you have any questions about this. 
+
+
+======================
+GENERIC GF UTILITIES
+======================
+
+The module gf_utils.py contains functions to carry out four 
+basic tasks: 
+1. 1-best parsing        (parse)
+2. K-best parsing        (kparse)
+3. 1-best linearization  (linearize)
+4. K-best linearization  (klinearize)
+
+> usage: gf_utils.py [-h] {parse,kparse,linearize,klinearize} ...
+
+Detailed arguments for each function can be found using the "-h" option.
+An exhaustive list of options for all the functions are given below. Options
+marked with (*) are required, the others are optional. 
+
+(*) -g/--pgf <pgf-file>	PGF Grammar file
+(*) -s/--src-lang <lang>	Source language name i.e. code used in GF (for e.g. TranslateEng, TranslateFin). For parsing, the option specifies the language of the input sentences. 
+(*) -t/--tgt-lang <lang>	Target language name. For linearization, the option specifies the language into which they are linearized.
+(*) -K <int>	Prespecified K value for K-best parsing and linearization. 
+-i/--input <filename>	Input file name, either raw text sentences or abstract trees for linearization.
+-o/--output <filename>	Output file name.
+-p/--start-sym <sym>	Start symbol used for parsing
+
+Basic example usage: 
+> python gf_utils.py parse -g TranslateEng.pgf -s TranslateEng -i <input-file> -o <parse-output-file> [-p Phr]
+> python gf_utils.py kparse -g TranslateEng.pgf -s TranslateEng -K 20 -i <input-file> -o <kparse-output-file> [-p Phr]
+> python gf_utils.py linearize -g TranslateFin.pgf -t TranslateFin -i <parse-output-file> -o <output-file>
+> python gf_utils.py klinearize -g TranslateFin.pgf -t TranslateFin -i <kparse-output-file> -o <output-file>
+
+======================
+File I/O formats
+======================
+
+1. One-sentence-per-line
+The input sentences to the parser/kparser are written one sentence 
+per line. This is also the standard format used in the translation
+pipeline. 
+
+2. SGM format
+The translation pipeline accepts SGM format file as both input 
+and output files. The format is specifically used by automatic
+evaluation metrics used to measure quality of MT systems. The format
+is primarily used in by the NIST evaluation and the WMT Shared
+Task evaluations.
+
+3. Parser output format
+The parser writes four columns, seperated by the <tab>-character
+for each sentence in a single line. The sentence index, time taken
+by the parser, the tree probability value and the abstract syntax tree.
+
+4. K-best parser output format
+The k-best parser uses a representation that has come to be called 
+CJ (Charniak-Johnson) format in the parsing community. 
+  a. The output consists of parsed blocks for each sentence. Two blocks
+  are seperated by an empty line. 
+  b. The first line in the block contains two numbers: the number 
+  of parses in that block, and a identifier for that sentence.
+  c. Each subsequent pair of lines contains the log probability of the
+  abstract tree in one line followed by the actual parse tree in the 
+  next line. 
+
+5. K-best translations output format
+The k-best linearizer and k-best translation use the same format as
+Moses and other SMT toolkits to write K-best translation lists. 
+  a. The output consists of translation blocks for each sentence.
+  b. Each block consists of several translations, one per each line.
+  c. Each translation (or line) consists of four columns seperated by
+  '|||' string. The first column contains a sentence identifier, 
+  the second column is the actual translation, followed by 
+  word-alignment information between the input sentence and the
+  translation and the scores from statistical models used in parsing.
