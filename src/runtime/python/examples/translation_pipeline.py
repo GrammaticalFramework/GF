@@ -91,7 +91,7 @@ def pipeline_lexer(sentence):
 
 def web_lexer(grammar, lang, sentences):
     for instance in sentences:
-	tokensList = re.split('\s+?', instance);
+	tokensList = re.split('\s+?', instance.strip());
 	for idx, token in enumerate(tokensList):
 	    if not token[0].isupper():
 		continue;
