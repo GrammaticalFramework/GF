@@ -152,8 +152,9 @@ def getKBestParses(grammar, language, K, callbacks=[], serializable=False, senti
 def pgf_parse(args):
     grammar  = pgf.readPGF(args.pgfgrammar);
     import translation_pipeline;
-    
-    inputSet = translation_pipeline.web_lexer(grammar, args.srclang, args.inputstream);
+
+    preprocessor = lexer();
+    inputSet = translation_pipeline.web_lexer(grammar, args.srclang, preprocessor(args.inputstream) );
     outputPrinter = lambda X: "%f\t%s" %(X[0], str(X[1])); #operator.itemgetter(1);
     callbacks = [('PN', translation_pipeline.parseNames(grammar, args.srclang)), ('Symb', translation_pipeline.parseUnknown(grammar, args.srclang))];
     parser = getKBestParses(grammar, args.srclang, 1, callbacks);
@@ -168,7 +169,8 @@ def pgf_kparse(args):
     grammar = pgf.readPGF(args.pgfgrammar);
     import translation_pipeline;
     
-    inputSet = translation_pipeline.web_lexer(grammar, args.srclang, args.inputstream);
+    preprocessor = lexer();
+    inputSet = translation_pipeline.web_lexer(grammar, args.srclang, preprocessor(args.inputstream) );
     outputPrinter = printJohnsonRerankerFormat;
     callbacks = [('PN', translation_pipeline.parseNames(grammar, args.srclang)), ('Symb', translation_pipeline.parseUnknown(grammar, args.srclang))];
     parser = getKBestParses(grammar, args.srclang, args.K, callbacks=callbacks);
