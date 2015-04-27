@@ -986,7 +986,7 @@ static PyTypeObject pgf_TypeType = {
 
 typedef struct IterObject {
     PyObject_HEAD
-    PGFObject* grammar;
+    PyObject* source;
     PyObject* container;
     GuPool* pool;
     int max_count;
@@ -1037,7 +1037,7 @@ Iter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
     IterObject* self = (IterObject *)type->tp_alloc(type, 0);
     if (self != NULL) {
-		self->grammar = NULL;
+		self->source = NULL;
 		self->container = NULL;
 		self->pool = NULL;
 		self->max_count = -1;
@@ -1054,7 +1054,7 @@ Iter_dealloc(IterObject* self)
 	if (self->pool != NULL)
 		gu_pool_free(self->pool);
 
-	Py_XDECREF(self->grammar);
+	Py_XDECREF(self->source);
 	
 	Py_XDECREF(self->container);
 
@@ -1340,13 +1340,13 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 		return NULL;
 	}
 
-	pyres->grammar = self->grammar;
-	Py_XINCREF(pyres->grammar);
+	pyres->source = (PyObject*) self->grammar;
+	Py_XINCREF(pyres->source);
 
 	GuPool* out_pool = gu_new_pool();
 
 	PyObject* py_pool = PyPool_New(out_pool);
-	pyres->container = PyTuple_Pack(2, pyres->grammar, py_pool);
+	pyres->container = PyTuple_Pack(2, pyres->source, py_pool);
 	Py_DECREF(py_pool);
 
 	pyres->pool      = gu_new_pool();
@@ -1404,8 +1404,8 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 		return NULL;
 	}
 
-	pyres->grammar = self->grammar;
-	Py_XINCREF(pyres->grammar);
+	pyres->source = (PyObject*) self->grammar;
+	Py_XINCREF(pyres->source);
 	
 	pyres->container = NULL;
 
@@ -1504,88 +1504,95 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 static PyObject*
 Iter_fetch_linearization(IterObject* self)
 {
-restart:;
-    GuStringBuf* sbuf = gu_string_buf(self->pool);
-    GuOut* out = gu_string_buf_out(sbuf);
-    GuExn* err = gu_new_exn(self->pool);
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_new_exn(tmp_pool);
 
-    PgfCncTree ctree = gu_next(self->res, PgfCncTree, self->pool);
-    if (gu_variant_is_null(ctree)) {
-	return NULL;
+restart:;
+	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuOut* out = gu_string_buf_out(sbuf);
+	
+
+	PgfCncTree ctree = gu_next(self->res, PgfCncTree, tmp_pool);
+	if (gu_variant_is_null(ctree)) {
+		gu_pool_free(tmp_pool);
+		return NULL;
     }
-    pgf_lzr_wrap_linref(ctree, self->pool); // to reduce tuple of strings to a single string;
-    
+	ctree = pgf_lzr_wrap_linref(ctree, tmp_pool); // to reduce tuple of strings to a single string;
+
     // Linearize the concrete tree as a simple sequence of strings.
-    ConcrObject* pyconcr = (ConcrObject*)self->container;
-    pgf_lzr_linearize_simple(pyconcr->concr, ctree, 0, out, err, self->pool);
+	ConcrObject* pyconcr = (ConcrObject*)self->container;
+	pgf_lzr_linearize_simple(pyconcr->concr, ctree, 0, out, err, tmp_pool);
 
     if (!gu_ok(err)) {
-	if (gu_exn_caught(err, PgfLinNonExist)) {
-	    // encountered nonExist. Unfortunately there
-	    // might be some output printed already. The
-	    // right solution should be to use GuStringBuf.
-	    gu_exn_clear(err);
-	    goto restart;
-	}
-	else if (gu_exn_caught(err, PgfExn)) {
-	    GuString msg = (GuString) gu_exn_caught_data(err);
-	    PyErr_SetString(PGFError, msg);
-	    return NULL;
-	} else {
-	    PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
-	    return NULL;
-	}
+		if (gu_exn_caught(err, PgfLinNonExist)) {
+			// encountered nonExist. Unfortunately there
+			// might be some output printed already. The
+			// right solution should be to use GuStringBuf.
+			gu_exn_clear(err);
+			goto restart;
+		}
+		else if (gu_exn_caught(err, PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+			gu_pool_free(tmp_pool);
+			return NULL;
+		} else {
+			PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+			gu_pool_free(tmp_pool);
+			return NULL;
+		}
     }
-    GuString str = gu_string_buf_freeze(sbuf, self->pool);
+
+    GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
     PyObject* pystr = PyString_FromString(str);
+    gu_pool_free(tmp_pool);
     return pystr;
 }
 
 static PyObject*
 Concr_linearizeAll(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
-    static char *kwlist[] = {"expression", "n", NULL};
-    ExprObject* pyexpr = NULL;
-    int max_count = -1;
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "O!|i", kwlist,
-                                     &pgf_ExprType, &pyexpr, &max_count))
-	return NULL;
+	static char *kwlist[] = {"expression", "n", NULL};
+	ExprObject* pyexpr = NULL;
+	int max_count = -1;
+	if (!PyArg_ParseTupleAndKeywords(args, keywds, "O!|i", kwlist,
+	                                 &pgf_ExprType, &pyexpr, &max_count))
+		return NULL;
 
-    GuPool* pool = gu_new_pool();
-    GuExn* err = gu_exn(pool);
-    
-    GuEnum* cts = pgf_lzr_concretize(self->concr, pyexpr->expr, err, pool);
-    if (!gu_ok(err)) {
-	if (gu_exn_caught(err, PgfExn)) {
-	    GuString msg = (GuString) gu_exn_caught_data(err);
-	    PyErr_SetString(PGFError, msg);
-	    gu_pool_free(pool);
-	    return NULL;
-	} else {
-	    PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
-	    gu_pool_free(pool);
-	    return NULL;
+	GuPool* pool = gu_new_pool();
+	
+	GuExn* err = gu_exn(pool);
+	GuEnum* cts = pgf_lzr_concretize(self->concr, pyexpr->expr, err, pool);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err, PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+			gu_pool_free(pool);
+			return NULL;
+		} else {
+			PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+			gu_pool_free(pool);
+			return NULL;
+		}
 	}
-    }
 
-    IterObject* pyres = (IterObject*) pgf_IterType.tp_alloc(&pgf_IterType, 0);
-    if (pyres == NULL) {
-	gu_pool_free(pool);
-	return NULL;
-    }
-    
-    pyres->grammar = self->grammar;
-    Py_XINCREF(pyres->grammar);
-    pyres->container = (PyObject*)self;
-    Py_INCREF(pyres->container);
-    pyres->pool = pool;
-    pyres->max_count = max_count;
-    pyres->counter   = 0;
-    pyres->fetch     = Iter_fetch_linearization;
-    pyres->res = cts;
+	IterObject* pyres = (IterObject*) pgf_IterType.tp_alloc(&pgf_IterType, 0);
+	if (pyres == NULL) {
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	pyres->source = (PyObject*)pyexpr;
+	Py_INCREF(pyres->source);
+	pyres->container = (PyObject*)self;
+	Py_INCREF(pyres->container);
+	pyres->pool = pool;
+	pyres->max_count = max_count;
+	pyres->counter   = 0;
+	pyres->fetch     = Iter_fetch_linearization;
+	pyres->res       = cts;
 
     return (PyObject*)pyres;
-
 }
 
 static PyObject*
@@ -2042,8 +2049,8 @@ Concr_fullFormLexicon(ConcrObject* self, PyObject *args)
 	if (pyres == NULL)
 		return NULL;
 
-	pyres->grammar = self->grammar;
-	Py_XINCREF(pyres->grammar);
+	pyres->source = (PyObject*) self->grammar;
+	Py_XINCREF(pyres->source);
 
 	pyres->container = NULL;
 	pyres->pool      = gu_new_pool();
@@ -2474,7 +2481,7 @@ PGF_generateAll(PGFObject* self, PyObject *args, PyObject *keywds)
 		return NULL;
 	}
 
-	pyres->grammar = self;
+	pyres->source = (PyObject*) self;
 	Py_INCREF(self);
 
 	pyres->pool = gu_new_pool();
