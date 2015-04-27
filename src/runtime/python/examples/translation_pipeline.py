@@ -357,7 +357,7 @@ def translation_pipeline(props):
 	else:
 	    bestTranslationIdx = 0;
 	    for tgtlang in targetLanguages:
-		translationBuffer[tgtlang] = gf_utils.getKLinearizations(grammar, tgtlang, [parsesBlock]).next();
+		translationBuffer[tgtlang] = gf_utils.getKLinearizations(grammar, tgtlang, [parsesBlock], K=bestK).next();
 		if bestK == 1:
 		    for tidx, translation in enumerate(translationBuffer[tgtlang]):
 			if postprocessor(translation[1]).strip():
