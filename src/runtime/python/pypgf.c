@@ -1031,6 +1031,7 @@ Iter_fetch_token(IterObject* self)
 	return res;
 }
 
+
 static IterObject*
 Iter_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
@@ -1214,7 +1215,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self,
 		                      lin_idx, sentence, *poffset);
 	if (result == NULL)
 		return NULL;
-
+	
 	if (result == Py_None) {
 		Py_DECREF(result);
 		return NULL;
@@ -1224,7 +1225,8 @@ pypgf_literal_callback_match(PgfLiteralCallback* self,
 
 	ExprObject* pyexpr;
 	if (!PyArg_ParseTuple(result, "Ofi", &pyexpr, &ep->prob, poffset))
-        return NULL;
+	    return NULL;
+
 	ep->expr = pyexpr->expr;
 
 	{
@@ -1306,7 +1308,7 @@ pypgf_new_callbacks_map(PgfConcr* concr, PyObject *py_callbacks,
 		callback->fin.fn = pypgf_literal_callback_fin;
 
 		Py_XINCREF(callback->pycallback);
-
+		
 		gu_pool_finally(pool, &callback->fin);
 
 		pgf_callbacks_map_add_literal(concr, callbacks,
@@ -1476,14 +1478,18 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 	
 	pgf_linearize(self->concr, pyexpr->expr, out, err);
 	if (!gu_ok(err)) {
-		if (gu_exn_caught(err, PgfLinNonExist))
+		if (gu_exn_caught(err, PgfLinNonExist)) {
+			gu_pool_free(tmp_pool);
 			Py_RETURN_NONE;
+		}
 		else if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
+			gu_pool_free(tmp_pool);
 			return NULL;
 		} else {
 			PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+			gu_pool_free(tmp_pool);
 			return NULL;
 		}
 	}
@@ -1493,6 +1499,93 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 	
 	gu_pool_free(tmp_pool);
 	return pystr;
+}
+
+static PyObject*
+Iter_fetch_linearization(IterObject* self)
+{
+restart:;
+    GuStringBuf* sbuf = gu_string_buf(self->pool);
+    GuOut* out = gu_string_buf_out(sbuf);
+    GuExn* err = gu_new_exn(self->pool);
+
+    PgfCncTree ctree = gu_next(self->res, PgfCncTree, self->pool);
+    if (gu_variant_is_null(ctree)) {
+	return NULL;
+    }
+    pgf_lzr_wrap_linref(ctree, self->pool); // to reduce tuple of strings to a single string;
+    
+    // Linearize the concrete tree as a simple sequence of strings.
+    ConcrObject* pyconcr = (ConcrObject*)self->container;
+    pgf_lzr_linearize_simple(pyconcr->concr, ctree, 0, out, err, self->pool);
+
+    if (!gu_ok(err)) {
+	if (gu_exn_caught(err, PgfLinNonExist)) {
+	    // encountered nonExist. Unfortunately there
+	    // might be some output printed already. The
+	    // right solution should be to use GuStringBuf.
+	    gu_exn_clear(err);
+	    goto restart;
+	}
+	else if (gu_exn_caught(err, PgfExn)) {
+	    GuString msg = (GuString) gu_exn_caught_data(err);
+	    PyErr_SetString(PGFError, msg);
+	    return NULL;
+	} else {
+	    PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+	    return NULL;
+	}
+    }
+    GuString str = gu_string_buf_freeze(sbuf, self->pool);
+    PyObject* pystr = PyString_FromString(str);
+    return pystr;
+}
+
+static PyObject*
+Concr_linearizeAll(ConcrObject* self, PyObject *args, PyObject *keywds)
+{
+    static char *kwlist[] = {"expression", "n", NULL};
+    ExprObject* pyexpr = NULL;
+    int max_count = -1;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "O!|i", kwlist,
+                                     &pgf_ExprType, &pyexpr, &max_count))
+	return NULL;
+
+    GuPool* pool = gu_new_pool();
+    GuExn* err = gu_exn(pool);
+    
+    GuEnum* cts = pgf_lzr_concretize(self->concr, pyexpr->expr, err, pool);
+    if (!gu_ok(err)) {
+	if (gu_exn_caught(err, PgfExn)) {
+	    GuString msg = (GuString) gu_exn_caught_data(err);
+	    PyErr_SetString(PGFError, msg);
+	    gu_pool_free(pool);
+	    return NULL;
+	} else {
+	    PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+	    gu_pool_free(pool);
+	    return NULL;
+	}
+    }
+
+    IterObject* pyres = (IterObject*) pgf_IterType.tp_alloc(&pgf_IterType, 0);
+    if (pyres == NULL) {
+	gu_pool_free(pool);
+	return NULL;
+    }
+    
+    pyres->grammar = self->grammar;
+    Py_XINCREF(pyres->grammar);
+    pyres->container = (PyObject*)self;
+    Py_INCREF(pyres->container);
+    pyres->pool = pool;
+    pyres->max_count = max_count;
+    pyres->counter   = 0;
+    pyres->fetch     = Iter_fetch_linearization;
+    pyres->res = cts;
+
+    return (PyObject*)pyres;
+
 }
 
 static PyObject*
@@ -2053,6 +2146,9 @@ static PyMethodDef Concr_methods[] = {
     },
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a string"
+    },
+    {"linearizeAll", (PyCFunction)Concr_linearizeAll, METH_VARARGS | METH_KEYWORDS,
+     "Takes an abstract tree and linearizes with all variants"
     },
     {"tabularLinearize", (PyCFunction)Concr_tabularLinearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a table containing all fields"
