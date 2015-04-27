@@ -466,22 +466,22 @@ linearizeAll lang e = unsafePerformIO $
        then throwExn exn pl
        else collect cts exn pl
   where
-    collect cts exn pl = do
-      ctree <- alloca $ \ptr -> do gu_enum_next cts ptr pl
+    collect cts exn pl = withGuPool $ \tmpPl -> do
+      ctree <- alloca $ \ptr -> do gu_enum_next cts ptr tmpPl
                                    peek ptr
       if ctree == nullPtr
         then do gu_pool_free pl
                 return []
-        else do (sb,out) <- newOut pl
-                ctree <- pgf_lzr_wrap_linref ctree pl
-                pgf_lzr_linearize_simple (concr lang) ctree 0 out exn pl
+        else do (sb,out) <- newOut tmpPl
+                ctree <- pgf_lzr_wrap_linref ctree tmpPl
+                pgf_lzr_linearize_simple (concr lang) ctree 0 out exn tmpPl
                 failed <- gu_exn_is_raised exn
                 if failed
                   then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
                           if is_nonexist
                             then collect cts exn pl
                             else throwExn exn pl
-                  else do lin <- gu_string_buf_freeze sb pl
+                  else do lin <- gu_string_buf_freeze sb tmpPl
                           s <- peekCString lin
                           ss <- unsafeInterleaveIO (collect cts exn pl)
                           return (s:ss)
