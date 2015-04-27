@@ -93,7 +93,7 @@ Expr_init(ExprObject *self, PyObject *args, PyObject *kwds)
 			return -1;
 		return Expr_initApp(self, fname, list);
 	} else {
-		PyErr_Format(PyExc_TypeError, "function takes 0, 1 or 2 arguments (%d given)", tuple_size);
+		PyErr_Format(PyExc_TypeError, "function takes 0, 1 or 2 arguments (%d given)", (int) tuple_size);
 		return -1;
 	}
 	
