@@ -995,7 +995,7 @@ typedef struct IterObject {
     PyObject* (*fetch)(struct IterObject* self);
 } IterObject;
 
-PyObject*
+static PyObject*
 Iter_fetch_expr(IterObject* self)
 {
 	PgfExprProb* ep = gu_next(self->res, PgfExprProb*, self->pool);
@@ -1016,7 +1016,7 @@ Iter_fetch_expr(IterObject* self)
 	return res;
 }
 
-PyObject*
+static PyObject*
 Iter_fetch_token(IterObject* self)
 {
 	PgfTokenProb* tp = gu_next(self->res, PgfTokenProb*, self->pool);
