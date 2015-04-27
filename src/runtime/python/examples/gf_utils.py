@@ -122,7 +122,7 @@ def getKLinearizations(grammar, tgtlanguage, abstractParsesList):
 	    kBestTrans.append( ((parseprob,), postprocessor( generator(parse) )) );
 	yield kBestTrans;
 
-def getKBestParses(grammar, language, K, callbacks=[], serializable=False, sentid=count(1)):
+def getKBestParses(grammar, language, K, callbacks=[], serializable=False, sentid=count(1), max_length=50):
     parser = grammar.languages[language].parse;
     def worker(sentence):
 	sentence = sentence.strip();
@@ -130,6 +130,10 @@ def getKBestParses(grammar, language, K, callbacks=[], serializable=False, senti
 	tstart = time.time();
 	kBestParses = [];
 	parseScores = {};
+	if len(sentence.split()) > max_length:
+	    tend, err = time.time(), "Sentence too long (%d tokens). Might potentially run out of memory" %(len(sentence.split()));
+	    print >>sys.stderr, '%d\t%.4f\t%s' %(curid, tend-tstart, err);
+	    return tend-tstart, kBestParses; # temporary hack to make sure parser does not get killed for very long sentences;
 	try:
 	    for parseidx, parse in enumerate( parser(sentence, heuristics=0, callbacks=callbacks) ):
 		parseScores[parse[0]] = True;
