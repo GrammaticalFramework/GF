@@ -113,13 +113,13 @@ def printMosesNbestFormat(hypothesisList, sentid=count(1)):
 	mosesRepr.append("%d ||| %s ||| NULL ||| %s" %(sid, hypStr, ' '.join(['%.6f'%score for score in hypScores])));
     return '\n'.join(mosesRepr);
 
-def getKLinearizations(grammar, tgtlanguage, abstractParsesList):
-    generator = grammar.languages[tgtlanguage].linearize;
+def getKLinearizations(grammar, tgtlanguage, abstractParsesList, K=10):
+    generator = grammar.languages[tgtlanguage].linearizeAll;
     for parsesBlock in abstractParsesList:
 	kBestTrans = [];
 	for parseprob, parse in parsesBlock:
-	    #print str(parse);
-	    kBestTrans.append( ((parseprob,), postprocessor( generator(parse) )) );
+	    for linstring in generator(parse, n=K):
+		kBestTrans.append( ((parseprob,), postprocessor(linstring)) );
 	yield kBestTrans;
 
 def getKBestParses(grammar, language, K, callbacks=[], serializable=False, sentid=count(1), max_length=50):
@@ -213,7 +213,7 @@ def pgf_klinearize(args):
     sentIdsList = imap(itemgetter(0), inputSet);
     parsesBlocks = map(itemgetter(1), inputSet);
 
-    for transBlock in getKLinearizations(grammar, args.tgtlang, parsesBlocks):
+    for transBlock in getKLinearizations(grammar, args.tgtlang, parsesBlocks, args.K):
 	strTrans = str(outputPrinter(transBlock, sentIdsList));
 	if strTrans:
 	    print >>args.outputstream, strTrans;
