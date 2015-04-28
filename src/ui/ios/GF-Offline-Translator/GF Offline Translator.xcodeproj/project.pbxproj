@@ -10,11 +10,14 @@
 		8B13021503B4FFDE467D3DA9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB9B7B89581859D72BD5CEC /* libPods.a */; };
 		CC57C23E1AEE23D000051DE4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C23D1AEE23D000051DE4 /* main.m */; };
 		CC57C2411AEE23D000051DE4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C2401AEE23D000051DE4 /* AppDelegate.m */; };
-		CC57C2441AEE23D000051DE4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C2431AEE23D000051DE4 /* ViewController.m */; };
 		CC57C2471AEE23D000051DE4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC57C2451AEE23D000051DE4 /* Main.storyboard */; };
 		CC57C2491AEE23D000051DE4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC57C2481AEE23D000051DE4 /* Images.xcassets */; };
 		CC57C24C1AEE23D000051DE4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC57C24A1AEE23D000051DE4 /* LaunchScreen.xib */; };
 		CC57C2581AEE23D000051DE4 /* GF_Offline_TranslatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C2571AEE23D000051DE4 /* GF_Offline_TranslatorTests.m */; };
+		CC619ED91AEE5793003A6EC7 /* TranslationTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC619ED81AEE5793003A6EC7 /* TranslationTextViewController.m */; };
+		CC619EDC1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */; };
+		CC619EDF1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */; };
+		CC619EE41AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */; };
 		CC8E007C1AEE32B20040920E /* assert.h in Sources */ = {isa = PBXBuildFile; fileRef = CC8E00191AEE32810040920E /* assert.h */; };
 		CC8E007D1AEE32B20040920E /* bits.c in Sources */ = {isa = PBXBuildFile; fileRef = CC8E001A1AEE32810040920E /* bits.c */; };
 		CC8E007E1AEE32B20040920E /* bits.h in Sources */ = {isa = PBXBuildFile; fileRef = CC8E001B1AEE32810040920E /* bits.h */; };
@@ -122,6 +125,13 @@
 		CC8E010D1AEE38600040920E /* AppIta.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC8E01001AEE38600040920E /* AppIta.pgf_c */; };
 		CC8E010E1AEE38600040920E /* AppSpa.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC8E01011AEE38600040920E /* AppSpa.pgf_c */; };
 		CC8E010F1AEE38600040920E /* AppSwe.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC8E01021AEE38600040920E /* AppSwe.pgf_c */; };
+		CC98AF0F1AEE72D800DFA116 /* LanguagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */; };
+		CC98AF121AEE76D100DFA116 /* ArrowsButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF111AEE76D100DFA116 /* ArrowsButton.m */; };
+		CC98AF181AEE78E800DFA116 /* StyleKitGF.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF171AEE78E800DFA116 /* StyleKitGF.m */; };
+		CC98AF1B1AEF71B300DFA116 /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1A1AEF71B300DFA116 /* Language.m */; };
+		CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1E1AEF772200DFA116 /* Grammar.m */; };
+		CC98AF221AEF773500DFA116 /* Translator.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF211AEF773500DFA116 /* Translator.m */; };
+		CC98AF281AEFB4CF00DFA116 /* MenuViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,14 +153,18 @@
 		CC57C23D1AEE23D000051DE4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CC57C23F1AEE23D000051DE4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CC57C2401AEE23D000051DE4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		CC57C2421AEE23D000051DE4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		CC57C2431AEE23D000051DE4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		CC57C2461AEE23D000051DE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CC57C2481AEE23D000051DE4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		CC57C24B1AEE23D000051DE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		CC57C2511AEE23D000051DE4 /* GF Offline TranslatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GF Offline TranslatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC57C2561AEE23D000051DE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC57C2571AEE23D000051DE4 /* GF_Offline_TranslatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GF_Offline_TranslatorTests.m; sourceTree = "<group>"; };
+		CC619ED71AEE5793003A6EC7 /* TranslationTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslationTextViewController.h; sourceTree = "<group>"; };
+		CC619ED81AEE5793003A6EC7 /* TranslationTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TranslationTextViewController.m; sourceTree = "<group>"; };
+		CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationInputTableViewCell.xib; sourceTree = "<group>"; };
+		CC619EDD1AEE59F8003A6EC7 /* TranslationTextTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslationTextTableViewCell.h; sourceTree = "<group>"; };
+		CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TranslationTextTableViewCell.m; sourceTree = "<group>"; };
+		CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationOutputTableViewCell.xib; sourceTree = "<group>"; };
 		CC8E00191AEE32810040920E /* assert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = assert.h; sourceTree = "<group>"; };
 		CC8E001A1AEE32810040920E /* bits.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bits.c; sourceTree = "<group>"; };
 		CC8E001B1AEE32810040920E /* bits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
@@ -258,6 +272,20 @@
 		CC8E01001AEE38600040920E /* AppIta.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppIta.pgf_c; sourceTree = "<group>"; };
 		CC8E01011AEE38600040920E /* AppSpa.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppSpa.pgf_c; sourceTree = "<group>"; };
 		CC8E01021AEE38600040920E /* AppSwe.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppSwe.pgf_c; sourceTree = "<group>"; };
+		CC98AF0D1AEE72D800DFA116 /* LanguagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanguagesViewController.h; sourceTree = "<group>"; };
+		CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanguagesViewController.m; sourceTree = "<group>"; };
+		CC98AF101AEE76D100DFA116 /* ArrowsButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrowsButton.h; sourceTree = "<group>"; };
+		CC98AF111AEE76D100DFA116 /* ArrowsButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrowsButton.m; sourceTree = "<group>"; };
+		CC98AF161AEE78E800DFA116 /* StyleKitGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleKitGF.h; sourceTree = "<group>"; };
+		CC98AF171AEE78E800DFA116 /* StyleKitGF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleKitGF.m; sourceTree = "<group>"; };
+		CC98AF191AEF71B300DFA116 /* Language.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Language.h; sourceTree = "<group>"; };
+		CC98AF1A1AEF71B300DFA116 /* Language.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Language.m; sourceTree = "<group>"; };
+		CC98AF1D1AEF772200DFA116 /* Grammar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grammar.h; sourceTree = "<group>"; };
+		CC98AF1E1AEF772200DFA116 /* Grammar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Grammar.m; sourceTree = "<group>"; };
+		CC98AF201AEF773500DFA116 /* Translator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Translator.h; sourceTree = "<group>"; };
+		CC98AF211AEF773500DFA116 /* Translator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translator.m; sourceTree = "<group>"; };
+		CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewItem.h; sourceTree = "<group>"; };
+		CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,14 +338,10 @@
 		CC57C23A1AEE23D000051DE4 /* GF Offline Translator */ = {
 			isa = PBXGroup;
 			children = (
-				CC8E00181AEE32810040920E /* gu */,
-				CC8E003F1AEE32810040920E /* pgf */,
-				CC8E00F51AEE38600040920E /* grammars */,
-				CC57C23F1AEE23D000051DE4 /* AppDelegate.h */,
-				CC57C2401AEE23D000051DE4 /* AppDelegate.m */,
-				CC57C2421AEE23D000051DE4 /* ViewController.h */,
-				CC57C2431AEE23D000051DE4 /* ViewController.m */,
-				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
+				CC619EDA1AEE589D003A6EC7 /* Grammatical Framework */,
+				CC98AF1C1AEF71BF00DFA116 /* Model */,
+				CC619EE51AEE6A1D003A6EC7 /* Views */,
+				CC98AF0C1AEE72A200DFA116 /* Controllers */,
 				CC57C2481AEE23D000051DE4 /* Images.xcassets */,
 				CC57C24A1AEE23D000051DE4 /* LaunchScreen.xib */,
 				CC57C23B1AEE23D000051DE4 /* Supporting Files */,
@@ -328,6 +352,8 @@
 		CC57C23B1AEE23D000051DE4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CC57C23F1AEE23D000051DE4 /* AppDelegate.h */,
+				CC57C2401AEE23D000051DE4 /* AppDelegate.m */,
 				CC57C23C1AEE23D000051DE4 /* Info.plist */,
 				CC57C23D1AEE23D000051DE4 /* main.m */,
 			);
@@ -349,6 +375,34 @@
 				CC57C2561AEE23D000051DE4 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CC619EDA1AEE589D003A6EC7 /* Grammatical Framework */ = {
+			isa = PBXGroup;
+			children = (
+				CC8E00181AEE32810040920E /* gu */,
+				CC8E003F1AEE32810040920E /* pgf */,
+				CC8E00F51AEE38600040920E /* grammars */,
+			);
+			name = "Grammatical Framework";
+			sourceTree = "<group>";
+		};
+		CC619EE51AEE6A1D003A6EC7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CC98AF161AEE78E800DFA116 /* StyleKitGF.h */,
+				CC98AF171AEE78E800DFA116 /* StyleKitGF.m */,
+				CC619EDD1AEE59F8003A6EC7 /* TranslationTextTableViewCell.h */,
+				CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */,
+				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
+				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
+				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
+				CC98AF101AEE76D100DFA116 /* ArrowsButton.h */,
+				CC98AF111AEE76D100DFA116 /* ArrowsButton.m */,
+				CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */,
+				CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		CC8E00181AEE32810040920E /* gu */ = {
@@ -521,6 +575,30 @@
 			path = grammars;
 			sourceTree = "<group>";
 		};
+		CC98AF0C1AEE72A200DFA116 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CC619ED71AEE5793003A6EC7 /* TranslationTextViewController.h */,
+				CC619ED81AEE5793003A6EC7 /* TranslationTextViewController.m */,
+				CC98AF0D1AEE72D800DFA116 /* LanguagesViewController.h */,
+				CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		CC98AF1C1AEF71BF00DFA116 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CC98AF191AEF71B300DFA116 /* Language.h */,
+				CC98AF1A1AEF71B300DFA116 /* Language.m */,
+				CC98AF1D1AEF772200DFA116 /* Grammar.h */,
+				CC98AF1E1AEF772200DFA116 /* Grammar.m */,
+				CC98AF201AEF773500DFA116 /* Translator.h */,
+				CC98AF211AEF773500DFA116 /* Translator.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		DBEB5864D0802AB27690957F /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -616,11 +694,13 @@
 				CC8E01091AEE38600040920E /* AppFin.pgf_c in Resources */,
 				CC8E010C1AEE38600040920E /* AppHin.pgf_c in Resources */,
 				CC57C24C1AEE23D000051DE4 /* LaunchScreen.xib in Resources */,
+				CC619EE41AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib in Resources */,
 				CC8E01041AEE38600040920E /* AppBul.pgf_c in Resources */,
 				CC8E01061AEE38600040920E /* AppChi.pgf_c in Resources */,
 				CC8E010D1AEE38600040920E /* AppIta.pgf_c in Resources */,
 				CC57C2491AEE23D000051DE4 /* Images.xcassets in Resources */,
 				CC8E01051AEE38600040920E /* AppCat.pgf_c in Resources */,
+				CC619EDC1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib in Resources */,
 				CC8E010F1AEE38600040920E /* AppSwe.pgf_c in Resources */,
 				CC8E01031AEE38600040920E /* App.pgf in Resources */,
 				CC8E010B1AEE38600040920E /* AppGer.pgf_c in Resources */,
@@ -689,6 +769,7 @@
 				CC8E00AA1AEE32C40040920E /* graphviz.h in Sources */,
 				CC8E00AB1AEE32C40040920E /* hopu.c in Sources */,
 				CC8E00AC1AEE32C40040920E /* hopu.h in Sources */,
+				CC98AF121AEE76D100DFA116 /* ArrowsButton.m in Sources */,
 				CC8E00AD1AEE32C40040920E /* jit.c in Sources */,
 				CC8E00AE1AEE32C40040920E /* asm.h in Sources */,
 				CC8E00AF1AEE32C40040920E /* core.h in Sources */,
@@ -702,14 +783,19 @@
 				CC8E00B71AEE32C40040920E /* funcs-common.h in Sources */,
 				CC8E00B81AEE32C40040920E /* asm-32.h in Sources */,
 				CC8E00B91AEE32C40040920E /* asm-64.h in Sources */,
+				CC98AF281AEFB4CF00DFA116 /* MenuViewItem.m in Sources */,
 				CC8E00BA1AEE32C40040920E /* asm.h in Sources */,
 				CC8E00BB1AEE32C40040920E /* core-32.h in Sources */,
+				CC98AF1B1AEF71B300DFA116 /* Language.m in Sources */,
 				CC8E00BC1AEE32C40040920E /* core-64.h in Sources */,
 				CC8E00BD1AEE32C40040920E /* core.h in Sources */,
 				CC8E00BE1AEE32C40040920E /* fp-32.h in Sources */,
 				CC8E00BF1AEE32C40040920E /* fp-64.h in Sources */,
 				CC8E00C01AEE32C40040920E /* fp.h in Sources */,
+				CC98AF221AEF773500DFA116 /* Translator.m in Sources */,
 				CC8E00C11AEE32C40040920E /* funcs.h in Sources */,
+				CC98AF0F1AEE72D800DFA116 /* LanguagesViewController.m in Sources */,
+				CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */,
 				CC8E00C21AEE32C40040920E /* asm.h in Sources */,
 				CC8E00C31AEE32C40040920E /* core.h in Sources */,
 				CC8E00C41AEE32C40040920E /* fp.h in Sources */,
@@ -723,6 +809,7 @@
 				CC8E00CC1AEE32C40040920E /* linearizer.h in Sources */,
 				CC8E00CD1AEE32C40040920E /* literals.c in Sources */,
 				CC8E00CE1AEE32C40040920E /* literals.h in Sources */,
+				CC619ED91AEE5793003A6EC7 /* TranslationTextViewController.m in Sources */,
 				CC8E00CF1AEE32C40040920E /* parser.c in Sources */,
 				CC8E00D01AEE32C40040920E /* parseval.c in Sources */,
 				CC8E00D11AEE32C40040920E /* pgf.c in Sources */,
@@ -743,6 +830,7 @@
 				CC8E00831AEE32B20040920E /* enum.c in Sources */,
 				CC8E00841AEE32B20040920E /* enum.h in Sources */,
 				CC8E00851AEE32B20040920E /* exn.c in Sources */,
+				CC619EDF1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m in Sources */,
 				CC8E00861AEE32B20040920E /* exn.h in Sources */,
 				CC8E00871AEE32B20040920E /* file.c in Sources */,
 				CC8E00881AEE32B20040920E /* file.h in Sources */,
@@ -770,9 +858,9 @@
 				CC8E009D1AEE32B20040920E /* ucs.h in Sources */,
 				CC8E009E1AEE32B20040920E /* utf8.c in Sources */,
 				CC8E009F1AEE32B20040920E /* utf8.h in Sources */,
+				CC98AF181AEE78E800DFA116 /* StyleKitGF.m in Sources */,
 				CC8E00A01AEE32B20040920E /* variant.c in Sources */,
 				CC8E00A11AEE32B20040920E /* variant.h in Sources */,
-				CC57C2441AEE23D000051DE4 /* ViewController.m in Sources */,
 				CC57C2411AEE23D000051DE4 /* AppDelegate.m in Sources */,
 				CC57C23E1AEE23D000051DE4 /* main.m in Sources */,
 			);
