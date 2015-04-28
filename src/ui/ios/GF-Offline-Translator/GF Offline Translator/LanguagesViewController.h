@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  LanguagesViewController.h
 //  GF Offline Translator
 //
 //  Created by Cenny Davidsson on 2015-04-27.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface LanguagesViewController : UITableViewController
 
 @end
-

@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "pgf/pgf.h"
+#import "gu/mem.h"
+#import "gu/exn.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +20,23 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"App" ofType:@"pgf" inDirectory:@"grammars"];
+    
+    
+    // Create the pool that is used to allocate everything
+    GuPool* pool = gu_new_pool();
+    // test
+    
+    // Create an exception frame that catches all errors.
+    GuExn* err = gu_new_exn(pool);
+    
+    // Read the PGF grammar.
+    PgfPGF* pgf = pgf_read([path UTF8String], pool, err);
+    
+    
+    printf("%p", pgf);
+    
     return YES;
 }
 
