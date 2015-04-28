@@ -394,13 +394,13 @@
 				CC98AF171AEE78E800DFA116 /* StyleKitGF.m */,
 				CC619EDD1AEE59F8003A6EC7 /* TranslationTextTableViewCell.h */,
 				CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */,
-				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
-				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
-				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
 				CC98AF101AEE76D100DFA116 /* ArrowsButton.h */,
 				CC98AF111AEE76D100DFA116 /* ArrowsButton.m */,
 				CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */,
 				CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */,
+				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
+				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
+				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
