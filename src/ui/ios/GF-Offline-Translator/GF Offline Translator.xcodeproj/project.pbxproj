@@ -128,6 +128,10 @@
 		CC98AF0F1AEE72D800DFA116 /* LanguagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */; };
 		CC98AF121AEE76D100DFA116 /* ArrowsButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF111AEE76D100DFA116 /* ArrowsButton.m */; };
 		CC98AF181AEE78E800DFA116 /* StyleKitGF.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF171AEE78E800DFA116 /* StyleKitGF.m */; };
+		CC98AF1B1AEF71B300DFA116 /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1A1AEF71B300DFA116 /* Language.m */; };
+		CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1E1AEF772200DFA116 /* Grammar.m */; };
+		CC98AF221AEF773500DFA116 /* Translator.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF211AEF773500DFA116 /* Translator.m */; };
+		CC98AF281AEFB4CF00DFA116 /* MenuViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -274,6 +278,14 @@
 		CC98AF111AEE76D100DFA116 /* ArrowsButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrowsButton.m; sourceTree = "<group>"; };
 		CC98AF161AEE78E800DFA116 /* StyleKitGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleKitGF.h; sourceTree = "<group>"; };
 		CC98AF171AEE78E800DFA116 /* StyleKitGF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleKitGF.m; sourceTree = "<group>"; };
+		CC98AF191AEF71B300DFA116 /* Language.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Language.h; sourceTree = "<group>"; };
+		CC98AF1A1AEF71B300DFA116 /* Language.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Language.m; sourceTree = "<group>"; };
+		CC98AF1D1AEF772200DFA116 /* Grammar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Grammar.h; sourceTree = "<group>"; };
+		CC98AF1E1AEF772200DFA116 /* Grammar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Grammar.m; sourceTree = "<group>"; };
+		CC98AF201AEF773500DFA116 /* Translator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Translator.h; sourceTree = "<group>"; };
+		CC98AF211AEF773500DFA116 /* Translator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translator.m; sourceTree = "<group>"; };
+		CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewItem.h; sourceTree = "<group>"; };
+		CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,8 +339,9 @@
 			isa = PBXGroup;
 			children = (
 				CC619EDA1AEE589D003A6EC7 /* Grammatical Framework */,
-				CC98AF0C1AEE72A200DFA116 /* Controllers */,
+				CC98AF1C1AEF71BF00DFA116 /* Model */,
 				CC619EE51AEE6A1D003A6EC7 /* Views */,
+				CC98AF0C1AEE72A200DFA116 /* Controllers */,
 				CC57C2481AEE23D000051DE4 /* Images.xcassets */,
 				CC57C24A1AEE23D000051DE4 /* LaunchScreen.xib */,
 				CC57C23B1AEE23D000051DE4 /* Supporting Files */,
@@ -386,6 +399,8 @@
 				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
 				CC98AF101AEE76D100DFA116 /* ArrowsButton.h */,
 				CC98AF111AEE76D100DFA116 /* ArrowsButton.m */,
+				CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */,
+				CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -569,6 +584,19 @@
 				CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		CC98AF1C1AEF71BF00DFA116 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CC98AF191AEF71B300DFA116 /* Language.h */,
+				CC98AF1A1AEF71B300DFA116 /* Language.m */,
+				CC98AF1D1AEF772200DFA116 /* Grammar.h */,
+				CC98AF1E1AEF772200DFA116 /* Grammar.m */,
+				CC98AF201AEF773500DFA116 /* Translator.h */,
+				CC98AF211AEF773500DFA116 /* Translator.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		DBEB5864D0802AB27690957F /* Pods */ = {
@@ -755,15 +783,19 @@
 				CC8E00B71AEE32C40040920E /* funcs-common.h in Sources */,
 				CC8E00B81AEE32C40040920E /* asm-32.h in Sources */,
 				CC8E00B91AEE32C40040920E /* asm-64.h in Sources */,
+				CC98AF281AEFB4CF00DFA116 /* MenuViewItem.m in Sources */,
 				CC8E00BA1AEE32C40040920E /* asm.h in Sources */,
 				CC8E00BB1AEE32C40040920E /* core-32.h in Sources */,
+				CC98AF1B1AEF71B300DFA116 /* Language.m in Sources */,
 				CC8E00BC1AEE32C40040920E /* core-64.h in Sources */,
 				CC8E00BD1AEE32C40040920E /* core.h in Sources */,
 				CC8E00BE1AEE32C40040920E /* fp-32.h in Sources */,
 				CC8E00BF1AEE32C40040920E /* fp-64.h in Sources */,
 				CC8E00C01AEE32C40040920E /* fp.h in Sources */,
+				CC98AF221AEF773500DFA116 /* Translator.m in Sources */,
 				CC8E00C11AEE32C40040920E /* funcs.h in Sources */,
 				CC98AF0F1AEE72D800DFA116 /* LanguagesViewController.m in Sources */,
+				CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */,
 				CC8E00C21AEE32C40040920E /* asm.h in Sources */,
 				CC8E00C31AEE32C40040920E /* core.h in Sources */,
 				CC8E00C41AEE32C40040920E /* fp.h in Sources */,

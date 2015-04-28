@@ -49,6 +49,12 @@
     ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
     self.navigationItem.titleView = arrows;
     
+    // Setup menu buttom
+    MenuViewItem *menuView = [[MenuViewItem alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
+    menuView.backgroundColor = [UIColor clearColor];
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
+    self.navigationItem.rightBarButtonItems = [self.navigationItem.rightBarButtonItems arrayByAddingObject:barButton].reverseObjectEnumerator.allObjects;
+    
     // Setup table view
     self.tableView.estimatedRowHeight = 89;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
