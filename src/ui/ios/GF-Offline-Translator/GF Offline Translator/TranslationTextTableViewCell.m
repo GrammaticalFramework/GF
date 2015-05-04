@@ -8,6 +8,7 @@
 
 #import "TranslationTextTableViewCell.h"
 
+
 @implementation TranslationTextTableViewCell
 
 - (void)awakeFromNib {

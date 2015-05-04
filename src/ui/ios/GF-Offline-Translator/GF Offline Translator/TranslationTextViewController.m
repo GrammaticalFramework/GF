@@ -7,8 +7,22 @@
 //
 
 #import "TranslationTextViewController.h"
+
+// Models
+#import "Translator.h"
+#import "Grammar.h"
+#import "Language.h"
+
+// Views
 #import "TranslationTextTableViewCell.h"
 #import "ArrowsButton.h"
+#import "MenuViewItem.h"
+
+// Grammatical framework
+#import "pgf/pgf.h"
+#import "gu/mem.h"
+#import "gu/exn.h"
+#import "gu/file.h"
 
 @interface TranslationTextViewController ()
 
@@ -37,6 +51,44 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    NSBundle *bundle = [NSBundle mainBundle];
+//    NSString *path = [bundle pathForResource:@"App" ofType:@"pgf"];
+//    
+//    // Create the pool that is used to allocate everything
+//    GuPool *pool = gu_new_pool();
+//    
+//    // Create an exception frame that catches all errors.
+//    GuExn *err = gu_new_exn(pool);
+//    
+//    // Read the PGF grammar.
+//    PgfPGF *pgf = pgf_read([path UTF8String], pool, err);
+//    
+//    // Load the file
+//    PgfConcr *concr = pgf_get_language(pgf, "AppSwe");
+//    path = [[NSBundle mainBundle] pathForResource:@"AppSwe" ofType:@"pgf_c"];
+//    FILE *file = fopen([path UTF8String], "r");
+//    
+//    GuIn *guIn = gu_file_in(file, pool);
+//    
+//    pgf_concrete_load(concr, guIn, err);
+////    pgf_concrete_unload(concr);
+//    
+//    printf("%p", pgf);
+    
+    Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" andBcp:@"sv-SE"];
+    Language *toLanguage = [[Language alloc] initWithName:@"English" abbreviation:@"Eng" andBcp:@"en-GB"];
+    
+    Translator *translator = [[Translator alloc] init];
+    translator.from = [Grammar loadGrammarFromLanguage:fromLanguage withTranslator:translator];
+    translator.to = [Grammar loadGrammarFromLanguage:toLanguage withTranslator:translator];
+    
+    NSString *hello = [translator translatePhrase:@"hej"];
+    
+    NSLog(@"%@",hello);
+    
+    printf("%p", translator.pgf);
+    
     
     // Register cells
     UINib *nib = [UINib nibWithNibName:@"TranslationInputTableViewCell" bundle:nil];

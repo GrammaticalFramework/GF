@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8B13021503B4FFDE467D3DA9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB9B7B89581859D72BD5CEC /* libPods.a */; };
+		CC020CFE1AF76A6C0050AE38 /* Translation.m in Sources */ = {isa = PBXBuildFile; fileRef = CC020CFD1AF76A6C0050AE38 /* Translation.m */; };
 		CC57C23E1AEE23D000051DE4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C23D1AEE23D000051DE4 /* main.m */; };
 		CC57C2411AEE23D000051DE4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C2401AEE23D000051DE4 /* AppDelegate.m */; };
 		CC57C2471AEE23D000051DE4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC57C2451AEE23D000051DE4 /* Main.storyboard */; };
@@ -132,6 +133,7 @@
 		CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1E1AEF772200DFA116 /* Grammar.m */; };
 		CC98AF221AEF773500DFA116 /* Translator.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF211AEF773500DFA116 /* Translator.m */; };
 		CC98AF281AEFB4CF00DFA116 /* MenuViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */; };
+		CCA994DD1AF7907900FB04D6 /* UIColor+TranslationsResults.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +150,8 @@
 		9D996C5B51A0CAF9741D9356 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		ABB9B7B89581859D72BD5CEC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4E29C5D7044D408E488C0F3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		CC020CFC1AF76A6C0050AE38 /* Translation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Translation.h; sourceTree = "<group>"; };
+		CC020CFD1AF76A6C0050AE38 /* Translation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translation.m; sourceTree = "<group>"; };
 		CC57C2381AEE23D000051DE4 /* GF Offline Translator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GF Offline Translator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC57C23C1AEE23D000051DE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC57C23D1AEE23D000051DE4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -286,6 +290,8 @@
 		CC98AF211AEF773500DFA116 /* Translator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translator.m; sourceTree = "<group>"; };
 		CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewItem.h; sourceTree = "<group>"; };
 		CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewItem.m; sourceTree = "<group>"; };
+		CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TranslationsResults.h"; sourceTree = "<group>"; };
+		CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TranslationsResults.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -394,13 +400,13 @@
 				CC98AF171AEE78E800DFA116 /* StyleKitGF.m */,
 				CC619EDD1AEE59F8003A6EC7 /* TranslationTextTableViewCell.h */,
 				CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */,
-				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
-				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
-				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
 				CC98AF101AEE76D100DFA116 /* ArrowsButton.h */,
 				CC98AF111AEE76D100DFA116 /* ArrowsButton.m */,
 				CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */,
 				CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */,
+				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
+				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
+				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -595,6 +601,10 @@
 				CC98AF1E1AEF772200DFA116 /* Grammar.m */,
 				CC98AF201AEF773500DFA116 /* Translator.h */,
 				CC98AF211AEF773500DFA116 /* Translator.m */,
+				CC020CFC1AF76A6C0050AE38 /* Translation.h */,
+				CC020CFD1AF76A6C0050AE38 /* Translation.m */,
+				CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */,
+				CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -791,6 +801,7 @@
 				CC8E00BD1AEE32C40040920E /* core.h in Sources */,
 				CC8E00BE1AEE32C40040920E /* fp-32.h in Sources */,
 				CC8E00BF1AEE32C40040920E /* fp-64.h in Sources */,
+				CCA994DD1AF7907900FB04D6 /* UIColor+TranslationsResults.m in Sources */,
 				CC8E00C01AEE32C40040920E /* fp.h in Sources */,
 				CC98AF221AEF773500DFA116 /* Translator.m in Sources */,
 				CC8E00C11AEE32C40040920E /* funcs.h in Sources */,
@@ -845,6 +856,7 @@
 				CC8E00911AEE32B20040920E /* mem.c in Sources */,
 				CC8E00921AEE32B20040920E /* mem.h in Sources */,
 				CC8E00931AEE32B20040920E /* out.c in Sources */,
+				CC020CFE1AF76A6C0050AE38 /* Translation.m in Sources */,
 				CC8E00941AEE32B20040920E /* out.h in Sources */,
 				CC8E00DA1AEE34E70040920E /* assert.c in Sources */,
 				CC8E00951AEE32B20040920E /* prime.c in Sources */,
