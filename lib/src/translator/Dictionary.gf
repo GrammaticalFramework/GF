@@ -41019,8 +41019,6 @@ fun passee_A : A ;
 fun passenger_N : N ;
 fun passepartout_N : N ;
 fun passer_N : N ;
-fun passer_by_N : N ;
-fun passerby_N : N ;
 fun passerine_A : A ;
 fun passerine_N : N ;
 fun passim_Adv : Adv ;
