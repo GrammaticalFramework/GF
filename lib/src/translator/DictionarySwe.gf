@@ -40653,8 +40653,6 @@ lin passee_A = variants {} ; -- status=guess
 lin passenger_N = mkN "passagerare" utrum | mkN "passagerare" utrum ; -- SaldoWN -- comment=2
 lin passepartout_N = mkN "passepartout" "passepartouter" ;
 lin passer_N = mkN "förbipasserande" | mkN "förbigående" ; -- status=guess status=guess
-lin passer_by_N = mkN "förbipasserande"; -- src=google
-lin passerby_N = mkN "förbipasserande"; -- src=google
 lin passerine_A = variants {} ; -- status=guess
 lin passerine_N = mkN "tätting" ; -- SaldoWN
 lin passim_Adv = variants {} ; -- status=guess

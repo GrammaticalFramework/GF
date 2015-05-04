@@ -41021,8 +41021,6 @@ lin passee_A = variants {} ;
 lin passenger_N = mkN "Passagier" "Passagiere" masculine | mkN "Fahrgast" "Fahrgäste" masculine ; -- status=guess status=guess
 lin passepartout_N = variants {} ;
 lin passer_N = mkN "Passant" "Passanten" masculine | mkN "Passantin" feminine ; -- status=guess status=guess
-lin passer_by_N = variants {} ;
-lin passerby_N = variants {} ;
 lin passerine_A = variants {} ;
 lin passerine_N = variants {} ;
 lin passim_Adv = mkAdv "passim" ; -- status=guess

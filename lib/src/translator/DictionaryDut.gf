@@ -475,7 +475,7 @@ lin aggression_N = mkN "agressie" ; -- status=guess
 lin aggressive_A = mkA "agressief" ; -- status=guess
 lin agile_A = mkA "beweeglijk" | mkA "lenig" | mkA "behendig" ; -- status=guess status=guess status=guess
 lin agility_N = mkN "wendbaarheid" feminine ; -- status=guess
-lin agitation_N = mkN "opwinding" feminine | mkN "agitatie" feminine | mkN "troebelen {p}" ; -- status=guess status=guess status=guess
+lin agitation_N = mkN "opwinding" feminine | mkN "agitatie" feminine | mkN "troebelen" ; -- status=guess status=guess status=guess
 lin agnes_PN = mkPN "Agnes" ; -- src=eng status=guess
 lin agnostic_A = mkA "agnostisch" ; -- status=guess
 lin agnostic_N = mkN "agnosticus" ; -- status=guess

@@ -19201,7 +19201,6 @@ lin passageway_N = mkN "corsia" ; -- status=guess
 lin passbook_N = mkN "libretto" | mkN "libretto_a_risparmio" | mkN "libretto_di_risparmio" ; -- UWN
 lin passenger_N = mkN "passeggero" ; -- status=guess
 lin passer_N = mkN "passante" masculine | mkN "passanti" masculine ; -- status=guess status=guess
-lin passerby_N = mkN "passante" ; -- UWN
 lin passion_N = mkN "passione" feminine ; -- status=guess
 lin passionate_A = mkA "appassionato" ; -- status=guess
 lin passionflower_N = mkN "passiflora" ; -- UWN
