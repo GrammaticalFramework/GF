@@ -25,5 +25,6 @@
 @property (nonatomic, strong) Grammar *previous;
 
 - (NSString *)translateWord:(NSString *)word;
+- (NSString *)translatePhrase:(NSString *)phrase;
 
 @end

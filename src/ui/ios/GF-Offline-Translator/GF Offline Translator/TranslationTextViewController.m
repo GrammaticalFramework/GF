@@ -77,13 +77,13 @@
 //    printf("%p", pgf);
     
     Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" andBcp:@"sv-SE"];
-    Language *toLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" andBcp:@"sv-SE"];
+    Language *toLanguage = [[Language alloc] initWithName:@"English" abbreviation:@"Eng" andBcp:@"en-GB"];
     
     Translator *translator = [[Translator alloc] init];
     translator.from = [Grammar loadGrammarFromLanguage:fromLanguage withTranslator:translator];
     translator.to = [Grammar loadGrammarFromLanguage:toLanguage withTranslator:translator];
     
-    NSString *hello = [translator translateWord:@"Hej"];
+    NSString *hello = [translator translatePhrase:@"hej"];
     
     NSLog(@"%@",hello);
     

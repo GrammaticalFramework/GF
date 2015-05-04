@@ -42,6 +42,38 @@
     return self;
 }
 
+- (NSString *)translatePhrase:(NSString *)phrase {
+    GuPool *tmpPool = gu_new_pool();
+    GuExn *tmpErr = gu_new_exn(tmpPool);
+    
+    PgfExprEnum *parsedExpressions = [self parsePhrase:phrase startCat:@"Phr" tmpPool:tmpPool tmpErr:tmpErr];
+    NSString *translation = @"";
+    
+    if (parsedExpressions != nil) {
+        translation = [self linearizeResult:parsedExpressions tmpPool:tmpPool tmpErr:tmpErr];
+    } else {
+        translation = [self translateByLookUp:phrase];
+    }
+    
+    gu_exn_clear(tmpErr);
+    gu_pool_free(tmpPool);
+    tmpPool = nil;
+    tmpErr = nil;
+    
+    return translation;
+}
+
+- (NSString *)translateByLookUp:(NSString *)phrase {
+    NSMutableString *translation = @"%".mutableCopy;
+    NSArray *words = [phrase componentsSeparatedByString:@" "];
+    
+    for (NSString *word in words) {
+        NSString *translatedWord = [self translateWord:word];
+        [translation appendString:translatedWord];
+    }
+    return translation.copy;
+}
+
 - (NSString *)translateWord:(NSString *)word {
     GuPool *tmpPool = gu_new_pool();
     GuExn *tmpErr = gu_new_exn(tmpPool);
@@ -51,6 +83,9 @@
     
     if (parse) {
         translation = [self linearizeResult:parse tmpPool:tmpPool tmpErr:tmpErr];
+    } else {
+        // TODO: Implement morphological analys
+        NSLog(@"Do morphological analys of word");
     }
     
     // Clear up resources
