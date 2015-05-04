@@ -12,6 +12,7 @@
 #import "Translator.h"
 #import "Grammar.h"
 #import "Language.h"
+#import "Translation.h"
 
 // Views
 #import "TranslationTextTableViewCell.h"
@@ -26,6 +27,7 @@
 
 @interface TranslationTextViewController ()
 
+@property (nonatomic) Translator *translator;
 @property (nonatomic, strong) NSMutableArray *inputs;
 
 @end
@@ -52,30 +54,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    NSBundle *bundle = [NSBundle mainBundle];
-//    NSString *path = [bundle pathForResource:@"App" ofType:@"pgf"];
-//    
-//    // Create the pool that is used to allocate everything
-//    GuPool *pool = gu_new_pool();
-//    
-//    // Create an exception frame that catches all errors.
-//    GuExn *err = gu_new_exn(pool);
-//    
-//    // Read the PGF grammar.
-//    PgfPGF *pgf = pgf_read([path UTF8String], pool, err);
-//    
-//    // Load the file
-//    PgfConcr *concr = pgf_get_language(pgf, "AppSwe");
-//    path = [[NSBundle mainBundle] pathForResource:@"AppSwe" ofType:@"pgf_c"];
-//    FILE *file = fopen([path UTF8String], "r");
-//    
-//    GuIn *guIn = gu_file_in(file, pool);
-//    
-//    pgf_concrete_load(concr, guIn, err);
-////    pgf_concrete_unload(concr);
-//    
-//    printf("%p", pgf);
-    
+    // Setup translator
     Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" andBcp:@"sv-SE"];
     Language *toLanguage = [[Language alloc] initWithName:@"English" abbreviation:@"Eng" andBcp:@"en-GB"];
     
@@ -83,12 +62,7 @@
     translator.from = [Grammar loadGrammarFromLanguage:fromLanguage withTranslator:translator];
     translator.to = [Grammar loadGrammarFromLanguage:toLanguage withTranslator:translator];
     
-    NSString *hello = [translator translatePhrase:@"hej"];
-    
-    NSLog(@"%@",hello);
-    
-    printf("%p", translator.pgf);
-    
+    self.translator = translator;
     
     // Register cells
     UINib *nib = [UINib nibWithNibName:@"TranslationInputTableViewCell" bundle:nil];
@@ -145,7 +119,8 @@
 - (void)didPressRightButton:(id)sender {
     // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
     // Must call super
-    [self.inputs addObject:self.textView.text];
+    Translation *newTranslation = [self.translator translatePhrase:self.textView.text];
+    [self.inputs addObject:newTranslation];
     [self.tableView reloadData];
     
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
@@ -219,12 +194,17 @@
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *identifier = indexPath.row % 2 == 0 ? @"TranslationInput" : @"TranslationOutput";
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    BOOL isFromText = indexPath.row % 2 == 0;
+    NSString *identifier = isFromText ? @"TranslationInput" : @"TranslationOutput";
     
     TranslationTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-    cell.translationTextLabel.text = self.inputs[indexPath.row/2];
+    Translation *translation = self.inputs[indexPath.row/2];
+    
+    cell.translationTextLabel.text = isFromText ? translation.fromText : translation.toText;
+    UIColor *lightBlueColor = [UIColor colorWithRed:0.373 green:0.836 blue:1.000 alpha:1.000];
+    cell.translationTextLabel.backgroundColor = isFromText ? lightBlueColor : translation.color;
+    
     return cell;
 }
 
