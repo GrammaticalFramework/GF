@@ -133,6 +133,7 @@
 		CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1E1AEF772200DFA116 /* Grammar.m */; };
 		CC98AF221AEF773500DFA116 /* Translator.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF211AEF773500DFA116 /* Translator.m */; };
 		CC98AF281AEFB4CF00DFA116 /* MenuViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */; };
+		CCA994DD1AF7907900FB04D6 /* UIColor+TranslationsResults.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -289,6 +290,8 @@
 		CC98AF211AEF773500DFA116 /* Translator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translator.m; sourceTree = "<group>"; };
 		CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewItem.h; sourceTree = "<group>"; };
 		CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewItem.m; sourceTree = "<group>"; };
+		CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TranslationsResults.h"; sourceTree = "<group>"; };
+		CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TranslationsResults.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -600,6 +603,8 @@
 				CC98AF211AEF773500DFA116 /* Translator.m */,
 				CC020CFC1AF76A6C0050AE38 /* Translation.h */,
 				CC020CFD1AF76A6C0050AE38 /* Translation.m */,
+				CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */,
+				CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -796,6 +801,7 @@
 				CC8E00BD1AEE32C40040920E /* core.h in Sources */,
 				CC8E00BE1AEE32C40040920E /* fp-32.h in Sources */,
 				CC8E00BF1AEE32C40040920E /* fp-64.h in Sources */,
+				CCA994DD1AF7907900FB04D6 /* UIColor+TranslationsResults.m in Sources */,
 				CC8E00C01AEE32C40040920E /* fp.h in Sources */,
 				CC98AF221AEF773500DFA116 /* Translator.m in Sources */,
 				CC8E00C11AEE32C40040920E /* funcs.h in Sources */,

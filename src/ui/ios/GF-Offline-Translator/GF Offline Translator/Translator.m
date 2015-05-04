@@ -10,6 +10,7 @@
 
 // Model
 #import "Grammar.h"
+#import "Translation.h"
 
 // Grammatical Framework
 #import "pgf/pgf.h"
@@ -22,6 +23,8 @@
 @end
 
 @implementation Translator
+
+#pragma mark - inits
 
 - (instancetype)init {
     self = [super init];
@@ -42,17 +45,19 @@
     return self;
 }
 
-- (NSString *)translatePhrase:(NSString *)phrase {
+#pragma mark - Public translation method
+
+- (Translation *)translatePhrase:(NSString *)phrase {
     GuPool *tmpPool = gu_new_pool();
     GuExn *tmpErr = gu_new_exn(tmpPool);
     
     PgfExprEnum *parsedExpressions = [self parsePhrase:phrase startCat:@"Phr" tmpPool:tmpPool tmpErr:tmpErr];
-    NSString *translation = @"";
+    NSString *translatedText = @"";
     
     if (parsedExpressions != nil) {
-        translation = [self linearizeResult:parsedExpressions tmpPool:tmpPool tmpErr:tmpErr];
+        translatedText = [self linearizeResult:parsedExpressions tmpPool:tmpPool tmpErr:tmpErr];
     } else {
-        translation = [self translateByLookUp:phrase];
+        translatedText = [self translateByLookUp:phrase];
     }
     
     gu_exn_clear(tmpErr);
@@ -60,8 +65,15 @@
     tmpPool = nil;
     tmpErr = nil;
     
+    Translation *translation = [Translation translationWithText:phrase
+                                                         toText:translatedText
+                                                   fromLanguage:self.from.language
+                                                     toLanguage:self.to.language];
+    
     return translation;
 }
+
+#pragma mark - Private helpers
 
 - (NSString *)translateByLookUp:(NSString *)phrase {
     NSMutableString *translation = @"%".mutableCopy;

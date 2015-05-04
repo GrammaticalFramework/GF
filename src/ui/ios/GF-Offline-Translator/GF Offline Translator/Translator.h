@@ -12,6 +12,7 @@
 #import "pgf.h"
 
 @class Grammar;
+@class Translation;
 
 @interface Translator : NSObject
 
@@ -24,7 +25,6 @@
 @property (nonatomic, strong) Grammar *from;
 @property (nonatomic, strong) Grammar *previous;
 
-- (NSString *)translateWord:(NSString *)word;
-- (NSString *)translatePhrase:(NSString *)phrase;
+- (Translation *)translatePhrase:(NSString *)phrase;
 
 @end

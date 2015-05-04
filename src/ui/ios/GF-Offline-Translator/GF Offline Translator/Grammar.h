@@ -13,7 +13,7 @@
 @class Translator;
 
 @interface Grammar : NSObject
-@property (nonatomic, copy) NSString *name;
+@property (nonatomic) Language *language;
 @property (nonatomic) PgfConcr *concrete;
 
 + (Grammar *)loadGrammarFromLanguage:(Language *)language withTranslator:(Translator *)translator;

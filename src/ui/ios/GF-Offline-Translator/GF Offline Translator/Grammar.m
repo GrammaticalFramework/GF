@@ -33,7 +33,7 @@
     pgf_concrete_load(concr, guIn, translator.err);
     
     grammar.concrete = concr;
-    grammar.name = language.name;
+    grammar.language = language;
     
     return grammar;
 }
