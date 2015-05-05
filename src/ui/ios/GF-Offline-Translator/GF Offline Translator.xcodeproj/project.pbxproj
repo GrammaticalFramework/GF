@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8B13021503B4FFDE467D3DA9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB9B7B89581859D72BD5CEC /* libPods.a */; };
 		CC020CFE1AF76A6C0050AE38 /* Translation.m in Sources */ = {isa = PBXBuildFile; fileRef = CC020CFD1AF76A6C0050AE38 /* Translation.m */; };
+		CC022FB01AF8D8CF0067A675 /* SLKTextView+TextInputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */; };
 		CC57C23E1AEE23D000051DE4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C23D1AEE23D000051DE4 /* main.m */; };
 		CC57C2411AEE23D000051DE4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C2401AEE23D000051DE4 /* AppDelegate.m */; };
 		CC57C2471AEE23D000051DE4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC57C2451AEE23D000051DE4 /* Main.storyboard */; };
@@ -132,7 +133,7 @@
 		CC98AF1B1AEF71B300DFA116 /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1A1AEF71B300DFA116 /* Language.m */; };
 		CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1E1AEF772200DFA116 /* Grammar.m */; };
 		CC98AF221AEF773500DFA116 /* Translator.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF211AEF773500DFA116 /* Translator.m */; };
-		CC98AF281AEFB4CF00DFA116 /* MenuViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */; };
+		CC98AF281AEFB4CF00DFA116 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF271AEFB4CF00DFA116 /* MenuView.m */; };
 		CCA994DD1AF7907900FB04D6 /* UIColor+TranslationsResults.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */; };
 /* End PBXBuildFile section */
 
@@ -152,6 +153,8 @@
 		B4E29C5D7044D408E488C0F3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		CC020CFC1AF76A6C0050AE38 /* Translation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Translation.h; sourceTree = "<group>"; };
 		CC020CFD1AF76A6C0050AE38 /* Translation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translation.m; sourceTree = "<group>"; };
+		CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+TextInputMode.h"; sourceTree = "<group>"; };
+		CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLKTextView+TextInputMode.m"; sourceTree = "<group>"; };
 		CC57C2381AEE23D000051DE4 /* GF Offline Translator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GF Offline Translator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC57C23C1AEE23D000051DE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC57C23D1AEE23D000051DE4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -288,8 +291,8 @@
 		CC98AF1E1AEF772200DFA116 /* Grammar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Grammar.m; sourceTree = "<group>"; };
 		CC98AF201AEF773500DFA116 /* Translator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Translator.h; sourceTree = "<group>"; };
 		CC98AF211AEF773500DFA116 /* Translator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translator.m; sourceTree = "<group>"; };
-		CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewItem.h; sourceTree = "<group>"; };
-		CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewItem.m; sourceTree = "<group>"; };
+		CC98AF261AEFB4CF00DFA116 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuView.h; sourceTree = "<group>"; };
+		CC98AF271AEFB4CF00DFA116 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuView.m; sourceTree = "<group>"; };
 		CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TranslationsResults.h"; sourceTree = "<group>"; };
 		CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TranslationsResults.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -402,8 +405,10 @@
 				CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */,
 				CC98AF101AEE76D100DFA116 /* ArrowsButton.h */,
 				CC98AF111AEE76D100DFA116 /* ArrowsButton.m */,
-				CC98AF261AEFB4CF00DFA116 /* MenuViewItem.h */,
-				CC98AF271AEFB4CF00DFA116 /* MenuViewItem.m */,
+				CC98AF261AEFB4CF00DFA116 /* MenuView.h */,
+				CC98AF271AEFB4CF00DFA116 /* MenuView.m */,
+				CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */,
+				CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */,
 				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
 				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
 				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
@@ -793,7 +798,7 @@
 				CC8E00B71AEE32C40040920E /* funcs-common.h in Sources */,
 				CC8E00B81AEE32C40040920E /* asm-32.h in Sources */,
 				CC8E00B91AEE32C40040920E /* asm-64.h in Sources */,
-				CC98AF281AEFB4CF00DFA116 /* MenuViewItem.m in Sources */,
+				CC98AF281AEFB4CF00DFA116 /* MenuView.m in Sources */,
 				CC8E00BA1AEE32C40040920E /* asm.h in Sources */,
 				CC8E00BB1AEE32C40040920E /* core-32.h in Sources */,
 				CC98AF1B1AEF71B300DFA116 /* Language.m in Sources */,
@@ -809,6 +814,7 @@
 				CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */,
 				CC8E00C21AEE32C40040920E /* asm.h in Sources */,
 				CC8E00C31AEE32C40040920E /* core.h in Sources */,
+				CC022FB01AF8D8CF0067A675 /* SLKTextView+TextInputMode.m in Sources */,
 				CC8E00C41AEE32C40040920E /* fp.h in Sources */,
 				CC8E00C51AEE32C40040920E /* funcs.h in Sources */,
 				CC8E00C61AEE32C40040920E /* asm.h in Sources */,

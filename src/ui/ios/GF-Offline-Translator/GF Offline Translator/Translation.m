@@ -60,7 +60,7 @@
         return text;
     }
     
-    NSCharacterSet *charsToRemove = [NSCharacterSet characterSetWithCharactersInString:@"+*%"];
+    NSCharacterSet *charsToRemove = [NSCharacterSet characterSetWithCharactersInString:@"+*% "];
     NSString *trimmedText = [text stringByTrimmingCharactersInSet:charsToRemove];
     
     for (NSString *charToRemove in @[@"[", @"]", @"_"]) {

@@ -7,7 +7,15 @@
 //
 
 #import "SLKTextViewController.h"
+@class Language;
 
-@interface TranslationTextViewController : SLKTextViewController
+@protocol TranslationTextViewControllerDelegate <NSObject>
+
+- (void)changeFromLanguageToLanguage:(Language *)laguange;
+- (void)changeToLanguageToLanguage:(Language *)laguange;
+
+@end
+
+@interface TranslationTextViewController : SLKTextViewController <TranslationTextViewControllerDelegate>
 
 @end

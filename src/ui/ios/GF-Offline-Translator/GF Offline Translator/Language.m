@@ -22,8 +22,33 @@
     return self;
 }
 
+- (BOOL)isEqualToLanguage:(Language *)language {
+    if (!language) {
+        return NO;
+    }
+    
+    BOOL haveEqualNames = (!self.name && !language.name) || [self.name isEqualToString:language.name];
+    BOOL haveEqualBcp   = (!self.bcp && !language.bcp) || [self.bcp isEqualToString:language.bcp];
+    
+    return haveEqualNames && haveEqualBcp;
+}
+
 + (NSArray *)allLanguages {
-    return @[];
+    return @[
+             [[Language alloc] initWithName:@"Bulgarian"    abbreviation:@"Bul"     andBcp:@"en-GB"],
+             [[Language alloc] initWithName:@"Chinese"      abbreviation:@"Chi"     andBcp:@"zh-CN"],
+             [[Language alloc] initWithName:@"Dutch"        abbreviation:@"Dut"     andBcp:@"nl-NL"],
+             [[Language alloc] initWithName:@"English"      abbreviation:@"Eng"     andBcp:@"en-GB"],
+             [[Language alloc] initWithName:@"Finnish"      abbreviation:@"Fin"     andBcp:@"fi-FI"],
+             [[Language alloc] initWithName:@"French"       abbreviation:@"Fre"     andBcp:@"fr-FR"],
+             [[Language alloc] initWithName:@"German"       abbreviation:@"Ger"     andBcp:@"de-DE"],
+             [[Language alloc] initWithName:@"Hindi"        abbreviation:@"Hin"     andBcp:@"hi-IN"],
+             [[Language alloc] initWithName:@"Italian"      abbreviation:@"Ita"     andBcp:@"it-IT"],
+             [[Language alloc] initWithName:@"Japanese"     abbreviation:@"Jpn"     andBcp:@"ja-JP"],
+             [[Language alloc] initWithName:@"Spanish"      abbreviation:@"Spa"     andBcp:@"es-ES"],
+             [[Language alloc] initWithName:@"Swedish"      abbreviation:@"Swe"     andBcp:@"sv-SE"],
+             [[Language alloc] initWithName:@"Thai"         abbreviation:@"Tha"     andBcp:@"th-TH"]
+             ];
 }
 
 @end

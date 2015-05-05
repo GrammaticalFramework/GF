@@ -6,17 +6,17 @@
 //  Copyright (c) 2015 Grammatical Framework. All rights reserved.
 //
 
-#import "MenuViewItem.h"
+#import "MenuView.h"
 #import "StyleKitGF.h"
 
-@implementation MenuViewItem
+@implementation MenuView
 
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
     // Drawing code
-    [StyleKitGF drawMenyWithFrame:rect];
+    [StyleKitGF drawMenyItemWithFrame:rect];
 }
 
 
