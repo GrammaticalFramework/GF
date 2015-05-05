@@ -142,5 +142,5 @@ instance PPA Pat where
       VarP x -> pp x
       Lit s -> pp s
       ConP c [] -> pp c
-      AsP x p -> x<>"@"<>parens p
+      AsP x p -> x<>"@"<>ppA p
       _ -> parens p
