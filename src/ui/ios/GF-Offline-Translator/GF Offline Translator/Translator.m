@@ -97,6 +97,7 @@
         translation = [self linearizeResult:parse tmpPool:tmpPool tmpErr:tmpErr];
     } else {
         // TODO: Implement morphological analys
+        translation = @"Error :)";
         NSLog(@"Do morphological analys of word");
     }
     
