@@ -99,7 +99,6 @@
     [[self tableView] registerNib:nib forCellReuseIdentifier:@"TranslationOutput"];
     
     // Setup buttons
-    
     MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
     menuView.backgroundColor = [UIColor clearColor];
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
@@ -217,27 +216,8 @@
     });
 }
 
-
 #pragma mark - SLKTextViewController Events
 
-- (void)didChangeKeyboardStatus:(SLKKeyboardStatus)status {
-    // Notifies the view controller that the keyboard changed status.
-    // Calling super does nothing
-}
-
-- (void)textWillUpdate {
-    // Notifies the view controller that the text will update.
-    // Calling super does nothing
-    
-    [super textWillUpdate];
-}
-
-- (void)textDidUpdate:(BOOL)animated {
-    // Notifies the view controller that the text did update.
-    // Must call super
-    
-    [super textDidUpdate:animated];
-}
 
 - (BOOL)canPressRightButton {
     // Asks if the right button can be pressed
@@ -260,25 +240,6 @@
     [super didPressRightButton:sender];
 }
 
-
-
-/*
-// Uncomment these methods for aditional events
-- (void)didPressLeftButton:(id)sender
-{
-    // Notifies the view controller when the left button's action has been triggered, manually.
- 
-    [super didPressLeftButton:sender];
-}
- 
-- (void)willRequestUndo
-{
-    // Notification about when a user did shake the device to undo the typed text
- 
-    [super willRequestUndo];
-}
-*/
-
 #pragma mark - SLKTextViewController Edition
 
 /*
@@ -295,25 +256,6 @@
     // Notifies the view controller when tapped on the left "Cancel" button
  
     [super didCancelTextEditing:sender];
-}
-*/
-
-#pragma mark - SLKTextViewController Autocompletion
-
-/*
-// Uncomment these methods to enable autocompletion mode
-- (BOOL)canShowAutoCompletion
-{
-    // Asks of the autocompletion view should be shown
- 
-    return NO;
-}
-
-- (CGFloat)heightForAutoCompletionView
-{
-    // Asks for the height of the autocompletion view
- 
-    return 0.0;
 }
 */
 
