@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ArrowsView : UIButton
+@interface ArrowsButton : UIButton
 
 @end

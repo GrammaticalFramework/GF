@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Grammatical Framework. All rights reserved.
 //
 
-#import "ArrowsView.h"
+#import "ArrowsButton.h"
 #import "StyleKitGF.h"
 
-@implementation ArrowsView
+@implementation ArrowsButton
 
 
 // Only override drawRect: if you perform custom drawing.
