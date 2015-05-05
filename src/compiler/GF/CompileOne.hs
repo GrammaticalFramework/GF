@@ -25,6 +25,7 @@ import GF.Data.Operations(ErrorMonad,liftErr,(+++),done)
 
 import GF.System.Directory(doesFileExist,getCurrentDirectory,renameFile)
 import System.FilePath(makeRelative)
+import System.Random(randomIO)
 import qualified Data.Map as Map
 import GF.Text.Pretty(render,(<+>),($$)) --Doc,
 import GF.System.Console(TermColors(..),getTermColors)
@@ -142,11 +143,12 @@ compileSourceModule opts cwd mb_gfFile gr =
 --writeGFO :: Options -> InitPath -> FilePath -> SourceModule -> IOE ()
 writeGFO opts cwd file mo =
     putPointE Normal opts ("  write file" +++ rfile) $
-      do encodeModule tmp mo2
+      do n <- liftIO randomIO --avoid name clashes when compiling with 'make -j'
+         let tmp = file++".tmp" ++show (n::Int)
+         encodeModule tmp mo2
          renameFile tmp file
   where
     rfile = makeRelative cwd file
-    tmp = file++".tmp"
     mo2 = (m,mi{jments=Map.filter notAnyInd (jments mi)})
     (m,mi) = subexpModule mo
 
