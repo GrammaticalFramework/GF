@@ -18,6 +18,7 @@
 #import "TranslationTextTableViewCell.h"
 #import "ArrowsView.h"
 #import "MenuView.h"
+#import "SLKTextView+TextInputMode.h"
 
 // Grammatical framework
 #import "pgf/pgf.h"
@@ -108,6 +109,12 @@
     self.inverted = NO;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
+}
+
 - (void)changeLanguage:(id)sender {
     [self performSegueWithIdentifier:@"ChangeLanguage" sender:sender];
 }
@@ -119,6 +126,9 @@
     
     self.leftLanguageButton.title = self.translator.from.language.name;
     self.rightLanguageButton.title = self.translator.to.language.name;
+    
+    self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
+    [self.textView reloadInputViews];
 }
 
 #pragma mark - Navigation
