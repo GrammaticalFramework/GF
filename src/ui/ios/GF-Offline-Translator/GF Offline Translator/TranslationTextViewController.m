@@ -42,13 +42,20 @@
 
 @implementation TranslationTextViewController
 
-#pragma mark - Getters
+#pragma mark - Getters & setters
 
 - (NSMutableArray *)inputs {
     if (!_inputs) {
         _inputs = [NSMutableArray new];
     }
     return _inputs;
+}
+
+- (void)setIsLoadingGrammar:(BOOL)isLoadingGrammar {
+    _isLoadingGrammar = isLoadingGrammar;
+    
+    self.leftLanguageButton.enabled = !isLoadingGrammar;
+    self.rightLanguageButton.enabled = !isLoadingGrammar;
 }
 
 #pragma mark - Initializer
@@ -69,16 +76,18 @@
     
     // Load grammars
     self.grammarQueue = dispatch_queue_create("Load grammars",NULL);
+    
     self.isLoadingGrammar = YES;
+    
     dispatch_async(self.grammarQueue, ^{
         translator.from = [Grammar loadGrammarFromLanguage:fromLanguage withTranslator:translator];
         translator.to = [Grammar loadGrammarFromLanguage:toLanguage withTranslator:translator];
         self.translator = translator;
         
-        self.isLoadingGrammar = NO;
-        
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.isLoadingGrammar = NO;
             [self updateButtonTitles];
+            [self textDidUpdate:YES];
         });
     });
     
@@ -168,6 +177,7 @@
 #pragma mark - TranslationTextViewControllerDelegate
 
 - (void)changeFromLanguageToLanguage:(Language *)laguange {
+    self.leftLanguageButton.title = @"loading";
     [self changeLanguage:laguange withSetGrammarBlock:^(Grammar *grammar) {
         self.translator.from = grammar;
     } getGrammarBlock:^Grammar*{
@@ -176,6 +186,7 @@
 }
 
 - (void)changeToLanguageToLanguage:(Language *)laguange {
+    self.rightLanguageButton.title = @"loading";
     [self changeLanguage:laguange withSetGrammarBlock:^(Grammar *grammar) {
         self.translator.to = grammar;
     } getGrammarBlock:^Grammar*{
@@ -184,10 +195,9 @@
 }
 
 - (void)changeLanguage:(Language *)laguange withSetGrammarBlock:(void (^)(Grammar *grammar))setGrammarblock getGrammarBlock:(Grammar*(^)(void))getGrammarBlock {
+
     self.isLoadingGrammar = YES;
-    
-    self.leftLanguageButton.title = @"loading";
-    self.rightLanguageButton.title = @"loading";
+    [self textDidUpdate:YES];
     
     dispatch_async(self.grammarQueue, ^{
         if ([self.translator.previous.language isEqualToLanguage:laguange]) {
@@ -198,10 +208,11 @@
             self.translator.previous = getGrammarBlock();
             self.translator.from = [Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator];
         }
-        self.isLoadingGrammar = NO;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateButtonTitles];
+            [self textDidUpdate:YES];
+            self.isLoadingGrammar = NO;
         });
     });
 }
@@ -230,7 +241,9 @@
 
 - (BOOL)canPressRightButton {
     // Asks if the right button can be pressed
-    
+    if (self.isLoadingGrammar) {
+        return NO;
+    }
     return [super canPressRightButton];
 }
 
