@@ -16,7 +16,7 @@
 
 // Views
 #import "TranslationTextTableViewCell.h"
-#import "ArrowsView.h"
+#import "ArrowsButton.h"
 #import "MenuView.h"
 #import "SLKTextView+TextInputMode.h"
 
@@ -33,8 +33,10 @@
 
 @property (nonatomic) Translator *translator;
 @property (nonatomic, strong) NSMutableArray *inputs;
+@property (nonatomic) BOOL isLoadingGrammar;
 @property (nonatomic) UIBarButtonItem *leftLanguageButton;
 @property (nonatomic) UIBarButtonItem *rightLanguageButton;
+@property (nonatomic) dispatch_queue_t grammarQueue;
 
 @end
 
@@ -63,12 +65,22 @@
     // Setup translator
     Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" andBcp:@"sv-SE"];
     Language *toLanguage = [[Language alloc] initWithName:@"English" abbreviation:@"Eng" andBcp:@"en-GB"];
-    
     Translator *translator = [[Translator alloc] init];
-    translator.from = [Grammar loadGrammarFromLanguage:fromLanguage withTranslator:translator];
-    translator.to = [Grammar loadGrammarFromLanguage:toLanguage withTranslator:translator];
     
-    self.translator = translator;
+    // Load grammars
+    self.grammarQueue = dispatch_queue_create("Load grammars",NULL);
+    self.isLoadingGrammar = YES;
+    dispatch_async(self.grammarQueue, ^{
+        translator.from = [Grammar loadGrammarFromLanguage:fromLanguage withTranslator:translator];
+        translator.to = [Grammar loadGrammarFromLanguage:toLanguage withTranslator:translator];
+        self.translator = translator;
+        
+        self.isLoadingGrammar = NO;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateButtonTitles];
+        });
+    });
     
     // Register cells
     UINib *nib = [UINib nibWithNibName:@"TranslationInputTableViewCell" bundle:nil];
@@ -83,16 +95,16 @@
     menuView.backgroundColor = [UIColor clearColor];
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
     
-    ArrowsView *arrows = [[ArrowsView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
     [arrows addTarget:self action:@selector(switchLanguage:) forControlEvents:UIControlEventTouchUpInside];
     arrows.backgroundColor = [UIColor clearColor];
     UIBarButtonItem *arrowsButton = [[UIBarButtonItem alloc] initWithCustomView:arrows];
     
-    self.leftLanguageButton = [[UIBarButtonItem alloc] initWithTitle:self.translator.from.language.name
+    self.leftLanguageButton = [[UIBarButtonItem alloc] initWithTitle:@"Loading"
                                                                style:(UIBarButtonItemStylePlain)
                                                               target:self
                                                               action:@selector(changeLanguage:)];
-    self.rightLanguageButton = [[UIBarButtonItem alloc] initWithTitle:self.translator.to.language.name
+    self.rightLanguageButton = [[UIBarButtonItem alloc] initWithTitle:@"Loading"
                                                                style:(UIBarButtonItemStylePlain)
                                                               target:self
                                                               action:@selector(changeLanguage:)];
@@ -156,30 +168,44 @@
 #pragma mark - TranslationTextViewControllerDelegate
 
 - (void)changeFromLanguageToLanguage:(Language *)laguange {
-    if ([self.translator.previous.language isEqualToLanguage:laguange]) {
-        Grammar *temp = self.translator.from;
-        self.translator.from = self.translator.previous;
-        self.translator.previous = temp;
-    } else {
-        self.translator.previous = self.translator.from;
-        self.translator.from = [Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator];
-    }
-    
-    [self updateButtonTitles];
+    [self changeLanguage:laguange withSetGrammarBlock:^(Grammar *grammar) {
+        self.translator.from = grammar;
+    } getGrammarBlock:^Grammar*{
+        return self.translator.from;
+    }];
 }
 
 - (void)changeToLanguageToLanguage:(Language *)laguange {
-    if ([self.translator.previous.language isEqualToLanguage:laguange]) {
-        Grammar *temp = self.translator.to;
-        self.translator.to = self.translator.previous;
-        self.translator.previous = temp;
-    } else {
-        self.translator.previous = self.translator.to;
-        self.translator.to = [Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator];
-    }
-    
-    [self updateButtonTitles];
+    [self changeLanguage:laguange withSetGrammarBlock:^(Grammar *grammar) {
+        self.translator.to = grammar;
+    } getGrammarBlock:^Grammar*{
+        return self.translator.to;
+    }];
 }
+
+- (void)changeLanguage:(Language *)laguange withSetGrammarBlock:(void (^)(Grammar *grammar))setGrammarblock getGrammarBlock:(Grammar*(^)(void))getGrammarBlock {
+    self.isLoadingGrammar = YES;
+    
+    self.leftLanguageButton.title = @"loading";
+    self.rightLanguageButton.title = @"loading";
+    
+    dispatch_async(self.grammarQueue, ^{
+        if ([self.translator.previous.language isEqualToLanguage:laguange]) {
+            Grammar *temp = self.translator.from;
+            setGrammarblock(self.translator.previous);
+            self.translator.previous = temp;
+        } else {
+            self.translator.previous = getGrammarBlock();
+            self.translator.from = [Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator];
+        }
+        self.isLoadingGrammar = NO;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateButtonTitles];
+        });
+    });
+}
+
 
 #pragma mark - SLKTextViewController Events
 

@@ -128,7 +128,7 @@
 		CC8E010E1AEE38600040920E /* AppSpa.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC8E01011AEE38600040920E /* AppSpa.pgf_c */; };
 		CC8E010F1AEE38600040920E /* AppSwe.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC8E01021AEE38600040920E /* AppSwe.pgf_c */; };
 		CC98AF0F1AEE72D800DFA116 /* LanguagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */; };
-		CC98AF121AEE76D100DFA116 /* ArrowsView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF111AEE76D100DFA116 /* ArrowsView.m */; };
+		CC98AF121AEE76D100DFA116 /* ArrowsButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF111AEE76D100DFA116 /* ArrowsButton.m */; };
 		CC98AF181AEE78E800DFA116 /* StyleKitGF.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF171AEE78E800DFA116 /* StyleKitGF.m */; };
 		CC98AF1B1AEF71B300DFA116 /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1A1AEF71B300DFA116 /* Language.m */; };
 		CC98AF1F1AEF772200DFA116 /* Grammar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF1E1AEF772200DFA116 /* Grammar.m */; };
@@ -281,8 +281,8 @@
 		CC8E01021AEE38600040920E /* AppSwe.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppSwe.pgf_c; sourceTree = "<group>"; };
 		CC98AF0D1AEE72D800DFA116 /* LanguagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanguagesViewController.h; sourceTree = "<group>"; };
 		CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanguagesViewController.m; sourceTree = "<group>"; };
-		CC98AF101AEE76D100DFA116 /* ArrowsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrowsView.h; sourceTree = "<group>"; };
-		CC98AF111AEE76D100DFA116 /* ArrowsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrowsView.m; sourceTree = "<group>"; };
+		CC98AF101AEE76D100DFA116 /* ArrowsButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrowsButton.h; sourceTree = "<group>"; };
+		CC98AF111AEE76D100DFA116 /* ArrowsButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrowsButton.m; sourceTree = "<group>"; };
 		CC98AF161AEE78E800DFA116 /* StyleKitGF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleKitGF.h; sourceTree = "<group>"; };
 		CC98AF171AEE78E800DFA116 /* StyleKitGF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleKitGF.m; sourceTree = "<group>"; };
 		CC98AF191AEF71B300DFA116 /* Language.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Language.h; sourceTree = "<group>"; };
@@ -403,15 +403,15 @@
 				CC98AF171AEE78E800DFA116 /* StyleKitGF.m */,
 				CC619EDD1AEE59F8003A6EC7 /* TranslationTextTableViewCell.h */,
 				CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */,
-				CC98AF101AEE76D100DFA116 /* ArrowsView.h */,
-				CC98AF111AEE76D100DFA116 /* ArrowsView.m */,
+				CC98AF101AEE76D100DFA116 /* ArrowsButton.h */,
+				CC98AF111AEE76D100DFA116 /* ArrowsButton.m */,
 				CC98AF261AEFB4CF00DFA116 /* MenuView.h */,
 				CC98AF271AEFB4CF00DFA116 /* MenuView.m */,
+				CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */,
+				CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */,
 				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
 				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
 				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
-				CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */,
-				CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -784,7 +784,7 @@
 				CC8E00AA1AEE32C40040920E /* graphviz.h in Sources */,
 				CC8E00AB1AEE32C40040920E /* hopu.c in Sources */,
 				CC8E00AC1AEE32C40040920E /* hopu.h in Sources */,
-				CC98AF121AEE76D100DFA116 /* ArrowsView.m in Sources */,
+				CC98AF121AEE76D100DFA116 /* ArrowsButton.m in Sources */,
 				CC8E00AD1AEE32C40040920E /* jit.c in Sources */,
 				CC8E00AE1AEE32C40040920E /* asm.h in Sources */,
 				CC8E00AF1AEE32C40040920E /* core.h in Sources */,
