@@ -18,6 +18,7 @@
                 abbreviation:(NSString *)abbreviation
                       andBcp:(NSString *)bcp;
 
+- (BOOL)isEqualToLanguage:(Language *)language;
 + (NSArray *)allLanguages;
 
 @end

@@ -7,8 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TranslationTextViewController.h"
+@class Language;
+
 
 @interface LanguagesViewController : UITableViewController
-
+@property (nonatomic, weak) id<TranslationTextViewControllerDelegate> delegate;
+@property (nonatomic) Language *senderLanguage;
+@property (nonatomic) BOOL fromLanguage;
 
 @end

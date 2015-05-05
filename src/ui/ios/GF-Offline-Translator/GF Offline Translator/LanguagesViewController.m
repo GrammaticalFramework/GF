@@ -41,6 +41,19 @@
     return cell;
 }
 
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Language *language = self.languages[indexPath.row];
+    
+    if (self.fromLanguage) {
+        [self.delegate changeFromLanguageToLanguage:language];
+    } else {
+        [self.delegate changeToLanguageToLanguage:language];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 /*
 #pragma mark - Navigation
 

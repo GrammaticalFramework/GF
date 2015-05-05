@@ -25,6 +25,9 @@
 #import "gu/exn.h"
 #import "gu/file.h"
 
+// View controllers
+#import "LanguagesViewController.h"
+
 @interface TranslationTextViewController ()
 
 @property (nonatomic) Translator *translator;
@@ -116,6 +119,56 @@
     
     self.leftLanguageButton.title = self.translator.from.language.name;
     self.rightLanguageButton.title = self.translator.to.language.name;
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [super prepareForSegue:segue sender:sender];
+    
+    if ([segue.identifier isEqualToString:@"ChangeLanguage"]) {
+        UINavigationController *navigationController = segue.destinationViewController;
+        
+        LanguagesViewController *destinattionController = (LanguagesViewController *)navigationController.topViewController;
+        BOOL fromLanguage = sender == self.leftLanguageButton;
+        
+        destinattionController.senderLanguage = fromLanguage ? self.translator.from.language : self.translator.to.language;
+        destinattionController.fromLanguage = fromLanguage;
+        destinattionController.delegate = self;
+    }
+}
+
+- (void)updateButtonTitles {
+    self.leftLanguageButton.title = self.translator.from.language.name;
+    self.rightLanguageButton.title = self.translator.to.language.name;
+}
+
+#pragma mark - TranslationTextViewControllerDelegate
+
+- (void)changeFromLanguageToLanguage:(Language *)laguange {
+    if ([self.translator.previous.language isEqualToLanguage:laguange]) {
+        Grammar *temp = self.translator.from;
+        self.translator.from = self.translator.previous;
+        self.translator.previous = temp;
+    } else {
+        self.translator.previous = self.translator.from;
+        self.translator.from = [Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator];
+    }
+    
+    [self updateButtonTitles];
+}
+
+- (void)changeToLanguageToLanguage:(Language *)laguange {
+    if ([self.translator.previous.language isEqualToLanguage:laguange]) {
+        Grammar *temp = self.translator.to;
+        self.translator.to = self.translator.previous;
+        self.translator.previous = temp;
+    } else {
+        self.translator.previous = self.translator.to;
+        self.translator.to = [Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator];
+    }
+    
+    [self updateButtonTitles];
 }
 
 #pragma mark - SLKTextViewController Events

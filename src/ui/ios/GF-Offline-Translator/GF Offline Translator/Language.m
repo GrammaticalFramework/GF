@@ -22,6 +22,17 @@
     return self;
 }
 
+- (BOOL)isEqualToLanguage:(Language *)language {
+    if (!language) {
+        return NO;
+    }
+    
+    BOOL haveEqualNames = (!self.name && !language.name) || [self.name isEqualToString:language.name];
+    BOOL haveEqualBcp   = (!self.bcp && !language.bcp) || [self.bcp isEqualToString:language.bcp];
+    
+    return haveEqualNames && haveEqualBcp;
+}
+
 + (NSArray *)allLanguages {
     return @[
              [[Language alloc] initWithName:@"Bulgarian"    abbreviation:@"Bul"     andBcp:@"en-GB"],
