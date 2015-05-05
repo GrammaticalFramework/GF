@@ -7,8 +7,11 @@
 //
 
 #import "LanguagesViewController.h"
+#import "Language.h"
 
 @interface LanguagesViewController ()
+
+@property (nonatomic) NSArray *languages;
 
 @end
 
@@ -16,13 +19,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.languages = Language.allLanguages;
 }
 
 - (IBAction)cancel:(UIBarButtonItem *)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - Table view data source 
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.languages.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LanguageCell" forIndexPath:indexPath];
+    Language *language = self.languages[indexPath.row];
+    cell.textLabel.text = language.name;
+    
+    return cell;
+}
 
 /*
 #pragma mark - Navigation

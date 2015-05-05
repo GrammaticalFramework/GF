@@ -16,8 +16,8 @@
 
 // Views
 #import "TranslationTextTableViewCell.h"
-#import "ArrowsButton.h"
-#import "MenuViewItem.h"
+#import "ArrowsView.h"
+#import "MenuView.h"
 
 // Grammatical framework
 #import "pgf/pgf.h"
@@ -29,6 +29,8 @@
 
 @property (nonatomic) Translator *translator;
 @property (nonatomic, strong) NSMutableArray *inputs;
+@property (nonatomic) UIBarButtonItem *leftLanguageButton;
+@property (nonatomic) UIBarButtonItem *rightLanguageButton;
 
 @end
 
@@ -71,23 +73,50 @@
     nib = [UINib nibWithNibName:@"TranslationOutputTableViewCell" bundle:nil];
     [[self tableView] registerNib:nib forCellReuseIdentifier:@"TranslationOutput"];
     
-    // Setup title view button
-    ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
-    self.navigationItem.titleView = arrows;
+    // Setup buttons
     
-    // Setup menu buttom
-    MenuViewItem *menuView = [[MenuViewItem alloc] initWithFrame:CGRectMake(0, 0, 10, 30)];
+    MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
     menuView.backgroundColor = [UIColor clearColor];
-    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
-    self.navigationItem.rightBarButtonItems = [self.navigationItem.rightBarButtonItems arrayByAddingObject:barButton].reverseObjectEnumerator.allObjects;
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
+    
+    ArrowsView *arrows = [[ArrowsView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    [arrows addTarget:self action:@selector(switchLanguage:) forControlEvents:UIControlEventTouchUpInside];
+    arrows.backgroundColor = [UIColor clearColor];
+    UIBarButtonItem *arrowsButton = [[UIBarButtonItem alloc] initWithCustomView:arrows];
+    
+    self.leftLanguageButton = [[UIBarButtonItem alloc] initWithTitle:self.translator.from.language.name
+                                                               style:(UIBarButtonItemStylePlain)
+                                                              target:self
+                                                              action:@selector(changeLanguage:)];
+    self.rightLanguageButton = [[UIBarButtonItem alloc] initWithTitle:self.translator.to.language.name
+                                                               style:(UIBarButtonItemStylePlain)
+                                                              target:self
+                                                              action:@selector(changeLanguage:)];
+    
+    
+    self.navigationItem.leftBarButtonItems = @[self.leftLanguageButton, arrowsButton, self.rightLanguageButton];
+    self.navigationItem.rightBarButtonItem = menuButton;
     
     // Setup table view
     self.tableView.estimatedRowHeight = 89;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.allowsSelection = NO;
     self.inverted = NO;
 }
 
+- (void)changeLanguage:(id)sender {
+    [self performSegueWithIdentifier:@"ChangeLanguage" sender:sender];
+}
+
+- (void)switchLanguage:(id)sender {
+    Grammar *temp = self.translator.from;
+    self.translator.from = self.translator.to;
+    self.translator.to = temp;
+    
+    self.leftLanguageButton.title = self.translator.from.language.name;
+    self.rightLanguageButton.title = self.translator.to.language.name;
+}
 
 #pragma mark - SLKTextViewController Events
 
@@ -119,7 +148,7 @@
 - (void)didPressRightButton:(id)sender {
     // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
     // Must call super
-    Translation *newTranslation = [self.translator translatePhrase:self.textView.text];
+    Translation *newTranslation = [self.translator translatePhrase:self.textView.text.lowercaseString];
     [self.inputs addObject:newTranslation];
     [self.tableView reloadData];
     
