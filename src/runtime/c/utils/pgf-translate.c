@@ -155,7 +155,9 @@ int main(int argc, char* argv[]) {
 
 		GuExn* parse_err = gu_new_exn(ppool);
 		result =
-			pgf_parse(from_concr, cat, line, parse_err, ppool, ppool);
+			pgf_parse_with_heuristics(from_concr, cat, line, 
+			                          -1, callbacks,
+			                          parse_err, ppool, ppool);
 		if (!gu_ok(parse_err)) {
 			if (gu_exn_caught(parse_err, PgfExn)) {
 				GuString msg = gu_exn_caught_data(parse_err);
