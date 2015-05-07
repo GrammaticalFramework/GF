@@ -173,7 +173,8 @@ pgf_match_name_lit(PgfLiteralCallback* self,
                    GuString sentence, size_t* poffset,
                    GuPool *out_pool)
 {
-	gu_assert(lin_idx == 0);
+	if (lin_idx != 0)
+		return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
 	GuStringBuf *sbuf = gu_string_buf(tmp_pool);
@@ -211,21 +212,32 @@ pgf_match_name_lit(PgfLiteralCallback* self,
 		ep = gu_new(PgfExprProb, out_pool);
 		ep->prob = 0;
 
-		PgfExprApp *expr_app =
+		PgfExprApp *expr_app1 =
 			gu_new_variant(PGF_EXPR_APP,
 			               PgfExprApp,
 			               &ep->expr, out_pool);
-		GuString con = "MkSymb";
-		PgfExprFun *expr_fun =
+		GuString con1 = "SymbPN";
+		PgfExprFun *expr_fun1 =
 			gu_new_flex_variant(PGF_EXPR_FUN,
 			                    PgfExprFun,
-			                    fun, strlen(con)+1,
-			                    &expr_app->fun, out_pool);
-		strcpy(expr_fun->fun, con);
+			                    fun, strlen(con1)+1,
+			                    &expr_app1->fun, out_pool);
+		strcpy(expr_fun1->fun, con1);
+		PgfExprApp *expr_app2 =
+			gu_new_variant(PGF_EXPR_APP,
+			               PgfExprApp,
+			               &expr_app1->arg, out_pool);
+		GuString con2 = "MkSymb";
+		PgfExprFun *expr_fun2 =
+			gu_new_flex_variant(PGF_EXPR_FUN,
+			                    PgfExprFun,
+			                    fun, strlen(con2)+1,
+			                    &expr_app2->fun, out_pool);
+		strcpy(expr_fun2->fun, con2);
 		PgfExprLit *expr_lit =
 			gu_new_variant(PGF_EXPR_LIT,
 			               PgfExprLit,
-			               &expr_app->arg, out_pool);
+			               &expr_app2->arg, out_pool);
 		GuString val = gu_string_buf_freeze(sbuf, tmp_pool);
 		PgfLiteralStr *lit_str =
 			gu_new_flex_variant(PGF_LITERAL_STR,
