@@ -31337,7 +31337,7 @@ lin landscape_V2 = variants {} ; -- status=guess
 lin landscaping_N = mkN "landskap" neutrum ;
 lin landscapist_N = mkN "landskapsmålare"; -- src=google
 lin landside_N = variants {} ; -- status=guess
-lin landslide_N = mkN "jordskredsseger" ; -- comment=4
+lin landslide_N = mkN "jordskred" neutrum | mkN "jordskredsseger" ; -- comment=4
 lin landslip_N = mkN "ras" neutrum ; -- comment=2
 lin landsman_N = mkN "landsman" "landsmannen" "landsmän" "landsmännen" ;
 lin landward_Adv = variants {} ; -- status=guess
@@ -36443,7 +36443,7 @@ lin mudguard_N = mkN "stänkskärm" ; -- status=guess
 lin mudhif_N = variants {} ; -- status=guess
 lin mudra_N = mkN "mudra";
 lin mudskipper_N = variants {} ; -- status=guess
-lin mudslide_N = (mkN "ras" "raser") | mkN "slamström" | mkN "lerskred" ; -- status=guess status=guess status=guess
+lin mudslide_N = (mkN "ras" "ras") | mkN "slamström" | mkN "lerskred" ; -- status=guess status=guess status=guess
 lin mudslinger_N = variants {} ; -- status=guess
 lin muesli_N = mkN "müsli" ; -- status=guess
 lin muezzin_N = variants {} ; -- status=guess
@@ -45621,8 +45621,7 @@ lin rabid_A = mkA "rabiat" "rabiat" ; -- SaldoWN
 lin rabies_N = mkN "rabies" ; -- SaldoWN
 lin raccoon_N = mkN "tvättbjörn" ; -- status=guess
 lin race_1_N = mkN "tävling" ;
-lin race_2_N = mkN "ras" "ras" ;
-lin race_N = mkN "ras" "raser" | mkN "tävling" | mkN "race" ; ---- alreadu split
+lin race_2_N = mkN "ras" "raser" ;
 lin race_V = mkV "tävla" ; -- status=guess
 lin race_V2 = variants {} ; -- mkV "tävla" ;
 lin race_V2V = variants {} ; -- mkV "tävla" ;
