@@ -4780,19 +4780,17 @@ bool p(GuUCS c) \
 	return checkattr(c,m); \
 }
 
-#define unipred_s(p,m) \
-bool p(GuUCS c) \
-{ \
-        return checkattr_s(c,m); \
+bool gu_ucs_is_space(GuUCS c)
+{
+	if (c == ' '  || c == '\t' || c == '\n' || c == '\r' ||
+	    c == '\f' || c == '\v' || c == '\xa0')
+		return true;
+	return checkattr_s(c,GENCAT_ZS);
 }
 
-/*
-	Make these rules as close to Hugs as possible.
-*/
 
 unipred(gu_ucs_is_cntrl,GENCAT_CC)
 unipred(gu_ucs_is_print, (GENCAT_MC | GENCAT_NO | GENCAT_SK | GENCAT_ME | GENCAT_ND |   GENCAT_PO | GENCAT_LT | GENCAT_PC | GENCAT_SM | GENCAT_ZS |   GENCAT_LU | GENCAT_PD | GENCAT_SO | GENCAT_PE | GENCAT_PF |   GENCAT_PS | GENCAT_SC | GENCAT_LL | GENCAT_LM | GENCAT_PI |   GENCAT_NL | GENCAT_MN | GENCAT_LO))
-unipred_s(gu_ucs_is_space,GENCAT_ZS)
 unipred(gu_ucs_is_upper,(GENCAT_LU|GENCAT_LT))
 unipred(gu_ucs_is_lower,GENCAT_LL)
 unipred(gu_ucs_is_alpha,(GENCAT_LL|GENCAT_LU|GENCAT_LT|GENCAT_LM|GENCAT_LO))
