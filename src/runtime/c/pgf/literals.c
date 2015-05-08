@@ -12,11 +12,13 @@ pgf_match_string_lit(PgfLiteralCallback* self,
 {
 	gu_assert(lin_idx == 0);
 
-	size_t offset = *poffset;
-	while (sentence[offset] && !gu_is_space(sentence[offset]))
-		offset++;
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
+	size_t len = 0;
+	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
+		len = p - buf;
+	}
 
-	size_t len = offset - *poffset;
 	if (len > 0) {
 		PgfExprProb* ep = gu_new(PgfExprProb, out_pool);
 		ep->prob = 0;
@@ -31,10 +33,10 @@ pgf_match_string_lit(PgfLiteralCallback* self,
 						        PgfLiteralStr,
 						        val, len+1,
 						        &expr_lit->lit, out_pool);
-		memcpy(lit_str->val, sentence+*poffset, len);
+		memcpy(lit_str->val, buf, len);
 		lit_str->val[len] = 0;
 
-		*poffset = offset;
+		*poffset += len;
 		return ep;
 	} else {
 		return NULL;
@@ -71,15 +73,17 @@ pgf_match_int_lit(PgfLiteralCallback* self,
 {
 	gu_assert(lin_idx == 0);
 
-	size_t offset = *poffset;
-	while (sentence[offset] && !gu_is_space(sentence[offset]))
-		offset++;
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
+	size_t len = 0;
+	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
+		len = p - buf;
+	}
 
-	size_t len = offset - *poffset;
 	if (len > 0) {
 		GuPool* tmp_pool = gu_local_pool();
 		PgfToken tok = gu_malloc(tmp_pool, len+1);
-		memcpy((char*) tok, sentence+*poffset, len);
+		memcpy((char*) tok, buf, len);
 		((char*) tok)[len] = 0;
 
 		int val;
@@ -103,7 +107,7 @@ pgf_match_int_lit(PgfLiteralCallback* self,
 						   &expr_lit->lit, out_pool);
 		lit_int->val = val;
 
-		*poffset = offset;
+		*poffset += len;
 		return ep;
 	} else {
 		return NULL;
@@ -123,15 +127,17 @@ pgf_match_float_lit(PgfLiteralCallback* self,
 {
 	gu_assert(lin_idx == 0);
 
-	size_t offset = *poffset;
-	while (sentence[offset] && !gu_is_space(sentence[offset]))
-		offset++;
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
+	size_t len = 0;
+	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
+		len = p - buf;
+	}
 
-	size_t len = offset - *poffset;
 	if (len > 0) {
 		GuPool* tmp_pool = gu_local_pool();
 		PgfToken tok = gu_malloc(tmp_pool, len+1);
-		memcpy((char*) tok, sentence+*poffset, len);
+		memcpy((char*) tok, buf, len);
 		((char*) tok)[len] = 0;
 
 		double val;
@@ -155,7 +161,7 @@ pgf_match_float_lit(PgfLiteralCallback* self,
 						   &expr_lit->lit, out_pool);
 		lit_flt->val = val;
 
-		*poffset = offset;
+		*poffset += len;
 		return ep;
 	} else {
 		return NULL;
@@ -181,30 +187,27 @@ pgf_match_name_lit(PgfLiteralCallback* self,
 	GuOut* out = gu_string_buf_out(sbuf);
 	GuExn* err = gu_new_exn(tmp_pool);
 
-	size_t offset = *poffset;
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
 
 	int i = 0;
-	while (iswupper(sentence[offset])) {
-		size_t len = 0;
-		while (!gu_is_space(sentence[offset+len])) {
-			len++;
-		}
-
-		PgfToken tok = gu_malloc(tmp_pool, len+1);
-		memcpy((char*) tok, sentence+offset, len);
-		((char*) tok)[len] = 0;
-
+	GuUCS ucs = gu_utf8_decode(&p);
+	while (gu_ucs_is_upper(ucs)) {
 		if (i > 0)
 		  gu_putc(' ', out, err);
-		gu_string_write(tok, out, err);
-		
+		gu_out_utf8(ucs, out, err);
+		ucs = gu_utf8_decode(&p);
+
+		while (ucs != 0 && !gu_ucs_is_space(ucs)) {
+			gu_out_utf8(ucs, out, err);
+			*poffset = p - ((uint8_t*) sentence);
+			ucs = gu_utf8_decode(&p);
+		}
+
 		i++;
 
-		offset  += len;
-		*poffset = offset;
-
-		while (gu_is_space(sentence[offset]))
-			offset++;
+		while (gu_ucs_is_space(ucs))
+			ucs = gu_utf8_decode(&p);
 	}
 
 	PgfExprProb* ep = NULL;
