@@ -145,41 +145,39 @@ pgf_prev_extern_sym(PgfSymbol sym)
 	}
 }
 
-static void
-pgf_add_extern_tok(PgfSymbol* psym, PgfToken tok, GuPool* pool) {
-	PgfSymbol new_sym;
-	size_t tok_len = strlen(tok);
-	PgfSymbolKS* sks = (PgfSymbolKS*)
-		gu_alloc_variant(PGF_SYMBOL_KS,
-						 sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+tok_len+1,
-						 gu_alignof(PgfSymbolKS),
-						 &new_sym, pool);
-	strcpy(sks->token, tok);
-	*((PgfSymbol*) (((uint8_t*) sks)+sizeof(PgfSymbolKS)+tok_len+1)) = *psym;
-	*psym = new_sym;
-}
-
-PgfSymbol
-pgf_collect_extern_tok(PgfParsing* ps, size_t start, size_t end)
+static PgfSymbol
+pgf_collect_extern_tok(PgfParsing* ps, size_t start_offset, size_t end_offset)
 {
 	PgfSymbol sym = gu_null_variant;
 
-	size_t offset = start;
-	while (offset < end) {
+	const uint8_t* start = (uint8_t*) ps->sentence+start_offset;
+	const uint8_t* end   = (uint8_t*) ps->sentence+end_offset;
+
+	const uint8_t* p = start;
+	GuUCS ucs = gu_utf8_decode(&p);
+	while (start < end) {
 		size_t len = 0;
-		while (!gu_is_space(ps->sentence[offset+len])) {
-			len++;
+		while (p <= end && !gu_ucs_is_space(ucs)) {
+			len = (p - start);
+			ucs = gu_utf8_decode(&p);
 		}
 
-		PgfToken tok = gu_malloc(ps->pool, len+1);
-		memcpy((char*) tok, ps->sentence+offset, len);
-		((char*) tok)[len] = 0;
+		PgfSymbol new_sym;
+		PgfSymbolKS* sks = (PgfSymbolKS*)
+			gu_alloc_variant(PGF_SYMBOL_KS,
+			             sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+len+1,
+			             gu_alignof(PgfSymbolKS),
+			             &new_sym, ps->pool);
+		memcpy((char*) sks->token, start, len);
+		((char*) sks->token)[len] = 0;
+		*((PgfSymbol*) (((uint8_t*) sks)+sizeof(PgfSymbolKS)+len+1)) = sym;
+		sym = new_sym;
 
-		pgf_add_extern_tok(&sym, tok, ps->pool);
-
-		offset  += len;
-		while (gu_is_space(ps->sentence[offset]))
-			offset++;
+		start = p;
+		while (gu_ucs_is_space(ucs)) {
+			start = p;
+			ucs = gu_utf8_decode(&p);
+		}
 	}
 
 	return sym;
@@ -504,11 +502,11 @@ skip_space(GuString* psent, size_t* plen)
 	if (*plen == 0)
 		return false;
 
-	char c = **psent;
-	if (!gu_is_space(c))
+	const uint8_t* p = (uint8_t*) *psent;
+	if (!gu_ucs_is_space(gu_utf8_decode(&p)))
 		return false;
 
-	(*psent)++;
+	*psent = (GuString) p;
 	return true;
 }
 
@@ -2056,24 +2054,22 @@ pgf_parsing_last_token(PgfParsing* ps, GuPool* pool)
 	if (ps->before == NULL)
 		return "";
 
-	size_t start = ps->before->end_offset;
-	while (start > 0) {
-		char c = ps->sentence[start-1];
-		if (gu_is_space(c))
-			break;
-		start--;
+	const uint8_t* start = (uint8_t*) ps->sentence;
+	const uint8_t* end   = (uint8_t*) ps->sentence + ps->before->end_offset;
+
+	const uint8_t* p = start;
+	while (p < end) {
+		if (gu_ucs_is_space(gu_utf8_decode(&p))) {
+			start = p;
+		}
 	}
 
-	size_t end = ps->before->end_offset;
-	while (ps->sentence[end] != 0) {
-		char c = ps->sentence[end];
-		if (gu_is_space(c))
-			break;
-		end++;
+	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
+		end = p;
 	}
 
 	char* tok = gu_malloc(pool, end-start+1);
-	memcpy(tok, ps->sentence+start, (end-start));
+	memcpy(tok, start, (end-start));
 	tok[end-start] = 0;
 	return tok;
 }
