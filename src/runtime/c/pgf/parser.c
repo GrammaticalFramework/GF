@@ -1079,7 +1079,7 @@ pgf_symbols_cmp(GuString* psent, BIND_TYPE* pbind, PgfSymbols* syms)
 
 static void
 pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state,
-                      size_t i, size_t j, ptrdiff_t min, ptrdiff_t max)
+                      int i, int j, ptrdiff_t min, ptrdiff_t max)
 {
 	// This is a variation of a binary search algorithm which
 	// can retrieve all prefixes of a string with minimal
@@ -1087,7 +1087,7 @@ pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state,
 	// prefix separately.
 
 	while (i <= j) {
-		size_t k  = (i+j) / 2;
+		int k  = (i+j) / 2;
 		PgfSequence* seq = gu_seq_index(ps->concr->sequences, PgfSequence, k);
 
 		GuString start   = ps->sentence + state->end_offset;
