@@ -1563,6 +1563,8 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 		break;
 	}
 	case PGF_SYMBOL_CAPIT: {
+		pgf_item_advance(item, ps->pool);
+		pgf_parsing_symbol(ps, item, item->curr_sym);
 		break;
 	}
 	default:
