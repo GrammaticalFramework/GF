@@ -69,6 +69,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Register cells
+    UINib *nib = [UINib nibWithNibName:@"TranslationInputTableViewCell" bundle:nil];
+    [[self tableView] registerNib:nib forCellReuseIdentifier:@"TranslationInput"];
+    
+    nib = [UINib nibWithNibName:@"TranslationOutputTableViewCell" bundle:nil];
+    [[self tableView] registerNib:nib forCellReuseIdentifier:@"TranslationOutput"];
+    
+    // Setup table view
+    self.tableView.estimatedRowHeight = 89;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.allowsSelection = NO;
+    self.inverted = NO;
+    
+    // Setup buttons
+    MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
+    menuView.backgroundColor = [UIColor clearColor];
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
+    
+    ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    [arrows addTarget:self action:@selector(switchLanguage:) forControlEvents:UIControlEventTouchUpInside];
+    arrows.backgroundColor = [UIColor clearColor];
+    UIBarButtonItem *arrowsButton = [[UIBarButtonItem alloc] initWithCustomView:arrows];
+    
+    self.leftLanguageButton = [[UIBarButtonItem alloc] initWithTitle:@"Loading"
+                                                               style:(UIBarButtonItemStylePlain)
+                                                              target:self
+                                                              action:@selector(changeLanguage:)];
+    self.rightLanguageButton = [[UIBarButtonItem alloc] initWithTitle:@"Loading"
+                                                                style:(UIBarButtonItemStylePlain)
+                                                               target:self
+                                                               action:@selector(changeLanguage:)];
+    
+    
+    self.navigationItem.leftBarButtonItems = @[self.leftLanguageButton, arrowsButton, self.rightLanguageButton];
+    self.navigationItem.rightBarButtonItem = menuButton;
+    
     // Setup translator
     Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" bcp:@"sv-SE"];
     Language *toLanguage = [[Language alloc] initWithName:@"English" abbreviation:@"Eng" bcp:@"en-GB"];
@@ -90,43 +127,6 @@
             [self textDidUpdate:YES];
         });
     });
-    
-    // Register cells
-    UINib *nib = [UINib nibWithNibName:@"TranslationInputTableViewCell" bundle:nil];
-    [[self tableView] registerNib:nib forCellReuseIdentifier:@"TranslationInput"];
-    
-    nib = [UINib nibWithNibName:@"TranslationOutputTableViewCell" bundle:nil];
-    [[self tableView] registerNib:nib forCellReuseIdentifier:@"TranslationOutput"];
-    
-    // Setup buttons
-    MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
-    menuView.backgroundColor = [UIColor clearColor];
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
-    
-    ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    [arrows addTarget:self action:@selector(switchLanguage:) forControlEvents:UIControlEventTouchUpInside];
-    arrows.backgroundColor = [UIColor clearColor];
-    UIBarButtonItem *arrowsButton = [[UIBarButtonItem alloc] initWithCustomView:arrows];
-    
-    self.leftLanguageButton = [[UIBarButtonItem alloc] initWithTitle:@"Loading"
-                                                               style:(UIBarButtonItemStylePlain)
-                                                              target:self
-                                                              action:@selector(changeLanguage:)];
-    self.rightLanguageButton = [[UIBarButtonItem alloc] initWithTitle:@"Loading"
-                                                               style:(UIBarButtonItemStylePlain)
-                                                              target:self
-                                                              action:@selector(changeLanguage:)];
-    
-    
-    self.navigationItem.leftBarButtonItems = @[self.leftLanguageButton, arrowsButton, self.rightLanguageButton];
-    self.navigationItem.rightBarButtonItem = menuButton;
-    
-    // Setup table view
-    self.tableView.estimatedRowHeight = 89;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = NO;
-    self.inverted = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -228,6 +228,7 @@
 }
 
 - (void)didPressRightButton:(id)sender {
+    
     // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
     // Must call super
     Translation *newTranslation = [self.translator translatePhrase:self.textView.text.lowercaseString];
@@ -237,7 +238,6 @@
     
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
-    
     [super didPressRightButton:sender];
     
     NSIndexPath *bottomIndexPath = [NSIndexPath indexPathForRow:(self.inputs.count*2)-1 inSection:0];
