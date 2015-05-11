@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 @class Language, UIColor;
 
+typedef NS_ENUM(NSUInteger, TranslationResult) {
+    WorstResult,
+    BestResult,
+    DefaultResult,
+    ParseByChunksResult
+};
 
 @interface Translation : NSObject
 
@@ -16,7 +22,7 @@
 @property (nonatomic) NSString *toText;
 @property (nonatomic) Language *fromLanguage;
 @property (nonatomic) Language *toLanguage;
-@property (nonatomic) UIColor *color;
+@property (nonatomic) TranslationResult result;
 
 + (Translation *)translationWithText:(NSString *)fromText
                               toText:(NSString *)toText

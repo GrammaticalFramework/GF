@@ -10,6 +10,19 @@
 
 @implementation UIColor (TranslationsResults)
 
++ (UIColor *)colorForResult:(TranslationResult)result {
+    switch (result) {
+        case BestResult:
+            return [UIColor bestResultColor];
+        case WorstResult:
+            return [UIColor worstResultColor];
+        case ParseByChunksResult:
+            return [UIColor parseByChunksResultColor];
+        default:
+            return [UIColor defaultResultColor];
+    }
+}
+
 + (UIColor *)worstResultColor {
     return [UIColor colorWithRed:0.695 green:0.000 blue:0.007 alpha:1.000];
 }

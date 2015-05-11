@@ -7,12 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Translation.h"
 
 @interface UIColor (TranslationsResults)
 
-+ (UIColor *)worstResultColor;
-+ (UIColor *)parseByChunksResultColor;
-+ (UIColor *)bestResultColor;
-+ (UIColor *)defaultResultColor;
++ (UIColor *)colorForResult:(TranslationResult)result;
 
 @end

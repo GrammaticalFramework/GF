@@ -410,6 +410,8 @@
 				CC98AF111AEE76D100DFA116 /* ArrowsButton.m */,
 				CC98AF261AEFB4CF00DFA116 /* MenuView.h */,
 				CC98AF271AEFB4CF00DFA116 /* MenuView.m */,
+				CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */,
+				CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */,
 				CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */,
 				CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */,
 				CCCBEA051B00D18F00C5143D /* UITableViewCell+Customize.h */,
@@ -613,8 +615,6 @@
 				CC98AF211AEF773500DFA116 /* Translator.m */,
 				CC020CFC1AF76A6C0050AE38 /* Translation.h */,
 				CC020CFD1AF76A6C0050AE38 /* Translation.m */,
-				CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */,
-				CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";

@@ -10,6 +10,8 @@
 #import "Translation.h"
 #import "UIColor+TranslationsResults.h"
 
+
+
 @implementation Translation
 
 + (Translation *)translationWithText:(NSString *)fromText
@@ -18,7 +20,7 @@
                           toLanguage:(Language *)toLanguage {
     Translation *translation = [Translation new];
     
-    translation.color = [Translation colorForText:toText];
+    translation.result = [Translation resultForText:toText];
     
     translation.toText = [Translation formatTranslation:toText];
     translation.fromText = fromText;
@@ -29,29 +31,29 @@
     return translation;
 }
 
-+ (UIColor *)colorForText:(NSString *)text {
++ (TranslationResult)resultForText:(NSString *)text {
     
     NSString *firstChar = [text substringToIndex:1];
     
     if (text.length == 0) {
-        return [UIColor defaultResultColor];
+        return DefaultResult;
     }
     
     if ([firstChar isEqualToString:@"%"] ||
         [text rangeOfString:@"parse error:"].location != NSNotFound ||
         [text rangeOfString:@"["].location != NSNotFound) {
-        return [UIColor worstResultColor];
+        return WorstResult;
     }
     
     if ([firstChar isEqualToString:@"*"]) {
-        return [UIColor parseByChunksResultColor];
+        return ParseByChunksResult;
     }
     
     if ([firstChar isEqualToString:@"+"]) {
-        return [UIColor bestResultColor];
+        return BestResult;
     }
     
-    return [UIColor defaultResultColor];
+    return DefaultResult;
 }
 
 + (NSString *)formatTranslation:(NSString *)text {
