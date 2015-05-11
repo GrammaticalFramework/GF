@@ -86,10 +86,12 @@ sym2js (SymLit n l)    = new "SymLit" [JS.EInt n, JS.EInt l]
 sym2js (SymVar n l)    = new "SymVar" [JS.EInt n, JS.EInt l]
 sym2js (SymKS t)       = new "SymKS"  [JS.EStr t]
 sym2js (SymKP ts alts) = new "SymKP"  [JS.EArray (map sym2js ts), JS.EArray (map alt2js alts)]
-sym2js SymNE           = new "SymNE"  []
 sym2js SymBIND         = new "SymKS"  [JS.EStr "&+"]
 sym2js SymSOFT_BIND    = new "SymKS"  [JS.EStr "&+"]
+sym2js SymSOFT_SPACE   = new "SymKS"  [JS.EStr "&+"]
 sym2js SymCAPIT        = new "SymKS"  [JS.EStr "&|"]
+sym2js SymALL_CAPIT    = new "SymKS"  [JS.EStr "&|"]
+sym2js SymNE           = new "SymNE"  []
 
 alt2js (ps,ts) = new "Alt" [JS.EArray (map sym2js ps), JS.EArray (map JS.EStr ts)]
 

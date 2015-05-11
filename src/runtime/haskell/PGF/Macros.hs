@@ -220,7 +220,9 @@ computeSeq filter seq args = concatMap compute seq
     compute SymNE             = [LeafNE]
     compute SymBIND           = [LeafKS "&+"]
     compute SymSOFT_BIND      = []
+    compute SymSOFT_SPACE     = []
     compute SymCAPIT          = [LeafKS "&|"]
+    compute SymALL_CAPIT      = [LeafKS "&|"]
     compute (SymKP syms alts) = [LeafKP (concatMap compute syms) [(concatMap compute syms,cs) | (syms,cs) <- alts]]
 
     getArg d r

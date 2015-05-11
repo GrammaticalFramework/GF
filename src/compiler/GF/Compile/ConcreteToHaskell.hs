@@ -248,9 +248,11 @@ convert' va gId vs gr = ppT
 
     ppPredef n =
       case predef n of
-        Ok BIND      -> single (c "BIND")
-        Ok SOFT_BIND -> single (c "SOFT_BIND")
-        Ok CAPIT     -> single (c "CAPIT")
+        Ok BIND       -> single (c "BIND")
+        Ok SOFT_BIND  -> single (c "SOFT_BIND")
+        Ok SOFT_SPACE -> single (c "SOFT_SPACE")
+        Ok CAPIT      -> single (c "CAPIT")
+        Ok ALL_CAPIT  -> single (c "ALL_CAPIT")
         _ -> Var n
 
     ppP p =

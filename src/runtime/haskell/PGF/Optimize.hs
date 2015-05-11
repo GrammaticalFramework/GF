@@ -240,7 +240,9 @@ splitLexicalRules cnc p_prods =
         seq2prefix (SymNE           :syms) = TrieMap.empty
         seq2prefix (SymBIND         :syms) = TrieMap.fromList [wf ["&+"]]
         seq2prefix (SymSOFT_BIND    :syms) = TrieMap.fromList [wf []]
+        seq2prefix (SymSOFT_SPACE   :syms) = TrieMap.fromList [wf []]
         seq2prefix (SymCAPIT        :syms) = TrieMap.fromList [wf ["&|"]]
+        seq2prefix (SymALL_CAPIT    :syms) = TrieMap.fromList [wf ["&|"]]
 
 updateConcrete abs cnc = 
   let p_prods0      = filterProductions IntMap.empty IntSet.empty (productions cnc)

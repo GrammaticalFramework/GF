@@ -32,7 +32,9 @@ cUndefinedType = identS "UndefinedType"
 cNonExist = identS "nonExist"
 cBIND = identS "BIND"
 cSOFT_BIND = identS "SOFT_BIND"
+cSOFT_SPACE = identS "SOFT_SPACE"
 cCAPIT = identS "CAPIT"
+cALL_CAPIT = identS "ALL_CAPIT"
 
 isPredefCat :: Ident -> Bool
 isPredefCat c = elem c [cInt,cString,cFloat]

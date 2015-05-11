@@ -134,8 +134,10 @@ pgf_prev_extern_sym(PgfSymbol sym)
 		return *((PgfSymbol*) (((PgfSymbolVar*) i.data)+1));
 	case PGF_SYMBOL_BIND:
 	case PGF_SYMBOL_SOFT_BIND:
+	case PGF_SYMBOL_SOFT_SPACE:
 		return *((PgfSymbol*) (((PgfSymbolBIND*) i.data)+1));
 	case PGF_SYMBOL_CAPIT:
+	case PGF_SYMBOL_ALL_CAPIT:
 		return *((PgfSymbol*) (((PgfSymbolCAPIT*) i.data)+1));
 	case PGF_SYMBOL_NE:
 		return *((PgfSymbol*) (((PgfSymbolNE*) i.data)+1));
@@ -768,7 +770,6 @@ pgf_item_update_arg(PgfItem* item, size_t d, PgfCCat *new_ccat,
 static void
 pgf_item_advance(PgfItem* item, GuPool* pool)
 {
-
 	if (GU_LIKELY(item->alt == 0)) {
 		item->sym_idx++;
 		pgf_item_set_curr_symbol(item, pool);
@@ -1063,7 +1064,11 @@ pgf_symbols_cmp(GuString* psent, BIND_TYPE* pbind, PgfSymbols* syms)
 			*pbind = BIND_SOFT;
 			break;
 		}
-		case PGF_SYMBOL_CAPIT: {
+		case PGF_SYMBOL_SOFT_SPACE: {
+			break;
+		}
+		case PGF_SYMBOL_CAPIT:
+		case PGF_SYMBOL_ALL_CAPIT: {
 			break;
 		}
 		case PGF_SYMBOL_NE: {
@@ -1541,7 +1546,8 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 		}
 		break;
 	}
-	case PGF_SYMBOL_SOFT_BIND: {
+	case PGF_SYMBOL_SOFT_BIND:
+	case PGF_SYMBOL_SOFT_SPACE: {
 		if (ps->before->start_offset == ps->before->end_offset) {
 			if (ps->before->needs_bind) {
 				PgfParseState* state =
@@ -1562,7 +1568,8 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 		}
 		break;
 	}
-	case PGF_SYMBOL_CAPIT: {
+	case PGF_SYMBOL_CAPIT:
+	case PGF_SYMBOL_ALL_CAPIT: {
 		pgf_item_advance(item, ps->pool);
 		pgf_parsing_symbol(ps, item, item->curr_sym);
 		break;

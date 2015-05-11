@@ -38,6 +38,13 @@ pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool);
 
 typedef struct PgfLinFuncs PgfLinFuncs;
 
+typedef enum {
+	PGF_CAPIT_NONE,
+	PGF_CAPIT_FIRST,
+	PGF_CAPIT_ALL,
+	PGF_CAPIT_NEXT
+} PgfCapitState;
+
 struct PgfLinFuncs
 {
 	/// Output tokens
@@ -56,7 +63,7 @@ struct PgfLinFuncs
 	void (*symbol_bind)(PgfLinFuncs** self);
 
 	/// capitalization
-	void (*symbol_capit)(PgfLinFuncs** self);
+	void (*symbol_capit)(PgfLinFuncs** self, PgfCapitState capit);
 };
 
 /// Linearize a concrete syntax tree.

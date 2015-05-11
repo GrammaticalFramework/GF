@@ -21,14 +21,14 @@ table vs = let m = M.fromList (zip enumAll vs) in (M.!) m
 type Str = [Tok] -- token sequence
 
 -- | Tokens
-data Tok = TK String | TP [([Prefix],Str)] Str | BIND | SOFT_BIND | CAPIT
+data Tok = TK String | TP [([Prefix],Str)] Str | BIND | SOFT_BIND | SOFT_SPACE | CAPIT | ALL_CAPIT
          deriving (Eq,Ord,Show)
 
 type Prefix = String -- ^ To be matched with the prefix of a following token
 
 -- | Render a token sequence as a 'String'
 fromStr :: Str -> String
-fromStr = from False False
+fromStr = from False id
   where
     from space cap ts =
       case ts of
@@ -36,15 +36,18 @@ fromStr = from False False
         TK s:ts -> put s++from True cap ts
         BIND:ts -> from False cap ts
         SOFT_BIND:ts -> from False cap ts
-        CAPIT:ts -> from space True ts
+        SOFT_SPACE:ts -> from True cap ts
+        CAPIT:ts -> from space toUpper1 ts
+        ALL_CAPIT:ts -> from space toUpperAll ts
         TP alts def:ts -> from space cap (pick alts def r++[TK r]) -- hmm
           where r = fromStr ts
       where
-        put s = [' '|space]++up s
-        up = if cap then toUpper1 else id
+        put s = [' '|space]++cap s
 
     toUpper1 (c:s) = toUpper c:s
     toUpper1 s     = s
+
+    toUpperAll = map toUpper
 
     pick alts def r = head ([str|(ps,str)<-alts,any (`isPrefixOf` r) ps]++[def])
 
