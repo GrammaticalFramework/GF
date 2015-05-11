@@ -38,6 +38,7 @@ typedef struct {
 	GuPool* pool;      // this pool is used for structures internal to the parser
 	GuPool* out_pool;  // this pool is used for the allocating the final abstract trees
 	GuString sentence; // the sentence to be parsed
+	bool case_sensitive;
 	GuBuf* expr_queue; // during the extraction of abstract trees we push them in this queue
     int max_fid;
     PgfParseState *before;
@@ -474,22 +475,25 @@ pgf_print_expr_state0(PgfExprState* st,
 #endif
 
 static int
-cmp_string(GuString* psent, GuString tok)
+cmp_string(GuString* psent, GuString tok, bool case_sensitive)
 {
 	for (;;) {
-		uint8_t c2 = *tok;
+		GuUCS c2 = gu_utf8_decode((const uint8_t**) &tok);
 		if (c2 == 0)
 			return 0;
 
-		uint8_t c1 = **psent;
+		const uint8_t* p = (uint8_t*) *psent;
+		GuUCS c1 = gu_utf8_decode(&p);
 		if (c1 == 0)
 			return -1;
+
+		if (!case_sensitive)
+			c1 = gu_ucs_to_lower(c1);
 
 		if (c1 != c2)
 			return (c1-c2);
 
-		tok++;
-		(*psent)++;
+		*psent = (GuString) p;
 	}
 }
 
@@ -1016,7 +1020,8 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
 }
 
 static int
-pgf_symbols_cmp(GuString* psent, BIND_TYPE* pbind, PgfSymbols* syms)
+pgf_symbols_cmp(GuString* psent, BIND_TYPE* pbind, PgfSymbols* syms,
+                bool case_sensitive)
 {
 	size_t n_syms = gu_seq_length(syms);
 	for (size_t i = 0; i < n_syms; i++) {
@@ -1048,7 +1053,7 @@ pgf_symbols_cmp(GuString* psent, BIND_TYPE* pbind, PgfSymbols* syms)
 				}
 			}
 
-			int cmp = cmp_string(psent, pks->token);
+			int cmp = cmp_string(psent, pks->token, case_sensitive);
 			if (cmp != 0)
 				return cmp;
 			break;
@@ -1098,7 +1103,7 @@ pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state,
 		GuString start   = ps->sentence + state->end_offset;
 		GuString current = start;
 		BIND_TYPE bind_type = state->needs_bind ? BIND_NONE : BIND_HARD;
-		int cmp = pgf_symbols_cmp(&current, &bind_type, seq->syms);
+		int cmp = pgf_symbols_cmp(&current, &bind_type, seq->syms, ps->case_sensitive);
 		if (cmp < 0) {
 			j = k-1;
 		} else if (cmp > 0) {
@@ -1141,7 +1146,7 @@ pgf_parsing_lookahead_pre(PgfParsing *ps, PgfParseState* state)
 
 		GuString current = ps->sentence + state->end_offset;
 		BIND_TYPE bind_type = state->needs_bind ? BIND_NONE : BIND_HARD;
-		if (pgf_symbols_cmp(&current, &bind_type, seq->syms) == 0) {
+		if (pgf_symbols_cmp(&current, &bind_type, seq->syms, ps->case_sensitive) == 0) {
 			PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
 			entry->idx       = seq->idx;
 			entry->bind_type = bind_type;
@@ -1233,7 +1238,7 @@ pgf_parsing_add_transition(PgfParsing* ps, PgfToken tok, PgfItem* item)
 			ps->tp->prob = item->inside_prob + item->conts->outside_prob;
 		}
 	} else {
-		if (!ps->before->needs_bind && cmp_string(&current, tok) == 0) {
+		if (!ps->before->needs_bind && cmp_string(&current, tok, ps->case_sensitive) == 0) {
 			PgfParseState* state =
 				pgf_new_parse_state(ps, (current - ps->sentence),
 				                    BIND_NONE,
@@ -1675,6 +1680,8 @@ pgf_new_parsing(PgfConcr* concr, GuString sentence, PgfCallbacksMap* callbacks,
 	ps->pool = pool;
 	ps->out_pool = out_pool;
 	ps->sentence = sentence;
+	ps->case_sensitive =
+		(gu_seq_binsearch(concr->cflags, pgf_flag_order, PgfFlag, "case_sensitive") == NULL);
 	ps->expr_queue = gu_new_buf(PgfExprState*, pool);
 	ps->max_fid = concr->total_cats;
 	ps->before = NULL;
@@ -2217,7 +2224,7 @@ pgf_sequence_cmp_fn(GuOrder* self, const void* p1, const void* p2)
 	const PgfSequence* sp2 = p2;
 
 	BIND_TYPE bind = BIND_HARD;
-	int res = pgf_symbols_cmp(&sent, &bind, sp2->syms);
+	int res = pgf_symbols_cmp(&sent, &bind, sp2->syms, true);
 	if (res == 0 && *sent != 0) {
 		res = 1;
 	}
