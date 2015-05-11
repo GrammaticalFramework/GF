@@ -80,7 +80,9 @@ pySymbol (SymKP ts alts) = pyDict 0 pyStr id [("pre", pyList 0 pySymbol ts), ("a
     where alt2py (ps,ts) = pyTuple 0 (pyList 0 pyStr) [map pySymbol ps, ts]
 pySymbol SymBIND         = pyStr "&+"
 pySymbol SymSOFT_BIND    = pyStr "&+"
+pySymbol SymSOFT_SPACE   = pyStr "&+"
 pySymbol SymCAPIT        = pyStr "&|"
+pySymbol SymALL_CAPIT    = pyStr "&|"
 pySymbol SymNE           = pyDict 0 pyStr id [("nonExist", pyTuple 0 id [])]
 
 ----------------------------------------------------------------------

@@ -2,7 +2,7 @@
 
 -- This file defines some prelude facilities usable in all grammars.
 
-resource Prelude = Predef[nonExist, BIND, SOFT_BIND, CAPIT] ** open (Predef=Predef) in {
+resource Prelude = Predef[nonExist, BIND, SOFT_BIND, SOFT_SPACE, CAPIT, ALL_CAPIT] ** open (Predef=Predef) in {
 
 oper
 

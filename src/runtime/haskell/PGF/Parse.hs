@@ -311,13 +311,18 @@ process flit ftok cnc (item@(Active j ppos funid seqid args key0):items) acc cha
       	SymBIND    -> let !acc' = ftok_ ["&+"] (Active j (ppos+1) funid seqid args key0) acc
       	              in process flit ftok cnc items acc' chart
       	SymSOFT_BIND->process flit ftok cnc ((Active j (ppos+1) funid seqid args key0):items) acc chart
+      	SymSOFT_SPACE->process flit ftok cnc ((Active j (ppos+1) funid seqid args key0):items) acc chart
       	SymCAPIT   -> let !acc' = ftok_ ["&|"] (Active j (ppos+1) funid seqid args key0) acc
+      	              in process flit ftok cnc items acc' chart
+      	SymALL_CAPIT->let !acc' = ftok_ ["&|"] (Active j (ppos+1) funid seqid args key0) acc
       	              in process flit ftok cnc items acc' chart
       	SymKP syms vars
       	           -> let to_tok (SymKS t)    = [t]
       	                  to_tok SymBIND      = ["&+"]
       	                  to_tok SymSOFT_BIND = []
+      	                  to_tok SymSOFT_SPACE= []
       	                  to_tok SymCAPIT     = ["&|"]
+      	                  to_tok SymALL_CAPIT = ["&|"]
       	                  to_tok _            = []
 
       	                  !acc' = foldl (\acc syms -> ftok_ (concatMap to_tok syms) (Active j (ppos+1) funid seqid args key0) acc) acc

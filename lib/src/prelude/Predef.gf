@@ -36,9 +36,12 @@ resource Predef = {
   oper toStr  : (L : Type) -> L -> Str = variants {} ; -- find the "first" string
   oper mapStr : (L : Type) -> (Str -> Str) -> L -> L = variants {} ; 
                -- map all strings in a data structure; experimental ---
-  oper nonExist : Str = variants {} ;  -- a placeholder for non-existant morphological forms
-  oper BIND : Str = variants {} ;  -- a token for gluing
-  oper SOFT_BIND : Str = variants {} ;  -- a token for soft gluing
-  oper CAPIT : Str = variants {} ;  -- a token for capitalization
+
+  oper nonExist : Str = variants {} ;    -- a placeholder for non-existant morphological forms
+  oper BIND : Str = variants {} ;        -- a token for gluing
+  oper SOFT_BIND : Str = variants {} ;   -- a token for soft gluing
+  oper SOFT_SPACE : Str = variants {} ;  -- a token for soft space
+  oper CAPIT : Str = variants {} ;       -- a token for capitalization
+  oper ALL_CAPIT : Str = variants {} ;   -- a token for capitalization of abreviations
 
 } ;

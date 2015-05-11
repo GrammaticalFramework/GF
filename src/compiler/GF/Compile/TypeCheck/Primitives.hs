@@ -53,7 +53,11 @@ primitives = Map.fromList
                                          [] typeStr []))) Nothing)
   , (cSOFT_BIND, ResOper (Just (noLoc (mkProd -- Str
                                          [] typeStr []))) Nothing)
+  , (cSOFT_SPACE,ResOper (Just (noLoc (mkProd -- Str
+                                         [] typeStr []))) Nothing)
   , (cCAPIT    , ResOper (Just (noLoc (mkProd -- Str
+                                         [] typeStr []))) Nothing)
+  , (cALL_CAPIT, ResOper (Just (noLoc (mkProd -- Str
                                          [] typeStr []))) Nothing)
   ]
   where
