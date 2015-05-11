@@ -7,7 +7,9 @@
 //
 
 #import "TranslationTextTableViewCell.h"
-
+#import "Translation.h"
+#import "Language.h"
+#import "UIColor+TranslationsResults.h"
 
 @implementation TranslationTextTableViewCell
 
@@ -20,6 +22,18 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)setCellWithLanguage:(Translation *)translation fromLanguage:(BOOL)fromLanguage {
+    
+    Language *language = fromLanguage ? translation.fromLanguage : translation.toLanguage;
+    NSString *text = fromLanguage ? translation.fromText : translation.toText;
+    
+    NSString *imageName = language.abbreviation;
+    [self.flagImageView setImage:[UIImage imageNamed:imageName]];
+    self.translationTextLabel.text = text;
+    UIColor *lightBlueColor = [UIColor colorWithRed:0.373 green:0.836 blue:1.000 alpha:1.000];
+    self.translationTextLabel.backgroundColor = fromLanguage ? lightBlueColor : [UIColor colorForResult:translation.result];
 }
 
 @end

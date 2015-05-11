@@ -272,18 +272,14 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    BOOL isFromText = indexPath.row % 2 == 0;
-    NSString *identifier = isFromText ? @"TranslationInput" : @"TranslationOutput";
+
+    BOOL isFrom = indexPath.row % 2 == 0;
+    NSString *identifier = isFrom ? @"TranslationInput" : @"TranslationOutput";
     
     TranslationTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
+    
     Translation *translation = self.inputs[indexPath.row/2];
-    
-    NSString *imageName = isFromText ? translation.fromLanguage.abbreviation : translation.toLanguage.abbreviation;
-    
-    [cell.flagImageView setImage:[UIImage imageNamed:imageName]];
-    cell.translationTextLabel.text = isFromText ? translation.fromText : translation.toText;
-    UIColor *lightBlueColor = [UIColor colorWithRed:0.373 green:0.836 blue:1.000 alpha:1.000];
-    cell.translationTextLabel.backgroundColor = isFromText ? lightBlueColor : translation.color;
+    [cell setCellWithLanguage:translation fromLanguage:isFrom];
     
     return cell;
 }
