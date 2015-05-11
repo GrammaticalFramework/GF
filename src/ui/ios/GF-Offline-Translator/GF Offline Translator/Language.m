@@ -8,11 +8,12 @@
 
 #import "Language.h"
 
+
 @implementation Language
 
 - (instancetype)initWithName:(NSString *)name
                 abbreviation:(NSString *)abbreviation
-                      andBcp:(NSString *)bcp {
+                         bcp:(NSString *)bcp {
     self = [super init];
     if (self) {
         _name           = name;
@@ -35,19 +36,19 @@
 
 + (NSArray *)allLanguages {
     return @[
-             [[Language alloc] initWithName:@"Bulgarian"    abbreviation:@"Bul"     andBcp:@"en-GB"],
-             [[Language alloc] initWithName:@"Chinese"      abbreviation:@"Chi"     andBcp:@"zh-CN"],
-             [[Language alloc] initWithName:@"Dutch"        abbreviation:@"Dut"     andBcp:@"nl-NL"],
-             [[Language alloc] initWithName:@"English"      abbreviation:@"Eng"     andBcp:@"en-GB"],
-             [[Language alloc] initWithName:@"Finnish"      abbreviation:@"Fin"     andBcp:@"fi-FI"],
-             [[Language alloc] initWithName:@"French"       abbreviation:@"Fre"     andBcp:@"fr-FR"],
-             [[Language alloc] initWithName:@"German"       abbreviation:@"Ger"     andBcp:@"de-DE"],
-             [[Language alloc] initWithName:@"Hindi"        abbreviation:@"Hin"     andBcp:@"hi-IN"],
-             [[Language alloc] initWithName:@"Italian"      abbreviation:@"Ita"     andBcp:@"it-IT"],
-             [[Language alloc] initWithName:@"Japanese"     abbreviation:@"Jpn"     andBcp:@"ja-JP"],
-             [[Language alloc] initWithName:@"Spanish"      abbreviation:@"Spa"     andBcp:@"es-ES"],
-             [[Language alloc] initWithName:@"Swedish"      abbreviation:@"Swe"     andBcp:@"sv-SE"],
-             [[Language alloc] initWithName:@"Thai"         abbreviation:@"Tha"     andBcp:@"th-TH"]
+             [[Language alloc] initWithName:@"Bulgarian"    abbreviation:@"Bul"     bcp:@"en-GB"],
+             [[Language alloc] initWithName:@"Chinese"      abbreviation:@"Chi"     bcp:@"zh-CN"],
+             [[Language alloc] initWithName:@"Dutch"        abbreviation:@"Dut"     bcp:@"nl-NL"],
+             [[Language alloc] initWithName:@"English"      abbreviation:@"Eng"     bcp:@"en-GB"],
+             [[Language alloc] initWithName:@"Finnish"      abbreviation:@"Fin"     bcp:@"fi-FI"],
+             [[Language alloc] initWithName:@"French"       abbreviation:@"Fre"     bcp:@"fr-FR"],
+             [[Language alloc] initWithName:@"German"       abbreviation:@"Ger"     bcp:@"de-DE"],
+             [[Language alloc] initWithName:@"Hindi"        abbreviation:@"Hin"     bcp:@"hi-IN"],
+             [[Language alloc] initWithName:@"Italian"      abbreviation:@"Ita"     bcp:@"it-IT"],
+             [[Language alloc] initWithName:@"Japanese"     abbreviation:@"Jpn"     bcp:@"ja-JP"],
+             [[Language alloc] initWithName:@"Spanish"      abbreviation:@"Spa"     bcp:@"es-ES"],
+             [[Language alloc] initWithName:@"Swedish"      abbreviation:@"Swe"     bcp:@"sv-SE"],
+             [[Language alloc] initWithName:@"Thai"         abbreviation:@"Tha"     bcp:@"th-TH"]
              ];
 }
 

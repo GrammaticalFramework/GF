@@ -14,9 +14,10 @@
 @property (nonatomic, copy) NSString *abbreviation;
 @property (nonatomic, copy) NSString *bcp;
 
+
 - (instancetype)initWithName:(NSString *)name
                 abbreviation:(NSString *)abbreviation
-                      andBcp:(NSString *)bcp;
+                         bcp:(NSString *)bcp;
 
 - (BOOL)isEqualToLanguage:(Language *)language;
 + (NSArray *)allLanguages;

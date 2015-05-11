@@ -135,6 +135,7 @@
 		CC98AF221AEF773500DFA116 /* Translator.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF211AEF773500DFA116 /* Translator.m */; };
 		CC98AF281AEFB4CF00DFA116 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF271AEFB4CF00DFA116 /* MenuView.m */; };
 		CCA994DD1AF7907900FB04D6 /* UIColor+TranslationsResults.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */; };
+		CCCBEA071B00D18F00C5143D /* UITableViewCell+Customize.m in Sources */ = {isa = PBXBuildFile; fileRef = CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +296,8 @@
 		CC98AF271AEFB4CF00DFA116 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuView.m; sourceTree = "<group>"; };
 		CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TranslationsResults.h"; sourceTree = "<group>"; };
 		CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TranslationsResults.m"; sourceTree = "<group>"; };
+		CCCBEA051B00D18F00C5143D /* UITableViewCell+Customize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Customize.h"; sourceTree = "<group>"; };
+		CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Customize.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -409,6 +412,8 @@
 				CC98AF271AEFB4CF00DFA116 /* MenuView.m */,
 				CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */,
 				CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */,
+				CCCBEA051B00D18F00C5143D /* UITableViewCell+Customize.h */,
+				CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */,
 				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
 				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
 				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
@@ -847,6 +852,7 @@
 				CC8E00831AEE32B20040920E /* enum.c in Sources */,
 				CC8E00841AEE32B20040920E /* enum.h in Sources */,
 				CC8E00851AEE32B20040920E /* exn.c in Sources */,
+				CCCBEA071B00D18F00C5143D /* UITableViewCell+Customize.m in Sources */,
 				CC619EDF1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m in Sources */,
 				CC8E00861AEE32B20040920E /* exn.h in Sources */,
 				CC8E00871AEE32B20040920E /* file.c in Sources */,

@@ -70,8 +70,8 @@
     [super viewDidLoad];
     
     // Setup translator
-    Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" andBcp:@"sv-SE"];
-    Language *toLanguage = [[Language alloc] initWithName:@"English" abbreviation:@"Eng" andBcp:@"en-GB"];
+    Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" bcp:@"sv-SE"];
+    Language *toLanguage = [[Language alloc] initWithName:@"English" abbreviation:@"Eng" bcp:@"en-GB"];
     Translator *translator = [[Translator alloc] init];
     
     // Load grammars
@@ -234,6 +234,7 @@
     [self.inputs addObject:newTranslation];
     [self.tableView reloadData];
     
+    
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
     
@@ -274,6 +275,9 @@
     TranslationTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     Translation *translation = self.inputs[indexPath.row/2];
     
+    NSString *imageName = isFromText ? translation.fromLanguage.abbreviation : translation.toLanguage.abbreviation;
+    
+    [cell.flagImageView setImage:[UIImage imageNamed:imageName]];
     cell.translationTextLabel.text = isFromText ? translation.fromText : translation.toText;
     UIColor *lightBlueColor = [UIColor colorWithRed:0.373 green:0.836 blue:1.000 alpha:1.000];
     cell.translationTextLabel.backgroundColor = isFromText ? lightBlueColor : translation.color;
