@@ -239,6 +239,9 @@
     [self.textView refreshFirstResponder];
     
     [super didPressRightButton:sender];
+    
+    NSIndexPath *bottomIndexPath = [NSIndexPath indexPathForRow:(self.inputs.count*2)-1 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:bottomIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 #pragma mark - SLKTextViewController Edition
