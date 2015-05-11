@@ -173,6 +173,7 @@ data Flags = Flags {
       optDump            :: [Dump],
       optTagsOnly        :: Bool,
       optHeuristicFactor :: Maybe Double,
+      optCaseSensitive   :: Bool,
       optPlusAsBind      :: Bool,
       optJobs            :: Maybe (Maybe Int)
     }
@@ -217,10 +218,11 @@ optionsGFO opts = optionsPGF opts
 
 -- | Pretty-print the options that are preserved in .pgf files.
 optionsPGF :: Options -> [(String,Literal)]
-optionsPGF opts = 
+optionsPGF opts =
          maybe [] (\x -> [("language",LStr x)]) (flag optSpeechLanguage opts)
       ++ maybe [] (\x -> [("startcat",LStr x)]) (flag optStartCat opts)
       ++ maybe [] (\x -> [("heuristic_search_factor",LFlt x)]) (flag optHeuristicFactor opts)
+      ++ (if flag optCaseSensitive opts then [] else [("case_sensitive",LStr "off")])
 
 -- Option manipulation
 
@@ -282,6 +284,7 @@ defaultFlags = Flags {
       optDump            = [],
       optTagsOnly        = False,
       optHeuristicFactor = Nothing,
+      optCaseSensitive   = True,
       optPlusAsBind      = False,
       optJobs            = Nothing
     }
@@ -365,6 +368,7 @@ optDescr =
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
      Option [] ["heuristic_search_factor"] (ReqArg (readDouble (\d o -> o { optHeuristicFactor = Just d })) "FACTOR") "Set the heuristic search factor for statistical parsing",
+     Option [] ["case_sensitive"] (onOff (\v -> set $ \o -> o{optCaseSensitive=v}) True) "Set the parser in case-sensitive/insensitive mode [sensitive by default]",
      Option [] ["plus-as-bind"] (NoArg (set $ \o -> o{optPlusAsBind=True})) "Uses of (+) with runtime variables automatically generate BIND (experimental feature).",
      dumpOption "source" Source,
      dumpOption "rebuild" Rebuild,
