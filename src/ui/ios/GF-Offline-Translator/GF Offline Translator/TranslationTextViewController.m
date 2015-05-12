@@ -286,18 +286,18 @@
 
 #pragma mark - <UITableViewDelegate>
 
-/*
+
 // Uncomment this method to handle the cell selection
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([tableView isEqual:self.tableView]) {
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([tableView isEqual:self.tableView] && indexPath.row % 2 == 1) {
+        Translation *translation = self.inputs[indexPath.row/2];
+        [self performSegueWithIdentifier:@"TranslationOptions" sender:translation];
     }
-    if ([tableView isEqual:self.autoCompletionView]) {
-
-        [self acceptAutoCompletionWithString:<#@"any_string"#>];
+    if ([tableView isEqual:self.tableView] && indexPath.row % 2 == 0) {
+        Translation *translation = self.inputs[indexPath.row/2];
+        self.textInputbar.textView.text = translation.fromText;
     }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-*/
 
 @end
