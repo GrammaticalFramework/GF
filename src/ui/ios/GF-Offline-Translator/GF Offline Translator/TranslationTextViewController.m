@@ -28,6 +28,7 @@
 
 // View controllers
 #import "LanguagesViewController.h"
+#import "TranslationOptionsViewController.h"
 
 @interface TranslationTextViewController ()
 
@@ -80,7 +81,7 @@
     self.tableView.estimatedRowHeight = 89;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = NO;
+    self.tableView.allowsSelection = YES;
     self.inverted = NO;
     
     // Setup buttons
@@ -165,6 +166,9 @@
         destinattionController.senderLanguage = fromLanguage ? self.translator.from.language : self.translator.to.language;
         destinattionController.fromLanguage = fromLanguage;
         destinattionController.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"TranslationOptions"]) {
+        TranslationOptionsViewController *destinattionController = segue.destinationViewController;
+        destinattionController.translation = sender;
     }
 }
 
@@ -280,6 +284,9 @@
     
     Translation *translation = self.inputs[indexPath.row/2];
     [cell setCellWithLanguage:translation fromLanguage:isFrom];
+    if (!isFrom && translation.toTexts.count) {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
     
     return cell;
 }
@@ -299,5 +306,6 @@
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
 
 @end

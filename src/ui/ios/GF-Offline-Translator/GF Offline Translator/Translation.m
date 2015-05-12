@@ -72,4 +72,12 @@
     return trimmedText;
 }
 
+- (void)setToTexts:(NSArray *)toTexts {
+    NSMutableArray *formatedTexts = [NSMutableArray new];
+    for (NSString *text in toTexts) {
+        [formatedTexts addObject:[Translation formatTranslation:text]];
+    }
+    _toTexts = formatedTexts.copy;
+}
+
 @end

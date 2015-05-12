@@ -52,12 +52,12 @@
     GuExn *tmpErr = gu_new_exn(tmpPool);
     
     PgfExprEnum *parsedExpressions = [self parsePhrase:phrase startCat:@"Phr" tmpPool:tmpPool tmpErr:tmpErr];
-    NSString *translatedText = @"";
+    NSArray *translatedText = nil;
     
     if (parsedExpressions != nil) {
         translatedText = [self linearizeResult:parsedExpressions tmpPool:tmpPool tmpErr:tmpErr];
     } else {
-        translatedText = [self translateByLookUp:phrase];
+        translatedText = @[[self translateByLookUp:phrase]];
     }
     
     gu_exn_clear(tmpErr);
@@ -66,9 +66,12 @@
     tmpErr = nil;
     
     Translation *translation = [Translation translationWithText:phrase
-                                                         toText:translatedText
+                                                         toText:translatedText.firstObject
                                                    fromLanguage:self.from.language
                                                      toLanguage:self.to.language];
+    if (translatedText.count > 1) {
+        translation.toTexts = translatedText;
+    }
     
     return translation;
 }
@@ -94,7 +97,7 @@
     NSString *translation = @"";
     
     if (parse) {
-        translation = [self linearizeResult:parse tmpPool:tmpPool tmpErr:tmpErr];
+        translation = [self linearizeResult:parse tmpPool:tmpPool tmpErr:tmpErr].firstObject;
     } else {
         // TODO: Implement morphological analys
         translation = @"Error :)";
@@ -115,22 +118,27 @@
     return gu_ok(tmpErr) ? result : nil;
 }
 
--(NSString *)linearizeResult:(PgfExprEnum *)result tmpPool:(GuPool *)tmpPool tmpErr:(GuExn *)tmpErr {
+-(NSArray *)linearizeResult:(PgfExprEnum *)result tmpPool:(GuPool *)tmpPool tmpErr:(GuExn *)tmpErr {
     
+    NSMutableOrderedSet *translations = [NSMutableOrderedSet new];
     PgfExprProb *ep;
-    
     gu_enum_next(result, &ep, tmpPool);
-    PgfExprProb parse = ep[0];
     
-    GuStringBuf *stringBuff = gu_string_buf(tmpPool);
-    GuOut *tmpOut = gu_string_buf_out(stringBuff);
-    pgf_linearize(self.to.concrete, parse.expr, tmpOut, tmpErr);
-    NSString *translation = [NSString stringWithUTF8String:gu_string_buf_freeze(stringBuff, tmpPool)];
+    do {
+        PgfExprProb parse = ep[0];
+        
+        GuStringBuf *stringBuff = gu_string_buf(tmpPool);
+        GuOut *tmpOut = gu_string_buf_out(stringBuff);
+        pgf_linearize(self.to.concrete, parse.expr, tmpOut, tmpErr);
+        [translations addObject:[NSString stringWithUTF8String:gu_string_buf_freeze(stringBuff, tmpPool)]];
+        
+        gu_out_flush(tmpOut, tmpErr);
+        tmpOut = nil;
+        
+        gu_enum_next(result, &ep, tmpPool);
+    } while (ep);
     
-    gu_out_flush(tmpOut, tmpErr);
-    tmpOut = nil;
-    
-    return translation;
+    return translations.objectEnumerator.allObjects;
 }
 
 @end

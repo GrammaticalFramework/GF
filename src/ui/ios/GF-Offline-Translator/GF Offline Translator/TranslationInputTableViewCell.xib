@@ -24,7 +24,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fIf-km-7od">
-                        <rect key="frame" x="8" y="8" width="41" height="22"/>
+                        <rect key="frame" x="8" y="11" width="41" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="WLX-vJ-WFy"/>
                             <constraint firstAttribute="width" constant="41" id="cHv-P6-5aq"/>
@@ -39,6 +39,7 @@
                     <constraint firstItem="adT-pY-vJo" firstAttribute="leading" secondItem="7tu-Bs-CSE" secondAttribute="leadingMargin" constant="49" id="IkA-0z-tjq"/>
                     <constraint firstItem="7To-y6-ppO" firstAttribute="trailing" secondItem="adT-pY-vJo" secondAttribute="trailing" id="NvK-qx-qu9"/>
                     <constraint firstAttribute="bottomMargin" secondItem="adT-pY-vJo" secondAttribute="bottom" id="OoV-Kh-Bco"/>
+                    <constraint firstItem="fIf-km-7od" firstAttribute="centerY" secondItem="adT-pY-vJo" secondAttribute="centerY" id="VCK-LR-e36"/>
                     <constraint firstItem="adT-pY-vJo" firstAttribute="top" secondItem="7tu-Bs-CSE" secondAttribute="topMargin" id="WIB-Kb-Qc8"/>
                     <constraint firstItem="7To-y6-ppO" firstAttribute="trailing" secondItem="adT-pY-vJo" secondAttribute="trailing" constant="10" id="fs7-hl-Qh7"/>
                     <constraint firstItem="fIf-km-7od" firstAttribute="leading" secondItem="7tu-Bs-CSE" secondAttribute="leadingMargin" id="kT3-DZ-LJ7"/>
@@ -52,6 +53,7 @@
                         <exclude reference="5hM-ra-fKy"/>
                         <exclude reference="NvK-qx-qu9"/>
                         <exclude reference="kaU-fi-tBu"/>
+                        <exclude reference="4G9-bu-4zE"/>
                         <exclude reference="9Vd-9J-Rlw"/>
                     </mask>
                 </variation>

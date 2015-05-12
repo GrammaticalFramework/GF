@@ -20,6 +20,7 @@ typedef NS_ENUM(NSUInteger, TranslationResult) {
 
 @property (nonatomic) NSString *fromText;
 @property (nonatomic) NSString *toText;
+@property (nonatomic) NSArray *toTexts;
 @property (nonatomic) Language *fromLanguage;
 @property (nonatomic) Language *toLanguage;
 @property (nonatomic) TranslationResult result;

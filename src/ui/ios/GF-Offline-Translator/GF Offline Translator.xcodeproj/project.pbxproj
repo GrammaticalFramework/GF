@@ -136,6 +136,7 @@
 		CC98AF281AEFB4CF00DFA116 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC98AF271AEFB4CF00DFA116 /* MenuView.m */; };
 		CCA994DD1AF7907900FB04D6 /* UIColor+TranslationsResults.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */; };
 		CCCBEA071B00D18F00C5143D /* UITableViewCell+Customize.m in Sources */ = {isa = PBXBuildFile; fileRef = CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */; };
+		CCDC6FE81B01465300C2B3FF /* TranslationOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDC6FE71B01465300C2B3FF /* TranslationOptionsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -298,6 +299,8 @@
 		CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TranslationsResults.m"; sourceTree = "<group>"; };
 		CCCBEA051B00D18F00C5143D /* UITableViewCell+Customize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Customize.h"; sourceTree = "<group>"; };
 		CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Customize.m"; sourceTree = "<group>"; };
+		CCDC6FE61B01465300C2B3FF /* TranslationOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslationOptionsViewController.h; sourceTree = "<group>"; };
+		CCDC6FE71B01465300C2B3FF /* TranslationOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TranslationOptionsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -600,6 +603,8 @@
 				CC619ED81AEE5793003A6EC7 /* TranslationTextViewController.m */,
 				CC98AF0D1AEE72D800DFA116 /* LanguagesViewController.h */,
 				CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */,
+				CCDC6FE61B01465300C2B3FF /* TranslationOptionsViewController.h */,
+				CCDC6FE71B01465300C2B3FF /* TranslationOptionsViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -839,6 +844,7 @@
 				CC8E00D31AEE32C40040920E /* printer.c in Sources */,
 				CC8E00D41AEE32C40040920E /* reader.c in Sources */,
 				CC8E00D51AEE32C40040920E /* reader.h in Sources */,
+				CCDC6FE81B01465300C2B3FF /* TranslationOptionsViewController.m in Sources */,
 				CC8E00D61AEE32C40040920E /* reasoner.c in Sources */,
 				CC8E00D71AEE32C40040920E /* reasoner.h in Sources */,
 				CC8E00D81AEE32C40040920E /* typechecker.c in Sources */,
