@@ -10,8 +10,7 @@
 @class Translation;
 
 @interface TranslationTextTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *translationTextLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *flagImageView;
+
 
 - (void)setCellWithLanguage:(Translation *)translation fromLanguage:(BOOL)fromLanguage;
 

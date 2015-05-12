@@ -11,11 +11,19 @@
 #import "Language.h"
 #import "UIColor+TranslationsResults.h"
 
+@interface TranslationTextTableViewCell ()
+
+@property (weak, nonatomic) IBOutlet UILabel *translationTextLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *flagImageView;
+@property (weak, nonatomic) IBOutlet UIView *decorationView;
+
+@end
+
 @implementation TranslationTextTableViewCell
 
 - (void)awakeFromNib {
-    self.translationTextLabel.layer.cornerRadius = 3;
-    self.translationTextLabel.layer.masksToBounds = YES;
+    self.decorationView.layer.cornerRadius = 5;
+    self.decorationView.layer.masksToBounds = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -33,7 +41,7 @@
     [self.flagImageView setImage:[UIImage imageNamed:imageName]];
     self.translationTextLabel.text = text;
     UIColor *lightBlueColor = [UIColor colorWithRed:0.373 green:0.836 blue:1.000 alpha:1.000];
-    self.translationTextLabel.backgroundColor = fromLanguage ? lightBlueColor : [UIColor colorForResult:translation.result];
+    self.decorationView.backgroundColor = fromLanguage ? lightBlueColor : [UIColor colorForResult:translation.result];
 }
 
 @end
