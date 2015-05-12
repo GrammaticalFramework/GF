@@ -20,7 +20,7 @@
                     <navigationItem key="navigationItem" id="St3-7e-rXA"/>
                     <connections>
                         <segue destination="B6l-9t-iLr" kind="presentation" identifier="ChangeLanguage" id="wkV-br-4Id"/>
-                        <segue destination="Vu1-QE-7az" kind="show" identifier="TranslationOptions" id="zeM-mX-HkR"/>
+                        <segue destination="Vu1-QE-7az" kind="presentation" identifier="TranslationOptions" id="zeM-mX-HkR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

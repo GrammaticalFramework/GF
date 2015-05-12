@@ -38,14 +38,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LanguageCell" forIndexPath:indexPath];
     
     Language *language = self.languages[indexPath.row];
-    
     cell.textLabel.text = language.name;
-    
-    // Setup flag image
-    NSString *imageName = language.abbreviation;
-    [cell.imageView setImage:[UIImage imageNamed:imageName]];
-    [cell sizeImageViewToSize:CGSizeMake(35, 20)];
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
     return cell;
 }
