@@ -42575,8 +42575,8 @@ lin playfellow_N = mkN "lekkamrat" "lekkamrater" ;
 lin playful_A = mkA "lekfull" ; -- status=guess
 lin playfulness_N = mkN "lekfullhet" "lekfullheter" ;
 lin playgoer_N = mkN "teaterbesökare" utrum ;
-lin playground_N = mkN "skolgård" ; -- comment=5
-lin playgroup_N = mkN "play"; -- src=google
+lin playground_N = mkN "lekplats" ;
+lin playgroup_N = variants {};
 lin playhouse_N = mkN "teater" ; -- comment=2
 lin playing_N = mkN "spel" neutrum ; -- status=guess
 lin playing_card_N = mkN "spel-kort"; -- src=google
