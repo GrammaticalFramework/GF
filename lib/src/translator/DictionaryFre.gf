@@ -798,7 +798,6 @@ lin aircraft_N = mkN "aéronef" masculine ; -- tocheck
 lin aircrew_N = mkN "groupe" ; -- UWN
 lin airdock_N = mkN "han" | mkN "hangar" ; -- UWN
 lin airdrie_PN = mkPN "Airdrie" ; -- status=guess src=geonames
-lin airdrome_N = mkN "airport" | mkN "aérodrome" | mkN "aéroport" ; -- UWN
 lin airfield_N = mkN "aérodrome" | mkN "piste" | mkN "terrain" ; -- UWN
 lin airfoil_N = mkN "profil" | mkN "profil_d'aile" | mkN "surface" ; -- UWN
 lin airing_N = mkN "aération" | mkN "ventilation" ; -- UWN

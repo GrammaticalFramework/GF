@@ -1388,7 +1388,6 @@ fun aircrew_N : N ;
 fun aircrewman_N : N ;
 fun airdock_N : N ;
 fun airdrie_PN : PN ;
-fun airdrome_N : N ;
 fun airdrop_N : N ;
 fun aireborough_PN : PN ;
 fun airedale_N : N ;

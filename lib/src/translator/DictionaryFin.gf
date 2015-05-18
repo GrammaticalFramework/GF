@@ -1331,7 +1331,6 @@ lin aircrew_N = mkWN (k2 "miehistö") "lentokoneen" ; --UNCHK
 lin aircrewman_N = mkWN (k32 "jäsen") "lentokoneen" "miehistön" ; --UNCHK
 lin airdock_N = mkWN (k5 "lentokonehalli") ; --UNCHK
 lin airdrie_PN = foreignPN "Airdrie" ;
-lin airdrome_N = mkWN (compoundN "lento" (k10A "kenttä")) ; --UNCHK
 lin airdrop_N = mkWN (compoundN "laskuvarjo" (k39 "pudotus")) ; --UNCHK
 lin airedale_N = mkWN (compoundN "airedalen" (k5 "terrieri")) ; --UNCHK
 lin airfare_N = mkWN (k9A "hinta") "lentolipun" ; --UNCHK

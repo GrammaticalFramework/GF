@@ -1402,7 +1402,6 @@ lin aircrew_N = variants {} ;
 lin aircrewman_N = variants {} ;
 lin airdock_N = variants {} ;
 lin airdrie_PN = mkPN "Airdrie" ; -- src=geonames status=guess
-lin airdrome_N = variants {} ;
 lin airdrop_N = variants {} ;
 lin aireborough_PN = mkPN "Aireborough" ; -- src=eng status=guess
 lin airedale_N = variants {} ;
