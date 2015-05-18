@@ -15848,7 +15848,6 @@ lin whelk_N = mkN "エゾバイ" | mkN "ツブ" ;
 lin when_IAdv = S.when_IAdv ;
 lin when_Subj = S.when_Subj ;
 lin whenever_Adv = ParadigmsJpn.mkAdv "いつでも" ;
-lin where_Adv = mkAdv "何処" | mkAdv "どこ" | mkAdv "どうなる" ;
 lin where_IAdv = S.where_IAdv ;
 lin where_Subj = variants{} ; --
 lin whereabouts_N = mkN "所在" | mkN "在所" ;

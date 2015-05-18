@@ -1703,7 +1703,6 @@ lin approved_A = variants {} ; --
 lin approvingly_Adv = mkAdv "approbativement" ; -- UWN
 lin approximate_A = mkA "approximant" | mkA "approximatif" ; -- tocheck
 lin approximate_V2 = mkV2 (mkV "approximer") ; -- tocheck
-lin approximately_A = variants {} ;
 lin approximation_N = mkN "rapprochement" masculine | mkN "approximation" feminine ; -- tocheck
 lin apraxia_N = mkN "apraxie" ; -- UWN
 lin apricot_N = mkN "abricot" masculine | mkN "abricotier" masculine ; -- tocheck

@@ -1809,7 +1809,6 @@ lin approve_V2 = mkV2 (aprobar_V) ; -- status=guess
 lin approved_A = variants {} ; --
 lin approvingly_Adv = mkAdv "con aprobación" ; -- status=guess
 lin approximate_A = mkA "aproximado" ; -- status=guess
-lin approximately_A = variants {} ;
 lin approximation_N = mkN "aproximación" feminine ; -- status=guess
 lin apraxia_N = mkN "apraxia" ; -- status=guess
 lin apricot_N = mkN "albaricoque" | mkN "chabacano" ; -- status=guess
@@ -19791,7 +19790,6 @@ lin newswoman_N = mkN "presentadora_de_noticias" ; --UWN
 lin newton_N = mkN "newton" masculine ; -- status=guess
 lin newtown_PN = mkPN "Newtown" ; -- status=guess src=geonames
 lin next_A = mkA "próximo" ; -- status=guess
-lin next_N = mkN "siguiente" masculine | mkN "próxima" | mkN "próximo" ; -- status=guess status=guess status=guess
 lin nexus_N = mkN "centro" ; -- status=guess
 lin nib_N = mkN "pico" ; --UWN
 lin nibble_V = mkV "comiscar" | mkV "comisquear" | mkV "picotear" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt

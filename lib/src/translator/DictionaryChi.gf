@@ -2319,7 +2319,6 @@ lin approver_N = mkN "批准者" ; -- open-multilingual-wordnet
 lin approx_PN = foreignPN "Approx" ; -- comment=src=eng status=guess
 lin approximate_A = mkA "大概" ;
 lin approximate_V2 = mkV2 "近似" ;
-lin approximately_A = mkA "大约" | mkA "近" ;
 lin approximation_N = mkN "近似算法" ; -- status=guess
 lin apr_PN = foreignPN "Apr" ; -- comment=src=eng status=guess
 lin apractic_A = mkA "运用不能症" ; -- open-multilingual-wordnet
@@ -22316,7 +22315,6 @@ lin newton_le_willows_PN = foreignPN "Newton-le-willows" ; -- comment=src=eng st
 lin newton_mearns_PN = foreignPN "Newton mearns" ; -- comment=src=eng status=guess
 lin newtown_PN = mkPN ("纽敦" | "新镇") ; -- comment=src=geonames status=guess
 lin next_A = mkA "下" | mkA "其次" | mkA "来" | {-HSK-} mkA "下一个" ;
-lin next_N = mkN "下" | mkN "其次" | mkN "来" | {-HSK-} mkN "秒""" ;
 lin next_Prep = mkPrep "比邻" ;
 lin nexus_N = mkN "关系" "种" ;
 lin nib_N = mkN "喙" | mkN "嘴" | mkN "鸟嘴" ; -- open-multilingual-wordnet
@@ -34630,7 +34628,6 @@ lin unthinkable_A = mkA "不可想象" ;
 lin untidy_A = mkA "不整洁" | mkA "不整齐" | mkA "凌乱" | mkA "懒散" ; -- open-multilingual-wordnet
 lin untie_V = mkV "解開" | mkV "解开" ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin untie_V2 = mkV2 (mkV "解開") | mkV2 (mkV "解开") ; -- status=guess, src=wikt -- status=guess, src=wikt
-lin until_Adv = mkAdv "到" ;
 lin until_Prep = mkPrep "直到" ;
 lin until_Subj = mkSubj "直到" ;
 lin untimbered_A = mkA "无支撑" ; -- open-multilingual-wordnet
@@ -35760,7 +35757,6 @@ lin whelk_N = mkN "峨螺" ; -- status=guess
 lin when_IAdv = S.when_IAdv ;
 lin when_Subj = S.when_Subj ;
 lin whenever_Adv = mkAdv "每当" ;
-lin where_Adv = mkAdv "哪兒" | mkAdv "哪儿" | mkAdv "哪裡" | mkAdv "哪里" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin where_IAdv = S.where_IAdv ;
 lin where_Subj = mkSubj "哪里" ;
 lin whereabouts_N = mkN "所在地" | mkN "所在" ; -- status=guess -- status=guess

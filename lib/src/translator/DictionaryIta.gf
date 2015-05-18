@@ -1494,7 +1494,6 @@ lin approval_N = mkN "approvazione" feminine ; -- status=guess
 lin approve_V = mkV "approvare" ; -- status=guess, src=wikt
 lin approve_V2 = mkV2 (mkV "approvare") ; -- status=guess, src=wikt
 lin approved_A = variants {} ; --
-lin approximately_A = variants {} ;
 lin approximation_N = mkN "approssimazione" feminine ; -- status=guess
 lin apricot_N = mkN "albicocca" ; -- status=guess
 lin apron_N = mkN "grembiule" masculine ; -- status=guess
@@ -17884,7 +17883,6 @@ lin newt_N = mkN "tritone" ; -- UWN
 lin newton_N = mkN "newton" masculine ; -- status=guess
 lin newtown_PN = mkPN "Newtown" ; -- status=guess src=geonames
 lin next_A = mkA "vicino" | mkA "prossimo" ; -- status=guess status=guess
-lin next_N = mkN "il prossimo" | mkN "la prossima" ; -- status=guess status=guess
 lin nexus_N = mkN "centro" ; -- status=guess
 lin ngultrum_N = mkN "ngultrum" | mkN "ngultrum_butanese" ; -- UWN
 lin ngwee_N = mkN "ngwee" | mkN "ngwee_zambiano" ; -- UWN
