@@ -2216,23 +2216,26 @@ pgf_morpho_iter(PgfProductionIdx* idx,
 	}
 }
 
+typedef struct {
+	GuOrder order;
+	bool case_sensitive;
+} PgfSequenceOrder;
+
 static int
-pgf_sequence_cmp_fn(GuOrder* self, const void* p1, const void* p2)
+pgf_sequence_cmp_fn(GuOrder* order, const void* p1, const void* p2)
 {
-	(void) self;
+	PgfSequenceOrder* self = gu_container(order, PgfSequenceOrder, order);
 	GuString sent = (GuString) p1;
 	const PgfSequence* sp2 = p2;
 
 	BIND_TYPE bind = BIND_HARD;
-	int res = pgf_symbols_cmp(&sent, &bind, sp2->syms, true);
+	int res = pgf_symbols_cmp(&sent, &bind, sp2->syms, self->case_sensitive);
 	if (res == 0 && *sent != 0) {
 		res = 1;
 	}
 
 	return res;
 }
-
-static GuOrder pgf_sequence_order[1] = { { pgf_sequence_cmp_fn } };
 
 void
 pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
@@ -2246,8 +2249,12 @@ pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
 		}
 	}
 
+	bool case_sensitive =
+		(gu_seq_binsearch(concr->cflags, pgf_flag_order, PgfFlag, "case_sensitive") == NULL);
+
+	PgfSequenceOrder order = { { pgf_sequence_cmp_fn }, case_sensitive };
 	PgfSequence* seq = (PgfSequence*)
-		gu_seq_binsearch(concr->sequences, pgf_sequence_order,
+		gu_seq_binsearch(concr->sequences, &order.order,
 		                 PgfSequence, (void*) sentence);
 
 	if (seq != NULL && seq->idx != NULL)
@@ -2341,7 +2348,11 @@ pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
 	state->prefix    = prefix;
 	state->seq_idx   = 0;
 
-	if (!gu_seq_binsearch_index(concr->sequences, pgf_sequence_order,
+	bool case_sensitive =
+		(gu_seq_binsearch(concr->cflags, pgf_flag_order, PgfFlag, "case_sensitive") == NULL);
+
+	PgfSequenceOrder order = { { pgf_sequence_cmp_fn }, case_sensitive };
+	if (!gu_seq_binsearch_index(concr->sequences, &order.order,
 	                            PgfSequence, (void*) prefix, 
 	                            &state->seq_idx)) {
 		state->seq_idx++;
