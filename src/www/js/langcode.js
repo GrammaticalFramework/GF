@@ -12,7 +12,14 @@ function lang1(namecode2) {
 }
 
 var languages = // [ISO-639-2 code "/"] language name ":" ISO 639-1 code
-    map(lang1,"Amharic:am Arabic:ar Bulgarian:bg Catalan:ca Chinese:zh Danish:da Dutch:nl English:en Finnish:fi French:fr German:de Greek:el Hindi:hi Ina/Interlingua:ia Italian:it Jpn/Japanese:ja Latin:la Norwegian:nb Polish:pl Ron/Romanian:ro Russian:ru Spanish:es Swedish:sv Thai:th Turkish:tr Urdu:ur".split(" "))
+    map(lang1,["Amharic:am","Arabic:ar","Bulgarian:bg","Catalan:ca",
+	       "Chinese:zh","Danish:da","Dutch:nl","English:en","Estonian:et",
+	       "Finnish:fi","French:fr","German:de","Greek:el","Hindi:hi",
+	       "Ina/Interlingua:ia","Italian:it","Jpn/Japanese:ja","Latin:la",
+	       "Norwegian:nb","Pes/Persian:fa","Polish:pl","Pnb/Punjabi:pa",
+	       "Ron/Romanian:ro","Russian:ru","Spanish:es","Swedish:sv",
+	       "Thai:th","Turkish:tr","Urdu:ur"])
+// GF uses nonstd 3-letter codes? Pes/Persian:fa, Pnb/Punjabi:pa
 
 var langname={}
 var langcode2={}

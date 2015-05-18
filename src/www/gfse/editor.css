@@ -33,9 +33,11 @@ table.extension td { border-left-width: 0; min-width: 30em; }
 
 .slideshow .hidden { display: none; }
 
-img.cloud, img.right, div.right, div.modtime { float: right; }
+img.cloud, img.right, div.right, div.modtime, div.version { float: right; }
 
-.modtime { color: #999; white-space: nowrap; }
+div.modtime >small { visibility: hidden; }
+div.modtime:hover >small { visibility: visible; }
+.modtime,.version { color: #999; white-space: nowrap; }
 
 table.grammar_list { border-collapse: collapse; margin-left: 1.0em; }
 table.grammar_list td { padding: 0.4ex 0.25em; }
@@ -116,7 +118,7 @@ table.tabs input[type=button], table.matrixview th input[type=button] {
 .string_edit { font-family: inherit; font-size: inherit; }
 textarea.string_edit { vertical-align: top; }
 
-ul.languages { -moz-column-width: 20em; }
+ul.languages { -moz-column-width: 10em; }
 
 li { margin-top: 0.5ex; margin-bottom: 0.5ex; }
 
