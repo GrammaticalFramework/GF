@@ -52,6 +52,7 @@ function add_country(code) {
     case "ja": return "ja-JP"
     case "ro": return "ja-RO"
     case "el": return "el-GR"
+    case "th": return "th-TH"
     // ...
     default: return code
     }
