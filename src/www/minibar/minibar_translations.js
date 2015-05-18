@@ -12,8 +12,9 @@ function Translations(server,opts) {
 	abstract_action: null, // action when selecting the abstracy syntax tree
 	show_trees: false, // add buttons to show abstract syntax trees,
 	                   // parse trees & word alignment
-	tree_img_format: "png", // format for trees & alignment images,
-	                        // can be "gif", "png" or "svg"
+	tree_img_format: supportsSVG() ? "svg" : "png",
+	                 // format for trees & alignment images,
+	                 // can be "gif", "png" or "svg"
 	show_grouped_translations: true,
 	to_multiple: true, // allow selection of multiple target languages
 	show_brackets: false, // show bracketed string
@@ -296,4 +297,8 @@ function draw_bracketss(bs) {
     return Array.isArray(bs)
 	? bs.map(draw_brackets)  //with gf>3.5, in some cases
 	: draw_brackets(bs) // with gf<=3.5
+}
+
+function supportsSVG() {
+    return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")
 }
