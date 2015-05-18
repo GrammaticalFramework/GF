@@ -43525,7 +43525,8 @@ lin practice_V2 = mkV2 (mkV "öva") | mkV2 (mkV "träna") ; -- status=guess, src
 lin practician_N = mkN "praktiker" "praktikern" "praktiker" "praktikerna" ;
 lin practise_V = mkV "övar" ; -- comment=8
 lin practise_V2 = variants {} ; -- mkV "övar" ; -- comment=8
-lin practitioner_N = mkN "utövare" "utövare" ; -- status=guess
+lin practitionerMasc_N = mkN "utövare" "utövare" ; -- status=guess
+lin practitionerFem_N = mkN "utövare" "utövare" ; -- status=guess
 lin praenomen_N = variants {} ; -- status=guess
 lin praesidium_N = mkN "presidium" "presidiet" "presidier" "presidierna" ;
 lin praetor_N = variants {} ; -- status=guess
@@ -58549,7 +58550,8 @@ lin trainband_N = variants {} ; -- status=guess
 lin trainbandsman_N = variants {} ; -- status=guess
 lin trainbearer_N = variants {} ; -- status=guess
 lin trained_A = variants {} ; --
-lin trainee_N = mkN "praktikant" "praktikanter" ; -- comment=5
+lin traineeMasc_N = mkN "praktikant" "praktikanter" ; -- comment=5
+lin traineeFem_N = mkN "praktikant" "praktikanter" ; -- comment=5
 lin traineeship_N = mkN "praktisering" ; -- status=guess
 lin trainer_N = mkN "tränare" utrum | mkN "tränare" utrum ; -- SaldoWN -- comment=3
 lin training_N = mkN "träning" | mkN "utbildning" ;

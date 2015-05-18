@@ -43927,7 +43927,8 @@ lin practice_V2 = mkV2 (mkV "ausüben") | mkV2 (mkV "praktizieren") ; -- status=
 lin practician_N = variants {} ;
 lin practise_V = variants {} ; --
 lin practise_V2 = variants {} ; --
-lin practitioner_N = variants {} ; --
+lin practitionerMasc_N = mkN "Praktikant" "Praktikanten" masculine ;
+lin practitionerFem_N = mkN "Praktikantin" feminine ;
 lin praenomen_N = mkN "Pränomen" neuter ; -- status=guess
 lin praesidium_N = variants {} ;
 lin praetor_N = mkN "Prätor" masculine ; -- status=guess
@@ -59145,7 +59146,8 @@ lin trainband_N = variants {} ;
 lin trainbandsman_N = variants {} ;
 lin trainbearer_N = variants {} ;
 lin trained_A = variants {} ; --
-lin trainee_N = mkN "Praktikant" "Praktikanten" masculine | mkN "Praktikantin" feminine ;
+lin traineeMasc_N = mkN "Praktikant" "Praktikanten" masculine ;
+lin traineeFem_N = mkN "Praktikantin" feminine ;
 lin traineeship_N = variants {} ;
 lin trainer_N = mkN "Trainer" "Trainer" masculine ; -- status=guess
 lin training_N = mkN "Ausbildung" | mkN "Training" "Trainings" neuter ; -- split: teacher training | gym training
