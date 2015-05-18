@@ -3140,7 +3140,6 @@ lin approx_PN = mkPN "Approx" ; -- src=eng status=guess
 lin approximate_A = mkA "annähernd" | mkA "ungefähr" | mkA "zirka" | mkA "circa" ; -- status=guess status=guess status=guess status=guess
 lin approximate_V = mkV "annähern" ; -- status=guess, src=wikt
 lin approximate_V2 = mkV2 (mkV "annähern") ; -- status=guess, src=wikt
-lin approximately_A = variants {} ;
 lin approximation_N = variants {} ;
 lin appurtenance_N = variants {} ;
 lin apr_PN = mkPN "Apr" ; -- src=eng status=guess
@@ -13318,7 +13317,6 @@ lin cougar_N = mkN "Puma" "Pumas" masculine | mkN "Berglöwe" masculine | mkN "S
 lin cough_N = mkN "Husten" "Husten" masculine ; -- status=guess
 lin cough_V = irregV "husten" "hustet" "hustete" "huste" "gehustet" ; -- status=guess, src=wikt
 lin cough_up_V2 = variants {} ;
-lin could_N = variants {} ;
 lin coulisse_N = variants {} ;
 lin coulomb_N = mkN "Coulomb" neuter ; -- status=guess
 lin coulter_N = variants {} ;
@@ -20193,7 +20191,6 @@ lin expectable_A = variants {} ;
 lin expectancy_N = mkN "Erwartung" ; -- status=guess
 lin expectant_A = variants {} ;
 lin expectation_N = mkN "Erwartung" ; -- status=guess
-lin expectations_N = variants {} ;
 lin expected_A = mkA "erwartet" ; -- status=guess
 lin expectedness_N = variants {} ;
 lin expectorant_N = mkN "Schleimlöser" masculine | mkN "Abhustemittel" neuter | mkN "Expektorans" neuter | mkN "Hustenlöser" masculine | mkN "schleimlösendes Mittel" neuter ; -- status=guess status=guess status=guess status=guess status=guess
@@ -22161,7 +22158,7 @@ lin foochow_PN = mkPN "Foochow" ; -- src=eng status=guess
 lin food_N = mkN "Essen" neuter | mkN "Lebensmittel" feminine ; --- split: this was good food / shop food
 lin foodless_A = variants {} ;
 lin foodstuff_N = mkN "Nahrungsmittel" "Nahrungsmittel" neuter ; -- status=guess
-lin fool_N = mkN "der&nbsp ;Damenflügel" "die&nbsp ;Damenflügel" masculine ; -- status=guess
+lin fool_N = variants {};
 lin fool_V2 = mkV2 (mkV "täuschen" | regV "schwindeln" | mkV "betrügen" | irregV "verarschen" "verarscht" "verarschte" "verarschte" "verarscht") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin fool_about_V = variants {} ;
 lin fool_around_V = variants {} ;
@@ -26046,7 +26043,7 @@ lin headmaster_N = variants {} ; --
 lin headmastership_N = variants {} ;
 lin headmistress_N = mkN "Schulleiterin" feminine | mkN "Rekorin" feminine | mkN "Direktorin" feminine ; -- status=guess status=guess status=guess
 lin headmistressship_N = variants {} ;
-lin headpiece_N = mkN "der&nbsp ;Damenflügel" "die&nbsp ;Damenflügel" masculine ; -- status=guess
+lin headpiece_N = variants {};
 lin headpin_N = variants {} ;
 lin headquarter_N = variants {} ;
 lin headquarters_N = mkN "Zentrale" "Zentralen" feminine ; -- status=guess
@@ -31481,7 +31478,7 @@ lin ladyfish_N = variants {} ;
 lin ladylike_A = variants {} ;
 lin ladylikeness_N = variants {} ;
 lin ladylove_N = mkN "Feinsliebchen" "Feinsliebchen" neuter ; -- status=guess
-lin ladyship_N = mkN "die&nbsp ;Vorstoßvariante" "die&nbsp ;Vorstoßvarianten" feminine ; -- status=guess
+lin ladyship_N = variants {};
 lin laelia_N = variants {} ;
 lin laetrile_N = variants {} ;
 lin lag_N = variants {} ;
@@ -33276,7 +33273,7 @@ lin lordliness_N = variants {} ;
 lin lordly_A = variants {} ;
 lin lordolatry_N = variants {} ;
 lin lordosis_N = variants {} ;
-lin lordship_N = mkN "der&nbsp ;Damenflügel" "die&nbsp ;Damenflügel" masculine ; -- status=guess
+lin lordship_N = variants {};
 lin lore_N = variants {} ;
 lin lorgnette_N = variants {} ;
 lin lorica_N = variants {} ;
@@ -37830,7 +37827,6 @@ lin newtonian_A = variants {} ;
 lin newtonian_N = variants {} ;
 lin newtown_PN = mkPN "Newtown" ; -- src=geonames status=guess
 lin next_A = mkA "nächster" ; -- status=guess
-lin next_N = mkN "der&nbsp ;Damenflügel" "die&nbsp ;Damenflügel" masculine ; -- status=guess
 lin next_Prep = variants {} ;
 lin next_to_Prep = variants {} ;
 lin nexus_N = mkN "Zentrum" "Zentren" neuter ; -- status=guess
@@ -43508,7 +43504,7 @@ lin pomposity_N = variants {} ;
 lin pompous_A = mkA "pompös" ; -- status=guess
 lin ponce_N = variants {} ;
 lin poncho_N = variants {} ;
-lin pond_N = mkN "der&nbsp ;Damenflügel" "die&nbsp ;Damenflügel" masculine ; -- status=guess
+lin pond_N = variants {} ;
 lin ponder_V = mkV "überlegen" | prefixV "nach" (irregV "denken" "denkt" "dachte" "dächte" "gedacht") ; -- status=guess, src=wikt status=guess, src=wikt
 lin ponder_V2 = mkV2 (mkV "überlegen" | prefixV "nach" (irregV "denken" "denkt" "dachte" "dächte" "gedacht")) ; -- status=guess, src=wikt status=guess, src=wikt
 lin ponderable_A = variants {} ;
@@ -48547,7 +48543,7 @@ lin roisterer_N = variants {} ;
 lin role_1_N = variants {} ; --
 lin role_2_N = variants {} ; --
 lin roleplaying_N = mkN "Rollenspiel" "Rollenspiele" neuter ; -- status=guess
-lin roll_N = mkN "das&nbsp ;Larsen-System" "die&nbsp ;Larsen-Systeme" neuter | mkN "das&nbsp ;Larsen-System" "die&nbsp ;Larsen-Systeme" neuter ; -- status=guess status=guess
+lin roll_N = variants {} ;
 lin roll_V = irregV "laufen" "lauft" "lief" "liefe" "gelaufen" ; -- status=guess, src=wikt
 lin roll_V2 = mkV2 (irregV "laufen" "lauft" "lief" "liefe" "gelaufen") ; -- status=guess, src=wikt
 lin roll_back_V = advV OP_roll_V OP_back_Adv ; -- guess-p-verb
@@ -53273,7 +53269,7 @@ lin solicit_V = mkV "belästigen" | mkV "stören" ; -- status=guess, src=wikt st
 lin solicit_V2 = mkV2 (mkV "belästigen") | mkV2 (mkV "stören") ; -- status=guess, src=wikt status=guess, src=wikt
 lin solicitation_N = variants {} ;
 lin solicitorFem_N = variants {} ;
-lin solicitorMasc_N = mkN "Solicitor" masculine | mkN "Rechtsanwalt" "Rechtsanwälte" masculine | mkN "der&nbsp ;Damenflügel" "die&nbsp ;Damenflügel" masculine ; -- status=guess status=guess status=guess
+lin solicitorMasc_N = mkN "Solicitor" masculine | mkN "Rechtsanwalt" "Rechtsanwälte" masculine ; -- status=guess status=guess status=guess
 lin solicitor_general_N = variants {} ;
 lin solicitorship_N = variants {} ;
 lin solicitous_A = mk3A "beflissen" "beflissener" "beflissenste" | mkA "dienstbeflissen" | mkA "sorgsam" ; -- status=guess status=guess status=guess
@@ -59017,7 +59013,7 @@ lin towel_rack_N = variants {} ;
 lin towel_rail_N = variants {} ;
 lin toweling_N = variants {} ;
 lin towelling_N = variants {} ;
-lin tower_N = mkN "der&nbsp ;Damenflügel" "die&nbsp ;Damenflügel" masculine ; -- status=guess
+lin tower_N = variants {} ;
 lin tower_V = variants {} ;
 lin tower_block_N = variants {} ;
 lin tower_hamlets_PN = mkPN "Tower hamlets" ; -- src=eng status=guess
@@ -61815,8 +61811,7 @@ lin untidy_A = mk3A "unordentlich" "unordentlicher" "unordentlichste" ; -- statu
 lin untie_V = mkReflV "lösen" ; -- status=guess, src=wikt
 lin untie_V2 = mkV2 (mkReflV "lösen") ; -- status=guess, src=wikt
 lin untied_A = variants {} ;
-lin until_Adv = variants {} ;
-lin until_Prep = variants {} ; --
+lin until_Prep = variants {} ;
 lin until_Subj = ss "bis" ;
 lin untilled_A = variants {} ;
 lin untimbered_A = variants {} ;
@@ -63945,7 +63940,6 @@ lin when_Subj = ss "wenn" | ss "als" ; -- comment=split in German ; could be par
 lin whence_Adv = mkAdv "woher" ; -- status=guess
 lin whencesoever_A = variants {} ;
 lin whenever_Adv = mkAdv "wenn" | mkAdv "wann" | mkAdv "wann" ; -- status=guess status=guess status=guess
-lin where_Adv = mkAdv "wo" | mkAdv "wohin" | mkAdv "woher" ; -- status=guess status=guess status=guess
 lin where_IAdv = S.where_IAdv ;
 lin where_Subj = ss "wo" ;
 lin where_as_Prep = variants {} ;
@@ -64691,7 +64685,6 @@ lin worshipful_A = variants {} ;
 lin worshipper_N = mkN "Anbeter" masculine | mkN "Anbeterin" feminine ; -- status=guess status=guess
 lin worst_A = mkA "schlectest" ; ---- not A
 lin worst_Adv = mkAdv "schlimmstenfalls" ; -- status=guess
-lin worst_N = variants {} ;
 lin worst_V2 = variants {} ;
 lin worsted_N = variants {} ;
 lin wort_N = variants {} ;
@@ -64706,7 +64699,6 @@ lin worthwhile_A = mkA "lohnend" | mk3A "wertvoll" "wertvoller" "wertvollste" ; 
 lin worthwhileness_N = variants {} ;
 lin worthy_A = mkA "würdig" ; -- status=guess
 lin worthy_N = variants {} ;
-lin would_N = variants {} ;
 lin would_be_A = variants {} ;
 lin wound_N = mkN "Wunde" "Wunden" feminine | mkN "Verletzung" ; -- status=guess status=guess
 lin wound_V2 = mkV2 (irregV "verletzen" "verletzt" "verletzte" "verletzte" "verletzt") ; -- status=guess, src=wikt

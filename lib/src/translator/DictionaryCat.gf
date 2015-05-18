@@ -17537,7 +17537,6 @@ lin wheelbase_N = mkN "intereix" masculine ; --auto
 lin when_IAdv = mkAdv "quan" ; --auto
 lin when_Subj = S.when_Subj ;
 lin whence_Adv = mkAdv "d'on" ; --auto
-lin where_Adv = mkAdv "a on" | mkAdv "on" ; --auto
 lin where_IAdv = mkAdv "a on" | mkAdv "on" ; --auto
 lin where_Subj = mkSubj "on" Indic ;
 lin wherever_Adv = mkAdv "onsevulga que" ; --auto

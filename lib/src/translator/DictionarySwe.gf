@@ -3126,7 +3126,6 @@ lin approx_PN = mkPN "Approx" ; -- src=eng status=guess
 lin approximate_A = mkA "ungefärlig" ; -- comment=2
 lin approximate_V = mkV "approximerar" ; -- comment=2
 lin approximate_V2 = variants {} ; -- status=guess
-lin approximately_A = variants {} ;
 lin approximation_N = mkN "närmande" ; -- comment=2
 lin appurtenance_N = mkN "tillbehör" neutrum ; -- status=guess
 lin apr_PN = mkPN "Apr" ; -- src=eng status=guess
@@ -37493,7 +37492,6 @@ lin newtonian_A = variants {} ; -- status=guess
 lin newtonian_N = mkN "newtonsk"; -- src=google
 lin newtown_PN = mkPN "Newtown" neutrum ; -- src=geonames status=guess
 lin next_A = mkA "nästa" ; -- status=guess
-lin next_N = mkN "nästa" ; -- comment=3
 lin next_Prep = mkPrep "nästintill" ; ---- Prep ?
 lin next_to_Prep = mkPrep "bredvid" | mkPrep "intill" ;
 lin nexus_N = variants {} ; -- status=guess
@@ -63301,7 +63299,6 @@ lin when_Subj = S.when_Subj ;
 lin whence_Adv = mkAdv "varifrån" | mkAdv "var i från" | (mkAdv "vadan") ; -- status=guess status=guess status=guess
 lin whencesoever_A = variants {} ; -- status=guess
 lin whenever_Adv = mkAdv "närsom" | mkAdv "när som helst" | mkAdv "närhelst" ; -- status=guess status=guess status=guess
-lin where_Adv = mkAdv "där" ; -- status=guess
 lin where_IAdv = S.where_IAdv ;
 lin where_Subj = lin Subj {s = "där"} ;
 lin where_as_Prep = variants {} ; -- status=guess
@@ -64040,7 +64037,6 @@ lin worshipful_A = variants {} ; -- status=guess
 lin worshipper_N = mkN "troende" ; -- status=guess
 lin worst_A = mkA "värst" ; -- status=guess
 lin worst_Adv = variants {} ; -- status=guess
-lin worst_N = mkN "värsta"; -- src=google
 lin worst_V2 = variants {} ; -- status=guess
 lin worsted_N = mkN "kamgarn" neutrum ; -- status=guess
 lin wort_N = mkN "vört" ; -- status=guess

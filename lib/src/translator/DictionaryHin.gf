@@ -33374,7 +33374,6 @@ lin worshiper_N = mkN "अंधभक्त" ; -- tocheck
 lin worshipper_N = mkN "अंधभक्त" ; -- tocheck              
 lin worst_A = mkA "सर्वाधिक बुरा" ; -- tocheck       
 lin worst_Adv = mkAdv "सबसे खराब" ; -- tocheck              
-lin worst_N = mkN "सबसे ज्यादा नुक़सान" ; -- tocheck              
 lin worst_V2 = mkV2 (compoundV "बुरी तरह से पछाड़" (mkV "देना")) ; -- tocheck
 lin worsted_N = mkN "वूर्स्टेड" ; -- tocheck              
 lin worth_A = mkA "योग्य" ; -- tocheck              

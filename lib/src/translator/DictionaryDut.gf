@@ -1026,7 +1026,6 @@ lin approve_V = mkV (mkV "instemmen") "met" ; -- status=guess, src=wikt
 lin approve_V2 = mkV2 (mkV (mkV "instemmen") "met") ; -- status=guess, src=wikt
 lin approved_A = variants {} ; --
 lin approx_PN = mkPN "Approx" ; -- src=eng status=guess
-lin approximately_A = variants {} ;
 lin approximation_N = mkN "benaderen" | mkN "schatten" ; -- status=guess status=guess
 lin apr_PN = mkPN "Apr" ; -- src=eng status=guess
 lin apricot_N = mkN "abrikoos" feminine ; -- status=guess
@@ -13629,7 +13628,6 @@ lin newton_le_willows_PN = mkPN "Newton-le-willows" ; -- src=eng status=guess
 lin newton_mearns_PN = mkPN "Newton mearns" ; -- src=eng status=guess
 lin newtown_PN = mkPN "Newtown" ; -- src=geonames status=guess
 lin next_A = mkA "naast" | mkA "dichtst" ; -- status=guess status=guess
-lin next_N = mkN "de volgende" masculine ; -- status=guess
 lin nexus_N = mkN "band" masculine | mkN "verbinding" feminine ; -- status=guess status=guess
 lin nibble_N = mkN "nibble" ; -- status=guess
 lin nibble_V = mkV "knabbelen" ; -- status=guess, src=wikt
@@ -22158,7 +22156,6 @@ lin when_IAdv = S.when_IAdv ;
 lin when_Subj = S.when_Subj ;
 lin whence_Adv = mkAdv "waarvandaan" ; -- status=guess
 lin whenever_Adv = mkAdv "wanneer ook" ; -- status=guess
-lin where_Adv = mkAdv "waar" | mkAdv "waarheen" | mkAdv "waarvan" | mkAdv "waarvandaan" ; -- status=guess status=guess status=guess status=guess
 lin where_IAdv = S.where_IAdv ;
 lin where_Subj = mkSubj "waar" ;
 lin whereabouts_N = mkN "waaromtrent" ; -- status=guess
