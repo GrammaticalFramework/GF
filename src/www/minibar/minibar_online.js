@@ -10,7 +10,7 @@ var online_options={
 var minibar_options= {
     show_abstract: true,
     show_trees: true,
-    tree_img_format: "png", // or "svg"
+//  tree_img_format: "png", // or "svg"
     show_grouped_translations: false,
     show_brackets: true,
     word_replacements: true,
