@@ -1202,7 +1202,7 @@ typedef struct {
 } PyPgfLiteralCallback;
 
 static PgfExprProb*
-pypgf_literal_callback_match(PgfLiteralCallback* self,
+pypgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
                              size_t lin_idx,
                              GuString sentence, size_t* poffset,
                              GuPool *out_pool)
@@ -1264,7 +1264,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self,
 }
 
 static GuEnum*
-pypgf_literal_callback_predict(PgfLiteralCallback* self,
+pypgf_literal_callback_predict(PgfLiteralCallback* self, PgfConcr* concr,
 	                           size_t lin_idx,
 	                           GuString prefix,
 	                           GuPool *out_pool)
