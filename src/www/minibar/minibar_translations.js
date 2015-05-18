@@ -18,6 +18,7 @@ function Translations(server,opts) {
 	show_grouped_translations: true,
 	to_multiple: true, // allow selection of multiple target languages
 	show_brackets: false, // show bracketed string
+	speech: true, // enable speech synthesis buttons
 	translate_limit: 25 // maximum number of parse trees to retrieve
     }
 
@@ -107,17 +108,33 @@ Translations.prototype.target_lang=function() {
 
 Translations.prototype.show_translations=function(translationResults) {
     var self=this;
-    function tdt(tree_btn,txt,action) {
+    function abs_tdt(tree) {
+	var as = self.options.show_trees
+	    ? [self.abstree_button(tree),
+	       self.alignment_button(tree,to=="All",self.toLangs),
+	       text(" ")]
+	    : []
+	as.push(text(tree))
+	return td(as)
+    }
+    function lin_tdt(tree,to,langcode,lin,action) {
+	var txt=text("▸ "+lin)
 	if(action) {
 	    txt=wrap("span",txt)
 	    txt.onclick=action
 	}
-	return self.options.show_trees ? td([tree_btn,text(" "),txt]) : td(txt)
+	var tree_btn=self.parsetree_button(tree,to)
+	var as = self.options.show_trees
+	    ? [tree_btn,text(" ")]
+	    : []
+	as.push(txt)
+	if(self.options.speech) as.push(speech_buttons(langcode,lin))
+	return td(as)
     }
     function act(lin) {
 	return self.lin_action ? function() { self.lin_action(lin) } : null
     }
-    function show_lin(tree_btn,lin,tree) {
+    function show_lin(langcode,lin,tree) {
 	function draw_table(lintable) {
 	    function draw_texts(texts) {
 		return texts.map(function(s) { return wrap("div",text(s)) })
@@ -143,7 +160,7 @@ Translations.prototype.show_translations=function(translationResults) {
 	    self.server.pgf_call("linearizeTable",{"tree":tree,"to":lin.to},
 				 show_table)
 	}
-	return tdt(tree_btn,text("▸ "+lin.text),get_tabular) // ▶
+	return lin_tdt(tree,lin.to,langcode,lin.text,get_tabular) // ▶
     }
     with(self) {
 	var trans=main;
@@ -176,12 +193,7 @@ Translations.prototype.show_translations=function(translationResults) {
 		                      ? title("Edit the syntax tree",
 				              button("Abstract",abs_act))
 			              : text("Abstract: ")
-			tbody.appendChild(
-			    tr([th(abs_hdr),
-				tdt(node("span",{},
-					 [abstree_button(t.tree),
-					  alignment_button(t.tree,to=="All",toLangs)]),
-				    text(t.tree))]));
+			tbody.appendChild(tr([th(abs_hdr),abs_tdt(t.tree)]));
 		    }
 		    for(var i=0;i<lin.length;i++) {
 			if(lin[i].to==to && toLangs.length==1)
@@ -196,7 +208,7 @@ Translations.prototype.show_translations=function(translationResults) {
 			    //hdr.disabled=lin[i].to==current.from
 			    var btn=parsetree_button(t.tree,lin[i].to)
 			    tbody.appendChild(
-				tr([th(hdr),show_lin(btn,lin[i],t.tree)]));
+				tr([th(hdr),show_lin(langcode,lin[i],t.tree)]));
 			}
 		    }
 		    trans.appendChild(wrap("table",tbody));
@@ -301,4 +313,30 @@ function draw_bracketss(bs) {
 
 function supportsSVG() {
     return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")
+}
+
+function speech_buttons(to3,txt) {
+    var to2=alangcode(to3)+"-"
+    var voices = window.speechSynthesis && window.speechSynthesis.getVoices() || []
+    var dvs = voices.filter(function(v){return v.default})
+    function pick(v) {
+	return v.lang.substr(0,to2.length)==to2
+    }
+    function btn(v) {
+	var u=new SpeechSynthesisUtterance(txt)
+	u.lang=v.lang // how to use v.voiceURI or v.name?
+
+	function speak() {
+	    speechSynthesis.cancel()
+	    speechSynthesis.speak(u)
+	}
+	return button(v.lang,speak)
+    }
+    //console.log(voices.length,"voices")
+    var vs=dvs.filter(pick)
+    if(vs.length==0) vs=voices.filter(pick)
+    //console.log(vs.length,"voices for "+to3+" "+to2)
+    var btns=vs.map(btn)
+    //console.log(btns.length,"voice buttons")
+    return wrap("span",btns)
 }
