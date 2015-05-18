@@ -20693,7 +20693,9 @@ lin topos_N = mkN "topos " neuter ; -- status=guess
 lin topsail_N = mkN "bovenzeil" neuter ; -- status=guess
 lin toque_N = mkN "muts" ; -- status=guess
 lin torbay_PN = mkPN "Torbay" ; -- src=geonames status=guess
-lin torch_N = mkN "zaklamp" ; -- status=guess
+lin torch_1_N = mkN "zaklamp" ; -- status=guess
+lin torch_2_N = mkN "zaklamp" ; -- status=guess
+lin torch_3_N = mkN "zaklamp" ; -- status=guess
 lin torino_PN = mkPN "Torino" ; -- src=eng status=guess
 lin torment_N = mkN "kwelling" ; -- status=guess
 lin torment_V2 = mkV2 (mkV "kwellen") ; -- status=guess, src=wikt

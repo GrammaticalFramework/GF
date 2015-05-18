@@ -21539,7 +21539,7 @@ lin flasher_N = mkN "blottare" utrum ; -- comment=3
 lin flashgun_N = variants {} ; -- status=guess
 lin flashiness_N = variants {} ; -- status=guess
 lin flashing_N = mkN "blinkande" ;
-lin flashlight_N = mkN "ficklampa" ; -- comment=3
+lin flashlight_N = mkN "ficklampa";
 lin flashover_N = mkN "överslag" neutrum ;
 lin flashpoint_N = mkN "flampunkt" "flampunkter" ; -- comment=2
 lin flashy_A = mkA "prålig" ; -- comment=3
@@ -58261,7 +58261,9 @@ lin topsy_turvydom_N = variants {} ; -- status=guess
 lin toque_N = mkN "toque" "toquer" ;
 lin tor_N = variants {} ; -- status=guess
 lin torbay_PN = mkPN "Torbay" neutrum ; -- src=geonames status=guess
-lin torch_N = mkN "fackla" | mkN "bloss" neutrum ; -- SaldoWN -- comment=3
+lin torch_1_N = mkN "fackla";
+lin torch_2_N = mkN "ficklampa";
+lin torch_3_N = mkN "bloss" neutrum;
 lin torch_V2 = variants {} ; -- status=guess
 lin torch_race_N = mkN "fackla-race"; -- src=google
 lin torch_singer_N = mkN "fackla-sångare";

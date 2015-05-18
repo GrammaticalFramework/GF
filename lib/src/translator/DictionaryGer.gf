@@ -58855,7 +58855,9 @@ lin topsy_turvydom_N = variants {} ;
 lin toque_N = variants {} ;
 lin tor_N = variants {} ;
 lin torbay_PN = mkPN "Torbay" ; -- src=geonames status=guess
-lin torch_N = mkN "Taschenlampe" "Taschenlampen" feminine ; -- status=guess
+lin torch_1_N = mkN "Taschenlampe" "Taschenlampen" feminine ; -- status=guess
+lin torch_2_N = mkN "Taschenlampe" "Taschenlampen" feminine ; -- status=guess
+lin torch_3_N = mkN "Taschenlampe" "Taschenlampen" feminine ; -- status=guess
 lin torch_V2 = mkV2 (mkV "anzünden") ; -- status=guess, src=wikt
 lin torch_race_N = variants {} ;
 lin torch_singer_N = variants {} ;
