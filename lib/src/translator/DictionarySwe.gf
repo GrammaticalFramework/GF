@@ -1391,7 +1391,6 @@ lin aircrew_N = mkN "flygplansbesättning" ;
 lin aircrewman_N = variants {} ; -- status=guess
 lin airdock_N = variants {} ; -- status=guess
 lin airdrie_PN = mkPN "Airdrie" neutrum ; -- src=geonames status=guess
-lin airdrome_N = variants {} ; -- status=guess
 lin airdrop_N = mkN "luftlandsättningar"; -- src=google
 lin aireborough_PN = mkPN "Aireborough" ; -- src=eng status=guess
 lin airedale_N = variants {} ; -- status=guess

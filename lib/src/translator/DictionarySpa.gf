@@ -851,7 +851,6 @@ lin airbus_N = mkN "aerobus" masculine ; -- status=guess
 lin aircraft_N = mkN "aeronave" feminine ;
 lin aircrew_N = mkN "tripulación" | mkN "tripulación_aérea" ; --UWN
 lin airdrie_PN = mkPN "Airdrie" ; -- status=guess src=geonames
-lin airdrome_N = mkN "aeropuerto" ; --UWN
 lin airfield_N = mkN "aeródromo" | mkN "campo de aviación" ; -- status=guess status=guess
 lin airflow_N = mkN "corriente" | mkN "corriente_de_air" ; --UWN
 lin airfoil_N = mkN "perfil alar" | mkN "perfil aerodinámico" | mkN "perfil" masculine ; -- status=guess status=guess status=guess

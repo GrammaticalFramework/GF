@@ -747,7 +747,7 @@ lin aeriform_A = mkA "幻想" | mkA "无实体" | mkA "空气状" | mkA "象空�
 lin aerobe_N = mkN "好氧性生物" ; -- open-multilingual-wordnet
 lin aerobiosis_N = mkN "好氧生活" | mkN "需氧生活" ; -- open-multilingual-wordnet
 lin aerodontalgia_N = mkN "高空牙痛症" ; -- open-multilingual-wordnet
-lin aerodrome_N = mkN "飞机场""" ;
+lin aerodrome_N = mkN "机场" | mkN "飞机场" ; -- open-multilingual-wordnet
 lin aerodynamic_A = mkA "空气动力学" ;
 lin aerodynamics_N = mkN "空气动力学" ; -- open-multilingual-wordnet
 lin aerolite_N = mkN "陨石" ; -- open-multilingual-wordnet
@@ -1010,7 +1010,6 @@ lin aircrew_N = mkN "全体机员" ; -- open-multilingual-wordnet
 lin aircrewman_N = mkN "机组人员" ; -- open-multilingual-wordnet
 lin airdock_N = mkN "机库" | mkN "飞机库" | mkN "飞机棚" ; -- open-multilingual-wordnet
 lin airdrie_PN = mkPN "艾尔德里" ; -- comment=src=geonames status=guess
-lin airdrome_N = mkN "机场" | mkN "飞机场" ; -- open-multilingual-wordnet
 lin aireborough_PN = foreignPN "Aireborough" ; -- comment=src=eng status=guess
 lin airfare_N = mkN "机票价格" | mkN "飞机票价" | mkN "飞机费用" ; -- open-multilingual-wordnet
 lin airfield_N = mkN "机场" | {-HSK-} mkN "机场" "家" ;
