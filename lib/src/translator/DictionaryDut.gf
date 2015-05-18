@@ -15506,7 +15506,8 @@ lin practice_V = mkV "beoefen" ; -- status=guess, src=wikt
 lin practice_V2 = mkV2 (mkV "beoefen") ; -- status=guess, src=wikt
 lin practise_V = variants {} ; --
 lin practise_V2 = variants {} ; --
-lin practitioner_N = mkN "beoefenaar" masculine ; -- status=guess
+lin practitionerMasc_N = mkN "beoefenaar" masculine ; -- status=guess
+lin practitionerFem_N = mkN "beoefenaar" masculine ; -- status=guess
 lin pragmatic_A = mkA "pragmatisch" ; -- status=guess
 lin pragmatics_N = mkN "Pragmatiek" ; -- status=guess
 lin pragmatism_N = mkN "pragmatisme" masculine ; -- status=guess
@@ -20802,7 +20803,8 @@ lin train_V2 = mkV2 (mkV "trainen") ;
 lin train_V2V = mkV2V (mkV "trainen") ;
 lin train_up_V2 = prepV2 OP_train_V OP_up_Prep ; -- guess-p-verb
 lin trained_A = variants {} ; --
-lin trainee_N = variants {} ; --
+lin traineeMasc_N = variants {} ; --
+lin traineeFem_N = variants {} ; --
 lin trainer_N = mkN "trainer" masculine | mkN "trainster" feminine ; -- status=guess status=guess
 lin training_N = mkN "opleiding" feminine | mkN "training" ;
 lin trait_N = mkN "karaktereigenschap" ; -- status=guess

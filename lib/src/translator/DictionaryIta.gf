@@ -20528,7 +20528,8 @@ lin practice_V = mkV "praticare" | mkV "addestrare" | mkV "esercitarsi" ; -- sta
 lin practice_V2 = mkV2 (mkV "praticare") | mkV2 (mkV "addestrare") | mkV2 (mkV "esercitarsi") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin practise_V = variants {} ; --
 lin practise_V2 = variants {} ; --
-lin practitioner_N = mkN "professionista" ; -- status=guess
+lin practitionerMasc_N = mkN "professionista" ; -- status=guess
+lin practitionerFem_N = mkN "professionista" ; -- status=guess
 lin praenomen_N = mkN "prenome" ; -- UWN
 lin praesidium_N = mkN "presidium" ; -- UWN
 lin praetorian_A = mkA "pretorio" ; -- UWN
@@ -27332,7 +27333,8 @@ lin train_V2 = mkV2 (mkV "esercitarsi") ; -- status=guess, src=wikt
 lin train_V2V = mkV2V (mkV "esercitarsi") ; -- status=guess, src=wikt
 lin train_up_V2 = prepV2 OP_train_V OP_up_Prep ; -- guess-p-verb
 lin trained_A = variants {} ; --
-lin trainee_N = mkN "praticante" | mkN "tirocinante" ; -- UWN
+lin traineeMasc_N = mkN "tirocinante" ; -- UWN
+lin traineeFem_N = mkN "tirocinante" ; -- UWN
 lin trainer_N = mkN "allenatore" masculine ; -- status=guess
 lin training_N = mkN "addestramento" ; -- status=guess
 lin trainman_N = mkN "ferroviere" ; -- UWN
