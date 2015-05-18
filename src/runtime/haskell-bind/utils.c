@@ -12,7 +12,7 @@ typedef struct {
 } HSPgfLiteralCallback;
 
 static PgfExprProb*
-hspgf_match_callback(PgfLiteralCallback* self,
+hspgf_match_callback(PgfLiteralCallback* self, PgfConcr* concr,
 	                 size_t lin_idx,
 	                 GuString sentence, size_t* poffset,
 	                 GuPool *out_pool)

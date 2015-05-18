@@ -5,7 +5,7 @@
 
 
 static PgfExprProb*
-pgf_match_string_lit(PgfLiteralCallback* self,
+pgf_match_string_lit(PgfLiteralCallback* self, PgfConcr* concr,
                      size_t lin_idx,
                      GuString sentence, size_t* poffset,
                      GuPool *out_pool)
@@ -50,7 +50,7 @@ pgf_predict_empty_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 static GuEnum*
-pgf_predict_empty(PgfLiteralCallback* self,
+pgf_predict_empty(PgfLiteralCallback* self, PgfConcr* concr,
 	              size_t lin_idx,
 	              GuString prefix,
 	              GuPool *out_pool)
@@ -66,7 +66,7 @@ static PgfLiteralCallback pgf_string_literal_callback =
 
 
 static PgfExprProb*
-pgf_match_int_lit(PgfLiteralCallback* self,
+pgf_match_int_lit(PgfLiteralCallback* self, PgfConcr* concr,
                   size_t lin_idx,
                   GuString sentence, size_t* poffset,
                   GuPool *out_pool)
@@ -120,7 +120,7 @@ static PgfLiteralCallback pgf_int_literal_callback =
 
 
 static PgfExprProb*
-pgf_match_float_lit(PgfLiteralCallback* self,
+pgf_match_float_lit(PgfLiteralCallback* self, PgfConcr* concr,
                     size_t lin_idx,
                     GuString sentence, size_t* poffset,
                     GuPool *out_pool)
@@ -174,7 +174,7 @@ static PgfLiteralCallback pgf_float_literal_callback =
 
 
 static PgfExprProb*
-pgf_match_name_lit(PgfLiteralCallback* self,
+pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
                    size_t lin_idx,
                    GuString sentence, size_t* poffset,
                    GuPool *out_pool)

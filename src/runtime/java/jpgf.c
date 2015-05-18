@@ -389,7 +389,7 @@ typedef struct {
 } JPgfTokenProbEnum;
 
 static PgfExprProb*
-jpgf_literal_callback_match(PgfLiteralCallback* self,
+jpgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
                             size_t lin_idx,
                             GuString sentence, size_t* poffset,
                             GuPool *out_pool)
@@ -467,7 +467,7 @@ jpgf_token_prob_enum_fin(GuFinalizer* self)
 }
 
 static GuEnum*
-jpgf_literal_callback_predict(PgfLiteralCallback* self,
+jpgf_literal_callback_predict(PgfLiteralCallback* self, PgfConcr* concr,
 	                          size_t lin_idx,
 	                          GuString prefix,
 	                          GuPool *out_pool)

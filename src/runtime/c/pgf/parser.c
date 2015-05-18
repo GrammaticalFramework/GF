@@ -1473,7 +1473,7 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 						size_t start  = ps->before->end_offset;
 						size_t offset = start;
 						PgfExprProb *ep =
-							callback->match(callback,
+							callback->match(callback, ps->concr,
 											slit->r,
 											ps->sentence, &offset,
 											ps->out_pool);
