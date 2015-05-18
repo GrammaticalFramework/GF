@@ -196,11 +196,13 @@ pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
 		if (i > 0)
 		  gu_putc(' ', out, err);
 		gu_out_utf8(ucs, out, err);
-		ucs = gu_utf8_decode(&p);
+		*poffset = p - ((uint8_t*) sentence);
 
+		ucs = gu_utf8_decode(&p);
 		while (ucs != 0 && !gu_ucs_is_space(ucs)) {
 			gu_out_utf8(ucs, out, err);
 			*poffset = p - ((uint8_t*) sentence);
+
 			ucs = gu_utf8_decode(&p);
 		}
 
