@@ -29969,7 +29969,9 @@ lin topple_V = mkV "derribar" ; -- status=guess, src=wikt
 lin topple_V2 = mkV2 (mkV "derribar") ; -- status=guess, src=wikt
 lin topsail_N = mkN "gavia" ; -- status=guess
 lin torbay_PN = mkPN "Torbay" ; -- status=guess src=geonames
-lin torch_N = mkN "lámpara" | mkN "linterna" ; -- status=guess
+lin torch_1_N = mkN "lámpara"; -- status=guess
+lin torch_2_N = mkN "linterna"; -- status=guess
+lin torch_3_N = mkN "lámpara"; -- status=guess
 lin toreador_N = mkN "torero" ; -- status=guess
 lin torero_N = mkN "torero" ; --UWN
 lin torment_N = mkN "tormento" ; -- status=guess

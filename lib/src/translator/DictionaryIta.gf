@@ -27197,7 +27197,9 @@ lin topsail_N = mkN "gabbia" ; -- UWN
 lin topsy_turvy_Adv = mkAdv "rinfusa" ; -- UWN
 lin toque_N = mkN "turbante" ; -- UWN
 lin torbay_PN = mkPN "Torbay" ; -- status=guess src=geonames
-lin torch_N = mkN "torcia" ; -- status=guess
+lin torch_1_N = mkN "torcia" ; -- status=guess
+lin torch_2_N = mkN "torcia" ; -- status=guess
+lin torch_3_N = mkN "torcia" ; -- status=guess
 lin torch_V2 = mkV2 (mkV "incendiare") ; -- status=guess, src=wikt
 lin toreador_N = mkN "torero" ; -- status=guess
 lin torment_N = mkN "cruccio" | mkN "tormento" ; -- status=guess status=guess

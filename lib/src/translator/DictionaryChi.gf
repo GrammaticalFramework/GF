@@ -33247,7 +33247,9 @@ lin topple_V2 = mkV2 "倾覆" ;
 lin topsoil_N = mkN "上层土" | mkN "表土" ; -- open-multilingual-wordnet
 lin topsy_turvy_Adv = mkAdv "颠三倒四" ;
 lin torbay_PN = foreignPN "Torbay" ; -- comment=src=geonames status=guess
-lin torch_N = mkN "火炬" ;
+lin torch_1_N = mkN "火炬" ;
+lin torch_2_N = mkN "火炬" ;
+lin torch_3_N = mkN "火炬" ;
 lin torch_V2 = mkV2 "火炬" ;
 lin torino_PN = foreignPN "Torino" ; -- comment=src=eng status=guess
 lin torment_N = mkN "苦痛" ; -- status=guess

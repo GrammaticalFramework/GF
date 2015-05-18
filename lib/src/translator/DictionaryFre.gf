@@ -30609,7 +30609,9 @@ lin topsail_N = mkN "hunier" masculine ; -- tocheck
 lin topspin_N = mkN "Topspin" | mkN "topspin" ; -- UWN
 lin toque_N = mkN "toque" feminine | mkN "tuque" feminine ; -- tocheck
 lin torbay_PN = mkPN "Torbay" ; -- status=guess src=geonames
-lin torch_N = mkN "torche" feminine ; -- tocheck
+lin torch_1_N = mkN "torche" feminine ; -- tocheck
+lin torch_2_N = mkN "torche" feminine ; -- tocheck
+lin torch_3_N = mkN "torche" feminine ; -- tocheck
 lin toreador_N = mkN "toréador" masculine ; -- tocheck
 lin torero_N = mkN "toréro" ; -- UWN
 lin torment_N = mkN "tourment" masculine ; -- tocheck

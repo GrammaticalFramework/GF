@@ -58859,7 +58859,9 @@ fun topsy_turvydom_N : N ;
 fun toque_N : N ;
 fun tor_N : N ;
 fun torbay_PN : PN ;
-fun torch_N : N ;
+fun torch_1_N : N ;   -- | a light usually carried in the hand; consists of some flammable substance
+fun torch_2_N : N ;   -- | a small portable battery-powered electric lamp
+fun torch_3_N : N ;   -- | a burner that mixes air and gas to produce a very hot flame
 fun torch_V2 : V2 ;
 fun torch_race_N : N ;
 fun torch_singer_N : N ;
