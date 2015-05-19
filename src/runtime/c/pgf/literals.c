@@ -177,15 +177,15 @@ typedef struct {
 	PgfExpr expr;
 	bool is_known;
 	GuPool* out_pool;
-} PgfMatchNameMorphoCallback;
+} PgfMatchMorphoCallback;
 
-void
+static void
 pgf_match_name_morpho_callback(PgfMorphoCallback* self_,
                                PgfCId lemma, GuString analysis, prob_t prob,
                                GuExn* err)
 {
-	PgfMatchNameMorphoCallback* self =
-		gu_container(self_, PgfMatchNameMorphoCallback, callback);
+	PgfMatchMorphoCallback* self =
+		gu_container(self_, PgfMatchMorphoCallback, callback);
 
 	PgfAbsFun* absfun =
 		gu_seq_binsearch(self->abstract->funs, pgf_absfun_order, PgfAbsFun, lemma);
@@ -277,12 +277,12 @@ pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
 			}
 		}
 
-		PgfMatchNameMorphoCallback clo = { { pgf_match_name_morpho_callback }, 
-			                               concr->abstr,
-			                               gu_null_variant,
-			                               false,
-			                               out_pool
-			                             };
+		PgfMatchMorphoCallback clo = { { pgf_match_name_morpho_callback }, 
+			                           concr->abstr,
+			                           gu_null_variant,
+			                           false,
+			                           out_pool
+			                         };
 		pgf_lookup_morpho(concr, name, &clo.callback, NULL);
 
 		if (clo.is_known) {
@@ -337,6 +337,90 @@ pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
 PgfLiteralCallback pgf_nerc_literal_callback =
   { pgf_match_name_lit, pgf_predict_empty } ;
 
+static void
+pgf_match_unknown_morpho_callback(PgfMorphoCallback* self_,
+                                  PgfCId lemma, GuString analysis, prob_t prob,
+                                  GuExn* err)
+{
+	PgfMatchMorphoCallback* self =
+		gu_container(self_, PgfMatchMorphoCallback, callback);
+	self->is_known = true;
+}
+
+static PgfExprProb*
+pgf_match_unknown_lit(PgfLiteralCallback* self, PgfConcr* concr,
+                      size_t lin_idx,
+                      GuString sentence, size_t* poffset,
+                      GuPool *out_pool)
+{
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
+
+	PgfExprProb* ep = NULL;
+
+	GuUCS ucs = gu_utf8_decode(&p);
+	if (!gu_ucs_is_upper(ucs)) {
+		GuPool* tmp_pool = gu_local_pool();
+		GuStringBuf *sbuf = gu_string_buf(tmp_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+		GuExn* err = gu_new_exn(tmp_pool);
+
+		gu_out_utf8(ucs, out, err);
+		*poffset = p - ((uint8_t*) sentence);
+
+		ucs = gu_utf8_decode(&p);
+		while (ucs != 0 && !gu_ucs_is_space(ucs)) {
+			gu_out_utf8(ucs, out, err);
+			*poffset = p - ((uint8_t*) sentence);
+
+			ucs = gu_utf8_decode(&p);
+		}
+		
+		GuString word = gu_string_buf_freeze(sbuf, tmp_pool);
+
+		PgfMatchMorphoCallback clo = { { pgf_match_unknown_morpho_callback }, 
+			                           concr->abstr,
+			                           gu_null_variant,
+			                           false,
+			                           out_pool
+			                         };
+		pgf_lookup_morpho(concr, word, &clo.callback, NULL);
+
+		if (!clo.is_known) {
+			ep = gu_new(PgfExprProb, out_pool);
+			ep->prob = 0;
+
+			PgfExprApp *expr_app =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &ep->expr, out_pool);
+			GuString con = "MkSymb";
+			PgfExprFun *expr_fun =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con)+1,
+									&expr_app->fun, out_pool);
+			strcpy(expr_fun->fun, con);
+			PgfExprLit *expr_lit =
+				gu_new_variant(PGF_EXPR_LIT,
+							   PgfExprLit,
+							   &expr_app->arg, out_pool);
+			PgfLiteralStr *lit_str =
+				gu_new_flex_variant(PGF_LITERAL_STR,
+									PgfLiteralStr,
+									val, strlen(word)+1,
+									&expr_lit->lit, out_pool);
+			strcpy(lit_str->val, word);
+		}
+		
+		gu_pool_free(tmp_pool);
+	}
+
+	return ep;
+}
+
+PgfLiteralCallback pgf_unknown_literal_callback =
+  { pgf_match_unknown_lit, pgf_predict_empty } ;
 
 PgfCallbacksMap*
 pgf_new_callbacks_map(PgfConcr* concr, GuPool *pool)
