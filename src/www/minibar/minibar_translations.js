@@ -117,50 +117,60 @@ Translations.prototype.show_translations=function(translationResults) {
 	as.push(text(tree))
 	return td(as)
     }
-    function lin_tdt(tree,to,langcode,lin,action) {
-	var txt=text("▸ "+lin)
-	if(action) {
-	    txt=wrap("span",txt)
-	    txt.onclick=action
-	}
-	var tree_btn=self.parsetree_button(tree,to)
-	var as = self.options.show_trees
-	    ? [tree_btn,text(" ")]
-	    : []
-	as.push(txt)
-	if(self.options.speech) as.push(speech_buttons(langcode,lin))
-	return td(as)
+    function text_speech(langcode,to,txt,lin) {
+	var langcode2=langCode(self.grammar,to)
+	return wrap("span",[txt,speech_buttons(langcode,langcode2,lin)])
+    }
+    function lin_tdt(tree,to,langcode,lin) {
+	var txt=wrap("span",text("▸ "+lin))
+	var ts = text_speech(langcode,to,txt,lin)
+	var as = wrap("span",
+		    self.options.show_trees
+		    ? [self.parsetree_button(tree,to),text(" "),ts]
+		    : [ts])
+	as.active=txt
+	as.swap=ts
+	return as
     }
     function act(lin) {
 	return self.lin_action ? function() { self.lin_action(lin) } : null
     }
+    function atext(s,act) {
+	var txt=wrap("span",text(s))
+	txt.onclick=act
+	return txt
+    }
     function show_lin(langcode,lin,tree) {
-	function draw_table(lintable) {
+	function draw_table(lintable,action) {
 	    function draw_texts(texts) {
-		return texts.map(function(s) { return wrap("div",text(s)) })
+		function text1(s) {
+		    var txt=atext(s,action)
+		    return wrap("div",text_speech(langcode,lin.to,txt,s))
+		}
+		return texts.map(text1)
 	    }
 	    function draw_row(row) {
 		return tr([td(text(row.params)),td(draw_texts(row.texts))])
 	    } // ▼ ▾
 	    return wrap("span",
-			[text("▾ "),
+			[atext("▾ ",action),
 			 wrap_class("table","lintable",lintable.map(draw_row))])
 	}
 	function get_tabular() {
-	    var t=this
-	    var pa=this.parentNode
 	    function show_table(lins) {
 		if(lins.length==1) {
-		    var ta=draw_table(lins[0].table)
-		    replaceNode(ta,t)
-		    ta.onclick=function() { replaceNode(t,ta) }
-		    t.onclick=function() { replaceNode(ta,t) }
+		    function restore() { replaceNode(one.swap,all) }
+		    var all=draw_table(lins[0].table,restore)
+		    replaceNode(all,one.swap)
+		    one.active.onclick=function() { replaceNode(all,one.swap) }
 		}
 	    }
 	    self.server.pgf_call("linearizeTable",{"tree":tree,"to":lin.to},
 				 show_table)
 	}
-	return lin_tdt(tree,lin.to,langcode,lin.text,get_tabular) // ▶
+	var one= lin_tdt(tree,lin.to,langcode,lin.text) // ▶
+	one.active.onclick=get_tabular
+	return td(one)
     }
     with(self) {
 	var trans=main;
@@ -315,12 +325,14 @@ function supportsSVG() {
     return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")
 }
 
-function speech_buttons(to3,txt) {
-    var to2=alangcode(to3)+"-"
+function speech_buttons(to3,to2,txt) {
     var voices = window.speechSynthesis && window.speechSynthesis.getVoices() || []
     var dvs = voices.filter(function(v){return v.default})
-    function pick(v) {
-	return v.lang.substr(0,to2.length)==to2
+    if(to2)
+	var pick=function (v) { return v.lang==to2 }
+    else {
+	var to2dash=alangcode(to3)+"-"
+	var pick=function(v) { return hasPrefix(v.lang,to2dash) }
     }
     function btn(v) {
 	var u=new SpeechSynthesisUtterance(txt)
