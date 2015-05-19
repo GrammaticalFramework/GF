@@ -577,11 +577,9 @@ nerc pgf (lang,concr) lin_idx sentence offset =
               "PN" -> retLit (mkApp lemma [])
               "WeekDay" -> retLit (mkApp "weekdayPN" [mkApp lemma []])
               "Month" -> retLit (mkApp "monthPN" [mkApp lemma []])
-              "Language" -> Nothing
-              _ -> pn
+              _ -> Nothing
       where
-        retLit e = --traceShow (name,e,drop end_offset sentence) $
-                   Just (e,0,end_offset)
+        retLit e = Just (e,0,end_offset)
           where end_offset = offset+length name
         pn = retLit (mkApp "SymbPN" [mkApp "MkSymb" [mkStr name]])
         ((lemma,cat),_) = maximumBy (compare `on` snd) (reverse ls)

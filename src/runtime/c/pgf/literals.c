@@ -171,7 +171,58 @@ pgf_match_float_lit(PgfLiteralCallback* self, PgfConcr* concr,
 static PgfLiteralCallback pgf_float_literal_callback =
   { pgf_match_float_lit, pgf_predict_empty } ;
 
+typedef struct {
+	PgfMorphoCallback callback;
+	PgfAbstr* abstract;
+	PgfExpr expr;
+	bool is_known;
+	GuPool* out_pool;
+} PgfMatchNameMorphoCallback;
 
+void
+pgf_match_name_morpho_callback(PgfMorphoCallback* self_,
+                               PgfCId lemma, GuString analysis, prob_t prob,
+                               GuExn* err)
+{
+	PgfMatchNameMorphoCallback* self =
+		gu_container(self_, PgfMatchNameMorphoCallback, callback);
+
+	PgfAbsFun* absfun =
+		gu_seq_binsearch(self->abstract->funs, pgf_absfun_order, PgfAbsFun, lemma);
+	if (absfun != NULL) {
+		if (strcmp(absfun->type->cid, "PN") == 0) {
+			self->expr = absfun->ep.expr;
+		} else if (strcmp(absfun->type->cid, "Weekday") == 0) {
+			PgfExprApp *expr_app =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &self->expr, self->out_pool);
+			GuString con = "weekdayPN";
+			PgfExprFun *expr_fun =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con)+1,
+									&expr_app->fun, self->out_pool);
+			strcpy(expr_fun->fun, con);
+			expr_app->arg = absfun->ep.expr;
+		} else if (strcmp(absfun->type->cid, "Month") == 0) {
+			PgfExprApp *expr_app =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &self->expr, self->out_pool);
+			GuString con = "monthPN";
+			PgfExprFun *expr_fun =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con)+1,
+									&expr_app->fun, self->out_pool);
+			strcpy(expr_fun->fun, con);
+			expr_app->arg = absfun->ep.expr;
+		} else {
+			self->is_known = true;
+		}
+	}
+}
 
 static PgfExprProb*
 pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
@@ -214,42 +265,68 @@ pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
 
 	PgfExprProb* ep = NULL;
 	if (i > 0) {
+		GuString name = gu_string_buf_freeze(sbuf, tmp_pool);
+
+		// Detect I and I'm in English
+		GuString concr_name = pgf_concrete_name(concr);
+		size_t concr_name_len = strlen(concr_name);
+		if (concr_name_len >= 3 && strcmp(concr_name+concr_name_len-3,"Eng") == 0) {
+			if (strcmp(name, "I") == 0 || strcmp(name, "I'm") == 0) {
+				gu_pool_free(tmp_pool);
+				return NULL;
+			}
+		}
+
+		PgfMatchNameMorphoCallback clo = { { pgf_match_name_morpho_callback }, 
+			                               concr->abstr,
+			                               gu_null_variant,
+			                               false,
+			                               out_pool
+			                             };
+		pgf_lookup_morpho(concr, name, &clo.callback, NULL);
+
+		if (clo.is_known) {
+			return NULL;
+		}
+
+		if (gu_variant_is_null(clo.expr)) {
+			PgfExprApp *expr_app1 =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &clo.expr, out_pool);
+			GuString con1 = "SymbPN";
+			PgfExprFun *expr_fun1 =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con1)+1,
+									&expr_app1->fun, out_pool);
+			strcpy(expr_fun1->fun, con1);
+			PgfExprApp *expr_app2 =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &expr_app1->arg, out_pool);
+			GuString con2 = "MkSymb";
+			PgfExprFun *expr_fun2 =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con2)+1,
+									&expr_app2->fun, out_pool);
+			strcpy(expr_fun2->fun, con2);
+			PgfExprLit *expr_lit =
+				gu_new_variant(PGF_EXPR_LIT,
+							   PgfExprLit,
+							   &expr_app2->arg, out_pool);
+			PgfLiteralStr *lit_str =
+				gu_new_flex_variant(PGF_LITERAL_STR,
+									PgfLiteralStr,
+									val, strlen(name)+1,
+									&expr_lit->lit, out_pool);
+			strcpy(lit_str->val, name);
+		}
+		
 		ep = gu_new(PgfExprProb, out_pool);
 		ep->prob = 0;
-
-		PgfExprApp *expr_app1 =
-			gu_new_variant(PGF_EXPR_APP,
-			               PgfExprApp,
-			               &ep->expr, out_pool);
-		GuString con1 = "SymbPN";
-		PgfExprFun *expr_fun1 =
-			gu_new_flex_variant(PGF_EXPR_FUN,
-			                    PgfExprFun,
-			                    fun, strlen(con1)+1,
-			                    &expr_app1->fun, out_pool);
-		strcpy(expr_fun1->fun, con1);
-		PgfExprApp *expr_app2 =
-			gu_new_variant(PGF_EXPR_APP,
-			               PgfExprApp,
-			               &expr_app1->arg, out_pool);
-		GuString con2 = "MkSymb";
-		PgfExprFun *expr_fun2 =
-			gu_new_flex_variant(PGF_EXPR_FUN,
-			                    PgfExprFun,
-			                    fun, strlen(con2)+1,
-			                    &expr_app2->fun, out_pool);
-		strcpy(expr_fun2->fun, con2);
-		PgfExprLit *expr_lit =
-			gu_new_variant(PGF_EXPR_LIT,
-			               PgfExprLit,
-			               &expr_app2->arg, out_pool);
-		GuString val = gu_string_buf_freeze(sbuf, tmp_pool);
-		PgfLiteralStr *lit_str =
-			gu_new_flex_variant(PGF_LITERAL_STR,
-			                    PgfLiteralStr,
-			                    val, strlen(val)+1,
-			                    &expr_lit->lit, out_pool);
-        strcpy(lit_str->val, val);
+		ep->expr = clo.expr;
 	}
 
 	gu_pool_free(tmp_pool);
