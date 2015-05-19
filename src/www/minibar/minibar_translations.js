@@ -29,9 +29,18 @@ function Translations(server,opts) {
     this.menus=empty("span");
 
     var tom_opts={id:"to_menu"}
-    if(this.options.to_multiple) tom_opts.multiple=true,tom_opts.size=5;
+    if(this.options.to_multiple)
+	tom_opts.multiple=true,tom_opts.size=8,
+        tom_opts.style="position: absolute";
     var tom=this.to_menu=node("select",tom_opts,[]);
-    appendChildren(this.menus,[text(" To: "), this.to_menu])
+    if(this.options.to_multiple) {
+	tom.style.display="none"
+	function toggle_tom() {
+	    tom.style.display= tom.style.display=="none" ? "" : "none"
+	}
+	appendChildren(this.menus,[button("To:",toggle_tom),tom,text(" ... ")])
+    }
+    else appendChildren(this.menus,[text(" To: "),tom])
     tom.onchange=bind(this.change_language,this);
     var o=this.options
     if(o.initial_grammar && o.initial_toLangs)
@@ -150,7 +159,7 @@ Translations.prototype.show_translations=function(translationResults) {
 		return texts.map(text1)
 	    }
 	    function draw_row(row) {
-		return tr([td(text(row.params)),td(draw_texts(row.texts))])
+		return tr([td(atext(row.params,action)),td(draw_texts(row.texts))])
 	    } // ▼ ▾
 	    return wrap("span",
 			[atext("▾ ",action),
