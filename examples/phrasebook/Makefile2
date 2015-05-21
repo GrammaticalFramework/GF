@@ -7,7 +7,7 @@ GFOPT=gf -make $S -optimize-pgf
 
 all: Phrasebook.pgf
 
-Phrasebook.pgf: PhrasebookFre.pgf PhrasebookGer.pgf PhrasebookFin.pgf PhrasebookEng.pgf PhrasebookBul.pgf PhrasebookCat.pgf PhrasebookChi.pgf PhrasebookDan.pgf PhrasebookDut.pgf PhrasebookHin.pgf PhrasebookIta.pgf PhrasebookLav.pgf PhrasebookNor.pgf PhrasebookPes.pgf PhrasebookPol.pgf PhrasebookRon.pgf PhrasebookRus.pgf PhrasebookSpa.pgf PhrasebookSwe.pgf PhrasebookTha.pgf PhrasebookUrd.pgf DisambPhrasebookEng.pgf
+Phrasebook.pgf: PhrasebookFre.pgf PhrasebookGer.pgf PhrasebookFin.pgf PhrasebookEng.pgf PhrasebookBul.pgf PhrasebookCat.pgf PhrasebookChi.pgf PhrasebookDan.pgf PhrasebookDut.pgf PhrasebookHin.pgf PhrasebookIta.pgf PhrasebookJpn.pgf PhrasebookLav.pgf PhrasebookNor.pgf PhrasebookPes.pgf PhrasebookPol.pgf PhrasebookRon.pgf PhrasebookRus.pgf PhrasebookSnd.pgf PhrasebookSpa.pgf PhrasebookSwe.pgf PhrasebookTha.pgf PhrasebookUrd.pgf DisambPhrasebookEng.pgf
 	gf -make $^
 
 PhrasebookEng.pgf:: ; $(GFOPT) -name=PhrasebookEng PhrasebookEng.gf
@@ -21,12 +21,14 @@ PhrasebookFre.pgf:: ; $(GFOPT) -name=PhrasebookFre PhrasebookFre.gf
 PhrasebookGer.pgf:: ; $(GFOPT) -name=PhrasebookGer PhrasebookGer.gf
 PhrasebookHin.pgf:: ; $(GFOPT) -name=PhrasebookHin PhrasebookHin.gf
 PhrasebookIta.pgf:: ; $(GFOPT) -name=PhrasebookIta PhrasebookIta.gf
+PhrasebookJpn.pgf:: ; $(GFOPT) -name=PhrasebookJpn PhrasebookJpn.gf
 PhrasebookLav.pgf:: ; $(GFOPT) -name=PhrasebookLav PhrasebookLav.gf
 PhrasebookNor.pgf:: ; $(GFOPT) -name=PhrasebookNor PhrasebookNor.gf
 PhrasebookPes.pgf:: ; $(GFOPT) -name=PhrasebookPes PhrasebookPes.gf
 PhrasebookPol.pgf:: ; $(GFOPT) -name=PhrasebookPol PhrasebookPol.gf
 PhrasebookRon.pgf:: ; $(GFOPT) -name=PhrasebookRon PhrasebookRon.gf
 PhrasebookRus.pgf:: ; $(GFOPT) -name=PhrasebookRus PhrasebookRus.gf
+PhrasebookSnd.pgf:: ; $(GFOPT) -name=PhrasebookSnd PhrasebookSnd.gf
 PhrasebookSpa.pgf:: ; $(GFOPT) -name=PhrasebookSpa PhrasebookSpa.gf
 PhrasebookSwe.pgf:: ; $(GFOPT) -name=PhrasebookSwe PhrasebookSwe.gf
 PhrasebookTha.pgf:: ; $(GFOPT) -name=PhrasebookTha PhrasebookTha.gf
