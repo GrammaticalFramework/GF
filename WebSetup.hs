@@ -48,7 +48,7 @@ buildWeb gf (flags,pkg,lbi) =
       where
         tmp_dir = gfo_dir</>subdir
         dir = "examples"</>subdir
-        args = numJobs flags++["-make","-s","-optimize-pgf"]
+        args = numJobs flags++["-make","-s"] -- ,"-optimize-pgf"
                ++["--gfo-dir="++tmp_dir,
                   "--gf-lib-path="++buildDir lbi </> "rgl",
                   "--name="++dropExtension pgf,
