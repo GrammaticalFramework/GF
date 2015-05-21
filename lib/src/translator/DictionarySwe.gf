@@ -25045,7 +25045,7 @@ lin guttural_A = variants {} ; -- status=guess
 lin guttural_N = mkN "guttural" "gutturaler" ;
 lin guvnor_N = variants {} ; -- status=guess
 lin guy's_PN = mkPN "Guy's" ; -- src=eng status=guess
-lin guy_N = mkN "fågelskrämma" ; -- comment=10
+lin guy_N = mkN "kille" utrum;
 lin guy_PN = mkPN "Guy" ; -- src=eng status=guess
 lin guy_V2 = variants {} ; -- status=guess
 lin guyana_PN = mkPN "Guyana" neutrum ; -- src=geonames status=guess
