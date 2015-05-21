@@ -571,17 +571,20 @@ function quiz_button(g,err_ind) {
 }
 
 
-function lang(code,name) { return { code:code, name:name} }
-function lang1(name) {
-    var ws=name.split("/");
-    return ws.length==1 ? lang(name.substr(0,3),name) : lang(ws[0],ws[1]);
-}
-
-// Language names and 3-letter ISO-639 codes
-// See http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 var languages =
-    map(lang1,"Amharic Arabic Bulgarian Catalan Chinese Danish Dutch English Estonian Finnish French German Greek Hindi Ina/Interlingua Italian Jpn/Japanese Latin Mlt/Maltese Mongolian Norwegian Pes/Persian Polish Pnb/Punjabi Ron/Romanian Russian Snd/Sindhi Spanish Swedish Thai Turkish Urdu".split(" "));
-languages.push(lang("Other","Other"));
+    function() {
+	function lang(code,name) { return { code:code, name:name} }
+	function lang1(name) {
+	    var ws=name.split("/");
+	    return ws.length==1 ? lang(name.substr(0,3),name) : lang(ws[0],ws[1]);
+	}
+
+	// Language names and 3-letter ISO-639 codes
+	// See http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+	var languages=map(lang1,"Amharic Arabic Bulgarian Catalan Chinese Danish Dutch English Estonian Finnish French German Greek Hindi Ina/Interlingua Italian Jpn/Japanese Latin Mlt/Maltese Mongolian Norwegian Pes/Persian Polish Pnb/Punjabi Ron/Romanian Russian Snd/Sindhi Spanish Swedish Thai Turkish Urdu".split(" "));
+	languages.push(lang("Other","Other"));
+	return languages
+    }()
 
 var langname={};
 for(var i in languages)
