@@ -1,25 +1,31 @@
 // Language names and ISO-639 codes (both 3-letter and 2-letter codes)
 // See http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 
-function lang1(namecode2) {
-    function lang(code,name,code2) {return {code:code, name:name, code2:code2}}
-    var nc=namecode2.split(":")
-    var name=nc[0]
-    var ws=name.split("/")
-    var code2=nc.length>1 ? nc[1] : ""
-    return ws.length==1 ? lang(name.substr(0,3),name,code2)
-	                : lang(ws[0],ws[1],code2)
-}
+var languages =
+    function() {
+	function lang1(namecode2) {
+	    function lang(code,name,code2) {
+		return {code:code, name:name, code2:code2}
+	    }
+	    var nc=namecode2.split(":")
+	    var name=nc[0]
+	    var ws=name.split("/")
+	    var code2=nc.length>1 ? nc[1] : ""
+	    return ws.length==1 ? lang(name.substr(0,3),name,code2)
+	                        : lang(ws[0],ws[1],code2)
+	}
 
-var languages = // [ISO-639-2 code "/"] language name ":" ISO 639-1 code
-    map(lang1,["Amharic:am","Arabic:ar","Bulgarian:bg","Catalan:ca",
-	       "Chinese:zh","Danish:da","Dutch:nl","English:en","Estonian:et",
-	       "Finnish:fi","French:fr","German:de","Greek:el","Hindi:hi",
-	       "Ina/Interlingua:ia","Italian:it","Jpn/Japanese:ja","Latin:la",
-	       "Norwegian:nb","Pes/Persian:fa","Polish:pl","Pnb/Punjabi:pa",
-	       "Ron/Romanian:ro","Russian:ru","Spanish:es","Swedish:sv",
-	       "Thai:th","Turkish:tr","Urdu:ur"])
-// GF uses nonstd 3-letter codes? Pes/Persian:fa, Pnb/Punjabi:pa
+	return map(lang1,
+		// [ISO-639-2 code "/"] language name ":" ISO 639-1 code
+		["Amharic:am","Arabic:ar","Bulgarian:bg","Catalan:ca",
+	        "Chinese:zh","Danish:da","Dutch:nl","English:en","Estonian:et",
+	        "Finnish:fi","French:fr","German:de","Greek:el","Hindi:hi",
+	        "Ina/Interlingua:ia","Italian:it","Jpn/Japanese:ja","Latin:la",
+	        "Norwegian:nb","Pes/Persian:fa","Polish:pl","Pnb/Punjabi:pa",
+	        "Ron/Romanian:ro","Russian:ru","Spanish:es","Swedish:sv",
+	        "Thai:th","Turkish:tr","Urdu:ur"])
+	        // GF uses nonstd 3-letter codes? Pes/Persian:fa, Pnb/Punjabi:pa
+    }()
 
 var langname={}
 var langcode2={}
