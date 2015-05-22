@@ -64,10 +64,22 @@ lin
     PredVPovs = G.PredVP;
 
   CompoundN noun cn = {
+    s = \\n,c => glue noun.co (cn.uncap.s ! n ! c) ;
+    co = glue noun.co (cn.uncap.co) ;
+    uncap = {
+      s = \\n,c => glue noun.uncap.co (cn.uncap.s ! n ! c) ;
+      co = glue noun.uncap.co (cn.uncap.co)
+      } ;
+    g = cn.g
+  } ;
+{- ---- doesn't compile AR 22/5/2015
+  CompoundN noun cn = {
     s = \\n,c => glue noun.co (cn.s ! n ! c) ;
     co = glue noun.co (cn.co) ;
     g = cn.g
   } ;
+
+-}
 
     CompoundAP noun adj = {
       s = \\af => glue (noun.s ! Sg ! Nom) (adj.s ! Posit ! af) ;
