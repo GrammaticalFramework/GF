@@ -12,19 +12,19 @@ concrete StructuralNor of Structural = CatNor **
   almost_AdA, almost_AdN = ss "nesten" ;
   although_Subj = ss ["selv om"] ;
   always_AdV = ss "altid" ;
-  and_Conj = {s1 = [] ; s2 = "og" ; n = Pl} ;
+  and_Conj = {s1 = [] ; s2 = "og" ; n = Pl ; isDiscont = False} ;
   because_Subj = ss "fordi" ;
   before_Prep = ss "før" ;
   behind_Prep = ss "bakom" ;
   between_Prep = ss "mellom" ;
-  both7and_DConj = sd2 "både" "og" ** {n = Pl} ;
+  both7and_DConj = sd2 "både" "og" ** {n = Pl ; isDiscont = True} ;
   but_PConj = ss "men" ;
   by8means_Prep = ss "med" ;
   can8know_VV, can_VV = 
     mkV "kunne" "kan" "kunn" "kunne" "kunnet" "kunnen" **
     {c2 = mkComplement [] ; lock_VV = <>} ;
   during_Prep = ss "under" ;
-  either7or_DConj = sd2 "enten" "eller" ** {n = Sg} ;
+  either7or_DConj = sd2 "enten" "eller" ** {n = Sg ; isDiscont = True} ;
   everybody_NP = regNP "alle" "alles" Utr Pl ;
   every_Det = {s = \\_,_ => "hver" ; sp = \\_,_ =>"enhver" ; n = Sg ; det = DDef Indef} ;
   everything_NP = regNP "alt" "alts" Neutr Sg ;
@@ -58,7 +58,7 @@ concrete StructuralNor of Structural = CatNor **
   on_Prep = ss "på" ;
 
   only_Predet = {s = \\_,_ => "kun" ; p = [] ; a = PNoAg} ;
-  or_Conj = {s1 = [] ; s2 = "eller" ; n = Pl} ;
+  or_Conj = {s1 = [] ; s2 = "eller" ; n = Pl ; isDiscont = False} ;
   otherwise_PConj = ss "annarledes" ;
   part_Prep = ss "av" ;
   please_Voc = ss "takk" ; ---

@@ -5,7 +5,10 @@ incomplete concrete ConjunctionScand of Conjunction =
 
   lin
 
-    ConjS conj ss = conjunctDistrTable Order conj ss ;
+    ConjS conj ss = {
+      s = \\p => let o : Order = case conj.isDiscont of {True => Inv ; _ => p}
+                 in conj.s1 ++ ss.s1 ! o ++ conj.s2 ++ ss.s2 ! p ;      
+      } ;
 
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
@@ -40,7 +43,7 @@ incomplete concrete ConjunctionScand of Conjunction =
       s2 = table {Inv => y.s ! Main ; o => y.s ! o}
       } ;
     ConsS x xs = { -- consrTable Order comma ;
-      s1 = \\o => x.s ! Inv ++ comma ++ xs.s1 ! case o of {Inv => Main ; _ => o} ;
+      s1 = \\o => x.s ! o ++ comma ++ xs.s1 ! case o of {Inv => Main ; _ => o} ;
       s2 = xs.s2
       } ;
     BaseAdv = twoSS ;

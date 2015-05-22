@@ -85,7 +85,7 @@ incomplete concrete CatScand of Cat =
 
 -- Structural
 
-    Conj = {s1,s2 : Str ; n : Number} ;
+    Conj = {s1,s2 : Str ; n : Number ; isDiscont : Bool} ; -- isDiscont: there is an adverb: antingen vinner jag eller du vinner
     Subj = {s : Str} ;
     Prep = {s : Str} ;
 

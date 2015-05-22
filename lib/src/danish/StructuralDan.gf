@@ -12,19 +12,19 @@ concrete StructuralDan of Structural = CatDan **
   almost_AdA, almost_AdN = ss "næsten" ;
   although_Subj = ss ["selv om"] ;
   always_AdV = ss "altid" ;
-  and_Conj = {s1 = [] ; s2 = "og" ; n = Pl} ;
+  and_Conj = {s1 = [] ; s2 = "og" ; n = Pl ; isDiscont = False} ;
   because_Subj = ss "fordi" ;
   before_Prep = ss "før" ;
   behind_Prep = ss "bag" ;
   between_Prep = ss "mellem" ;
-  both7and_DConj = sd2 "både" "og" ** {n = Pl} ;
+  both7and_DConj = sd2 "både" "og" ** {n = Pl ; isDiscont = True} ;
   but_PConj = ss "men" ;
   by8means_Prep = ss "med" ;
   can8know_VV, can_VV = 
     mkV "kunne" "kan" "kan" "kunne" "kunnet" "kan" **
     {c2 = mkComplement [] ; lock_VV = <>} ;
   during_Prep = ss "under" ;
-  either7or_DConj = sd2 "enten" "eller" ** {n = Sg} ;
+  either7or_DConj = sd2 "enten" "eller" ** {n = Sg ; isDiscont = True} ;
   everybody_NP = regNP "alle" "alles" Utr Pl ;
   every_Det = {s = \\_,_ => "hver" ; sp = \\_,_ => "enhver" ; n = Sg ; det = DDef Indef} ;
   everything_NP = regNP "alt" "alts" Neutr Sg ;
@@ -56,7 +56,7 @@ concrete StructuralDan of Structural = CatDan **
   no_Utt = ss ["nej"] ;
   on_Prep = ss "på" ;
   only_Predet = {s = \\_,_ => "kun" ; p = [] ; a = PNoAg} ;
-  or_Conj = {s1 = [] ; s2 = "eller" ; n = Pl} ;
+  or_Conj = {s1 = [] ; s2 = "eller" ; n = Pl ; isDiscont = False} ;
   otherwise_PConj = ss "anderledes" ;
   part_Prep = ss "af" ;
   please_Voc = ss "tak" ; ---
