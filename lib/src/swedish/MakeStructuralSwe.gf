@@ -6,9 +6,11 @@ resource MakeStructuralSwe = open CatSwe,
 oper 
   mkConj = overload {
     mkConj : Str -> Conj 
-      = \s -> lin Conj {s1 = [] ; s2 = s ; n = P.plural} ;
+      = \s -> lin Conj {s1 = [] ; s2 = s ; n = P.plural ; isDiscont = False} ;
     mkConj : Str -> Str -> P.Number -> Conj 
-      = \x,y,n -> {s1 = x ; s2 = y ; n = n ; lock_Conj = <>} ;
+      = \x,y,n -> lin Conj {s1 = x ; s2 = y ; n = n ; isDiscont = False} ;
+    mkConj : Str -> Str -> P.Number -> Bool -> Conj 
+      = \x,y,n,d -> lin Conj {s1 = x ; s2 = y ; n = n ; isDiscont = d} ;
     } ;
 
   mkSubj : Str -> Subj 

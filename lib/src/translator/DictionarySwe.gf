@@ -37206,7 +37206,7 @@ lin neighbouring_A = variants {} ; --
 lin neighbourliness_N = mkN "grannsämja" ;
 lin neighbourly_A = variants {} ; -- status=guess
 lin neil_PN = mkPN "Neil" ; -- src=eng status=guess
-lin neither7nor_DConj = M.mkConj "varken" "eller" singular ; -- status=guess
+lin neither7nor_DConj = M.mkConj "varken" "eller" singular True ; -- status=guess
 lin neither_A = variants {} ; -- status=guess
 lin neither_Adv = mkAdv "varken" ; -- comment=2
 lin neither_Det = M.mkDet "ingendera" | M.mkDet "ingen av" ; -- status=guess status=guess
@@ -38023,7 +38023,7 @@ lin nor'_nor'_west_Adv = variants {} ; -- status=guess
 lin nor'_nor'_west_N = variants {} ; -- status=guess
 lin nor'_west_Adv = variants {} ; -- status=guess
 lin nor'_west_N = variants {} ; -- status=guess
-lin nor_Conj = M.mkConj "inte heller" ; ---- not the same as in neither-nor
+lin nor_Conj = M.mkConj [] "och inte heller" singular True ; ---- not the same as in neither-nor
 lin nora_PN = mkPN "Nora" neutrum ; -- src=geonames status=guess
 lin noradrenaline_N = mkN "noradrenalin" "noradrenaliner" ;
 lin nordic_A = compoundA (mkA "nordisk") ;
