@@ -11,6 +11,7 @@
 // Model
 #import "Grammar.h"
 #import "Translation.h"
+#import "MorphAnalyser.h"
 
 // Grammatical Framework
 #import "pgf/pgf.h"
@@ -18,79 +19,6 @@
 #import "gu/exn.h"
 #import "gu/file.h"
 
-typedef struct {
-    PgfMorphoCallback callback;
-    PgfPGF* pgf;
-    PgfConcr* src;
-    PgfConcr* tgt;
-} PgfLinLemmasCallback;
-
-NSString *morphWord;
-
-void print_lemma(PgfMorphoCallback* _self,
-                 PgfCId lemma, GuString analysis, prob_t prob,
-                 GuExn* err) {
-    PgfLinLemmasCallback* this = gu_container(_self, PgfMorphoCallback, callback);
-    
-    // Here we print the lemmas. One and the same lemma could
-    // appear several times if there are different analyses.
-    // In this case "barn" is child but it could be in singular,
-    // in plural or it could be used as a compound form.
-    // Duplications should be eliminated in the user interface.
-    
-    if (morphWord) {
-        return;
-    }
-    
-    printf("%s (%s)\n", lemma, analysis);
-    
-    GuPool* tmp_pool = gu_new_pool();
-    GuStringBuf* buf = gu_string_buf(tmp_pool);
-    GuOut* out = gu_string_buf_out(buf);
-    
-    // Now we build an expression from the lemma.
-    PgfApplication app = {lemma, 0};
-    PgfExpr expr = pgf_expr_apply(&app, tmp_pool);
-    
-    // Now we linearize the expression in the source language
-    pgf_linearize(this->src, expr, out, err);
-    
-    if (pgf_has_linearization(this->tgt, lemma))
-        gu_puts(" - ", out, err);
-    else
-        gu_puts(" ", out, err);
-    
-    if (pgf_has_linearization(this->tgt, lemma)) {
-        gu_puts(". ", out, err);
-        
-        // Now we linearize the expression in the target language
-        // This is the only thing that needs to be done for
-        // visualization in the first view. Everything else
-        // is useful only for the second view which shows
-        // inflection tables and alternative translations.
-        pgf_linearize(this->tgt, expr, out, err);
-    } else {
-        gu_puts(".", out, err);
-    }
-    
-    // Finally we get the string which is used for describing
-    // the different lexical entries in the translations view
-    GuString s = gu_string_buf_freeze(buf, tmp_pool);
-    printf("entry: %s\n", s);
-    
-    morphWord = [NSString stringWithUTF8String:s];
-    
-    printf("\n");
-    gu_pool_free(tmp_pool);
-}
-
-void translate_word(PgfPGF* pgf, GuString word, GuExn* err)
-{
-    PgfConcr* swe = pgf_get_language(pgf, "AppSwe");
-    PgfConcr* eng = pgf_get_language(pgf, "AppEng");
-    PgfLinLemmasCallback callback = { { print_lemma }, pgf, swe, eng };
-    pgf_lookup_morpho(swe, word, &callback.callback, err);
-}
 
 @interface Translator ()
 
@@ -99,15 +27,6 @@ void translate_word(PgfPGF* pgf, GuString word, GuExn* err)
 @implementation Translator
 
 #pragma mark - inits
-
-- (void)morph {
-    GuPool* pool = gu_new_pool();
-    
-    GuExn* err = gu_new_exn(pool);
-    translate_word(self.pgf, "barn", err);
-    
-    gu_pool_free(pool);
-}
 
 - (instancetype)init {
     self = [super init];
@@ -167,7 +86,7 @@ void translate_word(PgfPGF* pgf, GuString word, GuExn* err)
     
     for (NSString *word in words) {
         NSString *translatedWord = [self translateWord:word];
-        [translation appendString:translatedWord];
+        [translation appendString: translatedWord ? translatedWord : @" - "];
     }
     return translation.copy;
 }
@@ -182,11 +101,9 @@ void translate_word(PgfPGF* pgf, GuString word, GuExn* err)
     if (parse) {
         translation = [self linearizeResult:parse tmpPool:tmpPool tmpErr:tmpErr].firstObject;
     } else {
-        
-        PgfLinLemmasCallback callback = { { print_lemma }, self.pgf, self.from.concrete, self.to.concrete };
-        pgf_lookup_morpho(self.from.concrete, [word UTF8String], &callback.callback, self.err);
-        translation = [[morphWord componentsSeparatedByString:@" "].lastObject stringByAppendingString:@" "];
-        morphWord = nil;
+        MorphAnalyser *analyser = [[MorphAnalyser alloc] initWithPgf:self.pgf err:self.err to:self.to from:self.from];
+        [analyser analysWord:word];
+        translation = analyser.bestTranslation;
     }
     
     // Clear up resources
@@ -209,7 +126,10 @@ void translate_word(PgfPGF* pgf, GuString word, GuExn* err)
     PgfExprProb *ep;
     gu_enum_next(result, &ep, tmpPool);
     
-    do {
+    while (ep) {
+        if (translations.count > 10) {
+            return translations.objectEnumerator.allObjects;
+        }
         PgfExprProb parse = ep[0];
         
         GuStringBuf *stringBuff = gu_string_buf(tmpPool);
@@ -221,7 +141,7 @@ void translate_word(PgfPGF* pgf, GuString word, GuExn* err)
         tmpOut = nil;
         
         gu_enum_next(result, &ep, tmpPool);
-    } while (ep);
+    }
     
     return translations.objectEnumerator.allObjects;
 }

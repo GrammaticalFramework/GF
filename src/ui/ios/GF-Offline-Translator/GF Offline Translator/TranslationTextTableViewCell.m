@@ -40,8 +40,8 @@
     NSString *imageName = language.abbreviation;
     [self.flagImageView setImage:[UIImage imageNamed:imageName]];
     self.translationTextLabel.text = text;
-    UIColor *lightBlueColor = [UIColor colorWithRed:0.373 green:0.836 blue:1.000 alpha:1.000];
-    self.decorationView.backgroundColor = fromLanguage ? lightBlueColor : [UIColor colorForResult:translation.result];
+    TranslationResult resultColor = fromLanguage ? InputSentence : translation.result;
+    self.decorationView.backgroundColor = [UIColor colorForResult: resultColor];
 }
 
 @end

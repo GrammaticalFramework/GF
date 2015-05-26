@@ -13,6 +13,7 @@
 #import "Grammar.h"
 #import "Language.h"
 #import "Translation.h"
+#import "MorphAnalyser.h"
 
 // Views
 #import "TranslationTextTableViewCell.h"
@@ -83,6 +84,8 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = YES;
     self.inverted = NO;
+    [self.textInputbar.rightButton setTitle:@"Translate" forState:UIControlStateNormal];
+
     
     // Setup buttons
     MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
@@ -235,9 +238,15 @@
     
     // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
     // Must call super
-    Translation *newTranslation = [self.translator translatePhrase:self.textView.text.lowercaseString];
+    
+    NSString *input = self.textView.text.lowercaseString;
+    Translation *newTranslation = [self.translator translatePhrase:input];
     [self.inputs addObject:newTranslation];
     [self.tableView reloadData];
+    
+    MorphAnalyser *analyser = [[MorphAnalyser alloc] initWithPgf:self.translator.pgf err:self.translator.err to:self.translator.to from:self.translator.from];
+    [analyser analysWord:input];
+    NSString *translation = analyser.bestTranslation;
     
     
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
