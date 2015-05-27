@@ -108,8 +108,8 @@ concrete CatGer of Cat =
     V, VS, VQ, VA = \v -> useInfVP False (predV v) ;
     V2, V2A, V2Q, V2S = \v -> useInfVP False (predV v) ++ v.c2.s ;
     V3 = \v -> useInfVP False (predV v) ++ v.c2.s ++ v.c3.s ;
-    VV = \v -> useInfVP False (predV v) ;
-    V2V = \v -> useInfVP False (predV v) ++ v.c2.s ;
+    VV = \v -> useInfVP v.isAux (predVGen v.isAux v) ;
+    V2V = \v -> useInfVP v.isAux (predVGen v.isAux v) ++ v.c2.s ;
 
     Conj = \c -> c.s1 ++ c.s2 ;
 }
