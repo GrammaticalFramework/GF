@@ -11,12 +11,14 @@
 // Model
 #import "Grammar.h"
 #import "Translation.h"
+#import "MorphAnalyser.h"
 
 // Grammatical Framework
 #import "pgf/pgf.h"
 #import "gu/mem.h"
 #import "gu/exn.h"
 #import "gu/file.h"
+
 
 @interface Translator ()
 
@@ -84,7 +86,7 @@
     
     for (NSString *word in words) {
         NSString *translatedWord = [self translateWord:word];
-        [translation appendString:translatedWord];
+        [translation appendString: translatedWord ? translatedWord : @" - "];
     }
     return translation.copy;
 }
@@ -99,9 +101,9 @@
     if (parse) {
         translation = [self linearizeResult:parse tmpPool:tmpPool tmpErr:tmpErr].firstObject;
     } else {
-        // TODO: Implement morphological analys
-        translation = @"Error :)";
-        NSLog(@"Do morphological analys of word");
+        MorphAnalyser *analyser = [[MorphAnalyser alloc] initWithPgf:self.pgf err:self.err to:self.to from:self.from];
+        [analyser analysWord:word];
+        translation = analyser.bestTranslation;
     }
     
     // Clear up resources
@@ -124,7 +126,10 @@
     PgfExprProb *ep;
     gu_enum_next(result, &ep, tmpPool);
     
-    do {
+    while (ep) {
+        if (translations.count > 10) {
+            return translations.objectEnumerator.allObjects;
+        }
         PgfExprProb parse = ep[0];
         
         GuStringBuf *stringBuff = gu_string_buf(tmpPool);
@@ -136,7 +141,7 @@
         tmpOut = nil;
         
         gu_enum_next(result, &ep, tmpPool);
-    } while (ep);
+    }
     
     return translations.objectEnumerator.allObjects;
 }

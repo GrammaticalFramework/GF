@@ -13,7 +13,8 @@ typedef NS_ENUM(NSUInteger, TranslationResult) {
     WorstResult,
     BestResult,
     DefaultResult,
-    ParseByChunksResult
+    ParseByChunksResult,
+    InputSentence
 };
 
 @interface Translation : NSObject

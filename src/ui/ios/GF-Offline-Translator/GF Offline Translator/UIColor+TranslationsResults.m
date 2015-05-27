@@ -10,6 +10,14 @@
 
 @implementation UIColor (TranslationsResults)
 
++ (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
+}
+
 + (UIColor *)colorForResult:(TranslationResult)result {
     switch (result) {
         case BestResult:
@@ -18,26 +26,32 @@
             return [UIColor worstResultColor];
         case ParseByChunksResult:
             return [UIColor parseByChunksResultColor];
+        case InputSentence:
+            return [UIColor inputSentenceColor];
         default:
             return [UIColor defaultResultColor];
     }
 }
 
 + (UIColor *)worstResultColor {
-    return [UIColor colorWithRed:0.695 green:0.000 blue:0.007 alpha:1.000];
+    return [UIColor colorFromHexString:@"#FF303e"];
 }
 
 + (UIColor *)defaultResultColor {
-    return [UIColor colorWithRed:0.996 green:0.988 blue:0.529 alpha:1.000];
+    return [UIColor colorFromHexString:@"#FFFF99"];
 }
 
 
 + (UIColor *)parseByChunksResultColor {
-    return [UIColor redColor];
+    return [UIColor colorFromHexString:@"#FFB2A5"];
 }
 
 + (UIColor *)bestResultColor {
-    return  [UIColor greenColor];
+    return  [UIColor colorFromHexString:@"#75CD75"];
+}
+
++ (UIColor *)inputSentenceColor {
+    return [UIColor colorFromHexString:@"#CDCDED"];
 }
 
 @end

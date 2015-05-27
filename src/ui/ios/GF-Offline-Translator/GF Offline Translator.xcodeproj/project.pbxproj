@@ -20,6 +20,8 @@
 		CC619EDC1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */; };
 		CC619EDF1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */; };
 		CC619EE41AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */; };
+		CC722BF51B11F83A0022DD7C /* MorphAnalyser.m in Sources */ = {isa = PBXBuildFile; fileRef = CC722BF41B11F83A0022DD7C /* MorphAnalyser.m */; };
+		CC722BF81B13B0530022DD7C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC722BF71B13B0530022DD7C /* WebViewController.m */; };
 		CC8E007C1AEE32B20040920E /* assert.h in Sources */ = {isa = PBXBuildFile; fileRef = CC8E00191AEE32810040920E /* assert.h */; };
 		CC8E007D1AEE32B20040920E /* bits.c in Sources */ = {isa = PBXBuildFile; fileRef = CC8E001A1AEE32810040920E /* bits.c */; };
 		CC8E007E1AEE32B20040920E /* bits.h in Sources */ = {isa = PBXBuildFile; fileRef = CC8E001B1AEE32810040920E /* bits.h */; };
@@ -174,6 +176,10 @@
 		CC619EDD1AEE59F8003A6EC7 /* TranslationTextTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslationTextTableViewCell.h; sourceTree = "<group>"; };
 		CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TranslationTextTableViewCell.m; sourceTree = "<group>"; };
 		CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranslationOutputTableViewCell.xib; sourceTree = "<group>"; };
+		CC722BF31B11F83A0022DD7C /* MorphAnalyser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MorphAnalyser.h; sourceTree = "<group>"; };
+		CC722BF41B11F83A0022DD7C /* MorphAnalyser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MorphAnalyser.m; sourceTree = "<group>"; };
+		CC722BF61B13B0530022DD7C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		CC722BF71B13B0530022DD7C /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		CC8E00191AEE32810040920E /* assert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = assert.h; sourceTree = "<group>"; };
 		CC8E001A1AEE32810040920E /* bits.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bits.c; sourceTree = "<group>"; };
 		CC8E001B1AEE32810040920E /* bits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
@@ -605,6 +611,8 @@
 				CC98AF0E1AEE72D800DFA116 /* LanguagesViewController.m */,
 				CCDC6FE61B01465300C2B3FF /* TranslationOptionsViewController.h */,
 				CCDC6FE71B01465300C2B3FF /* TranslationOptionsViewController.m */,
+				CC722BF61B13B0530022DD7C /* WebViewController.h */,
+				CC722BF71B13B0530022DD7C /* WebViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -620,6 +628,8 @@
 				CC98AF211AEF773500DFA116 /* Translator.m */,
 				CC020CFC1AF76A6C0050AE38 /* Translation.h */,
 				CC020CFD1AF76A6C0050AE38 /* Translation.m */,
+				CC722BF31B11F83A0022DD7C /* MorphAnalyser.h */,
+				CC722BF41B11F83A0022DD7C /* MorphAnalyser.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -803,6 +813,7 @@
 				CC8E00B21AEE32C40040920E /* fp.h in Sources */,
 				CC8E00B31AEE32C40040920E /* funcs.h in Sources */,
 				CC8E00B41AEE32C40040920E /* asm-common.h in Sources */,
+				CC722BF51B11F83A0022DD7C /* MorphAnalyser.m in Sources */,
 				CC8E00B51AEE32C40040920E /* core-common.h in Sources */,
 				CC8E00B61AEE32C40040920E /* fp-common.h in Sources */,
 				CC8E00B71AEE32C40040920E /* funcs-common.h in Sources */,
@@ -825,6 +836,7 @@
 				CC8E00C21AEE32C40040920E /* asm.h in Sources */,
 				CC8E00C31AEE32C40040920E /* core.h in Sources */,
 				CC022FB01AF8D8CF0067A675 /* SLKTextView+TextInputMode.m in Sources */,
+				CC722BF81B13B0530022DD7C /* WebViewController.m in Sources */,
 				CC8E00C41AEE32C40040920E /* fp.h in Sources */,
 				CC8E00C51AEE32C40040920E /* funcs.h in Sources */,
 				CC8E00C61AEE32C40040920E /* asm.h in Sources */,
