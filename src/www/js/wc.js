@@ -8,7 +8,12 @@ wc.o=element("output")
 wc.e=element("extra")
 wc.i=element("grammarinfo")
 wc.p=element("pick")
-wc.os=[] // output segment list
+wc.os=[] /* output segment list
+	    [{input,text:String; from,to::Lang;
+	      target:Node;
+	      rs::[TranslationResults];
+	      current_pick::Int // index into rs or -1
+	     }] */
 wc.cache={} // output segment cache, indexed by source text
 wc.local=appLocalStorage("gf.wc.")
 wc.translating=""
@@ -122,8 +127,9 @@ wc.translate=function() {
 	    }
 	    function word(w) {
 		var ps=w.split("_")
-		return ps.length==2 && elem(ps[1],gftranslate.documented_classes)
-		        ? inflect(w,ps[1]) : text(w)
+		var n=ps.length
+		return ps.length>1 && elem(ps[n-1],gftranslate.documented_classes)
+		        ? inflect(w,ps[n-1]) : text(w)
 	    }
 	    return tree.split(/([ ()]+)/).map(word)
 	}
@@ -132,7 +138,14 @@ wc.translate=function() {
 	    var r=so.rs[so.current_pick]
 	    var prob=r.prob<=0 ? "" : r.prob || ""
 	    if(e) {
-		e.innerHTML=prob+"<br>"
+		clear(e)
+		var speak_from=speech_buttons(so.from,"",so.input)
+		var speak_to=speech_buttons(so.to,"",so.text)
+		speak_to.className=speak_from.className="speech_buttons"
+		e.appendChild(wrap("div",[speak_from,
+					  text(so.input+" → "+so.text),
+					  speak_to]))
+		e.appendChild(wrap("div",text(prob)))
 		if(r.tree) {
 		    wc.e2=node("div",{id:"tree-container","class":"e2"})
 		    e.appendChild(wrap("span",treetext(r.tree)))
