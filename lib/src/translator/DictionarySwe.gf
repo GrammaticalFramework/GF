@@ -7765,7 +7765,7 @@ lin brunswick_PN = mkPN "Brunswick" neutrum ; -- src=geonames status=guess
 lin brunt_N = mkN "brunte" utrum ;
 lin brush_N = mkN "borste" utrum | mkN "sammandrabbning" ; -- SaldoWN -- comment=6
 lin brush_V = mkV "vidröra" "vidrörde" "vidrört" ; -- comment=6
-lin brush_V2 = dirV2 (partV (mkV "borstar")"av") ; -- comment=4
+lin brush_V2 = mkV2 "borstar";
 lin brush_aside_V = mkV "vidröra" "vidrörde" "vidrört" ; -- comment=6
 lin brush_off_N = mkN "pensel-off"; -- src=google
 lin brush_off_V2 = dirV2 (partV (mkV "borstar")"av") ; -- comment=4
