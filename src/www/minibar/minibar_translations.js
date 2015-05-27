@@ -329,35 +329,3 @@ function draw_bracketss(bs) {
 	? bs.map(draw_brackets)  //with gf>3.5, in some cases
 	: draw_brackets(bs) // with gf<=3.5
 }
-
-function supportsSVG() {
-    return document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")
-}
-
-function speech_buttons(to3,to2,txt) {
-    var voices = window.speechSynthesis && window.speechSynthesis.getVoices() || []
-    var dvs = voices.filter(function(v){return v.default})
-    if(to2)
-	var pick=function (v) { return v.lang==to2 }
-    else {
-	var to2dash=alangcode(to3)+"-"
-	var pick=function(v) { return hasPrefix(v.lang,to2dash) }
-    }
-    function btn(v) {
-	var u=new SpeechSynthesisUtterance(txt)
-	u.lang=v.lang // how to use v.voiceURI or v.name?
-
-	function speak() {
-	    speechSynthesis.cancel()
-	    speechSynthesis.speak(u)
-	}
-	return button(v.lang,speak)
-    }
-    //console.log(voices.length,"voices")
-    var vs=dvs.filter(pick)
-    if(vs.length==0) vs=voices.filter(pick)
-    //console.log(vs.length,"voices for "+to3+" "+to2)
-    var btns=vs.map(btn)
-    //console.log(btns.length,"voice buttons")
-    return wrap("span",btns)
-}
