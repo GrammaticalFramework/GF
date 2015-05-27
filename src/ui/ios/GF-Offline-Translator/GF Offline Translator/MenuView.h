@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MenuView : UIView
+@interface MenuView : UIButton
 
 @end

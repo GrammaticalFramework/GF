@@ -8,6 +8,8 @@
 
 #import "TranslationTextViewController.h"
 
+#import <AVFoundation/AVFoundation.h>
+
 // Models
 #import "Translator.h"
 #import "Grammar.h"
@@ -90,7 +92,10 @@
     // Setup buttons
     MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
     menuView.backgroundColor = [UIColor clearColor];
+    [menuView addTarget:self action:@selector(goToHelp:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
+
+    
     
     ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
     [arrows addTarget:self action:@selector(switchLanguage:) forControlEvents:UIControlEventTouchUpInside];
@@ -137,6 +142,10 @@
     [super viewWillAppear:animated];
     
     self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
+}
+
+- (void)goToHelp:(id)sender {
+    [self performSegueWithIdentifier:@"helpView" sender:nil];
 }
 
 - (void)changeLanguage:(id)sender {
@@ -207,12 +216,12 @@
     
     dispatch_async(self.grammarQueue, ^{
         if ([self.translator.previous.language isEqualToLanguage:laguange]) {
-            Grammar *temp = self.translator.from;
+            Grammar *temp = getGrammarBlock();
             setGrammarblock(self.translator.previous);
             self.translator.previous = temp;
         } else {
             self.translator.previous = getGrammarBlock();
-            self.translator.from = [Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator];
+            setGrammarblock([Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator]);
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -244,9 +253,17 @@
     [self.inputs addObject:newTranslation];
     [self.tableView reloadData];
     
-    MorphAnalyser *analyser = [[MorphAnalyser alloc] initWithPgf:self.translator.pgf err:self.translator.err to:self.translator.to from:self.translator.from];
-    [analyser analysWord:input];
-    NSString *translation = analyser.bestTranslation;
+    NSString *string = newTranslation.toText;
+    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:string];
+    utterance.rate = AVSpeechUtteranceMinimumSpeechRate;
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:newTranslation.toLanguage.bcp];
+    
+    AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
+    [synthesizer speakUtterance:utterance];
+    
+//    MorphAnalyser *analyser = [[MorphAnalyser alloc] initWithPgf:self.translator.pgf err:self.translator.err to:self.translator.to from:self.translator.from];
+//    [analyser analysWord:input];
+//    NSString *translation = analyser.bestTranslation;
     
     
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button

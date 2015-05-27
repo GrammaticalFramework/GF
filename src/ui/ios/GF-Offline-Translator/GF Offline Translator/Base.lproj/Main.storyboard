@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="cYS-lP-oJd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xFI-0W-N5x">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -56,6 +56,7 @@
                     <connections>
                         <segue destination="B6l-9t-iLr" kind="presentation" identifier="ChangeLanguage" id="wkV-br-4Id"/>
                         <segue destination="Vu1-QE-7az" kind="show" identifier="TranslationOptions" id="zeM-mX-HkR"/>
+                        <segue destination="dgk-2A-luy" kind="show" identifier="helpView" id="YFL-Nh-dhR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -149,6 +150,54 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1PJ-ar-1KV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="426" y="-372"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="nXS-Na-9ij">
+            <objects>
+                <viewController id="dgk-2A-luy" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="muk-1p-gTk"/>
+                        <viewControllerLayoutGuide type="bottom" id="wdN-RZ-bap"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0BT-Mn-C5l">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EEY-ZC-8AF">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">This is a beta version with the following known issues:
+ - No inflection tables or trees.
+
+To make it easier to input what you want to translate it is recommended to add that language keyboard in your settings on your iOS device. 
+You can add keyboards from Settings &gt; General &gt; Keyboard &gt; Keyboards.
+
+If more than one language is added, you can change the language while typing. Follow these steps to change the language of your keyboard once you’ve added it:
+ - Tap the globe icon in the lower left corner to choose the next language on your keyboard. The chosen language appears on the Space bar. 
+ - Touch and hold the globe icon in the lower left to display a menu of enabled keyboards. Drag to choose a new keyboard. </string>
+                                        <attributes>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="EEY-ZC-8AF" firstAttribute="leading" secondItem="0BT-Mn-C5l" secondAttribute="leading" id="LJM-vK-etM"/>
+                            <constraint firstItem="wdN-RZ-bap" firstAttribute="top" secondItem="EEY-ZC-8AF" secondAttribute="bottom" id="LJS-Xd-rkW"/>
+                            <constraint firstItem="EEY-ZC-8AF" firstAttribute="top" secondItem="0BT-Mn-C5l" secondAttribute="top" id="jDR-08-to6"/>
+                            <constraint firstAttribute="trailing" secondItem="EEY-ZC-8AF" secondAttribute="trailing" id="wLh-2a-C00"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RKo-u1-dmE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1880" y="-1478"/>
         </scene>
         <!--Translation Options View Controller-->
         <scene sceneID="Gym-bd-J1L">
