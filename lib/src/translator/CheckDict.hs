@@ -2,7 +2,7 @@ import qualified Data.Map
 import qualified Data.Set
 import Data.List
 
-langs = words "Bul Cat Chi Dut Eng Fin Fre Ger Hin Ita Jpn Spa Swe Tha"
+langs = words "Bul Cat Chi Dut Eng Fin Fre Ger Hin Ita Jpn Mlt Spa Swe Tha"
 
 -- apply a function to every line, changing it to a list 
 changeLinesLang :: (String -> [String]) -> String -> IO ()
