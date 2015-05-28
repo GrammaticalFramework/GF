@@ -533,7 +533,7 @@ lin alabama_PN = mkPN "Alabama" ; -- src=eng status=guess
 lin alacrity_N = mkN "bereidwilligheid" ; -- status=guess
 lin alan_PN = mkPN "Alan" ; -- src=eng status=guess
 lin alarm_N = mkN "wekker" masculine ; -- status=guess
-lin alarm_V2 = mkV2 (mkV (mkV "te") "wapen roepen") ; -- status=guess, src=wikt
+lin alarm_V2 = mkV2 (partV I.roepen_V "te wapen") ; -- status=guess, src=wikt
 lin alas_Interj = mkInterj "helaas" | mkInterj "o wee" | mkInterj "jammer genoeg" ; -- status=guess status=guess status=guess
 lin alaska_PN = mkPN "Alaska" ; -- src=eng status=guess
 lin alb_N = mkN "albe" ; -- status=guess
@@ -2092,7 +2092,7 @@ lin bistro_N = mkN "eetcafé" neuter ; -- status=guess
 lin bit_N = mkN "bit" masculine ; --- mkN "stukje" a piece/bit of
 lin bitch_N = mkN "slet" feminine | mkN "bitch" feminine | mkN "poot" masculine ; -- status=guess status=guess status=guess
 lin bite_N = mkN "bijten" neuter ; -- status=guess
-lin bite_V = mkV (mkV "te") "veel hooi op de vork nemen" ; -- status=guess, src=wikt
+lin bite_V = lin V L.bite_V2 ;
 lin bite_V2 = L.bite_V2 ;
 lin bitter_A = mkA "verbitterd" ; -- status=guess
 lin bittern_N = mkN "roerdomp" masculine ; -- status=guess
@@ -14306,7 +14306,7 @@ lin overplay_V2 = mkV2 (mkV "uitslaan") ; -- status=guess, src=wikt
 lin overrate_V2 = mkV2 (mkV "overschatten") ; -- status=guess, src=wikt
 lin override_V2 = mkV2 (mkV "afjakkeren") ; -- status=guess, src=wikt
 lin overripe_A = mkA "overrijp" ; -- status=guess
-lin overrun_V2 = mkV2 (mkV (mkV "te") "lang doorbijlopen") ; -- status=guess, src=wikt
+lin overrun_V2 = mkV2 (partV (mkV "doorbij" I.lopen_V) "te lang") ; -- status=guess, src=wikt
 lin overseas_A = mkA "overzees" ; -- status=guess
 lin overseas_Adv = mkAdv "Buitenlands" ; -- status=guess
 lin oversee_V2 = mkV2 (mkV "bekijken") | mkV2 (mkV (mkV "toezien") "op") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -18308,8 +18308,8 @@ lin signal_VS = variants {} ; --
 lin signature_N = mkN "handtekening" ; -- status=guess
 lin significance_N = mkN "betekenis" | mkN "belang" feminine | mkN "importantie" feminine ; -- status=guess status=guess status=guess
 lin significant_A = mkA "significant" | mkA "beduidend" | mkA "waarneembaar" ;
-lin signify_V = mkV (mkV "duidelijk") "maken" | mkV (mkV "te") "kennen geven" ; -- status=guess, src=wikt status=guess, src=wikt
-lin signify_V2 = mkV2 (mkV (mkV "duidelijk") "maken") | mkV2 (mkV (mkV "te") "kennen geven") ; -- status=guess, src=wikt status=guess, src=wikt
+lin signify_V = partV "duidelijk" (mkV "maken") ;
+lin signify_V2 = mkV2 (partV "te kennen" I.geven_V) ; 
 lin silage_N = mkN "silage" feminine ; -- status=guess
 lin sileby_PN = mkPN "Sileby" ; -- src=geonames status=guess
 lin silence_N = mkN "stilzwijgen" neuter ; -- status=guess
@@ -20616,7 +20616,7 @@ lin tittle_N = mkN "spatje" ; -- status=guess
 lin titular_A = mkA "titulair" | mkA "nominaal" ; -- status=guess status=guess
 lin tiverton_PN = mkPN "Tiverton" ; -- src=geonames status=guess
 lin to_Adv = mkAdv "toe" | mkAdv "dicht" ;
-lin to_Prep = S.to_Prep ;
+lin to_Prep = S.to_Prep | mkPrep "te" ;
 lin toad_N = mkN "pad" ; -- status=guess
 lin toadstool_N = mkN "giftige paddestoel" masculine | mkN "gifzwam" masculine ; -- status=guess status=guess
 lin toast_N = mkN "toost" | mkN "heildronk" ; -- status=guess status=guess
