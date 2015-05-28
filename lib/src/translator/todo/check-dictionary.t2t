@@ -1,8 +1,10 @@
 Checking GF Translation Dictionaries
 Aarne Ranta
-April 2014
+May 2015
 
 **News**
+
+28/5/2015 minor corrections in the text
 
 9/5 Link to the current status: https://docs.google.com/spreadsheets/d/1NuLRp86UPjd298LxjhCAGlHsoPypxKpcBJfDab0De90/edit#gid=0
 
@@ -46,7 +48,7 @@ Follow these steps for your language. For instance, ToCheckFre.gf, with Fre subs
 
 
 A reasonable batch of revisions is 500 words or more, which should be doable in less than 2 hours. To avoid conflicts and overlapping work,
-don't spend more than one day on a batch of work.
+don't spend more than one day on a batch of work before submitting it.
 
 The already split senses are explained [here ../senses-in-Dictionary.txt].
 
@@ -81,7 +83,7 @@ When editing a lin rule, do one of the following:
 ```
   might become
 ```
-  lin labour_N = mkN "travail" "travaux" masculine ; --- mkN "accouchement" childbirth labour
+  lin labour_N = mkN "travail" "travaux" masculine ; --- split work, childbirth mkN "accouchement" 
 ```
   To check the meanings of senses that have already been split (by using numbers, e.g. ``time_1_N``), look up the explanations in
   [Dictionary.gf ../Dictionary.gf].
