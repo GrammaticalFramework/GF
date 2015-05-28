@@ -11535,7 +11535,7 @@ lin coextension_N = variants {} ;
 lin coextensive_A = variants {} ;
 lin coextrude_V2 = variants {} ;
 lin cofactor_N = variants {} ;
-lin coffee_N = mkN "Kaffeebohne" "Kaffeebohnen" feminine ; -- status=guess
+lin coffee_N = mkN "Kaffee" "Kaffees" masculine ;
 lin coffee_house_N = variants {} ;
 lin coffee_mill_N = variants {} ;
 lin coffee_stall_N = variants {} ;

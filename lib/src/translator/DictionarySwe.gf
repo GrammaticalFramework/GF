@@ -27110,7 +27110,7 @@ lin hovel_N = mkN "kyffe" ; -- comment=3
 lin hover_V = mkV "sväva" ; -- status=guess, src=wikt
 lin hovercraft_N = mkN "svävare" utrum | mkN "svävfarkost" "svävfarkoster" ; -- SaldoWN -- comment=2
 lin how8many_IDet = S.how8many_IDet ;
-lin how8much_IDet = {s = \\_ => ["hur mycket"] ; n = singular ; det = C.DDef C.Indef} ; -- status=guess
+lin how8much_IDet = {s = \\_ => ["hur mycket"] ; n = singular ; det = C.DIndef} ; -- status=guess
 lin how_IAdv = S.how_IAdv ;
 lin how_d'ye_do_N = variants {} ; -- status=guess
 lin howard_PN = mkPN "Howard" neutrum ; -- src=geonames status=guess
@@ -30970,7 +30970,7 @@ lin knothole_N = variants {} ; -- status=guess
 lin knottingley_PN = mkPN "Knottingley" neutrum ; -- src=geonames status=guess
 lin knotty_A = variants {} ; -- status=guess
 lin knout_N = mkN "knutpiska" ;
-lin know_N = (mkN "viktigpetter") | (mkN "besserwisser") ; -- status=guess status=guess
+lin know_N = mkN "kunskap" "kunskaper" ;
 lin know_V = L.know_VS ;
 lin know_V2 = L.know_V2 ;
 lin know_VQ = L.know_VQ ;
@@ -57491,7 +57491,7 @@ lin thirsk_PN = mkPN "Thirsk" neutrum ; -- src=geonames status=guess
 lin thirst_N = mkN "törst" ;
 lin thirst_V2 = mkV2 (mkV "törsta") ;
 lin thirsty_A = mkA "törstig" ;
-lin this_Quant = S.this_Quant | M.mkQuant "denna" "detta" "dessa" ;
+lin this_Quant = S.this_Quant | M.mkQuant "denna" "detta" "dessa" ** {det = C.DDef C.Indef} ;
 lin thistle_N = mkN "tistel" ; -- status=guess
 lin thistledown_N = variants {} ; -- status=guess
 lin thistlelike_A = variants {} ; -- status=guess
