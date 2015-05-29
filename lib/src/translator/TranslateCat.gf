@@ -25,7 +25,8 @@ concrete TranslateCat of Translate =
   DocumentationCat,
 
   ChunkCat,
-  ExtensionsCat [CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
+  ExtensionsCat [    ListVPS,BaseVPS,ConsVPS,ConjVPS,ListVPI,BaseVPI,ConsVPI,ConjVPI,
+CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP],
 
   DictionaryCat ** 
 open MorphoCat, ResCat, ParadigmsCat, SyntaxCat, (E = ExtraCat), (G = GrammarCat), Prelude in {
