@@ -26,6 +26,7 @@ concrete TranslateIta of Translate =
 
   ChunkIta,
   ExtensionsIta [
+    ListVPS,BaseVPS,ConsVPS,ConjVPS,ListVPI,BaseVPI,ConsVPI,ConjVPI,
     CompoundN,AdAdV,UttAdV,ApposNP,MkVPI, MkVPS, PredVPS, PassVPSlash, PassAgentVPSlash, CompoundAP
     , PastPartAP, PastPartAgentAP, PresPartAP, GerundNP, GerundAdv
     , WithoutVP, InOrderToVP, ByVP
