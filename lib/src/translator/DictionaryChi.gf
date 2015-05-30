@@ -36076,7 +36076,7 @@ lin wording_N = mkN "措辞" "份" ;
 lin words_N = mkN "言" ; -- status=guess
 lin work_1_V = mkV "工作" ;
 lin work_2_V = mkV "工作" ;
-lin work_N = mkN "作业" "個" | mkN "作品" "部" | mkN "劳动" "次" | mkN "工作" "個" | mkN "工资" "個" | {-HSK-} mkN "工作" ;
+lin work_N = mkN "作业" "個" | mkN "作品" "部" | mkN "劳动" "次" | mkN "工作" "個" | mkN "工资" "個" ;
 lin work_V = mkV "工作" ;
 lin work_V2 = mkV2 "工作" | {-HSK-} mkV2 "干" | mkV2 "干活儿" ;
 lin work_off_V2 = prepV2 OP_work_V OP_off_Prep ; -- guess-p-verb
