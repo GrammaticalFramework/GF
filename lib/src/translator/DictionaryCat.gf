@@ -7251,7 +7251,6 @@ lin gravitation_N = mkN "gravitació" feminine ; --auto
 lin gravitational_A = mkA "gravitacional" ; --auto
 lin graviton_N = mkN "gravitó" masculine ; --auto
 lin gravity_N = mkN "gravetat" feminine ; --auto
-lin gray_A = mkA "gris" ; --auto
 lin graze_V = mkV "pasturar" ; --auto
 lin graze_V2 = mkV2 "pasturar" ; --auto
 lin grazier_N = mkN "ramader" ; --auto

@@ -13113,10 +13113,6 @@ lin gravitational_A = mkA "gravitatorio" ; -- status=guess
 lin graviton_N = mkN "gravitón" masculine ; -- status=guess
 lin gravity_N = mkN "gravedad" feminine ; -- status=guess
 lin gravy_N = mkN "salsa" ; -- status=guess
-lin gray_A = mkA "gris" ; -- status=guess
-lin gray_N = mkN "gris" masculine ; -- status=guess
-lin gray_V = encanecer_V ; -- status=guess, src=wikt
-lin gray_V2 = mkV2 (encanecer_V) ; -- status=guess, src=wikt
 lin graz_PN = mkPN "Graz" ; -- status=guess src=geonames
 lin graze_N = mkN "rasguño" ; -- status=guess
 lin graze_V = pacer_V | mkV "pastar" ; -- status=guess, src=wikt status=guess, src=wikt
@@ -13161,7 +13157,9 @@ lin grenade_N = mkN "lanzagranadas" ; -- status=guess
 lin grenadier_N = mkN "macrouridae" ; --UWN
 lin grevillea_N = mkN "grevillea" ; --UWN
 lin grey_A = mkA "gris" ; --UWN
-lin grey_N = mkN "garza real europea" ; -- status=guess
+lin grey_N = mkN "gris" masculine ; -- status=guess
+lin grey_V = encanecer_V ; -- status=guess, src=wikt
+lin grey_V2 = mkV2 (encanecer_V) ; -- status=guess, src=wikt
 lin greyhen_N = mkN "gallina" | mkN "gallina_lira" ; --UWN
 lin greyhound_N = mkN "galgo" ; -- status=guess
 lin greyish_A = mkA "gris" ; --UWN

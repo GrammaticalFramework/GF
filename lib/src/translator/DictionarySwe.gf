@@ -24537,10 +24537,6 @@ lin gravity_N = mkN "gravitation" "gravitationer" ; -- SaldoWN
 lin gravure_N = mkN "gravyr" "gravyrer" ;
 lin gravy_N = mkN "sky" "skyn" "skyar" "skyarna" ; -- comment=2
 lin gravy_boat_N = mkN "såsskål"; -- src=google
-lin gray_A = mkA "grå" "grått" ; -- status=guess
-lin gray_N = mkN "gray" "grayen" "gray" "grayen" ; -- status=guess
-lin gray_V = mkV "gråna" ; -- status=guess, src=wikt
-lin gray_V2 = mkV2 (mkV "gråna") ; -- status=guess, src=wikt
 lin grayly_Adv = variants {} ; -- status=guess
 lin graz_PN = mkPN "Graz" neutrum ; -- src=geonames status=guess
 lin graze_N = mkN "skrapa" ; -- comment=5
@@ -24631,10 +24627,10 @@ lin grenadian_N = variants {} ; -- status=guess
 lin grenadier_N = mkN "grenadjär" ; -- status=guess
 lin grenadine_N = mkN "grenadin" "grenadiner" ;
 lin grevillea_N = variants {} ; -- status=guess
-lin grey_A = mkA "livlös" ; -- comment=5
-lin grey_N = mkN "gråhäger" ; -- status=guess
-lin grey_V = mkV "grånar" ; -- status=guess
-lin grey_V2 = variants {} ; -- status=guess
+lin grey_A = mkA "grå" "grått" ;
+lin grey_N = mkN "grå" | mkN "gråa" ;
+lin grey_V = mkV "gråna" ;
+lin grey_V2 = mkV2 (mkV "gråna") ;
 lin grey_headed_A = variants {} ; -- status=guess
 lin greyback_N = variants {} ; -- status=guess
 lin greybeard_N = variants {} ; -- status=guess
