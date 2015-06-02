@@ -4,11 +4,13 @@ concrete AppTha of App =
 
   TranslateTha - [
   -- Verb
-    SlashV2V,             -- replaced by more efficient inlined versions
+    SlashV2a,ComplSlash, -- replaced by a more efficient inlined version
+    SlashV2V,             
     Slash2V3, Slash3V3, SlashV2S, SlashV2Q, SlashV2A, 
     SlashVV, SlashV2VNP,
     AdvVPSlash, AdVVPSlash, VPSlashPrep,
   -- Sentence
+    SlashVP, SlashVS,
     PredSCVP, 
     AdvSlash, SlashPrep, SlashVS,
     EmbedS, EmbedQS, EmbedVP, RelS,
@@ -44,5 +46,8 @@ ComplV2A v np vp = mkVP v np vp ;
 ComplV2Q v np vp = mkVP v np vp ;
 ComplV2S v np vp = mkVP v np vp ;
 ComplV3  v np vp = mkVP v np vp ;
+
+
+ComplV2 v np = mkVP v np ;
 
 }
