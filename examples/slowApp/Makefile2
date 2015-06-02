@@ -1,0 +1,7 @@
+P=../phrasebook
+L=../../lib/src
+GFPATH=$L/chunk:$L/translator:$L/finnish/stemmed:$L/finnish:$P
+J=-j +RTS -N4 -A20M -RTS
+
+App.pgf::
+	gf -s -make $J -probs=./app.probs -path=$(GFPATH) -gfo-dir gfo App???.gf

@@ -1,0 +1,36 @@
+Grammar for coloured translation app.
+
+(c) Aarne Ranta 2014 under GPL. Last modified 6/5/2014.
+
+1. Make sure you have the latest RGL compiled and available. Test this for instance in GF shell by typing
+
+  import alltenses/LangEng.gfo
+
+2. Check that you have the following file structure, which holds in the standard GF
+repository (darcs or github):
+
+  GF/lib/src/translator      -- the translator extensions of RGL
+  GF/lib/src/german          -- German RGL sources, needed for DictGer (morphological Dict)
+  GF/lib/src/finnish         -- Finnish RGL sources, needed for StemFin
+  GF/lib/src/finnish/stemmed -- StemFin, a special file for compact Finnish runtime
+  GF/lib/src/api             -- Syntax sources
+  GF/lib/src/chunk           -- Chunk sources
+  GF/examples/phrasebook     -- Phrasebook sources
+  GF/examples/app            -- App sources (this directory)
+
+3. Do 'make' and take a cup of coffee. If you have multiple cores, do first 'make Phrasebook' and then 'make -j App11.pgf' and take an espresso.
+
+4. Go to GF/src/ui/android and follow the README
+
+5. Before the final 'ant debug install', do the following:
+
+  cd assets/
+  rm *pgf*
+  cp -p <Your-GF>/examples/app/App11.pgf .
+  gf -make -split-pgf App11.pgf +RTS -K200M
+  rm App11.pgf 
+  cd ..
+  ant debug install
+
+Removing superfluous pgf files is recommended, because otherwise they will be copied to the app and 
+increase its size unnecessarily.

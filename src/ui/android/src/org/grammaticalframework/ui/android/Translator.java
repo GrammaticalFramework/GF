@@ -29,7 +29,7 @@ public class Translator {
         new Language("nl-NL", "Dutch", "AppDut", R.xml.qwerty),
     	new Language("en-US", "English", "AppEng", R.xml.qwerty),
         new Language("fi-FI", "Finnish", "AppFin", R.xml.nordic),
-        new Language("fr-FR", "French",  "AppFre", R.xml.qwerty),
+        new Language("fr-FR", "French",  "AppFre", R.xml.qwerty), ////
         new Language("de-DE", "German",  "AppGer", R.xml.qwerty),
         new Language("hi-IN", "Hindi",   "AppHin", R.xml.devanagari_page1, R.xml.devanagari_page2),
         new Language("it-IT", "Italian", "AppIta", R.xml.qwerty),
