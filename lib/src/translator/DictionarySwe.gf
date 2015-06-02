@@ -6245,7 +6245,7 @@ lin blabber_V2 = variants {} ; -- status=guess
 lin blabbermouth_N = variants {} ; -- status=guess
 lin blabbermouthed_A = variants {} ; -- status=guess
 lin black_A = L.black_A ;
-lin black_N = mkN "mörker" neutrum | mkN "svärta" ; -- SaldoWN -- comment=3
+lin black_N = mkN "svärta";
 lin black_V2 = variants {} ; -- status=guess
 lin black_beetle_N = mkN "black-skalbagge"; -- src=google
 lin black_lead_N = variants {} ; -- status=guess
@@ -6604,7 +6604,7 @@ lin bludgeon_N = mkN "klubba" ; -- status=guess
 lin bludgeon_V2 = variants {} ; -- status=guess
 lin bludgeoner_N = variants {} ; -- status=guess
 lin blue_A = L.blue_A ;
-lin blue_N = mkN "blåhet" ; -- status=guess
+lin blue_N = mkN "blå" | mkN "blåa";
 lin blue_V2 = variants {} ; -- status=guess
 lin blue_collar_A = variants {} ; -- status=guess
 lin blue_jacket_N = mkN "blue-jacka"; -- src=google
@@ -42191,10 +42191,10 @@ lin pining_N = mkN "längtar"; -- src=google
 lin pinion_N = mkN "drev" neutrum ; -- comment=3
 lin pinion_V2 = variants {} ; -- status=guess
 lin pinite_N = variants {} ; -- status=guess
-lin pink_A = mkA "rosa" ; -- comment=2
+lin pink_A = mkA "rosa" ;
 lin pink_N = mkN "skär" neutrum ; -- status=guess
-lin pink_V = mkV "rosar" ; -- comment=3
-lin pink_V2 = dirV2 (partV (mkV "knackar")"av") ; -- status=guess
+lin pink_V = mkV "rosa" ; -- comment=3
+lin pink_V2 = dirV2 (mkV "rosa") ; -- status=guess
 lin pinkish_A = variants {} ; -- status=guess
 lin pinkness_N = variants {} ; -- status=guess
 lin pinko_N = variants {} ; -- status=guess
@@ -46456,7 +46456,7 @@ lin recusation_N = mkN "jävsregler"; -- src=google
 lin recycle_V2 = mkV2 "återvinna" "återvann" "återvunnit" | mkV2 (mkV "återanvänder") ; -- status=guess
 lin recycling_N = mkN "återvinning" ; -- comment=3
 lin red_A = L.red_A ;
-lin red_N = mkN "rodnad" "rodnader" | mkN "röd" | mkN "rött" ; -- SaldoWN -- status=guess status=guess
+lin red_N = mkN "röda";
 lin red_hot_A = variants {} ; -- status=guess
 lin red_rimmed_A = variants {} ; -- status=guess
 lin redact_N = mkN "redigera"; -- src=google
