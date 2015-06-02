@@ -1,6 +1,6 @@
 --# -path=.:../../lib/src/chunk:../../lib/src/translator:../phrasebook/gfos
 
-concrete AppFre of App = 
+concrete AppFreInput of App = 
 {-
   TranslateFre - [
 ----    SlashVP, SlashVS, ---- expensive functions in Fre
@@ -24,8 +24,13 @@ concrete AppFre of App =
 -}
   NounFre - [PPartNP],
   AdjectiveFre,
-  VerbFre [UseV,CompAP,CompAdv,UseComp,AdvVP],
+  VerbFre [UseV,CompAP,CompAdv,UseComp,AdvVP,SlashV2a,ComplSlash],
   SentenceFre [PredVP,UseCl],
+  QuestionFre - [QuestCl,QuestIAdv,ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP],
+  ConjunctionFre,
+  ConstructionFre,
+  TranslateFre [QuestCl,QuestIAdv],
+  IdiomFre - [CleftNP, CleftAdv,ImpP3],
   TenseFre,
   PhraseFre,
   AdverbFre,
