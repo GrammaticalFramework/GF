@@ -26872,7 +26872,6 @@ lin grave_A = mkA "graavis" | mkA "haud" | mkA "kaalukas" | mkA "sünge" | mkA "
 lin gravelly_A = mkA "kriipiv" | mkA "kruusane" ;
 lin graven_A = mkA "graveeritud" | mkA "vormitud" ;
 lin gravitational_A = mkA "gravitatsiooniline" ;
-lin gray_A = mkA "hall" ;
 lin greaseproof_A = mkA "rasvakindel" ;
 lin greasy_A = mkA "rasvane" | mkA "võidunud" ;
 lin great_A = mkA "suur" | mkA "suurepärane" ;

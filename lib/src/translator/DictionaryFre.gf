@@ -13339,9 +13339,6 @@ lin gravitation_N = mkN "gravitation" feminine ; -- tocheck
 lin gravitational_A = mkA "gravitationnel" ; -- tocheck
 lin graviton_N = mkN "graviton" masculine ; -- tocheck
 lin gravity_N = mkN "gravité" feminine ; -- tocheck
-lin gray_A = mkA "gris" ; -- tocheck
-lin gray_N = mkN "gris" | mkN "Gris" masculine | mkN "gray" masculine ; -- tocheck
-lin gray_V2 = mkV2 (mkV "griser") ; -- tocheck
 lin graz_PN = mkPN "Graz" ; -- status=guess src=geonames
 lin graze_N = mkN "éraflure" ; -- tocheck
 lin graze_V2 = mkV2 (mkV "brouter") ; -- tocheck
@@ -13383,6 +13380,7 @@ lin grenadier_N = mkN "Macrouridae" | mkN "macrouridae" ; -- UWN
 lin grevillea_N = mkN "grevillea" ; -- UWN
 lin grey_A = mkA "gris" | mkA "grisonner" | mkA "grisâtre" ; -- UWN
 lin grey_N = mkN "gris" ; -- UWN
+lin grey_V2 = mkV2 (mkV "griser") ; -- tocheck
 lin greyhound_N = mkN "lévrier" masculine ; -- tocheck
 lin greyish_A = mkA "gris" | mkA "grisonner" | mkA "grisâtre" ; -- UWN
 lin grid_N = mkN "grille" feminine | mkN "réseau" masculine ; -- tocheck

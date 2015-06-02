@@ -8907,10 +8907,6 @@ lin gravitational_A = mkA "gravitationeel" ; -- status=guess
 lin graviton_N = mkN "graviton" neuter ; -- status=guess
 lin gravity_N = mkN "zwaartekracht" feminine ; -- status=guess
 lin gravy_N = mkN "jus" masculine | mkN "saus" feminine ; -- status=guess status=guess
-lin gray_A = mkA "grijs" | mkA "grauw" ; -- status=guess status=guess
-lin gray_N = mkN "grijs" ; -- status=guess
-lin gray_V = mkV "grijzen" ; -- status=guess, src=wikt
-lin gray_V2 = mkV2 (mkV "grijzen") ; -- status=guess, src=wikt
 lin graz_PN = mkPN "Graz" ; -- src=geonames status=guess
 lin graze_V = mkV "grazen" ; -- status=guess, src=wikt
 lin graze_V2 = mkV2 (mkV "grazen") ; -- status=guess, src=wikt
@@ -8945,8 +8941,10 @@ lin gregarious_A = mkA "gezellig" | mkA "sociaal" | mkA "gregarieus" | mkA "uitg
 lin gregory_PN = mkPN "Gregory" ; -- src=geonames status=guess
 lin grenada_PN = mkPN "Grenada" ; -- src=geonames status=guess
 lin grenade_N = mkN "granaat" masculine ; -- status=guess
-lin grey_A = mkA "grijsharig" ; -- status=guess
-lin grey_N = mkN "blauwe reiger" masculine ; -- status=guess
+lin grey_A = mkA "grijs" | mkA "grauw" | mkA "grijsharig" ; -- status=guess
+lin grey_N = mkN "grijs" | mkN "blauwe reiger" masculine ; -- status=guess
+lin grey_V = mkV "grijzen" ; -- status=guess, src=wikt
+lin grey_V2 = mkV2 (mkV "grijzen") ; -- status=guess, src=wikt
 lin greyhound_N = mkN "windhond" ; -- status=guess
 lin greylag_N = mkN "grauwe gans" ; -- status=guess
 lin grid_N = mkN "net" | mkN "elektriciteitsnet" ; -- status=guess status=guess

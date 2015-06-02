@@ -14944,9 +14944,6 @@ lin gravitation_N = mkN "重力" | mkN "引力" ; -- status=guess -- status=gues
 lin gravitational_A = mkA "万有引力" | mkA "地球引力" | mkA "重力" ; -- open-multilingual-wordnet
 lin gravity_N = mkN "重力" ;
 lin gravy_N = mkN "肉汁" [] ;
-lin gray_A = mkA "灰" | {-HSK-} mkA "灰色" ;
-lin gray_N = mkN "灰" | {-HSK-} mkN "灰色" ;
-lin gray_V = mkV "变灰白" ;
 lin grayly_Adv = mkAdv "晦暗+地" | mkAdv "灰灰+地" ; -- open-multilingual-wordnet
 lin graz_PN = mkPN "格拉茨" ; -- comment=src=geonames status=guess
 lin graze_V = mkV "放牧" ;
@@ -14999,8 +14996,9 @@ lin gregory_PN = foreignPN "Gregory" ; -- comment=src=geonames status=guess
 lin grenada_PN = mkPN "格林纳达" ; -- comment=src=geonames status=guess
 lin grenade_N = mkN "手榴弹" "枚" ;
 lin grenadier_N = mkN "长尾鳕" ; -- open-multilingual-wordnet
-lin grey_A = mkA "灰色" ;
-lin grey_N = mkN ": 灰色地帯" | mkN ": 灰色地帶" | {-mwn-} mkN "灰色马" ; -- status=guess -- status=guess -- open-multilingual-wordnet
+lin grey_A = mkA "灰" | {-HSK-} mkA "灰色"
+lin grey_N = mkN "灰" | {-HSK-} mkN "灰色" | mkN "灰色地帯" | mkN "灰色地帶" | {-mwn-} mkN "灰色马" ; -- status=guess -- status=guess -- open-multilingual-wordnet
+lin grey_V = mkV "变灰白" ;
 lin greybeard_N = mkN "土制酒壶" | mkN "贝拉明酒瓶" ; -- open-multilingual-wordnet
 lin greyhound_N = mkN "灰獵犬" | mkN "灰猎犬" | {-mwn-} mkN "灰狗" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin greyish_A = mkA "呈灰色" | mkA "微带灰色" | mkA "浅灰色" | mkA "淡灰色" | mkA "灰白" | mkA "灰色" ; -- open-multilingual-wordnet
