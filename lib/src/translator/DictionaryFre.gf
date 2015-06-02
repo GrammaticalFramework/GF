@@ -32450,7 +32450,7 @@ lin wake_up_V2 = prepV2 OP_wake_V OP_up_Prep ; -- guess-p-verb
 lin wakefield_PN = mkPN "Wakefield" ; -- status=guess src=geonames
 lin wale_N = mkN "côte" feminine ; -- tocheck
 lin wales_PN = mkPN "Wales" ; -- status=guess src=geonames
-lin walk_N = mkN "but-sur-balles" masculine | mkN "allée" feminine | mkN "démarche" feminine | mkN "promenade" feminine ; -- tocheck
+lin walk_N = mkN "promenade" feminine ; -- tocheck
 lin walk_V = L.walk_V ;
 lin walk_V2 = mkV2 (mkV "marcher") ; ---- faire marcher
 lin walk_away_from_V2 = prepV2 (advV OP_walk_V OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
