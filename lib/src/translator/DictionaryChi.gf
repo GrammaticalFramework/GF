@@ -1421,7 +1421,6 @@ lin ambush_N = mkN "埋伏" | mkN "伏擊" | mkN "伏击" ; -- status=guess -- s
 lin ambush_V2 = mkV2 "埋伏" ;
 lin ambusher_N = mkN "伏兵" ; -- open-multilingual-wordnet
 lin ambystomid_N = mkN "钝口螈属" ; -- open-multilingual-wordnet
-lin ameba_N = mkN "变形虫" | mkN "阿米巴" ; -- open-multilingual-wordnet
 lin amebiasis_N = mkN "阿米巴病" ; -- open-multilingual-wordnet
 lin ameboid_A = mkA "似变形虫" ; -- open-multilingual-wordnet
 lin amelia_N = mkN "无肢" | mkN "缺肢" ; -- open-multilingual-wordnet

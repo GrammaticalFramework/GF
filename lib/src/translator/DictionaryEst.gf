@@ -630,7 +630,6 @@ lin ambulance_N = mkN "kiirabi" | mkN "kiirabiauto" | mkN "preeriavanker" ;
 lin ambulatory_N = mkN "edasikanduv" | mkN "liikuv" ;
 lin ambuscade_N = mkN "varitsus" | mkN "varitsusest ründama" ;
 lin ambush_N = mkN "varitsema" | mkN "varitsus" ;
-lin ameba_N = mkN "amööb" ;
 lin amelioration_N = mkN "maaparandus" | mkN "melioratsioon" | mkN "paranemine" ;
 lin amenability_N = mkN "alistuvus" | mkN "järeleandlikkus" ;
 lin amendment_N = mkN "parandamine" | mkN "parandus" | mkN "täiendamine" | mkN "õiendus" ;

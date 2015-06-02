@@ -964,7 +964,6 @@ lin ambulance_N = mkN "ambulanza" ; -- status=guess
 lin ambulatory_N = mkN "deambulatorio" | mkN "ambulacro" ; -- status=guess status=guess
 lin ambuscade_N = mkN "agguato" | mkN "appostamento" | mkN "imboscata" ; -- UWN
 lin ambush_N = mkN "imboscata" ; -- status=guess
-lin ameba_N = mkN "ameba" ; -- UWN
 lin amebiasis_N = mkN "amebiasi" ; -- UWN
 lin ameboid_A = mkA "ameboide" ; -- UWN
 lin ameer_N = mkN "emiro" ; -- UWN
@@ -1004,7 +1003,7 @@ lin amnesty_N = mkN "amnistia" ; -- status=guess
 lin amniocentesis_N = mkN "amniocentesi" ; -- UWN
 lin amnion_N = mkN "amnio" ; -- status=guess
 lin amniotic_A = mkA "amniotico" ; -- status=guess
-lin amoeba_N = mkN "amoeba" ; -- status=guess
+lin amoeba_N = mkN "amoeba" | mkN "ameba" ; -- UWN
 lin amoebic_A = mkA "amebico" ; -- status=guess
 lin among_Prep = variants {} ; --
 lin amongst_Prep = variants {} ; --

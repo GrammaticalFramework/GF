@@ -1847,7 +1847,6 @@ lin ambush_N = mkWN (k9 "ansa") ; --UNCHK
 lin ambush_V2 = mkWV2 (k53A "odottaa") "makuulla" ; --UNCHK
 lin ambusher_N = mkWN "väijyjä" ; --UNCHK
 lin ambystomid_N = mkWN "aksolotli" ; --UNCHK
-lin ameba_N = mkWN (k9 "ameba") ; --UNCHK
 lin amebiasis_N = mkWN (k5A "tauti") "ameban" "aiheuttama" ; --UNCHK
 lin ameboid_A = mkWA (compoundA "ameba" (k38 "mainen")) ; --UNCHK
 lin ameer_N = mkWN (k6 "emiiri") ; --UNCHK
