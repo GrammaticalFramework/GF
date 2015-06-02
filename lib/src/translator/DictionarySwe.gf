@@ -1907,8 +1907,8 @@ lin ambassador_N = mkN "ambassadör" "ambassadörer" ; -- comment=2
 lin ambassadorial_A = variants {} ; -- status=guess
 lin ambassadorship_N = mkN "ambassadör" "ambassadörer" ;
 lin ambassadress_N = variants {} ; -- status=guess
-lin amber_A = mkA "gul" ; -- SaldoWN
-lin amber_N = mkN "bärnsten" ; -- status=guess
+lin amber_A = mkA "bärnstensgul";
+lin amber_N = mkN "bärnsten";
 lin ambergris_N = mkN "ambra" ; -- status=guess
 lin amberjack_N = mkN "seriola"; -- src=google
 lin ambiance_N = mkN "atmosfär" | mkN "stämning" | mkN "känsla" ; -- status=guess status=guess status=guess
