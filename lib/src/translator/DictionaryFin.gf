@@ -22803,7 +22803,6 @@ lin grenadier_N = mkWN (compoundN "lesti" (k9 "kala")) ; --UNCHK
 lin grenadine_N = mkWN "grenadiini" ; --UNCHK
 lin grevillea_N = mkWN (compoundN "silkki" (k41 "pensas")) ; --UNCHK
 lin grey_A = mkWA (k10 "harmahtava") | mkA "harmaa" ;
-
 lin grey_N = mkWN (k38 "hevonen") "harmaa" ; --UNCHK
 lin grey_V = mkWV (k52A "harmaantua") ; --UNCHK
 lin grey_V2 = mkWV2 (k52A "harmaantua") ; --UNCHK
