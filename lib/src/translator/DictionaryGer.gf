@@ -1959,7 +1959,6 @@ lin ambush_N = mkN "Hinterhalt" "Hinterhalte" masculine ; -- status=guess
 lin ambush_V2 = mkV2 (compoundV "aus dem Hinterhalt" (prefixV "an" I.greifen_V)) ;
 lin ambusher_N = variants {} ;
 lin ambystomid_N = variants {} ;
-lin ameba_N = variants {} ;
 lin amebiasis_N = variants {} ;
 lin ameboid_A = variants {} ;
 lin ameer_N = variants {} ;

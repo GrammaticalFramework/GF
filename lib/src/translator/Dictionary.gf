@@ -1945,7 +1945,6 @@ fun ambush_N : N ;
 fun ambush_V2 : V2 ;
 fun ambusher_N : N ;
 fun ambystomid_N : N ;
-fun ameba_N : N ;
 fun amebiasis_N : N ;
 fun ameboid_A : A ;
 fun ameer_N : N ;

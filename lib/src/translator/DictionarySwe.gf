@@ -1946,7 +1946,6 @@ lin ambush_N = mkN "försåt" neutrum ; -- status=guess
 lin ambush_V2 = variants {} ; -- status=guess
 lin ambusher_N = variants {} ; -- status=guess
 lin ambystomid_N = variants {} ; -- status=guess
-lin ameba_N = variants {} ; -- status=guess
 lin amebiasis_N = mkN "amöbainfektion"; -- src=google
 lin ameboid_A = variants {} ; -- status=guess
 lin ameer_N = variants {} ; -- status=guess
