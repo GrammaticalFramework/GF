@@ -54853,7 +54853,7 @@ lin strike_up_V = mkV "träffar" ; -- comment=47
 lin strike_up_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=35
 lin strike_upon_V2 = dirV2 (partV (mkV "träffar")"på") ; -- comment=35
 lin strikebound_A = variants {} ; -- status=guess
-lin strikebreaker_N = (mkN "svartfot" "svartfötter") | (mkN "guling") ; -- status=guess status=guess
+lin strikebreaker_N = mkN "strejkbrytare" "strejkbrytare" ;
 lin strikebreaking_N = variants {} ; -- status=guess
 lin strikeout_N = variants {} ; -- status=guess
 lin striker_N = mkN "strejkande" ; -- comment=4
@@ -64277,7 +64277,7 @@ lin yell_V2 = variants {} ; -- mkV "skrika" "skrek" "skrikit" ; -- comment=6
 lin yell_out_V = mkV "skrika" "skrek" "skrikit" ; -- comment=6
 lin yelling_N = mkN "skriker"; -- src=google
 lin yellow_A = L.yellow_A ;
-lin yellow_N = mkN "guling" ; -- status=guess
+lin yellow_N = mkN "gula" ;
 lin yellow_V = mkV "gulnar" ; -- status=guess
 lin yellow_V2 = variants {} ; -- status=guess
 lin yellow_bellied_A = variants {} ; -- status=guess
