@@ -14996,7 +14996,7 @@ lin gregory_PN = foreignPN "Gregory" ; -- comment=src=geonames status=guess
 lin grenada_PN = mkPN "格林纳达" ; -- comment=src=geonames status=guess
 lin grenade_N = mkN "手榴弹" "枚" ;
 lin grenadier_N = mkN "长尾鳕" ; -- open-multilingual-wordnet
-lin grey_A = mkA "灰" | {-HSK-} mkA "灰色"
+lin grey_A = mkA "灰" | {-HSK-} mkA "灰色" ;
 lin grey_N = mkN "灰" | {-HSK-} mkN "灰色" | mkN "灰色地帯" | mkN "灰色地帶" | {-mwn-} mkN "灰色马" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin grey_V = mkV "变灰白" ;
 lin greybeard_N = mkN "土制酒壶" | mkN "贝拉明酒瓶" ; -- open-multilingual-wordnet
