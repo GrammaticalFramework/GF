@@ -12,6 +12,7 @@
 #include <gu/exn.h>
 #include <gu/utf8.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 #ifdef __MINGW32__
 #include <malloc.h>
@@ -1028,7 +1029,10 @@ pgf_read_cnccat(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, PgfCId name)
 
 	cnccat->abscat = 
 		gu_seq_binsearch(abstr->cats, pgf_abscat_order, PgfAbsCat, name);
-	gu_assert(cnccat->abscat != NULL);
+	if (cnccat->abscat == NULL) {
+		fprintf(stderr, "Abstract category %s is missing\n", name);
+		gu_assert(cnccat->abscat != NULL);
+	}
 
 	int len = last + 1 - first;
 	cnccat->cats = gu_new_seq(PgfCCat*, len, rdr->opool);
