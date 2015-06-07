@@ -2,12 +2,13 @@
 //  Translation.h
 //  GF Offline Translator
 //
-//  Created by Cenny Davidsson on 2015-05-04.
+//  Created by Cenny Davidsson on 2015-06-03.
 //  Copyright (c) 2015 Grammatical Framework. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-@class Language, UIColor;
+
+@class Language;
 
 typedef NS_ENUM(NSUInteger, TranslationResult) {
     WorstResult,
@@ -26,9 +27,9 @@ typedef NS_ENUM(NSUInteger, TranslationResult) {
 @property (nonatomic) Language *toLanguage;
 @property (nonatomic) TranslationResult result;
 
-+ (Translation *)translationWithText:(NSString *)fromText
-                              toText:(NSString *)toText
-                        fromLanguage:(Language *)fromLanguage
-                          toLanguage:(Language *)toLanguage;
-
++ (instancetype)translationWithText:(NSString *)fromText
+                                    toText:(NSString *)toText
+                              fromLanguage:(Language *)fromLanguage
+                                toLanguage:(Language *)toLanguage;
+- (void)speak;
 @end

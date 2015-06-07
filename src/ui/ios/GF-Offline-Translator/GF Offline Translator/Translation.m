@@ -2,29 +2,28 @@
 //  Translation.m
 //  GF Offline Translator
 //
-//  Created by Cenny Davidsson on 2015-05-04.
+//  Created by Cenny Davidsson on 2015-06-03.
 //  Copyright (c) 2015 Grammatical Framework. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "Translation.h"
-#import "UIColor+TranslationsResults.h"
-
+#import "Language.h"
+#import <AVFoundation/AVFoundation.h>
 
 
 @implementation Translation
 
-+ (Translation *)translationWithText:(NSString *)fromText
-                              toText:(NSString *)toText
-                        fromLanguage:(Language *)fromLanguage
-                          toLanguage:(Language *)toLanguage {
-    Translation *translation = [Translation new];
++ (instancetype)translationWithText:(NSString *)fromText
+                             toText:(NSString *)toText
+                       fromLanguage:(Language *)fromLanguage
+                         toLanguage:(Language *)toLanguage {
+    Translation *translation = [self new];
     
     translation.result = [Translation resultForText:toText];
     
     translation.toText = [Translation formatTranslation:toText];
     translation.fromText = fromText;
-
+    
     translation.fromLanguage = fromLanguage;
     translation.toLanguage = toLanguage;
     
@@ -68,8 +67,17 @@
     for (NSString *charToRemove in @[@"[", @"]", @"_"]) {
         trimmedText =[trimmedText stringByReplacingOccurrencesOfString:charToRemove withString:@" "];
     }
-
+    
     return trimmedText;
+}
+
+- (void)speak {
+    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:self.toText];
+    utterance.rate = AVSpeechUtteranceMinimumSpeechRate;
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:self.toLanguage.bcp];
+    
+    AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
+    [synthesizer speakUtterance:utterance];
 }
 
 - (void)setToTexts:(NSArray *)toTexts {

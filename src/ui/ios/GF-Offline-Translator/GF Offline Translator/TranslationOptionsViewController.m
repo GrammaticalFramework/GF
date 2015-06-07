@@ -7,7 +7,8 @@
 //
 
 #import "TranslationOptionsViewController.h"
-#import "Translation.h"
+#import "PhraseTranslation.h"
+#import "MorphAnalyser.h"
 
 @implementation TranslationOptionsViewController
 
@@ -30,6 +31,20 @@
     cell.textLabel.text = self.translation.toTexts[indexPath.row];
     
     return cell;
+}
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    [super prepareForSegue:segue sender:sender];
+    
+    // WebView
 }
 
 @end

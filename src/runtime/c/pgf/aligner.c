@@ -13,7 +13,7 @@ typedef struct {
 	size_t n_matches;
 	GuExn* err;
 	bool bind;
-	bool capit;
+	PgfCapitState capit;
 	GuPool* out_pool;
 	GuPool* tmp_pool;
 } PgfAlignerLin;
@@ -107,18 +107,38 @@ pgf_aligner_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 		gu_buf_flush(alin->parent_current);
 
 		pgf_aligner_push_parent(alin, fid);
+		
+		if (alin->capit == PGF_CAPIT_NEXT)
+			alin->capit = PGF_CAPIT_NONE;
 	}
 
 	GuOut* out = gu_string_buf_out(alin->sbuf);
 
-	if (alin->capit) {
+	switch (alin->capit) {
+	case PGF_CAPIT_NONE:
+		gu_string_write(tok, out, alin->err);
+		break;
+	case PGF_CAPIT_FIRST: {
 		GuUCS c = gu_utf8_decode((const uint8_t**) &tok);
 		c = gu_ucs_to_upper(c);
 		gu_out_utf8(c, out, alin->err);
-		alin->capit = false;
+		gu_string_write(tok, out, alin->err);
+		alin->capit = PGF_CAPIT_NONE;
+		break;
+	}	
+	case PGF_CAPIT_ALL:
+		alin->capit = PGF_CAPIT_NEXT;
+		// continue
+	case PGF_CAPIT_NEXT: {
+		const uint8_t* p = (uint8_t*) tok;
+		while (*p) {
+			GuUCS c = gu_utf8_decode(&p);
+			c = gu_ucs_to_upper(c);
+			gu_out_utf8(c, out, alin->err);
+		}
+		break;
 	}
-
-	gu_string_write(tok, out, alin->err);
+	}
 }
 
 static void
@@ -150,10 +170,10 @@ pgf_aligner_lzn_symbol_bind(PgfLinFuncs** funcs)
 }
 
 static void
-pgf_aligner_lzn_symbol_capit(PgfLinFuncs** funcs)
+pgf_aligner_lzn_symbol_capit(PgfLinFuncs** funcs, PgfCapitState capit)
 {
 	PgfAlignerLin* alin = gu_container(funcs, PgfAlignerLin, funcs);
-	alin->capit = true;
+	alin->capit = capit;
 }
 
 static PgfLinFuncs pgf_file_lin_funcs = {
@@ -194,7 +214,7 @@ pgf_align_words(PgfConcr* concr, PgfExpr expr,
 			.n_matches = 0,
 			.err = err,
 			.bind = true,
-			.capit = false,
+			.capit = PGF_CAPIT_NONE,
 			.out_pool = pool,
 			.tmp_pool = tmp_pool
 		};

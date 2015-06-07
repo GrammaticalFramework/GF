@@ -8,8 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		8B13021503B4FFDE467D3DA9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB9B7B89581859D72BD5CEC /* libPods.a */; };
-		CC020CFE1AF76A6C0050AE38 /* Translation.m in Sources */ = {isa = PBXBuildFile; fileRef = CC020CFD1AF76A6C0050AE38 /* Translation.m */; };
+		CC020CFE1AF76A6C0050AE38 /* PhraseTranslation.m in Sources */ = {isa = PBXBuildFile; fileRef = CC020CFD1AF76A6C0050AE38 /* PhraseTranslation.m */; };
 		CC022FB01AF8D8CF0067A675 /* SLKTextView+TextInputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */; };
+		CC2E85D11B1E4F2500F4BC47 /* AppTha.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC2E85D01B1E4F2500F4BC47 /* AppTha.pgf_c */; };
+		CC2E85D31B1E4F3000F4BC47 /* AppJpn.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC2E85D21B1E4F3000F4BC47 /* AppJpn.pgf_c */; };
+		CC54E7031B1F83E500B3BECC /* NSString+StringToArray.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54E7021B1F83E400B3BECC /* NSString+StringToArray.m */; };
+		CC54E7061B1F947E00B3BECC /* WordTranslation.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54E7051B1F947E00B3BECC /* WordTranslation.m */; };
+		CC54E7091B1F94AC00B3BECC /* Translation.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54E7081B1F94AC00B3BECC /* Translation.m */; };
 		CC57C23E1AEE23D000051DE4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C23D1AEE23D000051DE4 /* main.m */; };
 		CC57C2411AEE23D000051DE4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C2401AEE23D000051DE4 /* AppDelegate.m */; };
 		CC57C2471AEE23D000051DE4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC57C2451AEE23D000051DE4 /* Main.storyboard */; };
@@ -155,10 +160,18 @@
 		9D996C5B51A0CAF9741D9356 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		ABB9B7B89581859D72BD5CEC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4E29C5D7044D408E488C0F3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		CC020CFC1AF76A6C0050AE38 /* Translation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Translation.h; sourceTree = "<group>"; };
-		CC020CFD1AF76A6C0050AE38 /* Translation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translation.m; sourceTree = "<group>"; };
+		CC020CFC1AF76A6C0050AE38 /* PhraseTranslation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhraseTranslation.h; sourceTree = "<group>"; };
+		CC020CFD1AF76A6C0050AE38 /* PhraseTranslation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhraseTranslation.m; sourceTree = "<group>"; };
 		CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+TextInputMode.h"; sourceTree = "<group>"; };
 		CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLKTextView+TextInputMode.m"; sourceTree = "<group>"; };
+		CC2E85D01B1E4F2500F4BC47 /* AppTha.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppTha.pgf_c; sourceTree = "<group>"; };
+		CC2E85D21B1E4F3000F4BC47 /* AppJpn.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppJpn.pgf_c; sourceTree = "<group>"; };
+		CC54E7011B1F83E400B3BECC /* NSString+StringToArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+StringToArray.h"; sourceTree = "<group>"; };
+		CC54E7021B1F83E400B3BECC /* NSString+StringToArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+StringToArray.m"; sourceTree = "<group>"; };
+		CC54E7041B1F947E00B3BECC /* WordTranslation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordTranslation.h; sourceTree = "<group>"; };
+		CC54E7051B1F947E00B3BECC /* WordTranslation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WordTranslation.m; sourceTree = "<group>"; };
+		CC54E7071B1F94AC00B3BECC /* Translation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Translation.h; sourceTree = "<group>"; };
+		CC54E7081B1F94AC00B3BECC /* Translation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Translation.m; sourceTree = "<group>"; };
 		CC57C2381AEE23D000051DE4 /* GF Offline Translator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GF Offline Translator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC57C23C1AEE23D000051DE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC57C23D1AEE23D000051DE4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -596,8 +609,10 @@
 				CC8E00FE1AEE38600040920E /* AppGer.pgf_c */,
 				CC8E00FF1AEE38600040920E /* AppHin.pgf_c */,
 				CC8E01001AEE38600040920E /* AppIta.pgf_c */,
+				CC2E85D21B1E4F3000F4BC47 /* AppJpn.pgf_c */,
 				CC8E01011AEE38600040920E /* AppSpa.pgf_c */,
 				CC8E01021AEE38600040920E /* AppSwe.pgf_c */,
+				CC2E85D01B1E4F2500F4BC47 /* AppTha.pgf_c */,
 			);
 			path = grammars;
 			sourceTree = "<group>";
@@ -626,10 +641,16 @@
 				CC98AF1E1AEF772200DFA116 /* Grammar.m */,
 				CC98AF201AEF773500DFA116 /* Translator.h */,
 				CC98AF211AEF773500DFA116 /* Translator.m */,
-				CC020CFC1AF76A6C0050AE38 /* Translation.h */,
-				CC020CFD1AF76A6C0050AE38 /* Translation.m */,
 				CC722BF31B11F83A0022DD7C /* MorphAnalyser.h */,
 				CC722BF41B11F83A0022DD7C /* MorphAnalyser.m */,
+				CC54E7011B1F83E400B3BECC /* NSString+StringToArray.h */,
+				CC54E7021B1F83E400B3BECC /* NSString+StringToArray.m */,
+				CC020CFC1AF76A6C0050AE38 /* PhraseTranslation.h */,
+				CC020CFD1AF76A6C0050AE38 /* PhraseTranslation.m */,
+				CC54E7041B1F947E00B3BECC /* WordTranslation.h */,
+				CC54E7051B1F947E00B3BECC /* WordTranslation.m */,
+				CC54E7071B1F94AC00B3BECC /* Translation.h */,
+				CC54E7081B1F94AC00B3BECC /* Translation.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -694,6 +715,7 @@
 				TargetAttributes = {
 					CC57C2371AEE23D000051DE4 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 4BJ69CG5TM;
 					};
 					CC57C2501AEE23D000051DE4 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -735,9 +757,11 @@
 				CC8E010D1AEE38600040920E /* AppIta.pgf_c in Resources */,
 				CC57C2491AEE23D000051DE4 /* Images.xcassets in Resources */,
 				CC8E01051AEE38600040920E /* AppCat.pgf_c in Resources */,
+				CC2E85D31B1E4F3000F4BC47 /* AppJpn.pgf_c in Resources */,
 				CC619EDC1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib in Resources */,
 				CC8E010F1AEE38600040920E /* AppSwe.pgf_c in Resources */,
 				CC8E01031AEE38600040920E /* App.pgf in Resources */,
+				CC2E85D11B1E4F2500F4BC47 /* AppTha.pgf_c in Resources */,
 				CC8E010B1AEE38600040920E /* AppGer.pgf_c in Resources */,
 				CC8E010E1AEE38600040920E /* AppSpa.pgf_c in Resources */,
 				CC8E01071AEE38600040920E /* AppDut.pgf_c in Resources */,
@@ -802,6 +826,7 @@
 				CC8E00A81AEE32C40040920E /* expr.h in Sources */,
 				CC8E00A91AEE32C40040920E /* graphviz.c in Sources */,
 				CC8E00AA1AEE32C40040920E /* graphviz.h in Sources */,
+				CC54E7031B1F83E500B3BECC /* NSString+StringToArray.m in Sources */,
 				CC8E00AB1AEE32C40040920E /* hopu.c in Sources */,
 				CC8E00AC1AEE32C40040920E /* hopu.h in Sources */,
 				CC98AF121AEE76D100DFA116 /* ArrowsButton.m in Sources */,
@@ -879,6 +904,7 @@
 				CC8E008A1AEE32B20040920E /* fun.h in Sources */,
 				CC8E008B1AEE32B20040920E /* hash.c in Sources */,
 				CC8E008C1AEE32B20040920E /* hash.h in Sources */,
+				CC54E7061B1F947E00B3BECC /* WordTranslation.m in Sources */,
 				CC8E008D1AEE32B20040920E /* in.c in Sources */,
 				CC8E008E1AEE32B20040920E /* in.h in Sources */,
 				CC8E008F1AEE32B20040920E /* map.c in Sources */,
@@ -886,8 +912,9 @@
 				CC8E00911AEE32B20040920E /* mem.c in Sources */,
 				CC8E00921AEE32B20040920E /* mem.h in Sources */,
 				CC8E00931AEE32B20040920E /* out.c in Sources */,
-				CC020CFE1AF76A6C0050AE38 /* Translation.m in Sources */,
+				CC020CFE1AF76A6C0050AE38 /* PhraseTranslation.m in Sources */,
 				CC8E00941AEE32B20040920E /* out.h in Sources */,
+				CC54E7091B1F94AC00B3BECC /* Translation.m in Sources */,
 				CC8E00DA1AEE34E70040920E /* assert.c in Sources */,
 				CC8E00951AEE32B20040920E /* prime.c in Sources */,
 				CC8E00961AEE32B20040920E /* prime.h in Sources */,
@@ -982,7 +1009,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1020,7 +1047,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1033,6 +1060,8 @@
 			baseConfigurationReference = 9D996C5B51A0CAF9741D9356 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../../../runtime/c",
@@ -1042,6 +1071,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1050,6 +1080,8 @@
 			baseConfigurationReference = B4E29C5D7044D408E488C0F3 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../../../runtime/c",
@@ -1059,6 +1091,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

@@ -5,18 +5,20 @@
 
 
 static PgfExprProb*
-pgf_match_string_lit(PgfLiteralCallback* self,
+pgf_match_string_lit(PgfLiteralCallback* self, PgfConcr* concr,
                      size_t lin_idx,
                      GuString sentence, size_t* poffset,
                      GuPool *out_pool)
 {
 	gu_assert(lin_idx == 0);
 
-	size_t offset = *poffset;
-	while (sentence[offset] && !gu_is_space(sentence[offset]))
-		offset++;
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
+	size_t len = 0;
+	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
+		len = p - buf;
+	}
 
-	size_t len = offset - *poffset;
 	if (len > 0) {
 		PgfExprProb* ep = gu_new(PgfExprProb, out_pool);
 		ep->prob = 0;
@@ -31,10 +33,10 @@ pgf_match_string_lit(PgfLiteralCallback* self,
 						        PgfLiteralStr,
 						        val, len+1,
 						        &expr_lit->lit, out_pool);
-		memcpy(lit_str->val, sentence+*poffset, len);
+		memcpy(lit_str->val, buf, len);
 		lit_str->val[len] = 0;
 
-		*poffset = offset;
+		*poffset += len;
 		return ep;
 	} else {
 		return NULL;
@@ -48,7 +50,7 @@ pgf_predict_empty_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 static GuEnum*
-pgf_predict_empty(PgfLiteralCallback* self,
+pgf_predict_empty(PgfLiteralCallback* self, PgfConcr* concr,
 	              size_t lin_idx,
 	              GuString prefix,
 	              GuPool *out_pool)
@@ -64,22 +66,24 @@ static PgfLiteralCallback pgf_string_literal_callback =
 
 
 static PgfExprProb*
-pgf_match_int_lit(PgfLiteralCallback* self,
+pgf_match_int_lit(PgfLiteralCallback* self, PgfConcr* concr,
                   size_t lin_idx,
                   GuString sentence, size_t* poffset,
                   GuPool *out_pool)
 {
 	gu_assert(lin_idx == 0);
 
-	size_t offset = *poffset;
-	while (sentence[offset] && !gu_is_space(sentence[offset]))
-		offset++;
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
+	size_t len = 0;
+	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
+		len = p - buf;
+	}
 
-	size_t len = offset - *poffset;
 	if (len > 0) {
 		GuPool* tmp_pool = gu_local_pool();
 		PgfToken tok = gu_malloc(tmp_pool, len+1);
-		memcpy((char*) tok, sentence+*poffset, len);
+		memcpy((char*) tok, buf, len);
 		((char*) tok)[len] = 0;
 
 		int val;
@@ -103,7 +107,7 @@ pgf_match_int_lit(PgfLiteralCallback* self,
 						   &expr_lit->lit, out_pool);
 		lit_int->val = val;
 
-		*poffset = offset;
+		*poffset += len;
 		return ep;
 	} else {
 		return NULL;
@@ -116,22 +120,24 @@ static PgfLiteralCallback pgf_int_literal_callback =
 
 
 static PgfExprProb*
-pgf_match_float_lit(PgfLiteralCallback* self,
+pgf_match_float_lit(PgfLiteralCallback* self, PgfConcr* concr,
                     size_t lin_idx,
                     GuString sentence, size_t* poffset,
                     GuPool *out_pool)
 {
 	gu_assert(lin_idx == 0);
 
-	size_t offset = *poffset;
-	while (sentence[offset] && !gu_is_space(sentence[offset]))
-		offset++;
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
+	size_t len = 0;
+	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
+		len = p - buf;
+	}
 
-	size_t len = offset - *poffset;
 	if (len > 0) {
 		GuPool* tmp_pool = gu_local_pool();
 		PgfToken tok = gu_malloc(tmp_pool, len+1);
-		memcpy((char*) tok, sentence+*poffset, len);
+		memcpy((char*) tok, buf, len);
 		((char*) tok)[len] = 0;
 
 		double val;
@@ -155,7 +161,7 @@ pgf_match_float_lit(PgfLiteralCallback* self,
 						   &expr_lit->lit, out_pool);
 		lit_flt->val = val;
 
-		*poffset = offset;
+		*poffset += len;
 		return ep;
 	} else {
 		return NULL;
@@ -165,74 +171,162 @@ pgf_match_float_lit(PgfLiteralCallback* self,
 static PgfLiteralCallback pgf_float_literal_callback =
   { pgf_match_float_lit, pgf_predict_empty } ;
 
+typedef struct {
+	PgfMorphoCallback callback;
+	PgfAbstr* abstract;
+	PgfExpr expr;
+	bool is_known;
+	GuPool* out_pool;
+} PgfMatchMorphoCallback;
 
+static void
+pgf_match_name_morpho_callback(PgfMorphoCallback* self_,
+                               PgfCId lemma, GuString analysis, prob_t prob,
+                               GuExn* err)
+{
+	PgfMatchMorphoCallback* self =
+		gu_container(self_, PgfMatchMorphoCallback, callback);
+
+	PgfAbsFun* absfun =
+		gu_seq_binsearch(self->abstract->funs, pgf_absfun_order, PgfAbsFun, lemma);
+	if (absfun != NULL) {
+		if (strcmp(absfun->type->cid, "PN") == 0) {
+			self->expr = absfun->ep.expr;
+		} else if (strcmp(absfun->type->cid, "Weekday") == 0) {
+			PgfExprApp *expr_app =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &self->expr, self->out_pool);
+			GuString con = "weekdayPN";
+			PgfExprFun *expr_fun =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con)+1,
+									&expr_app->fun, self->out_pool);
+			strcpy(expr_fun->fun, con);
+			expr_app->arg = absfun->ep.expr;
+		} else if (strcmp(absfun->type->cid, "Month") == 0) {
+			PgfExprApp *expr_app =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &self->expr, self->out_pool);
+			GuString con = "monthPN";
+			PgfExprFun *expr_fun =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con)+1,
+									&expr_app->fun, self->out_pool);
+			strcpy(expr_fun->fun, con);
+			expr_app->arg = absfun->ep.expr;
+		} else {
+			self->is_known = true;
+		}
+	}
+}
 
 static PgfExprProb*
-pgf_match_name_lit(PgfLiteralCallback* self,
+pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
                    size_t lin_idx,
                    GuString sentence, size_t* poffset,
                    GuPool *out_pool)
 {
-	gu_assert(lin_idx == 0);
+	if (lin_idx != 0)
+		return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
 	GuStringBuf *sbuf = gu_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	GuExn* err = gu_new_exn(tmp_pool);
 
-	size_t offset = *poffset;
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
 
 	int i = 0;
-	while (iswupper(sentence[offset])) {
-		size_t len = 0;
-		while (!gu_is_space(sentence[offset+len])) {
-			len++;
-		}
-
-		PgfToken tok = gu_malloc(tmp_pool, len+1);
-		memcpy((char*) tok, sentence+offset, len);
-		((char*) tok)[len] = 0;
-
+	GuUCS ucs = gu_utf8_decode(&p);
+	while (gu_ucs_is_upper(ucs)) {
 		if (i > 0)
 		  gu_putc(' ', out, err);
-		gu_string_write(tok, out, err);
-		
+		gu_out_utf8(ucs, out, err);
+		*poffset = p - ((uint8_t*) sentence);
+
+		ucs = gu_utf8_decode(&p);
+		while (ucs != 0 && !gu_ucs_is_space(ucs)) {
+			gu_out_utf8(ucs, out, err);
+			*poffset = p - ((uint8_t*) sentence);
+
+			ucs = gu_utf8_decode(&p);
+		}
+
 		i++;
 
-		offset  += len;
-		*poffset = offset;
-
-		while (gu_is_space(sentence[offset]))
-			offset++;
+		while (gu_ucs_is_space(ucs))
+			ucs = gu_utf8_decode(&p);
 	}
 
 	PgfExprProb* ep = NULL;
 	if (i > 0) {
+		GuString name = gu_string_buf_freeze(sbuf, tmp_pool);
+
+		// Detect I and I'm in English
+		GuString concr_name = pgf_concrete_name(concr);
+		size_t concr_name_len = strlen(concr_name);
+		if (concr_name_len >= 3 && strcmp(concr_name+concr_name_len-3,"Eng") == 0) {
+			if (strcmp(name, "I") == 0 || strcmp(name, "I'm") == 0) {
+				gu_pool_free(tmp_pool);
+				return NULL;
+			}
+		}
+
+		PgfMatchMorphoCallback clo = { { pgf_match_name_morpho_callback }, 
+			                           concr->abstr,
+			                           gu_null_variant,
+			                           false,
+			                           out_pool
+			                         };
+		pgf_lookup_morpho(concr, name, &clo.callback, NULL);
+
+		if (clo.is_known) {
+			return NULL;
+		}
+
+		if (gu_variant_is_null(clo.expr)) {
+			PgfExprApp *expr_app1 =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &clo.expr, out_pool);
+			GuString con1 = "SymbPN";
+			PgfExprFun *expr_fun1 =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con1)+1,
+									&expr_app1->fun, out_pool);
+			strcpy(expr_fun1->fun, con1);
+			PgfExprApp *expr_app2 =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &expr_app1->arg, out_pool);
+			GuString con2 = "MkSymb";
+			PgfExprFun *expr_fun2 =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con2)+1,
+									&expr_app2->fun, out_pool);
+			strcpy(expr_fun2->fun, con2);
+			PgfExprLit *expr_lit =
+				gu_new_variant(PGF_EXPR_LIT,
+							   PgfExprLit,
+							   &expr_app2->arg, out_pool);
+			PgfLiteralStr *lit_str =
+				gu_new_flex_variant(PGF_LITERAL_STR,
+									PgfLiteralStr,
+									val, strlen(name)+1,
+									&expr_lit->lit, out_pool);
+			strcpy(lit_str->val, name);
+		}
+		
 		ep = gu_new(PgfExprProb, out_pool);
 		ep->prob = 0;
-
-		PgfExprApp *expr_app =
-			gu_new_variant(PGF_EXPR_APP,
-			               PgfExprApp,
-			               &ep->expr, out_pool);
-		GuString con = "MkSymb";
-		PgfExprFun *expr_fun =
-			gu_new_flex_variant(PGF_EXPR_FUN,
-			                    PgfExprFun,
-			                    fun, strlen(con)+1,
-			                    &expr_app->fun, out_pool);
-		strcpy(expr_fun->fun, con);
-		PgfExprLit *expr_lit =
-			gu_new_variant(PGF_EXPR_LIT,
-			               PgfExprLit,
-			               &expr_app->arg, out_pool);
-		GuString val = gu_string_buf_freeze(sbuf, tmp_pool);
-		PgfLiteralStr *lit_str =
-			gu_new_flex_variant(PGF_LITERAL_STR,
-			                    PgfLiteralStr,
-			                    val, strlen(val)+1,
-			                    &expr_lit->lit, out_pool);
-        strcpy(lit_str->val, val);
+		ep->expr = clo.expr;
 	}
 
 	gu_pool_free(tmp_pool);
@@ -243,6 +337,90 @@ pgf_match_name_lit(PgfLiteralCallback* self,
 PgfLiteralCallback pgf_nerc_literal_callback =
   { pgf_match_name_lit, pgf_predict_empty } ;
 
+static void
+pgf_match_unknown_morpho_callback(PgfMorphoCallback* self_,
+                                  PgfCId lemma, GuString analysis, prob_t prob,
+                                  GuExn* err)
+{
+	PgfMatchMorphoCallback* self =
+		gu_container(self_, PgfMatchMorphoCallback, callback);
+	self->is_known = true;
+}
+
+static PgfExprProb*
+pgf_match_unknown_lit(PgfLiteralCallback* self, PgfConcr* concr,
+                      size_t lin_idx,
+                      GuString sentence, size_t* poffset,
+                      GuPool *out_pool)
+{
+	const uint8_t* buf = (uint8_t*) (sentence + *poffset);
+	const uint8_t* p   = buf;
+
+	PgfExprProb* ep = NULL;
+
+	GuUCS ucs = gu_utf8_decode(&p);
+	if (!gu_ucs_is_upper(ucs)) {
+		GuPool* tmp_pool = gu_local_pool();
+		GuStringBuf *sbuf = gu_string_buf(tmp_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+		GuExn* err = gu_new_exn(tmp_pool);
+
+		gu_out_utf8(ucs, out, err);
+		*poffset = p - ((uint8_t*) sentence);
+
+		ucs = gu_utf8_decode(&p);
+		while (ucs != 0 && !gu_ucs_is_space(ucs)) {
+			gu_out_utf8(ucs, out, err);
+			*poffset = p - ((uint8_t*) sentence);
+
+			ucs = gu_utf8_decode(&p);
+		}
+		
+		GuString word = gu_string_buf_freeze(sbuf, tmp_pool);
+
+		PgfMatchMorphoCallback clo = { { pgf_match_unknown_morpho_callback }, 
+			                           concr->abstr,
+			                           gu_null_variant,
+			                           false,
+			                           out_pool
+			                         };
+		pgf_lookup_morpho(concr, word, &clo.callback, NULL);
+
+		if (!clo.is_known) {
+			ep = gu_new(PgfExprProb, out_pool);
+			ep->prob = 0;
+
+			PgfExprApp *expr_app =
+				gu_new_variant(PGF_EXPR_APP,
+							   PgfExprApp,
+							   &ep->expr, out_pool);
+			GuString con = "MkSymb";
+			PgfExprFun *expr_fun =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+									PgfExprFun,
+									fun, strlen(con)+1,
+									&expr_app->fun, out_pool);
+			strcpy(expr_fun->fun, con);
+			PgfExprLit *expr_lit =
+				gu_new_variant(PGF_EXPR_LIT,
+							   PgfExprLit,
+							   &expr_app->arg, out_pool);
+			PgfLiteralStr *lit_str =
+				gu_new_flex_variant(PGF_LITERAL_STR,
+									PgfLiteralStr,
+									val, strlen(word)+1,
+									&expr_lit->lit, out_pool);
+			strcpy(lit_str->val, word);
+		}
+		
+		gu_pool_free(tmp_pool);
+	}
+
+	return ep;
+}
+
+PgfLiteralCallback pgf_unknown_literal_callback =
+  { pgf_match_unknown_lit, pgf_predict_empty } ;
 
 PgfCallbacksMap*
 pgf_new_callbacks_map(PgfConcr* concr, GuPool *pool)

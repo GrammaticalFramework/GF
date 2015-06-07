@@ -8,13 +8,11 @@
 
 #import "TranslationTextViewController.h"
 
-#import <AVFoundation/AVFoundation.h>
-
 // Models
 #import "Translator.h"
 #import "Grammar.h"
 #import "Language.h"
-#import "Translation.h"
+#import "PhraseTranslation.h"
 #import "MorphAnalyser.h"
 
 // Views
@@ -249,22 +247,13 @@
     // Must call super
     
     NSString *input = self.textView.text.lowercaseString;
-    Translation *newTranslation = [self.translator translatePhrase:input];
+    NSInteger wordsCount = [input componentsSeparatedByString:@" "].count;
+    Translation *newTranslation = (wordsCount == 1 ? (Translation *)[self.translator analysWord:input] : (Translation *)[self.translator translatePhrase:input]);
+    
     [self.inputs addObject:newTranslation];
     [self.tableView reloadData];
     
-    NSString *string = newTranslation.toText;
-    AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString:string];
-    utterance.rate = AVSpeechUtteranceMinimumSpeechRate;
-    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:newTranslation.toLanguage.bcp];
-    
-    AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
-    [synthesizer speakUtterance:utterance];
-    
-//    MorphAnalyser *analyser = [[MorphAnalyser alloc] initWithPgf:self.translator.pgf err:self.translator.err to:self.translator.to from:self.translator.from];
-//    [analyser analysWord:input];
-//    NSString *translation = analyser.bestTranslation;
-    
+    [newTranslation speak];
     
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
@@ -308,7 +297,7 @@
     
     TranslationTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     
-    Translation *translation = self.inputs[indexPath.row/2];
+    PhraseTranslation *translation = self.inputs[indexPath.row/2];
     [cell setCellWithLanguage:translation fromLanguage:isFrom];
     if (!isFrom && translation.toTexts.count) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -323,11 +312,11 @@
 // Uncomment this method to handle the cell selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([tableView isEqual:self.tableView] && indexPath.row % 2 == 1) {
-        Translation *translation = self.inputs[indexPath.row/2];
+        PhraseTranslation *translation = self.inputs[indexPath.row/2];
         [self performSegueWithIdentifier:@"TranslationOptions" sender:translation];
     }
     if ([tableView isEqual:self.tableView] && indexPath.row % 2 == 0) {
-        Translation *translation = self.inputs[indexPath.row/2];
+        PhraseTranslation *translation = self.inputs[indexPath.row/2];
         self.textInputbar.textView.text = translation.fromText;
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

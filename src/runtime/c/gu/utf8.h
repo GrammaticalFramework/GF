@@ -32,15 +32,12 @@ gu_out_utf8(GuUCS ucs, GuOut* out, GuExn* err)
 // Helper functions used in other modules
 
 GuUCS
-gu_utf8_decode(const uint8_t** utf8);
+gu_utf8_decode(const uint8_t** buf);
+
+void
+gu_utf8_encode(GuUCS ucs, uint8_t** buf);
 
 void
 gu_in_utf8_buf(uint8_t** buf, GuIn* in, GuExn* err);
-
-static inline bool
-gu_is_space(uint8_t c) {
-	return (c == '\t' || c == '\n' || c == '\v' ||
-	        c == '\f' || c == '\r' || c == ' ');
-}
 
 #endif // GU_UTF8_H_

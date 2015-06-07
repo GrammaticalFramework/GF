@@ -10,8 +10,11 @@
 
 // Model
 #import "Grammar.h"
-#import "Translation.h"
+#import "PhraseTranslation.h"
+#import "WordTranslation.h"
 #import "MorphAnalyser.h"
+#import "Language.h"
+#import "NSString+StringToArray.h"
 
 // Grammatical Framework
 #import "pgf/pgf.h"
@@ -21,7 +24,6 @@
 
 
 @interface Translator ()
-
 @end
 
 @implementation Translator
@@ -49,13 +51,23 @@
 
 #pragma mark - Public translation method
 
-- (Translation *)translatePhrase:(NSString *)phrase {
+- (PhraseTranslation *)translatePhrase:(NSString *)phrase {
+    
+    // If chinese add input to chars
+    if ([self.from.language.bcp isEqualToString:@"zh-CN"]) {
+        NSArray *array = [phrase stringToArray];
+        phrase = [array componentsJoinedByString:@" "];
+    }
+    
     GuPool *tmpPool = gu_new_pool();
     GuExn *tmpErr = gu_new_exn(tmpPool);
     
     PgfExprEnum *parsedExpressions = [self parsePhrase:phrase startCat:@"Phr" tmpPool:tmpPool tmpErr:tmpErr];
     NSArray *translatedText = nil;
     
+//    if ([phrase componentsSeparatedByString:@" "].count == 1) {
+//        translatedText = @[[self translateWord:phrase]];
+//    } else
     if (parsedExpressions != nil) {
         translatedText = [self linearizeResult:parsedExpressions tmpPool:tmpPool tmpErr:tmpErr];
     } else {
@@ -67,13 +79,28 @@
     tmpPool = nil;
     tmpErr = nil;
     
-    Translation *translation = [Translation translationWithText:phrase
+    PhraseTranslation *translation = [PhraseTranslation translationWithText:phrase
                                                          toText:translatedText.firstObject
                                                    fromLanguage:self.from.language
                                                      toLanguage:self.to.language];
     if (translatedText.count > 1) {
         translation.toTexts = translatedText;
     }
+    
+    return translation;
+}
+
+- (WordTranslation *)analysWord:(NSString *)word; {
+    
+    MorphAnalyser *analyser = [[MorphAnalyser alloc] initWithPgf:self.pgf err:self.err to:self.to from:self.from];
+    [analyser analysWord:word];
+    
+    WordTranslation *translation = [WordTranslation translationWithText:word
+                                                                  toText:analyser.bestTranslation
+                                                            fromLanguage:self.from.language
+                                                              toLanguage:self.to.language];
+    
+    translation.html = [analyser.html componentsJoinedByString:@" "];
     
     return translation;
 }
@@ -86,7 +113,7 @@
     
     for (NSString *word in words) {
         NSString *translatedWord = [self translateWord:word];
-        [translation appendString: translatedWord ? translatedWord : @" - "];
+        [translation appendString: translatedWord ? translatedWord : [NSString stringWithFormat:@" %@", word]];
     }
     return translation.copy;
 }
@@ -99,11 +126,17 @@
     NSString *translation = @"";
     
     if (parse) {
-        translation = [self linearizeResult:parse tmpPool:tmpPool tmpErr:tmpErr].firstObject;
+        NSArray *results = [self linearizeResult:parse tmpPool:tmpPool tmpErr:tmpErr];
+        
+        if (results.count) {
+            translation = results.firstObject;
+        } else {
+            translation = [self translateByLookUp:word];
+        }
     } else {
         MorphAnalyser *analyser = [[MorphAnalyser alloc] initWithPgf:self.pgf err:self.err to:self.to from:self.from];
         [analyser analysWord:word];
-        translation = analyser.bestTranslation;
+        translation = analyser.bestTranslation;        
     }
     
     // Clear up resources
@@ -126,10 +159,12 @@
     PgfExprProb *ep;
     gu_enum_next(result, &ep, tmpPool);
     
-    while (ep) {
-        if (translations.count > 10) {
-            return translations.objectEnumerator.allObjects;
-        }
+    // FIXME: Do word by word if ep is null
+    if (!ep) {
+        return @[];
+    }
+    
+    for (int i = 0; i <= 10 && ep != nil; i++) {
         PgfExprProb parse = ep[0];
         
         GuStringBuf *stringBuff = gu_string_buf(tmpPool);
@@ -142,6 +177,7 @@
         
         gu_enum_next(result, &ep, tmpPool);
     }
+
     
     return translations.objectEnumerator.allObjects;
 }

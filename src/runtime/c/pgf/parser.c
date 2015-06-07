@@ -38,6 +38,7 @@ typedef struct {
 	GuPool* pool;      // this pool is used for structures internal to the parser
 	GuPool* out_pool;  // this pool is used for the allocating the final abstract trees
 	GuString sentence; // the sentence to be parsed
+	bool case_sensitive;
 	GuBuf* expr_queue; // during the extraction of abstract trees we push them in this queue
     int max_fid;
     PgfParseState *before;
@@ -134,8 +135,10 @@ pgf_prev_extern_sym(PgfSymbol sym)
 		return *((PgfSymbol*) (((PgfSymbolVar*) i.data)+1));
 	case PGF_SYMBOL_BIND:
 	case PGF_SYMBOL_SOFT_BIND:
+	case PGF_SYMBOL_SOFT_SPACE:
 		return *((PgfSymbol*) (((PgfSymbolBIND*) i.data)+1));
 	case PGF_SYMBOL_CAPIT:
+	case PGF_SYMBOL_ALL_CAPIT:
 		return *((PgfSymbol*) (((PgfSymbolCAPIT*) i.data)+1));
 	case PGF_SYMBOL_NE:
 		return *((PgfSymbol*) (((PgfSymbolNE*) i.data)+1));
@@ -145,41 +148,39 @@ pgf_prev_extern_sym(PgfSymbol sym)
 	}
 }
 
-static void
-pgf_add_extern_tok(PgfSymbol* psym, PgfToken tok, GuPool* pool) {
-	PgfSymbol new_sym;
-	size_t tok_len = strlen(tok);
-	PgfSymbolKS* sks = (PgfSymbolKS*)
-		gu_alloc_variant(PGF_SYMBOL_KS,
-						 sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+tok_len+1,
-						 gu_alignof(PgfSymbolKS),
-						 &new_sym, pool);
-	strcpy(sks->token, tok);
-	*((PgfSymbol*) (((uint8_t*) sks)+sizeof(PgfSymbolKS)+tok_len+1)) = *psym;
-	*psym = new_sym;
-}
-
-PgfSymbol
-pgf_collect_extern_tok(PgfParsing* ps, size_t start, size_t end)
+static PgfSymbol
+pgf_collect_extern_tok(PgfParsing* ps, size_t start_offset, size_t end_offset)
 {
 	PgfSymbol sym = gu_null_variant;
 
-	size_t offset = start;
-	while (offset < end) {
+	const uint8_t* start = (uint8_t*) ps->sentence+start_offset;
+	const uint8_t* end   = (uint8_t*) ps->sentence+end_offset;
+
+	const uint8_t* p = start;
+	GuUCS ucs = gu_utf8_decode(&p);
+	while (start < end) {
 		size_t len = 0;
-		while (!gu_is_space(ps->sentence[offset+len])) {
-			len++;
+		while (p <= end && !gu_ucs_is_space(ucs)) {
+			len = (p - start);
+			ucs = gu_utf8_decode(&p);
 		}
 
-		PgfToken tok = gu_malloc(ps->pool, len+1);
-		memcpy((char*) tok, ps->sentence+offset, len);
-		((char*) tok)[len] = 0;
+		PgfSymbol new_sym;
+		PgfSymbolKS* sks = (PgfSymbolKS*)
+			gu_alloc_variant(PGF_SYMBOL_KS,
+			             sizeof(PgfSymbol)+sizeof(PgfSymbolKS)+len+1,
+			             gu_alignof(PgfSymbolKS),
+			             &new_sym, ps->pool);
+		memcpy((char*) sks->token, start, len);
+		((char*) sks->token)[len] = 0;
+		*((PgfSymbol*) (((uint8_t*) sks)+sizeof(PgfSymbolKS)+len+1)) = sym;
+		sym = new_sym;
 
-		pgf_add_extern_tok(&sym, tok, ps->pool);
-
-		offset  += len;
-		while (gu_is_space(ps->sentence[offset]))
-			offset++;
+		start = p;
+		while (gu_ucs_is_space(ucs)) {
+			start = p;
+			ucs = gu_utf8_decode(&p);
+		}
 	}
 
 	return sym;
@@ -474,41 +475,36 @@ pgf_print_expr_state0(PgfExprState* st,
 #endif
 
 static int
-cmp_string(GuString* psent, size_t* plen, GuString tok)
+cmp_string(GuString* psent, GuString tok, bool case_sensitive)
 {
-	GuString sent = *psent;
-	size_t   len  = *plen;
+	for (;;) {
+		GuUCS c2 = gu_utf8_decode((const uint8_t**) &tok);
+		if (c2 == 0)
+			return 0;
 
-	while (*tok != 0) {
-		if (len == 0)
+		const uint8_t* p = (uint8_t*) *psent;
+		GuUCS c1 = gu_utf8_decode(&p);
+		if (c1 == 0)
 			return -1;
 
-		if (((uint8_t) *sent) > ((uint8_t) *tok))
-			return 1;
-		else if (((uint8_t) *sent) < ((uint8_t) *tok))
-			return -2;
-			
-		tok++;
-		sent++;
-		len--;
-	}
+		if (!case_sensitive)
+			c1 = gu_ucs_to_lower(c1);
 
-	*psent = sent;
-	*plen  = len;
-	return 0;
+		if (c1 != c2)
+			return (c1-c2);
+
+		*psent = (GuString) p;
+	}
 }
 
 static bool
-skip_space(GuString* psent, size_t* plen)
+skip_space(GuString* psent)
 {
-	if (*plen == 0)
+	const uint8_t* p = (uint8_t*) *psent;
+	if (!gu_ucs_is_space(gu_utf8_decode(&p)))
 		return false;
 
-	char c = **psent;
-	if (!gu_is_space(c))
-		return false;
-
-	(*psent)++;
+	*psent = (GuString) p;
 	return true;
 }
 
@@ -778,7 +774,6 @@ pgf_item_update_arg(PgfItem* item, size_t d, PgfCCat *new_ccat,
 static void
 pgf_item_advance(PgfItem* item, GuPool* pool)
 {
-
 	if (GU_LIKELY(item->alt == 0)) {
 		item->sym_idx++;
 		pgf_item_set_curr_symbol(item, pool);
@@ -1025,10 +1020,9 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
 }
 
 static int
-pgf_symbols_cmp(GuString* psent, size_t sent_len, BIND_TYPE* pbind, PgfSymbols* syms)
+pgf_symbols_cmp(GuString* psent, BIND_TYPE* pbind, PgfSymbols* syms,
+                bool case_sensitive)
 {
-	GuString sent = *psent;
-
 	size_t n_syms = gu_seq_length(syms);
 	for (size_t i = 0; i < n_syms; i++) {
 		PgfSymbol sym = gu_seq_get(syms, PgfSymbol, i);
@@ -1038,34 +1032,34 @@ pgf_symbols_cmp(GuString* psent, size_t sent_len, BIND_TYPE* pbind, PgfSymbols* 
 		case PGF_SYMBOL_CAT:
 		case PGF_SYMBOL_LIT:
 		case PGF_SYMBOL_VAR: {
-			if (sent_len == 0)
+			if (**psent == 0)
 				return -1;
 			return 1;
 		}
 		case PGF_SYMBOL_KS: {
 			PgfSymbolKS* pks = inf.data;
-			if (sent_len == 0)
+			if (**psent == 0)
 				return -1;
 
 			if (*pbind == BIND_HARD)
 				*pbind = BIND_NONE;
 			else {
-				if (*pbind != BIND_SOFT && !skip_space(&sent, &sent_len))
+				if (*pbind != BIND_SOFT && !skip_space(psent))
 					return 1;
 
-				while (*sent != 0) {
-					if (!skip_space(&sent, &sent_len))
+				while (**psent != 0) {
+					if (!skip_space(psent))
 						break;
 				}
 			}
 
-			int cmp = cmp_string(&sent, &sent_len, pks->token);
+			int cmp = cmp_string(psent, pks->token, case_sensitive);
 			if (cmp != 0)
 				return cmp;
 			break;
 		}
 		case PGF_SYMBOL_KP: {
-			return -2;
+			return -1;
 		}
 		case PGF_SYMBOL_BIND: {
 			*pbind = BIND_HARD;
@@ -1075,92 +1069,89 @@ pgf_symbols_cmp(GuString* psent, size_t sent_len, BIND_TYPE* pbind, PgfSymbols* 
 			*pbind = BIND_SOFT;
 			break;
 		}
-		case PGF_SYMBOL_CAPIT: {
+		case PGF_SYMBOL_SOFT_SPACE: {
+			break;
+		}
+		case PGF_SYMBOL_CAPIT:
+		case PGF_SYMBOL_ALL_CAPIT: {
 			break;
 		}
 		case PGF_SYMBOL_NE: {
-			return -2;
+			return -1;
 		}
 		default:
 			gu_impossible();
 		}
 	}
 
-    *psent = sent;
 	return 0;
 }
 
 static void
-pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state)
+pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state,
+                      int i, int j, ptrdiff_t min, ptrdiff_t max)
 {
-	PgfSequence* epsilon_seq =
-		gu_seq_index(ps->concr->sequences, PgfSequence, 0);
-	if (gu_seq_length(epsilon_seq->syms) == 0 &&
-	    epsilon_seq->idx != NULL) {
-		// Since the sequences are sorted, the epsilon sequence will
-		// always be the first if there is any at all. We should
-		// always add the epsilon in the index, because we do
-		// bottom up prediction for epsilons.
-		PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
-		entry->idx       = epsilon_seq->idx;
-		entry->bind_type = BIND_NONE;
-		entry->offset    = state->start_offset;
-	}
+	// This is a variation of a binary search algorithm which
+	// can retrieve all prefixes of a string with minimal
+	// comparisons, i.e. there is no need to lookup every
+	// prefix separately.
 
-	size_t i = 0;
-	size_t j = gu_seq_length(ps->concr->sequences)-1;
-	size_t s = j;
-	size_t n = 1;
-	size_t sent_len = strlen(ps->sentence);
+	while (i <= j) {
+		int k  = (i+j) / 2;
+		PgfSequence* seq = gu_seq_index(ps->concr->sequences, PgfSequence, k);
 
-	while (state->end_offset + n <= sent_len) {
-		while (i <= j) {
-			size_t k  = (i+j) / 2;
-			PgfSequence* seq = gu_seq_index(ps->concr->sequences, PgfSequence, k);
-			
-			GuString current = ps->sentence + state->end_offset;
-			BIND_TYPE bind_type = state->needs_bind ? BIND_NONE : BIND_HARD;
-			switch (pgf_symbols_cmp(&current, n, &bind_type, seq->syms)) {
-			case -2:
-				j = k-1;
-				s = j;
-				break;
-			case -1:
-				j = k-1;
-				break;
-			case 0: {
-				if (seq->idx != NULL) {
-					PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
-					entry->idx       = seq->idx;
-					entry->bind_type = bind_type;
-					entry->offset    = (current - ps->sentence);
-				}
-				i = k+1;
-				goto next;
-			}
-			case 1:
-				i = k+1;
-				break;
-			}
-		}
+		GuString start   = ps->sentence + state->end_offset;
+		GuString current = start;
+		BIND_TYPE bind_type = state->needs_bind ? BIND_NONE : BIND_HARD;
+		int cmp = pgf_symbols_cmp(&current, &bind_type, seq->syms, ps->case_sensitive);
+		if (cmp < 0) {
+			j = k-1;
+		} else if (cmp > 0) {
+			ptrdiff_t len = current - start;
 
-next:;
-		size_t n_pres = gu_buf_length(ps->concr->pre_sequences);
-		for (size_t pi = 0; pi < n_pres; pi++) {
-			PgfSequence* seq = gu_buf_index(ps->concr->pre_sequences, PgfSequence, pi);
+			if (min <= len)
+				pgf_parsing_lookahead(ps, state, i, k-1, min, len);
 
-			GuString current = ps->sentence + state->end_offset;
-			BIND_TYPE bind_type = state->needs_bind ? BIND_NONE : BIND_HARD;
-			if (pgf_symbols_cmp(&current, n, &bind_type, seq->syms) == 0) {
+			if (len+1 <= max)
+				pgf_parsing_lookahead(ps, state, k+1, j, len+1, max);
+
+			break;
+		} else {
+			ptrdiff_t len = current - start;
+
+			if (min <= len-1)
+				pgf_parsing_lookahead(ps, state, i, k-1, min, len-1);
+
+			if (seq->idx != NULL) {
 				PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
 				entry->idx       = seq->idx;
 				entry->bind_type = bind_type;
 				entry->offset    = (current - ps->sentence);
 			}
-		}
 
-		j = s;
-		n++;
+			if (len+1 <= max)
+				pgf_parsing_lookahead(ps, state, k+1, j, len+1, max);
+
+			break;
+		}
+	}
+}
+
+static void
+pgf_parsing_lookahead_pre(PgfParsing *ps, PgfParseState* state)
+{
+	size_t n_pres = gu_buf_length(ps->concr->pre_sequences);
+	for (size_t pi = 0; pi < n_pres; pi++) {
+		PgfSequence* seq = gu_buf_index(ps->concr->pre_sequences, PgfSequence, pi);
+
+		GuString current = ps->sentence + state->end_offset;
+		BIND_TYPE bind_type = state->needs_bind ? BIND_NONE : BIND_HARD;
+		if (pgf_symbols_cmp(&current, &bind_type, seq->syms, ps->case_sensitive) == 0) {
+			PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
+			entry->idx       = seq->idx;
+			entry->bind_type = bind_type;
+			entry->offset    = (current - ps->sentence);
+		}
 	}
 }
 
@@ -1202,8 +1193,7 @@ pgf_new_parse_state(PgfParsing* ps, size_t start_offset,
 
 	size_t end_offset = start_offset;
 	GuString current = ps->sentence + end_offset;
-	size_t len = strlen(current);
-	while (skip_space(&current, &len)) {
+	while (skip_space(&current)) {
 		end_offset++;
 	}
 
@@ -1226,7 +1216,10 @@ pgf_new_parse_state(PgfParsing* ps, size_t start_offset,
 	if (ps->before == NULL && start_offset == 0)
 		state->needs_bind = false;
 
-	pgf_parsing_lookahead(ps, state);
+	pgf_parsing_lookahead(ps, state,
+	                      0, gu_seq_length(ps->concr->sequences)-1,
+	                      0, strlen(ps->sentence)-state->end_offset);
+	pgf_parsing_lookahead_pre(ps, state);
 
 	*pstate = state;
 
@@ -1237,18 +1230,17 @@ static void
 pgf_parsing_add_transition(PgfParsing* ps, PgfToken tok, PgfItem* item)
 {	
 	GuString current = ps->sentence + ps->before->end_offset;
-	size_t len = strlen(current);
 
-	if (ps->prefix != NULL && ps->sentence[ps->before->end_offset] == 0) {
+	if (ps->prefix != NULL && *current == 0) {
 		if (gu_string_is_prefix(ps->prefix, tok)) {
 			ps->tp = gu_new(PgfTokenProb, ps->out_pool);
 			ps->tp->tok  = tok;
 			ps->tp->prob = item->inside_prob + item->conts->outside_prob;
 		}
 	} else {
-		if (!ps->before->needs_bind && cmp_string(&current, &len, tok) == 0) {
+		if (!ps->before->needs_bind && cmp_string(&current, tok, ps->case_sensitive) == 0) {
 			PgfParseState* state =
-				pgf_new_parse_state(ps, (current - ps->sentence), 
+				pgf_new_parse_state(ps, (current - ps->sentence),
 				                    BIND_NONE,
 				                    item->inside_prob+item->conts->outside_prob);
 			gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
@@ -1481,7 +1473,7 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 						size_t start  = ps->before->end_offset;
 						size_t offset = start;
 						PgfExprProb *ep =
-							callback->match(callback,
+							callback->match(callback, ps->concr,
 											slit->r,
 											ps->sentence, &offset,
 											ps->out_pool);
@@ -1559,7 +1551,8 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 		}
 		break;
 	}
-	case PGF_SYMBOL_SOFT_BIND: {
+	case PGF_SYMBOL_SOFT_BIND:
+	case PGF_SYMBOL_SOFT_SPACE: {
 		if (ps->before->start_offset == ps->before->end_offset) {
 			if (ps->before->needs_bind) {
 				PgfParseState* state =
@@ -1580,7 +1573,10 @@ pgf_parsing_symbol(PgfParsing* ps, PgfItem* item, PgfSymbol sym)
 		}
 		break;
 	}
-	case PGF_SYMBOL_CAPIT: {
+	case PGF_SYMBOL_CAPIT:
+	case PGF_SYMBOL_ALL_CAPIT: {
+		pgf_item_advance(item, ps->pool);
+		pgf_parsing_symbol(ps, item, item->curr_sym);
 		break;
 	}
 	default:
@@ -1684,6 +1680,8 @@ pgf_new_parsing(PgfConcr* concr, GuString sentence, PgfCallbacksMap* callbacks,
 	ps->pool = pool;
 	ps->out_pool = out_pool;
 	ps->sentence = sentence;
+	ps->case_sensitive =
+		(gu_seq_binsearch(concr->cflags, pgf_flag_order, PgfFlag, "case_sensitive") == NULL);
 	ps->expr_queue = gu_new_buf(PgfExprState*, pool);
 	ps->max_fid = concr->total_cats;
 	ps->before = NULL;
@@ -2056,24 +2054,22 @@ pgf_parsing_last_token(PgfParsing* ps, GuPool* pool)
 	if (ps->before == NULL)
 		return "";
 
-	size_t start = ps->before->end_offset;
-	while (start > 0) {
-		char c = ps->sentence[start-1];
-		if (gu_is_space(c))
-			break;
-		start--;
+	const uint8_t* start = (uint8_t*) ps->sentence;
+	const uint8_t* end   = (uint8_t*) ps->sentence + ps->before->end_offset;
+
+	const uint8_t* p = start;
+	while (p < end) {
+		if (gu_ucs_is_space(gu_utf8_decode(&p))) {
+			start = p;
+		}
 	}
 
-	size_t end = ps->before->end_offset;
-	while (ps->sentence[end] != 0) {
-		char c = ps->sentence[end];
-		if (gu_is_space(c))
-			break;
-		end++;
+	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
+		end = p;
 	}
 
 	char* tok = gu_malloc(pool, end-start+1);
-	memcpy(tok, ps->sentence+start, (end-start));
+	memcpy(tok, start, (end-start));
 	tok[end-start] = 0;
 	return tok;
 }
@@ -2220,23 +2216,26 @@ pgf_morpho_iter(PgfProductionIdx* idx,
 	}
 }
 
+typedef struct {
+	GuOrder order;
+	bool case_sensitive;
+} PgfSequenceOrder;
+
 static int
-pgf_sequence_cmp_fn(GuOrder* self, const void* p1, const void* p2)
+pgf_sequence_cmp_fn(GuOrder* order, const void* p1, const void* p2)
 {
-	(void) self;
+	PgfSequenceOrder* self = gu_container(order, PgfSequenceOrder, order);
 	GuString sent = (GuString) p1;
 	const PgfSequence* sp2 = p2;
 
 	BIND_TYPE bind = BIND_HARD;
-	int res = pgf_symbols_cmp(&sent, strlen(sent), &bind, sp2->syms);
+	int res = pgf_symbols_cmp(&sent, &bind, sp2->syms, self->case_sensitive);
 	if (res == 0 && *sent != 0) {
 		res = 1;
 	}
 
 	return res;
 }
-
-static GuOrder pgf_sequence_order[1] = { { pgf_sequence_cmp_fn } };
 
 void
 pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
@@ -2250,8 +2249,12 @@ pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
 		}
 	}
 
+	bool case_sensitive =
+		(gu_seq_binsearch(concr->cflags, pgf_flag_order, PgfFlag, "case_sensitive") == NULL);
+
+	PgfSequenceOrder order = { { pgf_sequence_cmp_fn }, case_sensitive };
 	PgfSequence* seq = (PgfSequence*)
-		gu_seq_binsearch(concr->sequences, pgf_sequence_order,
+		gu_seq_binsearch(concr->sequences, &order.order,
 		                 PgfSequence, (void*) sentence);
 
 	if (seq != NULL && seq->idx != NULL)
@@ -2279,19 +2282,18 @@ gu_fullform_enum_next(GuEnum* self, void* to, GuPool* pool)
 	if (st->sequences != NULL) {
 		size_t n_seqs = gu_seq_length(st->sequences);
 		while (st->seq_idx < n_seqs) {
-			PgfSymbols* syms = gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->syms;
-			GuString tokens = pgf_get_tokens(syms, 0, pool);
-			
-			if (!gu_string_is_prefix(st->prefix, tokens)) {
+			PgfSequence* seq = gu_seq_index(st->sequences, PgfSequence, st->seq_idx);
+			GuString tokens = pgf_get_tokens(seq->syms, 0, pool);
+
+			if (gu_string_is_prefix(st->prefix, tokens) != 0) {
 				st->seq_idx = n_seqs;
 				break;
 			}
-				
-			if (strlen(tokens) > 0 &&
-				gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->idx != NULL) {
+
+			if (*tokens != 0 && seq->idx != NULL) {
 				entry = gu_new(PgfFullFormEntry, pool);
 				entry->tokens = tokens;
-				entry->idx    = gu_seq_index(st->sequences, PgfSequence, st->seq_idx)->idx;
+				entry->idx    = seq->idx;
 
 				st->seq_idx++;
 				break;
@@ -2346,7 +2348,11 @@ pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
 	state->prefix    = prefix;
 	state->seq_idx   = 0;
 
-	if (!gu_seq_binsearch_index(concr->sequences, pgf_sequence_order,
+	bool case_sensitive =
+		(gu_seq_binsearch(concr->cflags, pgf_flag_order, PgfFlag, "case_sensitive") == NULL);
+
+	PgfSequenceOrder order = { { pgf_sequence_cmp_fn }, case_sensitive };
+	if (!gu_seq_binsearch_index(concr->sequences, &order.order,
 	                            PgfSequence, (void*) prefix, 
 	                            &state->seq_idx)) {
 		state->seq_idx++;

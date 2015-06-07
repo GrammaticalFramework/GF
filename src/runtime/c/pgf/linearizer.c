@@ -652,6 +652,7 @@ typedef enum {
 	PGF_CACHED_END,
 	PGF_CACHED_BIND,
 	PGF_CACHED_CAPIT,
+	PGF_CACHED_ALL_CAPIT,
 	PGF_CACHED_NE
 } PgfLzrCachedTag;
 
@@ -718,7 +719,12 @@ pgf_lzr_cache_flush(PgfLzrCache* cache, PgfSymbols* form)
 			break;
 		case PGF_CACHED_CAPIT:
 			if ((*cache->lzr->funcs)->symbol_capit) {
-				(*cache->lzr->funcs)->symbol_capit(cache->lzr->funcs);
+				(*cache->lzr->funcs)->symbol_capit(cache->lzr->funcs, PGF_CAPIT_FIRST);
+			}
+			break;
+		case PGF_CACHED_ALL_CAPIT:
+			if ((*cache->lzr->funcs)->symbol_capit) {
+				(*cache->lzr->funcs)->symbol_capit(cache->lzr->funcs, PGF_CAPIT_ALL);
 			}
 			break;
 		case PGF_CACHED_NE:
@@ -797,11 +803,11 @@ pgf_lzr_cache_symbol_bind(PgfLinFuncs** funcs)
 }
 
 static void
-pgf_lzr_cache_symbol_capit(PgfLinFuncs** funcs)
+pgf_lzr_cache_symbol_capit(PgfLinFuncs** funcs, PgfCapitState capit)
 {
 	PgfLzrCache*  cache = gu_container(funcs, PgfLzrCache, funcs);
 	PgfLzrCached* event = gu_buf_extend(cache->events);
-	event->tag     = PGF_CACHED_CAPIT;
+	event->tag     = (capit == PGF_CAPIT_ALL) ? PGF_CACHED_ALL_CAPIT : PGF_CACHED_CAPIT;
 }
 
 static PgfLinFuncs pgf_lzr_cache_funcs = {
@@ -921,9 +927,18 @@ pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTreeApp* fapp,
 			}
 			break;
 		}
+		case PGF_SYMBOL_SOFT_SPACE: {
+			// SOFT_SPACE should be just ignored in linearization
+			break;
+		}
 		case PGF_SYMBOL_CAPIT:
 			if ((*lzr->funcs)->symbol_capit) {
-				(*lzr->funcs)->symbol_capit(lzr->funcs);
+				(*lzr->funcs)->symbol_capit(lzr->funcs, PGF_CAPIT_FIRST);
+			}
+			break;
+		case PGF_SYMBOL_ALL_CAPIT:
+			if ((*lzr->funcs)->symbol_capit) {
+				(*lzr->funcs)->symbol_capit(lzr->funcs, PGF_CAPIT_ALL);
 			}
 			break;
 		default:
@@ -1045,19 +1060,10 @@ typedef struct PgfSimpleLin PgfSimpleLin;
 struct PgfSimpleLin {
 	PgfLinFuncs* funcs;
 	bool bind;
-	bool capit;
+	PgfCapitState capit;
 	GuOut* out;
 	GuExn* err;
 };
-
-static void
-pgf_file_lzn_put_space(PgfSimpleLin* flin)
-{
-	if (flin->bind)
-		flin->bind = false;
-	else
-		gu_putc(' ', flin->out, flin->err);
-}
 
 static void
 pgf_file_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
@@ -1067,16 +1073,39 @@ pgf_file_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 		return;
 	}
 
-	pgf_file_lzn_put_space(flin);
+	if (flin->bind)
+		flin->bind = false;
+	else {
+		gu_putc(' ', flin->out, flin->err);
+		if (flin->capit == PGF_CAPIT_NEXT)
+			flin->capit = PGF_CAPIT_NONE;
+	}
 
-	if (flin->capit) {
+	switch (flin->capit) {
+	case PGF_CAPIT_NONE:
+		gu_string_write(tok, flin->out, flin->err);
+		break;
+	case PGF_CAPIT_FIRST: {
 		GuUCS c = gu_utf8_decode((const uint8_t**) &tok);
 		c = gu_ucs_to_upper(c);
 		gu_out_utf8(c, flin->out, flin->err);
-		flin->capit = false;
+		gu_string_write(tok, flin->out, flin->err);
+		flin->capit = PGF_CAPIT_NONE;
+		break;
+	}	
+	case PGF_CAPIT_ALL:
+		flin->capit = PGF_CAPIT_NEXT;
+		// continue
+	case PGF_CAPIT_NEXT: {
+		const uint8_t* p = (uint8_t*) tok;
+		while (*p) {
+			GuUCS c = gu_utf8_decode(&p);
+			c = gu_ucs_to_upper(c);
+			gu_out_utf8(c, flin->out, flin->err);
+		}
+		break;
 	}
-
-	gu_string_write(tok, flin->out, flin->err);
+	}
 }
 
 static void
@@ -1094,10 +1123,10 @@ pgf_file_lzn_symbol_bind(PgfLinFuncs** funcs)
 }
 
 static void
-pgf_file_lzn_symbol_capit(PgfLinFuncs** funcs)
+pgf_file_lzn_symbol_capit(PgfLinFuncs** funcs, PgfCapitState capit)
 {
 	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
-	flin->capit = true;
+	flin->capit = capit;
 }
 
 static PgfLinFuncs pgf_file_lin_funcs = {
@@ -1117,7 +1146,7 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
 	PgfSimpleLin flin = {
 		.funcs = &pgf_file_lin_funcs,
 		.bind = true,
-		.capit = false,
+		.capit = PGF_CAPIT_NONE,
 		.out = out,
 		.err = err
 	};

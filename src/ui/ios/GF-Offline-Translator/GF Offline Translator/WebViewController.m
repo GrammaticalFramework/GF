@@ -19,10 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    
-    [self.webView loadHTMLString:@"<html><head><title></title></head><body style=\"background:transparent;\"><h1> Noun </h1> <p>  </p> <table rules=all border=yes> <tr> <th> </th> <th> nom </th> <th> gen </th> </tr> <tr> <th> sg </th> <td> cake </td> <td> cake's </td> </tr> <tr> <th> pl </th> <td> cakes </td> <td> cakes' </td> </tr> </table> <p>  </p></body></html>" baseURL:nil];
+    [self.webView loadHTMLString:self.htmlToRender baseURL:nil];
 }
 
 @end

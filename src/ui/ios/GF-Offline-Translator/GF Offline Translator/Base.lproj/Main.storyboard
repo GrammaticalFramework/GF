@@ -228,10 +228,46 @@ If more than one language is added, you can change the language while typing. Fo
                             <outlet property="delegate" destination="Vu1-QE-7az" id="MZf-as-uDy"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <segue destination="4Hm-Xx-a85" kind="show" identifier="WebView" id="maE-LZ-yt0"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VmA-sb-BbB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1880" y="-784"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="X2Q-9F-hid">
+            <objects>
+                <viewController id="4Hm-Xx-a85" customClass="WebViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UCN-ya-kgJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="8GP-cw-HP4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="e4f-Yd-GYs">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Spb-gc-bFg">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Spb-gc-bFg" firstAttribute="top" secondItem="e4f-Yd-GYs" secondAttribute="top" id="2Iw-Fw-8mr"/>
+                            <constraint firstAttribute="trailing" secondItem="Spb-gc-bFg" secondAttribute="trailing" id="LPO-8J-Adk"/>
+                            <constraint firstItem="Spb-gc-bFg" firstAttribute="leading" secondItem="e4f-Yd-GYs" secondAttribute="leading" id="nDD-5G-4me"/>
+                            <constraint firstItem="8GP-cw-HP4" firstAttribute="top" secondItem="Spb-gc-bFg" secondAttribute="bottom" id="rhL-KZ-bwq"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="Spb-gc-bFg" id="aHr-v4-S6W"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yzz-Gx-TbE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2606" y="-784"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WFo-Wh-qjb">

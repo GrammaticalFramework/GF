@@ -7,7 +7,7 @@
 //
 
 #import "TranslationTextTableViewCell.h"
-#import "Translation.h"
+#import "PhraseTranslation.h"
 #import "Language.h"
 #import "UIColor+TranslationsResults.h"
 
@@ -32,7 +32,7 @@
     // Configure the view for the selected state
 }
 
-- (void)setCellWithLanguage:(Translation *)translation fromLanguage:(BOOL)fromLanguage {
+- (void)setCellWithLanguage:(PhraseTranslation *)translation fromLanguage:(BOOL)fromLanguage {
     
     Language *language = fromLanguage ? translation.fromLanguage : translation.toLanguage;
     NSString *text = fromLanguage ? translation.fromText : translation.toText;

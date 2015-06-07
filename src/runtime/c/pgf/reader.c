@@ -708,8 +708,22 @@ pgf_read_symbol(PgfReader* rdr)
 		gu_return_on_exn(rdr->err, gu_null_variant);
 		break;
 	}
+	case PGF_SYMBOL_SOFT_SPACE: {
+		gu_new_variant(PGF_SYMBOL_SOFT_SPACE,
+		               PgfSymbolBIND,
+		               &sym, rdr->opool);
+		gu_return_on_exn(rdr->err, gu_null_variant);
+		break;
+	}
 	case PGF_SYMBOL_CAPIT: {
 		gu_new_variant(PGF_SYMBOL_CAPIT,
+		               PgfSymbolCAPIT,
+		               &sym, rdr->opool);
+		gu_return_on_exn(rdr->err, gu_null_variant);
+		break;
+	}
+	case PGF_SYMBOL_ALL_CAPIT: {
+		gu_new_variant(PGF_SYMBOL_ALL_CAPIT,
 		               PgfSymbolCAPIT,
 		               &sym, rdr->opool);
 		gu_return_on_exn(rdr->err, gu_null_variant);

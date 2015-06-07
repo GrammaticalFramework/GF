@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Translation.h"
+#import "PhraseTranslation.h"
 
 @interface UIColor (TranslationsResults)
 

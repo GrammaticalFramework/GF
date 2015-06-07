@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-@class Translation;
+@class PhraseTranslation;
 
 @interface TranslationTextTableViewCell : UITableViewCell
 
 
-- (void)setCellWithLanguage:(Translation *)translation fromLanguage:(BOOL)fromLanguage;
+- (void)setCellWithLanguage:(PhraseTranslation *)translation fromLanguage:(BOOL)fromLanguage;
 
 @end
