@@ -12,11 +12,11 @@ concrete ExtraDut of ExtraDutAbs = CatDut **
     ConsVPI = consrTable Bool comma ;
 
     MkVPI vp = {s = \\b => useInfVP b vp} ;
---    ConjVPI = conjunctDistrTable Bool ;
---
---    ComplVPIVV v vpi = 
---        insertInf (vpi.s ! v.isAux) (
---            predVGen v.isAux v) ; ----
+    ConjVPI = conjunctDistrTable Bool ;
+
+    ComplVPIVV v vpi = 
+        insertInf (vpi.s ! v.isAux) (
+           predVGen v.isAux v) ; ----
 --{-
 --      insertExtrapos vpi.p3 (
 --        insertInf vpi.p2 (
