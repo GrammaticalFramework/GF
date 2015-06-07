@@ -17732,7 +17732,7 @@ lin nectarine_N = mkN "nettarina" ; -- status=guess
 lin nectary_N = mkN "nettario" ; -- status=guess
 lin need_N = mkN "bisogno" ; -- status=guess
 lin need_V = mkV (essere_V) "obbligato a" ; -- status=guess, src=wikt
-lin need_V2 = mkV2 (mkV (essere_V) "obbligato a") ; -- status=guess, src=wikt
+lin need_V2 = mkV2 (mkV avere_V "bisogno") ParadigmsIta.genitive ;
 lin need_VV = mkVV (mkV (essere_V) "obbligato a") ; -- status=guess, src=wikt
 lin needful_A = mkA "necessario" | mkA "richiesto" ; -- UWN
 lin needle_N = mkN "ago" ; -- status=guess
