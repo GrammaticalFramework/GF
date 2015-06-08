@@ -8861,7 +8861,7 @@ lin cant_V2 = mkV2 (mkV "kanten" | regV "kippen") ; -- status=guess, src=wikt st
 lin cantab_PN = mkPN "Cantab" ; -- src=eng status=guess
 lin cantabile_A = variants {} ;
 lin cantala_N = variants {} ;
-lin cantaloupe_N = mkN "Kantalupe";
+lin cantaloupe_N = mkN "Kantalupe" ;
 lin cantankerous_A = mk3A "launisch" "launischer" "launischste" | mkA "zänkisch" | mkA "mürrisch" | mkA "übellaunig" ; -- status=guess status=guess status=guess status=guess
 lin cantata_N = variants {} ;
 lin canteen_N = mkN "Besteckkasten" masculine ; -- status=guess
@@ -21450,8 +21450,8 @@ lin finland_PN = mkPN "Finnland" ; -- src=geonames status=guess
 lin finnan_N = variants {} ;
 lin finnan_haddie_N = variants {} ;
 lin finnan_haddock_N = variants {} ;
-lin finnishMasc_N = mkN "Finne" "Finnen" masculine ;
 lin finnishFem_N = variants {} ;
+lin finnishMasc_N = mkN "Finne" "Finnen" masculine ;
 lin finnish_A = mkA "finnisch" ;
 lin fiona_PN = mkPN "Fiona" ; -- src=eng status=guess
 lin fiord_N = variants {} ;
@@ -22156,7 +22156,7 @@ lin foochow_PN = mkPN "Foochow" ; -- src=eng status=guess
 lin food_N = mkN "Essen" neuter | mkN "Lebensmittel" feminine ; --- split: this was good food / shop food
 lin foodless_A = variants {} ;
 lin foodstuff_N = mkN "Nahrungsmittel" "Nahrungsmittel" neuter ; -- status=guess
-lin fool_N = variants {};
+lin fool_N = variants {} ;
 lin fool_V2 = mkV2 (mkV "täuschen" | regV "schwindeln" | mkV "betrügen" | irregV "verarschen" "verarscht" "verarschte" "verarschte" "verarscht") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin fool_about_V = variants {} ;
 lin fool_around_V = variants {} ;
@@ -26037,7 +26037,7 @@ lin headmaster_N = variants {} ; --
 lin headmastership_N = variants {} ;
 lin headmistress_N = mkN "Schulleiterin" feminine | mkN "Rekorin" feminine | mkN "Direktorin" feminine ; -- status=guess status=guess status=guess
 lin headmistressship_N = variants {} ;
-lin headpiece_N = variants {};
+lin headpiece_N = variants {} ;
 lin headpin_N = variants {} ;
 lin headquarter_N = variants {} ;
 lin headquarters_N = mkN "Zentrale" "Zentralen" feminine ; -- status=guess
@@ -31472,7 +31472,7 @@ lin ladyfish_N = variants {} ;
 lin ladylike_A = variants {} ;
 lin ladylikeness_N = variants {} ;
 lin ladylove_N = mkN "Feinsliebchen" "Feinsliebchen" neuter ; -- status=guess
-lin ladyship_N = variants {};
+lin ladyship_N = variants {} ;
 lin laelia_N = variants {} ;
 lin laetrile_N = variants {} ;
 lin lag_N = variants {} ;
@@ -33267,7 +33267,7 @@ lin lordliness_N = variants {} ;
 lin lordly_A = variants {} ;
 lin lordolatry_N = variants {} ;
 lin lordosis_N = variants {} ;
-lin lordship_N = variants {};
+lin lordship_N = variants {} ;
 lin lore_N = variants {} ;
 lin lorgnette_N = variants {} ;
 lin lorica_N = variants {} ;
@@ -43921,8 +43921,8 @@ lin practice_V2 = mkV2 (mkV "ausüben") | mkV2 (mkV "praktizieren") ; -- status=
 lin practician_N = variants {} ;
 lin practise_V = variants {} ; --
 lin practise_V2 = variants {} ; --
-lin practitionerMasc_N = mkN "Praktikant" "Praktikanten" masculine ;
 lin practitionerFem_N = mkN "Praktikantin" feminine ;
+lin practitionerMasc_N = mkN "Praktikant" "Praktikanten" masculine ;
 lin praenomen_N = mkN "Pränomen" neuter ; -- status=guess
 lin praesidium_N = variants {} ;
 lin praetor_N = mkN "Prätor" masculine ; -- status=guess
@@ -54172,10 +54172,10 @@ lin sprig_N = variants {} ;
 lin sprigged_A = variants {} ;
 lin sprightliness_N = variants {} ;
 lin sprightly_A = variants {} ;
-lin spring_1_N = mkN "Frühjahr";
-lin spring_2_N = mkN "Feder";
-lin spring_3_N = mkN "Quelle";
-lin spring_4_N = mkN "Sprung";
+lin spring_1_N = mkN "Frühjahr" ;
+lin spring_2_N = mkN "Feder" ;
+lin spring_3_N = mkN "Quelle" ;
+lin spring_4_N = mkN "Sprung" ;
 lin spring_V = irregV "springen" "springt" "sprang" "spränge" "gesprungen" ; -- status=guess, src=wikt
 lin spring_V2 = mkV2 (irregV "springen" "springt" "sprang" "spränge" "gesprungen") ; -- status=guess, src=wikt
 lin spring_back_V = variants {} ;
@@ -54196,7 +54196,7 @@ lin springfield_PN = mkPN "Springfield" ; -- src=geonames status=guess
 lin springless_A = variants {} ;
 lin springlike_A = variants {} ;
 lin springtide_N = variants {} ;
-lin springtime_N = mkN "Frühjahr";
+lin springtime_N = mkN "Frühjahr" ;
 lin springy_A = variants {} ;
 lin sprinkle_N = mkN "Nieselregen" "Nieselregen" masculine ; -- status=guess
 lin sprinkle_V2 = mkV2 (mkV "sprühen") ; -- status=guess, src=wikt
@@ -56446,7 +56446,7 @@ lin swedeMasc_N = mkN "Schwede" "Schweden" masculine ;
 lin sweden_PN = mkPN "Schweden" ; -- src=geonames status=guess
 lin swedishFem_N = variants {} ;
 lin swedishMasc_N = mkN "Schwede" "Schweden" masculine ;
-lin swedish_A = mkA "schwedisch";
+lin swedish_A = mkA "schwedisch" ;
 lin sweep_N = variants {} ;
 lin sweep_V = regV "fegen" | regV "kehren" ; -- status=guess, src=wikt status=guess, src=wikt
 lin sweep_V2 = mkV2 (regV "fegen" | regV "kehren") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -59140,8 +59140,8 @@ lin trainband_N = variants {} ;
 lin trainbandsman_N = variants {} ;
 lin trainbearer_N = variants {} ;
 lin trained_A = variants {} ; --
-lin traineeMasc_N = mkN "Praktikant" "Praktikanten" masculine ;
 lin traineeFem_N = mkN "Praktikantin" feminine ;
+lin traineeMasc_N = mkN "Praktikant" "Praktikanten" masculine ;
 lin traineeship_N = variants {} ;
 lin trainer_N = mkN "Trainer" "Trainer" masculine ; -- status=guess
 lin training_N = mkN "Ausbildung" | mkN "Training" "Trainings" neuter ; -- split: teacher training | gym training
@@ -65186,7 +65186,6 @@ lin zymoid_A = variants {} ;
 lin zymology_N = variants {} ;
 lin zymosis_N = variants {} ;
 lin zymotic_A = variants {} ;
-
 oper OP_by_Prep : Prep = mkPrep "durch" accusative ;
 oper OP_for_Prep : Prep = S.for_Prep ;
 oper OP_on_Prep : Prep = S.on_Prep ;
@@ -65256,7 +65255,6 @@ oper OP_for_Adv : Adv = mkAdv "dafür" ;
 oper OP_open_Adv : Adv = variants {} ; --
 oper OP_after_Adv : Adv = mkAdv "hinterher" | mkAdv "darauf" ; -- status=guess status=guess
 oper OP_clear_Adv : Adv = variants {} ;
-
 oper OP_account_V : V = variants {} ; --
 oper OP_act_V : V = mkV "handeln" ;
 oper OP_add_V : V = mkV "addieren" "addiert" "addierte" "addiere" "addiert" ; --- delete: false extraction
@@ -65494,5 +65492,4 @@ oper OP_shrug_V2 : V2 = mkV2 ( junkV "mit den Schultern" ( mkV "zucken" ) ) | mk
 oper OP_shut_V2 : V2 = mkV2 (mkV "schließen" | prefixV "zu" (regV "machen")) ; -- status=guess, src=wikt status=guess, src=wikt
 oper OP_take_V2 : V2 = mkV2 (irregV "nehmen" "nimmt" "nahm" "nähme" "genommen") ;
 oper OP_urge_V2 : V2 = mkV2 (mkV "drängen" | regV "mahnen" | irregV "treiben" "treibt" "trieb" "triebe" "getrieben") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-
 }
