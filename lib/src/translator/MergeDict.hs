@@ -49,6 +49,7 @@ mergeDict old new pref comm file = do
   olds1 <- readFile old >>= return . lines
   news1 <- readFile new >>= return . lines
   let (preamble,olds2) = break ((== ["lin"]) . take 1 . words) olds1
+  let lastopers = [l | l@('o':'p':'e':'r':_) <- olds2] 
   let olds = [mkRule 0 (w:ws) | w:ws <- map words olds2, w == "lin"]
   let news = [mkRule 1 (w:ws) | w:ws <- map words news1, w == "lin"]
   let lins = sort $ olds ++ news
@@ -56,6 +57,7 @@ mergeDict old new pref comm file = do
   let lins2 = map (mergeRule pref comm) linss
   writeFile file $ unlines preamble
   appendFile file $ unlines $ map prRule lins2
+  appendFile file $ unlines $ lastopers
   appendFile file "}"
 
 data Rule = R {fun :: String, priority :: Int, lins :: [[String]], comment :: [String]} -- fun, variants, comment
