@@ -25279,8 +25279,8 @@ lin spreadsheet_N = mkN "foglio_elettronico" | mkN "spreadsheet" ; -- UWN
 lin spree_N = mkN "baldoria" ; -- status=guess
 lin sprightliness_N = mkN "animazione" | mkN "brio" | mkN "briosità" | mkN "vita" | mkN "vivacità" ; -- UWN
 lin sprightly_A = mkA "vivace" ; -- status=guess
-lin spring_1_N = mkN "molla" ; -- status=guess ---- sense to be split
-lin spring_2_N = mkN "molla" ; -- status=guess ---- sense to be split
+lin spring_1_N = mkN "primavera" ;
+lin spring_2_N = mkN "primavera" ; ---- sense to be split
 lin spring_3_N = mkN "molla" ; -- status=guess ---- sense to be split
 lin spring_4_N = mkN "molla" ; -- status=guess ---- sense to be split
 lin spring_N = mkN "molla" ; -- status=guess
