@@ -7,15 +7,18 @@
 </head>
 <body>
 
-<h1>The Human Language Compiler - a mobile speech and text translation app for Android</h1>
+<h1>GF Offline Translator - a mobile speech and text translation app
+for Android and iOS</h1>
 
 <center>
 <img src="images/app-trans.png" width=200>
 </center>
 
 <p>
-Download for free from <a
+Android: download for free from <a
 href="https://play.google.com/store/apps/details?id=org.grammaticalframework.ui.android">Play Store</a>!
+<br>
+iOS (iPhone, iPad): coming in June 2015.
 </p>
 
 <p>
@@ -25,27 +28,23 @@ Or try first a
 
 
 <p>
-The Human Language Compiler differs from other translation
-systems that are currently available, by using grammars and
-semantics to perform the translation. Other systems use either
-statistics or shallow rules based on dictionary lookup. Our
-technology is similar to the way in which a compiler translates
-program code to machine code - hence the name of our system.
-
-<p>
-
-The technology enables the system to be compact in size
-and give control on quality. It indicates confidence with colours:
+GF Offline Translator is based on grammar and semantics. It is compact in size
+and gives control on quality. Its technology is inspired by compilers, which are
+programs that translate computer languages.
+Most other translators for human language are based on
+statistics and have less control of quality and are much bigger, so that
+they require either an internet connection or a huge storage on your phone.
+</p>
+The app indicates translation confidence with colours:
 <ul>
 		<li><b>Green</b>:
                  semantic translation, should be correct.
-                 But not necessarily the only correct one. 
+                 But not necessarily the only correct one.
+                 You can tap the output to see alternatives.
                 </li>
 		<li><b>Yellow</b>:
                  syntactic translation, should be grammatically correct.
-                 But can be very strange in its interpretation and
-		choice of words; there can also be bugs in word
-		inflection and genders.
+                 But can be very strange in its interpretation and choice of words.
                 </li>
 		<li><b>Light red</b>:
                  chunk translation, probably incorrect.
@@ -56,16 +55,23 @@ and give control on quality. It indicates confidence with colours:
                  Builds the translation word by word.
                 </li>
 </ul>
-The green translations currently come from a tourist phrasebook, which allows
+The green translations come from a tourist phrasebook, which allows
 you to translate things like "hello" and "how far is the airport from
-the hotel". But this part can be easily adapted to other uses, such as
-technical language.
+the hotel". 
 </p>
 
 <p>
-You can translate both speech and text, as selected in the menu in the upper right corner.
-Translation works between any pair of the supported languages, which means 110
-language pairs at the moment. But different languages are on different levels of development.
+You can translate both speech and text, as selected in the menu in the
+upper right corner. Both kinds of input can be edited with the
+keyboard by first tapping at the input field. This is often needed 
+because of <b>speech recognition errors</b>. Changing words
+from <b>upper to lower case</b> may also be needed.
+At the moment, <b>Japanese</b> and <b>Thai</b> input must be separated
+to words, whereas Chinese works without spaces.
+</p>
+<p>
+Translation works between any of the 14 supported languages, which means 182
+language pairs in the current version. But different languages are on different levels of development.
 The following table gives a rough idea of what to expect:
 </p>
 
@@ -74,21 +80,29 @@ The following table gives a rough idea of what to expect:
 <table rules=all border=yes>
 <tr> <th></th>          <th>coverage</th> <th>quality</th> <th>speed</th> <th>speech</th> </tr>
 <tr> <th>Bulgarian</th> <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=palegreen></td> <td bgcolor=yellow>in only</td></tr>
-<tr> <th>Chinese</th>   <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=palegreen></td> <td bgcolor=yellow>diff in/out</td> </tr>
+<tr> <th>Catalan</th>   <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=yellow>in only</td></tr>
+<tr> <th>Chinese</th>   <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=palegreen></td> <td bgcolor=yellow></td> </tr>
 <tr> <th>Dutch</th>     <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> </tr>
 <tr> <th>English</th>   <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> </tr>
-<tr> <th>Finnish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>Finnish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=yellow>in only</td></tr>
 <tr> <th>French</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
 <tr> <th>German</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
-<tr> <th>Hindi</th>     <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=yellow></td> <td bgcolor=yellow>out only</td> </tr>
-<tr> <th>Italian</th>    <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
-<tr> <th>Spanish</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
-<tr> <th>Swedish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> </tr>
+<tr> <th>Hindi</th>     <td bgcolor=pink></td> <td bgcolor=red></td> <td bgcolor=yellow></td> <td bgcolor=yellow>in only</td> </tr>
+<tr> <th>Italian</th>   <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>Japanese</th>  <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=yellow></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>Spanish</th>   <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>Swedish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> <td bgcolor=yellow>in only</td></tr>
+<tr> <th>Thai</th>   <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=yellow></td> <td bgcolor=palegreen></td></tr>
 </table>
 </center>
-This is new and experimental technology, and we are constantly working
-on the app. Expect frequent updates and improvements! 
 </p>
+<p>
+The speech input and output use Google's voice services. Their status
+can hence change without notice. You can make it more stable by
+installing third-party speech tools, such as SVOX, which provides
+output for most of the listed languages.
+</p>
+
 <p>
 When you tap on a translation you get a screen with <b>alternative translations</b>.
 Tapping on each of the alternatives
@@ -98,27 +112,8 @@ and a syntax tree otherwise.
 </p>
 
 <p>
-The app also provides an <b>input method</b> which you can use as 
-an alternative keyboard which allows you to do translation from
-other applications, for instance while you are entering SMS or e-mail.
-To activate it go to Settings > Language &amp; input.
-</p>
-
-<p>
-The Human Languge Compiler works <b>completely off-line</b>, without
-internet connection, although being on-line may give you better
-speech input and output and enable it for more languages.
-The app is small (around 24 MB for all languages).
-We do not show ads.
-</p>
-
-<p>
 Powered by <a href="http://www.grammaticalframework.org/">GF</a>,
 built by support from the GF community and from <a href="http://www.digitalgrammars.com/">Digital Grammars</a>.
-</p>
-<p>
-<i>Digital Grammars can tailor this app to you needs - tell us what you want to see
-	in the green area!</i>
 </p>
 
 <p>
