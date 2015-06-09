@@ -67,9 +67,11 @@ upper right corner. Both kinds of input can be edited with the
 keyboard by first tapping at the input field. This is often needed 
 because of <b>speech recognition errors</b>. Changing words
 from <b>upper to lower case</b> may also be needed.
+At the moment, <b>Japanese</b> and <b>Thai</b> input must be separated
+to words, whereas Chinese works without spaces.
 </p>
 <p>
-Translation works between any supported languages, which means 132
+Translation works between any of the 14 supported languages, which means 182
 language pairs in the current version. But different languages are on different levels of development.
 The following table gives a rough idea of what to expect:
 </p>
@@ -80,11 +82,11 @@ The following table gives a rough idea of what to expect:
 <tr> <th></th>          <th>coverage</th> <th>quality</th> <th>speed</th> <th>speech</th> </tr>
 <tr> <th>Bulgarian</th> <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=palegreen></td> <td bgcolor=yellow>in only</td></tr>
 <tr> <th>Catalan</th>   <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=yellow>in only</td></tr>
-<tr> <th>Chinese</th>   <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=palegreen></td> <td bgcolor=yellow>diff in/out*</td> </tr>
+<tr> <th>Chinese</th>   <td bgcolor=pink></td> <td bgcolor=pink></td> <td bgcolor=palegreen></td> <td bgcolor=yellow></td> </tr>
 <tr> <th>Dutch</th>     <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=yellow></td> <td bgcolor=palegreen></td> </tr>
 <tr> <th>English</th>   <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> <td bgcolor=palegreen></td> </tr>
 <tr> <th>Finnish</th>   <td bgcolor=yellow></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=yellow>in only</td></tr>
-<tr> <th>French</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=red></td> <td bgcolor=palegreen></td></tr>
+<tr> <th>French</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
 <tr> <th>German</th>    <td bgcolor=pink></td> <td bgcolor=yellow></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
 <tr> <th>Hindi</th>     <td bgcolor=pink></td> <td bgcolor=red></td> <td bgcolor=yellow></td> <td bgcolor=yellow>in only</td> </tr>
 <tr> <th>Italian</th>   <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=pink></td> <td bgcolor=palegreen></td></tr>
@@ -94,15 +96,12 @@ The following table gives a rough idea of what to expect:
 <tr> <th>Thai</th>   <td bgcolor=pink></td> <td bgcolor=pink></td><td bgcolor=yellow></td> <td bgcolor=palegreen></td></tr>
 </table>
 </center>
-*<b>Japanese</b> and <b>Thai</b> input must be separated to words.
-<br>
-**<b>Chinese</b> uses Mandarin for input and Cantonese for output.
 </p>
 <p>
 The speech input and output use Google's voice services. Their status
 can hence change without notice. You can make it more stable by
-installing third-party speech tools, such as SVOX, which also provides
-output in Finnish and Swedish.
+installing third-party speech tools, such as SVOX, which provides
+output for most of the listed languages.
 </p>
 
 <p>
@@ -125,7 +124,9 @@ The translation works <b>completely off-line</b>, without
 internet connection, when doing text-based translation.
 Even speech works off-line in some languages,
 but being on-line may give you better
-speech input and output.
+speech input and output and more languages.
+</p>
+<p>
 You can also install third-party off-line speech engines, such as
 <a href="https://play.google.com/store/apps/developer?id=SVOX+Mobile+Voices&hl=en">SVOX</a>.
 Consult the voice/language settings on your phone to find the optimal
