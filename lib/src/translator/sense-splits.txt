@@ -1,0 +1,688 @@
+fun abortionistFem_N : N ;
+fun abortionistMasc_N : N ;
+fun academicianFem_N : N ;
+fun academicianMasc_N : N ;
+fun accuserFem_N : N ;
+fun accuserMasc_N : N ;
+fun acrobatFem_N : N ;
+fun acrobatMasc_N : N ;
+fun activistFem_N : N ;
+fun activistMasc_N : N ;
+fun actor_1_N : N  ;  -- | a Shakespeare actor
+fun actor_2_N : N  ;  -- | an important actor
+fun administratorFem_N : N ;
+fun administratorMasc_N : N ;
+fun adventistFem_N : N ;
+fun adventistMasc_N : N ;
+fun adviserFem_N : N ;
+fun adviserMasc_N : N ;
+fun advocateFem_N : N ;
+fun advocateMasc_N : N ;
+fun aestheteFem_N : N ;
+fun aestheteMasc_N : N ;
+fun afghanFem_N : N ;
+fun afghanMasc_N : N ;
+fun afghanistaniFem_N : N ;
+fun afghanistaniMasc_N : N ;
+fun africanFem_N : N ;
+fun africanMasc_N : N ;
+fun afrikanerFem_N : N ;
+fun afrikanerMasc_N : N ;
+fun afro_americanFem_N : N ;
+fun afro_americanMasc_N : N ;
+fun agentFem_N : N ;
+fun agentMasc_N : N ;
+fun aggressorFem_N : N ;
+fun aggressorMasc_N : N ;
+fun alienFem_N : N ;
+fun alienMasc_N : N ;
+fun alsatianFem_N : N ;
+fun alsatianMasc_N : N ;
+fun amateurFem_N : N ;
+fun amateurMasc_N : N ;
+fun americanFem_N : N ;
+fun americanMasc_N : N ;
+fun anarchistFem_N : N ;
+fun anarchistMasc_N : N ;
+fun anglophilFem_N : N ;
+fun anglophilMasc_N : N ;
+fun anglophileFem_N : N ;
+fun anglophileMasc_N : N ;
+fun anthropologistFem_N : N ;
+fun anthropologistMasc_N : N ;
+fun arabianFem_N : N ;
+fun arabianMasc_N : N ;
+fun architectFem_N : N ;
+fun architectMasc_N : N ;
+fun area_1_N : N ;
+fun area_2_N : N ;
+fun area_3_N : N ;
+fun area_4_N : N ;
+fun area_5_N : N ;
+fun area_6_N : N ;
+fun arm_1_N : N ; -- | arms and legs
+fun arm_2_N : N ; -- | a farewell to arms
+fun aryanFem_N : N ;
+fun aryanMasc_N : N ;
+fun assistantFem_N : N ;
+fun assistantMasc_N : N ;
+fun athenianFem_N : N ;
+fun athenianMasc_N : N ;
+fun athens_1_PN : PN ;  -- | city in Greece
+fun athens_2_PN : PN ;  -- | city in America
+fun attempt_1_N : N ;
+fun attempt_2_N : N ;
+fun australianFem_N : N ;
+fun australianMasc_N : N ;
+fun austrianFem_N : N ;
+fun austrianMasc_N : N ;
+fun authority_1_N : N  ; -- | he is an authority in his field
+fun authority_2_N : N  ; -- | the police and other authorities
+fun aviatorFem_N : N ;
+fun aviatorMasc_N : N ;
+fun away_1_Adv : Adv  ; -- | she is away
+fun away_2_Adv : Adv  ; -- | she went away
+fun backerFem_N : N ;
+fun backerMasc_N : N ;
+fun bar_1_N : N  ; -- | have a drink in the bar
+fun bar_2_N : N  ; -- | bars in front of the window
+fun betrothedFem_N : N ;
+fun betrothedMasc_N : N ;
+fun board_1_N : N  ; -- | write it on the board
+fun board_2_N : N  ; -- | board member
+fun brassiere_1_N : N ;
+fun brassiere_2_N : N ;
+fun brunetteFem_N : N ;
+fun brunetteMasc_N : N ;
+fun buddhistFem_N : N ;
+fun buddhistMasc_N : N ;
+fun bulgarianFem_N : N ;
+fun bulgarianMasc_N : N ;
+fun buyerFem_N : N ;
+fun buyerMasc_N : N ;
+fun can_1_VV : VV ; -- | I can come with you (possibility)
+fun can_2_VV : VV ; -- | I can speak English (know-how)
+fun candidateFem_N : N ;
+fun candidateMasc_N : N ;
+fun canon_1_N : N ;
+fun canon_2_N : N ;
+fun capital_1_N : N  ; -- | the capital of France
+fun capital_2_N : N  ; -- | risk capital
+fun capital_3_N : N  ; -- | written in capitals
+fun captiveFem_N : N ;
+fun captiveMasc_N : N ;
+fun cardiologistFem_N : N ;
+fun cardiologistMasc_N : N ;
+fun cartoonistFem_N : N ;
+fun cartoonistMasc_N : N ;
+fun catalanFem_N : N ;
+fun catalanMasc_N : N ;
+fun catholicFem_N : N ;
+fun catholicMasc_N : N ;
+fun caucasianFem_N : N ;
+fun caucasianMasc_N : N ;
+fun cellistFem_N : N ;
+fun cellistMasc_N : N ;
+fun certain_1_A : A  ; -- | I am certain
+fun certain_2_A : A  ; -- | a certain house
+fun charabanc_1_N : N ;
+fun charabanc_2_N : N ;
+fun character_1_N : N ;
+fun character_2_N : N ;
+fun charge_1_N : N  ; -- | battery charge
+fun charge_2_N : N  ; -- | charge against him
+fun chemistFem_N : N ;
+fun chemistMasc_N : N ;
+fun chieftainFem_N : N ;
+fun chieftainMasc_N : N ;
+fun chileanFem_N : N ;
+fun chileanMasc_N : N ;
+fun chineseFem_N : N ;
+fun chineseMasc_N : N ;
+fun citizenFem_N : N ;
+fun citizenMasc_N : N ;
+fun clarinetistFem_N : N ;
+fun clarinetistMasc_N : N ;
+fun club_1_N : N  ; -- | member of the club
+fun club_2_N : N  ; -- | hit the ball with a club
+fun coach_1_N : N  ; -- | football coach
+fun coach_2_N : N  ; -- | coach in a train
+fun coach_3_N : N  ; -- | bus
+fun coauthorFem_N : N ;
+fun coauthorMasc_N : N ;
+fun columnistFem_N : N ;
+fun columnistMasc_N : N ;
+fun command_1_N : N  ; -- | she gave us commands
+fun command_2_N : N  ; -- | she took the command
+fun common_1_A : A  ; -- | very common
+fun common_2_A : A  ; -- | common to us
+fun company_1_N : N ;
+fun company_2_N : N ;
+fun compatriotFem_N : N ;
+fun compatriotMasc_N : N ;
+fun condition_1_N : N ; -- | there is one condition
+fun condition_2_N : N ; -- | he is in a bad condition
+fun confidantFem_N : N ;
+fun confidantMasc_N : N ;
+fun conservative_1_N : N ; -- | a person who is conservative
+fun conservative_2_N : N ; -- | a preservative
+fun correction_1_N : N;  -- | the process of correction
+fun correction_2_N : N;  -- | the effect of the correction
+fun cortege_1_N : N ;
+fun cortege_2_N : N ;
+fun court_1_N : N  ; -- | the emperor's court
+fun court_2_N : N  ; -- | the supreme court
+fun crepe_1_N : N ;
+fun crepe_2_N : N ;
+fun critical_1_A : A  ; -- | you are very critical
+fun critical_2_A : A  ; -- | of critical importance
+fun cure_1_N : N ;
+fun cure_2_N : N ;
+fun customerFem_N : N ;
+fun customerMasc_N : N ;
+fun danishFem_N : N ;
+fun danishMasc_N : N ;
+fun date_1_N : N ;  -- | the specified day of the month
+fun date_3_N : N  ; -- | she was my first date
+fun date_3_N : N ;  -- | a meeting arranged in advance
+fun date_7_N : N ;  -- | sweet edible fruit of the date palm with a single long woody seed
+fun debaucheeFem_N : N ;
+fun debaucheeMasc_N : N ;
+fun debris_1_N : N ;
+fun debris_2_N : N ;
+fun debut_1_N : N ;
+fun debut_2_N : N ;
+fun debutante_1_N : N ;
+fun debutante_2_N : N ;
+fun defenderFem_N : N ;
+fun defenderMasc_N : N ;
+fun degree_1_N : N ;  -- | a position on a scale of intensity or amount or quality
+fun degree_2_N : N ;  -- | an award conferred by a college or university signifying that the recipient has satisfactorily completed a course of study
+fun degree_3_N : N ;  -- | a unit of temperature on a specified scale
+fun dermatologistFem_N : N ;
+fun dermatologistMasc_N : N ;
+fun discovererFem_N : N ;
+fun discovererMasc_N : N ;
+fun division_1_N : N  ; -- | division at university
+fun division_2_N : N  ; -- | division in the army 
+fun division_3_N : N  ; -- | multiplication and division 
+fun draw_1_V2 : V2 ; -- | draw the carriage
+fun draw_2_V2 : V2 ; -- | draw a picture
+fun driverFem_N : N ;    -- | taxi driver
+fun driverMasc_N : N ;   -- | taxi driver
+fun dutchFem_N : N ;
+fun dutchMasc_N : N ;
+fun economy_1_N : N  ; -- | the country has a good economy
+fun economy_2_N : N  ; -- | saving money
+fun elitistFem_N : N ;
+fun elitistMasc_N : N ;
+fun elocutionistFem_N : N ;
+fun elocutionistMasc_N : N ;
+fun end_1_N : N  ; -- | the end of his life
+fun end_2_N : N  ; -- | the other end of the room
+fun englishFem_N : N ;
+fun englishMasc_N : N ;
+fun entry_1_N : N  ; -- | no entry
+fun entry_2_N : N  ; -- | lexical entry
+fun epilepticFem_N : N ;
+fun epilepticMasc_N : N ;
+fun evidence_1_N : N  ; -- | give me some evidence
+fun evidence_2_N : N  ; -- | the evidence of his opinion
+fun evolutionistFem_N : N ;
+fun evolutionistMasc_N : N ;
+fun experimenterFem_N : N ;
+fun experimenterMasc_N : N ;
+fun explorerFem_N : N ;
+fun explorerMasc_N : N ;
+fun exporterFem_N : N ;
+fun exporterMasc_N : N ;
+fun expressionistFem_N : N ;
+fun expressionistMasc_N : N ;
+fun fall_1_N : N  ; -- | rise and fall
+fun fall_2_N : N  ; -- | autumn
+fun fan_1_N : N ;
+fun fan_2_N : N ;
+fun fan_3_N : N ;
+fun fanaticFem_N : N ;
+fun fanaticMasc_N : N ;
+fun fatalistFem_N : N ;
+fun fatalistMasc_N : N ;
+fun favouriteFem_N : N ;
+fun favouriteMasc_N : N ;
+fun feministFem_N : N ;
+fun feministMasc_N : N ;
+fun field_1_N : N  ; -- | cotton field
+fun field_2_N : N  ; -- | field work
+fun field_3_N : N  ; -- | sports field
+fun field_4_N : N  ; -- | algebraic structure
+fun figure_1_N : N  ;  -- | a round figure
+fun figure_2_N : N  ;  -- | convincing figures
+fun film_1_N : N  ;  -- | movie
+fun film_2_N : N  ;  -- | thin layer
+fun finnishFem_N : N ;
+fun finnishMasc_N : N ;
+fun fire_1_N : N ; --- ??
+fun fire_2_N : N ; --- ??
+fun florence_1_PN : PN;   -- | the country name
+fun florence_2_PN : PN;   -- | personal name
+fun foreign_1_A : A  ; -- | a foreign citizen
+fun foreign_2_A : A  ; -- | don't throw foreign objects into the toilet
+fun fork_1_N : N ;
+fun fork_3_N : N ;
+fun fork_4_N : N ;
+fun frenchFem_N : N ;
+fun frenchMasc_N : N ;
+fun funambulistFem_N : N ;
+fun funambulistMasc_N : N ;
+fun future_1_N : N ;
+fun future_3_N : N ;
+fun futuristFem_N : N ;
+fun futuristMasc_N : N ;
+fun game_1_N : N  ;  -- | card game
+fun game_2_N : N  ;  -- | children's game
+fun game_3_N : N  ;  -- | eat game
+fun gardenerFem_N : N ;
+fun gardenerMasc_N : N ;
+fun gastroenterologistFem_N : N ;
+fun gastroenterologistMasc_N : N ;
+fun geologistFem_N : N ;
+fun geologistMasc_N : N ;
+fun germanFem_N : N ;
+fun germanMasc_N : N ;
+fun get_on_1_V2 : V2 ;
+fun get_on_2_V2 : V2 ;
+fun gipsyFem_N : N ;
+fun gipsyMasc_N : N ;
+fun greekFem_N : N ;
+fun greekMasc_N : N ;
+fun ground_1_N : N  ; -- | ground zero
+fun ground_2_N : N  ; -- | on dubious grounds
+fun gynecologistFem_N : N ;
+fun gynecologistMasc_N : N ;
+fun hard_1_A : A  ; -- | hard surface
+fun hard_2_A : A  ; -- | hard problem
+fun helperFem_N : N ;
+fun helperMasc_N : N ;
+fun iFem_Pron : Pron ;
+fun importerFem_N : N ;
+fun importerMasc_N : N ;
+fun in_1_Adv : Adv ; -- | he is in
+fun in_2_Adv : Adv ; -- | he goes in
+fun independent_1_A : A  ; -- | independent of her parents
+fun independent_2_A : A  ; -- | Andorra is an independent state
+fun indianFem_1_N : N ; -- national of India
+fun indianFem_1_N : N ; -- national of India
+fun indianFem_2_N : N ; -- indian of America
+fun indianFem_2_N : N ; -- indian of America
+fun indianMasc_1_N : N ; -- national of India
+fun indianMasc_1_N : N ; -- national of India
+fun indianMasc_2_N : N ; -- indian of America
+fun indianMasc_2_N : N ; -- indian of America
+fun inheritorFem_N : N ;
+fun inheritorMasc_N : N ;
+fun intelligence_1_N : N ;
+fun intelligence_2_N : N ;
+fun interest_1_N : N  ; -- | interest in literature
+fun interest_2_N : N  ; -- | loan with a high interest rate
+fun interest_4_N : N ;
+fun iranianFem_N : N ;
+fun iranianMasc_N : N ;
+fun irishFem_N : N ;
+fun irishMasc_N : N ;
+fun issue_1_N : N  ; -- | this is not an issue
+fun issue_2_N : N  ; -- | the next issue of the magazine
+fun italianFem_N : N ;
+fun italianMasc_N : N ;
+fun japaneseFem_N : N ;
+fun japaneseMasc_N : N ;
+fun key_1_N : N  ; -- | key to my house
+fun key_2_N : N  ; -- | the D major key
+fun key_3_N : N  ; -- | the keyboard key
+fun last_1_A : A ; -- | the last supper
+fun last_2_A : A ; -- | last week
+fun laureateFem_N : N ;
+fun laureateMasc_N : N ;
+fun law_1_N : N  ;  -- | the law forbids it
+fun law_2_N : N  ;  -- | he studies law
+fun league_1_N : N  ; -- | league of criminals
+fun league_2_N : N  ; -- | football league
+fun lebaneseFem_N : N ;
+fun lebaneseMasc_N : N ;
+fun letter_1_N : N ; ---- which is which??
+fun letter_2_N : N ;
+fun level_1_N : N  ; -- | reach a high level
+fun level_2_N : N  ; -- | level 4 of the building
+fun lexicographerFem_N : N ;
+fun lexicographerMasc_N : N ;
+fun lie_1_V : V ; -- | lie on the ground
+fun lie_2_V : V ; -- | tell a lie
+fun listenerFem_N : N ;
+fun listenerMasc_N : N ;
+fun magyarFem_N : N ;
+fun magyarMasc_N : N ;
+fun malteseFem_N : N ;
+fun malteseMasc_N : N ;
+fun market_1_N : N ; -- | fish market (place)
+fun market_2_N : N ; -- | stock market (abstract)
+fun marxistFem_N : N ;
+fun marxistMasc_N : N ;
+fun master_1_N : N  ; -- | master and slave
+fun master_2_N : N  ; -- | school master
+fun match_1_N : N  ; -- | football match
+fun match_2_N : N  ; -- | match box
+fun match_3_N : N  ; -- | perfect match
+fun mateFem_1_N : N ;
+fun mateFem_1_N : N ;
+fun mateFem_2_N : N ;
+fun mateFem_2_N : N ;
+fun mateMasc_1_N : N ;
+fun mateMasc_1_N : N ;
+fun mateMasc_2_N : N ;
+fun mateMasc_2_N : N ;
+fun mathematicianFem_N : N ;
+fun mathematicianMasc_N : N ;
+fun matter_1_N : N ; -- | matter and form
+fun matter_2_N : N ; -- | what is the matter
+fun maturity_1_N : N ;
+fun maturity_2_N : N ;
+fun maturity_3_N : N ;
+fun may_1_VV : VV ;  -- be possible
+fun may_2_VV : VV ;  -- be allowed
+fun middlemanFem_N : N ;
+fun middlemanMasc_N : N ;
+fun minister_1_N : N  ; -- | prime minister
+fun minister_2_N : N  ; -- | minister in church
+fun moscow_1_PN : PN ;  -- | the Russian capital
+fun moscow_2_PN : PN ;  -- | city in America
+fun move_1_V : V  ; -- | it doesn't move any more
+fun move_2_V : V  ; -- | move to a new house
+fun musicianFem_N : N ;
+fun musicianMasc_N : N ;
+fun mysticFem_N : N ;
+fun mysticMasc_N : N ;
+fun naive_1_A : A ;
+fun naive_2_A : A ;
+fun namibianFem_N : N ;
+fun namibianMasc_N : N ;
+fun nepaliFem_N : N ;
+fun nepaliMasc_N : N ;
+fun neurologistFem_N : N ;
+fun neurologistMasc_N : N ;
+fun nobleFem_N : N ;
+fun nobleMasc_N : N ;
+fun norwegianFem_N : N ;
+fun norwegianMasc_N : N ;
+fun note_1_N : N  ; -- | take notes
+fun note_2_N : N  ; -- | make notes
+fun note_3_N : N  ; -- | notes in music
+fun number_1_N : N  ;  -- | number five
+fun number_2_N : N  ;  -- | a number of people
+fun number_3_N : N  ;  -- | numbers singular and plural
+fun numerologistFem_N : N ;
+fun numerologistMasc_N : N ;
+fun offenderFem_N : N ;
+fun offenderMasc_N : N ;
+fun officer_1_N : N  ; -- | financial officer
+fun officer_2_N : N  ; -- | army officer
+fun officer_3_N : N  ; -- | police officer
+fun officialFem_N : N ;
+fun officialMasc_N : N ;
+fun opponentFem_N : N ;
+fun opponentMasc_N : N ;
+fun opportunistFem_N : N ;
+fun opportunistMasc_N : N ;
+fun optimistFem_N : N ;
+fun optimistMasc_N : N ;
+fun orange_1_N : N ;  -- | round yellow to orange fruit of any of several citrus trees
+fun orange_2_N : N ;  -- | orange color or pigment ; any of a range of colors between red and yellow
+fun oratorFem_N : N ;
+fun oratorMasc_N : N ;
+fun orientalistFem_N : N ;
+fun orientalistMasc_N : N ;
+fun originatorFem_N : N ;
+fun originatorMasc_N : N ;
+fun ornithologistFem_N : N ;
+fun ornithologistMasc_N : N ;
+fun orologistFem_N : N ;
+fun orologistMasc_N : N ;
+fun ottomanFem_N : N ;
+fun ottomanMasc_N : N ;
+fun pacifistFem_N : N ;
+fun pacifistMasc_N : N ;
+fun pakistaniFem_N : N ;
+fun pakistaniMasc_N : N ;
+fun pamphleteerFem_N : N ;
+fun pamphleteerMasc_N : N ;
+fun paris_1_PN : PN ;  -- | capital of France
+fun paris_2_PN : PN ;  -- | city in America
+fun party_1_N : N  ; -- | birthday party
+fun party_2_N : N  ; -- | political party
+fun pate_1_N : N ;
+fun pate_2_N : N ;
+fun peasantFem_N : N ;
+fun peasantMasc_N : N ;
+fun pedagogueFem_N : N ;
+fun pedagogueMasc_N : N ;
+fun performance_1_N : N  ; -- | high level of performance
+fun performance_2_N : N  ; -- | he made a strange performance
+fun perfumerFem_N : N ;
+fun perfumerMasc_N : N ;
+fun period_1_N : N  ; -- | it was a long period in her life
+fun period_2_N : N  ; -- | period or comma
+fun period_3_N : N  ; -- | she had her period
+fun persianFem_N : N ;
+fun persianMasc_N : N ;
+fun pessimistFem_N : N ;
+fun pessimistMasc_N : N ;
+fun pianistFem_N : N ;
+fun pianistMasc_N : N ;
+fun play_1_V : V  ;    -- | play in a football team
+fun play_1_V2 : V2  ;  -- | play football
+fun play_2_V : V  ;    -- | children play
+fun play_2_V2 : V2  ;  -- | play mum and dad
+fun play_3_V : V  ;    -- | play in the band
+fun play_3_V2 : V2  ;  -- | play the guitar
+fun point_1_N : N  ; -- | at this point
+fun point_2_N : N  ; -- | he got six points
+fun polishFem_N : N ;
+fun polishMasc_N : N ;
+fun polyglotFem_N : N ;
+fun polyglotMasc_N : N ;
+fun poor_1_A : A  ; -- | poor or rich
+fun poor_2_A : A  ; -- | poor him
+fun poor_3_A : A  ; -- | poor quality
+fun practitionerFem_N : N ;
+fun practitionerMasc_N : N ;
+fun presidentFem_N : N ;
+fun presidentMasc_N : N ;
+fun programmerFem_N : N ;
+fun programmerMasc_N : N ;
+fun property_1_N : N  ; -- | some bad properties
+fun property_2_N : N  ; -- | an enormous property
+fun prosecutorFem_N : N ;
+fun prosecutorMasc_N : N ;
+fun protectionistFem_N : N ;
+fun protectionistMasc_N : N ;
+fun race_1_N : N  ; -- | win the race
+fun race_2_N : N  ; -- | the human race
+fun racistFem_N : N ;
+fun racistMasc_N : N ;
+fun rationalistFem_N : N ;
+fun rationalistMasc_N : N ;
+fun recognize_1_V2 : V2 ;
+fun recognize_4_V2 : V2 ;
+fun record_1_N : N  ; -- | Guinness book of records
+fun record_2_N : N  ; -- | Beatles records
+fun record_3_N : N  ; -- | we keep a record of visitors
+fun regime_1_N : N ;
+fun regime_2_N : N ;
+fun renegadeFem_N : N ;
+fun renegadeMasc_N : N ;
+fun reporterFem_N : N ;
+fun reporterMasc_N : N ;
+fun representativeFem_N : N ;
+fun representativeMasc_N : N ;
+fun rescuerFem_N : N ;
+fun rescuerMasc_N : N ;
+fun researcherFem_N : N ;
+fun researcherMasc_N : N ;
+fun revisionistFem_N : N ;
+fun revisionistMasc_N : N ;
+fun riderFem_N : N ;
+fun riderMasc_N : N ;
+fun right_1_A : A  ; -- | right or wrong
+fun right_1_Adv : Adv  ; -- | right or wrong
+fun right_2_A : A  ; -- | right or left
+fun right_2_Adv : Adv  ; -- | right or left
+fun ring_4_V2 : V2 ;    -- | get or try to get into communication (with someone) by telephone
+fun ring_6_V2 : V2 ;    -- | attach a ring to the foot of, in order to identify
+fun role_1_N : N ;
+fun role_2_N : N ;
+fun romanianFem_N : N ;
+fun romanianMasc_N : N ;
+fun room_1_N : N ; -- | five rooms
+fun room_2_N : N ; -- | there is room for five
+fun russianFem_N : N ;
+fun russianMasc_N : N ;
+fun saboteurFem_N : N ;
+fun saboteurMasc_N : N ;
+fun sadomasochistFem_N : N ;
+fun sadomasochistMasc_N : N ;
+fun sake_1_N : N ;
+fun sake_2_N : N ;
+fun sellerFem_N : N ;
+fun sellerMasc_N : N ;
+fun servantFem_N : N ;
+fun servantMasc_N : N ;
+fun set_1_N : N  ;  -- | a reparation set
+fun set_2_N : N  ;  -- | an infinite set
+fun shopperFem_N : N ;
+fun shopperMasc_N : N ;
+fun singaporeanFem_N : N ;
+fun singaporeanMasc_N : N ;
+fun single_1_A : A  ; -- | a single ticket
+fun single_2_A : A  ; -- | a single woman
+fun solicitorFem_N : N ;
+fun solicitorMasc_N : N ;
+fun somaliFem_N : N ;
+fun somaliMasc_N : N ;
+fun somalianFem_N : N ;
+fun somalianMasc_N : N ;
+fun sophistFem_N : N ;
+fun sophistMasc_N : N ;
+fun spanishFem_N : N ;
+fun spanishMasc_N : N ;
+fun spartanFem_N : N ;
+fun spartanMasc_N : N ;
+fun spectatorFem_N : N ;
+fun spectatorMasc_N : N ;
+fun speculatorFem_N : N ;
+fun speculatorMasc_N : N ;
+fun spiritualistFem_N : N ;
+fun spiritualistMasc_N : N ;
+fun spouseFem_N : N ;
+fun spouseMasc_N : N ;
+fun spring_1_N : N ;
+fun spring_2_N : N ;
+fun spring_3_N : N ;
+fun spring_4_N : N ;
+fun staff_1_N : N  ; -- | staff of 50 persons
+fun staff_2_N : N  ; -- | pike staff
+fun starter_1_N : N ;
+fun starter_2_N : N ;
+fun starter_3_N : N ;
+fun starter_4_N : N ;
+fun starter_5_N : N ;
+fun starter_6_N : N ;
+fun starter_7_N : N ;
+fun state_1_N : N  ; -- | independent state
+fun state_2_N : N  ; -- | state of affairs
+fun statisticianFem_N : N ;
+fun statisticianMasc_N : N ;
+fun strike_1_N : N ;  -- | a group's refusal to work in protest against low pay or bad work conditions
+fun strike_2_N : N ;  -- | an attack that is intended to seize or inflict damage on or destroy an objective
+fun studentFem_N : N ;
+fun studentMasc_N : N ;
+fun subject_1_N : N  ; -- | subject matter
+fun subject_2_N : N  ; -- | subject and object
+fun suckerFem_N : N ;
+fun suckerMasc_N : N ;
+fun swedeFem_N : N ;
+fun swedeMasc_N : N ;
+fun swedishFem_N : N ;
+fun swedishMasc_N : N ;
+fun syndicalistFem_N : N ;
+fun syndicalistMasc_N : N ;
+fun taiwaneseFem_N : N ;
+fun taiwaneseMasc_N : N ;
+fun tambour_1_N : N ;
+fun tambour_2_N : N ;
+fun teacherFem_N : N ;
+fun teacherMasc_N : N ;
+fun tectonic_1_A : A ;   -- | tectonic plates
+fun tectonic_2_A : A ;   -- | the architectural term
+fun telephonistFem_N : N ;
+fun telephonistMasc_N : N ;
+fun thaiFem_N : N ;
+fun thaiMasc_N : N ;
+fun theyFem_Pron : Pron ;
+fun thinkerFem_N : N ;
+fun thinkerMasc_N : N ;
+fun thrusterFem_N : N ;
+fun thrusterMasc_N : N ;
+fun time_1_N : N  ;  -- | we have no time
+fun time_2_N : N  ;  -- | I was there four times
+fun torch_1_N : N ;   -- | a light usually carried in the hand; consists of some flammable substance
+fun torch_2_N : N ;   -- | a small portable battery-powered electric lamp
+fun torch_3_N : N ;   -- | a burner that mixes air and gas to produce a very hot flame
+fun traineeFem_N : N ;
+fun traineeMasc_N : N ;
+fun turkishFem_N : N ;
+fun turkishMasc_N : N ;
+fun typical_1_A : A ;
+fun typical_2_A : A ;
+fun typical_3_A : A ;
+fun understudyFem_N : N ;
+fun understudyMasc_N : N ;
+fun unit_1_N : N ;
+fun unit_2_N : N ;
+fun unit_3_N : N ;
+fun unit_4_N : N ;
+fun unit_5_N : N ;
+fun unit_6_N : N ;
+fun userFem_N : N ;
+fun userMasc_N : N ;
+fun variety_1_N : N  ; -- | there's a great variety
+fun variety_2_N : N  ; -- | the best variety
+fun vegetarianFem_N : N ;
+fun vegetarianMasc_N : N ;
+fun venereologistFem_N : N ;
+fun venereologistMasc_N : N ;
+fun view_1_N : N  ; -- | room with a view
+fun view_2_N : N  ; -- | people with strange views
+fun violinistFem_N : N ;
+fun violinistMasc_N : N ;
+fun violistFem_N : N ;
+fun violistMasc_N : N ;
+fun volunteerFem_N : N ;
+fun volunteerMasc_N : N ;
+fun watch_1_V2 : V2 ; -- | watch the tv
+fun watch_2_V2 : V2 ; -- | watch the bank
+fun watcherFem_N : N ;
+fun watcherMasc_N : N ;
+fun way_1_N : N  ; -- | the way to the city
+fun way_2_N : N  ; -- | do it the proper way
+fun weFem_Pron : Pron ;
+fun weaverFem_N : N ;
+fun weaverMasc_N : N ;
+fun web_1_N : N  ; -- | www
+fun web_2_N : N  ; -- | spider web
+fun work_1_V : V  ; -- | I just work here
+fun work_2_V : V  ; -- | the computer doesn't work
+fun yet_1_Adv : Adv  ; -- | we are not there yet
+fun yet_2_Adv : Adv  ; -- | yet he was not satisfied
+fun youPlFem_Pron : Pron ;
+fun youPolFem_Pron : Pron ;
+fun youSgFem_Pron : Pron ;
+fun zealotFem_N : N ;
+fun zealotMasc_N : N ;
