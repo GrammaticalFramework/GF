@@ -31,7 +31,7 @@ lin pot1to19 d = {s = d.s ! teen} ** {n = Pl} ;
 lin pot0as1 n = {s = n.s ! unit}  ** {n = n.n} ;
 lin pot1 d = {s = d.s ! ten} ** {n = Pl} ;
 lin pot1plus d e = {
-   s = \\o,c => d.s ! ten ! NCard ! Nom ++ "-" ++ e.s ! unit ! o ! c ; n = Pl} ;
+   s = \\o,c => d.s ! ten ! NCard ! Nom ++ BIND ++ "-" ++ BIND ++ e.s ! unit ! o ! c ; n = Pl} ;
 lin pot1as2 n = n ;
 lin pot2 d = {s = \\o,c => d.s ! unit ! NCard ! Nom ++ mkCard o "hundred" ! c}  ** {n = Pl} ;
 lin pot2plus d e = {
