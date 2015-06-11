@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../../prelude
 
-concrete NumeralRus of Numeral = CatRus ** open ResRus in {
+concrete NumeralRus of Numeral = CatRus ** open ResRus, Prelude in {
 
 flags  coding=utf8 ;
 
@@ -234,7 +234,7 @@ lin pot3plus n m =
     IDig d = {s = d.s ; n = d.n ; size = d.size} ;
 
     IIDig d i = {
-      s = d.s ++ i.s ;
+      s = d.s ++ BIND ++ i.s ;
       n = Pl ;
       size = i.size
     } ;

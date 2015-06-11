@@ -1,4 +1,4 @@
-concrete NumeralNor of Numeral = CatNor ** open MorphoNor in {
+concrete NumeralNor of Numeral = CatNor ** open MorphoNor, Prelude in {
   flags coding=utf8 ;
 
 lincat 
@@ -53,7 +53,7 @@ lin
     IDig d = d ; 
 
     IIDig d i = {
-      s = \\o => d.s ! NCard neutrum ++ i.s ! o ;
+      s = \\o => d.s ! NCard neutrum ++ BIND ++ i.s ! o ;
       n = Pl
     } ;
 

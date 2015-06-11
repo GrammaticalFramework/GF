@@ -380,8 +380,8 @@ concrete NumeralMlt of Numeral = CatMlt [Numeral,Digits] ** open Prelude,ResMlt 
 
     -- For correct comma placement in Digits
     commaIf : DTail -> Str = \t -> case t of {
-      T3 => "," ;
-      _ => []
+      T3 => BIND++","++BIND ;
+      _  => BIND
     } ;
     inc : DTail -> DTail = \t -> case t of {
       T1 => T2 ;

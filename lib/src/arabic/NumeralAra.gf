@@ -121,7 +121,7 @@ lincat
     IDig d = d ;
 
     IIDig d i = {
-      s = d.s ++ i.s;
+      s = d.s ++ BIND ++ i.s;
       n = ThreeTen ;
     } ;
 

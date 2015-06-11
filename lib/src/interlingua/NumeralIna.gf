@@ -1,4 +1,4 @@
-concrete NumeralIna of Numeral = CatIna ** open ResIna in {
+concrete NumeralIna of Numeral = CatIna ** open ResIna,Prelude in {
 
   lincat 
   Digit = {s : DForm => CardOrd => Str} ;
@@ -68,8 +68,8 @@ concrete NumeralIna of Numeral = CatIna ** open ResIna in {
 
   oper
     commaIf : DTail -> Str = \t -> case t of {
-      T3 => "," ;
-      _ => []
+      T3 => BIND++","++BIND ;
+      _ => BIND
       } ;
 
     inc : DTail -> DTail = \t -> case t of {

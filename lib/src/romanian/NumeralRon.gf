@@ -223,7 +223,7 @@ lin
    IDig d = d ;
 
    IIDig d i = {
-     s = \\o => d.s ! NCard Masc ++ i.s ! o ;
+     s = \\o => d.s ! NCard Masc ++ BIND ++ i.s ! o ;
       n = case d.n of
               { sg => if_then_else Size (i.isDig) less20 pl ;
                 _  => pl           
