@@ -1,0 +1,99 @@
+GF next Release Notes
+June 2015
+
+%!style:../css/style.css
+%!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+==Installation==
+
+See the [download page http://www.grammaticalframework.org/download/index.html].
+
+==What's new==
+
+Over 788 changes have been pushed to the source repository since the
+[release of GF 3.6 release-3.6.html] in June 2014.
+
+===GF compiler and run-time library===
+
+====New features and notable changes====
+
+- GF shell: the commands available in the shell after importing with the
+  ``-retain`` flag are now a superset of the commands available after
+  importing without ``-retain``.
+  (Previously commands that require compilation all the way to PMCFG were
+  not available when the ``-retain`` flag was used.)
+- The command line flag ``-s``/``-q`` now silences all warnings.
+- GF now supports parallel batch compilation of grammars.
+  This is activated with the ``-j``
+  flag. (For the time being, you also need to pass ``+RTS -N -RTS`` to enable
+  parallelism in the GHC run-time system.)
+- Concrete syntax can now be translated to Haskell. The flag
+  ``-output-format=haskell`` translates abstract syntax to Haskell as before.
+   By also adding ``-haskell=concrete`` you get a Haskell module for each
+   concrete syntax of the grammar. These contain translations of
+   linearization types and linearization functions.
+   By adding ``-haskell=variants`` you get linerization functions that output
+   all variants.
+  (You don't get any functions for parsing.)
+- [...]
+
+
+====Other changes and bug fixes====
+
+- Colors are now used to highlight errors and warnings (except on Windows).
+- Even though GF works with absolute paths internally, GF now shows paths
+  relative to the current directory in diagnostic output.
+- GF Shell and ``gf -server``: improved responsiveness when large grammars are
+  loaded (by increasing the GHC RTS idle timeout before full GC from the
+  default 0.3s to 5s).
+
+
+====Changes of interest to compiler developers====
+
+- The compiler is now available as a Haskell library. The module ``GF``
+  serves as a preliminary compiler API. It exports a selection of
+  types and functions from the compiler. [...]
+- Some Haddock documentation improvements to document the compiler API.
+- Various refactoring for readability, modularity and efficiency. Removal of
+  some dead code.
+- [...]
+
+
+===Resource Grammar Library===
+
+- New languages in the Resource Grammar Library: Mongolian
+  (see the [updated synopsis ../lib/doc/synopsis.html]).
+- [...]
+
+
+===GF Cloud services===
+
+    - Minibar and Wide Coverage Translation Demo: speech output is now available
+  (in browsers that support it).
+- The Wide Coverage Translation Demo can now draw syntax trees and show
+  inflection tables.
+- PGF service: add commands ``c-abstrtree`` and ``c-parsetree``.
+  These are the C runtime variants of the ``absttree`` and ``parsetree``
+  commands. They work in the same way, but support fewer rendering options.
+- PGF Service:
+  The ``parse``/``translate``/``c-parse``/``c-translate`` commands now
+  recognize the option ``jsontree=true`` to augment the returned JSON
+  structure with a field called
+  ``jsontree`` next to the field ``tree``, or ``jsontrees`` next to ``trees``,
+  containing the the returned syntax tree in JSON format.
+- PGF Service: when using ``full=yes`` with the ``complete`` command,
+  additional information about completions is included in the output, in
+  particular there is an additional field ``seq`` containing the longest
+  possible completion.
+- PGF service: add command ``c-linearizeAll`` to obtain all variants.
+- PGF service: PGFs now expire from the internal cache when they have been
+  unused for 24 hours, to keep memory use down in long running servers.
+- PGF Service: limit the number of parallel calls to the C run-time parse
+  function to 4 by default. The limit can be changed with the ``-j`` flag.
+- [...]
+
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
