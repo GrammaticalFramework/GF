@@ -87,8 +87,8 @@ lin pot3plus n m = {
 
   oper
     commaIf : DTail -> Str = \t -> case t of {
-      T3 => "," ;
-      _ => []
+      T3 => BIND++","++BIND ;
+      _  => BIND
       } ;
 
     inc : DTail -> DTail = \t -> case t of {

@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
-concrete NumeralMon of Numeral = CatMon ** open ResMon, MorphoMon in {
+concrete NumeralMon of Numeral = CatMon ** open ResMon, MorphoMon, Prelude in {
 
  flags  coding=utf8 ;
 
@@ -143,7 +143,7 @@ lin
  IDig d = d ;
 
  IIDig d i = {
-    s = \\co => d.s ! NCard ++ i.s ! co ;
+    s = \\co => d.s ! NCard ++ BIND ++ i.s ! co ;
     n = Pl
     } ;
 

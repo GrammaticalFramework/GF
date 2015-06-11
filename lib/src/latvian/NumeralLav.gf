@@ -1,6 +1,6 @@
 --# -path=.:abstract:common:prelude
 
-concrete NumeralLav of Numeral = CatLav [Numeral,Digits] ** open ResLav, ParadigmsLav in {
+concrete NumeralLav of Numeral = CatLav [Numeral,Digits] ** open ResLav, ParadigmsLav, Prelude in {
 
 flags coding = utf8 ;
 
@@ -89,7 +89,7 @@ lin
   IDig d = d ;
 
   IIDig d i = {
-    s = \\o => d.s ! NCard ++ i.s ! o ;
+    s = \\o => d.s ! NCard ++ BIND ++ i.s ! o ;
     num = Pl ;	-- FIXME: 1 cilvēks, 11 cilvēki, 21 cilvēks, ...
   } ;
 

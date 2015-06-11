@@ -1,5 +1,5 @@
 
-concrete NumeralAmh of Numeral = CatAmh ** open ResAmh,ParamX in {
+concrete NumeralAmh of Numeral = CatAmh ** open ResAmh,ParamX,Prelude in {
 flags coding = utf8;
 lincat 
 
@@ -93,8 +93,8 @@ lin pot3plus n m = {
 
   oper
     commaIf : DTail -> Str = \t -> case t of {
-      T3 => "," ;
-      _ => []
+      T3 => BIND++","++BIND ;
+      _  => BIND
       } ;
 
     inc : DTail -> DTail = \t -> case t of {

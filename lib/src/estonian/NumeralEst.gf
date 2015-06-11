@@ -128,7 +128,7 @@ oper
     IDig d = d ;
 
     IIDig d i = {
-      s = \\o => d.s ! NCard (NCase Sg Nom) ++ i.s ! o ;
+      s = \\o => d.s ! NCard (NCase Sg Nom) ++ BIND ++ i.s ! o ;
       n = Pl
     } ;
 

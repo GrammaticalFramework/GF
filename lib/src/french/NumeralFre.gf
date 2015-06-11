@@ -151,7 +151,7 @@ oper hyphen = BIND ++ "-" ++ BIND ;
     IDig d = d ;
 
     IIDig d i = {
-      s = \\o => d.s ! NCard Masc ++ i.s ! o ;
+      s = \\o => d.s ! NCard Masc ++ BIND ++ i.s ! o ;
       n = Pl
     } ;
 

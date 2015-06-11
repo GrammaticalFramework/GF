@@ -537,7 +537,7 @@ oper tysiac = table {
     IDig d = d;
     
 --     IIDig : Dig -> Digits -> Digits ; -- 876
-    IIDig d dd = { s = d.s ++ dd.s; o = d.s ++ dd.o; n=Pl; a=dd.a };
+    IIDig d dd = { s = d.s ++ BIND ++ dd.s; o = d.s ++ BIND ++ dd.o; n=Pl; a=dd.a };
 
     D_0 = { s = "0"; o="0."; n=Pl; a=TysiacA };
     D_1 = { s = "1"; o="1."; n=Sg; a=NoA };

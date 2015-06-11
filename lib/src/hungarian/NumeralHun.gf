@@ -71,8 +71,8 @@ concrete NumeralHun of Numeral = CatHun [Numeral,Digits] ** open ResHun in
 --
 --  oper
 --    commaIf : DTail -> Str = \t -> case t of {
---      T3 => "," ;
---      _ => []
+--      T3 => BIND++","++BIND ;
+--      _ => BIND
 --      } ;
 --
 --    inc : DTail -> DTail = \t -> case t of {
