@@ -79,7 +79,7 @@ type Sequence = Array DotPos Symbol
 type FunId = Int
 type SeqId = Int
 
--- merge two PGFs; fails is differens absnames; priority to second arg
+-- merge two PGFs; fails if different abstract names; priority to second arg
 
 unionPGF :: PGF -> PGF -> PGF
 unionPGF one two = fst $ msgUnionPGF one two
