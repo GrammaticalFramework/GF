@@ -209,10 +209,10 @@ typedef enum {
 	PGF_SYMBOL_KP,
 	PGF_SYMBOL_BIND,
 	PGF_SYMBOL_SOFT_BIND,
+	PGF_SYMBOL_NE,
 	PGF_SYMBOL_SOFT_SPACE,
 	PGF_SYMBOL_CAPIT,
 	PGF_SYMBOL_ALL_CAPIT,
-	PGF_SYMBOL_NE
 } PgfSymbolTag;
 
 typedef struct {
@@ -278,7 +278,6 @@ struct PgfConcr {
 	PgfCncOverloadMap* coerce_idx;
     PgfCncFuns* cncfuns;
     PgfSequences* sequences;
-    GuBuf* pre_sequences;
 	PgfCIdMap* cnccats;
 	int total_cats;
 	

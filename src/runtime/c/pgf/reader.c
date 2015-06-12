@@ -939,18 +939,56 @@ pgf_read_pargs(PgfReader* rdr, PgfConcr* concr)
 extern void
 pgf_parser_index(PgfConcr* concr, 
                  PgfCCat* ccat, PgfProduction prod,
+                 bool is_lexical,
                  GuPool *pool);
 
 extern void
 pgf_lzr_index(PgfConcr* concr, 
               PgfCCat* ccat, PgfProduction prod,
+              bool is_lexical,
               GuPool *pool);
+
+static bool
+pgf_production_is_lexical(PgfReader* rdr, PgfProductionApply *papp)
+{
+	if (gu_seq_length(papp->args) > 0)
+		return false;
+
+	for (size_t lin_idx = 0; lin_idx < papp->fun->n_lins; lin_idx++) {
+		PgfSequence* seq = papp->fun->lins[lin_idx];
+		
+		if (seq->idx == NULL) {
+			size_t n_syms = gu_seq_length(seq->syms);
+			for (size_t i = 0; i < n_syms; i++) {
+				PgfSymbol sym = gu_seq_get(seq->syms, PgfSymbol, i);
+				GuVariantInfo inf = gu_variant_open(sym);
+				if (inf.tag == PGF_SYMBOL_KP ||
+					inf.tag == PGF_SYMBOL_BIND ||
+					inf.tag == PGF_SYMBOL_NE ||
+					inf.tag == PGF_SYMBOL_SOFT_BIND ||
+					inf.tag == PGF_SYMBOL_SOFT_SPACE ||
+					inf.tag == PGF_SYMBOL_CAPIT ||
+					inf.tag == PGF_SYMBOL_ALL_CAPIT) {
+					seq->idx = rdr->non_lexical_buf;
+					return false;
+				}
+			}
+
+			seq->idx = gu_new_buf(PgfProductionIdxEntry, rdr->opool);
+		} if (seq->idx == rdr->non_lexical_buf) {
+			return false;
+		}
+	}
+
+	return true;
+}
 
 static void
 pgf_read_production(PgfReader* rdr, PgfConcr* concr, 
                     PgfCCat* ccat, size_t* top, size_t* bot)
 {
 	PgfProduction prod = gu_null_variant;
+	bool is_lexical = false;
 
 	uint8_t tag = pgf_read_tag(rdr);
 	switch (tag) {
@@ -966,7 +1004,8 @@ pgf_read_production(PgfReader* rdr, PgfConcr* concr,
 		papp->args = pgf_read_pargs(rdr, concr);
 		gu_return_on_exn(rdr->err, );
 
-		if (gu_seq_length(papp->args) > 0)
+		is_lexical = pgf_production_is_lexical(rdr, papp);
+		if (!is_lexical)
 			gu_seq_set(ccat->prods, PgfProduction, (*top)++, prod);
 		else
 			gu_seq_set(ccat->prods, PgfProduction, (*bot)--, prod);
@@ -988,8 +1027,8 @@ pgf_read_production(PgfReader* rdr, PgfConcr* concr,
 		pgf_read_tag_error(rdr);
 	}
 
-	pgf_parser_index(concr, ccat, prod, rdr->opool);
-	pgf_lzr_index(concr, ccat, prod, rdr->opool);
+	pgf_parser_index(concr, ccat, prod, is_lexical, rdr->opool);
+	pgf_lzr_index(concr, ccat, prod, is_lexical, rdr->opool);
 }
 
 static void
@@ -1151,8 +1190,6 @@ pgf_read_concrete_content(PgfReader* rdr, PgfConcr* concr)
 		pgf_read_sequences(rdr);
 	gu_return_on_exn(rdr->err,);
 
-	concr->pre_sequences = gu_new_buf(PgfSequence, rdr->opool);
-
 	concr->cncfuns =
 		pgf_read_cncfuns(rdr, concr->abstr, concr);
 	gu_return_on_exn(rdr->err,);
@@ -1176,7 +1213,6 @@ pgf_read_concrete_init_header(PgfConcr* concr)
 {
 	concr->printnames = NULL;
 	concr->sequences  = NULL;
-	concr->pre_sequences = NULL;
 	concr->cncfuns = NULL;
 	concr->ccats = NULL;
 	concr->fun_indices = NULL;
@@ -1326,6 +1362,7 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	rdr->tmp_pool = tmp_pool;
 	rdr->err = err;
 	rdr->in = in;
+	rdr->non_lexical_buf = gu_new_buf(PgfProductionIdxEntry, opool);
 	rdr->jit_state = pgf_new_jit(rdr);
 	return rdr;
 }
