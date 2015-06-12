@@ -11,14 +11,14 @@ lin
   airplane_N = regGenN "flygplan" neutrum ;
   answer_V2S = mkV2S (regV "svarar") (mkPrep "till") ;
   apartment_N = mk2N "lägenhet" "lägenheter" ;
-  apple_N = regGenN "äpple" neutrum ;
+  apple_N = changeCompoundN ("äpple" | "äppel") (regGenN "äpple" neutrum) ;
   art_N = mk2N "konst" "konster" ;
   ask_V2Q = mkV2Q (regV "frågar") noPrep ;
   baby_N = regGenN "bebis" utrum ;
   bad_A = irregA "dålig" "sämre" "sämst";
   bank_N = mk2N "bank" "banker" ;
   beautiful_A = mk3A "vacker" "vackert" "vackra" ;
-  become_VA = mkVA (mkV "bli" "blir""bli" "blev" "blivit" "bliven" "blivande") ;
+  become_VA = mkVA (mkV "bli" "blir" "bli" "blev" "blivit" "bliven" "blivande") ;
   beer_N = regGenN "öl" neutrum ;
   beg_V2V = mkV2V (mkV "be" "ber""be" "bad" "bett" "bedd") ;
   big_A = irregA "stor" "större" "störst";
@@ -34,7 +34,7 @@ lin
   bread_N = regGenN "bröd" neutrum ;
   break_V2 = dirV2 (partV (mkV "slå" "slår" "slå" "slog" "slagit" "slagen") "sönder") ;
   broad_A = mk2A "bred" "brett" ;
-  brother_N2 = mkN2 ((mkN "bror" "brodern" "bröder" "bröderna")) (mkPrep "till") ;
+  brother_N2 = mkN2 (mkN "bror" "brodern" "bröder" "bröderna") (mkPrep "till") ;
   brown_A = regA "brun" ;
   butter_N = regGenN "smör" neutrum ;
   buy_V2 = dirV2 (mk2V "köpa" "köpte") ;
