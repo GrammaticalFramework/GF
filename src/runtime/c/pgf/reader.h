@@ -12,6 +12,7 @@ typedef struct {
 	GuExn* err;
 	GuPool* opool;
 	GuPool* tmp_pool;
+	GuBuf* non_lexical_buf;
 	struct PgfJitState* jit_state;
 } PgfReader;
 
