@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@class PhraseTranslation;
+@class Translation;
 
 @interface TranslationOptionsViewController : UITableViewController
-@property (nonatomic) PhraseTranslation *translation;
+@property (nonatomic) Translation *translation;
 @end

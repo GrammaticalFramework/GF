@@ -12,6 +12,6 @@
 
 @interface WordTranslation : Translation
 
-@property (nonatomic, strong) NSString *html;
+@property (nonatomic, strong) NSArray *html;
 
 @end

@@ -114,12 +114,18 @@ void print_lemma(PgfMorphoCallback* _self,
         GuString lin = gu_string_buf_freeze(html_buf, tmp_pool);
         printf("html:\n%s\n", lin);
         
-        NSMutableString *html = [NSMutableString stringWithString: @"<html><head><title></title></head><body style=\"background:transparent;\">"];
+        NSString *htmlString = [NSString stringWithUTF8String:lin];
         
-        [html appendString:[NSString stringWithUTF8String:lin]];
-        [html appendString:@"</body></html>"];
+        if (htmlString.length > 0) {
+            NSMutableString *html = [NSMutableString stringWithString: @"<html><head><title></title></head><body style=\"background:transparent;\">"];
+            [html appendString:htmlString];
+            [html appendString:@"</body></html>"];
+            [htmls addObject:html];
+        } else {
+            [htmls addObject:@""];
+        }
         
-        [htmls addObject:html];
+        
     }
     
     printf("\n");

@@ -349,6 +349,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CC0A61661B24D17300CF1D1E /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				CC54E7011B1F83E400B3BECC /* NSString+StringToArray.h */,
+				CC54E7021B1F83E400B3BECC /* NSString+StringToArray.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		CC57C22F1AEE23D000051DE4 = {
 			isa = PBXGroup;
 			children = (
@@ -372,6 +381,7 @@
 		CC57C23A1AEE23D000051DE4 /* GF Offline Translator */ = {
 			isa = PBXGroup;
 			children = (
+				CC0A61661B24D17300CF1D1E /* Categories */,
 				CC619EDA1AEE589D003A6EC7 /* Grammatical Framework */,
 				CC98AF1C1AEF71BF00DFA116 /* Model */,
 				CC619EE51AEE6A1D003A6EC7 /* Views */,
@@ -643,8 +653,6 @@
 				CC98AF211AEF773500DFA116 /* Translator.m */,
 				CC722BF31B11F83A0022DD7C /* MorphAnalyser.h */,
 				CC722BF41B11F83A0022DD7C /* MorphAnalyser.m */,
-				CC54E7011B1F83E400B3BECC /* NSString+StringToArray.h */,
-				CC54E7021B1F83E400B3BECC /* NSString+StringToArray.m */,
 				CC020CFC1AF76A6C0050AE38 /* PhraseTranslation.h */,
 				CC020CFD1AF76A6C0050AE38 /* PhraseTranslation.m */,
 				CC54E7041B1F947E00B3BECC /* WordTranslation.h */,

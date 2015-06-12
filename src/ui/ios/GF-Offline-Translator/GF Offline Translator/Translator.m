@@ -24,6 +24,9 @@
 
 
 @interface Translator ()
+
+@property (nonatomic, strong) NSArray *sequences;
+
 @end
 
 @implementation Translator
@@ -51,7 +54,34 @@
 
 #pragma mark - Public translation method
 
+- (NSString *)getSequance:(NSString *)phrase ep:(PgfExprProb *)ep tmpErr:(GuExn *)tmpErr tmpPool:(GuPool *)tmpPool {
+    GuPool* tmp_pool = gu_new_pool();
+    GuStringBuf* buf = gu_string_buf(tmp_pool);
+    GuOut* outt = gu_string_buf_out(buf);
+    
+    
+    
+    // Write out the abstract syntax tree
+    gu_printf(outt, self.err, "", [phrase UTF8String]);
+    pgf_print_expr(ep->expr, NULL, 0, outt, self.err);
+    gu_putc('\n', outt, self.err);
+    
+    //    pgf_linearize(self.to.concrete, html_expr, html_out, err);
+    GuString lin = gu_string_buf_freeze(buf, tmp_pool);
+    
+    NSString *string = [NSString stringWithUTF8String:lin];
+    NSLog(@"%@", string);
+    
+    gu_exn_clear(tmpErr);
+    gu_pool_free(tmp_pool);
+    tmpPool = nil;
+    tmpErr = nil;
+    
+    return string;
+}
+
 - (PhraseTranslation *)translatePhrase:(NSString *)phrase {
+    
     
     // If chinese add input to chars
     if ([self.from.language.bcp isEqualToString:@"zh-CN"]) {
@@ -65,19 +95,22 @@
     PgfExprEnum *parsedExpressions = [self parsePhrase:phrase startCat:@"Phr" tmpPool:tmpPool tmpErr:tmpErr];
     NSArray *translatedText = nil;
     
-//    if ([phrase componentsSeparatedByString:@" "].count == 1) {
-//        translatedText = @[[self translateWord:phrase]];
-//    } else
     if (parsedExpressions != nil) {
         translatedText = [self linearizeResult:parsedExpressions tmpPool:tmpPool tmpErr:tmpErr];
     } else {
         translatedText = @[[self translateByLookUp:phrase]];
+        
+        GuPool* tmp_pool = gu_new_pool();
+        PgfExprProb *ep;
+        
+        gu_enum_next(parsedExpressions, &ep, tmp_pool);
+        
+        self.sequences = @[[self getSequance:phrase ep:ep tmpErr:tmpErr tmpPool:tmpPool]];
+        
+        gu_pool_free(tmp_pool);
     }
     
-    gu_exn_clear(tmpErr);
-    gu_pool_free(tmpPool);
-    tmpPool = nil;
-    tmpErr = nil;
+    
     
     PhraseTranslation *translation = [PhraseTranslation translationWithText:phrase
                                                          toText:translatedText.firstObject
@@ -86,6 +119,8 @@
     if (translatedText.count > 1) {
         translation.toTexts = translatedText;
     }
+    translation.sequences = self.sequences;
+    
     
     return translation;
 }
@@ -100,7 +135,9 @@
                                                             fromLanguage:self.from.language
                                                               toLanguage:self.to.language];
     
-    translation.html = [analyser.html componentsJoinedByString:@" "];
+    translation.toTexts = analyser.analysedWords;
+    translation.html = analyser.html;
+    
     
     return translation;
 }
@@ -155,7 +192,9 @@
 
 -(NSArray *)linearizeResult:(PgfExprEnum *)result tmpPool:(GuPool *)tmpPool tmpErr:(GuExn *)tmpErr {
     
-    NSMutableOrderedSet *translations = [NSMutableOrderedSet new];
+    NSMutableArray *translations = [NSMutableArray new];
+    NSMutableArray *sequences = [NSMutableArray new];
+    
     PgfExprProb *ep;
     gu_enum_next(result, &ep, tmpPool);
     
@@ -166,20 +205,28 @@
     
     for (int i = 0; i <= 10 && ep != nil; i++) {
         PgfExprProb parse = ep[0];
-        
+
+        // Get translation
         GuStringBuf *stringBuff = gu_string_buf(tmpPool);
         GuOut *tmpOut = gu_string_buf_out(stringBuff);
         pgf_linearize(self.to.concrete, parse.expr, tmpOut, tmpErr);
+        
+        // Get sequence
+        GuString lin = gu_string_buf_freeze(stringBuff, tmpPool);
+        NSString *phrase = [NSString stringWithUTF8String:lin];
+        
+        
         [translations addObject:[NSString stringWithUTF8String:gu_string_buf_freeze(stringBuff, tmpPool)]];
+        [sequences addObject:[self getSequance:phrase ep:ep tmpErr:tmpErr tmpPool:tmpPool]];
         
         gu_out_flush(tmpOut, tmpErr);
         tmpOut = nil;
         
         gu_enum_next(result, &ep, tmpPool);
     }
-
+    self.sequences = [sequences copy];
     
-    return translations.objectEnumerator.allObjects;
+    return [translations copy];
 }
 
 @end

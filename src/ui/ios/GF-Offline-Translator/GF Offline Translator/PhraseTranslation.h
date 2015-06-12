@@ -13,6 +13,6 @@
 
 @interface PhraseTranslation : Translation
 
-
+@property (nonatomic, strong) NSArray *sequences;
 
 @end
