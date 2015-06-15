@@ -63,22 +63,36 @@ void print_lemma(PgfMorphoCallback* _self,
     // Prep for prepositions, etc.
     PgfType* ty = pgf_function_type(this->pgf, lemma);
     
+    NSString *inflectionCid = [NSString stringWithFormat:@"Inflection%@",
+                               [NSString stringWithUTF8String:ty->cid]];
+    
+    BOOL hasLinearization = pgf_has_linearization(this->tgt, [inflectionCid UTF8String]);
+    
     // Here we get the tag that should be shown in the UI
     {
         // The purpose of this buffer is to just construct an expression.
         // Maybe there is an easier way in ObjectiveC
         GuStringBuf* expr_buf = gu_string_buf(tmp_pool);
         GuOut* expr_out = gu_string_buf_out(expr_buf);
-        gu_printf(expr_out, err, "MkTag (InflectionN %s)", lemma);
-        GuString s = gu_string_buf_freeze(expr_buf, tmp_pool);
-        GuIn* in = gu_string_in(s, tmp_pool);
-        PgfExpr tag_expr = pgf_read_expr(in, tmp_pool, err);
         
-        pgf_linearize(this->tgt, tag_expr, out, err);
+
+        
+        if (hasLinearization) {
+            gu_printf(expr_out, err, "MkTag (Inflection%s %s)",ty->cid ,lemma);
+            GuString s = gu_string_buf_freeze(expr_buf, tmp_pool);
+            GuIn* in = gu_string_in(s, tmp_pool);
+            PgfExpr tag_expr = pgf_read_expr(in, tmp_pool, err);
+            
+            pgf_linearize(this->tgt, tag_expr, out, err);
+            
+            gu_puts(". ", out, err);
+        } else {
+            
+        }
     }
     
     if (pgf_has_linearization(this->tgt, lemma)) {
-        gu_puts(". ", out, err);
+        
         
         // Now we linearize the expression in the target language
         // This is the only thing that needs to be done for
@@ -98,12 +112,12 @@ void print_lemma(PgfMorphoCallback* _self,
     [morphWords addObject:[NSString stringWithUTF8String:s]];
     
     // Here we get the html for the inflection table
-    {
+    if (hasLinearization) {
         // The purpose of this buffer is to just construct an expression.
         // Maybe there is an easier way in ObjectiveC
         GuStringBuf* expr_buf = gu_string_buf(tmp_pool);
         GuOut* expr_out = gu_string_buf_out(expr_buf);
-        gu_printf(expr_out, err, "MkDocument \"\" (InflectionN %s) \"\"", lemma);
+        gu_printf(expr_out, err, "MkDocument \"\" (Inflection%s %s) \"\"",ty->cid, lemma);
         GuString s = gu_string_buf_freeze(expr_buf, tmp_pool);
         GuIn* in = gu_string_in(s, tmp_pool);
         PgfExpr html_expr = pgf_read_expr(in, tmp_pool, err);
@@ -121,11 +135,9 @@ void print_lemma(PgfMorphoCallback* _self,
             [html appendString:htmlString];
             [html appendString:@"</body></html>"];
             [htmls addObject:html];
-        } else {
-            [htmls addObject:@""];
         }
-        
-        
+    } else {
+        [htmls addObject:@""];
     }
     
     printf("\n");

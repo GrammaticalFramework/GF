@@ -71,6 +71,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    
     // Register cells
     UINib *nib = [UINib nibWithNibName:@"TranslationInputTableViewCell" bundle:nil];
     [[self tableView] registerNib:nib forCellReuseIdentifier:@"TranslationInput"];
@@ -246,7 +248,7 @@
     // Notifies the view controller when the right button's action has been triggered, manually or by using the keyboard return key.
     // Must call super
     
-    NSString *input = self.textView.text.lowercaseString;
+    NSString *input = self.textView.text;
     NSInteger wordsCount = [input componentsSeparatedByString:@" "].count;
     Translation *newTranslation = (wordsCount == 1 ? (Translation *)[self.translator analysWord:input] : (Translation *)[self.translator translatePhrase:input]);
     

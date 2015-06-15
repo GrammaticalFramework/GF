@@ -37,7 +37,10 @@
         
         if (html.length > 0) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
+            
     } else if ([self.translation isMemberOfClass:[PhraseTranslation class]]) {
         PhraseTranslation *translation = (PhraseTranslation *)self.translation;
         cell.detailTextLabel.text = translation.sequences[indexPath.row];

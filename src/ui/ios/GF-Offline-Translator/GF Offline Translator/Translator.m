@@ -17,6 +17,7 @@
 #import "NSString+StringToArray.h"
 
 // Grammatical Framework
+#import "pgf/literals.h"
 #import "pgf/pgf.h"
 #import "gu/mem.h"
 #import "gu/exn.h"
@@ -55,6 +56,9 @@
 #pragma mark - Public translation method
 
 - (NSString *)getSequance:(NSString *)phrase ep:(PgfExprProb *)ep tmpErr:(GuExn *)tmpErr tmpPool:(GuPool *)tmpPool {
+    
+    
+    
     GuPool* tmp_pool = gu_new_pool();
     GuStringBuf* buf = gu_string_buf(tmp_pool);
     GuOut* outt = gu_string_buf_out(buf);
@@ -99,15 +103,6 @@
         translatedText = [self linearizeResult:parsedExpressions tmpPool:tmpPool tmpErr:tmpErr];
     } else {
         translatedText = @[[self translateByLookUp:phrase]];
-        
-        GuPool* tmp_pool = gu_new_pool();
-        PgfExprProb *ep;
-        
-        gu_enum_next(parsedExpressions, &ep, tmp_pool);
-        
-        self.sequences = @[[self getSequance:phrase ep:ep tmpErr:tmpErr tmpPool:tmpPool]];
-        
-        gu_pool_free(tmp_pool);
     }
     
     
@@ -150,7 +145,7 @@
     
     for (NSString *word in words) {
         NSString *translatedWord = [self translateWord:word];
-        [translation appendString: translatedWord ? translatedWord : [NSString stringWithFormat:@" %@", word]];
+        [translation appendString: translatedWord ? [NSString stringWithFormat:@" %@", translatedWord] : [NSString stringWithFormat:@" %@", word]];
     }
     return translation.copy;
 }
@@ -186,7 +181,22 @@
 }
 
 - (PgfExprEnum *)parsePhrase:(NSString *)phrase startCat:(NSString *)startCat tmpPool:(GuPool *)tmpPool tmpErr:(GuExn *)tmpErr {
-    PgfExprEnum *result = pgf_parse(self.from.concrete, [startCat UTF8String], [phrase UTF8String], tmpErr, tmpPool, tmpPool);
+    
+    PgfCallbacksMap* callbacks =
+    pgf_new_callbacks_map(self.from.concrete, tmpPool);
+    pgf_callbacks_map_add_literal(self.from.concrete, callbacks,
+                                  "PN", &pgf_nerc_literal_callback);
+    
+    pgf_callbacks_map_add_literal(self.from.concrete, callbacks,
+                                  "Symb", &pgf_unknown_literal_callback);
+    
+    PgfExprEnum *result = pgf_parse_with_heuristics(self.from.concrete, "Phr", [phrase UTF8String],
+                                       -1, callbacks,
+                                       tmpErr, tmpPool, tmpPool);
+    
+    
+    
+//    PgfExprEnum *result = pgf_parse(self.from.concrete, [startCat UTF8String], [phrase UTF8String], tmpErr, tmpPool, tmpPool);
     return gu_ok(tmpErr) ? result : nil;
 }
 
@@ -197,6 +207,7 @@
     
     PgfExprProb *ep;
     gu_enum_next(result, &ep, tmpPool);
+    
     
     // FIXME: Do word by word if ep is null
     if (!ep) {

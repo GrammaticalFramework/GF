@@ -10,7 +10,6 @@
 		034B53DA9FAA335DE854ADA1 /* SLKTextInputbar.h in Headers */ = {isa = PBXBuildFile; fileRef = D1E144FA47C20F771E47F555 /* SLKTextInputbar.h */; };
 		04EB64E82B04E3399321ED1A /* Pods-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C90BA886D36F5EE48BA054EA /* Pods-dummy.m */; };
 		20395D59F2D2AB04E61B9D5C /* SLKTextInputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D91C7B7583A3C0FEF8136EC /* SLKTextInputbar.m */; };
-		2D261CA265F005878CD9C311 /* SLKTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4EA2191E14693C28655C9592 /* SLKTextView.h */; };
 		3BC83E02B1D7C85932BB4946 /* SLKTextView+SLKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F026E1E0183CAAAFBAA0593 /* SLKTextView+SLKAdditions.m */; };
 		4066D193DBFCFA17A8670DA8 /* SLKUIConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 6379F2C08609B13703F6C346 /* SLKUIConstants.h */; };
 		687D87E2F201DA2497DBA39A /* UIView+SLKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E0D1BAFC3AA61FBBBE47B04 /* UIView+SLKAdditions.h */; };
@@ -219,7 +218,6 @@
 				034B53DA9FAA335DE854ADA1 /* SLKTextInputbar.h in Headers */,
 				A68BCB62BD814FC89C0EE69E /* SLKTextView+SLKAdditions.h in Headers */,
 				69FFDA9972599DFC0E79A015 /* SLKTextView.h in Headers */,
-				2D261CA265F005878CD9C311 /* SLKTextView.h in Headers */,
 				814603761BC7DE38345E5E04 /* SLKTextViewController.h in Headers */,
 				DDF2C9CDE24F82CE5F8413A5 /* SLKTypingIndicatorView.h in Headers */,
 				4066D193DBFCFA17A8670DA8 /* SLKUIConstants.h in Headers */,
@@ -271,7 +269,7 @@
 		A330C9BD9451DCB2D4228C94 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0630;
 			};
 			buildConfigurationList = 677F5A23CB1B91C40D0299D1 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
