@@ -36,7 +36,11 @@ Over 788 changes have been pushed to the source repository since the
    By adding ``-haskell=variants`` you get linerization functions that output
    all variants.
   (You don't get any functions for parsing.)
-- [...]
+- Now there is a full support for all orthographic primitives:
+  BIND, SOFT_BIND, SOFT_SPACE, CAPIT, ALL_CAPIT and nonExist
+- It is now possible to define callbacks for literals from the Haskell
+  binding to the C runtime. This is used for instance in 
+  the Wide Coverage translator on the Web.
 
 
 ====Other changes and bug fixes====
@@ -47,6 +51,7 @@ Over 788 changes have been pushed to the source repository since the
 - GF Shell and ``gf -server``: improved responsiveness when large grammars are
   loaded (by increasing the GHC RTS idle timeout before full GC from the
   default 0.3s to 5s).
+- Numerous fixes in the translation dictionaries.
 
 
 ====Changes of interest to compiler developers====
