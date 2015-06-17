@@ -61,11 +61,11 @@ data Symbol
   | SymKS Token
   | SymKP [Symbol] [([Symbol],[String])]
   | SymBIND                         -- the special BIND token
+  | SymNE                           -- non exist
   | SymSOFT_BIND                    -- the special SOFT_BIND token
   | SymSOFT_SPACE                   -- the special SOFT_SPACE token
   | SymCAPIT                        -- the special CAPIT token
   | SymALL_CAPIT                    -- the special ALL_CAPIT token
-  | SymNE                           -- non exist (this should be last constructor to simplify the binary search in the runtime)
   deriving (Eq,Ord,Show)
 data Production
   = PApply  {-# UNPACK #-} !FunId [PArg]
