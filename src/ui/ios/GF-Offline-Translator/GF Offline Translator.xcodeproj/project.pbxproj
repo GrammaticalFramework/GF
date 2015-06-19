@@ -10,6 +10,7 @@
 		8B13021503B4FFDE467D3DA9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB9B7B89581859D72BD5CEC /* libPods.a */; };
 		CC020CFE1AF76A6C0050AE38 /* PhraseTranslation.m in Sources */ = {isa = PBXBuildFile; fileRef = CC020CFD1AF76A6C0050AE38 /* PhraseTranslation.m */; };
 		CC022FB01AF8D8CF0067A675 /* SLKTextView+TextInputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */; };
+		CC1DCA271B32EE2D00AFA6C1 /* SentenceTranslationUITableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1DCA261B32EE2D00AFA6C1 /* SentenceTranslationUITableViewCell.m */; };
 		CC2E85D11B1E4F2500F4BC47 /* AppTha.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC2E85D01B1E4F2500F4BC47 /* AppTha.pgf_c */; };
 		CC2E85D31B1E4F3000F4BC47 /* AppJpn.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = CC2E85D21B1E4F3000F4BC47 /* AppJpn.pgf_c */; };
 		CC54E7031B1F83E500B3BECC /* NSString+StringToArray.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54E7021B1F83E400B3BECC /* NSString+StringToArray.m */; };
@@ -19,7 +20,6 @@
 		CC57C2411AEE23D000051DE4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C2401AEE23D000051DE4 /* AppDelegate.m */; };
 		CC57C2471AEE23D000051DE4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC57C2451AEE23D000051DE4 /* Main.storyboard */; };
 		CC57C2491AEE23D000051DE4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC57C2481AEE23D000051DE4 /* Images.xcassets */; };
-		CC57C24C1AEE23D000051DE4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC57C24A1AEE23D000051DE4 /* LaunchScreen.xib */; };
 		CC57C2581AEE23D000051DE4 /* GF_Offline_TranslatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CC57C2571AEE23D000051DE4 /* GF_Offline_TranslatorTests.m */; };
 		CC619ED91AEE5793003A6EC7 /* TranslationTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC619ED81AEE5793003A6EC7 /* TranslationTextViewController.m */; };
 		CC619EDC1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */; };
@@ -164,6 +164,8 @@
 		CC020CFD1AF76A6C0050AE38 /* PhraseTranslation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhraseTranslation.m; sourceTree = "<group>"; };
 		CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SLKTextView+TextInputMode.h"; sourceTree = "<group>"; };
 		CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SLKTextView+TextInputMode.m"; sourceTree = "<group>"; };
+		CC1DCA251B32EE2D00AFA6C1 /* SentenceTranslationUITableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SentenceTranslationUITableViewCell.h; sourceTree = "<group>"; };
+		CC1DCA261B32EE2D00AFA6C1 /* SentenceTranslationUITableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SentenceTranslationUITableViewCell.m; sourceTree = "<group>"; };
 		CC2E85D01B1E4F2500F4BC47 /* AppTha.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppTha.pgf_c; sourceTree = "<group>"; };
 		CC2E85D21B1E4F3000F4BC47 /* AppJpn.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppJpn.pgf_c; sourceTree = "<group>"; };
 		CC54E7011B1F83E400B3BECC /* NSString+StringToArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+StringToArray.h"; sourceTree = "<group>"; };
@@ -179,7 +181,6 @@
 		CC57C2401AEE23D000051DE4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		CC57C2461AEE23D000051DE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CC57C2481AEE23D000051DE4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		CC57C24B1AEE23D000051DE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		CC57C2511AEE23D000051DE4 /* GF Offline TranslatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "GF Offline TranslatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC57C2561AEE23D000051DE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CC57C2571AEE23D000051DE4 /* GF_Offline_TranslatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GF_Offline_TranslatorTests.m; sourceTree = "<group>"; };
@@ -358,6 +359,14 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		CC1DCA241B32ECF500AFA6C1 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
+			);
+			name = Storyboard;
+			sourceTree = "<group>";
+		};
 		CC57C22F1AEE23D000051DE4 = {
 			isa = PBXGroup;
 			children = (
@@ -381,13 +390,13 @@
 		CC57C23A1AEE23D000051DE4 /* GF Offline Translator */ = {
 			isa = PBXGroup;
 			children = (
+				CC1DCA241B32ECF500AFA6C1 /* Storyboard */,
 				CC0A61661B24D17300CF1D1E /* Categories */,
 				CC619EDA1AEE589D003A6EC7 /* Grammatical Framework */,
 				CC98AF1C1AEF71BF00DFA116 /* Model */,
 				CC619EE51AEE6A1D003A6EC7 /* Views */,
 				CC98AF0C1AEE72A200DFA116 /* Controllers */,
 				CC57C2481AEE23D000051DE4 /* Images.xcassets */,
-				CC57C24A1AEE23D000051DE4 /* LaunchScreen.xib */,
 				CC57C23B1AEE23D000051DE4 /* Supporting Files */,
 			);
 			path = "GF Offline Translator";
@@ -434,23 +443,24 @@
 		CC619EE51AEE6A1D003A6EC7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				CC98AF161AEE78E800DFA116 /* StyleKitGF.h */,
-				CC98AF171AEE78E800DFA116 /* StyleKitGF.m */,
-				CC619EDD1AEE59F8003A6EC7 /* TranslationTextTableViewCell.h */,
-				CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */,
 				CC98AF101AEE76D100DFA116 /* ArrowsButton.h */,
 				CC98AF111AEE76D100DFA116 /* ArrowsButton.m */,
 				CC98AF261AEFB4CF00DFA116 /* MenuView.h */,
 				CC98AF271AEFB4CF00DFA116 /* MenuView.m */,
-				CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */,
-				CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */,
+				CC1DCA251B32EE2D00AFA6C1 /* SentenceTranslationUITableViewCell.h */,
+				CC1DCA261B32EE2D00AFA6C1 /* SentenceTranslationUITableViewCell.m */,
 				CC022FAE1AF8D8CE0067A675 /* SLKTextView+TextInputMode.h */,
 				CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */,
-				CCCBEA051B00D18F00C5143D /* UITableViewCell+Customize.h */,
-				CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */,
-				CC57C2451AEE23D000051DE4 /* Main.storyboard */,
+				CC98AF161AEE78E800DFA116 /* StyleKitGF.h */,
+				CC98AF171AEE78E800DFA116 /* StyleKitGF.m */,
 				CC619EDB1AEE5968003A6EC7 /* TranslationInputTableViewCell.xib */,
 				CC619EE21AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib */,
+				CC619EDD1AEE59F8003A6EC7 /* TranslationTextTableViewCell.h */,
+				CC619EDE1AEE59F8003A6EC7 /* TranslationTextTableViewCell.m */,
+				CCA994DB1AF7907900FB04D6 /* UIColor+TranslationsResults.h */,
+				CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */,
+				CCCBEA051B00D18F00C5143D /* UITableViewCell+Customize.h */,
+				CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -758,7 +768,6 @@
 				CC57C2471AEE23D000051DE4 /* Main.storyboard in Resources */,
 				CC8E01091AEE38600040920E /* AppFin.pgf_c in Resources */,
 				CC8E010C1AEE38600040920E /* AppHin.pgf_c in Resources */,
-				CC57C24C1AEE23D000051DE4 /* LaunchScreen.xib in Resources */,
 				CC619EE41AEE60BB003A6EC7 /* TranslationOutputTableViewCell.xib in Resources */,
 				CC8E01041AEE38600040920E /* AppBul.pgf_c in Resources */,
 				CC8E01061AEE38600040920E /* AppChi.pgf_c in Resources */,
@@ -937,6 +946,7 @@
 				CC8E009F1AEE32B20040920E /* utf8.h in Sources */,
 				CC98AF181AEE78E800DFA116 /* StyleKitGF.m in Sources */,
 				CC8E00A01AEE32B20040920E /* variant.c in Sources */,
+				CC1DCA271B32EE2D00AFA6C1 /* SentenceTranslationUITableViewCell.m in Sources */,
 				CC8E00A11AEE32B20040920E /* variant.h in Sources */,
 				CC57C2411AEE23D000051DE4 /* AppDelegate.m in Sources */,
 				CC57C23E1AEE23D000051DE4 /* main.m in Sources */,
@@ -968,14 +978,6 @@
 				CC57C2461AEE23D000051DE4 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		CC57C24A1AEE23D000051DE4 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CC57C24B1AEE23D000051DE4 /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

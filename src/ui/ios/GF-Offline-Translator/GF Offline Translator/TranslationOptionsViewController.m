@@ -10,11 +10,20 @@
 #import "PhraseTranslation.h"
 #import "WordTranslation.h"
 #import "WebViewController.h"
+#import "SentenceTranslationUITableViewCell.h"
 
 @implementation TranslationOptionsViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 19;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
     [self.tableView reloadData];
 }
 
@@ -25,34 +34,55 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *identifier =  @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
-    
-    cell.textLabel.text = self.translation.toTexts[indexPath.row];
     
     if ([self.translation isMemberOfClass:[WordTranslation class]]) {
+      
+        NSString *identifier =  @"Basic";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
+        
         WordTranslation *translation = (WordTranslation *)self.translation;
         NSString *html = translation.html[indexPath.row];
+        
+        cell.textLabel.text = translation.toTexts[indexPath.row];
         
         if (html.length > 0) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
-            
+        
+        return cell;
     } else if ([self.translation isMemberOfClass:[PhraseTranslation class]]) {
+        
+        NSString *identifier =  @"Cell";
+        
+        SentenceTranslationUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
+        
         PhraseTranslation *translation = (PhraseTranslation *)self.translation;
-        cell.detailTextLabel.text = translation.sequences[indexPath.row];
+        
+        [cell configureCellWithSentenceInTableView:tableView
+                                   withTranslation:translation.toTexts[indexPath.row]
+                                           andTree:translation.sequences[indexPath.row]];
+        return cell;
     }
     
-    return cell;
+    return nil;
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self performSegueWithIdentifier:@"WebView" sender:indexPath];
+    
+    if ([self.translation isMemberOfClass:[WordTranslation class]]) {
+        WordTranslation *translation = (WordTranslation *)self.translation;
+        NSString *html = translation.html[indexPath.row];
+        
+        if (html.length > 0) {
+            [self performSegueWithIdentifier:@"WebView" sender:indexPath];
+        }
+    }
 }
 
 #pragma mark - Navigation

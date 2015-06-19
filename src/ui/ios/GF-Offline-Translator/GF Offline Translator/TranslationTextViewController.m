@@ -90,14 +90,14 @@
 
     
     // Setup buttons
-    MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
-    menuView.backgroundColor = [UIColor clearColor];
-    [menuView addTarget:self action:@selector(goToHelp:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
+//    MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
+//    menuView.backgroundColor = [UIColor clearColor];
+//    [menuView addTarget:self action:@selector(goToHelp:) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
 
     
     
-    ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
     [arrows addTarget:self action:@selector(switchLanguage:) forControlEvents:UIControlEventTouchUpInside];
     arrows.backgroundColor = [UIColor clearColor];
     UIBarButtonItem *arrowsButton = [[UIBarButtonItem alloc] initWithCustomView:arrows];
@@ -113,7 +113,7 @@
     
     
     self.navigationItem.leftBarButtonItems = @[self.leftLanguageButton, arrowsButton, self.rightLanguageButton];
-    self.navigationItem.rightBarButtonItem = menuButton;
+//    self.navigationItem.rightBarButtonItem = menuButton;
     
     // Setup translator
     Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" bcp:@"sv-SE"];
@@ -180,6 +180,7 @@
         destinattionController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"TranslationOptions"]) {
         TranslationOptionsViewController *destinattionController = segue.destinationViewController;
+        destinattionController.title = ((Translation *)sender).fromText;
         destinattionController.translation = sender;
     }
 }
@@ -303,6 +304,10 @@
     [cell setCellWithLanguage:translation fromLanguage:isFrom];
     if (!isFrom && translation.toTexts.count) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     return cell;
@@ -315,7 +320,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([tableView isEqual:self.tableView] && indexPath.row % 2 == 1) {
         PhraseTranslation *translation = self.inputs[indexPath.row/2];
-        [self performSegueWithIdentifier:@"TranslationOptions" sender:translation];
+        if (translation.toTexts.count > 0) {
+            [self performSegueWithIdentifier:@"TranslationOptions" sender:translation];
+        }
     }
     if ([tableView isEqual:self.tableView] && indexPath.row % 2 == 0) {
         PhraseTranslation *translation = self.inputs[indexPath.row/2];

@@ -226,9 +226,16 @@
         GuString lin = gu_string_buf_freeze(stringBuff, tmpPool);
         NSString *phrase = [NSString stringWithUTF8String:lin];
         
+        NSString *translated = [NSString stringWithUTF8String:gu_string_buf_freeze(stringBuff, tmpPool)];
         
-        [translations addObject:[NSString stringWithUTF8String:gu_string_buf_freeze(stringBuff, tmpPool)]];
-        [sequences addObject:[self getSequance:phrase ep:ep tmpErr:tmpErr tmpPool:tmpPool]];
+        NSInteger resultIndex = [translations indexOfObjectPassingTest:^BOOL(NSString *str, NSUInteger idx, BOOL *stop) {
+            return [str isEqualToString:translated];
+        }];
+        
+        if (resultIndex == NSNotFound) {
+            [translations addObject:translated];
+            [sequences addObject:[self getSequance:phrase ep:ep tmpErr:tmpErr tmpPool:tmpPool]];
+        }
         
         gu_out_flush(tmpOut, tmpErr);
         tmpOut = nil;

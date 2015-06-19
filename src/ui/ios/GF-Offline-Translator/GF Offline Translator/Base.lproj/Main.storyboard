@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xFI-0W-N5x">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Translation Text View Controller-->
@@ -18,19 +19,22 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="St3-7e-rXA">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="uaw-fI-N9Z"/>
+                        <barButtonItem key="rightBarButtonItem" title="Info" id="pCM-e5-4xf">
+                            <connections>
+                                <segue destination="dgk-2A-luy" kind="show" id="X1I-na-NNV"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="B6l-9t-iLr" kind="presentation" identifier="ChangeLanguage" id="wkV-br-4Id"/>
                         <segue destination="Vu1-QE-7az" kind="show" identifier="TranslationOptions" id="zeM-mX-HkR"/>
-                        <segue destination="dgk-2A-luy" kind="show" identifier="helpView" id="YFL-Nh-dhR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1166" y="-372"/>
         </scene>
-        <!--Languages View Controller-->
+        <!--Choose language-->
         <scene sceneID="vPx-fF-xJR">
             <objects>
                 <tableViewController id="Fe0-Ou-Rlf" customClass="LanguagesViewController" sceneMemberID="viewController">
@@ -97,7 +101,7 @@
                             <outlet property="delegate" destination="Fe0-Ou-Rlf" id="Dst-b0-Mzq"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="iGz-3o-bcY">
+                    <navigationItem key="navigationItem" title="Choose language" id="iGz-3o-bcY">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="XEa-C1-DUt">
                             <connections>
                                 <action selector="cancel:" destination="Fe0-Ou-Rlf" id="uO1-fV-m5z"/>
@@ -179,29 +183,74 @@ If more than one language is added, you can change the language while typing. Fo
         <scene sceneID="Gym-bd-J1L">
             <objects>
                 <tableViewController id="Vu1-QE-7az" customClass="TranslationOptionsViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="9Ly-b2-546">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="52" sectionHeaderHeight="10" sectionFooterHeight="10" id="9Ly-b2-546">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="1eh-YP-fRj" detailTextLabel="NZg-tU-NQa" style="IBUITableViewCellStyleSubtitle" id="bD0-ad-CEO">
-                                <rect key="frame" x="0.0" y="114" width="600" height="44"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Cell" id="bD0-ad-CEO" customClass="SentenceTranslationUITableViewCell">
+                                <rect key="frame" x="0.0" y="114" width="600" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bD0-ad-CEO" id="ZlP-Qe-UAj">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="51"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1eh-YP-fRj">
-                                            <rect key="frame" x="15" y="0.0" width="570" height="43"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lB8-TQ-gOC">
+                                            <rect key="frame" x="8" y="29" width="554" height="14"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NZg-tU-NQa">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gZT-bJ-Kpt">
+                                            <rect key="frame" x="8" y="8" width="554" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nkL-os-Edb">
+                                            <rect key="frame" x="570" y="15" width="22" height="22"/>
+                                            <connections>
+                                                <action selector="showTree:" destination="bD0-ad-CEO" eventType="touchUpInside" id="mwb-KY-CKE"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="gZT-bJ-Kpt" firstAttribute="leading" secondItem="ZlP-Qe-UAj" secondAttribute="leadingMargin" id="0dY-24-331"/>
+                                        <constraint firstItem="nkL-os-Edb" firstAttribute="trailing" secondItem="ZlP-Qe-UAj" secondAttribute="trailingMargin" id="62L-Lw-qMg"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="gZT-bJ-Kpt" secondAttribute="bottom" constant="14" id="7R4-WV-G6b"/>
+                                        <constraint firstItem="lB8-TQ-gOC" firstAttribute="top" secondItem="gZT-bJ-Kpt" secondAttribute="bottom" id="8io-C1-3lS"/>
+                                        <constraint firstItem="lB8-TQ-gOC" firstAttribute="leading" secondItem="ZlP-Qe-UAj" secondAttribute="leadingMargin" id="FPJ-ge-w3P"/>
+                                        <constraint firstItem="gZT-bJ-Kpt" firstAttribute="trailing" secondItem="ZlP-Qe-UAj" secondAttribute="trailingMargin" constant="-30" id="WO6-jN-5Sg"/>
+                                        <constraint firstItem="nkL-os-Edb" firstAttribute="leading" secondItem="gZT-bJ-Kpt" secondAttribute="trailing" constant="8" id="X3h-hy-uPh"/>
+                                        <constraint firstItem="lB8-TQ-gOC" firstAttribute="trailing" secondItem="ZlP-Qe-UAj" secondAttribute="trailingMargin" constant="-30" id="e2a-zj-bAf"/>
+                                        <constraint firstItem="nkL-os-Edb" firstAttribute="top" secondItem="ZlP-Qe-UAj" secondAttribute="topMargin" constant="7" id="kHq-Qe-pd8"/>
+                                        <constraint firstItem="gZT-bJ-Kpt" firstAttribute="top" secondItem="ZlP-Qe-UAj" secondAttribute="topMargin" id="rQg-rd-NdA"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="nkL-os-Edb" secondAttribute="bottom" constant="6" id="tod-J2-c7w"/>
+                                        <constraint firstItem="lB8-TQ-gOC" firstAttribute="bottom" secondItem="ZlP-Qe-UAj" secondAttribute="bottomMargin" id="uU7-Mw-1Hj"/>
+                                    </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="7R4-WV-G6b"/>
+                                        </mask>
+                                    </variation>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="translationSentance" destination="gZT-bJ-Kpt" id="CkR-a4-myk"/>
+                                    <outlet property="translationTree" destination="lB8-TQ-gOC" id="R1v-e6-Dec"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Basic" textLabel="Whx-GO-JX3" style="IBUITableViewCellStyleDefault" id="8A5-Qc-R0d" customClass="SentenceTranslationUITableViewCell">
+                                <rect key="frame" x="0.0" y="166" width="600" height="52"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8A5-Qc-R0d" id="2HZ-Yy-h5F">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="51"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Whx-GO-JX3">
+                                            <rect key="frame" x="15" y="0.0" width="570" height="51"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -213,6 +262,7 @@ If more than one language is added, you can change the language while typing. Fo
                             <outlet property="delegate" destination="Vu1-QE-7az" id="MZf-as-uDy"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="gHe-8r-vSO"/>
                     <connections>
                         <segue destination="4Hm-Xx-a85" kind="show" identifier="WebView" id="maE-LZ-yt0"/>
                     </connections>
