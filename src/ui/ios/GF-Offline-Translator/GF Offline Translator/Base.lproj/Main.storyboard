@@ -21,7 +21,7 @@
                     <navigationItem key="navigationItem" id="St3-7e-rXA">
                         <barButtonItem key="rightBarButtonItem" title="Info" id="pCM-e5-4xf">
                             <connections>
-                                <segue destination="dgk-2A-luy" kind="show" id="X1I-na-NNV"/>
+                                <segue destination="dgk-2A-luy" kind="show" identifier="Info" id="X1I-na-NNV"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -131,10 +131,10 @@
             </objects>
             <point key="canvasLocation" x="426" y="-372"/>
         </scene>
-        <!--View Controller-->
+        <!--Info-->
         <scene sceneID="nXS-Na-9ij">
             <objects>
-                <viewController id="dgk-2A-luy" sceneMemberID="viewController">
+                <viewController title="Info" id="dgk-2A-luy" customClass="WebViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="muk-1p-gTk"/>
                         <viewControllerLayoutGuide type="bottom" id="wdN-RZ-bap"/>
@@ -143,37 +143,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EEY-ZC-8AF">
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rac-eS-ve4">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <attributedString key="attributedText">
-                                    <fragment>
-                                        <string key="content">This is a beta version with the following known issues:
- - No inflection tables or trees.
-
-To make it easier to input what you want to translate it is recommended to add that language keyboard in your settings on your iOS device. 
-You can add keyboards from Settings &gt; General &gt; Keyboard &gt; Keyboards.
-
-If more than one language is added, you can change the language while typing. Follow these steps to change the language of your keyboard once you’ve added it:
- - Tap the globe icon in the lower left corner to choose the next language on your keyboard. The chosen language appears on the Space bar. 
- - Touch and hold the globe icon in the lower left to display a menu of enabled keyboards. Drag to choose a new keyboard. </string>
-                                        <attributes>
-                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                            </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="EEY-ZC-8AF" firstAttribute="leading" secondItem="0BT-Mn-C5l" secondAttribute="leading" id="LJM-vK-etM"/>
-                            <constraint firstItem="wdN-RZ-bap" firstAttribute="top" secondItem="EEY-ZC-8AF" secondAttribute="bottom" id="LJS-Xd-rkW"/>
-                            <constraint firstItem="EEY-ZC-8AF" firstAttribute="top" secondItem="0BT-Mn-C5l" secondAttribute="top" id="jDR-08-to6"/>
-                            <constraint firstAttribute="trailing" secondItem="EEY-ZC-8AF" secondAttribute="trailing" id="wLh-2a-C00"/>
+                            <constraint firstItem="rac-eS-ve4" firstAttribute="top" secondItem="0BT-Mn-C5l" secondAttribute="top" id="7cM-HO-6vz"/>
+                            <constraint firstItem="rac-eS-ve4" firstAttribute="leading" secondItem="0BT-Mn-C5l" secondAttribute="leading" id="F2R-VX-m9g"/>
+                            <constraint firstAttribute="trailing" secondItem="rac-eS-ve4" secondAttribute="trailing" id="Prv-Ph-Otq"/>
+                            <constraint firstItem="wdN-RZ-bap" firstAttribute="top" secondItem="rac-eS-ve4" secondAttribute="bottom" id="Row-Zp-YvG"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="webView" destination="rac-eS-ve4" id="GhE-qg-QnW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RKo-u1-dmE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

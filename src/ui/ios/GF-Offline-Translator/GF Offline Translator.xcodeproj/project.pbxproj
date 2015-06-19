@@ -144,6 +144,7 @@
 		CCA994DD1AF7907900FB04D6 /* UIColor+TranslationsResults.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA994DC1AF7907900FB04D6 /* UIColor+TranslationsResults.m */; };
 		CCCBEA071B00D18F00C5143D /* UITableViewCell+Customize.m in Sources */ = {isa = PBXBuildFile; fileRef = CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */; };
 		CCDC6FE81B01465300C2B3FF /* TranslationOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDC6FE71B01465300C2B3FF /* TranslationOptionsViewController.m */; };
+		CCE9113F1B3445AF0064D971 /* help_content.html in Resources */ = {isa = PBXBuildFile; fileRef = CCE9113E1B3445AF0064D971 /* help_content.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -321,6 +322,7 @@
 		CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Customize.m"; sourceTree = "<group>"; };
 		CCDC6FE61B01465300C2B3FF /* TranslationOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslationOptionsViewController.h; sourceTree = "<group>"; };
 		CCDC6FE71B01465300C2B3FF /* TranslationOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TranslationOptionsViewController.m; sourceTree = "<group>"; };
+		CCE9113E1B3445AF0064D971 /* help_content.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = help_content.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -390,6 +392,7 @@
 		CC57C23A1AEE23D000051DE4 /* GF Offline Translator */ = {
 			isa = PBXGroup;
 			children = (
+				CCE9113E1B3445AF0064D971 /* help_content.html */,
 				CC1DCA241B32ECF500AFA6C1 /* Storyboard */,
 				CC0A61661B24D17300CF1D1E /* Categories */,
 				CC619EDA1AEE589D003A6EC7 /* Grammatical Framework */,
@@ -780,6 +783,7 @@
 				CC8E01031AEE38600040920E /* App.pgf in Resources */,
 				CC2E85D11B1E4F2500F4BC47 /* AppTha.pgf_c in Resources */,
 				CC8E010B1AEE38600040920E /* AppGer.pgf_c in Resources */,
+				CCE9113F1B3445AF0064D971 /* help_content.html in Resources */,
 				CC8E010E1AEE38600040920E /* AppSpa.pgf_c in Resources */,
 				CC8E01071AEE38600040920E /* AppDut.pgf_c in Resources */,
 				CC8E01081AEE38600040920E /* AppEng.pgf_c in Resources */,

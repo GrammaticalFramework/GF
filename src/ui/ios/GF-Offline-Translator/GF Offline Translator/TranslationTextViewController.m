@@ -30,6 +30,7 @@
 // View controllers
 #import "LanguagesViewController.h"
 #import "TranslationOptionsViewController.h"
+#import "WebViewController.h"
 
 @interface TranslationTextViewController ()
 
@@ -182,6 +183,12 @@
         TranslationOptionsViewController *destinattionController = segue.destinationViewController;
         destinattionController.title = ((Translation *)sender).fromText;
         destinattionController.translation = sender;
+    } else if ([segue.identifier isEqualToString:@"Info"]) {
+        WebViewController *destinationController = (WebViewController *)segue.destinationViewController;
+        NSString *htmlFile = [[NSBundle mainBundle] pathForResource:@"help_content" ofType:@"html"];
+        NSString* htmlString = [NSString stringWithContentsOfFile:htmlFile encoding:NSUTF8StringEncoding error:nil];
+        
+        destinationController.htmlToRender = htmlString;
     }
 }
 
