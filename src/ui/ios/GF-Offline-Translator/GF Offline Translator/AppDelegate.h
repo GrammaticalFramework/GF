@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class Translator;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
+@property (strong, nonatomic) Translator *translator;
 
 @end
 

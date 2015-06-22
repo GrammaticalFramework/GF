@@ -145,6 +145,7 @@
 		CCCBEA071B00D18F00C5143D /* UITableViewCell+Customize.m in Sources */ = {isa = PBXBuildFile; fileRef = CCCBEA061B00D18F00C5143D /* UITableViewCell+Customize.m */; };
 		CCDC6FE81B01465300C2B3FF /* TranslationOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDC6FE71B01465300C2B3FF /* TranslationOptionsViewController.m */; };
 		CCE9113F1B3445AF0064D971 /* help_content.html in Resources */ = {isa = PBXBuildFile; fileRef = CCE9113E1B3445AF0064D971 /* help_content.html */; };
+		CCE911421B386FE00064D971 /* TranslatorStore.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE911411B386FE00064D971 /* TranslatorStore.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -323,6 +324,8 @@
 		CCDC6FE61B01465300C2B3FF /* TranslationOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslationOptionsViewController.h; sourceTree = "<group>"; };
 		CCDC6FE71B01465300C2B3FF /* TranslationOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TranslationOptionsViewController.m; sourceTree = "<group>"; };
 		CCE9113E1B3445AF0064D971 /* help_content.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = help_content.html; sourceTree = "<group>"; };
+		CCE911401B386FE00064D971 /* TranslatorStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TranslatorStore.h; sourceTree = "<group>"; };
+		CCE911411B386FE00064D971 /* TranslatorStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TranslatorStore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -672,6 +675,8 @@
 				CC54E7051B1F947E00B3BECC /* WordTranslation.m */,
 				CC54E7071B1F94AC00B3BECC /* Translation.h */,
 				CC54E7081B1F94AC00B3BECC /* Translation.m */,
+				CCE911401B386FE00064D971 /* TranslatorStore.h */,
+				CCE911411B386FE00064D971 /* TranslatorStore.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -856,6 +861,7 @@
 				CC8E00AF1AEE32C40040920E /* core.h in Sources */,
 				CC8E00B01AEE32C40040920E /* fp-swf.h in Sources */,
 				CC8E00B11AEE32C40040920E /* fp-vfp.h in Sources */,
+				CCE911421B386FE00064D971 /* TranslatorStore.m in Sources */,
 				CC8E00B21AEE32C40040920E /* fp.h in Sources */,
 				CC8E00B31AEE32C40040920E /* funcs.h in Sources */,
 				CC8E00B41AEE32C40040920E /* asm-common.h in Sources */,

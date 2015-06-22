@@ -14,6 +14,7 @@
 #import "Language.h"
 #import "PhraseTranslation.h"
 #import "MorphAnalyser.h"
+#import "TranslatorStore.h"
 
 // Views
 #import "TranslationTextTableViewCell.h"
@@ -39,7 +40,6 @@
 @property (nonatomic) BOOL isLoadingGrammar;
 @property (nonatomic) UIBarButtonItem *leftLanguageButton;
 @property (nonatomic) UIBarButtonItem *rightLanguageButton;
-@property (nonatomic) dispatch_queue_t grammarQueue;
 
 @end
 
@@ -72,6 +72,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // Setup keyboard
     self.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     
     // Register cells
@@ -88,16 +89,8 @@
     self.tableView.allowsSelection = YES;
     self.inverted = NO;
     [self.textInputbar.rightButton setTitle:@"Translate" forState:UIControlStateNormal];
-
     
     // Setup buttons
-//    MenuView *menuView = [[MenuView alloc] initWithFrame:CGRectMake(0, 0, 45, 20)];
-//    menuView.backgroundColor = [UIColor clearColor];
-//    [menuView addTarget:self action:@selector(goToHelp:) forControlEvents:UIControlEventTouchUpInside];
-//    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithCustomView:menuView];
-
-    
-    
     ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
     [arrows addTarget:self action:@selector(switchLanguage:) forControlEvents:UIControlEventTouchUpInside];
     arrows.backgroundColor = [UIColor clearColor];
@@ -112,31 +105,19 @@
                                                                target:self
                                                                action:@selector(changeLanguage:)];
     
-    
     self.navigationItem.leftBarButtonItems = @[self.leftLanguageButton, arrowsButton, self.rightLanguageButton];
-//    self.navigationItem.rightBarButtonItem = menuButton;
-    
-    // Setup translator
-    Language *fromLanguage = [[Language alloc] initWithName:@"Swedish" abbreviation:@"Swe" bcp:@"sv-SE"];
-    Language *toLanguage = [[Language alloc] initWithName:@"English" abbreviation:@"Eng" bcp:@"en-GB"];
-    Translator *translator = [[Translator alloc] init];
     
     // Load grammars
-    self.grammarQueue = dispatch_queue_create("Load grammars",NULL);
-    
     self.isLoadingGrammar = YES;
     
-    dispatch_async(self.grammarQueue, ^{
-        translator.from = [Grammar loadGrammarFromLanguage:fromLanguage withTranslator:translator];
-        translator.to = [Grammar loadGrammarFromLanguage:toLanguage withTranslator:translator];
+    [TranslatorStore loadTranslatorWithCompletion:^(Translator *translator) {
         self.translator = translator;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.isLoadingGrammar = NO;
-            [self updateButtonTitles];
-            [self textDidUpdate:YES];
-        });
-    });
+        self.isLoadingGrammar = NO;
+        [self updateButtonTitles];
+        [self textDidUpdate:YES];
+        self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -154,9 +135,7 @@
 }
 
 - (void)switchLanguage:(id)sender {
-    Grammar *temp = self.translator.from;
-    self.translator.from = self.translator.to;
-    self.translator.to = temp;
+    [TranslatorStore switchLanguage:self.translator];
     
     self.leftLanguageButton.title = self.translator.from.language.name;
     self.rightLanguageButton.title = self.translator.to.language.name;
@@ -222,7 +201,7 @@
     self.isLoadingGrammar = YES;
     [self textDidUpdate:YES];
     
-    dispatch_async(self.grammarQueue, ^{
+    dispatch_async(dispatch_queue_create("Load grammars",NULL), ^{
         if ([self.translator.previous.language isEqualToLanguage:laguange]) {
             Grammar *temp = getGrammarBlock();
             setGrammarblock(self.translator.previous);
@@ -299,7 +278,6 @@
     return self.inputs.count*2;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     BOOL isFrom = indexPath.row % 2 == 0;
@@ -337,6 +315,5 @@
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-
 
 @end
