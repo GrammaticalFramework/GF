@@ -7,15 +7,13 @@
 --
 -----------------------------------------------------------------------------
 
-module GF.Grammar.Binary(decodeModule,decodeModuleHeader,encodeModule) where
+module GF.Grammar.Binary(VersionTagged(..),decodeModuleHeader,decodeModule,encodeModule) where
 
 import Prelude hiding (catch)
 import Control.Exception(catch,ErrorCall(..),throwIO)
 
---import Data.Char
 import PGF.Internal(Binary(..),Word8,putWord8,getWord8,encodeFile,decodeFile)
---import Control.Monad
-import qualified Data.Map as Map
+import qualified Data.Map as Map(empty)
 import qualified Data.ByteString.Char8 as BS
 
 import GF.Data.Operations
@@ -28,7 +26,7 @@ import PGF() -- Binary instances
 import PGF.Internal(Literal(..))
 
 -- Please change this every time when the GFO format is changed
-gfoVersion = "GF03"
+gfoVersion = "GF04"
 
 instance Binary Ident where
   put id = put (ident2utf8 id)
@@ -315,6 +313,10 @@ instance Binary a => Binary (VersionTagged a) where
              then fmap Tagged get
              else return WrongVersion
 
+instance Functor VersionTagged where
+  fmap f (Tagged a) = Tagged (f a)
+  fmap f WrongVersion = WrongVersion
+
 gfoBinVersion = (b1,b2,b3,b4)
   where [b1,b2,b3,b4] = map (toEnum.fromEnum) gfoVersion :: [Word8]
 
@@ -324,23 +326,14 @@ decodeModule fpath = liftIO $ check =<< decodeFile' fpath
   where
     check (Tagged m) = return m
     check _ = fail ".gfo file version mismatch"
-{-
-decodeModuleHeader fpath = decodeFile_ fpath getVersionedMod
+
+-- | Read just the module header, the returned 'Module' will have an empty body
+decodeModuleHeader :: MonadIO io => FilePath -> io (VersionTagged Module)
+decodeModuleHeader = liftIO . fmap (fmap conv) . decodeFile'
   where
-    getVersionedMod = do
-      ver <- getGFOVersion
-      if ver == gfoVersion
-        then do (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc) <- get
-                return (Just (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty))
-        else return Nothing
---}
---{-
-decodeModuleHeader fpath = fmap check $ decodeFile' fpath
-  where
-    check (Tagged (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc)) =
-        (Just (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty))
-    check _ = Nothing
---}
+    conv (m,mtype,mstatus,mflags,mextend,mwith,mopens,med,msrc) =
+        (m,ModInfo mtype mstatus mflags mextend mwith mopens med msrc Nothing Map.empty)
+
 encodeModule :: MonadIO io => FilePath -> SourceModule -> io ()
 encodeModule fpath mo = liftIO $ encodeFile fpath (Tagged mo)
 

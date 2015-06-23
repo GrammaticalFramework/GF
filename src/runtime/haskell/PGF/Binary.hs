@@ -15,7 +15,7 @@ import qualified Data.IntMap as IntMap
 import Control.Monad
 
 pgfMajorVersion, pgfMinorVersion :: Word16
-version@(pgfMajorVersion, pgfMinorVersion) = (2,0)
+version@(pgfMajorVersion, pgfMinorVersion) = (2,1)
 
 instance Binary PGF where
   put pgf = do putWord16be pgfMajorVersion
@@ -23,11 +23,14 @@ instance Binary PGF where
                put (gflags pgf)
                put (absname pgf, abstract pgf)
                put (concretes pgf)
-  get = do v1 <- getWord16be
-           v2 <- getWord16be
-           case (v1,v2) of
-             v | v==version -> getPGF'
-               | v==Old.version -> Old.getPGF'
+  get = do major<- getWord16be
+           minor <- getWord16be
+           let v = (major,minor)
+           if major==pgfMajorVersion && minor<=pgfMinorVersion
+             then getPGF'
+             else if v==Old.version 
+                  then Old.getPGF'
+                  else fail $ "Unsupported PGF version "++show (major,minor)
 
 getPGF'=do gflags <- get
            (absname,abstract) <- get
