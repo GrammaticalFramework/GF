@@ -18,6 +18,16 @@
 
 @implementation SLKTextView (SLKAdditions)
 
+- (void)slk_clearText:(BOOL)clearUndo
+{
+    // Important to call self implementation, as SLKTextView overrides setText: to add additional features.
+    [self setText:nil];
+    
+    if (self.undoManagerEnabled && clearUndo) {
+        [self.undoManager removeAllActions];
+    }
+}
+
 - (void)slk_scrollToCaretPositonAnimated:(BOOL)animated
 {
     if (animated) {
@@ -151,8 +161,10 @@
         return;
     }
     
-    [[self.undoManager prepareWithInvocationTarget:self] setText:self.text];
-    [self.undoManager setActionName:description];
+	SLKTextView *prepareInvocation = [self.undoManager prepareWithInvocationTarget:self];
+	[prepareInvocation setText:self.text];
+	[self.undoManager setActionName:description];
+	
 }
 
 @end

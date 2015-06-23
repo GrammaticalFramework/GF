@@ -16,14 +16,15 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString * const SLKTextViewTextWillChangeNotification;
-extern NSString * const SLKTextViewContentSizeDidChangeNotification;
-extern NSString * const SLKTextViewDidPasteItemNotification;
-extern NSString * const SLKTextViewDidShakeNotification;
+UIKIT_EXTERN NSString * const SLKTextViewTextWillChangeNotification;
+UIKIT_EXTERN NSString * const SLKTextViewContentSizeDidChangeNotification;
+UIKIT_EXTERN NSString * const SLKTextViewSelectedRangeDidChangeNotification;
+UIKIT_EXTERN NSString * const SLKTextViewDidPasteItemNotification;
+UIKIT_EXTERN NSString * const SLKTextViewDidShakeNotification;
 
-extern NSString * const SLKTextViewPastedItemContentType;
-extern NSString * const SLKTextViewPastedItemMediaType;
-extern NSString * const SLKTextViewPastedItemData;
+UIKIT_EXTERN NSString * const SLKTextViewPastedItemContentType;
+UIKIT_EXTERN NSString * const SLKTextViewPastedItemMediaType;
+UIKIT_EXTERN NSString * const SLKTextViewPastedItemData;
 
 typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
     SLKPastableMediaTypeNone        = 0,
@@ -41,10 +42,10 @@ typedef NS_OPTIONS(NSUInteger, SLKPastableMediaType) {
 /** @name A custom text input view. */
 @interface SLKTextView : UITextView
 
-/** The placeholder text string. */
+/** The placeholder text string. Default is nil. */
 @property (nonatomic, copy) NSString *placeholder;
 
-/** The placeholder color. */
+/** The placeholder color. Default is lightGrayColor. */
 @property (nonatomic, copy) UIColor *placeholderColor;
 
 /** The maximum number of lines before enabling scrolling. Default is 0 wich means limitless. */

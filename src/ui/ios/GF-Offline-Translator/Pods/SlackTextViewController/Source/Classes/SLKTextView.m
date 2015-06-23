@@ -18,14 +18,15 @@
 #import "SLKTextView+SLKAdditions.h"
 #import "SLKUIConstants.h"
 
-NSString * const SLKTextViewTextWillChangeNotification =        @"SLKTextViewTextWillChangeNotification";
-NSString * const SLKTextViewContentSizeDidChangeNotification =  @"SLKTextViewContentSizeDidChangeNotification";
-NSString * const SLKTextViewDidPasteItemNotification =          @"SLKTextViewDidPasteItemNotification";
-NSString * const SLKTextViewDidShakeNotification =              @"SLKTextViewDidShakeNotification";
+NSString * const SLKTextViewTextWillChangeNotification =            @"SLKTextViewTextWillChangeNotification";
+NSString * const SLKTextViewContentSizeDidChangeNotification =      @"SLKTextViewContentSizeDidChangeNotification";
+NSString * const SLKTextViewSelectedRangeDidChangeNotification =    @"SLKTextViewSelectedRangeDidChangeNotification";
+NSString * const SLKTextViewDidPasteItemNotification =              @"SLKTextViewDidPasteItemNotification";
+NSString * const SLKTextViewDidShakeNotification =                  @"SLKTextViewDidShakeNotification";
 
-NSString * const SLKTextViewPastedItemContentType =             @"SLKTextViewPastedItemContentType";
-NSString * const SLKTextViewPastedItemMediaType =               @"SLKTextViewPastedItemMediaType";
-NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPastedItemData";
+NSString * const SLKTextViewPastedItemContentType =                 @"SLKTextViewPastedItemContentType";
+NSString * const SLKTextViewPastedItemMediaType =                   @"SLKTextViewPastedItemMediaType";
+NSString * const SLKTextViewPastedItemData =                        @"SLKTextViewPastedItemData";
 
 @interface SLKTextView ()
 
@@ -49,9 +50,9 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
 
 #pragma mark - Initialization
 
-- (instancetype)init
+- (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
 {
-    if (self = [super init]) {
+    if (self = [super initWithFrame:frame textContainer:textContainer]) {
         [self slk_commonInit];
     }
     return self;
@@ -67,7 +68,6 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
 
 - (void)slk_commonInit
 {
-    self.placeholderColor = [UIColor lightGrayColor];
     self.pastableMediaTypes = SLKPastableMediaTypeNone;
     self.undoManagerEnabled = YES;
     
@@ -110,9 +110,13 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
     [super layoutSubviews];
     
     self.placeholderLabel.hidden = [self slk_shouldHidePlaceholder];
+    
     if (!self.placeholderLabel.hidden) {
-        self.placeholderLabel.frame = [self slk_placeholderRectThatFits:self.bounds];
-        [self sendSubviewToBack:self.placeholderLabel];
+        
+        [UIView performWithoutAnimation:^{
+            self.placeholderLabel.frame = [self slk_placeholderRectThatFits:self.bounds];
+            [self sendSubviewToBack:self.placeholderLabel];
+        }];
     }
 }
 
@@ -129,7 +133,7 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
         _placeholderLabel.numberOfLines = 1;
         _placeholderLabel.font = self.font;
         _placeholderLabel.backgroundColor = [UIColor clearColor];
-        _placeholderLabel.textColor = self.placeholderColor;
+        _placeholderLabel.textColor = [UIColor lightGrayColor];
         _placeholderLabel.hidden = YES;
         
         [self addSubview:_placeholderLabel];
@@ -149,7 +153,7 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
 
 - (NSUInteger)numberOfLines
 {
-    return abs(self.contentSize.height/self.font.lineHeight);
+    return fabs(self.contentSize.height/self.font.lineHeight);
 }
 
 // Returns a different number of lines when landscape and only on iPhone
@@ -159,6 +163,11 @@ NSString * const SLKTextViewPastedItemData =                    @"SLKTextViewPas
         return 2.0;
     }
     return _maxNumberOfLines;
+}
+
+- (BOOL)isTypingSuggestionEnabled
+{
+    return (self.autocorrectionType == UITextAutocorrectionTypeNo) ? NO : YES;
 }
 
 // Returns only a supported pasted item
@@ -357,8 +366,6 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
         return;
     }
     
-    _typingSuggestionEnabled = enabled;
-    
     self.autocorrectionType = enabled ? UITextAutocorrectionTypeDefault : UITextAutocorrectionTypeNo;
     self.spellCheckingType = enabled ? UITextSpellCheckingTypeDefault : UITextSpellCheckingTypeNo;
     
@@ -367,6 +374,18 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 
 
 #pragma mark - UITextView Overrides
+
+- (void)setSelectedRange:(NSRange)selectedRange
+{
+    [super setSelectedRange:selectedRange];
+}
+
+- (void)setSelectedTextRange:(UITextRange *)selectedTextRange
+{
+    [super setSelectedTextRange:selectedTextRange];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewSelectedRangeDidChangeNotification object:self userInfo:nil];
+}
 
 - (void)setText:(NSString *)text
 {
@@ -483,8 +502,7 @@ SLKPastableMediaType SLKPastableMediaTypeFromNSString(NSString *string)
 {
     id pastedItem = [self slk_pastedItem];
     
-    if ([pastedItem isKindOfClass:[NSDictionary class]])
-    {
+    if ([pastedItem isKindOfClass:[NSDictionary class]]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SLKTextViewDidPasteItemNotification object:nil userInfo:pastedItem];
     }
     else if ([pastedItem isKindOfClass:[NSString class]]) {

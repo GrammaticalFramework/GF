@@ -14,7 +14,9 @@
 //   limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
 #import "SLKTextInputbar.h"
 #import "SLKTypingIndicatorView.h"
 #import "SLKTextView.h"
@@ -23,14 +25,16 @@
 #import "UIScrollView+SLKAdditions.h"
 #import "UIView+SLKAdditions.h"
 
+#import "SLKUIConstants.h"
+
 /**
  UIKeyboard notification replacement, posting reliably only when showing/hiding the keyboard (not when resizing keyboard, or with inputAccessoryView reloads, etc).
  Only triggered when using SLKTextViewController's text view.
  */
-extern NSString *const SLKKeyboardWillShowNotification;
-extern NSString *const SLKKeyboardDidShowNotification;
-extern NSString *const SLKKeyboardWillHideNotification;
-extern NSString *const SLKKeyboardDidHideNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardWillShowNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardDidShowNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardWillHideNotification;
+UIKIT_EXTERN NSString *const SLKKeyboardDidHideNotification;
 
 typedef NS_ENUM(NSUInteger, SLKKeyboardStatus) {
     SLKKeyboardStatusDidHide,
@@ -79,7 +83,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, assign) BOOL shouldClearTextAtRightButtonPress;
 
 /** YES if the text input bar should still move up/down when other text inputs interacts with the keyboard. Default is NO. */
-@property (nonatomic, assign) BOOL shouldForceTextInputbarAdjustment;
+@property (nonatomic, assign) BOOL shouldForceTextInputbarAdjustment DEPRECATED_MSG_ATTRIBUTE("Use -forceTextInputbarAdjustmentForResponder:");
 
 /** YES if the scrollView should scroll to bottom when the keyboard is shown. Default is NO.*/
 @property (nonatomic, assign) BOOL shouldScrollToBottomAfterKeyboardShows;
@@ -115,7 +119,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param style A constant that specifies the style of main table view that the controller object is to manage (UITableViewStylePlain or UITableViewStyleGrouped).
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithTableViewStyle:(UITableViewStyle)style NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithTableViewStyle:(UITableViewStyle)style SLK_DESIGNATED_INITIALIZER;
 
 /**
  Initializes a collection view controller and configures the collection view with the provided layout.
@@ -124,7 +128,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param layout The layout object to associate with the collection view. The layout controls how the collection view presents its cells and supplementary views.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCollectionViewLayout:(UICollectionViewLayout *)layout SLK_DESIGNATED_INITIALIZER;
 
 /**
  Initializes a text view controller to manage an arbitraty scroll view. The caller is responsible for configuration of the scroll view, including wiring the delegate.
@@ -132,7 +136,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param a UISCrollView to be used as the main content area.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithScrollView:(UIScrollView *)scrollView NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView SLK_DESIGNATED_INITIALIZER;
 
 /**
  Initializes either a table or collection view controller.
@@ -141,7 +145,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
  @param decoder An unarchiver object.
  @return An initialized SLKTextViewController object or nil if the object could not be created.
  */
-- (instancetype)initWithCoder:(NSCoder *)decoder NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithCoder:(NSCoder *)decoder SLK_DESIGNATED_INITIALIZER;
 
 /**
  Returns the tableView style to be configured when using Interface Builder. Default is UITableViewStylePlain.
@@ -182,6 +186,15 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 - (void)dismissKeyboard:(BOOL)animated;
 
 /**
+ Verifies if the text input bar should still move up/down even if it is not first responder. Default is NO.
+ You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
+
+ @param responder The current first responder object.
+ @return YES so the text input bar still move up/down.
+ */
+- (BOOL)forceTextInputbarAdjustmentForResponder:(UIResponder *)responder;
+
+/**
  Notifies the view controller that the keyboard changed status.
  You can override this method to perform additional tasks associated with presenting the view. You don't need call super since this method doesn't do anything.
  
@@ -197,17 +210,25 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /**
  Notifies the view controller that the text will update.
- You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with text changes. You MUST call super at some point in your implementation.
  */
 - (void)textWillUpdate NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller that the text did update.
- You can override this method to perform additional tasks associated with presenting the view. You MUST call super at some point in your implementation.
+ You can override this method to perform additional tasks associated with text changes. You MUST call super at some point in your implementation.
  
  @param If YES, the text input bar will be resized using an animation.
  */
 - (void)textDidUpdate:(BOOL)animated NS_REQUIRES_SUPER;
+
+/**
+ Notifies the view controller that the text selection did change.
+ Use this method a replacement of UITextViewDelegate's -textViewDidChangeSelection: which is not reliable enough when using third-party keyboards (they don't forward events properly sometimes).
+ 
+ You can override this method to perform additional tasks associated with text changes. You MUST call super at some point in your implementation.
+ */
+- (void)textSelectionDidChange NS_REQUIRES_SUPER;
 
 /**
  Notifies the view controller when the left button's action has been triggered, manually.
@@ -317,19 +338,19 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 @property (nonatomic, readonly) UITableView *autoCompletionView;
 
 /** The recently found prefix symbol used as prefix for autocompletion mode. */
-@property (nonatomic, readonly) NSString *foundPrefix;
+@property (nonatomic, readonly, copy) NSString *foundPrefix;
 
 /** The range of the found prefix in the text view content. */
 @property (nonatomic, readonly) NSRange foundPrefixRange;
 
 /** The recently found word at the text view's caret position. */
-@property (nonatomic, readonly) NSString *foundWord;
+@property (nonatomic, readonly, copy) NSString *foundWord;
 
 /** YES if the autocompletion mode is active. */
 @property (nonatomic, readonly, getter = isAutoCompleting) BOOL autoCompleting;
 
 /** An array containing all the registered prefix strings for autocompletion. */
-@property (nonatomic, readonly) NSArray *registeredPrefixes;
+@property (nonatomic, readonly, copy) NSArray *registeredPrefixes;
 
 /**
  Registers any string prefix for autocompletion detection, useful for user mentions and/or hashtags autocompletion.
@@ -416,6 +437,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 ///------------------------------------------------
 /// @name Customization
 ///------------------------------------------------
+
 /**
  Registers a class for customizing the behavior and appearance of the text view.
  You need to call this method inside of any initialization method.
@@ -432,7 +454,6 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** UITextViewDelegate */
 - (BOOL)textView:(SLKTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text NS_REQUIRES_SUPER;
-- (void)textViewDidChangeSelection:(SLKTextView *)textView NS_REQUIRES_SUPER;
 
 /** UIScrollViewDelegate */
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView NS_REQUIRES_SUPER;
@@ -440,5 +461,8 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface SLKTextViewController : UIViewController 
 
 /** UIGestureRecognizerDelegate */
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer NS_REQUIRES_SUPER;
+
+/** UIAlertViewDelegate */
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex NS_REQUIRES_SUPER;
 
 @end

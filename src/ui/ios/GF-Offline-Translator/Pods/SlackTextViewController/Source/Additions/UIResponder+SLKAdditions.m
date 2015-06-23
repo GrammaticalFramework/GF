@@ -14,10 +14,26 @@
 //   limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+#import "UIResponder+SLKAdditions.h"
 
-UIKIT_EXTERN NSString * const SLKInputAccessoryViewKeyboardFrameDidChangeNotification;
+static __weak id ___currentFirstResponder;
 
-@interface SLKInputAccessoryView : UIView
+@implementation UIResponder (SLKAdditions)
+
+/**
+ Based on Jakob Egger's answer in http://stackoverflow.com/a/14135456/590010
+ */
++ (instancetype)slk_currentFirstResponder
+{
+    ___currentFirstResponder = nil;
+    [[UIApplication sharedApplication] sendAction:@selector(slk_findFirstResponder:) to:nil from:nil forEvent:nil];
+    
+    return ___currentFirstResponder;
+}
+
+- (void)slk_findFirstResponder:(id)sender
+{
+    ___currentFirstResponder = self;
+}
 
 @end

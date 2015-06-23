@@ -26,6 +26,10 @@
 #define SLK_INPUT_ACCESSORY_DEBUG           DEBUG && 0  // Renders a translucent red area representing the keyboard accessory view
 #define SLK_KEYBOARD_NOTIFICATION_DEBUG     DEBUG && 0  // Logs every keyboard notification being sent
 
+#if __has_attribute(objc_designated_initializer)
+#define SLK_DESIGNATED_INITIALIZER __attribute__((objc_designated_initializer))
+#endif
+
 static NSString *SLKTextViewControllerDomain = @"com.slack.TextViewController";
 
 inline static CGFloat minimumKeyboardHeight()

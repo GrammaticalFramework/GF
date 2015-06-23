@@ -1,7 +1,12 @@
 #SlackTextViewController
 
-[![Pod Version](http://img.shields.io/cocoapods/v/SlackTextViewController.svg)](https://cocoadocs.org/docsets/SlackTextViewController)
-[![License](http://img.shields.io/badge/license-Apache%202.0-blue.svg)](http://opensource.org/licenses/Apache2.0)
+[![Build Status](https://img.shields.io/travis/slackhq/SlackTextViewController.svg?style=flat-square)](https://travis-ci.org/slackhq/SlackTextViewController)
+[![Coverage Status](https://img.shields.io/coveralls/slackhq/SlackTextViewController/master.svg?style=flat-square)](https://coveralls.io/r/slackhq/SlackTextViewController)
+
+[![Pod Version](http://img.shields.io/cocoapods/v/SlackTextViewController.svg?style=flat-square)](https://cocoadocs.org/docsets/SlackTextViewController)
+[![Carthage compatible](https://img.shields.io/badge/carthage-compatible-F5B369.svg?style=flat-square)](https://github.com/Carthage/Carthage)
+[![License](http://img.shields.io/badge/license-apache%202.0-blue.svg?style=flat-square)](http://opensource.org/licenses/Apache2.0)
+
 
 A drop-in UIViewController subclass with a growing text input view and other useful messaging features. Meant to be a replacement for UITableViewController & UICollectionViewController.
 
@@ -32,7 +37,7 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 - Bouncy Animations
 
 ### Compatibility
-- Swift: (a sample project is available in a different branch for now) (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
+- Swift: [A sample project is available in a different branch] (https://github.com/slackhq/SlackTextViewController/tree/swift-example)
 - iOS 7 & 8
 - iPhone & iPad
 - [Storyboard](https://github.com/slackhq/SlackTextViewController#storyboard)
@@ -43,10 +48,20 @@ This library is used in Slack's iOS app. It was built to fit our needs, but is f
 
 ## Installation
 
-Available in [Cocoa Pods](http://cocoapods.org/?q=SlackTextViewController)
+###### With [Cocoa Pods](http://cocoapods.org):
 ```ruby
 pod 'SlackTextViewController'
 ```
+
+###### With [Carthage](https://github.com/Carthage/Carthage):
+```
+github "slackhq/SlackTextViewController"
+```
+
+###### Manually:
+There are two ways to do this:
+- Copy and drag the `Source/` folder to your project.
+- or compile the project located in `Builder/SlackTextViewController.xcodeproj` to create a `SlackTextViewController.framework` package. You could also [link the library into your project](https://developer.apple.com/library/ios/recipes/xcode_help-project_editor/Articles/AddingaLibrarytoaTarget.html#//apple_ref/doc/uid/TP40010155-CH17-SW1).
 
 ##How to use
 
@@ -204,11 +219,11 @@ Use the `editing` property to know if the editing mode is on.
 
 Optionally, you can enable a simple typing indicator, which will be displayed right above the text input. It shows the name of the people that are typing, and if more than 2, it will display "Several are typing" message.
 
-To enable the typing indicator, just call `[self.typeIndicatorView insertUsername:@"John"];` and the view will automatically be animated on top of the text input. After a default interval of 6 seconds, if the same name hasn't been assigned once more, the view will be dismissed with animation.
+To enable the typing indicator, just call `[self.typingIndicatorView insertUsername:@"John"];` and the view will automatically be animated on top of the text input. After a default interval of 6 seconds, if the same name hasn't been assigned once more, the view will be dismissed with animation.
 
-You can remove names from the list by calling `[self.typeIndicatorView removeUsername:@"John"];`
+You can remove names from the list by calling `[self.typingIndicatorView removeUsername:@"John"];`
 
-You can also dismiss it by calling `[self.typeIndicatorView dismissIndicator];`
+You can also dismiss it by calling `[self.typingIndicatorView dismissIndicator];`
 
 ###Panning Gesture
 
