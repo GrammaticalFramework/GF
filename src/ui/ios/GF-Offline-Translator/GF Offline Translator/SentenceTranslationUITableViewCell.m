@@ -29,13 +29,28 @@
     self.translationTree.text = @"";
 }
 - (IBAction)showTree:(id)sender {
-    [self.tableView beginUpdates];
+    
     if ([self.translationTree.text isEqualToString:@""]) {
+        self.translationTree.alpha = 0;
+        
+        [self.tableView beginUpdates];
         self.translationTree.text = self.translationTreeText;
+        [self.tableView endUpdates];
+        
+        [UIView animateWithDuration:0.25 delay:0.15 options:0 animations:^{
+            self.translationTree.alpha = 1;
+        } completion:nil];
+        
     } else {
-        self.translationTree.text = @"";
+        [UIView animateWithDuration:0.25 animations:^{
+            self.translationTree.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self.tableView beginUpdates];
+            self.translationTree.text = @"";
+            [self.tableView endUpdates];
+        }];
     }
-    [self.tableView endUpdates];
+    
 }
 
 @end
