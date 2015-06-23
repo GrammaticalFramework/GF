@@ -64111,7 +64111,7 @@ fun whizbang_N : N ;
 fun whizz_kid_N : N ;
 fun whoPl_IP : IP ;
 fun whoSg_IP : IP ;
-fun who_N : N ;
+--- fun who_N : N ; -- as WHO, should be NP
 fun whodunit_N : N ;
 fun whoever_NP : NP ;
 fun whole_A : A ;
