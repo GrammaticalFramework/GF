@@ -20,7 +20,7 @@
 
 module GF.Compile.ReadFiles
            ( getAllFiles,ModName,ModEnv,importsOfModule,
-             findFile,gfImports,gfoImports,
+             findFile,gfImports,gfoImports,VersionTagged(..),
              parseSource,getOptionsFromFile,getPragmas) where
 
 import Prelude hiding (catch)
@@ -32,7 +32,7 @@ import GF.Data.Operations
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar
-import GF.Grammar.Binary(decodeModuleHeader)
+import GF.Grammar.Binary(VersionTagged(..),decodeModuleHeader)
 
 import System.IO(mkTextEncoding)
 import GF.Text.Coding(decodeUnicodeIO)
@@ -107,10 +107,10 @@ getAllFiles opts ps env file = do
           case st of
             CSEnv  -> return (st, (name, maybe [] snd mb_envmod))
             CSRead -> do let gfo = if isGFO file then file else gf2gfo opts file
-                         mb_imps <- gfoImports gfo
-                         case mb_imps of
-                           Just imps -> return (st,imps)
-                           Nothing
+                         t_imps <- gfoImports gfo
+                         case t_imps of
+                           Tagged imps -> return (st,imps)
+                           WrongVersion
                              | isGFO file -> raise (file ++ " is compiled with different GF version and I can't find the source file")
                              | otherwise  -> do imps <- gfImports opts file
                                                 return (CSComp,imps)
@@ -143,7 +143,7 @@ findFile gfoDir ps name =
 
 gfImports opts file = importsOfModule `fmap` parseModHeader opts file
 
-gfoImports gfo = fmap importsOfModule `fmap` liftIO (decodeModuleHeader gfo)
+gfoImports gfo = fmap importsOfModule `fmap` decodeModuleHeader gfo
 
 --------------------------------------------------------------------------------
 

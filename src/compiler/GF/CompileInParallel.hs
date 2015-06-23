@@ -9,7 +9,7 @@ import qualified GF.System.Directory as D
 import GF.System.Catch(catch,try)
 import Data.List(nub,isPrefixOf,intercalate,partition)
 import qualified Data.Map as M
-import GF.Compile.ReadFiles(getOptionsFromFile,findFile,gfImports,gfoImports)
+import GF.Compile.ReadFiles(getOptionsFromFile,findFile,gfImports,gfoImports,VersionTagged(..))
 import GF.CompileOne(reuseGFO,useTheSource)
 import GF.Infra.Option
 import GF.Infra.UseIO
@@ -177,8 +177,10 @@ getPathFromFile lib_dir cmdline_opts file =
 getImports opts file =
     if isGFO file then gfoImports' file else gfImports opts file
   where
-    gfoImports' file = maybe bad return =<< gfoImports file
-      where bad = raise $ file++": bad .gfo file"
+    gfoImports' file = check =<< gfoImports file
+      where
+        check (Tagged imps) = return imps
+        check WrongVersion = raise $ file++": .gfo file version mismatch"
 
 relativeTo lib_dir cwd path =
     if length librel<length cwdrel then librel else cwdrel
