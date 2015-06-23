@@ -4,7 +4,7 @@ Last update: %%mtime(%F, %H:%M)
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
-% txt2tags -t html --toc darcs.txt
+% txt2tags -t html gf-developers.t2t
 
 %!style:../css/style.css
 %!target:html
@@ -284,6 +284,27 @@ $ cabal build
 ```
 
 Again you can add the option ``-v`` if you want to see more details.
+
+==== Parallel builds ====
+
+If you have Cabal>=1.20 you can enable parallel compilation by using
+
+```
+$ cabal build -j
+```
+
+or by putting a line ``jobs: $ncpus`` in your ``.cabal/config`` file. Cabal
+will pass this option to GHC when building the GF compiler, but only if you
+have GHC>=7.8. Cabal can also pass this option to GF when compiling the
+Resource Grammar Library, but the code is commented out by default to avoid
+causing problems for developers with Cabal<1.20, so you have to manually
+enable it by editing the last few lines in ``WebSetup.hs``.
+
+
+==== Partial builds ====
+
+**NOTE**: The following doesn't work with recent versions of ``cabal``.
+%% // TH 2015-06-22
 
 Sometimes you just want to work on the GF compiler and don't want to
 recompile the resource library after each change. In this case use
