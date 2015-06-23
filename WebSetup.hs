@@ -97,6 +97,9 @@ execute command args =
   where
     showArg arg = if ' ' `elem` arg then "'" ++ arg ++ "'" else arg
 
+-- | This function is used to enable parallel compilation of the RGL and
+-- example grammars, but it is commented out by default
+-- to avoid casing problems for developers using Cabal<1.20
 numJobs flags =
     if null n
     then ["-j=1"]
