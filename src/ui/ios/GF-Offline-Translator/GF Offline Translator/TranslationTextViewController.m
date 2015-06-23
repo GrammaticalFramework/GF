@@ -74,6 +74,7 @@
     
     // Setup keyboard
     self.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    [self.textInputbar.rightButton setTitle:@"Translate" forState:UIControlStateNormal];
     
     // Register cells
     UINib *nib = [UINib nibWithNibName:@"TranslationInputTableViewCell" bundle:nil];
@@ -88,7 +89,6 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = YES;
     self.inverted = NO;
-    [self.textInputbar.rightButton setTitle:@"Translate" forState:UIControlStateNormal];
     
     // Setup buttons
     ArrowsButton *arrows = [[ArrowsButton alloc] initWithFrame:CGRectMake(0, 0, 50, 30)];
@@ -137,9 +137,7 @@
 - (void)switchLanguage:(id)sender {
     [TranslatorStore switchLanguage:self.translator];
     
-    self.leftLanguageButton.title = self.translator.from.language.name;
-    self.rightLanguageButton.title = self.translator.to.language.name;
-    
+    [self updateButtonTitles];
     self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
     [self.textView reloadInputViews];
 }
@@ -251,26 +249,6 @@
     NSIndexPath *bottomIndexPath = [NSIndexPath indexPathForRow:(self.inputs.count*2)-1 inSection:0];
     [self.tableView scrollToRowAtIndexPath:bottomIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
-
-#pragma mark - SLKTextViewController Edition
-
-/*
-// Uncomment these methods to enable edit mode
-- (void)didCommitTextEditing:(id)sender
-{
-    // Notifies the view controller when tapped on the right "Accept" button for commiting the edited text
- 
-    [super didCommitTextEditing:sender];
-}
-
-- (void)didCancelTextEditing:(id)sender
-{
-    // Notifies the view controller when tapped on the left "Cancel" button
- 
-    [super didCancelTextEditing:sender];
-}
-*/
-
 
 #pragma mark - <UITableViewDataSource>
 

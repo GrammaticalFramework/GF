@@ -13,6 +13,8 @@
 
 @implementation Translation
 
+@synthesize toTexts = _toTexts;
+
 + (instancetype)translationWithText:(NSString *)fromText
                              toText:(NSString *)toText
                        fromLanguage:(Language *)fromLanguage
@@ -78,6 +80,22 @@
     
     AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
     [synthesizer speakUtterance:utterance];
+}
+
+#pragma mark - Setters & getters
+
+- (NSString *)toText {
+    if (!_toText) {
+        return _fromText;
+    }
+    return _toText;
+}
+
+- (NSArray *)toTexts {
+    if (nil) {
+        return @[_fromText];
+    }
+    return _toTexts;
 }
 
 - (void)setToTexts:(NSArray *)toTexts {

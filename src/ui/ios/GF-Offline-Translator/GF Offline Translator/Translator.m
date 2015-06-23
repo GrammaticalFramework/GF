@@ -133,7 +133,6 @@
     translation.toTexts = analyser.analysedWords;
     translation.html = analyser.html;
     
-    
     return translation;
 }
 
