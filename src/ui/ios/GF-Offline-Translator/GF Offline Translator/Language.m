@@ -52,4 +52,22 @@
              ];
 }
 
+#pragma mark - NSObject
+
+- (BOOL)isEqual:(id)object {
+    if (self == object) {
+        return YES;
+    }
+    
+    if (![object isKindOfClass:[Language class]]) {
+        return NO;
+    }
+    
+    return [self isEqualToLanguage:(Language *)object];
+}
+
+- (NSUInteger)hash {
+    return [self.name hash] ^ [self.bcp hash];
+}
+
 @end

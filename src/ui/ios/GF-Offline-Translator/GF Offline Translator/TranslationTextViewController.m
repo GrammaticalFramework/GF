@@ -154,7 +154,7 @@
         LanguagesViewController *destinattionController = (LanguagesViewController *)navigationController.topViewController;
         BOOL fromLanguage = sender == self.leftLanguageButton;
         
-        destinattionController.senderLanguage = fromLanguage ? self.translator.from.language : self.translator.to.language;
+        destinattionController.currentLanguages = @[self.translator.from.language, self.translator.to.language];
         destinattionController.fromLanguage = fromLanguage;
         destinattionController.delegate = self;
     } else if ([segue.identifier isEqualToString:@"TranslationOptions"]) {

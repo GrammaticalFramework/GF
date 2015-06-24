@@ -13,7 +13,7 @@
 
 @interface LanguagesViewController : UITableViewController
 @property (nonatomic, weak) id<TranslationTextViewControllerDelegate> delegate;
-@property (nonatomic) Language *senderLanguage;
+@property (nonatomic) NSArray *currentLanguages;
 @property (nonatomic) BOOL fromLanguage;
 
 @end
