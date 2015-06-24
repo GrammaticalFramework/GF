@@ -127,22 +127,6 @@
     self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
 }
 
-- (void)goToHelp:(id)sender {
-    [self performSegueWithIdentifier:@"helpView" sender:nil];
-}
-
-- (void)changeLanguage:(id)sender {
-    [self performSegueWithIdentifier:@"ChangeLanguage" sender:sender];
-}
-
-- (void)switchLanguage:(id)sender {
-    [TranslatorStore switchLanguage:self.translator];
-    
-    [self updateButtonTitles];
-    self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
-    [self.textView reloadInputViews];
-}
-
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -170,52 +154,28 @@
     }
 }
 
-- (void)updateButtonTitles {
-    self.leftLanguageButton.title = self.translator.from.language.name;
-    self.rightLanguageButton.title = self.translator.to.language.name;
+- (void)goToHelp:(id)sender {
+    [self performSegueWithIdentifier:@"helpView" sender:nil];
+}
+
+- (void)changeLanguage:(id)sender {
+    [self performSegueWithIdentifier:@"ChangeLanguage" sender:sender];
 }
 
 #pragma mark - TranslationTextViewControllerDelegate
 
-- (void)changeFromLanguageToLanguage:(Language *)laguange {
-    self.leftLanguageButton.title = @"loading";
-    [self changeLanguage:laguange withSetGrammarBlock:^(Grammar *grammar) {
-        self.translator.from = grammar;
-    } getGrammarBlock:^Grammar*{
-        return self.translator.from;
-    }];
-}
-
-- (void)changeToLanguageToLanguage:(Language *)laguange {
-    self.rightLanguageButton.title = @"loading";
-    [self changeLanguage:laguange withSetGrammarBlock:^(Grammar *grammar) {
-        self.translator.to = grammar;
-    } getGrammarBlock:^Grammar*{
-        return self.translator.to;
-    }];
-}
-
-- (void)changeLanguage:(Language *)laguange withSetGrammarBlock:(void (^)(Grammar *grammar))setGrammarblock getGrammarBlock:(Grammar*(^)(void))getGrammarBlock {
-
+- (void)changeLanguageToLanguage:(Language *)laguange isFrom:(BOOL)isFrom {
+    UIBarButtonItem *button = isFrom ? self.leftLanguageButton : self.rightLanguageButton;
+    button.title = @"loading";
+    
     self.isLoadingGrammar = YES;
     [self textDidUpdate:YES];
     
-    dispatch_async(dispatch_queue_create("Load grammars",NULL), ^{
-        if ([self.translator.previous.language isEqualToLanguage:laguange]) {
-            Grammar *temp = getGrammarBlock();
-            setGrammarblock(self.translator.previous);
-            self.translator.previous = temp;
-        } else {
-            self.translator.previous = getGrammarBlock();
-            setGrammarblock([Grammar loadGrammarFromLanguage:laguange withTranslator:self.translator]);
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateButtonTitles];
-            self.isLoadingGrammar = NO;
-            [self textDidUpdate:YES];
-        });
-    });
+    [self.translator changeLanguageToLanguage:laguange isFrom:isFrom withCompletion:^{
+        [self updateButtonTitles];
+        self.isLoadingGrammar = NO;
+        [self textDidUpdate:YES];
+    }];
 }
 
 #pragma mark - SLKTextViewController Events
@@ -303,6 +263,21 @@
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:touchLoaction];
         [self.tableView.delegate tableView:self.tableView didSelectRowAtIndexPath:indexPath];
     }
+}
+
+#pragma mark - Private helpers
+
+- (void)updateButtonTitles {
+    self.leftLanguageButton.title = self.translator.from.language.name;
+    self.rightLanguageButton.title = self.translator.to.language.name;
+}
+
+- (void)switchLanguage:(id)sender {
+    [TranslatorStore switchLanguage:self.translator];
+    
+    [self updateButtonTitles];
+    self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
+    [self.textView reloadInputViews];
 }
 
 @end

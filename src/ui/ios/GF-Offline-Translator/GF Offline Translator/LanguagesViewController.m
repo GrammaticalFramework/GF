@@ -18,6 +18,8 @@
 
 @implementation LanguagesViewController
 
+#pragma mark - View lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -26,6 +28,8 @@
     [allLanguagesMutableCopy removeObjectsInArray:self.currentLanguages];
     self.languages = allLanguagesMutableCopy.copy;
 }
+
+#pragma mark - User Interaction
 
 - (IBAction)cancel:(UIBarButtonItem *)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -51,11 +55,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Language *language = self.languages[indexPath.row];
     
-    if (self.fromLanguage) {
-        [self.delegate changeFromLanguageToLanguage:language];
-    } else {
-        [self.delegate changeToLanguageToLanguage:language];
-    }
+    [self.delegate changeLanguageToLanguage:language isFrom:self.fromLanguage];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

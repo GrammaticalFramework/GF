@@ -101,6 +101,9 @@
     
     if (parsedExpressions != nil) {
         translatedText = [self linearizeResult:parsedExpressions tmpPool:tmpPool tmpErr:tmpErr];
+        if (translatedText.count == 0) {
+            translatedText = @[[self translateByLookUp:phrase]];
+        }
     } else {
         translatedText = @[[self translateByLookUp:phrase]];
     }
@@ -208,7 +211,7 @@
     gu_enum_next(result, &ep, tmpPool);
     
     
-    // FIXME: Do word by word if ep is null
+    // If null reutrun empty array
     if (!ep) {
         return @[];
     }
@@ -245,5 +248,28 @@
     
     return [translations copy];
 }
+
+- (void)changeLanguageToLanguage:(Language *)language isFrom:(BOOL)isFrom withCompletion:(void (^)(void))completion {
+    
+    dispatch_async(dispatch_queue_create("Load grammars",NULL), ^{
+        if ([self.previous.language isEqualToLanguage:language]) {
+            Grammar *temp = isFrom ? self.from : self.to;
+            self.from = self.previous;
+            self.previous = temp;
+        } else {
+            self.previous = isFrom ? self.from : self.to;
+            if (isFrom) {
+                self.from = [Grammar loadGrammarFromLanguage:language withTranslator:self];
+            } else {
+                self.to = [Grammar loadGrammarFromLanguage:language withTranslator:self];
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion();
+        });
+    });
+}
+
 
 @end

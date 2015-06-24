@@ -14,6 +14,7 @@
 @class Grammar;
 @class PhraseTranslation;
 @class WordTranslation;
+@class Language;
 
 @interface Translator : NSObject
 
@@ -28,5 +29,6 @@
 
 - (PhraseTranslation *)translatePhrase:(NSString *)phrase;
 - (WordTranslation *)analysWord:(NSString *)word;
+- (void)changeLanguageToLanguage:(Language *)language isFrom:(BOOL)isFrom withCompletion:(void (^)(void))completion;
 
 @end

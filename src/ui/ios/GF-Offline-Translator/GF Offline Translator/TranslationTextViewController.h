@@ -11,8 +11,7 @@
 
 @protocol TranslationTextViewControllerDelegate <NSObject>
 
-- (void)changeFromLanguageToLanguage:(Language *)laguange;
-- (void)changeToLanguageToLanguage:(Language *)laguange;
+- (void)changeLanguageToLanguage:(Language *)laguange isFrom:(BOOL)isFrom;
 
 @end
 
