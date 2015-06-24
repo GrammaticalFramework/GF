@@ -212,8 +212,8 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateButtonTitles];
-            [self textDidUpdate:YES];
             self.isLoadingGrammar = NO;
+            [self textDidUpdate:YES];
         });
     });
 }
