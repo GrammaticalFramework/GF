@@ -75,6 +75,7 @@
     // Setup keyboard
     self.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.textInputbar.rightButton setTitle:@"Translate" forState:UIControlStateNormal];
+    [self.singleTapGesture addTarget:self action:@selector(didTapTableView:)];
     
     // Register cells
     UINib *nib = [UINib nibWithNibName:@"TranslationInputTableViewCell" bundle:nil];
@@ -292,6 +293,16 @@
         self.textInputbar.textView.text = translation.fromText;
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Gesture method
+
+- (void)didTapTableView:(UIGestureRecognizer *)gesture {
+    if (![self.textView isFirstResponder]) {
+        CGPoint touchLoaction = [gesture locationInView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:touchLoaction];
+        [self.tableView.delegate tableView:self.tableView didSelectRowAtIndexPath:indexPath];
+    }
 }
 
 @end
