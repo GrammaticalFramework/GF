@@ -86,8 +86,6 @@ void print_lemma(PgfMorphoCallback* _self,
             pgf_linearize(this->tgt, tag_expr, out, err);
             
             gu_puts(". ", out, err);
-        } else {
-            
         }
     }
     
@@ -109,7 +107,11 @@ void print_lemma(PgfMorphoCallback* _self,
     GuString s = gu_string_buf_freeze(buf, tmp_pool);
     printf("entry: %s\n", s);
     
-    [morphWords addObject:[NSString stringWithUTF8String:s]];
+    NSString *translation = [NSString stringWithUTF8String:s];
+    if ([[translation componentsSeparatedByString:@" "].lastObject isEqualToString:@"."]) {
+        return;
+    }
+    [morphWords addObject:translation];
     
     // Here we get the html for the inflection table
     if (hasLinearization) {
