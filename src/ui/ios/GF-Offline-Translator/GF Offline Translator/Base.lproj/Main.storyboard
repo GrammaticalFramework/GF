@@ -181,12 +181,12 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lB8-TQ-gOC">
-                                            <rect key="frame" x="8" y="29" width="554" height="14"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <rect key="frame" x="14" y="29" width="548" height="14"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gZT-bJ-Kpt">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="751" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gZT-bJ-Kpt">
                                             <rect key="frame" x="8" y="8" width="554" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -204,7 +204,7 @@
                                         <constraint firstItem="nkL-os-Edb" firstAttribute="trailing" secondItem="ZlP-Qe-UAj" secondAttribute="trailingMargin" id="62L-Lw-qMg"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="gZT-bJ-Kpt" secondAttribute="bottom" constant="14" id="7R4-WV-G6b"/>
                                         <constraint firstItem="lB8-TQ-gOC" firstAttribute="top" secondItem="gZT-bJ-Kpt" secondAttribute="bottom" id="8io-C1-3lS"/>
-                                        <constraint firstItem="lB8-TQ-gOC" firstAttribute="leading" secondItem="ZlP-Qe-UAj" secondAttribute="leadingMargin" id="FPJ-ge-w3P"/>
+                                        <constraint firstItem="lB8-TQ-gOC" firstAttribute="leading" secondItem="ZlP-Qe-UAj" secondAttribute="leadingMargin" constant="6" id="FPJ-ge-w3P"/>
                                         <constraint firstItem="gZT-bJ-Kpt" firstAttribute="trailing" secondItem="ZlP-Qe-UAj" secondAttribute="trailingMargin" constant="-30" id="WO6-jN-5Sg"/>
                                         <constraint firstItem="nkL-os-Edb" firstAttribute="leading" secondItem="gZT-bJ-Kpt" secondAttribute="trailing" constant="8" id="X3h-hy-uPh"/>
                                         <constraint firstItem="lB8-TQ-gOC" firstAttribute="trailing" secondItem="ZlP-Qe-UAj" secondAttribute="trailingMargin" constant="-30" id="e2a-zj-bAf"/>
