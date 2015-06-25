@@ -253,7 +253,7 @@ Library
     GF.System.Directory
     GF.System.Process
     GF.System.Signal
-    GF.System.UseSignal
+--  GF.System.UseSignal
     GF.Text.Clitics
     GF.Text.Coding
     GF.Text.Lexing
