@@ -59001,7 +59001,7 @@ lin whiz_V = mkWV (k73 "kehrätä") ; --UNCHK
 lin whizbang_N = mkWN (k38 "sähikäinen") ; --UNCHK
 lin whoPl_IP = S.whoPl_IP ;
 lin whoSg_IP = S.whoSg_IP ;
-lin who_N = mkWN (compoundN "terveys" (k2 "järjestö")) "Maailman" ; --UNCHK
+lin who_PN = foreignPN "WHO" ;
 lin whodunit_N = mkWN (k6 "dekkari") ; --UNCHK
 lin whoever_NP = {s = table {NPAcc => "kenet" ++ "tahansa" ; c => S.kukaInt ! Sg ! npform2case Sg c ++ "tahansa"} ; a = agrP3 Sg ; isPron, isNeg = False} ; --
 lin whole_A = mkA "kokonainen" ;

@@ -36062,7 +36062,7 @@ lin whiz_N = mkN "飕飕声" ;
 lin whiz_V = mkV "作呼呼声" | mkV "发出嗖嗖声" | mkV "发出嗡嗡声" | mkV "发飕飕声" | mkV "嗡嗡转动" | mkV "飕飕作声" ; -- open-multilingual-wordnet
 lin whoPl_IP = S.whoPl_IP ;
 lin whoSg_IP = S.whoSg_IP ;
-lin who_N = mkN "谁" | {-HSK-} mkN "谁""" ;
+lin who_PN = foreignPN "WHO" ;
 lin whodunit_N = mkN "偵探小說" | mkN "侦探小说" ; -- status=guess -- status=guess
 lin whoever_NP = variants {} ;
 lin whole_A = mkA "一" | mkA "全部" | mkA "完" | mkA "完全" | mkA "整个" ;

@@ -63478,7 +63478,7 @@ lin whizbang_N = variants {} ; -- status=guess
 lin whizz_kid_N = mkN "allvetare" utrum ;
 lin whoPl_IP = S.whoPl_IP ;
 lin whoSg_IP = S.whoSg_IP ;
-lin who_N = mkN "vem" ; -- src=google
+lin who_PN = mkPN "WHO" neutrum ;
 lin whodunit_N = mkN "deckare" utrum ; -- status=guess
 lin whoever_NP = variants {} ; --
 lin whole_A = mkA "hel" | mkA "välbehållen" "välbehållet" ;
