@@ -399,12 +399,12 @@ oper
     s = nounForms apa apan apor aporna ;
     g = g ;
     co = case apa of {  
-      ap + "e" => case g of {
+      ap@(? + ? + ?) + "e" => case g of {
         Neutr => apa + "s" ;              -- rikes
         _     => ap                       -- pojk
         } ;
-      ap + "a" => ap ;                    -- flick
-      ? + ? + ? + _ + ("ing" | "ion" | "het") => apa + "s" ;  -- regerings, stations, frihets
+      ap@(? + ?) + "a" => ap ;                    -- flick
+      ? + ? + ? + _ + ("ing" | "ion" | "het" | "tet") => apa + "s" ;  -- regerings, stations, frihets, fakultets
       _ => apa
       }
     } ;
