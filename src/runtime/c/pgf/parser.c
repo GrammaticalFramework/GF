@@ -1105,7 +1105,9 @@ pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state,
 			if (seq->idx != NULL) {
 				PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
 				entry->idx       = seq->idx;
-				entry->offset    = (current - ps->sentence);
+				entry->offset    =
+					(gu_seq_length(seq->syms) == 0) ? state->start_offset
+					                                : (size_t) (current - ps->sentence);
 			}
 
 			if (len+1 <= max)
@@ -1218,16 +1220,16 @@ pgf_parsing_predict_lexeme(PgfParsing* ps, PgfItemConts* conts,
 	GuVariantInfo i = { PGF_PRODUCTION_APPLY, entry->papp };
 	PgfProduction prod = gu_variant_close(i);
 	PgfItem* item =
-        pgf_new_item(ps, conts, prod);
-    PgfSymbols* syms = entry->papp->fun->lins[conts->lin_idx]->syms;
-    item->sym_idx = gu_seq_length(syms);
-    prob_t prob = item->inside_prob+item->conts->outside_prob;
+		pgf_new_item(ps, conts, prod);
+	PgfSymbols* syms = entry->papp->fun->lins[conts->lin_idx]->syms;
+	item->sym_idx = gu_seq_length(syms);
+	prob_t prob = item->inside_prob+item->conts->outside_prob;
 	PgfParseState* state =
 		pgf_new_parse_state(ps, offset, BIND_NONE, prob);
 	if (state->viterbi_prob > prob) {
 		state->viterbi_prob = prob;
 	}
-    gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
+	gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
 }
 
 static void
