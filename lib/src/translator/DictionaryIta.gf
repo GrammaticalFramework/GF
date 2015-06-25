@@ -29419,6 +29419,7 @@ lin whitworth_PN = mkPN "Whitworth" ; -- status=guess src=geonames
 lin whiz_V = mkV "urinare" ; -- status=guess, src=wikt
 lin whoPl_IP = S.whoPl_IP ; -- comment=CHECKED
 lin whoSg_IP = S.whoSg_IP ; -- comment=CHECKED
+lin who_PN = mkPN "OMS" ;
 lin whodunit_N = mkN "giallo" ; -- UWN
 lin whoever_NP = variants {} ; --
 lin whole_A = mkA "intero" ; -- status=guess

@@ -489,6 +489,7 @@ lin which_IQuant = ss "liema" ;
 lin white_A = mkA "abjad" "bajda" "bojod" ;
 lin whoPl_IP = mkIP "min" plural ;
 lin whoSg_IP = mkIP "min" singular ;
+lin who_PN = mkPN "ODS" ;
 lin why_IAdv = ss "għalfejn" ;
 lin wide_A = broad_A ;
 lin wife_N = mkN "mara" "nisa" ;

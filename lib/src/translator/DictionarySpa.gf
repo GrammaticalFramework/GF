@@ -32502,6 +32502,7 @@ lin whittlesey_PN = mkPN "Whittlesey" ; -- status=guess src=geonames
 lin whitworth_PN = mkPN "Whitworth" ; -- status=guess src=geonames
 lin whoPl_IP = S.whoPl_IP ;
 lin whoSg_IP = S.whoSg_IP ;
+lin who_PN = mkPN "OMS" ;
 lin whodunit_N = mkN "whodunit" ; --UWN
 lin whoever_NP = variants {} ; --
 lin whole_A = mkA "entero" ;

@@ -64102,7 +64102,7 @@ lin whizbang_N = variants {} ;
 lin whizz_kid_N = variants {} ;
 lin whoPl_IP = S.whoPl_IP ;
 lin whoSg_IP = S.whoSg_IP ;
-lin who_N = variants {} ;
+lin who_PN = mkPN "WHO" ;
 lin whodunit_N = mkN "Kriminalroman" "Kriminalromane" masculine | mkN "Krimi" "Krimis" masculine ; -- status=guess status=guess
 lin whoever_NP = variants {} ; --
 lin whole_A = mkA "ganz" ;

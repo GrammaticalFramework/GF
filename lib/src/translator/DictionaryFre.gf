@@ -33067,6 +33067,7 @@ lin whitworth_PN = mkPN "Whitworth" ; -- status=guess src=geonames
 lin whiz_V = mkV "ronronner" ; -- UWN
 lin whoPl_IP = S.whoPl_IP ;
 lin whoSg_IP = S.whoSg_IP | E.QuiestcequeIP ;
+lin who_PN = mkPN "OMS" ;
 lin whodunit_N = mkN "mystère" | mkN "whodunit" | mkN "whodunnit" ; -- UWN
 lin whoever_NP = variants {} ; --
 lin whole_A = mkA "entier" ; ---- up to this checked by AR
