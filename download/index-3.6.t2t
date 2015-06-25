@@ -8,22 +8,22 @@ Grammatical Framework Download and Installation
 %!postproc(html): <TD><I> <TD><small>
 %!postproc(html): </I></TD> </small></TD>
 
-**GF 3.7** was released on 25 June 2015.
+**GF 3.6** was released on 23 June 2014.
 
-What's new? See the [Release notes release-3.7.html].
+What's new? See the [Release notes release-3.6.html].
 
 
 == Binary packages ==
 
 || Platform | Download | Features | How to install
-| Mac OS X | [gf-3.7.pkg gf-3.7.pkg] | //GF+S+C// | Double-click on the package icon
-| Mac OS X | [gf-3.7-bin-intel-mac.tar.gz gf-3.7-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.7-bin-intel-mac.tar.gz``
+| Mac OS X | [gf-3.6.pkg gf-3.6.pkg] | //GF+S+C// | Double-click on the package icon
+| Mac OS X | [gf-3.6-bin-intel-mac.tar.gz gf-3.6-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.6-bin-intel-mac.tar.gz``
 %| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+P// | ``sudo rpm -i ...``
-| Ubuntu (32-bit) | [gf_3.7-1_i386.deb gf_3.7-1_i386.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7-1_i386.deb``
-| Ubuntu (64-bit) | [gf_3.7-1_amd64.deb gf_3.7-1_amd64.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7-1_amd64.deb``
-| Windows | [gf-3.7-bin-windows.zip gf-3.7-bin-windows.zip] | //GF// | ``unzip gf-3.7-bin-windows.zip``
-%| MINGW | [gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz``
-%| ... | ... | ... | ...
+| Ubuntu (32-bit) | [gf_3.6-1_i386.deb gf_3.6-1_i386.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.6-1_i386.deb``
+| Ubuntu (64-bit) | [gf_3.6-1_amd64.deb gf_3.6-1_amd64.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.6-1_amd64.deb``
+| Windows | [gf-3.6-bin-windows.zip gf-3.6-bin-windows.zip] | //GF+S// | ``unzip gf-3.6-bin-windows.zip``
+| MINGW | [gf-3.6-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.6-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.6-bin-i686-MINGW32_NT-6.1.tar.gz``
+%| ... | ... | | ...
 
 Features: GF = GF shell and grammar compiler and the Resource Grammar Library,
 S = ``gf -server`` mode, C = C run-time system, P = Python binding to the C run-time system
@@ -38,14 +38,14 @@ You will probably need to set the ``PATH`` and ``GF_LIB_PATH`` environment
 variables, see Inari's notes on
 [Installing GF on Windows http://www.grammaticalframework.org/~inari/gf-windows.html#toc3].
 
-%The new experimental MINGW package is for use in the
-%[MINGW http://www.mingw.org] environment in Windows. Unpack it in the MSYS shell
-%(which is started with ``C:\MinGW\msys\1.0\msys.bat``).
-%It should work out of the box without any additional settings.
+The new experimental MINGW package is for use in the
+[MINGW http://www.mingw.org] environment in Windows. Unpack it in the MSYS shell
+(which is started with ``C:\MinGW\msys\1.0\msys.bat``).
+It should work out of the box without any additional settings.
 
-The ``.deb`` packages work on Ubuntu 12.04, 14.04 and 15.04.
+The ``.deb`` packages work on Ubuntu 12.04, 13.10 and 14.04.
 
-The packages for Mac OS work on 10.9 (Mavericks) and on 10.10 (Yosemite).
+The packages for Mac OS work on 10.8 (Mountain Lion) and on 10.9 (Mavericks).
 
 The Mac OS and Linux ``.tar.gz`` packages are designed to be installed in
 ``/usr/local``.
@@ -53,7 +53,7 @@ You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
 ```
-  export GF_LIB_PATH=/usr/local/share/gf-3.7/lib
+  export GF_LIB_PATH=/usr/local/share/gf-3.6/lib
 ```
 
 where ``/usr/local`` should be replaced with the path to the location where you
@@ -74,7 +74,7 @@ circumstances the prodedure is fairly simple:
 
 
 You can also download the full source package from here:
-[``gf-3.7.tar.gz`` gf-3.7.tar.gz].
+[``gf-3.6.tar.gz`` gf-3.6.tar.gz].
 
 === Notes ===
 
@@ -105,20 +105,25 @@ manually. Here is one way to do this:
 
 
 **Note 2**.
-We recommend using GHC 7.8 (which is part of the Haskell Platform 2014.2.0.0)
-or GHC 7.6 (which is part of the Haskell Platform 2013.2.0.0).
-Using GHC 7.4 (Haskell Platform 2012.4.0.0) still works too.
-%Compilation with GHC 6.12 is no longer supported, because of multiple package
-%version dependency problems.
+We recommend using GHC 7.6 (which is part of the Haskell Platform 2013.2.0.0)
+or GHC 7.4 (which is part of the Haskell Platform 2012.4.0.0).
+Using GHC 7.0 will probably still work for the most part
+(but there is an issue with error reporting in ``gf -server``
+when compiled with GHC 7.0).
+Compilation with GHC 6.12 is no longer supported, because of multiple package
+version dependency problems.
 
-The GF source code has been updated to be compilable with GHC 7.10.1, but we
-have seen cases where GF stops with the message ``gf: <<loop>>`` when running
-with multiple threads (``-j +RTS -N -RTS``), so it's probably better to stick
-with GHC 7.8, at least until GHC 7.10.2 is out.
+The GF source code has been updated to be compilable with GHC 7.8,
+unlike the [cgi http://hackage.haskell.org/package/cgi] package on Hackage,
+which is needed to compile GF with ``gf -server`` mode support.
+If you want to compile GF with GHC 7.8 and need ``gf -server`` mode,
+there is
+[a patched version of the cgi package on github https://github.com/jhenahan/haskell-cgi]
+that you can install instead of the version on Hackage.
 
 **Note 3**.
 [The Haskell Platform for Mac OS X http://www.haskell.org/platform/mac.html]
-page states that on OS X 10.6 you need Xcode 3.2 or later, but in fact it appears you need
+page states that you need Xcode 3.2 or later, but in fact it appears you need
 Xcode 3.2.3 or later. If you have Xcode 3.2.2, you can get an error from the
 linker: ``ld: unknown option: -no_pie``.
 
@@ -164,7 +169,6 @@ For more info on working with the GF source code, see the
 
 ==Older releases==
 
-- [GF 3.6 index-3.6.html] (June 2014)
 - [GF 3.5 index-3.5.html] (August 2013)
 - [GF 3.4 index-3.4.html] (January 2013).
 - [GF 3.3.3 index-3.3.3.html] (March 2012).
