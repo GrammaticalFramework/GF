@@ -1,0 +1,180 @@
+Grammatical Framework Download and Installation
+
+
+%!style:../css/style.css
+%!postproc(html): </HEAD> <STYLE>body { color: #333; } li>code,p>code,pre { color: #730; }</STYLE></HEAD>
+%!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+%!postproc(html): <TD><I> <TD><small>
+%!postproc(html): </I></TD> </small></TD>
+
+**GF 3.7** was released on 25 June 2015.
+
+What's new? See the [Release notes release-3.7.html].
+
+
+== Binary packages ==
+
+|| Platform | Download | Features | How to install
+| Mac OS X | [gf-3.7.pkg gf-3.7.pkg] | //GF+S+C// | Double-click on the package icon
+| Mac OS X | [gf-3.7-bin-intel-mac.tar.gz gf-3.7-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.7-bin-intel-mac.tar.gz``
+%| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+P// | ``sudo rpm -i ...``
+| Ubuntu (32-bit) | [gf_3.7-1_i386.deb gf_3.7-1_i386.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7-1_i386.deb``
+| Ubuntu (64-bit) | [gf_3.7-1_amd64.deb gf_3.7-1_amd64.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7-1_amd64.deb``
+| Windows | [gf-3.7-bin-windows.zip gf-3.7-bin-windows.zip] | //GF// | ``unzip gf-3.7-bin-windows.zip``
+%| MINGW | [gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz``
+%| ... | ... | ... | ...
+
+Features: GF = GF shell and grammar compiler and the Resource Grammar Library,
+S = ``gf -server`` mode, C = C run-time system, P = Python binding to the C run-time system
+
+%More binary packages might be added later.
+
+===Notes===
+
+The Windows package is installed by just unpacking it anywhere.
+%It finds the libraries relative to the ``.exe`` file.
+You will probably need to set the ``PATH`` and ``GF_LIB_PATH`` environment
+variables, see Inari's notes on
+[Installing GF on Windows http://www.grammaticalframework.org/~inari/gf-windows.html#toc3].
+
+%The new experimental MINGW package is for use in the
+%[MINGW http://www.mingw.org] environment in Windows. Unpack it in the MSYS shell
+%(which is started with ``C:\MinGW\msys\1.0\msys.bat``).
+%It should work out of the box without any additional settings.
+
+The ``.deb`` packages work on Ubuntu 12.04, 14.04 and 15.04.
+
+The packages for Mac OS work on 10.9 (Mavericks) and on 10.10 (Yosemite).
+
+The Mac OS and Linux ``.tar.gz`` packages are designed to be installed in
+``/usr/local``.
+You can install them in other locations, but then you need to set the
+``GF_LIB_PATH`` environment variable:
+
+```
+  export GF_LIB_PATH=/usr/local/share/gf-3.7/lib
+```
+
+where ``/usr/local`` should be replaced with the path to the location where you
+unpacked the package.
+
+
+==Installing the latest release from source==
+
+[GF is on Hackage http://hackage.haskell.org/package/gf], so under normal
+circumstances the prodedure is fairly simple:
+
++ Install the [Haskell Platform http://hackage.haskell.org/platform]
+  version 2013.2.0.0 or 2012.4.0.0 (see notes 2&3 below)
++ ``cabal update``
++ On Linux: install some C libraries from your Linux distribution
+  (see note 1 below)
++ ``cabal install gf``
+
+
+You can also download the full source package from here:
+[``gf-3.7.tar.gz`` gf-3.7.tar.gz].
+
+=== Notes ===
+
+The above steps installs GF for a single user.
+% and does not require root privileges.
+The executables are put in ``$HOME/.cabal/bin``
+(or, with recent versions of the Haskell platform on Mac OS X,
+in ``$HOME/Library/Haskell/bin``), so it is a good
+idea to put a line in your ``.bash_profile`` or ``.profile``
+to add that directory to you path:
+
+```
+  PATH=$HOME/.cabal/bin:$PATH
+```
+or
+```
+  PATH=$HOME/Library/Haskell/bin:$PATH
+```
+
+**Note 1**.
+GF uses [``haskeline`` http://hackage.haskell.org/package/haskeline], which
+on Linux depends on some non-Haskell libraries that
+won't be installed automatically by cabal, and therefore need to be installed
+manually. Here is one way to do this:
+
+- On Ubuntu: ``sudo apt-get install libghc-haskeline-dev``
+- On Fedora: ``sudo yum install ghc-haskeline-devel``
+
+
+**Note 2**.
+We recommend using GHC 7.8 (which is part of the Haskell Platform 2014.2.0.0)
+or GHC 7.6 (which is part of the Haskell Platform 2013.2.0.0).
+Using GHC 7.4 (Haskell Platform 2012.4.0.0) still works too.
+%Compilation with GHC 6.12 is no longer supported, because of multiple package
+%version dependency problems.
+
+The GF source code has been updated to be compilable with GHC 7.10.1, but we
+have seen cases where GF stops with the message ``gf: <<loop>>`` when running
+with multiple threads (``-j +RTS -N -RTS``), so it's probably better to stick
+with GHC 7.8, at least until GHC 7.10.2 is out.
+
+**Note 3**.
+[The Haskell Platform for Mac OS X http://www.haskell.org/platform/mac.html]
+page states that on OS X 10.6 you need Xcode 3.2 or later, but in fact it appears you need
+Xcode 3.2.3 or later. If you have Xcode 3.2.2, you can get an error from the
+linker: ``ld: unknown option: -no_pie``.
+
+=== Known problems ===
+
+There seems to be a bug in some versions of Cabal that can cause
+
+```
+  Distribution/Simple/PackageIndex.hs:124:8-13: Assertion failed
+```
+
+if the same version of GF is
+already installed. If you encounter this, you can use ``ghc-pkg unregister gf``
+to remove the installed version of GF and ``ghc-pkg list gf`` to verify that
+it is gone.
+
+==Installing from the latest developer source code==
+
+The first time:
+%, assuming you already have the Haskell Platform and darcs
+
+```
+  darcs get --lazy http://www.grammaticalframework.org/ GF
+  cd GF
+  cabal install
+```
+
+Subsequently:
+
+```
+  cd GF
+  darcs pull -a
+  cabal install
+```
+
+Alternatively, you can get the code from the
+[GF GitHub https://github.com/GrammaticalFramework/GF/] mirror, which is
+updated nightly.
+
+The above notes for installing from source apply also in these cases.
+For more info on working with the GF source code, see the
+[GF Developers Guide ../doc/gf-developers.html].
+
+==Older releases==
+
+- [GF 3.6 index-3.6.html] (June 2014)
+- [GF 3.5 index-3.5.html] (August 2013)
+- [GF 3.4 index-3.4.html] (January 2013).
+- [GF 3.3.3 index-3.3.3.html] (March 2012).
+- [GF 3.3 index-3.3.html] (October 2011).
+- [GF 3.2.9 index-3.2.9.html] source-only snapshot (September 2011).
+- [GF 3.2 index-3.2.html] (December 2010).
+- [GF 3.1.6 index-3.1.6.html] (April 2010).
+- [GF 3.1 old-index.html] (December 2009).
+
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]

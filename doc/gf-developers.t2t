@@ -40,7 +40,7 @@ web sites, as described below.
 === The Haskell Platform ===
 
 GF is written in Haskell, so first of all you need
-the //Haskell Platform//, version 2012.4.0.0 or 2013.2.0.0. Downloads
+the //Haskell Platform//, version 2014.2.0.0 or 2013.2.0.0. Downloads
 and installation instructions are available from here:
 
     http://hackage.haskell.org/platform/
@@ -54,7 +54,7 @@ This command should show you which version of GHC you have. If the installation
 of the Haskell Platform	 was successful you should see a message like:
 
 ```
-The Glorious Glasgow Haskell Compilation System, version 7.6.3
+The Glorious Glasgow Haskell Compilation System, version 7.8.3
 ```
 
 Other required tools included in the Haskell Platform are 
@@ -463,6 +463,8 @@ the ``INSTALL`` files in those directories.
 
 This was tested on Ubuntu 14.04 for the release of GF 3.6, and the
 resulting ``.deb`` packages appears to work on Ubuntu 12.04, 13.10 and 14.04.
+For the release of GF 3.7, we generated ``.deb`` packages on Ubuntu 15.04 and
+tested them on Ubuntu 12.04 and 14.04.
 
 Under Ubuntu, Haskell executables are statically linked against other Haskell
 libraries, so the .deb packages are fairly self-contained.

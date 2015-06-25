@@ -1,4 +1,4 @@
-GF next Release Notes
+GF 3.7 Release Notes
 June 2015
 
 %!style:../css/style.css
@@ -11,8 +11,8 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
-Over 788 changes have been pushed to the source repository since the
-[release of GF 3.6 release-3.6.html] in June 2014.
+Over 800 changes have been pushed to the source repository since
+[the release of GF 3.6 release-3.6.html] in June 2014.
 
 ===GF compiler and run-time library===
 
@@ -33,11 +33,12 @@ Over 788 changes have been pushed to the source repository since the
    By also adding ``-haskell=concrete`` you get a Haskell module for each
    concrete syntax of the grammar. These contain translations of
    linearization types and linearization functions.
-   By adding ``-haskell=variants`` you get linerization functions that output
+   By adding ``-haskell=variants`` you get linearization functions that output
    all variants.
   (You don't get any functions for parsing.)
-- Now there is a full support for all orthographic primitives:
-  BIND, SOFT_BIND, SOFT_SPACE, CAPIT, ALL_CAPIT and nonExist
+- Now there is full support for all orthographic primitives:
+  ``BIND``, ``SOFT_BIND``, ``SOFT_SPACE``, ``CAPIT``, ``ALL_CAPIT`` and
+   ``nonExist``.
 - It is now possible to define callbacks for literals from the Haskell
   binding to the C runtime. This is used for instance in 
   the Wide Coverage translator on the Web.
@@ -45,13 +46,20 @@ Over 788 changes have been pushed to the source repository since the
 
 ====Other changes and bug fixes====
 
-- Colors are now used to highlight errors and warnings (except on Windows).
+- GF now uses colors to highlight errors and warnings (except on Windows).
 - Even though GF works with absolute paths internally, GF now shows paths
   relative to the current directory in diagnostic output.
 - GF Shell and ``gf -server``: improved responsiveness when large grammars are
   loaded (by increasing the GHC RTS idle timeout before full GC from the
   default 0.3s to 5s).
 - Numerous fixes in the translation dictionaries.
+- C-run-time system: Bug fixes in the Java and Python bindings.
+- C-run-time system: the parser is now fully Unicode compatible.
+- Because of the new orthographic primitives, the version numbers in
+  ``.pgf`` and ``.gfo`` files have been bumped. PGF files
+  produced with this version of GF can not be used with older versions of GF.
+  If you get an error message saying ``.gfo file version mismatch``, remove
+  old ``.gfo`` files.
 
 
 ====Changes of interest to compiler developers====
@@ -62,41 +70,39 @@ Over 788 changes have been pushed to the source repository since the
 - Some Haddock documentation improvements to document the compiler API.
 - Various refactoring for readability, modularity and efficiency. Removal of
   some dead code.
-- [...]
 
 
 ===Resource Grammar Library===
 
 - New languages in the Resource Grammar Library: Mongolian
   (see the [updated synopsis ../lib/doc/synopsis.html]).
-- [...]
 
 
 ===GF Cloud services===
 
-    - Minibar and Wide Coverage Translation Demo: speech output is now available
+- Minibar and Wide Coverage Translation Demo: speech output is now available
   (in browsers that support it).
 - The Wide Coverage Translation Demo can now draw syntax trees and show
-  inflection tables.
+  inflection tables. There are also lots of improvements in the
+  translation grammar and dictionaries.
 - PGF service: add commands ``c-abstrtree`` and ``c-parsetree``.
   These are the C runtime variants of the ``absttree`` and ``parsetree``
   commands. They work in the same way, but support fewer rendering options.
-- PGF Service:
+- PGF service:
   The ``parse``/``translate``/``c-parse``/``c-translate`` commands now
   recognize the option ``jsontree=true`` to augment the returned JSON
   structure with a field called
   ``jsontree`` next to the field ``tree``, or ``jsontrees`` next to ``trees``,
   containing the the returned syntax tree in JSON format.
-- PGF Service: when using ``full=yes`` with the ``complete`` command,
+- PGF service: when using ``full=yes`` with the ``complete`` command,
   additional information about completions is included in the output, in
   particular there is an additional field ``seq`` containing the longest
   possible completion.
 - PGF service: add command ``c-linearizeAll`` to obtain all variants.
 - PGF service: PGFs now expire from the internal cache when they have been
   unused for 24 hours, to keep memory use down in long running servers.
-- PGF Service: limit the number of parallel calls to the C run-time parse
+- PGF service: limit the number of parallel calls to the C run-time parse
   function to 4 by default. The limit can be changed with the ``-j`` flag.
-- [...]
 
 
 --------------------
