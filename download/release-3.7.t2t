@@ -66,7 +66,7 @@ Over 800 changes have been pushed to the source repository since
 
 - The compiler is now available as a Haskell library. The module ``GF``
   serves as a preliminary compiler API. It exports a selection of
-  types and functions from the compiler. [...]
+  types and functions from the compiler.
 - Some Haddock documentation improvements to document the compiler API.
 - Various refactoring for readability, modularity and efficiency. Removal of
   some dead code.
