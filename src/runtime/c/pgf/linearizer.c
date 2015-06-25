@@ -33,6 +33,7 @@ pgf_lzr_add_overl_entry(PgfCncOverloadMap* overl_table,
 void
 pgf_lzr_index(PgfConcr* concr, 
               PgfCCat* ccat, PgfProduction prod,
+              bool is_lexical,
               GuPool *pool)
 {
 	void* data = gu_variant_data(prod);

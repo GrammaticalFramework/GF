@@ -6,6 +6,9 @@
 #include <pgf/evaluator.h>
 #include <pgf/reader.h>
 #include "lightning.h"
+#ifdef __MINGW32__
+#include <malloc.h>
+#endif
 
 //#define PGF_JIT_DEBUG
 
