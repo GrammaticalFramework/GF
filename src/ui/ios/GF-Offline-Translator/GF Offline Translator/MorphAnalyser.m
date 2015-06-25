@@ -99,7 +99,7 @@ void print_lemma(PgfMorphoCallback* _self,
         // inflection tables and alternative translations.
         pgf_linearize(this->tgt, expr, out, err);
     } else {
-        gu_puts(".", out, err);
+//        gu_puts(".", out, err);
     }
     
     // Finally we get the string which is used for describing
@@ -108,9 +108,11 @@ void print_lemma(PgfMorphoCallback* _self,
     printf("entry: %s\n", s);
     
     NSString *translation = [NSString stringWithUTF8String:s];
-    if ([[translation componentsSeparatedByString:@" "].lastObject isEqualToString:@"."]) {
+    if ([morphWords containsObject:translation] ||
+        [[translation stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] hasSuffix:@"."]) {
         return;
     }
+
     [morphWords addObject:translation];
     
     // Here we get the html for the inflection table
