@@ -196,19 +196,31 @@
     
     NSString *input = self.textView.text;
     NSInteger wordsCount = [input componentsSeparatedByString:@" "].count;
-    Translation *newTranslation = (wordsCount == 1 ? (Translation *)[self.translator analysWord:input] : (Translation *)[self.translator translatePhrase:input]);
     
-    [self.inputs addObject:newTranslation];
-    [self.tableView reloadData];
     
-    [newTranslation speak];
+    dispatch_async(dispatch_queue_create("Load grammars",NULL), ^{
+        Translation *newTranslation = (wordsCount == 1 ? (Translation *)[self.translator analysWord:input] : (Translation *)[self.translator translatePhrase:input]);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.inputs addObject:newTranslation];
+            [self.tableView reloadData];
+            
+            [newTranslation speak];
+            
+//            [self.tableView slk_scrollToBottomAnimated:YES];
+//
+            NSIndexPath *bottomIndexPath = [NSIndexPath indexPathForRow:(self.inputs.count*2)-1 inSection:0];
+            [self.tableView scrollToRowAtIndexPath:bottomIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        });
+    });
+    
+
     
     // This little trick validates any pending auto-correction or auto-spelling just after hitting the 'Send' button
     [self.textView refreshFirstResponder];
     [super didPressRightButton:sender];
     
-    NSIndexPath *bottomIndexPath = [NSIndexPath indexPathForRow:(self.inputs.count*2)-1 inSection:0];
-    [self.tableView scrollToRowAtIndexPath:bottomIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
 }
 
 #pragma mark - <UITableViewDataSource>
