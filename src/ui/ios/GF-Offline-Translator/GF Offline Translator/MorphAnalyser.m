@@ -108,8 +108,8 @@ void print_lemma(PgfMorphoCallback* _self,
     printf("entry: %s\n", s);
     
     NSString *translation = [NSString stringWithUTF8String:s];
-    if ([morphWords containsObject:translation] ||
-        [[translation stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] hasSuffix:@"."]) {
+    if ([morphWords containsObject:translation]) { //||
+//        [[translation stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] hasSuffix:@"."]) {
         return;
     }
 
@@ -166,9 +166,11 @@ void print_lemma(PgfMorphoCallback* _self,
 
 - (NSString *)bestTranslation {
     if (self.analysedWords.count) {
-        NSString *translation = self.analysedWords.firstObject;
-        translation = [[translation componentsSeparatedByString:@" "].lastObject stringByAppendingString:@" "];
-        return translation;
+        for (NSString *translation in self.analysedWords) {
+            if (![[translation stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] hasSuffix:@"."]) {
+                return [[translation componentsSeparatedByString:@" "].lastObject stringByAppendingString:@" "];
+            }
+        }
     }
     return nil;
 }
