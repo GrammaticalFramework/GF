@@ -254,7 +254,11 @@
     dispatch_async(dispatch_queue_create("Load grammars",NULL), ^{
         if ([self.previous.language isEqualToLanguage:language]) {
             Grammar *temp = isFrom ? self.from : self.to;
-            self.from = self.previous;
+            if (isFrom) {
+                self.from = self.previous;
+            } else {
+                self.to = self.previous;
+            }
             self.previous = temp;
         } else {
             self.previous = isFrom ? self.from : self.to;
