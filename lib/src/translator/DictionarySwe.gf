@@ -11701,8 +11701,8 @@ lin combine_N = mkN "kombinat" neutrum ; -- comment=4
 lin combine_V = mkV "kombinerar" ; -- comment=2
 lin combine_V2 = mkV2 "kombinerar" ; -- comment=2
 lin combine_VV = mkVV (mkV "kombinerar") ; -- comment=2
-lin combined_A = variants {} ; --
-lin combining_N = mkN "kombinera" ; -- src=google
+lin combined_A = mkA "kombinerad" ;
+lin combining_N = mkN "kombination" ;
 lin combretum_N = variants {} ; -- status=guess
 lin comburent_A = variants {} ; -- status=guess
 lin combustibility_N = mkN "brännbarhet" ; -- status=guess
@@ -52026,7 +52026,7 @@ lin sledge_N = mkN "släde" utrum ; -- comment=2
 lin sledge_V = variants {} ; -- status=guess
 lin sledge_V2 = variants {} ; -- status=guess
 lin sledgehammer_N = mkN "slägga" ; -- SaldoWN
-lin sleek_A = variants {} ; -- status=guess
+lin sleek_A = mkA "elegant" "elegent" ; -- src=google
 lin sleek_V2 = variants {} ; -- status=guess
 lin sleekness_N = variants {} ; -- status=guess
 lin sleep_N = mkN "sömn" ; -- SaldoWN
