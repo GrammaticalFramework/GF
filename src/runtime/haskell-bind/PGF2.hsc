@@ -26,6 +26,8 @@ module PGF2 (-- * CId
              graphvizAbstractTree,graphvizParseTree,
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
+             -- * Generation
+             functions, generateAll,
              -- * Exceptions
              PGFError(..),
              -- * Grammar specific callbacks
@@ -523,6 +525,26 @@ alignWords lang e = unsafePerformIO $
       n_fids <- (#peek PgfAlignmentPhrase, n_fids) ptr
       (fids :: [CInt]) <- peekArray (fromIntegral (n_fids :: CInt)) (ptr `plusPtr` (#offset PgfAlignmentPhrase, fids))
       return (phrase, map fromIntegral fids)
+
+functions :: PGF -> [Fun]
+functions p =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+    allocaBytes (#size GuMapItor) $ \itor -> do
+      exn <- gu_new_exn tmpPl
+      ref <- newIORef []
+      fptr <- wrapMapItorCallback (getFunctions ref)
+      (#poke GuMapItor, fn) itor fptr
+      pgf_iter_functions (pgf p) itor exn
+      freeHaskellFunPtr fptr
+      fs <- readIORef ref
+      return (reverse fs)
+  where
+    getFunctions :: IORef [String] -> MapItorCallback
+    getFunctions ref itor key value exn = do
+      names <- readIORef ref
+      name  <- peekCString (castPtr key)
+      writeIORef ref $! (name : names)
 
 -----------------------------------------------------------------------------
 -- Helper functions
