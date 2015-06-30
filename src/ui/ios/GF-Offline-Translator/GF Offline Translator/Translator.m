@@ -114,7 +114,7 @@
                                                          toText:translatedText.firstObject
                                                    fromLanguage:self.from.language
                                                      toLanguage:self.to.language];
-    if (translatedText.count > 1) {
+    if (translatedText.count == 1) {
         translation.toTexts = translatedText;
     }
     translation.sequences = self.sequences;

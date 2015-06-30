@@ -232,14 +232,14 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    BOOL isFrom = indexPath.row % 2 == 0;
-    NSString *identifier = isFrom ? @"TranslationInput" : @"TranslationOutput";
+    BOOL input = indexPath.row % 2 == 0;
+    NSString *identifier = input ? @"TranslationInput" : @"TranslationOutput";
     
     TranslationTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     
     PhraseTranslation *translation = self.inputs[indexPath.row/2];
-    [cell setCellWithLanguage:translation fromLanguage:isFrom];
-    if (!isFrom && translation.toTexts.count) {
+    [cell setCellWithLanguage:translation fromLanguage:input];
+    if (!input && (translation.toTexts.count || translation.sequences.count > 0)) {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
     } else {
@@ -260,7 +260,7 @@
     }
     if ([tableView isEqual:self.tableView] && indexPath.row % 2 == 1) {
         PhraseTranslation *translation = self.inputs[indexPath.row/2];
-        if (translation.toTexts.count > 0) {
+        if (translation.toTexts.count > 0 || translation.sequences.count > 0) {
             [self performSegueWithIdentifier:@"TranslationOptions" sender:translation];
         }
     }
