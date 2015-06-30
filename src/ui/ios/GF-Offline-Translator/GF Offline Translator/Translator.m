@@ -87,6 +87,7 @@
 - (PhraseTranslation *)translatePhrase:(NSString *)phrase {
     
     
+    
     // If chinese add input to chars
     if ([self.from.language.bcp isEqualToString:@"zh-CN"]) {
         NSArray *array = [phrase stringToArray];
@@ -96,7 +97,7 @@
     GuPool *tmpPool = gu_new_pool();
     GuExn *tmpErr = gu_new_exn(tmpPool);
     
-    PgfExprEnum *parsedExpressions = [self parsePhrase:phrase startCat:@"Phr" tmpPool:tmpPool tmpErr:tmpErr];
+    PgfExprEnum *parsedExpressions = [self parsePhrase:[phrase stringByAppendingString:@" "] startCat:@"Phr" tmpPool:tmpPool tmpErr:tmpErr];
     NSArray *translatedText = nil;
     
     if (parsedExpressions != nil) {
