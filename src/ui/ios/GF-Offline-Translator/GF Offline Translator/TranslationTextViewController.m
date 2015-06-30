@@ -127,6 +127,7 @@
     self.textView.userDefinedKeyboardLanguage = self.translator.from.language.bcp;
 }
 
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -254,6 +255,9 @@
 
 // Uncomment this method to handle the cell selection
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.inputs.count == 0) {
+        return;
+    }
     if ([tableView isEqual:self.tableView] && indexPath.row % 2 == 1) {
         PhraseTranslation *translation = self.inputs[indexPath.row/2];
         if (translation.toTexts.count > 0) {
