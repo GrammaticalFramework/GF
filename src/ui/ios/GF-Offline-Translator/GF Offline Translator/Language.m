@@ -45,10 +45,10 @@
              [[Language alloc] initWithName:@"German"       abbreviation:@"Ger"     bcp:@"de-DE"],
              [[Language alloc] initWithName:@"Hindi"        abbreviation:@"Hin"     bcp:@"hi-IN"],
              [[Language alloc] initWithName:@"Italian"      abbreviation:@"Ita"     bcp:@"it-IT"],
-             [[Language alloc] initWithName:@"Japanese"     abbreviation:@"Jpn"     bcp:@"ja-JP"],
+//             [[Language alloc] initWithName:@"Japanese"     abbreviation:@"Jpn"     bcp:@"ja-JP"],
              [[Language alloc] initWithName:@"Spanish"      abbreviation:@"Spa"     bcp:@"es-ES"],
-             [[Language alloc] initWithName:@"Swedish"      abbreviation:@"Swe"     bcp:@"sv-SE"],
-             [[Language alloc] initWithName:@"Thai"         abbreviation:@"Tha"     bcp:@"th-TH"]
+             [[Language alloc] initWithName:@"Swedish"      abbreviation:@"Swe"     bcp:@"sv-SE"]//,
+//             [[Language alloc] initWithName:@"Thai"         abbreviation:@"Tha"     bcp:@"th-TH"]
              ];
 }
 
