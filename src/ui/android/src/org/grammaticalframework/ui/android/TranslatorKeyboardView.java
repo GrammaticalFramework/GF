@@ -3,12 +3,15 @@ package org.grammaticalframework.ui.android;
 import org.grammaticalframework.ui.android.TranslatorKeyboard;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TableLayout;
@@ -55,9 +58,14 @@ public class TranslatorKeyboardView extends KeyboardView {
 	    		index++;
 	    	}
 
+			WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+			Display display = wm.getDefaultDisplay();
+			Point size = new Point();
+			display.getSize(size);
+
 	    	popupContainer.measure(
-	                MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST), 
-	                MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
+	                MeasureSpec.makeMeasureSpec(size.x, MeasureSpec.AT_MOST), 
+	                MeasureSpec.makeMeasureSpec(size.y, MeasureSpec.AT_MOST));
 	
 	    	mLanguagesPopup = new PopupWindow(getContext());
 	    	mLanguagesPopup.setWidth(popupContainer.getMeasuredWidth());
