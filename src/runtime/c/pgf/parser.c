@@ -1105,9 +1105,7 @@ pgf_parsing_lookahead(PgfParsing *ps, PgfParseState* state,
 			if (seq->idx != NULL) {
 				PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
 				entry->idx       = seq->idx;
-				entry->offset    =
-					(gu_seq_length(seq->syms) == 0) ? state->start_offset
-					                                : (size_t) (current - ps->sentence);
+				entry->offset    = (size_t) (current - ps->sentence);
 			}
 
 			if (len+1 <= max)
@@ -1179,9 +1177,23 @@ pgf_new_parse_state(PgfParsing* ps, size_t start_offset,
 	if (ps->before == NULL && start_offset == 0)
 		state->needs_bind = false;
 
-	pgf_parsing_lookahead(ps, state,
-	                      0, gu_seq_length(ps->concr->sequences)-1,
-	                      0, strlen(ps->sentence)-state->end_offset);
+	if (gu_seq_length(ps->concr->sequences) > 0) {
+		// Add epsilon lexical rules to the bottom up index
+		PgfSequence* seq = gu_seq_index(ps->concr->sequences, PgfSequence, 0);
+		if (gu_seq_length(seq->syms) == 0 && seq->idx != NULL) {
+			PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
+			entry->idx    = seq->idx;
+			entry->offset = state->start_offset;
+		}
+
+		// Add non-epsilon lexical rules to the bottom up index
+		if (!state->needs_bind) {
+			pgf_parsing_lookahead(ps, state,
+			                      0, gu_seq_length(ps->concr->sequences)-1,
+			                      1, strlen(ps->sentence)-state->end_offset);
+		}
+	}
+
 
 	*pstate = state;
 
@@ -1269,44 +1281,43 @@ pgf_parsing_td_predict(PgfParsing* ps,
 				pgf_parsing_production(ps, ps->before, conts, prod);
 			}
 
-			if (!ps->before->needs_bind) {
-				// Bottom-up prediction for lexical and epsilon rules
-				size_t n_idcs = gu_buf_length(ps->before->lexicon_idx);
-				for (size_t i = 0; i < n_idcs; i++) {
-					PgfLexiconIdxEntry* lentry =
-						gu_buf_index(ps->before->lexicon_idx, PgfLexiconIdxEntry, i);
-					PgfProductionIdxEntry key;
-					key.ccat    = ccat;
-					key.lin_idx = lin_idx;
-					key.papp    = NULL;
-					PgfProductionIdxEntry* value =
-						gu_seq_binsearch(gu_buf_data_seq(lentry->idx),
-										 pgf_production_idx_entry_order,
-										 PgfProductionIdxEntry, &key);
+			// Bottom-up prediction for lexical and epsilon rules
+			size_t n_idcs = gu_buf_length(ps->before->lexicon_idx);
+			for (size_t i = 0; i < n_idcs; i++) {
+				PgfLexiconIdxEntry* lentry =
+					gu_buf_index(ps->before->lexicon_idx, PgfLexiconIdxEntry, i);
 
-					if (value != NULL) {
-						pgf_parsing_predict_lexeme(ps, conts, value, lentry->offset);
+				PgfProductionIdxEntry key;
+				key.ccat    = ccat;
+				key.lin_idx = lin_idx;
+				key.papp    = NULL;
+				PgfProductionIdxEntry* value =
+					gu_seq_binsearch(gu_buf_data_seq(lentry->idx),
+									 pgf_production_idx_entry_order,
+									 PgfProductionIdxEntry, &key);
 
-						PgfProductionIdxEntry* start =
-							gu_buf_data(lentry->idx);
-						PgfProductionIdxEntry* end =
-							start + gu_buf_length(lentry->idx)-1;
+				if (value != NULL) {
+					pgf_parsing_predict_lexeme(ps, conts, value, lentry->offset);
 
-						PgfProductionIdxEntry* left = value-1;
-						while (left >= start &&
-							   value->ccat->fid == left->ccat->fid &&
-							   value->lin_idx   == left->lin_idx) {
-							pgf_parsing_predict_lexeme(ps, conts, left, lentry->offset);
-							left--;
-						}
+					PgfProductionIdxEntry* start =
+						gu_buf_data(lentry->idx);
+					PgfProductionIdxEntry* end =
+						start + gu_buf_length(lentry->idx)-1;
 
-						PgfProductionIdxEntry* right = value+1;
-						while (right <= end &&
-							   value->ccat->fid == right->ccat->fid &&
-							   value->lin_idx   == right->lin_idx) {
-							pgf_parsing_predict_lexeme(ps, conts, right, lentry->offset);
-							right++;
-						}
+					PgfProductionIdxEntry* left = value-1;
+					while (left >= start &&
+						   value->ccat->fid == left->ccat->fid &&
+						   value->lin_idx   == left->lin_idx) {
+						pgf_parsing_predict_lexeme(ps, conts, left, lentry->offset);
+						left--;
+					}
+
+					PgfProductionIdxEntry* right = value+1;
+					while (right <= end &&
+						   value->ccat->fid == right->ccat->fid &&
+						   value->lin_idx   == right->lin_idx) {
+						pgf_parsing_predict_lexeme(ps, conts, right, lentry->offset);
+						right++;
 					}
 				}
 			}
