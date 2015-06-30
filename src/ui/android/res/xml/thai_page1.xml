@@ -51,7 +51,7 @@
     </Row>
     
     <Row>
-		<Key android:codes="-10" android:keyLabel="1/2" android:horizontalGap="3%p" android:keyEdgeFlags="left"/>
+		<Key android:codes="-10" android:keyLabel="1/2" android:horizontalGap="1%p" android:keyEdgeFlags="left"/>
 		<Key android:codes="3612" android:keyLabel="ผ"/>
 		<Key android:codes="3611" android:keyLabel="ป"/>
 		<Key android:codes="3649" android:keyLabel="แ"/>
