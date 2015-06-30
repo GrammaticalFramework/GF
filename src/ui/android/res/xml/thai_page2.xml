@@ -51,14 +51,11 @@
     </Row>
     
     <Row>
-		<Key android:codes="-10" android:keyLabel="2/2" android:horizontalGap="3%p" android:keyEdgeFlags="left"/>
-		<Key android:codes="40" android:keyLabel="("/>
-		<Key android:codes="41" android:keyLabel=")"/>
+		<Key android:codes="-10" android:keyLabel="2/2" android:horizontalGap="6%p" android:keyEdgeFlags="left"/>
 		<Key android:codes="3593" android:keyLabel="ฉ"/>
 		<Key android:codes="3630" android:keyLabel="ฮ"/>
 		<Key android:codes="3642" android:keyLabel="ฺ"/>
 		<Key android:codes="3660" android:keyLabel="์"/>
-		<Key android:codes="63" android:keyLabel="\?"/>
 		<Key android:codes="3602" android:keyLabel="ฒ"/>
 		<Key android:codes="3628" android:keyLabel="ฬ"/>
 		<Key android:codes="-5" android:keyIcon="@drawable/sym_keyboard_delete" 
