@@ -5096,8 +5096,6 @@ lin curb_V2 = mkV2 (mkV "intomen") | mkV2 (mkV "beteugelen") ; -- status=guess, 
 lin curd_N = mkN "wrongel" ; -- status=guess
 lin curdle_V = mkV "klonteren" ; -- status=guess, src=wikt
 lin curdle_V2 = mkV2 (mkV "klonteren") ; -- status=guess, src=wikt
-lin cure_1_N = variants {} ; --
-lin cure_2_N = variants {} ; --
 lin cure_N = mkN "remedie" feminine ; -- status=guess
 lin cure_V = genezen_V ; -- status=guess, src=wikt
 lin cure_V2 = mkV2 (genezen_V) ; -- status=guess, src=wikt
@@ -5355,9 +5353,7 @@ lin debby_PN = mkPN "Debby" ; -- src=eng status=guess
 lin debilitate_V2 = mkV2 (mkV "verzwakken") ; -- status=guess, src=wikt
 lin debit_N = mkN "debet" ; -- status=guess
 lin deborah_PN = mkPN "Deborah" ; -- src=eng status=guess
-lin debris_1_N = mkN "gletjserpuin etc." ; -- status=guess ---- sense to be split
-lin debris_2_N = mkN "gletjserpuin etc." ; -- status=guess ---- sense to be split
-lin debris_N = mkN "gletjserpuin etc." ; -- status=guess
+lin debris_N = variants {} ;
 lin debt_N = mkN "schuld" feminine | mkN "verplichting" ;
 lin debtor_N = mkN "debiteur" ; -- status=guess
 lin debugger_N = mkN "debugger" ; -- status=guess
@@ -5365,8 +5361,7 @@ lin debunk_V2 = mkV2 (mkV "doorprikken") | mkV2 (mkV "ontmaskeren") ; -- status=
 lin debut_1_N = variants {} ; --
 lin debut_2_N = variants {} ; --
 lin debut_N = mkN "debuut" neuter ; -- status=guess
-lin debutante_1_N = variants {} ; ---- sense to be split
-lin debutante_2_N = variants {} ; ---- sense to be split
+lin debutante_N = variants {} ;
 lin dec_PN = mkPN "Dec" ; -- src=eng status=guess
 lin decade_N = mkN "decennium" neuter ;
 lin decant_V2 = mkV2 (mkV "overgieten") ; -- status=guess, src=wikt

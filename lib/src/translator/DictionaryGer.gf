@@ -14311,8 +14311,7 @@ lin curd_N = mkN "Käsebruch" masculine ; -- status=guess
 lin curdle_V = variants {} ;
 lin curdle_V2 = variants {} ;
 lin curdling_N = variants {} ;
-lin cure_1_N = variants {} ; --
-lin cure_2_N = variants {} ; --
+lin cure_N = variants {} ; --
 lin cure_V = junkV "haltbar" ( mkV "machen" ) | regV "trocknen" | mkV "räuchern" | mkV "pökeln" ; -- status = guess , src = wikt status = guess , src = wikt status = guess , src = wikt status = guess , src = wikt
 lin cure_V2 = mkV2 ( junkV "haltbar" ( mkV "machen" ) | regV "trocknen" | mkV "räuchern" | mkV "pökeln" ) ; -- status = guess , src = wikt status = guess , src = wikt status = guess , src = wikt status = guess , src = wikt
 lin cure_all_N = variants {} ;
@@ -15011,8 +15010,7 @@ lin debouch_V2 = variants {} ;
 lin debridement_N = variants {} ;
 lin debrief_V2 = variants {} ;
 lin debriefing_N = variants {} ;
-lin debris_1_N = variants {} ;
-lin debris_2_N = variants {} ;
+lin debris_N = variants {} ;
 lin debt_N = mkN "Schuld" "Schulden" feminine | mkN "Verbindlichkeit" feminine | mkN "Verpflichtung" ; -- status=guess status=guess status=guess
 lin debtor_N = mkN "Schuldner" "Schuldner" masculine ; -- status=guess
 lin debug_V2 = mkV2 (mkV "entwanzen") ; -- status=guess, src=wikt
@@ -15021,8 +15019,7 @@ lin debunk_V2 = mkV2 (mkV "entlarven" | irregV "diskreditieren" "diskreditiert" 
 lin debut_1_N = variants {} ; --
 lin debut_2_N = variants {} ; --
 lin debut_V2 = variants {} ;
-lin debutante_1_N = variants {} ;
-lin debutante_2_N = variants {} ;
+lin debutante_N = variants {} ;
 lin dec_PN = mkPN "Dec" ; -- src=eng status=guess
 lin decade_N = mkN "Jahrzehnt" "Jahrzehnte" neuter | mkN "Dekade" "Dekaden" feminine ; -- status=guess status=guess
 lin decadence_N = mkN "Dekadenz" feminine ; -- status=guess
