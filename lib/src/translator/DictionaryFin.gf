@@ -23634,7 +23634,6 @@ lin harasser_N = mkWN (k10 "kiusaaja") ; --UNCHK
 lin harassment_N = mkWN (k2 "ahdistelu") ; --UNCHK
 lin harbin_PN = foreignPN "Harbin" ;
 lin harbinger_N = mkWN (k10 "edeltäjä") ; --UNCHK
-lin harbor_N = mkWN (compoundN "turva" (k9A "paikka")) ; --UNCHK
 lin harbor_V2 = mkWV2 (k67A "elätellä") ; --UNCHK
 lin harborage_N = mkWN (compoundN "turva" (k9A "paikka")) ; --UNCHK
 lin harbour_N = L.harbour_N ;

@@ -25727,7 +25727,6 @@ fun harasser_N : N ;
 fun harassment_N : N ;
 fun harbin_PN : PN ;
 fun harbinger_N : N ;
-fun harbor_N : N  ;
 fun harbour_N : N ;
 fun harbour_V : V ;
 fun harbour_V2 : V2 ;
