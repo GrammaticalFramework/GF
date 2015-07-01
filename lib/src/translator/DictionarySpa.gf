@@ -4778,12 +4778,12 @@ lin cannes_PN = mkPN "Cannes" ; -- status=guess src=geonames
 lin cannibalism_N = mkN "antropofagia" | mkN "canibalismo" ; -- status=guess status=guess
 lin cannibalistic_A = mkA "caníbal" | mkA "antropófago" ; -- status=guess status=guess
 lin cannock_PN = mkPN "Cannock" ; -- status=guess src=geonames
-lin cannon_N = mkN "cañón" masculine ; -- status=guess
+lin cannon_1_N = mkN "cañón" masculine ; -- status=guess
+lin cannon_2_N = mkN "carambola" ; -- status=guess
 lin canny_A = mkA "cauteloso" ; -- status=guess
 lin canoe_N = mkN "canoa" ; -- status=guess
 lin canoeist_N = mkN "canoísta" | mkN "remero" ; --UWN
-lin canon_1_N = variants {} ; ---- sense to be split
-lin canon_2_N = variants {} ; ---- sense to be split
+lin canon_N = variants {} ;
 lin canonist_N = mkN "canonista" ; --UWN
 lin canopy_N = mkN "dosel" | mkN "palio" | mkN "toldo" ; -- status=guess status=guess status=guess
 lin cant_N = mkN "argot" masculine | mkN "jerga" ; -- status=guess status=guess

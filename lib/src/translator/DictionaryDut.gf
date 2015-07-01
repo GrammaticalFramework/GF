@@ -3107,12 +3107,11 @@ lin cannes_PN = mkPN "Cannes" ; -- src=geonames status=guess
 lin cannibal_N = mkN "kannibaal" ; -- status=guess
 lin cannibalism_N = mkN "kannibalisme" neuter ; -- status=guess
 lin cannock_PN = mkPN "Cannock" ; -- src=geonames status=guess
-lin cannon_N = mkN "kanon" neuter ; -- status=guess
+lin cannon_1_N = mkN "kanon" neuter ; -- status=guess
+lin cannon_2_N = mkN "kanon" neuter ; -- status=guess
 lin cannonball_N = mkN "kanonskogel" masculine | mkN "bommetje" neuter ; -- status=guess status=guess
 lin canny_A = mkA "heel" ; -- status=guess
 lin canoe_N = mkN "kano" masculine ; -- status=guess
-lin canon_1_N = mkN "canon" masculine ; -- status=guess ---- sense to be split
-lin canon_2_N = mkN "canon" masculine ; -- status=guess ---- sense to be split
 lin canon_N = mkN "canon" masculine ; -- status=guess
 lin cant_N = mkN "helling" feminine ; -- status=guess
 lin cant_V = mkV "neigen" ; -- status=guess, src=wikt

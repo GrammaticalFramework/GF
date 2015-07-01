@@ -5760,14 +5760,14 @@ lin cannibalism_N = mkN "同類相食" | mkN "同类相食" | mkN "食人" | {-m
 lin cannibalistic_A = mkA "吃人肉" | mkA "食人肉" ; -- open-multilingual-wordnet
 lin cannikin_N = mkN "小罐" ; -- open-multilingual-wordnet
 lin cannock_PN = foreignPN "Cannock" ; -- comment=src=geonames status=guess
-lin cannon_N = mkN "大炮" ;
+lin cannon_1_N = mkN "大炮" ;
+lin cannon_2_N = mkN "大炮" ;
 lin cannonade_N = mkN "砲擊" | mkN "炮击" ; -- status=guess -- status=guess
 lin cannonball_N = mkN "炮彈" | mkN "炮弹" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin cannula_N = mkN "套管" | mkN "插管" ; -- open-multilingual-wordnet
 lin canny_A = mkA "精明" ;
 lin canoe_N = mkN "獨木舟" | mkN "独木舟" ; -- status=guess -- status=guess -- open-multilingual-wordnet
-lin canon_1_N = variants {} ; ---- sense to be split
-lin canon_2_N = variants {} ; ---- sense to be split
+lin canon_N = variants {} ;
 lin canopy_N = mkN "盖" | {-mwn-} mkN "伞盖" | mkN "伞衣" ; -- open-multilingual-wordnet
 lin cant_N = mkN "斜面" ;
 lin cantab_PN = foreignPN "Cantab" ; -- comment=src=eng status=guess

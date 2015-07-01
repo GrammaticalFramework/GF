@@ -8832,7 +8832,8 @@ lin cannibalistic_A = variants {} ;
 lin cannibalize_V2 = variants {} ;
 lin cannikin_N = variants {} ;
 lin cannock_PN = mkPN "Cannock" ; -- src=geonames status=guess
-lin cannon_N = mkN "Kanone" "Kanonen" feminine ; -- status=guess
+lin cannon_1_N = mkN "Kanone" "Kanonen" feminine ; -- status=guess
+lin cannon_2_N = mkN "Kanone" "Kanonen" feminine ; -- status=guess
 lin cannon_fodder_N = variants {} ;
 lin cannonade_N = mkN "Kanonade" feminine ; -- status=guess
 lin cannonball_N = mkN "Kanonenkugel" "Kanonenkugeln" feminine ; -- status=guess
@@ -8842,8 +8843,7 @@ lin canny_A = variants {} ;
 lin canoe_N = mkN "Kanu" "Kanus" neuter ; -- status=guess
 lin canoe_V2 = mkV2 (regV "paddeln") ; -- status=guess, src=wikt
 lin canoeist_N = mkN "Kanufahrer" "Kanufahrer" masculine | mkN "Kanute" masculine ; -- status=guess status=guess
-lin canon_1_N = variants {} ;
-lin canon_2_N = variants {} ;
+lin canon_N = variants {} ;
 lin canonic_A = variants {} ;
 lin canonical_A = variants {} ;
 lin canonist_A = variants {} ;

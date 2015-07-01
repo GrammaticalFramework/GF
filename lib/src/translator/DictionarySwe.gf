@@ -8760,7 +8760,8 @@ lin cannibalistic_A = mkA "kannibalistisk" ; -- status=guess
 lin cannibalize_V2 = dirV2 (partV (mkV "slaktar")"ut") ; -- status=guess
 lin cannikin_N = variants {} ; -- status=guess
 lin cannock_PN = mkPN "Cannock" neutrum ; -- src=geonames status=guess
-lin cannon_N = mkN "kanon" "kanoner" ; -- comment=2
+lin cannon_1_N = mkN "kanon" "kanoner" ; -- comment=2
+lin cannon_2_N = mkN "kanon" "kanoner" ; -- comment=2
 lin cannon_fodder_N = mkN "kanonmat" ;
 lin cannonade_N = variants {} ; -- status=guess
 lin cannonball_N = mkN "kanonkula" ;
@@ -8770,8 +8771,6 @@ lin canny_A = mkA "trevlig" ; -- comment=5
 lin canoe_N = mkN "kanot" "kanoter" ; -- comment=2
 lin canoe_V2 = variants {} ; -- status=guess
 lin canoeist_N = variants {} ; -- status=guess
-lin canon_1_N = mkN "kanon" "kanoner" ; -- comment=6
-lin canon_2_N = variants {} ; -- status=guess
 lin canon_N = mkN "kanon" "kanoner" ; -- comment=6
 lin canonic_A = variants {} ; -- status=guess
 lin canonical_A = variants {} ; -- status=guess
