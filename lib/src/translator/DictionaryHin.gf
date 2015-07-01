@@ -12112,7 +12112,6 @@ lin harangue_V2 = mkV2 (compoundV "उग्र भाषण" (mkV "देना
 lin harass_V2 = mkV2 (compoundV "बार-बार आक्रमण" (mkV "करना")) ; -- tocheck
 lin harassment_N = mkN "कष्ट" ; -- tocheck              
 lin harbinger_N = mkN "अग्रदूत" ; -- tocheck              
-lin harbor_N = mkN "बंदरगाह" ; -- tocheck       
 lin harbour_N = mkN "बंदरगाह" ; -- tocheck              
 lin harbour_V = compoundV "मन में" (mkV "रखना") ; -- tocheck              
 lin harbour_V2 = mkV2 (compoundV "मन में" (mkV "रखना")) ; -- tocheck

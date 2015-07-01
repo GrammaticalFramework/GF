@@ -10047,7 +10047,6 @@ lin harangue_N = mkN "kõvahäälselt pragama" | mkN "tiraad" | mkN "vastusüüd
 lin harassment_N = mkN "kiusamine" | mkN "mõnitamine" | mkN "vaevatus" ;
 lin harbinger_N = mkN "ette kuulutama" | mkN "kuulutaja" | mkN "majutusülem" ;
 lin harborage_N = mkN "ohutu ankrupaik" ;
-lin harbor_N = mkN "hellitama" | mkN "hoidma" | mkN "sadam" | mkN "varjama" ;
 lin harbourage_N = mkN "ohutu ankrupaik" ;
 lin harbour_N = mkN "hellitama" | mkN "hoidma" | mkN "sadam" | mkN "varjama" ;
 lin hardback_N = mkN "kõvakaaneline" | mkN "kõvas köites raamat" ;

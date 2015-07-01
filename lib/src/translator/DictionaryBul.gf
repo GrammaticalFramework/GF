@@ -25732,7 +25732,6 @@ lin harasser_N = mkN007a "тормозатор" ;
 lin harassment_N = mkN007 "тормоз" ;
 lin harbin_PN = mkPN "Харбин" Masc ;
 lin harbinger_N = mkN014 "предвестник" ;
-lin harbor_N = variants {} ;
 lin harbour_N = mkN066 "пристанище" ;
 lin harbour_V = variants {dualV (mkV186 "затаявам") (mkV175 "затая"); dualV (mkV186 "укривам") (mkV163 "укрия"); singleV (mkV173 "храня")} ; ----
 lin harbour_V2 = dirV2 (variants {dualV (mkV186 "подслонявам") (mkV174 "подслоня") ; singleV (mkV163 "крия")}) ; ----

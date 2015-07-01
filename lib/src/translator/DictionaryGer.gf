@@ -25733,7 +25733,6 @@ lin harasser_N = variants {} ;
 lin harassment_N = mkN "Belästigung" feminine ; -- status=guess
 lin harbin_PN = mkPN "Harbin" ; -- src=geonames status=guess
 lin harbinger_N = mkN "Vorbote" masculine | mkN "Omen" neuter ; -- status=guess status=guess
-lin harbor_N = variants {} ;
 lin harbour_N = L.harbour_N ;
 lin harbour_V = variants {} ;
 lin harbour_V2 = variants {} ;
