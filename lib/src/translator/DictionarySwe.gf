@@ -3373,8 +3373,7 @@ lin arizona_PN = mkPN "Arizona" neutrum ; -- src=geonames status=guess
 lin ark_N = mkN "ark" ; -- comment=2
 lin arkansas_PN = mkPN "Arkansas" ; -- src=eng status=guess
 lin arm_1_N = mkN "arm" ;
-lin arm_2_N = mkN "arm" ;
-lin arm_N = mkN "arm" | mkN "vapen" "vapnet" "vapen" "vapnen" ;
+lin arm_2_N = mkN "vapen" ;
 lin arm_V = mkV "beväpnar" ; -- comment=7
 lin arm_V2 = mkV2 (mkV "rustar") | mkV2 (mkV "beväpna") ; -- status=guess, src=wikt status=guess, src=wikt
 lin arm_hole_N = mkN "arm-håls" ; -- src=google
