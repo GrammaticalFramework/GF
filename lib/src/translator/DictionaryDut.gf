@@ -2531,8 +2531,7 @@ lin branderburgh_PN = mkPN "Branderburgh" ; -- src=eng status=guess
 lin brandy_N = mkN "brandewijn" ; -- status=guess
 lin brasilia_PN = mkPN "Brasilia" ; -- src=eng status=guess
 lin brass_N = mkN "messing" neuter | mkN "geelkoper" neuter ; -- status=guess status=guess
-lin brassiere_1_N = variants {} ; ---- sense to be split
-lin brassiere_2_N = variants {} ; ---- sense to be split
+lin brassiere_N = variants {} ;
 lin brat_N = mkN "nest" neuter ; -- status=guess
 lin bratislava_PN = mkPN "Bratislava" ; -- src=geonames status=guess
 lin bratwurst_N = mkN "braadworst" ; -- status=guess

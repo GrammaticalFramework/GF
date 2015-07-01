@@ -102,7 +102,6 @@ lin abomasum_N = mkN "abomaso" ; -- UWN
 lin abominable_A = mkA "abominabile" ; -- status=guess
 lin abominate_V2 = mkV2 (mkV "abominare") ; -- status=guess, src=wikt
 lin aboriginal_A = mkA "aborigeno" ; -- status=guess
-lin aboriginal_N = mkN "aborigeno" | mkN "aborigeno_d'Australia" | mkN "autoctono" | mkN "autoctono" | mkN "indigeno" | mkN "indigeno" | mkN "nativo" ; -- UWN
 lin aborigine_N = mkN "aborigeno" ; -- status=guess
 lin abort_V = interrompere_V | mkV "fermare" ; -- status=guess, src=wikt status=guess, src=wikt
 lin abort_V2 = mkV2 (interrompere_V) | mkV2 (mkV "fermare") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -3430,8 +3429,7 @@ lin branchy_A = mkA "ramificato" | mkA "ramoluto" | mkA "ramoruto" | mkA "ramoso
 lin brand_N = mkN "marca" ; -- UWN
 lin brandy_N = mkN "acquavite" | mkN "brandy" ; -- UWN
 lin brass_N = mkN "ottone" masculine ; -- status=guess
-lin brassiere_1_N = variants {} ; ---- sense to be split
-lin brassiere_2_N = variants {} ; ---- sense to be split
+lin brassiere_N = variants {} ;
 lin brat_N = mkN "monello" ; -- status=guess
 lin bratislava_PN = mkPN "Bratislava" ; -- status=guess src=geonames
 lin braunschweig_PN = mkPN "Braunschweig" ; -- status=guess src=geonames

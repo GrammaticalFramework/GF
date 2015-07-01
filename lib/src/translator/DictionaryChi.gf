@@ -4908,8 +4908,7 @@ lin brasilia_PN = foreignPN "Brasilia" ; -- comment=src=eng status=guess
 lin brass_N = mkN "黄铜" [] ;
 lin brassard_N = mkN "臂章" | mkN "臂铠" ; -- open-multilingual-wordnet
 lin brasserie_N = mkN "啤酒店" ; -- open-multilingual-wordnet
-lin brassiere_1_N = mkN "奶罩" ;
-lin brassiere_2_N = variants {} ; ---- sense to be split
+lin brassiere_N = mkN "奶罩" ;
 lin brassy_A = mkA "似黄铜" ; -- open-multilingual-wordnet
 lin brat_N = mkN "小子" ;
 lin bratislava_PN = mkPN "布拉迪斯拉发" ; -- comment=src=geonames status=guess

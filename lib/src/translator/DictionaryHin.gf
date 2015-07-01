@@ -140,7 +140,6 @@ lin abomination_N = mkN "जुगुप्साजनक कार्य" ; --
 lin abominator_N = mkN "जुगुप्सक" ; -- tocheck       
 lin aboral_A = mkA "अपमुखी" ; -- tocheck       
 lin aboriginal_A = mkA "ऑस्ट्रेलियाई आदिवासियों का" ; -- tocheck              
-lin aboriginal_N = mkN "ऑस्ट्रेलियाई आदिवासी" ; -- tocheck              
 lin aborigine_N = mkN "ऑस्ट्रेलियाई आदिवासी" ; -- tocheck              
 lin abort_N = mkN "समापन" ; -- tocheck       
 lin abort_V = compoundV "गर्भ" (mkV "गिराना") ; -- tocheck              

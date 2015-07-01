@@ -117,9 +117,8 @@ lin abominable_A = mkA "abominable" | mkA "aborrecible" ; -- status=guess status
 lin abominate_V2 = mkV2 (mkV "abominar") | mkV2 (mkV "detestar") ; -- status=guess, src=wikt status=guess, src=wikt
 lin abomination_N = mkN "abominación" | mkN "maldad" feminine ; -- status=guess status=guess
 lin abominator_N = mkN "abominador" | mkN "aborrecedor" ; --UWN
-lin aboriginal_A = mkA "aborigen" | mkA "indígena" ; -- status=guess status=guess
-lin aboriginal_N = mkN "aborigen" ; --UWN
-lin aborigine_N = mkN "aborigen" masculine | mkN "indígena" masculine ; -- status=guess status=guess
+lin aboriginal_A = mkA "aborigen" ;
+lin aborigine_N = mkN "aborigen" masculine ;
 lin abort_N = mkN "aborto" ; -- status=guess
 lin abort_V = mkV "abortar" ; -- status=guess, src=wikt
 lin abort_V2 = mkV2 (mkV "abortar") ; -- status=guess, src=wikt
@@ -4039,8 +4038,7 @@ lin brant_N = mkN "barnacla" ; -- status=guess
 lin brash_A = mkA "irreflexivo" | mkA "precipitado" ; -- status=guess status=guess
 lin brass_N = mkN "latón" masculine ; -- status=guess
 lin brasserie_N = mkN "brasserie" ; --UWN
-lin brassiere_1_N = variants {} ; ---- sense to be split
-lin brassiere_2_N = variants {} ; ---- sense to be split
+lin brassiere_N = variants {} ;
 lin brat_N = mkN "mimado chiflado" ; -- status=guess
 lin bratislava_PN = mkPN "Bratislava" ; -- status=guess src=geonames
 lin bratwurst_N = mkN "bratwurst" ; -- status=guess

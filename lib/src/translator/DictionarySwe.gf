@@ -172,7 +172,6 @@ lin abominator_N = variants {} ; -- status=guess
 lin aborad_Adv = variants {} ; -- status=guess
 lin aboral_A = variants {} ; -- status=guess
 lin aboriginal_A = variants {} ; -- status=guess
-lin aboriginal_N = variants {} ; -- status=guess
 lin aborigine_N = mkN "aborigin" "aboriginer" ; -- status=guess
 lin abort_N = (mkN "abort" "aborter") | (mkN "missfall" neutrum) ; -- status=guess status=guess
 lin abort_V = mkV "abortera" | mkV "avbryta" "avbröt" "avbrutit" ; -- status=guess
@@ -7330,9 +7329,7 @@ lin brassavola_N = variants {} ; -- status=guess
 lin brassbound_A = variants {} ; -- status=guess
 lin brasserie_N = mkN "restaurang" "restauranger" ; -- status=guess
 lin brassie_N = variants {} ; -- status=guess
-lin brassiere_1_N = mkN "behå" ; -- comment=2
-lin brassiere_2_N = mkN "bysthållare" utrum ;
-lin brassiere_N = mkN "behå" ; -- comment=2
+lin brassiere_N = mkN "bysthållare" utrum ;
 lin brassy_A = variants {} ; -- status=guess
 lin brat_N = mkN "snorunge" utrum ; -- status=guess
 lin bratislava_PN = mkPN "Bratislava" neutrum ; -- src=geonames status=guess
