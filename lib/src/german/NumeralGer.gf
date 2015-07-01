@@ -60,7 +60,7 @@ oper
     IDig d = d ; 
 
     IIDig d i = {
-      s = \\o => d.s ! invNum ++ i.s ! o ;
+      s = \\o => d.s ! invNum ++ BIND ++ i.s ! o ;
       n = Pl
     } ;
 
