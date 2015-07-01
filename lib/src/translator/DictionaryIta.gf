@@ -4126,15 +4126,14 @@ lin cannibal_N = mkN "cannibale" masculine | mkN "antropofago" ; -- status=guess
 lin cannibalism_N = mkN "cannibalismo" ; -- status=guess
 lin cannibalistic_A = mkA "cannibalesco" | mkA "cannibalistico" ; -- status=guess status=guess
 lin cannock_PN = mkPN "Cannock" ; -- status=guess src=geonames
-lin cannon_N = mkN "cannone" masculine ; -- status=guess
+lin cannon_1_N = mkN "cannone" masculine ; -- status=guess
+lin cannon_2_N = mkN "cannone" masculine ; -- status=guess
 lin cannonade_N = mkN "cannoneggiamento" ; -- status=guess
 lin cannonball_N = mkN "palla_di_cannone" ; -- UWN
 lin cannula_N = mkN "cannula" ; -- UWN
 lin canoe_N = mkN "canoa" ; -- status=guess
 lin canoe_V2 = mkV2 (mkV (andare_V) "in canoa") ; -- status=guess, src=wikt
 lin canoeist_N = mkN "canoista" masculine ; -- status=guess
-lin canon_1_N = mkN "canone" masculine ; -- status=guess ---- sense to be split
-lin canon_2_N = mkN "canone" masculine ; -- status=guess ---- sense to be split
 lin canon_N = mkN "canone" masculine ; -- status=guess
 lin canonist_N = mkN "canonista" masculine ; -- status=guess
 lin canonize_V2 = mkV2 (mkV "santificare") | mkV2 (mkV "canonizzare") ; -- status=guess, src=wikt status=guess, src=wikt
