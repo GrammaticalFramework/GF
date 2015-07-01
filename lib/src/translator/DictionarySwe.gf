@@ -8540,6 +8540,7 @@ lin call_round_V = mkV "ropar" ; -- comment=11
 lin call_up_N = mkN "inkallelse" "inkallelser" ;
 lin call_up_V2 = dirV2 (partV (mkV "ropar")"till") ; -- comment=2
 lin callable_A = variants {} ; -- status=guess
+lin called_A = mkA "kallad" ; -- status=guess
 lin caller_A = variants {} ; -- status=guess
 lin caller_N = mkN "besökare" utrum ; -- status=guess
 lin calliandra_N = variants {} ; -- status=guess
@@ -28904,7 +28905,7 @@ lin injudicious_A = mkA "omdömeslös" ; -- status=guess
 lin injudiciousness_N = mkN "omdömeslöshet" "omdömeslösheter" ;
 lin injunction_N = mkN "föreläggande" ; -- comment=4
 lin injure_V2 = mkV2 (mkV "skadar") ; -- status=guess, src=wikt
-lin injured_A = variants {} ; --
+lin injured_A = mkA "skadad" ;
 lin injurious_A = mkA "skadlig" ; -- comment=3
 lin injury_N = mkN "skada" ;
 lin injustice_N = mkN "orättvisa" ; -- status=guess
@@ -51043,13 +51044,13 @@ lin shock_brigade_N = mkN "stöt-brigade" ; -- src=google
 lin shock_headed_A = variants {} ; -- status=guess
 lin shock_worker_N = mkN "stötarbetare" ; -- src=google
 lin shockable_A = variants {} ; -- status=guess
-lin shocked_A = variants {} ; --
+lin shocked_A = mkA "chockad" ;
 lin shocker_N = mkN "rysare" utrum ; -- status=guess
 lin shocking_A = mkA "förfärlig" ; -- comment=8
 lin shod_A = variants {} ; -- status=guess
 lin shoddiness_N = mkN "tarvlighet" "tarvligheter" ;
 lin shoddy_A = variants {} ; -- status=guess
-lin shoddy_N = mkN "fusk" neutrum | mkN "fusk" neutrum ; -- SaldoWN
+lin shoddy_N = mkN "fusk" neutrum ; -- SaldoWN
 lin shoe_N = L.shoe_N ;
 lin shoe_V2 = mkV2 (mkV "skor") ; -- status=guess, src=wikt
 lin shoe_leather_N = mkN "sko-läder" ; -- src=google
