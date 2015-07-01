@@ -290,7 +290,7 @@ oper
           ) ;
 
 lin
-  MkDocument b i e = ss (i.s1 ++ paragraph b.s ++ i.s2 ++ paragraph e.s) ;  -- explanation appended in a new paragraph
+  MkDocument b i e = ss (i.s1 ++ "<p style=\"font-size:20px\">"++b.s++"</p>" ++ i.s2 ++ paragraph e.s) ;  -- explanation appended in a new paragraph
   MkTag i = ss (i.t) ;
 
 {- --# notpresent

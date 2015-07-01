@@ -120,7 +120,7 @@ lin
     } ;
 
 lin
-  MkDocument b i e = {s = i.s1 ++ paragraph b.s ++ i.s2 ++ paragraph e.s} ;
+  MkDocument b i e = {s = i.s1 ++ "<p style=\"font-size:20px\">"++b.s++"</p>" ++ i.s2 ++ paragraph e.s} ;
   MkTag i = {s = i.t} ;
 
 }

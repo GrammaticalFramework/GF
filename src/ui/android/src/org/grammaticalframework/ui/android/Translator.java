@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.Pair;
 import android.view.inputmethod.CompletionInfo;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
 
 import org.grammaticalframework.pgf.*;
 import java.io.*;
@@ -45,6 +47,7 @@ public class Translator {
     private ConcrLoader mSourceLoader;
     private ConcrLoader mTargetLoader;
     private ConcrLoader mOtherLoader;
+    private DBManager mDBManager;
 
 	private static final String SOURCE_LANG_KEY = "source_lang";
 	private static final String TARGET_LANG_KEY = "target_lang";
@@ -94,6 +97,8 @@ public class Translator {
         }
 
         mOtherLoader = null;
+
+        mDBManager = new DBManager(context);
     }
 
     public List<Language> getAvailableLanguages() {
@@ -360,22 +365,61 @@ public class Translator {
     }
 
 	public String getInflectionTable(String lemma) {
+		SQLiteDatabase db = mDBManager.getReadableDatabase();
+		Cursor crs = db.rawQuery("select def from defs where fun=?1", new String[] { lemma });
+		String def = "";
+		if (crs.moveToNext()) {
+			def = escapeHtml(crs.getString(0));
+		}
+		crs.close();
+
 		Concr targetLang = getTargetConcr();
 		String cat = getGrammar().getFunctionType(lemma).getCategory();
 
-		if (!targetLang.hasLinearization(lemma))
+		if (targetLang.hasLinearization(lemma) && 
+		    targetLang.hasLinearization("Inflection"+cat)) {
+			Expr e = Expr.readExpr("MkDocument \""+def+"\" (Inflection"+cat+" "+lemma+") \"\"");
+			String html =
+				"<html><head><meta charset=\"UTF-8\"/></head><body>" +
+				targetLang.linearize(e) +
+				"</body>";
+			return html;
+		} else if (def != "") {
+			return "<p style=\"font-size:20px\">"+def+"</p>";
+		} else {
 			return null;
+		}
+	}
+	
+	private static String escapeHtml(CharSequence text) {
+		StringBuilder out = new StringBuilder();
 
-		if (!targetLang.hasLinearization("Inflection"+cat))
-			return null;
+		for (int i = 0; i < text.length(); i++) {
+			char c = text.charAt(i);
 
-		Expr e = Expr.readExpr("MkDocument \"\" (Inflection"+cat+" "+lemma+") \"\"");
-		String html =
-			"<html><head><meta charset=\"UTF-8\"/></head><body>" +
-			targetLang.linearize(e) +
-			"</body>";
+			if (c == '<') {
+				out.append("&lt;");
+			} else if (c == '>') {
+				out.append("&gt;");
+			} else if (c == '&') {
+				out.append("&amp;");
+			} else if (c == '"') {
+				out.append("&quot;");
+			} else if (c > 0x7E || c < ' ') {
+				out.append("&#").append((int) c).append(";");
+			} else if (c == ' ') {
+				while (i + 1 < text.length() && text.charAt(i + 1) == ' ') {
+					out.append("&nbsp;");
+					i++;
+				}
 
-		return html;
+				out.append(' ');
+			} else {
+				out.append(c);
+			}
+		}
+		
+		return out.toString();
 	}
 
     public List<MorphoAnalysis> lookupMorpho(String sentence) {
