@@ -7685,8 +7685,6 @@ lin curb_N = mkN "freno" ; --UWN
 lin curd_N = mkN "cuajada" ; -- status=guess
 lin curdle_V = mkV "cuajar" ; -- status=guess, src=wikt
 lin curdle_V2 = mkV2 (mkV "cuajar") ; -- status=guess, src=wikt
-lin cure_1_N = variants {} ; --
-lin cure_2_N = variants {} ; --
 lin cure_N = variants {} ; --
 lin cure_V = mkV "curar" ; -- status=guess, src=wikt
 lin cure_V2 = mkV2 (mkV "curar") ; -- status=guess, src=wikt
@@ -8040,8 +8038,6 @@ lin debit_N = mkN "tarjeta de débito" ; -- status=guess
 lin debonair_A = mkA "alegre" ; --UWN
 lin debridement_N = mkN "desbridamiento" ; --UWN
 lin debriefing_N = mkN "debriefing" | mkN "informe" | mkN "parte" | mkN "reunión_de_información" ; --UWN
-lin debris_1_N = mkN "fragmentos glaciares" ; -- status=guess ---- sense to be split
-lin debris_2_N = mkN "fragmentos glaciares" ; -- status=guess ---- sense to be split
 lin debris_N = mkN "fragmentos glaciares" ; -- status=guess
 lin debt_N = mkN "deuda" ;
 lin debtor_N = mkN "deudor" masculine ; -- status=guess
@@ -8052,8 +8048,7 @@ lin debut_1_N = mkN "debut" ; --UWN
 lin debut_2_N = variants {} ; --
 lin debut_N = mkN "debut" ; -- status=guess
 lin debut_V2 = mkV2 (mkV "debutar") ; -- status=guess, src=wikt
-lin debutante_1_N = variants {} ; ---- sense to be split
-lin debutante_2_N = variants {} ; ---- sense to be split
+lin debutante_N = variants {} ;
 lin decade_N = mkN "década" | mkN "decenio" ;
 lin decadence_N = mkN "decadencia" ; -- status=guess
 lin decadent_A = mkA "decadente" ; -- status=guess

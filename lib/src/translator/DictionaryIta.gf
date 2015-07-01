@@ -6822,8 +6822,6 @@ lin curbstone_N = mkN "paracarro" ; -- UWN
 lin curd_N = mkN "coagulo" ; -- status=guess
 lin curdle_V = mkV "coagularsi" ; -- UWN
 lin curdling_N = mkN "accagliatura" | mkN "coagulamento" | mkN "coagulazione" ; -- UWN
-lin cure_1_N = variants {} ; --
-lin cure_2_N = variants {} ; --
 lin cure_N = variants {} ; --
 lin cure_V = mkV "curare" ; -- status=guess, src=wikt
 lin cure_V2 = mkV2 (mkV "curare") ; -- status=guess, src=wikt
@@ -7150,8 +7148,6 @@ lin debilitating_A = mkA "debilitante" | mkA "estenuante" | mkA "faticoso" | mkA
 lin debility_N = mkN "debilitazione" | mkN "fragilità" | mkN "gracilità" | mkN "infermità" | mkN "mollezza" | mkN "tenuità" ; -- UWN
 lin debit_N = mkN "carta di debito" ; -- status=guess
 lin debonair_A = mkA "disinvolto" ; -- UWN
-lin debris_1_N = mkN "maceria" ; -- status=guess ---- sense to be split
-lin debris_2_N = mkN "maceria" ; -- status=guess ---- sense to be split
 lin debris_N = mkN "maceria" ; -- status=guess
 lin debt_N = mkN "debito" ; -- status=guess
 lin debtor_N = mkN "debitore" | mkN "debitrice" feminine ; -- status=guess status=guess
@@ -7159,8 +7155,7 @@ lin debugger_N = mkN "debugger" masculine ; -- status=guess
 lin debut_1_N = variants {} ; --
 lin debut_2_N = variants {} ; --
 lin debut_N = mkN "debutto" ; -- status=guess
-lin debutante_1_N = variants {} ; ---- sense to be split
-lin debutante_2_N = variants {} ; ---- sense to be split
+lin debutante_N = variants {} ;
 lin decade_N = mkN "decennio" | mkN "decade" feminine ; -- status=guess status=guess
 lin decadence_N = mkN "decadenza" ; -- status=guess
 lin decadent_A = mkA "decadente" ; -- status=guess

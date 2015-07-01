@@ -8939,9 +8939,7 @@ lin curb_V2 = mkV2 "抑制" ;
 lin curbside_N = mkN "路缘人行道" ; -- open-multilingual-wordnet
 lin curbstone_N = mkN "路缘石" ; -- open-multilingual-wordnet
 lin curdling_N = mkN "凝化" | mkN "凝固" | mkN "凝结" ; -- open-multilingual-wordnet
-lin cure_1_N = mkN "治愈" ;
-lin cure_2_N = variants {} ;
-lin cure_N = variants {} ;
+lin cure_N = mkN "治愈" ;
 lin cure_V = mkV "治愈" | {-HSK-} mkV "治疗" ;
 lin cure_V2 = mkV2 "治疗" ;
 lin curette_N = mkN "刮匙" ; -- open-multilingual-wordnet
@@ -9344,19 +9342,16 @@ lin debility_N = mkN "衰弱" ; -- open-multilingual-wordnet
 lin debit_N = mkN "借記" | mkN "借记" ; -- status=guess -- status=guess
 lin debonair_A = mkA "快乐" | mkA "快活" | mkA "愉快" | mkA "活泼" ; -- open-multilingual-wordnet
 lin deborah_PN = foreignPN "Deborah" ; -- comment=src=eng status=guess
-lin debris_1_N = mkN "碎片" ;
-lin debris_2_N = variants {} ; ---- sense to be split
+lin debris_N = mkN "碎片" ;
 lin debt_N = mkN "债务" ;
 lin debtor_N = mkN "债务人" ;
 lin debug_V2 = mkV2 (mkV "調試") | mkV2 (mkV "调试") ; -- status=guess, src=wikt -- status=guess, src=wikt
 lin debugger_N = mkN "調試器" | mkN "调试器" | mkN "調試程序" | mkN "调试程序" | mkN "調試工具" | mkN "调试工具" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin debunk_V2 = mkV2 "揭穿" ;
 lin debut_1_N = mkN "首次亮相" ;
-lin debut_2_N = variants {} ;
-lin debut_N = mkN "首次亮相" ;
+lin debut_2_N = mkN "首次亮相" ;
 lin debut_V2 = mkV2 "初次登台" ;
-lin debutante_1_N = variants {} ; ---- sense to be split
-lin debutante_2_N = variants {} ; ---- sense to be split
+lin debutante_N = variants {} ;
 lin dec_PN = foreignPN "Dec" ; -- comment=src=eng status=guess
 lin decade_N = mkN "数十年" ;
 lin decadence_N = mkN "颓废" ;

@@ -13676,7 +13676,6 @@ lin creosol_N = mkN "kreosol" ; -- src=google
 lin creosote_N = mkN "kreosot" ; -- src=google
 lin crepe_1_N = mkN "crêpe" "crêpen" "crêpes" "crêpesen" ; -- comment=2
 lin crepe_2_N = mkN "crepe" "crepen" "crepes" "crepesen" ; -- comment=3
-lin crepe_N = mkN "crêpe" "crêpen" "crêpes" "crêpesen" ; -- comment=2
 lin crepitate_V = variants {} ; -- status=guess
 lin crepitation_N = mkN "krepitation" ; -- src=google
 lin crepuscular_A = variants {} ; -- status=guess
@@ -14189,8 +14188,6 @@ lin curd_N = mkN "kvark" ; -- comment=3
 lin curdle_V = mkV "stelnar" ; -- comment=2
 lin curdle_V2 = mkV2 (mkV "stelnar") ; -- status=guess, src=wikt
 lin curdling_N = mkN "ystning" ; -- src=google
-lin cure_1_N = mkN "vulkanisering" ; -- comment=14
-lin cure_2_N = variants {} ; --
 lin cure_N = variants {} ; --
 lin cure_V = mkV "vulkaniserar" ; -- comment=8
 lin cure_V2 = dirV2 (partV (mkV "saltar")"in") ; -- status=guess
@@ -14889,8 +14886,6 @@ lin debouch_V2 = variants {} ; -- status=guess
 lin debridement_N = mkN "debridering" ; -- src=google
 lin debrief_V2 = variants {} ; -- status=guess
 lin debriefing_N = variants {} ; -- status=guess
-lin debris_1_N = mkN "skräp" neutrum ; -- comment=2
-lin debris_2_N = mkN "skräp" neutrum ;
 lin debris_N = mkN "skräp" neutrum ; -- comment=2
 lin debt_N = mkN "skuld" "skulder" ;
 lin debtor_N = mkN "gäldenär" "gäldenärer" ; -- SaldoWN
@@ -14901,8 +14896,6 @@ lin debut_1_N = mkN "debut" "debuter" ; -- status=guess
 lin debut_2_N = mkN "debut" "debuter" ;
 lin debut_N = mkN "debut" "debuter" ; -- status=guess
 lin debut_V2 = variants {} ; -- status=guess
-lin debutante_1_N = mkN "debutant" "debutanter" ; -- status=guess
-lin debutante_2_N = mkN "debutant" "debutanter" ;
 lin debutante_N = mkN "debutant" "debutanter" ; -- status=guess
 lin dec_PN = mkPN "Dec" ; -- src=eng status=guess
 lin decade_N = mkN "årtionde" | mkN "decennium" "decenniet" "decennier" "decennierna" ; -- SaldoWN -- comment=3
