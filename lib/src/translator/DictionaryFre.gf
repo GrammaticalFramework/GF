@@ -122,7 +122,6 @@ lin abominable_A = mkA "abominable" ; -- tocheck
 lin abominate_V2 = mkV2 (mkV "détester") ; -- tocheck
 lin abomination_N = mkN "abomination" feminine ; -- tocheck
 lin aboriginal_A = mkA "indigène" ; -- tocheck
-lin aboriginal_N = mkN "autochtone" | mkN "natif" ; -- UWN
 lin aborigine_N = mkN "aborigène" ; -- tocheck
 lin abort_N = mkN "avorton" masculine ; -- tocheck
 lin abort_V2 = mkV2 (mkV I.interrompre_V2) | mkV2 (mkV "avorter") ; -- tocheck
@@ -3886,8 +3885,7 @@ lin brashness_N = mkN "toupet" masculine ; -- tocheck
 lin brass_N = mkN "laiton" masculine | mkN "cuivres" | mkN "galonnés" | mkN "douille" feminine ; -- tocheck
 lin brassavola_N = mkN "brassavola" ; -- UWN
 lin brasserie_N = mkN "brasserie" ; -- UWN
-lin brassiere_1_N = variants {} ; ---- sense to be split
-lin brassiere_2_N = variants {} ; ---- sense to be split
+lin brassiere_N = variants {} ;
 lin brat_N = mkN "peste" feminine ; -- tocheck
 lin bratislava_PN = mkPN "Bratislava" ; -- status=guess src=geonames
 lin braunschweig_PN = mkPN "Brunswick" ; -- status=guess src=geonames

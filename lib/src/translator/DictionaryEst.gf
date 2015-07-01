@@ -75,7 +75,6 @@ lin abolitionist_N = mkN "abolitsionist" ;
 lin abolition_N = mkN "kaotamine" | mkN "tühistamine" | mkN "ümber lükkamine" ;
 lin abomination_N = mkN "jälestus" ;
 lin abominator_N = mkN "vihkaja" ;
-lin aboriginal_N = mkN "algupärane" | mkN "pärismaine" ;
 lin aborigine_N = mkN "aborigeen" | mkN "pärismaalane" ;
 lin abortifacient_N = mkN "aborti esile kutsuv" ;
 lin abortion_N = mkN "abort" | mkN "nurjumine" | mkN "raseduse katkestamine" ;

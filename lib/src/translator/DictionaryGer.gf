@@ -174,7 +174,6 @@ lin abominator_N = variants {} ;
 lin aborad_Adv = variants {} ;
 lin aboral_A = variants {} ;
 lin aboriginal_A = mkA "eingeboren" | regA "einheimisch" ; -- status=guess status=guess
-lin aboriginal_N = mkN "einheimisch" ; -- status=guess
 lin aborigine_N = mkN "Aborigine" masculine | mkN "Urbewohner" masculine ; -- status=guess status=guess
 lin abort_N = mkN "Abbruch" "Abbrüche" masculine ; -- status=guess
 lin abort_V = prefixV "ab" (irregV "brechen" "brecht" "brach" "bräche" "gebrochen") ; -- status=guess, src=wikt
@@ -7384,8 +7383,7 @@ lin brassavola_N = variants {} ;
 lin brassbound_A = variants {} ;
 lin brasserie_N = variants {} ;
 lin brassie_N = variants {} ;
-lin brassiere_1_N = variants {} ;
-lin brassiere_2_N = variants {} ;
+lin brassiere_N = variants {} ;
 lin brassy_A = variants {} ;
 lin brat_N = mkN "Balg" "Bälge" masculine | mkN "Göre" feminine | mkN "Gör" neuter ; -- status=guess status=guess status=guess
 lin bratislava_PN = mkPN "Preßburg" ; -- src=geonames status=guess
