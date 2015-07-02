@@ -9991,8 +9991,7 @@ lin chapterhouse_N = variants {} ;
 lin char_N = mkN "Kohle" "Kohlen" feminine ; -- status=guess
 lin char_V = mkV "ansengen" | mkV "versengen" ; -- status=guess, src=wikt status=guess, src=wikt
 lin char_V2 = mkV2 (mkV "ansengen") | mkV2 (mkV "versengen") ; -- status=guess, src=wikt status=guess, src=wikt
-lin charabanc_1_N = variants {} ;
-lin charabanc_2_N = variants {} ;
+lin charabanc_N = variants {} ;
 lin characin_N = variants {} ;
 lin character_1_N = mkN "Charakter" ;
 lin character_2_N = mkN "Zeichen" neuter | mkN "Buchstabe" masculine ;
@@ -29510,7 +29509,6 @@ lin interdiction_N = variants {} ;
 lin interdisciplinary_A = mkA "interdisziplinär" ; -- status=guess
 lin interest_1_N = mkN "Interesse" "Interesse" "Interesse" "Interesses" "Interessen" "Interessen" neuter ;
 lin interest_2_N = mkN "Zins" "Zins" "Zins" "Zinses" "Zinsen" "Zinsen" masculine ;
-lin interest_4_N = variants {} ; --
 lin interest_V = irregV "interessieren" "interessiert" "interessierte" "interessierte" "interessiert" ; -- status=guess, src=wikt
 lin interest_V2 = mkV2 (irregV "interessieren" "interessiert" "interessierte" "interessierte" "interessiert") ; -- status=guess, src=wikt
 lin interested_A = mk3A "interessiert" "interessierter" "interessierteste" ; -- status=guess
@@ -33816,7 +33814,6 @@ lin magyarFem_N = variants {} ;
 lin magyarMasc_N = variants {} ;
 lin magyar_A = variants {} ;
 lin maharaja_N = mkN "Maharadscha" "Maharadschas" masculine ; -- status=guess
-lin maharajah_N = variants {} ;
 lin maharanee_N = variants {} ;
 lin maharani_N = variants {} ;
 lin mahatma_N = variants {} ;
@@ -37185,8 +37182,7 @@ lin nainsook_N = variants {} ;
 lin naira_N = variants {} ;
 lin nairn_PN = mkPN "Nairn" ; -- src=geonames status=guess
 lin nairobi_PN = mkPN "Nairobi" ; -- src=geonames status=guess
-lin naive_1_A = variants {} ;
-lin naive_2_A = variants {} ;
+lin naive_A = variants {} ;
 lin naivete_N = variants {} ;
 lin naivety_N = mkN "Naivität" feminine ; -- status=guess
 lin naked_A = mk3A "nackt" "nackter" "nackteste" ; -- status=guess
@@ -48529,8 +48525,7 @@ lin roguish_A = variants {} ;
 lin roguishness_N = variants {} ;
 lin roil_V2 = mkV2 (mkV "trüben") ; -- status=guess, src=wikt
 lin roisterer_N = variants {} ;
-lin role_1_N = variants {} ; --
-lin role_2_N = variants {} ; --
+lin role_N = variants {} ; --
 lin roleplaying_N = mkN "Rollenspiel" "Rollenspiele" neuter ; -- status=guess
 lin roll_N = variants {} ;
 lin roll_V = irregV "laufen" "lauft" "lief" "liefe" "gelaufen" ; -- status=guess, src=wikt

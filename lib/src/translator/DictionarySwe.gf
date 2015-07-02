@@ -9908,8 +9908,7 @@ lin chapterhouse_N = mkN "chapter" ; -- src=google
 lin char_N = mkN "röding" ; -- comment=4
 lin char_V = mkV "städar" ; -- comment=2
 lin char_V2 = variants {} ; -- status=guess
-lin charabanc_1_N = variants {} ; -- status=guess
-lin charabanc_2_N = mkN "turistbuss" ; -- src=google
+lin charabanc_N = mkN "turistbuss" ;
 lin characin_N = variants {} ; -- status=guess
 lin character_1_N = mkN "karaktär" "karaktärer" ;
 lin character_2_N = mkN "bokstav" "bokstäver" ;
@@ -29247,7 +29246,6 @@ lin interdiction_N = variants {} ; -- status=guess
 lin interdisciplinary_A = mkA "tvärvetenskaplig" ; -- SaldoWN
 lin interest_1_N = mkN "intresse" ;
 lin interest_2_N = mkN "ränta" ;
-lin interest_4_N = mkN "intresse" ;
 lin interest_N = mkN "intresse" | mkN "ränta" ;
 lin interest_V = mkV "intresserar" ; -- comment=3
 lin interest_V2 = mkV2 (mkV "intresserar") ; -- status=guess, src=wikt
@@ -33515,7 +33513,6 @@ lin magyarFem_N = mkN "magyar" "magyarer" ;
 lin magyarMasc_N = mkN "magyar" "magyarer" ;
 lin magyar_A = variants {} ; -- status=guess
 lin maharaja_N = mkN "maharadja" ;
-lin maharajah_N = variants {} ; -- status=guess
 lin maharanee_N = variants {} ; -- status=guess
 lin maharani_N = variants {} ; -- status=guess
 lin mahatma_N = mkN "mahatma" ;
@@ -36861,8 +36858,6 @@ lin nainsook_N = variants {} ; -- status=guess
 lin naira_N = mkN "naira" ;
 lin nairn_PN = mkPN "Nairn" neutrum ; -- src=geonames status=guess
 lin nairobi_PN = mkPN "Nairobi" neutrum ; -- src=geonames status=guess
-lin naive_1_A = mkA "naiv" ; -- comment=3
-lin naive_2_A = variants {} ; -- status=guess
 lin naive_A = mkA "naiv" ; -- comment=3
 lin naivete_N = mkN "naivitet" "naiviteter" ;
 lin naivety_N = variants {} ; -- status=guess
@@ -48085,8 +48080,6 @@ lin roguish_A = mkA "skälmaktig" ; -- comment=2
 lin roguishness_N = mkN "skälmskhet" ;
 lin roil_V2 = variants {} ; -- status=guess
 lin roisterer_N = variants {} ; -- status=guess
-lin role_1_N = mkN "roll" "roller" ;
-lin role_2_N = mkN "roll" "roller" ;
 lin role_N = mkN "roll" "roller" ; ---
 lin roleplaying_N = mkN "rollspel" "rollspelet" "rollspel" "rollspelen" ; -- status=guess
 lin roll_N = mkN "trumvirvel" | mkN "vals" "valser" ; -- SaldoWN -- comment=22

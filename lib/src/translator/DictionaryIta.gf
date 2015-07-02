@@ -4673,8 +4673,7 @@ lin chapel_N = mkN "cappella" | mkN "chiesetta" ; -- status=guess status=guess
 lin chaplain_N = mkN "cappellano" ; -- status=guess
 lin chaplaincy_N = mkN "cappellanato" ; -- UWN
 lin chapter_N = mkN "capitolo" ; -- status=guess
-lin charabanc_1_N = variants {} ; ---- sense to be split
-lin charabanc_2_N = variants {} ; ---- sense to be split
+lin charabanc_N = variants {} ;
 lin character_1_N = mkN "carattere" ; -- UWN
 lin character_2_N = variants {} ; --
 lin characteristic_A = mkA "caratteristica" ; -- status=guess
@@ -14261,7 +14260,6 @@ lin interdependence_N = mkN "interdipendendenza" | mkN "interdipendenza" ; -- UW
 lin interdependent_A = mkA "interdipendente" ; -- UWN
 lin interest_1_N = mkN "interesse" ;
 lin interest_2_N = mkN "interesse" ;
-lin interest_4_N = mkN "interesse" ;
 lin interest_N = mkN "interesse" ;
 lin interest_V = variants {} ; --
 lin interest_V2 = variants {} ; --
@@ -16219,7 +16217,6 @@ lin magpie_N = mkN "gazza" ; -- status=guess
 lin magyarFem_N = variants {} ; ---- sense to be split
 lin magyarMasc_N = variants {} ; ---- sense to be split
 lin maharaja_N = mkN "maharajah" | mkN "maragià" ; -- UWN
-lin maharajah_N = mkN "maharajah" | mkN "maragià" ; -- UWN
 lin mahogany_N = mkN "mogano" ; -- status=guess
 lin maid_N = mkN "cameriera" ; -- status=guess
 lin maiden_N = mkN "nome da ragazza" | mkN "nome da nubile" ; -- status=guess status=guess
@@ -17729,8 +17726,6 @@ lin nailsea_PN = mkPN "Nailsea" ; -- status=guess src=geonames
 lin naira_N = mkN "naira" | mkN "naira_nigeriano" ; -- UWN
 lin nairn_PN = mkPN "Nairn" ; -- status=guess src=geonames
 lin nairobi_PN = mkPN "Nairobi" ; -- status=guess src=geonames
-lin naive_1_A = mkA "ingenuo" ; -- status=guess ---- sense to be split
-lin naive_2_A = mkA "ingenuo" ; -- status=guess ---- sense to be split
 lin naive_A = mkA "ingenuo" ; -- status=guess
 lin naivety_N = mkN "semplicità" ; -- UWN
 lin naked_A = mkA "nudo" ; -- status=guess
@@ -22817,8 +22812,6 @@ lin roebuck_N = mkN "capriolo" ; -- status=guess
 lin roentgenium_N = mkN "roentgenio" ; -- status=guess
 lin rogue_N = mkN "briccone" | mkN "canaglia" ; -- status=guess status=guess
 lin roil_V2 = mkV2 (mkV "intorbidare") | mkV2 (mkV (mkV "rendere") "torbido") ; -- status=guess, src=wikt status=guess, src=wikt
-lin role_1_N = variants {} ; --
-lin role_2_N = variants {} ; --
 lin role_N = mkN "ruolo" ; -- status=guess
 lin roleplaying_N = mkN "gioco di ruolo" ; -- status=guess
 lin roll_N = mkN "rollo" ; -- status=guess
