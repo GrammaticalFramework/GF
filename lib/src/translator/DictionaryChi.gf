@@ -6446,8 +6446,7 @@ lin chapter_N = mkN "章" ;
 lin chapterhouse_N = mkN "联谊会会堂" ; -- open-multilingual-wordnet
 lin char_N = mkN "炒粿條" | mkN "炒粿条" | mkN "炒貴刁" | mkN "炒贵刁" | {-mwn-} mkN "嘉鱼" | mkN "红点鲑" ; -- status=guess -- status=guess -- status=guess -- status=guess -- open-multilingual-wordnet
 lin char_V2 = mkV2 "使+烧焦" ;
-lin charabanc_1_N = variants {} ; ---- sense to be split
-lin charabanc_2_N = variants {} ; ---- sense to be split
+lin charabanc_N = variants {} ;
 lin characin_N = mkN "脂鲤" ; -- open-multilingual-wordnet
 lin character_1_N = mkN "字符" ;
 lin character_2_N = mkN "字符" ;
@@ -17724,7 +17723,6 @@ lin interdependence_N = mkN "相互依存" ;
 lin interdiction_N = mkN "禁止" "" ;
 lin interest_1_N = mkN "利息" ;
 lin interest_2_N = mkN "利息" ;
-lin interest_4_N = mkN "利息" ;
 lin interest_N = mkN "利息" ; -- comment=already split
 lin interest_V = mkV "关心" ;
 lin interest_V2 = mkV2 "使+有兴趣" ;
@@ -20246,7 +20244,6 @@ lin magus_N = mkN "賢者" | mkN "贤者" ; -- status=guess -- status=guess
 lin magyarFem_N = variants {} ; ---- sense to be split
 lin magyarMasc_N = variants {} ; ---- sense to be split
 lin maharaja_N = mkN "大君" ; -- status=guess
-lin maharajah_N = mkN "大君" ;
 lin mahjong_N = mkN "麻將" | mkN "麻将" | mkN "麻雀" ; -- status=guess -- status=guess -- status=guess
 lin mahogany_N = mkN "桃花心木" ;
 lin maid_N = mkN "女佣" ;
@@ -22108,8 +22105,7 @@ lin nailsea_PN = foreignPN "Nailsea" ; -- comment=src=geonames status=guess
 lin naira_N = mkN "奈拉" ; -- open-multilingual-wordnet
 lin nairn_PN = foreignPN "Nairn" ; -- comment=src=geonames status=guess
 lin nairobi_PN = mkPN "奈洛比" ; -- comment=src=geonames status=guess
-lin naive_1_A = mkA "朴素" ;
-lin naive_2_A = variants {} ; ---- sense to be split
+lin naive_A = mkA "朴素" ;
 lin naked_A = mkA "裸体" ;
 lin nakedness_N = mkN "裸體" | mkN "裸体" | mkN "赤裸" | mkN "赤裸" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin name_N = L.name_N | {-HSK-} mkN "姓" "個" | mkN "称" ;
@@ -28158,8 +28154,6 @@ lin roentgenographic_A = mkA "X光线照相术" | mkA "伦琴射线照相" ; -- 
 lin roger_PN = foreignPN "Roger" ; -- comment=src=eng status=guess
 lin rogue_N = mkN "流氓" ;
 lin roil_V2 = mkV2 "惹怒" ;
-lin role_1_N = mkN "角色" ;
-lin role_2_N = mkN "角色" ;
 lin role_N = mkN "角色" "个" ;
 lin roleplaying_N = mkN "角色扮演游戲" | mkN "角色扮演游戏" | mkN "角色活動" | mkN "角色活动" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin roll_N = mkN "卷" | {-HSK-} mkN "幅" ;

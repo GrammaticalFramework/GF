@@ -3499,8 +3499,7 @@ lin chaotic_A = mkA "chaotisch" | mkA "wanordelijk" | mkA "onordelijk" | mkA "wa
 lin chap_N = variants {} ; --
 lin chapel_N = mkN "kapel" masculine feminine ; -- status=guess
 lin chapter_N = mkN "hoofdstuk" neuter ;
-lin charabanc_1_N = variants {} ; ---- sense to be split
-lin charabanc_2_N = variants {} ; ---- sense to be split
+lin charabanc_N = variants {} ;
 lin character_1_N = mkN "karakter" neuter | mkN "persoonlijkheid" ; --- split mkN "karakter" ; character on a show
 lin character_2_N = mkN "karakter" neuter | mkN "teken" neuter ;
 lin characteristic_A = mkA "kenmerkend" | mkA "karakteristiek" | mkA "idiosyncratisch" ; -- status=guess status=guess status=guess
@@ -10755,7 +10754,6 @@ lin interdict_N = mkN "interdictie" ; -- status=guess
 lin interdisciplinary_A = mkA "interdisciplinair" ; -- status=guess
 lin interest_1_N = mkN "interesse" ;
 lin interest_2_N = mkN "rente" ;
-lin interest_4_N = mkN "belang" neuter | mkN "aandeel" neuter ; -- interest, stake, legal share of something
 lin interest_N = mkN "interesse" | mkN "belangstelling" | mkN "rente" ;
 lin interest_V = mkV "interesseren" ; -- status=guess, src=wikt
 lin interest_V2 = mkV2 (mkV "interesseren") ; -- status=guess, src=wikt
@@ -13603,8 +13601,6 @@ lin nail_V2 = mkV2 (mkV (mkV "slagen") "voor") | mkV2 (mkV (mkV "voor") "elkaar 
 lin nailsea_PN = mkPN "Nailsea" ; -- src=geonames status=guess
 lin nairn_PN = mkPN "Nairn" ; -- src=geonames status=guess
 lin nairobi_PN = mkPN "Nairobi" ; -- src=geonames status=guess
-lin naive_1_A = mkA "naïef" ; -- status=guess ---- sense to be split
-lin naive_2_A = mkA "naïef" ; -- status=guess ---- sense to be split
 lin naive_A = mkA "naïef" ; -- status=guess
 lin naked_A = mkA "naakt" | mkA "onopgesmukt" ; -- status=guess status=guess
 lin name_N = L.name_N ;
@@ -17420,9 +17416,7 @@ lin roebuck_N = mkN "reebok" masculine ; -- status=guess
 lin roentgenium_N = mkN "roentgenium" neuter ; -- status=guess
 lin roger_PN = mkPN "Roger" ; -- src=eng status=guess
 lin rogue_N = mkN "schurkenstaat" masculine ; -- status=guess
-lin role_1_N = mkN "functie" | mkN "rol" ; -- function, office, part, role
-lin role_2_N = mkN "rol" ; -- character, role, part, persona
-lin role_N = role_1_N | role_2_N ;
+lin role_N = mkN "functie" | mkN "rol" ;
 lin roll_N = mkN "rol" ; -- status=guess
 lin roll_V = mkV (mkV "overkop") "gaan" ; -- status=guess, src=wikt
 lin roll_V2 = mkV2 (mkV (mkV "overkop") "gaan") ; -- status=guess, src=wikt

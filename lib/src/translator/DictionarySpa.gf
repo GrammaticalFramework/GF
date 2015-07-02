@@ -5377,9 +5377,8 @@ lin chapel_N = mkN "capilla" masculine ; -- status=guess
 lin chaperon_N = mkN "carabina" | mkN "chaperón" | mkN "escopeta" ; -- status=guess status=guess status=guess
 lin chaplain_N = mkN "capellán" masculine ; -- status=guess
 lin chapter_N = mkN "capítulo" ;
-lin chapterhouse_N = mkN "sala_capitular" ; --UWN
-lin charabanc_1_N = variants {} ; ---- sense to be split
-lin charabanc_2_N = variants {} ; ---- sense to be split
+lin chapterhouse_N = mkN "sala capitular" ; --UWN
+lin charabanc_N = variants {} ;
 lin characin_N = mkN "carácido" | mkN "pez_carácido" ; --UWN
 lin character_1_N = mkN "carácter" ;
 lin character_2_N = mkN "personaje" ;
@@ -15741,7 +15740,6 @@ lin interdependent_A = mkA "interdependiente" ; -- status=guess
 lin interdict_N = mkN "interdicción" ; --UWN
 lin interest_1_N = mkN "interés" masculine ;
 lin interest_2_N = mkN "interés" masculine ;
-lin interest_4_N = mkN "interés" masculine ;
 lin interest_N = mkN "interés" masculine ;
 lin interest_V = mkV "interesar" ; -- status=guess
 lin interest_V2 = mkV2 (mkV "interesar") ; -- status=guess
@@ -19633,8 +19631,6 @@ lin nailer_N = mkN "chapuzas" ; --UWN
 lin nailsea_PN = mkPN "Nailsea" ; -- status=guess src=geonames
 lin nairn_PN = mkPN "Nairn" ; -- status=guess src=geonames
 lin nairobi_PN = mkPN "Nairobi" ; -- status=guess src=geonames
-lin naive_1_A = mkA "cándido" | mkA "ingenuo" ; -- status=guess status=guess ---- sense to be split
-lin naive_2_A = mkA "cándido" | mkA "ingenuo" ; -- status=guess status=guess ---- sense to be split
 lin naive_A = mkA "cándido" | mkA "ingenuo" ; -- status=guess status=guess
 lin naivety_N = mkN "ingenuidad" feminine ; -- status=guess
 lin naked_A = mkA "como dios lo trajo al mundo" ; -- status=guess
@@ -25155,8 +25151,6 @@ lin roebuck_N = mkN "ciervo" ; -- status=guess
 lin roentgenium_N = mkN "roentgenio" ; -- status=guess
 lin roil_V2 = mkV2 (mkV "enturbiar") ; -- status=guess, src=wikt
 lin roisterer_N = mkN "jaranero" | mkN "juerguista" ; --UWN
-lin role_1_N = mkN "papel" masculine ; ---- what's the difference in senses?
-lin role_2_N = mkN "papel" masculine ; ---- what's the difference in senses?
 lin role_N = mkN "papel" masculine ;
 lin roleplaying_N = mkN "juego de rol" ; -- status=guess
 lin roll_N = mkN "rollo" ; -- status=guess
