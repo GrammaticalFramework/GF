@@ -1,4 +1,4 @@
-//
+    //
 //  TranslationTextViewController.m
 //  GF Offline Translator
 //
@@ -15,6 +15,7 @@
 #import "PhraseTranslation.h"
 #import "MorphAnalyser.h"
 #import "TranslatorStore.h"
+#import "NSString+StringToArray.h"
 
 // Views
 #import "TranslationTextTableViewCell.h"
@@ -196,6 +197,13 @@
     // Must call super
     
     NSString *input = self.textView.text;
+    
+    // If chinese add input to chars
+    if ([self.translator.from.language.bcp isEqualToString:@"zh-CN"]) {
+        NSArray *array = [input stringToArray];
+        input = [array componentsJoinedByString:@" "];
+    }
+    
     NSInteger wordsCount = [input componentsSeparatedByString:@" "].count;
     
     

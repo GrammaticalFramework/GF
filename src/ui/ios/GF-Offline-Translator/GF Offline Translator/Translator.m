@@ -14,7 +14,7 @@
 #import "WordTranslation.h"
 #import "MorphAnalyser.h"
 #import "Language.h"
-#import "NSString+StringToArray.h"
+
 
 // Grammatical Framework
 #import "pgf/literals.h"
@@ -85,14 +85,6 @@
 }
 
 - (PhraseTranslation *)translatePhrase:(NSString *)phrase {
-    
-    
-    
-    // If chinese add input to chars
-    if ([self.from.language.bcp isEqualToString:@"zh-CN"]) {
-        NSArray *array = [phrase stringToArray];
-        phrase = [array componentsJoinedByString:@" "];
-    }
     
     GuPool *tmpPool = gu_new_pool();
     GuExn *tmpErr = gu_new_exn(tmpPool);
