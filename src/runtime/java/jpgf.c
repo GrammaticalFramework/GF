@@ -1154,11 +1154,12 @@ JNIEXPORT jobject JNICALL
 Java_org_grammaticalframework_pgf_Generator_generateAll(JNIEnv* env, jclass clazz, jobject jpgf, jstring jstartCat)
 {
 	GuPool* pool = gu_new_pool();
-
+	GuPool* out_pool = gu_new_pool();
     GuString startCat = j2gu_string(env, jstartCat, pool);
+    GuExn* err = gu_exn(pool);
 
 	GuEnum* res =
-		pgf_generate_all(get_ref(env, jpgf), startCat, pool);
+		pgf_generate_all(get_ref(env, jpgf), startCat, err, pool, out_pool);
 	if (res == NULL) {
 		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The generation failed");
 		gu_pool_free(pool);
@@ -1167,7 +1168,7 @@ Java_org_grammaticalframework_pgf_Generator_generateAll(JNIEnv* env, jclass claz
 
 	jclass expiter_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ExprIterator");
 	jmethodID constrId = (*env)->GetMethodID(env, expiter_class, "<init>", "(Lorg/grammaticalframework/pgf/PGF;JJJ)V");
-	jobject jexpiter = (*env)->NewObject(env, expiter_class, constrId, jpgf, p2l(pool), p2l(pool), p2l(res));
+	jobject jexpiter = (*env)->NewObject(env, expiter_class, constrId, jpgf, p2l(pool), p2l(out_pool), p2l(res));
 
 	return jexpiter;
 }

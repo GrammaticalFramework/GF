@@ -1,17 +1,17 @@
 #include "pgf/pgf.h"
 #include "pgf/data.h"
-#include "pgf/evaluator.h"
+#include "pgf/reasoner.h"
 #include <stdlib.h>
 
 #define PGF_ARGS_DELTA 5
 
 static inline PgfClosure*
-pgf_mk_pap(PgfEvalState* state, PgfClosure* fun,
+pgf_mk_pap(PgfReasoner* rs, PgfClosure* fun,
            size_t n_args, PgfClosure** args)
 {
 	if (n_args > 0) {
-		PgfValuePAP* val = gu_new_flex(state->pool, PgfValuePAP, args, n_args);
-		val->header.code = state->eval_gates->evaluate_value_pap;
+		PgfValuePAP* val = gu_new_flex(rs->pool, PgfValuePAP, args, n_args);
+		val->header.code = rs->eval_gates->evaluate_value_pap;
 		val->fun         = fun;
 		val->n_args      = n_args*sizeof(PgfClosure*);
 		for (size_t i = 0; i < n_args; i++) {
@@ -23,7 +23,7 @@ pgf_mk_pap(PgfEvalState* state, PgfClosure* fun,
 }
 
 PgfClosure*
-pgf_evaluate_expr_thunk(PgfEvalState* state, PgfExprThunk* thunk)
+pgf_evaluate_expr_thunk(PgfReasoner* rs, PgfExprThunk* thunk)
 {
 	PgfEnv* env  = thunk->env;
 	PgfExpr expr = thunk->expr;
@@ -39,7 +39,7 @@ repeat:;
 		PgfExprAbs* eabs = ei.data;
 
 		if (n_args > 0) {
-			PgfEnv* new_env  = gu_new(PgfEnv, state->pool);
+			PgfEnv* new_env  = gu_new(PgfEnv, rs->pool);
 			new_env->next    = env;
 			new_env->closure = args[--n_args];
 
@@ -47,7 +47,7 @@ repeat:;
 			expr = eabs->body;
 			goto repeat;
 		} else {
-			thunk->header.code = state->eval_gates->evaluate_value_lambda;
+			thunk->header.code = rs->eval_gates->evaluate_value_lambda;
 			thunk->expr = eabs->body;
 			res = &thunk->header;
 		}
@@ -56,8 +56,8 @@ repeat:;
 	case PGF_EXPR_APP: {
 		PgfExprApp* eapp = ei.data;
 		PgfExprThunk* thunk = 
-			gu_new(PgfExprThunk, state->pool);
-		thunk->header.code = state->eval_gates->evaluate_expr_thunk;
+			gu_new(PgfExprThunk, rs->pool);
+		thunk->header.code = rs->eval_gates->evaluate_expr_thunk;
 		thunk->env  = env;
 		thunk->expr = eapp->arg;
 		
@@ -72,7 +72,7 @@ repeat:;
 	case PGF_EXPR_LIT: {
 		PgfExprLit* elit = ei.data;
 		PgfValueLit* val = (PgfValueLit*) thunk;
-		val->header.code = state->eval_gates->evaluate_value_lit;
+		val->header.code = rs->eval_gates->evaluate_value_lit;
 		val->lit = elit->lit;
 		res = &val->header;
 		break;
@@ -81,28 +81,28 @@ repeat:;
 		PgfExprMeta* emeta = ei.data;
 
 		PgfValueMeta* val =
-			gu_new(PgfValueMeta, state->pool);
-		val->header.code = state->eval_gates->evaluate_meta;
+			gu_new(PgfValueMeta, rs->pool);
+		val->header.code = rs->eval_gates->evaluate_meta;
 		val->env = env;
 		val->id  = emeta->id;
-		res = pgf_mk_pap(state, &val->header, n_args, args);
+		res = pgf_mk_pap(rs, &val->header, n_args, args);
 		break;
 	}
 	case PGF_EXPR_FUN: {
 		PgfExprFun* efun = ei.data;
 
 		PgfAbsFun* absfun =
-			gu_seq_binsearch(state->pgf->abstract.funs, pgf_absfun_order, PgfAbsFun, efun->fun);
+			gu_seq_binsearch(rs->abstract->funs, pgf_absfun_order, PgfAbsFun, efun->fun);
 		gu_assert(absfun != NULL);
 
 		if (absfun->closure.code != NULL) {
-			res = pgf_mk_pap(state, (PgfClosure*) &absfun->closure, n_args, args);
+			res = pgf_mk_pap(rs, (PgfClosure*) &absfun->closure, n_args, args);
 		} else {
 			size_t arity = absfun->arity;
 
 			if (n_args == arity) {
-				PgfValue* val = gu_new_flex(state->pool, PgfValue, args, arity);
-				val->header.code = state->eval_gates->evaluate_value;
+				PgfValue* val = gu_new_flex(rs->pool, PgfValue, args, arity);
+				val->header.code = rs->eval_gates->evaluate_value;
 				val->con = (PgfClosure*) &absfun->closure;
 
 				for (size_t i = 0; i < arity; i++) {
@@ -112,10 +112,10 @@ repeat:;
 			} else {
 				gu_assert(n_args < arity);
 
-				PgfExprThunk* lambda = gu_new(PgfExprThunk, state->pool);
-				lambda->header.code = state->eval_gates->evaluate_value_lambda;
+				PgfExprThunk* lambda = gu_new(PgfExprThunk, rs->pool);
+				lambda->header.code = rs->eval_gates->evaluate_value_lambda;
 				lambda->env = NULL;
-				res = pgf_mk_pap(state, &lambda->header, n_args, args);
+				res = pgf_mk_pap(rs, &lambda->header, n_args, args);
 
 				for (size_t i = 0; i < arity; i++) {
 					PgfExpr new_expr, arg;
@@ -123,13 +123,13 @@ repeat:;
 					PgfExprVar *evar =
 						gu_new_variant(PGF_EXPR_VAR,
 									   PgfExprVar,
-									   &arg, state->pool);
+									   &arg, rs->pool);
 					evar->var = arity-i-1;
 
 					PgfExprApp *eapp =
 						gu_new_variant(PGF_EXPR_APP,
 									   PgfExprApp,
-									   &new_expr, state->pool);
+									   &new_expr, rs->pool);
 					eapp->fun = expr;
 					eapp->arg = arg;
 					
@@ -142,7 +142,7 @@ repeat:;
 					PgfExprAbs *eabs =
 						gu_new_variant(PGF_EXPR_ABS,
 									   PgfExprAbs,
-									   &new_expr, state->pool);
+									   &new_expr, rs->pool);
 					eabs->bind_type = PGF_BIND_TYPE_EXPLICIT;
 					eabs->id = "_";
 					eabs->body = expr;
@@ -162,7 +162,7 @@ repeat:;
 		while (i > 0) {
 			tmp_env = tmp_env->next;
 			if (tmp_env == NULL) {
-				GuExnData* err_data = gu_raise(state->err, PgfExn);
+				GuExnData* err_data = gu_raise(rs->err, PgfExn);
 				if (err_data) {
 					err_data->data = "invalid de Bruijn index";
 				}
@@ -171,7 +171,7 @@ repeat:;
 			i--;
 		}
 
-		res = pgf_mk_pap(state, tmp_env->closure, n_args, args);
+		res = pgf_mk_pap(rs, tmp_env->closure, n_args, args);
 		break;
 	}
 	case PGF_EXPR_TYPED: {
@@ -193,24 +193,24 @@ repeat:;
 }
 
 PgfClosure*
-pgf_evaluate_lambda_application(PgfEvalState* state, PgfExprThunk* lambda,
-                                                     PgfClosure* arg)
+pgf_evaluate_lambda_application(PgfReasoner* rs, PgfExprThunk* lambda,
+                                PgfClosure* arg)
 {
-	PgfEnv* new_env = gu_new(PgfEnv, state->pool);
+	PgfEnv* new_env = gu_new(PgfEnv, rs->pool);
 	new_env->next    = lambda->env;
 	new_env->closure = arg;
 
-	PgfExprThunk* thunk = gu_new(PgfExprThunk, state->pool);
-	thunk->header.code = state->eval_gates->evaluate_expr_thunk;
+	PgfExprThunk* thunk = gu_new(PgfExprThunk, rs->pool);
+	thunk->header.code = rs->eval_gates->evaluate_expr_thunk;
 	thunk->env         = new_env;
 	thunk->expr        = lambda->expr;
-	return pgf_evaluate_expr_thunk(state, thunk);
+	return pgf_evaluate_expr_thunk(rs, thunk);
 }
 
 static PgfExpr
-pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
+pgf_value2expr(PgfReasoner* rs, int level, PgfClosure* clos)
 {
-	clos = state->eval_gates->enter(state, clos);
+	clos = rs->eval_gates->enter(rs, clos);
 	if (clos == NULL)
 		return gu_null_variant;
 
@@ -218,20 +218,20 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 	size_t n_args = 0;
 	PgfClosure** args;
 
-	if (clos->code == state->eval_gates->evaluate_value) {
+	if (clos->code == rs->eval_gates->evaluate_value) {
 		PgfValue* val = (PgfValue*) clos;
 		PgfAbsFun* absfun = gu_container(val->con, PgfAbsFun, closure);
 
 		expr   = absfun->ep.expr;
 		n_args = absfun->arity;
 		args   = val->args;
-	} else if (clos->code == state->eval_gates->evaluate_value_lit) {
+	} else if (clos->code == rs->eval_gates->evaluate_value_lit) {
 		PgfValueLit* val = (PgfValueLit*) clos;
 
 		PgfExprLit *elit =
 			gu_new_variant(PGF_EXPR_LIT,
 						   PgfExprLit,
-						   &expr, pool);
+						   &expr, rs->out_pool);
 
 		GuVariantInfo i = gu_variant_open(val->lit);
 		switch (i.tag) {
@@ -242,7 +242,7 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 				gu_new_flex_variant(PGF_LITERAL_STR,
 									PgfLiteralStr,
 									val, strlen(lstr->val)+1,
-									&elit->lit, pool);
+									&elit->lit, rs->out_pool);
 			strcpy(new_lstr->val, lstr->val);
 			break;
 		}
@@ -252,7 +252,7 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 			PgfLiteralInt* new_lint =
 				gu_new_variant(PGF_LITERAL_INT,
 							   PgfLiteralInt,
-							   &elit->lit, pool);
+							   &elit->lit, rs->out_pool);
 			new_lint->val = lint->val;
 			break;
 		}
@@ -262,24 +262,24 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 			PgfLiteralFlt* new_lflt =
 				gu_new_variant(PGF_LITERAL_FLT,
 							   PgfLiteralFlt,
-							   &elit->lit, pool);
+							   &elit->lit, rs->out_pool);
 			new_lflt->val = lflt->val;
 			break;
 		}
 		default:
 			gu_impossible();
 		}
-	} else if (clos->code == state->eval_gates->evaluate_value_pap) {
+	} else if (clos->code == rs->eval_gates->evaluate_value_pap) {
 		PgfValuePAP *pap = (PgfValuePAP*) clos;
 
 		PgfValueGen* gen =
-			gu_new(PgfValueGen, state->pool);
-		gen->header.code = state->eval_gates->evaluate_gen;
+			gu_new(PgfValueGen, rs->pool);
+		gen->header.code = rs->eval_gates->evaluate_gen;
 		gen->level  = level;
 
 		size_t n_args = pap->n_args/sizeof(PgfClosure*);
-		PgfValuePAP* new_pap = gu_new_flex(state->pool, PgfValuePAP, args, n_args+1);
-		new_pap->header.code = state->eval_gates->evaluate_value_pap;
+		PgfValuePAP* new_pap = gu_new_flex(rs->pool, PgfValuePAP, args, n_args+1);
+		new_pap->header.code = rs->eval_gates->evaluate_value_pap;
 		new_pap->fun         = pap->fun;
 		new_pap->n_args      = pap->n_args+sizeof(PgfClosure*);
 		new_pap->args[0]     = &gen->header;
@@ -290,30 +290,30 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 		PgfExprAbs *eabs =
 			gu_new_variant(PGF_EXPR_ABS,
 						   PgfExprAbs,
-						   &expr, pool);
+						   &expr, rs->out_pool);
 		eabs->bind_type = PGF_BIND_TYPE_EXPLICIT;
-		eabs->id = gu_format_string(pool, "v%d", level);
-		eabs->body = pgf_value2expr(state, level+1, &new_pap->header, pool);
-	} else if (clos->code == state->eval_gates->evaluate_value_const) {
+		eabs->id = gu_format_string(rs->out_pool, "v%d", level);
+		eabs->body = pgf_value2expr(rs, level+1, &new_pap->header);
+	} else if (clos->code == rs->eval_gates->evaluate_value_const) {
 		PgfValuePAP* val = (PgfValuePAP*) clos;
 		
-		if (val->fun->code == state->eval_gates->evaluate_meta) {
+		if (val->fun->code == rs->eval_gates->evaluate_meta) {
 			PgfValueMeta* fun = (PgfValueMeta*) val->fun;
 
 			PgfExprMeta *emeta =
 				gu_new_variant(PGF_EXPR_META,
 				               PgfExprMeta,
-				               &expr, pool);
+				               &expr, rs->out_pool);
 			emeta->id = fun->id;
-		} else if (val->fun->code == state->eval_gates->evaluate_gen) {
+		} else if (val->fun->code == rs->eval_gates->evaluate_gen) {
 			PgfValueGen* fun = (PgfValueGen*) val->fun;
 
 			PgfExprVar *evar =
 				gu_new_variant(PGF_EXPR_VAR,
 				               PgfExprVar,
-				               &expr, pool);
+				               &expr, rs->out_pool);
 			evar->var = level - fun->level - 1;
-		} else if (val->fun->code == state->eval_gates->evaluate_sum) {
+		} else if (val->fun->code == rs->eval_gates->evaluate_sum) {
 			PgfValueSum* sum = (PgfValueSum*) val->fun;
 
 			PgfExpr e1,e2;
@@ -321,19 +321,19 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 				gu_new_flex_variant(PGF_EXPR_FUN,
 				                    PgfExprFun,
 				                    fun, 2,
-				                    &e1, pool);
+				                    &e1, rs->out_pool);
 			strcpy(efun->fun, "+");
 
 			PgfExprLit *elit =
 				gu_new_variant(PGF_EXPR_LIT,
 				               PgfExprLit,
-				               &e2, pool);
+				               &e2, rs->out_pool);
 			elit->lit = sum->lit;
 			
 			PgfExprApp* eapp =
 				gu_new_variant(PGF_EXPR_APP,
 				               PgfExprApp,
-				               &expr, pool);
+				               &expr, rs->out_pool);
 			eapp->fun = e1;
 			eapp->arg = e2;
 	
@@ -344,14 +344,14 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 
 				PgfExpr fun = expr;
 				PgfExpr arg = 
-					pgf_value2expr(state, level, con, pool);
+					pgf_value2expr(rs, level, con);
 				if (gu_variant_is_null(arg))
 					return gu_null_variant;
 
 				PgfExprApp* e =
 					gu_new_variant(PGF_EXPR_APP,
 					               PgfExprApp,
-					               &expr, pool);
+					               &expr, rs->out_pool);
 				e->fun = fun;
 				e->arg = arg;
 			}
@@ -369,14 +369,14 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 	for (size_t i = 0; i < n_args; i++) {
 		PgfExpr fun = expr;
 		PgfExpr arg = 
-			pgf_value2expr(state, level, args[i], pool);
+			pgf_value2expr(rs, level, args[i]);
 		if (gu_variant_is_null(arg))
 			return gu_null_variant;
 
 		PgfExprApp* e =
 			gu_new_variant(PGF_EXPR_APP,
 						   PgfExprApp,
-						   &expr, pool);
+						   &expr, rs->out_pool);
 		e->fun = fun;
 		e->arg = arg;
 	}
@@ -387,47 +387,33 @@ pgf_value2expr(PgfEvalState* state, int level, PgfClosure* clos, GuPool* pool)
 PgfExpr
 pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err, GuPool* pool, GuPool* out_pool)
 {
-	size_t n_cafs =
-		(pgf->abstract.eval_gates->cafs == NULL) 
-			? 0 : gu_seq_length(pgf->abstract.eval_gates->cafs);
-
-	PgfEvalState* state = 
-		gu_new_flex(pool, PgfEvalState, cafs, n_cafs);
-	state->pgf   = pgf;
-	state->eval_gates = pgf->abstract.eval_gates;
-	state->pool  = pool;
-	state->err   = err;
-
-	PgfFunction* cafs = gu_seq_data(state->eval_gates->cafs);
-	for (size_t i = 0; i < n_cafs; i++) {
-		state->cafs[i].header.code = cafs[i];
-		state->cafs[i].val = NULL;
-	}
+	PgfReasoner* rs =
+		pgf_new_reasoner(pgf, err, pool, out_pool);
 
 	PgfExprThunk* thunk =
 		gu_new(PgfExprThunk, pool);
-	thunk->header.code = state->eval_gates->evaluate_expr_thunk;
+	thunk->header.code = rs->eval_gates->evaluate_expr_thunk;
 	thunk->env  = NULL;
 	thunk->expr = expr;
 
-	return pgf_value2expr(state, 0, &thunk->header, out_pool);
+	return pgf_value2expr(rs, 0, &thunk->header);
 }
 
 void
-pgf_evaluate_accum_init_int(PgfEvalState* state, 
+pgf_evaluate_accum_init_int(PgfReasoner* rs, 
                             PgfEvalAccum* accum, int val)
 {
 	PgfLiteralInt *lit_int =
 		gu_new_variant(PGF_LITERAL_INT,
 	                   PgfLiteralInt,
 	                   &accum->lit,
-					   state->pool);
+					   rs->pool);
 	lit_int->val = val;
 	accum->consts = NULL;
 }
 
 void
-pgf_evaluate_accum_init_str(PgfEvalState* state, 
+pgf_evaluate_accum_init_str(PgfReasoner* rs, 
                             PgfEvalAccum* accum, GuString val)
 {
 	if (val == NULL)
@@ -437,23 +423,23 @@ pgf_evaluate_accum_init_str(PgfEvalState* state,
 		gu_new_flex_variant(PGF_LITERAL_STR,
 							PgfLiteralStr,
 							val, strlen(val)+1,
-							&accum->lit, state->pool);
+							&accum->lit, rs->pool);
 	strcpy((char*) lit_str->val, (char*) val);
 	accum->consts = NULL;
 }
 
 void
-pgf_evaluate_accum_init_flt(PgfEvalState* state, 
+pgf_evaluate_accum_init_flt(PgfReasoner* rs, 
                             PgfEvalAccum* accum, float val)
 {
 	PgfLiteralFlt *lit_flt =
 		gu_new_variant(PGF_LITERAL_FLT,
 					   PgfLiteralFlt,
 					   &accum->lit,
-					   state->pool);
+					   rs->pool);
 	lit_flt->val = val;
-	accum->enter_stack_ptr = state->enter_stack_ptr;
-	state->enter_stack_ptr = ((void*)accum)-sizeof(void*)*2;
+	accum->enter_stack_ptr = rs->enter_stack_ptr;
+	rs->enter_stack_ptr = ((void*)accum)-sizeof(void*)*2;
 	accum->consts = NULL;
 }
 
@@ -480,19 +466,19 @@ pgf_evaluate_accum_add_helper(PgfEvalAccum* accum, PgfLiteral lit)
 }
 
 void
-pgf_evaluate_accum_add(PgfEvalState* state,
+pgf_evaluate_accum_add(PgfReasoner* rs,
                        PgfEvalAccum* accum, PgfClosure* closure)
 {
-	if (closure->code == state->eval_gates->evaluate_value_lit) {
+	if (closure->code == rs->eval_gates->evaluate_value_lit) {
 		PgfValueLit* val = (PgfValueLit*) closure;
 		pgf_evaluate_accum_add_helper(accum, val->lit);
-	} else if (closure->code == state->eval_gates->evaluate_value_const) {
+	} else if (closure->code == rs->eval_gates->evaluate_value_const) {
 		if (accum->consts == NULL)
-			accum->consts = gu_new_buf(PgfClosure*, state->pool);
+			accum->consts = gu_new_buf(PgfClosure*, rs->pool);
 
 		PgfValuePAP* pap = (PgfValuePAP*) closure;
 		
-		if (pap->fun->code == state->eval_gates->evaluate_sum) {
+		if (pap->fun->code == rs->eval_gates->evaluate_sum) {
 			PgfValueSum* val = (PgfValueSum*) ((PgfValuePAP*) closure)->fun;
 			pgf_evaluate_accum_add_helper(accum, val->lit);
 
@@ -510,18 +496,18 @@ pgf_evaluate_accum_add(PgfEvalState* state,
 }
 
 PgfClosure*
-pgf_evaluate_accum_done(PgfEvalState* state, PgfEvalAccum* accum)
+pgf_evaluate_accum_done(PgfReasoner* rs, PgfEvalAccum* accum)
 {
-	state->enter_stack_ptr = accum->enter_stack_ptr;
+	rs->enter_stack_ptr = accum->enter_stack_ptr;
 
 	if (accum->consts == NULL) {
-		PgfValueLit* val = gu_new(PgfValueLit, state->pool);
-		val->header.code = state->eval_gates->evaluate_value_lit;
+		PgfValueLit* val = gu_new(PgfValueLit, rs->pool);
+		val->header.code = rs->eval_gates->evaluate_value_lit;
 		val->lit = accum->lit;
 		return &val->header;
 	} else {
-		PgfValueSum* val = gu_new(PgfValueSum, state->pool);
-		val->header.code = state->eval_gates->evaluate_sum;
+		PgfValueSum* val = gu_new(PgfValueSum, rs->pool);
+		val->header.code = rs->eval_gates->evaluate_sum;
 		val->lit = accum->lit;
 		val->consts = accum->consts;
 		return &val->header;

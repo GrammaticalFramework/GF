@@ -90,16 +90,16 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
              double *precision, double *recall, double *exact);
 
 PgfExpr
-pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err, 
+pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err,
             GuPool* pool, GuPool* out_pool);
 
 PgfExprEnum*
-pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuPool* pool);
+pgf_generate_all(PgfPGF* pgf, PgfCId cat,
+                 GuExn* err, GuPool* pool, GuPool* out_pool);
 
 PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfCId cat, GuString sentence,
-          GuExn* err,
-          GuPool* pool, GuPool* out_pool);
+          GuExn* err, GuPool* pool, GuPool* out_pool);
 
 typedef struct PgfMorphoCallback PgfMorphoCallback;
 struct PgfMorphoCallback {

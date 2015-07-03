@@ -3,7 +3,6 @@
 #include <gu/utf8.h>
 #include <pgf/data.h>
 #include <pgf/reasoner.h>
-#include <pgf/evaluator.h>
 #include <pgf/reader.h>
 #include "lightning.h"
 #ifdef __MINGW32__
@@ -387,7 +386,7 @@ pgf_jit_gates(PgfReader* rdr)
 	int closure_arg = jit_arg_p();
 	jit_getarg_p(JIT_VSTATE, es_arg);
 	jit_getarg_p(JIT_VCLOS,  closure_arg);
-	jit_stxi_p(offsetof(PgfEvalState, enter_stack_ptr), JIT_VSTATE, JIT_SP);
+	jit_stxi_p(offsetof(PgfReasoner, enter_stack_ptr), JIT_VSTATE, JIT_SP);
 	jit_ldr_p(JIT_R0, JIT_VCLOS);
 	jit_callr(JIT_R0);
 	jit_movr_p(JIT_RET, JIT_VHEAP);
@@ -430,7 +429,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_prepare(2);
 	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValuePAP));
 	jit_pusharg_ui(JIT_R0);
-	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
+	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfReasoner,pool));
 	jit_pusharg_p(JIT_R0);
 	jit_finish(gu_malloc);
 	jit_popr_i(JIT_R1);
@@ -531,7 +530,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_prepare(2);
 	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValuePAP));
 	jit_pusharg_ui(JIT_R0);
-	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
+	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfReasoner,pool));
 	jit_pusharg_p(JIT_R0);
 	jit_finish(gu_malloc);
 	jit_popr_i(JIT_R1);
@@ -563,15 +562,15 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_pushr_p(JIT_R0);
 	jit_jmpi(gates->mk_const);
 	jit_patch(ref2);
-	jit_ldxi_p(JIT_R1, JIT_VSTATE, offsetof(PgfEvalState,enter_stack_ptr));
+	jit_ldxi_p(JIT_R1, JIT_VSTATE, offsetof(PgfReasoner,enter_stack_ptr));
 	ref2 = jit_bner_p(jit_forward(), JIT_FP, JIT_R1);
-	jit_stxi_p(offsetof(PgfEvalState,tmp), JIT_VSTATE, JIT_R0);
+	jit_stxi_p(offsetof(PgfReasoner,tmp), JIT_VSTATE, JIT_R0);
 	jit_subr_p(JIT_R0, JIT_FP, JIT_SP);
 	jit_pushr_i(JIT_R0);
 	jit_prepare(2);
 	jit_addi_i(JIT_R0, JIT_R0, sizeof(PgfValuePAP));
 	jit_pusharg_ui(JIT_R0);
-	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
+	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfReasoner,pool));
 	jit_pusharg_p(JIT_R0);
 	jit_finish(gu_malloc);
 	jit_movr_p(JIT_VHEAP, JIT_RET);
@@ -588,7 +587,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_subi_i(JIT_R1, JIT_R1, sizeof(void*));
 	jit_jmpi(next);
 	jit_patch(ref);
-	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,tmp));
+	jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfReasoner,tmp));
 	jit_jmpr(JIT_R0);
 	jit_patch(ref2);
 	jit_ldxi_p(JIT_VCLOS, JIT_FP, sizeof(void*));
@@ -662,7 +661,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				absfun->closure.code = abstr->eval_gates->evaluate_caf;
 				size_t caf_id = rdr->jit_state->n_cafs++;
 				absfun->closure.caf_offset = 
-					offsetof(PgfEvalState,cafs)+
+					offsetof(PgfReasoner,cafs)+
 					caf_id*sizeof(PgfIndirection);
 				gu_seq_set(abstr->eval_gates->cafs,
 				           PgfFunction,
@@ -807,7 +806,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				jit_prepare(2);
 				jit_movi_ui(JIT_R0, size*sizeof(void*));
 				jit_pusharg_ui(JIT_R0);
-				jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfEvalState,pool));
+				jit_ldxi_p(JIT_R0, JIT_VSTATE, offsetof(PgfReasoner,pool));
 				jit_pusharg_p(JIT_R0);
 				jit_finish(gu_malloc);
 				jit_retval_p(JIT_VHEAP);
