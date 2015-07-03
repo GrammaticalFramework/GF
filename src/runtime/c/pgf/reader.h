@@ -48,7 +48,7 @@ pgf_reader_done(PgfReader* rdr, PgfPGF* pgf);
 
 
 // JIT specific interface
-#ifdef PGF_EVALUATOR_H_
+#ifdef PGF_REASONER_H_
 
 typedef struct PgfJitState PgfJitState;
 

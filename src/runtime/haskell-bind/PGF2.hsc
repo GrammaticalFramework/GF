@@ -113,7 +113,8 @@ generateAll p cat =
     do genPl  <- gu_new_pool
        exprPl <- gu_new_pool
        enum   <- withCString cat $ \cat ->
-                   pgf_generate_all (pgf p) cat genPl
+                   exn <- gu_new_exn genPl
+                   pgf_generate_all (pgf p) cat exn genPl exprPl
        genFPl  <- newForeignPtr gu_pool_finalizer genPl
        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
        fromPgfExprEnum enum genFPl (p,exprFPl)

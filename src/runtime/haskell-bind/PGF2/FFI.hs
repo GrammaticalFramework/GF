@@ -209,7 +209,7 @@ foreign import ccall "pgf/expr.h pgf_print_expr"
   pgf_print_expr :: PgfExpr -> Ptr PgfPrintContext -> CInt -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_generate_all"
-  pgf_generate_all :: Ptr PgfPGF -> CString -> Ptr GuPool -> IO (Ptr GuEnum)
+  pgf_generate_all :: Ptr PgfPGF -> CString -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
 
 foreign import ccall "pgf/pgf.h pgf_print"
   pgf_print :: Ptr PgfPGF -> Ptr GuOut -> Ptr GuExn -> IO ()
