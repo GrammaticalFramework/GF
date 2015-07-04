@@ -154,9 +154,7 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 
 	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
-	abscat->predicate = (PgfPredicate) jit_get_ip().ptr;
-	
-	jit_prolog(2);
+	abscat->predicate = (PgfFunction) jit_get_ip().ptr;
 
 	PgfAbsFun* absfun = NULL;
 	PgfAbsFun* next_absfun = NULL;
@@ -170,17 +168,12 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 		gu_puts("\n", out, err);
 #endif
 
-		int rs_arg = jit_arg_p();
-		int parent_arg = jit_arg_p();
-		jit_getarg_p(JIT_V1, rs_arg);
-		jit_getarg_p(JIT_V2, parent_arg);
-
 		// compile TRY_FIRST
 		jit_prepare(3);
-		jit_movi_p(JIT_V0,next_absfun);
-		jit_pusharg_p(JIT_V0);
-		jit_pusharg_p(JIT_V2);
-		jit_pusharg_p(JIT_V1);
+		jit_movi_p(JIT_R0,next_absfun);
+		jit_pusharg_p(JIT_R0);
+		jit_pusharg_p(JIT_VCLOS);
+		jit_pusharg_p(JIT_VSTATE);
 		jit_finish(pgf_reasoner_try_first);
 	}
 
@@ -188,7 +181,7 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 	gu_puts("    RET\n", out, err);
 #endif
 	// compile RET
-	jit_ret();
+	jit_bare_ret();
 
 #ifdef PGF_JIT_DEBUG
 	if (n_funs > 0) {
@@ -201,13 +194,7 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 		pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
 
 		absfun = next_absfun;
-		absfun->predicate = (PgfPredicate) jit_get_ip().ptr;
-
-		jit_prolog(2);
-		int rs_arg = jit_arg_p();
-		int st_arg = jit_arg_p();
-		jit_getarg_p(JIT_V1, rs_arg);
-		jit_getarg_p(JIT_V2, st_arg);
+		absfun->predicate = (PgfFunction) jit_get_ip().ptr;
 
 		size_t n_hypos = gu_seq_length(absfun->type->hypos);
 
@@ -223,13 +210,13 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 
 				// compile TRY_ELSE
 				jit_prepare(3);
-				jit_movi_p(JIT_V0, next_absfun);
-				jit_pusharg_p(JIT_V0);
-				jit_pusharg_p(JIT_V2);
-				jit_pusharg_p(JIT_V1);
+				jit_movi_p(JIT_R0, next_absfun);
+				jit_pusharg_p(JIT_R0);
+				jit_pusharg_p(JIT_VCLOS);
+				jit_pusharg_p(JIT_VSTATE);
 				jit_finish(pgf_reasoner_try_else);
 			}
-				
+
 			for (size_t i = 0; i < n_hypos; i++) {
 				PgfHypo* hypo = gu_seq_index(absfun->type->hypos, PgfHypo, i);
 
@@ -247,37 +234,23 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 #endif
 
 				// compile CALL
-				ref = jit_movi_p(JIT_V0, jit_forward());
-				jit_str_p(JIT_V2, JIT_V0);
-				jit_prepare(2);
-				jit_pusharg_p(JIT_V2);
-				jit_pusharg_p(JIT_V1);
+				ref = jit_movi_p(JIT_R0, jit_forward());
+				jit_str_p(JIT_VCLOS, JIT_R0);
 
 				PgfCallPatch patch;
 				patch.cid = hypo->type->cid;
-				patch.ref = jit_finish(jit_forward());
+				patch.ref = jit_jmpi(jit_forward());
 				gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
 
 #ifdef PGF_JIT_DEBUG
-				gu_puts("    RET\n", out, err);
 				if (i+1 < n_hypos) {
 					gu_printf(out, err, "L%d:\n", label++);
 				}
 #endif
 
-				// compile RET
-				jit_ret();
-
 				if (i+1 < n_hypos) {
 					pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
-
 					jit_patch_movi(ref,jit_get_label());
-					
-					jit_prolog(2);
-					rs_arg = jit_arg_p();
-					st_arg = jit_arg_p();
-					jit_getarg_p(JIT_V1, rs_arg);
-					jit_getarg_p(JIT_V2, st_arg);
 				} else {
 					jit_patch_movi(ref,pgf_reasoner_complete);
 				}
@@ -294,10 +267,10 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 
 				// compile TRY_CONSTANT
 				jit_prepare(3);
-				jit_movi_p(JIT_V0, next_absfun);
-				jit_pusharg_p(JIT_V0);
-				jit_pusharg_p(JIT_V2);
-				jit_pusharg_p(JIT_V1);
+				jit_movi_p(JIT_R0, next_absfun);
+				jit_pusharg_p(JIT_R0);
+				jit_pusharg_p(JIT_VCLOS);
+				jit_pusharg_p(JIT_VSTATE);
 				jit_finish(pgf_reasoner_try_constant);
 			} else {
 #ifdef PGF_JIT_DEBUG
@@ -306,8 +279,8 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 
 				// compile COMPLETE
 				jit_prepare(2);
-				jit_pusharg_p(JIT_V2);
-				jit_pusharg_p(JIT_V1);
+				jit_pusharg_p(JIT_VCLOS);
+				jit_pusharg_p(JIT_VSTATE);
 				jit_finish(pgf_reasoner_complete);
 			}
 
@@ -382,9 +355,9 @@ pgf_jit_gates(PgfReader* rdr)
 
 	gates->enter = (void*) jit_get_ip().ptr;
 	jit_prolog(2);
-	int es_arg = jit_arg_p();
+	int rs_arg = jit_arg_p();
 	int closure_arg = jit_arg_p();
-	jit_getarg_p(JIT_VSTATE, es_arg);
+	jit_getarg_p(JIT_VSTATE, rs_arg);
 	jit_getarg_p(JIT_VCLOS,  closure_arg);
 	jit_stxi_p(offsetof(PgfReasoner, enter_stack_ptr), JIT_VSTATE, JIT_SP);
 	jit_ldr_p(JIT_R0, JIT_VCLOS);
@@ -613,6 +586,24 @@ pgf_jit_gates(PgfReader* rdr)
 
 	gates->evaluate_sum = jit_get_ip().ptr;
 	jit_jmpi(gates->mk_const);
+
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
+
+	gates->combine1 = (void*) jit_get_ip().ptr;
+	jit_prepare(2);
+	jit_pusharg_p(JIT_VCLOS);
+	jit_pusharg_p(JIT_VSTATE);
+	jit_finish(pgf_reasoner_combine1);
+	jit_bare_ret();
+
+	pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
+
+	gates->combine2 = (void*) jit_get_ip().ptr;
+	jit_prepare(2);
+	jit_pusharg_p(JIT_VCLOS);
+	jit_pusharg_p(JIT_VSTATE);
+	jit_finish(pgf_reasoner_combine2);
+	jit_bare_ret();
 
 	gates->fin.fn = pgf_jit_finalize_cafs;
 	gates->cafs = NULL;
@@ -1291,7 +1282,7 @@ pgf_jit_done(PgfReader* rdr, PgfAbstr* abstr)
 		PgfAbsCat* arg =
 			gu_seq_binsearch(abstr->cats, pgf_abscat_order, PgfAbsCat, patch->cid);
 		if (arg != NULL) {
-			jit_patch_calli(patch->ref,(jit_insn*) arg->predicate);
+			jit_patch_at(patch->ref,(jit_insn*) arg->predicate);
 		} else {
 			PgfAbsFun* fun =
 				gu_seq_binsearch(abstr->funs, pgf_absfun_order, PgfAbsFun, patch->cid);
