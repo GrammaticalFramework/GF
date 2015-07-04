@@ -82,7 +82,7 @@ typedef struct {
 	int arity;
 	PgfEquations* defns; // maybe null
 	PgfExprProb ep;
-	void* predicate;
+	PgfFunction predicate;
 	struct {
 		PgfFunction code;
 		union {

@@ -7,20 +7,6 @@ typedef struct PgfReasoner PgfReasoner;
 typedef struct PgfReasonerState PgfReasonerState;
 typedef struct PgfExprState PgfExprState;
 
-typedef void (*PgfPredicate)(PgfReasoner* rs, PgfReasonerState* st);
-
-void
-pgf_reasoner_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun);
-
-void
-pgf_reasoner_try_else(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
-
-void
-pgf_reasoner_complete(PgfReasoner* rs, PgfExprState* st);
-
-void
-pgf_reasoner_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
-
 typedef struct {
 	PgfFunction code;
 } PgfClosure;
@@ -117,6 +103,9 @@ struct PgfEvalGates {
 
 	PgfFunction mk_const;
 
+	PgfFunction combine1;
+	PgfFunction combine2;
+
 	PgfClosure* (*enter)(PgfReasoner* rs, PgfClosure* closure);
 
 	GuFinalizer fin;
@@ -125,6 +114,24 @@ struct PgfEvalGates {
 
 PgfReasoner*
 pgf_new_reasoner(PgfPGF* pgf, GuExn* err, GuPool* pool, GuPool* out_pool);
+
+void
+pgf_reasoner_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun);
+
+void
+pgf_reasoner_try_else(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
+
+void
+pgf_reasoner_combine1(PgfReasoner* rs, PgfClosure* closure);
+
+void
+pgf_reasoner_combine2(PgfReasoner* rs, PgfClosure* closure);
+
+void
+pgf_reasoner_complete(PgfReasoner* rs, PgfExprState* st);
+
+void
+pgf_reasoner_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
 
 PgfClosure*
 pgf_evaluate_expr_thunk(PgfReasoner* rs, PgfExprThunk* thunk);
