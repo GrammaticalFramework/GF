@@ -112,7 +112,7 @@ generateAll p cat =
   unsafePerformIO $
     do genPl  <- gu_new_pool
        exprPl <- gu_new_pool
-       enum   <- withCString cat $ \cat ->
+       enum   <- withCString cat $ \cat -> do
                    exn <- gu_new_exn genPl
                    pgf_generate_all (pgf p) cat exn genPl exprPl
        genFPl  <- newForeignPtr gu_pool_finalizer genPl
