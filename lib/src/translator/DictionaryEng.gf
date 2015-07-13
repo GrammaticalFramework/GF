@@ -5,8 +5,8 @@ flags
 
 lin a_bomb_N = mkN "a-bomb" "a-bombs";
 lin a_fortiori_Adv = mkAdv "a fortiori";
-lin a_la_carte_Adv = mkAdv "à la carte";
-lin a_la_mode_Adv = mkAdv "à la mode";
+lin a_la_carte_Adv = variants {mkAdv "à la carte"; mkAdv "a la carte"};
+lin a_la_mode_Adv = variants {mkAdv "à la mode"; mkAdv "a la mode"};
 lin a_level_N = mkN "a-level" "a-levels";
 lin a_posteriori_A = irregAdv (compoundA (mkA "a posteriori")) "a posteriori";
 lin a_priori_A = irregAdv (compoundA (mkA "a priori")) "a priori";
