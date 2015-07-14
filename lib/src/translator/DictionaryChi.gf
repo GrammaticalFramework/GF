@@ -22870,9 +22870,9 @@ lin obfuscate_V2 = mkV2 "混淆" ;
 lin obi_N = mkN "寬腰帶" | mkN "宽腰带" ; -- status=guess -- status=guess
 lin obiter_dictum_N = mkN "附带" "" ;
 lin obituary_N = mkN "訃告" | mkN "讣告" | mkN "訃聞" | mkN "讣闻" ; -- status=guess -- status=guess -- status=guess -- status=guess
-lin object_N = mkN "事物" "個" | mkN "对象" "個" | {-HSK-} mkN "宾语" ;
+lin object_N =  mkN "物体" | mkN "对象" "個" | {-HSK-} mkN "宾语" ;
 lin object_V = mkV "拒绝" ;
-lin object_V2 = mkV2 "物体" ;
+lin object_V2 = mkV2 "拒绝" ;
 lin objection_N = mkN "异议" | {-HSK-} mkN "意见" "點" ;
 lin objectionable_A = mkA "讨厌" ;
 lin objective_A = mkA "客观" | {-HSK-} mkA "目标" | mkA "目" ;
@@ -23127,7 +23127,7 @@ lin ongoing_A = mkA "不断" ;
 lin onion_N = mkN "洋葱" "个" ;
 lin online_A = mkA "在線" | mkA "在线" | mkA "上網" | mkA "上网" | mkA "聯機" | mkA "联机" | mkA "線上" | mkA "线上" | mkA "網上" | mkA "网上" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin onlooker_N = mkN "旁观者" "名" ;
-lin only_Adv = mkAdv "不过" | mkAdv "光" | mkAdv "只" | mkAdv "唯一" | mkAdv "就" | mkAdv "才" | {-HSK-} mkAdv "只有" | {-HSK-} mkAdv "仅" ;
+lin only_Adv = {-HSK-} mkAdv "只有" | mkAdv "只" | mkAdv "不过" | mkAdv "光" | mkAdv "唯一" | mkAdv "就" | mkAdv "才" | {-HSK-} mkAdv "仅" ;
 lin only_Predet = S.only_Predet ;
 lin onomastic_A = mkA "亲自签名" ; -- open-multilingual-wordnet
 lin onomatopoeia_N = mkN "象聲" | mkN "象声" | mkN "擬聲" | mkN "拟声" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -30531,7 +30531,7 @@ lin somalianMasc_N = variants {} ; ---- sense to be split
 lin somatosensory_A = mkA "觉" | mkA "躯体感觉" ; -- open-multilingual-wordnet
 lin somber_A = mkA "陰沉" | mkA "阴沉" | mkA "陰鬱" | mkA "阴郁" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin some_Det = mkpDet "一些" | {-HSK-} mkpDet "两" | mkpDet "些" | mkpDet "俩" | mkpDet "某" | mkpDet "点" ;
-lin some_Quant = mkQuant "一些" ;
+lin some_Quant = R.mkQuant "一些" "一些"  R.DTPoss ;
 lin somebody_NP = S.somebody_NP ;
 lin someday_Adv = mkAdv "日后" ;
 lin somehow_AdV = mkAdV "不知何故" ;
@@ -30766,7 +30766,7 @@ lin speculatorFem_N = mkN "投机者" ;
 lin speculatorMasc_N = mkN "投机者" ;
 lin speech_N = mkN "发言" | {-HSK-} mkN "报告" "篇" | mkN "讲" ;
 lin speechless_A = mkA "無言" | mkA "无言" | mkA "無語" | mkA "无语" | mkA "沈默" | mkA "沉默" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
-lin speed_N = mkN "快" | mkN "速度" "個" | {-HSK-} mkN "速度" ;
+lin speed_N = mkN "速度" "個" | {-HSK-} mkN "速度" ;
 lin speed_V = mkV "速度" ;
 lin speed_V2 = mkV2 "速度" ;
 lin speed_up_V2 = mkV2 "加速" ;
@@ -31053,8 +31053,8 @@ lin sta_PN = foreignPN "Sta" ; -- comment=src=eng status=guess
 lin stab_N = mkN "戳" ;
 lin stab_V = mkV "刺" ;
 lin stab_V2 = L.stab_V2 ;
-lin stability_N = mkN "稳定" ;
-lin stabilization_N = mkN "稳定" ;
+lin stability_N = mkN "稳定性" ;
+lin stabilization_N = mkN "稳定性" ;
 lin stabilize_V = mkV "稳定" ;
 lin stabilize_V2 = mkV2 "使+稳定" | {-HSK-} mkV2 "稳定" ;
 lin stable_A = mkA "稳定" ;
@@ -33609,7 +33609,7 @@ lin tragedy_N = mkN "悲剧" ;
 lin tragic_A = mkA "悲催" ;
 lin tragically_Adv = mkAdv "悲剧" ;
 lin tragicomic_A = mkA "悲喜剧" ;
-lin trail_N = mkN "线索" ;
+lin trail_N = mkN "小道" "条" ;
 lin trail_V = mkV "拖曳" ;
 lin trail_V2 = mkV2 "线索" ;
 lin trailblazer_N = mkN "排頭兵" | mkN "排头兵" ; -- status=guess -- status=guess
@@ -36215,7 +36215,7 @@ lin wistful_A = mkA "渴望" ;
 lin wit_N = mkN "智力" ;
 lin witch_N = mkN "女巫" ;
 lin witchcraft_N = mkN "魔法" ;
-lin with_Prep = mkPrep "用" | mkPrep "和" "一起" ; ---- split: with chopsticks ; with you ; with meat ;
+lin with_Prep = S.with_Prep ; ---- split: with chopsticks ; with you ; with meat ;
 lin with_regard_to_Prep = mkPrep "关于" ;
 lin with_respect_to_Prep = mkPrep "关于" ;
 lin witham_PN = foreignPN "Witham" ; -- comment=src=geonames status=guess

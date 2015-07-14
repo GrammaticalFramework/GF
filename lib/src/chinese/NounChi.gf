@@ -12,7 +12,7 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
 
     DetNP det = {s = det.s ++ ge_s} ; ----
 
-    PredetNP pred np = mkNP (pred.s ++ possessive_s ++ np.s) ;
+    PredetNP pred np = mkNP (pred.s ++ np.s) ; ---- possessive_s ++ np.s) ;
 
     PPartNP np v2 = mkNP ((predV v2 v2.part).verb.s ++ possessive_s ++ np.s) ; ---- ??
 
@@ -63,7 +63,7 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
     OrdNumeralSuperl n a = {s = ordinal_s ++ n.s ++ superlative_s ++ a.s} ; ---- to check AR 24/8/2014
 
     DefArt = mkQuant [] [] DTPoss ;          -- use that_Quant if you want the_s
-    IndefArt = mkQuant yi_s [] (DTFull Sg) ;    -- empty in the plural
+    IndefArt = mkQuant yi_s [] DTPoss ; -- (DTFull Sg) ;    -- empty in the plural
 
     MassNP cn = cn ;
 
