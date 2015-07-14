@@ -16,7 +16,7 @@ lin
   small_A = mkA "小" ;        -- "xiao"
   green_A = mkA "绿" ;        -- "lv"
   walk_V = mkV "走" ;             -- "zou"
-  sleep_V = mkV "睡" ;            -- "shui"
+  sleep_V = mkV "睡觉" ;            -- "shui"
   love_V2 = mkV2 "爱" ;            -- "ai"
   watch_V2 = mkV2 "看" ;            -- "kan"
   know_VS = mkV "知道" ;          -- "zhidao"
@@ -128,7 +128,7 @@ tie_V2 = mkV2 "绑" ;
 sew_V = mkV "缝" ;
 count_V2 = mkV2 "数" ;
 say_VS = mkVS (mkV "说") ;
-sing_V = mkV "唱" ;
+sing_V = mkV "唱歌" ;
 play_V = mkV "玩" ;
 float_V = mkV "浮" ;
 flow_V = mkV "流" ;
