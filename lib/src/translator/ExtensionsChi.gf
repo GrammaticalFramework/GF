@@ -117,6 +117,12 @@ lin
        s = ant.s ++ pol.s ++ vp.prePart ++ useVerb vp.verb ! pol.p ! APlain ++ vp.compl ++ which_RP.s  ---- aspect
        } ; ---- ??
 
+  PresPartAP vp = { ---- copied from RelVP
+       s = vp.prePart ++ useVerb vp.verb ! Pos ! APlain ++ vp.compl ++ which_RP.s ;
+       monoSyl = False ;
+       hasAdA = False
+       } ; ---- ??
+
     ComplVV v a p vp = {
       verb = v ;
       compl = a.s ++ p.s ++ vp.topic ++ vp.prePart ++ useVerb vp.verb ! p.p ! APlain ++ vp.compl ; ---- aspect
