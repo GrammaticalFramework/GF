@@ -12,7 +12,7 @@ concrete AdverbChi of Adverb = CatChi **
 
     AdAdv adv ad = ss (ad.s ++ adv.s) ** {advType = ad.advType} ;
 
-    SubjS subj s = ss (subj.prePart ++ s.s ++ subj.sufPart)  ** {advType = ATManner} ;
+    SubjS subj s = ss (subj.prePart ++ s.s ++ subj.sufPart)  ** {advType = ATTime} ;
 
     AdnCAdv cadv = ss (cadv.s ++ conjThat) ** {advType = ATManner} ; -----
 
