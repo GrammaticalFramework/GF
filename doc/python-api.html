@@ -1,0 +1,433 @@
+<html>
+	<head>
+<style>
+.code {background-color:lightgray}
+</style>
+	</head>
+	<body>
+		<h1>Using the Python binding to the C runtime</h1>
+		<h4>Krasimir Angelov, July 2015</h4>
+		
+<h2>Loading the Grammar</h2>
+
+Before you use the Python binding you need to import the pgf module.
+<pre class="code">
+>>> import pgf
+</pre>
+
+Once you have the module imported, you can use the <tt>dir</tt> and
+<tt>help</tt> functions to see what kind of functionality is available.
+<tt>dir</tt> takes an object and returns a list of methods available
+in the object:
+<pre class="code">
+>>> dir(pgf)
+</pre>
+<tt>help</tt> is a little bit more advanced and it tries
+to produce more human readable documentation, which more over
+contains comments:
+<pre class="code">
+>>> help(pgf)
+</pre>
+
+A grammar is loaded by calling the method readPGF:
+<pre class="code">
+>>> gr = pgf.readPGF("App12.pgf")
+</pre>
+
+From the grammar you can query the set of available languages.
+It is accessible through the property <tt>languages</tt> which
+is a map from language name to an object of class <tt>pgf.Concr</tt>
+which respresents the language.
+For example the following will extract the English language:
+<pre class="code">
+>>> eng = gr.languages["AppEng"]
+>>> print eng
+&lt;pgf.Concr object at 0x7f7dfa4471d0&gt;
+</pre>
+
+<h2>Parsing</h2>
+
+All language specific services are available as methods of the
+class <tt>pgf.Concr</tt>. For example to invoke the parser, you
+can call:
+<pre class="code">
+>>> i = eng.parse("this is a small theatre")
+</pre>
+This gives you an iterator which can enumerates all possible
+abstract trees. You can get the next tree by calling next:
+<pre class="code">
+>>> p,e = i.next()
+</pre>
+The results are always pairs of probability and tree. The probabilities
+are negated logarithmic probabilities and which means that the lowest
+number encodes the most probable result. The possible trees are
+returned in decreasing probability order (i.e. increasing negated logarithm).
+The first tree should have the smallest <tt>p</tt>:
+<pre class="code">
+>>> print p
+35.9166526794
+</pre>
+and this is the corresponding abstract tree:
+<pre class="code">
+>>> print e
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant this_Quant NumSg)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN theatre_N)))))))) NoVoc
+</pre>
+
+The <tt>parse</tt> method has also the following optional parameters:
+<table border=1>
+	<tr><td>cat</td><td>start category</td></tr>
+	<tr><td>n</td><td>maximum number of trees</td></tr>
+	<tr><td>heuristics</td><td>a real number from 0 to 1</td></tr>
+	<tr><td>callbacks</td><td>a list of category and callback function</td></tr>
+</table>
+
+By using these parameters it is possible for instance to change the start category for
+the parser or to limit the number of trees returned from the parser. For example
+parsing with a different start category can be done as follows:
+<pre class="code">
+>>> i = eng.parse("a small theatre", cat="NP")
+</pre>
+
+<p>The heuristics factor can be used to trade parsing speed for quality.
+By default the list of trees is sorted by probability this corresponds
+to factor 0.0. When we increase the factor then parsing becomes faster
+but at the same time the sorting becomes imprecise. The worst
+factor is 1.0. In any case the parser always returns the same set of
+trees but in different order. Our experience is that even a factor
+of about 0.6-0.8 with the translation grammar, still orders 
+the most probable tree on top of the list but further down the list
+the trees become shuffled.
+</p>
+
+<p>
+The callbacks is a list of functions that can be used for recognizing
+literals. For example we use those for recognizing names and unknown
+words in the translator.
+</p>
+
+<h2>Linearization</h2>
+
+You can either linearize the result from the parser back to another
+language, or you can explicitly construct a tree and then
+linearize it in any language. For example, we can create
+a new expression like this:
+<pre class="code">
+>>> e = pgf.readExpr("AdjCN (PositA red_A) (UseN theatre_N)")
+</pre>
+and then we can linearize it:
+<pre class="code">
+>>> print eng.linearize(e)
+red theatre
+</pre>
+This method produces only a single linearization. If you use variants
+in the grammar then you might want to see all possible linearizations.
+For that purpouse you should use linearizeAll:
+<pre class="code">
+>>> for s in eng.linearizeAll(e):
+       print s
+red theatre
+red theater
+</pre>
+If, instead, you need an inflection table with all possible forms
+then the right method to use is tabularLinearize:
+<pre class="code">
+>>> eng.tabularLinearize(e):
+{'s Sg Nom': 'red theatre', 's Pl Nom': 'red theatres', 's Pl Gen': "red theatres'", 's Sg Gen': "red theatre's"}
+</pre>
+
+<p>
+Finally, you could also get a linearization which is bracketed into
+a list of phrases:
+<pre class="code">
+>>> [b] = eng.bracketedLinearize(e)
+>>> print b
+(CN:4 (AP:1 (A:0 red)) (CN:3 (N:2 theatre)))
+</pre>
+Each bracket is actually an object of type pgf.Bracket. The property
+<tt>cat</tt> of the object gives you the name of the category and 
+the property children gives you a list of nested brackets.
+If a phrase is discontinuous then it is represented as more than
+one brackets with the same category name. In that case, the index
+that you see in the example above will have the same value for all
+brackets of the same phrase.
+</p>
+
+The linearization works even if there are functions in the tree 
+that doesn't have linearization definitions. In that case you
+will just see the name of the function in the generated string.
+It is sometimes helpful to be able to see whether a function
+is linearizable or not. This can be done in this way:
+<pre class="code">
+>>> print eng.hasLinearization("apple_N")
+</pre>
+
+<h2>Analysing and Constructing Expressions</h2>
+
+<p>
+An already constructed tree can be analyzed and transformed
+in the host application. For example you can deconstruct 
+a tree into a function name and a list of arguments:
+<pre class="code">
+>>> e.unpack()
+('AdjCN', [&lt;pgf.Expr object at 0x7f7df6db78c8&gt;, &lt;pgf.Expr object at 0x7f7df6db7878&gt;])
+</pre>
+
+The result from unpack can be different depending on the form of the
+tree. If the tree is a function application then you always get
+a tuple of function name and a list of arguments. If instead the
+tree is just a literal string then the return value is the actual
+literal. For example the result from:
+<pre class="code">
+>>> pgf.readExpr('"literal"').unpack()
+'literal'
+</pre>
+is just the string 'literal'. Situations like this can be detected
+in Python by checking the type of the result from <tt>unpack</tt>.
+</p>
+
+<p>
+For more complex analyses you can use the visitor pattern.
+In object oriented languages this is just a clumpsy way to do
+what is called pattern matching in most functional languages.
+You need to define a class which has one method for each function
+in the abstract syntax of the grammar. If the functions is called
+<tt>f</tt> then you need a method called <tt>on_f</tt>. The method
+will be called each time when the corresponding function is encountered,
+and its arguments will be the arguments from the original tree.
+If there is no matching method name then the runtime will
+to call the method <tt>default</tt>. The following is an example:
+<pre class="code">
+>>> class ExampleVisitor:
+		def on_DetCN(self,quant,cn):
+			print "Found DetCN"
+			cn.visit(self)
+			
+		def on_AdjCN(self,adj,cn):
+			print "Found AdjCN"
+			cn.visit(self)
+			
+		def default(self,e):
+			pass
+>>> e2.visit(ExampleVisitor())
+Found DetCN
+Found AdjCN
+</pre>
+Here we call the method <tt>visit</tt> from the tree e2 and we give
+it, as parameter, an instance of class <tt>ExampleVisitor</tt>.
+<tt>ExampleVisitor</tt> has two methods <tt>on_DetCN</tt>
+and <tt>on_AdjCN</tt> which are called when the top function of
+the current tree is <tt>DetCN</tt> or <tt>AdjCN</tt>
+correspondingly. In this example we just print a message and
+we call <tt>visit</tt> recursively to go deeper into the tree.
+</p>
+
+Constructing new trees is also easy. You can either use 
+<tt>readExpr</tt> to read trees from strings, or you can
+construct new trees from existing pieces. This is possible by
+using the constructor for <tt>pgf.Expr</tt>:
+<pre class="code">
+>>> quant = pgf.readExpr("DetQuant IndefArt NumSg")
+>>> e2 = pgf.Expr("DetCN", [quant, e])
+>>> print e2
+DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN theatre_N))
+</pre>
+
+<h2>Embedded GF Grammars</h2>
+
+The GF compiler allows for easy integration of grammars in Haskell
+applications. For that purpose the compiler generates Haskell code
+that makes the integration of grammars easier. Since Python is a
+dynamic language the same can be done at runtime. Once you load
+the grammar you can call the method <tt>embed</tt>, which will
+dynamically create a Python module with one Python function 
+for every function in the abstract syntax of the grammar.
+After that you can simply import the module:
+<pre class="code">
+>>> gr.embed("App")
+&lt;module 'App' (built-in)&gt;
+>>> import App
+</pre>
+Now creating new trees is just a matter of calling ordinary Python
+functions:
+<pre class="code">
+>>> print App.DetCN(quant,e)
+DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN house_N))
+</pre>
+
+<h2>Access the Morphological Lexicon</h2>
+
+There are two methods that gives you direct access to the morphological
+lexicon. The first makes it possible to dump the full form lexicon.
+The following code just iterates over the lexicon and prints each
+word form with its possible analyses:
+<pre class="code">
+for entry in eng.fullFormLexicon():
+	print entry
+</pre>
+The second one implements a simple lookup. The argument is a word
+form and the result is a list of analyses:
+<pre class="code">
+print eng.lookupMorpho("letter")
+[('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
+</pre>
+
+<h2>Access the Abstract Syntax</h2>
+
+There is a simple API for accessing the abstract syntax. For example,
+you can get a list of abstract functions:
+<pre class="code">
+>>> gr.functions
+....
+</pre>
+or a list of categories:
+<pre class="code">
+>>> gr.categories
+....
+</pre>
+You can also access all functions with the same result category:
+<pre class="code">
+>>> gr.functionsByCat("Weekday")
+['friday_Weekday', 'monday_Weekday', 'saturday_Weekday', 'sunday_Weekday', 'thursday_Weekday', 'tuesday_Weekday', 'wednesday_Weekday']
+</pre>
+The full type of a function can be retrieved as:
+<pre class="code">
+>>> print gr.functionType("DetCN")
+Det -> CN -> NP
+</pre>
+
+<h2>Type Checking Abstract Trees</h2>
+
+<p>The runtime type checker can do type checking and type inference
+for simple types. Dependent types are still not fully implemented
+in the current runtime. The inference is done with method <tt>inferExpr</tt>:
+<pre class="code">
+>>> e,ty = gr.inferExpr(e)
+>>> print e
+AdjCN (PositA red_A) (UseN theatre_N)
+>>> print ty
+CN
+</pre>
+The result is a potentially updated expression and its type. In this
+case we always deal with simple types, which means that the new
+expression will be always equal to the original expression. However, this
+wouldn't be true when dependent types are added.
+</p>
+
+<p>Type checking is also trivial:
+<pre class="code">
+>>> e = gr.checkExpr(e,pgf.readType("CN"))
+>>> print e
+AdjCN (PositA red_A) (UseN theatre_N)
+</pre>
+In case of type error you will get an exception:
+<pre class="code">
+>>> e = gr.checkExpr(e,pgf.readType("A"))
+pgf.TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
+</pre>
+</p>
+
+<h2>Partial Grammar Loading</h2>
+
+By default the whole grammar is compiled into a single file
+which consists of an abstract syntax together will all concrete
+languages. For large grammars with many languages this might be
+inconvinient because loading becomes slower and the grammar takes
+more memory. For that purpose you could split the grammar into
+one file for the abstract syntax and one file for every concrete syntax.
+This is done by using the option <tt>-split-pgf</tt> in the compiler:
+<pre class="code">
+$ gf -make -split-pgf App12.pgf
+</pre>
+
+Now you can load the grammar as usual but this time only the
+abstract syntax will be loaded. You can still use the <tt>languages</tt>
+property to get the list of languages and the corresponding
+concrete syntax objects:
+<pre class="code">
+>>> gr = pgf.readPGF("App.pgf")
+>>> eng = gr.languages["AppEng"]
+</pre>
+However, if you now try to use the concrete syntax then you will
+get an exception:
+<pre class="code">
+>>> gr.languages["AppEng"].lookupMorpho("letter")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+pgf.PGFError: The concrete syntax is not loaded
+</pre>
+
+Before using the concrete syntax, you need to explicitly load it: 
+<pre class="code">
+>>> eng.load("AppEng.pgf_c")
+>>> print eng.lookupMorpho("letter")
+[('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
+</pre>
+
+When you don't need the language anymore then you can simply
+unload it:
+<pre class="code">
+>>> eng.unload()
+</pre>
+
+<h2>GraphViz</h2>
+
+GraphViz is used for visualizing abstract syntax trees and parse trees.
+In both cases the result is a GraphViz code that can be used for
+rendering the trees. See the examples bellow.
+
+<pre class="code">
+>>> print gr.graphvizAbstractTree(e)
+graph {
+n0[label = "AdjCN", style = "solid", shape = "plaintext"]
+n1[label = "PositA", style = "solid", shape = "plaintext"]
+n2[label = "red_A", style = "solid", shape = "plaintext"]
+n1 -- n2 [style = "solid"]
+n0 -- n1 [style = "solid"]
+n3[label = "UseN", style = "solid", shape = "plaintext"]
+n4[label = "theatre_N", style = "solid", shape = "plaintext"]
+n3 -- n4 [style = "solid"]
+n0 -- n3 [style = "solid"]
+}
+</pre>
+
+<pre class="code">
+>>> print eng.graphvizParseTree(e)
+graph {
+  node[shape=plaintext]
+
+  subgraph {rank=same;
+    n4[label="CN"]
+  }
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n1[label="AP"]
+    n3[label="CN"]
+    n1 -- n3
+  }
+  n4 -- n1
+  n4 -- n3
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n0[label="A"]
+    n2[label="N"]
+    n0 -- n2
+  }
+  n1 -- n0
+  n3 -- n2
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n100000[label="red"]
+    n100001[label="theatre"]
+    n100000 -- n100001
+  }
+  n0 -- n100000
+  n2 -- n100001
+}
+</pre>
+
+	</body>
+</html>
+
