@@ -2911,7 +2911,7 @@ lin asynergic_A = mkA "不协调" ; -- open-multilingual-wordnet
 lin asynergy_N = mkN "不能协同" | mkN "协同不能" ; -- open-multilingual-wordnet
 lin asystole_N = mkN "心搏停止" | mkN "心脏停搏" ; -- open-multilingual-wordnet
 lin at_N = mkN "在" | {-HSK-} mkN "阿特""" ;
-lin at_Prep = mkPrep "在" ;
+lin at_Prep = mkPrep "在" "" (R.ATPlace True) ;
 lin at_all_Adv = mkAdv "根本" | mkAdv "简直" ;
 lin at_home_Adv = mkAdv "在家里" ;
 lin at_least_AdN = S.at_least_AdN ;
@@ -8021,7 +8021,7 @@ lin consumer_N = mkN "消费者" ;
 lin consumerism_N = mkN "用户至上主义" ; -- open-multilingual-wordnet
 lin consummate_A = mkA "至上" ;
 lin consummate_V2 = mkV2 "完善" ;
-lin consumption_N = mkN "消费" ;
+lin consumption_N = mkN "功耗" | mkN "消费" ;
 lin cont_PN = foreignPN "Cont" ; -- comment=src=eng status=guess
 lin contact_N = mkN "联系" ;
 lin contact_V2 = mkV2 "接触" | {-HSK-} mkV2 "联系" ;
@@ -31229,7 +31229,7 @@ lin statesman_N = mkN "政治家" ;
 lin static_A = mkA "静态" ;
 lin static_N = mkN "靜電" | mkN "静电" ; -- status=guess -- status=guess
 lin statics_N = mkN "靜力學" ; -- status=guess
-lin station_N = mkN "台" | mkN "站" | {-HSK-} mkN "车站" ;
+lin station_N = mkN "站台" | mkN "站" | {-HSK-} mkN "车站" ;
 lin station_V2 = mkV2 "站" ;
 lin stationariness_N = mkN "不动" | mkN "固定" ; -- open-multilingual-wordnet
 lin stationary_A = mkA "固定" ;
@@ -36509,7 +36509,7 @@ lin yep_Interj = variants {} ;
 lin yerevan_PN = foreignPN "Yerevan" ; -- comment=src=geonames status=guess
 lin yes_Interj = mkInterj "是" ;
 lin yes_Utt = S.yes_Utt ;
-lin yesterday_Adv = mkAdv "昨天" ;
+lin yesterday_Adv = mkAdv "昨天" R.ATTime ;
 lin yesterday_N = mkN "昨天" ;
 lin yet_1_Adv = mkAdv "仍然" timeAdvType ;
 lin yet_2_Adv = mkAdv "仍然" mannerAdvType ;
