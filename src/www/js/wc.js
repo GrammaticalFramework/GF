@@ -168,7 +168,7 @@ wc.translate=function() {
 		    wc.e2.appendChild(r.img)
 		    */
 		    e.appendChild(wc.e2)
-		    d3Tree(wc.bracketsToD3(r.jsontree))
+		    if(window.d3 && window.d3Tree) window.d3Tree(wc.bracketsToD3(r.jsontree))
 		}
 	    }
 	    if(wc.p /*&& so.rs.length>1*/) show_picks()
