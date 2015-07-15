@@ -1,19 +1,20 @@
--- opers implementing the API of stem-based morphology in finnish/stemmed for tagged Finnish
+-- opers implementing the API of stem-based morphology in finnish/tagged for tagged Finnish
 
 resource StemFin = open TagFin, MorphoFin, Prelude in {
 
 flags coding = utf8 ;
 
 oper
-  SNForm : Type = {} ;
-  SNoun : Type = {s : Str} ;
+  SNForm : Type = Predef.Ints 0 ;
+  SNoun : Type = {s : SNForm => Str ; h : Harmony } ;
 
-  nforms2snoun : NForms -> SNoun = \nfs => {s = nfs ! 0} ;
+  nforms2snoun : NForms -> SNoun = \nfs -> {s = nfs ; h = Back} ;
 
     snoun2nounBind : SNoun -> Noun = snoun2noun True ;
     snoun2nounSep  : SNoun -> Noun = snoun2noun False ;
 
-    snoun2noun : Bool -> SNoun -> Noun = \b,sn -> {s = \\nf => sn.s ++ mkTag "N" + tagNForm nf ; h = Back} ;
+    snoun2noun : Bool -> SNoun -> Noun = \b,sn -> {s = \\nf => sn.s ! 0++ mkTag "N" + tagNForm nf ; h = Back} ;
+
 
 
     snoun2np : Number -> SPN -> NPForm => Str = \n,sn ->
@@ -32,14 +33,11 @@ oper
 
   SPN : Type = {s : Case  => Str} ;
 
-  snoun2spn : SNoun -> SPN = \n -> {s = \\c => n.s ! NCase Sg c} ;
+  snoun2spn : SNoun -> SPN = \n -> {s = \\c => n.s ! 0 ++ tagCase c} ;
 
   exceptNomSNoun : SNoun -> Str -> SNoun = \noun,nom -> {
-      s = table {
-        NCase Sg Nom => nom ;
-        f => noun.s ! f
-	} ;
-      h = noun.h
+      s = \\_ => nom ;
+      h = noun.h 
       } ;
 
 
@@ -56,40 +54,40 @@ oper
 
   snoun2sadjComp : Bool -> SNoun -> SAdj = \isPos,tuore ->
     let 
-      tuoree = init (tuore.s ! NCase Sg Gen) ;
+      tuoree = init (tuore.s ! 0) ;
       tuoreesti  = tuoree + "sti" ; 
       tuoreemmin =  init tuoree ;
     in {s = table {
-         AN f => tuore.s ! f ;
+         AN f => tuoree ;
          AAdv => if_then_Str isPos tuoreesti tuoreemmin
          } ;
-        h = tuore.h
+        h = Back
        } ;
 
-   sAN : SNForm -> SAForm = \n -> AN n ;  ---- without eta exp gives internal error 6/8/2013
+   sAN : SNForm -> SAForm = \n -> AN (NCase Sg Nom) ;  ---- without eta exp gives internal error 6/8/2013
    sAAdv : SAForm = AAdv ;
    sANGen : (SAForm => Str) -> Str = \a -> a ! AN (NCase Sg Gen) ;
 
     mkAdj : (hyva,parempi,paras : SNoun) -> (hyvin,paremmin,parhaiten : Str) -> {s : Degree => SAForm => Str ; h : Harmony} = \h,p,ps,hn,pn,ph -> {
       s = table {
         Posit => table {
-           AN nf => h.s ! nf ;
+           AN nf => h.s ! 0 ++ tagNForm nf ;
            AAdv  => hn
            } ; 
         Compar => table {
-           AN nf => p.s ! nf ;
+           AN nf => p.s ! 0 ++ tagNForm nf ;
            AAdv  => pn
            } ; 
         Superl => table {
-           AN nf => ps.s ! nf ;
+           AN nf => ps.s ! 0 ++ tagNForm nf ;
            AAdv  => ph
            }
         } ;
-      h = h.h
+      h = Back  ---- TODO: just get rid of h ?
       } ;
 
-  snoun2compar : SNoun -> Str = \n -> init (n.s ! NCase Sg Gen) + "mpi" ; ---- kivempi
-  snoun2superl : SNoun -> Str = \n -> n.s ! NInstruct ; ---- kivin vs. kivoin
+  snoun2compar : SNoun -> Str = \n -> n.s ! 0 + "Comp" ; ---- TODO
+  snoun2superl : SNoun -> Str = \n -> n.s ! 0 + "Superl" ; ---- TODO
 
 -- verbs
 
@@ -145,15 +143,16 @@ oper
 -- for Symbol
 
   addStemEnding : Str -> SPN = \i -> 
-    {s = \\c => i ++ bindColonIfS (NCase Sg c) ++ defaultCaseEnding c} ;
+    {s = \\c => i ++ BIND ++ defaultCaseEnding c} ;
+--    {s = \\c => i ++ bindColonIfS (NCase Sg c) ++ defaultCaseEnding c} ;
 
   bindIfS : SNForm -> Str = \c -> case c of {
-    NCase Sg Nom => [] ;
+    --NCase Sg Nom => [] ;
     _ => BIND
     } ;
 
   bindColonIfS : SNForm -> Str = \c -> case c of {
-    NCase Sg Nom => [] ;
+    --NCase Sg Nom => [] ;
     _ => BIND ++ ":" ++ BIND
     } ;
 
