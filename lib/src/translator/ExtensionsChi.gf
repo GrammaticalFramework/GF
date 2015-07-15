@@ -118,7 +118,7 @@ lin
        } ; ---- ??
 
   PresPartAP vp = { ---- copied from RelVP
-       s = vp.prePart ++ useVerb vp.verb ! Pos ! APlain ++ vp.compl ++ which_RP.s ;
+       s = vp.prePart ++ useVerb vp.verb ! Pos ! APlain ++ vp.compl ; -- ++ which_RP.s ;
        monoSyl = False ;
        hasAdA = False
        } ; ---- ??
