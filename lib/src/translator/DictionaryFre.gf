@@ -3808,7 +3808,6 @@ lin bow_V = reflV (mkV "incliner") | mkV "fléchir" | mkV "courber" ; -- tocheck
 lin bow_V2 = mkV2 (mkV "incliner") | mkV2 (mkV "fléchir") | mkV2 (mkV "courber") ; -- tocheck
 lin bowdlerize_V2 = mkV2 (mkV "censurer") ; -- tocheck
 lin bowel_N = variants {} ; --
-lin bowels_N = mkN "entrailles" ; -- tocheck
 lin bower_N = mkN "boudoir" masculine ; -- tocheck
 lin bowerbird_N = mkN "oiseaux_jardiniers" | mkN "ptilonorhynchidae" | mkN "ptilonorhynchidés" ; -- UWN
 lin bowl_N = mkN "bol" masculine ; -- tocheck

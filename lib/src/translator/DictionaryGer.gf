@@ -7219,7 +7219,6 @@ lin bowburn_PN = mkPN "Bowburn" ; -- src=eng status=guess
 lin bowdlerization_N = variants {} ;
 lin bowdlerize_V2 = mkV2 (regV "zensieren") ; -- status=guess, src=wikt
 lin bowel_N = mkN "Inneres" neuter | mkN "Eingeweide" "Eingeweide" neuter | mkN "Bauch" "Bäuche" masculine ; -- status=guess status=guess status=guess
-lin bowels_N = mkN "Tiefen" feminine ; -- status=guess
 lin bower_N = boudoir_N ; -- status=guess
 lin bowerbird_N = variants {} ;
 lin bowery_A = variants {} ;
