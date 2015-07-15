@@ -3961,7 +3961,6 @@ lin bow_N = mkN "proa" masculine ; -- status=guess
 lin bow_V = mkV "arquearse" ; -- status=guess
 lin bow_V2 = mkV2 (mkV "arquearse") ; -- status=guess
 lin bowel_N = mkN "entrañas" feminine ; -- status=guess
-lin bowels_N = mkN "profundidades" feminine | mkN "entrañas" feminine ; -- status=guess status=guess
 lin bower_N = mkN "tocador" masculine ; -- status=guess
 lin bowl_N = mkN "tazón" | mkN "cuenco" ; -- status=guess
 lin bowl_V = variants {} ; --

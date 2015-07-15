@@ -7168,7 +7168,6 @@ lin bowburn_PN = mkPN "Bowburn" ; -- src=eng status=guess
 lin bowdlerization_N = variants {} ; -- status=guess
 lin bowdlerize_V2 = variants {} ; -- status=guess
 lin bowel_N = mkN "tarm" ; -- SaldoWN
-lin bowels_N = mkN "innandöme" ; -- status=guess
 lin bower_N = mkN "berså" "bersåer" ; -- comment=3
 lin bowerbird_N = variants {} ; -- status=guess
 lin bowery_A = variants {} ; -- status=guess

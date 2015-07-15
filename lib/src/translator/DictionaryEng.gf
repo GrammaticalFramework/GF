@@ -7234,7 +7234,6 @@ lin bowburn_PN = mkPN "Bowburn";
 lin bowdlerization_N = mkN "bowdlerization" ;
 lin bowdlerize_V2 = mkV2 (mkV "bowdlerize" "bowdlerizes" "bowdlerized" "bowdlerized" "bowdlerizing");
 lin bowel_N = mkN "bowel" "bowels";
-lin bowels_N = mkN "bowels" ;
 lin bower_N = mkN "bower" "bowers";
 lin bowerbird_N = mkN "bowerbird" ;
 lin bowery_A = mkA "bowery" ;

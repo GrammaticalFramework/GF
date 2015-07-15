@@ -21642,7 +21642,6 @@ lin boondoggle_N = mkN "liiva sõeluma" | mkN "tühja tööd tegema" ;
 lin booze_up_N = mkN "joomapidu" | mkN "pummelung" ;
 lin bouffant_N = mkN "kohev" | mkN "puhevil" ;
 lin bougainvillea_N = mkN "bugenvillea" ;
-lin bowels_N = mkN "põu" | mkN "sisikond" | mkN "soolestik" ;
 lin bowie_knife_N = mkN "jahinuga" ;
 lin bowling_green_N = mkN "keeeglimuru" ;
 lin boxing_day_N = mkN "teine jõulupüha" ;

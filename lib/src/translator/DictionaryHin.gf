@@ -3312,7 +3312,6 @@ lin bow_V = compoundV "नमस्कार" (mkV "करना") ; -- tocheck
 lin bow_V2 = mkV2 (compoundV "पर गज" (mkV "फेरना")) ; -- tocheck
 lin bowdlerize_V2 = mkV2 (compoundV "परिशोधन" (mkV "करना")) ; -- tocheck
 lin bowel_N = mkN "अंतड़ी" ; -- tocheck              
-lin bowels_N = mkN "भीतरी भाग" ; -- tocheck       
 lin bower_N = mkN "ग्रीष्मावास" ; -- tocheck              
 lin bowl_N = mkN "चषक" ; -- tocheck              
 lin bowl_V = compoundV "गेंद से" (mkV "खेलना") ; -- tocheck              
