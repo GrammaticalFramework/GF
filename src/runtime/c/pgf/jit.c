@@ -707,19 +707,20 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 #ifdef PGF_JIT_DEBUG
 				gu_printf(out, err, "CASE        %s %03d\n", id, target);
 #endif
-				jit_insn *jump =
-					jit_bnei_p(jit_forward(), JIT_RET, jit_forward());
-
-				PgfSegmentPatch label_patch;
-				label_patch.segment = target;
-				label_patch.ref     = jump;
-				label_patch.is_abs  = false;
-				gu_buf_push(rdr->jit_state->segment_patches, PgfSegmentPatch, label_patch);
-
+				jit_insn *ref1 =
+					jit_movi_p(JIT_R1, jit_forward());
 				PgfCallPatch call_patch;
 				call_patch.cid = id;
-				call_patch.ref = jump-6;
+				call_patch.ref = ref1;
 				gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, call_patch);
+
+				jit_insn *ref2 =
+					jit_bner_p(jit_forward(), JIT_RET, JIT_R1);
+				PgfSegmentPatch label_patch;
+				label_patch.segment = target;
+				label_patch.ref     = ref2;
+				label_patch.is_abs  = false;
+				gu_buf_push(rdr->jit_state->segment_patches, PgfSegmentPatch, label_patch);
 				break;
 			}
 			case PGF_INSTR_CASE_LIT: {
