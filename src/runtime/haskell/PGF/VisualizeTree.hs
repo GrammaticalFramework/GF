@@ -396,7 +396,7 @@ graphvizAlignment pgf langs exp =
      renderList ii [] _ = empty
      renderList ii [l] [] = struct ii <> text "[label = \"" <> fields l <> text "\"] ;"
 
-     fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text w | (id,ws) <- cs, w <- ws])
+     fields cs = hsep (intersperse (char '|') [tbrackets (tag id) <> text (' ':w) | (id,ws) <- cs, w <- ws])
 
 
 
