@@ -1,7 +1,8 @@
 module Main where
 
-import Char
-import System
+import Data.Char
+import System.Cmd
+import System.Environment
 
 original = "tour.txt"
 
