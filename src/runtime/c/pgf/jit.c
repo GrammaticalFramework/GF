@@ -145,8 +145,6 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
     
 	gu_string_write(abscat->name, out, err);
 	gu_puts(":\n", out, err);
-	
-	int label = 0;
 #endif
 
 	size_t n_funs = pgf_read_len(rdr);
@@ -163,7 +161,7 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 		next_absfun = pgf_jit_read_absfun(rdr, abstr);
 
 #ifdef PGF_JIT_DEBUG
-		gu_puts("    TRY_FIRST ", out, err);
+		gu_puts("    TRY_FIRST   ", out, err);
 		gu_string_write(next_absfun->name, out, err);
 		gu_puts("\n", out, err);
 #endif
@@ -175,13 +173,14 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 		jit_pusharg_p(JIT_VCLOS);
 		jit_pusharg_p(JIT_VSTATE);
 		jit_finish(pgf_reasoner_try_first);
-	}
-
+		jit_bare_ret();
+	} else {
 #ifdef PGF_JIT_DEBUG
-	gu_puts("    RET\n", out, err);
+		gu_puts("    RET\n", out, err);
 #endif
-	// compile RET
-	jit_bare_ret();
+		// compile RET
+		jit_bare_ret();
+	}
 
 #ifdef PGF_JIT_DEBUG
 	if (n_funs > 0) {
@@ -203,7 +202,7 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 				next_absfun = pgf_jit_read_absfun(rdr, abstr); // i+1
 
 #ifdef PGF_JIT_DEBUG
-				gu_puts("    TRY_ELSE ", out, err);
+				gu_puts("    TRY_ELSE    ", out, err);
 				gu_string_write(next_absfun->name, out, err);
 				gu_puts("\n", out, err);
 #endif
@@ -221,16 +220,13 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 				PgfHypo* hypo = gu_seq_index(absfun->type->hypos, PgfHypo, i);
 
 				jit_insn *ref;
-				
+
 				// call the predicate for the category in hypo->type->cid
 #ifdef PGF_JIT_DEBUG
-				gu_puts("    CALL ", out, err);
-				gu_string_write(hypo->type->cid, out, err);
-				if (i+1 < n_hypos) {
-					gu_printf(out, err, " L%d\n", label);
-				} else {
-					gu_printf(out, err, " COMPLETE\n");
-				}
+				gu_printf(out, err, 
+				          (i+1 < n_hypos) ? "    CALL        %s\n" 
+				                          : "    CALL        %s tail(0)\n",
+				          hypo->type->cid);
 #endif
 
 				// compile CALL
@@ -241,12 +237,6 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 				patch.cid = hypo->type->cid;
 				patch.ref = jit_jmpi(jit_forward());
 				gu_buf_push(rdr->jit_state->call_patches, PgfCallPatch, patch);
-
-#ifdef PGF_JIT_DEBUG
-				if (i+1 < n_hypos) {
-					gu_printf(out, err, "L%d:\n", label++);
-				}
-#endif
 
 				if (i+1 < n_hypos) {
 					pgf_jit_make_space(rdr, JIT_CODE_WINDOW);
