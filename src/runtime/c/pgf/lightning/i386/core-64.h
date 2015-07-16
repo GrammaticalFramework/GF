@@ -123,8 +123,7 @@ struct jit_local_state {
 	    /* No. Need value in a register */				\
 	    : (jit_movi_l(JIT_REXTMP, is),				\
 	       jit_addr_l(d, rs, JIT_REXTMP)))				\
-	/* No. Do nothing. */						\
-	: 0)
+	: jit_movr_l(d, rs))
 #define jit_addr_l(d, s1, s2)	jit_opo_((d), (s1), (s2), ADDQrr((s2), (d)), ADDQrr((s1), (d)), LEAQmr(0, (s1), (s2), 1, (d))  )
 #define jit_addci_l(d, rs, is)	jit_qop_ ((d), (rs), (is), ADCQir((is), (d)), ADCQrr(JIT_REXTMP, (d)))
 #define jit_addcr_l(d, s1, s2)	jit_qopr_((d), (s1), (s2), ADCQrr((s1), (d)), ADCQrr((s2), (d)) )
