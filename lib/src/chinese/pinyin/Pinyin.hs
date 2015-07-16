@@ -56,9 +56,39 @@ useMapGF m s = case s of
     c  :s -> maybe [c] (head . words) (Map.lookup [c] m) ++ convert s
     _ -> cs 
 
-c2pMap ws = Map.fromList [(c,unwords ps) | (_,(c,ps)) <- ws]
+c2pMap ws = Map.fromList [(c,unwords (map tone2tone ps)) | (_,(c,ps)) <- ws]
+c2nMap ws = Map.fromList [(c,unwords ps) | (_,(c,ps)) <- ws]
 p2cMap ws = Map.fromListWith (++) [(p,c) | (_,(c,ps)) <- ws, p <- ps] -- store all chars with the same pinyin
 c2uMap ws = Map.fromList [(c,u)          | (u,(c,_))  <- ws]
 u2cMap ws = Map.fromList [(u,c)          | (u,(c,_))  <- ws]
 
+-- from numeric tones to diacritics
+tone2tone :: String -> String
+tone2tone = combine . change . analyse where
+  analyse :: String -> [String] -- four parts: ch,a,ng,1
+  analyse s = case reverse s of
+    i:'r':    v:x | elem i "1234" -> [reverse x,[v],"r", [i]]
+    i:'n':    v:x | elem i "1234" -> [reverse x,[v],"n", [i]]
+    i:'g':'n':v:x | elem i "1234" -> [reverse x,[v],"ng",[i]]
+    i:        v:x | elem i "1234" -> [reverse x,[v],"",  [i]]
+    'r':      v:x                 -> [reverse x,[v],"r", []]
+    'n':      v:x                 -> [reverse x,[v],"n", []]
+    'g':'n':  v:x                 -> [reverse x,[v],"ng",[]]
+    v          :x                 -> [reverse x,[v],"",  []]
+    _                             -> error $ "illegal pinyin: " ++ s
 
+  change ss@[x,[v],ng,i] = case i of
+    [] -> ss
+    _  -> [x,[accent v !! (read i - 1)],ng]
+
+  combine = concat
+
+  accent v = case v of
+    'a' -> "āáǎà"
+    'e' -> "ēéěè"
+    'i' -> "īíǐì" 
+    'o' -> "ōóǒò"
+    'u' -> "ūúǔù"
+    'ü' -> "ǖǘǚǜ"
+    'v' -> "ǖǘǚǜ"
+    _ -> error $ "no accents for " ++ [v]
