@@ -173,6 +173,10 @@ oper
     mkV2V : V -> Prep -> V2V ;
     mkV2V : V -> V2V ;
     } ;
+  auxV2V : overload { -- without "te"
+    auxV2V : V -> V2V ;
+    auxV2V : V -> Prep -> V2V ;
+    } ;
   mkV2S : overload {
     mkV2S : V -> Prep -> V2S ;
     mkV2S : V -> V2S ;
@@ -501,6 +505,10 @@ oper
   mkV2V = overload {
     mkV2V : V -> Prep -> V2V = \v,p -> lin V2V (prepV2 v p ** {isAux = False}) ;
     mkV2V : V -> V2V = \v -> lin V2V (prepV2 v (mkPrep []) ** {isAux = False}) ;
+    } ;
+  auxV2V = overload {
+    auxV2V : V -> Prep -> V2V = \v,p -> lin V2V (prepV2 v p ** {isAux = True}) ;
+    auxV2V : V -> V2V = \v -> lin V2V (prepV2 v (mkPrep []) ** {isAux = True}) ;
     } ;
   mkV2S = overload {
     mkV2S : V -> Prep -> V2S = \v,p -> lin V2S (prepV2 v p) ;
