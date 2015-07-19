@@ -1,5 +1,5 @@
 concrete ExtraChi of ExtraChiAbs = CatChi ** 
-  open ResChi, Coordination, Prelude in {
+  open ResChi, Coordination, (S = StructuralChi), Prelude in {
 
   flags coding = utf8 ;
 
@@ -11,6 +11,7 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
 
   lin
     PassVPSlash vps = insertAdv (mkNP passive_s) vps ;
+    PassAgentVPSlash vps np = insertAdv (ss (appPrep S.by8agent_Prep np.s)) (insertAdv (mkNP passive_s) vps) ;
 
     MkVPS t p vp = {s = t.s ++ p.s ++ (mkClause [] vp).s ! p.p ! t.t} ;
     ConjVPS c = conjunctDistrSS (c.s ! CSent) ;
@@ -35,18 +36,18 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
   lincat
     Aspect = {s : Str ; a : ResChi.Aspect} ;
   lin
-    PredBareAP np ap = case ap.hasAdA of {
-      True  => mkClause np.s (insertObj (mkNP ap.s) (predV nocopula [])) ; 
-      False => mkClause np.s (insertObj (mkNP ap.s) (predV hen_copula []))
+    CompBareAP ap = case ap.hasAdA of {
+      True  => insertObj (mkNP ap.s) (predV nocopula []) ; 
+      False => insertObj (mkNP ap.s) (predV hen_copula [])
       } ; 
     QuestRepV cl = {
-      s = \\p,a => 
+      s = \\_,p,a =>  ---- also for indirect questions?
           let
           v = cl.vp.verb ; 
           verb = case a of {
             APlain   => v.s  ++ v.neg ++ v.sn ; 
-            APerf    => v.s  ++ "bu4"  ++ v.sn ++ v.pp ;
-            ADurStat => v.s  ++ "bu4"  ++ v.sn ;
+            APerf    => v.s  ++ "bù"  ++ v.sn ++ v.pp ;
+            ADurStat => v.s  ++ "bù"  ++ v.sn ;
             ADurProg => v.dp ++ v.neg ++ v.dp ++ v.sn ;  -- mei or bu
             AExper   => v.s  ++ v.neg ++ v.sn ++ v.ep
             }
@@ -54,6 +55,6 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
           cl.np ++ cl.vp.prePart ++ verb ++ cl.vp.compl
       } ;
 
-  TopicAdvCl adv cl = mkClause (adv.s ++ cl.np) cl.vp ;
+  TopicAdvVP vp adv = insertTopic adv vp ;
 
 } 

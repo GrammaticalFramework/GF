@@ -17,44 +17,44 @@ resource ResChi = ParamX ** open Prelude in {
 
   defaultStr = "" ;
 
-  than_s = "bi3" ;
+  than_s = "bǐ" ;
   progressive_s = defaultStr ;
   de_s, possessive_s = "de" ; -- also used for AP + NP
   deAdvV_s = "de" ; -- between Adv and V
-  deVAdv_s = "de2" ; -- between V and Adv
+  deVAdv_s = "dé" ; -- between V and Adv
   imperneg_s = neg_s ;
   conjThat = emptyStr ; ----
-  reflPron = word "zi4ji3" ;   -- pron + refl
-  passive_s = "bei4" ;
+  reflPron = word "zìjǐ" ;   -- pron + refl
+  passive_s = "beì" ;
   relative_s = possessive_s ; -- relative
-  superlative_s = "zui4" ; -- superlative, sup + adj + de
-  zai_s = "zai4" ;  -- copula for place
-  you_s = "you3" ; -- to have
+  superlative_s = "zuì" ; -- superlative, sup + adj + de
+  zai_s = "zaì" ;  -- copula for place
+  you_s = "yoǔ" ; -- to have
 
-  copula_s = "shi4" ;
-  exist_s = word "cun2zai4" ;
-  neg_s = "bu4" ;
-  question_s = "ma3" ;
-  yi_s = "yi1" ;
-  ordinal_s = "di4" ;
-  xie_s = "xie1" ;
-  the_s = "na3" ;
-  geng_s = "geng1" ; -- more, in comparison
-  hen_s = "hen3" ; -- very, or predicating a monosyllabic adjective
-  taN_s = "ta1" ;
+  copula_s = "shì" ;
+  exist_s = word "cúnzaì" ;
+  neg_s = "bù" ;
+  question_s = "mǎ" ;
+  yi_s = "yī" ;
+  ordinal_s = "dì" ;
+  xie_s = "xiē" ;
+  the_s = "nǎ" ;
+  geng_s = "gēng" ; -- more, in comparison
+  hen_s = "hěn" ; -- very, or predicating a monosyllabic adjective
+  taN_s = "tā" ;
 
-  zai_V = mkVerb "zai4" [] [] [] [] "bu4" ;
+  zai_V = mkVerb "zaì" [] [] [] [] "bù" ;
   fullstop_s = "。" ;
   questmark_s = "？" ;
   exclmark_s = "！" ;
-  ge_s = "ge4" ;
-  di_s = "shi4" ; -- used in QuestSlash
-  ba_s = "ba3" ;  -- ba4, object marker
-  ba0_s = "ba1" ; -- ba, used in imperatives
+  ge_s = "gè" ;
+  di_s = "shì" ; -- used in QuestSlash
+  ba_s = "bǎ" ;  -- ba4, object marker
+  ba0_s = "bā" ; -- ba, used in imperatives
   men_s = "men" ;
-  zan_s = "za2" ;
+  zan_s = "zá" ;
 
-  say_s = "shui4" ; -- used in embedded sentences: she answers him that we sleep
+  say_s = "shuì" ; -- used in embedded sentences: she answers him that we sleep
 
   duncomma = "、" ;
   chcomma = "，" ;
@@ -67,6 +67,11 @@ resource ResChi = ParamX ** open Prelude in {
   bword : Str -> Str -> Str = \x,y -> x + y ; -- change to x + y to treat words as single tokens
 
   word : Str -> Str = \s -> case s of {
+      x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? + c@? + d@? + e@? => 
+        bword x (bword y (bword z (bword u (bword v (bword w (bword a (bword b (bword c (bword d e))))))))) ;
+      x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? + c@? + d@? => 
+        bword x (bword y (bword z (bword u (bword v (bword w (bword a (bword b (bword c d)))))))) ;
+      x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? + c@? => bword x (bword y (bword z (bword u (bword v (bword w (bword a (bword b c))))))) ;
       x@? + y@? + z@? + u@? + v@? + w@? + a@? + b@? => bword x (bword y (bword z (bword u (bword v (bword w (bword a b)))))) ;
       x@? + y@? + z@? + u@? + v@? + w@? + a@? => bword x (bword y (bword z (bword u (bword v (bword w a))))) ;
       x@? + y@? + z@? + u@? + v@? + w@? => bword x (bword y (bword z (bword u (bword v w)))) ;
@@ -89,13 +94,19 @@ param
     CPosType = CAPhrase | CNPhrase | CVPhrase ;
     DeForm = DeNoun | NdNoun ;    -- parameter created for noun with/out partical "de"
 
-    AdvType = ATPlace Bool | ATTime | ATManner ; -- ATPlace True = has zai_s already
+    AdvType = ATPlace Bool | ATTime | ATManner | ATPoss ; -- ATPlace True = has zai_s already
 
 -- parts of speech
 
 oper
 
-  VP = {verb : Verb ; compl : Str ; prePart : Str} ;
+  VP = {
+    topic : Str ;   -- topicalized item, before subject
+    prePart : Str ; -- between subject and verb
+    verb : Verb ; 
+    compl : Str     -- after verb
+    } ;
+
   NP = {s : Str} ; 
 
 -- for morphology
@@ -116,16 +127,16 @@ oper
     _ => mkAdj s False
     } ;
 
-  copula : Verb = mkVerb "shi4" [] [] [] [] "bu4" ;
+  copula : Verb = mkVerb "shì" [] [] [] [] "bù" ;
   hen_copula : Verb = 
-    {s = hen_s ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "bu4"} ; --- 
+    {s = hen_s ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "bù"} ; --- 
   nocopula : Verb = 
-    {s = [] ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "bu4"} ; --- 
+    {s = [] ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "bù"} ; --- 
   adjcopula : Verb = 
-    {s = "shi4" ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "bu4"} ; --- 
+    {s = "shì" ; sn = [] ; pp = [] ; ds = [] ; dp = [] ; ep = [] ; neg = "bù"} ; --- 
 
   regVerb : (walk : Str) -> Verb = \v -> 
-    mkVerb v "le" "zhao1" "zai4" "guo4" "bu4" ; -- 没" ;
+    mkVerb v "le" "zhaō" "zaì" "guò" "bù" ; -- 没" ;
 
   noVerb : Verb = regVerb [] ; ---?? -- used as copula for verbal adverbs
 
@@ -143,48 +154,60 @@ oper
             } ;
           Neg => table {
             APlain   => v.neg ++ v.sn ; --- neg?
-            APerf    => "bu4" ++ v.sn ++ v.pp ;
-            ADurStat => "bu4" ++ v.sn ;
+            APerf    => "不" ++ v.sn ++ v.pp ;
+            ADurStat => "不" ++ v.sn ;
             ADurProg => v.neg ++ v.dp ++ v.sn ;  -- mei or bu
             AExper   => v.neg ++ v.sn ++ v.ep
             }
      } ;
 
-  infVP : VP -> Str = \vp -> vp.prePart ++ vp.verb.s ++ vp.compl ; 
+  infVP : VP -> Str = \vp -> vp.topic ++ vp.prePart ++ vp.verb.s ++ vp.compl ; 
 
   predV : Verb -> Str -> VP = \v,part -> {
       verb = v ; 
       compl = part ;
-      prePart = [] ;
+      prePart, topic = [] ;
       } ; 
 
   insertObj : NP -> VP -> VP = \np,vp -> {
      verb  = vp.verb ;
      compl = np.s ++ vp.compl ;
-     prePart = vp.prePart
+     prePart = vp.prePart ;
+     topic = vp.topic
      } ; 
 
   insertObjPost : NP -> VP -> VP = \np,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ++ np.s ;
-     prePart = vp.prePart
+     prePart = vp.prePart ;
+     topic = vp.topic
      } ; 
 
    insertAdv : SS -> VP -> VP = \adv,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ;
-     prePart = adv.s ++ vp.prePart
+     prePart = adv.s ++ vp.prePart ;
+     topic = vp.topic
+     } ; 
+
+   insertTopic : SS -> VP -> VP = \adv,vp -> {
+     verb  = vp.verb ;
+     compl = vp.compl ;
+     prePart = vp.prePart ;
+     topic = adv.s ++ vp.topic
      } ; 
    insertAdvPost : SS -> VP -> VP = \adv,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ;
-     prePart = vp.prePart ++ adv.s
+     prePart = vp.prePart ++ adv.s ;
+     topic = vp.topic
      } ; 
 
    insertPP : SS -> VP -> VP = \pp,vp -> {
      verb  = vp.verb ;
      compl = vp.compl ;
-     prePart = vp.prePart ++ pp.s
+     prePart = vp.prePart ++ pp.s ;
+     topic = vp.topic
      } ; 
 
    insertExtra : SS -> VP -> VP = \ext,vp ->
@@ -211,8 +234,8 @@ oper
      } ;
  
    mkClauseCompl : Str -> VP -> Str -> Clause = \np,vp,compl -> {
-     s = \\p,a => np ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl ++ compl ;
-     np = np ;
+     s = \\p,a => vp.topic ++ np ++ vp.prePart ++ useVerb vp.verb ! p ! a ++ vp.compl ++ compl ;
+     np = vp.topic ++ np ;
      vp = insertObj (ss compl) vp ;
      } ;
    
@@ -228,15 +251,15 @@ oper
   Quantifier = Determiner ** {pl : Str} ;
 
   mkDet = overload {
-    mkDet : Str ->            Determiner = \s   -> {s = s ; detType = DTFull Sg} ;
-    mkDet : Str -> Number  -> Determiner = \s,n -> {s = s ; detType = DTFull n} ;
-    mkDet : Str -> DetType -> Determiner = \s,d -> {s = s ; detType = d} ;
+    mkDet : Str ->            Determiner = \s   -> {s = word s ; detType = DTFull Sg} ;
+    mkDet : Str -> Number  -> Determiner = \s,n -> {s = word s ; detType = DTFull n} ;
+    mkDet : Str -> DetType -> Determiner = \s,d -> {s = word s ; detType = d} ;
     } ;
 
   mkQuant = overload {
-    mkQuant : Str ->                   Quantifier = \s     -> {s,pl = s ; detType = DTFull Sg} ;
-    mkQuant : Str ->        DetType -> Quantifier = \s,d   -> {s,pl = s ; detType = d} ;
-    mkQuant : Str -> Str -> DetType -> Quantifier = \s,p,d -> {s    = s ; detType = d ; pl = p} ;
+    mkQuant : Str ->                   Quantifier = \s     -> {s,pl = word s ; detType = DTFull Sg} ;
+    mkQuant : Str ->        DetType -> Quantifier = \s,d   -> {s,pl = word s ; detType = d} ;
+    mkQuant : Str -> Str -> DetType -> Quantifier = \s,p,d -> {s    = word s ; detType = d ; pl = p} ;
     } ;
 
   pronNP : (s : Str) -> NP = \s -> {
@@ -252,8 +275,14 @@ oper
     } ;
     
   getAdvType : Str -> AdvType = \s -> case s of {
-    "zai4" + _ => ATPlace True ; -- certain that True
+    "的"     => ATPoss ;
+    "在" + _ => ATPlace True ; -- certain that True
     _ => ATPlace False         -- uncertain whether ATPlace
+    } ;
+
+  possessiveIf : AdvType -> Str = \at -> case at of {
+    ATPoss => [] ;   --- to avoid double "de" 
+    _ => possessive_s
     } ;
 
   mkSubj : Str -> Str -> {prePart : Str ; sufPart : Str} = \p,s -> {
