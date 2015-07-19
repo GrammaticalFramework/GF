@@ -53,7 +53,8 @@ useMapGF m s = case s of
  where
   convert cs = case cs of
     '"':s -> '"' : useMapGF m s
-    c  :s -> maybe [c] (head . words) (Map.lookup [c] m) ++ convert s
+    c  :s | elem c (['A'..'Z']++['a'..'z'])-> [c] ++ convert s
+    c  :s -> maybe ['#',c] (head . words) (Map.lookup [c] m) ++ convert s
     _ -> cs 
 
 c2pMap ws = Map.fromList [(c,unwords (map tone2tone ps)) | (_,(c,ps)) <- ws]
