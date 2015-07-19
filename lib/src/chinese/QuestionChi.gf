@@ -14,8 +14,8 @@ concrete QuestionChi of Question = CatChi **
           v = cl.vp.verb ; 
           verb = case a of {
             APlain   => v.s  ++ v.neg ++ v.sn ; 
-            APerf    => v.s  ++ "不"  ++ v.sn ++ v.pp ;
-            ADurStat => v.s  ++ "不"  ++ v.sn ;
+            APerf    => v.s  ++ neg_s ++ v.sn ++ v.pp ;
+            ADurStat => v.s  ++ neg_s ++ v.sn ;
             ADurProg => v.dp ++ v.neg ++ v.dp ++ v.sn ;  -- mei or bu
             AExper   => v.s  ++ v.neg ++ v.sn ++ v.ep
             }
