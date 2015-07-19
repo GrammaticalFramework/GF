@@ -18,7 +18,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q = 
       insertExtrapos (q.s ! QIndir) (predV v) ;
-    ComplVA  v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
+    ComplVA v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
 
     SlashV2a v = predV (v2v v) ** {c2 = v.c2} ; 
       
@@ -33,11 +33,11 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       insertExtrapos (q.s ! QIndir) (predVv v) ** {c2 = v.c2} ;
     SlashV2V v vp = 
       let 
-        vpi = infVP False vp 
+        vpi = infVP v.isAux vp 
       in
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
-          insertObj vpi.p1 ((predVv v)))) ** {c2 = v.c2} ;
+          insertObj vpi.p1 ((predVGen v.isAux v)))) ** {c2 = v.c2} ;
 
     SlashV2A v ap = 
       insertObj (\\_ => ap.s ! APred) (predVv v) ** {c2 = v.c2} ;
@@ -56,13 +56,13 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
 
     SlashV2VNP v np vp = 
       let 
-        vpi = infVP False vp 
+        vpi = infVP v.isAux vp 
       in
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
             insertObj (\\_ => appPrep v.c2.p1 np.s) (
-              predVv v)))) ** {c2 = v.c2} ;
+              predVGen v.isAux v)))) ** {c2 = v.c2} ;
 
     -- True, because negation comes before copula complement 
     -- "ik ben niet groot" but "ik begrijp hem niet"
