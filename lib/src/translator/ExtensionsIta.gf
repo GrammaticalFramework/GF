@@ -118,7 +118,7 @@ lin
   PredVPovs np vp = mkCl (lin NP np) (lin VP vp) ;
 
 
-  CompS s = {s = \\_ => "di" ++ "che" ++ s.s ! Indic} ; ---- de ?
+  CompS s = {s = \\_ => "di" ++ "che" ++ s.s ! Indic ; cop = serCopula} ; ---- de ?
 
 {-
   CompQS qs = {s = \\_ => qs.s ! QIndir} ;

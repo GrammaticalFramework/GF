@@ -52,6 +52,13 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
   oper mkImperative : Bool -> Person -> VP -> RPolarity => Gender => Number => Str ;
 
+-- To render the copula (ser/estar in Spa,Cat)
+
+  oper CopulaType : PType ;
+  oper selectCopula : CopulaType -> Verb ;
+  oper serCopula : CopulaType ;
+  oper estarCopula : CopulaType ;
+
 
 --2 Constants that must derivatively depend on language
 

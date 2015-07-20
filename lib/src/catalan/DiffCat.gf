@@ -124,6 +124,10 @@ oper
         in
         neg.p1 ++ verb ++ bindIf refl.p2 ++ refl.p1 ++ bindIf clpr.p3 ++ clpr.p1 ++ compl
          ;
+    CopulaType = Bool ;
+    selectCopula = \isEstar -> case isEstar of {True => estar_V ; False => copula} ;
+    serCopula = False ;
+    estarCopula = True ;
 
     negation : RPolarity => (Str * Str) = table {
       RPos => <[],[]> ;
@@ -194,6 +198,7 @@ oper
     auxPassive : Verb = verbBeschH (estar_54 "estar") ;
 
     copula = verbBeschH (ser_52 "ser") ;
+    estar_V = verbBeschH (estar_54 "estar") ;
 
     haver_V : Verb = verbBeschH (haver_59 "haver" True) ;
 

@@ -57,19 +57,19 @@ lin
                     <Pl,Nom> => Predef.BIND ++ "s" ;
                     <Pl,Gen> => Predef.BIND ++ "s'"
                     } ++ 
-                  vp.s2 ! AgP3Sg Neutr ++ vp.ext ; 
+                  vp.p ++ vp.s2 ! AgP3Sg Neutr ++ vp.ext ; 
      g = Neutr
      } ;
 
    GerundNP vp = 
      let a = AgP3Sg Neutr ---- agr
      in 
-     {s = \\_ => vp.ad ! a ++ vp.prp ++ vp.s2 ! a ++ vp.ext ; a = a} ;
+     {s = \\_ => vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a ++ vp.ext ; a = a} ;
 
    GerundAdv vp = 
      let a = AgP3Sg Neutr
      in 
-     {s = vp.ad ! a ++ vp.prp ++ vp.s2 ! a ++ vp.ext} ;
+     {s = vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a ++ vp.ext} ;
 
    WithoutVP vp = {s = "without" ++ (GerundAdv (lin VP vp)).s} ; 
 
@@ -80,11 +80,11 @@ lin
    PresPartAP = E.PartVP ;
 
    PastPartAP vp = { 
-      s = \\a => vp.ad ! a ++ vp.ptp ++ vp.c2 ++ vp.s2 ! a ++ vp.ext ;
+      s = \\a => vp.ad ! a ++ vp.ptp ++ vp.p ++ vp.c2 ++ vp.s2 ! a ++ vp.ext ;
       isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
    PastPartAgentAP vp np = { 
-      s = \\a => vp.ad ! a ++ vp.ptp ++ vp.c2 ++ vp.s2 ! a ++ "by" ++ np.s ! NPAcc ++ vp.ext ;
+      s = \\a => vp.ad ! a ++ vp.ptp ++ vp.p ++ vp.c2 ++ vp.s2 ! a ++ "by" ++ np.s ! NPAcc ++ vp.ext ;
       isPre = False
       } ;
 
@@ -142,7 +142,7 @@ lin
     {c2 = ""; gapInMiddle = False} ;
 
   PastPartRS ant pol vps = {
-    s = \\agr => vps.ad ! agr ++ vps.ptp ++ vps.s2 ! agr ;
+    s = \\agr => vps.ad ! agr ++ vps.ptp ++ vps.p ++ vps.s2 ! agr ;
     c = npNom
     } ;
 

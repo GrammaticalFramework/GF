@@ -134,6 +134,11 @@ instance DiffSpa of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
         in
         neg.p1 ++ verb ++ bindIf refl.p2 ++ refl.p1 ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
 
+    CopulaType = Bool ;
+    selectCopula = \isEstar -> case isEstar of {True => estar_V ; False => copula} ;
+    serCopula = False ;
+    estarCopula = True ;
+
     negation : RPolarity => (Str * Str) = table {
       RPos => <[],[]> ;
       RNeg _ => <"no",[]>
@@ -201,8 +206,10 @@ instance DiffSpa of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
 
     auxPassive : Verb = verbBeschH (estar_2 "estar") ;
 
-    copula = verbBeschH (ser_1 "ser") ;
+    copula : Verb = verbBeschH (ser_1 "ser") ;
 
+    estar_V : Verb = verbBeschH (estar_2 "estar") ;
+    
     haber_V : Verb = verbBeschH (haber_3 "haber") ;
 
     verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere ; p = []} ;

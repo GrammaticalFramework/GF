@@ -34,7 +34,7 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
       isNeg = False
       } ;
 
-    CompIQuant iq = {s = \\aa => iq.s ! aa.n ! aa.g ! Nom} ;
+    CompIQuant iq = {s = \\aa => iq.s ! aa.n ! aa.g ! Nom ; cop = serCopula} ;
 
     PrepCN prep cn = {s = prep.s ++ prepCase prep.c ++ cn.s ! Sg} ;
     

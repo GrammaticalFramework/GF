@@ -35,7 +35,7 @@ incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
 
     QCl    = {s : RTense => Anteriority => RPolarity => QForm => Str} ;
     IP     = {s : Case => Str ; a : AAgr} ;
-    IComp  = {s : AAgr => Str} ;     
+    IComp  = {s : AAgr => Str ; cop : CopulaType} ;     
     IDet   = {s : Gender => Case => Str ; n : Number} ;
     IQuant = {s : Number => Gender => Case => Str} ;
 
@@ -51,7 +51,7 @@ incomplete concrete CatRomance of Cat = CommonX - [SC,Pol]
 
     VP = ResRomance.VP ;
     VPSlash = ResRomance.VP ** {c2 : Compl} ;
-    Comp = {s : Agr => Str} ; 
+    Comp = {s : Agr => Str ; cop : CopulaType} ; 
 
 -- Adjective
 

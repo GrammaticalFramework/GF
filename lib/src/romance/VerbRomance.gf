@@ -87,17 +87,18 @@ incomplete concrete VerbRomance of Verb =
 -}
 
 
-    UseComp comp = insertComplement comp.s (predV copula) ;
+    UseComp comp = insertComplement comp.s (predV (selectCopula comp.cop)) ;
 
     UseCopula = predV copula ;
 
-    CompAP ap = {s = \\ag => let agr = complAgr ag in ap.s ! AF agr.g agr.n} ;
+    CompAP ap = {s = \\ag => let agr = complAgr ag in ap.s ! AF agr.g agr.n ; cop = serCopula} ;
     CompCN cn = { s = \\ag => 
-      let agr = complAgr ag in 
-      artIndef False cn.g agr.n Nom ++ cn.s ! agr.n
+        let agr = complAgr ag in 
+        artIndef False cn.g agr.n Nom ++ cn.s ! agr.n ;
+      cop = serCopula
       }; --- RE 7/12/2010 -- AR added indef 2/8/2011
-    CompNP np = {s = \\_  => (np.s ! Nom).ton} ;
-    CompAdv a = {s = \\_  => a.s} ;
+    CompNP np = {s = \\_  => (np.s ! Nom).ton ; cop = serCopula} ;
+    CompAdv a = {s = \\_  => a.s ; cop = estarCopula} ;
 
     AdvVP vp adv = insertAdv adv.s vp ;
     ExtAdvVP vp adv = insertAdv (embedInCommas adv.s) vp ;
