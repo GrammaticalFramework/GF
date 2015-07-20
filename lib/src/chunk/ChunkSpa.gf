@@ -19,7 +19,7 @@ oper
   emptyNP = mkNP (P.mkPN []) ;
 
 lin
-  copula_inf_Chunk = ss "ser" ;
+  copula_inf_Chunk = ss "ser" | ss "estar" ;
 
   refl_SgP1_Chunk = ss "yo mismo" ;
   refl_SgP2_Chunk = ss "tu mismo" ;
@@ -28,8 +28,8 @@ lin
   refl_PlP2_Chunk = ss "vosotros mismos" ;
   refl_PlP3_Chunk = ss "ellos mismos" ;
   neg_Chunk = ss "no" ;
-  copula_Chunk = ss "es" ;
-  copula_neg_Chunk = ss "no es" ;
+  copula_Chunk = ss "es" | ss "está" ;
+  copula_neg_Chunk = ss "no es" | ss "no está" ;
   past_copula_Chunk = ss "era" ;
   past_copula_neg_Chunk = ss "no era" ;
   future_Chunk = ss "va"  ; ----

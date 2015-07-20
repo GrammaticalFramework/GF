@@ -49,7 +49,7 @@ incomplete concrete QuestionRomance of Question =
     QuestIComp icomp np = {
       s = \\t,a,p,_ => 
             let 
-              vp  = predV copula ;
+              vp  = predV (selectCopula icomp.cop) ;
               cls = (mkClause (np.s ! Nom).comp np.hasClit np.isPol np.a vp).s ! 
                        DInv ! t ! a ! p ! Indic ;
               why = icomp.s ! complAgr np.a ;
@@ -95,9 +95,9 @@ incomplete concrete QuestionRomance of Question =
 
     AdvIAdv i a = {s = i.s ++ a.s} ;
 
-    CompIAdv a = {s = \\_  => a.s} ;
+    CompIAdv a = {s = \\_  => a.s ; cop = estarCopula} ;
 
-    CompIP p = {s = \\_  => p.s ! Nom} ;
+    CompIP p = {s = \\_  => p.s ! Nom ; cop = serCopula} ;
 
   lincat 
     QVP = ResRomance.VP ;

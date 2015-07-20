@@ -146,6 +146,11 @@ instance DiffIta of DiffRomance - [contractInf] = open CommonRomance, PhonoIta, 
         in
         neg.p1 ++ verb ++ bindIf refl.p2 ++ refl.p1 ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
 
+    CopulaType = {} ;
+    selectCopula = \isEstar -> copula ;
+    serCopula = <> ;
+    estarCopula = <> ;
+
     negation : RPolarity => (Str * Str) = table {
       RPos => <[],[]> ;
       RNeg _ => <"non",[]>

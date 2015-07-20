@@ -154,6 +154,11 @@ instance DiffFre of DiffRomance - [
 
     bindHyphen : Str = BIND ++ "-" ++ BIND ;
 
+    CopulaType = {} ;
+    selectCopula = \isEstar -> copula ;
+    serCopula = <> ;
+    estarCopula = <> ;
+
     negation : RPolarity => (Str * Str) = table {
       RPos => <[],[]> ;
       RNeg True  => <elisNe,[]> ;
