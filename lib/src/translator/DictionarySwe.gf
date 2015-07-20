@@ -21170,7 +21170,7 @@ lin filly_N = mkN "ungsto" | mkN "stoföl" ; -- status=guess status=guess
 lin film_1_N = mkN "film" "filmer" ;
 lin film_2_N = mkN "hinna" ;
 lin film_N = mkN "film" ; ---- has been split
-lin film_V = mkV "hinna" "hann" "hunnit" ; -- SaldoWN
+lin film_V = mkV "filma" ; --
 lin film_V2 = mkV2 (mkV "filmar") ; -- SaldoWN -- status=guess, src=wikt
 lin film_star_N = variants {} ; -- status=guess
 lin filmable_A = variants {} ; -- status=guess
@@ -51022,7 +51022,7 @@ lin shoal_N = mkN "grund" neutrum ; -- comment=2
 lin shoal_V = variants {} ; -- status=guess
 lin shock_Adv = variants {} ; -- status=guess
 lin shock_N = mkN "stöt" | mkN "våg" ; -- SaldoWN -- comment=10
-lin shock_V2 = variants {} ; --
+lin shock_V2 = mkV2 "chocka" ; --
 lin shock_brigade_N = mkN "stöt-brigade" ; -- src=google
 lin shock_headed_A = variants {} ; -- status=guess
 lin shock_worker_N = mkN "stötarbetare" ; -- src=google
