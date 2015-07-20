@@ -64556,6 +64556,7 @@ lin win_down_V = partV (mkV "win") "down";
 lin win_over_V = partV (mkV "win") "over";
 lin win_up_V = partV (mkV "win") "up";
 lin wince_N = mkN "wince" "winces";
+lin wince_V = mkV "wince" "winces" "winced" "winced" "wincing" ;
 lin wince_V2 = mkV2 (mkV "wince" "winces" "winced" "winced" "wincing");
 lin wincey_N = mkN "wincey" ;
 lin winceyette_N = mkN "winceyette" ;
