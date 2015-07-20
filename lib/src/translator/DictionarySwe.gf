@@ -54595,7 +54595,7 @@ lin stoop_N = variants {} ; -- status=guess
 lin stoop_V = mkV "kutar" ; -- status=guess
 lin stoop_V2 = variants {} ; -- status=guess
 lin stooper_N = variants {} ; -- status=guess
-lin stop_N = mkN "uppehåll" neutrum | mkN "bländare" utrum ; -- SaldoWN -- comment=18
+lin stop_N = mkN "hållplats" utrum | mkN "uppehåll" neutrum | mkN "bländare" utrum ; -- SaldoWN -- comment=18
 lin stop_V = L.stop_V ;
 lin stop_V2 = mkV2 "stoppa" ;
 lin stop_VV = mkVV (mkV "sluta") ;
