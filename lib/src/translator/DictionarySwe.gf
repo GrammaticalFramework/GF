@@ -20965,7 +20965,7 @@ lin festoon_V2 = variants {} ; -- status=guess
 lin festschrift_N = variants {} ; -- status=guess
 lin fetal_A = variants {} ; -- status=guess
 lin fetch_N = mkN "apport" "apporter" | mkN "gengångare" utrum ; -- SaldoWN -- comment=10
-lin fetch_V2 = dirV2 (partV (mkV "dra" "drar" "dra" "drog" "dragit" "dragen")"ut") ; -- comment=6
+lin fetch_V2 = mkV2 "hämta" ;
 lin fetching_A = mkA "tilltalande" ; -- comment=5
 lin fete_N = variants {} ; -- status=guess
 lin fete_V2 = variants {} ; -- status=guess
