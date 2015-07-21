@@ -7,12 +7,13 @@ main = do
   s <- readFile pinyinFile
   let m = c2pMap (mkList (words s))
   mapM_ (mkPinyin m) xx
+  putStrLn $ unwords xx
   return ()
 
 pinyinFile = "pinyin.txt"
 
 resModules = [mo | mo <- 
-                ["Extra","Lexicon", "Numeral", "Paradigms","Res", "Structural","Symbol"]
+                ["Extra","Lexicon", "Numeral", "Paradigms","Res", "Structural","Symbol", "Construction"]
              ]
 
 mkPinyin ma mo = do
