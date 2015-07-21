@@ -47,14 +47,14 @@ lin
               predVGen v.isAux v)))) ;
 
     PastPartRS ant pol sl = {   -- guessed by KA, some fields in sl are ignored!!
-      s = \\gn => let agr = agrgP3 Masc (numGenNum gn)
+      s = \\rgn => let agr = case rgn of {RGenNum gn => agrgP3 Masc (numGenNum gn) ; _ => agrgP3 Neutr Sg}
                   in sl.s.s ! VPastPart APred ++ 
                      (sl.nn ! agr).p1 ++ (sl.nn ! agr).p2 ++ sl.a2;
       c = Nom
       } ;
 
     PresPartRS ant pol vp = {   -- guessed by KA!!
-      s = \\gn => let agr = agrgP3 Masc (numGenNum gn)
+      s = \\rgn => let agr = case rgn of {RGenNum gn => agrgP3 Masc (numGenNum gn) ; _ => agrgP3 Neutr Sg}
                   in vp.s.s ! VPresPart APred ++ 
                      (vp.nn ! agr).p1 ++ (vp.nn ! agr).p2;
       c = Nom
