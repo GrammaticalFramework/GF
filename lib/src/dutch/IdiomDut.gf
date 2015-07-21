@@ -4,7 +4,7 @@ concrete IdiomDut of Idiom = CatDut **
   flags optimize=all_subs ;
 
   lin
-    ImpersCl vp = mkClause "'t" (agrP3 Sg) vp ;
+    ImpersCl vp = mkClause "het" (agrP3 Sg) vp ; -- cunger: 't -> het
     GenericCl vp = mkClause "men" (agrP3 Sg) vp ;
 
     CleftNP np rs = mkClause "'t" (agrP3 Sg) 
@@ -41,7 +41,7 @@ concrete IdiomDut of Idiom = CatDut **
         vvp = insertExtrapos vpi.p3 (
                 insertInf vpi.p2 (
                   insertObj vpi.p1 (
-                    predVGen True v))) ;
+                    predVGen True vp.negPos v))) ;
       in 
       {s = (mkClause "we" {g = Utr ; n = Pl ; p = P1} vvp).s ! 
                            Pres ! Simul ! Pos ! Inv 

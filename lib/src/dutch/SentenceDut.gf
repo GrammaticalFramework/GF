@@ -20,11 +20,13 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
           verb = vp.s.s ! ps.p1 ;
           inf  = vp.inf.p1 ;
         in
-          case vp.negBeforeObj of {
-             True => verb ++ ps.p2 ++ vp.a1 ! pol ++ vp.n0 ! agr ++ 
+          case vp.negPos of {
+             BeforeObjs => verb ++ ps.p2 ++ vp.a1 ! pol ++ vp.n0 ! agr ++ 
                      vp.n2 ! agr ++ vp.a2 ++ inf ++ vp.ext ;
-	     _    => verb ++ ps.p2 ++ vp.n0 ! agr ++ vp.n2 ! agr ++ 
-                     vp.a1 ! pol ++ vp.a2 ++ inf ++ vp.ext
+             AfterObjs => verb ++ ps.p2 ++ vp.n0 ! agr ++ vp.n2 ! agr ++ 
+                     vp.a1 ! pol ++ vp.a2 ++ inf ++ vp.ext ;
+             BetweenObjs => verb ++ ps.p2 ++ vp.n0 ! agr ++ vp.a1 ! pol ++ vp.n2 ! agr ++ 
+                     vp.a2 ++ inf ++ vp.ext 
 	  } ;
     } ;
 
