@@ -270,7 +270,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
     from1 = maybe (missing "from") return =<< from'
     from' = getLang "from"
 
-    to = (,) # getLangs "to" % unlexer
+    to = (,) # getLangs "to" % unlexerC
 
     getLangs = getLangs' readLang
     getLang = getLang' readLang
@@ -337,19 +337,40 @@ lexer' uncap = maybe (return id) lexerfun =<< getInput "lexer"
 
 type Unlexer = String->String
 
-unlexer :: CGI Unlexer
-unlexer = maybe (return id) unlexerfun =<< getInput "unlexer" 
+-- | Unlexing for the C runtime system, &+ is already applied
+unlexerC :: CGI Unlexer
+unlexerC = maybe (return id) unlexerfun =<< getInput "unlexer"
   where
     unlexerfun name =
        case name of
          "text"  -> return (unlexText' . words)
          "code"  -> return (unlexCode . words)
          "mixed" -> return (unlexMixed . words)
+         "none"  -> return id
+         "id"    -> return id
          _ -> badRequest "Unknown lexer" name
 
-    unlexText' ("+":ws) = "+ "++unlexText ws
-    unlexText' ("*":ws) = "* "++unlexText ws
-    unlexText' ws       = unlexText ws
+-- | Unlex text, skipping the quality marker used by the App grammar
+unlexText' ("+":ws) = "+ "++unlexText ws
+unlexText' ("*":ws) = "* "++unlexText ws
+unlexText' ws       = unlexText ws
+
+-- | Unlexing for the Haskell run-time, applying the &+ operator first
+unlexerH :: CGI Unlexer
+unlexerH = maybe (return doBind) unlexerfun =<< getInput "unlexer"
+  where
+    unlexerfun name =
+       case name of
+         "text"  -> return (unlexText' . bind)
+         "code"  -> return (unlexCode . bind)
+         "mixed" -> return (unlexMixed . bind)
+         "none"  -> return id
+         "id"    -> return id
+         "bind"  -> return doBind
+         _ -> badRequest "Unknown lexer" name
+
+    doBind = unwords . bind
+    bind = bindTok . words
 
 --------------------------------------------------------------------------------
 -- * Haskell run-time functionality
@@ -439,7 +460,7 @@ pgfMain command (t,pgf) =
 
     from1 = maybe (missing "from") return =<< from
     from = getLang "from"
-    to = (,) # getLangs "to" % unlexer
+    to = (,) # getLangs "to" % unlexerH
 
     getLangs = getLangs' readLang
     getLang = getLang' readLang
@@ -536,7 +557,7 @@ type To = ([PGF.Language],Unlexer)
 type TreeOpts = (Bool,Bool) -- (trie,jsontree)
 
 doTranslate :: PGF -> From -> Maybe PGF.Type -> To -> Maybe Int -> TreeOpts -> JSValue
-doTranslate pgf (mfrom,input) mcat (tos,unlex) mlimit (trie,jsontree) =
+doTranslate pgf (mfrom,input) mcat tos mlimit (trie,jsontree) =
   showJSON
      [makeObj ("from".=from : "brackets".=bs : jsonTranslateOutput po)
           | (from,po,bs) <- parse' pgf input mcat mfrom]
@@ -548,9 +569,9 @@ doTranslate pgf (mfrom,input) mcat (tos,unlex) mlimit (trie,jsontree) =
             ["translations".=
               [makeObj (addTree jsontree tree++
                        ["linearizations".=
-                            [makeObj ["to".=to, "text".=unlex text,
+                            [makeObj ["to".=to, "text".=text,
                                       "brackets".=bs]
-                               | (to,text,bs)<- linearizeAndBind pgf tos tree]])
+                               | (to,text,bs)<- linearizeAndUnlex pgf tos tree]])
                 | tree <- maybe id take mlimit trees]]
         PGF.ParseIncomplete -> ["incomplete".=True]
         PGF.ParseFailed n   -> ["parseFailed".=n]
@@ -562,17 +583,17 @@ jsonTypeErrors errs =
 
 -- used in phrasebook
 doTranslateGroup :: PGF -> From -> Maybe PGF.Type -> To -> Maybe Int -> JSValue
-doTranslateGroup pgf (mfrom,input) mcat (tos,unlex) mlimit =
+doTranslateGroup pgf (mfrom,input) mcat tos mlimit =
   showJSON
     [makeObj ["from".=langOnly (PGF.showLanguage from),
               "to".=langOnly (PGF.showLanguage to),
               "linearizations".=
-                 [toJSObject (("text",unlex alt) : disamb lg from ts)
-                    | (ts,alt) <- output, let lg = length output]
+                 [toJSObject (("text",alt) : disamb lg from ts)
+                    | let lg = length output, (ts,alt) <- output]
               ]
        | 
          (from,po,bs) <- parse' pgf input mcat mfrom,
-         (to,output)  <- groupResults [(t, linearizeAndBind pgf tos t) | t <- case po of {PGF.ParseOk ts -> maybe id take mlimit ts; _ -> []}]
+         (to,output)  <- groupResults [(t, linearizeAndUnlex pgf tos t) | t <- case po of {PGF.ParseOk ts -> maybe id take mlimit ts; _ -> []}]
           ]
   where
    groupResults = Map.toList . foldr more Map.empty . start . collect
@@ -591,7 +612,7 @@ doTranslateGroup pgf (mfrom,input) mcat (tos,unlex) mlimit =
    disamb lg from ts = 
      if lg < 2 
        then [] 
-       else [("tree", "-- " ++ groupDisambs [unlex (disambLang from t) | t <- ts])]
+       else [("tree", "-- " ++ groupDisambs [disambLang from t | t <- ts])]
 
    groupDisambs = unwords . intersperse "/"
 
@@ -662,13 +683,13 @@ completionInfo pgf token pstate =
       Nothing -> makeObj [ "error".=("Function "++show cid++" not found") ] -- shouldn't happen
 
 doLinearize :: PGF -> PGF.Tree -> To -> JSValue
-doLinearize pgf tree (tos,unlex) = showJSON
-    [makeObj ["to".=to, "text".=unlex text,"brackets".=bs]
-      | (to,text,bs) <- linearizeAndBind pgf tos tree]
+doLinearize pgf tree tos = showJSON
+    [makeObj ["to".=to, "text".=text,"brackets".=bs]
+      | (to,text,bs) <- linearizeAndUnlex pgf tos tree]
 
 doLinearizes :: PGF -> PGF.Tree -> To -> JSValue
 doLinearizes pgf tree (tos,unlex) = showJSON
-    [makeObj ["to".=to, "texts".=map (unlex . doBind) texts]
+    [makeObj ["to".=to, "texts".=map unlex texts]
        | (to,texts) <- linearizes' pgf tos tree]
   where
     linearizes' pgf tos tree =
@@ -678,9 +699,9 @@ doLinearizes pgf tree (tos,unlex) = showJSON
         lins to = nub . concatMap (map snd) . PGF.tabularLinearizes pgf to
 
 doLinearizeTabular :: PGF -> PGF.Tree -> To -> JSValue
-doLinearizeTabular pgf tree (tos,unlex) = showJSON
+doLinearizeTabular pgf tree tos = showJSON
     [makeObj ["to".=to,
-              "table".=[makeObj ["params".=ps,"texts".=map unlex ts]
+              "table".=[makeObj ["params".=ps,"texts".=ts]
                          | (ps,ts)<-texts]]
        | (to,texts) <- linearizeTabular pgf tos tree]
 
@@ -698,11 +719,11 @@ doRandom pgf mcat mdepth mlimit to =
         depth = fromMaybe 4 mdepth
 
 doGenerate :: PGF -> Maybe PGF.Type -> Maybe Int -> Maybe Int -> To -> JSValue
-doGenerate pgf mcat mdepth mlimit (tos,unlex) =
+doGenerate pgf mcat mdepth mlimit tos =
     showJSON [makeObj ["tree".=PGF.showExpr [] tree,
                        "linearizations".=
-                          [makeObj ["to".=to, "text".=unlex text]
-                             | (to,text,bs) <- linearizeAndBind pgf tos tree]]
+                          [makeObj ["to".=to, "text".=text]
+                             | (to,text,bs) <- linearizeAndUnlex pgf tos tree]]
                 | tree <- limit trees]
   where
     trees = PGF.generateAllDepth pgf cat (Just depth)
@@ -967,24 +988,22 @@ transfer lang = if "LaTeX" `isSuffixOf` show lang
 
 -- | tabulate all variants and their forms
 linearizeTabular
-  :: PGF -> [PGF.Language] -> PGF.Tree -> [(PGF.Language,[(String,[String])])]
-linearizeTabular pgf tos tree =
+  :: PGF -> To -> PGF.Tree -> [(PGF.Language,[(String,[String])])]
+linearizeTabular pgf (tos,unlex) tree =
     [(to,lintab to (transfer to tree)) | to <- langs]
   where
     langs = if null tos then PGF.languages pgf else tos
-    lintab to t = [(p,map doBind (nub [t|(p',t)<-vs,p'==p]))|p<-ps]
+    lintab to t = [(p,map unlex (nub [t|(p',t)<-vs,p'==p]))|p<-ps]
       where
         ps = nub (map fst vs)
         vs = concat (PGF.tabularLinearizes pgf to t)
 
-linearizeAndBind pgf mto tree =
+linearizeAndUnlex pgf (mto,unlex) tree =
     [(to,s,bss) | to<-langs,
                  let bss = PGF.bracketedLinearize pgf to (transfer to tree)
-                     s   = unwords . bindTok $ concatMap PGF.flattenBracketedString bss]
+                     s   = unlex . unwords $ concatMap PGF.flattenBracketedString bss]
   where
     langs = if null mto then PGF.languages pgf else mto
-
-doBind = unwords . bindTok . words
 
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
