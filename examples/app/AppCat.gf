@@ -19,9 +19,10 @@ concrete AppCat of App =
     ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP,
   -- Idiom
     CleftNP, CleftAdv,
-    ImpP3    
+    ImpP3,
   -- Construction
   -- Extensions
+    PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
   ,PhrasebookCat - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, cheap_A,expensive_A, open_A, closed_A]
@@ -49,4 +50,6 @@ ComplV3  v np vp = mkVP v np vp ;
 
 ComplV2 v np = mkVP v np ;
 
+  PassV2 v2 = passiveVP v2 ;
+  PassV2 v2 = passiveVP v2 ;
 }
