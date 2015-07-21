@@ -485,8 +485,11 @@ oper
 --  sein_V = MorphoDut.sein_V ** {lock_V = <>} ;
 --  werden_V = MorphoDut.werden_V ** {lock_V = <>} ;
 --
-  prepV2  : V -> Prep -> V2 ;
+  prepV2 : V -> Prep -> V2 ;
   prepV2 v c = lin V2 (v ** {c2 = <c.s,True>}) ; --if it has prep, needed for word order (place of negation)
+
+  noprepV2 : V -> V2 ;
+  noprepV2 v = lin V2 (v ** {c2 = <[],False>}) ; 
 --  dirV2 v = prepV2 v (mkPrep [] accusative) ;
 --  datV2 v = prepV2 v (mkPrep [] dative) ;
 --
@@ -504,23 +507,23 @@ oper
 
   mkV2V = overload {
     mkV2V : V -> Prep -> V2V = \v,p -> lin V2V (prepV2 v p ** {isAux = False}) ;
-    mkV2V : V -> V2V = \v -> lin V2V (prepV2 v (mkPrep []) ** {isAux = False}) ;
+    mkV2V : V -> V2V = \v -> lin V2V (noprepV2 v ** {isAux = False}) ;
     } ;
   auxV2V = overload {
     auxV2V : V -> Prep -> V2V = \v,p -> lin V2V (prepV2 v p ** {isAux = True}) ;
-    auxV2V : V -> V2V = \v -> lin V2V (prepV2 v (mkPrep []) ** {isAux = True}) ;
+    auxV2V : V -> V2V = \v -> lin V2V (noprepV2 v ** {isAux = True}) ;
     } ;
   mkV2S = overload {
     mkV2S : V -> Prep -> V2S = \v,p -> lin V2S (prepV2 v p) ;
-    mkV2S : V -> V2S = \v -> lin V2S (prepV2 v (mkPrep [])) ;
+    mkV2S : V -> V2S = \v -> lin V2S (noprepV2 v) ;
     } ;
   mkV2A = overload {
     mkV2A : V -> Prep -> V2A = \v,p -> lin V2A (prepV2 v p) ;
-    mkV2A : V -> V2A = \v -> lin V2A (prepV2 v (mkPrep [])) ;
+    mkV2A : V -> V2A = \v -> lin V2A (noprepV2 v) ; 
     } ;
   mkV2Q = overload {
     mkV2Q : V -> Prep -> V2Q = \v,p -> lin V2Q (prepV2 v p) ;
-    mkV2Q : V -> V2Q = \v -> lin V2Q (prepV2 v (mkPrep [])) ;
+    mkV2Q : V -> V2Q = \v -> lin V2Q (noprepV2 v) ;
     } ;
 
 

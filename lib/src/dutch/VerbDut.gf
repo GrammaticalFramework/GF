@@ -12,13 +12,13 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
-            predVGen v.isAux (v2v v)))) ; ---- subtyp
+            predVGen v.isAux vp.negPos (v2v v)))) ; ---- subtyp
 
     ComplVS v s = 
       insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q = 
       insertExtrapos (q.s ! QIndir) (predV v) ;
-    ComplVA v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
+    ComplVA v ap = insertObj (\\ _ => ap.s ! APred) (predVGen False BetweenObjs v) ;
 
     SlashV2a v = predV (v2v v) ** {c2 = v.c2} ; 
       
@@ -37,13 +37,13 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       in
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
-          insertObj vpi.p1 ((predVGen v.isAux v)))) ** {c2 = v.c2} ;
+          insertObj vpi.p1 ((predVGen v.isAux vp.negPos v)))) ** {c2 = v.c2} ;
 
     SlashV2A v ap = 
-      insertObj (\\_ => ap.s ! APred) (predVv v) ** {c2 = v.c2} ;
+      insertObj (\\_ => ap.s ! APred) (predVGen False BetweenObjs (v2v v)) ** {c2 = v.c2} ;
 
     --vp.c2.p2: if the verb has a preposition or not
-    ComplSlash vp np = insertObjNP np.isPron vp.c2.p2 (\\_ => appPrep vp.c2.p1 np.s) vp ;
+    ComplSlash vp np = insertObjNP np.isPron (case vp.c2.p2 of {True => BeforeObjs; False => vp.negPos}) (\\_ => appPrep vp.c2.p1 np.s) vp ;
 
     SlashVV v vp = 
       let 
@@ -52,7 +52,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
-            predVGen v.isAux (v2v v)))) ** {c2 = vp.c2} ;
+            predVGen v.isAux vp.negPos (v2v v)))) ** {c2 = vp.c2} ;
 
     SlashV2VNP v np vp = 
       let 
@@ -62,13 +62,13 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
         insertInf vpi.p2 (
           insertObj vpi.p1 (
             insertObj (\\_ => appPrep v.c2.p1 np.s) (
-              predVGen v.isAux v)))) ** {c2 = v.c2} ;
+              predVGen v.isAux vp.negPos v)))) ** {c2 = v.c2} ;
 
-    -- True, because negation comes before copula complement 
+    -- BeforeObjs, because negation comes before copula complement 
     -- "ik ben niet groot" but "ik begrijp hem niet"
-    UseComp comp = insertObjNP False True comp.s (predV zijn_V) ; -- agr not used
+    UseComp comp = insertObjNP False BeforeObjs comp.s (predV zijn_V) ; -- agr not used
 
-    UseCopula = predV zijn_V ;
+    UseCopula = predV zijn_V; 
 
     CompCN cn = {s = \\a => cn.s ! Strong ! NF a.n Nom} ;
     CompAP ap = {s = \\_ => ap.s ! APred} ;

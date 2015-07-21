@@ -388,7 +388,7 @@ param
          a = {g = g ; n = n ; p = p}
          } ;
 
-    het_Pron : Pronoun = mkPronoun "'t" "'t" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ;
+    het_Pron : Pronoun = mkPronoun "het" "het" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ; -- cunger: 't -> het 
 
 
 -- Complex $CN$s, like adjectives, have strong and weak forms.
@@ -475,6 +475,8 @@ param
         _ => AAttr
         } ;
 
+  param NegPosition = BeforeObjs | AfterObjs | BetweenObjs;
+
   oper VP : Type = {
       s  : VVerb ;
       a1 : Polarity => Str ; -- niet
@@ -482,15 +484,14 @@ param
       n2 : Agr => Str ;      -- je vrouw
       a2 : Str ;             -- vandaag
       isAux : Bool ;         -- is a double infinitive
-      negBeforeObj : Bool ;  -- ik schoop X niet ; ik houd niet van X ; dat is niet leuk
+      negPos : NegPosition ; -- ik schoop X niet ; ik houd niet van X ; dat is niet leuk
       inf : Str * Bool ;     -- zeggen (True = non-empty)
       ext : Str              -- dat je komt
       } ;
 
-  predV : VVerb -> VP = predVGen False ;
+  predV : VVerb -> VP = predVGen False AfterObjs;
 
-
-  predVGen : Bool -> VVerb -> VP = \isAux, verb -> {
+  predVGen : Bool -> NegPosition -> VVerb -> VP = \isAux, negPos, verb -> {
     s = verb ;
     a1  : Polarity => Str = negation ;
     n0  : Agr => Str = \\a => case verb.vtype of {
@@ -499,8 +500,8 @@ param
       } ;
     n2  : Agr => Str = \\a => [] ;
     a2  : Str = [] ;
-    isAux = isAux ; ----
-    negBeforeObj = False ;
+    isAux = isAux ; 
+    negPos = negPos ;
     inf : Str * Bool = <[],False> ;
     ext : Str = []
     } ;
@@ -512,18 +513,18 @@ param
 
 -- Extending a verb phrase with new constituents.
 
-  --when we call it with a normal VP, just copy the negBeforeObj field of the vp
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> insertObjNP False vp.negBeforeObj obj vp;
+  --when we call it with a normal VP, just copy the negPos field of the vp
+  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> insertObjNP False vp.negPos obj vp;
 
   --this is needed when we call insertObjNP in ComplSlash: VPSlash is a subtype of VP so it works
-  insertObjNP : Bool -> Bool -> (Agr => Str) -> VP -> VP = \isPron,negBeforeObj,obj,vp -> {
+  insertObjNP : Bool -> NegPosition -> (Agr => Str) -> VP -> VP = \isPron,negPos,obj,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
     n0 = \\a => case isPron of {True  => obj ! a ; _ => []} ++ vp.n0 ! a ;
     n2 = \\a => case isPron of {False => obj ! a ; _ => []} ++ vp.n2 ! a ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
-    negBeforeObj = negBeforeObj ;
+    negPos = negPos ;
     inf = vp.inf ;
     ext = vp.ext
     } ;
@@ -535,7 +536,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
-    negBeforeObj = vp.negBeforeObj ;
+    negPos = vp.negPos ;
     inf = vp.inf ;
     ext = vp.ext
     } ;
@@ -547,7 +548,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ++ adv ;
     isAux = vp.isAux ;
-    negBeforeObj = vp.negBeforeObj ;
+    negPos = vp.negPos ;
     inf = vp.inf ;
     ext = vp.ext
     } ;
@@ -559,7 +560,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
-    negBeforeObj = vp.negBeforeObj ;
+    negPos = vp.negPos ;
     inf = vp.inf ;
     ext = vp.ext ++ ext
     } ;
@@ -571,7 +572,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ; ----
-    negBeforeObj = vp.negBeforeObj ;
+    negPos = vp.negPos ;
     inf = <inf ++ vp.inf.p1, True> ;
     ext = vp.ext
     } ;
@@ -603,9 +604,10 @@ param
           obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
 	  part  = vp.s.particle ;
-	  compl = case vp.negBeforeObj of {
-	    True => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ vp.s.prefix ;
-	    _    => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ vp.s.prefix 
+	  compl = case vp.negPos of {
+	    BeforeObjs  => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ vp.s.prefix ;
+	    AfterObjs   => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ vp.s.prefix ;
+      BetweenObjs => obj0 ++ neg ++ obj ++ part ++ vp.a2 ++ vp.s.prefix 
 	  } ;
           inf : Str  =                                               
             case <vp.isAux, vp.inf.p2, a> of {                  

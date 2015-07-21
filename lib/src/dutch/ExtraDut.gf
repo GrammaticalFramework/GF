@@ -16,12 +16,12 @@ concrete ExtraDut of ExtraDutAbs = CatDut **
 
     ComplVPIVV v vpi = 
         insertInf (vpi.s ! v.isAux) (
-           predVGen v.isAux v) ; ----
+           predVGen v.isAux BeforeObjs v) ; ----
 --{-
 --      insertExtrapos vpi.p3 (
 --        insertInf vpi.p2 (
 --          insertObj vpi.p1 (
---            predVGen v.isAux v))) ;
+--            predVGen v.isAux vpi.negPos v))) ;
 ---}
 --
 --    PPzuAdv cn = {s = case cn.g of {
@@ -122,7 +122,7 @@ lin
 lin
  NominalizeVPSlashNP vpslash np =
            --False for negation place; doesn't matter because vp.a1 ! Pos is chosen
-           let  vp : ResDut.VP = insertObjNP np.isPron False (\\_ => appPrep vpslash.c2.p1 np.s) vpslash ;
+           let  vp : ResDut.VP = insertObjNP np.isPron AfterObjs (\\_ => appPrep vpslash.c2.p1 np.s) vpslash ;
                 agrDef : Agr = agrP3 Sg ; 
                 compl : Str = vp.n0 ! agrDef ++ vp.a1 ! Pos ++ vp.n2 ! agrDef ++ vp.s.prefix ; 
                 inf : Str = vp.inf.p1 ;

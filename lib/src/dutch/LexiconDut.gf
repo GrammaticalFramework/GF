@@ -45,7 +45,7 @@ lin
   married_A2 = mkA2 (mkA "getrouwd") (mkPrep "met") ;
   mother_N2 = mkN2 (mkN "moeder") ;
   now_Adv = mkAdv "nu" ;
-  paint_V2A = mkV2A (mkV "schilderen" "schildert") noPrep ;
+  paint_V2A = mkV2A (mkV "schilderen" "schildert") ;
   paris_PN = mkPN "Parijs" ;
   red_A = mkA "rood" ;
   say_VS = mkVS zeggen_V ;
@@ -246,7 +246,7 @@ queen_N = mkN "koningin" utrum ;
 question_N = mkN "vraag" utrum ;
 radio_N = mkN "radio" utrum ;
 rain_N = mkN "regen" utrum ;
-rain_V0 = mkV "regenen" ;
+rain_V0 = mkV "regen" "regent" "regenen" "regende" "regenden" "geregend" ; 
 read_V2 = mkV2 lezen_V ;
 ready_A = mkA "klaar" ;
 reason_N = mkN "reden" utrum ;
