@@ -10,13 +10,17 @@ concrete RelativeGer of Relative = CatGer ** open ResGer in {
       } ;
 
     RelVP rp vp = {
-      s = \\m,t,ant,b,gn => 
-        let 
+      s = \\m,t,ant,b,rgn => 
+        let
+	  gn = case rgn of {
+	    RGenNum gf => gf ;
+	    RSentence => GSg Neutr
+	    } ;
           agr = case rp.a of {
             RNoAg => agrP3 (numGenNum gn) ;
             RAg n p => Ag Neutr n p
             } ;
-          cl = mkClause (rp.s ! gn ! Nom) agr vp
+          cl = mkClause (rp.s ! rgn ! Nom) agr vp
         in
         cl.s ! m ! t ! ant ! b ! Sub ;
       c = Nom

@@ -9,7 +9,7 @@ concrete IdiomGer of Idiom = CatGer **
     GenericCl vp = mkClause "man" (agrP3 Sg) vp ;
 
     CleftNP np rs = mkClause "es" (agrP3 Sg) 
-      (insertExtrapos (rs.s ! gennum (genderAgr np.a) (numberAgr np.a)) ----
+      (insertExtrapos (rs.s ! RGenNum (gennum (genderAgr np.a) (numberAgr np.a))) ----
         (insertObj (\\_ => np.s ! NPC rs.c) (predV MorphoGer.sein_V))) ;
 
     CleftAdv ad s = mkClause "es" (agrP3 Sg) 

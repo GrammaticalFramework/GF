@@ -10,7 +10,7 @@ concrete CatGer of Cat =
 
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
-    RS = {s : GenNum => Str ; c : Case} ;
+    RS = {s : RelGenNum => Str ; c : Case} ;
     SSlash = {s : Order => Str} ** {c2 : Preposition} ;
 
 -- Sentence
@@ -32,8 +32,8 @@ concrete CatGer of Cat =
 
 -- Relative
 
-    RCl = {s : Mood => ResGer.Tense => Anteriority => Polarity => GenNum => Str ; c : Case} ;
-    RP = {s : GenNum => Case => Str ; a : RAgr} ;
+    RCl = {s : Mood => ResGer.Tense => Anteriority => Polarity => RelGenNum => Str ; c : Case} ;
+    RP = {s : RelGenNum => Case => Str ; a : RAgr} ;
 
 -- Verb
 

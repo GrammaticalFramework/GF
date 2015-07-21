@@ -17,7 +17,7 @@ concrete ConjunctionGer of Conjunction =
       isPre = ss.isPre
       } ;
 
-    ConjRS conj ss = conjunctDistrTable GenNum conj ss ** {
+    ConjRS conj ss = conjunctDistrTable RelGenNum conj ss ** {
       c = ss.c
       } ;
 
@@ -39,14 +39,14 @@ concrete ConjunctionGer of Conjunction =
     ConsNP xs x = consrTable PCase comma xs x ** {a = conjAgr xs.a x.a} ;
     BaseAP x y = twoTable AForm x y ** {isPre = andB x.isPre y.isPre} ;
     ConsAP xs x = consrTable AForm comma xs x ** {isPre = andB xs.isPre x.isPre} ;
-    BaseRS x y = twoTable GenNum x y ** {c = y.c} ;
-    ConsRS xs x = consrTable GenNum comma xs x ** {c = xs.c} ;
+    BaseRS x y = twoTable RelGenNum x y ** {c = y.c} ;
+    ConsRS xs x = consrTable RelGenNum comma xs x ** {c = xs.c} ;
 
   lincat
     [S] = {s1,s2 : Order => Str} ;
     [Adv] = {s1,s2 : Str} ;
     [NP] = {s1,s2 : PCase => Str ; a : Agr} ;
     [AP] = {s1,s2 : AForm => Str ; isPre : Bool} ;
-    [RS] = {s1,s2 : GenNum => Str ; c : Case} ;
+    [RS] = {s1,s2 : RelGenNum => Str ; c : Case} ;
 
 }
