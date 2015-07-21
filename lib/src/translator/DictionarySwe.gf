@@ -15711,7 +15711,7 @@ lin despoil_V2 = variants {} ; -- status=guess
 lin despondency_N = mkN "missmod" neutrum ; -- status=guess
 lin despondent_A = mkA "missmodig" ; -- comment=2
 lin despot_N = mkN "despot" "despoter" ; -- SaldoWN
-lin despotic_A = variants {} ; -- status=guess
+lin despotic_A = mkA "despotisk" ;
 lin despotism_N = mkN "despotism" "despotismer" ; -- comment=2
 lin desquamation_N = mkN "deskvamation" ; -- src=google
 lin dessau_PN = mkPN "Dessau" neutrum ; -- src=geonames status=guess
@@ -15727,7 +15727,7 @@ lin destine_V2V = variants {} ; -- status=guess
 lin destiny_N = mkN "öde" ; -- comment=3
 lin destitute_A = mkA "utfattig" ; -- comment=3
 lin destitution_N = mkN "armod" neutrum | mkN "nöd" ; -- SaldoWN -- comment=4
-lin destroy_V2 = mkV2 (mkV "förstöra") ; -- status=guess, src=wikt
+lin destroy_V2 = mkV2 (mkV "förstör" "förstörde" "förstört") ; 
 lin destroyable_A = variants {} ; -- status=guess
 lin destroyer_N = mkN "förstörare" utrum ; -- comment=2
 lin destructibility_N = variants {} ; -- status=guess
@@ -16824,20 +16824,20 @@ lin distressful_A = mkA "bedrövlig" ; -- comment=7
 lin distressing_A = mkA "bedrövlig" ; -- comment=8
 lin distributary_N = mkN "flodarm" ;
 lin distribute_V2 = dirV2 (partV (mkV "sprida" "spred" "spritt")"ut") ; -- status=guess
-lin distributed_A = variants {} ; --
+lin distributed_A = mkA "distribuerad" "distribuerat" ;
 lin distribution_N = mkN "spridning" ;
 lin distributional_A = variants {} ; -- status=guess
 lin distributive_A = mkA "distributiv" ; -- status=guess
 lin distributor_N = mkN "distributör" "distributörer" ; -- SaldoWN
 lin district_N = mkN "distrikt" neutrum ;
 lin distrust_N = mkN "misstro" ; -- SaldoWN
-lin distrust_V2 = variants {} ; -- status=guess
+lin distrust_V2 = mkV2 "misstro" ;
 lin distrustful_A = mkA "misstänksam" "misstänksamt" "misstänksamma" "misstänksamma" "misstänksammare" "misstänksammast" "misstänksammaste" ; -- comment=2
 lin distrustfulness_N = mkN "misstänk" ; -- src=google
-lin disturb_V2 = mkV2 (mkV "störa") ; -- status=guess, src=wikt
+lin disturb_V2 = mkV2 (mkV "störa" "störde" "stört") ;
 lin disturbance_N = mkN "orolighet" "oroligheter" | mkN "störande" ; -- SaldoWN -- comment=14
 lin disturber_N = variants {} ; -- status=guess
-lin disturbing_A = variants {} ;
+lin disturbing_A = mkA "förstörande" ;
 lin disulfiram_N = variants {} ; -- status=guess
 lin disunion_N = mkN "söndring" ;
 lin disunite_V = variants {} ; -- status=guess
