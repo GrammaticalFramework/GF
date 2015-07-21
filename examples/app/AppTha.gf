@@ -18,9 +18,10 @@ concrete AppTha of App =
     ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP,
   -- Idiom
     CleftNP, CleftAdv,
-    ImpP3    
+    ImpP3,
   -- Construction
   -- Extensions
+    PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
   ,PhrasebookTha - [at_Prep, closed_A, open_A] --- - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
@@ -50,4 +51,6 @@ ComplV3  v np vp = mkVP v np vp ;
 
 ComplV2 v np = mkVP v np ;
 
+  PassV2 v2 = passiveVP v2 ;
+  PassV2 v2 = passiveVP v2 ;
 }

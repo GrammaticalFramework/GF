@@ -17,9 +17,10 @@ abstract App =
     ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP,
   -- Idiom
     CleftNP, CleftAdv,
-    ImpP3    
+    ImpP3,
   -- Construction
   -- Extensions
+    PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
   ,Phrasebook
 
@@ -33,6 +34,8 @@ fun
   Phrase_Chunk : Phrase -> Chunk ;
 
   ComplV2 : V2 -> NP -> VP ;
+  PassV2 : V2 -> VP ;
+  
 
 {-
   ComplV2V : V2V -> NP -> VP -> VP ;

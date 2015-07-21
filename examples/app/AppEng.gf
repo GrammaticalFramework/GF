@@ -18,9 +18,10 @@ concrete AppEng of App =
     ComplSlashIP,AdvQVP,AddAdvQVP,QuestQVP,
   -- Idiom
     CleftNP, CleftAdv,
-    ImpP3    
+    ImpP3,
   -- Construction
   -- Extensions
+    PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
   ,PhrasebookEng - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv]
@@ -47,4 +48,6 @@ lin
 
 ComplV2 v np = mkVP v np ;
 
+  PassV2 v2 = passiveVP v2 ;
+  PassV2 v2 = passiveVP v2 ;
 }

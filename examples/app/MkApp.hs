@@ -22,10 +22,6 @@ putImports i s =
 
 extra s = unlines (init (lines s) ++ extraLines ++ ["}"])
 
-extraLines = -- [] -- default: no extra
-
-  [
-  "",
-  "ComplV2 v np = mkVP v np ;",
-  ""
-  ]
+extraLines = [
+  "  PassV2 v2 = passiveVP v2 ;"
+  ] -- default: no extra
