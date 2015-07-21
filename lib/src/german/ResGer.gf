@@ -29,6 +29,7 @@ resource ResGer = ParamX ** open Prelude in {
 -- Gender distinctions are only made in the singular. 
 
     GenNum = GSg Gender | GPl ;
+    RelGenNum = RGenNum GenNum | RSentence ;
 
 -- Agreement of $NP$ has three parts.
 
@@ -801,7 +802,9 @@ resource ResGer = ParamX ** open Prelude in {
     np ** {isPron = False} ;
 
   oper
-      relPron :  GenNum => Case => Str = \\gn,c =>
+      relPron :  RelGenNum => Case => Str = \\rgn,c =>
+    case rgn of {
+    RGenNum gn => 
     case <gn,c> of {
       <GSg Fem,Gen> => "deren" ;
       <GSg g,Gen>   => "dessen" ;
@@ -809,5 +812,7 @@ resource ResGer = ParamX ** open Prelude in {
       <GPl,Gen>     => "deren" ;
       _ => artDef ! gn ! c
       } ;
+    RSentence => "was"
+    } ;
 
 }
