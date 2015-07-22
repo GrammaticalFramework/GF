@@ -254,7 +254,7 @@ oper
           tullut ;
           tullee ;
           plus tullut ("t" + a) ;
-          plus tullee ("n" + a) ;
+          tullee ; -- essive stem; ("n" + a)  is added in snoun2noun
           plus tullee "see" ;
           plus tulle "ide" ;
           plus tulle ("it" + a) ;
@@ -271,7 +271,7 @@ oper
           tultu ;
           tullu__ ;
           plus tultu a ;
-          plus tultu ("n" + a) ;
+          tultu ; -- essive stem; ("n" + a)  is added in snoun2noun
           plus tultu u ;
           plus tultu "je" ;
           plus tultu ("j" + a) ;
@@ -288,7 +288,7 @@ oper
           tuleva ;
           tuleva ;
           plus tuleva a ;
-          plus tuleva ("n" + a) ;
+          tuleva  ; -- essive stem; ("n" + a) is added in snoun2noun
           plus tuleva a ;
           plus tulev "ie" ;
           plus tulev ("i" + a) ;
@@ -305,7 +305,7 @@ oper
           tultava ;
           tultava ;
           plus tultava a ;
-          plus tultava ("n" + a) ;
+          tultava ; -- essive stem ; ("n" + a) is added in snoun2noun
           plus tultava a ;
           plus tultav "ie" ;
           plus tultav ("i" + a) ;
@@ -322,7 +322,7 @@ oper
           tulema ;
           tulema ;
           plus tulema a ;
-          plus tulema ("n" + a) ;
+          tulema ;
           plus tulema a ;
           plus tulem "ie" ;
           plus tulem ("i" + a) ;
