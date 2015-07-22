@@ -82,7 +82,7 @@ rglCommands =
        let prelude_src_dir = rgl_src_dir    </> "prelude"
            prelude_dst_dir = rgl_dst_dir (lbi bi) </> "prelude"
        createDirectoryIfMissing True prelude_dst_dir
-       files <- ls prelude_src_dir
+       files <- list_files prelude_src_dir
        run_gfc bi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files])
 
   , RGLCommand "all"     True  $ gfcp [l,s,c,t,sc]
@@ -164,7 +164,7 @@ copyRGL args flags bi = do
 copyAll s from to = do
   putStrLn $ "Installing [" ++ s ++ "] " ++ to
   createDirectoryIfMissing True to
-  mapM_ (\file -> copyFile (from </> file) (to </> file)) =<< ls from
+  mapM_ (\file -> copyFile (from </> file) (to </> file)) =<< list_files from
 {-
 sdistRGL pkg mb_lbi hooks flags = do
   paths <- getRGLFiles rgl_src_dir []
@@ -414,7 +414,7 @@ updateFile path new =
                                  writeFile path new
 
 -- | List files, excluding "." and ".."
-ls path = filter (`notElem` [".",".."]) `fmap` getDirectoryContents path
+list_files path = filter ((/=".").take 1) `fmap` getDirectoryContents path
 
 
 -- | For parallel RGL module compilation
