@@ -4,7 +4,16 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
   lin
 
-    PredVP np vp = mkClause (np.s ! NPC Nom) np.a vp ;
+	PredVP np vp = 
+		let subj = mkSubj np vp.subjc 
+		in mkClause subj.p1 subj.p2 vp ;
+
+	{- applies verb's subject case to subject ;
+	   forces 3rd person sg agreement for any non-nom subjects -->
+			"uns graut" "*uns grauen"
+	   allows pre/post-positions in subjects -->
+	 		"nach mir wurde gedürstet" "*mir wurde gedürstet" 
+			can't think of case of postpositions in subject -}
 
     PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 
@@ -21,13 +30,11 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
         in
         verb.fin ++ ps.p2 ++ 
         (vp.nn ! agr).p1 ++ vp.a1 ! pol ++ (vp.nn ! agr).p2 ++ vp.a2 ++ inf ++ vp.ext
-    } ;
+    } ; 
 
     SlashVP np vp = 
-      mkClause 
-        (np.s ! NPC Nom) np.a 
-        vp **
-      {c2 = vp.c2} ;
+		let subj = mkSubj np vp.subjc 
+		in mkClause subj.p1 subj.p2 vp ** {c2 = vp.c2} ;
 
     AdvSlash slash adv = {
       s  = \\m,t,a,b,o => slash.s ! m ! t ! a ! b ! o ++ adv.s ;
@@ -36,10 +43,11 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
     SlashPrep cl prep = cl ** {c2 = prep} ;
 
-    SlashVS np vs slash = 
-        mkClause (np.s ! NPC Nom) np.a 
-          (insertExtrapos (conjThat ++ slash.s ! Sub) (predV vs)) **
-        {c2 = slash.c2} ;
+    SlashVS np vs slash =
+		let subj = mkSubj np PrepNom 
+		in mkClause subj.p1 subj.p2 
+			(insertExtrapos (conjThat ++ slash.s ! Sub) (predV vs)) **
+        			{c2 = slash.c2} ;
 
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
@@ -66,6 +74,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
     SSubjS a s b = {s = \\o => a.s ! o ++ "," ++ s.s ++ b.s ! Sub} ;
 
-    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! RSentence} ; --- "welches"
+	RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! RSentence} ; --- "was"
+
 
 }

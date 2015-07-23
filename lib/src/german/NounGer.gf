@@ -7,48 +7,58 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
       s = \\c => det.s ! cn.g ! c ++ 
                  (let k = (prepC c).c in cn.s ! adjfCase det.a k ! det.n ! k) ;
       a = agrgP3 cn.g det.n ;
-      isPron = det.isDef    -- ich sehe den Mann nicht vs. ich sehe nicht einen Mann
+      isPron = det.isDef ;   -- ich sehe den Mann nicht vs. ich sehe nicht einen Mann
+      rc = cn.rc ! det.n ;
+      adv = cn.adv ;
+      ext = cn.ext 
       } ;
 
     DetNP det = {
       s = \\c => det.sp ! Neutr ! c ; -- more genders in ExtraGer
       a = agrP3 det.n ;
-      isPron = det.isDef
+      isPron = det.isDef ;
+      rc, adv, ext = []
       } ;
 
     UsePN pn = {
       s = \\c => usePrepC c (\k -> pn.s ! k) ;
-      a = agrP3 Sg ;
-      isPron = True --- means: this is not a heavy NP, but comes before negation
+      a = agrgP3 pn.g Sg ;
+      isPron = True ; --- means: this is not a heavy NP, but comes before negation
+ 	  rc, adv, ext = []
       } ;
 
     UsePron pron = {
       s = \\c => usePrepC c (\k -> pron.s ! NPCase k) ;
       a = pron.a ;
-      isPron = True
+      isPron = True ;
+	  rc, adv, ext = []
       } ;
 
     PredetNP pred np = 
-      let ag = case pred.a of {PAg n => agrP3 n ; _ => np.a} in heavyNP {
+      let ag = case pred.a of {PAg n => agrP3 n ; _ => np.a} in np ** {
         s = \\c0 => 
           let c = case pred.c.k of {NoCase => c0 ; PredCase k => k} in
           pred.s ! numberAgr ag ! genderAgr np.a ! c0 ++ pred.c.p ++ np.s ! c ; 
-        a = ag
+        a = ag ;
+        isPron = False
         } ;
 
-    PPartNP np v2 = heavyNP {
+    PPartNP np v2 = np ** {
       s = \\c => np.s ! c ++ v2.s ! VPastPart APred ; --- invar part
-      a = np.a
+      isPron = False
+      } ;
+	{- possibly structures such as
+		"sie ist eine erfolgreiche Frau geliebt von vielen"
+	 but only with v2 not possible in German? -}
+	
+    AdvNP np adv = np ** {
+      adv = np.adv ++ adv.s ;
+      isPron = False
       } ;
 
-    AdvNP np adv = heavyNP {
-      s = \\c => np.s ! c ++ adv.s ;
-      a = np.a
-      } ;
-
-    ExtAdvNP np adv = heavyNP {
-      s = \\c => np.s ! c ++ embedInCommas adv.s ;
-      a = np.a
+    ExtAdvNP np adv = np ** {
+      adv = np.adv ++ embedInCommas adv.s ;
+      isPron = False
       } ;
 
     DetQuantOrd quant num ord = 
@@ -131,79 +141,70 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
     MassNP cn = {
       s = \\c => usePrepC c (\k -> cn.s ! Strong ! Sg ! k) ;
       a = agrgP3 cn.g Sg ;
-      isPron = False
+      isPron = False ;
+	  rc = cn.rc ! Sg ;
+	  adv = cn.adv ;
+	  ext = cn.ext 
       } ;
 
     UseN, UseN2 = \n -> {
       s = \\_ => n.s ;
-      g = n.g
+      g = n.g ;
+	  rc = \\_ => [] ;
+	  ext,adv = [] 
       } ;
 
     ComplN2 f x = {
-      s = \\_,n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
-      g = f.g
+      s = \\_,n,c => f.s ! n ! c ++ appPrepNP f.c2 x ;
+      g = f.g ;
+	  rc = \\_ => [] ;
+	  ext,adv = [] 
       } ;
 
     ComplN3 f x = {
-      s = \\n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
-      co = f.co ++ appPrep f.c2 x.s ; ---- should not occur at all; the abstract syntax is problematic in giving N2
+      s = \\n,c => f.s ! n ! c ++ appPrepNP f.c2 x ;
+      co = f.co ++ appPrepNP f.c2 x ; ---- should not occur at all; the abstract syntax is problematic in giving N2
       uncap = {
-        s = \\n,c => f.uncap.s ! n ! c ++ appPrep f.c2 x.s ;
-        co = f.uncap.co ++ appPrep f.c2 x.s ; ---- should not occur at all; the abstract syntax is problematic in giving N2
+        s = \\n,c => f.uncap.s ! n ! c ++ appPrepNP f.c2 x ;
+        co = f.uncap.co ++ appPrepNP f.c2 x ; ---- should not occur at all; the abstract syntax is problematic in giving N2
        } ;
       g = f.g ; 
-      c2 = f.c3
+      c2 = f.c3 ;
+	  rc = \\_ => [] ;
+	  ext,adv = [] 
       } ;
 
     Use2N3 f = f ;
 
     Use3N3 f = f ** {
-      c2 = f.c3
+      c2 = f.c3;
       } ;
 
     AdjCN ap cn = 
       let 
         g = cn.g 
-      in {
+      in cn ** {
         s = \\a,n,c => 
                preOrPost ap.isPre
-                 (ap.s ! agrAdj g a n c)
+                 (ap.c.p1 ++ ap.c.p2 ++ ap.s ! agrAdj g a n c ++ ap.ext)
                  (cn.s ! a ! n ! c) ;
         g = g
         } ;
 
-    RelCN cn rs = {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ "," ++  
-                     rs.s ! RGenNum (gennum cn.g n) ;
-      g = cn.g
-      } ;
+ 
+    RelCN cn rs = cn ** {rc = \\n => embedInCommas (rs.s ! RGenNum (gennum cn.g n))} ;
 
-    RelNP np rs = {
-      s = \\c => np.s ! c ++ "," ++ 
-                 rs.s ! RGenNum (gennum (genderAgr np.a) (numberAgr np.a)) ;
-      a = np.a ;
-      isPron = False
-      } ;
+    RelNP np rs = np ** {
+      rc = embedInCommas (rs.s ! RGenNum (gennum (genderAgr np.a) (numberAgr np.a))) ;
+      isPron = False } ;
 
-    SentCN cn s = {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ;
-      g = cn.g
-      } ;
+    SentCN cn s = cn ** {ext = embedInCommas s.s} ;
 
-    AdvCN cn s = {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ;
-      g = cn.g
-      } ;
+    AdvCN cn a = cn ** {adv = a.s} ;
 
-    ApposCN  cn np = let g = cn.g in {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPC c ;
-      g = g ;
-      isMod = cn.isMod
-      } ;
+    ApposCN  cn np = let g = cn.g in cn ** {
+      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPC c ++ bigNP np } ;
 
-    PossNP cn np = {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPP CVonDat ;
-      g = cn.g
-      } ;
-
+    PossNP cn np = cn ** {
+      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPP CVonDat } ;
 }

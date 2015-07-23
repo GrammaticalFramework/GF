@@ -11,18 +11,21 @@ lin
   CNIntNP cn i = {
     s = \\c => cn.s ! Weak ! Sg ! Nom ++ i.s ;
     a = agrP3 Sg ;
-    isPron = False
+    isPron = False ;
+	ext,rc,adv = [] -- added
     } ;
   CNSymbNP det cn xs = let g = cn.g in {
     s = \\c => det.s ! g ! c ++ 
                (let k = (prepC c).c in cn.s !  adjfCase det.a k ! det.n ! k) ++ xs.s ; 
     a = agrP3 det.n ;
-    isPron = False
+    isPron = False ;
+    ext,rc,adv = [] -- added
     } ;
   CNNumNP cn i = {
     s = \\c => artDefContr (GSg cn.g) c ++ cn.s ! Weak ! Sg ! Nom ++ i.s ! Neutr ! (prepC c).c ;
     a = agrP3 Sg ;
-    isPron = False
+    isPron = False ;
+	ext,rc,adv = [] -- added
     } ;
 
   SymbS sy = {s = \\_ => sy.s} ;

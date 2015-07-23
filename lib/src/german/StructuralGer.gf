@@ -19,7 +19,7 @@ concrete StructuralGer of Structural = CatGer **
   before_Prep = mkPrep "vor" P.dative ;
   behind_Prep = mkPrep "hinter" P.dative ;
   between_Prep = mkPrep "zwischen" P.dative ;
-  both7and_DConj = sd2 "sowohl" ["als auch"] ** {n = Pl} ;
+  both7and_DConj = sd2 "sowohl" ["als auch"] ** {n = Sg} ;
   but_PConj = ss "aber" ;
   by8agent_Prep = mkPrep "durch" P.accusative ;
   by8means_Prep = mkPrep "mit" P.dative ;
@@ -29,7 +29,7 @@ concrete StructuralGer of Structural = CatGer **
         "konnte" "konntest" "konnten" "konntet"
         "könnte" "gekonnt" [] 
         VHaben) ;
-  during_Prep = mkPrep "während" P.genitive ;
+  during_Prep = mkPrep "während" P.genitive | P.mkPrep P.accusative "über" ; 
   either7or_DConj = sd2 "entweder" "oder" ** {n = Sg} ;
   everybody_NP = nameNounPhrase {s = caselist "jeder" "jeden" "jedem" "jedes"} ;
   every_Det = detLikeAdj False Sg "jed" ;
@@ -46,7 +46,7 @@ concrete StructuralGer of Structural = CatGer **
   how_IAdv = ss "wie" ;
   how8much_IAdv = ss "wieviel" ;
   how8many_IDet = {s = \\g,c => (detLikeAdj False Pl "wie viel").s ! g ! NPC c ; n = Pl} ;
-  if_Subj = ss "wenn" ;
+  if_Subj = ss "wenn" | ss "falls" ;
   in8front_Prep = mkPrep "vor" P.dative ;
   i_Pron = mkPronPers "ich" "mich" "mir" "meiner" "mein" Masc Sg P1 ;
   in_Prep = mkPrep [] (NPP CInDat) ;
@@ -91,7 +91,7 @@ concrete StructuralGer of Structural = CatGer **
      jener : Number => Gender => PCase => Str = \\n => (detLikeAdj True n "jen").s in 
      {s,sp = \\_ => jener ; a,aPl = Weak} ;
 ---b  that_NP = nameNounPhrase {s = caselist "das" "das" "denem" "dessen"} ; ----
-  there_Adv = ss "da" ;
+  there_Adv = ss "da" | ss "dort" ;
   there7to_Adv = ss "dahin" ;
   there7from_Adv = ss ["daher"] ;
   therefore_PConj = ss "deshalb" ;
@@ -145,7 +145,7 @@ concrete StructuralGer of Structural = CatGer **
   nobody_NP = 
     nameNounPhrase {s = caselist "niemand" "niemanden" "niemandem" "niemands"} ;
   nothing_NP = 
-    nameNounPhrase {s = \\_ => "nichts"} ;
+    nameNounPhrase {s = \\_ => "nichts"} ; --maybe add: nameNounPhrase {s = \\_ => "garnichts"}
   at_least_AdN = ss "wenigstens" ;
   at_most_AdN = ss "höchstens" ;
   except_Prep = mkPrep "außer" P.dative ;

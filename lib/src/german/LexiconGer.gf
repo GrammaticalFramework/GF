@@ -57,14 +57,14 @@ lin
   clean_A = regA "rein" ;
   clever_A = mk3A "klug" "klüger" "klügste" ;
   close_V2 = dirV2 Irreg.schließen_V ;
-  coat_N = mkN "Jacke" ;
+  coat_N = mkN "Jacke" | mkN "Mantel" "Mantel" masculine;
   cold_A = regA "kalt" ;
   come_V = seinV (mk6V "kommen" "kommt" "komm" "kam" "käme" "gekommen") ;
   computer_N = reg2N "Rechner" "Rechner" masculine ;
   country_N = reg2N "Land" "Länder" neuter ;
   cousin_N = reg2N "Vetter" "Vetter" masculine ; --- Kusine
   cow_N = reg2N "Kuh" "Kühe" feminine ;
-  die_V = seinV Irreg.sterben_V ;
+  die_V = seinV Irreg.sterben_V | seinV (prefixV "um" Irreg.kommen_V);
   distance_N3 = mkN3 (mkN "Entfernung") von_Prep zu_Prep ;
   dirty_A = regA "schmutzig" ;
   do_V2 = dirV2 Irreg.tun_V ;
@@ -141,7 +141,7 @@ lin
   open_V2 = dirV2 (regV "öffnen") ;
   paint_V2A = mkV2A (regV "malen") accPrep ;
   paper_N = reg2N "Papier" "Papiere" neuter ;
-  paris_PN = mkPN "Paris" ; -- neuter ;
+  paris_PN = mkPN "Paris" neuter ;
   peace_N = mk6N "Friede" "Frieden" "Frieden" "Friedens" "Frieden" "Frieden" masculine ;
   pen_N = mkN "Bleistift" ; ----
   planet_N = reg2N "Planet" "Planeten" masculine ;
@@ -328,7 +328,7 @@ lin
   stand_V = Irreg.stehen_V ; 
   swell_V = prefixV "an" (regV "schwellen") ;
   swim_V = seinV (Irreg.schwimmen_V) ; 
-  think_V = Irreg.denken_V ; 
+  think_V = Irreg.denken_V | prefixV "nach" Irreg.denken_V; 
   turn_V = regV "drehen" ;
   vomit_V = regV "kotzen" ;
   bite_V2 = dirV2 Irreg.beißen_V ;
@@ -357,7 +357,7 @@ lin
   language_N = mkN "Sprache" ;
   rule_N = reg2N "Regel" "Regeln" feminine ;
 
-    john_PN = mkPN "Johann" ; -- should be: masculine ;
+    john_PN = mkPN "Johann" masculine ;
     question_N = mkN "Frage" ;
     ready_A = regA "fertig" ;
     reason_N = reg2N "Grund" "Gründe" masculine ;

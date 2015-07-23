@@ -26,7 +26,7 @@ concrete CatGer of Cat =
 
     QCl = {s : Mood => ResGer.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Case => Str ; n : Number} ;
-    IComp = {s : Agr => Str} ; 
+    IComp = {s : Agr => Str ; ext : Str} ; 
     IDet = {s : Gender => Case => Str ; n : Number} ;
     IQuant = {s : Number => Gender => Case => Str} ;
 
@@ -39,16 +39,23 @@ concrete CatGer of Cat =
 
     VP = ResGer.VP ;
     VPSlash = ResGer.VPSlash ;
-    Comp = {s : Agr => Str} ; 
+    Comp = {s : Agr => Str ; ext : Str} ; 
 
 -- Adjective
 
-    AP = {s : AForm => Str ; isPre : Bool} ; 
+    AP = {s : AForm => Str ; isPre : Bool ; c: Str * Str ; ext : Str} ; 
+    -- ich bin [c1 ihm] treu 
+	-- du bist so klug gewesen [ext ihn zu lesen]
+	-- ich bin stolz [c2 auf dich]
 
 -- Noun
 
-    CN = {s : Adjf => Number => Case => Str ; g : Gender} ;
-    NP = {s : PCase => Str ; a : Agr ; isPron : Bool} ;
+    CN = {s : Adjf => Number => Case => Str ;
+		  rc : Number => Str ; -- Frage , [rc die ich gestellt habe]
+		  ext : Str ; -- Frage , [sc wo sie schläft])
+		  adv : Str ; -- Frage [a von Max]
+		  g : Gender} ;
+    NP = ResGer.NP ; 
     Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s,sp : Gender => PCase => Str ; n : Number ; a : Adjf ; isDef : Bool} ;
     Quant = {
@@ -91,7 +98,7 @@ concrete CatGer of Cat =
     N  = ResGer.Noun ;
     N2 = ResGer.Noun ** {c2 : Preposition} ;
     N3 = ResGer.Noun ** {c2,c3 : Preposition} ;
-    PN = {s : Case => Str} ;
+    PN = {s : Case => Str; g : Gender} ;
 
 -- tense with possibility to choose conjunctive forms
 
@@ -108,6 +115,7 @@ concrete CatGer of Cat =
     V, VS, VQ, VA = \v -> useInfVP False (predV v) ;
     V2, V2A, V2Q, V2S = \v -> useInfVP False (predV v) ++ v.c2.s ;
     V3 = \v -> useInfVP False (predV v) ++ v.c2.s ++ v.c3.s ;
+
     VV = \v -> useInfVP v.isAux (predVGen v.isAux v) ;
     V2V = \v -> useInfVP v.isAux (predVGen v.isAux v) ++ v.c2.s ;
 
