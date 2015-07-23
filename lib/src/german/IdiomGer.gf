@@ -68,7 +68,8 @@ concrete IdiomGer of Idiom = CatGer **
   SelfNP np = {
       s = \\c => np.s ! c ++ "selbst" ;
       a = np.a ;
-      isPron = False
+      isPron = False ;
+	  adv, rc, ext = [] 
       } ;
 
   oper

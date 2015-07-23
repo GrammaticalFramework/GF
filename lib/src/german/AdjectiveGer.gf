@@ -6,54 +6,72 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
 
     PositA  a = {
       s = a.s ! Posit ;
-      isPre = True
+      isPre = True ;
+      c = <[],[]> ;
+      ext = []
       } ;
     ComparA a np = {
-      s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! NPC Nom ;
-      isPre = True
+      s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! NPC Nom ++ bigNP np ;
+      isPre = True ;
+      c = <[],[]> ;
+      ext = []
       } ;
-    CAdvAP ad ap np = {
-      s = \\af => ad.s ++ ap.s ! af ++ ad.p ++ np.s ! NPC Nom ;
-      isPre = False
+    CAdvAP ad ap np = ap ** {
+      s = \\af => ad.s ++ ap.s ! af ++ ad.p ++ np.s ! NPC Nom ++ bigNP np ;
+      isPre = False 
       } ;
     UseComparA a = {
       s = \\af => a.s ! Compar ! af ;
-      isPre = True
+      isPre = True ;
+      c = <[],[]> ;
+      ext = []
       } ;
-    AdjOrd  a = {
+
+    AdjOrd a = {
       s = a.s ;
-      isPre = True
-      } ;
+      isPre = True ;
+      c = <[],[]> ;
+      ext = []
+      } ; 
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
-    ComplA2 a np = {
-      s = table {
-        APred => a.s ! Posit ! APred ++ appPrep a.c2 np.s ; 
-        af => appPrep a.c2 np.s ++ a.s ! Posit ! af
-        } ; 
-      isPre = True
+    ComplA2 a np = 
+	  let CExt = case a.c2.isPrep of {
+			False => <appPrepNP a.c2 np, []> ;
+			True => <[], appPrepNP a.c2 np> } 
+		in {
+      s = a.s ! Posit ;
+      isPre = True ;
+      c = CExt ;
+	  ext = []
       } ;
 
-    ReflA2 a = {
-      s = \\af => a.s ! Posit ! APred ++ 
-                  appPrep a.c2 (\\k => usePrepC k (\c -> reflPron ! agrP3 Sg ! c)) ; --- agr 
-      isPre = True
+    ReflA2 a = 
+	  let 
+		compl = appPrep a.c2 (\\k => usePrepC k (\c -> reflPron ! agrP3 Sg ! c)) ;
+		CExt = case a.c2.isPrep of
+			{False => <compl, []> ;
+			True => <[], compl> }
+	  in {
+      s = a.s ! Posit ;
+      isPre = True ;
+      c = CExt ;
+	  ext = []
       } ;
 
-    SentAP ap sc = {
-      s = \\a => ap.s ! a ++ sc.s ; 
-      isPre = False
+    SentAP ap sc = ap ** {
+      isPre = False ;
+	  ext = ap.ext ++ sc.s
       } ;
 
-    AdAP ada ap = {
-      s = \\a => ada.s ++ ap.s ! a ;
-      isPre = ap.isPre
-      } ;
+    AdAP ada ap = ap ** {s = \\a => ada.s ++ ap.s ! a} ;
 
     UseA2 a = {
       s = a.s ! Posit ;
-      isPre = True
+      isPre = True ;
+      c = <[],[]> ;
+      ext = []
       } ;
 
 }

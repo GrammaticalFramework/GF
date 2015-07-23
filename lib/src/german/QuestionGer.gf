@@ -49,7 +49,7 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
     QuestIComp icomp np = {
       s = \\m,t,a,p => 
             let 
-              vp  = predV sein_V ;
+              vp  = predV sein_V ** {ext = icomp.ext};
               cls = (mkClause (np.s ! NPC Nom) np.a vp).s ! m ! t ! a ! p ;
               why = icomp.s ! np.a
             in table {
@@ -95,9 +95,9 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
 
     AdvIAdv i a = {s = i.s ++ a.s} ;
  
-    CompIAdv a = {s = \\_ => a.s} ;
+    CompIAdv a = {s = \\_ => a.s ; ext = ""} ;
 
-    CompIP ip = {s = \\_ => ip.s ! Nom} ;
+    CompIP ip = {s = \\_ => ip.s ! Nom ; ext = "" } ;
 
 }
 

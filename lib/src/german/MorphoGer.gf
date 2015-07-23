@@ -20,9 +20,10 @@ oper
   mkPrep : Str -> PCase -> Preposition = \s,c -> 
     {s = s ; s2 = [] ; c = c ; isPrep = True} ;
 
-  nameNounPhrase : {s : Case => Str} ->  {s : PCase => Str ; a : Agr ; isPron : Bool} = \name -> heavyNP {
+  nameNounPhrase : {s : Case => Str} ->  {s : PCase => Str ; a : Agr ; isPron : Bool ; ext,adv,rc : Str} = \name -> heavyNP {
       s = \\c => usePrepC c (\k -> name.s ! k) ;
-      a = agrP3 Sg
+      a = agrP3 Sg ;
+	  ext, adv, rc = [] -- added
       } ;
 
   detLikeAdj : Bool -> Number -> Str -> 

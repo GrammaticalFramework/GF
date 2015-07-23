@@ -19,14 +19,14 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
       insertExtrapos (comma ++ conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q = 
       insertExtrapos (comma ++ q.s ! QIndir) (predV v) ;
-    ComplVA  v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
+    ComplVA v ap = insertAdj (ap.s ! APred) ap.c ap.ext (predV v) ; -- changed
 
     SlashV2a v = predV v ** {c2 = v.c2} ; 
       
     Slash2V3 v np =
-      insertObj (\\_ => appPrep v.c2 np.s) (predV v) ** {c2 = v.c3} ;
+      insertObj (\\_ => appPrepNP v.c2 np) (predV v) ** {c2 = v.c3} ;
     Slash3V3 v np =
-      insertObj (\\_ => appPrep v.c3 np.s) (predV v) ** {c2 = v.c2} ;
+      insertObj (\\_ => appPrepNP v.c3 np) (predV v) ** {c2 = v.c2} ;
 
     SlashV2S v s = 
       insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ** {c2 = v.c2} ;
@@ -41,9 +41,9 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
           insertObj vpi.p1 ((predVGen v.isAux v)))) ** {c2 = v.c2} ;
 
     SlashV2A v ap = 
-      insertObj (\\_ => ap.s ! APred) (predV v) ** {c2 = v.c2} ;
+      insertAdj (ap.s ! APred) ap.c ap.ext (predV v) ** {c2 = v.c2} ; -- changed
 
-    ComplSlash vp np = insertObjNP (isLightComplement np.isPron vp.c2) (\\_ => appPrep vp.c2 np.s) vp ;
+    ComplSlash vp np = insertObjNP (isLightComplement np.isPron vp.c2) (\\_ => appPrepNP vp.c2 np) vp ;
 
     SlashVV v vp = 
       let 
@@ -61,21 +61,24 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
-            insertObj (\\_ => appPrep v.c2 np.s) (
+            insertObj (\\_ => appPrepNP v.c2 np) (
               predVGen v.isAux v)))) ** {c2 = v.c2} ;
 
     UseComp comp = insertObj comp.s (predV sein_V) ; -- agr not used
-    -- we want to say "ich liebe sie nicht" but not "ich bin alt nicht"
+    -- adj slot not used here for e.g. "ich bin alt" but same behaviour as NPs?
+	-- "ich bin nicht alt" "ich bin nicht Doris" 
+
     UseCopula = predV sein_V ;
 
-    CompAP ap = {s = \\_ => ap.s ! APred} ;
-    CompNP np = {s = \\_ => np.s ! NPC Nom} ;
-    CompAdv a = {s = \\_ => a.s} ;
+    CompAP ap = {s = \\_ => ap.c.p1 ++ ap.s ! APred ++ ap.c.p2 ; ext = ap.ext} ;
+    CompNP np = {s = \\_ => np.s ! NPC Nom ++ np.adv ++ np.rc ; ext = np.ext} ;
+    CompAdv a = {s = \\_ => a.s ; ext = []} ;
 
     CompCN cn = {s = \\a => case numberAgr a of {
         Sg => "ein" + pronEnding ! GSg cn.g ! Nom ++ cn.s ! Strong ! Sg ! Nom ;
         Pl => cn.s ! Strong ! Pl ! Nom
-        }
+        } ;
+		ext = []
       } ;
 
     AdvVP vp adv = insertAdv adv.s vp ;

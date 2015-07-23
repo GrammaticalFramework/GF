@@ -43,7 +43,7 @@ in {
   lin erlöschen_V =  irregV "erlöschen" "erlischt" "erlosch" "erlösche" "erloschen" ;
   lin erkennen_V =  irregV "erkennen" "erkennt" "erkannte" "erkannte" "erkannt" ;
   lin erschrecken_V =  irregV "erschrecken" "erschrickt" "erschrak" "erschräke" "erschrocken" ;
-  lin essen_V =  irregV "essen" "ißt" "aß" "äße" "gegessen" ;
+  lin essen_V =  irregV "essen" "isst" "aß" "äße" "gegessen" ;
   lin fahren_V =  irregV "fahren" "fährt" "fuhr" "führe" "gefahren" ;
   lin fallen_V =  irregV "fallen" "fällt" "fiel" "fiele" "gefallen" ;
   lin fangen_V =  irregV "fangen" "fängt" "fing" "finge" "gefangen" ;
