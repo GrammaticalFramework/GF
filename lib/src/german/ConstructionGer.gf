@@ -78,7 +78,7 @@ lin
   languageNP l = mkNP l ;
   languageCN l = mkCN l ;
 
-oper mkLanguage : Str -> N = \s -> mkN s ; ---- produces Masc
+oper mkLanguage : Str -> N = \s -> mkN s neuter ; ---- produces Neuter
 
 ----------------------------------------------
 ---- lexicon of special names
