@@ -72,24 +72,19 @@ lin
       } ;
     g = cn.g
   } ;
-{- ---- doesn't compile AR 22/5/2015
-  CompoundN noun cn = {
-    s = \\n,c => glue noun.co (cn.s ! n ! c) ;
-    co = glue noun.co (cn.co) ;
-    g = cn.g
-  } ;
-
--}
 
     CompoundAP noun adj = {
       s = \\af => glue (noun.s ! Sg ! Nom) (adj.s ! Posit ! af) ;
-      isPre = True
+      isPre = True ;
+      c = <[],[]>;
+	  ext = []
       } ;
 
   GerundNP vp = {  -- infinitive: Bier zu trinken
     s = \\c => (prepC c).s ++ useInfVP False vp  ; 
     a = Ag Neutr Sg P3 ;
-    isPron = False
+    isPron = False ; 
+    rc, ext, adv = ""; 
     } ;
 
   GerundAdv vp = {  -- Bier trinkend
@@ -108,21 +103,27 @@ lin
     s = "durch" ++ useInfVP False vp ----
     } ;
 
-  PresPartAP vp = {
-    s = \\af => (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ vp.inf ++ vp.ext ++ vp.infExt ++ vp.s.s ! VPresPart af ;
-    isPre = True
+   PresPartAP vp = {
+    s = \\af => vp.s.particle ++ (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ vp.inf ++ vp.ext ++ vp.infExt ++ vp.s.s ! VPresPart af ;
+    isPre = True ;
+    c = <[],[]>;
+	ext = []
     } ;
 
   PastPartAP vp = {
     s = \\af => (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ vp.inf ++ vp.ext ++ vp.infExt ++ vp.s.s ! VPastPart af ;
-    isPre = True
+    isPre = True ;
+    c = <[],[]>;
+	ext = []
     } ;
 
   PastPartAgentAP vp np = 
     let agent = (SyntaxGer.mkAdv von_Prep (lin NP np)).s
     in {
       s = \\af => (vp.nn ! agrP3 Sg).p1 ++ (vp.nn ! agrP3 Sg).p2 ++ vp.a2 ++ agent ++ vp.inf ++ vp.ext ++ vp.infExt ++ vp.s.s ! VPastPart af ;
-      isPre = True
+      isPre = True ;
+    c = <[],[]>;
+	ext = []
       } ;
 
 {-  
@@ -149,8 +150,8 @@ lin
           }
     } ;
 -}
-  CompS s = {s = \\_ => "dass" ++ s.s ! Main} ;  -- S -> Comp
-  CompVP ant p vp = {s = \\_ => useInfVP True vp} ; -- VP -> Comp
+  CompS s = {s = \\_ => "dass" ++ s.s ! Main ; ext = ""} ;  -- S -> Comp
+  CompVP ant p vp = {s = \\_ => useInfVP True vp; ext = ""} ; -- VP -> Comp
 
 lin
   that_RP = which_RP ;
