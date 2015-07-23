@@ -230,7 +230,7 @@ CitRestaurant cit = mkCNPlace (mkCN cit  (mkN "Restaurant" "Restaurants" neuter)
        prop = mkA adj ; country = mkNP (mkPN co)} ;
      
     mkDay : Str -> {name : NP ; point : Adv ; habitual : Adv} = \d ->
-      let day = mkNP (mkPN d) in
+      let day = mkNP (mkPN d masculine) in
       {name = day ; 
        point = SyntaxGer.mkAdv (mkPrep "am" dative) day ; ---- am 
        habitual = ParadigmsGer.mkAdv (d + "s") ----
