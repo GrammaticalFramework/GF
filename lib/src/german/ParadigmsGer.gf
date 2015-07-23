@@ -126,6 +126,7 @@ mkN : overload {
 -- taken into account.
 
   mkPN : overload {
+    mkPN : Str -> PN ; -- regular name with genitive in "s", masculine
     mkPN : Str -> Gender -> PN ; -- regular name with genitive in "s"
 
 -- If only the genitive differs, two strings are needed.
@@ -461,6 +462,7 @@ mkV2 : overload {
     mk2PN horst (ifTok Tok (Predef.dp 1 horst) "s" horst (horst + "s")) g ;
 
   mkPN = overload {
+    mkPN : Str -> PN = \s -> regPN s Masc ;
     mkPN : Str -> Gender -> PN = regPN ;
     mkPN : N -> PN = \n -> lin PN {s = n.s ! Sg; g = n.g} ;
     mkPN : (nom,gen : Str) -> Gender -> PN = mk2PN ;
