@@ -107,11 +107,25 @@
                                                          toText:translatedText.firstObject
                                                    fromLanguage:self.from.language
                                                      toLanguage:self.to.language];
-//    if (translatedText.count > 0) {
-        translation.toTexts = translatedText;
-//    }
+
+    translation.toTexts = translatedText;
     translation.sequences = self.sequences;
-    
+
+    if ([translation.toLanguage.bcp isEqualToString:@"th-TH"] ||
+        [translation.toLanguage.bcp isEqualToString:@"ja-JP"] ||
+        [translation.toLanguage.bcp isEqualToString:@"ca-ES"]) {
+        
+        NSMutableArray *trimmedArray = @[].mutableCopy;
+        
+        for (NSString *string in translation.toTexts) {
+            NSString *trimmed = [string stringByReplacingOccurrencesOfString:@" " withString:@""];
+            [trimmedArray addObject:trimmed];
+        }
+        NSString *trimmed = [translation.toText stringByReplacingOccurrencesOfString:@" " withString:@""];
+        
+        translation.toText = trimmed;
+        translation.toTexts = trimmedArray.copy;
+    }
     
     return translation;
 }

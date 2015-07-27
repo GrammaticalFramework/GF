@@ -38,6 +38,7 @@
     return @[
              [[Language alloc] initWithName:@"Bulgarian"    abbreviation:@"Bul"     bcp:@"en-GB"],
              [[Language alloc] initWithName:@"Chinese"      abbreviation:@"Chi"     bcp:@"zh-CN"],
+             [[Language alloc] initWithName:@"Catalan"      abbreviation:@"Cat"     bcp:@"ca-ES"],
              [[Language alloc] initWithName:@"Dutch"        abbreviation:@"Dut"     bcp:@"nl-NL"],
              [[Language alloc] initWithName:@"English"      abbreviation:@"Eng"     bcp:@"en-GB"],
              [[Language alloc] initWithName:@"Finnish"      abbreviation:@"Fin"     bcp:@"fi-FI"],
@@ -45,10 +46,10 @@
              [[Language alloc] initWithName:@"German"       abbreviation:@"Ger"     bcp:@"de-DE"],
              [[Language alloc] initWithName:@"Hindi"        abbreviation:@"Hin"     bcp:@"hi-IN"],
              [[Language alloc] initWithName:@"Italian"      abbreviation:@"Ita"     bcp:@"it-IT"],
-//             [[Language alloc] initWithName:@"Japanese"     abbreviation:@"Jpn"     bcp:@"ja-JP"],
+             [[Language alloc] initWithName:@"Japanese"     abbreviation:@"Jpn"     bcp:@"ja-JP"],
              [[Language alloc] initWithName:@"Spanish"      abbreviation:@"Spa"     bcp:@"es-ES"],
-             [[Language alloc] initWithName:@"Swedish"      abbreviation:@"Swe"     bcp:@"sv-SE"]//,
-//             [[Language alloc] initWithName:@"Thai"         abbreviation:@"Tha"     bcp:@"th-TH"]
+             [[Language alloc] initWithName:@"Swedish"      abbreviation:@"Swe"     bcp:@"sv-SE"],
+             [[Language alloc] initWithName:@"Thai"         abbreviation:@"Tha"     bcp:@"th-TH"]
              ];
 }
 
