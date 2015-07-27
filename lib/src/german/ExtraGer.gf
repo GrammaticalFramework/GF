@@ -102,7 +102,7 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
 
     PredVPS np vpi = 
       let
-        subj = np.s ! NPC Nom ;
+        subj = np.s ! NPC Nom ++ bigNP np ;
         agr  = np.a ;
       in {
         s = \\o => 

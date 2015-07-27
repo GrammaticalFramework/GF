@@ -8,8 +8,8 @@ oper
   emptyNP = mkNP (P.mkPN []) ;
 
 lin
-  NP_Acc_Chunk np = ss (np.s ! NPC Acc) ;
-  NP_Gen_Chunk np = ss (np.s ! NPC Gen) ;
+  NP_Acc_Chunk np = ss (np.s ! NPC Acc ++ bigNP np) ;
+  NP_Gen_Chunk np = ss (np.s ! NPC Gen ++ bigNP np) ;
 
   VPI_Chunk vpi = {s = vpi.s ! (True | False)} ;
 
