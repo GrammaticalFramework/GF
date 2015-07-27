@@ -206,5 +206,5 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
       s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPC c ++ bigNP np } ;
 
     PossNP cn np = cn ** {
-      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPP CVonDat } ;
+      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPP CVonDat ++ bigNP np } ;
 }
