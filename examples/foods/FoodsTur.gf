@@ -26,7 +26,7 @@ concrete FoodsTur of Foods = open Predef in {
     -- Reason for excluding plural form of copula: In Turkish if subject is not a human being,
     -- then singular form of copula is used regardless of the number of subject. Since all
     -- possible subjects are non human, copula do not need to have plural form.
-    Pred item quality = {s = item.s ++ quality.s ++ "&+" ++ copula ! quality.softness ! quality.h} ;--! item.n} ;
+    Pred item quality = {s = item.s ++ quality.s ++ BIND ++ copula ! quality.softness ! quality.h} ;--! item.n} ;
     Mod quality kind = {s = case quality.c of {
                               Nom => \\t,n => quality.s ++ kind.s ! t ! n ;
                               Gen => \\t,n => quality.s ++ kind.s ! Gen ! n
