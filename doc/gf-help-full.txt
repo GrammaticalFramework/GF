@@ -453,7 +453,7 @@ sequences; see example.
  | ``-from_urdu`` | from unicode to GF Urdu transliteration
  | ``-from_utf8`` | decode from utf8 (default)
  | ``-lexcode`` | code-like lexer
- | ``-lexmixed`` | mixture of text and code (code between $...$)
+ | ``-lexmixed`` | mixture of text and code, as in LaTeX (code between $...$, \(...)\, \[...\])
  | ``-lextext`` | text-like lexer
  | ``-to_amharic`` | from GF Amharic transliteration to unicode
  | ``-to_ancientgreek`` | from GF ancient Greek transliteration to unicode
@@ -473,7 +473,7 @@ sequences; see example.
  | ``-to_utf8`` | encode to utf8 (default)
  | ``-unchars`` | unlexer that puts no spaces between tokens
  | ``-unlexcode`` | code-like unlexer
- | ``-unlexmixed`` | mixture of text and code (code between $...$)
+ | ``-unlexmixed`` | mixture of text and code (code between $...$, \(...)\, \[...\])
  | ``-unlextext`` | text-like unlexer
  | ``-unwords`` | unlexer that puts a single space between tokens (default)
  | ``-words`` | lexer that assumes tokens separated by spaces (default)
@@ -526,7 +526,7 @@ trees where a function node is a metavariable.
  | ``-from_urdu`` | from unicode to GF Urdu transliteration
  | ``-from_utf8`` | decode from utf8 (default)
  | ``-lexcode`` | code-like lexer
- | ``-lexmixed`` | mixture of text and code (code between $...$)
+ | ``-lexmixed`` | mixture of text and code, as in LaTeX (code between $...$, \(...)\, \[...\])
  | ``-lextext`` | text-like lexer
  | ``-to_amharic`` | from GF Amharic transliteration to unicode
  | ``-to_ancientgreek`` | from GF ancient Greek transliteration to unicode
@@ -546,7 +546,7 @@ trees where a function node is a metavariable.
  | ``-to_utf8`` | encode to utf8 (default)
  | ``-unchars`` | unlexer that puts no spaces between tokens
  | ``-unlexcode`` | code-like unlexer
- | ``-unlexmixed`` | mixture of text and code (code between $...$)
+ | ``-unlexmixed`` | mixture of text and code (code between $...$, \(...)\, \[...\])
  | ``-unlextext`` | text-like unlexer
  | ``-unwords`` | unlexer that puts a single space between tokens (default)
  | ``-words`` | lexer that assumes tokens separated by spaces (default)
@@ -747,6 +747,7 @@ To see transliteration tables, use command ut.
 - Syntax: ``ps OPT? STRING``
 - Options:
 
+ | ``-lines`` | apply the operation separately to each input line, returning a list of lines
  | ``-bind`` | bind tokens separated by Prelude.BIND, i.e. &+
  | ``-chars`` | lexer that makes every non-space character a token
  | ``-from_amharic`` | from unicode to GF Amharic transliteration
@@ -765,7 +766,7 @@ To see transliteration tables, use command ut.
  | ``-from_urdu`` | from unicode to GF Urdu transliteration
  | ``-from_utf8`` | decode from utf8 (default)
  | ``-lexcode`` | code-like lexer
- | ``-lexmixed`` | mixture of text and code (code between $...$)
+ | ``-lexmixed`` | mixture of text and code, as in LaTeX (code between $...$, \(...)\, \[...\])
  | ``-lextext`` | text-like lexer
  | ``-to_amharic`` | from GF Amharic transliteration to unicode
  | ``-to_ancientgreek`` | from GF ancient Greek transliteration to unicode
@@ -785,7 +786,7 @@ To see transliteration tables, use command ut.
  | ``-to_utf8`` | encode to utf8 (default)
  | ``-unchars`` | unlexer that puts no spaces between tokens
  | ``-unlexcode`` | code-like unlexer
- | ``-unlexmixed`` | mixture of text and code (code between $...$)
+ | ``-unlexmixed`` | mixture of text and code (code between $...$, \(...)\, \[...\])
  | ``-unlextext`` | text-like unlexer
  | ``-unwords`` | unlexer that puts a single space between tokens (default)
  | ``-words`` | lexer that assumes tokens separated by spaces (default)
@@ -1054,22 +1055,6 @@ This command must be a line of its own, and thus cannot be a part of a pipe.
 
  | ``ss`` | print complete current source grammar on terminal
  | ``ss -strip -save MorphoFin`` | print the headers in file MorphoFin.gfh
-
-
-#NORMAL
-
-
-#VSPACE
-
-====t = tokenize====
-#NOINDENT
-``t`` = ``tokenize``: //Tokenize string using the vocabulary.//
-
-#TINY
-
-- Flags:
-
- | ``-lang`` | The name of the concrete to use
 
 
 #NORMAL
