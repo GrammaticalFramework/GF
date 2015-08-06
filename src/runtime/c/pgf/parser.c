@@ -1040,6 +1040,9 @@ pgf_symbols_cmp(GuString* psent, PgfSymbols* syms, bool case_sensitive)
 				return -1;
 
 			if (i > 0) {
+				if (!skip_space(psent))
+					return 1;
+
 				while (**psent != 0) {
 					if (!skip_space(psent))
 						break;
