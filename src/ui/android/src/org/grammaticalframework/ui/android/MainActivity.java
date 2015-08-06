@@ -323,6 +323,7 @@ public class MainActivity extends Activity {
                 if (DBG) Log.d(TAG, "Speaking: " + res.first);
             	CharSequence text2 = 
             		mConversationView.addSecondPersonUtterance(input, text, alts);
+            	text2 = text2.toString().replace('[',' ').replace(']',' ').replaceAll("_","").trim();
                 mTts.speak(getTargetLanguageCode(), text2.toString());
 
                 hideProgressBar();

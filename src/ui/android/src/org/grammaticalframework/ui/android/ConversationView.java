@@ -148,7 +148,6 @@ public class ConversationView extends ScrollView {
     	// unknown linearizations in output: darkest red color. But replace [ ] by spaces and remove _ for better speech synthesis
     	else if (target.toString().contains("[")) {
     		view.setBackgroundDrawable(getResources().getDrawable(R.drawable.second_person_worst_utterance_bg));
-    		target = target.toString().replace('[',' ').replace(']',' ').replaceAll("_","").trim();
     	}
 
     	// parse by domain grammar, marked by +, green color
