@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:keyWidth="10%p"
+    android:keyWidth="9%p"
     android:horizontalGap="0px"
     android:verticalGap="0px"
     android:keyHeight="@dimen/key_height"
@@ -21,8 +21,8 @@
 		<Key android:codes="3673" android:keyLabel="๙"/>
     </Row>
     
-    <Row>
-		<Key android:codes="3664" android:keyLabel="๐"/>
+    <Row android:keyWidth="8%p">
+		<Key android:codes="3664" android:keyLabel="๐" android:horizontalGap="2%p"/>
 		<Key android:codes="34" android:keyLabel='"'/>
 		<Key android:codes="3598" android:keyLabel="ฎ"/>
 		<Key android:codes="3601" android:keyLabel="ฑ"/>
@@ -37,7 +37,7 @@
     </Row>
     
     <Row>
-		<Key android:codes="3620" android:keyLabel="ฤ"/>
+		<Key android:codes="3620" android:keyLabel="ฤ" android:horizontalGap="1%p"/>
 		<Key android:codes="3590" android:keyLabel="ฆ"/>
 		<Key android:codes="3599" android:keyLabel="ฏ"/>
 		<Key android:codes="3650" android:keyLabel="โ"/>
@@ -51,7 +51,7 @@
     </Row>
     
     <Row>
-		<Key android:codes="-10" android:keyLabel="2/2" android:horizontalGap="6%p" android:keyEdgeFlags="left"/>
+		<Key android:codes="-10" android:keyLabel="2/2" android:horizontalGap="8%p" android:keyEdgeFlags="left"/>
 		<Key android:codes="3593" android:keyLabel="ฉ"/>
 		<Key android:codes="3630" android:keyLabel="ฮ"/>
 		<Key android:codes="3642" android:keyLabel="ฺ"/>
