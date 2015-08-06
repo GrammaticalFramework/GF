@@ -7,8 +7,8 @@
     android:keyHeight="@dimen/key_height"
     >
 
-    <Row>
-		<Key android:codes="3653" android:keyLabel="ๅ"/>
+    <Row android:keyWidth="8%p">
+		<Key android:codes="3653" android:keyLabel="ๅ" android:horizontalGap="2%p"/>
 		<Key android:codes="3613" android:keyLabel="ฝ"/>
 		<Key android:codes="3622" android:keyLabel="ฦ"/>
 		<Key android:codes="3616" android:keyLabel="ภ"/>
@@ -23,7 +23,7 @@
     </Row>
     
     <Row>
-		<Key android:codes="3654" android:keyLabel="ๆ"/>
+		<Key android:codes="3654" android:keyLabel="ๆ" android:horizontalGap="1%p"/>
 		<Key android:codes="3652" android:keyLabel="ไ"/>
 		<Key android:codes="3614" android:keyLabel="พ"/>
 		<Key android:codes="3632" android:keyLabel="ะ"/>
@@ -37,7 +37,7 @@
     </Row>
     
     <Row>
-		<Key android:codes="3615" android:keyLabel="ฟ"/>
+		<Key android:codes="3615" android:keyLabel="ฟ" android:horizontalGap="1%p"/>
 		<Key android:codes="3627" android:keyLabel="ห"/>
 		<Key android:codes="3585" android:keyLabel="ก"/>
 		<Key android:codes="3604" android:keyLabel="ด"/>
@@ -50,8 +50,8 @@
 		<Key android:codes="3591" android:keyLabel="ง"/>
     </Row>
     
-    <Row>
-		<Key android:codes="-10" android:keyLabel="1/2" android:horizontalGap="1%p" android:keyEdgeFlags="left"/>
+    <Row android:keyWidth="8%p">
+		<Key android:codes="-10" android:keyLabel="1/2" android:horizontalGap="2%p" android:keyEdgeFlags="left"/>
 		<Key android:codes="3612" android:keyLabel="ผ"/>
 		<Key android:codes="3611" android:keyLabel="ป"/>
 		<Key android:codes="3649" android:keyLabel="แ"/>
