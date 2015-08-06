@@ -365,13 +365,13 @@ public class Translator {
     }
 
 	public String getInflectionTable(String lemma) {
-		SQLiteDatabase db = mDBManager.getReadableDatabase();
-		Cursor crs = db.rawQuery("select def from defs where fun=?1", new String[] { lemma });
 		String def = "";
+/*		SQLiteDatabase db = mDBManager.getReadableDatabase();
+		Cursor crs = db.rawQuery("select def from defs where fun=?1", new String[] { lemma });
 		if (crs.moveToNext()) {
 			def = escapeHtml(crs.getString(0));
 		}
-		crs.close();
+		crs.close();*/
 
 		Concr targetLang = getTargetConcr();
 		String cat = getGrammar().getFunctionType(lemma).getCategory();
