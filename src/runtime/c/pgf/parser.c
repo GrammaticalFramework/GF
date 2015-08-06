@@ -2259,7 +2259,7 @@ gu_fullform_enum_next(GuEnum* self, void* to, GuPool* pool)
 			PgfSequence* seq = gu_seq_index(st->sequences, PgfSequence, st->seq_idx);
 			GuString tokens = pgf_get_tokens(seq->syms, 0, pool);
 
-			if (gu_string_is_prefix(st->prefix, tokens) != 0) {
+			if (!gu_string_is_prefix(st->prefix, tokens)) {
 				st->seq_idx = n_seqs;
 				break;
 			}
