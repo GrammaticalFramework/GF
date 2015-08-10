@@ -59,8 +59,6 @@ compact [] = []
 compact ([]:xs@([]:_)) = compact xs
 compact (x:xs) = x:compact xs
 
-mkEx s = let (command,expl) = break (=="--") (words s) in (unwords command, unwords (drop 1 expl))
-
 helpCommand allCommands =
   ("h", emptyCommandInfo {
      longname = "help",
