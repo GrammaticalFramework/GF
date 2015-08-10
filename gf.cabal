@@ -132,13 +132,14 @@ Library
     PGF.OldBinary
 
   if flag(c-runtime)
-    exposed-modules:     PGF2
-    other-modules:       PGF2.FFI
-    hs-source-dirs:      src/runtime/haskell-bind
-    build-tools:         hsc2hs
-    extra-libraries:     gu pgf
-    c-sources:           src/runtime/haskell-bind/utils.c
-    cc-options:          -std=c99
+    exposed-modules: PGF2
+    other-modules:   PGF2.FFI
+                     GF.Interactive2 GF.Command.Commands2
+    hs-source-dirs:  src/runtime/haskell-bind
+    build-tools:     hsc2hs
+    extra-libraries: gu pgf
+    c-sources:       src/runtime/haskell-bind/utils.c
+    cc-options:      -std=c99
 
 ---- GF compiler as a library:
 
