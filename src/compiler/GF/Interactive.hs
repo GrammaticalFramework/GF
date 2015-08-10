@@ -3,9 +3,9 @@
 module GF.Interactive (mainGFI,mainRunGFI,mainServerGFI) where
 import Prelude hiding (putStrLn,print)
 import qualified Prelude as P(putStrLn)
-import GF.Command.Interpreter(CommandEnv(..),commands,mkCommandEnv,emptyCommandEnv,interpretCommandLine)
+import GF.Command.Interpreter(CommandEnv(..),pgfenv,commands,mkCommandEnv,interpretCommandLine)
 --import GF.Command.Importing(importSource,importGrammar)
-import GF.Command.Commands(flags,options)
+import GF.Command.Commands(flags,options,PGFEnv,pgfEnv,allCommands)
 import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
 import GF.Data.Operations (Err(..),chunks,err,raise,done)
@@ -29,7 +29,7 @@ import qualified System.Console.Haskeline as Haskeline
 --import GF.Compile.Coding(codeTerm)
 
 import PGF
-import PGF.Internal(emptyPGF,abstract,funs,lookStartCat)
+import PGF.Internal(abstract,funs,lookStartCat,emptyPGF)
 
 import Data.Char
 import Data.List(nub,isPrefixOf,isInfixOf,partition)
@@ -357,10 +357,10 @@ importInEnv gfenv opts files
         do src <- importSource opts files
            pgf <- lazySIO importPGF -- duplicates some work, better to link src
            return $ gfenv {grammar = src, retain=True,
-                           commandenv = mkCommandEnv pgf}
+                           commandenv = commandEnv pgf }
     | otherwise =
         do pgf1 <- importPGF
-           return $ gfenv { commandenv = mkCommandEnv pgf1 }
+           return $ gfenv { commandenv = commandEnv pgf1 }
   where
     importPGF =
       do let opts' = addOptions (setOptimization OptCSE False) opts
@@ -406,13 +406,16 @@ prompt env
 data GFEnv = GFEnv {
   grammar :: Grammar, -- gfo grammar -retain
   retain :: Bool,  -- grammar was imported with -retain flag
-  commandenv :: CommandEnv,
+  commandenv :: CommandEnv PGFEnv,
   history    :: [String]
   }
 
 emptyGFEnv :: GFEnv
-emptyGFEnv =
-  GFEnv emptyGrammar False (mkCommandEnv emptyPGF) [] {-0-}
+emptyGFEnv = GFEnv emptyGrammar False emptyCommandEnv [] {-0-}
+
+commandEnv pgf = mkCommandEnv (pgfEnv pgf) allCommands
+emptyCommandEnv = commandEnv emptyPGF
+multigrammar = fst . pgfenv
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of

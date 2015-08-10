@@ -161,7 +161,9 @@ Library
 
     DarcsVersion_gf
     GF.Command.Abstract
+    GF.Command.CommandInfo
     GF.Command.Commands
+    GF.Command.Help
     GF.Command.Importing
     GF.Command.Interpreter
     GF.Command.Messages
