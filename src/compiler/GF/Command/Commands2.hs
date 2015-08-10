@@ -310,28 +310,29 @@ allCommands = extend commonCommands [
   helpCommand allCommands,
   ("i", emptyCommandInfo {
      longname = "import",
-     synopsis = "import a grammar from source code or compiled .pgf file",
+     synopsis = "import a grammar from a compiled .pgf file",
      explanation = unlines [
-       "Reads a grammar from File and compiles it into a GF runtime grammar.",
-       "If its abstract is different from current state, old modules are discarded.",
-       "If its abstract is the same and a concrete with the same name is already in the state",
-       "it is overwritten - but only if compilation succeeds.",
+       "Reads a grammar from a compiled .pgf file.",
+       "Old modules are discarded.",
+{-
        "The grammar parser depends on the file name suffix:",
+
        "  .cf    context-free (labelled BNF) source",
        "  .ebnf  extended BNF source",
        "  .gfm   multi-module GF source",
        "  .gf    normal GF source",
        "  .gfo   compiled GF source",
+-}
        "  .pgf   precompiled grammar in Portable Grammar Format"
        ],
      flags = [
-       ("probs","file with biased probabilities for generation")
+--     ("probs","file with biased probabilities for generation")
        ],
      options = [
        -- ["gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
-       ("retain","retain operations (used for cc command)"),
-       ("src",   "force compilation from source"),
-       ("v",     "be verbose - show intermediate status information")
+--     ("retain","retain operations (used for cc command)"),
+--     ("src",   "force compilation from source"),
+--     ("v",     "be verbose - show intermediate status information")
        ],
      needsTypeCheck = False
      }),
