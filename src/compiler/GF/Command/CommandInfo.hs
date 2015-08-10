@@ -55,3 +55,7 @@ toStrings = map showAsString
     showAsString t = case t of
       H.ELit (H.LStr s) -> s
       _ -> "\n" ++ H.showExpr [] t ---newline needed in other cases than the first
+
+-- ** Creating documentation
+
+mkEx s = let (command,expl) = break (=="--") (words s) in (unwords command, unwords (drop 1 expl))
