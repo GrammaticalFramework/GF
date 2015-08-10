@@ -1,5 +1,6 @@
 -- | Shell IO: a monad that can restrict acesss to arbitrary IO and has the
 -- ability to capture output that normally would be sent to stdout.
+{-# LANGUAGE CPP #-}
 module GF.Infra.SIO(
        -- * The SIO monad
        SIO,
@@ -11,6 +12,9 @@ module GF.Infra.SIO(
        newStdGen,print,putStrLn,
        -- ** Specific to GF
        importGrammar,importSource,
+#ifdef C_RUNTIME
+       readPGF2,
+#endif
        putStrLnFlush,runInterruptibly,lazySIO,
        -- * Restricted accesss to arbitrary (potentially unsafe) IO operations
        -- | If the environment variable GF_RESTRICTED is defined, these
@@ -33,6 +37,9 @@ import qualified System.Random as IO(newStdGen)
 import qualified GF.Infra.UseIO as IO(getLibraryDirectory)
 import qualified GF.System.Signal as IO(runInterruptibly)
 import qualified GF.Command.Importing as GF(importGrammar, importSource)
+#ifdef C_RUNTIME
+import qualified PGF2
+#endif
 
 -- * The SIO monad
 
@@ -96,3 +103,7 @@ lazySIO              = lift1   lazyIO
 
 importGrammar pgf opts files = lift0 $ GF.importGrammar pgf opts files
 importSource      opts files = lift0 $ GF.importSource      opts files
+
+#ifdef C_RUNTIME
+readPGF2 = lift0 . PGF2.readPGF
+#endif

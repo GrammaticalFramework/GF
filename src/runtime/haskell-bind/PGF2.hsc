@@ -15,7 +15,7 @@
 module PGF2 (-- * CId
              CId,
              -- * PGF
-             PGF,readPGF,AbsName,abstractName,startCat,
+             PGF,readPGF,AbsName,abstractName,Cat,startCat,
              -- * Concrete syntax
              ConcName,Concr,languages,parse,parseWithHeuristics,
              hasLinearization,linearize,linearizeAll,alignWords,

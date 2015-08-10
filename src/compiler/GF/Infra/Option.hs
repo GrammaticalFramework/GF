@@ -73,7 +73,10 @@ errors = raise . unlines
 
 -- Types
 
-data Mode = ModeVersion | ModeHelp | ModeInteractive | ModeRun | ModeCompiler
+data Mode = ModeVersion | ModeHelp
+          | ModeInteractive | ModeRun
+          | ModeInteractive2 | ModeRun2
+          | ModeCompiler
           | ModeServer {-port::-}Int
   deriving (Show,Eq,Ord)
 
@@ -302,6 +305,8 @@ optDescr =
      Option ['j'] ["jobs"] (OptArg jobs "N") "Compile N modules in parallel with -batch (default 1).",
      Option [] ["interactive"] (NoArg (mode ModeInteractive)) "Run in interactive mode (default).",
      Option [] ["run"] (NoArg (mode ModeRun)) "Run in interactive mode, showing output only (no other messages).",
+     Option [] ["cshell"] (NoArg (mode ModeInteractive2)) "Start the C run-time shell.",
+     Option [] ["crun"] (NoArg (mode ModeRun2)) "Start the C run-time shell, showing output only (no other messages).",
      Option [] ["server"] (OptArg modeServer "port") $
        "Run in HTTP server mode on given port (default "++show defaultPort++").",
      Option [] ["document-root"] (ReqArg gfDocuRoot "DIR")
