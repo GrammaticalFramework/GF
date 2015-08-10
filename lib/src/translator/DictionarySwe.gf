@@ -8183,7 +8183,7 @@ lin butter_V2 = mkV2 (mkV "breda" "bredde" "brett") ; -- status=guess, src=wikt 
 lin butterbean_N = mkN "butter" ; -- src=google
 lin butterbur_N = variants {} ; -- status=guess
 lin buttercrunch_N = variants {} ; -- status=guess
-lin buttercup_N = mkN "smörblomma" ; -- status=guess
+lin buttercup_N = mkN "smörblomma" ;
 lin butterfat_N = mkN "smörfett" ; -- src=google
 lin butterfingers_N = mkN "butter" ; -- src=google
 lin butterfish_N = mkN "butter" ; -- src=google
@@ -54495,7 +54495,7 @@ lin straw_A = variants {} ; -- status=guess
 lin straw_N = mkN "sugrör" neutrum | mkN "strå" "strået" "strån" "stråna" ; -- SaldoWN -- comment=2
 lin straw_V2 = variants {} ; -- status=guess
 lin straw_coloured_A = variants {} ; -- status=guess
-lin strawberry_N = mkN "jordgubbe" utrum | mkN "jordgubbe" utrum ; -- SaldoWN
+lin strawberry_N = mkN "jordgubb" utrum | mkN "jordgubbe" utrum ; -- SaldoWN
 lin strawboard_N = mkN "halm" ;
 lin strawflower_N = variants {} ; -- status=guess
 lin strawworm_N = variants {} ; -- status=guess
