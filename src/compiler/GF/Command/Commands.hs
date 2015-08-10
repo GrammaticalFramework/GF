@@ -1,21 +1,14 @@
-{-# LANGUAGE PatternGuards #-}
+{-# LANGUAGE PatternGuards, TypeSynonymInstances, FlexibleInstances #-}
 module GF.Command.Commands (
-  allCommands,
-  lookCommand,
-  exec,
-  isOpt,
-  options,
-  flags,
-  needsTypeCheck,
-  CommandInfo,
-  CommandOutput(..),void
+  PGFEnv,pgfEnv,allCommands,
+  options,flags,
   ) where
 import Prelude hiding (putStrLn)
 
 import PGF
 
 import PGF.Internal(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
-import PGF.Internal(abstract,funs,cats,Literal(LStr),Expr(EFun,ELit)) ----
+import PGF.Internal(abstract,funs,cats,Expr(EFun)) ----
 --import PGF.Morphology(isInMorpho,morphoKnown)
 import PGF.Internal(ppFun,ppCat)
 --import PGF.Probabilistic(rankTreesByProbs,probTree,setProbabilities)
@@ -31,7 +24,9 @@ import GF.Infra.UseIO(writeUTF8File)
 import GF.Infra.SIO
 --import GF.Data.ErrM ----
 import GF.Command.Abstract
-import GF.Command.Messages
+--import GF.Command.Messages
+import GF.Command.CommandInfo
+import GF.Command.Help
 import GF.Text.Lexing
 import GF.Text.Clitics
 import GF.Text.Transliterations
@@ -55,113 +50,14 @@ import Data.List (sort)
 
 type PGFEnv = (PGF, Map.Map Language Morpho)
 
-data CommandInfo = CommandInfo {
-  exec     :: PGFEnv -> [Option] -> [Expr] -> SIO CommandOutput,
-  synopsis :: String,
-  syntax   :: String,
-  explanation :: String,
-  longname :: String,
-  options  :: [(String,String)],
-  flags    :: [(String,String)],
-  examples :: [(String,String)],
-  needsTypeCheck :: Bool
-  }
+pgfEnv pgf = (pgf,mos)
+  where mos = Map.fromList [(la,buildMorpho pgf la) | la <- languages pgf]
 
---------------------------------------------------------------------------------
-newtype CommandOutput  = Piped {fromPipe :: ([Expr],String)} ---- errors, etc
-
--- Converting command output:
-fromStrings ss         = Piped (map (ELit . LStr) ss, unlines ss)
-fromExprs   es         = Piped (es,unlines (map (showExpr []) es))
-fromString  s          = Piped ([ELit (LStr s)], s)
-pipeWithMessage es msg = Piped (es,msg)
-pipeMessage msg        = Piped ([],msg)
-pipeExprs   es         = Piped (es,[]) -- only used in emptyCommandInfo
-void                   = Piped ([],"")
-
--- Converting command input:
-toString  = unwords . toStrings
-toStrings = map showAsString
-  where
-    showAsString t = case t of
-      ELit (LStr s) -> s
-      _ -> "\n" ++ showExpr [] t ---newline needed in other cases than the first
-
---------------------------------------------------------------------------------
-
-emptyCommandInfo :: CommandInfo
-emptyCommandInfo = CommandInfo {
-  exec = \_ _ ts -> return $ pipeExprs ts, ----
-  synopsis = "",
-  syntax = "",
-  explanation = "",
-  longname = "",
-  options = [],
-  flags = [],
-  examples = [],
-  needsTypeCheck = True
-  }
-
-lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
-lookCommand = Map.lookup
-
-commandHelpAll :: [Option] -> String
-commandHelpAll opts = unlines $
-  commandHelp' opts (isOpt "full" opts) `map` Map.toList allCommands
-
-commandHelp' opts = if isOpt "t2t" opts then commandHelpTags else commandHelp
-
-commandHelp :: Bool -> (String,CommandInfo) -> String
-commandHelp full (co,info) = unlines . compact $ [
-  co ++ optionally (", " ++) (longname info),
-  synopsis info] ++ if full then [
-  "",
-  optionally (("syntax:" ++++).("  "++).(++"\n")) (syntax info),
-  explanation info,
-  section "options:"  [" -" ++ o ++ "\t" ++ e | (o,e) <- options info],
-  section "flags:"    [" -" ++ o ++ "\t" ++ e | (o,e) <- flags info],
-  section "examples:" ["  " ++ o ++ "\t--" ++ e | (o,e) <- examples info]
-  ] else []
-
--- for printing with txt2tags formatting
-
-commandHelpTags :: Bool -> (String,CommandInfo) -> String
-commandHelpTags full (co,info) = unlines . compact $ [
-  "#VSPACE","",
-  "===="++hdrname++"====",
-  "#NOINDENT",
-  name ++ ": " ++
-  "//" ++ synopsis info ++ ".//"] ++ if full then [
-  "","#TINY","",
-  explanation info,
-  optionally ("- Syntax: "++) (lit (syntax info)),
-  section "- Options:\n"  [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- options info],
-  section "- Flags:\n"    [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- flags info],
-  section "- Examples:\n" [" | ``"  ++ o ++ "`` | " ++ e | (o,e) <- examples info],
-  "", "#NORMAL", ""
-  ] else []
- where
-   hdrname = co ++ equal (longname info)
-   name = lit co ++ equal (lit (longname info))
-
-   lit = optionally (wrap "``")
-   equal = optionally (" = "++)
--- verbatim = optionally (wrap ["```"])
-   wrap d s = d++s++d
-
-section hdr = optionally ((hdr++++).unlines)
-
-optionally f [] = []
-optionally f s  = f s
-
-compact [] = []
-compact ([]:xs@([]:_)) = compact xs
-compact (x:xs) = x:compact xs
-
-mkEx s = let (command,expl) = break (=="--") (words s) in (unwords command, unwords (drop 1 expl))
+instance TypeCheckArg PGFEnv where
+  typeCheckArg (pgf,_) = either (Left . ppTcError) (Right . fst) . inferExpr pgf
 
 -- this list must no more be kept sorted by the command name
-allCommands :: Map.Map String CommandInfo
+allCommands :: Map.Map String (CommandInfo PGFEnv)
 allCommands = Map.fromList [
   ("!", emptyCommandInfo {
      synopsis = "system command: escape to system shell",
@@ -440,35 +336,7 @@ allCommands = Map.fromList [
                   Nothing -> generateAllDepth pgfr (optType pgf opts) (Just dp)
        returnFromExprs $ take (optNumInf opts) ts
      }),
-  ("h", emptyCommandInfo {
-     longname = "help",
-     syntax = "h (-full)? COMMAND?",
-     synopsis = "get description of a command, or a the full list of commands",
-     explanation = unlines [
-       "Displays information concerning the COMMAND.",
-       "Without argument, shows the synopsis of all commands."
-       ],
-     options = [
-       ("changes","give a summary of changes from GF 2.9"),
-       ("coding","give advice on character encoding"),
-       ("full","give full information of the commands"),
-       ("license","show copyright and license information"),
-       ("t2t","output help in txt2tags format")
-       ],
-     exec = \_ opts ts ->
-       let
-        msg = case ts of
-          _ | isOpt "changes" opts -> changesMsg
-          _ | isOpt "coding" opts -> codingMsg
-          _ | isOpt "license" opts -> licenseMsg
-          [t] -> let co = getCommandOp (showExpr [] t) in
-                 case lookCommand co allCommands of
-                   Just info -> commandHelp' opts True (co,info)
-                   _ -> "command not found"
-          _ -> commandHelpAll opts
-       in return (fromString msg),
-     needsTypeCheck = False
-     }),
+  helpCommand allCommands,
   ("i", emptyCommandInfo {
      longname = "import",
      synopsis = "import a grammar from source code or compiled .pgf file",

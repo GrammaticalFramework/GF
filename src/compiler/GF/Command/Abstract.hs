@@ -1,6 +1,6 @@
-module GF.Command.Abstract where
+module GF.Command.Abstract(module GF.Command.Abstract,Expr,showExpr) where
 
-import PGF(CId,mkCId,Expr)
+import PGF(CId,mkCId,Expr,showExpr)
 
 type Ident = String
 
