@@ -5,7 +5,7 @@ import Prelude hiding (putStrLn,print)
 import qualified Prelude as P(putStrLn)
 import GF.Command.Interpreter(CommandEnv(..),pgfenv,commands,mkCommandEnv,interpretCommandLine)
 --import GF.Command.Importing(importSource,importGrammar)
-import GF.Command.Commands(flags,options,PGFEnv,pgfEnv,allCommands)
+import GF.Command.Commands(flags,options,PGFEnv,pgf,pgfEnv,allCommands)
 import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
 import GF.Data.Operations (Err(..),chunks,err,raise,done)
@@ -415,7 +415,7 @@ emptyGFEnv = GFEnv emptyGrammar False emptyCommandEnv [] {-0-}
 
 commandEnv pgf = mkCommandEnv (pgfEnv pgf) allCommands
 emptyCommandEnv = commandEnv emptyPGF
-multigrammar = fst . pgfenv
+multigrammar = pgf . pgfenv
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of
