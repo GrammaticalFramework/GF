@@ -1,6 +1,5 @@
-{-# LANGUAGE PatternGuards, TypeSynonymInstances, FlexibleInstances #-}
 module GF.Command.Commands2 (
-  PGFEnv,pgfEnv,emptyPGFEnv,allCommands,
+  PGFEnv,pgf,concs,pgfEnv,emptyPGFEnv,allCommands,
   options, flags,
   ) where
 import Prelude hiding (putStrLn)
@@ -19,8 +18,8 @@ import qualified PGF as H
 --import GF.Compile.ToAPI
 --import GF.Compile.ExampleBased
 --import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
-import GF.Infra.UseIO(writeUTF8File)
-import GF.Infra.SIO
+--import GF.Infra.UseIO(writeUTF8File)
+--import GF.Infra.SIO
 --import GF.Data.ErrM ----
 import GF.Command.Abstract
 --import GF.Command.Messages
@@ -29,7 +28,7 @@ import GF.Command.Help
 import GF.Command.CommonCommands
 --import GF.Text.Lexing
 --import GF.Text.Clitics
-import GF.Text.Transliterations
+--import GF.Text.Transliterations
 --import GF.Quiz
 
 --import GF.Command.TreeOperations ---- temporary place for typecheck and compute
@@ -41,18 +40,18 @@ import GF.Data.Operations
 import Data.Maybe
 import qualified Data.Map as Map
 --import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
-import GF.System.Process
-import GF.Text.Pretty
+--import GF.System.Process
+--import GF.Text.Pretty
 --import Data.List (sort)
 import Control.Monad(mplus)
 --import Debug.Trace
 --import System.Random (newStdGen) ----
 
 
-type PGFEnv = (Maybe C.PGF, Map.Map C.ConcName C.Concr)
+data PGFEnv = Env {pgf::Maybe C.PGF,concs::Map.Map C.ConcName C.Concr}
 
-pgfEnv pgf = (Just pgf,C.languages pgf) :: PGFEnv
-emptyPGFEnv = (Nothing,Map.empty) :: PGFEnv
+pgfEnv pgf = Env (Just pgf) (C.languages pgf)
+emptyPGFEnv = Env Nothing Map.empty
 
 instance TypeCheckArg PGFEnv where
   typeCheckArg env e = Right e -- no type checker available !!
@@ -1056,7 +1055,7 @@ allCommands = extend commonCommands [
      file -> do
        probs <- restricted $ H.readProbabilitiesFromFile file pgf
        return (H.setProbabilities probs pgf)
--}
+
    optTranslit opts = case (valStrOpts "to" "" opts, valStrOpts "from" "" opts) of
      ("","")  -> return id
      (file,"") -> do
@@ -1065,7 +1064,7 @@ allCommands = extend commonCommands [
      (_,file) -> do
        src <- restricted $ readFile file
        return $ transliterateWithFile file src True
-{-
+
    optFile opts = valStrOpts "file" "_gftmp" opts
 -}
    optCat pgf opts = valStrOpts "cat" (C.startCat pgf) opts
@@ -1077,9 +1076,9 @@ allCommands = extend commonCommands [
                        Left tcErr -> error $ render (H.ppTcError tcErr)
                        Right ty   -> ty
           Nothing -> error ("Can't parse '"++str++"' as a type")
--}
+
    optComm opts = valStrOpts "command" "" opts
-{-
+
    optViewFormat opts = valStrOpts "format" "png" opts
    optViewGraph opts = valStrOpts "view" "open" opts
    optNum opts = valIntOpts "number" 1 opts
@@ -1206,7 +1205,7 @@ cExpr e =
     Just (f,es) -> C.mkApp (H.showCId f) (map cExpr es)
     _ -> error "GF.Command.Commands2.cExpr"
 
-needPGF exec (mb_pgf,cncs) opts ts =
+needPGF exec (Env mb_pgf cncs) opts ts =
   case mb_pgf of
     Just pgf -> exec (pgf,cncs) opts ts
     _ -> fail "Import a grammar before using this command"

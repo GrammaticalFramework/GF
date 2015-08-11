@@ -1,6 +1,5 @@
-{-# LANGUAGE PatternGuards, TypeSynonymInstances, FlexibleInstances #-}
 module GF.Command.Commands (
-  PGFEnv,pgfEnv,allCommands,
+  PGFEnv,pgf,mos,pgfEnv,allCommands,
   options,flags,
   ) where
 import Prelude hiding (putStrLn)
@@ -49,13 +48,13 @@ import Data.List (sort)
 --import System.Random (newStdGen) ----
 
 
-type PGFEnv = (PGF, Map.Map Language Morpho)
+data PGFEnv = Env {pgf::PGF,mos::Map.Map Language Morpho}
 
-pgfEnv pgf = (pgf,mos)
+pgfEnv pgf = Env pgf mos
   where mos = Map.fromList [(la,buildMorpho pgf la) | la <- languages pgf]
 
 instance TypeCheckArg PGFEnv where
-  typeCheckArg (pgf,_) = either (Left . ppTcError) (Right . fst) . inferExpr pgf
+  typeCheckArg (Env pgf _) = either (Left . ppTcError) (Right . fst) . inferExpr pgf
 
 -- this list must no more be kept sorted by the command name
 allCommands :: Map.Map String (CommandInfo PGFEnv)
@@ -71,7 +70,7 @@ allCommands = extend commonCommands [
        "by the flag. The target format is postscript, unless overridden by the",
        "flag -format."
        ],
-     exec = \env@(pgf, mos) opts es -> do
+     exec = \ (Env pgf mos) opts es -> do
          let langs = optLangs pgf opts
          if isOpt "giza" opts
            then do
@@ -210,7 +209,7 @@ allCommands = extend commonCommands [
        ("lang","the language in which to parse"),
        ("probs","file with probabilities to rank the parses")
        ],
-     exec = \env@(pgf, mos) opts _ -> do
+     exec = \ env@(Env pgf mos) opts _ -> do
        let file = optFile opts
        pgf <- optProbs opts pgf
        let printer = if (isOpt "api" opts) then exprToAPI else (showExpr [])
@@ -244,7 +243,7 @@ allCommands = extend commonCommands [
        ("depth","the maximum generation depth"),
        ("probs", "file with biased probabilities (format 'f 0.4' one by line)")
        ],
-     exec = \env@(pgf, mos) opts xs -> do
+     exec = \ (Env pgf mos) opts xs -> do
        pgf <- optProbs opts (optRestricted opts pgf)
        gen <- newStdGen
        let dp = valIntOpts "depth" 4 opts
@@ -274,7 +273,7 @@ allCommands = extend commonCommands [
        mkEx "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
        mkEx "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
        ],
-     exec = \env@(pgf, mos) opts xs -> do
+     exec = \ (Env pgf mos) opts xs -> do
        let pgfr = optRestricted opts pgf
        let dp = valIntOpts "depth" 4 opts
        let ts = case mexp xs of
@@ -329,7 +328,7 @@ allCommands = extend commonCommands [
        mkEx "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table",
        mkEx "l -unlexer=\"LangAra=to_arabic LangHin=to_devanagari\" -- different unlexers"
        ],
-     exec = \env@(pgf, mos) opts -> return . fromStrings . optLins pgf opts,
+     exec = \ (Env pgf mos) opts -> return . fromStrings . optLins pgf opts,
      options = [
        ("all",    "show all forms and variants, one by line (cf. l -list)"),
        ("bracket","show tree structure with brackets and paths to nodes"),
@@ -354,7 +353,7 @@ allCommands = extend commonCommands [
      examples = [
        mkEx "l -lang=LangSwe,LangNor -chunks ? a b (? c d)"
        ],
-     exec = \env@(pgf, mos) opts -> return . fromStrings . optLins pgf (opts ++ [OOpt "chunks"]),
+     exec = \ (Env pgf mos) opts -> return . fromStrings . optLins pgf (opts ++ [OOpt "chunks"]),
      options = [
        ("treebank","show the tree and tag linearizations with language names")
        ] ++ stringOpOptions,
@@ -395,7 +394,7 @@ allCommands = extend commonCommands [
      longname = "morpho_quiz",
      synopsis = "start a morphology quiz",
      syntax   = "mq (-cat=CAT)? (-probs=FILE)? TREE?",
-     exec = \env@(pgf, mos) opts xs -> do
+     exec = \ (Env pgf mos) opts xs -> do
          let lang = optLang pgf opts
          let typ  = optType pgf opts
          pgf <- optProbs opts pgf
@@ -423,7 +422,7 @@ allCommands = extend commonCommands [
        "the parser. For example if -openclass=\"A,N,V\" is given, the parser",
        "will accept unknown adjectives, nouns and verbs with the resource grammar."
        ],
-     exec = \env@(pgf, mos) opts ts ->
+     exec = \ (Env pgf mos) opts ts ->
               return . Piped $ fromParse opts (concat [map ((,) s) (par pgf opts s) | s <- toStrings ts]),
      flags = [
        ("cat","target category of parsing"),
@@ -490,7 +489,7 @@ allCommands = extend commonCommands [
        mkEx "pt -compute (plus one two)                               -- compute value",
        mkEx "p \"4 dogs love 5 cats\" | pt -transfer=digits2numeral | l -- four...five..."
        ],
-     exec = \env@(pgf, mos) opts ->
+     exec = \ (Env pgf mos) opts ->
             returnFromExprs . takeOptNum opts . treeOps pgf opts,
      options = treeOpOptions undefined{-pgf-},
      flags = [("number","take at most this many trees")] ++ treeOpFlags undefined{-pgf-}
@@ -509,7 +508,7 @@ allCommands = extend commonCommands [
        ("lines","return the list of lines, instead of the singleton of all contents"),
        ("tree","convert strings into trees")
        ],
-     exec = \env@(pgf, mos) opts _ -> do
+     exec = \ (Env pgf mos) opts _ -> do
        let file = valStrOpts "file" "_gftmp" opts
        let exprs []         = ([],empty)
            exprs ((n,s):ls) | null s
@@ -544,7 +543,7 @@ allCommands = extend commonCommands [
        "by the file given by flag -probs=FILE, where each line has the form",
        "'function probability', e.g. 'youPol_Pron  0.01'."
        ],
-     exec = \env@(pgf, mos) opts ts -> do
+     exec = \ (Env pgf mos) opts ts -> do
          pgf <- optProbs opts pgf
          let tds = rankTreesByProbs pgf ts
          if isOpt "v" opts
@@ -566,7 +565,7 @@ allCommands = extend commonCommands [
      longname = "translation_quiz",
      syntax   = "tq -from=LANG -to=LANG (-cat=CAT)? (-probs=FILE)? TREE?",
      synopsis = "start a translation quiz",
-     exec = \env@(pgf, mos) opts xs -> do
+     exec = \ (Env pgf mos) opts xs -> do
          let from = optLangFlag "from" pgf opts
          let to   = optLangFlag "to" pgf opts
          let typ  = optType pgf opts
@@ -669,7 +668,7 @@ allCommands = extend commonCommands [
        "by the flag. The target format is png, unless overridden by the",
        "flag -format."
        ],
-     exec = \env@(pgf, mos) opts es -> do
+     exec = \ (Env pgf mos) opts es -> do
          let debug = isOpt "v" opts
          let file = valStrOpts "file" "" opts
          let outp = valStrOpts "output" "dot" opts
@@ -717,7 +716,7 @@ allCommands = extend commonCommands [
        "by the flag. The target format is png, unless overridden by the",
        "flag -format."
        ],
-     exec = \env@(pgf, mos) opts es -> do
+     exec = \ (Env pgf mos) opts es -> do
          let lang = optLang pgf opts
          let gvOptions = GraphvizOptions {noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
                                           noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
@@ -778,7 +777,7 @@ allCommands = extend commonCommands [
        "flag -format.",
        "With option -mk, use for showing library style function names of form 'mkC'."
        ],
-     exec = \env@(pgf, mos) opts es ->
+     exec = \ (Env pgf mos) opts es ->
        if isOpt "mk" opts
        then return $ fromString $ unlines $ map (tree2mk pgf) es
        else if isOpt "api" opts
@@ -826,7 +825,7 @@ allCommands = extend commonCommands [
        "If a whole expression is given it prints the expression with refined",
        "metavariables and the type of the expression."
        ],
-     exec = \env@(pgf, mos) opts arg -> do
+     exec = \ (Env pgf mos) opts arg -> do
        case arg of
          [EFun id] -> case Map.lookup id (funs (abstract pgf)) of
                         Just fd -> do putStrLn $ render (ppFun id fd)
@@ -986,7 +985,7 @@ allCommands = extend commonCommands [
      [] -> pipeMessage "no trees found"
      _  -> fromExprs es
 
-   prGrammar env@(pgf,mos) opts
+   prGrammar (Env pgf mos) opts
      | isOpt "pgf"      opts = do
           let pgf1 = if isOpt "opt" opts then optimizePGF pgf else pgf
           let outfile = valStrOpts "file" (showCId (abstractName pgf) ++ ".pgf") opts
@@ -1008,12 +1007,12 @@ allCommands = extend commonCommands [
    funsigs pgf = [(f,ty) | (f,(ty,_,_,_)) <- Map.assocs (funs (abstract pgf))]
    showFun (f,ty) = showCId f ++ " : " ++ showType [] ty ++ " ;"
 
-   morphos (pgf,mos) opts s =
+   morphos (Env pgf mos) opts s =
      [(s,morpho mos [] (\mo -> lookupMorpho mo s) la) | la <- optLangs pgf opts]
 
    morpho mos z f la = maybe z f $ Map.lookup la mos
 
-   optMorpho (pgf,mos) opts = morpho mos (error "no morpho") id (head (optLangs pgf opts))
+   optMorpho (Env pgf mos) opts = morpho mos (error "no morpho") id (head (optLangs pgf opts))
 
    optClitics opts = case valStrOpts "clitics" "" opts of
      "" -> []
