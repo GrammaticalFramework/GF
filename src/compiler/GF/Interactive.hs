@@ -38,7 +38,6 @@ import qualified GF.System.Signal as IO(runInterruptibly)
 #ifdef SERVER_MODE
 import GF.Server(server)
 #endif
-import GF.System.Console(changeConsoleEncoding)
 
 import GF.Command.Messages(welcome)
 
@@ -130,7 +129,6 @@ execute1 opts gfenv0 s0 =
     "dt":ws  -> define_tree ws
     "ph":_   -> print_history
     "r" :_   -> reload_last
-    "se":ws  -> set_encoding ws
  -- ordinary commands, working on CommandEnv
     _        -> do interpretCommandLine env s0
                    continue gfenv
@@ -209,12 +207,6 @@ execute1 opts gfenv0 s0 =
         _ -> do
           putStrLn $ "no import in history"  
           continue gfenv
-
-    set_encoding [c] =
-      do let cod = renameEncoding c
-         restricted $ changeConsoleEncoding cod
-         continue gfenv
-    set_encoding _ = putStrLn "se command not parsed" >> continue gfenv
 
 
 printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)

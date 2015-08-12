@@ -7,6 +7,8 @@ import GF.Command.CommandInfo
 import qualified Data.Map as Map
 import GF.Infra.SIO
 import GF.Infra.UseIO(writeUTF8File)
+import GF.Infra.Option(renameEncoding)
+import GF.System.Console(changeConsoleEncoding)
 import GF.System.Process
 import GF.Command.Abstract --(isOpt,valStrOpts,prOpt)
 import GF.Text.Pretty
@@ -135,7 +137,14 @@ commonCommands = Map.fromList [
      examples = [
       mkEx "se cp1251 -- set encoding to cp1521",
       mkEx "se utf8   -- set encoding to utf8 (default)"
-      ]
+      ],
+     needsTypeCheck = False,
+     exec = \ _ opts ts ->
+       case words (toString ts) of
+         [c] -> do let cod = renameEncoding c
+                   restricted $ changeConsoleEncoding cod
+                   return void
+         _ -> return (pipeMessage "se command not parsed")
     }),
   ("sp", emptyCommandInfo {
      longname = "system_pipe",
