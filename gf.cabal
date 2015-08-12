@@ -165,6 +165,7 @@ Library
     GF.Command.CommandInfo
     GF.Command.Commands
     GF.Command.CommonCommands
+    GF.Command.SourceCommands
     GF.Command.Help
     GF.Command.Importing
     GF.Command.Interpreter
