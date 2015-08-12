@@ -49,9 +49,7 @@ import GF.Server(server)
 #endif
 import GF.System.Console(changeConsoleEncoding)
 
-import GF.Infra.BuildInfo(buildInfo)
-import Data.Version(showVersion)
-import Paths_gf(version)
+import GF.Command.Messages(welcome)
 
 -- | Run the GF Shell in quiet mode (@gf -run@).
 mainRunGFI :: Options -> [FilePath] -> IO ()
@@ -377,25 +375,6 @@ tryGetLine = do
   case res of
    Left (e :: SomeException) -> return "q"
    Right l -> return l
-
-welcome = unlines [
-  "                              ",
-  "         *  *  *              ",
-  "      *           *           ",
-  "    *               *         ",
-  "   *                          ",
-  "   *                          ",
-  "   *        * * * * * *       ",
-  "   *        *         *       ",
-  "    *       * * * *  *        ",
-  "      *     *      *          ",
-  "         *  *  *              ",
-  "                              ",
-  "This is GF version "++showVersion version++". ",
-  buildInfo,
-  "License: see help -license.   ",
-  "Bug reports: http://code.google.com/p/grammatical-framework/issues/list"
-  ]
 
 prompt env
   | retain env || abs == wildCId = "> "

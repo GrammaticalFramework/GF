@@ -1,5 +1,30 @@
 module GF.Command.Messages where
 
+import GF.Infra.BuildInfo(buildInfo)
+import Data.Version(showVersion)
+import Paths_gf(version)
+
+
+welcome = unlines [
+  "                              ",
+  "         *  *  *              ",
+  "      *           *           ",
+  "    *               *         ",
+  "   *                          ",
+  "   *                          ",
+  "   *        * * * * * *       ",
+  "   *        *         *       ",
+  "    *       * * * *  *        ",
+  "      *     *      *          ",
+  "         *  *  *              ",
+  "                              ",
+  "This is GF version "++showVersion version++". ",
+  buildInfo,
+  "License: see help -license.   "--,
+  -- Google Code is shutting down August 2015
+--"Bug reports: http://code.google.com/p/grammatical-framework/issues/list"
+  ]
+
 licenseMsg = unlines [
  "Copyright (c)", 
  "Krasimir Angelov, Bj\246rn Bringert, H\229kan Burden, Hans-Joachim Daniels,",

@@ -53,9 +53,7 @@ import GF.Server(server)
 -}
 import GF.System.Console(changeConsoleEncoding)
 
-import GF.Infra.BuildInfo(buildInfo)
-import Data.Version(showVersion)
-import Paths_gf(version)
+import GF.Command.Messages(welcome)
 
 -- | Run the GF Shell in quiet mode (@gf -run@).
 mainRunGFI :: Options -> [FilePath] -> IO ()
@@ -67,6 +65,7 @@ beQuiet = addOptions (modifyFlags (\f -> f{optVerbosity=Quiet}))
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
   P.putStrLn welcome
+  P.putStrLn "This shell uses the C run-time system. See help for available commands."
   shell opts files
 
 shell opts files = loop opts =<< runSIO (importInEnv emptyGFEnv opts files)
@@ -382,27 +381,6 @@ tryGetLine = do
   case res of
    Left (e :: SomeException) -> return "q"
    Right l -> return l
-
-welcome = unlines [
-  "                              ",
-  "         *  *  *              ",
-  "      *           *           ",
-  "    *               *         ",
-  "   *                          ",
-  "   *                          ",
-  "   *        * * * * * *       ",
-  "   *        *         *       ",
-  "    *       * * * *  *        ",
-  "      *     *      *          ",
-  "         *  *  *              ",
-  "                              ",
-  "This is GF version "++showVersion version++". ",
-  buildInfo,
-  "License: see help -license.   ",
---"Bug reports: http://code.google.com/p/grammatical-framework/issues/list",
-  "",
-  "This shell uses the C run-time system. See help for available commands."
-  ]
 
 prompt env = abs ++ "> "
   where
