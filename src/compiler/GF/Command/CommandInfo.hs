@@ -17,6 +17,8 @@ data CommandInfo env = CommandInfo {
   needsTypeCheck :: Bool
   }
 
+mapCommandEnv f c = c { exec = exec c . f }
+
 emptyCommandInfo :: CommandInfo env
 emptyCommandInfo = CommandInfo {
   exec = \_ _ ts -> return $ pipeExprs ts, ----
@@ -32,6 +34,9 @@ emptyCommandInfo = CommandInfo {
 --------------------------------------------------------------------------------
 
 class TypeCheckArg env where typeCheckArg :: env -> Expr -> Either Doc Expr
+
+instance TypeCheckArg env => TypeCheckArg (x,env) where
+  typeCheckArg (x,env) = typeCheckArg env
 
 --------------------------------------------------------------------------------
 

@@ -43,14 +43,20 @@ valIntOpts flag def opts =
 
 valStrOpts :: String -> String -> [Option] -> String
 valStrOpts flag def opts =
-  case [v | OFlag f v <- opts, f == flag] of
-    (VStr v:_) -> v
-    (VId  v:_) -> v
-    (VInt v:_) -> show v
-    _          -> def
+  case listFlags flag opts of
+    v:_ -> valueString v
+    _   -> def
+
+listFlags flag opts = [v | OFlag f v <- opts, f == flag]
+
+valueString v =
+  case v of
+    VStr v -> v
+    VId  v -> v
+    VInt v -> show v
 
 isOpt :: String -> [Option] -> Bool
-isOpt o opts = elem o [x | OOpt x <- opts]
+isOpt o opts = elem (OOpt o) opts
 
 isFlag :: String -> [Option] -> Bool
 isFlag o opts = elem o [x | OFlag x _ <- opts]
