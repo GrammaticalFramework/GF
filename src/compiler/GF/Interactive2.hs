@@ -8,18 +8,8 @@ import GF.Command.Interpreter(CommandEnv(..),commands,mkCommandEnv,interpretComm
 import GF.Command.Commands2(flags,options,PGFEnv,pgf,concs,pgfEnv,emptyPGFEnv,allCommands)
 import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
-import GF.Data.Operations (Err(..),chunks,err,raise,done)
-import GF.Grammar hiding (Ident,isPrefixOf)
-import GF.Grammar.Analyse
-import GF.Grammar.Parser (runP, pExp)
-import GF.Grammar.ShowTerm
-import GF.Grammar.Lookup (allOpers,allOpersTo)
-import GF.Compile.Rename(renameSourceTerm)
---import GF.Compile.Compute.Concrete (computeConcrete,checkPredefError)
-import qualified GF.Compile.Compute.ConcreteNew as CN(normalForm,resourceValues)
-import GF.Compile.TypeCheck.RConcrete as TC(inferLType,ppType)
-import GF.Infra.Dependencies(depGraph)
-import GF.Infra.CheckM
+import GF.Data.Operations (Err(..),done)
+
 import GF.Infra.UseIO(ioErrorText)
 import GF.Infra.SIO
 import GF.Infra.Option
@@ -30,21 +20,19 @@ import qualified System.Console.Haskeline as Haskeline
 
 import qualified PGF2 as C
 import qualified PGF as H
-import qualified PGF.Internal as H(emptyPGF,abstract,funs,lookStartCat)
 
 import Data.Char
-import Data.List(nub,isPrefixOf,isInfixOf,partition)
+import Data.List(isPrefixOf)
 import qualified Data.Map as Map
---import qualified Data.ByteString.Char8 as BS
-import qualified Data.ByteString.UTF8 as UTF8(fromString)
+
 import qualified Text.ParserCombinators.ReadP as RP
 --import System.IO(utf8)
 --import System.CPUTime(getCPUTime)
 import System.Directory({-getCurrentDirectory,-}getAppUserDataDirectory)
 import System.FilePath(takeExtensions)
-import Control.Exception(SomeException,fromException,evaluate,try)
+import Control.Exception(SomeException,fromException,try)
 import Control.Monad
-import GF.Text.Pretty (render)
+
 import qualified GF.System.Signal as IO(runInterruptibly)
 {-
 #ifdef SERVER_MODE
@@ -135,11 +123,6 @@ execute1 opts gfenv0 s0 =
              loopNewCPU gfenv' -}
     "q" :_   -> quit
     "!" :ws  -> system_command ws
---  "cc":ws  -> compute_concrete ws
---  "sd":ws  -> show_deps ws
---  "so":ws  -> show_operations ws
---  "ss":ws  -> show_source ws
---  "dg":ws  -> dependency_graph ws
     "eh":ws  -> eh ws
     "i" :ws  -> import_ ws
  -- other special commands, working on GFEnv
@@ -173,99 +156,7 @@ execute1 opts gfenv0 s0 =
               stop
 
     system_command ws = do restrictedSystem $ unwords ws ; continue gfenv
-{-
-    compute_concrete ws = do
-      let
-        pOpts style q ("-table"  :ws) = pOpts TermPrintTable   q           ws
-        pOpts style q ("-all"    :ws) = pOpts TermPrintAll     q           ws
-        pOpts style q ("-list"   :ws) = pOpts TermPrintList    q           ws
-        pOpts style q ("-one"    :ws) = pOpts TermPrintOne     q           ws
-        pOpts style q ("-default":ws) = pOpts TermPrintDefault q           ws
-        pOpts style q ("-unqual" :ws) = pOpts style            Unqualified ws
-        pOpts style q ("-qual"   :ws) = pOpts style            Qualified   ws
-        pOpts style q             ws  = (style,q,unwords ws)
 
-        (style,q,s) = pOpts TermPrintDefault Qualified ws
-        {-
-        (new,ws') = case ws of
-                      "-new":ws' -> (True,ws')
-                      "-old":ws' -> (False,ws')
-                      _ -> (flag optNewComp opts,ws)
-        -}
-      case runP pExp (UTF8.fromString s) of
-        Left (_,msg) -> putStrLn msg
-        Right t      -> putStrLn . err id (showTerm sgr style q)
-                                 . checkComputeTerm sgr
-                                 $ {-codeTerm (decodeUnicode utf8 . BS.pack)-} t
-      continue gfenv
-
-    show_deps ws = do
-          let (os,xs) = partition (isPrefixOf "-") ws
-          ops <- case xs of
-             _:_ -> do
-               let ts = [t | Right t <- map (runP pExp . UTF8.fromString) xs]
-               err error (return . nub . concat) $ mapM (constantDepsTerm sgr) ts
-             _   -> error "expected one or more qualified constants as argument"
-          let prTerm = showTerm sgr TermPrintDefault Qualified
-          let size = sizeConstant sgr
-          let printed 
-                | elem "-size" os =
-                    let sz = map size ops in 
-                    unlines $ ("total: " ++ show (sum sz)) : 
-                              [prTerm f ++ "\t" ++ show s | (f,s) <- zip ops sz]
-                | otherwise = unwords $ map prTerm ops
-          putStrLn $ printed
-          continue gfenv
-
-    show_operations ws =
-      case greatestResource sgr of
-        Nothing -> putStrLn "no source grammar in scope; did you import with -retain?" >> continue gfenv
-        Just mo -> do
-          let (os,ts) = partition (isPrefixOf "-") ws
-          let greps = [drop 6 o | o <- os, take 6 o == "-grep="]
-          let isRaw = elem "-raw" os 
-          ops <- case ts of
-             _:_ -> do
-               let Right t = runP pExp (UTF8.fromString (unwords ts))
-               ty <- err error return $ checkComputeTerm sgr t
-               return $ allOpersTo sgr ty
-             _   -> return $ allOpers sgr 
-          let sigs = [(op,ty) | ((mo,op),ty,pos) <- ops]
-          let printer = if isRaw 
-                          then showTerm sgr TermPrintDefault Qualified
-                          else (render . TC.ppType)
-          let printed = [unwords [showIdent op, ":", printer ty] | (op,ty) <- sigs]
-          mapM_ putStrLn [l | l <- printed, all (flip isInfixOf l) greps]
-          continue gfenv
-
-    show_source ws = do
-      let (os,ts) = partition (isPrefixOf "-") ws
-      let strip = if elem "-strip" os then stripSourceGrammar else id
-      let mygr = strip $ case ts of
-            _:_ -> mGrammar [(i,m) | (i,m) <- modules sgr, elem (render i) ts]
-            [] -> sgr
-      case 0 of
-        _ | elem "-detailedsize" os -> putStrLn (printSizesGrammar mygr)
-        _ | elem "-size" os -> do
-               let sz = sizesGrammar mygr
-               putStrLn $ unlines $
-                 ("total\t" ++ show (fst sz)): 
-                 [render j ++ "\t" ++ show (fst k) | (j,k) <- snd sz]
-        _ | elem "-save" os -> mapM_ 
-                 (\ m@(i,_) -> let file = (render i ++ ".gfh") in
-                    restricted $ writeFile file (render (ppModule Qualified m)) >> P.putStrLn ("wrote " ++ file))
-                 (modules mygr)  
-        _ -> putStrLn $ render mygr
-      continue gfenv
-
-    dependency_graph ws =
-      do let stop = case ws of
-               ('-':'o':'n':'l':'y':'=':fs):_ -> Just $ chunks ',' fs
-               _ -> Nothing
-         restricted $ writeFile "_gfdepgraph.dot" (depGraph stop sgr)
-         putStrLn "wrote graph in file _gfdepgraph.dot"
-         continue gfenv
--}
     eh [w] = -- Ehhh? Reads commands from a file, but does not execute them
       do cs <- restricted (readFile w) >>= return . map (interpretCommandLine env) . lines
          continue gfenv
@@ -331,13 +222,6 @@ execute1 opts gfenv0 s0 =
 
 
 printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
-
-checkComputeTerm sgr t = do
-                 mo <- maybe (raise "no source grammar in scope") return $ greatestResource sgr
-                 ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
-                                            inferLType sgr [] t
-                 t1 <- return (CN.normalForm (CN.resourceValues noOptions sgr) (L NoLoc identW) t)
-                 checkPredefError t1
 
 fetchCommand :: GFEnv -> IO String
 fetchCommand gfenv = do
