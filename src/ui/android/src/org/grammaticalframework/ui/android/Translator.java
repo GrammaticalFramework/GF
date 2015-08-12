@@ -240,9 +240,9 @@ public class Translator {
     }
 
     private static String implode(String s) {
-	return s.replaceAll("\\s","");
-    } 
-	
+		return s.replaceAll("(?<!^[%*+])\\s","");
+    }
+
     private String translateWord(String input) {
 
     	String output = input.toUpperCase() ;  // if all else fails, return the word itself in upper case ///in brackets
