@@ -4,9 +4,9 @@ module GF.Interactive2 (mainGFI,mainRunGFI{-,mainServerGFI-}) where
 import Prelude hiding (putStrLn,print)
 import qualified Prelude as P(putStrLn)
 import GF.Command.Interpreter(CommandEnv(..),commands,mkCommandEnv,interpretCommandLine)
---import GF.Command.Importing(importSource,importGrammar)
 import GF.Command.Commands2(flags,options,PGFEnv,HasPGFEnv(..),pgf,concs,pgfEnv,emptyPGFEnv,pgfCommands)
 import GF.Command.CommonCommands
+import GF.Command.CommandInfo
 import GF.Command.Help(helpCommand)
 import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
@@ -35,7 +35,7 @@ import System.Directory({-getCurrentDirectory,-}getAppUserDataDirectory)
 import System.FilePath(takeExtensions)
 import Control.Exception(SomeException,fromException,try)
 --import Control.Monad
-import Control.Monad.State
+import Control.Monad.State hiding (void)
 
 import qualified GF.System.Signal as IO(runInterruptibly)
 {-
@@ -135,10 +135,10 @@ execute1 opts s0 =
          "eh":ws  -> eh ws
          "i" :ws  -> import_ ws
       -- other special commands, working on GFEnv
-         "e" :_   -> empty
          "dc":ws  -> define_command ws
          "dt":ws  -> define_tree ws
-         "ph":_   -> print_history
+--       "e" :_   -> empty
+--       "ph":_   -> print_history
          "r" :_   -> reload_last
       -- ordinary commands
          _        -> do env <- gets commandenv
@@ -192,9 +192,6 @@ execute1 opts s0 =
                 continue
          continue
 
-    empty = do modify $ \ gfenv -> gfenv { commandenv=emptyCommandEnv }
-               continue
-
     define_command (f:ws) =
         case readCommandLine (unwords ws) of
            Just comm ->
@@ -226,10 +223,6 @@ execute1 opts s0 =
 
     dt_not_parsed = putStrLnE "value definition not parsed" >> continue
 
-    print_history =
-      do mapM_ putStrLnE . reverse . drop 1 . history =<< get
-         continue
-
     reload_last = do
       gfenv0 <- get
       let imports = [(s,ws) | s <- history gfenv0, ("i":ws) <- [pwords s]]
@@ -240,6 +233,30 @@ execute1 opts s0 =
         _ -> do
           putStrLnE $ "no import in history"
           continue
+
+moreCommands = [
+  ("e",  emptyCommandInfo {
+     longname = "empty",
+     synopsis = "empty the environment (except the command history)",
+     exec = \ _ _ ->
+            do modify $ \ gfenv -> emptyGFEnv { history=history gfenv }
+               return void
+     }),
+  ("ph", emptyCommandInfo {
+     longname = "print_history",
+     synopsis = "print command history",
+     explanation = unlines [
+       "Prints the commands issued during the GF session.",
+       "The result is readable by the eh command.",
+       "The result can be used as a script when starting GF."
+       ],
+     examples = [
+      mkEx "ph | wf -file=foo.gfs  -- save the history into a file"
+      ],
+     exec = \ _ _ ->
+            fmap (fromString . unlines . reverse . drop 1 . history) get
+     })
+  ]
 
 
 printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
@@ -306,7 +323,7 @@ multigrammar = pgf . pgfenv
 concretes = concs . pgfenv
 
 allCommands =
-  extend pgfCommands [helpCommand allCommands]
+  extend pgfCommands (helpCommand allCommands:moreCommands)
   `Map.union` commonCommands
 
 instance HasPGFEnv ShellM where getPGFEnv = gets pgfenv
