@@ -1,16 +1,19 @@
-{-# LANGUAGE ScopedTypeVariables, CPP #-}
+{-# LANGUAGE CPP, ScopedTypeVariables, TypeSynonymInstances,FlexibleInstances #-}
 -- | GF interactive mode (with the C run-time system)
 module GF.Interactive2 (mainGFI,mainRunGFI{-,mainServerGFI-}) where
 import Prelude hiding (putStrLn,print)
 import qualified Prelude as P(putStrLn)
 import GF.Command.Interpreter(CommandEnv(..),commands,mkCommandEnv,interpretCommandLine)
 --import GF.Command.Importing(importSource,importGrammar)
-import GF.Command.Commands2(flags,options,PGFEnv,pgf,concs,pgfEnv,emptyPGFEnv,allCommands)
+import GF.Command.Commands2(flags,options,PGFEnv,HasPGFEnv(..),pgf,concs,pgfEnv,emptyPGFEnv,pgfCommands)
+import GF.Command.CommonCommands
+import GF.Command.Help(helpCommand)
 import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
 import GF.Data.Operations (Err(..),done)
+import GF.Data.Utilities(repeatM)
 
-import GF.Infra.UseIO(ioErrorText)
+import GF.Infra.UseIO(ioErrorText,putStrLnE)
 import GF.Infra.SIO
 import GF.Infra.Option
 import qualified System.Console.Haskeline as Haskeline
@@ -31,7 +34,8 @@ import qualified Text.ParserCombinators.ReadP as RP
 import System.Directory({-getCurrentDirectory,-}getAppUserDataDirectory)
 import System.FilePath(takeExtensions)
 import Control.Exception(SomeException,fromException,try)
-import Control.Monad
+--import Control.Monad
+import Control.Monad.State
 
 import qualified GF.System.Signal as IO(runInterruptibly)
 {-
@@ -55,7 +59,10 @@ mainGFI opts files = do
   P.putStrLn "This shell uses the C run-time system. See help for available commands."
   shell opts files
 
-shell opts files = loop opts =<< runSIO (importInEnv emptyGFEnv opts files)
+shell opts files = flip evalStateT emptyGFEnv $
+                   do mapStateT runSIO $ importInEnv opts files
+                      loop opts
+
 {-
 #ifdef SERVER_MODE
 -- | Run the GF Server (@gf -server@).
@@ -73,31 +80,34 @@ mainServerGFI opts files =
 #endif
 -}
 -- | Read end execute commands until it is time to quit
-loop :: Options -> GFEnv -> IO ()
-loop opts gfenv = maybe done (loop opts) =<< readAndExecute1 opts gfenv
+loop :: Options -> StateT GFEnv IO ()
+loop opts = repeatM $ readAndExecute1 opts
 
 -- | Read and execute one command, returning Just an updated environment for
 -- | the next command, or Nothing when it is time to quit
-readAndExecute1 :: Options -> GFEnv -> IO (Maybe GFEnv)
-readAndExecute1 opts gfenv =
-    runSIO . execute1 opts gfenv =<< readCommand opts gfenv
+readAndExecute1 :: Options -> StateT GFEnv IO Bool
+readAndExecute1 opts =
+    mapStateT runSIO . execute1 opts =<< readCommand opts
 
 -- | Read a command
-readCommand :: Options -> GFEnv -> IO String
-readCommand opts gfenv0 =
+readCommand :: Options -> StateT GFEnv IO String
+readCommand opts =
     case flag optMode opts of
-      ModeRun -> tryGetLine
-      _       -> fetchCommand gfenv0
+      ModeRun -> lift tryGetLine
+      _       -> lift . fetchCommand =<< get
+
+timeIt act =
+  do t1 <- liftSIO $ getCPUTime
+     a <-  act
+     t2 <- liftSIO $ getCPUTime
+     return (t2-t1,a)
 
 -- | Optionally show how much CPU time was used to run an IO action
-optionallyShowCPUTime :: Options -> SIO a -> SIO a
+optionallyShowCPUTime :: (Monad m,MonadSIO m) => Options -> m a -> m a
 optionallyShowCPUTime opts act 
   | not (verbAtLeast opts Normal) = act
-  | otherwise = do t0 <- getCPUTime
-                   r <- act
-                   t1 <- getCPUTime
-                   let dt = t1-t0
-                   putStrLnFlush $ show (dt `div` 1000000000) ++ " msec"
+  | otherwise = do (dt,r) <- timeIt act
+                   liftSIO $ putStrLnFlush $ show (dt `div` 1000000000) ++ " msec"
                    return r
 
 {-
@@ -105,112 +115,131 @@ loopOptNewCPU opts gfenv'
  | not (verbAtLeast opts Normal) = return gfenv'
  | otherwise = do 
      cpu' <- getCPUTime
-     putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
+     putStrLnE (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
      return $ gfenv' {cputime = cpu'}
 -}
 
+type ShellM = StateT GFEnv SIO
+
 -- | Execute a given command, returning Just an updated environment for
 -- | the next command, or Nothing when it is time to quit
-execute1 :: Options -> GFEnv -> String -> SIO (Maybe GFEnv)
-execute1 opts gfenv0 s0 =
-  interruptible $ optionallyShowCPUTime opts $
-  case pwords s0 of
- -- special commands, requiring source grammar in env
-  {-"eh":w:_ -> do
-             cs <- readFile w >>= return . map words . lines
-             gfenv' <- foldM (flip (process False benv)) gfenv cs
-             loopNewCPU gfenv' -}
-    "q" :_   -> quit
-    "!" :ws  -> system_command ws
-    "eh":ws  -> eh ws
-    "i" :ws  -> import_ ws
- -- other special commands, working on GFEnv
-    "e" :_   -> empty
-    "dc":ws  -> define_command ws
-    "dt":ws  -> define_tree ws
-    "ph":_   -> print_history
-    "r" :_   -> reload_last
- -- ordinary commands, working on CommandEnv
-    _        -> do interpretCommandLine env s0
-                   continue gfenv
+execute1 :: Options -> String -> ShellM Bool
+execute1 opts s0 =
+  do modify $ \ gfenv0 -> gfenv0 {history = s0 : history gfenv0}
+     interruptible $ optionallyShowCPUTime opts $
+       case pwords s0 of
+      -- cc, sd, so, ss and dg are now in GF.Commands.SourceCommands
+      -- special commands
+         "q" :_   -> quit
+         "!" :ws  -> system_command ws
+         "eh":ws  -> eh ws
+         "i" :ws  -> import_ ws
+      -- other special commands, working on GFEnv
+         "e" :_   -> empty
+         "dc":ws  -> define_command ws
+         "dt":ws  -> define_tree ws
+         "ph":_   -> print_history
+         "r" :_   -> reload_last
+      -- ordinary commands
+         _        -> do env <- gets commandenv
+                        interpretCommandLine env s0
+                        continue
   where
 --  loopNewCPU = fmap Just . loopOptNewCPU opts
-    continue = return . Just
-    stop = return Nothing
-    env = commandenv gfenv0
---  sgr = grammar gfenv0
-    gfenv = gfenv0 {history = s0 : history gfenv0}
+    continue,stop :: ShellM Bool
+    continue = return True
+    stop = return False
+
     pwords s = case words s of
                  w:ws -> getCommandOp w :ws
                  ws -> ws
 
+    interruptible :: ShellM Bool -> ShellM Bool
     interruptible act =
-      either (\e -> printException e >> return (Just gfenv)) return
-        =<< runInterruptibly act 
+      do gfenv <- get
+         mapStateT (
+           either (\e -> printException e >> return (True,gfenv)) return
+             <=< runInterruptibly) act
 
   -- Special commands:
 
-    quit = do when (verbAtLeast opts Normal) $ putStrLn "See you."
+    quit = do when (verbAtLeast opts Normal) $ putStrLnE "See you."
               stop
 
-    system_command ws = do restrictedSystem $ unwords ws ; continue gfenv
+    system_command ws = do lift $ restrictedSystem $ unwords ws ; continue
 
+
+       {-"eh":w:_ -> do
+                  cs <- readFile w >>= return . map words . lines
+                  gfenv' <- foldM (flip (process False benv)) gfenv cs
+                  loopNewCPU gfenv' -}
     eh [w] = -- Ehhh? Reads commands from a file, but does not execute them
-      do cs <- restricted (readFile w) >>= return . map (interpretCommandLine env) . lines
-         continue gfenv
-    eh _   = do putStrLn "eh command not parsed"
-                continue gfenv
+      do env <- gets commandenv
+         cs <- lift $ restricted (readFile w) >>= return . map (interpretCommandLine env) . lines
+         continue
+    eh _   = do putStrLnE "eh command not parsed"
+                continue
 
     import_ args = 
-      do gfenv' <- case parseOptions args of
-                     Ok (opts',files) -> do
-                       curr_dir <- getCurrentDirectory
-                       lib_dir  <- getLibraryDirectory (addOptions opts opts')
-                       importInEnv gfenv (addOptions opts (fixRelativeLibPaths curr_dir lib_dir opts')) files
-                     Bad err -> do 
-                       putStrLn $ "Command parse error: " ++ err
-                       return gfenv
-         continue gfenv'
+      do case parseOptions args of
+           Ok (opts',files) -> do
+             curr_dir <- lift getCurrentDirectory
+             lib_dir  <- lift $ getLibraryDirectory (addOptions opts opts')
+             importInEnv (addOptions opts (fixRelativeLibPaths curr_dir lib_dir opts')) files
+             continue
+           Bad err ->
+             do putStrLnE $ "Command parse error: " ++ err
+                continue
+         continue
 
-    empty = continue $ gfenv {
-              commandenv=emptyCommandEnv --, grammar = ()
-             }
+    empty = do modify $ \ gfenv -> gfenv { commandenv=emptyCommandEnv }
+               continue
 
     define_command (f:ws) =
         case readCommandLine (unwords ws) of
-           Just comm -> continue $ gfenv {
-             commandenv = env {
-               commandmacros = Map.insert f comm (commandmacros env)
-               }
-             }
+           Just comm ->
+             do modify $
+                  \ gfenv ->
+                    let env = commandenv gfenv
+                    in gfenv {
+                         commandenv = env {
+                           commandmacros = Map.insert f comm (commandmacros env)
+                         }
+                       }
+                continue
            _ -> dc_not_parsed
     define_command _ = dc_not_parsed
 
-    dc_not_parsed = putStrLn "command definition not parsed" >> continue gfenv
+    dc_not_parsed = putStrLnE "command definition not parsed" >> continue
 
     define_tree (f:ws) =
         case H.readExpr (unwords ws) of
-          Just exp -> continue $ gfenv {
-            commandenv = env {
-              expmacros = Map.insert f exp (expmacros env)
-              }
-            }
+          Just exp ->
+           do modify $
+                \ gfenv ->
+                  let env = commandenv gfenv
+                  in gfenv { commandenv = env {
+                               expmacros = Map.insert f exp (expmacros env) } }
+              continue
           _ -> dt_not_parsed
     define_tree _ = dt_not_parsed
 
-    dt_not_parsed = putStrLn "value definition not parsed" >> continue gfenv
+    dt_not_parsed = putStrLnE "value definition not parsed" >> continue
 
-    print_history = mapM_ putStrLn (reverse (history gfenv0))>> continue gfenv
+    print_history =
+      do mapM_ putStrLnE . reverse . drop 1 . history =<< get
+         continue
 
     reload_last = do
+      gfenv0 <- get
       let imports = [(s,ws) | s <- history gfenv0, ("i":ws) <- [pwords s]]
       case imports of
         (s,ws):_ -> do
-          putStrLn $ "repeating latest import: " ++ s
+          putStrLnE $ "repeating latest import: " ++ s
           import_ ws
         _ -> do
-          putStrLn $ "no import in history"  
-          continue gfenv
+          putStrLnE $ "no import in history"
+          continue
 
 
 printException e = maybe (print e) (putStrLn . ioErrorText) (fromException e)
@@ -230,27 +259,26 @@ fetchCommand gfenv = do
     Right Nothing  -> return "q"
     Right (Just s) -> return s
 
-importInEnv :: GFEnv -> Options -> [FilePath] -> SIO GFEnv
-importInEnv gfenv opts files =
+importInEnv :: Options -> [FilePath] -> ShellM ()
+importInEnv opts files =
   case files of
     _ | flag optRetainResource opts ->
-          do putStrLn "Flag -retain is not supported in this shell"
-             return gfenv
+          putStrLnE "Flag -retain is not supported in this shell"
     [file] | takeExtensions file == ".pgf" -> importPGF file
-    [] -> return gfenv
-    _ -> do putStrLn "Can only import one .pgf file"
-            return gfenv
+    [] -> done
+    _ -> do putStrLnE "Can only import one .pgf file"
   where
     importPGF file =
-      do case multigrammar (commandenv gfenv) of
-           Just _ -> putStrLnFlush "Discarding previous grammar"
+      do gfenv <- get
+         case multigrammar gfenv of
+           Just _ -> putStrLnE "Discarding previous grammar"
            _ -> done
-         pgf1 <- readPGF2 file
-         let gfenv' = gfenv { commandenv = commandEnv pgf1 }
+         pgf1 <- lift $ readPGF2 file
+         let gfenv' = gfenv { pgfenv = pgfEnv pgf1 }
          when (verbAtLeast opts Normal) $
-           let langs = Map.keys . concretes $ commandenv gfenv'
-           in putStrLnFlush . unwords $ "\nLanguages:":langs
-         return gfenv'
+           let langs = Map.keys . concretes $ gfenv'
+           in putStrLnE . unwords $ "\nLanguages:":langs
+         put gfenv'
 
 tryGetLine = do
   res <- try getLine
@@ -260,22 +288,30 @@ tryGetLine = do
 
 prompt env = abs ++ "> "
   where
-    abs = maybe "" C.abstractName (multigrammar (commandenv env))
+    abs = maybe "" C.abstractName (multigrammar env)
 
 data GFEnv = GFEnv {
 --grammar :: (), -- gfo grammar -retain
 --retain :: (),  -- grammar was imported with -retain flag
-  commandenv :: CommandEnv PGFEnv,
+  pgfenv :: PGFEnv,
+  commandenv :: CommandEnv ShellM,
   history    :: [String]
   }
 
 emptyGFEnv :: GFEnv
-emptyGFEnv = GFEnv {-() ()-} emptyCommandEnv [] {-0-}
+emptyGFEnv = GFEnv {-() ()-} emptyPGFEnv emptyCommandEnv [] {-0-}
 
-commandEnv pgf = mkCommandEnv (pgfEnv pgf) allCommands
-emptyCommandEnv = mkCommandEnv emptyPGFEnv allCommands
+emptyCommandEnv = mkCommandEnv allCommands
 multigrammar = pgf . pgfenv
 concretes = concs . pgfenv
+
+allCommands =
+  extend pgfCommands [helpCommand allCommands]
+  `Map.union` commonCommands
+
+instance HasPGFEnv ShellM where getPGFEnv = gets pgfenv
+
+-- ** Completion
 
 wordCompletion gfenv (left,right) = do
   case wc_type (reverse left) of
@@ -315,7 +351,7 @@ wordCompletion gfenv (left,right) = do
 
     _ -> ret 0 []
   where
-    mb_pgf = multigrammar cmdEnv
+    mb_pgf = multigrammar gfenv
     cmdEnv = commandenv gfenv
 {-
     optLang opts = valStrOpts "lang" (head $ Map.keys (concretes cmdEnv)) opts

@@ -19,8 +19,8 @@ import qualified PGF as H(showCId,showExpr,toATree,toTrie,Trie(..))
 
 extend old new = Map.union (Map.fromList new) old -- Map.union is left-biased
 
-commonCommands :: Map.Map String (CommandInfo env)
-commonCommands = Map.fromList [
+commonCommands :: (Monad m,MonadSIO m) => Map.Map String (CommandInfo m)
+commonCommands = fmap (mapCommandExec liftSIO) $ Map.fromList [
   ("!", emptyCommandInfo {
      synopsis = "system command: escape to system shell",
      syntax   = "! SYSTEMCOMMAND",
@@ -104,7 +104,7 @@ commonCommands = Map.fromList [
        mkEx "rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration",
        mkEx "ps -to=chinese.trans \"abc\"      -- apply transliteration defined in file chinese.trans"
        ],
-     exec = \_ opts x -> do
+     exec = \opts x-> do
                let (os,fs) = optsAndFlags opts
                trans <- optTranslit opts
 
@@ -139,7 +139,7 @@ commonCommands = Map.fromList [
       mkEx "se utf8   -- set encoding to utf8 (default)"
       ],
      needsTypeCheck = False,
-     exec = \ _ opts ts ->
+     exec = \ opts ts ->
        case words (toString ts) of
          [c] -> do let cod = renameEncoding c
                    restricted $ changeConsoleEncoding cod
@@ -150,7 +150,7 @@ commonCommands = Map.fromList [
      longname = "system_pipe",
      synopsis = "send argument to a system command",
      syntax   = "sp -command=\"SYSTEMCOMMAND\", alt. ? SYSTEMCOMMAND",
-     exec = \_ opts arg -> do
+     exec = \opts arg -> do
        let syst = optComm opts  -- ++ " " ++ tmpi
        {-
        let tmpi = "_tmpi" ---
@@ -171,12 +171,12 @@ commonCommands = Map.fromList [
      longname = "to_trie",
      syntax = "to_trie",
      synopsis = "combine a list of trees into a trie",
-     exec = \ _ _ -> return . fromString . trie
+     exec = \ _ ts -> return . fromString $ trie ts
     }),
   ("ut", emptyCommandInfo {
      longname = "unicode_table",
      synopsis = "show a transliteration table for a unicode character set",
-     exec = \_ opts _ -> do
+     exec = \opts _ -> do
          let t = concatMap prOpt (take 1 opts)
          let out = maybe "no such transliteration" characterTable $ transliteration t
          return $ fromString out,
@@ -185,7 +185,7 @@ commonCommands = Map.fromList [
   ("wf", emptyCommandInfo {
      longname = "write_file",
      synopsis = "send string or tree to a file",
-     exec = \_ opts arg -> do
+     exec = \opts arg-> do
          let file = valStrOpts "file" "_gftmp" opts
          if isOpt "append" opts
            then restricted $ appendFile file (toString arg)

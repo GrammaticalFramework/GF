@@ -1,5 +1,6 @@
+{-# LANGUAGE FlexibleInstances, UndecidableInstances #-}
 module GF.Command.Commands2 (
-  PGFEnv,pgf,concs,pgfEnv,emptyPGFEnv,allCommands,
+  PGFEnv,HasPGFEnv(..),pgf,concs,pgfEnv,emptyPGFEnv,pgfCommands,
   options, flags,
   ) where
 import Prelude hiding (putStrLn)
@@ -19,13 +20,11 @@ import qualified PGF as H
 --import GF.Compile.ExampleBased
 --import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
 --import GF.Infra.UseIO(writeUTF8File)
---import GF.Infra.SIO
+import GF.Infra.SIO(MonadSIO,liftSIO)
 --import GF.Data.ErrM ----
 import GF.Command.Abstract
 --import GF.Command.Messages
 import GF.Command.CommandInfo
-import GF.Command.Help
-import GF.Command.CommonCommands
 --import GF.Text.Lexing
 --import GF.Text.Clitics
 --import GF.Text.Transliterations
@@ -53,12 +52,13 @@ data PGFEnv = Env {pgf::Maybe C.PGF,concs::Map.Map C.ConcName C.Concr}
 pgfEnv pgf = Env (Just pgf) (C.languages pgf)
 emptyPGFEnv = Env Nothing Map.empty
 
-instance TypeCheckArg PGFEnv where
-  typeCheckArg env e = Right e -- no type checker available !!
+class (Monad m,MonadSIO m) => HasPGFEnv m where getPGFEnv :: m PGFEnv
 
+instance Monad m => TypeCheckArg m where
+  typeCheckArg = return -- no type checker available !!
 
-allCommands :: Map.Map String (CommandInfo PGFEnv)
-allCommands = extend commonCommands [
+pgfCommands :: HasPGFEnv m => Map.Map String (CommandInfo m)
+pgfCommands = Map.fromList [
 {-
   ("aw", emptyCommandInfo {
      longname = "align_words",
@@ -140,57 +140,6 @@ allCommands = extend commonCommands [
        mkEx "ca -lang=Fin -clitics=ko,ni \"nukkuuko minun vaimoni\" | p  -- to parse Finnish"
        ]
      }),
-
-  ("cc", emptyCommandInfo {
-     longname = "compute_concrete",
-     syntax = "cc (-all | -table | -unqual)? TERM",
-     synopsis = "computes concrete syntax term using a source grammar",
-     explanation = unlines [
-       "Compute TERM by concrete syntax definitions. Uses the topmost",
-       "module (the last one imported) to resolve constant names.",
-       "N.B.1 You need the flag -retain when importing the grammar, if you want",
-       "the definitions to be retained after compilation.",
-       "N.B.2 The resulting term is not a tree in the sense of abstract syntax",
-       "and hence not a valid input to a Tree-expecting command.",
-       "This command must be a line of its own, and thus cannot be a part",
-       "of a pipe."
-       ],
-     options = [
-       ("all","pick all strings (forms and variants) from records and tables"),
-       ("list","all strings, comma-separated on one line"),
-       ("one","pick the first strings, if there is any, from records and tables"),
-       ("table","show all strings labelled by parameters"),
-       ("unqual","hide qualifying module names")
-       ],
-     needsTypeCheck = False
-     }),
--}
-{-
-  ("dg",  emptyCommandInfo {
-     longname = "dependency_graph",
-     syntax = "dg (-only=MODULES)?",
-     synopsis = "print module dependency graph",
-     explanation = unlines [
-       "Prints the dependency graph of source modules.",
-       "Requires that import has been done with the -retain flag.",
-       "The graph is written in the file _gfdepgraph.dot",
-       "which can be further processed by Graphviz (the system command 'dot').",
-       "By default, all modules are shown, but the -only flag restricts them",
-       "by a comma-separated list of patterns, where 'name*' matches modules",
-       "whose name has prefix 'name', and other patterns match modules with",
-       "exactly the same name. The graphical conventions are:",
-       "  solid box = abstract, solid ellipse = concrete, dashed ellipse = other",
-       "  solid arrow empty head = of, solid arrow = **, dashed arrow = open",
-       "  dotted arrow = other dependency"
-       ],
-     flags = [
-       ("only","list of modules included (default: all), literally or by prefix*")
-       ],
-     examples = [
-       mkEx "dg -only=SyntaxEng,Food*  -- shows only SyntaxEng, and those with prefix Food"
-       ],
-     needsTypeCheck = False
-     }),
 -}
 {-
   ("eb", emptyCommandInfo {
@@ -269,7 +218,7 @@ allCommands = extend commonCommands [
      examples = [
        mkEx "ga                     -- all trees in the startcat",
        mkEx "ga -cat=NP -number=16  -- 16 trees in the category NP"],
-     exec = needPGF $ \ env@(pgf,_) opts _ ->
+     exec = needPGF $ \ opts _ env@(pgf,_) ->
             let ts = map fst (C.generateAll pgf cat)
                 cat = optCat pgf opts
             in returnFromCExprs (takeOptNum opts ts),
@@ -306,7 +255,6 @@ allCommands = extend commonCommands [
        returnFromExprs $ take (optNumInf opts) ts
      }),
 -}
-  helpCommand allCommands,
   ("i", emptyCommandInfo {
      longname = "import",
      synopsis = "import a grammar from a compiled .pgf file",
@@ -346,8 +294,8 @@ allCommands = extend commonCommands [
        ],
      examples = [
        mkEx "l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor"],
-     exec = needPGF $ \ env opts ->
-                      return . fromStrings . cLins env opts . map cExpr
+     exec = needPGF $ \ opts ts env ->
+                      return . fromStrings . cLins env opts $ map cExpr ts
      }),
 {-
   ("l", emptyCommandInfo {
@@ -470,7 +418,7 @@ allCommands = extend commonCommands [
      examples = [
          mkEx "p  \"this fish is fresh\" | l -lang=Swe  -- try parsing with all languages and translate the successful parses to Swedish"
        ],
-     exec = needPGF $ \ env opts -> return . cParse env opts . toStrings
+     exec = needPGF $ \ opts ts env -> return . cParse env opts $ toStrings ts
      })
 {-
   ("p", emptyCommandInfo {
@@ -657,76 +605,6 @@ allCommands = extend commonCommands [
        mkEx ("tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))  -- only trees of this form")
        ]
      }),
-
-  ("sd", emptyCommandInfo {
-     longname = "show_dependencies",
-     syntax = "sd QUALIFIED_CONSTANT+",
-     synopsis = "show all constants that the given constants depend on",
-     explanation = unlines [
-       "Show recursively all qualified constant names, by tracing back the types and definitions",
-       "of each constant encountered, but just listing every name once.",
-       "This command requires a source grammar to be in scope, imported with 'import -retain'.",
-       "Notice that the accuracy is better if the modules are compiled with the flag -optimize=noexpand.",
-       "This command must be a line of its own, and thus cannot be a part of a pipe."
-       ],
-     options = [
-       ("size","show the size of the source code for each constants (number of constructors)")
-       ],
-     examples = [
-       mkEx "sd ParadigmsEng.mkV ParadigmsEng.mkN  -- show all constants on which mkV and mkN depend",
-       mkEx "sd -size ParadigmsEng.mkV    -- show all constants on which mkV depends, together with size"
-       ],
-     needsTypeCheck = False
-     }),
--}
-{-
-  ("so", emptyCommandInfo {
-     longname = "show_operations",
-     syntax = "so (-grep=STRING)* TYPE?",
-     synopsis = "show all operations in scope, possibly restricted to a value type",
-     explanation = unlines [
-       "Show the names and type signatures of all operations available in the current resource.",
-       "This command requires a source grammar to be in scope, imported with 'import -retain'.",
-       "The operations include the parameter constructors that are in scope.",
-       "The optional TYPE filters according to the value type.",
-       "The grep STRINGs filter according to other substrings of the type signatures.",
-       "This command must be a line of its own, and thus cannot be a part",
-       "of a pipe."
-       ],
-     flags = [
-       ("grep","substring used for filtering (the command can have many of these)")
-       ],
-     options = [
-       ("raw","show the types in computed forms (instead of category names)")
-       ],
-     needsTypeCheck = False
-     }),
-
-  ("ss", emptyCommandInfo {
-     longname = "show_source",
-     syntax = "ss (-strip)? (-save)? MODULE*",
-     synopsis = "show the source code of modules in scope, possibly just headers",
-     explanation = unlines [
-       "Show compiled source code, i.e. as it is included in GF object files.",
-       "This command requires a source grammar to be in scope, imported with 'import -retain'.",
-       "The optional MODULE arguments cause just these modules to be shown.",
-       "The -size and -detailedsize options show code size as the number of constructor nodes.",
-       "This command must be a line of its own, and thus cannot be a part of a pipe."
-       ],
-     options = [
-       ("detailedsize", "instead of code, show the sizes of all judgements and modules"),
-       ("save", "save each MODULE in file MODULE.gfh instead of printing it on terminal"),
-       ("size", "instead of code, show the sizes of all modules"),
-       ("strip","show only type signatures of oper's and lin's, not their definitions")
-       ],
-     examples = [
-       mkEx "ss                         -- print complete current source grammar on terminal",
-       mkEx "ss -strip -save MorphoFin  -- print the headers in file MorphoFin.gfh"
-       ],
-     needsTypeCheck = False
-     }),
--}
-{-
   ("vd", emptyCommandInfo {
      longname = "visualize_dependency",
      synopsis = "show word dependency tree graphically",
@@ -1205,7 +1083,8 @@ cExpr e =
     Just (f,es) -> C.mkApp (H.showCId f) (map cExpr es)
     _ -> error "GF.Command.Commands2.cExpr"
 
-needPGF exec (Env mb_pgf cncs) opts ts =
-  case mb_pgf of
-    Just pgf -> exec (pgf,cncs) opts ts
-    _ -> fail "Import a grammar before using this command"
+needPGF exec opts ts =
+  do Env mb_pgf cncs <- getPGFEnv
+     case mb_pgf of
+       Just pgf -> liftSIO $ exec opts ts (pgf,cncs)
+       _ -> fail "Import a grammar before using this command"

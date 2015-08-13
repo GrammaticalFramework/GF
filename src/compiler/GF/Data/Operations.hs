@@ -20,7 +20,7 @@ module GF.Data.Operations (
 		   lookupErr,
 
 		   -- ** Error monad class
-		   ErrorMonad(..), checks, doUntil, --allChecks, checkAgain,
+		   ErrorMonad(..), checks, --doUntil, allChecks, checkAgain,
                    liftErr,
 		   
 		   -- ** Checking
@@ -363,10 +363,11 @@ allChecks :: ErrorMonad m => [m a] -> m [a]
 allChecks ms = case ms of
   (m: ms) -> let rs = allChecks ms in handle_ (liftM2 (:) m rs) rs
   _ -> return []
--}
+
 doUntil :: ErrorMonad m => (a -> Bool) -> [m a] -> m a
 doUntil cond ms = case ms of
   a:as -> do
     v <- a
     if cond v then return v else doUntil cond as
   _ -> raise "no result"
+-}

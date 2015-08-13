@@ -16,7 +16,7 @@ module GF.Data.Utilities(module GF.Data.Utilities, module PGF.Utilities) where
 
 import Data.Maybe
 import Data.List
-import Control.Monad (MonadPlus(..),liftM)
+import Control.Monad (MonadPlus(..),liftM,when)
 import PGF.Utilities
 
 -- * functions on lists
@@ -135,6 +135,10 @@ mapBoth = map . apBoth
 -- | Return the given value if the boolean is true, els return 'mzero'.
 whenMP :: MonadPlus m => Bool -> a -> m a
 whenMP b x = if b then return x else mzero
+
+whenM bm m = flip when m =<< bm
+
+repeatM m = whenM m (repeatM m)
 
 -- * functions on Maybes
 
