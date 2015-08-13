@@ -1,9 +1,9 @@
 -- | Shell IO: a monad that can restrict acesss to arbitrary IO and has the
 -- ability to capture output that normally would be sent to stdout.
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP, FlexibleInstances, FlexibleContexts #-}
 module GF.Infra.SIO(
        -- * The SIO monad
-       SIO,
+       SIO,MonadSIO(..),
        -- * Running SIO operations
        runSIO,hRunSIO,captureSIO,
        -- * Unrestricted, safe operations
@@ -25,12 +25,14 @@ module GF.Infra.SIO(
 import Prelude hiding (putStrLn,print)
 import Control.Applicative(Applicative(..))
 import Control.Monad(liftM,ap)
+import Control.Monad.Trans(MonadTrans(..))
 import System.IO(hPutStrLn,hFlush,stdout)
 import GF.System.Catch(try)
 import System.Process(system)
 import System.Environment(getEnv)
 import Control.Concurrent.Chan(newChan,writeChan,getChanContents)
 import GF.Infra.Concurrency(lazyIO)
+import GF.Infra.UseIO(Output(..))
 import qualified System.CPUTime as IO(getCPUTime)
 import qualified System.Directory as IO(getCurrentDirectory)
 import qualified System.Random as IO(newStdGen)
@@ -55,6 +57,19 @@ instance Applicative SIO where
 instance Monad SIO where
   return x = SIO (const (return x))
   SIO m1 >>= xm2 = SIO $ \ h -> m1 h >>= \ x -> unS (xm2 x) h
+
+instance Output SIO where
+  ePutStr = lift0 . ePutStr
+  ePutStrLn = lift0 . ePutStrLn
+  putStrLnE = putStrLnFlush
+--putStrE = --- !!!
+
+class MonadSIO m where liftSIO :: SIO a -> m a
+
+instance MonadSIO SIO where liftSIO = id
+
+instance (MonadTrans t,Monad m,MonadSIO m) => MonadSIO (t m) where
+  liftSIO = lift . liftSIO
 
 -- * Running SIO operations
 

@@ -1,12 +1,12 @@
 -- | Commands requiring source grammar in env
-module GF.Command.SourceCommands(sourceCommands) where
+module GF.Command.SourceCommands(HasGrammar(..),sourceCommands) where
 import Prelude hiding (putStrLn)
 import qualified Prelude as P(putStrLn)
 import Data.List(nub,isInfixOf)
 import qualified Data.ByteString.UTF8 as UTF8(fromString)
 import qualified Data.Map as Map
 
-import GF.Infra.SIO
+import GF.Infra.SIO(MonadSIO(..),restricted)
 import GF.Infra.Option(noOptions)
 import GF.Data.Operations (chunks,err,raise)
 import GF.Text.Pretty(render)
@@ -25,6 +25,10 @@ import GF.Infra.CheckM(runCheck)
 import GF.Command.Abstract(Option(..),isOpt,listFlags,valueString,valStrOpts)
 import GF.Command.CommandInfo
 
+class (Monad m,MonadSIO m) => HasGrammar m where
+  getGrammar :: m Grammar
+
+sourceCommands :: HasGrammar m => Map.Map String (CommandInfo m)
 sourceCommands = Map.fromList [
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
@@ -152,9 +156,11 @@ sourceCommands = Map.fromList [
      })
   ]
   where
-    withStrings exec sgr opts = do exec sgr opts . toStrings
+    withStrings exec opts ts =
+      do sgr <- getGrammar
+         liftSIO (exec opts (toStrings ts) sgr)
 
-    compute_concrete sgr opts ws =
+    compute_concrete opts ws sgr =
       case runP pExp (UTF8.fromString s) of
         Left (_,msg) -> return $ pipeMessage msg
         Right t      -> return $ err pipeMessage
@@ -176,7 +182,7 @@ sourceCommands = Map.fromList [
             OOpt "qual"    -> pOpts style            Qualified   os
             _              -> pOpts style            q           os
 
-    show_deps sgr os xs = do
+    show_deps os xs sgr = do
           ops <- case xs of
              _:_ -> do
                let ts = [t | Right t <- map (runP pExp . UTF8.fromString) xs]
@@ -192,7 +198,7 @@ sourceCommands = Map.fromList [
                 | otherwise = unwords $ map prTerm ops
           return $ fromString printed
 
-    show_operations sgr os ts =
+    show_operations os ts sgr =
       case greatestResource sgr of
         Nothing -> return $ fromString "no source grammar in scope; did you import with -retain?"
         Just mo -> do
@@ -211,7 +217,7 @@ sourceCommands = Map.fromList [
           let printed = [unwords [showIdent op, ":", printer ty] | (op,ty) <- sigs]
           return . fromString $ unlines [l | l <- printed, all (`isInfixOf` l) greps]
 
-    show_source sgr os ts = do
+    show_source os ts sgr = do
       let strip = if isOpt "strip" os then stripSourceGrammar else id
       let mygr = strip $ case ts of
             _:_ -> mGrammar [(i,m) | (i,m) <- modules sgr, elem (render i) ts]
@@ -236,7 +242,7 @@ sourceCommands = Map.fromList [
 
         _ -> return . fromString $ render mygr
 
-    dependency_graph sgr opts ws =
+    dependency_graph opts ws sgr =
       do let stop = case valStrOpts "only" "" opts of
                       "" -> Nothing
                       fs -> Just $ chunks ',' fs

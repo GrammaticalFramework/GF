@@ -12,7 +12,7 @@ commandHelpAll' allCommands opts = unlines $
 
 commandHelp' opts = if isOpt "t2t" opts then commandHelpTags else commandHelp
 
-commandHelp :: Bool -> (String,CommandInfo env) -> String
+--commandHelp :: Bool -> (String,CommandInfo env) -> String
 commandHelp full (co,info) = unlines . compact $ [
   co ++ optionally (", " ++) (longname info),
   synopsis info] ++ if full then [
@@ -26,7 +26,7 @@ commandHelp full (co,info) = unlines . compact $ [
 
 -- for printing with txt2tags formatting
 
-commandHelpTags :: Bool -> (String,CommandInfo env) -> String
+--commandHelpTags :: Bool -> (String,CommandInfo env) -> String
 commandHelpTags full (co,info) = unlines . compact $ [
   "#VSPACE","",
   "===="++hdrname++"====",
@@ -75,7 +75,7 @@ helpCommand allCommands =
        ("license","show copyright and license information"),
        ("t2t","output help in txt2tags format")
        ],
-     exec = \_ opts ts ->
+     exec = \opts ts ->
        let
         msg = case ts of
           _ | isOpt "changes" opts -> changesMsg

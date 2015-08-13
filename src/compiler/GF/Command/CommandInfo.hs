@@ -1,12 +1,10 @@
 module GF.Command.CommandInfo where
 import GF.Command.Abstract(Option,Expr)
-import GF.Infra.SIO(SIO)
 import qualified PGF as H(showExpr)
 import qualified PGF.Internal as H(Literal(LStr),Expr(ELit)) ----
-import GF.Text.Pretty(Doc)
 
-data CommandInfo env = CommandInfo {
-  exec     :: env -> [Option] -> [Expr] -> SIO CommandOutput,
+data CommandInfo m = CommandInfo {
+  exec     :: [Option] -> [Expr] -> m CommandOutput,
   synopsis :: String,
   syntax   :: String,
   explanation :: String,
@@ -17,11 +15,11 @@ data CommandInfo env = CommandInfo {
   needsTypeCheck :: Bool
   }
 
-mapCommandEnv f c = c { exec = exec c . f }
+mapCommandExec f c = c { exec = \ opts ts -> f (exec c opts ts) }
 
-emptyCommandInfo :: CommandInfo env
+--emptyCommandInfo :: CommandInfo env
 emptyCommandInfo = CommandInfo {
-  exec = \_ _ ts -> return $ pipeExprs ts, ----
+  exec = error "command not implemented",
   synopsis = "",
   syntax = "",
   explanation = "",
@@ -33,10 +31,7 @@ emptyCommandInfo = CommandInfo {
   }
 --------------------------------------------------------------------------------
 
-class TypeCheckArg env where typeCheckArg :: env -> Expr -> Either Doc Expr
-
-instance TypeCheckArg env => TypeCheckArg (x,env) where
-  typeCheckArg (x,env) = typeCheckArg env
+class Monad m => TypeCheckArg m where typeCheckArg :: Expr -> m Expr
 
 --------------------------------------------------------------------------------
 

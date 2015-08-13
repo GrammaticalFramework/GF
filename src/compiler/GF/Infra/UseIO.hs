@@ -34,8 +34,9 @@ import System.CPUTime
 --import System.Cmd
 import Text.Printf
 --import Control.Applicative(Applicative(..))
-import Control.Monad
+import Control.Monad(when,liftM,foldM)
 import Control.Monad.Trans(MonadIO(..))
+import Control.Monad.State(StateT,lift)
 import Control.Exception(evaluate)
 
 --putIfVerb :: MonadIO io => Options -> String -> io ()
@@ -201,6 +202,13 @@ instance Output IOE where
   putStrLnE = liftIO . putStrLnE
   putStrE   = liftIO . putStrE
 -}
+
+instance Output m => Output (StateT s m) where
+  ePutStr = lift . ePutStr
+  ePutStrLn = lift . ePutStrLn
+  putStrE = lift . putStrE
+  putStrLnE = lift . putStrLnE
+
 --putPointE :: Verbosity -> Options -> String -> IO a -> IO a
 putPointE v opts msg act = do
   when (verbAtLeast opts v) $ putStrE msg
