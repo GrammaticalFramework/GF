@@ -21287,7 +21287,7 @@ lin finder_N = variants {} ;
 lin finding_N = variants {} ; --
 lin findings_N = variants {} ;
 lin fine_A = mkA "genau" | mkA "schön" | mkA "fein" | mkA "okay" ; --- split: fine, precise line | what a fine day | fine grained | it's fine (ok ; this sense only used as predicate adj?)
-lin fine_Adv = variants {} ;
+lin fine_Adv = mkAdv "gut" ;
 lin fine_N = mkN "Bußgeld" neuter | mkN "Geldbuße" feminine | mkN "Geldstrafe" "Geldstrafen" feminine ; -- status=guess status=guess status=guess
 lin fine_V2 = mkV2 (mkV "klären" | mkV "filtern" | regV "sieben") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin fine_tooth_A = variants {} ;
@@ -53209,7 +53209,7 @@ lin soulless_A = mkA "seelenlos" ; -- status=guess
 lin sound_A = mk3A "gesund" "gesünder" "gesündeste" ; -- status=guess
 lin sound_Adv = variants {} ;
 lin sound_N = mkN "Geräusch" "Geräusche" neuter | mkN "Klang" "Klänge" masculine ; -- split I heard a strange sound | guitar sound
-lin sound_V = fixprefixV "er" I.klingen_V | mkV "läuten" ;
+lin sound_V = mkV "klingen" | mkV "läuten" ;
 lin sound_V2 = mkV2 (regV "sondieren" | compoundV "erschallen" I.lassen_V) ;
 lin sound_VA = mkVA I.klingen_V ;
 lin sound_VS = mkVS (regV "sondieren") ; -- delete: false extraction
