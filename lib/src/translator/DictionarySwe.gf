@@ -8464,7 +8464,7 @@ lin calk_N = mkN "driva" ; -- status=guess
 lin calk_V2 = variants {} ; -- status=guess
 lin call_N = mkN "anrop" "anrop" | mkN "kallelse" "kallelser" | mkN "telefonsamtal" neutrum ; --- split -- | function call -- | phone call
 lin call_V = mkV "kalla" | mkV "anropa" ;
-lin call_V2 = mkV2 "kalla" | mkV2 "anropa" | mkV2 (mkV "heter") ; ---- heta = be called
+lin call_V2 = mkV2 "kalla" | mkV2 "anropa" ;
 lin call_after_V2 = dirV2 (partV (mkV "ropar")"till") ; -- comment=2
 lin call_around_V = mkV "ropar" ; -- comment=11
 lin call_back_V2 = dirV2 (partV (mkV "ropar")"till") ; -- comment=2
