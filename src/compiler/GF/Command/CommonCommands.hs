@@ -71,6 +71,11 @@ commonCommands = fmap (mapCommandExec liftSIO) $ Map.fromList [
      longname = "empty",
      synopsis = "empty the environment"
      }),
+  ("eh",  emptyCommandInfo {
+     longname = "execute_history",
+     syntax = "eh FILE",
+     synopsis = "read commands from a file and execute them"
+     }),
   ("ph", emptyCommandInfo {
      longname = "print_history",
      synopsis = "print command history",
