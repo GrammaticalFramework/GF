@@ -27,7 +27,7 @@ interpretCommandLine env line =
   case readCommandLine line of
     Just []    -> return ()
     Just pipes -> mapM_ (interpretPipe env) pipes
-    Nothing    -> putStrLnE "command not parsed"
+    Nothing    -> putStrLnE $ "command not parsed: "++line
 
 interpretPipe env cs = do
      Piped v@(_,s) <- intercs cs void

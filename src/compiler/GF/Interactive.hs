@@ -13,7 +13,7 @@ import GF.Command.Help(helpCommand)
 import GF.Command.Abstract
 import GF.Command.Parse(readCommandLine,pCommand)
 import GF.Data.Operations (Err(..),done)
-import GF.Data.Utilities(repeatM)
+import GF.Data.Utilities(whenM,repeatM)
 import GF.Grammar hiding (Ident,isPrefixOf)
 import GF.Infra.UseIO(ioErrorText,putStrLnE)
 import GF.Infra.SIO
@@ -113,17 +113,21 @@ type ShellM = StateT GFEnv SIO
 
 -- | Execute a given command line, returning 'True' to continue execution,
 -- | 'False' when it is time to quit
-execute1 :: String -> ShellM Bool
+execute1, execute1' :: String -> ShellM Bool
 execute1 s0 =
   do modify $ \ gfenv0 -> gfenv0 {history = s0 : history gfenv0}
-     opts <- gets startOpts
+     execute1' s0
+
+-- | Execute a given command line, without adding it to the history
+execute1' s0 =
+  do opts <- gets startOpts
      interruptible $ optionallyShowCPUTime opts $
        case pwords s0 of
       -- cc, sd, so, ss and dg are now in GF.Commands.SourceCommands
       -- special commands
          "q" :_   -> quit
          "!" :ws  -> system_command ws
-         "eh":ws  -> eh ws
+         "eh":ws  -> execute_history ws
          "i" :ws  -> do import_ ws; continue
       -- other special commands, working on GFEnv
          "dc":ws  -> define_command ws
@@ -157,12 +161,16 @@ execute1 s0 =
                   cs <- readFile w >>= return . map words . lines
                   gfenv' <- foldM (flip (process False benv)) gfenv cs
                   loopNewCPU gfenv' -}
-    eh [w] = -- Ehhh? Reads commands from a file, but does not execute them
-      do env <- gets commandenv
-         cs <- lift $ restricted (readFile w) >>= return . map (interpretCommandLine env) . lines
+    execute_history [w] =
+      do execute . lines =<< lift (restricted (readFile w))
          continue
-    eh _   = do putStrLnE "eh command not parsed"
-                continue
+      where
+        execute [] = done
+        execute (line:lines) = whenM (execute1' line) (execute lines)
+
+    execute_history _   =
+       do putStrLnE "eh command not parsed"
+          continue
 
     define_command (f:ws) =
         case readCommandLine (unwords ws) of
