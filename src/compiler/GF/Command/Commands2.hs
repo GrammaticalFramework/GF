@@ -292,6 +292,11 @@ pgfCommands = Map.fromList [
      flags = [
        ("lang","the languages of linearization (comma-separated, no spaces)")
        ],
+     options = [
+       ("all",    "show all variants (but not all forms), one by line (cf. l -list)"),
+       ("list","show all variants (but not all forms), comma-separated on one line (cf. l -all)"),
+       ("treebank","show the tree and tag linearizations with language names")
+       ],
      examples = [
        mkEx "l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor"],
      exec = needPGF $ \ opts ts env ->
@@ -829,10 +834,23 @@ pgfCommands = Map.fromList [
             err msg = ["Parse failed: "++msg]
             ok = map (C.showExpr . fst).takeOptNum opts
 
-   cLins env opts ts = [C.linearize cnc t|t<-ts,(lang,cnc)<-cncs]
+   cLins env@(pgf,cncs) opts ts =
+       [l|t<-ts,l<-[abs++": "++show t|treebank]++[l|cnc<-cncs,l<-lin cnc t]]
      where
+       lin (lang,cnc) t =
+           tag $ if all || list
+                 then optCommaList (C.linearizeAll cnc t)
+                 else [C.linearize cnc t]
+         where
+           tag = if treebank then map ((lang++": ")++) else id
+           optCommaList = if list then (:[]) . commaList else id
+
+       abs = C.abstractName pgf
        cncs = optConcs env opts
-     
+       treebank = isOpt "treebank" opts
+       all = isOpt "all" opts
+       list = isOpt "list" opts
+
    optConcs = optConcsFlag "lang"
 
    optConcsFlag f (pgf,cncs) opts =
@@ -889,10 +907,10 @@ pgfCommands = Map.fromList [
                [(H.mkCId la,tail le) | lex <- lexs, let (la,le) = span (/='=') lex, not (null le)] of
        Just le -> chunks ',' le
        _ -> []
-
+-}
    commaList [] = []
    commaList ws = concat $ head ws : map (", " ++) (tail ws)
--}
+
 -- Proposed logic of coding in unlexing:
 --   - If lang has no coding flag, or -to_utf8 is not in opts, just opts are used.
 --   - If lang has flag coding=utf8, -to_utf8 is ignored.
