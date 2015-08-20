@@ -15,12 +15,12 @@
 module PGF2 (-- * CId
              CId,
              -- * PGF
-             PGF,readPGF,AbsName,abstractName,Cat,startCat,
+             PGF,readPGF,AbsName,abstractName,Cat,startCat,categories,
              -- * Concrete syntax
              ConcName,Concr,languages,parse,parseWithHeuristics,
              hasLinearization,linearize,linearizeAll,alignWords,
              -- * Types
-             Type(..), Hypo, functionType,
+             Type(..), Hypo, BindType(..), showType, functionType,
              -- * Trees
              Expr,Fun,readExpr,showExpr,mkApp,unApp,mkStr,
              graphvizAbstractTree,graphvizParseTree,
@@ -46,11 +46,15 @@ import Data.Typeable
 import qualified Data.Map as Map
 import Data.IORef
 import Data.Char(isUpper,isSpace)
-import Data.List(isSuffixOf,maximumBy)
+import Data.List(isSuffixOf,maximumBy,nub)
 import Data.Function(on)
+import qualified Text.PrettyPrint as PP
 --import Debug.Trace
 
 type CId = String
+
+ppCId = PP.text
+wildCId = "_" :: CId
  
 -----------------------------------------------------------------------
 -- Functions that take a PGF.
@@ -162,6 +166,31 @@ data BindType =
 -- | 'Hypo' represents a hypothesis in a type i.e. in the type A -> B, A is the hypothesis
 type Hypo = (BindType,CId,Type)
 
+-- | renders type as 'String'.
+showType :: Type -> String
+showType = PP.render . ppType 0
+
+ppType :: Int -> Type -> PP.Doc
+ppType d (DTyp hyps cat args)
+  | null hyps = ppRes cat args
+  | otherwise = let hdocs = map (ppHypo 1) hyps
+                in ppParens (d > 0) (foldr (\hdoc doc -> hdoc PP.<+> PP.text "->" PP.<+> doc) (ppRes cat args) hdocs)
+  where
+    ppRes cat es
+      | null es   = ppCId cat
+      | otherwise = ppParens (d > 3) (ppCId cat PP.<+> PP.hsep (map (ppExpr 4) es))
+
+ppHypo :: Int -> (BindType,CId,Type) -> PP.Doc
+ppHypo d (Explicit,x,typ) =
+    if x == wildCId
+    then ppType d typ
+    else PP.parens (ppCId x PP.<+> PP.char ':' PP.<+> ppType 0 typ)
+ppHypo d (Implicit,x,typ) =
+    PP.parens (PP.braces (ppCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ)
+
+ppParens True  = PP.parens
+ppParens False = id
+
 functionType :: PGF -> CId -> Type
 functionType p fn =
   unsafePerformIO $
@@ -263,6 +292,9 @@ readExpr str =
                         return $ Just (Expr c_expr exprFPl)
                 else do gu_pool_free exprPl
                         return Nothing
+
+ppExpr :: Int -> Expr -> PP.Doc
+ppExpr d e = ppParens (d>0) (PP.text (showExpr e)) -- just a quick hack !!!
 
 showExpr :: Expr -> String
 showExpr e = 
@@ -546,6 +578,13 @@ functions p =
       names <- readIORef ref
       name  <- peekCString (castPtr key)
       writeIORef ref $! (name : names)
+
+categories :: PGF -> [Cat]
+categories pgf = -- !!! quick hack
+    nub [cat | f<-functions pgf, let DTyp _ cat _=functionType pgf f]
+
+categoryContext :: PGF -> Cat -> Maybe [Hypo]
+categoryContext pgf cat = Nothing -- !!! not implemented yet TODO
 
 -----------------------------------------------------------------------------
 -- Helper functions
