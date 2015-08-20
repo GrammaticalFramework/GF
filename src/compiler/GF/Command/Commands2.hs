@@ -9,7 +9,7 @@ import qualified PGF2 as C
 import qualified PGF as H
 
 --import qualified PGF.Internal as H(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
---import qualified PGF.Internal as H(abstract,funs,cats,Expr(EFun)) ----
+import qualified PGF.Internal as H(Expr(EFun)) ----abstract,funs,cats,
 --import qualified PGF.Internal as H(Literal(LStr),Expr(ELit)) ----
 --import qualified PGF.Internal as H(ppFun,ppCat)
 
@@ -20,7 +20,7 @@ import qualified PGF as H
 --import GF.Compile.ExampleBased
 --import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
 --import GF.Infra.UseIO(writeUTF8File)
-import GF.Infra.SIO(MonadSIO,liftSIO)
+import GF.Infra.SIO(MonadSIO,liftSIO,putStrLn)
 --import GF.Data.ErrM ----
 import GF.Command.Abstract
 --import GF.Command.Messages
@@ -424,7 +424,7 @@ pgfCommands = Map.fromList [
          mkEx "p  \"this fish is fresh\" | l -lang=Swe  -- try parsing with all languages and translate the successful parses to Swedish"
        ],
      exec = needPGF $ \ opts ts env -> return . cParse env opts $ toStrings ts
-     })
+     }),
 {-
   ("p", emptyCommandInfo {
      longname = "parse",
@@ -452,10 +452,11 @@ pgfCommands = Map.fromList [
        ]
      }),
 -}
-{-
   ("pg", emptyCommandInfo { -----
      longname = "print_grammar",
-     synopsis = "print the actual grammar with the given printer",
+--   synopsis = "print the actual grammar with the given printer",
+     synopsis = "print some information about the grammar",
+{-
      explanation = unlines [
        "Prints the actual grammar, with all involved languages.",
        "In some printers, this can be restricted to a subset of languages",
@@ -472,29 +473,31 @@ pgfCommands = Map.fromList [
         " " ++ opt ++ "\t\t" ++ expl |
            ((opt,_),expl) <- outputFormatsExpl, take 1 expl /= "*"
        ]),
-     exec  = \env opts _ -> prGrammar env opts,
+-}
+     exec  = needPGF $ \opts _ env -> prGrammar env opts,
      flags = [
        --"cat",
-       ("file",   "set the file name when printing with -pgf option"),
-       ("lang",   "select languages for the some options (default all languages)"),
-       ("printer","select the printing format (see flag values above)")
+--     ("file",   "set the file name when printing with -pgf option"),
+--     ("lang",   "select languages for the some options (default all languages)"),
+--     ("printer","select the printing format (see flag values above)")
        ],
      options = [
        ("cats",   "show just the names of abstract syntax categories"),
-       ("fullform", "print the fullform lexicon"),
+--     ("fullform", "print the fullform lexicon"),
        ("funs",   "show just the names and types of abstract syntax functions"),
-       ("langs",  "show just the names of top concrete syntax modules"),
-       ("lexc", "print the lexicon in Xerox LEXC format"),
-       ("missing","show just the names of functions that have no linearization"),
-       ("opt",    "optimize the generated pgf"),
-       ("pgf",    "write current pgf image in file"),
-       ("words", "print the list of words")
+       ("langs",  "show just the names of top concrete syntax modules")
+--     ("lexc", "print the lexicon in Xerox LEXC format"),
+--     ("missing","show just the names of functions that have no linearization"),
+--     ("opt",    "optimize the generated pgf"),
+--     ("pgf",    "write current pgf image in file"),
+--     ("words", "print the list of words")
        ],
      examples = [
-       mkEx ("pg -funs | ? grep \" S ;\"  -- show functions with value cat S")
+       mkEx "pg -langs -- show the names of top concrete syntax modules"
+--     mkEx ("pg -funs | ? grep \" S ;\"  -- show functions with value cat S")
        ]
      }),
--}
+
 {-
   ("pt", emptyCommandInfo {
      longname = "put_tree",
@@ -770,49 +773,50 @@ pgfCommands = Map.fromList [
        ]
      }),
 -}
-{-
+
   ("ai", emptyCommandInfo {
      longname = "abstract_info",
-     syntax = "ai IDENTIFIER  or  ai EXPR",
-     synopsis = "Provides an information about a function, an expression or a category from the abstract syntax",
+--   syntax = "ai IDENTIFIER  or  ai EXPR",
+     syntax = "ai IDENTIFIER",
+--   synopsis = "Provides an information about a function, an expression or a category from the abstract syntax",
+     synopsis = "Provides information about a function, or a category from the abstract syntax",
      explanation = unlines [
-       "The command has one argument which is either function, expression or",
+--     "The command has one argument which is either function, expression or",
+       "The command has one argument which is either function or",
        "a category defined in the abstract syntax of the current grammar. ",
-       "If the argument is a function then ?its type is printed out.",
-       "If it is a category then the category definition is printed.",
+       "If the argument is a function then its type is printed out.",
+       "If it is a category then the category definition is printed."{-,
        "If a whole expression is given it prints the expression with refined",
-       "metavariables and the type of the expression."
+       "metavariables and the type of the expression."-}
        ],
-     exec = \env@(pgf, mos) opts arg -> do
+     exec = needPGF $ \ opts arg env@(pgf,cncs) -> do
        case arg of
-         [H.EFun id]->case Map.lookup id (H.funs (H.abstract pgf)) of
-                        Just fd -> do putStrLn $ render (H.ppFun id fd)
-                                      let (_,_,_,prob) = fd
-                                      putStrLn ("Probability: "++show prob)
-                                      return void
-                        Nothing -> case Map.lookup id (H.cats (H.abstract pgf)) of
-                                     Just cd   -> do putStrLn $
-                                                        render (H.ppCat id cd $$
-                                                                if null (H.functionsToCat pgf id)
-                                                                  then empty
-                                                                  else ' ' $$
-                                                                       vcat [H.ppFun fid (ty,0,Just ([],[]),0) | (fid,ty) <- H.functionsToCat pgf id] $$
-                                                                       ' ')
-                                                     let (_,_,prob) = cd
-                                                     putStrLn ("Probability: "++show prob)
-                                                     return void
-                                     Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
-                                                     return void
+         [H.EFun cid]
+             | id `elem` funs -> return (fromString (showFun pgf id))
+             | id `elem` cats -> return (fromString (showCat id))
+           where
+             id = H.showCId cid
+             funs = C.functions pgf
+             cats = C.categories pgf
+
+             showCat c = "cat "++c -- TODO: show categoryContext
+                         ++"\n\n"++
+                         unlines [showFun' f ty|f<-funs,
+                                                let ty=C.functionType pgf f,
+                                                target ty == c]
+             target (C.DTyp _ c _) = c
+{-
          [e]         -> case H.inferExpr pgf e of
                           Left tcErr   -> error $ render (H.ppTcError tcErr)
                           Right (e,ty) -> do putStrLn ("Expression:  "++H.showExpr [] e)
                                              putStrLn ("Type:        "++H.showType [] ty)
                                              putStrLn ("Probability: "++show (H.probTree pgf e))
                                              return void
-         _           -> do putStrLn "a single identifier or expression is expected from the command"
+-}
+         _           -> do putStrLn "a single function name or category name is expected"
                            return void,
      needsTypeCheck = False
-     })-}
+     })
   ]
  where
 {-
@@ -1003,6 +1007,17 @@ pgfCommands = Map.fromList [
       return $ case es of
                  [] -> pipeMessage "no trees found"
                  _  -> fromExprs es
+
+   prGrammar env@(pgf,cncs) opts
+     | isOpt "langs" opts = return . fromString . unwords $ Map.keys cncs
+     | isOpt "cats" opts = return . fromString . unwords $ C.categories pgf
+     | isOpt "funs" opts = return . fromString . unlines . map (showFun pgf) $
+                             C.functions pgf
+     | otherwise = return void -- TODO implement more options
+
+   showFun pgf f = showFun' f (C.functionType pgf f)
+   showFun' f ty = "fun "++f++" : "++C.showType ty
+
 {-
    prGrammar env@(pgf,mos) opts
      | isOpt "pgf"      opts = do
