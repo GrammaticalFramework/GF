@@ -16,11 +16,11 @@ import qualified PGF.Internal as H(Expr(EFun)) ----abstract,funs,cats,
 --import qualified PGF.Internal as H(optimizePGF)
 
 --import GF.Compile.Export
---import GF.Compile.ToAPI
+import GF.Compile.ToAPI(exprToAPI)
 --import GF.Compile.ExampleBased
 --import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
---import GF.Infra.UseIO(writeUTF8File)
-import GF.Infra.SIO(MonadSIO,liftSIO,putStrLn)
+import GF.Infra.UseIO(writeUTF8File)
+import GF.Infra.SIO(MonadSIO,liftSIO,putStrLn,restricted,restrictedSystem)
 --import GF.Data.ErrM ----
 import GF.Command.Abstract
 --import GF.Command.Messages
@@ -723,7 +723,7 @@ pgfCommands = Map.fromList [
        ("leafedgestyle","edge style for links to leaves (solid/dashed/dotted/bold, default: dashed)")
        ]
     }),
-
+-}
   ("vt", emptyCommandInfo {
      longname = "visualize_tree",
      synopsis = "show a set of trees graphically",
@@ -733,21 +733,21 @@ pgfCommands = Map.fromList [
        "If the -view flag is defined, the graph is saved in a temporary file",
        "which is processed by graphviz and displayed by the program indicated",
        "by the flag. The target format is postscript, unless overridden by the",
-       "flag -format.",
-       "With option -mk, use for showing library style function names of form 'mkC'."
+       "flag -format."--,
+--     "With option -mk, use for showing library style function names of form 'mkC'."
        ],
-     exec = \env@(pgf, mos) opts es ->
-       if isOpt "mk" opts
+     exec = needPGF $ \opts es env@(pgf, _) ->
+       {-if isOpt "mk" opts
        then return $ fromString $ unlines $ map (tree2mk pgf) es
-       else if isOpt "api" opts
+       else -}if isOpt "api" opts
        then do
          let ss = map exprToAPI es
          mapM_ putStrLn ss
          return void
        else do
-         let funs = not (isOpt "nofun" opts)
-         let cats = not (isOpt "nocat" opts)
-         let grph = unlines (map (H.graphvizAbstractTree pgf (funs,cats)) es) -- True=digraph
+--       let funs = not (isOpt "nofun" opts)
+--       let cats = not (isOpt "nocat" opts)
+         let grph = unlines (map (C.graphvizAbstractTree pgf . cExpr) es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -762,17 +762,16 @@ pgfCommands = Map.fromList [
        mkEx "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
        ],
      options = [
-       ("api", "show the tree with function names converted to 'mkC' with value cats C"),
-       ("mk",  "similar to -api, deprecated"),
-       ("nofun","don't show functions but only categories"),
-       ("nocat","don't show categories but only functions")
+       ("api", "show the tree with function names converted to 'mkC' with value cats C")--,
+--     ("mk",  "similar to -api, deprecated"),
+--     ("nofun","don't show functions but only categories"),
+--     ("nocat","don't show categories but only functions")
        ],
      flags = [
        ("format","format of the visualization file (default \"png\")"),
        ("view","program to open the resulting file (default \"open\")")
        ]
      }),
--}
 
   ("ai", emptyCommandInfo {
      longname = "abstract_info",
@@ -978,9 +977,10 @@ pgfCommands = Map.fromList [
           Nothing -> error ("Can't parse '"++str++"' as a type")
 
    optComm opts = valStrOpts "command" "" opts
-
+-}
    optViewFormat opts = valStrOpts "format" "png" opts
    optViewGraph opts = valStrOpts "view" "open" opts
+{-
    optNum opts = valIntOpts "number" 1 opts
 -}
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
