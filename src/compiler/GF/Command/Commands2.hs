@@ -663,7 +663,7 @@ pgfCommands = Map.fromList [
        ("lang","the language of analysis")
        ]
     }),
-
+-}
 
   ("vp", emptyCommandInfo {
      longname = "visualize_parse",
@@ -676,8 +676,9 @@ pgfCommands = Map.fromList [
        "by the flag. The target format is png, unless overridden by the",
        "flag -format."
        ],
-     exec = \env@(pgf, mos) opts es -> do
-         let lang = optLang pgf opts
+     exec = needPGF $ \opts es env@(pgf, concs) ->
+      do let concs = optConcs env opts
+{-
          let gvOptions=H.GraphvizOptions {H.noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
                                           H.noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
                                           H.noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
@@ -688,9 +689,10 @@ pgfCommands = Map.fromList [
                                           H.nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts,
                                           H.leafEdgeStyle = valStrOpts "leafedgestyle" "dashed" opts
                                          }
-         let grph = if null es 
-                      then []
-                      else H.graphvizParseTree pgf lang gvOptions (head es)
+-}
+         let grph= if null es || null concs
+                   then []
+                   else C.graphvizParseTree (snd (head concs)) (cExpr (head es))
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -701,29 +703,34 @@ pgfCommands = Map.fromList [
            return void
           else return $ fromString grph,
      examples = [
-       mkEx "p \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
-       mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
+       mkEx "p -lang=Eng \"John walks\" | vp  -- generate a tree and show parse tree as .dot script"--,
+--     mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
        ],
      options = [
+{-
        ("showcat","show categories in the tree nodes (default)"),
        ("nocat","don't show categories"),
        ("showfun","show function names in the tree nodes"),
        ("nofun","don't show function names (default)"),
        ("showleaves","show the leaves of the tree (default)"),
        ("noleaves","don't show the leaves of the tree (i.e., only the abstract tree)")
+-}
        ],
      flags = [
+       ("lang","the language to visualize"),
        ("format","format of the visualization file (default \"png\")"),
-       ("view","program to open the resulting file (default \"open\")"),
+       ("view","program to open the resulting file (default \"open\")")--,
+{-
        ("nodefont","font for tree nodes (default: Times -- graphviz standard font)"),
        ("leaffont","font for tree leaves (default: nodefont)"),
        ("nodecolor","color for tree nodes (default: black -- graphviz standard color)"),
        ("leafcolor","color for tree leaves (default: nodecolor)"),
        ("nodeedgestyle","edge style between tree nodes (solid/dashed/dotted/bold, default: solid)"),
        ("leafedgestyle","edge style for links to leaves (solid/dashed/dotted/bold, default: dashed)")
+-}
        ]
     }),
--}
+
   ("vt", emptyCommandInfo {
      longname = "visualize_tree",
      synopsis = "show a set of trees graphically",
