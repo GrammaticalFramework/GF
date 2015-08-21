@@ -629,6 +629,7 @@ pgfCommands = Map.fromList [
        ("noleaves","don't show the leaves of the tree (i.e., only the abstract tree)")
        ],
      flags = [
+       ("lang","the language to visualize"),
        ("format","format of the visualization file (default \"png\")"),
        ("view","program to open the resulting file (default \"open\")"),
        ("nodefont","font for tree nodes (default: Times -- graphviz standard font)"),
