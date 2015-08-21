@@ -5,8 +5,8 @@
 #define SG_EXPRS   "sg_exprs"
 #define SG_PAIRS   "sg_pairs"
 #define SG_IDENTS  "sg_idents"
-#define SG_RELS    "sg_rels"
 #define SG_TRIPLES "sg_triples"
+#define SG_TRIPLES_SPO "sg_triples_spo"
 
 typedef struct {
 	sqlite3 *db;
@@ -23,8 +23,8 @@ sg_create_tables(sqlite3 *db)
 	return sqlite3_exec(db, "create table if not exists " SG_EXPRS "(fun not null, arg integer);"
 	                        "create unique index if not exists " SG_IDENTS " on " SG_EXPRS "(fun) where arg is null;"
 	                        "create unique index if not exists " SG_PAIRS " on " SG_EXPRS "(fun,arg) where arg is not null;"
-	                        "create table if not exists " SG_RELS "(rel varchar);"
-	                        "create table if not exists " SG_TRIPLES "(subj integer, rel integer, obj integer);",
+	                        "create table if not exists " SG_TRIPLES "(subj integer, pred integer, obj integer);"
+	                        "create unique index if not exists " SG_TRIPLES_SPO " on " SG_TRIPLES "(subj,pred,obj);",
 	                    NULL, NULL, NULL);
 }
 
@@ -394,6 +394,149 @@ rollback:
 	return rc;
 }
 
+int
+sg_insert_triple(sqlite3 *db, i64 subj, i64 pred, i64 obj, i64 *pKey)
+{
+	Table *triplesTbl =
+		sqlite3HashFind(&db->aDb[0].pSchema->tblHash, SG_TRIPLES);
+    if (!triplesTbl) return SQLITE_ERROR;
+
+	Index *spoIdx = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_TRIPLES_SPO);
+    if (!spoIdx) return SQLITE_ERROR;
+
+	int rc;
+	rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 1);
+	if (rc != SQLITE_OK) {
+		return rc;
+	}
+
+	BtCursor crsTriples;
+	memset(&crsTriples, 0, sizeof(crsTriples));
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, triplesTbl->tnum, 1, NULL, &crsTriples);
+	if (rc != SQLITE_OK) {
+		goto rollback;
+	}
+
+	BtCursor crsSPO;
+	memset(&crsSPO, 0, sizeof(crsSPO));
+	KeyInfo *infSPO = sqlite3KeyInfoAlloc(db, 3, 0);
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, spoIdx->tnum, 1, infSPO, &crsSPO);
+	if (rc != SQLITE_OK) {
+		goto close1;
+	}
+
+	Mem mem[4];
+	mem[0].flags = MEM_Int;
+	mem[0].u.i = subj;
+	mem[1].flags = MEM_Int;
+	mem[1].u.i = pred;
+	mem[2].flags = MEM_Int;
+	mem[2].u.i = obj;
+
+	UnpackedRecord idxKey;
+	idxKey.pKeyInfo = crsSPO.pKeyInfo;
+	idxKey.nField = 3;
+	idxKey.default_rc = 0;
+	idxKey.aMem = mem;
+
+	int res = 0;
+	rc = sqlite3BtreeMovetoUnpacked(&crsSPO,
+	                                &idxKey, 0,  0, &res);
+	if (rc != SQLITE_OK) {
+		goto close;
+	}
+
+	if (res == 0) {
+		rc = sqlite3VdbeIdxRowid(db, &crsSPO, pKey);
+	} else {
+		rc = sqlite3BtreeLast(&crsTriples, &res);
+		if (rc != SQLITE_OK) {
+			goto close;
+		}
+
+		rc = sqlite3BtreeKeySize(&crsTriples, pKey);
+		if (rc != SQLITE_OK) {
+			goto close;
+		}
+		(*pKey)++;
+
+		int file_format = db->aDb[0].pSchema->file_format;
+
+		unsigned char buf[41];  // enough for record with three integers
+		buf[0] = 5;
+
+		u32 serial_type;
+		unsigned char* p = buf+5;
+
+		serial_type = sqlite3VdbeSerialType(&mem[0], file_format);
+		buf[1] = serial_type;
+		p += sqlite3VdbeSerialPut(p, &mem[0], serial_type);
+
+		serial_type = sqlite3VdbeSerialType(&mem[1], file_format);
+		buf[2] = serial_type;
+		p += sqlite3VdbeSerialPut(p, &mem[1], serial_type);
+
+		serial_type = sqlite3VdbeSerialType(&mem[2], file_format);
+		buf[3] = serial_type;
+		p += sqlite3VdbeSerialPut(p, &mem[2], serial_type);
+
+		unsigned char* tmp = p;
+
+		mem[3].flags = MEM_Int;
+		mem[3].u.i = 1;
+		serial_type = sqlite3VdbeSerialType(&mem[3], file_format);
+		buf[4] = serial_type;
+		p += sqlite3VdbeSerialPut(p, &mem[3], serial_type);
+
+		rc = sqlite3BtreeInsert(&crsTriples, 0, *pKey,
+								buf, p-buf, 0,
+								0, 0);
+		if (rc != SQLITE_OK) {
+			return rc;
+		}
+
+		p = tmp;
+
+		mem[3].flags = MEM_Int;
+		mem[3].u.i = *pKey;
+		serial_type = sqlite3VdbeSerialType(&mem[3], file_format);
+		buf[4] = serial_type;
+		p += sqlite3VdbeSerialPut(p, &mem[3], serial_type);
+
+		rc = sqlite3BtreeInsert(&crsSPO, buf, p-buf,
+								0, *pKey, 0,
+								0, 0);
+		if (rc != SQLITE_OK) {
+			return rc;
+		}
+	}
+
+	sqlite3KeyInfoUnref(infSPO);
+	rc = sqlite3BtreeCloseCursor(&crsSPO);
+	if (rc != SQLITE_OK) {
+		goto close1;
+	}
+
+	rc = sqlite3BtreeCloseCursor(&crsTriples);
+	if (rc != SQLITE_OK) {
+		goto rollback;
+	}
+
+	rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+	return rc;
+
+close:
+	sqlite3KeyInfoUnref(infSPO);
+	sqlite3BtreeCloseCursor(&crsSPO);
+
+close1:
+	sqlite3BtreeCloseCursor(&crsTriples);
+
+rollback:
+	sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	return rc;
+}
+
 void main()
 {
 	sqlite3 *db = NULL;
@@ -416,6 +559,9 @@ void main()
 	sg_select_expr(db, key, &e, tmp_pool);
 	pgf_print_expr(e, NULL, 0, out, err);
 	printf("\n");
+
+	sg_insert_triple(db, 2, 2, 2, &key);
+	printf("%d\n", (int) key);
 
 	gu_pool_free(tmp_pool);
 
