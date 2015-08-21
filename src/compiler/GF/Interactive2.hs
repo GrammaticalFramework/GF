@@ -166,6 +166,7 @@ execute1' s0 =
       do execute . lines =<< lift (restricted (readFile w))
          continue
       where
+        execute :: [String] -> ShellM ()
         execute [] = done
         execute (line:lines) = whenM (execute1' line) (execute lines)
 
