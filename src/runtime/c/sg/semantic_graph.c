@@ -537,6 +537,80 @@ rollback:
 	return rc;
 }
 
+int
+sg_select_triple(sqlite3 *db, i64 key, i64 *pSubj, i64 *pPred, i64 *pObj)
+{
+	Table *triplesTbl =
+		sqlite3HashFind(&db->aDb[0].pSchema->tblHash, SG_TRIPLES);
+    if (!triplesTbl) return SQLITE_ERROR;
+
+	int rc;
+	rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 0);
+	if (rc != SQLITE_OK) {
+		return rc;
+	}
+
+	BtCursor crsTriples;
+	memset(&crsTriples, 0, sizeof(crsTriples));
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, triplesTbl->tnum, 1, NULL, &crsTriples);
+	if (rc != SQLITE_OK) {
+		goto rollback;
+	}
+
+	int res;
+	rc = sqlite3BtreeMovetoUnpacked(&crsTriples, 0, key, 0, &res);
+	if (rc != SQLITE_OK)
+		goto close;
+
+	if (res == 0) {
+		int payloadSize;
+		rc = sqlite3BtreeDataSize(&crsTriples, &payloadSize);
+		if (rc != SQLITE_OK)
+			goto close;
+
+		u32 avail = 0;
+		const unsigned char* row = sqlite3BtreeDataFetch(&crsTriples, &avail);
+		row++;
+
+		int serial_type_subj, serial_type_pred, serial_type_obj;
+		row += getVarint32(row, serial_type_subj);
+		row += getVarint32(row, serial_type_pred);
+		row += getVarint32(row, serial_type_obj);
+		row++;
+
+		Mem mem[3];
+		row += sqlite3VdbeSerialGet(row, serial_type_subj, &mem[0]);
+		row += sqlite3VdbeSerialGet(row, serial_type_pred, &mem[1]);
+		row += sqlite3VdbeSerialGet(row, serial_type_obj,  &mem[2]);
+		
+		*pSubj = mem[0].u.i;
+		*pPred = mem[1].u.i;
+		*pObj  = mem[2].u.i;
+	}
+
+	rc = sqlite3BtreeCloseCursor(&crsTriples);
+	if (rc != SQLITE_OK) {
+		goto rollback;
+	}
+
+	rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+	if (rc != SQLITE_OK) {
+		return rc;
+	}
+
+	if (res != 0)
+		rc = SQLITE_DONE;
+
+	return rc;
+
+close:
+	sqlite3BtreeCloseCursor(&crsTriples);
+
+rollback:
+	sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	return rc;
+}
+
 void main()
 {
 	sqlite3 *db = NULL;
@@ -560,8 +634,12 @@ void main()
 	pgf_print_expr(e, NULL, 0, out, err);
 	printf("\n");
 
-	sg_insert_triple(db, 2, 2, 2, &key);
+	sg_insert_triple(db, 1, 2, 3, &key);
 	printf("%d\n", (int) key);
+
+	i64 subj, pred, obj;
+	sg_select_triple(db, key, &subj, &pred, &obj);
+	printf("%d %d %d\n", (int) subj, (int) pred, (int) obj);
 
 	gu_pool_free(tmp_pool);
 
