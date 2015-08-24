@@ -4,7 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: libgu
-Description: G(F|lib|othenburg) Utilities library
+Description: Gothenburg Utilities library
 Version: @VERSION@
 Libs: -L${libdir} -lgu 
-Cflags: -I${includedir} -I${libdir}/libgu/include
+Cflags: -I${includedir}
