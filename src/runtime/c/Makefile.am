@@ -1,7 +1,7 @@
-lib_LTLIBRARIES = libgu.la libpgf.la
+lib_LTLIBRARIES = libgu.la libpgf.la libsg.la
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libgu.pc libpgf.pc
+pkgconfig_DATA = libgu.pc libpgf.pc libsg.pc
 
 configincludedir = $(libdir)/libgu/include
 
@@ -83,6 +83,13 @@ libpgf_la_SOURCES = \
 libpgf_la_LDFLAGS = "-no-undefined"
 libpgf_la_LIBADD = libgu.la
 
+sgincludedir=$(includedir)/sg
+sginclude_HEADERS =
+
+libsg_la_SOURCES = \
+	sg/semantic_graph.c
+libsg_la_LIBADD = libgu.la libpgf.la
+
 bin_PROGRAMS = \
 	utils/pgf-print \
 	utils/pgf-translate \
@@ -105,4 +112,5 @@ EXTRA_DIST = \
 	Doxyfile \
 	DoxygenLayout.xml \
 	libgu.pc.in \
-	libpgf.pc.in
+	libpgf.pc.in \
+	libsg.pc.in

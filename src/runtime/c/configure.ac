@@ -74,7 +74,7 @@ AC_CONFIG_LINKS(pgf/lightning/asm.h:$cpu_dir/asm.h			dnl
 AC_CONFIG_FILES([Makefile
 	         libgu.pc
 		 libpgf.pc
-		 libteyjus.pc
+		 libsg.pc
 		 ])
 
 AC_OUTPUT
