@@ -38,7 +38,7 @@ module GF.Data.Operations (
                    tree2list,
  
 		   -- ** Printing
-		   indent, (+++), (++-), (++++), (+++++),
+		   indent, (+++), (++-), (++++), (+++-), (+++++),
 		   prUpper, prReplicate, prTList, prQuotedString, prParenth, prCurly, 
 		   prBracket, prArgList, prSemicList, prCurlyList, restoreEscapes,
 		   numberedParagraphs, prConjList, prIfEmpty, wrapLines,
@@ -160,12 +160,19 @@ tree2list = Map.toList
 indent :: Int -> String -> String
 indent i s = replicate i ' ' ++ s
 
-(+++), (++-), (++++), (+++++) :: String -> String -> String
+(+++), (++-), (++++), (+++-), (+++++) :: String -> String -> String
 a +++ b   = a ++ " "    ++ b
+
 a ++- ""  = a 
 a ++- b   = a +++ b
+
 a ++++ b  = a ++ "\n"   ++ b
+
+a +++- "" = a
+a +++- b  = a ++++ b
+
 a +++++ b = a ++ "\n\n" ++ b
+
 
 prUpper :: String -> String
 prUpper s = s1 ++ s2' where

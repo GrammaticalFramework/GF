@@ -365,7 +365,7 @@ pgfCommands = Map.fromList [
        "will accept unknown adjectives, nouns and verbs with the resource grammar."
        ],
      exec = getEnv $ \ opts ts (Env pgf mos) ->
-              return . Piped $ fromParse opts (concat [map ((,) s) (par pgf opts s) | s <- toStrings ts]),
+              return $ fromParse opts (concat [map ((,) s) (par pgf opts s) | s <- toStrings ts]),
      flags = [
        ("cat","target category of parsing"),
        ("lang","the languages of parsing (comma-separated, no spaces)"),
@@ -742,34 +742,53 @@ pgfCommands = Map.fromList [
      where
        dp = valIntOpts "depth" 4 opts
 
+   fromParse opts = foldr (joinPiped . fromParse1 opts) void
+
+   joinPiped (Piped (es1,ms1)) (Piped (es2,ms2)) = Piped (es1++es2,ms1+++-ms2)
+
+   fromParse1 opts (s,(po,bs))
+     | isOpt "bracket" opts = pipeMessage (showBracketedString bs)
+     | otherwise            =
+         case po of
+           ParseOk ts      -> fromExprs ts
+           ParseFailed i   -> pipeMessage $ "The parser failed at token "
+                                             ++ show i ++": "
+                                             ++ show (words s !! max 0 (i-1))
+                                          -- ++ " in " ++ show s
+           ParseIncomplete -> pipeMessage "The sentence is not complete"
+           TypeError errs  ->
+             pipeMessage . render $
+               "The parsing is successful but the type checking failed with error(s):"
+               $$ nest 2 (vcat (map (ppTcError . snd) errs))
+
    optLins pgf opts ts = case opts of
      _ | isOpt "groups" opts ->
-       map (unlines . snd) $ groupResults
-         [[(lang, linear pgf opts lang t) | lang <- optLangs pgf opts] | t <- ts]
-     _ -> map (optLin pgf opts) ts
-   optLin pgf opts t = unlines $
+       concatMap snd $ groupResults
+         [[(lang, s) | lang <- optLangs pgf opts,s <- linear pgf opts lang t] | t <- ts]
+     _ -> concatMap (optLin pgf opts) ts
+   optLin pgf opts t =
      case opts of
        _ | isOpt "treebank" opts && isOpt "chunks" opts ->
          (showCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
          [showCId lang ++ ": " ++ li | (lang,li) <- linChunks pgf opts t] --linear pgf opts lang t | lang <- optLangs pgf opts]
        _ | isOpt "treebank" opts ->
          (showCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
-         [showCId lang ++ ": " ++ linear pgf opts lang t | lang <- optLangs pgf opts]
+         [showCId lang ++ ": " ++ s | lang <- optLangs pgf opts, s<-linear pgf opts lang t]
        _ | isOpt "chunks" opts -> map snd $ linChunks pgf opts t   
-       _ -> [linear pgf opts lang t | lang <- optLangs pgf opts]
+       _ -> [s | lang <- optLangs pgf opts, s<-linear pgf opts lang t]
    linChunks pgf opts t = 
-     [(lang, unwords (intersperse "<+>" (map (linear pgf opts lang) (treeChunks t)))) | lang <- optLangs pgf opts]
+     [(lang, unwords (intersperse "<+>" (map (unlines . linear pgf opts lang) (treeChunks t)))) | lang <- optLangs pgf opts]
 
-   linear :: PGF -> [Option] -> CId -> Expr -> String
+   linear :: PGF -> [Option] -> CId -> Expr -> [String]
    linear pgf opts lang = let unl = unlex opts lang in case opts of
-       _ | isOpt "all"     opts -> unlines . concat . intersperse [[]] .
+       _ | isOpt "all"     opts -> concat . -- intersperse [[]] .
                                    map (map (unl . snd)) . tabularLinearizes pgf lang
-       _ | isOpt "list"    opts -> commaList . concat . intersperse [[]] .
+       _ | isOpt "list"    opts -> (:[]) . commaList . concat .
                                    map (map (unl . snd)) . tabularLinearizes pgf lang
-       _ | isOpt "table"   opts -> unlines . concat . intersperse [[]] .
+       _ | isOpt "table"   opts -> concat . -- intersperse [[]] .
                     map (map (\(p,v) -> p+++":"+++unl v)) . tabularLinearizes pgf lang
-       _ | isOpt "bracket" opts -> unwords . map showBracketedString . bracketedLinearize pgf lang
-       _                        -> unl . linearize pgf lang
+       _ | isOpt "bracket" opts -> (:[]) . unwords . map showBracketedString . bracketedLinearize pgf lang
+       _                        -> (:[]) . unl . linearize pgf lang
 
    -- replace each non-atomic constructor with mkC, where C is the val cat
    tree2mk pgf = showExpr [] . t2m where
@@ -843,22 +862,6 @@ pgfCommands = Map.fromList [
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
    takeOptNum opts = take (optNumInf opts)
-
-   fromParse opts []     = ([],[])
-   fromParse opts ((s,(po,bs)):ps)
-     | isOpt "bracket" opts = (es, showBracketedString bs
-                                   ++ "\n" ++ msg)
-     | otherwise            = case po of
-                                ParseOk ts     -> let Piped (es',msg') = fromExprs ts
-                                                  in (es'++es,msg'++msg)
-                                TypeError errs -> ([], render ("The parsing is successful but the type checking failed with error(s):" $$
-                                                               nest 2 (vcat (map (ppTcError . snd) errs)))
-                                                       ++ "\n" ++ msg)
-                                ParseFailed i  -> ([], "The parser failed at token " ++ show (words s !! max 0 (i-1))
-                                                       ++ "\n" ++ msg)
-                                ParseIncomplete-> ([], "The sentence is not complete")
-     where
-       (es,msg) = fromParse opts ps
 
    returnFromExprs es = return $ case es of
      [] -> pipeMessage "no trees found"
