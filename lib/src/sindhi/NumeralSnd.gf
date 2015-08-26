@@ -1,4 +1,4 @@
-concrete NumeralSnd of Numeral = CatSnd ** open ResSnd, Prelude in {
+concrete NumeralSnd of Numeral = CatSnd [Numeral,Digits] ** open ResSnd, Prelude in {
 -- By Harald Hammarstroem
 -- Modification for Punjabi by Shafqat Virk
  flags coding=utf8 ;

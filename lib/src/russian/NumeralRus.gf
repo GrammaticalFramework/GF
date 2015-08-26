@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../../prelude
 
-concrete NumeralRus of Numeral = CatRus ** open ResRus, Prelude in {
+concrete NumeralRus of Numeral = CatRus [Numeral,Digits] ** open ResRus, Prelude in {
 
 flags  coding=utf8 ;
 

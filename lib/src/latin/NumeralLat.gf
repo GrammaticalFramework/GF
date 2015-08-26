@@ -1,4 +1,4 @@
-concrete NumeralLat of Numeral = CatLat ** open ResLat,Prelude in {
+concrete NumeralLat of Numeral = CatLat [Numeral,Digits] ** open ResLat,Prelude in {
 --
 --lincat 
 --  Digit = {s : DForm => CardOrd => Str} ;

@@ -1,4 +1,4 @@
-concrete NumeralGre of Numeral = CatGre  ** open ResGre,Prelude in {
+concrete NumeralGre of Numeral = CatGre [Numeral,Digits] ** open ResGre,Prelude in {
 
  flags coding= utf8 ;
 

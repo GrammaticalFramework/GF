@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
-concrete NumeralMon of Numeral = CatMon ** open ResMon, MorphoMon, Prelude in {
+concrete NumeralMon of Numeral = CatMon [Numeral,Digits] ** open ResMon, MorphoMon, Prelude in {
 
  flags  coding=utf8 ;
 

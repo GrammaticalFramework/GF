@@ -1,4 +1,4 @@
-concrete NumeralRon of Numeral = CatRon ** 
+concrete NumeralRon of Numeral = CatRon [Numeral,Digits] **
   open  MorphoRon, CatRon, Prelude in {
 
 flags coding = utf8 ;

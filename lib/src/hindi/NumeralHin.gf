@@ -2,7 +2,7 @@
 -- Modification for Urdu Shafqat Virk
 
 
-concrete NumeralHin of Numeral = CatHin ** open ResHin,CommonHindustani,ParamX, Prelude in {
+concrete NumeralHin of Numeral = CatHin [Numeral,Digits] ** open ResHin,CommonHindustani,ParamX, Prelude in {
 flags coding=utf8 ;
 
 param DForm = unit | ten ;

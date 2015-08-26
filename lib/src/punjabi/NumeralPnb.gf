@@ -1,4 +1,4 @@
-concrete NumeralPnb of Numeral = CatPnb ** open ResPnb, Prelude in {
+concrete NumeralPnb of Numeral = CatPnb [Numeral,Digits] ** open ResPnb, Prelude in {
 -- By Harald Hammarstroem
 -- Modification for Punjabi by Shafqat Virk
  flags coding=utf8 ;

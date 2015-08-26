@@ -1,4 +1,4 @@
-concrete NumeralChi of Numeral = CatChi ** open ResChi, Prelude in {
+concrete NumeralChi of Numeral = CatChi [Numeral,Digits] ** open ResChi, Prelude in {
 
 flags coding = utf8 ;
 
