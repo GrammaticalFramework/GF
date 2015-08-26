@@ -1,4 +1,4 @@
-concrete NumeralNor of Numeral = CatNor ** open MorphoNor, Prelude in {
+concrete NumeralNor of Numeral = CatNor [Numeral,Digits] ** open MorphoNor, Prelude in {
   flags coding=utf8 ;
 
 lincat 

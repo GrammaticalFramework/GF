@@ -1,4 +1,4 @@
-concrete NumeralSwa of Numeral = CatSwa ** open ResSwa in {
+concrete NumeralSwa of Numeral = CatSwa [Numeral,Digits] ** open ResSwa in {
 
 
 }

@@ -1,4 +1,4 @@
-concrete NumeralDan of Numeral = CatDan ** open MorphoDan,Prelude in {
+concrete NumeralDan of Numeral = CatDan [Numeral,Digits] ** open MorphoDan,Prelude in {
   flags coding=utf8 ;
 
 

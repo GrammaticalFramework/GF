@@ -1,5 +1,5 @@
 
-concrete NumeralAfr of Numeral = CatAfr ** open ResAfr, Prelude in {
+concrete NumeralAfr of Numeral = CatAfr [Numeral,Digits] ** open ResAfr, Prelude in {
 
 flags optimize = all_subs ;
   coding=utf8 ;

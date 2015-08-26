@@ -1,4 +1,4 @@
-concrete NumeralNep of Numeral = CatNep ** open ResNep, Prelude in {
+concrete NumeralNep of Numeral = CatNep [Numeral,Digits] ** open ResNep, Prelude in {
 -- By Harald Hammarstroem
 -- Modification for Nepali by Dinesh Simkhada and Shafqat Virk - 2011
  flags coding=utf8 ;

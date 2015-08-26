@@ -2,7 +2,7 @@
 -- Modification for Urdu Shafqat Virk
 
 
-concrete NumeralUrd of Numeral = CatUrd ** open ResUrd,CommonHindustani,ParamX, Prelude in {
+concrete NumeralUrd of Numeral = CatUrd [Numeral,Digits] ** open ResUrd,CommonHindustani,ParamX, Prelude in {
 flags coding=utf8 ;
 
 param DForm = unit | ten ;

@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../../prelude
 
-concrete NumeralTur of Numeral = CatTur ** open Prelude, ResTur, ParadigmsTur in {
+concrete NumeralTur of Numeral = CatTur [Numeral,Digits] ** open Prelude, ResTur, ParadigmsTur in {
 
 flags
   coding = utf8 ;

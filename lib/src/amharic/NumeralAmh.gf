@@ -1,5 +1,5 @@
 
-concrete NumeralAmh of Numeral = CatAmh ** open ResAmh,ParamX,Prelude in {
+concrete NumeralAmh of Numeral = CatAmh [Numeral,Digits] ** open ResAmh,ParamX,Prelude in {
 flags coding = utf8;
 lincat 
 

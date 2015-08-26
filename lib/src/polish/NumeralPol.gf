@@ -2,7 +2,7 @@
 
 -- Adam Slaski, 2009, 2010 <adam.slaski@gmail.com>
 
-concrete NumeralPol of Numeral = CatPol ** open ResPol,Prelude, AdjectiveMorphoPol in {
+concrete NumeralPol of Numeral = CatPol [Numeral,Digits] ** open ResPol,Prelude, AdjectiveMorphoPol in {
 
   flags  coding=utf8 ;
 

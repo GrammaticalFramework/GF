@@ -1,4 +1,4 @@
---concrete NumeralTel of Numeral = CatTel ** open ResTel in {
+--concrete NumeralTel of Numeral = CatTel [Numeral,Digits] ** open ResTel in {
 ----
 ----lincat 
 ----  Digit = {s : DForm => CardOrd => Str} ;

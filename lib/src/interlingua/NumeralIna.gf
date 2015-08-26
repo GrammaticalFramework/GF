@@ -1,4 +1,4 @@
-concrete NumeralIna of Numeral = CatIna ** open ResIna,Prelude in {
+concrete NumeralIna of Numeral = CatIna [Numeral,Digits] ** open ResIna,Prelude in {
 
   lincat 
   Digit = {s : DForm => CardOrd => Str} ;

@@ -1,4 +1,4 @@
-concrete NumeralAra of Numeral = CatAra ** 
+concrete NumeralAra of Numeral = CatAra [Numeral,Digits] **
   open Predef, Prelude, ResAra, MorphoAra in {
 
 flags coding=utf8 ;
