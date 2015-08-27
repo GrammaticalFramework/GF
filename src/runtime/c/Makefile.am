@@ -36,6 +36,10 @@ pgfinclude_HEADERS = \
 	pgf/graphviz.h \
 	pgf/pgf.h
 
+sgincludedir=$(includedir)/sg
+sginclude_HEADERS = \
+	sg/sg.h
+
 libgu_la_SOURCES = \
 	gu/assert.c \
 	gu/bits.c \
@@ -83,11 +87,8 @@ libpgf_la_SOURCES = \
 libpgf_la_LDFLAGS = "-no-undefined"
 libpgf_la_LIBADD = libgu.la
 
-sgincludedir=$(includedir)/sg
-sginclude_HEADERS =
-
 libsg_la_SOURCES = \
-	sg/semantic_graph.c
+	sg/sg.c
 libsg_la_LIBADD = libgu.la libpgf.la
 
 bin_PROGRAMS = \
