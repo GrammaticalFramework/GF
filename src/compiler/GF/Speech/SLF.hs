@@ -51,7 +51,7 @@ mkFAs pgf cnc = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
 slfStyleFA :: Eq a => DFA a -> FA State (Maybe a) ()
 slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing ()
              . moveLabelsToNodes . dfa2nfa
-
+{-
 -- | Give sequential names to subnetworks.
 renameSubs :: MFA -> MFA
 renameSubs (MFA start subs) = MFA (newName start) subs'
@@ -59,7 +59,7 @@ renameSubs (MFA start subs) = MFA (newName start) subs'
         newName s = lookup' s newNames
         subs' = [(newName s,renameLabels n) | (s,n) <- subs]
         renameLabels = mapTransitions (mapSymbol newName id)
-
+-}
 --
 -- * SLF graphviz printing (without sub-networks)
 --

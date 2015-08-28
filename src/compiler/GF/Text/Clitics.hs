@@ -35,6 +35,6 @@ getCliticsText isLex rclitics =
 
 -- example
 
-getClitics1 = getClitics exlex1 exclits1
-exlex1   = flip elem ["auto", "naise", "rahan","maa","maahan","maahankaan"]
-exclits1 = map reverse ["ni","ko","han","pas","nsa","kin","kaan"]
+--getClitics1 = getClitics exlex1 exclits1
+--exlex1   = flip elem ["auto", "naise", "rahan","maa","maahan","maahankaan"]
+--exclits1 = map reverse ["ni","ko","han","pas","nsa","kin","kaan"]

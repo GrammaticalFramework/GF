@@ -92,7 +92,7 @@ llin :: Environ -> Expr -> Expr
 llin env expr = 
      let 
          (id,args) = fromJust $ unApp expr
-         cexpr = fromJust $ Map.lookup id (getConcMap env)
+       --cexpr = fromJust $ Map.lookup id (getConcMap env)
      in 
          if any isMeta args 
               then let 
@@ -170,7 +170,7 @@ embedInStart fss cs =
 
 
 -----------------------------------------------
-
+{-
 updateConcMap :: Environ -> MyFunc -> Expr -> Environ
 updateConcMap env myf expr = 
      Env (getTypeMap env) (Map.insert myf expr (getConcMap env)) (getSigs env) (getAll env)
@@ -196,14 +196,14 @@ updateEnv env myf myt expr =
        newInterInstr = 
          maybe (Map.insert myt [myf] ii) (\x -> Map.insert myt (myf:x) ii) $ Map.lookup myt ii
       in Env (getTypeMap env) (Map.insert nn expr (getConcMap env)) newInterInstr (getAll env)
-
+-}
 
 mkSigs :: [FuncWithArg] -> Map.Map MyType [FuncWithArg]
 mkSigs fss = Map.fromListWith (++) $ zip (map getType fss) (map (\x -> [x]) fss)
 
 
 
-------------------------------------
+{------------------------------------
 lang :: String 
 lang = "Eng"
 
@@ -214,7 +214,7 @@ parseLang = fromJust $ readLanguage "ParseEng"
 
 parsePGFfile :: String
 parsePGFfile = "ParseEngAbs.pgf"
-------------------------------------
+------------------------------------}
 
 
 
@@ -307,7 +307,7 @@ debugReplaceConc expr i e =
                                          in (mkApp cid (map  fst repargs), or $ map snd repargs)) $ unApp e_  
  
 
-
+{-
 -- replaceArgs : Original expression to parse (from abstract syntax) -> Concrete expression (parsed) 
 replaceArgs :: Expr -> Expr -> Environ -> Maybe Expr
 replaceArgs aexpr cexpr env =
@@ -352,7 +352,7 @@ simpleReplace :: String -> String
 simpleReplace [] = []
 simpleReplace ('?':xs) = 'o' : simpleReplace xs
 simpleReplace (x:xs) = x : simpleReplace xs
-
+-}
 
 isMeta :: Expr -> Bool
 isMeta = isJust.unMeta 
@@ -368,12 +368,12 @@ mkFuncWithArg ((c1,c2),cids) = FuncWithArg c1 c2 cids
 
 initial :: TypeMap -> ConcMap -> [FuncWithArg] -> [FuncWithArg] -> Environ
 initial tm cm fss allfs = Env tm cm (mkSigs fss) allfs
-
+{-
 testInit :: [FuncWithArg] -> Environ
 testInit allfs = initial lTypes Map.empty [] allfs
 
 lTypes = Map.fromList [(mkCId "Comment", mkCId "S"),(mkCId "Item", mkCId "NP"), (mkCId "Kind", mkCId "CN"), (mkCId "Quality", mkCId "AP")]
-
+-}
 startCateg = mkCId "Comment"
 -- question about either to give the startcat or not ...
 

@@ -119,22 +119,22 @@ sizeInfo i = case i of
   msize mt = case mt of
     Just (L _ t) -> sizeTerm t
     _ -> 0
-
+{-
 -- the size of a module
 sizeModule :: SourceModule -> Int
 sizeModule = fst . sizesModule
-
+-}
 sizesModule :: SourceModule -> (Int, [(Ident,Int)])
 sizesModule (_,m) = 
   let 
     js = Map.toList (jments m) 
     tb = [(i,k) | (i,j) <- js, let k = sizeInfo j, k >= 0]
   in (length tb + sum (map snd tb),tb)
-
+{-
 -- the size of a grammar
 sizeGrammar :: Grammar -> Int
 sizeGrammar = fst . sizesGrammar
-
+-}
 sizesGrammar :: Grammar -> (Int,[(ModuleName,(Int,[(Ident,Int)]))])
 sizesGrammar g = 
   let 

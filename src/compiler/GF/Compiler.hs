@@ -90,7 +90,7 @@ compileCFFiles opts fs = do
                 (CFRule cat _ _ : _) -> return cat
                 _                    -> fail "empty CFG"
   let pgf = cf2pgf (last fs) (uniqueFuns (mkCFG startCat Set.empty rules))
-  let cnc = justModuleName (last fs)
+--let cnc = justModuleName (last fs)
   unless (flag optStopAfterPhase opts == Compile) $
      do probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
         let pgf' = setProbabilities probs $ if flag optOptimizePGF opts then optimizePGF pgf else pgf

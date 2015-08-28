@@ -189,5 +189,5 @@ remove x r = let (mss,r') = Map.updateLookupWithKey (\_ _ -> Nothing) x r
 incoming :: Ord a => a -> Rel' a -> Set a
 incoming x r = maybe Set.empty fst $ Map.lookup x r
 
-outgoing :: Ord a => a -> Rel' a -> Set a
-outgoing x r = maybe Set.empty snd $ Map.lookup x r
+--outgoing :: Ord a => a -> Rel' a -> Set a
+--outgoing x r = maybe Set.empty snd $ Map.lookup x r

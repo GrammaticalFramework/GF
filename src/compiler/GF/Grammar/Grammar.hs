@@ -190,9 +190,9 @@ allExtendsPlus gr i =
   where
     exts m = extends m ++ [j | MTInstance (j,_) <- [mtype m]]
 
--- | initial search path: the nonqualified dependencies
-searchPathModule :: ModuleInfo -> [ModuleName]
-searchPathModule m = [i | OSimple i <- depPathModule m]
+-- -- | initial search path: the nonqualified dependencies
+-- searchPathModule :: ModuleInfo -> [ModuleName]
+-- searchPathModule m = [i | OSimple i <- depPathModule m]
 
 prependModule :: Grammar -> Module -> Grammar
 prependModule (MGrammar mm ms) im@(i,m) = MGrammar (Map.insert i m mm) (im:ms)

@@ -36,7 +36,7 @@ module GF.Speech.FiniteState (FA(..), State, NFA, DFA,
 
 import Data.List
 import Data.Maybe 
-import Data.Map (Map)
+--import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Set (Set)
 import qualified Data.Set as Set
@@ -246,8 +246,8 @@ fixIncoming cs c@((n,()),es) = (cs'', ((n,Nothing),es'):newContexts)
 		    ++ [ (y,x,()) | (f,_,l') <- cyc, l == l', (y,_) <- newNodes]
 	newContexts = [ (v, to v) | v <- newNodes ]
 
-alphabet :: Eq b => Graph n a (Maybe b) -> [b]
-alphabet = nub . catMaybes . map edgeLabel . edges
+--alphabet :: Eq b => Graph n a (Maybe b) -> [b]
+--alphabet = nub . catMaybes . map edgeLabel . edges
 
 determinize :: Ord a => NFA a -> DFA a
 determinize (FA g s f) = let (ns,es) = h (Set.singleton start) Set.empty Set.empty
@@ -309,8 +309,8 @@ dfa2nfa = mapTransitions Just
 prFAGraphviz :: (Eq n,Show n) => FA n String String -> String
 prFAGraphviz  = Dot.prGraphviz . faToGraphviz
 
-prFAGraphviz_ :: (Eq n,Show n,Show a, Show b) => FA n a b -> String
-prFAGraphviz_  = Dot.prGraphviz . faToGraphviz . mapStates show . mapTransitions show
+--prFAGraphviz_ :: (Eq n,Show n,Show a, Show b) => FA n a b -> String
+--prFAGraphviz_  = Dot.prGraphviz . faToGraphviz . mapStates show . mapTransitions show
 
 faToGraphviz :: (Eq n,Show n) => FA n String String -> Dot.Graph
 faToGraphviz (FA (Graph _ ns es) s f) 
@@ -325,5 +325,5 @@ faToGraphviz (FA (Graph _ ns es) s f)
 -- * Utilities
 --
 
-lookups :: Ord k => [k] -> Map k a -> [a]
-lookups xs m = mapMaybe (flip Map.lookup m) xs
+--lookups :: Ord k => [k] -> Map k a -> [a]
+--lookups xs m = mapMaybe (flip Map.lookup m) xs

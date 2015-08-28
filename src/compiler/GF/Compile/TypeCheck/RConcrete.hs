@@ -479,7 +479,7 @@ checkLType gr g trm typ0 = do
 
     R r -> case typ of --- why needed? because inference may be too difficult
        RecType rr -> do
-         let (ls,_) = unzip rr        -- labels of expected type
+       --let (ls,_) = unzip rr        -- labels of expected type
          fsts <- mapM (checkM r) rr   -- check that they are found in the record
          return $ (R fsts, typ)       -- normalize record
 
@@ -556,10 +556,10 @@ checkLType gr g trm typ0 = do
       termWith trm' $ checkEqLType gr g typ ty' trm'
  where
    justCheck g ty te = checkLType gr g ty te >>= return . fst
-
+{-
    recParts rr t = (RecType rr1,RecType rr2) where 
      (rr1,rr2) = partition (flip elem (map fst t) . fst) rr 
-
+-}
    checkM rms (l,ty) = case lookup l rms of
      Just (Just ty0,t) -> do
        checkEqLType gr g ty ty0 t
@@ -747,12 +747,12 @@ ppType ty =
                       _      -> ppTerm Unqualified 0 ty
     Prod _ x a b -> ppType a <+> "->" <+> ppType b
     _            -> ppTerm Unqualified 0 ty
-
+{-
 ppqType :: Type -> Type -> Doc
 ppqType t u = case (ppType t, ppType u) of
   (pt,pu) | render pt == render pu -> ppTerm Qualified 0 t
   (pt,_) -> pt
-
+-}
 checkLookup :: Ident -> Context -> Check Type
 checkLookup x g =
   case [ty | (b,y,ty) <- g, x == y] of

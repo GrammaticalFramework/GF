@@ -20,8 +20,8 @@ module GF.Data.Str (
   allItems
 ) where
 
-import GF.Data.Operations
-import Data.List (isPrefixOf, isSuffixOf, intersperse)
+import GF.Data.Operations(prQuotedString)
+import Data.List (isPrefixOf, intersperse) --, isSuffixOf
 
 -- | abstract token list type. AR 2001, revised and simplified 20\/4\/2003
 newtype Str = Str [Tok]  deriving (Read, Show, Eq, Ord)
@@ -50,11 +50,11 @@ matchPrefix s vs t =
     (u,as) <- vs, 
     any (\c -> isPrefixOf c (concat (unmarkup t))) as
   ] ++ [s]
-
+{-
 matchSuffix :: String -> Ss -> [(Ss,[String])] -> Ss
 matchSuffix t s vs = 
   head ([u | (u,as) <- vs, any (\c -> isSuffixOf c t) as] ++ [s])
-
+-}
 unmarkup :: [String] -> [String]
 unmarkup = filter (not . isXMLtag) where
   isXMLtag s = case s of

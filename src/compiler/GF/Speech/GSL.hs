@@ -78,8 +78,8 @@ keepSymbol _ = True
 showToken :: Token -> Doc
 showToken = pp . map toLower
 
-isPunct :: Char -> Bool
-isPunct c = c `elem` "-_.:;.,?!()[]{}"
+--isPunct :: Char -> Bool
+--isPunct c = c `elem` "-_.:;.,?!()[]{}"
 
 comment :: String -> Doc
 comment s = ";" <+> s

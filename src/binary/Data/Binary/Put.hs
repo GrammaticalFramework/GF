@@ -61,7 +61,7 @@ import Control.Applicative
 ------------------------------------------------------------------------
 
 -- XXX Strict in buffer only. 
-data PairS a = PairS a {-# UNPACK #-}!Builder
+data PairS a = PairS a {-UNPACK-}!Builder
 
 sndS :: PairS a -> Builder
 sndS (PairS _ b) = b

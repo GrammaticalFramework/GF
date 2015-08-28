@@ -9,7 +9,6 @@ import GF.Command.Parse
 import PGF.Internal(Expr(..))
 import GF.Infra.UseIO(putStrLnE)
 
-import GF.Text.Pretty(render)
 import Control.Monad(when)
 import qualified Data.Map as Map
 

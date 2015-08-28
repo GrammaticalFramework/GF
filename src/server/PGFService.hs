@@ -37,7 +37,7 @@ import Control.Monad
 import Control.Monad.State(State,evalState,get,put)
 import Control.Monad.Catch(bracket_)
 import Data.Char
-import Data.Function (on)
+--import Data.Function (on)
 import Data.List (sortBy,intersperse,mapAccumL,nub,isSuffixOf,nubBy)
 import qualified Data.Map as Map
 import Data.Maybe
@@ -678,7 +678,7 @@ completionInfo pgf token pstate =
       Just typ ->
         makeObj [ {-"fid".=funid,-} "fun".=cid, "hyps".=hyps', "cat".=cat, "seq".=seq ]
         where
-          (hyps,cat,es) = PGF.unType typ
+          (hyps,cat,_es) = PGF.unType typ
           hyps' = [ PGF.showType [] typ | (_,_,typ) <- hyps ]
       Nothing -> makeObj [ "error".=("Function "++show cid++" not found") ] -- shouldn't happen
 
@@ -948,10 +948,10 @@ instance JSON PGF.BracketedString where
     showJSON (PGF.Leaf s) = makeObj ["token".=s]
 
 -- * PGF utilities
-
+{-
 cat :: PGF -> Maybe PGF.Type -> PGF.Type
 cat pgf mcat = fromMaybe (PGF.startCat pgf) mcat
-
+-}
 parse' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,PGF.ParseOutput,PGF.BracketedString)]
 parse' pgf input mcat mfrom = 
    [(from,po,bs) | from <- froms, (po,bs) <- [PGF.parse_ pgf from cat Nothing input]]
@@ -969,7 +969,7 @@ complete' pgf from typ mlimit input =
        then (bs, unwords (if null prefix then ws' else ws'++[prefix]), Map.empty)
        else (bs, prefix, PGF.getCompletions ps prefix)
   where
-    order = sortBy (compare `on` map toLower)
+  --order = sortBy (compare `on` map toLower)
 
     tokensAndPrefix :: String -> ([String],String)
     tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")

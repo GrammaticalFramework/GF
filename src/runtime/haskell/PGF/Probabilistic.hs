@@ -210,7 +210,7 @@ mkProbDefs pgf =
                               then closure k deps2 vs2 vs3
                               else closure k deps2 ((src,dst') : vs2) vs3
                        else closure k (dep2 : deps2) vs2 vs3
-
+{-
         mkNewSig src =
           DTyp (mkArgs 0 0 [] src) cidFloat []
           where
@@ -219,7 +219,7 @@ mkProbDefs pgf =
                | i == k    = let ty = DTyp [] c (map (normalForm sig k env) es)
                              in (Explicit,wildCId,ty) : mkArgs (k+1) (l+1) (VGen l [] : env) src
                | otherwise = mkArgs (k+1) l (VMeta 0 env [] : env) src
-
+-}
 type CState = (Int,Map.Map CId [Equation])
 
 computeConstrs :: PGF -> CState -> [(CId,[Patt],[Expr])] -> (CState,[[CId]])
@@ -263,7 +263,7 @@ computeConstrs pgf st fns =
       where
         addArgs (cn,fns) = addArg (length args) cn [] fns
           where
-            Just (ty@(DTyp args _ es),_,_,_) = Map.lookup cn (funs (abstract pgf))
+            Just (DTyp args _ _es,_,_,_) = Map.lookup cn (funs (abstract pgf))
 
         addArg 0 cn ps fns = [(PApp cn (reverse ps),fns)]
         addArg n cn ps fns = concat [addArg (n-1) cn (arg:ps) fns' | (arg,fns') <- computeConstr fns]

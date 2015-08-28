@@ -55,7 +55,7 @@ typesInterm abs fset =
                                      in (x,c)) fset
               in Map.fromList $ Set.toList fsetTypes             
 
-
+{-
 takeArgs :: Map.Map CId CId -> Map.Map CId Expr -> CId -> Expr
 takeArgs mtypes mexpr ty = 
      let xarg = head $ Map.keys $ Map.filter (==ty) mtypes
@@ -63,7 +63,7 @@ takeArgs mtypes mexpr ty =
 
 doesReturnCat :: Type -> CId -> Bool
 doesReturnCat (DTyp _ c _) cat = c == cat                                  
-                         
+-}                         
 returnCat :: Abstr -> CId -> CId 
 returnCat abs cid = 
       let p = Map.lookup cid $ funs abs           
