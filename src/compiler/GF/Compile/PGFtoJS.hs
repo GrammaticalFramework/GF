@@ -51,11 +51,14 @@ concrete2js (c,cnc) =
                                JS.EInt (totalCats cnc)])
   where 
    l  = JS.IdentPropName (JS.Ident (showCId c))
+{-
    litslins = [JS.Prop (JS.StringPropName    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
                JS.Prop (JS.StringPropName  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
                JS.Prop (JS.StringPropName "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
+-}
    cats (c,CncCat start end _) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
                                                                                             ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
+{-
 mkStr :: String -> JS.Expr
 mkStr s = new "Str" [JS.EStr s]
 
@@ -65,7 +68,7 @@ mkSeq xs = new "Seq" xs
 
 argIdent :: Integer -> JS.Ident
 argIdent n = JS.Ident ("x" ++ show n)
-
+-}
 children :: JS.Ident
 children = JS.Ident "cs"
 

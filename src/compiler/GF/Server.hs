@@ -142,7 +142,7 @@ handle logLn documentroot state0 cache execute1 stateVar
       _ -> return (resp501 $ "method "++method)
   where
     logPutStrLn msg = liftIO $ logLn msg
-    debug msg = logPutStrLn msg
+--  debug msg = logPutStrLn msg
 
     addDate m =
       do t <- getCurrentTime
@@ -371,7 +371,7 @@ ok200' t     = Response 200 [t,xo]
 json200 x    = json200' id x
 json200' f   = ok200' jsonUTF8 . encodeString . f . encode
 jsonp200' f  = ok200' jsonpUTF8 . encodeString . f . encode
-html200      = ok200' htmlUTF8 . encodeString
+--html200    = ok200' htmlUTF8 . encodeString
 resp204      = Response 204 [xo] "" -- no content
 resp301 url  = Response 301 [plain,xo,location url] $
                "Moved permanently to "++url
@@ -389,7 +389,7 @@ plain = ct "text/plain" ""
 plainUTF8 = ct "text/plain" csutf8
 jsonUTF8 = ct "application/json" csutf8 -- http://www.ietf.org/rfc/rfc4627.txt
 jsonpUTF8 = ct "application/javascript" csutf8
-htmlUTF8 = ct "text/html" csutf8
+--htmlUTF8 = ct "text/html" csutf8
 
 ct t cs = ("Content-Type",t++cs)
 csutf8 = "; charset=UTF-8"

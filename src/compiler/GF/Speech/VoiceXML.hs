@@ -151,13 +151,13 @@ prompt = Tag "prompt" []
 
 promptString :: String -> XML
 promptString p = prompt [Data p]
-
+{-
 reprompt :: XML
 reprompt = ETag "reprompt" []
-
+-}
 assign :: String -> String -> XML
 assign n e = ETag "assign" [("name",n),("expr",e)]
-
+{-
 value :: String -> XML
 value expr = ETag "value" [("expr",expr)]
 
@@ -174,7 +174,7 @@ cond ((c,b):rest) els = Tag "if" [("cond",c)] (b ++ es)
 
 goto_item :: String -> XML
 goto_item nextitem = ETag "goto" [("nextitem",nextitem)]
-
+-}
 return_ :: [String] -> XML
 return_ names = ETag "return" [("namelist", unwords names)]
 
@@ -183,7 +183,7 @@ block = Tag "block" []
 
 blockCond :: String -> [XML] -> XML
 blockCond cond = Tag "block" [("cond", cond)]
-
+{-
 throw :: String -> String -> XML
 throw event msg = Tag "throw" [("event",event),("message",msg)] []
 
@@ -192,20 +192,20 @@ nomatch = Tag "nomatch" []
 
 help :: [XML] -> XML
 help = Tag "help" []
-
+-}
 param :: String -> String -> XML
 param name expr = ETag "param" [("name",name),("expr",expr)]
 
 var :: String -> Maybe String -> XML
 var name expr = ETag "var" ([("name",name)]++e)
   where e = maybe [] ((:[]) . (,) "expr") expr
-
+{-
 script :: String -> XML
 script s = Tag "script" [] [CData s]
 
 scriptURI :: String -> XML
 scriptURI uri = Tag "script" [("uri", uri)] []
-
+-}
 --
 -- * ECMAScript stuff
 --

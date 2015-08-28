@@ -153,13 +153,13 @@ removeLeftRecursion gr
     -- note: the rest don't occur in the original grammar
 
     cats = allCats gr
-    rules = allRules gr
+--  rules = allRules gr
 
     directLeftCorner = mkRel [(NonTerminal c,t) | CFRule c (t:_) _ <- allRules gr]
-    leftCorner = reflexiveClosure_ (map NonTerminal cats) $ transitiveClosure directLeftCorner
+--  leftCorner = reflexiveClosure_ (map NonTerminal cats) $ transitiveClosure directLeftCorner
     properLeftCorner = transitiveClosure directLeftCorner
     properLeftCornersOf = Set.toList . allRelated properLeftCorner . NonTerminal
-    isProperLeftCornerOf = flip (isRelatedTo properLeftCorner)
+--  isProperLeftCornerOf = flip (isRelatedTo properLeftCorner)
 
     leftRecursive = reflexiveElements properLeftCorner
     isLeftRecursive = (`Set.member` leftRecursive)
@@ -167,7 +167,7 @@ removeLeftRecursion gr
     retained = cfgStartCat gr `Set.insert`
                 Set.fromList [a | r <- allRules (filterCFGCats (not . isLeftRecursive . NonTerminal) gr),
                                   NonTerminal a <- ruleRhs r]
-    isRetained = (`Set.member` retained)
+--  isRetained = (`Set.member` retained)
 
     retainedLeftRecursive = filter (isLeftRecursive . NonTerminal) $ Set.toList retained
 

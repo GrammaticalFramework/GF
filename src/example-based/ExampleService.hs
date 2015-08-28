@@ -71,11 +71,11 @@ doTestFunction cwd cache environ =
 getCId :: String -> CGI CId
 getCId name = maybe err return =<< fmap readCId (getInp name)
   where err = throwCGIError 400 ("Bad "++name) []
-
+{-
 getLimit :: CGI Int
 getLimit = maybe err return =<< readInput "limit"
   where err = throwCGIError 400 "Missing/bad limit" []
-
+-}
 
 readParsePGF cwd cache =
     do parsepgf <- getInp "parser"

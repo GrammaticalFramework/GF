@@ -49,9 +49,9 @@ normEBNF erules = let
   erules1 = [normERule ([i],r) | (i,r) <- zip [0..] erules]
   erules2 = erules1 ---refreshECats erules1 --- this seems to be just bad !
   erules3 = concat (map pickERules erules2)
-  erules4 = nubERules erules3
+--erules4 = nubERules erules3
  in [(mkCFCatE cat, map eitem2cfitem its) | (cat,itss) <- erules3, its <- itss]
-
+{-
 refreshECats :: [NormERule] -> [NormERule]
 refreshECats rules = [recas [i] rule | (i,rule) <- zip [0..] rules] where
  recas ii (cat,its) = (updECat ii cat, [recss ii 0 s | s <- its])
@@ -63,7 +63,7 @@ refreshECats rules = [recas [i] rule | (i,rule) <- zip [0..] rules] where
    EIPlus (cat,t) -> EIPlus (updECat ii cat, [recss ii 0 s | s <- t])
    EIOpt  (cat,t) -> EIOpt  (updECat ii cat, [recss ii 0 s | s <- t])
    _ -> it
-  
+-}
 pickERules :: NormERule -> [NormERule]
 pickERules rule@(cat,alts) = rule : concat (map pics (concat alts)) where
  pics it = case it of
@@ -77,7 +77,7 @@ pickERules rule@(cat,alts) = rule : concat (map pics (concat alts)) where
                                         where cat' = mkNewECat cat "Plus"
  mkEOptRules cat  = [(cat', [[],[EINonTerm cat]])] 
                                         where cat' = mkNewECat cat "Opt"
-
+{-
 nubERules :: [NormERule] -> [NormERule]
 nubERules rules = nub optim where 
   optim = map (substERules (map mkSubst replaces)) irreducibles
@@ -100,7 +100,7 @@ substERules g (cat,itss) = (cat, map sub itss) where
   sub (EIStar r : ii) = EIStar (substERules g r) : ii
   sub (EIPlus r : ii) = EIPlus (substERules g r) : ii
   sub (EIOpt r : ii)  = EIOpt  (substERules g r) : ii
-
+-}
 eitem2cfitem :: EItem -> CFSymbol
 eitem2cfitem it = case it of
   EITerm a       -> Terminal a
@@ -145,8 +145,8 @@ prECat (c,ints) = c ++ "_" ++ prTList "_" (map show ints)
 
 mkCFCatE :: ECat -> Cat
 mkCFCatE = prECat
-
+{-
 updECat _ (c,[]) = (c,[])
 updECat ii (c,_) = (c,ii)
-
+-}
 mkNewECat (c,ii) str = (c ++ str,ii)

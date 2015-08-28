@@ -2,7 +2,7 @@
 {-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 module GF.Compile.Compute.Predef(predef,predefName,delta) where
 
-import GF.Text.Pretty(render,hang)
+--import GF.Text.Pretty(render,hang)
 import qualified Data.Map as Map
 import Data.Array(array,(!))
 import Data.List (isInfixOf)
@@ -146,11 +146,11 @@ norm v =
                   (VString s1,VString s2) -> VString (s1++" "++s2)
                   (v1,v2) -> VC v1 v2
     _ -> v
-
+{-
 strict v = case v of
              VError err -> Left err
              _ -> Right v
-
+-}
 string s = case words s of
              [] -> VString ""
              ss -> foldr1 VC (map VString ss)
@@ -158,7 +158,8 @@ string s = case words s of
 ---
 
 swap (x,y) = (y,x)
-
+{-
 bug msg = ppbug msg
 ppbug doc = error $ render $
                     hang "Internal error in Compute.Predef:" 4 doc
+-}

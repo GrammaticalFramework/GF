@@ -33,7 +33,7 @@ nfx env@(GE _ _ _ loc) t = value2term loc [] # eval env t
 eval :: GlobalEnv -> Term -> Err Value
 eval ge t = ($[]) # value (toplevel ge) t
 
-apply env = apply' env
+--apply env = apply' env
 
 --------------------------------------------------------------------------------
 
@@ -279,7 +279,7 @@ strsFromValue t = case t of
     d0 <- strsFromValue d
     v0 <- mapM (strsFromValue . fst) vs
     c0 <- mapM (strsFromValue . snd) vs
-    let vs' = zip v0 c0
+  --let vs' = zip v0 c0
     return [strTok (str2strings def) vars | 
               def  <- d0,
               vars <- [[(str2strings v, map sstr c) | (v,c) <- zip vv c0] | 
@@ -511,11 +511,11 @@ ix loc fn xs i =
     else bugloc loc $ "(!!): index too large in "++fn++", "++show i++"<"++show n
   where n = length xs
 
-infixl 1 #,<#,@@
+infixl 1 #,<# --,@@
 
 f # x = fmap f x
 mf <# mx  = ap mf mx
-m1 @@ m2 = (m1 =<<) . m2
+--m1 @@ m2 = (m1 =<<) . m2
 
 both f (x,y) = (,) # f x <# f y
 

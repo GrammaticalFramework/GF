@@ -201,7 +201,7 @@ varsOfPatt p = case p of
   PR r    -> concat $ map (varsOfPatt . snd) r
   PT _ q -> varsOfPatt q
   _ -> []
--}
+
 -- | to search matching parameter combinations in tables
 isMatchingForms :: [Patt] -> [Term] -> Bool
 isMatchingForms ps ts = all match (zip ps ts') where
@@ -209,3 +209,4 @@ isMatchingForms ps ts = all match (zip ps ts') where
   match _ = True
   ts' = map appForm ts
 
+-}

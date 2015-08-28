@@ -37,7 +37,7 @@ import qualified Data.Map as Map
 import Data.Set (Set)
 import qualified Data.Set as Set
 
-import Debug.Trace
+--import Debug.Trace
 
 data SRG = SRG { srgName :: String    -- ^ grammar name
 		 , srgStartCat :: Cat     -- ^ start category name
@@ -88,13 +88,13 @@ setDefaultCFGTransform opts t b = setCFGTransform t b `addOptions` opts
 
 maybeTransform :: Options -> CFGTransform -> (CFG -> CFG) -> (CFG -> CFG)
 maybeTransform opts t f = if cfgTransform opts t then f else id
-
+{-
 traceStats s g = trace ("---- " ++ s ++ ": " ++ stats g {- ++ "\n" ++ prCFRules g ++ "----" -}) g
 
 stats g = "Categories: " ++ show (countCats g)
           ++ ", External categories: " ++ show (Set.size (cfgExternalCats g))
           ++ ", Rules: " ++ show (countRules g)
-
+-}
 makeNonRecursiveSRG :: Options 
                     -> PGF
                     -> CId -- ^ Concrete syntax name.

@@ -64,8 +64,8 @@ lookupVar g x = maybe (Bad (render ("unknown variable" <+> x))) return $ lookup 
 
 type TCEnv = (Int,Env,Env)
 
-emptyTCEnv :: TCEnv
-emptyTCEnv = (0,[],[])
+--emptyTCEnv :: TCEnv
+--emptyTCEnv = (0,[],[])
 
 whnf :: Val -> Err Val
 whnf v = ---- errIn ("whnf" +++ prt v) $ ---- debug

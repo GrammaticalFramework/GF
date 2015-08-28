@@ -159,8 +159,8 @@ getArray get1 = toArray `fmap` getList' get1
 toArray (n,xs) = listArray (0::Int,n-1) xs
 listToArray xs = toArray (length xs,xs)
 
-getArray2 :: (IArray a1 (a2 Int e), IArray a2 e) => Get e -> Get (a1 Int (a2 Int e))
-getArray2 get1 = getArray (getArray get1)
+--getArray2 :: (IArray a1 (a2 Int e), IArray a2 e) => Get e -> Get (a1 Int (a2 Int e))
+--getArray2 get1 = getArray (getArray get1)
 
 getList get1 = snd `fmap` getList' get1
 

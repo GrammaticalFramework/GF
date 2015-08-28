@@ -71,7 +71,7 @@ bracketedTokn dp f@(Forest abs cnc forest root) =
                         in (ct,fid',fun,es,(map getVar hypos,lin))
         Nothing      -> error ("wrong forest id " ++ show fid)
       where
-        descend forest (PApply funid args) = let (CncFun fun lins) = cncfuns cnc ! funid
+        descend forest (PApply funid args) = let (CncFun fun _lins) = cncfuns cnc ! funid
                                                  cat = case isLindefCId fun of
                                                          Just cat -> cat
                                                          Nothing  -> case Map.lookup fun (funs abs) of
@@ -132,7 +132,7 @@ getAbsTrees (Forest abs cnc forest root) arg@(PArg _ fid) ty dp =
       | otherwise           = do fid0 <- get
                                  put fid
                                  x <- foldForest (\funid args trees ->
-                                                  do let CncFun fn lins = cncfuns cnc ! funid
+                                                  do let CncFun fn _lins = cncfuns cnc ! funid
                                                      case isLindefCId fn of
                                                        Just _  -> do arg <- go (Set.insert fid rec_) scope mb_tty (head args)
                                                                      return (mkAbs arg)

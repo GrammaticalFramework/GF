@@ -99,10 +99,10 @@ tag (Just fmt) t =
 
 isPunct :: Char -> Bool
 isPunct c = c `elem` "-_.;.,?!"
-
+{-
 comment :: String -> Doc
 comment s = "//" <+> s
-
+-}
 alts :: [Doc] -> Doc
 alts = fsep . prepunctuate ("| ")
 

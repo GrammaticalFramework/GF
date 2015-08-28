@@ -22,7 +22,7 @@ render d = rend 0 (map ($ "") $ d []) "" where
     t:ts@(t':_) | not (spaceBefore t') -> showString t . rend i ts
     t:ts -> space t . rend i ts
     []   -> id
-  new i   = showChar '\n' . replicateS (2*i) (showChar ' ') . dropWhile isSpace
+--new i   = showChar '\n' . replicateS (2*i) (showChar ' ') . dropWhile isSpace
   space t = showString t . (\s -> if null s then "" else (' ':s))
 
 spaceAfter :: String -> Bool
@@ -39,10 +39,10 @@ concatS = foldr (.) id
 
 concatD :: [Doc] -> Doc
 concatD = foldr (.) id
-
+{-
 replicateS :: Int -> ShowS -> ShowS
 replicateS n f = concatS (replicate n f)
-
+-}
 -- the printer class does the job
 class Print a where
   prt :: Int -> a -> Doc

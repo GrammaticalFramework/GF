@@ -600,6 +600,7 @@ generateForForest :: (Scope -> TType -> TcM FId Expr) -> Expr -> TcM FId Expr
 generateForForest prove e = do
 --  fillinVariables
   refineExpr e
+{-
   where
     fillinVariables = do
       fvs <- TcM (\abstr k h ms -> k [(i,s,scope,tty,cs) | (i,MUnbound s scope tty cs) <- IntMap.toList ms] ms)
@@ -614,6 +615,7 @@ generateForForest prove e = do
                                                                     sequence_ [c e | c <- cs]
                                                                     fillinVariables
                                                                 ) abstr k h ms s)
+-}
 
 -----------------------------------------------------
 -- evalType

@@ -124,5 +124,5 @@ linTree pgf cnc e = nub (map snd (lin Nothing 0 e [] [] e []))
                                   def (Just (cat,fid)) n_fid e0 ys xs s
     def Nothing          n_fid e0 ys xs s = []
 
-amapWithIndex :: (IArray a e1, IArray a e2, Ix i) => (i -> e1 -> e2) -> a i e1 -> a i e2
-amapWithIndex f arr = listArray (bounds arr) (map (uncurry f) (assocs arr))
+--amapWithIndex :: (IArray a e1, IArray a e2, Ix i) => (i -> e1 -> e2) -> a i e1 -> a i e2
+--amapWithIndex f arr = listArray (bounds arr) (map (uncurry f) (assocs arr))

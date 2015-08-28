@@ -126,7 +126,7 @@ toHaskell gId gr absname cenv (name,jment) =
         [Right (cat,(Eqn (prefixIdent "lin" cat,lhs),coerce [] lincat rhs))]
       where
         Ok abstype = lookupFunType gr absname name
-        (absctx,abscat,absargs) = typeForm abstype
+        (absctx,_abscat,_absargs) = typeForm abstype
 
         e' = unAbs (length params) $
              nf loc (mkAbs params (mkApp def (map Vr args)))

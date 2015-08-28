@@ -177,8 +177,8 @@ genCncCats gr am cm cdefs =
                 (index',cats) = mkCncCats index cdefs
             in (index', (i2i id,cc) : cats)
       | otherwise     =
-            let cc@(C.CncCat s e _) = pgfCncCat gr lincat index
-                (index',cats)       = mkCncCats (e+1) cdefs
+            let cc@(C.CncCat _s e _) = pgfCncCat gr lincat index
+                (index',cats)        = mkCncCats (e+1) cdefs
             in (index', (i2i id,cc) : cats)
     mkCncCats index (_                      :cdefs) = mkCncCats index cdefs
 
@@ -303,6 +303,6 @@ genPrintNames cdefs =
     flatten (Alts x _) = flatten x
     flatten (C x y)    = flatten x +++ flatten y
 
-mkArray    lst = listArray (0,length lst-1) lst
+--mkArray    lst = listArray (0,length lst-1) lst
 mkMapArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
 mkSetArray set = listArray (0,Set.size set-1) [v | v <- Set.toList set]

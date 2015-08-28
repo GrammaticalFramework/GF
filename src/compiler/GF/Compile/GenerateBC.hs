@@ -149,7 +149,7 @@ compileFun gr eval st vs (Let (x, (_, e1)) e2) h0 bs args =
 compileFun gr eval st vs e@(Glue e1 e2) h0 bs args =
   let eval' st fun args = [PUSH_FRAME]++is++[EVAL fun' RecCall]
                           where
-                            (st1,is) = pushArgs (st+2) (reverse args)
+                            (_st1,is) = pushArgs (st+2) (reverse args)
                             fun'     = shiftIVal st fun
 
       flatten (Glue e1 e2) h0 bs =

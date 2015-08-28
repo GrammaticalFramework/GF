@@ -231,11 +231,11 @@ computeSeq filter seq args = concatMap compute seq
       | otherwise   = arg_lin
       where
         arg_lin                          = lin ! r
-        (ct@(cat,fid),_,fun,es,(xs,lin)) = args !! d
+        (ct@(cat,fid),_,fun,es,(_xs,lin)) = args !! d
 
     getVar d r = [LeafKS (showCId (xs !! r))]
       where
-        (ct,_,fun,es,(xs,lin)) = args !! d
+        (_ct,_,_fun,_es,(xs,_lin)) = args !! d
 
 flattenBracketedString :: BracketedString -> [String]
 flattenBracketedString (Leaf w)              = [w]

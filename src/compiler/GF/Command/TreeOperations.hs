@@ -4,7 +4,7 @@ module GF.Command.TreeOperations (
   treeChunks
   ) where
 
-import PGF
+import PGF(PGF,CId,compute,unApp,paraphrase)
 import PGF.Internal(Expr(..),unAppForm)
 import Data.List
 
