@@ -55640,8 +55640,8 @@ lin sweeten_V = mkV "sötar" ; -- comment=2
 lin sweeten_V2 = dirV2 (partV (mkV "sockrar")"över") ; -- status=guess
 lin sweetening_N = mkN "sötning" ; -- src=google
 lin sweetheart_A = variants {} ; -- status=guess
-lin sweetheart_N = mkN "sötnos" ; -- comment=7
-lin sweetie_N = mkN "sötnos" ; -- status=guess
+lin sweetheart_N = variants {mkN "sötnos"; mkN "sötis"} ;
+lin sweetie_N = variants {mkN "sötnos"; mkN "sötis"} ;
 lin sweetish_A = variants {} ; -- status=guess
 lin sweetleaf_N = variants {} ; -- status=guess
 lin sweetmeat_N = mkN "godsak" "godsaker" ;
