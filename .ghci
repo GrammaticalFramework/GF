@@ -1,2 +1,2 @@
-:set -isrc/compiler -isrc/binary -isrc/runtime/haskell -isrc/server -isrc/example-based -isrc/server/transfer -idist/build/autogen -idist/build/gf/gf-tmp 
+:set -isrc/compiler -isrc/binary -isrc/runtime/haskell -isrc/server -isrc/example-based -isrc/server/transfer -idist/build/autogen -idist/build
 :set -fwarn-unused-imports -optP-DSERVER_MODE -optP-DUSE_INTERRUPT -optP-DCC_LAZY -optP-include -optPdist/build/autogen/cabal_macros.h -odir dist/build/gf/gf-tmp -hidir dist/build/gf/gf-tmp -stubdir dist/build/gf/gf-tmp
