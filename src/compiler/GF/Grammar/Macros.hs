@@ -551,7 +551,7 @@ strsFromTerm t = case t of
     d0 <- strsFromTerm d
     v0 <- mapM (strsFromTerm . fst) vs
     c0 <- mapM (strsFromTerm . snd) vs
-    let vs' = zip v0 c0
+  --let vs' = zip v0 c0
     return [strTok (str2strings def) vars | 
               def  <- d0,
               vars <- [[(str2strings v, map sstr c) | (v,c) <- zip vv c0] | 

@@ -9,7 +9,7 @@ module GF.Infra.SIO(
        -- * Unrestricted, safe operations
        -- ** From the standard libraries
        getCPUTime,getCurrentDirectory,getLibraryDirectory,
-       newStdGen,print,putStrLn,
+       newStdGen,print,putStr,putStrLn,
        -- ** Specific to GF
        importGrammar,importSource,
 #ifdef C_RUNTIME
@@ -22,11 +22,11 @@ module GF.Infra.SIO(
        -- Output to stdout will /not/ be captured or redirected.
        restricted,restrictedSystem
   ) where
-import Prelude hiding (putStrLn,print)
+import Prelude hiding (putStr,putStrLn,print)
 import Control.Applicative(Applicative(..))
 import Control.Monad(liftM,ap)
 import Control.Monad.Trans(MonadTrans(..))
-import System.IO(hPutStrLn,hFlush,stdout)
+import System.IO(hPutStr,hFlush,stdout)
 import GF.System.Catch(try)
 import System.Process(system)
 import System.Environment(getEnv)
@@ -45,8 +45,8 @@ import qualified PGF2
 
 -- * The SIO monad
 
-type PutStrLn = String -> IO ()
-newtype SIO a = SIO {unS::PutStrLn->IO a}
+type PutStr = String -> IO ()
+newtype SIO a = SIO {unS::PutStr->IO a}
 
 instance Functor SIO where fmap = liftM
 
@@ -62,9 +62,11 @@ instance Output SIO where
   ePutStr = lift0 . ePutStr
   ePutStrLn = lift0 . ePutStrLn
   putStrLnE = putStrLnFlush
---putStrE = --- !!!
+  putStrE = putStr
 
-class MonadSIO m where liftSIO :: SIO a -> m a
+class {- Monad m => -} MonadSIO m where liftSIO :: SIO a -> m a
+-- ^ If the Monad m superclass is included, then the generic instance
+-- for monad transformers below would require UndecidableInstances
 
 instance MonadSIO SIO where liftSIO = id
 
@@ -77,16 +79,17 @@ instance (MonadTrans t,Monad m,MonadSIO m) => MonadSIO (t m) where
 runSIO           = hRunSIO stdout
 
 -- | Redirect 'stdout' to the given handle
-hRunSIO h sio    = unS sio (\s->hPutStrLn h s>>hFlush h)
+hRunSIO h sio    = unS sio (\s->hPutStr h s>>hFlush h)
 
 -- | Capture 'stdout'
+captureSIO :: SIO a -> IO (String,a)
 captureSIO sio   = do ch <- newChan
                       result <- unS sio (writeChan ch . Just)
                       writeChan ch Nothing
                       output <- fmap takeJust (getChanContents ch)
                       return (output,result)
                    where
-                     takeJust (Just xs:ys) = xs++'\n':takeJust ys
+                     takeJust (Just xs:ys) = xs++takeJust ys
                      takeJust _ = []
 
 -- * Restricted accesss to arbitrary (potentially unsafe) IO operations
@@ -105,8 +108,10 @@ restrictedIO io =
 lift0 io         = SIO $ const io
 lift1 f io       = SIO $ f . unS io
 
+putStr           = putStrFlush
+putStrFlush s    = SIO ($ s)
 putStrLn         = putStrLnFlush
-putStrLnFlush s  = SIO ($ s)
+putStrLnFlush s  = putStr s >> putStrFlush "\n"
 print x          = putStrLn (show x)
 
 getCPUTime           = lift0   IO.getCPUTime

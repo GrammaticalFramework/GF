@@ -517,7 +517,7 @@ type Continuation = TrieMap.TrieMap Token ActiveSet
 getContinuationInfo :: ParseState -> Map.Map [Token] [(FunId, CId, String)]
 getContinuationInfo pstate = Map.map (map f . Set.toList) contMap
   where
-    PState abstr concr chart cont = pstate
+    PState _abstr concr _chart cont = pstate
     contMap = Map.fromList (TrieMap.toList cont) -- always get [([], _::ActiveSet)]
     f :: Active -> (FunId,CId,String)
     f (Active int dotpos funid seqid pargs ak) = (funid, cid, seq)
