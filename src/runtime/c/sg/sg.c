@@ -915,7 +915,7 @@ close:
 }
 
 bool
-sg_query_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn* err)
+sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn* err)
 {
 	while (tres->res == 0) {
 		int rc;
@@ -993,7 +993,7 @@ sg_query_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn* 
 }
 
 void
-sg_query_result_close(SgTripleResult* tres, GuExn* err)
+sg_triple_result_close(SgTripleResult* tres, GuExn* err)
 {
 	close_triples(tres->db, tres->cursors, &tres->n_cursors);
 
@@ -1004,4 +1004,68 @@ sg_query_result_close(SgTripleResult* tres, GuExn* err)
 	}
 
 	free(tres);
+}
+
+struct SgQueryResult {
+	sqlite3 *db;
+	SgQuery* query;
+
+	int n_results;
+	SgTripleResult* results[];
+};
+
+SgQueryResult*
+sg_query(SgSG *sg, SgQuery* query, GuExn* err)
+{
+	sqlite3 *db = (sqlite3 *) sg;
+
+	SgQueryResult* qres = 
+		malloc(sizeof(SgQueryResult)+
+		       sizeof(SgTripleResult*)*query->n_patterns);
+	qres->db = db;
+	qres->query = query;
+	qres->n_results = 0;
+	
+	return qres;
+}
+
+bool
+sg_query_result_fetch(SgQueryResult* qres, SgId* res, GuExn* err)
+{
+	size_t i = 0;
+	while (i < qres->query->n_patterns) {
+		SgTriple triple;
+		triple[0] = qres->query->vars[qres->query->patterns[i][0]];
+		triple[1] = qres->query->vars[qres->query->patterns[i][1]];
+		triple[2] = qres->query->vars[qres->query->patterns[i][2]];
+		qres->results[i] = sg_query_triple((SgSG *) qres->db, triple, err);
+
+		SgId key;
+		for (;;) {
+			bool found = sg_triple_result_fetch(qres->results[i], &key, triple, err);
+			if (gu_exn_is_raised(err)) {
+				return false;
+			}
+
+			if (!found) {
+				sg_triple_result_close(qres->results[i], err);
+				if (gu_exn_is_raised(err)) {
+					return false;
+				}
+				
+				if (i == 0)
+					break;
+				
+				i--;
+			}
+		}
+
+		qres->query->vars[qres->query->patterns[i][0]] = triple[0];
+		qres->query->vars[qres->query->patterns[i][1]] = triple[1];
+		qres->query->vars[qres->query->patterns[i][2]] = triple[2];
+
+		i++;
+	}
+	
+	return false;
 }
