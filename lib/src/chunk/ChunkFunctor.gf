@@ -45,7 +45,7 @@ lin
 ----  RP_Acc_Chunk rp = ss (rp.s ! RPrep Masc) ; ----
 ----  RP_Gen_Chunk rp = ss (rp.s ! RC Neutr (NCase Gen)) ;
   Subj_Chunk subj = subj ;
-  PConj_Chunk pconj = pconj ;
+---  PConj_Chunk pconj = pconj ;
 
   VPS_Chunk vps = mkUtt (E.PredVPS emptyNP vps) ;
 --  VPI_Chunk    : VPI -> Chunk ;

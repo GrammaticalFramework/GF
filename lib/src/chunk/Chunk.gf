@@ -43,7 +43,7 @@ fun
   RP_Gen_Chunk : RP -> Chunk ;
   RP_Acc_Chunk : RP -> Chunk ;
   Subj_Chunk   : Subj -> Chunk ;
-  PConj_Chunk  : PConj -> Chunk ;
+--- PConj_Chunk  : PConj -> Chunk ;
 
   VPS_Chunk    : VPS -> Chunk ;
   VPI_Chunk    : VPI -> Chunk ;
