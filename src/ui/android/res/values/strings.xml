@@ -7,6 +7,7 @@
 	<string name="open_image">Opening</string>
 	<string name="mic_input">Speech Input</string>
 	<string name="keyboard_input">Keyboard Input</string>
+	<string name="semantic_graph">Semantic Graph</string>
 	<string name="help">Help</string>
 	<string name="global_preferences_key">org.grammaticalframework.ui.android.GLOBAL_PREFERENCES</string>
 
@@ -24,4 +25,7 @@
     <!-- Labels for subtype -->
     <string name="normalKeyboardMode">normalKeyboardMode</string>
     <string name="internalKeyboardMode">internalKeyboardMode</string>
+    
+    <string name="search_hint">Search word:</string>
+    <string name="search_description">Search for words in the lexicon</string>
 </resources>

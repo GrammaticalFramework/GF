@@ -27,6 +27,16 @@
         </activity>
         <activity android:name="AlternativesActivity"></activity>
         <activity android:name="HelpActivity"></activity>
+        <activity android:name="SemanticGraphActivity"
+                  android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@xml/searchable"/>
+            <meta-data android:name="android.app.default_searchable"
+                       android:value=".SearchableActivity"/>
+        </activity>
         <service android:name="TranslatorInputMethodService"
                 android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
@@ -34,6 +44,10 @@
             </intent-filter>
             <meta-data android:name="android.view.im" android:resource="@xml/method" />
         </service>
+        <provider android:name=".LexiconSuggestionProvider"
+                  android:authorities="org.grammaticalframework.ui.android.LexiconSuggestionProvider">
+            <path-permission android:pathPrefix="/search_suggest_query"
+                  android:readPermission="android.permission.GLOBAL_SEARCH"/>
+        </provider>
     </application>
-
 </manifest>
