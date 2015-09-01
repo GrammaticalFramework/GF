@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../api:../prelude
+--# -path=.:../abstract:../common:../api
 
 concrete LangEng of Lang = 
   GrammarEng,
@@ -8,6 +8,6 @@ concrete LangEng of Lang =
   ,MarkupEng - [stringMark]
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+
 
 } ;

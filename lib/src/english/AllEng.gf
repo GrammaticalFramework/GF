@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../api:../prelude
+--# -path=.:../abstract:../common:../api
 
 concrete AllEng of AllEngAbs = 
   LangEng, 
