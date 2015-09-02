@@ -14,6 +14,16 @@ sg_open(const char *filename, GuExn* err);
 void
 sg_close(SgSG *sg, GuExn* err);
 
+void
+sg_begin_trans(SgSG* sg, GuExn* err);
+
+void
+sg_commit(SgSG* sg, GuExn* err);
+
+void
+sg_rollback(SgSG* sg, GuExn* err);
+
+
 SgId
 sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err);
 
