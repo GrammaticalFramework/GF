@@ -26751,11 +26751,11 @@ lin hoot_V2 = variants {} ; -- status=guess
 lin hooter_N = mkN "signalhorn" neutrum ; -- comment=4
 lin hoover_N = variants {} ; -- status=guess
 lin hoover_V2 = variants {} ; -- status=guess
-lin hop_N = mkN "skutt" neutrum ; -- comment=6
+lin hop_N = mkN "humle" ;
 lin hop_V = mkV "hoppar" ; -- comment=2
 lin hop_V2 = dirV2 (partV (mkV "hoppar")"över") ; -- comment=2
 lin hop_field_N = mkN "hop-fält" ;
-lin hop_garden_N = mkN "humlegård" ; -- src=google
+lin hop_garden_N = mkN "humlegård" ;
 lin hop_picker_N = variants {} ; -- status=guess
 lin hop_pole_N = mkN "humlestör" ; -- src=google
 lin hope_N = mkN "hopp" "hoppet" | mkN "förhoppning" ;
