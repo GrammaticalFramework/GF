@@ -15,7 +15,6 @@ wc.os=[] /* output segment list
 	      current_pick::Int // index into rs or -1
 	     }] */
 wc.cache={} // output segment cache, indexed by source text
-wc.local=appLocalStorage("gf.wc.")
 wc.translating=""
 
 wc.delayed_translate=function() {
@@ -37,21 +36,25 @@ wc.clear=function() {
 }
 
 wc.save=function() {
-    var f=wc.f
-    wc.local.put("from",f.from.value)
-    wc.local.put("to",f.to.value)
-    wc.local.put("input",f.input.value)
-    wc.local.put("colors",f.colors.checked)
+    if(wc.local) {
+	var f=wc.f
+	wc.local.put("from",f.from.value)
+	wc.local.put("to",f.to.value)
+	wc.local.put("input",f.input.value)
+	wc.local.put("colors",f.colors.checked)
+    }
 }
 
 wc.load=function() {
-    var f=wc.f
-    f.input.value=wc.local.get("input",f.input.value)
-    f.from.value=wc.local.get("from",f.from.value)
-    f.to.value=wc.local.get("to",f.to.value)
-    f.colors.checked=wc.local.get("colors",f.colors.checked)
-    wc.colors()
-    wc.delayed_translate()
+    if(wc.local) {
+	var f=wc.f
+	f.input.value=wc.local.get("input",f.input.value)
+	f.from.value=wc.local.get("from",f.from.value)
+	f.to.value=wc.local.get("to",f.to.value)
+	f.colors.checked=wc.local.get("colors",f.colors.checked)
+	wc.colors()
+	wc.delayed_translate()
+    }
 }
 
 wc.translate=function() {
@@ -381,7 +384,7 @@ wc.bracketsToD3=function(bs) {
 }
 
 // Update language selection menus with the languages supported by the grammar
-function init_languages() {
+wc.init_languages=function () {
     function init2(langs) {
 	replaceInnerHTML(wc.i,"Enter text to translate above")
 	wc.languages=langs
@@ -405,7 +408,7 @@ function init_languages() {
     gftranslate.get_languages(init2,initerror)
 }
 
-function init_speech() {
+wc.init_speech=function() {
     var speak=element("speak")
     if(speak) {
 	wc.speech=window.speechSynthesis && window.speechSynthesis.getVoices().length>0
@@ -413,12 +416,19 @@ function init_speech() {
     }
 }
 
-init_languages()
-init_speech()
-setTimeout(init_speech,500) // A hack for Chrome.
-if(wc.cnl) {
-    wc.pgf_online=pgf_online({});
-    wc.pgf_online.switch_grammar(wc.cnl+".pgf")
+wc.initialize=function(grammar_name,grammar_url) {
+    if(grammar_name && grammar_url) {
+	gftranslate.grammar=grammar_name
+	gftranslate.jsonurl=grammar_url
+    }
+    wc.init_languages()
+    //init_speech()
+    setTimeout(wc.init_speech,500) // A hack for Chrome.
+    if(wc.cnl) {
+	wc.pgf_online=pgf_online({});
+	wc.pgf_online.switch_grammar(wc.cnl+".pgf")
+    }
+    wc.local=appLocalStorage("gf.wc."+gftranslate.grammar+".")
+    wc.load()
+    wc.f.input.focus()
 }
-wc.load()
-wc.f.input.focus()
