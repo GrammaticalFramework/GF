@@ -88,6 +88,45 @@ sg_shutdown()
 	sqlite3_shutdown();
 }
 
+void
+sg_begin_trans(SgSG* sg, GuExn* err)
+{
+	sqlite3 *db = (sqlite3 *) sg;
+
+	int rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 1);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		return;
+	}
+	db->autoCommit = 0;
+}
+
+void
+sg_commit(SgSG* sg, GuExn* err)
+{
+	sqlite3 *db = (sqlite3 *) sg;
+
+	int rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		return;
+	}
+	db->autoCommit = 1;
+}
+
+void
+sg_rollback(SgSG* sg, GuExn* err)
+{
+	sqlite3 *db = (sqlite3 *) sg;
+
+	int rc = sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		return;
+	}
+	db->autoCommit = 1;
+}
+
 static int
 store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 {
@@ -280,10 +319,12 @@ sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err)
 	}
 
 	int rc;
-	rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 1);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		return 0;
+	if (db->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 1);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return 0;
+		}
 	}
 
 	BtCursor crsExprs;
@@ -359,10 +400,12 @@ sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err)
 		goto rollback;
 	}
 
-    rc = sqlite3BtreeCommit(db->aDb[0].pBt);
-    if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		return 0;
+	if (db->autoCommit) {
+		rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return 0;
+		}
 	}
 
     return key;
@@ -379,7 +422,9 @@ close1:
 	sqlite3BtreeCloseCursor(&crsExprs);
 
 rollback:
-	sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	if (db->autoCommit) {
+		sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	}
 	return 0;
 }
 
@@ -452,10 +497,12 @@ sg_select_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err)
 	}
 
 	int rc;
-	rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 0);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		return gu_null_variant;
+	if (db->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 0);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return gu_null_variant;
+		}
 	}
 
 	BtCursor crsExprs;
@@ -479,10 +526,12 @@ sg_select_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err)
 		goto rollback;
 	}
 
-    rc = sqlite3BtreeCommit(db->aDb[0].pBt);
-    if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto rollback;
+	if (db->autoCommit) {
+		rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			goto rollback;
+		}
 	}
 
     return expr;
@@ -491,7 +540,9 @@ close:
 	sqlite3BtreeCloseCursor(&crsExprs);
 
 rollback:
-	sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	if (db->autoCommit) {
+		sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	}
 	return gu_null_variant;
 }
 
@@ -525,10 +576,12 @@ open_triples(sqlite3 *db, int wrFlag, BtCursor cursor[], int *n_cursors, GuExn* 
 	}
 
 	int rc;
-	rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, wrFlag);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		return;
+	if (db->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, wrFlag);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return;
+		}
 	}
 
 	memset(cursor, 0, sizeof(BtCursor)*4);
@@ -553,7 +606,7 @@ open_triples(sqlite3 *db, int wrFlag, BtCursor cursor[], int *n_cursors, GuExn* 
 }
 
 static void
-close_triples(sqlite3 *db, BtCursor cursor[], int *n_cursors)
+close_triples(sqlite3 *db, BtCursor cursor[], int *n_cursors, int rc, GuExn* err)
 {
 	while (*n_cursors > 0) {
 		(*n_cursors)--;
@@ -561,6 +614,18 @@ close_triples(sqlite3 *db, BtCursor cursor[], int *n_cursors)
 			sqlite3KeyInfoUnref(cursor[*n_cursors].pKeyInfo);
 		}
 		sqlite3BtreeCloseCursor(&cursor[*n_cursors]);
+	}
+
+	if (db->autoCommit) {
+		if (rc == SQLITE_OK || rc == SQLITE_DONE) {
+			rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+			if (rc != SQLITE_OK) {
+				sg_raise_sqlite(db, err);
+				return;
+			}
+		} else {
+			sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+		}
 	}
 }
 
@@ -600,7 +665,7 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 		goto close;
 	}
 
-	SgId key;
+	SgId key = 0;
 
 	if (res == 0) {
 		rc = sqlite3VdbeIdxRowid(db, &cursor[0], &key);
@@ -709,20 +774,9 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 		}
 	}
 
-	close_triples(db, cursor, &n_cursors);
-
-	rc = sqlite3BtreeCommit(db->aDb[0].pBt);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto close;
-	}
-
-	return key;
-
 close:
-	close_triples(db, cursor, &n_cursors);
-	sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
-	return 0;
+	close_triples(db, cursor, &n_cursors, rc, err);
+	return key;
 }
 
 static int
@@ -770,10 +824,12 @@ sg_select_triple(SgSG *sg, SgId key, SgTriple triple, GuExn* err)
 	}
 
 	int rc;
-	rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 0);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		return false;
+	if (db->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 0);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return false;
+		}
 	}
 
 	BtCursor crsTriples;
@@ -805,10 +861,12 @@ sg_select_triple(SgSG *sg, SgId key, SgTriple triple, GuExn* err)
 		goto rollback;
 	}
 
-	rc = sqlite3BtreeCommit(db->aDb[0].pBt);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		return false;
+	if (db->autoCommit) {
+		rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return false;
+		}
 	}
 
 	return (res == 0);
@@ -817,7 +875,9 @@ close:
 	sqlite3BtreeCloseCursor(&crsTriples);
 
 rollback:
-	sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	if (db->autoCommit) {
+		sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	}
 	return false;
 }
 
@@ -897,20 +957,8 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 	return tres;
 
 close:
-	close_triples(db, tres->cursors, &tres->n_cursors);
-
+	close_triples(db, tres->cursors, &tres->n_cursors, rc, err);
 	free(tres);
-
-	if (rc == SQLITE_OK) {
-		rc = sqlite3BtreeCommit(db->aDb[0].pBt);
-		if (rc != SQLITE_OK) {
-			sg_raise_sqlite(db, err);
-			return NULL;
-		}
-	} else {
-		sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
-	}
-
 	return NULL;
 }
 
@@ -995,14 +1043,7 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn*
 void
 sg_triple_result_close(SgTripleResult* tres, GuExn* err)
 {
-	close_triples(tres->db, tres->cursors, &tres->n_cursors);
-
-	int rc = sqlite3BtreeCommit(tres->db->aDb[0].pBt);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(tres->db, err);
-		return;
-	}
-
+	close_triples(tres->db, tres->cursors, &tres->n_cursors, SQLITE_OK, err);
 	free(tres);
 }
 
