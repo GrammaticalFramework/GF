@@ -380,7 +380,7 @@ close1:
 
 rollback:
 	sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
-	return rc;
+	return 0;
 }
 
 static int
