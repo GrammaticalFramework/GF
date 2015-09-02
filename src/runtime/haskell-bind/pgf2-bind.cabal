@@ -17,15 +17,15 @@ extra-source-files:  README
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     PGF2
-  other-modules:       PGF2.FFI
+  exposed-modules:     PGF2, SG
+  other-modules:       PGF2.FFI, PGF2.Expr, SG.FFI
   build-depends:       base >=4.3, bytestring >=0.9,
-                       containers
+                       containers, pretty
   -- hs-source-dirs:      
   default-language:    Haskell2010
   build-tools:         hsc2hs
 
-  extra-libraries:     pgf gu
+  extra-libraries:     sg pgf gu
   cc-options:          -std=c99
   default-language:    Haskell2010
   c-sources:           utils.c
