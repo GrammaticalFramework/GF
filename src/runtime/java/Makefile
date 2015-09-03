@@ -1,4 +1,4 @@
-C_SOURCES = jpgf.c jsg.c
+C_SOURCES = jpgf.c jsg.c jni_utils.c
 JAVA_SOURCES = $(wildcard org/grammaticalframework/pgf/*.java) \
                $(wildcard org/grammaticalframework/sg/*.java)
 
