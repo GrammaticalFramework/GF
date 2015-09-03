@@ -193,8 +193,8 @@ commonCommands = fmap (mapCommandExec liftSIO) $ Map.fromList [
      exec = \opts arg-> do
          let file = valStrOpts "file" "_gftmp" opts
          if isOpt "append" opts
-           then restricted $ appendFile file (toString arg)
-           else restricted $ writeUTF8File file (toString arg)
+           then restricted $ appendFile file (toLines arg)
+           else restricted $ writeUTF8File file (toLines arg)
          return void,
      options = [
        ("append","append to file, instead of overwriting it")
@@ -259,3 +259,7 @@ trie = render . pptss . H.toTrie . map H.toATree
         H.Oth e     -> pp (H.showExpr [] e)
         H.Ap f [[]] -> pp (H.showCId f)
         H.Ap f tss  -> H.showCId f $$ nest 2 (pptss tss)
+
+-- ** Converting command input
+toString  = unwords . toStrings
+toLines = unlines . toStrings
