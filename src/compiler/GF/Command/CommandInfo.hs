@@ -49,7 +49,7 @@ void                   = Piped ([],"")
 stringAsExpr = H.ELit . H.LStr -- should be a pattern macro
 
 -- ** Converting command input
-toString  = unwords . toStrings
+
 toStrings = map showAsString
   where
     showAsString t = case t of
