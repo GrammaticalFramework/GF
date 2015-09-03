@@ -157,7 +157,7 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 		idxKey.nField = 2;
 		idxKey.default_rc = 0;
 		idxKey.aMem = mem;
-		
+
 		int res = 0;
 		rc = sqlite3BtreeMovetoUnpacked(ctxt->crsPairs,
 		                                &idxKey, 0,  0, &res);
@@ -170,7 +170,7 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 		} else {
 			*pKey = ++ctxt->key_seed;
 
-			unsigned char buf[32];  // enough for record with three integers
+			unsigned char buf[32];  // enough for a record with three integers
 			buf[1] = 3;
 
 			u32 serial_type;
@@ -247,7 +247,7 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 			int serial_type_key = sqlite3VdbeSerialType(&mem[1], ctxt->file_format);
 			int serial_type_key_hdr_len = sqlite3VarintLen(serial_type_key);
 
-			unsigned char* buf = malloc(1+serial_type_fun_hdr_len+MAX(1,serial_type_key_hdr_len)+mem[0].n);
+			unsigned char* buf = malloc(1+serial_type_fun_hdr_len+MAX(1,serial_type_key_hdr_len)+mem[0].n+8);
 			unsigned char* p = buf;
 			*p++ = 1+serial_type_fun_hdr_len+1;
 			p += putVarint32(p, serial_type_fun);
@@ -546,33 +546,33 @@ rollback:
 	return gu_null_variant;
 }
 
-static void
+static int
 open_triples(sqlite3 *db, int wrFlag, BtCursor cursor[], int *n_cursors, GuExn* err)
 {
 	Index *idx[3];
 	idx[0] = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_TRIPLES_SPO);
     if (!idx[0]) {
 		sg_raise_err("Index " SG_TRIPLES_SPO " is missing", err);
-		return;
+		return SQLITE_ERROR;
 	}
 
 	idx[1] = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_TRIPLES_PO);
     if (!idx[1]) {
 		sg_raise_err("Index " SG_TRIPLES_PO " is missing", err);
-		return;
+		return SQLITE_ERROR;
 	}
 
 	idx[2] = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_TRIPLES_O);
     if (!idx[2]) {
 		sg_raise_err("Index " SG_TRIPLES_O " is missing", err);
-		return;
+		return SQLITE_ERROR;
 	}
 
 	Table *triplesTbl =
 		sqlite3HashFind(&db->aDb[0].pSchema->tblHash, SG_TRIPLES);
     if (!triplesTbl) {
 		sg_raise_err("Table " SG_TRIPLES " is missing", err);
-		return;
+		return SQLITE_ERROR;
 	}
 
 	int rc;
@@ -580,7 +580,7 @@ open_triples(sqlite3 *db, int wrFlag, BtCursor cursor[], int *n_cursors, GuExn* 
 		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, wrFlag);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(db, err);
-			return;
+			return rc;
 		}
 	}
 
@@ -592,7 +592,7 @@ open_triples(sqlite3 *db, int wrFlag, BtCursor cursor[], int *n_cursors, GuExn* 
 		rc = sqlite3BtreeCursor(db->aDb[0].pBt, idx[*n_cursors]->tnum, wrFlag, inf, &cursor[*n_cursors]);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(db, err);
-			return;
+			return rc;
 		}
 		(*n_cursors)++;
 	}
@@ -600,9 +600,11 @@ open_triples(sqlite3 *db, int wrFlag, BtCursor cursor[], int *n_cursors, GuExn* 
 	rc = sqlite3BtreeCursor(db->aDb[0].pBt, triplesTbl->tnum, wrFlag, NULL, &cursor[*n_cursors]);
 	if (rc != SQLITE_OK) {
 		sg_raise_sqlite(db, err);
-		return;
+		return rc;
 	}
 	(*n_cursors)++;
+	
+	return SQLITE_OK;
 }
 
 static void
@@ -638,8 +640,8 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 
 	BtCursor cursor[4];
 	int n_cursors = 0;
-	open_triples(db, 1, cursor, &n_cursors, err);
-	if (gu_exn_is_raised(err)) {
+	rc = open_triples(db, 1, cursor, &n_cursors, err);
+	if (rc != SQLITE_OK) {
 		goto close;
 	}
 
@@ -684,7 +686,7 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 		key++;
 
 		u32 serial_type;
-		unsigned char buf[41];  // enough for record with three integers
+		unsigned char buf[41];  // enough for a record with three integers
 		int file_format = db->aDb[0].pSchema->file_format;
 
 		unsigned char* p = buf+(buf[0] = 5);
@@ -898,11 +900,13 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 {
 	sqlite3 *db = (sqlite3 *) sg;
 
+	int rc;
+
 	SgTripleResult* tres = malloc(sizeof(SgTripleResult));
 	tres->db = db;
 
-	open_triples(db, 0, tres->cursors, &tres->n_cursors, err);
-	if (gu_exn_is_raised(err))
+	rc = open_triples(db, 0, tres->cursors, &tres->n_cursors, err);
+	if (rc != SQLITE_OK)
 		goto close;
 
 	for (int i = 0; i < 3; i++) {
@@ -934,7 +938,6 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 			break;
 	}
 
-	int rc;
 	if (tres->idxKey.nField > 0) {
 		tres->idxKey.default_rc = 1;
 		rc = sqlite3BtreeMovetoUnpacked(tres->cursor,
