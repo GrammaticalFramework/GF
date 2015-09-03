@@ -1,22 +1,10 @@
-Before compiling Java binding you first need to have the C runtime 
-compiled and installed. In order to compile the binding itself you need
-Eclipse plus the plugin for compiling C projects in 
-Eclipse (https://www.eclipse.org/cdt). Follow the instructions on 
-the web site.
+Before compiling the Java binding you first need to have the C runtime 
+compiled and installed. You also need to find where your jni.h header
+is installed. It is part of the Java JDK, but it might be placed
+in different places on different platforms. The path to the jni.h 
+header should be assigned to the JNI_PATH variable in the beginning
+of the Makefile that you will find in the root directory of 
+the binding. Once this is done type:
 
-After you have done the above, import the directory where you have found 
-this INSTALL file as an existing project in Eclipse. The project has
-two configurations one for Posix (Linux) systems and one for Windows.
-You can change the configuration by right clicking on the project
-and choosing "Properties" from the menu. Then go to C/C++ Build
-and click on the button "Manage Configurations". Change the active
-configuration from there. Now go to "C/C++ Build / Tool Chain Editor"
-and check whether the current tool chain is the one for your platform.
-
-Build the project by selecting the menu "Project / Build Project".
-
-On Windows you might also have to change the following directories
-from the "Properties" dialog:
-
-C/C++ Build / Settings / GCC C Compiler / Includes / Include paths
-C/C++ Build / Settings / MinGW C++ Linker / Libraries / Library search paths
+$ make
+$ make install
