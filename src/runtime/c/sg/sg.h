@@ -50,6 +50,9 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple,
                        GuPool* out_pool, GuExn* err);
 
 void
+sg_triple_result_get_query(SgTripleResult* tres, SgTriple triple);
+
+void
 sg_triple_result_close(SgTripleResult* tres, GuExn* err);
 
 typedef int SgPattern[3];
