@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <sg/sg.h>
+#include <pgf/expr.h>
 #include "jni_utils.h"
 
 JNIEXPORT jobject JNICALL
@@ -61,19 +62,131 @@ Java_org_grammaticalframework_sg_SG_close(JNIEnv *env, jobject self)
 
 JNIEXPORT jobject JNICALL
 Java_org_grammaticalframework_sg_SG_queryTriple(JNIEnv *env, jobject self,
-                                                jobject subj,
-                                                jobject pred,
-                                                jobject obj)
+                                                jobject jsubj,
+                                                jobject jpred,
+                                                jobject jobj)
 {
-	return NULL;
+	SgSG *sg = get_ref(env, self);
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_exn(tmp_pool);
+
+	SgTriple triple;
+	triple[0] = (jsubj == NULL) ? gu_null_variant
+	                            : gu_variant_from_ptr((void*) get_ref(env, jsubj));
+	triple[1] = (jpred == NULL) ? gu_null_variant
+	                            : gu_variant_from_ptr((void*) get_ref(env, jpred));
+	triple[2] = (jobj == NULL)  ? gu_null_variant
+	                            : gu_variant_from_ptr((void*) get_ref(env, jobj));
+	
+	SgTripleResult* res = sg_query_triple(sg, triple, err);
+	if (!gu_ok(err)) {
+		GuString msg;
+		if (gu_exn_caught(err, SgError)) {
+			msg = (GuString) gu_exn_caught_data(err);
+		} else {
+			msg = "The query failed";
+		}
+		throw_string_exception(env, "org/grammaticalframework/sg/SGError", msg);
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	jclass res_class = (*env)->FindClass(env, "org/grammaticalframework/sg/TripleResult");
+	jmethodID constrId = (*env)->GetMethodID(env, res_class, "<init>", "(JLorg/grammaticalframework/pgf/Expr;Lorg/grammaticalframework/pgf/Expr;Lorg/grammaticalframework/pgf/Expr;)V");
+	jobject jres = (*env)->NewObject(env, res_class, constrId, p2l(res), jsubj, jpred, jobj);
+
+	return jres;
 }
 
 JNIEXPORT jboolean JNICALL
 Java_org_grammaticalframework_sg_TripleResult_hasNext(JNIEnv *env, jobject self)
 {
+	SgTripleResult *res = get_ref(env, self);
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuPool* out_pool = gu_new_pool();
+	GuExn* err = gu_exn(tmp_pool);
+
+	SgId key;
+	SgTriple triple;
+	int r = sg_triple_result_fetch(res, &key, triple, out_pool, err);
+	if (!gu_ok(err)) {
+		GuString msg;
+		if (gu_exn_caught(err, SgError)) {
+			msg = (GuString) gu_exn_caught_data(err);
+		} else {
+			msg = "The fetch failed";
+		}
+		throw_string_exception(env, "org/grammaticalframework/sg/SGError", msg);
+		gu_pool_free(out_pool);
+		gu_pool_free(tmp_pool);
+		return JNI_FALSE;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	if (r) {
+		SgTriple orig_triple;
+		sg_triple_result_get_query(res, orig_triple);
+
+		jclass pool_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Pool");
+		jmethodID pool_constrId = (*env)->GetMethodID(env, pool_class, "<init>", "(J)V");
+		jobject jpool = (*env)->NewObject(env, pool_class, pool_constrId, p2l(out_pool));
+
+		jclass expr_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Expr");
+		jmethodID constrId = (*env)->GetMethodID(env, expr_class, "<init>", "(Lorg/grammaticalframework/pgf/Pool;Ljava/lang/Object;J)V");
+
+		jclass result_class = (*env)->GetObjectClass(env, self);
+
+		jfieldID keyId = (*env)->GetFieldID(env, result_class, "key", "J");
+		(*env)->SetLongField(env, self, keyId, key);
+
+		if (triple[0] != orig_triple[0]) {
+			jfieldID subjId = (*env)->GetFieldID(env, result_class, "subj", "Lorg/grammaticalframework/pgf/Expr;");
+			jobject jsubj = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, gu_variant_to_ptr(triple[0]));
+			(*env)->SetObjectField(env, self, subjId, jsubj);
+		}
+
+		if (triple[1] != orig_triple[1]) {
+			jfieldID predId = (*env)->GetFieldID(env, result_class, "pred", "Lorg/grammaticalframework/pgf/Expr;");
+			jobject jpred = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, gu_variant_to_ptr(triple[1]));
+			(*env)->SetObjectField(env, self, predId, jpred);
+		}
+
+		if (triple[2] != orig_triple[2]) {
+			jfieldID objId = (*env)->GetFieldID(env, result_class, "obj", "Lorg/grammaticalframework/pgf/Expr;");
+			jobject jobj  = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, gu_variant_to_ptr(triple[2]));
+			(*env)->SetObjectField(env, self, objId, jobj);
+		}
+
+		return JNI_TRUE;
+	} else {
+		gu_pool_free(out_pool);
+		return JNI_FALSE;
+	}
 }
 
 JNIEXPORT void JNICALL
 Java_org_grammaticalframework_sg_TripleResult_close(JNIEnv *env, jobject self)
 {
+	SgTripleResult *res = get_ref(env, self);
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_exn(tmp_pool);
+	
+	sg_triple_result_close(res, err);
+	if (!gu_ok(err)) {
+		GuString msg;
+		if (gu_exn_caught(err, SgError)) {
+			msg = (GuString) gu_exn_caught_data(err);
+		} else {
+			msg = "Closing the result failed";
+		}
+		throw_string_exception(env, "org/grammaticalframework/sg/SGError", msg);
+	}
+
+	gu_pool_free(tmp_pool);
 }
