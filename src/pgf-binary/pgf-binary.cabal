@@ -1,0 +1,27 @@
+name: pgf-binary
+version: 0.5
+
+cabal-version: >= 1.10
+build-type: Simple
+license: BSD3
+--license-file: LICENSE
+synopsis: Custom version of the binary-0.5 package for the PGF library
+homepage: http://www.grammaticalframework.org/
+--bug-reports: http://code.google.com/p/grammatical-framework/issues/list
+maintainer: Thomas Hallgren
+stability: provisional
+category: Data, Parsing
+tested-with: GHC==7.4.2, GHC==7.8.3
+
+source-repository head
+  type:     darcs
+  location: http://www.grammaticalframework.org/
+
+Library
+  default-language:    Haskell2010
+  build-depends: base >= 4.3 && <5, binary, data-binary-ieee754,
+                 containers, array, bytestring
+  exposed-modules: PGF.Data.Binary
+
+  ghc-options: -fwarn-unused-imports -O2
+  extensions: FlexibleInstances, FlexibleContexts
