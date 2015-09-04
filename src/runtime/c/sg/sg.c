@@ -3,10 +3,11 @@
 
 #include "sg/sg.h"
 
-#define SG_EXPRS   "sg_exprs"
-#define SG_PAIRS   "sg_pairs"
-#define SG_IDENTS  "sg_idents"
-#define SG_TRIPLES "sg_triples"
+#define SG_EXPRS    "sg_exprs"
+#define SG_PAIRS    "sg_pairs"
+#define SG_IDENTS   "sg_idents"
+#define SG_LITERALS "sg_literals"
+#define SG_TRIPLES  "sg_triples"
 #define SG_TRIPLES_SPO "sg_triples_spo"
 #define SG_TRIPLES_PO  "sg_triples_po"
 #define SG_TRIPLES_O   "sg_triples_o"
@@ -47,6 +48,7 @@ sg_open(const char *filename,
 
 	rc = sqlite3_exec(db, "create table if not exists " SG_EXPRS "(fun not null, arg integer);"
 	                      "create unique index if not exists " SG_IDENTS " on " SG_EXPRS "(fun) where arg is null;"
+	                      "create unique index if not exists " SG_LITERALS " on " SG_EXPRS "(fun) where arg = 0;"
 	                      "create unique index if not exists " SG_PAIRS " on " SG_EXPRS "(fun,arg) where arg is not null;"
 	                      "create table if not exists " SG_TRIPLES "(subj integer, pred integer, obj integer, state integer);"
 	                      "create unique index if not exists " SG_TRIPLES_SPO " on " SG_TRIPLES "(subj,pred,obj);"
@@ -123,6 +125,7 @@ typedef struct {
 	BtCursor crsExprs;
 	BtCursor crsPairs;
 	BtCursor crsIdents;
+	BtCursor crsLiterals;
 	SgId key_seed;
 } ExprContext;
 
@@ -147,6 +150,12 @@ open_exprs(sqlite3 *db, int wrFlag, ExprContext* ctxt, GuExn* err)
 	Index *identsIdx = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_IDENTS);
     if (!identsIdx) {
 		sg_raise_err("Index " SG_IDENTS " is missing", err);
+		return SQLITE_ERROR;
+	}
+
+	Index *literalsIdx = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_LITERALS);
+    if (!literalsIdx) {
+		sg_raise_err("Index " SG_LITERALS " is missing", err);
 		return SQLITE_ERROR;
 	}
 
@@ -178,6 +187,15 @@ open_exprs(sqlite3 *db, int wrFlag, ExprContext* ctxt, GuExn* err)
 	}
 	ctxt->n_cursors++;
 
+	memset(&ctxt->crsLiterals, 0, sizeof(ctxt->crsLiterals));
+	KeyInfo *infLiterals = sqlite3KeyInfoAlloc(db, 1, 1);
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, literalsIdx->tnum, wrFlag, infLiterals, &ctxt->crsLiterals);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		return rc;
+	}
+	ctxt->n_cursors++;
+
 	if (wrFlag) {
 		int res;
 		rc = sqlite3BtreeLast(&ctxt->crsExprs, &res);
@@ -201,6 +219,11 @@ open_exprs(sqlite3 *db, int wrFlag, ExprContext* ctxt, GuExn* err)
 static void
 close_exprs(ExprContext* ctxt)
 {
+	if (ctxt->n_cursors >= 4) {
+		sqlite3KeyInfoUnref(ctxt->crsLiterals.pKeyInfo);
+		sqlite3BtreeCloseCursor(&ctxt->crsLiterals);
+	}
+
 	if (ctxt->n_cursors >= 3) {
 		sqlite3KeyInfoUnref(ctxt->crsIdents.pKeyInfo);
 		sqlite3BtreeCloseCursor(&ctxt->crsIdents);
@@ -228,6 +251,7 @@ store_expr(sqlite3* db,
 	GuVariantInfo ei = gu_variant_open(expr);
 	switch (ei.tag) {
 	case PGF_EXPR_ABS: {
+		gu_impossible();
 		break;
 	}
 	case PGF_EXPR_APP: {
@@ -314,9 +338,104 @@ store_expr(sqlite3* db,
 		break;
 	}
 	case PGF_EXPR_LIT: {
+		PgfExprLit* elit = ei.data;
+
+		Mem mem[2];
+
+		GuVariantInfo li = gu_variant_open(elit->lit);
+		switch (li.tag) {
+		case PGF_LITERAL_STR: {
+			PgfLiteralStr* lstr = li.data;
+
+			mem[0].flags = MEM_Str;
+			mem[0].n = strlen(lstr->val);
+			mem[0].z = lstr->val;
+			break;
+		}
+		case PGF_LITERAL_INT: {
+			PgfLiteralInt* lint = li.data;
+
+			mem[0].flags = MEM_Int;
+			mem[0].u.i = lint->val;
+			break;
+		}
+		case PGF_LITERAL_FLT: {
+			PgfLiteralFlt* lflt = li.data;
+
+			mem[0].flags = MEM_Real;
+			mem[0].u.r = lflt->val;
+			break;
+		}
+		default:
+			gu_impossible();
+		}
+
+		UnpackedRecord idxKey;
+		idxKey.pKeyInfo = ctxt->crsIdents.pKeyInfo;
+		idxKey.nField = 1;
+		idxKey.default_rc = 0;
+		idxKey.aMem = mem;
+
+		int res = 0;
+		rc = sqlite3BtreeMovetoUnpacked(&ctxt->crsLiterals,
+		                                &idxKey, 0,  0, &res);
+		if (rc != SQLITE_OK) {
+			return rc;
+		}
+
+		if (res == 0) {
+			rc = sqlite3VdbeIdxRowid(db, &ctxt->crsLiterals, pKey);
+		} else {
+			if (wrFlag == 0) {
+				*pKey = 0;
+				return SQLITE_OK;
+			}
+
+			*pKey = ++ctxt->key_seed;
+
+			mem[1].flags = MEM_Int;
+			mem[1].u.i = 0;
+
+			int serial_type_lit = sqlite3VdbeSerialType(&mem[0], file_format);
+			int serial_type_lit_hdr_len = sqlite3VarintLen(serial_type_lit);
+			int serial_type_arg = sqlite3VdbeSerialType(&mem[1], file_format);
+			int serial_type_arg_hdr_len = sqlite3VarintLen(serial_type_arg);
+
+			unsigned char* buf = malloc(1+serial_type_lit_hdr_len+MAX(1,serial_type_arg_hdr_len)+mem[0].n+8);
+			unsigned char* p = buf;
+			*p++ = 1+serial_type_lit_hdr_len+serial_type_arg_hdr_len;
+			p += putVarint32(p, serial_type_lit);
+			p += putVarint32(p, serial_type_arg);
+			p += sqlite3VdbeSerialPut(p, &mem[0], serial_type_lit);
+			p += sqlite3VdbeSerialPut(p, &mem[1], serial_type_arg);
+
+			rc = sqlite3BtreeInsert(&ctxt->crsExprs, 0, *pKey,
+			                        buf, p-buf, 0,
+			                        0, 0);
+			if (rc == SQLITE_OK) {
+				mem[1].flags = MEM_Int;
+				mem[1].u.i = *pKey;
+
+				int serial_type_key = sqlite3VdbeSerialType(&mem[1], file_format);
+				int serial_type_key_hdr_len = sqlite3VarintLen(serial_type_key);
+
+				p = buf;
+				*p++ = 1+serial_type_lit_hdr_len+serial_type_key_hdr_len;
+				p += putVarint32(p, serial_type_lit);
+				p += putVarint32(p, serial_type_key);
+				p += sqlite3VdbeSerialPut(p, &mem[0], serial_type_lit);
+				p += sqlite3VdbeSerialPut(p, &mem[1], serial_type_key);
+				rc = sqlite3BtreeInsert(&ctxt->crsLiterals, buf, p-buf,
+										0, *pKey, 0,
+										0, 0);
+			}
+
+			free(buf);
+		}
 		break;
 	}
 	case PGF_EXPR_META: {
+		gu_impossible();
 	}
 	case PGF_EXPR_FUN: {
 		PgfExprFun* fun = ei.data;
@@ -390,12 +509,17 @@ free:
         break;
 	}
 	case PGF_EXPR_VAR: {
+		gu_impossible();
 		break;
 	}
 	case PGF_EXPR_TYPED: {
+		PgfExprTyped* etyped = ei.data;
+		rc = store_expr(db, ctxt, etyped->expr, pKey, wrFlag);
 		break;
 	}
 	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* eimpl = ei.data;
+		rc = store_expr(db, ctxt, eimpl->expr, pKey, wrFlag);
 		break;
 	}
 	default:
@@ -482,8 +606,8 @@ load_expr(BtCursor* crsExprs, SgId key, PgfExpr *pExpr, GuPool* out_pool)
 	Mem mem[2];
 	row += sqlite3VdbeSerialGet(row, serial_type_fun, &mem[0]);
 	row += sqlite3VdbeSerialGet(row, serial_type_arg, &mem[1]);
-	
-	if (serial_type_arg == 0) {
+
+	if (mem[1].flags & MEM_Null) {
 		u32 len = sqlite3VdbeSerialTypeLen(serial_type_fun);
 
 		PgfExprFun *efun =
@@ -493,6 +617,37 @@ load_expr(BtCursor* crsExprs, SgId key, PgfExpr *pExpr, GuPool* out_pool)
 			                    pExpr, out_pool);
 		memcpy(efun->fun, mem[0].z, len);
 		efun->fun[len] = 0;
+	} else if (mem[1].u.i == 0) {
+		PgfExprLit *elit =
+			gu_new_variant(PGF_EXPR_LIT,
+			               PgfExprLit,
+			               pExpr, out_pool);
+
+		if (mem[0].flags & MEM_Str) {
+			u32 len = sqlite3VdbeSerialTypeLen(serial_type_fun);
+
+			PgfLiteralStr *lstr =
+				gu_new_flex_variant(PGF_LITERAL_STR,
+				                    PgfLiteralStr,
+				                    val, len+1,
+				                    &elit->lit, out_pool);
+			memcpy(lstr->val, mem[0].z, len);
+			lstr->val[len] = 0;
+		} else if (mem[0].flags & MEM_Int) {
+			PgfLiteralInt *lint =
+				gu_new_variant(PGF_LITERAL_INT,
+				               PgfLiteralInt,
+				               &elit->lit, out_pool);
+			lint->val = mem[0].u.i;
+		} else if (mem[0].flags & MEM_Real) {
+			PgfLiteralFlt *lflt =
+				gu_new_variant(PGF_LITERAL_FLT,
+				               PgfLiteralFlt,
+				               &elit->lit, out_pool);
+			lflt->val = mem[0].u.r;
+		} else {
+			gu_impossible();
+		}
 	} else {
 		PgfExprApp* papp =
 			gu_new_variant(PGF_EXPR_APP, PgfExprApp, pExpr, out_pool);
@@ -1152,6 +1307,14 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple,
 	}
 
 	return false;
+}
+
+void
+sg_triple_result_get_query(SgTripleResult* tres, SgTriple triple)
+{
+	triple[0] = tres->triple[0];
+	triple[1] = tres->triple[1];
+	triple[2] = tres->triple[2];
 }
 
 void
