@@ -49,7 +49,7 @@ sg_open(const char *filename,
 	rc = sqlite3_exec(db, "create table if not exists " SG_EXPRS "(fun not null, arg integer);"
 	                      "create unique index if not exists " SG_IDENTS " on " SG_EXPRS "(fun) where arg is null;"
 	                      "create unique index if not exists " SG_LITERALS " on " SG_EXPRS "(fun) where arg = 0;"
-	                      "create unique index if not exists " SG_PAIRS " on " SG_EXPRS "(fun,arg) where arg is not null;"
+	                      "create unique index if not exists " SG_PAIRS " on " SG_EXPRS "(fun,arg) where arg > 0;"
 	                      "create table if not exists " SG_TRIPLES "(subj integer, pred integer, obj integer, state integer);"
 	                      "create unique index if not exists " SG_TRIPLES_SPO " on " SG_TRIPLES "(subj,pred,obj);"
 	                      "create index if not exists " SG_TRIPLES_PO  " on " SG_TRIPLES "(pred,obj);"
