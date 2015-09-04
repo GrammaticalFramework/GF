@@ -23,8 +23,7 @@ $ $ANDROID_SDK_LOCATION/tools/android update project -p .
 
 Build libs/libjpgf.jar:
 
-$ (cd ../../runtime/java && javac org/grammaticalframework/pgf/*.java && jar -cf libjpgf.jar org/grammaticalframework/pgf/*.class)
-$ cp ../../runtime/java/libjpgf.jar libs
+$ (cd ../../runtime/java && javac org/grammaticalframework/*/*.java && jar -cf ../../ui/android/libs/jpgf.jar org/grammaticalframework/*/*.class)
 
 Build JNI code:
 
