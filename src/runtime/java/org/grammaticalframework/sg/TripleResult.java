@@ -4,13 +4,13 @@ import java.io.Closeable;
 import org.grammaticalframework.pgf.Expr;
 
 public class TripleResult implements Closeable {
-	private Expr subj;
-	private Expr pred;
-	private Expr obj;
-
 	public native boolean hasNext();
 	public native void close();
-	
+
+	public long getKey() {
+		return key;
+	}
+
 	public Expr getSubject() {
 		return subj;
 	}
@@ -21,5 +21,20 @@ public class TripleResult implements Closeable {
 
 	public Expr getObject() {
 		return obj;
+	}
+	
+	//////////////////////////////////////////////////////////////////
+	// private stuff
+	private long ref;
+	private long key;
+	private Expr subj;
+	private Expr pred;
+	private Expr obj;
+
+	private TripleResult(long ref, Expr subj, Expr pred, Expr obj) {
+		this.ref  = ref;
+		this.subj = subj;
+		this.pred = pred;
+		this.obj  = obj;
 	}
 }
