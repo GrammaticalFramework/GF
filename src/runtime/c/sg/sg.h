@@ -28,24 +28,26 @@ SgId
 sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err);
 
 PgfExpr
-sg_select_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err);
+sg_get_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err);
 
 
-typedef SgId SgTriple[3];
+typedef PgfExpr SgTriple[3];
 
 SgId
 sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err);
 
-bool
-sg_select_triple(SgSG *sg, SgId key, SgTriple triple, GuExn* err);
+int
+sg_get_triple(SgSG *sg, SgId key, SgTriple triple,
+                 GuPool* out_pool, GuExn* err);
 
 typedef struct SgTripleResult SgTripleResult;
 
 SgTripleResult*
 sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err);
 
-bool
-sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn* err);
+int
+sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple,
+                       GuPool* out_pool, GuExn* err);
 
 void
 sg_triple_result_close(SgTripleResult* tres, GuExn* err);

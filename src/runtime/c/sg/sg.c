@@ -11,15 +11,6 @@
 #define SG_TRIPLES_PO  "sg_triples_po"
 #define SG_TRIPLES_O   "sg_triples_o"
 
-typedef struct {
-	sqlite3 *db;
-	BtCursor* crsExprs;
-	BtCursor* crsPairs;
-	BtCursor* crsIdents;
-	SgId key_seed;
-	int file_format;
-} StoreContext;
-
 void
 sg_raise_sqlite(sqlite3* db, GuExn* err)
 {
@@ -127,10 +118,112 @@ sg_rollback(SgSG* sg, GuExn* err)
 	db->autoCommit = 1;
 }
 
+typedef struct {
+	int n_cursors;
+	BtCursor crsExprs;
+	BtCursor crsPairs;
+	BtCursor crsIdents;
+	SgId key_seed;
+} ExprContext;
+
 static int
-store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
+open_exprs(sqlite3 *db, int wrFlag, ExprContext* ctxt, GuExn* err)
+{
+	ctxt->n_cursors = 0;
+	
+	Table *exprsTbl =
+		sqlite3HashFind(&db->aDb[0].pSchema->tblHash, SG_EXPRS);
+    if (!exprsTbl) {
+		sg_raise_err("Table " SG_EXPRS " is missing", err);
+		return SQLITE_ERROR;
+	}
+    
+	Index *pairsIdx = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_PAIRS);
+    if (!pairsIdx) {
+		sg_raise_err("Index " SG_PAIRS " is missing", err);
+		return SQLITE_ERROR;
+	}
+
+	Index *identsIdx = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_IDENTS);
+    if (!identsIdx) {
+		sg_raise_err("Index " SG_IDENTS " is missing", err);
+		return SQLITE_ERROR;
+	}
+
+	int rc;
+
+	memset(&ctxt->crsExprs, 0, sizeof(ctxt->crsExprs));
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, exprsTbl->tnum, wrFlag, NULL, &ctxt->crsExprs);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		return rc;
+	}
+	ctxt->n_cursors++;
+
+	memset(&ctxt->crsPairs, 0, sizeof(ctxt->crsPairs));
+	KeyInfo *infPairs = sqlite3KeyInfoAlloc(db, 2, 0);
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, pairsIdx->tnum, wrFlag, infPairs, &ctxt->crsPairs);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		return rc;
+	}
+	ctxt->n_cursors++;
+
+	memset(&ctxt->crsIdents, 0, sizeof(ctxt->crsIdents));
+	KeyInfo *infIdents = sqlite3KeyInfoAlloc(db, 1, 1);
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, identsIdx->tnum, wrFlag, infIdents, &ctxt->crsIdents);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		return rc;
+	}
+	ctxt->n_cursors++;
+
+	if (wrFlag) {
+		int res;
+		rc = sqlite3BtreeLast(&ctxt->crsExprs, &res);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return rc;
+		}
+
+		rc = sqlite3BtreeKeySize(&ctxt->crsExprs, &ctxt->key_seed);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return rc;
+		}
+	} else {
+		ctxt->key_seed = 0;
+	}
+
+	return SQLITE_OK;
+}
+
+static void
+close_exprs(ExprContext* ctxt)
+{
+	if (ctxt->n_cursors >= 3) {
+		sqlite3KeyInfoUnref(ctxt->crsIdents.pKeyInfo);
+		sqlite3BtreeCloseCursor(&ctxt->crsIdents);
+	}
+
+	if (ctxt->n_cursors >= 2) {
+		sqlite3KeyInfoUnref(ctxt->crsPairs.pKeyInfo);
+		sqlite3BtreeCloseCursor(&ctxt->crsPairs);
+	}
+
+	if (ctxt->n_cursors >= 1) {
+		sqlite3BtreeCloseCursor(&ctxt->crsExprs);
+	}
+	
+	ctxt->n_cursors = 0;
+}
+
+static int
+store_expr(sqlite3* db,
+           ExprContext* ctxt, PgfExpr expr, SgId* pKey, int wrFlag)
 {
 	int rc = SQLITE_OK;
+	int file_format = db->aDb[0].pSchema->file_format;
 
 	GuVariantInfo ei = gu_variant_open(expr);
 	switch (ei.tag) {
@@ -143,31 +236,44 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 		Mem mem[3];
 
 		mem[0].flags = MEM_Int;
-		rc = store_expr(ctxt, app->fun, &mem[0].u.i);
+		rc = store_expr(db, ctxt, app->fun, &mem[0].u.i, wrFlag);
 		if (rc != SQLITE_OK)
 			return rc;
+		if (wrFlag == 0 && mem[0].u.i == 0) {
+			*pKey = 0;
+			return SQLITE_OK;
+		}
 
 		mem[1].flags = MEM_Int;
-		rc = store_expr(ctxt, app->arg, &mem[1].u.i);
+		rc = store_expr(db, ctxt, app->arg, &mem[1].u.i, wrFlag);
 		if (rc != SQLITE_OK)
 			return rc;
+		if (wrFlag == 0 && mem[1].u.i == 0) {
+			*pKey = 0;
+			return SQLITE_OK;
+		}
 
 		UnpackedRecord idxKey;
-		idxKey.pKeyInfo = ctxt->crsPairs->pKeyInfo;
+		idxKey.pKeyInfo = ctxt->crsPairs.pKeyInfo;
 		idxKey.nField = 2;
 		idxKey.default_rc = 0;
 		idxKey.aMem = mem;
 
 		int res = 0;
-		rc = sqlite3BtreeMovetoUnpacked(ctxt->crsPairs,
+		rc = sqlite3BtreeMovetoUnpacked(&ctxt->crsPairs,
 		                                &idxKey, 0,  0, &res);
 		if (rc != SQLITE_OK) {
 			return rc;
 		}
 
 		if (res == 0) {
-			rc = sqlite3VdbeIdxRowid(ctxt->db, ctxt->crsPairs, pKey);
+			rc = sqlite3VdbeIdxRowid(db, &ctxt->crsPairs, pKey);
 		} else {
+			if (wrFlag == 0) {
+				*pKey = 0;
+				return SQLITE_OK;
+			}
+
 			*pKey = ++ctxt->key_seed;
 
 			unsigned char buf[32];  // enough for a record with three integers
@@ -176,15 +282,15 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 			u32 serial_type;
 			unsigned char* p = buf+4;
 
-			serial_type = sqlite3VdbeSerialType(&mem[0], ctxt->file_format);
+			serial_type = sqlite3VdbeSerialType(&mem[0], file_format);
 			buf[2] = serial_type;
 			p += sqlite3VdbeSerialPut(p, &mem[0], serial_type);
 
-			serial_type = sqlite3VdbeSerialType(&mem[1], ctxt->file_format);
+			serial_type = sqlite3VdbeSerialType(&mem[1], file_format);
 			buf[3] = serial_type;
 			p += sqlite3VdbeSerialPut(p, &mem[1], serial_type);
 
-			rc = sqlite3BtreeInsert(ctxt->crsExprs, 0, *pKey,
+			rc = sqlite3BtreeInsert(&ctxt->crsExprs, 0, *pKey,
 			                        buf+1, p-(buf+1), 0,
 			                        0, 0);
 			if (rc != SQLITE_OK) {
@@ -197,11 +303,11 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 
 			mem[2].flags = MEM_Int;
 			mem[2].u.i = *pKey;
-			serial_type = sqlite3VdbeSerialType(&mem[2], ctxt->file_format);
+			serial_type = sqlite3VdbeSerialType(&mem[2], file_format);
 			buf[3] = serial_type;
 			p += sqlite3VdbeSerialPut(p, &mem[2], serial_type);
 
-			rc = sqlite3BtreeInsert(ctxt->crsPairs, buf, p-buf,
+			rc = sqlite3BtreeInsert(&ctxt->crsPairs, buf, p-buf,
 			                        0, *pKey, 0,
 			                        0, 0);
         }
@@ -221,30 +327,35 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 		mem[0].z = fun->fun;
 
 		UnpackedRecord idxKey;
-		idxKey.pKeyInfo = ctxt->crsIdents->pKeyInfo;
+		idxKey.pKeyInfo = ctxt->crsIdents.pKeyInfo;
 		idxKey.nField = 1;
 		idxKey.default_rc = 0;
 		idxKey.aMem = mem;
 
 		int res = 0;
-		rc = sqlite3BtreeMovetoUnpacked(ctxt->crsIdents,
+		rc = sqlite3BtreeMovetoUnpacked(&ctxt->crsIdents,
 		                                &idxKey, 0,  0, &res);
 		if (rc != SQLITE_OK) {
 			return rc;
 		}
 
 		if (res == 0) {
-			rc = sqlite3VdbeIdxRowid(ctxt->db, ctxt->crsIdents, pKey);
+			rc = sqlite3VdbeIdxRowid(db, &ctxt->crsIdents, pKey);
 		} else {
+			if (wrFlag == 0) {
+				*pKey = 0;
+				return SQLITE_OK;
+			}
+
 			*pKey = ++ctxt->key_seed;
 
-			int serial_type_fun = sqlite3VdbeSerialType(&mem[0], ctxt->file_format);
+			int serial_type_fun = sqlite3VdbeSerialType(&mem[0], file_format);
 			int serial_type_fun_hdr_len = sqlite3VarintLen(serial_type_fun);
 
 			mem[1].flags = MEM_Int;
 			mem[1].u.i = *pKey;
 
-			int serial_type_key = sqlite3VdbeSerialType(&mem[1], ctxt->file_format);
+			int serial_type_key = sqlite3VdbeSerialType(&mem[1], file_format);
 			int serial_type_key_hdr_len = sqlite3VarintLen(serial_type_key);
 
 			unsigned char* buf = malloc(1+serial_type_fun_hdr_len+MAX(1,serial_type_key_hdr_len)+mem[0].n+8);
@@ -255,7 +366,7 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 			memcpy(p, fun->fun, mem[0].n);
 			p += mem[0].n;
 
-			rc = sqlite3BtreeInsert(ctxt->crsExprs, 0, *pKey,
+			rc = sqlite3BtreeInsert(&ctxt->crsExprs, 0, *pKey,
 			                        buf, p-buf, 0,
 			                        0, 0);
 			if (rc != SQLITE_OK) {
@@ -269,7 +380,7 @@ store_expr(StoreContext* ctxt, PgfExpr expr, SgId* pKey)
 			memcpy(p, fun->fun, mem[0].n);
 			p += mem[0].n;
 			p += sqlite3VdbeSerialPut(p, &mem[1], serial_type_key);
-			rc = sqlite3BtreeInsert(ctxt->crsIdents, buf, p-buf,
+			rc = sqlite3BtreeInsert(&ctxt->crsIdents, buf, p-buf,
 			                        0, *pKey, 0,
 			                        0, 0);
 
@@ -299,26 +410,8 @@ sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err)
 {
 	sqlite3 *db = (sqlite3 *) sg;
 
-	Table *exprsTbl =
-		sqlite3HashFind(&db->aDb[0].pSchema->tblHash, SG_EXPRS);
-    if (!exprsTbl) {
-		sg_raise_err("Table " SG_EXPRS " is missing", err);
-		return 0;
-	}
-    
-	Index *pairsIdx = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_PAIRS);
-    if (!pairsIdx) {
-		sg_raise_err("Index " SG_PAIRS " is missing", err);
-		return 0;
-	}
-
-	Index *identsIdx = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_IDENTS);
-    if (!identsIdx) {
-		sg_raise_err("Index " SG_IDENTS " is missing", err);
-		return 0;
-	}
-
 	int rc;
+
 	if (db->autoCommit) {
 		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 1);
 		if (rc != SQLITE_OK) {
@@ -327,78 +420,19 @@ sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err)
 		}
 	}
 
-	BtCursor crsExprs;
-	memset(&crsExprs, 0, sizeof(crsExprs));
-	rc = sqlite3BtreeCursor(db->aDb[0].pBt, exprsTbl->tnum, 1, NULL, &crsExprs);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto rollback;
-	}
+	ExprContext ctxt;
+	rc = open_exprs(db, 1, &ctxt, err);
+	if (rc != SQLITE_OK)
+		goto close;
 
-	BtCursor crsPairs;
-	memset(&crsPairs, 0, sizeof(crsPairs));
-	KeyInfo *infPairs = sqlite3KeyInfoAlloc(db, 2, 0);
-	rc = sqlite3BtreeCursor(db->aDb[0].pBt, pairsIdx->tnum, 1, infPairs, &crsPairs);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto close1;
-	}
-
-	BtCursor crsIdents;
-	memset(&crsIdents, 0, sizeof(crsIdents));
-	KeyInfo *infIdents = sqlite3KeyInfoAlloc(db, 1, 1);
-	rc = sqlite3BtreeCursor(db->aDb[0].pBt, identsIdx->tnum, 1, infIdents, &crsIdents);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto close2;
-	}
-
-	int res;
-	rc = sqlite3BtreeLast(&crsExprs, &res);
+	SgId key;
+	rc = store_expr(db, &ctxt, expr, &key, 1);
 	if (rc != SQLITE_OK) {
 		sg_raise_sqlite(db, err);
 		goto close;
 	}
 
-	SgId key = 0;
-	rc = sqlite3BtreeKeySize(&crsExprs, &key);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto close;
-	}
-
-	StoreContext ctxt;
-	ctxt.db       = db;
-	ctxt.crsExprs = &crsExprs;
-	ctxt.crsPairs = &crsPairs;
-	ctxt.crsIdents = &crsIdents;
-	ctxt.key_seed = key;
-	ctxt.file_format = db->aDb[0].pSchema->file_format;
-	rc = store_expr(&ctxt, expr, &key);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto close;
-	}
-
-	sqlite3KeyInfoUnref(infIdents);
-	rc = sqlite3BtreeCloseCursor(&crsIdents);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto close2;
-	}
-
-	sqlite3KeyInfoUnref(infPairs);
-	rc = sqlite3BtreeCloseCursor(&crsPairs);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto close1;
-	}
-
-	rc = sqlite3BtreeCloseCursor(&crsExprs);
-	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto rollback;
-	}
+	close_exprs(&ctxt);
 
 	if (db->autoCommit) {
 		rc = sqlite3BtreeCommit(db->aDb[0].pBt);
@@ -411,17 +445,8 @@ sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err)
     return key;
 
 close:
-	sqlite3KeyInfoUnref(infIdents);
-	sqlite3BtreeCloseCursor(&crsIdents);
+	close_exprs(&ctxt);
 
-close2:
-	sqlite3KeyInfoUnref(infPairs);
-	sqlite3BtreeCloseCursor(&crsPairs);
-
-close1:
-	sqlite3BtreeCloseCursor(&crsExprs);
-
-rollback:
 	if (db->autoCommit) {
 		sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
 	}
@@ -485,7 +510,7 @@ load_expr(BtCursor* crsExprs, SgId key, PgfExpr *pExpr, GuPool* out_pool)
 }
 
 PgfExpr
-sg_select_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err)
+sg_get_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err)
 {
 	sqlite3 *db = (sqlite3 *) sg;
 
@@ -546,8 +571,13 @@ rollback:
 	return gu_null_variant;
 }
 
+typedef struct {
+	int n_cursors;
+	BtCursor cursor[4];
+} TripleContext;
+
 static int
-open_triples(sqlite3 *db, int wrFlag, BtCursor cursor[], int *n_cursors, GuExn* err)
+open_triples(sqlite3 *db, int wrFlag, TripleContext* ctxt, GuExn* err)
 {
 	Index *idx[3];
 	idx[0] = sqlite3HashFind(&db->aDb[0].pSchema->idxHash, SG_TRIPLES_SPO);
@@ -576,58 +606,39 @@ open_triples(sqlite3 *db, int wrFlag, BtCursor cursor[], int *n_cursors, GuExn* 
 	}
 
 	int rc;
-	if (db->autoCommit) {
-		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, wrFlag);
+
+	memset(ctxt->cursor, 0, sizeof(ctxt->cursor));
+
+	ctxt->n_cursors = 0;
+	while (ctxt->n_cursors < 3) {
+		KeyInfo *inf = sqlite3KeyInfoAlloc(db, 3-ctxt->n_cursors, ctxt->n_cursors);
+		rc = sqlite3BtreeCursor(db->aDb[0].pBt, idx[ctxt->n_cursors]->tnum, wrFlag, inf, &ctxt->cursor[ctxt->n_cursors]);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(db, err);
 			return rc;
 		}
+		ctxt->n_cursors++;
 	}
 
-	memset(cursor, 0, sizeof(BtCursor)*4);
-
-	*n_cursors = 0;
-	while (*n_cursors < 3) {
-		KeyInfo *inf = sqlite3KeyInfoAlloc(db, 3-*n_cursors, *n_cursors);
-		rc = sqlite3BtreeCursor(db->aDb[0].pBt, idx[*n_cursors]->tnum, wrFlag, inf, &cursor[*n_cursors]);
-		if (rc != SQLITE_OK) {
-			sg_raise_sqlite(db, err);
-			return rc;
-		}
-		(*n_cursors)++;
-	}
-
-	rc = sqlite3BtreeCursor(db->aDb[0].pBt, triplesTbl->tnum, wrFlag, NULL, &cursor[*n_cursors]);
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, triplesTbl->tnum, wrFlag, NULL, &ctxt->cursor[ctxt->n_cursors]);
 	if (rc != SQLITE_OK) {
 		sg_raise_sqlite(db, err);
 		return rc;
 	}
-	(*n_cursors)++;
-	
+	ctxt->n_cursors++;
+
 	return SQLITE_OK;
 }
 
 static void
-close_triples(sqlite3 *db, BtCursor cursor[], int *n_cursors, int rc, GuExn* err)
+close_triples(TripleContext* ctxt)
 {
-	while (*n_cursors > 0) {
-		(*n_cursors)--;
-		if (cursor[*n_cursors].pKeyInfo != NULL) {
-			sqlite3KeyInfoUnref(cursor[*n_cursors].pKeyInfo);
+	while (ctxt->n_cursors > 0) {
+		ctxt->n_cursors--;
+		if (ctxt->cursor[ctxt->n_cursors].pKeyInfo != NULL) {
+			sqlite3KeyInfoUnref(ctxt->cursor[ctxt->n_cursors].pKeyInfo);
 		}
-		sqlite3BtreeCloseCursor(&cursor[*n_cursors]);
-	}
-
-	if (db->autoCommit) {
-		if (rc == SQLITE_OK || rc == SQLITE_DONE) {
-			rc = sqlite3BtreeCommit(db->aDb[0].pBt);
-			if (rc != SQLITE_OK) {
-				sg_raise_sqlite(db, err);
-				return;
-			}
-		} else {
-			sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
-		}
+		sqlite3BtreeCloseCursor(&ctxt->cursor[ctxt->n_cursors]);
 	}
 }
 
@@ -638,29 +649,44 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 
 	int rc;
 
-	BtCursor cursor[4];
-	int n_cursors = 0;
-	rc = open_triples(db, 1, cursor, &n_cursors, err);
-	if (rc != SQLITE_OK) {
-		goto close;
+	if (db->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 1);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return 0;
+		}
 	}
 
+	TripleContext tctxt;
+	rc = open_triples(db, 1, &tctxt, err);
+	if (rc != SQLITE_OK)
+		goto close;
+
 	Mem mem[4];
-	mem[0].flags = MEM_Int;
-	mem[0].u.i = triple[0];
-	mem[1].flags = MEM_Int;
-	mem[1].u.i = triple[1];
-	mem[2].flags = MEM_Int;
-	mem[2].u.i = triple[2];
+
+	ExprContext ectxt;
+	rc = open_exprs(db, 1, &ectxt, err);
+	if (rc != SQLITE_OK)
+		goto close;
+
+	for (size_t i = 0; i < 3; i++) {
+		mem[i].flags = MEM_Int;
+
+		rc = store_expr(db, &ectxt, triple[i], &mem[i].u.i, 1);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			goto close;
+		}
+	}
 
 	UnpackedRecord idxKey;
-	idxKey.pKeyInfo = cursor[0].pKeyInfo;
+	idxKey.pKeyInfo = tctxt.cursor[0].pKeyInfo;
 	idxKey.nField = 3;
 	idxKey.default_rc = 0;
 	idxKey.aMem = mem;
 
 	int res = 0;
-	rc = sqlite3BtreeMovetoUnpacked(&cursor[0],
+	rc = sqlite3BtreeMovetoUnpacked(&tctxt.cursor[0],
 	                                &idxKey, 0,  0, &res);
 	if (rc != SQLITE_OK) {
 		sg_raise_sqlite(db, err);
@@ -670,15 +696,15 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 	SgId key = 0;
 
 	if (res == 0) {
-		rc = sqlite3VdbeIdxRowid(db, &cursor[0], &key);
+		rc = sqlite3VdbeIdxRowid(db, &tctxt.cursor[0], &key);
 	} else {
-		rc = sqlite3BtreeLast(&cursor[3], &res);
+		rc = sqlite3BtreeLast(&tctxt.cursor[3], &res);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(db, err);
 			goto close;
 		}
 
-		rc = sqlite3BtreeKeySize(&cursor[3], &key);
+		rc = sqlite3BtreeKeySize(&tctxt.cursor[3], &key);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(db, err);
 			goto close;
@@ -711,7 +737,7 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 		buf[4] = serial_type;
 		p += sqlite3VdbeSerialPut(p, &mem[3], serial_type);
 
-		rc = sqlite3BtreeInsert(&cursor[3], 0, key,
+		rc = sqlite3BtreeInsert(&tctxt.cursor[3], 0, key,
 								buf, p-buf, 0,
 								0, 0);
 		if (rc != SQLITE_OK) {
@@ -727,7 +753,7 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 		buf[4] = serial_type;
 		p += sqlite3VdbeSerialPut(p, &mem[3], serial_type);
 
-		rc = sqlite3BtreeInsert(&cursor[0], buf, p-buf,
+		rc = sqlite3BtreeInsert(&tctxt.cursor[0], buf, p-buf,
 								0, key, 0,
 								0, 0);
 		if (rc != SQLITE_OK) {
@@ -749,7 +775,7 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 		buf[3] = serial_type;
 		p += sqlite3VdbeSerialPut(p, &mem[3], serial_type);
 
-		rc = sqlite3BtreeInsert(&cursor[1], buf, p-buf,
+		rc = sqlite3BtreeInsert(&tctxt.cursor[1], buf, p-buf,
 								0, key, 0,
 								0, 0);
 		if (rc != SQLITE_OK) {
@@ -767,7 +793,7 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 		buf[2] = serial_type;
 		p += sqlite3VdbeSerialPut(p, &mem[3], serial_type);
 
-		rc = sqlite3BtreeInsert(&cursor[2], buf, p-buf,
+		rc = sqlite3BtreeInsert(&tctxt.cursor[2], buf, p-buf,
 								0, key, 0,
 								0, 0);
 		if (rc != SQLITE_OK) {
@@ -777,12 +803,27 @@ sg_insert_triple(SgSG *sg, SgTriple triple, GuExn* err)
 	}
 
 close:
-	close_triples(db, cursor, &n_cursors, rc, err);
+	close_exprs(&ectxt);
+	close_triples(&tctxt);
+
+	if (db->autoCommit) {
+		if (rc == SQLITE_OK || rc == SQLITE_DONE) {
+			rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+			if (rc != SQLITE_OK) {
+				sg_raise_sqlite(db, err);
+				return 0;
+			}
+		} else {
+			sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+		}
+	}
+
 	return key;
 }
 
 static int
-load_triple(BtCursor* crsTriples, SgTriple triple)
+load_triple(BtCursor* crsTriples, BtCursor* crsExprs, SgTriple triple,
+            GuPool* out_pool)
 {
 	int rc;
 
@@ -806,22 +847,38 @@ load_triple(BtCursor* crsTriples, SgTriple triple)
 	row += sqlite3VdbeSerialGet(row, serial_type_pred, &mem[1]);
 	row += sqlite3VdbeSerialGet(row, serial_type_obj,  &mem[2]);
 
-	triple[0] = mem[0].u.i;
-	triple[1] = mem[1].u.i;
-	triple[2] = mem[2].u.i;
-	
+	for (int i = 0; i < 3; i++) {
+		if (gu_variant_is_null(triple[i])) {
+			rc = load_expr(crsExprs, mem[i].u.i, &triple[i], out_pool);
+			if (rc != SQLITE_OK)
+				return rc;
+		}
+	}
+
 	return SQLITE_OK;
 }
 
-bool
-sg_select_triple(SgSG *sg, SgId key, SgTriple triple, GuExn* err)
+int
+sg_get_triple(SgSG *sg, SgId key, SgTriple triple,
+              GuPool* out_pool, GuExn* err)
 {
 	sqlite3 *db = (sqlite3 *) sg;
+
+	triple[0] = gu_null_variant;
+	triple[1] = gu_null_variant;
+	triple[2] = gu_null_variant;
 
 	Table *triplesTbl =
 		sqlite3HashFind(&db->aDb[0].pSchema->tblHash, SG_TRIPLES);
       if (!triplesTbl) {
 		sg_raise_err("Table " SG_TRIPLES " is missing", err);
+		return false;
+	}
+
+	Table *exprsTbl =
+		sqlite3HashFind(&db->aDb[0].pSchema->tblHash, SG_EXPRS);
+    if (!exprsTbl) {
+		sg_raise_err("Table " SG_EXPRS " is missing", err);
 		return false;
 	}
 
@@ -842,6 +899,14 @@ sg_select_triple(SgSG *sg, SgId key, SgTriple triple, GuExn* err)
 		goto rollback;
 	}
 
+	BtCursor crsExprs;
+	memset(&crsExprs, 0, sizeof(crsExprs));
+	rc = sqlite3BtreeCursor(db->aDb[0].pBt, exprsTbl->tnum, 0, NULL, &crsExprs);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		goto close1;
+	}
+
 	int res;
 	rc = sqlite3BtreeMovetoUnpacked(&crsTriples, 0, key, 0, &res);
 	if (rc != SQLITE_OK) {
@@ -850,11 +915,17 @@ sg_select_triple(SgSG *sg, SgId key, SgTriple triple, GuExn* err)
 	}
 
 	if (res == 0) {
-		rc = load_triple(&crsTriples, triple);
+		rc = load_triple(&crsTriples, &crsExprs, triple, out_pool);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(db, err);
 			goto close;
 		}
+	}
+
+	rc = sqlite3BtreeCloseCursor(&crsExprs);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+		goto close1;
 	}
 
 	rc = sqlite3BtreeCloseCursor(&crsTriples);
@@ -874,6 +945,9 @@ sg_select_triple(SgSG *sg, SgId key, SgTriple triple, GuExn* err)
 	return (res == 0);
 
 close:
+	sqlite3BtreeCloseCursor(&crsExprs);
+
+close1:
 	sqlite3BtreeCloseCursor(&crsTriples);
 
 rollback:
@@ -885,9 +959,11 @@ rollback:
 
 struct SgTripleResult {
 	sqlite3 *db;
+	SgTriple triple;
 
-	int n_cursors;
-	BtCursor cursors[4];
+	ExprContext ectxt;
+	TripleContext tctxt;
+
 	BtCursor* cursor;
 
 	int res;
@@ -902,30 +978,51 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 
 	int rc;
 
+	if (db->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 0);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return NULL;
+		}
+	}
+
 	SgTripleResult* tres = malloc(sizeof(SgTripleResult));
 	tres->db = db;
+	tres->triple[0] = triple[0];
+	tres->triple[1] = triple[1];
+	tres->triple[2] = triple[2];
 
-	rc = open_triples(db, 0, tres->cursors, &tres->n_cursors, err);
+	rc = open_triples(db, 0, &tres->tctxt, err);
+	if (rc != SQLITE_OK)
+		goto close;
+
+	rc = open_exprs(db, 0, &tres->ectxt, err);
 	if (rc != SQLITE_OK)
 		goto close;
 
 	for (int i = 0; i < 3; i++) {
-		if (triple[i] == 0)
+		if (gu_variant_is_null(triple[i]))
 			tres->mem[i].flags = MEM_Null;
 		else {
 			tres->mem[i].flags = MEM_Int;
-			tres->mem[i].u.i = triple[i];
+			rc = store_expr(db, &tres->ectxt, triple[i], &tres->mem[i].u.i, 0);
+			if (rc != SQLITE_OK)
+				goto close;
+			if (tres->mem[i].u.i == 0) {
+				tres->res = 1;
+				return tres;
+			}
 		}
 	}
 
 	int i = 0;
 	while (i < 3) {
-		if (triple[i] != 0)
+		if (!gu_variant_is_null(triple[i]))
 			break;
 		i++;
 	}
 
-	tres->cursor = &tres->cursors[i];
+	tres->cursor = &tres->tctxt.cursor[i];
 	tres->idxKey.pKeyInfo = tres->cursor->pKeyInfo;
 	tres->idxKey.nField = 0;
 	tres->idxKey.aMem = &tres->mem[i];
@@ -960,14 +1057,25 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 	return tres;
 
 close:
-	close_triples(db, tres->cursors, &tres->n_cursors, rc, err);
+	close_exprs(&tres->ectxt);
+	close_triples(&tres->tctxt);
+
+	if (db->autoCommit) {
+		sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	}
+
 	free(tres);
 	return NULL;
 }
 
-bool
-sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn* err)
+int
+sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple,
+                       GuPool* out_pool, GuExn* err)
 {
+	triple[0] = tres->triple[0];
+	triple[1] = tres->triple[1];
+	triple[2] = tres->triple[2];
+
 	while (tres->res == 0) {
 		int rc;
 
@@ -990,7 +1098,9 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn*
 			if (tres->res != 0)
 				return false;
 
-			if (tres->idxKey.nField == 1 && tres->mem[2].flags != MEM_Null) {
+			if (tres->idxKey.aMem == &tres->mem[0] &&
+			    tres->idxKey.nField == 1 &&
+			    tres->mem[2].flags != MEM_Null) {
 				int offset = 
 					zData[0] + 
 					sqlite3VdbeSerialTypeLen(zData[1]) + 
@@ -1016,7 +1126,7 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn*
 				return false;
 			}
 
-			rc = sqlite3BtreeMovetoUnpacked(&tres->cursors[3], 0, *pKey, 0, &tres->res);
+			rc = sqlite3BtreeMovetoUnpacked(&tres->tctxt.cursor[3], 0, *pKey, 0, &tres->res);
 		} else {
 			rc = sqlite3BtreeKeySize(tres->cursor, pKey);
 		}
@@ -1025,7 +1135,8 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn*
 			return false;
 		}
 
-		rc = load_triple(&tres->cursors[3], triple);
+		rc = load_triple(&tres->tctxt.cursor[3], &tres->ectxt.crsExprs,
+		                 triple, out_pool);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(tres->db, err);
 			return false;
@@ -1046,7 +1157,17 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple, GuExn*
 void
 sg_triple_result_close(SgTripleResult* tres, GuExn* err)
 {
-	close_triples(tres->db, tres->cursors, &tres->n_cursors, SQLITE_OK, err);
+	close_exprs(&tres->ectxt);
+	close_triples(&tres->tctxt);
+
+	if (tres->db->autoCommit) {
+		int rc = sqlite3BtreeCommit(tres->db->aDb[0].pBt);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(tres->db, err);
+			return;
+		}
+	}
+
 	free(tres);
 }
 
@@ -1086,7 +1207,7 @@ sg_query_result_fetch(SgQueryResult* qres, SgId* res, GuExn* err)
 
 		SgId key;
 		for (;;) {
-			bool found = sg_triple_result_fetch(qres->results[i], &key, triple, err);
+			bool found = sg_triple_result_fetch(qres->results[i], &key, triple, NULL, err);
 			if (gu_exn_is_raised(err)) {
 				return false;
 			}
