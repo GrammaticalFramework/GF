@@ -654,7 +654,7 @@ param
 
   useInfVP : Bool -> VP -> Str = \isAux,vp ->
     let vpi = infVP isAux vp in
-    "om" ++ vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ; -- TODO
+    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ; -- TODO
 
   reflPron : Agr => Str = table {
     {n = Sg ; p = P1} => "me" ;

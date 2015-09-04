@@ -21,7 +21,7 @@ lin
   weather_adjCl ap = mkCl (mkVP (lin AP ap)) ;
    
   is_right_VP = mkVP (ParadigmsChi.mkA "对") ; 
-  is_wrong_VP = mkVP (ParadigmsChi.mkV "错") ; 
+  is_wrong_VP = mkVP (ParadigmsChi.mkA "错") ; 
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ; ----
 
