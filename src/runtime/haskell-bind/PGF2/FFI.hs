@@ -222,6 +222,8 @@ foreign import ccall "pgf/pgf.h pgf_print"
 foreign import ccall "pgf/expr.h pgf_read_expr"
   pgf_read_expr :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
 
+foreign import ccall "pgf/expr.h pgf_read_expr_tuple"
+  pgf_read_expr_tuple :: Ptr GuIn -> CInt -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO CInt
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_abstract_tree"
   pgf_graphviz_abstract_tree :: Ptr PgfPGF -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()

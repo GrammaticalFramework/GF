@@ -152,6 +152,11 @@ pgf_expr_string(GuString, GuPool* pool);
 PgfExpr
 pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);
 
+int
+pgf_read_expr_tuple(GuIn* in,
+                    int n_exprs, PgfExpr exprs[],
+                    GuPool* pool, GuExn* err);
+
 PgfType*
 pgf_read_type(GuIn* in, GuPool* pool, GuExn* err);
 
