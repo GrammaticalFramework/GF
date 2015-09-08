@@ -1025,6 +1025,16 @@ pgf_symbols_cmp(GuString* psent, PgfSymbols* syms, bool case_sensitive)
 	for (size_t i = 0; i < n_syms; i++) {
 		PgfSymbol sym = gu_seq_get(syms, PgfSymbol, i);
 
+		if (i > 0) {
+			if (!skip_space(psent))
+				return 1;
+
+			while (**psent != 0) {
+				if (!skip_space(psent))
+					break;
+			}
+		}
+
 		GuVariantInfo inf = gu_variant_open(sym);
 		switch (inf.tag) {
 		case PGF_SYMBOL_CAT:
@@ -1038,16 +1048,6 @@ pgf_symbols_cmp(GuString* psent, PgfSymbols* syms, bool case_sensitive)
 			PgfSymbolKS* pks = inf.data;
 			if (**psent == 0)
 				return -1;
-
-			if (i > 0) {
-				if (!skip_space(psent))
-					return 1;
-
-				while (**psent != 0) {
-					if (!skip_space(psent))
-						break;
-				}
-			}
 
 			int cmp = cmp_string(psent, pks->token, case_sensitive);
 			if (cmp != 0)
@@ -2027,7 +2027,7 @@ pgf_parse_result_enum_next(GuEnum* self, void* to, GuPool* pool)
 
 static GuString
 pgf_parsing_last_token(PgfParsing* ps, GuPool* pool)
-{	
+{
 	if (ps->before == NULL)
 		return "";
 
