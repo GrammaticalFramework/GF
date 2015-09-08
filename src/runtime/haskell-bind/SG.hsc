@@ -8,7 +8,7 @@ module SG( SG, openSG, closeSG
          , beginTrans, commit, rollback, inTransaction
          , SgId
          , insertExpr, getExpr
-         , insertTriple, getTriple
+         , readTriple, insertTriple, getTriple
          , queryTriple
          ) where
 
@@ -107,6 +107,26 @@ getExpr (SG sg) id = do
 
 -----------------------------------------------------------------------
 -- Triples
+
+readTriple :: String -> Maybe (Expr,Expr,Expr)
+readTriple str =
+  unsafePerformIO $
+    do exprPl <- gu_new_pool
+       withGuPool $ \tmpPl ->
+         withCString str $ \c_str ->
+           withTriple $ \triple -> do
+             do guin <- gu_string_in c_str tmpPl
+                exn <- gu_new_exn tmpPl
+                ok <- pgf_read_expr_tuple guin 3 triple exprPl exn
+                status <- gu_exn_is_raised exn
+                if (ok == 1 && not status)
+                  then do c_expr1 <- peekElemOff triple 0
+                          c_expr2 <- peekElemOff triple 1
+                          c_expr3 <- peekElemOff triple 2
+                          exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+                          return $ Just (Expr c_expr1 exprFPl,Expr c_expr2 exprFPl,Expr c_expr3 exprFPl)
+                  else do gu_pool_free exprPl
+                          return Nothing
 
 insertTriple :: SG -> Expr -> Expr -> Expr -> IO SgId
 insertTriple (SG sg) (Expr expr1 _) (Expr expr2 _) (Expr expr3 _) =
