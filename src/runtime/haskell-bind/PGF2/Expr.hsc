@@ -4,7 +4,7 @@
 module PGF2.Expr where
 
 import System.IO.Unsafe(unsafePerformIO)
-import Foreign
+import Foreign hiding (unsafePerformIO)
 import Foreign.C
 import qualified Text.PrettyPrint as PP
 import PGF2.FFI
