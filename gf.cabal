@@ -254,11 +254,11 @@ Library
     GF.Speech.SRGS_XML
     GF.Speech.VoiceXML
     GF.System.Catch
+    GF.System.Concurrency
     GF.System.Console
     GF.System.Directory
     GF.System.Process
     GF.System.Signal
---  GF.System.UseSignal
     GF.Text.Clitics
     GF.Text.Coding
     GF.Text.Lexing
