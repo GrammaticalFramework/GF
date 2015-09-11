@@ -21,7 +21,6 @@ setNumCapabilities opt_n =
      return True
 #else
      n_now <- C.getNumCapabilities
-     print (n,n_now)
      return (n==n_now)
 #endif
 
