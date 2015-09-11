@@ -4,6 +4,7 @@ import Prelude hiding (catch)
 import Control.Monad(join,ap,when,unless)
 import Control.Applicative
 import GF.Infra.Concurrency
+import GF.System.Concurrency
 import System.FilePath
 import qualified GF.System.Directory as D
 import GF.System.Catch(catch,try)
@@ -27,11 +28,12 @@ import qualified Data.ByteString.Lazy as BS
 -- the broken PGF files that can result from mixing different modes in the
 -- same concrete syntax.
 --
--- The first argument is supposed to be the number of jobs to run in
--- parallel, but this has not been implemented yet. Instead you have to
+-- The first argument controls the number of jobs to run in
+-- parallel. This works if GF was compiled with GHC>=7.6, otherwise you have to
 -- use the GHC run-time flag @+RTS -N -RTS@ to enable parallelism.
 parallelBatchCompile jobs opts rootfiles0 =
-  do rootfiles <- mapM canonical rootfiles0
+  do setJobs jobs
+     rootfiles <- mapM canonical rootfiles0
      lib_dir  <- canonical =<< getLibraryDirectory opts
      filepaths <- mapM (getPathFromFile lib_dir opts) rootfiles
      let groups = groupFiles lib_dir filepaths
@@ -65,6 +67,13 @@ parallelBatchCompile jobs opts rootfiles0 =
         dropSlash ('/':p) = p
         dropSlash ('\\':p) = p
         dropSlash p = p
+
+setJobs opt_n =
+  do ok <- setNumCapabilities opt_n
+     when (not ok) $
+       ePutStrLn $ "To set the number of concurrent threads"
+                   ++" you need to use +RTS -N"++maybe "" show opt_n
+                   ++"\n   or recompile GF with ghc>=7.6"
 
 batchCompile1 lib_dir (opts,filepaths) =
   do cwd <- D.getCurrentDirectory
