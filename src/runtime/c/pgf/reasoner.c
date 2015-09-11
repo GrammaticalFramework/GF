@@ -12,7 +12,7 @@ typedef struct {
 } PgfAnswers;
 
 #ifdef PGF_REASONER_DEBUG
-typedef void (*PgfStatePrinter)(PgfReasonerState* st,
+typedef void (*PgfStatePrinter)(PgfReasoner* rs, PgfReasonerState* st,
                                 GuOut* out, GuExn* err,
                                 GuPool* tmp_pool);
 #endif
@@ -76,21 +76,21 @@ pgf_expr_state_order = { cmp_expr_state };
 
 #ifdef PGF_REASONER_DEBUG
 static void
-pgf_print_parent_state(PgfExprState* st,
+pgf_print_parent_state(PgfReasoner* rs, PgfExprState* st,
                        GuOut* out, GuExn* err, GuBuf* stack)
 {
 	gu_buf_push(stack, int, (st->n_args - st->arg_idx - 1));
 
 	PgfExprState* parent = gu_buf_get(st->answers->parents, PgfExprState*, 0);
-	if (parent != NULL)
-		pgf_print_parent_state(parent, out, err, stack);
+	if (&parent->base.header != rs->start)
+		pgf_print_parent_state(rs, parent, out, err, stack);
 
 	gu_puts(" (", out, err);
 	pgf_print_expr(st->expr, NULL, 0, out, err);
 }
 
 static void
-pgf_print_expr_state(PgfExprState* st,
+pgf_print_expr_state(PgfReasoner* rs, PgfExprState* st,
                      GuOut* out, GuExn* err, GuPool* tmp_pool)
 {	
 	gu_printf(out, err, "[%f] ", st->base.prob);
@@ -101,8 +101,8 @@ pgf_print_expr_state(PgfExprState* st,
 
 	PgfExprState* cont =
 		gu_buf_get(st->answers->parents, PgfExprState*, 0);
-	if (cont != NULL)
-		pgf_print_parent_state(cont, out, err, stack);
+	if (&cont->base.header != rs->start)
+		pgf_print_parent_state(rs, cont, out, err, stack);
 
 	if (st->n_args > 0)
 		gu_puts(" (", out, err);
@@ -146,11 +146,12 @@ pgf_combine1_to_expr(PgfCombine1State* st, GuPool* pool, GuPool* out_pool) {
 }
 
 static PgfExprState*
-pgf_combine2_to_expr(PgfCombine2State* st, GuPool* pool, GuPool* out_pool)
+pgf_combine2_to_expr(PgfReasoner* rs, PgfCombine2State* st,
+                     GuPool* pool, GuPool* out_pool)
 {
 	PgfExprState* parent =
 		gu_buf_get(st->parents, PgfExprState*, st->choice);
-	if (parent == NULL)
+	if (&parent->base.header == rs->start)
 		return NULL;
 
 	PgfExprState* nst =
@@ -174,20 +175,20 @@ pgf_combine2_to_expr(PgfCombine2State* st, GuPool* pool, GuPool* out_pool)
 
 #ifdef PGF_REASONER_DEBUG
 static void
-pgf_print_combine1_state(PgfCombine1State* st,
+pgf_print_combine1_state(PgfReasoner* rs, PgfCombine1State* st,
                          GuOut* out, GuExn* err, GuPool* tmp_pool)
 {
 	PgfExprState* nst = pgf_combine1_to_expr(st, tmp_pool, tmp_pool);
-	pgf_print_expr_state(nst, out, err, tmp_pool);
+	pgf_print_expr_state(rs, nst, out, err, tmp_pool);
 }
 
 static void
-pgf_print_combine2_state(PgfCombine2State* st,
+pgf_print_combine2_state(PgfReasoner* rs, PgfCombine2State* st,
                          GuOut* out, GuExn* err, GuPool* tmp_pool)
 {
-	PgfExprState* nst = pgf_combine2_to_expr(st, tmp_pool);
+	PgfExprState* nst = pgf_combine2_to_expr(rs, st, tmp_pool, tmp_pool);
 	if (nst != NULL)
-		pgf_print_expr_state(nst, out, err, tmp_pool);
+		pgf_print_expr_state(rs, nst, out, err, tmp_pool);
 }
 #endif
 
@@ -279,7 +280,7 @@ void
 pgf_reasoner_combine2(PgfReasoner* rs, PgfClosure* closure)
 {
 	PgfCombine2State* st = (PgfCombine2State*) closure;
-	PgfExprState* nst = pgf_combine2_to_expr(st, rs->pool, rs->out_pool);
+	PgfExprState* nst = pgf_combine2_to_expr(rs, st, rs->pool, rs->out_pool);
 	if (nst != NULL) {
 		rs->eval_gates->enter(rs, &nst->base.header);
 	}
@@ -337,7 +338,7 @@ pgf_reasoner_next(PgfReasoner* rs)
 			GuPool* tmp_pool = gu_new_pool();
 			GuOut* out = gu_file_out(stderr, tmp_pool);
 			GuExn* err = gu_exn(tmp_pool);
-			st->print(st, out, err, tmp_pool);
+			st->print(rs, st, out, err, tmp_pool);
 			gu_pool_free(tmp_pool);
 		}
 #endif
@@ -373,6 +374,7 @@ pgf_new_reasoner(PgfPGF* pgf, GuExn* err, GuPool* pool, GuPool* out_pool)
     rs->abstract = &pgf->abstract,
 	rs->table = gu_new_string_map(PgfAnswers*, &gu_null_struct, rs->pool),
 
+	rs->start = NULL;
 	rs->eval_gates = pgf->abstract.eval_gates;
 
 	rs->pqueue = gu_new_buf(PgfReasonerState*, rs->pool);
@@ -401,9 +403,9 @@ pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuExn* err, GuPool* pool, GuPool* out_
 
 	PgfAbsCat* abscat = gu_seq_binsearch(rs->abstract->cats, pgf_abscat_order, PgfAbsCat, cat);
 	if (abscat != NULL) {
-		PgfClosure* closure = gu_new(PgfClosure, rs->pool);
-		closure->code = abscat->predicate;
-		rs->eval_gates->enter(rs, closure);
+		rs->start = gu_new(PgfClosure, rs->pool);
+		rs->start->code = abscat->predicate;
+		rs->eval_gates->enter(rs, rs->start);
 	}
 
 	return &rs->en;

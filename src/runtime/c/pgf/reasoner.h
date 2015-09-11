@@ -29,6 +29,7 @@ struct PgfReasoner {
 	PgfAbswersMap* table;
 	GuBuf* pqueue;
 	GuBuf* exprs;
+	PgfClosure* start;
 	PgfEvalGates* eval_gates; // cached from pgf->abstr->eval_gates
 	GuExn* err;
 	void* enter_stack_ptr;
