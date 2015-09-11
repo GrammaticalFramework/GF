@@ -102,9 +102,10 @@ execute command args =
 -- to avoid casing problems for developers using Cabal<1.20
 numJobs flags =
     if null n
-    then ["-j=1"]
+    then ["-j","+RTS","-A20M","-N","-RTS"]
     else ["-j="++n,"+RTS","-A20M","-N"++n,"-RTS"]
   where
+    -- buildNumJobs is only available in Cabal>=1.20
     n = {-case buildNumJobs flags of
           Flag mn | mn/=Just 1-> maybe "" show mn
           _ ->-} ""
