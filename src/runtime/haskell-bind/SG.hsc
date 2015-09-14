@@ -12,7 +12,7 @@ module SG( SG, openSG, closeSG
          , queryTriple
          ) where
 
-import Foreign
+import Foreign hiding (unsafePerformIO)
 import Foreign.C
 import SG.FFI
 import PGF2.FFI
@@ -20,7 +20,7 @@ import PGF2.Expr
 
 import Data.Typeable
 import Control.Exception(Exception,SomeException,catch,throwIO)
-import System.IO.Unsafe(unsafeInterleaveIO)
+import System.IO.Unsafe(unsafePerformIO,unsafeInterleaveIO)
 
 -----------------------------------------------------------------------
 -- Global database operations and types
