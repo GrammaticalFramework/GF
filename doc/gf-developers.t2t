@@ -65,7 +65,10 @@ and
 
 === Darcs ===
 
-To get the GF source code, you also need //Darcs//, version 2 or later.  Darcs
+To get the GF source code, you also need //Darcs//, version 2 or later.
+Darcs 2.10 is recommended (July 2015).
+
+//Darcs//
 is a distributed version control system, see http://darcs.net/ for
 more information. There are precompiled packages for many platforms
 available and source code if you want to compile it yourself. Darcs
@@ -76,8 +79,8 @@ is also written in Haskell and so you can use GHC to compile it.
 
 GF uses //haskeline// to enable command line editing in the GF shell.
 This should work automatically on Mac OS and Windows, but on Linux one
-extra step is needed to make sure the C libraries required by //haskeline//
-are installed.  Here is one way to do this:
+extra step is needed to make sure the C libraries (terminfo)
+required by //haskeline// are installed.  Here is one way to do this:
 
 - On Ubuntu: ``sudo apt-get install libghc-haskeline-dev``
 - On Fedora: ``sudo yum install ghc-haskeline-devel``
@@ -141,9 +144,11 @@ pushing them to the main repo. In fact, you don't have to push them at
 all if you want to keep the changes only in your local repo.
 
 If you think there are too many questions about what to record, you
-can use the ``-a`` flag to ``record``. Or answer ``a`` to the first
-question. Both of these record all the changes you have in your local
-repository.
+can answer ``f`` to record all remaining changes in the current file,
+or ``s`` to skip them. Use ``?`` to get a list of more options.
+%use the ``-a`` flag to ``record``. Or answer ``a`` to the first
+%question. Both of these record all the changes you have in your local
+%repository.
 
 
 ==== Submitting patches ====
@@ -163,10 +168,11 @@ descriptive name). Since some e-mail setups change text attachments
 (most likely by changing the newline characters) you need to send
 the patch in some compressed format, such as GZIP, BZIP2 or ZIP.
 
-Send it as an e-mail attachment. If you have
-sendmail or something equivalent installed, it is possible to send the
-patch directly from darcs. If so, replace ``-o mypatch.patch`` with
-``--to=EMAIL`` where ``EMAIL`` is the address to send it to.
+Send it as an e-mail attachment.
+% If you have
+%sendmail or something equivalent installed, it is possible to send the
+%patch directly from darcs. If so, replace ``-o mypatch.patch`` with
+%``--to=EMAIL`` where ``EMAIL`` is the address to send it to.
 
 
 
@@ -181,10 +187,10 @@ get read-write access over SSH to the GF repository.
 ==== Getting a fresh copy ====
 
 Get your copy with (all on one line),
-replacing ``bringert`` with your own username on ``www.grammaticalframework.org``:
+replacing ``user`` with your own user name on ``www.grammaticalframework.org``:
 
 ```
-$ darcs get --lazy --set-scripts-executable bringert@www.grammaticalframework.org:/usr/local/www/GF/ gf
+$ darcs get --lazy --set-scripts-executable user@www.grammaticalframework.org:/usr/local/www/GF/ gf
 ```
 
 The option ``--lazy`` means that darcs defers downloading all the
@@ -198,10 +204,10 @@ past.
 Get all new patches from the main repo:
 
 ```
-$ darcs pull -a
+$ darcs pull
 ```
 
-Without ``-a``, you can choose which patches you want to get.
+You can add ``-a`` to get all patches without answering yes/no to each patch.
 
 
 
@@ -293,12 +299,18 @@ If you have Cabal>=1.20 you can enable parallel compilation by using
 $ cabal build -j
 ```
 
-or by putting a line ``jobs: $ncpus`` in your ``.cabal/config`` file. Cabal
-will pass this option to GHC when building the GF compiler, but only if you
-have GHC>=7.8. Cabal can also pass this option to GF when compiling the
-Resource Grammar Library, but the code is commented out by default to avoid
-causing problems for developers with Cabal<1.20, so you have to manually
-enable it by editing the last few lines in ``WebSetup.hs``.
+or by putting a line
+```
+jobs: $ncpus
+```
+in your ``.cabal/config`` file. Cabal
+will pass this option to GHC when building the GF compiler, if you
+have GHC>=7.8.
+
+Cabal also passes ``-j`` to GF to enable parallel compilation of the
+Resource Grammar Library. This is done unconditionally to avoid
+causing problems for developers with Cabal<1.20. You can disable this
+by editing the last few lines in ``WebSetup.hs``.
 
 
 ==== Partial builds ====
@@ -404,11 +416,15 @@ wrapper arround Cabal for you. If you just type:
 $ make
 ```
 the configuration phase will be run automatically if needed and after that
-the sources will be compiled. If you don't want to compile the resource library
-every time then you can use:
-```
-$ make gf
-```
+the sources will be compiled.
+
+%% cabal build rgl-none does not work with recent versions of Cabal
+%If you don't want to compile the resource library
+%every time then you can use:
+%```
+%$ make gf
+%```
+
 For installation use:
 ```
 $ make install
@@ -424,14 +440,21 @@ $ make clean
 
 == Compiling GF with C run-time system support ==
 
-The C run-time system is a separate implementation of the PGF run-time services
-that makes it possible to work with very large, ambiguous grammars, using
+The C run-time system is a separate implementation of the PGF run-time services.
+It makes it possible to work with very large, ambiguous grammars, using
 probabilistic models to obtain probable parses. The C run-time system might
 also be easier to use than the Haskell run-time system on certain platforms,
 e.g. Android and iOS.
 
 To install the C run-time system, go to the ``src/runtime/c`` directory
-and follow the instructions in the ``INSTALL`` file. This will install
+%and follow the instructions in the ``INSTALL`` file.
+and use the ``install.sh`` script:
+```
+bash install.sh configure
+bash install.sh build
+bash install.sh install
+```
+This will install
 the C header files and libraries need to write C programs that use PGF grammars.
 Some example C programs are included in the ``utils`` subdirectory, e.g.
 ``pgf-translate.c``.
