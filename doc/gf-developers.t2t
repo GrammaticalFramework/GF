@@ -450,9 +450,9 @@ To install the C run-time system, go to the ``src/runtime/c`` directory
 %and follow the instructions in the ``INSTALL`` file.
 and use the ``install.sh`` script:
 ```
-bash install.sh configure
-bash install.sh build
-bash install.sh install
+bash setup.sh configure
+bash setup.sh build
+bash setup.sh install
 ```
 This will install
 the C header files and libraries need to write C programs that use PGF grammars.
