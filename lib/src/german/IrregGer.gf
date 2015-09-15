@@ -5,7 +5,7 @@
 
 concrete IrregGer of IrregGerAbs = CatGer ** open 
   ParadigmsGer,
-  (M = MorphoGer)
+  (M = MorphoGer), ResGer
 in {
 
   flags optimize=values ;
@@ -159,7 +159,7 @@ in {
   lin schwingen_V =  irregV "schwingen" "schwingt" "schwang" "schwänge" "geschwungen" ;
   lin schwören_V =  irregV "schwören" "schwört" "schwor" "schwüre" "geschworen" ;
   lin sehen_V =  irregV "sehen" "sieht" "sah" "sähe" "gesehen" ;
-  lin sein_V =  irregV "sein" "ist" "war" "wäre" "gewesen" ;
+  lin sein_V =  ResGer.sein_V ;
   lin senden_V =  irregV "senden" "sendet" "sandte" "sandte" "gesandt" ;
   lin sieden_V =  irregV "sieden" "siedet" "sott" "sotte" "gesotten" ;
   lin singen_V =  irregV "singen" "singt" "sang" "sänge" "gesungen" ;
