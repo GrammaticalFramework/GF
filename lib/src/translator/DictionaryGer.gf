@@ -7821,7 +7821,7 @@ lin buck_V = mkReflV "widersetzen" ; -- status=guess, src=wikt
 lin buck_V2 = mkV2 (mkReflV "widersetzen") ; -- status=guess, src=wikt
 lin buck_up_V2 = variants {} ;
 lin buckboard_N = variants {} ;
-lin bucket_N = mkN "Ein-Euro-Job" "Ein-Euro-Jobs" masculine ; -- status=guess
+lin bucket_N = mkN "Eimer" "Eimer" masculine ;
 lin bucket_V = variants {} ;
 lin bucket_down_V = variants {} ;
 lin bucketful_N = variants {} ;
@@ -30808,8 +30808,8 @@ lin kibe_N = variants {} ;
 lin kibibit_N = variants {} ;
 lin kibitzer_N = variants {} ;
 lin kick_N = mkN "Ein-Euro-Job" "Ein-Euro-Jobs" masculine ; -- status=guess
-lin kick_V = mkV "schießen" ; -- status=guess, src=wikt
-lin kick_V2 = mkV2 (mkV "schießen") ; -- status=guess, src=wikt
+lin kick_V = I.treten_V ;
+lin kick_V2 = mkV2 I.treten_V ;
 lin kick_about_V2 = prepV2 OP_kick_V OP_about_Prep ; -- guess-p-verb
 lin kick_around_V2 = prepV2 OP_kick_V OP_around_Prep ; -- guess-p-verb
 lin kick_around_with_V2 = prepV2 (advV OP_kick_V OP_around_Adv ) OP_with_Prep ; -- guess-p-verb
@@ -65039,7 +65039,7 @@ oper OP_issue_V : V = variants {} ; --
 oper OP_join_V : V = prefixV "bei" I.treten_V ;
 oper OP_jump_V : V = L.jump_V ;
 oper OP_keep_V : V = I.halten_V ; --- delete: false extraction
-oper OP_kick_V : V = mkV "schießen" ; -- status=guess, src=wikt
+oper OP_kick_V : V = I.treten_V ;
 oper OP_kill_V : V = mkV "töten" ;
 oper OP_knock_V : V = prefixV "um" (irregV "werfen" "wirft" "warf" "warf" "geworfen") ; -- status=guess, src=wikt
 oper OP_land_V : V = regV "landen" ; -- status=guess, src=wikt
