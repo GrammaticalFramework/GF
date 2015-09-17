@@ -18,15 +18,16 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
             } ;
           agr  = {g = Utr ; n = ps.p3 ; p = P2} ; ---- P2? -- g does not matter
           verb = vp.s.s ! ps.p1 ;
+	  part = vp.s.particle ++ vp.a2 ++ vp.s.prefix ; -- as in mkClause
           inf  = vp.inf.p1 ;
         in
           case vp.negPos of {
              BeforeObjs => verb ++ ps.p2 ++ vp.a1 ! pol ++ vp.n0 ! agr ++ 
-                     vp.n2 ! agr ++ vp.a2 ++ inf ++ vp.ext ;
+                     vp.n2 ! agr ++ part ++ inf ++ vp.ext ;
              AfterObjs => verb ++ ps.p2 ++ vp.n0 ! agr ++ vp.n2 ! agr ++ 
-                     vp.a1 ! pol ++ vp.a2 ++ inf ++ vp.ext ;
+                     vp.a1 ! pol ++ part ++ inf ++ vp.ext ;
              BetweenObjs => verb ++ ps.p2 ++ vp.n0 ! agr ++ vp.a1 ! pol ++ vp.n2 ! agr ++ 
-                     vp.a2 ++ inf ++ vp.ext 
+                     part ++ inf ++ vp.ext 
 	  } ;
     } ;
 

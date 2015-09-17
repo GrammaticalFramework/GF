@@ -34,4 +34,10 @@ abstract ExtraItaAbs = ExtraRomanceAbs ** {
     AdvDatVP : VP -> VP ;  -- ci vado
     AdvGenVP : VP -> VP ;  -- ne arrivo
 
+-- alternatives of what = che
+
+    che_cosa_IP : IP ;
+    cosa_IP : IP ;
+
+    voiPol_Pron : Pron ;
 }

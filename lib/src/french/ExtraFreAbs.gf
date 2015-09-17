@@ -48,5 +48,10 @@ abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
 
     PNegNe : Pol ;
 
+-- alternative forms of questions
+
+    EstcequeQuestCl : Cl -> QCl ; -- est-ce qu'il dort
+    InvQuestCl : Cl -> QCl ;      -- dort-il
+
 
 }
