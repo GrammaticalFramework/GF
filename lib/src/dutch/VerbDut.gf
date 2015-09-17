@@ -6,14 +6,19 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
     UseV = predV ;
 
     ComplVV v vp = 
-      let 
-        vpi = infVP v.isAux vp 
+      let
+        vpv = predVGen v.isAux vp.negPos (v2v v) ;
+        vpi = infVP v.isAux vp ;
       in
-      insertExtrapos vpi.p3 (
+      vpv ** {n2 = vpi.p1 ; inf = <vpi.p2, True> ; ext = vpi.p3} ; ----
+
+{-
+      in
+      insertInf vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
             predVGen v.isAux vp.negPos (v2v v)))) ; ---- subtyp
-
+-}
     ComplVS v s = 
       insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q = 

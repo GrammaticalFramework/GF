@@ -63,7 +63,10 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
         a = quant.a
       in {
         s = \\g => quant.s ! num.isNum ! n ! g ++ num.s ;
-        sp = \\g => quant.sp ! n ! g ++ num.s ;
+        sp = \\g => case num.isNum of {
+	  False => quant.sp ! n ! g ++ num.s ;
+	  True  => quant.s ! True ! n ! g ++ num.s
+	  } ;
         n = n ;
         a = a
         } ;
