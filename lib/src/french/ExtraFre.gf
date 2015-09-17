@@ -82,6 +82,23 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
     ExistsNP np = 
       mkClause "il" True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (regV "exister"))) ;
 
+
+    EstcequeQuestCl cl = 
+    {s = \\t,a,p =>                             -- est-ce qu'il dort ?
+            let cls = cl.s ! DDir ! t ! a ! p 
+            in table {
+              QDir   => "est-ce" ++ elisQue ++ cls ! Indic ;
+              QIndir => subjIf ++ cls ! Indic
+              }
+      } ;
+    InvQuestCl cl = {s = \\t,a,p =>                             -- dort-il ?
+            let cls = cl.s ! DInv ! t ! a ! p 
+            in table {
+              QDir   => cls ! Indic ;
+              QIndir => subjIf ++ cls ! Indic
+              }
+      } ;
+
 --- in ExtraRomance
 --    PassAgentVPSlash vps np = passVPSlash 
 --      vps ("par" ++ (np.s ! Acc).ton) ;

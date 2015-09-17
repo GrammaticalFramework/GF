@@ -21,7 +21,7 @@ lin n4 =
   mkTal "cuatro" "catorce"    "cuarenta"  "cuatrocientos" 
         "cuarto" "decimocuarto" "cuadragésimo" "cuadringentesimo" ;
 lin n5 = 
-  mkTal "cinco"  "quince"     "cinquenta" "quinientos"
+  mkTal "cinco"  "quince"     "cincuenta" "quinientos"
         "quinto" "decimoquinto" "quincuagésimo" "guingentésimo" ;
 lin n6 = 
   mkTal "seis"   "dieciséis"  "sesenta"   "seiscientos"

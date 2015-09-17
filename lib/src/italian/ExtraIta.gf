@@ -48,5 +48,13 @@ concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta **
     ExistsNP np = 
       mkClause [] True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (regV "esistere"))) ;
 
+    che_cosa_IP = {s = \\c => prepCase c ++ ["che cosa"] ; a = aagr Fem Sg} ;
+    cosa_IP = {s = \\c => prepCase c ++ ["cosa"] ; a = aagr Fem Sg} ;
+
+    voiPol_Pron = mkPronoun
+       "voi" "vi" "vi" "ve" "voi" "vostro" "vostra" "vostri" "vostre"
+       Masc Pl P2
+        ** {isPol = True} ;
+
 
 }

@@ -124,7 +124,8 @@ oper
     mkV : (aaien,aait : Str) -> V ;  -- regular verb with third person sg pres (giving stem)
     mkV : (breken,brak,gebroken : Str) -> V ; -- theme of irregular verb
     mkV : (breken,brak,braken,gebroken : Str) -> V ; -- also past plural irregular
-    mkV : (aai,aait,aaien,aaide,aaide,aaiden,geaaid : Str) -> V ; -- worst-case verb
+    mkV : (aai,aait,aaien,aaide,aaide,aaiden,geaaid : Str) -> V ; -- almost worst-case verb, Sg2=Sg3
+    mkV : (aai,aait,aait,aaien,aaide,aaide,aaiden,geaaid : Str) -> V ; -- worst-case verb
 
 -- To add a movable suffix e.g. "auf(fassen)".
 
@@ -269,6 +270,8 @@ oper
       \a,b,c,d -> lin V (v2vv (irregVerb2 a b c d)) ;
     mkV : (aai,aait,aaien,aaide,aaiden,geaaid : Str) -> V =
       \a,b,c,d,f,g -> lin V (v2vv (mkVerb a b c d d f g)) ;
+    mkV : (aai,aait,aait,aaien,aaide,aaide,aaiden,geaaid : Str) -> V =
+      \a,b2,b3,c,d2,d3,f,g -> lin V (v2vv (mkVerb8 a b2 b3 c d2 d3 f g)) ;
     mkV : Str -> V -> V = \v,s ->lin V (prefixV v s) ;
     mkV : V -> Str -> V = \s,v ->lin V (prefixV v s) ; ---- the same, in order matching Wiktionary-generated lexicon
     } ;

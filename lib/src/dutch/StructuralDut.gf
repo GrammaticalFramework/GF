@@ -86,7 +86,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   to_Prep = mkPrep "naar" ;
   under_Prep = mkPrep "onder" ;
   very_AdA = ss "erg" ;
-  want_VV = auxVV (mkV "wil" "wil" "willen" "wou" "wouden" "gewild") ;
+  want_VV = auxVV (mkV "wil" "wilt" "wil" "willen" "wou" "wou" "wouden" "gewild") ;
 
   we_Pron = mkPronoun "we" "ons" "ons" "wij" "ons" "onze" "onze" Utr Pl P3 ; ----
 
