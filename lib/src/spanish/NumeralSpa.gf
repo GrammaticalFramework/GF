@@ -41,6 +41,7 @@ lin pot01 =
   "décimo" "centésimo").s in
   {s =\\f,g => case <f,g> of {
      <ental pred,_> => [] ;
+     <ental _, NCard Masc> => "un" ;
      <ental _, NCard Fem> => "una" ;
      <hundra False,  NCard _> => "cien" ;
      <hundra True,  NCard Fem> => "ciento" ;

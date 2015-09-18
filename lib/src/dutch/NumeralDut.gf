@@ -23,7 +23,7 @@ lin
 
   pot01 = {
     s = \\f => table {
-          NCard g _ => "een" ; ---- "één" ;
+          NCard g _ => "één" ; --- een
           NOrd af => (regAdjective "eerst").s ! Posit ! af
           } ; 
     n = Sg ;
