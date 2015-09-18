@@ -1,5 +1,5 @@
 concrete NumeralIta of Numeral = CatIta [Numeral,Digits] ** 
-  open CommonRomance, ResRomance, MorphoIta, Prelude in {
+  open CommonRomance, ResRomance, MorphoIta, PhonoIta, Prelude in {
 
 lincat 
   Digit = {s : DForm => CardOrd => Str  ; isContr : Bool} ;
@@ -32,9 +32,9 @@ lin pot01 =
   {s =\\f,g => case f of {
       ental t => case t of 
                    {pred  =>  case g of {
-                                         NCard Fem => "una" ;
-                                         _ => uno ! f ! g
-                                         };
+                                         NCard Fem => elision "una" "un'" "una" ;
+                                         _ => pre {"un" ; "uno" / sImpuro}
+                                         } ;
                     indip =>  case g of
                                    { NCard _ => [] ;
                                      _       => uno ! f ! g
