@@ -49,7 +49,7 @@ type Env = [(Ident,Value)]
 data Predefined = Drop | Take | Tk | Dp | EqStr | Occur | Occurs | ToUpper
                 | ToLower | IsUpper | Length | Plus | EqInt | LessInt 
              {- | Show | Read | ToStr | MapStr | EqVal -}
-                | Error
+                | Error | Trace
                 -- Canonical values below:
                 | PBool | PFalse | PTrue | Int | Ints | NonExist 
                 | BIND | SOFT_BIND | SOFT_SPACE | CAPIT | ALL_CAPIT

@@ -75,7 +75,7 @@ predefList =
      (cIsUpper,IsUpper),(cLength,Length),(cPlus,Plus),(cEqInt,EqInt),
      (cLessInt,LessInt),
      -- cShow, cRead, cMapStr, cEqVal
-     (cError,Error),
+     (cError,Error),(cTrace,Trace),
      -- Canonical values:
      (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInt,Int),
      (cInts,Ints),(cNonExist,NonExist)
@@ -101,6 +101,7 @@ delta f vs =
       LessInt -> ap2 ((<)::Int->Int->Bool)
     {- -- | Show | Read | ToStr | MapStr | EqVal -}
       Error   -> ap1 VError
+      Trace   -> ap2 vtrace
       -- Canonical values:
       PBool   -> canonical
       Int     -> canonical
@@ -128,6 +129,9 @@ delta f vs =
     fromNonExist vs a b
       | null [v | v@(VApp NonExist _) <- vs] = b
       | otherwise                            = return (toValue a)
+
+    vtrace :: Value -> Value -> Value
+    vtrace x y = y -- tracing is implemented elsewhere
 
 --  unimpl id = bug $ "unimplemented predefined function: "++showIdent id
 --  problem id vs = bug $ "unexpected arguments: Predef."++showIdent id++" "++show vs

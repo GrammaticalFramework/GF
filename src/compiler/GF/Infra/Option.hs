@@ -178,7 +178,8 @@ data Flags = Flags {
       optHeuristicFactor :: Maybe Double,
       optCaseSensitive   :: Bool,
       optPlusAsBind      :: Bool,
-      optJobs            :: Maybe (Maybe Int)
+      optJobs            :: Maybe (Maybe Int),
+      optTrace           :: Bool
     }
   deriving (Show)
 
@@ -289,7 +290,8 @@ defaultFlags = Flags {
       optHeuristicFactor = Nothing,
       optCaseSensitive   = True,
       optPlusAsBind      = False,
-      optJobs            = Nothing
+      optJobs            = Nothing,
+      optTrace           = False
     }
 
 -- | Option descriptions
@@ -318,6 +320,8 @@ optDescr =
      Option [] ["make"] (NoArg (liftM2 addOptions (mode ModeCompiler) (phase Link))) "Build .pgf file and other output files and exit.",
      Option [] ["cpu"] (NoArg (cpu True)) "Show compilation CPU time statistics.",
      Option [] ["no-cpu"] (NoArg (cpu False)) "Don't show compilation CPU time statistics (default).",
+--   Option ['t'] ["trace"] (NoArg (trace True)) "Trace computations",
+--   Option [] ["no-trace"] (NoArg (trace False)) "Don't trace computations",
      Option [] ["gfo-dir"] (ReqArg gfoDir "DIR") "Directory to put .gfo files in (default = '.').",
      Option ['f'] ["output-format"] (ReqArg outFmt "FMT") 
         (unlines ["Output format. FMT can be one of:",
@@ -383,7 +387,6 @@ optDescr =
      dumpOption "refresh" Refresh,
      dumpOption "opt" Optimize,
      dumpOption "canon" Canon
-
     ]
  where phase       x = set $ \o -> o { optStopAfterPhase = x }
        mode        x = set $ \o -> o { optMode = x }
@@ -406,6 +409,7 @@ optDescr =
                                         Just i  -> set $ \o -> o { optVerbosity = i }
                                         Nothing -> fail $ "Bad verbosity: " ++ show v
        cpu         x = set $ \o -> o { optShowCPUTime = x }
+--     trace       x = set $ \o -> o { optTrace = x }
        gfoDir      x = set $ \o -> o { optGFODir = Just x }
        outFmt      x = readOutputFormat x >>= \f ->
                          set $ \o -> o { optOutputFormats = optOutputFormats o ++ [f] }
