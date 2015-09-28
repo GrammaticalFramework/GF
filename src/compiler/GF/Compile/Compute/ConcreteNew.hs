@@ -7,7 +7,7 @@ module GF.Compile.Compute.ConcreteNew
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
-import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr)
+import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr,cTrace)
 import GF.Grammar.PatternMatch(matchPattern,measurePatt)
 import GF.Grammar.Lockfield(isLockLabel,lockRecType) --unlockRecord,lockLabel
 import GF.Compile.Compute.Value hiding (Error)
@@ -21,7 +21,7 @@ import Data.List (findIndex,intersect,nub,elemIndex,(\\)) --,isInfixOf
 --import Data.Char (isUpper,toUpper,toLower)
 import GF.Text.Pretty
 import qualified Data.Map as Map
---import Debug.Trace(trace)
+import Debug.Trace(trace)
 
 -- * Main entry points
 
@@ -41,10 +41,11 @@ eval ge t = ($[]) # value (toplevel ge) t
 
 type ResourceValues = Map.Map ModuleName (Map.Map Ident (Err Value))
 
-data GlobalEnv = GE Grammar ResourceValues Options (L Ident)
+data GlobalEnv = GE Grammar ResourceValues Options GLocation
 data CompleteEnv = CE {srcgr::Grammar,rvs::ResourceValues,
                        opts::Options,
-                       gloc::L Ident,local::LocalScope}
+                       gloc::GLocation,local::LocalScope}
+type GLocation = L Ident
 type LocalScope = [Ident]
 type Stack = [Value]
 type OpenValue = Stack->Value
@@ -85,7 +86,24 @@ resourceValues opts gr = env
     rvs = Map.mapWithKey moduleResources (moduleMap gr)
     moduleResources m = Map.mapWithKey (moduleResource m) . jments
     moduleResource m c _info = do L l t <- lookupResDefLoc gr (m,c)
-                                  eval (GE gr rvs opts (L l c)) t
+                                  let loc = L l c
+                                      qloc = L l (Q (m,c))
+                                  eval (GE gr rvs opts loc) (traceRes qloc t)
+
+    traceRes = if flag optTrace opts
+               then traceResource
+               else const id
+
+-- * Tracing
+
+-- | Insert a call to the trace function under the top-level lambdas
+traceResource (L l q) t =
+  case termFormCnc t of
+    (abs,body) -> mkAbs abs (mkApp traceQ [args,body])
+      where
+        args = R $ tuple2record (K lstr:[Vr x|(bt,x)<-abs,bt==Explicit])
+        lstr = render (l<>":"<>ppTerm Qualified 0 q)
+        traceQ = Q (cPredef,cTrace)
 
 -- * Computing values
 
@@ -390,35 +408,38 @@ apply' env t vs =
                               in \ svs -> maybe constr id (Map.lookup f predefs)
                                           $ map ($svs) vs
               | otherwise  -> do r <- resource env x
-                                 return $ \ svs -> vapply r (map ($svs) vs)
+                                 return $ \ svs -> vapply (gloc env) r (map ($svs) vs)
 -}
     App t1 t2              -> apply' env t1 . (:vs) =<< value env t2
     _                      -> do fv <- value env t
-                                 return $ \ svs -> vapply (fv svs) (map ($svs) vs)
+                                 return $ \ svs -> vapply (gloc env) (fv svs) (map ($svs) vs)
 
-vapply :: Value -> [Value] -> Value
-vapply v [] = v
-vapply v vs =
+vapply :: GLocation -> Value -> [Value] -> Value
+vapply loc v [] = v
+vapply loc v vs =
   case v of
     VError {} -> v
 --  VClosure env (Abs b x t) -> beta gr env b x t vs
-    VAbs bt _ (Bind f) -> vbeta bt f vs
-    VApp pre vs1 -> err msg vfv $ mapM (delta pre) (varyList (vs1++vs))
+    VAbs bt _ (Bind f) -> vbeta loc bt f vs
+    VApp pre vs1 -> delta' pre (vs1++vs)
       where
+        delta' Trace (v1:v2:vs) = let vr = vapply loc v2 vs
+                                  in vtrace loc v1 vr
+        delta' pre vs = err msg vfv $ mapM (delta pre) (varyList vs)
         --msg = const (VApp pre (vs1++vs))
         msg = bug . (("Applying Predef."++showIdent (predefName pre)++": ")++)
-    VS (VV t pvs fs) s -> VS (VV t pvs [vapply f vs|f<-fs]) s
-    VFV fs -> vfv [vapply f vs|f<-fs]
+    VS (VV t pvs fs) s -> VS (VV t pvs [vapply loc f vs|f<-fs]) s
+    VFV fs -> vfv [vapply loc f vs|f<-fs]
     VCApp f vs0 -> VCApp f (vs0++vs)
     v -> bug $ "vapply "++show v++" "++show vs
 
-vbeta bt f (v:vs) =
+vbeta loc bt f (v:vs) =
   case (bt,v) of
     (Implicit,VImplArg v) -> ap v
     (Explicit,         v) -> ap v
   where
-    ap (VFV avs) = vfv [vapply (f v) vs|v<-avs]
-    ap v         = vapply (f v) vs
+    ap (VFV avs) = vfv [vapply loc (f v) vs|v<-avs]
+    ap v         = vapply loc (f v) vs
 
 vary (VFV vs) = vs
 vary v = [v]
@@ -431,10 +452,20 @@ beta env b x t (v:vs) =
     (Explicit,         v) -> apply' (ext (x,v) env) t vs
 -}
 
+vtrace loc arg res = trace (render (hang (pv arg) 4 ("->"<+>pv res))) res
+  where
+    pv v = case v of
+             VRec (f:as) -> hang (pf f) 4 (fsep (map pa as))
+             _ -> ppV v
+    pf (_,VString n) = pp n
+    pf (_,v) = ppV v
+    pa (_,v) = ppV v
+    ppV v = ppT 10 (value2term loc [] v)
+
 --  tr s f vs = trace (s++" "++show vs++" = "++show r) r where r = f vs
 
 -- | Convert a value back to a term
-value2term :: L Ident -> [Ident] -> Value -> Term
+value2term :: GLocation -> [Ident] -> Value -> Term
 value2term loc xs v0 =
   case v0 of
     VApp pre vs    -> foldl App (Q (cPredef,predefName pre)) (map v2t vs)

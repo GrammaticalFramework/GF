@@ -61,6 +61,7 @@ cRead = identS "read"
 cToStr = identS "toStr"
 cMapStr = identS "mapStr"
 cError = identS "error"
+cTrace = identS "trace"
 
 -- * Hacks: dummy identifiers used in various places.
 -- Not very nice!

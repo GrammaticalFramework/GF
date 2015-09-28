@@ -7,7 +7,7 @@ import qualified Data.ByteString.UTF8 as UTF8(fromString)
 import qualified Data.Map as Map
 
 import GF.Infra.SIO(MonadSIO(..),restricted)
-import GF.Infra.Option(noOptions)
+import GF.Infra.Option(modifyFlags,optTrace) --,noOptions
 import GF.Data.Operations (chunks,err,raise)
 import GF.Text.Pretty(render)
 
@@ -49,7 +49,8 @@ sourceCommands = Map.fromList [
        ("list","all strings, comma-separated on one line"),
        ("one","pick the first strings, if there is any, from records and tables"),
        ("table","show all strings labelled by parameters"),
-       ("unqual","hide qualifying module names")
+       ("unqual","hide qualifying module names"),
+       ("trace","trace computations")
        ],
      needsTypeCheck = False, -- why not True?
      exec = withStrings compute_concrete
@@ -165,7 +166,7 @@ sourceCommands = Map.fromList [
         Left (_,msg) -> return $ pipeMessage msg
         Right t      -> return $ err pipeMessage
                                      (fromString . showTerm sgr style q)
-                                 $ checkComputeTerm sgr t
+                                 $ checkComputeTerm opts sgr t
       where
         (style,q) = pOpts TermPrintDefault Qualified opts
         s = unwords ws
@@ -207,7 +208,7 @@ sourceCommands = Map.fromList [
           ops <- case ts of
              _:_ -> do
                let Right t = runP pExp (UTF8.fromString (unwords ts))
-               ty <- err error return $ checkComputeTerm sgr t
+               ty <- err error return $ checkComputeTerm os sgr t
                return $ allOpersTo sgr ty
              _   -> return $ allOpers sgr
           let sigs = [(op,ty) | ((mo,op),ty,pos) <- ops]
@@ -251,9 +252,11 @@ sourceCommands = Map.fromList [
                P.putStrLn "wrote graph in file _gfdepgraph.dot"
          return void
 
-checkComputeTerm sgr t = do
-                 mo <- maybe (raise "no source grammar in scope") return $ greatestResource sgr
-                 ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
-                                            inferLType sgr [] t
-                 t1 <- return (CN.normalForm (CN.resourceValues noOptions sgr) (L NoLoc identW) t)
-                 checkPredefError t1
+checkComputeTerm os sgr t =
+  do mo <- maybe (raise "no source grammar in scope") return $
+           greatestResource sgr
+     ((t,_),_) <- runCheck $ do t <- renameSourceTerm sgr mo t
+                                inferLType sgr [] t
+     let opts = modifyFlags (\fs->fs{optTrace=isOpt "trace" os})
+         t1 = CN.normalForm (CN.resourceValues opts sgr) (L NoLoc identW) t
+     checkPredefError t1

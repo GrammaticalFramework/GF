@@ -25,10 +25,16 @@ noLoc = L NoLoc
 ppLocation :: FilePath -> Location -> Doc
 ppLocation fpath NoLoc          = pp fpath
 ppLocation fpath (External p l) = ppLocation p l
-ppLocation fpath (Local b e)
-  | b == e    = fpath <> ":" <> b
-  | otherwise = fpath <> ":" <> b <> "-" <> e
+ppLocation fpath (Local b e) =
+    opt (fpath/="") (fpath <> ":") <> b <> opt (b/=e) ("-" <> e)
+  where
+    opt False x = empty
+    opt True x = x
+
+ppL (L loc x) msg = hang (loc<>":") 4 ("In"<+>x<>":"<+>msg)
 
 
-ppL (L loc x) msg = hang (ppLocation "" loc<>":") 4
-                         ("In"<+>x<>":"<+>msg)
+instance Pretty Location where pp = ppLocation ""
+
+instance Pretty a => Pretty (L a) where pp (L loc x) = loc<>":"<>x
+

@@ -291,7 +291,7 @@ greatestResource :: Grammar -> Maybe ModuleName
 greatestResource gr =
   case allResources gr of
     [] -> Nothing
-    a  -> return $ head a ---- why not last as in Abstract? works though AR 24/5/2008
+    mo:_ -> Just mo ---- why not last as in Abstract? works though AR 24/5/2008
 
 -- | all concretes for a given abstract
 allConcretes :: Grammar -> ModuleName -> [ModuleName]
@@ -455,7 +455,7 @@ type Equation = ([Patt],Term)
 type Labelling = (Label, Type) 
 type Assign = (Label, (Maybe Type, Term)) 
 type Case = (Patt, Term) 
-type Cases = ([Patt], Term) 
+--type Cases = ([Patt], Term) 
 type LocalDef = (Ident, (Maybe Type, Term))
 
 type Param = (Ident, Context) 
