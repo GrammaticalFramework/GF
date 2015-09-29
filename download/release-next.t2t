@@ -1,0 +1,83 @@
+GF 3.7.1 Release Notes
+October 2015
+
+%!style:../css/style.css
+%!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+%!postproc(html): '<BODY.*?>' '<BODY class=releasenotes>'
+
+==Installation==
+
+See the [download page http://www.grammaticalframework.org/download/index.html].
+
+==What's new==
+
+Over 170 changes have been pushed to the source repository since
+[the release of GF 3.7 release-3.7.html] in June 2015.
+
+===GF compiler and run-time library===
+
+====New features and notable changes====
+
+- GF shell: ``cc -trace`` (preliminary): you can now do things like 
+  
+  	``cc -trace mkV "debug"``
+  
+  to see a trace of all opers with their arguments and results during the
+  computation of ``mkV "debug"``.
+
+- GF shell: you can now parse and linearize with the C run-time system
+  from the GF shell by starting GF with ``gf -cshell`` or ``gf -crun``.
+  Only limited functionality is available when running the shell in these
+  modes (use the ``help`` command in the shell for details):
+  
+  - You can only import .pgf files, not source files.
+  - The -retain flag can not be used and the commands that require it to work
+    are not available.
+
+- GF now supports parallel batch compilation of grammars.
+
+    - ``gf -make -j=``//n// uses //n// parallel threads.
+    - ``gf -make -j`` adapts to the number of processors in the system.
+
+  (This depends on the function ``Control.Concurrent.setNumCapabilities``,
+  which is only available in GHC>=7.6 (base>=4.6).
+  GF can still be compiled with GHC<7.6, but then you have
+  to use ``+RTS -N -RTS`` to take advantage of multicore processors.)
+
+- GF shell: more commands (``cc``, ``sd``, ``so``, ``ss``, ``dg``, ``ph``)
+  can now be used in pipes.
+
+- GF shell: the ``eh`` (``execute_history``) command now works again.
+
+
+%====Other changes and bug fixes====
+
+
+====Changes of interest to compiler developers====
+
+- The implementation of the GF shell has been refactored, both to accommodate
+  the C run-time mode (``gf -cshell``), to allow a more uniform treatment
+  of different types of commands, and to fix some commands that have been
+  broken for years.
+
+
+===Resource Grammar Library===
+
+- Various fixes for several languages.
+- Numerous fixes in the translation dictionaries.
+
+
+===GF Cloud services===
+
+- PGF service: by adding ``unlexer=none`` (or ``unlexer=id``)
+  in requests that output linearizations
+  (e.g. ``command=linearize``, ``command=translate``),
+  you can leave ``&+`` uninterpreted instead of gluing the adjacent tokens.
+  This means that the output is left in a format that can be parsed in
+  a subsequent request.
+
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
