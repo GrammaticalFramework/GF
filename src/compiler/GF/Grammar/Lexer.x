@@ -16,6 +16,7 @@ import qualified Data.ByteString.Internal as BS(w2c)
 import qualified Data.ByteString.UTF8 as UTF8
 import qualified Data.Map as Map
 import Data.Word(Word8)
+import Data.Char(readLitChar)
 --import Debug.Trace(trace)
 }
 
@@ -39,7 +40,7 @@ $white+ ;
 \' ([. # [\' \\ \n]] | (\\ (\' | \\)))+ \' { tok (T_Ident . identS . unescapeInitTail . unpack) }
 (\_ | $l)($l | $d | \_ | \')*   { tok ident }
 
-\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \" { tok (T_String . unescapeInitTail . unpack) }
+\" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t | $d+)))* \" { tok (T_String . unescapeInitTail . unpack) }
 
 (\-)? $d+                       { tok (T_Integer . read . unpack) }
 (\-)? $d+ \. $d+ (e (\-)? $d+)? { tok (T_Double  . read . unpack) }
@@ -217,13 +218,11 @@ resWords = Map.fromList
 unescapeInitTail :: String -> String
 unescapeInitTail = unesc . tail where
   unesc s = case s of
-    '\\':c:cs | elem c ['\"', '\\', '\''] -> c : unesc cs
-    '\\':'n':cs  -> '\n' : unesc cs
-    '\\':'t':cs  -> '\t' : unesc cs
+    []         -> []
     '\"':[]    -> []
     '\'':[]    -> []
-    c:cs      -> c : unesc cs
-    _         -> []
+    _          -> case readLitChar s of
+                    [(c,cs)] -> c:unesc cs
 
 -------------------------------------------------------------------
 -- Alex wrapper code.
