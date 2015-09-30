@@ -460,13 +460,17 @@ vtrace loc arg res = trace (render (hang (pv arg) 4 ("->"<+>pv res))) res
     pf (_,VString n) = pp n
     pf (_,v) = ppV v
     pa (_,v) = ppV v
-    ppV v = ppT 10 (value2term loc [] v)
+    ppV v = ppT 10 (trace2term loc [] v)
 
 --  tr s f vs = trace (s++" "++show vs++" = "++show r) r where r = f vs
 
+-- | When tracing, we need to avoid printing under lambdas...
+trace2term = value2term' True
+
 -- | Convert a value back to a term
 value2term :: GLocation -> [Ident] -> Value -> Term
-value2term loc xs v0 =
+value2term = value2term' False
+value2term' stop loc xs v0 =
   case v0 of
     VApp pre vs    -> foldl App (Q (cPredef,predefName pre)) (map v2t vs)
     VCApp f vs     -> foldl App (QC f)                 (map v2t vs)
@@ -476,8 +480,8 @@ value2term loc xs v0 =
 --  VClosure env (Prod bt x t1 t2) -> Prod bt x (v2t  (eval gr env t1))
 --                                              (nf gr (push x (env,xs)) t2)
 --  VClosure env (Abs  bt x t)     -> Abs  bt x (nf gr (push x (env,xs)) t)
-    VProd bt v x (Bind f) -> Prod bt x (v2t v) (v2t' x f)
-    VAbs  bt   x (Bind f) -> Abs  bt x         (v2t' x f)
+    VProd bt v x f -> Prod bt x (v2t v) (v2t' x f)
+    VAbs  bt   x f -> Abs  bt x         (v2t' x f)
     VInt n         -> EInt n
     VFloat f       -> EFloat f
     VString s      -> if null s then Empty else K s
@@ -502,8 +506,9 @@ value2term loc xs v0 =
     VError err     -> Error err
     _              -> bug ("value2term "++show loc++" : "++show v0)
   where
-    v2t = value2term loc xs
-    v2t' x f = value2term loc (x:xs) (f (gen xs))
+    v2t = v2txs xs
+    v2txs = value2term' stop loc
+    v2t' x f = v2txs (x:xs) (bind f (gen xs))
 
     var j = if j<n
             then Vr (reverse xs !! j)
@@ -514,9 +519,12 @@ value2term loc xs v0 =
     push x (env,xs) = ((x,gen xs):env,x:xs)
     gen xs = VGen (length xs) []
 
-    nfcase (p,Bind f) = (p,value2term loc xs' (f env'))
+    nfcase (p,f) = (p,v2txs xs' (bind f env'))
       where (env',xs') = pushs (pattVars p) ([],xs)
 
+    bind (Bind f) x = if stop
+                      then VSort (identS "...") -- hmm
+                      else f x
 --  nf gr (env,xs) = value2term xs . eval gr env
 
 linPattVars p =
