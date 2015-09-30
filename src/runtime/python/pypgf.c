@@ -1961,6 +1961,100 @@ Concr_bracketedLinearize(ConcrObject* self, PyObject *args)
 }
 
 static PyObject*
+Iter_fetch_bracketedLinearization(IterObject* self)
+{
+    GuPool* tmp_pool = gu_local_pool();
+    GuExn* err = gu_exn(tmp_pool);
+
+restart:;
+
+    PgfCncTree ctree = gu_next(self->res, PgfCncTree, tmp_pool); 
+    if (gu_variant_is_null(ctree)) {
+	gu_pool_free(tmp_pool);
+	return NULL;
+    }
+
+    PyObject* list = PyList_New(0);
+    ctree = pgf_lzr_wrap_linref(ctree, tmp_pool);
+
+    ConcrObject* pyconcr = (ConcrObject*) self->container; 
+
+    PgfBracketLznState state;
+    state.funcs = &pgf_bracket_lin_funcs;
+    state.stack = gu_new_buf(PyObject*, tmp_pool);
+    state.list  = list;
+    pgf_lzr_linearize(pyconcr->concr, ctree, 0, &state.funcs, tmp_pool);
+
+    if (!gu_ok(err)) {
+	if (gu_exn_caught(err, PgfLinNonExist)) {
+	    // encountered nonExist. Unfortunately there
+	    // might be some output printed already. The
+	    // right solution should be to use GuStringBuf.
+	    gu_exn_clear(err);
+	    goto restart;
+	}
+	else if (gu_exn_caught(err, PgfExn)) {
+	    GuString msg = (GuString) gu_exn_caught_data(err);
+	    PyErr_SetString(PGFError, msg);
+	    gu_pool_free(tmp_pool);
+	    return NULL;
+	} else {
+	    PyErr_SetString(PGFError, "The abstract tree cannot be linearized");
+	    gu_pool_free(tmp_pool);
+	    return NULL;
+	}
+    }
+
+    gu_pool_free(tmp_pool);
+    return list;
+}
+    
+static PyObject*
+Concr_bracketedLinearizeAll(ConcrObject* self, PyObject *args, PyObject *keywds)
+{
+	static char *kwlist[] = {"expression", "n", NULL};
+	ExprObject* pyexpr = NULL;
+	int max_count = -1;
+
+	if (!PyArg_ParseTupleAndKeywords(args, keywds, "O!|i", kwlist,
+	                                 &pgf_ExprType, &pyexpr, &max_count))
+		return NULL;
+
+	GuPool* pool = gu_new_pool();
+	GuExn* err = gu_exn(pool);
+	
+	GuEnum* cts = 
+		pgf_lzr_concretize(self->concr, pyexpr->expr, err, pool);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err, PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			PyErr_SetString(PGFError, msg);
+		} else {
+			PyErr_SetString(PGFError, "The abstract tree cannot be concretized");
+		}
+		return NULL;
+	}
+
+	IterObject* pyres = (IterObject*) pgf_IterType.tp_alloc(&pgf_IterType, 0);
+	if (pyres == NULL) {
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	pyres->source = (PyObject*)pyexpr;
+	Py_INCREF(pyres->source);
+	pyres->container = (PyObject*)self;
+	Py_INCREF(pyres->container);
+	pyres->pool = pool;
+	pyres->max_count = max_count;
+	pyres->counter   = 0;
+	pyres->fetch     = Iter_fetch_bracketedLinearization;
+	pyres->res       = cts;
+
+	return (PyObject*)pyres;
+}
+
+static PyObject*
 Concr_hasLinearization(ConcrObject* self, PyObject *args)
 {
 	PgfCId id;
@@ -2231,6 +2325,9 @@ static PyMethodDef Concr_methods[] = {
 	},
     {"bracketedLinearize", (PyCFunction)Concr_bracketedLinearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a bracketed string"
+    },
+    {"bracketedLinearizeAll", (PyCFunction)Concr_bracketedLinearizeAll, METH_VARARGS | METH_KEYWORDS,
+     "Takes an abstract tree and linearizes all variants into bracketed strings"
     },
     {"hasLinearization", (PyCFunction)Concr_hasLinearization, METH_VARARGS,
      "hasLinearization(f) returns true if the function f has linearization in the concrete syntax"
