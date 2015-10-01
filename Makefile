@@ -39,7 +39,7 @@ deb:
 
 # Make an OS X Installer package
 pkg:
-	PREFIX=/usr FMT=pkg bash bin/build-binary-dist.sh
+	FMT=pkg bash bin/build-binary-dist.sh
 
 # Make a binary tar distribution
 bintar:
