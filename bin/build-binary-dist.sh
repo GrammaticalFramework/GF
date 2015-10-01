@@ -58,7 +58,7 @@ case $fmt in
 	;;
     pkg)
 	pkg=$name.pkg
-	pkgbuild --identifier org.grammaticalframework.gf.pkg --version "$ver" --root "$destdir/usr" --install-location "$prefix" dist/$pkg
+	pkgbuild --identifier org.grammaticalframework.gf.pkg --version "$ver" --root "$destdir$prefix" --install-location "$prefix" dist/$pkg
 	echo "Created $pkg"
 esac
 
