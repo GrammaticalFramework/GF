@@ -1,7 +1,7 @@
 GF 3.7.1 Release Notes
 October 2015
 
-%!style:../css/style.css
+%!style:../css/notes.css
 %!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 %!postproc(html): '<BODY.*?>' '<BODY class=releasenotes>'
@@ -31,9 +31,9 @@ Over 170 changes have been pushed to the source repository since
   Only limited functionality is available when running the shell in these
   modes (use the ``help`` command in the shell for details):
   
-  - You can only import .pgf files, not source files.
-  - The -retain flag can not be used and the commands that require it to work
-    are not available.
+  - You can only import ``.pgf`` files, not source files.
+  - The ``-retain`` flag can not be used and the commands that require it to
+    work are not available.
 
 - GF now supports parallel batch compilation of grammars.
 
@@ -46,9 +46,8 @@ Over 170 changes have been pushed to the source repository since
   to use ``+RTS -N -RTS`` to take advantage of multicore processors.)
 
 - GF shell: more commands (``cc``, ``sd``, ``so``, ``ss``, ``dg``, ``ph``)
-  can now be used in pipes.
-
-- GF shell: the ``eh`` (``execute_history``) command now works again.
+  can now be used in pipes and
+  the ``eh`` (``execute_history``) command now works again.
 
 
 %====Other changes and bug fixes====
