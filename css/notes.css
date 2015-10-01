@@ -1,0 +1,6 @@
+@import url(style.css);
+
+i { color: #00c; }
+
+body { color: #333; }
+li>code, p>code, pre { color: #730; }
