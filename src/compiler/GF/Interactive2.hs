@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, ScopedTypeVariables, TypeSynonymInstances,FlexibleInstances #-}
+{-# LANGUAGE CPP, ScopedTypeVariables, TypeSynonymInstances, FlexibleInstances, FlexibleContexts #-}
 -- | GF interactive mode (with the C run-time system)
 module GF.Interactive2 (mainGFI,mainRunGFI{-,mainServerGFI-}) where
 import Prelude hiding (putStrLn,print)
