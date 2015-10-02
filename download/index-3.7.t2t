@@ -1,27 +1,28 @@
 Grammatical Framework Download and Installation
 
 
-%!style:../css/notes.css
+%!style:../css/style.css
+%!postproc(html): </HEAD> <STYLE>body { color: #333; } li>code,p>code,pre { color: #730; }</STYLE></HEAD>
 %!postproc(html): <TITLE> <meta name = "viewport" content = "width = device-width"><TITLE>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
 %!postproc(html): <TD><I> <TD><small>
 %!postproc(html): </I></TD> </small></TD>
 
-**GF 3.7.1** might be released on 2 October 2015.
+**GF 3.7** was released on 25 June 2015.
 
-What's new? See the [Release notes release-3.7.1.html].
+What's new? See the [Release notes release-3.7.html].
 
 
 == Binary packages ==
 
 || Platform | Download | Features | How to install
-| Mac OS X | [gf-3.7.1.pkg gf-3.7.1.pkg] | //GF+S+C// | Double-click on the package icon (*)
-| Mac OS X | [gf-3.7.1-bin-intel-mac.tar.gz gf-3.7.1-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.7.1-bin-intel-mac.tar.gz``
+| Mac OS X | [gf-3.7.pkg gf-3.7.pkg] | //GF+S+C// | Double-click on the package icon
+| Mac OS X | [gf-3.7-bin-intel-mac.tar.gz gf-3.7-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.7-bin-intel-mac.tar.gz``
 %| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+P// | ``sudo rpm -i ...``
-| Ubuntu (32-bit) | [gf_3.7.1-1_i386.deb gf_3.7.1-1_i386.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7.1-1_i386.deb``
-| Ubuntu (64-bit) | [gf_3.7.1-1_amd64.deb gf_3.7.1-1_amd64.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7.1-1_amd64.deb``
-| Windows | [gf-3.7.1-bin-windows.zip gf-3.7.1-bin-windows.zip] | //GF+S// | ``unzip gf-3.7.1-bin-windows.zip``
-%| MINGW | [gf-3.7.1-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.7.1-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.7.1-bin-i686-MINGW32_NT-6.1.tar.gz``
+| Ubuntu (32-bit) | [gf_3.7-1_i386.deb gf_3.7-1_i386.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7-1_i386.deb``
+| Ubuntu (64-bit) | [gf_3.7-1_amd64.deb gf_3.7-1_amd64.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7-1_amd64.deb``
+| Windows | [gf-3.7-bin-windows.zip gf-3.7-bin-windows.zip] | //GF// | ``unzip gf-3.7-bin-windows.zip``
+%| MINGW | [gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.7-bin-i686-MINGW32_NT-6.1.tar.gz``
 %| ... | ... | ... | ...
 
 Features: GF = GF shell and grammar compiler and the Resource Grammar Library,
@@ -44,14 +45,7 @@ variables, see Inari's notes on
 
 The ``.deb`` packages work on Ubuntu 12.04, 14.04 and 15.04.
 
-The packages for Mac OS X should work on at least 10.9, 10.10 and 10.11 (Mavericks, Yosemite and El Capitan).
-
-(*) **Note** that for compatibility with OS X 10.11, 
-``gf-3.7.1.pkg`` will install the ``gf`` executable in ``/usr/local/bin``
-instead of ``/usr/bin``.
-If you have an older version of GF installed in ``/usr/bin``, remove it
-and/or make sure ``/usr/local/bin`` comes before ``/usr/bin`` in your ``$PATH``
-to make sure you don't accidentally run the old version.
+The packages for Mac OS work on 10.9 (Mavericks) and on 10.10 (Yosemite).
 
 The Mac OS and Linux ``.tar.gz`` packages are designed to be installed in
 ``/usr/local``.
@@ -59,7 +53,7 @@ You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
 ```
-  export GF_LIB_PATH=/usr/local/share/gf-3.7.1/lib
+  export GF_LIB_PATH=/usr/local/share/gf-3.7/lib
 ```
 
 where ``/usr/local`` should be replaced with the path to the location where you
@@ -80,7 +74,7 @@ circumstances the prodedure is fairly simple:
 
 
 You can also download the full source package from here:
-[``gf-3.7.1.tar.gz`` gf-3.7.1.tar.gz].
+[``gf-3.7.tar.gz`` gf-3.7.tar.gz].
 
 === Notes ===
 
@@ -170,7 +164,6 @@ For more info on working with the GF source code, see the
 
 ==Older releases==
 
-- [GF 3.7 index-3.7.html] (June 2015)
 - [GF 3.6 index-3.6.html] (June 2014)
 - [GF 3.5 index-3.5.html] (August 2013)
 - [GF 3.4 index-3.4.html] (January 2013).
