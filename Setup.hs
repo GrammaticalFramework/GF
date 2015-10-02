@@ -392,18 +392,18 @@ extractDarcsVersion distFlag =
     versionModulePath = autogenPath</>"DarcsVersion_gf.hs"
     modname = "DarcsVersion_gf"
 
-    askDarcs =
-      do flip unless (fail "no _darcs") =<< doesDirectoryExist "_darcs"
-         tags <- lines `fmap` readProcess "darcs" ["show","tags"] ""
-         let from = case tags of
-                      [] -> []
-                      tag:_ -> ["--from-tag="++tag]
-         dates <- patches `fmap` readProcess "darcs" ("changes":from) ""
---       let dates = init' (filter ((`notElem` [""," "]).take 1) changes)
-         whatsnew <- tryIOE $ lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
-         return (listToMaybe tags,listToMaybe dates,
-                 length dates,either (const 0) length whatsnew)
-
+askDarcs =
+  do flip unless (fail "no _darcs") =<< doesDirectoryExist "_darcs"
+     tags <- lines `fmap` readProcess "darcs" ["show","tags"] ""
+     let from = case tags of
+                  [] -> []
+                  tag:_ -> ["--from-tag="++tag]
+     dates <- (init' . patches) `fmap` readProcess "darcs" ("changes":from) ""
+--   let dates = init' (filter ((`notElem` [""," "]).take 1) changes)
+     whatsnew <- tryIOE $ lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
+     return (listToMaybe tags,listToMaybe dates,
+             length dates,either (const 0) length whatsnew)
+  where
     init' [] = []
     init' xs = init xs
 
