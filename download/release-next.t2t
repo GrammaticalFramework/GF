@@ -4,7 +4,6 @@ October 2015
 %!style:../css/notes.css
 %!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
 %!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
-%!postproc(html): '<BODY.*?>' '<BODY class=releasenotes>'
 
 ==Installation==
 
@@ -50,7 +49,10 @@ Over 170 changes have been pushed to the source repository since
   the ``eh`` (``execute_history``) command now works again.
 
 
-%====Other changes and bug fixes====
+====Other changes and bug fixes====
+
+- Various improvements and bug fixes in the C run-time system and its
+  bindings to other languages.
 
 
 ====Changes of interest to compiler developers====
