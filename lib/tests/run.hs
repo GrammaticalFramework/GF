@@ -4,7 +4,7 @@ import Data.Maybe ( isNothing, fromJust )
 import System.Directory (doesDirectoryExist, getDirectoryContents, doesFileExist)
 import System.FilePath ((</>), takeExtension, replaceExtension)
 
-import Test.Framework
+import Test.Framework hiding ( runTest )
 import Test.Framework.TestManager ( makeBlackBoxTest )
 import Test.Framework.TestTypes ( Test )
 import Test.Framework.BlackBoxTest ( defaultDiff )
