@@ -2866,7 +2866,6 @@ moral_A
 protein_N
 distinguish_V2
 distinguish_V
-gently_Adv
 reckon_VS
 incorporate_V2
 proceed_V
