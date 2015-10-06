@@ -249,9 +249,8 @@ lin acme_N = mkN "hoogtepunt" neuter ; -- status=guess
 lin acne_N = mkN "acne " masculine ; -- status=guess
 lin aconite_N = mkN "monnikskap" ; -- status=guess
 lin acorn_N = mkN "eikel" masculine ; -- status=guess
-lin acoustic_A = mkA "akoestisch" | mkA "akoestische" ; -- status=guess status=guess
+lin acoustic_A = mkA "akoestisch" | mkA "akoestische" ;
 lin acoustic_N = mkN "akoestische gitaar" masculine feminine ; -- status=guess
-lin acoustically_Adv = mkAdv "akoestisch" ; -- status=guess
 lin acoustics_N = mkN "akoestiek" masculine ; -- status=guess
 lin acquaintance_N = mkN "kennis" masculine | mkN "bekende" masculine ; -- status=guess status=guess
 lin acquiescent_A = mkA "weltevreden" | mkA "onderdanig" ; -- status=guess status=guess
@@ -1451,7 +1450,6 @@ lin autocrat_N = mkN "autocraat" masculine ; -- status=guess
 lin autograph_N = mkN "handtekening" ; -- status=guess
 lin automatic_A = mkA "automatisch" | mkA "gedachtenloos" | mkA "mechanisch" ; -- status=guess status=guess status=guess
 lin automatic_N = mkN "automaat" masculine ; -- status=guess
-lin automatically_Adv = mkAdv "automatisch" ; -- status=guess
 lin automation_N = mkN "automatisering" ; -- status=guess
 lin automaton_N = mkN "automaat" masculine ; -- status=guess
 lin autonomous_A = mkA "autonoom" ; -- status=guess
@@ -6266,7 +6264,6 @@ lin drainage_N = mkN "drainage" | mkN "afwatering" ; -- status=guess status=gues
 lin drake_N = mkN "woerd" masculine | mkN "mannetjeseend" feminine | mkN "draak" masculine ; -- status=guess status=guess status=guess
 lin drama_N = mkN "drama" neuter ; -- status=guess
 lin dramatic_A = variants {} ; --
-lin dramatically_Adv = variants {} ; --
 lin drape_V2 = mkV2 (mkV "bekleden") ; -- status=guess, src=wikt
 lin drastic_A = mkA "drastisch" ; -- status=guess
 lin drat_V2 = mkV2 (mkV "verdoemen") | mkV2 (mkV "vervloeken") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -6802,7 +6799,6 @@ lin emphasis_N = mkN "klemtoon" masculine | mkN "beklemtoning" ; -- status=guess
 lin emphasize_V2 = mkV2 (mkV "benadrukken") ; -- status=guess, src=wikt
 lin emphasize_VS = mkVS (mkV "benadrukken") ; -- status=guess, src=wikt
 lin emphatic_A = mkA "nadrukkelijk" | mkA "emfatisch" ; -- status=guess status=guess
-lin emphatically_Adv = mkAdv "nadrukkelijk" ; -- status=guess
 lin empire_N = mkN "imperium" ; -- status=guess
 lin empirical_A = variants {} ; --
 lin employ_V2 = mkV2 (mkV "tewerkstellen") | mkV2 (mkV "aannemen") ;
@@ -8564,7 +8560,6 @@ lin gentile_A = mkA "niet-Joods" | mkA "christelijk" | mkA "ongelovig" | mkA "he
 lin gentle_A = variants {} ; --
 lin gentleman_N = mkN "heer" masculine ;
 lin gentleness_N = mkN "minzaamheid" ; -- status=guess
-lin gently_Adv = mkAdv "zachtjes" | mkAdv "voorzichtig" | mkAdv "zachtaardig" ; -- status=guess status=guess status=guess
 lin gentrification_N = mkN "verbetering" ; -- status=guess
 lin genuine_A = mkA "echt" | mkA "authentiek" | mkA "origineel" ; -- status=guess status=guess status=guess
 lin genus_N = mkN "soort" feminine ; -- status=guess
@@ -11517,7 +11512,6 @@ lin lackadaisical_A = mkA "ongeïnteresseerd" | mkA "lusteloos" ; -- status=gues
 lin lackey_N = mkN "lakei" masculine | mkN "slaafje" | mkN "voetvaag" ; -- status=guess status=guess status=guess
 lin lacking_A = variants {} ; --
 lin lackluster_A = mkA "dof" ; -- status=guess
-lin laconically_Adv = mkAdv "laconiek" ; -- status=guess
 lin lacquer_N = mkN "lak" ; -- status=guess
 lin lacquer_V2 = mkV2 (mkV "lakken") ; -- status=guess, src=wikt
 lin lacrosse_N = mkN "lacrosse" ; -- status=guess
@@ -14333,7 +14327,6 @@ lin optimism_N = variants {} ; --
 lin optimistFem_N = variants {} ; ---- sense to be split
 lin optimistMasc_N = variants {} ; ---- sense to be split
 lin optimistic_A = mkA "optimistisch" ; -- status=guess
-lin optimistically_Adv = mkAdv "optimistisch" ; -- status=guess
 lin option_N = mkN "optie" feminine ;
 lin optional_A = variants {} ; --
 lin optometrist_N = mkN "oogarts" | mkN "optometrist" masculine ; -- status=guess status=guess
@@ -17925,7 +17918,6 @@ lin schwa_N = mkN "sjwa" | mkN "doffe e" ; -- status=guess status=guess
 lin schwerin_PN = mkPN "Schwerin" ; -- src=geonames status=guess
 lin science_N = L.science_N ;
 lin scientific_A = mkA "wetenschappelijk" ; -- status=guess
-lin scientifically_Adv = mkAdv "wetenschappelijk" ; -- status=guess
 lin scientist_N = mkN "wetenschapper" masculine ; -- status=guess
 lin scimitar_N = mkN "kromsabel" ; -- status=guess
 lin scion_N = mkN "telg" ; -- status=guess
@@ -22579,7 +22571,6 @@ lin whole_N = mkN "geheel" neuter ;
 lin wholesale_N = mkN "groothandel" masculine ; -- status=guess
 lin wholesaler_N = mkN "grossier" | mkN "groothandelaar" ; -- status=guess status=guess
 lin wholesome_A = mkA "deugdelijk" ; -- status=guess
-lin wholly_Adv = variants {} ; --
 lin whoopee_Interj = mkInterj "joepie" ; -- status=guess
 lin whopper_N = mkN "knoert" masculine | mkN "joekel" masculine | mkN "kanjer" masculine ; -- status=guess status=guess status=guess
 lin whore_N = mkN "hoer" feminine ; -- status=guess
