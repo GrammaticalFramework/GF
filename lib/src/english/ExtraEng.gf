@@ -89,7 +89,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     IAdvAdv adv = {s = "how" ++ adv.s} ;
 
     PartVP vp = {
-      s = \\a => vp.ad ! a ++ vp.prp ++ vp.s2 ! a ++ vp.ext ;
+      s = \\a => vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a ++ vp.ext ;
       isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
 
