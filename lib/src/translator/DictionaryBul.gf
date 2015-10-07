@@ -24564,7 +24564,6 @@ lin gravity_N = mkN047 "гравитация" ;
 lin gravure_N = mkN041 "гравюра" ;
 lin gravy_N = mkN001 "сос" ; ----
 lin gravy_boat_N = mkN041 "сосиера" ;
-lin grayly_Adv = variants {} ;
 lin graz_PN = mkPN "Грац" Masc ;
 lin graze_N = mkN041 "драскотина" ;
 lin graze_V = variants {dualV (mkV173 "жуля") (mkV152 "жулна"); dualV (mkV186 "закачам") (mkV176 "закача"); dualV (mkV186 "засягам") (mkV152 "засегна"); dualV (mkV186 "лизвам") (mkV152 "лизна"); dualV (mkV186 "напасвам") (mkV152 "напасна"); dualV (mkV186 "одирам") (mkV174 "одимя"); dualV (mkV186 "одрасквам") (mkV186 "одраскам"); dualV (mkV186 "ожулвам") (mkV173 "ожуля"); dualV (mkV186 "охлузвам") (mkV173 "охлузя"); singleV (mkV145a "паса")} ; ----
