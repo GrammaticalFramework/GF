@@ -21583,13 +21583,12 @@ lin flavin_N = variants {} ;
 lin flavivirus_N = variants {} ;
 lin flavone_N = variants {} ;
 lin flavonoid_N = variants {} ;
-lin flavor_N = mkN "Geschmacksverstärker" masculine ; -- status=guess
-lin flavorer_N = variants {} ;
 lin flavorful_A = variants {} ;
 lin flavorlessness_N = variants {} ;
 lin flavorsomeness_N = variants {} ;
 lin flavour_N = mkN "Geschmacksstoff" masculine | mkN "Geschmacksverstärker" masculine ; -- status=guess status=guess
 lin flavour_V2 = mkV2 (mkV "würzen") ; -- status=guess, src=wikt
+lin flavourer_N = variants {} ;
 lin flavouring_N = variants {} ;
 lin flavourless_A = variants {} ;
 lin flaw_N = mkN "Windbö" feminine ; -- status=guess
@@ -33419,7 +33418,6 @@ lin machinist_N = variants {} ;
 lin machismo_N = mkN "Maschismo" masculine ; -- status=guess
 lin machmeter_N = variants {} ;
 lin macho_N = mkN "Macho" "Machos" masculine ; -- status=guess
-lin macintosh_N = variants {} ;
 lin mackerel_N = mkN "Makrele" "Makrelen" feminine ; -- status=guess
 lin mackinaw_N = variants {} ;
 lin mackintosh_N = variants {} ;
@@ -36794,7 +36792,6 @@ lin myiasis_N = mkN "Myiasis" feminine ; -- status=guess
 lin mylodon_N = variants {} ;
 lin mylodontid_N = variants {} ;
 lin myna_N = mkN "Maina" feminine ; -- status=guess
-lin mynah_N = variants {} ;
 lin myocardial_A = variants {} ;
 lin myocardium_N = mkN "Myokard" "Myokarde" neuter ; -- status=guess
 lin myoclonus_N = variants {} ;
