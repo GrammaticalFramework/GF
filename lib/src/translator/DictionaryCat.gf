@@ -9592,7 +9592,6 @@ lin lettuce_N = mkN "enciam" masculine ; --auto
 lin leucine_N = mkN "leucina" feminine ; --auto
 lin leucocyte_N = mkN "leucòcit" masculine ; --auto
 lin leukaemia_N = mkN "leucèmia" feminine ; --auto
-lin leukemia_N = mkN "leucèmia" feminine ; --auto
 lin leukocytosis_N = mkN "leucocitosi" feminine ; --auto
 lin leukoderma_N = mkN "leucodèrmia" feminine ; --auto
 lin leukopenia_N = mkN "leucopènia" feminine ; --auto

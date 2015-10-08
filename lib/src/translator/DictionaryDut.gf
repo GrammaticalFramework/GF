@@ -11833,7 +11833,7 @@ lin letter_1_N = mkN "brief" ;
 lin letter_2_N = mkN "letter" ;
 lin letter_N = letter_1_N ;
 lin lettuce_N = mkN "sla" | mkN "salade" | mkN "slaplant" masculine ; -- status=guess status=guess status=guess
-lin leukemia_N = mkN "leukemie" ; -- status=guess
+lin leukaemia_N = mkN "leukemie" ; -- status=guess
 lin leukocyte_N = mkN "leukocyt" masculine | mkN "witte bloedcel " masculine ; -- status=guess status=guess
 lin levant_PN = mkPN "Levant" ; -- src=geonames status=guess
 lin level_1_N = mkN "niveau" | mkN "level" ;
@@ -12539,8 +12539,6 @@ lin mandrill_N = mkN "mandril" masculine ; -- status=guess
 lin mandy_PN = mkPN "Mandy" ; -- src=eng status=guess
 lin mane_N = mkN "maan" feminine ; -- status=guess
 lin maneuver_N = mkN "manoeuvre" masculine feminine | mkN "oefening" ; -- status=guess status=guess
-lin maneuver_V = mkV "manoeuvreren" | mkV "laveren" ; -- status=guess, src=wikt status=guess, src=wikt
-lin maneuver_V2 = mkV2 (mkV "manoeuvreren") | mkV2 (mkV "laveren") ; -- status=guess, src=wikt status=guess, src=wikt
 lin maneuverable_A = mkA "wendbaar" ; -- status=guess
 lin manga_N = mkN "manga" ; -- status=guess
 lin manganese_N = mkN "mangaan" neuter | mkN "manganium" neuter ; -- status=guess status=guess
@@ -12570,6 +12568,8 @@ lin mannequin_N = mkN "mannequin" | mkN "paspop" masculine feminine ; -- status=
 lin manner_N = mkN "wijze" | mkN "manier" ;
 lin manners_N = mkN "omgangsvormen {p}" ; -- status=guess
 lin mannheim_PN = mkPN "Mannheim" ; -- src=geonames status=guess
+lin manoeuvre_V = mkV "manoeuvreren" | mkV "laveren" ; -- status=guess, src=wikt status=guess, src=wikt
+lin manoeuvre_V2 = mkV2 (mkV "manoeuvreren") | mkV2 (mkV "laveren") ; -- status=guess, src=wikt status=guess, src=wikt
 lin manometer_N = mkN "manometer" ; -- status=guess
 lin manor_N = variants {} ; --
 lin manpower_N = variants {} ; --

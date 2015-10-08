@@ -6422,7 +6422,6 @@ lin blessedness_N = variants {} ;
 lin blessing_N = mkN "Segnen" neuter | mkN "Segnung" feminine ; -- status=guess status=guess
 lin bletchley_PN = mkPN "Bletchley" ; -- src=geonames status=guess
 lin blether_N = variants {} ;
-lin blether_V = variants {} ;
 lin bletia_N = variants {} ;
 lin bleu_N = variants {} ;
 lin blewits_N = variants {} ;
@@ -7024,7 +7023,6 @@ lin borrower_N = mkN "Kreditnehmer" "Kreditnehmer" masculine | mkN "Entleiher" m
 lin borrowing_N = variants {} ;
 lin borsch_N = variants {} ;
 lin borstal_N = variants {} ;
-lin bortsch_N = variants {} ;
 lin borzoi_N = mkN "Barsoi" masculine ; -- status=guess
 lin bosc_N = variants {} ;
 lin bosh_N = variants {} ;
@@ -32045,8 +32043,7 @@ lin leucine_N = mkN "Leucin" "Leucine" neuter ; -- status=guess
 lin leucocyte_N = variants {} ;
 lin leucocytozoan_N = variants {} ;
 lin leucothoe_N = variants {} ;
-lin leukaemia_N = variants {} ;
-lin leukemia_N = mkN "Leukämie" feminine ; -- status=guess
+lin leukaemia_N = mkN "Leukämie" feminine ; -- status=guess
 lin leukocyte_N = mkN "Leukozyt" "Leukozyten" masculine | mkN "weißes Blutkörperchen" neuter ; -- status=guess status=guess
 lin leukocytosis_N = variants {} ;
 lin leukoderma_N = variants {} ;
@@ -33838,8 +33835,6 @@ lin mandrill_N = mkN "Mandrill" masculine ; -- status=guess
 lin mandy_PN = mkPN "Mandy" ; -- src=eng status=guess
 lin mane_N = mkN "Mähne" feminine ; -- status=guess
 lin maneuver_N = mkN "Manöver" neuter ; -- status=guess
-lin maneuver_V = mkV "manövrieren" ; -- status=guess, src=wikt
-lin maneuver_V2 = mkV2 (mkV "manövrieren") ; -- status=guess, src=wikt
 lin maneuverability_N = variants {} ;
 lin maneuverable_A = mkA "manövrierfähig" ; -- status=guess
 lin maneuverer_N = variants {} ;
@@ -33912,8 +33907,8 @@ lin mannitol_N = variants {} ;
 lin manoeuvrability_N = mkN "Manövrierbarkeit" feminine | mkN "Manövrierfähigkeit" feminine ; -- status=guess status=guess
 lin manoeuvrable_A = variants {} ;
 lin manoeuvre_N = variants {} ;
-lin manoeuvre_V = variants {} ;
-lin manoeuvre_V2 = variants {} ;
+lin manoeuvre_V = mkV "manövrieren" ; -- status=guess, src=wikt
+lin manoeuvre_V2 = mkV2 (mkV "manövrieren") ; -- status=guess, src=wikt
 lin manoeuvrer_N = variants {} ;
 lin manometer_N = mkN "Druckmessgerät" neuter | mkN "Manometer" "Manometer" neuter ; -- status=guess status=guess
 lin manor_N = mkN "Lehen" neuter ; -- status=guess
@@ -35304,7 +35299,6 @@ lin millenary_A = variants {} ;
 lin millenary_N = variants {} ;
 lin millennial_A = variants {} ;
 lin millennium_N = mkN "Jahrtausend" "Jahrtausende" neuter | mkN "Millennium" "Millennien" neuter ; -- status=guess status=guess
-lin millepede_N = variants {} ;
 lin miller_N = mkN "Müller" masculine | mkN "Müllerin" feminine ; -- status=guess status=guess
 lin millerite_N = variants {} ;
 lin millet_N = mkN "Hirse" "Hirsen" feminine ; -- status=guess
@@ -38051,13 +38045,11 @@ lin noose_N = mkN "Schlinge" "Schlingen" feminine ; -- status=guess
 lin noose_V2 = variants {} ;
 lin nopal_N = variants {} ;
 lin nope_Interj = variants {} ;
-lin nor'_east_Adv = variants {} ;
 lin nor'_east_N = variants {} ;
 lin nor'_nor'_east_Adv = variants {} ;
 lin nor'_nor'_east_N = variants {} ;
 lin nor'_nor'_west_Adv = variants {} ;
 lin nor'_nor'_west_N = variants {} ;
-lin nor'_west_Adv = variants {} ;
 lin nor'_west_N = variants {} ;
 lin nor_Conj = {s1 = "weder" ; s2 = "noch" ; n = R.Pl} ;
 lin nora_PN = mkPN "Nora" ; -- src=geonames status=guess
@@ -42016,7 +42008,6 @@ lin pick_up_after_V2 = prepV2 (advV OP_pick_V OP_up_Adv ) OP_after_Prep ; -- gue
 lin pick_up_on_V2 = prepV2 (advV OP_pick_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
 lin pick_yourself_up_V = variants {} ;
 lin pickaback_Adv = variants {} ;
-lin pickaninny_N = variants {} ;
 lin pickaxe_N = mkN "Spitzhacke" feminine ; -- status=guess
 lin pickelhaube_N = variants {} ;
 lin picker_N = variants {} ;
@@ -42126,7 +42117,6 @@ lin pikestaff_N = variants {} ;
 lin pilaff_N = variants {} ;
 lin pilar_A = variants {} ;
 lin pilaster_N = variants {} ;
-lin pilau_N = variants {} ;
 lin pilchard_N = variants {} ;
 lin pile_N = mkN "Haufen" "Haufen" masculine | mkN "Stoß" masculine | mkN "Stapel" "Stapel" masculine ;
 lin pile_V = regV "stapeln" | mkV "aufstapeln" | mkV "anhäufen" | mkV "schichten" ;
@@ -42276,7 +42266,6 @@ lin pious_A = mk3A "fromm" "frommerfrömmer" "frommstenfrömmste" ; -- status=gu
 lin pip_N = mkN "Zacken" masculine ; -- status=guess
 lin pip_V2 = variants {} ;
 lin pipage_N = variants {} ;
-lin pipal_N = variants {} ;
 lin pipe_N = mkN "Rohrbombe" feminine ; -- status=guess
 lin pipe_V = variants {} ;
 lin pipe_V2 = variants {} ;
@@ -49569,7 +49558,6 @@ lin schlock_N = variants {} ;
 lin schlockmeister_N = variants {} ;
 lin schmaltz_N = variants {} ;
 lin schmaltzy_A = mkA "schmalzig" ; -- status=guess
-lin schmalz_N = variants {} ;
 lin schmalzy_A = variants {} ;
 lin schmeer_N = variants {} ;
 lin schmuck_N = variants {} ;
@@ -53040,7 +53028,6 @@ lin sotho_N = variants {} ;
 lin sottish_A = variants {} ;
 lin sottishness_N = variants {} ;
 lin sotto_voce_Adv = variants {} ;
-lin sou'_east_Adv = variants {} ;
 lin sou'_east_N = variants {} ;
 lin sou'_sou'_east_Adv = variants {} ;
 lin sou'_sou'_east_N = variants {} ;
@@ -57581,8 +57568,6 @@ lin thin_V2 = mkV2 (mkV "ausdünnen") ; -- status=guess, src=wikt
 lin thin_skinned_A = variants {} ;
 lin thine_A = variants {} ;
 lin thing_N = mkN "Sache" | mkN "Ding" "Dinge" neuter ;
-lin thingmabob_N = variants {} ;
-lin thingmajig_N = variants {} ;
 lin things_N = variants {} ;
 lin thingumabob_N = variants {} ;
 lin thingumajig_N = variants {} ;
@@ -64488,7 +64473,6 @@ lin ymca_N = variants {} ;
 lin yo_yo_N = variants {} ;
 lin yob_N = mkN "Halbstarker" masculine | mkN "Halbstarke" feminine | mkN "Rabauke" "Rabauken" masculine | mkN "Rabaukin" feminine | rowdy_N | mkN "Rowdyin" feminine | mkN "Randalierer" "Randalierer" masculine | mkN "Randaliererin" feminine | mkN "Hooligan" "Hooligans" masculine | mkN "Hooliganin" feminine | mkN "Hool" masculine | mkN "Hoolin" feminine ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess
 lin yobibit_N = variants {} ;
-lin yobo_N = variants {} ;
 lin yodel_N = variants {} ;
 lin yodel_V = regV "jodeln" ; -- status=guess, src=wikt
 lin yodel_V2 = mkV2 (regV "jodeln") ; -- status=guess, src=wikt

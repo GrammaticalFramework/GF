@@ -3035,7 +3035,6 @@ lin blessedness_N = mkN "beatitudine" ; -- UWN
 lin blessing_N = mkN "benedizione" feminine ; -- status=guess
 lin bletchley_PN = mkPN "Bletchley" ; -- status=guess src=geonames
 lin blether_N = mkN "chiacchiera" | mkN "chicacchiera" | mkN "ciancia" | mkN "cicalata" | mkN "fanfaluca" ; -- UWN
-lin blether_V = mkV "blaterare" | mkV "cianciare" | mkV "ciarlare" | mkV "sfringuellare" | mkV "taccolare" ; -- UWN
 lin blidworth_PN = mkPN "Blidworth" ; -- status=guess src=geonames
 lin blimp_N = mkN "dirigibile floscio" ; -- status=guess
 lin blind_A = mkA "cieco" ; -- status=guess
@@ -15440,7 +15439,6 @@ lin lettering_N = mkN "iscrizione" | mkN "leggenda" | mkN "scritta" ; -- UWN
 lin lettuce_N = mkN "lattuga" ; -- status=guess
 lin let_up_N = mkN "bonaccia" | mkN "pausa" | mkN "sosta" | mkN "tregua" ; -- UWN
 lin leukaemia_N = mkN "leucemia" ; -- UWN
-lin leukemia_N = mkN "leucemia" ; -- UWN
 lin leukocyte_N = mkN "leucocita" masculine ; -- status=guess
 lin leukoderma_N = mkN "leucodermia" ; -- UWN
 lin leukorrhea_N = mkN "leucorrea" ; -- status=guess
@@ -16313,8 +16311,6 @@ lin mandrake_N = mkN "mandragora" ; -- status=guess
 lin mandrill_N = mkN "mandrillo" ; -- status=guess
 lin mane_N = mkN "chioma" ; -- status=guess
 lin maneuver_N = mkN "manovra" ; -- status=guess
-lin maneuver_V = mkV "manovrare" ; -- status=guess, src=wikt
-lin maneuver_V2 = mkV2 (mkV "manovrare") ; -- status=guess, src=wikt
 lin manganate_N = mkN "manganato" ; -- UWN
 lin manganese_N = mkN "manganese" ; -- status=guess
 lin manganite_N = mkN "manganite" ; -- UWN
@@ -16350,7 +16346,8 @@ lin mannerism_N = mkN "affettazione" feminine | mkN "leziosaggine." | mkN "abitu
 lin mannheim_PN = mkPN "Mannheim" ; -- status=guess src=geonames
 lin mannitol_N = mkN "mannitolo" ; -- status=guess
 lin manoeuvrability_N = mkN "manovrabilità" feminine ; -- status=guess
-lin manoeuvre_V = mkV "operare" ; -- UWN
+lin manoeuvre_V = mkV "manovrare" ; -- status=guess, src=wikt
+lin manoeuvre_V2 = mkV2 (mkV "manovrare") ; -- status=guess, src=wikt
 lin manometer_N = mkN "manometro" ; -- status=guess
 lin manor_N = variants {} ; --
 lin manpower_N = mkN "manodopera" ; -- status=guess
@@ -16985,7 +16982,7 @@ lin mill_V = mkV "macinare" | mkV "tritare" ; -- UWN
 lin millenarianism_N = mkN "chiliasmo" | mkN "millenarismo" ; -- UWN
 lin millennial_A = mkA "millenniale" ; -- status=guess
 lin millennium_N = mkN "millennio" ; -- status=guess
-lin millepede_N = mkN "millepiedi" ; -- UWN
+lin millipede_N = mkN "millepiedi" ; -- UWN
 lin miller_N = mkN "mugnaio" | mkN "mulinaro" ; -- status=guess status=guess
 lin millet_N = mkN "miglio" ; -- status=guess
 lin milliampere_N = mkN "mA" | mkN "milliampere" ; -- UWN
@@ -17000,7 +16997,6 @@ lin milling_N = mkN "fresalesatrice" ; -- status=guess
 lin millionaire_N = mkN "milionario" ; -- status=guess
 lin millionth_A = mkA "milionesimo" | mkA "1.000.000º" ; -- status=guess status=guess
 lin millionth_N = mkN "milionesimo" ; -- status=guess
-lin millipede_N = mkN "millepiedi" ; -- status=guess
 lin millisecond_N = mkN "millisecondo" ; -- status=guess
 lin millivolt_N = mkN "mV" | mkN "millivolt" ; -- UWN
 lin millom_PN = mkPN "Millom" ; -- status=guess src=geonames
@@ -17628,7 +17624,6 @@ lin mutter_V2 = variants {} ; --
 lin mutterer_N = mkN "borbottone" ; -- UWN
 lin mutton_N = mkN "castrato" | mkN "montone" ; -- UWN
 lin mutual_A = mkA "mutuo" | mkA "vicendevole" ; -- status=guess status=guess
-lin muzhik_N = mkN "mugic" | mkN "mugik" ; -- UWN
 lin myalgia_N = mkN "mialgia" ; -- UWN
 lin myalgic_A = mkA "mialgico" ; -- UWN
 lin mycelium_N = mkN "micelio" ; -- status=guess
@@ -19933,7 +19928,6 @@ lin pick_up_V2 = prepV2 OP_pick_V OP_up_Prep ; -- guess-p-verb
 lin pick_up_after_V2 = prepV2 (advV OP_pick_V OP_up_Adv ) OP_after_Prep ; -- guess-p-verb
 lin pick_up_on_V2 = prepV2 (advV OP_pick_V OP_up_Adv ) OP_on_Prep ; -- guess-p-verb
 lin pick_yourself_up_V = variants {} ; -- guess-p-verb
-lin pickaninny_N = mkN "moretto" | mkN "negretto" ; -- UWN
 lin pickaxe_N = mkN "piccone" masculine ; -- status=guess
 lin picket_N = mkN "picchetto" ; -- status=guess
 lin picking_N = mkN "coglitura" ; -- UWN
@@ -19974,7 +19968,6 @@ lin pigwash_N = mkN "broda" | mkN "imbratto" ; -- UWN
 lin pika_N = mkN "lepre_stimolante" ; -- UWN
 lin pike_N = mkN "picca" ; -- status=guess
 lin pilaff_N = mkN "pilaf" ; -- UWN
-lin pilau_N = mkN "pilaf" ; -- UWN
 lin pilchard_N = mkN "sardina" ; -- UWN
 lin pile_N = mkN "mucchio" ; -- status=guess
 lin pile_V = variants {} ; --

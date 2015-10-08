@@ -19345,7 +19345,6 @@ lin lettuce_N = mkN "莴苣" ;
 lin let_up_N = mkN "停顿" ; -- open-multilingual-wordnet
 lin leu_N = mkN "列伊" ; -- status=guess
 lin leukaemia_N = mkN "白血病" ; -- open-multilingual-wordnet
-lin leukemia_N = mkN "白血病" ; -- status=guess -- open-multilingual-wordnet
 lin leukocyte_N = mkN "白血球" | mkN "白細胞" | mkN "白细胞" ; -- status=guess -- status=guess -- status=guess
 lin leukocytosis_N = mkN "白血球增多" ; -- open-multilingual-wordnet
 lin leukoderma_N = mkN "白变病" | mkN "白斑病" ; -- open-multilingual-wordnet
@@ -20375,7 +20374,6 @@ lin mandrill_N = mkN "山魈" ; -- status=guess
 lin mandy_PN = foreignPN "Mandy" ; -- comment=src=eng status=guess
 lin mane_N = mkN "獅子的鬃毛" | mkN "狮子的鬃毛" | mkN "獅鬣" | mkN "狮鬣" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin maneuver_N = mkN "活动" "項" ;
-lin maneuver_V = mkV "演习" ;
 lin manga_N = mkN "漫畫" | mkN "漫画" | mkN "日本漫畫" | mkN "日本漫画" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin mangabey_N = mkN "白眉猴" ; -- open-multilingual-wordnet
 lin manganese_N = mkN "錳" ; -- status=guess
@@ -20417,6 +20415,7 @@ lin mannered_A = mkA "矫饰" ;
 lin mannerism_N = mkN "假装" | mkN "虚饰" ; -- open-multilingual-wordnet
 lin manners_N = mkN "礼貌" | {-HSK-} mkN "規矩" | mkN "规矩" | mkN "禮貌" | mkN "禮儀" | mkN "礼仪" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin mannheim_PN = mkPN "曼海姆" ; -- comment=src=geonames status=guess
+lin manoeuvre_V = mkV "演习" ;
 lin manometer_N = mkN "压力计" ; -- open-multilingual-wordnet
 lin manor_N = mkN "庄园" ;
 lin manorial_A = mkA "庄园" ; -- open-multilingual-wordnet
