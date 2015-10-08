@@ -3879,7 +3879,6 @@ lin borrow_V2 = mkV2 (mkV (mkV "tomar") "prestado") ; -- status=guess
 lin borrow_VV = mkVV (mkV (mkV "tomar") "prestado") ; -- status=guess
 lin borrowing_N = mkN "adopción" ; --UWN
 lin borsch_N = mkN "borscht" ; --UWN
-lin bortsch_N = mkN "borscht" ; --UWN
 lin borzoi_N = mkN "borzoi" masculine ; -- status=guess
 lin bosc_N = mkN "Bosc" ; --UWN
 lin boskopoid_A = mkA "boskopoide" ; --UWN
@@ -17115,7 +17114,6 @@ lin letters_N = mkN "cédula de privilegio" | mkN "patente de privilegio" ; -- s
 lin lettuce_N = mkN "lechuga" ; -- status=guess
 lin leucine_N = mkN "leucina" ; -- status=guess
 lin leukaemia_N = mkN "leucemia" ; --UWN
-lin leukemia_N = mkN "leucemia" ; --UWN
 lin leukocyte_N = mkN "leucocito" ; -- status=guess
 lin leukocytosis_N = mkN "leucocitosis" ; --UWN
 lin leukoencephalitis_N = mkN "leucoencefalitis" ; --UWN
@@ -18069,8 +18067,6 @@ lin mandrake_N = mkN "mandragora" ; -- status=guess
 lin mandrill_N = mkN "mandril" masculine ; -- status=guess
 lin mane_N = mkN "melena" ; -- status=guess
 lin maneuver_N = mkN "maniobra" ; -- status=guess
-lin maneuver_V = mkV "maniobrar" ; -- status=guess, src=wikt
-lin maneuver_V2 = mkV2 (mkV "maniobrar") ; -- status=guess, src=wikt
 lin manganese_N = mkN "manganeso" ; -- status=guess
 lin manganite_N = mkN "manganita" ; --UWN
 lin mange_N = mkN "sarna" ; -- status=guess
@@ -18108,6 +18104,8 @@ lin mannheim_PN = mkPN "Mannheim" ; -- status=guess src=geonames
 lin mannish_A = mkA "masculino" ; --UWN
 lin mannitol_N = mkN "manitol" masculine ; -- status=guess
 lin manometer_N = mkN "manómetro" ; -- status=guess
+lin manoeuvre_V = mkV "maniobrar" ; -- status=guess, src=wikt
+lin manoeuvre_V2 = mkV2 (mkV "maniobrar") ; -- status=guess, src=wikt
 lin manor_N = variants {} ; --
 lin manpower_N = variants {} ; --
 lin mansard_N = mkN "mansarda" ; --UWN
@@ -18845,7 +18843,6 @@ lin mill_V = moler_V ; -- status=guess, src=wikt
 lin mill_V2 = mkV2 (moler_V) ; -- status=guess, src=wikt
 lin millenarianism_N = mkN "milenarismo" ; --UWN
 lin millennium_N = mkN "milenio" ; -- status=guess
-lin millepede_N = mkN "diplopoda" ; --UWN
 lin miller_N = mkN "molinero" ; -- status=guess
 lin millet_N = mkN "mijo" ; -- status=guess
 lin millettia_N = mkN "millettia" ; --UWN
@@ -18859,7 +18856,7 @@ lin millimetre_N = mkN "milímetro" ; -- status=guess
 lin milling_N = mkN "fresadora" ; -- status=guess
 lin millionaire_N = mkN "millonario" ; -- status=guess
 lin millionth_N = mkN "millonésimo" ; -- status=guess
-lin millipede_N = mkN "milpiés" | mkN "congorocho" ; -- status=guess status=guess
+lin millipede_N = mkN "milpiés" | mkN "congorocho" | mkN "diplopoda" ; --UWN
 lin millisecond_N = mkN "milisegundo" ; -- status=guess
 lin millom_PN = mkPN "Millom" ; -- status=guess src=geonames
 lin millstone_N = mkN "muela" ; -- status=guess
@@ -22080,7 +22077,6 @@ lin pike_N = mkN "lucio" ; -- status=guess
 lin pikestaff_N = mkN "asta_de_lanza" ; --UWN
 lin pilaff_N = mkN "pilaf" ; --UWN
 lin pilaster_N = mkN "pilastra" ; -- status=guess
-lin pilau_N = mkN "pilaf" ; --UWN
 lin pile_N = mkN "montón" masculine ; -- status=guess
 lin pile_V = mkV "amontonarse" ; -- status=guess
 lin pile_V2 = mkV2 (mkV "amontonarse") ; -- status=guess
@@ -25805,7 +25801,6 @@ lin schizophrenic_A = mkA "esquizofrénico" ; -- status=guess
 lin schizophrenic_N = mkN "esquizofrénico" ; -- status=guess
 lin schlep_N = mkN "viaje_pesado" ; --UWN
 lin schmaltz_N = mkN "schmaltz" ; --UWN
-lin schmalz_N = mkN "schmaltz" ; --UWN
 lin schmuck_N = mkN "prepucio" ; -- status=guess
 lin schnitzel_N = mkN "schnitzel" masculine ; -- status=guess
 lin schnorrer_N = mkN "aprovechado" | mkN "gorrón" | mkN "sacadineros" ; --UWN
