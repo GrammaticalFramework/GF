@@ -10268,7 +10268,6 @@ lin chivalry_N = mkN "ridderlighet" ;
 lin chive_N = mkN "gräslök" ; -- SaldoWN
 lin chives_N = mkN "gräslök" ; -- status=guess
 lin chivvy_V2 = variants {} ; -- status=guess
-lin chivy_V2 = variants {} ; -- status=guess
 lin chlamydeous_A = variants {} ; -- status=guess
 lin chlamydia_N = mkN "klamydia" ; -- status=guess
 lin chlamydial_A = variants {} ; -- status=guess
@@ -23041,7 +23040,6 @@ lin garnish_V2 = variants {} ; -- status=guess
 lin garnishee_N = mkN "utmätning" ;
 lin garnishment_N = mkN "utmätning" ;
 lin garotte_N = variants {} ; -- status=guess
-lin garotte_V2 = variants {} ; -- status=guess
 lin garret_N = variants {} ; -- status=guess
 lin garrison_N = mkN "garnison" "garnisoner" ; -- status=guess
 lin garrison_V2 = variants {} ; -- status=guess

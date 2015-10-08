@@ -9597,7 +9597,6 @@ lin chivalry_N = mkWN (k40 "huomaavaisuus") ; --UNCHK
 lin chive_N = mkWN (k9A "ruoholaukka") ; --UNCHK
 lin chives_N = mkWN (compoundN "ruoho" (k6 "sipuli")) ; --UNCHK
 lin chivvy_V2 = mkWV2 (k53A "hätyyttää") ; --UNCHK
-lin chivy_V2 = mkWV2 (k53A "hätyyttää") ; --UNCHK
 lin chlamydeous_A = mkWA (compoundA "kehä" (k38 "mäinen")) ; --UNCHK
 lin chlamydia_N = mkWN (k12 "klamydia") ; --UNCHK
 lin chlamydial_A = mkWA "klamydian" ; --UNCHK
