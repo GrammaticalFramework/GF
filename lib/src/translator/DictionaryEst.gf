@@ -32270,7 +32270,6 @@ lin chirrup_V = mkV "siristama" ;
 lin chirrup_V2 = mkV2 "siristama" ;
 lin chisel_V2 = mkV2 "peitliga raiuma" ;
 lin chivvy_V2 = mkV2 "närvidele käima" | mkV2 "sammhaaval edenema" | mkV2 "urkima" ;
-lin chivy_V2 = mkV2 "närvidele käima" | mkV2 "sammhaaval edenema" | mkV2 "urkima" ;
 lin chlorinate_V2 = mkV2 "klooriga töötlema" | mkV2 "kloorima" ;
 lin choke_V = mkV "kägistama" | mkV "lämbuma" | mkV "ummistama" ;
 lin choke_V2 = mkV2 "kägistama" | mkV2 "lämbuma" | mkV2 "ummistama" ;

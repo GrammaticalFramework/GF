@@ -10332,7 +10332,6 @@ lin chivalry_N = mkN "Ritterlichkeit" feminine ; -- status=guess
 lin chive_N = mkN "Schnittlauch" "Schnittlauche" masculine ; -- status=guess
 lin chives_N = variants {} ;
 lin chivvy_V2 = variants {} ;
-lin chivy_V2 = variants {} ;
 lin chlamydeous_A = variants {} ;
 lin chlamydia_N = mkN "Chlamydien" ; -- status=guess
 lin chlamydial_A = variants {} ;
@@ -23189,7 +23188,6 @@ lin garnish_V2 = mkV2 (irregV "verzieren" "verziert" "verzierte" "verzierte" "ve
 lin garnishee_N = variants {} ;
 lin garnishment_N = variants {} ;
 lin garotte_N = variants {} ;
-lin garotte_V2 = variants {} ;
 lin garret_N = mkN "Mansarde" "Mansarden" feminine ; -- status=guess
 lin garrison_N = mkN "Standort" "Standorte" masculine | mkN "Garnison" "Garnisonen" feminine ; -- status=guess status=guess
 lin garrison_V2 = variants {} ;

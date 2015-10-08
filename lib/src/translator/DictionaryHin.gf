@@ -10993,7 +10993,6 @@ lin garnet_N = mkN "तामड़ा" ; -- tocheck
 lin garnish_N = mkN "सजावट" ; -- tocheck              
 lin garnish_V2 = mkV2 (mkV "सजाना") ; -- tocheck
 lin garotte_N = mkN "गला घोंट कर मारने का यंत्र" ; -- tocheck              
-lin garotte_V2 = mkV2 (compoundV "गला" (mkV "घोंटना")) ; -- tocheck
 lin garret_N = mkN "दुछत्ती" ; -- tocheck              
 lin garrison_N = mkN "रक्षकसेना" ; -- tocheck              
 lin garrison_V2 = mkV2 (compoundV "रक्षा" (mkV "करना")) ; -- tocheck
