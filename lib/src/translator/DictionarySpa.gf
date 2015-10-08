@@ -11642,8 +11642,8 @@ lin flaunt_V2 = mkV2 (lucir_V) | mkV2 (mkV "presumir") | mkV2 (mkV "ostentar") ;
 lin flautist_N = mkN "flautista" ; --UWN
 lin flavivirus_N = mkN "flavivirus" ; --UWN
 lin flavonoid_N = mkN "flavonoide" ; --UWN
-lin flavorer_N = mkN "condimento" ; --UWN
 lin flavour_N = mkN "sabor" masculine ; -- status=guess
+lin flavourer_N = mkN "condimento" ; --UWN
 lin flavouring_N = mkN "condimento" ; --UWN
 lin flaw_N = mkN "falla" ; -- status=guess
 lin flawless_A = mkA "impecable" | mkA "perfecto" ; -- status=guess status=guess
@@ -17838,7 +17838,6 @@ lin machinist_N = mkN "maquinista" masculine | mkN "mecánico" ; -- status=guess
 lin machismo_N = mkN "machismo" ; -- status=guess
 lin machmeter_N = mkN "máchmetro" ; --UWN
 lin macho_N = mkN "macho" ; -- status=guess
-lin macintosh_N = mkN "macintosh" ; --UWN
 lin mackerel_N = mkN "caballa" ; -- status=guess
 lin mackintosh_N = mkN "macintosh" ; --UWN
 lin macrocephalic_A = mkA "macrocéfalo" ; -- status=guess

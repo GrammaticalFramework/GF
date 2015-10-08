@@ -13273,9 +13273,8 @@ lin flatwork_N = mkN "机械熨烫件" ; -- open-multilingual-wordnet
 lin flaunt_V = mkV "炫耀" ;
 lin flaunt_V2 = mkV2 "炫耀" ;
 lin flavin_N = mkN "核黄素" | mkN "黄素" ; -- open-multilingual-wordnet
-lin flavor_N = mkN "口味" | mkN "味道" | mkN "尝" ;
 lin flavorful_A = mkA "味浓" | mkA "好风味" | mkA "有味道" | mkA "有香味" ; -- open-multilingual-wordnet
-lin flavour_N = mkN "香味" "种" ;
+lin flavour_N = mkN "香味" "种" | mkN "口味" | mkN "味道" | mkN "尝" ;
 lin flaw_N = mkN "缺陷" ;
 lin flaw_V2 = mkV2 "破裂" ;
 lin flawless_A = mkA "无瑕疵" ;
@@ -20124,7 +20123,6 @@ lin machinery_N = mkN "机械" ;
 lin machinist_N = mkN "机械师" ;
 lin machmeter_N = mkN "马赫表" | mkN "马赫计" ; -- open-multilingual-wordnet
 lin macho_N = mkN "男子漢" | mkN "男子汉" ; -- status=guess -- status=guess
-lin macintosh_N = mkN "橡皮布防水衣" | mkN "马金托什雨衣" ; -- open-multilingual-wordnet
 lin mackerel_N = mkN "鯖魚" | mkN "鲭鱼" ; -- status=guess -- status=guess
 lin mackinaw_N = mkN "麦基诺厚呢" ; -- open-multilingual-wordnet
 lin mackintosh_N = mkN "橡皮布防水衣" | mkN "马金托什雨衣" ; -- open-multilingual-wordnet

@@ -21461,12 +21461,12 @@ lin flavin_N = variants {} ; -- status=guess
 lin flavivirus_N = variants {} ; -- status=guess
 lin flavone_N = mkN "flavon" ; -- src=google
 lin flavonoid_N = variants {} ; -- status=guess
-lin flavorer_N = variants {} ; -- status=guess
 lin flavorful_A = variants {} ; -- status=guess
 lin flavorlessness_N = variants {} ; -- status=guess
 lin flavorsomeness_N = variants {} ; -- status=guess
 lin flavour_N = mkN "smak" "smaker" | mkN "krydda" ; -- SaldoWN -- comment=8
 lin flavour_V2 = mkV2 "smaksätta" "smaksätter" "smaksätt" "smaksatte" "smaksatt" "smaksatt" ; -- status=guess
+lin flavourer_N = variants {} ; -- status=guess
 lin flavouring_N = mkN "arom" "aromer" ;
 lin flavourless_A = mkA "smaklös" ; -- status=guess
 lin flaw_N = mkN "spricka" ; -- comment=3
@@ -33201,7 +33201,6 @@ lin machinist_N = mkN "maskinist" "maskinister" ; -- comment=2
 lin machismo_N = variants {} ; -- status=guess
 lin machmeter_N = variants {} ; -- status=guess
 lin macho_N = variants {} ; -- status=guess
-lin macintosh_N = variants {} ; -- status=guess
 lin mackerel_N = mkN "makrill" ; -- status=guess
 lin mackinaw_N = variants {} ; -- status=guess
 lin mackintosh_N = variants {} ; -- status=guess
@@ -36564,7 +36563,6 @@ lin myiasis_N = variants {} ; -- status=guess
 lin mylodon_N = variants {} ; -- status=guess
 lin mylodontid_N = variants {} ; -- status=guess
 lin myna_N = variants {} ; -- status=guess
-lin mynah_N = variants {} ; -- status=guess
 lin myocardial_A = variants {} ; -- status=guess
 lin myocardium_N = mkN "myokardium" ; -- src=google
 lin myoclonus_N = mkN "myoklonus" ; -- src=google
