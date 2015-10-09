@@ -62999,8 +62999,6 @@ lin waterborne_A = variants {} ;
 lin waterbuck_N = variants {} ;
 lin watercannon_N = variants {} ;
 lin waterchute_N = variants {} ;
-lin watercolor_N = variants {} ;
-lin watercolorist_N = variants {} ;
 lin watercolour_N = mkN "Aquarell" "Aquarelle" neuter | mkN "Wasserfarbe" "Wasserfarben" feminine ; -- status=guess status=guess
 lin watercolourist_N = variants {} ;
 lin watercourse_N = mkN "Wasserlauf" "Wasserläufe" masculine ; -- status=guess

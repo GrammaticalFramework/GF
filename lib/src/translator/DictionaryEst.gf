@@ -20885,7 +20885,6 @@ lin waterbuck_N = mkN "vesivohlu" ;
 lin buffalo_N = mkN "piison" | mkN "pühvel" | mkN "ähvardama" ;
 lin butt_N = mkN "koni" | mkN "puksima" | mkN "pära" | mkN "sihtmärk" | mkN "tagumik" | mkN "vaat" ;
 lin closet_N = mkN "privaatruum" | mkN "sala-" | mkN "seinakapp" | mkN "tualett" | mkN "varjatud" ;
-lin watercolor_N = mkN "akvarell" | mkN "vesivärv" ;
 lin watercolour_N = mkN "akvarell" | mkN "vesivärv" ;
 lin watercourse_N = mkN "kanal" | mkN "veevool" | mkN "voolusäng" ;
 lin watercraft_N = mkN "alused" | mkN "laev" ;
