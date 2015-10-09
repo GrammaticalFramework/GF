@@ -62558,8 +62558,6 @@ lin waterborne_A = variants {} ; -- status=guess
 lin waterbuck_N = mkN "vattenbock" ; -- src=google
 lin watercannon_N = variants {} ; -- status=guess
 lin waterchute_N = variants {} ; -- status=guess
-lin watercolor_N = mkN "vattenfärg" "vattenfärger" ; -- comment=2
-lin watercolorist_N = variants {} ; -- status=guess
 lin watercolour_N = mkN "vattenfärg" "vattenfärger" ; -- comment=2
 lin watercolourist_N = mkN "akvarellmålare" | (mkN "akvarellist" "akvarellister") ; -- status=guess status=guess
 lin watercourse_N = mkN "vattendrag" neutrum ;
