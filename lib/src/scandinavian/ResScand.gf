@@ -43,7 +43,7 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
       ha  : Str = auxv ! VI (VInfin Act) ;
 
       vf : Str -> Str -> {fin,inf : Str} = \fin,inf -> {
-        fin = fin ; inf = inf ++ verb.part
+        fin = fin ; inf = inf ++ verb.part  --- not always right after the verb: hon ser (inte) vacker ut ; spotta ut snusen
         } ;
 
     in {
