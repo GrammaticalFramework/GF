@@ -11,12 +11,15 @@
 abstract Tense = Common ** {
 
   fun
-    TTAnt : Tense -> Ant -> Temp ;
+    TTAnt : Tense -> Ant -> Temp ;  -- [combination of tense and anteriority, e.g. past anterior]
 
-    PPos, PNeg : Pol ;           -- I sleep/don't sleep
+    PPos : Pol ;           -- I sleep  [positive polarity]
+    PNeg : Pol ;           -- I don't sleep [negative polarity]
 
-    TPres  : Tense ;                
-    ASimul : Ant ;
-    TPast, TFut, TCond : Tense ; -- I slept/will sleep/would sleep --# notpresent
-    AAnter : Ant ;               -- I have slept                   --# notpresent
+    TPres  : Tense ;             -- I sleep/have slept [present]  
+    ASimul : Ant ;               -- I sleep/slept [simultaneous, not compound]
+    TPast  : Tense ;             -- I slept [past, "imperfect"]      --# notpresent
+    TFut   : Tense ;             -- I will sleep [future] --# notpresent
+    TCond  : Tense ;             -- I would sleep [conditional] --# notpresent
+    AAnter : Ant ;               -- I have slept/had slept [anterior, "compound", "perfect"] --# notpresent
 }

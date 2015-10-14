@@ -36,13 +36,13 @@ abstract Phrase = Cat ** {
 -- The phrasal conjunction is optional. A sentence conjunction
 -- can also be used to prefix an utterance.
 
-    NoPConj   : PConj ;                      
+    NoPConj   : PConj ;                     -- [plain phrase without conjunction in front]
     PConjConj : Conj -> PConj ;             -- and
 
 -- The vocative is optional. Any noun phrase can be made into vocative,
 -- which may be overgenerating (e.g. "I").
 
-    NoVoc   : Voc ;
+    NoVoc   : Voc ;                         -- [plain phrase without vocative]
     VocNP   : NP -> Voc ;                   -- my friend
 
 }
