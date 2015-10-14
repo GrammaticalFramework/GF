@@ -5,7 +5,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
   lin
     UseV = predV ;
 
-    SlashV2a v = predVc v ;
+    SlashV2a v = predV v ** {c2 = v.c2 ; gapInMiddle = False} ;
     Slash2V3 v np = 
       insertObjc (\\_ => v.c2 ++ np.s ! NPAcc) (predV v ** {c2 = v.c3 ; gapInMiddle = False}) ;
     Slash3V3 v np = 
