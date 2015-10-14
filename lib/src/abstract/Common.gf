@@ -1,7 +1,7 @@
 --1 Common: Structures with Common Implementations.
 
--- This module defines the categories that uniformly have the linearization
--- ${s : Str}$ in all languages. 
+-- This module defines the categories that uniformly have the
+-- linearization type ${s:Str}$ in all languages. 
 
 abstract Common = {
 
