@@ -27,7 +27,7 @@ cat
   Sub1000000 ;  -- 1..999999
 
 data 
-  num : Sub1000000 -> Numeral ;
+  num : Sub1000000 -> Numeral ; -- 123456 [coercion to top category]
 
   n2, n3, n4, n5, n6, n7, n8, n9 : Digit ;
 

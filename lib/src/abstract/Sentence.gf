@@ -57,10 +57,10 @@ abstract Sentence = Cat ** {
 -- anteriority, which are defined in [``Common`` Common.html].
 
   fun
-    UseCl    : Temp -> Pol -> Cl  -> S ;
-    UseQCl   : Temp -> Pol -> QCl -> QS ;
-    UseRCl   : Temp -> Pol -> RCl -> RS ;
-    UseSlash : Temp -> Pol -> ClSlash -> SSlash ;
+    UseCl    : Temp -> Pol -> Cl  -> S ;   -- she had not slept
+    UseQCl   : Temp -> Pol -> QCl -> QS ;  -- who had not slept
+    UseRCl   : Temp -> Pol -> RCl -> RS ;  -- that had not slept
+    UseSlash : Temp -> Pol -> ClSlash -> SSlash ; -- (that) she had not seen
 
 -- An adverb can be added to the beginning of a sentence, either with comma ("externally")
 -- or without:

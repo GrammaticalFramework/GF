@@ -20,7 +20,7 @@ abstract Noun = Cat ** {
 
 -- A noun phrase already formed can be modified by a $Predet$erminer.
 
-    PredetNP : Predet -> NP -> NP; -- only the man 
+    PredetNP : Predet -> NP -> NP ; -- only the man 
 
 -- A noun phrase can also be postmodified by the past participle of a
 -- verb, by an adverb, or by a relative clause
@@ -50,9 +50,9 @@ abstract Noun = Cat ** {
 -- the "kernel" of a determiner. It is, however, the $Num$ that determines
 -- the inherent number.
 
-    NumSg   : Num ;
-    NumPl   : Num ;
-    NumCard : Card -> Num ;
+    NumSg   : Num ;  -- [no numeral, but marked as singular]
+    NumPl   : Num ;  -- [no numeral, but marked as plural]
+    NumCard : Card -> Num ; -- one/five [explicit numeral]
 
 -- $Card$ consists of either digits or numeral words.
 
@@ -82,8 +82,8 @@ abstract Noun = Cat ** {
 -- neatly distinct words (Spanish "un, unos ; el, los") but also without
 -- any particular word (Finnish; Swedish definites).
 
-    IndefArt   : Quant ;
-    DefArt     : Quant ;
+    IndefArt   : Quant ;  -- a/an
+    DefArt     : Quant ;  -- the
 
 -- Nouns can be used without an article as mass nouns. The resource does
 -- not distinguish mass nouns from other common nouns, which can result

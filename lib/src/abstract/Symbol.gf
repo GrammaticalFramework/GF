@@ -12,7 +12,7 @@ fun
   SymbPN   : Symb -> PN ;                -- x
   IntPN    : Int -> PN ;                 -- 27
   FloatPN  : Float -> PN ;               -- 3.14159
-  NumPN    : Card -> PN ;
+  NumPN    : Card -> PN ;                -- twelve [as proper name]
   CNNumNP  : CN -> Card -> NP ;          -- level five ; level 5
   CNSymbNP : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
 
@@ -37,7 +37,7 @@ cat
   [Symb]{2} ;
 
 fun
-  MkSymb : String -> Symb ;
+  MkSymb : String -> Symb ;     -- foo [making a symbol from a string]
 
 --2 Obsolescent
 

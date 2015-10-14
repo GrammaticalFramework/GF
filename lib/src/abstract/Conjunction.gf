@@ -17,15 +17,15 @@ abstract Conjunction = Cat ** {
 --2 Rules
 
   fun
-    ConjS    : Conj -> [S] -> S ;       -- "he walks and she runs"
-    ConjRS   : Conj -> [RS] -> RS ;     -- "who walks and whose mother runs"
-    ConjAP   : Conj -> [AP] -> AP ;     -- "cold and warm"
-    ConjNP   : Conj -> [NP] -> NP ;     -- "she or we"
-    ConjAdv  : Conj -> [Adv] -> Adv ;   -- "here or there"
-    ConjAdV  : Conj -> [AdV] -> AdV ;
-    ConjIAdv : Conj -> [IAdv] -> IAdv ; -- "where and with whom"
-    ConjCN   : Conj -> [CN] -> CN ;     -- "man and woman"
-    ConjDet  : Conj -> [DAP] -> Det ;   -- "his or her"
+    ConjS    : Conj -> [S] -> S ;       -- he walks and she runs
+    ConjRS   : Conj -> [RS] -> RS ;     -- who walks and whose mother runs
+    ConjAP   : Conj -> [AP] -> AP ;     -- cold and warm
+    ConjNP   : Conj -> [NP] -> NP ;     -- she or we
+    ConjAdv  : Conj -> [Adv] -> Adv ;   -- here or there
+    ConjAdV  : Conj -> [AdV] -> AdV ;   -- always or sometimes
+    ConjIAdv : Conj -> [IAdv] -> IAdv ; -- where and with whom
+    ConjCN   : Conj -> [CN] -> CN ;     -- man and woman
+    ConjDet  : Conj -> [DAP] -> Det ;   -- his or her
 
 --2 Categories
 
