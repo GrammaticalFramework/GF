@@ -1026,8 +1026,11 @@ pgf_symbols_cmp(GuString* psent, PgfSymbols* syms, bool case_sensitive)
 		PgfSymbol sym = gu_seq_get(syms, PgfSymbol, i);
 
 		if (i > 0) {
-			if (!skip_space(psent))
+			if (!skip_space(psent)) {
+				if (**psent == 0)
+					return -1;
 				return 1;
+			}
 
 			while (**psent != 0) {
 				if (!skip_space(psent))
