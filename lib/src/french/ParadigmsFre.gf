@@ -414,7 +414,7 @@ oper
 
   mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mmkV3 v accusative p ;
-  dirdirV3 v = dirV3 v dative ;
+  dirdirV3 v = mmkV3 v dative accusative ;
 
   mkV3 = overload {
     mkV3 : V -> V3 = dirdirV3 ;               -- donner,_,_

@@ -315,7 +315,7 @@ lin
   flow_V = regV "flow" ;
   fly_V = IrregEng.fly_V ;
   freeze_V = IrregEng.freeze_V ;
-  give_V3 = dirV3 give_V toP ;
+  give_V3 = mkV3 give_V noPrep noPrep ;
   laugh_V = regV "laugh" ;
   lie_V = IrregEng.lie_V ;
   play_V = regV "play" ;

@@ -24,8 +24,8 @@ abstract ParseEngAbs =
 flags
   startcat=Phr;
   heuristic_search_factor=0.60;
-  meta_prob=1.0e-5;
-  meta_token_prob=1.1965149246222233e-9;
+---  meta_prob=1.0e-5;
+---  meta_token_prob=1.1965149246222233e-9;
 
 fun CompoundCN : Num -> N -> CN -> CN ;
     DashCN : N -> N -> N ;

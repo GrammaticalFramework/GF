@@ -323,7 +323,7 @@ lin
   wing_N = mk2N "siipi" "siipiä" ;
   worm_N = mkN "mato" ;
   year_N = mk3N "vuosi" "vuoden" "vuosia" ;
-  bite_V2 = mkV2 (mkV "purra") ;
+  bite_V2 = mkV2 (mkV "purra") cpartitive ;
   blow_V = mkV "puhaltaa" ;
   burn_V = mkV "palaa" ;
   count_V2 = mkV2 (mkV "laskea") ;
@@ -336,7 +336,7 @@ lin
   flow_V = mkV "virrata" "virtaan" "virtasi" ;
   fly_V = mkV "lentää" ;
   freeze_V = mkV "jäätyä" ;
-  give_V3 = mkV3 (mkV "antaa" "annan" "antoi") accPrep (casePrep allative) ;
+  give_V3 = mkV3 (mkV "antaa" "annan" "antoi") (casePrep allative) accPrep ;
   hit_V2 = mkV2 (mkV "lyödä") cpartitive ;
   hold_V2 = mkV2 (mkV "pitää") cpartitive ;
   hunt_V2 = mkV2 (mkV "metsästää") cpartitive ;
