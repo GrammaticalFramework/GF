@@ -440,7 +440,7 @@ oper
 
   mkV3 v p q = lin V3 (v ** {c2 = p ; c3 = q}) ;
   dirV3 v p = mkV3 v accusative p ;
-  dirdirV3 v = dirV3 v dative ;
+  dirdirV3 v = mkV3 v dative accusative ;
 
   V0 : Type = V ;
   AS, AV : Type = A ;

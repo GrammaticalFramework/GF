@@ -317,7 +317,7 @@ lin
   flow_V = rinna_V ;
   fly_V = flyga_V ;
   freeze_V = frysa_V ;
-  give_V3 = dirV3 (mkV "ge" "ger""ge" "gav" "givit" "given" "givande") (mkPrep "till");
+  give_V3 = mkV3 (mkV "ge" "ger""ge" "gav" "givit" "given" "givande") (mkPrep []) (mkPrep []) ;
   hit_V2 = dirV2 (slå_V) ;
   hold_V2 = dirV2 (hålla_V) ;
   hunt_V2 = dirV2 (regV "jaga") ;

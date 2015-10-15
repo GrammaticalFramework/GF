@@ -319,7 +319,7 @@ lin
   flow_V = verboV (finire_100 "fluire") ;
   fly_V = regV "volare" ;
   freeze_V = regV "gelare" ;
-  give_V3 = dirdirV3 (verboV (dare_15 "dare")) ;
+  give_V3 = mkV3 (verboV (dare_15 "dare")) dative accusative ;
   hit_V2 = dirV2 (regV "colpire") ;
   hold_V2 = dirV2 (verboV (venire_110 "tenire")) ;
   hunt_V2 = dirV2 (regV "cacciare") ;

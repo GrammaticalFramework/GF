@@ -424,7 +424,7 @@ oper
   mmkV3    : V -> Prep -> Prep -> V3 ;  -- parler, à, de
   mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mmkV3 v accusative p ;
-  dirdirV3 v = dirV3 v dative ;
+  dirdirV3 v = mmkV3 v dative accusative ;
 
   mmkV2 : V -> Prep -> V2 ;
   mmkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
