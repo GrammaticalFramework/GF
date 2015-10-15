@@ -11,10 +11,10 @@ import Data.List
 -- this creates the file absfuns.html
 
 main = do
-  system "grep \" : \" ../src/abstract/*.gf ../src/translator/Extensions.gf >absfuns.tmp"
+  system "grep \" : \" ../src/abstract/*.gf ../src/translator/Extensions.gf | grep \" -- \" >absfuns.tmp"
   funs <- readFile "absfuns.tmp" >>= return . lines
   deps <- readFile "../src/uddeps.labels" >>= return . lines
-  let depmap = M.fromList [(fun,deps) | fun:deps <- map words deps]
+  let depmap = M.fromListWith (\x y -> x ++ [";"] ++ y) [(fun,deps) | fun:deps <- map words deps]
   let rows = sort $ filter (flip S.notMember hiddenModules . last) $ map (mkRow depmap) (map words funs)
   let entries = map (sepFields . addLink) rows
   putStrLnIf $ "GF RGL Functions"
@@ -27,7 +27,7 @@ main = do
 
 
 hiddenModules = S.fromList
-  ["Backward","Structural","Extra","Construction","Compatibility",
+  ["Backward","Structural","Extra","Compatibility",
    "Documentation","Lexicon","NumeralTransfer","Terminology","Transfer","MarkHTML","Markup","ERROR"] ----
 
 mkRow depmap ws = case ws of
