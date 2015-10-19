@@ -24260,7 +24260,7 @@ lin gonioscopy_N = variants {} ;
 lin gonococcus_N = variants {} ;
 lin gonorrhea_N = mkN "Gonorrhoe" feminine ; -- status=guess
 lin gonorrhoea_N = variants {} ;
-lin goo_N = schmalz_N | mkN "übertriebene Sentimentalität" feminine ; -- status=guess status=guess
+lin goo_N = mkN  "Schmalz" "Schmalze" neuter | mkN "übertriebene Sentimentalität" feminine ; -- status=guess status=guess
 lin good_A = mk3A "gut" "besser" "beste" ;
 lin good_N = mkN "Gute" neuter ;
 lin good_afternoon_Interj = variants {} ;
@@ -31425,7 +31425,7 @@ lin larboard_N = mkN "Backbord" "Backborde" neuter ; -- status=guess
 lin larcenist_N = variants {} ;
 lin larceny_N = variants {} ;
 lin larch_N = mkN "Lärche" feminine ; -- status=guess
-lin lard_N = schmalz_N ; -- status=guess
+lin lard_N = mkN  "Schmalz" "Schmalze" neuter ; -- status=guess
 lin lard_V2 = variants {} ;
 lin larder_N = mkN "Kühlraum" masculine | mkN "Speisekammer" "Speisekammern" feminine ; -- status=guess status=guess
 lin large_A = mk3A "groß" "größer" "größte" | mkA "weit" ; --- split: large dog (groß) ; large area (weit)
@@ -50489,7 +50489,7 @@ lin sentiment_N = variants {} ; --
 lin sentimental_A = mk3A "sentimental" "sentimentaler" "sentimentalste" ; -- status=guess
 lin sentimentalism_N = variants {} ;
 lin sentimentalist_N = variants {} ;
-lin sentimentality_N = mkN "Sentimentalität" feminine | schmalz_N | mkN "Empfindsamkeit" "Empfindsamkeiten" feminine | mkN "Gefühlsseligkeit" feminine | mkN "Rührseligkeit" feminine ; -- status=guess status=guess status=guess status=guess status=guess
+lin sentimentality_N = mkN "Sentimentalität" feminine | mkN  "Schmalz" "Schmalze" neuter | mkN "Empfindsamkeit" "Empfindsamkeiten" feminine | mkN "Gefühlsseligkeit" feminine | mkN "Rührseligkeit" feminine ; -- status=guess status=guess status=guess status=guess status=guess
 lin sentimentalization_N = variants {} ;
 lin sentimentalize_V = variants {} ;
 lin sentimentalize_V2 = variants {} ;
