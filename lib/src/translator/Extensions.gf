@@ -13,18 +13,17 @@ cat
   [VPS] {2} ;
 
 fun
-  MkVPI : VP -> VPI ;               -- to walk
-  ConjVPI : Conj -> [VPI] -> VPI ;  -- to walk and drink beer
-  ComplVPIVV : VV -> VPI -> VP ;    -- want to walk and drink beer
+  MkVPI : VP -> VPI ;                 -- to walk
+  ConjVPI : Conj -> ListVPI -> VPI ;  -- to walk and drink beer
+  ComplVPIVV : VV -> VPI -> VP ;      -- want to walk and drink beer
 
-  MkVPS : Temp -> Pol -> VP -> VPS ;  -- had walked
-  ConjVPS : Conj -> [VPS] -> VPS ;    -- had walked and drank beer
-  PredVPS : NP -> VPS -> S ;          -- I had walked and drank beer
+  MkVPS   : Temp -> Pol -> VP -> VPS ;  -- had walked
+  ConjVPS : Conj -> ListVPS -> VPS ;    -- had walked and drank beer
+  PredVPS : NP -> VPS -> S ;            -- I had walked and drank beer
 
 ---- merge VPS and VPI
 ----            MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
 ----            VPIForm, VPIInf, VPIPresPart, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
-
 
 -- generalizing Grammar
 
@@ -94,6 +93,17 @@ fun
 
     FocusObjS : NP -> SSlash -> S ;                    -- this woman I love  -- in declarative S, not in QS
 
+
+{-
+-- for documentation
+
+  BaseVPI : VPI -> VPI -> ListVPI ;      -- to walk, to run
+  ConsVPI : VPI -> ListVPI -> ListVPI ;  -- to walk, to run, to stop
+
+  BaseVPS : VPS -> VPS -> ListVPS ;      -- walks, has run
+  ConsVPS : VPS -> ListVPS -> ListVPS ;  -- walks, has run, will stop
+
+-}
 
 }
 
