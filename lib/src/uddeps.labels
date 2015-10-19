@@ -88,6 +88,7 @@ DetQuantOrd 	head nummod amod     -- quite wrong; again for same reason as DetQu
 DetCN 	det head
 CountNP 	det head
 PredetNP 	det head
+PPartNP		head amod	-- only in core RGL
 
 AdjCN 	amod head
 AdjDAP 	head amod
@@ -150,3 +151,7 @@ PhrUtt 	cc head discourse
 
 PlusChunk 	head dep
 TTAnt 	empty empty head
+
+TExclMark      head dep		-- punctuation in the middle in these three
+TFullStop      head dep
+TQuestMark     head dep
