@@ -70,8 +70,8 @@ mainServerGFI opts0 port files =
     jobs = join (flag optJobs opts)
 
     execute1' gfenv0 cmd =
-       do (quit,gfenv) <- runStateT (execute1 cmd) gfenv0
-          return $ if quit then Nothing else Just gfenv
+       do (continue,gfenv) <- runStateT (execute1 cmd) gfenv0
+          return $ if continue then Just gfenv else Nothing
 #else
 mainServerGFI opts port files =
   error "GF has not been compiled with server mode support"
