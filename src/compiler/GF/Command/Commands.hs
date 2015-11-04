@@ -572,7 +572,7 @@ pgfCommands = Map.fromList [
        ("v","show extra information")
        ],
      flags = [
-       ("file","configuration file for labels per fun, format 'fun l1 ... label ... l2'"),
+       ("file","configuration file for labels, format per line 'fun label*'"),
        ("format","format of the visualization file (default \"png\")"),
        ("output","output format of graph source (default \"dot\")"),
        ("view","program to open the resulting file (default \"open\")"),
@@ -597,7 +597,7 @@ pgfCommands = Map.fromList [
          let gvOptions = GraphvizOptions {noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
                                           noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
                                           noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
-                                          noDep = True, ---- TODO
+                                          noDep = not (isOpt "deps" opts),
                                           nodeFont = valStrOpts "nodefont" "" opts,
                                           leafFont = valStrOpts "leaffont" "" opts,
                                           nodeColor = valStrOpts "nodecolor" "" opts,
@@ -605,9 +605,14 @@ pgfCommands = Map.fromList [
                                           nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts,
                                           leafEdgeStyle = valStrOpts "leafedgestyle" "dashed" opts
                                          }
+         let depfile = valStrOpts "file" "" opts
+         mlab <- case depfile of
+           "" -> return Nothing
+           _  -> (Just . getDepLabels . lines) `fmap` restricted (readFile depfile)
+
          let grph = if null es 
                       then []
-                      else graphvizParseTree pgf lang gvOptions (head es)
+                      else graphvizParseTreeDep mlab pgf lang gvOptions (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -619,11 +624,13 @@ pgfCommands = Map.fromList [
           else return $ fromString grph,
      examples = [
        mkEx "p \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
-       mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
+       mkEx "gr | vp -view=open -- generate a tree and display parse tree on a Mac",
+       mkEx "p \"she loves us\" | vp -view=open -deps -file=uddeps.labels -nocat"  -- show a visual variant of a dependency tree"
        ],
      options = [
        ("showcat","show categories in the tree nodes (default)"),
        ("nocat","don't show categories"),
+       ("deps","show dependency labels"),
        ("showfun","show function names in the tree nodes"),
        ("nofun","don't show function names (default)"),
        ("showleaves","show the leaves of the tree (default)"),
@@ -631,6 +638,7 @@ pgfCommands = Map.fromList [
        ],
      flags = [
        ("lang","the language to visualize"),
+       ("file","configuration file for dependency labels with -deps, format per line 'fun label*'"),
        ("format","format of the visualization file (default \"png\")"),
        ("view","program to open the resulting file (default \"open\")"),
        ("nodefont","font for tree nodes (default: Times -- graphviz standard font)"),
