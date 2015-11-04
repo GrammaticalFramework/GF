@@ -597,6 +597,7 @@ pgfCommands = Map.fromList [
          let gvOptions = GraphvizOptions {noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
                                           noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
                                           noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
+                                          noDep = True, ---- TODO
                                           nodeFont = valStrOpts "nodefont" "" opts,
                                           leafFont = valStrOpts "leaffont" "" opts,
                                           nodeColor = valStrOpts "nodecolor" "" opts,

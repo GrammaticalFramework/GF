@@ -448,6 +448,7 @@ pgfMain command (t,pgf) =
         PGF.GraphvizOptions # bool "noleaves"
                             % bool "nofun"
                             % bool "nocat"
+                            % bool "nodep"
                             % string "nodefont"
                             % string "leaffont"
                             % string "nodecolor"
