@@ -14,6 +14,7 @@ module PGF.VisualizeTree
              , graphvizDefaults
              , graphvizAbstractTree
              , graphvizParseTree
+             , graphvizParseTreeDep
              , graphvizDependencyTree
              , graphvizBracketedString
              , graphvizAlignment
@@ -255,20 +256,20 @@ graphvizBracketedString opts mbl tree bss = render graphviz_code
       internal_nodes = [mkLevel internals |
                         internals <- getInternals (map ((,) nil) bss),
                         not (null internals)]
-      leaf_nodes = mkLevel [(parent, id, word) |
-                            (id, (parent, word)) <- zip [100000..] (concatMap (getLeaves nil) bss)]
+      leaf_nodes = mkLevel [(parent, id, mkLeafNode cat word) |
+                            (id, (parent, (cat,word))) <- zip [100000..] (concatMap (getLeaves (mkCId "?") nil) bss)]
 
       getInternals []    = []
       getInternals nodes
           = nub [(parent, fid, mkNode fun cat) |
-                 (parent, Bracket cat fid lind fun _ _) <- nodes]
+                 (parent, Bracket cat fid _ fun _ _) <- nodes]
             : getInternals [(fid, child) |
                             (_, Bracket _ fid _ _ _ children) <- nodes,
                             child <- children]
 
-      getLeaves parent (Leaf word) = [(parent, word)]
-      getLeaves parent (Bracket _ fid i _ _ children)
-          = concatMap (getLeaves fid) children
+      getLeaves cat parent (Leaf word) = [(parent, (cat, word))] -- the lowest cat before the word
+      getLeaves _ parent (Bracket cat fid i _ _ children)
+          = concatMap (getLeaves cat fid) children
 
       mkLevel nodes
           = text "subgraph {rank=same;" $$
@@ -288,9 +289,26 @@ graphvizBracketedString opts mbl tree bss = render graphviz_code
       depLabel node@(parent,id,lbl) 
         | noDep opts = ";"
         | otherwise = case getArg id of
-            Just (fun,arg) -> (mkOption "" "label" (showCId fun ++ "#" ++ show arg))
+            Just (fun,arg) -> mkOption "" "label" (lookLabel fun arg) 
             _ -> ";"
       getArg i = getArgumentPlace i (expr2numtree tree) Nothing
+
+      labels = maybe Map.empty id mbl
+
+      lookLabel fun arg = case Map.lookup fun labels of
+        Just xx | length xx > arg -> case xx !! arg of
+          "head" -> ""
+          l -> l
+        _ -> argLabel fun arg
+      argLabel fun arg = showCId fun ++ "#" ++ show arg
+
+      mkLeafNode cat word
+       | noDep opts = word        --- || not (noCat opts) -- show POS only if intermediate nodes hidden
+       | otherwise = posCat cat ++ "\n" ++ word         -- show POS in dependency tree
+
+      posCat cat = case Map.lookup cat labels of
+        Just [p] -> p
+        _ -> showCId cat
 
 ---- to restore the argument place from bracketed linearization
 data NumTree = NumTree Int CId [NumTree]
@@ -314,7 +332,7 @@ expr2numtree = fst . renumber 0 . flatten where
     t:tt -> case renumber i t of
       (t',j) -> case renumbers j tt of (tt',k) -> (t':tt',k)
     _ -> ([],i)
------ end this terrible stuff
+----- end this terrible stuff AR 4/11/2015
  
 
 

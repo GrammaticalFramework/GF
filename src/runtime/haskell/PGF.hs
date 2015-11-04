@@ -122,6 +122,7 @@ module PGF(
            -- ** Visualizations
            graphvizAbstractTree,
            graphvizParseTree,
+           graphvizParseTreeDep,
            graphvizDependencyTree,
            graphvizBracketedString,
            graphvizAlignment,
