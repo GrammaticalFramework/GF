@@ -300,8 +300,8 @@ graphvizBracketedString opts mbl tree bss = render graphviz_code
           "head" -> ""
           l -> l
         _ -> argLabel fun arg
-      argLabel fun arg = "dep#" ++ show arg --showCId fun ++ "#" ++ show arg
-
+      argLabel fun arg = if arg==0 then "" else "dep#" ++ show arg --showCId fun ++ "#" ++ show arg
+                         -- assuming the arg is head, if no configuration is given; always true for 1-arg funs
       mkLeafNode cat word
        | noDep opts = word        --- || not (noCat opts) -- show POS only if intermediate nodes hidden
        | otherwise = posCat cat ++ "\n" ++ word         -- show POS in dependency tree
