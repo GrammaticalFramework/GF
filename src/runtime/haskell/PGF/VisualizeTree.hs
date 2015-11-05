@@ -300,7 +300,7 @@ graphvizBracketedString opts mbl tree bss = render graphviz_code
           "head" -> ""
           l -> l
         _ -> argLabel fun arg
-      argLabel fun arg = showCId fun ++ "#" ++ show arg
+      argLabel fun arg = "dep#" ++ show arg --showCId fun ++ "#" ++ show arg
 
       mkLeafNode cat word
        | noDep opts = word        --- || not (noCat opts) -- show POS only if intermediate nodes hidden
