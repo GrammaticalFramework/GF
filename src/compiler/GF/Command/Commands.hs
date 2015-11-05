@@ -57,9 +57,9 @@ pgfCommands = Map.fromList [
        "Prints a set of strings in the .dot format (the graphviz format).",
        "The graph can be saved in a file by the wf command as usual.",
        "If the -view flag is defined, the graph is saved in a temporary file",
-       "which is processed by graphviz and displayed by the program indicated",
-       "by the flag. The target format is postscript, unless overridden by the",
-       "flag -format."
+       "which is processed by 'dot' (graphviz) and displayed by the program indicated",
+       "by the view flag. The target format is png, unless overridden by the",
+       "flag -format. Results from multiple trees are combined to pdf with convert (ImageMagick)."
        ],
      exec = getEnv $ \ opts es (Env pgf mos) -> do
          let langs = optLangs pgf opts
@@ -72,17 +72,13 @@ pgfCommands = Map.fromList [
              let grph = if null es then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
              return $ fromString grph
            else do
-             let grph = if null es then [] else graphvizAlignment pgf langs (head es)
+             let grphs = map (graphvizAlignment pgf langs) es
              if isFlag "view" opts || isFlag "format" opts
                then do
-                 let file s = "_grph." ++ s
                  let view = optViewGraph opts
                  let format = optViewFormat opts
-                 restricted $ writeUTF8File (file "dot") grph
-                 restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-                 restrictedSystem $ view ++ " " ++ file format
-                 return void
-               else return $ fromString grph,
+                 viewGraphviz view format "_grpha_" grphs
+               else return $ fromString $ unlines grphs,
      examples = [
        ("gr | aw"                         , "generate a tree and show word alignment as graph script"),
        ("gr | aw -view=\"open\""          , "generate a tree and display alignment on Mac"),
@@ -540,9 +536,9 @@ pgfCommands = Map.fromList [
        "function; moreover, the head depends on the head of the function above.",
        "The graph can be saved in a file by the wf command as usual.",
        "If the -view flag is defined, the graph is saved in a temporary file",
-       "which is processed by graphviz and displayed by the program indicated",
-       "by the flag. The target format is png, unless overridden by the",
-       "flag -format.",
+       "which is processed by dot (graphviz) and displayed by the program indicated",
+       "by the view flag. The target format is png, unless overridden by the",
+       "flag -format. Results from multiple trees are combined to pdf with convert (ImageMagick).",
        "See also 'vp -showdep' for another visualization of dependencies." 
        ],
      exec = getEnv $ \ opts es (Env pgf mos) -> do
@@ -553,16 +549,13 @@ pgfCommands = Map.fromList [
            "" -> return Nothing
            _  -> (Just . getDepLabels . lines) `fmap` restricted (readFile file)
          let lang = optLang pgf opts
-         let grphs = unlines $ map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
-         if isFlag "view" opts || isFlag "format" opts then do
-           let file s = "_grphd." ++ s
-           let view = optViewGraph opts
-           let format = optViewFormat opts
-           restricted $ writeUTF8File (file "dot") grphs
-           restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-           restrictedSystem $ view ++ " " ++ file format
-           return void
-          else return $ fromString grphs,
+         let grphs = map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
+         if isFlag "view" opts || isFlag "format" opts
+           then do
+             let view = optViewGraph opts
+             let format = optViewFormat opts
+             viewGraphviz view format "_grphd_" grphs
+           else return $ fromString $ unlines grphs,
      examples = [
        mkEx "gr | vd              -- generate a tree and show dependency tree in .dot",
        mkEx "gr | vd -view=open   -- generate a tree and display dependency tree on a Mac",
@@ -589,9 +582,9 @@ pgfCommands = Map.fromList [
        "Prints a parse tree in the .dot format (the graphviz format).",
        "The graph can be saved in a file by the wf command as usual.",
        "If the -view flag is defined, the graph is saved in a temporary file",
-       "which is processed by graphviz and displayed by the program indicated",
-       "by the flag. The target format is png, unless overridden by the",
-       "flag -format."
+       "which is processed by dot (graphviz) and displayed by the program indicated",
+       "by the view flag. The target format is png, unless overridden by the",
+       "flag -format. Results from multiple trees are combined to pdf with convert (ImageMagick)."
        ],
      exec = getEnv $ \ opts es (Env pgf mos) -> do
          let lang = optLang pgf opts
@@ -610,19 +603,13 @@ pgfCommands = Map.fromList [
          mlab <- case depfile of
            "" -> return Nothing
            _  -> (Just . getDepLabels . lines) `fmap` restricted (readFile depfile)
-
-         let grph = if null es 
-                      then []
-                      else graphvizParseTreeDep mlab pgf lang gvOptions (head es)
-         if isFlag "view" opts || isFlag "format" opts then do
-           let file s = "_grph." ++ s
-           let view = optViewGraph opts
-           let format = optViewFormat opts
-           restricted $ writeUTF8File (file "dot") grph
-           restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-           restrictedSystem $ view ++ " " ++ file format
-           return void
-          else return $ fromString grph,
+         let grphs = map (graphvizParseTreeDep mlab pgf lang gvOptions) es
+         if isFlag "view" opts || isFlag "format" opts
+           then do
+             let view = optViewGraph opts
+             let format = optViewFormat opts
+             viewGraphviz view format "_grphp_" grphs
+           else return $ fromString $ unlines grphs,
      examples = [
        mkEx "p \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
        mkEx "gr | vp -view=open -- generate a tree and display parse tree on a Mac",
@@ -659,9 +646,9 @@ pgfCommands = Map.fromList [
        "Prints a set of trees in the .dot format (the graphviz format).",
        "The graph can be saved in a file by the wf command as usual.",
        "If the -view flag is defined, the graph is saved in a temporary file",
-       "which is processed by graphviz and displayed by the program indicated",
-       "by the flag. The target format is postscript, unless overridden by the",
-       "flag -format.",
+       "which is processed by dot (graphviz) and displayed by the command indicated",
+       "by the view flag. The target format is postscript, unless overridden by the",
+       "flag -format. Results from multiple trees are combined to pdf with convert (ImageMagick).",
        "With option -mk, use for showing library style function names of form 'mkC'."
        ],
      exec = getEnv $ \ opts es (Env pgf mos) ->
@@ -675,16 +662,13 @@ pgfCommands = Map.fromList [
        else do
          let funs = not (isOpt "nofun" opts)
          let cats = not (isOpt "nocat" opts)
-         let grph = unlines (map (graphvizAbstractTree pgf (funs,cats)) es) -- True=digraph
-         if isFlag "view" opts || isFlag "format" opts then do
-           let file s = "_grph." ++ s
-           let view = optViewGraph opts
-           let format = optViewFormat opts
-           restricted $ writeUTF8File (file "dot") grph
-           restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-           restrictedSystem $ view  ++ " " ++ file format
-           return void
-          else return $ fromString grph,
+         let grphs = map (graphvizAbstractTree pgf (funs,cats)) es
+         if isFlag "view" opts || isFlag "format" opts
+           then do
+             let view = optViewGraph opts
+             let format = optViewFormat opts
+             viewGraphviz view format "_grpht_" grphs
+           else return $ fromString $ unlines grphs,
      examples = [
        mkEx "p \"hello\" | vt              -- parse a string and show trees as graph script",
        mkEx "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
@@ -961,3 +945,19 @@ prAllWords mo =
 prMorphoAnalysis :: (String,[(Lemma,Analysis)]) -> String
 prMorphoAnalysis (w,lps) =
   unlines (w:[showCId l ++ " : " ++ p | (l,p) <- lps])
+
+viewGraphviz :: String -> String -> String -> [String] -> SIO CommandOutput
+viewGraphviz view format name grphs = do
+           let file i s = name ++ i ++ "." ++ s
+           mapM_ (\ (grph,i) -> restricted $ writeUTF8File (file (show i) "dot") grph) (zip grphs [1..])
+           mapM_ (\i -> restrictedSystem $ "dot -T" ++ format ++ " " ++ file (show i) "dot" ++ " > " ++ file (show i) format) [1..length grphs]
+           if length grphs > 1
+             then do
+               let files = unwords [file (show i) format | i <- [1..length grphs]]
+               restrictedSystem $ "convert " ++ files ++ " " ++ file "all" "pdf"
+               restrictedSystem $ view ++ " " ++ file "all" "pdf"
+             else restrictedSystem $ view ++ " " ++ file "1" format
+---           restrictedSystem $ "rm " ++ file "*" format  --- removing temporary files
+---           restrictedSystem $ "rm " ++ file "*" "dot"
+---           restrictedSystem $ "rm " ++ file "all" "pdf"
+           return void
