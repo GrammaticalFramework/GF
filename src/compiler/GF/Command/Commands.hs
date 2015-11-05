@@ -542,7 +542,8 @@ pgfCommands = Map.fromList [
        "If the -view flag is defined, the graph is saved in a temporary file",
        "which is processed by graphviz and displayed by the program indicated",
        "by the flag. The target format is png, unless overridden by the",
-       "flag -format."
+       "flag -format.",
+       "See also 'vp -showdep' for another visualization of dependencies." 
        ],
      exec = getEnv $ \ opts es (Env pgf mos) -> do
          let debug = isOpt "v" opts
@@ -565,7 +566,7 @@ pgfCommands = Map.fromList [
      examples = [
        mkEx "gr | vd              -- generate a tree and show dependency tree in .dot",
        mkEx "gr | vd -view=open   -- generate a tree and display dependency tree on a Mac",
-       mkEx "gr -number=1000 | vd -file=dep.labels -output=malt      -- generate training treebank",
+       mkEx "gr -number=1000 | vd -file=dep.labels -output=conll     -- generate training treebank",
        mkEx "gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences"
        ],
      options = [
@@ -573,8 +574,8 @@ pgfCommands = Map.fromList [
        ],
      flags = [
        ("file","configuration file for labels, format per line 'fun label*'"),
-       ("format","format of the visualization file (default \"png\")"),
-       ("output","output format of graph source (default \"dot\")"),
+       ("format","format of the visualization file using dot (default \"png\")"),
+       ("output","output format of graph source (dot (default), malt_input, conll)"),
        ("view","program to open the resulting file (default \"open\")"),
        ("lang","the language of analysis")
        ]
@@ -597,7 +598,7 @@ pgfCommands = Map.fromList [
          let gvOptions = GraphvizOptions {noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
                                           noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
                                           noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
-                                          noDep = not (isOpt "deps" opts),
+                                          noDep = not (isOpt "showdep" opts),
                                           nodeFont = valStrOpts "nodefont" "" opts,
                                           leafFont = valStrOpts "leaffont" "" opts,
                                           nodeColor = valStrOpts "nodecolor" "" opts,
@@ -625,12 +626,12 @@ pgfCommands = Map.fromList [
      examples = [
        mkEx "p \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
        mkEx "gr | vp -view=open -- generate a tree and display parse tree on a Mac",
-       mkEx "p \"she loves us\" | vp -view=open -deps -file=uddeps.labels -nocat"  -- show a visual variant of a dependency tree"
+       mkEx "p \"she loves us\" | vp -view=open -showdep -file=uddeps.labels -nocat  -- show a visual variant of a dependency tree"
        ],
      options = [
        ("showcat","show categories in the tree nodes (default)"),
        ("nocat","don't show categories"),
-       ("deps","show dependency labels"),
+       ("showdep","show dependency labels"),
        ("showfun","show function names in the tree nodes"),
        ("nofun","don't show function names (default)"),
        ("showleaves","show the leaves of the tree (default)"),
