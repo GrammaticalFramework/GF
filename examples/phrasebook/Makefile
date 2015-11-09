@@ -1,7 +1,7 @@
 compile = runghc Compile 
 
 forApp: 
-	$(compile) -opt Bul Cat Chi Dut Eng Fin Fre Ger Hin Ita Jpn Spa Swe Tha
+	$(compile) -opt Bul Cat Chi Dut Eng Est Fin Fre Ger Hin Ita Jpn Spa Swe Tha
 	make gfos
 
 .PHONY: gfos
