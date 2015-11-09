@@ -1,133 +1,141 @@
--- (c) 2010-2015 Aarne Ranta under LGPL
---# -coding=latin1
+-- (c) 2010 Aarne Ranta under LGPL
+-- Estonian port by Kaarel Kaljurand
 
-concrete WordsEst of Words = SentencesEst ** 
-  open 
-    SyntaxEst, ParadigmsEst, (L = LexiconEst), 
+concrete WordsEst of Words = SentencesEst **
+  open
+    SyntaxEst, ParadigmsEst, (L = LexiconEst), (R = ResEst),
     Prelude, (E = ExtraEst) in {
 
   flags optimize = noexpand ;
 
   lin
 
----- TODO most Est words
-
 -- kinds
 
     Apple = mkCN L.apple_N ;
     Beer = mkCN L.beer_N ;
     Bread = mkCN L.bread_N ;
-----    Cheese = mkCN (mkN "juusto") ;
-----    Chicken = mkCN (mkN "kana") ;
-----    Coffee = mkCN (mkN "kahvi") ;
+    Cheese = mkCN (mkN "juust" "juustu" "juustu" "juustu" "juustude" "juuste") ;
+    Chicken = mkCN (mkN "kana") ;
+    Coffee = mkCN (mkN "kohv" "kohvi" "kohvi" "kohvi" "kohvide" "kohve") ;
     Fish = mkCN L.fish_N ;
-----    Meat = mkCN (mkN "liha") ;
+    Meat = mkCN (mkN "liha") ;
     Milk = mkCN L.milk_N ;
-----    Pizza = mkCN (mkN "pizza") ;
+    Pizza = mkCN (mkN "pitsa" "pitsa" "pitsat" "pitsasse" "pitsade" "pitsasid") ;
     Salt = mkCN L.salt_N ;
-----    Tea = mkCN (mkN "tee") ;
+    Tea = mkCN (mkN "tee") ;
     Water = mkCN L.water_N ;
     Wine = mkCN L.wine_N ;
 
 -- qualities
 
     Bad = L.bad_A ;
-----    Boring = mkA "tylsä" ;
-----    Cheap = mkA "halpa" ;
+    Boring = mkA "igav" ;
+    Cheap = mkA "odav" ;
     Cold = L.cold_A ;
-----    Delicious = mkA "herkullinen" ;
-----    Expensive = mkA "kallis" ;
-----    Fresh = mkA "tuore" ;
+    Delicious = mkA "maitsev" ;
+    Expensive = mkA (mkN "kallis" "kalli" "kallist" "kallisse" "kallite" "kalleid");
+    Fresh = mkA "toores" ;
     Good = L.good_A ;
-----    Suspect = mkA "epäilyttävä" ;
+    Suspect = mkA "kahtlane" ;
     Warm = L.warm_A ;
-
-{- ---- TODO: everything below this
 
 -- places
 
-    Restaurant = mkPlace (mkN "ravintola") ssa ;
-    Bank = mkPlace (mkN "pankki") ssa ;
-    PostOffice = mkPlace (mkN "posti") ssa ;
-    Bar = mkPlace (mkN "baari") ssa ;
-    Toilet = mkPlace (mkN "vessa") ssa ;
-    Museum = mkPlace (mkN "museo") ssa ;
-    Airport = mkPlace (mkN "lento" (mkN "kenttä")) lla ;
-    Station = mkPlace (mkN "asema") lla ;
-    Hospital = mkPlace (mkN "sairaala") ssa ;
-    Church = mkPlace (mkN "kirkko") ssa ;
-    Cinema = mkPlace (mkN "elokuva" (mkN "teatteri")) ssa ;
-    Theatre = mkPlace (mkN "teatteri") ssa ;
-    Shop = mkPlace (mkN "kauppa") ssa ;
-    Park = mkPlace (mkN "puisto") ssa ;
-    Hotel = mkPlace (mkN "hotelli") ssa ;
-    University = mkPlace (mkN "yliopisto") lla ;
-    School = mkPlace (mkN "koulu") lla ;
+    Restaurant = mkPlace (mkN "restoran") ssa ;
+    Bank = mkPlace (mkN "pank") ssa ;
+    PostOffice = mkPlace (mkN "post" (mkN "kontor")) ssa ;
+    Bar = mkPlace (mkN "baar") ssa ;
+    Toilet = mkPlace (mkN "tualett") ssa ;
+    Museum = mkPlace (mkN "muuseum") ssa ;
+    Airport = mkPlace (mkN "lennu" (mkN "jaam" "jaama" "jaama" "jaama" "jaamade" "jaamu")) ssa ; -- different in Fin
+    Station = mkPlace (mkN "jaam" "jaama" "jaama" "jaama" "jaamade" "jaamu") ssa ; -- different in Fin
+    Hospital = mkPlace (mkN "haigla") ssa ;
+    Church = mkPlace (mkN "kirik") ssa ;
+    Cinema = mkPlace (mkN "kino") ssa ;
+    Theatre = mkPlace (mkN "teater") ssa ;
+    Shop = mkPlace (mkN "pood" "poe" "poodi" "poodi" "poodide" "poode") ssa ;
+    Park = mkPlace (mkN "park") ssa ;
+    Hotel = mkPlace (mkN "hotell" "hotelli" "hotelli" "hotelli" "hotellide" "hotelle") ssa ;
+    University = mkPlace (mkN "Ã¼li" (mkN "kool")) ssa ; -- different in Fin
+    School = mkPlace (mkN "kool") ssa ; -- different in Fin
 
     CitRestaurant cit = {
-      name = mkCN cit (mkN "ravintola") ; isExternal = False ; isPl = False
+      name = mkCN cit (mkN "restoran") ;
+      at = casePrep inessive ;
+      to = casePrep illative;
+      from = casePrep elative ;
+      isPl = False
       } ;
-    Parking = mkPlace (mkN "pysäköinti" (mkN "alue")) lla ;
-    Supermarket = mkPlace (mkN "supermarket") ssa ;
-    Pharmacy = mkPlace (mkN "apteekki") ssa ;
-    Center = mkPlace (mkN "keskusta") ssa ;
-    Cafeteria = mkPlace (mkN "kahvila") ssa ;
-    Disco = mkPlace (mkN "disko") ssa ;
-    Pub = mkPlace (mkN "pub") ssa ;
-    AmusementPark = mkPlace (mkN "huvi" (mkN "puisto")) ssa ;   
-    Zoo = mkPlace (mkN "eläin" (mkN "tarha")) ssa ;   
+
+    Parking = mkPlace (mkN "parkla") ssa ; -- different in Fin
+    Supermarket = mkPlace (mkN "super" (mkN "market")) ssa ;
+    Pharmacy = mkPlace (mkN "apteek") ssa ;
+    Center = mkPlace (mkN "keskus") ssa ;
+    Cafeteria = mkPlace (mkN "kohvik") ssa ;
+    Disco = mkPlace (mkN "diskoteek") ssa ;
+    Pub = mkPlace (mkN "kÃµrts") ssa ;
+    AmusementPark = mkPlace (mkN "lÃµbustus" (mkN "park")) ssa ;
+    Zoo = mkPlace (mkN "looma" (mkN "aed" "aia" "aeda" "aeda" "aedade" "aedu")) ssa ;
 
 -- currencies
 
-    DanishCrown = mkCN (mkN "Tanskan kruunu") | mkCN (mkN "kruunu") ;
-    Dollar = mkCN (mkN "dollari") ;
+    DanishCrown = mkCN (kroon2 "taani") ;
+    Dollar = mkCN (mkN "dollar") ;
     Euro = mkCN (mkN "euro") ;
-    Lei = mkCN (mkN "lei") ;
-    Leva = mkCN (mkN "leva") ;
-    NorwegianCrown = mkCN (mkN "Norjan kruunu") | mkCN (mkN "kruunu") ;
-    Pound = mkCN (mkN "punta") ;
-    Rouble = mkCN (mkN "rupla") ;
-    SwedishCrown = mkCN (mkN "Ruotsin kruunu") | mkCN (mkN "kruunu") ;
-    Zloty = mkCN (mkN "zloty" "zlotyja") ;
+    Lei = mkCN (mkN "leu") ;
+    Leva = mkCN (mkN "leev") ;
+    NorwegianCrown = mkCN (kroon2 "norra") ;
+    Pound = mkCN (mkN "nael" "naela") ;
+    Rouble = mkCN (mkN "rubla") ;
+    Rupee = mkCN (mkN "ruupia") ;
+    SwedishCrown = mkCN (kroon2 "rootsi") ;
+    Zloty = mkCN (mkN "zlott") ;
+    Yuan = mkCN (mkN "jÃ¼Ã¤Ã¤n") ;
 
--- nationalities
+-- Citizenship
+    Belgian = mkA "belgia" ;
+    Indian = mkA "india" ;
 
-    Belgian = mkA "belgialainen" ;
-    Belgium = {np = mkNP (mkPN "Belgia") ; isExternal = False} ;
-    Bulgarian = mkNat (mkPN "bulgaria") (mkPN "Bulgaria") (mkA "bulgarialainen") ;
-    Catalan = mkNat (mkPN "katalaani") (mkPN "Katalonia") (mkA "katalonialainen") ;
-    Danish = mkNat (mkPN "tanska") (mkPN "Tanska") (mkA "tanskalainen") ;
-    Dutch = mkNat (mkPN "hollanti") (mkPN "Hollanti") (mkA "hollantilainen") ;
-    English = mkNat (mkPN "englanti") (mkPN "Englanti") (mkA "englantilainen") ;
-    Finnish = 
-      mkNat (mkPN (mkN "suomi" "suomia")) (mkPN (mkN "Suomi" "Suomia")) 
-            (mkA "suomalainen") ;
-    Flemish = mkNP (mkPN "flaami") ;
-    French = mkNat (mkPN "ranska") (mkPN "Ranska") (mkA "ranskalainen") ; 
-    German = mkNat (mkPN "saksa") (mkPN "Saksa") (mkA "saksalainen") ;
-    Italian = mkNat (mkPN "italia") (mkPN "Italia") (mkA "italialainen") ;
-    Norwegian = mkNat (mkPN "norja") (mkPN "Norja") (mkA "norjalainen") ;
-    Polish = mkNat (mkPN "puola") (mkPN "Puola") (mkA "puolalainen") ;
-    Romanian = mkNat (mkPN "romania") (mkPN "Romania") (mkA "romanialainen") ;
-    Russian = mkNatExternal (mkPN "venäjä") (mkPN "Venäjä") (mkA "venäläinen") ;
-    Spanish = mkNat (mkPN "espanja") (mkPN "Espanja") (mkA "espanjalainen") ;
-    Swedish = mkNat (mkPN "ruotsi") (mkPN "Ruotsi") (mkA "ruotsalainen") ;
+-- Country
+    Belgium = mkNP (mkPN "Belgia") ;
+    India = mkNP (mkPN "India") ;
+
+-- Nationality
+    Bulgarian = mkNat "bulgaaria" (mkPN "Bulgaaria") ;
+    Catalan = mkNat "katalaani" (mkPN "Kataloonia") ;
+    Chinese = mkNat "hiina" (mkPN "Hiina") ;
+    Danish = mkNat "taani" (mkPN "Taani") ;
+    Dutch = mkNat "hollandi" (mkPN "Holland") ;
+    English = mkNat "inglise" (mkPN "Inglismaa") ;
+    Finnish = mkNat "soome" (mkPN "Soome") ;
+    Flemish = mkNP (mkPN "flaami keel") ; -- Language
+    Hindi = mkNP (mkPN "hindi keel") ; -- Language
+    French = mkNat "prantsuse" (mkPN "Prantsusmaa") ;
+    German = mkNat "saksa" (mkPN "Saksamaa") ;
+    Italian = mkNat "itaalia" (mkPN "Itaalia") ;
+    Norwegian = mkNat "norra" (mkPN "Norra") ;
+    Polish = mkNat "poola" (mkPN "Poola") ;
+    Romanian = mkNat "rumeenia" (mkPN "Rumeenia") ;
+    Russian = mkNat "vene" (mkPN "Venemaa") ;
+    Spanish = mkNat "hispaania" (mkPN "Hispaania") ;
+    Swedish = mkNat "rootsi" (mkPN "Rootsi") ;
 
     ---- it would be nice to have a capitalization Predef function
 
--- means of transportation 
+-- means of transportation
 
-    Bike = mkTransport L.bike_N ; 
-    Bus = mkTransport (mkN "bussi") ;
+    Bike = mkTransport L.bike_N ;
+    Bus = mkTransport (mkN "buss" "bussi" "bussi" "bussi" "busside" "busse") ;
     Car = mkTransport L.car_N ;
-    Ferry = mkTransport (mkN "lautta") ;
+    Ferry = mkTransport (mkN "praam") ;
     Plane = mkTransport L.airplane_N ;
-    Subway = mkTransport (mkN "metro") ;
-    Taxi = mkTransport (mkN "taksi") ;
+    Subway = mkTransport (mkN "metroo") ;
+    Taxi = mkTransport (mkN "takso") ;
     Train = mkTransport L.train_N ;
-    Tram = mkTransport (mkN "raitiovaunu") ;
+    Tram = mkTransport (mkN "tramm") ;
 
-    ByFoot = ParadigmsEst.mkAdv "jalkaisin" ;
+    ByFoot = ParadigmsEst.mkAdv "jalgsi" ;
 
 
 -- actions
@@ -135,156 +143,183 @@ concrete WordsEst of Words = SentencesEst **
     AHasAge p num = mkCl p.name (mkNP num L.year_N) ;
     AHasChildren p num = mkCl p.name have_V2 (mkNP num L.child_N) ;
     AHasName p name = mkCl (nameOf p) name ;
-    AHasRoom p = haveForPerson p.name (mkCN (mkN "huone")) ;
-    AHasTable p = haveForPerson p.name (mkCN (mkN "pöytä")) ;
-    AHungry p = E.AdvExistNP (SyntaxEst.mkAdv on_Prep p.name) (mkNP (mkN "nälkä")) ;
-    AIll p = mkCl p.name (mkA "sairas") ;
-    AKnow p = mkCl p.name (mkV "tietää") ;
+    AHasRoom p = haveForPerson p.name (mkCN (mkN "tuba")) ;
+    AHasTable p = haveForPerson p.name (mkCN (mkN "laud")) ;
+    AHungry p = E.AdvExistNP (SyntaxEst.mkAdv on_Prep p.name) (mkNP (mkN "nÃ¤lg")) ;
+    AIll p = mkCl p.name (mkA "haige") ;
+    --AKnow p = mkCl p.name (mkV "teadma") ;
+    AKnow p = mkCl p.name L.know_VS ;
     ALike p item = mkCl p.name L.like_V2 item ;
-    ALive p co = mkCl p.name (mkVP (mkVP (mkV "asua")) (SyntaxEst.mkAdv (casePrep (if_then_else Case co.isExternal adessive inessive)) co.np)) ;
-    ALove p q = mkCl p.name (mkV2 (mkV "rakastaa") partitive) q.name ;
-    AMarried p = mkCl p.name (ParadigmsEst.mkAdv "naimisissa") ;
+    ALive p co = mkCl p.name (mkVP (mkVP L.live_V) (SyntaxEst.mkAdv in_Prep co)) ;
+    ALove p q = mkCl p.name L.love_V2 q.name ;
+    AMarried p = mkCl p.name (ParadigmsEst.mkAdv "abielus") ;
     AReady p = mkCl p.name (ParadigmsEst.mkA "valmis") ;
-    AScared p = mkCl p.name (caseV partitive (mkV "pelottaa")) ;
-    ASpeak p lang = mkCl p.name  (mkV2 (mkV "puhua") partitive) lang ;
-    AThirsty p = E.AdvExistNP (SyntaxEst.mkAdv on_Prep p.name) (mkNP (mkN "jano")) ;
-    ATired p = mkCl p.name (caseV partitive (mkV "väsyttää")) ;
-    AUnderstand p = mkCl p.name (mkV "ymmärtää") ;
-    AWant p obj = mkCl p.name (mkV2 "haluta") obj ;
+    -- Eng: I am scared
+    -- Fin: Minua pelottaa (partitive)
+    -- Est: Mina kardan (nominative)
+    -- Est: Mul on hirm (nominative)
+    -- AScared p = mkCl p.name (caseV nominative (mkV "kartma")) ;
+    AScared p = E.AdvExistNP (SyntaxEst.mkAdv on_Prep p.name) (mkNP (mkN "hirm")) ;
+    -- Fin: puhua: Puhun hollantia (partitive)
+    -- Est: Mina rÃ¤Ã¤gin hollandi keelt (partitive)
+    ASpeak p lang = mkCl p.name L.speak_V2 lang ;
+    AThirsty p = E.AdvExistNP (SyntaxEst.mkAdv on_Prep p.name) (mkNP (mkN "janu")) ;
+    -- Eng: I am tired
+    -- Fin: Minua vÃ¤syttÃ¤Ã¤. (partitive)
+    -- Ger: Ich bin mÃ¼de.
+    -- Est: Mina olen vÃ¤sinud.
+    -- ATired p = mkCl p.name (caseV partitive (mkV "vÃ¤sitada")) ;
+    ATired p = mkCl p.name (ParadigmsEst.mkA "vÃ¤sinud") ;
+    -- TODO: better: aru saama / saan aru
+    -- AUnderstand p = mkCl p.name L.understand_V2 ;
+    AUnderstand p = mkCl p.name (mkV "mÃµistma") ;
+    AWant p obj = mkCl p.name (mkV2 "tahtma") obj ;
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
 
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
     QWhatAge p = mkQS (mkQCl (E.ICompAP (mkAP L.old_A)) p.name) ;
-    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "maksaa"))) ; 
-    ItCost item price = mkCl item (mkV2 (mkV "maksaa")) price ;
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "maksma"))) ;
+    ItCost item price = mkCl item (mkV2 (mkV "maksma")) price ;
 
     PropOpen p = mkCl p.name open_Adv ;
     PropClosed p = mkCl p.name closed_Adv ;
-    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ; 
-    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ; 
-    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ; 
-    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ; 
+    PropOpenDate p d = mkCl p.name (mkVP (mkVP open_Adv) d) ;
+    PropClosedDate p d = mkCl p.name (mkVP (mkVP closed_Adv) d) ;
+    PropOpenDay p d = mkCl p.name (mkVP (mkVP open_Adv) d.habitual) ;
+    PropClosedDay p d = mkCl p.name (mkVP (mkVP closed_Adv) d.habitual) ;
 
 
 -- Building phrases from strings is complicated: the solution is to use
 -- mkText : Text -> Text -> Text ;
 
-    PSeeYouDate d = mkText (lin Text (ss ("nähdään"))) (mkPhrase (mkUtt d)) ;
-    PSeeYouPlace p = mkText (lin Text (ss ("nähdään"))) (mkPhrase (mkUtt p.at)) ;
-    PSeeYouPlaceDate p d = 
-      mkText (lin Text (ss ("nähdään"))) 
+    PSeeYouDate d = mkText (lin Text (ss ("kohtumiseni"))) (mkPhrase (mkUtt d)) ;
+    PSeeYouPlace p = mkText (lin Text (ss ("kohtumiseni"))) (mkPhrase (mkUtt p.at)) ;
+    PSeeYouPlaceDate p d =
+      mkText (lin Text (ss ("kohtumiseni")))
         (mkText (mkPhrase (mkUtt p.at)) (mkPhrase (mkUtt d))) ;
 
 -- Relations are expressed as "my wife" or "my son's wife", as defined by $xOf$
 -- below. Languages without productive genitives must use an equivalent of
 -- "the wife of my son" for non-pronouns.
 
-    Wife = xOf sing (mkN "vaimo") ;
+    Wife = xOf sing (mkN "naine") ;
     Husband = xOf sing L.man_N ;
-    Son = xOf sing L.boy_N ;
-    Daughter = xOf sing (mkN "tytär") ;
+    Son = xOf sing (mkN "poeg" "poja" "poega" "poegadesse" "poegade" "poegi") ;
+    Daughter = xOf sing (mkN "tÃ¼tar" "tÃ¼tre" "tÃ¼tart" "tÃ¼tresse" "tÃ¼tarde" "tÃ¼treid") ;
     Children = xOf plur L.child_N ;
 
 -- week days
 
-    Monday = let d = "maanantai" in mkDay (mkPN d) (d + "sin") ;
-    Tuesday = let d = "tiistai" in mkDay (mkPN d) (d + "sin") ;
-    Wednesday = let d = "keskiviikko" in mkDay (mkPN d) (d + "isin") ;
-    Thursday = let d = "torstai" in mkDay (mkPN d) (d + "sin") ;
-    Friday = let d = "perjantai" in mkDay (mkPN d) (d + "sin") ;
-    Saturday = let d = "lauantai" in mkDay (mkPN d) (d + "sin") ;
-    Sunday = let d = "sunnuntai" in mkDay (mkPN d) (d + "sin") ;
+    Monday = mkDayPaev "esmas" ;
+    Tuesday = mkDayPaev "teisi" ;
+    Wednesday = mkDayPaev "kolma" ;
+    Thursday = mkDayPaev "nelja" ;
+    Friday = mkDay (mkPN (mkN "reede" "reede")) ("reedeti") ;
+    Saturday = mkDayPaev "lau" ;
+    Sunday = mkDayPaev "pÃ¼ha" ;
 
-    Tomorrow = ParadigmsEst.mkAdv "huomenna" ;
+    Tomorrow = ParadigmsEst.mkAdv "homme" ;
 
 -- transports
 
     HowFar place = mkQS (mkQCl far_IAdv place.name) ;
-    HowFarFrom x y = 
+    HowFarFrom x y =
       mkQS (mkQCl far_IAdv (mkCl y.name x.from)) ;
-    HowFarFromBy x y t = 
-      mkQS (mkQCl far_IAdv (mkCl y.name 
+    HowFarFromBy x y t =
+      mkQS (mkQCl far_IAdv (mkCl y.name
         (mkVP (mkVP x.from) t))) ;
-    HowFarBy place t = 
+    HowFarBy place t =
       mkQS (mkQCl far_IAdv (mkCl place.name t)) ;
-      -- mkQS (mkQCl (mkIAdv far_IAdv t) y.name) ; 
+      -- mkQS (mkQCl (mkIAdv far_IAdv t) y.name) ;
 
-    WhichTranspPlace trans place = 
+    WhichTranspPlace trans place =
       mkQS (mkQCl (mkIP which_IDet trans.name) (mkVP (mkVP L.go_V) place.to)) ;
 
     IsTranspPlace trans place =
-      mkQS (mkQCl (mkCl (mkVP (mkVP (mkVP (mkV "päästä")) place.to) trans.by))) ;
-      -- pääseekö keskustaan bussilla
-      -- mkQS (mkQCl (E.AdvPredNP place.to L.go_V (E.PartCN (trans.name)))) ; 
-      -- meneekö keskustaan bussia
+      mkQS (mkQCl (mkCl (mkVP (mkVP (mkVP (mkV "saama")) trans.by) place.to))) ;
+      -- pÃ¤Ã¤seekÃ¶ keskustaan bussilla
+      -- mkQS (mkQCl (E.AdvPredNP place.to L.go_V (E.PartCN (trans.name)))) ;
+      -- meneekÃ¶ keskustaan bussia
 
 -- modifiers of places
 
     TheBest = mkSuperl L.good_A ;
-    TheClosest = mkSuperl (mkA (mkN "läheinen") "lähempi" "lähin") ;
-    TheCheapest = mkSuperl (mkA (mkN "halpa") "halvempi" "halvin") ;
-    TheMostExpensive = mkSuperl (mkA (mkN "kallis") "kalliimpi" "kallein") ;
-    TheMostPopular = mkSuperl (mkA "suosittu") ;
-    TheWorst = mkSuperl (mkA "huono") ;
+    TheClosest = mkSuperl (mkA (mkN "lÃ¤hedal asuv") "lÃ¤hem" "lÃ¤him") ;
+    TheCheapest = mkSuperl (mkA "odav") ;
+    TheMostExpensive = mkSuperl (mkA (mkN "kallis" "kalli" "kallist" "kallisse" "kallite" "kalleid")) ;
+    TheMostPopular = mkSuperl (mkA "populaarne") ;
+    TheWorst = mkSuperl (L.bad_A) ;
 
     SuperlPlace sup p = placeNP sup p ;
 
   oper
-    mkNat : PN -> PN -> A -> 
-      {lang : NP ; prop : A ; country : {np : NP ; isExternal : Bool}} = \nat,co,pro ->
-        {lang = mkNP nat ; 
-         prop = pro ;
-         country = {np = mkNP co ; isExternal = False}
-        } ;
+    kroon : N = mkN "kroon" "krooni" "krooni" "krooni" "kroonide" "kroone" ;
+    kroon2 : Str -> N = \taani -> mkN (taani + " ") kroon ;
 
-    mkNatExternal : PN -> PN -> A -> 
-      {lang : NP ; prop : A ; country : {np : NP ; isExternal : Bool}} = \nat,co,pro ->
-        {lang = mkNP nat ; 
-         prop = pro ;
-         country = {np = mkNP co ; isExternal = True}
+    mkNat : Str -> PN ->
+      {lang : NP ; prop : A ; country : NP} = \pro,co ->
+        {lang = mkNP (mkCN (mkN pro (mkN "keel" "keele" "keelt" "keelde" "keelte" "keeli")));
+         prop = mkA (mkN pro) R.Invariable ;
+         country = mkNP co
         } ;
 
     ---- using overloaded paradigms slows down compilation dramatically
+    -- Eng: See you on Monday!
+    -- Est: Kohtumiseni esmaspÃ¤eval! (adessive)
+    -- Fin: NÃ¤hdÃ¤Ã¤n maanantaina! (essive)
+    -- TODO: use StructuralEst.gf: on_Prep = casePrep adessive
     mkDay : PN -> Str -> {name : NP ; point : Adv ; habitual : Adv} = \d,s ->
       let day = mkNP d in
-      {name = day ; 
-       point = SyntaxEst.mkAdv (casePrep essive) day ; 
+      {name = day ;
+       point = SyntaxEst.mkAdv (casePrep adessive) day ;
        habitual = ParadigmsEst.mkAdv s
       } ;
 
-    mkPlace : N -> Bool -> {name : CN ; isExternal : Bool ; isPl : Bool} = \p,e -> {
+    mkDayPaev : Str -> {name : NP ; point : Adv ; habitual : Adv} = \s ->
+        mkDay (mkPN (mkN (s + "pÃ¤ev") (s + "pÃ¤eva"))) (s + "pÃ¤eviti") ;
+
+    mkPlace : N -> Bool -> {name : CN ; at : Prep ; to : Prep; from : Prep ; isPl : Bool} = \p,e -> {
       name = mkCN p ;
-      isExternal = e ;
-      isPl = False   
+      at = casePrep (if_then_else Case e adessive inessive) ;  -- True: external
+      to = casePrep (if_then_else Case e allative illative) ;
+      from = casePrep (if_then_else Case e ablative elative) ;
+      isPl = False
    } ;
+
     ssa = False ;
     lla = True ;
 
-    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> 
+    -- Ger-grammar uses this xOf (mis on nimi minu naise)
+    -- xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p -> mkRelative n (mkCN x) p ;
+
+    -- (mis on minu naise nimi)
+    xOf : GNumber -> N -> NPPerson -> NPPerson = \n,x,p ->
       relativePerson n (mkCN x) (\a,b,c -> mkNP (E.GenNP b) a c) p ;
 
     nameOf : NPPerson -> NP = \p -> (xOf sing L.name_N p).name ;
 
-  oper 
+  oper
     -- do you have a table for five persons
     haveForPerson : NP -> CN -> Card -> Cl = \p,a,n ->
-      mkCl p have_V2 
+      mkCl p have_V2
 ----      (mkNP (E.PartCN a)  ---- partitive works in questions )
         (mkNP (mkNP a_Det a)
-           (SyntaxEst.mkAdv for_Prep (mkNP n (mkN "henki" "henkiä")))) ;
+           (SyntaxEst.mkAdv for_Prep (mkNP n L.person_N))) ;
 ----       (SyntaxEst.mkAdv for_Prep (mkNP (mkDet n)))) ; -- 60s faster compile 25/10/2010
 
-    open_Adv = ParadigmsEst.mkAdv "avoinna" ;
-    closed_Adv = ParadigmsEst.mkAdv "kiinni" ;
+    open_Adv = ParadigmsEst.mkAdv "avatud" ;
+    closed_Adv = ParadigmsEst.mkAdv "suletud" ;
 
+    -- Fin: casePrep adessive
+    -- Est: casePrep comitative
     mkTransport : N -> {name : CN ; by : Adv} = \n -> {
-      name = mkCN n ; 
-      by = SyntaxEst.mkAdv (casePrep adessive) (mkNP n)
+      name = mkCN n ;
+      by = SyntaxEst.mkAdv (casePrep comitative) (mkNP n)
       } ;
 
-    mkSuperl : A -> Det = \a -> SyntaxEst.mkDet the_Quant (mkOrd a) ;
+    mkSuperl : A -> Det = \a -> mkDet the_Quant (mkOrd a) ;
 
     far_IAdv = E.IAdvAdv L.far_Adv ;
 
@@ -293,47 +328,45 @@ concrete WordsEst of Words = SentencesEst **
 --------------------------------------------------
 
   lin
-    Thai = mkNat (mkPN "thai") (mkPN "Thaimaa") (mkA "thaimaalainen") ;
-    Baht = mkCN (mkN "baht" "bahteja") ;
+    Thai = mkNat ("tai") (mkPN "Tai") ;
+    Baht = mkCN (mkN "baht") ;
 
-    Rice = mkCN (mkN "riisi") ;
-    Pork = mkCN (mkN "sika") ;
-    Beef = mkCN (mkN "nauta") ;
+    Rice = mkCN (mkN "riis") ;
+    Pork = mkCN (mkN "siga") ;
+    Beef = mkCN (mkN "veis") ;
     Egg = mkCN L.egg_N ;
-    Noodles = mkCN (mkN "nuudeli" "nuudeleita") ;
-    Shrimps = mkCN (mkN "katka" (mkN "rapu")) ;
-    Chili = mkCN (mkN "chili") ;
-    Garlic = mkCN (mkN "valko" (mkN "sipuli")) ;
-    Durian = mkCN (mkN "durian" "durianeja") ;
-    Mango = mkCN (mkN "mango" "mangoja") ;
-    Pineapple = mkCN (mkN "ananas" "ananaksia") ;
+    Noodles = mkCN (mkN "nuudel") ;
+    Shrimps = mkCN (mkN "krevet") ;
+    Chili = mkCN (mkN "tÅ¡illi") ;
+    Garlic = mkCN (mkN "kÃ¼Ã¼s" (mkN "lauk")) ;
+    Durian = mkCN (mkN "duurian") ;
+    Mango = mkCN (mkN "mango") ;
+    Pineapple = mkCN (mkN "ananass") ;
     Coke = mkCN (mkN "coca-cola") ;
-    IceCream = mkCN (mkN "jäätelö" "jäätelöitä") ;
-    Salad = mkCN (mkN "salaatti") ;
-    OrangeJuice = mkCN (mkN "appelsiini" (mkN "mehu")) ;
-    Lemonade = mkCN (mkN "limsa") ;
+    IceCream = mkCN (mkN "jÃ¤Ã¤tis") ;
+    Salad = mkCN (mkN "salat") ;
+    OrangeJuice = mkCN (mkN "apelsiini" (mkN "mahl")) ;
+    Lemonade = mkCN (mkN "limonaad") ;
 
-    Beach = mkPlace (mkN "uima" (mkN "ranta")) lla ;
+    Beach = mkPlace (mkN "supel" (mkN "rand")) ssa ;
 
     ItsRaining = mkCl (mkVP L.rain_V0) ;
     ItsCold = mkCl (mkVP L.cold_A) ;
     ItsWarm = mkCl (mkVP L.warm_A) ;
-    ItsWindy = mkCl (mkVP (mkV "tuulla")) ;
-    SunShine = mkCl (mkNP the_Det L.sun_N) (mkVP (mkV "paistaa")) ;
+    ItsWindy = mkCl (mkNP the_Det L.wind_N) (mkVP (mkV "puhuma")) ;
+    SunShine = mkCl (mkNP the_Det L.sun_N) (mkVP (mkV "paistma")) ;
 
-    Smoke = mkVP (mkV "tupakoida") ;
+    Smoke = mkVP (mkV "suitsetama") ;
 
-    ADoctor = mkProfession (mkN "lääkäri" "lääkäreitä") ;
-    AProfessor = mkProfession (mkN "professori" "professoreita") ;
-    ALawyer = mkProfession (mkN "laki" L.man_N) ;
-    AEngineer =  mkProfession (mkN "insinööri" "insinöörejä") ;
-    ATeacher = mkProfession (mkN "opettaja" "opettajia") ;
-    ACook = mkProfession (mkN "kokki") ;
-    AStudent = mkProfession (mkN "opiskelija" "opiskelijoita") ;
-    ABusinessman = mkProfession (mkN "liike" L.man_N) ;
+    ADoctor = mkProfession (mkN "arst") ;
+    AProfessor = mkProfession (mkN "professor") ;
+    ALawyer = mkProfession (mkN "jurist") ;
+    AEngineer =  mkProfession (mkN "insener") ;
+    ATeacher = mkProfession (mkN "Ãµpetaja") ;
+    ACook = mkProfession (mkN "kokk") ;
+    AStudent = mkProfession (mkN "Ãµpilane") ;
+    ABusinessman = mkProfession (mkN "Ã¤ri" L.man_N) ;
 
   oper
     mkProfession : N -> NPPerson -> Cl = \n,p -> mkCl p.name n ;
--}
-
 }
