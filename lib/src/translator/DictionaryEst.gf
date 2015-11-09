@@ -3,7 +3,7 @@ concrete DictionaryEst of Dictionary = CatEst ** open ParadigmsEst,
   (S = StructuralEst),
   (L = LexiconEst),
   (R = ResEst),
-  MorphoEst, SyntaxEst, (E = ExtraEst), (X = ConstructX), Prelude in {
+  MorphoEst, SyntaxEst, (M=MakeStructuralEst), (E = ExtraEst), (X = ConstructX), Prelude in {
 
 flags coding=utf8 ;
 ---------------------
@@ -39,10 +39,10 @@ flags coding=utf8 ;
   during_Prep = postGenPrep "ajal" ;
   either7or_DConj = sd2 "kas" "või" ** {n = Sg} ;
   everybody_NP = makeNP (mkN "igaüks") Sg ;
-----  every_Det = mkDet Sg (mkN "iga") ;
+  every_Det = MorphoEst.mkDet Sg (mkN "iga") ;
   everything_NP = makeNP ((mkN "kõik") ** {lock_N = <>}) Sg ;
   everywhere_Adv = ss "kõikjal" ;
-----  few_Det = mkDet Sg (mkN "mõni") ;
+  few_Det = MorphoEst.mkDet Sg (mkN "mõni") ;
 ---  first_Ord = {s = \\n,c => (mkN "ensimmäinen").s ! NCase n c} ;
   for_Prep = casePrep allative ;
   from_Prep = casePrep elative ;
@@ -67,10 +67,10 @@ flags coding=utf8 ;
     isPron = False
     } ;
   less_CAdv = X.mkCAdv "vähem" "kui" ;
-----  many_Det = mkDet Sg (mkN "mitu") ;
+  many_Det = MorphoEst.mkDet Sg (mkN "mitu") ;
   more_CAdv = X.mkCAdv "rohkem" "kui" ;
   most_Predet = {s = \\n,c => (nForms2N (dSuurin "MOST")).s ! NCase n (npform2case n c)} ;
-----  much_Det = mkDet Sg {s = \\_ => "palju"} ;
+  much_Det = MorphoEst.mkDet Sg {s = \\_ => "palju"} ;
   must_VV = mkVVf (mkV "pidama" "pidada" "peab" "peetakse" "pidage" "pidi" "pidanud" "peetud") infMa ;
   no_Utt = ss "ei" ;
   on_Prep = casePrep adessive ;
@@ -304,7 +304,7 @@ lin
   -- Name of the language in that language, s/suomi/eesti/ :--P
   lin language_title_Utt = ss "eesti" ;
 
-
+  lin of_Prep = S.possess_Prep ;
 
 ----------------------
 -- Conjunctions 

@@ -49,12 +49,13 @@ lin
                 h = v.h ; p = v.p
                }
          ) ;
+-}
 
-  CompoundN noun cn = {
-    s = \\nf => noun.s ! 10 ++ BIND ++ cn.s ! nf ;
-    h = cn.h
+  CompoundN noun cn = lin N {
+    s = \\nf => noun.s ! NCase Sg Gen ++ BIND ++ cn.s ! nf ---- AR genitive best?
     } ;
 
+{-
   CompoundAP  noun adj = {
     s = \\_ => (snoun2nounSep {s = \\f => noun.s ! 10 ++ BIND ++ adj.s ! Posit ! sAN f ; h = adj.h}).s
     } ;
