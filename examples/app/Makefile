@@ -1,4 +1,4 @@
-all: Phrasebook App12.pgf
+all: Phrasebook App15.pgf
 
 PROBSFILE=./app.probs
 GFODIR=./gfos
@@ -15,6 +15,7 @@ APP11=AppEng.pgf AppBul.pgf AppChi.pgf AppGer.pgf AppSwe.pgf AppHin.pgf AppFin.p
 APP12=$(APP11) AppCat.pgf
 APP13=$(APP12) AppJpn.pgf
 APP14=$(APP13) AppTha.pgf
+APP15=$(APP14) AppEst.pgf
 
 # With dependencies:
 App11.pgf: $(APP11)
@@ -25,6 +26,8 @@ App13.pgf: $(APP13)
 	$(GFMKT) -name=App13 $(APP13) +RTS -K200M
 App14.pgf: $(APP14)
 	$(GFMKT) -name=App14 $(APP14) +RTS -K200M
+App15.pgf: $(APP15)
+	$(GFMKT) -name=App15 $(APP15) +RTS -K200M
 
 # Without dependencies:
 App11:
@@ -35,6 +38,8 @@ App13:
 	$(GFMKT) -name=App13 $(APP13) +RTS -K200M
 App14:
 	$(GFMKT) -name=App14 $(APP14) +RTS -K200M
+App15:
+	$(GFMKT) -name=App15 $(APP15) +RTS -K200M
 
 # App grammars for individual languages
 AppEng.pgf:: ; $(GFMKT) -name=AppEng AppEng.gf
@@ -42,6 +47,7 @@ AppBul.pgf:: ; $(GFMKT) -name=AppBul AppBul.gf
 AppCat.pgf:: ; $(GFMKT) -name=AppCat AppCat.gf +RTS -K100M
 AppChi.pgf:: ; $(GFMKT) -name=AppChi AppChi.gf +RTS -K100M
 AppDut.pgf:: ; $(GFMKT) -name=AppDut AppDut.gf +RTS -K64M
+AppEst.pgf:: ; $(GFMKT) -name=AppEst AppEst.gf +RTS -K64M
 AppFin.pgf:: ; $(GFMKT) -name=AppFin AppFin.gf +RTS -K64M
 AppGer.pgf:: ; $(GFMKT) -name=AppGer AppGer.gf +RTS -K64M
 AppHin.pgf:: ; $(GFMKT) -name=AppHin AppHin.gf
