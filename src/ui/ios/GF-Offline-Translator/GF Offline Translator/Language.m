@@ -41,6 +41,7 @@
              [[Language alloc] initWithName:@"Catalan"      abbreviation:@"Cat"     bcp:@"ca-ES"],
              [[Language alloc] initWithName:@"Dutch"        abbreviation:@"Dut"     bcp:@"nl-NL"],
              [[Language alloc] initWithName:@"English"      abbreviation:@"Eng"     bcp:@"en-GB"],
+	     [[Language alloc] initWithName:@"Estonian"     abbreviation:@"Est"     bcp:@"es-EE"],
              [[Language alloc] initWithName:@"Finnish"      abbreviation:@"Fin"     bcp:@"fi-FI"],
              [[Language alloc] initWithName:@"French"       abbreviation:@"Fre"     bcp:@"fr-FR"],
              [[Language alloc] initWithName:@"German"       abbreviation:@"Ger"     bcp:@"de-DE"],
