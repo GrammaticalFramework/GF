@@ -1,0 +1,10 @@
+PODS:
+  - SlackTextViewController (1.5.2)
+
+DEPENDENCIES:
+  - SlackTextViewController
+
+SPEC CHECKSUMS:
+  SlackTextViewController: ab240cda4c7fe1f70f6c6cf64578f3fea495ce99
+
+COCOAPODS: 0.36.1
