@@ -113,7 +113,7 @@
 
     if ([translation.toLanguage.bcp isEqualToString:@"th-TH"] ||
         [translation.toLanguage.bcp isEqualToString:@"ja-JP"] ||
-        [translation.toLanguage.bcp isEqualToString:@"ca-ES"]) {
+        [translation.toLanguage.bcp isEqualToString:@"zh-CN"]) {
         
         NSMutableArray *trimmedArray = @[].mutableCopy;
         
