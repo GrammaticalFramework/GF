@@ -1,4 +1,4 @@
---# -path=.:../chunk
+--# -path=.:../chunk:../estonian
 
 concrete TranslateEst of Translate = 
   TenseX,
