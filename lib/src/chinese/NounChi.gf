@@ -10,7 +10,11 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
     UsePN pn = pn ;
     UsePron p = p ;
 
-    DetNP det = {s = det.s ++ ge_s} ; ----
+    DetNP det = {s = case det.detType of {
+                   DTFull Pl => det.s ++ xie_s ;
+                   _         => det.s ++ ge_s
+                   } ;
+                } ; ----
 
     PredetNP pred np = mkNP (pred.s ++ np.s) ; ---- possessive_s ++ np.s) ;
 

@@ -608,11 +608,11 @@ that
 
 mkUtt these_NP
 these
-这个 BAD 这些
+这些 GOOD
 
 mkUtt those_NP
 those
-那个 BAD 那些
+那些 GOOD
 
 mkUtt (mkNP (mkDet this_Quant (mkCard (mkNumeral n5_Unit))))
 these five
@@ -866,7 +866,7 @@ mkUtt (mkCN (mkCN reason_N) (mkVP sleep_V))
 reason to sleep
 睡道理 BAD 睡的理由
 
-mkUtt (mkCN (mkCN reason_N) (mkVP sleep_V))
+mkUtt (mkCN (mkCN reason_N) (mkVP sleep_V)) !DUPLICATE
 reason to sleep
 睡道理 BAD 睡的理由
 
