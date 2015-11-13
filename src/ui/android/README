@@ -30,6 +30,9 @@ Build JNI code:
 $ cd jni
 $ $ANDROID_NDK_LOCATION/ndk-build
 
+Build the semantic database code:
+
+$ runghc glosses.hs
 
 Build APK:
 
