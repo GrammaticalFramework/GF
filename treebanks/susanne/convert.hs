@@ -5,92 +5,63 @@ import Data.Char(toLower)
 import Control.Monad
 import qualified Data.Map as Map
 
-import PGF (readPGF, readLanguage, buildMorpho, lookupMorpho, mkCId, functionType, unType)
+import PGF2
 import SusanneFormat
 import Parser
 import Idents
 
-Just eng = readLanguage "DictEng"
-
 main = do
-  gr <- readPGF "DictEngAbs.pgf"
-  let morpho = buildMorpho gr eng
+  gr <- readPGF "ParseEngAbs.pgf"
+  let Just eng = Map.lookup "ParseEng" (languages gr)
   fs <- getDirectoryContents "data"
   txts <- (mapM (\f -> readFile ("data" </> f)) . filter ((/= ".") . take 1)) (sort fs)
-  --let ts' = readTreebank (lines (concat txts))
-  --writeFile "text" (unlines (map show ts'))
-  let (ts',rs') = combineRes (convert gr morpho) (readTreebank (lines (concat txts)))
-  let rm = Map.fromListWith (++) rs'
-  writeFile "susanne.gft" (unlines (map show ts'))
-  writeFile "rules" (unlines (concat [unwords ("-":cat:"->":cats) : map (\t -> "     "++show t) rs'' | (cat :-> cats,rs'') <- Map.toList rm]))
+  let ts = (map (convert gr eng) . concatMap filterTree) (readTreebank (lines (concat txts)))
+  writeFile "susanne.gft" (unlines (map show ts))
 
-data Rule = Tag :-> [Tag]
-            deriving (Eq,Ord)
-
-convert pgf morpho w@(Word _ tag _ lemma)
-  | elem tag ["YB","YBL","YBR","YF","YIL","YIR","YTL","YTR", "YO"] = ([],[])
-{-  | tag == "NN1c" = convertLemma pgf morpho (mkCId "N") "s Sg Nom" w
-  | tag == "NN1n" = convertLemma pgf morpho (mkCId "N") "s Sg Nom" w
-  | tag == "NN2"  = convertLemma pgf morpho (mkCId "N") "s Pl Nom" w
-  | tag == "JJ"   = convertLemma pgf morpho (mkCId "A") "s (AAdj Posit Nom)" w
-  | tag == "JB"   = convertLemma pgf morpho (mkCId "A") "s (AAdj Posit Nom)" w
-  | tag == "JBo"  = convertLemma pgf morpho (mkCId "A") "s (AAdj Posit Nom)" w
-  | tag == "AT"   = convertLemma pgf morpho (mkCId "Quant") "s False Sg" w
-  | tag == "VVDi" = convertLemma pgf morpho (mkCId "V") "s VPast" w
-  | tag == "VVDt" = convertLemma pgf morpho (mkCId "V2") "s VPast" w
-  | tag == "VVDv" = convertLemma pgf morpho (mkCId "V") "s VPast" w
-  | tag == "VVZi" = convertLemma pgf morpho (mkCId "V") "s VPres" w
-  | tag == "VVZt" = convertLemma pgf morpho (mkCId "V2") "s VPres" w
-  | tag == "VVZv" = convertLemma pgf morpho (mkCId "V") "s VPres" w
-  | tag == "PPHS2"= convertLemma pgf morpho (mkCId "Pron") "s (NCase Nom)" w
-  | tag == "PPHO2"= convertLemma pgf morpho (mkCId "Pron") "s NPAcc" w
-  | tag == "RR"   = convertLemma pgf morpho (mkCId "Adv") "s" w
-  | tag == "II"   = convertLemma pgf morpho (mkCId "Prep") "s" w
-  | tag == "IO"   = convertLemma pgf morpho (mkCId "Prep") "s" w-}
-  | otherwise                                                 = ([w],[])
-convert pgf morpho t@(Phrase tag mods fn idx ts)
-  | tag == "O" = (ts',rs')
-  | tag == "Q" = (ts',rs')
-  | tag == "S" = case runP pS pgf morpho ts' of
-                   Just ([],x) -> ([x], rs')
-                   _           -> ([Phrase tag mods fn idx ts'], (r,[t]) : rs')
-  | otherwise  = ([Phrase tag mods fn idx ts'], (r,[t]) : rs')
+filterTree w@(Word _ tag _ lemma)
+  | elem tag ["YB","YBL","YBR","YF","YIL","YIR","YTL","YTR", "YO"] = []
+  | otherwise                                                      = [w]
+filterTree (Phrase tag mods fn idx ts)
+  | tag == "O" = ts'
+  | tag == "Q" = ts'
+  | otherwise  = [Phrase tag mods fn idx ts']
   where
-    (ts',rs') = combineRes (convert pgf morpho) ts
-    r         = tag :-> map getTag ts
+    ts' = concatMap filterTree ts
 
-    isExtra (Word _ "YIL" _ _) = True
-    isExtra (Word _ "YIR" _ _) = True
-    isExtra (Word _ "YTL" _ _) = True
-    isExtra (Word _ "YTR" _ _) = True
-    isExtra _                  = False
-
-    getTag (Phrase tag mods fn idx ts) = tag++if null fn then "" else ":"++fn
-    getTag (Word _ tag _ _)            = tag
-
-convertLemma pgf morpho cat an0 w@(Word _ tag form _) =
-  case [f | (f,an) <- lookupMorpho morpho (map toLower form), hasCat pgf f cat, an == an0] of
-    [f] -> ([App f []], [])
-    _   -> ([w],[])
+convert pgf eng t@(Phrase tag mods fn idx ts)
+  | tag == "S" = case runP pS pgf eng ts of
+                   Just ([],x) -> x
+                   _           -> Phrase tag mods fn idx ts'
+  | tag == "N" = case runP pNP pgf eng ts of
+                   Just ([],x) -> x
+                   _           -> Phrase tag mods fn idx ts'
+  | tag == "V" = case runP (pV "V") pgf eng [t] of
+                   Just ([],(_,_,_,_,x)) -> x
+                   _                     -> Phrase tag mods fn idx ts'
+  | tag == "P" = case runP pPP pgf eng ts of
+                   Just ([],x) -> x
+                   _           -> Phrase tag mods fn idx ts'
+  | tag == "Po"= case runP pPP pgf eng ts of
+                   Just ([],x) -> x
+                   _           -> Phrase tag mods fn idx ts'
+  | otherwise  = Phrase tag mods fn idx ts'
   where
-    hasCat pgf f cat =
-      case functionType pgf f of
-        Just ty -> case unType ty of
-                     (_,cat1,_) -> cat1 == cat
-        Nothing -> False
-
-combineRes f ts = (ts',rs')
-  where
-    (x,y) = unzip (map f ts)
-    ts' = concat x
-    rs' = concat y
+    ts' = map (convert pgf eng) ts
+convert pgf eng t@(Word _ tag _ lemma)
+  | take 2 tag == "NN" = case runP pN pgf eng [t] of
+                           Just ([],(_,x)) -> x
+                           _               -> t
+  | take 1 tag == "J"  = case runP pAP pgf eng [t] of
+                           Just ([],x) -> x
+                           _           -> t
+  | otherwise          = t
 
 pS =
   do mplus pConj (return ())
      advs <- many pAdS
      np <- pSubject
      (t,p,vp) <- pVP
-     return (foldr ($) (cidUseCl (cidTTAnt t p) (cidPredVP np vp)) advs)
+     return (foldr ($) (cidUseCl t p (cidPredVP np vp)) advs)
   `mplus`
   do mplus pConj (return ())
      (t,p,vp) <- pVP
@@ -98,44 +69,56 @@ pS =
   `mplus`
   do mplus pConj (return ())
      advs <- many pAdS
-     t1 <- match "EX"
+     t1 <- match convert "EX"
      (t,p,vp) <- pVP
-     return (foldr ($) (cidUseCl (cidTTAnt t p) (cidExistNP t1 vp)) advs)
+     return (foldr ($) (cidUseCl t p (cidExistNP t1 vp)) advs)
 
 pSubject =
-  do insideOpt "N:s" pNP
+  do insideOpt convert "N:s" pNP
   `mplus`
-  do insideOpt "N:S" pNP
+  do insideOpt convert "N:S" pNP
   `mplus`
-  do match "M:s"
+  do match convert "M:s"
   `mplus`
-  do match "M:S"
+  do match convert "M:S"
   `mplus`
-  do match "D:s"
+  do insideOpt convert "Ds:s" $ do
+       det <- pDet
+       return (cidDetNP (det cidNumSg))
   `mplus`
-  do match "D:S"
+  do insideOpt convert "Dp:s" $ do
+       det <- pDet
+       return (cidDetNP (det cidNumPl))
+  `mplus`
+  do insideOpt convert "Ds:S" $ do
+       det <- pDet
+       return (cidDetNP (det cidNumSg))
+  `mplus`
+  do insideOpt convert "Dp:S" $ do
+       det <- pDet
+       return (cidDetNP (det cidNumPl))
 
 pConj =
-  do match "CC"
+  do match convert "CC"
      return ()
   `mplus`
-  do match "CCB"
+  do match convert "CCB"
      return ()
 
 pAdS =
-  do adv <- pAdv
-     match "YC"
+  do adv <- pVPMods
+     match convert "YC"
      return (\t -> cidExtAdvS adv t)
   `mplus`
-  do adv <- pAdv
+  do adv <- pVPMods
      return (\t -> cidAdvS adv t)
 
 pVP =
   do adVs     <- many pAdV
-     (t,p,vs) <- pV "VS"
-     advs     <- many pAdv
-     s        <- insideOpt "F:o"
-                   (opt (match "CST") >> pS)
+     (t,p,voice,apect,vs) <- pV "VS"
+     advs     <- many pVPMods
+     s        <- insideOpt convert "F:o"
+                   (opt (match convert "CST") >> pS)
      return (t,p,foldr (\adv t -> cidAdVVP adv t)
                        (foldl (\t adv -> cidAdvVP t adv)
                               (cidComplVS vs s)
@@ -143,20 +126,22 @@ pVP =
                        adVs)
   `mplus`
   do adVs     <- many pAdV
-     (t,p,vv) <- pV "VV"
-     advs     <- many pAdv
-     vp       <- match "Ti"
+     (t,p,voice,apect,vv) <- pV "VV"
+     advs     <- many pVPMods
+     (p2,voice,aspect,vp) <- inside "Ti" $ do
+                               match convert "s"
+                               pVPInf
      return (t,p,foldr (\adv t -> cidAdVVP adv t)
                        (foldl (\t adv -> cidAdvVP t adv)
-                              (cidComplVV vv vp)
+                              (cidComplVV vv cidASimul p2 vp)
                               advs)
                        adVs)
   `mplus`
   do adVs     <- many pAdV
-     (t,p,v2) <- pV "V2"
+     (t,p,voice,apect,v2) <- pV "V2"
      o        <- pObject
-     opt (match "YC")   -- what is this?
-     advs     <- many pAdv
+     opt (match convert "YC")   -- what is this?
+     advs     <- many pVPMods
      return (t,p,foldr (\adv t -> cidAdVVP adv t)
                        (foldl (\t adv -> cidAdvVP t adv)
                               (cidComplSlash (cidSlashV2a v2) o)
@@ -164,141 +149,641 @@ pVP =
                        adVs)
   `mplus`
   do adVs    <- many pAdV
-     (t,p,v) <- pV "V"
-     advs    <- many pAdv
+     (t,p,voice,apect,v) <- pV "V"
+     advs    <- many pVPMods
      return (t,p,foldr (\adv t -> cidAdVVP adv t)
                        (foldl (\t adv -> cidAdvVP t adv)
                               (cidUseV v)
                               advs)
                        adVs)
+  `mplus`
+  do inside "V" (match convert "VBZ")
+     adVs  <- many pAdV
+     p     <- pPol
+     comp  <- pComp
+     advs  <- many pVPMods
+     return (cidTTAnt cidTPres cidASimul,p,foldr (\adv t -> cidAdVVP adv t)
+                       (foldl (\t adv -> cidAdvVP t adv)
+                              (cidUseComp comp)
+                              advs)
+                       adVs)
+
+pComp =
+  do adv <- insideOpt convert "R:e" pAdv
+     return (cidCompAdv adv)
+  `mplus`
+  do np <- insideOpt convert "N:e" pNP
+     return (cidCompNP np)
+  `mplus`
+  do ap <- pAP
+     return (cidCompAP ap)
+
+pAdv =
+  do lemma "RP" "Adv" "s"
+
+data Voice  = Active | Passive
+data Aspect = Simple | Progressive
 
 pV cat =
   do inside "V" $
-       do v <- lemma "VVDv" (mkCId cat) "s VPast"
-          return (cidTTAnt cidTPast cidASimul,cidPPos,v)
+       do v <- pVPres cat
+          return (cidTTAnt cidTPres cidASimul,cidPPos,Active,Simple,v)
        `mplus`
-       do v <- lemma "VVDt" (mkCId cat) "s VPast"
-          return (cidTTAnt cidTPast cidASimul,cidPPos,v)
+       do v <- do lemma "VVZi" cat "s VPres"
+               `mplus`
+               do lemma "VVZt" cat "s VPres"
+               `mplus`
+               do lemma "VVZv" cat "s VPres"
+          return (cidTTAnt cidTPres cidASimul,cidPPos,Active,Simple,v)
        `mplus`
-       do v <- lemma "VVZv" (mkCId cat) "s VPres"
-          return (cidTTAnt cidTPres cidASimul,cidPPos,v)
+       do v <- do lemma "VVDi" cat "s VPast"
+               `mplus`
+               do lemma "VVDt" cat "s VPast"
+               `mplus`
+               do lemma "VVDv" cat "s VPast"
+          return (cidTTAnt cidTPast cidASimul,cidPPos,Active,Simple,v)
        `mplus`
-       do match "VHD"
-          match "VHD"
-          v <- lemma "VVNv" (mkCId cat) "s VPPart"
-          return (cidTTAnt cidTPres cidAAnter,cidPPos,v)
+       do (match convert "VBM" `mplus` match convert "VBR" `mplus` match convert "VBZ") -- am,are,is
+          pol <- pPol
+          (voice,aspect,v) <- pVPart cat
+          return (cidTTAnt cidTPres cidASimul,pol,voice,aspect,v)
+       `mplus`
+       do (match convert "VBDZ" `mplus` match convert "VBDR") -- was,were
+          pol <- pPol
+          (voice,aspect,v) <- pVPart cat
+          return (cidTTAnt cidTPast cidASimul,pol,voice,aspect,v)
+       `mplus`
+       do match convert "VH0" -- have
+          pol <- pPol
+          (voice,aspect,v) <- do v <- pVPastPart cat
+                                 return (Active,Simple,v)
+                              `mplus`
+                              do match convert "VBN" -- been
+                                 pVPart cat
+          return (cidTTAnt cidTPres cidAAnter,pol,voice,aspect,v)
+       `mplus`
+       do match convert "VH0" -- have
+          return (cidTTAnt cidTPres cidAAnter,cidPPos,Active,Simple,cidhave_V2)
+       `mplus`
+       do match convert "VHZ" -- has
+          pol <- pPol
+          (voice,aspect,v) <- do v <- pVPastPart cat
+                                 return (Active,Simple,v)
+                              `mplus`
+                              do match convert "VBN" -- been
+                                 pVPart cat
+          return (cidTTAnt cidTPres cidAAnter,pol,voice,aspect,v)
+       `mplus`
+       do match convert "VHZ" -- has
+          return (cidTTAnt cidTPres cidAAnter,cidPPos,Active,Simple,cidhave_V2)
+       `mplus`
+       do match convert "VHD" -- had
+          pol <- pPol
+          (voice,aspect,v) <- do v <- pVPastPart cat
+                                 return (Active,Simple,v)
+                              `mplus`
+                              do match convert "VBN" -- been
+                                 pVPart cat
+          return (cidTTAnt cidTPast cidAAnter,pol,voice,aspect,v)
+       `mplus`
+       do match convert "VHD" -- had
+          return (cidTTAnt cidTPast cidASimul,cidPPos,Active,Simple,cidhave_V2)
+       `mplus`
+       do w <- word "VMo" -- will
+          guard (w == "will")
+          pol <- pPol
+          (voice,apect,vp) <- pVInf cat
+          return (cidTTAnt cidTFut cidASimul,pol,voice,apect,vp)
+       `mplus`
+       do mplus (match convert "VD0") (match convert "VDZ") -- do,does
+          match convert "XX"
+          vp <- pVPres cat
+          return (cidTTAnt cidTPres cidASimul,cidPNeg,Active,Simple,vp)
+       `mplus`
+       do match convert "VDD" -- did
+          match convert "XX"
+          vp <- pVPres cat
+          return (cidTTAnt cidTPast cidASimul,cidPNeg,Active,Simple,vp)
+
+
+pVPInf = do
+  adVs <- many pAdV
+  (pol,voice,apect,vp) <- do (pol,voice,apect,v2) <- inside "Vi" $
+                                                       do pol <- pPol
+                                                          match convert "TO"
+                                                          (voice,aspect,v) <- pVInf "V2"
+                                                          return (pol,voice,aspect,v)
+                             o <- pObject
+                             return (pol,voice,apect,cidComplSlash (cidSlashV2a v2) o)
+                          `mplus`
+                          do (pol,voice,apect,v2a) <- inside "Vi" $
+                                                        do pol <- pPol
+                                                           match convert "TO"
+                                                           (voice,aspect,v) <- pVInf "V2A"
+                                                           return (pol,voice,aspect,v)
+                             o        <- pObject
+                             ap       <- pAP
+                             return (pol,voice,apect,cidComplSlash (cidSlashV2A v2a ap) o)
+  advs <- many pVPMods
+  return (pol,voice,apect,
+              foldr (\adv t -> cidAdVVP adv t)
+                    (foldl (\t adv -> cidAdvVP t adv)
+                           vp
+                           advs)
+                    adVs)
+
+pVInf cat =
+  do v <- pVPres cat
+     return (Active,Simple,v)
   `mplus`
-  do v <- match "V"
-     return (App (mkCId "XXX") [],App (mkCId "XXX") [],v)
+  do match convert "VB0" -- be
+     pVPart cat
+  `mplus`
+  do v <- match convert "VH0" -- have
+     return (Active,Simple,v)
+
+pVPart cat =
+  do v <- do lemma "VVGi" cat "s VPresPart"
+          `mplus`
+          do lemma "VVGt" cat "s VPresPart"
+          `mplus`
+          do lemma "VVGv" cat "s VPresPart"
+     return (Active,Progressive,v)
+  `mplus`
+  do v <- pVPastPart cat
+     return (Passive,Simple,v)
+
+pVPres cat =
+  do lemma "VV0i" cat "s VInf"
+  `mplus`
+  do lemma "VV0t" cat "s VInf"
+  `mplus`
+  do lemma "VV0v" cat "s VInf"
+
+pVPastPart cat =
+  do lemma "VVNi" cat "s VPPart"
+  `mplus`
+  do lemma "VVNt" cat "s VPPart"
+  `mplus`
+  do lemma "VVNv" cat "s VPPart"
+
+pPol =
+  do match convert "XX"
+     return cidPNeg
+  `mplus`
+  do return cidPPos
 
 pAdV =
-  do insideOpt "R:c" $
-       lemma "RRR" (mkCId "AdV") "s"
+  do insideOpt convert "R:c" $
+       lemma "RRR" "AdV" "s"
   `mplus`
-  do match "R:m"
+  do insideOpt convert "R:m" $
+       lemma "RRR" "AdV" "s"
 
 pObject = 
-  match "P:u"
+  match convert "P:u"
   `mplus`
-  insideOpt "N:o" pNP
+  insideOpt convert "N:o" pNP
   `mplus`
-  match "N:e"
+  match convert "N:e"
   `mplus`
-  match "M:e"
+  match convert "M:e"
   `mplus`
-  match "D:e"
+  do insideOpt convert "Ds:e" $ do
+       det <- pDet
+       return (cidDetNP (det cidNumSg))
   `mplus`
-  match "P:e"
+  do insideOpt convert "Dp:e" $ do
+       det <- pDet
+       return (cidDetNP (det cidNumPl))
+  `mplus`
+  do insideOpt convert "P:e" $ pPP
 
-pAdv =
-  do match "N:t"
+pVPMods =
+  do insideOpt convert "N:t" pTimeNPAdv
   `mplus`
-  do match "N:h"
+  do match convert "N:h"
   `mplus`
-  do match "P:p"
+  do insideOpt convert "P:p" $ pPP
   `mplus`
-  do match "P:q"
+  do insideOpt convert "P:q" $ pPP
   `mplus`
-  do match "P:a"
+  do insideOpt convert "Pb:a" $ do
+       match convert "IIb"
+       np <- insideOpt convert "N" pNP
+       return (cidPrepNP cidby_Prep np)
   `mplus`
-  do match "P:t"
+  do insideOpt convert "P:t" $ pPP
   `mplus`
-  do match "P:h"
+  do insideOpt convert "P:h" $ pPP
   `mplus`
-  do match "P:m"
+  do insideOpt convert "P:m" $ pPP
   `mplus`
-  do match "P:r"
+  do insideOpt convert "P:r" $ pPP
   `mplus`
-  do match "R:p"
+  do insideOpt convert "R:p" $ pAdv
   `mplus`
-  do match "R:q"
+  do insideOpt convert "R:q" $ pAdv
   `mplus`
-  do match "R:a"
+  do insideOpt convert "R:a" $ pAdv
   `mplus`
-  do match "R:t"
+  do insideOpt convert "R:t" $ pAdv
   `mplus`
-  do match "R:h"
+  do insideOpt convert "R:h" $ pAdv
   `mplus`
-  do match "R:m"
+  do insideOpt convert "R:m" $ pAdv
   `mplus`
-  do match "R:c"
+  do insideOpt convert "R:c" $ pAdv
   `mplus`
-  do match "R:r"
+  do insideOpt convert "R:r" $ pAdv
   `mplus`
-  do match "F:p"
+  do match convert "F:p"
   `mplus`
-  do match "F:q"
+  do match convert "F:q"
   `mplus`
-  do match "F:a"
+  do match convert "F:a"
   `mplus`
-  do match "F:t"
+  do match convert "F:t"
   `mplus`
-  do match "F:h"
+  do match convert "F:h"
   `mplus`
-  do match "F:m"
+  do match convert "F:m"
   `mplus`
-  do match "F:r"
+  do match convert "F:r"
   `mplus`
-  do match "W:b"
+  do match convert "W:b"
   `mplus`
-  do match "L:b"
+  do match convert "L:b"
 
-pNP = do
-  q      <- pQuant
-  (n,cn) <- pCN
-  return (cidDetCN (cidDetQuant q n) cn)
+pPP =
+  do prep <- do lemma "ICS" "Prep" "s"
+             `mplus`
+             do lemma "ICSk" "Prep" "s"
+             `mplus`
+             do lemma "ICSt" "Prep" "s"
+             `mplus`
+             do lemma "ICSx" "Prep" "s"
+             `mplus`
+             do lemma "IF" "Prep" "s"
+             `mplus`
+             do lemma "II" "Prep" "s"
+             `mplus`
+             do lemma "IIa" "Prep" "s"
+             `mplus`
+             do lemma "IIb" "Prep" "s"
+             `mplus`
+             do lemma "IIg" "Prep" "s"
+             `mplus`
+             do lemma "IIp" "Prep" "s"
+             `mplus`
+             do lemma "IIt" "Prep" "s"
+             `mplus`
+             do lemma "IO" "Prep" "s"
+             `mplus`
+             do lemma "IW" "Prep" "s"
+             `mplus`
+             do insideOpt convert "II=" $ do
+                  w1 <- word "II21"
+                  w2 <- word "II22"
+                  lookupForm "Prep" "s" (unwords [w1,w2])
+     np   <- do insideOpt convert "N" pNP
+             `mplus`
+             do (mb_num,n) <- pN
+                case mb_num of
+                  Just num | num == cidNumPl -> return (cidDetCN (cidDetQuant cidIndefArt num) (cidUseN n))
+                  _                          -> return (cidMassNP (cidUseN n))    -- we don't know the number
+     return (cidPrepNP prep np)
+
+pNP = 
+  do np <- pBaseNP
+     match convert "YC"
+     fr <- insideOpt convert "Fr" pRCl
+     return (cidRelNP np fr)
+  `mplus`
+  do pBaseNP
+
+pBaseNP = 
+  do det         <- pDet
+     (mb_num,cn) <- pCN
+     case mb_num of
+       Just num -> return (cidDetCN (det num) cn)
+       Nothing  -> mzero    -- we don't know the number
+  `mplus`
+  do pn <- pName
+     return (cidUsePN pn)
+  `mplus`
+  do (mb_num,cn) <- pCN
+     case mb_num of
+       Just num | num == cidNumPl -> return (cidDetCN (cidDetQuant cidIndefArt num) cn)
+       _                          -> return (cidMassNP cn)    -- we don't know the number     
+  `mplus`
+  do match convert "PPIS1"
+     return (cidUsePron cidi_Pron)
+  `mplus`
+  do match convert "PPY"
+     return (cidUsePron cidyouSg_Pron)
+  `mplus`
+  do match convert "PPHS1m"
+     return (cidUsePron cidhe_Pron)
+  `mplus`
+  do match convert "PPHS1f"
+     return (cidUsePron cidshe_Pron)
+  `mplus`
+  do match convert "PPH1"
+     return (cidUsePron cidit_Pron)
+  `mplus`
+  do match convert "PPIS2"
+     return (cidUsePron cidwe_Pron)
+  `mplus`
+  do match convert "PPHS2"
+     return (cidUsePron cidthey_Pron)
+  `mplus`
+  do match convert "Nn"
+
+pDet =
+  do match convert "DDy"
+     return (\num -> if num == cidNumSg
+                       then cidanySg_Det
+                       else cidanyPl_Det)
+  `mplus`
+  do det <- lemma "DA2" "Det" "s"
+     return (\num -> det)
+  `mplus`
+  do q   <- pQuant
+     ord <- pOrd
+     return (\num -> cidDetQuantOrd q num ord)
+  `mplus`
+  do q   <- pQuant
+     return (\num -> cidDetQuant q num)
 
 pQuant =
-  do lemma "AT" (mkCId "Quant") "s False Sg"
+  do match convert "AT"
+     return cidDefArt
   `mplus`
-  do match "AT1"
+  do match convert "AT1"
      return cidIndefArt
+  `mplus`
+  do match convert "ATn"
+     return cidno_Quant
+  `mplus`
+  do match convert "APPGi1"
+     return (cidPossPron cidi_Pron)
+  `mplus`
+  do match convert "APPGy"
+     return (cidPossPron cidyouSg_Pron)
+  `mplus`
+  do match convert "APPGm"
+     return (cidPossPron cidhe_Pron)
+  `mplus`
+  do match convert "APPGf"
+     return (cidPossPron cidshe_Pron)
+  `mplus`
+  do match convert "APPGh1"
+     return (cidPossPron cidit_Pron)
+  `mplus`
+  do match convert "APPGi2"
+     return (cidPossPron cidwe_Pron)
+  `mplus`
+  do match convert "APPGh2"
+     return (cidPossPron cidthey_Pron)
+  `mplus`
+  do lemma "DD1a" "Quant" "s True Sg"
+  `mplus`
+  do lemma "DD1i" "Quant" "s True Sg"
+  `mplus`
+  do lemma "DD2a" "Quant" "s True Pl"
+  `mplus`
+  do lemma "DD2i" "Quant" "s True Pl"
+  `mplus`
+  do lemma "DDi" "Quant" "s True Pl"
+  `mplus`
+  insideOpt convert "G" pGenitive
+
+pOrd =
+  do a <- lemma "JJT" "A" "s (AAdj Superl Nom)"
+     return (cidOrdSuperl a)
+
+pGenitive =
+  do np <- insideOpt convert "N" pNP
+     match convert "GG"
+     return (cidGenNP np)
 
 pCN =
-  do np <- insideOpt "N" pNP
-     (n,cn) <- pCN
-     return (n,App (mkCId "Appos") [np,cn])
+  do pn <- mplus pName (insideOpt convert "Nn" pName)
+     (mb_num,cn) <- pCN
+     return (mb_num,cidNameCN pn cn)
   `mplus`
-  do a  <- lemma "JJ" (mkCId "A") "s (AAdj Posit Nom)"
-     (n,cn) <- pCN
-     return (n,cidAdjCN (cidPositA a) cn)
+  do (mb_num_n,n) <- mplus pN (inside "N" pCN)
+     (mb_num,cn) <- pCN
+     case mb_num_n of
+       Just num | num == cidNumPl -> return (mb_num,cidCompoundPlCN (cidUseN n) cn)
+       _                          -> return (mb_num,cidCompoundSgCN (cidUseN n) cn)  -- here we don't really know the number
   `mplus`
-  do (num,n) <- pN
-     advs <- many pPo
-     return (num,
-             foldl (\t adv -> cidAdvCN t adv)
+  do ap <- pAP
+     (mb_num,cn) <- pCN
+     return (mb_num,cidAdjCN ap cn)
+  `mplus`
+  do t <- match convert "NN1u&"
+     mods <- many pCNMods
+     return (Just cidNumSg
+            ,foldl (\t mod -> mod t)
+                   t
+                   mods)
+  `mplus`
+  do (mb_num,n) <- pN
+     mods <- many pCNMods
+     return (mb_num,
+             foldl (\t mod -> mod t)
                    (cidUseN n)
-                   advs)
+                   mods)
 
-pN = 
-  do n <- lemma "NN1c" (mkCId "N") "s Sg Nom"
-     return (cidNumSg, n)
+pAP =
+  do a <-  lemma "JJ" "A" "s (AAdj Posit Nom)"
+           `mplus`
+           lemma "JA" "A" "s (AAdj Posit Nom)"
+           `mplus`
+           lemma "JB" "A" "s (AAdj Posit Nom)"
+           `mplus`
+           lemma "JBo" "A" "s (AAdj Posit Nom)"
+           `mplus`
+           lemma "DAy" "A" "s (AAdj Posit Nom)"
+           `mplus`
+           lemma "DAz" "A" "s (AAdj Posit Nom)"
+     return (cidPositA a)
   `mplus`
-  do n <- lemma "NN1n" (mkCId "N") "s Sg Nom"
-     return (cidNumSg, n)
+  do a <-  lemma "JJR" "A" "s (AAdj Compar Nom)"
+     return (cidUseComparA a)
+  `mplus`
+  do vp <- match convert "Tn"
+     return (cidPastPartAP vp)
+  `mplus`
+  do insideOpt convert "J" $ do
+       adas <- many pAdA
+       ap <- pAP
+       mods <- many pAPMods
+       return (foldl (\t ada -> cidAdAP ada t)
+                     (foldl (\t mod -> cidAdvAP t mod)
+                            ap
+                            mods)
+                     adas)
 
-pPo =
-  insideOpt "Po" $ do
-    p  <- match "IO"
-    np <- insideOpt "N" pNP
-    return (cidPrepNP p np)
+pAdA = do
+  a <- lemma "RR" "A" "s AAdv"
+  return (cidPositAdAAdj a)
+
+pAPMods =
+  do insideOpt convert "P" pPP
+
+pN =
+  do n <- lemma "NNn" "N" "s Sg Nom"
+     return (Nothing, n)
+  `mplus`
+  do n <- lemma "NNu" "N" "s Sg Nom"
+     return (Just cidNumPl, n)
+  `mplus`
+  do n <- lemma "NNux" "N" "s Sg Nom"
+     return (Nothing, n)
+  `mplus`
+  do n <- lemma "NN1c" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NN1m" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NN1n" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NN1u" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NN1ux" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NN2" "N" "s Pl Nom"
+     return (Just cidNumPl, n)
+  `mplus`
+  do n <- lemma "NNJ1c" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNJ1n" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNJ2" "N" "s Pl Nom"
+     return (Just cidNumPl, n)
+  `mplus`
+  do n <- lemma "NNLc" "N" "s Sg Nom"
+     return (Nothing, n)
+  `mplus`
+  do n <- lemma "NNL1c" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNL1cb" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNL1n" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNL2" "N" "s Pl Nom"
+     return (Just cidNumPl, n)
+  `mplus`
+  do n <- lemma "NNS1c" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNS1n" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNS2" "N" "s Pl Nom"
+     return (Just cidNumPl, n)
+  `mplus`
+  do n <- lemma "NNT1h" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNT1m" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNT1c" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNT2" "N" "s Pl Nom"
+     return (Just cidNumPl, n)
+  `mplus`
+  do n <- lemma "NNUc" "N" "s Sg Nom"
+     return (Nothing, n)
+  `mplus`
+  do n <- lemma "NNUn" "N" "s Sg Nom"
+     return (Nothing, n)
+  `mplus`
+  do n <- lemma "NNU1c" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNU1n" "N" "s Sg Nom"
+     return (Just cidNumSg, n)
+  `mplus`
+  do n <- lemma "NNU2" "N" "s Pl Nom"
+     return (Just cidNumPl, n)
+  `mplus`
+  do inside "Ns" $ do
+       (mb_num1,n1) <- pN
+       match convert "YH"
+       (mb_num2,n2) <- pN
+       case mb_num1 of
+         Just num | num == cidNumPl -> return (mb_num2,cidDashPlN n1 n2)
+         _                          -> return (mb_num2,cidDashSgN n1 n2)  -- here we don't really know the number
+
+pCNMods =
+  do adv <- insideOpt convert "Po" $ pPP
+     return (\t -> cidAdvCN t adv)
+  `mplus`
+  do adv <- insideOpt convert "P" $ pPP
+     return (\t -> cidAdvCN t adv)
+  `mplus`
+  do adv <- insideOpt convert "Fn" $ do
+              match convert "CST"
+              s <- pS
+              return (cidSubjS cidthat_Subj s)
+     return (\t -> cidAdvCN t adv)
+  `mplus`
+  do fr <- insideOpt convert "Fr" pRCl
+     return (\t -> cidRelCN t fr)
+
+pName =
+  do w1 <- word "NP1s"
+     w2 <- word "NNL1cb"
+     return (cidSymbPN (cidMkSymb (Lit (unwords [w1,w2]))))
+  `mplus`
+  do w1 <- word "NPM1"
+     match convert "YH"
+     w2 <- word "NPM1"
+     return (cidSymbPN (cidMkSymb (Lit (unwords [w1,"-",w2]))))
+  `mplus`
+  do w1 <- msum [word "NP1c", word "NP1f", word "NP1g"
+                ,word "NP1j", word "NP1m", word "NP1p"
+                ,word "NP1s", word "NP1t", word "NP1x"
+                ,word "NP1z", word "NP2c", word "NP2f"
+                ,word "NP2g", word "NP2j", word "NP2m"
+                ,word "NP2p", word "NP2s", word "NP2t"
+                ,word "NP2x", word "NP2z"]
+     return (cidSymbPN (cidMkSymb (Lit w1)))
+
+pRCl = 
+  do rp <- pRP
+     (t,p,vp) <- pVP
+     opt (match convert "YC")
+     return (cidUseRCl t p (cidRelVP rp vp))
+  `mplus`
+  do (prep,rp) <- inside "Pq" $ do
+                    prep <- lemma "II" "Prep" "s"
+                    rp   <- pRP
+                    return (prep,rp)
+     np <- pSubject
+     (t,p,vp) <- pVP
+     opt (match convert "YC")
+     return (cidUseRCl t p (cidRelSlash rp (cidSlashVP np (cidVPSlashPrep vp prep))))
+
+pRP = 
+  do inside "Dq" (match convert "DDQr")
+     return cidIdRP
+
+pTimeNPAdv = do
+  day <- lemma "NPD1" "Weekday" "s Sg Nom"
+  return (cidweekdayPunctualAdv day)
