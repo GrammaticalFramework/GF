@@ -1,7 +1,7 @@
 module SusanneFormat(Tag,Id,Word,Lemma,ParseTree(..),readTreebank,readTag) where
 
-import PGF(CId)
 import Data.Char
+import qualified Data.Map as Map
 
 type Tag   = String
 type Mods  = String
@@ -14,7 +14,8 @@ type Lemma = String
 data ParseTree
  = Phrase Tag Mods Fn Index [ParseTree]
  | Word   Id Tag Word Lemma
- | App CId [ParseTree]
+ | App String [ParseTree]
+ | Lit String
  deriving Eq
 
 data ParseTreePos
@@ -28,14 +29,15 @@ instance Show ParseTree where
     | otherwise            = "["++tag++mods++":"++fn++show idx++" "++unwords (map show ts)++"]"
   show (Word _ tag w _)    = "["++tag++" "++w++"]"
   show (App f ts)           
-    | null ts              = show f
-    | otherwise            = "("++show f++" "++unwords (map show ts)++")"
+    | null ts              = f
+    | otherwise            = "("++f++" "++unwords (map show ts)++")"
+  show (Lit s)             = show s
 
 readTreebank ls = readLines Root (map words ls)
 
 readLines p []                        = []
 readLines p ([id,_,tag,w,l,parse]:ls) =
-  readParse (Word id tag w l) p parse ls
+  readParse (Word id tag (readWord w) l) p parse ls
 
 readParse w p []       ls = readLines p ls
 readParse w p ('[':cs) ls =
@@ -81,3 +83,61 @@ readTag w (c:cs)                -- phrase tag
 readTag w cs = readError w
 
 readError (Word id _ _ _) = error id
+
+readWord w0 = replaceEntities w2
+  where
+    w1 | head w0 == '+' = tail w0
+       | otherwise      = w0
+    w2 | last w1 == '+' = init w1
+       | otherwise      = w1
+
+    replaceEntities []       = []
+    replaceEntities ('<':cs) =
+      let (e,'>':cs1) = break (=='>') cs
+      in case Map.lookup e entity_names of
+           Just c  -> c : replaceEntities cs1
+           Nothing -> "<"++e++">"++ replaceEntities cs1
+    replaceEntities (c:  cs) = c : replaceEntities cs
+
+entity_names = Map.fromList
+  [("agr",'α')
+  ,("agrave",'à')
+  ,("apos",'\'')
+  ,("auml",'ä')
+  ,("bgr",'β')
+  ,("blank",' ')
+  ,("ccedil",'ç')
+  ,("deg",'°')
+  ,("dollar",'$')
+  ,("eacute",'é')
+  ,("egr",'ε')
+  ,("egrave",'è')
+  ,("frac12",'½')
+  ,("frac14",'¼')
+  ,("ggr",'γ')
+  ,("hellip",'…')
+  ,("hyphen",'-')
+  ,("iuml",'ï')
+  ,("khgr",'χ')
+  ,("ldquo",'“')
+  ,("lgr",'λ')
+  ,("lsquo",'‘')
+  ,("mdash",'—')
+  ,("mgr",'μ')
+  ,("minus",'-')
+  ,("ntilde",'ñ')
+  ,("oelig",'œ')
+  ,("ouml",'ö')
+  ,("para",'¶')
+  ,("pgr",'π')
+  ,("phgr",'φ')
+  ,("prime",'′')
+  ,("Prime",'″')
+  ,("rdquo",'”')
+  ,("rgr",'ρ')
+  ,("rsquo",'’')
+  ,("sect",'§')
+  ,("sol",'/')
+  ,("tggr",'θ')
+  ]
+
