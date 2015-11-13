@@ -24,14 +24,15 @@ abstract ParseEngAbs =
 flags
   startcat=Phr;
   heuristic_search_factor=0.60;
----  meta_prob=1.0e-5;
----  meta_token_prob=1.1965149246222233e-9;
 
-fun CompoundCN : Num -> N -> CN -> CN ;
-    DashCN : N -> N -> N ;
+fun CompoundSgCN : CN -> CN -> CN ;
+    CompoundPlCN : CN -> CN -> CN ;
+    DashSgN : N -> N -> N ;
+    DashPlN : N -> N -> N ;
     GerundN : V -> N ;
+
     GerundAP : V -> AP ;
-    PastPartAP : V2 -> AP ;
+    PastPartAP : VPSlash -> AP ;
     myself_NP : NP ;
     yourselfSg_NP : NP ;
     himself_NP : NP ;
@@ -68,7 +69,9 @@ fun CompoundCN : Num -> N -> CN -> CN ;
     PresPartRS : Ant -> Pol -> VP -> RS ;
 
 	ApposNP : NP -> NP -> NP ;
-	
+
+	NameCN : PN -> CN -> CN ;
+
 	AdAdV : AdA -> AdV -> AdV ;
 
 	UttAdV : AdV -> Utt;
