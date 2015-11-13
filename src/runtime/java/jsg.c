@@ -60,6 +60,46 @@ Java_org_grammaticalframework_sg_SG_close(JNIEnv *env, jobject self)
 	gu_pool_free(tmp_pool);
 }
 
+JNIEXPORT jobjectArray JNICALL 
+Java_org_grammaticalframework_sg_SG_readTriple(JNIEnv *env, jclass cls, jstring s)
+{
+	GuPool* pool = gu_new_pool();
+	
+	GuPool* tmp_pool = gu_local_pool();
+	GuString buf = j2gu_string(env, s, tmp_pool);
+	GuIn* in = gu_data_in((uint8_t*) buf, strlen(buf), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
+
+	const int len = 3;
+
+	PgfExpr exprs[len];
+	int res = pgf_read_expr_tuple(in, 3, exprs, pool, err);
+	if (!gu_ok(err) || res == 0) {
+		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be parsed");
+		gu_pool_free(tmp_pool);
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	jclass pool_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Pool");
+	jmethodID pool_constrId = (*env)->GetMethodID(env, pool_class, "<init>", "(J)V");
+	jobject jpool = (*env)->NewObject(env, pool_class, pool_constrId, p2l(pool));
+
+	jclass expr_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Expr");
+	jmethodID expr_constrId = (*env)->GetMethodID(env, expr_class, "<init>", "(Lorg/grammaticalframework/pgf/Pool;Ljava/lang/Object;J)V");
+
+	jobjectArray array = (*env)->NewObjectArray(env, len, expr_class, NULL);
+	for (int i = 0; i < len; i++) {
+		jobject obj = (*env)->NewObject(env, expr_class, expr_constrId, jpool, NULL, p2l(gu_variant_to_ptr(exprs[i])));
+		(*env)->SetObjectArrayElement(env, array, i, obj);
+		(*env)->DeleteLocalRef(env, obj);
+	}
+
+	return array;
+}
+
 JNIEXPORT jobject JNICALL
 Java_org_grammaticalframework_sg_SG_queryTriple(JNIEnv *env, jobject self,
                                                 jobject jsubj,
@@ -189,4 +229,110 @@ Java_org_grammaticalframework_sg_TripleResult_close(JNIEnv *env, jobject self)
 	}
 
 	gu_pool_free(tmp_pool);
+}
+
+JNIEXPORT void JNICALL
+Java_org_grammaticalframework_sg_SG_beginTrans(JNIEnv *env, jobject self)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_exn(tmp_pool);
+
+	sg_begin_trans(get_ref(env, self), err);
+	if (!gu_ok(err)) {
+		GuString msg;
+		if (gu_exn_caught(err, SgError)) {
+			msg = (GuString) gu_exn_caught_data(err);
+		} else {
+			msg = "The transaction cannot be started";
+		}
+		throw_string_exception(env, "org/grammaticalframework/sg/SGError", msg);
+		gu_pool_free(tmp_pool);
+		return;
+	}
+
+	gu_pool_free(tmp_pool);
+}
+
+JNIEXPORT void JNICALL
+Java_org_grammaticalframework_sg_SG_commit(JNIEnv *env, jobject self)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_exn(tmp_pool);
+
+	sg_commit(get_ref(env, self), err);
+	if (!gu_ok(err)) {
+		GuString msg;
+		if (gu_exn_caught(err, SgError)) {
+			msg = (GuString) gu_exn_caught_data(err);
+		} else {
+			msg = "The transaction cannot be commited";
+		}
+		throw_string_exception(env, "org/grammaticalframework/sg/SGError", msg);
+		gu_pool_free(tmp_pool);
+		return;
+	}
+
+	gu_pool_free(tmp_pool);
+}
+
+JNIEXPORT void JNICALL
+Java_org_grammaticalframework_sg_SG_rollback(JNIEnv *env, jobject self)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_exn(tmp_pool);
+
+	sg_rollback(get_ref(env, self), err);
+	if (!gu_ok(err)) {
+		GuString msg;
+		if (gu_exn_caught(err, SgError)) {
+			msg = (GuString) gu_exn_caught_data(err);
+		} else {
+			msg = "The transaction cannot be rolled back";
+		}
+		throw_string_exception(env, "org/grammaticalframework/sg/SGError", msg);
+		gu_pool_free(tmp_pool);
+		return;
+	}
+
+	gu_pool_free(tmp_pool);
+}
+
+JNIEXPORT jlong JNICALL
+Java_org_grammaticalframework_sg_SG_insertTriple(JNIEnv *env, jobject self,
+                                                jobject jsubj,
+                                                jobject jpred,
+                                                jobject jobj)
+{
+	SgSG *sg = get_ref(env, self);
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_exn(tmp_pool);
+
+	SgTriple triple;
+	triple[0] = gu_variant_from_ptr((void*) get_ref(env, jsubj));
+	triple[1] = gu_variant_from_ptr((void*) get_ref(env, jpred));
+	triple[2] = gu_variant_from_ptr((void*) get_ref(env, jobj));
+
+	SgId id = sg_insert_triple(sg, triple, err);
+	if (!gu_ok(err)) {
+		GuString msg;
+		if (gu_exn_caught(err, SgError)) {
+			msg = (GuString) gu_exn_caught_data(err);
+		} else {
+			msg = "The insertion failed";
+		}
+		throw_string_exception(env, "org/grammaticalframework/sg/SGError", msg);
+		gu_pool_free(tmp_pool);
+		return 0;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return id;
 }
