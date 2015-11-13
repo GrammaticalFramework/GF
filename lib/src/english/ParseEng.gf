@@ -8,7 +8,7 @@ concrete ParseEng of ParseEngAbs =
   NumeralEng,
   SymbolEng [PN, Symb, String, CN, Card, NP, MkSymb, SymbPN, CNNumNP],
   ConjunctionEng,
-  VerbEng - [SlashV2V, PassV2, UseCopula, ComplVV],
+  VerbEng - [SlashV2V, PassV2, UseCopula, ComplVV, ComplVS],
   AdverbEng,
   PhraseEng,
   SentenceEng - [UseCl], -- replaced by UseCl | ContractedUseCl
@@ -24,14 +24,14 @@ concrete ParseEng of ParseEngAbs =
             ClSlash, RCl, EmptyRelSlash, VS, V2S, ComplBareVS, SlashBareV2S],
 
   DictionaryEng ** 
-open MorphoEng, ResEng, ParadigmsEng, (S = SentenceEng), (E = ExtraEng), Prelude in {
+open MorphoEng, ResEng, ParadigmsEng, (G = GrammarEng), (E = ExtraEng), Prelude in {
 
 flags
   literal=Symb ;
 
 -- exceptional linearizations
 lin
-  UseCl t p cl = S.UseCl t p cl | E.ContractedUseCl t p cl ;
+  UseCl t p cl = G.UseCl t p cl | E.ContractedUseCl t p cl ;
 
 lin
   myself_NP = regNP "myself" singular ;
@@ -43,14 +43,24 @@ lin
   yourselfPl_NP = regNP "yourself" plural ;
   themselves_NP = regNP "themselves" plural ;
 
-  CompoundCN num noun cn = {
-    s = \\n,c => num.s ! Nom ++ noun.s ! num.n ! Nom ++ cn.s ! n ! c ;
-    g = cn.g
+  CompoundSgCN cn1 cn2 = {
+    s = \\n,c => cn1.s ! Sg ! Nom ++ cn2.s ! n ! c ;
+    g = cn2.g
   } ;
-  
-  DashCN noun1 noun2 = {
-    s = \\n,c => noun1.s ! Sg ! Nom ++ "-" ++ noun2.s ! n ! c ;
-    g = noun2.g
+
+  CompoundPlCN cn1 cn2 = {
+    s = \\n,c => cn1.s ! Pl ! Nom ++ cn2.s ! n ! c ;
+    g = cn2.g
+  } ;
+
+  DashSgN n1 n2 = {
+    s = \\n,c => n1.s ! Sg ! Nom ++ "-" ++ n2.s ! n ! c ;
+    g = n2.g
+  } ;
+
+  DashPlN n1 n2 = {
+    s = \\n,c => n1.s ! Pl ! Nom ++ "-" ++ n2.s ! n ! c ;
+    g = n2.g
   } ;
 
   GerundN v = {
@@ -63,9 +73,9 @@ lin
     isPre = True
   } ;
 
-  PastPartAP v = {
-    s = \\agr => v.s ! VPPart ;
-    isPre = True
+  PastPartAP vp = { 
+    s = \\a => vp.ad ! a ++ vp.ptp ++ vp.p ++ vp.c2 ++ vp.s2 ! a ++ vp.ext ;
+    isPre = vp.isSimple                 -- depends on whether there are complements
   } ;
 
   OrdCompar a = {s = \\c => a.s ! AAdj Compar c } ;
@@ -89,6 +99,7 @@ lin
   ComplVV v a p vp = insertObj (\\agr => a.s ++ p.s ++ 
                                          infVP v.typ vp a.a p.p agr)
                                (predVV v) ;
+  ComplVS vs s = G.ComplVS vs s | ComplBareVS vs s ;
 
   PredVPosv np vp = {
       s = \\t,a,b,o => 
@@ -146,6 +157,11 @@ lin
   ApposNP np1 np2 = {
     s = \\c => np1.s ! c ++ frontComma ++ np2.s ! npNom ++ finalComma ;
     a = np1.a
+  } ;
+  
+  NameCN pn cn = {
+    s = \\n,c => pn.s ! npcase2case npNom ++ cn.s ! n ! c ;
+    g = cn.g
   } ;
   
   AdAdV = cc2 ;
