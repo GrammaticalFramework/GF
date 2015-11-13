@@ -1,8 +1,10 @@
 import SG
+import Data.Char
+import Data.List
 
 main = do
   ls <- fmap lines $ readFile "../../../lib/src/translator/Dictionary.gf"
-  writeFile "assets/glosses.txt" (unlines ["<"++fn++",gloss,"++show gloss++">" | Just (fn,gloss) <- map gloss ls])
+  writeFile "assets/glosses.txt" (unlines [x | Just (fn,gloss) <- map gloss ls, x <- glossTriples fn gloss])
 
 gloss l = 
   case words l of
@@ -11,9 +13,20 @@ gloss l =
                       _      -> Nothing
     _            -> Nothing
 
-test = do
-  db <- openSG "semantics.db"
-  ls <- fmap lines $ readFile "assets/glosses.txt"
-  inTransaction db $
-    sequence_ [insertTriple db s p o | Just (s,p,o) <- map readTriple ls]
-  closeSG db
+glossTriples fn s =
+  (if null gs then [] else ["<"++fn++",gloss,"++show (mergeGloss gs)++">"])++
+  ["<"++fn++",example,"++e++">" | e <- es]
+  where
+    (es,gs) = partition isExample (splitGloss s)
+
+splitGloss s =
+  let (xs,s') = break (==';') s
+  in trim xs : case s' of
+                 ';':s -> splitGloss s
+                 _     -> []
+  where
+    trim = reverse . dropWhile isSpace . reverse . dropWhile isSpace
+
+mergeGloss = intercalate "; "
+
+isExample s = not (null s) && head s == '"' && last s == '"'
