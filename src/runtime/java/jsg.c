@@ -186,19 +186,19 @@ Java_org_grammaticalframework_sg_TripleResult_hasNext(JNIEnv *env, jobject self)
 
 		if (triple[0] != orig_triple[0]) {
 			jfieldID subjId = (*env)->GetFieldID(env, result_class, "subj", "Lorg/grammaticalframework/pgf/Expr;");
-			jobject jsubj = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, gu_variant_to_ptr(triple[0]));
+			jobject jsubj = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, p2l(gu_variant_to_ptr(triple[0])));
 			(*env)->SetObjectField(env, self, subjId, jsubj);
 		}
 
 		if (triple[1] != orig_triple[1]) {
 			jfieldID predId = (*env)->GetFieldID(env, result_class, "pred", "Lorg/grammaticalframework/pgf/Expr;");
-			jobject jpred = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, gu_variant_to_ptr(triple[1]));
+			jobject jpred = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, p2l(gu_variant_to_ptr(triple[1])));
 			(*env)->SetObjectField(env, self, predId, jpred);
 		}
 
 		if (triple[2] != orig_triple[2]) {
 			jfieldID objId = (*env)->GetFieldID(env, result_class, "obj", "Lorg/grammaticalframework/pgf/Expr;");
-			jobject jobj  = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, gu_variant_to_ptr(triple[2]));
+			jobject jobj  = (*env)->NewObject(env, expr_class, constrId, jpool, jpool, p2l(gu_variant_to_ptr(triple[2])));
 			(*env)->SetObjectField(env, self, objId, jobj);
 		}
 
