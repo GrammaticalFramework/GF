@@ -60,17 +60,17 @@ lin
   active_Parameter = mkN "isikuline tegumood" ;
   passive_Parameter = mkN "umbsikuline tegumood" ;
   
-  imperative_Parameter = mkN "käskiv" ;
-  indicative_Parameter = mkN "kindel" ;
-  conjunctive_Parameter = mkN "konjunktiivi" ;
-  infinitive_Parameter = mkN "infinitiivi" ;
+  imperative_Parameter = mkN "käskiv kõneviis" "käskiva kõneviisi";
+  indicative_Parameter = mkN "kindel kõneviis" "kindla kõneviisi";
+  conjunctive_Parameter = mkN "konjunktiiv" ;
+  infinitive_Parameter = mkN "infinitiiv" ;
 
   present_Parameter = mkN "olevik" ;
   past_Parameter = mkN "lihtminevik" ;
   future_Parameter = mkN "futuur" ; ---- ??? 
-  conditional_Parameter = mkN "tingiv" ;
+  conditional_Parameter = mkN "tingiv kõneviis" "tingiva kõneviisi";
   perfect_Parameter = mkN "täisminevik" ;
-  quotative_Parameter = mkN "kaudne" ;
+  quotative_Parameter = mkN "kaudne kõneviis" "kaudse kõneviisi";
 
   participle_Parameter = mkN "kesksõna" ;
   aux_verb_Parameter = mkN "abi" (mkN "verb") ;
