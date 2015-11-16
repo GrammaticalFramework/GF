@@ -14,7 +14,7 @@ libjpgf.la: $(patsubst %.c, %.lo, $(C_SOURCES))
 	libtool --mode=compile gcc -g -O -c -I$(JNI_PATH) -std=c99 -shared $< -o $@
 
 jpgf.jar: $(patsubst %.java, %.class, $(JAVA_SOURCES))
-	jar -cf $@ $^
+	jar -cf $@ org/grammaticalframework/pgf/*.class org/grammaticalframework/sg/*.class
 
 %.class : %.java
 	javac $<
