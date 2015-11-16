@@ -64,7 +64,7 @@ lin
 
   InflectionAdv adv = {
     t  = "adverb" ;
-    s1 = heading1 (heading preposition_Category) ;
+    s1 = heading1 (heading adverb_Category) ;
     s2 = paragraph adv.s
     } ;
 

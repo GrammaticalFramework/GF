@@ -23,6 +23,7 @@ lin
   noun_Category = mkN "Substantiv" ;
   adjective_Category = mkN "Adjektiv" ;
   verb_Category = mkN "Verb" ;
+  adverb_Category = mkN "Adverb" ;
   preposition_Category = mkN "Präposition" ;
 
   gender_ParameterType = mkN "Geschlecht" ;
