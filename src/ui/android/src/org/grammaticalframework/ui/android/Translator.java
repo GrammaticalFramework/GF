@@ -379,7 +379,7 @@ public class Translator {
 		if (targetLang.hasLinearization(lemma) && 
 		    targetLang.hasLinearization("Inflection"+cat)) {
 			if (def == null)
-				def = new Expr("NoDefinition");
+				def = Expr.readExpr("NoDefinition");
 
 			Expr e = new Expr("MkDocument", 
 			                  def,
