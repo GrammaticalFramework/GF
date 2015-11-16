@@ -4,6 +4,7 @@ concrete LangTha of Lang =
   GrammarTha,
   LexiconTha
   ,ConstructionTha
+  ,DocumentationTha --# notpresent
   ** {
 
 
