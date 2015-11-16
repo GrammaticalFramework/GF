@@ -21,7 +21,7 @@ concrete TranslateJpn of Translate =
   RelativeJpn,
   IdiomJpn,
 ----  ConstructionJpn, ---- TODO
-----  DocumentationJpn, ---- TODO
+  DocumentationJpn, ---- TODO
 
   ChunkJpn,
   ExtensionsJpn [

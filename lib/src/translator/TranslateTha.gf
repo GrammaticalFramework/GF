@@ -21,7 +21,7 @@ concrete TranslateTha of Translate =
   RelativeTha,
   IdiomTha,
   ConstructionTha,
---  DocumentationTha,
+  DocumentationTha,
 
   ChunkTha,
   ExtensionsTha [
