@@ -367,26 +367,31 @@ public class Translator {
     }
 
 	public String getInflectionTable(String lemma) {
-		Expr lemmaExpr = Expr.readExpr(lemma);
-		Expr gloss = mSGManager.getGloss(lemmaExpr);
-		Expr empty = Expr.readExpr("\"\"");
+		boolean withExample =
+			(getSourceLanguage().getLangCode().equals("en-US") ||
+             getTargetLanguage().getLangCode().equals("en-US"));
+		Expr def = 
+			mSGManager.getDefinition(Expr.readExpr(lemma), withExample);
 
 		Concr targetLang = getTargetConcr();
 		String cat = getGrammar().getFunctionType(lemma).getCategory();
 
 		if (targetLang.hasLinearization(lemma) && 
 		    targetLang.hasLinearization("Inflection"+cat)) {
-			if (gloss == null)
-				gloss = empty;
+			if (def == null)
+				def = new Expr("NoDefinition");
 
-			Expr e = new Expr("MkDocument", gloss, Expr.readExpr("Inflection"+cat+" "+lemma), empty);
+			Expr e = new Expr("MkDocument", 
+			                  def,
+			                  Expr.readExpr("Inflection"+cat+" "+lemma),
+			                  Expr.readExpr("\"\""));
 			String html =
 				"<html><head><meta charset=\"UTF-8\"/></head><body>" +
 				targetLang.linearize(e) +
 				"</body>";
 			return html;
-		} else if (gloss != null) {
-			return "<p style=\"font-size:20px\">"+targetLang.linearize(gloss)+"</p>";
+		} else if (def != null) {
+			return targetLang.linearize(def);
 		} else {
 			return null;
 		}

@@ -13,6 +13,7 @@ in {
 
 lincat
   Inflection = {t : Str; s1,s2 : Str} ;
+  Definition = {s : Str} ;
   Document = {s : Str} ;
   Tag = {s : Str} ;
 
@@ -262,6 +263,11 @@ oper
           tr (th (heading comitative_Parameter)  ++ td (nouns (NCase Sg Comit)) ++ td (nouns (NCase Pl Comit))) ++
           tr (th (heading instructive_Parameter) ++ td (nouns (NCase Sg Termin)) ++ td (nouns (NCase Pl Termin))
           )) ;
+
+lin
+  NoDefinition       = {s=""};
+  MkDefinition   d   = {s="<p><b>Definitsioon:</b>"++d.s++"</p>"};
+  MkDefinitionEx d e = {s="<p><b>Definitsioon:</b>"++d.s++"</p><p><b>Eeskuju:</b>"++e.s++"</p>"};
 
 lin
   MkDocument b i e = ss (i.s1 ++ paragraph b.s ++ i.s2 ++ paragraph e.s) ;  -- explanation appended in a new paragraph

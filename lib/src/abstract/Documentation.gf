@@ -5,6 +5,7 @@ abstract Documentation = Cat ** {
 
 cat
   Inflection ;     -- inflection table
+  Definition ;
   Document ;
   Tag ;
 
@@ -29,7 +30,12 @@ fun
   InflectionPrep : Prep -> Inflection ;
 
 fun
-  MkDocument : String -> Inflection -> String -> Document ;
+  NoDefinition   : Definition ;
+  MkDefinition   : String -> Definition ;
+  MkDefinitionEx : String -> String -> Definition ;
+
+fun
+  MkDocument : Definition -> Inflection -> String -> Document ;
   MkTag : Inflection -> Tag ;
 
 }

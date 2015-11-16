@@ -76,22 +76,39 @@ public class SemanticGraphManager implements Closeable {
 		}
 	}
 
-    public Expr getGloss(Expr lemma) {
-		Expr obj = null;
+    public Expr getDefinition(Expr lemma, boolean withExample) {
+		Expr gloss   = null;
+		Expr example = null;
 
 		try {
 			createDatabaseFromAssets();
-			TripleResult res = mDB.queryTriple(lemma, Expr.readExpr("gloss"), null);
-			if (res.hasNext()) {
-				obj = res.getObject();
+			
+			{
+				TripleResult res = mDB.queryTriple(lemma, Expr.readExpr("gloss"), null);
+				if (res.hasNext()) {
+					gloss = res.getObject();
+				}
+				res.close();
 			}
-			res.close();
+
+			if (withExample) {
+				TripleResult res = mDB.queryTriple(lemma, Expr.readExpr("example"), null);
+				if (res.hasNext()) {
+					example = res.getObject();
+				}
+				res.close();
+			}
 		} catch (IOException e) {
 			// nothing
 		} catch (SGError e) {
 			// nothing
 		}
 
-		return obj;
+		if (gloss == null)
+			return null;
+		else if (example == null)
+			return new Expr("MkDefinition", gloss);
+		else
+			return new Expr("MkDefinitionEx", gloss, example);
 	}
 }

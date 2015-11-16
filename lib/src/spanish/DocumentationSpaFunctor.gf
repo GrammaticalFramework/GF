@@ -16,6 +16,7 @@ flags coding=utf8 ;
 
 lincat
   Inflection = {t : Str; s1,s2 : Str} ;
+  Definition = {s : Str} ;
   Document = {s : Str} ;
   Tag = {s : Str} ;
   
@@ -132,6 +133,12 @@ lin
     s2 = inflVerb v
     } ;
 
+lin
+  NoDefinition       = {s=""};
+  MkDefinition   d   = {s="<p><b>Definición:</b>"++d.s++"</p>"};
+  MkDefinitionEx d e = {s="<p><b>Definición:</b>"++d.s++"</p><p><b>Ejemplo:</b>"++e.s++"</p>"};
+
+lin
   MkDocument b i e = ss (i.s1 ++ "<p style=\"font-size:20px\">"++b.s++"</p>" ++ i.s2 ++ paragraph e.s) ;  -- explanation appended in a new paragraph
   MkTag i = ss i.t ;
 
