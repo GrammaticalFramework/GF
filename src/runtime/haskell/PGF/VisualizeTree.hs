@@ -483,53 +483,57 @@ conll2latex :: String -> String
 conll2latex = unlines . dep2latex . conll2dep
 
 data Dep = Dep {
-    wordLength  :: Int                  -- millimetres 
-  , tokens      :: [(String,String)]    -- word, pos
-  , deps        :: [((Int,Int),String)]
-  , root        :: Int
-  , pictureSize :: (Int,Int)
+    wordLength  :: Double               -- fixed width, millimetres (>= 20.0)
+  , tokens      :: [(String,String)]    -- word, pos (0..)
+  , deps        :: [((Int,Int),String)] -- from, to, label
+  , root        :: Int                  -- root word position
+  , pictureSize :: (Int,Int)            -- width = #words*wordlength
   }
+  
+defaultWordLength :: Double
+defaultWordLength = 20.0 -- the minimum fixed width word length
 
--- initialize with just the words, at optimal constant distances
-string2dep :: String -> Dep
-string2dep s = Dep {
-    wordLength = max 20 (maximum [2 * length w | w <- ws])
-  , tokens = zip ws (repeat "WORD")
-  , deps   = []
-  , root   = 0
-  , pictureSize = (100*length ws, (100*length ws) `div` 2)
-  }
- where ws = words s
+defaultUnit :: Double
+defaultUnit = 0.2   -- 0.2 millimetres
+
+comment s = "%% " ++ s
 
 dep2latex :: Dep -> [String]
 dep2latex d =
-     ("%% " ++ unwords (map fst (tokens d)))
-  :  app "setlength{\\unitlength}" (show (fromIntegral wld /100) ++ "mm")
+     comment (unwords (map fst (tokens d)))
+  :  app "setlength{\\unitlength}" (show defaultUnit ++ "mm")
   :  ("\\begin{picture}(" ++ show width ++ "," ++ show height ++ ")")
-  :  [put x  0 w | (x,w) <- zip [0,100..] (map fst (tokens d))] -- words
-  ++ [put x 15 w | (x,w) <- zip [0,100..] (map snd (tokens d))] -- pos tags
-  ++ [putArc wld x y label | ((x,y),label) <- deps d]    -- arcs and labels
-  ++ [put (root d * 100 + 10) height (app "vector(0,-1)" (show (height-40)))]
-  ++ [put (root d * 100 + 15) (height - 10) "ROOT"]
+  :  [put (wpos rwld i)  0 w | (i,w) <- zip [0..] (map fst (tokens d))]   -- words
+  ++ [put (wpos rwld i) 15 w | (i,w) <- zip [0..] (map snd (tokens d))]   -- pos tags 15u above bottom
+  ++ [putArc rwld x y label | ((x,y),label) <- deps d]    -- arcs and labels
+  ++ [put (wpos rwld (root d) + 10) height (app "vector(0,-1)" (show (height-40)))]
+  ++ [put (wpos rwld (root d) + 15) (height - 10) "ROOT"]
   ++ ["\\end{picture}"]
  where
    (width,height) = case pictureSize d of (w,h) -> (w, h)
-   wld = wordLength d
-   rwld = 100 * wld `div` 20 ---- 100
+   wld  = wordLength d   -- >= 20.0
+   rwld = wld / defaultWordLength       -- >= 1.0
 
-putArc :: Int -> Int -> Int -> String -> String
-putArc wld x y label = unlines [oval,arrowhead,labelling] where
-  oval = put ctr 40 ("\\oval(" ++ show wdth ++ "," ++ show hght ++ ")[t]")
-  arrowhead = put endp 45 (app "vector(0,-1)" "5")
-  labelling = put (ctr - 15) (hght `div` 2 + 45) label
-  xy = 100 * abs (x-y) 
-  hxy =  xy `div` 2
-  beg = min x y
-  ctr = beg*100 + hxy + 10   -- center of oval = 
-  wdth = rwld * xy - (3000 `div` (rwld * xy))  -- width of oval = 
-  hght = hxy `div` rwld
-  endp = (if x < y then (+) else (-)) ctr (wdth `div` 2)
-  rwld = wld `div` 20
+-- some general measures
+wsize rwld     = 100 * rwld                               -- word length, units
+wpos rwld i    = fromIntegral i * wsize rwld              -- start position of the i'th word
+wdist rwld x y = wsize rwld * fromIntegral (abs (x-y))    -- distance between words x and y
+labelheight h  = h/2 + 45           -- label just above arc; 25 would put it just below
+labelstart c   = c - 20.0           -- label starts 20u left of arc centre
+arcbase        = 40.0               -- arcs start and end 40u above the bottom
+
+putArc :: Double -> Int -> Int -> String -> String
+putArc rwld x y label = unlines [oval,arrowhead,labelling] where
+  oval = put ctr arcbase ("\\oval(" ++ show wdth ++ "," ++ show hght ++ ")[t]")
+  arrowhead = put endp (arcbase + 5) (app "vector(0,-1)" "5")   -- downgoing arrow 5u above the arc base
+  labelling = put (labelstart ctr) (labelheight hght) label
+  dxy  = wdist rwld x y              -- distance between words, >>= 20.0
+  hdxy = dxy / 2                     -- half the distance
+  wdth = dxy - 3000/dxy              -- longer arcs are less wide in proportion
+  hght = hdxy / rwld                 -- arc height is independent of word length
+  begp = min x y                     -- begin position of oval
+  ctr  = wpos rwld begp + hdxy + (if x < y then 20 else  10)  -- LR arcs are farther right from center of oval
+  endp = (if x < y then (+) else (-)) ctr (wdth/2)            -- the point of the arrow
 
 latexDoc :: [String] -> String
 latexDoc body = unlines $
@@ -539,19 +543,32 @@ latexDoc body = unlines $
   : body
   ++ ["\\end{document}"]
 
+-- initialize with just the words, at optimal constant distances
+string2dep :: String -> Dep
+string2dep s = Dep {
+    wordLength = max defaultWordLength (maximum [2 * fromIntegral (length w) | w <- ws])
+  , tokens = zip ws (repeat "WORD")
+  , deps   = []
+  , root   = 0
+  , pictureSize = (100*length ws, (100*length ws) `div` 2)
+  }
+ where ws = words s
 
 app macro arg = "\\" ++ macro ++ "{" ++ arg ++ "}"
 put x y obj = app ("put(" ++ show x ++ "," ++ show y ++ ")") obj
 
 conll2dep :: String -> Dep
-conll2dep str = (string2dep sentence) {
+conll2dep str = dep0 {
     tokens = toks
   , deps = dps
   , root = head $ [read x-1 | x:_:_:_:_:_:"0":_ <- ls] ++ [1]
-  , pictureSize = (100*length ls, (20 + 50*(maximum [abs (x-y) | ((x,y),_) <- dps])))
+  , pictureSize = (rwld*100*length ls, (20 + 50*(maximum [abs (x-y) | ((x,y),_) <- dps])))
   }
  where
+   dep0 = string2dep sentence
    ls = map words (lines str)
    sentence = unwords (map fst toks) 
    toks = [(w,c) | _:w:_:c:_ <- ls]
    dps = [((read y-1, read x-1),lab) | x:_:_:_:_:_:y:lab:_ <- ls, y /="0"]
+   rwld = round (wordLength dep0 / defaultWordLength)
+
