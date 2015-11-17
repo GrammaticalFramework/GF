@@ -530,6 +530,7 @@ pgfCommands = Map.fromList [
      synopsis = "show word dependency tree graphically",
      explanation = unlines [
        "Prints a dependency tree in the .dot format (the graphviz format, default)",
+       "or LaTeX (flag -output=latex)",
        "or the CoNLL/MaltParser format (flag -output=conll for training, malt_input",
        "for unanalysed input).",
        "By default, the last argument is the head of every abstract syntax",
@@ -550,15 +551,20 @@ pgfCommands = Map.fromList [
            _  -> (Just . getDepLabels . lines) `fmap` restricted (readFile file)
          let lang = optLang pgf opts
          let grphs = map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
-         if isFlag "view" opts || isFlag "format" opts
+         if isFlag "view" opts && valStrOpts "output" "" opts == "latex"
            then do
-             let view = optViewGraph opts
-             let format = optViewFormat opts
-             viewGraphviz view format "_grphd_" grphs
-           else return $ fromString $ unlines grphs,
+               let view = optViewGraph opts
+               viewLatex view "_grphd_" grphs
+           else if isFlag "view" opts || isFlag "format" opts
+             then do
+               let view = optViewGraph opts
+               let format = optViewFormat opts
+               viewGraphviz view format "_grphd_" grphs
+             else return $ fromString $ unlines grphs,
      examples = [
        mkEx "gr | vd              -- generate a tree and show dependency tree in .dot",
        mkEx "gr | vd -view=open   -- generate a tree and display dependency tree on a Mac",
+       mkEx "gr | vd -view=open -output=latex   -- generate a tree and display latex dependency tree on a Mac",
        mkEx "gr -number=1000 | vd -file=dep.labels -output=conll     -- generate training treebank",
        mkEx "gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences"
        ],
@@ -961,3 +967,26 @@ viewGraphviz view format name grphs = do
 ---           restrictedSystem $ "rm " ++ file "*" "dot"
 ---           restrictedSystem $ "rm " ++ file "all" "pdf"
            return void
+
+viewLatex :: String -> String -> [String] -> SIO CommandOutput
+viewLatex view name grphs = do
+  let texfile = name ++ ".tex"
+  let pdffile = name ++ ".pdf"
+  restricted $ writeUTF8File texfile (latexDoc grphs)
+  restrictedSystem $ "pdflatex " ++ texfile
+  restrictedSystem $ view ++ " " ++ pdffile
+  return void
+  
+---- copied from VisualizeTree ; not sure about proper place AR Nov 2015
+latexDoc :: [String] -> String
+latexDoc body = unlines $
+    "\\batchmode"
+  : "\\documentclass{article}"
+  : "\\usepackage[utf8]{inputenc}"  
+  : "\\begin{document}"
+  : spaces body
+  ++ ["\\end{document}"]
+ where
+   spaces = intersperse "\\vspace{6mm}"
+   ---- also reduce the size for long sentences
+   
