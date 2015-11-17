@@ -26,6 +26,7 @@ import PGF.CId (wildCId,showCId,ppCId,mkCId) --CId,pCId,
 import PGF.Data
 import PGF.Expr (Tree) -- showExpr
 import PGF.Linearize
+----import PGF.LatexVisualize (conll2latex) ---- should be separate module?
 import PGF.Macros (lookValCat, BracketedString(..))
                    --lookMap, BracketedTokn(..), flattenBracketedString
 
@@ -112,12 +113,13 @@ graphvizAbstractTree pgf (funs,cats) = render . tree2graph
 type Labels = Map.Map CId [String]
 
 graphvizDependencyTree :: String -> Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Tree -> String
-graphvizDependencyTree format debug mlab ms pgf lang t = render $
+graphvizDependencyTree format debug mlab ms pgf lang t = 
   case format of
-    "conll"      -> vcat (map (hcat . intersperse (char '\t')         ) wnodes)
-    "malt_tab"   -> vcat (map (hcat . intersperse (char '\t') . (\ws -> [ws !! 0,ws !! 1,ws !! 3,ws !! 6,ws !! 7])) wnodes)
-    "malt_input" -> vcat (map (hcat . intersperse (char '\t') . take 6) wnodes)
-    _            -> text "digraph {" $$
+    "latex"      -> conll2latex $ render $ vcat (map (hcat . intersperse (char '\t')         ) wnodes)
+    "conll"      -> render $ vcat (map (hcat . intersperse (char '\t')         ) wnodes)
+    "malt_tab"   -> render $ vcat (map (hcat . intersperse (char '\t') . (\ws -> [ws !! 0,ws !! 1,ws !! 3,ws !! 6,ws !! 7])) wnodes)
+    "malt_input" -> render $ vcat (map (hcat . intersperse (char '\t') . take 6) wnodes)
+    _            -> render $ text "digraph {" $$
                     space $$
                     nest 2 (text "rankdir=LR ;" $$
                             text "node [shape = plaintext] ;" $$
@@ -128,7 +130,10 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
     nodes  = map mkNode leaves
     links  = map mkLink [(fid, fromMaybe (dep_lbl,nil) (lookup fid deps)) | ((cat,fid,fun),_,w) <- tail leaves]
 
-    wnodes = [[int i, maltws ws, ppCId fun, ppCId cat, ppCId cat, unspec, int parent, text lab, unspec, unspec] |
+-- CoNLL format: ID FORM LEMMA PLEMMA POS PPOS FEAT PFEAT HEAD PHEAD DEPREL PDEPREL
+-- P variants are automatically predicted rather than gold standard
+
+    wnodes = [[int i, maltws ws, ppCId fun, ppCId (posCat cat), ppCId cat, unspec, int parent, text lab, unspec, unspec] |
               ((cat,fid,fun),i,ws) <- tail leaves,
               let (lab,parent) = fromMaybe (dep_lbl,0)
                                            (do (lbl,fid) <- lookup fid deps
@@ -167,6 +172,10 @@ graphvizDependencyTree format debug mlab ms pgf lang t = render $
     mkLink (x,(lbl,y)) = tag y <+> text "->" <+> tag x  <+> text "[label = " <> doubleQuotes (text lbl) <> text "] ;"
 
     labels = maybe Map.empty id mlab
+
+    posCat cat = case Map.lookup cat labels of
+        Just [p] -> mkCId p
+        _ -> cat
 
     getDeps n_fid xs (EAbs _ x e) es = getDeps n_fid (x:xs) e      es
     getDeps n_fid xs (EApp e1 e2) es = getDeps n_fid xs     e1 (e2:es)
@@ -460,3 +469,89 @@ tbrackets d = char '<' <> d  <> char '>'
 tag i
   | i < 0     = char 'r' <> int (negate i)
   | otherwise = char 'n' <> int i
+
+
+---------------------- should be a separate module?
+
+-- visualization with latex output. AR Nov 2015
+
+-- convert a set of CoNLL annotated dependency trees into LaTeX pictures
+conlls2latexDoc :: [String] -> String
+conlls2latexDoc = latexDoc . intersperse "\n\\vspace{4mm}\n" . map conll2latex
+
+conll2latex :: String -> String
+conll2latex = unlines . dep2latex . conll2dep
+
+data Dep = Dep {
+    wordLength  :: Int                  -- millimetres 
+  , tokens      :: [(String,String)]    -- word, pos
+  , deps        :: [((Int,Int),String)]
+  , root        :: Int
+  , pictureSize :: (Int,Int)
+  }
+
+-- initialize with just the words, at optimal constant distances
+string2dep :: String -> Dep
+string2dep s = Dep {
+    wordLength = max 20 (maximum [2 * length w | w <- ws])
+  , tokens = zip ws (repeat "WORD")
+  , deps   = []
+  , root   = 0
+  , pictureSize = (100*length ws, (100*length ws) `div` 2)
+  }
+ where ws = words s
+
+dep2latex :: Dep -> [String]
+dep2latex d =
+     ("%% " ++ unwords (map fst (tokens d)))
+  :  app "setlength{\\unitlength}" (show (fromIntegral wld /100) ++ "mm")
+  :  ("\\begin{picture}(" ++ show width ++ "," ++ show height ++ ")")
+  :  [put x  0 w | (x,w) <- zip [0,100..] (map fst (tokens d))] -- words
+  ++ [put x 15 w | (x,w) <- zip [0,100..] (map snd (tokens d))] -- pos tags
+  ++ [putArc wld x y label | ((x,y),label) <- deps d]    -- arcs and labels
+  ++ [put (root d * 100 + 10) height (app "vector(0,-1)" (show (height-40)))]
+  ++ [put (root d * 100 + 15) (height - 10) "ROOT"]
+  ++ ["\\end{picture}"]
+ where
+   (width,height) = case pictureSize d of (w,h) -> (w, h)
+   wld = wordLength d
+   rwld = 100 * wld `div` 20 ---- 100
+
+putArc :: Int -> Int -> Int -> String -> String
+putArc wld x y label = unlines [oval,arrowhead,labelling] where
+  oval = put ctr 40 ("\\oval(" ++ show wdth ++ "," ++ show hght ++ ")[t]")
+  arrowhead = put endp 45 (app "vector(0,-1)" "5")
+  labelling = put (ctr - 15) (hght `div` 2 + 45) label
+  xy = 100 * abs (x-y) 
+  hxy =  xy `div` 2
+  beg = min x y
+  ctr = beg*100 + hxy + 10   -- center of oval = 
+  wdth = rwld * xy - (3000 `div` (rwld * xy))  -- width of oval = 
+  hght = hxy `div` rwld
+  endp = (if x < y then (+) else (-)) ctr (wdth `div` 2)
+  rwld = wld `div` 20
+
+latexDoc :: [String] -> String
+latexDoc body = unlines $
+    "\\documentclass{article}"
+  : "\\usepackage[utf8]{inputenc}"  
+  : "\\begin{document}"
+  : body
+  ++ ["\\end{document}"]
+
+
+app macro arg = "\\" ++ macro ++ "{" ++ arg ++ "}"
+put x y obj = app ("put(" ++ show x ++ "," ++ show y ++ ")") obj
+
+conll2dep :: String -> Dep
+conll2dep str = (string2dep sentence) {
+    tokens = toks
+  , deps = dps
+  , root = head $ [read x-1 | x:_:_:_:_:_:"0":_ <- ls] ++ [1]
+  , pictureSize = (100*length ls, (20 + 50*(maximum [abs (x-y) | ((x,y),_) <- dps])))
+  }
+ where
+   ls = map words (lines str)
+   sentence = unwords (map fst toks) 
+   toks = [(w,c) | _:w:_:c:_ <- ls]
+   dps = [((read y-1, read x-1),lab) | x:_:_:_:_:_:y:lab:_ <- ls, y /="0"]
