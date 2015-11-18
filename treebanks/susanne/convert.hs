@@ -2,6 +2,7 @@ import System.Directory
 import System.FilePath
 import Data.List
 import Data.Char(toLower)
+import Data.Maybe(fromMaybe)
 import Control.Monad
 import qualified Data.Map as Map
 
@@ -44,6 +45,9 @@ convert pgf eng t@(Phrase tag mods fn idx ts)
   | tag == "Po"= case runP pPP pgf eng ts of
                    Just ([],x) -> x
                    _           -> Phrase tag mods fn idx ts'
+  | tag == "Fr"= case runP pRS pgf eng ts of
+                   Just ([],x) -> x
+                   _           -> Phrase tag mods fn idx ts'
   | otherwise  = Phrase tag mods fn idx ts'
   where
     ts' = map (convert pgf eng) ts
@@ -78,9 +82,9 @@ pSubject =
   `mplus`
   do insideOpt convert "N:S" pNP
   `mplus`
-  do match convert "M:s"
+  do insideOpt convert "M:s" pM
   `mplus`
-  do match convert "M:S"
+  do insideOpt convert "M:S" pM
   `mplus`
   do insideOpt convert "Ds:s" $ do
        det <- pDet
@@ -157,16 +161,21 @@ pVP =
                               advs)
                        adVs)
   `mplus`
-  do inside "V" (match convert "VBZ")
-     adVs  <- many pAdV
-     p     <- pPol
+  do (t,p) <- inside "V" pCopula
      comp  <- pComp
      advs  <- many pVPMods
-     return (cidTTAnt cidTPres cidASimul,p,foldr (\adv t -> cidAdVVP adv t)
-                       (foldl (\t adv -> cidAdvVP t adv)
-                              (cidUseComp comp)
-                              advs)
-                       adVs)
+     return (cidTTAnt t cidASimul,p,foldl (\t adv -> cidAdvVP t adv)
+                                          (cidUseComp comp)
+                                          advs)
+
+pCopula = 
+  do match convert "VBZ"
+     p <- pPol
+     return (cidTPres,p)
+  `mplus`
+  do match convert "VBDZ"
+     p <- pPol
+     return (cidTPast,p)
 
 pComp =
   do adv <- insideOpt convert "R:e" pAdv
@@ -302,12 +311,13 @@ pVInf cat =
   do v <- match convert "VH0" -- have
      return (Active,Simple,v)
 
+pVPPresPart =
+  insideOpt convert "Vg" $ do
+    v <- pVPresPart "V"
+    return (cidUseV v)
+
 pVPart cat =
-  do v <- do lemma "VVGi" cat "s VPresPart"
-          `mplus`
-          do lemma "VVGt" cat "s VPresPart"
-          `mplus`
-          do lemma "VVGv" cat "s VPresPart"
+  do v <- pVPresPart cat
      return (Active,Progressive,v)
   `mplus`
   do v <- pVPastPart cat
@@ -319,6 +329,13 @@ pVPres cat =
   do lemma "VV0t" cat "s VInf"
   `mplus`
   do lemma "VV0v" cat "s VInf"
+
+pVPresPart cat =
+  do lemma "VVGi" cat "s VPresPart"
+  `mplus`
+  do lemma "VVGt" cat "s VPresPart"
+  `mplus`
+  do lemma "VVGv" cat "s VPresPart"
 
 pVPastPart cat =
   do lemma "VVNi" cat "s VPPart"
@@ -347,7 +364,7 @@ pObject =
   `mplus`
   match convert "N:e"
   `mplus`
-  match convert "M:e"
+  insideOpt convert "M:e" pM
   `mplus`
   do insideOpt convert "Ds:e" $ do
        det <- pDet
@@ -454,11 +471,12 @@ pPP =
                   _                          -> return (cidMassNP (cidUseN n))    -- we don't know the number
      return (cidPrepNP prep np)
 
-pNP = 
+pNP =
   do np <- pBaseNP
-     match convert "YC"
-     fr <- insideOpt convert "Fr" pRCl
-     return (cidRelNP np fr)
+     mods <- many pNPMods
+     return (foldl (\t mod -> mod t)
+                   np
+                   mods)
   `mplus`
   do pBaseNP
 
@@ -509,12 +527,16 @@ pDet =
   do det <- lemma "DA2" "Det" "s"
      return (\num -> det)
   `mplus`
+  do num0 <- pNumeral
+     return (\num -> cidDetQuant cidIndefArt num0)
+  `mplus`
   do q   <- pQuant
      ord <- pOrd
      return (\num -> cidDetQuantOrd q num ord)
   `mplus`
-  do q   <- pQuant
-     return (\num -> cidDetQuant q num)
+  do q      <- pQuant
+     mb_num <- opt pNumeral
+     return (\num -> cidDetQuant q (fromMaybe num mb_num))
 
 pQuant =
   do match convert "AT"
@@ -562,6 +584,27 @@ pQuant =
 pOrd =
   do a <- lemma "JJT" "A" "s (AAdj Superl Nom)"
      return (cidOrdSuperl a)
+
+pNumeral =
+  do w <- word "MC" `mplus` word "MC1"
+     cnc <- getConcr
+     case parse cnc "Numeral" w of
+       Right [(e,_)] -> do n <- toParseTree e
+                           return (cidNumCard (cidNumNumeral n))
+       _             -> mzero
+  `mplus`
+  do w <- word "MCn"
+     cnc <- getConcr
+     case parse cnc "Digits" w of
+       Right [(e,_)] -> do n <- toParseTree e
+                           return (cidNumCard (cidNumDigits n))
+       _             -> mzero
+  where
+    toParseTree e = 
+      case unApp e of
+        Just (f,es) -> do ps <- mapM toParseTree es
+                          return (App f ps)
+        Nothing     -> mzero
 
 pGenitive =
   do np <- insideOpt convert "N" pNP
@@ -616,6 +659,9 @@ pAP =
   `mplus`
   do vp <- match convert "Tn"
      return (cidPastPartAP vp)
+  `mplus`
+  do vp <- insideOpt convert "Tg" pVPPresPart
+     return (cidPresPartAP vp)
   `mplus`
   do insideOpt convert "J" $ do
        adas <- many pAdA
@@ -743,8 +789,44 @@ pCNMods =
               return (cidSubjS cidthat_Subj s)
      return (\t -> cidAdvCN t adv)
   `mplus`
-  do fr <- insideOpt convert "Fr" pRCl
+  do fr <- insideOpt convert "Fr" pRS
      return (\t -> cidRelCN t fr)
+
+pNPMods =
+  do adv <- insideOpt convert "Po" $ pPP
+     return (\t -> cidAdvNP t adv)
+  `mplus`
+  do adv <- insideOpt convert "P" $ pPP
+     return (\t -> cidAdvNP t adv)
+  `mplus`
+  do adv <- insideOpt convert "Fn" $ do
+              match convert "CST"
+              s <- pS
+              return (cidSubjS cidthat_Subj s)
+     return (\t -> cidAdvNP t adv)
+  `mplus`
+  do match convert "YC"
+     adv <- insideOpt convert "Po" $ pPP
+     opt (match convert "YC")
+     return (\t -> cidExtAdvNP t adv)
+  `mplus`
+  do match convert "YC"
+     adv <- insideOpt convert "P" $ pPP
+     opt (match convert "YC")
+     return (\t -> cidExtAdvNP t adv)
+  `mplus`
+  do match convert "YC"
+     adv <- insideOpt convert "Fn" $ do
+              match convert "CST"
+              s <- pS
+              return (cidSubjS cidthat_Subj s)
+     opt (match convert "YC")
+     return (\t -> cidExtAdvNP t adv)
+  `mplus`
+  do match convert "YC"
+     fr <- insideOpt convert "Fr" pRS
+     opt (match convert "YC")
+     return (\t -> cidRelNP t fr)
 
 pName =
   do w1 <- word "NP1s"
@@ -765,7 +847,19 @@ pName =
                 ,word "NP2x", word "NP2z"]
      return (cidSymbPN (cidMkSymb (Lit w1)))
 
-pRCl = 
+pM = do
+  num <- pNumeral
+  mods <- many pNPMods
+  return (foldl (\t mod -> mod t)
+                (cidDetNP (cidDetQuant cidIndefArt num))
+                mods)
+
+pRS = 
+  do rp <- pRP
+     np <- pSubject
+     (t,p,vp) <- pVP
+     return (cidUseRCl t p (cidRelSlash rp (cidSlashVP np vp)))
+  `mplus`
   do rp <- pRP
      (t,p,vp) <- pVP
      opt (match convert "YC")

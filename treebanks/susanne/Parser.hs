@@ -19,6 +19,8 @@ instance MonadPlus P where
   mzero = P (\pgf cnc ts -> Nothing)
   mplus f g = P (\pgf cnc ts -> mplus (runP f pgf cnc ts) (runP g pgf cnc ts))
 
+getConcr = P (\pgf cnc ts -> Just (ts,cnc))
+
 match convert tag_spec = P (\pgf cnc ts ->
   case ts of
     (t@(Phrase tag1 mods1 fn1 _ _):ts)
