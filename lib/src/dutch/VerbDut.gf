@@ -75,7 +75,9 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
 
     UseCopula = predV zijn_V; 
 
-    CompCN cn = {s = \\a => cn.s ! Strong ! NF a.n Nom} ;
+    CompCN cn = {s = \\a => case a.n of {
+                                 Sg => "een" ++ cn.s ! Strong ! NF Sg Nom ;
+                                 Pl => cn.s ! Strong ! NF Pl Nom }} ;
     CompAP ap = {s = \\_ => ap.s ! APred} ;
     CompNP np = {s = \\_ => np.s ! NPNom} ;
     CompAdv a = {s = \\_ => a.s} ;
