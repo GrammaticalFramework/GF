@@ -31,7 +31,7 @@ param
 
   Gender  = Utr | Neutr ;
 
-  AForm   = AF AFormGrad Case ;
+  AForm   = AF AFormGrad Case | AAdv ;
 
   AFormGrad =
      APosit  AFormPos
@@ -192,8 +192,9 @@ oper
       AF (APosit a) c          => mkCase c (mkAdjPos a liten litet lilla sma) ;
       AF ACompar c             => mkCase c mindre ;
       AF (ASuperl SupStrong) c => mkCase c minst ;
-      AF (ASuperl SupWeak) c   => mkCase c minsta
-      } 
+      AF (ASuperl SupWeak) c   => mkCase c minsta ;
+      AAdv                     => litet
+      }
     } ;
 
   mkVerb9 : (x1,_,_,_,_,_,_,_,x9 : Str) -> {s : VForm => Str ; vtype : VType} = 

@@ -94,7 +94,7 @@ lin
       isDet = True
       } ;
 
-  PositAdVAdj a = {s = a.s ! G.adverbForm} ;
+  PositAdVAdj a = {s = a.s ! AAdv} ;
 
   UseQuantPN q pn = {
       s = \\c => q.s ! Sg ! True ! False ! pn.g ++ pn.s ! caseNP c ; 

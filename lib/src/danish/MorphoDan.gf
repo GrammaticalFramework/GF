@@ -53,7 +53,8 @@ oper
        AF (APosit _) c                  => mkCase c store ;
        AF ACompar c                     => mkCase c storre ;
        AF (ASuperl SupStrong) c         => mkCase c storst ;
-       AF (ASuperl SupWeak) c           => mkCase c (storst + "e")
+       AF (ASuperl SupWeak) c           => mkCase c (storst + "e") ;
+       AAdv                             => stort
        }
     } ;
 
