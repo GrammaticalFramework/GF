@@ -44,7 +44,9 @@ lin
            caseInfl Nom ++
            tr (intagAttr "th" "colspan=5" "genitiv") ++
            caseInfl Nom
-         )
+        ) ++
+        heading1 ("Adverb") ++
+        paragraph (adj.s ! AAdv) ;
     } where {
         caseInfl : Case -> Str = \c ->
           tr (intagAttr "th" "rowspan=3" "obest" ++

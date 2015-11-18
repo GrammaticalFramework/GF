@@ -189,6 +189,8 @@ oper
  
   invarA : Str -> A ;  -- e.g. äkta
 
+  irregAdv : A -> Str -> A ;  -- adverb irreg
+
 ---- Adjective with deviant adverb.
 
 ----  deviantAdvA : Str -> A -> A ; -- e.g. bra, god
@@ -581,6 +583,8 @@ oper
   compoundA adj = {s = adj.s ; isComp = True ; lock_A = <>} ;
 
   invarA s = mk3cA s s s True ;
+
+  irregAdv a adv = lin A {s = table {AAdv => adv; aform => a.s ! aform}; isComp = a.isComp} ;
 
   mkA2 a p = a ** {c2 = mkComplement p.s ; lock_A2 = <>} ;
 
