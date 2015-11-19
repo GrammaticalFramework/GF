@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		82BDC7DA1BFC9222006E3F07 /* AppEst.pgf_c in Resources */ = {isa = PBXBuildFile; fileRef = 82BDC7D91BFC9222006E3F07 /* AppEst.pgf_c */; };
 		8B13021503B4FFDE467D3DA9 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB9B7B89581859D72BD5CEC /* libPods.a */; };
 		CC020CFE1AF76A6C0050AE38 /* PhraseTranslation.m in Sources */ = {isa = PBXBuildFile; fileRef = CC020CFD1AF76A6C0050AE38 /* PhraseTranslation.m */; };
 		CC022FB01AF8D8CF0067A675 /* SLKTextView+TextInputMode.m in Sources */ = {isa = PBXBuildFile; fileRef = CC022FAF1AF8D8CE0067A675 /* SLKTextView+TextInputMode.m */; };
@@ -159,6 +160,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		82BDC7D91BFC9222006E3F07 /* AppEst.pgf_c */ = {isa = PBXFileReference; lastKnownFileType = file; path = AppEst.pgf_c; sourceTree = "<group>"; };
 		9D996C5B51A0CAF9741D9356 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		ABB9B7B89581859D72BD5CEC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4E29C5D7044D408E488C0F3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -624,6 +626,7 @@
 		CC8E00F51AEE38600040920E /* grammars */ = {
 			isa = PBXGroup;
 			children = (
+				82BDC7D91BFC9222006E3F07 /* AppEst.pgf_c */,
 				CC8E00F61AEE38600040920E /* App.pgf */,
 				CC8E00F71AEE38600040920E /* AppBul.pgf_c */,
 				CC8E00F81AEE38600040920E /* AppCat.pgf_c */,
@@ -792,6 +795,7 @@
 				CC8E010E1AEE38600040920E /* AppSpa.pgf_c in Resources */,
 				CC8E01071AEE38600040920E /* AppDut.pgf_c in Resources */,
 				CC8E01081AEE38600040920E /* AppEng.pgf_c in Resources */,
+				82BDC7DA1BFC9222006E3F07 /* AppEst.pgf_c in Resources */,
 				CC8E010A1AEE38600040920E /* AppFre.pgf_c in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
