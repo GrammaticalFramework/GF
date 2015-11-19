@@ -112,6 +112,36 @@ pgf_expr_string(GuString str, GuPool* pool)
 	                        lit);
 }
 
+PgfExpr
+pgf_expr_int(int val, GuPool* pool)
+{
+	PgfLiteral lit;
+	PgfLiteralInt* plit = 
+		gu_new_variant(PGF_LITERAL_INT,
+		               PgfLiteralInt,
+		               &lit, pool);
+	plit->val = val;
+	return gu_new_variant_i(pool,
+	                        PGF_EXPR_LIT,
+	                        PgfExprLit,
+	                        lit);
+}
+
+PgfExpr
+pgf_expr_float(double val, GuPool* pool)
+{
+	PgfLiteral lit;
+	PgfLiteralFlt* plit = 
+		gu_new_variant(PGF_LITERAL_FLT,
+		               PgfLiteralFlt,
+		               &lit, pool);
+	plit->val = val;
+	return gu_new_variant_i(pool,
+	                        PGF_EXPR_LIT,
+	                        PgfExprLit,
+	                        lit);
+}
+
 typedef struct PgfExprParser PgfExprParser;
 
 typedef enum {

@@ -22,7 +22,7 @@ module PGF2 (-- * CId
              -- * Types
              Type(..), Hypo, BindType(..), showType, functionType,
              -- * Trees
-             Expr,Fun,readExpr,showExpr,mkApp,unApp,mkStr,
+             Expr,Fun,readExpr,showExpr,mkApp,unApp,mkStr,mkInt,mkFloat,
              graphvizAbstractTree,graphvizParseTree,
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,

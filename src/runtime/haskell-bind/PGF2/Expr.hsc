@@ -67,6 +67,22 @@ mkStr str =
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
       return (Expr c_expr exprFPl)
 
+mkInt :: Int -> Expr
+mkInt val =
+  unsafePerformIO $ do
+      exprPl <- gu_new_pool
+      c_expr <- pgf_expr_int (fromIntegral val) exprPl
+      exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+      return (Expr c_expr exprFPl)
+
+mkFloat :: Double -> Expr
+mkFloat val =
+  unsafePerformIO $ do
+      exprPl <- gu_new_pool
+      c_expr <- pgf_expr_float (realToFrac val) exprPl
+      exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+      return (Expr c_expr exprFPl)
+
 readExpr :: String -> Maybe Expr
 readExpr str =
   unsafePerformIO $
