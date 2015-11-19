@@ -150,6 +150,12 @@ PgfExpr
 pgf_expr_string(GuString, GuPool* pool);
 
 PgfExpr
+pgf_expr_int(int val, GuPool* pool);
+
+PgfExpr
+pgf_expr_float(double val, GuPool* pool);
+
+PgfExpr
 pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);
 
 int
