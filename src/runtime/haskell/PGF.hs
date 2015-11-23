@@ -129,6 +129,7 @@ module PGF(
            gizaAlignment,
            GraphvizOptions(..),
            graphvizDefaults,
+           conlls2latexDoc,
            -- extra:
            getDepLabels,
  
