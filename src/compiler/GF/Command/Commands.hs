@@ -551,25 +551,29 @@ pgfCommands = Map.fromList [
            _  -> (Just . getDepLabels . lines) `fmap` restricted (readFile file)
          let lang = optLang pgf opts
          let grphs = map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
-         if isFlag "view" opts && valStrOpts "output" "" opts == "latex"
-           then do
-               let view = optViewGraph opts
-               viewLatex view "_grphd_" grphs
-           else if isFlag "view" opts || isFlag "format" opts
+         if isOpt "conll2latex" opts
+           then return $ fromString $ conlls2latexDoc $ stanzas $ unlines $ toStrings es
+           else if isFlag "view" opts && valStrOpts "output" "" opts == "latex"
              then do
                let view = optViewGraph opts
-               let format = optViewFormat opts
-               viewGraphviz view format "_grphd_" grphs
-             else return $ fromString $ unlines grphs,
+               viewLatex view "_grphd_" grphs
+             else if isFlag "view" opts || isFlag "format" opts
+               then do
+                 let view = optViewGraph opts
+                 let format = optViewFormat opts
+                 viewGraphviz view format "_grphd_" grphs
+               else return $ fromString $ unlines $ intersperse "" grphs,
      examples = [
        mkEx "gr | vd              -- generate a tree and show dependency tree in .dot",
        mkEx "gr | vd -view=open   -- generate a tree and display dependency tree on a Mac",
        mkEx "gr | vd -view=open -output=latex   -- generate a tree and display latex dependency tree on a Mac",
        mkEx "gr -number=1000 | vd -file=dep.labels -output=conll     -- generate training treebank",
-       mkEx "gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences"
+       mkEx "gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences",
+       mkEx "rf -file=ex.conll | vd -conll2latex | wf -file=ex.tex   -- convert conll file to latex"
        ],
      options = [
-       ("v","show extra information")
+       ("v","show extra information"),
+       ("conll2latex", "convert conll to latex")
        ],
      flags = [
        ("file","configuration file for labels, format per line 'fun label*'"),
@@ -989,4 +993,9 @@ latexDoc body = unlines $
  where
    spaces = intersperse "\\vspace{6mm}"
    ---- also reduce the size for long sentences
-   
+
+stanzas :: String -> [String]
+stanzas = map unlines . chop . lines where
+  chop ls = case break (=="") ls of
+    (ls1,[])  -> [ls1]
+    (ls1,_:ls2) -> ls1 : chop ls2

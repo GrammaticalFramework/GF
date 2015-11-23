@@ -20,6 +20,7 @@ module PGF.VisualizeTree
              , graphvizAlignment
              , gizaAlignment
              , getDepLabels
+             , conlls2latexDoc
              ) where
 
 import PGF.CId (wildCId,showCId,ppCId,mkCId) --CId,pCId,
@@ -476,7 +477,7 @@ tag i
 -- visualization with latex output. AR Nov 2015
 
 conlls2latexDoc :: [String] -> String
-conlls2latexDoc = latexDoc . intersperse "\n\\vspace{4mm}\n" . map conll2latex
+conlls2latexDoc = latexDoc . intersperse "\n\\vspace{4mm}\n" . map conll2latex . filter (not . null)
 
 conll2latex :: String -> String
 conll2latex = unlines . dep2latex . conll2dep
@@ -496,11 +497,11 @@ defaultUnit       = 0.2   -- unit in latex pictures, 0.2 millimetres
 wsize rwld     = 100 * rwld                               -- word length, units
 wpos rwld i    = fromIntegral i * wsize rwld              -- start position of the i'th word
 wdist rwld x y = wsize rwld * fromIntegral (abs (x-y))    -- distance between words x and y
-labelheight h  = h/2 + arcbase + 5  -- label just above arc; 25 would put it just below
+labelheight h  = h + arcbase + 3    -- label just above arc; 25 would put it just below
 labelstart c   = c - 15.0           -- label starts 15u left of arc centre
 arcbase        = 30.0               -- arcs start and end 40u above the bottom
 arcfactor r    = r * 1500           -- reduction of arc size from word distance
-
+xyratio        = 3                  -- width/height ratio of arcs
 
 dep2latex :: Dep -> [String]
 dep2latex d =
@@ -522,11 +523,11 @@ putArc :: Double -> Int -> Int -> String -> String
 putArc rwld x y label = unlines [oval,arrowhead,labelling] where
   oval = put ctr arcbase ("\\oval(" ++ show wdth ++ "," ++ show hght ++ ")[t]")
   arrowhead = put endp (arcbase + 5) (app "vector(0,-1)" "5")   -- downgoing arrow 5u above the arc base
-  labelling = put (labelstart ctr) (labelheight hght) (small label)
+  labelling = put (labelstart ctr) (labelheight (hght/2)) (small label)
   dxy  = wdist rwld x y              -- distance between words, >>= 20.0
   hdxy = dxy / 2                     -- half the distance
   wdth = dxy - (arcfactor rwld)/dxy  -- longer arcs are less wide in proportion
-  hght = hdxy / rwld                 -- arc height is independent of word length
+  hght = dxy / (xyratio * rwld)      -- arc height is independent of word length
   begp = min x y                     -- begin position of oval
   ctr  = wpos rwld begp + hdxy + (if x < y then 20 else  10)  -- LR arcs are farther right from center of oval
   endp = (if x < y then (+) else (-)) ctr (wdth/2)            -- the point of the arrow
@@ -537,7 +538,7 @@ conll2dep str = Dep {
   , tokens = toks
   , deps = dps
   , root = head $ [read x-1 | x:_:_:_:_:_:"0":_ <- ls] ++ [1]
-  , pictureSize = (round (wsize rwld * fromIntegral (length ls)),  60 + 25*maxdist)  -- highest arc + 60u
+  , pictureSize = (round (wsize rwld * fromIntegral (length ls)),  60 + 16*maxdist)  -- highest arc + 60u
   }
  where
    wld = maximum [2 * fromIntegral (length w) | w <- map fst toks ++ map snd toks]
