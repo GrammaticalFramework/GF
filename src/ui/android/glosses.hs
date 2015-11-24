@@ -14,8 +14,8 @@ gloss l =
     _            -> Nothing
 
 glossTriples fn s =
-  (if null gs then [] else ["<"++fn++",gloss,"++show (mergeGloss gs)++">"])++
-  ["<"++fn++",example,"++e++">" | e <- es]
+  (if null gs then [] else ["<"++fn++",gloss,"++show (merge gs)++">"])++
+  (if null es then [] else ["<"++fn++",example,"++show (merge (map (init . tail) es))++">"])
   where
     (es,gs) = partition isExample (splitGloss s)
 
@@ -27,6 +27,6 @@ splitGloss s =
   where
     trim = reverse . dropWhile isSpace . reverse . dropWhile isSpace
 
-mergeGloss = intercalate "; "
+merge = intercalate "; "
 
 isExample s = not (null s) && head s == '"' && last s == '"'
