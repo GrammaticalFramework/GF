@@ -94,7 +94,7 @@ public class SemanticGraphActivity extends Activity {
 				Toast toast = Toast.makeText(this, "\""+query+"\" doesn't match", Toast.LENGTH_SHORT);
 				toast.show();
 			} else {
-				mGraphView.getGraph().addNode(query);
+				mGraphView.getGraph().addNode(query, list);
 				mGraphView.refresh();
 			}
 		}
