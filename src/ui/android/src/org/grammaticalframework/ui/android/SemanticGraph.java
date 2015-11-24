@@ -21,10 +21,10 @@ public class SemanticGraph {
 		layoutMaxY = 0;
 	}
 
-	public Node addNode(String lemma) {
+	public Node addNode(String lemma, List senses) {
 		Node n = nodes.get(lemma);
 		if (n == null) {
-			n = new Node(lemma, new String[(int) (10*Math.random())]);
+			n = new Node(lemma, senses);
 		}
 		nodes.put(lemma,n);
 		return n;
@@ -182,7 +182,7 @@ public class SemanticGraph {
 
 	public static class Node {
 		private String lemma;
-        private String[] senses;
+        private List senses;
 
 		private float layoutPosX;
 		private float layoutPosY;
@@ -190,7 +190,7 @@ public class SemanticGraph {
         private float layoutForceY;
         
                 
-        private Node(String lemma, String[] senses) {
+        private Node(String lemma, List senses) {
 			this.lemma  = lemma;
 			this.senses = senses;
 
@@ -205,11 +205,11 @@ public class SemanticGraph {
 		}
 
 		public int getSenseCount() {
-			return senses.length;
+			return senses.size();
 		}
 
-		public String getSenseId(int i) {
-			return senses[i];
+		public Object getSenseId(int i) {
+			return senses.get(i);
 		}
 
 		public float getLayoutX() {
