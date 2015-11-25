@@ -840,7 +840,7 @@ pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err)
 
 int
 pgf_read_expr_tuple(GuIn* in,
-                    int n_exprs, PgfExpr exprs[],
+                    size_t n_exprs, PgfExpr exprs[],
                     GuPool* pool, GuExn* err)
 {
 	GuPool* tmp_pool = gu_new_pool();
@@ -1330,6 +1330,19 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
 	} else {
 		pgf_print_cid(type->cid, out, err);
 	}
+}
+
+void
+pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
+                     GuOut* out, GuExn* err)
+{
+	gu_putc('<', out, err);
+	for (size_t i = 0; i < n_exprs; i++) {
+		if (i > 0)
+			gu_putc(',', out, err);
+		pgf_print_expr(exprs[i], ctxt, 0, out, err);
+	}
+	gu_putc('>', out, err);
 }
 
 bool
