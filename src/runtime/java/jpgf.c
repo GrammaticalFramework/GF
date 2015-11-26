@@ -1054,6 +1054,24 @@ Java_org_grammaticalframework_pgf_Expr_initApp(JNIEnv* env, jclass clazz, jstrin
 	return expr;
 }
 
+JNIEXPORT jboolean JNICALL
+Java_org_grammaticalframework_pgf_Expr_equals(JNIEnv* env, jobject self, jobject other)
+{
+	jclass self_class  = (*env)->GetObjectClass(env, self);
+	jclass other_class = (*env)->GetObjectClass(env, other);
+
+	if (!(*env)->IsAssignableFrom(env, other_class, self_class))
+		return JNI_FALSE;
+
+	PgfExpr e_self  = gu_variant_from_ptr(l2p(get_ref(env, self)));
+	PgfExpr e_other = gu_variant_from_ptr(l2p(get_ref(env, other)));
+	
+	if (pgf_expr_eq(e_self, e_other))
+		return JNI_TRUE;
+	else
+		return JNI_FALSE;
+}
+
 JNIEXPORT jstring JNICALL
 Java_org_grammaticalframework_pgf_Type_getCategory(JNIEnv* env, jobject self)
 {
