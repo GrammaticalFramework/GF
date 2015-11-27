@@ -4077,7 +4077,6 @@ lin colonization_N = mkN "kolonisatie" feminine ; -- status=guess
 lin colony_N = mkN "kolonie" feminine ; -- status=guess
 lin color_N = mkN "kleur " masculine ; -- status=guess
 lin colorado_PN = mkPN "Colorado" ; -- src=geonames status=guess
-lin colorful_A = mkA "kleurrijk" ; -- status=guess
 lin colossal_A = mkA "kolossaal" ; -- status=guess
 lin colostrum_N = mkN "biest" ; -- status=guess
 lin colour_N = mkN "kleur" ;
@@ -4085,7 +4084,7 @@ lin colour_V = variants {} ; --
 lin colour_V2 = variants {} ; --
 lin colour_V2A = variants {} ; --
 lin coloured_A = variants {} ; --
-lin colourful_A = variants {} ; --
+lin colourful_A = mkA "kleurrijk" ; -- status=guess
 lin colourless_A = mkA "kleurloos" ; -- status=guess
 lin colt_N = mkN "hengstveulen" neuter ; -- status=guess
 lin columbarium_N = mkN "columbarium" neuter ; -- status=guess

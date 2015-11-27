@@ -11613,16 +11613,12 @@ lin colonoscopy_N = variants {} ;
 lin colony_N = mkN "Kolonie" "Kolonien" feminine ; -- status=guess
 lin colophon_N = mkN "Kolophon" masculine ; -- status=guess
 lin colophony_N = variants {} ;
-lin color_A = regA "farbenblind" ; -- status=guess
-lin color_N = mkN "Tinktur" "Tinkturen" feminine ; -- status=guess
 lin colorado_PN = mkPN "Colorado" ; -- src=geonames status=guess
 lin coloration_N = variants {} ;
 lin coloratura_N = variants {} ;
 lin colorcast_N = variants {} ;
 lin colorectal_A = variants {} ;
-lin colored_A = mk3A "farbig" "farbiger" "farbigste" ; -- status=guess
 lin colorfast_A = variants {} ;
-lin colorful_A = mk3A "bunt" "bunter" "bunteste" | mk3A "farbig" "farbiger" "farbigste" | mkA "farbenprächtig" | mk3A "farbenfroh" "farbenfroher" "farbenfrohstenfarbenfroheste" | mkA "kunterbunt" ; -- status=guess status=guess status=guess status=guess status=guess
 lin colorimeter_N = variants {} ;
 lin colorimetric_A = variants {} ;
 lin colorimetry_N = mkN "Farbmetrik" feminine ; -- status=guess
@@ -11632,7 +11628,8 @@ lin colossal_A = mk3A "kolossal" "kolossaler" "kolossalste" ; -- status=guess
 lin colossus_N = mkN "Koloss" "Kolosse" masculine ; -- status=guess
 lin colostomy_N = variants {} ;
 lin colostrum_N = mkN "Kolostrum" "Kolostren" neuter | mkN "Vormilch" feminine | mkN "Biest" "Biester" neuter ; -- status=guess status=guess status=guess
-lin colour_N = mkN "Farbe" ;
+lin colour_A = regA "farbenblind" ; -- status=guess
+lin colour_N = mkN "Farbe" | mkN "Tinktur" "Tinkturen" feminine ; -- status=guess
 lin colour_V = variants {} ; --
 lin colour_V2 = variants {} ; --
 lin colour_V2A = variants {} ; --
@@ -11641,8 +11638,8 @@ lin colour_blind_A = variants {} ;
 lin colour_code_V2 = variants {} ;
 lin colour_up_V = variants {} ;
 lin colour_wash_N = variants {} ;
-lin coloured_A = variants {} ; --
-lin colourful_A = variants {} ; --
+lin coloured_A = mk3A "farbig" "farbiger" "farbigste" ; -- status=guess
+lin colourful_A = mk3A "bunt" "bunter" "bunteste" | mk3A "farbig" "farbiger" "farbigste" | mkA "farbenprächtig" | mk3A "farbenfroh" "farbenfroher" "farbenfrohstenfarbenfroheste" | mkA "kunterbunt" ; -- status=guess status=guess status=guess status=guess status=guess
 lin colouring_N = variants {} ;
 lin colourless_A = mk3A "farblos" "farbloser" "farbloseste" ; -- status=guess
 lin colpitis_N = variants {} ;

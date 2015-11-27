@@ -6215,19 +6215,18 @@ lin colonizer_N = mkN "colonizador" ; --UWN
 lin colonnade_N = mkN "columnata" ; -- status=guess
 lin colonoscopy_N = mkN "colonoscopia" ; --UWN
 lin colony_N = mkN "colonia" ; -- status=guess
-lin color_A = mkA "en color" ; -- status=guess
 lin colorado_PN = mkPN "Colorado" ; -- status=guess src=geonames
 lin coloratura_N = mkN "coloratura" ; --UWN
-lin colored_A = mkA "coloreado" ; -- status=guess
 lin colorimetric_A = mkA "colorimétrico" ; --UWN
 lin colorimetry_N = mkN "colorimetría" ; -- status=guess
 lin colossus_N = mkN "coloso" ; -- status=guess
 lin colostrum_N = mkN "calostro" ; -- status=guess
+lin colour_A = mkA "en color" ; -- status=guess
 lin colour_N = mkN "color" ;
 lin colour_V = variants {} ; --
 lin colour_V2 = variants {} ; --
 lin colour_V2A = variants {} ; --
-lin coloured_A = variants {} ; --
+lin coloured_A = mkA "coloreado" ; -- status=guess
 lin colourful_A = variants {} ; --
 lin colourless_A = mkA "incoloro" ; -- status=guess
 lin colpitis_N = mkN "colpitis" | mkN "vaginitis" ; --UWN
