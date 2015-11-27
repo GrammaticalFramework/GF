@@ -11545,14 +11545,11 @@ lin colonoscopy_N = mkN "koloskopi" ; -- src=google
 lin colony_N = mkN "koloni" "kolonier" ; -- SaldoWN
 lin colophon_N = mkN "kolofon" "kolofoner" ;
 lin colophony_N = mkN "kolofonium" ; -- src=google
-lin color_A = mkA "färg-" ; -- status=guess
-lin color_N = mkN "färg" "färger" ; -- status=guess
 lin colorado_PN = mkPN "Colorado" neutrum ; -- src=geonames status=guess
 lin coloration_N = mkN "färgning" ;
 lin coloratura_N = variants {} ; -- status=guess
 lin colorcast_N = mkN "färgskiftning" ;
 lin colorectal_A = variants {} ; -- status=guess
-lin colored_A = mkA "kulört" "kulört" ; -- status=guess
 lin colorfast_A = variants {} ; -- status=guess
 lin colorimeter_N = mkN "kolorimeter" ; -- src=google
 lin colorimetric_A = variants {} ; -- status=guess
@@ -11563,6 +11560,7 @@ lin colossal_A = mkA "kolossal" ; -- comment=5
 lin colossus_N = mkN "koloss" "kolosser" ; -- status=guess
 lin colostomy_N = mkN "kolostomi" ; -- src=google
 lin colostrum_N = mkN "råmjölk" ; -- status=guess
+lin colour_A = mkA "färg-" ; -- status=guess
 lin colour_N = mkN "färg" "färger" ;
 lin colour_V = mkV "färglägga" "färglade" "färglagt" ; -- comment=2
 lin colour_V2 = variants {} ; -- mkV "färglägga" "färglade" "färglagt" ; -- comment=2
@@ -11572,7 +11570,7 @@ lin colour_blind_A = variants {} ; -- status=guess
 lin colour_code_V2 = variants {} ; -- status=guess
 lin colour_up_V = mkV "färglägga" "färglade" "färglagt" ; -- comment=2
 lin colour_wash_N = mkN "färg-tvätt" ; -- src=google
-lin coloured_A = variants {} ; --
+lin coloured_A = mkA "kulört" "kulört" ; -- status=guess
 lin colourful_A = mkA "färgstark" | mkA "färgrik" ; -- SaldoWN
 lin colouring_N = mkN "färgning" ;
 lin colourless_A = compoundA (regA "ofärgad") ; -- comment=2

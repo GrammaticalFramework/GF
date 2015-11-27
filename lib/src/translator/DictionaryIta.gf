@@ -5443,7 +5443,6 @@ lin colonnade_N = mkN "colonnato" ; -- status=guess
 lin colonoscopy_N = mkN "coloscopia" ; -- status=guess
 lin colony_N = mkN "colonia" ; -- status=guess
 lin colophony_N = mkN "colofonia" | mkN "pece_greca" ; -- UWN
-lin color_A = mkA "daltonico" ; -- status=guess
 lin colorado_PN = mkPN "Colorado" ; -- status=guess src=geonames
 lin colorectal_A = mkA "colorettale" ; -- status=guess
 lin colorimeter_N = mkN "colorimetro" ; -- status=guess
@@ -5451,6 +5450,7 @@ lin colorimetric_A = mkA "colorimetrico" ; -- status=guess
 lin colorlessness_N = mkN "acromatismo" ; -- UWN
 lin colossus_N = mkN "colosso" ; -- status=guess
 lin colostrum_N = mkN "colostro" ; -- status=guess
+lin colour_A = mkA "daltonico" ; -- status=guess
 lin colour_N = mkN "televisore a colori" ; -- status=guess
 lin colour_V = mkV "sbiadirsi" | mkV "schiarire" | mkV "scolorare" | mkV "scolorire" | mkV "scolorirsi" | mkV "stingere" | mkV "stingersi" ; -- UWN
 lin colour_V2 = variants {} ; --

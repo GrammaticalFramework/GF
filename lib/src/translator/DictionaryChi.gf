@@ -7417,23 +7417,20 @@ lin colonoscope_N = mkN "结肠镜" | mkN "结肠镜检查" ; -- open-multilingu
 lin colony_N = mkN "殖民地" ;
 lin colophon_N = mkN "书尾题署" | mkN "出版社商标" | mkN "标记" | mkN "版权页标记" ; -- open-multilingual-wordnet
 lin colophony_N = mkN "松香" | mkN "树脂" ; -- open-multilingual-wordnet
-lin color_A = mkA "彩色" | {-HSK-} mkA "青" | mkA "颜色" ;
-lin color_N = mkN "色盲" | {-HSK-} mkN "青" | mkN "颜色" "個" ; -- status=guess
 lin colorado_PN = foreignPN "Colorado" ; -- comment=src=geonames status=guess
 lin coloratura_N = mkN "花腔" ;
 lin colorectal_A = mkA "结肠直肠" ; -- open-multilingual-wordnet
-lin colored_A = mkA "有色" ; -- status=guess
-lin colorful_A = mkA "丰富多彩" ; -- status=guess
 lin colorimeter_N = mkN "色度计" ; -- open-multilingual-wordnet
 lin colorimetric_A = mkA "比色" | mkA "色度" ; -- open-multilingual-wordnet
 lin colossus_N = mkN "巨像" ;
 lin colostrum_N = mkN "初乳" ; -- status=guess
-lin colour_N = mkN "颜色" ;
+lin colour_A = mkA "彩色" | {-HSK-} mkA "青" | mkA "颜色" ;
+lin colour_N = mkN "色盲" | {-HSK-} mkN "青" | mkN "颜色" "個" ; -- status=guess
 lin colour_V = mkV "颜色" ;
 lin colour_V2 = mkV2 "上色" ;
 lin colour_V2A = mkV2A "颜色" ;
 lin colour_code_V2 = mkV2 "用颜色标记" ;
-lin coloured_A = variants {} ;
+lin coloured_A = mkA "有色" ; -- status=guess
 lin colourful_A = mkA "丰富多彩" ;
 lin colourless_A = mkA "無色" | mkA "无色" ; -- status=guess -- status=guess
 lin colpitis_N = mkN "阴道炎" ; -- open-multilingual-wordnet
