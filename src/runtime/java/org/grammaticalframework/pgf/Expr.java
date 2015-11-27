@@ -54,4 +54,8 @@ public class Expr implements Serializable {
 			master = e.master;
 			ref    = e.ref;
 		}
+		
+		static { 
+			System.loadLibrary("jpgf");
+		}
 }
