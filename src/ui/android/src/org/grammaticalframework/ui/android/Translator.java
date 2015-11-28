@@ -5,10 +5,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 import android.util.Pair;
+import android.net.Uri;
 import android.view.inputmethod.CompletionInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.Cursor;
 
+import org.grammaticalframework.sg.*;
 import org.grammaticalframework.pgf.*;
 import java.io.*;
 import java.util.*;
@@ -53,6 +55,9 @@ public class Translator {
 
 	private static final String SOURCE_LANG_KEY = "source_lang";
 	private static final String TARGET_LANG_KEY = "target_lang";
+	
+	public static final String WORDS     = "words";
+	public static final String SENTENCES = "sentences";
 	
 	private static final int NUM_ALT_TRANSLATIONS = 10;
 	
@@ -345,48 +350,142 @@ public class Translator {
     	return targetLang.bracketedLinearize(expr);
     }
 
-    public String generateLexiconEntry(String lemma) {
+    public String generateLexiconEntry(Expr lemma) {
         Concr sourceLang = getSourceConcr();
         Concr targetLang = getTargetConcr();
-    	String cat = getGrammar().getFunctionType(lemma).getCategory();
+        String fun = lemma.toString();
+    	String cat = getGrammar().getFunctionType(fun).getCategory();
 		
-    	Expr e1 = Expr.readExpr(lemma);
-    	Expr e2 = Expr.readExpr("MkTag (Inflection"+cat+" "+lemma+")");
+    	Expr e2 = Expr.readExpr("MkTag (Inflection"+cat+" "+fun+")");
 
     	if (targetLang.hasLinearization("Inflection"+cat)) {
-	        if (targetLang.hasLinearization(lemma))
-	        	return sourceLang.linearize(e1) + " - " + targetLang.linearize(e2) + ". " + targetLang.linearize(e1);
+	        if (targetLang.hasLinearization(fun))
+	        	return sourceLang.linearize(lemma) + " - " + targetLang.linearize(e2) + ". " + targetLang.linearize(lemma);
 	        else
-	        	return sourceLang.linearize(e1) + " " + targetLang.linearize(e2)+".";
+	        	return sourceLang.linearize(lemma) + " " + targetLang.linearize(e2)+".";
     	} else {
-    		if (targetLang.hasLinearization(lemma))
-    			return sourceLang.linearize(e1) + " - " + targetLang.linearize(e1);
+    		if (targetLang.hasLinearization(fun))
+    			return sourceLang.linearize(lemma) + " - " + targetLang.linearize(lemma);
     		else
-    			return sourceLang.linearize(e1);
+    			return sourceLang.linearize(lemma);
     	}
     }
 
-	public String getInflectionTable(String lemma) {
+	private static final Expr gloss_pred   = Expr.readExpr("gloss");
+	private static final Expr topic_pred   = Expr.readExpr("topic");
+	private static final Expr example_pred = Expr.readExpr("example");
+	
+    public Expr getDefinition(Expr lemma, boolean withExample) {
+		Expr gloss   = null;
+		Expr example = null;
+		Map<String,Uri.Builder> topics = new TreeMap<String,Uri.Builder>();
+
+		try {
+			TripleResult res = mSGManager.queryTriple(lemma, null, null);
+			while (res.hasNext()) {
+				if (res.getPredicate().equals(gloss_pred))
+					gloss = res.getObject();
+				else if (res.getPredicate().equals(topic_pred))
+					updateWordsMap(res.getObject(), topics);
+				else if (res.getPredicate().equals(example_pred))
+					example = res.getObject();
+			}
+			res.close();
+		} catch (IOException e) {
+			// nothing
+		} catch (SGError e) {
+			// nothing
+		}
+
+		Expr topic = null;
+		if (topics.size() > 0) {
+			StringBuilder builder = new StringBuilder();
+			builder.append('(');
+			buildWordsHtml(topics, builder);
+			builder.append(')');
+			topic = new Expr(builder.toString());
+		}
+		if (gloss == null)
+			return topic;
+		else {
+			if (topic == null)
+				topic = new Expr("");
+			if (withExample && example != null)
+				return new Expr("MkDefinitionEx", topic, gloss, example);
+			else
+				return new Expr("MkDefinition", topic, gloss);
+		}
+	}
+
+	private void updateWordsMap(Expr expr, Map<String,Uri.Builder> map) {
+		String word = getTargetConcr().linearize(expr);
+
+		Uri.Builder builder = map.get(word);
+		if (builder == null) {
+			builder = new Uri.Builder();
+			builder.scheme("gf-translator");
+			builder.authority(WORDS);
+			builder.appendQueryParameter("source", word);	
+			map.put(word,builder);
+		}
+		builder.appendQueryParameter("alternative", expr.toString());
+	}
+
+    private void buildWordsHtml(Map<String,Uri.Builder> map, StringBuilder sbuilder) {
+		boolean first = true;
+		for (Map.Entry<String,Uri.Builder> entry : map.entrySet()) {
+			if (first)
+				first = false;
+			else
+				sbuilder.append(", ");
+
+			sbuilder.append("<a href=\""+entry.getValue().build()+"\">"+entry.getKey()+"</a>");
+		}
+	}
+
+    private Expr getTopicWords(Expr lemma) {
+		StringBuilder sbuilder = new StringBuilder();
+		try {
+			TripleResult res = mSGManager.queryTriple(null, topic_pred, lemma);
+			Map<String,Uri.Builder> map = new TreeMap<String,Uri.Builder>();
+			while (res.hasNext()) {
+				updateWordsMap(res.getSubject(), map);
+			}
+			res.close();
+
+			StringBuilder builder = new StringBuilder();
+			buildWordsHtml(map, builder);
+			return new Expr(builder.toString());
+		} catch (IOException e) {
+			// nothing
+		} catch (SGError e) {
+			// nothing
+		}
+		return null;
+	}
+
+	public String getInflectionTable(Expr lemma) {
 		boolean withExample =
 			(getSourceLanguage().getLangCode().equals("en-US") ||
              getTargetLanguage().getLangCode().equals("en-US"));
 		Expr def = 
-			mSGManager.getDefinition(Expr.readExpr(lemma), withExample);
+			getDefinition(lemma, withExample);
 
+		String fun = lemma.toString();
 		Concr targetLang = getTargetConcr();
-		String cat = getGrammar().getFunctionType(lemma).getCategory();
+		String cat = getGrammar().getFunctionType(fun).getCategory();
 
-		if (targetLang.hasLinearization(lemma) && 
+		if (targetLang.hasLinearization(fun) && 
 		    targetLang.hasLinearization("Inflection"+cat)) {
 			if (def == null)
 				def = Expr.readExpr("NoDefinition");
 
 			Expr e = new Expr("MkDocument", 
 			                  def,
-			                  Expr.readExpr("Inflection"+cat+" "+lemma),
-			                  Expr.readExpr("\"\""));
+			                  new Expr("Inflection"+cat,lemma),
+			                  getTopicWords(lemma));
 			String html =
-				"<html><head><meta charset=\"UTF-8\"/></head><body>" +
+				"<html><head><meta charset=\"UTF-8\"/><style>a {color: gray;}</style></head><body>" +
 				targetLang.linearize(e) +
 				"</body>";
 			return html;

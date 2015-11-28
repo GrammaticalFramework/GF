@@ -11,6 +11,7 @@ public class SemanticGraphManager implements Closeable {
     private SG mDB;
 
 	public static final String GLOSSES_FILE_NAME = "glosses.txt";
+	public static final String TOPICS_FILE_NAME  = "topics.txt";
 	public static final String DATABASE_FILE_NAME = "semantics.db";
 
     public SemanticGraphManager(Context context) {
@@ -44,9 +45,14 @@ public class SemanticGraphManager implements Closeable {
 		if (exists)
 			return;
 
+		loadFile(GLOSSES_FILE_NAME);
+		loadFile(TOPICS_FILE_NAME);
+    }
+
+	private void loadFile(String assetName) throws IOException {
 		BufferedReader br = new BufferedReader(
 			new InputStreamReader(
-				mContext.getAssets().open(GLOSSES_FILE_NAME)));
+				mContext.getAssets().open(assetName)));
 
 		try {
 			mDB.beginTrans();
@@ -67,7 +73,7 @@ public class SemanticGraphManager implements Closeable {
 		} finally {
 			br.close();
 		}
-    }
+	}
 
 	public void close() {
 		if (mDB != null) {
@@ -75,40 +81,9 @@ public class SemanticGraphManager implements Closeable {
 			mDB = null;
 		}
 	}
-
-    public Expr getDefinition(Expr lemma, boolean withExample) {
-		Expr gloss   = null;
-		Expr example = null;
-
-		try {
-			createDatabaseFromAssets();
-			
-			{
-				TripleResult res = mDB.queryTriple(lemma, Expr.readExpr("gloss"), null);
-				if (res.hasNext()) {
-					gloss = res.getObject();
-				}
-				res.close();
-			}
-
-			if (withExample) {
-				TripleResult res = mDB.queryTriple(lemma, Expr.readExpr("example"), null);
-				if (res.hasNext()) {
-					example = res.getObject();
-				}
-				res.close();
-			}
-		} catch (IOException e) {
-			// nothing
-		} catch (SGError e) {
-			// nothing
-		}
-
-		if (gloss == null)
-			return null;
-		else if (example == null)
-			return new Expr("MkDefinition", gloss);
-		else
-			return new Expr("MkDefinitionEx", gloss, example);
+	
+	public TripleResult queryTriple(Expr subj, Expr pred, Expr obj) throws IOException {
+		createDatabaseFromAssets();
+		return mDB.queryTriple(subj, pred, obj);
 	}
 }

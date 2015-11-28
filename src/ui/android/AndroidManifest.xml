@@ -25,7 +25,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="AlternativesActivity"></activity>
+        <activity android:name="AlternativesActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+				<data android:scheme="gf-translator"/>
+            </intent-filter>
+        </activity>
         <activity android:name="HelpActivity"></activity>
         <activity android:name="SemanticGraphActivity"
                   android:launchMode="singleTop">

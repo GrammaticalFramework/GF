@@ -1,7 +1,7 @@
 package org.grammaticalframework.ui.android;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.*;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+
+import org.grammaticalframework.pgf.Expr;
 
 public class ConversationView extends ScrollView {
 
@@ -105,7 +107,7 @@ public class ConversationView extends ScrollView {
     }
 
     @SuppressWarnings("deprecation")
-	public CharSequence addSecondPersonUtterance(final CharSequence source, CharSequence target, final Object alternatives) {
+	public CharSequence addSecondPersonUtterance(String authority, CharSequence source, CharSequence target, List<Expr> alternatives) {
     	TextView view;
     	if (mLastUtterance != null && mLastUtterance.getTag() != null)
     		view = (TextView) mLastUtterance.getTag();
@@ -124,6 +126,7 @@ public class ConversationView extends ScrollView {
     		mLastUtterance.setTag(view);
     	}
 
+    	view.setTag(R.string.authority_key, authority);
     	view.setTag(R.string.source_key, source);
     	view.setTag(R.string.target_key, target);
     	view.setTag(R.string.alternatives_key, alternatives);
@@ -176,9 +179,10 @@ public class ConversationView extends ScrollView {
     		mAlternativesListener = new OnClickListener() {
 	        	@Override
 	        	public void onClick(View v) {
+	        		String authority = v.getTag(R.string.authority_key).toString();
 	        		String source = v.getTag(R.string.source_key).toString();
-	        		Object alternatives = v.getTag(R.string.alternatives_key);
-	        		listener.onAlternativesSelected(source, alternatives);
+	        		List<Expr> alternatives = (List<Expr>) v.getTag(R.string.alternatives_key);
+	        		listener.onAlternativesSelected(authority, source, alternatives);
 	        	}
 	        };
     }
@@ -186,12 +190,13 @@ public class ConversationView extends ScrollView {
     public void setSpeechInputListener(ASR.Listener listener) {
     	mSpeechListener = listener;
     }
-    
+
     public interface OnAlternativesListener {
-    	public void onAlternativesSelected(CharSequence word, Object lexicon);
+    	public void onAlternativesSelected(CharSequence authority, CharSequence word, List<Expr> althernatives);
     }
 
     public void saveConversation(Bundle state) {
+    	ArrayList<String> authorities   = new ArrayList<String>();
     	ArrayList<String> firstPersonUtterances   = new ArrayList<String>();
     	ArrayList<String> secondPersonUtterances  = new ArrayList<String>();
     	ArrayList<Object> translationAlternatives = new ArrayList<Object>();
@@ -200,31 +205,36 @@ public class ConversationView extends ScrollView {
     	for (int i = 0; i < childCount; i++) {
     		View child = mContent.getChildAt(i);
     		if (child.getClass() == TextView.class) {
+				authorities.add(child.getTag(R.string.authority_key).toString());
     			firstPersonUtterances.add(child.getTag(R.string.source_key).toString());
     			secondPersonUtterances.add(child.getTag(R.string.target_key).toString());
     			translationAlternatives.add(child.getTag(R.string.alternatives_key));
     		}
     	}
 
+		state.putStringArrayList("authorities",  authorities);
     	state.putStringArrayList("first_person_uterances",  firstPersonUtterances);
 		state.putStringArrayList("second_person_uterances", secondPersonUtterances);
 		state.putSerializable("translation_alternatives",(Serializable) translationAlternatives);
     }
 
 	public void restoreConversation(Bundle state) {
+		ArrayList<String> authorities  = state.getStringArrayList("authorities");
 		ArrayList<String> firstPersonUtterances  = state.getStringArrayList("first_person_uterances");
 		ArrayList<String> secondPersonUtterances = state.getStringArrayList("second_person_uterances");
-		ArrayList<Object> translationAlternatives= (ArrayList<Object>) state.getSerializable("translation_alternatives");
+		ArrayList<List<Expr>> translationAlternatives= (ArrayList<List<Expr>>) state.getSerializable("translation_alternatives");
 
 		int i = 0;
-		while (i < firstPersonUtterances.size() && 
+		while (i < authorities.size() && 
+		       i < firstPersonUtterances.size() && 
 			   i < Math.min(secondPersonUtterances.size(), translationAlternatives.size())) {
 			String text = firstPersonUtterances.get(i);
 			addFirstPersonUtterance(text, false);
 
+			String authority  = authorities.get(i);
 			String translation  = secondPersonUtterances.get(i);
-			Object alternatives = translationAlternatives.get(i);
-			addSecondPersonUtterance(text, translation, alternatives);
+			List<Expr> alternatives = translationAlternatives.get(i);
+			addSecondPersonUtterance(authority, text, translation, alternatives);
 
 			i++;
 		}

@@ -11,6 +11,7 @@
 	<string name="help">Help</string>
 	<string name="global_preferences_key">org.grammaticalframework.ui.android.GLOBAL_PREFERENCES</string>
 
+	<string name="authority_key">authority_key</string>
 	<string name="source_key">source_key</string>
 	<string name="target_key">target_key</string>
 	<string name="alternatives_key">alternatives_key</string>
