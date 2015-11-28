@@ -1,9 +1,7 @@
 package org.grammaticalframework.ui.android;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
+import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
@@ -25,8 +24,7 @@ import android.widget.ImageView;
 import org.grammaticalframework.ui.android.ASR.State;
 import org.grammaticalframework.ui.android.LanguageSelector.OnLanguageSelectedListener;
 import org.grammaticalframework.ui.android.ConversationView.OnAlternativesListener;
-import org.grammaticalframework.pgf.ExprProb;
-import org.grammaticalframework.pgf.MorphoAnalysis;
+import org.grammaticalframework.pgf.*;
 
 public class MainActivity extends Activity {
 
@@ -89,10 +87,16 @@ public class MainActivity extends Activity {
         
         mConversationView.setOnAlternativesListener(new OnAlternativesListener() {
             @Override
-            public void onAlternativesSelected(CharSequence input, Object lexicon) {
-            	Intent myIntent = new Intent(MainActivity.this, AlternativesActivity.class);
-            	myIntent.putExtra("source", input);
-            	myIntent.putExtra("analyses", (Serializable) lexicon);
+            public void onAlternativesSelected(CharSequence authority, CharSequence input, List<Expr> alternatives) {
+				Uri.Builder builder = new Uri.Builder();
+				builder.scheme("gf-translator");
+				builder.authority(authority.toString());
+				builder.appendQueryParameter("source", input.toString());
+				for (Expr e : alternatives) {
+					builder.appendQueryParameter("alternative", e.toString());
+				}
+
+            	Intent myIntent = new Intent(Intent.ACTION_VIEW, builder.build());
             	MainActivity.this.startActivity(myIntent);
             }
         });
@@ -187,10 +191,16 @@ public class MainActivity extends Activity {
 	        	editor.commit();
 
 	            return true;
-	        case R.id.help:
+	        case R.id.semantic_graph: {
+	        	Intent myIntent = new Intent(MainActivity.this, SemanticGraphActivity.class);
+            	MainActivity.this.startActivity(myIntent);
+	        	return true;
+	        }
+	        case R.id.help: {
 	        	Intent myIntent = new Intent(MainActivity.this, HelpActivity.class);
             	MainActivity.this.startActivity(myIntent);
 	        	return true;
+	        }
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -278,11 +288,16 @@ public class MainActivity extends Activity {
             protected void onPostExecute(Pair<String,List<ExprProb>> res) {
             	String text = res.first;
             	List<ExprProb> transl = res.second;
-            	Object alts = null;
+
+            	List<Expr> alts = null;
+				String authority = null;
 
             	// filter out duplicates
             	int i = 0;
             	if (list.size() > 0) {
+					alts = new ArrayList(list.size());
+					authority = Translator.WORDS;
+
 	            	while (i < list.size()) {
 	            		MorphoAnalysis an = list.get(i);
 	            		boolean found = false;
@@ -293,14 +308,16 @@ public class MainActivity extends Activity {
 	            			}
 	            		}
 	            		
-	            		if (found)
-	            			list.remove(i);
-	            		else {
-	         				i++;
+	            		if (!found) {
+	         				alts.add(Expr.readExpr(an.getLemma()));
 	         			}
+
+	         			i++;
 	            	}
-	            	alts = list;
             	} else {
+					alts = new ArrayList(transl.size());
+					authority = Translator.SENTENCES;
+
             		Set<String> strings = new HashSet<String>();
             		while (i < transl.size()) {
             			String s = mTranslator.linearize(transl.get(i).getExpr());
@@ -309,20 +326,18 @@ public class MainActivity extends Activity {
     			    		s = s.substring(2);
     			    	}
 
-	            		if (strings.contains(s))
-	            			transl.remove(i);
-	            		else {
+	            		if (!strings.contains(s)) {
 	            			strings.add(s);
-	         				i++;
+							alts.add(transl.get(i).getExpr());
 	         			}
-	            	}
 
-            		alts = transl;
-            	}
+	         			i++;
+	            	}
+	           	}
 
                 if (DBG) Log.d(TAG, "Speaking: " + res.first);
             	CharSequence text2 = 
-            		mConversationView.addSecondPersonUtterance(input, text, alts);
+            		mConversationView.addSecondPersonUtterance(authority, input, text, alts);
             	text2 = text2.toString().replace('[',' ').replace(']',' ').replaceAll("_","").trim();
                 mTts.speak(getTargetLanguageCode(), text2.toString());
 

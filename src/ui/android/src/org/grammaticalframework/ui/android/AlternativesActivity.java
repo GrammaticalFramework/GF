@@ -1,6 +1,6 @@
 package org.grammaticalframework.ui.android;
 
-import java.util.List;
+import java.util.*;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.util.Log;
 
 import org.grammaticalframework.pgf.*;
 import org.grammaticalframework.ui.android.LanguageSelector.OnLanguageSelectedListener;
@@ -26,7 +27,8 @@ public class AlternativesActivity extends ListActivity {
 	private Translator mTranslator;
 	private LanguageSelector mShowLanguageView;
 	private View mProgressBarView = null;
-	
+	private AlternativesAdapter mAdapter = null;
+
 	/** Called when the activity is first created. */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,8 @@ public class AlternativesActivity extends ListActivity {
 
                     @Override
                     protected void onPostExecute(Void result) {
-                        updateTranslations();
+                        mAdapter.notifyDataSetChanged();
+                        expandedView = null;
                         hideProgressBar();
                     }
                 }.execute();
@@ -63,11 +66,20 @@ public class AlternativesActivity extends ListActivity {
         });
 	    
 	    TextView descrView = (TextView) findViewById(R.id.lexical_desc);
-	    descrView.setText(getIntent().getExtras().getString("source"));
+
+		String authority = getIntent().getData().getAuthority();
+		String source = getIntent().getData().getQueryParameter("source");
+		List analyses = new ArrayList();
+		for (String an : getIntent().getData().getQueryParameters("alternative")) {
+			analyses.add(Expr.readExpr(an));
+		}
+		descrView.setText(source);
+
+		mAdapter = new AlternativesAdapter(this, authority, analyses);
+		setListAdapter(mAdapter);
+        expandedView = null;
 
 	    mProgressBarView = findViewById(R.id.progressBarView);
-	    
-	    updateTranslations();
      }
 
 	@Override
@@ -86,15 +98,6 @@ public class AlternativesActivity extends ListActivity {
 	}
 
 	private View expandedView;
-
-	private void updateTranslations() {
-	    @SuppressWarnings("unchecked")
-		List<Object> list = (List<Object>)
-	    	getIntent().getExtras().getSerializable("analyses");
-
-        setListAdapter(new AlternativesAdapter(this, list));
-        expandedView = null;
-	}
 	
 	private void collapse() {
 		if (expandedView == null)
@@ -113,7 +116,7 @@ public class AlternativesActivity extends ListActivity {
 		expandedView = null;
 	}
 
-	private void expand(View view, String lemma) {
+	private void expandWord(View view, Expr lemma) {
 		String html = mTranslator.getInflectionTable(lemma);
 		if (html == null)
 			return;
@@ -136,7 +139,7 @@ public class AlternativesActivity extends ListActivity {
 		expandedView = view;
 	}
 
-	private void expandExpr(View view, ExprProb ep) {
+	private void expandSentence(View view, Expr expr) {
 		ImageView arrow = (ImageView) view.findViewById(R.id.arrow);
 		arrow.setImageResource(R.drawable.close_arrow);
 		
@@ -150,7 +153,7 @@ public class AlternativesActivity extends ListActivity {
 			((RelativeLayout) view).addView(parseView, params);
 		}
 
-		Object[] brackets = mTranslator.bracketedLinearize(ep.getExpr());
+		Object[] brackets = mTranslator.bracketedLinearize(expr);
 		if (brackets[0] instanceof Bracket) {
 			Bracket b = (Bracket) brackets[0];
 			if (b.children[0].equals("*") ||
@@ -174,20 +177,23 @@ public class AlternativesActivity extends ListActivity {
 			params.addRule(RelativeLayout.BELOW, R.id.desc_details);
 			((RelativeLayout) view).addView(textView, params);
 		}
-		textView.setText(ep.getExpr().toString());
+		textView.setText(expr.toString());
 
 		expandedView = view;
 	}
 
-    private class AlternativesAdapter extends ArrayAdapter<Object> {
-    	public AlternativesAdapter(Context context, List<Object> data) {
+    private class AlternativesAdapter extends ArrayAdapter<Expr> {
+		private String mAuthority;
+
+    	public AlternativesAdapter(Context context, String authority, List<Expr> data) {
     		super(context, android.R.layout.simple_list_item_1, data);
+    		mAuthority = authority;
     	}
 
     	public View getView(int position, View convertView, ViewGroup parent) {
-			Object item = getItem(position);
+			final Expr expr = getItem(position);
 
-			if (item instanceof MorphoAnalysis) {
+			if (mAuthority.equals(Translator.WORDS)) {
 				if (convertView == null) {
 					LayoutInflater inflater = (LayoutInflater) 
 							getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -197,9 +203,7 @@ public class AlternativesActivity extends ListActivity {
 		        TextView descView = (TextView)
 		        	convertView.findViewById(R.id.lexical_desc);
 
-				final String lemma = ((MorphoAnalysis) item).getLemma();
-
-		    	String phrase = mTranslator.generateLexiconEntry(lemma);
+		    	String phrase = mTranslator.generateLexiconEntry(expr);
 		        descView.setText(phrase);
 
 		        convertView.setOnClickListener(new OnClickListener() {
@@ -208,16 +212,14 @@ public class AlternativesActivity extends ListActivity {
 						if (expandedView == view)
 							collapse();
 						else if (expandedView == null)
-							expand(view, lemma);
+							expandWord(view, expr);
 						else {
 							collapse();
-							expand(view, lemma);
+							expandWord(view, expr);
 						}
 					}
 				});
-			} else if (item instanceof ExprProb) {
-				final ExprProb ep = (ExprProb) item;
-	
+			} else if (mAuthority.equals(Translator.SENTENCES)) {
 				if (convertView == null) {
 					LayoutInflater inflater = (LayoutInflater) 
 							getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -233,7 +235,7 @@ public class AlternativesActivity extends ListActivity {
 		        TextView descView = (TextView)
 		        	convertView.findViewById(R.id.alternative_desc);
 
-		    	String phrase = mTranslator.linearize(ep.getExpr());
+		    	String phrase = mTranslator.linearize(expr);
 
 		    	// parse by words, marked by %, darkest red color
 		    	if (phrase.charAt(0) == '%') {
@@ -270,10 +272,10 @@ public class AlternativesActivity extends ListActivity {
 						if (expandedView == view)
 							collapse();
 						else if (expandedView == null)
-							expandExpr(view, ep);
+							expandSentence(view, expr);
 						else {
 							collapse();
-							expandExpr(view, ep);
+							expandSentence(view, expr);
 						}
 					}
 				});
