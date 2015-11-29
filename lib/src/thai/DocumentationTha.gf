@@ -9,8 +9,8 @@ lincat
   Tag      = {s : Str} ;
 
 lin
-  NoDefinition       = {s=""};
-  MkDefinition   d   = {s="<p>"++d.s++"</p>"};
-  MkDefinitionEx d e = {s="<p>"++d.s++"</p><p>"++e.s++"</p>"};
+  NoDefinition   t     = {s=t.s};
+  MkDefinition   t d   = {s="<p>"++t.s++d.s++"</p>"};
+  MkDefinitionEx t d e = {s="<p>"++t.s++d.s++"</p><p>"++e.s++"</p>"};
 
 }

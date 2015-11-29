@@ -125,9 +125,9 @@ oper
   pp : Str -> Str = \s -> "&lt;"+s+"&gt;" ;
 
 lin
-  NoDefinition       = {s=""};
-  MkDefinition   d   = {s="<p><b>定义:</b>"++d.s++"</p>"};
-  MkDefinitionEx d e = {s="<p><b>定义:</b>"++d.s++"</p><p><b>例子:</b>"++e.s++"</p>"};
+  NoDefinition   t     = {s=t.s};
+  MkDefinition   t d   = {s="<p><b>定义:</b>"++t.s++d.s++"</p>"};
+  MkDefinitionEx t d e = {s="<p><b>定义:</b>"++t.s++d.s++"</p><p><b>例子:</b>"++e.s++"</p>"};
 
 lin
   MkDocument d i e = {s=i.s1 ++ d.s ++ i.s2 ++ paragraph e.s} ;

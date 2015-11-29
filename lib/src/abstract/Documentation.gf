@@ -30,9 +30,9 @@ fun
   InflectionPrep : Prep -> Inflection ;
 
 fun
-  NoDefinition   : Definition ;
-  MkDefinition   : String -> Definition ;
-  MkDefinitionEx : String -> String -> Definition ;
+  NoDefinition   : String -> Definition ;
+  MkDefinition   : String -> String -> Definition ;
+  MkDefinitionEx : String -> String -> String -> Definition ;
 
 fun
   MkDocument : Definition -> Inflection -> String -> Document ;
