@@ -121,9 +121,9 @@ lin
     } ;
 
 lin
-  NoDefinition       = {s=""};
-  MkDefinition   d   = {s="<p><b>परिभाषा:</b>"++d.s++"</p>"};
-  MkDefinitionEx d e = {s="<p><b>परिभाषा:</b>"++d.s++"</p><p><b>नमूना:</b>"++e.s++"</p>"};
+  NoDefinition   t     = {s=t.s};
+  MkDefinition   t d   = {s="<p><b>परिभाषा:</b>"++t.s++d.s++"</p>"};
+  MkDefinitionEx t d e = {s="<p><b>परिभाषा:</b>"++t.s++d.s++"</p><p><b>नमूना:</b>"++e.s++"</p>"};
 
 lin
   MkDocument d i e = {s = i.s1 ++ d.s ++ i.s2 ++ paragraph e.s} ;

@@ -291,9 +291,9 @@ oper
           ) ;
 
 lin
-  NoDefinition       = {s=""};
-  MkDefinition   d   = {s="<p><b>Rajaus:</b>"++d.s++"</p>"};
-  MkDefinitionEx d e = {s="<p><b>Rajaus:</b>"++d.s++"</p><p><b>Esimerkki:</b>"++e.s++"</p>"};
+  NoDefinition   t     = {s=t.s};
+  MkDefinition   t d   = {s="<p><b>Rajaus:</b>"++t.s++d.s++"</p>"};
+  MkDefinitionEx t d e = {s="<p><b>Rajaus:</b>"++t.s++d.s++"</p><p><b>Esimerkki:</b>"++e.s++"</p>"};
 
 lin
   MkDocument d i e = ss (i.s1 ++ d.s ++ i.s2 ++ paragraph e.s) ;  -- explanation appended in a new paragraph

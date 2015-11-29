@@ -134,9 +134,9 @@ lin
     } ;
 
 lin
-  NoDefinition       = {s=""};
-  MkDefinition   d   = {s="<p><b>Definición:</b>"++d.s++"</p>"};
-  MkDefinitionEx d e = {s="<p><b>Definición:</b>"++d.s++"</p><p><b>Ejemplo:</b>"++e.s++"</p>"};
+  NoDefinition   t     = {s=t.s};
+  MkDefinition   t d   = {s="<p><b>Definición:</b>"++t.s++d.s++"</p>"};
+  MkDefinitionEx t d e = {s="<p><b>Definición:</b>"++t.s++d.s++"</p><p><b>Ejemplo:</b>"++e.s++"</p>"};
 
 lin
   MkDocument b i e = ss (i.s1 ++ "<p style=\"font-size:20px\">"++b.s++"</p>" ++ i.s2 ++ paragraph e.s) ;  -- explanation appended in a new paragraph
