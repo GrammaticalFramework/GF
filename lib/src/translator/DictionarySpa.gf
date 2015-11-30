@@ -27154,8 +27154,10 @@ lin smirch_V2 = mkV2 (mkV "ensuciar") ; -- status=guess, src=wikt
 lin smock_N = mkN "bata" | mkN "gabardina" ; --UWN
 lin smog_N = mkN "esmog" ; -- status=guess
 lin smoke_N = L.smoke_N ;
-lin smoke_V = mkV (mkV "fumar") "como un carretero" ; -- status=guess
-lin smoke_V2 = mkV2 (mkV (mkV "fumar") "como un carretero") ; -- status=guess
+lin smoke_V = mkV "fumar" ; 
+lin smoke_V2 = mkV2 (mkV "fumar") ; 
+--lin smoke_V = mkV (mkV "fumar") "como un carretero" ; -- status=guess
+--lin smoke_V2 = mkV2 (mkV (mkV "fumar") "como un carretero") ; -- status=guess
 lin smoke_out_V2 = prepV2 OP_smoke_V OP_out_Prep ; -- guess-p-verb
 lin smoker_N = mkN "fumador" | mkN "fumadora" ; -- status=guess status=guess
 lin smokestack_N = mkN "chimenea" ; -- status=guess
