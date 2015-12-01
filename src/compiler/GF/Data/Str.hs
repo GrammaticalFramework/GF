@@ -44,8 +44,8 @@ type Ss = [String]
 -- matching functions in both ways
 
 matchPrefix :: Ss -> [(Ss,[String])] -> [String] -> Ss
-matchPrefix s vs t = 
-  head $ [u | let t' = concat (unmarkup t),
+matchPrefix s vs t =
+  head $ [u | t':_ <- [unmarkup t],
               (u,as) <- vs,
               any (`isPrefixOf` t') as]
          ++ [s]
