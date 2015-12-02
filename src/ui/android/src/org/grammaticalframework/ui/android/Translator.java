@@ -338,11 +338,26 @@ public class Translator {
     	if (s == null)
     		s = "% ";     // make sure that we return something
 	
-	if (getTargetLanguage().getLangCode().equals("cmn-Hans-CN") ||
-	    getTargetLanguage().getLangCode().equals("ja-JP") ||
-	    getTargetLanguage().getLangCode().equals("th-TH"))
-	    return implode(s) ;
-	else return s ;
+		if (getTargetLanguage().getLangCode().equals("cmn-Hans-CN") ||
+		    getTargetLanguage().getLangCode().equals("ja-JP") ||
+		    getTargetLanguage().getLangCode().equals("th-TH"))
+		  return implode(s);
+		else
+		  return s;
+    }
+
+    public String linearizeSource(Expr expr) {
+    	Concr targetLang = getSourceConcr();
+    	String s = targetLang.linearize(expr);
+    	if (s == null)
+    		s = "% ";     // make sure that we return something
+	
+		if (getTargetLanguage().getLangCode().equals("cmn-Hans-CN") ||
+		    getTargetLanguage().getLangCode().equals("ja-JP") ||
+		    getTargetLanguage().getLangCode().equals("th-TH"))
+		  return implode(s);
+		else
+		  return s;
     }
 
     public Object[] bracketedLinearize(Expr expr) {
@@ -443,15 +458,34 @@ public class Translator {
 		}
 	}
 
-    private Expr getTopicWords(Expr lemma) {
-		StringBuilder sbuilder = new StringBuilder();
+    public List<Expr> getTopicWords(Expr lemma) {
+		TripleResult res = null;
+		List<Expr> words = new ArrayList<Expr>();
 		try {
-			TripleResult res = mSGManager.queryTriple(null, topic_pred, lemma);
+			res = mSGManager.queryTriple(null, topic_pred, lemma);
+			while (res.hasNext()) {
+				words.add(res.getSubject());
+			}
+		} catch (IOException e) {
+			// nothing
+		} catch (SGError e) {
+			// nothing
+		} finally {
+			if (res != null)
+				res.close();
+		}
+		return words;
+	}
+
+    private Expr getTopicWordsHtml(Expr lemma) {
+		StringBuilder sbuilder = new StringBuilder();
+		TripleResult res = null;
+		try {
+			res = mSGManager.queryTriple(null, topic_pred, lemma);
 			Map<String,Uri.Builder> map = new TreeMap<String,Uri.Builder>();
 			while (res.hasNext()) {
 				updateWordsMap(res.getSubject(), map);
 			}
-			res.close();
 
 			StringBuilder builder = new StringBuilder();
 			buildWordsHtml(map, builder);
@@ -460,6 +494,9 @@ public class Translator {
 			// nothing
 		} catch (SGError e) {
 			// nothing
+		} finally {
+			if (res != null)
+				res.close();
 		}
 		return null;
 	}
@@ -483,9 +520,9 @@ public class Translator {
 			Expr e = new Expr("MkDocument", 
 			                  def,
 			                  new Expr("Inflection"+cat,lemma),
-			                  getTopicWords(lemma));
+			                  getTopicWordsHtml(lemma));
 			String html =
-				"<html><head><meta charset=\"UTF-8\"/><style>a {color: gray;}</style></head><body>" +
+				"<html><head><meta charset=\"UTF-8\"/><style>a {color: #808080;}</style></head><body>" +
 				targetLang.linearize(e) +
 				"</body>";
 			return html;
@@ -495,7 +532,26 @@ public class Translator {
 			return null;
 		}
 	}
-	
+
+    public List<Expr> getTopicsOf(Expr lemma) {
+		TripleResult res = null;
+		List<Expr> topics = new ArrayList<Expr>();
+		try {
+			res = mSGManager.queryTriple(lemma, topic_pred, null);
+			while (res.hasNext()) {
+				topics.add(res.getObject());
+			}
+		} catch (IOException e) {
+			// nothing
+		} catch (SGError e) {
+			// nothing
+		} finally {
+			if (res != null)
+				res.close();
+		}
+		return topics;
+	}
+
 	private static String escapeHtml(CharSequence text) {
 		StringBuilder out = new StringBuilder();
 

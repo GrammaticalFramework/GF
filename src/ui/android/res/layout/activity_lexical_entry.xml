@@ -4,49 +4,66 @@
 	android:layout_height="match_parent"
 	android:layout_width="match_parent">
 
-	<RelativeLayout
-		android:layout_height="match_parent"
-		android:layout_width="match_parent">
+	<android.support.v4.widget.DrawerLayout
+		android:id="@+id/drawer_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
+		<!-- The main content view -->
 		<RelativeLayout
-			android:id="@+id/lexical_header"
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentLeft="true"
-			android:layout_alignParentRight="true"
-			android:padding="8dp"
-			android:background="#C0C0C0">
+			android:layout_height="match_parent"
+			android:layout_width="match_parent">
 
-			<org.grammaticalframework.ui.android.LanguageSelector
-				android:id="@+id/show_language"
+			<RelativeLayout
+				android:id="@+id/lexical_header"
 				android:layout_height="wrap_content"
 				android:layout_width="match_parent"
-				android:layout_alignParentLeft="true"
 				android:layout_alignParentTop="true"
-				android:padding="0dp"/>
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentRight="true"
+				android:padding="8dp"
+				android:background="#C0C0C0">
 
+				<org.grammaticalframework.ui.android.LanguageSelector
+					android:id="@+id/show_language"
+					android:layout_height="wrap_content"
+					android:layout_width="match_parent"
+					android:layout_alignParentLeft="true"
+					android:layout_alignParentTop="true"
+					android:padding="0dp"/>
+
+			</RelativeLayout>
+		
+			<TextView
+				android:id="@+id/lexical_desc"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/lexical_header"
+				android:paddingLeft="1dp"
+				android:paddingTop="4dp"
+				android:paddingBottom="2dp"
+				android:textSize="25sp"/>
+
+			<ListView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_below="@id/lexical_desc"
+				android:orientation="vertical"
+				android:paddingLeft="1dp"
+				android:id="@android:id/list" >
+			</ListView>
 		</RelativeLayout>
-	
-		<TextView
-			android:id="@+id/lexical_desc"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/lexical_header"
-			android:paddingLeft="1dp"
-			android:paddingTop="4dp"
-			android:paddingBottom="2dp"
-			android:textSize="25sp"/>
 
-		<ListView
-			android:layout_width="match_parent"
+		<!-- The navigation drawer -->
+		<ListView android:id="@+id/topics_list"
+			android:layout_width="250dp"
 			android:layout_height="match_parent"
-			android:layout_below="@id/lexical_desc"
-			android:orientation="vertical"
-			android:paddingLeft="1dp"
-			android:id="@android:id/list" >
-		</ListView>
-	</RelativeLayout>
+			android:layout_gravity="start"
+			android:choiceMode="singleChoice"
+			android:divider="@android:color/transparent"
+			android:dividerHeight="0dp"
+			android:background="#FFFFE0"/>
+	</android.support.v4.widget.DrawerLayout>
 
 	<LinearLayout
 		android:id="@+id/progressBarView" 

@@ -191,8 +191,8 @@ public class MainActivity extends Activity {
 	        	editor.commit();
 
 	            return true;
-	        case R.id.semantic_graph: {
-	        	Intent myIntent = new Intent(MainActivity.this, SemanticGraphActivity.class);
+	        case R.id.topics: {
+	        	Intent myIntent = new Intent(MainActivity.this, AlternativesActivity.class);
             	MainActivity.this.startActivity(myIntent);
 	        	return true;
 	        }
