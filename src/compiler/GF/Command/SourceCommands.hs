@@ -2,7 +2,7 @@
 module GF.Command.SourceCommands(HasGrammar(..),sourceCommands) where
 import Prelude hiding (putStrLn)
 import qualified Prelude as P(putStrLn)
-import Data.List(nub,isInfixOf)
+import Data.List(nub,isInfixOf,isPrefixOf)
 import qualified Data.ByteString.UTF8 as UTF8(fromString)
 import qualified Data.Map as Map
 
@@ -10,6 +10,7 @@ import GF.Infra.SIO(MonadSIO(..),restricted)
 import GF.Infra.Option(modifyFlags,optTrace) --,noOptions
 import GF.Data.Operations (chunks,err,raise)
 import GF.Text.Pretty(render)
+import GF.Data.Str(sstr)
 
 import GF.Grammar hiding (Ident,isPrefixOf)
 import GF.Grammar.Analyse
@@ -259,4 +260,27 @@ checkComputeTerm os sgr t =
                                 inferLType sgr [] t
      let opts = modifyFlags (\fs->fs{optTrace=isOpt "trace" os})
          t1 = CN.normalForm (CN.resourceValues opts sgr) (L NoLoc identW) t
-     checkPredefError t1
+         t2 = evalStr t1
+     checkPredefError t2
+  where
+    -- ** Try to compute pre{...} tokens in token sequences
+    evalStr t =
+      case t of
+        C t1 t2 -> foldr1 C (evalC [t])
+        _ -> composSafeOp evalStr t
+
+    evalC (C t1 t2:ts) = evalC (t1:t2:ts)
+    evalC (t1@(Alts t tts):ts) = case evalC ts of
+                              K s:ts' -> matchPrefix t tts s:K s:ts'
+                              ts' -> evalStr t1:ts'
+    evalC (t:ts) = evalStr t:evalC ts
+    evalC [] = []
+
+    matchPrefix t0 tts0 s = foldr match1 t tts
+      where
+        alts@(Alts t tts) = evalStr (Alts t0 tts0)
+
+        match1 (u,a) r = err (const alts) ok (strsFromTerm a)
+          where ok as = if any (`isPrefixOf` s) (map sstr as)
+                        then u
+                        else r
