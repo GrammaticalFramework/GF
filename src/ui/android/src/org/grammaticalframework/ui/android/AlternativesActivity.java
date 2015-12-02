@@ -491,16 +491,22 @@ public class AlternativesActivity extends ListActivity {
 		}
 		
 		void filterOnTopics(List<Topic> selected_topics) {
-			if (mSourceTopic != null && !selected_topics.contains(mSourceTopic))
-				mAlternatives = null;
+			if (mSourceTopic != null && !selected_topics.contains(mSourceTopic)) {
+				mAlternatives         = null;
+				mOriginalAlternatives = null;
+				mTopics               = null;
+				mAllTopics            = mOriginalAllTopics;
+			}
 
 			if (mAlternatives == null) {
-				if (selected_topics.size() == 0)
+				if (selected_topics.size() == 0) {
+					notifyDataSetChanged();
 					return;
+				}
 
 				mSourceTopic = selected_topics.get(0);
 				mAlternatives = mTranslator.getTopicWords(mSourceTopic.expr);
-				
+
 				mTopics = new ArrayList<List<Topic>>();
 				for (Expr e : mAlternatives) {
 					List<Topic> topics = new ArrayList<Topic>();
