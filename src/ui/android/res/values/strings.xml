@@ -29,4 +29,8 @@
     
     <string name="search_hint">Search word:</string>
     <string name="search_description">Search for words in the lexicon</string>
+    
+    <string name="topics">Topics</string>
+    <string name="topics_open">Open topics</string>
+    <string name="topics_close">Close topics</string>
 </resources>
