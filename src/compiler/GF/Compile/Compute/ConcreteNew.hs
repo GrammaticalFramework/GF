@@ -303,8 +303,8 @@ strsFromValue t = case t of
               vars <- [[(str2strings v, map sstr c) | (v,c) <- zip vv c0] | 
                                                           vv <- combinations v0]
            ]
-  VFV ts -> mapM strsFromValue ts >>= return . concat
-  VStrs ts -> mapM strsFromValue ts >>= return . concat  
+  VFV ts -> concat # mapM strsFromValue ts
+  VStrs ts -> concat # mapM strsFromValue ts
 
   _ -> fail ("cannot get Str from value " ++ show t)
 
