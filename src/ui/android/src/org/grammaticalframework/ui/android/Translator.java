@@ -527,7 +527,11 @@ public class Translator {
 				"</body>";
 			return html;
 		} else if (def != null) {
-			return targetLang.linearize(def);
+			String html =
+				"<html><head><meta charset=\"UTF-8\"/><style>a {color: #808080;}</style></head><body>" +
+				targetLang.linearize(def) +
+				"</body>";
+			return html;
 		} else {
 			return null;
 		}
