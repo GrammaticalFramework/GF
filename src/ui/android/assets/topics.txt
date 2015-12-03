@@ -28,7 +28,6 @@
 <sacrifice_3_N,topic,animal_N>
 <trailing_N,topic,animal_N>
 <microorganism_N,topic,animal_N>
-<micro_organism_N,topic,animal_N>
 <actinomycete_N,topic,animal_N>
 <trap_6_N,topic,animal_N>
 <humaneness_N,topic,animal_N>
@@ -81,7 +80,6 @@
 <leggy_1_A,topic,flora_2_N>
 <phytotherapy_N,topic,flora_2_N>
 <microorganism_N,topic,flora_2_N>
-<micro_organism_N,topic,flora_2_N>
 <parasite_2_N,topic,flora_2_N>
 <coca_2_N,topic,flora_2_N>
 <fugacity_2_N,topic,flora_2_N>
@@ -141,9 +139,7 @@
 <underbid_2_V2,topic,auction_2_N>
 <overcapitalization_N,topic,business_7_N>
 <redemption_2_N,topic,theology_2_N>
-<redemption_2_N,topic,divinity_3_N>
 <salvation_4_N,topic,theology_2_N>
-<salvation_4_N,topic,divinity_3_N>
 <indulgence_5_N,topic,"Roman Church">
 <transposition_7_N,topic,music_1_N>
 <bowling_2_N,topic,cricket_2_N>
@@ -165,7 +161,6 @@
 <hummer_2_N,topic,baseball_2_N>
 <bullet_3_N,topic,baseball_2_N>
 <jumper_8_N,topic,basketball_2_N>
-<traction_2_N,topic,orthopedics_N>
 <traction_2_N,topic,orthopaedics_N>
 <centering_2_N,topic,"American football">
 <snap_13_N,topic,"American football">
@@ -344,7 +339,6 @@
 <salt_1_V2,topic,cooking_N>
 <catharsis_2_N,topic,psychoanalysis_N>
 <mikvah_N,topic,judaism_2_N>
-<anastylosis_N,topic,archeology_N>
 <anastylosis_N,topic,archaeology_N>
 <etiolation_3_N,topic,botany_2_N>
 <staining_2_N,topic,histology_N>
@@ -399,7 +393,6 @@
 <trot_1_V2,topic,riding_2_N>
 <pass_over_3_V2,topic,aviation_4_N>
 <overfly_V2,topic,aviation_4_N>
-<overfly_V2,topic,air_9_N>
 <fly_9_V2,topic,aviation_4_N>
 <cruise_3_V,topic,aviation_4_N>
 <stooge_1_V,topic,aviation_4_N>
@@ -480,7 +473,6 @@
 <log_rolling_2_N,topic,athletics_3_N>
 <sitting_3_N,topic,photography_2_N>
 <de_escalation_N,topic,war_3_N>
-<de_escalation_N,topic,warfare_2_N>
 <withholding_3_N,topic,taxation_1_N>
 <amplification_3_N,topic,electricity_2_N>
 <crop_dusting_N,topic,aircraft_N>
@@ -540,19 +532,12 @@
 <extend_7_V2,topic,riding_1_N>
 <trot_1_V2,topic,riding_1_N>
 <spar_2_V,topic,cockfighting_N>
-<bag_5_V2,topic,hunt_5_N>
 <bag_5_V2,topic,hunting_3_N>
-<trap_3_V2,topic,hunt_5_N>
-<entrap_2_V2,topic,hunt_5_N>
-<snare_1_V2,topic,hunt_5_N>
-<ensnare_2_V2,topic,hunt_5_N>
-<trammel_1_V2,topic,hunt_5_N>
 <trap_3_V2,topic,hunting_3_N>
 <entrap_2_V2,topic,hunting_3_N>
 <snare_1_V2,topic,hunting_3_N>
 <ensnare_2_V2,topic,hunting_3_N>
 <trammel_1_V2,topic,hunting_3_N>
-<gin_2_V2,topic,hunt_5_N>
 <gin_2_V2,topic,hunting_3_N>
 <bite_5_N,topic,fishing_2_N>
 <turn_8_N,topic,game_2_N>
@@ -858,15 +843,11 @@
 <rally_4_N,topic,"table tennis">
 <exchange_5_N,topic,"table tennis">
 <break_27_V2,topic,billiards_N>
-<promote_3_V2,topic,"board game">
+<promote_3_V2,topic,game_2_N>
 <black_3_N,topic,checkers_N>
-<black_3_N,topic,draughts_N>
 <checker_3_N,topic,checkers_N>
-<checker_3_N,topic,draughts_N>
 <king_5_N,topic,checkers_N>
-<king_5_N,topic,draughts_N>
 <white_3_N,topic,checkers_N>
-<white_3_N,topic,draughts_N>
 <bishop_3_N,topic,chess_2_N>
 <black_3_N,topic,chess_2_N>
 <castle_2_N,topic,chess_2_N>
@@ -1122,7 +1103,6 @@
 <chorus_2_N,topic,singing_2_N>
 <tutor_N,topic,singing_2_N>
 <gospel_1_N,topic,"a cappella singing">
-<gospel_1_N,topic,"a capella singing">
 <shtik_2_N,topic,yiddish_N>
 <service_9_N,topic,case_law_2_N>
 <cabinetwork_2_N,topic,furniture_N>
@@ -1149,10 +1129,6 @@
 <traverse_3_V2,topic,law_2_N>
 <deny_4_V3,topic,law_2_N>
 <education_5_N,topic,education_4_N>
-<education_5_N,topic,instruction_4_N>
-<education_5_N,topic,teaching_3_N>
-<education_5_N,topic,pedagogy_3_N>
-<education_5_N,topic,"didactics">
 <politics_5_N,topic,politics_3_N>
 <medicine_4_N,topic,medicine_1_N>
 <quack_2_V,topic,medicine_4_N>
@@ -1200,7 +1176,6 @@
 <slough_off_2_V2,topic,medicine_4_N>
 <eviscerate_1_V2,topic,medicine_4_N>
 <theology_3_N,topic,theology_2_N>
-<theology_3_N,topic,divinity_3_N>
 <backhand_A,topic,handwriting_2_N>
 <legibility_1_N,topic,handwriting_2_N>
 <readability_2_N,topic,handwriting_2_N>
@@ -1208,8 +1183,6 @@
 <handwriting_1_N,topic,handwriting_2_N>
 <hand_8_N,topic,handwriting_2_N>
 <script_2_N,topic,handwriting_2_N>
-<carry_over_3_V2,topic,accountancy_N>
-<carry_forward_V2,topic,accountancy_N>
 <carry_over_3_V2,topic,accounting_5_N>
 <carry_forward_V2,topic,accounting_5_N>
 <posting_2_N,topic,bookkeeping_N>
@@ -1231,7 +1204,6 @@
 <prejudice_1_V2,topic,justice_3_N>
 <irrigation_2_N,topic,medicine_1_N>
 <blood_letting_1_N,topic,"Middle Ages">
-<blood_letting_1_N,topic,"Dark Ages">
 <blood_letting_1_N,topic,medicine_1_N>
 <anal_2_A,topic,psychoanalysis_N>
 <oral_4_A,topic,psychoanalysis_N>
@@ -1302,9 +1274,10 @@
 <barratry_4_N,topic,law_3_N>
 <champerty_N,topic,law_3_N>
 <maintenance_4_N,topic,law_3_N>
-<crime_2_N,topic,"criminal law">
-<offense_5_N,topic,"criminal law">
-<offence_5_N,topic,"criminal law">
+<offense_5_N,topic,crime_2_N>
+<offense_5_N,topic,law_3_N>
+<offence_5_N,topic,crime_2_N>
+<offence_5_N,topic,law_3_N>
 <kidnap_V2,topic,crime_2_N>
 <nobble_3_V2,topic,crime_2_N>
 <abduct_1_V2,topic,crime_2_N>
@@ -1377,15 +1350,7 @@
 <transposition_4_N,topic,algebra_N>
 <operation_7_N,topic,mathematics_N>
 <education_2_N,topic,education_4_N>
-<education_2_N,topic,instruction_4_N>
-<education_2_N,topic,teaching_3_N>
-<education_2_N,topic,pedagogy_3_N>
-<education_2_N,topic,"didactics">
 <tuition_1_N,topic,education_4_N>
-<tuition_1_N,topic,instruction_4_N>
-<tuition_1_N,topic,teaching_3_N>
-<tuition_1_N,topic,pedagogy_3_N>
-<tuition_1_N,topic,"didactics">
 <drill_4_N,topic,military_N>
 <manual_2_N,topic,military_N>
 <square_bashing_N,topic,military_N>
@@ -1435,70 +1400,43 @@
 <enter_8_V2,topic,transcription_5_N>
 <put_down_8_V2,topic,transcription_5_N>
 <reface_2_V2,topic,construction_6_N>
-<reface_2_V2,topic,building_4_N>
 <frame_3_V2,topic,construction_6_N>
-<frame_3_V2,topic,building_4_N>
 <rebuild_V2,topic,construction_6_N>
 <reconstruct_2_V2,topic,construction_6_N>
-<rebuild_V2,topic,building_4_N>
-<reconstruct_2_V2,topic,building_4_N>
 <groin_V2,topic,construction_6_N>
-<groin_V2,topic,building_4_N>
 <raise_10_V2,topic,construction_6_N>
 <erect_2_V2,topic,construction_6_N>
 <rear_5_V2,topic,construction_6_N>
 <set_up_5_V2,topic,construction_6_N>
 <put_up_5_V2V,topic,construction_6_N>
-<raise_10_V2,topic,building_4_N>
-<erect_2_V2,topic,building_4_N>
-<rear_5_V2,topic,building_4_N>
-<set_up_5_V2,topic,building_4_N>
-<put_up_5_V2V,topic,building_4_N>
 <prefabricate_1_V2,topic,construction_6_N>
-<prefabricate_1_V2,topic,building_4_N>
 <metacentric_1_A,topic,shipbuilding_N>
 <metacenter_N,topic,shipbuilding_N>
 <production_5_N,topic,economics_N>
-<cultivation_5_N,topic,farming_1_N>
 <cultivation_5_N,topic,agriculture_3_N>
 <cultivation_5_N,topic,husbandry_N>
-<smut_4_V2,topic,farming_1_N>
 <smut_4_V2,topic,agriculture_3_N>
 <smut_4_V2,topic,husbandry_N>
-<fertilize_2_V2,topic,farming_1_N>
-<feed_10_V2,topic,farming_1_N>
 <fertilize_2_V2,topic,agriculture_3_N>
 <feed_10_V2,topic,agriculture_3_N>
 <fertilize_2_V2,topic,husbandry_N>
 <feed_10_V2,topic,husbandry_N>
-<thrash_5_V2,topic,farming_1_N>
-<thresh_3_V2,topic,farming_1_N>
 <thrash_5_V2,topic,agriculture_3_N>
 <thresh_3_V2,topic,agriculture_3_N>
 <thrash_5_V2,topic,husbandry_N>
 <thresh_3_V2,topic,husbandry_N>
-<sow_2_V2,topic,farming_1_N>
-<seed_4_V2,topic,farming_1_N>
 <sow_2_V2,topic,agriculture_3_N>
 <seed_4_V2,topic,agriculture_3_N>
 <sow_2_V2,topic,husbandry_N>
 <seed_4_V2,topic,husbandry_N>
-<broadcast_1_V2,topic,farming_1_N>
 <broadcast_1_V2,topic,agriculture_3_N>
 <broadcast_1_V2,topic,husbandry_N>
-<inseminate_1_V2,topic,farming_1_N>
-<sow_1_V2,topic,farming_1_N>
 <inseminate_1_V2,topic,agriculture_3_N>
 <sow_1_V2,topic,agriculture_3_N>
 <inseminate_1_V2,topic,husbandry_N>
 <sow_1_V2,topic,husbandry_N>
-<reseed_1_V2,topic,farming_1_N>
 <reseed_1_V2,topic,agriculture_3_N>
 <reseed_1_V2,topic,husbandry_N>
-<grow_2_VA,topic,farming_1_N>
-<raise_9_V2,topic,farming_1_N>
-<farm_3_V2,topic,farming_1_N>
-<produce_5_V2,topic,farming_1_N>
 <grow_2_VA,topic,agriculture_3_N>
 <raise_9_V2,topic,agriculture_3_N>
 <farm_3_V2,topic,agriculture_3_N>
@@ -1507,62 +1445,66 @@
 <raise_9_V2,topic,husbandry_N>
 <farm_3_V2,topic,husbandry_N>
 <produce_5_V2,topic,husbandry_N>
-<carry_22_V2,topic,farming_1_N>
 <carry_22_V2,topic,agriculture_3_N>
 <carry_22_V2,topic,husbandry_N>
-<till_V2,topic,farming_1_N>
 <till_V2,topic,agriculture_3_N>
 <till_V2,topic,husbandry_N>
-<cultivate_3_V2,topic,farming_1_N>
-<crop_1_V2,topic,farming_1_N>
-<work_15_V2,topic,farming_1_N>
 <cultivate_3_V2,topic,agriculture_3_N>
 <crop_1_V2,topic,agriculture_3_N>
 <work_15_V2,topic,agriculture_3_N>
 <cultivate_3_V2,topic,husbandry_N>
 <crop_1_V2,topic,husbandry_N>
 <work_15_V2,topic,husbandry_N>
-<overcrop_V2,topic,farming_1_N>
 <overcrop_V2,topic,agriculture_3_N>
 <overcrop_V2,topic,husbandry_N>
-<plow_2_V2,topic,farming_1_N>
-<plough_2_V2,topic,farming_1_N>
-<turn_13_VA,topic,farming_1_N>
 <plow_2_V2,topic,agriculture_3_N>
 <plough_2_V2,topic,agriculture_3_N>
 <turn_13_VA,topic,agriculture_3_N>
 <plow_2_V2,topic,husbandry_N>
 <plough_2_V2,topic,husbandry_N>
 <turn_13_VA,topic,husbandry_N>
-<ridge_2_V2,topic,farming_1_N>
 <ridge_2_V2,topic,agriculture_3_N>
 <ridge_2_V2,topic,husbandry_N>
-<harrow_V2,topic,farming_1_N>
 <harrow_V2,topic,agriculture_3_N>
 <harrow_V2,topic,husbandry_N>
-<hoe_V2,topic,farming_1_N>
 <hoe_V2,topic,agriculture_3_N>
 <hoe_V2,topic,husbandry_N>
-<cultivate_2_V2,topic,farming_1_N>
 <cultivate_2_V2,topic,agriculture_3_N>
 <cultivate_2_V2,topic,husbandry_N>
-<calk_1_V2,topic,"animal husbandry">
-<stand_9_V2,topic,"animal husbandry">
-<breed_2_V2,topic,"animal husbandry">
-<cover_13_V2,topic,"animal husbandry">
-<yoke_3_V2,topic,"animal husbandry">
-<inspan_V2,topic,"animal husbandry">
-<outspan_V2,topic,"animal husbandry">
-<harness_2_V2,topic,"animal husbandry">
-<tackle_2_V2,topic,"animal husbandry">
-<yoke_2_V2,topic,"animal husbandry">
-<link_2_V2,topic,"animal husbandry">
-<yoke_1_V2,topic,"animal husbandry">
-<plant_1_V2,topic,"animal husbandry">
-<restock_V2,topic,"animal husbandry">
-<stock_3_V2,topic,"animal husbandry">
-<stock_2_V2,topic,"animal husbandry">
-<stable_V2,topic,"animal husbandry">
+<calk_1_V2,topic,husbandry_N>
+<stand_9_V2,topic,husbandry_N>
+<breed_2_V2,topic,husbandry_N>
+<cover_13_V2,topic,husbandry_N>
+<yoke_3_V2,topic,husbandry_N>
+<inspan_V2,topic,husbandry_N>
+<outspan_V2,topic,husbandry_N>
+<harness_2_V2,topic,husbandry_N>
+<tackle_2_V2,topic,husbandry_N>
+<yoke_2_V2,topic,husbandry_N>
+<link_2_V2,topic,husbandry_N>
+<yoke_1_V2,topic,husbandry_N>
+<plant_1_V2,topic,husbandry_N>
+<restock_V2,topic,husbandry_N>
+<stock_3_V2,topic,husbandry_N>
+<stock_2_V2,topic,husbandry_N>
+<stable_V2,topic,husbandry_N>
+<calk_1_V2,topic,animal_N>
+<stand_9_V2,topic,animal_N>
+<breed_2_V2,topic,animal_N>
+<cover_13_V2,topic,animal_N>
+<yoke_3_V2,topic,animal_N>
+<inspan_V2,topic,animal_N>
+<outspan_V2,topic,animal_N>
+<harness_2_V2,topic,animal_N>
+<tackle_2_V2,topic,animal_N>
+<yoke_2_V2,topic,animal_N>
+<link_2_V2,topic,animal_N>
+<yoke_1_V2,topic,animal_N>
+<plant_1_V2,topic,animal_N>
+<restock_V2,topic,animal_N>
+<stock_3_V2,topic,animal_N>
+<stock_2_V2,topic,animal_N>
+<stable_V2,topic,animal_N>
 <garden_V,topic,gardening_N>
 <garden_V,topic,horticulture_N>
 <landscape_2_V2,topic,gardening_N>
@@ -1571,102 +1513,46 @@
 <landscape_1_V2,topic,horticulture_N>
 <culture_6_N,topic,biology_3_N>
 <opencast_A,topic,mining_2_N>
-<opencast_A,topic,excavation_4_N>
 <bore_4_N,topic,mining_2_N>
 <bore_hole_N,topic,mining_2_N>
-<bore_4_N,topic,excavation_4_N>
-<bore_hole_N,topic,excavation_4_N>
 <drift_7_N,topic,mining_2_N>
 <heading_3_N,topic,mining_2_N>
 <gallery_7_N,topic,mining_2_N>
-<drift_7_N,topic,excavation_4_N>
-<heading_3_N,topic,excavation_4_N>
-<gallery_7_N,topic,excavation_4_N>
 <fathom_2_N,topic,mining_2_N>
-<fathom_2_N,topic,excavation_4_N>
 <rag_6_V2,topic,mining_2_N>
-<rag_6_V2,topic,excavation_4_N>
 <hush_5_V2,topic,mining_2_N>
-<hush_5_V2,topic,excavation_4_N>
 <hush_4_V2,topic,mining_2_N>
-<hush_4_V2,topic,excavation_4_N>
 <mine_1_V2,topic,mining_2_N>
-<mine_1_V2,topic,excavation_4_N>
 <drive_18_V2V,topic,mining_2_N>
-<drive_18_V2V,topic,excavation_4_N>
 <extract_3_V2,topic,mining_2_N>
-<extract_3_V2,topic,excavation_4_N>
 <quarry_V2,topic,quarrying_N>
 <industry_1_N,topic,industry_3_N>
-<industry_1_N,topic,manufacture_2_N>
 <privatize_V2,topic,industry_3_N>
-<privatize_V2,topic,manufacture_2_N>
 <rat_2_V2,topic,industry_3_N>
-<rat_2_V2,topic,manufacture_2_N>
 <link_5_N,topic,programming_2_N>
 <kludge_N,topic,programming_2_N>
 <library_2_N,topic,programming_2_N>
 <techie_N,topic,programming_2_N>
-<write_4_VS,topic,writing_4_N>
-<compose_4_V2,topic,writing_4_N>
-<pen_V2,topic,writing_4_N>
-<indite_V2,topic,writing_4_N>
 <write_4_VS,topic,authorship_1_N>
 <compose_4_V2,topic,authorship_1_N>
 <pen_V2,topic,authorship_1_N>
 <indite_V2,topic,authorship_1_N>
-<write_4_VS,topic,composition_9_N>
-<compose_4_V2,topic,composition_9_N>
-<pen_V2,topic,composition_9_N>
-<indite_V2,topic,composition_9_N>
-<profile_1_V2,topic,writing_4_N>
 <profile_1_V2,topic,authorship_1_N>
-<profile_1_V2,topic,composition_9_N>
-<paragraph_3_V2,topic,writing_4_N>
 <paragraph_3_V2,topic,authorship_1_N>
-<paragraph_3_V2,topic,composition_9_N>
-<dash_off_1_V2,topic,writing_4_N>
-<knock_off_3_V2,topic,writing_4_N>
-<toss_off_1_V2,topic,writing_4_N>
 <dash_off_1_V2,topic,authorship_1_N>
 <knock_off_3_V2,topic,authorship_1_N>
 <toss_off_1_V2,topic,authorship_1_N>
-<dash_off_1_V2,topic,composition_9_N>
-<knock_off_3_V2,topic,composition_9_N>
-<toss_off_1_V2,topic,composition_9_N>
-<rewrite_1_V2,topic,writing_4_N>
 <rewrite_1_V2,topic,authorship_1_N>
-<rewrite_1_V2,topic,composition_9_N>
-<dramatize_1_V2,topic,writing_4_N>
-<adopt_4_V2,topic,writing_4_N>
 <dramatize_1_V2,topic,authorship_1_N>
 <adopt_4_V2,topic,authorship_1_N>
-<dramatize_1_V2,topic,composition_9_N>
-<adopt_4_V2,topic,composition_9_N>
-<draft_1_V2,topic,writing_4_N>
-<outline_1_V2,topic,writing_4_N>
 <draft_1_V2,topic,authorship_1_N>
 <outline_1_V2,topic,authorship_1_N>
-<draft_1_V2,topic,composition_9_N>
-<outline_1_V2,topic,composition_9_N>
-<co_author_V2,topic,writing_4_N>
 <co_author_V2,topic,authorship_1_N>
-<co_author_V2,topic,composition_9_N>
-<ghost_3_V2,topic,writing_4_N>
 <ghost_3_V2,topic,authorship_1_N>
-<ghost_3_V2,topic,composition_9_N>
-<annotate_1_V2,topic,writing_4_N>
 <annotate_1_V2,topic,authorship_1_N>
-<annotate_1_V2,topic,composition_9_N>
-<cite_1_V2,topic,writing_4_N>
 <cite_1_V2,topic,authorship_1_N>
-<cite_1_V2,topic,composition_9_N>
-<write_out_1_V2,topic,writing_4_N>
-<write_up_1_V2,topic,writing_4_N>
 <write_out_1_V2,topic,authorship_1_N>
 <write_up_1_V2,topic,authorship_1_N>
-<write_out_1_V2,topic,composition_9_N>
-<write_up_1_V2,topic,composition_9_N>
 <popular_4_A,topic,art_4_N>
 <pop_A,topic,art_4_N>
 <cathartic_2_A,topic,art_4_N>
@@ -1745,8 +1631,6 @@
 <recapitulation_4_N,topic,music_1_N>
 <centesis_N,topic,surgery_1_N>
 <amniocentesis_N,topic,pregnancy_N>
-<amniocentesis_N,topic,gestation_2_N>
-<amniocentesis_N,topic,maternity_1_N>
 <venipuncture_N,topic,medicine_1_N>
 <update_2_V2,topic,computer_science_N>
 <action_8_N,topic,military_N>
@@ -1777,28 +1661,19 @@
 <war_3_N,topic,military_N>
 <warfare_2_N,topic,military_N>
 <side_5_N,topic,war_3_N>
-<side_5_N,topic,warfare_2_N>
 <plunderer_N,topic,war_3_N>
 <pillager_N,topic,war_3_N>
 <looter_N,topic,war_3_N>
 <spoiler_2_N,topic,war_3_N>
 <raider_1_N,topic,war_3_N>
 <freebooter_N,topic,war_3_N>
-<plunderer_N,topic,warfare_2_N>
-<pillager_N,topic,warfare_2_N>
-<looter_N,topic,warfare_2_N>
-<spoiler_2_N,topic,warfare_2_N>
-<raider_1_N,topic,warfare_2_N>
-<freebooter_N,topic,warfare_2_N>
 <war_1_N,topic,war_3_N>
-<war_1_N,topic,warfare_2_N>
 <assault_1_N,topic,military_N>
 <blitz_2_N,topic,military_N>
 <infiltration_2_N,topic,military_N>
 <peacekeeping_N,topic,military_N>
 <broadside_5_N,topic,navy_1_N>
 <tuning_N,topic,music_1_N>
-<sampling_2_N,topic,telecommunication_1_N>
 <sampling_2_N,topic,telecom_N>
 <echolalia_2_N,topic,psychiatry_N>
 <replay_2_N,topic,television_1_N>
@@ -1843,161 +1718,57 @@
 <countermine_N,topic,military_N>
 <recusation_1_N,topic,law_3_N>
 <usance_1_N,topic,commerce_2_N>
-<usance_1_N,topic,commercialism_N>
-<usance_1_N,topic,mercantilism_2_N>
 <commercialize_2_V2,topic,commerce_2_N>
 <market_4_V2,topic,commerce_2_N>
-<commercialize_2_V2,topic,commercialism_N>
-<market_4_V2,topic,commercialism_N>
-<commercialize_2_V2,topic,mercantilism_2_N>
-<market_4_V2,topic,mercantilism_2_N>
 <buy_4_V2,topic,commerce_2_N>
 <purchase_V2,topic,commerce_2_N>
-<buy_4_V2,topic,commercialism_N>
-<purchase_V2,topic,commercialism_N>
-<buy_4_V2,topic,mercantilism_2_N>
-<purchase_V2,topic,mercantilism_2_N>
 <take_14_V2,topic,commerce_2_N>
-<take_14_V2,topic,commercialism_N>
-<take_14_V2,topic,mercantilism_2_N>
 <get_4_VV,topic,commerce_2_N>
-<get_4_VV,topic,commercialism_N>
-<get_4_VV,topic,mercantilism_2_N>
 <clear_9_V2,topic,commerce_2_N>
-<clear_9_V2,topic,commercialism_N>
-<clear_9_V2,topic,mercantilism_2_N>
 <turn_4_VA,topic,commerce_2_N>
-<turn_4_VA,topic,commercialism_N>
-<turn_4_VA,topic,mercantilism_2_N>
 <negotiate_4_V2,topic,commerce_2_N>
-<negotiate_4_V2,topic,commercialism_N>
-<negotiate_4_V2,topic,mercantilism_2_N>
 <sell_6_V2,topic,commerce_2_N>
-<sell_6_V2,topic,commercialism_N>
-<sell_6_V2,topic,mercantilism_2_N>
 <resell_V2,topic,commerce_2_N>
-<resell_V2,topic,commercialism_N>
-<resell_V2,topic,mercantilism_2_N>
 <palm_off_V2,topic,commerce_2_N>
 <fob_off_V2,topic,commerce_2_N>
-<palm_off_V2,topic,commercialism_N>
-<fob_off_V2,topic,commercialism_N>
-<palm_off_V2,topic,mercantilism_2_N>
-<fob_off_V2,topic,mercantilism_2_N>
 <realize_2_VS,topic,commerce_2_N>
-<realize_2_VS,topic,commercialism_N>
-<realize_2_VS,topic,mercantilism_2_N>
 <auction_V2,topic,commerce_2_N>
 <auction_off_V2,topic,commerce_2_N>
-<auction_V2,topic,commercialism_N>
-<auction_off_V2,topic,commercialism_N>
-<auction_V2,topic,mercantilism_2_N>
-<auction_off_V2,topic,mercantilism_2_N>
 <deal_11_V2,topic,commerce_2_N>
 <sell_5_V2,topic,commerce_2_N>
 <trade_5_V2,topic,commerce_2_N>
-<deal_11_V2,topic,commercialism_N>
-<sell_5_V2,topic,commercialism_N>
-<trade_5_V2,topic,commercialism_N>
-<deal_11_V2,topic,mercantilism_2_N>
-<sell_5_V2,topic,mercantilism_2_N>
-<trade_5_V2,topic,mercantilism_2_N>
 <transact_V2,topic,commerce_2_N>
-<transact_V2,topic,commercialism_N>
-<transact_V2,topic,mercantilism_2_N>
 <deal_10_V2,topic,commerce_2_N>
-<deal_10_V2,topic,commercialism_N>
-<deal_10_V2,topic,mercantilism_2_N>
 <retail_2_V2,topic,commerce_2_N>
-<retail_2_V2,topic,commercialism_N>
-<retail_2_V2,topic,mercantilism_2_N>
 <wholesale_V2,topic,commerce_2_N>
-<wholesale_V2,topic,commercialism_N>
-<wholesale_V2,topic,mercantilism_2_N>
 <sell_out_1_V2,topic,commerce_2_N>
 <sell_up_V2,topic,commerce_2_N>
 <liquidize_1_V2,topic,commerce_2_N>
-<sell_out_1_V2,topic,commercialism_N>
-<sell_up_V2,topic,commercialism_N>
-<liquidize_1_V2,topic,commercialism_N>
-<sell_out_1_V2,topic,mercantilism_2_N>
-<sell_up_V2,topic,mercantilism_2_N>
-<liquidize_1_V2,topic,mercantilism_2_N>
 <trade_3_V2,topic,commerce_2_N>
 <trade_in_V2,topic,commerce_2_N>
-<trade_3_V2,topic,commercialism_N>
-<trade_in_V2,topic,commercialism_N>
-<trade_3_V2,topic,mercantilism_2_N>
-<trade_in_V2,topic,mercantilism_2_N>
 <trade_2_V2,topic,commerce_2_N>
-<trade_2_V2,topic,commercialism_N>
-<trade_2_V2,topic,mercantilism_2_N>
 <traffic_2_V,topic,commerce_2_N>
-<traffic_2_V,topic,commercialism_N>
-<traffic_2_V,topic,mercantilism_2_N>
 <turn_over_1_V2,topic,commerce_2_N>
-<turn_over_1_V2,topic,commercialism_N>
-<turn_over_1_V2,topic,mercantilism_2_N>
 <trust_3_VS,topic,commerce_2_N>
-<trust_3_VS,topic,commercialism_N>
-<trust_3_VS,topic,mercantilism_2_N>
 <pick_up_4_V2,topic,commerce_2_N>
-<pick_up_4_V2,topic,commercialism_N>
-<pick_up_4_V2,topic,mercantilism_2_N>
 <market_3_V2,topic,commerce_2_N>
-<market_3_V2,topic,commercialism_N>
-<market_3_V2,topic,mercantilism_2_N>
 <market_2_V2,topic,commerce_2_N>
-<market_2_V2,topic,commercialism_N>
-<market_2_V2,topic,mercantilism_2_N>
 <stock_4_V2,topic,commerce_2_N>
 <buy_in_V2,topic,commerce_2_N>
 <stock_up_V,topic,commerce_2_N>
-<stock_4_V2,topic,commercialism_N>
-<buy_in_V2,topic,commercialism_N>
-<stock_up_V,topic,commercialism_N>
-<stock_4_V2,topic,mercantilism_2_N>
-<buy_in_V2,topic,mercantilism_2_N>
-<stock_up_V,topic,mercantilism_2_N>
 <shop_3_V,topic,commerce_2_N>
-<shop_3_V,topic,commercialism_N>
-<shop_3_V,topic,mercantilism_2_N>
 <market_1_V2,topic,commerce_2_N>
-<market_1_V2,topic,commercialism_N>
-<market_1_V2,topic,mercantilism_2_N>
 <shop_2_V,topic,commerce_2_N>
 <browse_1_V,topic,commerce_2_N>
-<shop_2_V,topic,commercialism_N>
-<browse_1_V,topic,commercialism_N>
-<shop_2_V,topic,mercantilism_2_N>
-<browse_1_V,topic,mercantilism_2_N>
 <smuggle_V2,topic,commerce_2_N>
-<smuggle_V2,topic,commercialism_N>
-<smuggle_V2,topic,mercantilism_2_N>
 <import_1_V2,topic,commerce_2_N>
-<import_1_V2,topic,commercialism_N>
-<import_1_V2,topic,mercantilism_2_N>
 <export_1_V2,topic,commerce_2_N>
-<export_1_V2,topic,commercialism_N>
-<export_1_V2,topic,mercantilism_2_N>
 <pawn_V2,topic,commerce_2_N>
 <soak_1_V2,topic,commerce_2_N>
 <hock_1_V2,topic,commerce_2_N>
-<pawn_V2,topic,commercialism_N>
-<soak_1_V2,topic,commercialism_N>
-<hock_1_V2,topic,commercialism_N>
-<pawn_V2,topic,mercantilism_2_N>
-<soak_1_V2,topic,mercantilism_2_N>
-<hock_1_V2,topic,mercantilism_2_N>
 <impulse_buy_V2,topic,commerce_2_N>
-<impulse_buy_V2,topic,commercialism_N>
-<impulse_buy_V2,topic,mercantilism_2_N>
 <retail_1_V2,topic,commerce_2_N>
-<retail_1_V2,topic,commercialism_N>
-<retail_1_V2,topic,mercantilism_2_N>
 <trade_1_V2,topic,commerce_2_N>
-<trade_1_V2,topic,commercialism_N>
-<trade_1_V2,topic,mercantilism_2_N>
 <protect_1_V2,topic,trade_6_N>
 <dull_12_A,topic,business_7_N>
 <slow_6_A,topic,business_7_N>
@@ -2029,20 +1800,16 @@
 <stagnancy_2_N,topic,business_7_N>
 <doldrums_1_N,topic,business_7_N>
 <privatize_V2,topic,business_7_N>
-<margin_3_N,topic,"corporate finance">
-<buy_into_V2,topic,investing_N>
+<margin_3_N,topic,corporation_1_N>
+<margin_3_N,topic,finance_1_N>
 <buy_into_V2,topic,investment_4_N>
-<subscribe_2_V2,topic,investing_N>
 <subscribe_2_V2,topic,investment_4_N>
 <rubber_A,topic,banking_2_N>
-<index_2_V2,topic,publication_4_N>
 <index_2_V2,topic,publishing_N>
 <printing_4_N,topic,printing_1_N>
 <case_16_N,topic,printing_4_N>
 <justify_5_VV,topic,printing_4_N>
 <online_1_A,topic,transportation_3_N>
-<online_1_A,topic,shipping_2_N>
-<online_1_A,topic,transport_5_N>
 <alienation_3_N,topic,law_3_N>
 <rental_2_N,topic,automobile_N>
 <progressive_5_A,topic,government_4_N>
@@ -2078,7 +1845,6 @@
 <occupation_2_N,topic,military_N>
 <finance_2_N,topic,finance_1_N>
 <bioremediation_2_N,topic,bacteria_N>
-<bioremediation_2_N,topic,bacterium_N>
 <mandate_3_N,topic,politics_3_N>
 <toleration_2_N,topic,religion_2_N>
 <patronage_4_N,topic,politics_3_N>
@@ -2122,9 +1888,12 @@
 <naturalization_2_N,topic,law_3_N>
 <judgment_6_N,topic,law_3_N>
 <judgement_6_N,topic,law_3_N>
-<conviction_2_N,topic,"criminal law">
-<condemnation_5_N,topic,"criminal law">
-<sentence_3_N,topic,"criminal law">
+<conviction_2_N,topic,crime_2_N>
+<conviction_2_N,topic,law_3_N>
+<condemnation_5_N,topic,crime_2_N>
+<condemnation_5_N,topic,law_3_N>
+<sentence_3_N,topic,crime_2_N>
+<sentence_3_N,topic,law_3_N>
 <dismissal_3_N,topic,law_3_N>
 <opinion_6_N,topic,law_3_N>
 <ruling_N,topic,law_3_N>
@@ -2179,17 +1948,11 @@
 <heteroploid_N,topic,genetics_N>
 <polyploid_N,topic,genetics_N>
 <motile_A,topic,microorganism_N>
-<motile_A,topic,micro_organism_N>
 <nonmotile_A,topic,microorganism_N>
-<nonmotile_A,topic,micro_organism_N>
 <virulence_1_N,topic,microorganism_N>
-<virulence_1_N,topic,micro_organism_N>
 <vector_2_N,topic,microorganism_N>
 <transmitter_2_N,topic,microorganism_N>
-<vector_2_N,topic,micro_organism_N>
-<transmitter_2_N,topic,micro_organism_N>
 <bacteremia_N,topic,microorganism_N>
-<bacteremia_N,topic,micro_organism_N>
 <monad_3_N,topic,biology_3_N>
 <hybrid_3_N,topic,genetics_N>
 <crossbreed_N,topic,genetics_N>
@@ -2201,11 +1964,8 @@
 <bacteria_N,topic,microbiology_N>
 <bacterium_N,topic,microbiology_N>
 <peritrichous_A,topic,bacteria_N>
-<peritrichous_A,topic,bacterium_N>
 <resistance_6_N,topic,bacteria_N>
-<resistance_6_N,topic,bacterium_N>
 <microphage_N,topic,bacteria_N>
-<microphage_N,topic,bacterium_N>
 <vector_4_N,topic,genetics_N>
 <cosmid_N,topic,genetics_N>
 <monster_5_N,topic,medicine_1_N>
@@ -2287,7 +2047,6 @@
 <arch_4_N,topic,architecture_1_N>
 <architecture_3_N,topic,architecture_1_N>
 <armament_1_N,topic,military_N>
-<armilla_2_N,topic,archeology_N>
 <armilla_2_N,topic,archaeology_N>
 <arsenal_2_N,topic,military_N>
 <armory_3_N,topic,military_N>
@@ -2326,9 +2085,7 @@
 <brig_2_N,topic,ship_N>
 <broadside_3_N,topic,navy_1_N>
 <buffer_4_N,topic,computer_science_N>
-<barrow_2_N,topic,archeology_N>
 <barrow_2_N,topic,archaeology_N>
-<tumulus_N,topic,archeology_N>
 <tumulus_N,topic,archaeology_N>
 <passenger_N,topic,bus_4_N>
 <riderMasc_3_N,topic,bus_4_N>
@@ -2354,15 +2111,10 @@
 <mainframe_2_N,topic,computer_science_N>
 <chachka_2_N,topic,yiddish_N>
 <chain_mail_N,topic,"Middle Ages">
-<chain_mail_N,topic,"Dark Ages">
 <ring_mail_N,topic,"Middle Ages">
-<ring_mail_N,topic,"Dark Ages">
 <mail_5_N,topic,"Middle Ages">
-<mail_5_N,topic,"Dark Ages">
 <chain_armour_N,topic,"Middle Ages">
-<chain_armour_N,topic,"Dark Ages">
 <ring_armour_N,topic,"Middle Ages">
-<ring_armour_N,topic,"Dark Ages">
 <circus_2_N,topic,antiquity_1_N>
 <clinch_1_N,topic,vessel_3_N>
 <clinch_1_N,topic,watercraft_2_N>
@@ -2449,11 +2201,9 @@
 <fort_1_N,topic,military_N>
 <gauze_1_N,topic,medicine_1_N>
 <grail_2_N,topic,legend_1_N>
-<grail_2_N,topic,fable_3_N>
 <earth_7_N,topic,electricity_2_N>
 <guardhouse_N,topic,military_N>
 <habergeon_N,topic,"Middle Ages">
-<habergeon_N,topic,"Dark Ages">
 <habit_4_N,topic,religion_2_N>
 <hardware_3_N,topic,computer_science_N>
 <hardware_2_N,topic,military_N>
@@ -2468,7 +2218,6 @@
 <interface_3_N,topic,computer_science_N>
 <port_5_N,topic,computer_science_N>
 <kanzu_N,topic,swahili_Language>
-<tie_up_5_V2,topic,knit_3_N>
 <tie_up_5_V2,topic,knitting_1_N>
 <latrine_N,topic,military_N>
 <laurel_2_N,topic,antiquity_1_N>
@@ -2496,9 +2245,7 @@
 <mihrab_1_N,topic,islam_2_N>
 <post_6_N,topic,military_N>
 <miniature_1_N,topic,"Middle Ages">
-<miniature_1_N,topic,"Dark Ages">
 <illumination_5_N,topic,"Middle Ages">
-<illumination_5_N,topic,"Dark Ages">
 <minute_gun_N,topic,military_N>
 <modillion_N,topic,architecture_1_N>
 <monstrance_2_N,topic,"Roman Church">
@@ -2530,7 +2277,6 @@
 <pallium_3_N,topic,"Roman Church">
 <pantheon_3_N,topic,antiquity_1_N>
 <pavis_N,topic,"Middle Ages">
-<pavis_N,topic,"Dark Ages">
 <peripheral_N,topic,computer_science_N>
 <picket_4_N,topic,military_N>
 <pier_1_N,topic,architecture_1_N>
@@ -2550,7 +2296,8 @@
 <redoubt_1_N,topic,military_N>
 <regimentals_N,topic,military_N>
 <register_4_N,topic,computer_science_N>
-<repeater_4_N,topic,"electrical engineering">
+<repeater_4_N,topic,electricity_2_N>
+<repeater_4_N,topic,engineering_1_N>
 <rocket_base_N,topic,military_N>
 <router_2_N,topic,computer_science_N>
 <weatherly_A,topic,sailing_vessel_N>
@@ -2625,8 +2372,6 @@
 <schmaltz_N,topic,yiddish_N>
 <resistance_7_N,topic,psychiatry_N>
 <phase_4_N,topic,astronomy_N>
-<persona_2_N,topic,"Carl Jung">
-<image_6_N,topic,"Carl Jung">
 <persona_2_N,topic,psychology_N>
 <image_6_N,topic,psychology_N>
 <collar_1_N,topic,zoology_2_N>
@@ -2777,8 +2522,6 @@
 <blister_3_N,topic,pathology_2_N>
 <bulla_1_N,topic,pathology_2_N>
 <endometrium_N,topic,pregnancy_N>
-<endometrium_N,topic,gestation_2_N>
-<endometrium_N,topic,maternity_1_N>
 <frill_1_N,topic,palaeontology_N>
 <graft_1_N,topic,surgery_1_N>
 <transplant_1_N,topic,surgery_1_N>
@@ -2789,9 +2532,7 @@
 <humor_3_N,topic,physiology_1_N>
 <humour_3_N,topic,physiology_1_N>
 <humor_3_N,topic,"Middle Ages">
-<humor_3_N,topic,"Dark Ages">
 <humour_3_N,topic,"Middle Ages">
-<humour_3_N,topic,"Dark Ages">
 <humor_3_N,topic,antiquity_1_N>
 <humour_3_N,topic,antiquity_1_N>
 <spindle_1_N,topic,biology_3_N>
@@ -2808,9 +2549,7 @@
 <perdition_N,topic,christianity_2_N>
 <pit_4_N,topic,christianity_2_N>
 <limbo_3_N,topic,theology_2_N>
-<limbo_3_N,topic,divinity_3_N>
 <purgatory_2_N,topic,theology_2_N>
-<purgatory_2_N,topic,divinity_3_N>
 <check_9_V2,topic,falconry_N>
 <verbalize_4_V2,topic,language_6_N>
 <verbalize_4_V2,topic,speech_8_N>
@@ -2837,22 +2576,16 @@
 <mores_N,topic,sociology_N>
 <paramnesia_N,topic,psychiatry_N>
 <readiness_2_N,topic,psychology_N>
-<anima_N,topic,"Carl Jung">
 <anima_N,topic,psychology_N>
 <inspiration_3_N,topic,theology_2_N>
-<inspiration_3_N,topic,divinity_3_N>
 <succedaneum_N,topic,medicine_1_N>
 <process_3_N,topic,psychology_N>
 <operation_4_N,topic,psychology_N>
 <constancy_1_N,topic,psychology_N>
 <finish_7_N,topic,tasting_1_N>
-<harmonize_2_V2,topic,music_3_N>
-<harmonize_2_V,topic,music_3_N>
 <harmonize_2_V2,topic,euphony_N>
 <harmonize_2_V,topic,euphony_N>
-<orchestrate_1_V2,topic,music_3_N>
 <orchestrate_1_V2,topic,euphony_N>
-<transcribe_1_V2,topic,music_3_N>
 <transcribe_1_V2,topic,euphony_N>
 <music_2_N,topic,music_1_N>
 <syncopate_2_V2,topic,music_2_N>
@@ -2877,7 +2610,6 @@
 <introjection_2_N,topic,psychology_N>
 <generalization_4_N,topic,psychology_N>
 <theanthropism_1_N,topic,theology_2_N>
-<theanthropism_1_N,topic,divinity_3_N>
 <triplicity_1_N,topic,astrology_N>
 <trigon_2_N,topic,astrology_N>
 <sign_3_N,topic,astrology_N>
@@ -2978,9 +2710,7 @@
 <pre_emption_1_N,topic,law_3_N>
 <relation_3_N,topic,law_3_N>
 <predestination_2_N,topic,theology_2_N>
-<predestination_2_N,topic,divinity_3_N>
 <predetermination_1_N,topic,theology_2_N>
-<predetermination_1_N,topic,divinity_3_N>
 <aesthetic_N,topic,philosophy_1_N>
 <esthetic_N,topic,philosophy_1_N>
 <deconstruction_N,topic,philosophy_1_N>
@@ -3058,8 +2788,6 @@
 <representable_A,topic,mathematics_N>
 <linear_3_A,topic,mathematics_N>
 <additive_1_A,topic,mathematics_N>
-<linear_3_A,topic,maths_N>
-<additive_1_A,topic,maths_N>
 <nonlinear_A,topic,mathematics_N>
 <monotonic_1_A,topic,mathematics_N>
 <nonmonotonic_A,topic,mathematics_N>
@@ -3462,7 +3190,6 @@
 <determinant_1_N,topic,immunology_N>
 <neurology_2_N,topic,neurology_1_N>
 <nullipara_N,topic,obstetrics_N>
-<nullipara_N,topic,midwifery_1_N>
 <primigravida_N,topic,obstetrics_N>
 <primipara_N,topic,obstetrics_N>
 <quadripara_N,topic,obstetrics_N>
@@ -4187,17 +3914,11 @@
 <go_down_4_V,topic,astronomy_N>
 <go_under_2_V,topic,astronomy_N>
 <rigid_4_A,topic,aeronautics_N>
-<rigid_4_A,topic,astronautics_N>
 <semirigid_1_A,topic,aeronautics_N>
-<semirigid_1_A,topic,astronautics_N>
 <nonrigid_A,topic,aeronautics_N>
-<nonrigid_A,topic,astronautics_N>
 <inflation_2_N,topic,cosmology_2_N>
-<inflation_2_N,topic,cosmogony_N>
 <string_2_N,topic,cosmology_2_N>
-<string_2_N,topic,cosmogony_N>
 <ylem_N,topic,cosmology_2_N>
-<ylem_N,topic,cosmogony_N>
 <monoclinic_A,topic,crystallography_N>
 <triclinic_A,topic,crystallography_N>
 <isometric_3_A,topic,crystallography_N>
@@ -4322,15 +4043,12 @@
 <hip_1_N,topic,architecture_1_N>
 <build_3_V2,topic,architecture_1_N>
 <sink_1_N,topic,engineering_1_N>
-<sink_1_N,topic,technology_1_N>
 <source_1_N,topic,engineering_1_N>
-<source_1_N,topic,technology_1_N>
 <fine_4_A,topic,metallurgy_N>
 <rich_4_A,topic,metallurgy_N>
 <alloy_2_V2,topic,metallurgy_N>
 <debase_2_V2,topic,metallurgy_N>
 <alloy_1_V2,topic,metallurgy_N>
-<telecommunication_2_N,topic,telecommunication_1_N>
 <telecommunication_2_N,topic,telecom_N>
 <addressable_A,topic,computer_science_N>
 <online_2_A,topic,computer_science_N>
@@ -4460,17 +4178,11 @@
 <relationship_3_N,topic,anthropology_N>
 <affinity_1_N,topic,anthropology_N>
 <consanguinity_N,topic,anthropology_N>
-<culture_2_N,topic,archeology_N>
-<civilization_2_N,topic,archeology_N>
-<civilisation_2_N,topic,archeology_N>
 <culture_2_N,topic,archaeology_N>
 <civilization_2_N,topic,archaeology_N>
 <civilisation_2_N,topic,archaeology_N>
-<dig_1_N,topic,archeology_N>
-<excavation_1_N,topic,archeology_N>
 <dig_1_N,topic,archaeology_N>
 <excavation_1_N,topic,archaeology_N>
-<midden_1_N,topic,archeology_N>
 <midden_1_N,topic,archaeology_N>
 <mythology_2_N,topic,mythology_1_N>
 <minimalist_2_A,topic,politics_3_N>
@@ -4608,12 +4320,10 @@
 <quantify_1_V2,topic,logic_1_N>
 <presuppose_2_V2,topic,logic_1_N>
 <suppose_3_VS,topic,logic_1_N>
-<deriving_N,topic,"historical linguistics">
-<derivation_3_N,topic,"historical linguistics">
-<deriving_N,topic,"diachronic linguistics">
-<derivation_3_N,topic,"diachronic linguistics">
 <deriving_N,topic,"diachrony">
+<deriving_N,topic,linguistics_1_N>
 <derivation_3_N,topic,"diachrony">
+<derivation_3_N,topic,linguistics_1_N>
 <literature_3_N,topic,literature_2_N>
 <metrical_2_A,topic,prosody_3_N>
 <metric_2_A,topic,prosody_3_N>
@@ -4644,9 +4354,7 @@
 <allocution_N,topic,rhetoric_4_N>
 <circulation_1_N,topic,"library science">
 <trivium_N,topic,"Middle Ages">
-<trivium_N,topic,"Dark Ages">
 <quadrivium_N,topic,"Middle Ages">
-<quadrivium_N,topic,"Dark Ages">
 <analytic_3_A,topic,linguistics_1_N>
 <uninflected_3_A,topic,linguistics_1_N>
 <synthetic_5_A,topic,linguistics_1_N>
@@ -4778,23 +4486,14 @@
 <shift_7_V2,topic,phonetics_N>
 <syncope_2_N,topic,phonology_N>
 <syncopation_1_N,topic,phonology_N>
-<syncope_2_N,topic,phonemics_N>
-<syncopation_1_N,topic,phonemics_N>
 <derivation_1_N,topic,"descriptive linguistics">
 <minor_1_A,topic,theology_2_N>
 <venial_1_A,topic,theology_2_N>
-<minor_1_A,topic,divinity_3_N>
-<venial_1_A,topic,divinity_3_N>
 <deadly_2_A,topic,theology_2_N>
-<deadly_2_A,topic,divinity_3_N>
 <universalistic_2_A,topic,theology_2_N>
-<universalistic_2_A,topic,divinity_3_N>
 <fundamentalist_A,topic,theology_2_N>
-<fundamentalist_A,topic,divinity_3_N>
 <catechetical_A,topic,theology_2_N>
-<catechetical_A,topic,divinity_3_N>
 <theology_1_N,topic,theology_2_N>
-<theology_1_N,topic,divinity_3_N>
 <emanation_2_N,topic,theology_1_N>
 <rise_4_N,topic,theology_1_N>
 <procession_1_N,topic,theology_1_N>
@@ -4803,9 +4502,12 @@
 <foreordain_1_V2,topic,theology_1_N>
 <reprobate_1_V2,topic,theology_1_N>
 <reveal_1_VS,topic,theology_1_N>
-<consubstantial_A,topic,"Christian theology">
-<agape_1_N,topic,"Christian theology">
-<grace_1_N,topic,"Christian theology">
+<consubstantial_A,topic,christianity_2_N>
+<consubstantial_A,topic,theology_2_N>
+<agape_1_N,topic,christianity_2_N>
+<agape_1_N,topic,theology_2_N>
+<grace_1_N,topic,christianity_2_N>
+<grace_1_N,topic,theology_2_N>
 <mitzvah_1_N,topic,judaism_2_N>
 <lumpenproletariat_N,topic,marxism_N>
 <eon_3_N,topic,"Gnosticism">
@@ -4840,7 +4542,6 @@
 <shaitan_N,topic,islam_2_N>
 <eblis_N,topic,islam_2_N>
 <houri_2_N,topic,islam_2_N>
-<houri_2_N,topic,muhammadanism_N>
 <paynim_N,topic,islam_2_N>
 <imam_N,topic,islam_2_N>
 <mantra_2_N,topic,hinduism_2_N>
@@ -4881,28 +4582,16 @@
 <air_2_V2,topic,broadcasting_2_N>
 <rerun_3_V2,topic,broadcasting_2_N>
 <sign_off_V2,topic,broadcasting_2_N>
-<duplex_2_A,topic,telecommunication_1_N>
 <duplex_2_A,topic,telecom_N>
-<simplex_2_A,topic,telecommunication_1_N>
 <simplex_2_A,topic,telecom_N>
-<call_for_11_V2V,topic,telecommunication_1_N>
 <call_for_11_V2V,topic,telecom_N>
-<call_for_21_V2V,topic,telephone_1_N>
-<telephone_V2,topic,telephone_1_N>
-<call_up_3_V2,topic,telephone_1_N>
-<phone_V2,topic,telephone_1_N>
-<ring_4_V2,topic,telephone_1_N>
 <call_for_21_V2V,topic,telephony_N>
 <telephone_V2,topic,telephony_N>
 <call_up_3_V2,topic,telephony_N>
 <phone_V2,topic,telephony_N>
 <ring_4_V2,topic,telephony_N>
-<call_in_7_V2,topic,telephone_1_N>
 <call_in_7_V2,topic,telephony_N>
-<dial_1_V2,topic,telephone_1_N>
 <dial_1_V2,topic,telephony_N>
-<hang_on_2_V,topic,telephone_1_N>
-<hold_on_3_V,topic,telephone_1_N>
 <hang_on_2_V,topic,telephony_N>
 <hold_on_3_V,topic,telephony_N>
 <cable_2_V2,topic,telegraphy_1_N>
@@ -4943,8 +4632,7 @@
 <tension_3_N,topic,literature_2_N>
 <longueur_N,topic,literature_2_N>
 <hagiology_N,topic,legend_1_N>
-<hagiology_N,topic,fable_3_N>
-<parable_1_N,topic,"New Testament">
+<parable_1_N,topic,christianity_2_N>
 <sympathetic_2_A,topic,drama_3_N>
 <appealing_1_A,topic,drama_3_N>
 <likeable_1_A,topic,drama_3_N>
@@ -4966,9 +4654,9 @@
 <inscription_1_N,topic,music_1_N>
 <breviary_N,topic,"Roman Church">
 <missal_N,topic,"Roman Church">
-<covenant_2_N,topic,"Bible">
-<eisegesis_N,topic,"Bible">
-<exegesis_N,topic,"Bible">
+<covenant_2_N,topic,christianity_2_N>
+<eisegesis_N,topic,christianity_2_N>
+<exegesis_N,topic,christianity_2_N>
 <magnificat_N,topic,luke_2_PN>
 <vulgate_N,topic,"Roman Church">
 <manna_2_N,topic,"Old Testament">
@@ -4992,18 +4680,18 @@
 <sarah_PN,topic,"Old Testament">
 <solomon_N,topic,"Old Testament">
 <stacte_N,topic,"Old Testament">
-<armageddon_1_PN,topic,"New Testament">
-<andrew_PN,topic,"New Testament">
-<james_7_PN,topic,"New Testament">
-<john_2_PN,topic,"New Testament">
-<joseph_3_PN,topic,"New Testament">
-<judas_2_PN,topic,"New Testament">
-<judas_1_PN,topic,"New Testament">
-<luke_1_PN,topic,"New Testament">
-<matthew_1_PN,topic,"New Testament">
-<paul_2_PN,topic,"New Testament">
-<doomsday_PN,topic,"New Testament">
-<millennium_1_N,topic,"New Testament">
+<armageddon_1_PN,topic,christianity_2_N>
+<andrew_PN,topic,christianity_2_N>
+<james_7_PN,topic,christianity_2_N>
+<john_2_PN,topic,christianity_2_N>
+<joseph_3_PN,topic,christianity_2_N>
+<judas_2_PN,topic,christianity_2_N>
+<judas_1_PN,topic,christianity_2_N>
+<luke_1_PN,topic,christianity_2_N>
+<matthew_1_PN,topic,christianity_2_N>
+<paul_2_PN,topic,christianity_2_N>
+<doomsday_PN,topic,christianity_2_N>
+<millennium_1_N,topic,christianity_2_N>
 <evensong_2_N,topic,"Anglican Church">
 <judith_1_PN,topic,apocrypha_N>
 <summation_3_N,topic,law_3_N>
@@ -5038,10 +4726,14 @@
 <statute_book_N,topic,law_3_N>
 <bill_4_N,topic,law_3_N>
 <measure_4_N,topic,law_3_N>
-<complaint_5_N,topic,"criminal law">
-<principal_4_N,topic,"criminal law">
-<bail_1_N,topic,"criminal law">
-<bond_4_N,topic,"criminal law">
+<complaint_5_N,topic,crime_2_N>
+<complaint_5_N,topic,law_3_N>
+<principal_4_N,topic,crime_2_N>
+<principal_4_N,topic,law_3_N>
+<bail_1_N,topic,crime_2_N>
+<bail_1_N,topic,law_3_N>
+<bond_4_N,topic,crime_2_N>
+<bond_4_N,topic,law_3_N>
 <decree_N,topic,law_3_N>
 <edict_2_N,topic,law_3_N>
 <fiat_N,topic,law_3_N>
@@ -5132,7 +4824,7 @@
 <tape_2_V2,topic,movie_N>
 <pax_N,topic,"Roman Church">
 <salute_2_N,topic,military_N>
-<synset_N,topic,"WordNet">
+<synset_N,topic,linguistics_1_N>
 <proposer_2_N,topic,order_9_N>
 <mover_1_N,topic,order_9_N>
 <interpellation_1_N,topic,parliament_1_N>
@@ -5273,8 +4965,8 @@
 <overplay_V2,topic,theatre_2_N>
 <underact_V2,topic,dramaturgy_N>
 <underact_V2,topic,theatre_2_N>
-<foot_4_V2,topic,dance_3_N>
-<heel_3_V2,topic,dance_3_N>
+<foot_4_V2,topic,dancing_N>
+<heel_3_V2,topic,dancing_N>
 <chromatic_2_A,topic,music_1_N>
 <diatonic_2_A,topic,music_1_N>
 <popular_4_A,topic,music_1_N>
@@ -5400,7 +5092,6 @@
 <versify_V2,topic,poetry_2_N>
 <scan_1_V2,topic,poetry_2_N>
 <assonant_1_A,topic,rhyme_1_N>
-<assonant_1_A,topic,rime_2_N>
 <voice_2_N,topic,metonymy_N>
 <sidebar_1_N,topic,law_3_N>
 <pretrial_N,topic,law_3_N>
@@ -5843,21 +5534,15 @@
 <gatherer_2_N,topic,taxation_1_N>
 <accumulator_1_N,topic,taxation_1_N>
 <esquire_N,topic,"Middle Ages">
-<esquire_N,topic,"Dark Ages">
 <gladiator_2_N,topic,antiquity_1_N>
 <palatine_2_N,topic,"Middle Ages">
-<palatine_2_N,topic,"Dark Ages">
 <pontifex_N,topic,antiquity_1_N>
 <procurator_2_N,topic,antiquity_1_N>
 <serf_N,topic,"Middle Ages">
-<serf_N,topic,"Dark Ages">
 <helot_N,topic,"Middle Ages">
-<helot_N,topic,"Dark Ages">
 <villein_N,topic,"Middle Ages">
-<villein_N,topic,"Dark Ages">
 <sibyl_2_N,topic,antiquity_1_N>
 <tribune_1_N,topic,antiquity_1_N>
-<entelechy_N,topic,"Aristotle">
 <hot_20_A,topic,electricity_2_N>
 <live_7_A,topic,electricity_2_N>
 <direct_8_A,topic,electricity_2_N>
@@ -5885,8 +5570,6 @@
 <solubility_1_N,topic,solution_1_N>
 <wilderness_1_N,topic,politics_1_N>
 <phlebothrombosis_N,topic,pregnancy_N>
-<phlebothrombosis_N,topic,gestation_2_N>
-<phlebothrombosis_N,topic,maternity_1_N>
 <fluorescein_N,topic,solution_1_N>
 <accentual_2_A,topic,prosody_3_N>
 <advantage_1_N,topic,tennis_N>
@@ -5912,7 +5595,7 @@
 <centre_17_N,topic,"American football">
 <chromatinic_A,topic,microbiology_N>
 <circumpolar_1_A,topic,astronomy_N>
-<colour_3_N,topic,physics_N>
+<colour_3_N,topic,physics_2_N>
 <coloured_2_A,topic,colour_6_N>
 <dark_6_A,topic,colour_6_N>
 <light_22_A,topic,colour_6_N>
@@ -6134,3 +5817,4 @@
 <write_9_V2,topic,computer_2_N>
 <write_5_VS,topic,computer_2_N>
 <write_9_VS,topic,computer_2_N>
+<rock_5_N,topic,music_1_N>
