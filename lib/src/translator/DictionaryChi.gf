@@ -25734,7 +25734,7 @@ lin previous_A = mkA "上" | mkA "以前" | mkA "往" | mkA "过去" ;
 lin prey_N = mkN "捕食" ;
 lin prey_V = mkV "猎物" ;
 lin priapism_N = mkN "陰莖異常勃起" | mkN "阴茎异常勃起" | {-mwn-} mkN "持续勃起症" ; -- status=guess -- status=guess -- open-multilingual-wordnet
-lin price_N = mkN "价格" | {-HSK-} mkN "价格" "個" ;
+lin price_N = {-HSK-} mkN "价格" "個" ;
 lin price_V = mkV "价格" ;
 lin price_V2 = mkV2 "价格" ;
 lin price_V2V = mkV2V "价格" ;
