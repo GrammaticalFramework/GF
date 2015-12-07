@@ -30580,6 +30580,7 @@ lin juryman_N = mkN masculine (mkN "juryman" "jurymen");
 lin just_A = mkA "just" ;
 lin just_AdV = mkAdV "just";
 lin just_Adv = mkAdv "just";
+lin just_because_Subj = mkSubj "just because";
 lin just_Predet = {s="just"};
 lin justice_N = mkN "justice" "justices";
 lin justiciar_N = mkN "justiciar" ;

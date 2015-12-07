@@ -30262,6 +30262,7 @@ lin juryman_N = mkN "nämndeman" "nämndemannen" "nämndemän" "nämndemännen" 
 lin just_A = mkA "rättvis" ; -- SaldoWN
 lin just_AdV = mkAdV "bara" ; -- status=guess
 lin just_Adv = mkAdv "precis" | mkAdv "just" ;
+lin just_because_Subj = M.mkSubj "bara för att" | M.mkSubj "bafatt" ; -- added 7/12/2015
 lin just_Predet = M.mkPredet "bara" "bara" "bara" ; -- status=guess
 lin justice_N = mkN "rättvisa" | mkN "domare" utrum ; -- SaldoWN -- comment=10
 lin justiciar_N = mkN "justitiarius" ; -- src=google
