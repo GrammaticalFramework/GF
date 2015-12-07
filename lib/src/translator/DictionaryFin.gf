@@ -28054,6 +28054,7 @@ lin juryman_N = mkWN (compoundN "lauta" (k42 "mies")) ; --UNCHK
 lin just_A = mkWA (k1 "reilu") ; --UNCHK
 lin just_AdV = mkAdV "pelkästään" ;
 lin just_Adv = mkAdv "juuri" ;
+lin just_because_Subj = mkSubj "vain koska" ;
 lin just_Predet = mkPredet "pelkästään" ;
 lin justice_N = mkN "oikeus" ;
 lin justiciar_N = mkWN (k6 "tuomari") ; --UNCHK

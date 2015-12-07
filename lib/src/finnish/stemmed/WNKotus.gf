@@ -51,6 +51,7 @@ oper
     mkWAdv : (_ : Adv)     -> Adv = \a -> a ;
     mkWAdv : NForms        -> Adv = \nf -> mkAdv (nf ! 0) ;
     mkWAdv : Adv -> Str    -> Adv = \a,s -> mkAdv (s ++ a.s) ;
+    mkWAdv : Str -> Adv    -> Adv = \s,a -> mkAdv (s ++ a.s) ;
     mkWAdv : (_,_ : Str)   -> Adv = \s,p -> mkAdv (s ++ p) ;
     mkWAdv : (_,_,_ : Str) -> Adv = \s,p,q -> mkAdv (s ++ p ++ q) ;
     } ;
