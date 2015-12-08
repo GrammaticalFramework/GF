@@ -2423,8 +2423,6 @@ lin archean_A = mkA "太古代" | mkA "太古化" ; -- open-multilingual-wordnet
 lin archegonial_A = mkA "有颈卵器" | mkA "颈卵器" ; -- open-multilingual-wordnet
 lin archegonium_N = mkN "造卵器" | mkN "颈卵器" ; -- open-multilingual-wordnet
 lin archenteron_N = mkN "原肠" ; -- open-multilingual-wordnet
-lin archeologist_N = mkN "考古学家" ; -- open-multilingual-wordnet
-lin archeology_N = mkN "考古学" ; -- open-multilingual-wordnet
 lin archeozoic_A = mkA "始生代" ; -- open-multilingual-wordnet
 lin archer_N = mkN "射手" | mkN "弓箭手" ; -- status=guess -- status=guess
 lin archery_N = mkN "箭術" | mkN "箭术" | mkN "射箭" ; -- status=guess -- status=guess -- status=guess -- open-multilingual-wordnet
@@ -11648,7 +11646,6 @@ lin end_up_V2 = prepV2 OP_end_V OP_up_Prep ; -- guess-p-verb
 lin end_up_with_V2 = prepV2 (advV OP_end_V OP_up_Adv ) OP_with_Prep ; -- guess-p-verb
 lin endanger_V2 = mkV2 "危害" ;
 lin endarteritis_N = mkN "动脉内膜炎" ; -- open-multilingual-wordnet
-lin endeavor_N = mkN "努力" ; -- status=guess
 lin endeavour_N = mkN "努力" ; -- status=guess
 lin endeavour_V = mkV "努力" ; -- status=guess, src=wikt
 lin endermic_A = mkA "涂在皮肤上" ; -- open-multilingual-wordnet
@@ -22953,12 +22950,11 @@ lin offal_N = mkN "内脏""" ;
 lin offaly_PN = foreignPN "Offaly" ; -- comment=src=eng status=guess
 lin offbeat_A = mkA "离奇" ;
 lin offenbach_PN = foreignPN "Offenbach" ; -- comment=src=geonames status=guess
-lin offence_N = mkN "犯罪" "次" ;
+lin offence_N = mkN "犯罪" "次" | mkN "刑事犯罪" | mkN "罪" | mkN "罪行" ; -- open-multilingual-wordnet
 lin offend_V = mkV "冒犯" ;
 lin offend_V2 = mkV2 "得罪" ;
 lin offenderFem_N = mkN "犯罪分子" ;
 lin offenderMasc_N = mkN "犯罪分子" ;
-lin offense_N = mkN "刑事犯罪" | mkN "犯罪" | mkN "罪" | mkN "罪行" ; -- open-multilingual-wordnet
 lin offensive_A = mkA "冒犯" ;
 lin offensive_N = mkN "进攻" ;
 lin offer_N = mkN "议案" ;
@@ -23304,8 +23300,7 @@ lin orthodoxy_N = mkN "正统" "" ;
 lin orthographic_A = mkA "拼字正确" | mkA "正字法" ; -- open-multilingual-wordnet
 lin orthography_N = mkN "正字法" | mkN "拼字" | mkN "拼寫法" | mkN "拼写法" | mkN "正詞法" | mkN "正词法" | mkN "拼寫" | mkN "拼写" | mkN "寫法" | mkN "写法" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin orthopaedic_A = mkA "整形外科" ; -- open-multilingual-wordnet
-lin orthopedic_A = mkA "整形外科" ; -- open-multilingual-wordnet
-lin orthopedics_N = mkN "骨科" | mkN "整形外科" | mkN "矯形外科" | mkN "矫形外科" ; -- status=guess -- status=guess -- status=guess -- status=guess
+lin orthopaedics_N = mkN "骨科" | mkN "整形外科" | mkN "矯形外科" | mkN "矫形外科" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin orthopnea_N = mkN "端坐呼吸" ; -- open-multilingual-wordnet
 lin orthoptic_A = mkA "双目并用" ; -- open-multilingual-wordnet
 lin oryx_N = mkN "羚羊" | {-mwn-} mkN "长角羚羊" ; -- status=guess -- open-multilingual-wordnet
