@@ -3236,9 +3236,6 @@ lin archean_A = variants {} ;
 lin archegonial_A = variants {} ;
 lin archegonium_N = variants {} ;
 lin archenteron_N = variants {} ;
-lin archeological_A = variants {} ;
-lin archeologist_N = variants {} ;
-lin archeology_N = variants {} ;
 lin archeozoic_A = variants {} ;
 lin archer_N = mkN "Bogenschütze" masculine ; -- status=guess
 lin archerfish_N = variants {} ;
@@ -18858,7 +18855,6 @@ lin endarteritis_N = variants {} ;
 lin endear_V2 = variants {} ;
 lin endearingly_Adv = variants {} ;
 lin endearment_N = variants {} ;
-lin endeavor_N = mkN "Bemühung" feminine ; -- status=guess
 lin endeavour_N = mkN "Bemühung" feminine ; -- status=guess
 lin endeavour_V = mkReflV "bemühen" ; -- status=guess, src=wikt
 lin endemic_A = regA "endemisch" ; -- status=guess
@@ -35073,7 +35069,6 @@ lin mickle_N = variants {} ;
 lin miconazole_N = variants {} ;
 lin micro_A = variants {} ;
 lin micro_N = mkN "Mikro-Regierung" ; -- status=guess
-lin micro_organism_N = variants {} ;
 lin microbalance_N = variants {} ;
 lin microbe_N = mkN "Mikrobe" "Mikroben" masculine ; -- status=guess
 lin microbial_A = mkA "mikrobisch" ; -- status=guess
@@ -38666,8 +38661,6 @@ lin offend_V = regV "beleidigen" ; -- status=guess, src=wikt
 lin offend_V2 = mkV2 (regV "beleidigen") ; -- status=guess, src=wikt
 lin offenderFem_N = variants {} ;
 lin offenderMasc_N = mkN "Täter" masculine ; -- status=guess
-lin offense_N = variants {} ;
-lin offenseless_A = variants {} ;
 lin offensive_A = mkA "beleidigend" ; -- status=guess
 lin offensive_N = mkN "Offensive" "Offensiven" feminine ; -- status=guess
 lin offensiveness_N = variants {} ;
@@ -39283,9 +39276,7 @@ lin orthography_N = mkN "Orthografie" "Orthografien" feminine | mkN "Orthographi
 lin orthomolecular_A = variants {} ;
 lin orthomyxovirus_N = variants {} ;
 lin orthopaedic_A = variants {} ;
-lin orthopaedics_N = variants {} ;
-lin orthopedic_A = variants {} ;
-lin orthopedics_N = mkN "Orthopädie" feminine ; -- status=guess
+lin orthopaedics_N = mkN "Orthopädie" feminine ; -- status=guess
 lin orthopedist_N = mkN "Orthopäde" masculine | mkN "Orthopädin" feminine ; -- status=guess status=guess
 lin orthopnea_N = variants {} ;
 lin orthopter_N = variants {} ;

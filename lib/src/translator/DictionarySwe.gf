@@ -3227,8 +3227,6 @@ lin archean_A = variants {} ; -- status=guess
 lin archegonial_A = variants {} ; -- status=guess
 lin archegonium_N = mkN "arkegon" ; -- src=google
 lin archenteron_N = variants {} ; -- status=guess
-lin archeologist_N = mkN "arkeolog" "arkeologer" ; -- status=guess
-lin archeology_N = mkN "arkeologi" ; -- status=guess
 lin archeozoic_A = variants {} ; -- status=guess
 lin archer_N = mkN "bågskytt" ; -- status=guess
 lin archerfish_N = mkN "sprutfiskar" ; -- src=google
@@ -18759,8 +18757,7 @@ lin endarteritis_N = variants {} ; -- status=guess
 lin endear_V2 = variants {} ; -- status=guess
 lin endearingly_Adv = variants {} ; -- status=guess
 lin endearment_N = mkN "ömhetsbetygelse" "ömhetsbetygelseen" "ömhetsbetygelseer" "ömhetsbetygelseerna" ; -- comment=2
-lin endeavor_N = mkN "strävan" "strävan" "strävanden" "strävandena" ; -- comment=3
-lin endeavour_N = endeavor_N ;
+lin endeavour_N = mkN "strävan" "strävan" "strävanden" "strävandena" ; -- comment=3
 lin endeavour_V = mkV "strävar" ; -- status=guess
 lin endemic_A = mkA "endemisk" ; -- status=guess
 lin endemic_N = mkN "endemisk" ; -- src=google
@@ -34880,7 +34877,6 @@ lin mickey_PN = mkPN "Mickey" ; -- src=eng status=guess
 lin mickle_N = variants {} ; -- status=guess
 lin miconazole_N = mkN "mikonazol" ; -- src=google
 lin micro_A = variants {} ; -- status=guess
-lin micro_organism_N = mkN "mikroorganism" "mikroorganismer" ;
 lin microbalance_N = mkN "mikrovåg" "mikrovågor" ;
 lin microbe_N = mkN "mikrob" "mikrober" ; -- status=guess
 lin microbial_A = variants {} ; -- status=guess
@@ -34920,8 +34916,8 @@ lin micrometer_N = mkN "mikrometer" ; -- comment=2
 lin micrometry_N = variants {} ; -- status=guess
 lin micron_N = mkN "mikron" "mikroner" ;
 lin micronutrient_N = mkN "mikronäringsämne" ;
-lin microorganism_N = mkN "mikroorganism" "mikroorganismer" ; -- status=guess
-lin micropaleontology_N = mkN "mikropaleontologi" ; -- src=google
+lin microorganism_N = mkN "mikroorganism" "mikroorganismer" ;
+lin micropaleontology_N = mkN "mikropaleontologi" ;
 lin micropenis_N = mkN "mikro" "mikror" ;
 lin microphage_N = variants {} ; -- status=guess
 lin microphone_N = mkN "mikrofon" "mikrofoner" ; -- SaldoWN
@@ -38440,14 +38436,12 @@ lin offal_N = (mkN "lik" neutrum) | (mkN "kadaver" neutrum) ; -- status=guess st
 lin offaly_PN = mkPN "Offaly" ; -- src=eng status=guess
 lin offbeat_A = variants {} ; -- status=guess
 lin offenbach_PN = mkPN "Offenbach" neutrum ; -- src=geonames status=guess
-lin offence_N = mkN "offensiv" "offensiver" | mkN "förseelse" "förseelser" ; -- SaldoWN -- comment=9
+lin offence_N = mkN "offensiv" "offensiver" | mkN "förseelse" "förseelser" | mkN "brott" neutrum ; -- SaldoWN -- comment=9
 lin offenceless_A = variants {} ; -- status=guess
 lin offend_V = mkV "förolämpar" ; -- comment=4
 lin offend_V2 = mkV2 (mkV "såra") ; -- status=guess, src=wikt
 lin offenderFem_N = mkN "gärningsman" "gärningsmannen" "gärningsmän" "gärningsmännen" ;
 lin offenderMasc_N = mkN "gärningsman" "gärningsmannen" "gärningsmän" "gärningsmännen" ;
-lin offense_N = mkN "brott" neutrum ;
-lin offenseless_A = variants {} ; -- status=guess
 lin offensive_A = mkA "offensiv" ; -- SaldoWN
 lin offensive_N = mkN "offensiv" "offensiver" ; -- SaldoWN
 lin offensiveness_N = variants {} ; -- status=guess
@@ -39062,8 +39056,6 @@ lin orthomolecular_A = variants {} ; -- status=guess
 lin orthomyxovirus_N = mkN "ortomyxovirus" ; -- src=google
 lin orthopaedic_A = mkA "ortopedisk" ; -- SaldoWN
 lin orthopaedics_N = mkN "ortopedi" ;
-lin orthopedic_A = mkA "ortopedisk" ; -- status=guess
-lin orthopedics_N = mkN "ortopedi" ; -- status=guess
 lin orthopedist_N = mkN "ortoped" "ortopeder" ; -- status=guess
 lin orthopnea_N = mkN "ortopné" ; -- src=google
 lin orthopter_N = variants {} ; -- status=guess

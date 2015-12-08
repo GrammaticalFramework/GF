@@ -1546,9 +1546,9 @@ lin arcadian_A = mkA "arcadico" | mkA "bucolico" ; -- UWN
 lin arcane_A = mkA "arcano" ; -- status=guess
 lin arch_N = variants {} ; --
 lin arch_V = mkV "arcuare" | mkV "curvare" | mkV "inarcare" | mkV "incurvare" ; -- UWN
-lin archaeological_A = mkA "archeologico" ; -- status=guess
-lin archaeologist_N = mkN "archeologo" ; -- status=guess
-lin archaeology_N = mkN "archeologia" ; -- status=guess
+lin archaeological_A = mkA "archeologico" ;
+lin archaeologist_N = mkN "archeologo" ;
+lin archaeology_N = mkN "archeologia" ;
 lin archaic_A = mkA "arcaico" ; -- status=guess
 lin archaism_N = mkN "arcaismo" ; -- UWN
 lin archaistic_A = mkA "arcaistico" ; -- UWN
@@ -1563,8 +1563,6 @@ lin archduchess_N = mkN "arciduchessa" ; -- status=guess
 lin archduchy_N = mkN "arciducato" ; -- UWN
 lin archduke_N = mkN "arciduca" ; -- status=guess
 lin archegonium_N = mkN "archegonio" ; -- UWN
-lin archeologist_N = mkN "archeologo" ; -- UWN
-lin archeology_N = mkN "archeologia" ; -- UWN
 lin archery_N = mkN "tiro con l'arco" ; -- status=guess
 lin archetype_N = mkN "archetipo" ; -- status=guess
 lin archiepiscopal_A = mkA "archiepiscopale" | mkA "arcivescovile" ; -- status=guess status=guess
@@ -18394,7 +18392,6 @@ lin offend_V = mkV "offendere" ; -- status=guess, src=wikt
 lin offend_V2 = mkV2 (mkV "offendere") ; -- status=guess, src=wikt
 lin offenderFem_N = mkN "contravventore" | mkN "malfattore" | mkN "offensore" | mkN "reo" | mkN "rompitore" | mkN "trasgreditore" | mkN "trasgressore" ; -- UWN
 lin offenderMasc_N = variants {} ; --
-lin offense_N = mkN "crimine" | mkN "delitto" | mkN "fattaccio" | mkN "illecito" | mkN "misfatto" | mkN "reato" ; -- UWN
 lin offensive_A = mkA "offensivo" ; -- status=guess
 lin offensive_N = mkN "offensiva" ; -- status=guess
 lin offer_N = mkN "offerta" ; -- status=guess
@@ -18707,8 +18704,6 @@ lin orthogonality_N = mkN "ortogonalità" feminine ; -- status=guess
 lin orthographic_A = mkA "ortografico" ; -- UWN
 lin orthopaedic_A = mkA "ortopedico" ; -- UWN
 lin orthopaedics_N = mkN "ortopedia" ; -- UWN
-lin orthopedic_A = mkA "ortopedico" ; -- UWN
-lin orthopedics_N = mkN "ortopedia" ; -- UWN
 lin orthopedist_N = mkN "ortopedico" ; -- status=guess
 lin ortolan_N = mkN "beccafico" ; -- status=guess
 lin oryx_N = mkN "orice" ; -- UWN

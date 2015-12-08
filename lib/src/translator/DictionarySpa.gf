@@ -1885,7 +1885,7 @@ lin arch_V = mkV "arquear" ; -- status=guess, src=wikt
 lin arch_V2 = mkV2 (mkV "arquear") ; -- status=guess, src=wikt
 lin archaeological_A = mkA "arqueológico" ; -- status=guess
 lin archaeologist_N = mkN "arqueólogo" | mkN "arqueóloga" ; -- status=guess status=guess
-lin archaeology_N = mkN "arqueología" ; -- status=guess
+lin archaeology_N = mkN "arqueología" ;
 lin archaic_A = mkA "arcaico" ; -- status=guess
 lin archaist_N = mkN "anticuario" | mkN "arcaísta" ; --UWN
 lin archangel_N = mkN "arcángel" masculine ; -- status=guess
@@ -1901,7 +1901,6 @@ lin archduke_N = mkN "archiduque" masculine ; -- status=guess
 lin archegonial_A = mkA "arquegónico" ; --UWN
 lin archegonium_N = mkN "arquegonio" ; --UWN
 lin archenteron_N = mkN "arquénteron" ; --UWN
-lin archeology_N = mkN "arqueología" ; --UWN
 lin archer_N = mkN "arquero" ; -- status=guess
 lin archery_N = mkN "arquería" | mkN "tiro al arco" ; -- status=guess status=guess
 lin archetypal_A = mkA "arquetípico" ; -- status=guess
@@ -20384,7 +20383,6 @@ lin offend_V = mkV "ofender" ; -- status=guess
 lin offend_V2 = mkV2 (mkV "ofender") ; -- status=guess
 lin offenderFem_N = mkN "infractor" ; --UWN
 lin offenderMasc_N = variants {} ; --
-lin offense_N = mkN "crimen" | mkN "delito" ; --UWN
 lin offensive_A = mkA "ofensivo" | mkA "ofensiva" ; -- status=guess
 lin offensive_N = mkN "ataque" ; --UWN
 lin offer_N = mkN "oferta" ;
@@ -20713,7 +20711,6 @@ lin orthogonal_A = mkA "rectangular" ; --UWN
 lin orthographic_A = mkA "ortográfico" ; -- status=guess
 lin orthography_N = mkN "ortografía" ; -- status=guess
 lin orthopaedic_A = mkA "ortopédico" ; --UWN
-lin orthopedic_A = mkA "ortopédico" ; -- status=guess
 lin orthopedist_N = mkN "ortopedista" masculine | mkN "ortopédico" ; -- status=guess status=guess
 lin orthopnea_N = mkN "ortopnea" ; --UWN
 lin orthoptic_A = mkA "ortóptico" ; --UWN
