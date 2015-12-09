@@ -4089,7 +4089,7 @@ lin auk_N = mkN "alka" ; -- status=guess
 lin auklet_N = variants {} ; -- status=guess
 lin auld_A = variants {} ; -- status=guess
 lin auld_lang_syne_N = variants {} ; -- status=guess
-lin aunt_N = mkN "faster" | mkN "tant" "tanter" ; -- SaldoWN -- comment=3
+lin aunt_N = mkN "faster" | mkN "moster" | mkN "tant" "tanter" ; ---- split
 lin auntie_N = mkN "faster" ;
 lin aunty_N = mkN "faster" ;
 lin aura_N = mkN "aura" ;
@@ -24281,14 +24281,14 @@ lin granddad_N = variants {} ; -- status=guess
 lin granddaughter_N = mkN "sondotter" "sondottern" "sondöttrar" "sondöttrarna" ; -- SaldoWN
 lin grandee_N = variants {} ; -- status=guess
 lin grandeur_N = mkN "storslagenhet" ; -- comment=5
-lin grandfather_N = mkN "morfar" "morfadern" "morfäder" "morfäderna" ; -- SaldoWN
+lin grandfather_N = mkN "farfar" "farfadern" "farfäder" "farfäderna" | mkN "morfar" "morfadern" "morfäder" "morfäderna" ; ---- split
 lin grandiloquence_N = mkN "svulstighet" "svulstigheter" ;
 lin grandiloquent_A = variants {} ; -- status=guess
 lin grandiose_A = compoundA (regA "storstilad") ; -- comment=4
 lin grandiosity_N = mkN "storslagenhet" ; -- status=guess
 lin grandma_N = mkN "farmoder" "farmodern" "farmödrar" "farmödrarna" | mkN "mormoder" "mormodern" "mormödrar" "mormödrarna" ; -- status=guess
 lin grandmaster_N = mkN "mästare" utrum ;
-lin grandmother_N = mkN "mormoder" "mormodern" "mormödrar" "mormödrarna" ; -- status=guess
+lin grandmother_N = mkN "mormor" "mormodern" "mormödrar" "mormödrarna" | mkN "farmor" "farmodern" "farmödrar" "farmödrarna" ; ---- split
 lin grandnephew_N = variants {} ; -- status=guess
 lin grandniece_N = variants {} ; -- status=guess
 lin grandpa_N = mkN "morfar" "morfadern" "morfäder" "morfäderna" ; -- comment=2
@@ -59615,7 +59615,7 @@ lin uncivilized_A = compoundA (regA "ociviliserad") ; -- status=guess
 lin unclaimed_A = variants {} ; -- status=guess
 lin unclassifiable_A = variants {} ; -- status=guess
 lin unclassified_A = compoundA (regA "oklassificerad") ; -- comment=2
-lin uncle_N = mkN "morbror" "morbröder" | mkN "farbror" "farbröder" ; -- SaldoWN -- comment=2
+lin uncle_N = mkN "morbror" "morbröder" | mkN "farbror" "farbröder" ; ---- split
 lin unclean_A = mkA "oren" ; -- status=guess
 lin uncleanliness_N = mkN "orenlighet" "orenligheter" ;
 lin uncleanly_A = variants {} ; -- status=guess
