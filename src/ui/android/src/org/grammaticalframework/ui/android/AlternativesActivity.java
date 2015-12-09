@@ -72,7 +72,7 @@ public class AlternativesActivity extends ListActivity {
                     @Override
                     protected void onPostExecute(Void result) {
                         mAdapter.notifyDataSetChanged();
-                        expandedView = null;
+                        collapse();
                         hideProgressBar();
                     }
                 }.execute();
