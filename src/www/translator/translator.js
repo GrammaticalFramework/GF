@@ -738,7 +738,7 @@ Translator.prototype.open_in_wc=function(el) {
     hide_menu(el)
     var doc=t.document
     var sourcetext=doc.segments.map(function(s){return s.source}).join(" ")
-    var wc=appLocalStorage("gf.wc.")
+    var wc=appLocalStorage("gf.wc."+gftranslate.grammar+".")
     wc.put("from",doc.options.from)
     wc.put("to",doc.options.to)
     wc.put("input",sourcetext)
