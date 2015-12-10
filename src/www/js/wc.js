@@ -178,7 +178,8 @@ wc.translate=function() {
 	    //if(f.speak.checked) wc.speak(t.text,f.to.value)
 	    if(!so.got_more) {
 		so.got_more=true
-		trans(so.input,1,9)
+		if(so.rs.length<10)
+		    trans(so.input,so.rs.length,10-so.rs.length)
 	    }
 	}
 	so.target.onclick=show_more
@@ -233,6 +234,8 @@ wc.translate=function() {
 			}
 		    }
 		    else {
+			function cmp(a,b) { return a.prob-b.prob; }
+			tra=tra.sort(cmp)
 			for(var ti=0;ti<tra.length;ti++) {
 			    var r=tra[ti]
 			    if(r.linearizations) showit(r,gftranslate.grammar)
@@ -245,7 +248,7 @@ wc.translate=function() {
 	    }
 	    gftranslate.translate(text,f.from.value,wc.languages || f.to.value,i,count,step3)
 	}
-	function step2(text) { trans(text,0,1) }
+	function step2(text) { trans(text,0,10) }
 	function step2cnl(text) {
 	    function step3cnl(results) {
 		var trans=results[0].translations
