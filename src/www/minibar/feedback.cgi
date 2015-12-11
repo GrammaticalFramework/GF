@@ -33,7 +33,7 @@ view_feedback() {
   charset="UTF-8"
   pagestart "Collected Feedback"
   begin pre class=feedbacklist
-   Reg show reverse drop color_depth,pixel_depth,outer_size,inner_size,available_screen_size urlmatch-v 'user_agent=*Googlebot*' from-url <"$PATH_TRANSLATED" | plain2html
+   Reg show reverse drop color_depth,pixel_depth,outer_size,inner_size,available_screen_size urlmatch-v 'from=&input=&improvement=&comment=' urlmatch-v 'user_agent=*Googlebot*' from-url <"$PATH_TRANSLATED" | plain2html
   end
   pageend
 }
