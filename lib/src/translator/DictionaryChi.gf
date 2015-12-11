@@ -14845,7 +14845,7 @@ lin gong_N = mkN "鑼" | mkN "锣" | {-mwn-} mkN "钟" | mkN "钟琴" ; -- statu
 lin gonorrhea_N = mkN "淋病" ; -- status=guess -- open-multilingual-wordnet
 lin gonorrhoea_N = mkN "淋病" ; -- open-multilingual-wordnet
 lin goo_N = mkN "感伤""" ;
-lin good_A = mkA "商品" | mkA "好" | mkA "硬" | mkA "良好" ;
+lin good_A = mkA "好" | mkA "商品" | mkA "硬" | mkA "良好" ;
 lin good_N = mkN "商品" "個" | mkN "好" | mkN "硬" | mkN "良好" ;
 lin good_afternoon_Interj = mkInterj "下午好" ;
 lin good_evening_Interj = mkInterj "下午好" ;

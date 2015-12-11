@@ -48,7 +48,7 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
             APlain   => v.s  ++ v.neg ++ v.sn ; 
             APerf    => v.s  ++ "不"  ++ v.sn ++ v.pp ;
             ADurStat => v.s  ++ "不"  ++ v.sn ;
-            ADurProg => v.dp ++ v.neg ++ v.dp ++ v.sn ;  -- mei or bu
+            ADurProg => v.s  ++ v.neg ++ v.dp ++ v.sn ;  -- mei or bu
             AExper   => v.s  ++ v.neg ++ v.sn ++ v.ep
             }
           in
