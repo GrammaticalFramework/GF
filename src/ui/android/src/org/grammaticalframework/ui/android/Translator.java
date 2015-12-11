@@ -29,6 +29,7 @@ public class Translator {
     	new Language("bg-BG", "Bulgarian", "AppBul", R.xml.cyrillic),
         new Language("ca-ES", "Catalan", "AppCat", R.xml.qwerty),
     	new Language("cmn-Hans-CN", "Chinese", "AppChi", R.xml.qwerty),
+	//    	new Language("zh-CN", "Chinese", "AppChi", R.xml.qwerty),
 	//    	new Language("yue", "Chinese (Cantonese)", "AppChi", R.xml.qwerty),
 	//    	new Language("cmn-Hans-CN", "Chinese (Mandarin)", "AppChi", R.xml.qwerty),
         new Language("nl-NL", "Dutch", "AppDut", R.xml.qwerty),
