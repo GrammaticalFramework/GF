@@ -35,9 +35,9 @@ public class TTS {
     		}
             */
 
-	    /* OR use separate entries for Cantonese and Mandarin  */ 
+	    /* Google Chinese speech input has a nonstandard code. In output, yue works for Chi in Google, but SVOX uses the standard zh-CN  */ 
 	    	if (language.equals("cmn-Hans-CN")) {
-	    		language = "yue";
+	    		language = "zh-CN";
 	    	}
 
 	        Locale locale = LocaleUtils.parseJavaLocale(language.replace('-', '_'),
