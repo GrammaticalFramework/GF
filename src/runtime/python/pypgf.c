@@ -1429,6 +1429,9 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 		pypgf_new_callbacks_map(self->concr, py_callbacks, pyres->pool);
 	if (callbacks == NULL)
 		return NULL;
+
+	sentence = gu_string_copy(sentence, pyres->pool);
+
 	pyres->res =
 		pgf_parse_with_heuristics(self->concr, catname, sentence, 
 		                          heuristics, callbacks, parse_err,
