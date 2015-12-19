@@ -106,6 +106,7 @@ struct PgfEvalGates {
 
 	PgfFunction combine1;
 	PgfFunction combine2;
+	PgfFunction complete;
 
 	PgfClosure* (*enter)(PgfReasoner* rs, PgfClosure* closure);
 
