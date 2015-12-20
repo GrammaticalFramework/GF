@@ -59,8 +59,6 @@ import Data.Function(on)
 -- the foreign pointer in case if the application still has a reference
 -- to Concr but has lost its reference to PGF.
 
-data PGF = PGF {pgf :: Ptr PgfPGF, pgfMaster :: ForeignPtr GuPool}
-data Concr = Concr {concr :: Ptr PgfConcr, concrMaster :: PGF}
 
 type AbsName = String -- ^ Name of abstract syntax
 type ConcName = String -- ^ Name of concrete syntax

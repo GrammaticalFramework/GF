@@ -9,6 +9,9 @@ import Foreign.ForeignPtr
 import Control.Exception
 import GHC.Ptr
 
+data PGF = PGF {pgf :: Ptr PgfPGF, pgfMaster :: ForeignPtr GuPool}
+data Concr = Concr {concr :: Ptr PgfConcr, concrMaster :: PGF}
+
 ------------------------------------------------------------------
 -- libgu API
 

@@ -30,6 +30,12 @@ sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err);
 PgfExpr
 sg_get_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err);
 
+void
+sg_update_fts_index(SgSG* sg, PgfPGF* pgf, GuExn* err);
+
+GuSeq*
+sg_query_linearization(SgSG *sg, GuString tok, GuPool* pool, GuExn* err);
+
 
 typedef PgfExpr SgTriple[3];
 

@@ -8,6 +8,8 @@ module SG( SG, openSG, closeSG
          , beginTrans, commit, rollback, inTransaction
          , SgId
          , insertExpr, getExpr
+         , updateFtsIndex
+         , queryLinearization
          , readTriple, showTriple
          , insertTriple, getTriple
          , queryTriple
@@ -105,6 +107,36 @@ getExpr (SG sg) id = do
       then do touchForeignPtr exprFPl
               return Nothing
       else do return $ Just (Expr c_expr exprFPl)
+
+updateFtsIndex :: SG -> PGF -> IO ()
+updateFtsIndex (SG sg) p = do
+  withGuPool $ \tmpPl -> do
+    exn <- gu_new_exn tmpPl
+    sg_update_fts_index sg (pgf p) exn
+    handle_sg_exn exn
+
+queryLinearization :: SG -> String -> IO [Expr]
+queryLinearization (SG sg) query = do
+  exprPl  <- gu_new_pool
+  exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+  (withCString query $ \c_query ->
+   withGuPool $ \tmpPl -> do
+     exn <- gu_new_exn tmpPl
+     seq <- sg_query_linearization sg c_query tmpPl exn
+     handle_sg_exn exn
+     len <- (#peek GuSeq, len) seq
+     ids <- peekArray (fromIntegral (len :: CInt)) (seq `plusPtr` (#offset GuSeq, data))
+     getExprs exprFPl exprPl exn ids)
+  where
+    getExprs exprFPl exprPl exn []       = return []
+    getExprs exprFPl exprPl exn (id:ids) = do
+      c_expr <- sg_get_expr sg id exprPl exn
+      handle_sg_exn exn
+      if c_expr == nullPtr
+        then getExprs exprFPl exprPl exn ids
+        else do let e = Expr c_expr exprFPl
+                es <- getExprs exprFPl exprPl exn ids
+                return (e:es)
 
 -----------------------------------------------------------------------
 -- Triples
