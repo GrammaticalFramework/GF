@@ -32,6 +32,12 @@ foreign import ccall "sg/sg.h sg_insert_expr"
 foreign import ccall "sg/sg.h sg_get_expr"
   sg_get_expr :: Ptr SgSG -> SgId -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
 
+foreign import ccall "sg/sg.h sg_update_fts_index"
+  sg_update_fts_index :: Ptr SgSG -> Ptr PgfPGF -> Ptr GuExn -> IO ()
+
+foreign import ccall "sg/sg.h sg_query_linearization"
+  sg_query_linearization :: Ptr SgSG -> CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr GuSeq)
+
 foreign import ccall "sg/sg.h sg_insert_triple"
   sg_insert_triple :: Ptr SgSG -> SgTriple -> Ptr GuExn -> IO SgId
 
