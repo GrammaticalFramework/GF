@@ -163,6 +163,10 @@ pgf_read_expr_tuple(GuIn* in,
                     size_t n_exprs, PgfExpr exprs[],
                     GuPool* pool, GuExn* err);
 
+GuSeq*
+pgf_read_expr_matrix(GuIn* in, size_t n_exprs,
+                     GuPool* pool, GuExn* err);
+
 PgfType*
 pgf_read_type(GuIn* in, GuPool* pool, GuExn* err);
 
