@@ -1,6 +1,7 @@
 #include "pgf.h"
 #include <gu/assert.h>
 #include <gu/utf8.h>
+#include <gu/seq.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -156,6 +157,7 @@ typedef enum {
 	PGF_TOKEN_RTRIANGLE,
 	PGF_TOKEN_COMMA,
 	PGF_TOKEN_COLON,
+	PGF_TOKEN_SEMI,
 	PGF_TOKEN_WILD,
 	PGF_TOKEN_IDENT,
 	PGF_TOKEN_INT,
@@ -284,6 +286,10 @@ pgf_expr_parser_token(PgfExprParser* parser)
 	case ':':
 		pgf_expr_parser_getc(parser);
 		parser->token_tag = PGF_TOKEN_COLON;
+		break;
+	case ';':
+		pgf_expr_parser_getc(parser);
+		parser->token_tag = PGF_TOKEN_SEMI;
 		break;
 	case '\'':
 		pgf_expr_parser_getc(parser);
@@ -638,7 +644,8 @@ pgf_expr_parser_expr(PgfExprParser* parser)
 		       parser->token_tag != PGF_TOKEN_RCURLY &&
 		       parser->token_tag != PGF_TOKEN_RTRIANGLE &&
 		       parser->token_tag != PGF_TOKEN_COLON &&
-		       parser->token_tag != PGF_TOKEN_COMMA) {
+		       parser->token_tag != PGF_TOKEN_COMMA &&
+		       parser->token_tag != PGF_TOKEN_SEMI) {
 			PgfExpr arg = pgf_expr_parser_arg(parser);
 			if (gu_variant_is_null(arg))
 				return gu_null_variant;
@@ -847,27 +854,83 @@ pgf_read_expr_tuple(GuIn* in,
 	PgfExprParser* parser =
 		pgf_new_parser(in, pool, tmp_pool, err);
 	if (parser->token_tag != PGF_TOKEN_LTRIANGLE)
-		return 0;
+		goto fail;
 	pgf_expr_parser_token(parser);
 	for (size_t i = 0; i < n_exprs; i++) {
 		if (i > 0) {
 			if (parser->token_tag != PGF_TOKEN_COMMA)
-				return 0;
+				goto fail;
 			pgf_expr_parser_token(parser);
 		}
 
 		exprs[i] = pgf_expr_parser_expr(parser);
 		if (gu_variant_is_null(exprs[i]))
-			return 0;
+			goto fail;
 	}
 	if (parser->token_tag != PGF_TOKEN_RTRIANGLE)
-		return 0;
+		goto fail;
 	pgf_expr_parser_token(parser);
 	if (parser->token_tag != PGF_TOKEN_EOF)
-		return 0;
+		goto fail;
 	gu_pool_free(tmp_pool);
 
 	return 1;
+	
+fail:
+	gu_pool_free(tmp_pool);
+	return 0;
+}
+
+GuSeq*
+pgf_read_expr_matrix(GuIn* in,
+                     size_t n_exprs,
+                     GuPool* pool, GuExn* err)
+{
+	GuPool* tmp_pool = gu_new_pool();
+	PgfExprParser* parser =
+		pgf_new_parser(in, pool, tmp_pool, err);
+	if (parser->token_tag != PGF_TOKEN_LTRIANGLE)
+		goto fail;
+	pgf_expr_parser_token(parser);
+
+	GuBuf* buf = gu_new_buf(PgfExpr, pool);
+	
+	if (parser->token_tag != PGF_TOKEN_RTRIANGLE) {	
+		for (;;) {
+			PgfExpr* exprs = gu_buf_extend_n(buf, n_exprs);
+
+			for (size_t i = 0; i < n_exprs; i++) {
+				if (i > 0) {
+					if (parser->token_tag != PGF_TOKEN_COMMA)
+						goto fail;
+					pgf_expr_parser_token(parser);
+				}
+
+				exprs[i] = pgf_expr_parser_expr(parser);
+				if (gu_variant_is_null(exprs[i]))
+					goto fail;
+			}
+
+			if (parser->token_tag != PGF_TOKEN_SEMI)
+				break;
+
+			pgf_expr_parser_token(parser);
+		}
+
+		if (parser->token_tag != PGF_TOKEN_RTRIANGLE)
+			goto fail;
+	}
+
+	pgf_expr_parser_token(parser);
+	if (parser->token_tag != PGF_TOKEN_EOF)
+		goto fail;
+	gu_pool_free(tmp_pool);
+
+	return gu_buf_data_seq(buf);
+
+fail:
+	gu_pool_free(tmp_pool);
+	return NULL;
 }
 
 PgfType*
