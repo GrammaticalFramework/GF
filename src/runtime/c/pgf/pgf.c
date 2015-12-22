@@ -29,6 +29,8 @@ pgf_read(const char* fpath,
 	pgf_reader_done(rdr, pgf);
 
 	gu_pool_free(tmp_pool);
+	
+	fclose(infile);
 	return pgf;
 }
 
