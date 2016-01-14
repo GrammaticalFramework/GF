@@ -3,6 +3,9 @@ package org.grammaticalframework.pgf;
 import java.util.Collections;
 import java.util.Iterator;
 
+/** A callback for recognizing words that are not in the lexicon.
+ * For such words the callback returns the expression (MkSymb "&lt;word&gt;").
+ */
 public class UnknownLiteralCallback implements LiteralCallback {
 	private Concr concr;
 

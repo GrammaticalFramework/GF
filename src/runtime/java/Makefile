@@ -22,6 +22,9 @@ jpgf.jar: $(patsubst %.java, %.class, $(JAVA_SOURCES))
 install: libjpgf.la jpgf.jar
 	libtool --mode=install install -s libjpgf.la $(INSTALL_PATH)
 
+doc:
+	javadoc org.grammaticalframework.pgf org.grammaticalframework.sg -d java-api
+
 clean:
 	rm -f *.lo
 	rm -f *.la
