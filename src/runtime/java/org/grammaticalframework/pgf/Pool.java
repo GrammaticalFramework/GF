@@ -1,6 +1,6 @@
 package org.grammaticalframework.pgf;
 
-public class Pool {
+class Pool {
 	final long ref;
 
 	public Pool(long ref) {

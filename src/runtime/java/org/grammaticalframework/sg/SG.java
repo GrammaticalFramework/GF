@@ -3,32 +3,38 @@ package org.grammaticalframework.sg;
 import java.io.Closeable;
 import org.grammaticalframework.pgf.*;
 
+/** This class represents a connection to a semantic graph database.
+ * The semantic graph is a graph represented as a set of tripples
+ * of abstract expressions. The graph can be used for instance to store
+ * semantic information for entities in a GF grammar.
+ */
 public class SG implements Closeable {
-	/** Opens a new database file */
+	/** Opens a new database file. */
 	public static native SG openSG(String path) throws SGError;
 	
-	/** Closes an already opened database */
+	/** Closes an already opened database. */
 	public native void close() throws SGError;
 
-	/** Reads a triple in the format <expr,expr,expr> and returns it as an array */
+	/** Reads a triple in the format &lt;expr,expr,expr&gt; and returns it as an array. */
 	public static native Expr[] readTriple(String s) throws PGFError;
 
-	/** Simple triple queries. Each of the arguments subj, pred and obj
-	 * could be null. In that case the argument is interpreted as a wild card.
+	/** Simple triple queries.
+	 * Each of the arguments subj, pred and obj could be null. 
+	 * A null argument is interpreted as a wild card.
 	 * If one of the arguments is not null then only triples with matching values
 	 * will be retrieved.  
 	 * 
-	 * @return An iterator over the matching triples
+	 * @return An iterator over the matching triples.
 	 */
 	public native TripleResult queryTriple(Expr subj, Expr pred, Expr obj) throws SGError;
 
-	/** Start a new transaction */
+	/** Starts a new transaction. */
 	public native void beginTrans() throws SGError;
 	
-	/** Commits the transaction */
+	/** Commits the transaction. */
 	public native void commit() throws SGError;
 	
-	/** Rollbacks all changes made in the current transaction */
+	/** Rollbacks all changes made in the current transaction. */
 	public native void rollback() throws SGError;
 
 	/** Inserts a new triple.

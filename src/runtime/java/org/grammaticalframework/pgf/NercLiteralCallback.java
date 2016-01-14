@@ -3,6 +3,11 @@ package org.grammaticalframework.pgf;
 import java.util.Collections;
 import java.util.Iterator;
 
+/** A callback for recognizing names. A name is a sequence of tokens
+ * starting with capital letters. The callback constructs an expression
+ * which is an abstract function name, if the name is in the lexicon.
+ * If it is not then the result is (SymbPN (MkSymb "&lt;name&gt;")).
+ */
 public class NercLiteralCallback implements LiteralCallback {
 	private PGF pgf;
 	private Concr concr;
