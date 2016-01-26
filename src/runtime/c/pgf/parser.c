@@ -429,7 +429,10 @@ pgf_print_expr_state(PgfExprState* st,
 	}
 
 	gu_puts(" (", out, err);
-	pgf_print_expr(st->ep.expr, NULL, 0, out, err);
+	if (gu_variant_is_null(st->ep.expr))
+	  gu_puts("_", out, err);
+	else
+	  pgf_print_expr(st->ep.expr, NULL, 0, out, err);
 }
 
 static void
@@ -458,7 +461,11 @@ pgf_print_expr_state0(PgfExprState* st,
 		gu_puts(" (", out, err);
 	else
 		gu_puts(" ", out, err);
-	pgf_print_expr(st->ep.expr, NULL, 0, out, err);
+
+	if (gu_variant_is_null(st->ep.expr))
+	  gu_puts("_", out, err);
+	else
+	  pgf_print_expr(st->ep.expr, NULL, 0, out, err);
 
 	size_t n_counts = gu_buf_length(stack);
 	for (size_t i = 0; i < n_counts; i++) {
@@ -1712,7 +1719,7 @@ static GuOrder
 pgf_expr_state_order = { cmp_expr_state };
 
 static void
-pgf_result_production(PgfParsing* ps, 
+pgf_result_production(PgfParsing* ps,
                       PgfAnswers* answers, PgfProduction prod)
 {
 	GuVariantInfo pi = gu_variant_open(prod);
@@ -1739,11 +1746,15 @@ pgf_result_production(PgfParsing* ps,
 		PgfProductionCoerce* pcoerce = pi.data;
 
 		PgfCCat* ccat = pcoerce->coerce;
-		for (size_t i = 0; i < ccat->n_synprods; i++) {
-			PgfProduction prod =
-				gu_seq_get(ccat->prods, PgfProduction, i);
-			pgf_result_production(ps, answers, prod);
-		}
+
+		PgfExprState *st = gu_new(PgfExprState, ps->pool);
+		st->answers = answers;
+		st->ep.expr = gu_null_variant;
+		st->ep.prob = ccat->viterbi_prob;
+		st->args    = gu_empty_seq();
+		st->arg_idx = 0;
+
+		pgf_result_predict(ps, st, ccat);
 		break;
 	}
 	case PGF_PRODUCTION_EXTERN: {
@@ -1804,10 +1815,12 @@ pgf_result_predict(PgfParsing* ps,
 			PgfExprState* st = gu_new(PgfExprState, ps->pool);
 			st->answers = cont->answers;
 			st->ep.expr =
-				gu_new_variant_i(ps->out_pool, 
-				                 PGF_EXPR_APP, PgfExprApp,
-						         .fun = cont->ep.expr,
-						         .arg = ep->expr);
+			    gu_variant_is_null(cont->ep.expr) ?
+			      ep->expr :
+				  gu_new_variant_i(ps->out_pool, 
+				                   PGF_EXPR_APP, PgfExprApp,
+				                   .fun = cont->ep.expr,
+				                   .arg = ep->expr);
 			st->ep.prob = cont->ep.prob+ep->prob;
 			st->args    = cont->args;
 			st->arg_idx = cont->arg_idx+1;
@@ -1979,13 +1992,17 @@ pgf_parse_result_next(PgfParsing* ps)
 				gu_seq_index(st->args, PgfPArg, st->arg_idx)->ccat;
 
 			if (ccat->fid < ps->concr->total_cats) {
+				PgfExpr meta = gu_new_variant_i(ps->out_pool,
+				                                PGF_EXPR_META, PgfExprMeta,
+				                                .id = 0);
+
 				st->ep.expr =
-					gu_new_variant_i(ps->out_pool, 
-					                 PGF_EXPR_APP, PgfExprApp,
-									 .fun = st->ep.expr,
-									 .arg = gu_new_variant_i(ps->out_pool,
-					                                         PGF_EXPR_META, PgfExprMeta,
-					                                         .id = 0));
+				    gu_variant_is_null(st->ep.expr) ?
+				      meta :
+					  gu_new_variant_i(ps->out_pool, 
+				                       PGF_EXPR_APP, PgfExprApp,
+				                       .fun = st->ep.expr,
+				                       .arg = meta);
 				st->arg_idx++;
 				gu_buf_heap_push(ps->expr_queue, &pgf_expr_state_order, &st);
 			} else {
@@ -2005,10 +2022,12 @@ pgf_parse_result_next(PgfParsing* ps)
 				PgfExprState* st3 = gu_new(PgfExprState, ps->pool);
 				st3->answers = st2->answers;
 				st3->ep.expr =
-					gu_new_variant_i(ps->out_pool,
-					                 PGF_EXPR_APP, PgfExprApp,
-							         .fun = st2->ep.expr,
-							         .arg = st->ep.expr);
+				    gu_variant_is_null(st2->ep.expr) ?
+				      st->ep.expr :
+					  gu_new_variant_i(ps->out_pool,
+					                   PGF_EXPR_APP, PgfExprApp,
+					                   .fun = st2->ep.expr,
+					                   .arg = st->ep.expr);
 				st3->ep.prob = st2->ep.prob + st->ep.prob;
 				st3->args = st2->args;
 				st3->arg_idx = st2->arg_idx+1;
