@@ -6,8 +6,9 @@ module Main where
 -- 3. $ runghc ../MkLang.hs Ger Dut
 -- AR 6/11/2009
 
-import System
-import List
+import System.Cmd
+import System.Environment
+import Data.List
 
 main = do
   xx <- getArgs 
