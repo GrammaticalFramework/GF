@@ -25,7 +25,7 @@ sg_rollback(SgSG* sg, GuExn* err);
 
 
 SgId
-sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err);
+sg_insert_expr(SgSG *sg, PgfExpr expr, int wrFlag, GuExn* err);
 
 PgfExpr
 sg_get_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err);
@@ -61,16 +61,12 @@ sg_triple_result_get_query(SgTripleResult* tres, SgTriple triple);
 void
 sg_triple_result_close(SgTripleResult* tres, GuExn* err);
 
-typedef int SgPattern[3];
-
-typedef struct {
-	SgId* sel;
-	SgId* vars;
-	size_t n_patterns;
-	SgPattern patterns[];
-} SgQuery;
-
+typedef struct SgQuery SgQuery;
 typedef struct SgQueryResult SgQueryResult;
+
+SgQuery*
+sg_prepare_query(SgSG *sg, size_t n_triples, SgTriple* triples,
+                 GuPool* pool, GuExn* err);
 
 SgQueryResult*
 sg_query(SgSG *sg, SgQuery* query, GuExn* err);

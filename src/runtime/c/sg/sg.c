@@ -547,14 +547,14 @@ store_expr(sqlite3* db,
 }
 
 SgId
-sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err)
+sg_insert_expr(SgSG *sg, PgfExpr expr, int wrFlag, GuExn* err)
 {
 	sqlite3 *db = (sqlite3 *) sg;
 
 	int rc;
 
 	if (db->autoCommit) {
-		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 1);
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, wrFlag);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(db, err);
 			return 0;
@@ -562,12 +562,12 @@ sg_insert_expr(SgSG *sg, PgfExpr expr, GuExn* err)
 	}
 
 	ExprContext ctxt;
-	rc = open_exprs(db, 1, false, &ctxt, err);
+	rc = open_exprs(db, wrFlag, false, &ctxt, err);
 	if (rc != SQLITE_OK)
 		goto close;
 
 	SgId key;
-	rc = store_expr(db, &ctxt, expr, &key, 1);
+	rc = store_expr(db, &ctxt, expr, &key, wrFlag);
 	if (rc != SQLITE_OK) {
 		sg_raise_sqlite(db, err);
 		goto close;
@@ -1378,11 +1378,7 @@ rollback:
 	return false;
 }
 
-struct SgTripleResult {
-	sqlite3 *db;
-	SgTriple triple;
-
-	ExprContext ectxt;
+typedef struct {
 	TripleContext tctxt;
 
 	BtCursor* cursor;
@@ -1390,7 +1386,65 @@ struct SgTripleResult {
 	int res;
 	Mem mem[3];
 	UnpackedRecord idxKey;
+}  SgTripleResultInt;
+
+struct SgTripleResult {
+	sqlite3 *db;
+	SgTriple triple;
+	ExprContext ectxt;
+	
+	SgTripleResultInt i;
 };
+
+static int
+init_triple_result_int(sqlite3 *db, SgTripleResultInt* tresi, GuExn* err)
+{
+	int rc;
+
+	rc = open_triples(db, 0, &tresi->tctxt, err);
+	if (rc != SQLITE_OK)
+		return rc;
+
+	int i = 0;
+	while (i < 3) {
+		if (tresi->mem[i].flags != MEM_Null)
+			break;
+		i++;
+	}
+
+	tresi->cursor = &tresi->tctxt.cursor[i];
+	tresi->idxKey.pKeyInfo = tresi->cursor->pKeyInfo;
+	tresi->idxKey.nField = 0;
+	tresi->idxKey.aMem = &tresi->mem[i];
+	tresi->res = 0;
+
+	while (i+tresi->idxKey.nField < 3) {
+		tresi->idxKey.nField++;
+
+		if (tresi->mem[i+tresi->idxKey.nField].flags == MEM_Null)
+			break;
+	}
+
+	if (tresi->idxKey.nField > 0) {
+		tresi->idxKey.default_rc = 1;
+		rc = sqlite3BtreeMovetoUnpacked(tresi->cursor,
+										&tresi->idxKey, 0,  0, &tresi->res);
+		if (rc == SQLITE_OK) {
+			if (tresi->res < 0) {
+				rc = sqlite3BtreeNext(tresi->cursor, &tresi->res);
+			}
+			tresi->res = 0;
+		}
+	} else {
+		rc = sqlite3BtreeFirst(tresi->cursor, &tresi->res);
+	}
+
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(db, err);
+	}
+
+	return rc;
+}
 
 SgTripleResult*
 sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
@@ -1413,73 +1467,35 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 	tres->triple[1] = triple[1];
 	tres->triple[2] = triple[2];
 
-	rc = open_triples(db, 0, &tres->tctxt, err);
-	if (rc != SQLITE_OK)
-		goto close;
-
 	rc = open_exprs(db, 0, false, &tres->ectxt, err);
 	if (rc != SQLITE_OK)
 		goto close;
 
 	for (int i = 0; i < 3; i++) {
 		if (gu_variant_is_null(triple[i]))
-			tres->mem[i].flags = MEM_Null;
+			tres->i.mem[i].flags = MEM_Null;
 		else {
-			tres->mem[i].flags = MEM_Int;
-			rc = store_expr(db, &tres->ectxt, triple[i], &tres->mem[i].u.i, 0);
+			tres->i.mem[i].flags = MEM_Int;
+			rc = store_expr(db, &tres->ectxt, triple[i], &tres->i.mem[i].u.i, 0);
 			if (rc != SQLITE_OK)
 				goto close;
-			if (tres->mem[i].u.i == 0) {
-				tres->res = 1;
+			if (tres->i.mem[i].u.i == 0) {
+				tres->i.res = 1;
 				return tres;
 			}
 		}
 	}
 
-	int i = 0;
-	while (i < 3) {
-		if (!gu_variant_is_null(triple[i]))
-			break;
-		i++;
-	}
-
-	tres->cursor = &tres->tctxt.cursor[i];
-	tres->idxKey.pKeyInfo = tres->cursor->pKeyInfo;
-	tres->idxKey.nField = 0;
-	tres->idxKey.aMem = &tres->mem[i];
-	tres->res = 0;
-
-	while (i+tres->idxKey.nField < 3) {
-		tres->idxKey.nField++;
-
-		if (triple[i+tres->idxKey.nField] == 0)
-			break;
-	}
-
-	if (tres->idxKey.nField > 0) {
-		tres->idxKey.default_rc = 1;
-		rc = sqlite3BtreeMovetoUnpacked(tres->cursor,
-										&tres->idxKey, 0,  0, &tres->res);
-		if (rc == SQLITE_OK) {
-			if (tres->res < 0) {
-				rc = sqlite3BtreeNext(tres->cursor, &tres->res);
-			}
-			tres->res = 0;
-		}
-	} else {
-		rc = sqlite3BtreeFirst(tres->cursor, &tres->res);
-	}
-
+	rc = init_triple_result_int(db, &tres->i, err);
 	if (rc != SQLITE_OK) {
-		sg_raise_sqlite(db, err);
-		goto close;
+		return NULL;
 	}
 
 	return tres;
 
 close:
 	close_exprs(&tres->ectxt);
-	close_triples(&tres->tctxt);
+	close_triples(&tres->i.tctxt);
 
 	if (db->autoCommit) {
 		sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
@@ -1487,6 +1503,81 @@ close:
 
 	free(tres);
 	return NULL;
+}
+
+static bool
+triple_result_fetch_int(sqlite3* db, SgTripleResultInt* tresi,
+                        SgId* pKey, GuExn* err)
+{
+	while (tresi->res == 0) {
+		int rc;
+
+		if (tresi->idxKey.nField > 0) {
+			i64 szData;
+			const unsigned char *zData;
+			rc = sqlite3BtreeKeySize(tresi->cursor, &szData);
+			if (rc != SQLITE_OK) {
+				sg_raise_sqlite(db, err);
+				return false;
+			}
+
+			u32 available = 0;
+			zData = sqlite3BtreeKeyFetch(tresi->cursor, &available);
+			if (szData > available)
+				gu_impossible();
+
+			tresi->idxKey.default_rc = 0;
+			tresi->res = sqlite3VdbeRecordCompare(available, zData, &tresi->idxKey);
+			if (tresi->res != 0)
+				return false;
+
+			if (tresi->idxKey.aMem == &tresi->mem[0] &&
+			    tresi->idxKey.nField == 1 &&
+			    tresi->mem[2].flags != MEM_Null) {
+				int offset = 
+					zData[0] + 
+					sqlite3VdbeSerialTypeLen(zData[1]) + 
+					sqlite3VdbeSerialTypeLen(zData[2]);
+				zData+offset;
+				Mem mem;
+				sqlite3VdbeSerialGet(zData+offset, zData[3], &mem);
+				if (mem.u.i != tresi->mem[2].u.i) {
+					sqlite3BtreeNext(tresi->cursor, &tresi->res);
+					if (rc != SQLITE_OK) {
+						sg_raise_sqlite(db, err);
+						return false;
+					}
+					continue;
+				}
+			}
+		}
+
+		if (tresi->idxKey.nField > 0) {
+			rc = sqlite3VdbeIdxRowid(db, tresi->cursor, pKey);
+			if (rc != SQLITE_OK) {
+				sg_raise_sqlite(db, err);
+				return false;
+			}
+
+			rc = sqlite3BtreeMovetoUnpacked(&tresi->tctxt.cursor[3], 0, *pKey, 0, &tresi->res);
+		} else {
+			rc = sqlite3BtreeKeySize(tresi->cursor, pKey);
+		}
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return false;
+		}
+		
+		sqlite3BtreeNext(tresi->cursor, &tresi->res);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return false;
+		}
+
+		return true;
+	}
+
+	return false;
 }
 
 int
@@ -1497,31 +1588,31 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple,
 	triple[1] = tres->triple[1];
 	triple[2] = tres->triple[2];
 
-	while (tres->res == 0) {
+	while (tres->i.res == 0) {
 		int rc;
 
-		if (tres->idxKey.nField > 0) {
+		if (tres->i.idxKey.nField > 0) {
 			i64 szData;
 			const unsigned char *zData;
-			rc = sqlite3BtreeKeySize(tres->cursor, &szData);
+			rc = sqlite3BtreeKeySize(tres->i.cursor, &szData);
 			if (rc != SQLITE_OK) {
 				sg_raise_sqlite(tres->db, err);
 				return false;
 			}
 
 			u32 available = 0;
-			zData = sqlite3BtreeKeyFetch(tres->cursor, &available);
+			zData = sqlite3BtreeKeyFetch(tres->i.cursor, &available);
 			if (szData > available)
 				gu_impossible();
 
-			tres->idxKey.default_rc = 0;
-			tres->res = sqlite3VdbeRecordCompare(available, zData, &tres->idxKey);
-			if (tres->res != 0)
+			tres->i.idxKey.default_rc = 0;
+			tres->i.res = sqlite3VdbeRecordCompare(available, zData, &tres->i.idxKey);
+			if (tres->i.res != 0)
 				return false;
 
-			if (tres->idxKey.aMem == &tres->mem[0] &&
-			    tres->idxKey.nField == 1 &&
-			    tres->mem[2].flags != MEM_Null) {
+			if (tres->i.idxKey.aMem == &tres->i.mem[0] &&
+			    tres->i.idxKey.nField == 1 &&
+			    tres->i.mem[2].flags != MEM_Null) {
 				int offset = 
 					zData[0] + 
 					sqlite3VdbeSerialTypeLen(zData[1]) + 
@@ -1529,8 +1620,8 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple,
 				zData+offset;
 				Mem mem;
 				sqlite3VdbeSerialGet(zData+offset, zData[3], &mem);
-				if (mem.u.i != tres->mem[2].u.i) {
-					sqlite3BtreeNext(tres->cursor, &tres->res);
+				if (mem.u.i != tres->i.mem[2].u.i) {
+					sqlite3BtreeNext(tres->i.cursor, &tres->i.res);
 					if (rc != SQLITE_OK) {
 						sg_raise_sqlite(tres->db, err);
 						return false;
@@ -1540,30 +1631,30 @@ sg_triple_result_fetch(SgTripleResult* tres, SgId* pKey, SgTriple triple,
 			}
 		}
 
-		if (tres->idxKey.nField > 0) {
-			rc = sqlite3VdbeIdxRowid(tres->db, tres->cursor, pKey);
+		if (tres->i.idxKey.nField > 0) {
+			rc = sqlite3VdbeIdxRowid(tres->db, tres->i.cursor, pKey);
 			if (rc != SQLITE_OK) {
 				sg_raise_sqlite(tres->db, err);
 				return false;
 			}
 
-			rc = sqlite3BtreeMovetoUnpacked(&tres->tctxt.cursor[3], 0, *pKey, 0, &tres->res);
+			rc = sqlite3BtreeMovetoUnpacked(&tres->i.tctxt.cursor[3], 0, *pKey, 0, &tres->i.res);
 		} else {
-			rc = sqlite3BtreeKeySize(tres->cursor, pKey);
+			rc = sqlite3BtreeKeySize(tres->i.cursor, pKey);
 		}
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(tres->db, err);
 			return false;
 		}
 
-		rc = load_triple(&tres->tctxt.cursor[3], &tres->ectxt.crsExprs,
+		rc = load_triple(&tres->i.tctxt.cursor[3], &tres->ectxt.crsExprs,
 		                 triple, out_pool);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(tres->db, err);
 			return false;
 		}
 		
-		sqlite3BtreeNext(tres->cursor, &tres->res);
+		sqlite3BtreeNext(tres->i.cursor, &tres->i.res);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(tres->db, err);
 			return false;
@@ -1587,7 +1678,7 @@ void
 sg_triple_result_close(SgTripleResult* tres, GuExn* err)
 {
 	close_exprs(&tres->ectxt);
-	close_triples(&tres->tctxt);
+	close_triples(&tres->i.tctxt);
 
 	if (tres->db->autoCommit) {
 		int rc = sqlite3BtreeCommit(tres->db->aDb[0].pBt);
@@ -1600,66 +1691,216 @@ sg_triple_result_close(SgTripleResult* tres, GuExn* err)
 	free(tres);
 }
 
+typedef int SgPattern[3];
+
+struct SgQuery {
+	size_t n_vars;
+	struct {
+		SgId id;
+		PgfExpr expr;
+	}* vars;
+
+	size_t n_sels;
+	int* sel;
+
+	size_t n_patterns;
+	SgPattern patterns[];
+};
+
 struct SgQueryResult {
-	sqlite3 *db;
+	sqlite3* db;
 	SgQuery* query;
+	ExprContext ectxt;
+
+	bool is_empty;
 
 	int n_results;
-	SgTripleResult* results[];
+	SgTripleResultInt results[];
 };
+
+SgQuery*
+sg_prepare_query(SgSG *sg, size_t n_triples, SgTriple* triples,
+                 GuPool* pool, GuExn* err)
+{
+	sqlite3 *db = (sqlite3 *) sg;
+
+	int rc;
+
+	if (db->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 0);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return NULL;
+		}
+	}
+
+	ExprContext ectxt;
+	rc = open_exprs(db, 0, false, &ectxt, err);
+	if (rc != SQLITE_OK)
+		goto close;
+
+	SgQuery* query = gu_new_flex(pool, SgQuery, patterns, n_triples);
+	query->n_vars = 0;
+	query->vars   = gu_malloc(pool, sizeof(query->vars[0])*n_triples*3);
+
+	query->n_patterns = n_triples;
+	for (size_t i = 0; i < n_triples; i++) {
+		for (int k = 0; k < 3; k++) {
+			PgfExpr expr = triples[i][k];
+
+			size_t j = 0;
+			while (j < query->n_vars) {
+				if (pgf_expr_eq(expr, query->vars[j].expr))
+					break;
+				j++;
+			}
+			if (j >= query->n_vars) {
+				query->vars[j].expr = expr;
+
+				if (gu_variant_tag(expr) == PGF_EXPR_META)
+					query->vars[j].id = 0;
+				else {
+					rc = store_expr(db, &ectxt, expr, &query->vars[j].id, 0);
+					if (rc != SQLITE_OK) {
+						sg_raise_sqlite(db, err);
+						goto close;
+					}
+					
+					if (query->vars[j].id == 0)
+						goto close;
+				}
+
+				query->n_vars++;
+			}
+
+			query->patterns[i][k] = j;
+		}
+	}
+
+	close_exprs(&ectxt);
+	
+	if (db->autoCommit) {
+		rc = sqlite3BtreeCommit(db->aDb[0].pBt);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return 0;
+		}
+	}
+
+	return query;
+
+close:
+	close_exprs(&ectxt);
+	
+	if (db->autoCommit) {
+		sqlite3BtreeRollback(db->aDb[0].pBt, SQLITE_ABORT_ROLLBACK, 0);
+	}
+
+	return NULL;
+}
 
 SgQueryResult*
 sg_query(SgSG *sg, SgQuery* query, GuExn* err)
 {
 	sqlite3 *db = (sqlite3 *) sg;
 
+	int rc;
+
+	if (db->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(db->aDb[0].pBt, 0);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(db, err);
+			return NULL;
+		}
+	}
+
 	SgQueryResult* qres = 
 		malloc(sizeof(SgQueryResult)+
-		       sizeof(SgTripleResult*)*query->n_patterns);
+		       sizeof(SgTripleResultInt)*query->n_patterns);
 	qres->db = db;
+	qres->is_empty = false;
 	qres->query = query;
 	qres->n_results = 0;
-	
+
+	rc = open_exprs(db, 0, false, &qres->ectxt, err);
+	if (rc != SQLITE_OK)
+		goto close;
+
 	return qres;
+	
+close:
+	return NULL;
 }
 
 bool
-sg_query_result_fetch(SgQueryResult* qres, SgId* res, GuExn* err)
+sg_query_result_fetch(SgQueryResult* qres, PgfExpr* res, GuPool* out_pool, GuExn* err)
 {
+	if (qres->is_empty)
+		return false;
+
+	int rc;
+
 	size_t i = 0;
 	while (i < qres->query->n_patterns) {
+		for (int k = 0; k < 3; k++) {
+			if (qres->query->vars[qres->query->patterns[i][k]].id == 0)
+				qres->results[i].mem[k].flags = MEM_Null;
+			else {
+				qres->results[i].mem[k].flags = MEM_Int;
+				qres->results[i].mem[i].u.i   = qres->query->vars[qres->query->patterns[i][k]].id;
+			}
+		}
+
+		rc = init_triple_result_int(qres->db, &qres->results[i], err);
+		if (rc != SQLITE_OK)
+			goto close;
+
 		SgTriple triple;
-		triple[0] = qres->query->vars[qres->query->patterns[i][0]];
-		triple[1] = qres->query->vars[qres->query->patterns[i][1]];
-		triple[2] = qres->query->vars[qres->query->patterns[i][2]];
-		qres->results[i] = sg_query_triple((SgSG *) qres->db, triple, err);
 
 		SgId key;
 		for (;;) {
-			bool found = sg_triple_result_fetch(qres->results[i], &key, triple, NULL, err);
+			bool found = 
+				triple_result_fetch_int(qres->db, &qres->results[i],
+				                        &key, err);
 			if (gu_exn_is_raised(err)) {
 				return false;
 			}
 
-			if (!found) {
-				sg_triple_result_close(qres->results[i], err);
-				if (gu_exn_is_raised(err)) {
-					return false;
-				}
-				
-				if (i == 0)
-					break;
-				
-				i--;
-			}
+			if (found)
+				break;
+
+			close_triples(&qres->results[i].tctxt);
+
+			if (i == 0)
+				return false;
+
+			i--;
 		}
 
-		qres->query->vars[qres->query->patterns[i][0]] = triple[0];
-		qres->query->vars[qres->query->patterns[i][1]] = triple[1];
-		qres->query->vars[qres->query->patterns[i][2]] = triple[2];
+		qres->query->vars[qres->query->patterns[i][0]].id = triple[0];
+		qres->query->vars[qres->query->patterns[i][1]].id = triple[1];
+		qres->query->vars[qres->query->patterns[i][2]].id = triple[2];
 
 		i++;
 	}
+
+	for (size_t i = 0; i < qres->query->n_sels; i++) {
+		res[i] = qres->query->vars[qres->query->sel[i]].expr;
+		if (gu_variant_is_null(res[i])) {
+			rc = load_expr(&qres->ectxt.crsExprs,
+			               qres->query->vars[qres->query->sel[i]].id,
+			               &res[i], out_pool);
+			if (rc != SQLITE_OK) {
+				sg_raise_sqlite(qres->db, err);
+				goto close;
+			}
+
+			qres->query->vars[qres->query->sel[i]].expr = res[i];
+		}
+	}
+
+	return true;
 	
+close:
 	return false;
 }
