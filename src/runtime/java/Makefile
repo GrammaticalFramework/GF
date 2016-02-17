@@ -6,7 +6,7 @@ JNI_PATH = /usr/lib/jvm/default-java/include
 #JNI_PATH = /System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/
 INSTALL_PATH = /usr/local/lib
 
-LIBTOOL = $(if $(shell command -v glibtool 2>/dev/null), glibtool --tags=CC, libtool)
+LIBTOOL = $(if $(shell command -v glibtool 2>/dev/null), glibtool --tag=CC, libtool)
 
 all: libjpgf.la jpgf.jar
 
