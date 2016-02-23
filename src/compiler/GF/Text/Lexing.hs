@@ -3,6 +3,7 @@ module GF.Text.Lexing (stringOp,opInEnv) where
 
 import GF.Text.Transliterations
 import PGF.Lexing
+import PGF.LexingAGreek(lexAGreek,unlexAGreek,lexAGreek2) -- HL 20.2.2016
 
 import Data.Char (isSpace)
 import Data.List (intersperse)
@@ -13,12 +14,15 @@ stringOp name = case name of
   "lextext"    -> Just $ appLexer lexText
   "lexcode"    -> Just $ appLexer lexCode
   "lexmixed"   -> Just $ appLexer lexMixed
+  "lexgreek"   -> Just $ appLexer lexAGreek
+  "lexgreek2"  -> Just $ appLexer lexAGreek2
   "words"      -> Just $ appLexer words
   "bind"       -> Just $ appUnlexer (unwords . bindTok)
   "unchars"    -> Just $ appUnlexer concat
   "unlextext"  -> Just $ appUnlexer (unlexText . unquote)
   "unlexcode"  -> Just $ appUnlexer unlexCode
   "unlexmixed" -> Just $ appUnlexer (unlexMixed . unquote)
+  "unlexgreek" -> Just $ appUnlexer unlexAGreek
   "unwords"    -> Just $ appUnlexer unwords
   "to_html"    -> Just wrapHTML
   _ -> transliterate name

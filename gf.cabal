@@ -105,8 +105,10 @@ Library
     PGF
     PGF.Internal
     PGF.Lexing
+    PGF.LexingAGreek
     PGF.Utilities
     PGF.Haskell
+
   other-modules:
     PGF.Data
     PGF.Macros
