@@ -101,13 +101,16 @@ commonCommands = fmap (mapCommandExec liftSIO) $ Map.fromList [
        "To see transliteration tables, use command ut."
        ],
      examples = [
-       mkEx "l (EAdd 3 4) | ps -code         -- linearize code-like output",
-       mkEx "ps -lexer=code | p -cat=Exp     -- parse code-like input",
+--       mkEx "l (EAdd 3 4) | ps -code         -- linearize code-like output",
+       mkEx "l (EAdd 3 4) | ps -unlexcode    -- linearize code-like output",
+--       mkEx "ps -lexer=code | p -cat=Exp     -- parse code-like input",
+       mkEx "ps -lexcode | p -cat=Exp        -- parse code-like input",
        mkEx "gr -cat=QCl | l | ps -bind      -- linearization output from LangFin",
        mkEx "ps -to_devanagari \"A-p\"         -- show Devanagari in UTF8 terminal",
        mkEx "rf -file=Hin.gf | ps -env=quotes -to_devanagari -- convert translit to UTF8",
        mkEx "rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration",
-       mkEx "ps -to=chinese.trans \"abc\"      -- apply transliteration defined in file chinese.trans"
+       mkEx "ps -to=chinese.trans \"abc\"      -- apply transliteration defined in file chinese.trans",
+       mkEx "ps -lexgreek \"a)gavoi` a)'nvrwpoi' tines*\" -- normalize ancient greek accentuation"
        ],
      exec = \opts x-> do
                let (os,fs) = optsAndFlags opts
@@ -232,6 +235,8 @@ stringOpOptions = sort $ [
        ("lextext","text-like lexer"),
        ("lexcode","code-like lexer"),
        ("lexmixed","mixture of text and code, as in LaTeX (code between $...$, \\(...)\\, \\[...\\])"),
+       ("lexgreek","lexer normalizing ancient Greek accentuation"),
+       ("lexgreek2","lexer normalizing ancient Greek accentuation for text with vowel length annotations"),
        ("to_cp1251","encode to cp1251 (Cyrillic used in Bulgarian resource)"),
        ("to_html","wrap in a html file with linebreaks"),
        ("to_utf8","encode to utf8 (default)"),
@@ -239,6 +244,7 @@ stringOpOptions = sort $ [
        ("unlexcode","code-like unlexer"),
        ("unlexmixed","mixture of text and code (code between $...$, \\(...)\\, \\[...\\])"),
        ("unchars","unlexer that puts no spaces between tokens"),
+       ("unlexgreek","unlexer de-normalizing ancient Greek accentuation"),
        ("unwords","unlexer that puts a single space between tokens (default)"),
        ("words","lexer that assumes tokens separated by spaces (default)")
        ] ++

@@ -239,12 +239,13 @@ transGreek = mkTransliteration "modern Greek" allTrans allCodes where
 transAncientGreek :: Transliteration
 transAncientGreek = mkTransliteration "ancient Greek" allTrans allCodes where
  allTrans = words $
+--   "-  -  -  -  -  -  -  c: -  -  -  -  -  -  -  - " ++  -- standard code point for colon: 00B7
    "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - " ++
    "i= A  B  G  D  E  Z  H  V  I  K  L  M  N  X  O  " ++
    "P  R  -  S  T  Y  F  C  Q  W  I- Y- -  -  -  -  " ++
    "y= a  b  g  d  e  z  h  v  i  k  l  m  n  x  o  " ++
    "p  r  s* s  t  y  f  c  q  w  i- y- -  -  -  -  " ++
-   "a)  a(  a)` a(` a)' a(' a)~ a(~ A)  A(  A)` A(` A)' A(' A)~ A(~ " ++
+   "a)  a(  a)` a(` a)' a(' a)~ a(~ A)  A(  A)` A(` A)' A(' A)~ A(~ " ++  -- 1f00-1f09,1f0a-1f0f
    "e)  e(  e)` e(` e)' e(' -   -   E)  E(  E)` E(` E)' E(' -   -   " ++
    "h)  h(  h)` h(` h)' h(' h)~ h(~ H)  H(  H)` H(` H)' H(' H)~ H(~ " ++
    "i)  i(  i)` i(` i)' i(' i)~ i(~ I)  I(  I)` I(` I)' I(' I)~ I(~ " ++
@@ -252,16 +253,42 @@ transAncientGreek = mkTransliteration "ancient Greek" allTrans allCodes where
    "y)  y(  y)` y(` y)' y(' y)~ y(~ -   Y(  -   Y(` -   Y(' -   Y(~ " ++
    "w)  w(  w)` w(` w)' w(' w)~ w(~ W)  W(  W)` W(` W)' W(' W)~ W(~ " ++
    "a`  a'  e`  e'  h`  h'  i`  i'  o`  o'  y`  y'  w`  w'  -   -   " ++
-   "a|) a|( a|)` a|(` a|)' a|(' a|)~ a|(~ - - - - - - - - " ++ -- 1f80-  -- HL: a|) a|( for a|( a|)
-   "h|) h|( h|)` h|(` h|)' h|(' h|)~ h|(~ - - - - - - - - " ++ -- 1f90-  -- HL: h|) h|( for h|( h|)
-   "w|) w|( w|)` w|(` w|)' w|(' w|)~ w|(~ - - - - - - - - " ++ -- 1fa0-  -- HL: w|) w|( for w|( w|)
+   "a|) a|( a|)` a|(` a|)' a|(' a|)~ a|(~ - - - - - - - - " ++ -- 1f80-  
+   "h|) h|( h|)` h|(` h|)' h|(' h|)~ h|(~ - - - - - - - - " ++ -- 1f90-  
+   "w|) w|( w|)` w|(` w|)' w|(' w|)~ w|(~ - - - - - - - - " ++ -- 1fa0-  
    "a.  a_  a|` a|  a|'  -  a~ a|~ - - - - - - - - " ++ -- 1fb0-
    "-  -  h|` h|  h|'  -  h~ h|~ - - - - - - - - " ++ -- 1fc0-
    "i. i_ i=` i=' -    -  i~ i=~ - - - - - - - - " ++ -- 1fd0-
-   "y. y_ y=` y=' r)   r( y~ y=~ - - - - - - - - " ++ -- 1fe0-   -- HL: y=~ for y|~
-   "-  -  w|` w|  w|'  -  w~ w|~ - - - - - - - - "    -- 1ff0-
- allCodes = [0x0380 .. 0x03cf] ++ [0x1f00 .. 0x1fff]
-
+   "y. y_ y=` y=' r)   r( y~ y=~ - - - - - - - - " ++ -- 1fe0-   
+   "-  -  w|` w|  w|'  -  w~ w|~ - - - - - - - - " ++ -- 1ff0-
+   -- HL, Private Use Area Code Points (New Athena Unicode, Cardo, ALPHABETUM, Antioch)
+   -- see: http://apagreekkeys.org/technicalDetails.html
+   --      GreekKeys Support by Donald Mastronarde
+   "- - - - - - - - - e. o. R) Y) Y)` Y)' Y)~ "    ++ -- e1a0-e1af  
+   "e~ e)~ e(~ e_ e_' e_` e_) e_( e_)` e_(` e_)' e_(' E)~ E(~ E_ E. " ++ -- e1b0-e1bf
+   "o~ o)~ o(~ o_ o_' o_` o_) o_( o_)` o_(` o_)' o_(' O)~ O(~ O_ O. " ++ -- e1c0-e1cf
+   "a_` - a_~ a_)` a_(` a_)~ a_(~ - a.` a.) a.)` a.(' a.(` - - - "    ++ -- eaf0-eaff  
+   "a_' - - - a_) a_( - a_)' - a_(' a.' a.( a.)' - - - "              ++ -- eb00-eb0f  
+   "e_)~ e_(~ - - - - - e_~ - - - - - - - - "                         ++ -- eb20-eb2f
+   "- - - - - - i_~ - i_` i_' - - i_) i_)' i_( i_(' "                 ++ -- eb30-eb3f   
+   "i.' i.) i.)' i.( i.` i.)` - i.(' i.(` - - - - - - - "             ++ -- eb40-eb4f
+   "- - - - i_)` i_(` - i_)~ i_(~ - o_~ o_)~ o_(~ - - - "             ++ -- eb50-eb5f
+   "y_` " ++ -- eb6f
+   "y_~ y_)` - - - y_(` - y_)~ y_(~ - y_' - - y_) y_( y_)' "  ++         -- eb70-eb7f
+   "y_(' y.' y.( y.` y.) y.)' - - y.)` y.(' y.(` - - - - - "             -- eb80-eb8f
+ allCodes =  -- [0x00B0 .. 0x00Bf] 
+             [0x0380 .. 0x03cf] ++ [0x1f00 .. 0x1fff] 
+          ++ [0xe1a0 .. 0xe1af] 
+          ++ [0xe1b0 .. 0xe1bf]
+          ++ [0xe1c0 .. 0xe1cf]
+          ++ [0xeaf0 .. 0xeaff]
+          ++ [0xeb00 .. 0xeb0f]
+          ++ [0xeb20 .. 0xeb2f]
+          ++ [0xeb30 .. 0xeb3f]
+          ++ [0xeb40 .. 0xeb4f]
+          ++ [0xeb50 .. 0xeb5f] ++ [0xeb6f]
+          ++ [0xeb70 .. 0xeb7f]
+          ++ [0xeb80 .. 0xeb8f]
  
 transAmharic :: Transliteration
 transAmharic = mkTransliteration "Amharic" allTrans allCodes where
