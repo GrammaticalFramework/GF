@@ -1,0 +1,1982 @@
+Lang: TQuestMark (PhrUtt NoPConj (UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePron she_Pron) (UseV sleep_V))))) NoVoc) (TFullStop (PhrUtt NoPConj yes_Utt NoVoc) TEmpty)
+LangEng: does she sleep ? yes .
+Lang: TFullStop (PhrUtt NoPConj yes_Utt NoVoc) TEmpty
+LangEng: yes .
+Lang: TFullStop (PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))) NoVoc) TEmpty
+LangEng: she slept .
+Lang: TFullStop (PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))) NoVoc) TEmpty
+LangEng: she sleeps .
+Lang: TQuestMark (PhrUtt NoPConj (UttQS (UseQCl (TTAnt TPast ASimul) PPos (QuestCl (PredVP (UsePron she_Pron) (UseV sleep_V))))) NoVoc) TEmpty
+LangEng: did she sleep ?
+Lang: TExclMark (PhrUtt NoPConj (UttImpPl PNeg (ImpVP (UseV sleep_V))) NoVoc) TEmpty
+LangEng: don't sleep !
+Lang: TExclMark (PhrUtt NoPConj (UttImpPol PNeg (ImpVP (UseV sleep_V))) NoVoc) TEmpty
+LangEng: don't sleep !
+Lang: TExclMark (PhrUtt NoPConj (UttImpSg PNeg (ImpVP (UseV sleep_V))) NoVoc) TEmpty
+LangEng: don't sleep !
+Lang: TQuestMark (PhrUtt NoPConj (UttIAdv where_IAdv) NoVoc) (TFullStop (PhrUtt NoPConj (UttAdv here_Adv) NoVoc) (TQuestMark (PhrUtt NoPConj (UttIAdv when_IAdv) NoVoc) (TExclMark (PhrUtt NoPConj (UttAdv now_Adv) NoVoc) TEmpty)))
+LangEng: where ? here . when ? now !
+Lang: TFullStop (PhrUtt NoPConj yes_Utt NoVoc) TEmpty
+LangEng: yes .
+Lang: TQuestMark (PhrUtt NoPConj yes_Utt NoVoc) TEmpty
+LangEng: yes ?
+Lang: TExclMark (PhrUtt NoPConj yes_Utt NoVoc) TEmpty
+LangEng: yes !
+Lang: PhrUtt but_PConj (UttImpPl PPos (ImpVP (UseV sleep_V))) (VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N)))
+LangEng: but sleep , my friend
+Lang: PhrUtt but_PConj (UttImpPol PPos (ImpVP (UseV sleep_V))) (VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N)))
+LangEng: but sleep , my friend
+Lang: PhrUtt but_PConj (UttImpSg PPos (ImpVP (UseV sleep_V))) (VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N)))
+LangEng: but sleep , my friend
+Lang: PhrUtt NoPConj (UttS (UseCl (TTAnt TFut ASimul) PNeg (PredVP (UsePron she_Pron) (UseV sleep_V)))) NoVoc
+LangEng: she won't sleep
+Lang: PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))) NoVoc
+LangEng: she sleeps
+Lang: PhrUtt NoPConj (UttQS (UseQCl (TTAnt TCond ASimul) PPos (QuestCl (PredVP (UsePron she_Pron) (UseV sleep_V))))) NoVoc
+LangEng: would she sleep
+Lang: PhrUtt NoPConj (UttImpPl PPos (ImpVP (UseV sleep_V))) NoVoc
+LangEng: sleep
+Lang: PhrUtt NoPConj (UttImpPol PPos (ImpVP (UseV sleep_V))) NoVoc
+LangEng: sleep
+Lang: PhrUtt NoPConj (UttImpSg PPos (ImpVP (UseV sleep_V))) NoVoc
+LangEng: sleep
+Lang: PhrUtt (PConjConj and_Conj) (UttAdv now_Adv) NoVoc
+LangEng: and now
+Lang: PhrUtt (PConjConj both7and_DConj) (UttAdv now_Adv) NoVoc
+LangEng: and now
+Lang: PhrUtt NoPConj yes_Utt (VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N)))
+LangEng: yes , my friend
+Lang: PhrUtt NoPConj (ImpPl1 (UseV sleep_V)) NoVoc
+LangEng: let's sleep
+Lang: PhrUtt but_PConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (AdvVP UseCopula here_Adv)))) NoVoc
+LangEng: but she is here
+Lang: PhrUtt but_PConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAdv here_Adv))))) NoVoc
+LangEng: but she is here
+Lang: PhrUtt otherwise_PConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV laugh_V)))) NoVoc
+LangEng: otherwise she laughs
+Lang: PhrUtt NoPConj (UttImpPl PPos (ImpVP (ComplSlash (SlashV2a eat_V2) (DetCN (DetQuant IndefArt NumSg) (UseN apple_N))))) please_Voc
+LangEng: eat an apple please
+Lang: PhrUtt NoPConj (UttImpPol PPos (ImpVP (ComplSlash (SlashV2a eat_V2) (DetCN (DetQuant IndefArt NumSg) (UseN apple_N))))) please_Voc
+LangEng: eat an apple please
+Lang: PhrUtt NoPConj (UttImpSg PPos (ImpVP (ComplSlash (SlashV2a eat_V2) (DetCN (DetQuant IndefArt NumSg) (UseN apple_N))))) please_Voc
+LangEng: eat an apple please
+Lang: PhrUtt therefore_PConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV laugh_V)))) NoVoc
+LangEng: therefore she laughs
+Lang: UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she slept
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she sleeps
+Lang: UttQS (UseQCl (TTAnt TPast ASimul) PNeg (QuestVP whoSg_IP (UseV sleep_V)))
+LangEng: who didn't sleep
+Lang: UttQS (UseQCl (TTAnt TPast ASimul) PNeg (QuestVP whoPl_IP (UseV sleep_V)))
+LangEng: who didn't sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))
+LangEng: who sleeps
+Lang: UttImpPl PNeg (ImpVP (UseComp (CompCN (UseN man_N))))
+LangEng: don't be men
+Lang: UttImpPl PNeg (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (UseN man_N)))))
+LangEng: don't be men
+Lang: UttImpPol PNeg (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (UseN man_N)))))
+LangEng: don't be men
+Lang: UttImpSg PNeg (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (UseN man_N)))))
+LangEng: don't be men
+Lang: UttIP whoPl_IP
+LangEng: who
+Lang: UttIP whoSg_IP
+LangEng: who
+Lang: UttIAdv why_IAdv
+LangEng: why
+Lang: UttNP (DetCN (DetQuant this_Quant NumSg) (UseN man_N))
+LangEng: this man
+Lang: UttAdv here_Adv
+LangEng: here
+Lang: UttVP (UseV sleep_V)
+LangEng: to sleep
+Lang: UttCN (UseN beer_N)
+LangEng: beer
+Lang: UttNP (MassNP (UseN beer_N))
+LangEng: beer
+Lang: UttAP (PositA good_A)
+LangEng: good
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
+LangEng: five
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))))
+LangEng: five
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PNeg (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she doesn't sleep
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she sleeps
+Lang: UttS (UseCl (TTAnt TPres AAnter) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she has slept
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she sleeps
+Lang: UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she slept
+Lang: UttS (UseCl (TTAnt TFut ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she will sleep
+Lang: UttS (UseCl (TTAnt TCond ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she would sleep
+Lang: UttImpPl PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN man_N)))))
+LangEng: be a man
+Lang: UttImpPol PPos (ImpVP (UseComp (CompCN (UseN man_N))))
+LangEng: be a man
+Lang: UttImpPol PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN man_N)))))
+LangEng: be a man
+Lang: UttImpSg PPos (ImpVP (UseComp (CompCN (UseN man_N))))
+LangEng: be a man
+Lang: UttImpSg PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN man_N)))))
+LangEng: be a man
+Lang: UttImpPl PPos (ImpVP (UseComp (CompCN (UseN man_N))))
+LangEng: be men
+Lang: UttImpPl PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (UseN man_N)))))
+LangEng: be men
+Lang: UttImpPol PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (UseN man_N)))))
+LangEng: be men
+Lang: UttImpSg PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumPl) (UseN man_N)))))
+LangEng: be men
+Lang: UttImpPl PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN man_N)))))
+LangEng: be a man
+Lang: UttImpPol PPos (ImpVP (UseComp (CompCN (UseN man_N))))
+LangEng: be a man
+Lang: UttImpPol PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN man_N)))))
+LangEng: be a man
+Lang: UttImpSg PPos (ImpVP (UseComp (CompCN (UseN man_N))))
+LangEng: be a man
+Lang: UttImpSg PPos (ImpVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN man_N)))))
+LangEng: be a man
+Lang: UttS (UseCl (TTAnt TCond AAnter) PNeg (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she wouldn't have slept
+Lang: UttS (ConjS and_Conj (BaseS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))) (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV run_V)))))
+LangEng: she sleeps and I run
+Lang: UttS (ConjS and_Conj (ConsS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))) (BaseS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV run_V))) (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youPol_Pron) (UseV walk_V))))))
+LangEng: she sleeps , I run and you walk
+Lang: UttS (ConjS and_Conj (ConsS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))) (BaseS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV run_V))) (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youSg_Pron) (UseV walk_V))))))
+LangEng: she sleeps , I run and you walk
+Lang: UttS (ConjS and_Conj (ConsS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))) (BaseS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV run_V))) (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youPl_Pron) (UseV walk_V))))))
+LangEng: she sleeps , I run and you walk
+Lang: UttS (AdvS today_Adv (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: today she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+LangEng: she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2a love_V2) (UsePron he_Pron))))
+LangEng: she loves him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))) (UsePron he_Pron))))
+LangEng: she sends it to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (Slash2V3 send_V3 (UsePron it_Pron)) (UsePron he_Pron))))
+LangEng: she sends it to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (DetNP (DetQuant DefArt NumSg)))))
+LangEng: she sends it to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (UsePron it_Pron))))
+LangEng: she sends it to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplVV want_VV (UseV sleep_V))))
+LangEng: she wants to sleep
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV sleep_V))))))
+LangEng: she says that I sleep
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplVQ wonder_VQ (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))))
+LangEng: she wonders who sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplVA become_VA (PositA old_A))))
+LangEng: she becomes old
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplVA become_VA (AdAP very_AdA (PositA old_A)))))
+LangEng: she becomes very old
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (DetNP (DetQuant DefArt NumSg)))))
+LangEng: she paints it red
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))
+LangEng: she paints it red
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (DetNP (DetQuant DefArt NumSg)))))
+LangEng: she paints it red
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))
+LangEng: she paints it red
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (UseV sleep_V)))) (UsePron he_Pron))))
+LangEng: she answers to him that we sleep
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))) (UsePron he_Pron))))
+LangEng: she asks him who sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2V beg_V2V (UseV sleep_V)) (UsePron he_Pron))))
+LangEng: she begs him to sleep
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAP (PositA old_A)))))
+LangEng: she is old
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAP (ComparA old_A (UsePron he_Pron))))))
+LangEng: she is older than he
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (AdvVP (UseComp (CompAP (UseA2 married_A2))) (PrepNP to_Prep (UsePron he_Pron)))))
+LangEng: she is married to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (VPSlashPrep (UseComp (CompAP (UseA2 married_A2))) to_Prep) (UsePron he_Pron))))
+LangEng: she is married to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAP (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron)))))))
+LangEng: she is married to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAP (ComplA2 married_A2 (UsePron he_Pron))))))
+LangEng: she is married to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (married_Cl (UsePron she_Pron) (UsePron he_Pron)))
+LangEng: she is married to him
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAP (AdAP very_AdA (PositA old_A))))))
+LangEng: she is very old
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompNP (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))))
+LangEng: she is the woman
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompCN (UseN woman_N)))))
+LangEng: she is a woman
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))))
+LangEng: she is a woman
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompCN (AdjCN (PositA old_A) (UseN woman_N))))))
+LangEng: she is an old woman
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))))
+LangEng: she is an old woman
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (AdvVP UseCopula here_Adv)))
+LangEng: she is here
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAdv here_Adv))))
+LangEng: she is here
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (AdVVP always_AdV (UseV sleep_V))))
+LangEng: she always sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ExistNP (DetCN (DetQuant IndefArt NumSg) (UseN house_N))))
+LangEng: there is a house
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ExistNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN house_N)))))
+LangEng: there is an old house
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ExistNP (DetCN many_Det (UseN house_N))))
+LangEng: there are many houses
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (CleftNP (UsePron she_Pron) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V)))))
+LangEng: it is she who sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (CleftAdv here_Adv (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))
+LangEng: it is here that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ImpersCl (AdvVP (AdvVP UseCopula here_Adv) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is here that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ImpersCl (AdvVP (UseComp (CompAdv here_Adv)) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is here that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant DefArt NumSg)) (AdvVP (AdvVP UseCopula here_Adv) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is here that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant DefArt NumSg)) (AdvVP (UseComp (CompAdv here_Adv)) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is here that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron it_Pron) (AdvVP (AdvVP UseCopula here_Adv) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is here that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron it_Pron) (AdvVP (UseComp (CompAdv here_Adv)) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is here that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ImpersCl (UseV rain_V0)))
+LangEng: it rains
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant DefArt NumSg)) (UseV rain_V0)))
+LangEng: it rains
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron it_Pron) (UseV rain_V0)))
+LangEng: it rains
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ImpersCl (ProgrVP (UseV rain_V0))))
+LangEng: it is raining
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant DefArt NumSg)) (ProgrVP (UseV rain_V0))))
+LangEng: it is raining
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron it_Pron) (ProgrVP (UseV rain_V0))))
+LangEng: it is raining
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredSCVP (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))) (UseComp (CompAP (PositA good_A)))))
+LangEng: that she sleeps is good
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (GenericCl (UseV sleep_V)))
+LangEng: one sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant IndefArt NumSg)) (UseV sleep_V)))
+LangEng: one sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))))))) (UseV sleep_V)))
+LangEng: one sleeps
+Lang: UttVP (UseV sleep_V)
+LangEng: to sleep
+Lang: UttVP (ComplSlash (SlashV2a love_V2) (UsePron he_Pron))
+LangEng: to love him
+Lang: UttVP (ComplSlash (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))) (UsePron he_Pron))
+LangEng: to send it to him
+Lang: UttVP (ComplSlash (Slash2V3 send_V3 (UsePron it_Pron)) (UsePron he_Pron))
+LangEng: to send it to him
+Lang: UttVP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (DetNP (DetQuant DefArt NumSg)))
+LangEng: to send it to him
+Lang: UttVP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (UsePron it_Pron))
+LangEng: to send it to him
+Lang: UttVP (ComplVV want_VV (UseV sleep_V))
+LangEng: to want to sleep
+Lang: UttVP (ComplVS know_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: to know that she sleeps
+Lang: UttVP (ComplVQ wonder_VQ (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))
+LangEng: to wonder who sleeps
+Lang: UttVP (ComplVA become_VA (PositA red_A))
+LangEng: to become red
+Lang: UttVP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (DetNP (DetQuant DefArt NumSg)))
+LangEng: to paint it red
+Lang: UttVP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))
+LangEng: to paint it red
+Lang: UttVP (ComplSlash (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))) (UsePron he_Pron))
+LangEng: to answer to him that she sleeps
+Lang: UttVP (ComplSlash (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))) (UsePron he_Pron))
+LangEng: to ask him who sleeps
+Lang: UttVP (ComplSlash (SlashV2V beg_V2V (UseV sleep_V)) (UsePron he_Pron))
+LangEng: to beg him to sleep
+Lang: UttVP (UseComp (CompAP (PositA old_A)))
+LangEng: to be old
+Lang: UttVP (UseComp (CompAP (ComparA old_A (UsePron he_Pron))))
+LangEng: to be older than he
+Lang: UttVP (AdvVP (UseComp (CompAP (UseA2 married_A2))) (PrepNP to_Prep (UsePron he_Pron)))
+LangEng: to be married to him
+Lang: UttVP (ComplSlash (VPSlashPrep (UseComp (CompAP (UseA2 married_A2))) to_Prep) (UsePron he_Pron))
+LangEng: to be married to him
+Lang: UttVP (UseComp (CompAP (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron)))))
+LangEng: to be married to him
+Lang: UttVP (UseComp (CompAP (ComplA2 married_A2 (UsePron he_Pron))))
+LangEng: to be married to him
+Lang: UttVP (UseComp (CompAP (AdAP very_AdA (PositA old_A))))
+LangEng: to be very old
+Lang: UttVP (UseComp (CompCN (UseN woman_N)))
+LangEng: to be a woman
+Lang: UttVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))
+LangEng: to be a woman
+Lang: UttVP (UseComp (CompCN (AdjCN (PositA old_A) (UseN woman_N))))
+LangEng: to be an old woman
+Lang: UttVP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))
+LangEng: to be an old woman
+Lang: UttVP (UseComp (CompNP (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))
+LangEng: to be the woman
+Lang: UttVP (AdvVP UseCopula here_Adv)
+LangEng: to be here
+Lang: UttVP (UseComp (CompAdv here_Adv))
+LangEng: to be here
+Lang: UttVP (AdvVP (UseV sleep_V) here_Adv)
+LangEng: to sleep here
+Lang: UttVP (AdVVP always_AdV (UseV sleep_V))
+LangEng: to always sleep
+Lang: UttVP (ComplSlash (SlashV2A paint_V2A (PositA black_A)) (DetNP (DetQuant DefArt NumSg)))
+LangEng: to paint it black
+Lang: UttVP (ComplSlash (SlashV2A paint_V2A (PositA black_A)) (UsePron it_Pron))
+LangEng: to paint it black
+Lang: UttVP (ReflVP (SlashV2A paint_V2A (PositA black_A)))
+LangEng: to paint itself black
+Lang: UttVP (UseComp (CompAP (PositA warm_A)))
+LangEng: to be warm
+Lang: UttAdv (PrepNP to_Prep (SelfNP (MassNP (UseN love_N))))
+LangEng: to love itself
+Lang: UttVP (ReflVP (SlashV2a love_V2))
+LangEng: to love itself
+Lang: UttVP (ReflVP (SlashV2A paint_V2A (PositA black_A)))
+LangEng: to paint itself black
+Lang: UttVP (PassV2 love_V2)
+LangEng: to be loved
+Lang: UttVP (AdvVP (PassV2 love_V2) (PrepNP by8agent_Prep (UsePron she_Pron)))
+LangEng: to be loved by her
+Lang: UttVP (AdvVP (PassV2 love_V2) (PrepNP by8means_Prep (UsePron she_Pron)))
+LangEng: to be loved by her
+Lang: UttVP (ComplSlash (VPSlashPrep (PassV2 love_V2) by8agent_Prep) (UsePron she_Pron))
+LangEng: to be loved by her
+Lang: UttVP (ComplSlash (VPSlashPrep (PassV2 love_V2) by8means_Prep) (UsePron she_Pron))
+LangEng: to be loved by her
+Lang: UttVP (ProgrVP (UseV sleep_V))
+LangEng: to be sleeping
+Lang: UttVP (UseComp (CompAP (PositA old_A)))
+LangEng: to be old
+Lang: UttVP (UseComp (CompNP (DetCN (DetQuant this_Quant NumSg) (UseN man_N))))
+LangEng: to be this man
+Lang: UttVP (AdvVP UseCopula here_Adv)
+LangEng: to be here
+Lang: UttVP (UseComp (CompAdv here_Adv))
+LangEng: to be here
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredSCVP (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))) (UseComp (CompAP (PositA important_A)))))
+LangEng: that she sleeps is important
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredSCVP (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))) (UseComp (CompAP (PositA important_A)))))
+LangEng: who sleeps is important
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredSCVP (EmbedVP (UseV sleep_V)) (UseComp (CompAP (PositA important_A)))))
+LangEng: to sleep is important
+Lang: UttImpPl PPos (ImpVP (AdvVP (UseV come_V) (PrepNP to_Prep (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N)))))
+LangEng: come to my house
+Lang: UttImpPl PPos (ImpVP (ComplSlash (VPSlashPrep (UseV come_V) to_Prep) (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N))))
+LangEng: come to my house
+Lang: UttImpPol PPos (ImpVP (AdvVP (UseV come_V) (PrepNP to_Prep (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N)))))
+LangEng: come to my house
+Lang: UttImpPol PPos (ImpVP (ComplSlash (VPSlashPrep (UseV come_V) to_Prep) (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N))))
+LangEng: come to my house
+Lang: UttImpSg PPos (ImpVP (AdvVP (UseV come_V) (PrepNP to_Prep (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N)))))
+LangEng: come to my house
+Lang: UttImpSg PPos (ImpVP (ComplSlash (VPSlashPrep (UseV come_V) to_Prep) (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N))))
+LangEng: come to my house
+Lang: UttImpPl PPos (ImpVP (UseV come_V))
+LangEng: come
+Lang: UttImpPol PPos (ImpVP (UseV come_V))
+LangEng: come
+Lang: UttImpSg PPos (ImpVP (UseV come_V))
+LangEng: come
+Lang: UttImpPl PPos (ImpVP (ComplSlash (SlashV2a buy_V2) (DetNP (DetQuant DefArt NumSg))))
+LangEng: buy it
+Lang: UttImpPl PPos (ImpVP (ComplSlash (SlashV2a buy_V2) (UsePron it_Pron)))
+LangEng: buy it
+Lang: UttImpPol PPos (ImpVP (ComplSlash (SlashV2a buy_V2) (DetNP (DetQuant DefArt NumSg))))
+LangEng: buy it
+Lang: UttImpPol PPos (ImpVP (ComplSlash (SlashV2a buy_V2) (UsePron it_Pron)))
+LangEng: buy it
+Lang: UttImpSg PPos (ImpVP (ComplSlash (SlashV2a buy_V2) (DetNP (DetQuant DefArt NumSg))))
+LangEng: buy it
+Lang: UttImpSg PPos (ImpVP (ComplSlash (SlashV2a buy_V2) (UsePron it_Pron)))
+LangEng: buy it
+Lang: UttNP (DetCN (DetQuant this_Quant NumSg) (UseN man_N))
+LangEng: this man
+Lang: UttNP (DetCN (DetQuant this_Quant NumSg) (AdjCN (PositA old_A) (UseN man_N)))
+LangEng: this old man
+Lang: UttNP (DetCN (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (AdjCN (PositA old_A) (UseN man_N)))
+LangEng: these five old men
+Lang: UttNP (DetCN (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN man_N))
+LangEng: these five men
+Lang: UttNP (DetCN (DetQuant DefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (AdjCN (PositA old_A) (UseN man_N)))
+LangEng: the five old men
+Lang: UttNP (DetCN (DetQuant DefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN man_N))
+LangEng: the five men
+Lang: UttNP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (AdjCN (PositA old_A) (UseN man_N)))
+LangEng: five old men
+Lang: UttNP (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN man_N))
+LangEng: five men
+Lang: UttNP (DetCN (DetQuant IndefArt (NumCard (NumDigits (IIDig D_5 (IDig D_1))))) (AdjCN (PositA old_A) (UseN man_N)))
+LangEng: 5 &+ 1 old men
+Lang: UttNP (DetCN (DetQuant IndefArt (NumCard (NumDigits (IIDig D_5 (IDig D_1))))) (UseN man_N))
+LangEng: 5 &+ 1 men
+Lang: UttNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (AdjCN (PositA old_A) (UseN man_N)))
+LangEng: my old man
+Lang: UttNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN man_N))
+LangEng: my man
+Lang: UttNP (UsePN paris_PN)
+LangEng: Paris
+Lang: UttNP (UsePron we_Pron)
+LangEng: we
+Lang: UttNP (DetNP (DetQuant this_Quant NumSg))
+LangEng: this
+Lang: UttNP (DetNP (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))))
+LangEng: these five
+Lang: UttNP (DetNP (DetQuantOrd DefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))) (OrdSuperl good_A)))
+LangEng: the five best
+Lang: UttCN (AdjCN (PositA old_A) (UseN beer_N))
+LangEng: old beer
+Lang: UttNP (MassNP (AdjCN (PositA old_A) (UseN beer_N)))
+LangEng: old beer
+Lang: UttCN (UseN beer_N)
+LangEng: beer
+Lang: UttNP (MassNP (UseN beer_N))
+LangEng: beer
+Lang: UttNP (PredetNP only_Predet (DetCN (DetQuant this_Quant NumSg) (UseN woman_N)))
+LangEng: only this woman
+Lang: UttNP (PPartNP (DetCN (DetQuant DefArt NumSg) (UseN man_N)) see_V2)
+LangEng: the man seen
+Lang: UttNP (AdvNP (UsePN paris_PN) today_Adv)
+LangEng: Paris today
+Lang: UttNP (ConjNP or_Conj (BaseNP (DetCN (DetQuant this_Quant NumSg) (UseN woman_N)) (UsePN john_PN)))
+LangEng: this woman or John
+Lang: UttNP (ConjNP or_Conj (ConsNP (DetCN (DetQuant this_Quant NumSg) (UseN woman_N)) (BaseNP (UsePN john_PN) (UsePron i_Pron))))
+LangEng: this woman , John or I
+Lang: UttNP (UsePron i_Pron)
+LangEng: I
+Lang: UttNP (UsePron youPl_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPol_Pron)
+LangEng: you
+Lang: UttNP (UsePron youSg_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPl_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPol_Pron)
+LangEng: you
+Lang: UttNP (UsePron youSg_Pron)
+LangEng: you
+Lang: UttNP (UsePron he_Pron)
+LangEng: he
+Lang: UttNP (UsePron she_Pron)
+LangEng: she
+Lang: UttNP (DetNP (DetQuant DefArt NumSg))
+LangEng: it
+Lang: UttNP (UsePron it_Pron)
+LangEng: it
+Lang: UttNP (UsePron we_Pron)
+LangEng: we
+Lang: UttNP (UsePron youPl_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPol_Pron)
+LangEng: you
+Lang: UttNP (UsePron youSg_Pron)
+LangEng: you
+Lang: UttNP (DetNP (DetQuant DefArt NumPl))
+LangEng: they
+Lang: UttNP (UsePron they_Pron)
+LangEng: they
+Lang: UttNP (DetNP (DetQuant this_Quant NumSg))
+LangEng: this
+Lang: UttNP (DetNP (DetQuant this_Quant NumSg))
+LangEng: this
+Lang: UttNP (DetNP (DetQuant that_Quant NumSg))
+LangEng: that
+Lang: UttNP (DetNP (DetQuant this_Quant NumPl))
+LangEng: these
+Lang: UttNP (DetNP (DetQuant that_Quant NumPl))
+LangEng: those
+Lang: UttNP (DetNP (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))))
+LangEng: these five
+Lang: UttNP (DetNP (DetQuantOrd DefArt NumSg (OrdNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))))
+LangEng: the fifth
+Lang: UttNP (DetNP (DetQuantOrd DefArt NumPl (OrdNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))))
+LangEng: the fifth
+Lang: UttNP (DetNP (DetQuantOrd DefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))) (OrdSuperl good_A)))
+LangEng: the five best
+Lang: UttNP (DetNP (DetQuant this_Quant NumPl))
+LangEng: these
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
+LangEng: five
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))))
+LangEng: five
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
+LangEng: five
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))))
+LangEng: five
+Lang: UttNP (DetNP (DetQuant (PossPron i_Pron) NumSg))
+LangEng: mine
+Lang: UttNP (DetNP (DetQuant (PossPron i_Pron) NumPl))
+LangEng: mine
+Lang: UttNP (DetNP (DetQuant (PossPron i_Pron) (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))))
+LangEng: my five
+Lang: UttNP (DetCN (DetQuant DefArt NumSg) (UseN house_N))
+LangEng: the house
+Lang: UttNP (DetCN (DetQuant IndefArt NumSg) (UseN house_N))
+LangEng: a house
+Lang: UttNP (DetCN (DetQuant DefArt NumSg) (UseN house_N))
+LangEng: the house
+Lang: UttNP (DetCN (DetQuant DefArt NumPl) (UseN house_N))
+LangEng: the houses
+Lang: UttNP (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))
+LangEng: a woman
+Lang: UttNP (DetCN (DetQuant IndefArt NumPl) (UseN woman_N))
+LangEng: women
+Lang: UttNP (DetCN (DetQuant this_Quant NumSg) (UseN woman_N))
+LangEng: this woman
+Lang: UttNP (DetCN (DetQuant that_Quant NumSg) (UseN woman_N))
+LangEng: that woman
+Lang: UttNP (DetCN (DetQuant this_Quant NumPl) (UseN woman_N))
+LangEng: these women
+Lang: UttNP (DetCN (DetQuant that_Quant NumPl) (UseN woman_N))
+LangEng: those women
+Lang: UttNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N))
+LangEng: my house
+Lang: UttNP (DetCN (DetQuant DefArt NumSg) (UseN house_N))
+LangEng: the house
+Lang: UttNP (DetCN (DetQuant IndefArt NumSg) (UseN house_N))
+LangEng: a house
+Lang: UttNP (DetNP (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot1 n2))))))))
+LangEng: these twenty
+Lang: UttNP (DetNP (DetQuant this_Quant (NumCard (NumDigits (IIDig D_2 (IDig D_1))))))
+LangEng: these 2 &+ 1
+Lang: UttNP (DetNP (DetQuant this_Quant (NumCard (AdNum almost_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))))))
+LangEng: these almost five
+Lang: UttNP (DetNP (DetQuant this_Quant (NumCard (AdNum almost_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))))))
+LangEng: these almost five
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n7))))))
+LangEng: seven
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n7)))))))))
+LangEng: seven
+Lang: UttAP (AdjOrd (OrdSuperl small_A))
+LangEng: smallest
+Lang: UttNP (DetNP (DetQuantOrd IndefArt NumPl (OrdSuperl small_A)))
+LangEng: smallest
+Lang: UttCard (AdNum (AdnCAdv more_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))))))
+LangEng: more than eight
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (AdNum (AdnCAdv more_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8))))))))))
+LangEng: more than eight
+Lang: UttCard (NumNumeral (num (pot2as3 (pot2 (pot0 n9)))))
+LangEng: nine hundred
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot2 (pot0 n9))))))))
+LangEng: nine hundred
+Lang: UttCard (NumNumeral (num (pot2as3 (pot2plus (pot0 n9) pot111))))
+LangEng: nine hundred and eleven
+Lang: UttNP (ConjNP and_Conj (BaseNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot2 (pot0 n9)))))))) (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 pot111)))))))))
+LangEng: nine hundred and eleven
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot2plus (pot0 n9) pot111)))))))
+LangEng: nine hundred and eleven
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8))))))
+LangEng: eight
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))))))))
+LangEng: eight
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot1to19 n3)))))
+LangEng: thirteen
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot1to19 n3))))))))
+LangEng: thirteen
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8))))))
+LangEng: eight
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))))))))
+LangEng: eight
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))))
+LangEng: one
+Lang: UttNP (DetNP (DetQuant IndefArt NumSg))
+LangEng: one
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))))
+LangEng: one
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))
+LangEng: two
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))))))))
+LangEng: two
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n3))))))
+LangEng: three
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n3)))))))))
+LangEng: three
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n4))))))
+LangEng: four
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n4)))))))))
+LangEng: four
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
+LangEng: five
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))))
+LangEng: five
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n6))))))
+LangEng: six
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n6)))))))))
+LangEng: six
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n7))))))
+LangEng: seven
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n7)))))))))
+LangEng: seven
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8))))))
+LangEng: eight
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))))))))
+LangEng: eight
+Lang: UttCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n9))))))
+LangEng: nine
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n9)))))))))
+LangEng: nine
+Lang: UttCard (NumDigits (IDig D_4))
+LangEng: 4
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumDigits (IDig D_4)))))
+LangEng: 4
+Lang: UttCard (NumDigits (IIDig D_1 (IIDig D_2 (IIDig D_3 (IIDig D_3 (IIDig D_4 (IIDig D_8 (IDig D_6))))))))
+LangEng: 1 &+ , &+ 2 &+ 3 &+ 3 &+ , &+ 4 &+ 8 &+ 6
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (NumDigits (IIDig D_1 (IIDig D_2 (IIDig D_3 (IIDig D_3 (IIDig D_4 (IIDig D_8 (IDig D_6)))))))))))
+LangEng: 1 &+ , &+ 2 &+ 3 &+ 3 &+ , &+ 4 &+ 8 &+ 6
+Lang: UttCN (UseN house_N)
+LangEng: house
+Lang: UttNP (MassNP (UseN house_N))
+LangEng: house
+Lang: UttCN (AdvCN (UseN2 mother_N2) (PrepNP part_Prep (DetCN (DetQuant DefArt NumSg) (UseN king_N))))
+LangEng: mother of the king
+Lang: UttCN (AdvCN (UseN2 mother_N2) (PrepNP possess_Prep (DetCN (DetQuant DefArt NumSg) (UseN king_N))))
+LangEng: mother of the king
+Lang: UttCN (ComplN2 mother_N2 (DetCN (DetQuant DefArt NumSg) (UseN king_N)))
+LangEng: mother of the king
+Lang: UttCN (PartNP (UseN2 mother_N2) (DetCN (DetQuant DefArt NumSg) (UseN king_N)))
+LangEng: mother of the king
+Lang: UttCN (PossNP (UseN2 mother_N2) (DetCN (DetQuant DefArt NumSg) (UseN king_N)))
+LangEng: mother of the king
+Lang: UttNP (AdvNP (MassNP (UseN2 mother_N2)) (PrepNP part_Prep (DetCN (DetQuant DefArt NumSg) (UseN king_N))))
+LangEng: mother of the king
+Lang: UttNP (AdvNP (MassNP (UseN2 mother_N2)) (PrepNP possess_Prep (DetCN (DetQuant DefArt NumSg) (UseN king_N))))
+LangEng: mother of the king
+Lang: UttNP (MassNP (AdvCN (UseN2 mother_N2) (PrepNP part_Prep (DetCN (DetQuant DefArt NumSg) (UseN king_N)))))
+LangEng: mother of the king
+Lang: UttNP (MassNP (AdvCN (UseN2 mother_N2) (PrepNP possess_Prep (DetCN (DetQuant DefArt NumSg) (UseN king_N)))))
+LangEng: mother of the king
+Lang: UttNP (MassNP (ComplN2 mother_N2 (DetCN (DetQuant DefArt NumSg) (UseN king_N))))
+LangEng: mother of the king
+Lang: UttNP (MassNP (PartNP (UseN2 mother_N2) (DetCN (DetQuant DefArt NumSg) (UseN king_N))))
+LangEng: mother of the king
+Lang: UttNP (MassNP (PossNP (UseN2 mother_N2) (DetCN (DetQuant DefArt NumSg) (UseN king_N))))
+LangEng: mother of the king
+Lang: UttCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (ApposCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (ApposCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (ApposCN (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuant this_Quant NumSg))) (MassNP (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (ApposCN (UseN2 (ComplN3 distance_N3 (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (ComplN2 (Use2N3 distance_N3) (DetCN (DetQuant this_Quant NumSg) (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttCN (AdvCN (UseN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttCN (ApposCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (AdvNP (MassNP (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ApposCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ApposCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (AdvNP (MassNP (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ApposCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ApposCN (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuant this_Quant NumSg))) (AdvNP (MassNP (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ApposCN (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuant this_Quant NumSg))) (MassNP (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ApposCN (UseN2 (ComplN3 distance_N3 (DetNP (DetQuant this_Quant NumSg)))) (AdvNP (MassNP (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ApposCN (UseN2 (ComplN3 distance_N3 (DetNP (DetQuant this_Quant NumSg)))) (MassNP (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ComplN2 (Use2N3 distance_N3) (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ComplN2 (Use2N3 distance_N3) (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttCN (ComplN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (UseN city_N))) (UsePN paris_PN))
+LangEng: distance from this city to Paris
+Lang: UttCN (UseN2 (ComplN3 distance_N3 (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttCN (UseN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (UseN2 (Use2N3 distance_N3))) (PrepNP from_Prep (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (UseN2 (Use2N3 distance_N3))) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (UseN2 (Use3N3 distance_N3))) (PrepNP from_Prep (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (UseN2 (Use3N3 distance_N3))) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (AdvNP (MassNP (UseN2 (Use2N3 distance_N3))) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (AdvNP (MassNP (UseN2 (Use3N3 distance_N3))) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (UseN city_N))))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (UseN city_N))))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (ApposCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (ApposCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (ApposCN (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuant this_Quant NumSg))) (MassNP (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (ApposCN (UseN2 (ComplN3 distance_N3 (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (ComplN2 (Use2N3 distance_N3) (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (AdvNP (MassNP (UseN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (UseN city_N))))) (PrepNP to_Prep (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN)))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN)))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (ApposCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (ApposCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (ApposCN (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuant this_Quant NumSg))) (MassNP (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (ApposCN (UseN2 (ComplN3 distance_N3 (DetNP (DetQuant this_Quant NumSg)))) (MassNP (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (ComplN2 (Use2N3 distance_N3) (DetCN (DetQuant this_Quant NumSg) (UseN city_N))) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (AdvCN (UseN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (UseN city_N)))) (PrepNP to_Prep (UsePN paris_PN))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ApposCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (AdvNP (MassNP (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ApposCN (AdvCN (UseN2 (Use2N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ApposCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (AdvNP (MassNP (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ApposCN (AdvCN (UseN2 (Use3N3 distance_N3)) (PrepNP from_Prep (DetNP (DetQuant this_Quant NumSg)))) (MassNP (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ApposCN (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuant this_Quant NumSg))) (AdvNP (MassNP (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ApposCN (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuant this_Quant NumSg))) (MassNP (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ApposCN (UseN2 (ComplN3 distance_N3 (DetNP (DetQuant this_Quant NumSg)))) (AdvNP (MassNP (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ApposCN (UseN2 (ComplN3 distance_N3 (DetNP (DetQuant this_Quant NumSg)))) (MassNP (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ComplN2 (Use2N3 distance_N3) (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN)))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ComplN2 (Use2N3 distance_N3) (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (ComplN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (UseN city_N))) (UsePN paris_PN)))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (UseN2 (ComplN3 distance_N3 (AdvNP (DetCN (DetQuant this_Quant NumSg) (UseN city_N)) (PrepNP to_Prep (UsePN paris_PN))))))
+LangEng: distance from this city to Paris
+Lang: UttNP (MassNP (UseN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (AdvCN (UseN city_N) (PrepNP to_Prep (UsePN paris_PN)))))))
+LangEng: distance from this city to Paris
+Lang: UttCN (UseN2 mother_N2)
+LangEng: mother
+Lang: UttNP (MassNP (UseN2 mother_N2))
+LangEng: mother
+Lang: UttCN (UseN2 (Use2N3 distance_N3))
+LangEng: distance
+Lang: UttCN (UseN2 (Use3N3 distance_N3))
+LangEng: distance
+Lang: UttNP (MassNP (UseN2 (Use2N3 distance_N3)))
+LangEng: distance
+Lang: UttNP (MassNP (UseN2 (Use3N3 distance_N3)))
+LangEng: distance
+Lang: UttCN (AdjCN (PositA big_A) (UseN house_N))
+LangEng: big house
+Lang: UttNP (MassNP (AdjCN (PositA big_A) (UseN house_N)))
+LangEng: big house
+Lang: UttCN (AdjCN (PositA big_A) (AdjCN (PositA blue_A) (UseN house_N)))
+LangEng: big blue house
+Lang: UttNP (MassNP (AdjCN (PositA big_A) (AdjCN (PositA blue_A) (UseN house_N))))
+LangEng: big blue house
+Lang: UttCN (AdjCN (AdAP very_AdA (PositA big_A)) (UseN house_N))
+LangEng: very big house
+Lang: UttNP (MassNP (AdjCN (AdAP very_AdA (PositA big_A)) (UseN house_N)))
+LangEng: very big house
+Lang: UttCN (AdjCN (AdAP very_AdA (PositA big_A)) (AdjCN (PositA blue_A) (UseN house_N)))
+LangEng: very big blue house
+Lang: UttNP (MassNP (AdjCN (AdAP very_AdA (PositA big_A)) (AdjCN (PositA blue_A) (UseN house_N))))
+LangEng: very big blue house
+Lang: UttCN (RelCN (UseN man_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))
+LangEng: man whom she loves
+Lang: UttCN (SentCN (UseN man_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))
+LangEng: man whom she loves
+Lang: UttCN (SentCN (UseN man_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))
+LangEng: man whom she loves
+Lang: UttNP (MassNP (RelCN (UseN man_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))
+LangEng: man whom she loves
+Lang: UttNP (MassNP (SentCN (UseN man_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))))
+LangEng: man whom she loves
+Lang: UttNP (MassNP (SentCN (UseN man_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))))
+LangEng: man whom she loves
+Lang: UttCN (AdjCN (PositA old_A) (RelCN (UseN man_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))
+LangEng: old man whom she loves
+Lang: UttCN (AdjCN (PositA old_A) (SentCN (UseN man_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))))
+LangEng: old man whom she loves
+Lang: UttCN (AdjCN (PositA old_A) (SentCN (UseN man_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))))
+LangEng: old man whom she loves
+Lang: UttCN (RelCN (AdjCN (PositA old_A) (UseN man_N)) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))
+LangEng: old man whom she loves
+Lang: UttCN (SentCN (AdjCN (PositA old_A) (UseN man_N)) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))
+LangEng: old man whom she loves
+Lang: UttCN (SentCN (AdjCN (PositA old_A) (UseN man_N)) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))
+LangEng: old man whom she loves
+Lang: UttNP (MassNP (AdjCN (PositA old_A) (RelCN (UseN man_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))))
+LangEng: old man whom she loves
+Lang: UttNP (MassNP (AdjCN (PositA old_A) (SentCN (UseN man_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))))
+LangEng: old man whom she loves
+Lang: UttNP (MassNP (AdjCN (PositA old_A) (SentCN (UseN man_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))))
+LangEng: old man whom she loves
+Lang: UttNP (MassNP (RelCN (AdjCN (PositA old_A) (UseN man_N)) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))
+LangEng: old man whom she loves
+Lang: UttNP (MassNP (SentCN (AdjCN (PositA old_A) (UseN man_N)) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))))
+LangEng: old man whom she loves
+Lang: UttNP (MassNP (SentCN (AdjCN (PositA old_A) (UseN man_N)) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))))
+LangEng: old man whom she loves
+Lang: UttCN (AdvCN (UseN house_N) (PrepNP on_Prep (DetCN (DetQuant DefArt NumSg) (UseN hill_N))))
+LangEng: house on the hill
+Lang: UttNP (AdvNP (MassNP (UseN house_N)) (PrepNP on_Prep (DetCN (DetQuant DefArt NumSg) (UseN hill_N))))
+LangEng: house on the hill
+Lang: UttNP (MassNP (AdvCN (UseN house_N) (PrepNP on_Prep (DetCN (DetQuant DefArt NumSg) (UseN hill_N)))))
+LangEng: house on the hill
+Lang: UttCN (AdjCN (PositA big_A) (AdvCN (UseN house_N) (PrepNP on_Prep (DetCN (DetQuant DefArt NumSg) (UseN hill_N)))))
+LangEng: big house on the hill
+Lang: UttCN (AdvCN (AdjCN (PositA big_A) (UseN house_N)) (PrepNP on_Prep (DetCN (DetQuant DefArt NumSg) (UseN hill_N))))
+LangEng: big house on the hill
+Lang: UttNP (AdvNP (MassNP (AdjCN (PositA big_A) (UseN house_N))) (PrepNP on_Prep (DetCN (DetQuant DefArt NumSg) (UseN hill_N))))
+LangEng: big house on the hill
+Lang: UttNP (MassNP (AdjCN (PositA big_A) (AdvCN (UseN house_N) (PrepNP on_Prep (DetCN (DetQuant DefArt NumSg) (UseN hill_N))))))
+LangEng: big house on the hill
+Lang: UttNP (MassNP (AdvCN (AdjCN (PositA big_A) (UseN house_N)) (PrepNP on_Prep (DetCN (DetQuant DefArt NumSg) (UseN hill_N)))))
+LangEng: big house on the hill
+Lang: UttCN (AdvCN (UseN rule_N) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))
+LangEng: rule that she sleeps
+Lang: UttCN (SentCN (UseN rule_N) (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))
+LangEng: rule that she sleeps
+Lang: UttNP (AdvNP (MassNP (UseN rule_N)) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))
+LangEng: rule that she sleeps
+Lang: UttNP (MassNP (AdvCN (UseN rule_N) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))))
+LangEng: rule that she sleeps
+Lang: UttNP (MassNP (SentCN (UseN rule_N) (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))))
+LangEng: rule that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (MassNP (ApposCN (ApposCN (UseN rule_N) (DetNP (DetQuant that_Quant NumSg))) (UsePron she_Pron))) (UseV sleep_V)))
+LangEng: rule that she sleeps
+Lang: UttCN (AdvCN (UseN question_N) (SubjS if_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))
+LangEng: question if she sleeps
+Lang: UttCN (SentCN (UseN question_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePron she_Pron) (UseV sleep_V))))))
+LangEng: question if she sleeps
+Lang: UttNP (AdvNP (MassNP (UseN question_N)) (SubjS if_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))
+LangEng: question if she sleeps
+Lang: UttNP (MassNP (AdvCN (UseN question_N) (SubjS if_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))))
+LangEng: question if she sleeps
+Lang: UttNP (MassNP (SentCN (UseN question_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: question if she sleeps
+Lang: UttCN (SentCN (UseN reason_N) (EmbedVP (UseV sleep_V)))
+LangEng: reason to sleep
+Lang: UttNP (MassNP (SentCN (UseN reason_N) (EmbedVP (UseV sleep_V))))
+LangEng: reason to sleep
+Lang: UttCN (SentCN (UseN reason_N) (EmbedVP (UseV sleep_V)))
+LangEng: reason to sleep
+Lang: UttNP (MassNP (SentCN (UseN reason_N) (EmbedVP (UseV sleep_V))))
+LangEng: reason to sleep
+Lang: UttCN (ApposCN (UseN king_N) (UsePN john_PN))
+LangEng: king John
+Lang: UttNP (MassNP (ApposCN (UseN king_N) (UsePN john_PN)))
+LangEng: king John
+Lang: UttCN (AdjCN (PositA old_A) (ApposCN (UseN king_N) (UsePN john_PN)))
+LangEng: old king John
+Lang: UttCN (ApposCN (AdjCN (PositA old_A) (UseN king_N)) (UsePN john_PN))
+LangEng: old king John
+Lang: UttNP (MassNP (AdjCN (PositA old_A) (ApposCN (UseN king_N) (UsePN john_PN))))
+LangEng: old king John
+Lang: UttNP (MassNP (ApposCN (AdjCN (PositA old_A) (UseN king_N)) (UsePN john_PN)))
+LangEng: old king John
+Lang: UttAP (PositA warm_A)
+LangEng: warm
+Lang: UttAP (ComparA warm_A (UsePN paris_PN))
+LangEng: warmer than Paris
+Lang: UttAP (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron she_Pron)))
+LangEng: married to her
+Lang: UttAP (ComplA2 married_A2 (UsePron she_Pron))
+LangEng: married to her
+Lang: UttAP (UseA2 married_A2)
+LangEng: married
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ImpersCl (AdvVP (UseComp (CompAP (PositA good_A))) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ImpersCl (UseComp (CompAP (AdvAP (PositA good_A) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ImpersCl (UseComp (CompAP (SentAP (PositA good_A) (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant DefArt NumSg)) (AdvVP (UseComp (CompAP (PositA good_A))) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant DefArt NumSg)) (UseComp (CompAP (AdvAP (PositA good_A) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant DefArt NumSg)) (UseComp (CompAP (SentAP (PositA good_A) (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron it_Pron) (AdvVP (UseComp (CompAP (PositA good_A))) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron it_Pron) (UseComp (CompAP (AdvAP (PositA good_A) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron it_Pron) (UseComp (CompAP (SentAP (PositA good_A) (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (weather_adjCl (AdvAP (PositA good_A) (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (weather_adjCl (SentAP (PositA good_A) (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))))))
+LangEng: it is good that she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (ImpersCl (UseComp (CompAP (SentAP (PositA uncertain_A) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))))))
+LangEng: it is uncertain who sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant DefArt NumSg)) (UseComp (CompAP (SentAP (PositA uncertain_A) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))))))
+LangEng: it is uncertain who sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron it_Pron) (UseComp (CompAP (SentAP (PositA uncertain_A) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))))))
+LangEng: it is uncertain who sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (weather_adjCl (SentAP (PositA uncertain_A) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))))
+LangEng: it is uncertain who sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAP (SentAP (PositA ready_A) (EmbedVP (UseV sleep_V)))))))
+LangEng: she is ready to sleep
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseComp (CompAP (SentAP (PositA ready_A) (EmbedVP (UseV sleep_V)))))))
+LangEng: she is ready to sleep
+Lang: UttAP (AdAP very_AdA (PositA old_A))
+LangEng: very old
+Lang: UttAP (AdAP very_AdA (AdAP very_AdA (PositA old_A)))
+LangEng: very very old
+Lang: UttAP (ConjAP or_Conj (BaseAP (PositA old_A) (PositA young_A)))
+LangEng: old or young
+Lang: UttAP (ConjAP and_Conj (ConsAP (PositA old_A) (BaseAP (PositA big_A) (PositA warm_A))))
+LangEng: old , big and warm
+Lang: UttAP (AdjOrd (OrdSuperl old_A))
+LangEng: oldest
+Lang: UttNP (DetNP (DetQuantOrd IndefArt NumPl (OrdSuperl old_A)))
+LangEng: oldest
+Lang: UttAP (CAdvAP as_CAdv (PositA old_A) (UsePron she_Pron))
+LangEng: as old as she
+Lang: UttAP (ReflA2 married_A2)
+LangEng: married to itself
+Lang: UttAP (UseComparA warm_A)
+LangEng: warmer
+Lang: UttAdv (PositAdvAdj warm_A)
+LangEng: warmly
+Lang: UttAdv (PrepNP in_Prep (DetCN (DetQuant DefArt NumSg) (UseN house_N)))
+LangEng: in the house
+Lang: UttAdv (SubjS when_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: when she sleeps
+Lang: UttAdv (ComparAdvAdj more_CAdv warm_A (UsePron he_Pron))
+LangEng: more warmly than he
+Lang: UttAdv (ComparAdvAdjS more_CAdv warm_A (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron he_Pron) (UseV run_V))))
+LangEng: more warmly than he runs
+Lang: UttAdv (AdAdv very_AdA (PositAdvAdj warm_A))
+LangEng: very warmly
+Lang: UttAdv (ConjAdv and_Conj (BaseAdv here_Adv now_Adv))
+LangEng: here and now
+Lang: UttAdv (ConjAdv and_Conj (ConsAdv (PrepNP with_Prep (UsePron she_Pron)) (BaseAdv here_Adv now_Adv)))
+LangEng: with her , here and now
+Lang: UttQS (UseQCl (TTAnt TCond AAnter) PNeg (QuestVP whoSg_IP (UseV sleep_V)))
+LangEng: who wouldn't have slept
+Lang: UttQS (UseQCl (TTAnt TCond AAnter) PNeg (QuestVP whoPl_IP (UseV sleep_V)))
+LangEng: who wouldn't have slept
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestCl (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP (UseV sleep_V) here_Adv)))
+LangEng: who sleeps here
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))
+LangEng: who sleeps
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2a love_V2) (UsePron she_Pron))))
+LangEng: who loves her
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))) (UsePron she_Pron))))
+LangEng: who sends it to her
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash2V3 send_V3 (UsePron it_Pron)) (UsePron she_Pron))))
+LangEng: who sends it to her
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash3V3 send_V3 (UsePron she_Pron)) (DetNP (DetQuant DefArt NumSg)))))
+LangEng: who sends it to her
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash3V3 send_V3 (UsePron she_Pron)) (UsePron it_Pron))))
+LangEng: who sends it to her
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVV want_VV (UseV sleep_V))))
+LangEng: who wants to sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV sleep_V))))))
+LangEng: who says that I sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVQ wonder_VQ (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))))
+LangEng: who wonders who sleeps
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVA become_VA (PositA old_A))))
+LangEng: who becomes old
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVA become_VA (AdAP very_AdA (PositA old_A)))))
+LangEng: who becomes very old
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (DetNP (DetQuant DefArt NumSg)))))
+LangEng: who paints it red
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))
+LangEng: who paints it red
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (DetNP (DetQuant DefArt NumSg)))))
+LangEng: who paints it very red
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (UsePron it_Pron))))
+LangEng: who paints it very red
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (UseV sleep_V)))) (UsePron he_Pron))))
+LangEng: who answers to him that we sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))) (UsePron he_Pron))))
+LangEng: who asks him who sleeps
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2V beg_V2V (UseV sleep_V)) (UsePron he_Pron))))
+LangEng: who begs him to sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (PositA old_A)))))
+LangEng: who is old
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (ComparA old_A (UsePron he_Pron))))))
+LangEng: who is older than he
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP (UseComp (CompAP (UseA2 married_A2))) (PrepNP to_Prep (UsePron he_Pron)))))
+LangEng: who is married to him
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (VPSlashPrep (UseComp (CompAP (UseA2 married_A2))) to_Prep) (UsePron he_Pron))))
+LangEng: who is married to him
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron)))))))
+LangEng: who is married to him
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (ComplA2 married_A2 (UsePron he_Pron))))))
+LangEng: who is married to him
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (AdAP very_AdA (PositA old_A))))))
+LangEng: who is very old
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whoPl_IP) (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))
+LangEng: who is the woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whoSg_IP) (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))
+LangEng: who is the woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))))
+LangEng: who is the woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whoPl_IP) (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))
+LangEng: who is a woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whoSg_IP) (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))
+LangEng: who is a woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompCN (UseN woman_N)))))
+LangEng: who is a woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))))
+LangEng: who is a woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whoPl_IP) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))
+LangEng: who is an old woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whoSg_IP) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))
+LangEng: who is an old woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompCN (AdjCN (PositA old_A) (UseN woman_N))))))
+LangEng: who is an old woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))))
+LangEng: who is an old woman
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP UseCopula here_Adv)))
+LangEng: who is here
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAdv here_Adv))))
+LangEng: who is here
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdVVP always_AdV (UseV sleep_V))))
+LangEng: who always sleeps
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIAdv why_IAdv (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: why does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIAdv (PrepIP with_Prep whoPl_IP) (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIAdv (PrepIP with_Prep whoSg_IP) (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashPrep (PredVP (UsePron she_Pron) (UseV sleep_V)) with_Prep)))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (VPSlashPrep (UseV sleep_V) with_Prep))))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashPrep (PredVP (UsePron she_Pron) (UseV sleep_V)) with_Prep)))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (VPSlashPrep (UseV sleep_V) with_Prep))))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIAdv where_IAdv (PredVP (UsePron she_Pron) UseCopula)))
+LangEng: where is she
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIAdv where_IAdv) (UsePron she_Pron)))
+LangEng: where is she
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whoPl_IP) (DetCN (DetQuant this_Quant NumSg) (UseN man_N))))
+LangEng: who is this man
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whoSg_IP) (DetCN (DetQuant this_Quant NumSg) (UseN man_N))))
+LangEng: who is this man
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant this_Quant NumSg) (UseN man_N))))))
+LangEng: who is this man
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (ExistIP (IdetCN (IdetQuant which_IQuant NumSg) (UseN city_N))))
+LangEng: which city is there
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP (IdetCN (IdetQuant which_IQuant NumSg) (UseN city_N)) (AdvVP UseCopula there7to_Adv)))
+LangEng: which city is there
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP (IdetCN (IdetQuant which_IQuant NumSg) (UseN city_N)) (AdvVP UseCopula there_Adv)))
+LangEng: which city is there
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP (IdetCN (IdetQuant which_IQuant NumSg) (UseN city_N)) (UseComp (CompAdv there7to_Adv))))
+LangEng: which city is there
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP (IdetCN (IdetQuant which_IQuant NumSg) (UseN city_N)) (UseComp (CompAdv there_Adv))))
+LangEng: which city is there
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (UsePron she_Pron)))))
+LangEng: who is her
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a love_V2)) today_Adv)))
+LangEng: whom does she love today
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a love_V2) today_Adv))))
+LangEng: whom does she love today
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a love_V2)) today_Adv)))
+LangEng: whom does she love today
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a love_V2) today_Adv))))
+LangEng: whom does she love today
+Lang: UttIP (IdetCN (IdetQuant which_IQuant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (AdjCN (PositA big_A) (UseN city_N)))
+LangEng: which five big cities
+Lang: UttIP (IdetCN (IdetQuant which_IQuant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN city_N))
+LangEng: which five cities
+Lang: UttIP (IdetIP (IdetQuant which_IQuant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))))
+LangEng: which five
+Lang: UttIP (IdetCN (IdetQuant which_IQuant NumSg) (AdjCN (PositA big_A) (UseN city_N)))
+LangEng: which big city
+Lang: UttIP (IdetCN (IdetQuant which_IQuant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (AdjCN (PositA big_A) (UseN city_N)))
+LangEng: which five big cities
+Lang: UttIP (IdetCN (IdetQuant which_IQuant NumSg) (UseN city_N))
+LangEng: which city
+Lang: UttIP (AdvIP whoPl_IP (PrepNP in_Prep (UsePN paris_PN)))
+LangEng: who in Paris
+Lang: UttIP (AdvIP whoSg_IP (PrepNP in_Prep (UsePN paris_PN)))
+LangEng: who in Paris
+Lang: UttIP whatPl_IP
+LangEng: what
+Lang: UttIP whatSg_IP
+LangEng: what
+Lang: UttIP whoPl_IP
+LangEng: who
+Lang: UttIP whoSg_IP
+LangEng: who
+Lang: UttIAdv (PrepIP in_Prep (IdetCN (IdetQuant which_IQuant NumSg) (UseN city_N)))
+LangEng: in which city
+Lang: UttIAdv (AdvIAdv where_IAdv (PrepNP in_Prep (UsePN paris_PN)))
+LangEng: where in Paris
+Lang: UttIP (IdetCN (IdetQuant which_IQuant NumPl) (UseN house_N))
+LangEng: which houses
+Lang: UttIP (IdetCN (IdetQuant which_IQuant NumSg) (UseN house_N))
+LangEng: which house
+Lang: UttIP (IdetCN (IdetQuant which_IQuant NumSg) (UseN house_N))
+LangEng: which house
+Lang: UttIP (IdetCN (IdetQuant which_IQuant NumPl) (UseN house_N))
+LangEng: which houses
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TCond AAnter) PNeg (RelVP IdRP (UseV sleep_V))))
+LangEng: woman who wouldn't have slept
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TCond AAnter) PNeg (QuestVP whoSg_IP (UseV sleep_V)))))
+LangEng: woman who wouldn't have slept
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TCond AAnter) PNeg (QuestVP whoPl_IP (UseV sleep_V)))))
+LangEng: woman who wouldn't have slept
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TCond AAnter) PNeg (RelVP IdRP (UseV sleep_V)))))
+LangEng: woman who wouldn't have slept
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TCond AAnter) PNeg (QuestVP whoSg_IP (UseV sleep_V))))))
+LangEng: woman who wouldn't have slept
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TCond AAnter) PNeg (QuestVP whoPl_IP (UseV sleep_V))))))
+LangEng: woman who wouldn't have slept
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V))))
+LangEng: woman who sleeps
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))
+LangEng: woman who sleeps
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V)))))
+LangEng: woman who sleeps
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))))
+LangEng: woman who sleeps
+Lang: UttCN (RelCN (UseN woman_N) (ConjRS or_Conj (BaseRS (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V))) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron we_Pron) (SlashV2a love_V2)))))))
+LangEng: woman who sleeps or whom we love
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (ConjRS or_Conj (BaseRS (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V))) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron we_Pron) (SlashV2a love_V2))))))))
+LangEng: woman who sleeps or whom we love
+Lang: UttCN (AdvCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V)))) here_Adv)
+LangEng: woman who sleeps here
+Lang: UttCN (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))) here_Adv)
+LangEng: woman who sleeps here
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (AdvVP (UseV sleep_V) here_Adv))))
+LangEng: woman who sleeps here
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP (UseV sleep_V) here_Adv)))))
+LangEng: woman who sleeps here
+Lang: UttNP (AdvNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V))))) here_Adv)
+LangEng: woman who sleeps here
+Lang: UttNP (AdvNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))) here_Adv)
+LangEng: woman who sleeps here
+Lang: UttNP (MassNP (AdvCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V)))) here_Adv))
+LangEng: woman who sleeps here
+Lang: UttNP (MassNP (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))) here_Adv))
+LangEng: woman who sleeps here
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (AdvVP (UseV sleep_V) here_Adv)))))
+LangEng: woman who sleeps here
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP (UseV sleep_V) here_Adv))))))
+LangEng: woman who sleeps here
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V))))
+LangEng: woman who sleeps
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))
+LangEng: woman who sleeps
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V)))))
+LangEng: woman who sleeps
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))))
+LangEng: woman who sleeps
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a love_V2) (UsePron he_Pron)))))
+LangEng: woman who loves him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2a love_V2) (UsePron he_Pron))))))
+LangEng: woman who loves him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a love_V2) (UsePron he_Pron))))))
+LangEng: woman who loves him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2a love_V2) (UsePron he_Pron)))))))
+LangEng: woman who loves him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))) (UsePron he_Pron)))))
+LangEng: woman who sends it to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (Slash2V3 send_V3 (UsePron it_Pron)) (UsePron he_Pron)))))
+LangEng: woman who sends it to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (DetNP (DetQuant DefArt NumSg))))))
+LangEng: woman who sends it to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (UsePron it_Pron)))))
+LangEng: woman who sends it to him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))) (UsePron he_Pron))))))
+LangEng: woman who sends it to him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash2V3 send_V3 (UsePron it_Pron)) (UsePron he_Pron))))))
+LangEng: woman who sends it to him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (DetNP (DetQuant DefArt NumSg)))))))
+LangEng: woman who sends it to him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (UsePron it_Pron))))))
+LangEng: woman who sends it to him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))) (UsePron he_Pron))))))
+LangEng: woman who sends it to him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (Slash2V3 send_V3 (UsePron it_Pron)) (UsePron he_Pron))))))
+LangEng: woman who sends it to him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (DetNP (DetQuant DefArt NumSg)))))))
+LangEng: woman who sends it to him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (UsePron it_Pron))))))
+LangEng: woman who sends it to him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))) (UsePron he_Pron)))))))
+LangEng: woman who sends it to him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash2V3 send_V3 (UsePron it_Pron)) (UsePron he_Pron)))))))
+LangEng: woman who sends it to him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (DetNP (DetQuant DefArt NumSg))))))))
+LangEng: woman who sends it to him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (Slash3V3 send_V3 (UsePron he_Pron)) (UsePron it_Pron)))))))
+LangEng: woman who sends it to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVV want_VV (UseV sleep_V)))))
+LangEng: woman who wants to sleep
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVV want_VV (UseV sleep_V))))))
+LangEng: woman who wants to sleep
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVV want_VV (UseV sleep_V))))))
+LangEng: woman who wants to sleep
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVV want_VV (UseV sleep_V)))))))
+LangEng: woman who wants to sleep
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV sleep_V)))))))
+LangEng: woman who says that I sleep
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV sleep_V))))))))
+LangEng: woman who says that I sleep
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV sleep_V))))))))
+LangEng: woman who says that I sleep
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV sleep_V)))))))))
+LangEng: woman who says that I sleep
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVQ wonder_VQ (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))))
+LangEng: woman who wonders who sleeps
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVQ wonder_VQ (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))))))
+LangEng: woman who wonders who sleeps
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVQ wonder_VQ (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))))))
+LangEng: woman who wonders who sleeps
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVQ wonder_VQ (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))))))
+LangEng: woman who wonders who sleeps
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVA become_VA (PositA old_A)))))
+LangEng: woman who becomes old
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVA become_VA (PositA old_A))))))
+LangEng: woman who becomes old
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVA become_VA (PositA old_A))))))
+LangEng: woman who becomes old
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVA become_VA (PositA old_A)))))))
+LangEng: woman who becomes old
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVA become_VA (AdAP very_AdA (PositA old_A))))))
+LangEng: woman who becomes very old
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVA become_VA (AdAP very_AdA (PositA old_A)))))))
+LangEng: woman who becomes very old
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplVA become_VA (AdAP very_AdA (PositA old_A)))))))
+LangEng: woman who becomes very old
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplVA become_VA (AdAP very_AdA (PositA old_A))))))))
+LangEng: woman who becomes very old
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (DetNP (DetQuant DefArt NumSg))))))
+LangEng: woman who paints it red
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron)))))
+LangEng: woman who paints it red
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (DetNP (DetQuant DefArt NumSg)))))))
+LangEng: woman who paints it red
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))))
+LangEng: woman who paints it red
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (DetNP (DetQuant DefArt NumSg)))))))
+LangEng: woman who paints it red
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))))
+LangEng: woman who paints it red
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (DetNP (DetQuant DefArt NumSg))))))))
+LangEng: woman who paints it red
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron)))))))
+LangEng: woman who paints it red
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (DetNP (DetQuant DefArt NumSg))))))
+LangEng: woman who paints it very red
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (UsePron it_Pron)))))
+LangEng: woman who paints it very red
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (DetNP (DetQuant DefArt NumSg)))))))
+LangEng: woman who paints it very red
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (UsePron it_Pron))))))
+LangEng: woman who paints it very red
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (DetNP (DetQuant DefArt NumSg)))))))
+LangEng: woman who paints it very red
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (UsePron it_Pron))))))
+LangEng: woman who paints it very red
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (DetNP (DetQuant DefArt NumSg))))))))
+LangEng: woman who paints it very red
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (PositA red_A))) (UsePron it_Pron)))))))
+LangEng: woman who paints it very red
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (UseV sleep_V)))) (UsePron he_Pron)))))
+LangEng: woman who answers to him that we sleep
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (UseV sleep_V)))) (UsePron he_Pron))))))
+LangEng: woman who answers to him that we sleep
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (UseV sleep_V)))) (UsePron he_Pron))))))
+LangEng: woman who answers to him that we sleep
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (UseV sleep_V)))) (UsePron he_Pron)))))))
+LangEng: woman who answers to him that we sleep
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))) (UsePron he_Pron)))))
+LangEng: woman who asks him who sleeps
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))) (UsePron he_Pron))))))
+LangEng: woman who asks him who sleeps
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))) (UsePron he_Pron))))))
+LangEng: woman who asks him who sleeps
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))) (UsePron he_Pron)))))))
+LangEng: woman who asks him who sleeps
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2V beg_V2V (UseV sleep_V)) (UsePron he_Pron)))))
+LangEng: woman who begs him to sleep
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2V beg_V2V (UseV sleep_V)) (UsePron he_Pron))))))
+LangEng: woman who begs him to sleep
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2V beg_V2V (UseV sleep_V)) (UsePron he_Pron))))))
+LangEng: woman who begs him to sleep
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2V beg_V2V (UseV sleep_V)) (UsePron he_Pron)))))))
+LangEng: woman who begs him to sleep
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA old_A))))))
+LangEng: woman who is old
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (PositA old_A)))))))
+LangEng: woman who is old
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (PositA old_A)))))))
+LangEng: woman who is old
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (PositA old_A))))))))
+LangEng: woman who is old
+Lang: UttCN (AdjCN (ComparA old_A (UsePron he_Pron)) (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))))
+LangEng: woman who is older than he
+Lang: UttCN (AdjCN (ComparA old_A (UsePron he_Pron)) (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))))
+LangEng: woman who is older than he
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (ComparA old_A (UsePron he_Pron)))))))
+LangEng: woman who is older than he
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (ComparA old_A (UsePron he_Pron))))))))
+LangEng: woman who is older than he
+Lang: UttNP (MassNP (AdjCN (ComparA old_A (UsePron he_Pron)) (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula)))))
+LangEng: woman who is older than he
+Lang: UttNP (MassNP (AdjCN (ComparA old_A (UsePron he_Pron)) (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula))))))
+LangEng: woman who is older than he
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (ComparA old_A (UsePron he_Pron))))))))
+LangEng: woman who is older than he
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (ComparA old_A (UsePron he_Pron)))))))))
+LangEng: woman who is older than he
+Lang: UttCN (AdjCN (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron))) (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))))
+LangEng: woman who is married to him
+Lang: UttCN (AdjCN (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron))) (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))))
+LangEng: woman who is married to him
+Lang: UttCN (AdjCN (ComplA2 married_A2 (UsePron he_Pron)) (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))))
+LangEng: woman who is married to him
+Lang: UttCN (AdjCN (ComplA2 married_A2 (UsePron he_Pron)) (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))))
+LangEng: woman who is married to him
+Lang: UttCN (AdvCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (UseA2 married_A2)))))) (PrepNP to_Prep (UsePron he_Pron)))
+LangEng: woman who is married to him
+Lang: UttCN (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (UseA2 married_A2))))))) (PrepNP to_Prep (UsePron he_Pron)))
+LangEng: woman who is married to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (AdvVP (UseComp (CompAP (UseA2 married_A2))) (PrepNP to_Prep (UsePron he_Pron))))))
+LangEng: woman who is married to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (VPSlashPrep (UseComp (CompAP (UseA2 married_A2))) to_Prep) (UsePron he_Pron)))))
+LangEng: woman who is married to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron))))))))
+LangEng: woman who is married to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (ComplA2 married_A2 (UsePron he_Pron)))))))
+LangEng: woman who is married to him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP (UseComp (CompAP (UseA2 married_A2))) (PrepNP to_Prep (UsePron he_Pron)))))))
+LangEng: woman who is married to him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (VPSlashPrep (UseComp (CompAP (UseA2 married_A2))) to_Prep) (UsePron he_Pron))))))
+LangEng: woman who is married to him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron)))))))))
+LangEng: woman who is married to him
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (ComplA2 married_A2 (UsePron he_Pron))))))))
+LangEng: woman who is married to him
+Lang: UttNP (AdvNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (UseA2 married_A2))))))) (PrepNP to_Prep (UsePron he_Pron)))
+LangEng: woman who is married to him
+Lang: UttNP (AdvNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (UseA2 married_A2)))))))) (PrepNP to_Prep (UsePron he_Pron)))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (AdjCN (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron))) (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula)))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (AdjCN (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron))) (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (AdjCN (ComplA2 married_A2 (UsePron he_Pron)) (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula)))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (AdjCN (ComplA2 married_A2 (UsePron he_Pron)) (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (AdvCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (UseA2 married_A2)))))) (PrepNP to_Prep (UsePron he_Pron))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (UseA2 married_A2))))))) (PrepNP to_Prep (UsePron he_Pron))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (AdvVP (UseComp (CompAP (UseA2 married_A2))) (PrepNP to_Prep (UsePron he_Pron)))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (VPSlashPrep (UseComp (CompAP (UseA2 married_A2))) to_Prep) (UsePron he_Pron))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron)))))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (ComplA2 married_A2 (UsePron he_Pron))))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP (UseComp (CompAP (UseA2 married_A2))) (PrepNP to_Prep (UsePron he_Pron))))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (ComplSlash (VPSlashPrep (UseComp (CompAP (UseA2 married_A2))) to_Prep) (UsePron he_Pron)))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (AdvAP (UseA2 married_A2) (PrepNP to_Prep (UsePron he_Pron))))))))))
+LangEng: woman who is married to him
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (ComplA2 married_A2 (UsePron he_Pron)))))))))
+LangEng: woman who is married to him
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (AdAP very_AdA (PositA old_A)))))))
+LangEng: woman who is very old
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (AdAP very_AdA (PositA old_A))))))))
+LangEng: woman who is very old
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAP (AdAP very_AdA (PositA old_A))))))))
+LangEng: woman who is very old
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAP (AdAP very_AdA (PositA old_A)))))))))
+LangEng: woman who is very old
+Lang: UttCN (ApposCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))) (DetCN (DetQuant DefArt NumSg) (UseN woman_N)))
+LangEng: woman who is the woman
+Lang: UttCN (ApposCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))) (DetCN (DetQuant DefArt NumSg) (UseN woman_N)))
+LangEng: woman who is the woman
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompNP (DetCN (DetQuant DefArt NumSg) (UseN woman_N)))))))
+LangEng: woman who is the woman
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))))))
+LangEng: woman who is the woman
+Lang: UttNP (MassNP (ApposCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))) (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))
+LangEng: woman who is the woman
+Lang: UttNP (MassNP (ApposCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))) (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))
+LangEng: woman who is the woman
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompNP (DetCN (DetQuant DefArt NumSg) (UseN woman_N))))))))
+LangEng: woman who is the woman
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant DefArt NumSg) (UseN woman_N)))))))))
+LangEng: woman who is the woman
+Lang: UttCN (ApposCN (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))) (DetCN (DetQuant IndefArt NumSg) (UseN woman_N)))
+LangEng: student who is a woman
+Lang: UttCN (ApposCN (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))) (DetCN (DetQuant IndefArt NumSg) (UseN woman_N)))
+LangEng: student who is a woman
+Lang: UttCN (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompCN (UseN woman_N))))))
+LangEng: student who is a woman
+Lang: UttCN (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN woman_N)))))))
+LangEng: student who is a woman
+Lang: UttCN (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompCN (UseN woman_N)))))))
+LangEng: student who is a woman
+Lang: UttCN (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))))))
+LangEng: student who is a woman
+Lang: UttNP (MassNP (ApposCN (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))) (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))
+LangEng: student who is a woman
+Lang: UttNP (MassNP (ApposCN (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))) (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))
+LangEng: student who is a woman
+Lang: UttNP (MassNP (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompCN (UseN woman_N)))))))
+LangEng: student who is a woman
+Lang: UttNP (MassNP (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN woman_N))))))))
+LangEng: student who is a woman
+Lang: UttNP (MassNP (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompCN (UseN woman_N))))))))
+LangEng: student who is a woman
+Lang: UttNP (MassNP (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (UseN woman_N)))))))))
+LangEng: student who is a woman
+Lang: UttCN (ApposCN (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N))))
+LangEng: student who is an old woman
+Lang: UttCN (ApposCN (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N))))
+LangEng: student who is an old woman
+Lang: UttCN (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompCN (AdjCN (PositA old_A) (UseN woman_N)))))))
+LangEng: student who is an old woman
+Lang: UttCN (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N))))))))
+LangEng: student who is an old woman
+Lang: UttCN (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompCN (AdjCN (PositA old_A) (UseN woman_N))))))))
+LangEng: student who is an old woman
+Lang: UttCN (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))))))
+LangEng: student who is an old woman
+Lang: UttNP (MassNP (ApposCN (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))
+LangEng: student who is an old woman
+Lang: UttNP (MassNP (ApposCN (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))) (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))
+LangEng: student who is an old woman
+Lang: UttNP (MassNP (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompCN (AdjCN (PositA old_A) (UseN woman_N))))))))
+LangEng: student who is an old woman
+Lang: UttNP (MassNP (RelCN (UseN student_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N)))))))))
+LangEng: student who is an old woman
+Lang: UttNP (MassNP (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompCN (AdjCN (PositA old_A) (UseN woman_N)))))))))
+LangEng: student who is an old woman
+Lang: UttNP (MassNP (SentCN (UseN student_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA old_A) (UseN woman_N))))))))))
+LangEng: student who is an old woman
+Lang: UttCN (AdvCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))) here_Adv)
+LangEng: woman who is here
+Lang: UttCN (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))) here_Adv)
+LangEng: woman who is here
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (AdvVP UseCopula here_Adv))))
+LangEng: woman who is here
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAdv here_Adv)))))
+LangEng: woman who is here
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP UseCopula here_Adv)))))
+LangEng: woman who is here
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAdv here_Adv))))))
+LangEng: woman who is here
+Lang: UttNP (AdvNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula)))) here_Adv)
+LangEng: woman who is here
+Lang: UttNP (AdvNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula))))) here_Adv)
+LangEng: woman who is here
+Lang: UttNP (MassNP (AdvCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP UseCopula))) here_Adv))
+LangEng: woman who is here
+Lang: UttNP (MassNP (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP UseCopula)))) here_Adv))
+LangEng: woman who is here
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (AdvVP UseCopula here_Adv)))))
+LangEng: woman who is here
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseComp (CompAdv here_Adv))))))
+LangEng: woman who is here
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdvVP UseCopula here_Adv))))))
+LangEng: woman who is here
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseComp (CompAdv here_Adv)))))))
+LangEng: woman who is here
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (AdVVP always_AdV (UseV sleep_V)))))
+LangEng: woman who always sleeps
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdVVP always_AdV (UseV sleep_V))))))
+LangEng: woman who always sleeps
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (AdVVP always_AdV (UseV sleep_V))))))
+LangEng: woman who always sleeps
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (AdVVP always_AdV (UseV sleep_V)))))))
+LangEng: woman who always sleeps
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron we_Pron) (SlashV2a love_V2)))))
+LangEng: woman whom we love
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron we_Pron) (SlashV2a love_V2))))))
+LangEng: woman whom we love
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron we_Pron) (SlashV2a love_V2))))))
+LangEng: woman whom we love
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron we_Pron) (SlashV2a love_V2))))))
+LangEng: woman whom we love
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron we_Pron) (SlashV2a love_V2)))))))
+LangEng: woman whom we love
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron we_Pron) (SlashV2a love_V2)))))))
+LangEng: woman whom we love
+Lang: UttCN (AdvCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))) today_Adv)
+LangEng: woman whom she loves today
+Lang: UttCN (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))) today_Adv)
+LangEng: woman whom she loves today
+Lang: UttCN (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))) today_Adv)
+LangEng: woman whom she loves today
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a love_V2)) today_Adv))))
+LangEng: woman whom she loves today
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a love_V2) today_Adv)))))
+LangEng: woman whom she loves today
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a love_V2)) today_Adv)))))
+LangEng: woman whom she loves today
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a love_V2) today_Adv))))))
+LangEng: woman whom she loves today
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a love_V2)) today_Adv)))))
+LangEng: woman whom she loves today
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a love_V2) today_Adv))))))
+LangEng: woman whom she loves today
+Lang: UttNP (AdvNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))) today_Adv)
+LangEng: woman whom she loves today
+Lang: UttNP (AdvNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))) today_Adv)
+LangEng: woman whom she loves today
+Lang: UttNP (AdvNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))))) today_Adv)
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (AdvCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (SlashV2a love_V2))))) today_Adv))
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))) today_Adv))
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a love_V2)))))) today_Adv))
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a love_V2)) today_Adv)))))
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a love_V2) today_Adv))))))
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a love_V2)) today_Adv))))))
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a love_V2) today_Adv)))))))
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a love_V2)) today_Adv))))))
+LangEng: woman whom she loves today
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a love_V2) today_Adv)))))))
+LangEng: woman whom she loves today
+Lang: UttCN (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V))))
+LangEng: woman who sleeps
+Lang: UttCN (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V)))))
+LangEng: woman who sleeps
+Lang: UttNP (MassNP (RelCN (UseN woman_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (UseV sleep_V)))))
+LangEng: woman who sleeps
+Lang: UttNP (MassNP (SentCN (UseN woman_N) (EmbedQS (UseQCl (TTAnt TPres ASimul) PPos (QuestVP whoSg_IP (UseV sleep_V))))))
+LangEng: woman who sleeps
+Lang: UttCN (RelCN (UseN child_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP (FunRP part_Prep (PredetNP all_Predet (DetCN (DetQuant DefArt NumPl) (UseN teacher_N))) IdRP) (UseComp (CompAP (PositA young_A))))))
+LangEng: child all the teachers of whom are young
+Lang: UttCN (RelCN (UseN child_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP (FunRP possess_Prep (PredetNP all_Predet (DetCN (DetQuant DefArt NumPl) (UseN teacher_N))) IdRP) (UseComp (CompAP (PositA young_A))))))
+LangEng: child all the teachers of whom are young
+Lang: UttNP (MassNP (RelCN (UseN child_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP (FunRP part_Prep (PredetNP all_Predet (DetCN (DetQuant DefArt NumPl) (UseN teacher_N))) IdRP) (UseComp (CompAP (PositA young_A)))))))
+LangEng: child all the teachers of whom are young
+Lang: UttNP (MassNP (RelCN (UseN child_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP (FunRP possess_Prep (PredetNP all_Predet (DetCN (DetQuant DefArt NumPl) (UseN teacher_N))) IdRP) (UseComp (CompAP (PositA young_A)))))))
+LangEng: child all the teachers of whom are young
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a see_V2))))
+LangEng: whom does she see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a see_V2))))
+LangEng: whom does she see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a see_V2))))
+LangEng: whom does she see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a see_V2))))
+LangEng: whom does she see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashVV want_VV (SlashV2a see_V2)))))
+LangEng: whom does she want to see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashVV want_VV (SlashV2a see_V2)))))
+LangEng: whom does she want to see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIAdv (PrepIP with_Prep whoPl_IP) (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIAdv (PrepIP with_Prep whoSg_IP) (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashPrep (PredVP (UsePron she_Pron) (UseV sleep_V)) with_Prep)))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (VPSlashPrep (UseV sleep_V) with_Prep))))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashPrep (PredVP (UsePron she_Pron) (UseV sleep_V)) with_Prep)))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (VPSlashPrep (UseV sleep_V) with_Prep))))
+LangEng: with whom does she sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a see_V2)) today_Adv)))
+LangEng: whom does she see today
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a see_V2) today_Adv))))
+LangEng: whom does she see today
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (AdvSlash (SlashVP (UsePron she_Pron) (SlashV2a see_V2)) today_Adv)))
+LangEng: whom does she see today
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (AdvVPSlash (SlashV2a see_V2) today_Adv))))
+LangEng: whom does she see today
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVS (UsePron she_Pron) know_VS (UseSlash (TTAnt TPast AAnter) PNeg (SlashVP (UsePron we_Pron) (SlashV2a see_V2))))))
+LangEng: whom does she know that we hadn't seen
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVS (UsePron she_Pron) know_VS (UseSlash (TTAnt TPast AAnter) PNeg (SlashVP (UsePron we_Pron) (SlashV2a see_V2))))))
+LangEng: whom does she know that we hadn't seen
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2a see_V2))))
+LangEng: whom does she see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2a see_V2))))
+LangEng: whom does she see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))))))
+LangEng: to whom does she send it
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (Slash2V3 send_V3 (UsePron it_Pron)))))
+LangEng: to whom does she send it
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (Slash2V3 send_V3 (DetNP (DetQuant DefArt NumSg))))))
+LangEng: to whom does she send it
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (Slash2V3 send_V3 (UsePron it_Pron)))))
+LangEng: to whom does she send it
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2A paint_V2A (PositA red_A)))))
+LangEng: whom does she paint red
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2A paint_V2A (PositA red_A)))))
+LangEng: whom does she paint red
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestIAdv where_IAdv (PredVP (UsePron i_Pron) (UseV sleep_V))))))))
+LangEng: whom does she ask where I sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2Q ask_V2Q (UseQCl (TTAnt TPres ASimul) PPos (QuestIAdv where_IAdv (PredVP (UsePron i_Pron) (UseV sleep_V))))))))
+LangEng: whom does she ask where I sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV sleep_V)))))))
+LangEng: to whom does she answer that I sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2S answer_V2S (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseV sleep_V)))))))
+LangEng: to whom does she answer that I sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2V beg_V2V (UseV sleep_V)))))
+LangEng: whom does she beg to sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2V beg_V2V (UseV sleep_V)))))
+LangEng: whom does she beg to sleep
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashVV want_VV (SlashV2a see_V2)))))
+LangEng: whom does she want to see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashVV want_VV (SlashV2a see_V2)))))
+LangEng: whom does she want to see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoPl_IP (SlashVP (UsePron she_Pron) (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a see_V2)))))
+LangEng: whom does she beg me to see
+Lang: UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash whoSg_IP (SlashVP (UsePron she_Pron) (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a see_V2)))))
+LangEng: whom does she beg me to see
+Lang: UttAdv (PrepNP above_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: above it
+Lang: UttAdv (PrepNP above_Prep (UsePron it_Pron))
+LangEng: above it
+Lang: UttAdv (PrepNP after_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: after it
+Lang: UttAdv (PrepNP after_Prep (UsePron it_Pron))
+LangEng: after it
+Lang: UttNP (PredetNP all_Predet (DetCN (DetQuant DefArt NumPl) (UseN man_N)))
+LangEng: all the men
+Lang: UttAP (AdAP almost_AdA (PositA red_A))
+LangEng: almost red
+Lang: UttCard (AdNum almost_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))))))
+LangEng: almost eight
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (AdNum almost_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8))))))))))
+LangEng: almost eight
+Lang: UttAdv (SubjS although_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: although she sleeps
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (AdVVP always_AdV (UseV sleep_V))))
+LangEng: she always sleeps
+Lang: UttAdv (ConjAdv and_Conj (BaseAdv here_Adv now_Adv))
+LangEng: here and now
+Lang: UttAdv (SubjS because_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: because she sleeps
+Lang: UttAdv (PrepNP before_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: before it
+Lang: UttAdv (PrepNP before_Prep (UsePron it_Pron))
+LangEng: before it
+Lang: UttAdv (PrepNP behind_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: behind it
+Lang: UttAdv (PrepNP behind_Prep (UsePron it_Pron))
+LangEng: behind it
+Lang: UttAdv (PrepNP between_Prep (ConjNP and_Conj (BaseNP (UsePron youPl_Pron) (UsePron i_Pron))))
+LangEng: between you and me
+Lang: UttAdv (PrepNP between_Prep (ConjNP and_Conj (BaseNP (UsePron youPol_Pron) (UsePron i_Pron))))
+LangEng: between you and me
+Lang: UttAdv (PrepNP between_Prep (ConjNP and_Conj (BaseNP (UsePron youSg_Pron) (UsePron i_Pron))))
+LangEng: between you and me
+Lang: UttAdv (ConjAdv both7and_DConj (BaseAdv here_Adv there7to_Adv))
+LangEng: both here and there
+Lang: UttAdv (ConjAdv both7and_DConj (BaseAdv here_Adv there_Adv))
+LangEng: both here and there
+Lang: UttAdv (PrepNP by8agent_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: by it
+Lang: UttAdv (PrepNP by8agent_Prep (UsePron it_Pron))
+LangEng: by it
+Lang: UttAdv (PrepNP by8means_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: by it
+Lang: UttAdv (PrepNP by8means_Prep (UsePron it_Pron))
+LangEng: by it
+Lang: UttAdv (PrepNP by8agent_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: by it
+Lang: UttAdv (PrepNP by8agent_Prep (UsePron it_Pron))
+LangEng: by it
+Lang: UttAdv (PrepNP by8means_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: by it
+Lang: UttAdv (PrepNP by8means_Prep (UsePron it_Pron))
+LangEng: by it
+Lang: UttVP (ComplVV can8know_VV (UseV sleep_V))
+LangEng: to be able to sleep
+Lang: UttVP (ComplVV can_VV (UseV sleep_V))
+LangEng: to be able to sleep
+Lang: UttVP (ComplVV can8know_VV (UseV sleep_V))
+LangEng: to be able to sleep
+Lang: UttVP (ComplVV can_VV (UseV sleep_V))
+LangEng: to be able to sleep
+Lang: UttAdv (PrepNP during_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: during it
+Lang: UttAdv (PrepNP during_Prep (UsePron it_Pron))
+LangEng: during it
+Lang: UttAdv (ConjAdv either7or_DConj (BaseAdv here_Adv there7to_Adv))
+LangEng: either here or there
+Lang: UttAdv (ConjAdv either7or_DConj (BaseAdv here_Adv there_Adv))
+LangEng: either here or there
+Lang: UttNP (DetCN every_Det (UseN woman_N))
+LangEng: every woman
+Lang: UttNP everybody_NP
+LangEng: everybody
+Lang: UttNP everything_NP
+LangEng: everything
+Lang: UttAdv everywhere_Adv
+LangEng: everywhere
+Lang: UttNP (DetCN few_Det (UseN woman_N))
+LangEng: few women
+Lang: UttAdv (PrepNP for_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: for it
+Lang: UttAdv (PrepNP for_Prep (UsePron it_Pron))
+LangEng: for it
+Lang: UttAdv (PrepNP from_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: from it
+Lang: UttAdv (PrepNP from_Prep (UsePron it_Pron))
+LangEng: from it
+Lang: UttNP (UsePron he_Pron)
+LangEng: he
+Lang: UttAdv here_Adv
+LangEng: here
+Lang: UttAdv here7to_Adv
+LangEng: to here
+Lang: UttAdv here7from_Adv
+LangEng: from here
+Lang: UttIAdv how_IAdv
+LangEng: how
+Lang: UttIP (IdetCN how8many_IDet (UseN house_N))
+LangEng: how many houses
+Lang: UttIAdv how8much_IAdv
+LangEng: how much
+Lang: UttNP (UsePron i_Pron)
+LangEng: I
+Lang: UttAdv (SubjS if_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: if she sleeps
+Lang: UttAdv (PrepNP in8front_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: in front of it
+Lang: UttAdv (PrepNP in8front_Prep (UsePron it_Pron))
+LangEng: in front of it
+Lang: UttAdv (PrepNP in_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: in it
+Lang: UttAdv (PrepNP in_Prep (UsePron it_Pron))
+LangEng: in it
+Lang: UttNP (DetNP (DetQuant DefArt NumSg))
+LangEng: it
+Lang: UttNP (UsePron it_Pron)
+LangEng: it
+Lang: UttAP (CAdvAP less_CAdv (PositA warm_A) (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N)))
+LangEng: less warm than my house
+Lang: UttNP (DetCN many_Det (UseN house_N))
+LangEng: many houses
+Lang: UttAP (CAdvAP more_CAdv (PositA warm_A) (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N)))
+LangEng: more warm than my house
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (PredetNP most_Predet (DetCN (DetQuant IndefArt NumPl) (UseN man_N))) (UseV sleep_V)))
+LangEng: most men sleep
+Lang: UttNP (DetCN much_Det (UseN wine_N))
+LangEng: much wine
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (ComplVV must_VV (UseV sleep_V))))
+LangEng: we must sleep
+Lang: UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (PredetNP only_Predet (DetCN (DetQuant IndefArt NumPl) (UseN man_N))) (UseV sleep_V)))
+LangEng: only men sleep
+Lang: UttAdv (PrepNP on_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: on it
+Lang: UttAdv (PrepNP on_Prep (UsePron it_Pron))
+LangEng: on it
+Lang: UttAdv (ConjAdv or_Conj (BaseAdv here_Adv there7to_Adv))
+LangEng: here or there
+Lang: UttAdv (ConjAdv or_Conj (BaseAdv here_Adv there_Adv))
+LangEng: here or there
+Lang: UttAdv (PrepNP part_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: of it
+Lang: UttAdv (PrepNP part_Prep (UsePron it_Pron))
+LangEng: of it
+Lang: UttAdv (PrepNP possess_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: of it
+Lang: UttAdv (PrepNP possess_Prep (UsePron it_Pron))
+LangEng: of it
+Lang: UttAdv (PrepNP part_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: of it
+Lang: UttAdv (PrepNP part_Prep (UsePron it_Pron))
+LangEng: of it
+Lang: UttAdv (PrepNP possess_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: of it
+Lang: UttAdv (PrepNP possess_Prep (UsePron it_Pron))
+LangEng: of it
+Lang: UttNP (UsePron she_Pron)
+LangEng: she
+Lang: UttAP (AdAP so_AdA (PositA warm_A))
+LangEng: so warm
+Lang: UttNP (DetCN someSg_Det (UseN wine_N))
+LangEng: some wine
+Lang: UttNP (DetCN somePl_Det (UseN woman_N))
+LangEng: some women
+Lang: UttNP somebody_NP
+LangEng: somebody
+Lang: UttNP something_NP
+LangEng: something
+Lang: UttAdv somewhere_Adv
+LangEng: somewhere
+Lang: UttNP (DetCN (DetQuant that_Quant NumSg) (UseN house_N))
+LangEng: that house
+Lang: UttAdv (SubjS that_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: that she sleeps
+Lang: UttAdv there7to_Adv
+LangEng: there
+Lang: UttAdv there_Adv
+LangEng: there
+Lang: UttAdv there7to_Adv
+LangEng: there
+Lang: UttAdv there_Adv
+LangEng: there
+Lang: UttAdv there7from_Adv
+LangEng: from there
+Lang: UttNP (DetNP (DetQuant DefArt NumPl))
+LangEng: they
+Lang: UttNP (UsePron they_Pron)
+LangEng: they
+Lang: UttNP (DetCN (DetQuant this_Quant NumSg) (UseN house_N))
+LangEng: this house
+Lang: UttAdv (PrepNP through_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: through it
+Lang: UttAdv (PrepNP through_Prep (UsePron it_Pron))
+LangEng: through it
+Lang: UttAdv (PrepNP to_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: to it
+Lang: UttAdv (PrepNP to_Prep (UsePron it_Pron))
+LangEng: to it
+Lang: UttAP (AdAP too_AdA (PositA warm_A))
+LangEng: too warm
+Lang: UttAdv (PrepNP under_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: under it
+Lang: UttAdv (PrepNP under_Prep (UsePron it_Pron))
+LangEng: under it
+Lang: UttAP (AdAP very_AdA (PositA warm_A))
+LangEng: very warm
+Lang: UttVP (ComplVV want_VV (UseV sleep_V))
+LangEng: to want to sleep
+Lang: UttNP (UsePron we_Pron)
+LangEng: we
+Lang: UttIP whatPl_IP
+LangEng: what
+Lang: UttIP whatSg_IP
+LangEng: what
+Lang: UttIP whatPl_IP
+LangEng: what
+Lang: UttIP whatSg_IP
+LangEng: what
+Lang: UttIAdv when_IAdv
+LangEng: when
+Lang: UttAdv (SubjS when_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V))))
+LangEng: when she sleeps
+Lang: UttIAdv where_IAdv
+LangEng: where
+Lang: UttIP (IdetCN (IdetQuant which_IQuant NumSg) (UseN house_N))
+LangEng: which house
+Lang: UttIP whoPl_IP
+LangEng: who
+Lang: UttIP whoSg_IP
+LangEng: who
+Lang: UttIP whoPl_IP
+LangEng: who
+Lang: UttIP whoSg_IP
+LangEng: who
+Lang: UttIAdv why_IAdv
+LangEng: why
+Lang: UttAdv (PrepNP with_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: with it
+Lang: UttAdv (PrepNP with_Prep (UsePron it_Pron))
+LangEng: with it
+Lang: UttAdv (PrepNP without_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: without it
+Lang: UttAdv (PrepNP without_Prep (UsePron it_Pron))
+LangEng: without it
+Lang: no_Utt
+LangEng: no
+Lang: yes_Utt
+LangEng: yes
+Lang: UttNP (UsePron youPl_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPol_Pron)
+LangEng: you
+Lang: UttNP (UsePron youSg_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPl_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPol_Pron)
+LangEng: you
+Lang: UttNP (UsePron youSg_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPl_Pron)
+LangEng: you
+Lang: UttNP (UsePron youPol_Pron)
+LangEng: you
+Lang: UttNP (UsePron youSg_Pron)
+LangEng: you
+Lang: UttNP (DetCN (DetQuant no_Quant NumSg) (UseN house_N))
+LangEng: no house
+Lang: UttNP (PredetNP not_Predet everybody_NP)
+LangEng: not everybody
+Lang: UttAdv (ConjAdv if_then_Conj (BaseAdv here_Adv there7to_Adv))
+LangEng: if here then there
+Lang: UttAdv (ConjAdv if_then_Conj (BaseAdv here_Adv there_Adv))
+LangEng: if here then there
+Lang: UttCard (AdNum at_least_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))))))
+LangEng: at least eight
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (AdNum at_least_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8))))))))))
+LangEng: at least eight
+Lang: UttCard (AdNum at_most_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8)))))))
+LangEng: at most eight
+Lang: UttNP (DetNP (DetQuant IndefArt (NumCard (AdNum at_most_AdN (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n8))))))))))
+LangEng: at most eight
+Lang: UttNP nobody_NP
+LangEng: nobody
+Lang: UttNP nothing_NP
+LangEng: nothing
+Lang: UttAdv (PrepNP except_Prep (DetNP (DetQuant DefArt NumSg)))
+LangEng: except it
+Lang: UttAdv (PrepNP except_Prep (UsePron it_Pron))
+LangEng: except it
+Lang: UttAP (CAdvAP as_CAdv (PositA warm_A) (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N)))
+LangEng: as warm as my house
+Lang: UttVP (ComplSlash (SlashV2a have_V2) (DetNP (DetQuant DefArt NumSg)))
+LangEng: to have it
+Lang: UttVP (ComplSlash (SlashV2a have_V2) (UsePron it_Pron))
+LangEng: to have it
