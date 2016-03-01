@@ -94,8 +94,10 @@ mkEx l = unws . bind . mkE . words where
 bind ws = case ws of
          w : "&+" : u : ws2 -> bind ((w ++ u) : ws2)
          w : "Predef.BIND" : u : ws2 -> bind ((w ++ u) : ws2)
+         w : "Predef.SOFT_BIND" : u : ws2 -> bind ((w ++ u) : ws2)
          "&+":ws2           -> bind ws2
          "Predef.BIND":ws2           -> bind ws2
+         "Predef.SOFT_BIND":ws2           -> bind ws2
          w : ws2            -> w : bind ws2
          w : "++" : ws2     -> w : bind ws2
          _ -> ws
