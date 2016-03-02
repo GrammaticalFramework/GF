@@ -2,7 +2,6 @@
 {-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
 module GF.Compile.Compute.Predef(predef,predefName,delta) where
 
---import GF.Text.Pretty(render,hang)
 import qualified Data.Map as Map
 import Data.Array(array,(!))
 import Data.List (isInfixOf)
@@ -15,7 +14,6 @@ import GF.Compile.Compute.Value
 import GF.Infra.Ident (Ident,showIdent) --,varX
 import GF.Data.Operations(Err) -- ,err
 import GF.Grammar.Predef
---import PGF.Data(BindType(..))
 
 --------------------------------------------------------------------------------
 class Predef a where

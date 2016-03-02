@@ -1,8 +1,9 @@
 -- | Functions for computing the values of terms in the concrete syntax, in
 -- | preparation for PMCFG generation.
 module GF.Compile.Compute.ConcreteNew
-           (GlobalEnv, resourceValues, normalForm,
-           --, Value(..), Env, value2term, eval, apply
+           (GlobalEnv(..), GLocation, resourceValues, normalForm,
+            Value(..), Bind(..), Env, value2term, 
+            eval, value, toplevel
            ) where
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
