@@ -178,7 +178,7 @@ Library
     GF.Compile.CheckGrammar
     GF.Compile.Compute.AppPredefined
     GF.Compile.Compute.ConcreteNew
-    GF.Compile.Compute.ConcreteNew1
+--  GF.Compile.Compute.ConcreteNew1
     GF.Compile.Compute.Predef
     GF.Compile.Compute.Value
     GF.Compile.ExampleBased
