@@ -177,7 +177,7 @@ checkInfo opts cwd sgr (m,mo) c info = checkInModule cwd mo NoLoc empty $ do
       mty  <- case mty of
                 Just (L loc typ) -> chIn loc "linearization type of" $ 
                                      (if False --flag optNewComp opts
-                                        then do (typ,_) <- CN.checkLType gr typ typeType
+                                        then do (typ,_) <- CN.checkLType (CN.resourceValues opts gr) typ typeType
                                                 typ  <- computeLType gr [] typ
                                                 return (Just (L loc typ))
                                         else do (typ,_) <- checkLType gr [] typ typeType
@@ -224,17 +224,17 @@ checkInfo opts cwd sgr (m,mo) c info = checkInModule cwd mo NoLoc empty $ do
          (Just (L loct ty), Just (L locd de)) -> do
            ty'     <- chIn loct "operation" $
                          (if False --flag optNewComp opts
-                            then CN.checkLType gr ty typeType >>= return . CN.normalForm (CN.resourceValues opts gr) (L loct c) . fst -- !!
+                            then CN.checkLType (CN.resourceValues opts gr) ty typeType >>= return . CN.normalForm (CN.resourceValues opts gr) (L loct c) . fst -- !!
                             else checkLType gr [] ty typeType >>= computeLType gr [] . fst)
            (de',_) <- chIn locd "operation" $
                          (if False -- flag optNewComp opts
-                            then CN.checkLType gr de ty'
+                            then CN.checkLType (CN.resourceValues opts gr) de ty'
                             else checkLType gr [] de ty')
            return (Just (L loct ty'), Just (L locd de'))
          (Nothing         , Just (L locd de)) -> do
            (de',ty') <- chIn locd "operation" $
                           (if False -- flag optNewComp opts
-                            then CN.inferLType gr de
+                            then CN.inferLType (CN.resourceValues opts gr) de
                             else inferLType gr [] de)
            return (Just (L locd ty'), Just (L locd de'))
          (Just (L loct ty), Nothing) -> do
