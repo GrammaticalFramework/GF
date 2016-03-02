@@ -3,7 +3,7 @@
 module GF.Compile.Compute.ConcreteNew
            (GlobalEnv, GLocation, resourceValues, geLoc, geGrammar,
             normalForm,
-            Value(..), Bind(..), Env, value2term, eval
+            Value(..), Bind(..), Env, value2term, eval, vapply
            ) where
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
@@ -416,6 +416,7 @@ apply' env t vs =
                                  return $ \ svs -> vapply (gloc env) r (map ($svs) vs)
 -}
     App t1 t2              -> apply' env t1 . (:vs) =<< value env t2
+    Meta i                 -> return $ \ svs -> VMeta i (zip (local env) svs) (map ($svs) vs)
     _                      -> do fv <- value env t
                                  return $ \ svs -> vapply (gloc env) (fv svs) (map ($svs) vs)
 
