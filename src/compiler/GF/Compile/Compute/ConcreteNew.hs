@@ -416,7 +416,6 @@ apply' env t vs =
                                  return $ \ svs -> vapply (gloc env) r (map ($svs) vs)
 -}
     App t1 t2              -> apply' env t1 . (:vs) =<< value env t2
-    Meta i                 -> return $ \ svs -> VMeta i (zip (local env) svs) (map ($svs) vs)
     _                      -> do fv <- value env t
                                  return $ \ svs -> vapply (gloc env) (fv svs) (map ($svs) vs)
 
@@ -437,6 +436,8 @@ vapply loc v vs =
     VS (VV t pvs fs) s -> VS (VV t pvs [vapply loc f vs|f<-fs]) s
     VFV fs -> vfv [vapply loc f vs|f<-fs]
     VCApp f vs0 -> VCApp f (vs0++vs)
+    VMeta i env vs0 -> VMeta i env (vs0++vs)
+    VGen i vs0 -> VGen i (vs0++vs)
     v -> bug $ "vapply "++show v++" "++show vs
 
 vbeta loc bt f (v:vs) =
