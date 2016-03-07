@@ -8,7 +8,7 @@ module GF.Compile.Compute.ConcreteNew
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)
-import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr,cTrace)
+import GF.Grammar.Predef(cPredef,cErrorType,cTok,cStr,cTrace,cPBool)
 import GF.Grammar.PatternMatch(matchPattern,measurePatt)
 import GF.Grammar.Lockfield(isLockLabel,lockRecType) --unlockRecord,lockLabel
 import GF.Compile.Compute.Value hiding (Error)
@@ -141,7 +141,9 @@ value env t0 =
       | m == cPredef -> if f==cErrorType                -- to be removed
                         then let p = identS "P"
                              in const # value0 env (mkProd [(Implicit,p,typeType)] (Vr p) [])
-                        else const . flip VApp [] # predef f
+                        else if f==cPBool
+                               then const # resource env x
+                               else const . flip VApp [] # predef f
       | otherwise    -> const # resource env x --valueResDef (fst env) x
     QC x   -> return $ const (VCApp x [])
     App e1 e2 -> apply' env e1 . (:[]) =<< value env e2
@@ -183,6 +185,7 @@ value env t0 =
     Glue t1 t2 -> ((ok2p (glue env).) # both id) # both (value env) (t1,t2)
     ELin c r -> (unlockVRec (gloc env) c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
+    Typed t ty -> value env t
     t -> fail.render $ "value"<+>ppT 10 t $$ show t
 
 vconcat vv@(v1,v2) =
