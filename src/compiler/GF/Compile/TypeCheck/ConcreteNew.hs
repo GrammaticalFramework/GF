@@ -10,7 +10,7 @@ import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Grammar.Lockfield
 import GF.Compile.Compute.ConcreteNew
-import GF.Compile.Compute.Predef(predef)
+import GF.Compile.Compute.Predef(predef,predefName)
 import GF.Infra.CheckM
 import GF.Data.Operations
 import Control.Applicative(Applicative(..))
@@ -19,6 +19,7 @@ import Control.Monad(ap)
 import GF.Text.Pretty
 import Data.List (nub, (\\), tails)
 import qualified Data.IntMap as IntMap
+import Data.Maybe(fromMaybe,isNothing)
 
 checkLType :: GlobalEnv -> Term -> Type -> Check (Term, Type)
 checkLType ge t ty = runTcM $ do
@@ -55,13 +56,14 @@ checkSigma ge scope t sigma = do                                -- GEN2
 
 Just vtypeInt   = fmap (flip VApp []) (predef cInt)
 Just vtypeFloat = fmap (flip VApp []) (predef cFloat)
+Just vtypeInts  = fmap (\p i -> VApp p [VInt i]) (predef cInts)
 vtypeStr   = VSort cStr
 vtypeStrs  = VSort cStrs
 vtypeType  = VSort cType
 vtypePType = VSort cPType
 
 tcRho :: GlobalEnv -> Scope -> Term -> Maybe Rho -> TcM (Term, Rho)
-tcRho ge scope t@(EInt _)   mb_ty = instSigma ge scope t vtypeInt   mb_ty
+tcRho ge scope t@(EInt i)   mb_ty = instSigma ge scope t (vtypeInts i) mb_ty -- INT
 tcRho ge scope t@(EFloat _) mb_ty = instSigma ge scope t vtypeFloat mb_ty
 tcRho ge scope t@(K _)      mb_ty = instSigma ge scope t vtypeStr   mb_ty
 tcRho ge scope t@(Empty)    mb_ty = instSigma ge scope t vtypeStr   mb_ty
@@ -81,18 +83,18 @@ tcRho ge scope t@(QC id)     mb_ty =
     Bad err -> tcError (pp err)
 tcRho ge scope (App fun arg) mb_ty = do                         -- APP
   (fun,fun_ty) <- tcRho ge scope fun Nothing
-  varg <- liftErr (eval ge (scopeEnv scope) arg)
-  (arg_ty, res_ty) <- unifyFun ge scope varg fun_ty
+  (arg_ty, res_ty) <- unifyFun ge scope fun_ty
   arg <- checkSigma ge scope arg arg_ty
-  instSigma ge scope (App fun arg) res_ty mb_ty
+  varg <- liftErr (eval ge (scopeEnv scope) arg)
+  instSigma ge scope (App fun arg) (res_ty varg) mb_ty
 tcRho ge scope (Abs bt var body) Nothing = do                   -- ABS1
   i <- newMeta vtypeType
   let arg_ty = VMeta i (scopeEnv scope) []
   (body,body_ty) <- tcRho ge ((var,arg_ty):scope) body Nothing
   return (Abs bt var body, (VProd bt arg_ty identW (Bind (const body_ty))))
 tcRho ge scope (Abs bt var body) (Just ty) = do                 -- ABS2
-  (var_ty, body_ty) <- unifyFun ge scope (VGen (length scope) []) ty
-  (body, body_ty) <- tcRho ge ((var,var_ty):scope) body (Just body_ty)
+  (var_ty, body_ty) <- unifyFun ge scope ty
+  (body, body_ty) <- tcRho ge ((var,var_ty):scope) body (Just (body_ty (VGen (length scope) [])))
   return (Abs bt var body,ty)
 tcRho ge scope (Let (var, (mb_ann_ty, rhs)) body) mb_ty = do    -- LET
   (rhs,var_ty) <- case mb_ann_ty of
@@ -124,8 +126,17 @@ tcRho ge scope (FV ts) mb_ty = do
 tcRho ge scope t@(Sort s) mb_ty = do
   instSigma ge scope t vtypeType mb_ty
 tcRho ge scope t@(RecType rs) mb_ty = do
-  mapM_ (\(l,ty) -> tcRho ge scope ty (Just vtypeType)) rs
-  instSigma ge scope t vtypeType mb_ty
+  case mb_ty of
+    Nothing           -> return ()
+    Just ty@(VSort s)
+      | s == cType    -> return ()
+      | s == cPType   -> return ()
+    Just (VMeta _ _ _)-> return ()
+    Just ty           -> do ty <- zonkTerm (value2term (geLoc ge) (scopeVars scope) ty)
+                            tcError ("The record type" <+> ppTerm Unqualified 0 t $$ 
+                                     "cannot be of type" <+> ppTerm Unqualified 0 ty)
+  (rs,mb_ty) <- tcRecTypeFields ge scope rs mb_ty
+  return (RecType rs,fromMaybe vtypePType mb_ty)
 tcRho ge scope t@(Table p res) mb_ty = do
   (p,  p_ty)   <- tcRho ge scope p   (Just vtypePType)
   (res,res_ty) <- tcRho ge scope res Nothing
@@ -143,27 +154,39 @@ tcRho ge scope (S t p) mb_ty = do
   (t,t_ty) <- tcRho ge scope t (Just t_ty)
   p <- checkSigma ge scope p p_ty
   instSigma ge scope (S t p) res_ty mb_ty
-tcRho ge scope (T tt ps) mb_ty = do
+tcRho ge scope (T tt ps) Nothing = do                           -- ABS1/AABS1 for tables
   p_ty   <- case tt of
               TRaw      -> fmap (\i -> VMeta i (scopeEnv scope) []) $ newMeta vtypePType
               TTyped ty -> do (ty, _) <- tcRho ge scope ty (Just vtypeType)
                               liftErr (eval ge (scopeEnv scope) ty)
-  res_ty <- fmap (\i -> VMeta i (scopeEnv scope) []) $ newMeta vtypeType
-  ps <- mapM (tcCase ge scope p_ty res_ty) ps
-  instSigma ge scope (T (TTyped (value2term (geLoc ge) [] p_ty)) ps) (VTblType p_ty res_ty) mb_ty
-tcRho ge scope t@(R rs) mb_ty = do
-  lttys <- case mb_ty of
-             Nothing -> inferRecFields ge scope rs
-             Just ty -> case ty of
-                          VRecType ltys -> checkRecFields ge scope rs ltys
-                          VMeta _ _ _   -> inferRecFields ge scope rs
-                          _             -> tcError ("Record type is inferred but:" $$
-                                                    nest 2 (ppTerm Unqualified 0 (value2term (geLoc ge) (scopeVars scope) ty)) $$
-                                                    "is expected in the expresion:" $$
-                                                    nest 2 (ppTerm Unqualified 0 t))
-  return (R        [(l, (Just (value2term (geLoc ge) (scopeVars scope) ty), t)) | (l,t,ty) <- lttys], 
-          VRecType [(l, ty)                                                     | (l,t,ty) <- lttys]
-         )
+  (ps,mb_res_ty) <- tcCases ge scope ps p_ty Nothing
+  res_ty <- case mb_res_ty of
+              Just res_ty -> return res_ty
+              Nothing     -> fmap (\i -> VMeta i (scopeEnv scope) []) $ newMeta vtypeType
+  return (T (TTyped (value2term (geLoc ge) [] p_ty)) ps, VTblType p_ty res_ty)
+tcRho ge scope (T tt ps) (Just ty) = do                         -- ABS2/AABS2 for tables
+  (p_ty, res_ty) <- unifyTbl ge scope ty
+  case tt of
+    TRaw      -> return ()
+    TTyped ty -> do (ty, _) <- tcRho ge scope ty (Just vtypeType)
+                    return ()--subsCheckRho ge scope -> Term ty res_ty
+  (ps,Just res_ty) <- tcCases ge scope ps p_ty (Just res_ty)
+  return (T (TTyped (value2term (geLoc ge) [] p_ty)) ps, VTblType p_ty res_ty)
+tcRho ge scope (R rs) mb_ty = do
+  case mb_ty of
+    Nothing              -> do lttys <- inferRecFields ge scope rs
+                               return (R        [(l, (Just (value2term (geLoc ge) (scopeVars scope) ty), t)) | (l,t,ty) <- lttys], 
+                                       VRecType [(l, ty) | (l,t,ty) <- lttys]
+                                      )
+    Just (VRecType ltys) -> do lttys <- checkRecFields ge scope rs ltys
+                               return (R        [(l, (Just (value2term (geLoc ge) (scopeVars scope) ty), t)) | (l,t,ty) <- lttys], 
+                                       VRecType [(l, ty) | (l,t,ty) <- lttys]
+                                      )
+    Just ty              -> do lttys <- inferRecFields ge scope rs
+                               let t   = R        [(l, (Just (value2term (geLoc ge) (scopeVars scope) ty), t)) | (l,t,ty) <- lttys]
+                                   ty' = VRecType [(l, ty) | (l,t,ty) <- lttys]
+                               t <- subsCheckRho ge scope t ty' ty
+                               return (t, ty')
 tcRho ge scope (P t l) mb_ty = do
   x_ty   <- case mb_ty of
               Just ty -> return ty
@@ -186,8 +209,7 @@ tcRho ge scope t@(ExtR t1 t2) mb_ty = do
     (VSort s1,VSort s2)
        | s1 == cType && s2 == cType -> instSigma ge scope (ExtR t1 t2) (VSort cType) mb_ty
     (VRecType rs1, VRecType rs2) 
-       | otherwise                  -> do tcWarn (pp "bbbb")
-                                          instSigma ge scope (ExtR t1 t2) (VRecType (rs1 ++ rs2)) mb_ty
+       | otherwise                  -> instSigma ge scope (ExtR t1 t2) (VRecType (rs1 ++ rs2)) mb_ty
     _                               -> tcError ("Cannot type check" <+> ppTerm Unqualified 0 t)
 tcRho ge scope (ELin cat t) mb_ty = do  -- this could be done earlier, i.e. in the parser
   tcRho ge scope (ExtR t (R [(lockLabel cat,(Just (RecType []),R []))])) mb_ty
@@ -205,28 +227,33 @@ tcRho ge scope (Strs ss) mb_ty = do
            (t,_) <- tcRho ge scope t (Just vtypeStr)
            return t
   instSigma ge scope (Strs ss) vtypeStrs mb_ty
-tcRho gr scope t _ = error ("tcRho "++show t)
+tcRho gr scope t _ = unimplemented ("tcRho "++show t)
 
-tcCase ge scope p_ty res_ty (p,t) = do
-  scope <- tcPatt ge scope p p_ty
-  (t,res_ty) <- tcRho ge scope t (Just res_ty)
-  return (p,t)
+tcCases ge scope []         p_ty mb_res_ty = return ([],mb_res_ty)
+tcCases ge scope ((p,t):cs) p_ty mb_res_ty = do
+  scope' <- tcPatt ge scope p p_ty
+  (t,res_ty)     <- tcRho ge scope' t mb_res_ty
+  (cs,mb_res_ty) <- tcCases ge scope cs p_ty (Just res_ty)
+  return ((p,t):cs,mb_res_ty)
 
 tcPatt ge scope PW        ty0 =
   return scope
 tcPatt ge scope (PV x)    ty0 =
   return ((x,ty0):scope)
-tcPatt ge scope (PP c ps) ty0 = 
+tcPatt ge scope (PP c ps) ty0 =
   case lookupResType (geGrammar ge) c of
     Ok ty  -> do let go scope ty []     = return (scope,ty)
-                     go scope ty (p:ps) = do (arg_ty,res_ty) <- unifyFun ge scope (VGen (length scope) []) ty
+                     go scope ty (p:ps) = do (arg_ty,res_ty) <- unifyFun ge scope ty
                                              scope <- tcPatt ge scope p arg_ty
-                                             go scope res_ty ps
+                                             go scope (res_ty (VGen (length scope) [])) ps
                  vty <- liftErr (eval ge [] ty)
                  (scope,ty) <- go scope vty ps
                  unify ge scope ty0 ty
                  return scope
     Bad err -> tcError (pp err)
+tcPatt ge scope (PInt i) ty0 = do
+  subsCheckRho ge scope (EInt i) (vtypeInts i) ty0
+  return scope
 tcPatt ge scope (PString s) ty0 = do
   unify ge scope ty0 vtypeStr
   return scope
@@ -241,15 +268,16 @@ tcPatt ge scope (PSeq p1 p2) ty0 = do
 tcPatt ge scope (PAs x p) ty0 = do
   tcPatt ge ((x,ty0):scope) p ty0
 tcPatt ge scope (PR rs) ty0 = do
-  let go scope []         = return (scope,[])
-      go scope ((l,p):rs) = do i <- newMeta vtypePType
-                               let ty = VMeta i (scopeEnv scope) []
-                               scope <- tcPatt ge scope p ty
-                               (scope,rs) <- go scope rs
-                               return (scope,(l,ty) : rs)
-  (scope',rs) <- go scope rs
-  unify ge scope ty0 (VRecType rs)
-  return scope'
+  let mk_ltys  []            = return []
+      mk_ltys  ((l,p):rs)    = do i <- newMeta vtypePType
+                                  ltys <- mk_ltys rs
+                                  return ((l,p,VMeta i (scopeEnv scope) []) : ltys)
+      go scope []            = return scope
+      go scope ((l,p,ty):rs) = do scope <- tcPatt ge scope p ty
+                                  go scope rs
+  ltys <- mk_ltys rs
+  subsCheckRho ge scope (R []) (VRecType [(l,ty) | (l,p,ty) <- ltys]) ty0
+  go scope ltys
 tcPatt gr scope (PAlt p1 p2) ty0 = do
   tcPatt gr scope p1 ty0
   tcPatt gr scope p2 ty0
@@ -287,6 +315,19 @@ tcRecField ge scope l (mb_ann_ty,t) mb_ty = do
               Nothing     -> tcRho ge scope t mb_ty
   return (l,t,ty)
 
+tcRecTypeFields ge scope []          mb_ty = return ([],mb_ty)
+tcRecTypeFields ge scope ((l,ty):rs) mb_ty = do
+  (ty,sort) <- tcRho ge scope ty mb_ty
+  mb_ty <- case sort of
+             VSort s
+               | s == cType  -> return (Just sort)
+               | s == cPType -> return mb_ty
+             VMeta _ _ _     -> return mb_ty
+             _               -> do sort <- zonkTerm (value2term (geLoc ge) (scopeVars scope) sort)
+                                   tcError ("The record type field" <+> l <+> ':' <+> ppTerm Unqualified 0 ty $$ 
+                                            "cannot be of type" <+> ppTerm Unqualified 0 sort)
+  (rs,mb_ty) <- tcRecTypeFields ge scope rs mb_ty
+  return ((l,ty):rs,mb_ty)
 
 -- | Invariant: if the third argument is (Just rho),
 -- 	            then rho is in weak-prenex form
@@ -318,39 +359,92 @@ subsCheckRho ge scope t sigma1@(VProd Implicit _ _ _) rho2 = do         -- Rule 
   (t,rho1) <- instantiate t sigma1
   subsCheckRho ge scope t rho1 rho2
 subsCheckRho ge scope t rho1 (VProd Explicit a2 _ (Bind r2)) = do       -- Rule FUN
-  (a1,r1) <- unifyFun ge scope (VGen (length scope) []) rho1
-  subsCheckFun ge scope t a1 r1 a2 (r2 (VGen (length scope) []))
+  (a1,r1) <- unifyFun ge scope rho1
+  subsCheckFun ge scope t a1 r1 a2 r2
 subsCheckRho ge scope t (VProd Explicit a1 _ (Bind r1)) rho2 = do       -- Rule FUN
-  (a2,r2) <- unifyFun ge scope (VGen (length scope) []) rho2
-  subsCheckFun ge scope t a1 (r1 (VGen (length scope) [])) a2 r2
+  (a2,r2) <- unifyFun ge scope rho2
+  subsCheckFun ge scope t a1 r1 a2 r2
+subsCheckRho ge scope t rho1 (VTblType p2 r2) = do                      -- Rule FUN for table types
+  (p1,r1) <- unifyTbl ge scope rho1
+  subsCheckTbl ge scope t p1 r1 p2 r2
+subsCheckRho ge scope t (VTblType p1 r1) rho2 = do                      -- Rule FUN for table types
+  (p2,r2) <- unifyTbl ge scope rho2
+  subsCheckTbl ge scope t p1 r1 p2 r2
 subsCheckRho ge scope t (VSort s1) (VSort s2)
   | s1 == cPType && s2 == cType = return t
+subsCheckRho ge scope t (VApp p1 _) (VApp p2 _)
+  | predefName p1 == cInts && predefName p2 == cInt = return t
+subsCheckRho ge scope t (VApp p1 [VInt i]) (VApp p2 [VInt j])
+  | predefName p1 == cInts && predefName p2 == cInts =
+      if i <= j 
+        then return t
+        else tcError ("Ints" <+> i <+> "is not a subtype of" <+> "Ints" <+> j)
+subsCheckRho ge scope t ty1@(VRecType rs1) ty2@(VRecType rs2) = do
+  (mkProj,mkRec) <- case t of
+                      R rs -> do sequence_ [tcWarn ("Discarded field:" <+> l) | (l,_) <- rs, isNothing (lookup l rs1)]
+                                 return (\l -> case lookup l rs of
+                                                 Just r  -> (l,r)
+                                                 Nothing -> error (render ("subsCheckRho: missing record field" <+> pp l))
+                                        ,R
+                                        )
+                      Vr x -> do return (\l -> (l,(Nothing,P t l))
+                                        ,R
+                                        )
+                      t    -> let x = newVar scope
+                              in return (\l  -> (l,(Nothing,P (Vr x) l))
+                                        ,\rs -> Let (x, (Nothing, t)) (R rs)
+                                        )
+  let mkField f (l,(mb_ty,t)) = do
+        t <- f t
+        return (l,(mb_ty,t))
+  rs <- sequence [mkField (\t -> subsCheck ge scope t ty1 ty2) (mkProj l) | (l,ty1) <- rs1, Just ty2 <- [lookup l rs2]]
+  return (mkRec rs)
 subsCheckRho ge scope t tau1 tau2 = do                                  -- Rule MONO
   unify ge scope tau1 tau2                                 -- Revert to ordinary unification
   return t
 
-subsCheckFun :: GlobalEnv -> Scope -> Term -> Sigma -> Rho -> Sigma -> Rho -> TcM Term
+subsCheckFun :: GlobalEnv -> Scope -> Term -> Sigma -> (Value -> Rho) -> Sigma -> (Value -> Rho) -> TcM Term
 subsCheckFun ge scope t a1 r1 a2 r2 = do
-  let v = newVar scope
-  vt <- subsCheck ge scope (Vr v) a2 a1
-  t  <- subsCheckRho ge ((v,vtypeType):scope) (App t vt) r1 r2 ;
-  return (Abs Explicit v t)
+  let x   = newVar scope
+  let val = VGen (length scope) []
+  xt <- subsCheck ge scope (Vr x) a2 a1
+  t  <- subsCheckRho ge ((x,vtypeType):scope) (App t xt) (r1 val) (r2 val);
+  return (Abs Explicit x t)
 
+subsCheckTbl :: GlobalEnv -> Scope -> Term -> Sigma -> Rho -> Sigma -> Rho -> TcM Term
+subsCheckTbl ge scope t p1 r1 p2 r2 = do
+  let x = newVar scope
+  xt <- subsCheck ge scope (Vr x) p2 p1
+  t  <- subsCheckRho ge ((x,vtypePType):scope) (S t xt) r1 r2 ;
+  return (T (TTyped (value2term (geLoc ge) (scopeVars scope) p2)) [(PV x,t)])
 
 -----------------------------------------------------------------------
 -- Unification
 -----------------------------------------------------------------------
 
-unifyFun :: GlobalEnv -> Scope -> Value -> Rho -> TcM (Sigma, Rho)
-unifyFun ge scope arg_v (VProd Explicit arg x (Bind res)) =
-  return (arg,res arg_v)
-unifyFun ge scope arg_v tau = do
-  arg_ty <- newMeta vtypeType
-  res_ty <- newMeta vtypeType
-  unify ge scope tau (VProd Explicit (VMeta arg_ty [] []) identW (Bind (const (VMeta arg_ty [] []))))
-  return (VMeta arg_ty [] [], VMeta res_ty [] [])
+unifyFun :: GlobalEnv -> Scope -> Rho -> TcM (Sigma, Value -> Rho)
+unifyFun ge scope (VProd Explicit arg x (Bind res)) =
+  return (arg,res)
+unifyFun ge scope tau = do
+  let mk_val ty = VMeta ty [] []
+  arg <- fmap mk_val $ newMeta vtypeType
+  res <- fmap mk_val $ newMeta vtypeType
+  unify ge scope tau (VProd Explicit arg identW (Bind (const res)))
+  return (arg,const res)
+
+unifyTbl :: GlobalEnv -> Scope -> Rho -> TcM (Sigma, Rho)
+unifyTbl ge scope (VTblType arg res) =
+  return (arg,res)
+unifyTbl ge scope tau = do
+  let mk_val ty = VMeta ty [] []
+  arg <- fmap mk_val $ newMeta vtypePType
+  res <- fmap mk_val $ newMeta vtypeType
+  unify ge scope tau (VTblType arg res)
+  return (arg,res)
 
 unify ge scope (VApp f1 vs1)      (VApp f2 vs2)
+  | f1 == f2                   = sequence_ (zipWith (unify ge scope) vs1 vs2)
+unify ge scope (VCApp f1 vs1)     (VCApp f2 vs2)
   | f1 == f2                   = sequence_ (zipWith (unify ge scope) vs1 vs2)
 unify ge scope (VSort s1)         (VSort s2)
   | s1 == s2                   = return ()
@@ -363,13 +457,13 @@ unify ge scope (VMeta i env1 vs1) (VMeta j env2 vs2)
                                       Bound t2  -> do v2 <- liftErr (eval ge env2 t2)
                                                       unify ge scope (VMeta i env1 vs1) (vapply (geLoc ge) v2 vs2)
                                       Unbound _ -> setMeta i (Bound (Meta j))
+unify ge scope (VInt i)       (VInt j)
+  | i == j                     = return ()
 unify ge scope (VMeta i env vs) v = unifyVar ge scope i env vs v
 unify ge scope v (VMeta i env vs) = unifyVar ge scope i env vs v
 unify ge scope (VTblType p1 res1) (VTblType p2 res2) = do
   unify ge scope p1   p2
   unify ge scope res1 res2
-unify ge scope (VRecType rs1) (VRecType rs2) = do
-  sequence_ [unify ge scope ty1 ty2 | (l,ty1) <- rs1, Just ty2 <- [lookup l rs2]]
 unify ge scope v1 v2 = do
   t1 <- zonkTerm (value2term (geLoc ge) (scopeVars scope) v1)
   t2 <- zonkTerm (value2term (geLoc ge) (scopeVars scope) v2)
@@ -534,6 +628,7 @@ getMetaVars loc sc_tys = do
   where
     -- Get the MetaIds from a term; no duplicates in result
     go (Vr tv)    acc = acc 
+    go (App x y)  acc = go x (go y acc)
     go (Meta i)   acc
 	  | i `elem` acc  = acc
 	  | otherwise	  = i : acc
@@ -543,7 +638,7 @@ getMetaVars loc sc_tys = do
     go (Prod _ _ arg res) acc = go arg (go res acc)
     go (Table p t) acc = go p (go t acc)
     go (RecType rs) acc = foldl (\acc (l,ty) -> go ty acc) acc rs
-    go t acc = error ("go "++show t)
+    go t acc = unimplemented ("go "++show t)
 
 -- | This function takes account of zonking, and returns a set
 -- (no duplicates) of free type variables
@@ -556,6 +651,7 @@ getFreeVars loc sc_tys = do
 	  | tv `elem` bound             = acc
 	  | tv `elem` acc               = acc
 	  | otherwise                   = tv : acc
+    go bound (App x y)          acc = go bound x (go bound y acc)
     go bound (Meta _)           acc = acc
     go bound (Q _)              acc = acc
     go bound (QC _)             acc = acc
