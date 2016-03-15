@@ -15,7 +15,7 @@ import GF.Compile.Compute.Value hiding (Error)
 import GF.Compile.Compute.Predef(predef,predefName,delta)
 import GF.Data.Str(Str,glueStr,str2strings,str,sstr,plusStr,strTok)
 import GF.Data.Operations(Err,err,errIn,maybeErr,combinations,mapPairsM)
-import GF.Data.Utilities(mapFst,mapSnd,mapBoth)
+import GF.Data.Utilities(mapFst,mapSnd)
 import GF.Infra.Option
 import Control.Monad(ap,liftM,liftM2) -- ,unless,mplus
 import Data.List (findIndex,intersect,nub,elemIndex,(\\)) --,isInfixOf
@@ -29,7 +29,11 @@ import Debug.Trace(trace)
 normalForm :: GlobalEnv -> L Ident -> Term -> Term
 normalForm (GE gr rv opts _) loc = err (bugloc loc) id . nfx (GE gr rv opts loc)
 
-nfx env@(GE _ _ _ loc) t = value2term loc [] # eval env [] t
+nfx env@(GE _ _ _ loc) t = do
+  v <- eval env [] t
+  case value2term loc [] v of
+    Left i  -> fail ("variable #"++show i++" is out of scope")
+    Right t -> return t
 
 eval :: GlobalEnv -> Env -> Term -> Err Value
 eval (GE gr rvs opts loc) env t = ($ (map snd env)) # value cenv t
@@ -132,7 +136,7 @@ value env t0 =
 {-
   trace (render $ text "value"<+>sep [ppL (gloc env)<>text ":",
                                       brackets (fsep (map ppIdent (local env))),
-                                      ppT 10 t0]) $
+                                      ppTerm Unqualified 10 t0]) $
 --}
   errIn (render t0) $
   case t0 of
@@ -186,7 +190,7 @@ value env t0 =
     ELin c r -> (unlockVRec (gloc env) c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
     Typed t ty -> value env t
-    t -> fail.render $ "value"<+>ppT 10 t $$ show t
+    t -> fail.render $ "value"<+>ppTerm Unqualified 10 t $$ show t
 
 vconcat vv@(v1,v2) =
     case vv of
@@ -280,12 +284,14 @@ glue env (v1,v2) = glu v1 v2
 --        (v1,v2) -> ok2 VGlue v1 v2
           (v1,v2) -> if flag optPlusAsBind (opts env)
                        then VC v1 (VC (VApp BIND []) v2)
-                       else error . render $
-                                      ppL loc (hang "unsupported token gluing:" 4
-                                                    (Glue (vt v1) (vt v2)))
+                       else let loc  = gloc env
+                                vt v = case value2term loc (local env) v of
+                                         Left i  -> Error ('#':show i)
+                                         Right t -> t
+                            in error . render $
+                                         ppL loc (hang "unsupported token gluing:" 4
+                                                        (Glue (vt v1) (vt v2)))
 
-    vt = value2term loc (local env)
-    loc = gloc env
 
 -- | to get a string from a value that represents a sequence of terminals
 strsFromValue :: Value -> Err [Str]
@@ -337,7 +343,10 @@ select env vv =
       (VS (VV pty pvs rs) v12,v2) -> VS (VV pty pvs [select env (v11,v2)|v11<-rs]) v12
       (v1,v2) -> ok2 VS v1 v2
 
-match loc cs = err bad return . matchPattern cs . value2term loc []
+match loc cs v = 
+  case value2term loc [] v of
+    Left i  -> bad ("variable #"++show i++" is out of scope")
+    Right t -> err bad return (matchPattern cs t)
   where
     bad = fail . ("In pattern matching: "++)
 
@@ -357,13 +366,15 @@ valueTable env i cs =
 
     cases cs' vty vs = err keep ($vs) (convertv cs' (vty vs))
       where
-        keep msg = --trace (msg++"\n"++render (ppT 0 (T i cs))) $
+        keep msg = --trace (msg++"\n"++render (ppTerm Unqualified 0 (T i cs))) $
                    VT wild (vty vs) (mapSnd ($vs) cs')
 
     wild = case i of TWild _ -> True; _ -> False
 
-    convertv cs' vty = convert' cs' =<< paramValues'' env pty
-      where pty = value2term (gloc env) [] vty
+    convertv cs' vty = 
+      case value2term (gloc env) [] vty of
+        Left i    -> fail ("variable #"++show i++" is out of scope")
+        Right pty -> convert' cs' =<< paramValues'' env pty
 
     convert cs' ty = convert' cs' =<< paramValues' env ty
 
@@ -470,72 +481,64 @@ vtrace loc arg res = trace (render (hang (pv arg) 4 ("->"<+>pv res))) res
     pf (_,VString n) = pp n
     pf (_,v) = ppV v
     pa (_,v) = ppV v
-    ppV v = ppT 10 (trace2term loc [] v)
-
---  tr s f vs = trace (s++" "++show vs++" = "++show r) r where r = f vs
-
--- | When tracing, we need to avoid printing under lambdas...
-trace2term = value2term' True
+    ppV v = case value2term' True loc [] v of
+              Left i  -> "variable #" <> pp i <+> "is out of scope"
+              Right t -> ppTerm Unqualified 10 t
 
 -- | Convert a value back to a term
-value2term :: GLocation -> [Ident] -> Value -> Term
+value2term :: GLocation -> [Ident] -> Value -> Either Int Term
 value2term = value2term' False
 value2term' stop loc xs v0 =
   case v0 of
-    VApp pre vs    -> foldl App (Q (cPredef,predefName pre)) (map v2t vs)
-    VCApp f vs     -> foldl App (QC f)                 (map v2t vs)
---  VGen j vs      -> foldl App (Vr (ix loc "value2term" (reverse xs) j)) (map v2t vs)
-    VGen j vs      -> foldl App (var j) (map v2t vs)
-    VMeta j env vs -> foldl App (Meta j)               (map v2t vs)
---  VClosure env (Prod bt x t1 t2) -> Prod bt x (v2t  (eval gr env t1))
---                                              (nf gr (push x (env,xs)) t2)
---  VClosure env (Abs  bt x t)     -> Abs  bt x (nf gr (push x (env,xs)) t)
-    VProd bt v x f -> Prod bt x (v2t v) (v2t' x f)
-    VAbs  bt   x f -> Abs  bt x         (v2t' x f)
-    VInt n         -> EInt n
-    VFloat f       -> EFloat f
-    VString s      -> if null s then Empty else K s
-    VSort s        -> Sort s
-    VImplArg v     -> ImplArg (v2t v)
-    VTblType p res -> Table (v2t p) (v2t res)
-    VRecType rs    -> RecType [(l,v2t v) | (l,v) <- rs]
-    VRec as        -> R [(l,(Nothing,v2t v))|(l,v) <- as]
-    VV t _ vs      -> V t (map v2t vs)
-    VT wild v cs   -> T ((if wild then TWild else TTyped) (v2t v))
-                        (map nfcase cs)
-    VFV vs         -> FV (map v2t vs)
-    VC v1 v2       -> C (v2t v1) (v2t v2)
-    VS v1 v2       -> S (v2t v1) (v2t v2)
-    VP v l         -> P (v2t v) l
-    VPatt p        -> EPatt p -- hmm
+    VApp pre vs    -> liftM (foldl App (Q (cPredef,predefName pre))) (mapM v2t vs)
+    VCApp f vs     -> liftM  (foldl App (QC f))   (mapM v2t vs)
+    VGen j vs      -> liftM2 (foldl App) (var j)  (mapM v2t vs)
+    VMeta j env vs -> liftM  (foldl App (Meta j)) (mapM v2t vs)
+    VProd bt v x f -> liftM2 (Prod bt x) (v2t v) (v2t' x f)
+    VAbs  bt   x f -> liftM  (Abs  bt x)         (v2t' x f)
+    VInt n         -> return (EInt n)
+    VFloat f       -> return (EFloat f)
+    VString s      -> return (if null s then Empty else K s)
+    VSort s        -> return (Sort s)
+    VImplArg v     -> liftM  ImplArg (v2t v)
+    VTblType p res -> liftM2 Table (v2t p) (v2t res)
+    VRecType rs    -> liftM  RecType (mapM (\(l,v) -> fmap ((,) l) (v2t v)) rs)
+    VRec as        -> liftM  R       (mapM (\(l,v) -> v2t v >>= \t -> return (l,(Nothing,t))) as)
+    VV t _ vs      -> liftM  (V t)   (mapM v2t vs)
+    VT wild v cs   -> v2t v >>= \t -> liftM (T ((if wild then TWild else TTyped) t)) (mapM nfcase cs)
+    VFV vs         -> liftM  FV (mapM v2t vs)
+    VC v1 v2       -> liftM2 C (v2t v1) (v2t v2)
+    VS v1 v2       -> liftM2 S (v2t v1) (v2t v2)
+    VP v l         -> v2t v >>= \t -> return (P t l)
+    VPatt p        -> return (EPatt p) -- hmm
 --  VPattType v    -> ...
-    VAlts v vvs    -> Alts (v2t v) (mapBoth v2t vvs)
-    VStrs vs       -> Strs (map v2t vs)
+    VAlts v vvs    -> liftM2 Alts (v2t v) (mapM (\(x,y) -> liftM2 (,) (v2t x) (v2t y)) vvs)
+    VStrs vs       -> liftM  Strs (mapM v2t vs)
 --  VGlue v1 v2    -> Glue (v2t v1) (v2t v2)
 --  VExtR v1 v2    -> ExtR (v2t v1) (v2t v2)
-    VError err     -> Error err
+    VError err     -> return (Error err)
     _              -> bug ("value2term "++show loc++" : "++show v0)
   where
     v2t = v2txs xs
     v2txs = value2term' stop loc
     v2t' x f = v2txs (x:xs) (bind f (gen xs))
 
-    var j = if j<n
-            then Vr (reverse xs !! j)
-            else Error ("VGen "++show j++" "++show xs) -- bug hunting
-      where n = length xs
+    var j
+      | j<length xs = Right (Vr (reverse xs !! j))
+      | otherwise   = Left  j
+
 
     pushs xs e = foldr push e xs
     push x (env,xs) = ((x,gen xs):env,x:xs)
     gen xs = VGen (length xs) []
 
-    nfcase (p,f) = (p,v2txs xs' (bind f env'))
+    nfcase (p,f) = liftM ((,) p) (v2txs xs' (bind f env'))
       where (env',xs') = pushs (pattVars p) ([],xs)
 
     bind (Bind f) x = if stop
                       then VSort (identS "...") -- hmm
                       else f x
---  nf gr (env,xs) = value2term xs . eval gr env
+
 
 linPattVars p =
     if null dups
@@ -567,8 +570,6 @@ mf <# mx  = ap mf mx
 --m1 @@ m2 = (m1 =<<) . m2
 
 both f (x,y) = (,) # f x <# f y
-
-ppT = ppTerm Unqualified
 
 bugloc loc s = ppbug $ ppL loc s
 
