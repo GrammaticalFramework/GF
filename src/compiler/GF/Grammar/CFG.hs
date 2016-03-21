@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : GF.Speech.CFG
+-- Module      : GF.Grammar.CFG
 --
 -- Context-free grammar representation and manipulation.
 ----------------------------------------------------------------------
