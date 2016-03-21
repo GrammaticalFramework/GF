@@ -219,6 +219,7 @@ Library
     GF.Grammar.Binary
     GF.Grammar.CFG
     GF.Grammar.EBNF
+    GF.Grammar.BNFC
     GF.Grammar.Grammar
     GF.Grammar.Lexer
     GF.Grammar.Lockfield
