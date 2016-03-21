@@ -5,10 +5,11 @@ import PGF.Internal(optimizePGF,unionPGF,msgUnionPGF)
 
 import GF.Compile
 import GF.Compile.Multi (readMulti)
-import GF.Compile.GetGrammar (getCFRules, getEBNFRules)
+import GF.Compile.GetGrammar (getBNFCRules, getEBNFRules)
 import GF.Grammar (SourceGrammar) -- for cc command
-import GF.Grammar.CFG
+import GF.Grammar.BNFC
 import GF.Grammar.EBNF
+import GF.Grammar.CFG
 import GF.Compile.CFGtoPGF
 import GF.Infra.UseIO(die,tryIOE)
 import GF.Infra.Option
@@ -22,7 +23,7 @@ importGrammar :: PGF -> Options -> [FilePath] -> IO PGF
 importGrammar pgf0 _ [] = return pgf0
 importGrammar pgf0 opts files =
   case takeExtensions (last files) of
-    ".cf"   -> importCF opts files getCFRules id
+    ".cf"   -> importCF opts files getBNFCRules bnfc2cf
     ".ebnf" -> importCF opts files getEBNFRules ebnf2cf
     ".gfm"  -> do
       ascss <- mapM readMulti files

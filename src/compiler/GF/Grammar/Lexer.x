@@ -124,6 +124,10 @@ data Token
  | T_variants
  | T_where
  | T_with
+ | T_coercions
+ | T_terminator
+ | T_separator
+ | T_nonempty
  | T_String  String          -- string literals
  | T_Integer Int             -- integer literals
  | T_Double  Double          -- double precision float literals
@@ -212,6 +216,10 @@ resWords = Map.fromList
  , b "variants"   T_variants
  , b "where"      T_where
  , b "with"       T_with
+ , b "coercions"  T_coercions
+ , b "terminator" T_terminator
+ , b "separator"  T_separator
+ , b "nonempty"   T_nonempty
  ]
  where b s t = (identS s, t)
 

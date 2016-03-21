@@ -12,7 +12,7 @@
 -- this module builds the internal GF grammar that is sent to the type checker
 -----------------------------------------------------------------------------
 
-module GF.Compile.GetGrammar (getSourceModule, getCFRules, getEBNFRules) where
+module GF.Compile.GetGrammar (getSourceModule, getBNFCRules, getEBNFRules) where
 
 import Prelude hiding (catch)
 
@@ -23,7 +23,7 @@ import GF.Infra.Option(Options,optPreprocessors,addOptions,renameEncoding,optEnc
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar
-import GF.Grammar.CFG
+import GF.Grammar.BNFC
 import GF.Grammar.EBNF
 import GF.Compile.ReadFiles(parseSource)
 
@@ -63,10 +63,10 @@ getSourceModule opts file0 =
           --liftIO $ transcodeModule' (i,mi) -- old lexer
             return (i,mi) -- new lexer
 
-getCFRules :: Options -> FilePath -> IOE [CFRule]
-getCFRules opts fpath = do
+getBNFCRules :: Options -> FilePath -> IOE [BNFCRule]
+getBNFCRules opts fpath = do
   raw <- liftIO (BS.readFile fpath)
-  (optCoding,parsed) <- parseSource opts pCFRules raw
+  (optCoding,parsed) <- parseSource opts pBNFCRules raw
   case parsed of
     Left (Pn l c,msg) -> do cwd <- getCurrentDirectory
                             let location = makeRelative cwd fpath++":"++show l++":"++show c
