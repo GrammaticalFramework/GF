@@ -60,7 +60,10 @@ cf2concr cfg = Concr Map.empty Map.empty
 
     lbls = listArray (0,0) ["s"]
     (totalCats,cnccats0) = mapAccumL mkCncCat 0 (Map.toList (cfgRules cfg))
-    cnccats = Map.fromList cnccats0
+    cnccats = Map.fromList ((mkCId "Int",    CncCat fidInt    fidInt    lbls) :
+                            (mkCId "Float",  CncCat fidFloat  fidFloat  lbls) :
+                            (mkCId "String", CncCat fidString fidString lbls) :
+                            cnccats0)
 
     lindefsrefs = 
        IntMap.fromList (map mkLinDefRef (Map.keys (cfgRules cfg)))
@@ -81,7 +84,7 @@ cf2concr cfg = Concr Map.empty Map.empty
       where
         syms   = snd $ mapAccumL convertSymbol 0 (ruleRhs rule)
 
-        convertSymbol d (NonTerminal _) = (d+1,SymCat d 0)
+        convertSymbol d (NonTerminal c) = (d+1,if c `elem` ["Int","Float","String"] then SymLit d 0 else SymCat d 0)
         convertSymbol d (Terminal t)    = (d,  SymKS t)
 
     mkCncCat fid (cat,_) = (fid+1, (mkCId cat,CncCat fid fid lbls))
