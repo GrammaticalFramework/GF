@@ -55,7 +55,7 @@ isSepTerm _                   = False
 
 transformRules :: SepMap -> BNFCRule -> [ParamCFRule]
 transformRules sepMap (BNFCRule c smbs@(s:ss) r) = Rule (c,[0]) cfSmbs r : rls
-  where smbs'   = map transformSymb smbs
+  where smbs'   = map (transformSymb sepMap) smbs
         cfSmbs  = [snd s | s            <- smbs']
         ids = filter (/= "") [fst s | s <- smbs']
         rls = concatMap (createListRules sepMap) ids
@@ -71,10 +71,14 @@ fRules c n = Rule (c',[0]) ss rn
          ss = [NonTerminal (c ++ show (n+1),[0])]
          rn = CFObj (mkCId $ "coercion_" ++ c') []
 
-transformSymb :: BNFCSymbol -> (String, ParamCFSymbol)
-transformSymb s = case s of
+transformSymb :: SepMap -> BNFCSymbol -> (String, ParamCFSymbol)
+transformSymb sepMap s = case s of
   NonTerminal (c,False) -> ("", NonTerminal (c,[0]))
-  NonTerminal (c,True ) -> (c , NonTerminal $ ("List" ++ c,[0]))
+  NonTerminal (c,True ) -> let needsCoercion = 
+                                 case lookup c sepMap of
+                                   Just (ne, isSep, symb) -> isSep && symb /= "" && not ne
+                                   Nothing                -> False
+                           in (c , NonTerminal ("List" ++ c,if needsCoercion then [0,1] else [0]))
   Terminal t            -> ("", Terminal t)
 
 createListRules :: SepMap -> String -> [ParamCFRule]
@@ -84,15 +88,23 @@ createListRules sepMap c =
     Nothing                -> createListRules' False True "" c
 
 createListRules':: IsNonempty -> IsSeparator -> SepTermSymb -> String -> [ParamCFRule]
-createListRules' ne isSep symb c = ruleCons : [ruleBase]
+createListRules' ne isSep symb c = ruleBase : ruleCons
   where ruleBase = Rule ("List" ++ c,[0]) smbs rn
           where smbs = if isSep
                        then [NonTerminal (c,[0]) | ne]
                        else [NonTerminal (c,[0]) | ne] ++
                             [Terminal symb | symb /= "" && ne]
                 rn   = CFObj (mkCId $ "Base" ++ c) []
-        ruleCons = Rule ("List" ++ c,[0]) smbs rn
-          where smbs = [NonTerminal (c,[0])] ++
+        ruleCons
+          | isSep && symb /= "" && not ne = [Rule ("List" ++ c,[1]) smbs0 rn
+                                            ,Rule ("List" ++ c,[1]) smbs1 rn]
+          | otherwise                     = [Rule ("List" ++ c,[0]) smbs  rn]
+          where smbs0 =[NonTerminal (c,[0])] ++
+                       [NonTerminal ("List" ++ c,[0])]
+                smbs1 =[NonTerminal (c,[0])] ++
+                       [Terminal symb] ++
+                       [NonTerminal ("List" ++ c,[1])]
+                smbs = [NonTerminal (c,[0])] ++
                        [Terminal symb | symb /= ""] ++
                        [NonTerminal ("List" ++ c,[0])]
                 rn   = CFObj (mkCId $ "Cons" ++ c) []
