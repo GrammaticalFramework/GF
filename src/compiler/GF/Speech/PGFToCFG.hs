@@ -64,17 +64,17 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
 
     extCats :: Set Cat
-    extCats = Set.fromList $ map lhsCat startRules
+    extCats = Set.fromList $ map ruleLhs startRules
 
     startRules :: [CFRule]
-    startRules = [CFRule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
+    startRules = [Rule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
                       | (c,CncCat s e lbls) <- Map.toList (cnccats cnc), 
                         fc <- range (s,e), not (isPredefFId fc),
                         r <- [0..catLinArity fc-1]]
 
     ruleToCFRule :: (FId,Production) -> [CFRule]
     ruleToCFRule (c,PApply funid args) = 
-        [CFRule (fcatToCat c l) (mkRhs row) (profilesToTerm [fixProfile row n | n <- [0..length args-1]])
+        [Rule (fcatToCat c l) (mkRhs row) (profilesToTerm [fixProfile row n | n <- [0..length args-1]])
            | (l,seqid) <- Array.assocs rhs
            , let row = sequences cnc ! seqid
            , not (containsLiterals row)]
@@ -119,5 +119,5 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
         profileToTerm t [] = CFMeta t
         profileToTerm _ xs = CFRes (last xs) -- FIXME: unify
     ruleToCFRule (c,PCoerce c') =
-        [CFRule (fcatToCat c l) [NonTerminal (fcatToCat c' l)] (CFRes 0)
+        [Rule (fcatToCat c l) [NonTerminal (fcatToCat c' l)] (CFRes 0)
            | l <- [0..catLinArity c-1]]

@@ -8,16 +8,11 @@ module GF.Grammar.CFG where
 
 import GF.Data.Utilities
 import PGF
---import GF.Infra.Option
 import GF.Data.Relation
 
---import Control.Monad
---import Control.Monad.State (State, get, put, evalState)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.List
---import Data.Maybe (fromMaybe)
---import Data.Monoid (mconcat)
 import Data.Set (Set)
 import qualified Data.Set as Set
 
@@ -30,13 +25,17 @@ type Cat = String
 data Symbol c t = NonTerminal c | Terminal t
   deriving (Eq, Ord, Show)
 
-type CFSymbol = Symbol Cat Token
-
-data CFRule = CFRule { 
-      lhsCat :: Cat,
-      ruleRhs :: [CFSymbol],
+data Rule c t = Rule { 
+      ruleLhs  :: c,
+      ruleRhs  :: [Symbol c t],
       ruleName :: CFTerm 
     }
+  deriving (Eq, Ord, Show)
+
+data Grammar c t = Grammar { 
+      cfgStartCat     :: c,
+      cfgExternalCats :: Set c,
+      cfgRules        :: Map c (Set (Rule c t)) }
   deriving (Eq, Ord, Show)
 
 data CFTerm
@@ -48,11 +47,14 @@ data CFTerm
     | CFMeta CId -- ^ A metavariable
   deriving (Eq, Ord, Show)
 
-data CFG = CFG { cfgStartCat :: Cat,
-                 cfgExternalCats :: Set Cat,
-                 cfgRules :: Map Cat (Set CFRule) }
-  deriving (Eq, Ord, Show)
+type CFSymbol = Symbol  Cat Token
+type CFRule   = Rule    Cat Token
+type CFG      = Grammar Cat Token
 
+type Param         = Int
+type ParamCFSymbol = Symbol (Cat,[Param]) Token
+type ParamCFRule   = Rule    (Cat,[Param]) Token
+type ParamCFG      = Grammar (Cat,[Param]) Token
 
 --
 -- * Grammar filtering
@@ -64,25 +66,25 @@ data CFG = CFG { cfgStartCat :: Cat,
 --   one should we pick?
 --   FIXME: Does not (yet) remove productions which are cyclic
 --   because of empty productions.
-removeCycles :: CFG -> CFG
+removeCycles :: (Ord c,Ord t) => Grammar c t -> Grammar c t
 removeCycles = onRules f
   where f rs = filter (not . isCycle) rs
-          where alias = transitiveClosure $ mkRel [(c,c') | CFRule c [NonTerminal c'] _ <- rs]
-                isCycle (CFRule c [NonTerminal c'] _) = isRelatedTo alias c' c
+          where alias = transitiveClosure $ mkRel [(c,c') | Rule c [NonTerminal c'] _ <- rs]
+                isCycle (Rule c [NonTerminal c'] _) = isRelatedTo alias c' c
                 isCycle _ = False
 
 -- | Better bottom-up filter that also removes categories which contain no finite
 -- strings.
-bottomUpFilter :: CFG -> CFG
+bottomUpFilter :: (Ord c,Ord t) => Grammar c t -> Grammar c t
 bottomUpFilter gr = fix grow (gr { cfgRules = Map.empty })
   where grow g = g `unionCFG` filterCFG (all (okSym g) . ruleRhs) gr
         okSym g = symbol (`elem` allCats g) (const True)
 
 -- | Removes categories which are not reachable from any external category.
-topDownFilter :: CFG -> CFG
+topDownFilter :: (Ord c,Ord t) => Grammar c t -> Grammar c t
 topDownFilter cfg = filterCFGCats (`Set.member` keep) cfg
   where
-    rhsCats = [ (lhsCat r, c') | r <- allRules cfg, c' <- filterCats (ruleRhs r) ]
+    rhsCats = [ (ruleLhs r, c') | r <- allRules cfg, c' <- filterCats (ruleRhs r) ]
     uses = reflexiveClosure_ (allCats cfg) $ transitiveClosure $ mkRel rhsCats
     keep = Set.unions $ map (allRelated uses) $ Set.toList $ cfgExternalCats cfg
 
@@ -95,12 +97,12 @@ mergeIdentical g = onRules (map subst) g
     m = Map.fromList [(y,concat (intersperse "+" xs)) 
                           | (_,xs) <- buildMultiMap [(rulesKey rs,c) | (c,rs) <- Map.toList (cfgRules g)], y <- xs]
     -- build data to compare for each category: a set of name,rhs pairs
-    rulesKey = Set.map (\ (CFRule _ r n) -> (n,r))
-    subst (CFRule c r n) = CFRule (substCat c) (map (mapSymbol substCat id) r) n
+    rulesKey = Set.map (\ (Rule _ r n) -> (n,r))
+    subst (Rule c r n) = Rule (substCat c) (map (mapSymbol substCat id) r) n
     substCat c = Map.findWithDefault (error $ "mergeIdentical: " ++ c) c m
 
 -- | Keeps only the start category as an external category.
-purgeExternalCats :: CFG -> CFG
+purgeExternalCats :: Grammar c t -> Grammar c t
 purgeExternalCats cfg = cfg { cfgExternalCats = Set.singleton (cfgStartCat cfg) }
 
 --
@@ -113,7 +115,7 @@ removeLeftRecursion :: CFG -> CFG
 removeLeftRecursion gr 
     = gr { cfgRules = groupProds $ concat [scheme1, scheme2, scheme3, scheme4] }
   where
-    scheme1 = [CFRule a [x,NonTerminal a_x] n' | 
+    scheme1 = [Rule a [x,NonTerminal a_x] n' | 
                a <- retainedLeftRecursive, 
                x <- properLeftCornersOf a,
                not (isLeftRecursive x),
@@ -123,27 +125,27 @@ removeLeftRecursion gr
                a_x `Set.member` newCats,
                let n' = symbol (\_ -> CFApp (CFRes 1) (CFRes 0))
                                (\_ -> CFRes 0) x] 
-    scheme2 = [CFRule a_x (beta++[NonTerminal a_b]) n' | 
+    scheme2 = [Rule a_x (beta++[NonTerminal a_b]) n' | 
                a <- retainedLeftRecursive, 
                b@(NonTerminal b') <- properLeftCornersOf a,
                isLeftRecursive b,
-               CFRule _ (x:beta) n <- catRules gr b', 
+               Rule _ (x:beta) n <- catRules gr b', 
                let a_x = mkCat (NonTerminal a) x,
                let a_b = mkCat (NonTerminal a) b,
                let i = length $ filterCats beta,
                let n' = symbol (\_ -> CFAbs 1 (CFApp (CFRes i) (shiftTerm n)))
                                (\_ -> CFApp (CFRes i) n) x]
-    scheme3 = [CFRule a_x beta n' |
+    scheme3 = [Rule a_x beta n' |
                a <- retainedLeftRecursive, 
                x <- properLeftCornersOf a,
-               CFRule _ (x':beta) n <- catRules gr a,
+               Rule _ (x':beta) n <- catRules gr a,
                x == x',
                let a_x = mkCat (NonTerminal a) x,
                let n' = symbol (\_ -> CFAbs 1 (shiftTerm n)) 
                                (\_ -> n) x]
     scheme4 = catSetRules gr $ Set.fromList $ filter (not . isLeftRecursive . NonTerminal) cats
 
-    newCats = Set.fromList (map lhsCat (scheme2 ++ scheme3))
+    newCats = Set.fromList (map ruleLhs (scheme2 ++ scheme3))
 
     shiftTerm :: CFTerm -> CFTerm
     shiftTerm (CFObj f ts) = CFObj f (map shiftTerm ts)
@@ -155,7 +157,7 @@ removeLeftRecursion gr
     cats = allCats gr
 --  rules = allRules gr
 
-    directLeftCorner = mkRel [(NonTerminal c,t) | CFRule c (t:_) _ <- allRules gr]
+    directLeftCorner = mkRel [(NonTerminal c,t) | Rule c (t:_) _ <- allRules gr]
 --  leftCorner = reflexiveClosure_ (map NonTerminal cats) $ transitiveClosure directLeftCorner
     properLeftCorner = transitiveClosure directLeftCorner
     properLeftCornersOf = Set.toList . allRelated properLeftCorner . NonTerminal
@@ -176,11 +178,12 @@ removeLeftRecursion gr
         where showSymbol = symbol id show
 
 -- | Get the sets of mutually recursive non-terminals for a grammar.
-mutRecCats :: Bool    -- ^ If true, all categories will be in some set.
+mutRecCats :: Ord c
+           => Bool    -- ^ If true, all categories will be in some set.
                       --   If false, only recursive categories will be included.
-           -> CFG -> [Set Cat]
+           -> Grammar c t -> [Set c]
 mutRecCats incAll g = equivalenceClasses $ refl $ symmetricSubrelation $ transitiveClosure r
-  where r = mkRel [(c,c') | CFRule c ss _ <- allRules g, NonTerminal c' <- ss]
+  where r = mkRel [(c,c') | Rule c ss _ <- allRules g, NonTerminal c' <- ss]
         refl = if incAll then reflexiveClosure_ (allCats g) else reflexiveSubrelation
 
 --
@@ -199,107 +202,108 @@ makeRegular g = g { cfgRules = groupProds $ concatMap trSet (mutRecCats True g) 
   where trSet cs | allXLinear cs rs = rs
                  | otherwise = concatMap handleCat (Set.toList cs)
             where rs = catSetRules g cs
-                  handleCat c = [CFRule c' [] (mkCFTerm (c++"-empty"))] -- introduce A' -> e
+                  handleCat c = [Rule c' [] (mkCFTerm (c++"-empty"))] -- introduce A' -> e
                                 ++ concatMap (makeRightLinearRules c) (catRules g c)
                       where c' = newCat c
-                  makeRightLinearRules b' (CFRule c ss n) = 
+                  makeRightLinearRules b' (Rule c ss n) = 
                       case ys of
                               [] -> newRule b' (xs ++ [NonTerminal (newCat c)]) n -- no non-terminals left
                               (NonTerminal b:zs) -> newRule b' (xs ++ [NonTerminal b]) n 
-                                        ++ makeRightLinearRules (newCat b) (CFRule c zs n)
+                                        ++ makeRightLinearRules (newCat b) (Rule c zs n)
                       where (xs,ys) = break (`catElem` cs) ss
                             -- don't add rules on the form A -> A
                             newRule c rhs n | rhs == [NonTerminal c] = []
-                                            | otherwise = [CFRule c rhs n]
+                                            | otherwise = [Rule c rhs n]
         newCat c = c ++ "$"
 
 --
 -- * CFG Utilities
 --
 
-mkCFG :: Cat -> Set Cat -> [CFRule] -> CFG
-mkCFG start ext rs = CFG { cfgStartCat = start, cfgExternalCats = ext, cfgRules = groupProds rs }
+mkCFG :: (Ord c,Ord t) => c -> Set c -> [Rule c t] -> Grammar c t
+mkCFG start ext rs = Grammar { cfgStartCat = start, cfgExternalCats = ext, cfgRules = groupProds rs }
 
-groupProds :: [CFRule] -> Map Cat (Set CFRule)
-groupProds = Map.fromListWith Set.union . map (\r -> (lhsCat r,Set.singleton r))
+groupProds :: (Ord c,Ord t) => [Rule c t] -> Map c (Set (Rule c t))
+groupProds = Map.fromListWith Set.union . map (\r -> (ruleLhs r,Set.singleton r))
 
-uniqueFuns :: CFG -> CFG
-uniqueFuns cfg = CFG {cfgStartCat     = cfgStartCat cfg
-                     ,cfgExternalCats = cfgExternalCats cfg
-                     ,cfgRules        = Map.fromList (snd (mapAccumL uniqueFunSet Set.empty (Map.toList (cfgRules cfg))))
-                     }
+uniqueFuns :: (Ord c,Ord t) => Grammar c t -> Grammar c t
+uniqueFuns cfg = Grammar {cfgStartCat     = cfgStartCat cfg
+                         ,cfgExternalCats = cfgExternalCats cfg
+                         ,cfgRules        = Map.fromList (snd (mapAccumL uniqueFunSet Set.empty (Map.toList (cfgRules cfg))))
+                         }
   where
     uniqueFunSet funs (cat,rules) =
       let (funs',rules') = mapAccumL uniqueFun funs (Set.toList rules)
       in (funs',(cat,Set.fromList rules'))
-    uniqueFun funs (CFRule cat items (CFObj fun args)) = (Set.insert fun' funs,CFRule cat items (CFObj fun' args))
+    uniqueFun funs (Rule cat items (CFObj fun args)) = (Set.insert fun' funs,Rule cat items (CFObj fun' args))
       where
         fun' = head [fun'|suffix<-"":map show ([2..]::[Int]),
                           let fun'=mkCId (showCId fun++suffix),
                           not (fun' `Set.member` funs)]
 
 -- | Gets all rules in a CFG.
-allRules :: CFG -> [CFRule]
-allRules = concat . map Set.toList . Map.elems . cfgRules
+allRules :: Grammar c t -> [Rule c t]
+allRules = concatMap Set.toList . Map.elems . cfgRules
 
 -- | Gets all rules in a CFG, grouped by their LHS categories.
-allRulesGrouped :: CFG -> [(Cat,[CFRule])]
+allRulesGrouped :: Grammar c t -> [(c,[Rule c t])]
 allRulesGrouped = Map.toList . Map.map Set.toList . cfgRules
 
 -- | Gets all categories which have rules.
-allCats :: CFG -> [Cat]
+allCats :: Grammar c t -> [c]
 allCats = Map.keys . cfgRules
 
 -- | Gets all categories which have rules or occur in a RHS.
-allCats' :: CFG -> [Cat]
+allCats' :: (Ord c,Ord t) => Grammar c t -> [c]
 allCats' cfg = Set.toList (Map.keysSet (cfgRules cfg) `Set.union` 
                            Set.fromList [c | rs <- Map.elems (cfgRules cfg), 
                                              r  <- Set.toList rs, 
                                              NonTerminal c <- ruleRhs r])
 
 -- | Gets all rules for the given category.
-catRules :: CFG -> Cat -> [CFRule]
+catRules :: Ord c => Grammar c t -> c -> [Rule c t]
 catRules gr c = Set.toList $ Map.findWithDefault Set.empty c (cfgRules gr)
 
 -- | Gets all rules for categories in the given set.
 catSetRules :: CFG -> Set Cat -> [CFRule]
 catSetRules gr cs = allRules $ filterCFGCats (`Set.member` cs) gr
 
-mapCFGCats :: (Cat -> Cat) -> CFG -> CFG
-mapCFGCats f cfg = mkCFG (f (cfgStartCat cfg)) 
-                         (Set.map f (cfgExternalCats cfg))
-                         [CFRule (f lhs) (map (mapSymbol f id) rhs) t | CFRule lhs rhs t <- allRules cfg]
+mapCFGCats :: (Ord c,Ord c',Ord t) => (c -> c') -> Grammar c t -> Grammar c' t
+mapCFGCats f cfg = Grammar (f (cfgStartCat cfg)) 
+                           (Set.map f (cfgExternalCats cfg))
+                           (groupProds [Rule (f lhs) (map (mapSymbol f id) rhs) t | Rule lhs rhs t <- allRules cfg])
 
-onCFG :: (Map Cat (Set CFRule) -> Map Cat (Set CFRule)) -> CFG -> CFG
-onCFG f cfg = cfg { cfgRules = f (cfgRules cfg) }
-
-onRules :: ([CFRule] -> [CFRule]) -> CFG -> CFG
+onRules :: (Ord c,Ord t) => ([Rule c t] -> [Rule c t]) -> Grammar c t -> Grammar c t
 onRules f cfg = cfg { cfgRules = groupProds $ f $ allRules cfg }
 
 -- | Clean up CFG after rules have been removed.
-cleanCFG :: CFG -> CFG
-cleanCFG = onCFG (Map.filter (not . Set.null))
+cleanCFG :: Ord c => Grammar c t -> Grammar c t
+cleanCFG cfg = cfg{ cfgRules = Map.filter (not . Set.null) (cfgRules cfg) }
 
 -- | Combine two CFGs.
-unionCFG :: CFG -> CFG -> CFG
-unionCFG x y = onCFG (\rs -> Map.unionWith Set.union rs (cfgRules y)) x
+unionCFG :: (Ord c,Ord t) => Grammar c t -> Grammar c t -> Grammar c t
+unionCFG x y = x { cfgRules = Map.unionWith Set.union (cfgRules x) (cfgRules y) }
 
-filterCFG :: (CFRule -> Bool) -> CFG -> CFG
-filterCFG p = cleanCFG . onCFG (Map.map (Set.filter p))
+filterCFG :: (Rule c t -> Bool) -> Grammar c t -> Grammar c t
+filterCFG p cfg = cfg { cfgRules = Map.mapMaybe filterRules (cfgRules cfg) }
+  where
+    filterRules rules = 
+      let rules' = Set.filter p rules
+      in if Set.null rules' then Nothing else Just rules'
 
-filterCFGCats :: (Cat -> Bool) -> CFG -> CFG
-filterCFGCats p = onCFG (Map.filterWithKey (\c _ -> p c))
+filterCFGCats :: (c -> Bool) -> Grammar c t -> Grammar c t
+filterCFGCats p cfg = cfg { cfgRules = Map.filterWithKey (\c _ -> p c) (cfgRules cfg) }
 
-countCats :: CFG -> Int
+countCats :: Ord c => Grammar c t -> Int
 countCats = Map.size . cfgRules . cleanCFG
 
-countRules :: CFG -> Int
+countRules :: Grammar c t -> Int
 countRules = length . allRules
 
 prCFG :: CFG -> String
 prCFG = prProductions . map prRule . allRules
     where 
-      prRule r = (lhsCat r, unwords (map prSym (ruleRhs r)))
+      prRule r = (ruleLhs r, unwords (map prSym (ruleRhs r)))
       prSym = symbol id (\t -> "\""++ t ++"\"")
 
 prProductions :: [(Cat,String)] -> String
@@ -325,8 +329,8 @@ prCFTerm = pr 0
 -- * CFRule Utilities
 --
 
-ruleFun :: CFRule -> CId
-ruleFun (CFRule _ _ t) = f t
+ruleFun :: Rule c t -> CId
+ruleFun (Rule _ _ t) = f t
   where f (CFObj n _) = n
         f (CFApp _ x) = f x
         f (CFAbs _ x) = f x
@@ -334,29 +338,31 @@ ruleFun (CFRule _ _ t) = f t
 
 -- | Check if any of the categories used on the right-hand side
 --   are in the given list of categories.
-anyUsedBy :: [Cat] -> CFRule -> Bool
-anyUsedBy cs (CFRule _ ss _) = any (`elem` cs) (filterCats ss)
+anyUsedBy :: Eq c => [c] -> Rule c t -> Bool
+anyUsedBy cs (Rule _ ss _) = any (`elem` cs) (filterCats ss)
 
 mkCFTerm :: String -> CFTerm
 mkCFTerm n = CFObj (mkCId n) []
 
-ruleIsNonRecursive :: Set Cat -> CFRule -> Bool
+ruleIsNonRecursive :: Ord c => Set c -> Rule c t -> Bool
 ruleIsNonRecursive cs = noCatsInSet cs . ruleRhs
 
 -- | Check if all the rules are right-linear, or all the rules are
 --   left-linear, with respect to given categories.
-allXLinear :: Set Cat -> [CFRule] -> Bool
+allXLinear :: Ord c => Set c -> [Rule c t] -> Bool
 allXLinear cs rs = all (isRightLinear cs) rs || all (isLeftLinear cs) rs
 
 -- | Checks if a context-free rule is right-linear.
-isRightLinear :: Set Cat  -- ^ The categories to consider
-              -> CFRule   -- ^ The rule to check for right-linearity
+isRightLinear :: Ord c
+              => Set c    -- ^ The categories to consider
+              -> Rule c t -- ^ The rule to check for right-linearity
               -> Bool
 isRightLinear cs = noCatsInSet cs . safeInit . ruleRhs
 
 -- | Checks if a context-free rule is left-linear.
-isLeftLinear :: Set Cat  -- ^ The categories to consider
-             -> CFRule   -- ^ The rule to check for left-linearity
+isLeftLinear :: Ord c
+             => Set c    -- ^ The categories to consider
+             -> Rule c t -- ^ The rule to check for left-linearity
              -> Bool
 isLeftLinear cs = noCatsInSet cs . drop 1 . ruleRhs
 

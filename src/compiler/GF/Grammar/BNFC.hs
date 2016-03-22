@@ -16,7 +16,7 @@ module GF.Grammar.BNFC(BNFCRule(..), BNFCSymbol, Symbol(..), CFTerm(..), bnfc2cf
 
 import GF.Grammar.CFG
 import PGF (Token, mkCId)
-import Data.List (lookup, partition)
+import Data.List (partition)
 
 type IsList = Bool
 type BNFCSymbol = Symbol (Cat, IsList) Token
@@ -42,7 +42,7 @@ type IsSeparator = Bool
 type SepTermSymb = String 
 type SepMap      = [(Cat, (IsNonempty, IsSeparator, SepTermSymb))]
 
-bnfc2cf :: [BNFCRule] -> [CFRule]
+bnfc2cf :: [BNFCRule] -> [ParamCFRule]
 bnfc2cf rules = concatMap (transformRules (map makeSepTerm rules1)) rules2
   where (rules1,rules2) = partition isSepTerm rules
         makeSepTerm (BNFCTerminator ne c s) = (c, (ne, False, s))
@@ -53,46 +53,46 @@ isSepTerm (BNFCTerminator {}) = True
 isSepTerm (BNFCSeparator  {}) = True
 isSepTerm _                   = False
 
-transformRules :: SepMap -> BNFCRule -> [CFRule]
-transformRules sepMap (BNFCRule c smbs@(s:ss) r) = CFRule c cfSmbs r : rls
+transformRules :: SepMap -> BNFCRule -> [ParamCFRule]
+transformRules sepMap (BNFCRule c smbs@(s:ss) r) = Rule (c,[0]) cfSmbs r : rls
   where smbs'   = map transformSymb smbs
         cfSmbs  = [snd s | s            <- smbs']
         ids = filter (/= "") [fst s | s <- smbs']
         rls = concatMap (createListRules sepMap) ids
 transformRules sepMap (BNFCCoercions c num) = rules ++ [lastRule]
           where rules = map (fRules c)  [0..num-1]
-                lastRule = CFRule c' ss rn
+                lastRule = Rule (c',[0]) ss rn
                   where c' = c ++ show num
-                        ss = [Terminal "(", NonTerminal c, Terminal ")"]
+                        ss = [Terminal "(", NonTerminal (c,[0]), Terminal ")"]
                         rn = CFObj (mkCId $ "coercion_" ++ c) []
 
-fRules c n = CFRule c' ss rn
+fRules c n = Rule (c',[0]) ss rn
    where c' = if n == 0 then c else c ++ show n
-         ss = [NonTerminal (c ++ show (n+1))]
-         rn = CFObj (mkCId $ "coercion_" ++ c')[]
+         ss = [NonTerminal (c ++ show (n+1),[0])]
+         rn = CFObj (mkCId $ "coercion_" ++ c') []
 
-transformSymb :: BNFCSymbol -> (String, CFSymbol)
+transformSymb :: BNFCSymbol -> (String, ParamCFSymbol)
 transformSymb s = case s of
-  NonTerminal (c,False) -> ("", NonTerminal c)
-  NonTerminal (c,True ) -> (c , NonTerminal $ "List" ++ c)
+  NonTerminal (c,False) -> ("", NonTerminal (c,[0]))
+  NonTerminal (c,True ) -> (c , NonTerminal $ ("List" ++ c,[0]))
   Terminal t            -> ("", Terminal t)
 
-createListRules :: SepMap -> String -> [CFRule]
+createListRules :: SepMap -> String -> [ParamCFRule]
 createListRules sepMap c =
   case lookup c sepMap of
     Just (ne, isSep, symb) -> createListRules' ne isSep symb c
     Nothing                -> createListRules' False True "" c
 
-createListRules':: IsNonempty -> IsSeparator -> SepTermSymb -> String -> [CFRule]
+createListRules':: IsNonempty -> IsSeparator -> SepTermSymb -> String -> [ParamCFRule]
 createListRules' ne isSep symb c = ruleCons : [ruleBase]
-  where ruleBase = CFRule ("List" ++ c) smbs rn
+  where ruleBase = Rule ("List" ++ c,[0]) smbs rn
           where smbs = if isSep
-                       then [NonTerminal c | ne]
-                       else [NonTerminal c | ne] ++
+                       then [NonTerminal (c,[0]) | ne]
+                       else [NonTerminal (c,[0]) | ne] ++
                             [Terminal symb | symb /= "" && ne]
                 rn   = CFObj (mkCId $ "Base" ++ c) []
-        ruleCons = CFRule ("List" ++ c) smbs rn
-          where smbs = [NonTerminal c] ++
+        ruleCons = Rule ("List" ++ c,[0]) smbs rn
+          where smbs = [NonTerminal (c,[0])] ++
                        [Terminal symb | symb /= ""] ++
-                       [NonTerminal ("List" ++ c)]
+                       [NonTerminal ("List" ++ c,[0])]
                 rn   = CFObj (mkCId $ "Cons" ++ c) []

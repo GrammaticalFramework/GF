@@ -129,9 +129,9 @@ renameCats prefix cfg = mapCFGCats renameCat cfg
         badCat c = error ("GF.Speech.SRG.renameCats: " ++ c ++ "\n" ++ prCFG cfg)
 
 cfRulesToSRGRule :: [CFRule] -> SRGRule
-cfRulesToSRGRule rs@(r:_) = SRGRule (lhsCat r) rhs
+cfRulesToSRGRule rs@(r:_) = SRGRule (ruleLhs r) rhs
     where 
-      alts = [((n,Nothing),mkSRGSymbols 0 ss) | CFRule c ss n <- rs]
+      alts = [((n,Nothing),mkSRGSymbols 0 ss) | Rule c ss n <- rs]
       rhs = [SRGAlt p n (srgItem sss) | ((n,p),sss) <- buildMultiMap alts ]
 
       mkSRGSymbols _ [] = []
