@@ -54,8 +54,8 @@ importCF opts files get convert = impCF
     impCF = do
       rules <- fmap (convert . concat) $ mapM (get opts) files
       startCat <- case rules of
-                    (CFRule cat _ _ : _) -> return cat
-                    _                    -> fail "empty CFG"
+                    (Rule cat _ _ : _) -> return cat
+                    _                  -> fail "empty CFG"
       let pgf = cf2pgf (last files) (uniqueFuns (mkCFG startCat Set.empty rules))
       probs <- maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf
       return $ setProbabilities probs 

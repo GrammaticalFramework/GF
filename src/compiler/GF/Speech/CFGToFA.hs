@@ -75,14 +75,14 @@ make_fa c@(g,ns) q0 alpha q1 fa =
                   case mrRec n of
                     -- the set Ni is right-recursive or cyclic
                     RightR ->
-                        let new = [(getState c, xs, q1) | CFRule c xs _ <- nrs]
-                                  ++ [(getState c, xs, getState d) | CFRule c ss _ <- rs, 
+                        let new = [(getState c, xs, q1) | Rule c xs _ <- nrs]
+                                  ++ [(getState c, xs, getState d) | Rule c ss _ <- rs, 
                                        let (xs,NonTerminal d) = (init ss,last ss)]
                          in make_fas new $ newTransition q0 (getState a) Nothing fa'
                     -- the set Ni is left-recursive                         
                     LeftR ->
-                        let new = [(q0, xs, getState c) | CFRule c xs _ <- nrs]
-                                  ++ [(getState d, xs, getState c) | CFRule c (NonTerminal d:xs) _ <- rs]
+                        let new = [(q0, xs, getState c) | Rule c xs _ <- nrs]
+                                  ++ [(getState d, xs, getState c) | Rule c (NonTerminal d:xs) _ <- rs]
                          in make_fas new $ newTransition (getState a) q1 Nothing fa'
                 where
                   (fa',stateMap) = addStatesForCats ni fa
@@ -91,7 +91,7 @@ make_fa c@(g,ns) q0 alpha q1 fa =
                                x stateMap
               -- a is not recursive
               Nothing -> let rs = catRules g a
-                          in foldl' (\f (CFRule _ b _) -> make_fa_ q0 b q1 f) fa rs
+                          in foldl' (\f (Rule _ b _) -> make_fa_ q0 b q1 f) fa rs
         (x:beta) -> let (fa',q) = newState () fa
                      in make_fa_ q beta q1 $ make_fa_ q0 [x] q fa'
   where
@@ -190,15 +190,15 @@ make_fa1 mr q0 alpha q1 fa =
             case mrRec mr of
                 NotR -> -- the set is a non-recursive (always singleton) set of categories
                         -- so the set of category rules is the set of rules for the whole set
-                    make_fas [(q0, b, q1) | CFRule _ b _ <- mrNonRecRules mr] fa
+                    make_fas [(q0, b, q1) | Rule _ b _ <- mrNonRecRules mr] fa
                 RightR -> -- the set is right-recursive or cyclic
-                    let new = [(getState c, xs, q1) | CFRule c xs _ <- mrNonRecRules mr]
-                              ++ [(getState c, xs, getState d) | CFRule c ss _ <- mrRecRules mr, 
+                    let new = [(getState c, xs, q1) | Rule c xs _ <- mrNonRecRules mr]
+                              ++ [(getState c, xs, getState d) | Rule c ss _ <- mrRecRules mr, 
                                                                  let (xs,NonTerminal d) = (init ss,last ss)]
                      in make_fas new $ newTransition q0 (getState a) Nothing fa'
                 LeftR -> -- the set is left-recursive
-                    let new = [(q0, xs, getState c) | CFRule c xs _ <- mrNonRecRules mr]
-                              ++ [(getState d, xs, getState c) | CFRule c (NonTerminal d:xs) _ <- mrRecRules mr]
+                    let new = [(q0, xs, getState c) | Rule c xs _ <- mrNonRecRules mr]
+                              ++ [(getState d, xs, getState c) | Rule c (NonTerminal d:xs) _ <- mrRecRules mr]
                      in make_fas new $ newTransition (getState a) q1 Nothing fa'
              where
              (fa',stateMap) = addStatesForCats (mrCats mr) fa

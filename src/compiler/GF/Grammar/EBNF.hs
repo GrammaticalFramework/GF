@@ -18,8 +18,6 @@ import GF.Data.Operations
 import GF.Grammar.CFG
 import PGF (mkCId)
 
-import Data.List
-
 type EBNF = [ERule]
 type ERule = (ECat, ERHS)
 type ECat = (String,[Int])
@@ -35,14 +33,14 @@ data ERHS =
  | EOpt  ERHS
  | EEmpty
 
-type CFRHS = [CFSymbol]
-type CFJustRule = (Cat, CFRHS)
+type CFRHS = [ParamCFSymbol]
+type CFJustRule = ((Cat,[Param]), CFRHS)
 
-ebnf2cf :: EBNF -> [CFRule]
+ebnf2cf :: EBNF -> [ParamCFRule]
 ebnf2cf ebnf = 
-  [CFRule cat items (mkCFF i cat) | (i,(cat,items)) <- zip [0..] (normEBNF ebnf)]
+  [Rule cat items (mkCFF i cat) | (i,(cat,items)) <- zip [0..] (normEBNF ebnf)]
   where
-    mkCFF i c = CFObj (mkCId ("Mk" ++ c ++ "_" ++ show i)) []
+    mkCFF i (c,_) = CFObj (mkCId ("Mk" ++ c ++ "_" ++ show i)) []
 
 normEBNF :: EBNF -> [CFJustRule]
 normEBNF erules = let
@@ -101,7 +99,7 @@ substERules g (cat,itss) = (cat, map sub itss) where
   sub (EIPlus r : ii) = EIPlus (substERules g r) : ii
   sub (EIOpt r : ii)  = EIOpt  (substERules g r) : ii
 -}
-eitem2cfitem :: EItem -> CFSymbol
+eitem2cfitem :: EItem -> ParamCFSymbol
 eitem2cfitem it = case it of
   EITerm a       -> Terminal a
   EINonTerm cat  -> NonTerminal (mkCFCatE cat)
@@ -143,8 +141,8 @@ mkECat ints = ("C", ints)
 prECat (c,[]) = c
 prECat (c,ints) = c ++ "_" ++ prTList "_" (map show ints)
 
-mkCFCatE :: ECat -> Cat
-mkCFCatE = prECat
+mkCFCatE :: ECat -> (Cat,[Param])
+mkCFCatE c = (prECat c,[0])
 {-
 updECat _ (c,[]) = (c,[])
 updECat ii (c,_) = (c,ii)
