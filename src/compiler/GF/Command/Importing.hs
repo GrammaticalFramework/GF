@@ -56,7 +56,7 @@ importCF opts files get convert = impCF
       startCat <- case rules of
                     (Rule cat _ _ : _) -> return cat
                     _                  -> fail "empty CFG"
-      let pgf = cf2pgf (last files) (uniqueFuns (mkCFG startCat Set.empty rules))
+      let pgf = cf2pgf (last files) (mkCFG startCat Set.empty rules)
       probs <- maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf
       return $ setProbabilities probs 
              $ if flag optOptimizePGF opts then optimizePGF pgf else pgf

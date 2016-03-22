@@ -226,15 +226,9 @@ mkCFG start ext rs = Grammar { cfgStartCat = start, cfgExternalCats = ext, cfgRu
 groupProds :: (Ord c,Ord t) => [Rule c t] -> Map c (Set (Rule c t))
 groupProds = Map.fromListWith Set.union . map (\r -> (ruleLhs r,Set.singleton r))
 
-uniqueFuns :: (Ord c,Ord t) => Grammar c t -> Grammar c t
-uniqueFuns cfg = Grammar {cfgStartCat     = cfgStartCat cfg
-                         ,cfgExternalCats = cfgExternalCats cfg
-                         ,cfgRules        = Map.fromList (snd (mapAccumL uniqueFunSet Set.empty (Map.toList (cfgRules cfg))))
-                         }
+uniqueFuns :: [Rule c t] -> [Rule c t]
+uniqueFuns = snd . mapAccumL uniqueFun Set.empty
   where
-    uniqueFunSet funs (cat,rules) =
-      let (funs',rules') = mapAccumL uniqueFun funs (Set.toList rules)
-      in (funs',(cat,Set.fromList rules'))
     uniqueFun funs (Rule cat items (CFObj fun args)) = (Set.insert fun' funs,Rule cat items (CFObj fun' args))
       where
         fun' = head [fun'|suffix<-"":map show ([2..]::[Int]),
