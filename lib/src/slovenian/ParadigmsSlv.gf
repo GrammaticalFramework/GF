@@ -1,4 +1,4 @@
-resource ParadigmsSlv = open CatSlv, ResSlv in {
+resource ParadigmsSlv = open CatSlv, ResSlv, Prelude in {
 
 oper
   nominative : Case = Nom ;
@@ -271,5 +271,7 @@ oper
              ASuperl Neut Pl Instr => superlNPlInstr
            }
     };
+
+  mkAdv : Str -> Adv = \s -> lin Adv {s=s} ;
 
 }
