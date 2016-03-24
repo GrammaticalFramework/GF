@@ -1,4 +1,4 @@
-concrete CatSlv of Cat = open ResSlv in {
+concrete CatSlv of Cat = CommonX ** open ResSlv in {
 
 lincat
   -- Adjective
