@@ -24,4 +24,7 @@ param
         | AComparDefAcc
         | ASuperlDefAcc ;
 
+oper
+  Agr = {g : Gender; n : Number} ;
+
 }
