@@ -3,7 +3,7 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
   lin
     DetCN det cn = {
       s = \\c => det.s ! c ++ cn.s ! det.spec ! c ! det.n ; 
-      a = {g=cn.g; n=det.n}
+      a = {g=cn.g; n=det.n; p=P3}
       } ;
 
     DetQuant quant num = {

@@ -3,7 +3,7 @@
 concrete GrammarSlv of Grammar = 
   NounSlv,
 --  VerbEng,
-  AdjectiveSlv
+  AdjectiveSlv,
 {-  AdverbEng,
   NumeralEng,
   SentenceEng,
@@ -12,8 +12,9 @@ concrete GrammarSlv of Grammar =
   ConjunctionEng,
   PhraseEng,
   TextX - [Pol,PPos,PNeg],
-  StructuralEng,
-  IdiomEng,
+-}
+  StructuralSlv
+{-  IdiomEng,
   TenseX  -}
   ** {
 
