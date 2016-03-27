@@ -25,6 +25,6 @@ param
         | ASuperlDefAcc ;
 
 oper
-  Agr = {g : Gender; n : Number} ;
+  Agr = {g : Gender; n : Number; p : Person} ;
 
 }
