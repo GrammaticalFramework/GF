@@ -1,4 +1,4 @@
-resource ResSlv = {
+resource ResSlv = open ParamX in {
 
 param
   Case = Nom | Gen | Dat | Acc | Loc | Instr;
@@ -26,5 +26,16 @@ param
 
 oper
   Agr = {g : Gender; n : Number; p : Person} ;
+
+  VP = {s : Tense => Agr => Str} ;
+  
+  predV : (VForm => Str) -> VP =
+    \v -> { s = table {
+                  Pres => \\a => v ! VPres a.n a.p ;
+                  Past => \\a => "biti" ++ v ! VPastPart a.g a.n ;
+                  Fut  => \\a => "biti" ++ v ! VPastPart a.g a.n ;
+                  Cond => \\a => "bi" ++ v ! VPastPart a.g a.n
+                }
+          } ;
 
 }

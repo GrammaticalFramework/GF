@@ -286,4 +286,8 @@ oper
                   } ;
               a = {g=g; n=n; p=p}
              } ;
+             
+  mkInterj : Str -> Interj =
+    \s -> lin Interj {s=s} ;
+
 }

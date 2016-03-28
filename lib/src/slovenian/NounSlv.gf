@@ -25,6 +25,11 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
       spec = Indef
       } ;
 
+    MassNP n = {
+      s = \\c => n.s ! Indef ! c ! Sg ;
+      a = {g=n.g; n=Sg; p=P3}
+      } ;
+
     UseN n = {s = \\_ => n.s; g = n.g} ;
 
     AdjCN ap cn = {
