@@ -2,7 +2,7 @@
 
 concrete GrammarSlv of Grammar = 
   NounSlv,
---  VerbEng,
+  VerbSlv,
   AdjectiveSlv,
 {-  AdverbEng,
   NumeralEng,

@@ -1,6 +1,9 @@
 concrete CatSlv of Cat = CommonX ** open ResSlv in {
 
 lincat
+  -- Verb
+  VP = ResSlv.VP ;
+
   -- Adjective
   AP = {s : Species => Gender => Case => Number => Str} ;
 
