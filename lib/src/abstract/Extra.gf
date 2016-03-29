@@ -105,4 +105,9 @@ abstract Extra = Cat ** {
     FrontExtPredVP : NP -> VP -> Cl ;      -- I am here, she said
     InvFrontExtPredVP : NP -> VP -> Cl ;   -- I am here, said she
 
+-- to use an AP as CN without CN
+
+    AdjAsCN : AP -> CN ; -- a green one ; en grön (Swe)
+
+
 }

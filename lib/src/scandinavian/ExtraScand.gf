@@ -1,11 +1,12 @@
 incomplete concrete ExtraScand of ExtraScandAbs = CatScand ** 
-   open CommonScand,Coordination,ResScand, ParamX in {
+   open CommonScand,Coordination,ResScand, ParamX, Prelude in {
   flags coding=utf8 ;
   lin
     GenNP np = {
       s,sp = \\n,_,_,g  => np.s ! NPPoss (gennum (ngen2gen g) n) Nom ; 
       det = DDef Indef
       } ;
+
 
     ComplBareVS v s  = insertObj (\\_ => s.s ! Sub) (predV v) ;
 
@@ -112,4 +113,12 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     UseFoc t p foc = {s = t.s ++ p.s ++ foc.s ! t.t ! t.a ! p.p} ;
 
   oper NONEXIST : Str = "#¿@§X?X&%/" ;
+
+  lin
+    AdjAsCN ap = let g = utrum in {  ---- neutrum ??
+      s = \\n,d,c => ap.s ! agrAdj (gennum (ngen2gen g) n) d ;
+      g = g ;
+      isMod = True
+      } ;
+
 } 

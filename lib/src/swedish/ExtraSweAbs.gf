@@ -61,7 +61,6 @@ fun
 
   AdvComp : Comp -> Adv -> Comp ; -- jag är redan här
 
-
 ----------------- Predeterminers,Quantifiers,Determiners
 
    bara_AdvFoc : AdvFoc ;
