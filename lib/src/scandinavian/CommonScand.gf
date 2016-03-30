@@ -145,7 +145,7 @@ oper
     } ;
 
 
--- Used in $DiffScand.predV$.
+-- Used in $ResScand.predV$.
 
   vFin : STense -> Voice -> VForm = \t,v -> case t of {
     SPres => VF (VPres v) 
@@ -276,9 +276,9 @@ oper
   detForms : (x1,x2,x3 : Str) -> Gender => Number => Str = \den,det,de -> 
     \\g,n => gennumForms den det de ! gennum g n ;
 
-  regNP : Str -> Str -> Gender -> Number -> {s : NPForm => Str ; a : Agr} =
+  regNP : Str -> Str -> Gender -> Number -> {s : NPForm => Str ; a : Agr ; isPron : Bool} =
     \det,dess,g,n ->
-    mkNP det det dess dess dess g n P3 ;
+    mkNP det det dess dess dess g n P3 ** {isPron = False} ;
 
 
 -- For $Verb$.
@@ -286,11 +286,14 @@ oper
   VP = {
       s : Voice => VPForm => {
         fin : Str ;          -- V1 har  ---s1
-        inf : Str            -- V2 sagt ---s4
+        inf : Str ;          -- V2 sagt ---s4
+	a1  : Polarity => Agr => Str * Str ; -- A1 inte ---s3 själv/själva/självt
+	                                     -- p1: with infinite    "jag har inte älskat dig",
+					     -- p2: without infinite "jag älskar dig inte"	                                     
         } ;
       sp : PartForm => Str ;  -- present or past participle
-      a1 : Polarity => Agr => Str ; -- A1 inte ---s3 själv/själva/självt
-      n2 : Agr => Str ;      -- N2 dig  ---s5  
+      n1 : Agr => Str ;      -- N1 sig/dig  ---s5  
+      n2 : Agr => Str ;      -- N2 den här mannen  ---s5  
       a2 : Str ;             -- A2 idag ---s6
       ext : Str ;            -- S-Ext att hon går   ---s7
       --- ea1,ev2,           --- these depend on params of v and a1
@@ -298,11 +301,14 @@ oper
       } ;
 
 
-  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
-    n2 = \\a => obj ! a ++ vp.n2 ! a ;
-    en2 = True ;
+  insertObjPron : Bool -> (Agr => Str) -> VP -> VP = \isPron,obj,vp -> vp ** {
+    n1 = \\a => if_then_Str isPron (obj ! a ++ vp.n2 ! a) [] ;
+    n2 = \\a => if_then_Str isPron [] (obj ! a ++ vp.n2 ! a) ;
+    en2 = notB isPron ;
     } ;
-
+    
+  insertObj : (Agr => Str) -> VP -> VP = insertObjPron False ;
+  
   insertObjPost : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
     n2 = \\a => vp.n2 ! a ++ obj ! a ;
     en2 = True ;
@@ -324,27 +330,23 @@ oper
     a1 = \\b,a => vp.a1 ! b ! a ++ adv ! a ;
     } ;
 
-  passiveVP : VP -> VP = \vp -> {
+  passiveVP : VP -> VP = \vp -> vp ** {
     s = \\_ => vp.s ! Pass ; -- forms the s-passive
-    sp = vp.sp ;
-    a1 = vp.a1 ;
-    n2 = vp.n2 ;
-    a2 = vp.a2 ;
-    ext = vp.ext ;
-    en2 = vp.en2 ;
-    ea2 = vp.ea2 ;
-    eext = vp.eext
     } ;
 
   infVP : VP -> Agr -> Str = \vp,a -> infVPPlus vp a Simul Pos ;
  
-  infVPPlus : VP -> Agr -> Anteriority -> Polarity -> Str = \vp,a,ant,pol -> 
-    vp.a1 ! pol ! a ++ (vp.s ! Act ! VPInfinit ant).inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
+  infVPPlus : VP -> Agr -> Anteriority -> Polarity -> Str = \vp,a,ant,pol ->
+    let negs = (vp.s ! Act ! VPInfinit Simul).a1 ! pol ! a
+    in negs.p1 ++ negs.p2 ++ (vp.s ! Act ! VPInfinit ant).inf ++ vp.n1 ! a ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; --- a1
 
   partVPPlus : VP -> PartForm -> Agr -> Polarity -> Str = \vp,pf,a,pol -> 
-    vp.a1 ! pol ! a ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ++ vp.sp ! pf ; -- verb final: i sängen liggande
-  partVPPlusPost : VP -> PartForm -> Agr -> Polarity -> Str = \vp,pf,a,pol -> 
-    vp.a1 ! pol ! a ++ vp.sp ! pf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; -- verb first: liggande i sängen
+    let negs = (vp.s ! Act ! VPInfinit Simul).a1 ! pol ! a
+    in negs.p1 ++ negs.p2  ++ vp.n1 ! a ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ++ vp.sp ! pf ; -- verb final: i sängen liggande
+    
+  partVPPlusPost : VP -> PartForm -> Agr -> Polarity -> Str = \vp,pf,a,pol ->
+    let negs = (vp.s ! Act ! VPInfinit Simul).a1 ! pol ! a
+    in negs.p1 ++ negs.p2 ++ vp.sp ! pf ++ vp.n1 ! a ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ; -- verb first: liggande i sängen
 
 
 -- For $Sentence$.
@@ -357,14 +359,21 @@ oper
       s = \\t,a,b,o => 
         let 
           verb  = vp.s  ! Act ! VPFinite t a ;
-          neg   = vp.a1 ! b ! agr ;
-          compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext
+          neg   = verb.a1 ! b ! agr ;
+	  pron  = vp.n1 ! agr ;
+          compl = vp.n2 ! agr ++ vp.a2 ++ vp.ext ;
+	  pronneg = neg.p1 ++ verb.inf ++ pron ++ neg.p2 ++ compl ; -- jag älskar dig inte
         in
         case o of {
-          Main => subj ++ verb.fin ++ neg ++ verb.inf ++ compl ;
-          Inv  => verb.fin ++ subj ++ neg ++ verb.inf ++ compl ;
-          Sub  => subj ++ neg ++ verb.fin ++ verb.inf ++ compl
+          Main => subj ++ verb.fin ++ pronneg ;
+          Inv  => verb.fin ++ subj ++ pronneg ;
+          Sub  => subj ++ neg.p1 ++ neg.p2 ++ verb.fin ++ verb.inf ++ pron ++ compl
           }
     } ;
 
 }
+
+-- har inte älskat dig
+--          älskar dig inte
+-- har jag inte älskat dig
+--              älskar jag dig inte

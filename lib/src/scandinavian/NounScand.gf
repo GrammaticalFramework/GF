@@ -20,34 +20,40 @@ incomplete concrete NounScand of Noun =
       in {
       s = \\c => det.s ! m ! g ++
                  cn.s ! det.n ! dd ! caseNP c ; 
-      a = agrP3 (ngen2gen g) det.n
+      a = agrP3 (ngen2gen g) det.n ;
+      isPron = False
       } ;
 
     UsePN pn = {
       s = \\c => pn.s ! caseNP c ; 
-      a = agrP3 pn.g Sg
+      a = agrP3 pn.g Sg ;
+      isPron = False
       } ;
 
-    UsePron p = p ;
+    UsePron p = p ** {isPron = True} ;
 
     PredetNP pred np = {
       s = \\c => pred.s ! np.a.g ! np.a.n ++ pred.p ++ np.s ! c ;
-      a = case pred.a of {PAg n => agrP3 np.a.g n ; _ => np.a}
+      a = case pred.a of {PAg n => agrP3 np.a.g n ; _ => np.a} ;
+      isPron = False
       } ;
 
     PPartNP np v2 = {
       s = \\c => np.s ! c ++ v2.s ! (VI (VPtPret (agrAdjNP np.a DIndef) Nom)) ;
-      a = np.a
+      a = np.a ;
+      isPron = False
       } ;
 
     AdvNP np adv = {
       s = \\c => np.s ! c ++ adv.s ;
-      a = np.a
+      a = np.a ;
+      isPron = False
       } ;
 
     ExtAdvNP np adv = {
       s = \\c => np.s ! c ++ embedInCommas adv.s ;
-      a = np.a
+      a = np.a ;
+      isPron = False
       } ;
 
     DetQuantOrd quant num ord = {
@@ -84,7 +90,8 @@ incomplete concrete NounScand of Noun =
         m = True ;  ---- is this needed for other than Art?
       in {
         s = \\c => det.sp ! m ! g ;    ---- case of det!
-        a = agrP3 (ngen2gen g) det.n
+        a = agrP3 (ngen2gen g) det.n ;
+        isPron = False
       } ;
 
     PossPron p = {
@@ -141,7 +148,8 @@ incomplete concrete NounScand of Noun =
 
     MassNP cn = {
       s = \\c => cn.s ! Sg ! DIndef ! caseNP c ; 
-      a = agrP3 (ngen2gen cn.g) Sg
+      a = agrP3 (ngen2gen cn.g) Sg ;
+      isPron = False
       } ;
 
     UseN, UseN2 = \noun -> {
@@ -200,7 +208,7 @@ incomplete concrete NounScand of Noun =
     RelNP np rs = {
       s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ! RNom ;
       a = np.a ;
-      isMod = np.isMod
+      isPron = False
       } ;
 
     AdvCN  cn sc = let g = cn.g in {
@@ -238,7 +246,8 @@ incomplete concrete NounScand of Noun =
         m = True ;  ---- see DetNP above
       in {
         s = \\c => det.sp ! m ! ng ++ av_Prep ++ np.s ! NPAcc ;
-        a = agrP3 g det.n
+        a = agrP3 g det.n ;
+        isPron = False
       } ;
 
     AdjDAP det ap = {

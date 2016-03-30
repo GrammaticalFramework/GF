@@ -37,44 +37,49 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
         True => verbBe.s ;
         _ => verbHave.s
         } ;
- 
+
 
       har : STense -> Str = \t -> auxv ! vFin t Act ;
       ha  : Str = auxv ! VI (VInfin Act) ;
 
-      vf : Str -> Str -> {fin,inf : Str} = \fin,inf -> {
-        fin = fin ; inf = inf ++ verb.part  --- not always right after the verb: hon ser (inte) vacker ut ; spotta ut snusen
+      vf : Bool -> Str -> Str -> {fin,inf : Str ; a1  : Polarity => Agr => Str * Str} = \hasInf, fin,inf -> {
+        fin = fin ;
+	inf = inf ++ verb.part ; --- not always right after the verb: hon ser (inte) vacker ut ; spotta ut snusen
+	a1 : Polarity => Agr => Str*Str = \\p,a => case hasInf of {
+	  True  => <negation ! p, []> ;
+	  False => <[], negation ! p>
+	  }
         } ;
 
     in {
     s = \\d => table {
       VPFinite t Simul => case t of {
 --        SPres | SPast => vf (vfin d t) [] ; -- the general rule
-        SPast => vf (vfin d t) [] ;    --# notpresent
-        SFut  => vf auxFut (vinf d) ;    --# notpresent
-        SFutKommer => vf auxFutKommer (auxFutPart ++ infMark ++ vinf d) ;   --# notpresent
-        SCond => vf auxCond (vinf d) ;   --# notpresent
-        SPres => vf (vfin d t) []
+        SPast => vf False (vfin d t) [] ;    --# notpresent
+        SFut  => vf True auxFut (vinf d) ;    --# notpresent
+        SFutKommer => vf True auxFutKommer (auxFutPart ++ infMark ++ vinf d) ;   --# notpresent
+        SCond => vf True auxCond (vinf d) ;   --# notpresent
+        SPres => vf False (vfin d t) []
         } ;
       VPFinite t Anter => case t of {    --# notpresent
-        SPres | SPast => vf (har t) (vsup d) ; --# notpresent
-        SFut  => vf auxFut (ha ++ vsup d) ; --# notpresent
-        SFutKommer => vf auxFutKommer (auxFutPart ++ infMark ++ ha ++ vsup d) ; --# notpresent
-        SCond => vf auxCond (ha ++ vsup d)  --# notpresent
+        SPres | SPast => vf True (har t) (vsup d) ; --# notpresent
+        SFut  => vf True auxFut (ha ++ vsup d) ; --# notpresent
+        SFutKommer => vf True auxFutKommer (auxFutPart ++ infMark ++ ha ++ vsup d) ; --# notpresent
+        SCond => vf True auxCond (ha ++ vsup d)  --# notpresent
         } ;                              --# notpresent
-      VPImperat => vf (verb.s ! VF (VImper (diath d))) [] ;
-      VPInfinit Anter => vf [] (ha ++ vsup d) ;  --# notpresent
-      VPInfinit Simul => vf [] (vinf d)
+      VPImperat => vf False (verb.s ! VF (VImper (diath d))) [] ;
+      VPInfinit Anter => vf True [] (ha ++ vsup d) ;  --# notpresent
+      VPInfinit Simul => vf True [] (vinf d)
       } ;
     sp = table {
       PartPret a c   => verb.s ! (VI (VPtPret a c)) ;
       PartPres n s c => verb.s ! (VI (VPtPres n s c))
       } ;
-    a1  : Polarity => Agr => Str = \\p,a => negation ! p ;
-    n2  : Agr => Str = \\a => case verb.vtype of {
-      VRefl => reflPron a ;
-      _ => []
-      } ;
+    n1 : Agr => Str = \\a => case verb.vtype of {
+        VRefl => reflPron a ;
+        _ => []
+        } ;
+    n2  : Agr => Str = \\a => [] ; 
     a2  : Str = [] ;
     ext : Str = [] ;
     en2,ea2,eext : Bool = False   -- indicate if the field exists

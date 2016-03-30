@@ -19,7 +19,7 @@ concrete IdiomSwe of Idiom = CatSwe **
       (insertObj (\\_ => ad.s ++ s.s ! Sub) (predV verbBe)) ;
 
     ExistNP np = 
-      mkClause "det" (agrP3 neutr Sg) (insertObj 
+      mkClause "det" (agrP3 neutr Sg) (insertObj
         (\\_ => np.s ! accusative) (predV (depV finna_V))) ;
 
     ExistIP ip = {
@@ -35,7 +35,7 @@ concrete IdiomSwe of Idiom = CatSwe **
       } ;
 
     ExistNPAdv np adv = 
-      mkClause "det" (agrP3 neutr Sg) (insertObj 
+      mkClause "det" (agrP3 neutr Sg) (insertObj
         (\\_ => np.s ! accusative ++ adv.s) (predV (depV finna_V))) ;
 
     ExistIPAdv ip adv = {
@@ -59,14 +59,15 @@ concrete IdiomSwe of Idiom = CatSwe **
     SelfAdVVP vp = insertAdVAgr (\\a => sjalv a.g a.n) vp ;
     SelfNP np = {
       s = \\c => np.s ! c ++ sjalv np.a.g np.a.n ;
-      a = np.a
+      a = np.a ;
+      isPron = False
       } ;
 
   oper
     sjalv : Gender -> Number -> Str = \g,n -> case <g,n> of {
       <Utr,Sg> => "själv" ;
       <Neutr,Sg> => "självt" ;
-      _ => "själva"
+      _ => "själva" 
       } ;
 
 

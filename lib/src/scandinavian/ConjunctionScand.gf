@@ -13,7 +13,8 @@ incomplete concrete ConjunctionScand of Conjunction =
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
     ConjNP conj ss = conjunctDistrTable NPForm conj ss ** {
-      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p}
+      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
+      isPron = False
       } ;
 
     ConjAP conj ss = conjunctDistrTable AFormPos conj ss ** {

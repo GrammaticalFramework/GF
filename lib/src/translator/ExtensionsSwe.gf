@@ -49,7 +49,8 @@ lin
 
   GerundNP vp = {  -- infinitive: att dricka öl, att vara glad
     s = \\_ => "att" ++ infVP vp {g = Utr ; n = Sg ; p = P3} ; 
-    a = {g = Neutr ; n = Sg ; p = P3}
+    a = {g = Neutr ; n = Sg ; p = P3} ;
+    isPron = False
     } ;
 
   GerundAdv vp = {
@@ -98,7 +99,8 @@ lin
 
   UseQuantPN q pn = {
       s = \\c => q.s ! Sg ! True ! False ! pn.g ++ pn.s ! caseNP c ; 
-      a = agrP3 pn.g Sg
+      a = agrP3 pn.g Sg ;
+     isPron = False
       } ;
 
   SlashV2V v ant p vp = predV v ** {
@@ -135,7 +137,8 @@ lin
 
   ApposNP np1 np2 = {
     s = \\c => np1.s ! c ++ comma ++ np2.s ! NPNom ;
-    a = np1.a
+    a = np1.a ;
+    isPron = False
   } ;
   
   AdAdV = cc2 ;

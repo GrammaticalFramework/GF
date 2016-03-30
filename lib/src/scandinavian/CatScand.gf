@@ -41,11 +41,14 @@ incomplete concrete CatScand of Cat =
     VP = {
       s : Voice => VPForm => {
         fin : Str ;          -- V1 har  ---s1
-        inf : Str            -- V2 sagt ---s4
+        inf : Str ;          -- V2 sagt ---s4
+        a1  : Polarity => Agr => Str * Str ; -- A1 inte ---s3 själv/själva/självt
+	                                     -- p1: with infinite    "jag har inte älskat dig",
+					     -- p2: without infinite "jag älskar dig inte"	                                     
         } ;
       sp : PartForm => Str ;
-      a1 : Polarity => Agr => Str ; -- A1 inte ---s3
-      n2 : Agr => Str ;      -- N2 dig  ---s5  
+      n1 : Agr => Str ;      -- N2 dig  ---s5  
+      n2 : Agr => Str ;      -- N2 den där mannen  ---s5  
       a2 : Str ;             -- A2 idag ---s6
       ext : Str ;            -- S-Ext att hon går   ---s7
       en2,ea2,eext : Bool    -- indicate if the field exists
@@ -69,7 +72,8 @@ incomplete concrete CatScand of Cat =
 -- as $Quant$.
 
     CN = {s : Number => DetSpecies => Case => Str ; g : NGender ; isMod : Bool} ;
-    NP,Pron = {s : NPForm => Str ; a : Agr} ;
+    NP = {s : NPForm => Str ; a : Agr ; isPron : Bool} ;
+    Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s,sp : Bool => NGender => Str ; n : Number ; det : DetSpecies} ;
     Quant = {s,sp : Number => Bool => Bool => NGender => Str ; det : DetSpecies} ;
     Predet = {s : Gender => Number => Str ; p : Str ; a : PredetAgr} ;
