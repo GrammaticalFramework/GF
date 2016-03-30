@@ -8,7 +8,7 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand, 
     SlashV2a v = predV v ** {n3 = \\_ => [] ; c2 = v.c2} ;
 
     Slash2V3 v np = 
-      insertObj (\\_ => v.c2.s ++ np.s ! accusative) (predV v) ** 
+      insertObjPron np.isPron (\\_ => v.c2.s ++ np.s ! accusative) (predV v) ** 
         {n3 = \\_ => [] ; c2 = v.c3} ;  -- to preserve the order of args
     Slash3V3 v np = predV v ** {
       n3 = \\_ => v.c3.s ++ np.s ! accusative ; 
@@ -37,19 +37,20 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand, 
       c2 = v.c2
       } ; 
 
-    ComplSlash vp np = 
-       insertObjPost 
-         (\\_ => vp.c2.s ++ np.s ! accusative ++ vp.n3 ! np.a) vp ;
+    ComplSlash vp np =
+      insertObjPost (\\_ => vp.n3 ! np.a)
+        (insertObjPron (andB np.isPron (notB vp.c2.hasPrep)) (\\_ => vp.c2.s ++ np.s ! accusative)
+          vp) ;
 
     SlashVV v vp = 
       insertObj (\\a => v.c2.s ++ infVP vp a) (predV v) ** {n3 = vp.n3 ; c2 = vp.c2} ;
 
     SlashV2VNP v np vp = 
-      insertObj 
+      insertObj
         (\\a => v.c2.s ++ np.s ! accusative ++ v.c3.s ++ infVP vp a) (predV v) 
         ** {n3 = vp.n3 ; c2 = v.c2} ;
 
-    UseComp comp = insertObj 
+    UseComp comp = insertObj
       comp.s (predV verbBe) ;
 
     CompAP ap = {s = \\a => ap.s ! agrAdjNP a DIndef} ;
@@ -59,12 +60,12 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand, 
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
 
-    ReflVP vp = insertObj (\\a => vp.c2.s ++ reflPron a ++ vp.n3 ! a) vp ;
+    ReflVP vp = insertObjPron (notB vp.c2.hasPrep) (\\a => reflPron a) (insertObj (\\a => vp.c2.s ++ vp.n3 ! a) vp) ;
 
     VPSlashPrep vp prep = vp ** {n3 = \\_ => [] ; c2 = {s = prep.s ; hasPrep = True}} ;
 
     PassV2 v = 
-      insertObj 
+      insertObj
         (\\a => v.s ! VI (VPtPret (agrAdjNP a DIndef) Nom)) 
         (predV verbBecome) ;
 

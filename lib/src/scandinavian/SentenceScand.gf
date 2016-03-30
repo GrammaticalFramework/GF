@@ -13,8 +13,10 @@ incomplete concrete SentenceScand of Sentence =
         let 
           agr   = {g = Utr ; n = n ; p = P2} ;
           verb  = vp.s ! Act ! VPImperat ;
+	  neg   = verb.a1 ! pol ! agr ;
+	  pron  = vp.n1 ! agr
         in
-        verb.fin ++ vp.a1 ! pol ! agr ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
+        verb.fin ++ neg.p1 ++ verb.inf ++ pron ++ neg.p2 ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
     } ;
 
     SlashVP np vp = 

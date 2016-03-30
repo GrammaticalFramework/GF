@@ -1,8 +1,7 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
-concrete ExtraSwe of ExtraSweAbs = ExtraScandSwe - [FocAdv] ,
-                                   ParadigmsSwe - [nominative] **
+concrete ExtraSwe of ExtraSweAbs = ExtraScandSwe - [FocAdv] **
  open CommonScand, ResSwe, ParamX, VerbSwe, Prelude, DiffSwe, StructuralSwe, MorphoSwe,
-      NounSwe, Coordination, AdjectiveSwe, SentenceSwe, AdverbSwe, RelativeSwe in {
+      NounSwe, Coordination, AdjectiveSwe, SentenceSwe, AdverbSwe, RelativeSwe, (P = ParadigmsSwe) in {
 
   flags coding=utf8 ;
 lincat
@@ -25,7 +24,8 @@ lin
           m = True ;  ---- is this needed for other than Art?
       in lin NP {
         s = \\c => det.sp ! m ! g;
-        a = agrP3 (ngen2gen g) num
+        a = agrP3 (ngen2gen g) num ;
+	isPron = False
       } ;
 
  lin
@@ -46,7 +46,9 @@ lin
  
   AdvFocVP adv vp = vp ** {
     s = \\v,vpf => {fin = adv.s ++ (vp.s ! v ! vpf).fin ;
-                    inf = (vp.s ! v ! vpf).inf}
+                    inf = (vp.s ! v ! vpf).inf ;
+		    a1 = (vp.s ! v ! vpf).a1
+		    }
     } ;
   PredetAdvF adv = {s = \\_,_ => adv.s ; p = [] ; a = PNoAg} ;
   
@@ -91,12 +93,13 @@ lin
             <_    ,Anter> => (vp.s ! Act ! VPFinite SPast Anter).inf   --# notpresent
             };
           verb = mkClause subj agr (predV do_V) ;                        
-          comp = vp.n2 ! agr ++ vp.a2 ++ vp.ext     
+          comp = vp.n1 ! agr ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext ;
+	  neg = vps.a1 ! Pos ! agr
         in
-        vf ++ comp ++ (verb.s ! t ! a ! p ! Inv) ++ vp.a1 ! Pos ! agr 
+        vf ++ comp ++ (verb.s ! t ! a ! p ! Inv) ++ neg.p1 ++ neg.p2  ----
       } ;
 
-  oper do_V : V = mkV "göra" "gör" "gör" "gjorde" "gjort" "gjord" ;
+  oper do_V : V = P.mkV "göra" "gör" "gör" "gjorde" "gjort" "gjord" ;
 
 lin
   FocAP ap np    = 
@@ -113,10 +116,14 @@ lin
     let vps = vp.s ! Act ! VPInfinit Simul ;
         vvp = UseV vv ;
         vvs = vvp.s ! Act ! VPFinite t a ; 
-        always = vp.a1 ! Pos ! np.a ++ vvp.a1 ! Pos ! np.a ;
-        already = vp.a2 ++ vvp.a2 in
+        vpsneg = vps.a1 ! Pos ! np.a ;
+        vvsneg = vvs.a1 ! Pos ! np.a ;
+	always = vpsneg.p1 ++ vpsneg.p2 ++ vvsneg.p1 ++ vvsneg.p2 ;
+        already = vp.a2 ++ vvp.a2
+   in
    vps.inf ++ vp.n2 ! np.a ++ vvs.fin ++ np.s ! NPNom 
-   ++ vv.c2.s ++ always ++ negation ! p ++ already ++ vvs.inf
+   ++ vv.c2.s ++ always ++
+   negation ! p ++ already ++ vvs.inf
    };  
 
 
@@ -155,13 +162,13 @@ lin
 
 
   SupCl np vp pol = let sub = np.s ! nominative ;                     --# notpresent
-                        verb = (vp.s ! Act ! VPFinite SPres Anter).inf ;    --# notpresent
-                        neg  = vp.a1 ! pol.p ! np.a ++ pol.s ;               --# notpresent
+                        verb = (vp.s ! Act ! VPFinite SPres Anter) ;    --# notpresent
+                        neg  = verb.a1 ! pol.p ! np.a ;               --# notpresent
                         compl = vp.n2 ! np.a ++ vp.a2 ++ vp.ext in    --# notpresent
-    {s = \\_ => sub ++ neg ++ verb ++ compl };                        --# notpresent
+    {s = \\_ => neg.p1 ++ sub ++ neg.p2 ++ pol.s ++ verb.inf ++ compl };                        --# notpresent
     
 
-  PassV2 v2 = predV (depV (lin V v2));
+  PassV2 v2 = predV (P.depV (lin V v2));
 
   PassV2Be v = insertObj 
         (\\a => v.s ! VI (VPtPret (agrAdjNP a DIndef) Nom)) 
@@ -181,7 +188,8 @@ lin
             dd = DDef Indef ;
       in lin NP {
       s = \\c => cn.s ! num.n ! dd ! caseNP c ++ num.s ! g ; 
-      a = agrP3 (ngen2gen g) num.n -- ?
+      a = agrP3 (ngen2gen g) num.n ; -- ?
+      isPron = False
       } ;
 
   ReflSlash vp np = let vp_l = lin VPSlash vp ;
@@ -210,7 +218,7 @@ lin
   this_NP : Str -> Gender -> Number -> NP =
   \denna,g,n -> lin NP {s = table {NPPoss gn c => denna+"s";
                                    _           => denna};
-                           a = agrP3 g n};
+                           a = agrP3 g n ; isPron = False} ;
 
   getPronoun : Person -> ParadigmsSwe.Number -> Pron = 
    \p,n ->  case <p,n> of {
@@ -225,10 +233,10 @@ lin
 ----------------- Predeterminers,Quantifiers,Determiners
 
   lin
-    bara_AdvFoc = mkAdv "bara" ;
+    bara_AdvFoc = P.mkAdv "bara" ;
 
-    sadana_PronAQ = mkA "sådan" ;
-    fler_PronAD   = mkA "flera" "flera" "flera" "fler" "flest" ;
+    sadana_PronAQ = P.mkA "sådan" ;
+    fler_PronAD   = P.mkA "flera" "flera" "flera" "fler" "flest" ;
 
     hela_Predet    = {s  = \\_,_ => "hela" ; p = [] ; a = PNoAg} ;
     samma_Predet   = {s  = \\_,_ => "samma" ; p = [] ; a = PNoAg} ;

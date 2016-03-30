@@ -77,13 +77,14 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     MkVPS t p vp = {
       s = \\o,a => 
             let 
-              neg = vp.a1 ! p.p ! a ;
-              verb = vp.s ! Act ! VPFinite t.t t.a ;
-              compl = verb.inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ;
+              verb  = vp.s ! Act ! VPFinite t.t t.a ;
+	      neg   = verb.a1 ! p.p ! a ;
+              compl = vp.n2 ! a ++ vp.a2 ++ vp.ext ;
+	      pron  = vp.n1 ! a
             in t.s ++ p.s ++ case o of {
-              Main => verb.fin ++ neg ++ compl ;
-              Inv  => verb.fin ++ neg ++ compl ; ----
-              Sub  => neg ++ verb.fin ++ compl
+              Main => verb.fin ++ neg.p1 ++ verb.inf ++ pron ++ neg.p2 ++ compl ;
+              Inv  => verb.fin ++ neg.p1 ++ verb.inf ++ pron ++ neg.p2 ++ compl ; ----
+              Sub  => neg.p1 ++ neg.p2 ++ verb.fin ++ verb.inf ++ pron ++ compl
               }
       } ;
 
