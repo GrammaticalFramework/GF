@@ -18,11 +18,12 @@ module Main (main) where
 
 import Data.Char
 import Data.List
-import System.Cmd
-import System.Directory
+import System.Process
+import System.Directory -- from package directory>=1.2
 import System.Environment
-import System.Locale
-import System.Time
+import Data.Time -- from package time>=1.5
+--import System.Locale -- from package old-locale
+--import System.Time -- from package old-time
 
 -- to read files and write a file
 
@@ -56,12 +57,20 @@ main = do
   return ()
 
 modTime :: FilePath -> IO ModTime
-modTime name = 
+-- Works with directory>=1.2, time>=1.5
+modTime name =
+  do zt <- utcToLocalZonedTime =<< getModificationTime name
+     let timeFmt = "%Y-%m-%d %H:%M:%S %Z"
+     return $ formatTime defaultTimeLocale timeFmt zt
+{-
+-- Works with directory<1.2, old-time, old-locale
+modTime name =
     do
     t <- getModificationTime name
     ct <- toCalendarTime t
     let timeFmt = "%Y-%m-%d %H:%M:%S %Z"
     return $ formatCalendarTime defaultTimeLocale timeFmt ct
+-}
 
 welcome = unlines [
   "",

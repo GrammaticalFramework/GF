@@ -18,8 +18,8 @@
 
 module Main (main) where
 
-import System
-import Char
+import System.Environment(getArgs)
+import Data.Char
 
 main :: IO ()
 main = do
