@@ -1,0 +1,12 @@
+name: gf-tools
+version: 0.1
+build-type: Simple
+cabal-version: >= 1.8
+
+Executable gfdoc
+  main-is: GFDoc.hs
+  build-depends: base, directory>=1.2, time>=1.5, process
+
+Executable htmls
+  main-is: Htmls.hs
+  build-depends: base
