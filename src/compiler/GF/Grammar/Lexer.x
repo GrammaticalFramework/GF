@@ -268,7 +268,7 @@ data ParseResult a
 newtype P a = P { unP :: AlexInput -> ParseResult a }
 
 instance Functor P where
-  fmap = (<$>)
+  fmap = liftA
 
 instance Applicative P where
   pure = return
