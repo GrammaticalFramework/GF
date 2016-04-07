@@ -61,7 +61,8 @@ pgfCommands = Map.fromList [
        "by the view flag. The target format is png, unless overridden by the",
        "flag -format. Results from multiple trees are combined to pdf with convert (ImageMagick)."
        ],
-     exec = getEnv $ \ opts es (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env pgf mos) -> do
+         let es = toExprs arg
          let langs = optLangs pgf opts
          if isOpt "giza" opts
            then do
@@ -182,11 +183,11 @@ pgfCommands = Map.fromList [
        ("depth","the maximum generation depth"),
        ("probs", "file with biased probabilities (format 'f 0.4' one by line)")
        ],
-     exec = getEnv $ \ opts xs (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env pgf mos) -> do
        pgf <- optProbs opts (optRestricted opts pgf)
        gen <- newStdGen
        let dp = valIntOpts "depth" 4 opts
-       let ts  = case mexp xs of
+       let ts  = case mexp (toExprs arg) of
                    Just ex -> generateRandomFromDepth gen pgf ex (Just dp)
                    Nothing -> generateRandomDepth     gen pgf (optType pgf opts) (Just dp)
        returnFromExprs $ take (optNum opts) ts
@@ -212,10 +213,10 @@ pgfCommands = Map.fromList [
        mkEx "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
        mkEx "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
        ],
-     exec = getEnv $ \ opts xs (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env pgf mos) -> do
        let pgfr = optRestricted opts pgf
        let dp = valIntOpts "depth" 4 opts
-       let ts = case mexp xs of
+       let ts = case mexp (toExprs arg) of
                   Just ex -> generateFromDepth pgfr ex (Just dp)
                   Nothing -> generateAllDepth pgfr (optType pgf opts) (Just dp)
        returnFromExprs $ take (optNumInf opts) ts
@@ -266,7 +267,7 @@ pgfCommands = Map.fromList [
        mkEx "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table",
        mkEx "l -unlexer=\"LangAra=to_arabic LangHin=to_devanagari\" -- different unlexers"
        ],
-     exec = getEnv $ \ opts ts (Env pgf mos) -> return . fromStrings $ optLins pgf opts ts,
+     exec = getEnv $ \ opts ts (Env pgf mos) -> return . fromStrings . optLins pgf opts $ toExprs ts,
      options = [
        ("all",    "show all forms and variants, one by line (cf. l -list)"),
        ("bracket","show tree structure with brackets and paths to nodes"),
@@ -291,7 +292,7 @@ pgfCommands = Map.fromList [
      examples = [
        mkEx "l -lang=LangSwe,LangNor -chunks ? a b (? c d)"
        ],
-     exec = getEnv $ \ opts ts (Env pgf mos) -> return . fromStrings $ optLins pgf (opts ++ [OOpt "chunks"]) ts,
+     exec = getEnv $ \ opts ts (Env pgf mos) -> return . fromStrings $ optLins pgf (opts ++ [OOpt "chunks"]) (toExprs ts),
      options = [
        ("treebank","show the tree and tag linearizations with language names")
        ] ++ stringOpOptions,
@@ -332,11 +333,11 @@ pgfCommands = Map.fromList [
      longname = "morpho_quiz",
      synopsis = "start a morphology quiz",
      syntax   = "mq (-cat=CAT)? (-probs=FILE)? TREE?",
-     exec = getEnv $ \ opts xs (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env pgf mos) -> do
          let lang = optLang pgf opts
          let typ  = optType pgf opts
          pgf <- optProbs opts pgf
-         let mt = mexp xs
+         let mt = mexp (toExprs arg)
          restricted $ morphologyQuiz mt pgf lang typ
          return void,
      flags = [
@@ -427,8 +428,8 @@ pgfCommands = Map.fromList [
        mkEx "pt -compute (plus one two)                               -- compute value",
        mkEx "p \"4 dogs love 5 cats\" | pt -transfer=digits2numeral | l -- four...five..."
        ],
-     exec = getEnv $ \ opts ts (Env pgf mos) ->
-            returnFromExprs . takeOptNum opts $ treeOps pgf opts ts,
+     exec = getEnv $ \ opts arg (Env pgf mos) ->
+            returnFromExprs . takeOptNum opts . treeOps pgf opts $ toExprs arg,
      options = treeOpOptions undefined{-pgf-},
      flags = [("number","take at most this many trees")] ++ treeOpFlags undefined{-pgf-}
      }),
@@ -481,7 +482,8 @@ pgfCommands = Map.fromList [
        "by the file given by flag -probs=FILE, where each line has the form",
        "'function probability', e.g. 'youPol_Pron  0.01'."
        ],
-     exec = getEnv $ \ opts ts (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env pgf mos) -> do
+         let ts = toExprs arg
          pgf <- optProbs opts pgf
          let tds = rankTreesByProbs pgf ts
          if isOpt "v" opts
@@ -503,11 +505,11 @@ pgfCommands = Map.fromList [
      longname = "translation_quiz",
      syntax   = "tq -from=LANG -to=LANG (-cat=CAT)? (-probs=FILE)? TREE?",
      synopsis = "start a translation quiz",
-     exec = getEnv $ \ opts xs (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env pgf mos) -> do
          let from = optLangFlag "from" pgf opts
          let to   = optLangFlag "to" pgf opts
          let typ  = optType pgf opts
-         let mt   = mexp xs
+         let mt   = mexp (toExprs arg)
          pgf <- optProbs opts pgf
          restricted $ translationQuiz mt pgf from to typ
          return void,
@@ -542,7 +544,8 @@ pgfCommands = Map.fromList [
        "flag -format. Results from multiple trees are combined to pdf with convert (ImageMagick).",
        "See also 'vp -showdep' for another visualization of dependencies." 
        ],
-     exec = getEnv $ \ opts es (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env pgf mos) -> do
+         let es = toExprs arg
          let debug = isOpt "v" opts
          let file = valStrOpts "file" "" opts
          let outp = valStrOpts "output" "dot" opts
@@ -552,7 +555,7 @@ pgfCommands = Map.fromList [
          let lang = optLang pgf opts
          let grphs = map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
          if isOpt "conll2latex" opts
-           then return $ fromString $ conlls2latexDoc $ stanzas $ unlines $ toStrings es
+           then return $ fromString $ conlls2latexDoc $ stanzas $ unlines $ toStrings arg
            else if isFlag "view" opts && valStrOpts "output" "" opts == "latex"
              then do
                let view = optViewGraph opts
@@ -596,7 +599,8 @@ pgfCommands = Map.fromList [
        "by the view flag. The target format is png, unless overridden by the",
        "flag -format. Results from multiple trees are combined to pdf with convert (ImageMagick)."
        ],
-     exec = getEnv $ \ opts es (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env pgf mos) -> do
+         let es = toExprs arg
          let lang = optLang pgf opts
          let gvOptions = GraphvizOptions {noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
                                           noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
@@ -661,7 +665,8 @@ pgfCommands = Map.fromList [
        "flag -format. Results from multiple trees are combined to pdf with convert (ImageMagick).",
        "With option -mk, use for showing library style function names of form 'mkC'."
        ],
-     exec = getEnv $ \ opts es (Env pgf mos) ->
+     exec = getEnv $ \ opts arg (Env pgf mos) ->
+      let es = toExprs arg in
        if isOpt "mk" opts
        then return $ fromString $ unlines $ map (tree2mk pgf) es
        else if isOpt "api" opts
@@ -707,7 +712,7 @@ pgfCommands = Map.fromList [
        "metavariables and the type of the expression."
        ],
      exec = getEnv $ \ opts arg (Env pgf mos) -> do
-       case arg of
+       case toExprs arg of
          [EFun id] -> case Map.lookup id (funs (abstract pgf)) of
                         Just fd -> do putStrLn $ render (ppFun id fd)
                                       let (_,_,_,prob) = fd
@@ -748,7 +753,10 @@ pgfCommands = Map.fromList [
 
    fromParse opts = foldr (joinPiped . fromParse1 opts) void
 
-   joinPiped (Piped (es1,ms1)) (Piped (es2,ms2)) = Piped (es1++es2,ms1+++-ms2)
+   joinPiped (Piped (es1,ms1)) (Piped (es2,ms2)) = Piped (jA es1 es2,ms1+++-ms2)
+     where
+       jA (Exprs es1) (Exprs es2) = Exprs (es1++es2)
+       -- ^ fromParse1 always output Exprs
 
    fromParse1 opts (s,(po,bs))
      | isOpt "bracket" opts = pipeMessage (showBracketedString bs)

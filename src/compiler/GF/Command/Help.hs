@@ -1,6 +1,6 @@
 module GF.Command.Help where
 import GF.Command.Messages
-import GF.Command.Abstract(isOpt,getCommandOp,showExpr)
+import GF.Command.Abstract(isOpt,getCommandOp)
 import GF.Command.CommandInfo
 
 import GF.Data.Operations((++++))
@@ -75,13 +75,13 @@ helpCommand allCommands =
        ("license","show copyright and license information"),
        ("t2t","output help in txt2tags format")
        ],
-     exec = \opts ts ->
+     exec = \opts args ->
        let
-        msg = case ts of
+        msg = case toStrings args of
           _ | isOpt "changes" opts -> changesMsg
           _ | isOpt "coding" opts -> codingMsg
           _ | isOpt "license" opts -> licenseMsg
-          [t] -> let co = getCommandOp (showExpr [] t) in
+          [s] -> let co = getCommandOp s in
                  case Map.lookup co allCommands of
                    Just info -> commandHelp' opts True (co,info)
                    _ -> "command not found"

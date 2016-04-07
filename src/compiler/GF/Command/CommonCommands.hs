@@ -179,7 +179,7 @@ commonCommands = fmap (mapCommandExec liftSIO) $ Map.fromList [
      longname = "to_trie",
      syntax = "to_trie",
      synopsis = "combine a list of trees into a trie",
-     exec = \ _ ts -> return . fromString $ trie ts
+     exec = \ _ -> return . fromString . trie . toExprs
     }),
   ("ut", emptyCommandInfo {
      longname = "unicode_table",

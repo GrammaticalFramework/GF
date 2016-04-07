@@ -1,6 +1,7 @@
 module GF.Command.Parse(readCommandLine, pCommand) where
 
 import PGF(pExpr,pIdent)
+import GF.Grammar.Parser(runPartial,pTerm)
 import GF.Command.Abstract
 
 import Data.Char(isDigit,isSpace)
@@ -21,10 +22,10 @@ pCommandLine =
 pPipe = sepBy1 (skipSpaces >> pCommand) (skipSpaces >> char '|')
 
 pCommand = (do
-  cmd  <- pIdent <++ (char '%' >> pIdent >>= return . ('%':))
+  cmd  <- pIdent <++ (char '%' >> fmap ('%':) pIdent)
   skipSpaces
   opts <- sepBy pOption skipSpaces
-  arg  <- pArgument
+  arg  <- if getCommandOp cmd == "cc" then pArgTerm else pArgument
   return (Command cmd opts arg)
   )
     <++ (do
@@ -54,6 +55,12 @@ pArgument =
     (fmap AExpr pExpr
               <++
     (skipSpaces >> char '%' >> fmap AMacro pIdent))
+
+pArgTerm = ATerm `fmap` readS_to_P sTerm
+  where
+    sTerm s = case runPartial pTerm s of
+                Right (s,t) -> [(t,s)]
+                _ -> []
 
 pSystemCommand =
     (char '"' >> (manyTill (pEsc <++ get) (char '"')))
