@@ -2,9 +2,10 @@
 {
 {-# OPTIONS -fno-warn-overlapping-patterns #-}
 module GF.Grammar.Parser
-         ( P, runP
+         ( P, runP, runPartial
          , pModDef
          , pModHeader
+         , pTerm
          , pExp
          , pTopDef
          , pBNFCRules
@@ -30,6 +31,7 @@ import PGF(mkCId)
 %name pModDef ModDef
 %name pTopDef TopDef
 %partial pModHeader ModHeader
+%partial pTerm Exp1
 %name pExp Exp
 %name pBNFCRules ListCFRule
 %name pEBNFRules ListEBNFRule
