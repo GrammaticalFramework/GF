@@ -299,8 +299,8 @@ pgfCommands = Map.fromList [
        ],
      examples = [
        mkEx "l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor"],
-     exec = needPGF $ \ opts ts env ->
-                      return . fromStrings . cLins env opts $ map cExpr ts
+     exec = needPGF $ \ opts arg env ->
+                      return . fromStrings . cLins env opts . map cExpr $ toExprs arg
      }),
 {-
   ("l", emptyCommandInfo {
@@ -676,8 +676,9 @@ pgfCommands = Map.fromList [
        "by the flag. The target format is png, unless overridden by the",
        "flag -format."
        ],
-     exec = needPGF $ \opts es env@(pgf, concs) ->
-      do let concs = optConcs env opts
+     exec = needPGF $ \opts arg env@(pgf, concs) ->
+      do let es = toExprs arg
+         let concs = optConcs env opts
 {-
          let gvOptions=H.GraphvizOptions {H.noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
                                           H.noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
@@ -743,7 +744,8 @@ pgfCommands = Map.fromList [
        "flag -format."--,
 --     "With option -mk, use for showing library style function names of form 'mkC'."
        ],
-     exec = needPGF $ \opts es env@(pgf, _) ->
+     exec = needPGF $ \opts arg env@(pgf, _) ->
+       let es = toExprs arg in
        {-if isOpt "mk" opts
        then return $ fromString $ unlines $ map (tree2mk pgf) es
        else -}if isOpt "api" opts
@@ -796,7 +798,7 @@ pgfCommands = Map.fromList [
        "metavariables and the type of the expression."-}
        ],
      exec = needPGF $ \ opts arg env@(pgf,cncs) -> do
-       case arg of
+       case toExprs arg of
          [H.EFun cid]
              | id `elem` funs -> return (fromString (showFun pgf id))
              | id `elem` cats -> return (fromString (showCat id))
@@ -837,7 +839,7 @@ pgfCommands = Map.fromList [
      where
        cat = optCat pgf opts
        cncs = optConcs env opts
-       parsed rs = Piped (ts,unlines msgs)
+       parsed rs = Piped (Exprs ts,unlines msgs)
           where
             ts = [hsExpr t|Right ts<-rs,(t,p)<-takeOptNum opts ts]
             msgs = concatMap (either err ok) rs
