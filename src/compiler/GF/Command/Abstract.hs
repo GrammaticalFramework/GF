@@ -1,6 +1,7 @@
-module GF.Command.Abstract(module GF.Command.Abstract,Expr,showExpr) where
+module GF.Command.Abstract(module GF.Command.Abstract,Expr,showExpr,Term) where
 
 import PGF(CId,mkCId,Expr,showExpr)
+import GF.Grammar.Grammar(Term)
 
 type Ident = String
 
@@ -25,6 +26,7 @@ data Value
 
 data Argument
   = AExpr Expr
+  | ATerm Term
   | ANoArg
   | AMacro Ident
   deriving (Eq,Ord,Show)

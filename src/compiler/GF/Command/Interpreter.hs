@@ -33,29 +33,31 @@ interpretPipe env cs = do
      putStrLnE s
      return ()
   where
-   intercs [] treess = return treess
-   intercs (c:cs) (Piped (trees,_)) = interc c trees >>= intercs cs
+   intercs [] args = return args
+   intercs (c:cs) (Piped (args,_)) = interc c args >>= intercs cs
 
-   interc comm@(Command co opts arg) es =
+   interc comm@(Command co opts arg) args =
      case co of
        '%':f -> case Map.lookup f (commandmacros env) of
          Just css ->
-           do es <- getCommandTrees env False arg es
-              mapM_ (interpretPipe env) (appLine es css)
+           do args <- getCommandTrees env False arg args
+              mapM_ (interpretPipe env) (appLine args css)
               return void
          Nothing  -> do
            putStrLnE $ "command macro " ++ co ++ " not interpreted"
            return void
-       _ -> interpret env es comm
+       _ -> interpret env args comm
 
    appLine = map . map . appCommand
 
 -- | macro definition applications: replace ?i by (exps !! i)
-appCommand :: [Expr] -> Command -> Command
-appCommand xs c@(Command i os arg) = case arg of
+appCommand :: CommandArguments -> Command -> Command
+appCommand args c@(Command i os arg) = case arg of
   AExpr e -> Command i os (AExpr (app e))
   _       -> c
  where
+  xs = toExprs args
+
   app e = case e of
     EAbs b x e -> EAbs b x (app e)
     EApp e1 e2 -> EApp (app e1) (app e2)
@@ -97,14 +99,15 @@ checkOpts info opts =
     os  -> fail $ "options not interpreted: " ++ unwords os
 
 --getCommandTrees :: CommandEnv -> Bool -> Argument -> [Expr] -> Either String [Expr]
-getCommandTrees env needsTypeCheck a es =
+getCommandTrees env needsTypeCheck a args =
   case a of
     AMacro m -> case Map.lookup m (expmacros env) of
                   Just e -> one e
-                  _      -> return [] -- report error?
+                  _      -> return (Exprs []) -- report error?
     AExpr e -> if needsTypeCheck
                then one =<< typeCheckArg e
                else one e
-    ANoArg  -> return es  -- use piped
+    ATerm t -> return (Term t)
+    ANoArg  -> return args  -- use piped
   where
-    one e = return [e] -- ignore piped
+    one e = return (Exprs [e]) -- ignore piped
