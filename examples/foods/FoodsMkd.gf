@@ -28,9 +28,9 @@ lin
        a = ASg kind.g};
     That kind = {
        s = case kind.g of {
-             Masc  => "овоj"; -- not sure
-             Fem   => "оваа"; -- not sure
-             Neutr => "ова" -- not sure
+             Masc  => "оноj";
+             Fem   => "онаа";
+             Neutr => "она"
            } ++ 
            kind.s ! Sg;
        a = ASg kind.g};
