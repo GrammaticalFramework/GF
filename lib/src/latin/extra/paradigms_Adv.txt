@@ -1,8 +1,0 @@
-s : iam
-
- s : longe
-
- s : nunc
-
- s : hodie
-

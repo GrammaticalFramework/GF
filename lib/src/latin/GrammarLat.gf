@@ -7,11 +7,12 @@ concrete GrammarLat of Grammar =
   AdverbLat,
   NumeralLat,
   SentenceLat,
---  QuestionLat,
+  QuestionLat,
 --  RelativeLat,
 --  ConjunctionLat,
   PhraseLat,
   TextX,
+  TenseX,
   StructuralLat
 --  IdiomLat
   ** {

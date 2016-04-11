@@ -122,7 +122,7 @@ lin
   king_N = mkN "rex" "regis" masculine; -- regis m. (Langenscheidts)
   know_V2 = mkV2 (mkV "scire") ; -- scio, scivi/scii, scitum 4 (Langenscheidts)
   know_VQ = mkV "scire" ;
-  know_VS = mkV "scire" ;
+  know_VS = mkVS ( mkV "scire" );
   lake_N = mkN "lacus" "lacus" masculine; -- -us m. (Langenscheidts)
   lamp_N = mkN "lucerna" ; -- -ae f. (Langenscheidts)
   learn_V2 = mkV2 (mkV "discere" "disco" "didici") ; -- disco, didici, - 3 (-isc-?) (Langenscheidts)
@@ -130,7 +130,7 @@ lin
   leave_V2 = mkV2 (mkV "relinquere" "relinquo" "relinqui" "relictum") ; -- relinquo, relinqui, relictum 3 (Langenscheidts)
   like_V2 = mkV2 ( IrregLat.want_V ) ; -- vello, velli (volsi, vulsi), vulsum 3 (Langenscheidts)
   listen_V2 = mkV2 (mkV "auscultare") ; -- ausculto 1 (Langenscheidts)
-  live_V = mkV "vivere" ; -- vivo, vixi, victurus 3 (Langenscheidts)
+  live_V = mkV "vivere" "vivo" "vixi" "victurus" ; -- vivo, vixi, victurus 3 (Langenscheidts)
   long_A = mkA "longus" ; -- 3 (Langenscheidts)
   lose_V2 = mkV2 (mkV "amittere") ; -- amitto, amissi, amissum 3 (Langenscheidts)
   love_N = mkN "amor" "amoris" masculine ; -- Ranta; -oris m. (Langenscheidts)
@@ -222,7 +222,7 @@ lin
   university_N = mkN "universitas" "universitatis" feminine ; -- -atis f. (http://la.wikipedia.org/wiki/Universitas) and (Langenscheidts)
   village_N = mkN "vicus" ; -- -i m. (Langenscheidts)
   wait_V2 = mkV2 (mkV "exspectare") ; -- 1 (Langenscheidts)
-  walk_V = mkV "vadere" ; -- 3 (Langenscheidts)
+  walk_V = mkV "vadere" "vadio" "vasi"; -- 3 (Langenscheidts)
   warm_A = mkA "calidus" ; -- 3 (Langenscheidts)
   war_N = mkN "bellum" ; -- -i m. (Langenscheidts)
   watch_V2 = mkV2 (mkV "spectare") ; -- 1 (Langenscheidts)

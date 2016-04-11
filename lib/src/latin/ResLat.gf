@@ -48,7 +48,7 @@ param
     { 
       s = table {
 	Pl => n.s ! Pl ;
-	Sg => \\_ => "######" -- no singular forms
+	Sg => \\_ => nonExist -- no singular forms
 	};
       g = n.g ;
       preap = n.preap ;
@@ -89,6 +89,8 @@ param
       n = n ;
       p = P3 
     } ;
+
+  emptyNP : NounPhrase = { s = \\_ => ""; g = Masc; n = Sg; p = P1 }; 
 -- also used for adjectives and so on
 
 -- adjectives
@@ -143,9 +145,11 @@ param
   VTense = VPres VMood | VImpf VMood | VFut ; 
   VMood  = VInd | VConj ;
 
+  VQForm = VQTrue | VQFalse ; -- Question suffix should be added to the Verb
+  
   oper
   VerbPhrase : Type = {
-    fin : VActForm => Str ;
+    fin : VActForm => VQForm => Str ;
     inf : VInfForm => Str ;
     obj : Str ;
     adj : Agr => Str
@@ -162,6 +166,9 @@ param
     part  : VPartForm =>Agr => Str ;
     } ;
 
+  Verb2 : Type = Verb ** { c : Preposition };
+  Verb3 : Type = Verb ** { c : Preposition ; c2 : Preposition };
+  
   VV : Type = Verb ** { isAux : Bool } ;
 
   tenseToVTense : Tense -> VTense = 
@@ -196,14 +203,14 @@ param
 
   useVPasV : VerbPhrase -> Verb = \vp ->
     {
-      act = \\a => vp.obj ++ vp.fin ! a ;
-      pass = \\_ => "???" ;
+      act = \\a => vp.obj ++ vp.fin ! a ! VQFalse;
+      pass = \\_ => nonExist ;
       inf = \\a => vp.obj ++ vp.inf ! a ;
-      imp = \\_ => "???" ;
-      ger = \\_ => "???" ;
-      geriv = \\_ => "???" ;
-      sup = \\_ => "???" ;
-      part = \\_,_ => "???" ;
+      imp = \\_ => nonExist ;
+      ger = \\_ => nonExist ;
+      geriv = \\_ => nonExist ;
+      sup = \\_ => nonExist ;
+      part = \\_,_ => nonExist ;
     } ;
 
   mkVerb : 
@@ -357,7 +364,7 @@ param
 	  ) + "tote" ;
 	VImp2 Pl P3          => -- Imperative II 
 	  pres_stem + fill.p2 + "nto" ;
-	_ => "######" -- No imperative form
+	_ => nonExist -- No imperative form
 	} ;
       ger = 
 	table {
@@ -517,19 +524,19 @@ param
           VAct VSim VFut          n  p  => -- Future I
 	    fut_I_base + passPresEnding n p ;
           VAct VAnt (VPres VInd)  n  p  => -- Prefect Indicative
-	    "######" ; -- Use participle
+	    nonExist ; -- Use participle
           VAct VAnt (VPres VConj) n  p  => -- Prefect Conjunctive
-	    "######" ; -- Use participle
+	    nonExist ; -- Use participle
           VAct VAnt (VImpf VInd)  n  p  => -- Plusperfect Indicative
-	    "######" ; -- Use participle
+	    nonExist ; -- Use participle
           VAct VAnt (VImpf VConj) n  p  => -- Plusperfect Conjunctive
-	    "######" ; -- Use participle
-          VAct VAnt VFut          n  p  => -- Future II 
-	    "######" -- Use participle
-        } ; 
-      pass = 
-	\\_ => "######" ; -- no passive forms
-      inf = 
+	    nonExist ; -- Use participle
+          VAct VAnt VFut          n  p  => -- Future II
+	    nonExist -- Use participle
+        } ;
+      pass =
+	\\_ => nonExist ; -- no passive forms
+      inf =
 	table {
           VInfActPres        => -- Infinitive Present Active
 	    inf_pres ;
@@ -546,11 +553,11 @@ param
 	  VInfActFut Neutr   => -- Infinitive Perfect Active
 	    part_stem + "urum" ;
 	  VInfPassPres       => -- Infinitive Present Passive
-	    "######" ; -- no passive form
+	    nonExist ; -- no passive form
 	  VInfPassPerf _     => -- Infinitive Perfect Passive
-	    "######" ; -- no passive form
+	    nonExist ; -- no passive form
 	  VInfPassFut        => -- Infinitive Future Passive
-	    "######"  -- no passive form
+	    nonExist  -- no passive form
         } ;
       imp = 
 	table {
@@ -565,10 +572,10 @@ param
 	  VImp2 Sg ( P2 | P3 ) => -- Imperative II
 	    imp_base + "tor" ;
 	  VImp2 Pl P2          => -- Imperative II
-	    "######" ; -- really no such form?
+	    nonExist ; -- really no such form?
 	  VImp2 Pl P3          => -- Imperative II
 	    pres_ind_base + fill.p1 + "ntor" ;
-	  _ => "######" -- No imperative form
+	  _ => nonExist -- No imperative form
 	} ;
       ger = 
 	table {
@@ -803,12 +810,12 @@ oper
       		  <Fem  ,Pl> => pronForms "eae" "eas" "earum" "eis" "eis" ;
       		  <Neutr,Pl> => pronForms "ea"  "ea"  "eorum" "eis" "eis"
       		} ;
-      	      PronRefl => pronForms "######" "se" "sui" "sibi" "se"
+      	      PronRefl => pronForms nonExist "se" "sui" "sibi" "se"
       	    }
       	} ,
       	table {
-      	  PronNonRefl => 
-      	    \\_ => "######" ;
+      	  PronNonRefl =>
+      	    \\_ => nonExist ;
       	  PronRefl =>
       	    table {
       	      Ag Masc  Sg c => ( pronForms "suus" "suum" "sui" "suo" "suo" ) ! c ;
@@ -856,13 +863,17 @@ oper
   VPSlash = VerbPhrase ** {c2 : Preposition} ;
 
   predV : Verb -> VerbPhrase = \v -> {
-    fin = v.act ;
+    fin = \\a,q => v.act ! a ++ case q of { VQTrue => Prelude.BIND ++ "ne"; VQFalse => "" };
     inf = v.inf ;
     obj = [] ;
     adj = \\a => []
   } ;
 
-  predV2 : (Verb ** {c : Preposition}) -> VPSlash = \v -> predV v ** {c2 = v.c} ;
+  predV2 : Verb2 -> VPSlash = \v ->
+    predV v ** {c2 = v.c} ;
+
+  predV3 : Verb3 -> VPSlash = \v
+    -> predV v ** {c2 = v.c2; c3 = v.c3 } ;
 
   appPrep : Preposition -> (Case => Str) -> Str = \c,s -> c.s ++ s ! c.c ;
 
@@ -873,6 +884,14 @@ oper
     adj = vp.adj
   } ;
 
+   insertObjc: Str -> VPSlash -> VPSlash = \obj,vp -> {
+    fin = vp.fin ;
+    inf = vp.inf ;
+    obj = obj ++ vp.obj ;
+    adj = vp.adj ;
+    c2 = vp.c2
+    } ;
+    
   insertAdj : (Agr => Str) -> VerbPhrase -> VerbPhrase = \adj,vp -> {
     fin = vp.fin ;
     inf = vp.inf ;
@@ -880,13 +899,31 @@ oper
     adj = \\a => adj ! a ++ vp.adj ! a
   } ;
 
---  Clause = {s : VAnter => VTense => Polarity => Str} ;
+  -- clauses
+  Clause = {s : Tense => Anteriority => Polarity => VQForm => Order => Str} ;
+  QClause = {s : Tense => Anteriority => Polarity => QForm => Str} ;
 
-  -- mkClause : Pronoun -> VP -> Clause = \np,vp -> {
-  --   s = \\a,t,p => np.s ! Nom ++ vp.obj ++ vp.adj ! np.g ! np.n ++ negation p ++ 
-  --     vp.fin ! VAct a t np.n np.p
-  --   } ;
-    
+  -- The VQForm parameter defines if the ordinary verbform or the quistion form with suffix "-ne" will be used
+  mkClause : NounPhrase -> VerbPhrase -> Clause = \np,vp -> {
+    s = \\tense,anter,pol,vqf,order => case order of {
+      SVO => np.s ! Nom ++ negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.inf ! VInfActPres ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ! vqf ++ vp.obj ;
+      VSO => negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ! vqf ++ np.s ! Nom ++ vp.obj ;
+      VOS => negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ! vqf ++ vp.obj ++ np.s ! Nom ;
+      OSV => vp.obj ++ np.s ! Nom ++ negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ! vqf ;
+      OVS => vp.obj ++ negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ! vqf ++ np.s ! Nom ;
+      SOV => np.s ! Nom ++ vp.obj ++ negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ! vqf 
+      } 
+      -- np.s ! Nom ++ vp.obj ++ vp.adj ! np.g ! np.n ++ negation p ++ vp.fin ! VAct a t np.n np.p
+    } ;
+
+  -- questions
+  mkQuestion : SS -> Clause -> QClause = \ss,cl -> {
+    s = \\tense,anter,pol,form => case form of {
+      QDir => ss.s ++ cl.s ! tense ! anter ! pol ! VQFalse ! OVS;
+      QIndir => ss.s ++ cl.s ! tense ! anter ! pol ! VQFalse ! OSV
+      }
+    } ;
+  
   negation : Polarity -> Str = \p -> case p of {
     Pos => [] ;   
     Neg => "non"

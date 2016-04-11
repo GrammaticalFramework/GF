@@ -276,7 +276,8 @@ oper
 			       bon + "ioribus" ; 
 			       bon + "ioribus" ; 
 			       bon + "iora" ] ! c 
-	}
+	} ;
+      _ => \\_ => nonExist -- Default case
     } ;
   
   super : Str -> ( Agr => Str ) = \bonus ->
@@ -286,7 +287,8 @@ oper
 	faci + "lis" => faci + "l" ; -- Bayer-Lindauer 48 3
 	feli + "x" => feli + "c" ; -- Bayer-Lindauer 48 1
 	ege + "ns" => ege + "nt" ; -- Bayer-Lindauer 48 1
-	bon + ( "us" | "is") => bon -- Bayer-Lindauer 48 1
+	bon + ( "us" | "is") => bon ; -- Bayer-Lindauer 48 1
+	_ => nonExist -- default case
 	};
       suffix : Str = case bonus of {
 	ac + "er" => "rim" ; -- Bayer-Lindauer 48 2

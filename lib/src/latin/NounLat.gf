@@ -34,11 +34,12 @@ concrete NounLat of Noun = CatLat ** open ResLat, Prelude, ConjunctionLat in {
 --      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
 --      a = np.a
 --      } ;
---
---    AdvNP np adv = {
---      s = \\c => np.s ! c ++ adv.s ;
---      a = np.a
---      } ;
+
+--    AdvNP   : NP -> Adv -> NP ;    -- Paris today
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      g = np.g ; n = np.n; p = np.p
+      } ;
 --
 --    DetQuantOrd quant num ord = {
 --      s  = quant.s ! num.hasCard ! num.n ++ num.s ++ ord.s ; 
