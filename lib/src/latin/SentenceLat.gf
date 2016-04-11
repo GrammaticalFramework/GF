@@ -1,21 +1,11 @@
-concrete SentenceLat of Sentence = CatLat,TenseX ** open Prelude, ResLat in {
+concrete SentenceLat of Sentence = CatLat ** open Prelude, ResLat in {
 
   flags optimize=all_subs ;
 
   lin
 
     PredVP np vp = -- NP -> VP -> Cl
-      {
-	s = \\tense,anter,pol,order => 
-	  case order of {
-	    SVO => np.s ! Nom ++ negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ++ vp.obj ;
-	    VSO => negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ++ np.s ! Nom ++ vp.obj ;
-	    VOS => negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ++ vp.obj ++ np.s ! Nom ;
-	    OSV => vp.obj ++ np.s ! Nom ++ negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ;
-	    OVS => vp.obj ++ negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p ++ np.s ! Nom ;
-	    SOV => np.s ! Nom ++ vp.obj ++ negation pol ++ vp.adj ! Ag np.g Sg Nom ++ vp.fin ! VAct ( anteriorityToVAnter anter ) ( tenseToVTense tense ) np.n np.p 
-	  } 
-      } ;
+      mkClause np vp ;
 --
 --    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 --
@@ -32,16 +22,18 @@ concrete SentenceLat of Sentence = CatLat,TenseX ** open Prelude, ResLat in {
 --        in
 --        dont ++ verb
 --    } ;
---
---    SlashVP np vp = 
---      mkClause (np.s ! Nom) np.a vp ** {c2 = vp.c2} ;
+   
+--  SlashVP  : NP -> VPSlash -> ClSlash ;      -- (whom) he sees
+    SlashVP np vp = 
+      mkClause np ( vp ** {c2 = vp.c2} ) ;
 --
 --    AdvSlash slash adv = {
 --      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
 --      c2 = slash.c2
 --    } ;
---
---    SlashPrep cl prep = cl ** {c2 = prep.s} ;
+
+--  SlashPrep : Cl -> Prep -> ClSlash ;         -- (with whom) he walks 
+    SlashPrep cl prep = cl ** {c2 = prep.s} ;
 --
 --    SlashVS np vs slash = 
 --      mkClause (np.s ! Nom) np.a 
@@ -54,11 +46,11 @@ concrete SentenceLat of Sentence = CatLat,TenseX ** open Prelude, ResLat in {
 --
     UseCl  t p cl = -- Temp -> Pol-> Cl -> S
       {
-	s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! SOV 
+	s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! VQFalse ! SOV
     } ;
---    UseQCl t p cl = {
---      s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! q
---    } ;
+    UseQCl t p cl = {
+      s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! q
+    } ;
 --    UseRCl t p cl = {
 --      s = \\r => t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! r ;
 --      c = cl.c
@@ -69,7 +61,11 @@ concrete SentenceLat of Sentence = CatLat,TenseX ** open Prelude, ResLat in {
 --    } ;
 --
 --    AdvS a s = {s = a.s ++ "," ++ s.s} ;
---
+
+-- This covers subjunctive clauses, but they can also be added to the end.
+--  SSubjS : S -> Subj -> S -> S ;       -- I go home if she comes
+    SSubjS s1 subj s2 = ss ( subj.s ++ s2.s ++ s1.s );
+    
 --    RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ;
 --
 --  oper

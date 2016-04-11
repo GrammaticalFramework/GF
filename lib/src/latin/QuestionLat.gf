@@ -1,30 +1,31 @@
---concrete QuestionLat of Question = CatLat ** open ResLat, Prelude in {
---
+concrete QuestionLat of Question = CatLat ** open ResLat, IrregLat, Prelude in {
+
 --  flags optimize=all_subs ;
+  --`
+  lin
+--   QuestCl : Cl -> QCl ;            -- does John walk
+     QuestCl cl = {
+       s = \\t,a,p => 
+         let cls = cl.s ! t ! a ! p 
+         in table {
+           QDir   => cls ! VQTrue ! VSO ; -- cls ! OQuest ;
+           QIndir => "" -- "if" ++ cls ! ODir -- TODO
+         }
+       } ;
+    
+--  QuestVP     : IP -> VP -> QCl ;      -- who walks
+    QuestVP ip vp = 
+      let qcl = mkQuestion { s = ip.s ! Nom } ( mkClause emptyNP vp )
+      in {s = \\t,a,b,qd => qcl.s ! t ! a ! b ! qd} ;
+
+--  QuestSlash  : IP -> ClSlash -> QCl ; -- whom does John love    
+    QuestSlash ip slash =
+      mkQuestion (ss ( ip.s ! Acc) ) slash ;
+
+    QuestIAdv iadv cl = mkQuestion iadv cl ;
 --
---  lin
---
---    QuestCl cl = {
---      s = \\t,a,p => 
---            let cls = cl.s ! t ! a ! p 
---            in table {
---              QDir   => cls ! OQuest ;
---              QIndir => "if" ++ cls ! ODir
---              } ---- "whether" in ExtLat
---      } ;
---
---    QuestVP qp vp = 
---      let cl = mkClause (qp.s ! Nom) (agrP3 qp.n) vp
---      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
---
---    QuestSlash ip slash = 
---      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
---      --- stranding in ExratLat 
---
---    QuestIAdv iadv cl = mkQuestion iadv cl ;
---
---    QuestIComp icomp np = 
---      mkQuestion icomp (mkClause (np.s ! Nom) np.a (predAux auxBe)) ;
+    QuestIComp icomp np = 
+      mkQuestion icomp (mkClause np (predV be_V) ) ;
 --
 --
 --    PrepIP p ip = {s = p.s ++ ip.s ! Acc} ;
@@ -49,7 +50,7 @@
 --      n = num.n
 --      } ;
 --
---    CompIAdv a = a ;
+    CompIAdv a = a ;
 --    CompIP p = ss (p.s ! Nom) ;
 --
---}
+}

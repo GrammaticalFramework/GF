@@ -36,7 +36,7 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
     	    a => verb.act ! a
 	  };
 	pass =
-	  \\_ => "######" ; -- no passive forms 
+	  \\_ => nonExist ; -- no passive forms 
 	inf =
 	  verb.inf ;
 	imp =
@@ -47,18 +47,18 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
 	    a => verb.imp ! a
 	  } ;
 	sup =
-	  \\_ => "######" ; -- no supin forms
+	  \\_ => nonExist ; -- no supin forms
 	ger =
-	  \\_ => "######" ; -- no gerund forms
+	  \\_ => nonExist ; -- no gerund forms
 	geriv = 
-	  \\_ => "######" ; -- no gerundive forms
+	  \\_ => nonExist ; -- no gerundive forms
 	part = table {
 	  VActFut =>
 	    verb.part ! VActFut ;
 	  VActPres => 
-	    \\_ => "######" ; -- no such participle
+	    \\_ => nonExist ; -- no such participle
 	  VPassPerf =>
-	    \\_ => "######" -- no such participle
+	    \\_ => nonExist -- no such participle
 	  }
       } ;
 
@@ -92,27 +92,27 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
     	    a => verb.act ! a
     	  } ;
     	pass = 
-    	  \\_ => "######" ; -- no passive forms
+    	  \\_ => nonExist ; -- no passive forms
     	inf = 
 	  table {
-	    VInfActFut _ => "######" ;
+	    VInfActFut _ => nonExist ;
 	    a => verb.inf ! a
 	  } ;
     	imp = 
-	  \\_ => "######" ;
+	  \\_ => nonExist ;
     	sup = 
-	  \\_ => "######" ;
+	  \\_ => nonExist ;
     	ger =
-	  \\_ => "######" ;
+	  \\_ => nonExist ;
     	geriv =
-	  \\_ => "######" ;
+	  \\_ => nonExist ;
     	part = table {
 	  VActFut =>
-    	    \\_ => "######" ; -- no such participle
+    	    \\_ => nonExist ; -- no such participle
     	  VActPres => 
-	    \\_ => "######" ; -- no such participle
+	    \\_ => nonExist ; -- no such participle
     	  VPassPerf =>
-    	    \\_ => "######" -- no such participle
+    	    \\_ => nonExist -- no such participle
 	  } ;
     	isAux = False
       };
@@ -202,22 +202,22 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
     	    a => verb.act ! a
 	  } ;
 	  pass =
-	    \\_ => "######" ;
+	    \\_ => nonExist ;
 	  ger = 
 	    verb.ger ;
 	  geriv =
 	    verb.geriv ;
 	  imp = 
-	    \\_ => "######" ;
+	    \\_ => nonExist ;
 	  inf = 
 	    verb.inf ;
 	  part = table {
 	    VActFut =>
-	      \\_ => "######" ;
+	      \\_ => nonExist ;
 	    VActPres =>
 	      verb.part ! VActPres ;
 	    VPassPerf =>
-	      \\_ => "######"
+	      \\_ => nonExist
 	    } ; 
 	  sup =
 	    verb.sup ;
@@ -255,7 +255,7 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
     	    a => verb.act ! a
 	  } ;
 	pass = 
-	  \\_ => "######"; -- no passive forms
+	  \\_ => nonExist; -- no passive forms
 	ger = 
 	  table VGerund [ "eundum" ; "eundi" ; "eundo" ; "eundo" ] ;
 	geriv =
@@ -289,10 +289,10 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
  		    Masc ).s ! n ! c
 	    } ;
 	  VPassPerf => 
-	    \\_ => "######" -- no such participle
+	    \\_ => nonExist -- no such participle
 	  } ;
 	sup = 
-	  \\_ => "######" -- really no such form?
+	  \\_ => nonExist -- really no such form?
       } ;
 
     -- Bayer-Lindauer 97
@@ -321,15 +321,15 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
 	act = 
 	  table {
 	    VAct VSim (VPres VInd) Sg P1 => "fio" ;
-	    VAct VAnt _            _  _  => "######" ; -- perfect expressed by participle
+	    VAct VAnt _            _  _  => nonExist ; -- perfect expressed by participle
 	    a => verb.act ! a 
 	  } ;
 	pass =
-	  \\_ => "######" ; -- no passive forms
+	  \\_ => nonExist ; -- no passive forms
 	ger =
-	  \\_ => "######" ; -- no gerund form
+	  \\_ => nonExist ; -- no gerund form
 	geriv = 
-	  \\_ => "######" ; -- no gerundive form
+	  \\_ => nonExist ; -- no gerundive form
 	imp = 
 	  verb.imp ;
 	inf = 
@@ -342,14 +342,14 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
 	  } ;
 	part = table {
 	  VActFut =>
-	    \\_ => "######" ; -- no such participle
+	    \\_ => nonExist ; -- no such participle
 	  VActPres => 
-	    \\_ => "######" ; -- no such participle
+	    \\_ => nonExist ; -- no such participle
 	  VPassPerf =>
 	    verb.part ! VPassPerf
 	  } ;
 	sup = 
-	  \\_ => "######" -- no supin
+	  \\_ => nonExist -- no supin
       } ;
 
     -- Source ?
@@ -377,35 +377,35 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
 	    VAct VAnt (VPres VConj) Pl P3 => "pluverint" ;
 	    VAct VAnt (VImpf VConj) Sg P3 => "pluvisset" ;
 	    VAct VAnt (VImpf VConj) Pl P3 => "pluvissent" ;
-	    _ => "######" -- no such forms
+	    _ => nonExist -- no such forms
 	  } ;
 	pass = 
-	  \\_ => "######" ; -- no passive forms
+	  \\_ => nonExist ; -- no passive forms
 	inf = table {
 	  VInfActPres => "pluere" ;
 	  VInfActPerf _ => "pluvisse" ;
-	  _ => "######"
+	  _ => nonExist
 	  } ;
 	imp =
 	  table {
 	    VImp2 Sg ( P2 | P3 ) => "pluito" ;
 	    VImp2 Pl P2 => "pluitote" ;
 	    VImp2 Pl P3 => "pluunto" ;
-	    _ => "######" 
+	    _ => nonExist 
 	  } ;
 	ger = 
-	  \\_ => "######" ; -- no gerund forms
+	  \\_ => nonExist ; -- no gerund forms
 	geriv = 
-	  \\_ => "######" ; -- no gerundive forms
+	  \\_ => nonExist ; -- no gerundive forms
 	sup = 
-	  \\_ => "######" ; -- no supin forms
+	  \\_ => nonExist ; -- no supin forms
 	part = table { 
 	  VActPres =>
 	    \\_ => "pluens" ;
 	  VActFut =>
-	    \\_ => "######" ; -- no such participle
+	    \\_ => nonExist ; -- no such participle
 	  VPassPerf =>
-	    \\_ => "######" -- no such participle
+	    \\_ => nonExist -- no such participle
 	  }
       } ;
 
@@ -432,25 +432,25 @@ concrete IrregLat of IrregLatAbs = CatLat ** open Prelude, ParadigmsLat, ResLat 
       in {
 	act = table {
 	  VAct VSim t n p => verb.act ! VAct VAnt t n p ;
-	  _ => "######" -- no such verb forms
+	  _ => nonExist -- no such verb forms
 	  } ;
-	pass = \\_ => "######" ; -- no passive forms 
-	ger = \\_ => "######" ; -- no gerund forms
-	geriv = \\_ => "######" ; -- no gerundive forms
-	imp = \\_ => "######" ; -- no imperative form
+	pass = \\_ => nonExist ; -- no passive forms 
+	ger = \\_ => nonExist ; -- no gerund forms
+	geriv = \\_ => nonExist ; -- no gerundive forms
+	imp = \\_ => nonExist ; -- no imperative form
 	inf = table {
 	  VInfActPres => verb.inf ! VInfActPres ;
 	  VInfActFut g => verb.inf ! VInfActFut g ; -- really ?
-	  _ => "######"
+	  _ => nonExist
 	  } ;
 	part = table {
 	  VActFut => 
 	    verb.part ! VActFut ;
 	  VActPres => 
-	    \\_ => "######" ; -- no such participle form
+	    \\_ => nonExist ; -- no such participle form
 	  VPassPerf => 
-	    \\_ => "######" -- no such participle form
+	    \\_ => nonExist -- no such participle form
 	  } ;
-	sup = \\_ => "######" ; -- no such supine form
+	sup = \\_ => nonExist ; -- no such supine form
       } ;
 }
