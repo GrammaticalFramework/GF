@@ -32,18 +32,29 @@ bash setup.sh install prefix="$destdir$prefix"
 popd
 
 ## Build the python binding to the C run-time system
-pushd src/runtime/python
-EXTRA_INCLUDE_DIRS="$extrainclude" EXTRA_LIB_DIRS="$extralib" python setup.py build
-python setup.py install --prefix="$destdir$prefix"
-popd
+if which >/dev/null python; then
+    pushd src/runtime/python
+    EXTRA_INCLUDE_DIRS="$extrainclude" EXTRA_LIB_DIRS="$extralib" python setup.py build
+    python setup.py install --prefix="$destdir$prefix"
+    popd
+else
+    echo "Python is not installed, so the Python binding will not be included"
+fi
 
 ## Build the Java binding to the C run-time system
-pushd src/runtime/java
-# not implemented yet
-popd
+if which >/dev/null javac && which >/dev/null jar ; then
+    pushd src/runtime/java
+    rm -f libjpgf.la # In case it contains the wrong INSTALL_PATH
+    make INSTALL_PATH="$prefix/lib"
+    make INSTALL_PATH="$destdir$prefix/lib" install
+    cp jpgf.jar "$destdir$prefix/lib" # missing from make install...
+    popd
+else
+    echo "Java SDK is not installed, so the Java binding will not be included"
+fi
 
 ## Build GF, with C run-time support enabled
-cabal install --only-dependencies
+cabal install --only-dependencies -fserver -fc-runtime $extra
 cabal configure --prefix="$prefix" -fserver -fc-runtime $extra
 DYLD_LIBRARY_PATH="$extralib" LD_LIBRARY_PATH="$extralib" cabal build
 cabal copy --destdir="$destdir"
