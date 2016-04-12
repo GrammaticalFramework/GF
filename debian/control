@@ -3,7 +3,7 @@ Section: devel
 Priority: optional
 Maintainer: Thomas Hallgren <hallgren@chalmers.se>
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 5), haskell-platform (>= 2011.2.0.1), libghc-haskeline-dev, libghc-mtl-dev, libghc-json-dev, python-dev, autoconf, libtool
+Build-Depends: debhelper (>= 5), haskell-platform (>= 2011.2.0.1), libghc-haskeline-dev, libghc-mtl-dev, libghc-json-dev, autoconf, automake, libtool, python-dev, java-sdk
 Homepage: http://www.grammaticalframework.org/
 
 Package: gf
