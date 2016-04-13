@@ -217,6 +217,29 @@ gu_string_to_double(GuString s, double *res)
 	return true;
 }
 
+void
+gu_double_to_string(double val, GuOut* out, GuExn* err)
+{
+	int ival = (int) val;
+    gu_printf(out, err, "%d", ival);
+    val -= ival;
+
+	if (val < 0)
+		val = -val;
+
+	if (val != 0) {
+		gu_putc('.', out, err);
+
+		while (val > 0.000001)  // process remaining digits
+		{
+			val  = val * 10;
+			ival = (int) val;
+			gu_printf(out, err, "%d", ival);
+			val -= ival;
+		}
+	}
+}
+
 bool
 gu_string_is_prefix(GuString s1, GuString s2)
 {

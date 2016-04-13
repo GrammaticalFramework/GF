@@ -48,6 +48,9 @@ gu_string_to_int(GuString s, int *res);
 bool
 gu_string_to_double(GuString s, double *res);
 
+void
+gu_double_to_string(double val, GuOut* out, GuExn* err);
+
 bool
 gu_string_is_prefix(GuString s1, GuString s2);
 
