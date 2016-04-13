@@ -458,7 +458,7 @@ pgf_jit_gates(PgfReader* rdr)
 	jit_movr_p(JIT_FP, JIT_SP);
 	jit_movi_p(JIT_R1, gates->update_closure);
 	jit_pushr_p(JIT_R1);
-	jit_retval(JIT_VCLOS);
+	jit_retval_p(JIT_VCLOS);
 	jit_patch(ref);
 	jit_ldr_p(JIT_R0, JIT_VCLOS);
 	jit_jmpr(JIT_R0);
