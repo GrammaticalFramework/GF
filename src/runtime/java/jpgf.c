@@ -314,6 +314,40 @@ Java_org_grammaticalframework_pgf_PGF_getFunctions(JNIEnv* env, jobject self)
 	return functions;
 }
 
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_PGF_getFunctionsByCat(JNIEnv* env, jobject self, jstring jcat)
+{
+	jclass list_class = (*env)->FindClass(env, "java/util/ArrayList");
+	if (!list_class)
+		return NULL;
+	jmethodID constrId = (*env)->GetMethodID(env, list_class, "<init>", "()V");
+	if (!constrId)
+		return NULL;
+	jobject functions = (*env)->NewObject(env, list_class, constrId);
+	if (!functions)
+		return NULL;
+
+	PgfPGF* pgf = get_ref(env, self);
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	PgfCId cat = j2gu_string(env, jcat, tmp_pool);
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_exn(tmp_pool);
+	
+	JPGFClosure clo = { { pgf_collect_names }, env, self, functions };
+	pgf_iter_functions_by_cat(pgf, cat, &clo.fn, err);
+	if (!gu_ok(err)) {
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return functions;
+}
+
 JNIEXPORT jstring JNICALL 
 Java_org_grammaticalframework_pgf_Concr_getName(JNIEnv* env, jobject self)
 {
