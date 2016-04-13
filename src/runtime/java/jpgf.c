@@ -1213,3 +1213,37 @@ Java_org_grammaticalframework_pgf_Generator_generateAll(JNIEnv* env, jclass claz
 
 	return jexpiter;
 }
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_PGF_compute(JNIEnv* env, jobject self, jobject jexpr)
+{
+	GuPool* pool = gu_new_pool();
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_exn(tmp_pool);
+
+	PgfExpr res =
+		pgf_compute(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), err, tmp_pool, pool);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err, PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+		} else {
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be computed");
+		}
+		gu_pool_free(tmp_pool);
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	jclass pool_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Pool");
+	jmethodID pool_constrId = (*env)->GetMethodID(env, pool_class, "<init>", "(J)V");
+	jobject jpool = (*env)->NewObject(env, pool_class, pool_constrId, p2l(pool));
+
+	jclass expr_class  = (*env)->GetObjectClass(env, jexpr);
+	jmethodID constrId = (*env)->GetMethodID(env, expr_class, "<init>", "(Lorg/grammaticalframework/pgf/Pool;Ljava/lang/Object;J)V");
+	jexpr = (*env)->NewObject(env, expr_class, constrId, jpool, NULL, p2l(gu_variant_to_ptr(res)));
+
+	return jexpr;
+}
