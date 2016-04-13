@@ -236,6 +236,84 @@ Java_org_grammaticalframework_pgf_PGF_getLanguages(JNIEnv* env, jobject self)
 	return languages;
 }
 
+static void
+pgf_collect_names(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+	PgfCId name = (PgfCId) key;
+    JPGFClosure* clo = (JPGFClosure*) fn;
+
+	jstring jname = gu2j_string(clo->env, name);
+
+	jclass list_class = (*clo->env)->GetObjectClass(clo->env, clo->object);
+	jmethodID add_method = (*clo->env)->GetMethodID(clo->env, list_class, "add", "(Ljava/lang/Object;)Z");
+
+	(*clo->env)->CallObjectMethod(clo->env, clo->object, add_method, jname);
+}
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_PGF_getCategories(JNIEnv* env, jobject self)
+{
+	jclass list_class = (*env)->FindClass(env, "java/util/ArrayList");
+	if (!list_class)
+		return NULL;
+	jmethodID constrId = (*env)->GetMethodID(env, list_class, "<init>", "()V");
+	if (!constrId)
+		return NULL;
+	jobject categories = (*env)->NewObject(env, list_class, constrId);
+	if (!categories)
+		return NULL;
+
+	PgfPGF* pgf = get_ref(env, self);
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_exn(tmp_pool);
+	
+	JPGFClosure clo = { { pgf_collect_names }, env, self, categories };
+	pgf_iter_categories(pgf, &clo.fn, err);
+	if (!gu_ok(err)) {
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return categories;
+}
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_PGF_getFunctions(JNIEnv* env, jobject self)
+{
+	jclass list_class = (*env)->FindClass(env, "java/util/ArrayList");
+	if (!list_class)
+		return NULL;
+	jmethodID constrId = (*env)->GetMethodID(env, list_class, "<init>", "()V");
+	if (!constrId)
+		return NULL;
+	jobject functions = (*env)->NewObject(env, list_class, constrId);
+	if (!functions)
+		return NULL;
+
+	PgfPGF* pgf = get_ref(env, self);
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an exception frame that catches all errors.
+	GuExn* err = gu_exn(tmp_pool);
+	
+	JPGFClosure clo = { { pgf_collect_names }, env, self, functions };
+	pgf_iter_functions(pgf, &clo.fn, err);
+	if (!gu_ok(err)) {
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return functions;
+}
+
 JNIEXPORT jstring JNICALL 
 Java_org_grammaticalframework_pgf_Concr_getName(JNIEnv* env, jobject self)
 {
