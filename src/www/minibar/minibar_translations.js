@@ -291,7 +291,7 @@ Translations.prototype.alignment_button=function(abs,all,toLangs) {
 Translations.prototype.parsetree_button=function(abs,lang) {
   var f=this.options.tree_img_format;
   var img=this.server.current_grammar_url
-          +"?command=parsetree&format="+f+"&nodefont=arial"
+          +"?command=parsetree&format="+f+"&nodep=true&nodefont=arial"
 	  +"&from="+lang+"&tree="+encodeURIComponent(abs);
   var btn=tree_button(img)
   btn.title="Click to display parse tree. Click again to show function names."
