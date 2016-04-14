@@ -12,15 +12,17 @@ public class Type {
 	 * If the represented type is A1 -&gt; A2 -&gt; ... An -&gt; B, then
 	 * the hypotheses represent the types in A1, A2 ... An. */
 	public native Hypo[] getHypos();
-	
+
+	public native String toString();
+
 	//////////////////////////////////////////////////////////////////
 	// private stuff
-	
-	private PGF gr;
+
+	private Object master;
 	private long ref;
-	
-	private Type(PGF gr, long ref) {
-		this.gr  = gr;
-		this.ref = ref;
+
+	private Type(Object master, long ref) {
+		this.master = master;
+		this.ref    = ref;
 	}
 }

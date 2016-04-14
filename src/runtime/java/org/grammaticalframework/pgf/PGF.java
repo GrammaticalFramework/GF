@@ -58,6 +58,10 @@ public class PGF {
 	 */
 	public native Expr compute(Expr expr);
 
+	/** Takes an expression and returns a refined version
+	 * of the expression together with its type */
+	public native TypedExpr inferExpr(Expr expr) throws TypeError;
+
 	//////////////////////////////////////////////////////////////////
 	// private stuff
 	private Pool pool;
