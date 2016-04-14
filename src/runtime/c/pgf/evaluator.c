@@ -100,18 +100,16 @@ repeat:;
 		} else {
 			size_t arity = absfun->arity;
 
-			if (n_args == arity) {
-				PgfValue* val = gu_new_flex(rs->pool, PgfValue, args, arity);
+			if (n_args >= arity) {
+				PgfValue* val = gu_new_flex(rs->pool, PgfValue, args, n_args);
 				val->header.code = rs->eval_gates->evaluate_value;
 				val->con = (PgfClosure*) &absfun->closure;
 
-				for (size_t i = 0; i < arity; i++) {
+				for (size_t i = 0; i < n_args; i++) {
 					val->args[i] = args[--n_args];
 				}
 				res = &val->header;
 			} else {
-				gu_assert(n_args < arity);
-
 				PgfExprThunk* lambda = gu_new(PgfExprThunk, rs->pool);
 				lambda->header.code = rs->eval_gates->evaluate_value_lambda;
 				lambda->env = NULL;
@@ -135,7 +133,7 @@ repeat:;
 					
 					expr = new_expr;
 				}
-				
+
 				for (size_t i = 0; i < arity-1; i++) {
 					PgfExpr new_expr;
 
@@ -223,7 +221,7 @@ pgf_value2expr(PgfReasoner* rs, int level, PgfClosure* clos)
 		PgfAbsFun* absfun = gu_container(val->con, PgfAbsFun, closure);
 
 		expr   = absfun->ep.expr;
-		n_args = absfun->arity;
+		n_args = gu_seq_length(absfun->type->hypos);
 		args   = val->args;
 	} else if (clos->code == rs->eval_gates->evaluate_value_lit) {
 		PgfValueLit* val = (PgfValueLit*) clos;
