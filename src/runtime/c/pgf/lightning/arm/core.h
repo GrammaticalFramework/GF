@@ -49,7 +49,6 @@ struct {
 } jit_flags;
 
 struct jit_local_state {
-    int		 reglist;
     int		 framesize;
     int		 nextarg_get;
     int		 nextarg_put;
@@ -356,7 +355,12 @@ jit_v_order[JIT_V_NUM] = {
 	} \
 }
 #else
-#define jit_addi_i(r0, r1, i0) 0
+#define jit_addi_i(r0, r1, i0) \
+	(encode_arm_immediate(i0) != -1) ? \
+	    _ADDI(r0, r1, encode_arm_immediate(i0)) : \
+	    ((encode_arm_immediate(-i0) != -1) ? \
+	        _SUBI(r0, r1, encode_arm_immediate(-i0)) : \
+	        (jit_movi_i(JIT_TMP, i0), _ADD(r0, r1, JIT_TMP)))
 #endif
 
 #ifdef USE_THUMB_CODE
@@ -1999,39 +2003,36 @@ next: \
 	\
     /* patch alloca and stack adjustment */ \
     _jitl.stack = (int *)_jit.x.pc; \
-	\
-    if (jit_swf_p()) \
-	/* 6 soft double precision float registers */ \
-		_jitl.alloca_offset = 48; \
-    else \
-		_jitl.alloca_offset = 0; \
-	\
-	jit_movi_p(JIT_TMP, (void *)_jitl.alloca_offset); \
-    jit_subr_i(JIT_SP, JIT_SP, JIT_TMP); \
     _jitl.stack_length = _jitl.stack_offset = 0; \
 }
 #endif
 
 #ifdef USE_THUMB_CODE
-#define jit_callr(r0) T1_BLX(r0)
+#define jit_callr(r0) \
+    (T1_ADDI3(JIT_LR, JIT_PC, 4), \
+     T2_PUSH((1<<JIT_LR)), \
+     T1_MOV(JIT_PC, r0))
 #else
-#define jit_callr(r0) _BLX(r0)
+#define jit_callr(r0) \
+    (_ADDI(JIT_LR, JIT_PC, 4), \
+     _PUSH((1<<JIT_LR)), \
+     _MOV(JIT_PC, r0))
 #endif
 
 #ifdef USE_THUMB_CODE
 #define jit_calli(i0) \
     (_jitl.thumb_tmp = jit_movi_p(JIT_TMP, i0), \
-	 T1_BLX(JIT_TMP), \
+	 jit_callr(JIT_TMP), \
 	 _jitl.thumb_tmp)
 #else
 #define jit_calli(i0) \
     (_jitl.thumb_tmp = jit_movi_p(JIT_TMP, i0), \
-	 _BLX(JIT_TMP), \
+	 jit_callr(JIT_TMP), \
 	 _jitl.thumb_tmp)
 #endif
 
 #define jit_prepare_i(i0) \
-    (assert((i0) >= 0 && !_jitl.stack_offset && !_jitl.nextarg_put), \
+    (assert((i0) >= 0 && !_jitl.nextarg_put), \
      _jitl.stack_offset = i0 << 2)
 
 #define jit_arg_c()			jit_arg_p()
@@ -2066,81 +2067,53 @@ next: \
 #define jit_getarg_p(r0, i0) \
     jit_ldxi_i(r0, JIT_FP, (((i0) < 4) ? (i0) << 2 : (i0)));  /* arguments are saved in prolog */
 
-#ifdef USE_THUMB_CODE
 #define jit_pusharg_i(r0) \
-{ \
-    int ofs = _jitl.nextarg_put++; \
-    assert(ofs < 256); \
-    _jitl.stack_offset -= sizeof(int); \
-    _jitl.arguments[ofs] = (int *)_jit.x.pc; \
-    _jitl.types[ofs >> 5] &= ~(1 << (ofs & 31)); \
-    /* force 32 bit instruction due to possibly needing to trasform it */ \
-	T2_STRWI(r0, JIT_SP, 0); \
-}
-#else
-#define jit_pusharg_i(r0) \
-{ \
-    int		ofs = _jitl.nextarg_put++; \
-    assert(ofs < 256); \
-    _jitl.stack_offset -= sizeof(int); \
-    _jitl.arguments[ofs] = (int *)_jit.x.pc; \
-    _jitl.types[ofs >> 5] &= ~(1 << (ofs & 31)); \
-	_STRI(r0, JIT_SP, 0); \
-}
-#endif
+    (jit_pushr_i(r0), _jitl.nextarg_put++)
 
 #ifdef USE_THUMB_CODE
 #define jit_finishr(rs) \
 { \
-    assert(!_jitl.stack_offset); \
     if (r0 < 4) { \
 		jit_movr_i(JIT_TMP, r0); \
 		r0 = JIT_TMP; \
     } \
-    arm_patch_arguments(&_jitl); \
-    _jitl.nextarg_put = 0; \
-    if (_jitl.reglist) { \
-		T2_LDMIA(JIT_FP, _jitl.reglist); \
-		_jitl.reglist = 0; \
+    if (_jitl.nextarg_put) { \
+		T2_POP(((1 << _jitl.nextarg_put) - 1) & 0xf); \
+		_jitl.nextarg_put = 0; \
     } \
-    jit_callr(r0); \
+    T1_BLX(r0); \
 }
 #else
 #define jit_finishr(rs) \
 { \
-    assert(!_jitl.stack_offset); \
     if (r0 < 4) { \
 		jit_movr_i(JIT_TMP, r0); \
 		r0 = JIT_TMP; \
     } \
-    arm_patch_arguments(&_jitl); \
-    _jitl.nextarg_put = 0; \
-    if (_jitl.reglist) { \
-		_LDMIA(JIT_FP, _jitl.reglist); \
-		_jitl.reglist = 0; \
+    if (_jitl.nextarg_put) { \
+		_POP(((1 << _jitl.nextarg_put) - 1) & 0xf); \
+		_jitl.nextarg_put = 0; \
     } \
-    jit_callr(r0); \
+    _BLX(r0); \
 }
 #endif
 
 #ifdef USE_THUMB_CODE
 #define jit_finish(i0) \
-	(assert(!_jitl.stack_offset), \
-	 arm_patch_arguments(&_jitl), \
-	 _jitl.nextarg_put = 0, \
-	 (_jitl.reglist) ? \
-		(T2_LDMIA(JIT_FP, _jitl.reglist), \
-		 _jitl.reglist = 0) : 0, \
-     jit_calli(i0))
+	((_jitl.nextarg_put) ? \
+		(T2_POP(((1 << _jitl.nextarg_put) - 1) & 0xf), \
+		 _jitl.nextarg_put = 0) : 0, \
+	 _jitl.thumb_tmp = jit_movi_p(JIT_TMP, i0), \
+	 T1_BLX(JIT_TMP), \
+	 _jitl.thumb_tmp)
 #else
 #define jit_finish(i0) \
-	(assert(!_jitl.stack_offset), \
-	 arm_patch_arguments(&_jitl), \
-	 _jitl.nextarg_put = 0, \
-	 (_jitl.reglist) ? \
-		(_LDMIA(JIT_FP, _jitl.reglist), \
-		 _jitl.reglist = 0) : 0, \
-     jit_calli(i0))
+	((_jitl.nextarg_put) ? \
+		(_POP(((1 << _jitl.nextarg_put) - 1) & 0xf), \
+		 _jitl.nextarg_put = 0) : 0, \
+	 _jitl.thumb_tmp = jit_movi_p(JIT_TMP, i0), \
+	 _BLX(JIT_TMP), \
+	 _jitl.thumb_tmp)
 #endif
 
 #define jit_retval_i(r0)		jit_movr_i(r0, JIT_RET)
@@ -2179,19 +2152,12 @@ next: \
 #define jit_bare_ret() _POP(1<<JIT_PC)
 #endif
 
-/* just to pass make check... */
-#ifdef JIT_NEED_PUSH_POP
-# define jit_pushr_i(r0) \
-    (assert(_jitl.pop < sizeof(_jitl.push) / sizeof(_jitl.push[0])), \
-     _jitl.push[_jitl.pop++] = jit_allocai(4), \
-     jit_stxi_i(_jitl.push[_jitl.pop], JIT_FP, r0))
-
-# define jit_popr_i(r0) \
-	(assert(_jitl.pop > 0), \
-	 _jitl.pop--, \
-	 jit_ldxi_i(r0, JIT_FP, _jitl.push[_jitl.pop]))
+#ifdef USE_THUMB_CODE
+# define jit_pushr_i(r0) T2_PUSH((1<<r0))
+# define jit_popr_i(r0)  T2_POP((1<<r0))
 #else
-# define jit_pushr_i(r0) 0
-# define jit_popr_i(r0) 0
+# define jit_pushr_i(r0) _PUSH((1<<r0))
+# define jit_popr_i(r0)  _POP((1<<r0))
 #endif
+
 #endif /* __lightning_core_arm_h */
