@@ -1801,7 +1801,7 @@ next: \
 #endif
 
 #ifdef USE_THUMB_CODE
-#define jit_stxi_i(r0, r1, i0) \
+#define jit_stxi_i(i0, r0, r1) \
 { \
 	if ((r0|r1) < 8 && i0 >= 0 && !(i0 & 3) && (i0 >> 2) < 0x20) \
 		T1_STRI(r1, r0, i0 >> 2); \
@@ -1823,7 +1823,7 @@ next: \
 	} \
 }
 #else
-#define jit_stxi_i(r0, r1, i0) \
+#define jit_stxi_i(i0, r0, r1) \
 { \
 	if (i0 >= 0 && i0 <= 4095) \
 	    _STRI(r1, r0, i0); \
