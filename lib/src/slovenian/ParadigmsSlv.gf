@@ -274,6 +274,8 @@ oper
 
   mkAdv : Str -> Adv = \s -> lin Adv {s=s} ;
 
+  mkAdV : Str -> AdV = \s -> lin AdV {s=s} ;
+
   mkPron : (_,_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pron =
     \nom,acc,gen,dat,loc,instr,g,n,p ->
     lin Pron {s = table {
