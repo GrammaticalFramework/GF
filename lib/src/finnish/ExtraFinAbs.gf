@@ -4,7 +4,7 @@ abstract ExtraFinAbs = Extra [
   PassVPSlash, PassAgentVPSlash,
   VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,ConjVPS,Tense,Temp,Pol,S,
-  VV,VP,Conj,NP,Quant,IAdv,IComp,ICompAP,IAdvAdv,Adv,AP, Pron, RP, ProDrop] ** {
+  VV,VP,Conj,NP,Quant,IAdv,IComp,ICompAP,IAdvAdv,Adv,AP, Pron, RP, ProDrop, AdjAsCN] ** {
   flags coding=utf8 ;
 
   fun
