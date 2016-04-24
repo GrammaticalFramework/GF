@@ -265,4 +265,9 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       } ; 
 
 
+  AdjAsCN ap = {
+      s = \\nf => ap.s ! True ! (n2nform nf) ;
+      h = Back ; ---- TODO should be ap.h, which does not exist
+      } ;
+
 } 
