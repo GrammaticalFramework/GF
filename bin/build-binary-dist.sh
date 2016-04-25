@@ -45,9 +45,8 @@ fi
 if which >/dev/null javac && which >/dev/null jar ; then
     pushd src/runtime/java
     rm -f libjpgf.la # In case it contains the wrong INSTALL_PATH
-    make INSTALL_PATH="$prefix/lib"
+    make CFLAGS="-I$extrainclude -L$extralib" INSTALL_PATH="$prefix/lib"
     make INSTALL_PATH="$destdir$prefix/lib" install
-    cp jpgf.jar "$destdir$prefix/lib" # missing from make install...
     popd
 else
     echo "Java SDK is not installed, so the Java binding will not be included"

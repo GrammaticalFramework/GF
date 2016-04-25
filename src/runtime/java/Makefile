@@ -12,10 +12,10 @@ LIBTOOL = $(if $(shell command -v glibtool 2>/dev/null), glibtool --tag=CC, libt
 all: libjpgf.la jpgf.jar
 
 libjpgf.la: $(patsubst %.c, %.lo, $(C_SOURCES))
-	$(LIBTOOL) --mode=link gcc -g -O -o libjpgf.la -shared $^ -rpath $(INSTALL_PATH) -lgu -lpgf -lsg
+	$(LIBTOOL) --mode=link gcc $(CFLAGS) -g -O -o libjpgf.la -shared $^ -rpath $(INSTALL_PATH) -lgu -lpgf -lsg
 
 %.lo : %.c
-	$(LIBTOOL) --mode=compile gcc -g -O -c -I$(JNI_PATH) -std=c99 -shared $< -o $@
+	$(LIBTOOL) --mode=compile gcc $(CFLAGS) -g -O -c -I$(JNI_PATH) -std=c99 -shared $< -o $@
 
 jpgf.jar: $(patsubst %.java, %.class, $(JAVA_SOURCES))
 	jar -cf $@ org/grammaticalframework/pgf/*.class org/grammaticalframework/sg/*.class
@@ -25,6 +25,8 @@ jpgf.jar: $(patsubst %.java, %.class, $(JAVA_SOURCES))
 
 install: libjpgf.la jpgf.jar
 	$(LIBTOOL) --mode=install install -s libjpgf.la $(INSTALL_PATH)
+	install jpgf.jar $(INSTALL_PATH)
+
 
 doc:
 	javadoc org.grammaticalframework.pgf org.grammaticalframework.sg -d java-api

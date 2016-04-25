@@ -15,7 +15,7 @@ override_dh_shlibdeps:
 
 override_dh_auto_build:
 	cd src/runtime/python && EXTRA_INCLUDE_DIRS=$(CURDIR)/src/runtime/c EXTRA_LIB_DIRS=$(CURDIR)/src/runtime/c/.libs python setup.py build
-	cd src/runtime/java && make INSTALL_PATH=/usr/lib
+	cd src/runtime/java && make CFLAGS="-I$(CURDIR)/src/runtime/c -L$(CURDIR)/src/runtime/c/.libs" INSTALL_PATH=/usr/lib
 	echo LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(CURDIR)/src/runtime/c/.libs
 	LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(CURDIR)/src/runtime/c/.libs cabal build
 
@@ -37,7 +37,6 @@ override_dh_auto_install:
 	cd src/runtime/c && bash setup.sh copy prefix=$(CURDIR)/debian/gf/usr
 	cd src/runtime/python && python setup.py install --prefix=$(CURDIR)/debian/gf/usr
 	cd src/runtime/java && make INSTALL_PATH=$(CURDIR)/debian/gf/usr/lib install
-	cp src/runtime/java/jpgf.jar $(CURDIR)/debian/gf/usr/lib
 	D="`find debian/gf -name site-packages`" && [ -n "$$D" ] && cd $$D && cd .. && mv site-packages dist-packages
 
 override_dh_auto_test:
