@@ -22,7 +22,7 @@ change xx = case xx of
      system "ls *.gf > files.tmp"
      files <- readFile "files.tmp" >>= return . lines
      mapM_ (changeIdents from to) files
-     mapM_ commentOut files
+----     mapM_ commentOut files
   comment -> do
      files <- readFile "files.tmp" >>= return . lines
      mapM_ commentOut files
