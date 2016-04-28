@@ -88,6 +88,7 @@ libpgf_la_LDFLAGS = "-no-undefined"
 libpgf_la_LIBADD = libgu.la
 
 libsg_la_SOURCES = \
+	sg/sqlite3Btree.c \
 	sg/sg.c
 libsg_la_LIBADD = libgu.la libpgf.la
 
