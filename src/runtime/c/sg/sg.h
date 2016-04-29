@@ -30,6 +30,17 @@ sg_insert_expr(SgSG *sg, PgfExpr expr, int wrFlag, GuExn* err);
 PgfExpr
 sg_get_expr(SgSG *sg, SgId key, GuPool* out_pool, GuExn* err);
 
+typedef struct SgQueryExprResult SgQueryExprResult;
+
+SgQueryExprResult*
+sg_query_expr(SgSG *sg, PgfExpr expr, GuPool* pool, GuExn* err);
+
+PgfExpr
+sg_query_next(SgSG *sg, SgQueryExprResult* ctxt, SgId* pKey, GuPool* pool, GuExn* err);
+
+void
+sg_query_close(SgSG* sg, SgQueryExprResult* ctxt, GuExn* err);
+
 void
 sg_update_fts_index(SgSG* sg, PgfPGF* pgf, GuExn* err);
 

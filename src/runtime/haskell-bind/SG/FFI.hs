@@ -8,7 +8,10 @@ import GHC.Ptr
 import Data.Int
 
 data SgSG
+data SgQueryExprResult
 data SgTripleResult
+data SgQuery
+data SgQueryResult
 type SgId = Int64
 
 foreign import ccall "sg/sg.h sg_open"
@@ -27,10 +30,19 @@ foreign import ccall "sg/sg.h sg_rollback"
   sg_rollback :: Ptr SgSG -> Ptr GuExn -> IO ()
 
 foreign import ccall "sg/sg.h sg_insert_expr"
-  sg_insert_expr :: Ptr SgSG -> PgfExpr -> Ptr GuExn -> IO SgId
+  sg_insert_expr :: Ptr SgSG -> PgfExpr -> CInt -> Ptr GuExn -> IO SgId
 
 foreign import ccall "sg/sg.h sg_get_expr"
   sg_get_expr :: Ptr SgSG -> SgId -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
+
+foreign import ccall "sg/sg.h sg_query_expr"
+  sg_query_expr :: Ptr SgSG -> PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO (Ptr SgQueryExprResult)
+
+foreign import ccall "sg/sg.h sg_query_next"
+  sg_query_next :: Ptr SgSG -> Ptr SgQueryExprResult -> Ptr SgId -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
+
+foreign import ccall "sg/sg.h sg_query_close"
+  sg_query_close :: Ptr SgSG -> Ptr SgQueryExprResult -> Ptr GuExn -> IO ()
 
 foreign import ccall "sg/sg.h sg_update_fts_index"
   sg_update_fts_index :: Ptr SgSG -> Ptr PgfPGF -> Ptr GuExn -> IO ()
@@ -52,6 +64,13 @@ foreign import ccall "sg/sg.h sg_triple_result_fetch"
 
 foreign import ccall "sg/sg.h sg_triple_result_close"
   sg_triple_result_close :: Ptr SgTripleResult -> Ptr GuExn -> IO ()
+
+foreign import ccall "sg/sg.h sg_prepare_query"
+  sg_prepare_query :: Ptr SgSG -> CInt -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO (Ptr SgQuery)
+
+foreign import ccall "sg/sg.h sg_query"
+  sg_query :: Ptr SgSG -> Ptr SgQuery -> Ptr GuExn -> IO (Ptr SgQueryResult)
+
 
 
 type SgTriple = Ptr PgfExpr

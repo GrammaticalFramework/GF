@@ -2,6 +2,7 @@
 #include "sqlite3Btree.h"
 
 #include "sg/sg.h"
+#include "gu/mem.h"
 #include "pgf/data.h"
 
 #define SG_EXPRS       1
@@ -800,6 +801,396 @@ rollback:
 		sqlite3BtreeRollback(sg->pBtree, SQLITE_ABORT_ROLLBACK, 0);
 	}
 	return gu_null_variant;
+}
+
+// A query is compiled into a sequence of instructions with
+// the following codes:
+#define QI_PUSH   1
+#define QI_VAR    2
+#define QI_APPLY  3
+#define QI_RETURN 4
+
+typedef struct {
+	int  code;
+	SgId arg;
+} QueryInstr;
+
+struct SgQueryExprResult {
+	ExprContext ectxt;
+	GuBuf* instrs;
+	GuBuf* queue;
+	size_t iState;
+	PgfMetaId min_meta_id;
+	PgfMetaId max_meta_id;
+};
+
+typedef struct QueryArg QueryArg;
+struct QueryArg {
+	QueryArg* prev;
+	SgId arg;
+};
+
+typedef struct {
+	QueryArg* args;  // a stack of arguments
+	int pc;          // program counter
+} QueryState;
+
+static int
+build_expr_query(SgSG* sg,
+                 SgQueryExprResult* ctxt, PgfExpr expr)
+{
+	int rc = SQLITE_OK;
+
+	GuVariantInfo ei = gu_variant_open(expr);
+	switch (ei.tag) {
+	case PGF_EXPR_ABS: {
+		gu_impossible();
+		break;
+	}
+	case PGF_EXPR_APP: {
+		PgfExprApp* app = ei.data;
+
+		rc = build_expr_query(sg, ctxt, app->fun);
+		if (rc != SQLITE_OK)
+			return rc;
+		QueryInstr* first =
+			gu_buf_index_last(ctxt->instrs, QueryInstr);
+
+		rc = build_expr_query(sg, ctxt, app->arg);
+		if (rc != SQLITE_OK)
+			return rc;
+		QueryInstr* second =
+			gu_buf_index_last(ctxt->instrs, QueryInstr);
+
+		if (first->code == QI_PUSH && second->code == QI_PUSH &&
+		    second - first == 1) {
+			// we could directly combine the two expressions
+
+			Mem mem[2];
+			mem[0].flags = MEM_Int;
+			mem[0].u.i   = first->arg;
+			mem[1].flags = MEM_Int;
+			mem[1].u.i   = second->arg;
+
+			UnpackedRecord idxKey;
+			sqlite3BtreeInitUnpackedRecord(&idxKey, ctxt->ectxt.crsPairs, 2, 0, mem);
+
+			int res = 0;
+			rc = sqlite3BtreeMovetoUnpacked(ctxt->ectxt.crsPairs,
+											&idxKey, 0,  0, &res);
+			if (rc != SQLITE_OK)
+				return rc;
+			if (res != 0)
+				return SQLITE_DONE;
+
+			gu_buf_pop(ctxt->instrs, QueryInstr);
+
+			rc = sqlite3BtreeIdxRowid(sg->pBtree, ctxt->ectxt.crsPairs, &first->arg);
+   		} else if (gu_variant_tag(app->arg) != PGF_EXPR_META) {
+			QueryInstr* instr = gu_buf_extend(ctxt->instrs);
+			instr->code = QI_APPLY;
+			instr->arg  = 0;
+		}
+		break;
+	}
+	case PGF_EXPR_LIT: {
+		PgfExprLit* elit = ei.data;
+
+		Mem mem;
+
+		GuVariantInfo li = gu_variant_open(elit->lit);
+		switch (li.tag) {
+		case PGF_LITERAL_STR: {
+			PgfLiteralStr* lstr = li.data;
+
+			mem.flags = MEM_Str;
+			mem.n = strlen(lstr->val);
+			mem.z = lstr->val;
+			break;
+		}
+		case PGF_LITERAL_INT: {
+			PgfLiteralInt* lint = li.data;
+
+			mem.flags = MEM_Int;
+			mem.u.i = lint->val;
+			break;
+		}
+		case PGF_LITERAL_FLT: {
+			PgfLiteralFlt* lflt = li.data;
+
+			mem.flags = MEM_Real;
+			mem.u.r = lflt->val;
+			break;
+		}
+		default:
+			gu_impossible();
+		}
+
+		UnpackedRecord idxKey;
+		sqlite3BtreeInitUnpackedRecord(&idxKey, ctxt->ectxt.crsIdents, 1, 0, &mem);
+
+		int res = 0;
+		rc = sqlite3BtreeMovetoUnpacked(ctxt->ectxt.crsLiterals,
+		                                &idxKey, 0,  0, &res);
+		if (rc != SQLITE_OK)
+			return rc;
+		if (res != 0)
+			return SQLITE_DONE;
+
+		QueryInstr* instr = gu_buf_extend(ctxt->instrs);
+		instr->code = QI_PUSH;
+		rc = sqlite3BtreeIdxRowid(sg->pBtree, ctxt->ectxt.crsLiterals, &instr->arg);
+		break;
+	}
+	case PGF_EXPR_META: {
+		PgfExprMeta* emeta = ei.data;
+		QueryInstr* instr = gu_buf_extend(ctxt->instrs);
+		instr->code = QI_VAR;
+		instr->arg  = emeta->id;
+		
+		if (ctxt->min_meta_id > emeta->id)
+			ctxt->min_meta_id = emeta->id;
+		if (ctxt->max_meta_id < emeta->id)
+			ctxt->max_meta_id = emeta->id;
+		break;
+	}
+	case PGF_EXPR_FUN: {
+		PgfExprFun* fun = ei.data;
+
+		QueryInstr* instr = gu_buf_extend(ctxt->instrs);
+		instr->code = QI_PUSH;
+		rc = find_function_rowid(sg, &ctxt->ectxt, fun->fun, &instr->arg, 0);
+		if (rc == SQLITE_OK && instr->arg == 0)
+			return SQLITE_DONE;
+        break;
+	}
+	case PGF_EXPR_VAR: {
+		gu_impossible();
+		break;
+	}
+	case PGF_EXPR_TYPED: {
+		PgfExprTyped* etyped = ei.data;
+		rc = build_expr_query(sg, ctxt, etyped->expr);
+		break;
+	}
+	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* eimpl = ei.data;
+		rc = build_expr_query(sg, ctxt, eimpl->expr);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+
+	return rc;
+}
+
+static int
+run_expr_query(SgSG* sg, SgQueryExprResult* ctxt, GuPool* pool)
+{
+	int rc;
+
+	while (ctxt->iState < gu_buf_length(ctxt->queue)) {
+		QueryState* state =
+			gu_buf_index(ctxt->queue, QueryState, ctxt->iState);
+		QueryInstr* instr =
+			gu_buf_index(ctxt->instrs, QueryInstr, state->pc);
+
+		switch (instr->code) {
+		case QI_PUSH: {
+			QueryArg* arg = gu_new(QueryArg, pool);
+			arg->arg  = instr->arg;
+			arg->prev = state->args;
+			state->args = arg;
+			break;
+		}
+		case QI_VAR: {
+			assert(state->args != NULL);
+
+			Mem mem;
+			mem.flags = MEM_Int;
+			mem.u.i   = state->args->arg;
+
+			UnpackedRecord idxKey;
+			sqlite3BtreeInitUnpackedRecord(&idxKey, ctxt->ectxt.crsPairs, 1, 1, &mem);
+
+			int res = 0;
+			rc = sqlite3BtreeMovetoUnpacked(ctxt->ectxt.crsPairs,
+											&idxKey, 0,  0, &res);
+			if (rc != SQLITE_OK)
+				return rc;
+			if (res < 0) {
+				rc = sqlite3BtreeNext(ctxt->ectxt.crsPairs, &res);
+			}
+			res = 0;
+
+			while (res == 0) {
+				i64 szData;
+				const unsigned char *zData;
+				rc = sqlite3BtreeKeySize(ctxt->ectxt.crsPairs, &szData);
+				if (rc != SQLITE_OK)
+					return rc;
+
+				u32 available = 0;
+				zData = sqlite3BtreeKeyFetch(ctxt->ectxt.crsPairs, &available);
+				if (szData > available)
+					gu_impossible();
+
+				idxKey.default_rc = 0;
+				res = sqlite3BtreeRecordCompare(available, zData, &idxKey);
+				if (res != 0)
+					break;
+
+				QueryArg* arg = gu_new(QueryArg, pool);
+				arg->prev = state->args->prev;
+
+				QueryState* state1 = gu_buf_extend(ctxt->queue);
+				state1->args = arg;
+				state1->pc   = state->pc+1;
+
+				rc = sqlite3BtreeIdxRowid(sg->pBtree, ctxt->ectxt.crsPairs, &arg->arg);
+				if (rc != SQLITE_OK)
+					return rc;
+
+				sqlite3BtreeNext(ctxt->ectxt.crsPairs, &res);
+				if (rc != SQLITE_OK)
+					return rc;
+			}
+
+			ctxt->iState++;
+			break;
+		}
+		case QI_APPLY: {
+			assert(state->args != NULL && state->args->prev);
+
+			Mem mem[2];
+			mem[0].flags = MEM_Int;
+			mem[0].u.i   = state->args->prev->arg;
+			mem[1].flags = MEM_Int;
+			mem[1].u.i   = state->args->arg;
+
+			UnpackedRecord idxKey;
+			sqlite3BtreeInitUnpackedRecord(&idxKey, ctxt->ectxt.crsPairs, 2, 0, mem);
+
+			int res = 0;
+			rc = sqlite3BtreeMovetoUnpacked(ctxt->ectxt.crsPairs,
+											&idxKey, 0,  0, &res);
+			if (rc != SQLITE_OK)
+				return rc;
+			if (res != 0) {
+				ctxt->iState++;
+				continue;
+			}
+
+			state->args = state->args->prev;
+
+			rc = sqlite3BtreeIdxRowid(sg->pBtree, ctxt->ectxt.crsPairs, &state->args->arg);
+			if (rc != SQLITE_OK)
+				return rc;
+			break;
+		}
+		case QI_RETURN:
+			return SQLITE_OK;
+		}
+
+		state->pc++;
+	}
+
+	return SQLITE_DONE;
+}
+
+SgQueryExprResult*
+sg_query_expr(SgSG *sg, PgfExpr expr, GuPool* pool, GuExn* err)
+{
+	int rc;
+
+	if (sg->autoCommit) {
+		rc = sqlite3BtreeBeginTrans(sg->pBtree, 0);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(rc, err);
+			return NULL;
+		}
+	}
+
+	SgQueryExprResult* ctxt = gu_new(SgQueryExprResult, pool);
+	rc = open_exprs(sg, 0, false, &ctxt->ectxt, err);
+	if (rc != SQLITE_OK)
+		goto close;
+
+	ctxt->instrs = gu_new_buf(QueryInstr, pool);
+	ctxt->queue  = gu_new_buf(QueryState, pool);
+	ctxt->iState = 0;
+	ctxt->min_meta_id = INT_MAX;
+	ctxt->max_meta_id = INT_MIN;
+
+	rc = build_expr_query(sg, ctxt, expr);
+	if (rc == SQLITE_OK) {
+		QueryInstr* instr = gu_buf_extend(ctxt->instrs);
+		instr->code = QI_RETURN;
+		instr->arg  = 0;
+
+		QueryState* state = gu_buf_extend(ctxt->queue);
+		state->args = NULL;
+		state->pc   = 0;
+	} else if (rc != SQLITE_DONE) {
+		sg_raise_sqlite(rc, err);
+		goto close;
+	}
+
+    return ctxt;
+
+close:
+	close_exprs(&ctxt->ectxt);
+
+	if (sg->autoCommit) {
+		sqlite3BtreeRollback(sg->pBtree, SQLITE_ABORT_ROLLBACK, 0);
+	}
+	return NULL;
+}
+
+PgfExpr
+sg_query_next(SgSG *sg, SgQueryExprResult* ctxt, SgId* pKey, GuPool* pool, GuExn* err)
+{
+	int rc;
+
+	rc = run_expr_query(sg, ctxt, pool);
+	if (rc == SQLITE_DONE)
+		return gu_null_variant;
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(rc, err);
+		return gu_null_variant;
+	}
+
+	QueryState* state =
+		gu_buf_index(ctxt->queue, QueryState, ctxt->iState);
+	assert(state->args != NULL);
+	ctxt->iState++;
+
+	PgfExpr expr;
+	rc = load_expr(ctxt->ectxt.crsExprs, state->args->arg, &expr, pool);
+	if (rc != SQLITE_OK) {
+		sg_raise_sqlite(rc, err);
+		return gu_null_variant;
+	}
+
+	*pKey = state->args->arg;
+
+	return expr;
+}
+
+void
+sg_query_close(SgSG* sg, SgQueryExprResult* ctxt, GuExn* err)
+{
+	int rc;
+
+	close_exprs(&ctxt->ectxt);
+
+	if (sg->autoCommit) {
+		rc = sqlite3BtreeCommit(sg->pBtree);
+		if (rc != SQLITE_OK) {
+			sg_raise_sqlite(rc, err);
+		}
+	}
 }
 
 static int
