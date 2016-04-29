@@ -124,6 +124,12 @@ gu_buf_extend(GuBuf* buf)
 void
 gu_buf_pop_n(GuBuf* buf, size_t n_elems, void* data_out);
 
+#define gu_buf_get_last(BUF, T)			\
+	(((T*)gu_buf_data(BUF))[(BUF)->seq->len-1])
+
+#define gu_buf_index_last(BUF, T)		\
+	(&((T*)gu_buf_data(BUF))[(BUF)->seq->len-1])
+
 const void*
 gu_buf_trim_n(GuBuf* buf, size_t n_elems);
 
