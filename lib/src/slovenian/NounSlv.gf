@@ -6,6 +6,8 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
       a = {g=cn.g; n=det.n; p=P3}
       } ;
 
+    UsePron p = p ;
+
     DetQuant quant num = {
       s    = \\c => quant.s ++ num.s ! c;
       spec = quant.spec ;
