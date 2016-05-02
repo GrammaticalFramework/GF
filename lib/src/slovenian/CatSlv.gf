@@ -1,6 +1,9 @@
-concrete CatSlv of Cat = CommonX ** open ResSlv in {
+concrete CatSlv of Cat = CommonX ** open ResSlv, (P=ParamX) in {
 
 lincat
+  -- Sentence
+  Cl = {s : P.Tense => P.Anteriority => P.Polarity => Str} ;
+
   -- Verb
   VP = ResSlv.VP ;
 

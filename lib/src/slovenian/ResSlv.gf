@@ -38,4 +38,14 @@ oper
                 }
           } ;
 
+  Clause : Type = {
+    s : Tense => Anteriority => Polarity => Str
+    } ;
+
+  mkClause : Str -> Agr -> VP -> Clause =
+    \subj,agr,vp -> {
+      s = \\t,a,p => 
+        subj ++ vp.s ! t ! agr
+    } ;
+
 }
