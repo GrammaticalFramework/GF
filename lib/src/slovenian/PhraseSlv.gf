@@ -7,6 +7,8 @@ concrete PhraseSlv of Phrase = CatSlv ** open Prelude, ResSlv in {
     UttNP np = {s = np.s ! Nom} ;
     UttAdv adv = adv ;
     UttCN n = {s = n.s ! Indef ! Nom ! Sg} ;
+    UttAP ap = {s = ap.s ! Indef ! Masc ! Nom ! Sg} ;
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
 
