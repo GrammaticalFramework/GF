@@ -9,10 +9,9 @@ concrete GrammarSlv of Grammar =
   SentenceEng,
   QuestionEng,
   RelativeEng,
-  ConjunctionEng,
-  PhraseEng,
+  ConjunctionEng,-}
+  PhraseSlv,
   TextX - [Pol,PPos,PNeg],
--}
   StructuralSlv
 {-  IdiomEng,
   TenseX  -}
