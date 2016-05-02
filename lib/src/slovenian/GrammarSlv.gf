@@ -6,8 +6,9 @@ concrete GrammarSlv of Grammar =
   AdjectiveSlv,
 {-  AdverbEng,
   NumeralEng,
-  SentenceEng,
-  QuestionEng,
+-}
+  SentenceSlv,
+{-  QuestionEng,
   RelativeEng,
   ConjunctionEng,-}
   PhraseSlv,
