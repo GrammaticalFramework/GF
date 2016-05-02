@@ -55,7 +55,7 @@ concrete StructuralGer of Structural = CatGer **
   many_Det = detLikeAdj False Pl "viel" ;
   more_CAdv = X.mkCAdv "mehr" "als" ;
   most_Predet = {s = appAdj (regA "meist") ; c = noCase ; a = PAgNone} ;
-  much_Det = detLikeAdj False Sg "viel" ;
+  much_Det = {s = \\_,_ => "viel" ; sp = \\_,_ => "vieles" ; n = Sg ; a = Weak ; isDef = False} ;
   must_VV = auxVV 
       (mkV 
         "müssen" "muss" "musst" "muss" "müsst" "müss" 
