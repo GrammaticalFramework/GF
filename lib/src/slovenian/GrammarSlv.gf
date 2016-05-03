@@ -4,18 +4,17 @@ concrete GrammarSlv of Grammar =
   NounSlv,
   VerbSlv,
   AdjectiveSlv,
-{-  AdverbEng,
-  NumeralEng,
--}
+{-  AdverbSlv,-}
+  NumeralSlv,
   SentenceSlv,
-{-  QuestionEng,
-  RelativeEng,
-  ConjunctionEng,-}
+{-  QuestionSlv,
+  RelativeSlv,
+  ConjunctionSlv,-}
   PhraseSlv,
   TextX - [Pol,PPos,PNeg],
-  StructuralSlv
-{-  IdiomEng,
-  TenseX  -}
+  StructuralSlv,
+{-  IdiomSlv,  -}
+  TenseX
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

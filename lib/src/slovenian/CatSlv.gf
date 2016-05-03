@@ -16,9 +16,13 @@ lincat
 
   Pron = {s : Case => Str ; a : Agr} ;
 
-  Det = {s : Case => Str; spec : Species; n : Number} ;
-  Num  = {s : Case => Str ; n : Number} ;
+  Det = {s : Gender => Case => Str; spec : Species; n : NumAgr} ;
+  Num  = {s : Gender => Case => Str ; n : NumAgr} ;
+  Card = {s : Gender => Case => Str ; n : NumAgr} ;
   Quant = {s : Str; spec : Species} ;
+
+  -- Numeral
+  Numeral = {s : Gender => Case => Str ; n : NumAgr} ;
 
   -- Structural
   Prep = {s : Str; c : Case} ;

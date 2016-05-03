@@ -2,20 +2,34 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
 
   lin
     DetCN det cn = {
-      s = \\c => det.s ! c ++ cn.s ! det.spec ! c ! det.n ; 
-      a = {g=cn.g; n=det.n; p=P3}
+      s = \\c => det.s ! cn.g ! c ++ 
+                 case det.n of {
+                   UseNum n => cn.s ! det.spec ! c ! n ;
+                   UseGen   => cn.s ! det.spec ! Gen ! Pl
+                 } ;
+      a = {g = cn.g ;
+           n = case det.n of {
+                 UseNum n => n ;
+                 UseGen   => Pl
+               } ;
+           p = P3
+          }
       } ;
 
     UsePron p = p ;
 
     DetQuant quant num = {
-      s    = \\c => quant.s ++ num.s ! c;
+      s    = \\c,g => quant.s ++ num.s ! c ! g;
       spec = quant.spec ;
       n    = num.n ;
       } ;
 
-    NumSg = {s = \\_ => []; n = Sg} ;
-    NumPl = {s = \\_ => []; n = Pl} ;
+    NumSg = {s = \\_,_ => []; n = UseNum Sg} ;
+    NumPl = {s = \\_,_ => []; n = UseNum Pl} ;
+
+    NumCard n = n ;
+
+    NumNumeral numeral = {s = numeral.s; n = numeral.n} ;
 
     DefArt = {
       s    = "" ;
