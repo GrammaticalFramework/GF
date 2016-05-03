@@ -12,4 +12,9 @@ lin
   youSg_Pron = mkPron "tí" "tébe" "tébe" "tébi" "tébi" ("tebój"|"tábo") Masc Sg P2 ;
   youPl_Pron = mkPron "ví" "vàs" "vàs" "vàm" "vàs" "vàmi" Masc Pl P2 ;
   youPol_Pron = mkPron "ví" "vàs" "vàs" "vàm" "vàs" "vàmi" Masc Pl P2 ;
+  somebody_NP = mkNP "nekdo" "nekóga" "nekóga" "nekómu" "nekóm" "nekóm" Masc Sg ;
+  something_NP = mkNP "nekaj" "nekaj" "nečésa" "nečému" "nečém" "nečīm" Neut Sg ;
+  nobody_NP = mkNP "nihčè" "nikȏgar" "nikȏgar" "nikȏmur" "nikȏmer" "nikȏmer" Masc Sg ;
+  nothing_NP = mkNP "nìč" "nìč" "ničȇsar" "ničȇmur" "ničȇmer" "ničîmer" Masc Sg ;
+
 }
