@@ -6,6 +6,8 @@ lincat
 
   -- Verb
   VP = ResSlv.VP ;
+  VPSlash = ResSlv.VP ** {c2 : Prep} ;
+  Comp = {s : Agr => Str} ; 
 
   -- Adjective
   AP = {s : Species => Gender => Case => Number => Str} ;
@@ -28,7 +30,8 @@ lincat
   Prep = {s : Str; c : Case} ;
 
   -- Open lexical classes, e.g. Lexicon
-  V = {s : VForm => Str};
+  V  = {s : VForm => Str};
+  V2 = {s : VForm => Str; c2 : Prep};
 
   A = {s : AForm => Str};
   
