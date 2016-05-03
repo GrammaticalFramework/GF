@@ -6,7 +6,10 @@ param
   Gender = Masc | Fem | Neut ;
   Person = P1 | P2 | P3 ;
   Species = Indef | Def ;
-  
+
+  NumAgr = UseNum Number | UseGen;
+  DForm = Unit Gender | Teen | Ten | Hundred;
+
   VForm = VInf
         | VSup
         | VPastPart Gender Number
