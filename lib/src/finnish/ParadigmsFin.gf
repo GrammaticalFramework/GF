@@ -345,7 +345,10 @@ mkVS = overload {
     mkDet : (isNeg : Bool) -> Number -> N -> Det  -- use this with True to create a negative determiner 
     = \isNeg,nu,noun -> lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ;
     mkDet : (isNeg : Bool) -> Number -> N -> Case -> Det  -- paljon + False + partitive, ei yhtään + True + partitive
-    = \isNeg,nu,noun,_ -> lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ;
+    = \isNeg,nu,noun,c -> case c of {
+      Part => lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ** {isNum = True} ; --- works like "kolme autoa"
+      _ => lin Det (MorphoFin.mkDetPol isNeg nu (snoun2nounBind noun)) ---- are there other cases?
+      } ;
     } ;
 
   mkQuant = overload {
