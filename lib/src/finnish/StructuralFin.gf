@@ -63,7 +63,7 @@ concrete StructuralFin of Structural = CatFin **
   many_Det = MorphoFin.mkDet Sg (snoun2nounBind (mkN "moni" "monia")) ;
   more_CAdv = X.mkCAdv "enemmän" "kuin" ;
   most_Predet = {s = \\n,c => (nForms2N (dSuurin "useinta")).s ! NCase n (npform2case n c)} ;
-  much_Det = MorphoFin.mkDet Sg {s = \\_ => "paljon" ; h = Back} ; --Harmony not relevant, it's just a CommonNoun
+  much_Det = MorphoFin.mkDet Sg (snoun2nounBind (exceptNomN (mkN "paljo") "paljon")) ** {isNum = True} ; --Harmony not relevant, it's just a CommonNoun
   must_VV = mkVV (caseV genitive (mkV "täytyä")) ;
   no_Utt = ss "ei" ;
   on_Prep = casePrep adessive ;
