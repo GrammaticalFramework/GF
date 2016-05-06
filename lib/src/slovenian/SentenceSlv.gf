@@ -10,6 +10,9 @@ lin
     UseCl  t p cl = {
       s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p
     } ;
+    UseQCl t p cl = {
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p
+    } ;
 
 }
 

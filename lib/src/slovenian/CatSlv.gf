@@ -5,6 +5,9 @@ lincat
   Cl = {s : P.Tense => P.Anteriority => P.Polarity => Str} ;
   Imp = {s : P.Polarity => Gender => Number => Str} ;
 
+  -- Question
+  QCl = {s : P.Tense => P.Anteriority => P.Polarity => Str} ;
+
   -- Verb
   VP = ResSlv.VP ;
   VPSlash = ResSlv.VP ** {c2 : Prep} ;
