@@ -24,6 +24,16 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
       n    = num.n ;
       } ;
 
+    DetNP det = {
+      s = det.s ! Masc ;
+      a = {g=Masc; n=case det.n of {UseNum n=>n; UseGen=>Pl}; p=P3};
+      } ;
+
+    PossPron p = {
+      s    = p.poss ;
+      spec = Indef
+      } ;
+
     NumSg = {s = \\_,_ => []; n = UseNum Sg} ;
     NumPl = {s = \\_,_ => []; n = UseNum Pl} ;
 
