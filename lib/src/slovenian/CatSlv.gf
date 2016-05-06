@@ -17,7 +17,7 @@ lincat
   CN = {s : Species => Case => Number => Str; g : Gender} ;
   NP = {s : Case => Str ; a : Agr} ;
 
-  Pron = {s : Case => Str ; a : Agr} ;
+  Pron = {s : Case => Str; poss : Str; a : Agr} ;
 
   Det = {s : Gender => Case => Str; spec : Species; n : NumAgr} ;
   Num  = {s : Gender => Case => Str ; n : NumAgr} ;

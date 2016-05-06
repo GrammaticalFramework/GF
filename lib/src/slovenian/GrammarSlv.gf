@@ -4,7 +4,7 @@ concrete GrammarSlv of Grammar =
   NounSlv,
   VerbSlv,
   AdjectiveSlv,
-{-  AdverbSlv,-}
+  AdverbSlv,
   NumeralSlv,
   SentenceSlv,
 {-  QuestionSlv,
