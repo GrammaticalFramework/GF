@@ -4,6 +4,7 @@ concrete PhraseSlv of Phrase = CatSlv ** open Prelude, ResSlv in {
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
 
     UttS s = s ;
+    UttQS qs = qs ;
     UttImpSg pol imp = {s = pol.s ++ imp.s ! pol.p ! Masc ! Sg} ;
     UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! Masc ! Sg} ;
     UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! Masc ! Sg} ;
