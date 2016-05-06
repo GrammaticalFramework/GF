@@ -30,16 +30,14 @@ param
 oper
   Agr = {g : Gender; n : Number; p : Person} ;
 
-  VP = {s : Tense => Agr => Str; s2 : Agr => Str} ;
+  VP = {s : VForm => Str; s2 : Agr => Str} ;
 
-  predV : (VForm => Str) -> VP =
-    \v -> { s = table {
-                  Pres => \\a => v ! VPres a.n a.p ;
-                  Past => \\a => sem_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
-                  Fut  => \\a => bom_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
-                  Cond => \\a => "bi" ++ v ! VPastPart a.g a.n
-                } ;
-            s2= \\a => ""
+  predV : (VForm => Str) -> Tense => Agr => Str =
+    \v -> table {
+             Pres => \\a => v ! VPres a.n a.p ;
+             Past => \\a => sem_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
+             Fut  => \\a => bom_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
+             Cond => \\a => "bi" ++ v ! VPastPart a.g a.n
           } ;
 
   sem_V : Number => Person => Str =
@@ -87,7 +85,7 @@ oper
   mkClause : Str -> Agr -> VP -> Clause =
     \subj,agr,vp -> {
       s = \\t,a,p => 
-        subj ++ vp.s ! t ! agr ++ vp.s2 ! agr
+        subj ++ predV vp.s ! t ! agr ++ vp.s2 ! agr
     } ;
 
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
