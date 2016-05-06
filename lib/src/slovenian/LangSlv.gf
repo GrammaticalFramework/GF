@@ -1,6 +1,7 @@
 concrete LangSlv of Lang =
   GrammarSlv,
-  LexiconSlv
+  LexiconSlv,
+  ConstructionSlv
 
   ** {
 
