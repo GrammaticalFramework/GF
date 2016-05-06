@@ -35,12 +35,50 @@ oper
   predV : (VForm => Str) -> VP =
     \v -> { s = table {
                   Pres => \\a => v ! VPres a.n a.p ;
-                  Past => \\a => "biti" ++ v ! VPastPart a.g a.n ;
-                  Fut  => \\a => "biti" ++ v ! VPastPart a.g a.n ;
+                  Past => \\a => sem_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
+                  Fut  => \\a => bom_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
                   Cond => \\a => "bi" ++ v ! VPastPart a.g a.n
                 } ;
             s2= \\a => ""
           } ;
+
+  sem_V : Number => Person => Str =
+    table {
+      Sg => table {
+              P1 => "sem" ;
+              P2 => "si" ;
+              P3 => "je"
+            } ;
+      Dl => table {
+              P1 => "sva" ;
+              P2 => "sta" ;
+              P3 => "sta"
+            } ;
+      Pl => table {
+              P1 => "smo" ;
+              P2 => "ste" ;
+              P3 => "so"
+            }
+    } ;
+
+  bom_V : Number => Person => Str =
+    table {
+      Sg => table {
+              P1 => "bom" ;
+              P2 => "boš" ;
+              P3 => "bo"
+            } ;
+      Dl => table {
+              P1 => "bova" ;
+              P2 => "bosta" ;
+              P3 => "bosta"
+            } ;
+      Pl => table {
+              P1 => "bomo" ;
+              P2 => "boste" ;
+              P3 => "bodo"
+            }
+    } ;
 
   Clause : Type = {
     s : Tense => Anteriority => Polarity => Str
