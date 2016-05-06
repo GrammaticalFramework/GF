@@ -71,8 +71,10 @@ oper
            }
     };
 
-  mkV2 : V -> V2 =
-    \v -> v ** {c2 = lin Prep {s=""; c=Acc}} ;
+  mkV2 = overload {
+    mkV2 : V -> V2 = \v -> v ** {c2 = lin Prep {s=""; c=Acc}} ;
+    mkV2 : V -> Case -> V2 = \v,c -> v ** {c2 = lin Prep {s=""; c=c}} ;
+  } ;
 
   mkA : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> A =
     \positMSgNom,positMSgNomDef,positMSgGen,positMSgDat,positMSgAcc,positMSgAccIndef,positMSgAccDef,positMSgLoc,positMSgInstr,
