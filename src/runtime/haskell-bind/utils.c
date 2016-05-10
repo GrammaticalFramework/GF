@@ -67,3 +67,33 @@ hspgf_callbacks_map_add_literal(PgfConcr* concr, PgfCallbacksMap* callbacks,
 	gu_pool_finally(pool, &callback->fin);
 	pgf_callbacks_map_add_literal(concr, callbacks, cat, &callback->callback);
 }
+
+typedef struct {
+	PgfOracleCallback oracle;
+	GuFinalizer fin;
+} HSPgfOracleCallback;
+
+static void
+hspgf_oracle_callback_fin(GuFinalizer* self)
+{
+	HSPgfOracleCallback* oracle = gu_container(self, HSPgfOracleCallback, fin);
+
+	if (oracle->oracle.predict  != NULL)
+		hs_free_fun_ptr((HsFunPtr) oracle->oracle.predict);
+	if (oracle->oracle.complete != NULL)
+		hs_free_fun_ptr((HsFunPtr) oracle->oracle.complete);
+	if (oracle->oracle.literal  != NULL)
+		hs_free_fun_ptr((HsFunPtr) oracle->oracle.literal);
+}
+
+PgfOracleCallback*
+hspgf_new_oracle_callback(HsFunPtr predict, HsFunPtr complete, HsFunPtr literal, GuPool* pool)
+{
+	HSPgfOracleCallback* oracle = gu_new(HSPgfOracleCallback, pool);
+	oracle->oracle.predict  = (void*) predict;
+	oracle->oracle.complete = (void*) complete;
+	oracle->oracle.literal  = (void*) literal;
+	oracle->fin.fn = hspgf_oracle_callback_fin;
+	gu_pool_finally(pool, &oracle->fin);
+	return &oracle->oracle;
+}

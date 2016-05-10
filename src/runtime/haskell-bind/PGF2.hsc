@@ -17,7 +17,8 @@ module PGF2 (-- * CId
              -- * PGF
              PGF,readPGF,AbsName,abstractName,Cat,startCat,categories,
              -- * Concrete syntax
-             ConcName,Concr,languages,parse,parseWithHeuristics,
+             ConcName,Concr,languages,parse,
+             parseWithHeuristics, parseWithOracle,
              hasLinearization,linearize,linearizeAll,alignWords,
              -- * Types
              Type(..), Hypo, BindType(..), showType, functionType,
@@ -339,6 +340,88 @@ mkCallbacksMap concr callbacks pool = do
                                     return ep
 
     predict_callback _ _ _ _ = return nullPtr
+
+-- | The oracle is a triple of functions.
+-- The first two take a category name and a linearization field name
+-- and they should return True/False when the corresponding 
+-- prediction or completion is appropriate. The third function
+-- is the oracle for literals.
+type Oracle = (Maybe (Cat -> String -> Int -> Bool)
+              ,Maybe (Cat -> String -> Int -> Bool)
+              ,Maybe (Cat -> String -> Int -> Maybe (Expr,Float,Int))
+              )
+
+parseWithOracle :: Concr      -- ^ the language with which we parse
+                -> Cat        -- ^ the start category
+                -> String     -- ^ the input sentence
+                -> Oracle
+                -> Either String [(Expr,Float)]
+parseWithOracle lang cat sent (predict,complete,literal) =
+  unsafePerformIO $
+    do parsePl <- gu_new_pool
+       exprPl  <- gu_new_pool
+       exn     <- gu_new_exn parsePl
+       enum    <- withCString cat $ \cat ->
+                    withCString sent $ \sent -> do
+                      predictPtr  <- maybe (return nullFunPtr) (wrapOracleCallback . oracleWrapper) predict
+                      completePtr <- maybe (return nullFunPtr) (wrapOracleCallback . oracleWrapper) complete
+                      literalPtr  <- maybe (return nullFunPtr) (wrapOracleLiteralCallback . oracleLiteralWrapper) literal
+                      cback <- hspgf_new_oracle_callback predictPtr completePtr literalPtr parsePl
+                      pgf_parse_with_oracle (concr lang) cat sent cback exn parsePl exprPl
+       failed  <- gu_exn_is_raised exn
+       if failed
+         then do is_parse_error <- gu_exn_caught exn gu_exn_type_PgfParseError
+                 if is_parse_error
+                   then do c_tok <- (#peek GuExn, data.data) exn
+                           tok <- peekCString c_tok
+                           gu_pool_free parsePl
+                           gu_pool_free exprPl
+                           return (Left tok)
+                   else do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+                           if is_exn
+                             then do c_msg <- (#peek GuExn, data.data) exn
+                                     msg <- peekCString c_msg
+                                     gu_pool_free parsePl
+                                     gu_pool_free exprPl
+                                     throwIO (PGFError msg)
+                             else do gu_pool_free parsePl
+                                     gu_pool_free exprPl
+                                     throwIO (PGFError "Parsing failed")
+         else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
+                 exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
+                 exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
+                 return (Right exprs)
+  where
+    oracleWrapper oracle _ catPtr lblPtr offset = do
+      cat <- peekCString catPtr
+      lbl <- peekCString lblPtr
+      return (oracle cat lbl (fromIntegral offset))
+
+    oracleLiteralWrapper oracle _ catPtr lblPtr poffset out_pool = do
+      cat <- peekCString catPtr
+      lbl <- peekCString lblPtr
+      offset <- peek poffset
+      case oracle cat lbl (fromIntegral offset) of
+        Just (e,prob,offset) ->
+                      do poke poffset (fromIntegral offset)
+
+                         -- here we copy the expression to out_pool
+                         c_e <- withGuPool $ \tmpPl -> do
+                                  exn <- gu_new_exn tmpPl
+
+                                  (sb,out) <- newOut tmpPl
+                                  let printCtxt = nullPtr
+                                  pgf_print_expr (expr e) printCtxt 1 out exn
+                                  c_str <- gu_string_buf_freeze sb tmpPl
+
+                                  guin <- gu_string_in c_str tmpPl
+                                  pgf_read_expr guin out_pool exn
+
+                         ep <- gu_malloc out_pool (#size PgfExprProb)
+                         (#poke PgfExprProb, expr) ep c_e
+                         (#poke PgfExprProb, prob) ep prob
+                         return ep
+        Nothing    -> do return nullPtr
 
 hasLinearization :: Concr -> Fun -> Bool
 hasLinearization lang id = unsafePerformIO $
