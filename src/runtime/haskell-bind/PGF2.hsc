@@ -366,7 +366,7 @@ parseWithOracle lang cat sent (predict,complete,literal) =
                       predictPtr  <- maybe (return nullFunPtr) (wrapOracleCallback . oracleWrapper) predict
                       completePtr <- maybe (return nullFunPtr) (wrapOracleCallback . oracleWrapper) complete
                       literalPtr  <- maybe (return nullFunPtr) (wrapOracleLiteralCallback . oracleLiteralWrapper) literal
-                      cback <- hspgf_new_oracle_callback predictPtr completePtr literalPtr parsePl
+                      cback <- hspgf_new_oracle_callback sent predictPtr completePtr literalPtr parsePl
                       pgf_parse_with_oracle (concr lang) cat sent cback exn parsePl exprPl
        failed  <- gu_exn_is_raised exn
        if failed
@@ -392,12 +392,12 @@ parseWithOracle lang cat sent (predict,complete,literal) =
                  exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
                  return (Right exprs)
   where
-    oracleWrapper oracle _ catPtr lblPtr offset = do
+    oracleWrapper oracle catPtr lblPtr offset = do
       cat <- peekCString catPtr
       lbl <- peekCString lblPtr
       return (oracle cat lbl (fromIntegral offset))
 
-    oracleLiteralWrapper oracle _ catPtr lblPtr poffset out_pool = do
+    oracleLiteralWrapper oracle catPtr lblPtr poffset out_pool = do
       cat <- peekCString catPtr
       lbl <- peekCString lblPtr
       offset <- peek poffset

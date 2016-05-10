@@ -11,15 +11,9 @@ typedef struct {
 	GuFinalizer fin;
 } HSPgfLiteralCallback;
 
-static PgfExprProb*
-hspgf_match_callback(PgfLiteralCallback* self, PgfConcr* concr,
-	                 size_t lin_idx,
-	                 GuString sentence, size_t* poffset,
-	                 GuPool *out_pool)
+static size_t
+hspgf_offset2hs(GuString sentence, size_t offset)
 {
-	HSPgfLiteralCallback* callback = (HSPgfLiteralCallback*) self;
-	size_t offset = *poffset;
-
 	const uint8_t *start = sentence;
 	const uint8_t *end   = sentence + offset;
 	size_t hs_offset = 0;
@@ -27,18 +21,35 @@ hspgf_match_callback(PgfLiteralCallback* self, PgfConcr* concr,
 		gu_utf8_decode(&start);
 		hs_offset++;
 	}
+	return hs_offset;
+}
 
-	PgfExprProb* ep =
-		callback->match(self, lin_idx, sentence, &hs_offset, out_pool);
-
-	start = sentence;
-	end   = start;
+static size_t
+hspgf_hs2offset(GuString sentence, size_t hs_offset)
+{
+	const uint8_t *start = sentence;
+	const uint8_t *end   = start;
 	while (hs_offset > 0) {
 		gu_utf8_decode(&end);
 		hs_offset--;
 	}
+	
+	return (end - start);
+}
 
-	*poffset = (end - start);
+static PgfExprProb*
+hspgf_match_callback(PgfLiteralCallback* self, PgfConcr* concr,
+	                 size_t lin_idx,
+	                 GuString sentence, size_t* poffset,
+	                 GuPool *out_pool)
+{
+	HSPgfLiteralCallback* callback = (HSPgfLiteralCallback*) self;
+
+	size_t hs_offset =
+		hspgf_offset2hs(sentence, *poffset);
+	PgfExprProb* ep =
+		callback->match(self, lin_idx, sentence, &hs_offset, out_pool);
+	*poffset = hspgf_hs2offset(sentence, hs_offset);
 
 	return ep;
 }
@@ -70,29 +81,81 @@ hspgf_callbacks_map_add_literal(PgfConcr* concr, PgfCallbacksMap* callbacks,
 
 typedef struct {
 	PgfOracleCallback oracle;
+	GuString sentence;
+    bool (*predict) (PgfCId cat,
+	                 GuString label,
+	                 size_t offset);
+	bool (*complete)(PgfCId cat,
+	                 GuString label,
+	                 size_t offset);
+    PgfExprProb* (*literal)(PgfCId cat,
+	                        GuString label,
+	                        size_t* poffset,
+	                        GuPool *out_pool);
 	GuFinalizer fin;
 } HSPgfOracleCallback;
+
+static bool
+hspgf_predict_callback(PgfOracleCallback* self,
+	                   PgfCId cat,
+	                   GuString label,
+	                   size_t offset)
+{
+	HSPgfOracleCallback* oracle = gu_container(self, HSPgfOracleCallback, oracle);
+	oracle->predict(cat,label,hspgf_offset2hs(oracle->sentence, offset));
+}
+
+static bool
+hspgf_complete_callback(PgfOracleCallback* self,
+	                   PgfCId cat,
+	                   GuString label,
+	                   size_t offset)
+{
+	HSPgfOracleCallback* oracle = gu_container(self, HSPgfOracleCallback, oracle);
+	oracle->complete(cat,label,hspgf_offset2hs(oracle->sentence, offset));
+}
+
+static PgfExprProb*
+hspgf_literal_callback(PgfOracleCallback* self,
+                       PgfCId cat,
+	                   GuString label,
+	                   size_t* poffset,
+	                   GuPool *out_pool)
+{
+	HSPgfOracleCallback* oracle = gu_container(self, HSPgfOracleCallback, oracle);
+	size_t hs_offset = hspgf_offset2hs(oracle->sentence, *poffset);
+	PgfExprProb* ep =
+		oracle->literal(cat,label,&hs_offset,out_pool);
+	*poffset = hspgf_hs2offset(oracle->sentence, hs_offset);
+	return ep;
+}
 
 static void
 hspgf_oracle_callback_fin(GuFinalizer* self)
 {
 	HSPgfOracleCallback* oracle = gu_container(self, HSPgfOracleCallback, fin);
 
-	if (oracle->oracle.predict  != NULL)
-		hs_free_fun_ptr((HsFunPtr) oracle->oracle.predict);
-	if (oracle->oracle.complete != NULL)
-		hs_free_fun_ptr((HsFunPtr) oracle->oracle.complete);
-	if (oracle->oracle.literal  != NULL)
-		hs_free_fun_ptr((HsFunPtr) oracle->oracle.literal);
+	if (oracle->predict  != NULL)
+		hs_free_fun_ptr((HsFunPtr) oracle->predict);
+	if (oracle->complete != NULL)
+		hs_free_fun_ptr((HsFunPtr) oracle->complete);
+	if (oracle->literal  != NULL)
+		hs_free_fun_ptr((HsFunPtr) oracle->literal);
 }
 
 PgfOracleCallback*
-hspgf_new_oracle_callback(HsFunPtr predict, HsFunPtr complete, HsFunPtr literal, GuPool* pool)
+hspgf_new_oracle_callback(GuString sentence,
+                          HsFunPtr predict, HsFunPtr complete, HsFunPtr literal,
+                          GuPool* pool)
 {
 	HSPgfOracleCallback* oracle = gu_new(HSPgfOracleCallback, pool);
-	oracle->oracle.predict  = (void*) predict;
-	oracle->oracle.complete = (void*) complete;
-	oracle->oracle.literal  = (void*) literal;
+	oracle->oracle.predict  = predict  ? hspgf_predict_callback  : NULL;
+	oracle->oracle.complete = complete ? hspgf_complete_callback : NULL;
+	oracle->oracle.literal  = literal  ? hspgf_literal_callback  : NULL;
+	oracle->sentence = sentence;
+	oracle->predict  = (void*) predict;
+	oracle->complete = (void*) complete;
+	oracle->literal  = (void*) literal;
 	oracle->fin.fn = hspgf_oracle_callback_fin;
 	gu_pool_finally(pool, &oracle->fin);
 	return &oracle->oracle;

@@ -180,8 +180,8 @@ foreign import ccall "pgf/pgf.h pgf_new_callbacks_map"
 foreign import ccall
   hspgf_callbacks_map_add_literal :: Ptr PgfConcr -> Ptr PgfCallbacksMap -> CString -> FunPtr LiteralMatchCallback -> FunPtr LiteralPredictCallback -> Ptr GuPool -> IO ()
 
-type OracleCallback = Ptr PgfOracleCallback -> CString -> CString -> CInt -> IO Bool
-type OracleLiteralCallback = Ptr PgfOracleCallback -> CString -> CString -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
+type OracleCallback = CString -> CString -> CInt -> IO Bool
+type OracleLiteralCallback = CString -> CString -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
 
 foreign import ccall "wrapper"
   wrapOracleCallback :: OracleCallback -> IO (FunPtr OracleCallback)
@@ -190,7 +190,7 @@ foreign import ccall "wrapper"
   wrapOracleLiteralCallback :: OracleLiteralCallback -> IO (FunPtr OracleLiteralCallback)
 
 foreign import ccall
-  hspgf_new_oracle_callback :: FunPtr OracleCallback -> FunPtr OracleCallback -> FunPtr OracleLiteralCallback -> Ptr GuPool -> IO (Ptr PgfOracleCallback)
+  hspgf_new_oracle_callback :: CString -> FunPtr OracleCallback -> FunPtr OracleCallback -> FunPtr OracleLiteralCallback -> Ptr GuPool -> IO (Ptr PgfOracleCallback)
 
 foreign import ccall "pgf/pgf.h pgf_parse_with_oracle"
   pgf_parse_with_oracle :: Ptr PgfConcr -> CString -> CString -> Ptr PgfOracleCallback -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
