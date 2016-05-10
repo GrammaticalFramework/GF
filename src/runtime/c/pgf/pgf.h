@@ -137,6 +137,31 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat,
                           GuExn* err,
                           GuPool* pool, GuPool* out_pool);
 
+typedef struct PgfOracleCallback PgfOracleCallback;
+
+struct PgfOracleCallback {
+    bool (*predict) (PgfOracleCallback* self,
+	                 PgfCId cat,
+	                 GuString label,
+	                 size_t offset);
+	bool (*complete)(PgfOracleCallback* self,
+	                 PgfCId cat,
+	                 GuString label,
+	                 size_t offset);
+    PgfExprProb* (*literal)(PgfOracleCallback* self,
+                            PgfCId cat,
+	                        GuString label,
+	                        size_t* poffset,
+	                        GuPool *out_pool);
+};
+
+PgfExprEnum*
+pgf_parse_with_oracle(PgfConcr* concr, PgfCId cat, 
+                      GuString sentence,
+                      PgfOracleCallback* oracle,
+                      GuExn* err,
+                      GuPool* pool, GuPool* out_pool);
+
 typedef struct {
 	PgfToken tok;
 	PgfCId cat;
