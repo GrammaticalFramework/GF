@@ -44,7 +44,7 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
 
       vf : Bool -> Str -> Str -> {fin,inf : Str ; a1  : Polarity => Agr => Str * Str} = \hasInf, fin,inf -> {
         fin = fin ;
-	inf = inf ++ verb.part ; --- not always right after the verb: hon ser (inte) vacker ut ; spotta ut snusen
+	inf = inf ; 
 	a1 : Polarity => Agr => Str*Str = \\p,a => case hasInf of {
 	  True  => <negation ! p, []> ;
 	  False => <[], negation ! p>
@@ -79,7 +79,7 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
         VRefl => reflPron a ;
         _ => []
         } ;
-    n2  : Agr => Str = \\a => [] ; 
+    n2  : Agr => Str = \\a => verb.part ; ---- check: hon ser (inte) vacker ut ; spotta (inte) ut snusen
     a2  : Str = [] ;
     ext : Str = [] ;
     en2,ea2,eext : Bool = False   -- indicate if the field exists

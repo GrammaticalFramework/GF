@@ -302,8 +302,8 @@ oper
 
 
   insertObjPron : Bool -> (Agr => Str) -> VP -> VP = \isPron,obj,vp -> vp ** {
-    n1 = \\a => if_then_Str isPron (obj ! a ++ vp.n2 ! a) [] ;
-    n2 = \\a => if_then_Str isPron [] (obj ! a ++ vp.n2 ! a) ;
+    n1 = \\a => vp.n1 ! a ++ if_then_Str isPron (obj ! a) [] ;
+    n2 = \\a => vp.n2 ! a ++ if_then_Str isPron []        (obj ! a) ;
     en2 = notB isPron ;
     } ;
     
