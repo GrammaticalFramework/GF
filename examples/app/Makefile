@@ -16,6 +16,7 @@ APP12=$(APP11) AppCat.pgf
 APP13=$(APP12) AppJpn.pgf
 APP14=$(APP13) AppTha.pgf
 APP15=$(APP14) AppEst.pgf
+APP16=$(APP15) AppRus.pgf
 
 # With dependencies:
 App11.pgf: $(APP11)
@@ -28,6 +29,8 @@ App14.pgf: $(APP14)
 	$(GFMKT) -name=App14 $(APP14) +RTS -K200M
 App15.pgf: $(APP15)
 	$(GFMKT) -name=App15 $(APP15) +RTS -K200M
+App16.pgf: $(APP16)
+	$(GFMKT) -name=App16 $(APP16) +RTS -K200M
 
 # Without dependencies:
 App11:
