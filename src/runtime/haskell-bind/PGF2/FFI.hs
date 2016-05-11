@@ -199,12 +199,12 @@ foreign import ccall "pgf/pgf.h pgf_align_words"
 foreign import ccall "pgf/pgf.h pgf_parse_with_heuristics"
   pgf_parse_with_heuristics :: Ptr PgfConcr -> CString -> CString -> Double -> Ptr PgfCallbacksMap -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
 
-type LiteralMatchCallback = Ptr () -> CInt -> CString -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
+type LiteralMatchCallback = CInt -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
 
 foreign import ccall "wrapper"
   wrapLiteralMatchCallback :: LiteralMatchCallback -> IO (FunPtr LiteralMatchCallback)
 
-type LiteralPredictCallback = Ptr () -> CInt -> CString -> Ptr GuPool -> IO (Ptr PgfExprProb)
+type LiteralPredictCallback = CInt -> CString -> Ptr GuPool -> IO (Ptr PgfExprProb)
 
 foreign import ccall "wrapper"
   wrapLiteralPredictCallback :: LiteralPredictCallback -> IO (FunPtr LiteralPredictCallback)

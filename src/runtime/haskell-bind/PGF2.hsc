@@ -267,7 +267,7 @@ parseWithHeuristics :: Concr      -- ^ the language with which we parse
                                   -- A negative value tells the parser 
                                   -- to lookup up the default from 
                                   -- the grammar flags
-                    -> [(Cat, Int -> String -> Int -> Maybe (Expr,Float,Int))]
+                    -> [(Cat, Int -> Int -> Maybe (Expr,Float,Int))]
                                   -- ^ a list of callbacks for literal categories.
                                   -- The arguments of the callback are:
                                   -- the index of the constituent for the literal category;
@@ -308,7 +308,7 @@ parseWithHeuristics lang cat sent heuristic callbacks =
                  exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
                  return (Right exprs)
 
-mkCallbacksMap :: Ptr PgfConcr -> [(String, Int -> String -> Int -> Maybe (Expr,Float,Int))] -> Ptr GuPool -> IO (Ptr PgfCallbacksMap)
+mkCallbacksMap :: Ptr PgfConcr -> [(String, Int -> Int -> Maybe (Expr,Float,Int))] -> Ptr GuPool -> IO (Ptr PgfCallbacksMap)
 mkCallbacksMap concr callbacks pool = do
   callbacks_map <- pgf_new_callbacks_map concr pool
   forM_ callbacks $ \(cat,match) -> do
@@ -318,10 +318,9 @@ mkCallbacksMap concr callbacks pool = do
     hspgf_callbacks_map_add_literal concr callbacks_map ccat match predict pool
   return callbacks_map
   where
-    match_callback match _ clin_idx csentence poffset out_pool = do
-      sentence <- peekUtf8CString csentence
+    match_callback match clin_idx poffset out_pool = do
       coffset <- peek poffset
-      case match (fromIntegral clin_idx) sentence (fromIntegral coffset) of
+      case match (fromIntegral clin_idx) (fromIntegral coffset) of
         Nothing               -> return nullPtr
         Just (e,prob,offset') -> do poke poffset (fromIntegral offset')
 
@@ -342,7 +341,7 @@ mkCallbacksMap concr callbacks pool = do
                                     (#poke PgfExprProb, prob) ep prob
                                     return ep
 
-    predict_callback _ _ _ _ = return nullPtr
+    predict_callback _ _ _ = return nullPtr
 
 -- | The oracle is a triple of functions.
 -- The first two take a category name and a linearization field name
@@ -574,7 +573,7 @@ instance Exception PGFError
 -----------------------------------------------------------------------
 
 type LiteralCallback =
-       PGF -> (ConcName,Concr) -> Int -> String -> Int -> Maybe (Expr,Float,Int)
+       PGF -> (ConcName,Concr) -> String -> Int -> Int -> Maybe (Expr,Float,Int)
 
 -- | Callbacks for the App grammar
 literalCallbacks :: [(AbsName,[(Cat,LiteralCallback)])]
@@ -583,7 +582,7 @@ literalCallbacks = [("App",[("PN",nerc),("Symb",chunk)])]
 -- | Named entity recognition for the App grammar 
 -- (based on ../java/org/grammaticalframework/pgf/NercLiteralCallback.java)
 nerc :: LiteralCallback
-nerc pgf (lang,concr) lin_idx sentence offset =
+nerc pgf (lang,concr) sentence lin_idx offset =
   case consume capitalized (drop offset sentence) of
     (capwords@(_:_),rest) |
        not ("Eng" `isSuffixOf` lang && name `elem` ["I","I'm"]) ->
@@ -618,7 +617,7 @@ nerc pgf (lang,concr) lin_idx sentence offset =
 -- | Callback to parse arbitrary words as chunks (from
 -- ../java/org/grammaticalframework/pgf/UnknownLiteralCallback.java)
 chunk :: LiteralCallback
-chunk _ (_,concr) lin_idx sentence offset =
+chunk _ (_,concr) sentence lin_idx offset =
   case uncapitalized (drop offset sentence) of
     Just (word0@(_:_),rest) | null (lookupMorpho concr word) ->
         Just (expr,0,offset+length word)

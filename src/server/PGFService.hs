@@ -173,7 +173,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
       --cparse = C.parse concr cat input
         cparse = C.parseWithHeuristics concr cat input (-1) callbacks
         callbacks = maybe [] cb $ lookup (C.abstractName pgf) C.literalCallbacks
-        cb fs = [(cat,f pgf (from,concr))|(cat,f)<-fs]
+        cb fs = [(cat,f pgf (from,concr) input)|(cat,f)<-fs]
 {-
     -- Caching parse results:
     parse' start mlimit ((from,concr),input) = 
