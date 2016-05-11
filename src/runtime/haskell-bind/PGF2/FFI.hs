@@ -2,12 +2,13 @@
 
 module PGF2.FFI where
 
+import Foreign ( alloca, poke )
 import Foreign.C
---import Foreign.C.String
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Control.Exception
 import GHC.Ptr
+import Data.Int(Int32)
 
 data PGF = PGF {pgf :: Ptr PgfPGF, pgfMaster :: ForeignPtr GuPool}
 data Concr = Concr {concr :: Ptr PgfConcr, concrMaster :: PGF}
@@ -72,9 +73,15 @@ foreign import ccall "gu/file.h gu_file_in"
 
 foreign import ccall "gu/enum.h gu_enum_next"
   gu_enum_next :: Ptr a -> Ptr (Ptr b) -> Ptr GuPool -> IO ()
-
+ 
 foreign import ccall "gu/string.h gu_string_buf_freeze"
   gu_string_buf_freeze :: Ptr GuStringBuf -> Ptr GuPool -> IO CString
+
+foreign import ccall unsafe "gu/utf8.h gu_utf8_decode"
+  gu_utf8_decode :: Ptr CString -> IO Int32
+
+foreign import ccall unsafe "gu/utf8.h gu_utf8_encode"
+  gu_utf8_encode :: Int32 -> Ptr CString -> IO ()
 
 withGuPool :: (Ptr GuPool -> IO a) -> IO a
 withGuPool f = bracket gu_new_pool gu_pool_free f
@@ -84,6 +91,34 @@ newOut pool =
    do sb <- gu_string_buf pool
       out <- gu_string_buf_out sb
       return (sb,out)
+
+peekUtf8CString :: CString -> IO String
+peekUtf8CString ptr =
+  alloca $ \pptr ->
+    poke pptr ptr >> decode pptr
+  where
+    decode pptr = do
+      x <- gu_utf8_decode pptr
+      if x == 0
+        then return []
+        else do cs <- decode pptr
+                return (((toEnum . fromEnum) x) : cs)
+
+newUtf8CString :: String -> Ptr GuPool -> IO CString
+newUtf8CString s pool = do
+  -- An UTF8 character takes up to 6 bytes. We allocate enough
+  -- memory for the worst case. This is wasteful but those
+  -- strings are usually allocated only temporary.
+  ptr <- gu_malloc pool (fromIntegral (length s * 6+1))
+  alloca $ \pptr ->
+    poke pptr ptr >> encode s pptr
+  return ptr
+  where
+    encode []     pptr = do
+      gu_utf8_encode 0 pptr
+    encode (c:cs) pptr = do
+      gu_utf8_encode ((toEnum . fromEnum) c) pptr
+      encode cs pptr
 
 ------------------------------------------------------------------
 -- libpgf API
