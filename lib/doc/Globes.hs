@@ -7,7 +7,8 @@ main = do
 graph langs = unlines $[
   "digraph {",
   "node [shape = oval] ;",
-  "edge [dir = both] ;"
+  "edge [dir = none] ;"
+--  "edge [dir = both] ;"
   ] ++ links langs ++ [
   "}"
   ]
@@ -19,8 +20,8 @@ interlingua = "Meaning"
 
 languages = [
   "afrikaans",
-  "አማርኛ",
-  "العربية",
+--  "አማርኛ",
+--  "العربية",
   "Български",
   "català",
   "中文",
@@ -35,7 +36,7 @@ languages = [
   "हिन्दी",
   "italiano",
   "日本語", 
-  "latina",
+--  "latina",
   "latviešu",
   "Malti",
   "Монгол",
