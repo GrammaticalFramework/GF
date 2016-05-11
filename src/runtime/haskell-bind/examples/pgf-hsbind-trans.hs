@@ -50,7 +50,7 @@ translates pgf cfrom cto cat (mxt,mxv) s0 =
 
 cparse pgf concr cat input = parseWithHeuristics concr cat input (-1) callbacks where
   callbacks = maybe [] cb $ lookup "App" literalCallbacks
-  cb fs = [(cat,f pgf ("TranslateEng",concr))|(cat,f)<-fs]
+  cb fs = [(cat,f pgf ("TranslateEng",concr) input)|(cat,f)<-fs]
 
 lextext cnc = unwords . lexText' (\w -> case lookupMorpho cnc w of
   _:_ -> w
