@@ -1,3 +1,5 @@
+@import url("overlay.css");
+
 body { margin:0; padding: 5px; position: relative; }
 h1 { float: right; margin: 0; font-size: 150%; }
 h2 { font-size: 120%; }
@@ -104,26 +106,6 @@ span.choices { color: blue; font-weight: bold; font-family: sans-serif; }
 .low_quality { background-color: #fcc; background-color: rgba(255,0,0,0.20); }
 .bad_quality { background-color: #f88; background-color: rgba(255,0,0,0.53); }
 .manual_quality { background-color: #ccf; background-color: rgba(0,0,255,0.20); }
-
-div.overlay {
-    display: none;
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100%; height: 100%;
-    background: white; /* fallback */
-    background: rgba(0,0,0,0.3);
-}
-
-div.overlay > div {
-    margin: 5em 3em;
-    background: white; /* fallback */
-    background: rgba(255,255,255,0.95);
-    padding: 1em;
-    box-shadow: 4px 4px 12px rgba(0,0,0,0.33);
-    /*border-radius: 5px;*/
-}
 
 div#minibar, div#syntax_editor {
     border: 1px solid black;
