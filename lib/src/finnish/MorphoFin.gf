@@ -584,9 +584,11 @@ resource MorphoFin = ResFin ** open Prelude in {
     let
       a      = last juoda ;
       juo    = Predef.tk 2 juoda ;
-      joi    = case last juo of {
-        "i" => juo ;                     -- naida
-        o   => Predef.tk 2 juo + o + "i"
+      joi : Str   = case juo of {
+        _ + "i"  => juo ;                     -- naida, nai
+        _ + "yy" => init juo + "i" ;          -- myydä, myi
+        _ + "y"  => init juo + "vi" ;         -- käydä, kävi
+        _ + o@?  => Predef.tk 2 juo + o + "i"
         } ;
       u      = uyHarmony a ;
     in vForms12
