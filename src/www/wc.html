@@ -2,6 +2,7 @@
 <html> <head>
 <title>Demo: GF Wide Coverage Translation</title>
 <link rel="stylesheet" type="text/css" href="gfse/editor.css" title="Cloud">
+<link rel="stylesheet" type="text/css" href="translator/overlay.css">
 <meta name = "viewport" content = "width = device-width">
 <meta charset="UTF-8">
 <link rel=top href="../" title="GF">
@@ -43,6 +44,8 @@ span.inflect { color: blue; }
 <div>
 <h1><a href="http://www.grammaticalframework.org/"><img class=nofloat src="P/gf-cloud.png" alt="GF"></a> Wide Coverage Translation Demo</h1>
 </div>
+
+<div class=overlay><div id=grammarbox class=grammarbox></div></div>
 
 <form onsubmit="return wc.translate()" style="width: 100%">
 <table>
@@ -87,6 +90,7 @@ span.inflect { color: blue; }
   </select>
   <input name=colors type=checkbox checked onchange="wc.colors()"> Colors
   <td><button name=translate type=submit><strong>Translate</strong></button>
+      <input type=button name=grammars onclick="wc.select_grammars()" value="Grammars...">
   <tr><td class=input colspan=2>
     <div class=input>
   <textarea name=input rows=5 style="width: 100%" onkeyup="wc.delayed_translate()"></textarea>
@@ -109,7 +113,7 @@ span.inflect { color: blue; }
   </div>
 <hr>
 <div class=modtime><small>
-<!-- hhmts start -->Last modified: Fri Nov 27 10:47:46 CET 2015 <!-- hhmts end -->
+<!-- hhmts start -->Last modified: Thu May 12 15:32:41 CEST 2016 <!-- hhmts end -->
 </small></div>
 <a href="http://www.grammaticalframework.org/demos/translation.html">About</a>
 <script src="js/support.js"></script>

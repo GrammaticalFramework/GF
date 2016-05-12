@@ -2,12 +2,14 @@
 /* --- Wide Coverage Translation Demo web app ------------------------------- */
 
 var wc={}
-//wc.cnl="Phrasebook" // try this controlled natural language first
+wc.selected_cnls=[] // list of grammar names
+wc.cnls={} // maps grammars names to {pgf_online:...,grammar_info:{...}}
 wc.f=document.forms[0]
 wc.o=element("output")
 wc.e=element("extra")
 wc.i=element("grammarinfo")
 wc.p=element("pick")
+wc.grammarbox=element("grammarbox")
 wc.os=[] /* output segment list
 	    [{input,text:String; from,to::Lang;
 	      target:Node;
@@ -42,6 +44,7 @@ wc.save=function() {
 	wc.local.put("to",f.to.value)
 	wc.local.put("input",f.input.value)
 	wc.local.put("colors",f.colors.checked)
+	wc.local.put("cnls",wc.selected_cnls)
     }
 }
 
@@ -52,6 +55,7 @@ wc.load=function() {
 	f.from.value=wc.local.get("from",f.from.value)
 	f.to.value=wc.local.get("to",f.to.value)
 	f.colors.checked=wc.local.get("colors",f.colors.checked)
+	wc.selected_cnls=wc.local.get("cnls",wc.selected_cnls)
 	wc.colors()
 	wc.delayed_translate()
     }
@@ -249,25 +253,31 @@ wc.translate=function() {
 	    gftranslate.translate(text,f.from.value,wc.languages || f.to.value,i,count,step3)
 	}
 	function step2(text) { trans(text,0,10) }
-	function step2cnl(text) {
+	function step2cnl(text,ix) {
 	    function step3cnl(results) {
 		var trans=results[0].translations
 		if(trans && trans.length>=1) {
 		    for(var i=0;i<trans.length;i++) {
 			var r=trans[i]
 			r.prob=0
-			showit(r,wc.cnl)
+			showit(r,cnl)
 		    }
 		}
-		step2(text)
+		step2cnl(text,ix+1)
 	    }
-	    wc.pgf_online.translate({from:wc.cnl+f.from.value,
-				     //to:wc.cnl+f.to.value,
-				     lexer:"text",unlexer:"text",input:text},
-				    step3cnl,
-				    function(){step2(text)})
+	    if(ix<wc.selected_cnls.length) {
+		var g=wc.cnls[wc.selected_cnls[ix]]
+		var cnl=g.grammar_info.name
+		g.pgf_online.translate({from:cnl+f.from.value,
+					//to:cnl+f.to.value,
+					lexer:"text",unlexer:"text",
+					jsontree:true,input:text},
+					step3cnl,
+				       function(){step2cnl(text,ix+1)})
+	    }
+	    else step2(text)
 	}
-	if(wc.cnl) step2cnl(so.input)
+	if(wc.selected_cnls) step2cnl(so.input,0)
 	else step2(so.input)
     }
 
@@ -419,6 +429,70 @@ wc.init_speech=function() {
     }
 }
 
+
+wc.show_grammarbox=function() {
+    wc.grammarbox.parentNode.style.display="block";
+}
+
+wc.hide_grammarbox=function() {
+    wc.grammarbox.parentNode.style.display="";
+    clear(wc.grammarbox)
+}
+
+wc.init_cnl=function(grammar) {
+    var g
+    if(wc.cnls[grammar]) g=wc.cnls[grammar]
+    else g=wc.cnls[grammar]={}
+    g.pgf_online=pgf_online({})
+    g.pgf_online.switch_grammar(grammar)
+    g.pgf_online.grammar_info(function(info){g.grammar_info=info})
+}
+
+wc.init_cnls=function() {
+    var gs=wc.selected_cnls
+    for(var i=0;i<gs.length;i++) wc.init_cnl(gs[i])
+}
+
+wc.select_grammars=function() {
+    function done() {
+	wc.hide_grammarbox()
+	wc.local.put("cnls",wc.selected_cnls)
+    }
+    function checkbox(grammar) {
+	var vb=node("input",{type:"checkbox"})
+	vb.checked=elem(grammar,wc.selected_cnls)
+	vb.onchange=function() {
+	    if(elem(grammar,wc.selected_cnls)) {
+		function other(g) { return g!=grammar }
+		if(!vb.checked) wc.selected_cnls=filter(other,wc.selected_cnls)
+	    }
+	    else {
+		if(vb.checked) {
+		    wc.selected_cnls.push(grammar)
+		    wc.init_cnl(grammar)
+		}
+	    }
+	}
+	return vb
+    }
+    function grammar_pick(grammar) {
+	return [checkbox(grammar),text(" "+grammar.split(".pgf")[0])]
+    }
+    function show_list(grammars) {
+	for(var i=0;i<grammars.length;i++)
+	    list.appendChild(wrap("dt",grammar_pick(grammars[i])))
+    }
+    
+    clear(wc.grammarbox)
+    wc.grammarbox.appendChild(wrap("h2",text("Select which domain-specific grammars to use")))
+    wc.grammarbox.appendChild(text("These grammars are tried before the wide-coverage grammar. They can give higher quality translations within their respective domains."))
+    var list=empty("dl")
+    wc.grammarbox.appendChild(list)
+    wc.grammarbox.appendChild(button("Done",done))
+    wc.show_grammarbox()
+    wc.pgf_online.get_grammarlist(show_list)
+}
+
 wc.initialize=function(grammar_name,grammar_url) {
     if(grammar_name && grammar_url) {
 	gftranslate.grammar=grammar_name
@@ -427,11 +501,9 @@ wc.initialize=function(grammar_name,grammar_url) {
     wc.init_languages()
     //init_speech()
     setTimeout(wc.init_speech,500) // A hack for Chrome.
-    if(wc.cnl) {
-	wc.pgf_online=pgf_online({});
-	wc.pgf_online.switch_grammar(wc.cnl+".pgf")
-    }
+    wc.pgf_online=pgf_online({});
     wc.local=appLocalStorage("gf.wc."+gftranslate.grammar+".")
     wc.load()
+    wc.init_cnls()
     wc.f.input.focus()
 }
