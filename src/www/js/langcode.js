@@ -14,17 +14,17 @@ var languages =
 	    return ws.length==1 ? lang(name.substr(0,3),name,code2)
 	                        : lang(ws[0],ws[1],code2)
 	}
-
-	return map(lang1,
-		// [ISO-639-2 code "/"] language name ":" ISO 639-1 code
-		["Amharic:am","Arabic:ar","Bulgarian:bg","Catalan:ca",
-	        "Chinese:zh","Danish:da","Dutch:nl","English:en","Estonian:et",
-	        "Finnish:fi","French:fr","German:de","Greek:el","Hindi:hi",
-	        "Ina/Interlingua:ia","Italian:it","Jpn/Japanese:ja","Latin:la",
-	        "Norwegian:nb","Pes/Persian:fa","Polish:pl","Pnb/Punjabi:pa",
-	        "Ron/Romanian:ro","Russian:ru","Spanish:es","Swedish:sv",
-	        "Thai:th","Turkish:tr","Urdu:ur"])
-	        // GF uses nonstd 3-letter codes? Pes/Persian:fa, Pnb/Punjabi:pa
+	var ls
+	//  [ISO-639-2 code "/"] language name ":" ISO 639-1 code
+	ls=["Afrikaans:af","Amharic:am","Arabic:ar","Bulgarian:bg","Catalan:ca",
+	    "Chinese:zh","Danish:da","Dutch:nl","English:en","Estonian:et",
+	    "Finnish:fi","French:fr","German:de","Greek:el","Hindi:hi",
+	    "Ina/Interlingua:ia","Italian:it","Jpn/Japanese:ja","Latin:la",
+	    "Norwegian:nb","Pes/Persian:fa","Polish:pl","Pnb/Punjabi:pa",
+	    "Ron/Romanian:ro","Russian:ru","Spanish:es","Swedish:sv",
+	    "Thai:th","Turkish:tr","Urdu:ur"]
+	// GF uses nonstd 3-letter codes? Pes/Persian:fa, Pnb/Punjabi:pa
+	return map(lang1,ls)
     }()
 
 var langname={}
