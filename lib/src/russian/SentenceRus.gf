@@ -95,7 +95,7 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = vp.s2  ++ vp.s!ClInfinit!(GSg Masc) !P3 ++ vp.s3!Masc!Sg} ;
 
-    UseCl t p cl = {s = case t.t of { 
+    UseCl t p cl = {s = t.s ++ p.s ++ case t.t of { 
       Cond => cl.s! p.p ! ClCondit ; --# notpresent
       Pres => cl.s! p.p ! ClIndic Present t.a   ---- AR work-around 13/12/2007
         ; --# notpresent
