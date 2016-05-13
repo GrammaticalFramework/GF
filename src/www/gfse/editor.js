@@ -570,40 +570,20 @@ function quiz_button(g,err_ind) {
 		 button("Quiz",compile))
 }
 
-
-var languages =
-    function() {
-	function lang(code,name) { return { code:code, name:name} }
-	function lang1(name) {
-	    var ws=name.split("/");
-	    return ws.length==1 ? lang(name.substr(0,3),name) : lang(ws[0],ws[1]);
-	}
-
-	// Language names and 3-letter ISO-639 codes
-	// See http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-	var languages=map(lang1,"Afrikaans Amharic Arabic Bulgarian Catalan Chinese Danish Dutch English Estonian Finnish French German Greek Hindi Ina/Interlingua Italian Jpn/Japanese Latin Lav/Latvian Mlt/Maltese Mongolian Norwegian Pes/Persian Polish Pnb/Punjabi Ron/Romanian Russian Snd/Sindhi Spanish Swedish Thai Turkish Urdu".split(" "));
-	languages.push(lang("Other","Other"));
-	return languages
-    }()
-
-var langname={};
-for(var i in languages)
-    langname[languages[i].code]=languages[i].name
-
-function concname(code) { return langname[code] || code; }
-
 function add_concrete(g,file) {
     clear(file);
     var dc={};
     for(var i in g.concretes)
 	dc[g.concretes[i].langcode]=true;
     var list=[]
-    for(var i in languages) {
-	var l=languages[i], c=l.code;
-	if(!dc[c])
-	    list.push(li([a(jsurl("add_concrete2("+g.index+",'"+c+"')"),
-			    [text(l.name)])]));
+    function addconc(name,code) {
+	if(!dc[code])
+	    list.push(li([a(jsurl("add_concrete2("+g.index+",'"+code+"')"),
+			    [text(name)])]));
     }
+    for(var i in languages)
+	addconc(languages[i].name,languages[i].code)
+    addconc("Other","Other")
     var from= g.current>0 
 	? "a copy of "+concname(g.concretes[g.current-1].langcode)
 	:"scratch";

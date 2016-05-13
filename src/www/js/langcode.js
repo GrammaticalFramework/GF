@@ -20,9 +20,10 @@ var languages =
 	    "Chinese:zh","Danish:da","Dutch:nl","English:en","Estonian:et",
 	    "Finnish:fi","French:fr","German:de","Greek:el","Hindi:hi",
 	    "Ina/Interlingua:ia","Italian:it","Jpn/Japanese:ja","Latin:la",
+	    "Lav/Latvian:lv","Mlt/Maltese:mt","Mongolian:mn",
 	    "Norwegian:nb","Pes/Persian:fa","Polish:pl","Pnb/Punjabi:pa",
-	    "Ron/Romanian:ro","Russian:ru","Spanish:es","Swedish:sv",
-	    "Thai:th","Turkish:tr","Urdu:ur"]
+	    "Ron/Romanian:ro","Russian:ru","Snd/Sindhi:sd","Spanish:es",
+	    "Swedish:sv","Thai:th","Turkish:tr","Urdu:ur"]
 	// GF uses nonstd 3-letter codes? Pes/Persian:fa, Pnb/Punjabi:pa
 	return map(lang1,ls)
     }()
