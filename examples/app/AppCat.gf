@@ -25,7 +25,7 @@ concrete AppCat of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookCat - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, cheap_A,expensive_A, open_A, closed_A]
+ --P ,PhrasebookCat - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, cheap_A,expensive_A, open_A, closed_A]
 
     ** open ParadigmsCat, SyntaxCat, Prelude in {
 

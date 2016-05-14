@@ -1,4 +1,4 @@
-all: Phrasebook App15.pgf
+all: App15.pgf
 
 PROBSFILE=./app.probs
 GFODIR=./gfos

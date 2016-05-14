@@ -25,7 +25,7 @@ concrete AppSpa of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookSpa - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, cheap_A,expensive_A, open_A, closed_A]
+ --P ,PhrasebookSpa - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, cheap_A,expensive_A, open_A, closed_A]
 
     ** open ParadigmsSpa, SyntaxSpa, Prelude in {
 

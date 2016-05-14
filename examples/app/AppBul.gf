@@ -24,7 +24,7 @@ concrete AppBul of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookBul - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
+ --P ,PhrasebookBul - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
 
     ** open ParadigmsBul, SyntaxBul, Prelude in {
 

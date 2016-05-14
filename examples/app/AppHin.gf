@@ -23,7 +23,7 @@ concrete AppHin of App =
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
-  ,PhrasebookHin - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
+ --P ,PhrasebookHin - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
 
     ** open ParadigmsHin, SyntaxHin, Prelude in {
 

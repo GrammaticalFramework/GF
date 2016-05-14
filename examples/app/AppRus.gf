@@ -24,7 +24,7 @@ concrete AppRus of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookRus - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, cost_V]
+--P  ,PhrasebookRus - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, cost_V]
 
     ** open ParadigmsRus, SyntaxRus, Prelude in {
 

@@ -24,7 +24,7 @@ concrete AppEst of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookEst - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, open_Adv]
+ --P ,PhrasebookEst - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, open_Adv]
 
     ** open ParadigmsEst, SyntaxEst, Prelude in {
 

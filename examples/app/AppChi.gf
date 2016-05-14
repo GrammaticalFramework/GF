@@ -24,7 +24,7 @@ concrete AppChi of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookChi - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
+ --P ,PhrasebookChi - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
 
     ** open ParadigmsChi, SyntaxChi, Prelude in {
 
