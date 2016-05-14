@@ -3,7 +3,7 @@
 -- the new files are produced in ./tmp/ which has to be created first
 -- usage: runghc MkApp.hs
 
-langs = words "Bul Cat Chi Dut Eng Fin Fre Ger Hin Ita Jpn Spa Swe Tha"
+langs = words "Bul Cat Chi Dut Eng Est Fin Fre Ger Hin Ita Jpn Spa Swe Tha"
 appCnc lang = "App" ++ lang ++ ".gf"
 
 appAbs = "App.gf"
@@ -23,5 +23,5 @@ putImports i s =
 extra s = unlines (init (lines s) ++ extraLines ++ ["}"])
 
 extraLines = [
-  "  PassV2 v2 = passiveVP v2 ;"
+--  "  PassV2 v2 = passiveVP v2 ;"
   ] -- default: no extra

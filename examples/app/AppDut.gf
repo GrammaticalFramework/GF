@@ -24,7 +24,7 @@ concrete AppDut of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-	,PhrasebookDut - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
+--P	,PhrasebookDut - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
 
     ** open ParadigmsDut, SyntaxDut, Prelude in {
 

@@ -23,7 +23,7 @@ concrete AppSwe of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookSwe - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
+ --P ,PhrasebookSwe - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
 
     ** open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Prelude in {
 

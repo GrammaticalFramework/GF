@@ -24,7 +24,7 @@ concrete AppTha of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookTha - [at_Prep, closed_A, open_A] --- - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
+ --P ,PhrasebookTha - [at_Prep, closed_A, open_A] --- - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
 
     ** open ParadigmsTha, SyntaxTha, Prelude in {
 

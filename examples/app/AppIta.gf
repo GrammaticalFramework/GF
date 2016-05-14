@@ -24,7 +24,7 @@ concrete AppIta of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookIta - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, closed_A]
+ --P ,PhrasebookIta - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, closed_A]
 
     ** open ParadigmsIta, SyntaxIta, Prelude in {
 

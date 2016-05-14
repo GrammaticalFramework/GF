@@ -22,7 +22,7 @@ concrete AppFre of App =
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
-  ,PhrasebookFre - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, closed_A]
+ --P ,PhrasebookFre - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, closed_A]
 
     ** open ParadigmsFre, SyntaxFre, Prelude in {
 

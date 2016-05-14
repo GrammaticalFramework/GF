@@ -24,7 +24,7 @@ concrete AppFin of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookFin - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, open_Adv]
+--P  ,PhrasebookFin - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_A, open_Adv]
 
     ** open ParadigmsFin, SyntaxFin, Prelude in {
 

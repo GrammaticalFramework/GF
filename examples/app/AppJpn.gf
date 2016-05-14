@@ -24,7 +24,7 @@ concrete AppJpn of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-  ,PhrasebookJpn ---- - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
+ --P ,PhrasebookJpn ---- - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
 
     ** open ParadigmsJpn, SyntaxJpn, Prelude in {
 
