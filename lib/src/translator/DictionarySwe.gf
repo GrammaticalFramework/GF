@@ -1,6 +1,6 @@
 ---- edits by AR till formal_A
 
-concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe), Prelude in {
+concrete DictionarySwe of Dictionary = CatSwe ** open ParadigmsSwe, (I = IrregSwe), (C = CommonScand), (R = ResSwe), (MorphoSwe = MorphoSwe), (L = LexiconSwe), (M = MakeStructuralSwe), (S = SyntaxSwe), Prelude in {
 
 
 oper adjAdv : A -> Adv = \a -> S.mkAdv a ;
@@ -29685,7 +29685,7 @@ lin issuer_N = mkN "utfärdare" ;
 lin istanbul_PN = mkPN "Istanbul" ; -- src=eng status=guess
 lin isthmian_A = variants {} ; -- status=guess
 lin isthmus_N = mkN "näs" neutrum ; -- comment=2
-lin it_Pron = S.it_Pron ;
+lin it_Pron = S.it_Pron | MorphoSwe.regNP "den" "dess" utrum singular ;
 lin italianFem_N = mkN "italienska" ;
 lin italianMasc_N = mkN "italienare" "italienare" ;
 lin italian_A = mkA "italiensk" ;
