@@ -38,13 +38,13 @@ lin
   Phrase_Chunk p = p ;
 
   ComplV2 v np = mkVP v np ;
-{-
+
 ComplV2V v np vp = mkVP v np vp ;
-ComplV2A v np vp = mkVP v np vp ;
-ComplV2Q v np vp = mkVP v np vp ;
-ComplV2S v np vp = mkVP v np vp ;
+--ComplV2A v np vp = mkVP v np vp ;
+--ComplV2Q v np vp = mkVP v np vp ;
+--ComplV2S v np vp = mkVP v np vp ;
 ComplV3  v np vp = mkVP v np vp ;
--}
+
 
 
 ComplV2 v np = mkVP v np ;
