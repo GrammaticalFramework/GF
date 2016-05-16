@@ -461,6 +461,7 @@ wc.select_grammars=function() {
 	for(var i=0;i<glist.length;i++)
 	    if(glist[i].cb.checked) gs.push(glist[i].grammar)
 	wc.selected_cnls=gs
+	wc.init_cnls()
 	wc.local.put("cnls",wc.selected_cnls)
     }
     function cancel() {
@@ -497,7 +498,7 @@ wc.select_grammars=function() {
     }
     
     clear(wc.grammarbox)
-    wc.grammarbox.appendChild(wrap("h2",text("Select which domain-specific grammars to use")))
+    wc.grammarbox.appendChild(wrap("h2",[button("X",cancel),text("Select which domain-specific grammars to use")]))
     wc.grammarbox.appendChild(text("These grammars are tried before the wide-coverage grammar. They can give higher quality translations within their respective domains."))
     var list=empty("dl")
     wc.grammarbox.appendChild(list)
