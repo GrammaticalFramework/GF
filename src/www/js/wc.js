@@ -456,31 +456,44 @@ wc.init_cnls=function() {
 wc.select_grammars=function() {
     function done() {
 	wc.hide_grammarbox()
+	var gs=[]
+	var glist=list.children
+	for(var i=0;i<glist.length;i++)
+	    if(glist[i].cb.checked) gs.push(glist[i].grammar)
+	wc.selected_cnls=gs
 	wc.local.put("cnls",wc.selected_cnls)
     }
-    function checkbox(grammar) {
+    function cancel() {
+	wc.hide_grammarbox()
+    }
+    function remove(x,xs) {
+	function other(y) { return y!=x; }
+	return filter(other,xs)
+    }
+    function checkbox(grammar,checked) {
 	var vb=node("input",{type:"checkbox"})
-	vb.checked=elem(grammar,wc.selected_cnls)
-	vb.onchange=function() {
-	    if(elem(grammar,wc.selected_cnls)) {
-		function other(g) { return g!=grammar }
-		if(!vb.checked) wc.selected_cnls=filter(other,wc.selected_cnls)
-	    }
-	    else {
-		if(vb.checked) {
-		    wc.selected_cnls.push(grammar)
-		    wc.init_cnl(grammar)
-		}
-	    }
-	}
+	vb.checked=checked
 	return vb
     }
-    function grammar_pick(grammar) {
-	return [checkbox(grammar),text(" "+grammar.split(".pgf")[0])]
+    function grammar_pick(grammar,checked) {
+	var cb=checkbox(grammar,checked)
+	var p=[cb,text(" "+grammar.split(".pgf")[0])]
+	var dt=node("dt",{class:"grammar_pick"},p)
+	dt.cb=cb
+	dt.grammar=grammar
+	return dt
     }
     function show_list(grammars) {
+	var sg=wc.selected_cnls
+	for(var i=0;i<sg.length;i++) {
+	    if(elem(sg[i],grammars))
+		list.appendChild(grammar_pick(sg[i],true))
+	    else
+		remove(sg[i],wc.selected_cnls)
+	}
 	for(var i=0;i<grammars.length;i++)
-	    list.appendChild(wrap("dt",grammar_pick(grammars[i])))
+	    if(!elem(grammars[i],wc.selected_cnls))
+		list.appendChild(grammar_pick(grammars[i],false))
     }
     
     clear(wc.grammarbox)
@@ -488,7 +501,8 @@ wc.select_grammars=function() {
     wc.grammarbox.appendChild(text("These grammars are tried before the wide-coverage grammar. They can give higher quality translations within their respective domains."))
     var list=empty("dl")
     wc.grammarbox.appendChild(list)
-    wc.grammarbox.appendChild(button("Done",done))
+    wc.grammarbox.appendChild(button("OK",done))
+    wc.grammarbox.appendChild(button("Cancel",cancel))
     wc.show_grammarbox()
     wc.pgf_online.get_grammarlist(show_list)
 }
@@ -505,5 +519,6 @@ wc.initialize=function(grammar_name,grammar_url) {
     wc.local=appLocalStorage("gf.wc."+gftranslate.grammar+".")
     wc.load()
     wc.init_cnls()
+    initialize_sorting(["DT"],["grammar_pick"])
     wc.f.input.focus()
 }
