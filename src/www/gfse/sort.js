@@ -17,11 +17,12 @@ function initialize_sorting(tagList,classList) {
     var sortable_class=listToSet(classList)
 
     function sortable(elem) {
-	return elem && (sortable_tag[elem.tagName]
-			  ? sortable_class[elem.className]
-			    ? elem
-			    : null
-			  : sortable(elem.parentNode))
+	return elem && elem.tagName!="INPUT" && elem.tagName!="BUTTON"
+	    && (sortable_tag[elem.tagName]
+		? sortable_class[elem.className]
+		? elem
+		: null
+		: sortable(elem.parentNode))
     }
 
     function move_element(elem,x,y) {
