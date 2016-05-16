@@ -39,7 +39,7 @@ function initialize_sorting(tagList,classList) {
     }
 
     function move_up(elem) {
-	var prev=elem.previousSibling;
+	var prev=elem.previousElementSibling;
 	if(prev) {
 	    var top=elem.offsetTop;
 	    var mid=prev.offsetTop+prev.offsetHeight/2;
@@ -53,7 +53,7 @@ function initialize_sorting(tagList,classList) {
     }
 
     function move_down(elem) {
-	var next=elem.nextSibling;
+	var next=elem.nextElementSibling;
 	if(next) {
 	    var top=elem.offsetTop;
 	    var bot=top+elem.offsetHeight;
@@ -76,53 +76,80 @@ function initialize_sorting(tagList,classList) {
 	return Math.min(range.hi,Math.max(range.lo,y));
     }
 
-function startDrag(event,elem) {
-    //jsdebug("Start dragging");
-    elem.style.position="relative";
-    elem.delta || (elem.delta={x:0,y:0});
-    elem.downAt={x:event.screenX-elem.delta.x,y:event.screenY-elem.delta.y};
-    var list=elem.parentNode;
-    var top=list.offsetTop-elem.offsetTop+elem.delta.y;
-    elem.range={lo:top,hi:top+list.offsetHeight-elem.offsetHeight};
-    elem.style.zIndex=1;
-    document.onmousemove=function(event) {
-	var dx=0/*event.screenX-elem.downAt.x*/;
-	var dy=restrictTo(elem.range,event.screenY-elem.downAt.y);
-	//jsdebug("dragging to "+dx+" "+dy+" "+show_props(elem.range,"range"));
-	move_element(elem,dx,dy);
-	//jsdebug("dragging to "+elem.offsetLeft+" "+elem.offsetTop);
-	swap(elem,dy)
-	//event.stopPropagation();
-	return false;
-    }
-    document.onmouseup=function(event) {
-	//jsdebug("dropped");
-	elem.style.zIndex=0;
-	move_element(elem,0,0);
-	document.onmousemove=null;
-	document.onmouseup=null;
-	if(list.onsort) list.onsort();
-	//else jsdebug("no list.onsort "+list.className+" "+list.firstChild.ident);
-	//event.stopPropagation();
-	return false;
-    }
-    //event.stopPropagation();
-    return false;
-}
+    // -------------------------------------------------------------------------
+    // These functions isolate the difference between mouse interfaces and touch
+    // interfaces
 
-function mousedown(event) {
-    var elem=sortable(event.target);
-    if(elem) return startDrag(event,elem);
-    //else jsdebug("Clicked outside"/*+taglist(event.target)/*+show_props(event,"event")*/);
-}
+    function eventPosition(event) {
+	var p=event
+	if(event.touches) p=event.touches[0]
+	return {x:p.screenX,y:p.screenY}
+    }
+
+    function setStartHandler(ondown) {
+	if("ontouchstart" in window) document.ontouchstart=ondown
+	else document.onmousedown=ondown
+    }
+
+    function setDragHandlers(onmove,onend) {
+	if("ontouchstart" in window) {
+	    document.ontouchmove=onmove;
+	    document.ontouchend=onend;
+	}
+	else {
+	    document.onmousemove=onmove;
+	    document.onmouseup=onend;
+	}
+    }
+    // -------------------------------------------------------------------------
+    
+    function startDrag(event,elem) {
+	//jsdebug("Start dragging");
+	elem.style.position="relative";
+	elem.delta || (elem.delta={x:0,y:0});
+	var p=eventPosition(event)
+	elem.downAt={x:p.x-elem.delta.x,y:p.y-elem.delta.y};
+	var list=elem.parentNode;
+	// elem and list must have the same offsetParent for this to work!!
+	var top=list.offsetTop-elem.offsetTop+elem.delta.y;
+	elem.range={lo:top,hi:top+list.offsetHeight-elem.offsetHeight};
+	elem.style.zIndex=1;
+	//console.log("Start dragging",elem.id,list.offsetTop,elem.offsetTop,elem.range.lo,elem.range.hi)
+	function dragMove(event) {
+	    var p=eventPosition(event)
+	    var dx=0/*p.x-elem.downAt.x*/;
+	    var dy=restrictTo(elem.range,p.y-elem.downAt.y);
+	    //jsdebug("dragging to "+dx+" "+dy+" "+show_props(elem.range,"range"));
+	    //console.log("dragging to ",dy);
+	    move_element(elem,dx,dy);
+	    //jsdebug("dragging to "+elem.offsetLeft+" "+elem.offsetTop);
+	    swap(elem,dy)
+	    return false;
+	}
+	function dragEnd() {
+	    //jsdebug("dropped");
+	    elem.style.zIndex=0;
+	    move_element(elem,0,0);
+	    setDragHandlers(null,null)
+	    return false;
+	}
+	setDragHandlers(dragMove,dragEnd)
+	return false;
+    }
+
+    function mousedown(event) {
+	var elem=sortable(event.target);
+	if(elem) return startDrag(event,elem);
+	//else jsdebug("Clicked outside"/*+taglist(event.target)/*+show_props(event,"event")*/);
+    }
 
     //var jsdebug=debug;
 
-function init() {
-    document.onmousedown=mousedown;
-    //var d=element("javascriptdebug");
-    //if(d) jsdebug=function(msg) { d.innerHTML=msg; }
-}
+    function init() {
+	setStartHandler(mousedown)
+	//var d=element("javascriptdebug");
+	//if(d) jsdebug=function(msg) { d.innerHTML=msg; }
+    }
     init();
 }
 
