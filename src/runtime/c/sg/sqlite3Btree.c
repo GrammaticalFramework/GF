@@ -204,6 +204,7 @@
 
 #include "sqlite3Btree.h"
 
+#include <stdio.h>
 #include <stdarg.h>     /* Needed for the definition of va_list */
 
 /*
@@ -5172,6 +5173,7 @@ static SQLITE_WSD struct sqlite3StatType {
 #endif
 } sqlite3Stat = { {0,}, {0,} };
 
+#ifndef NDEBUG
 /*
 ** Elements of sqlite3Stat[] are protected by either the memory allocator
 ** mutex, or by the pcache1 mutex.  The following array determines which.
@@ -5188,7 +5190,7 @@ static const char statMutex[] = {
   0,  /* SQLITE_STATUS_SCRATCH_SIZE */
   0,  /* SQLITE_STATUS_MALLOC_COUNT */
 };
-
+#endif
 
 /* The "wsdStat" macro will resolve to the status information
 ** state vector.  If writable static data is unsupported on the target,
@@ -7827,6 +7829,28 @@ SQLITE_PRIVATE void *sqlite3DbReallocOrFree(Btree *pBtree, void *p, u64 n){
     sqlite3DbFree(pBtree, p);
   }
   return pNew;
+}
+
+/*
+** Make a copy of a string in memory obtained from sqliteMalloc(). These 
+** functions call sqlite3MallocRaw() directly instead of sqliteMalloc(). This
+** is because when memory debugging is turned on, these two functions are 
+** called via macros that record the current file and line number in the
+** ThreadData structure.
+*/
+char *sqlite3DbStrDup(Btree *pBtree, const char *z){
+  char *zNew;
+  size_t n;
+  if( z==0 ){
+    return 0;
+  }
+  n = sqlite3Strlen30(z) + 1;
+  assert( (n&0x7fffffff)==n );
+  zNew = sqlite3DbMallocRaw(pBtree, (int)n);
+  if( zNew ){
+    memcpy(zNew, z, n);
+  }
+  return zNew;
 }
 
 /************** End of malloc.c **********************************************/
