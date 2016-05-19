@@ -23,6 +23,9 @@ public class Expr implements Serializable {
 
 		/** Constructs an expression which represents a string literal */
 		public Expr(String s) {
+			if (s == null)
+				throw new IllegalArgumentException("s == null");
+
 			this.pool   = new Pool();
 			this.master = null;
 			this.ref    = initStringLit(s, pool.ref);  
@@ -33,6 +36,13 @@ public class Expr implements Serializable {
 		 * @param args the arguments for the function.
 		 */
 		public Expr(String fun, Expr... args) {
+			if (fun == null)
+				throw new IllegalArgumentException("fun == null");
+			for (int i = 0; i < args.length; i++) {
+				if (args[i] == null)
+					throw new IllegalArgumentException("the "+i+"th argument is null");
+			}
+
 			this.pool   = new Pool();
 			this.master = Arrays.copyOf(args, args.length);
 			this.ref    = initApp(fun, args, pool.ref);
