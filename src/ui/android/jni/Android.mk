@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 jni_c_files := jpgf.c jsg.c jni_utils.c
-sg_c_files := sg.c
+sg_c_files := sg.c sqlite3Btree.c
 pgf_c_files := data.c expr.c graphviz.c linearizer.c literals.c parser.c parseval.c pgf.c printer.c reader.c \
 reasoner.c evaluator.c jit.c typechecker.c
 gu_c_files := assert.c  choice.c  exn.c   fun.c   in.c      map.c  out.c     utf8.c \
