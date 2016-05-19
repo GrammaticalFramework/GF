@@ -61,7 +61,9 @@ wc.load=function() {
     }
 }
 
-wc.translate=function() {
+wc.translate=function(redo) {
+    // redo=true => discard translated segment cache and resubmit translation
+    // requests to the server (browser cache may still be used)
     var f=wc.f, e=wc.e, p=wc.p
 
     /*
@@ -267,13 +269,18 @@ wc.translate=function() {
 	    }
 	    if(ix<wc.selected_cnls.length) {
 		var g=wc.cnls[wc.selected_cnls[ix]]
-		var cnl=g.grammar_info.name
-		g.pgf_online.translate({from:cnl+f.from.value,
-					//to:cnl+f.to.value,
-					lexer:"text",unlexer:"text",
-					jsontree:true,input:text},
-					step3cnl,
-				       function(){step2cnl(text,ix+1)})
+		var gi=g.grammar_info
+		var langs=gi.languages.map(function(l) { return l.name; })
+		var cnl=gi.name
+		var from=cnl+f.from.value,to=cnl+f.to.value
+		if(elem(from,langs) && elem(to,langs))
+		    g.pgf_online.translate({from:from,
+					    //to:to,
+					    lexer:"text",unlexer:"text",
+					    jsontree:true,input:text},
+					   step3cnl,
+					   function(){step2cnl(text,ix+1)})
+		else step2cnl(text,ix+1)
 	    }
 	    else step2(text)
 	}
@@ -308,12 +315,18 @@ wc.translate=function() {
     clear(p)
 
 
-    var old=wc.cache
     var old_selected=wc.selected
     wc.selected=null
-    for(var i=0;i<wc.os.length;i++) old[wc.os[i].input]=wc.os[i] 
-       // could also keep all copies if the same text occurs more than once...
-    wc.os=[]
+    if(redo) {
+	wc.cache={}
+	var old=wc.cache
+    }
+    else {
+	var old=wc.cache
+	for(var i=0;i<wc.os.length;i++) old[wc.os[i].input]=wc.os[i]
+	// could also keep all copies if the same text occurs more than once...
+	wc.os=[]
+    }
 
     wc.translating=f.input.value
     var is=split_punct(wc.translating+"\n")
@@ -463,6 +476,7 @@ wc.select_grammars=function() {
 	wc.selected_cnls=gs
 	wc.init_cnls()
 	wc.local.put("cnls",wc.selected_cnls)
+	wc.translate(true)
     }
     function cancel() {
 	wc.hide_grammarbox()
