@@ -2024,7 +2024,6 @@ lin amniotic_A = variants {} ; -- status=guess
 lin amobarbital_N = variants {} ; -- status=guess
 lin amoeba_N = mkN "amöba" ; -- status=guess
 lin amoebic_A = variants {} ; -- status=guess
-lin amok_Adv = mkAdv "amok" ; -- status=guess
 lin among_Prep = mkPrep "bland" ;
 lin amongst_Prep = mkPrep "bland" ; -- status=guess
 lin amora_N = variants {} ; -- status=guess

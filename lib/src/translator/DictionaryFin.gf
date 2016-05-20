@@ -1936,7 +1936,6 @@ lin amniote_N = mkWN (compoundN "vesi" (k38 "kalvollinen")) ; --UNCHK
 lin amniotic_A = mkWA "sikiökalvo-" ; --UNCHK
 lin amoeba_N = mkWN (k9 "ameba") ; --UNCHK
 lin amoebic_A = mkWA (compoundA "ameba" (k38 "mainen")) ; --UNCHK
-lin amok_Adv = mkWAdv (k99 "murhaavasti") ; --UNCHK
 lin among_Prep = postPrep genitive "joukossa" ;
 lin amongst_Prep = postPrep genitive "joukossa" ;
 lin amora_N = mkWN "amora" ; --UNCHK

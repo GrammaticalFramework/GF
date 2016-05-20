@@ -2029,7 +2029,6 @@ lin amniotic_A = mkA079 "амниотичен" ;
 lin amobarbital_N = mkN007 "амобарбитал" ;
 lin amoeba_N = mkN041 "амеба" ;
 lin amoebic_A = mkA079 "амебен" ;
-lin amok_Adv = variants {} ;
 lin among_Prep = mkPrep "измежду" Acc ;
 lin amongst_Prep = mkPrep "между" Acc ;
 lin amora_N = variants {} ;

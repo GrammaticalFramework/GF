@@ -1505,7 +1505,7 @@ lin amniote_N = mkN "羊膜动物" | mkN "羊膜的" | mkN "脊椎动物" ; -- o
 lin amniotic_A = mkA "有羊膜" | mkA "羊膜" ; -- open-multilingual-wordnet
 lin amoeba_N = mkN "變形蟲" | mkN "变形虫" | mkN "阿米巴" ; -- status=guess -- status=guess -- status=guess -- open-multilingual-wordnet
 lin amoebic_A = mkA "阿米巴" | mkA "阿米巴性" ; -- open-multilingual-wordnet
-lin amok_Adv = mkAdv "疯狂地" ;
+lin amuck_Adv = mkAdv "疯狂地" ;
 lin among_Prep = mkPrep "在" "其中" ;
 lin amongst_Prep = mkPrep "在之中" ;
 lin amoralism_N = mkN "非道德论" ; -- open-multilingual-wordnet

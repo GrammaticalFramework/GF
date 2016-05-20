@@ -1234,7 +1234,6 @@ lin amniote_N = mkN "amniota" ; --UWN
 lin amniotic_A = mkA "amniótico" ; -- status=guess
 lin amoeba_N = mkN "ameba" ; -- status=guess
 lin amoebic_A = mkA "amebiano" ; -- status=guess
-lin amok_Adv = mkAdv "de_forma_asesina" | mkAdv "enloquecido" | mkAdv "frenéticamente" ; --UWN
 lin among_Prep = mkPrep "entre" ;
 lin amongst_Prep = variants {} ; --
 lin amora_N = mkN "amoraim" ; --UWN
@@ -1275,7 +1274,7 @@ lin ampullar_A = mkA "ampollar" ; --UWN
 lin amputate_V2 = mkV2 (mkV "amputar") ; -- status=guess, src=wikt
 lin amputation_N = mkN "amputación" feminine ; -- status=guess
 lin amsterdam_PN = mkPN "Ámsterdam" ; -- status=guess src=geonames
-lin amuck_Adv = mkAdv "de_forma_asesina" | mkAdv "enloquecido" | mkAdv "frenéticamente" ; --UWN
+lin amuck_Adv = mkAdv "de forma asesina" | mkAdv "enloquecido" | mkAdv "frenéticamente" ; --UWN
 lin amulet_N = mkN "amuleto" | mkN "talismán" masculine ; -- status=guess status=guess
 lin amuse_V2 = mkV2 (divertir_V) ; -- status=guess
 lin amusement_N = mkN "diversión" feminine ; -- status=guess
