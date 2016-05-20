@@ -542,7 +542,6 @@ lin acknowledge_V2 = dirV2 (dualV (mkV186 "признавам") (mkV161 "при�
 lin acknowledge_VS = variants {} ;
 lin acknowledgeable_A = variants {} ;
 lin acknowledgement_N = mkN072 "признание" ;
-lin acknowledgment_N = mkN072 "признание" ;
 lin acme_N = mkN032 "апогей" ;
 lin acne_N = mkN065 "акне" ;
 lin acned_A = variants {} ;

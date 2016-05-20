@@ -244,7 +244,6 @@ lin acidotic_A = mkA "acidotisch" ; -- status=guess
 lin acknowledge_V2 = mkV2 (mkV "erkennen") ; -- status=guess, src=wikt
 lin acknowledge_VS = mkVS (mkV "erkennen") ; -- status=guess, src=wikt
 lin acknowledgement_N = mkN "erkenning" feminine ; -- status=guess
-lin acknowledgment_N = mkN "erkenning" ; -- status=guess
 lin acme_N = mkN "hoogtepunt" neuter ; -- status=guess
 lin acne_N = mkN "acne " masculine ; -- status=guess
 lin aconite_N = mkN "monnikskap" ; -- status=guess

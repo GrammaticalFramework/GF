@@ -357,7 +357,6 @@ lin acidosis_N = mkN "acidosis" feminine ; -- status=guess
 lin acknowledge_V2 = variants {} ; --
 lin acknowledge_VS = variants {} ; --
 lin acknowledgement_N = mkN "reconocimiento" ; -- status=guess
-lin acknowledgment_N = mkN "reconocimiento" ; -- status=guess
 lin acme_N = mkN "colmo" | mkN "apogeo" | mkN "cúspide" feminine ; -- status=guess status=guess status=guess
 lin acne_N = mkN "acné" masculine ; -- status=guess
 lin acneiform_A = mkA "acneiforme" ; --UWN

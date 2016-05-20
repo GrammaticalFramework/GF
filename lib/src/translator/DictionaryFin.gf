@@ -539,7 +539,6 @@ lin acknowledge_V2 = mkWV2 (k54A "myöntää") ; --UNCHK
 lin acknowledge_VS = mkWVS (k54A "myöntää") ;
 lin acknowledgeable_A = mkWA (k10 "oleva") "tunnustettavissa" ; --UNCHK
 lin acknowledgement_N = mkWN (k5A "merkki") "tunnistamisen" ; --UNCHK
-lin acknowledgment_N = mkWN (k5A "merkki") "tunnistamisen" ; --UNCHK
 lin acme_N = mkWN (k1A "huippu") ; --UNCHK
 lin acne_N = mkWN (k8 "akne") ; --UNCHK
 lin acned_A = mkWA (k38 "näppyläinen") ; --UNCHK
