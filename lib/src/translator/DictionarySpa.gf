@@ -1171,7 +1171,6 @@ lin ambassadorship_N = mkN "embajada" ; --UWN
 lin amber_A = mkA "ambarino" | mkA "de color ámbar" ; -- status=guess status=guess
 lin amber_N = mkN "ámbar" masculine ; -- status=guess
 lin ambergris_N = mkN "ámbar gris" ; -- status=guess
-lin ambiance_N = mkN "ambiente" | mkN "atmósfera" ; -- status=guess status=guess
 lin ambidexterity_N = mkN "ambidiestro" ; --UWN
 lin ambidextrous_A = mkA "ambidextro" ; -- status=guess
 lin ambience_N = mkN "ambiente" | mkN "atmósfera" ; --UWN

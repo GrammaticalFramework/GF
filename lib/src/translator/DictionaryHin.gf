@@ -1098,7 +1098,6 @@ lin amazon_N = mkN "रणचंडी" ; -- tocheck
 lin ambassador_N = mkN "राजदूत" ; -- tocheck              
 lin ambassadorial_A = mkA "राजदूत संबंधी" ; -- tocheck              
 lin amber_N = mkN "तृणमणि रंग" ; -- tocheck              
-lin ambiance_N = mkN "माहौल" ; -- tocheck       
 lin ambidextrous_A = mkA "सव्यसाची" ; -- tocheck              
 lin ambience_N = mkN "माहौल" ; -- tocheck              
 lin ambient_A = mkA "परिवेशी" ; -- tocheck              
