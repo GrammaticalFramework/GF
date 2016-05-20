@@ -1620,7 +1620,6 @@ lin arm_hole_N = mkN "बाँह" ; -- tocheck
 lin armistice_N = mkN "युद्ध-विराम" ; -- tocheck              
 lin armlet_N = mkN "बाजूबंद" ; -- tocheck              
 lin armored_A = mkA "बख्तरबंद" ; -- tocheck       
-lin armory_N = mkN "शस्त्रागार" ; -- tocheck       
 lin armour_N = mkN "कवच" ; -- tocheck              
 lin armoured_A = mkA "बख्तरबंद" ; -- tocheck              
 lin armourer_N = mkN "शस्त्रसाज़" ; -- tocheck              

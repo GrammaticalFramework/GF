@@ -1154,7 +1154,7 @@ lin armband_N = mkN "rouwbandje" neuter | mkN "protestbandje" neuter ; -- status
 lin armchair_N = mkN "fauteuil" masculine ; -- status=guess
 lin armed_A = mkA "gewapend" ; -- status=guess
 lin armistice_N = mkN "wapenstilstand" masculine | mkN "staakt-het-vuren" neuter ; -- status=guess status=guess
-lin armor_N = mkN "pantser" neuter | mkN "harnas" neuter ; -- status=guess status=guess
+lin armour_N = mkN "pantser" neuter | mkN "harnas" neuter ; -- status=guess status=guess
 lin armpit_N = mkN "oksel" masculine ; -- status=guess
 lin armrest_N = mkN "armleuning" ; -- status=guess
 lin army_N = mkN "leger" neuter | mkN "horde" | mkN "menigte" ;

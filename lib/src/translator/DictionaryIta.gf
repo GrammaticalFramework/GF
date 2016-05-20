@@ -1640,8 +1640,7 @@ lin arm_hole_N = mkN "giro manica" ; -- UWN
 lin armillary_A = mkA "armillare" ; -- UWN
 lin armistice_N = mkN "armistizio" ; -- status=guess
 lin armlet_N = mkN "bracciale" ; -- UWN
-lin armor_N = mkN "armatura" ; -- status=guess
-lin armory_N = mkN "fabbrica_d'armi" ; -- UWN
+lin armour_N = mkN "armatura" ; -- status=guess
 lin armourer_N = mkN "armaiolo" ; -- UWN
 lin armoury_N = mkN "armeria" ; -- status=guess
 lin armpit_N = mkN "ascella" ; -- status=guess
