@@ -2845,7 +2845,6 @@ lin aoudad_N = variants {} ;
 lin apace_Adv = variants {} ;
 lin apache_N = variants {} ;
 lin apadana_N = variants {} ;
-lin apanage_N = variants {} ;
 lin apar_N = variants {} ;
 lin apart_Adv = mkAdv "auseinander" ;
 lin apart_from_Prep = variants {} ;

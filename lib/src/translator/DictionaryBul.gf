@@ -2837,7 +2837,6 @@ lin aoudad_N = variants {} ;
 lin apace_Adv = variants {} ;
 lin apache_N = mkN007 "апаш" ; ----
 lin apadana_N = variants {} ;
-lin apanage_N = mkN007 "апанаж" ;
 lin apar_N = variants {} ;
 lin apart_Adv = variants {} ;
 lin apart_from_Prep = mkPrep "независимо от" Acc ;
@@ -2972,7 +2971,8 @@ lin apotropaic_A = variants {} ;
 lin appal_V2 = dirV2 (dualV (mkV186 "ужасявам") (mkV174 "ужася")) ; ----
 lin appalling_A = mkA076 "груб" ; ----
 lin appalling_N = variants {} ;
-lin appanage_N = mkN007 "апаннаж" ;
+lin appanage_N = variants {mkN007 "апаннаж"; mkN007 "апанаж"} ;
+
 lin apparatchik_N = mkN014a "апаратчик" ;
 lin apparatus_N = mkN007 "апарат" ;
 lin apparel_N = mkN054 "облекло" ; ----

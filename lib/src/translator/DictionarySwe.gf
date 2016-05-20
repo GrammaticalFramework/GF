@@ -2833,7 +2833,6 @@ lin aoudad_N = variants {} ; -- status=guess
 lin apace_Adv = variants {} ; -- status=guess
 lin apache_N = mkN "apache" "apacher" ;
 lin apadana_N = variants {} ; -- status=guess
-lin apanage_N = mkN "apanage" "apanaget" "apanage" "apanagen" ;
 lin apar_N = variants {} ; -- status=guess
 lin apart_Adv = mkAdv "avsides" | mkAdv "separat" ;
 lin apart_from_Prep = mkPrep "bortsett från" ;
@@ -2970,7 +2969,7 @@ lin apotropaic_A = variants {} ; -- status=guess
 lin appal_V2 = variants {} ; -- status=guess
 lin appalling_A = mkA "skrämmande" ; -- comment=4
 lin appalling_N = mkN "skrämmande" ; -- status=guess
-lin appanage_N = mkN "tillbehör" neutrum ; -- comment=3
+lin appanage_N = mkN "tillbehör" neutrum | mkN "apanage" "apanaget" "apanage" "apanagen" ;
 lin apparatchik_N = mkN "partifunktionär" ; -- status=guess
 lin apparatus_N = mkN "apparat" "apparater" ; -- SaldoWN
 lin apparel_N = mkN "dräkt" "dräkter" ; -- comment=2

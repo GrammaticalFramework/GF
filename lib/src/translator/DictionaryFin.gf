@@ -2688,7 +2688,6 @@ lin aoudad_N = mkWN (compoundN "harja" (k41A "lammas")) ; --UNCHK
 lin apace_Adv = mkWAdv (k99 "joutuin") ; --UNCHK
 lin apache_N = mkWN (k5 "apassi") ; --UNCHK
 lin apadana_N = mkWN "apadana" ; --UNCHK
-lin apanage_N = mkWN (compoundN "apan" (k5 "aasi")) ; --UNCHK
 lin apar_N = mkWN (compoundN "pallo" (k38 "vyötiäinen")) ; --UNCHK
 lin apart_Adv = mkAdv "erillään" | mkAdv "erikseen" | mkAdv "syrjässä" | mkAdv "syrjään" ; ---- split
 lin apart_from_Prep = mkPrep "lisäksi" ;
