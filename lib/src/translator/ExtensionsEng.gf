@@ -122,16 +122,6 @@ lin
       s = s.s ! QDir ++ frontComma ++ t.s ++ cl.s ! t.t ! t.a ! CPos ! oDir
     } ;
 
-  that_RP = {
-    s = \\_ => "that" ;
-    a = RNoAg
-    } ;
-
-  who_RP = {
-    s = \\_ => "who" ;
-    a = RNoAg
-    } ;
-
   CompS s = {s = \\_ => "that" ++ s.s} ;
   CompQS qs = {s = \\_ => qs.s ! QIndir} ;
   CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 

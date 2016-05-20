@@ -48,16 +48,6 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       insertObj (\\a => vpi.s ! vv.typ ! a) (predVV vv) ;
 
   lin
-    that_RP = 
-    { s = table {
-        RC _ (NCase Gen)    => "whose" ; 
-        RC _ _      => "that" ;
-        _           => "that"   ---- "in that" ?
---        RPrep Neutr => "which" ;
---        RPrep _     => "whom"
-        } ;
-      a = RNoAg
-      } ;
 
     each_Det = mkDeterminer Sg "each" ;
     any_Quant = mkQuant "any" "any" ;
@@ -283,4 +273,44 @@ lin
         g = cn.g
         } ;
 
-} 
+  that_RP =
+     { s = table {
+        RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
+        RC Neutr _  => "that" ;
+        RC _ NPAcc    => "that" ;
+        RC _ (NCase Nom)    => "that" ;
+        RPrep Neutr => "which" ;
+        RPrep _     => "who"
+        } ;
+      a = RNoAg
+      } ;
+
+  who_RP =
+     { s = table {
+        RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
+        _     => "who"
+        } ;
+      a = RNoAg
+      } ;
+      
+  which_RP =
+     { s = table {
+        RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
+        _     => "which"
+        } ;
+      a = RNoAg
+      } ;
+
+  emptyRP =
+     { s = table {
+        RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
+        RC _ NPAcc    => [] ;
+        RC _ (NCase Nom)    => "that" ;
+        RPrep Neutr => "which" ;
+        RPrep _     => "who"
+        } ;
+      a = RNoAg
+      } ;
+
+
+}
