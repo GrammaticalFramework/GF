@@ -1129,7 +1129,6 @@ lin analogue_N = D.analoog_N ;
 lin analogy_N = D.analoogia_N ;
 lin analphabet_N = D.kirjaoskamatu_N ;
 lin analphabetic_A = D.kirjaoskamatu_A ;
-lin analyse_V2 = mkV2 "analüüsima" ;
 lin analysis_N = D.'analüüs_N' ;
 lin analyst_N = D.'analüütik_N' ;
 lin analytic_A = D.'analüütiline_A' ;

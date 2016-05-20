@@ -2171,7 +2171,6 @@ lin analogy_N = mkN047 "аналогия" ;
 lin analphabet_N = variants {} ;
 lin analphabetic_A = mkA079 "грамотен" ;
 lin analysand_N = variants {} ;
-lin analyse_V2 = dirV2 (singleV (mkV186 "анализирам")) ;
 lin analysis_N = mkN007 "анализ" ;
 lin analyst_N = mkN014a "аналитик" ;
 lin analytic_A = mkA079 "аналитичен" ;

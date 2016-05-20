@@ -796,7 +796,6 @@ lin anagram_N = mkN "anagram" | mkN "letterkeer" ; -- status=guess status=guess
 lin analgesic_N = mkN "pijnstiller" masculine ; -- status=guess
 lin analogous_A = mkA "analoog" | mkA "analoge" ; -- status=guess status=guess
 lin analogy_N = mkN "analogie" feminine ; -- status=guess
-lin analyse_V2 = variants {} ; --
 lin analysis_N = mkN "analyse" feminine ;
 lin analyst_N = mkN "analist" masculine | mkN "analiste" feminine ; -- status=guess status=guess
 lin analyze_V2 = mkV2 (mkV "analyseren") ; -- status=guess, src=wikt

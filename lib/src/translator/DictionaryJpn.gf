@@ -597,7 +597,6 @@ lin anagram_N = mkN "アナグラム" ;
 lin anal_A = mkA "尻" ;
 lin analgesic_N = mkN "鎮痛剤" ;
 lin analogy_N = mkN "類推" | mkN "アナロジー" | mkN "類似" | mkN "類比" ;
-lin analyse_V2 = variants {} ; --
 lin analysis_N = mkN "分析" ;
 lin analyst_N = mkN "アナリスト" ;
 lin analyze_V2 = mkV2 "分析する" ;

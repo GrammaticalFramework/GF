@@ -2167,7 +2167,6 @@ lin analogy_N = mkN "analogi" "analogier" ; -- SaldoWN
 lin analphabet_N = mkN "analfabet" "analfabeter" ; -- status=guess
 lin analphabetic_A = variants {} ; -- status=guess
 lin analysand_N = variants {} ; -- status=guess
-lin analyse_V2 = mkV2 "analysera" ;
 lin analysis_N = mkN "analys" "analyser" ;
 lin analyst_N = mkN "psykoanalytiker" "psykoanalytikern" "psykoanalytiker" "psykoanalytikerna" | mkN "analytiker" "analytikern" "analytiker" "analytikerna" ; -- SaldoWN
 lin analytic_A = mkA "analytisk" ; -- status=guess

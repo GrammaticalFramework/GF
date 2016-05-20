@@ -1226,7 +1226,6 @@ lin analogical_A = mkA "analogique" ; -- tocheck
 lin analogous_A = mkA "analogue" ; -- tocheck
 lin analogue_A = mkA "analogique" | mkA "analogue" | mkA "linéaire" ; -- UWN
 lin analogy_N = mkN "analogie" feminine ; -- tocheck
-lin analyse_V2 = variants {} ; --
 lin analysis_N = mkN "analyse" feminine ; -- tocheck
 lin analyst_N = mkN "analyste" masculine ; -- tocheck
 lin analytic_A = mkA "analytique" ; -- tocheck
