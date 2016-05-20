@@ -122,8 +122,9 @@ def getKLinearizations(grammar, tgtlanguage, abstractParsesList, K=10):
 		kBestTrans.append( ((parseprob,), postprocessor(linstring)) );
 	yield kBestTrans;
 
-def getKBestParses(grammar, language, K, callbacks=[], serializable=False, sentid=count(1), max_length=50):
+def getKBestParses(grammar, language, K, serializable=False, sentid=count(1), max_length=50):
     parser = grammar.languages[language].parse;
+    import translation_pipeline
     def worker(sentence):
 	sentence = sentence.strip();
 	curid = sentid.next();
@@ -135,6 +136,7 @@ def getKBestParses(grammar, language, K, callbacks=[], serializable=False, senti
 	    print >>sys.stderr, '%d\t%.4f\t%s' %(curid, tend-tstart, err);
 	    return tend-tstart, kBestParses; # temporary hack to make sure parser does not get killed for very long sentences;
 	try:
+	    callbacks = [('PN', translation_pipeline.parseNames(grammar, args.srclang, sentence)), ('Symb', translation_pipeline.parseUnknown(grammar, args.srclang, sentence))]
 	    for parseidx, parse in enumerate( parser(sentence, heuristics=0, callbacks=callbacks) ):
 		parseScores[parse[0]] = True;
 		kBestParses.append( (parse[0], str(parse[1]) if serializable else parse[1]) );
@@ -160,8 +162,7 @@ def pgf_parse(args):
     preprocessor = lexer();
     inputSet = translation_pipeline.web_lexer(grammar, args.srclang, imap(preprocessor, args.inputstream) );
     outputPrinter = lambda X: "%f\t%s" %(X[0], str(X[1])); #operator.itemgetter(1);
-    callbacks = [('PN', translation_pipeline.parseNames(grammar, args.srclang)), ('Symb', translation_pipeline.parseUnknown(grammar, args.srclang))];
-    parser = getKBestParses(grammar, args.srclang, 1, callbacks);
+    parser = getKBestParses(grammar, args.srclang, 1);
     
     sentidx = 0;
     for time, parsesBlock in imap(parser, inputSet):
@@ -176,8 +177,7 @@ def pgf_kparse(args):
     preprocessor = lexer();
     inputSet = translation_pipeline.web_lexer(grammar, args.srclang, imap(preprocessor, args.inputstream) );
     outputPrinter = printJohnsonRerankerFormat;
-    callbacks = [('PN', translation_pipeline.parseNames(grammar, args.srclang)), ('Symb', translation_pipeline.parseUnknown(grammar, args.srclang))];
-    parser = getKBestParses(grammar, args.srclang, args.K, callbacks=callbacks);
+    parser = getKBestParses(grammar, args.srclang, args.K);
 
     sentidx = 0;
     for time, parsesBlock in imap(parser, inputSet):

@@ -129,8 +129,8 @@ def clean_gfstrings(sentence):
 	sentence = sentence.replace(entry, ' '.join(entry[1:-1].split('_')[:-1]) if entry.find('_') != -1 else '');
     return ' '.join( sentence.split() );
 
-def parseNames(grammar, language):
-    def callback(lin_idx, sentence, start):
+def parseNames(grammar, language, sentence):
+    def callback(lin_idx, start):
 	moving_start, end, eot = start, len(sentence), True;
 	if moving_start < end and (not sentence[moving_start].isupper()):
 	    return None;
@@ -175,8 +175,8 @@ def parseNames(grammar, language):
 	return None;
     return callback;
 
-def parseUnknown(grammar, language):
-    def callback(lin_idx, sentence, start):
+def parseUnknown(grammar, language, sentence):
+    def callback(lin_idx, start):
 	moving_start, end, eot = start, len(sentence), True;
 	isNewToken = (moving_start == 0) or (moving_start > 1 and sentence[moving_start-1].isspace()) # -- added to deal with segmentation errors like may => ma_N + Symb y
 	if moving_start < end and (not sentence[moving_start].isupper()):
@@ -271,7 +271,7 @@ def pipelineParsing(grammar, language, sentences, K=20):
     #buf = [sent for sent in sentences];
     buf, sentences = itertools.tee(sentences, 2);
     sentences = itertools.imap(gf_utils.lexer(lang=language), sentences);
-    parser = gf_utils.getKBestParses(grammar, language, K, callbacks=[("PN", parseNames(grammar, language)), ("Symb", parseUnknown(grammar, language))]);
+    parser = gf_utils.getKBestParses(grammar, language, K);
     for sent, (time, parsesBlock) in itertools.izip(buf, itertools.imap(parser, sentences)):
 	yield (sent, parsesBlock);
 

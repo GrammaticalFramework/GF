@@ -1280,11 +1280,11 @@ pypgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
 		gu_container(self, PyPgfLiteralCallback, callback);
 
 	PyObject* result =
-		PyObject_CallFunction(callback->pycallback, "isi", 
-		                      lin_idx, sentence, *poffset);
+		PyObject_CallFunction(callback->pycallback, "ii",
+		                      lin_idx, *poffset);
 	if (result == NULL)
 		return NULL;
-	
+
 	if (result == Py_None) {
 		Py_DECREF(result);
 		return NULL;

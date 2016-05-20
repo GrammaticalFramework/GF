@@ -307,8 +307,8 @@ public class Translator {
             Concr targetLang = getTargetConcr();
 
             Map<String,LiteralCallback> callbacks = new HashMap<String,LiteralCallback>();
-            callbacks.put("PN", new NercLiteralCallback(mGrammarLoader.getGrammar(), sourceLang));
-            callbacks.put("Symb", new UnknownLiteralCallback(sourceLang));
+            callbacks.put("PN", new NercLiteralCallback(mGrammarLoader.getGrammar(), sourceLang, input));
+            callbacks.put("Symb", new UnknownLiteralCallback(sourceLang, input));
 
             int count = NUM_ALT_TRANSLATIONS;
             for (ExprProb ep : sourceLang.parseWithHeuristics(getGrammar().getStartCat(), input, -1, callbacks)) {

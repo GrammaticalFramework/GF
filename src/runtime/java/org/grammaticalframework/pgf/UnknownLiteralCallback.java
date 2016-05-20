@@ -8,12 +8,14 @@ import java.util.Iterator;
  */
 public class UnknownLiteralCallback implements LiteralCallback {
 	private Concr concr;
+	private String sentence;
 
-	public UnknownLiteralCallback(Concr concr) {
+	public UnknownLiteralCallback(Concr concr, String sentence) {
 		this.concr = concr;
+		this.sentence = sentence;
 	}
 
-	public CallbackResult match(int lin_idx, String sentence, int offset) {
+	public CallbackResult match(int lin_idx, int offset) {
 		if (offset < sentence.length() &&
 		    !Character.isUpperCase(sentence.charAt(offset))) {
 			int start_offset = offset;
