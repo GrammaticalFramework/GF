@@ -1305,7 +1305,6 @@ lin analogical_A = mkA "analógico" ; -- status=guess
 lin analogist_N = mkN "analogista" ; --UWN
 lin analogous_A = mkA "análogo" ; -- status=guess
 lin analogy_N = mkN "analogía" ; -- status=guess
-lin analyse_V2 = variants {} ; --
 lin analysis_N = mkN "análisis" masculine ;
 lin analyst_N = mkN "analista" masculine ; -- status=guess
 lin analytic_A = mkA "analítico" ; -- status=guess

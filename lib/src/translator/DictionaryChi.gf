@@ -1610,7 +1610,6 @@ lin analogous_A = mkA "类似" ;
 lin analogy_N = mkN "比喻" ;
 lin analphabet_N = mkN "文盲" | mkN "目不识丁者" ; -- open-multilingual-wordnet
 lin analysand_N = mkN "接受精神分析的人" ; -- open-multilingual-wordnet
-lin analyse_V2 = mkV2 "分析" ;
 lin analysis_N = mkN "分析" | {-HSK-} mkN "分析" "個" ;
 lin analyst_N = mkN "分析人士" ;
 lin analytic_A = mkA "分析" ;

@@ -1087,7 +1087,7 @@ lin analgesic_N = mkN "analgesico" ; -- status=guess
 lin analogical_A = mkA "analogico" ; -- status=guess
 lin analogue_A = mkA "analogico" ; -- UWN
 lin analogy_N = mkN "analogia" ; -- status=guess
-lin analyse_V2 = variants {} ; --
+lin analyze_V2 = variants {} ; --
 lin analysis_N = mkN "analisi" feminine ; -- status=guess
 lin analyst_N = mkN "analista" ; -- status=guess
 lin analytic_A = mkA "analitico" ; -- status=guess

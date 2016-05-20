@@ -754,7 +754,6 @@ lin analgesia_N = mkN "analgèsia" feminine ; --auto
 lin analgesic_A = mkA "analgèsic" ; --auto
 lin analgesic_N = mkN "analgèsic" masculine ; --auto
 lin analogous_A = mkA "anàleg" ; --auto
-lin analyse_V2 = mkV2 "analitzar" ; --auto
 lin analysis_N = mkN "anàlisi" feminine ;
 lin analyst_N = mkN "analista" ; --auto
 lin analytic_A = mkA "analític" ; --auto

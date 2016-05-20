@@ -2036,7 +2036,6 @@ lin amniotic_A = variants {} ;
 lin amobarbital_N = variants {} ;
 lin amoeba_N = mkN "Amöbe" feminine ; -- status=guess
 lin amoebic_A = variants {} ;
-lin amok_Adv = mkAdv "Amok" ; -- status=guess
 lin among_Prep = mkPrep "unter" accusative ;
 lin amongst_Prep = variants {} ; --
 lin amora_N = variants {} ;
@@ -2107,7 +2106,7 @@ lin amputee_N = mkN "Amputierte" masculine ; -- status=guess
 lin amrinone_N = variants {} ;
 lin amsterdam_PN = mkPN "Amsterdam" ; -- src=geonames status=guess
 lin amuck_A = variants {} ;
-lin amuck_Adv = variants {} ;
+lin amuck_Adv = mkAdv "Amok" ; -- status=guess
 lin amulet_N = mkN "Amulett" "Amulette" neuter ; -- status=guess
 lin amuse_V2 = mkV2 (regV "belustigen" | mkV "erheitern") ; -- status=guess, src=wikt status=guess, src=wikt
 lin amusement_N = mkN "Amüsement" neuter | mkN "Entertainment" neuter | mkN "Unterhaltung" | mkN "Vergnügen" neuter ; -- status=guess status=guess status=guess status=guess
@@ -2180,7 +2179,6 @@ lin analogy_N = mkN "Analogie" "Analogien" feminine ; -- status=guess
 lin analphabet_N = variants {} ;
 lin analphabetic_A = variants {} ;
 lin analysand_N = variants {} ;
-lin analyse_V2 = variants {} ; --
 lin analysis_N = mkN "Analyse" ;
 lin analyst_N = mkN "Analytiker" "Analytiker" masculine ; -- status=guess
 lin analytic_A = mk3A "analytisch" "analytischer" "analytischste" ; -- status=guess

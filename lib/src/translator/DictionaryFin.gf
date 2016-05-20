@@ -2071,7 +2071,6 @@ lin analogy_N = mkWN (k40 "vastaavuus") ; --UNCHK
 lin analphabet_N = mkWN (k5A "analfabeetti") ; --UNCHK
 lin analphabetic_A = mkWA (compoundA "luku" (k34A "taidoton")) ; --UNCHK
 lin analysand_N = mkWN (k2 "henkilö") "psykoanalyysiä" "saava" ; --UNCHK
-lin analyse_V2 = mkWV2 (k62 "analysoida") ; --UNCHK
 lin analysis_N = mkN "analyysi" | mkWN (k2 "tarkastelu") ;
 lin analyst_N = mkN (lin NK {s = d04A "analyytikko"}) ;
 lin analytic_A = mkWA (k38 "analyyttinen") ; --UNCHK

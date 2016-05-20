@@ -1188,7 +1188,6 @@ lin analog_N = mkN "समधर्मी" ; -- tocheck
 lin analogous_A = mkA "अनुरूप" ; -- tocheck              
 lin analogue_A = mkA "रेखीय" ; -- tocheck       
 lin analogue_N = mkN "समधर्मी" ; -- tocheck              
-lin analyse_V2 = mkV2 (compoundV "मनोविश्लेषण" (mkV "करना")) ; -- tocheck
 lin analysis_N = mkN "विश्लेषण" ; -- tocheck              
 lin analyst_N = mkN "विश्लेषक" ; -- tocheck              
 lin analytic_A = mkA "विश्लेषणात्मक" ; -- tocheck              
