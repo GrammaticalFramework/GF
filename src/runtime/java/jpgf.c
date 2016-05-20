@@ -422,9 +422,8 @@ jpgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
 	JNIEnv *env;
     (*cachedJVM)->AttachCurrentThread(cachedJVM, (void**)&env, NULL);
 
-	jstring jsentence = gu2j_string(env, sentence);
 	size_t  joffset   = gu2j_string_offset(sentence, *poffset);
-	jobject result = (*env)->CallObjectMethod(env, callback->jcallback, callback->match_methodId, lin_idx, jsentence, joffset);
+	jobject result = (*env)->CallObjectMethod(env, callback->jcallback, callback->match_methodId, lin_idx, joffset);
 	if (result == NULL)
 		return NULL;
 
@@ -539,7 +538,7 @@ JNIEXPORT void JNICALL Java_org_grammaticalframework_pgf_Parser_addLiteralCallba
 	callback->fin.fn = jpgf_literal_callback_fin;
 
 	jclass callback_class = (*env)->GetObjectClass(env, jcallback);
-	callback->match_methodId = (*env)->GetMethodID(env, callback_class, "match", "(ILjava/lang/String;I)Lorg/grammaticalframework/pgf/LiteralCallback$CallbackResult;");
+	callback->match_methodId = (*env)->GetMethodID(env, callback_class, "match", "(II)Lorg/grammaticalframework/pgf/LiteralCallback$CallbackResult;");
 	callback->predict_methodId = (*env)->GetMethodID(env, callback_class, "predict", "(ILjava/lang/String;)Ljava/util/Iterator;");
 
 	gu_pool_finally(pool, &callback->fin);

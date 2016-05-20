@@ -11,13 +11,15 @@ import java.util.Iterator;
 public class NercLiteralCallback implements LiteralCallback {
 	private PGF pgf;
 	private Concr concr;
+	private String sentence;
 
-	public NercLiteralCallback(PGF pgf, Concr concr) {
+	public NercLiteralCallback(PGF pgf, Concr concr, String sentence) {
 		this.pgf   = pgf;
 		this.concr = concr;
+		this.sentence = sentence;
 	}
 
-	public CallbackResult match(int lin_idx, String sentence, int offset) {
+	public CallbackResult match(int lin_idx, int offset) {
 		StringBuilder sbuilder = new StringBuilder();
 
 		int i = 0;
