@@ -3377,7 +3377,6 @@ lin armlike_A = variants {} ; -- status=guess
 lin armoire_N = variants {} ; -- status=guess
 lin armor_N = mkN "rustning" ; -- status=guess
 lin armored_A = variants {} ; -- status=guess
-lin armorer_N = variants {} ; -- status=guess
 lin armorial_A = variants {} ; -- status=guess
 lin armory_N = mkN "vapenförråd" ; -- src=google
 lin armour_N = mkN "pansar" neutrum ; -- comment=3

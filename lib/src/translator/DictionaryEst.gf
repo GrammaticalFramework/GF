@@ -1743,7 +1743,6 @@ lin armlet_N = D.'käevõru_N' ;
 lin armoire_N = mkN "relvapalat" ;
 lin armor_N = D.'soomusrüü_N' ;
 lin armored_A = D.relvastatud_A ;
-lin armorer_N = mkN "relvaülem" ;
 lin armory_N = mkN "kogurelvastus" ;
 lin armour_N = D.'raudrüü_N' ;
 lin armour_plate_N = mkN "soomusplaat" ;

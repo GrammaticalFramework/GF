@@ -2540,7 +2540,6 @@ lin armistice_N = mkN "停戰協定" | mkN "停战协定" | {-mwn-} mkN "缓和"
 lin armlet_N = mkN "臂环" | mkN "臂章" | mkN "袖章" ; -- open-multilingual-wordnet
 lin armoire_N = mkN "大型衣橱" ; -- open-multilingual-wordnet
 lin armor_N = mkN "鎧甲" | mkN "铠甲" ; -- status=guess -- status=guess
-lin armorer_N = mkN "武器制造者" ; -- open-multilingual-wordnet
 lin armorial_A = mkA "纹章学" | mkA "纹章盾徽" ; -- open-multilingual-wordnet
 lin armory_N = mkN "兵工厂" | mkN "军械厂" | mkN "军械库" | mkN "军火库" ; -- open-multilingual-wordnet
 lin armourer_N = mkN "武器制造者" ; -- open-multilingual-wordnet

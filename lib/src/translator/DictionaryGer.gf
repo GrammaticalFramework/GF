@@ -3384,7 +3384,6 @@ lin armlike_A = variants {} ;
 lin armoire_N = variants {} ;
 lin armor_N = mkN "Panzerung" feminine ; -- status=guess
 lin armored_A = mkA "gepanzert" ; -- status=guess
-lin armorer_N = variants {} ;
 lin armorial_A = variants {} ;
 lin armory_N = variants {} ;
 lin armour_N = variants {} ;

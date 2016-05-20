@@ -3211,7 +3211,6 @@ lin armlike_A = mkWA (compoundA "käsivarsi" (k38 "mainen")) ; --UNCHK
 lin armoire_N = mkWN "liinavaatekaappi" ; --UNCHK
 lin armor_N = mkWN (k6 "panssari") ; --UNCHK
 lin armored_A = mkWA (compoundA "panssaro" (k1A "itu")) ; --UNCHK
-lin armorer_N = mkWN (compoundN "ase" (k10 "valmistaja")) ; --UNCHK
 lin armorial_A = mkWA "vaakuna-" ; --UNCHK
 lin armory_N = mkWN (compoundN "ase" (k9 "paja")) ; --UNCHK
 lin armour_N = mkWN (k6 "panssari") ; --UNCHK
