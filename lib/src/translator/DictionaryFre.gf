@@ -1093,7 +1093,6 @@ lin amber_A = mkA "ambré" ; -- tocheck
 lin amber_N = mkN "ambre" masculine ; -- tocheck
 lin ambergris_N = mkN "ambre" | mkN "ambre_gris" ; -- UWN
 lin amberjack_N = mkN "seriola" | mkN "sériole" ; -- UWN
-lin ambiance_N = mkN "environnement" | mkN "milieu" ; -- UWN
 lin ambidexterity_N = mkN "ambidextrie" feminine ; -- tocheck
 lin ambidextrous_A = mkA "ambidextre" ; -- tocheck
 lin ambience_N = mkN "environnement" | mkN "milieu" ; -- UWN

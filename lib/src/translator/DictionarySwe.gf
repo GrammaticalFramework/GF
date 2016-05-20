@@ -1898,7 +1898,6 @@ lin amber_A = mkA "bärnstensgul" ;
 lin amber_N = mkN "bärnsten" ;
 lin ambergris_N = mkN "ambra" ; -- status=guess
 lin amberjack_N = mkN "seriola" ; -- src=google
-lin ambiance_N = mkN "atmosfär" | mkN "stämning" | mkN "känsla" ; -- status=guess status=guess status=guess
 lin ambidexterity_N = variants {} ; -- status=guess
 lin ambidextrous_A = mkA "ambidexter" ; -- comment=4
 lin ambience_N = mkN "atmosfär" "atmosfärer" ;

@@ -1903,7 +1903,6 @@ lin amber_A = mkA079 "кехлибарен" ;
 lin amber_N = mkN007 "кехлибар" ;
 lin ambergris_N = mkN041 "амбра" ;
 lin amberjack_N = variants {} ;
-lin ambiance_N = mkN041 "атмосфера" ;
 lin ambidexterity_N = variants {} ;
 lin ambidextrous_A = mkA079 "двуличен" ;
 lin ambience_N = mkN041 "атмосфера" ;

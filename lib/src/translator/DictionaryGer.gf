@@ -1910,10 +1910,9 @@ lin amber_A = variants {} ;
 lin amber_N = mkN "Bernsteingelb" neuter ; -- status=guess
 lin ambergris_N = mkN "Ambra" "Ambras" feminine | mkN "Amber" masculine ; -- status=guess status=guess
 lin amberjack_N = mkN "Gelbschwanzmakrele" feminine ; -- status=guess
-lin ambiance_N = mkN "Ambiente" neuter ; -- status=guess
 lin ambidexterity_N = variants {} ;
 lin ambidextrous_A = variants {} ;
-lin ambience_N = variants {} ;
+lin ambience_N = mkN "Ambiente" neuter ; -- status=guess
 lin ambient_A = variants {} ;
 lin ambiguity_N = mkN "Ambiguität" feminine | mkN "Mehrdeutigkeit" "Mehrdeutigkeiten" feminine | mkN "Doppeldeutigkeit" feminine ; -- status=guess status=guess status=guess
 lin ambiguous_A = regA "mehrdeutig" | mkA "doppeldeutig" ; -- status=guess status=guess

@@ -1411,9 +1411,8 @@ lin amber_A = mkA "棕黄色" | mkA "琥珀色" | mkA "褐黄色" | mkA "黄褐�
 lin amber_N = mkN "琥珀色" | mkN "淡黃色" ; -- status=guess -- status=guess
 lin ambergris_N = mkN "龍涎香" | mkN "龙涎香" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin amberjack_N = mkN "大頭魚" | mkN "大头鱼" | {-mwn-} mkN "鰤" ; -- status=guess -- status=guess -- open-multilingual-wordnet
-lin ambiance_N = mkN "氣氛" | mkN "气氛" | {-mwn-} mkN "格调" | mkN "环境" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin ambidextrous_A = mkA "雙手靈巧" | {-mwn-} mkA "双手灵巧" ; -- status=guess -- open-multilingual-wordnet
-lin ambience_N = mkN "格调" | mkN "气氛" | mkN "环境" ; -- open-multilingual-wordnet
+lin ambience_N = mkN "格调" | mkN "环境" | mkN "氣氛" ; -- open-multilingual-wordnet
 lin ambient_A = mkA "环境" | {-mwn-} mkA "四周" | mkA "环抱" ; -- open-multilingual-wordnet
 lin ambiguity_N = mkN "双关" ;
 lin ambiguous_A = mkA "模糊不清" | {-HSK-} mkA "暧昧" ;

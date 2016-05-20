@@ -1813,7 +1813,6 @@ lin amber_A = mkWA (compoundA "ruskean" (k38 "keltainen")) ; --UNCHK
 lin amber_N = mkWN (k38 "keltainen") ; --UNCHK
 lin ambergris_N = mkWN (k9 "ambra") "harmaa" ; --UNCHK
 lin amberjack_N = mkWN "amberfish" ; --UNCHK
-lin ambiance_N = mkWN (k1 "ympäristö") ; --UNCHK
 lin ambidexterity_N = mkWN (compoundN "molempi" (k40 "kätisyys")) ; --UNCHK
 lin ambidextrous_A = mkWA "molempikätinen" ; --UNCHK
 lin ambience_N = mkWN (k1 "ympäristö") ; --UNCHK
