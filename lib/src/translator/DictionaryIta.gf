@@ -1374,7 +1374,6 @@ lin aorist_N = mkN "aoristo" ; -- UWN
 lin aorta_N = mkN "aorta" ; -- status=guess
 lin aortal_A = mkA "aortico" ; -- status=guess
 lin apace_Adv = mkAdv "celermente" | mkAdv "lestamente" | mkAdv "lesto" | mkAdv "presto" | mkAdv "prontamente" | mkAdv "rapidamente" | mkAdv "ratto" | mkAdv "sollecitamente" | mkAdv "speditamente" | mkAdv "spedito" | mkAdv "sveltamente" | mkAdv "veloce" | mkAdv "velocemente" ; -- UWN
-lin apanage_N = mkN "appannaggio" ; -- UWN
 lin apart_Adv = variants {} ; --
 lin apartheid_N = mkN "apartheid" masculine ; -- status=guess
 lin apartment_N = L.apartment_N ;

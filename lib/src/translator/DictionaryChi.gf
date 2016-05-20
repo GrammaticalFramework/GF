@@ -2113,7 +2113,6 @@ lin aoristic_A = mkA "不定过去时" ; -- open-multilingual-wordnet
 lin aorta_N = mkN "大動脈" | mkN "大动脉" ; -- status=guess -- status=guess
 lin aortal_A = mkA "主动脉" | mkA "大动脉" ; -- open-multilingual-wordnet
 lin aortitis_N = mkN "主动脉动脉炎" ; -- open-multilingual-wordnet
-lin apanage_N = mkN "俸禄" | mkN "封禄" ; -- open-multilingual-wordnet
 lin apart_Adv = mkAdv "隔开" ;
 lin apart_from_Prep = mkPrep "除了" ;
 lin apartheid_N = mkN "种族隔离" [] ;
