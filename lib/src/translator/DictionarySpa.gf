@@ -1986,7 +1986,7 @@ lin arm_hole_N = mkN "sisa" ; -- status=guess
 lin armiger_N = mkN "armígero" ; -- status=guess
 lin armillary_A = mkA "armilar" ; --UWN
 lin armistice_N = mkN "armisticio" ; -- status=guess
-lin armor_N = mkN "coraza" ; -- status=guess
+lin armour_N = mkN "coraza" ; -- status=guess
 lin armored_A = mkA "blindado" | mkA "acorazado" ; -- status=guess status=guess
 lin armourer_N = mkN "armero" | mkN "armerol" ; --UWN
 lin armoury_N = mkN "armería" ; -- status=guess
