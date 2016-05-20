@@ -1048,7 +1048,6 @@ lin ammunition_N = D.laskemoon_N ;
 lin amnesia_N = D.amneesia_N ;
 lin amnesty_N = D.amnestia_N ;
 lin amoeba_N = D.'amööb_N' ;
-lin amok_Adv = ParadigmsEst.mkAdv "amok" ;
 lin amoralism_N = mkN "amoralism" ;
 lin amoralist_N = mkN "amoralist" ;
 lin amorpha_N = mkN "amorfa" ;
