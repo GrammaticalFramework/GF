@@ -548,8 +548,7 @@ lin ackee_N = variants {} ;
 lin acknowledge_V2 = mkV2 (prefixV "an" (irregV "erkennen" "erkennt" "erkannte" "erkannte" "erkannt")) ; -- status=guess, src=wikt
 lin acknowledge_VS = mkVS (prefixV "an" (irregV "erkennen" "erkennt" "erkannte" "erkannte" "erkannt")) ; -- status=guess, src=wikt
 lin acknowledgeable_A = variants {} ;
-lin acknowledgement_N = mkN "Anerkennung" ; -- status=guess
-lin acknowledgment_N = mkN "Quittung" ; -- status=guess
+lin acknowledgement_N = mkN "Anerkennung" | mkN "Quittung" ; -- status=guess
 lin acme_N = variants {} ;
 lin acne_N = mkN "Akne" "Aknen" feminine ; -- status=guess
 lin acned_A = variants {} ;

@@ -543,8 +543,7 @@ lin ackee_N = variants {} ; -- status=guess
 lin acknowledge_V2 = mkV2 (mkV "erkänna" "erkände" "erkänt") ; -- comment=5
 lin acknowledge_VS = mkVS (mkV "erkänna" "erkände" "erkänt") ; -- comment=5
 lin acknowledgeable_A = variants {} ; -- status=guess
-lin acknowledgement_N = mkN "tacksägelse" "tacksägelser" ; -- comment=5
-lin acknowledgment_N = mkN "bekräftelse" "bekräftelser" ;
+lin acknowledgement_N = mkN "tacksägelse" "tacksägelser" | mkN "bekräftelse" "bekräftelser" ;
 lin acme_N = mkN "kulm" ; -- status=guess
 lin acne_N = mkN "akne" utrum | mkN "acne" utrum ; -- SaldoWN -- comment=3
 lin acned_A = variants {} ; -- status=guess

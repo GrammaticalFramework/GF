@@ -302,7 +302,6 @@ lin acidosis_N = mkN "acidosi" ; -- status=guess
 lin acknowledge_V2 = mkV2 (riconoscere_V) | mkV2 (ammettere_V) ; -- status=guess, src=wikt status=guess, src=wikt
 lin acknowledge_VS = mkVS (riconoscere_V) | mkVS (ammettere_V) ; -- status=guess, src=wikt status=guess, src=wikt
 lin acknowledgement_N = mkN "riconoscimento" ; -- status=guess
-lin acknowledgment_N = mkN "riconoscimento" ; -- status=guess
 lin acne_N = mkN "acne" feminine ; -- status=guess
 lin acolyte_N = mkN "accolito" ; -- UWN
 lin aconite_N = mkN "aconito" ; -- status=guess
