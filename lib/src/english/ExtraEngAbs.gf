@@ -8,7 +8,10 @@ abstract ExtraEngAbs = Extra - [ProDrop] ** {
 
     CompoundCN : CN -> CN -> CN ;       -- rock album
 
-    that_RP : RP ; -- "that" as a relational pronoun (IdRP is "which" / "who")
+    that_RP : RP ;  -- "that" as a relational pronoun (IdRP is "which" / "who")
+    which_RP : RP ; -- force "which"
+    who_RP : RP ;   -- force "who" ; in Acc, also "who": "the girl who I saw"
+    emptyRP : RP ;  -- empty RP in Acc position: "the girl I saw"
 
     each_Det : Det ;
     any_Quant : Quant ;

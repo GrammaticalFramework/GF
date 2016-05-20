@@ -37,7 +37,7 @@ resource ResEng = ParamX ** open Prelude in {
 -- for "himself"/"herself"/"itself".
 
   param
-    Agr = AgP1 Number | AgP2 Number | AgP3Sg Gender | AgP3Pl ;
+    Agr = AgP1 Number | AgP2 Number | AgP3Sg Gender | AgP3Pl Gender ;
 
   param 
     Gender = Neutr | Masc | Fem ;
@@ -101,14 +101,14 @@ param
         P2 => AgP2 n ;
         P3 => case n of {
           Sg => AgP3Sg g ;
-          Pl => AgP3Pl
+          Pl => AgP3Pl g
           }
         } ;
 
     fromAgr : Agr -> {n : Number ; p : Person ; g : Gender} = \a -> case a of {
       AgP1 n => {n = n ; p = P1 ; g = Masc} ;
       AgP2 n => {n = n ; p = P2 ; g = Masc} ;
-      AgP3Pl => {n = Pl ; p = P3 ; g = Masc} ;
+      AgP3Pl g => {n = Pl ; p = P3 ; g = g} ;
       AgP3Sg g => {n = Sg ; p = P3 ; g = g}
       } ;
 
@@ -523,7 +523,7 @@ param
     AgP3Sg Neutr => "itself" ;
     AgP1 Pl      => "ourselves" ;
     AgP2 Pl      => "yourselves" ;
-    AgP3Pl       => "themselves"
+    AgP3Pl _     => "themselves"
     } ;
 
 -- For $Sentence$.
