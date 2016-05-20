@@ -1641,7 +1641,6 @@ lin armillary_A = mkA "armillare" ; -- UWN
 lin armistice_N = mkN "armistizio" ; -- status=guess
 lin armlet_N = mkN "bracciale" ; -- UWN
 lin armor_N = mkN "armatura" ; -- status=guess
-lin armorer_N = mkN "armaiolo" ; -- UWN
 lin armory_N = mkN "fabbrica_d'armi" ; -- UWN
 lin armourer_N = mkN "armaiolo" ; -- UWN
 lin armoury_N = mkN "armeria" ; -- status=guess

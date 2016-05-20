@@ -2972,7 +2972,6 @@ lin appal_V2 = dirV2 (dualV (mkV186 "ужасявам") (mkV174 "ужася")) ;
 lin appalling_A = mkA076 "груб" ; ----
 lin appalling_N = variants {} ;
 lin appanage_N = variants {mkN007 "апаннаж"; mkN007 "апанаж"} ;
-
 lin apparatchik_N = mkN014a "апаратчик" ;
 lin apparatus_N = mkN007 "апарат" ;
 lin apparel_N = mkN054 "облекло" ; ----
@@ -3377,7 +3376,6 @@ lin armlike_A = variants {} ;
 lin armoire_N = mkN001 "шкаф" ;
 lin armor_N = mkN047 "броня" ;
 lin armored_A = mkA076 "брониран" ;
-lin armorer_N = mkN014a "оръжейник" ;
 lin armorial_A = mkA076 "гербов" ;
 lin armory_N = mkN041a "оръжейница" ;
 lin armour_N = variants {mkN001 "бром"; mkN041 "доспеха"} ; ----
