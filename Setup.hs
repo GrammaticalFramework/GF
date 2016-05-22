@@ -1,6 +1,6 @@
 import Distribution.Simple
 import Distribution.Simple.LocalBuildInfo
-import Distribution.Simple.BuildPaths
+import Distribution.Simple.BuildPaths(exeExtension)
 import Distribution.Simple.Utils
 import Distribution.Simple.Setup
 import Distribution.PackageDescription hiding (Flag)
@@ -12,7 +12,7 @@ import Data.Maybe(listToMaybe)
 import qualified Control.Exception as E
 import System.Process(readProcess)
 import System.FilePath
-import System.Directory
+import System.Directory(createDirectoryIfMissing,copyFile,doesDirectoryExist,getDirectoryContents)
 --import System.Exit
 --import Control.Concurrent(forkIO)
 --import Control.Concurrent.Chan(newChan,writeChan,readChan)

@@ -44,7 +44,7 @@ pgfEnv pgf = Env pgf mos
 
 class (Functor m,Monad m,MonadSIO m) => HasPGFEnv m where getPGFEnv :: m PGFEnv
 
-instance HasPGFEnv m => TypeCheckArg m where
+instance (Monad m,HasPGFEnv m) => TypeCheckArg m where
   typeCheckArg e = (either (fail . render . ppTcError) (return . fst)
                     . flip inferExpr e . pgf) =<< getPGFEnv
 
