@@ -1649,7 +1649,8 @@ lin bangladesh_PN = mkPN "Bangladesh" ; -- src=geonames status=guess
 lin bangor_PN = mkPN "Bangor" ; -- src=geonames status=guess
 lin banister_N = mkN "baluster" | mkN "leuning" ; -- status=guess status=guess
 lin banjo_N = mkN "banjo" masculine ; -- status=guess
-lin bank_N = L.bank_N ;
+lin bank_1_N = L.bank_N ;
+lin bank_2_N = L.bank_N ;
 lin banker_N = mkN "bankier" masculine ; -- status=guess
 lin banking_N = variants {} ; --
 lin banknote_N = mkN "bankbiljet" neuter | mkN "biljet" neuter ; -- status=guess status=guess

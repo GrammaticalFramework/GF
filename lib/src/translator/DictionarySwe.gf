@@ -4810,7 +4810,8 @@ lin banish_V2 = variants {} ; -- status=guess
 lin banishment_N = mkN "förvisning" ;
 lin banister_N = mkN "räcke" | mkN "ledstång" "ledstänger" ; -- SaldoWN -- comment=3
 lin banjo_N = mkN "banjo" "banjor" ; -- status=guess
-lin bank_N = L.bank_N ;
+lin bank_1_N = L.bank_N ;
+lin bank_2_N = L.bank_N ;
 lin bank_V = mkV "förråda" "förrådde" "förrått" ; -- comment=9
 lin bank_V2 = dirV2 (partV (mkV "lutar")"av") ; -- comment=2
 lin bank_bill_N = variants {} ; -- status=guess

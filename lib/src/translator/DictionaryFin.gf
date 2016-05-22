@@ -4539,7 +4539,8 @@ lin banish_V2 = mkWV2 (k56 "ajaa") "tiehensä" ; --UNCHK
 lin banishment_N = mkWN (k3 "tuomio") ; --UNCHK
 lin banister_N = mkWN (k48A "kaide") ; --UNCHK
 lin banjo_N = mkWN (k1 "banjo") ; --UNCHK
-lin bank_N = L.bank_N ;
+lin bank_1_N = mkN (lin NK {s = d09A "penkka"}) ;
+lin bank_2_N = L.bank_N ;
 lin bank_V = mkWV (k53A "luottaa") ; --UNCHK
 lin bank_V2 = mkWV2 (k53A "luottaa") ; --UNCHK
 lin bank_bill_N = mkWN (k6 "seteli") "dollarin" ; --UNCHK
