@@ -2814,7 +2814,8 @@ lin banish_V2 = mkV2 (desterrar_V) ; -- status=guess, src=wikt
 lin banishment_N = mkN "exilio" ; -- status=guess
 lin banister_N = mkN "barandilla" ; -- status=guess
 lin banjo_N = mkN "banjo" ; -- status=guess
-lin bank_N = L.bank_N ;
+lin bank_1_N = L.bank_N ;
+lin bank_2_N = L.bank_N ;
 lin bank_V = mkV (mkV "tener") "la cuenta en" ; -- status=guess, src=wikt
 lin bank_V2 = mkV2 (mkV (mkV "tener") "la cuenta en") ; -- status=guess, src=wikt
 lin banker_N = mkN "banquero" | mkN "banquera" ; -- status=guess

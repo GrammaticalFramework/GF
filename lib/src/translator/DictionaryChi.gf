@@ -3492,7 +3492,8 @@ lin banish_V2 = mkV2 "放逐" ;
 lin banishment_N = mkN "流放" ; -- comment="充军" ;
 lin banister_N = mkN "欄杆" | mkN "栏杆" | {-mwn-} mkN "扶手" | mkN "栏杆的支柱" | mkN "楼梯栏杆小柱" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin banjo_N = mkN "班卓琴" ; -- status=guess -- open-multilingual-wordnet
-lin bank_N = L.bank_N | {-HSK-} mkN "岸" "個" | mkN "银行" "家" ;
+lin bank_1_N = L.bank_N | {-HSK-} mkN "岸" "個" | mkN "银行" "家" ;
+lin bank_2_N = L.bank_N | {-HSK-} mkN "岸" "個" | mkN "银行" "家" ;
 lin bank_V = mkV "银行" "家" ;
 lin bank_V2 = mkV2 "将+存入银行" ;
 lin bank_book_N = mkN "银行存折" ; -- open-multilingual-wordnet

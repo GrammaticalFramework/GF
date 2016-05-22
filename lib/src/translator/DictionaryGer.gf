@@ -4813,7 +4813,8 @@ lin banish_V2 = mkV2 (irregV "vertreiben" "vertreibt" "vertrieb" "vertriebe" "ve
 lin banishment_N = variants {} ;
 lin banister_N = mkN "Geländer" neuter ; -- status=guess
 lin banjo_N = mkN "Banjo" "Banjos" neuter ; -- status=guess
-lin bank_N = L.bank_N ;
+lin bank_1_N = L.bank_N ;
+lin bank_2_N = L.bank_N ;
 lin bank_V = variants {} ;
 lin bank_V2 = variants {} ;
 lin bank_bill_N = variants {} ;
@@ -5592,7 +5593,7 @@ lin bemoan_V2 = variants {} ;
 lin bemused_A = variants {} ;
 lin ben_N = variants {} ;
 lin ben_PN = mkPN "Ben" ; -- src=eng status=guess
-lin bench_N = bank_N ; -- status=guess
+lin bench_N = variants {} ; -- status=guess
 lin benchmark_N = mkN "Maßstab" masculine | mkN "Höhenfestpunkt" masculine | mkN "Kriterium" "Kriterien" neuter ; -- status=guess status=guess status=guess
 lin bend_N = mkN "Kurve" "Kurven" feminine ; -- status=guess
 lin bend_V = mkReflV "bücken" ; -- status=guess, src=wikt

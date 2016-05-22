@@ -2336,7 +2336,8 @@ lin banish_V2 = mkV2 (mkV "bandire") | mkV2 (mkV "esiliare") ; -- status=guess, 
 lin banishment_N = mkN "proscrizione" ; -- UWN
 lin banister_N = mkN "ringhiera" ; -- status=guess
 lin banjo_N = mkN "bangio" | mkN "banjo" ; -- status=guess status=guess
-lin bank_N = L.bank_N ;
+lin bank_1_N = L.bank_N ;
+lin bank_2_N = L.bank_N ;
 lin bank_V = mkV "depositare" ; -- status=guess, src=wikt
 lin bank_V2 = mkV2 (mkV "depositare") ; -- status=guess, src=wikt
 lin bank_book_N = mkN "libretto" | mkN "libretto_a_risparmio" | mkN "libretto_di_risparmio" ; -- UWN
