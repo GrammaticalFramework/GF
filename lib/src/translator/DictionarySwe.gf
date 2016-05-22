@@ -54809,7 +54809,7 @@ lin subjacent_A = variants {} ; -- status=guess
 lin subject_1_N = mkN "ämne" ;
 lin subject_2_N = mkN "subjekt" "subjekter" ;
 lin subject_A = mkA "underlydande" ; -- comment=3
-lin subject_A2 = variants {} ; -- status=guess
+lin subject_to_A2 = variants {} ; -- status=guess
 lin subject_N = mkN "ämne" ; ---
 lin subject_V2 = variants {} ; --
 lin subject_to_Prep = variants {} ; -- status=guess

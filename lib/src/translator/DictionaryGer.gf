@@ -55181,7 +55181,7 @@ lin subjacent_A = variants {} ;
 lin subject_1_N = mkN "Gegenstand" "Gegenstand" "Gegenstand" "Gegenstands" "Gegenstände" "Gegenständen" masculine ; --- note: "subject matter" is not sufficiently clear for disambiguating meanings ; interpreted as physical matter of a subject
 lin subject_2_N = mkN "Subjekt" "Subjekt" "Subjekt" "Subjekts" "Subjekte" "Subjekten" neuter | mkN "Thema" "Thema" "Thema" "Themas" "Themen" "Themen" neuter | mkN "Fach" "Fach" "Fach" "Fachs" "Fächer" "Fächern" neuter ; --- split further: subject and object / the subject of this talk / maths is my fav subject
 lin subject_A = variants {} ; --
-lin subject_A2 = variants {} ;
+lin subject_to_A2 = variants {} ;
 lin subject_V2 = mkV2 (mkV "unterwerfen") ; -- status=guess, src=wikt
 lin subject_to_Prep = variants {} ;
 lin subjection_N = variants {} ;

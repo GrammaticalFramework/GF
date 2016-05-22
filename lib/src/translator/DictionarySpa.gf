@@ -28562,7 +28562,7 @@ lin subjacent_A = mkA "subyacente" ; --UWN
 lin subject_1_N = mkN "asunto" | mkN "tema" masculine ;
 lin subject_2_N = mkN "sujeto" ;
 lin subject_A = mkA "sujeto" ; -- status=guess
-lin subject_A2 = mkA2 (mkA "sujeto") ParadigmsSpa.dative ; -- status=guess
+lin subject_to_A2 = mkA2 (mkA "sujeto") ParadigmsSpa.dative ; -- status=guess
 lin subject_N = mkN "sujeto" ;
 lin subject_V2 = mkV2 (mkV "someter") ; -- status=guess
 lin subjection_N = mkN "conquista" | mkN "sometimiento" ; --UWN
