@@ -226,6 +226,11 @@ perfective: Aspect ;
    mkV3  : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"
    mkVS  : V -> VS ;
    mkVQ  : V -> VQ ;   
+   mkV2V : V -> Str -> Case -> V2V ;
+   mkV2S : V -> Str -> Case -> V2S ;
+   mkV2Q : V -> Str -> Case -> V2Q ;
+   mkV2A : V -> Str -> Case -> V2A ;
+
    dirV2    : V -> V2 ;                    -- "видеть", "любить"
    tvDirDir : V -> V3 ; 
                             
@@ -540,9 +545,11 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
    mkV3 v s1 s2 c1 c2 = v ** {c2 = {s=s1; c=c1}; c3={s=s2; c=c2}; lock_V3 = <>};  
 
-
    mkVS v = v ** {lock_VS = <>} ;
    mkVQ v = v ** {lock_VQ = <>} ;
-
+   mkV2V v p cas = v ** {c2 = {s=p; c=cas}; lock_V2V = <>};
+   mkV2S v p cas = v ** {c2 = {s=p; c=cas}; lock_V2S = <>};
+   mkV2Q v p cas = v ** {c2 = {s=p; c=cas}; lock_V2Q = <>};
+   mkV2A v p cas = v ** {c2 = {s=p; c=cas}; lock_V2A = <>};
 } ;
 
