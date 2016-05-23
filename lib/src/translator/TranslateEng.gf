@@ -31,8 +31,12 @@ concrete TranslateEng of Translate =
   QuestionEng - [
     QuestVP   -- replaced by QuestVP | contracted QuestVP
     ,QuestIComp
+    ,QuestSlash -- replaced by QuestSlash | StrandQuestSlash
     ],       
-  RelativeEng - [IdRP],
+  RelativeEng - [
+     IdRP      -- with variants that/who/which/-
+    ,RelSlash  -- replaced by RelSlash | StrandRelSlash
+    ],
   IdiomEng,
   ConstructionEng,
   DocumentationEng,
@@ -73,6 +77,8 @@ lin
       in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir True}
    ;
 
+  QuestSlash ip cls = G.QuestSlash ip cls | E.StrandQuestSlash ip cls ;
+
   ComplVS vs s = G.ComplVS vs s | E.ComplBareVS vs s ;
   SlashV2S vs s = G.SlashV2S vs s | E.SlashBareV2S vs s ;
   ComplSlash vps np = G.ComplSlash vps np | E.ComplSlashPartLast vps np ;
@@ -85,6 +91,8 @@ lin
   PNeg = {s = [] ; p = CNeg True} | {s = [] ; p = CNeg False} ;
 
   IdRP = E.that_RP | G.IdRP | E.who_RP | E.emptyRP ; --- "that" safest when gender is not known
+
+  RelSlash rp cls = G.RelSlash rp cls | E.StrandRelSlash rp cls ;
 
   DetNP d = G.DetNP d | G.DetCN d (UseN (mkN "one")) ; -- I like this / I like this one ; it / the one
 
