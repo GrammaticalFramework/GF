@@ -483,7 +483,7 @@ conll2latex :: String -> String
 conll2latex = unlines . dep2latex . conll2dep
 
 data Dep = Dep {
-    wordLength  :: Double               -- fixed width, millimetres (>= 20.0)
+    wordLength  :: Int -> Double        -- length of word at position int       -- was: fixed width, millimetres (>= 20.0)
   , tokens      :: [(String,String)]    -- word, pos (0..)
   , deps        :: [((Int,Int),String)] -- from, to, label
   , root        :: Int                  -- root word position
@@ -493,15 +493,32 @@ data Dep = Dep {
 -- some general measures
 defaultWordLength = 20.0  -- the default fixed width word length, making word 100 units
 defaultUnit       = 0.2   -- unit in latex pictures, 0.2 millimetres
+spaceLength       = 10.0
+charWidth = 1.8
 
-wsize rwld     = 100 * rwld                               -- word length, units
-wpos rwld i    = fromIntegral i * wsize rwld              -- start position of the i'th word
-wdist rwld x y = wsize rwld * fromIntegral (abs (x-y))    -- distance between words x and y
+wsize rwld  w  = 100 * rwld w + spaceLength                   -- word length, units
+wpos rwld i    = sum [wsize rwld j | j <- [0..i-1]]           -- start position of the i'th word
+wdist rwld x y = sum [wsize rwld i | i <- [min x y .. max x y - 1]]    -- distance between words x and y
 labelheight h  = h + arcbase + 3    -- label just above arc; 25 would put it just below
 labelstart c   = c - 15.0           -- label starts 15u left of arc centre
 arcbase        = 30.0               -- arcs start and end 40u above the bottom
-arcfactor r    = r * 1500           -- reduction of arc size from word distance
+arcfactor r    = r * 500            -- reduction of arc size from word distance
 xyratio        = 3                  -- width/height ratio of arcs
+
+putArc :: (Int -> Double) -> Int -> Int -> String -> String
+putArc frwld x y label = unlines [oval,arrowhead,labelling] where
+  oval = put ctr arcbase ("\\oval(" ++ show wdth ++ "," ++ show hght ++ ")[t]")
+  arrowhead = put endp (arcbase + 5) (app "vector(0,-1)" "5")   -- downgoing arrow 5u above the arc base
+  labelling = put (labelstart ctr) (labelheight (hght/2)) (small label)
+  dxy  = wdist frwld x y             -- distance between words, >>= 20.0
+  ndxy = 100 * rwld * fromIntegral (abs (x-y))  -- distance that is indep of word length
+  hdxy = dxy / 2                     -- half the distance
+  wdth = dxy - (arcfactor rwld)/dxy  -- longer arcs are less wide in proportion
+  hght = ndxy / (xyratio * rwld)      -- arc height is independent of word length
+  begp = min x y                     -- begin position of oval
+  ctr  = wpos frwld begp + hdxy + (if x < y then 20 else  10)  -- LR arcs are farther right from center of oval
+  endp = (if x < y then (+) else (-)) ctr (wdth/2)            -- the point of the arrow
+  rwld = 0.5 ----
 
 dep2latex :: Dep -> [String]
 dep2latex d =
@@ -516,21 +533,41 @@ dep2latex d =
   ++ ["\\end{picture}"]
  where
    (width,height) = case pictureSize d of (w,h) -> (w, h)
-   wld  = wordLength d   -- >= 20.0
-   rwld = wld / defaultWordLength       -- >= 1.0
+   wld i  = wordLength d i  -- >= 20.0
+   rwld i = (wld i) / defaultWordLength       -- >= 1.0
 
-putArc :: Double -> Int -> Int -> String -> String
+  
+{-
+dep2latex :: Dep -> [String]
+dep2latex d =
+     comment (unwords (map fst (tokens d)))
+  :  app "setlength{\\unitlength}" (show defaultUnit ++ "mm")
+  :  ("\\begin{picture}(" ++ show width ++ "," ++ show height ++ ")")
+  :  [put (wpos rwld i)  0 w | (i,w) <- zip [0..] (map fst (tokens d))]   -- words
+  ++ [put (wpos rwld i) 15 (small w) | (i,w) <- zip [0..] (map snd (tokens d))]   -- pos tags 15u above bottom
+  ++ [putArc rwld x y label | ((x,y),label) <- (deps d)]    -- arcs and labels
+  ++ [put (wpos rwld (root d) + 15) height (app "vector(0,-1)" (show (fromIntegral height-arcbase)))]
+  ++ [put (wpos rwld (root d) + 20) (height - 10) (small "ROOT")]
+  ++ ["\\end{picture}"]
+ where
+   (width,height) = case pictureSize d of (w,h) -> (w, h)
+   wld  = wordLength d   -- >= 20.0
+   rwld i = wld i / defaultWordLength       -- >= 1.0
+
+putArc :: (Int -> Double) -> Int -> Int -> String -> String
 putArc rwld x y label = unlines [oval,arrowhead,labelling] where
   oval = put ctr arcbase ("\\oval(" ++ show wdth ++ "," ++ show hght ++ ")[t]")
   arrowhead = put endp (arcbase + 5) (app "vector(0,-1)" "5")   -- downgoing arrow 5u above the arc base
   labelling = put (labelstart ctr) (labelheight (hght/2)) (small label)
   dxy  = wdist rwld x y              -- distance between words, >>= 20.0
   hdxy = dxy / 2                     -- half the distance
-  wdth = dxy - (arcfactor rwld)/dxy  -- longer arcs are less wide in proportion
-  hght = dxy / (xyratio * rwld)      -- arc height is independent of word length
+  wdth = dxy - (arcfactor wrwld)/dxy  -- longer arcs are less wide in proportion
+  hght = dxy / (xyratio * wrwld)      -- arc height is independent of word length
   begp = min x y                     -- begin position of oval
   ctr  = wpos rwld begp + hdxy + (if x < y then 20 else  10)  -- LR arcs are farther right from center of oval
   endp = (if x < y then (+) else (-)) ctr (wdth/2)            -- the point of the arrow
+  wrwld = wdist rwld x y / defaultWordLength
+-}
 
 conll2dep :: String -> Dep
 conll2dep str = Dep {
@@ -538,15 +575,16 @@ conll2dep str = Dep {
   , tokens = toks
   , deps = dps
   , root = head $ [read x-1 | x:_:_:_:_:_:"0":_ <- ls] ++ [1]
-  , pictureSize = (round (wsize rwld * fromIntegral (length ls)),  60 + 16*maxdist)  -- highest arc + 60u
+  , pictureSize = (totallength,  60 + 16*maxdist)  -- highest arc + 60u
   }
  where
-   wld = maximum [2 * fromIntegral (length w) | w <- map fst toks ++ map snd toks]
+   wld i = maximum [charWidth * fromIntegral (length w) | w <- let (tok,pos) = toks !! i in [tok,pos]]
    ls = map words (lines str)
    toks = [(w,c) | _:w:_:c:_ <- ls]
    dps = [((read y-1, read x-1),lab) | x:_:_:_:_:_:y:lab:_ <- ls, y /="0"]
-   rwld = wld / defaultWordLength
+   rwld w = wld w / defaultWordLength
    maxdist = maximum [abs (x-y) | ((x,y),_) <- dps]
+   totallength = round (sum [wsize rwld w | (w,_) <- zip [0..] toks]) + round spaceLength * ((length toks) - 1)
 
 -- latex formatting
 
