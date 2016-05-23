@@ -44,6 +44,9 @@
             <meta-data android:name="android.app.default_searchable"
                        android:value=".SearchableActivity"/>
         </activity>
+        
+        <activity android:name="se.chalmers.phrasebook.gui.activities.NavigationActivity"></activity>
+
         <service android:name="TranslatorInputMethodService"
                 android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
