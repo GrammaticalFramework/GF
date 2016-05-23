@@ -8231,7 +8231,8 @@ lin freddie_PN = mkPN "Freddie" ; -- src=eng status=guess
 lin freddy_PN = mkPN "Freddy" ; -- src=eng status=guess
 lin frederick_PN = mkPN "Frederick" ; -- src=geonames status=guess
 lin frederiksberg_PN = mkPN "Frederiksberg" ; -- src=geonames status=guess
-lin free_A = mkA "vrij" | mkA "los" ;
+lin free_1_A = mkA "vrij" | mkA "los" ;
+lin free_2_A = mkA "vrij" | mkA "los" ;
 lin free_N = mkN "vrije trap" masculine | mkN "vrije schop" masculine | mkN "vrijschop" masculine ; -- status=guess status=guess status=guess
 lin free_V2 = mkV2 (mkV "bevrijden") | mkV2 (mkV "loslaten") | mkV2 (mkV (mkV "laten") "gaan") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin free_V2V = mkV2V (mkV "bevrijden") | mkV2V (mkV "loslaten") | mkV2V (mkV (mkV "laten") "gaan") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
@@ -17393,7 +17394,8 @@ lin robot_N = mkN "robot" ; -- status=guess
 lin robust_A = mkA "robuust" | mkA "degelijk" ; -- status=guess status=guess
 lin rochdale_PN = mkPN "Rochdale" ; -- src=geonames status=guess
 lin rochester_PN = mkPN "Rochester" ; -- src=geonames status=guess
-lin rock_N = L.rock_N ;
+lin rock_1_N = L.rock_N ;
+lin rock_2_N = L.rock_N ;
 lin rock_V = mkV "schudden" ; -- status=guess, src=wikt
 lin rock_V2 = mkV2 (mkV "schudden") ; -- status=guess, src=wikt
 lin rocket_N = mkN "raket" ; -- status=guess

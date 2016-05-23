@@ -12204,7 +12204,8 @@ lin freckle_N = mkN "tache_de_rousseur" | mkN "éphélide" ; -- UWN
 lin freckleton_PN = mkPN "Freckleton" ; -- status=guess src=geonames
 lin frederick_PN = mkPN "Frederick" ; -- status=guess src=geonames
 lin frederiksberg_PN = mkPN "Frederiksberg" ; -- status=guess src=geonames
-lin free_A = mkA "libre" | mkA "gratuit" ; ---- split: free world, free lunch
+lin free_1_A = mkA "libre" ;
+lin free_2_A = mkA "gratuit" ;
 lin free_V2 = variants {} ; -- mkV2V (mkV "libérer") ; -- tocheck
 lin free_V2V = mkV2V (mkV "libérer") ; -- tocheck
 lin free_for_all_N = mkN "pagaille" feminine ; -- tocheck
@@ -25492,7 +25493,8 @@ lin robotics_N = mkN "robotique" ; -- UWN
 lin robustness_N = mkN "robustesse" feminine ; -- tocheck
 lin rochdale_PN = mkPN "Rochdale" ; -- status=guess src=geonames
 lin rochester_PN = mkPN "Rochester" ; -- status=guess src=geonames
-lin rock_N = L.rock_N ;
+lin rock_1_N = L.rock_N ;
+lin rock_2_N = L.rock_N ;
 lin rock_V = variants {} ; -- mkV2 (mkV "secouer") | mkV2 (mkV "remuer") | mkV2 (mkV "gérer") ; -- tocheck
 lin rock_V2 = mkV2 (mkV "secouer") | mkV2 (mkV "remuer") | mkV2 (mkV "gérer") ; -- tocheck
 lin rockabilly_N = mkN "Rockabilly" | mkN "hillbilly_rock" | mkN "rockabilly" ; -- UWN

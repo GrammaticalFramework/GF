@@ -12227,7 +12227,7 @@ lin congolese_A = variants {} ; -- status=guess
 lin congolese_N = variants {} ; -- status=guess
 lin congou_N = variants {} ; -- status=guess
 lin congratulate_V2 = mkV2 (mkV "gratulerar") | mkV2 (mkV "lyckönska") | mkV2 (mkV "grattar") ;
-lin congratulation_N = mkN "gratulation" "gratulationer" | mkN "grattis" "grattis" ;
+lin congratulation_N = mkN "gratulation" "gratulationer" ;
 lin congratulatory_A = variants {} ; -- status=guess
 lin congregant_N = variants {} ; -- status=guess
 lin congregate_V = mkV "samlar" ; -- comment=2
@@ -22324,7 +22324,8 @@ lin freddie_PN = mkPN "Freddie" ; -- src=eng status=guess
 lin freddy_PN = mkPN "Freddy" ; -- src=eng status=guess
 lin frederick_PN = mkPN "Frederick" neutrum ; -- src=geonames status=guess
 lin frederiksberg_PN = mkPN "Frederiksberg" neutrum ; -- src=geonames status=guess
-lin free_A = mkA "ledig" | mkA "fri" "fritt" ;
+lin free_1_A = mkA "ledig" | mkA "fri" "fritt" ;
+lin free_2_A = mkA "kostnadsfri" "kostnadsfritt" ;
 lin free_N = mkN "fritt kassaflöde" ; -- status=guess
 lin free_V2 = mkV2 (mkV "frigöra" "frigjorde" "frigjort") | mkV2 (mkV "befriar") | mkV2 (mkV "frita" "fritar" "frita" "fritog" "fritagit" "fritagen") ; -- status=guess
 lin free_V2V = mkV2V (mkV "befriar") ; -- status=guess
@@ -24361,7 +24362,7 @@ lin gratify_V2 = variants {} ; -- status=guess
 lin gratifying_A = mkA "glädjande" ; -- comment=2
 lin grating_N = mkN "gnisslande" ; -- comment=5
 lin gratingly_Adv = variants {} ; -- status=guess
-lin gratis_A = mkA "kostnadsfri" "kostnadsfritt" ; -- comment=2
+lin gratis_A = mkA "gratis" ;
 lin gratis_Adv = mkAdv "gratis" ; -- status=guess
 lin gratitude_N = mkN "tacksamhet" "tacksamheter" ; -- status=guess
 lin gratuitous_A = compoundA (regA "ogrundad") ; -- comment=4
@@ -47796,7 +47797,8 @@ lin roccella_N = variants {} ; -- status=guess
 lin rochdale_PN = mkPN "Rochdale" neutrum ; -- src=geonames status=guess
 lin rochester_PN = mkPN "Rochester" neutrum ; -- src=geonames status=guess
 lin rock_'n_roll_N = variants {} ; -- status=guess
-lin rock_N = L.rock_N ;
+lin rock_1_N = L.rock_N ;
+lin rock_2_N = mkN "rock" ;
 lin rock_V = mkV "vaggar" ; -- comment=9
 lin rock_V2 = dirV2 (partV (mkV "skakar")"om") ; -- comment=2
 lin rock_bottom_N = variants {} ; -- status=guess

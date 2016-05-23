@@ -10863,7 +10863,8 @@ lin freckle_N = mkN "lentiggine" ; -- status=guess
 lin freckleton_PN = mkPN "Freckleton" ; -- status=guess src=geonames
 lin frederick_PN = mkPN "Frederick" ; -- status=guess src=geonames
 lin frederiksberg_PN = mkPN "Frederiksberg" ; -- status=guess src=geonames
-lin free_A = mkA "libero" ; -- status=guess
+lin free_1_A = mkA "libero" ; -- status=guess
+lin free_2_A = mkA "libero" ; -- status=guess
 lin free_N = mkN "calcio di punizione" feminine ; -- status=guess
 lin free_V2 = mkV2 (mkV "liberare") ; -- status=guess, src=wikt
 lin free_V2V = mkV2V (mkV "liberare") ; -- status=guess, src=wikt
@@ -22717,7 +22718,8 @@ lin robot_N = mkN "robot" masculine ; -- status=guess
 lin robotics_N = mkN "robotica" ; -- UWN
 lin rochdale_PN = mkPN "Rochdale" ; -- status=guess src=geonames
 lin rochester_PN = mkPN "Rochester" ; -- status=guess src=geonames
-lin rock_N = L.rock_N ;
+lin rock_1_N = L.rock_N ;
+lin rock_2_N = L.rock_N ;
 lin rock_V = mkV "cullare" ; -- status=guess, src=wikt
 lin rock_V2 = mkV2 (mkV "cullare") ; -- status=guess, src=wikt
 lin rocker_N = mkN "sedia a dondolo" ; -- status=guess

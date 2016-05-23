@@ -22447,7 +22447,8 @@ lin freddie_PN = mkPN "Freddie" ; -- src=eng status=guess
 lin freddy_PN = mkPN "Freddy" ; -- src=eng status=guess
 lin frederick_PN = mkPN "Frederick" ; -- src=geonames status=guess
 lin frederiksberg_PN = mkPN "Frederiksberg Kommune" ; -- src=geonames status=guess
-lin free_A = mkA "frei" ;
+lin free_1_A = mkA "frei" ;
+lin free_2_A = mkA "frei" ;
 lin free_N = mkN "Freistoß" "Freistöße" masculine ; -- status=guess
 lin free_V2 = mkV2 (regV "befreien" | regV "freisetzen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin free_V2V = mkV2V (regV "befreien" | regV "freisetzen") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -48085,7 +48086,8 @@ lin roccella_N = variants {} ;
 lin rochdale_PN = mkPN "Rochdale" ; -- src=geonames status=guess
 lin rochester_PN = mkPN "Rochester" ; -- src=geonames status=guess
 lin rock_'n_roll_N = variants {} ;
-lin rock_N = L.rock_N ;
+lin rock_1_N = L.rock_N ;
+lin rock_2_N = L.rock_N ;
 lin rock_V = mkV "auwühlen" | regV "schockieren" ; -- status=guess, src=wikt status=guess, src=wikt
 lin rock_V2 = mkV2 (mkV "auwühlen" | regV "schockieren") ; -- status=guess, src=wikt status=guess, src=wikt
 lin rock_bottom_N = variants {} ;
