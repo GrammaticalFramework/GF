@@ -191,6 +191,11 @@ public class MainActivity extends Activity {
 	        	editor.commit();
 
 	            return true;
+	        case R.id.phrasebook: {
+	        	Intent myIntent = new Intent(MainActivity.this, se.chalmers.phrasebook.gui.activities.NavigationActivity.class);
+            	MainActivity.this.startActivity(myIntent);
+	        	return true;
+	        }
 	        case R.id.topics: {
 	        	Intent myIntent = new Intent(MainActivity.this, AlternativesActivity.class);
             	MainActivity.this.startActivity(myIntent);

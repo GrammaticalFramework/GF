@@ -1,6 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 	<item android:id="@+id/input_mode"
           android:title="@string/keyboard_input"/>
+    <item android:id="@+id/phrasebook"
+          android:title="@string/phrasebook"/>
 	<item android:id="@+id/topics"
           android:title="@string/topics"/>
 	<item android:id="@+id/help"

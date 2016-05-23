@@ -4,4 +4,6 @@
     <color name="candidate_recommended">#FFE35900</color>
     <color name="candidate_other">#ff808080</color>
     <color name="candidate_background">#ffffffff</color>
+    <item name="primary_color" type="color">#009688</item>
+    <item name="text_colour_light" type="color">#616161</item>
 </resources>

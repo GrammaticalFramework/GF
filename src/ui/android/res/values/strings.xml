@@ -33,4 +33,6 @@
     <string name="topics">Topics</string>
     <string name="topics_open">Open topics</string>
     <string name="topics_close">Close topics</string>
+
+    <string name="phrasebook">Phrasebook</string>
 </resources>
