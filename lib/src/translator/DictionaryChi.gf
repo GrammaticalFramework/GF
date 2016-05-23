@@ -13780,7 +13780,8 @@ lin freddie_PN = foreignPN "Freddie" ; -- comment=src=eng status=guess
 lin freddy_PN = foreignPN "Freddy" ; -- comment=src=eng status=guess
 lin frederick_PN = mkPN "弗雷德里克" ; -- comment=src=geonames status=guess
 lin frederiksberg_PN = mkPN "腓特烈斯贝" ; -- comment=src=geonames status=guess
-lin free_A = mkA "免费" | mkA "自由" | {-HSK-} mkA "无偿" ;
+lin free_1_A = mkA "免费" | mkA "自由" | {-HSK-} mkA "无偿" ;
+lin free_2_A = mkA "免费" | mkA "自由" | {-HSK-} mkA "无偿" ;
 lin free_N = mkN "免费" | mkN "自由" "個" | {-HSK-} mkN "自由軟件" | mkN "自由软件" ; -- status=guess -- status=guess
 lin free_V2 = mkV2 "免费" | {-HSK-} mkV2 "放" ;
 lin free_V2V = mkV2V "免费" | {-HSK-} mkV2V "放" ;
@@ -28060,7 +28061,8 @@ lin robust_A = mkA "健壮" ;
 lin roc_N = mkN "鹏" | mkN "大鹏" ; -- status=guess -- status=guess
 lin rochdale_PN = foreignPN "Rochdale" ; -- comment=src=geonames status=guess
 lin rochester_PN = mkPN "羅徹斯特" ; -- comment=src=geonames status=guess
-lin rock_N = L.rock_N ;
+lin rock_1_N = L.rock_N ;
+lin rock_2_N = L.rock_N ;
 lin rock_V = mkV "摇" | {-HSK-} mkV "摇晃" ;
 lin rock_V2 = mkV2 "摇" | {-HSK-} mkV2 "摇动" ;
 lin rocker_N = mkN "摇杆" ;
