@@ -2,7 +2,8 @@
 
 concrete LangRus of Lang = 
   GrammarRus,
-  LexiconRus
+  LexiconRus,
+  DocumentationRus
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ; coding=utf8 ;
