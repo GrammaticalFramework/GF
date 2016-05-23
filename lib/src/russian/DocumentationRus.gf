@@ -295,7 +295,7 @@ lin
   MkTag i = {s = i.t} ;
 
   NoDefinition   t     = {s=t.s};
-  MkDefinition   t d   = {s="<p><b>Дефиниция:</b>"++t.s++d.s++"</p>"};
-  MkDefinitionEx t d e = {s="<p><b>Дефиниция:</b>"++t.s++d.s++"</p><p><b>Пример:</b>"++e.s++"</p>"};
+  MkDefinition   t d   = {s="<p><b>Определение:</b>"++t.s++d.s++"</p>"};
+  MkDefinitionEx t d e = {s="<p><b>Определение:</b>"++t.s++d.s++"</p><p><b>Пример:</b>"++e.s++"</p>"};
 
 } 

@@ -21,7 +21,7 @@ concrete TranslateRus of Translate =
   RelativeRus,
   IdiomRus,
   --ConstructionRus,
-  --DocumentationBul,
+  DocumentationRus,
 
   ChunkRus,
   ExtensionsRus [
