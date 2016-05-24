@@ -22123,7 +22123,8 @@ lin pion_N = mkN "pion" ; --UWN
 lin pioneer_N = mkN "pionero" ; -- status=guess
 lin pious_A = mkA "piadoso" ; -- status=guess
 lin pip_N = mkN "pipa" masculine ; -- status=guess
-lin pipe_N = mkN "tubería" | mkN "tubería informática" ; -- status=guess
+lin pipe_1_N = mkN "tubería" | mkN "tubería informática" ; -- status=guess
+lin pipe_2_N = mkN "tubería" | mkN "tubería informática" ; -- status=guess
 lin pipefish_N = mkN "pez pipa" ; -- status=guess
 lin piperazine_N = mkN "piperazina" ; --UWN
 lin pipette_N = mkN "pipeta" ; -- status=guess

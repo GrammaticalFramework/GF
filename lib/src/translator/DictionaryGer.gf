@@ -42246,7 +42246,8 @@ lin pious_A = mk3A "fromm" "frommerfrömmer" "frommstenfrömmste" ; -- status=gu
 lin pip_N = mkN "Zacken" masculine ; -- status=guess
 lin pip_V2 = variants {} ;
 lin pipage_N = variants {} ;
-lin pipe_N = mkN "Rohrbombe" feminine ; -- status=guess
+lin pipe_1_N = mkN "Rohrbombe" feminine ; -- status=guess
+lin pipe_2_N = mkN "Rohrbombe" feminine ; -- status=guess
 lin pipe_V = variants {} ;
 lin pipe_V2 = variants {} ;
 lin pipe_down_V = variants {} ;

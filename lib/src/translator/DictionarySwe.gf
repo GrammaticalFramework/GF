@@ -42018,7 +42018,8 @@ lin pious_A = mkA "from" "fromt" "fromma" "fromma" "frommare" "frommast" "fromma
 lin pip_N = mkN "prick" ; -- comment=5
 lin pip_V2 = dirV2 (partV (mkV "kärnar")"ur") ; -- status=guess
 lin pipage_N = variants {} ; -- status=guess
-lin pipe_N = mkN "rör" neutrum | mkN "rör" neutrum ; -- SaldoWN -- comment=4
+lin pipe_1_N = mkN "pipa" utrum ;
+lin pipe_2_N = mkN "rör" neutrum ;
 lin pipe_V = mkV "röra" "rörde" "rört" ; -- comment=4
 lin pipe_V2 = variants {} ; -- status=guess
 lin pipe_down_V = mkV "röra" "rörde" "rört" ; -- comment=4

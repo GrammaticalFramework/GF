@@ -20014,7 +20014,8 @@ lin pion_N = mkN "pione" masculine ; -- status=guess
 lin pioneer_N = mkN "pionere" ; -- status=guess
 lin pious_A = mkA "pio" ; -- status=guess
 lin pip_N = mkN "seme" masculine ; -- status=guess
-lin pipe_N = mkN "curapipe" ; -- status=guess
+lin pipe_1_N = mkN "curapipe" ; -- status=guess
+lin pipe_2_N = mkN "curapipe" ; -- status=guess
 lin pipeful_N = mkN "pipa" | mkN "pipata" ; -- UWN
 lin piper_N = mkN "pifferaio" ; -- status=guess
 lin pipet_N = mkN "pipetta" ; -- UWN
