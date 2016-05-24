@@ -15307,7 +15307,8 @@ lin pion_N = mkN "pion" neuter ; -- status=guess
 lin pioneer_N = mkN "pioneer" masculine ; -- status=guess
 lin pious_A = mkA "vroom" ; -- status=guess
 lin pip_N = mkN "stip" feminine ; -- status=guess
-lin pipe_N = mkN "pijpewisser" masculine ; -- status=guess
+lin pipe_1_N = mkN "pijpewisser" masculine ; -- status=guess
+lin pipe_2_N = mkN "pijpewisser" masculine ; -- status=guess
 lin pipeline_N = mkN "pijpleiding" feminine ; -- status=guess
 lin pipette_N = mkN "pipet " neuter ; -- status=guess
 lin piquant_A = mkA "pikant" ; -- status=guess
