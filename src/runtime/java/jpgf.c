@@ -627,8 +627,8 @@ Java_org_grammaticalframework_pgf_TokenIterator_fetchTokenProb(JNIEnv* env, jcla
 		return NULL;
 
 	jclass tp_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/TokenProb");
-	jmethodID tp_constrId = (*env)->GetMethodID(env, tp_class, "<init>", "(Ljava/lang/String;D)V");
-	jobject jtp = (*env)->NewObject(env, tp_class, tp_constrId, gu2j_string(env,tp->tok), tp->prob);
+	jmethodID tp_constrId = (*env)->GetMethodID(env, tp_class, "<init>", "(DLjava/lang/String;Ljava/lang/String;)V");
+	jobject jtp = (*env)->NewObject(env, tp_class, tp_constrId, tp->prob, gu2j_string(env,tp->tok), gu2j_string(env,tp->cat));
 
 	return jtp;
 }
