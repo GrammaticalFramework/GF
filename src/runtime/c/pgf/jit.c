@@ -154,6 +154,57 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 
 	abscat->predicate = (PgfFunction) jit_get_ip().ptr;
 
+	if (strcmp(abscat->name, "String") == 0) {
+		gu_printf(out, err, "    MK_STRING\n");
+
+		jit_prepare(2);
+		jit_pusharg_p(JIT_VCLOS);
+		jit_pusharg_p(JIT_VSTATE);
+		jit_finish(pgf_reasoner_mk_string);
+
+#ifdef PGF_JIT_DEBUG
+		gu_puts("    RET\n", out, err);
+#endif
+		// compile RET
+		jit_bare_ret();
+		
+		return;
+	}
+
+	if (strcmp(abscat->name, "Int") == 0) {
+		gu_printf(out, err, "    MK_INT\n");
+
+		jit_prepare(2);
+		jit_pusharg_p(JIT_VCLOS);
+		jit_pusharg_p(JIT_VSTATE);
+		jit_finish(pgf_reasoner_mk_int);
+
+#ifdef PGF_JIT_DEBUG
+		gu_puts("    RET\n", out, err);
+#endif
+		// compile RET
+		jit_bare_ret();
+		
+		return;
+	}
+
+	if (strcmp(abscat->name, "Float") == 0) {
+		gu_printf(out, err, "    MK_FLOAT\n");
+
+		jit_prepare(2);
+		jit_pusharg_p(JIT_VCLOS);
+		jit_pusharg_p(JIT_VSTATE);
+		jit_finish(pgf_reasoner_mk_float);
+
+#ifdef PGF_JIT_DEBUG
+		gu_puts("    RET\n", out, err);
+#endif
+		// compile RET
+		jit_bare_ret();
+		
+		return;
+	}
+
 	PgfAbsFun* absfun = NULL;
 	PgfAbsFun* next_absfun = NULL;
 

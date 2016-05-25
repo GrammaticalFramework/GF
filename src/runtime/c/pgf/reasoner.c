@@ -324,12 +324,80 @@ pgf_reasoner_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun
 	pgf_reasoner_complete(rs, prev);
 }
 
+static void
+pgf_reasoner_mk_literal(PgfReasoner* rs, PgfExprState* parent,
+                        GuString cat, PgfExpr expr)
+{
+	PgfAnswers* answers = gu_map_get(rs->table, cat, PgfAnswers*);
+	if (answers == NULL) {
+		answers = gu_new(PgfAnswers, rs->pool);
+		answers->parents = gu_new_buf(PgfExprState*, rs->pool);
+		answers->exprs   = gu_new_buf(PgfExprProb*, rs->pool);
+		answers->outside_prob = parent->base.prob;
+
+		gu_map_put(rs->table, cat, PgfAnswers*, answers);
+	}
+
+	gu_buf_push(answers->parents, PgfExprState*, parent);
+
+	if (gu_buf_length(answers->parents) == 1) {
+		PgfExprProb* ep = gu_new(PgfExprProb, rs->out_pool);
+		ep->prob = 0;
+		ep->expr = expr;
+		gu_buf_push(answers->exprs, PgfExprProb*, ep);
+	}
+
+	if (&parent->base.header == rs->start)
+		return;
+
+	PgfExprProb* ep =
+		gu_buf_get(answers->exprs, PgfExprProb*, 0);
+
+	parent->expr =
+		gu_new_variant_i(rs->out_pool,
+		                 PGF_EXPR_APP,
+		                 PgfExprApp,
+		                 parent->expr, 
+		                 ep->expr);
+#ifdef PGF_REASONER_DEBUG
+	parent->arg_idx++;
+#endif
+	parent->base.prob += ep->prob;
+	gu_buf_heap_push(rs->pqueue, &pgf_expr_state_order, &parent);
+}
+
+void
+pgf_reasoner_mk_string(PgfReasoner* rs, PgfExprState* parent)
+{
+	pgf_reasoner_mk_literal(rs, parent, "String",
+	                        pgf_expr_string("FOO", rs->out_pool));
+}
+
+void
+pgf_reasoner_mk_int(PgfReasoner* rs, PgfExprState* parent)
+{
+	pgf_reasoner_mk_literal(rs, parent, "Int",
+	                        pgf_expr_int(999, rs->out_pool));
+}
+
+void
+pgf_reasoner_mk_float(PgfReasoner* rs, PgfExprState* parent)
+{
+	pgf_reasoner_mk_literal(rs, parent, "Float",
+	                        pgf_expr_float(999.99, rs->out_pool));
+}
+
 static PgfExprProb*
 pgf_reasoner_next(PgfReasoner* rs)
-{		
-	size_t n_exprs = gu_buf_length(rs->exprs);
+{
+	for (;;) {
+		if (rs->n_reported_exprs < gu_buf_length(rs->exprs)) {
+			return gu_buf_get(rs->exprs, PgfExprProb*, rs->n_reported_exprs++);
+		}
 
-	while (gu_buf_length(rs->pqueue) > 0) {
+		if (gu_buf_length(rs->pqueue) == 0)
+			return NULL;
+
 		PgfReasonerState* st;
 		gu_buf_heap_pop(rs->pqueue, &pgf_expr_state_order, &st);
 
@@ -344,13 +412,7 @@ pgf_reasoner_next(PgfReasoner* rs)
 #endif
 
 		rs->eval_gates->enter(rs, &st->header);
-
-		if (n_exprs < gu_buf_length(rs->exprs)) {
-			return gu_buf_get(rs->exprs, PgfExprProb*, n_exprs);
-		}
 	}
-
-	return NULL;
 }
 
 static void
@@ -379,6 +441,7 @@ pgf_new_reasoner(PgfPGF* pgf, GuExn* err, GuPool* pool, GuPool* out_pool)
 
 	rs->pqueue = gu_new_buf(PgfReasonerState*, rs->pool);
 	rs->exprs = gu_new_buf(PgfExprProb*, rs->pool);
+	rs->n_reported_exprs = 0;
 	rs->en.next = pgf_reasoner_enum_next;
 
 	PgfFunction* cafs = gu_seq_data(rs->eval_gates->cafs);
