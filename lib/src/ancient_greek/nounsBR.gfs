@@ -1,0 +1,10 @@
+-- For gf-3.2, do it in the greek directory, without gf*/testsuite/libraries and Setup.hs 
+-- rf -file=bornemann -lines -tree | l -table -to_ancientgreek | ?grep s
+
+-- Use Makefile and 'make nouns', then 'make ediff-nouns' to create nounsBR, nounsBR.out
+
+se utf8
+i -path=.:alltenses AllGrc.gfo
+rf -file=nounsBR -lines -tree | l -table -to_ancientgreek 
+
+

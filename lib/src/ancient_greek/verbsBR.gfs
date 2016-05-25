@@ -1,0 +1,6 @@
+-- For gf-3.2, do everything in the greek directory, without gf*/testsuite and Setup.hs 
+
+i -path=.:alltenses AllGrc.gfo
+rf -file=verbsBR -lines -tree | l -table -to_ancientgreek 
+
+
