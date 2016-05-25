@@ -1,0 +1,155 @@
+-- Note: Comments at the end of the line makes the whole line ignored! 4/11
+
+-- A-declension
+
+  idea_N      
+  chora_N     
+  stratia_N   
+  doxa_N      
+  glotta_N    
+  macha_N     
+  nika_N      
+  tima_N      
+  thalatta_N  
+  gephyra_N   
+
+  neanias_N   
+  polita_N    
+  dikasta_N   
+  atreida_N   
+  athena_N    
+  gea_N       
+  hermea_N    
+
+-- O-declension
+
+  logos_N     
+  demos_N     
+  anthropos_N 
+  hodos_N     
+  doron_N     
+-- ergon_N 
+
+  agathos_A  
+  dikaios_A
+
+  nous_N
+  osteon_N
+  eunous_A
+
+  argyrous_A 
+  chrysous_A
+
+  neos_N
+  news_N
+  Meneleos_PN 
+  ilews_A
+
+-- Noun declension III 
+
+  krathr_N 
+  rhtwr_N 
+  als_N 
+  vhr_N 
+
+-- gutturals -k, -g, -x
+  fylax_N   
+  aix_N 
+  gyps_N   
+  fleps_N 
+
+-- dentals -t, -d, -v
+  esvhs_N  
+  elpis_N  
+  caris_N 
+  swma_N 
+  ellhn_N
+  agwn_N 
+  poimhn_N 
+  daimwn_N 
+  eydaimwn_A
+-- kakion_A
+
+-- stems ending in -nt:
+  gigas_N  
+  odoys_N 
+  gerwn_N 
+
+-- adjectives and participles
+  pas_A
+  ekwn_A
+  lywn_A
+  lysas_A
+  theis_A
+  dys_A
+  carieis_A
+
+-- stems ending in -r with 3 ablautlevels
+  pathr_N 
+  mhthr_N
+  vygathr_N
+  gasthr_N
+  anhr_N
+
+-- s-stems
+  genos_N
+  eugenhs_A
+  diogenhs_N
+  periklhs_N
+  philosopher_N
+
+  polis_N 
+  dynamis_N 
+  phcys_N
+  asty_N
+  icvys_N
+  sys_N
+  pitys_N  
+  erinys_N
+  basileys_N 
+
+-- verbs
+  paideyw_V
+  timaw_V
+  poiew_V 
+  doylow_V 
+  leipw_V
+  elleipw_V
+
+  tivhmi_V 
+  ihmi_V
+  didwmi_V
+  isthmi_V
+
+  deiknymi_V
+
+--verbsWmut
+  leipw_V
+  elleipw_V
+  trepw_V
+  grafw_V
+  tribw_V
+  diwkw_V
+  arcw_V
+  legw_V
+  anytw_V
+  peivw_V
+  pseudw_V
+
+  typtw_V
+  kryptw_V
+  blabtw_V
+  fylattw_V
+
+  ktizw_V
+  nomizw_V
+  swzw_V
+  scizw_V
+  evizw_V
+
+-- verbsWliq
+  derw_V
+  menw_V
+  nemw_V
+  angellw_V
+  fainw_V

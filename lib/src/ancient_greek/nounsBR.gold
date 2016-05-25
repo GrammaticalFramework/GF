@@ -1,0 +1,1264 @@
+                              
+         *  *  *              
+      *           *           
+    *               *         
+   *                          
+   *                          
+   *        * * * * * *       
+   *        *         *       
+    *       * * * *  *        
+      *     *      *          
+         *  *  *              
+                              
+This is GF version 3.7-darcs. 
+No detailed version info available
+Built on linux/x86_64 with ghc-7.6, flags: interrupt server
+License: see help -license.   
+Bug reports: http://code.google.com/p/grammatical-framework/issues/list
+
+
+Languages:
+> 0 msec
+> 0 msec
+> 0 msec
+> 0 msec
+> 0 msec
+> 0 msec
+> linking ... OK
+
+Languages: AllGrc
+629 msec
+
+A-declension, BR 32
+ok:
+s Sg Nom : ἰδέα  
+s Sg Acc : ἰδέαν
+s Sg Gen : ἰδέας
+s Sg Dat : ἰδέᾳ
+s Sg Voc : ἰδέα
+s Pl Nom : ἰδέαι
+s Pl Acc : ἰδέας
+s Pl Gen : ἰδεῶν
+s Pl Dat : ἰδέαις
+s Pl Voc : ἰδέαι
+s Dl Nom : ἰδέα
+s Dl Acc : ἰδέα
+s Dl Gen : ἰδέαιν
+s Dl Dat : ἰδέαιν
+s Dl Voc : ἰδέα
+
+ok:
+s Sg Nom : χώρα
+s Sg Acc : χώραν
+s Sg Gen : χώρας
+s Sg Dat : χώρᾳ
+s Sg Voc : χώρα
+s Pl Nom : χῶραι
+s Pl Acc : χώρας
+s Pl Gen : χωρῶν
+s Pl Dat : χώραις
+s Pl Voc : χῶραι
+s Dl Nom : χώρα
+s Dl Acc : χώρα
+s Dl Gen : χώραιν
+s Dl Dat : χώραιν
+s Dl Voc : χώρα
+
+ok:
+s Sg Nom : στρατιά
+s Sg Acc : στρατιάν
+s Sg Gen : στρατιᾶς
+s Sg Dat : στρατιᾷ
+s Sg Voc : στρατιά
+s Pl Nom : στρατιαί
+s Pl Acc : στρατιάς
+s Pl Gen : στρατιῶν
+s Pl Dat : στρατιαῖς
+s Pl Voc : στρατιαί
+s Dl Nom : στρατιά
+s Dl Acc : στρατιά
+s Dl Gen : στρατιαῖν
+s Dl Dat : στρατιαῖν
+s Dl Voc : στρατιά
+
+ok:
+s Sg Nom : δόξα
+s Sg Acc : δόξαν
+s Sg Gen : δόξης
+s Sg Dat : δόξῃ
+s Sg Voc : δόξα
+s Pl Nom : δόξαι
+s Pl Acc : δόξας
+s Pl Gen : δοξῶν
+s Pl Dat : δόξαις
+s Pl Voc : δόξαι
+s Dl Nom : δόξα
+s Dl Acc : δόξα
+s Dl Gen : δόξαιν
+s Dl Dat : δόξαιν
+s Dl Voc : δόξα
+
+ok:
+s Sg Nom : γλῶττα
+s Sg Acc : γλῶτταν
+s Sg Gen : γλώττης
+s Sg Dat : γλώττῃ
+s Sg Voc : γλῶττα
+s Pl Nom : γλῶτται
+s Pl Acc : γλώττας
+s Pl Gen : γλωττῶν
+s Pl Dat : γλώτταις
+s Pl Voc : γλῶτται
+s Dl Nom : γλώττα
+s Dl Acc : γλώττα
+s Dl Gen : γλώτταιν
+s Dl Dat : γλώτταιν
+s Dl Voc : γλώττα
+
+ok:
+s Sg Nom : μάχη
+s Sg Acc : μάχην
+s Sg Gen : μάχης
+s Sg Dat : μάχῃ
+s Sg Voc : μάχη
+s Pl Nom : μάχαι
+s Pl Acc : μάχας
+s Pl Gen : μαχῶν
+s Pl Dat : μάχαις
+s Pl Voc : μάχαι
+s Dl Nom : μάχα
+s Dl Acc : μάχα
+s Dl Gen : μάχαιν
+s Dl Dat : μάχαιν
+s Dl Voc : μάχα
+
+ok:
+s Sg Nom : νίκη
+s Sg Acc : νίκην
+s Sg Gen : νίκης
+s Sg Dat : νίκῃ
+s Sg Voc : νίκη
+s Pl Nom : νῖκαι
+s Pl Acc : νίκας
+s Pl Gen : νικῶν
+s Pl Dat : νίκαις
+s Pl Voc : νῖκαι
+s Dl Nom : νίκα
+s Dl Acc : νίκα
+s Dl Gen : νίκαιν
+s Dl Dat : νίκαιν
+s Dl Voc : νίκα
+
+ok:
+s Sg Nom : τιμή
+s Sg Acc : τιμήν
+s Sg Gen : τιμῆς
+s Sg Dat : τιμῇ
+s Sg Voc : τιμή
+s Pl Nom : τιμαί
+s Pl Acc : τιμάς
+s Pl Gen : τιμῶν
+s Pl Dat : τιμαῖς
+s Pl Voc : τιμαί
+s Dl Nom : τιμά
+s Dl Acc : τιμά
+s Dl Gen : τιμαῖν
+s Dl Dat : τιμαῖν
+s Dl Voc : τιμά
+
+ok:
+s Sg Nom : θάλαττα
+s Sg Acc : θάλατταν
+s Sg Gen : θαλάττης
+s Sg Dat : θαλάττῃ
+s Sg Voc : θάλαττα
+s Pl Nom : θάλατται
+s Pl Acc : θαλάττας
+s Pl Gen : θαλαττῶν
+s Pl Dat : θαλάτταις
+s Pl Voc : θάλατται
+s Dl Nom : θαλάττα
+s Dl Acc : θαλάττα
+s Dl Gen : θαλάτταιν
+s Dl Dat : θαλάτταιν
+s Dl Voc : θαλάττα
+
+ok:
+s Sg Nom : γέφυρα
+s Sg Acc : γέφυραν
+s Sg Gen : γεφύρας
+s Sg Dat : γεφύρᾳ
+s Sg Voc : γέφυρα
+s Pl Nom : γέφυραι
+s Pl Acc : γεφύρας
+s Pl Gen : γεφυρῶν
+s Pl Dat : γεφύραις
+s Pl Voc : γέφυραι
+s Dl Nom : γεφύρα
+s Dl Acc : γεφύρα
+s Dl Gen : γεφύραιν
+s Dl Dat : γεφύραιν
+s Dl Voc : γεφύρα
+
+BR 33
+s Sg Nom : νεανίας
+s Sg Acc : νεανίαν
+s Sg Gen : νεανίου
+s Sg Dat : νεανίᾳ
+s Sg Voc : νεανία
+s Pl Nom : νεανίαι
+s Pl Acc : νεανίας
+s Pl Gen : νεανιῶν
+s Pl Dat : νεανίαις
+s Pl Voc : νεανίαι
+s Dl Nom : νεανία
+s Dl Acc : νεανία
+s Dl Gen : νεανίαιν
+s Dl Dat : νεανίαιν
+s Dl Voc : νεανία
+
+
+s Sg Nom : πολίτης
+s Sg Acc : πολίτην
+s Sg Gen : πολίτου
+s Sg Dat : πολίτῃ
+s Sg Voc : πολῖτα
+s Pl Nom : πολῖται
+s Pl Acc : πολίτας
+s Pl Gen : πολιτῶν
+s Pl Dat : πολίταις
+s Pl Voc : πολίται  i~
+s Dl Nom : πολίτα
+s Dl Acc : πολίτα
+s Dl Gen : πολίταιν
+s Dl Dat : πολίταιν
+s Dl Voc : πολίτα
+
+ok:
+s Sg Nom : δικαστής
+s Sg Acc : δικαστήν
+s Sg Gen : δικαστοῦ
+s Sg Dat : δικαστῇ
+s Sg Voc : δικαστά
+s Pl Nom : δικασταί
+s Pl Acc : δικαστάς
+s Pl Gen : δικαστῶν
+s Pl Dat : δικασταῖς
+s Pl Voc : δικασταί
+s Dl Nom : δικαστά
+s Dl Acc : δικαστά
+s Dl Gen : δικασταῖν
+s Dl Dat : δικασταῖν
+s Dl Voc : δικαστά
+
+ok:
+s Sg Nom : Ἀτρεΐδης
+s Sg Acc : Ἀτρεΐδην
+s Sg Gen : Ἀτρεΐδου
+s Sg Dat : Ἀτρεΐδῃ
+s Sg Voc : Ἀτρεΐδη
+s Pl Nom : Ἀτρεῗδαι
+s Pl Acc : Ἀτρεΐδας
+s Pl Gen : Ἀτρεΐδῶν
+s Pl Dat : Ἀτρεΐδαις
+s Pl Voc : Ἀτρεΐδαι
+s Dl Nom : Ἀτρεΐδα
+s Dl Acc : Ἀτρεΐδα
+s Dl Gen : Ἀτρεΐδαιν
+s Dl Dat : Ἀτρεΐδαιν
+s Dl Voc : Ἀτρεΐδα
+
+BR 34
+ok:
+s Sg Nom : Ἀθηνᾶ
+s Sg Acc : Ἀθηνᾶν
+s Sg Gen : Ἀθηνᾶς
+s Sg Dat : Ἀθηνᾷ
+s Sg Voc : Ἀθηνᾶ
+s Pl Nom : Ἀθηναῖ
+s Pl Acc : Ἀθηνᾶς
+s Pl Gen : Ἀθηνῶν
+s Pl Dat : Ἀθηναῖς
+s Pl Voc : Ἀθηναῖ
+s Dl Nom : Ἀθηνᾶ
+s Dl Acc : Ἀθηνᾶ
+s Dl Gen : Ἀθηναῖν
+s Dl Dat : Ἀθηναῖν
+s Dl Voc : Ἀθηνᾶ
+
+ok:
+s Sg Nom : γῆ
+s Sg Acc : γῆν
+s Sg Gen : γῆς
+s Sg Dat : γῇ
+s Sg Voc : γῆ
+s Pl Nom : γαῖ
+s Pl Acc : γᾶς
+s Pl Gen : γῶν
+s Pl Dat : γαῖς
+s Pl Voc : γαῖ
+s Dl Nom : γῆ
+s Dl Acc : γῆ
+s Dl Gen : γαῖν
+s Dl Dat : γαῖν
+s Dl Voc : γῆ
+
+TODO
+s Sg Nom : Ἑρμῆς
+s Sg Acc : Ἑρμῆν
+s Sg Gen : Ἑρμοῦ
+s Sg Dat : Ἑρμῇ
+s Sg Voc : Ἑρμῆ
+s Pl Nom : Ἑρμαῖ
+s Pl Acc : Ἑρμᾶς
+s Pl Gen : Ἑρμῶν
+s Pl Dat : Ἑρμαῖς
+s Pl Voc : Ἑρμαῖ
+s Dl Nom : Ἑρμᾶ
+s Dl Acc : Ἑρμᾶ
+s Dl Gen : Ἑρμαῖν
+s Dl Dat : Ἑρμαῖν
+s Dl Voc : Ἑρμᾶ
+
+O-declension
+BR 36
+ok:
+s Sg Nom : λόγος
+s Sg Acc : λόγον
+s Sg Gen : λόγου
+s Sg Dat : λόγῳ
+s Sg Voc : λόγε
+s Pl Nom : λόγοι
+s Pl Acc : λόγους
+s Pl Gen : λόγων
+s Pl Dat : λόγοις
+s Pl Voc : λόγοι
+s Dl Nom : λόγω
+s Dl Acc : λόγω
+s Dl Gen : λόγοιν
+s Dl Dat : λόγοιν
+s Dl Voc : λόγω
+
+ok:
+s Sg Nom : δῆμος
+s Sg Acc : δῆμον
+s Sg Gen : δήμου
+s Sg Dat : δήμῳ
+s Sg Voc : δῆμε
+s Pl Nom : δῆμοι
+s Pl Acc : δήμους
+s Pl Gen : δήμων
+s Pl Dat : δήμοις
+s Pl Voc : δῆμοι
+s Dl Nom : δήμω
+s Dl Acc : δήμω
+s Dl Gen : δήμοιν
+s Dl Dat : δήμοιν
+s Dl Voc : δήμω
+
+ok:
+s Sg Nom : ἄνθρωπος
+s Sg Acc : ἄνθρωπον
+s Sg Gen : ἀνθρώπου
+s Sg Dat : ἀνθρώπῳ
+s Sg Voc : ἄνθρωπε
+s Pl Nom : ἄνθρωποι
+s Pl Acc : ἀνθρώπους
+s Pl Gen : ἀνθρώπων
+s Pl Dat : ἀνθρώποις
+s Pl Voc : ἄνθρωποι
+s Dl Nom : ἀνθρώπω
+s Dl Acc : ἀνθρώπω
+s Dl Gen : ἀνθρώποιν
+s Dl Dat : ἀνθρώποιν
+s Dl Voc : ἀνθρώπω
+
+ok:
+s Sg Nom : ὁδός
+s Sg Acc : ὁδόν
+s Sg Gen : ὁδοῦ
+s Sg Dat : ὁδῷ
+s Sg Voc : ὁδέ
+s Pl Nom : ὁδοί
+s Pl Acc : ὁδούς
+s Pl Gen : ὁδῶν
+s Pl Dat : ὁδοῖς
+s Pl Voc : ὁδοί
+s Dl Nom : ὁδῶ
+s Dl Acc : ὁδῶ
+s Dl Gen : ὁδοῖν
+s Dl Dat : ὁδοῖν
+s Dl Voc : ὁδῶ
+
+ok:
+s Sg Nom : δῶρον
+s Sg Acc : δῶρον
+s Sg Gen : δώρου
+s Sg Dat : δώρῳ
+s Sg Voc : δῶρον
+s Pl Nom : δῶρα
+s Pl Acc : δῶρα
+s Pl Gen : δώρων
+s Pl Dat : δώροις
+s Pl Voc : δῶρα
+s Dl Nom : δώρω
+s Dl Acc : δώρω
+s Dl Gen : δώροιν
+s Dl Dat : δώροιν
+s Dl Voc : δώρω
+
+BR 38  contracta: -oo | -eo | -oo > -oy
+ok:
+s Sg Nom : νοῦς
+s Sg Acc : νοῦν
+s Sg Gen : νοῦ
+s Sg Dat : νῷ
+s Sg Voc : νόε (?)
+s Pl Nom : νοῖ
+s Pl Acc : νοῦς
+s Pl Gen : νῶν
+s Pl Dat : νοῖς
+s Pl Voc : νοῖ
+s Dl Nom : νῶ
+s Dl Acc : νῶ
+s Dl Gen : νοῖν
+s Dl Dat : νοῖν
+s Dl Voc : νῶ
+
+ok:
+s Sg Nom : ὀστοῦν
+s Sg Acc : ὀστοῦν
+s Sg Gen : ὀστοῦ
+s Sg Dat : ὀστῷ
+s Sg Voc : ὀστοῦν
+s Pl Nom : ὀστᾶ
+s Pl Acc : ὀστᾶ
+s Pl Gen : ὀστῶν
+s Pl Dat : ὀστοῖς
+s Pl Voc : ὀστᾶ
+s Dl Nom : ὀστῶ
+s Dl Acc : ὀστῶ
+s Dl Gen : ὀστοῖν
+s Dl Dat : ὀστοῖν
+s Dl Voc : ὀστῶ
+
+BR 40
+s Sg Nom : νεώς
+s Sg Acc : νεών
+s Sg Gen : νεώ
+s Sg Dat : νεῴ
+s Sg Voc : νεώς
+s Pl Nom : νεῴ
+s Pl Acc : νεώς
+s Pl Gen : νεών
+s Pl Dat : νεῴς
+s Pl Voc : νεῴ
+s Dl Nom : νεώς
+s Dl Acc : νεώς
+s Dl Gen : νεώς
+s Dl Dat : νεώς
+s Dl Voc : νεώς
+
+
+s Nom : Μενελέος
+s Acc : Μενελέον
+s Gen : Μενελέου
+s Dat : Μενελέῳ
+s Voc : Μενελέε
+
+
+3rd declension
+BR 42
+ok:
+s Sg Nom : κρατήρ
+s Sg Acc : κρατῆρα
+s Sg Gen : κρατῆρος
+s Sg Dat : κρατῆρι
+s Sg Voc : κρατῆρ     Sg Voc : κρᾱτήρ  CHECK
+s Pl Nom : κρατῆρες
+s Pl Acc : κρατῆρας
+s Pl Gen : κρατήρων
+s Pl Dat : κρατῆρσι
+s Pl Voc : κρατῆρες
+s Dl Nom : κρατῆρε
+s Dl Acc : κρατῆρε
+s Dl Gen : κρατήροιν
+s Dl Dat : κρατήροιν
+s Dl Voc : κρατῆρε
+
+ok:
+s Sg Nom : ῥήτωρ
+s Sg Acc : ῥήτορα
+s Sg Gen : ῥήτορος
+s Sg Dat : ῥήτορι
+s Sg Voc : ῥῆτορ
+s Pl Nom : ῥήτορες
+s Pl Acc : ῥήτορας
+s Pl Gen : ῥητόρων
+s Pl Dat : ῥήτορσι
+s Pl Voc : ῥήτορες
+s Dl Nom : ῥήτορε
+s Dl Acc : ῥήτορε
+s Dl Gen : ῥητόροιν
+s Dl Dat : ῥητόροιν
+s Dl Voc : ῥήτορε
+
+ok:
+s Sg Nom : ἅλς
+s Sg Acc : ἅλα
+s Sg Gen : ἁλός
+s Sg Dat : ἁλί
+s Sg Voc : ἅλς
+s Pl Nom : ἅλες
+s Pl Acc : ἅλας
+s Pl Gen : ἁλῶν
+s Pl Dat : ἁλσί
+s Pl Voc : ἅλες
+s Dl Nom : ἅλε
+s Dl Acc : ἅλε
+s Dl Gen : ἁλοῖν
+s Dl Dat : ἁλοῖν
+s Dl Voc : ἅλε
+
+ok:
+s Sg Nom : θήρ
+s Sg Acc : θῆρα
+s Sg Gen : θηρός
+s Sg Dat : θηρί
+s Sg Voc : θήρ
+s Pl Nom : θῆρες
+s Pl Acc : θῆρας
+s Pl Gen : θηρῶν
+s Pl Dat : θηρσί
+s Pl Voc : θῆρες
+s Dl Nom : θῆρε
+s Dl Acc : θῆρε
+s Dl Gen : θηροῖν
+s Dl Dat : θηροῖν
+s Dl Voc : θῆρε
+
+BR 43  -guttural (-k, -g, -c), -labial (-p,-b,-f)
+ok:
+s Sg Nom : φύλαξ
+s Sg Acc : φύλακα
+s Sg Gen : φύλακος
+s Sg Dat : φύλακι
+s Sg Voc : φύλαξ
+s Pl Nom : φύλακες
+s Pl Acc : φύλακας
+s Pl Gen : φυλάκων
+s Pl Dat : φύλαξι
+s Pl Voc : φύλακες
+s Dl Nom : φύλακε
+s Dl Acc : φύλακε
+s Dl Gen : φυλάκοιν
+s Dl Dat : φυλάκοιν
+s Dl Voc : φύλακε
+
+ok:
+s Sg Nom : αἶξ
+s Sg Acc : αἶγα
+s Sg Gen : αἰγός
+s Sg Dat : αἰγί
+s Sg Voc : αἶξ
+s Pl Nom : αἶγες
+s Pl Acc : αἶγας
+s Pl Gen : αἰγῶν
+s Pl Dat : αἰξί
+s Pl Voc : αἶγες
+s Dl Nom : αἶγε
+s Dl Acc : αἶγε
+s Dl Gen : αἰγοῖν
+s Dl Dat : αἰγοῖν
+s Dl Voc : αἶγε
+
+ok:
+s Sg Nom : γύπς  (γy_'πς)
+s Sg Acc : γῦπα
+s Sg Gen : γυπός
+s Sg Dat : γυπί
+s Sg Voc : γύπς  (γy_'πς)
+s Pl Nom : γῦπες
+s Pl Acc : γῦπας
+s Pl Gen : γυπῶν
+s Pl Dat : γυψί
+s Pl Voc : γῦπες
+s Dl Nom : γῦπε
+s Dl Acc : γῦπε
+s Dl Gen : γυποῖν
+s Dl Dat : γυποῖν
+s Dl Voc : γῦπε
+
+ok:
+s Sg Nom : φλέπς
+s Sg Acc : φλέβα
+s Sg Gen : φλεβός
+s Sg Dat : φλεβί
+s Sg Voc : φλέπς
+s Pl Nom : φλέβες
+s Pl Acc : φλέβας
+s Pl Gen : φλεβῶν
+s Pl Dat : φλεψί
+s Pl Voc : φλέβες
+s Dl Nom : φλέβε
+s Dl Acc : φλέβε
+s Dl Gen : φλεβοῖν
+s Dl Dat : φλεβοῖν
+s Dl Voc : φλέβε
+
+BR 44 -dental (-t, -d, -v)
+ok:
+s Sg Nom : ἐσθής
+s Sg Acc : ἐσθῆτα
+s Sg Gen : ἐσθῆτος
+s Sg Dat : ἐσθῆτι
+s Sg Voc : ἐσθής
+s Pl Nom : ἐσθῆτες
+s Pl Acc : ἐσθῆτας
+s Pl Gen : ἐσθήτων
+s Pl Dat : ἐσθῆσι
+s Pl Voc : ἐσθῆτες
+s Dl Nom : ἐσθῆτε
+s Dl Acc : ἐσθῆτε
+s Dl Gen : ἐσθήτοιν
+s Dl Dat : ἐσθήτοιν
+s Dl Voc : ἐσθῆτε
+
+ok:
+s Sg Nom : ἐλπίς  (ἐλπi.'ς)
+s Sg Acc : ἐλπίδα
+s Sg Gen : ἐλπίδος
+s Sg Dat : ἐλπίδι
+s Sg Voc : ἐλπίς
+s Pl Nom : ἐλπίδες
+s Pl Acc : ἐλπίδας
+s Pl Gen : ἐλπίδων
+s Pl Dat : ἐλπίσι
+s Pl Voc : ἐλπίδες
+s Dl Nom : ἐλπίδε
+s Dl Acc : ἐλπίδε
+s Dl Gen : ἐλπίδοιν
+s Dl Dat : ἐλπίδοιν
+s Dl Voc : ἐλπίδε
+
+ok:
+s Sg Nom : χάρις
+s Sg Acc : χάριν (BR 44.2)
+s Sg Gen : χάριτος
+s Sg Dat : χάριτι
+s Sg Voc : χάρις
+s Pl Nom : χάριτες
+s Pl Acc : χάριτας
+s Pl Gen : χαρίτων
+s Pl Dat : χάρισι
+s Pl Voc : χάριτες
+s Dl Nom : χάριτε
+s Dl Acc : χάριτε
+s Dl Gen : χαρίτοιν
+s Dl Dat : χαρίτοιν
+s Dl Voc : χάριτε
+
+ok:
+s Sg Nom : σῶμα
+s Sg Acc : σῶμα
+s Sg Gen : σώματος
+s Sg Dat : σώματι
+s Sg Voc : σῶμα
+s Pl Nom : σώματα
+s Pl Acc : σώματα
+s Pl Gen : σωμάτων
+s Pl Dat : σώμασι
+s Pl Voc : σώματα
+s Dl Nom : σώματε
+s Dl Acc : σώματε
+s Dl Gen : σωμάτοιν
+s Dl Dat : σωμάτοιν
+s Dl Voc : σώματε
+
+BR 45 stem -n
+ok:
+s Sg Nom : Ἕλλην
+s Sg Acc : Ἕλληνα
+s Sg Gen : Ἕλληνος
+s Sg Dat : Ἕλληνι
+s Sg Voc : Ἕλλην
+s Pl Nom : Ἕλληνες
+s Pl Acc : Ἕλληνας
+s Pl Gen : Ἑλλήνων
+s Pl Dat : Ἕλλησι
+s Pl Voc : Ἕλληνες
+s Dl Nom : Ἕλληνε
+s Dl Acc : Ἕλληνε
+s Dl Gen : Ἑλλήνοιν
+s Dl Dat : Ἑλλήνοιν
+s Dl Voc : Ἕλληνε
+
+
+ok:
+s Sg Nom : ἀγών
+s Sg Acc : ἀγῶνα
+s Sg Gen : ἀγῶνος
+s Sg Dat : ἀγῶνι
+s Sg Voc : ἀγών
+s Pl Nom : ἀγῶνες
+s Pl Acc : ἀγῶνας
+s Pl Gen : ἀγώνων
+s Pl Dat : ἀγῶσι
+s Pl Voc : ἀγῶνες
+s Dl Nom : ἀγῶνε
+s Dl Acc : ἀγῶνε
+s Dl Gen : ἀγώνοιν
+s Dl Dat : ἀγώνοιν
+s Dl Voc : ἀγῶνε
+
+ok:
+s Sg Nom : ποιμήν
+s Sg Acc : ποιμένα
+s Sg Gen : ποιμένος
+s Sg Dat : ποιμένι
+s Sg Voc : ποιμήν    (!)
+s Pl Nom : ποιμένες
+s Pl Acc : ποιμένας
+s Pl Gen : ποιμένων
+s Pl Dat : ποιμέσι   (!)
+s Pl Voc : ποιμένες
+s Dl Nom : ποιμένε
+s Dl Acc : ποιμένε
+s Dl Gen : ποιμένοιν
+s Dl Dat : ποιμένοιν
+s Dl Voc : ποιμένε
+
+ok:
+s Sg Nom : δαίμων
+s Sg Acc : δαίμονα
+s Sg Gen : δαίμονος
+s Sg Dat : δαίμονι
+s Sg Voc : δαῖμον
+s Pl Nom : δαίμονες
+s Pl Acc : δαίμονας
+s Pl Gen : δαιμόνων
+s Pl Dat : δαίμοσι (!)
+s Pl Voc : δαίμονες
+s Dl Nom : δαίμονε
+s Dl Acc : δαίμονε
+s Dl Gen : δαιμόνοιν
+s Dl Dat : δαιμόνοιν
+s Dl Voc : δαίμονε
+
+BR 46 stem ending in -nt
+ok:
+s Sg Nom : γίγας
+s Sg Acc : γίγαντα
+s Sg Gen : γίγαντος
+s Sg Dat : γίγαντι
+s Sg Voc : γίγαν
+s Pl Nom : γίγαντες
+s Pl Acc : γίγαντας
+s Pl Gen : γιγάντων
+s Pl Dat : γίγασι
+s Pl Voc : γίγαντες
+s Dl Nom : γίγαντε
+s Dl Acc : γίγαντε
+s Dl Gen : γιγάντοιν
+s Dl Dat : γιγάντοιν
+s Dl Voc : γίγαντε
+
+ok:
+s Sg Nom : ὀδούς
+s Sg Acc : ὀδόντα
+s Sg Gen : ὀδόντος
+s Sg Dat : ὀδόντι
+s Sg Voc : ὀδόν
+s Pl Nom : ὀδόντες
+s Pl Acc : ὀδόντας
+s Pl Gen : ὀδόντων
+s Pl Dat : ὀδοῦσι
+s Pl Voc : ὀδόντες
+s Dl Nom : ὀδόντε
+s Dl Acc : ὀδόντε
+s Dl Gen : ὀδόντοιν
+s Dl Dat : ὀδόντοιν
+s Dl Voc : ὀδόντε
+
+ok:
+s Sg Nom : γέρων
+s Sg Acc : γέροντα
+s Sg Gen : γέροντος
+s Sg Dat : γέροντι
+s Sg Voc : γέρον
+s Pl Nom : γέροντες
+s Pl Acc : γέροντας
+s Pl Gen : γερόντων
+s Pl Dat : γέρουσι
+s Pl Voc : γέροντες
+s Dl Nom : γέροντε
+s Dl Acc : γέροντε
+s Dl Gen : γερόντοιν
+s Dl Dat : γερόντοιν
+s Dl Voc : γέροντε
+
+BR 47: stem in -r with 3 ablauts
+ok:
+s Sg Nom : πατήρ
+s Sg Acc : πατέρα
+s Sg Gen : πατρός
+s Sg Dat : πατρί
+s Sg Voc : πάτερ
+s Pl Nom : πατέρες
+s Pl Acc : πατέρας
+s Pl Gen : πατέρων
+s Pl Dat : πατράσι
+s Pl Voc : πατέρες
+s Dl Nom : πατέρε
+s Dl Acc : πατέρε
+s Dl Gen : πατέροιν
+s Dl Dat : πατέροιν
+s Dl Voc : πατέρε
+
+ok:
+s Sg Nom : μήτηρ
+s Sg Acc : μητέρα
+s Sg Gen : μητρός
+s Sg Dat : μητρί
+s Sg Voc : μῆτερ
+s Pl Nom : μητέρες
+s Pl Acc : μητέρας
+s Pl Gen : μητέρων
+s Pl Dat : μητράσι
+s Pl Voc : μητέρες
+s Dl Nom : μητέρε
+s Dl Acc : μητέρε
+s Dl Gen : μητέροιν
+s Dl Dat : μητέροιν
+s Dl Voc : μητέρε
+
+ok:
+s Sg Nom : θυγάτηρ
+s Sg Acc : θυγατέρα
+s Sg Gen : θυγατρός
+s Sg Dat : θυγατρί
+s Sg Voc : θύγατερ
+s Pl Nom : θυγατέρες
+s Pl Acc : θυγατέρας
+s Pl Gen : θυγατέρων
+s Pl Dat : θυγατράσι
+s Pl Voc : θυγατέρες
+s Dl Nom : θυγατέρε
+s Dl Acc : θυγατέρε
+s Dl Gen : θυγατέροιν
+s Dl Dat : θυγατέροιν
+s Dl Voc : θυγατέρε
+
+TODO
+s Sg Nom : γαστήρ
+s Sg Acc : γάστρα  > gaste'ra
+s Sg Gen : γάστρος > gastro's
+s Sg Dat : γάστρι     > gastri'
+s Sg Voc : γάστρ     > 
+s Pl Nom : γάστρες > gaste'res etc BR 47
+s Pl Acc : γάστρας
+s Pl Gen : γάστρων
+s Pl Dat : γάστρσι
+s Pl Voc : γάστρες
+s Dl Nom : γάστρε
+s Dl Acc : γάστρε
+s Dl Gen : γάστροιν
+s Dl Dat : γάστροιν
+s Dl Voc : γάστρε
+
+
+s Sg Nom : ἀνήρ
+s Sg Acc : ἄνδρα
+s Sg Gen : ἀνδρός
+s Sg Dat : ἀνδρί
+s Sg Voc : ἄνδρ     > a)'ner
+s Pl Nom : ἄνδρες
+s Pl Acc : ἄνδρας
+s Pl Gen : ἀνδρῶν
+s Pl Dat : ἀνδράσι
+s Pl Voc : ἄνδρες
+s Dl Nom : ἄνδρε
+s Dl Acc : ἄνδρε
+s Dl Gen : ἀνδροῖν
+s Dl Dat : ἀνδροῖν
+s Dl Voc : ἄνδρε
+
+
+
+BR 48: stem ending in -s
+s Sg Nom : γένος
+s Sg Acc : γένος
+s Sg Gen : γένους
+s Sg Dat : γένει
+s Sg Voc : γένε  ?
+s Pl Nom : γένη
+s Pl Acc : γένη
+s Pl Gen : γενῶν
+s Pl Dat : γένεσι
+s Pl Voc : γένη
+s Dl Nom : γένει
+s Dl Acc : γένει
+s Dl Gen : γενοῖν
+s Dl Dat : γενοῖν
+s Dl Voc : γένει
+
+
+s Sg Nom : Διογένης
+s Sg Acc : Διογένης  > Διογένη  BR 48.4
+s Sg Gen : Διογένους
+s Sg Dat : Διογένει
+s Sg Voc : Διογένε    > Dio'genes
+s Pl Nom : Διογένεις  -- Pl, Dl irrelevant
+s Pl Acc : Διογένης
+s Pl Gen : Διογενῶν
+s Pl Dat : Διογένεσι
+s Pl Voc : Διογένεις
+s Dl Nom : Διογένει
+s Dl Acc : Διογένει
+s Dl Gen : Διογενοῖν
+s Dl Dat : Διογενοῖν
+s Dl Voc : Διογένει
+
+
+s Sg Nom : Περικλῆς
+s Sg Acc : Περικλῆς   > Περικλe'a_
+s Sg Gen : Περικλέους
+s Sg Dat : Περικλέει   > Περικλει~
+s Sg Voc : Περικλέε   > Περι'κλeis
+s Pl Nom : Περικλέεις -- omit Pl, Dl in PN
+s Pl Acc : Περικλέης
+s Pl Gen : Περικλεῶν
+s Pl Dat : Περικλέεσι
+s Pl Voc : Περικλέεις
+s Dl Nom : Περικλέει
+s Dl Acc : Περικλέει
+s Dl Gen : Περικλεοῖν
+s Dl Dat : Περικλεοῖν
+s Dl Voc : Περικλέει
+
+s Sg Nom : φιλόσοφος
+s Sg Acc : φιλόσοφον
+s Sg Gen : φιλοσόφου
+s Sg Dat : φιλοσόφῳ
+s Sg Voc : φιλόσοφε
+s Pl Nom : φιλόσοφοι
+s Pl Acc : φιλοσόφους
+s Pl Gen : φιλοσόφων
+s Pl Dat : φιλοσόφοις
+s Pl Voc : φιλόσοφοι
+s Dl Nom : φιλοσόφω
+s Dl Acc : φιλοσόφω
+s Dl Gen : φιλοσόφοιν
+s Dl Dat : φιλοσόφοιν
+s Dl Voc : φιλοσόφω
+
+BR 49 stem in -i/e with ablaut
+s Sg Nom : πόλις
+s Sg Acc : πόλιν
+s Sg Gen : πόλεως
+s Sg Dat : πόλει
+s Sg Voc : πόλι
+s Pl Nom : πόλεις
+s Pl Acc : πόλεις
+s Pl Gen : πόλεων
+s Pl Dat : πόλεσι
+s Pl Voc : πόλεις
+s Dl Nom : πόλε  > po'lei  BR 49, BR 74
+s Dl Acc : πόλε    > po'lei
+s Dl Gen : πόλεις > pole'oin
+s Dl Dat : πόλεις  > pole'oin
+s Dl Voc : πόλε    > po'lei
+
+
+s Sg Nom : δύναμις
+s Sg Acc : δύναμιν
+s Sg Gen : δυνάμεως
+s Sg Dat : δυνάμει
+s Sg Voc : δύναμι
+s Pl Nom : δυνάμεις
+s Pl Acc : δυνάμεις
+s Pl Gen : δυνάμεων
+s Pl Dat : δυνάμεσι
+s Pl Voc : δυνάμεις
+s Dl Nom : δυνάμει
+s Dl Acc : δυνάμει
+s Dl Gen : δυνάμοιν
+s Dl Dat : δυνάμοιν
+s Dl Voc : δυνάμει
+
+
+BR 50
+s Sg Nom : πῆχυς
+s Sg Acc : πῆχυν
+s Sg Gen : πήχεως
+s Sg Dat : πήχει
+s Sg Voc : πῆχυ
+s Pl Nom : πήχεις
+s Pl Acc : πήχεις
+s Pl Gen : πήχεων
+s Pl Dat : πήχεσι
+s Pl Voc : πήχεις
+s Dl Nom : πήχει
+s Dl Acc : πήχει
+s Dl Gen : πήχοιν  > phcoi~n ?
+s Dl Dat : πήχοιν
+s Dl Voc : πήχει
+
+
+s Sg Nom : ἄστυ
+s Sg Acc : ἄστυ
+s Sg Gen : ἄστεως
+s Sg Dat : ἄστει
+s Sg Voc : ἄστυ
+s Pl Nom : ἄστη
+s Pl Acc : ἄστη
+s Pl Gen : ἄστεων
+s Pl Dat : ἄστεσι
+s Pl Voc : ἄστη
+s Dl Nom : ἄστει
+s Dl Acc : ἄστει
+s Dl Gen : ἄστοιν
+s Dl Dat : ἄστοιν
+s Dl Voc : ἄστει
+
+
+BR 51
+ok:
+s Sg Nom : ιχθῦς
+s Sg Acc : ιχθῦν
+s Sg Gen : ιχθύος
+s Sg Dat : ιχθύι
+s Sg Voc : ιχθῦ
+s Pl Nom : ιχθύες
+s Pl Acc : ιχθῦς
+s Pl Gen : ιχθύων
+s Pl Dat : ιχθύσι
+s Pl Voc : ιχθύες
+s Dl Nom : ιχθύε
+s Dl Acc : ιχθύε
+s Dl Gen : ιχθύοιν
+s Dl Dat : ιχθύοιν
+s Dl Voc : ιχθύε
+
+ok:
+s Sg Nom : σῦς
+s Sg Acc : σῦν
+s Sg Gen : συός
+s Sg Dat : συί
+s Sg Voc : σῦ
+s Pl Nom : σύες
+s Pl Acc : σῦς
+s Pl Gen : συῶν
+s Pl Dat : συσί
+s Pl Voc : σύες
+s Dl Nom : συέ
+s Dl Acc : συέ
+s Dl Gen : συοῖν
+s Dl Dat : συοῖν
+s Dl Voc : συέ
+
+ok:
+s Sg Nom : πίτυς
+s Sg Acc : πίτυν
+s Sg Gen : πίτυος
+s Sg Dat : πίτυι
+s Sg Voc : πίτυ
+s Pl Nom : πίτυες
+s Pl Acc : πίτυς
+s Pl Gen : πιτύων
+s Pl Dat : πίτυσι
+s Pl Voc : πίτυες
+s Dl Nom : πίτυε
+s Dl Acc : πίτυε
+s Dl Gen : πιτύοιν
+s Dl Dat : πιτύοιν
+s Dl Voc : πίτυε
+
+BR 52 stem in -ey
+ok:
+s Sg Nom : βασιλεύς
+s Sg Acc : βασιλέα
+s Sg Gen : βασιλέως
+s Sg Dat : βασιλεῖ
+s Sg Voc : βασιλεῦ
+s Pl Nom : βασιλῆς
+s Pl Acc : βασιλέας
+s Pl Gen : βασιλέων
+s Pl Dat : βασιλεῦσι
+s Pl Voc : βασιλῆς
+s Dl Nom : βασιλεῦε
+s Dl Acc : βασιλεῦε
+s Dl Gen : βασιλέοιν
+s Dl Dat : βασιλέοιν
+s Dl Voc : βασιλεῦε
+
+
+s Sg Nom : ἀγαθόν
+s Sg Acc : ἀγαθόν
+s Sg Gen : ἀγαθοῦ
+s Sg Dat : ἀγαθῷ
+s Sg Voc : ἀγαθόν
+s Pl Nom : ἀγαθά
+s Pl Acc : ἀγαθά
+s Pl Gen : ἀγαθῶν
+s Pl Dat : ἀγαθοῖς
+s Pl Voc : ἀγαθά
+s Dl Nom : ἀγαθῶ
+s Dl Acc : ἀγαθῶ
+s Dl Gen : ἀγαθοῖν
+s Dl Dat : ἀγαθοῖν
+s Dl Voc : ἀγαθῶ
+
+
+s Sg Nom : γραμματική
+s Sg Acc : γραμματικήν
+s Sg Gen : γραμματικῆς
+s Sg Dat : γραμματικῇ
+s Sg Voc : γραμματική
+s Pl Nom : γραμματικαί
+s Pl Acc : γραμματικάς
+s Pl Gen : γραμματικῶν
+s Pl Dat : γραμματικαῖς
+s Pl Voc : γραμματικαί
+s Dl Nom : γραμματικά
+s Dl Acc : γραμματικά
+s Dl Gen : γραμματικαῖν
+s Dl Dat : γραμματικαῖν
+s Dl Voc : γραμματικά
+
+
+s Sg Nom : γλῶσσα
+s Sg Acc : γλῶσσαν
+s Sg Gen : γλώσσης
+s Sg Dat : γλώσσῃ
+s Sg Voc : γλῶσσα
+s Pl Nom : γλῶσσαι
+s Pl Acc : γλώσσας
+s Pl Gen : γλωσσῶν
+s Pl Dat : γλώσσαις
+s Pl Voc : γλῶσσαι
+s Dl Nom : γλώσσα
+s Dl Acc : γλώσσα
+s Dl Gen : γλώσσαιν
+s Dl Dat : γλώσσαιν
+s Dl Voc : γλώσσα
+
+
+s Sg Nom : εἰρήνη
+s Sg Acc : εἰρήνην
+s Sg Gen : εἰρήνης
+s Sg Dat : εἰρήνῃ
+s Sg Voc : εἰρήνη
+s Pl Nom : εἰρῆναι
+s Pl Acc : εἰρήνας
+s Pl Gen : εἰρηνῶν
+s Pl Dat : εἰρήναις
+s Pl Voc : εἰρῆναι
+s Dl Nom : εἰρήνα
+s Dl Acc : εἰρήνα
+s Dl Gen : εἰρήναιν
+s Dl Dat : εἰρήναιν
+s Dl Voc : εἰρήνα
+
+
+s Sg Nom : βασίλεα
+s Sg Acc : βασίλεαν
+s Sg Gen : βασίλεας
+s Sg Dat : βασίλεᾳ
+s Sg Voc : βασίλεα
+s Pl Nom : βασίλεαι
+s Pl Acc : βασίλεας
+s Pl Gen : βασιλεῶν
+s Pl Dat : βασίλεαις
+s Pl Voc : βασίλεαι
+s Dl Nom : βασίλεα
+s Dl Acc : βασίλεα
+s Dl Gen : βασίλεαιν
+s Dl Dat : βασίλεαιν
+s Dl Voc : βασίλεα
+
+
+s Sg Nom : ποταμός
+s Sg Acc : ποταμόν
+s Sg Gen : ποταμοῦ
+s Sg Dat : ποταμῷ
+s Sg Voc : ποταμέ
+s Pl Nom : ποταμοί
+s Pl Acc : ποταμούς
+s Pl Gen : ποταμῶν
+s Pl Dat : ποταμοῖς
+s Pl Voc : ποταμοί
+s Dl Nom : ποταμῶ
+s Dl Acc : ποταμῶ
+s Dl Gen : ποταμοῖν
+s Dl Dat : ποταμοῖν
+s Dl Voc : ποταμῶ
+
+
+s Sg Nom : λίθος
+s Sg Acc : λίθον
+s Sg Gen : λίθου
+s Sg Dat : λίθῳ
+s Sg Voc : λίθε
+s Pl Nom : λίθοι
+s Pl Acc : λίθους
+s Pl Gen : λίθων
+s Pl Dat : λίθοις
+s Pl Voc : λίθοι
+s Dl Nom : λίθω
+s Dl Acc : λίθω
+s Dl Gen : λίθοιν
+s Dl Dat : λίθοιν
+s Dl Voc : λίθω
+
+
+s Sg Nom : ἔργον
+s Sg Acc : ἔργον
+s Sg Gen : ἔργου
+s Sg Dat : ἔργῳ
+s Sg Voc : ἔργον
+s Pl Nom : ἔργα
+s Pl Acc : ἔργα
+s Pl Gen : ἔργων
+s Pl Dat : ἔργοις
+s Pl Voc : ἔργα
+s Dl Nom : ἔργω
+s Dl Acc : ἔργω
+s Dl Gen : ἔργοιν
+s Dl Dat : ἔργοιν
+s Dl Voc : ἔργω
+
+
+s Sg Nom : βίβλος
+s Sg Acc : βίβλον
+s Sg Gen : βίβλου
+s Sg Dat : βίβλῳ
+s Sg Voc : βίβλε
+s Pl Nom : βίβλοι
+s Pl Acc : βίβλους
+s Pl Gen : βίβλων
+s Pl Dat : βίβλοις
+s Pl Voc : βίβλοι
+s Dl Nom : βίβλω
+s Dl Acc : βίβλω
+s Dl Gen : βίβλοιν
+s Dl Dat : βίβλοιν
+s Dl Voc : βίβλω
+
+
+s Sg Nom : ἡμέρα
+s Sg Acc : ἡμέραν
+s Sg Gen : ἡμέρας
+s Sg Dat : ἡμέρᾳ
+s Sg Voc : ἡμέρα
+s Pl Nom : ἡμέραι
+s Pl Acc : ἡμέρας
+s Pl Gen : ἡμερῶν
+s Pl Dat : ἡμέραις
+s Pl Voc : ἡμέραι
+s Dl Nom : ἡμέρα
+s Dl Acc : ἡμέρα
+s Dl Gen : ἡμέραιν
+s Dl Dat : ἡμέραιν
+s Dl Voc : ἡμέρα
+
