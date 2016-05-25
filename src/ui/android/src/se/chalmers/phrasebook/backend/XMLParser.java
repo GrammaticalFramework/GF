@@ -6,9 +6,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,20 +40,20 @@ public class XMLParser {
         }
     }
 
-    public HashMap<String, String> getSentencesData() {
+    public List<Map.Entry<String, String>> getSentencesData() {
         String[] result;
-        HashMap<String, String> sentenceMap = new HashMap<String, String>();
+        List<Map.Entry<String, String>> sentences = new ArrayList<Map.Entry<String, String>>();
 
-        NodeList sentences = document.getElementsByTagName("sentence");
-        int nbrOfSentences = sentences.getLength();
+        NodeList sentencesList = document.getElementsByTagName("sentence");
+        int nbrOfSentences = sentencesList.getLength();
 
         for (int i = 0; i < nbrOfSentences; i++) {
-            String desc = sentences.item(i).getAttributes().getNamedItem("desc").getNodeValue();
-            String id = sentences.item(i).getAttributes().getNamedItem("id").getNodeValue();
+            String desc = sentencesList.item(i).getAttributes().getNamedItem("desc").getNodeValue();
+            String id = sentencesList.item(i).getAttributes().getNamedItem("id").getNodeValue();
             if (desc != null && id != null)
-                sentenceMap.put(id, desc);
+                sentences.add(new HashMap.SimpleEntry<String,String>(id, desc));
         }
-        return sentenceMap;
+        return sentences;
     }
 
     public SyntaxTree getAdvancedOptionSyntaxTree() {
