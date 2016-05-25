@@ -1841,7 +1841,7 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 
 	rc = open_exprs(sg, 0, false, &tres->ectxt, err);
 	if (rc != SQLITE_OK)
-		goto close1;
+		goto close;
 
 	for (int i = 0; i < 3; i++) {
 		if (gu_variant_is_null(triple[i]))
@@ -1850,7 +1850,7 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 			tres->i.mem[i].flags = MEM_Int;
 			rc = store_expr(sg, &tres->ectxt, triple[i], &tres->i.mem[i].u.i, 0);
 			if (rc != SQLITE_OK)
-				goto close1;
+				goto close;
 			if (tres->i.mem[i].u.i == 0) {
 				tres->i.res = 1;
 				tres->i.tctxt.n_cursors = 0; // this is important since the triples are not initialized yet
@@ -1867,8 +1867,6 @@ sg_query_triple(SgSG *sg, SgTriple triple, GuExn* err)
 	return tres;
 
 close:
-	close_triples(&tres->i.tctxt);
-close1:
 	close_exprs(&tres->ectxt);
 
 	if (sg->autoCommit) {
