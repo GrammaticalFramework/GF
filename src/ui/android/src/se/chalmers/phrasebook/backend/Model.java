@@ -3,9 +3,8 @@ package se.chalmers.phrasebook.backend;
 
 import android.content.Context;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
 import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.ui.android.R;
@@ -33,8 +32,8 @@ public class Model {
         }
 
 		phrases = new ArrayList<SyntaxTree>();
-        for (String s : parser.getSentencesData().keySet()) {
-            phrases.add(parser.getSyntaxTree(s));
+        for (Map.Entry<String,String> entry : parser.getSentencesData()) {
+            phrases.add(parser.getSyntaxTree(entry.getKey()));
         }
     }
 
@@ -52,10 +51,10 @@ public class Model {
         currentPhrase.setSelectedChild(optionIndex, target, childIndex, isAdvanced);
     }
 
-    public ArrayList<String> getSentencesInCurrentPhrasebook() {
+    public List<String> getSentencesInCurrentPhrasebook() {
         ArrayList<String> sentences = new ArrayList<String>();
-        for (int i = 0; i < phrases.size(); i++) {
-			sentences.add(parser.getSentencesData().get(phrases.get(i).getId()));
+        for (Map.Entry<String,String> entry : parser.getSentencesData()) {
+			sentences.add(entry.getValue());
         }
         return sentences;
     }
@@ -67,15 +66,14 @@ public class Model {
     }
 
     public String getDescFromPos(int pos) {
-        return parser.getSentencesData()
-                .get((String) (parser.getSentencesData().keySet().toArray()[pos]));
+        return parser.getSentencesData().get(pos).getValue();
     }
 
     public void setNumeralCurrentPhrase() {
-        for (int i = 0; i < parser.getSentencesData().values().size(); i++) {
-            if ((parser.getSentencesData().keySet().toArray()[i]).equals("NNumeral")) {
-                currentPhrase = parser.getSyntaxTree((String) parser.getSentencesData()
-                        .keySet().toArray()[i]);
+        for (int i = 0; i < parser.getSentencesData().size(); i++) {
+			String key = parser.getSentencesData().get(i).getKey();
+            if (key.equals("NNumeral")) {
+                currentPhrase = parser.getSyntaxTree(key);
             }
         }
     }
