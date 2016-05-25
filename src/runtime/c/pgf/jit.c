@@ -155,7 +155,9 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 	abscat->predicate = (PgfFunction) jit_get_ip().ptr;
 
 	if (strcmp(abscat->name, "String") == 0) {
+#ifdef PGF_JIT_DEBUG
 		gu_printf(out, err, "    MK_STRING\n");
+#endif
 
 		jit_prepare(2);
 		jit_pusharg_p(JIT_VCLOS);
@@ -172,7 +174,9 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 	}
 
 	if (strcmp(abscat->name, "Int") == 0) {
+#ifdef PGF_JIT_DEBUG
 		gu_printf(out, err, "    MK_INT\n");
+#endif
 
 		jit_prepare(2);
 		jit_pusharg_p(JIT_VCLOS);
@@ -189,7 +193,9 @@ pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
 	}
 
 	if (strcmp(abscat->name, "Float") == 0) {
+#ifdef PGF_JIT_DEBUG
 		gu_printf(out, err, "    MK_FLOAT\n");
+#endif
 
 		jit_prepare(2);
 		jit_pusharg_p(JIT_VCLOS);
