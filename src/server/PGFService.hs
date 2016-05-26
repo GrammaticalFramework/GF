@@ -38,15 +38,16 @@ import Control.Monad.State(State,evalState,get,put)
 import Control.Monad.Catch(bracket_)
 import Data.Char
 --import Data.Function (on)
-import Data.List (sortBy,intersperse,mapAccumL,nub,isSuffixOf,nubBy)
+import Data.List ({-sortBy,-}intersperse,mapAccumL,nub,isSuffixOf,nubBy)
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Random
 import System.Process
 import System.Exit
 import System.IO
-import System.IO.Error(isDoesNotExistError)
+import System.IO.Error(isDoesNotExistError,tryIOError)
 import System.Directory(removeFile)
+import System.FilePath(dropExtension,(<.>))
 import System.Mem(performGC)
 import Fold(fold) -- transfer function for OpenMath LaTeX
 
@@ -111,7 +112,7 @@ cgiMain' cache path =
 #else
                    serverError "Server configured without C run-time support" ""
 #endif
-         _          -> pgfMain command =<< getFile (readCache' (fst cache)) path
+         _     -> pgfMain path command =<< getFile (readCache' (fst cache)) path
 
 getFile get path =
    either failed return =<< liftIO (E.try (get path))
@@ -375,8 +376,8 @@ unlexerH = maybe (return doBind) unlexerfun =<< getInput "unlexer"
 --------------------------------------------------------------------------------
 -- * Haskell run-time functionality
 
---pgfMain :: String -> PGF -> CGI CGIResult
-pgfMain command (t,pgf) =
+--pgfMain :: FilePath -> String -> PGF -> CGI CGIResult
+pgfMain path command (t,pgf) =
     case command of
       "parse"          -> o =<< doParse pgf # input % cat % limit % treeopts
       "complete"       -> o =<< doComplete pgf # input % cat % limit % full
@@ -392,6 +393,7 @@ pgfMain command (t,pgf) =
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
       "parsetree"      -> outputGraphviz =<< parseTree pgf # from1 % graphvizOptions % tree
+      "deptree"        -> join $ doDepTree path pgf # format "dot" % to1 % tree
       "abstrjson"      -> o . jsonExpr =<< tree
       "browse"         -> join $ doBrowse pgf # optId % cssClass % href % format "html" % getIncludePrintNames
       "external"       -> do cmd <- getInput "external"
@@ -461,6 +463,8 @@ pgfMain command (t,pgf) =
 
     from1 = maybe (missing "from") return =<< from
     from = getLang "from"
+
+    to1 = maybe (missing "to") return =<< getLang "to"
     to = (,) # getLangs "to" % unlexerH
 
     getLangs = getLangs' readLang
@@ -517,7 +521,7 @@ errorMissingId = badRequest "Missing identifier" ""
 
 notFound = throw 404 "Not found"
 badRequest = throw 400
-serverError = throw 500
+--serverError = throw 500
 
 throw code msg extra =
     throwCGIError code msg [msg ++(if null extra then "" else ": "++extra)]
@@ -769,6 +773,16 @@ abstrTree pgf      opts tree = PGF.graphvizAbstractTree pgf opts' tree
   where opts' = (not (PGF.noFun opts),not (PGF.noCat opts))
 
 parseTree pgf lang opts tree = PGF.graphvizParseTree pgf lang opts tree
+
+doDepTree path pgf fmt lang tree =
+  do lbls <- either (const Nothing) Just # liftIO (tryIOError readDepLabels)
+     let vis = PGF.graphvizDependencyTree fmt False lbls Nothing pgf lang tree
+     if fmt `elem` ["png","gif","svg","gv"]
+       then outputGraphviz vis
+       else outputPlain vis
+  where
+    labelsPath = dropExtension path <.> "labels"
+    readDepLabels = PGF.getDepLabels . lines # readFile labelsPath
 
 alignment pgf tree (tos,unlex) = PGF.graphvizAlignment pgf tos' tree
   where tos' = if null tos then PGF.languages pgf else tos
