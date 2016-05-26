@@ -521,7 +521,7 @@ errorMissingId = badRequest "Missing identifier" ""
 
 notFound = throw 404 "Not found"
 badRequest = throw 400
---serverError = throw 500
+serverError = throw 500
 
 throw code msg extra =
     throwCGIError code msg [msg ++(if null extra then "" else ": "++extra)]
