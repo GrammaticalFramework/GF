@@ -22549,6 +22549,7 @@ lin frederick_PN = mkPN "Frederick";
 lin frederiksberg_PN = mkPN "Frederiksberg";
 lin free_1_A = mkA "free" "freer";
 lin free_2_A = mkA "free" "freer";
+lin free_3_A = mkA "free" "freer";
 lin free_N = mkN "free" ;
 lin free_V2 = mkV2 (mkV "free" "frees" "freed" "freed" "freeing");
 lin free_V2V = mkV2V (mkV "free") noPrep to_Prep ;
