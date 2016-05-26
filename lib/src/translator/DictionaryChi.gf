@@ -30438,7 +30438,8 @@ lin soloist_N = mkN "独奏者" ;
 lin solon_PN = foreignPN "Solon" ; -- comment=src=geonames status=guess
 lin solstice_N = mkN "至日" | mkN "至點" | mkN "至点" | mkN "冬至" | mkN "夏至" | {-mwn-} mkN "至" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- open-multilingual-wordnet
 lin soluble_A = mkA "可溶性" ;
-lin solution_N = mkN "答案" "個" | {-HSK-} mkN "解决方案" ;
+lin solution_1_N = mkN "答案" "個" | {-HSK-} mkN "解决方案" ;
+lin solution_2_N = mkN "答案" "個" | {-HSK-} mkN "解决方案" ;
 lin solvable_A = mkA "可以解" | mkA "可以解决" | mkA "可分解" | mkA "可解决" ; -- open-multilingual-wordnet
 lin solvate_N = mkN "溶剂化物" ; -- open-multilingual-wordnet
 lin solvation_N = mkN "溶剂化" | mkN "溶剂化作用" | mkN "溶剂离解作用" ; -- open-multilingual-wordnet

@@ -24783,7 +24783,8 @@ lin solon_PN = mkPN "Solon" ; -- status=guess src=geonames
 lin solstice_N = mkN "solstizio" ; -- status=guess
 lin solubility_N = mkN "solubilità" feminine ; -- status=guess
 lin solute_N = mkN "soluto" ; -- status=guess
-lin solution_N = mkN "soluzione" feminine ; -- status=guess
+lin solution_1_N = mkN "soluzione" feminine ; -- status=guess
+lin solution_2_N = mkN "soluzione" feminine ; -- status=guess
 lin solvation_N = mkN "solvatazione" feminine ; -- status=guess
 lin solve_V2 = variants {} ; --
 lin solvency_N = mkN "solvenza" | mkN "solvibilità" ; -- UWN

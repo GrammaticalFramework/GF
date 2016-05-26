@@ -52521,7 +52521,8 @@ lin solstice_N = mkN "sommarsolstånd" | mkN "vintersolstånd" ; -- status=guess
 lin solubility_N = mkN "löslighet" ;
 lin soluble_A = mkA "löslig" ; -- status=guess
 lin solute_N = variants {} ; -- status=guess
-lin solution_N = mkN "lösning" ;
+lin solution_1_N = mkN "lösning" ;
+lin solution_2_N = mkN "lösning" ;
 lin solvability_N = mkN "likviditetskriterier" ; -- src=google
 lin solvable_A = mkA "löslig" ; -- status=guess
 lin solvate_N = mkN "solvat" ; -- src=google
