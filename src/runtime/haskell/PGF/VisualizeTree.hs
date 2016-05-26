@@ -16,10 +16,10 @@ module PGF.VisualizeTree
              , graphvizParseTree
              , graphvizParseTreeDep
              , graphvizDependencyTree
+             , getDepLabels
              , graphvizBracketedString
              , graphvizAlignment
              , gizaAlignment
-             , getDepLabels
              , conlls2latexDoc
              ) where
 
@@ -59,7 +59,9 @@ data GraphvizOptions = GraphvizOptions {noLeaves :: Bool,
 graphvizDefaults = GraphvizOptions False False False True "" "" "" "" "" ""
 
 
--- | Renders abstract syntax tree in Graphviz format
+-- | Renders abstract syntax tree in Graphviz format.
+-- The pair of 'Bool' @(funs,cats)@ lets you control whether function names and
+-- category names are included in the rendered tree.
 graphvizAbstractTree :: PGF -> (Bool,Bool) -> Tree -> String
 graphvizAbstractTree pgf (funs,cats) = render . tree2graph
   where
@@ -113,7 +115,16 @@ graphvizAbstractTree pgf (funs,cats) = render . tree2graph
 
 type Labels = Map.Map CId [String]
 
-graphvizDependencyTree :: String -> Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Tree -> String
+-- | Visualize word dependency tree.
+graphvizDependencyTree
+  :: String -- ^ Output format: @"latex"@, @"conll"@, @"malt_tab"@, @"malt_input"@ or @"dot"@
+  -> Bool -- ^ Include extra information (debug)
+  -> Maybe Labels -- ^ Label information obtained with 'getDepLabels'
+  -> unused -- ^ not used (was: @Maybe String@)
+  -> PGF
+  -> CId -- ^ The language of analysis
+  -> Tree
+  -> String -- ^ Rendered output in the specified format
 graphvizDependencyTree format debug mlab ms pgf lang t = 
   case format of
     "latex"      -> conll2latex $ render $ vcat (map (hcat . intersperse (char '\t')         ) wnodes)
@@ -217,6 +228,8 @@ graphvizDependencyTree format debug mlab ms pgf lang t =
     root_lbl = "ROOT"
     unspec   = text "_"
 
+-- | Prepare lines obtained from a configuration file for labels for
+-- use with 'graphvizDependencyTree'. Format per line /fun/ /label/@*@.
 getDepLabels :: [String] -> Labels
 getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
 
