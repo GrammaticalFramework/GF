@@ -22453,6 +22453,7 @@ lin frederick_PN = mkPN "Фредерик" Masc ;
 lin frederiksberg_PN = mkPN "Фредриксберг" Masc ;
 lin free_1_A = mkA079 "свободен" ;
 lin free_2_A = mkA079 "безплатен" ;
+lin free_3_A = mkA079 "свободен" ;
 lin free_N = mkN033 "свободен" ;
 lin free_V2 = dirV2 (dualV (mkV186 "освобождавам") (mkV174 "освободя")) ; ----
 lin free_V2V = mkV2V (dualV (mkV186 "освобождавам") (mkV174 "освободя")) noPrep noPrep ;

@@ -22324,10 +22324,11 @@ lin freddie_PN = mkPN "Freddie" ; -- src=eng status=guess
 lin freddy_PN = mkPN "Freddy" ; -- src=eng status=guess
 lin frederick_PN = mkPN "Frederick" neutrum ; -- src=geonames status=guess
 lin frederiksberg_PN = mkPN "Frederiksberg" neutrum ; -- src=geonames status=guess
-lin free_1_A = mkA "ledig" | mkA "fri" "fritt" ;
+lin free_1_A = mkA "fri" "fritt" ;
 lin free_2_A = mkA "kostnadsfri" "kostnadsfritt" ;
-lin free_N = mkN "fritt kassaflöde" ; -- status=guess
-lin free_V2 = mkV2 (mkV "frigöra" "frigjorde" "frigjort") | mkV2 (mkV "befriar") | mkV2 (mkV "frita" "fritar" "frita" "fritog" "fritagit" "fritagen") ; -- status=guess
+lin free_3_A = mkA "ledig" ;
+lin free_N = mkN "fri människor" ;
+lin free_V2 = mkV2 (mkV "befriar") | mkV2 (mkV "frigöra" "frigjorde" "frigjort") | mkV2 (mkV "frita" "fritar" "frita" "fritog" "fritagit" "fritagen") ; -- status=guess
 lin free_V2V = mkV2V (mkV "befriar") ; -- status=guess
 lin free_and_easy_A = variants {} ; -- status=guess
 lin free_for_all_N = variants {} ; -- status=guess
@@ -23297,12 +23298,12 @@ lin gentile_N = variants {} ; -- status=guess
 lin gentility_N = variants {} ; -- status=guess
 lin gentle_A = mkA "mjuk" ; -- comment=7
 lin gentlefolk_N = mkN "herrskap" neutrum ;
-lin gentleman_N = mkN "gentleman" "gentlemannen" "gentlemän" "gentlemännen" | mkN "man" ; -- SaldoWN -- comment=4
+lin gentleman_N = mkN "gentleman" "gentlemannen" "gentlemän" "gentlemännen" ;
 lin gentleman_at_arms_N = variants {} ; -- status=guess
 lin gentlemanlike_A = variants {} ; -- status=guess
 lin gentlemanly_A = mkA "gentlemannamässig" ; -- status=guess
 lin gentleness_N = mkN "mildhet" "mildheter" ; -- comment=6
-lin gentlewoman_N = mkN "gentle" ; -- src=google
+lin gentlewoman_N = mkN "gentlekvinna" ;
 lin gentrification_N = mkN "gentrifiering" ; -- status=guess
 lin gentry_N = mkN "herrskap" neutrum ;
 lin genuflect_V = mkV "knäfalla" "knäföll" "knäfallit" | mkV "knäböjer" ; -- status=guess
