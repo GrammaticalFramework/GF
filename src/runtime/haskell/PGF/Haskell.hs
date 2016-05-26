@@ -61,7 +61,7 @@ data R_s t = R_s t deriving (Eq,Ord,Show)
 instance (EnumAll t) => EnumAll (R_s t) where enumAll = R_s <$> enumAll
 instance Has_s (R_s t) t where proj_s (R_s t) = t
 
--- | Coerce from any record type @{...,s:t,...}@ field to the supertype @{s:t}@
+-- | Coerce from any record type @{...,s:t,...}@ to the supertype @{s:t}@
 to_R_s r = R_s (proj_s r)
 
 
