@@ -19047,7 +19047,8 @@ lin solo_N = mkN "solo" ; -- status=guess
 lin solon_PN = mkPN "Solon" ; -- src=geonames status=guess
 lin solstice_N = mkN "zonnewende" feminine | mkN "zonnestilstand" masculine ; -- status=guess status=guess
 lin solubility_N = mkN "oplosbaarheid" feminine ; -- status=guess
-lin solution_N = mkN "oplossing" feminine ;
+lin solution_1_N = mkN "oplossing" feminine ;
+lin solution_2_N = mkN "oplossing" feminine ;
 lin solve_V2 = mkV2 (mkV "oplossen") ; -- status=guess, src=wikt
 lin solvent_N = mkN "oplosmiddel" ; -- status=guess
 lin somaliFem_N = variants {} ; ---- sense to be split

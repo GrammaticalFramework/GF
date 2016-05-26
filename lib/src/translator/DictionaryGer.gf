@@ -52856,7 +52856,8 @@ lin solstice_N = mkN "Sonnenwende" "Sonnenwenden" feminine ; -- status=guess
 lin solubility_N = mkN "Löslichkeitsprodukt" neuter ; -- status=guess
 lin soluble_A = mkA "löslich" ; -- status=guess
 lin solute_N = variants {} ;
-lin solution_N = mkN "Lösung" feminine ;
+lin solution_1_N = mkN "Lösung" feminine ;
+lin solution_2_N = mkN "Lösung" feminine ;
 lin solvability_N = variants {} ;
 lin solvable_A = mkA "löslich" ; -- status=guess
 lin solvate_N = variants {} ;

@@ -27382,7 +27382,8 @@ lin solstice_N = mkN "solsticio" ; -- status=guess
 lin solubility_N = mkN "solubilidad" feminine ; -- status=guess
 lin soluble_A = mkA "soluble" ; -- status=guess
 lin solute_N = mkN "soluto" ; -- status=guess
-lin solution_N = mkN "solución" feminine ;
+lin solution_1_N = mkN "solución" feminine ;
+lin solution_2_N = mkN "solución" feminine ;
 lin solvability_N = mkN "solubilidad" ; --UWN
 lin solvation_N = mkN "solvatación" feminine ; -- status=guess
 lin solve_V2 = mkV2 (resolver_V) | mkV2 (mkV "solucionar") ; -- status=guess
