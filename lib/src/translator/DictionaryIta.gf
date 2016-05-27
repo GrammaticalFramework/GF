@@ -15540,7 +15540,8 @@ lin ligament_N = mkN "legamento" ; -- status=guess
 lin ligand_N = mkN "ligando" | mkN "legante" masculine ; -- status=guess status=guess
 lin ligation_N = mkN "allacciatura" | mkN "legatura" ; -- UWN
 lin ligature_N = mkN "legatura" ; -- status=guess
-lin light_A = mkA "leggero" | mkA "leggera" ; -- status=guess status=guess
+lin light_1_A = mkA "leggero" | mkA "leggera" ; -- status=guess status=guess
+lin light_2_A = mkA "leggero" | mkA "leggera" ; -- status=guess status=guess
 lin light_N = mkN "lampadina" ; -- status=guess
 lin light_V = mkV "illuminare" ; -- status=guess, src=wikt
 lin light_V2 = mkV2 (mkV "illuminare") ; -- status=guess, src=wikt
@@ -16491,7 +16492,9 @@ lin masochist_N = mkN "masochista" masculine ; -- status=guess
 lin masochistic_A = mkA "masochistico" ; -- status=guess
 lin masquerade_N = mkN "mascherata" | mkN "ballo in maschera" ; -- status=guess status=guess
 lin mass_A = variants {} ; --
-lin mass_N = mkN "massa" ; -- status=guess
+lin mass_1_N = mkN "massa" ; -- status=guess
+lin mass_2_N = mkN "massa" ; -- status=guess
+lin mass_3_N = mkN "massa" ; -- status=guess
 lin massacre_N = mkN "carnaio" | mkN "carneficina" | mkN "carneficina" | mkN "ecatombe" | mkN "ecatombe" | mkN "eccidio" | mkN "eccidio" | mkN "falcidia" | mkN "macello" | mkN "macello" | mkN "massacro" | mkN "massacro" | mkN "scempio" | mkN "strage" | mkN "strage" | mkN "tagliamento" | mkN "tagliata" ; -- UWN
 lin massage_N = mkN "massaggio" ; -- status=guess
 lin massager_N = mkN "massaggiatore" ; -- UWN

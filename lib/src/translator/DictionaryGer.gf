@@ -32223,7 +32223,8 @@ lin ligand_N = mkN "Ligandenfeldtheorie" feminine ; -- status=guess
 lin ligation_N = variants {} ;
 lin ligature_N = mkN "Ligatur" "Ligaturen" feminine ; -- status=guess
 lin liger_N = variants {} ;
-lin light_A = mkA "erleuchtet" | mk3A "hell" "heller" "hellste" ; -- status=guess status=guess
+lin light_1_A = mk3A "hell" "heller" "hellste" ; -- status=guess status=guess
+lin light_2_A = mkA "erleuchtet" ; -- status=guess status=guess
 lin light_Adv = variants {} ;
 lin light_N = mkN "Licht" neuter ;
 lin light_V = irregV "beleuchten" "beleuchtet" "beleuchtete" "beleuchtete" "beleuchtet" | mkV "anstrahlen" ; -- status=guess, src=wikt status=guess, src=wikt
@@ -34180,7 +34181,9 @@ lin masquerade_N = mkN "Maskerade" feminine ; -- status=guess
 lin masquerade_V = variants {} ;
 lin masquerader_N = variants {} ;
 lin mass_A = variants {} ; --
-lin mass_N = mkN "Massendefekt" masculine ; -- status=guess
+lin mass_1_N = mkN "Massendefekt" masculine ; -- status=guess
+lin mass_2_N = mkN "Massendefekt" masculine ; -- status=guess
+lin mass_3_N = mkN "Massendefekt" masculine ; -- status=guess
 lin mass_V = variants {} ;
 lin mass_V2 = variants {} ;
 lin mass_produce_V2 = variants {} ;
