@@ -19451,7 +19451,8 @@ lin lift_V2 = mkV2 "举" | mkV2 "抬" | mkV2 "提" ;
 lin lift_off_V = advV OP_lift_V OP_off_Adv ; -- guess-p-verb
 lin ligament_N = mkN "韌帶" | mkN "韧带" | {-mwn-} mkN "纽带" | mkN "联结物" ; -- status=guess -- status=guess -- open-multilingual-wordnet
 lin liger_N = mkN "獅虎" | mkN "狮虎" ; -- status=guess -- status=guess
-lin light_A = mkA "光" | mkA "光明" | mkA "嫩" | mkA "灯" | mkA "薄" | mkA "轻" ;
+lin light_1_A = mkA "光" | mkA "光明" | mkA "嫩" | mkA "灯" | mkA "薄" | mkA "轻" ;
+lin light_2_A = mkA "光" | mkA "光明" | mkA "嫩" | mkA "灯" | mkA "薄" | mkA "轻" ;
 lin light_Adv = mkAdv "光" | mkAdv "光明" | mkAdv "嫩" | mkAdv "灯" | mkAdv "薄" | mkAdv "轻" ;
 lin light_N = mkN "光" | {-HSK-} mkN "光" "道" | mkN "光明" | mkN "嫩" | mkN "灯" "盞" | mkN "薄" | mkN "轻" ;
 lin light_V = mkV "光" | {-HSK-} mkV "点" ;
@@ -20584,7 +20585,9 @@ lin mason_dixon_PN = foreignPN "Mason-dixon" ; -- comment=src=eng status=guess
 lin masonry_N = mkN "砖石" ;
 lin masquerade_V = mkV "伪装" ;
 lin mass_A = {-HSK-} mkA "质量" ;
-lin mass_N = mkN "块" [] | {-HSK-} mkN "质量" "個" ;
+lin mass_1_N = mkN "块" [] | {-HSK-} mkN "质量" "個" ;
+lin mass_2_N = mkN "块" [] | {-HSK-} mkN "质量" "個" ;
+lin mass_3_N = mkN "块" [] | {-HSK-} mkN "质量" "個" ;
 lin mass_V = mkV "聚集" ;
 lin mass_produce_V2 = mkV2 "批量生产" ;
 lin massachusetts_PN = mkPN "马萨诸塞州" ;

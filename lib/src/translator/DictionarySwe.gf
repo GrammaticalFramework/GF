@@ -32033,7 +32033,8 @@ lin ligand_N = variants {} ; -- status=guess
 lin ligation_N = mkN "ligering" ; -- src=google
 lin ligature_N = mkN "ligatur" "ligaturer" ; -- status=guess
 lin liger_N = variants {} ; -- status=guess
-lin light_A = mkA "lätt" ;
+lin light_1_A = mkA "lätt" ;
+lin light_2_A = mkA "ljus" ;
 lin light_Adv = variants {} ; -- status=guess
 lin light_N = mkN "ljus" "ljus" ;
 lin light_V = mkV "yra" "yrde" "yrt" ; -- comment=9
@@ -33982,7 +33983,9 @@ lin masquerade_N = mkN "maskerad" "maskerader" ; -- status=guess
 lin masquerade_V = mkV "maskerar" ; -- status=guess
 lin masquerader_N = variants {} ; -- status=guess
 lin mass_A = variants {} ; --
-lin mass_N = mkN "massa" | mkN "mässa" ; -- SaldoWN = mkN "massa" ; -- comment=5
+lin mass_1_N = mkN "massa" ; -- SaldoWN = mkN "massa" ; -- comment=5
+lin mass_2_N = mkN "massa" ; -- SaldoWN = mkN "massa" ; -- comment=5
+lin mass_3_N = mkN "mässa" ; -- SaldoWN = mkN "massa" ; -- comment=5
 lin mass_V = mkV "mässar" ; -- comment=4
 lin mass_V2 = variants {} ; -- status=guess
 lin mass_produce_V2 = variants {} ; -- status=guess

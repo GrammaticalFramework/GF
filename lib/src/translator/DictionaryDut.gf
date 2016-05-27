@@ -11913,7 +11913,8 @@ lin lift_V2 = mkV2 lift_V ;
 lin lift_off_V = advV OP_lift_V OP_off_Adv ; -- guess-p-verb
 lin ligature_N = mkN "ligatuur" | mkN "verbinding" ; -- status=guess status=guess
 lin liger_N = mkN "lijger" masculine ; -- status=guess
-lin light_A = mkA "licht" ;
+lin light_1_A = mkA "licht" ;
+lin light_2_A = mkA "licht" ;
 lin light_N = mkN "licht" neuter ;
 lin light_V = mkV "lichten" | mkV "bijlichten" ; -- status=guess, src=wikt status=guess, src=wikt
 lin light_V2 = mkV2 (mkV "lichten") | mkV2 (mkV "bijlichten") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -12699,7 +12700,9 @@ lin masochistic_A = mkA "masochistisch" ; -- status=guess
 lin mason_N = mkN "metselaar" masculine | mkN "metser" masculine ; -- status=guess status=guess
 lin mason_dixon_PN = mkPN "Mason-dixon" ; -- src=eng status=guess
 lin mass_A = variants {} ; --
-lin mass_N = mkN "massa" feminine | mkN "hoeveelheid" feminine ; -- status=guess status=guess
+lin mass_1_N = mkN "massa" feminine | mkN "hoeveelheid" feminine ; -- status=guess status=guess
+lin mass_2_N = mkN "massa" feminine | mkN "hoeveelheid" feminine ; -- status=guess status=guess
+lin mass_3_N = mkN "massa" feminine | mkN "hoeveelheid" feminine ; -- status=guess status=guess
 lin mass_V = mkV "vieren" | mkV "misvieren" ; -- status=guess, src=wikt status=guess, src=wikt
 lin mass_V2 = mkV2 (mkV "vieren") | mkV2 (mkV "misvieren") ; -- status=guess, src=wikt status=guess, src=wikt
 lin massachusetts_PN = mkPN "Massachusetts" ; -- src=eng status=guess

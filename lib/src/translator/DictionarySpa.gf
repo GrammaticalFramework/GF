@@ -17220,7 +17220,8 @@ lin ligament_N = mkN "ligamento" ; -- status=guess
 lin ligand_N = mkN "ligando" ; --UWN
 lin ligature_N = mkN "ligadura" ; -- status=guess
 lin liger_N = mkN "ligre" masculine ; -- status=guess
-lin light_A = mkA "ligero" | mkA "luminoso" | mkA "claro" ; --- split: not heavy / not dark
+lin light_1_A = mkA "ligero" ;
+lin light_2_A = mkA "luminoso" | mkA "claro" ;
 lin light_Adv = mkAdv "ligeramente" | mkAdv "ligeros" ; --UWN
 lin light_N = mkN "luz" ; --- split? mkN "bombilla" ;
 lin light_V = mkV "iluminar" ; -- status=guess
@@ -18263,7 +18264,9 @@ lin masquerade_N = mkN "mascarada" ; -- status=guess
 lin masquerade_V = mkV "masquerar" ; -- status=guess, src=wikt
 lin masquerader_N = mkN "disfrazado" | mkN "embozado" | mkN "enmascarado" ; --UWN
 lin mass_A = variants {} ; --
-lin mass_N = mkN "medios de comunicación" ; -- status=guess
+lin mass_1_N = mkN "medios de comunicación" ; -- status=guess
+lin mass_2_N = mkN "medios de comunicación" ; -- status=guess
+lin mass_3_N = mkN "medios de comunicación" ; -- status=guess
 lin massacre_N = mkN "masacre" feminine ; -- status=guess
 lin massacre_V2 = mkV2 (mkV "masacrar") ; -- status=guess, src=wikt
 lin massage_N = mkN "masaje" masculine ; -- status=guess
