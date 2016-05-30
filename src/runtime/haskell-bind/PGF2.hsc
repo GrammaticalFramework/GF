@@ -149,7 +149,9 @@ functionType p fn =
   withGuPool $ \tmpPl -> do
     c_fn <- newUtf8CString fn tmpPl
     c_type <- pgf_function_type (pgf p) c_fn
-    peekType c_type
+    if c_type == nullPtr
+      then throwIO (PGFError ("Function '"++fn++"' is not defined"))
+      else peekType c_type
   where
     peekType c_type = do
       cid <- (#peek PgfType, cid) c_type >>= peekUtf8CString
