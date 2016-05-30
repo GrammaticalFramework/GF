@@ -23363,7 +23363,8 @@ lin gen_PN = mkPN "Gen" ; -- src=eng status=guess
 lin gen_V2 = variants {} ;
 lin gendarme_N = mkN "Gendarm" "Gendarmen" masculine ; -- status=guess
 lin gendarmerie_N = mkN "Gendarmerie" feminine ; -- status=guess
-lin gender_N = mkN "Geschlecht" "Geschlechter" neuter ; -- status=guess
+lin gender_1_N = mkN "Geschlecht" "Geschlechter" neuter ; -- status=guess
+lin gender_2_N = mkN "Geschlecht" "Geschlechter" neuter ; -- status=guess
 lin gene_N = gen_N ; -- status=guess
 lin gene_PN = mkPN "Gene" ; -- src=eng status=guess
 lin genealogic_A = variants {} ;
@@ -34100,7 +34101,8 @@ lin marriageability_N = variants {} ;
 lin marriageable_A = variants {} ;
 lin married_A = regA "verheiratet" ; -- status=guess
 lin married_N = mkN "Ehepaar" "Ehepaare" neuter ; -- status=guess
-lin marrow_N = mkN "Flaschenkürbis" masculine ; -- status=guess
+lin marrow_1_N = mkN "Flaschenkürbis" masculine ; -- status=guess
+lin marrow_2_N = mkN "Flaschenkürbis" masculine ; -- status=guess
 lin marrowbone_N = variants {} ;
 lin marry_V = irregV "heiraten" "heiratet" "heiratete" "heirate" "geheiratet" ; -- status=guess, src=wikt
 lin marry_V2 = mkV2 (irregV "heiraten" "heiratet" "heiratete" "heirate" "geheiratet") ; -- status=guess, src=wikt
@@ -40156,7 +40158,9 @@ lin pallium_N = variants {} ;
 lin pallone_N = variants {} ;
 lin pallor_N = variants {} ;
 lin pally_A = variants {} ;
-lin palm_N = mkN "Handfläche" feminine ; -- status=guess
+lin palm_1_N = mkN "Handfläche" feminine ; -- status=guess
+lin palm_2_N = mkN "Handfläche" feminine ; -- status=guess
+lin palm_3_N = mkN "Handfläche" feminine ; -- status=guess
 lin palm_V2 = mkV2 (mkV "palmieren") ; -- status=guess, src=wikt
 lin palm_off_V = variants {} ;
 lin palm_off_V2 = variants {} ;

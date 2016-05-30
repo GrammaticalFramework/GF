@@ -11244,7 +11244,8 @@ lin gemini_PN = mkPN "Gemini" ; -- status=guess src=geonames
 lin gemmed_A = mkA "ingemmato" | mkA "ingioiellato" ; -- UWN
 lin gendarme_N = mkN "agente di polizia" | mkN "poliziotto" | mkN "carabiniere" masculine | mkN "gendarme" masculine ; -- status=guess status=guess status=guess status=guess
 lin gendarmerie_N = mkN "carabinieri" | mkN "gendarmeria" ; -- status=guess status=guess
-lin gender_N = mkN "genere" masculine ; -- status=guess
+lin gender_1_N = mkN "genere" masculine ; -- status=guess
+lin gender_2_N = mkN "genere" masculine ; -- status=guess
 lin gene_N = mkN "gene" masculine ; -- status=guess
 lin genealogic_A = mkA "genealogico" ; -- UWN
 lin genealogical_A = mkA "genealogico" ; -- status=guess
@@ -16446,7 +16447,8 @@ lin marquis_N = mkN "marchese" ; -- UWN
 lin marriage_N = mkN "connubio" | mkN "unione" feminine ; -- status=guess status=guess
 lin married_A = mkA "sposato" ;
 lin married_A2 = L.married_A2 ; -- comment=CHECKED
-lin marrow_N = mkN "zucchina" ; -- status=guess
+lin marrow_1_N = mkN "zucchina" ; -- status=guess
+lin marrow_2_N = mkN "zucchina" ; -- status=guess
 lin marrowbone_N = mkN "osso_buco" | mkN "ossobuco" ; -- UWN
 lin marry_V = mkV "sposarsi" ; -- status=guess, src=wikt
 lin marry_V2 = mkV2 (mkV "sposarsi") ; -- status=guess, src=wikt
@@ -19021,7 +19023,9 @@ lin palliative_A = mkA "palliativo" ; -- status=guess
 lin palliative_N = mkN "palliativo" ; -- UWN
 lin pallidness_N = mkN "lividezza" | mkN "pallore" ; -- UWN
 lin pallor_N = mkN "lividezza" | mkN "pallore" ; -- UWN
-lin palm_N = mkN "palmare" ; -- status=guess
+lin palm_1_N = mkN "palmare" ; -- status=guess
+lin palm_2_N = mkN "palmare" ; -- status=guess
+lin palm_3_N = mkN "palmare" ; -- status=guess
 lin palm_V2 = mkV2 (mkV "sbolognare") ; -- status=guess, src=wikt
 lin palmar_A = mkA "palmare" ; -- UWN
 lin palmatifid_A = mkA "palmatifido" ; -- status=guess
