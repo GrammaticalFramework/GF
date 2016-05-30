@@ -66,6 +66,9 @@ pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
 PgfType*
 pgf_function_type(PgfPGF* pgf, PgfCId funname);
 
+double
+pgf_function_prob(PgfPGF* pgf, PgfCId funname);
+
 GuString
 pgf_print_name(PgfConcr*, PgfCId id);
 

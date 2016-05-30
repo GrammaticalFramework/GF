@@ -42,6 +42,12 @@ public class PGF {
 	 */
 	public native Type getFunctionType(String fun);
 
+	/** Returns the negative logarithmic probability of the function
+	 * with the given name.
+	 * @param fun The name of the function.
+	 */
+	public native double getFunctionProb(String fun);
+
 	/** Returns an iterable over the set of all expression in
 	 * the given category. The expressions are enumerated in decreasing
 	 * probability order.

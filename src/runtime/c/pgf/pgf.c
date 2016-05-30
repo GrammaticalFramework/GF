@@ -165,6 +165,17 @@ pgf_function_type(PgfPGF* pgf, PgfCId funname)
 	return absfun->type;
 }
 
+double
+pgf_function_prob(PgfPGF* pgf, PgfCId funname) 
+{
+	PgfAbsFun* absfun =
+		gu_seq_binsearch(pgf->abstract.funs, pgf_absfun_order, PgfAbsFun, funname);
+	if (absfun == NULL)
+		return INFINITY;
+
+	return absfun->ep.prob;
+}
+
 GuString
 pgf_print_name(PgfConcr* concr, PgfCId id)
 {
