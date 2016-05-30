@@ -23226,7 +23226,8 @@ lin gen_PN = mkPN "Gen" ; -- src=eng status=guess
 lin gen_V2 = variants {} ; -- status=guess
 lin gendarme_N = variants {} ; -- status=guess
 lin gendarmerie_N = mkN "gendarmeri" neutrum ;
-lin gender_N = mkN "genus" neutrum ; -- comment=3
+lin gender_1_N = mkN "genus" neutrum ;
+lin gender_2_N = mkN "kön" neutrum ;
 lin gene_N = mkN "gen" "gener" ; -- SaldoWN
 lin gene_PN = mkPN "Gene" ; -- src=eng status=guess
 lin genealogic_A = variants {} ; -- status=guess
@@ -33902,7 +33903,8 @@ lin marriageability_N = variants {} ; -- status=guess
 lin marriageable_A = variants {} ; -- status=guess
 lin married_A = mkA "gift" "gift" ; -- status=guess
 lin married_N = mkN "gift" "giftet" "gifter" "gifterna" ; -- SaldoWN
-lin marrow_N = mkN "märg" ; -- status=guess
+lin marrow_1_N = mkN "märg" ;
+lin marrow_2_N = mkN "zucchini" ;
 lin marrowbone_N = mkN "märgben" neutrum ;
 lin marry_V = depV (mkV "gifter") | reflV (mkV "gifter") ;
 lin marry_V2 = mkV2 (mkV "gifter") ;
@@ -39929,7 +39931,9 @@ lin pallium_N = mkN "palliet" ; -- src=google
 lin pallone_N = variants {} ; -- status=guess
 lin pallor_N = mkN "blekhet" "blekheter" ;
 lin pally_A = variants {} ; -- status=guess
-lin palm_N = mkN "palm" "palmer" | mkN "handflata" ; -- SaldoWN -- comment=2
+lin palm_1_N = mkN "handflata" ;
+lin palm_2_N = mkN "handflata" ;
+lin palm_3_N = mkN "palm" "palmer" ;
 lin palm_V2 = mkV2 (mkV "palmera") ; -- status=guess, src=wikt
 lin palm_oil_N = mkN "palmolja" ;
 lin palmar_A = variants {} ; -- status=guess
@@ -41981,7 +41985,7 @@ lin pinion_N = mkN "drev" neutrum ; -- comment=3
 lin pinion_V2 = variants {} ; -- status=guess
 lin pinite_N = variants {} ; -- status=guess
 lin pink_A = mkA "rosa" ;
-lin pink_N = mkN "skär" neutrum ; -- status=guess
+lin pink_N = mkN "rosa" ;
 lin pink_V = mkV "rosa" ; -- comment=3
 lin pink_V2 = dirV2 (mkV "rosa") ; -- status=guess
 lin pinkish_A = variants {} ; -- status=guess

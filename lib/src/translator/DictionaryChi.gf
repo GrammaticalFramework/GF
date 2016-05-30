@@ -14259,7 +14259,8 @@ lin gemmiferous_A = mkA "发芽" | mkA "发芽生殖" | mkA "生芽" ; -- open-m
 lin gempylid_N = mkN "蛇鲭鱼" ; -- open-multilingual-wordnet
 lin gen_PN = foreignPN "Gen" ; -- comment=src=eng status=guess
 lin gendarme_N = mkN "宪兵" "个" ;
-lin gender_N = mkN "性别" ;
+lin gender_1_N = mkN "性别" ;
+lin gender_2_N = mkN "性别" ;
 lin gene_N = mkN "基因" ;
 lin gene_PN = foreignPN "Gene" ; -- comment=src=eng status=guess
 lin genealogic_A = mkA "宗谱" | mkA "系谱" ; -- open-multilingual-wordnet
@@ -20532,7 +20533,8 @@ lin marriage_N = mkN "婚姻" | {-HSK-} mkN "婚姻" "次" ;
 lin married_A = variants {} ;
 lin married_A2 = L.married_A2 ;
 lin married_N = mkN "夫婦" | mkN "夫妇" | mkN "夫妻" ; -- status=guess -- status=guess -- status=guess
-lin marrow_N = mkN "骨髓" "" ;
+lin marrow_1_N = mkN "骨髓" "" ;
+lin marrow_2_N = mkN "骨髓" "" ;
 lin marry_V = mkV "娶" | mkV "结婚" ;
 lin marry_V2 = mkV2 "娶" | mkV2 "结婚" ;
 lin marry_in_V = advV OP_marry_V OP_in_Adv ; -- guess-p-verb
@@ -23741,7 +23743,9 @@ lin palliation_N = mkN "减轻" | mkN "缓和" ; -- open-multilingual-wordnet
 lin palliative_A = mkA "使缓和" | mkA "减轻" | mkA "止痛性" | mkA "缓和" | mkA "缓和性" ; -- open-multilingual-wordnet
 lin palliative_N = mkN "臨終關懷" | mkN "临终关怀" | mkN "安寧和緩醫療" | mkN "安宁和缓医疗" | mkN "善忠服務" | mkN "善忠服务" | mkN "姑息療法" | mkN "姑息疗法" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin pallor_N = mkN "苍白" ;
-lin palm_N = mkN "棕榈" ;
+lin palm_1_N = mkN "棕榈" ;
+lin palm_2_N = mkN "棕榈" ;
+lin palm_3_N = mkN "棕榈" ;
 lin palm_V2 = mkV2 "将+藏于掌中" ;
 lin palm_off_V = mkV "用诡计" ; -- open-multilingual-wordnet
 lin palmar_A = mkA "手掌" | mkA "掌中" | mkA "足底" ; -- open-multilingual-wordnet

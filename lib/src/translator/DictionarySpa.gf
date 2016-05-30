@@ -12513,7 +12513,8 @@ lin geminate_N = mkN "geminada" ; --UWN
 lin gemination_N = mkN "geminación" feminine ; -- status=guess
 lin gemini_PN = mkPN "Gemini" ; -- status=guess src=geonames
 lin gendarmerie_N = mkN "gendarmería" ; -- status=guess
-lin gender_N = mkN "sexo" | mkN "género" ; -- status=guess
+lin gender_1_N = mkN "género" ; -- status=guess
+lin gender_2_N = mkN "sexo" ; -- status=guess
 lin gene_N = mkN "gen" | mkN "gene" masculine ; -- status=guess
 lin genealogic_A = mkA "genealógico" ; --UWN
 lin genealogical_A = mkA "genealógico" ; -- status=guess
@@ -18216,7 +18217,8 @@ lin marquis_N = mkN "marqués" ; --UWN
 lin marriage_N = mkN "matrimonio" ;
 lin married_A = variants {} ; --
 lin married_A2 = L.married_A2 ;
-lin marrow_N = mkN "calabaza" ; -- status=guess
+lin marrow_1_N = mkN "calabaza" ; -- status=guess
+lin marrow_2_N = mkN "calabaza" ; -- status=guess
 lin marry_V = mkV "casar" | mkV "casarse" ;
 lin marry_V2 = mkV2 (mkV "casarse") with_Prep | mkV2 (mkV "casar") ;
 lin marry_in_V = advV OP_marry_V OP_in_Adv ; -- guess-p-verb
@@ -21079,7 +21081,9 @@ lin palliative_A = mkA "paliativo" ; -- status=guess
 lin palliative_N = mkN "tratamiento_paliativo" ; --UWN
 lin pallid_A = mkA "pálido" ; -- status=guess
 lin pallone_N = mkN "pallone" ; --UWN
-lin palm_N = mkN "palma" | mkN "palma de la mano" ; -- status=guess
+lin palm_1_N = mkN "palma" ; -- status=guess
+lin palm_2_N = mkN "palma" ; -- status=guess
+lin palm_3_N = mkN "palma" ; -- status=guess
 lin palm_V2 = mkV2 (mkV (mkV "agarrar") "con la palma") | mkV2 (mkV (mkV "mover") "con la palma") ; -- status=guess, src=wikt status=guess, src=wikt
 lin palmist_N = mkN "quiromántico" ; --UWN
 lin palmitin_N = mkN "palmitina" ; --UWN

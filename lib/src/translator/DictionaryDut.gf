@@ -8527,7 +8527,8 @@ lin gem_N = mkN "edelsteen" masculine ; -- status=guess
 lin gemini_PN = mkPN "Gemini" ; -- src=geonames status=guess
 lin gen_PN = mkPN "Gen" ; -- src=eng status=guess
 lin gendarmerie_N = mkN "rijkswacht" feminine ; -- status=guess
-lin gender_N = mkN "geslacht" neuter ; -- status=guess
+lin gender_1_N = mkN "geslacht" neuter ; -- status=guess
+lin gender_2_N = mkN "geslacht" neuter ; -- status=guess
 lin gene_N = mkN "gen" ; -- status=guess
 lin gene_PN = mkPN "Gene" ; -- src=eng status=guess
 lin genealogy_N = mkN "kwartierstaat" | mkN "parenteel" | mkN "stamreeks" | mkN "stamboom" | mkN "genealogie" ; -- status=guess status=guess status=guess status=guess status=guess
@@ -12664,7 +12665,8 @@ lin marquess_N = mkN "markies" masculine ; -- status=guess
 lin marriage_N = mkN "huwelijk" feminine ;
 lin married_A = mkA "getrouwd" ; -- status=guess
 lin married_A2 = L.married_A2 ;
-lin marrow_N = mkN "courgette" ; -- status=guess
+lin marrow_1_N = mkN "courgette" ; -- status=guess
+lin marrow_2_N = mkN "courgette" ; -- status=guess
 lin marry_V = mkV "trouwen" | mkV "huwen" | reflMkV "in de echt verbinden" ;
 lin marry_V2 = mkV2 (mkV "trouwen") | mkV2 (mkV "huwen") | mkV2 (reflMkV "in de echt verbinden") ;
 lin marry_in_V = advV OP_marry_V OP_in_Adv ; -- guess-p-verb
@@ -14653,7 +14655,9 @@ lin pall_N = mkN "lijkkleed" ; -- status=guess
 lin palladium_N = mkN "palladium" neuter ; -- status=guess
 lin pallet_N = mkN "transpallet" ; -- status=guess
 lin pallor_N = mkN "bleekheid" ; -- status=guess
-lin palm_N = mkN "palm" masculine | mkN "handpalm" masculine ; -- status=guess status=guess
+lin palm_1_N = mkN "palm" masculine | mkN "handpalm" masculine ; -- status=guess status=guess
+lin palm_2_N = mkN "palm" masculine | mkN "handpalm" masculine ; -- status=guess status=guess
+lin palm_3_N = mkN "palm" masculine | mkN "handpalm" masculine ; -- status=guess status=guess
 lin palm_V2 = mkV2 (mkV "opdringen") | mkV2 (mkV (mkV "opzadelen") "met") ; -- status=guess, src=wikt status=guess, src=wikt
 lin palpable_A = mkA "tastbaar" ; -- status=guess
 lin paltry_A = mkA "armzalig" | mkA "meelijwekkend" | mkA "beklagenswaardig" | mkA "waardeloos" ; -- status=guess status=guess status=guess status=guess
