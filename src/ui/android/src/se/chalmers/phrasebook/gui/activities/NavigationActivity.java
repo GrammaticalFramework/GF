@@ -16,24 +16,17 @@ import android.support.v4.widget.DrawerLayout;
 
 import org.grammaticalframework.ui.android.R;
 import se.chalmers.phrasebook.backend.Model;
-import se.chalmers.phrasebook.backend.syntax.SyntaxNodeList;
-import se.chalmers.phrasebook.gui.FragmentCommunicator;
-import se.chalmers.phrasebook.gui.fragments.NumeralTranslatorFragment;
+import se.chalmers.phrasebook.backend.syntax.*;
 import se.chalmers.phrasebook.gui.fragments.PhraseListFragment;
 import se.chalmers.phrasebook.gui.fragments.TranslatorFragment;
 
-public class NavigationActivity extends FragmentActivity implements FragmentCommunicator {
+public class NavigationActivity extends FragmentActivity {
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
     private Fragment mContent;
-
-    public void pageChanged() {
-        if (mContent instanceof TranslatorFragment)
-            ((TranslatorFragment) mContent).displayDots();
-    }
 
     private Model mModel;
 
@@ -80,21 +73,7 @@ public class NavigationActivity extends FragmentActivity implements FragmentComm
 		}
     }
 
-    @Override
-    public void updateSyntax(int optionIndex, SyntaxNodeList l, int childIndex, boolean isAdvanced) {
-        mModel.update(optionIndex, l, childIndex, isAdvanced);
-        updateTranslation();
-    }
-
-    public void updateTranslation() {
-       if (mContent instanceof TranslatorFragment) {
-            TranslatorFragment fragment = (TranslatorFragment) mContent;
-            fragment.updateTranslation();
-        }
-    }
-
-    @Override
-    public void setToTranslationFragment(int id) {
-        switchContent(TranslatorFragment.newInstance(id + ""), "");
+    public void setToTranslationFragment(SyntaxTree phrase) {
+        switchContent(TranslatorFragment.newInstance(phrase), "");
     }
 }

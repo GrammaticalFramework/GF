@@ -1,39 +1,36 @@
 package se.chalmers.phrasebook.backend;
 
-
-import android.content.Context;
+import org.w3c.dom.*;
+import org.xml.sax.*;
+import org.w3c.dom.ls.*;
 
 import java.io.*;
 import java.util.*;
+import javax.xml.parsers.*;
 
 import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.ui.android.R;
 import org.grammaticalframework.ui.android.GFTranslator;
-import se.chalmers.phrasebook.backend.syntax.SyntaxNodeList;
-import se.chalmers.phrasebook.backend.syntax.SyntaxTree;
+import se.chalmers.phrasebook.backend.syntax.*;
 
-/**
- * Created by Björn on 2016-03-03.
- */
 public class Model {
     private static Model model;
 
-    private XMLParser parser;
-    private ArrayList<SyntaxTree> phrases;
-    private SyntaxTree currentPhrase;
+    private List<SyntaxTree> phrases;
 
     private Model() {
         try {
-            InputStream phrases = GFTranslator.get().getAssets().open("phrases.xml");
-            parser = new XMLParser(phrases);
-            phrases.close();
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            InputStream is = GFTranslator.get().getAssets().open("phrases.xml");
+			Document document = documentBuilder.parse(is);
+			phrases = parseSentencesData(document);
+            is.close();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-		phrases = new ArrayList<SyntaxTree>();
-        for (Map.Entry<String,String> entry : parser.getSentencesData()) {
-            phrases.add(parser.getSyntaxTree(entry.getKey()));
         }
     }
 
@@ -47,39 +44,111 @@ public class Model {
         return model;
     }
 
-    public void update(int optionIndex, SyntaxNodeList target, int childIndex, boolean isAdvanced) {
-        currentPhrase.setSelectedChild(optionIndex, target, childIndex, isAdvanced);
-    }
+    public List<SyntaxTree> getSentences() {
+		return phrases;
+	}
 
-    public List<String> getSentencesInCurrentPhrasebook() {
-        ArrayList<String> sentences = new ArrayList<String>();
-        for (Map.Entry<String,String> entry : parser.getSentencesData()) {
-			sentences.add(entry.getValue());
+    private List<SyntaxTree> parseSentencesData(Document document) {
+		List<SyntaxTree> sentences = new ArrayList<SyntaxTree>();
+		Map<String,SyntaxNode> ids = new HashMap<String,SyntaxNode>();
+		List<SyntaxNodeCall> calls = new ArrayList<SyntaxNodeCall>();
+
+		NodeList nodesList = document.getDocumentElement().getChildNodes();
+		for (int i = 0; i < nodesList.getLength(); i++) {
+			Node node = nodesList.item(i);
+			
+			if (node != null &&
+			    node.getNodeType() == Node.ELEMENT_NODE &&
+			    node.getNodeName().equals("sentence")) {
+				NamedNodeMap attributes = node.getAttributes();
+
+				if (attributes == null)
+					continue;
+
+				String desc = "";
+				if (attributes.getNamedItem("desc") != null) {
+					desc = attributes.getNamedItem("desc").getNodeValue();
+				}
+
+				SyntaxNode[] nodes = constructSyntaxNodeList(node, ids, calls);
+				if (nodes.length > 0)
+					sentences.add(new SyntaxTree(desc, nodes[0]));
+			} else if (node.getAttributes() != null && node.getAttributes().getNamedItem("id") != null) {
+				String id = node.getAttributes().getNamedItem("id").getNodeValue();
+				SyntaxNode snode = constructSyntaxNode(node, ids, calls);
+				if (snode == null) {
+					throw new IllegalArgumentException(outerXml(node));
+				}
+				ids.put(id,snode);
+			}
         }
+
+        for (SyntaxNodeCall call : calls) {
+			call.bind(ids);
+		}
         return sentences;
     }
 
-    public void setCurrentPhrase(int position) {
-        SyntaxTree choosenPhrase = phrases.get(position);
-        currentPhrase = parser.getSyntaxTree(choosenPhrase.getId());
-        boolean status = currentPhrase.replicate(choosenPhrase);
-    }
+    private SyntaxNode constructSyntaxNode(Node node, Map<String,SyntaxNode> ids, List<SyntaxNodeCall> calls) {
+		NamedNodeMap attributes = node.getAttributes();
+		if (attributes == null)
+			return null;
 
-    public String getDescFromPos(int pos) {
-        return parser.getSentencesData().get(pos).getValue();
-    }
+		String desc = "";
+		if (attributes.getNamedItem("desc") != null) {
+			desc = attributes.getNamedItem("desc").getNodeValue();
+		}
 
-    public void setNumeralCurrentPhrase() {
-        for (int i = 0; i < parser.getSentencesData().size(); i++) {
-			String key = parser.getSentencesData().get(i).getKey();
-            if (key.equals("NNumeral")) {
-                currentPhrase = parser.getSyntaxTree(key);
+		if (node.getNodeName().equals("function")) {
+			String function = attributes.getNamedItem("name").getNodeValue();
+			SyntaxNode[] arguments = constructSyntaxNodeList(node, ids, calls);
+			return new SyntaxNodeFunction(desc, function, arguments);
+		} else if (node.getNodeName().equals("numeral")) {
+			return new SyntaxNodeNumeral(desc, 1, 100);
+		} else if (node.getNodeName().equals("option")) {
+			SyntaxNode[] options = constructSyntaxNodeList(node, ids, calls);
+			return new SyntaxNodeOption(desc, options);
+		} else if (node.getNodeName().equals("call")) {
+			if (attributes.getNamedItem("ref") == null)
+				return null;
+
+			String ref = attributes.getNamedItem("ref").getNodeValue();
+			SyntaxNode[] arguments = constructSyntaxNodeList(node, ids, calls);
+			SyntaxNodeCall call = new SyntaxNodeCall(desc, ref, arguments);
+			calls.add(call);
+			return call;
+		} else if (node.getNodeName().equals("argument")) {
+			int d = 0;
+			if (attributes.getNamedItem("index") != null)
+				d = Integer.parseInt(attributes.getNamedItem("index").getNodeValue());
+			return new SyntaxNodeArgument(desc, d);
+		}
+
+		return null;
+	}
+
+    private SyntaxNode[] constructSyntaxNodeList(Node root, Map<String,SyntaxNode> ids, List<SyntaxNodeCall> calls) {
+		NodeList nl = root.getChildNodes();
+
+		int index = 0;
+		SyntaxNode[] list = new SyntaxNode[nl.getLength()];
+        for (int i = 0; i < nl.getLength(); i++) {
+			Node node = nl.item(i);
+            if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
+				list[index] = constructSyntaxNode(node, ids, calls);
+				if (list[index] == null)
+					throw new IllegalArgumentException(outerXml(node));
+				index++;
             }
         }
+        return Arrays.copyOf(list, index);
     }
-
-    public SyntaxTree getCurrentPhrase() {
-        return currentPhrase;
-    }
+    
+    private String outerXml(Node node) {
+		DOMImplementationLS lsImpl = (DOMImplementationLS)node.getOwnerDocument().getImplementation().getFeature("LS", "3.0");
+		LSSerializer lsSerializer = lsImpl.createLSSerializer();
+		lsSerializer.getDomConfig().setParameter("xml-declaration", false);
+		return lsSerializer.writeToString(node);
+	}
 }
 

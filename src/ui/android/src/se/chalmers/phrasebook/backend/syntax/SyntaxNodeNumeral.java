@@ -1,54 +1,42 @@
 package se.chalmers.phrasebook.backend.syntax;
 
-/**
- * Created by Björn on 2016-04-04.
- */
-public class NumeralSyntaxNode extends SyntaxNode {
+public class SyntaxNodeNumeral extends SyntaxNode {
+	private int min;
+	private int max;
 
-    private int number = 1;
-
-    public NumeralSyntaxNode() {
-        super("NNumeral");
+    public SyntaxNodeNumeral(String desc, int min, int max) {
+        super(desc);
+        this.min = min;
+        this.max = max;
     }
 
-    @Override
-    public boolean isModular() {
-        return true;
-    }
+	public String getAbstractSyntax(ChoiceContext context) {
+		return nbrToSyntax(context.choose(this));
+	}
 
-    public String getData() {
-        try {
-            return nbrToSyntax(number);
-        }catch(IllegalArgumentException e) {
-            //Returns the syntax for "1" in case of erroneous input.
-            return "(NNumeral(num (pot2as3 (pot1as2 (pot0as1 pot01)))))";
-        }
-    }
-
-    public String getDesc() {
-        return Integer.toString(number);
-    }
-
-    public void setDesc(String number) {
-        this.number = Integer.parseInt(number);
-    }
-
-
-    @Override
-    public void setSelectedChild(int listIndex, SyntaxNode newChild) {
-        setDesc(Integer.toString(listIndex));
-    }
+	@Override
+	public int getDefaultChoice() {
+		return 1;
+	}
+	
+	public int getMin() {
+		return min;
+	}
+	
+	public int getMax() {
+		return max;
+	}
 
     private String nbrToSyntax(int nbr) throws IllegalArgumentException {
         String syntax = "";
         if(nbr < 1000000 && nbr > 0) {
             if (nbr <=999) {
-                syntax = "(NNumeral(num(pot2as3 " + subs1000(nbr) + ")))";
+                syntax = "(num (pot2as3 " + subs1000(nbr) + "))";
             } else if(nbr % 1000 == 0) {
-                syntax = "(NNumeral(num(pot3 " + subs1000(nbr/1000) + ")))";
+                syntax = "(num (pot3 " + subs1000(nbr/1000) + "))";
             } else if(nbr > 1000 && nbr%1000 != 0) {
-                syntax = "(NNumeral(num(pot3plus " + subs1000(nbr/1000) + " " +
-                        subs1000(nbr%1000) + ")))";
+                syntax = "(num (pot3plus " + subs1000(nbr/1000) + " " +
+                        subs1000(nbr%1000) + "))";
             }
         } else {
             throw new IllegalArgumentException("Input must be between 1 and 999999");
@@ -92,13 +80,5 @@ public class NumeralSyntaxNode extends SyntaxNode {
             syntax = "(pot0 n" + nbr + ")";
         }
         return syntax;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
     }
 }
