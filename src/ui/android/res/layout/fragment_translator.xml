@@ -6,42 +6,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/grid_phrasebook_button"
+		android:layout_marginTop="10dp"
+		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
+		android:id="@+id/fragment_translation">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/containerfor_translation"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp">
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="New Text"
+			android:textSize="24dp"
+			android:id="@+id/origin_phrase"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:layout_marginTop="16dp"
+			android:layout_marginBottom="16dp"
+			android:maxLines="4"
+			android:scrollHorizontally="false"
+			/>
 
-    </FrameLayout>
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="New Text"
+			android:textSize="24dp"
+			android:id="@+id/target_phrase"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:maxLines="4"
+			android:scrollHorizontally="false"
+			/>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/containerfor_options"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp">
+		<ImageView
+			android:id="@+id/button3"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_gravity="right"
+			android:src="@drawable/ic_volume_up_black_18dp"/>
+	</LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dots"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_gravity="center|bottom">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/firstDot"
-            android:src="@drawable/ic_dictionary" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/secondDot"
-            android:src="@drawable/ic_dictionary" />
-    </LinearLayout>
-    </FrameLayout>
+	<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/input_holder"
+	    android:divider="@android:color/transparent"
+		android:padding="8dp"/>
 </LinearLayout>
