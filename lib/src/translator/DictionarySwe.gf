@@ -12114,7 +12114,7 @@ lin conduit_N = mkN "ledning" ; -- comment=4
 lin condylar_A = variants {} ; -- status=guess
 lin condyle_N = variants {} ; -- status=guess
 lin condylion_N = variants {} ; -- status=guess
-lin cone_N = mkN "strut" ; -- comment=6
+lin cone_N = mkN "kon" "koner" ;
 lin cone_V2 = variants {} ; -- status=guess
 lin coneflower_N = variants {} ; -- status=guess
 lin conenose_N = variants {} ; -- status=guess
@@ -41964,7 +41964,7 @@ lin pine_away_V = mkV "trånar" ; -- comment=2
 lin pineal_A = variants {} ; -- status=guess
 lin pinealoma_N = variants {} ; -- status=guess
 lin pineapple_N = mkN "ananas" ;
-lin pinecone_N = mkN "tallkotte" ; -- src=google
+lin pinecone_N = mkN "kotte" "kottar" ;
 lin pinesap_N = mkN "tallört" ; -- status=guess
 lin pinetum_N = variants {} ; -- status=guess
 lin pinfish_N = mkN "pinfish" ;
