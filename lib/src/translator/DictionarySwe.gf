@@ -39932,7 +39932,7 @@ lin pallone_N = variants {} ; -- status=guess
 lin pallor_N = mkN "blekhet" "blekheter" ;
 lin pally_A = variants {} ; -- status=guess
 lin palm_1_N = mkN "handflata" ;
-lin palm_2_N = mkN "handflata" ;
+lin palm_2_N = mkN "handsbredd" "handsbredder" ;
 lin palm_3_N = mkN "palm" "palmer" ;
 lin palm_V2 = mkV2 (mkV "palmera") ; -- status=guess, src=wikt
 lin palm_oil_N = mkN "palmolja" ;
