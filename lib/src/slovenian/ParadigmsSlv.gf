@@ -15,7 +15,7 @@ oper
   neuter    = Neut;
 
   mkN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> N =
-    \nomsg,nomdl,nompl,gensg,gendl,genpl,datsg,datdl,datpl,accsg,accdl,accpl,locsg,locdl,locpl,instrsg,instrdl,instrpl,g -> lin N {
+    \nomsg,gensg,datsg,accsg,locsg,instrsg,nomdl,gendl,datdl,accdl,locdl,instrdl,nompl,genpl,datpl,accpl,locpl,instrpl,g -> lin N {
        s = table {
              Nom   => table {Sg=>nomsg; Dl=>nomdl; Pl=>nompl};
              Gen   => table {Sg=>gensg; Dl=>gendl; Pl=>genpl};
