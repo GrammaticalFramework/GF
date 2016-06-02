@@ -9,37 +9,54 @@ June 2016
 
 See the [download page http://www.grammaticalframework.org/download/index.html].
 
+
 ==What's new==
 
-Over 292 changes have been pushed to the source repository since
+Over 300 changes have been pushed to the source repository since
 [the release of GF 3.7.1 release-3.7.1.html] in October 2015.
 
+
 ===GF compiler and run-time library===
+
 
 ====New features and notable changes====
 
 - ...
 
+
 ====Other changes and bug fixes====
 
-- ...
+- GF shell: a simple post-processing step has been added in the ``cc`` command
+  to try compute ``pre{...}`` tokens instead of leaving them uninterpreted.
+- GF shell: an argument parsing problem has been fixed in the ``cc`` command.
+  The problem prevented commands like ``cc "last"`` and ``cc "last"++"year"``
+  from working, but they should work now.
+- Various improvements and bug fixes in the C run-time system and its bindings
+  to other languages.
 
 
 ====Changes of interest to compiler developers====
 
-- ...
+- The compiler source code has been updated for compatibility with GHC 8.0.1.
 
 
 ===Resource Grammar Library===
 
+- Various fixes for several languages.
+- Numerous fixes in the translation dictionaries.
 - ...
-%- Various fixes for several languages.
-%- Numerous fixes in the translation dictionaries.
 
 
 ===GF Cloud services===
 
-- ...
+- Wide Coverage Translation Demo:
+  there is now a new button "Grammars..." which show a list where users can
+  select which application grammars to use for translation, in addition to
+  the wide coverage grammar. Application grammars can give higher quality
+  translations in the domain they cover.
+  You can change the order in which the selected grammars are tried
+  by dragging them up and down in the list.
+
 
 --------------------
 
