@@ -50,4 +50,7 @@ ComplV2 v np = mkVP v np ;
 
   PassV2 v2 = SyntaxSwe.passiveVP v2 ;
 
+RelV2 rp np v2 = mkRCl rp (mkClSlash np (mkVPSlash v2)) ;
+QuestV2 ip np v2 = mkQCl ip (mkClSlash np (mkVPSlash v2)) ;
+
 }
