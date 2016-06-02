@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+-- --# -path=.:alltenses:prelude
 
 resource CombinatorsGrc = Combinators - [appCN, appCNc] with 
   (Cat = CatGrc),

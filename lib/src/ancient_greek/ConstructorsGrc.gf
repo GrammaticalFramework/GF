@@ -1,3 +1,3 @@
---# -path=.:alltenses:prelude
+-- --# -path=.:alltenses:prelude
 
 resource ConstructorsGrc = Constructors with (Grammar = GrammarGrc) ;

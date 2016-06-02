@@ -1,5 +1,5 @@
 ---# -path=.:../../gf/lib/src/abstract:../common:../prelude
---# -path=.:abstract:../common:../prelude
+--# -path=../abstract:../common:../prelude
 
 concrete LangGrc of Lang = 
   GrammarGrc, 
