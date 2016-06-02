@@ -353,9 +353,9 @@ public class Translator {
     	if (s == null)
     		s = "% ";     // make sure that we return something
 	
-		if (getTargetLanguage().getLangCode().equals("cmn-Hans-CN") ||
-		    getTargetLanguage().getLangCode().equals("ja-JP") ||
-		    getTargetLanguage().getLangCode().equals("th-TH"))
+		if (getSourceLanguage().getLangCode().equals("cmn-Hans-CN") ||
+		    getSourceLanguage().getLangCode().equals("ja-JP") ||
+		    getSourceLanguage().getLangCode().equals("th-TH"))
 		  return implode(s);
 		else
 		  return s;
