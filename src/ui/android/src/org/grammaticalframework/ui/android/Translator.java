@@ -589,7 +589,18 @@ public class Translator {
 	}
 
     public List<MorphoAnalysis> lookupMorpho(String sentence) {
-    	return getSourceConcr().lookupMorpho(sentence);
+		List<MorphoAnalysis> ans = getSourceConcr().lookupMorpho(sentence);
+		Collections.sort(ans, new Comparator<MorphoAnalysis>() {
+				public int compare(MorphoAnalysis a1, MorphoAnalysis a2) {
+					if (a1.getProb() > a2.getProb())
+						return 1;
+					else if (a1.getProb() < a2.getProb())
+						return -1;
+					else
+						return 0;
+				}
+			});
+    	return ans;
     }
 
     public CompletionInfo[] lookupWordPrefix(String prefix) {
