@@ -518,13 +518,13 @@ arcbase        = 30.0               -- arcs start and end 40u above the bottom
 arcfactor r    = r * 500            -- reduction of arc size from word distance
 xyratio        = 3                  -- width/height ratio of arcs
 
-putArc :: (Int -> Double) -> Int -> Int -> String -> String
-putArc frwld x y label = unlines [oval,arrowhead,labelling] where
+putArc :: (Int -> Double) -> Int -> Int -> Int -> String -> String
+putArc frwld height x y label = unlines [oval,arrowhead,labelling] where
   oval = put ctr arcbase ("\\oval(" ++ show wdth ++ "," ++ show hght ++ ")[t]")
   arrowhead = put endp (arcbase + 5) (app "vector(0,-1)" "5")   -- downgoing arrow 5u above the arc base
   labelling = put (labelstart ctr) (labelheight (hght/2)) (small label)
   dxy  = wdist frwld x y             -- distance between words, >>= 20.0
-  ndxy = 100 * rwld * fromIntegral (abs (x-y))  -- distance that is indep of word length
+  ndxy = 100 * rwld * fromIntegral height  -- distance that is indep of word length
   hdxy = dxy / 2                     -- half the distance
   wdth = dxy - (arcfactor rwld)/dxy  -- longer arcs are less wide in proportion
   hght = ndxy / (xyratio * rwld)      -- arc height is independent of word length
@@ -540,7 +540,7 @@ dep2latex d =
   :  ("\\begin{picture}(" ++ show width ++ "," ++ show height ++ ")")
   :  [put (wpos rwld i)  0 w | (i,w) <- zip [0..] (map fst (tokens d))]   -- words
   ++ [put (wpos rwld i) 15 (small w) | (i,w) <- zip [0..] (map snd (tokens d))]   -- pos tags 15u above bottom
-  ++ [putArc rwld x y label | ((x,y),label) <- deps d]    -- arcs and labels
+  ++ [putArc rwld (aheight x y) x y label | ((x,y),label) <- deps d]    -- arcs and labels
   ++ [put (wpos rwld (root d) + 15) height (app "vector(0,-1)" (show (fromIntegral height-arcbase)))]
   ++ [put (wpos rwld (root d) + 20) (height - 10) (small "ROOT")]
   ++ ["\\end{picture}"]
@@ -548,6 +548,12 @@ dep2latex d =
    (width,height) = case pictureSize d of (w,h) -> (w, h)
    wld i  = wordLength d i  -- >= 20.0
    rwld i = (wld i) / defaultWordLength       -- >= 1.0
+   aheight x y = depth (min x y) (max x y) + 1    ---- abs (x-y)
+   arcs = [(min u v, max u v) | ((u,v),_) <- deps d]
+   depth x y = case [(u,v) | (u,v) <- arcs, (x < u && v <= y) || (x == u && v < y)] of ---- only projective arcs counted
+     [] -> 0
+     uvs -> 1 + maximum [depth u v | (u,v) <- uvs]
+
 
   
 {-
