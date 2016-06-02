@@ -43,4 +43,7 @@ fun
 
   ComplV3  : V3  -> NP -> NP -> VP ;
 
+  RelV2   : RP -> NP -> V2 -> RCl ;
+  QuestV2 : IP -> NP -> V2 -> QCl ;
+
 }
