@@ -108,6 +108,9 @@ public class Model {
 		} else if (node.getNodeName().equals("option")) {
 			SyntaxNode[] options = constructSyntaxNodeList(node, ids, calls);
 			return new SyntaxNodeOption(desc, options);
+		} else if (node.getNodeName().equals("boolean")) {
+			SyntaxNode[] options = constructSyntaxNodeList(node, ids, calls);
+			return new SyntaxNodeBoolean(desc, options);
 		} else if (node.getNodeName().equals("call")) {
 			if (attributes.getNamedItem("ref") == null)
 				return null;
