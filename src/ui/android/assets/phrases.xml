@@ -1,10 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phrasebook>
+    <sentence desc="Greetings" id="PGreeting">
+		<option>
+			<function desc="Male Speaker" name="PGreetingMale">
+				<call ref="Greeting"/>
+			</function>
+			<function desc="Female Speaker" name="PGreetingFemale">
+				<call ref="Greeting"/>
+			</function>
+		</option>
+    </sentence>
+
+    <sentence desc="Fixed Phrases" id="PPhrase">
+		<option>
+			<function desc="Male Speaker" name="PGreetingMale">
+				<call ref="Phrase"/>
+			</function>
+			<function desc="Female Speaker" name="PGreetingFemale">
+				<call ref="Phrase"/>
+			</function>
+		</option>
+    </sentence>
+
     <sentence desc="What is somebody's name?" id="QWhatName">
         <function name="PQuestion">
             <function name="QWhatName">
-                <call desc="Who are we talking about?" ref="allpersons"/>
+                <call desc="Who are we talking about?" ref="Person"/>
             </function>
         </function>
     </sentence>
@@ -13,7 +35,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AHasName">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                     <function name="NameNN"/>
 				</function>
 			</function>
@@ -23,7 +45,7 @@
     <sentence desc="How old is someone?" id="QWhatAge">
         <function name="PQuestion">
             <function name="QWhatAge">
-                <call ref="allpersons"/>
+                <call ref="Person"/>
             </function>
         </function>
     </sentence>
@@ -32,7 +54,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AHasAge">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                     <function name="NNumeral">
 						<numeral desc="How many years?"/>
                     </function>
@@ -45,8 +67,8 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="ALove">
-                    <call desc="Who loves someone?" ref="allpersons"/>
-                    <call desc="Who is loved?" ref="allpersons"/>
+                    <call desc="Who loves someone?" ref="Person"/>
+                    <call desc="Who is loved?" ref="Person"/>
                 </function>
             </function>
         </call>
@@ -56,7 +78,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AMarried">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                 </function>
             </function>
         </call>
@@ -66,10 +88,28 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AHasChildren">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                     <function name="NNumeral">
 						<numeral desc="How many children?"/>
 					</function>
+                </function>
+            </function>
+        </call>
+    </sentence>
+
+    <sentence desc="Someone has something" id="SHave">
+        <function name="SHave">
+            <call ref="Person"/>
+            <call desc="What do you have?" ref="Object"/>
+        </function>
+    </sentence>
+
+    <sentence desc="Someone has currency" id="AHaveCurr">
+        <call ref="phraseit">
+            <function name="PropAction">
+                <function name="AHaveCurr">
+                    <call ref="Person"/>
+                    <call ref="Currency"/>
                 </function>
             </function>
         </call>
@@ -79,7 +119,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="ALive">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                     <call desc="Living where?" ref="country"/>
                 </function>
             </function>
@@ -90,10 +130,19 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AWantGo">
-                    <call ref="allpersons"/>
-                    <call ref="a/an/the">
-                        <call ref="places"/>
-                    </call>
+                    <call ref="Person"/>
+                    <call ref="Place"/>
+                </function>
+            </function>
+        </call>
+    </sentence>
+
+    <sentence desc="Someone is a citizen" id="ACitizen">
+        <call ref="phraseit">
+            <function name="PropAction">
+                <function name="ACitizen">
+                    <call ref="Person"/>
+                    <call desc="Living where?" ref="country"/>
                 </function>
             </function>
         </call>
@@ -103,11 +152,18 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="ABePlace">
-                    <call ref="allpersons"/>
-                    <call ref="a/an/the">
-                        <call desc="What place?" ref="places"/>
-                    </call>
+                    <call ref="Person"/>
+                    <call ref="Place"/>
                 </function>
+            </function>
+        </call>
+    </sentence>
+
+    <sentence desc="Something is something" id="Is">
+        <call ref="phraseit">
+            <function name="Is">
+                <call ref="Item"/>
+                <call ref="Quality"/>
             </function>
         </call>
     </sentence>
@@ -115,7 +171,7 @@
     <sentence desc="How far is something?" id="HowFar">
         <function name="PQuestion">
             <function name="HowFar">
-                <call desc="What place are we asking about?" ref="superlative_places"/>
+                <call desc="What place are we asking about?" ref="Place"/>
             </function>
         </function>
     </sentence>
@@ -123,29 +179,45 @@
     <sentence desc="How far is something from somewhere?" id="HowFarFrom">
         <function name="PQuestion">
             <function name="HowFarFrom">
-                <call desc="Where are we going from?" ref="superlative_places"/>
-                <call desc="Where are we going to?" ref="superlative_places"/>
+                <call desc="Where are we going from?" ref="Place"/>
+                <call desc="Where are we going to?" ref="Place"/>
             </function>
         </function>
     </sentence>
 
     <sentence desc="Some place is open" id="PropOpen">
         <call ref="phraseit">
-            <function name="PropOpen">
-                <call ref="superlative">
-                    <call ref="places"/>
-                </call>
-            </function>
+			<option>
+				<function desc="now" name="PropOpen">
+					<call ref="Place"/>
+				</function>
+                <function desc="on a specific date" name="PropOpenDate">
+                    <call ref="Place"/>
+                    <call ref="Date"/>
+                </function>
+                <function desc="on a specific day of the week" name="PropOpenDay">
+                    <call ref="Place"/>
+                    <call ref="Day"/>
+                </function>
+            </option>
         </call>
     </sentence>
 
     <sentence desc="Some place is closed" id="PropClosed">
         <call ref="phraseit">
-            <function name="PropClosed">
-                <call ref="superlative">
-                    <call ref="places"/>
-                </call>
-            </function>
+			<option>
+				<function desc="now" name="PropClosed">
+                    <call ref="Place"/>
+                </function>
+                <function desc="on a specific date" name="PropClosedDate">
+                    <call ref="Place"/>
+                    <call ref="Date"/>
+                </function>
+                <function desc="on a specific day of the week" name="PropClosedDay">
+                    <call ref="Place"/>
+                    <call ref="Day"/>
+                </function>
+             </option>
         </call>
     </sentence>
 
@@ -153,10 +225,8 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AWant">
-                    <call desc="Who wants food?" ref="allpersons"/>
-                    <call ref="objectsPrep">
-                        <call ref="food"/>
-                    </call>
+                    <call desc="Who wants food?" ref="Person"/>
+                    <call ref="Object"/>
                 </function>
             </function>
         </call>
@@ -166,10 +236,8 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="ALike">
-                    <call desc="Who likes it?" ref="allpersons"/>
-                    <call ref="det">
-                        <call ref="food"/>
-                    </call>
+                    <call desc="Who likes it?" ref="Person"/>
+                    <call ref="Item"/>
                 </function>
             </function>
         </call>
@@ -179,7 +247,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AHasTable">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                     <function name="NNumeral">
 						<numeral desc="How many persons?"/>
                     </function>
@@ -192,7 +260,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AHasRoom">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                     <function name="NNumeral">
 						<numeral desc="How many persons?"/>
                     </function>
@@ -201,47 +269,21 @@
         </call>
     </sentence>
 
-    <sentence desc="How much does something cost?" id="HowMuchCost">
-        <function name="PQuestion">
-            <function name="HowMuchCost">
-                <call ref="det">
-                    <call ref="food"/>
-                </call>
-            </function>
-        </function>
-    </sentence>
-
-    <sentence desc="Something costs ..." id="ItCost">
-        <call ref="phraseit">
-            <function name="ItCost">
-                <call ref="det">
-					<call ref="food"/>
-                </call>
-				<function name="AmountCurrency">
-					<function name="NNumeral">
-						<numeral desc="How much does it cost?"/>
-					</function>
-					<call ref="currency"/>
-				</function>
-            </function>
-        </call>
-    </sentence>
-
     <sentence desc="Someone is hungry" id="AHungry">
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AHungry">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                 </function>
             </function>
         </call>
     </sentence>
 
-    <sentence advanced="true" desc="Someone is thirsty" id="AThirsty">
+    <sentence desc="Someone is thirsty" id="AThirsty">
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AThirsty">
-                    <call ref="allpersons" />
+                    <call ref="Person" />
                 </function>
             </function>
         </call>
@@ -251,7 +293,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="ATired">
-                    <call ref="allpersons" />
+                    <call ref="Person" />
                 </function>
             </function>
         </call>
@@ -261,7 +303,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AScared">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                 </function>
             </function>
         </call>
@@ -271,7 +313,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AIll">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                 </function>
             </function>
         </call>
@@ -281,8 +323,30 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AReady">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                 </function>
+            </function>
+        </call>
+    </sentence>
+    
+    <sentence desc="Someone does something" id="ADoVerbPhrase">
+		<call ref="phraseit">
+            <function name="PropAction">
+				<option desc="Modality">
+					<call desc="No modality" ref="do"/>
+					<call desc="can" ref="modal_do">
+						<function desc="can"  name="MCan"/>
+					</call>
+					<call desc="know" ref="modal_do">
+						<function desc="know" name="MKnow"/>
+					</call>
+					<call desc="must" ref="modal_do">
+						<function desc="must" name="MMust"/>
+					</call>
+					<call desc="want" ref="modal_do">
+						<function desc="want" name="MWant"/>
+					</call>
+				</option>
             </function>
         </call>
     </sentence>
@@ -291,7 +355,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="ASpeak">
-                    <call desc="Who speaks it?" ref="allpersons"/>
+                    <call desc="Who speaks it?" ref="Person"/>
                     <call ref="language"/>
                 </function>
             </function>
@@ -302,7 +366,7 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AUnderstand">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                 </function>
             </function>
         </call>
@@ -312,84 +376,200 @@
         <call ref="phraseit">
             <function name="PropAction">
                 <function name="AKnow">
-                    <call ref="allpersons"/>
+                    <call ref="Person"/>
                 </function>
             </function>
         </call>
     </sentence>
 
+    <sentence desc="Someone knows someone" id="AKnowPerson">
+        <call ref="phraseit">
+            <function name="PropAction">
+                <function name="AKnowPerson">
+                    <call desc="Who knows it?" ref="Person"/>
+                    <call desc="Who is known?" ref="Person"/>
+                </function>
+            </function>
+        </call>
+    </sentence>
+
+    <sentence desc="How much does something cost?" id="HowMuchCost">
+        <function name="PQuestion">
+            <function name="HowMuchCost">
+                <call ref="Item"/>
+            </function>
+        </function>
+    </sentence>
+
+    <sentence desc="Something costs ..." id="ItCost">
+        <call ref="phraseit">
+            <function name="ItCost">
+                <call ref="Item"/>
+                <call ref="Price"/>
+            </function>
+        </call>
+    </sentence>
+
+	<sentence desc="Commands" id="PImperative">
+		<option>
+			<function desc="positive, familiar" name="PImperativeFamPos">
+				<call ref="VerbPhrase"/>
+			</function>
+			<function desc="positive, polite" name="PImperativePolPos">
+				<call ref="VerbPhrase"/>
+			</function>
+			<function desc="positive, plural" name="PImperativePlurPos">
+				<call ref="VerbPhrase"/>
+			</function>
+			<function desc="negated, familiar" name="PImperativeFamNeg">
+				<call ref="VerbPhrase"/>
+			</function>
+			<function desc="negated, polite" name="PImperativePolNeg">
+				<call ref="VerbPhrase"/>
+			</function>
+			<function desc="negative, plural" name="PImperativePlurNeg">
+				<call ref="VerbPhrase"/>
+			</function>
+		</option>
+	</sentence>
+
+    <sentence desc="Price" id="PPrice">
+		<function name="PPrice">
+			<call ref="Price"/>
+		</function>
+	</sentence>
+	
+	<sentence desc="Number" id="Number">
+		<function name="PNumber">
+			<function name="NNumeral">
+				<numeral desc="Which number?"/>
+			</function>
+		</function>
+	</sentence>
+
     <!-- ___________________________________________________________________________________________ -->
     <!--Option lists -->
-    <option desc="Who are we talking about?" id="allpersons">
+    <option desc="Who are we talking about?" id="Person">
         <function desc="me (male)" name="IMale" />
         <function desc="me (female)" name="IFemale" />
         <function desc="you (a male friend)" name="YouFamMale" />
         <function desc="you (a female friend)" name="YouFamFemale" />
         <function desc="you (a male stranger)" name="YouPolMale" />
         <function desc="you (a female stranger)" name="YouPolFemale" />
+        <function desc="he" name="He"/>
+        <function desc="she" name="She"/>
+        <function desc="we (male)" name="WeMale"/>
+        <function desc="we (female)" name="WeFemale"/>
+        <function desc="you (male friends)" name="YouPlurFamMale"/>
+        <function desc="you (female friends)" name="YouPlurFamFemale"/>
+        <function desc="you (male strangers)" name="YouPlurPolMale"/>
+        <function desc="you (female strangers)" name="YouPlurPolFemale"/>
+        <function desc="they (male)" name="TheyMale"/>
+        <function desc="they (female)" name="TheyFemale"/>
         <function desc="Wife of ..." name="Wife">
-            <call ref="allpersons"/>
+            <call ref="Person"/>
         </function>
         <function desc="Husband of ..." name="Husband">
-            <call ref="allpersons"/>
+            <call ref="Person"/>
         </function>
         <function desc="Daughter of ..." name="Daughter">
-            <call ref="allpersons"/>
+            <call ref="Person"/>
         </function>
         <function desc="Son of ..." name="Son">
-            <call ref="allpersons"/>
+            <call ref="Person"/>
         </function>
         <function desc="Children of ..." name="Children">
-            <call ref="allpersons"/>
-        </function>
-    </option>
-
-    <call id="superlative_places" ref="superlative">
-        <call ref="places"/>
-    </call>
-
-    <option desc="What article?" id="a/an/the">
-        <function desc="a/an" name="APlace">
-            <argument/>
-        </function>
-        <function desc="The" name="ThePlace">
-            <argument/>
+            <call ref="Person"/>
         </function>
     </option>
 
     <option desc="How to phrase it?" id="phraseit">
         <function desc="As a statement" name="PSentence">
             <function name="SProp">
-                <argument/>
+				<boolean desc="Reported Speech">
+					<argument/>
+					<function name="PropAction">
+						<option>
+                            <function desc="As a statement" name="AKnowSentence">
+    					        <call ref="Person"/>
+                                <function name="SProp">
+	    					        <argument/>
+		    			        </function>
+                            </function>
+                            <function desc="As a question" name="AKnowQuestion">
+    						    <call ref="Person"/>
+                                <function name="QProp">
+   		    				        <argument/>
+			    			    </function>
+                            </function>
+                            <function desc="As a negation" name="AKnowSentence">
+   						        <call ref="Person"/>
+                                <function name="SPropNot">
+	    					        <argument/>
+		    			        </function>
+                            </function>
+                        </option>
+                    </function>
+                </boolean>
             </function>
         </function>
         <function desc="As a question" name="PQuestion">
             <function name="QProp">
-		        <argument/>
+				<boolean desc="Reported Speech">
+					<argument/>
+					<function name="PropAction">
+						<option>
+                            <function desc="As a statement" name="AKnowSentence">
+    					        <call ref="Person"/>
+                                <function name="SProp">
+	    					        <argument/>
+		    			        </function>
+                            </function>
+                            <function desc="As a question" name="AKnowQuestion">
+    						    <call ref="Person"/>
+                                <function name="QProp">
+   		    				        <argument/>
+			    			    </function>
+                            </function>
+                            <function desc="As a negation" name="AKnowSentence">
+   						        <call ref="Person"/>
+                                <function name="SPropNot">
+	    					        <argument/>
+		    			        </function>
+                            </function>
+                        </option>
+                    </function>
+                </boolean>
             </function>
         </function>
         <function desc="As a negation" name="PSentence">
             <function name="SPropNot">
-                <argument/>
+				<boolean desc="Reported Speech">
+					<argument/>
+					<function name="PropAction">
+						<option>
+                            <function desc="As a statement" name="AKnowSentence">
+    					        <call ref="Person"/>
+                                <function name="SProp">
+	    					        <argument/>
+		    			        </function>
+                            </function>
+                            <function desc="As a question" name="AKnowQuestion">
+    						    <call ref="Person"/>
+                                <function name="QProp">
+   		    				        <argument/>
+			    			    </function>
+                            </function>
+                            <function desc="As a negation" name="AKnowSentence">
+   						        <call ref="Person"/>
+                                <function name="SPropNot">
+	    					        <argument/>
+		    			        </function>
+                            </function>
+                        </option>
+                    </function>
+                </boolean>
             </function>
-        </function>
-    </option>
-
-    <option id="advphraseit" option="How are they phrasing it?">
-        <function desc="As a statement" name="PSentence">
-            <function name="SProp">
-			    <argument/>
-		    </function>
-        </function>
-        <function desc="As a question" name="PQuestion">
-            <function name="QProp">
-		    	<argument/>
-			</function>
-        </function>
-        <function desc="As a negation" name="PSentence">
-            <function name="SPropNot">
-		    	<argument/>
-			</function>
         </function>
     </option>
 
@@ -412,7 +592,7 @@
         <function desc="Swedish" name="(LangNat Swedish)"/>
     </option>
 
-    <option id="nationality" desc="What nationality">
+    <option id="Citizenship" desc="What nationality">
         <function desc="Belgian" name="Belgian"/>
         <function desc="Bulgarian" name="CitiNat Bulgarian"/>
         <function desc="Catalan" name="CitiNat Catalan"/>
@@ -431,8 +611,8 @@
         <function desc="Swedish" name="CitiNat Swedish"/>
     </option>
 
-    <option desc="What place are we asking about?" id="places">
-        <function desc="airport" name="AmusementPark"/>
+    <option desc="What place are we asking about?" id="PlaceKind">
+        <function desc="airport" name="Airport"/>
         <function desc="amusement park" name="AmusementPark"/>
         <function desc="bank" name="Bank"/>
         <function desc="bar" name="Bar"/>
@@ -451,7 +631,7 @@
         <function desc="pub" name="Pub"/>
         <function desc="restaurant" name="Restaurant"/>
         <function desc="restaurant (National)" name="CitRestaurant">
-            <call ref="nationality"/>
+            <call ref="Citizenship"/>
         </function>
         <function desc="school" name="School"/>
         <function desc="shop" name="Shop"/>
@@ -463,33 +643,36 @@
         <function desc="zoo" name="Zoo"/>
     </option>
 
-    <option id="superlative">
-        <function desc="(no superlative)" name="ThePlace">
-			<argument/>
+    <option id="Place">
+        <function desc="a/an" name="APlace">
+            <call ref="PlaceKind"/>
+        </function>
+        <function desc="the" name="ThePlace">
+			<call ref="PlaceKind"/>
 		</function>
-        <function desc="best" name="SuperlPlace">
+        <function desc="the best" name="SuperlPlace">
 			<function name="TheBest"/>
-			<argument/>
+			<call ref="PlaceKind"/>
         </function>
-        <function desc="worst" name="SuperlPlace">
+        <function desc="the worst" name="SuperlPlace">
 			<function name="TheWorst"/>
-			<argument/>
+			<call ref="PlaceKind"/>
         </function>
-        <function desc="nearest" name="SuperlPlace">
+        <function desc="the nearest" name="SuperlPlace">
 			<function name="TheClosest"/>
-			<argument/>
+			<call ref="PlaceKind"/>
         </function>
-        <function desc="cheapest" name="SuperlPlace">
+        <function desc="the cheapest" name="SuperlPlace">
 			<function name="TheCheapest"/>
-			<argument/>
+			<call ref="PlaceKind"/>
         </function>
-        <function desc="most expensive" name="SuperlPlace">
+        <function desc="the most expensive" name="SuperlPlace">
 			<function name="TheMostExpensive"/>
-			<argument/>
+			<call ref="PlaceKind"/>
         </function>
-        <function desc="most popular" name="SuperlPlace">
+        <function desc="the most popular" name="SuperlPlace">
 			<function name="TheMostPopular"/>
-			<argument/>
+			<call ref="PlaceKind"/>
         </function>
     </option>
 
@@ -512,68 +695,212 @@
         <function desc="Sweden" name="(CountryNat Swedish)"/>
     </option>
 
-    <option desc="What is being wanted?" id="objectsPrep">
+    <option desc="What is being wanted?" id="Object">
         <function desc="a/an" name="OneObj">
-            <function name="ObjMass">
-				<argument/>
-			</function>
+            <call ref="IndefItem"/>
         </function>
         <function desc="the" name="OneObj">
             <function name="ObjItem">
-                <function name="TheMass">
-					<argument/>
-			    </function>
+                <call ref="DefItem"/>
             </function>
         </function>
         <function desc="this" name="OneObj">
             <function name="ObjItem">
-                <function name="ThisMass">
-					<argument/>
-			    </function>
+                <call ref="ThisItem"/>
             </function>
         </function>
         <function desc="that" name="OneObj">
             <function name="ObjItem">
-                <function name="ThatMass">
-					<argument/>
-			    </function>
+				<call ref="ThatItem"/>
+            </function>
+        </function>
+        <function desc="(plural)" name="OneObj">
+            <function name="ObjPlural">
+				<call ref="Kind"/>
             </function>
         </function>
     </option>
 
-    <option id="det" desc="Determiner">
-        <function desc="The"  name="TheMass">
-			<argument/>
-		</function>
-        <function desc="This" name="ThisMass">
-			<argument/>
-		</function>
-        <function desc="That" name="ThatMass">
-			<argument/>
-		</function>
+    <option desc="Determiner" id="Item">
+        <call desc="the"  ref="DefItem"/>
+        <call desc="this" ref="ThisItem"/>
+		<call desc="that" ref="ThatItem"/>
     </option>
 
-    <option id="food" desc="What are we talking about?">
-        <function desc="Beer" name="(MassDrink Beer)"/>
-        <function desc="Bread" name="Bread"/>
-        <function desc="Cheese" name="Cheese"/>
-        <function desc="Chicken" name="Chicken"/>
-        <function desc="Coffee" name="(MassDrink Coffee)"/>
-        <function desc="Fish" name="Fish"/>
-        <function desc="Meat" name="Meat"/>
-        <function desc="Milk" name="Milk"/>
-        <function desc="Salt" name="Salt"/>
-        <function desc="Tea" name="(MassDrink Tea)"/>
-        <function desc="Water" name="(MassDrink Water)"/>
-        <function desc="Wine" name="(MassDrink Wine)"/>
+	<option id="IndefItem" desc="What are we talking about?">
+		<function desc="apple" name="(ObjIndef Apple)"/>
+        <function desc="beer" name="(ObjMass (MassDrink Beer))"/>
+        <function desc="bread" name="(ObjMass Bread)"/>
+        <function desc="cheese" name="(ObjMass Cheese)"/>
+        <function desc="chicken" name="(ObjMass Chicken)"/>
+        <function desc="coffee" name="(ObjMass (MassDrink Coffee))"/>
+        <function desc="fish" name="(ObjMass Fish)"/>
+        <function desc="meat" name="(ObjMass Meat)"/>
+        <function desc="milk" name="(ObjMass Milk)"/>
+        <function desc="pizza" name="(ObjIndef Pizza)"/>
+        <function desc="salt" name="(ObjMass Salt)"/>
+        <function desc="tea" name="(ObjMass (MassDrink Tea))"/>
+        <function desc="water" name="(ObjMass (MassDrink Water))"/>
+        <function desc="wine" name="(ObjMass (MassDrink Wine))"/>
+        <function desc="(with quality)" name="ObjMass">
+			<function name="SuchMassKind">
+				<call ref="Quality"/>
+				<call ref="MassKind"/>
+			</function>
+        </function>
     </option>
 
-    <option id="currency">
+	<option id="DefItem" desc="What are we talking about?">
+		<function desc="apple" name="(The Apple)"/>
+        <function desc="beer" name="(TheMass (MassDrink Beer))"/>
+        <function desc="bread" name="(TheMass Bread)"/>
+        <function desc="cheese" name="(TheMass Cheese)"/>
+        <function desc="chicken" name="(TheMass Chicken)"/>
+        <function desc="coffee" name="(TheMass (MassDrink Coffee))"/>
+        <function desc="fish" name="(TheMass Fish)"/>
+        <function desc="meat" name="(TheMass Meat)"/>
+        <function desc="milk" name="(TheMass Milk)"/>
+        <function desc="pizza" name="(The Pizza)"/>
+        <function desc="salt" name="(TheMass Salt)"/>
+        <function desc="tea" name="(TheMass (MassDrink Tea))"/>
+        <function desc="water" name="(TheMass (MassDrink Water))"/>
+        <function desc="wine" name="(TheMass (MassDrink Wine))"/>
+        <function desc="(with quality)" name="TheMass">
+			<function name="SuchMassKind">
+				<call ref="Quality"/>
+				<call ref="MassKind"/>
+			</function>
+        </function>
+    </option>
+
+	<option id="ThisItem" desc="What are we talking about?">
+		<function desc="apple" name="(This Apple)"/>
+        <function desc="beer" name="(ThisMass (MassDrink Beer))"/>
+        <function desc="bread" name="(ThisMass Bread)"/>
+        <function desc="cheese" name="(ThisMass Cheese)"/>
+        <function desc="chicken" name="(ThisMass Chicken)"/>
+        <function desc="coffee" name="(ThisMass (MassDrink Coffee))"/>
+        <function desc="fish" name="(ThisMass Fish)"/>
+        <function desc="meat" name="(ThisMass Meat)"/>
+        <function desc="milk" name="(ThisMass Milk)"/>
+        <function desc="pizza" name="(This Pizza)"/>
+        <function desc="salt" name="(ThisMass Salt)"/>
+        <function desc="tea" name="(ThisMass (MassDrink Tea))"/>
+        <function desc="water" name="(ThisMass (MassDrink Water))"/>
+        <function desc="wine" name="(ThisMass (MassDrink Wine))"/>
+        <function desc="(with quality)" name="ThisMass">
+			<function name="SuchMassKind">
+				<call ref="Quality"/>
+				<call ref="MassKind"/>
+			</function>
+        </function>
+    </option>
+
+	<option id="ThatItem" desc="What are we talking about?">
+		<function desc="apple" name="(That Apple)"/>
+        <function desc="beer" name="(ThatMass (MassDrink Beer))"/>
+        <function desc="bread" name="(ThatMass Bread)"/>
+        <function desc="cheese" name="(ThatMass Cheese)"/>
+        <function desc="chicken" name="(ThatMass Chicken)"/>
+        <function desc="coffee" name="(ThatMass (MassDrink Coffee))"/>
+        <function desc="fish" name="(ThatMass Fish)"/>
+        <function desc="meat" name="(ThatMass Meat)"/>
+        <function desc="milk" name="(ThatMass Milk)"/>
+        <function desc="pizza" name="(That Pizza)"/>
+        <function desc="salt" name="(ThatMass Salt)"/>
+        <function desc="tea" name="(ThatMass (MassDrink Tea))"/>
+        <function desc="water" name="(ThatMass (MassDrink Water))"/>
+        <function desc="wine" name="(ThatMass (MassDrink Wine))"/>
+        <function desc="(with quality)" name="ThatMass">
+			<function name="SuchMassKind">
+				<call ref="Quality"/>
+				<call ref="MassKind"/>
+			</function>
+        </function>
+    </option>
+
+    <option id="MassKind" desc="What are we talking about?">
+        <function desc="beer" name="(MassDrink Beer)"/>
+        <function desc="bread" name="Bread"/>
+        <function desc="cheese" name="Cheese"/>
+        <function desc="chicken" name="Chicken"/>
+        <function desc="coffee" name="(MassDrink Coffee)"/>
+        <function desc="fish" name="Fish"/>
+        <function desc="meat" name="Meat"/>
+        <function desc="milk" name="Milk"/>
+        <function desc="salt" name="Salt"/>
+        <function desc="tea" name="(MassDrink Tea)"/>
+        <function desc="water" name="(MassDrink Water)"/>
+        <function desc="wine" name="(MassDrink Wine)"/>
+        <function desc="(with quality)" name="SuchMassKind">
+			<call ref="Quality"/>
+			<call ref="MassKind"/>
+        </function>
+    </option>
+
+	<option id="Kind" desc="What are we talking about?">
+		<function desc="apple" name="Apple"/>
+        <function desc="pizza" name="Pizza"/>
+        <function desc="(with quality)" name="SuchKind">
+			<call ref="Quality"/>
+			<call ref="Kind"/>
+        </function>
+    </option>
+
+    <option id="Quality" desc="What quality does it have?">
+        <function desc="bad" name="(PropQuality Bad)"/>
+        <function desc="boring" name="(PropQuality Boring)"/>
+        <function desc="cheap" name="(PropQuality Cheap)"/>
+        <function desc="cold" name="(PropQuality Cold)"/>
+        <function desc="delicious" name="(PropQuality Delicious)"/>
+        <function desc="expensive" name="(PropQuality Expensive)"/>
+        <function desc="fresh" name="(PropQuality Fresh)"/>
+        <function desc="good" name="(PropQuality Good)"/>
+        <function desc="suspect" name="(PropQuality Suspect)"/>
+        <function desc="warm" name="(PropQuality Warm)"/>
+
+        <function desc="too bad" name="(Too Bad)"/>
+        <function desc="too boring" name="(Too Boring)"/>
+        <function desc="too cheap" name="(Too Cheap)"/>
+        <function desc="too cold" name="(Too Cold)"/>
+        <function desc="too delicious" name="(Too Delicious)"/>
+        <function desc="too expensive" name="(Too Expensive)"/>
+        <function desc="too fresh" name="(Too Fresh)"/>
+        <function desc="too good" name="(Too Good)"/>
+        <function desc="too suspect" name="(Too Suspect)"/>
+        <function desc="too warm" name="(Too Warm)"/>
+
+        <function desc="very bad" name="(Very Bad)"/>
+        <function desc="very boring" name="(Very Boring)"/>
+        <function desc="very cheap" name="(Very Cheap)"/>
+        <function desc="very cold" name="(Very Cold)"/>
+        <function desc="very delicious" name="(Very Delicious)"/>
+        <function desc="very expensive" name="(Very Expensive)"/>
+        <function desc="very fresh" name="(Very Fresh)"/>
+        <function desc="very good" name="(Very Good)"/>
+        <function desc="very suspect" name="(Very Suspect)"/>
+        <function desc="very warm" name="(Very Warm)"/>
+
+        <function desc="(with nationality)" name="PropQuality">
+			<function name="PropCit">
+				<call ref="Citizenship"/>
+			</function>
+        </function>
+    </option>
+
+	<function name="AmountCurrency" id="Price">
+		<function name="NNumeral">
+			<numeral desc="How much does it cost?"/>
+		</function>
+		<call ref="Currency"/>
+	</function>
+
+    <option id="Currency">
         <function desc="Euro"  name="Euro"/>
         <function desc="Dollar" name="Dollar"/>
-        <function desc="DanishCrown" name="DanishCrown"/>
-        <function desc="NorwegianCrown" name="NorwegianCrown"/>
-        <function desc="SwedishCrown" name="SwedishCrown"/>
+        <function desc="Danish Crown" name="DanishCrown"/>
+        <function desc="Norwegian Crown" name="NorwegianCrown"/>
+        <function desc="Swedish Crown" name="SwedishCrown"/>
         <function desc="Pound" name="Pound"/>
         <function desc="Rouble" name="Rouble"/>
         <function desc="Rupee" name="Rupee"/>
@@ -582,5 +909,127 @@
         <function desc="Yuan" name="Yuan"/>
         <function desc="Zloty" name="Zloty"/>
     </option>
-</phrasebook>
+    
+    <option desc="When?" id="Date">
+		<function desc="today" name="Today"/>
+		<function desc="tomorrow" name="Tomorrow"/>
+		<function desc="on Monday" name="(OnDay Monday)"/>
+		<function desc="on Tuesday" name="(OnDay Tuesday)"/>
+		<function desc="on Wednesday" name="(OnDay Wednesday)"/>
+		<function desc="on Thursday" name="(OnDay Thursday)"/>
+		<function desc="on Friday" name="(OnDay Friday)"/>
+		<function desc="on Saturday" name="(OnDay Saturday)"/>
+		<function desc="on Sunday" name="(OnDay Sunday)"/>
+	</option>
 
+    <option desc="On which days?" id="Day">
+		<function desc="Monday" name="Monday"/>
+		<function desc="Tuesday" name="Tuesday"/>
+		<function desc="Wednesday" name="Wednesday"/>
+		<function desc="Thursday" name="Thursday"/>
+		<function desc="Friday" name="Friday"/>
+		<function desc="Saturday" name="Saturday"/>
+		<function desc="Sunday" name="Sunday"/>
+	</option>
+
+	<option dec="Greeting" id="Greeting">
+		<function desc="Hello" name="GHello"/>
+		<function desc="Good Day" name="GGoodDay"/>
+		<function desc="Good Evening" name="GGoodEvening"/>
+		<function desc="Good Morning" name="GGoodMorning"/>
+		<function desc="Good Night" name="GGoodNight"/>
+		<function desc="Good Luck" name="GGoodLuck"/>
+		<function desc="See You Soon" name="GSeeYouSoon"/>
+		<function desc="See You on a Day" name="PSeeYouDate">
+			<call ref="Date"/>
+		</function>
+		<function desc="See You Somewhere" name="PSeeYouPlace">
+			<call ref="Place"/>
+		</function>
+		<function desc="See You Somewhere on a Day" name="PSeeYouPlaceDate">
+			<call ref="Place"/>
+			<call ref="Date"/>
+		</function>
+		<function desc="Goodbye" name="GGoodbye"/>
+		<function desc="Bye" name="GBye"/>
+		<function desc="Cheers" name="GCheers"/>
+		<function desc="Congratulations" name="GCongratulations"/>
+		<function desc="Damn" name="GDamn"/>
+		<function desc="Excuse me" name="GExcuse"/>
+		<function desc="Excuse me (polite)" name="GExcusePol"/>
+		<function desc="Happy Birthday" name="GHappyBirthday"/>
+		<function desc="Help" name="GHelp"/>
+		<function desc="How Are You" name="GHowAreYou"/>
+		<function desc="Nice to Meet You" name="GNiceToMeetYou"/>
+		<function desc="Sorry" name="GSorry"/>
+		<function desc="Sorry (polite)" name="GSorryPol"/>
+		<function desc="Thanks" name="GThanks"/>
+	</option>
+
+	<option dec="Phrase" id="Phrase">
+		<function desc="Yes" name="PYes"/>
+		<function desc="Yes (as an answer to no)" name="PYesToNo"/>
+		<function desc="No" name="PNo"/>
+		<function desc="What is the time?" name="GWhatTime"/>
+		<function desc="The Bill" name="GTheCheck"/>
+		<function desc="Look Out" name="GLookOut"/>
+		<function desc="Something please" name="GObjectPlease">
+			<call ref="Object"/>
+		</function>
+		<function desc="Please" name="GPleaseGive"/>
+		<function desc="Please (polite)" name="GPleaseGivePol"/>
+	</option>
+
+	<option id="do">
+		<function desc="In general" name="ADoVerbPhrase">
+			<call ref="Person"/>
+			<call ref="VerbPhrase"/>
+		</function>
+		<function desc="In some place" name="ADoVerbPhrasePlace">
+			<call ref="Person"/>
+			<call ref="VerbPhrase"/>
+			<call ref="Place"/>
+		</function>
+	</option>
+
+	<option id="modal_do">
+		<function desc="In general" name="AModVerbPhrase">
+			<argument/>
+			<call ref="Person"/>
+			<call ref="VerbPhrase"/>
+		</function>
+		<function desc="In some place" name="AModVerbPhrasePlace">
+			<argument/>
+			<call ref="Person"/>
+			<call ref="VerbPhrase"/>
+			<call ref="Place"/>
+		</function>
+	</option>
+
+	<option desc="Verb" id="VerbPhrase">
+		<function desc="Buy" name="V2Buy">
+			<call desc="What should be bought?" ref="Object"/>
+		</function>
+		<function desc="Drink" name="VDrink"/>
+		<function desc="Drink Something" name="V2Drink">
+			<call desc="What should be drunk?" ref="Object"/>
+		</function>
+		<function desc="Eat" name="VEat"/>
+		<function desc="Eat Something" name="V2Eat">
+			<call desc="What should be eaten?" ref="Object"/>
+		</function>
+		<function desc="Wait for Someone" name="V2Wait">
+			<call desc="Whom should we wait for?" ref="Person"/>
+		</function>
+		<function desc="Play" name="VPlay"/>
+		<function desc="Read" name="VRead"/>
+		<function desc="Run" name="VRun"/>
+		<function desc="Sit" name="VSit"/>
+		<function desc="Sleep" name="VSleep"/>
+		<function desc="Stop" name="VStop"/>
+		<function desc="Swim" name="VSwim"/>
+		<function desc="Wait" name="VWait"/>
+		<function desc="Walk" name="VWalk"/>
+		<function desc="Write" name="VWrite"/>
+	</option>
+</phrasebook>
