@@ -21,7 +21,9 @@ public class SyntaxTree implements Serializable {
     }
 
     public Expr getAbstractSyntax(ChoiceContext choices) {
-		return Expr.readExpr(root.getAbstractSyntax(choices));
+		Expr expr = Expr.readExpr(root.getAbstractSyntax(choices));
+		choices.trim();
+		return expr;
 	}
 	
 	@Override

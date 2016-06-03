@@ -18,6 +18,11 @@ public class ChoiceContext {
 		stack.clear();
 	}
 
+	public void trim() {
+		while (pos < choices.size())
+			choices.remove(choices.size()-1);
+	}
+
 	public int choose(SyntaxNode node) {
 		SyntacticChoice choice = null;
 
@@ -25,8 +30,7 @@ public class ChoiceContext {
 			if (choices.get(pos).getNode().unlink() == node.unlink()) {
 				choice = choices.get(pos);
 			} else {
-				while (pos < choices.size())
-					choices.remove(choices.size()-1);
+				trim();
 			}
 		}
 
@@ -38,7 +42,7 @@ public class ChoiceContext {
 		pos++;
 		return choice.getChoice();
 	}
-	
+
 	public void push(SyntaxNode[] args) {
 		stack.add(args);
 	}
