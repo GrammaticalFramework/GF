@@ -62,7 +62,9 @@ public class TranslatorFragment extends Fragment {
 				public View getView (int position, View convertView, ViewGroup parent) {
 					SyntacticChoice choice = mContext.getChoices().get(position);
 					View view = null;
-					if (choice.getNode() instanceof SyntaxNodeOption) {
+					if (choice.getNode() instanceof SyntaxNodeBoolean) {
+						view = createCheckBoxInputView(inflater, choice, (SyntaxNodeBoolean) choice.getNode(), parent);
+					} else if (choice.getNode() instanceof SyntaxNodeOption) {
 						view = createSpinnerInputView(inflater, choice, (SyntaxNodeOption) choice.getNode(), parent);
 					} else if (choice.getNode() instanceof SyntaxNodeNumeral) {
 						view = createNumeralInputView(inflater, choice, (SyntaxNodeNumeral) choice.getNode(), parent);
@@ -209,6 +211,31 @@ public class TranslatorFragment extends Fragment {
 					editNumber.setText(Integer.toString(number));
                 seekBar.setProgress(number-numeral.getMin());
                 updateSyntax();
+            }
+        });
+
+        return view;
+	}
+
+    private View createCheckBoxInputView(LayoutInflater inflater, final SyntacticChoice choice, final SyntaxNodeBoolean options, ViewGroup parent) {
+        View view = inflater.inflate(R.layout.checkbox_input_list_item, parent, false);
+        final CheckBox checkBox = (CheckBox) view.findViewById(R.id.choice_checkbox);
+
+		String label = options.getDesc();
+        if (label != null && !label.isEmpty()) {
+            checkBox.setText(label);
+        }
+
+        checkBox.setChecked(choice.getChoice() == 1);
+        checkBox.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+				int position = checkBox.isChecked() ? 1 : 0;
+				if (position != choice.getChoice()) {
+					choice.setChoice(position);
+					updateSyntax();
+				}
             }
         });
 
