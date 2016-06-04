@@ -7116,7 +7116,7 @@ lin eunuch_N = mkN "eunuch" masculine | mkN "castraat" masculine ; -- status=gue
 lin euphemism_N = mkN "verbloeming" | mkN "eufemisme" neuter ; -- status=guess status=guess
 lin euphonium_N = mkN "euphonium" ; -- status=guess
 lin eurasia_PN = mkPN "Eurasia" ; -- src=eng status=guess
-lin euro_N = mkN "euro" ; -- status=guess
+lin euro_N = mkN "euro" "euro's" de ;
 lin europe_PN = mkPN "Europe" ; -- src=eng status=guess
 lin europium_N = mkN "europium" neuter ; -- status=guess
 lin eurovision_PN = mkPN "Eurovision" ; -- src=eng status=guess

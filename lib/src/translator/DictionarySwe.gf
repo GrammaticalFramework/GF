@@ -19559,7 +19559,7 @@ lin eurasia_PN = mkPN "Eurasia" ; -- src=eng status=guess
 lin eurasian_A = variants {} ; -- status=guess
 lin eurasian_N = variants {} ; -- status=guess
 lin eurhythmics_N = mkN "rytmik" ;
-lin euro_N = mkN "euro" "euron" "euro" "eurona" ; -- status=guess
+lin euro_N = mkN "euro" "euron" "euro" "eurona" ;
 lin eurodollar_N = mkN "eurodollar" "eurodollarn" "eurodollar" "eurodollarna" ;
 lin europe_PN = mkPN "Europa" neutrum ;
 lin european_A = mkA "europeisk" ;

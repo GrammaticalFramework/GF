@@ -12090,7 +12090,7 @@ lin euphoria_N = mkN "欣快" ;
 lin euphoriant_N = mkN "安乐药" | mkN "欣快剂" ; -- open-multilingual-wordnet
 lin eurasia_PN = foreignPN "Eurasia" ; -- comment=src=eng status=guess
 lin eurhythmics_N = mkN "艺术体操" | mkN "韵律体操" | mkN "韵律操" | mkN "韵律舞蹈" | mkN "韵律舞蹈体操" | mkN "韵律运动" ; -- open-multilingual-wordnet
-lin euro_N = mkN "歐元" | mkN "欧元" | {-mwn-} mkN "欧" ; -- status=guess -- status=guess -- open-multilingual-wordnet
+lin euro_N = mkN "欧元" ;
 lin eurodollar_N = mkN "欧洲美元" ;
 lin europe_PN = mkPN "欧洲" ;
 lin european_A = mkA "欧洲" ;

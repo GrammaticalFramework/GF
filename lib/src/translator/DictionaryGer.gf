@@ -19653,7 +19653,7 @@ lin eurasia_PN = mkPN "Eurasia" ; -- src=eng status=guess
 lin eurasian_A = variants {} ;
 lin eurasian_N = variants {} ;
 lin eurhythmics_N = variants {} ;
-lin euro_N = mkN "Euro" "Euros" masculine ; -- status=guess
+lin euro_N = mkN "Euro" "Euro" "Euro" "Euro" "Euro" "Euro" neuter ;
 lin eurodollar_N = variants {} ;
 lin europe_PN = mkPN "Europe" ; -- src=eng status=guess
 lin european_A = variants {} ;

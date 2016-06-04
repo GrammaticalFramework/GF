@@ -9462,7 +9462,7 @@ lin euphorbium_N = mkN "euforbio" ; -- UWN
 lin euphoria_N = mkN "euforia" ; -- status=guess
 lin euphoric_A = mkA "euforico" ; -- status=guess
 lin euphuism_N = mkN "eufuismo" ; -- status=guess
-lin euro_N = mkN "euro" ; -- status=guess
+lin euro_N = mkN "euro" "euro" masculine ; -- status=guess
 lin europium_N = mkN "europio" ; -- status=guess
 lin eutectic_N = mkN "crioidrato" | mkN "eutettico" ; -- UWN
 lin euthanasia_N = mkN "eutanasia" ; -- status=guess
