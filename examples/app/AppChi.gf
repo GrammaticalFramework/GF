@@ -24,33 +24,4 @@ concrete AppChi of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
- --P ,PhrasebookChi - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A, at_Prep, by_Prep]
-
-    ** open ParadigmsChi, SyntaxChi, Prelude in {
-
-flags
-  literal=Symb ;
-
-
--- to suppress punctuation
-lin
-  PSentence, PQuestion = \s -> lin Text (mkUtt s) ;
-  PGreetingMale, PGreetingFemale = \s -> lin Text s ;
-  GObjectPlease o = lin Text (mkUtt o) ;
-
-  PhrasePhr p = {s = "+" ++ p.s} | p ;
-  Phrase_Chunk p = p ;
-
-
-ComplV2V v np vp = mkVP v np vp ;
-ComplV2A v np vp = mkVP v np vp ;
-ComplV2Q v np vp = mkVP v np vp ;
-ComplV2S v np vp = mkVP v np vp ;
-ComplV3  v np vp = mkVP v np vp ;
-
-
-ComplV2 v np = mkVP v np ;
-
-  PassV2 v2 = passiveVP v2 ;
-  PassV2 v2 = passiveVP v2 ;
-}
+   ** AppFunctor with (Syntax = SyntaxChi) ;

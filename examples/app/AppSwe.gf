@@ -23,34 +23,4 @@ concrete AppSwe of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
- --P ,PhrasebookSwe - [PSentence, PQuestion, PGreetingMale, PGreetingFemale, GObjectPlease, open_Adv, closed_A, open_A]
-
-    ** open MorphoSwe, ResSwe, ParadigmsSwe, SyntaxSwe, CommonScand, (E = ExtraSwe), Prelude in {
-
-flags
-  literal=Symb ;
-
--- to suppress punctuation
-lin
-  PSentence, PQuestion = \s -> lin Text (mkUtt s) ;
-  PGreetingMale, PGreetingFemale = \s -> lin Text s ;
-  GObjectPlease o = lin Text (mkUtt o) ;
-  PhrasePhr p = {s = "+" ++ p.s} | p ;
-  Phrase_Chunk p = p ;
-
-
-ComplV2V v np vp = mkVP v np vp ;
-ComplV2A v np vp = mkVP v np vp ;
-ComplV2Q v np vp = mkVP v np vp ;
-ComplV2S v np vp = mkVP v np vp ;
-ComplV3  v np vp = mkVP v np vp ;
-
-
-ComplV2 v np = mkVP v np ;
-
-  PassV2 v2 = SyntaxSwe.passiveVP v2 ;
-
-RelV2 rp np v2 = mkRCl rp (mkClSlash np (mkVPSlash v2)) ;
-QuestV2 ip np v2 = mkQCl ip (mkClSlash np (mkVPSlash v2)) ;
-
-}
+   ** AppFunctor with (Syntax = SyntaxSwe) ;

@@ -1,8 +1,6 @@
---# -path=.:../../lib/src/chunk:../../lib/src/translator:../phrasebook/gfos
+incomplete concrete AppFunctor of App = 
 
-concrete AppHin of App = 
-
-  TranslateHin - [
+  Translate - [
   -- Verb
     SlashV2a,ComplSlash, -- replaced by a more efficient inlined version
     SlashV2V,             
@@ -24,4 +22,24 @@ concrete AppHin of App =
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
 
-   ** AppFunctor with (Syntax = SyntaxHin) ;
+   ** open Syntax in {
+
+flags
+  literal=Symb ;
+
+lin
+  ComplV2 v np = mkVP v np ;
+
+  ComplV2V v np vp = mkVP v np vp ;
+--  ComplV2A v np vp = mkVP v np vp ;
+--  ComplV2Q v np vp = mkVP v np vp ;
+--  ComplV2S v np vp = mkVP v np vp ;
+  ComplV3  v np vp = mkVP v np vp ;
+
+
+
+  PassV2 v2 = passiveVP v2 ;
+  RelV2 rp np v2 = mkRCl rp (mkClSlash np (mkVPSlash v2)) ;
+  QuestV2 ip np v2 = mkQCl ip (mkClSlash np (mkVPSlash v2)) ;
+
+}
