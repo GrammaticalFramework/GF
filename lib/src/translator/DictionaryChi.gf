@@ -3827,7 +3827,8 @@ lin bedwas_PN = foreignPN "Bedwas" ; -- comment=src=geonames status=guess
 lin bee_N = mkN "蜜蜂" | {-HSK-} mkN "蜜蜂" "隻" ;
 lin beebread_N = mkN "蜂的幼虫食料" | mkN "蜜蜂食料" ; -- open-multilingual-wordnet
 lin beech_N = mkN "山毛櫸" | mkN "山毛榉" ; -- status=guess -- status=guess
-lin beef_N = mkN "牛肉" [] ;
+lin beef_1_N = mkN "牛肉" [] ;
+lin beef_2_N = mkN "牛肉" [] ;
 lin beef_V = mkV "抱怨" ;
 lin beefsteak_N = mkN "牛排" ; -- status=guess
 lin beefy_A = mkA "结实" ;
@@ -8936,7 +8937,8 @@ lin curling_N = mkN "冰壺" | mkN "冰壶" ; -- status=guess -- status=guess
 lin curly_A = mkA "卷曲" ;
 lin currency_N = mkN "货币" ;
 lin current_A = mkA "当前" | {-HSK-} mkA "现在" | mkA "行" ;
-lin current_N = mkN "当前" | {-HSK-} mkN "现在" | mkN "行" ;
+lin current_1_N = mkN "当前" | {-HSK-} mkN "现在" | mkN "行" ;
+lin current_2_N = mkN "当前" | {-HSK-} mkN "现在" | mkN "行" ;
 lin curricular_A = mkA "课程" ; -- open-multilingual-wordnet
 lin curriculum_N = mkN "课程" "节" ;
 lin curriculum_vitae_N = mkN "履历" "份" ;
@@ -18329,7 +18331,8 @@ lin juggle_V = mkV "耍" ;
 lin juggle_V2 = mkV2 "欺骗" ;
 lin juggler_N = mkN "变戏法者" ;
 lin jugular_A = mkA "咽喉" | mkA "颈部" ; -- open-multilingual-wordnet
-lin juice_N = mkN "果汁" "杯" ;
+lin juice_1_N = mkN "果汁" "杯" ;
+lin juice_2_N = mkN "果汁" "杯" ;
 lin juicy_A = mkA "多汁" ; -- status=guess
 lin juju_N = mkN "物神" | mkN "符咒" | mkN "迷信" ; -- open-multilingual-wordnet
 lin jujube_N = mkN "棗" | mkN "枣" | mkN "棗實" | mkN "枣实" ; -- status=guess -- status=guess -- status=guess -- status=guess
@@ -24946,7 +24949,8 @@ lin planned_A = variants {} ;
 lin planner_N = mkN "计划者" ;
 lin planning_N = mkN "规划" "次" ;
 lin planographic_A = mkA "平版" | mkA "平面印刷" ; -- open-multilingual-wordnet
-lin plant_N = mkN "厂" | {-HSK-} mkN "植物" "種" ;
+lin plant_1_N = mkN "厂" | {-HSK-} mkN "植物" "種" ;
+lin plant_2_N = mkN "厂" | {-HSK-} mkN "植物" "種" ;
 lin plant_V2 = mkV2 "厂" ;
 lin plant_out_V2 = prepV2 (lin V OP_plant_V2) OP_out_Prep ; -- guess-p-verb
 lin plantain_N = mkN "芣苢" ; -- status=guess
@@ -28832,7 +28836,8 @@ lin scholar_N = mkN "大方" | {-HSK-} mkN "学者" ;
 lin scholarly_A = mkA "博学" ;
 lin scholarship_N = mkN "奖学金" "份" ;
 lin scholastic_A = mkA "学校" ; -- open-multilingual-wordnet
-lin school_N = L.school_N | {-HSK-} mkN "学校" "所" | mkN "派" | mkN "门" ;
+lin school_1_N = L.school_N ;
+lin school_2_N = mkN "学校" "所" | mkN "派" | mkN "门" ;
 lin school_V2 = mkV2 "学校" ;
 lin schoolbag_N = mkN "書包" | mkN "书包" ; -- status=guess -- status=guess
 lin schoolbook_N = mkN "教科书" | mkN "课本" ; -- open-multilingual-wordnet
@@ -29378,7 +29383,8 @@ lin sewage_N = mkN "污水" "堆" ;
 lin sewer_N = mkN "裁缝师" ; -- comment=[mark]或下水道 4
 lin sewerage_N = mkN "下水道" ; -- status=guess
 lin sewing_N = mkN "缝纫" ;
-lin sex_N = mkN "性别" ;
+lin sex_1_N = mkN "性别" ;
+lin sex_2_N = mkN "性别" ;
 lin sexism_N = mkN "性別歧視" | mkN "性别歧视" ; -- status=guess -- status=guess
 lin sexist_A = mkA "性别歧视" ;
 lin sexploitation_N = mkN "性泛滥" | mkN "性渲染" | mkN "色情利用" ; -- open-multilingual-wordnet
@@ -32307,7 +32313,8 @@ lin tabbouleh_N = mkN "塔布勒沙拉" ; -- status=guess
 lin tabby_N = mkN "虎斑貓" | mkN "虎斑猫" | mkN "斑貓" | mkN "斑猫" | {-mwn-} mkN "雌猫" ; -- status=guess -- status=guess -- status=guess -- status=guess -- open-multilingual-wordnet
 lin tabernacle_N = mkN "临时房屋""座" ;
 lin tabes_N = mkN "脊髓痨" ; -- open-multilingual-wordnet
-lin table_N = L.table_N | {-HSK-} mkN "桌子" "張" | mkN "表格" "張" ;
+lin table_1_N = L.table_N ;
+lin table_2_N = {-HSK-} mkN "桌子" "張" | mkN "表格" "張" ;
 lin table_V2 = mkV2 "使+嵌合" ;
 lin tablecloth_N = mkN "桌布" ; -- status=guess
 lin tableland_N = mkN "高原" ; -- status=guess

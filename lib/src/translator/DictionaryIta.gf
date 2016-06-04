@@ -2588,7 +2588,8 @@ lin bedwas_PN = mkPN "Bedwas" ; -- status=guess src=geonames
 lin bee_N = mkN "ape" feminine ; -- status=guess
 lin beech_N = mkN "faggio" ; -- status=guess
 lin beechnut_N = mkN "faggiola" | mkN "faggina" ; -- status=guess status=guess
-lin beef_N = mkN "manzo" ; -- status=guess
+lin beef_1_N = mkN "manzo" ; -- status=guess
+lin beef_2_N = mkN "manzo" ; -- status=guess
 lin beefsteak_N = mkN "bistecca" ; -- status=guess
 lin beefy_A = mkA "carnoso" ; -- status=guess
 lin beehive_N = mkN "alveare" | mkN "arnia" ; -- status=guess status=guess
@@ -6818,7 +6819,8 @@ lin curmudgeon_N = mkN "burbero" | mkN "musone" masculine ; -- status=guess stat
 lin currant_N = mkN "ribes" ; -- status=guess
 lin currency_N = mkN "valuta" ; -- status=guess
 lin current_A = mkA "corrente" | mkA "attuale" ; -- status=guess status=guess
-lin current_N = mkN "corrente" feminine ; -- status=guess
+lin current_1_N = mkN "corrente" feminine ; -- status=guess
+lin current_2_N = mkN "corrente" feminine ; -- status=guess
 lin currentness_N = mkN "attualità" ; -- UWN
 lin curricular_A = mkA "curricolare" ; -- UWN
 lin curriculum_N = mkN "curriculum vitae" ; -- status=guess
@@ -14662,7 +14664,8 @@ lin juggle_V = mkV "giocolare" ; -- status=guess, src=wikt
 lin juggle_V2 = mkV2 (mkV "giocolare") ; -- status=guess, src=wikt
 lin juggler_N = mkN "giocoliere" masculine ; -- status=guess
 lin jugular_A = mkA "giugulare" | mkA "iugulare" ; -- UWN
-lin juice_N = mkN "succo" | mkN "spremuta" ; -- status=guess status=guess
+lin juice_1_N = mkN "succo" | mkN "spremuta" ; -- status=guess status=guess
+lin juice_2_N = mkN "succo" | mkN "spremuta" ; -- status=guess status=guess
 lin juiciness_N = mkN "gustosità" | mkN "succosità" | mkN "succulenza" | mkN "sugosità" ; -- UWN
 lin juicy_A = mkA "sugoso" | mkA "sugosa" ; -- status=guess status=guess
 lin juju_N = mkN "feticcio" ; -- UWN
@@ -20116,7 +20119,8 @@ lin plankton_N = mkN "plancton" masculine ; -- status=guess
 lin planned_A = variants {} ; --
 lin planner_N = variants {} ; --
 lin planning_N = mkN "pianificazione" feminine ; -- status=guess
-lin plant_N = mkN "pianta" ; -- status=guess
+lin plant_1_N = mkN "pianta" ; -- status=guess
+lin plant_2_N = mkN "pianta" ; -- status=guess
 lin plant_V2 = mkV2 (mkV "piantare") ; -- status=guess, src=wikt
 lin plant_out_V2 = prepV2 (lin V OP_plant_V2) OP_out_Prep ; -- guess-p-verb
 lin plantain_N = mkN "piantaggine" feminine ; -- status=guess
@@ -23370,7 +23374,8 @@ lin scholar_N = mkN "erudito" | mkN "dotto" ; -- status=guess status=guess
 lin scholarly_A = mkA "erudito" ; -- UWN
 lin scholarship_N = mkN "borsa di studi" ; -- status=guess
 lin scholasticism_N = mkN "scolasticismo" ; -- status=guess
-lin school_N = L.school_N ;
+lin school_1_N = L.school_N ;
+lin school_2_N = L.school_N ;
 lin schoolbook_N = mkN "libro_di_testo" ; -- UWN
 lin schoolboy_N = mkN "alunno" | mkN "scolaro" ; -- status=guess status=guess
 lin schoolchild_N = mkN "alunno" | mkN "alunna" | mkN "scolaro" | mkN "scolara" ; -- status=guess status=guess status=guess status=guess status=guess
@@ -23853,7 +23858,8 @@ lin sewage_N = mkN "liquame" ; -- UWN
 lin sewer_N = mkN "fogna" | mkN "chiavica" | mkN "cloaca" ; -- status=guess status=guess status=guess
 lin sewerage_N = mkN "cloaca" | mkN "fogna" | mkN "fognatura" | mkN "rete_fognaria" ; -- UWN
 lin sewing_N = mkN "cucito" ; -- status=guess
-lin sex_N = mkN "sesso" ; -- status=guess
+lin sex_1_N = mkN "sesso" ; -- status=guess
+lin sex_2_N = mkN "sesso" ; -- status=guess
 lin sex_V2 = mkV2 (mkV (I.fare_V) "sesso") ; -- status=guess, src=wikt
 lin sexism_N = mkN "sessismo" ; -- status=guess
 lin sexist_A = mkA "sessista" ; -- status=guess
@@ -26394,7 +26400,8 @@ lin tab_N = mkN "linguetta" ; -- status=guess
 lin tabby_A = mkA "soriano" ; -- status=guess
 lin tabby_N = mkN "soriano" ; -- status=guess
 lin tabernacle_N = mkN "tabernacolo" ; -- status=guess
-lin table_N = L.table_N ;
+lin table_1_N = L.table_N ;
+lin table_2_N = L.table_N ;
 lin tablecloth_N = mkN "tovaglia" ; -- status=guess
 lin tableland_N = mkN "altopiano" | mkN "pianoro" | mkN "tavoliere" masculine ; -- status=guess status=guess status=guess
 lin tablespoon_N = mkN "cucchiaio da tavola" ; -- status=guess
