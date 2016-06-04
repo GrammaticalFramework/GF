@@ -10586,7 +10586,7 @@ lin euphoria_N = mkN "euforia" ; -- status=guess
 lin euphoric_A = mkA "eufórico" ; -- status=guess
 lin euphuism_N = mkN "eufuismo" ; -- status=guess
 lin eurhythmics_N = mkN "euritmia" ; --UWN
-lin euro_N = mkN "euro" ; -- status=guess
+lin euro_N = mkN "euro" ;
 lin europium_N = mkN "europio" ; -- status=guess
 lin eurypterid_N = mkN "eurypterida" ; --UWN
 lin eurythmics_N = mkN "euritmia" ; --UWN
