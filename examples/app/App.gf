@@ -34,15 +34,14 @@ fun
 --P  Phrase_Chunk : Phrase -> Chunk ;
 
   ComplV2 : V2 -> NP -> VP ;
-  PassV2 : V2 -> VP ;
   
   ComplV2V : V2V -> NP -> VP -> VP ;
 --  ComplV2A : V2A -> NP -> AP -> VP ;
 --  ComplV2Q : V2Q -> NP -> QS -> VP ;
 --  ComplV2S : V2S -> NP -> S  -> VP ;
-
   ComplV3  : V3  -> NP -> NP -> VP ;
 
+  PassV2  : V2 -> VP ;
   RelV2   : RP -> NP -> V2 -> RCl ;
   QuestV2 : IP -> NP -> V2 -> QCl ;
 
