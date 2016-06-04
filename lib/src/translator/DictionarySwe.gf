@@ -5388,7 +5388,8 @@ lin beebread_N = variants {} ; -- status=guess
 lin beech_N = mkN "bok" ; -- comment=2
 lin beechen_A = variants {} ; -- status=guess
 lin beechnut_N = mkN "bokollon" neutrum ; -- comment=2
-lin beef_N = mkN "biff" | mkN "nötkött" neutrum ; -- SaldoWN -- comment=8
+lin beef_1_N = mkN "biff" neutrum ; -- SaldoWN -- comment=8
+lin beef_2_N = mkN "biff" | mkN "nötkött" neutrum ; -- SaldoWN -- comment=8
 lin beef_V = mkV "styrker" ; -- comment=2
 lin beefcake_N = mkN "muskelknutte" utrum ; -- status=guess
 lin beefeater_N = variants {} ; -- status=guess
@@ -14115,7 +14116,8 @@ lin currant_N = mkN "vinbär" neutrum ; -- comment=2
 lin currawong_N = variants {} ; -- status=guess
 lin currency_N = mkN "valuta" ; -- SaldoWN
 lin current_A = mkA "aktuell" ;
-lin current_N = mkN "ström" "strömmen" "strömmar" "strömmarna" | mkN "rådande" ; -- SaldoWN -- comment=10
+lin current_1_N = mkN "ström" "strömmen" "strömmar" "strömmarna" | mkN "rådande" ; -- SaldoWN -- comment=10
+lin current_2_N = mkN "ström" "strömmen" "strömmar" "strömmarna" | mkN "rådande" ; -- SaldoWN -- comment=10
 lin currentness_N = mkN "aktualitet" "aktualiteter" ;
 lin curricular_A = variants {} ; -- status=guess
 lin curriculum_N = mkN "läroplan" "läroplaner" ; -- SaldoWN
@@ -29900,7 +29902,7 @@ lin jello_N = variants {} ; -- status=guess
 lin jelly_N = mkN "gelé" "geléer" ; -- SaldoWN
 lin jelly_V = variants {} ; -- status=guess
 lin jelly_V2 = variants {} ; -- status=guess
-lin jellyfish_N = mkN "brännmanet" "brännmaneter" ; -- comment=2
+lin jellyfish_N = mkN "manet" "maneter" ;
 lin jellyroll_N = variants {} ; -- status=guess
 lin jemmy_N = mkN "bräckjärn" neutrum | mkN "dyrk" ; -- SaldoWN -- comment=3
 lin jennet_N = variants {} ; -- status=guess
@@ -30179,7 +30181,8 @@ lin juggler_N = mkN "jonglör" "jonglörer" ; -- status=guess
 lin jugglery_N = variants {} ; -- status=guess
 lin jugular_A = variants {} ; -- status=guess
 lin jugular_N = variants {} ; -- status=guess
-lin juice_N = mkN "juice" "juicer" | mkN "saft" "safter" ; -- SaldoWN
+lin juice_1_N = mkN "juice" "juicer" | mkN "saft" "safter" ;
+lin juice_2_N = mkN "soppa" ;
 lin juice_up_V2 = variants {} ; -- status=guess
 lin juiceless_A = variants {} ; -- status=guess
 lin juiciness_N = mkN "saftighet" ;
@@ -42247,7 +42250,8 @@ lin planning_N = mkN "planering" ;
 lin planoconcave_A = variants {} ; -- status=guess
 lin planoconvex_A = variants {} ; -- status=guess
 lin planographic_A = variants {} ; -- status=guess
-lin plant_N = mkN "växt" "växter" | mkN "planta" ;
+lin plant_1_N = L.factory_N ;
+lin plant_2_N = mkN "växt" "växter" | mkN "planta" ;
 lin plant_V2 = dirV2 (partV (mkV "planterar")"om") ; -- status=guess
 lin plant_louse_N = mkN "bladlus" "bladlusen" "bladlöss" "bladlössen" ;
 lin plant_out_V2 = dirV2 (partV (mkV "planterar")"om") ; -- status=guess
@@ -49263,7 +49267,8 @@ lin scholastically_Adv = variants {} ; -- status=guess
 lin scholasticism_N = mkN "stik" ; -- src=google
 lin scholiast_N = variants {} ; -- status=guess
 lin scholium_N = variants {} ; -- status=guess
-lin school_N = L.school_N | mkN "gymnasium" "gymnasiet" "gymnasier" "gymnasierna" ; ---- sense gymnasium
+lin school_1_N = L.school_N ;
+lin school_2_N = mkN "stim" "stimmet" "stim" "stimmen" ;
 lin school_V2 = mkV2 (mkV "skolar") | mkV2 (mkV "lära") ; -- status=guess, src=wikt status=guess, src=wikt
 lin school_board_N = mkN "skola-board" ; -- src=google
 lin schoolbag_N = mkN "skolväska" ; -- status=guess
@@ -50392,7 +50397,8 @@ lin sewer_rat_N = mkN "kloak-råtta" ; -- src=google
 lin sewerage_N = mkN "avlopp" neutrum ;
 lin sewing_N = mkN "sömnad" "sömnader" ; -- status=guess
 lin sewing_machine_N = mkN "symaskin" "symaskiner" ;
-lin sex_N = mkN "sex" neutrum | mkN "kön" neutrum ; --- split -- | sex movie -- | both sexes
+lin sex_1_N = mkN "sex" neutrum ;
+lin sex_2_N = mkN "kön" neutrum ;
 lin sex_V2 = mkV2 (mkV "knullar") | mkV2 (mkV (mkV "ha") "samlag med") ; -- status=guess, src=wikt status=guess, src=wikt
 lin sex_starved_A = variants {} ; -- status=guess
 lin sexagenarian_A = variants {} ; -- status=guess
@@ -52726,7 +52732,7 @@ lin soundness_N = mkN "soliditet" "soliditeter" ;
 lin soundproof_A = mkA "ljudisolerad" ; -- status=guess
 lin soundproof_V2 = mkV2 (mkV "ljudisolerar") ; -- status=guess, src=wikt
 lin soundtrack_N = mkN "filmmusik" ; -- status=guess
-lin soup_N = mkN "soppa" ; -- SaldoWN = mkN "soppa" ;
+lin soup_N = mkN "soppa" ;
 lin soup_V2 = variants {} ; -- status=guess
 lin soup_kitchen_N = mkN "soppkök" neutrum ;
 lin soupcon_N = mkN "soupcon" ; -- src=google
@@ -55938,7 +55944,8 @@ lin tabernacle_N = mkN "tabernakel" neutrum ;
 lin tabes_N = variants {} ; -- status=guess
 lin tabi_N = variants {} ; -- status=guess
 lin tablature_N = mkN "tabulatur" "tabulaturer" ;
-lin table_N = L.table_N ;
+lin table_1_N = L.table_N ;
+lin table_2_N = mkN "tabell" ;
 lin table_V2 = mkV2 (mkV "bordlägga" "bordlade" "bordlagt") ; -- status=guess, src=wikt
 lin table_d'hote_A = variants {} ; -- status=guess
 lin table_d'hote_Adv = variants {} ; -- status=guess
@@ -58139,7 +58146,6 @@ lin towel_V2 = variants {} ; -- status=guess
 lin towel_horse_N = mkN "handduk-häst" ; -- src=google
 lin towel_rack_N = mkN "handdukshängare" ; -- src=google
 lin towel_rail_N = mkN "handduk-skena" ; -- src=google
-lin toweling_N = mkN "frotté" "frottéer" ;
 lin towelling_N = mkN "frotté" "frottéer" ;
 lin tower_N = mkN "torn" ; -- SaldoWN = mkN "torn" neutrum ;
 lin tower_V = variants {} ; -- status=guess

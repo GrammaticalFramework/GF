@@ -3106,7 +3106,8 @@ lin bedwas_PN = mkPN "Bedwas" ; -- status=guess src=geonames
 lin bee_N = mkN "abejaruco" ; -- status=guess
 lin beebread_N = mkN "ambrosía" ; --UWN
 lin beech_N = mkN "haya" ; -- status=guess
-lin beef_N = mkN "vacuno" ; -- status=guess
+lin beef_1_N = mkN "vacuno" ; -- status=guess
+lin beef_2_N = mkN "vacuno" ; -- status=guess
 lin beef_V = mkV "chillar" | mkV "disputar" | mkV "graznar" | mkV "gritar" | mkV "lamentarse" | mkV "quejarse" | mkV "renegar" ; --UWN
 lin beefcake_N = mkN "galán" masculine | mkN "churro" | mkN "mijito rico" | mkN "guapetón" masculine ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
 lin beefeater_N = mkN "yeoman" ; --UWN
@@ -7681,7 +7682,8 @@ lin currant_N = mkN "grosella" ; -- status=guess
 lin currawong_N = mkN "stepera" ; --UWN
 lin currency_N = mkN "moneda" ; -- status=guess
 lin current_A = mkA "actual" ;
-lin current_N = mkN "cuenta corriente" ; -- status=guess
+lin current_1_N = mkN "cuenta corriente" ; -- status=guess
+lin current_2_N = mkN "cuenta corriente" ; -- status=guess
 lin currentness_N = mkN "actualidad" | mkN "contemporaneidad" | mkN "simultaneidad" ; --UWN
 lin curricular_A = mkA "curricular" ; --UWN
 lin curriculum_N = mkN "currículo" ; -- status=guess
@@ -16233,7 +16235,8 @@ lin juggler_N = mkN "malabarista" masculine ; -- status=guess
 lin jugglery_N = mkN "malabarismo" ; --UWN
 lin jugular_A = mkA "yugular" ; -- status=guess
 lin jugular_N = mkN "yugular" ; -- status=guess
-lin juice_N = mkN "jugo" | mkN "zumo" ; -- status=guess
+lin juice_1_N = mkN "jugo" | mkN "zumo" ; -- status=guess
+lin juice_2_N = mkN "jugo" | mkN "zumo" ; -- status=guess
 lin juiceless_A = mkA "seco" ; --UWN
 lin juiciness_N = mkN "jugosidad" | mkN "suculencia" ; --UWN
 lin juicy_A = mkA "jugoso" ; -- status=guess
@@ -22230,7 +22233,8 @@ lin planktonic_A = mkA "plancton" | mkA "planctónico" ; --UWN
 lin planned_A = variants {} ; --
 lin planner_N = variants {} ; --
 lin planning_N = mkN "plan" ;
-lin plant_N = mkN "planta" ; --- split mkN "fábrica"
+lin plant_1_N = mkN "fábrica" ;
+lin plant_2_N = mkN "planta" ;
 lin plant_V2 = mkV2 (mkV "plantar") | mkV2 (sembrar_V) ; -- status=guess
 lin plant_out_V2 = prepV2 (lin V OP_plant_V2) OP_out_Prep ; -- guess-p-verb
 lin plantain_N = mkN " plátano macho" | mkN "plátano" ; -- status=guess status=guess
@@ -25812,7 +25816,8 @@ lin scholarship_N = mkN "erudición" feminine | mkN "sabiduría" ; -- status=gue
 lin scholastic_A = mkA "escolar" ; --UWN
 lin scholasticism_N = mkN "escolástica" ; -- status=guess
 lin scholium_N = mkN "escolio" ; --UWN
-lin school_N = L.school_N ;
+lin school_1_N = L.school_N ;
+lin school_2_N = L.school_N ;
 lin schoolboy_N = mkN "colegial" | mkN "escolar" ; --UWN
 lin schoolchild_N = mkN "escolar" masculine | mkN "alumna" | mkN "colegiala" ; -- status=guess
 lin schoolfellow_N = mkN "compañera" | mkN "compañero" | mkN "compañero_de_clase" | mkN "compañero_de_colegio" ; --UWN
@@ -26330,7 +26335,8 @@ lin sew_V2 = mkV2 (mkV "coser") ; -- status=guess, src=wikt
 lin sewage_N = mkN "aguas residuales" ; -- status=guess
 lin sewer_N = mkN "costurero" | mkN "costurera" | mkN "cosedor" | mkN "cosedora" ; -- status=guess status=guess status=guess status=guess
 lin sewing_N = mkN "máquina de coser" ; -- status=guess
-lin sex_N = mkN "sexo" ;
+lin sex_1_N = mkN "sexo" ;
+lin sex_2_N = mkN "sexo" ;
 lin sex_V2 = mkV2 (mkV "sexar") ; -- status=guess, src=wikt
 lin sexcapade_N = mkN "aventura_sexual" ; --UWN
 lin sexism_N = mkN "sexismo" ; -- status=guess
@@ -29139,7 +29145,8 @@ lin tabby_N = mkN "gato atigrado" ; -- status=guess
 lin tabernacle_N = mkN "tabernáculo" ; -- status=guess
 lin tabi_N = mkN "tabi" ; --UWN
 lin tablature_N = mkN "tablatura" ; --UWN
-lin table_N = L.table_N ;
+lin table_1_N = L.table_N ;
+lin table_2_N = L.table_N ;
 lin table_V2 = mkV2 (mkV (mkV "traer") "a discusión") ; -- status=guess, src=wikt
 lin tableau_N = mkN "retablo" | mkN "cuadro vivo" ; -- status=guess status=guess
 lin tablecloth_N = mkN "mantel" masculine ; -- status=guess

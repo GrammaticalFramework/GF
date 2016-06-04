@@ -1857,7 +1857,8 @@ lin bedroom_N = mkN "slaapkamer" feminine ; -- status=guess
 lin bedwas_PN = mkPN "Bedwas" ; -- src=geonames status=guess
 lin bee_N = mkN "bij" feminine | mkN "honingbij" feminine | mkN "imme" feminine ; -- status=guess status=guess status=guess
 lin beech_N = mkN "beuk" ; -- status=guess
-lin beef_N = mkN "bief" | mkN "biefstuk" | mkN "rundvlees" neuter ; -- status=guess status=guess status=guess
+lin beef_1_N = mkN "bief" | mkN "biefstuk" | mkN "rundvlees" neuter ; -- status=guess status=guess status=guess
+lin beef_2_N = mkN "bief" | mkN "biefstuk" | mkN "rundvlees" neuter ; -- status=guess status=guess status=guess
 lin beehive_N = mkN "bijenkorf" masculine | mkN "bijenhuif" feminine | mkN "huif" feminine | mkN "bijennest" neuter | mkN "immenhuif" feminine | mkN "immenkorf" masculine ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin beekeeper_N = mkN "imker" | mkN "bijenhouder" masculine ; -- status=guess status=guess
 lin beeline_N = mkN "rechte lijn" ; -- status=guess
@@ -5107,7 +5108,8 @@ lin curmudgeon_N = mkN "iezegrim" masculine | mkN "kankeraar" ; -- status=guess 
 lin currant_N = mkN "aalbes" feminine ; -- status=guess
 lin currency_N = mkN "munteenheid" feminine | mkN "valuta" ; -- status=guess status=guess
 lin current_A = mkA "huidig" | mkA "actueel" ;
-lin current_N = mkN "zichtrekening" feminine | mkN "lopende rekening" ; -- status=guess status=guess
+lin current_1_N = mkN "zichtrekening" feminine | mkN "lopende rekening" ; -- status=guess status=guess
+lin current_2_N = mkN "zichtrekening" feminine | mkN "lopende rekening" ; -- status=guess status=guess
 lin curriculum_N = mkN "curriculum" neuter | mkN "levensloop" masculine ; -- status=guess status=guess
 lin currie_PN = mkPN "Currie" ; -- src=geonames status=guess
 lin curry_N = mkN "kerrieschotel" | mkN "curryschotel" ; -- status=guess status=guess
@@ -11159,7 +11161,8 @@ lin juggle_V = mkV "jongeleren" ; -- status=guess, src=wikt
 lin juggle_V2 = mkV2 (mkV "jongeleren") ; -- status=guess, src=wikt
 lin jugular_A = mkA "jugulair" ; -- status=guess
 lin jugular_N = mkN "halsader" masculine ; -- status=guess
-lin juice_N = mkN "sap" neuter ; -- status=guess
+lin juice_1_N = mkN "sap" neuter ; -- status=guess
+lin juice_2_N = mkN "sap" neuter ; -- status=guess
 lin juicy_A = mkA "sappig" ; -- status=guess
 lin jukebox_N = mkN "jukebox" masculine ; -- status=guess
 lin jul_PN = mkPN "Jul" ; -- src=eng status=guess
@@ -15383,7 +15386,8 @@ lin plank_N = mkN "plank" masculine feminine ; -- status=guess
 lin planned_A = variants {} ; --
 lin planner_N = variants {} ; --
 lin planning_N = mkN ("planning") ;
-lin plant_N = mkN "plant" masculine ;
+lin plant_1_N = mkN "plant" masculine ;
+lin plant_2_N = mkN "plant" masculine ;
 lin plant_V2 = mkV2 (mkV "planten") | mkV2 (mkV "poten") ; -- status=guess, src=wikt status=guess, src=wikt
 lin plant_out_V2 = prepV2 (lin V OP_plant_V2) OP_out_Prep ; -- guess-p-verb
 lin plantain_N = mkN "bakbanaan" ; -- status=guess
@@ -17919,7 +17923,8 @@ lin schizophrenia_N = mkN "schizofrenie" ; -- status=guess
 lin schlimazel_N = mkN "pechvogel" | mkN "schlemiel" ; -- status=guess status=guess
 lin scholar_N = mkN "herdersmat" ; -- status=guess
 lin scholarship_N = mkN "studiebeurs or" masculine ; -- status=guess
-lin school_N = L.school_N ;
+lin school_1_N = L.school_N ;
+lin school_2_N = L.school_N ;
 lin school_V2 = mkV2 (mkV "scholen") ; -- status=guess, src=wikt
 lin schooner_N = mkN "schoener" ; -- status=guess
 lin schwa_N = mkN "sjwa" | mkN "doffe e" ; -- status=guess status=guess
@@ -18276,7 +18281,8 @@ lin sew_V2 = mkV2 (mkV "naaien") ; -- status=guess, src=wikt
 lin sewer_N = mkN "naaier" masculine | mkN "naaister" feminine ; -- status=guess status=guess
 lin sewerage_N = mkN "riolering" ; -- status=guess
 lin sewing_N = mkN "naaimachine" feminine ; -- status=guess
-lin sex_N = mkN "seks" masculine | mkN "geslachtsgemeenschap" masculine | mkN "vrijen" neuter ;
+lin sex_1_N = mkN "seks" masculine | mkN "geslachtsgemeenschap" masculine | mkN "vrijen" neuter ;
+lin sex_2_N = mkN "seks" masculine | mkN "geslachtsgemeenschap" masculine | mkN "vrijen" neuter ;
 lin sex_V2 = mkV2 (vrijen_V) | mkV2 (mkV (mkV "de") "liefde bedrijven") ; -- status=guess, src=wikt status=guess, src=wikt
 lin sexton_N = mkN "koster" masculine ; -- status=guess
 lin sexual_A = mkA "seksueel" ;
@@ -20296,7 +20302,8 @@ lin syzygy_N = mkN "syzygie" feminine ; -- status=guess
 lin t_shirt_N = variants {} ; --
 lin tab_N = mkN "rekening" ; -- status=guess
 lin tabernacle_N = mkN "tabernakel " neuter ; -- status=guess
-lin table_N = L.table_N ;
+lin table_1_N = L.table_N ;
+lin table_2_N = L.table_N ;
 lin table_V2 = mkV2 (mkV (mkV "ter") "tafel brengen") ; -- status=guess, src=wikt
 lin tablecloth_N = mkN "tafelkleed" ; -- status=guess
 lin tableland_N = mkN "plateau" neuter ; -- status=guess

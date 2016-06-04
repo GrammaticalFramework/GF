@@ -5400,7 +5400,8 @@ lin beebread_N = variants {} ;
 lin beech_N = mkN "Buche" "Buchen" feminine ; -- status=guess
 lin beechen_A = variants {} ;
 lin beechnut_N = mkN "Buchecker" "Bucheckern" feminine ; -- status=guess
-lin beef_N = mkN "Rindfleisch" neuter | mkN "Ochsenfleisch" ; -- status=guess status=guess
+lin beef_1_N = mkN "Rindfleisch" neuter | mkN "Ochsenfleisch" ; -- status=guess status=guess
+lin beef_2_N = mkN "Rindfleisch" neuter | mkN "Ochsenfleisch" ; -- status=guess status=guess
 lin beef_V = variants {} ;
 lin beef_up_V2 = variants {} ;
 lin beefcake_N = mkN "Muskelprotz" masculine ; -- status=guess
@@ -14200,7 +14201,8 @@ lin currant_N = mkN "Johannisbeere" "Johannisbeeren" feminine ; -- status=guess
 lin currawong_N = variants {} ;
 lin currency_N = mkN "Währung" feminine ; -- status=guess
 lin current_A = mkA "gegenwärtig" ;
-lin current_N = mkN "Girokonto" neuter ; -- status=guess
+lin current_1_N = mkN "Girokonto" neuter ; -- status=guess
+lin current_2_N = mkN "Girokonto" neuter ; -- status=guess
 lin currentness_N = variants {} ;
 lin curricular_A = variants {} ;
 lin curriculum_N = mkN "Lebenslauf" "Lebensläufe" masculine ; -- status=guess
@@ -30354,7 +30356,8 @@ lin juggler_N = mkN "Jongleur" "Jongleure" masculine ; -- status=guess
 lin jugglery_N = variants {} ;
 lin jugular_A = variants {} ;
 lin jugular_N = variants {} ;
-lin juice_N = mkN "Saft" "Säfte" masculine ; -- status=guess
+lin juice_1_N = mkN "Saft" "Säfte" masculine ; -- status=guess
+lin juice_2_N = mkN "Saft" "Säfte" masculine ; -- status=guess
 lin juice_up_V2 = variants {} ;
 lin juiceless_A = variants {} ;
 lin juiciness_N = variants {} ;
@@ -42475,7 +42478,8 @@ lin planning_N = mkN "Planung" ; -- status=guess
 lin planoconcave_A = variants {} ;
 lin planoconvex_A = variants {} ;
 lin planographic_A = variants {} ;
-lin plant_N = mkN "Pflanze" ;
+lin plant_1_N = mkN "Pflanze" ;
+lin plant_2_N = mkN "Pflanze" ;
 lin plant_V2 = mkV2 (regV "pflanzen") ; -- status=guess, src=wikt
 lin plant_louse_N = variants {} ;
 lin plant_out_V2 = prepV2 (lin V OP_plant_V2) OP_out_Prep ; -- guess-p-verb
@@ -49563,7 +49567,8 @@ lin scholastic_A = variants {} ;
 lin scholasticism_N = mkN "Scholastik" feminine | mkN "Schulwissenschaft" feminine ; -- status=guess status=guess
 lin scholiast_N = variants {} ;
 lin scholium_N = variants {} ;
-lin school_N = L.school_N ;
+lin school_1_N = L.school_N ;
+lin school_2_N = L.school_N ;
 lin school_V2 = mkV2 (irregV "unterrichten" "unterrichtet" "unterrichtete" "unterrichte" "unterrichtet" | regV "schulen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin school_board_N = variants {} ;
 lin schoolbag_N = mkN "Schultasche" feminine | mkN "Schulranzen" "Schulranzen" masculine ; -- status=guess status=guess
@@ -50698,7 +50703,8 @@ lin sewer_rat_N = variants {} ;
 lin sewerage_N = mkN "Kanalisation" ; -- status=guess
 lin sewing_N = mkN "Nähen" neuter ; -- status=guess
 lin sewing_machine_N = variants {} ;
-lin sex_N = mkN "Geschlecht" neuter | mkN "Sex" | mkN "Geschlechtsverkehr" ; -- split: gender / coitus
+lin sex_1_N = mkN "Sex" ;
+lin sex_2_N = mkN "Geschlecht" neuter | mkN "Geschlechtsverkehr" ; -- split: gender / coitus
 lin sex_V2 = mkV2 ( junkV "das Geschlecht" ( mkV "bestimmen" ) ) | mkV2 ( mkV "sexen" ) ; -- status = guess , src = wikt status = guess , src = wikt
 lin sex_starved_A = variants {} ;
 lin sex_up_V2 = variants {} ;
@@ -56314,7 +56320,8 @@ lin tabernacle_N = mkN "Tabernakel" "Tabernakel" masculine | mkN "Stiftshütte" 
 lin tabes_N = variants {} ;
 lin tabi_N = variants {} ;
 lin tablature_N = variants {} ;
-lin table_N = L.table_N ;
+lin table_1_N = L.table_N ;
+lin table_2_N = L.table_N ;
 lin table_V2 = variants {} ;
 lin table_d'hote_A = variants {} ;
 lin table_d'hote_Adv = variants {} ;
@@ -58532,7 +58539,6 @@ lin towel_V2 = variants {} ;
 lin towel_horse_N = variants {} ;
 lin towel_rack_N = variants {} ;
 lin towel_rail_N = variants {} ;
-lin toweling_N = variants {} ;
 lin towelling_N = variants {} ;
 lin tower_N = variants {} ;
 lin tower_V = variants {} ;
