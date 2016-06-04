@@ -1,0 +1,200 @@
+PredVP 	nsubj head
+PredVPS 	nsubj head
+DirectComplVQ 	empty nsubj head ccomp  -- Temp argument can only be empty in English 
+DirectComplVS 	empty nsubj head ccomp  -- Temp argument can only be empty in English 
+SlashVP 	nsubj head
+SlashVS 	nsubj head ccomp
+FocusObjS 	nsubj head              -- again might be wrong; more correct to call it dobj
+QuestIAdv 	advmod head		-- "where does John sleep" cf. AdvVP
+QuestIComp 	head nsubj	-- "where is John": John is clearly nsubj, but is where the head?
+QuestQVP 	nsubj head
+QuestSlash 	dobj head
+QuestVP 	nsubj head
+
+PredSCVP 	csubj head
+
+ComplSlash 	head dobj
+ComplSlashIP 	head dobj
+Slash3V3 	head dobj
+SlashV2VNP 	head dobj xcomp
+PastPartAgentAP 	head dobj
+AdvQVP 	head dobj
+
+Slash2V3 	head iobj
+
+ComplVS 	head ccomp
+ComplVQ 	head ccomp
+SlashV2S 	head ccomp
+SlashV2Q 	head ccomp
+CleftAdv 	head advcl            -- not sure
+
+ComplVA 	head xcomp
+ComplVV 	head xcomp
+SlashVV 	head acl
+SlashV2A 	head xcomp
+SlashV2V 	head xcomp
+
+AdvNP 	head nmod              -- not sure
+ExtAdvNP 	head nmod      -- not sure
+PassAgentVPSlash 	head nmod    -- not sure
+CleftNP 	head acl       -- this cannot be nmod, not with type RS
+
+SSubjS 	head mark advcl
+RelS 	head advcl
+
+AdNum 	advmod head
+AdAP 	advmod head
+AdvAP 	head advmod
+ComparAdvAdj 	advmod amod head
+ComparAdvAdjS 	advmod amod head
+AdvIAdv 	advmod head
+AdVVP 	advmod head
+AdvVP 	head advmod
+ExtAdvVP 	head advmod
+AddAdvQVP 	head advmod
+AdVVPSlash 	advmod head
+AdvVPSlash 	head advmod
+AdvSlash 	head advmod
+ExistIPAdv 	head advmod
+AdvS 	advmod head
+ExtAdvS 	advmod head
+
+SubjS 	mark head
+RelVP 	mark head
+RelSlash 	mark head
+
+ComplN2 	head nmod
+ComplN3 	nmod head
+AdvCN 	head nmod
+PossNP 	nmod head
+PartNP 	nmod head
+ExistNPAdv 	head nmod
+
+OrdNumeralSuperl 	nummod head  -- quite wrong; cannot find relevant details in the documentation; but most probably head lies outside the score of this function 
+DetQuant 	head nummod          -- quite wrong; I think the head lies outside the scope of the function
+CNNumNP 	head nummod          
+
+ApposCN 	head appos
+ApposNP 	head appos
+
+RelNP 	head acl
+RelCN 	head acl
+SentCN 	head acl
+SentAP 	amod acl
+
+DetQuantOrd 	head nummod amod     -- quite wrong; again for same reason as DetQuant function
+DetCN 	det head
+CountNP 	det head
+PredetNP 	det head
+PPartNP		head amod	-- only in core RGL
+
+AdjCN 	amod head
+AdjDAP 	head amod
+CAdvAP 	case amod head
+ComparA 	amod head
+ComplA2 	amod head
+CompoundAP 	head amod
+AdAdV 	amod head
+AdAdv 	amod head
+
+CompoundN 	compound head
+
+IIDig 	head goeswith
+
+PrepNP 	case head
+PrepIP 	case head
+SlashPrep 	head case
+VPSlashPrep 	head case
+
+UttImpPl 	empty head
+UttImpPol 	empty head
+UttImpSg 	empty head
+
+MkVPS 	empty empty head
+
+UseCl 	empty empty head
+UseQCl 	empty empty head
+UseRCl 	empty empty head
+UseSlash 	empty empty head
+UseVC 	empty empty head
+
+BaseAP 	head conj
+BaseAdV 	head conj
+BaseAdv 	head conj
+BaseCN 	head conj
+BaseDAP 	head conj
+BaseIAdv 	head conj
+BaseNP 	head conj
+BaseRS 	head conj
+BaseS 	head conj
+ConsAP 	head conj
+ConsAdV 	head conj
+ConsAdv 	head conj
+ConsCN 	head conj
+ConsDAP 	head conj
+ConsIAdv 	head conj
+ConsNP 	head conj
+ConsRS 	head conj
+ConsS 	head conj
+ConjAP 	cc head
+ConjAdV 	cc head
+ConjAdv 	cc head
+ConjCN 	cc head
+ConjDet 	cc head
+ConjIAdv 	cc head
+ConjNP 	cc head
+ConjRS 	cc head
+ConjS 	cc head
+PhrUtt 	cc head discourse
+
+PlusChunk 	head dep
+TTAnt 	empty empty head
+
+TExclMark      head dep		-- punctuation in the middle in these three
+TFullStop      head dep
+TQuestMark     head dep
+
+A	ADJ
+A2	ADJ
+AdA	ADV
+AdN	ADV
+AdV	ADV
+Adv	ADV
+CAdv	ADV
+Card	NUM
+Conj	CONJ
+Det	DET
+Digits	NUM
+IAdv	ADV
+IDet	DET
+IP	PRON
+Interj	INTJ
+N	NOUN
+N2	NOUN
+N3	NOUN
+Numeral	NUM
+Ord	NUM
+PConj	CONJ
+PN	PROPN
+Predet	DET
+Prep	ADP
+Pron	PRON
+Punct	PUNCT
+Quant	DET
+RP	PRON
+Subj	SCONJ
+V	VERB
+V2	VERB
+V2A	VERB
+V2Q	VERB
+V2S	VERB
+V2V	VERB
+V3	VERB
+VA	VERB
+VQ	VERB
+VS	VERB
+VV	VERB
+
+
+
+
