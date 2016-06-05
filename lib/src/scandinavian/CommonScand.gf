@@ -327,8 +327,19 @@ oper
   insertAdV : Str -> VP -> VP = \adv -> insertAdVAgr (\\_ => adv) ;
 
   insertAdVAgr : (Agr => Str) -> VP -> VP = \adv,vp ->vp ** {
-    a1 = \\b,a => vp.a1 ! b ! a ++ adv ! a ;
+    s = \\vo,vpf =>
+      let vps = vp.s ! vo ! vpf
+      in {
+        fin = vps.fin ;
+	inf = vps.inf ;
+        a1 = \\b,a => case vpf of {
+	  VPFinite (SPres | SPast) Simul | VPImperat =>
+	       <(vps.a1 ! b ! a).p1,            (vps.a1 ! b ! a).p2 ++ adv ! a> ;
+	  _ => <(vps.a1 ! b ! a).p1 ++ adv ! a, (vps.a1 ! b ! a).p2>
+          }
+       }
     } ;
+
 
   passiveVP : VP -> VP = \vp -> vp ** {
     s = \\_ => vp.s ! Pass ; -- forms the s-passive
