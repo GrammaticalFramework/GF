@@ -11,8 +11,6 @@ QuestQVP 	nsubj head
 QuestSlash 	dobj head
 QuestVP 	nsubj head
 
-PredVP	PassVPSlash	nsubjpass head
-
 PredSCVP 	csubj head
 
 ComplSlash 	head dobj
@@ -155,3 +153,54 @@ TTAnt 	empty empty head
 TExclMark      head dep		-- punctuation in the middle in these three
 TFullStop      head dep
 TQuestMark     head dep
+
+ComplV2	       head dobj	-- shortcuts in App
+ComplV2V       head dobj xcomp
+ComplV3	       head iobj dobj   ---- could be dobj dobj
+RelV2	       mark nsubj head
+QuestV2	       dobj nsubj head 
+
+A	ADJ
+A2	ADJ
+AdA	ADV
+AdN	ADV
+AdV	ADV
+Adv	ADV
+CAdv	ADV
+Card	NUM
+Conj	CONJ
+Det	DET
+Digits	NUM
+IAdv	ADV
+IDet	DET
+IP	PRON
+Interj	INTJ
+N	NOUN
+N2	NOUN
+N3	NOUN
+Numeral	NUM
+Ord	NUM
+PConj	CONJ
+PN	PROPN
+Predet	DET
+Prep	ADP
+Pron	PRON
+Punct	PUNCT
+Quant	DET
+RP	PRON
+Subj	SCONJ
+V	VERB
+V2	VERB
+V2A	VERB
+V2Q	VERB
+V2S	VERB
+V2V	VERB
+V3	VERB
+VA	VERB
+VQ	VERB
+VS	VERB
+VV	VERB
+
+
+
+
