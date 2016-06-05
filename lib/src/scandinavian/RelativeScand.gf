@@ -24,20 +24,14 @@ incomplete concrete RelativeScand of Relative =
       c = NPNom
       } ;
 
--- This rule uses pied piping ("huset i vilket hon bor")
--- Preposition stranding ("huset som hon bor i")
+-- changed by AR 5/6/2016
+-- This rule uses preposition stranding ("huset som hon bor i")
+-- Pied piping ("huset i vilket hon bor")
 -- and the empty relative ("huset hon bor i") are defined in $ExtraScand$.
 
     RelSlash rp slash = {
-      s = \\t,a,p,ag,_ => 
-        let 
-          agr = case rp.a of {
-            RNoAg => ag ;
-            RAg g n pr => {g = g ; n = n ; p = pr}
-            }
-        in
-          slash.c2.s ++ rp.s ! ag.g ! ag.n ! RPrep slash.c2.hasPrep ++  
-          slash.s ! t ! a ! p ! Sub ++ slash.n3 ! agr ;
+          s = \\t,a,p,ag,_ => 
+          rp.s ! ag.g ! ag.n ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
       c = NPAcc
       } ;
 

@@ -26,15 +26,15 @@ incomplete concrete QuestionScand of Question =
         cl.s ! t ! a ! b ! somo.p2
       } ;   
 
+-- preposition stranding, default since 5/6/2016; for pied piping, see ExtraScand
     QuestSlash ip slash = {
       s = \\t,a,p => 
             let 
-              agr = agrP3 ip.g ip.n ;
-              cls : Order => Str = \\o => slash.s ! t ! a ! p ! o ++ slash.n3 ! agr ;
-              who = slash.c2.s ++ ip.s ! accusative --- stranding in ExtScand 
+              cls = slash.s ! t ! a ! p ;
+              who = ip.s ! accusative
             in table {
-              QDir   => who ++ cls ! Inv ;
-              QIndir => who ++ cls ! Sub
+              QDir   => who ++ cls ! Inv ++ slash.c2.s ;
+              QIndir => who ++ cls ! Sub ++ slash.c2.s
               }
       } ;
 

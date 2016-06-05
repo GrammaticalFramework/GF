@@ -16,6 +16,19 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
       }
     } ;
 
+    PiedPipingRelSlash rp slash = {
+      s = \\t,a,p,ag,_ => 
+        let 
+          agr = case rp.a of {
+            RNoAg => ag ;
+            RAg g n pr => {g = g ; n = n ; p = pr}
+            }
+        in
+          slash.c2.s ++ rp.s ! ag.g ! ag.n ! RPrep slash.c2.hasPrep ++  
+          slash.s ! t ! a ! p ! Sub ++ slash.n3 ! agr ;
+      c = NPAcc
+      } ;
+
     StrandRelSlash rp slash  = {
       s = \\t,a,p,ag,_ => 
           rp.s ! ag.g ! ag.n ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
@@ -35,6 +48,18 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
             in table {
               QDir   => who ++ cls ! Inv ++ slash.c2.s ;
               QIndir => who ++ cls ! Sub ++ slash.c2.s
+              }
+      } ;
+
+    PiedPipingQuestSlash ip slash = {
+      s = \\t,a,p => 
+            let 
+              agr = agrP3 ip.g ip.n ;
+              cls : Order => Str = \\o => slash.s ! t ! a ! p ! o ++ slash.n3 ! agr ;
+              who = slash.c2.s ++ ip.s ! accusative --- stranding in ExtScand 
+            in table {
+              QDir   => who ++ cls ! Inv ;
+              QIndir => who ++ cls ! Sub
               }
       } ;
 

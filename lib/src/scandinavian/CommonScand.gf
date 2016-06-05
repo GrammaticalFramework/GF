@@ -333,7 +333,9 @@ oper
         fin = vps.fin ;
 	inf = vps.inf ;
         a1 = \\b,a => case vpf of {
-	  VPFinite (SPres | SPast) Simul | VPImperat =>
+	  VPFinite SPres Simul |
+	  VPFinite SPast Simul | --# notpresent
+	  VPImperat =>
 	       <(vps.a1 ! b ! a).p1,            (vps.a1 ! b ! a).p2 ++ adv ! a> ;
 	  _ => <(vps.a1 ! b ! a).p1 ++ adv ! a, (vps.a1 ! b ! a).p2>
           }
