@@ -48113,7 +48113,8 @@ lin rock_salt_N = variants {} ;
 lin rockabilly_N = variants {} ;
 lin rocker_N = variants {} ;
 lin rockery_N = variants {} ;
-lin rocket_N = mkN "Rakete" "Raketen" feminine ; -- status=guess
+lin rocket_1_N = mkN "Rakete" "Raketen" feminine ; -- status=guess
+lin rocket_2_N = mkN "Rakete" "Raketen" feminine ; -- status=guess
 lin rocket_V = variants {} ;
 lin rocket_base_N = variants {} ;
 lin rocket_range_N = variants {} ;
@@ -52164,7 +52165,8 @@ lin slimed_A = variants {} ;
 lin sliminess_N = variants {} ;
 lin slimness_N = variants {} ;
 lin slimy_A = mkA "schleimig" ; -- status=guess
-lin sling_N = mkN "Schleuder" feminine ; -- status=guess
+lin sling_1_N = mkN "Schleuder" feminine ; -- status=guess
+lin sling_2_N = mkN "Schleuder" feminine ; -- status=guess
 lin sling_V = regV "schleudern" | mkV "schmeißen" ; -- status=guess, src=wikt status=guess, src=wikt
 lin sling_V2 = mkV2 (regV "schleudern" | mkV "schmeißen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin slingback_N = variants {} ;

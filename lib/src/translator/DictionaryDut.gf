@@ -14787,7 +14787,6 @@ lin partnership_N = mkN "maatschap" | mkN "partnerschap" ; -- status=guess statu
 lin partridge_N = mkN "patrijs" feminine ; -- status=guess
 lin party_1_N = mkN "feest" neuter | mkN "fuif" ;
 lin party_2_N = mkN "partij" ;
-lin party_N = mkN "feest" neuter | mkN "partij" | mkN "fuif" ;
 lin parvenu_N = mkN "parvenu" ; -- status=guess
 lin pasha_N = mkN "pasja" masculine ; -- status=guess
 lin pass_N = mkN "passage" feminine ; -- status=guess
@@ -17410,7 +17409,8 @@ lin rock_1_N = L.rock_N ;
 lin rock_2_N = L.rock_N ;
 lin rock_V = mkV "schudden" ; -- status=guess, src=wikt
 lin rock_V2 = mkV2 (mkV "schudden") ; -- status=guess, src=wikt
-lin rocket_N = mkN "raket" ; -- status=guess
+lin rocket_1_N = mkN "raket" ; -- status=guess
+lin rocket_2_N = mkN "raket" ; -- status=guess
 lin rocky_A = mkA "rotsig" ; -- status=guess
 lin rod_N = mkN "roede" ; -- status=guess
 lin rod_PN = mkPN "Rod" ; -- src=eng status=guess
@@ -18831,7 +18831,8 @@ lin slim_V = mkV "vermageren" | mkV "lijnen" | mkV (mkV "aan") "de lijn doen" | 
 lin slim_V2 = mkV2 (mkV "vermageren") | mkV2 (mkV "lijnen") | mkV2 (mkV (mkV "aan") "de lijn doen") | mkV2 (mkV "afslanken") | mkV2 (mkV "diëten") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin slime_N = mkN "slijm" neuter ; -- status=guess
 lin slimy_A = mkA "slijmig" ; -- status=guess
-lin sling_N = mkN "verband" ; -- status=guess
+lin sling_1_N = mkN "verband" ; -- status=guess
+lin sling_2_N = mkN "verband" ; -- status=guess
 lin sling_V = mkV "slingeren" | werpen_V | mkV "ophangen" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin sling_V2 = mkV2 (mkV "slingeren") | mkV2 (werpen_V) | mkV2 (mkV "ophangen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin slingshot_N = mkN "katapult" masculine ; -- status=guess

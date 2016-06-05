@@ -12402,7 +12402,7 @@ lin constancy_N = mkN "varaktighet" "varaktigheter" ; -- comment=2
 lin constant_A = mkA "ständig" ; -- SaldoWN
 lin constant_N = mkN "konstant" "konstanter" ; -- comment=2
 lin constantan_N = mkN "konstantan" ; -- src=google
-lin constellation_N = mkN "konstellation" "konstellationer" | mkN "förband" neutrum ; -- SaldoWN -- comment=3
+lin constellation_N = mkN "konstellation" "konstellationer" ;
 lin consternation_N = mkN "bestörtning" ; -- comment=3
 lin constipate_V2 = variants {} ; -- status=guess
 lin constipation_N = mkN "förstoppning" ; -- status=guess
@@ -17401,7 +17401,7 @@ lin dress_up_V = mkV "tillreda" "tillredde" "tillrett" ; -- comment=24
 lin dress_up_V2 = dirV2 (partV (mkV "rensar")"ut") ; -- comment=11
 lin dressage_N = (mkN "dressyr" "dressyrer") | mkN "hästdressyr" ; -- status=guess status=guess
 lin dresser_N = variants {} ; -- status=guess
-lin dressing_N = mkN "förband" neutrum | mkN "dressing" ; -- SaldoWN = mkN "förband" neutrum ; -- comment=10
+lin dressing_N = mkN "förband" neutrum | mkN "dressing" ; -- SaldoWN -- comment=10
 lin dressing_case_N = mkN "dressing-fall" ;
 lin dressing_down_N = mkN "dressing-ner" ; -- src=google
 lin dressing_gown_N = mkN "morgonrock" ;
@@ -40401,7 +40401,6 @@ lin parturient_A = variants {} ; -- status=guess
 lin parturition_N = mkN "nedkomst" ;
 lin party_1_N = mkN "kalas" "kalas" | mkN "fest" "fester" ;
 lin party_2_N = mkN "parti" "partiet" "partier" "partierna" ;
-lin party_N = mkN "parti" "partit" "partier" "partierna" | mkN "grupp" "grupper" ; ---
 lin party_spirit_N = mkN "party-anda" ; -- src=google
 lin party_spirited_A = variants {} ; -- status=guess
 lin party_wall_N = mkN "parti-vägg" ; -- src=google
@@ -47825,7 +47824,8 @@ lin rock_salt_N = mkN "stensalt" neutrum ;
 lin rockabilly_N = variants {} ; -- status=guess
 lin rocker_N = mkN "gungstol" ; -- status=guess
 lin rockery_N = mkN "stenparti" "stenpartit" "stenpartier" "stenpartierna" ;
-lin rocket_N = mkN "raket" "raketer" ; -- SaldoWN
+lin rocket_1_N = mkN "raket" "raketer" ; -- SaldoWN
+lin rocket_2_N = mkN "ruccola" ; -- SaldoWN
 lin rocket_V = variants {} ; -- status=guess
 lin rocket_base_N = mkN "raket-bas" ; -- src=google
 lin rocket_range_N = mkN "raket-range" ; -- src=google
@@ -51840,7 +51840,8 @@ lin slimed_A = variants {} ; -- status=guess
 lin sliminess_N = mkN "slemmighet" "slemmigheter" ; -- comment=2
 lin slimness_N = variants {} ; -- status=guess
 lin slimy_A = mkA "slemmig" ; -- status=guess
-lin sling_N = mkN "slunga" ; -- status=guess
+lin sling_1_N = mkN "slunga" ;
+lin sling_2_N = mkN "förband" neutrum ;
 lin sling_V = mkV "slungar" ; -- status=guess
 lin sling_V2 = dirV2 (partV (mkV "slungar")"in") ; -- status=guess
 lin slingback_N = variants {} ; -- status=guess
