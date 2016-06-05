@@ -157,6 +157,7 @@ TQuestMark     head dep
 ComplV2	       head dobj	-- shortcuts in App
 ComplV2V       head dobj xcomp
 ComplV3	       head iobj dobj   ---- could be dobj dobj
+PassAgentV2    head ncomp	-- not sure
 RelV2	       mark nsubj head
 QuestV2	       dobj nsubj head 
 
