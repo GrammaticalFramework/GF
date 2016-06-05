@@ -11,7 +11,7 @@ import Data.List
 -- this creates the file absfuns.html
 
 main = do
-  system "grep \" : \" ../src/abstract/*.gf ../src/translator/Extensions.gf | grep \" -- \" >absfuns.tmp"
+  system "grep \" : \" ../src/abstract/*.gf ../src/translator/Extensions.gf ../../examples/app/App.gf | grep \" -- \" >absfuns.tmp"
   funs <- readFile "absfuns.tmp" >>= return . lines
   deps <- readFile "../src/uddeps.labels" >>= return . lines
   let depmap = M.fromListWith (\x y -> x ++ [";"] ++ y) [(fun,deps) | fun:deps <- map words deps]
@@ -45,7 +45,12 @@ named f = f ++ "''<a name=\"" ++ f ++ "\"></a>''"
 italics e = "//" ++ map (\c -> case c of '[' -> '(' ; ']'->')'; _ -> c) e ++ "//"
 putStrLnIf = putStrLn
 addLink fs =
-  let m = last fs ; abstract = case m of "Extensions" -> "translator/" ; _ -> "abstract/"
+  let
+    m = last fs
+    abstract = case m of
+      "App" -> "../../examples/app/"
+      "Extensions" -> "translator/"
+      _ -> "abstract/"
   in init fs ++ ["[" ++ m ++ " ../src/" ++ abstract ++ m ++ ".gf]"]
 
 -- for tab separated generation
