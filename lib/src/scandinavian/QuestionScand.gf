@@ -31,10 +31,11 @@ incomplete concrete QuestionScand of Question =
       s = \\t,a,p => 
             let 
               cls = slash.s ! t ! a ! p ;
-              who = ip.s ! accusative
+              who = ip.s ! accusative ;
+	      agr = agrP3 ip.g ip.n ;
             in table {
-              QDir   => who ++ cls ! Inv ++ slash.c2.s ;
-              QIndir => who ++ cls ! Sub ++ slash.c2.s
+              QDir   => who ++ cls ! Inv ++ slash.n3 ! agr ++ slash.c2.s ;
+              QIndir => who ++ cls ! Sub ++ slash.n3 ! agr ++ slash.c2.s
               }
       } ;
 
