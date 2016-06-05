@@ -12,10 +12,12 @@ abstract Extra = Cat ** {
     GenRP       : Num -> CN -> RP ;   -- whose car
     CompBareCN  : CN -> Comp ;        -- (est) professeur
 
+    PiedPipingRelSlash   : RP -> ClSlash -> RCl ;   -- in which he lives
     StrandRelSlash   : RP -> ClSlash -> RCl ;   -- that he lives in
     EmptyRelSlash    : ClSlash -> RCl ;   -- he lives in
     StrandQuestSlash : IP -> ClSlash -> QCl ;   -- whom does John live with
-
+    PiedPipingQuestSlash : IP -> ClSlash -> QCl ;   -- with whom does John live
+ 
 -- $VP$ conjunction, which has different fragments implemented in
 -- different languages - never a full $VP$, though.
 

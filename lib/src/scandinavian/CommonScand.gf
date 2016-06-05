@@ -75,7 +75,7 @@ param
 
   NPForm = NPNom | NPAcc | NPPoss GenNum Case ;
 
-  RCase = RNom | RGen | RPrep Bool ;
+  RCase = RNom | RAcc | RGen | RPrep Bool ;
 
   RAgr = RNoAg | RAg Gender Number Person ;
 

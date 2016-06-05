@@ -1,5 +1,7 @@
 abstract ExtraScandAbs = Extra ** {
  
- fun                  --# notpresent
+ fun
  TFutKommer : Tense ; --# notpresent
+ emptyRP : RP ; -- empty RP in Acc position: "kvinnan jag såg"
+
 }
