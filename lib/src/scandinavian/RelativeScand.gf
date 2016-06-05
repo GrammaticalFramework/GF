@@ -31,7 +31,7 @@ incomplete concrete RelativeScand of Relative =
 
     RelSlash rp slash = {
           s = \\t,a,p,ag,_ => 
-          rp.s ! ag.g ! ag.n ! RAcc ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
+          rp.s ! ag.g ! ag.n ! RAcc ++ slash.s ! t ! a ! p ! Sub ++ slash.n3 ! ag ++ slash.c2.s ;
       c = NPAcc
       } ;
 
