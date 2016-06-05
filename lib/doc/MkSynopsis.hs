@@ -334,14 +334,13 @@ readFileC cod file = do
   case cod of
     "utf8" -> readFile file
     _ -> do
-      system $ "iconv -f ISO-8859-1 -t UTF-8 " ++ file ++ " >" ++ tmp
+      system $ "iconv -f " ++ cod ++ " -t UTF-8 " ++ file ++ " >" ++ tmp
       readFile tmp
 
 -- 'intelligently' determine the coding of a file
+---- AR 5/6/2016: now utf8 is used for all languages except Bul, where no characters are shown in documentation anyway
 coding file = case language file of
-  "Pol" -> "utf8"
-  "Rus" -> "utf8"
-  "Mlt" -> "utf8"
-  _     -> "latin1" ----
+  "Bul" -> "CP1251" --- "ISO-8859-1"
+  _     -> "utf8"
 
 language = reverse . take 3 . drop 3 . reverse
