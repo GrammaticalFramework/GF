@@ -29,10 +29,12 @@ var languages =
     }()
 
 var langname={}
+var langcode={}
 var langcode2={}
 var langcode3={}
 for(var i in languages) {
     langname[languages[i].code]=languages[i].name
+    langcode[languages[i].name]=languages[i]
     langcode2[languages[i].code]=languages[i].code2
     langcode3[languages[i].code2]=languages[i].code
 }

@@ -69,11 +69,20 @@ function supportsSVG() {
 function speech_buttons(to3,to2,txt) {
     var voices = window.speechSynthesis && window.speechSynthesis.getVoices() || []
     var dvs = voices.filter(function(v){return v.default})
+    function pick2dash(v) { return hasPrefix(v.lang,to2dash) }
     if(to2)
 	var pick=function (v) { return v.lang==to2 }
-    else {
+    else if(to3.length==3) {
 	var to2dash=alangcode(to3)+"-"
-	var pick=function(v) { return hasPrefix(v.lang,to2dash) }
+	var pick=pick2dash
+    }
+    else {
+	// Maybe the name of the concrete syntax is the name of the language
+	// like in Numerals.pgf
+	var lang=to3.substr(0,1).toUpperCase()+to3.substr(1).toLowerCase()
+	var codes=langcode[lang]
+	var to2dash=(codes ? codes.code2 : to3)+"-"
+	var pick=pick2dash
     }
     function btn(v) {
 	var u=new SpeechSynthesisUtterance(txt)
