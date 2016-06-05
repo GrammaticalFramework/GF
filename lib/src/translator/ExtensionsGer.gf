@@ -158,6 +158,17 @@ lin
 
   UttAdV adv = adv;
 
+  ApposNP np1 np2 = {
+    s = \\c => np1.s ! c ++ bigNP np1 ++ SOFT_BIND ++ "," ++ np2.s ! NPNom ;
+    ext = np2.ext ;
+    rc = np2.rc ;
+    adv = np2.adv ;
+    a = np1.a ;
+    isPron = False
+  } ;
+  
+  AdAdV = cc2 ;
+
   DirectComplVS t np vs utt = 
     mkS (lin Adv (optCommaSS utt)) (mkS t positivePol (mkCl np (lin V vs))) ;
 
