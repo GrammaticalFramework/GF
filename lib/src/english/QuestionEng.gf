@@ -18,9 +18,11 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
       in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! oDir} ; ----
 
     QuestSlash ip slash = 
-      mkQuestion (ss (slash.c2 ++ ip.s ! NPAcc)) slash ;
-      --- stranding in ExratEng 
-
+      {s = \\t,a,b,q => 
+         (mkQuestion (ss (ip.s ! NPAcc)) slash).s ! t ! a ! b ! q ++ slash.c2
+      } ;
+      --- changed AR 5/6/2016: uses stranding; pied-piping in ExtraEng
+      
     QuestIAdv iadv cl = mkQuestion iadv cl ;
 
     QuestIComp icomp np = 

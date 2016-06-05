@@ -13,6 +13,11 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       a = RAg (agrP3 nu.n)
       } ;
 
+    PiedPipingRelSlash rp slash = {
+      s = \\t,a,p,agr => 
+          slash.c2 ++ rp.s ! RPrep (fromAgr agr).g ++ slash.s ! t ! a ! p ! oDir ;
+      c = NPAcc
+      } ;
     StrandRelSlash rp slash = {
       s = \\t,a,p,ag => 
         rp.s ! RC (fromAgr ag).g NPAcc ++ slash.s ! t ! a ! p ! oDir ++ slash.c2 ;
@@ -22,6 +27,9 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       s = \\t,a,p,_ => slash.s ! t ! a ! p ! oDir ++ slash.c2 ;
       c = NPAcc
       } ;
+
+    PiedPipingQuestSlash ip slash = 
+      mkQuestion (ss (slash.c2 ++ ip.s ! NPAcc)) slash ;
 
     StrandQuestSlash ip slash = 
       {s = \\t,a,b,q => 
@@ -285,6 +293,18 @@ lin
       a = RNoAg
       } ;
 
+  which_who_RP =
+     { s = table {
+        RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
+        RC Neutr _  => "which" ;
+        RC _ NPAcc    => "whom" ;
+        RC _ (NCase Nom)    => "who" ;
+        RPrep Neutr => "which" ;
+        RPrep _     => "whom"
+        } ;
+      a = RNoAg
+      } ;
+      
   who_RP =
      { s = table {
         RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
