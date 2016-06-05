@@ -66,7 +66,7 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
         } ;
 
     relPron : Gender => Number => RCase => Str = \\g,n,c => case c of {
-      RNom | RPrep False => "som" ;
+      RNom | RAcc | RPrep False => "som" ;
       RGen  => "vars" ;
       RPrep True => gennumForms "vilken" "vilket" "vilka" ! gennum g n
       } ;

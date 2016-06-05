@@ -16,6 +16,14 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
       }
     } ;
 
+    emptyRP = {
+      s = \\g,n => table {
+         RAcc => [] ;
+	 c => relPron ! g ! n ! c
+         } ;
+      a = RNoAg
+      } ;
+
     PiedPipingRelSlash rp slash = {
       s = \\t,a,p,ag,_ => 
         let 

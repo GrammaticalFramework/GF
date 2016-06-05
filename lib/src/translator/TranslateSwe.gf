@@ -21,6 +21,7 @@ concrete TranslateSwe of Translate =
     ], 
   RelativeSwe - [
     RelSlash  -- replaced by RelSlash | PiedPipingRelSlash
+   ,IdRP  -- replaced by IdRP | emptyRP
     ],
   IdiomSwe,
   ConstructionSwe,
@@ -48,6 +49,8 @@ lin
      G.PossNP cn np 
    | {s = \\n,d,c => np.s ! NPPoss (gennum (ngen2gen cn.g) n) Nom ++ cn.s ! n ! DDef Indef ! c ; g = cn.g ; isMod = True} ---- overgenerating
    ;
+
+  IdRP = G.IdRP | E.emptyRP ;
 
   RelSlash rp cls = G.RelSlash rp cls | E.PiedPipingRelSlash rp cls ;
 
