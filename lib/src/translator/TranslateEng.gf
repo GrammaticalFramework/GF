@@ -31,11 +31,11 @@ concrete TranslateEng of Translate =
   QuestionEng - [
     QuestVP   -- replaced by QuestVP | contracted QuestVP
     ,QuestIComp
-    ,QuestSlash -- replaced by QuestSlash | StrandQuestSlash
+    ,QuestSlash -- replaced by QuestSlash | PiedPipingQuestSlash
     ],       
   RelativeEng - [
      IdRP      -- with variants that/who/which/-
-    ,RelSlash  -- replaced by RelSlash | StrandRelSlash
+    ,RelSlash  -- replaced by RelSlash | PiedPipingRelSlash
     ],
   IdiomEng,
   ConstructionEng,
