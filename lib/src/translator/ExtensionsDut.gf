@@ -144,7 +144,14 @@ lin
 lin
   that_RP = which_RP ;
 
-----  UttAdV adv = adv;
+  UttAdV adv = adv ;
 
+  ApposNP np1 np2 = {
+    s = \\c => np1.s ! c ++ SOFT_BIND ++ "," ++ np2.s ! NPNom ;
+    a = np1.a ;
+    isPron = False
+  } ;
+  
+  AdAdV = cc2 ;
 
 }
