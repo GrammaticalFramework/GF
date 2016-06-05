@@ -22,13 +22,13 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
       c = npNom
       } ;
 
--- Pied piping: "at which we are looking". Stranding and empty
--- relative are defined in $ExtraEng.gf$ ("that we are looking at", 
+-- Pied piping: "that we are looking at". Pied piping and empty
+-- relative are defined in $ExtraEng.gf$ ("at which we are looking", 
 -- "we are looking at").
 
     RelSlash rp slash = {
-      s = \\t,a,p,agr => 
-          slash.c2 ++ rp.s ! RPrep (fromAgr agr).g ++ slash.s ! t ! a ! p ! oDir ;
+      s = \\t,a,p,ag => 
+        rp.s ! RC (fromAgr ag).g NPAcc ++ slash.s ! t ! a ! p ! oDir ++ slash.c2 ;
       c = NPAcc
       } ;
 
@@ -37,14 +37,17 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
       a = RAg np.a
       } ;
 
-    IdRP = 
+
+-- relative pronoun "that" used by default, because it is always correct, even in absence of gender/animateness information
+
+    IdRP =
      { s = table {
         RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
-        RC Neutr _  => "which" ;
-        RC _ NPAcc    => "whom" ;
-        RC _ (NCase Nom)    => "who" ;
+        RC Neutr _  => "that" ;
+        RC _ NPAcc    => "that" ;
+        RC _ (NCase Nom)    => "that" ;
         RPrep Neutr => "which" ;
-        RPrep _     => "whom"
+        RPrep _     => "who"
         } ;
       a = RNoAg
       } ;
