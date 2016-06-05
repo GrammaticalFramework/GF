@@ -22735,7 +22735,8 @@ lin rock_2_N = L.rock_N ;
 lin rock_V = mkV "cullare" ; -- status=guess, src=wikt
 lin rock_V2 = mkV2 (mkV "cullare") ; -- status=guess, src=wikt
 lin rocker_N = mkN "sedia a dondolo" ; -- status=guess
-lin rocket_N = mkN "razzo" ; -- status=guess
+lin rocket_1_N = mkN "razzo" ; -- status=guess
+lin rocket_2_N = mkN "razzo" ; -- status=guess
 lin rocky_A = mkA "roccioso" | mkA "petroso" | mkA "sassoso" ; -- status=guess status=guess status=guess
 lin rod_N = mkN "pertica" ; -- status=guess
 lin rodent_N = mkN "roditore" masculine ; -- status=guess
@@ -24496,7 +24497,8 @@ lin slim_V2 = mkV2 (mkV "dimagrire") ; -- status=guess, src=wikt
 lin slime_N = mkN "belletta" | mkN "fanghiglia" | mkN "limo" | mkN "melma" | mkN "mota" ; -- UWN
 lin slimness_N = mkN "esilità" | mkN "magrezza" | mkN "snellezza" | mkN "sottigliezza" ; -- UWN
 lin slimy_A = mkA "viscido" ; -- status=guess
-lin sling_N = mkN "frombola" ; -- status=guess
+lin sling_1_N = mkN "frombola" ; -- status=guess
+lin sling_2_N = mkN "frombola" ; -- status=guess
 lin slingshot_N = mkN "fionda" ; -- status=guess
 lin slip_N = mkN "sbaglio" | mkN "errore" masculine | mkN "svista" ; -- status=guess status=guess status=guess
 lin slip_V = variants {} ; --

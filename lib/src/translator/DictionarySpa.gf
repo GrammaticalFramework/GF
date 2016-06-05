@@ -21314,7 +21314,6 @@ lin parturient_A = mkA "parturienta" | mkA "parturiento" ; --UWN
 lin parturition_N = mkN "parto" | mkN "nacimiento" feminine ; -- status=guess status=guess
 lin party_1_N = mkN "fiesta" ;
 lin party_2_N = mkN "partido" ;
-lin party_N = mkN "partido" ;
 lin parvenu_A = mkA "parvenido" ; -- status=guess
 lin paschal_A = mkA "pascual" ; --UWN
 lin pasha_N = mkN "pachá" | mkN "bajá" masculine ; -- status=guess status=guess
@@ -25096,7 +25095,8 @@ lin rock_V = mecer_V ; -- status=guess
 lin rock_V2 = mkV2 (mecer_V) ; -- status=guess
 lin rockabilly_N = mkN "rockabilly" ; --UWN
 lin rocker_N = mkN "roquero" ; -- status=guess
-lin rocket_N = mkN "cohete" masculine ; -- status=guess
+lin rocket_1_N = mkN "cohete" masculine ; -- status=guess
+lin rocket_2_N = mkN "cohete" masculine ; -- status=guess
 lin rocky_A = mkA "rocoso" ; -- status=guess
 lin rod_N = mkN "bastón" masculine ; -- status=guess
 lin rodent_N = mkN "roedor" masculine ; -- status=guess
@@ -27067,7 +27067,8 @@ lin slim_V = mkV "adelgazarse" | enflaquecer_V | mkV "enflaquecerse" | mkV "enfl
 lin slim_V2 = mkV2 (mkV "adelgazarse") | mkV2 (enflaquecer_V) | mkV2 (mkV "enflaquecerse") | mkV2 (mkV "enflacar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin slime_N = mkN "lama" masculine | mkN "cieno" | mkN "baba" | mkN "légamo" | mkN "moco" ; -- status=guess status=guess status=guess status=guess status=guess
 lin slimy_A = mkA "viscoso" | mkA "baboso" | mkA "pegajoso" | mkA "gelatinoso" | mkA "empalagoso" ; -- status=guess status=guess status=guess status=guess status=guess
-lin sling_N = mkN "cabestrillo" ; -- status=guess
+lin sling_1_N = mkN "cabestrillo" ; -- status=guess
+lin sling_2_N = mkN "cabestrillo" ; -- status=guess
 lin sling_V = mkV "tirar" | mkV "lanzar" | mkV "arrojar" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin sling_V2 = mkV2 (mkV "tirar") | mkV2 (mkV "lanzar") | mkV2 (mkV "arrojar") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin slinger_N = mkN "hondero" ; -- status=guess
