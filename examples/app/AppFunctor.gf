@@ -39,6 +39,7 @@ lin
 
 
   PassV2 v2 = passiveVP v2 ;
+  PassAgentV2 v2 np = mkVP (passiveVP v2) (mkAdv by8agent_Prep np) ;
   RelV2 rp np v2 = mkRCl rp (mkClSlash np (mkVPSlash v2)) ;
   QuestV2 ip np v2 = mkQCl ip (mkClSlash np (mkVPSlash v2)) ;
 
