@@ -85,7 +85,9 @@ function speech_buttons(to3,to2,txt) {
 	var pick=pick2dash
     }
     function btn(v) {
-	var u=new SpeechSynthesisUtterance(txt)
+	// Remove spaces more fluent Thai:
+	var txt2 = v.lang=="th-TH" ? txt.split(" ").join("") : txt
+	var u=new SpeechSynthesisUtterance(txt2)
 	u.lang=v.lang // how to use v.voiceURI or v.name?
 
 	function speak() {
