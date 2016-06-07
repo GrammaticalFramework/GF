@@ -111,5 +111,32 @@ abstract Extra = Cat ** {
 
     AdjAsCN : AP -> CN ; -- a green one ; en grön (Swe)
 
+-- AR 7/6/2016
+-- reflexive noun phrases: a generalization of Verb.ReflVP, which covers just reflexive pronouns
+-- This is necessary in languages like Swedish, which have special reflexive possessives.
+-- However, it is also needed in application grammars that want to treat "brush one's teeth" as a one-place predicate.
+
+  cat
+    RNP ;     -- reflexive noun phrase, e.g. "my family and myself"
+    RNPList ; -- list of reflexives to be coordinated, e.g. "my family, myself, everyone"
+    
+-- Notice that it is enough for one NP in RNPList to be RNP. 
+
+  fun
+    ReflRNP : VPSlash -> RNP -> VP ;   -- support my family and myself
+
+    ReflPron : RNP ;  -- myself
+    ReflPoss : Num -> CN -> RNP ; -- my family
+
+    PredetRNP : Predet -> RNP -> RNP ; -- all my brothers
+
+    ConjRNP : Conj -> RNPList -> RNP ;  -- my family, John and myself
+
+    Base_rr_RNP : RNP -> RNP -> RNPList ;       -- my family, myself 
+    Base_nr_RNP : NP  -> RNP -> RNPList ;       -- John, myself
+    Base_rn_RNP : RNP -> NP  -> RNPList ;       -- myself, John
+    Cons_rr_RNP : RNP -> RNPList -> RNPList ;   -- my family, myself, John
+    Cons_nr_RNP : NP  -> RNPList -> RNPList ;   -- John, my family, myself
+----    Cons_rn_RNP : RNP -> ListNP  -> RNPList ;   -- myself, John, Mary
 
 }
