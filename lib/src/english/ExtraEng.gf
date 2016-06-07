@@ -291,6 +291,15 @@ lin
     ReflPoss num cn = {s = \\a => possPron ! a ++ num.s ! Nom ++ cn.s ! num.n ! Nom} ;
     PredetRNP predet rnp = {s = \\a => predet.s ++ rnp.s ! a} ;
 
+    ConjRNP conj rpns = conjunctDistrTable Agr conj rpns ;
+
+    Base_rr_RNP x y = twoTable Agr x y ;
+    Base_nr_RNP x y = twoTable Agr {s = \\a => x.s ! NPAcc} y ;
+    Base_rn_RNP x y = twoTable Agr x {s = \\a => y.s ! NPAcc} ;
+    Cons_rr_RNP x xs = consrTable Agr comma x xs ;
+    Cons_nr_RNP x xs = consrTable Agr comma {s = \\a => x.s ! NPAcc} xs ;
+
+    
 ---- TODO: RNPList construction
 
 
