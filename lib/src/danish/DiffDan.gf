@@ -84,4 +84,18 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
 
     av_Prep = "af" ;
 
+    possPron : Number -> Person -> Number -> Gender -> Str = \sn,sb,on,og -> case <sn,sb,on,og> of {
+       <Sg,P1,Sg,Utr>   => "min" ;
+       <Sg,P1,Sg,Neutr> => "mit" ;
+       <Sg,P1,Pl,_>     => "mine" ;
+       <Sg,P2,Sg,Utr>   => "din" ;
+       <Sg,P2,Sg,Neutr> => "dit" ;
+       <Sg,P2,Pl,_>     => "dine" ;
+       <Pl,P1,_,_>      => "vores" ;
+       <Pl,P2,_,_>      => "jeres" ;
+       <_,_,Sg,Utr>     => "sin" ;
+       <_,_,Sg,Neutr>   => "sit" ;
+       <_,_,Pl,_>       => "sine"
+       } ;
+
 }

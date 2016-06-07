@@ -156,4 +156,37 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
       isMod = True
       } ;
 
+
+  lincat
+    RNP     = {s : Agr => Str ; isPron : Bool} ;   ---- inherent Agr needed: han färgar sitt hår vitt. But also depends on subject
+    RNPList = {s1,s2 : Agr => Str} ;
+
+  lin 
+    ReflRNP vps rnp = 
+      insertObjPron
+        (andB (notB vps.c2.hasPrep) rnp.isPron)
+        rnp.s
+	(insertObj (\\a => vps.c2.s ++ vps.n3 ! a) vps) ;
+	
+    ReflPron = {s = \\a => reflPron a ; isPron = True} ; ---- agr ??
+    ReflPoss num cn = {
+      s = \\a => possPron a.n a.p num.n (ngen2gen cn.g) ++ num.s ! cn.g ++ cn.s ! num.n ! DDef Indef ! Nom ;
+      isPron = False
+      } ;
+    PredetRNP predet rnp = {
+      s = \\a => predet.s ! Utr ! Pl ++ predet.p ++ rnp.s ! a ;  ---- agr needed here as well
+----      s = \\a => predet.s ! np.a.g ! np.a.n ++ predet.p ++ np.s ! a ;
+----      a = case pred.a of {PAg n => agrP3 np.a.g n ; _ => np.a} ;
+      isPron = False
+      } ;
+
+    ConjRNP conj rpns = conjunctDistrTable Agr conj rpns ** {isPron = False} ;
+
+    Base_rr_RNP x y = twoTable Agr x y ;
+    Base_nr_RNP x y = twoTable Agr {s = \\a => x.s ! NPAcc} y ;
+    Base_rn_RNP x y = twoTable Agr x {s = \\a => y.s ! NPAcc} ;
+    Cons_rr_RNP x xs = consrTable Agr comma x xs ;
+    Cons_nr_RNP x xs = consrTable Agr comma {s = \\a => x.s ! NPAcc} xs ;
+
+
 } 
